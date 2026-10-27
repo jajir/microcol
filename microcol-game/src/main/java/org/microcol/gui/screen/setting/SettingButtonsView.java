@@ -38,6 +38,9 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
     private final CheckBox autosaveCheckBox;
     private final CheckBox turnSummaryCheckBox;
     private final CheckBox openEuropeCheckBox;
+    private final CheckBox developerCheckBox;
+    private final javafx.scene.control.Label developerHeading = new javafx.scene.control.Label();
+    private final javafx.scene.control.Label developerDescription = new javafx.scene.control.Label();
 
     @Inject
     SettingButtonsView(final SettingLanguageView settingLanguageView,
@@ -46,7 +49,8 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
             final SettingVolumeView settingVolumeView,
             final SettingAnimationSpeedView settingAnimationSpeedView,
             final SettingVersionView settingVersionView,
-            final GamePreferences gamePreferences, final I18n i18n) {
+            final GamePreferences gamePreferences, final I18n i18n,
+            final org.microcol.gui.preferences.DeveloperMode developerMode) {
         this.settingLanguageView = Preconditions
                 .checkNotNull(settingLanguageView);
         this.settingShowGridView = Preconditions
@@ -74,6 +78,23 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         openEuropeCheckBox.setOnAction(event -> gamePreferences
                 .setOpenEuropeOnArrival(openEuropeCheckBox.isSelected()));
 
+        developerCheckBox = new CheckBox();
+        developerCheckBox.setId("settingDeveloperMode");
+        developerCheckBox.setSelected(developerMode.isEnabled());
+        developerCheckBox.setOnAction(event -> {
+            try {
+                developerMode.setEnabled(developerCheckBox.isSelected());
+            } finally {
+                developerCheckBox.setSelected(developerMode.isEnabled());
+            }
+        });
+        developerMode.enabledProperty().addListener((property, before,
+                after) -> developerCheckBox.setSelected(after));
+        developerDescription.setWrapText(true);
+        developerDescription.setMaxWidth(440);
+        final VBox developerSection = new VBox(4, developerHeading,
+                developerCheckBox, developerDescription);
+        developerSection.setId("developerSettings");
         buttonBack = new Button();
         buttonBack.setId(BUTTON_BACK_ID);
 
@@ -88,6 +109,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         buttonsBox.getChildren().add(openEuropeCheckBox);
         buttonsBox.getChildren().add(settingVolumeView.getContent());
         buttonsBox.getChildren().add(settingAnimationSpeedView.getContent());
+        buttonsBox.getChildren().add(developerSection);
         buttonsBox.getChildren().add(settingVersionView.getContent());
         buttonsBox.getChildren().add(buttonBack);
 
@@ -110,6 +132,10 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
     public void updateLanguage(final I18n i18n) {
         logger.debug("Current language is: {}", i18n);
         buttonBack.setText(i18n.get(GameMenu.buttonBack));
+        developerHeading.setText(i18n.get(GameMenu.settingDeveloperHeading));
+        developerCheckBox.setText(i18n.get(GameMenu.settingDeveloperMode));
+        developerDescription
+                .setText(i18n.get(GameMenu.settingDeveloperDescription));
         this.settingLanguageView.updateLanguage(i18n);
         this.settingShowGridView.updateLanguage(i18n);
         this.settingShowFightAdvisorView.updateLanguage(i18n);

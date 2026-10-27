@@ -291,4 +291,6 @@
     <entry key="unitsPanel_continental">Military role: Continental</entry>
     <entry key="unitsPanel_convert">Native convert of the %s. Unassigned turns: %s of 8.</entry>
     <entry key="unitsPanel_royal">Military role: Royal regular</entry>
+    <entry key="developerModeOn">DEV on</entry>
+    <entry key="developerModeOff">DEV off</entry>
 </properties>

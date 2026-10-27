@@ -4,6 +4,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.microcol.gui.Loc;
 import org.microcol.gui.LocalizationHelper;
-import org.microcol.gui.preferences.GamePreferences;
+import org.microcol.gui.preferences.DeveloperMode;
 import org.microcol.gui.util.StreamReader;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
@@ -35,7 +36,7 @@ public class StatusBarMessageServiceTest {
             .setVerifyThatAllKeysInResourceBundleHaveConstant(true)
             .setDefaultLocale(new Locale("cs", "CZ")).build();
 
-    private final GamePreferences gamePreferences = mock(GamePreferences.class);
+    private DeveloperMode developerMode;
 
     private final LocalizationHelper localizationHelper = new LocalizationHelper(
             i18n);
@@ -67,7 +68,7 @@ public class StatusBarMessageServiceTest {
     @Test
     public void verify_message_that_location_was_not_discovered()
             throws Exception {
-        when(gamePreferences.isDevelopment()).thenReturn(false);
+        developerMode.setEnabled(false);
         when(player.isVisible(where)).thenReturn(false);
 
         final String ret = service.getStatusMessage(where, player,
@@ -78,7 +79,7 @@ public class StatusBarMessageServiceTest {
 
     @Test
     public void verify_location_is_discovered_without_ships() throws Exception {
-        when(gamePreferences.isDevelopment()).thenReturn(false);
+        developerMode.setEnabled(false);
         when(player.isVisible(where)).thenReturn(true);
         when(player.isCurrentlyVisible(where)).thenReturn(true);
 
@@ -90,7 +91,7 @@ public class StatusBarMessageServiceTest {
 
     @Test
     public void verify_one_ship_of_same_type() throws Exception {
-        when(gamePreferences.isDevelopment()).thenReturn(false);
+        developerMode.setEnabled(false);
         when(player.isVisible(where)).thenReturn(true);
         when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(unit1.getType()).thenReturn(UnitType.GALLEON);
@@ -103,7 +104,7 @@ public class StatusBarMessageServiceTest {
 
     @Test
     public void verify_two_ship_of_same_type() throws Exception {
-        when(gamePreferences.isDevelopment()).thenReturn(false);
+        developerMode.setEnabled(false);
         when(player.isVisible(where)).thenReturn(true);
         when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(unit1.getType()).thenReturn(UnitType.GALLEON);
@@ -118,7 +119,7 @@ public class StatusBarMessageServiceTest {
 
     @Test
     public void verify_five_ship_of_same_type() throws Exception {
-        when(gamePreferences.isDevelopment()).thenReturn(false);
+        developerMode.setEnabled(false);
         when(player.isVisible(where)).thenReturn(true);
         when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(unit1.getType()).thenReturn(UnitType.GALLEON);
@@ -137,7 +138,7 @@ public class StatusBarMessageServiceTest {
 
     @Test
     public void verify_six_ship_of_same_type() throws Exception {
-        when(gamePreferences.isDevelopment()).thenReturn(false);
+        developerMode.setEnabled(false);
         when(player.isVisible(where)).thenReturn(true);
         when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(unit1.getType()).thenReturn(UnitType.GALLEON);
@@ -158,7 +159,7 @@ public class StatusBarMessageServiceTest {
     @Test
     public void verify_colonist_two_galleons_one_frigate__of_same_type()
             throws Exception {
-        when(gamePreferences.isDevelopment()).thenReturn(false);
+        developerMode.setEnabled(false);
         when(player.isVisible(where)).thenReturn(true);
         when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(unit1.getType()).thenReturn(UnitType.COLONIST);
@@ -179,7 +180,7 @@ public class StatusBarMessageServiceTest {
     @Test
     public void verify_two_galleons_one_frigate__of_same_type()
             throws Exception {
-        when(gamePreferences.isDevelopment()).thenReturn(false);
+        developerMode.setEnabled(false);
         when(player.isVisible(where)).thenReturn(true);
         when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(unit2.getType()).thenReturn(UnitType.GALLEON);
@@ -195,7 +196,7 @@ public class StatusBarMessageServiceTest {
 
     @Test
     public void verify_coloy() throws Exception {
-        when(gamePreferences.isDevelopment()).thenReturn(false);
+        developerMode.setEnabled(false);
         when(player.isVisible(where)).thenReturn(true);
         when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(colony.getName()).thenReturn("Kuchařovice");
@@ -209,7 +210,7 @@ public class StatusBarMessageServiceTest {
     @Test
     public void verify_coloy_two_galleons_one_frigate__of_same_type()
             throws Exception {
-        when(gamePreferences.isDevelopment()).thenReturn(false);
+        developerMode.setEnabled(false);
         when(player.isVisible(where)).thenReturn(true);
         when(player.isCurrentlyVisible(where)).thenReturn(true);
         when(colony.getName()).thenReturn("Kuchařovice");
@@ -229,7 +230,7 @@ public class StatusBarMessageServiceTest {
     @Test
     public void verify_explored_tile_outside_present_sight_hides_objects()
             throws Exception {
-        when(gamePreferences.isDevelopment()).thenReturn(false);
+        developerMode.setEnabled(false);
         when(player.isVisible(where)).thenReturn(true);
         when(player.isCurrentlyVisible(where)).thenReturn(false);
         when(colony.getName()).thenReturn("Kuchařovice");
@@ -245,7 +246,7 @@ public class StatusBarMessageServiceTest {
     @Test
     public void verify_lost_city_rumor_is_named_in_present_sight_only()
             throws Exception {
-        when(gamePreferences.isDevelopment()).thenReturn(false);
+        developerMode.setEnabled(false);
         when(player.isVisible(where)).thenReturn(true);
         when(player.isCurrentlyVisible(where)).thenReturn(true);
 
@@ -274,9 +275,48 @@ public class StatusBarMessageServiceTest {
                         true));
     }
 
+    @Test
+    void developerCoordinatesToggleWithoutRevealingUnknownTile() {
+        when(player.isVisible(where)).thenReturn(false);
+        developerMode.setEnabled(true);
+        assertEquals("x=22, y=18 · Tato oblast je neprozkoumaná.",
+                service.getStatusMessage(where, player, TerrainType.OCEAN,
+                        Lists.newArrayList(unit1), Optional.of(colony)));
+        org.mockito.Mockito.verifyZeroInteractions(unit1, colony);
+        developerMode.setEnabled(false);
+        assertEquals("Tato oblast je neprozkoumaná.",
+                service.getStatusMessage(where, player, TerrainType.OCEAN,
+                        Lists.newArrayList(unit1), Optional.of(colony)));
+    }
+
+    @Test
+    void coordinatesUseModelValuesAndPreserveOrdinaryDescription() {
+        when(player.isVisible(org.mockito.ArgumentMatchers.any()))
+                .thenReturn(true);
+        when(player.isCurrentlyVisible(org.mockito.ArgumentMatchers.any()))
+                .thenReturn(true);
+        for (final Location location : List.of(Location.of(1, 1),
+                Location.of(60, 40))) {
+            developerMode.setEnabled(false);
+            final String ordinary = service.getStatusMessage(location, player,
+                    TerrainType.OCEAN, List.of(), Optional.empty());
+            developerMode.setEnabled(true);
+            assertEquals(
+                    "x=" + location.getX() + ", y=" + location.getY() + " · "
+                            + ordinary,
+                    service.getStatusMessage(location, player,
+                            TerrainType.OCEAN, List.of(), Optional.empty()));
+        }
+    }
+
     @BeforeEach
     private void startup() {
-        service = new StatusBarMessageService(i18n, gamePreferences,
+        final org.microcol.gui.preferences.SettingService settings = mock(
+                org.microcol.gui.preferences.SettingService.class);
+        when(settings.load())
+                .thenReturn(new org.microcol.gui.preferences.Setting());
+        developerMode = new DeveloperMode(settings);
+        service = new StatusBarMessageService(i18n, developerMode,
                 localizationHelper);
     }
 

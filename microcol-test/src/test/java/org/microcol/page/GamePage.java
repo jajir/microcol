@@ -52,11 +52,16 @@ public class GamePage extends AbstractScreen {
         verifyThatStatusBarIsVisible();
     }
 
-    public void moveMouseAtLocation(final Location location) {
-        verifyThatTileIsVisible(location);
+    /** Move the pointer without assuming diagnostics are enabled. */
+    public void hoverTile(final Location location) {
         final javafx.geometry.Point2D p = screenPoint(location);
         getRobot().moveTo(p.getX(), p.getY(), Motion.DEFAULT);
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void moveMouseAtLocation(final Location location) {
+        verifyThatTileIsVisible(location);
+        hoverTile(location);
         verifyThatStatusBarContains(String.valueOf(location.getX()));
         verifyThatStatusBarContains(String.valueOf(location.getY()));
     }

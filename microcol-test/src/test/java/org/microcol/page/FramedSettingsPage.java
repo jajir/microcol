@@ -103,8 +103,15 @@ public final class FramedSettingsPage extends AbstractScreen {
 
     public void verifyAppearance() {
         getRobot().interact(() -> {
-            for (final String id : new String[] { "settingGrid",
-                    "settingFightAdvisor", "settingTurnSummary",
+            final javafx.scene.Node heading = getNodeFinder()
+                    .lookup(".main-title").query();
+            final Control first = control("rbCzech");
+            assertTrue(heading.localToScene(heading.getBoundsInLocal())
+                    .getMaxY() <= first.localToScene(first.getBoundsInLocal())
+                            .getMinY(),
+                    "Settings controls must remain below the heading");
+            for (final String id : new String[] { "settingDeveloperMode",
+                    "settingGrid", "settingFightAdvisor", "settingTurnSummary",
                     "settingOpenEuropeOnArrival", "autosaveEnabled", "rbCzech",
                     "rbEnglish", "settingVolume", "settingAnimationSpeed" }) {
                 final Control c = control(id);

@@ -59,3 +59,11 @@
 .welcome-screen .main-title {
     -fx-translate-y: -270;
 }
+
+/* Settings grows with its title in normal flow, without overlay offsets. */
+.settings-screen .main-title, .settings-screen .titled-content {
+    -fx-translate-y: 0;
+}
+.settings-screen .game-menu-inner {
+    -fx-spacing: 4;
+}

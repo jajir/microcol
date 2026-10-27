@@ -811,7 +811,7 @@ documentation in APT just to make it visible on the web.
    Remote CI and publication have not been inspected or claimed here.
 ## R-0311 developer mode proposal — 2026-10-27
 
-1. [R-0311](requirements/R-0311.md) captures a proposed runtime developer
+1. [R-0311](requirements/done/R-0311.md) captures a proposed runtime developer
    preference, F3 shortcut and hover coordinates. Source inspection used
    `d7308d49149eea9ab476966dee6968090a32f907`; the existing launch flag also
    controls CSSFX and hidden menu behavior. The requirement keeps the proposed

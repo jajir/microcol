@@ -1,10 +1,10 @@
 # Current requirement backlog
 
-Captured on 2026-10-27: [R-0311 — runtime developer mode and map coordinates](R-0311.md),
-A03 with A01/A05 dependencies. Proposes one Settings switch, F3, a visible mode
-indicator and hover coordinates using the map-file convention. Implementation
-has not been selected; the requirement distinguishes existing launch-time
-diagnostics from the proposed runtime preference.
+Accepted locally on 2026-10-27: [R-0311 — runtime developer mode
+and map coordinates](done/R-0311.md), A03 with A01/A05 dependencies. Settings and F3
+share one persisted preference; coordinates preserve map visibility rules.
+Model/JUnit, targeted UI and fixed smoke passed; see the
+[implementation evidence](../functional-tests.md#r-0311-runtime-developer-mode-2026-10-27).
 
 Accepted locally on 2026-10-27: [R-0310 — initially focused free-play
 galleon](done/R-0310.md), A04 with A01/A02 entry flow. Initial keyboard and mouse

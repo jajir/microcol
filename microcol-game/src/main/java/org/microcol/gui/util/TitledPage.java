@@ -42,6 +42,13 @@ public final class TitledPage implements JavaFxComponent {
         box.getChildren().add(menuPanel.getContent());
     }
 
+    /** Keep longer forms below their title instead of overlaying both. */
+    public void stackTitleAboveContent() {
+        mainPanel.getChildren().clear();
+        mainPanel.getChildren()
+                .add(new javafx.scene.layout.VBox(16, title, box));
+    }
+
     public void setTitle(final String menuTitle) {
         title.setText(menuTitle);
     }

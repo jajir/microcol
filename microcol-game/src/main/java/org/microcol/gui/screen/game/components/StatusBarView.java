@@ -21,6 +21,7 @@ public final class StatusBarView implements JavaFxComponent {
     private final Label labelEra;
 
     private final Label labelGold;
+    private final Label developerMode = new Label();
 
     @Inject
     public StatusBarView() {
@@ -43,8 +44,15 @@ public final class StatusBarView implements JavaFxComponent {
 
         statusBar = new HBox();
         statusBar.setMinHeight(Region.USE_PREF_SIZE);
-        statusBar.getChildren().addAll(pane, labelGold, labelEra);
+        developerMode.setId("developerModeIndicator");
+        developerMode.setMinWidth(Region.USE_PREF_SIZE);
+        statusBar.getChildren().addAll(pane, developerMode, labelGold,
+                labelEra);
         statusBar.setId("statusBar");
+    }
+
+    public Label getDeveloperMode() {
+        return developerMode;
     }
 
     public Label getStatusBarDescription() {

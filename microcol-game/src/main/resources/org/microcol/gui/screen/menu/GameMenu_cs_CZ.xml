@@ -67,4 +67,7 @@
     <entry key="setupGeneratedPreview">Náhled: mapa %1$d × %2$d polí, podnebí %3$s, pevnina %4$d %%, semínko %5$s.</entry>
     <entry key="setupGeneratedSeedError">Zadejte celé semínko od 0 do 999999999.</entry>
     <entry key="setupGeneratedFailed">Nový svět se nepodařilo vygenerovat. Aktuální hra nebyla změněna.</entry>
+    <entry key="settingDeveloperHeading">Vývojář</entry>
+    <entry key="settingDeveloperMode">Režim vývojáře (F3)</entry>
+    <entry key="settingDeveloperDescription">Zobrazí souřadnice mapy a diagnostické informace.</entry>
 </properties>

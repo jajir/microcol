@@ -21,6 +21,7 @@ public enum GameMenu implements MessageKeyResource {
     settingTitle, buttonBack, campaignTitle, settingLanguage, settingLanguageCz,
     settingLanguageEn, settingShowGrid, settingShowFightAdvisor,
     settingAutosave, settingTurnSummary, settingOpenEuropeOnArrival,
+    settingDeveloperHeading, settingDeveloperMode, settingDeveloperDescription,
     settingVersion, campaignPanelButtonBack, campaignPanel_default_findNewWorld,
     campaignPanel_default_buildArmy, campaignPanel_default_thrive;
 

@@ -1060,3 +1060,16 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
    trade, Congress and help scenarios retain the behavioral checks. See
    [dated acceptance](functional-tests.md#r-0307-in-game-screen-frame-2026-10-27);
    this change does not claim completion of the whole use cases.
+
+## UC-006/114/119: developer mode — 2026-10-27
+
+1. [R-0311](requirements/done/R-0311.md) adds a persisted developer display preference,
+   F3 and a DEV indicator. `TC_84_F75_framed_settings_test` TC_03–TC_06 cover
+   Settings/shortcut synchronization, EN/CZ labels, held keys, stationary
+   hover, unchanged game state and pending orders, unknown map corners,
+   scrolling, leaving the map, modal text input, application restart and load.
+   Existing TC_01–TC_02 retain Settings layout and control checks.
+2. `DeveloperModeTest` covers the default, copy/equality, persistence and failed
+   writes; `StatusBarMessageServiceTest` covers coordinate formatting and
+   hidden information. [Acceptance evidence](functional-tests.md#r-0311-runtime-developer-mode-2026-10-27)
+   records actual results; written tests alone do not close these UCs.

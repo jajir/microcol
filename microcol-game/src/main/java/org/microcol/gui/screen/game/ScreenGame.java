@@ -44,7 +44,8 @@ public class ScreenGame implements GameScreen {
     @Inject
     ScreenGame(final @Named("GamePanel") StatusBar statusBar,
             final RightPanel rightPanel, final ButtonsGamePanel buttonGamePanel,
-            final GamePanelComponent gamePanelComponents) {
+            final GamePanelComponent gamePanelComponents,
+            final org.microcol.gui.preferences.DeveloperMode developerMode) {
         this.statusBar = Preconditions.checkNotNull(statusBar);
         this.rightPanel = Preconditions.checkNotNull(rightPanel);
         this.buttonGamePanel = Preconditions.checkNotNull(buttonGamePanel);
@@ -77,6 +78,8 @@ public class ScreenGame implements GameScreen {
         mainPanel.getStylesheets().add(STYLE_SHEET_GAME_PANEL);
         mainPanel.getChildren().add(mainBox);
         mainPanel.getChildren().add(buttonGamePanel.getContent());
+        org.microcol.gui.util.DeveloperModeShortcut.install(mainPanel,
+                developerMode);
     }
 
     /**

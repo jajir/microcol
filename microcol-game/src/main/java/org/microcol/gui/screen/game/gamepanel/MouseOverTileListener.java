@@ -42,7 +42,8 @@ public final class MouseOverTileListener {
     public MouseOverTileListener(final GameModelController gameModelController,
             final EventBus eventBus,
             final StatusBarMessageService statusBarMessageService,
-            final MouseOverTileManager mouseOverTileManager) {
+            final MouseOverTileManager mouseOverTileManager,
+            final org.microcol.gui.preferences.DeveloperMode developerMode) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.eventBus = Preconditions.checkNotNull(eventBus);
@@ -50,6 +51,14 @@ public final class MouseOverTileListener {
                 .checkNotNull(statusBarMessageService);
         this.mouseOverTileManager = Preconditions
                 .checkNotNull(mouseOverTileManager);
+        developerMode.enabledProperty()
+                .addListener((property, before, after) -> {
+                    if (gameModelController.isGameModelReady()) {
+                        mouseOverTileManager.getMouseOverTile()
+                                .ifPresent(where -> onMouseOverTileChanged(
+                                        new MouseOverTileChangedEvent(where)));
+                    }
+                });
     }
 
     @Subscribe

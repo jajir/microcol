@@ -43,6 +43,8 @@ public class ScreenSetting extends AbstractScreenMenu implements GameScreen {
         this.settingButtons = Preconditions.checkNotNull(settingButtons);
         menuHolderPanel.getContent().getStylesheets()
                 .add(STYLE_SHEET_GAME_MENU);
+        menuHolderPanel.getContent().getStyleClass().add("settings-screen");
+        menuHolderPanel.stackTitleAboveContent();
         menuHolderPanel.setMenuPanel(settingButtons);
     }
 

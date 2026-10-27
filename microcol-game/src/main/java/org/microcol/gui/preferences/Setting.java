@@ -28,6 +28,8 @@ public class Setting {
 
     private boolean showGrid;
 
+    private boolean developerMode;
+
     private boolean showFightAdvisor;
 
     private Boolean autosaveEnabled;
@@ -54,6 +56,7 @@ public class Setting {
         out.volume = volume;
         out.animationSpeed = animationSpeed;
         out.showGrid = showGrid;
+        out.developerMode = developerMode;
         out.showFightAdvisor = showFightAdvisor;
         out.autosaveEnabled = autosaveEnabled;
         out.turnSummaryEnabled = turnSummaryEnabled;
@@ -66,9 +69,9 @@ public class Setting {
     @Override
     public int hashCode() {
         return Objects.hashCode(mainFramePosition, mainFrameState, locale,
-                volume, animationSpeed, showGrid, showFightAdvisor, version,
-                gameInProgressSaveFile, autosaveEnabled, turnSummaryEnabled,
-                openEuropeOnArrival);
+                volume, animationSpeed, showGrid, developerMode,
+                showFightAdvisor, version, gameInProgressSaveFile,
+                autosaveEnabled, turnSummaryEnabled, openEuropeOnArrival);
     }
 
     @Override
@@ -86,6 +89,7 @@ public class Setting {
                 && Objects.equal(this.volume, other.volume)
                 && Objects.equal(this.animationSpeed, other.animationSpeed)
                 && Objects.equal(this.showGrid, other.showGrid)
+                && this.developerMode == other.developerMode
                 && Objects.equal(this.showFightAdvisor, other.showFightAdvisor)
                 && Objects.equal(this.autosaveEnabled, other.autosaveEnabled)
                 && Objects.equal(this.turnSummaryEnabled,
@@ -104,7 +108,7 @@ public class Setting {
                 .add("mainFramePosition", mainFramePosition)
                 .add("mainFrameState", mainFrameState).add("locale", locale)
                 .add("volume", volume).add("animationSpeed", animationSpeed)
-                .add("showGrid", showGrid)
+                .add("showGrid", showGrid).add("developerMode", developerMode)
                 .add("showFightAdvisor", showFightAdvisor)
                 .add("autosaveEnabled", autosaveEnabled)
                 .add("turnSummaryEnabled", turnSummaryEnabled)
@@ -152,6 +156,14 @@ public class Setting {
 
     public void setAnimationSpeed(Integer animationSpeed) {
         this.animationSpeed = animationSpeed;
+    }
+
+    public boolean isDeveloperMode() {
+        return developerMode;
+    }
+
+    public void setDeveloperMode(final boolean enabled) {
+        developerMode = enabled;
     }
 
     public boolean isShowGrid() {

@@ -68,4 +68,7 @@
     <entry key="setupGeneratedPreview">Preview: map %1$d × %2$d squares, %3$s climate, land %4$d %%, seed %5$s.</entry>
     <entry key="setupGeneratedSeedError">Enter a whole seed from 0 to 999999999.</entry>
     <entry key="setupGeneratedFailed">The new world could not be generated. The current game was not changed.</entry>
+    <entry key="settingDeveloperHeading">Developer</entry>
+    <entry key="settingDeveloperMode">Developer mode (F3)</entry>
+    <entry key="settingDeveloperDescription">Show map coordinates and diagnostic information.</entry>
 </properties>

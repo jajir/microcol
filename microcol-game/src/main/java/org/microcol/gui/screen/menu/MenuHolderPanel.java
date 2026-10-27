@@ -37,6 +37,10 @@ public final class MenuHolderPanel implements JavaFxComponent, ScreenLifeCycle {
         titledPage.setContent(menuPanel);
     }
 
+    public void stackTitleAboveContent() {
+        titledPage.stackTitleAboveContent();
+    }
+
     public void setTitle(final String menuTitle) {
         titledPage.setTitle(menuTitle);
     }

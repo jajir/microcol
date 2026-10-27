@@ -11077,3 +11077,103 @@ acceptance covers base `ad8ab420b038b7ed73b1fe7b56bf788341d89fa5` plus R-0307.
 The requirement is archived as done. No remote CI or publication verification
 was requested or performed; local acceptance does not prove distribution
 or website publication.
+
+## R-0311 runtime developer mode — 2026-10-27
+
+1. Base revision `199e4f30`, plus [R-0311](requirements/done/R-0311.md). Changes are
+   scoped to the runtime display preference, Settings, keyboard routing,
+   status/hover information, EN/CZ resources and their checks. Both shared UI
+   profiles explicitly enable diagnostics to preserve existing coordinate
+   assertions; TC84 also exercises normal mode. No player save or map schema
+   changes. The launch flag retains CSSFX and secret-menu behavior.
+2. Shared Eclipse formatting was applied to 19 changed Java files; exact Java
+   tokens and repeat-format idempotence passed (`target/r0311/format.log`).
+3. First all-model/JUnit dispatch: completion `20261027T061325Z-1e1e31d8fab3`,
+   supervisor PID 97072, timeout 600 seconds, selection `verify.sh --model`.
+   Acceptance is pending; no successful UI, smoke or remote result is claimed.
+
+4. First model attempt failed during test compilation after 45.147 seconds:
+   the repository uses Mockito 2.24.5, which lacks `verifyNoInteractions`.
+   Replaced it with the installed API and used the real observable mode with
+   a mocked settings store rather than mocking a final class. No tests passed
+   in that incomplete attempt. Evidence: `target/verification/run-8kvonl55/`.
+
+5. Repaired model dispatch: completion `20261027T061615Z-b4c94db3ce8f`,
+   supervisor PID 97449, timeout 600 seconds, unchanged full model selection.
+
+6. Repaired all-model/JUnit phase passed **4,770 tests in 346 complete XML
+   reports**, zero failures, errors or skips, in 133.476 verifier seconds
+   (133.616 seconds including cleanup). All `microcol-game` sources match
+   `target/verification/run-qv055dh8/source/`; results and the exact selection
+   are in that run's manifest/summary. This includes two `DeveloperModeTest`
+   checks and fifteen `StatusBarMessageServiceTest` checks.
+7. Targeted Docker/Xvfb dispatch: completion `20261027T061924Z-d856709487d7`,
+   supervisor PID 97781, timeout 1,200 seconds. Selection: all six TC84
+   scenarios, TC26/TC01 and TC04, TC80/TC01 and all three
+   `PageVerificationContractTest` checks. Expected total: twelve checks.
+   UI acceptance and fixed smoke remain pending.
+
+8. First targeted attempt completed twelve checks with **one failure, one
+   error and zero skips** in 144.719 seconds. TC84/TC06 created a replacement
+   Stage that TestFX did not target; its later initialization also left two
+   titles for TC84/TC02. The restart scenario now reuses the framework's
+   original Stage while rebuilding the application/injector. Evidence:
+   `target/docker-ui/run-i8JUwy/`.
+9. Visual review of that run's Czech Settings screenshot found controls
+   overlapping the heading. Settings now opts into normal vertical title/content
+   flow with compact spacing, retaining existing controls and the other menus'
+   layout. TC84 explicitly checks that controls follow the heading. This is a
+   runtime repair, so the all-model phase must pass again before targeted UI.
+
+10. Layout-repair model dispatch: completion `20261027T062557Z-b486713252ac`,
+    supervisor PID 97951, timeout 600 seconds. Shared formatting now covers
+    22 changed Java files; token preservation and idempotence passed.
+
+11. Layout-repair all-model/JUnit gate passed **4,770 tests in 346 complete
+    XML suites**, zero failures/errors/skips, in 133.079 seconds (133.253
+    seconds including supervisor cleanup). Evidence and exact selection:
+    `target/verification/run-kcl1nmwd/{manifest,summary}.json`. The
+    executable game sources match that run's source snapshot.
+12. Repaired targeted Docker/Xvfb selection repeats item 7: completion
+    `20261027T062828Z-fe8d7cfa5242`, supervisor PID 98225, timeout 1,200
+    seconds. Settings title placement and the original-stage restart path
+    are now checked explicitly. Targeted acceptance and smoke remain pending.
+
+13. Repaired targeted phase passed **12 checks in four complete XML suites**,
+    zero failures/errors/skips, in 153.879 seconds including cleanup. Reports:
+    `target/docker-ui/run-5X2mKY/microcol-test/surefire-reports/`. The selection
+    remains all TC84 (6), TC26/01+04 (2), TC80/01 (1), and the source contract
+    (3). The Czech Settings and map screenshots in that run's `warehouse-qa/`
+    were inspected: controls follow the title, all Settings controls fit, and
+    the ordinary description, labelled coordinates and DEV indicator remain
+    readable. No `EVENT_HANDLER_FAILED` occurs in the passing command log.
+14. Fixed smoke/support dispatch: completion `20261027T063202Z-1d6685b6ee82`,
+    supervisor PID 98464, timeout 480 seconds, selection `verify.sh --smoke`;
+    the acceptance budget remains 420 seconds including cleanup.
+
+15. Source review checked preference persistence and failed-write rollback,
+    F3 event filtering before unit commands, modal/text-input boundaries,
+    hover visibility filtering and refresh, status indicator lifecycle,
+    EN/CZ Settings layout, and the restarted test application. No blocking
+    code issue remains. All 2,172 tracked/untracked inputs under
+    `microcol-game/` and `microcol-test/` still match the passing model
+    snapshot; no executable source changed during the passing targeted run.
+    Formatting covered all 22 task Java files. Smoke and final documentation
+    acceptance are still required before commit.
+
+16. Fixed smoke/support passed **21 tests in 12 complete XML suites**, zero
+    failures/errors/skips, in 202.728 verifier seconds and 202.925 seconds
+    including supervisor cleanup, within the 420-second budget. This is the
+    unchanged ten-scenario selection in `scripts/ui-tests/smoke.json` plus
+    eleven support checks; model tests were not repeated. Exact selection,
+    hashes and reports: `target/verification/run-uxbn2_6s/{manifest,summary}.json`.
+    All 2,172 game/test inputs still match the reviewed source and smoke
+    snapshot. Local acceptance covers base `199e4f300b3b6f186976db1d8521a580119e8a62`
+    plus R-0311. The earlier failed attempts remain failed.
+
+17. All nine documentation consistency tests and strict MkDocs passed; logs
+    are `target/r0311/final-docs-tests.log` and `target/r0311/final-mkdocs.log`.
+    R-0311 is archived as done with its incoming links repaired. Source review,
+    shared formatting and all required local phases are complete. Native
+    macOS function-key behavior and remote CI/distribution/Pages publication
+    were not checked; local acceptance does not establish a published build.

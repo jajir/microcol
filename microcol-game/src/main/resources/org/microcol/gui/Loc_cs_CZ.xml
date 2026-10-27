@@ -291,4 +291,6 @@
     <entry key="unitsPanel_continental">Vojenská role: kontinentální</entry>
     <entry key="unitsPanel_convert">Domorodý konvertita: %s. Nepřiřazená kola: %s z 8.</entry>
     <entry key="unitsPanel_royal">Vojenská role: královský voják</entry>
+    <entry key="developerModeOn">DEV zapnuto</entry>
+    <entry key="developerModeOff">DEV vypnuto</entry>
 </properties>

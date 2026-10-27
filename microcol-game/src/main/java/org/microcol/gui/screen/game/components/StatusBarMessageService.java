@@ -13,7 +13,7 @@ import org.microcol.gui.GoodsTypeName;
 import org.microcol.gui.Loc;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.UnitTypes;
-import org.microcol.gui.preferences.GamePreferences;
+import org.microcol.gui.preferences.DeveloperMode;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
 import org.microcol.model.GoodsType;
@@ -46,16 +46,15 @@ public class StatusBarMessageService {
 
     private final I18n i18n;
 
-    private final GamePreferences gamePreferences;
+    private final DeveloperMode developerMode;
 
     private final LocalizationHelper localizationHelper;
 
     @Inject
-    StatusBarMessageService(final I18n i18n,
-            final GamePreferences gamePreferences,
+    StatusBarMessageService(final I18n i18n, final DeveloperMode developerMode,
             final LocalizationHelper localizationHelper) {
         this.i18n = Preconditions.checkNotNull(i18n);
-        this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
+        this.developerMode = Preconditions.checkNotNull(developerMode);
         this.localizationHelper = Preconditions
                 .checkNotNull(localizationHelper);
     }
@@ -92,12 +91,12 @@ public class StatusBarMessageService {
             final Optional<NativeSettlement> oNativeSettlement,
             final boolean lostCityRumor) {
         final StringBuilder buff = new StringBuilder();
-        if (gamePreferences.isDevelopment()) {
-            buff.append("[");
+        if (developerMode.isEnabled()) {
+            buff.append("x=");
             buff.append(where.getX());
-            buff.append(",");
+            buff.append(", y=");
             buff.append(where.getY());
-            buff.append("] - ");
+            buff.append(" · ");
         }
         if (player.isVisible(where)) {
             // Terrain is remembered; units and colonies are shown only while

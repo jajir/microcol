@@ -120,6 +120,12 @@ public final class GamePanelMouseListener {
                 onMouseReleased(e);
             }
         });
+        gamePanelComponent.getCanvas().setOnMouseExited(e -> {
+            mouseOverTileManager.clearMouseOverTile();
+            eventBus.post(
+                    new org.microcol.gui.screen.game.components.StatusBarMessageEvent(
+                            org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source.GAME));
+        });
         gamePanelComponent.getCanvas().setOnMouseEntered(
                 e -> mouseOverTileManager.clearMouseOverTile());
         gamePanelComponent.getCanvas().setOnMouseMoved(e -> {
