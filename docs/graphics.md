@@ -5,7 +5,7 @@
 1. Uživatel schválil [poslední náhled s černou čárou](graphics-assets/wave-contours-2026-10-27/selected-black.png):
    vlny mají být černé a stejně silné jako hranice odkryté a skryté mapy.
    Předchozí tři barevné a příliš silné návrhy nejsou zadáním.
-2. [R-0305](requirements/R-0305.md) nastavuje hlavní vlnu i doznívající stopu
+2. [R-0305](requirements/done/R-0305.md) nastavuje hlavní vlnu i doznívající stopu
    na černou `#000000` a 1,6 logického px, podle stávajícího cíle obrysu mapy.
    Platí pro oceán, daleké moře i jejich statické náhledy. Nahrazuje starší
    barevné a šířkové nastavení vln z R-0293, nikoli jejich schválený pohyb.
@@ -1271,7 +1271,7 @@ rsvg-convert --zoom 2 -o microcol-game/src/main/resources/images/game-toolbar-fr
 
 ## Titulkový pruh macOS — 2026-10-25
 
-[R-0281](requirements/R-0281.md) připravuje sjednocení systémového titulku hlavního okna s papírovou barvou `#FFF9EC`. Zachovává systémový název, ovládací tlačítka a změnu velikosti okna. Jde o titulek okna, nikoli horní lištu nabídek celého macOS. Skutečný vzhled na Macu zatím není ověřen; stav kontrol vede [funkční evidence](functional-tests.md#r-0281-macos-title-bar-2026-10-25).
+[R-0281](requirements/R-0281.md) připravuje sjednocení systémového titulku hlavního okna s papírovou barvou `#FFF9EC`. Zachovává systémový název, ovládací tlačítka a změnu velikosti okna. Jde o titulek okna, nikoli horní lištu nabídek celého macOS. Kontrola na odemčeném Macu dne 27. října 2026 neprošla: uživatel potvrdil jinou barvu titulku. Nastavení scény a stylu JavaFX samo o sobě požadovaný vzhled nedokazuje; R-0281 zůstává otevřený. Viz [aktuální funkční evidence](functional-tests.md#requirement-closure-2026-10-27).
 
 ## Kompaktní kolonie a počet domků — R-0280
 
@@ -1280,7 +1280,7 @@ rsvg-convert --zoom 2 -o microcol-game/src/main/resources/images/game-toolbar-fr
 
 ## Otazníky na neobjevené mapě — R-0282
 
-**Úprava z 27. října 2026, [R-0306](requirements/R-0306.md):** vybraný
+**Úprava z 27. října 2026, [R-0306](requirements/done/R-0306.md):** vybraný
 kreslený tvar A má nově černou čáru `#000000` o šířce 2 logické px, včetně
 tečky. Mírné zesílení z 1,6 px a změna tmavě šedé na černou navazují na
 schválené vlny. Geometrie, rozmístění a mizení po objevení se nemění.

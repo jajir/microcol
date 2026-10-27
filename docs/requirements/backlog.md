@@ -7,24 +7,22 @@ publishing the analysis only; tests remain isolated and uncommitted, and no
 gameplay repair is authorized. See the
 [evidence](../functional-tests.md#r-0310-initial-free-play-movement-2026-10-27).
 
-Proposed on 2026-10-27: [R-0309 — Settings controls and layout](R-0309.md).
-Three visual alternatives cover all existing Settings elements; the final
-design and implementation remain unselected. Primary area A03, with A01/A04
-dependencies and the existing R-0307 in-game frame.
+Closed by user acceptance on 2026-10-27: [R-0309 — Settings design alternatives](done/R-0309.md).
+The three proposals are delivered. A later runtime change still needs a selected
+design; this closure does not claim implementation of any alternative.
 
 Completed locally on 2026-10-27:
 [R-0308 — opening-menu buttons fit their contents](done/R-0308.md).
 Content widths, EN/CZ labels and compact fallback passed local acceptance; see the
 [evidence](../functional-tests.md#r-0308-opening-menu-content-width-2026-10-27).
 
-Implemented without test execution at the user's request on 2026-10-27:
-[R-0306 — stronger black question marks](R-0306.md). Status remains
-`ready for development` pending verified acceptance; see the
-[evidence](../functional-tests.md#r-0306-black-question-marks-2026-10-27).
+Accepted locally on 2026-10-27: [R-0306 — stronger black question marks](done/R-0306.md).
+Fresh model, targeted UI and smoke checks passed; see the
+[closure evidence](../functional-tests.md#requirement-closure-2026-10-27).
 
-Implemented without test execution at the user's request on 2026-10-27:
-[R-0305 — black wave contours](R-0305.md). Status remains `ready for development`
-pending verified acceptance; see the [evidence](../functional-tests.md#r-0305-black-wave-contours-2026-10-27).
+Accepted locally on 2026-10-27: [R-0305 — black wave contours](done/R-0305.md).
+Fresh model, targeted UI and smoke checks passed; see the
+[closure evidence](../functional-tests.md#requirement-closure-2026-10-27).
 
 Completed locally on 2026-10-26: [R-0299 — resolve current Dependabot library alerts](done/R-0299.md), A01 with A03/A04 consumers; patched Log4j and Gson, JDK 17 packaging checks and all 4,775 mandatory model/JUnit plus fixed smoke checks passed. [Evidence](../functional-tests.md#r-0299-dependabot-library-updates-2026-10-26) distinguishes local acceptance from remote alert closure and publication.
 
@@ -213,7 +211,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0204](done/R-0204.md) | Show turn notices and final result entry | New capture | UC-114 notifications/end; existing R-0086 notice credited |
 | [R-0205](done/R-0205.md) | Inspect owned and lawfully known world objects | New capture | SUPPORT-004 model disclosure query and object details |
 | [R-0206](done/R-0206.md) | Navigate the game-rule encyclopedia | Done; targeted checks passed | SUPPORT-004; existing help shell credited |
-| [R-0259](R-0259.md) | Recognize all 14 terrain types and terrain features in illustrated help | Remaining feature illustrations; terrain/forest/resource reference delivered by [R-0269](done/R-0269.md) | User request, 2026-10-24; existing encyclopedia and artwork reused |
+| [R-0259](done/R-0259.md) | Recognize terrain and features in illustrated help | Closed on user acceptance of the terrain/forest/resource reference delivered by [R-0269](done/R-0269.md) and [R-0274](done/R-0274.md) | User confirmation, 2026-10-27; broader illustration capture retained as history |
 | [R-0260](done/R-0260.md) | Record the shared ballpoint, Playpen Sans 14 and flat-color contract | Done; documentation agreement only | User decisions and palette reference, 2026-10-24 |
 | [R-0261](done/R-0261.md) | Show a subtle dashed grid only on explored map squares | New capture | User request and Tabletop Map reference, 2026-10-24; solid gray unknown territory has no grid |
 | [R-0262](done/R-0262.md) | Make the main game screen hand-drawn with clear controls and a taller bottom panel | New capture | User request, 2026-10-24; integrated main-map screen, not the separate main menu |
@@ -592,7 +590,7 @@ preserving native input, values and persistence. Other screens remain outside th
 
 ## Four-container regression experiment — 2026-10-20
 
-1. [R-0253](R-0253.md) measures four isolated serial UI groups using the existing runner; production CI remains unchanged pending evidence.
+1. [R-0253](canceled/R-0253.md) was canceled by the user on 2026-10-27. The unsuccessful four-container experiment remains recorded; no speedup or production adoption is accepted.
 
 
 ## Local acceptance without CI waiting — 2026-10-20
@@ -655,7 +653,7 @@ preserving native input, values and persistence. Other screens remain outside th
 
 ## macOS title bar — 2026-10-25
 
-1. [R-0281](R-0281.md) aligns the native window title bar with the cream game background under A03, retaining native controls. Implementation and local checks are in progress; native visual acceptance is pending.
+1. [R-0281](R-0281.md) aligns the native window title bar with the cream game background under A03, retaining native controls. The user rejected the native title-bar color on 2026-10-27. The JavaFX configuration checks pass, but the visible outcome is still incorrect; see the [current evidence](../functional-tests.md#requirement-closure-2026-10-27).
 
 [R-0282](done/R-0282.md) — stationary question marks on unexplored map; implemented and locally accepted on 2026-10-25. See the [verification evidence](../functional-tests.md#r-0282-unknown-question-marks-2026-10-25).
 

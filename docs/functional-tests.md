@@ -1,5 +1,76 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## Requirement closure — 2026-10-27
+
+1. Scope: the user canceled [R-0253](requirements/canceled/R-0253.md),
+   confirmed [R-0259](requirements/done/R-0259.md) and
+   [R-0309](requirements/done/R-0309.md) as done, and requested work on
+   [R-0281](requirements/R-0281.md), [R-0305](requirements/done/R-0305.md)
+   and [R-0306](requirements/done/R-0306.md). This task changes documentation only;
+   the wave and question-mark implementations were already present.
+2. Checked executable source: `69841d85af08eadc2dc37ddcb011d477a2637501`.
+   No executable source, tests, assets or configuration changed during this
+   verification. The earlier R-0310 reproducer remains in its isolated worktree;
+   its expected failures are not silently integrated into this selection.
+3. First model attempt `20261027T050217Z-a5b90b0b19b5`, supervisor PID 84225,
+   timeout 600 seconds, failed before starting tests: the Docker labelled-container
+   query exceeded its 20-second preflight timeout. The saved result is
+   `timed_out`, with no cleanup errors. After the host was unlocked, Docker
+   Desktop status, server version and container listing responded normally;
+   no production change was needed. This failed attempt remains failed.
+4. Model retry `20261027T050502Z-94f895ee7c06`, supervisor PID 85013,
+   timeout 600 seconds: **4,764 tests in 344 XML suites, zero failures,
+   errors or skips**. Reports: `target/verification/run-0yg4mno7/model`.
+   Runner elapsed time was 140.778 seconds; the model phase took 136.588 seconds.
+5. Targeted Docker/Xvfb run `20261027T050906Z-b99177893a48`, supervisor
+   PID 86159, timeout 1,200 seconds: **10 tests, zero failures, errors or
+   skips**, elapsed 157.589 seconds. Reports: `target/docker-ui/run-KN0RSa`.
+   The exact selection was TC100/F91/06–07 (illustrated help in EN/CZ), all
+   three TC188/F221 scenarios (toolbar and scene/window configuration),
+   TC80/F72/04 (sparse terrain, animated/static water, pan and Continue),
+   TC26/F18/10 (black question marks, navigation, resize, Continue and
+   exploration) and all three `PageVerificationContractTest` checks.
+6. Native R-0281 inspection used a fresh local app image named
+   `MicroColRequirementCheck`, built from the checked source with an isolated
+   test home and preferences, Java 17.0.18 and JavaFX 17.0.20 on macOS 27.0.1.
+   The earlier installed MicroCol app was recognized as stale and excluded.
+   Menu and Settings were inspected and the native zoom action was exercised.
+   The tool capture did not reliably show the actual native decorations; the
+   user inspected the window directly and explicitly reported a different
+   title-bar color. **R-0281 fails native visual acceptance and remains active.**
+   Passing TC188 configuration assertions do not contradict this observation.
+7. Investigation of the current approach: the
+   [JavaFX 17 unified-window documentation](https://openjfx.io/javadoc/17/javafx.graphics/javafx/stage/StageStyle.html#UNIFIED)
+   describes platform decorations and a transparent scene for the unified
+   effect; it does not promise an exact title-bar pigment. The
+   [OpenJFX macOS implementation](https://github.com/openjdk/jfx17u/blob/master/modules/javafx.graphics/src/main/native-glass/mac/GlassWindow.m)
+   uses the textured-background window mask, while
+   [WindowStage](https://github.com/openjdk/jfx17u/blob/master/modules/javafx.graphics/src/main/java/com/sun/javafx/tk/quantum/WindowStage.java)
+   passes the scene color to the native window background. This source review
+   explains why the existing test verifies configuration rather than the
+   requested native result; it is not evidence that a replacement works.
+   No JavaFX upgrade, native bridge or replacement window controls were added.
+8. Closure scope: R-0253 preserves the failed four-container history. R-0259
+   is closed on the user's acceptance of the delivered 14-terrain, forest and
+   12-resource reference from R-0269/R-0274; this does not assert delivery of
+   separate plowed-field, road, river or rumor illustrations from the original
+   broader capture. R-0309 closes the delivered three Settings design proposals,
+   whose [preview evidence](publishing.md#settings-design-proposals-2026-10-27)
+   remains authoritative; no proposal was selected for a runtime change.
+
+9. Fixed smoke/support run `20261027T051420Z-b2de0d31d4f6`, supervisor
+   PID 86691, timeout 480 seconds and acceptance budget 420 seconds:
+   **21 tests in 12 suites, zero failures, errors or skips**. The full
+   configured [smoke/support selection](#pre-commit-smoke) passed in
+   203.129 seconds (runner elapsed 206.306 seconds). Reports and exact selected
+   methods: `target/verification/run-0rriqaax/summary.json`. The source revision
+   is the same as the model and targeted phases. R-0305 and R-0306 are now
+   accepted as `done`; no runtime or test changes were needed in this task.
+10. Documentation consistency: **9 tests passed** and strict MkDocs built
+    successfully after the status moves and link repair. Review confirmed a
+    documentation-only commit scope. Remote CI and publication were not
+    inspected; local acceptance is not a claim of a newly published build.
+
 ## R-0310 initial free-play movement — 2026-10-27
 
 1. [R-0310](requirements/R-0310.md) requests reproduction only on production
@@ -96,7 +167,7 @@
 
 ## R-0306 black question marks — 2026-10-27
 
-1. [R-0306](requirements/R-0306.md), based on `a28f774f`, changes the
+1. [R-0306](requirements/done/R-0306.md), based on `a28f774f`, changes the
    unexplored-map question mark from dark-gray 1.6-pixel ink to black
    2-pixel ink. The drawing's path, position, placement and exploration
    behavior are unchanged; other map markers retain their shared ink.
@@ -121,7 +192,7 @@
 
 ## R-0305 black wave contours — 2026-10-27
 
-1. [R-0305](requirements/R-0305.md) implements the approved black wave lines
+1. [R-0305](requirements/done/R-0305.md) implements the approved black wave lines
    at the map-outline target of 1.6 logical pixels, on base `8d9af870` plus
    this task's changes. The shared SVG and runtime PNG cover all 120 ocean
    and 120 High Seas frames and static previews; frame geometry, opacity,
@@ -9047,7 +9118,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ## Four isolated containers experiment — 2026-10-20
 
-1. [R-0253](requirements/R-0253.md) measures four concurrent containers using the unchanged serial runner on source `108e13e58bbc8a19c9e888eb7bdce138d79bf82c`. No production CI, assertion, fixture or JVM isolation setting changed. Docker remains amd64 on ARM64, with approximately 8 GiB engine memory and three unrelated application containers.
+1. [R-0253](requirements/canceled/R-0253.md) measures four concurrent containers using the unchanged serial runner on source `108e13e58bbc8a19c9e888eb7bdce138d79bf82c`. No production CI, assertion, fixture or JVM isolation setting changed. Docker remains amd64 on ARM64, with approximately 8 GiB engine memory and three unrelated application containers.
 2. Timing input: successful CI `39342872217` at `d0572790ae3d756fedf3a41217b475bd276a3a99`, 101 UI/support suites and 413 checks. Current source has the same class set; TC85 adds one method after that baseline. Model test sources are unchanged. Whole classes were assigned greedily by descending XML duration, reserving the prior model-module duration in group 1. The manifest, source hashes and resource samples are under `target/ui-parallel/`. This older CI run is not a controlled same-machine benchmark.
 3. Four groups contain 28, 17, 28 and 28 UI classes. All 223 baseline model classes run only in group 1; the other groups allow the dependent module to have no selected tests. Every dispatch has a 5,400-second timeout and originating task `01a15723-6fc7-7750-b6f3-f10734c531f7`. Completion directories under `~/Library/Logs/Microcol/completions/` and supervisor PIDs:
 

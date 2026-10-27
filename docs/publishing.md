@@ -788,7 +788,7 @@ documentation in APT just to make it visible on the web.
 
 ## Settings design proposals — 2026-10-27
 
-1. [R-0309](requirements/R-0309.md) offers three alternatives for all existing
+1. [R-0309](requirements/done/R-0309.md) offers three alternatives for all existing
    Settings controls: Papírový formulář, Dva listy and Kompaktní seznam. The
    screenshots are browser mockups with sample values, not game screenshots.
    The user has not selected a design or authorized its implementation.

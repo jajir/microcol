@@ -644,7 +644,7 @@ Rozdělení práce a akceptace výše jsou návrhy pro následující zadání.
 
 ## Four-container regression experiment — 2026-10-20
 
-1. [R-0253](requirements/R-0253.md) measures four isolated serial UI groups using the existing runner; production CI remains unchanged pending evidence.
+1. [R-0253](requirements/canceled/R-0253.md) was canceled by the user on 2026-10-27. Preserve the unsuccessful four-container experiment as evidence; it authorizes neither another attempt nor production adoption.
 
 
 ## Local acceptance without CI waiting — 2026-10-20
