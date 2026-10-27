@@ -1123,3 +1123,12 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
    TC100/06–07 českou a anglickou obrazovou nápovědu.
 2. Stav místního přijetí a skutečné výsledky vede [funkční evidence](functional-tests.md#r-0314-k3-lake-ripples-2026-10-27).
    Tato dílčí vizuální změna neuzavírá celé UC-114 ani UC-119.
+
+## Atlas statistik — R-0323, 2026-10-27
+
+1. UC-114/119: [R-0323](requirements/done/R-0323.md) mění rozložení statistik,
+   zachovává dvanáct reportů a jejich skutečná data. TC192/03–04 doplňují
+   historii, výběr, klávesnici, EN/CZ, malé okno a návrat; TC192/01 zachovává
+   osm negrafových reportů. Výsledek a přesný výběr uvádí
+   [evidence](functional-tests.md#r-0323-statistics-atlas-2026-10-27); místní přejímka prošla.
+   Tento krok neuzavírá celé UC-114/119.

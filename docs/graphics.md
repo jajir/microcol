@@ -1,5 +1,24 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Atlas statistik — 27. října 2026
+
+1. Uživatel vybral směr Atlas z [návrhů obrazovek](requirements/R-0321.md).
+   První implementaci vlastní [R-0323](requirements/done/R-0323.md): vlevo stálý
+   rejstřík všech dvanácti přehledů, vpravo nadpis a jeden graf nebo report.
+   Papírový podklad sjednocuje celou plochu; dvě části odděluje jemná linka.
+2. Přepínače používají stávající společná tlačítka s ikonami. Písková výplň
+   a podtržení označují výběr. Grafy používají zelenou křivku, jemné neutrální
+   vodorovné linky a pojmenované osy. Nadpisy i hodnoty zachovávají Playpen Sans
+   Regular 14; návrhová galerie nezavádí výjimku z dohodnuté typografie.
+3. Stav implementace a skutečnou přejímku uvádí
+   [funkční evidence](functional-tests.md#r-0323-statistics-atlas-2026-10-27).
+   Skutečné snímky implementace: [graf zlata](graphics-assets/statistics-atlas-2026-10-27/r0323-atlas-gold-en.png),
+[loďstvo v malém okně](graphics-assets/statistics-atlas-2026-10-27/r0323-atlas-fleet-small.png)
+a [česká prázdná historie](graphics-assets/statistics-atlas-2026-10-27/r0323-atlas-empty-cs.png).
+
+Tento krok neupravuje další obrazovky z galerie.
+
+
 ## Ručně kreslená modální okna — 27. října 2026
 
 1. Uživatel vybral variantu **01 — Klidný rukopis**: jemně prohnuté hrany,

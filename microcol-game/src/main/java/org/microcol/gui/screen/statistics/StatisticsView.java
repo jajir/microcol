@@ -7,6 +7,8 @@ import org.microcol.gui.util.InGamePage;
 import org.microcol.gui.util.JavaFxComponent;
 import com.google.inject.Inject;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Priority;
 
 /** Report content inside the shared game frame. */
 @Singleton
@@ -18,6 +20,7 @@ public final class StatisticsView implements JavaFxComponent, ScreenLifeCycle {
     StatisticsView(final InGamePage page,
             final StatisticsButtonsPanel buttons) {
         this.page = page;
+        page.getContent().getStyleClass().add("statistics-atlas");
         page.setToolbar(buttons.getContent());
     }
 
@@ -25,10 +28,7 @@ public final class StatisticsView implements JavaFxComponent, ScreenLifeCycle {
         mainPanel = panel;
         panel.getContent().getStyleClass().add("report-content");
         page.setContent(panel.getContent());
-    }
-
-    public void setTitle(final String title) {
-        page.setTitle(title);
+        VBox.setVgrow(panel.getContent(), Priority.ALWAYS);
     }
 
     @Override

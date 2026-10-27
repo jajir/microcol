@@ -8,7 +8,7 @@
 	<entry key="titleMilitary">Military</entry>
 	<entry key="titleWealth">Wealth</entry>
 	<entry key="titleScore">Score</entry>
-	<entry key="titleIndex">Index</entry>
+	<entry key="titleIndex">Atlas of reports</entry>
 	<entry key="buttonCancel">Back</entry>
 
 	<entry key="statistics_year">Year</entry>
@@ -102,4 +102,6 @@ Your treasury when quoted: %s gold.</entry>
 	<entry key="titleReligion">Religion</entry>
 	<entry key="titleColonies">Colonies</entry>
 	<entry key="titleFleet">Fleet</entry>
+    <entry key="historyLatest">Last recorded value: %s · Year %s</entry>
+    <entry key="historyEmpty">No history yet. Records will appear after a turn is completed.</entry>
 </properties>

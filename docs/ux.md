@@ -1,5 +1,22 @@
 # UX a pravidla ovládání MicroCol
 
+## Atlas přehledů ve Statistikách — 2026-10-27
+
+1. Hráč z mapy otevře Statistiky, vybere jeden z dvanácti přehledů v levém
+   rejstříku a čte jeho obsah vpravo. [R-0323](requirements/done/R-0323.md) navazuje
+   na uživatelem vybraný Atlas. Existující akce reportů mají stejné důsledky
+   a potvrzení; prohlížení a návrat nemění tah ani zlato.
+2. Výběr zůstává viditelný i po opakovaném kliknutí. Rejstřík se posouvá
+   samostatně a při ovládání klávesnicí odhalí fokusovanou položku. Escape
+   i horní Zpět vedou na mapu; spodní stav zůstává dosažitelný.
+3. Souhrn grafu výslovně označuje poslední historický záznam; není příslibem
+   stejné hodnoty v aktuální pokladně. Prázdná historie má vysvětlení a jeden
+   záznam se ukáže jako bod. Další otevření přehled obnoví ze skutečné hry.
+4. [Evidence](functional-tests.md#r-0323-statistics-atlas-2026-10-27) rozlišuje
+   automatické kontroly a vizuální přejímku. Snazší orientace je návrhový záměr,
+   nikoli nové pozorování hráčů.
+
+
 ## Obrys modálních oken — 27. října 2026
 
 1. [R-0322](requirements/done/R-0322.md) mění pouze vnější vizuální hranici modalu

@@ -37,6 +37,8 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
+import javafx.util.StringConverter;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -102,6 +104,10 @@ final class StatisticsPanel implements GameScreen {
 
     private final Label labelIndexTitle = new Label();
 
+    private final Label reportTitle = new Label();
+
+    private final Label historySummary = new Label();
+
     private final ToggleGroup toggleGroup = new ToggleGroup();
     private final ToggleButton tb1 = ActionButtons.toggle(ButtonIcon.GOLD);
     private final ToggleButton tb2 = ActionButtons.toggle(ButtonIcon.MILITARY);
@@ -109,15 +115,12 @@ final class StatisticsPanel implements GameScreen {
     private final ToggleButton tb4 = ActionButtons
             .toggle(ButtonIcon.STATISTICS);
 
-    private Pane chartPanel = new StackPane();
-
-    private final StatisticsView statisticsView;
+    private final Pane chartPanel = new StackPane();
 
     @Inject
     StatisticsPanel(final I18n i18n, final EventBus eventBus,
             final GameModelController gameModelController,
-            final StatisticsView statisticsView, final ViewUtil viewUtil,
-            final HallOfFameDao hallOfFameDao,
+            final ViewUtil viewUtil, final HallOfFameDao hallOfFameDao,
             final LocalizationHelper localization,
             final LaborNavigator laborNavigator,
             final ColonyAdvisorNavigator colonyAdvisorNavigator,
@@ -126,7 +129,6 @@ final class StatisticsPanel implements GameScreen {
                 .checkNotNull(gameModelController);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        this.statisticsView = Preconditions.checkNotNull(statisticsView);
 
         relations = new EuropeanRelationsPanel(gameModelController, viewUtil,
                 i18n);
@@ -182,15 +184,19 @@ final class StatisticsPanel implements GameScreen {
         toggleGroup.selectedToggleProperty()
                 .addListener(this::onToggleGroupWasChanged);
 
+        tb1.setId("goldTab");
         tb1.setToggleGroup(toggleGroup);
         tb1.setUserData(KEY_GOLD);
 
+        tb2.setId("militaryTab");
         tb2.setToggleGroup(toggleGroup);
         tb2.setUserData(KEY_MILITARY);
 
+        tb3.setId("wealthTab");
         tb3.setToggleGroup(toggleGroup);
         tb3.setUserData(KEY_WEALTH);
 
+        tb4.setId("scoreTab");
         tb4.setToggleGroup(toggleGroup);
         tb4.setUserData(KEY_SCORE);
 
@@ -211,13 +217,18 @@ final class StatisticsPanel implements GameScreen {
         leftPanel.getChildren().add(fleetButton);
         // The position moves the whole sidebar, so the scroll bar stays at its
         // edge instead of being moved out of the viewport with the tabs.
-        sidebar.getStyleClass().add("left");
+        sidebar.getStyleClass().add("atlas-sidebar");
+        sidebar.setMinHeight(0);
+        sidebar.setPrefViewportHeight(520);
+        leftPanel.getStyleClass().add("atlas-index");
         sidebar.setId("statsSidebar");
         sidebar.setFitToWidth(true);
         sidebar.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         for (final ToggleButton tab : List.of(tb1, tb2, tb3, tb4,
                 relationsButton, tradeButton, baseScoreButton, hallOfFameButton,
                 laborButton, religionButton, coloniesButton, fleetButton)) {
+            tab.getStyleClass().add("atlas-tab");
+            tab.setMaxWidth(Double.MAX_VALUE);
             tab.focusedProperty()
                     .addListener((observable, wasFocused, isFocused) -> {
                         if (isFocused) {
@@ -226,11 +237,21 @@ final class StatisticsPanel implements GameScreen {
                     });
         }
 
-        final VBox rightPanel = new VBox();
-        rightPanel.getStyleClass().add("right");
+        reportTitle.setId("atlasReportTitle");
+        reportTitle.getStyleClass().add("atlas-report-title");
+        reportTitle.setWrapText(true);
+        reportTitle.setMaxWidth(Double.MAX_VALUE);
+        historySummary.setId("atlasHistorySummary");
+        historySummary.getStyleClass().add("atlas-history-summary");
+        historySummary.setWrapText(true);
+        chartPanel.setId("atlasReportContent");
+        chartPanel.setMinWidth(0);
+        final VBox rightPanel = new VBox(16, reportTitle, historySummary,
+                chartPanel);
+        rightPanel.getStyleClass().add("atlas-detail");
         rightPanel.setMinWidth(0);
-        HBox.setHgrow(rightPanel, javafx.scene.layout.Priority.ALWAYS);
-        rightPanel.getChildren().addAll(chartPanel);
+        HBox.setHgrow(rightPanel, Priority.ALWAYS);
+        VBox.setVgrow(chartPanel, Priority.ALWAYS);
 
         final HBox statsPanel = new HBox(sidebar, rightPanel);
         statsPanel.getStyleClass().add("statsPanel");
@@ -243,8 +264,11 @@ final class StatisticsPanel implements GameScreen {
             final ObservableValue<? extends Toggle> object,
             final Toggle oldValue, final Toggle newValue) {
         if (newValue == null) {
+            toggleGroup.selectToggle(oldValue);
             return;
         }
+        historySummary.setVisible(false);
+        historySummary.setManaged(false);
         if (KEY_RELATIONS.equals(newValue.getUserData())) {
             setTitle(Stats.titleRelations);
             relations.showReport();
@@ -264,7 +288,7 @@ final class StatisticsPanel implements GameScreen {
             return;
         }
         if (KEY_HALL_OF_FAME.equals(newValue.getUserData())) {
-            statisticsView.setTitle(i18n.get(HallOfFameText.title));
+            reportTitle.setText(i18n.get(HallOfFameText.title));
             hallOfFame.showReport(gameModelController.isGameModelReady()
                     ? gameModelController.getModel().getHallOfFameEntry()
                     : Optional.empty());
@@ -320,7 +344,7 @@ final class StatisticsPanel implements GameScreen {
     }
 
     private void setTitle(final Stats key) {
-        statisticsView.setTitle(i18n.get(key));
+        reportTitle.setText(i18n.get(key));
     }
 
     /**
@@ -347,7 +371,7 @@ final class StatisticsPanel implements GameScreen {
     private Node createChartScore(final List<TurnPlayerStatistics> stats,
             final Calendar calendar) {
         final LineChart<Number, Number> lineChart = makeLineChart(calendar,
-                Stats.titleScore);
+                stats, Stats.titleScore);
         lineChart.getData().add(initSerie(stats, stat -> stat.getScore(),
                 Stats.titleScore, calendar));
         return lineChart;
@@ -356,7 +380,7 @@ final class StatisticsPanel implements GameScreen {
     private Node createChartWealth(final List<TurnPlayerStatistics> stats,
             final Calendar calendar) {
         final LineChart<Number, Number> lineChart = makeLineChart(calendar,
-                Stats.titleWealth);
+                stats, Stats.titleWealth);
         lineChart.getData().add(initSerie(stats, stat -> stat.getEcononyScore(),
                 Stats.titleWealth, calendar));
 
@@ -366,7 +390,7 @@ final class StatisticsPanel implements GameScreen {
     private Node createChartGold(final List<TurnPlayerStatistics> stats,
             final Calendar calendar) {
         final LineChart<Number, Number> lineChart = makeLineChart(calendar,
-                Stats.titleGold);
+                stats, Stats.titleGold);
         lineChart.getData().add(initSerie(stats, stat -> stat.getGold(),
                 Stats.titleGold, calendar));
 
@@ -376,7 +400,7 @@ final class StatisticsPanel implements GameScreen {
     private Node createChartMilitaryPower(
             final List<TurnPlayerStatistics> stats, final Calendar calendar) {
         final LineChart<Number, Number> lineChart = makeLineChart(calendar,
-                Stats.titleMilitary);
+                stats, Stats.titleMilitary);
         lineChart.getData()
                 .add(initSerie(stats, stat -> stat.getMilitaryScore(),
                         Stats.titleMilitary, calendar));
@@ -385,19 +409,41 @@ final class StatisticsPanel implements GameScreen {
     }
 
     private final LineChart<Number, Number> makeLineChart(
-            final Calendar calendar, final Stats yAxisMessageKey) {
+            final Calendar calendar, final List<TurnPlayerStatistics> stats,
+            final Stats yAxisMessageKey) {
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
 
         xAxis.setAutoRanging(false);
         xAxis.setLowerBound(calendar.getStartYear());
-        xAxis.setUpperBound(calendar.getCurrentYear() + 2);
+        final int lastYear = stats.stream()
+                .mapToInt(stat -> calendar.getYearForTurnNo(stat.getTurnNo()))
+                .max().orElse(calendar.getCurrentYear());
+        xAxis.setUpperBound(Math.max(calendar.getCurrentYear(), lastYear) + 2);
         xAxis.setLabel(i18n.get(Stats.statistics_year));
         yAxis.setLabel(i18n.get(yAxisMessageKey));
 
         final LineChart<Number, Number> out = new LineChart<Number, Number>(
                 xAxis, yAxis);
+        out.setId("statisticsChart");
         out.setLegendVisible(false);
+        out.setAnimated(false);
+        out.setMinSize(0, 280);
+        out.setPrefHeight(420);
+        xAxis.setTickUnit(Math.max(1, Math
+                .ceil((xAxis.getUpperBound() - xAxis.getLowerBound()) / 6)));
+        xAxis.setMinorTickVisible(false);
+        xAxis.setTickLabelFormatter(new StringConverter<Number>() {
+            @Override
+            public String toString(final Number value) {
+                return Integer.toString(value.intValue());
+            }
+
+            @Override
+            public Number fromString(final String text) {
+                return Integer.valueOf(text);
+            }
+        });
 
         return out;
     }
@@ -412,6 +458,15 @@ final class StatisticsPanel implements GameScreen {
                 .add(new XYChart.Data<Number, Number>(
                         calendar.getYearForTurnNo(stat.getTurnNo()),
                         statFunction.apply(stat))));
+        historySummary.setText(stats.stream()
+                .max(java.util.Comparator
+                        .comparingInt(TurnPlayerStatistics::getTurnNo))
+                .map(stat -> i18n.get(Stats.historyLatest,
+                        statFunction.apply(stat),
+                        calendar.getYearForTurnNo(stat.getTurnNo())))
+                .orElseGet(() -> i18n.get(Stats.historyEmpty)));
+        historySummary.setVisible(true);
+        historySummary.setManaged(true);
         return series;
     }
 
@@ -444,7 +499,11 @@ final class StatisticsPanel implements GameScreen {
 
     @Override
     public void beforeShow() {
-        toggleGroup.selectToggle(tb1);
+        if (toggleGroup.getSelectedToggle() == tb1) {
+            onToggleGroupWasChanged(null, null, tb1);
+        } else {
+            toggleGroup.selectToggle(tb1);
+        }
     }
 
     @Override

@@ -1,5 +1,69 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0323 statistics Atlas — 2026-10-27
+
+1. [R-0323](requirements/done/R-0323.md), UC-114/119, implements the selected Atlas
+   layout for Statistics. Existing reports, model operations, icons and shared
+   buttons remain in place. TC192/03 covers four chart metrics, real historical
+   values, selection, keyboard navigation, resize and return. TC192/04 covers
+   Czech text, empty/single-record saved fixtures and refreshed reopening.
+   TC192/01 retains all eight non-chart report checks and the shared frame.
+2. The shared Java formatter was applied to all five changed Java files.
+   Base revision: `c0e64583`; eight source/test hashes are recorded in
+   `target/r0323/source.json`. Model/JUnit phase dispatched through the completion
+   runner at `20261027T173410Z-1d32d83ebf98`, supervisor PID `5033`, timeout 600 s.
+   Evidence directory:
+   `/Users/jan/Library/Logs/Microcol/completions/20261027T173410Z-1d32d83ebf98`.
+   The accepted results for each phase are recorded below.
+3. Model/JUnit acceptance passed: **4,777 tests, zero failures, errors or
+   skips**, across 348 fresh XML reports in `target/verification/run-5kmgm3rg/model`.
+   Completion elapsed time: 134.277 s. All eight recorded source/test hashes
+   match the tested snapshot and current candidate.
+4. Targeted Docker/Xvfb run `20261027T173644Z-b54d29e032b4`, supervisor PID
+   `5361`, timeout 1,800 s, selects complete TC192 and TC166, Czech TC167/02,
+   TC168/02 and TC171/02, and `PageVerificationContractTest`. Expected selection:
+   eight player scenarios plus three source-contract checks. Visual and fixed
+   smoke acceptance follow complete passing targeted reports.
+
+
+5. Targeted acceptance passed: **11 checks (8 player scenarios and 3 source-contract
+   checks), zero failures, errors or skips**, in six fresh XML reports under
+   `target/docker-ui/run-c9RYPZ/microcol-test/surefire-reports`. Completion elapsed
+   time: 186.409 s. Current source hashes still match the model candidate.
+6. Visual review of the actual Docker/Xvfb game captures confirmed the graph,
+   sidebar selection, Czech empty/single-record messages and the 900×700 fleet
+   layout. Archived captures: [gold](graphics-assets/statistics-atlas-2026-10-27/r0323-atlas-gold-en.png),
+   [small fleet](graphics-assets/statistics-atlas-2026-10-27/r0323-atlas-fleet-small.png),
+   [empty history](graphics-assets/statistics-atlas-2026-10-27/r0323-atlas-empty-cs.png)
+   and [one record](graphics-assets/statistics-atlas-2026-10-27/r0323-atlas-single-cs.png).
+   These are implementation checks, not a player study. The F221 fixture keeps
+   calendar year 1600 while retaining records through 1649; the chart intentionally
+   displays all stored years and labels its summary as historical data.
+7. Fixed smoke/support phase dispatched as `20261027T174205Z-c70a1e834269`,
+   supervisor PID `5731`, outer timeout 480 s and total acceptance budget 420 s.
+   Evidence directory:
+   `/Users/jan/Library/Logs/Microcol/completions/20261027T174205Z-c70a1e834269`.
+   No remote CI or publication verification is part of this task.
+
+8. Fixed smoke acceptance passed: **21 checks (10 player scenarios and 11 support
+   checks), zero failures, errors or skips**, across 12 fresh XML reports in
+   `target/verification/run-ykr35ctv/precommit`. The fixed selection covers
+   TC02/02, TC06/06, TC07/07, TC12/01, TC21/01+04+05, TC23/01, TC83/03,
+   TC84/02 and the four support classes defined by the smoke contract.
+   Verification elapsed time was 202.281 s; completion with cleanup was
+   **202.429 s**, within the 420 s acceptance budget.
+9. Final source review found no unresolved issue in the changed paths. The eight
+   current executable/test hashes match both accepted model and smoke source
+   snapshots and remained unchanged during targeted UI verification. Local
+   acceptance covers base `c0e64583` plus this task's changes; it does not assert
+   full-regression or publication success. Final documentation validation is
+   recorded below.
+
+10. Final documentation acceptance passed all nine consistency tests and strict
+    MkDocs. Logs: `target/r0323/doc-tests-final.log` and
+    `target/r0323/mkdocs-final.log`. The completed requirement has four chapters,
+    `Status: done`, and updated links after moving into `requirements/done/`.
+
 ## R-0322 hand-drawn modal silhouettes — 2026-10-27
 
 1. [R-0322](requirements/done/R-0322.md) applies the selected outline to the common

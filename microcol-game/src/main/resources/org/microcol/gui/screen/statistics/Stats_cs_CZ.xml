@@ -8,7 +8,7 @@
 	<entry key="titleMilitary">Vojenská síla</entry>
 	<entry key="titleWealth">Bohatství</entry>
 	<entry key="titleScore">Score</entry>
-	<entry key="titleIndex">Seznam</entry>
+	<entry key="titleIndex">Atlas přehledů</entry>
 	<entry key="buttonCancel">Zpět</entry>
 
 	<entry key="statistics_year">Rok</entry>
@@ -102,4 +102,6 @@ Vaše pokladna při nabídce: %s zlatých.</entry>
 	<entry key="titleReligion">Náboženství</entry>
 	<entry key="titleColonies">Kolonie</entry>
 	<entry key="titleFleet">Loďstvo</entry>
+    <entry key="historyLatest">Poslední zaznamenaná hodnota: %s · Rok %s</entry>
+    <entry key="historyEmpty">Historie je zatím prázdná. Záznamy přibudou po dokončení tahu.</entry>
 </properties>

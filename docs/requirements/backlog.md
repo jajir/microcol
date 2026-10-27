@@ -780,9 +780,9 @@ remain owned by their current requirements; acceptance is recorded in the
 
 1. [R-0321](R-0321.md), primary area A03, captures three proposed layouts for each
    of ten in-game screen families: statistics, goals, Congress, Europe, colony,
-   trade, turn reports, relations, help and settings. Status: `new`. The user will
-   select one screen and direction for further refinement; this comparison does
-   not authorize implementation of all screens. A06/A07/A08/A10 retain their
+   trade, turn reports, relations, help and settings. Status: `new`. The user selected Atlas on 2026-10-27.
+   [R-0323](done/R-0323.md) implements Statistics first; other screens remain separate
+   refinement steps. A06/A07/A08/A10 retain their
    rules and data, and A01 retains settings/navigation responsibilities.
 
 ## Hand-drawn modal outlines (2026-10-27)
@@ -791,3 +791,11 @@ remain owned by their current requirements; acceptance is recorded in the
    contour and opaque interior with transparent surroundings across application
    modals. Status: `done`. Existing buttons and interactions
    remain unchanged. See [acceptance evidence](../functional-tests.md#r-0322-hand-drawn-modal-silhouettes-2026-10-27).
+
+## Statistics Atlas (2026-10-27)
+
+1. [R-0323](done/R-0323.md), primary area A03, implements the selected Atlas layout
+   for Statistics with all twelve existing views, real chart history, keyboard
+   access and refreshed reopening. Status: `done`. Local acceptance passed; see
+   [evidence](../functional-tests.md#r-0323-statistics-atlas-2026-10-27).
+   Other screen families from R-0321 are outside this step.

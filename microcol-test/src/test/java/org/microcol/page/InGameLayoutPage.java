@@ -2,16 +2,26 @@ package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
 import org.testfx.util.WaitForAsyncUtils;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 /**
  * The same frame contract applies to reports, work screens and modal readers.
@@ -45,6 +55,101 @@ public final class InGameLayoutPage extends AbstractScreen {
         assertTrue(getNodeFinder().lookup("#" + id)
                 .queryAs(javafx.scene.control.ToggleButton.class).isSelected(),
                 id);
+    }
+
+    public void selectNextReportWithKeyboard() {
+        getRobot().push(KeyCode.RIGHT);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyAtlasLayout(final String expectedTitle) {
+        getRobot().interact(() -> {
+            final Region root = page();
+            final ScrollPane sidebar = (ScrollPane) root
+                    .lookup("#statsSidebar");
+            final Region detail = (Region) root.lookup(".atlas-detail");
+            final Bounds left = sidebar.localToScene(sidebar.getLayoutBounds());
+            final Bounds right = detail.localToScene(detail.getLayoutBounds());
+            final Node body = root.lookup(".screen-scroll");
+            final Bounds viewport = body.localToScene(body.getLayoutBounds());
+            assertEquals(12, root.lookupAll(".atlas-tab").size());
+            assertTrue(right.getMinX() >= left.getMaxX() + 16,
+                    "Atlas index and detail remain separate");
+            assertTrue(right.getMaxX() <= viewport.getMaxX() + 1);
+            assertTrue(right.getWidth() >= 400, "Report has readable width");
+            assertEquals(expectedTitle,
+                    ((Label) root.lookup("#atlasReportTitle")).getText());
+            final ToggleButton selected = root.lookupAll(".atlas-tab").stream()
+                    .map(node -> (ToggleButton) node)
+                    .filter(ToggleButton::isSelected).findFirst().orElseThrow();
+            final Bounds tab = selected
+                    .localToScene(selected.getLayoutBounds());
+            final Node clip = sidebar.lookup(".viewport");
+            final Bounds visible = clip.localToScene(clip.getLayoutBounds());
+            assertTrue(tab.getMinY() >= visible.getMinY() - 1);
+            assertTrue(tab.getMaxY() <= visible.getMaxY() + 1);
+            assertTrue(selected.isUnderline(), "Selection has a non-color cue");
+            assertEquals("Playpen Sans Regular", selected.getFont().getName());
+            assertEquals(14, selected.getFont().getSize());
+            assertTrue(root.getBackground().getFills().stream().anyMatch(
+                    fill -> Color.web("#FFF9EC").equals(fill.getFill())));
+        });
+    }
+
+    public void verifyAtlasHistory(final int expectedCount,
+            final int expectedLastValue, final int expectedLastYear,
+            final String expectedSummary) {
+        getRobot().interact(() -> {
+            final LineChart<?, ?> chart = (LineChart<?, ?>) page()
+                    .lookup("#statisticsChart");
+            assertNotNull(chart);
+            assertFalse(chart.getAnimated());
+            assertEquals(1, chart.getData().size());
+            final java.util.List<? extends XYChart.Data<?, ?>> points = chart
+                    .getData().get(0).getData();
+            assertEquals(expectedCount, points.size());
+            assertEquals(expectedSummary,
+                    ((Label) page().lookup("#atlasHistorySummary")).getText());
+            if (expectedCount > 0) {
+                final XYChart.Data<?, ?> last = points.get(expectedCount - 1);
+                assertEquals(expectedLastValue,
+                        ((Number) last.getYValue()).intValue());
+                assertEquals(expectedLastYear,
+                        ((Number) last.getXValue()).intValue());
+                final NumberAxis axis = (NumberAxis) chart.getXAxis();
+                assertTrue(axis.getUpperBound() >= expectedLastYear,
+                        "Every recorded year remains in the chart");
+                assertEquals(Integer.toString(expectedLastYear), axis
+                        .getTickLabelFormatter().toString(expectedLastYear));
+                assertNotNull(last.getNode(), "Recorded points stay visible");
+            }
+        });
+    }
+
+    /**
+     * Load a saved fixture with zero or one historical point, before
+     * navigation.
+     */
+    public void loadAtlasHistoryFixture(final int records) throws Exception {
+        final Gson gson = new Gson();
+        final JsonObject fixture = gson.fromJson(
+                Files.readString(Path
+                        .of("src/test/scenarios/F221-game-toolbar.microcol")),
+                JsonObject.class);
+        final JsonObject statistics = fixture.getAsJsonObject("model")
+                .getAsJsonObject("statistics");
+        final JsonArray history = new JsonArray();
+        if (records == 1) {
+            history.add(statistics.getAsJsonArray("turnStatistics").get(0));
+        }
+        statistics.add("turnStatistics", history);
+        final Path file = Files.createTempFile("atlas-history-", ".microcol");
+        try {
+            Files.writeString(file, gson.toJson(fixture));
+            new AttackPage(getContext()).replaceGame(file.toFile());
+        } finally {
+            Files.deleteIfExists(file);
+        }
     }
 
     public void closeWithEscape() {

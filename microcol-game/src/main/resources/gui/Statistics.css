@@ -1,7 +1,41 @@
-.statsPanel { -fx-spacing: 28; }
-.left { -fx-pref-width: 220; -fx-min-width: 220; -fx-max-height: 560; }
-.right { -fx-pref-width: 520; }
-.indexTitle { -fx-font-size: 14; -fx-padding: 0 0 16 0; }
+.statistics-atlas,
+.statistics-atlas .screen-scroll,
+.statistics-atlas .screen-scroll > .viewport {
+    -fx-background-color: #FFF9EC;
+}
+.statistics-atlas .screen-body { -fx-padding: 24; -fx-spacing: 0; }
+.statistics-atlas .report-content {
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+.statistics-atlas .statsPanel { -fx-spacing: 24; }
+.statistics-atlas .atlas-sidebar {
+    -fx-pref-width: 232;
+    -fx-min-width: 232;
+    -fx-padding: 0 18 0 0;
+    -fx-border-color: #B8AC92;
+    -fx-border-width: 0 1 0 0;
+}
+.statistics-atlas .atlas-index { -fx-spacing: 4; }
+.statistics-atlas .indexTitle { -fx-padding: 0 0 12 3; }
+.statistics-atlas .atlas-tab { -fx-alignment: center-left; }
+.statistics-atlas .atlas-tab:selected { -fx-background-color: #DCC49A; }
+.statistics-atlas .atlas-detail { -fx-pref-width: 640; }
+.statistics-atlas .atlas-report-title {
+    -fx-padding: 0 0 12 0;
+    -fx-border-color: #B8AC92;
+    -fx-border-width: 0 0 1 0;
+}
+.statistics-atlas .atlas-history-summary { -fx-text-fill: #526B4C; }
+.statistics-atlas .chart { -fx-padding: 6 0 0 0; }
+.statistics-atlas .chart-plot-background { -fx-background-color: #FFF9EC; }
+.statistics-atlas .chart-horizontal-grid-lines { -fx-stroke: #D8CEBA; }
+.statistics-atlas .chart-vertical-grid-lines,
+.statistics-atlas .chart-alternative-row-fill,
+.statistics-atlas .chart-alternative-column-fill { -fx-stroke: transparent; -fx-fill: transparent; }
+.statistics-atlas .chart-series-line { -fx-stroke: #526B4C; -fx-stroke-width: 2; }
+.statistics-atlas .chart-line-symbol { -fx-background-color: #526B4C, #FFF9EC; -fx-padding: 3; }
+.statistics-atlas .axis { -fx-tick-label-font: 14 "Playpen Sans"; -fx-tick-label-fill: #302D27; }
 .relation-row { -fx-padding: 10; -fx-background-color: #f6eddb; }
 .relation-row .label { -fx-text-fill: #211a10; }
 .relations-report .scroll-pane { -fx-background-color: transparent; }
