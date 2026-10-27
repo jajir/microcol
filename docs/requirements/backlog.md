@@ -1,5 +1,10 @@
 # Current requirement backlog
 
+Implemented on 2026-10-27: [R-0315 — two-arm river mouth](R-0315.md).
+The selected appearance applies to existing known coastal river endpoints,
+including loaded games. Compilation and a static renderer preview are checked;
+tests remain unrun at the user's request, so normal local acceptance is not claimed.
+
 Captured on 2026-10-27: [R-0314 — lake animation proposals](R-0314.md), A03 with
 A05/A04 dependencies. Seven expanding-ring and seven small-wave alternatives
 are shown in the user's map screenshot. Selection is open; runtime implementation

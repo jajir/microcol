@@ -23,6 +23,7 @@ import org.microcol.model.Player;
 import org.microcol.model.PlayerNative;
 import org.microcol.model.ResourceOverlay;
 import org.microcol.model.Terrain;
+import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
@@ -203,6 +204,55 @@ public final class PaintService {
         for (int plank = 3; plank < 27; plank += 5) {
             graphics.strokeLine(x + plank, y - 4, x + plank, y + 4);
         }
+        graphics.restore();
+    }
+
+    /** Open the coast with two water arms around a small decorative island. */
+    public void paintRiverMouth(final GraphicsContext graphics,
+            final Point point, final RiverShape river,
+            final Direction direction, final TerrainType land,
+            final TerrainType water) {
+        final double half = Tile.TILE_WIDTH_IN_PX / 2.0;
+        final double length = Tile.TILE_WIDTH_IN_PX * .75;
+        final double radius = river.width / 2;
+        final double opening = river.width * 1.1;
+        graphics.save();
+        graphics.translate(point.getX() + half, point.getY() + half);
+        graphics.rotate(Math.toDegrees(Math.atan2(direction.getVector().getY(),
+                direction.getVector().getX())));
+        graphics.setFill(imageProvider.getTerrainColor(water));
+        graphics.beginPath();
+        graphics.moveTo(0, -radius);
+        graphics.bezierCurveTo(length * .35, -radius, length * .55, -opening,
+                length, -opening);
+        graphics.lineTo(length, opening);
+        graphics.bezierCurveTo(length * .55, opening, length * .35, radius, 0,
+                radius);
+        graphics.closePath();
+        graphics.fill();
+        // A pointed flat-colour transition avoids a dark cap in the sea.
+        graphics.setFill(RIVER_COLOR);
+        graphics.beginPath();
+        graphics.moveTo(0, -radius);
+        graphics.bezierCurveTo(length * .25, -radius, length * .38,
+                -radius * .5, length * .42, 0);
+        graphics.bezierCurveTo(length * .38, radius * .5, length * .25, radius,
+                0, radius);
+        graphics.closePath();
+        graphics.fill();
+        final double islandRadius = Math.max(2.2, river.width * .3);
+        graphics.setFill(imageProvider.getTerrainColor(land));
+        graphics.setStroke(MARKER_INK);
+        graphics.setLineWidth(1.6);
+        graphics.beginPath();
+        graphics.moveTo(length * .55, 0);
+        graphics.bezierCurveTo(length * .75, -islandRadius, length * .95,
+                -islandRadius, length * .95, 0);
+        graphics.bezierCurveTo(length * .95, islandRadius, length * .75,
+                islandRadius, length * .55, 0);
+        graphics.closePath();
+        graphics.fill();
+        graphics.stroke();
         graphics.restore();
     }
 

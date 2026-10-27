@@ -21,11 +21,13 @@ import org.microcol.gui.screen.game.gamepanel.MoveModeSupport.MoveMode;
 import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.RiverShape;
 import org.microcol.model.ColonySighting;
+import org.microcol.model.Direction;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.NativeSettlement;
 import org.microcol.model.Player;
 import org.microcol.model.RiverSize;
+import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
 import org.microcol.model.WorldMap;
 
@@ -142,10 +144,15 @@ final class GamePaintService {
         final Player player = gameModelController.getHumanPlayer();
         final WorldMap map = gameModelController.getModel().getMap();
         final Map<Location, RiverShape> courses = new LinkedHashMap<>();
-        for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight()
-                .getX(); i++) {
-            for (int j = coord.getTopLeft().getY(); j <= coord.getBottomRight()
-                    .getY(); j++) {
+        // Include mouths extending from just outside the viewport.
+        for (int i = Math.max(Location.MAP_MIN_X,
+                coord.getTopLeft().getX() - 1); i <= Math.min(
+                        map.getMaxLocationX(),
+                        coord.getBottomRight().getX() + 1); i++) {
+            for (int j = Math.max(Location.MAP_MIN_Y,
+                    coord.getTopLeft().getY() - 1); j <= Math.min(
+                            map.getMaxLocationY(),
+                            coord.getBottomRight().getY() + 1); j++) {
                 final Location location = Location.of(i, j);
                 final RiverSize size = map.getRiverSizeAt(location);
                 if (size != RiverSize.NONE && player.isVisible(location)) {
@@ -159,6 +166,22 @@ final class GamePaintService {
                     courses.put(location, river);
                     paintService.paintRiver(graphics,
                             area.convertToCanvasPoint(location), river);
+                    if (joined.size() == 1) {
+                        final Map<Location, TerrainType> knownTerrain = location
+                                .getNeighbors().stream().filter(map::isValid)
+                                .filter(player::isVisible).collect(
+                                        Collectors.toMap(neighbour -> neighbour,
+                                                map::getTerrainTypeAt));
+                        final Direction mouth = RiverShape.mouthDirection(
+                                location, joined.keySet(), knownTerrain);
+                        if (mouth != null) {
+                            paintService.paintRiverMouth(graphics,
+                                    area.convertToCanvasPoint(location), river,
+                                    mouth, map.getTerrainTypeAt(location),
+                                    knownTerrain.get(
+                                            location.add(mouth.getVector())));
+                        }
+                    }
                 }
             }
         }

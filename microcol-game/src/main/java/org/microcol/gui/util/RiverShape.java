@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.microcol.gui.Tile;
+import org.microcol.model.Direction;
 import org.microcol.model.Location;
+import org.microcol.model.TerrainType;
 import org.microcol.model.RiverSize;
 
 /**
@@ -49,6 +52,32 @@ public final class RiverShape {
                         false);
             }
         }
+    }
+
+    /** Choose one known ocean edge ahead of a visible terminal course. */
+    public static Direction mouthDirection(final Location at,
+            final Set<Location> riverLinks,
+            final Map<Location, TerrainType> knownTerrain) {
+        if (riverLinks.size() != 1) {
+            return null;
+        }
+        final Location upstream = riverLinks.iterator().next();
+        Direction mouth = null;
+        int bestAlignment = 0;
+        // A corner-only contact must not cut through either adjacent land tile.
+        for (final Direction direction : List.of(Direction.north,
+                Direction.east, Direction.south, Direction.west)) {
+            final Location vector = direction.getVector();
+            final TerrainType water = knownTerrain.get(at.add(vector));
+            final int alignment = (at.getX() - upstream.getX()) * vector.getX()
+                    + (at.getY() - upstream.getY()) * vector.getY();
+            if ((water == TerrainType.OCEAN || water == TerrainType.HIGH_SEA)
+                    && alignment > bestAlignment) {
+                mouth = direction;
+                bestAlignment = alignment;
+            }
+        }
+        return mouth;
     }
 
     private static double width(final RiverSize size) {

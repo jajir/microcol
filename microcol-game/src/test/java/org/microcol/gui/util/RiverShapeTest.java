@@ -3,13 +3,17 @@ package org.microcol.gui.util;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.microcol.model.Direction;
 import org.microcol.model.Location;
+import org.microcol.model.TerrainType;
 import org.microcol.model.RiverSize;
 
 class RiverShapeTest {
@@ -104,6 +108,58 @@ class RiverShapeTest {
                 Map.of());
         assertTrue(isolated.bands.isEmpty());
         assertTrue(isolated.roundCenter);
+    }
+
+    @Test
+    void coastalMouthFollowsTheIncomingRiverInEachCardinalDirection() {
+        for (final Direction direction : new Direction[] { Direction.north,
+                Direction.east, Direction.south, Direction.west }) {
+            final Location vector = direction.getVector();
+            final Location upstream = Location.of(CENTER.getX() - vector.getX(),
+                    CENTER.getY() - vector.getY());
+            final Location ocean = CENTER.add(vector);
+            for (final TerrainType water : new TerrainType[] {
+                    TerrainType.OCEAN, TerrainType.HIGH_SEA }) {
+                assertEquals(direction, RiverShape.mouthDirection(CENTER,
+                        Set.of(upstream), Map.of(ocean, water)));
+            }
+        }
+    }
+
+    @Test
+    void missingWaterLakesCornersAndContinuingRiversHaveNoMouth() {
+        final Location west = Location.of(9, 10);
+        final Location east = Location.of(11, 10);
+        final Map<Location, TerrainType> ocean = Map.of(east,
+                TerrainType.OCEAN);
+        assertNull(RiverShape.mouthDirection(CENTER, Set.of(west), Map.of()));
+        assertNull(RiverShape.mouthDirection(CENTER, Set.of(west),
+                Map.of(east, TerrainType.LAKE)));
+        assertNull(RiverShape.mouthDirection(CENTER, Set.of(west),
+                Map.of(east, TerrainType.GRASSLAND)));
+        assertNull(RiverShape.mouthDirection(CENTER, Set.of(west),
+                Map.of(Location.of(11, 11), TerrainType.OCEAN)));
+        assertNull(RiverShape.mouthDirection(CENTER, Set.of(east), ocean));
+        assertNull(RiverShape.mouthDirection(CENTER, Set.of(), ocean));
+        assertNull(RiverShape.mouthDirection(CENTER,
+                Set.of(west, Location.of(10, 9)), ocean));
+    }
+
+    @Test
+    void equallyAlignedOceanEdgesHaveAStableChoiceAfterReload() {
+        final Location east = Location.of(11, 10);
+        final Location south = Location.of(10, 11);
+        final Set<Location> upstream = Set.of(Location.of(9, 9));
+        final Map<Location, TerrainType> ocean = new LinkedHashMap<>();
+        ocean.put(south, TerrainType.OCEAN);
+        ocean.put(east, TerrainType.OCEAN);
+        assertEquals(Direction.east,
+                RiverShape.mouthDirection(CENTER, upstream, ocean));
+        ocean.clear();
+        ocean.put(east, TerrainType.OCEAN);
+        ocean.put(south, TerrainType.OCEAN);
+        assertEquals(Direction.east,
+                RiverShape.mouthDirection(CENTER, upstream, ocean));
     }
 
     private void verifyBounds(final RiverShape curve) {

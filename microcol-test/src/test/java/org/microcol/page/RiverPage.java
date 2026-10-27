@@ -1,12 +1,18 @@
 package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.microcol.gui.Point;
+import org.microcol.gui.Tile;
+import org.microcol.gui.image.ImageProvider;
+import org.microcol.model.Direction;
+import org.microcol.model.TerrainType;
 import org.microcol.gui.screen.game.gamepanel.FogFrameProbe;
 import org.microcol.gui.util.PaintService;
 import org.microcol.model.GoodsType;
@@ -39,6 +45,48 @@ public final class RiverPage extends AbstractScreen {
 
     public RiverPage(final TestContext context) {
         super(context);
+    }
+
+    public void verifyLargeTwoArmMouth(final Location at,
+            final Direction towardSea) throws Exception {
+        final ImageProvider images = getContext()
+                .getClassFromGuice(ImageProvider.class);
+        final int sea = toRgb(images.getTerrainColor(TerrainType.OCEAN));
+        final int land = toRgb(images
+                .getTerrainColor(getModel().getMap().getTerrainTypeAt(at)));
+        final int[] expected = { toRgb(PaintService.RIVER_COLOR), land, sea,
+                sea, sea, sea };
+        try {
+            WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
+                    () -> Arrays.equals(expected, mouthPixels(at, towardSea)));
+        } catch (final TimeoutException timeout) {
+            // The assertion reports a closed coast or missing island.
+        }
+        assertArrayEquals(expected, mouthPixels(at, towardSea),
+                "Expected a small island and two open arms across the coastline");
+    }
+
+    private int[] mouthPixels(final Location at, final Direction towardSea)
+            throws Exception {
+        final Image canvas = WaitForAsyncUtils
+                .asyncFx(() -> FogFrameProbe.captureCanvas(getContext()))
+                .get(10, TimeUnit.SECONDS);
+        final Point tile = getContext().getArea().convertToCanvasPoint(at);
+        final Location direction = towardSea.getVector();
+        final int[][] samples = { { -8, 0 }, { 25, 0 }, { 20, -8 }, { 20, 8 },
+                { 26, -8 }, { 26, 8 } };
+        final int[] pixels = new int[samples.length];
+        for (int i = 0; i < samples.length; i++) {
+            final int x = (int) Math.round(Tile.TILE_WIDTH_IN_PX / 2.0
+                    + direction.getX() * samples[i][0]
+                    - direction.getY() * samples[i][1]);
+            final int y = (int) Math.round(Tile.TILE_WIDTH_IN_PX / 2.0
+                    + direction.getY() * samples[i][0]
+                    + direction.getX() * samples[i][1]);
+            pixels[i] = toRgb(canvas.getPixelReader().getColor(tile.getX() + x,
+                    tile.getY() + y));
+        }
+        return pixels;
     }
 
     /**

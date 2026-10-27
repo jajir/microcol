@@ -70,9 +70,22 @@
 3. Obrázek je vybraný návrh vytvořený ImageGenem ze screenshotu, nikoli snímek
    implementované hry. Výběr nemění generování řek ani pobřežní pravidla;
    výjimku Original World na (25, 13) nadále určuje [R-0313](requirements/R-0313.md).
-   Podle předchozího pokynu zatím nekódovat je tato změna pouze dokumentační.
+   Následně uživatel výslovně zadal implementaci v [R-0315](requirements/R-0315.md).
+4. Vykreslování nyní otevírá známý koncový úsek směrem k prozkoumanému oceánu
+   přes společnou hranu. Volí směr navazující na přítok; kontakt pouze rohem,
+   jezero a neprozkoumané sousedství ústí nevytvoří. Zachovává velikost řeky,
+   jediné provedení ostrůvku, pořadí bonusů a mostů i pravidla mlhy.
+5. Již uložená partie s příslušnou řekou získá vzhled po načtení v novém
+   sestavení hry. Soubor se při otevření nemění a řeka se nedoplňuje do starých
+   pozic, které ji na daném poli nemají. Generování ani formát map se nemění.
+6. Níže je statický výřez skutečného rendereru nad daty Original World,
+   bez uživatelského rozhraní a mlhy. Kompilace a vizuální kontrola výřezu
+   nejsou ověřením celé hráčské cesty; testy na přání uživatele nebyly spuštěny.
+   Podrobnosti obsahuje [evidence](functional-tests.md#r-0315-two-arm-river-mouth-2026-10-27).
 
 ![Vybraná dvouramenná delta B s drobným protáhlým ostrůvkem](graphics-assets/river-mouths-2026-10-27/selected-b.png)
+
+![Statický náhled implementovaného ústí na (25, 13), zvětšeno 4×](graphics-assets/river-mouths-2026-10-27/implemented-mouth.png)
 
 ## Delší oblouky a ústí řek — návrhy 26. října 2026
 

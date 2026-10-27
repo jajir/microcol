@@ -343,6 +343,16 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         fog.verifyExplored(mouth, true);
         setup.verifyOriginalWorldLandscape();
 
+        // Inspect the open sea arms and decorative island, then pan the map.
+        final org.microcol.model.Location delta = org.microcol.model.Location
+                .of(25, 13);
+        final org.microcol.page.RiverPage river = new org.microcol.page.RiverPage(
+                getContext());
+        river.verifyLargeTwoArmMouth(delta, org.microcol.model.Direction.east);
+        fog.saveMapEvidence("R-0315-river-mouth.png");
+        game.panFromTile(delta);
+        river.verifyLargeTwoArmMouth(delta, org.microcol.model.Direction.east);
+
         // Choose a passenger, land and found a colony using the normal dialog.
         game.nextTurnAndCloseDialogs();
         game.moveMouseAtLocation(sea);
@@ -394,6 +404,7 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         colony.verifyColonyName("River Haven");
         colony.close();
         setup.verifyOriginalWorldLandscape();
+        river.verifyLargeTwoArmMouth(delta, org.microcol.model.Direction.east);
 
         // Sail north and inspect the freshwater lake behind its land shore.
         game.nextTurnAndCloseDialogs();

@@ -11311,3 +11311,35 @@ or website publication.
     logs in `target/r0312/final-docs-tests.log` and `target/r0312/final-mkdocs.log`.
     Shared formatting, source review and every required local phase are
     complete. No new build/download publication is claimed by this acceptance.
+
+
+## R-0315 Two-arm river mouth — 2026-10-27
+
+1. Base `c659b36c`, plus [R-0315](requirements/R-0315.md): GUI-only outlet selection
+   and the selected two-arm mouth. No map schema, gameplay rules or saved data change.
+   The user explicitly authorized implementation while the instruction not to run
+   tests remains in effect. The requirement remains active, not locally accepted.
+2. Shared Eclipse formatting and source review cover all six changed Java files.
+   `mvn -B -ntp -pl microcol-test -am -DskipTests test-compile` compiled the game,
+   unit tests and functional-test sources successfully. Log:
+   `target/r0315/compile-final.log`. Strict MkDocs also passed; log:
+   `target/r0315/mkdocs.log`. No test selection was executed: zero
+   model/JUnit, UI, smoke, tooling or documentation consistency tests were run.
+3. Three new `RiverShapeTest` cases describe orientation, absent/hidden water,
+   lakes, corner-only contact, continuing courses and deterministic ocean-edge
+   choice. TC24/F15/12 uses `RiverPage.verifyLargeTwoArmMouth` on arrival, after
+   panning and after Continue; its existing gameplay assertions remain intact.
+   These are authored expectations, not passing results.
+4. A standalone headless JavaFX render used the actual `PaintService`, river
+   geometry, coast images and Original World data. The 1× and 4× previews were
+   visually inspected; the [saved 4× preview](graphics-assets/river-mouths-2026-10-27/implemented-mouth.png)
+   shows the coastline opening and the separate small island. The helper and
+   render log are `target/r0315/RiverPreview.java` and `preview-final.log`.
+   Initial helper setup needed ordinary class loading and an inline mock for the
+   final map manager with compatibility enabled for its older Byte Buddy version;
+   those renderer-only settings are confined to ignored `target/r0315`.
+   This static preview is not a Docker/Xvfb player test or Save/Continue acceptance.
+5. Full gameplay, native desktop behavior, remote CI and distribution/website
+   publication were not checked. Loading an existing save can display the mouth
+   only where that save already contains a suitable coastal river; no migration
+   adds the Original World template change to older saves.
