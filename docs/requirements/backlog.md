@@ -1,5 +1,11 @@
 # Current requirement backlog
 
+Captured on 2026-10-27: [R-0311 — runtime developer mode and map coordinates](R-0311.md),
+A03 with A01/A05 dependencies. Proposes one Settings switch, F3, a visible mode
+indicator and hover coordinates using the map-file convention. Implementation
+has not been selected; the requirement distinguishes existing launch-time
+diagnostics from the proposed runtime preference.
+
 Defect reproduced on 2026-10-27: [R-0310 — initially focused free-play
 galleon](R-0310.md), A04 with A01/A02 entry flow. Keyboard and mouse movement
 fail before reselection; both controls pass afterward. The user authorized

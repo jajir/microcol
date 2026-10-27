@@ -809,3 +809,19 @@ documentation in APT just to make it visible on the web.
    records the proposal checks. No Settings runtime source changed for R-0309.
    Model/JUnit and Docker/Xvfb are exempt for this documentation-only scope.
    Remote CI and publication have not been inspected or claimed here.
+## R-0311 developer mode proposal — 2026-10-27
+
+1. [R-0311](requirements/R-0311.md) captures a proposed runtime developer
+   preference, F3 shortcut and hover coordinates. Source inspection used
+   `d7308d49149eea9ab476966dee6968090a32f907`; the existing launch flag also
+   controls CSSFX and hidden menu behavior. The requirement keeps the proposed
+   display preference separate. No runtime implementation was requested by
+   this advice/capture task.
+2. All nine documentation consistency checks passed with zero failures,
+   errors or skips, and strict MkDocs passed. Acceptance uses a scoped export
+   of the base revision plus only R-0311, its backlog entry and this record,
+   excluding concurrent R-0310 work. Logs are retained in
+   `target/r0311/docs-tests.log` and `target/r0311/mkdocs.log`; the export is
+   `target/r0311/acceptance/`. Model/JUnit and Docker/Xvfb checks are exempt
+   for this documentation-only change. Remote CI and publication were not
+   inspected; the push does not prove publication.
