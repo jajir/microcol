@@ -1,5 +1,13 @@
 # Current requirement backlog
 
+Accepted locally on 2026-10-27: [R-0319 — river tile previews](done/R-0319.md),
+A03 with A05 terrain/exploration and A07 overlay dependencies. The preview shares
+river courses, coastal mouths and bridges with the map, including the island
+in the adjoining ocean tile. Model/JUnit, targeted UI and fixed smoke passed;
+[local evidence](../functional-tests.md#r-0319-river-tile-previews-2026-10-27)
+retains failed attempts and screenshots. Remote publication remains unverified.
+
+
 Accepted locally on 2026-10-27: [R-0318 — unexplored tile preview](done/R-0318.md),
 A03 with A05 exploration and A10 founder-check dependencies. Map and panel share
 fog drawing; a supporting Congress layout repair keeps candidates selectable.

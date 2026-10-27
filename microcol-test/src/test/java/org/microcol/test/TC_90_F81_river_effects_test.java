@@ -68,6 +68,11 @@ public class TC_90_F81_river_effects_test extends AbstractMicroColTest {
                 LARGE_LOCATION);
         river.verifyRiverWidth(LARGE_LOCATION, RiverSize.LARGE, SMALL_LOCATION);
         river.verifyCurvedCourse(SMALL_LOCATION);
+        // Inspect both river widths through the actual selected-tile panel.
+        gamePage.selectTile(SMALL_LOCATION);
+        river.verifyRiverPreview(SMALL_LOCATION);
+        gamePage.selectTile(LARGE_LOCATION);
+        river.verifyRiverPreview(LARGE_LOCATION);
 
         // The third colonist steps from the colony onto the small river: one
         // third is spent, so two remain.
@@ -190,6 +195,8 @@ public class TC_90_F81_river_effects_test extends AbstractMicroColTest {
         river.verifyRiverWidth(SMALL_LOCATION, RiverSize.SMALL,
                 SOURCE_LOCATION);
         river.verifyNoRiverToward(SMALL_LOCATION, LARGE_LOCATION);
+        GamePage.of(getContext()).selectTile(SMALL_LOCATION);
+        river.verifyRiverPreview(SMALL_LOCATION);
     }
 
     @Test
@@ -217,6 +224,9 @@ public class TC_90_F81_river_effects_test extends AbstractMicroColTest {
         // The deposit and bridge coexist; no forest or plowed field covers the
         // river.
         river.verifyBridge(SMALL_LOCATION);
+        game.selectTile(SMALL_LOCATION);
+        river.captureDialog("tileImage", "R-0319-bridge-" + deposit + ".png");
+        river.verifyRiverPreview(SMALL_LOCATION);
         new ResourcePage(getContext()).verifyMarkerPainted(SMALL_LOCATION,
                 deposit);
         river.verifyRemainingDeposit(SMALL_LOCATION, goods, reserve);
@@ -267,6 +277,9 @@ public class TC_90_F81_river_effects_test extends AbstractMicroColTest {
         // The deposit and bridge coexist; no forest or plowed field covers the
         // river.
         river.verifyBridge(SMALL_LOCATION);
+        game.selectTile(SMALL_LOCATION);
+        river.captureDialog("tileImage", "R-0319-bridge-" + deposit + ".png");
+        river.verifyRiverPreview(SMALL_LOCATION);
         new ResourcePage(getContext()).verifyMarkerPainted(SMALL_LOCATION,
                 deposit);
         river.verifyRemainingDeposit(SMALL_LOCATION, goods, reserve);

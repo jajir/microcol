@@ -8,6 +8,15 @@
    odhaleného terénu používají také TC69 a TC111. Skutečné výsledky přejímky
    uvádí [funkční evidence](functional-tests.md#r-0318-unknown-tile-preview-2026-10-27).
 
+## UC-006/008/012: náhled řeky a ústí — 2026-10-27
+
+1. [R-0319](requirements/done/R-0319.md) doplňuje stejný tok, ústí a most do pravého
+   náhledu vybraného pole, se zachováním prozkoumaných spojů a vrstvení surovin.
+2. TC90/F81/01, /03–05 a TC24/F15/12 mají doplněné kontroly náhledu při 1×/2×,
+   včetně ostrůvku v sousedním moři, posunu mapy a Continue. TC26/F18/11 chrání
+   přechod na neobjevené pole. Stav skutečné přejímky uvádí
+   [funkční evidence](functional-tests.md#r-0319-river-tile-previews-2026-10-27).
+
 ## UC-011/115: počáteční pohyb ve volné hře — 2026-10-27
 
 1. [R-0310](requirements/done/R-0310.md) pokrývá pohyb počátečně zaměřené

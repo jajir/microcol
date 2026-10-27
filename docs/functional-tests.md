@@ -1,5 +1,96 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0319 river tile previews — 2026-10-27
+
+1. [R-0319](requirements/done/R-0319.md), UC-006/008/012, shares the complete existing
+   river layer between map and selected tile preview: river courses, coastal
+   mouths crossing into neighbouring water, then bridges. The clipped preview
+   retains static terrain, resource overlays and the existing occupant rules.
+   Candidate base: `c74f77be`; no terrain or saved-game schema changes.
+2. TC90/F81/01 compares small and large river previews with the actual map;
+   TC90/03 covers an unexplored neighbour; TC90/04 and /05 cover bridge and
+   silver/ore overlays. TC24/F15/12 checks the Original World endpoint at (25,13)
+   and the island in adjacent sea (26,13), then repeats after panning and Continue.
+   `RiverPage.verifyRiverPreview` compares rendered pixels at 1×/2×, excluding
+   selection borders and animated ocean decoration; it also checks clear margins
+   and requires actual river water or the island. Existing player journeys and
+   gameplay assertions remain intact. TC26/F18/11 retains unknown-preview coverage.
+3. Shared Java formatting applied to the six changed Java files. Initial source
+   hashes: `target/r0319/source-attempt1.json`. Model/JUnit dispatched through
+   completion runner `20261027T154159Z-666a67b75732`, PID 85665, 600-second timeout.
+   Model, targeted Docker/Xvfb, smoke, visual review and documentation acceptance
+   remain pending. Remote CI and publication are not part of this session.
+4. Initial model run failed during compilation after 23.231 seconds including
+   preparation/cleanup (`target/verification/run-zci0roas`). Three copied calls
+   still used the old `paintService` receiver inside `PaintService`. Source
+   review identified and removed those receivers; the shared algorithm was
+   checked against the original after coordinate-parameter adaptation. This
+   failed run is retained, not counted as accepted tests. Reformatted source
+   hashes: `target/r0319/source-repair1.json`. Fresh model run:
+   `20261027T154423Z-f5fd6f7f583e`, PID 86573, 600-second timeout.
+5. Fresh model/JUnit acceptance passed: **4,776 tests**, zero failures, errors
+   or skips, **134.180 seconds** including preparation and cleanup. Evidence:
+   `target/verification/run-pm78k481/summary.json` and 347 complete XML reports.
+   All six changed Java hashes match both the checked source copy and current
+   candidate. Targeted Docker/Xvfb selection dispatched as
+   `20261027T154703Z-a67b018c5678`, PID 87055, 900-second timeout: full TC90/F81
+   (five scenarios), TC24/F15/12, TC26/F18/11 and `PageVerificationContractTest`
+   (three checks), **10 expected tests**. UI, visual and smoke acceptance pending.
+6. Initial targeted run completed **10 tests: 8 passed, 2 errors**, no skips,
+   in **200.588 seconds**. TC24/12, TC26/11, the three page-contract checks and
+   TC90/01–03 passed. TC90/04 and /05 stopped at the new exact-colour comparison:
+   a rotated bridge-edge pixel at (3,16) was `FF5D4C2B` on the map and `FF5D4B2B`
+   in the preview. Reports and screenshots: `target/docker-ui/run-3xJ2Pd/`.
+   Visual review of the successful TC24 land/sea screenshots confirms the river,
+   split outlet and neighbouring island. Preserve this run as failed.
+7. The UI comparison now retains exact opacity and exact RGB for non-road tiles;
+   road/bridge tiles allow at most one 8-bit colour level per channel for rotated
+   edge antialiasing at different canvas origins. Every pixel in the original
+   comparison region is still checked; existing bridge, resource, production,
+   fog and movement assertions remain. Added bridge preview screenshots.
+   Production code and all `microcol-game` model/JUnit inputs are unchanged;
+   retain the passing model run. Reformatted UI source hashes are in
+   `target/r0319/source-repair2.json`. Full targeted selection repeated as
+   `20261027T155228Z-276f4d816f79`, PID 88274, 900-second timeout. Acceptance pending.
+8. Repeated targeted selection passed **10/10 tests**, zero failures, errors or
+   skips, in **216.295 seconds**. Complete XML and exit code 0:
+   `target/docker-ui/run-XaE6aC/`. All six Java hashes still match
+   `target/r0319/source-repair2.json`. Visual review of the actual
+   [land endpoint](graphics-assets/river-preview-2026-10-27/mouth-land.png),
+   [ocean island](graphics-assets/river-preview-2026-10-27/mouth-sea.png),
+   [silver bridge](graphics-assets/river-preview-2026-10-27/bridge-silver.png) and
+   [ore bridge](graphics-assets/river-preview-2026-10-27/bridge-ore.png) confirms
+   shared appearance, readable resource layering and clear preview margins.
+9. Fixed smoke/support selection dispatched through `verify --smoke` as
+   `20261027T155618Z-344550964b91`, PID 89304, 480-second supervisor timeout;
+   the verifier's acceptance budget remains **420 seconds** including
+   preparation and cleanup. Model tests are not repeated in smoke. Final
+   smoke and documentation acceptance remain pending.
+10. Final smoke/support acceptance passed **21/21 tests**, zero failures, errors
+    or skips, in **200.768 seconds** including preparation and cleanup, below
+    the 420-second budget. Evidence:
+    `target/verification/run-um9edbtx/summary.json` and 12 complete XML reports.
+    The smoke source copy and current six Java files match the accepted
+    `target/r0319/source-repair2.json` hashes. The retained model phase covers
+    unchanged `microcol-game` inputs; the final targeted phase compiles/checks
+    the adjusted UI tests. No required test is skipped.
+11. Final source review confirms unchanged map pass ordering and visibility
+    filtering, clipping only of the terrain preview, preserved colony/unit
+    composition, and unchanged colony-field callers. Shared formatter is applied
+    to all six changed Java files without changing their accepted hashes.
+    Documentation consistency **9/9 tests** and strict MkDocs passed
+    (`target/r0319/docs-tests-final.log`, `target/r0319/mkdocs-final.log`).
+    **R-0319 is locally accepted**; the initial failed
+    compilation and bridge comparison runs remain recorded above. Remote CI and
+    publication were not inspected; local acceptance does not prove a new
+    downloadable distribution was published.
+
+
+
+
+
+
+
 ## R-0318 unknown tile preview — 2026-10-27
 
 1. [R-0318](requirements/done/R-0318.md), UC-006/114/119, shares the existing fog

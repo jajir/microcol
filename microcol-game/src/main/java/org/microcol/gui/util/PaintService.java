@@ -1,6 +1,10 @@
 package org.microcol.gui.util;
 
 import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.Optional;
 
 import org.microcol.gui.Point;
@@ -22,6 +26,8 @@ import org.microcol.model.PlaceLocation;
 import org.microcol.model.Player;
 import org.microcol.model.PlayerNative;
 import org.microcol.model.ResourceOverlay;
+import org.microcol.model.RiverSize;
+import org.microcol.model.WorldMap;
 import org.microcol.model.Terrain;
 import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
@@ -194,6 +200,58 @@ public final class PaintService {
         graphics.setFill(previousFill);
         graphics.setStroke(previousStroke);
         graphics.setLineWidth(previousWidth);
+    }
+
+    /**
+     * Draw known river courses, neighbouring mouths and bridges in map order.
+     */
+    public void paintRivers(final GraphicsContext graphics, final WorldMap map,
+            final Player player, final Location topLeft,
+            final Location bottomRight,
+            final Function<Location, Point> toPoint) {
+        final Map<Location, RiverShape> courses = new LinkedHashMap<>();
+        // Include mouths extending from just outside the viewport.
+        for (int i = Math.max(Location.MAP_MIN_X, topLeft.getX() - 1); i <= Math
+                .min(map.getMaxLocationX(), bottomRight.getX() + 1); i++) {
+            for (int j = Math.max(Location.MAP_MIN_Y,
+                    topLeft.getY() - 1); j <= Math.min(map.getMaxLocationY(),
+                            bottomRight.getY() + 1); j++) {
+                final Location location = Location.of(i, j);
+                final RiverSize size = map.getRiverSizeAt(location);
+                if (size != RiverSize.NONE && player.isVisible(location)) {
+                    final Map<Location, RiverSize> joined = map
+                            .getRiverLinksAt(location).stream()
+                            .filter(player::isVisible)
+                            .collect(Collectors.toMap(neighbour -> neighbour,
+                                    map::getRiverSizeAt));
+                    final RiverShape river = new RiverShape(location, size,
+                            joined);
+                    courses.put(location, river);
+                    paintRiver(graphics, toPoint.apply(location), river);
+                    if (joined.size() == 1) {
+                        final Map<Location, TerrainType> knownTerrain = location
+                                .getNeighbors().stream().filter(map::isValid)
+                                .filter(player::isVisible).collect(
+                                        Collectors.toMap(neighbour -> neighbour,
+                                                map::getTerrainTypeAt));
+                        final Direction mouth = RiverShape.mouthDirection(
+                                location, joined.keySet(), knownTerrain);
+                        if (mouth != null) {
+                            paintRiverMouth(graphics, toPoint.apply(location),
+                                    river, mouth,
+                                    map.getTerrainTypeAt(location),
+                                    knownTerrain.get(
+                                            location.add(mouth.getVector())));
+                        }
+                    }
+                }
+            }
+        }
+        courses.forEach((location, river) -> {
+            if (map.getTerrainAt(location).isHasRoad()) {
+                paintRiverBridge(graphics, toPoint.apply(location), river);
+            }
+        });
     }
 
     /** Draw the existing road across the local river's tangent. */
@@ -665,6 +723,27 @@ public final class PaintService {
                     Tile.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
                     Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
         }
+    }
+
+    /** Compose a stationary selected tile using the map's river layer. */
+    public void paintTerrainPreview(final GraphicsContext graphics,
+            final Point point, final Location location, final Terrain terrain,
+            final WorldMap map, final Player player) {
+        graphics.save();
+        graphics.beginPath();
+        graphics.rect(point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX,
+                Tile.TILE_WIDTH_IN_PX);
+        graphics.clip();
+        paintTerrainBaseOnTile(graphics, point, location, terrain, 0, false);
+        paintRivers(graphics, map, player, location, location,
+                at -> Point.of(
+                        point.getX() + (at.getX() - location.getX())
+                                * Tile.TILE_WIDTH_IN_PX,
+                        point.getY() + (at.getY() - location.getY())
+                                * Tile.TILE_WIDTH_IN_PX));
+        paintTerrainOverlayOnTile(graphics, point, terrain, false);
+        paintHiddenCoast(graphics, point, location);
+        graphics.restore();
     }
 
     public void paintTerrainOnTile(final GraphicsContext graphics,

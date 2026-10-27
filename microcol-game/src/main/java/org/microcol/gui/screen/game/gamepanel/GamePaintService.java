@@ -4,7 +4,6 @@ import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,15 +18,11 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.game.gamepanel.MoveModeSupport.MoveMode;
 import org.microcol.gui.util.PaintService;
-import org.microcol.gui.util.RiverShape;
 import org.microcol.model.ColonySighting;
-import org.microcol.model.Direction;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.NativeSettlement;
 import org.microcol.model.Player;
-import org.microcol.model.RiverSize;
-import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
 import org.microcol.model.WorldMap;
 
@@ -130,67 +125,13 @@ final class GamePaintService {
         }
     }
 
-    /**
-     * Draw river courses over known terrain. A course is shown only toward a
-     * neighbour the player also knows, so unseen squares never reveal a river.
-     *
-     * @param graphics required {@link GraphicsContext}
-     * @param area     required visible area description
-     * @param coord    required object holding information about canvas in world
-     *                 map coordinates (Location)
-     */
+    /** Draw the shared river layer over the visible map. */
     public void paintRivers(final GraphicsContext graphics, final Area area,
             final CanvasInMapCoordinates coord) {
-        final Player player = gameModelController.getHumanPlayer();
-        final WorldMap map = gameModelController.getModel().getMap();
-        final Map<Location, RiverShape> courses = new LinkedHashMap<>();
-        // Include mouths extending from just outside the viewport.
-        for (int i = Math.max(Location.MAP_MIN_X,
-                coord.getTopLeft().getX() - 1); i <= Math.min(
-                        map.getMaxLocationX(),
-                        coord.getBottomRight().getX() + 1); i++) {
-            for (int j = Math.max(Location.MAP_MIN_Y,
-                    coord.getTopLeft().getY() - 1); j <= Math.min(
-                            map.getMaxLocationY(),
-                            coord.getBottomRight().getY() + 1); j++) {
-                final Location location = Location.of(i, j);
-                final RiverSize size = map.getRiverSizeAt(location);
-                if (size != RiverSize.NONE && player.isVisible(location)) {
-                    final Map<Location, RiverSize> joined = map
-                            .getRiverLinksAt(location).stream()
-                            .filter(player::isVisible)
-                            .collect(Collectors.toMap(neighbour -> neighbour,
-                                    map::getRiverSizeAt));
-                    final RiverShape river = new RiverShape(location, size,
-                            joined);
-                    courses.put(location, river);
-                    paintService.paintRiver(graphics,
-                            area.convertToCanvasPoint(location), river);
-                    if (joined.size() == 1) {
-                        final Map<Location, TerrainType> knownTerrain = location
-                                .getNeighbors().stream().filter(map::isValid)
-                                .filter(player::isVisible).collect(
-                                        Collectors.toMap(neighbour -> neighbour,
-                                                map::getTerrainTypeAt));
-                        final Direction mouth = RiverShape.mouthDirection(
-                                location, joined.keySet(), knownTerrain);
-                        if (mouth != null) {
-                            paintService.paintRiverMouth(graphics,
-                                    area.convertToCanvasPoint(location), river,
-                                    mouth, map.getTerrainTypeAt(location),
-                                    knownTerrain.get(
-                                            location.add(mouth.getVector())));
-                        }
-                    }
-                }
-            }
-        }
-        courses.forEach((location, river) -> {
-            if (map.getTerrainAt(location).isHasRoad()) {
-                paintService.paintRiverBridge(graphics,
-                        area.convertToCanvasPoint(location), river);
-            }
-        });
+        paintService.paintRivers(graphics,
+                gameModelController.getModel().getMap(),
+                gameModelController.getHumanPlayer(), coord.getTopLeft(),
+                coord.getBottomRight(), area::convertToCanvasPoint);
     }
 
     /** Cover overlays which can cross from explored into unknown tiles. */

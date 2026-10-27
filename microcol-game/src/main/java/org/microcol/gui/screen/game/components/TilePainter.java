@@ -5,6 +5,7 @@ import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 import java.util.List;
 
 import org.microcol.gui.Point;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.PaintService;
 import org.microcol.model.Location;
 import org.microcol.model.ColonySighting;
@@ -27,9 +28,13 @@ class TilePainter {
     private final PaintService paintService;
 
     private final Canvas canvas;
+    private final GameModelController gameModelController;
 
     @Inject
-    public TilePainter(final PaintService paintService) {
+    public TilePainter(final PaintService paintService,
+            final GameModelController gameModelController) {
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
         this.paintService = Preconditions.checkNotNull(paintService);
         canvas = new Canvas(TILE_WIDTH_IN_PX + 8, TILE_WIDTH_IN_PX);
     }
@@ -37,8 +42,10 @@ class TilePainter {
     void setTerrain(final Terrain terrain, final Location location) {
         canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(),
                 canvas.getHeight());
-        paintService.paintTerrainOnTile(canvas.getGraphicsContext2D(),
-                Point.of(4, 0), location, terrain, false);
+        paintService.paintTerrainPreview(canvas.getGraphicsContext2D(),
+                Point.of(4, 0), location, terrain,
+                gameModelController.getModel().getMap(),
+                gameModelController.getHumanPlayer());
     }
 
     void paintUnit(final List<Unit> units) {

@@ -1,5 +1,24 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Náhled řeky a ústí — 27. října 2026
+
+1. [R-0319](requirements/done/R-0319.md) doplňuje do pravého náhledu stejnou vrstvu
+   říčních toků, dvouramenných ústí a mostů, kterou používá hlavní mapa.
+   Suroviny a pozorované objekty zůstávají nad řekou. Kresba se ořízne na vybrané
+   pole; při výběru sousedního moře zahrne také jeho část ústí a ostrůvku.
+2. Náhled používá pouze prozkoumané říční spoje a známé pobřeží. Neobjevená pole
+   zachovávají šedobéžovou mlhu a případný otazník. Statické dekorace náhledu,
+   pravidla dohledu a model řek se nemění.
+3. Ověření a skutečné snímky zaznamenává [funkční evidence](functional-tests.md#r-0319-river-tile-previews-2026-10-27).
+   Cílené testy, vizuální kontrola snímků níže i závěrečná smoke přejímka prošly.
+
+![Skutečný náhled říčního ústí na pevnině](graphics-assets/river-preview-2026-10-27/mouth-land.png)
+
+[Část ústí s ostrůvkem v sousedním moři](graphics-assets/river-preview-2026-10-27/mouth-sea.png),
+[most se stříbrem](graphics-assets/river-preview-2026-10-27/bridge-silver.png) a
+[most s rudou](graphics-assets/river-preview-2026-10-27/bridge-ore.png).
+
+
 ## Náhled neobjeveného pole — 27. října 2026
 
 1. [R-0318](requirements/done/R-0318.md) sjednocuje pravý náhled s mapovou mlhou:

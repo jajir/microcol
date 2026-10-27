@@ -349,9 +349,20 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         final org.microcol.page.RiverPage river = new org.microcol.page.RiverPage(
                 getContext());
         river.verifyLargeTwoArmMouth(delta, org.microcol.model.Direction.east);
+        game.selectTile(delta);
+        river.verifyRiverPreview(delta);
+        game.selectTile(org.microcol.model.Location.of(26, 13));
+        river.verifyRiverPreview(org.microcol.model.Location.of(26, 13));
+        river.captureDialog("tileImage", "R-0319-mouth-sea.png");
+        game.selectTile(delta);
+        river.captureDialog("tileImage", "R-0319-mouth-land.png");
         fog.saveMapEvidence("R-0315-river-mouth.png");
         game.panFromTile(delta);
         river.verifyLargeTwoArmMouth(delta, org.microcol.model.Direction.east);
+        game.selectTile(delta);
+        river.verifyRiverPreview(delta);
+        game.selectTile(org.microcol.model.Location.of(26, 13));
+        river.verifyRiverPreview(org.microcol.model.Location.of(26, 13));
 
         // Choose a passenger, land and found a colony using the normal dialog.
         game.nextTurnAndCloseDialogs();
@@ -405,6 +416,10 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         colony.close();
         setup.verifyOriginalWorldLandscape();
         river.verifyLargeTwoArmMouth(delta, org.microcol.model.Direction.east);
+        game.selectTile(delta);
+        river.verifyRiverPreview(delta);
+        game.selectTile(org.microcol.model.Location.of(26, 13));
+        river.verifyRiverPreview(org.microcol.model.Location.of(26, 13));
 
         // Sail north and inspect the freshwater lake behind its land shore.
         game.nextTurnAndCloseDialogs();

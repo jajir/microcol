@@ -47,6 +47,107 @@ public final class RiverPage extends AbstractScreen {
         super(context);
     }
 
+    /**
+     * Compare the selected river content with the actual map at both scales.
+     */
+    public void verifyRiverPreview(final Location at) throws Exception {
+        WaitForAsyncUtils.asyncFx(() -> {
+            final javafx.scene.Scene scene = getContext().getPrimaryStage()
+                    .getScene();
+            final javafx.scene.layout.Region root = (javafx.scene.layout.Region) scene
+                    .getRoot();
+            final double width = scene.getWidth();
+            final double height = scene.getHeight();
+            final double preferredWidth = root.getPrefWidth();
+            final double preferredHeight = root.getPrefHeight();
+            root.setPrefSize(width, height);
+            try {
+                final javafx.scene.canvas.Canvas map = getContext()
+                        .getClassFromGuice(
+                                org.microcol.gui.screen.game.gamepanel.GamePanelComponent.class)
+                        .getCanvas();
+                final javafx.scene.canvas.Canvas preview = (javafx.scene.canvas.Canvas) ((javafx.scene.layout.Pane) getNodeFinder()
+                        .lookup("#tileImage").query()).getChildren().get(0);
+                final Point point = getContext().getArea()
+                        .convertToCanvasPoint(at);
+                final boolean sea = !getModel().getMap().getTerrainTypeAt(at)
+                        .isLand();
+                for (final int scale : new int[] { 1, 2 }) {
+                    final javafx.scene.SnapshotParameters parameters = new javafx.scene.SnapshotParameters();
+                    parameters.setFill(Color.TRANSPARENT);
+                    parameters.setTransform(
+                            new javafx.scene.transform.Scale(scale, scale));
+                    final Image mapImage = map.snapshot(parameters, null);
+                    final Image previewImage = preview.snapshot(parameters,
+                            null);
+                    // The eastern sea tile contains the island at its western
+                    // edge, away from animated waves.
+                    int riverPixels = 0;
+                    int maxColourDifference = 0;
+                    for (int y = (sea ? 14 : 3) * scale; y < (sea ? 32 : 42)
+                            * scale; y++) {
+                        for (int x = 3 * scale; x < (sea ? 8 : 42)
+                                * scale; x++) {
+                            final int expected = mapImage.getPixelReader()
+                                    .getArgb(point.getX() * scale + x,
+                                            point.getY() * scale + y);
+                            final int actual = previewImage.getPixelReader()
+                                    .getArgb(4 * scale + x, y);
+                            assertEquals(expected >>> 24, actual >>> 24,
+                                    "Preview opacity at " + at);
+                            for (int shift = 0; shift < 24; shift += 8) {
+                                maxColourDifference = Math.max(
+                                        maxColourDifference,
+                                        Math.abs(((expected >>> shift) & 255)
+                                                - ((actual >>> shift) & 255)));
+                            }
+                            if (toRgb(mapImage.getPixelReader().getColor(
+                                    point.getX() * scale + x,
+                                    point.getY() * scale + y)) == toRgb(
+                                            PaintService.RIVER_COLOR)) {
+                                riverPixels++;
+                            }
+                        }
+                    }
+                    // Rotated bridge edges round one colour level differently
+                    // at different canvas origins.
+                    final int tolerance = getModel().getMap().getTerrainAt(at)
+                            .isHasRoad() ? 1 : 0;
+                    assertTrue(maxColourDifference <= tolerance,
+                            "River preview differs at " + at + " scale " + scale
+                                    + ": maximum channel difference "
+                                    + maxColourDifference);
+                    if (!sea) {
+                        assertTrue(riverPixels > 0,
+                                "The checked map square must contain visible river water");
+                    } else {
+                        final ImageProvider images = getContext()
+                                .getClassFromGuice(ImageProvider.class);
+                        assertEquals(
+                                toRgb(images.getTerrainColor(
+                                        TerrainType.GRASSLAND)),
+                                toRgb(previewImage.getPixelReader()
+                                        .getColor(7 * scale, 23 * scale)),
+                                "The ocean preview must contain the mouth's grass island");
+                    }
+                    for (int y = 0; y < 45 * scale; y++) {
+                        assertEquals(0,
+                                previewImage.getPixelReader().getArgb(0, y),
+                                "Left margin stays clear");
+                        assertEquals(0,
+                                previewImage.getPixelReader()
+                                        .getArgb(52 * scale, y),
+                                "Right margin stays clear");
+                    }
+                }
+            } finally {
+                root.setPrefSize(preferredWidth, preferredHeight);
+                root.resize(width, height);
+                root.layout();
+            }
+        }).get(10, TimeUnit.SECONDS);
+    }
+
     public void verifyLargeTwoArmMouth(final Location at,
             final Direction towardSea) throws Exception {
         final ImageProvider images = getContext()
