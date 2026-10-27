@@ -775,3 +775,12 @@ remain owned by their current requirements; acceptance is recorded in the
    in completion notices. Status: `done`; local acceptance passed.
    No gameplay behavior or acceptance limit changes. See the
    [operating contract and evidence](../ai/completion-callbacks.md#timeout-evidence-2026-10-27).
+
+## Screen design alternatives (2026-10-27)
+
+1. [R-0321](R-0321.md), primary area A03, captures three proposed layouts for each
+   of ten in-game screen families: statistics, goals, Congress, Europe, colony,
+   trade, turn reports, relations, help and settings. Status: `new`. The user will
+   select one screen and direction for further refinement; this comparison does
+   not authorize implementation of all screens. A06/A07/A08/A10 retain their
+   rules and data, and A01 retains settings/navigation responsibilities.

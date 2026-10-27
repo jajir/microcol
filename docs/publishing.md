@@ -870,3 +870,25 @@ documentation in APT just to make it visible on the web.
    verified facts. Logs are retained in `target/r0318/docs-tests.log` and
    `target/r0318/mkdocs.log`. No runtime reproduction, remote CI inspection or
    publication verification is claimed.
+
+## R-0321 screen design proposals — 2026-10-27
+
+1. [R-0321](requirements/R-0321.md) captures three proposed layouts for each of
+   ten screen families, based on source revision
+   `d318a0508266708c61e79b92af7f8a744fdb8be0` and the saved R-0307 screenshots.
+   The requirement remains `new`: choosing a screen precedes detailed refinement
+   and implementation. Sample values in the conversational prototypes are not
+   game-state observations or new rules.
+2. The documentation-only commit contains the requirement, its backlog link and
+   this evidence. Nine documentation consistency checks passed without failures,
+   errors or skips, and strict MkDocs passed. Rendered-source review checked the
+   four chapters, status, relative links and all thirty named proposals.
+3. Local browser checks covered ten screens, three variants and three viewport
+   widths (1024, 360 and 320 pixels): 90 layout/content checks and six interaction
+   checks passed without JavaScript errors. Manual screenshot review covered
+   statistics, Congress and colony designs. Local prototypes and check output
+   are in `target/screen-designs-2026-10-27/`; they are conversation material,
+   not game runtime assets or published documentation.
+4. No JavaFX gameplay implementation or player observation is claimed.
+   Model/JUnit and Docker/Xvfb phases are exempt for this documentation-only
+   scope. Remote regression and publication were not inspected.
