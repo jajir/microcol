@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.menu;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
@@ -39,21 +41,27 @@ public final class ButtonsPanelView
 
     public static final String BUTTON_HALL_OF_FAME_ID = "buttonHallOfFame";
 
-    private final Button buttonContinue = new Button();
+    private final Button buttonContinue = ActionButtons.button(ButtonIcon.PLAY);
 
-    private final Button buttonRecovery = new Button();
+    private final Button buttonRecovery = ActionButtons
+            .button(ButtonIcon.RECOVER);
 
-    private final Button buttonLoad = new Button();
+    private final Button buttonLoad = ActionButtons.button(ButtonIcon.FOLDER);
 
-    private final Button buttonPlayCampaign = new Button();
+    private final Button buttonPlayCampaign = ActionButtons
+            .button(ButtonIcon.CAMPAIGN);
 
-    private final Button buttonStartFreeGame = new Button();
+    private final Button buttonStartFreeGame = ActionButtons
+            .button(ButtonIcon.NEW_GAME);
 
-    private final Button buttonHallOfFame = new Button();
+    private final Button buttonHallOfFame = ActionButtons
+            .button(ButtonIcon.TROPHY);
 
-    private final Button buttonSetting = new Button();
+    private final Button buttonSetting = ActionButtons
+            .button(ButtonIcon.SETTINGS);
 
-    private final Button buttonExitMicroCol = new Button();
+    private final Button buttonExitMicroCol = ActionButtons
+            .button(ButtonIcon.EXIT);
 
     private final VBox buttonsBox = new VBox();
 

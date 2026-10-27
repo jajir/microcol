@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.europe;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.i18n.I18n;
@@ -25,7 +27,8 @@ public final class RecruiteUnitPanel extends VBox {
         final Label name = new Label(names.getUnitName(offer.getType()));
         name.setId("recruit-name-" + offer.getSlot());
         name.setWrapText(true);
-        final Button confirm = new Button(i18n.get(Europe.earnedChoose));
+        final Button confirm = ActionButtons.button(ButtonIcon.CONFIRM,
+                i18n.get(Europe.earnedChoose));
         confirm.setId("recruit-confirm-" + offer.getSlot());
         confirm.setDisable(!buyer.canChooseEarnedImmigrant(offer));
         confirm.setOnAction(event -> dialog.chooseEarned(offer));
@@ -43,7 +46,7 @@ public final class RecruiteUnitPanel extends VBox {
         final Label name = new Label(names.getUnitName(offer.getType()));
         name.setId("recruit-name-" + offer.getSlot());
         name.setWrapText(true);
-        final Button confirm = new Button(
+        final Button confirm = ActionButtons.button(ButtonIcon.BUY,
                 i18n.get(Europe.recruitUnitDialogButton) + " "
                         + offer.getPrice());
         confirm.setId("recruit-confirm-" + offer.getSlot());

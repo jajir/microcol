@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.europe;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.Optional;
 
 import org.microcol.gui.GoodsTypeName;
@@ -31,9 +33,9 @@ public final class TaxDemandDialog extends AbstractMessageWindow {
     private final Label protestDetail = new Label();
     private final Label feedback = new Label();
     private final Label laterExplain = new Label();
-    private final Button accept = new Button();
-    private final Button protest = new Button();
-    private final Button later = new Button();
+    private final Button accept = ActionButtons.button(ButtonIcon.CONFIRM);
+    private final Button protest = ActionButtons.button(ButtonIcon.STOP);
+    private final Button later = ActionButtons.button(ButtonIcon.WAIT);
     private final GameModelController controller;
     private final EuropeCallback europe;
     private final I18n i18n;

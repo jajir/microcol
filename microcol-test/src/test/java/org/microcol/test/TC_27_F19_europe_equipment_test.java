@@ -116,6 +116,8 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         // A returning pioneer cannot silently discard the remaining 37 tools.
         WelcomePage.of(getContext()).loadGame().openEuroperPort();
         EuropeEquipmentPage equipment = new EuropeEquipmentPage(getContext());
+        equipment.captureDialog("closeButtonId",
+                "r0316-europe-equipment-before.png");
         equipment.open(101, "Buy 50 muskets");
         equipment.verifyChoice("Buy 50 muskets", false, INCOMPATIBLE);
         equipment.cancel();

@@ -1,5 +1,7 @@
 package org.microcol.gui.util;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.Loc;
 import org.microcol.gui.dialog.Dialog;
 import org.microcol.i18n.I18n;
@@ -27,11 +29,11 @@ public final class ButtonsBarYesNo implements JavaFxComponent {
 
     public ButtonsBarYesNo(final String buttonYesLabel,
             final String buttonNoLabel) {
-        buttonYes = new Button(buttonYesLabel);
+        buttonYes = ActionButtons.button(ButtonIcon.CONFIRM, buttonYesLabel);
         buttonYes.requestFocus();
         buttonYes.setId("buttonYes");
 
-        buttonNo = new Button(buttonNoLabel);
+        buttonNo = ActionButtons.button(ButtonIcon.CANCEL, buttonNoLabel);
         buttonNo.requestFocus();
         buttonNo.setId("buttonNo");
 

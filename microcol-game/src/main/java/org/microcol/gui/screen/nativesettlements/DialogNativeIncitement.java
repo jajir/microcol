@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.nativesettlements;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -69,9 +71,9 @@ public final class DialogNativeIncitement extends AbstractMessageWindow {
 
     private final Label notice = new Label();
 
-    private final Button confirm = new Button();
+    private final Button confirm = ActionButtons.button(ButtonIcon.MILITARY);
 
-    private final Button back = new Button();
+    private final Button back = ActionButtons.button(ButtonIcon.BACK);
 
     private NativeIncitementQuote shown;
 

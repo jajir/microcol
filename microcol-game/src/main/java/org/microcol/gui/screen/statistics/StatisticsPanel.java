@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.statistics;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -42,35 +44,43 @@ final class StatisticsPanel implements GameScreen {
 
     private final static String KEY_RELATIONS = "relations";
     private final EuropeanRelationsPanel relations;
-    private final ToggleButton relationsButton = new ToggleButton();
+    private final ToggleButton relationsButton = ActionButtons
+            .toggle(ButtonIcon.DIPLOMACY);
 
     private final static String KEY_TRADE = "trade";
     private final EuropeanTradePanel trade;
-    private final ToggleButton tradeButton = new ToggleButton();
+    private final ToggleButton tradeButton = ActionButtons
+            .toggle(ButtonIcon.TRADE);
 
     private final static String KEY_BASE_SCORE = "baseScore";
     private final BaseScorePanel baseScore;
-    private final ToggleButton baseScoreButton = new ToggleButton();
+    private final ToggleButton baseScoreButton = ActionButtons
+            .toggle(ButtonIcon.STATISTICS);
 
     private final static String KEY_HALL_OF_FAME = "hallOfFame";
     private final HallOfFamePanel hallOfFame;
-    private final ToggleButton hallOfFameButton = new ToggleButton();
+    private final ToggleButton hallOfFameButton = ActionButtons
+            .toggle(ButtonIcon.TROPHY);
 
     private final static String KEY_LABOR = "labor";
     private final LaborPanel labor;
-    private final ToggleButton laborButton = new ToggleButton();
+    private final ToggleButton laborButton = ActionButtons
+            .toggle(ButtonIcon.LABOR);
 
     private final static String KEY_RELIGION = "religion";
     private final ReligionPanel religion;
-    private final ToggleButton religionButton = new ToggleButton();
+    private final ToggleButton religionButton = ActionButtons
+            .toggle(ButtonIcon.RELIGION);
 
     private final static String KEY_COLONIES = "colonies";
     private final ColonyAdvisorPanel colonies;
-    private final ToggleButton coloniesButton = new ToggleButton();
+    private final ToggleButton coloniesButton = ActionButtons
+            .toggle(ButtonIcon.COLONIES);
 
     private final static String KEY_FLEET = "fleet";
     private final FleetPanel fleet;
-    private final ToggleButton fleetButton = new ToggleButton();
+    private final ToggleButton fleetButton = ActionButtons
+            .toggle(ButtonIcon.SHIP);
 
     private final static String KEY_GOLD = "gold";
     private final static String KEY_MILITARY = "military";
@@ -93,10 +103,11 @@ final class StatisticsPanel implements GameScreen {
     private final Label labelIndexTitle = new Label();
 
     private final ToggleGroup toggleGroup = new ToggleGroup();
-    private final ToggleButton tb1 = new ToggleButton();
-    private final ToggleButton tb2 = new ToggleButton();
-    private final ToggleButton tb3 = new ToggleButton();
-    private final ToggleButton tb4 = new ToggleButton();
+    private final ToggleButton tb1 = ActionButtons.toggle(ButtonIcon.GOLD);
+    private final ToggleButton tb2 = ActionButtons.toggle(ButtonIcon.MILITARY);
+    private final ToggleButton tb3 = ActionButtons.toggle(ButtonIcon.CARGO);
+    private final ToggleButton tb4 = ActionButtons
+            .toggle(ButtonIcon.STATISTICS);
 
     private Pane chartPanel = new StackPane();
 
@@ -171,19 +182,15 @@ final class StatisticsPanel implements GameScreen {
         toggleGroup.selectedToggleProperty()
                 .addListener(this::onToggleGroupWasChanged);
 
-        tb1.getStyleClass().clear();
         tb1.setToggleGroup(toggleGroup);
         tb1.setUserData(KEY_GOLD);
 
-        tb2.getStyleClass().clear();
         tb2.setToggleGroup(toggleGroup);
         tb2.setUserData(KEY_MILITARY);
 
-        tb3.getStyleClass().clear();
         tb3.setToggleGroup(toggleGroup);
         tb3.setUserData(KEY_WEALTH);
 
-        tb4.getStyleClass().clear();
         tb4.setToggleGroup(toggleGroup);
         tb4.setUserData(KEY_SCORE);
 

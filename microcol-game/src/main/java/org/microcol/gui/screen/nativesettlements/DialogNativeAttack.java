@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.nativesettlements;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.Loc;
 import org.microcol.gui.screen.game.components.StatusBarMessageService;
 import org.microcol.gui.util.AbstractMessageWindow;
@@ -51,9 +53,9 @@ public final class DialogNativeAttack extends AbstractMessageWindow {
 
     private final Label relations = new Label();
 
-    private final Button confirm = new Button();
+    private final Button confirm = ActionButtons.button(ButtonIcon.MILITARY);
 
-    private final Button back = new Button();
+    private final Button back = ActionButtons.button(ButtonIcon.BACK);
 
     private boolean confirmed;
 

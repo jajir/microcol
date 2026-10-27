@@ -65,6 +65,8 @@ public final class PassengerTransferPage extends AbstractScreen {
         final Node source = getNodeFinder().lookup(
                 (europe ? "#europe-pier-unit-" : "#colonyUnit-") + unitId)
                 .query();
+        revealGameContent(source, PageComponentPanelDock.of(getContext())
+                .getListOfCrates().get(slotIndex));
         final CountDownLatch finished = new CountDownLatch(1);
         final EventHandler<DragEvent> done = event -> finished.countDown();
         getRobot().interact(

@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.Optional;
 
 import org.microcol.gui.Point;
@@ -61,7 +63,8 @@ class PanelConstructionCarpenter extends AbstractPanelConstructionWithSlots {
         final Optional<BuildingStatus<ColonyBuildingItem>> oStats = colony
                 .getColonyBuildingQueue().getActuallyBuildingStat();
         mainVbox.getChildren().clear();
-        final Button open = new Button(getI18n().get(ConstructionText.open));
+        final Button open = ActionButtons.button(ButtonIcon.LABOR,
+                getI18n().get(ConstructionText.open));
         open.setId("constructionOpen");
         open.setOnAction(
                 event -> getEventBus().post(new ShowBuildingQueueEvent()));

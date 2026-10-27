@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.europe;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ViewUtil;
@@ -32,9 +34,9 @@ public final class MercenaryOfferDialog extends AbstractMessageWindow {
     private final ComboBox<Colony> port = new ComboBox<>();
     private final Label hint = new Label();
     private final Label feedback = new Label();
-    private final Button accept = new Button();
-    private final Button decline = new Button();
-    private final Button later = new Button();
+    private final Button accept = ActionButtons.button(ButtonIcon.CONFIRM);
+    private final Button decline = ActionButtons.button(ButtonIcon.CANCEL);
+    private final Button later = ActionButtons.button(ButtonIcon.WAIT);
 
     public MercenaryOfferDialog(final ViewUtil viewUtil, final I18n i18n,
             final GameModelController game, final Model model,

@@ -1,5 +1,7 @@
 package org.microcol.gui.util;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.Loc;
 import org.microcol.i18n.I18n;
 
@@ -32,7 +34,7 @@ public class ButtonBarOk implements JavaFxComponent {
     }
 
     public ButtonBarOk(final String buttonOkLabel) {
-        buttonOk = new Button(buttonOkLabel);
+        buttonOk = ActionButtons.button(ButtonIcon.CONFIRM, buttonOkLabel);
         buttonOk.requestFocus();
         buttonOk.setId(BUTTON_OK_ID);
         final Pane spacer = new Pane();

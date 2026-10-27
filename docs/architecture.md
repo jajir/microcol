@@ -1178,3 +1178,14 @@ produkce se nemění. Viz [ověření](functional-tests.md#r-0188-targeted-cause
 vlastní svůj obsah, životní cyklus, navigaci a modelové příkazy. Rám čte stav
 přes stávající presenter; nevytváří herní pravidla ani závislost modelu na GUI.
 Viz [R-0307](requirements/done/R-0307.md) a [evidence](functional-tests.md#r-0307-in-game-screen-frame-2026-10-27).
+
+### Společná tlačítka a ikony (R-0316)
+
+`gui.util.ActionButtons` vytváří standardní JavaFX tlačítka, přepínače a
+rozbalovací tlačítka s povinnou ikonou z `gui.image.ButtonIcon`. Katalog načítá
+sdílené atlasy, zatímco `gui/ToolbarControls.css` určuje jediný vzhled ovládacího
+prvku. Obrazovky vybírají význam ikony a dál vlastní své akce. Jde o stávající
+odpovědnost prezentačních utilit a poskytování obrázků, bez nové modelové nebo
+AI závislosti. [Vizuální pravidlo](graphics.md#jednotna-papirova-tlacitka-2026-10-27)
+a [evidence](functional-tests.md#r-0316-shared-paper-buttons-and-action-icons-2026-10-27)
+jsou autoritativní pro vzhled a přijetí.

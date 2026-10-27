@@ -1,5 +1,7 @@
 package org.microcol.gui.dialog;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -60,8 +62,9 @@ public final class SavedGamesDialog extends AbstractMessageWindow {
                 setText(empty || entry == null ? null : describe(entry));
             }
         });
-        final MenuButton filter = new MenuButton(texts.get(
-                recoveryOnly ? SavedGameText.automatic : SavedGameText.all));
+        final MenuButton filter = ActionButtons.menu(ButtonIcon.FILTER,
+                texts.get(recoveryOnly ? SavedGameText.automatic
+                        : SavedGameText.all));
         filter.setId("savedGamesFilter");
         filter.getStyleClass().add("game-toolbar-control");
         final MenuItem all = new MenuItem(texts.get(SavedGameText.all));
@@ -169,7 +172,7 @@ public final class SavedGamesDialog extends AbstractMessageWindow {
 
     private Button add(final FlowPane pane, final SavedGameText text,
             final String id, final Runnable action) {
-        final Button button = new Button(texts.get(text));
+        final Button button = ActionButtons.button(icon(text), texts.get(text));
         button.setId(id);
         button.setOnAction(event -> action.run());
         pane.getChildren().add(button);
@@ -179,6 +182,29 @@ public final class SavedGamesDialog extends AbstractMessageWindow {
     private void select(final Action action) {
         result = new Choice(action, null, null);
         close();
+    }
+
+    private static ButtonIcon icon(final SavedGameText action) {
+        switch (action) {
+        case save:
+        case overwrite:
+            return ButtonIcon.SAVE;
+        case load:
+            return ButtonIcon.FOLDER;
+        case delete:
+            return ButtonIcon.DELETE;
+        case exportFile:
+            return ButtonIcon.EXPORT;
+        case importFile:
+            return ButtonIcon.IMPORT;
+        case folder:
+            return ButtonIcon.FOLDER;
+        case cancel:
+            return ButtonIcon.CANCEL;
+        default:
+            throw new IllegalArgumentException(
+                    "No saved-game action icon: " + action);
+        }
     }
 
     static SavedGameText kindText(final Kind kind) {

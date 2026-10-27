@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.game.components;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
@@ -31,7 +33,7 @@ public final class ColoniesMenu implements JavaFxComponent {
     private final EventBus eventBus;
     private final I18n i18n;
 
-    private final MenuButton button = new MenuButton();
+    private final MenuButton button = ActionButtons.menu(ButtonIcon.COLONIES);
 
     @Inject
     public ColoniesMenu(GameModelController gameModelController,

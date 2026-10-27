@@ -83,7 +83,7 @@ public final class HallOfFamePage extends AbstractScreen {
     /** Open the statistics of the game and its Hall of Fame tab. */
     public void openFromStatistics() {
         new FreePlayAuditPage(getContext()).openStatistics();
-        getRobot().clickOn("#" + TAB);
+        clickOnStatisticsTab(TAB);
         WaitForAsyncUtils.waitForFxEvents();
     }
 

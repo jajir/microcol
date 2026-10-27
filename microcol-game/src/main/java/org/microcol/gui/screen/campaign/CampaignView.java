@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.campaign;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.function.Consumer;
 
 import org.microcol.gui.screen.menu.GameMenu;
@@ -38,7 +40,7 @@ public final class CampaignView implements CampaignPresenter.Display,
         this.i18n = Preconditions.checkNotNull(i18n);
         box = new VBox();
         box.getStyleClass().add("game-menu-inner");
-        buttonBack = new Button();
+        buttonBack = ActionButtons.button(ButtonIcon.BACK);
         refresh();
     }
 
@@ -46,8 +48,9 @@ public final class CampaignView implements CampaignPresenter.Display,
         box.getChildren().clear();
         final Campaign campaign = campaignManager.getDefaultCampain();
         campaign.getMissions().forEach(mission -> {
-            final Button missionButton = new Button(i18n
-                    .get(GameMenu.get(campaign.getName(), mission.getName())));
+            final Button missionButton = ActionButtons
+                    .button(ButtonIcon.CAMPAIGN, i18n.get(GameMenu
+                            .get(campaign.getName(), mission.getName())));
             missionButton.setDisable(!campaign.isMissionEnabled(mission));
             missionButton
                     .setOnAction(event -> onSelectedMission(mission.getName()));

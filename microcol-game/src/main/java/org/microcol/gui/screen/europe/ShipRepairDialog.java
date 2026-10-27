@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.europe;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import com.google.inject.Inject;
 import org.microcol.gui.UnitTypes;
 import org.microcol.gui.event.model.GameModelController;
@@ -69,7 +71,8 @@ public final class ShipRepairDialog extends AbstractMessageWindow {
         Label explanation = new Label(i18n.get(Europe.repairsRestriction));
         explanation.setWrapText(true);
         explanation.setMaxWidth(560);
-        Button close = new Button(i18n.get(Europe.repairsClose));
+        Button close = ActionButtons.button(ButtonIcon.CANCEL,
+                i18n.get(Europe.repairsClose));
         close.setId("shipRepairsClose");
         close.setCancelButton(true);
         close.setOnAction(event -> close());

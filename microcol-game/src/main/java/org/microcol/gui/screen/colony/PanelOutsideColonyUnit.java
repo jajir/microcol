@@ -163,6 +163,12 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
 
     @SuppressWarnings("unused")
     private void onMousePressed(final MouseEvent event) {
+        if (mainPane.isFocusTraversable()) {
+            // Keep the scroll viewport from taking the colonist's keyboard
+            // focus.
+            mainPane.requestFocus();
+            event.consume();
+        }
         if (contextMenu.isShowing()) {
             contextMenu.hide();
         }

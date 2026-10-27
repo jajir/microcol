@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony.buildingqueue;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
@@ -16,8 +18,8 @@ final class ConstructionRushDialog extends AbstractMessageWindow {
     private final I18n i18n;
     private final Label detail = new Label();
     private final Label feedback = new Label();
-    private final Button confirm = new Button();
-    private final Button cancel = new Button();
+    private final Button confirm = ActionButtons.button(ButtonIcon.GOLD);
+    private final Button cancel = ActionButtons.button(ButtonIcon.CANCEL);
     private QueueController controller;
     private ConstructionRushQuote quote;
     private boolean purchased;

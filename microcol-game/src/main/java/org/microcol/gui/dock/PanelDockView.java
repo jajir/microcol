@@ -1,5 +1,7 @@
 package org.microcol.gui.dock;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -17,11 +19,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -88,13 +85,16 @@ public class PanelDockView implements JavaFxComponent {
     }
 
     void addShip(final UnitWithCargo ship) {
-        final ToggleButton toggleButtonShip = new ToggleButton();
-        final BackgroundImage myBI = new BackgroundImage(
-                imageProvider.getUnitImage(ship), BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                BackgroundSize.DEFAULT);
+        final ToggleButton toggleButtonShip = ActionButtons
+                .toggle(ButtonIcon.SHIP);
+        final javafx.scene.image.ImageView icon = new javafx.scene.image.ImageView(
+                imageProvider.getUnitImage(ship));
+        icon.setFitWidth(32);
+        icon.setFitHeight(32);
+        icon.setPreserveRatio(true);
+        icon.setMouseTransparent(true);
         toggleButtonShip.getStyleClass().add(SHIP_IN_PORT_STYLE);
-        toggleButtonShip.setBackground(new Background(myBI));
+        toggleButtonShip.setGraphic(icon);
         toggleButtonShip.setToggleGroup(toggleGroup);
         toggleButtonShip.setUserData(ship);
         if (ship.isShip()) {
@@ -138,9 +138,8 @@ public class PanelDockView implements JavaFxComponent {
             Preconditions.checkArgument(unit.getType().isShip(),
                     "Unit (%s) have to be ship.");
             ClipboardWritter.make(butt.startDragAndDrop(TransferMode.MOVE))
-                    .addImage(
-                            butt.getBackground().getImages().get(0).getImage())
-                    .addUnit(unit).build();
+                    .addImage(imageProvider.getUnitImage(unit)).addUnit(unit)
+                    .build();
             event.consume();
         }
     }

@@ -60,7 +60,7 @@ public final class BaseScorePage extends AbstractScreen {
 
     public void open() {
         new FreePlayAuditPage(getContext()).openStatistics();
-        getRobot().clickOn("#baseScoreTab");
+        clickOnStatisticsTab("baseScoreTab");
         WaitForAsyncUtils.waitForFxEvents();
     }
 

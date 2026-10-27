@@ -1,5 +1,7 @@
 package org.microcol.gui.dialog;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,9 +55,9 @@ final class JettisonDialog extends AbstractMessageWindow {
         question.setWrapText(true);
         root.getChildren().addAll(title, question);
         for (final JettisonOffer offer : offers) {
-            final Button hold = new Button(i18n.get(Jettison.holdButton,
-                    offer.getSlotIndex() + 1, offer.getGoods().getAmount(),
-                    i18n.get(GoodsTypeName
+            final Button hold = ActionButtons.button(ButtonIcon.CARGO, i18n.get(
+                    Jettison.holdButton, offer.getSlotIndex() + 1,
+                    offer.getGoods().getAmount(), i18n.get(GoodsTypeName
                             .getNameForGoodsType(offer.getGoods().getType()))));
             hold.setId("jettisonHold-" + (offer.getSlotIndex() + 1));
             hold.setOnAction(event -> {
@@ -64,7 +66,8 @@ final class JettisonDialog extends AbstractMessageWindow {
             });
             root.getChildren().add(hold);
         }
-        final Button cancel = new Button(i18n.get(Dialog.cancel));
+        final Button cancel = ActionButtons.button(ButtonIcon.CANCEL,
+                i18n.get(Dialog.cancel));
         cancel.setId("jettisonCancel");
         cancel.setOnAction(event -> onCancelDialog());
         root.getChildren().add(cancel);

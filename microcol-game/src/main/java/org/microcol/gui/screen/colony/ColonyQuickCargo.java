@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.List;
 
 import org.microcol.gui.event.model.GameModelController;
@@ -39,9 +41,9 @@ final class ColonyQuickCargo implements UpdatableLanguage {
 
     private final I18n i18n;
 
-    private final Button loadButton = new Button();
+    private final Button loadButton = ActionButtons.button(ButtonIcon.LOAD);
 
-    private final Button unloadButton = new Button();
+    private final Button unloadButton = ActionButtons.button(ButtonIcon.UNLOAD);
 
     @Inject
     ColonyQuickCargo(final GameModelController gameModelController,

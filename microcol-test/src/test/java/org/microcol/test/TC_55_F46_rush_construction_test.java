@@ -34,6 +34,8 @@ public class TC_55_F46_rush_construction_test extends AbstractMicroColTest {
         ConstructionPage building = new ConstructionPage(getContext());
         ConstructionRushPage rush = new ConstructionRushPage(getContext());
         rush.setToolAsk(3);
+        building.captureDialog("closeButtonId",
+                "r0316-construction-before.png");
         building.assignCarpenter(4);
         building.open();
         building.select("BLACKSMITHS_SHOP");

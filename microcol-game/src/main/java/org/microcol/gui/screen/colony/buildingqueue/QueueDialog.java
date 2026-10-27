@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony.buildingqueue;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,12 +46,12 @@ public class QueueDialog extends AbstractMessageWindow {
     private final Label feedback = new Label();
     private final ListView<ColonyBuildingItem> projects = new ListView<>();
     private final ListView<ColonyBuildingItemProgress<?>> queue = new ListView<>();
-    private final Button add = new Button();
-    private final Button up = new Button();
-    private final Button down = new Button();
-    private final Button remove = new Button();
-    private final Button cancel = new Button();
-    private final Button rush = new Button();
+    private final Button add = ActionButtons.button(ButtonIcon.ADD);
+    private final Button up = ActionButtons.button(ButtonIcon.UP);
+    private final Button down = ActionButtons.button(ButtonIcon.DOWN);
+    private final Button remove = ActionButtons.button(ButtonIcon.REMOVE);
+    private final Button cancel = ActionButtons.button(ButtonIcon.CANCEL);
+    private final Button rush = ActionButtons.button(ButtonIcon.GOLD);
     private final ConstructionRushDialog rushDialog;
     private List<?> selectionState = List.of();
 

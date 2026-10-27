@@ -11343,3 +11343,190 @@ or website publication.
    publication were not checked. Loading an existing save can display the mouth
    only where that save already contains a suitable coastal river; no migration
    adds the Original World template change to older saves.
+
+## R-0316 shared paper buttons and action icons (2026-10-27)
+
+1. [R-0316](requirements/done/R-0316.md), UC-006/114/115/119: all application-owned
+   action buttons use the main toolbar's paper frame and a meaningful icon.
+   The inventory found 197 constructor sites. Native button/toggle/menu input
+   remains; screen owners select icons and retain action handlers.
+2. The shared factory requires an explicit icon. Existing toolbar/menu art is
+   reused, with 44 additional SVG symbols in the same 48-unit cells, 2.4-unit
+   ink and olive accent. Source/artifact model checks guard missing icons;
+   TC83 and TC192 now check the paper style, icons and native interactions
+   instead of requiring the old wooden skin. Acceptance is pending.
+3. Model/JUnit dispatch `20261027T084322Z-c27699cc803b`, supervisor PID 24193,
+   timeout 600 s, checks the working implementation based on `4b175170`.
+   Results, targeted UI, smoke and final visual review remain pending.
+4. The first dispatch timed out during Docker cleanup discovery (`docker ps`
+   with the managed-container label), before tests started. The same read-only
+   query then completed in 0.069 s with no managed containers. No test failure
+   was hidden; the intermittent Docker delay remains unexplained.
+5. Retry `20261027T084742Z-bcec19e50064`, PID 24920, timeout 600 s, passed in
+   134.827 s. `target/verification/run-c__np9y8/summary.json` records **4,775
+   model/JUnit tests, zero failures, errors or skips**.
+6. Targeted dispatch `20261027T085138Z-100b9bbb2dd4`, PID 25700, timeout 1,500 s:
+   `TC_83_*`, `TC_192_*`, `TC_191_*`, `PageVerificationContractTest`.
+   This checks shared styling, screen navigation and the save/leave/cancel
+   confirmation from the user's screenshot. Results remain pending.
+7. The first targeted run failed in test compilation: TC85 still imported the
+   renamed `WoodenButtonsPage`. The typography scenario now uses
+   `PaperButtonsPage`; the Europe ship assertion now checks its real ImageView
+   and shared frame instead of the retired background-image implementation.
+   Gameplay expectations remain unchanged. No UI result was accepted from
+   this incomplete run.
+8. Targeted retry `20261027T085338Z-a25a86a85740`, PID 26073, timeout 1,500 s,
+   repeats the same four selections after the test migration repair.
+9. The retry ran 10 checks with 6 errors. Shared icon-only button labels tried
+   to overwrite the main toolbar's bound accessible name on scene attachment.
+   The helper now preserves the toolbar-owned binding and tooltip. This is a
+   production repair; model acceptance will be repeated before UI acceptance.
+10. Model retry after the accessibility repair:
+    `20261027T085546Z-d9c3c3469bd1`, PID 26669, timeout 600 s. Documentation
+    checks passed 9 tests and strict MkDocs; final acceptance remains pending.
+11. The repaired source passed model/JUnit in 132.851 s:
+    `target/verification/run-q6gjvww8/summary.json`, 4,775 tests, zero failures,
+    errors or skips. The next focused UI run also includes TC85 typography.
+12. Focused UI dispatch `20261027T085825Z-8d4060f4e6fa`, PID 27079,
+    timeout 1,500 s: TC83/85/191/192 and `PageVerificationContractTest`.
+13. The focused run exposed one remaining local padding override on the
+    Colonies menu button (6 px at the bottom versus the shared 7 px). The
+    override was removed so the common rule owns the button face. TC85 also
+    still expected a 36 px colony title, although R-0307 already moved it to
+    the 14 px screen toolbar; that stale expectation now follows the agreed
+    typography. Model dispatch `20261027T090036Z-c1dd55249c0c`, PID 27330,
+    timeout 600 s, checks the final shared-padding source.
+14. The focused run completed 12 checks with 3 errors (two shared-padding
+    assertions and the stale colony-title expectation); no failures or skips.
+    Session/save/cancel checks and the page-source contract passed. Visual
+    review found that TC192 clicked lower statistics tabs outside the visible
+    sidebar and therefore stayed on Gold. Shared page actions now scroll the
+    sidebar with the mouse before clicking, and TC192 explicitly verifies each
+    tab selection. Existing report-specific assertions remain in their tests.
+15. Model acceptance for the shared-padding source passed in 135.764 s
+    (9.062 s lock wait recorded separately): 4,775 tests, zero failures,
+    errors or skips, `target/verification/run-vmq5mojd/summary.json`.
+16. Focused dispatch after scrolling/test repairs:
+    `20261027T090354Z-2f33ba926ab3`, PID 27803, timeout 1,500 s; same
+    TC83/85/191/192 and page-contract selection. The saved-game confirmation,
+    Congress and statistics screenshots already show the shared paper frame,
+    meaningful icons and intact text; full acceptance awaits the final run.
+17. Focused acceptance passed in 157.974 s: **12 tests, zero failures,
+    errors or skips**, `target/docker-ui/run-kp3i5i`. This includes each actual
+    statistics tab, typography, paper button states, keyboard activation,
+    named saves/restore/cancel and the page-object source contract.
+18. Broader targeted dispatch `20261027T090647Z-e4dd616ad0ce`, PID 28450,
+    timeout 1,500 s, selects TC01/06/25/27/33/46/55/84/100/127/159/160/163/
+    166/167/168/171/176/177/178/186/188. These retain gameplay assertions for
+    embarkation, trade, equipment, recruitment, construction, settings/help,
+    diplomacy, report tabs, Congress, turn summary, Europe and the game toolbar.
+    Results and fixed smoke remain pending.
+19. Review confirmed no action-handler or game-rule changes in the production
+    diff. All 197 production factory call sites choose an icon; no remaining
+    direct constructors or wooden skins exist outside the shared factory.
+    The then-current `microcol-game/src` tree exactly matched the accepted model
+    snapshot. Java formatting checked 92 files with exact code-token and
+    idempotence validation; documentation checks passed 9 tests and strict
+    MkDocs. Final documentation acceptance follows the completion update.
+20. Fixed smoke/support dispatch `20261027T091034Z-e105e0b0fa46`, PID 28986,
+    wrapper timeout 480 s and unchanged 420 s acceptance budget. It waits for
+    the broader targeted job's local lock and then checks the same stable
+    executable tree. Neither phase is accepted until its reports are complete.
+21. Broader UI run `run-xfCyf2` completed in 1,208.897 s: 94 tests,
+    4 failures, 13 errors, zero skips. The failures identify two production
+    omissions: ship dragging still read the retired button background image,
+    and Escape in the colony toolbar never reached the old content-only key
+    handler. Dragging now uses the unit image provider; colony Escape is
+    handled at the whole screen frame through the existing close callback.
+22. Equipment, construction and passenger tests also attempted mouse gestures
+    below the scroll viewport. Shared page actions now reveal the relevant
+    body targets before clicking or dragging; no model outcomes are relaxed.
+    TC192 explicitly verifies Escape with keyboard focus on the colony toolbar.
+23. Smoke `run-qrnczjch` completed in 201.423 s (981.278 s lock wait separately),
+    21 tests with one error and no failures/skips: TC23 hit the same ship-drag
+    background-image assumption. This run remains failed. Both phases require
+    new acceptance after the production repairs.
+24. Model dispatch after those repairs: `20261027T093417Z-d3d19ad15707`,
+    PID 34718, timeout 600 s. Acceptance and publication remain pending.
+25. Model acceptance passed in 132.299 s: 4,775 tests, zero failures,
+    errors or skips, `target/verification/run-a1b7e473/summary.json`.
+26. Focused repair dispatch `20261027T093658Z-97fd604a611f`, PID 35114,
+    timeout 900 s: TC25#04, TC27#02, TC55#01, TC171#01, TC166, TC23#01,
+    TC192#01 and `PageVerificationContractTest`. This isolates the failed
+    mouse/keyboard journeys and the ship-drag regression before full targeted
+    acceptance is repeated.
+27. Focused repair run `run-qB9eS4` finished in 223.442 s: 10 tests,
+    one failure, zero errors/skips. Ship/voyage dragging, passenger dragging,
+    carpenter assignment, report navigation and colony-toolbar Escape passed.
+    The remaining TC25 keyboard failure points to the scroll viewport taking
+    focus after a colonist click. The colonist's mouse handler now explicitly
+    retains focus and consumes that press; Shift+F10 remains the tested action.
+28. Model dispatch for the colonist-focus repair:
+    `20261027T094221Z-f98a2ea6f06f`, PID 36912, timeout 600 s.
+29. Model acceptance passed in 136.383 s: **4,775 tests, zero failures,
+    errors or skips**, `target/verification/run-h6x0bv1l/summary.json`.
+30. Complete targeted dispatch `20261027T094519Z-d72bc7def245`, PID 38032,
+    timeout 1,500 s, combines the earlier 94-test broader selection with
+    TC83/85/191/192, `PageVerificationContractTest`, and TC23#01. It checks
+    the stable final source including the colonist-focus repair; results
+    remain pending. No source changes are planned while acceptance runs.
+31. Fixed smoke dispatch `20261027T094543Z-677be4484ae6`, PID 38057,
+    timeout 480 s with the fixed 420 s acceptance budget, is queued behind
+    the complete targeted run. Model source identity was rechecked against
+    `run-h6x0bv1l`; the trees match. Formatting checked 103 Java files with
+    zero changes, exact code-token equivalence and idempotence passing.
+32. Targeted run `run-OWK8Wd` completed in 1,498.241 s: 107 tests,
+    one failure, zero errors/skips. All groups except TC25 passed. TC25#01
+    completed a native cargo drag without unloading the muskets; its warehouse
+    assertion remained 49 instead of 100. This run remains failed. The keyboard
+    equipment, ship drag, colony Escape and other previously failing journeys
+    passed. Smoke acquired the lock after 1,474.357 s of waiting.
+33. Cargo diagnosis dispatch `20261027T101252Z-5634c80f75cb`, PID 42426,
+    timeout 600 s, selects TC25#01 with temporary viewport/bounds diagnostics.
+    No game logic or expected warehouse amount was changed.
+34. Smoke `run-wwka7lqu` passed all 21 selected UI/support tests with zero
+    failures, errors or skips in 202.521 s, within the 420 s budget.
+35. Diagnostic run `run-NfoJBh` reproduced TC25#01 in 44.060 s (one
+    failure, zero errors/skips). Its saved screenshot and screen bounds showed
+    the musket drop target clipped behind the right-hand scrollbar: the page
+    helper revealed targets vertically only. The shared helper now reveals
+    both horizontal and vertical bounds before the native gesture. Temporary
+    logging was removed; the expected warehouse amount and gameplay checks
+    are unchanged. Final acceptance must cover this test-helper correction.
+36. Post-correction model dispatch `20261027T101559Z-d6a712eadbd0`,
+    PID 43760, timeout 600 s. The shared formatter checked 103 Java files,
+    formatted the changed helper, and passed exact code-token equivalence
+    and idempotence. `git diff --check` passed. Executable and test source
+    hashes are saved in `target/button-unification/final-source.json`;
+    further source edits are not planned during final acceptance.
+37. Final targeted dispatch `20261027T101818Z-09a89468baa6`, PID 44629,
+    timeout 2,100 s, queues the same complete 107-test selection behind the
+    model phase. The watchdog allows headroom over the previous 1,498 s
+    execution; no test is removed and the separate smoke budget stays 420 s.
+38. Model `run-k1ks8qxv` passed **4,775 tests**, zero failures, errors or
+    skips, in 134.634 s. Source hashes still match the final snapshot.
+    Targeted UI acquired the local lock after model completion. Final smoke
+    dispatch `20261027T101901Z-36d59f9ac8db`, PID 45039, timeout 480 s,
+    waits behind the targeted run and retains the fixed 420 s acceptance limit.
+39. Final targeted run `run-2soKDT` passed **107 tests in 28 suites**, zero
+    failures, errors or skips, in 1,510.726 s. The selection is unchanged from
+    item 30 and covers the repaired cargo gesture, keyboard equipment menu,
+    ship dragging, colony Escape and the shared button presentation. All
+    executable/test hashes still match the recorded final source; there are
+    no additional changed executable paths. The final review retained model
+    outcomes and stable scenario IDs and checked the shared style, explicit
+    icon creation, accessibility bindings and the repaired interaction paths.
+40. Final smoke `run-8oy1bxy7` passed **21 UI/support tests**, zero failures,
+    errors or skips, in **204.760 s**, within the 420 s acceptance budget.
+    Lock waiting took 1,467.902 s separately. Completion cleanup reported no
+    errors. All executable/test source hashes remained unchanged after the
+    accepted model, targeted UI and smoke phases. R-0316 is locally accepted;
+    historical failed runs remain failed. Remote regression and publication
+    are not verified by this local acceptance.
+41. Final documentation closure passed all nine documentation consistency
+    tests and the strict MkDocs build. The requirement was moved to `done/`
+    with inbound and relative links updated. Shared Java formatting,
+    code-token/idempotence checks and staged/unstaged whitespace checks passed.
+    The reviewed executable source is the accepted snapshot based on
+    `4b175170ac4acbdb1fea97c124ca2c68f6b6c23f`; subsequent closure edits affect
+    documentation only. Remote CI and publication are outside this task.

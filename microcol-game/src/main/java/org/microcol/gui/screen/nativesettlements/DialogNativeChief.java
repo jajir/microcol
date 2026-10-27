@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.nativesettlements;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.Loc;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ViewUtil;
@@ -36,9 +38,9 @@ public final class DialogNativeChief extends AbstractMessageWindow {
 
     private final Label line = new Label();
 
-    private final Button confirm = new Button();
+    private final Button confirm = ActionButtons.button(ButtonIcon.DIPLOMACY);
 
-    private final Button back = new Button();
+    private final Button back = ActionButtons.button(ButtonIcon.BACK);
 
     private boolean confirmed;
 

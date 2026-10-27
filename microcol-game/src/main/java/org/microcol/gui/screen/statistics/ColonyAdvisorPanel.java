@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.statistics;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.List;
 
 import org.microcol.gui.GoodsTypeName;
@@ -132,7 +134,8 @@ final class ColonyAdvisorPanel extends VBox {
                         colony.getPopulation()));
         HBox.setHgrow(name, Priority.ALWAYS);
         name.setMaxWidth(Double.MAX_VALUE);
-        final Button open = new Button(i18n.get(ColonyAdvisorText.open));
+        final Button open = ActionButtons.button(ButtonIcon.COLONIES,
+                i18n.get(ColonyAdvisorText.open));
         open.setId("colonyOpen-" + id);
         open.setMinWidth(Region.USE_PREF_SIZE);
         open.setOnAction(event -> open(colony));

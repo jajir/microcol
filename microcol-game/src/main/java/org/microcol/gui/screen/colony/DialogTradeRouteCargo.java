@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -58,24 +60,26 @@ public final class DialogTradeRouteCargo extends AbstractMessageWindow {
     private final ComboBox<Integer> stopBox = new ComboBox<>();
     private final TradeRouteGoodsList unload;
     private final TradeRouteGoodsList load;
-    private final Button save = new Button();
+    private final Button save = ActionButtons.button(ButtonIcon.SAVE);
     private final Label message = new Label();
     private final Label carrierLabel = new Label();
     private final ComboBox<UnitWithCargo> carrierBox = new ComboBox<>();
     private final Label carrierStatus = new Label();
-    private final Button process = new Button();
+    private final Button process = ActionButtons.button(ButtonIcon.PLAY);
     private final Label assignRule = new Label();
     private final Label firstStopLabel = new Label();
     private final ComboBox<Integer> firstStopBox = new ComboBox<>();
-    private final Button assign = new Button();
+    private final Button assign = ActionButtons.button(ButtonIcon.CONFIRM);
     private final Label assignStatus = new Label();
     private final Label assignedHeading = new Label();
     private final Label assigned = new Label();
-    private final Button cancelAssignment = new Button();
-    private final Button deleteRoute = new Button();
+    private final Button cancelAssignment = ActionButtons
+            .button(ButtonIcon.REMOVE);
+    private final Button deleteRoute = ActionButtons.button(ButtonIcon.DELETE);
     private final Label replaceStopLabel = new Label();
     private final ComboBox<TradeRouteStop> replaceBox = new ComboBox<>();
-    private final Button replaceButton = new Button();
+    private final Button replaceButton = ActionButtons
+            .button(ButtonIcon.REPLACE);
     private final Label replaceStatus = new Label();
     private final Label assignedPickLabel = new Label();
     /** Every carrier that follows the route, wherever it is now. */
@@ -87,7 +91,7 @@ public final class DialogTradeRouteCargo extends AbstractMessageWindow {
     private Integer deleteAskedFor;
     private final Label resultHeading = new Label();
     private final Label result = new Label();
-    private final Button close = new Button();
+    private final Button close = ActionButtons.button(ButtonIcon.CANCEL);
     private Model model;
     private Player player;
     /** Set while controls are rebuilt, so their own events do not recurse. */

@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.setting;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.screen.menu.GameMenu;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.util.JavaFxComponent;
@@ -95,7 +97,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         final VBox developerSection = new VBox(4, developerHeading,
                 developerCheckBox, developerDescription);
         developerSection.setId("developerSettings");
-        buttonBack = new Button();
+        buttonBack = ActionButtons.button(ButtonIcon.BACK);
         buttonBack.setId(BUTTON_BACK_ID);
 
         buttonsBox = new VBox();

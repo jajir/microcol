@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.statistics;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.UnitTypes;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
@@ -17,7 +19,7 @@ final class PeaceDialog extends AbstractMessageWindow {
     private final PeaceOffer offer;
     private final I18n i18n;
     private final Label feedback = new Label();
-    private final Button confirm = new Button();
+    private final Button confirm = ActionButtons.button(ButtonIcon.CONFIRM);
     private boolean accepted;
 
     PeaceDialog(ViewUtil viewUtil, I18n i18n, GameModelController game,
@@ -56,11 +58,13 @@ final class PeaceDialog extends AbstractMessageWindow {
         confirm.setDisable(offer.getActor().getGold() < offer.getPrice());
         confirm.setDefaultButton(true);
         confirm.setOnAction(event -> accept());
-        Button cancel = new Button(i18n.get(PeaceText.cancel));
+        Button cancel = ActionButtons.button(ButtonIcon.CANCEL,
+                i18n.get(PeaceText.cancel));
         cancel.setId("peaceCancel");
         cancel.setCancelButton(true);
         cancel.setOnAction(event -> cancel());
-        Button later = new Button(i18n.get(PeaceText.later));
+        Button later = ActionButtons.button(ButtonIcon.WAIT,
+                i18n.get(PeaceText.later));
         later.setId("peaceLater");
         later.setOnAction(event -> close());
         feedback.setId("peaceFeedback");

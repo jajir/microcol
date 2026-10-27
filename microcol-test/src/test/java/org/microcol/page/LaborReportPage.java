@@ -37,7 +37,7 @@ public final class LaborReportPage extends AbstractScreen {
     /** Opens statistics and the labor tab with the mouse. */
     public void open() {
         new FreePlayAuditPage(getContext()).openStatistics();
-        getRobot().clickOn("#laborTab");
+        clickOnStatisticsTab("laborTab");
         WaitForAsyncUtils.waitForFxEvents();
     }
 

@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.statistics;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -62,13 +64,15 @@ final class DeclarationDialog extends AbstractMessageWindow {
         root.getChildren().add(message);
 
         final HBox buttons = new HBox(12);
-        final Button cancel = new Button(i18n.get(Stats.declarationCancel));
+        final Button cancel = ActionButtons.button(ButtonIcon.CANCEL,
+                i18n.get(Stats.declarationCancel));
         cancel.setId("declarationCancel");
         cancel.setCancelButton(true);
         cancel.setDefaultButton(true);
         cancel.setOnAction(e -> onCancelDialog());
 
-        final Button confirm = new Button(i18n.get(Stats.declarationConfirm));
+        final Button confirm = ActionButtons.button(ButtonIcon.MILITARY,
+                i18n.get(Stats.declarationConfirm));
         confirm.setId("declarationConfirm");
         confirm.setDefaultButton(false);
         confirm.setOnAction(e -> {

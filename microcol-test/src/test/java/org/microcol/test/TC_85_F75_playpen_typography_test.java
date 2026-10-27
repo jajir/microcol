@@ -12,7 +12,7 @@ import org.microcol.page.GamePage;
 import org.microcol.page.SettingPage;
 import org.microcol.page.TypographyPage;
 import org.microcol.page.WelcomePage;
-import org.microcol.page.WoodenButtonsPage;
+import org.microcol.page.PaperButtonsPage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
@@ -43,11 +43,11 @@ public class TC_85_F75_playpen_typography_test extends AbstractMicroColTest {
     void TC_01_light_font_survives_languages_navigation_and_dialogs()
             throws Exception {
         final TypographyPage type = new TypographyPage(getContext());
-        final WoodenButtonsPage buttons = new WoodenButtonsPage(getContext());
+        final PaperButtonsPage buttons = new PaperButtonsPage(getContext());
         // Menu and both Settings languages retain the same real bundled face.
         type.verifySceneTypography("buttonSetting");
         type.verifyTextSize(".main-title", 36);
-        buttons.verifyWoodenButton("buttonSetting");
+        buttons.verifyPaperButton("buttonSetting");
         final SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();
         type.verifySceneTypography("settingGrid");
@@ -67,7 +67,7 @@ public class TC_85_F75_playpen_typography_test extends AbstractMicroColTest {
         type.verifyTextSize(".unitOwner", 14);
         buttons.click("congress");
         type.verifySceneTypography("congressClose");
-        buttons.verifyWoodenButton("congressClose");
+        buttons.verifyPaperButton("congressClose");
         type.captureDialog("congressClose", "playpen-congress.png");
         buttons.click("congressClose");
         final EuropePortScreen europe = game.openEuroperPort();
@@ -80,7 +80,7 @@ public class TC_85_F75_playpen_typography_test extends AbstractMicroColTest {
                 "New Amsterdam");
         colony.verifyColonyName("New Amsterdam");
         type.verifyVisibleCaption("colonyName", "New Amsterdam");
-        type.verifyTextSize("#colonyName", 36);
+        type.verifyTextSize("#colonyName", 14);
         type.verifySceneTypography("closeButtonId");
         type.verifyCanvasTypography();
         type.captureDialog("closeButtonId", "playpen-colony.png");

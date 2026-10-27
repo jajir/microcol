@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.statistics;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ViewUtil;
@@ -33,8 +35,9 @@ public final class ScoreBoundaryDialog extends AbstractMessageWindow {
     private final Player player;
     private final I18n i18n;
     private final Label feedback = new Label();
-    private final Button continueUnscored = new Button();
-    private final Button later = new Button();
+    private final Button continueUnscored = ActionButtons
+            .button(ButtonIcon.PLAY);
+    private final Button later = ActionButtons.button(ButtonIcon.WAIT);
 
     public ScoreBoundaryDialog(final ViewUtil viewUtil, final I18n i18n,
             final GameModelController game, final Model model,

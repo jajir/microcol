@@ -1,5 +1,7 @@
 package org.microcol.gui.dialog;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.Optional;
 
 import org.microcol.gui.event.model.GameModelController;
@@ -46,8 +48,8 @@ public final class DialogOrdainMissionary extends AbstractMessageWindow {
         this.caption = new Label();
         this.summary = new Label();
         this.message = new Label();
-        this.confirm = new Button();
-        this.cancel = new Button();
+        this.confirm = ActionButtons.button(ButtonIcon.RELIGION);
+        this.cancel = ActionButtons.button(ButtonIcon.CANCEL);
 
         final VBox root = new VBox(12);
         root.setPrefWidth(500);

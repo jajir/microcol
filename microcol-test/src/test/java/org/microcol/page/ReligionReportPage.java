@@ -33,7 +33,7 @@ public final class ReligionReportPage extends AbstractScreen {
     /** Opens statistics and the religion tab with the mouse. */
     public void open() {
         new FreePlayAuditPage(getContext()).openStatistics();
-        getRobot().clickOn("#religionTab");
+        clickOnStatisticsTab("religionTab");
         WaitForAsyncUtils.waitForFxEvents();
     }
 

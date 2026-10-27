@@ -6,14 +6,17 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.page.WelcomePage;
-import org.microcol.page.WoodenButtonsPage;
+import org.microcol.page.PaperButtonsPage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
-/** Verify ordinary wooden buttons while preserving existing custom controls. */
+/**
+ * Stable TC83 scenarios verify the shared paper controls and their input
+ * behavior.
+ */
 @ExtendWith(ApplicationExtension.class)
 public class TC_83_F74_wooden_buttons_test extends AbstractMicroColTest {
     private static final File FIXTURE = new File(
@@ -29,7 +32,7 @@ public class TC_83_F74_wooden_buttons_test extends AbstractMicroColTest {
     void TC_01_menu_navigation_uses_wooden_buttons() throws Exception {
         // Each opening-menu button fits its label and icon in the shared
         // toolbar style, preserving existing menu actions.
-        final WoodenButtonsPage page = new WoodenButtonsPage(getContext());
+        final PaperButtonsPage page = new PaperButtonsPage(getContext());
         final WelcomePage welcome = WelcomePage.of(getContext());
         welcome.resizeWindow(1000, 800);
         welcome.verifyOpeningControls(false, false);
@@ -77,14 +80,15 @@ public class TC_83_F74_wooden_buttons_test extends AbstractMicroColTest {
         // Map controls keep the shared frame, icon geometry and player journey.
         final org.microcol.page.GamePage game = WelcomePage.of(getContext())
                 .loadGame();
-        final WoodenButtonsPage page = new WoodenButtonsPage(getContext());
+        final PaperButtonsPage page = new PaperButtonsPage(getContext());
         page.verifyToolbarButton("nextTurn");
         page.verifyToolbarButton("europe");
         page.verifyToolbarButton("congress");
-        page.captureDialog("europe", "wooden-game.png");
+        page.captureDialog("europe", "paper-game.png");
         page.click("congress");
-        page.verifyWoodenButton("congressClose");
-        page.captureDialog("congressDialog", "wooden-congress.png");
+        page.verifyPaperButton("congressClose");
+        page.verifyVisibleButtonStyles();
+        page.captureDialog("congressDialog", "paper-congress.png");
         page.click("congressClose");
         final org.microcol.page.EuropePortScreen europe = game
                 .openEuroperPort();
@@ -97,25 +101,25 @@ public class TC_83_F74_wooden_buttons_test extends AbstractMicroColTest {
     @Tag("local")
     void TC_03_modal_buttons_keep_widths_states_and_keyboard_behavior()
             throws Exception {
-        final WoodenButtonsPage page = new WoodenButtonsPage(getContext());
+        final PaperButtonsPage page = new PaperButtonsPage(getContext());
         // A modal fixture uses the production dialog stylesheet and real
         // controls.
         page.showSamples();
-        page.captureDialog("woodSamples", "wooden-dialog-first-layout.png");
-        page.verifyWoodenButton("woodOk");
-        page.verifyWoodenButton("woodLong");
+        page.captureDialog("woodSamples", "paper-dialog-first-layout.png");
+        page.verifyPaperButton("woodOk");
+        page.verifyPaperButton("woodLong");
         page.verifyWidthsAndInk();
         page.changeSampleLabel();
-        page.verifyWoodenButton("woodLong");
-        page.captureDialog("woodSamples", "wooden-dialog-normal.png");
+        page.verifyPaperButton("woodLong");
+        page.captureDialog("woodSamples", "paper-dialog-normal.png");
 
         // Mouse hover and press have distinct colors; release performs one
         // action.
         page.hover("woodOk");
-        page.verifyFill("woodOk", "#efc68f", false);
+        page.verifyFill("woodOk", "#E7E7D0", false);
         page.holdMouse();
-        page.verifyFill("woodOk", "#c69b6b", true);
-        page.captureDialog("woodSamples", "wooden-dialog-pressed.png");
+        page.verifyFill("woodOk", "#DCDCC5", true);
+        page.captureDialog("woodSamples", "paper-dialog-pressed.png");
         page.releaseMouse();
         page.verifyActionCount(1);
 
@@ -136,8 +140,8 @@ public class TC_83_F74_wooden_buttons_test extends AbstractMicroColTest {
         page.verifyActionCount(3);
         page.click("woodToggle");
         page.verifySelected(true);
-        page.verifyFill("woodToggle", "#c69b6b", false);
-        page.captureDialog("woodSamples", "wooden-dialog-selected.png");
+        page.verifyFill("woodToggle", "#E7E7D0", false);
+        page.captureDialog("woodSamples", "paper-dialog-selected.png");
         page.press(KeyCode.ESCAPE);
         page.verifySamplesClosed();
         page.verifyActionCount(3);

@@ -736,3 +736,12 @@ preserving native input, values and persistence. Other screens remain outside th
 in-game screens, Congress and help. The existing game actions and navigation
 remain owned by their current requirements; acceptance is recorded in the
 [functional evidence](../functional-tests.md#r-0307-in-game-screen-frame-2026-10-27).
+
+## Shared action buttons (2026-10-27)
+
+1. [R-0316](done/R-0316.md), primary area A03, applies the existing main-menu paper
+   style and meaningful icons to every application-owned action button from
+   one shared implementation. Status: `done`; local acceptance passed on
+   2026-10-27. Cross-area dependencies preserve screen actions,
+   quantities, persistence and navigation. See the
+   [verification evidence](../functional-tests.md#r-0316-shared-paper-buttons-and-action-icons-2026-10-27).

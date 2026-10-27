@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.nativesettlements;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -106,9 +108,9 @@ public final class NativeSettlementsDialog extends AbstractMessageWindow {
 
     private final Label teaching = new Label();
 
-    private final Button stopTeaching = new Button();
+    private final Button stopTeaching = ActionButtons.button(ButtonIcon.STOP);
 
-    private final Button showOnMap = new Button();
+    private final Button showOnMap = ActionButtons.button(ButtonIcon.CENTER);
 
     private final Label unavailable = new Label();
 

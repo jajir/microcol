@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import com.google.inject.Inject;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -41,8 +43,8 @@ public final class DialogEquipment extends AbstractMessageWindow {
         this.caption = new Label();
         this.cost = new Label();
         this.message = new Label();
-        this.confirm = new Button();
-        this.cancel = new Button();
+        this.confirm = ActionButtons.button(ButtonIcon.MILITARY);
+        this.cancel = ActionButtons.button(ButtonIcon.CANCEL);
 
         VBox root = new VBox(12);
         root.setPrefWidth(500);

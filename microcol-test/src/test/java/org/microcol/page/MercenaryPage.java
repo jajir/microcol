@@ -114,7 +114,7 @@ public final class MercenaryPage extends AbstractScreen {
     /** Use the relations report to open the unanswered offer again. */
     public void reviewFromRelations() throws Exception {
         new FreePlayAuditPage(getContext()).openStatistics();
-        getRobot().clickOn("#relationsTab");
+        clickOnStatisticsTab("relationsTab");
         WaitForAsyncUtils.waitForFxEvents();
         clickOnButtonWithId("mercenaryResume");
         waitForOffer();

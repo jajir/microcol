@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.statistics;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -98,8 +100,9 @@ final class LaborPanel extends VBox {
     }
 
     private ToggleButton typeButton(final UnitType type, final int count) {
-        final ToggleButton button = new ToggleButton(i18n.get(LaborText.typeRow,
-                i18n.get(UnitTypes.getUnitName(type)), count));
+        final ToggleButton button = ActionButtons.toggle(ButtonIcon.LABOR,
+                i18n.get(LaborText.typeRow,
+                        i18n.get(UnitTypes.getUnitName(type)), count));
         button.setId("laborType-" + type.name());
         button.setToggleGroup(typeGroup);
         button.setSelected(type.equals(selectedType));
@@ -120,7 +123,8 @@ final class LaborPanel extends VBox {
         if (!flags.isEmpty()) {
             text.getChildren().add(label("laborFlags-" + id, flags));
         }
-        final Button show = new Button(i18n.get(LaborText.show));
+        final Button show = ActionButtons.button(ButtonIcon.CENTER,
+                i18n.get(LaborText.show));
         show.setId("laborShow-" + id);
         show.setDisable(!member.getLocation().isNavigable());
         show.setOnAction(event -> open(member));

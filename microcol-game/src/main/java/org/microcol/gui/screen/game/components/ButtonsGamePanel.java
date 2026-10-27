@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.game.components;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.buttonpanel.AbstractButtonsPanel;
 import org.microcol.gui.screen.congress.CongressDialog;
 import org.microcol.gui.screen.congress.CongressText;
@@ -13,7 +15,6 @@ import org.microcol.gui.event.BuildRoadEvent;
 import org.microcol.gui.event.ClearForestEvent;
 import org.microcol.gui.event.PlowFieldEvent;
 import org.microcol.gui.event.StartMoveEvent;
-import org.microcol.gui.image.ImageLoaderButtons;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
@@ -112,20 +113,24 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private final Menu unitChoices = new Menu();
     private final List<Button> unitCommands = new ArrayList<>();
 
-    private final Button buttonSentry = new Button();
+    private final Button buttonSentry = ActionButtons.button(ButtonIcon.SENTRY);
     private final Tooltip sentryTooltip = new Tooltip();
     private boolean sentryActive;
-    private final Button buttonFortify = new Button();
+    private final Button buttonFortify = ActionButtons
+            .button(ButtonIcon.FORTIFY);
     private final Tooltip fortifyTooltip = new Tooltip();
     private boolean fortifying;
     private boolean fortified;
-    private final Button buttonGoTo = new Button();
+    private final Button buttonGoTo = ActionButtons.button(ButtonIcon.CENTER);
     private final Tooltip goToTooltip = new Tooltip();
-    private final Button buttonGoToColony = new Button();
+    private final Button buttonGoToColony = ActionButtons
+            .button(ButtonIcon.COLONIES);
     private final Tooltip goToColonyTooltip = new Tooltip();
-    private final Button buttonDisband = new Button();
+    private final Button buttonDisband = ActionButtons
+            .button(ButtonIcon.DISBAND);
     private final Tooltip disbandTooltip = new Tooltip();
-    private final Button buttonJettison = new Button();
+    private final Button buttonJettison = ActionButtons
+            .button(ButtonIcon.JETTISON);
     private final Tooltip jettisonTooltip = new Tooltip();
     private final Label goToStatus = new Label();
     private boolean goToOrdered;
@@ -138,13 +143,15 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private final Map<Labeled, Buttons> toolbarExplanations = new LinkedHashMap<>();
     private boolean updatingToolbarLayout;
 
-    private final Button buttonCongress = new Button();
+    private final Button buttonCongress = ActionButtons
+            .button(ButtonIcon.CONGRESS);
 
-    private final Button buttonRetire = new Button();
+    private final Button buttonRetire = ActionButtons.button(ButtonIcon.RETIRE);
     private final Tooltip retireTooltip = new Tooltip();
 
-    private final Button buttonWait = new Button();
-    private final Button buttonSkipUnitTurn = new Button();
+    private final Button buttonWait = ActionButtons.button(ButtonIcon.WAIT);
+    private final Button buttonSkipUnitTurn = ActionButtons
+            .button(ButtonIcon.NEXT);
     private final Tooltip waitTooltip = new Tooltip();
     private final Tooltip skipTooltip = new Tooltip();
     private final Tooltip buildRoadTooltip = new Tooltip();
@@ -220,82 +227,72 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         setUnitOrdersEnabled(false, false);
         updateLanguage(i18n);
 
-        buttonCenter = makeButon(ImageLoaderButtons.BUTTON_CENTER,
-                Buttons.buttonCenter);
+        buttonCenter = makeButton(ButtonIcon.CENTER, Buttons.buttonCenter);
         buttonCenter.setOnAction(event -> eventBus.post(new CenterViewEvent()));
         buttonCenter.setId(BUTTON_CENTER_ID);
-        buttonHelp = makeButon(ImageLoaderButtons.BUTTON_HELP,
-                Buttons.buttonHelp);
+        buttonHelp = makeButton(ButtonIcon.HELP, Buttons.buttonHelp);
         buttonHelp.setOnAction(event -> eventBus.post(new ShowHelpEvent()));
         buttonHelp.setId(BUTTON_HELP_ID);
-        buttonStatistics = makeButon(ImageLoaderButtons.BUTTON_STATISTICS,
+        buttonStatistics = makeButton(ButtonIcon.STATISTICS,
                 Buttons.buttonStatistics);
         buttonStatistics.setOnAction(
                 event -> eventBus.post(new ShowScreenEvent(Screen.STATISTICS)));
         buttonStatistics.setId(BUTTON_STATISTICS_ID);
-        buttonExit = makeButon(ImageLoaderButtons.BUTTON_EXIT,
-                Buttons.buttonExit);
+        buttonExit = makeButton(ButtonIcon.BACK, Buttons.buttonExit);
         gameMenu.setAnchor(buttonExit);
         buttonExit.setOnAction(event -> gameMenu.show());
         buttonExit.setId(BUTTON_EXIT_ID);
-        buttonGoals = makeButon(ImageLoaderButtons.BUTTON_GOALS,
-                Buttons.buttonGoals);
+        buttonGoals = makeButton(ButtonIcon.GOALS, Buttons.buttonGoals);
         buttonGoals.setOnAction(
                 event -> eventBus.post(new ShowScreenEvent(Screen.GOALS)));
         buttonGoals.setId(BUTTON_GOALS_ID);
-        buttonTurnReport = makeButon(ImageLoaderButtons.BUTTON_TURN_REPORT,
+        buttonTurnReport = makeButton(ButtonIcon.REPORT,
                 Buttons.buttonTurnReport);
         buttonTurnReport.setOnAction(event -> eventBus
                 .post(new ShowScreenEvent(Screen.TURN_REPORT)));
         buttonTurnReport.setId(BUTTON_TURN_REPORT_ID);
-        buttonEurope = makeButon(ImageLoaderButtons.BUTTON_EUROPE,
-                Buttons.buttonEurope);
+        buttonEurope = makeButton(ButtonIcon.EUROPE, Buttons.buttonEurope);
         buttonEurope.setOnAction(
                 event -> eventBus.post(new ShowScreenEvent(Screen.EUROPE)));
         buttonEurope.setId(BUTTON_EUROPE_ID);
-        buttonNextTurn = makeButon(ImageLoaderButtons.BUTTON_NEXT_TURN,
-                Buttons.buttonNextTurn);
+        buttonNextTurn = makeButton(ButtonIcon.NEXT, Buttons.buttonNextTurn);
         buttonNextTurn.setId(BUTTON_NEXT_TURN_ID);
         buttonNextTurn.setOnAction(event -> {
             buttonNextTurn.setDisable(true);
             eventBus.post(new NextTurnEvent());
         });
-        buttonMove = makeButon(ImageLoaderButtons.BUTTON_MOVE,
-                Buttons.buttonMove);
+        buttonMove = makeButton(ButtonIcon.CENTER, Buttons.buttonMove);
         buttonMove.setOnAction(event -> eventBus.post(new StartMoveEvent()));
         buttonMove.setId(BUTTON_MOVE_ID);
-        buttonPlowField = makeButon(ImageLoaderButtons.BUTTON_PLOW_FIELD,
-                Buttons.buttonPlowField);
+        buttonPlowField = makeButton(ButtonIcon.PLOW, Buttons.buttonPlowField);
         buttonPlowField
                 .setOnAction(event -> eventBus.post(new PlowFieldEvent()));
         buttonPlowField.setId(BUTTON_PLOW_FIELD_ID);
-        buttonCancelPlowField = makeButon(ImageLoaderButtons.BUTTON_PLOW_FIELD,
+        buttonCancelPlowField = makeButton(ButtonIcon.PLOW,
                 Buttons.buttonCancelPlowField);
         buttonCancelPlowField.setId(BUTTON_CANCEL_PLOW_FIELD_ID);
-        buttonClearForest = makeButon(ImageLoaderButtons.BUTTON_CUT_TREE,
+        buttonClearForest = makeButton(ButtonIcon.CUT_TREE,
                 Buttons.buttonClearForest);
         buttonClearForest
                 .setOnAction(event -> eventBus.post(new ClearForestEvent()));
         buttonClearForest.setId(BUTTON_CLEAR_FOREST_ID);
-        buttonCancelClearForest = makeButon(ImageLoaderButtons.BUTTON_CUT_TREE,
+        buttonCancelClearForest = makeButton(ButtonIcon.CUT_TREE,
                 Buttons.buttonCancelClearForest);
         buttonCancelClearForest.setId(BUTTON_CANCEL_CLEAR_FOREST_ID);
-        buttonBuildRoad = makeButon(ImageLoaderButtons.BUTTON_BUILD_ROAD,
-                Buttons.buttonBuildRoad);
+        buttonBuildRoad = makeButton(ButtonIcon.ROAD, Buttons.buttonBuildRoad);
         buttonBuildRoad
                 .setOnAction(event -> eventBus.post(new BuildRoadEvent()));
         buttonBuildRoad.setId(BUTTON_BUILD_ROAD_ID);
         buttonBuildRoad.setTooltip(buildRoadTooltip);
-        buttonCancelBuildRoad = makeButon(ImageLoaderButtons.BUTTON_BUILD_ROAD,
+        buttonCancelBuildRoad = makeButton(ButtonIcon.ROAD,
                 Buttons.buttonCancelBuildRoad);
         buttonCancelBuildRoad.setId(BUTTON_CANCEL_BUILD_ROAD_ID);
-        buttonBuildColony = makeButon(ImageLoaderButtons.BUTTON_BUILD_COLONY,
+        buttonBuildColony = makeButton(ButtonIcon.COLONIES,
                 Buttons.buttonBuildColony);
         buttonBuildColony
                 .setOnAction(event -> eventBus.post(new BuildColonyEvent()));
         buttonBuildColony.setId(BUTTON_BUILD_COLONY_ID);
-        buttonDeclareIndependence = makeButon(
-                ImageLoaderButtons.BUTTON_PLOW_FIELD,
+        buttonDeclareIndependence = makeButton(ButtonIcon.PLOW,
                 Buttons.buttonDeclareIndependence);
         buttonDeclareIndependence.setOnAction(
                 event -> eventBus.post(new DeclareIndependenceEvent()));
@@ -494,7 +491,6 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private void addUnitCommand(final Button button, final Buttons labelKey) {
         unitCommands.add(button);
         button.getStyleClass().remove("image-button");
-        button.setBackground(Background.EMPTY);
         button.setMaxWidth(Double.MAX_VALUE);
         button.setMinHeight(Region.USE_PREF_SIZE);
         if (labelKey != null) {
@@ -511,7 +507,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         shortcut.managedProperty().bind(shortcut.visibleProperty());
         final Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        final HBox face = new HBox(8, caption, spacer, shortcut);
+        final HBox face = new HBox(8, button.getGraphic(), caption, spacer,
+                shortcut);
         face.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
         // Fixed menu column, independent of the button's first layout pass.
         face.setPrefWidth(266);

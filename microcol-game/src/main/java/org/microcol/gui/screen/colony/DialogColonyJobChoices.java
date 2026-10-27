@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,9 +54,9 @@ public final class DialogColonyJobChoices extends AbstractMessageWindow {
     private final ListView<ColonyJobChoice> choices = new ListView<>();
     private final Label details = new Label();
     private final Label message = new Label();
-    private final Button confirm = new Button();
-    private final Button cancel = new Button();
-    private final Button clear = new Button();
+    private final Button confirm = ActionButtons.button(ButtonIcon.CONFIRM);
+    private final Button cancel = ActionButtons.button(ButtonIcon.CANCEL);
+    private final Button clear = ActionButtons.button(ButtonIcon.REMOVE);
     private Colony colony;
     private Model model;
     private Unit worker;

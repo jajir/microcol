@@ -74,7 +74,90 @@ public abstract class AbstractScreen {
             closeUnitActions();
         }
         final String id = "#" + buttonId;
+        revealGameContent(getNodeFinder().lookup(id).query());
         getRobot().clickOn(id);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /**
+     * Scroll the report navigation before clicking a tab outside its viewport.
+     */
+    protected void clickOnStatisticsTab(final String id) {
+        final javafx.scene.control.ScrollPane sidebar = getNodeFinder()
+                .lookup("#statsSidebar")
+                .queryAs(javafx.scene.control.ScrollPane.class);
+        final Node tab = getNodeFinder().lookup("#" + id).query();
+        for (int step = 0; step < 30; step++) {
+            final Node viewport = sidebar.lookup(".viewport");
+            final javafx.geometry.Bounds visible = viewport
+                    .localToScreen(viewport.getBoundsInLocal());
+            final javafx.geometry.Bounds bounds = tab
+                    .localToScreen(tab.getBoundsInLocal());
+            if (bounds.getMinY() >= visible.getMinY()
+                    && bounds.getMaxY() <= visible.getMaxY()) {
+                getRobot().clickOn(tab);
+                WaitForAsyncUtils.waitForFxEvents();
+                return;
+            }
+            getRobot().moveTo(sidebar);
+            getRobot().scroll(2,
+                    bounds.getMinY() < visible.getMinY()
+                            ? javafx.geometry.VerticalDirection.UP
+                            : javafx.geometry.VerticalDirection.DOWN);
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+        throw new IllegalStateException(
+                "Statistics tab is outside its viewport: " + id);
+    }
+
+    /** Reveal targets in the scrollable game body before a mouse gesture. */
+    protected void revealGameContent(final javafx.scene.Node... targets) {
+        javafx.scene.Node ancestor = targets[0];
+        while (ancestor != null
+                && !(ancestor instanceof javafx.scene.control.ScrollPane
+                        && ancestor.getStyleClass()
+                                .contains("screen-scroll"))) {
+            ancestor = ancestor.getParent();
+        }
+        if (ancestor == null) {
+            return;
+        }
+        final javafx.scene.control.ScrollPane scroll = (javafx.scene.control.ScrollPane) ancestor;
+        getRobot().interact(() -> {
+            final Node viewport = scroll.lookup(".viewport");
+            final javafx.geometry.Bounds visible = viewport
+                    .localToScene(viewport.getBoundsInLocal());
+            double top = Double.POSITIVE_INFINITY;
+            double bottom = Double.NEGATIVE_INFINITY;
+            double left = Double.POSITIVE_INFINITY;
+            double right = Double.NEGATIVE_INFINITY;
+            for (final Node target : targets) {
+                final javafx.geometry.Bounds bounds = target
+                        .localToScene(target.getBoundsInLocal());
+                top = Math.min(top, bounds.getMinY());
+                bottom = Math.max(bottom, bounds.getMaxY());
+                left = Math.min(left, bounds.getMinX());
+                right = Math.max(right, bounds.getMaxX());
+            }
+            final double range = scroll.getContent().getLayoutBounds()
+                    .getHeight() - scroll.getViewportBounds().getHeight();
+            final double delta = bottom > visible.getMaxY()
+                    ? bottom - visible.getMaxY()
+                    : top < visible.getMinY() ? top - visible.getMinY() : 0;
+            if (range > 0) {
+                scroll.setVvalue(Math.max(0,
+                        Math.min(1, scroll.getVvalue() + delta / range)));
+            }
+            final double horizontalRange = scroll.getContent().getLayoutBounds()
+                    .getWidth() - scroll.getViewportBounds().getWidth();
+            final double horizontalDelta = right > visible.getMaxX()
+                    ? right - visible.getMaxX()
+                    : left < visible.getMinX() ? left - visible.getMinX() : 0;
+            if (horizontalRange > 0) {
+                scroll.setHvalue(Math.max(0, Math.min(1, scroll.getHvalue()
+                        + horizontalDelta / horizontalRange)));
+            }
+        });
         WaitForAsyncUtils.waitForFxEvents();
     }
 

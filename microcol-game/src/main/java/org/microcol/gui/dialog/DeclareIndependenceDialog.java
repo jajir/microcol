@@ -1,5 +1,7 @@
 package org.microcol.gui.dialog;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ViewUtil;
@@ -33,8 +35,9 @@ public final class DeclareIndependenceDialog extends AbstractMessageWindow {
     private final Label europe = new Label();
     private final Label irreversible = new Label();
     private final Label feedback = new Label();
-    private final Button confirm = new Button();
-    private final Button cancel = new Button();
+    private final Button confirm = ActionButtons
+            .button(ButtonIcon.INDEPENDENCE);
+    private final Button cancel = ActionButtons.button(ButtonIcon.CANCEL);
     private final GameModelController controller;
     private final I18n i18n;
     private Model openedModel;

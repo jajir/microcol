@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.statistics;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.UnitTypes;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
@@ -17,7 +19,7 @@ final class TributeDialog extends AbstractMessageWindow {
     private final TributeDemand offer;
     private final I18n i18n;
     private final Label feedback = new Label();
-    private final Button confirm = new Button();
+    private final Button confirm = ActionButtons.button(ButtonIcon.GOLD);
     private boolean accepted;
 
     TributeDialog(ViewUtil viewUtil, I18n i18n, GameModelController game,
@@ -55,11 +57,13 @@ final class TributeDialog extends AbstractMessageWindow {
         confirm.setText(i18n.get(TributeText.confirm));
         confirm.setDefaultButton(true);
         confirm.setOnAction(event -> accept());
-        Button cancel = new Button(i18n.get(TributeText.cancel));
+        Button cancel = ActionButtons.button(ButtonIcon.CANCEL,
+                i18n.get(TributeText.cancel));
         cancel.setId("tributeCancel");
         cancel.setCancelButton(true);
         cancel.setOnAction(event -> cancel());
-        Button later = new Button(i18n.get(TributeText.later));
+        Button later = ActionButtons.button(ButtonIcon.WAIT,
+                i18n.get(TributeText.later));
         later.setId("tributeLater");
         later.setOnAction(event -> close());
         feedback.setId("tributeFeedback");

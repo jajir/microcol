@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.foreigncolony;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,8 +62,8 @@ public final class DialogForeignColonyTrade extends AbstractMessageWindow {
     private final Label prices = new Label();
     private final Label net = new Label();
     private final Label feedback = new Label();
-    private final Button confirm = new Button();
-    private final Button cancel = new Button();
+    private final Button confirm = ActionButtons.button(ButtonIcon.TRADE);
+    private final Button cancel = ActionButtons.button(ButtonIcon.CANCEL);
     private ForeignColonyTradeQuote quote;
     /** Set while limits are resized, so their own value events do not nest. */
     private boolean limiting;

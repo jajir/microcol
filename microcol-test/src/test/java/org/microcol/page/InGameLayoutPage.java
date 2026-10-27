@@ -32,9 +32,19 @@ public final class InGameLayoutPage extends AbstractScreen {
     }
 
     public void open(final String id) {
-        getRobot()
-                .clickOn(getNodeFinder().lookup("#" + id).queryAs(Node.class));
-        WaitForAsyncUtils.waitForFxEvents();
+        if (id.endsWith("Tab")) {
+            clickOnStatisticsTab(id);
+        } else {
+            getRobot().clickOn(
+                    getNodeFinder().lookup("#" + id).queryAs(Node.class));
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+    }
+
+    public void verifySelectedTab(final String id) {
+        assertTrue(getNodeFinder().lookup("#" + id)
+                .queryAs(javafx.scene.control.ToggleButton.class).isSelected(),
+                id);
     }
 
     public void closeWithEscape() {
@@ -84,6 +94,7 @@ public final class InGameLayoutPage extends AbstractScreen {
                 }
             }
         });
+        new PaperButtonsPage(getContext()).verifyVisibleButtonStyles();
     }
 
     public void verifyScreenTitle(final String expectedTitle) {

@@ -1,5 +1,7 @@
 package org.microcol.gui.dialog;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ViewUtil;
@@ -59,7 +61,8 @@ public final class TreasureDialog extends AbstractMessageWindow {
         scroll.setFitToWidth(true);
         scroll.setPrefViewportWidth(540);
         scroll.setPrefViewportHeight(260);
-        final Button cancel = new Button(i18n.get(TreasureText.cancel));
+        final Button cancel = ActionButtons.button(ButtonIcon.CANCEL,
+                i18n.get(TreasureText.cancel));
         cancel.setId("treasureCancel");
         cancel.setCancelButton(true);
         cancel.setOnAction(event -> close());
@@ -80,7 +83,8 @@ public final class TreasureDialog extends AbstractMessageWindow {
                 quote.getUnitId(), quote.getFaceValue(), quote.getTransport(),
                 quote.getTax(), quote.getNet()));
         terms.setId("treasureTerms-" + quote.getUnitId());
-        final Button confirm = new Button(i18n.get(TreasureText.confirm));
+        final Button confirm = ActionButtons.button(ButtonIcon.GOLD,
+                i18n.get(TreasureText.confirm));
         confirm.setId("treasureConfirm-" + quote.getUnitId());
         final Label feedback = label("");
         feedback.setId("treasureFeedback-" + quote.getUnitId());

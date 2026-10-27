@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.nativesettlements;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.Loc;
 import org.microcol.gui.UnitTypes;
 import org.microcol.gui.util.AbstractMessageWindow;
@@ -38,9 +40,9 @@ public final class DialogNativeTeaching extends AbstractMessageWindow {
 
     private final Label line = new Label();
 
-    private final Button confirm = new Button();
+    private final Button confirm = ActionButtons.button(ButtonIcon.EDUCATION);
 
-    private final Button back = new Button();
+    private final Button back = ActionButtons.button(ButtonIcon.BACK);
 
     /**
      * @param onConfirm run after the player confirms, after this window closed

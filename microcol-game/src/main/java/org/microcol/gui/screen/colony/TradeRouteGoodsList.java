@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,10 +32,10 @@ final class TradeRouteGoodsList {
     private final Label heading = new Label();
     private final ListView<GoodsType> list = new ListView<>();
     private final ComboBox<GoodsType> choice = new ComboBox<>();
-    private final Button add = new Button();
-    private final Button remove = new Button();
-    private final Button up = new Button();
-    private final Button down = new Button();
+    private final Button add = ActionButtons.button(ButtonIcon.ADD);
+    private final Button remove = ActionButtons.button(ButtonIcon.REMOVE);
+    private final Button up = ActionButtons.button(ButtonIcon.UP);
+    private final Button down = ActionButtons.button(ButtonIcon.DOWN);
     private final VBox box;
 
     /**

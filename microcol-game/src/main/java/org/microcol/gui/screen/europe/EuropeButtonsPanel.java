@@ -1,7 +1,8 @@
 package org.microcol.gui.screen.europe;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.buttonpanel.AbstractButtonsPanel;
-import org.microcol.gui.image.ImageLoaderButtons;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
@@ -21,12 +22,13 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
 
     public static final String BUY_BUTTON_ID = "buyButtonId";
 
-    private final Button treasure = new Button();
+    private final Button treasure = ActionButtons.button(ButtonIcon.GOLD);
 
-    private final Button buttonRecruit = new Button();
-    private final Button buttonRepairs = new Button();
-    private final Button buttonTax = new Button();
-    private final Button buttonBackTax = new Button();
+    private final Button buttonRecruit = ActionButtons.button(ButtonIcon.BUY);
+    private final Button buttonRepairs = ActionButtons
+            .button(ButtonIcon.REPAIR);
+    private final Button buttonTax = ActionButtons.button(ButtonIcon.TAX);
+    private final Button buttonBackTax = ActionButtons.button(ButtonIcon.TAX);
 
     private final Button buttonClose;
     private final Button buttonBuyUnit;
@@ -38,14 +40,12 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
             final org.microcol.gui.dialog.TreasureDialog treasureDialog) {
         super(imageProvider, eventBus, Source.EUROPE, i18n);
 
-        buttonClose = makeButon(ImageLoaderButtons.BUTTON_EXIT,
-                Europe.buttonClose);
+        buttonClose = makeButton(ButtonIcon.BACK, Europe.buttonClose);
         buttonClose.setOnAction(
                 evnt -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
         buttonClose.setId(CLOSE_BUTTON_ID);
 
-        buttonBuyUnit = makeButon(ImageLoaderButtons.BUTTON_BUY,
-                Europe.buttonBuyUnit);
+        buttonBuyUnit = makeButton(ButtonIcon.BUY, Europe.buttonBuyUnit);
         buttonBuyUnit.setId(BUY_BUTTON_ID);
 
         treasure.setId("treasureOpen");

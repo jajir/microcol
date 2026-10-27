@@ -17,12 +17,14 @@ public final class EquipmentPage extends AbstractScreen {
     }
 
     public void open(final String action) {
+        revealGameContent(getNodeFinder().lookup("#colonyUnit-4").query());
         getRobot().clickOn("#colonyUnit-4", MouseButton.SECONDARY)
                 .clickOn(action);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void openWithKeyboard(final int choice) {
+        revealGameContent(getNodeFinder().lookup("#colonyUnit-4").query());
         getRobot().clickOn("#colonyUnit-4").push(KeyCode.SHIFT, KeyCode.F10);
         for (int i = 0; i < choice; i++)
             getRobot().push(KeyCode.DOWN);

@@ -966,3 +966,17 @@ skutečného hráče; výsledky patří do [funkční evidence](functional-tests
    a nápověda zůstávají modální; úvodní menu má svůj dosavadní vzhled.
    Jde o implementaci uživatelského zadání, nikoli o výsledek studie hráčů.
    Skutečnou přejímku vede [funkční evidence](functional-tests.md#r-0307-in-game-screen-frame-2026-10-27).
+
+## Jednotná akční tlačítka (2026-10-27)
+
+1. Akce na všech obrazovkách používají společný
+   [papírový vzhled](graphics.md#jednotna-papirova-tlacitka-2026-10-27) a ikonu
+   odpovídající významu. Popisek zůstává hlavním vysvětlením akce; ikonová
+   tlačítka mají přístupný název nebo nápovědu. Fokus, stisk, nedostupnost
+   a trvalý výběr musí být rozeznatelné i při ovládání klávesnicí.
+2. Sjednocení nesmí měnit cíl akce, předpoklady, potvrzení, zrušení ani zpětnou
+   vazbu. Zejména u odchodu ze hry zůstávají odlišné akce uložit a pokračovat,
+   odejít bez uložení a zrušit odchod. Plné popisky a ikony se nesmějí překrývat.
+3. [R-0316](requirements/done/R-0316.md) a jeho
+   [evidence](functional-tests.md#r-0316-shared-paper-buttons-and-action-icons-2026-10-27)
+   zachycují kontrolu implementace; nejde o výsledky uživatelské studie.

@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.europe;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.Optional;
 
 import org.microcol.gui.event.model.GameModelController;
@@ -185,7 +187,7 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
                     remaining.setWrapText(true);
                     remaining.setMinHeight(Region.USE_PREF_SIZE);
                     remaining.setMaxWidth(200);
-                    final Button reverse = new Button(
+                    final Button reverse = ActionButtons.button(ButtonIcon.BACK,
                             i18n.get(Europe.voyageReverse));
                     reverse.setId("voyage-reverse-" + unit.getId());
                     // Turning an outbound ship toward a closed home Europe is
@@ -197,7 +199,8 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
                             || !voyage.isTravelToEurope()
                                     && !unit.getOwner().canTradeInEurope());
                     reverse.setOnAction(event -> reverseCourse((Ship) unit));
-                    final Button jettison = new Button(
+                    final Button jettison = ActionButtons.button(
+                            ButtonIcon.JETTISON,
                             i18n.get(Europe.voyageJettison));
                     jettison.setId("voyage-jettison-" + unit.getId());
                     jettison.setDisable(!gameModelController.getModel()

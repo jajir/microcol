@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.europe;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.i18n.I18n;
@@ -19,7 +21,7 @@ public final class BuyUnitPanel extends VBox {
     private final I18n i18n;
     private final Label labelName = new Label();
     private final Label unavailable = new Label();
-    private final Button buttonBuy = new Button();
+    private final Button buttonBuy = ActionButtons.button(ButtonIcon.BUY);
 
     public BuyUnitPanel(final UnitType unitType,
             final ImageProvider imageProvider,

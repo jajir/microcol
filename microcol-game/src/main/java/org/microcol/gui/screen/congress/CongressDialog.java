@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.congress;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import com.google.inject.Inject;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
@@ -34,8 +36,8 @@ public final class CongressDialog extends AbstractMessageWindow {
     private final Label feedback = label("congressFeedback");
     private final Label detail = label("congressDetail");
     private final ListView<FounderOffer> candidates = new ListView<>();
-    private final Button choose = new Button();
-    private final Button close = new Button();
+    private final Button choose = ActionButtons.button(ButtonIcon.CONFIRM);
+    private final Button close = ActionButtons.button(ButtonIcon.CANCEL);
     private Model boundModel;
     private Player player;
 

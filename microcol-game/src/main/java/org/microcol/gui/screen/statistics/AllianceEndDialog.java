@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.statistics;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -46,12 +48,14 @@ final class AllianceEndDialog extends AbstractMessageWindow {
         message.setWrapText(true);
         message.setMaxWidth(460);
         root.getChildren().add(message);
-        final Button cancel = new Button(i18n.get(Stats.allianceEndCancel));
+        final Button cancel = ActionButtons.button(ButtonIcon.CANCEL,
+                i18n.get(Stats.allianceEndCancel));
         cancel.setId("allianceEndCancel");
         cancel.setCancelButton(true);
         cancel.setDefaultButton(true);
         cancel.setOnAction(e -> onCancelDialog());
-        final Button end = new Button(i18n.get(Stats.allianceEndConfirm));
+        final Button end = ActionButtons.button(ButtonIcon.STOP,
+                i18n.get(Stats.allianceEndConfirm));
         end.setId("allianceEndConfirm");
         end.setOnAction(e -> {
             if (!answered) {

@@ -153,6 +153,11 @@ Výchozí stav technického inventáře k **11. říjnu 2026**, větev `develop`
 
 ## Současné zadání vzhledu
 
+Od 27. října 2026 platí pro všechna aplikační akční tlačítka
+[jediný papírový základ s ikonami](#jednotna-papirova-tlacitka-2026-10-27),
+podle hlavního herního menu. Toto pravidlo nahrazuje starší dřevěné vzhledy
+včetně dosavadních výjimek pro jednotlivé obrazovky.
+
 Každá změna vzhledu musí zachovat herní výsledky podle
 [pravidel funkčních testů](functional-tests.md). Kontrola obrázku nenahrazuje
 provedení dotčených hráčských scénářů.
@@ -584,6 +589,9 @@ Následuje záznam dosavadní implementace. Při převodu na dohodu z 24. říjn
    touto dohodou. Výsledky ověření patří do [funkční evidence](functional-tests.md).
 
 ### Dřevěná tlačítka bez bočních zářezů
+
+Historický vzhled; aktuální dohoda jej nahrazuje
+[jednotnými papírovými tlačítky](#jednotna-papirova-tlacitka-2026-10-27).
 
 Následuje záznam dosavadní implementace. Při převodu na dohodu z 24. října
 2026 mají přednost aktuální [typografie](#typografie-playpen-sans),
@@ -1458,3 +1466,38 @@ přístupným názvem; po rozšíření se text obnoví. Stav ověření vede
    [nákup](graphics-assets/in-game-frame-2026-10-27/market-buy.png) a
    [nápověda](graphics-assets/in-game-frame-2026-10-27/help-czech.png).
    Nejde o studii s hráči; úplný stav přijetí uvádí výše odkazovaná evidence.
+
+## Jednotná papírová tlačítka (2026-10-27)
+
+1. [R-0316](requirements/done/R-0316.md): všechna aplikační akční tlačítka vycházejí
+   z hlavního herního menu. Platí to také pro dialogy, Kongres, statistiky,
+   nastavení, editor, přepínače a rozbalovací tlačítka. Starší dřevěné varianty
+   a samostatné vzhledy tlačítek se ruší. Nativní systémový výběr souboru
+   zůstává systémovým dialogem; checkboxy a radiobuttony si zachovávají
+   vlastní indikátor volby.
+2. Jediným společným základem je `gui/ToolbarControls.css`: papír `#FFF9EC`,
+   inkoust `#302D27`, existující rám `game-toolbar-frame.png`, Playpen Sans
+   Regular 14 a odsazení 6/3/7/3 logických px. Najetí myši, fokus a vybraný
+   přepínač používají `#E7E7D0`, stisk `#DCDCC5` a posun o 1 px. Fokus a
+   výběr mají také podtržení; nedostupná akce neprůhlednost 0,45.
+3. `gui.util.ActionButtons` vyžaduje významovou ikonu z `gui.image.ButtonIcon`.
+   Obrazovky určují význam akce, společný základ její vykreslení. Standardní
+   JavaFX ovládání zachovává klávesnici a přístupnost. Ikona má 32 × 32
+   logických px; tlačítko výběru konkrétní lodi používá její skutečný obrázek.
+   Původní ikony hlavního a úvodního menu zůstávají zachované.
+4. Chybějící ikony jsou ve zdroji
+   [action-icons.svg](../microcol-game/src/graphics/action-icons.svg): 44 buněk
+   po 48 jednotkách, tah 2,4, zaoblené konce, stejný inkoust a olivový akcent
+   `#71864B`. Export do průhledného atlasu s buňkami 96 × 96 px:
+
+   ```sh
+   rsvg-convert -w 4224 -h 96 -o microcol-game/src/main/resources/images/action-icons.png microcol-game/src/graphics/action-icons.svg
+   ```
+
+5. [Funkční evidence](functional-tests.md#r-0316-shared-paper-buttons-and-action-icons-2026-10-27)
+   odlišuje implementaci od skutečného ověření. Historické snímky zůstávají
+   záznamem tehdejšího stavu, nikoli výjimkou z tohoto pravidla.
+6. Snímky skutečné hry z úspěšného cíleného Docker/Xvfb běhu:
+   [uložit / odejít / zrušit](graphics-assets/buttons-2026-10-27/save-confirmation.png),
+   [statistiky](graphics-assets/buttons-2026-10-27/statistics.png) a
+   [Kongres česky](graphics-assets/buttons-2026-10-27/congress-czech.png).

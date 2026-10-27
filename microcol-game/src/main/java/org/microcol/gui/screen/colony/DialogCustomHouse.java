@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -22,8 +24,8 @@ public final class DialogCustomHouse extends AbstractMessageWindow {
     private final Map<GoodsType, CheckBox> choices = new LinkedHashMap<>();
     private final Label rule = new Label();
     private final Label feedback = new Label();
-    private final Button confirm = new Button();
-    private final Button cancel = new Button();
+    private final Button confirm = ActionButtons.button(ButtonIcon.CONFIRM);
+    private final Button cancel = ActionButtons.button(ButtonIcon.CANCEL);
     private Model boundModel;
     private Colony colony;
     private Player owner;

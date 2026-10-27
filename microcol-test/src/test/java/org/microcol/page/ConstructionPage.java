@@ -114,6 +114,9 @@ public final class ConstructionPage extends AbstractScreen {
                 .getChildrenUnmodifiable().stream()
                 .filter(node -> node instanceof javafx.scene.canvas.Canvas)
                 .findFirst().orElseThrow();
+        revealGameContent(
+                getNodeFinder().lookup("#colonyUnit-" + unitId).query(),
+                canvas);
         getRobot().drag("#colonyUnit-" + unitId, MouseButton.PRIMARY)
                 .dropTo(canvas.localToScreen(41, 82));
         WaitForAsyncUtils.waitFor(5, java.util.concurrent.TimeUnit.SECONDS,

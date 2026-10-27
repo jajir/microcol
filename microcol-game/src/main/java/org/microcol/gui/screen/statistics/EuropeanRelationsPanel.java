@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.statistics;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -94,7 +96,7 @@ final class EuropeanRelationsPanel extends VBox {
         if (model.getPendingMercenaryOffer(own).isEmpty()) {
             return;
         }
-        final Button resume = new Button(
+        final Button resume = ActionButtons.button(ButtonIcon.PLAY,
                 i18n.get(org.microcol.gui.screen.europe.MercenaryText.resume));
         resume.setId("mercenaryResume");
         resume.setOnAction(event -> resumeMercenary(model, own));
@@ -248,7 +250,8 @@ final class EuropeanRelationsPanel extends VBox {
                 if (actor.isHuman() && (actor == first || actor == second)
                         && state == EuropeanRelationState.PEACE) {
                     final Player target = actor == first ? second : first;
-                    final Button declare = new Button(
+                    final Button declare = ActionButtons.button(
+                            ButtonIcon.MILITARY,
                             i18n.get(Stats.declarationReview));
                     declare.setId("declare-" + i + "-" + j);
                     declare.setDisable(!model.isGameRunning() || wait > 0);
@@ -266,7 +269,8 @@ final class EuropeanRelationsPanel extends VBox {
                             .getPendingAllianceOffer(actor, target).isPresent();
                     final int blocked = model.getAllianceBlockedRounds(actor,
                             target);
-                    final Button alliance = new Button(
+                    final Button alliance = ActionButtons.button(
+                            ButtonIcon.DIPLOMACY,
                             i18n.get(pending ? Stats.allianceResume
                                     : Stats.allianceOpen));
                     alliance.setId("alliance-" + i + "-" + j);
@@ -285,7 +289,7 @@ final class EuropeanRelationsPanel extends VBox {
                 if (actor.isHuman() && (actor == first || actor == second)
                         && state == EuropeanRelationState.ALLIANCE) {
                     final Player target = actor == first ? second : first;
-                    final Button end = new Button(
+                    final Button end = ActionButtons.button(ButtonIcon.STOP,
                             i18n.get(Stats.allianceEndOpen));
                     end.setId("allianceEnd-" + i + "-" + j);
                     end.setDisable(!model.isGameRunning());
@@ -297,8 +301,10 @@ final class EuropeanRelationsPanel extends VBox {
                     final Player target = actor == first ? second : first;
                     final boolean pending = model
                             .getPendingPeaceOffer(actor, target).isPresent();
-                    final Button peace = new Button(i18n
-                            .get(pending ? PeaceText.resume : PeaceText.open));
+                    final Button peace = ActionButtons.button(
+                            ButtonIcon.DIPLOMACY,
+                            i18n.get(pending ? PeaceText.resume
+                                    : PeaceText.open));
                     peace.setId("peace-" + i + "-" + j);
                     peace.setDisable(!model.isGameRunning() || (!pending
                             && model.getPeaceVisitors(actor, target)
@@ -314,8 +320,9 @@ final class EuropeanRelationsPanel extends VBox {
                             .getPendingTributeDemand(actor, target).isPresent();
                     final int remaining = model.getTributeTurnsRemaining(actor,
                             target);
-                    final Button tribute = new Button(i18n.get(
-                            pending ? TributeText.resume : TributeText.open));
+                    final Button tribute = ActionButtons.button(ButtonIcon.GOLD,
+                            i18n.get(pending ? TributeText.resume
+                                    : TributeText.open));
                     tribute.setId("tribute-" + i + "-" + j);
                     tribute.setDisable(!model.isGameRunning()
                             || (!pending && (remaining > 0

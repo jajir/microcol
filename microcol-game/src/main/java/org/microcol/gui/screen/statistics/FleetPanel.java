@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.statistics;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -130,7 +132,8 @@ final class FleetPanel extends VBox {
                 fitted(label("fleetCargo-" + id, cargoText(ship)), section));
         section.getChildren().add(
                 fitted(label("fleetHolds-" + id, holdsText(ship)), section));
-        final Button show = new Button(i18n.get(FleetText.show));
+        final Button show = ActionButtons.button(ButtonIcon.CENTER,
+                i18n.get(FleetText.show));
         show.setId("fleetShow-" + id);
         show.setDisable(!ship.getLocation().isNavigable());
         show.setOnAction(event -> openOwn(ship));
@@ -154,7 +157,8 @@ final class FleetPanel extends VBox {
                 .add(fitted(label("fleetForeignHolds-" + id, i18n
                         .get(FleetText.foreignHolds, ship.getOccupiedHolds())),
                         section));
-        final Button show = new Button(i18n.get(FleetText.show));
+        final Button show = ActionButtons.button(ButtonIcon.EUROPE,
+                i18n.get(FleetText.show));
         show.setId("fleetForeignShow-" + id);
         show.setOnAction(event -> openForeign(ship));
         section.getChildren().add(show);

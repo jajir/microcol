@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.editor;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.model.TerrainType;
 
@@ -15,19 +17,26 @@ public class EditorRightPanel implements JavaFxComponent {
 
     private final VBox mainPanel = new VBox();
 
-    private final Button buttonTree = new Button("Tree");
+    private final Button buttonTree = ActionButtons.button(ButtonIcon.TREE,
+            "Tree");
 
-    private final Button buttonField = new Button("Field");
+    private final Button buttonField = ActionButtons.button(ButtonIcon.PLOW,
+            "Field");
 
-    private final Button buttonHill = new Button("Hill");
+    private final Button buttonHill = ActionButtons.button(ButtonIcon.LAND,
+            "Hill");
 
-    private final Button buttonGrass = new Button("Grass");
+    private final Button buttonGrass = ActionButtons.button(ButtonIcon.LAND,
+            "Grass");
 
-    private final Button buttonOcean = new Button("Ocean");
+    private final Button buttonOcean = ActionButtons.button(ButtonIcon.OCEAN,
+            "Ocean");
 
-    private final Button buttonMountain = new Button("Mountain");
+    private final Button buttonMountain = ActionButtons
+            .button(ButtonIcon.MOUNTAIN, "Mountain");
 
-    private final Button buttonHighSeas = new Button("High Seas");
+    private final Button buttonHighSeas = ActionButtons.button(ButtonIcon.SHIP,
+            "High Seas");
 
     @Inject
     EditorRightPanel(final MouseOperationManager mouseOperationManager) {
@@ -68,7 +77,7 @@ public class EditorRightPanel implements JavaFxComponent {
     private void addTerrainButton(final String label,
             final TerrainType terrainType,
             final MouseOperationManager mouseOperationManager) {
-        final Button button = new Button(label);
+        final Button button = ActionButtons.button(ButtonIcon.LAND, label);
         button.setOnAction(
                 e -> mouseOperationManager.setterrainOperation(terrainType));
         mainPanel.getChildren().add(button);

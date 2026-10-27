@@ -47,7 +47,7 @@ public final class EuropeanRelationsPage extends AbstractScreen {
 
     public void open() {
         new FreePlayAuditPage(getContext()).openStatistics();
-        getRobot().clickOn("#relationsTab");
+        clickOnStatisticsTab("relationsTab");
         WaitForAsyncUtils.waitForFxEvents();
     }
 

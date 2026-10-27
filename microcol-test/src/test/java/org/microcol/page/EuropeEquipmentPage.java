@@ -27,17 +27,23 @@ public final class EuropeEquipmentPage extends AbstractScreen {
     }
 
     public void open(int unitId, String action) {
+        revealGameContent(
+                getNodeFinder().lookup("#europe-pier-unit-" + unitId).query());
         getRobot().clickOn("#europe-pier-unit-" + unitId).clickOn(action);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void openContextMenu(int unitId) {
+        revealGameContent(
+                getNodeFinder().lookup("#europe-pier-unit-" + unitId).query());
         getRobot().clickOn("#europe-pier-unit-" + unitId,
                 MouseButton.SECONDARY);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void openWithKeyboard(int unitId, int choice) {
+        revealGameContent(
+                getNodeFinder().lookup("#europe-pier-unit-" + unitId).query());
         getRobot().clickOn("#europe-pier-unit-" + unitId).push(KeyCode.ESCAPE)
                 .push(KeyCode.ENTER);
         for (int i = 0; i <= choice; i++)

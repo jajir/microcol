@@ -1,7 +1,7 @@
 package org.microcol.gui.screen.goals;
 
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.buttonpanel.AbstractButtonsPanel;
-import org.microcol.gui.image.ImageLoaderButtons;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.i18n.I18n;
@@ -24,8 +24,7 @@ public class GoalsButtonsPanel extends AbstractButtonsPanel {
             final EventBus eventBus, final I18n i18n) {
         super(imageProvider, eventBus, Source.EUROPE, i18n);
 
-        buttonClose = makeButon(ImageLoaderButtons.BUTTON_EXIT,
-                Goals.buttonBack);
+        buttonClose = makeButton(ButtonIcon.BACK, Goals.buttonBack);
         buttonClose.setId(CLOSE_BUTTON_ID);
 
         getButtonPanel().getChildren().add(buttonClose);

@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,8 +49,8 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
     private final TextField name = new TextField();
     private final ComboBox<TradeRouteKind> kind = new ComboBox<>();
     private final List<ComboBox<TradeRouteStop>> stops = new ArrayList<>();
-    private final Button create = new Button();
-    private final Button cancel = new Button();
+    private final Button create = ActionButtons.button(ButtonIcon.ADD);
+    private final Button cancel = ActionButtons.button(ButtonIcon.CANCEL);
     private final Label rule = new Label();
     private final Label nameLabel = new Label();
     private final Label kindLabel = new Label();

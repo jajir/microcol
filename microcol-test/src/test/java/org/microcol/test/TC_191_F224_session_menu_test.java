@@ -79,6 +79,13 @@ public class TC_191_F224_session_menu_test extends AbstractMicroColTest {
         // cancelled.
         saves.openMenu();
         saves.chooseMenu("menuMain");
+        // The leave confirmation uses the same paper controls as the map.
+        final org.microcol.page.PaperButtonsPage buttons = new org.microcol.page.PaperButtonsPage(
+                getContext());
+        buttons.verifyPaperButton("saveConfirm");
+        buttons.verifyPaperButton("saveDiscard");
+        buttons.verifyPaperButton("saveCancel");
+        buttons.captureDialog("saveConfirm", "r0316-save-confirmation.png");
         saves.action("saveCancel");
         saves.verifyGameUnchanged();
         saves.closeWindow();

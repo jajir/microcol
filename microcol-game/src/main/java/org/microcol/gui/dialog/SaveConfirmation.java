@@ -1,5 +1,7 @@
 package org.microcol.gui.dialog;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
@@ -44,7 +46,13 @@ final class SaveConfirmation extends AbstractMessageWindow {
 
     private void button(final HBox row, final SavedGameText text,
             final String id, final int value) {
-        final Button button = new Button(texts.get(text));
+        final Button button = ActionButtons
+                .button((value == 0 ? ButtonIcon.CANCEL
+                        : text == SavedGameText.discard ? ButtonIcon.EXIT
+                                : text == SavedGameText.saveContinue
+                                        ? ButtonIcon.SAVE
+                                        : ButtonIcon.CONFIRM),
+                        texts.get(text));
         button.setId(id);
         button.setOnAction(event -> {
             result = value;

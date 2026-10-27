@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.statistics;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.Optional;
 
 import org.microcol.gui.LocalizationHelper;
@@ -30,7 +32,8 @@ public final class HallOfFameDialog extends AbstractMessageWindow {
         final HallOfFamePanel panel = new HallOfFamePanel(dao, i18n,
                 localization);
         panel.showReport(result);
-        final Button close = new Button(i18n.get(HallOfFameText.close));
+        final Button close = ActionButtons.button(ButtonIcon.CANCEL,
+                i18n.get(HallOfFameText.close));
         close.setId("hallOfFameClose");
         close.setDefaultButton(true);
         close.setCancelButton(true);

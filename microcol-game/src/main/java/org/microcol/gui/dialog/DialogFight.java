@@ -1,5 +1,7 @@
 package org.microcol.gui.dialog;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.preferences.PreferencesProperties;
@@ -161,14 +163,14 @@ public final class DialogFight extends AbstractMessageWindow {
 
         // Y=10
         // Cancel and OK buttons
-        buttonCancel = new Button();
+        buttonCancel = ActionButtons.button(ButtonIcon.CANCEL);
         buttonCancel.setId("fightCancel");
         buttonCancel.setCancelButton(true);
         buttonCancel.setOnAction(e -> onClickCancel(
                 checkBoxShowNextTime.isSelected(), preferencesProperties));
         root.add(buttonCancel, 0, 10);
 
-        buttonFight = new Button();
+        buttonFight = ActionButtons.button(ButtonIcon.MILITARY);
         buttonFight.setId("fightConfirm");
         buttonFight.requestFocus();
         buttonFight.setOnAction(e -> onClickFight(

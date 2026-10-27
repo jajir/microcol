@@ -1,10 +1,11 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.List;
 
 import org.microcol.gui.buttonpanel.AbstractButtonsPanel;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.image.ImageLoaderButtons;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
@@ -25,11 +26,12 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
     public static final String CLOSE_BUTTON_ID = "closeButtonId";
 
     private final Button buttonClose;
-    private final Button treasure = new Button();
-    private final Button exports = new Button();
-    private final Button education = new Button();
-    private final Button tradeRoute = new Button();
-    private final Button tradeRouteCargo = new Button();
+    private final Button treasure = ActionButtons.button(ButtonIcon.GOLD);
+    private final Button exports = ActionButtons.button(ButtonIcon.EXPORT);
+    private final Button education = ActionButtons.button(ButtonIcon.EDUCATION);
+    private final Button tradeRoute = ActionButtons.button(ButtonIcon.TRADE);
+    private final Button tradeRouteCargo = ActionButtons
+            .button(ButtonIcon.CARGO);
     private final I18n i18n;
     private final GameModelController game;
     private org.microcol.model.Colony colony;
@@ -60,8 +62,7 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         tradeRouteCargo.setId("tradeRouteCargoOpen");
         tradeRouteCargo.setOnAction(event -> routeCargo.showFor(colony));
         tradeRouteCargo.setDisable(true);
-        buttonClose = makeButon(ImageLoaderButtons.BUTTON_EXIT,
-                ColonyMsg.buttonClose);
+        buttonClose = makeButton(ButtonIcon.BACK, ColonyMsg.buttonClose);
         buttonClose.setId(CLOSE_BUTTON_ID);
         buttonClose.setOnAction(
                 evnt -> eventBus.post(new ShowScreenEvent(Screen.GAME)));

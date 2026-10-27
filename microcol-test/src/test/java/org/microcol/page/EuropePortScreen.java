@@ -164,9 +164,13 @@ public class EuropePortScreen extends AbstractScreen {
                 .filter(node -> node.getUserData() == ship).findFirst()
                 .orElseThrow();
         assertTrue(button.isVisible());
-        assertFalse(button.getBackground().getImages().isEmpty());
-        assertFalse(
-                button.getBackground().getImages().get(0).getImage().isError());
+        assertTrue(button.getGraphic() instanceof javafx.scene.image.ImageView);
+        javafx.scene.image.ImageView icon = (javafx.scene.image.ImageView) button
+                .getGraphic();
+        assertFalse(icon.getImage().isError());
+        assertEquals(32, icon.getFitWidth(), 0.01);
+        assertTrue(button.getBorder().getImages().get(0).getImage().getUrl()
+                .endsWith("game-toolbar-frame.png"));
     }
 
     public void verifyAvailableHoldCount(int holds) {

@@ -9,18 +9,6 @@
 /*
  * Ship pane 
  */
-.paneShip{
-	-fx-fit-to-height: 45px;
-	-fx-fit-to-width: 45px;
-	-fx-pref-width: 45px;
-	-fx-pref-height: 45px;
-}
-
-.paneShip:selected{
-	-fx-border-color: lightblue ;
-	-fx-border-width: 2;
-}
-
 /* Main map only: flat paper groups, existing controls and readable status. */
 .game-screen {
     -fx-background-color: #FFF9EC;
@@ -38,7 +26,6 @@
 }
 .game-screen #coloniesMenu {
     -fx-min-height: 57;
-    -fx-padding: 6 3 6 3;
 }
 .game-screen #coloniesMenu > .label {
     -fx-padding: 0 4 0 0;

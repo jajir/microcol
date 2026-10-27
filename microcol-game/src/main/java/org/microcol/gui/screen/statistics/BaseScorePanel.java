@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.statistics;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,7 +76,7 @@ final class BaseScorePanel extends VBox {
                     game.getHumanPlayer().getResultScore(), false);
         }
         if (model.isAwaitingScoreChoice()) {
-            final Button decide = new Button(
+            final Button decide = ActionButtons.button(ButtonIcon.CONFIRM,
                     i18n.get(FrozenScoreText.decideFrozen));
             decide.setId("decideFrozenScore");
             decide.setOnAction(event -> openDecision());

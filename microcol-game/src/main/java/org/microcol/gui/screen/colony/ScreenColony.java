@@ -26,7 +26,8 @@ public class ScreenColony implements GameScreen {
     @Inject
     ScreenColony(final ColonyPanel colonyPanel, final CenteredPage centeredPage,
             final InGamePage page, final ColonyBackground colonyBackground,
-            final ColonyButtonsPanel buttons) {
+            final ColonyButtonsPanel buttons,
+            final ColonyDialogCallback callback) {
         this.page = Preconditions.checkNotNull(page);
         this.colonyPanel = Preconditions.checkNotNull(colonyPanel);
         page.setStatusSource(Source.COLONY);
@@ -40,6 +41,13 @@ public class ScreenColony implements GameScreen {
         page.getContent().getStyleClass().add("illustrated-page");
         page.setToolbar(buttons.getContent());
         page.setContent(centeredPage.getContent());
+        page.getContent().addEventFilter(
+                javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
+                    if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) {
+                        callback.close();
+                        event.consume();
+                    }
+                });
     }
 
     /**

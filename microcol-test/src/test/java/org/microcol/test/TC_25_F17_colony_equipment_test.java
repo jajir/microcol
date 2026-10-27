@@ -130,6 +130,8 @@ public class TC_25_F17_colony_equipment_test extends AbstractMicroColTest {
         WelcomePage.of(getContext()).loadGame().openColonyAt(COLONY,
                 "New Amsterdam");
         final EquipmentPage equipment = new EquipmentPage(getContext());
+        equipment.captureDialog("closeButtonId",
+                "r0316-colony-equipment-before.png");
         equipment.openWithKeyboard(1);
         equipment.verifyChoice("Mount horses", true, "");
         equipment.escape();

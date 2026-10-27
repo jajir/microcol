@@ -39,7 +39,7 @@ public final class FleetReportPage extends AbstractScreen {
     /** Opens statistics and the fleet tab with the mouse. */
     public void open() {
         new FreePlayAuditPage(getContext()).openStatistics();
-        getRobot().clickOn("#fleetTab");
+        clickOnStatisticsTab("fleetTab");
         WaitForAsyncUtils.waitForFxEvents();
     }
 

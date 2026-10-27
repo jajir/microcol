@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.menu;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import static org.microcol.gui.screen.AbstractScreenMenu.STYLE_SHEET_GAME_MENU;
 
 import java.util.ArrayList;
@@ -210,13 +212,13 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         errorLabel.setWrapText(true);
         errorLabel.setMinHeight(40);
 
-        startButton = new Button();
+        startButton = ActionButtons.button(ButtonIcon.PLAY);
         startButton.setId(ID_START);
         startButton.setDefaultButton(true);
         startButton.setDisable(true);
         startButton.setOnAction(e -> onStart());
 
-        backButton = new Button();
+        backButton = ActionButtons.button(ButtonIcon.BACK);
         backButton.setId(ID_BACK);
         backButton.setCancelButton(true);
         backButton.setOnAction(e -> onBack());

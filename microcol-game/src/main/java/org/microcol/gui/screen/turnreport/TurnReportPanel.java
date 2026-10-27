@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.turnreport;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.Optional;
 
 import org.microcol.gui.Loc;
@@ -76,14 +78,16 @@ public final class TurnReportPanel implements GameScreen {
         if (turnEvent instanceof TeItemColony) {
             final int colonyId = ((TeItemColony) turnEvent).getColonyId();
             if (findOwnedColony(shownModel, colonyId).isPresent()) {
-                final Button open = new Button(i18n.get(TurnEvents.openColony));
+                final Button open = ActionButtons.button(ButtonIcon.COLONIES,
+                        i18n.get(TurnEvents.openColony));
                 open.setId("turnEventOpenColony-" + colonyId);
                 open.setOnAction(event -> openColony(shownModel, colonyId));
                 return new TurnEventPanel(turnEvent, open);
             }
         }
         if (turnEvent instanceof TeItemEurope) {
-            final Button open = new Button(i18n.get(TurnEvents.openEurope));
+            final Button open = ActionButtons.button(ButtonIcon.EUROPE,
+                    i18n.get(TurnEvents.openEurope));
             open.setId("turnEventOpenEurope");
             open.setOnAction(event -> openEurope(shownModel));
             return new TurnEventPanel(turnEvent, open);

@@ -1,5 +1,7 @@
 package org.microcol.gui.dialog;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.List;
 
 import org.microcol.gui.Loc;
@@ -116,11 +118,14 @@ public final class NativeLandDialog extends AbstractMessageWindow {
                 i18n.get(Loc.nativeLandConsequence));
         final Label note = text("nativeLandNote", noteText);
         final Label message = text("nativeLandMessage", "");
-        final Button pay = new Button(i18n.get(Loc.nativeLandPay));
+        final Button pay = ActionButtons.button(ButtonIcon.GOLD,
+                i18n.get(Loc.nativeLandPay));
         pay.setId("nativeLandPay");
-        final Button proceed = new Button(i18n.get(Loc.nativeLandProceed));
+        final Button proceed = ActionButtons.button(ButtonIcon.NEXT,
+                i18n.get(Loc.nativeLandProceed));
         proceed.setId("nativeLandProceed");
-        final Button cancel = new Button(i18n.get(Loc.nativeLandCancel));
+        final Button cancel = ActionButtons.button(ButtonIcon.CANCEL,
+                i18n.get(Loc.nativeLandCancel));
         cancel.setId("nativeLandCancel");
         cancel.setCancelButton(true);
         if (!payable) {

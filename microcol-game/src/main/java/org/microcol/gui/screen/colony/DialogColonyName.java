@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +40,7 @@ public final class DialogColonyName extends AbstractMessageWindow {
     private final Label message = new Label();
     private final Label caption = new Label();
     private final Label land = new Label();
-    private final Button save = new Button();
+    private final Button save = ActionButtons.button(ButtonIcon.SAVE);
     private final Set<String> suggestions = new HashSet<>();
     private Model model;
     private Colony colony;
@@ -66,7 +68,8 @@ public final class DialogColonyName extends AbstractMessageWindow {
         caption.setId("colonyNameCaption");
         final Label label = new Label(i18n.get(ColonyMsg.nameLabel));
         label.setLabelFor(name);
-        final Button generate = new Button(i18n.get(ColonyMsg.nameGenerate));
+        final Button generate = ActionButtons.button(ButtonIcon.RENAME,
+                i18n.get(ColonyMsg.nameGenerate));
         generate.setId("colonyNameGenerate");
         generate.setOnAction(event -> {
             suggestions.add(name.getText());
@@ -76,7 +79,8 @@ public final class DialogColonyName extends AbstractMessageWindow {
             name.requestFocus();
             name.selectAll();
         });
-        final Button cancel = new Button(i18n.get(ColonyMsg.nameCancel));
+        final Button cancel = ActionButtons.button(ButtonIcon.CANCEL,
+                i18n.get(ColonyMsg.nameCancel));
         cancel.setId("colonyNameCancel");
         cancel.setCancelButton(true);
         cancel.setOnAction(event -> close());

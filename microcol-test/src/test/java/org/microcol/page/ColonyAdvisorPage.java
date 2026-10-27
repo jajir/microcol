@@ -50,7 +50,7 @@ public final class ColonyAdvisorPage extends AbstractScreen {
     /** Opens statistics and the colonies tab with the mouse. */
     public void open() {
         new FreePlayAuditPage(getContext()).openStatistics();
-        getRobot().clickOn("#coloniesTab");
+        clickOnStatisticsTab("coloniesTab");
         WaitForAsyncUtils.waitForFxEvents();
     }
 

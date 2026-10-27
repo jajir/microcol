@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import org.microcol.gui.UnitTypes;
@@ -30,9 +32,9 @@ public final class DialogEducation extends AbstractMessageWindow {
     private final Label skillLabel = new Label();
     private final Label preview = new Label();
     private final Label feedback = new Label();
-    private final Button assign = new Button();
-    private final Button cancelCourse = new Button();
-    private final Button closeButton = new Button();
+    private final Button assign = ActionButtons.button(ButtonIcon.EDUCATION);
+    private final Button cancelCourse = ActionButtons.button(ButtonIcon.STOP);
+    private final Button closeButton = ActionButtons.button(ButtonIcon.CANCEL);
     private Model boundModel;
     private Colony colony;
     private Player owner;

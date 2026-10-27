@@ -245,6 +245,8 @@ public class ColonyScreen extends AbstractScreen {
     public void dragGoodsFromShipCargoSlotToWarehouse(final int cargoSlotIndex,
             final int goodsIndexInWarehouse) throws InterruptedException {
         final StackPane crate = getListOfCrates().get(cargoSlotIndex);
+        revealGameContent(crate,
+                getListOfGoodsImagesInWarehouse().get(goodsIndexInWarehouse));
         completeDrag(crate,
                 () -> getRobot().drag(crate, MouseButton.PRIMARY)
                         .dropTo(getListOfGoodsImagesInWarehouse()

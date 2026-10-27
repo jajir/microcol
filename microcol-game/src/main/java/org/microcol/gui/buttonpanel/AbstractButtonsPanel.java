@@ -1,5 +1,6 @@
 package org.microcol.gui.buttonpanel;
 
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.colony.ScreenColony;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
@@ -52,10 +53,10 @@ public class AbstractButtonsPanel implements JavaFxComponent {
         VBox.setVgrow(mainPanel, Priority.ALWAYS);
     }
 
-    protected <T extends Enum<T> & MessageKeyResource> Button makeButon(
-            final String imgName, final T buttonsKey) {
+    protected <T extends Enum<T> & MessageKeyResource> Button makeButton(
+            final ButtonIcon icon, final T buttonsKey) {
         final ButtonImage<T> buttonImage = new ButtonImage<T>(eventBus, source,
-                i18n, buttonsKey, imageProvider.getImage(imgName));
+                i18n, buttonsKey, icon);
         return buttonImage.getContent();
     }
 

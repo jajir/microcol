@@ -40,21 +40,29 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         page.open("statistics");
         page.verifyFrame(484, 1600);
         page.open("coloniesTab");
+        page.verifySelectedTab("coloniesTab");
         page.verifyFrame(484, 1600);
         page.saveEvidence("r0307-statistics.png");
         page.open("relationsTab");
+        page.verifySelectedTab("relationsTab");
         page.verifyFrame(484, 1600);
         page.open("tradeTab");
+        page.verifySelectedTab("tradeTab");
         page.verifyFrame(484, 1600);
         page.open("baseScoreTab");
+        page.verifySelectedTab("baseScoreTab");
         page.verifyFrame(484, 1600);
         page.open("hallOfFameTab");
+        page.verifySelectedTab("hallOfFameTab");
         page.verifyFrame(484, 1600);
         page.open("laborTab");
+        page.verifySelectedTab("laborTab");
         page.verifyFrame(484, 1600);
         page.open("religionTab");
+        page.verifySelectedTab("religionTab");
         page.verifyFrame(484, 1600);
         page.open("fleetTab");
+        page.verifySelectedTab("fleetTab");
         page.verifyFrame(484, 1600);
         page.open("closeButtonId");
         // Colony and port retain their actions above the illustrated content.
@@ -62,7 +70,11 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         page.verifyFrame(484, 1600);
         page.verifyColonyNameVisible("New Amsterdam");
         page.saveEvidence("r0307-colony.png");
-        page.open("closeButtonId");
+        // Escape also works when focus is in the shared toolbar.
+        new org.microcol.page.PaperButtonsPage(getContext())
+                .focus("closeButtonId");
+        page.closeWithEscape();
+        page.verifyMapReturned();
         game.openEuroperPort();
         page.verifyFrame(484, 1600);
         page.saveEvidence("r0307-europe.png");

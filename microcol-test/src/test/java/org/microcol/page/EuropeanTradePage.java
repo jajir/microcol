@@ -28,7 +28,7 @@ public final class EuropeanTradePage extends AbstractScreen {
 
     public void open() {
         new FreePlayAuditPage(getContext()).openStatistics();
-        getRobot().clickOn("#tradeTab");
+        clickOnStatisticsTab("tradeTab");
         WaitForAsyncUtils.waitForFxEvents();
     }
 

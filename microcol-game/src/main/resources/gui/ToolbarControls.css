@@ -1,8 +1,5 @@
-/* Shared paper controls for the map toolbar and opening menu. */
-.button.game-toolbar-control {
-    -fx-skin: "javafx.scene.control.skin.ButtonSkin";
-}
-.game-toolbar-control {
+/* One paper-button face for application actions, menus and toggles. */
+.button, .toggle-button, .menu-button, .split-menu-button {
     -fx-font-family: "Playpen Sans";
     -fx-font-size: 14;
     -fx-font-weight: normal;
@@ -18,18 +15,19 @@
     -fx-text-fill: #302D27;
     -fx-effect: null;
 }
-.game-toolbar-control:hover,
-.game-toolbar-control:showing {
+.button:hover, .toggle-button:hover, .menu-button:hover, .split-menu-button:hover,
+.menu-button:showing, .split-menu-button:showing, .toggle-button:selected {
     -fx-background-color: #E7E7D0;
 }
-.game-toolbar-control:focused {
+.button:focused, .toggle-button:focused, .menu-button:focused, .split-menu-button:focused {
     -fx-background-color: #E7E7D0;
     -fx-underline: true;
 }
-.game-toolbar-control:armed {
+.button:armed, .toggle-button:armed, .menu-button:armed, .split-menu-button:armed {
     -fx-background-color: #DCDCC5;
     -fx-translate-y: 1;
 }
-.game-toolbar-control:disabled {
+.button:disabled, .toggle-button:disabled, .menu-button:disabled, .split-menu-button:disabled {
     -fx-opacity: 0.45;
 }
+.toggle-button:selected { -fx-underline: true; }

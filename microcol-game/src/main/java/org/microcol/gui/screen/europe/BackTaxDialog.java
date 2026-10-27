@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.europe;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.List;
 
 import org.microcol.gui.GoodsTypeName;
@@ -36,8 +38,8 @@ public final class BackTaxDialog extends AbstractMessageWindow {
     private final Label treasury = new Label();
     private final Label insufficient = new Label();
     private final Label feedback = new Label();
-    private final Button pay = new Button();
-    private final Button cancel = new Button();
+    private final Button pay = ActionButtons.button(ButtonIcon.GOLD);
+    private final Button cancel = ActionButtons.button(ButtonIcon.CANCEL);
     private final GameModelController controller;
     private final EuropeCallback europe;
     private final I18n i18n;

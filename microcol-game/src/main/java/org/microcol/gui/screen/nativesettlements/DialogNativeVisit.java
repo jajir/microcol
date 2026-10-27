@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.nativesettlements;
 
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -290,27 +292,32 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
 
     private final List<Label> choiceLabels;
 
-    private final Button teach = new Button();
+    private final Button teach = ActionButtons.button(ButtonIcon.EDUCATION);
 
-    private final Button chiefButton = new Button();
+    private final Button chiefButton = ActionButtons
+            .button(ButtonIcon.DIPLOMACY);
 
-    private final Button missionButton = new Button();
+    private final Button missionButton = ActionButtons
+            .button(ButtonIcon.RELIGION);
 
-    private final Button contestButton = new Button();
+    private final Button contestButton = ActionButtons
+            .button(ButtonIcon.MILITARY);
 
-    private final Button incitementButton = new Button();
+    private final Button incitementButton = ActionButtons
+            .button(ButtonIcon.MILITARY);
 
-    private final Button attackButton = new Button();
+    private final Button attackButton = ActionButtons
+            .button(ButtonIcon.MILITARY);
 
-    private final Button tributeButton = new Button();
+    private final Button tributeButton = ActionButtons.button(ButtonIcon.GOLD);
 
     private final Label contact = new Label();
 
     private final Label admission = new Label();
 
-    private final Button introduce = new Button();
+    private final Button introduce = ActionButtons.button(ButtonIcon.DIPLOMACY);
 
-    private final Button openMarket = new Button();
+    private final Button openMarket = ActionButtons.button(ButtonIcon.TRADE);
 
     private final Label expedition = new Label();
 
@@ -336,11 +343,11 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
 
     private final Label saleNotice = new Label();
 
-    private final Button sellButton = new Button();
+    private final Button sellButton = ActionButtons.button(ButtonIcon.SELL);
 
-    private final Button giftButton = new Button();
+    private final Button giftButton = ActionButtons.button(ButtonIcon.GIFT);
 
-    private final Button haggleButton = new Button();
+    private final Button haggleButton = ActionButtons.button(ButtonIcon.HAGGLE);
 
     private final Label purchaseHeader = new Label();
 
@@ -360,11 +367,12 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
 
     private final Label purchaseNotice = new Label();
 
-    private final Button buyButton = new Button();
+    private final Button buyButton = ActionButtons.button(ButtonIcon.BUY);
 
-    private final Button purchaseHaggleButton = new Button();
+    private final Button purchaseHaggleButton = ActionButtons
+            .button(ButtonIcon.HAGGLE);
 
-    private final Button declineButton = new Button();
+    private final Button declineButton = ActionButtons.button(ButtonIcon.BACK);
 
     /** Pieces of each carried good, as the model reports them now. */
     private final Map<GoodsType, Integer> carriedAmounts = new HashMap<>();
