@@ -221,7 +221,10 @@ as lake in these templates. [R-0302](requirements/done/R-0302.md) supersedes Ori
 World's connected-lake layout from [R-0287](requirements/done/R-0287.md).
 The same correction applies the [inland river restriction](#r-0065-refinement)
 to bundled map templates: no hills/mountains or water neighbours, including
-endpoints and diagonals. Existing saves are not rewritten, and movement on
+endpoints and diagonals. On 2026-10-27, [R-0313](requirements/R-0313.md)
+authorizes one explicit exception: Original World's large river extends from
+(24, 13) to the coastal square (25, 13) for appearance work. Generated maps retain
+the inland restriction. Existing saves are not rewritten, and movement on
 existing water/river terrain is unchanged. See the [map catalogue](free-play-maps.md).
 
 This resolves the lake questions in R-0123/R-0124/R-0125; it is an agreed rule,
@@ -1897,7 +1900,7 @@ A rule becomes behaviorally verified only when its cited acceptance scenario has
 4. Generated river squares have independent 15% silver, 5% ore and 80% no-deposit
    probabilities. Non-river resources keep their existing roughly 10% allocation
    and family distribution. Fixed maps approximate those shares deliberately;
-   Original World's 22 river squares receive four silver and one ore deposit.
+   Original World's 23 river squares receive four silver and one ore deposit.
    Relocate incompatible forests/resources while preserving a viable starting
    location, timber access and the complete landscape inventory.
 5. Connected river movement stays one third of a point in either direction;

@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+Implemented on 2026-10-27: [R-0313 — Original World river at (25, 13)](R-0313.md).
+The user explicitly requested a push without test runs. Data and existing test
+expectations are updated; normal local acceptance remains unverified.
+
 Accepted locally on 2026-10-27: [R-0311 — runtime developer mode
 and map coordinates](done/R-0311.md), A03 with A01/A05 dependencies. Settings and F3
 share one persisted preference; coordinates preserve map visibility rules.

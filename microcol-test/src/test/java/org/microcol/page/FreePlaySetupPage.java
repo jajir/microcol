@@ -53,6 +53,9 @@ public final class FreePlaySetupPage extends AbstractScreen {
                 map.hasRiverSegment(Location.of(22, 13), Location.of(23, 13)));
         assertTrue(
                 map.hasRiverSegment(Location.of(23, 13), Location.of(24, 13)));
+        assertEquals(RiverSize.LARGE, map.getRiverSizeAt(Location.of(25, 13)));
+        assertTrue(
+                map.hasRiverSegment(Location.of(24, 13), Location.of(25, 13)));
         assertTrue(map.hasLostCityRumorAt(Location.of(18, 25)));
     }
 

@@ -18,7 +18,7 @@ class FreePlayMapsTest {
     private final GameModelPoDao dao = new GameModelPoDao();
 
     @Test
-    void everyBundledWorldKeepsRiversInlandAndLakesSeparateFromTheSea() {
+    void everyBundledWorldKeepsRiverPlacementAndLakesSeparateFromTheSea() {
         for (final FreePlayMap choice : FreePlayMap.values()) {
             final GameModelPo data = dao
                     .loadFromClassPath(choice.getResource());
@@ -37,10 +37,15 @@ class FreePlayMapsTest {
                                 terrain.isSea() || terrain == TerrainType.HILL
                                         || terrain == TerrainType.MOUNTAIN,
                                 choice + " " + at);
-                        assertTrue(at.getNeighbors().stream()
-                                .filter(map::isValid).noneMatch(next -> map
-                                        .getTerrainTypeAt(next).isSea()),
-                                choice + " " + at);
+                        // R-0313 explicitly adds this coastal endpoint.
+                        if (choice != FreePlayMap.ORIGINAL
+                                || !at.equals(Location.of(25, 13))) {
+                            assertTrue(at.getNeighbors().stream()
+                                    .filter(map::isValid)
+                                    .noneMatch(next -> map
+                                            .getTerrainTypeAt(next).isSea()),
+                                    choice + " " + at);
+                        }
                     }
                     if (terrain == TerrainType.LAKE) {
                         assertTrue(at.getNeighbors().stream()

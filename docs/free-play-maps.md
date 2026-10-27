@@ -12,13 +12,20 @@ rohem. Jezera jsou oddělená od oceánu souvislou pevninou. Oprava platí pro n
 zahájené hry; uložené rozehrané pozice se nepřepisují. Ověření je vedené v
 [testové evidenci](functional-tests.md#r-0302-bundled-map-geography-2026-10-26).
 
+Výjimka z 27. října 2026: [R-0313](requirements/R-0313.md) prodlužuje velkou
+řeku Původního světa z (24, 13) na pobřežní (25, 13), aby bylo možné posuzovat
+její vzhled. Výjimka platí jen pro toto pole; generované řeky se nemění.
+Testy této změny nebyly na výslovné přání uživatele spuštěny.
+
 ## 1. Původní svět
 
 Pět nových pobřežních polí uzavírá jezero na souřadnicích X=18–19, Y=8–9.
 Samostatná vnitrozemská voda na (15, 12) je správně označená jako jezero.
-Tři samostatné řeky mají 3, 12 a 7 polí. Ložiska a bonusy byly podle potřeby
+Tři samostatné řeky mají 3, 13 a 7 polí. Ložiska a bonusy byly podle potřeby
 přesunuty, jejich počet a konečné zásoby zůstaly zachované. Kolonie i běžné
 vylodění u (25, 14) zůstávají na místě.
+
+Následující diagramy zachycují stav z 26. října 2026, před přidáním pole (25, 13).
 
 ![Původní svět – detail pevniny](graphics-assets/free-play-maps-2026-10-26/original-world-detail.png)
 

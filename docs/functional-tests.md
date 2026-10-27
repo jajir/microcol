@@ -11177,3 +11177,18 @@ or website publication.
     shared formatting and all required local phases are complete. Native
     macOS function-key behavior and remote CI/distribution/Pages publication
     were not checked; local acceptance does not establish a published build.
+
+## R-0313 Original World coastal river — 2026-10-27
+
+1. At source revision `626cff98`, the user requested a river at (25, 13), commit/push
+   and explicitly no tests. [R-0313](requirements/R-0313.md) extends the existing
+   large river from (24, 13); the single coastal exception is recorded in the
+   [map catalogue](free-play-maps.md).
+2. `OriginalWorldTest`, `FreePlayMapsTest` and the landscape verification used by
+   `TC_24_F15_free_play_setup_test.TC_12_original_world_river_landing_and_colony_survive_continue`
+   now expect the additional square and link. No model/JUnit, UI, smoke, tooling
+   or documentation consistency tests were run. This is not normal local
+   acceptance, and no runtime appearance or Save/Continue result is claimed.
+3. Shared Java formatting and source diff review completed; the strict MkDocs
+   build passed. No test selection was executed for this explicitly untested
+   change. Remote regression and publication are not inspected.

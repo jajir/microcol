@@ -62,7 +62,10 @@ class OriginalWorldTest {
         assertEquals(RiverSize.LARGE, map.getRiverSizeAt(Location.of(24, 13)));
         assertTrue(
                 map.hasRiverSegment(Location.of(23, 13), Location.of(24, 13)));
-        assertEquals(19, source().getMap().getRiverSegments().size());
+        assertEquals(RiverSize.LARGE, map.getRiverSizeAt(Location.of(25, 13)));
+        assertTrue(
+                map.hasRiverSegment(Location.of(24, 13), Location.of(25, 13)));
+        assertEquals(20, source().getMap().getRiverSegments().size());
     }
 
     @Test
