@@ -1,6 +1,11 @@
 # Current requirement backlog
 
 Implemented without test execution at the user's request on 2026-10-27:
+[R-0306 — stronger black question marks](R-0306.md). Status remains
+`ready for development` pending verified acceptance; see the
+[evidence](../functional-tests.md#r-0306-black-question-marks-2026-10-27).
+
+Implemented without test execution at the user's request on 2026-10-27:
 [R-0305 — black wave contours](R-0305.md). Status remains `ready for development`
 pending verified acceptance; see the [evidence](../functional-tests.md#r-0305-black-wave-contours-2026-10-27).
 

@@ -111,8 +111,8 @@ public final class PaintService {
         if (mapManager.hasUnknownMark(location)) {
             graphics.save();
             graphics.translate(point.getX(), point.getY());
-            graphics.setStroke(MARKER_INK);
-            graphics.setLineWidth(1.6);
+            graphics.setStroke(Color.BLACK);
+            graphics.setLineWidth(2);
             graphics.setLineCap(StrokeLineCap.ROUND);
             graphics.setLineJoin(StrokeLineJoin.ROUND);
             graphics.beginPath();

@@ -633,8 +633,8 @@ public final class FogPage extends AbstractScreen {
                     .getGraphicsContext2D();
             graphics.setFill(Color.web("#9B9486"));
             graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-            graphics.setStroke(Color.web("#292824"));
-            graphics.setLineWidth(1.6);
+            graphics.setStroke(Color.BLACK);
+            graphics.setLineWidth(2);
             graphics.setLineCap(javafx.scene.shape.StrokeLineCap.ROUND);
             graphics.setLineJoin(javafx.scene.shape.StrokeLineJoin.ROUND);
             graphics.beginPath();

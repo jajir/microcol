@@ -1,5 +1,30 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0306 black question marks — 2026-10-27
+
+1. [R-0306](requirements/R-0306.md), based on `a28f774f`, changes the
+   unexplored-map question mark from dark-gray 1.6-pixel ink to black
+   2-pixel ink. The drawing's path, position, placement and exploration
+   behavior are unchanged; other map markers retain their shared ink.
+2. The existing player scenario
+   `TC_26_F18_fog_of_war_test.TC_10_unknown_question_marks_remain_fixed_until_explored`
+   retains its navigation, resize, Continue, discovery and subsequent
+   hidden-state assertions. Its independent pixel reference in
+   `FogPage.verifyUnknownMark` now expects the stronger black contour;
+   its screenshot filename is `R-0306-black-question-marks.png`.
+3. The user requested the same direct-push workflow as R-0305, continuing
+   the instruction to omit tests. No model/JUnit, targeted Docker/Xvfb UI,
+   smoke/support or documentation consistency tests were executed. The
+   screenshot filename is prepared for a future run, not new runtime evidence.
+4. Shared Java formatting passed for the three touched Java files, and
+   source/diff review confirmed only the two drawing settings changed in
+   production code. The existing path rendered with the new ink was visually
+   reviewed (`target/r0306/question-mark.png`); this is a drawing preview,
+   not a game screenshot. Strict MkDocs passed; logs are in
+   `target/r0306/format.log` and `target/r0306/mkdocs.log`. These non-test
+   checks do not establish local game acceptance. Remote regression and
+   publication are not inspected.
+
 ## R-0305 black wave contours — 2026-10-27
 
 1. [R-0305](requirements/R-0305.md) implements the approved black wave lines

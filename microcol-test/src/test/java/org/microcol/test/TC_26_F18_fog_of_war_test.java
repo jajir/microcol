@@ -333,15 +333,15 @@ public class TC_26_F18_fog_of_war_test extends AbstractMicroColTest {
     @Tag("local")
     void TC_10_unknown_question_marks_remain_fixed_until_explored()
             throws Exception {
-        // The saved map seed places the selected hand-drawn A on this sea
-        // square.
+        // The saved map seed places the black, two-pixel hand-drawn A mark on
+        // this sea square.
         GamePage game = WelcomePage.of(getContext()).loadGame();
         FogPage fog = new FogPage(getContext());
         Location marked = Location.of(27, 20);
         Location south = Location.of(25, 18);
         fog.centerFrontier();
         fog.verifyUnknownMark(marked, true);
-        fog.saveMapEvidence("R-0296-hand-drawn-question-marks.png");
+        fog.saveMapEvidence("R-0306-black-question-marks.png");
 
         // Panning, repainting, resizing and Continue keep the same drawing.
         fog.centerOn(Location.of(28, 18));

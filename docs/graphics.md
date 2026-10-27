@@ -1280,6 +1280,15 @@ rsvg-convert --zoom 2 -o microcol-game/src/main/resources/images/game-toolbar-fr
 
 ## Otazníky na neobjevené mapě — R-0282
 
+**Úprava z 27. října 2026, [R-0306](requirements/R-0306.md):** vybraný
+kreslený tvar A má nově černou čáru `#000000` o šířce 2 logické px, včetně
+tečky. Mírné zesílení z 1,6 px a změna tmavě šedé na černou navazují na
+schválené vlny. Geometrie, rozmístění a mizení po objevení se nemění.
+Změna je implementovaná bez spuštění testů podle uživatelova pokynu;
+[evidence](functional-tests.md#r-0306-black-question-marks-2026-10-27)
+neprohlašuje ověření hry ani publikace.
+
+
 1. Podle zadání a reference z 25. října 2026 má přibližně **4 % neobjevených políček** jeden otazník. Původní R-0282 používala hnědý znak Playpen Sans 14; aktuálně vybraný kreslený tvar A stanoví [R-0296](requirements/done/R-0296.md). Rozmístění určuje uložený seed mapy a souřadnice, nezávisle na skrytém obsahu.
 2. Otazníky se nehýbou ani nepřelosují při posunu, změně velikosti okna nebo Save/Continue. S objevením políčka zmizí a po opuštění dohledu se nevracejí. Mřížka zůstává pod neprůhlednou mlhou; jde pouze o dekoraci.
 3. Implementaci a přejímku sleduje [R-0282](requirements/done/R-0282.md); tato změna nepřidává uložená data ani nové herní pravidlo.
