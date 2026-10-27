@@ -114,7 +114,6 @@ public class WelcomePage extends AbstractMenuScreen {
                 assertTrue(bounds.getMaxY() <= button.getScene().getHeight());
                 if (previous != null) {
                     assertEquals(previous.getMinX(), bounds.getMinX(), 0.01);
-                    assertEquals(previous.getWidth(), bounds.getWidth(), 0.01);
                     assertEquals(8, bounds.getMinY() - previous.getMaxY(),
                             0.01);
                 }
@@ -122,6 +121,14 @@ public class WelcomePage extends AbstractMenuScreen {
                     final javafx.scene.text.Text text = (javafx.scene.text.Text) button
                             .lookup(".text");
                     assertEquals(button.getText(), text.getText());
+                    assertEquals(Math.ceil(text.getLayoutBounds().getWidth()
+                            + icon.getFitWidth() + button.getGraphicTextGap()
+                            + button.getInsets().getLeft()
+                            + button.getInsets().getRight()), button.getWidth(),
+                            0.01, "Button fits its full label and icon");
+                } else {
+                    assertEquals(column.getWidth(), button.getWidth(), 0.01,
+                            "Compact controls fit the available column");
                 }
                 previous = bounds;
             }

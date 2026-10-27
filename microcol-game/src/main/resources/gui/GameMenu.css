@@ -40,8 +40,6 @@
     -fx-padding: 0;
     -fx-spacing: 8;
     -fx-min-width: 0;
-    -fx-pref-width: 300;
-    -fx-max-width: 300;
 }
 .welcome-screen .game-menu-inner > .button {
     -fx-alignment: center-left;

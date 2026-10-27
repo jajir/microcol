@@ -1353,6 +1353,16 @@ Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.
 
 ## Opening menu R-0297
 
+**Šířka podle obsahu — 27. října 2026, [R-0308](requirements/done/R-0308.md):**
+každé tlačítko úvodního menu má šířku své ikony, celého přeloženého názvu
+a společného odsazení. Nahrazuje pevnou šířku 300 px z původního zadání.
+Levý okraj, výška, mezery, písmo a rámeček zůstávají společné. Při změně
+jazyka se šířky přepočítají; širší okno krátká tlačítka neroztahuje. Pokud
+se celý název nevejde, zachovává se režim samotné ikony s tooltipem a
+přístupným názvem; po rozšíření se text obnoví. Stav ověření vede
+[funkční evidence](functional-tests.md#r-0308-opening-menu-content-width-2026-10-27).
+
+
 1. **Dohoda 26. října 2026:** uživatel vybral [návrh s jedním sloupcem vlevo](graphics-assets/opening-menu-2026-10-26/approved-proposal.png), nikoli dřívější dva sloupce. Pod názvem MicroCol jsou dvě krátké ručně kreslené vlnky. Obrázek je výtvarný návrh, nikoli snímek běžící hry; spodní vzorník ikon není další herní lišta.
 2. [R-0297](requirements/done/R-0297.md) přebírá přímo `game-toolbar-frame.png` a společný `ToolbarControls.css`. Menu a herní lišta mají stejné odsazení, ikony 32 × 32 a Playpen Sans Regular 14; tlačítka menu nejsou vyšší. Sloupec má výchozí šířku 300 px, mezery 8 px a levý okraj 80 px i v širším okně. Pozadí, animace a dostupnost původních akcí zůstávají.
 3. Nové ikony vlastní [menu-icons.svg](../microcol-game/src/graphics/menu-icons.svg), osm buněk 48 × 48, tah 2,4 jednotky a stejný inkoust/olivový akcent jako herní lišta. Export `rsvg-convert -w 768 -h 96 -o microcol-game/src/main/resources/images/menu-icons.png microcol-game/src/graphics/menu-icons.svg` se přes existující obrazovou cache řeže po 96 px a zobrazuje po 32 px. [menu-title-waves.svg](../microcol-game/src/graphics/menu-title-waves.svg) se exportuje přímo na 120 × 18 příkazem `rsvg-convert -o microcol-game/src/main/resources/images/menu-title-waves.png microcol-game/src/graphics/menu-title-waves.svg`.

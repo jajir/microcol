@@ -81,7 +81,7 @@ public final class ButtonsPanelView
             final Button button = (Button) buttonsBox.getChildren().get(index);
             button.getStyleClass().add("game-toolbar-control");
             button.setMinWidth(0);
-            button.setMaxWidth(Double.MAX_VALUE);
+            button.setMaxWidth(Region.USE_PREF_SIZE);
             final ImageView icon = new ImageView(icons);
             icon.setViewport(new Rectangle2D(index * 96, 0, 96, 96));
             icon.setFitWidth(32);
@@ -92,7 +92,7 @@ public final class ButtonsPanelView
             tooltip.textProperty().bind(button.textProperty());
             button.setTooltip(tooltip);
             button.accessibleTextProperty().bind(button.textProperty());
-            button.widthProperty()
+            buttonsBox.widthProperty()
                     .addListener(observable -> updateLabel(button));
             button.fontProperty()
                     .addListener(observable -> updateLabel(button));
@@ -109,8 +109,9 @@ public final class ButtonsPanelView
         final double requiredWidth = label.getLayoutBounds().getWidth() + 32
                 + button.getGraphicTextGap() + button.getInsets().getLeft()
                 + button.getInsets().getRight();
+        button.setPrefWidth(Math.ceil(requiredWidth));
         button.setContentDisplay(
-                requiredWidth <= button.getWidth() ? ContentDisplay.LEFT
+                requiredWidth <= buttonsBox.getWidth() ? ContentDisplay.LEFT
                         : ContentDisplay.GRAPHIC_ONLY);
     }
 

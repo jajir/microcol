@@ -27,20 +27,20 @@ public class TC_83_F74_wooden_buttons_test extends AbstractMicroColTest {
     @Test
     @Tag("local")
     void TC_01_menu_navigation_uses_wooden_buttons() throws Exception {
-        // Keep the existing menu actions while adopting compact toolbar
-        // controls.
+        // Each opening-menu button fits its label and icon in the shared
+        // toolbar style, preserving existing menu actions.
         final WoodenButtonsPage page = new WoodenButtonsPage(getContext());
         final WelcomePage welcome = WelcomePage.of(getContext());
         welcome.resizeWindow(1000, 800);
         welcome.verifyOpeningControls(false, false);
         welcome.verifyMenuPalette();
-        page.captureDialog("buttonSetting", "R-0297-menu-english.png");
+        page.captureDialog("buttonSetting", "R-0308-menu-english.png");
 
         // Changing window size preserves the column and continuous background.
         welcome.resizeWindow(1400, 1000);
         welcome.verifyOpeningControls(false, false);
         welcome.verifyMenuPalette();
-        page.captureDialog("buttonSetting", "R-0297-menu-wide.png");
+        page.captureDialog("buttonSetting", "R-0308-menu-wide.png");
 
         // Keyboard activation still opens Settings; Czech labels fit on return.
         page.focus("buttonSetting");
@@ -53,12 +53,12 @@ public class TC_83_F74_wooden_buttons_test extends AbstractMicroColTest {
         settings.goBack().verifyMainScreen();
         welcome.resizeWindow(1000, 700);
         welcome.verifyOpeningControls(true, false);
-        page.captureDialog("buttonSetting", "R-0297-menu-czech-small.png");
+        page.captureDialog("buttonSetting", "R-0308-menu-czech-small.png");
 
         // A narrow column hides whole labels but keeps names, icons and height.
         welcome.setMenuColumnWidth(58);
         welcome.verifyOpeningControls(true, true);
-        page.captureDialog("buttonSetting", "R-0297-menu-icons.png");
+        page.captureDialog("buttonSetting", "R-0308-menu-icons.png");
         welcome.setMenuColumnWidth(300);
         welcome.verifyOpeningControls(true, false);
 

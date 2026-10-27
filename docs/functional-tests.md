@@ -1,5 +1,51 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0308 opening menu content width — 2026-10-27
+
+1. [R-0308](requirements/done/R-0308.md) replaces the fixed 300-pixel opening-menu
+   column with buttons sized to their icon, full translated label and shared
+   padding. The hidden label is measured independently of its current
+   display mode, so widening the column restores it. Existing actions,
+   shared frame, typography, height and left alignment remain unchanged.
+2. Work and acceptance use an isolated checkout of `afc91632` plus this
+   change, preserving concurrent work on other screens. The shared Eclipse
+   formatter passed for the three changed Java files. The first formatter
+   command encountered the macOS Java stub; using the existing Homebrew
+   JDK 21 corrected the caller environment, with no source changes needed.
+3. All-model run `20261027T040722Z-043ba58d8160`, supervisor PID 65264,
+   passed all **4,764 tests in 344 suites**, zero failures/errors/skips.
+   Reports and source manifest: `target/verification/run-qbqvkg5s`.
+   Verification took **136.074 seconds**, 136.214 seconds including supervisor
+   cleanup, after 26.214 seconds waiting for the shared test lock. All 2,314
+   non-document source hashes match the candidate; no cleanup errors occurred.
+4. Targeted run `20261027T041224Z-5624e3d5eb04`, supervisor PID 68384,
+   passed **5 tests**, zero failures/errors/skips: TC83/01 (EN/CZ content
+   widths, resizing, hidden/restored labels, keyboard and settings navigation),
+   TC12 (new-game entry), and three `PageVerificationContractTest` checks.
+   Reports and screenshots: `target/docker-ui/run-VwNSj9`. Execution and
+   cleanup took **59.884 seconds**, after 392.638 seconds waiting for the
+   shared test lock; no cleanup errors occurred. Visual review confirmed
+   complete labels, individual button widths and unchanged left alignment,
+   height and frame in English, Czech and the narrow icon-only layout.
+   See the [English screenshot](graphics-assets/opening-menu-width-2026-10-27/menu-english.png)
+   and [Czech screenshot](graphics-assets/opening-menu-width-2026-10-27/menu-czech.png).
+5. Fixed smoke/support run `20261027T042225Z-6b0b61ebdf76`, supervisor
+   PID 71707, passed **21 checks in 12 suites**, zero failures/errors/skips
+   and zero model tests. Reports and source manifest:
+   `target/verification/run-b6rj1u56`. Complete XML reports match exactly
+   the fixed support selection and ten UI methods. Verification took
+   **200.805 seconds**, 200.969 seconds including cleanup, within the
+   420-second budget; the separate lock wait was 126.240 seconds.
+   No cleanup errors occurred. All 2,314 non-document source hashes match
+   the candidate and the accepted model manifest.
+6. Final review confirms the change is scoped to opening-menu sizing and
+   its existing scenario. Shared frame, font, icons and action handlers
+   remain unchanged. English, Czech and narrow-to-wide screenshots were
+   reviewed. Nine documentation checks and strict MkDocs passed; logs are
+   retained in `target/r0308` together with the shared formatter report.
+   R-0308 is locally accepted. Remote regression and publication are not
+   inspected; a local pass or push does not establish a new published build.
+
 ## R-0306 black question marks — 2026-10-27
 
 1. [R-0306](requirements/R-0306.md), based on `a28f774f`, changes the

@@ -1,5 +1,10 @@
 # Current requirement backlog
 
+Completed locally on 2026-10-27:
+[R-0308 — opening-menu buttons fit their contents](done/R-0308.md).
+Content widths, EN/CZ labels and compact fallback passed local acceptance; see the
+[evidence](../functional-tests.md#r-0308-opening-menu-content-width-2026-10-27).
+
 Implemented without test execution at the user's request on 2026-10-27:
 [R-0306 — stronger black question marks](R-0306.md). Status remains
 `ready for development` pending verified acceptance; see the
