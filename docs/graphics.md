@@ -1,5 +1,21 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Spodní řádek Čistá linka — 27. října 2026
+
+1. Uživatel vybral **Čistou linku** z pěti návrhů a menší mince se zachováním
+   optické síly obrysu. [R-0327](requirements/done/R-0327.md) používá společný
+   papírový panel s jedinou horní linkou, bez svislých dělicích čar a rámečků.
+   Vlevo je kontext, vpravo mince s částkou a `AD` s rokem; sezóna se zachovává.
+2. Písmo zůstává Playpen Sans Regular 14. Ikona má 32×26 logických px,
+   tah 1,6 px, inkoust `#302D27` a jednolité okrové výplně. Zmenšení ikony
+   proto neztenčuje obrys. Číslo pokladny se nezmenšuje.
+3. Vektorová předloha [status-gold.svg](../microcol-game/src/graphics/status-gold.svg)
+   navazuje na schválenou siluetu mincí a kreslené herní postavičky.
+   [Runtime PNG](../microcol-game/src/main/resources/images/status-gold.png)
+   má 64×52 px; export: `rsvg-convert -w 64 -h 52 -o microcol-game/src/main/resources/images/status-gold.png microcol-game/src/graphics/status-gold.svg`.
+4. Skutečné ověření a snímky vede [funkční evidence](functional-tests.md#r-0327-clean-status-line-2026-10-27).
+
+
 ## Návrhy odlehčení nápovědy — 27. října 2026
 
 1. Podle uživatelova anotovaného snímku bude název vlevo v horní liště, bez

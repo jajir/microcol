@@ -111,20 +111,20 @@ public class TC_181_F208_reference_profile_matrix_english_test
         // The new game starts in 1490 on the human's first turn.
         profile.verifyProfile(nation, difficulty, difficultyLabel, gold);
         profile.verifyPlayedTurns(0);
-        audit.verifyDisplayedDate("Year 1490 AD");
+        audit.verifyDisplayedDate("AD 1490");
 
         // End the human turn; the computer nations and Crowns act, then the
         // next round starts. The profile and the gold must not change.
         game.nextTurnAndCloseDialogs();
         profile.verifyProfile(nation, difficulty, difficultyLabel, gold);
         profile.verifyPlayedTurns(1);
-        audit.verifyDisplayedDate("Year 1491 AD");
+        audit.verifyDisplayedDate("AD 1491");
 
         // Leaving the game saves it; Continue reopens the same position.
         game.exitToMenu();
         audit.continueGame();
         profile.verifyProfile(nation, difficulty, difficultyLabel, gold);
         profile.verifyPlayedTurns(1);
-        audit.verifyDisplayedDate("Year 1491 AD");
+        audit.verifyDisplayedDate("AD 1491");
     }
 }

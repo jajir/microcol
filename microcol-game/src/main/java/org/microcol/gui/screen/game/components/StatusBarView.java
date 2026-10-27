@@ -1,10 +1,12 @@
 package org.microcol.gui.screen.game.components;
 
 import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.gui.image.ImageProvider;
 
 import com.google.inject.Inject;
 
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Priority;
@@ -40,6 +42,14 @@ public final class StatusBarView implements JavaFxComponent {
         labelGold = new Label();
         labelGold.setId("labelGold");
         labelGold.setMinWidth(Region.USE_PREF_SIZE);
+        final ImageView goldIcon = new ImageView(
+                ImageProvider.getRawImage("status-gold.png"));
+        goldIcon.setId("statusGoldIcon");
+        goldIcon.setFitWidth(32);
+        goldIcon.setFitHeight(26);
+        goldIcon.setMouseTransparent(true);
+        labelGold.setGraphic(goldIcon);
+        labelGold.setGraphicTextGap(8);
 
         statusBar = new HBox();
         statusBar.setMinHeight(Region.USE_PREF_SIZE);

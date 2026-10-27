@@ -1,5 +1,18 @@
 # Use cases a přejímka pravidel hry
 
+## UC-114/119: spodní řádek Čistá linka — 2026-10-27
+
+1. [R-0327](requirements/done/R-0327.md) mění společný informační panel: kontext
+   pod kurzorem, menší kreslené mince se stavem pokladny a AD s rokem.
+   Zůstává lokalizace, dostupnost dlouhých textů a sezón, aktualizace hodnot
+   i návraty mezi obrazovkami bez změn pravidel.
+2. TC21/10 kontroluje rozložení, překlady a vzhled; TC188/01–02 hover/fokus
+   a sezóny; TC37/01–03 datum přes hranici roku a Pokračovat; TC192/01–02
+   společný panel ostatních obrazovek. Nákup/prodej a aktualizaci pokladny
+   dále chrání TC06 v pevném smoke. Skutečné výsledky jsou ve
+   [funkční evidenci](functional-tests.md#r-0327-clean-status-line-2026-10-27).
+
+
 ## UC-008/012: obrys říčních břehů — R-0320 (2026-10-27)
 
 1. [R-0320](requirements/done/R-0320.md) upravuje vzhled MAP-004 a UC-008/012:

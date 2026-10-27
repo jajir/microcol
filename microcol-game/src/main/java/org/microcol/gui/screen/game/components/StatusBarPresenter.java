@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.game.components;
 
+import java.util.Locale;
+
 import org.microcol.gui.Loc;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
@@ -110,8 +112,7 @@ final class StatusBarPresenter implements UpdatableLanguage {
     private void setYearText(final Label labelEra, final Calendar calendar) {
         Preconditions.checkNotNull(labelEra);
         Preconditions.checkNotNull(calendar);
-        String date = i18n.get(Loc.statusBar_era) + " "
-                + calendar.getCurrentYear() + " AD";
+        String date = "AD " + calendar.getCurrentYear();
         if (calendar.getCurrentSeason().isPresent()) {
             date += " " + i18n.get(Loc
                     .getTerrainDescription(calendar.getCurrentSeason().get()));
@@ -120,7 +121,11 @@ final class StatusBarPresenter implements UpdatableLanguage {
     }
 
     private void setGoldText(final int gold) {
-        getLabelGold().setText(i18n.get(Loc.statusBar_gold) + " " + gold);
+        final String amount = String.format(Locale.ROOT, "%,d", gold)
+                .replace(',', '\u00a0');
+        getLabelGold().setText(amount);
+        getLabelGold()
+                .setAccessibleText(i18n.get(Loc.statusBar_gold) + " " + amount);
     }
 
     /**

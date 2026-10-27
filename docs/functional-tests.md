@@ -1,5 +1,43 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0327 clean status line — 2026-10-27
+
+1. [R-0327](requirements/done/R-0327.md) changes the shared status presentation:
+   hover context, 32×26 gold icon with a 1.6 px logical contour, grouped treasury
+   amount and AD/year with the existing localized season. Gameplay expectations
+   remain unchanged. Exact old date strings and gold text parsing are updated.
+2. TC21/10 checks the single top edge, absence of inner separators, icon size,
+   accessible gold text, English/Czech labels, wrapped context and 1280×850 /
+   900×700 layouts. Existing frame checks cover Europe and the colony as well.
+3. Targeted Docker/Xvfb selection passed **11 tests, 0 failures, 0 errors,
+   0 skips**: TC21/10, TC37/01–03, TC188/01–02, TC192/01–02 and the three
+   `PageVerificationContractTest` checks. Reports are retained in
+   `target/docker-ui/run-VSgdQW/microcol-test/surefire-reports/`.
+4. Model/JUnit acceptance passed **4,777 tests, 0 failures, 0 errors, 0 skips**
+   in 134.872 s (`target/verification/run-e62puz3i/summary.json`), completion
+   `20261027T192636Z-6c994db5035c`, PID 21557, timeout 600 s. All 17 changed
+   executable/test/asset files match that source snapshot; hashes are retained
+   in `target/r0327/source-sha256.json`.
+5. Targeted completion `20261027T192938Z-b1498bafba49`, PID 22603,
+   timeout 1,800 s, finished successfully in 132.438 s. Visual review of the
+   [English 1280×850 panel](graphics-assets/status-line-2026-10-27/status-en.png)
+   and [Czech 900×700 panel](graphics-assets/status-line-2026-10-27/status-cs-small.png)
+   confirms the smaller coins, consistent outline, wrapped context, readable
+   amount/date and absence of inner separators.
+6. Fixed smoke/support acceptance passed **21 tests in 12 suites, 0 failures,
+   0 errors, 0 skips**, with no repeated model tests. The ten UI scenarios in
+   `scripts/ui-tests/smoke.json` and eleven support checks passed in 203.666
+   verifier seconds (203.790 s including cleanup), within the 420 s budget.
+   Reports and exact selection: `target/verification/run-n34ypyxj/summary.json`.
+   Completion `20261027T193224Z-b9e3614208bf`, PID 23147, supervisor timeout 480 s.
+   All 17 changed executable/test/asset files match the model and smoke snapshots
+   on base `ca67c34697415d9b86df2d3fa107cb4282b44c17` plus this task's changes.
+7. Shared Eclipse formatting and review preserve existing gameplay assertions.
+   Final documentation validation uses the nine consistency checks and strict
+   MkDocs build; logs are retained in `target/r0327/`. Local acceptance does not
+   establish remote regression or distribution publication; neither is inspected.
+
+
 ## R-0324 full-window Help — 2026-10-27
 
 1. [R-0324](requirements/done/R-0324.md), UC-114/119, moves Help from a separate modal

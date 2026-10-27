@@ -69,9 +69,7 @@
 /* Reuse the button's ink and slice scale for each single freehand edge. */
 .game-screen .buttonPanel,
 .game-screen #rightPanel,
-.game-screen #statusBar,
-.game-screen #statusBar #description,
-.game-screen #statusBar #labelGold {
+.game-screen #statusBar {
     -fx-border-color: transparent;
     -fx-border-image-source: url("../images/game-toolbar-frame.png");
     -fx-border-image-slice: 12;
@@ -89,8 +87,4 @@
 .game-screen #statusBar {
     -fx-border-image-width: 6 0 0 0;
     -fx-border-image-insets: -3 0 0 0;
-}
-.game-screen #statusBar #description,
-.game-screen #statusBar #labelGold {
-    -fx-border-image-width: 0 6 0 0;
 }

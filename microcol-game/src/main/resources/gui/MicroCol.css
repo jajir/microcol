@@ -36,9 +36,6 @@
 
 #statusBar #description {
     -fx-alignment: center-left;
-    -fx-border-style: solid inside;
-    -fx-border-color: #746E60;
-    -fx-border-width: 0 1 0 0;
 }
 
 #statusBar #description .label {
@@ -47,9 +44,6 @@
 
 #statusBar #labelGold {
     -fx-padding: 0 16 0 16;
-    -fx-border-style: solid inside;
-    -fx-border-color: #746E60;
-    -fx-border-width: 0 1 0 0;
 }
 
 #statusBar #labelEra {

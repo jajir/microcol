@@ -814,3 +814,12 @@ remain owned by their current requirements; acceptance is recorded in the
    narrow search to the index and raise the article. Three proposals compare
    hand-drawn controls and inner structure. Status: `waiting for refinement`;
    a variant choice precedes gameplay implementation.
+
+## Clean status line (2026-10-27)
+
+1. [R-0327](done/R-0327.md), primary area A03, implements the selected Čistá linka:
+   hover context, a smaller gold icon with consistent ink weight, the treasury
+   amount and AD/year. A04 and A06 retain date and treasury rules.
+   Status: `done`. Implementation and required local acceptance are complete;
+   [test evidence](../functional-tests.md#r-0327-clean-status-line-2026-10-27) records
+   the results. Remote regression and publication remain independently verified.

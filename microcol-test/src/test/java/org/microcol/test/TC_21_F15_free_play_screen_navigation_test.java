@@ -224,6 +224,7 @@ public class TC_21_F15_free_play_screen_navigation_test
         layout.verifyLayout(english);
         layout.verifyStatusBar();
         layout.verifyMainScreenSeparators();
+        layout.verifyStatusValues("10\u00a0000", "AD 1508", "Gold 10\u00a0000");
         layout.saveEvidence("R-0267-main-English.png");
         layout.verifyMapTouchesSeparators();
         layout.verifyMainScreenTypography();
@@ -237,11 +238,13 @@ public class TC_21_F15_free_play_screen_navigation_test
         settings.goBack();
         new FreePlayAuditPage(getContext()).continueGame();
         String czech = "Nový Amsterdam: opevněná pobřežní kolonie s pracovníky, uloženým zbožím a lodí čekající na další plavbu.";
-        layout.resize(1000, 700);
+        layout.resize(900, 700);
         layout.showContextMessage(czech);
         layout.verifyLayout(czech);
         layout.verifyStatusBar();
         layout.verifyMainScreenSeparators();
+        layout.verifyStatusValues("10\u00a0000", "AD 1508",
+                "Zlato 10\u00a0000");
         layout.saveEvidence("R-0267-main-Czech-small.png");
         layout.verifyMapTouchesSeparators();
         layout.verifyMainScreenTypography();

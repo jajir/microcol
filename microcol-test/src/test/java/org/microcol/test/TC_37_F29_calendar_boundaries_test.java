@@ -39,22 +39,22 @@ public class TC_37_F29_calendar_boundaries_test extends AbstractMicroColTest {
         // Load the last annual turn and advance complete rounds with the UI.
         GamePage game = WelcomePage.of(getContext()).loadGame();
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
-        audit.verifyDisplayedDate("Year 1599 AD");
+        audit.verifyDisplayedDate("AD 1599");
         game.nextTurnAndCloseDialogs();
-        audit.verifyDisplayedDate("Year 1600 AD Spring");
+        audit.verifyDisplayedDate("AD 1600 Spring");
         game.nextTurnAndCloseDialogs();
-        audit.verifyDisplayedDate("Year 1600 AD Summer");
+        audit.verifyDisplayedDate("AD 1600 Summer");
         game.nextTurnAndCloseDialogs();
-        audit.verifyDisplayedDate("Year 1600 AD Autumn");
+        audit.verifyDisplayedDate("AD 1600 Autumn");
         game.nextTurnAndCloseDialogs();
-        audit.verifyDisplayedDate("Year 1600 AD Winter");
+        audit.verifyDisplayedDate("AD 1600 Winter");
 
         // Save and continue the winter position, then advance into spring.
         game.exitToMenu().verifyMainScreen();
         game = audit.continueGame();
-        audit.verifyDisplayedDate("Year 1600 AD Winter");
+        audit.verifyDisplayedDate("AD 1600 Winter");
         game.nextTurnAndCloseDialogs();
-        audit.verifyDisplayedDate("Year 1601 AD Spring");
+        audit.verifyDisplayedDate("AD 1601 Spring");
     }
 
     @Test
@@ -69,7 +69,7 @@ public class TC_37_F29_calendar_boundaries_test extends AbstractMicroColTest {
 
         // Continue must neither advance the calendar nor rewrite that file.
         audit.continueGame();
-        audit.verifyDisplayedDate("Year 1599 AD");
+        audit.verifyDisplayedDate("AD 1599");
         audit.verifyCalendarAndGold(109, 10000);
         audit.verifyAutosaveUnchanged(saved);
         audit.verifyAutosaveLastModifiedTime(modified);
@@ -83,14 +83,14 @@ public class TC_37_F29_calendar_boundaries_test extends AbstractMicroColTest {
         audit.chooseLoadFile(new File(
                 "src/test/scenarios/F29-calendar-late-start.microcol"));
         final GamePage game = WelcomePage.of(getContext()).loadGame();
-        audit.verifyDisplayedDate("Year 1630 AD Winter");
+        audit.verifyDisplayedDate("AD 1630 Winter");
 
         // Complete a round and preserve the resulting spring through Continue.
         game.nextTurnAndCloseDialogs();
-        audit.verifyDisplayedDate("Year 1631 AD Spring");
+        audit.verifyDisplayedDate("AD 1631 Spring");
         game.exitToMenu().verifyMainScreen();
         audit.continueGame();
-        audit.verifyDisplayedDate("Year 1631 AD Spring");
+        audit.verifyDisplayedDate("AD 1631 Spring");
     }
 
     @Test

@@ -44,7 +44,7 @@ public class TC_36_F28_national_turn_order_test extends AbstractMicroColTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         final NationalTurnPage turns = new NationalTurnPage(getContext());
-        audit.verifyDisplayedDate("Year 1508 AD");
+        audit.verifyDisplayedDate("AD 1508");
         audit.verifyCalendarAndGold(18, 10000);
 
         // End the human turn, let all present Crowns/nations act, and return
@@ -52,7 +52,7 @@ public class TC_36_F28_national_turn_order_test extends AbstractMicroColTest {
         turns.observeTurnOrder();
         game.nextTurnAndCloseDialogs();
         turns.verifyTurnOrder(ORDER);
-        audit.verifyDisplayedDate("Year 1509 AD");
+        audit.verifyDisplayedDate("AD 1509");
         audit.verifyCalendarAndGold(19, 10000);
         final JsonElement prepared = turns.readTurnState();
 
@@ -64,13 +64,13 @@ public class TC_36_F28_national_turn_order_test extends AbstractMicroColTest {
         game.exitToMenu().verifyMainScreen();
         game = audit.continueGame();
         turns.verifyTurnState(prepared);
-        audit.verifyDisplayedDate("Year 1509 AD");
+        audit.verifyDisplayedDate("AD 1509");
 
         // Another complete round follows the same order and advances only once.
         turns.observeTurnOrder();
         game.nextTurnAndCloseDialogs();
         turns.verifyTurnOrder(ORDER);
-        audit.verifyDisplayedDate("Year 1510 AD");
+        audit.verifyDisplayedDate("AD 1510");
         audit.verifyCalendarAndGold(20, 10000);
     }
 
@@ -106,7 +106,7 @@ public class TC_36_F28_national_turn_order_test extends AbstractMicroColTest {
         // round.
         turns.verifyTurnOrder(ORDER);
         audit.verifyCalendarAndGold(19, 10000);
-        audit.verifyDisplayedDate("Year 1509 AD");
+        audit.verifyDisplayedDate("AD 1509");
     }
 
     @Test

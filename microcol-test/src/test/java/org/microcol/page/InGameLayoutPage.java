@@ -183,8 +183,9 @@ public final class InGameLayoutPage extends AbstractScreen {
             assertEquals(pageBounds.getMaxY(), bottom.getMaxY(), 1,
                     "Status remains at the bottom of the screen");
             assertTrue(status.getHeight() >= 72);
-            assertTrue(((Label) root.lookup("#labelGold")).getText()
-                    .endsWith(" " + expectedGold));
+            assertEquals(Integer.toString(expectedGold),
+                    ((Label) root.lookup("#labelGold")).getText()
+                            .replace("\u00a0", ""));
             assertTrue(((Label) root.lookup("#labelEra")).getText()
                     .contains(Integer.toString(expectedYear)));
             for (Node control : ((javafx.scene.Parent) toolbar)

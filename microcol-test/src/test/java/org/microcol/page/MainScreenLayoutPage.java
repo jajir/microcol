@@ -16,6 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.BorderImage;
 import javafx.scene.layout.Region;
@@ -79,18 +80,17 @@ public final class MainScreenLayoutPage extends AbstractScreen {
             assertTrue(bounds("statusBar")
                     .getMaxY() <= bar.getScene().getHeight() + 1,
                     "Status panel remains inside the scene");
-            for (String id : new String[] { "description", "labelGold" }) {
+            for (String id : new String[] { "description", "labelGold",
+                    "labelEra" }) {
                 final Region field = (Region) node(id);
-                assertEquals(new BorderWidths(0, 1, 0, 0),
-                        field.getBorder().getStrokes().get(0).getWidths(), id);
+                assertTrue(
+                        field.getBorder() == null || (field.getBorder()
+                                .getImages().isEmpty()
+                                && field.getBorder().getStrokes().stream()
+                                        .allMatch(stroke -> BorderWidths.EMPTY
+                                                .equals(stroke.getWidths()))),
+                        id + " has no internal divider or frame");
             }
-            final Region year = (Region) node("labelEra");
-            assertTrue(
-                    year.getBorder() == null
-                            || year.getBorder().getStrokes().stream()
-                                    .allMatch(stroke -> BorderWidths.EMPTY
-                                            .equals(stroke.getWidths())),
-                    "Year has no frame");
             for (String id : new String[] { "statusBarLabel", "labelGold",
                     "labelEra" }) {
                 final Label label = (Label) node(id);
@@ -104,6 +104,24 @@ public final class MainScreenLayoutPage extends AbstractScreen {
             }
             assertTrue(bounds("labelGold")
                     .getMaxX() <= bounds("labelEra").getMinX() + 1);
+            final ImageView icon = (ImageView) ((Label) node("labelGold"))
+                    .getGraphic();
+            assertNotNull(icon, "Gold has a drawn coin icon");
+            assertEquals(32, icon.getFitWidth());
+            assertEquals(26, icon.getFitHeight());
+            assertFalse(icon.getImage().isError());
+            assertEquals(64, icon.getImage().getWidth());
+            assertEquals(52, icon.getImage().getHeight());
+        });
+    }
+
+    public void verifyStatusValues(final String amount, final String date,
+            final String accessibleGold) {
+        getRobot().interact(() -> {
+            final Label gold = (Label) node("labelGold");
+            assertEquals(amount, gold.getText());
+            assertEquals(accessibleGold, gold.getAccessibleText());
+            assertEquals(date, ((Label) node("labelEra")).getText());
         });
     }
 
@@ -114,13 +132,10 @@ public final class MainScreenLayoutPage extends AbstractScreen {
             final BorderImage frame = button.getBorder().getImages().get(0);
             final double width = frame.getWidths().getTop();
             final String[] selectors = { ".buttonPanel", "#rightPanel",
-                    "#statusBar", "#statusBar #description",
-                    "#statusBar #labelGold" };
+                    "#statusBar" };
             final BorderWidths[] edges = { new BorderWidths(0, 0, width, 0),
                     new BorderWidths(0, 0, 0, width),
-                    new BorderWidths(width, 0, 0, 0),
-                    new BorderWidths(0, width, 0, 0),
-                    new BorderWidths(0, width, 0, 0) };
+                    new BorderWidths(width, 0, 0, 0) };
             for (int i = 0; i < selectors.length; i++) {
                 final Region panel = getNodeFinder().lookup(selectors[i])
                         .queryAs(Region.class);

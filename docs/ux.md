@@ -1,5 +1,21 @@
 # UX a pravidla ovládání MicroCol
 
+## Jednoduchý spodní řádek — 27. října 2026
+
+1. [R-0327](requirements/done/R-0327.md) zachovává vlevo existující popis objektu
+   pod myší nebo nápovědu zaměřeného ovládání. Dlouhý text se zalamuje;
+   údaje o pokladně a datu zůstávají vpravo čitelné a nepřekrývají jej.
+2. Kreslené mince nahrazují slovní předponu zlata. Částka používá nezalomitelné
+   mezery mezi tisíci; přístupný název stále obsahuje lokalizované Zlato/Gold.
+   Stávající nápověda po najetí na peníze a datum zůstává zachovaná.
+3. Datum začíná `AD`, následuje rok a případné lokalizované roční období.
+   Změny zlata, tahu a jazyka i Pokračovat používají skutečný modelový stav.
+   Jde o informační panel bez nových akcí. Vzhled určuje
+   [grafické pravidlo](graphics.md#spodni-radek-cista-linka-27-rijna-2026).
+4. Přejímku uvádí [funkční evidence](functional-tests.md#r-0327-clean-status-line-2026-10-27);
+   nejde o pozorování hráčů při uživatelském testování.
+
+
 ## Nápověda v hlavním okně — 2026-10-27
 
 1. [R-0324](requirements/done/R-0324.md) sjednocuje Help s Cíli: tlačítko na mapě i H

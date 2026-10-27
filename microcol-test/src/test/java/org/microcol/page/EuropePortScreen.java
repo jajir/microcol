@@ -61,8 +61,7 @@ public class EuropePortScreen extends AbstractScreen {
 
     public void verifyGold(final int expectedAmountOfGold) {
         final Labeled labeledGold = getLabeledById("labelGold");
-        String gold = labeledGold.getText();
-        gold = gold.substring(gold.lastIndexOf(" ") + 1);
+        final String gold = labeledGold.getText().replace("\u00a0", "");
         final int realGold = Integer.valueOf(gold);
         assertEquals(expectedAmountOfGold, realGold,
                 String.format("Expected gold was '%s' but really is '%s'",
