@@ -98,7 +98,7 @@ final class GamePaintService {
                                     .getModel().getMap().getTerrainAt(location),
                             gameTick);
                 } else {
-                    paintHiddenTile(graphics, point);
+                    paintService.paintHiddenTile(graphics, point);
                 }
             }
         }
@@ -204,22 +204,13 @@ final class GamePaintService {
                 final Location location = Location.of(i, j);
                 final Point point = area.convertToCanvasPoint(location);
                 if (!player.isVisible(location)) {
-                    paintHiddenTile(graphics, point);
+                    paintService.paintHiddenTile(graphics, point);
                     paintService.paintUnknownMark(graphics, point, location);
                 } else {
                     paintService.paintHiddenCoast(graphics, point, location);
                 }
             }
         }
-    }
-
-    private void paintHiddenTile(final GraphicsContext graphics,
-            final Point point) {
-        graphics.save();
-        graphics.setFill(Color.web("#9B9486"));
-        graphics.fillRect(point.getX(), point.getY(), TILE_WIDTH_IN_PX,
-                TILE_WIDTH_IN_PX);
-        graphics.restore();
     }
 
     /**

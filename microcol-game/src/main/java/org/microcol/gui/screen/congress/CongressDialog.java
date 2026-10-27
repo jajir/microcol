@@ -50,6 +50,7 @@ public final class CongressDialog extends AbstractMessageWindow {
         this.page = page;
         candidates.setId("congressCandidates");
         candidates.setPrefHeight(190);
+        candidates.setMinHeight(Region.USE_PREF_SIZE);
         candidates.setCellFactory(view -> new ListCell<>() {
             @Override
             protected void updateItem(FounderOffer offer, boolean empty) {

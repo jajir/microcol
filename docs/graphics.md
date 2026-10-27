@@ -1,5 +1,21 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Náhled neobjeveného pole — 27. října 2026
+
+1. [R-0318](requirements/done/R-0318.md) sjednocuje pravý náhled s mapovou mlhou:
+   stejné šedobéžové pozadí `#9B9486` a stejný případný otazník podle souřadnic.
+   Náhled nepřebírá rámeček výběru ani dočasné mapové efekty a neodhaluje skrytý
+   obsah. Při změně vybraného pole se odstraní i přesahy předchozí kresby.
+2. Statické kresby známého terénu a pravidla dohledu zůstávají zachované.
+   Úplné sjednocení všech vrstev známé mapy není součástí této opravy.
+   Lokální přejímku a skutečné snímky vede [funkční evidence](functional-tests.md#r-0318-unknown-tile-preview-2026-10-27). Cílené testy,
+   vizuální kontrola níže uvedených snímků i závěrečná smoke přejímka prošly.
+
+![Skutečný náhled vybraného neobjeveného pole s otazníkem](graphics-assets/unknown-preview-2026-10-27/marked.png)
+
+[Stejné ověření pole bez otazníku](graphics-assets/unknown-preview-2026-10-27/unmarked.png).
+
+
 ## Jezero se třemi kruhy K3 — 27. října 2026
 
 1. Uživatel vybral [K3 — Tři drobné kruhy](graphics-assets/lake-animations-2026-10-27/k3.gif)

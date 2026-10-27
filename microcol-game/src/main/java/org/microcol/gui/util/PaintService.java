@@ -107,6 +107,16 @@ public final class PaintService {
         this.colonyFont = fontService.getDefault(14);
     }
 
+    /** Shared unknown-terrain background for the map and tile preview. */
+    public void paintHiddenTile(final GraphicsContext graphics,
+            final Point point) {
+        graphics.save();
+        graphics.setFill(Color.web("#9B9486"));
+        graphics.fillRect(point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX,
+                Tile.TILE_WIDTH_IN_PX);
+        graphics.restore();
+    }
+
     public void paintUnknownMark(final GraphicsContext graphics,
             final Point point, final Location location) {
         if (mapManager.hasUnknownMark(location)) {

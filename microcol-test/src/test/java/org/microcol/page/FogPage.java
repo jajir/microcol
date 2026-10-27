@@ -11,7 +11,6 @@ import javax.imageio.ImageIO;
 import org.microcol.gui.Point;
 import org.microcol.gui.Tile;
 import org.microcol.gui.event.model.ForeignStepProbe;
-import org.microcol.gui.image.ImageLoaderTerrain;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.components.StatusBarView;
 import org.microcol.gui.screen.game.gamepanel.GamePanelComponent;
@@ -330,19 +329,18 @@ public final class FogPage extends AbstractScreen {
     }
 
     public void verifyRevealedPixels(final Location location) throws Exception {
+        verifyExplored(location, true);
         final Image actual = WaitForAsyncUtils.asyncFx(
                 () -> org.microcol.gui.screen.game.gamepanel.FogFrameProbe
                         .captureCanvas(getContext()))
                 .get(10, TimeUnit.SECONDS);
-        final Image hidden = getContext().getClassFromGuice(ImageProvider.class)
-                .getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN);
         final Point point = getContext().getArea()
                 .convertToCanvasPoint(location);
         boolean different = false;
+        // Avoid both the selection border and the unknown question mark.
         for (int y = 12; y < Tile.TILE_WIDTH_IN_PX - 12; y += 8) {
-            for (int x = 12; x < Tile.TILE_WIDTH_IN_PX - 12; x += 8) {
-                different |= hidden.getPixelReader().getArgb(x, y) != actual
-                        .getPixelReader()
+            for (int x : new int[] { 12, Tile.TILE_WIDTH_IN_PX - 13 }) {
+                different |= 0xFF9B9486 != actual.getPixelReader()
                         .getArgb(point.getX() + x, point.getY() + y);
             }
         }
@@ -688,5 +686,88 @@ public final class FogPage extends AbstractScreen {
                         "Hidden tile " + location);
             }
         }
+    }
+
+    public void verifyUnknownPreview(final Location location,
+            final boolean expectedMark) {
+        verifyExplored(location, false);
+        getRobot().interact(() -> {
+            final javafx.scene.Scene scene = getContext().getPrimaryStage()
+                    .getScene();
+            final javafx.scene.layout.Region root = (javafx.scene.layout.Region) scene
+                    .getRoot();
+            final double width = scene.getWidth();
+            final double height = scene.getHeight();
+            final double preferredWidth = root.getPrefWidth();
+            final double preferredHeight = root.getPrefHeight();
+            // Node snapshots otherwise lay out the menu's oversized root.
+            root.setPrefSize(width, height);
+            try {
+                final Canvas map = getContext()
+                        .getClassFromGuice(GamePanelComponent.class)
+                        .getCanvas();
+                final Canvas preview = (Canvas) ((javafx.scene.layout.Pane) getNodeFinder()
+                        .lookup("#tileImage").query()).getChildren().get(0);
+                final Point point = getContext().getArea()
+                        .convertToCanvasPoint(location);
+                for (int scale : new int[] { 1, 2 }) {
+                    final javafx.scene.SnapshotParameters parameters = new javafx.scene.SnapshotParameters();
+                    parameters.setFill(Color.TRANSPARENT);
+                    parameters.setTransform(
+                            new javafx.scene.transform.Scale(scale, scale));
+                    final Image mapImage = map.snapshot(parameters, null);
+                    final Image previewImage = preview.snapshot(parameters,
+                            null);
+                    assertEquals(0xFF9B9486,
+                            previewImage.getPixelReader().getArgb(12 * scale,
+                                    8 * scale),
+                            "Preview uses the current fog background");
+                    int ink = 0;
+                    // The map selection outline is not part of the tile
+                    // preview.
+                    for (int y = 3 * scale; y < (Tile.TILE_WIDTH_IN_PX - 3)
+                            * scale; y++) {
+                        for (int x = 3 * scale; x < (Tile.TILE_WIDTH_IN_PX - 3)
+                                * scale; x++) {
+                            final int actual = previewImage.getPixelReader()
+                                    .getArgb(4 * scale + x, y);
+                            assertEquals(
+                                    mapImage.getPixelReader()
+                                            .getArgb(point.getX() * scale + x,
+                                                    point.getY() * scale + y),
+                                    actual,
+                                    "Preview matches selected unknown tile "
+                                            + location + " at " + x + "," + y
+                                            + " scale " + scale);
+                            if (actual != 0xFF9B9486) {
+                                ink++;
+                            }
+                        }
+                    }
+                    assertEquals(expectedMark, ink > 0,
+                            "Question mark belongs to the selected location");
+                    for (int y = 0; y < Tile.TILE_WIDTH_IN_PX * scale; y++) {
+                        // At 2x, ignore only interpolation along the opaque
+                        // edge.
+                        for (int x = 0; x < 4 * scale - (scale - 1); x++) {
+                            assertEquals(0,
+                                    previewImage.getPixelReader().getArgb(x,
+                                            y) >>> 24,
+                                    "Left preview margin is clear");
+                            assertEquals(0,
+                                    previewImage.getPixelReader().getArgb(
+                                            (Tile.TILE_WIDTH_IN_PX + 4) * scale
+                                                    + x + (scale - 1),
+                                            y) >>> 24,
+                                    "Right preview margin is clear");
+                        }
+                    }
+                }
+            } finally {
+                root.setPrefSize(preferredWidth, preferredHeight);
+                root.resize(width, height);
+                root.layout();
+            }
+        });
     }
 }

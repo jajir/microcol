@@ -1,9 +1,9 @@
 # Current requirement backlog
 
-Captured on 2026-10-27: [R-0318 — unexplored tile preview](R-0318.md), A03 with
-A05 exploration dependencies. Source analysis explains the dark legacy atlas
-tile in the panel and proposes shared fog drawing with the map. Status: `new`;
-no gameplay implementation or fresh gameplay verification is claimed.
+Accepted locally on 2026-10-27: [R-0318 — unexplored tile preview](done/R-0318.md),
+A03 with A05 exploration and A10 founder-check dependencies. Map and panel share
+fog drawing; a supporting Congress layout repair keeps candidates selectable.
+Status: `done`; [local acceptance](../functional-tests.md#r-0318-unknown-tile-preview-2026-10-27) passed.
 
 Implemented on 2026-10-27: [R-0315 — two-arm river mouth](R-0315.md).
 The selected appearance applies to existing known coastal river endpoints,

@@ -16,7 +16,6 @@ import com.google.inject.Inject;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 /**
@@ -53,8 +52,11 @@ class TilePainter {
                 sighting, false);
     }
 
-    void setImage(final Image image) {
-        canvas.getGraphicsContext2D().drawImage(image, 4, 0);
+    void setHiddenTerrain(final Location location) {
+        final GraphicsContext graphics = canvas.getGraphicsContext2D();
+        graphics.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        paintService.paintHiddenTile(graphics, Point.of(4, 0));
+        paintService.paintUnknownMark(graphics, Point.of(4, 0), location);
     }
 
     void clear() {

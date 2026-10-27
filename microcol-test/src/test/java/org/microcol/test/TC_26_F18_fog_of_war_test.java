@@ -367,4 +367,55 @@ public class TC_26_F18_fog_of_war_test extends AbstractMicroColTest {
         fog.verifyUnknownMark(marked, false);
         fog.verifyUnitLocation(3, START);
     }
+
+    /** The selected unknown square keeps the map's fog and its own mark. */
+    @Test
+    @Tag("local")
+    void TC_11_unknown_preview_matches_map_tile() throws Exception {
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final FogPage fog = new FogPage(getContext());
+        final Location marked = Location.of(27, 20);
+        final Location south = Location.of(25, 18);
+        fog.centerFrontier();
+
+        // Replace an occupied colony preview without leaving its artwork
+        // behind.
+        game.openColonyAt(OWN_COLONY, "New Amsterdam").closeWithEscape();
+        fog.inspect(ENEMY);
+        fog.verifyUnknownPreview(ENEMY, false);
+        fog.verifyUnknownInformation("This area is still hidden",
+                "Hidden Quebec");
+        fog.inspect(marked);
+        fog.verifyUnknownPreview(marked, true);
+        fog.captureDialog("rightPanel", "R-0318-marked-preview.png");
+        fog.saveMapEvidence("R-0318-selected-unknown-map.png");
+
+        // Panning, resizing and Continue retain the selected square's
+        // appearance.
+        fog.centerOn(Location.of(28, 18));
+        fog.verifyUnknownPreview(marked, true);
+        fog.resizeMapWindow(1100, 800);
+        fog.centerFrontier();
+        fog.inspect(ENEMY);
+        fog.verifyUnknownPreview(ENEMY, false);
+        fog.captureDialog("rightPanel", "R-0318-unmarked-preview.png");
+        game.exitToMenu();
+        new FreePlayAuditPage(getContext()).continueGame();
+        fog.centerFrontier();
+        fog.inspect(marked);
+        fog.verifyUnknownPreview(marked, true);
+
+        // Discovery replaces fog, and leaving sight keeps the terrain known.
+        fog.move(START, south, 3);
+        fog.inspect(marked);
+        fog.verifyUnknownMark(marked, false);
+        fog.verifyRevealedPixels(marked);
+        fog.verifyRightPanelContains("Move cost");
+        fog.move(south, START, 3);
+        fog.inspect(marked);
+        fog.verifyCurrentSight(marked, false);
+        fog.verifyRevealedPixels(marked);
+        fog.verifyRightPanelContains("Move cost");
+        fog.verifyUnitLocation(3, START);
+    }
 }

@@ -1,5 +1,13 @@
 # Use cases a přejímka pravidel hry
 
+### UC-006/114/119: náhled neobjeveného pole — 2026-10-27
+
+1. [R-0318](requirements/done/R-0318.md) přidává TC26/F18/11: shodu mapové mlhy a
+   pravého náhledu včetně otazníku, čisté okraje po změně výběru, posun, změnu
+   velikosti, Pokračovat a nahrazení mlhy po průzkumu. Opravenou kontrolu
+   odhaleného terénu používají také TC69 a TC111. Skutečné výsledky přejímky
+   uvádí [funkční evidence](functional-tests.md#r-0318-unknown-tile-preview-2026-10-27).
+
 ## UC-011/115: počáteční pohyb ve volné hře — 2026-10-27
 
 1. [R-0310](requirements/done/R-0310.md) pokrývá pohyb počátečně zaměřené

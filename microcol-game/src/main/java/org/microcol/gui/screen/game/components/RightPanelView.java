@@ -8,8 +8,6 @@ import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.UnitsPanel;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.image.ImageLoaderTerrain;
-import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.i18n.I18n;
@@ -38,8 +36,6 @@ import javafx.scene.layout.RowConstraints;
  */
 public final class RightPanelView implements JavaFxComponent {
 
-    private final ImageProvider imageProvider;
-
     private final I18n i18n;
 
     private final TilePainter tilePainter;
@@ -61,12 +57,10 @@ public final class RightPanelView implements JavaFxComponent {
     private final GameModelController gameModelController;
 
     @Inject
-    public RightPanelView(final ImageProvider imageProvider, final I18n i18n,
-            final UnitsPanel unitsPanel,
+    public RightPanelView(final I18n i18n, final UnitsPanel unitsPanel,
             final LocalizationHelper localizationHelper,
             final GameModelController gameModelController,
             final TilePainter tilePainter) {
-        this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.unitsPanel = Preconditions.checkNotNull(unitsPanel);
         this.localizationHelper = Preconditions
@@ -174,8 +168,7 @@ public final class RightPanelView implements JavaFxComponent {
                     unitsPanel.setUnits(getModel().getCurrentPlayer(), units);
                 }
             } else {
-                tilePainter.setImage(imageProvider
-                        .getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN));
+                tilePainter.setHiddenTerrain(location);
                 sb.append(i18n.get(Loc.unitsPanel_unexplored));
             }
             tileName.setText(sb.toString());

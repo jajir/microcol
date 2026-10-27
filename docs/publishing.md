@@ -857,7 +857,7 @@ documentation in APT just to make it visible on the web.
 
 ## R-0318 unknown preview analysis — 2026-10-27
 
-1. [R-0318](requirements/R-0318.md) records the user's screenshot, source
+1. [R-0318](requirements/done/R-0318.md) records the user's screenshot, source
    analysis at `c9d172e18375dc891edf2bb8fdf3e8414f3bda84` and a proposed shared
    fog painter. The requirement remains `new`; the broader limitations of
    discovered-tile previews are identified without authorizing implementation.

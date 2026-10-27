@@ -1,5 +1,115 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0318 unknown tile preview — 2026-10-27
+
+1. [R-0318](requirements/done/R-0318.md), UC-006/114/119, shares the existing fog
+   background and location-dependent question mark between the map and the
+   right-panel preview. The preview clears its full canvas before displaying
+   another unknown tile. Exploration and observed-object rules are unchanged.
+2. TC26/F18 adds `TC_11_unknown_preview_matches_map_tile`: an occupied colony
+   preview → unmarked/marked unknown tiles; map/panel pixel comparison at 1×/2×;
+   cleared margins; panning, resize and Continue; exploration and departure from
+   current sight. Existing unknown-information checks remain. `FogPage` now
+   checks revealed pixels against the current fog color outside question-mark
+   strokes, together with the model's explored state; TC69 and TC111 also use it.
+3. Candidate source is based on `3affb0e02796cd3759e6e5e98cc75541179fe441`;
+   the six changed Java file hashes are in `target/r0318/source.json`. The
+   shared Eclipse profile was applied to all six files (`target/r0318/format.log`).
+   Model/JUnit completion run `20261027T145847Z-1e3f12a346ae`, PID 77263,
+   passed all **4,776 model/JUnit tests**, zero failures/errors/skips, in
+   **133.420 seconds** including preparation and cleanup (600-second timeout).
+   Reports: `target/verification/run-6vnm3557/summary.json`. All six candidate
+   source hashes remained unchanged. UI and smoke acceptance are pending.
+4. Targeted selection: complete `TC_26_F18_fog_of_war_test`,
+   `TC_69_F60_desoto_sight_test`, `TC_111_F102_coronado_reveal_test`, and
+   `PageVerificationContractTest`: 15 expected checks (TC26 has ten named methods; its stable IDs omit TC08). Completion
+   `20261027T150201Z-4986f6571c04`, PID 77795, timeout 900 seconds. Then run the fixed smoke/support selection
+   with its 420-second acceptance budget. No remote CI/publication check is
+   authorized by this local implementation task.
+5. The first targeted attempt failed during test compilation, before running
+   any selected scenario: TC26/11 called nonexistent `ColonyScreen.goBack()`.
+   The scenario now uses the existing `closeWithEscape()` player action.
+   Failed evidence remains in `target/docker-ui/run-t1AE39/` and completion
+   `20261027T150201Z-4986f6571c04` (30.258 seconds). Only the test caller changed;
+   all four production Java hashes still match the passing model run. Shared
+   formatting was reapplied; `target/r0318/source-repair1.json` records the
+   corrected candidate. Retry completion `20261027T150335Z-ae2ba5e46081`,
+   PID 78087, uses the same complete selection and 900-second timeout.
+   The complete targeted selection must pass on retry.
+6. Retry `run-vySBu3` completed 15 checks with three errors, zero failures/skips
+   in 157.752 seconds. TC26/11 exhausted heap in `Node.snapshot`: snapshot layout
+   used the menu root's oversized preferred dimensions. The check now bounds
+   root layout to the actual scene size and restores it in `finally`, following
+   the existing `AbstractScreen.snapshotScene` practice. TC69/TC111 failed before
+   fog verification because `CongressPage.select` clicked an unrealized list
+   cell. It now reveals the candidate list and scrolls to the offered item before
+   the existing mouse click; no game action or assertion was bypassed.
+7. The next selection adds both TC56/F47 Congress scenarios to cover that shared
+   page action: **17 expected checks**. All four production hashes still match
+   the passing model result. Shared formatting and source review cover the two
+   repaired page objects; `target/r0318/source-repair2.json` records all seven
+   changed Java files. Both failed attempts retain their original evidence.
+   Completion `20261027T151040Z-70a2470682e3`, PID 79606, timeout 900 seconds,
+   runs that complete 17-check selection.
+8. `run-SoD8WI` finished 17 checks with five errors, zero failures/skips in
+   170.680 seconds. TC26/11 passed its first unknown-tile content comparison but
+   rejected the interpolated alpha at the 2× snapshot's opaque/transparent edge.
+   The original 1× margin remains checked in full; at 2× only the adjacent
+   interpolation pixel is excluded. The four Congress scenarios still could
+   not locate their candidate cell after scrolling. A bounded diagnostic run
+   captures the list's actual geometry and screenshot before clicking, instead
+   of assuming that scrolling repaired the failure.
+9. Diagnostic completion `20261027T151537Z-56b2bbf55007`, PID 80511, timeout
+   600 seconds, selects TC26/11, TC56/01 and the three source-contract checks.
+   This five-check diagnostic does not replace the complete targeted selection.
+10. Diagnostic `run-6ra3ru` completed five checks in 70.086 seconds: TC26/11 and
+    all three source-contract checks passed; TC56/01 errored. Visual review of
+    `R-0318-marked-preview.png` and `R-0318-unmarked-preview.png` confirms the
+    shared fog appearance. Congress geometry showed five offers but a two-pixel
+    list height (4.8 px including focus effects) and only an empty cell; the
+    diagnostic screenshot confirms the collapsed control. This was an actual
+    existing layout defect, not a missing founder or an input-selector defect.
+11. `CongressDialog` now preserves the candidate list's existing 190-pixel
+    preferred height as its minimum inside the scrolling report. The ineffective
+    `CongressPage` changes and temporary diagnostics were removed. TC56/01–02
+    plus TC69/TC111 must verify the normal original player actions. Production
+    source changed, so a fresh model phase is required before the full targeted
+    selection and smoke. `target/r0318/source-final.json` records the candidate.
+    Model completion `20261027T151854Z-bd75293ea302`, PID 80959, timeout
+    600 seconds, passed **4,776 model/JUnit checks**, zero failures/errors/skips,
+    in **134.639 seconds** including preparation and cleanup. Complete reports:
+    `target/verification/run-s0qq08dl/summary.json`; all seven candidate Java
+    hashes match.
+12. Final targeted completion `20261027T152133Z-5ca550ee3046`, PID 82124,
+    timeout 900 seconds, passed all **17 selected checks**, zero failures/errors/
+    skips, in **221.462 seconds** including preparation and cleanup. Complete
+    reports are in `target/docker-ui/run-YPFYMq/microcol-test/surefire-reports/`:
+    TC26 ten, TC56 two, TC69 one, TC111 one, source contract three. Source hashes
+    still match. Visual review confirmed both [marked](graphics-assets/unknown-preview-2026-10-27/marked.png)
+    and [unmarked](graphics-assets/unknown-preview-2026-10-27/unmarked.png)
+    actual selected-tile previews; assertions also compare 1×/2× snapshots.
+13. Fixed smoke/support completion `20261027T152531Z-460d7fa8644b`, PID 82690,
+    has a 480-second supervisor timeout and the unchanged 420-second acceptance
+    budget. It passed all **21 fixed smoke/support checks**, zero failures,
+    errors or skips, in **202.078 seconds** including preparation and cleanup.
+    Complete reports: `target/verification/run-tr39ahs_/summary.json`. No
+    executable source changed after the passing model and targeted phases.
+14. Final source review confirms that unknown previews read only exploration
+    and the existing location-based decoration, clear the whole preview canvas,
+    and preserve map fog ordering. Colony-field callers and discovered-preview
+    composition are unchanged. Congress preserves its existing preferred size
+    without changing founder rules. No model, save schema, runtime asset, new
+    dependency, configuration or package responsibility changed. All seven
+    reviewed Java hashes still match the tested source. Final screenshots are
+    byte-identical copies of accepted targeted-run evidence.
+15. R-0318 is `done` after local acceptance. All **nine documentation consistency
+    checks** and **strict MkDocs** passed; logs are `target/r0318/docs-tests.log`
+    and `target/r0318/mkdocs.log`. Rendered review confirmed four chapters, done
+    status, repaired source links and both evidence images. Historical failures
+    above remain failures. Remote CI, Pages and distribution publication were not
+    inspected; local acceptance does not prove a newly published build.
+
+
 ## R-0310 initial free-play movement repair — 2026-10-27
 
 1. The user selected [R-0310](requirements/done/R-0310.md) for repair after the
