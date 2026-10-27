@@ -1073,3 +1073,14 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
    writes; `StatusBarMessageServiceTest` covers coordinate formatting and
    hidden information. [Acceptance evidence](functional-tests.md#r-0311-runtime-developer-mode-2026-10-27)
    records actual results; written tests alone do not close these UCs.
+
+### UC-006/114/119: global developer shortcut — 2026-10-27
+
+1. [R-0312](requirements/done/R-0312.md) extends R-0311 to every game screen and
+   application dialog, including focused text input, and removes both DEV
+   status-bar indications. TC84/03–06 retain Settings, map, held-key, modal
+   input and persistence checks; TC84/07 adds welcome, setup, saved-game
+   browser, Europe, colony and repeated entry. Indicator checks now require
+   absence while ordinary game information remains covered. Actual results
+   belong to the [dated evidence](functional-tests.md#r-0312-global-developer-shortcut-2026-10-27);
+   this does not close these whole UCs.

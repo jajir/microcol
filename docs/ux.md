@@ -6,18 +6,20 @@
    „Režim vývojáře (F3)“ a stručným vysvětlením. Přepínač je dostupný z hlavního
    menu i rozehrané hry. Nový profil začíná s vypnutou volbou; poslední stav se
    ukládá do nastavení aplikace, nikoli do partie.
-2. F3 na mapě a v Nastavení mění stejnou volbu při uvolnění klávesy, takže
-   držení opakovaně nepřepíná režim. Na Macu může být nutná Fn+F3. Otevřený
-   dialog a textové pole si zachovávají vlastní ovládání. Změna nepotřebuje
-   potvrzení ani restart a nesmí rušit připravený rozkaz jednotky.
-3. Stavový řádek krátce oznámí zapnutí/vypnutí a po zapnutí ponechá značku DEV.
-   Běžný popis pole zůstává na místě; zapnutý režim přidá `x=12, y=8 · …`
-   i bez pohybu myši. Souřadnice odpovídají mapě: levý horní roh `[1, 1]`, x
-   doprava a y dolů. Opuštění mapy odstraní souřadnice. Neprozkoumané pole
-   nadále neprozradí terén ani skryté objekty.
-4. Implementace prošla lokální přejímkou dne 27. října 2026. [Funkční evidence](functional-tests.md#r-0311-runtime-developer-mode-2026-10-27)
-   odděluje automatické testy od skutečného pozorování hráčů; nové hráčské
-   pozorování tento úkol neprovádí.
+2. Podle navazujícího [R-0312](requirements/done/R-0312.md) F3 mění stejnou volbu
+   na každé obrazovce hry, včetně úvodního menu a herních dialogů. Přepne se
+   při uvolnění klávesy, takže držení režim opakovaně nepřepíná. Funguje také
+   při psaní do textového pole, aniž změní jeho obsah nebo zavře dialog.
+   Kombinace s modifikátory a systémová okna pro výběr souborů si ponechávají
+   vlastní ovládání. Na Macu může být nutná Fn+F3.
+3. Stav režimu ukazuje zaškrtávátko v Nastavení. Stavový řádek neobsahuje
+   značku DEV ani dočasnou zprávu o zapnutí/vypnutí. Běžný popis pole zůstává;
+   zapnutý režim přidá `x=12, y=8 · …` i bez pohybu myši. Souřadnice odpovídají
+   mapě: levý horní roh `[1, 1]`, x doprava a y dolů. Opuštění mapy odstraní
+   souřadnice; neprozkoumané pole neprozradí terén ani skryté objekty.
+4. Změna nepotřebuje potvrzení ani restart a neruší připravený rozkaz jednotky.
+   [Přejímka R-0312](functional-tests.md#r-0312-global-developer-shortcut-2026-10-27)
+   prošla dne 27. října 2026. Automatické testy a kontrola snímků nejsou novým pozorováním hráčů.
 
 ## Čitelné hranice krajiny — R-0294
 

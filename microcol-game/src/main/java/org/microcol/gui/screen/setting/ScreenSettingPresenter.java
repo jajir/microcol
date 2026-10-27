@@ -20,12 +20,9 @@ public class ScreenSettingPresenter {
     @Inject
     ScreenSettingPresenter(final ScreenSetting screenSetting,
             final EventBus eventBus,
-            final org.microcol.gui.event.model.GameModelController game,
-            final org.microcol.gui.preferences.DeveloperMode developerMode) {
+            final org.microcol.gui.event.model.GameModelController game) {
         this.game = game;
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        org.microcol.gui.util.DeveloperModeShortcut
-                .install(screenSetting.getContent(), developerMode);
         screenSetting.getContent().setOnKeyPressed(this::onKeyPressed);
     }
 

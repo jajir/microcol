@@ -33,17 +33,12 @@ final class StatusBarPresenter implements UpdatableLanguage {
     private final EventBus eventBus;
 
     private StatusBarView view;
-    private final org.microcol.gui.preferences.DeveloperMode developerMode;
-    private final javafx.animation.PauseTransition modeFeedback = new javafx.animation.PauseTransition(
-            javafx.util.Duration.seconds(2));
 
     private Source showEventsFromSource;
 
     @Inject
     public StatusBarPresenter(final EventBus eventBus, final I18n text,
-            final GameModelController gameModelController,
-            final org.microcol.gui.preferences.DeveloperMode developerMode) {
-        this.developerMode = developerMode;
+            final GameModelController gameModelController) {
         this.i18n = Preconditions.checkNotNull(text);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.gameModelController = Preconditions
@@ -63,13 +58,6 @@ final class StatusBarPresenter implements UpdatableLanguage {
 
     void setStatusBarView(final StatusBarView statusBarView) {
         this.view = Preconditions.checkNotNull(statusBarView);
-        modeFeedback.setOnFinished(event -> updateDeveloperMode(false));
-        developerMode.enabledProperty()
-                .addListener((property, before, after) -> {
-                    updateDeveloperMode(true);
-                    modeFeedback.playFromStart();
-                });
-        updateDeveloperMode(false);
         statusBarView.getLabelEra().setOnMouseEntered(event -> {
             Preconditions.checkNotNull(showEventsFromSource,
                     "It's not defined which events should be shown in status bar.");
@@ -107,20 +95,8 @@ final class StatusBarPresenter implements UpdatableLanguage {
         });
     }
 
-    private void updateDeveloperMode(final boolean feedback) {
-        final Label label = view.getDeveloperMode();
-        final String state = i18n
-                .get(developerMode.isEnabled() ? Loc.developerModeOn
-                        : Loc.developerModeOff);
-        label.setText(feedback ? state : "DEV");
-        label.setAccessibleText(state);
-        label.setVisible(feedback || developerMode.isEnabled());
-        label.setManaged(label.isVisible());
-    }
-
     @Override
     public void updateLanguage(final I18n i18n) {
-        updateDeveloperMode(false);
         if (gameModelController.isGameModelReady()) {
             setYearText(view.getLabelEra(),
                     gameModelController.getModel().getCalendar());

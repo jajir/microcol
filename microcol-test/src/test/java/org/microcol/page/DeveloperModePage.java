@@ -11,7 +11,6 @@ import org.microcol.model.Location;
 import org.testfx.util.WaitForAsyncUtils;
 import com.google.gson.Gson;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 
@@ -106,17 +105,11 @@ public final class DeveloperModePage extends AbstractScreen {
         assertFalse(description().contains("y="), description());
     }
 
-    public void verifyIndicator(final boolean enabled) throws Exception {
-        final Label label = getNodeFinder().lookup("#developerModeIndicator")
-                .match(node -> node.getScene() != null
-                        && node.getScene().getWindow().isShowing()
-                        && node.getParent().isVisible())
-                .queryAs(Label.class);
-        WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
-                () -> label.isVisible() == enabled
-                        && (!enabled || "DEV".equals(label.getText())));
-        assertEquals(enabled, label.isVisible());
-        assertEquals(enabled, label.isManaged());
+    public void verifyNoIndicator() {
+        assertTrue(
+                getNodeFinder().lookup("#developerModeIndicator").queryAll()
+                        .isEmpty(),
+                "Developer status indicator must not be created");
     }
 
     public void verifyGameUnchanged() {
@@ -129,8 +122,17 @@ public final class DeveloperModePage extends AbstractScreen {
                 .getClassFromGuice(ModeController.class).isMoveMode());
     }
 
-    public void verifySearchText(final String expected) {
-        assertEquals(expected, getNodeFinder().lookup("#colonizopediaSearch")
+    public void verifyText(final String id, final String expected) {
+        assertEquals(expected, getNodeFinder().lookup("#" + id)
                 .queryAs(TextField.class).getText());
+    }
+
+    public void pressModifiedF3() {
+        getRobot().push(KeyCode.SHIFT, KeyCode.F3);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifySearchText(final String expected) {
+        verifyText("colonizopediaSearch", expected);
     }
 }

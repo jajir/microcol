@@ -11192,3 +11192,122 @@ or website publication.
 3. Shared Java formatting and source diff review completed; the strict MkDocs
    build passed. No test selection was executed for this explicitly untested
    change. Remote regression and publication are not inspected.
+
+## R-0312 global developer shortcut — 2026-10-27
+
+1. Integration base `9231728774b716cc6c073e2f0889957f7d13f835`, plus
+   [R-0312](requirements/done/R-0312.md). Scope: common window shortcut routing,
+   removal of status-bar diagnostics, and TC84 player paths. No game rules,
+   save schema, launch flag or diagnostic coordinate behavior changes.
+   Model/JUnit, targeted UI, smoke, review and documentation checks are pending.
+
+
+
+
+2. Shared Eclipse formatting covered all 11 task Java files, with exact
+   Java-token preservation and repeat-format idempotence passing. Source
+   review confirmed both scene creation sites install the shared shortcut
+   once per scene, including directly constructed dialogs; restarting an
+   application on the same Stage gets a new scene without stale handlers.
+3. Full model/JUnit dispatch: completion `20261027T065601Z-ead6428101fd`,
+   supervisor PID 5817, timeout 600 seconds, selection `verify.sh --model`.
+   Acceptance is pending.
+
+4. The first attempt timed out after 20.009 seconds during the Docker recovery
+   preflight (`docker ps`), before any test or verification snapshot existed.
+   Docker Desktop's host log records its VM starting at 06:56:02 UTC and
+   returning to idle at 06:56:32 UTC, exceeding that preflight timeout during
+   wake-up. Subsequent engine checks returned Docker 29.8.2, zero running
+   containers and no managed leftovers. No native UI fallback was used.
+   The failed completion remains preserved.
+5. Repeated model dispatch: completion `20261027T065915Z-a6353b5f8af6`,
+   supervisor PID 6023, timeout 600 seconds. This uses the new integration
+   base above: the independent Original World map update was committed while
+   this task was in progress. The task diff excludes that separate change.
+
+6. Repeated model/JUnit passed **4,770 tests in 346 complete XML suites**,
+   zero failures/errors/skips, in 132.279 verifier seconds (132.391 seconds
+   with supervisor cleanup). Reports and exact selection:
+   `target/verification/run-_hzsf4de/{manifest,summary}.json`. All game/test
+   source inputs match its snapshot.
+7. Targeted Docker/Xvfb dispatch: completion `20261027T070149Z-a63f2f3ef05b`,
+   supervisor PID 6319, timeout 1,200 seconds. Selection: all seven TC84,
+   TC21/01+04, TC26/01+04, TC80/01 and three `PageVerificationContractTest`
+   checks, expected total fifteen. These cover global F3, ordinary screen
+   navigation/status information, existing hover/fog behavior and test-source
+   conventions. Targeted acceptance and fixed smoke remain pending.
+
+8. First targeted run completed fifteen checks with **zero failures, one error
+   and zero skips** in 180.432 seconds. TC84/07's final whole-game comparison
+   found only `focusedField.x` changing from 25 to 24: opening the colony
+   legitimately focuses its tile. All preceding F3/state/indicator checks
+   passed. The test now takes and verifies a full snapshot around each F3
+   press, after navigation; no game field is omitted from comparison. This
+   repairs the test's navigation assumption without changing runtime code.
+   Failed evidence: `target/docker-ui/run-6x26CW/`.
+
+9. Repeated targeted selection: completion `20261027T070615Z-1c75d093aa3d`,
+   supervisor PID 6968, timeout 1,200 seconds. All fifteen checks from item 7
+   are retained. All `microcol-game` inputs match the passing model snapshot,
+   so that gate is reused; only TC84's observation timing changed.
+
+10. Repeated targeted phase passed **15 checks in five complete XML suites**,
+    zero failures/errors/skips, in 180.528 seconds including cleanup. Exact
+    selection is unchanged from item 7; reports are in
+    `target/docker-ui/run-hAAfjq/microcol-test/surefire-reports/`. No
+    `EVENT_HANDLER_FAILED` occurs in the command log. The reviewed source
+    hashes still match all 2,172 game/test inputs. The map screenshot from
+    `run-6x26CW` was visually checked against unchanged runtime sources: the
+    DEV label is absent, with ordinary text, coordinates, gold and year intact.
+11. Fixed smoke/support dispatch: completion `20261027T070938Z-914f431464a1`,
+    supervisor PID 7991, timeout 480 seconds, selection `verify.sh --smoke`.
+    The 420-second acceptance budget still includes cleanup.
+12. Source review checked the shared main/dialog scene entry points, removal
+    of per-screen handlers and status-label/timer dependencies, scene
+    replacement on restart, keyboard consumption, persisted state, text
+    preservation and full game-state checks around each F3 press. No blocking
+    code issue remains. Final smoke and documentation acceptance are pending.
+
+13. First fixed smoke completed **21 checks in twelve XML suites**, with zero
+    failures, one error and zero skips, in 196.417 verifier seconds (196.615
+    seconds including cleanup). TC23/01 reported a delayed JavaFX
+    `ScenePulseListener.synchronizeSceneNodes` null-node exception while
+    advancing the Atlantic-voyage turn. The stack was surfaced by
+    `GamePage.waitWhileMoving`; logs place the pulse error after turn 19
+    began. This scenario does not use F3. The exact cause is not established;
+    no exception has been suppressed and no assertion removed. Evidence:
+    `target/verification/run-3bluu2ie/`. A focused reproduction is required
+    before repeating the full smoke; runtime sources remain unchanged.
+
+14. Focused TC23/01 reproduction dispatch: completion
+    `20261027T071451Z-d3ffef8c5b90`, supervisor PID 9674, timeout 600 seconds.
+    This diagnostic run does not replace the required full smoke selection.
+
+15. Focused TC23/01 passed **one check**, zero failures/errors/skips, in
+    53.602 seconds including cleanup. Evidence: `target/docker-ui/run-j84CEv/`.
+    The command log has no pulse exception or `EVENT_HANDLER_FAILED`. No
+    runtime/test source changed between the failed smoke and reproduction,
+    so the intermittent JavaFX failure is not claimed as repaired.
+16. Repeated full smoke dispatch: completion `20261027T071557Z-1fc568192fe8`,
+    supervisor PID 10051, timeout 480 seconds. The fixed ten UI scenarios
+    plus eleven support checks and the 420-second acceptance budget are
+    unchanged; no scenario is excluded.
+
+17. Repeated full smoke passed **21 tests in twelve complete XML suites**,
+    zero failures/errors/skips, in 203.129 verifier seconds and 203.234 seconds
+    including supervisor cleanup, within 420 seconds. Exact selection,
+    manifest and reports: `target/verification/run-1c0_jf5z/`. All 2,172
+    reviewed game/test inputs match its source snapshot. The passing log has
+    neither the earlier pulse exception nor `EVENT_HANDLER_FAILED`. Historical
+    failures remain failed; their evidence is preserved.
+18. Local acceptance and source review cover integration base
+    `9231728774b716cc6c073e2f0889957f7d13f835` plus R-0312. The implementation
+    retains shared preference persistence and hover behavior, with no DEV
+    label or notification and one F3 handler per application scene. R-0312
+    is archived as done with incoming links repaired. Native macOS function
+    keys and remote CI/distribution/Pages publication were not checked.
+
+19. All nine documentation consistency tests and strict MkDocs passed, with
+    logs in `target/r0312/final-docs-tests.log` and `target/r0312/final-mkdocs.log`.
+    Shared formatting, source review and every required local phase are
+    complete. No new build/download publication is claimed by this acceptance.

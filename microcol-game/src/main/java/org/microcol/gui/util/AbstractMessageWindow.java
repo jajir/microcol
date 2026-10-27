@@ -78,6 +78,7 @@ public abstract class AbstractMessageWindow implements UpdatableLanguage {
 
     public final void init(final Parent root) {
         scene = new Scene(root);
+        viewUtil.installSceneShortcuts(scene);
         scene.getStylesheets().add(MainStageBuilder.STYLE_SHEET_DIALOGS);
         stageDialog.setScene(scene);
         /**

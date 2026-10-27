@@ -151,18 +151,19 @@ public class TC_84_F75_framed_settings_test extends AbstractMicroColTest {
         game.hoverTile(ship);
         final String ordinary = developer.description();
         developer.verifyNoCoordinates();
-        developer.verifyIndicator(false);
+        developer.verifyNoIndicator();
         developer.rememberGame();
         // F3 refreshes the existing hover and preserves the ordinary
         // description.
         developer.pressF3();
         developer.verifyHover(ship, true, ordinary);
-        developer.verifyIndicator(true);
-        developer.captureDialog("developerModeIndicator",
+        developer.verifyNoIndicator();
+        developer.captureDialog(
+                org.microcol.gui.screen.game.components.StatusBarView.STATUS_BAR_LABEL_ID,
                 "developer-mode-map.png");
         developer.pressF3();
         developer.verifyHover(ship, false, ordinary);
-        developer.verifyIndicator(false);
+        developer.verifyNoIndicator();
         developer.verifyGameUnchanged();
         // The in-game Settings checkbox controls the same state.
         developer.openGameSettings();
@@ -206,7 +207,13 @@ public class TC_84_F75_framed_settings_test extends AbstractMicroColTest {
         help.typeSearch("cargo");
         developer.pressF3();
         developer.verifySearchText("cargo");
+        developer.verifyState(false);
+        help.verifyDialogOpen();
+        developer.pressF3();
         developer.verifyState(true);
+        developer.verifySearchText("cargo");
+        developer.verifyNoIndicator();
+        help.verifyDialogOpen();
         help.closeWithEscape();
         help.verifyDialogClosed();
         developer.verifyGameUnchanged();
@@ -240,9 +247,77 @@ public class TC_84_F75_framed_settings_test extends AbstractMicroColTest {
         developer.verifySettings(false, "Developer mode (F3)");
         reloaded.goBack().loadGame();
         developer.verifyState(false);
-        developer.verifyIndicator(false);
+        developer.verifyNoIndicator();
         developer.pressF3();
         developer.verifyState(true);
-        developer.verifyIndicator(true);
+        developer.verifyNoIndicator();
     }
+
+    @Test
+    @Tag("local")
+    void TC_07_developer_shortcut_follows_every_screen_and_dialog()
+            throws Exception {
+        final WelcomePage welcome = WelcomePage.of(getContext());
+        final DeveloperModePage developer = new DeveloperModePage(getContext());
+        // The welcome page switches the saved preference before a game exists.
+        developer.verifyState(true);
+        developer.pressF3();
+        developer.verifyState(false);
+        welcome.verifyMainScreen();
+        developer.pressModifiedF3();
+        developer.verifyState(false);
+        final SettingPage settings = welcome.openSetting();
+        developer.verifySettings(false, "Developer mode (F3)");
+        settings.goBack();
+        // Primary-scene text fields keep their content while F3 switches modes.
+        final org.microcol.page.FreePlaySetupPage setup = welcome
+                .openFreePlaySetup();
+        setup.enterName("Map author");
+        developer.pressF3();
+        developer.verifyState(true);
+        developer.verifyText("freePlayPlayerName", "Map author");
+        setup.back().verifyMainScreen();
+        // Direct-created dialogs use the same shortcut as injected dialogs.
+        final org.microcol.page.SavedGamesPage saved = new org.microcol.page.SavedGamesPage(
+                getContext());
+        saved.action("buttonLoad");
+        developer.pressF3();
+        developer.verifyState(false);
+        saved.cancelBrowser();
+        welcome.verifyMainScreen();
+        final GamePage game = welcome.loadGame();
+        game.waitWhileMoving();
+        // Compare each F3 press after navigation has set the focused tile.
+        final org.microcol.page.EuropePortScreen europe = game
+                .openEuroperPort();
+        developer.rememberGame();
+        developer.pressF3();
+        developer.verifyState(true);
+        developer.verifyNoIndicator();
+        europe.verifyGold(10000);
+        developer.verifyGameUnchanged();
+        europe.close();
+        final org.microcol.page.ColonyScreen colony = game
+                .openColonyAt(Location.of(24, 16), "New Amsterdam");
+        developer.rememberGame();
+        developer.pressF3();
+        developer.verifyState(false);
+        developer.verifyNoIndicator();
+        colony.verifyColonyName("New Amsterdam");
+        developer.verifyGameUnchanged();
+        colony.close();
+        // Re-entering a screen does not install another key handler.
+        game.openEuroperPort();
+        developer.rememberGame();
+        developer.pressF3();
+        developer.verifyState(true);
+        developer.verifyGameUnchanged();
+        europe.close();
+        developer.openGameSettings();
+        developer.verifySettings(true, "Developer mode (F3)");
+        developer.backToGame();
+        developer.verifyNoIndicator();
+        developer.verifyGameUnchanged();
+    }
+
 }

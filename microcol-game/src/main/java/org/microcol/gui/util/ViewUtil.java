@@ -1,12 +1,15 @@
 package org.microcol.gui.util;
 
+import org.microcol.gui.preferences.DeveloperMode;
+
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 import javafx.stage.Stage;
+import javafx.scene.Scene;
 
 /**
- * Provide game main stage and provide screen center point.
+ * Provide the main stage, screen center and shared scene shortcuts.
  */
 public final class ViewUtil {
 
@@ -15,10 +18,17 @@ public final class ViewUtil {
      * {@link javafx.stage.Stage}.
      */
     private final Stage parentFrame;
+    private final DeveloperMode developerMode;
 
     @Inject
-    public ViewUtil(final Stage parentFrame) {
+    public ViewUtil(final Stage parentFrame,
+            final DeveloperMode developerMode) {
         this.parentFrame = Preconditions.checkNotNull(parentFrame);
+        this.developerMode = Preconditions.checkNotNull(developerMode);
+    }
+
+    public void installSceneShortcuts(final Scene scene) {
+        DeveloperModeShortcut.install(scene, developerMode);
     }
 
     public Stage getPrimaryStage() {
