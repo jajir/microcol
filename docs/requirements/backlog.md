@@ -784,3 +784,10 @@ remain owned by their current requirements; acceptance is recorded in the
    select one screen and direction for further refinement; this comparison does
    not authorize implementation of all screens. A06/A07/A08/A10 retain their
    rules and data, and A01 retains settings/navigation responsibilities.
+
+## Hand-drawn modal outlines (2026-10-27)
+
+1. [R-0322](done/R-0322.md), primary area A03, implements the selected single hand-drawn
+   contour and opaque interior with transparent surroundings across application
+   modals. Status: `done`. Existing buttons and interactions
+   remain unchanged. See [acceptance evidence](../functional-tests.md#r-0322-hand-drawn-modal-silhouettes-2026-10-27).

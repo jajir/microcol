@@ -38,8 +38,10 @@ tar -C /source --exclude=.git --exclude=target -cf - . \
 xvfb-run -e "$RESULT_DIR/xvfb.log" -a \
     --server-args='-screen 0 1600x1200x24' bash -euc '
     openbox > "$RESULT_DIR/openbox.log" 2>&1 &
-    pid=$!
-    trap "kill $pid 2>/dev/null || true" EXIT
+    wm_pid=$!
+    xcompmgr -n > "$RESULT_DIR/compositor.log" 2>&1 &
+    compositor_pid=$!
+    trap "kill $wm_pid $compositor_pid 2>/dev/null || true" EXIT
     mvn -B -ntp -pl "${MICROCOL_TEST_MODULE:-microcol-test}" -am clean test -P ci "$@" \
         -Dtestfx.robot=glass -Dtestfx.headless=false -Dprism.order=sw \
         -DsoundEnabled=false

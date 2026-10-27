@@ -661,3 +661,10 @@ Rozdělení práce a akceptace výše jsou návrhy pro následující zadání.
 ## Vybraná grafika terénů — 25. října 2026
 
 1. [R-0274](requirements/done/R-0274.md) dodává v A03 vybrané ikony pro P05 a sdílenou nápovědu. Herní pravidla terénů a zdrojů zůstávají v A05; přejímka P31 ověřuje jejich dosavadní hráčské cesty.
+
+## Ručně kreslený obrys modalů — 27. října 2026
+
+1. [R-0322](requirements/done/R-0322.md), oblast A03, převádí vnější okraj všech
+   aplikačních modalů na schválenou variantu 01. Tlačítka a herní akce zůstávají
+   zachované. Přesný tvar a průhlednost vlastní [grafické zadání](graphics.md#rucne-kreslena-modalni-okna-27-rijna-2026),
+   skutečné výsledky [funkční evidence](functional-tests.md#r-0322-hand-drawn-modal-silhouettes-2026-10-27).

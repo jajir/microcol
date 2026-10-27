@@ -1,5 +1,144 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0322 hand-drawn modal silhouettes — 2026-10-27
+
+1. [R-0322](requirements/done/R-0322.md) applies the selected outline to the common
+   application modal base. Existing buttons and game actions remain unchanged.
+   Base revision: `d318a050`. Local acceptance is complete; final candidate was checked on `3b5e7830` plus this task’s changes.
+2. Model phase dispatched through completion runner
+   `20261027T164250Z-a7ba35d22dee`, supervisor PID `96982`, timeout 600 seconds.
+   Evidence directory:
+   `/Users/jan/Library/Logs/Microcol/completions/20261027T164250Z-a7ba35d22dee`.
+   It timed out during preparation after 22.086 seconds: the initial
+   `docker ps` exceeded its 20-second step limit. The test command never
+   started; this run supplies no accepted tests. Notification was successfully
+   queued. Docker host logs show VM wake/start at 16:42:50–51 UTC and the
+   running state at 16:43:21 UTC. Subsequent bounded `docker info` and `docker ps`
+   checks succeeded (Engine 29.8.2, no running containers); no runtime setting
+   or timeout was changed.
+   Fresh model phase: `20261027T164717Z-12ca12a1754f`, supervisor PID `97647`,
+   timeout 600 seconds. Source hashes are recorded in
+   `target/r0322/source-after-format.json`. Results remain pending.
+3. Fresh model/JUnit acceptance passed: **4,777 tests, zero failures, errors or
+   skips**, across 348 XML reports in `target/verification/run-g0dignkm/model`.
+   Completion elapsed time was 133.020 seconds. The accepted snapshot and all
+   nine current source/test hashes match `target/r0322/source-after-format.json`.
+   Checked HEAD: `3b5e7830`, plus this task's uncommitted candidate.
+4. Targeted Docker/Xvfb selection dispatched as
+   `20261027T164952Z-76ebab16cd35`, supervisor PID `98198`, timeout 1,800 seconds:
+   complete TC83/F74, TC85/F75, TC191/F224, TC192/F225, TC02/F02 and the three
+   `PageVerificationContractTest` checks. This covers transparency and thin ink,
+   resize/reopen, existing button semantics, typography, named saves and nested
+   confirmations, large Congress/help frames and colony naming. Targeted, visual
+   and fixed smoke/support acceptance remain pending. No remote CI or publication
+   verification is part of this task.
+5. First targeted attempt failed during test compilation, before any UI scenario
+   ran: the new screen-evidence helper called an unavailable no-argument
+   `FxRobot.capture`. Evidence: `target/docker-ui/run-2mTzVV`, completion elapsed
+   31.469 seconds. The helper now supplies the primary-window screen rectangle;
+   no production code or model test changed, so the accepted model phase remains
+   valid. The shared formatter was reapplied to the changed page object.
+6. The same 13-check targeted selection was dispatched again as
+   `20261027T165046Z-506555ece9ac`, supervisor PID `98570`, timeout 1,800 seconds.
+   Acceptance remains pending.
+7. The second targeted run completed **13 checks: 10 passed, 3 errors, no
+   failures or skips**, in 152.041 seconds (`target/docker-ui/run-t3pMfC`).
+   TC83/02, TC191/01 and TC192/02 rejected missing top-edge ink. Inspection of
+   `playpen-congress.png` confirmed opaque child panels painted over the border.
+   The shared frame now draws its mouse-transparent outline above all content.
+   The earlier sample's scene snapshot had transparent corners, but its native
+   screen capture showed a backing plate: Xvfb/Openbox had no compositor.
+8. The Docker image now includes `xcompmgr`; the existing Xvfb session starts
+   simple compositing without shadows/fades and cleans up both desktop processes.
+   TC83 additionally compares native corner pixels with the underlying owner
+   scene. This supplements scene-alpha checks rather than accepting a transparent
+   snapshot as proof of native composition. The 36-test UI-tooling suite completed
+   with exit code 0; `bash -n` and diff checks passed. Shared formatting reapplied.
+9. Production rendering and the test environment changed, so the earlier model
+   pass is historical. Fresh complete model/JUnit phase dispatched as
+   `20261027T165657Z-d1c0c40927ba`, supervisor PID `99361`, timeout 600 seconds.
+   Current source hashes: `target/r0322/source-ui-repair2.json`. Acceptance pending.
+
+10. Repeated model/JUnit acceptance passed: **4,777 tests, zero failures,
+    errors or skips**, in 348 XML reports under
+    `target/verification/run-6hd_9os3/model`. Completion elapsed time was
+    203.504 seconds. All 11 recorded executable/test/environment source
+    hashes match both the tested snapshot and the current candidate.
+11. Repeated targeted selection dispatched as
+    `20261027T170310Z-11964258aecb`, supervisor PID `99799`, timeout 1,800
+    seconds, with the same six classes and 13 checks. Evidence directory:
+    `/Users/jan/Library/Logs/Microcol/completions/20261027T170310Z-11964258aecb`.
+    Targeted acceptance and subsequent smoke/support phase remain pending.
+
+12. The repeated targeted run passed **13 checks, zero failures, errors or
+    skips** in 177.677 seconds, with six XML reports in
+    `target/docker-ui/run-1MzKWK`. All 11 current source hashes still match
+    the dispatch record. Native menu corners now show the owner's actual
+    pixels, and the save confirmation has the expected outline and opaque fill.
+    Visual review nevertheless rejected the tall Congress screenshot: the
+    fixed 6px gutter allowed the inward top curve to cross toolbar buttons.
+    This successful test run does not establish final visual acceptance.
+13. The shared frame now reserves space proportional to its height and width
+    for the inward curves, with a 6px minimum. Button styling is unchanged.
+    Geometry and real-dialog checks additionally require the entire content
+    rectangle to remain inside the silhouette. Formatting was reapplied.
+    Fresh model/JUnit phase: `20261027T170930Z-ddad02ea64d4`, supervisor
+    PID `222`, timeout 600 seconds; source hashes are recorded in
+    `target/r0322/source-ui-repair3.json`. Evidence directory:
+    `/Users/jan/Library/Logs/Microcol/completions/20261027T170930Z-ddad02ea64d4`.
+    Acceptance remains pending; the changed production source requires new
+    model, targeted UI and smoke evidence.
+
+14. Model/JUnit acceptance for the content-clearance repair passed **4,777
+    tests, zero failures, errors or skips**, with 348 XML reports in
+    `target/verification/run-vnc7uwag/model`, in 137.580 seconds. All 11
+    recorded source hashes match the tested snapshot and current candidate.
+15. The same targeted 13-check Docker/Xvfb selection was dispatched as
+    `20261027T171210Z-575c5988c288`, supervisor PID `631`, timeout 1,800
+    seconds. Evidence directory:
+    `/Users/jan/Library/Logs/Microcol/completions/20261027T171210Z-575c5988c288`.
+    Targeted visual acceptance and smoke/support remain pending.
+
+16. Final targeted candidate passed **13 checks, zero failures, errors or
+    skips**, in 176.955 seconds. Six fresh XML reports are under
+    `target/docker-ui/run-4mLxSm`; all 11 source hashes remain unchanged.
+    Visual review confirmed the tall Congress toolbar stays inside the frame,
+    the existing buttons are intact, and the opaque paper and transparent
+    surroundings compose correctly over the game. Evidence:
+    [save confirmation](graphics-assets/modal-frames-2026-10-27/save-confirmation.png),
+    [Congress](graphics-assets/modal-frames-2026-10-27/congress.png),
+    [resized sample](graphics-assets/modal-frames-2026-10-27/resized-sample.png).
+    `compositor.log` retains X11 `BadWindow` diagnostics; the native corner-pixel
+    check and inspected screen captures passed. No failed evidence was replaced.
+17. Fixed smoke/support selection dispatched through the completion runner:
+    `20261027T171538Z-d578ae23ea0f`, supervisor PID `959`, timeout 480 seconds,
+    with the verification script's unchanged total budget of 420 seconds.
+    Evidence directory:
+    `/Users/jan/Library/Logs/Microcol/completions/20261027T171538Z-d578ae23ea0f`.
+    Smoke acceptance and final integration remain pending. Remote regression
+    and publication are outside this session's verification scope.
+
+18. Fixed smoke/support acceptance passed **21 checks, zero failures, errors
+    or skips**, in 12 XML reports under
+    `target/verification/run-0tdl77q8/precommit`. Verification took 209.186
+    seconds; the completion runner including cleanup took 209.421 seconds,
+    both below the 420-second budget. The unchanged selection contains the
+    ten documented UI scenarios and all 11 support checks; model tests were
+    not repeated. All 11 executable/test/environment source hashes match the
+    tested snapshot and current files. Checked base: `3b5e7830` plus R-0322.
+19. Final code review checked the common modal caller path, fixed-width ink,
+    clip and content clearance, unchanged button assets/styles/handlers,
+    preserved gameplay assertions and compositor cleanup. No open code
+    findings remain. Earlier visual findings were repaired and reverified;
+    historical unsuccessful runs above remain unsuccessful. R-0322 is locally
+    accepted and moved to `done`; publication remains unverified.
+
+20. Closure checks passed: nine documentation consistency tests and strict
+    MkDocs (4.11 seconds). The affected UI-tooling suite had already passed
+    all 36 checks; `bash -n`, shared Java formatting and `git diff --check`
+    passed. Only documentation, status, links and copied acceptance screenshots
+    changed after the accepted game-source snapshot.
+
 ## R-0319 river tile previews — 2026-10-27
 
 1. [R-0319](requirements/done/R-0319.md), UC-006/008/012, shares the complete existing
@@ -3732,6 +3871,10 @@ Mac není překážkou těchto testů. Nativní macOS okno používat jen pro v�
 platformní nebo ruční vizuální kontrolu; běžná regrese nevyžaduje odemčení.
 
 ### Docker UI tests
+
+From R-0322, the container runs `xcompmgr -n` alongside Openbox so native
+transparent JavaFX windows are composited over their owner. It adds no shadows
+or fades; `compositor.log` is retained with the run evidence.
 
 #### Úplné ověření v izolovaných skupinách
 

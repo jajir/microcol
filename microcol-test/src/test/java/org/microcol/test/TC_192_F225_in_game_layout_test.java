@@ -111,6 +111,10 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         page.open("buttonBack");
         // Congress and help retain their keyboard cancellation.
         page.open("congress");
+        final org.microcol.page.PaperButtonsPage buttons = new org.microcol.page.PaperButtonsPage(
+                getContext());
+        buttons.verifyModalFrame("congressClose");
+        buttons.captureModalOnScreen("r0322-congress-on-map.png");
         page.verifyScreenTitle("Kongres");
         page.verifyFrame(484, 1600);
         page.scrollToBottom();
@@ -119,6 +123,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         page.closeWithEscape();
         page.verifyMapReturned();
         page.open("help");
+        buttons.verifyModalFrame("colonizopediaSearch");
         page.verifyScreenTitle("Colonizopedia");
         page.verifyFrame(484, 1600);
         page.saveEvidence("r0307-help-czech.png");

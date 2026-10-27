@@ -11,6 +11,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -32,7 +33,7 @@ public abstract class AbstractMessageWindow implements UpdatableLanguage {
     public AbstractMessageWindow(final ViewUtil viewUtil, final I18n i18n) {
         this.viewUtil = Preconditions.checkNotNull(viewUtil);
         this.i18n = Preconditions.checkNotNull(i18n);
-        stageDialog = new Stage(StageStyle.UNDECORATED);
+        stageDialog = new Stage(StageStyle.TRANSPARENT);
         stageDialog.initModality(Modality.WINDOW_MODAL);
         stageDialog.initOwner(viewUtil.getPrimaryStage());
         // A reopened native window must exist before its position is assigned.
@@ -77,7 +78,7 @@ public abstract class AbstractMessageWindow implements UpdatableLanguage {
     }
 
     public final void init(final Parent root) {
-        scene = new Scene(root);
+        scene = new Scene(new ModalFrame(root), Color.TRANSPARENT);
         viewUtil.installSceneShortcuts(scene);
         scene.getStylesheets().add(MainStageBuilder.STYLE_SHEET_DIALOGS);
         stageDialog.setScene(scene);

@@ -1,5 +1,26 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Ručně kreslená modální okna — 27. října 2026
+
+1. Uživatel vybral variantu **01 — Klidný rukopis**: jemně prohnuté hrany,
+   mírně nestejné rohy a jediný tmavohnědý tah `#302D27` o síle 2 logických px,
+   jako u současných tlačítek. [R-0322](requirements/done/R-0322.md) přebírá pouze
+   vnější obrys návrhu. Tlačítka z návrhu nejsou zadáním; jejich současná
+   grafika, velikost, ikony a stavy se zachovávají.
+2. Modal překrývá podklad okrajovou linkou a neprůhlednou plochou uvnitř.
+   Vně nepravidelného obrysu je průhledný, včetně rohů. Společný papírový
+   rám používá `#FFF9EC`; dosavadní obsah a jeho barevné panely zůstávají
+   uvnitř. Nevzniká obdélníková podložka za kresleným okrajem.
+3. Implementace používá jedinou křivku v `gui.util.ModalFrame`, sdílené
+   `dialogs.css` a průhledný základ `AbstractMessageWindow`. Geometrie se
+   přizpůsobuje velikosti okna, tah zůstává 2 px. Stejný tvar ořezává celý
+   obsah, aby vnitřní pozadí nevystoupilo ven. Odstup obsahu od rámu roste
+   s velikostí okna, aby zvlněný tah nezasahoval do ovládání. Nativní systémový výběr
+   souboru zůstává ve správě operačního systému.
+4. Stav skutečné přejímky a snímky vlastní
+   [funkční evidence](functional-tests.md#r-0322-hand-drawn-modal-silhouettes-2026-10-27).
+   Tento popis sám nepotvrzuje dokončení testů ani publikaci.
+
 ## Úzké ústí a obrys řeky — 27. října 2026
 
 1. Uživatel vybral **variantu 1: úzký tok obtažený po obou březích** a zadal

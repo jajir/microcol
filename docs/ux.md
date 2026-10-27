@@ -1,5 +1,17 @@
 # UX a pravidla ovládání MicroCol
 
+## Obrys modálních oken — 27. října 2026
+
+1. [R-0322](requirements/done/R-0322.md) mění pouze vnější vizuální hranici modalu
+   podle [zvolené varianty](graphics.md#rucne-kreslena-modalni-okna-27-rijna-2026).
+   Hráč otevírá stejné dialogy ze stejných míst, čte stávající obsah a potvrzuje
+   či ruší původními tlačítky a klávesami. Výsledek akce i důvody odmítnutí
+   zůstávají u dosavadního vlastníka.
+2. Obsah uvnitř obrysu zakrývá podklad; průhledné okolí není novou cestou
+   k ovládání zablokovaného rodičovského okna. Stejně fungují vnořená
+   potvrzení, Escape i návrat po zavření. Návrh vzhledu není pozorováním
+   hráčů; skutečná přejímka je v [evidenci](functional-tests.md#r-0322-hand-drawn-modal-silhouettes-2026-10-27).
+
 ## Režim vývojáře — 2026-10-27
 
 1. [R-0311](requirements/done/R-0311.md) přidává v Nastavení sekci Vývojář s volbou

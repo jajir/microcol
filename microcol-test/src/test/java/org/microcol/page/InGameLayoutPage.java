@@ -61,6 +61,7 @@ public final class InGameLayoutPage extends AbstractScreen {
     public void verifyFrame(final int expectedGold, final int expectedYear) {
         getRobot().interact(() -> {
             final Region root = page();
+            final Bounds pageBounds = root.localToScene(root.getLayoutBounds());
             final Node toolbar = root.lookup(".screen-toolbar");
             final Region status = (Region) root.lookup("#statusBar");
             final Node content = root.lookup(".screen-scroll");
@@ -68,13 +69,13 @@ public final class InGameLayoutPage extends AbstractScreen {
             final Bounds middle = content
                     .localToScene(content.getLayoutBounds());
             final Bounds bottom = status.localToScene(status.getLayoutBounds());
-            assertEquals(0, top.getMinY(), 1,
+            assertEquals(pageBounds.getMinY(), top.getMinY(), 1,
                     "Toolbar is at the top of the screen");
             assertTrue(top.getHeight() >= 45 && top.getHeight() < 180,
                     "Controls reserve a compact, visible toolbar");
             assertTrue(middle.getMinY() >= top.getMaxY() - 1);
             assertTrue(middle.getMaxY() <= bottom.getMinY() + 1);
-            assertEquals(root.getScene().getHeight(), bottom.getMaxY(), 1,
+            assertEquals(pageBounds.getMaxY(), bottom.getMaxY(), 1,
                     "Status remains at the bottom of the screen");
             assertTrue(status.getHeight() >= 72);
             assertTrue(((Label) root.lookup("#labelGold")).getText()
@@ -88,9 +89,8 @@ public final class InGameLayoutPage extends AbstractScreen {
                             .localToScene(control.getLayoutBounds());
                     assertTrue(bounds.getMinY() >= top.getMinY() - 1);
                     assertTrue(bounds.getMaxY() <= top.getMaxY() + 1);
-                    assertTrue(bounds.getMinX() >= -1);
-                    assertTrue(
-                            bounds.getMaxX() <= root.getScene().getWidth() + 1);
+                    assertTrue(bounds.getMinX() >= pageBounds.getMinX() - 1);
+                    assertTrue(bounds.getMaxX() <= pageBounds.getMaxX() + 1);
                 }
             }
         });

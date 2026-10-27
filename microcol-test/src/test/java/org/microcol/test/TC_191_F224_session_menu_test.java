@@ -44,6 +44,8 @@ public class TC_191_F224_session_menu_test extends AbstractMicroColTest {
         // Empty names fail; Unicode punctuation is preserved independently of
         // filenames.
         saves.openSave();
+        new org.microcol.page.PaperButtonsPage(getContext())
+                .verifyModalFrame("savedGamesList");
         saves.saveName("");
         saves.verifyInvalidName();
         saves.captureDialog("savedGamesList", "r0298-saved-games.png");
@@ -54,6 +56,8 @@ public class TC_191_F224_session_menu_test extends AbstractMicroColTest {
         saves.openSave();
         saves.select("Přístav / před bitvou");
         saves.action("overwriteSave");
+        new org.microcol.page.PaperButtonsPage(getContext())
+                .verifyModalFrame("saveCancel");
         saves.action("saveCancel");
         saves.cancelBrowser();
         saves.verifyGameUnchanged();
@@ -83,6 +87,8 @@ public class TC_191_F224_session_menu_test extends AbstractMicroColTest {
         final org.microcol.page.PaperButtonsPage buttons = new org.microcol.page.PaperButtonsPage(
                 getContext());
         buttons.verifyPaperButton("saveConfirm");
+        buttons.verifyModalFrame("saveConfirm");
+        buttons.captureModalOnScreen("r0322-save-on-map.png");
         buttons.verifyPaperButton("saveDiscard");
         buttons.verifyPaperButton("saveCancel");
         buttons.captureDialog("saveConfirm", "r0316-save-confirmation.png");

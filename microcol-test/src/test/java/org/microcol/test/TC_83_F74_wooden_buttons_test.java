@@ -86,6 +86,7 @@ public class TC_83_F74_wooden_buttons_test extends AbstractMicroColTest {
         page.verifyToolbarButton("congress");
         page.captureDialog("europe", "paper-game.png");
         page.click("congress");
+        page.verifyModalFrame("congressClose");
         page.verifyPaperButton("congressClose");
         page.verifyVisibleButtonStyles();
         page.captureDialog("congressDialog", "paper-congress.png");
@@ -105,6 +106,9 @@ public class TC_83_F74_wooden_buttons_test extends AbstractMicroColTest {
         // A modal fixture uses the production dialog stylesheet and real
         // controls.
         page.showSamples();
+        page.verifyModalFrame("woodSamples");
+        page.captureModalOnScreen("r0322-modal-on-menu.png");
+        page.verifyTransparentSurroundings("woodSamples");
         page.captureDialog("woodSamples", "paper-dialog-first-layout.png");
         page.verifyPaperButton("woodOk");
         page.verifyPaperButton("woodLong");
@@ -142,8 +146,22 @@ public class TC_83_F74_wooden_buttons_test extends AbstractMicroColTest {
         page.verifySelected(true);
         page.verifyFill("woodToggle", "#E7E7D0", false);
         page.captureDialog("woodSamples", "paper-dialog-selected.png");
+
+        // The same thin silhouette follows a larger window and returns intact.
+        page.resizeSamples(780, 320);
+        page.verifyModalFrame("woodSamples");
+        page.verifyPaperButton("woodOk");
+        page.captureDialog("woodSamples", "r0322-modal-wide.png");
+        page.resizeSamples(576, 196);
+        page.verifyModalFrame("woodSamples");
         page.press(KeyCode.ESCAPE);
         page.verifySamplesClosed();
         page.verifyActionCount(3);
+
+        // Reopening also uses the shared window lifecycle and cancel button.
+        page.showSamples();
+        page.verifyModalFrame("woodSamples");
+        page.click("woodBack");
+        page.verifySamplesClosed();
     }
 }

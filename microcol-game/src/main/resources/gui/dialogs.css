@@ -9,7 +9,17 @@
 .name-error { -fx-text-fill: #a71919; }
 #colonyNameInput:invalid { -fx-text-fill: #a71919; -fx-border-color: #a71919; }
 
-.root{
+.modal-frame {
+    -fx-background-color: #FFF9EC;
+    -fx-background-insets: 0;
+}
+
+.modal-outline {
+    -fx-border-color: #302D27;
+    -fx-border-width: 2;
+}
+
+.modal-content {
 	-fx-padding: 30 30 15 30;
 }
 
