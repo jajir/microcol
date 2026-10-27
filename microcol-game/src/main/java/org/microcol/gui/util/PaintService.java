@@ -84,6 +84,8 @@ public final class PaintService {
     /** Ink outline of a special-resource marker, the same as the grid ink. */
     private static final Color MARKER_INK = Color.web("#292824");
 
+    private static final double RIVER_BANK_WIDTH = 1.6;
+
     /** Share of a square's width used by a lost-city rumor marker. */
     private static final double RESOURCE_MARKER_SHARE = 0.28;
 
@@ -210,6 +212,7 @@ public final class PaintService {
             final Location bottomRight,
             final Function<Location, Point> toPoint) {
         final Map<Location, RiverShape> courses = new LinkedHashMap<>();
+        final Map<Location, Direction> mouths = new LinkedHashMap<>();
         // Include mouths extending from just outside the viewport.
         for (int i = Math.max(Location.MAP_MIN_X, topLeft.getX() - 1); i <= Math
                 .min(map.getMaxLocationX(), bottomRight.getX() + 1); i++) {
@@ -227,7 +230,6 @@ public final class PaintService {
                     final RiverShape river = new RiverShape(location, size,
                             joined);
                     courses.put(location, river);
-                    paintRiver(graphics, toPoint.apply(location), river);
                     if (joined.size() == 1) {
                         final Map<Location, TerrainType> knownTerrain = location
                                 .getNeighbors().stream().filter(map::isValid)
@@ -237,16 +239,20 @@ public final class PaintService {
                         final Direction mouth = RiverShape.mouthDirection(
                                 location, joined.keySet(), knownTerrain);
                         if (mouth != null) {
-                            paintRiverMouth(graphics, toPoint.apply(location),
-                                    river, mouth,
-                                    map.getTerrainTypeAt(location),
-                                    knownTerrain.get(
-                                            location.add(mouth.getVector())));
+                            mouths.put(location, mouth);
                         }
                     }
                 }
             }
         }
+        // Fill every connected band after all outlines, hiding internal seams.
+        courses.forEach((location, river) -> paintRiver(graphics,
+                toPoint.apply(location), river, true));
+        courses.forEach((location, river) -> paintRiver(graphics,
+                toPoint.apply(location), river, false));
+        mouths.forEach((location, direction) -> paintRiverMouth(graphics,
+                toPoint.apply(location), courses.get(location), direction,
+                map.getTerrainTypeAt(location.add(direction.getVector()))));
         courses.forEach((location, river) -> {
             if (map.getTerrainAt(location).isHasRoad()) {
                 paintRiverBridge(graphics, toPoint.apply(location), river);
@@ -275,67 +281,68 @@ public final class PaintService {
         graphics.restore();
     }
 
-    /** Open the coast with two water arms around a small decorative island. */
-    public void paintRiverMouth(final GraphicsContext graphics,
+    /** Join a narrow river to the coast without a transverse end cap. */
+    private void paintRiverMouth(final GraphicsContext graphics,
             final Point point, final RiverShape river,
-            final Direction direction, final TerrainType land,
-            final TerrainType water) {
+            final Direction direction, final TerrainType water) {
         final double half = Tile.TILE_WIDTH_IN_PX / 2.0;
-        final double length = Tile.TILE_WIDTH_IN_PX * .75;
+        // The coast artwork extends five pixels into the neighbouring sea tile.
+        final double shore = half + 4.5;
         final double radius = river.width / 2;
-        final double opening = river.width * 1.1;
+        final double corner = 3;
         graphics.save();
         graphics.translate(point.getX() + half, point.getY() + half);
         graphics.rotate(Math.toDegrees(Math.atan2(direction.getVector().getY(),
                 direction.getVector().getX())));
         graphics.setFill(imageProvider.getTerrainColor(water));
-        graphics.beginPath();
-        graphics.moveTo(0, -radius);
-        graphics.bezierCurveTo(length * .35, -radius, length * .55, -opening,
-                length, -opening);
-        graphics.lineTo(length, opening);
-        graphics.bezierCurveTo(length * .55, opening, length * .35, radius, 0,
-                radius);
-        graphics.closePath();
-        graphics.fill();
-        // A pointed flat-colour transition avoids a dark cap in the sea.
+        graphics.fillRect(shore, -radius - corner, 6, 2 * (radius + corner));
         graphics.setFill(RIVER_COLOR);
         graphics.beginPath();
         graphics.moveTo(0, -radius);
-        graphics.bezierCurveTo(length * .25, -radius, length * .38,
-                -radius * .5, length * .42, 0);
-        graphics.bezierCurveTo(length * .38, radius * .5, length * .25, radius,
-                0, radius);
+        graphics.lineTo(shore - corner, -radius);
+        graphics.quadraticCurveTo(shore, -radius, shore, -radius - corner);
+        graphics.lineTo(shore, radius + corner);
+        graphics.quadraticCurveTo(shore, radius, shore - corner, radius);
+        graphics.lineTo(0, radius);
         graphics.closePath();
         graphics.fill();
-        final double islandRadius = Math.max(2.2, river.width * .3);
-        graphics.setFill(imageProvider.getTerrainColor(land));
         graphics.setStroke(MARKER_INK);
-        graphics.setLineWidth(1.6);
-        graphics.beginPath();
-        graphics.moveTo(length * .55, 0);
-        graphics.bezierCurveTo(length * .75, -islandRadius, length * .95,
-                -islandRadius, length * .95, 0);
-        graphics.bezierCurveTo(length * .95, islandRadius, length * .75,
-                islandRadius, length * .55, 0);
-        graphics.closePath();
-        graphics.fill();
-        graphics.stroke();
+        graphics.setLineWidth(RIVER_BANK_WIDTH);
+        graphics.setLineCap(StrokeLineCap.ROUND);
+        for (final int side : new int[] { -1, 1 }) {
+            final double bank = side * (radius + RIVER_BANK_WIDTH / 2);
+            graphics.beginPath();
+            graphics.moveTo(0, bank);
+            graphics.lineTo(shore - corner, bank);
+            graphics.quadraticCurveTo(shore, bank, shore, bank + side * corner);
+            graphics.stroke();
+        }
         graphics.restore();
     }
 
-    /** Draw a stable hand-drawn course in tile-local coordinates. */
-    public void paintRiver(final GraphicsContext graphics, final Point point,
-            final RiverShape river) {
+    /** Draw one pass of the connected river silhouette in tile coordinates. */
+    private void paintRiver(final GraphicsContext graphics, final Point point,
+            final RiverShape river, final boolean outline) {
         graphics.save();
         graphics.translate(point.getX(), point.getY());
         graphics.setFill(RIVER_COLOR);
+        graphics.setStroke(MARKER_INK);
+        graphics.setLineWidth(2 * RIVER_BANK_WIDTH);
+        graphics.setLineJoin(StrokeLineJoin.ROUND);
         for (final RiverShape.Band band : river.bands) {
-            graphics.fillPolygon(band.x, band.y, band.x.length);
+            if (outline) {
+                graphics.strokePolygon(band.x, band.y, band.x.length);
+            } else {
+                graphics.fillPolygon(band.x, band.y, band.x.length);
+            }
         }
         if (river.roundCenter) {
             final double edge = (Tile.TILE_WIDTH_IN_PX - river.width) / 2;
-            graphics.fillOval(edge, edge, river.width, river.width);
+            if (outline) {
+                graphics.strokeOval(edge, edge, river.width, river.width);
+            } else {
+                graphics.fillOval(edge, edge, river.width, river.width);
+            }
         }
         graphics.restore();
     }

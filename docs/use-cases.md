@@ -1,5 +1,17 @@
 # Use cases a přejímka pravidel hry
 
+## UC-008/012: obrys říčních břehů — R-0320 (2026-10-27)
+
+1. [R-0320](requirements/done/R-0320.md) upravuje vzhled MAP-004 a UC-008/012:
+   úzký tok má obtažené břehy a jediné otevřené ústí do moře, shodné na mapě
+   i v náhledu vybraného pole. Pravidla pohybu, produkce, průzkumu a ukládání
+   se nemění.
+2. TC24/F15/12 ověřuje ústí, shodu mapy a náhledu, posun a Pokračovat.
+   TC90/F81 kontroluje inkoust obou břehů a nepřerušenou vodu společně
+   s dosavadními asercemi pohybu, produkce a mostů. Skutečnou přejímku vede
+   [funkční evidence](functional-tests.md#r-0320-ink-river-banks-2026-10-27).
+
+
 ### UC-006/114/119: náhled neobjeveného pole — 2026-10-27
 
 1. [R-0318](requirements/done/R-0318.md) přidává TC26/F18/11: shodu mapové mlhy a

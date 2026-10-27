@@ -1,9 +1,17 @@
 # Current requirement backlog
 
+Accepted locally on 2026-10-27: [R-0320 — ink river banks and narrow mouth](done/R-0320.md),
+A03 with A05/A07 dependencies. The user-selected variant 1 replaces the island
+from R-0315. All 4,776 model/JUnit tests, 13 targeted UI/support checks and
+21 fixed smoke/support checks passed with zero failures/errors/skips;
+[evidence](../functional-tests.md#r-0320-ink-river-banks-2026-10-27) retains
+the repaired verification failures. Remote publication remains unverified.
+
+
 Accepted locally on 2026-10-27: [R-0319 — river tile previews](done/R-0319.md),
 A03 with A05 terrain/exploration and A07 overlay dependencies. The preview shares
-river courses, coastal mouths and bridges with the map, including the island
-in the adjoining ocean tile. Model/JUnit, targeted UI and fixed smoke passed;
+river courses, coastal mouths and bridges with the map. Its earlier island
+appearance is replaced by R-0320. Model/JUnit, targeted UI and fixed smoke passed;
 [local evidence](../functional-tests.md#r-0319-river-tile-previews-2026-10-27)
 retains failed attempts and screenshots. Remote publication remains unverified.
 
@@ -13,7 +21,7 @@ A03 with A05 exploration and A10 founder-check dependencies. Map and panel share
 fog drawing; a supporting Congress layout repair keeps candidates selectable.
 Status: `done`; [local acceptance](../functional-tests.md#r-0318-unknown-tile-preview-2026-10-27) passed.
 
-Implemented on 2026-10-27: [R-0315 — two-arm river mouth](R-0315.md).
+Superseded on 2026-10-27 by R-0320: [R-0315 — two-arm river mouth](canceled/R-0315.md).
 The selected appearance applies to existing known coastal river endpoints,
 including loaded games. Compilation and a static renderer preview are checked;
 tests remain unrun at the user's request, so normal local acceptance is not claimed.

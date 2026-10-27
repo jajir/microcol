@@ -11516,7 +11516,7 @@ or website publication.
 
 ## R-0315 Two-arm river mouth — 2026-10-27
 
-1. Base `c659b36c`, plus [R-0315](requirements/R-0315.md): GUI-only outlet selection
+1. Base `c659b36c`, plus [R-0315](requirements/canceled/R-0315.md): GUI-only outlet selection
    and the selected two-arm mouth. No map schema, gameplay rules or saved data change.
    The user explicitly authorized implementation while the instruction not to run
    tests remains in effect. The requirement remains active, not locally accepted.
@@ -11791,3 +11791,64 @@ or website publication.
    consistency checks and strict MkDocs passed after moving the requirement and
    repairing its links. R-0314 is complete locally. Remote regression and
    publication were not inspected or claimed.
+
+
+## R-0320 ink river banks — 2026-10-27
+
+1. Source: `93dc2252fdec8ed31fa920d7175441d9c0847479` plus the R-0320 changes.
+   [R-0320](requirements/done/R-0320.md) replaces the island with variant 1 and adds
+   1.6-pixel ink banks to the shared river renderer. All outlines precede water
+   fills, preserving open tile joins and junctions. Model data and rules are unchanged.
+2. TC24/F15/12 retains approach, landing, colony founding and Continue; its
+   dedicated `RiverPage` checks now expect narrow ink banks, continuous water
+   across the coast and no island. Map/preview comparison remains at 1×/2×.
+   TC90/F81 retains travel, production and bridge assertions and verifies both
+   ink banks and uninterrupted water in its actual-map curved-course check.
+3. Shared Java formatting passed for the three changed Java files. A headless
+   JavaFX render of Original World was inspected at 1×/4×, including the coastal
+   join and a bend. The [saved image](graphics-assets/river-banks-2026-10-27/implemented-mouth.png)
+   is renderer evidence, not Docker/Xvfb acceptance. Preview setup initially
+   lacked Monocle and Mockito's existing inline-mock resource; both were supplied
+   from the existing runtime/previous preview. No project dependency was added.
+4. Required model dispatch: `20261027T161507Z-fc0b8c72f54e`, PID `93697`, timeout
+   600 s. Passed all **4,776 model/JUnit tests**, 347 fresh XML reports,
+   zero failures/errors/skips in 136.321 s including local admission/cleanup.
+   Reports: `target/verification/run-xvhjiy7c/model/run-fmJ5to/microcol-game/surefire-reports`.
+5. Targeted dispatch `20261027T161751Z-5318c44c6e74`, PID `94031`, timeout
+   600 s, selects TC24/F15/12, all five TC90/F81 scenarios, all three TC91/F82
+   scenarios, TC80/F72/05 and the three `PageVerificationContractTest` checks.
+   This attempt completed all 13 checks in 169.387 s with zero failures,
+   two errors and zero skips. Reports: `target/docker-ui/run-6UShaU`.
+6. TC24/F15/12 sampled sea colour three pixels inside the ocean tile, which is
+   still within the outlined river opening. The repaired preview check verifies
+   river water there and ocean water eight pixels into the tile. TC90/F81/01
+   found a one-channel-level antialias rounding difference between the same
+   curve at different canvas origins; the existing one-level bridge tolerance
+   now also applies to ink curves. All gameplay, river width, bank, continuous
+   water, map/preview, margin and persistence assertions remain. Only the UI
+   verification helper changed; all runtime/model sources still match the
+   passing model snapshot. The failed evidence and actual-map image are retained.
+7. The same 13-check targeted selection is repeated after shared formatting:
+   `20261027T162207Z-096db831bc1b`, PID `94677`, timeout 600 s. Passed all
+   **13 checks in five complete XML reports**, zero failures/errors/skips,
+   in 233.432 s including local admission/cleanup. Reports:
+   `target/docker-ui/run-dLF1Bn/microcol-test/surefire-reports`.
+8. Visually inspected the [actual-map screenshot](graphics-assets/river-banks-2026-10-27/implemented-map.png)
+   and both selected land/sea previews from the passing Docker run. The bank
+   outline joins the sea coast without a transverse line or island; resource
+   layering and the clipped preview remain readable. Saved originals are
+   `target/docker-ui/run-dLF1Bn/microcol-test/warehouse-qa/R-0320-*.png`.
+9. Fixed smoke dispatch: `20261027T162620Z-d117fed9b05a`, PID `95225`, outer
+   timeout 480 s with the unchanged 420-second acceptance budget. Passed all
+   **21 fixed smoke/support checks in 12 complete XML reports**, zero
+   failures/errors/skips, in **201.891 s including admission and cleanup**
+   (verifier 201.739 s, container group 198.999 s). Reports:
+   `target/verification/run-hxt5soh4/precommit/run-jx6b8p/microcol-test/surefire-reports`.
+10. Final review confirmed shared map/preview composition, bank thickness,
+    open coastline, foreground resources/bridges and unchanged model/visibility
+    rules. All three changed Java files match the accepted smoke source copy
+    and the recorded hashes in `target/r0320/source-hashes-repair.json`;
+    runtime code also matches the passing model copy. Only documentation
+    closure follows acceptance. All nine documentation consistency tests and
+    the strict MkDocs build passed after closing R-0320. Remote CI and
+    publication were not inspected and are not claimed.

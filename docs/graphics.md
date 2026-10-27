@@ -1,11 +1,34 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Úzké ústí a obrys řeky — 27. října 2026
+
+1. Uživatel vybral **variantu 1: úzký tok obtažený po obou březích** a zadal
+   její realizaci v [R-0320](requirements/done/R-0320.md). Nahrazuje dřívější
+   dvouramenné ústí s ostrůvkem. Břehové linky mají stejnou optickou tloušťku
+   jako pobřeží; u ústí se malým obloukem napojí na jeho čáru. Napříč vodou
+   není uzavírací čára, ostrůvek ani pás pevniny.
+2. Stávající šířky a jemné vlnění toku zůstávají. Nejprve se kreslí obrysy
+   všech propojených pásů, potom jejich vodní výplň; uvnitř soutoku ani na
+   hranici polí tak nemají vznikat inkoustové přepážky. Náhled vybraného
+   pole používá stejný renderer jako mapa. Pravidla dohledu, suroviny,
+   mosty, ukládání a rozmístění řek se nemění.
+3. [Vybraný návrh](graphics-assets/river-banks-2026-10-27/selected-1.png)
+   je výtvarná reference. Následující čtyřnásobný náhled pochází ze skutečného
+   rendereru nad Original World; není to náhrada hráčských testů. Výsledky
+   kontrol vede [funkční evidence](functional-tests.md#r-0320-ink-river-banks-2026-10-27).
+4. [Snímek skutečné hry](graphics-assets/river-banks-2026-10-27/implemented-map.png)
+   pochází z úspěšného cíleného testu v Dockeru/Xvfb dne 27. října 2026.
+
+![Úzké ústí a obtažené břehy ve skutečném rendereru](graphics-assets/river-banks-2026-10-27/implemented-mouth.png)
+
+
 ## Náhled řeky a ústí — 27. října 2026
 
 1. [R-0319](requirements/done/R-0319.md) doplňuje do pravého náhledu stejnou vrstvu
-   říčních toků, dvouramenných ústí a mostů, kterou používá hlavní mapa.
+   říčních toků, ústí a mostů, kterou používá hlavní mapa.
    Suroviny a pozorované objekty zůstávají nad řekou. Kresba se ořízne na vybrané
-   pole; při výběru sousedního moře zahrne také jeho část ústí a ostrůvku.
+   pole; při výběru sousedního moře zahrne také jeho část ústí. Aktuální tvar
+   určuje [R-0320](#uzke-usti-a-obrys-reky-27-rijna-2026).
 2. Náhled používá pouze prozkoumané říční spoje a známé pobřeží. Neobjevená pole
    zachovávají šedobéžovou mlhu a případný otazník. Statické dekorace náhledu,
    pravidla dohledu a model řek se nemění.
@@ -14,7 +37,7 @@
 
 ![Skutečný náhled říčního ústí na pevnině](graphics-assets/river-preview-2026-10-27/mouth-land.png)
 
-[Část ústí s ostrůvkem v sousedním moři](graphics-assets/river-preview-2026-10-27/mouth-sea.png),
+[Historický náhled ústí s ostrůvkem v sousedním moři](graphics-assets/river-preview-2026-10-27/mouth-sea.png),
 [most se stříbrem](graphics-assets/river-preview-2026-10-27/bridge-silver.png) a
 [most s rudou](graphics-assets/river-preview-2026-10-27/bridge-ore.png).
 
@@ -113,6 +136,9 @@
 
 ## Vybrané dvouramenné ústí — 27. října 2026
 
+Tento dřívější výběr a jeho náhledy jsou historické; nahrazuje je
+[úzké ústí s obrysem](#uzke-usti-a-obrys-reky-27-rijna-2026).
+
 1. Pro [R-0304](requirements/R-0304.md) uživatel vybral **variantu B: dvě ramena
    kolem drobného protáhlého ostrůvku**. Jde o jediný společný vzhled; výběr
    variant pro jednotlivé mapy ani ústí se nyní nezavádí.
@@ -122,7 +148,7 @@
 3. Obrázek je vybraný návrh vytvořený ImageGenem ze screenshotu, nikoli snímek
    implementované hry. Výběr nemění generování řek ani pobřežní pravidla;
    výjimku Original World na (25, 13) nadále určuje [R-0313](requirements/R-0313.md).
-   Následně uživatel výslovně zadal implementaci v [R-0315](requirements/R-0315.md).
+   Následně uživatel výslovně zadal implementaci v [R-0315](requirements/canceled/R-0315.md).
 4. Vykreslování nyní otevírá známý koncový úsek směrem k prozkoumanému oceánu
    přes společnou hranu. Volí směr navazující na přítok; kontakt pouze rohem,
    jezero a neprozkoumané sousedství ústí nevytvoří. Zachovává velikost řeky,

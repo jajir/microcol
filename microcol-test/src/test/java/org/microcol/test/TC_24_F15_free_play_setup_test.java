@@ -343,22 +343,22 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         fog.verifyExplored(mouth, true);
         setup.verifyOriginalWorldLandscape();
 
-        // Inspect the open sea arms and decorative island, then pan the map.
+        // Inspect the outlined narrow outlet, then pan the map.
         final org.microcol.model.Location delta = org.microcol.model.Location
                 .of(25, 13);
         final org.microcol.page.RiverPage river = new org.microcol.page.RiverPage(
                 getContext());
-        river.verifyLargeTwoArmMouth(delta, org.microcol.model.Direction.east);
+        river.verifyNarrowRiverMouth(delta, org.microcol.model.Direction.east);
         game.selectTile(delta);
         river.verifyRiverPreview(delta);
         game.selectTile(org.microcol.model.Location.of(26, 13));
         river.verifyRiverPreview(org.microcol.model.Location.of(26, 13));
-        river.captureDialog("tileImage", "R-0319-mouth-sea.png");
+        river.captureDialog("tileImage", "R-0320-mouth-sea.png");
         game.selectTile(delta);
-        river.captureDialog("tileImage", "R-0319-mouth-land.png");
-        fog.saveMapEvidence("R-0315-river-mouth.png");
+        river.captureDialog("tileImage", "R-0320-mouth-land.png");
+        fog.saveMapEvidence("R-0320-river-mouth.png");
         game.panFromTile(delta);
-        river.verifyLargeTwoArmMouth(delta, org.microcol.model.Direction.east);
+        river.verifyNarrowRiverMouth(delta, org.microcol.model.Direction.east);
         game.selectTile(delta);
         river.verifyRiverPreview(delta);
         game.selectTile(org.microcol.model.Location.of(26, 13));
@@ -415,7 +415,7 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
         colony.verifyColonyName("River Haven");
         colony.close();
         setup.verifyOriginalWorldLandscape();
-        river.verifyLargeTwoArmMouth(delta, org.microcol.model.Direction.east);
+        river.verifyNarrowRiverMouth(delta, org.microcol.model.Direction.east);
         game.selectTile(delta);
         river.verifyRiverPreview(delta);
         game.selectTile(org.microcol.model.Location.of(26, 13));

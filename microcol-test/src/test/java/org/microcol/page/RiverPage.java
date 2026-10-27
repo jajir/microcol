@@ -80,8 +80,7 @@ public final class RiverPage extends AbstractScreen {
                     final Image mapImage = map.snapshot(parameters, null);
                     final Image previewImage = preview.snapshot(parameters,
                             null);
-                    // The eastern sea tile contains the island at its western
-                    // edge, away from animated waves.
+                    // Compare the coastal opening away from animated waves.
                     int riverPixels = 0;
                     int maxColourDifference = 0;
                     for (int y = (sea ? 14 : 3) * scale; y < (sea ? 32 : 42)
@@ -109,11 +108,9 @@ public final class RiverPage extends AbstractScreen {
                             }
                         }
                     }
-                    // Rotated bridge edges round one colour level differently
+                    // Antialiased ink rounds one colour level differently
                     // at different canvas origins.
-                    final int tolerance = getModel().getMap().getTerrainAt(at)
-                            .isHasRoad() ? 1 : 0;
-                    assertTrue(maxColourDifference <= tolerance,
+                    assertTrue(maxColourDifference <= 1,
                             "River preview differs at " + at + " scale " + scale
                                     + ": maximum channel difference "
                                     + maxColourDifference);
@@ -123,12 +120,16 @@ public final class RiverPage extends AbstractScreen {
                     } else {
                         final ImageProvider images = getContext()
                                 .getClassFromGuice(ImageProvider.class);
-                        assertEquals(
-                                toRgb(images.getTerrainColor(
-                                        TerrainType.GRASSLAND)),
+                        assertEquals(toRgb(PaintService.RIVER_COLOR),
                                 toRgb(previewImage.getPixelReader()
                                         .getColor(7 * scale, 23 * scale)),
-                                "The ocean preview must contain the mouth's grass island");
+                                "The river must extend through the coastal opening");
+                        assertEquals(
+                                toRgb(images
+                                        .getTerrainColor(TerrainType.OCEAN)),
+                                toRgb(previewImage.getPixelReader()
+                                        .getColor(12 * scale, 23 * scale)),
+                                "The ocean preview must show open water without an island");
                     }
                     for (int y = 0; y < 45 * scale; y++) {
                         assertEquals(0,
@@ -148,23 +149,22 @@ public final class RiverPage extends AbstractScreen {
         }).get(10, TimeUnit.SECONDS);
     }
 
-    public void verifyLargeTwoArmMouth(final Location at,
+    public void verifyNarrowRiverMouth(final Location at,
             final Direction towardSea) throws Exception {
         final ImageProvider images = getContext()
                 .getClassFromGuice(ImageProvider.class);
         final int sea = toRgb(images.getTerrainColor(TerrainType.OCEAN));
-        final int land = toRgb(images
-                .getTerrainColor(getModel().getMap().getTerrainTypeAt(at)));
-        final int[] expected = { toRgb(PaintService.RIVER_COLOR), land, sea,
-                sea, sea, sea };
+        final int ink = toRgb(Color.web("#292824"));
+        final int river = toRgb(PaintService.RIVER_COLOR);
+        final int[] expected = { river, river, river, sea, sea, ink, ink };
         try {
             WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
                     () -> Arrays.equals(expected, mouthPixels(at, towardSea)));
         } catch (final TimeoutException timeout) {
-            // The assertion reports a closed coast or missing island.
+            // The assertion reports a closed outlet or missing bank ink.
         }
         assertArrayEquals(expected, mouthPixels(at, towardSea),
-                "Expected a small island and two open arms across the coastline");
+                "Expected outlined narrow banks and open water through the coast");
     }
 
     private int[] mouthPixels(final Location at, final Direction towardSea)
@@ -174,8 +174,8 @@ public final class RiverPage extends AbstractScreen {
                 .get(10, TimeUnit.SECONDS);
         final Point tile = getContext().getArea().convertToCanvasPoint(at);
         final Location direction = towardSea.getVector();
-        final int[][] samples = { { -8, 0 }, { 25, 0 }, { 20, -8 }, { 20, 8 },
-                { 26, -8 }, { 26, 8 } };
+        final int[][] samples = { { -8, 0 }, { 12, 0 }, { 25, 0 }, { 28, 0 },
+                { 32, 0 }, { 12, -8 }, { 12, 6 } };
         final int[] pixels = new int[samples.length];
         for (int i = 0; i < samples.length; i++) {
             final int x = (int) Math.round(Tile.TILE_WIDTH_IN_PX / 2.0
@@ -295,6 +295,21 @@ public final class RiverPage extends AbstractScreen {
             }
             assertTrue(bottom >= top,
                     "Connected river has a gap at column " + x);
+            for (int y = top; y <= bottom; y++) {
+                assertTrue(isRiverPixel(canvas, tile, x, y, riverRgb),
+                        "No ink seam may cross the water at column " + x);
+            }
+            for (final int bank : new int[] { top - 2, bottom + 2 }) {
+                boolean ink = false;
+                for (int y = bank - 1; y <= bank + 1; y++) {
+                    final Color colour = canvas.getPixelReader()
+                            .getColor(tile.getX() + x, tile.getY() + y);
+                    ink |= colour.getRed() < .25 && colour.getGreen() < .25
+                            && colour.getBlue() < .25;
+                }
+                assertTrue(ink,
+                        "Both river banks must carry ink at column " + x);
+            }
             minimum = Math.min(minimum, (top + bottom) / 2.0);
             maximum = Math.max(maximum, (top + bottom) / 2.0);
         }
