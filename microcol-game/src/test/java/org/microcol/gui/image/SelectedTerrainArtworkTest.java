@@ -27,6 +27,12 @@ class SelectedTerrainArtworkTest {
                 frames.add(fingerprint(image));
                 for (int y = 0; y < 45; y++) {
                     for (int x = 0; x < 45; x++) {
+                        final int pixel = image.getPixelReader().getArgb(x, y);
+                        // The pale High Seas direction marker starts at x=37.
+                        if (x < 35 && (pixel >>> 24) > 0) {
+                            assertEquals(0, pixel & 0x00ffffff,
+                                    "Wave contours use black ink");
+                        }
                         if (x < 3 || y < 16 || y > 32) {
                             assertEquals(0,
                                     image.getPixelReader().getColor(x, y)
@@ -46,7 +52,8 @@ class SelectedTerrainArtworkTest {
             assertNotEquals(fingerprint(crest), fingerprint(impact));
             assertTrue(ink(crest) > ink(dissolved) + 10,
                     "The wave dissolves; the High Seas direction mark stays");
-            assertTrue(ink(crest) < 100, "Thin contour, not a filled hill");
+            assertTrue(ink(crest) > 50 && ink(crest) < 100,
+                    "Map-outline weight, not a hairline or a filled hill");
             assertEquals(fingerprint(crest),
                     fingerprint(cache.getImage(
                             ImageLoaderTerrainSymbols.decorationKey(terrain))),

@@ -1,4 +1,9 @@
 # Current requirement backlog
+
+Implemented without test execution at the user's request on 2026-10-27:
+[R-0305 — black wave contours](R-0305.md). Status remains `ready for development`
+pending verified acceptance; see the [evidence](../functional-tests.md#r-0305-black-wave-contours-2026-10-27).
+
 Completed locally on 2026-10-26: [R-0299 — resolve current Dependabot library alerts](done/R-0299.md), A01 with A03/A04 consumers; patched Log4j and Gson, JDK 17 packaging checks and all 4,775 mandatory model/JUnit plus fixed smoke checks passed. [Evidence](../functional-tests.md#r-0299-dependabot-library-updates-2026-10-26) distinguishes local acceptance from remote alert closure and publication.
 
 Completed locally on 2026-10-26: [R-0295 — six-minute local acceptance gate](done/R-0295.md), A01; 45 tooling tests and 4,775 mandatory model/JUnit plus fixed smoke checks passed. [Evidence](../functional-tests.md#r-0295-six-minute-gate-2026-10-26) records the configured limit and actual duration independently of publication.

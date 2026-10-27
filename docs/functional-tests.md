@@ -1,5 +1,30 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0305 black wave contours — 2026-10-27
+
+1. [R-0305](requirements/R-0305.md) implements the approved black wave lines
+   at the map-outline target of 1.6 logical pixels, on base `8d9af870` plus
+   this task's changes. The shared SVG and runtime PNG cover all 120 ocean
+   and 120 High Seas frames and static previews; frame geometry, opacity,
+   timing and placement are unchanged.
+2. The user explicitly requested implementation and push without tests on
+   2026-10-27. Model/JUnit, targeted Docker/Xvfb UI, smoke/support and
+   documentation consistency tests were not run. No fresh passing counts
+   or local game acceptance are claimed; previous successful runs do not
+   verify this asset change.
+3. `SelectedTerrainArtworkTest` now expects black wave pixels and contour
+   coverage consistent with the thicker line. The existing
+   `TC_80_F72_terrain_identity_test.TC_04_sparse_terrain_and_living_water_survive_pan_and_continue`
+   remains the player-path coverage for animation, static previews, panning
+   and Continue. These checks remain unexecuted for this revision.
+4. SVG export and visual inspection of the atlas passed. Source review found
+   only wave stroke color/width changes and the asset description update;
+   all 1,096 SVG elements, frame paths and opacity values are retained.
+   Shared Java formatting passed for the one changed test file. Strict
+   MkDocs passed after correcting a heading link (`target/r0305/mkdocs.log`);
+   these are non-test checks, not game acceptance. Remote regression and
+   publication are not inspected; pushing does not establish a new download.
+
 ## R-0303 — Separate model and smoke phases — 2026-10-26
 
 1. [R-0303](requirements/done/R-0303.md) separates the existing verifier into all-model `--model` and UI/support `--smoke` phases. Model tests include `ConnectorTest`; smoke retains all existing support checks and the same ten UI scenarios. Default full verification is unchanged. Smoke has a 420-second acceptance budget at both entry points, with a separate 480-second callback watchdog.

@@ -1,5 +1,22 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Černé kontury vln — 27. října 2026
+
+1. Uživatel schválil [poslední náhled s černou čárou](graphics-assets/wave-contours-2026-10-27/selected-black.png):
+   vlny mají být černé a stejně silné jako hranice odkryté a skryté mapy.
+   Předchozí tři barevné a příliš silné návrhy nejsou zadáním.
+2. [R-0305](requirements/R-0305.md) nastavuje hlavní vlnu i doznívající stopu
+   na černou `#000000` a 1,6 logického px, podle stávajícího cíle obrysu mapy.
+   Platí pro oceán, daleké moře i jejich statické náhledy. Nahrazuje starší
+   barevné a šířkové nastavení vln z R-0293, nikoli jejich schválený pohyb.
+3. Šestisekundový průběh, tvary a průhlednost jednotlivých snímků zůstávají
+   zachované. Šipka dalekého moře, jezera, terénní barvy, četnost, priorita
+   bonusů a skrytá mapa se nemění.
+4. SVG a herní PNG jsou upravené. Uživatel pro tuto změnu výslovně požádal
+   o push bez testů; [evidence](functional-tests.md#r-0305-black-wave-contours-2026-10-27)
+   rozlišuje kontrolu podkladů od neprovedeného ověření hry. Přiložený
+   schválený obrázek je návrh, nikoli nový snímek běžící hry.
+
 ## Delší oblouky a ústí řek — návrhy 26. října 2026
 
 1. [R-0304](requirements/R-0304.md) zachycuje uživatelovu žádost přiblížit řeky
