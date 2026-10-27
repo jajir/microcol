@@ -1,0 +1,83 @@
+/* Native controls keep their keyboard, wheel and drag behavior. */
+#colonizopediaSearch {
+    -fx-shape: "M2 2 Q55 0 110 2 T218 2 Q220 18 218 38 Q164 40 110 38 T2 38 Q0 20 2 2 Z";
+    -fx-background-color: #FFF9EC;
+    -fx-background-insets: 0;
+    -fx-border-color: #302D27;
+    -fx-border-width: 1.7;
+    -fx-padding: 7 11;
+    -fx-pref-height: 40;
+    -fx-min-height: 40;
+    -fx-prompt-text-fill: #716858;
+    -fx-text-fill: #292824;
+}
+
+#colonizopediaSearch:focused {
+    -fx-background-color: #FFFDF6;
+    -fx-border-width: 2.4;
+}
+
+#colonizopediaTopics,
+#colonizopediaBodyScroll {
+    -fx-background-color: #FFFDF6;
+    -fx-background-insets: 0;
+    -fx-border-color: #B9AE93;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+}
+
+#colonizopediaTopics .list-cell {
+    -fx-background-color: #FFFDF6;
+    -fx-text-fill: #292824;
+    -fx-padding: 7 9;
+}
+
+#colonizopediaTopics .list-cell:odd { -fx-background-color: #F3F1E9; }
+#colonizopediaTopics .list-cell:empty { -fx-background-color: #FFFDF6; }
+#colonizopediaTopics .list-cell:filled:selected {
+    -fx-background-color: #DEC79B;
+    -fx-underline: true;
+}
+#colonizopediaTopics:focused { -fx-border-color: #716858; }
+
+#colonizopediaBodyScroll > .viewport { -fx-background-color: #FFFDF6; }
+#colonizopediaPage .help-article { -fx-padding: 12; }
+#colonizopediaPage .help-topic-title {
+    -fx-padding: 0 0 10 0;
+    -fx-border-color: #B9AE93;
+    -fx-border-width: 0 0 1 0;
+}
+
+#colonizopediaPage .scroll-bar:vertical {
+    -fx-background-color: #EAE2CC;
+    -fx-padding: 3;
+    -fx-pref-width: 20;
+}
+#colonizopediaPage .scroll-bar:vertical .track {
+    -fx-shape: "M3 1 Q2 26 3 50 T3 99 L6 99 Q7 75 6 50 T6 1 Z";
+    -fx-background-color: #FFF9EC;
+    -fx-border-color: #716858;
+    -fx-border-width: 1;
+    -fx-background-insets: 0 5;
+    -fx-border-insets: 0 5;
+}
+#colonizopediaPage .scroll-bar:vertical .thumb {
+    -fx-shape: "M2 2 Q8 0 14 2 Q16 18 14 32 T14 62 Q8 64 2 62 Q0 46 2 32 T2 2 Z";
+    -fx-background-color: #DEC79B;
+    -fx-background-insets: 0;
+    -fx-border-color: #302D27;
+    -fx-border-width: 1.6;
+    -fx-min-height: 28;
+}
+#colonizopediaPage .scroll-bar:vertical .thumb:hover,
+#colonizopediaPage .scroll-bar:vertical .thumb:pressed {
+    -fx-background-color: #CBB17F;
+}
+#colonizopediaPage .scroll-bar:vertical .increment-button,
+#colonizopediaPage .scroll-bar:vertical .decrement-button,
+#colonizopediaPage .scroll-bar:vertical .increment-arrow,
+#colonizopediaPage .scroll-bar:vertical .decrement-arrow {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-pref-height: 0;
+}

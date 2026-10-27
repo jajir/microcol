@@ -895,7 +895,7 @@ documentation in APT just to make it visible on the web.
 
 ## R-0325 help refinement proposals — 2026-10-27
 
-1. [R-0325](requirements/R-0325.md) captures the user's annotated follow-up to
+1. [R-0325](requirements/done/R-0325.md) captures the user's annotated follow-up to
    full-window Help at `d45d059b`: title in the header, no common outer frame,
    search limited to the left index, a higher article, and hand-drawn search
    and vertical-scroll controls. Status remains `waiting for refinement` until

@@ -93,11 +93,11 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         final MainScreenLayoutPage window = new MainScreenLayoutPage(
                 getContext());
         window.resize(1280, 850);
-        help.verifyFillsGameWindow();
-        help.captureDialog("colonizopediaPage", "r0324-help-full-en.png");
+        help.verifyFillsGameWindow("Colonizopedia");
+        help.captureDialog("colonizopediaPage", "r0325-help-full-en.png");
         window.resize(900, 700);
-        help.verifyFillsGameWindow();
-        help.captureDialog("colonizopediaPage", "r0324-help-small-en.png");
+        help.verifyFillsGameWindow("Colonizopedia");
+        help.captureDialog("colonizopediaPage", "r0325-help-small-en.png");
 
         // Every rule family is listed; the first topic is shown at once.
         help.verifyTopicTitles(TOPICS);
@@ -203,7 +203,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         // Focus returns to the game: H opens help again and clears the search.
         help.openWithHKey();
         help.verifyDialogOpen();
-        help.verifyFillsGameWindow();
+        help.verifyFillsGameWindow("Colonizopedia");
         help.verifyTopicTitles(TOPICS);
         help.verifyTopicListHasFocus();
         help.closeWithOk();
@@ -393,6 +393,12 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.typeSearch("ore miner");
         help.verifyTopicTitles("Units");
         help.verifyReferenceRows(35);
+        // The sketched native thumb remains draggable to the last unit.
+        help.verifyFillsGameWindow("Colonizopedia");
+        help.verifyHandDrawnBodyScrollbar();
+        help.captureDialog("colonizopediaPage", "r0325-help-units-en.png");
+        help.dragBodyThumbToEnd();
+        help.verifyBodyScrolledToEnd();
         help.scrollReferenceToEnd();
         help.scrollReferenceToEnd();
         help.scrollReferenceToEnd();

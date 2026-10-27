@@ -27,6 +27,7 @@
 3. Horní OK a Escape vracejí hráče na mapu bez změny partie. Sdílený stavový panel
    zůstává viditelný. [Evidence](functional-tests.md#r-0324-full-window-help-2026-10-27)
    odděluje automatické a vizuální kontroly od případného pozorování hráčů.
+4. Následná [Přímá úprava R-0325](requirements/done/R-0325.md) umisťuje název do horní lišty a hledání pouze nad rejstřík. Článek začíná vedle hledání; při nenalezeném výrazu lze hledání upravit či vymazat. Kreslené ovládání zachovává textový fokus, kolečko a tažení posuvníku. Jde o rozložení zvolené uživatelem, nikoli výsledek hráčské studie.
 
 ## Atlas přehledů ve Statistikách — 2026-10-27
 

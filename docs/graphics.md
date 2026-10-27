@@ -16,17 +16,11 @@
 4. Skutečné ověření a snímky vede [funkční evidence](functional-tests.md#r-0327-clean-status-line-2026-10-27).
 
 
-## Návrhy odlehčení nápovědy — 27. října 2026
+## Odlehčení nápovědy — 27. října 2026
 
-1. Podle uživatelova anotovaného snímku bude název vlevo v horní liště, bez
-   samostatného řádku pod ní. Odstraní se vnější společný rámeček; hledání zůstane
-   pouze nad levým rejstříkem a článek začne ve stejné výšce jako hledání.
-2. Ručně kreslené obrysy hledání a svislého posuvníku navazují na současná tlačítka.
-   Zachovávají Playpen Sans Regular 14, současné ilustrace a čitelný fokus.
-3. [R-0325](requirements/R-0325.md) porovnává tři návrhy vnitřního členění.
-   Jde o upřesnění před výběrem; aktuální implementace zůstává podle R-0324.
-   [Evidence](publishing.md#r-0325-help-refinement-proposals-2026-10-27) rozlišuje
-   kontroly návrhu od budoucí přejímky JavaFX.
+1. Pro [R-0325](requirements/done/R-0325.md) uživatel vybral **Přímou úpravu**: název v horní liště, odstraněný společný vnější rám, hledání nad levým rejstříkem a článek začínající vedle hledání. Jemné rámečky seznamu a článku zůstávají.
+2. Hledání a svislé posuvníky mají nepravidelný obrys pera; používají nativní ovládání JavaFX. Pískový výběr tématu s podtržením, původní ilustrace a Playpen Sans Regular 14 navazují na návrh. Spodní stavová lišta a společné tlačítko OK se nemění.
+3. [Evidence návrhů](publishing.md#r-0325-help-refinement-proposals-2026-10-27) zachovává porovnání tří variant. [Funkční evidence](functional-tests.md#r-0325-help-refinement-2026-10-27) vede skutečné kontroly a opravu fokusu při prvním otevření. Snímky implementace: [plná plocha](graphics-assets/help-refinement-2026-10-27/r0325-help-full-en.png), [menší okno](graphics-assets/help-refinement-2026-10-27/r0325-help-small-en.png), [čeština](graphics-assets/help-refinement-2026-10-27/r0325-help-czech.png), [jednotky a posuvník](graphics-assets/help-refinement-2026-10-27/r0325-help-units-en.png).
 
 ## Nápověda přes celou herní plochu — 27. října 2026
 

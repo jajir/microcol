@@ -198,10 +198,9 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         page.verifyMapReturned();
         page.open("help");
         org.microcol.page.ColonizopediaPage.of(getContext())
-                .verifyFillsGameWindow();
-        page.verifyScreenTitle("Colonizopedia");
+                .verifyFillsGameWindow("Colonizopedia");
         page.verifyFrame(484, 1600);
-        page.saveEvidence("r0307-help-czech.png");
+        page.saveEvidence("r0325-help-czech.png");
         page.closeWithEscape();
         page.verifyMapReturned();
         game.verifyGameInFront();

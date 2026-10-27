@@ -1154,3 +1154,11 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
    EN/CZ, hledání, posouvání a obrázkové tabulky; TC192/02 kontroluje český herní rám.
 2. Výsledky přejímky vede [evidence](functional-tests.md#r-0324-full-window-help-2026-10-27).
    Tato úprava sama neuzavírá celé UC-114/119.
+
+## Odlehčení nápovědy — R-0325, 2026-10-27
+
+1. UC-114/119: [R-0325](requirements/done/R-0325.md) upravuje umístění názvu, hledání,
+   rámečků a svislého posuvníku. TC100/01, TC100/08 a TC192/02 doplňují kontroly
+   rozložení a tažení; stávající scénáře zachovávají obsah a chování hry.
+2. [Evidence přejímky](functional-tests.md#r-0325-help-refinement-2026-10-27)
+   rozlišuje tento krok od původních návrhů a neuzavírá celé UC-114/119.

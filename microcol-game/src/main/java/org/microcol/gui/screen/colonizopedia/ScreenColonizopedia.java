@@ -15,7 +15,7 @@ import com.google.inject.Inject;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
-import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -44,10 +44,14 @@ public final class ScreenColonizopedia implements GameScreen {
 
     public static final String NO_RESULTS_ID = "colonizopediaNoResults";
 
+    public static final String TITLE_ID = "colonizopediaTitle";
+
     private final I18n i18n;
     private final InGamePage page;
 
     private final ButtonBarOk buttonBar;
+
+    private final Label title = new Label();
 
     private final TextField search = new TextField();
 
@@ -60,7 +64,9 @@ public final class ScreenColonizopedia implements GameScreen {
 
     private final Label body = new Label();
 
-    private final VBox bodyContent = new VBox(12, body);
+    private final Label topicTitle = new Label();
+
+    private final VBox bodyContent = new VBox(12, topicTitle, body);
     private final ScrollPane bodyScroll = new ScrollPane(bodyContent);
     private final ColonizopediaTables tables;
 
@@ -100,6 +106,10 @@ public final class ScreenColonizopedia implements GameScreen {
 
         body.setId(BODY_ID);
         body.setWrapText(true);
+        topicTitle.getStyleClass().add("help-topic-title");
+        topicTitle.setWrapText(true);
+        topicTitle.setMaxWidth(Double.MAX_VALUE);
+        bodyContent.getStyleClass().add("help-article");
         bodyScroll.setId(BODY_SCROLL_ID);
         bodyScroll.setFitToWidth(true);
         bodyScroll.setMinSize(0, 0);
@@ -114,13 +124,13 @@ public final class ScreenColonizopedia implements GameScreen {
         rightColumn.setMinWidth(0);
         VBox.setVgrow(bodyScroll, Priority.ALWAYS);
         HBox.setHgrow(rightColumn, Priority.ALWAYS);
-        final HBox main = new HBox(20, topicList, rightColumn);
-        main.setMinHeight(0);
-        VBox.setVgrow(main, Priority.ALWAYS);
-        final VBox root = new VBox(10, search, main);
-        root.setPadding(new Insets(10));
+        final VBox leftColumn = new VBox(10, search, topicList);
+        leftColumn.setMinSize(220, 0);
+        leftColumn.setPrefWidth(220);
+        leftColumn.setMaxWidth(220);
+        VBox.setVgrow(topicList, Priority.ALWAYS);
+        final HBox root = new HBox(20, leftColumn, rightColumn);
         root.setMinHeight(0);
-        root.getStyleClass().add("report-content");
         VBox.setVgrow(root, Priority.ALWAYS);
         // Handle Escape before the focused list consumes it.
         page.getContent().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
@@ -129,10 +139,18 @@ public final class ScreenColonizopedia implements GameScreen {
                 event.consume();
             }
         });
-        page.setToolbar(buttonBar.getContent());
+        title.setId(TITLE_ID);
+        title.setWrapText(true);
+        final HBox toolbar = new HBox(20, title, buttonBar.getContent());
+        toolbar.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(buttonBar.getContent(), Priority.ALWAYS);
+        page.setToolbar(toolbar);
         page.setContent(root);
         page.getContent().setId("colonizopediaPage");
-        page.getContent().sceneProperty()
+        page.getContent().getStylesheets().add(ScreenColonizopedia.class
+                .getResource("/gui/Colonizopedia.css").toExternalForm());
+        // ScrollPane attaches its content only after its skin is created.
+        topicList.sceneProperty()
                 .addListener((observable, oldScene, newScene) -> {
                     if (newScene != null) {
                         Platform.runLater(topicList::requestFocus);
@@ -164,7 +182,7 @@ public final class ScreenColonizopedia implements GameScreen {
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        page.setTitle(i18n.get(Colonizopedia.title));
+        title.setText(i18n.get(Colonizopedia.title));
         search.setPromptText(i18n.get(Colonizopedia.searchPrompt));
         noResults.setText(i18n.get(Colonizopedia.noResults));
         buttonBar.setButtonText(i18n.get(Loc.ok));
@@ -185,7 +203,10 @@ public final class ScreenColonizopedia implements GameScreen {
 
     private void showBody(final ColonizopediaTopic topic) {
         body.setText(topic == null ? "" : topic.getBody(i18n));
-        bodyContent.getChildren().setAll(body);
+        topicTitle.setText(topic == null ? "" : topic.getTitle(i18n));
+        topicTitle.setVisible(topic != null);
+        topicTitle.setManaged(topic != null);
+        bodyContent.getChildren().setAll(topicTitle, body);
         if (topic == ColonizopediaTopic.TERRAIN
                 || topic == ColonizopediaTopic.RESOURCES
                 || topic == ColonizopediaTopic.UNITS) {

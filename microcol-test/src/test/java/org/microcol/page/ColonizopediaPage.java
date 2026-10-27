@@ -42,6 +42,8 @@ import javafx.scene.control.Labeled;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.layout.Region;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -406,7 +408,7 @@ public final class ColonizopediaPage extends AbstractScreen {
         }
     }
 
-    public void verifyFillsGameWindow() {
+    public void verifyFillsGameWindow(final String expectedTitle) {
         getRobot().interact(() -> {
             final Node page = getNodeFinder().lookup("#colonizopediaPage")
                     .query();
@@ -431,7 +433,32 @@ public final class ColonizopediaPage extends AbstractScreen {
             final Bounds bodyBounds = body.localToScene(body.getLayoutBounds());
             final Bounds statusBounds = status
                     .localToScene(status.getLayoutBounds());
-            assertEquals(listBounds.getHeight(), bodyBounds.getHeight(), 1);
+            final TextField search = getSearchField();
+            final Bounds searchBounds = search
+                    .localToScene(search.getLayoutBounds());
+            final Labeled title = (Labeled) page
+                    .lookup("#" + ScreenColonizopedia.TITLE_ID);
+            final Bounds titleBounds = title
+                    .localToScene(title.getLayoutBounds());
+            assertEquals(expectedTitle, title.getText());
+            assertTrue(
+                    title.getParent().getStyleClass()
+                            .contains("screen-toolbar"),
+                    "Page title belongs to the top toolbar");
+            assertTrue(titleBounds.getMaxY() < searchBounds.getMinY());
+            assertTrue(page.lookupAll(".report-content").isEmpty(),
+                    "Help has no outer report frame");
+            assertEquals(listBounds.getMinX(), searchBounds.getMinX(), 1);
+            assertEquals(listBounds.getWidth(), searchBounds.getWidth(), 1);
+            assertEquals(searchBounds.getMinY(), bodyBounds.getMinY(), 1);
+            assertTrue(listBounds.getMinY() >= searchBounds.getMaxY() + 9);
+            assertEquals(listBounds.getMaxY(), bodyBounds.getMaxY(), 1);
+            assertTrue(bodyBounds.getHeight() > listBounds.getHeight(),
+                    "Article uses the height beside the search field");
+            assertTrue(search.getShape() != null,
+                    "Search keeps its hand-drawn contour");
+            assertEquals(14, search.getFont().getSize(), 0.01);
+            assertEquals(14, title.getFont().getSize(), 0.01);
             assertTrue(bodyBounds.getMaxX() >= scene.getWidth() - 60,
                     "Article fills available width");
             assertTrue(bodyBounds.getMaxY() >= statusBounds.getMinY() - 60,
@@ -439,6 +466,32 @@ public final class ColonizopediaPage extends AbstractScreen {
             assertTrue(bodyBounds.getMaxY() <= statusBounds.getMinY(),
                     "Article does not cover status");
         });
+    }
+
+    public void verifyHandDrawnBodyScrollbar() {
+        getRobot().interact(() -> {
+            final ScrollBar bar = getNodeFinder()
+                    .lookup("#" + ScreenColonizopedia.BODY_SCROLL_ID
+                            + " .scroll-bar:vertical")
+                    .queryAs(ScrollBar.class);
+            assertTrue(bar.isVisible(), "Long article exposes its scrollbar");
+            assertTrue(((Region) bar.lookup(".track")).getShape() != null,
+                    "Scrollbar rail has a hand-drawn contour");
+            assertTrue(((Region) bar.lookup(".thumb")).getShape() != null,
+                    "Scrollbar thumb has a hand-drawn contour");
+        });
+    }
+
+    public void dragBodyThumbToEnd() {
+        final Node bar = getNodeFinder().lookup("#"
+                + ScreenColonizopedia.BODY_SCROLL_ID + " .scroll-bar:vertical")
+                .query();
+        final Node track = bar.lookup(".track");
+        final Bounds bounds = track.localToScreen(track.getLayoutBounds());
+        getRobot().drag(bar.lookup(".thumb"), MouseButton.PRIMARY).dropTo(
+                (bounds.getMinX() + bounds.getMaxX()) / 2,
+                bounds.getMaxY() - 2);
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void verifyDialogOpen() {
@@ -452,7 +505,11 @@ public final class ColonizopediaPage extends AbstractScreen {
 
     /** Keyboard users reach the topic list as soon as the screen opens. */
     public void verifyTopicListHasFocus() throws Exception {
-        WaitForAsyncUtils.waitForFxEvents();
+        // Scene attachment and native focus settle on separate JavaFX pulses.
+        WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
+                () -> WaitForAsyncUtils
+                        .asyncFx(() -> getTopicList().isFocused())
+                        .get(5, TimeUnit.SECONDS));
         assertTrue(
                 WaitForAsyncUtils.asyncFx(() -> getTopicList().isFocused())
                         .get(5, TimeUnit.SECONDS),

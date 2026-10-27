@@ -1,5 +1,73 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0325 Help refinement — 2026-10-27
+
+1. [R-0325](requirements/done/R-0325.md), UC-114/119, applies the selected **Přímá úprava**
+   to Help: toolbar title, search above the index, a taller article and native
+   hand-drawn controls. Base revision: `43c87286`. The game state and complete
+   reference content remain unchanged. Local acceptance is complete.
+2. TC100/01 and TC192/02 check the title, search/index width, aligned article top,
+   shared lower edge and full-window layout in English/Czech at 1280×850 and
+   900×700. TC100/08 checks native thumb dragging to the final unit; the existing
+   TC100 scenarios preserve wheel scrolling, search, no results, keyboard,
+   illustrated data, OK/Escape and unchanged game state.
+3. Shared Eclipse formatting covers all four changed Java files. The five
+   executable/test/CSS hashes are retained in `target/r0325/source.json`.
+   Model/JUnit completion dispatch: `20261027T194546Z-00f571e0e56b`, supervisor
+   PID 25245, timeout 600 s. The targeted selection is all TC100, all TC192 and
+   `PageVerificationContractTest`, followed by the fixed smoke/support phase.
+4. Model/JUnit passed **4,777 tests, 0 failures, 0 errors, 0 skips** in 133.805 s
+   (`target/verification/run-m0xqalq5/summary.json`). All five task hashes match
+   its source snapshot. Targeted Docker/Xvfb dispatch:
+   `20261027T194829Z-c57900bdd54e`, supervisor PID 25849, timeout 1,800 s.
+5. That first targeted run remains **failed**: 16 tests, 1 failure, 0 errors,
+   0 skips, 223.426 s. TC100/01 observed no topic-list focus immediately after
+   opening; all other scenarios, layout assertions and thumb dragging passed.
+   Reports: `target/docker-ui/run-dSAUrj/microcol-test/surefire-reports/`.
+   The page verification now allows up to five seconds for the existing
+   asynchronous focus transition, without setting focus or changing assertions.
+   No runtime file changed after the model pass; only the UI page verification
+   changed (`target/r0325/source-first.json` versus `source.json`).
+6. The same complete targeted selection, `20261027T195408Z-e48b42a7ff37`,
+   PID 26392, timeout 1,800 s, also remains **failed**: 16 tests, 0 failures,
+   1 error, 0 skips, 226.650 s. TC100/01 timed out waiting for topic-list focus;
+   reports are retained in `target/docker-ui/run-B0DS5n/microcol-test/surefire-reports/`.
+   Waiting alone did not solve the defect. The focus request now follows the
+   topic list's own scene attachment, after the ScrollPane skin attaches its
+   content, instead of following the outer page's earlier attachment.
+7. That runtime repair requires new acceptance. The final candidate hashes are
+   in `target/r0325/source.json`; previous candidates remain in `source-first.json`
+   and `source-second.json`. Model/JUnit dispatch:
+   `20261027T195818Z-3f50a5a04c70`, PID 26738, timeout 600 s, passed **4,777 tests,
+   0 failures, 0 errors, 0 skips** in 133.253 s. Reports and the matching snapshot:
+   `target/verification/run-fb3vtnma/summary.json`.
+8. The unchanged candidate's complete targeted selection, completion
+   `20261027T200047Z-5b99160b8f9e`, PID 26987, timeout 1,800 s, passed **16 tests,
+   0 failures, 0 errors, 0 skips** in 224.461 s. The initial mouse-open focus,
+   repeated keyboard-open focus, layout and dragging checks now pass.
+   Reports: `target/docker-ui/run-mxB7UN/microcol-test/surefire-reports/`.
+9. Visual review of the final candidate confirms the toolbar title, removed
+   outer frame, aligned narrow search, taller article, pen contours, readable
+   reference table and intact status bar in [English at 1280×850](graphics-assets/help-refinement-2026-10-27/r0325-help-full-en.png),
+   [English at 900×700](graphics-assets/help-refinement-2026-10-27/r0325-help-small-en.png),
+   [Czech](graphics-assets/help-refinement-2026-10-27/r0325-help-czech.png) and
+   [the long units reference](graphics-assets/help-refinement-2026-10-27/r0325-help-units-en.png).
+10. Fixed smoke/support completion `20261027T200448Z-d715549660ae`, PID 27140,
+    supervisor timeout 480 s, passed **21 tests in 12 suites, 0 failures, 0 errors,
+    0 skips**. The ten UI scenarios and eleven support checks in the fixed
+    `scripts/ui-tests/smoke.json` selection ran without repeating model tests.
+    Total verifier time was 205.842 s (205.979 s including cleanup), within the
+    420 s acceptance budget. Exact selection and reports:
+    `target/verification/run-hz90k2gq/summary.json`.
+11. All five executable/test/CSS files match the accepted model and smoke source
+    snapshots on base `43c87286e7dfc2281d74cb62212a77de3fea19c5` plus this change.
+    Review confirms Help-local styling, native input behavior, unchanged shared
+    frame/status controls and preserved gameplay assertions. Earlier failed runs
+    remain failed evidence. Final documentation validation uses nine consistency
+    checks and strict MkDocs, with logs in `target/r0325/`.
+    Local acceptance does not establish remote regression or publication of a
+    distribution; neither is inspected.
+
 ## R-0327 clean status line — 2026-10-27
 
 1. [R-0327](requirements/done/R-0327.md) changes the shared status presentation:
