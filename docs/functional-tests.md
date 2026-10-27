@@ -1,5 +1,78 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0324 full-window Help — 2026-10-27
+
+1. [R-0324](requirements/done/R-0324.md), UC-114/119, moves Help from a separate modal
+   into the main game screen, preserving search, reference tables and game state.
+   Base revision: `877d8d8f`. TC100/01 checks full-window layout and resize;
+   TC100/04 checks reopening, search reset, keyboard focus and unchanged state;
+   TC192/02 checks the Czech shared frame. Local acceptance is complete.
+
+2. The shared formatter was applied to all ten changed Java files. Candidate
+   source hashes (including the removed dialog path) are recorded in
+   `target/r0324/source.json`. Model/JUnit dispatch:
+   `20261027T175757Z-4bacc2ff576c`, supervisor PID `7145`, timeout 600 s.
+   Evidence directory:
+   `/Users/jan/Library/Logs/Microcol/completions/20261027T175757Z-4bacc2ff576c`.
+   Model, targeted UI, visual review and fixed smoke acceptance remain pending.
+
+3. The first model dispatch timed out during preparation (22.093 s): the initial
+   `docker ps` step exceeded 20 s, and **the test command never started**.
+   Docker host logs show VM startup at 17:57:57–58 UTC and later dashboard/idle
+   readiness at 17:58:28 UTC. A bounded recheck returned Engine 29.8.2 in 0.516 s
+   and no running containers in 0.017 s. No runtime setting or timeout changed.
+   The failed evidence is retained; it supplies no accepted tests.
+4. Model retry on the unchanged candidate: `20261027T175912Z-cc7744f48c47`,
+   supervisor PID `7385`, timeout 600 s. Results remain pending. The first strict
+   documentation build found three links to the renamed dialog source; repairing
+   those links restored strict MkDocs. Nine documentation consistency tests also
+   passed. Final documentation validation will follow acceptance and the status move.
+
+5. Model/JUnit retry passed **4,777 tests, zero failures, errors or skips**, in
+   348 fresh XML reports under `target/verification/run-3outxbma/model`.
+   Completion elapsed time: 132.939 s. All ten current source/test hashes match
+   the accepted source snapshot; the former dialog source is absent in both.
+6. Targeted Docker/Xvfb dispatch: `20261027T180139Z-cce448d32639`, supervisor PID
+   `7656`, timeout 1,800 s. Selection: complete `TC_100_*`, complete `TC_192_*`,
+   and `PageVerificationContractTest` (13 player scenarios and 3 contract checks).
+   Evidence directory:
+   `/Users/jan/Library/Logs/Microcol/completions/20261027T180139Z-cce448d32639`.
+   Targeted, visual and fixed smoke acceptance remain pending.
+
+7. Targeted acceptance passed **16 checks (13 player scenarios and 3 contract
+   checks), zero failures, errors or skips**, in three fresh XML reports under
+   `target/docker-ui/run-c1eBmb/microcol-test/surefire-reports`. Completion elapsed
+   time: 222.390 s. The current candidate hashes remain unchanged.
+8. Visual review inspected the actual full-size and small-window English captures,
+   the Czech frame and the Czech unit reference. Content fills the main window,
+   the frame remains visible and text/reference tables retain their scrolling.
+   Archived captures: [1280×850](graphics-assets/full-window-help-2026-10-27/help-full-en.png),
+   [900×700](graphics-assets/full-window-help-2026-10-27/help-small-en.png) and
+   [Czech](graphics-assets/full-window-help-2026-10-27/help-cs.png).
+   These are implementation checks, not a player study.
+9. Fixed smoke/support dispatch: `20261027T180549Z-71e09803374d`, supervisor PID
+   `7799`, timeout 480 s with a 420 s total acceptance budget. Evidence directory:
+   `/Users/jan/Library/Logs/Microcol/completions/20261027T180549Z-71e09803374d`.
+   Smoke acceptance remains pending; remote CI and publication are outside this task.
+
+10. Fixed smoke acceptance passed **21 checks (10 player scenarios and 11 support
+    checks), zero failures, errors or skips**, in 12 fresh XML reports under
+    `target/verification/run-yozt6ilf/precommit`. The fixed selection contains
+    TC02/02, TC06/06, TC07/07, TC12/01, TC21/01+04+05, TC23/01, TC83/03,
+    TC84/02 and the four support classes defined by the smoke contract.
+    Verification elapsed time: 202.147 s; completion including cleanup:
+    **202.253 s**, within the 420 s budget.
+11. Final review found no unresolved issue in the changed paths. All ten current
+    Java source/test hashes and the removed dialog path match the accepted model
+    and smoke snapshots and remained unchanged during targeted UI verification.
+    The accepted candidate is `877d8d8f` plus this task's changes. The requirement
+    moves to `done`; local acceptance does not assert remote regression or
+    publication success.
+12. Final documentation validation passed nine consistency tests and strict
+    MkDocs; logs are `target/r0324/doc-tests-final.log` and
+    `target/r0324/mkdocs-final.log`. The moved requirement retains its four
+    chapters, exact `Status: done` and repaired incoming/relative links.
+
 ## R-0323 statistics Atlas — 2026-10-27
 
 1. [R-0323](requirements/done/R-0323.md), UC-114/119, implements the selected Atlas

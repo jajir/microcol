@@ -2,10 +2,12 @@ package org.microcol.gui.screen.colonizopedia;
 
 import org.microcol.gui.Loc;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.util.AbstractMessageWindow;
+import org.microcol.gui.screen.GameScreen;
+import org.microcol.gui.screen.Screen;
+import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.gui.util.InGamePage;
 import org.microcol.gui.util.ButtonBarOk;
-import org.microcol.gui.util.ViewUtil;
+import com.google.common.eventbus.EventBus;
 import org.microcol.i18n.I18n;
 
 import com.google.inject.Inject;
@@ -22,13 +24,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
  * Rules help with a searchable topic list. Showing it reads reference
  * definitions and never mutates the game.
  */
-public final class ColonizopediaDialog extends AbstractMessageWindow {
+public final class ScreenColonizopedia implements GameScreen {
 
     public static final String SEARCH_ID = "colonizopediaSearch";
 
@@ -63,15 +67,14 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
     private final Label noResults = new Label();
 
     @Inject
-    public ColonizopediaDialog(final I18n i18n, final ViewUtil viewUtil,
+    public ScreenColonizopedia(final I18n i18n, final EventBus eventBus,
             final ImageProvider images, final InGamePage page) {
-        super(viewUtil, i18n);
         this.i18n = i18n;
         this.page = page;
         tables = new ColonizopediaTables(i18n, images);
         buttonBar = new ButtonBarOk(i18n);
         buttonBar.getButtonOk().setOnAction(e -> {
-            close();
+            eventBus.post(new ShowScreenEvent(Screen.GAME));
         });
 
         search.setId(SEARCH_ID);
@@ -80,6 +83,8 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
 
         topicList.setId(TOPICS_ID);
         topicList.setPrefSize(220, 340);
+        topicList.setMinWidth(220);
+        topicList.setMinHeight(0);
         topicList.setCellFactory(list -> new ListCell<ColonizopediaTopic>() {
 
             @Override
@@ -97,6 +102,7 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
         body.setWrapText(true);
         bodyScroll.setId(BODY_SCROLL_ID);
         bodyScroll.setFitToWidth(true);
+        bodyScroll.setMinSize(0, 0);
         bodyScroll.setPrefViewportWidth(540);
         bodyScroll.setPrefViewportHeight(340);
 
@@ -105,19 +111,33 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
         noResults.setPrefWidth(540);
 
         final VBox rightColumn = new VBox(10, noResults, bodyScroll);
+        rightColumn.setMinWidth(0);
+        VBox.setVgrow(bodyScroll, Priority.ALWAYS);
+        HBox.setHgrow(rightColumn, Priority.ALWAYS);
         final HBox main = new HBox(20, topicList, rightColumn);
+        main.setMinHeight(0);
+        VBox.setVgrow(main, Priority.ALWAYS);
         final VBox root = new VBox(10, search, main);
         root.setPadding(new Insets(10));
+        root.setMinHeight(0);
+        root.getStyleClass().add("report-content");
+        VBox.setVgrow(root, Priority.ALWAYS);
         // Handle Escape before the focused list consumes it.
-        root.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+        page.getContent().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
-                close();
+                eventBus.post(new ShowScreenEvent(Screen.GAME));
                 event.consume();
             }
         });
         page.setToolbar(buttonBar.getContent());
         page.setContent(root);
-        init(page.getContent());
+        page.getContent().setId("colonizopediaPage");
+        page.getContent().sceneProperty()
+                .addListener((observable, oldScene, newScene) -> {
+                    if (newScene != null) {
+                        Platform.runLater(topicList::requestFocus);
+                    }
+                });
 
         topicList.getSelectionModel().selectFirst();
         applyFilter();
@@ -128,19 +148,22 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
      * list, so arrow keys and Escape work without a mouse.
      */
     @Override
-    public void showAndWait() {
-        page.getContent().setPrefSize(
-                getViewUtil().getPrimaryStage().getScene().getWidth(),
-                getViewUtil().getPrimaryStage().getScene().getHeight());
+    public void beforeShow() {
         page.beforeShow();
         search.clear();
-        Platform.runLater(topicList::requestFocus);
-        super.showAndWait();
+    }
+
+    @Override
+    public void beforeHide() {
+    }
+
+    @Override
+    public Region getContent() {
+        return page.getContent();
     }
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        setTitle(i18n.get(Colonizopedia.title));
         page.setTitle(i18n.get(Colonizopedia.title));
         search.setPromptText(i18n.get(Colonizopedia.searchPrompt));
         noResults.setText(i18n.get(Colonizopedia.noResults));

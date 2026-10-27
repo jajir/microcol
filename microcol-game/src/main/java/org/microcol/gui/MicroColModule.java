@@ -25,7 +25,7 @@ import org.microcol.gui.screen.MainPanelView;
 import org.microcol.gui.screen.campaign.CampaignPresenter;
 import org.microcol.gui.screen.campaign.CampaignView;
 import org.microcol.gui.screen.campaign.ScreenCampaignPresenter;
-import org.microcol.gui.screen.colonizopedia.ColonizopediaDialog;
+import org.microcol.gui.screen.colonizopedia.ScreenColonizopedia;
 import org.microcol.gui.screen.nativesettlements.NativeSettlementsDialog;
 import org.microcol.gui.screen.nativesettlements.ShowNativeSettlementsListener;
 import org.microcol.gui.screen.colonizopedia.ShowHelpListener;
@@ -296,7 +296,7 @@ public final class MicroColModule extends AbstractModule {
         /**
          * Rest of UI
          */
-        bind(ColonizopediaDialog.class).in(Singleton.class);
+        bind(ScreenColonizopedia.class).in(Singleton.class);
         bind(NativeSettlementsDialog.class).in(Singleton.class);
 
         /**

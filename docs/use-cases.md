@@ -1132,3 +1132,12 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
    osm negrafových reportů. Výsledek a přesný výběr uvádí
    [evidence](functional-tests.md#r-0323-statistics-atlas-2026-10-27); místní přejímka prošla.
    Tento krok neuzavírá celé UC-114/119.
+
+## Nápověda v celé herní ploše — R-0324, 2026-10-27
+
+1. UC-114/119: [R-0324](requirements/done/R-0324.md) převádí Help na hlavní obrazovku.
+   TC100/01 ověřuje stejné okno, plnou plochu a změnu rozměrů; TC100/04 ověřuje
+   opakované H, vyprázdnění hledání, fokus a nezměněnou partii. Celý TC100 zachovává
+   EN/CZ, hledání, posouvání a obrázkové tabulky; TC192/02 kontroluje český herní rám.
+2. Výsledky přejímky vede [evidence](functional-tests.md#r-0324-full-window-help-2026-10-27).
+   Tato úprava sama neuzavírá celé UC-114/119.

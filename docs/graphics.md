@@ -1,5 +1,18 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Nápověda přes celou herní plochu — 27. října 2026
+
+1. [R-0324](requirements/done/R-0324.md) používá pro Help celý hlavní herní rám jako
+   Cíle. Modální obrys se na tuto obrazovku nevztahuje. Horní ovládání, spodní
+   stav, papírový panel, stávající ilustrace a Playpen Sans Regular 14 zůstávají.
+2. Seznam témat a obsah rostou s oknem; nepoužívají rozměry samostatného dialogu.
+   Přejímku při 1280×850 a 900×700 a české texty vede
+   [funkční evidence](functional-tests.md#r-0324-full-window-help-2026-10-27).
+
+3. Skutečné snímky hry: [plná plocha](graphics-assets/full-window-help-2026-10-27/help-full-en.png),
+   [menší okno](graphics-assets/full-window-help-2026-10-27/help-small-en.png) a
+   [čeština](graphics-assets/full-window-help-2026-10-27/help-cs.png).
+
 ## Atlas statistik — 27. října 2026
 
 1. Uživatel vybral směr Atlas z [návrhů obrazovek](requirements/R-0321.md).

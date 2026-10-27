@@ -799,3 +799,10 @@ remain owned by their current requirements; acceptance is recorded in the
    access and refreshed reopening. Status: `done`. Local acceptance passed; see
    [evidence](../functional-tests.md#r-0323-statistics-atlas-2026-10-27).
    Other screen families from R-0321 are outside this step.
+
+## Full-window Help (2026-10-27)
+
+1. [R-0324](done/R-0324.md), primary area A03 with A01 navigation, moves the existing
+   Help content into the main game window like Goals. Status: `done`.
+   Local acceptance passed for search, keyboard access, reference tables,
+   resizing and unchanged game state. [Evidence](../functional-tests.md#r-0324-full-window-help-2026-10-27).

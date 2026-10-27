@@ -1,5 +1,17 @@
 # UX a pravidla ovládání MicroCol
 
+## Nápověda v hlavním okně — 2026-10-27
+
+1. [R-0324](requirements/done/R-0324.md) sjednocuje Help s Cíli: tlačítko na mapě i H
+   otevřou celou herní plochu uvnitř stávajícího okna. Jeho velikost ani systémový
+   režim celé obrazovky se nemění; nevzniká další okno.
+2. Po otevření je hledání prázdné a fokus má seznam témat. Seznam i článek využívají
+   dostupnou výšku, článek se rozšiřuje s oknem. Dlouhý obsah má vlastní posouvání.
+   České i anglické texty, stav bez výsledků a obrázkové tabulky zůstávají dostupné.
+3. Horní OK a Escape vracejí hráče na mapu bez změny partie. Sdílený stavový panel
+   zůstává viditelný. [Evidence](functional-tests.md#r-0324-full-window-help-2026-10-27)
+   odděluje automatické a vizuální kontroly od případného pozorování hráčů.
+
 ## Atlas přehledů ve Statistikách — 2026-10-27
 
 1. Hráč z mapy otevře Statistiky, vybere jeden z dvanácti přehledů v levém
@@ -172,7 +184,7 @@ Následující přehled zachycuje vybrané vazby ve zdrojovém kódu. Nejde o ú
 | Popisky ikon | [ButtonImage](../microcol-game/src/main/java/org/microcol/gui/buttonpanel/ButtonImage.java) při najetí myši posílá lokalizovaný popis do stavového řádku a při opuštění jej odstraňuje. | Zda si hráč popisku všimne, rozpozná ikonu a dostane obdobnou pomoc při ovládání klávesnicí. |
 | Práce a vybavení v kolonii | [PanelOutsideColonyUnit](../microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelOutsideColonyUnit.java) používá přetažení a kontextové menu vybavení. [PanelColonyFields](../microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelColonyFields.java) nabízí změnu produkce přes kontextové menu obsazeného pole. | Zda hráč najde tyto možnosti bez náhodného zkoušení, pozná platný cíl přesunu a potřebné suroviny. |
 | Přehled tahu | [ShowTurnEvensOnTurnStartedEvent](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/ShowTurnEvensOnTurnStartedEvent.java) otevírá report pro čerstvý tah člověka s neprázdným seznamem. [TurnEventPanel](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/TurnEventPanel.java) zobrazuje zprávu jako text s odrážkou. | Zda hráč pozná naléhavost zprávy, najde dotčenou kolonii a ví, co může udělat dál. |
-| Výuka a následná nápověda | [Default_0_mission](../microcol-game/src/main/java/org/microcol/model/campaign/Default_0_mission.java) obsahuje kontextové instrukce k počátečním úkolům. Tlačítko na mapě a klávesa H otevírají [ColonizopediaDialog](../microcol-game/src/main/java/org/microcol/gui/screen/colonizopedia/ColonizopediaDialog.java) s tématy pravidel, hledáním a zprávou o prázdném výsledku ([R-0206](requirements/done/R-0206.md)); cílené automatizované ověření prošlo, společná regrese dávky ještě následuje. | Zda hráč zvládne první kolonii a později dokáže znovu dohledat zapomenutý postup. Existence třídy dialogu neprokazuje dostupnou a úplnou nápovědu. |
+| Výuka a následná nápověda | [Default_0_mission](../microcol-game/src/main/java/org/microcol/model/campaign/Default_0_mission.java) obsahuje kontextové instrukce k počátečním úkolům. Tlačítko na mapě a klávesa H otevírají [ColonizopediaDialog](../microcol-game/src/main/java/org/microcol/gui/screen/colonizopedia/ScreenColonizopedia.java) s tématy pravidel, hledáním a zprávou o prázdném výsledku ([R-0206](requirements/done/R-0206.md)); cílené automatizované ověření prošlo, společná regrese dávky ještě následuje. | Zda hráč zvládne první kolonii a později dokáže znovu dohledat zapomenutý postup. Existence třídy dialogu neprokazuje dostupnou a úplnou nápovědu. |
 
 Při vstupu do hry mají zaměřené pole a skutečný výběr jednotky odpovídat:
 [R-0310](requirements/done/R-0310.md) vybírá vlastní jednotku nezávisle na úvodním

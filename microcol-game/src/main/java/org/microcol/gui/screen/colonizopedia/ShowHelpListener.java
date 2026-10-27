@@ -6,25 +6,27 @@ import org.microcol.gui.util.Listener;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
+import com.google.common.eventbus.EventBus;
+import org.microcol.gui.screen.Screen;
+import org.microcol.gui.screen.ShowScreenEvent;
 
 /**
  * Opens the Colonizopedia for the map help button and the H shortcut. The
- * dialog is created on the first request, after the primary stage exists.
+ * existing screen navigation keeps it in the main game window.
  */
 @Listener
 public final class ShowHelpListener {
 
-    private final Provider<ColonizopediaDialog> dialog;
+    private final EventBus eventBus;
 
     @Inject
-    public ShowHelpListener(final Provider<ColonizopediaDialog> dialog) {
-        this.dialog = Preconditions.checkNotNull(dialog);
+    public ShowHelpListener(final EventBus eventBus) {
+        this.eventBus = Preconditions.checkNotNull(eventBus);
     }
 
     @Subscribe
     private void onShowHelp(final ShowHelpEvent event) {
-        dialog.get().showAndWait();
+        eventBus.post(new ShowScreenEvent(Screen.HELP));
     }
 
 }

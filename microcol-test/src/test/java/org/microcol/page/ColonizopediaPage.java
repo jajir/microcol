@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import org.microcol.gui.screen.colonizopedia.ColonizopediaDialog;
+import org.microcol.gui.screen.colonizopedia.ScreenColonizopedia;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.gamepanel.MapManager;
@@ -77,7 +77,7 @@ public final class ColonizopediaPage extends AbstractScreen {
 
     private void waitUntilDialogOpen() throws Exception {
         WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
-                () -> isCssIdVisible(ColonizopediaDialog.TOPICS_ID));
+                () -> isCssIdVisible(ScreenColonizopedia.TOPICS_ID));
     }
 
     /** Move the topic selection with the Down arrow from the focused list. */
@@ -131,7 +131,7 @@ public final class ColonizopediaPage extends AbstractScreen {
 
     /** Scroll the body text down with the mouse wheel over its window. */
     public void scrollBodyDown() {
-        getRobot().moveTo("#" + ColonizopediaDialog.BODY_SCROLL_ID);
+        getRobot().moveTo("#" + ScreenColonizopedia.BODY_SCROLL_ID);
         getRobot().scroll(10, VerticalDirection.DOWN);
         WaitForAsyncUtils.waitForFxEvents();
     }
@@ -151,7 +151,7 @@ public final class ColonizopediaPage extends AbstractScreen {
      * so it would otherwise block the next scenario.
      */
     public void closeIfOpen() {
-        if (isCssIdVisible(ColonizopediaDialog.TOPICS_ID)) {
+        if (isCssIdVisible(ScreenColonizopedia.TOPICS_ID)) {
             closeWithEscape();
         }
     }
@@ -215,7 +215,7 @@ public final class ColonizopediaPage extends AbstractScreen {
     private Optional<Node> findTopicRow(final String title) throws Exception {
         return WaitForAsyncUtils.asyncFx(() -> {
             final Node list = getNodeFinder()
-                    .lookup("#" + ColonizopediaDialog.TOPICS_ID).query();
+                    .lookup("#" + ScreenColonizopedia.TOPICS_ID).query();
             final Node viewport = list.lookup(".clipped-container");
             final Bounds listBounds = viewport
                     .localToScreen(viewport.getLayoutBounds());
@@ -237,13 +237,13 @@ public final class ColonizopediaPage extends AbstractScreen {
     }
 
     private void scrollTopicList(final VerticalDirection direction) {
-        getRobot().moveTo("#" + ColonizopediaDialog.TOPICS_ID);
+        getRobot().moveTo("#" + ScreenColonizopedia.TOPICS_ID);
         getRobot().scroll(1, direction);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void scrollReferenceToEnd() {
-        getRobot().moveTo("#" + ColonizopediaDialog.BODY_SCROLL_ID);
+        getRobot().moveTo("#" + ScreenColonizopedia.BODY_SCROLL_ID);
         getRobot().scroll(150, VerticalDirection.DOWN);
         WaitForAsyncUtils.waitForFxEvents();
     }
@@ -406,16 +406,51 @@ public final class ColonizopediaPage extends AbstractScreen {
         }
     }
 
+    public void verifyFillsGameWindow() {
+        getRobot().interact(() -> {
+            final Node page = getNodeFinder().lookup("#colonizopediaPage")
+                    .query();
+            final javafx.scene.Scene scene = getContext().getPrimaryStage()
+                    .getScene();
+            assertEquals(scene, page.getScene(),
+                    "Help belongs to the main game window");
+            assertEquals(1,
+                    javafx.stage.Window.getWindows().stream()
+                            .filter(javafx.stage.Window::isShowing).count(),
+                    "Help opens no additional window");
+            final Bounds bounds = page.localToScene(page.getLayoutBounds());
+            assertEquals(0, bounds.getMinX(), 1);
+            assertEquals(0, bounds.getMinY(), 1);
+            assertEquals(scene.getWidth(), bounds.getWidth(), 1);
+            assertEquals(scene.getHeight(), bounds.getHeight(), 1);
+            final Node list = page.lookup("#" + ScreenColonizopedia.TOPICS_ID);
+            final Node body = page
+                    .lookup("#" + ScreenColonizopedia.BODY_SCROLL_ID);
+            final Node status = page.lookup("#statusBar");
+            final Bounds listBounds = list.localToScene(list.getLayoutBounds());
+            final Bounds bodyBounds = body.localToScene(body.getLayoutBounds());
+            final Bounds statusBounds = status
+                    .localToScene(status.getLayoutBounds());
+            assertEquals(listBounds.getHeight(), bodyBounds.getHeight(), 1);
+            assertTrue(bodyBounds.getMaxX() >= scene.getWidth() - 60,
+                    "Article fills available width");
+            assertTrue(bodyBounds.getMaxY() >= statusBounds.getMinY() - 60,
+                    "Article fills available height");
+            assertTrue(bodyBounds.getMaxY() <= statusBounds.getMinY(),
+                    "Article does not cover status");
+        });
+    }
+
     public void verifyDialogOpen() {
-        assertTrue(isCssIdVisible(ColonizopediaDialog.SEARCH_ID),
+        assertTrue(isCssIdVisible(ScreenColonizopedia.SEARCH_ID),
                 "Colonizopedia search field is not shown");
-        assertTrue(isCssIdVisible(ColonizopediaDialog.TOPICS_ID),
+        assertTrue(isCssIdVisible(ScreenColonizopedia.TOPICS_ID),
                 "Colonizopedia topic list is not shown");
-        assertTrue(isCssIdVisible(ColonizopediaDialog.BODY_ID),
+        assertTrue(isCssIdVisible(ScreenColonizopedia.BODY_ID),
                 "Colonizopedia text is not shown");
     }
 
-    /** Keyboard users reach the topic list as soon as the dialog opens. */
+    /** Keyboard users reach the topic list as soon as the screen opens. */
     public void verifyTopicListHasFocus() throws Exception {
         WaitForAsyncUtils.waitForFxEvents();
         assertTrue(
@@ -448,7 +483,7 @@ public final class ColonizopediaPage extends AbstractScreen {
     }
 
     public void verifyBodyContains(final String expectedPart) {
-        final String text = getLabeledById(ColonizopediaDialog.BODY_ID)
+        final String text = getLabeledById(ScreenColonizopedia.BODY_ID)
                 .getText();
         assertTrue(text.contains(expectedPart), () -> "Body should contain '"
                 + expectedPart + "' but was: " + text);
@@ -460,10 +495,10 @@ public final class ColonizopediaPage extends AbstractScreen {
     public void verifyBodyEndVisible() throws Exception {
         WaitForAsyncUtils.asyncFx(() -> {
             final ScrollPane scroll = getNodeFinder()
-                    .lookup("#" + ColonizopediaDialog.BODY_SCROLL_ID)
+                    .lookup("#" + ScreenColonizopedia.BODY_SCROLL_ID)
                     .queryAs(ScrollPane.class);
             final Node body = getNodeFinder()
-                    .lookup("#" + ColonizopediaDialog.BODY_ID).query();
+                    .lookup("#" + ScreenColonizopedia.BODY_ID).query();
             final Node viewport = scroll.lookup(".viewport");
             final Bounds textBounds = body
                     .localToScreen(body.getBoundsInLocal());
@@ -479,7 +514,7 @@ public final class ColonizopediaPage extends AbstractScreen {
 
     public void verifyBodyScrolledToEnd() throws Exception {
         final ScrollPane scroll = getNodeFinder()
-                .lookup("#" + ColonizopediaDialog.BODY_SCROLL_ID)
+                .lookup("#" + ScreenColonizopedia.BODY_SCROLL_ID)
                 .queryAs(ScrollPane.class);
         final boolean overflows = WaitForAsyncUtils
                 .asyncFx(() -> scroll.getContent().getBoundsInLocal()
@@ -496,7 +531,7 @@ public final class ColonizopediaPage extends AbstractScreen {
         assertTrue(getTopicList().getItems().isEmpty(),
                 "No topic should match the search");
         final Labeled message = getLabeledById(
-                ColonizopediaDialog.NO_RESULTS_ID);
+                ScreenColonizopedia.NO_RESULTS_ID);
         assertTrue(message.isVisible(),
                 "The no-results message should be visible");
         assertEquals(expectedMessage, message.getText(),
@@ -505,14 +540,14 @@ public final class ColonizopediaPage extends AbstractScreen {
 
     public void verifyNoResultsHidden() {
         assertFalse(
-                getLabeledById(ColonizopediaDialog.NO_RESULTS_ID).isVisible(),
+                getLabeledById(ScreenColonizopedia.NO_RESULTS_ID).isVisible(),
                 "The no-results message should be hidden");
     }
 
     public void verifyDialogClosed() throws Exception {
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
-                () -> !isCssIdVisible(ColonizopediaDialog.TOPICS_ID));
-        assertFalse(isCssIdVisible(ColonizopediaDialog.TOPICS_ID),
+                () -> !isCssIdVisible(ScreenColonizopedia.TOPICS_ID));
+        assertFalse(isCssIdVisible(ScreenColonizopedia.TOPICS_ID),
                 "Colonizopedia should be closed");
     }
 
@@ -540,12 +575,12 @@ public final class ColonizopediaPage extends AbstractScreen {
 
     @SuppressWarnings("unchecked")
     private ListView<ColonizopediaTopic> getTopicList() {
-        return getNodeFinder().lookup("#" + ColonizopediaDialog.TOPICS_ID)
+        return getNodeFinder().lookup("#" + ScreenColonizopedia.TOPICS_ID)
                 .queryAs(ListView.class);
     }
 
     private TextField getSearchField() {
-        return getNodeFinder().lookup("#" + ColonizopediaDialog.SEARCH_ID)
+        return getNodeFinder().lookup("#" + ScreenColonizopedia.SEARCH_ID)
                 .queryAs(TextField.class);
     }
 

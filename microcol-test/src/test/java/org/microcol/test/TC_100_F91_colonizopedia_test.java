@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.page.ColonizopediaPage;
+import org.microcol.page.MainScreenLayoutPage;
 import org.microcol.page.SettingPage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
@@ -89,6 +90,14 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.openFromButton();
         help.verifyDialogOpen();
         help.verifyTopicListHasFocus();
+        final MainScreenLayoutPage window = new MainScreenLayoutPage(
+                getContext());
+        window.resize(1280, 850);
+        help.verifyFillsGameWindow();
+        help.captureDialog("colonizopediaPage", "r0324-help-full-en.png");
+        window.resize(900, 700);
+        help.verifyFillsGameWindow();
+        help.captureDialog("colonizopediaPage", "r0324-help-small-en.png");
 
         // Every rule family is listed; the first topic is shown at once.
         help.verifyTopicTitles(TOPICS);
@@ -182,6 +191,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         // H opens the same encyclopedia; Escape closes it and changes nothing.
         help.openWithHKey();
         help.verifyDialogOpen();
+        help.typeSearch("attack");
         help.selectTopicWithMouse(COMBAT);
         help.verifySelectedTopic(COMBAT, "attack");
         help.closeWithEscape();
@@ -190,9 +200,12 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.verifyTurnAndGold(TURN, GOLD);
         help.verifyNextTurnEnabled();
 
-        // Focus returns to the game: H opens the dialog again and OK closes it.
+        // Focus returns to the game: H opens help again and clears the search.
         help.openWithHKey();
         help.verifyDialogOpen();
+        help.verifyFillsGameWindow();
+        help.verifyTopicTitles(TOPICS);
+        help.verifyTopicListHasFocus();
         help.closeWithOk();
         help.verifyDialogClosed();
         help.verifyGameStateUnchanged(before);
