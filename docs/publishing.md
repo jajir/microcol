@@ -785,3 +785,27 @@ documentation in APT just to make it visible on the web.
    task's documentation belongs in the commit; unrelated working changes remain
    outside it. Model/JUnit and Docker/Xvfb smoke are exempt for this documentation
    scope. Remote CI and publication are not inspected or claimed.
+
+## Settings design proposals — 2026-10-27
+
+1. [R-0309](requirements/R-0309.md) offers three alternatives for all existing
+   Settings controls: Papírový formulář, Dva listy and Kompaktní seznam. The
+   screenshots are browser mockups with sample values, not game screenshots.
+   The user has not selected a design or authorized its implementation.
+2. Browser inspection checked all three layouts at 1024-pixel viewport width
+   and their stacked layout at 360 pixels (328 pixels of preview content,
+   without horizontal overflow). Language selection updated Czech/English
+   labels; checking the grid changed its visible state; a keyboard step changed
+   volume from 60 to 70 percent and back. These are preview checks, not JavaFX
+   or game acceptance. The mockups do not modify game preferences.
+3. Nine documentation consistency checks and strict MkDocs passed on the
+   acceptance export in `target/settings-proposals/acceptance/`. Evidence
+   is retained in `target/settings-proposals/docs-tests.log` and `mkdocs.log`.
+   The earlier whole-working-tree build failed on an unfinished R-0310 anchor;
+   that result is preserved in `mkdocs-working-tree.log`, separately from the
+   accepted proposal documentation.
+   The proposal sources were included in concurrent integration `7299ae07`;
+   this documentation follow-up links the completed R-0307 dependency and
+   records the proposal checks. No Settings runtime source changed for R-0309.
+   Model/JUnit and Docker/Xvfb are exempt for this documentation-only scope.
+   Remote CI and publication have not been inspected or claimed here.
