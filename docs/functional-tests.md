@@ -1,5 +1,53 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0310 initial free-play movement — 2026-10-27
+
+1. [R-0310](requirements/R-0310.md) requests reproduction only on production
+   revision `afc916327ea4e7f6a4b5d02bce4c1c66044e6ece`. The isolated worktree
+   `classic-initial-movement/microcol` excludes unrelated main-checkout edits.
+   No production code, runtime assets or fixture data are changed.
+2. `TC_193_F15_initial_ship_movement_test` covers fresh Free game → Original
+   world entry: `TC_01` uses `M` and a destination click, `TC_02` drags the
+   galleon; neither reselects it before the command. `TC_03` and `TC_04` repeat
+   those actions after clicking an adjacent tile and then the ship. All four
+   require the same ship to arrive at `(44, 15)` and leave `(45, 15)` empty.
+3. Model completion `20261027T041842Z-d0c7e5e5dd31` (supervisor PID 70374,
+   timeout 600 seconds) passed: 344 complete XML reports, **4,764 tests, zero
+   failures, errors or skips**. Reports: `target/verification/run-bt0ro0eg`;
+   execution/cleanup 135.830 seconds, separate lock wait 74.669 seconds.
+4. First targeted Docker/Xvfb completion `20261027T042257Z-883c76907b2f`
+   (supervisor PID 71864, timeout 900 seconds) completed **7 checks: 2 failures,
+   0 errors, 0 skips**. Both reselection controls and all three source-contract
+   checks passed. TC193/01 failed because the galleon remained at `(45, 15)`;
+   TC193/02 failed inside the existing drag helper's status-bar assertion.
+   The drag also logged `EVENT_HANDLER_FAILED` with `NoSuchElementException`.
+   Reports remain in `target/docker-ui/run-M1qmNk`; execution/cleanup was
+   65.448 seconds, with a separate 295.315-second lock wait.
+5. The test-only `GamePage.dragToLocation` action is now public so the new mouse
+   scenarios can use the existing input sequence and reach their explicit
+   ship-location assertion. Existing helper behavior and assertions remain.
+   Second completion `20261027T043001Z-749d9b118112` (supervisor PID 74042,
+   timeout 900 seconds) repeated the same seven checks: **2 failures, 0 errors,
+   0 skips**. Both TC193/01 (`M`) and TC193/02 (drag) now fail specifically on
+   `Unexpected unit location`: expected `(44, 15)`, actual `(45, 15)`.
+   TC193/03 and TC193/04 both pass after reselection, as do all three source
+   contract checks. The drag again logs the missing selected unit at
+   `GamePanelPresenter.swithToMoveMode`, line 236 (`Optional.get`). Reports:
+   `target/docker-ui/run-vSDRio`; execution/cleanup 65.874 seconds, separate
+   lock wait 75.446 seconds. No timeout or supervisor cleanup failure occurred.
+6. Shared Java formatter and idempotence check passed for both Java test files.
+   Nine documentation consistency checks and strict MkDocs passed. Both failed
+   runs are preserved. The reproductions remain failing assertions, without
+   disabled tests or a gameplay repair. The defect is confirmed on the checked
+   revision; it is not fixed. At the end of reproduction, smoke and remote CI had not run, and no test or
+   gameplay changes had been committed, pushed or integrated into main. The isolated worktree retains
+   both test files and documentation for the next user-selected step.
+7. The user subsequently authorized publishing this requirement on 2026-10-27.
+   Only its analysis, backlog entry and this evidence are included. The draft
+   identifier R-0308 collided with a separately committed menu requirement, so
+   its first main publication uses R-0310; saved run records remain unchanged.
+   The game has not been repaired or reverified on the later main revision.
+
 ## R-0308 opening menu content width — 2026-10-27
 
 1. [R-0308](requirements/done/R-0308.md) replaces the fixed 300-pixel opening-menu

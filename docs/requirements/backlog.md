@@ -1,5 +1,12 @@
 # Current requirement backlog
 
+Defect reproduced on 2026-10-27: [R-0310 — initially focused free-play
+galleon](R-0310.md), A04 with A01/A02 entry flow. Keyboard and mouse movement
+fail before reselection; both controls pass afterward. The user authorized
+publishing the analysis only; tests remain isolated and uncommitted, and no
+gameplay repair is authorized. See the
+[evidence](../functional-tests.md#r-0310-initial-free-play-movement-2026-10-27).
+
 Proposed on 2026-10-27: [R-0309 — Settings controls and layout](R-0309.md).
 Three visual alternatives cover all existing Settings elements; the final
 design and implementation remain unselected. Primary area A03, with A01/A04
