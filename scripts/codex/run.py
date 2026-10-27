@@ -198,8 +198,15 @@ def cleanup(record, process, log):
 
 def notify(directory, record):
     result = json.loads((directory / "result.json").read_text())
+    detail = ""
+    if result.get("failure_phase"):
+        detail = " Phase: " + result["failure_phase"] + "."
+        if "step_timeout_seconds" in result:
+            detail += " Step exceeded " + str(round(result["step_timeout_seconds"], 3)) + " s."
+        if result.get("command_started") is False:
+            detail += " Test command did not start."
     message = ("Microcol " + record["kind"] + " " + record["run_id"] + ": " + result["status"]
-               + "; exit " + str(result["exit_code"]) + ". Evidence: " + str(directory / "result.json")
+               + "; exit " + str(result["exit_code"]) + "." + detail + " Evidence: " + str(directory / "result.json")
                + ". Verification and review remain pending; inspect evidence before continuing "
                  "the already authorized task.")
     delivery = {"status": "attempting", "thread": record["thread"], "message": message}
@@ -233,6 +240,7 @@ def supervise(directory):
             try:
                 if record["kind"] in ("docker", "verify"):
                     slot = LocalSlot(log)
+                    slot.budget = min(record["timeout_seconds"], record.get("acceptance_seconds", float("inf")))
                     slot.acquire()
                     admitted = True
                     started = slot.acquired_at
@@ -251,6 +259,8 @@ def supervise(directory):
                                                start_new_session=True)
                 process.wait(timeout=remaining(deadline))
                 result["status"] = "success" if process.returncode == 0 else "failed"
+                if slot is not None and process.returncode != 0:
+                    result["failure_phase"] = "execution"
                 if record["kind"] == "ci":
                     data = ci_metadata(record, directory, "after", deadline, log)
                     if data["status"] != "completed" or data["conclusion"] != "success":
@@ -264,12 +274,18 @@ def supervise(directory):
             except (Cancelled, subprocess.TimeoutExpired) as error:
                 result.update(status="cancelled" if isinstance(error, Cancelled) else "timed_out",
                               error=str(error))
+                if slot is not None:
+                    result["failure_phase"] = getattr(error, "phase", slot.phase)
+                    if isinstance(error, subprocess.TimeoutExpired):
+                        result["step_timeout_seconds"] = error.timeout
                 for sig in previous:
                     signal.signal(sig, signal.SIG_IGN)
                 if admitted:
                     result["cleanup_errors"] = cleanup(record, process, log)
             except (OSError, ValueError, KeyError, TypeError, RuntimeError, subprocess.SubprocessError) as error:
                 result.update(status="failed", error=str(error))
+                if slot is not None:
+                    result["failure_phase"] = getattr(error, "phase", slot.phase)
             finally:
                 for sig in previous:
                     signal.signal(sig, signal.SIG_IGN)
@@ -278,15 +294,24 @@ def supervise(directory):
                         slot.close()
                     except (OSError, RuntimeError, ValueError, subprocess.SubprocessError) as error:
                         result["status"] = "failed"
+                        if "failure_phase" not in result:
+                            result["failure_phase"] = "cleanup"
+                            if isinstance(error, subprocess.TimeoutExpired):
+                                result["step_timeout_seconds"] = error.timeout
                         result["cleanup_errors"].append(str(error))
                 result["exit_code"] = process.returncode if process else None
+                if slot is not None:
+                    result["command_started"] = process is not None
+                    if result["status"] == "failed":
+                        result.setdefault("failure_phase", "execution")
                 if slot is not None and slot.acquired_at is not None:
                     started, admitted = slot.acquired_at, True
                     result["wait_seconds"] = slot.wait_seconds
                 elapsed = round(time.monotonic() - started, 3)
                 if (result["status"] == "success" and record.get("acceptance_seconds")
                         and time.monotonic() - started > record["acceptance_seconds"]):
-                    result.update(status="failed", error="Acceptance budget exceeded including cleanup")
+                    result.update(status="failed", failure_phase="cleanup",
+                                  error="Acceptance budget exceeded including cleanup")
                 result["elapsed_seconds"] = elapsed if admitted else 0
                 if not admitted:
                     result["wait_seconds"] = elapsed

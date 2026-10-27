@@ -746,3 +746,11 @@ remain owned by their current requirements; acceptance is recorded in the
    2026-10-27. Cross-area dependencies preserve screen actions,
    quantities, persistence and navigation. See the
    [verification evidence](../functional-tests.md#r-0316-shared-paper-buttons-and-action-icons-2026-10-27).
+
+## Local timeout evidence (2026-10-27)
+
+1. [R-0317](done/R-0317.md), primary area A01, adds bounded diagnostic evidence
+   around Docker preparation/cleanup timeouts and identifies the failed phase
+   in completion notices. Status: `done`; local acceptance passed.
+   No gameplay behavior or acceptance limit changes. See the
+   [operating contract and evidence](../ai/completion-callbacks.md#timeout-evidence-2026-10-27).

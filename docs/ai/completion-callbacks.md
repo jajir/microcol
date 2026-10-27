@@ -321,3 +321,106 @@ separately; this probe does not prove the later integration.
    and preservation of foreign containers. Nine documentation consistency tests
    and strict MkDocs passed after closure. R-0292 is accepted locally. No remote
    CI or publication verification was requested.
+
+## Timeout evidence (2026-10-27)
+
+1. [R-0317](../requirements/done/R-0317.md) adds structured `local-test` JSON lines
+   to the existing `command.log`. Each record includes UTC time, runner PID,
+   phase and event. Queue waiting, preparation, execution (build/tests) and
+   cleanup are distinct. Docker steps record their command, deadline, elapsed
+   time, return code and output; timeout records retain partial output.
+   Existing container-log streaming is preserved. Recorded output excerpts are
+   limited to 4,096 characters per stream.
+2. A timed-out preparation or cleanup Docker command triggers read-only
+   diagnostics: selected client path/context and host transport, load averages,
+   Docker process state/CPU/RSS, client version, selected context and server
+   version. Only a successful server-version probe permits one diagnostic repeat
+   of the owned-container query. A successful probe does not retry tests,
+   change the original outcome, restart Docker or remove additional containers.
+3. Collection has an eight-second maximum, with at most two seconds per probe,
+   also bounded by the remaining job budget. Existing 20-second recovery command
+   limits and the 420-second smoke acceptance budget remain unchanged. Cleanup
+   still runs when a job has exhausted its budget; additional diagnostic probes
+   then have no time allowance. Probe failures are logged without replacing the
+   original timeout. Whole environment/configuration dumps and unrelated process
+   listings are excluded; URL credentials and URL query parameters are redacted.
+4. Local `result.json` adds `command_started` and, for failed runs,
+   `failure_phase`; a caught timeout also records
+   `step_timeout_seconds`. Existing result statuses and the notification's
+   evidence link format remain unchanged. A preparation timeout notification
+   explicitly says the test command did not start; `execution` includes build
+   preparation and does not prove that individual tests began.
+5. Initial tooling verification passed 27 UI-verifier/lock checks but exposed
+   three completion-fixture failures: inserting the phase after the evidence
+   path broke the fixture's link parser. Moving details before the evidence
+   link preserves that existing format. Logs are retained under
+   `target/timeout-diagnostics/initial-*-tooling.log`. Final local acceptance
+   is pending. The recurring Docker delay itself is not diagnosed or repaired
+   by adding this evidence collection.
+6. Final tooling checks passed 35 verifier/lock/diagnostic tests in 13.244 s
+   and 22 completion-runner tests in 6.552 s, with no failures or skips.
+   Tests cover partial timeout output, probe budgets, original-failure
+   preservation, credential/process filtering, preparation and cleanup phases,
+   and the existing notification link parser. Logs and source hashes are in
+   `target/timeout-diagnostics/`. Model dispatch
+   `20261027T124439Z-ecd738502eb4`, PID 62913, timeout 600 s, checks the frozen
+   source based on `f9dc601ef2c7967a2c002a4b3e85d5f1458f5051`.
+7. That first model dispatch naturally reproduced the preparation timeout:
+   the container query took 20.009 s without output; no test command started.
+   New diagnostics completed within the budget, with the whole failed attempt
+   taking 22.082 s. The Docker client version returned in 0.013 s and context
+   `desktop-linux` in 0.017 s, while the server-version probe exceeded 2 s.
+   Its result retains `timed_out`, `failure_phase: preparation`,
+   `step_timeout_seconds: 20` and `command_started: false`.
+8. A read-only follow-up of Docker Desktop's existing host log correlates this
+   attempt with VM wake-up: at 12:44:39 UTC the container-list request moved
+   Docker from idle to busy and started its VM after 1h10m56s idle; the busy
+   interval ended about 31.3 s later. A selected excerpt is retained in
+   `target/timeout-diagnostics/docker-wake-evidence.log`. This identifies a
+   concrete cold-start delay for this attempt, not every older timeout. No
+   Docker setting, test deadline or automatic retry policy was changed.
+   After a bounded read-only check confirmed server 29.8.2 was responding,
+   model acceptance was dispatched again as `20261027T124723Z-0838d932f9e3`,
+   PID 63787, timeout 600 s, with unchanged executable sources.
+9. Nine documentation consistency tests and strict MkDocs passed before
+   evidence closure. Final model/smoke acceptance and the final documentation
+   closure are pending.
+10. Model retry `run-atlk_02r` passed 4,776 checks with zero failures,
+    errors or skips in 134.116 s. Final review then added an edge-case test
+    and preserved the original execution phase/timeout when cleanup also
+    fails. The unchanged verifier/lock diagnostics and updated completion
+    runner passed 35 tests in 13.697 s and 23 tests in 7.760 s respectively,
+    with no failures or skips. Final-source model dispatch is
+    `20261027T125149Z-95961652a03e`, PID 64872, timeout 600 s; smoke follows
+    successful model acceptance. Source hashes were refreshed after this
+    review correction; no further executable changes are planned.
+11. Model run `run-wkjqfpah` passed all 4,776 checks with zero failures,
+    errors or skips; completion `20261027T125149Z-95961652a03e` took
+    131.683 s. Smoke was dispatched as `20261027T125536Z-37bf1f48190d`,
+    PID 65700, timeout 480 s. A final review found that a timed-out process
+    listing also needs the unrelated-process filter already used for complete
+    output. The shared excerpt filter and a regression test now cover both
+    paths. Final tooling checks passed 36 verifier/lock/diagnostic tests in
+    13.840 s and 23 completion-runner tests in 7.261 s, without failures or
+    skips. Source hashes were refreshed; model dispatch
+    `20261027T125715Z-345e3e9cd3a7`, PID 66591, timeout 600 s, and a subsequent
+    smoke run must cover this correction before acceptance.
+12. The earlier smoke `run-kegmn5k8` passed all 21 checks with zero failures,
+    errors or skips in 200.046 s. After the output-filter correction, final
+    model run `run-ze3mdwct` passed all 4,776 checks with zero failures, errors
+    or skips in 133.954 s; its separate 101.430 s lock wait was excluded from
+    execution time. Source hashes still match the reviewed candidate.
+    Final smoke was dispatched as `20261027T130126Z-faf0e1dc1d9a`, PID 68271,
+    with a 480 s supervisor timeout and the unchanged 420 s acceptance budget.
+13. Final smoke `run-o9p1tf4c` passed all 21 fixed smoke/support checks with
+    zero failures, errors or skips; completion `20261027T130126Z-faf0e1dc1d9a`
+    took 202.298 s including preparation and cleanup, within 420 s. The final
+    four executable/test file hashes still match `target/timeout-diagnostics/source.json`,
+    based on `f9dc601ef2c7967a2c002a4b3e85d5f1458f5051`. Review covered callers,
+    budgets, failure preservation, notification compatibility and bounded output
+    filtering. No game code or player behavior changed, so additional targeted
+    gameplay scenarios and Java formatting do not apply. Local acceptance is
+    59 tooling tests, 4,776 model/JUnit checks and 21 smoke/support checks,
+    all passing without skips. Nine documentation consistency checks and strict
+    MkDocs passed at closure. R-0317 is done. Historical failures remain failed;
+    no remote CI, publication or Docker configuration changes were requested.

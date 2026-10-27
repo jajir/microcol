@@ -79,6 +79,49 @@ def emit():
         self.assertEqual(json.loads((self.directory / "result.json").read_text()), result)
         return result
 
+    def test_preparation_timeout_notifies_without_starting_test_command(self):
+        self.record.update(kind="verify", timeout_seconds=600)
+        run.write_json(self.directory / "request.json", self.record)
+        with patch("local_slot.cleanup_containers", side_effect=subprocess.TimeoutExpired(["docker", "ps"], 20)), \
+                patch.object(run, "LocalSlot", side_effect=lambda log: local_slot.LocalSlot(log, self.root / "slot.lock")):
+            result = run.supervise(self.directory)
+        self.assertEqual(result["status"], "timed_out")
+        self.assertEqual(result["failure_phase"], "preparation")
+        self.assertEqual(result["step_timeout_seconds"], 20)
+        self.assertFalse(result["command_started"])
+        notice = json.loads((self.directory / "notification.json").read_text())
+        self.assertIn("Phase: preparation. Step exceeded 20 s. Test command did not start.", notice["message"])
+        self.assertEqual(notice["status"], "queued")
+
+    def test_cleanup_timeout_records_phase_after_command_completion(self):
+        self.record.update(kind="verify", timeout_seconds=600)
+        run.write_json(self.directory / "request.json", self.record)
+        with patch("local_slot.cleanup_containers", side_effect=[None, subprocess.TimeoutExpired(["docker", "ps"], 20)]), \
+                patch.object(run, "LocalSlot", side_effect=lambda log: local_slot.LocalSlot(log, self.root / "slot.lock")):
+            result = run.supervise(self.directory)
+        self.assertEqual(result["status"], "failed")
+        self.assertEqual(result["failure_phase"], "cleanup")
+        self.assertEqual(result["step_timeout_seconds"], 20)
+        self.assertTrue(result["command_started"])
+
+    def test_cleanup_timeout_preserves_original_execution_failure(self):
+        for code, budget, timed_out in [("raise SystemExit(7)", 3, False),
+                                      ("import time; time.sleep(10)", 0.1, True)]:
+            with self.subTest(timed_out=timed_out):
+                self.record.update(kind="verify", timeout_seconds=budget,
+                                   command=[sys.executable, "-c", code])
+                run.write_json(self.directory / "request.json", self.record)
+                with patch("local_slot.cleanup_containers", side_effect=[None, subprocess.TimeoutExpired(["docker", "ps"], 20)]), \
+                        patch.object(run, "LocalSlot", side_effect=lambda log: local_slot.LocalSlot(log, self.root / "slot.lock")):
+                    result = run.supervise(self.directory)
+                self.assertEqual(result["failure_phase"], "execution")
+                self.assertTrue(result["command_started"])
+                self.assertTrue(result["cleanup_errors"])
+                if timed_out:
+                    self.assertLessEqual(result["step_timeout_seconds"], budget)
+                else:
+                    self.assertNotIn("step_timeout_seconds", result)
+
     def test_success_keeps_arguments_and_evidence(self):
         with patch.dict(os.environ, {"CODEX_THREAD": "wrong-task"}):
             result = self.execute(command=[sys.executable, "-c", "import sys; print(sys.argv[1])",
