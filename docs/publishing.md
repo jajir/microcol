@@ -825,3 +825,31 @@ documentation in APT just to make it visible on the web.
    `target/r0311/acceptance/`. Model/JUnit and Docker/Xvfb checks are exempt
    for this documentation-only change. Remote CI and publication were not
    inspected; the push does not prove publication.
+
+## Lake animation proposals — 2026-10-27
+
+1. [R-0314](requirements/R-0314.md) captures seven expanding-ring and seven
+   small-wave proposals in the supplied map screenshot. Source inspection used
+   `121b08aa`; the [graphics catalogue](graphics.md#animace-jezera-navrhy-27-rijna-2026)
+   preserves the original crop and fourteen animated GIFs. These are composited
+   design previews. No game source, runtime asset, test or configuration changes.
+2. Headless browser checks passed for all fourteen moving variants, six-second
+   loop boundaries, matching restored-water colour, unchanged fish, play/pause,
+   1×/2× scale, 320 px layout without horizontal overflow and zero browser errors.
+   Every GIF retains the complete 6000 ms cycle; 75 input frames encode to 64–75
+   frames because identical frames are merged. The preview was visually reviewed
+   at desktop width. Evidence is retained in `target/r0314/browser-verification.json`.
+3. Initial preview review detected a colour-profile mismatch in the restored
+   water, corrected by sampling the browser-rendered screenshot. Export checks
+   then identified an incorrect fixed frame-count assertion and a missing
+   per-frame delay list. The export now verifies retained movement and total
+   duration. All preview/export checks were rerun successfully; the failed
+   diagnostics remain in `target/r0314/initial-diagnostics.txt`.
+4. Model/JUnit and Docker/Xvfb checks are exempt for this documentation-only
+   proposal scope. Browser verification does not establish JavaFX rendering,
+   gameplay acceptance or user selection. Remote CI and publication were not
+   inspected; a push does not prove publication.
+5. All nine documentation consistency checks passed with zero failures, errors
+   or skips, and the strict MkDocs build passed. Logs are retained in
+   `target/r0314/docs-tests.log` and `target/r0314/mkdocs.log`. The committed
+   scope contains only documentation sources and proposal images.

@@ -1,5 +1,10 @@
 # Current requirement backlog
 
+Captured on 2026-10-27: [R-0314 — lake animation proposals](R-0314.md), A03 with
+A05/A04 dependencies. Seven expanding-ring and seven small-wave alternatives
+are shown in the user's map screenshot. Selection is open; runtime implementation
+is not authorized by the proposal request.
+
 Implemented on 2026-10-27: [R-0313 — Original World river at (25, 13)](R-0313.md).
 The user explicitly requested a push without test runs. Data and existing test
 expectations are updated; normal local acceptance remains unverified.

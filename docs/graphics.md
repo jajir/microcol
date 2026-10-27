@@ -1,5 +1,47 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Animace jezera — návrhy 27. října 2026
+
+1. [R-0314](requirements/R-0314.md) zachycuje hlášenou chybu: náhodná dekorace
+   jezera kreslí vyplněnou siluetu dalšího jezírka dovnitř skutečné vodní plochy.
+   Návrhy nahrazují tento motiv pohybem čáry. Jde o návrhy k výběru, nikoli
+   o změnu hry nebo schválenou četnost animace.
+2. Všechny náhledy vycházejí z [uživatelova výřezu](graphics-assets/lake-animations-2026-10-27/source.png).
+   Spodní vodní plocha je v kompozici obnovena, aby odstranila chybný motiv;
+   ryba, jednotky a okolí poskytují původní kontext. Výřez má 290 × 222 px,
+   tedy dvojnásobek herního měřítka. Animované GIFy opakují šestisekundový cyklus.
+   Nejde o nové snímky běžící hry. Interaktivní porovnání v původním chatu navíc
+   umožňuje pohyb pozastavit a přepnout na herní měřítko.
+3. K1–K7 porovnávají rozšiřující se kruhy; V1–V7 malé vlnky. V4 přebírá
+   skutečných 120 snímků současné mořské vlny zmenšených na 70 %, včetně tahu.
+   Ostatní návrhy používají černou čáru o síle 1,6 logického px s postupným
+   mizením. Výběr dosud neproběhl.
+
+| Návrh kruhů | Animace v kontextu |
+| --- | --- |
+| K1 — Jeden klidný kruh | ![K1: jeden rozšiřující se ovál v jezeře](graphics-assets/lake-animations-2026-10-27/k1.gif) |
+| K2 — Dva soustředné kruhy | ![K2: dva postupně rostoucí kruhy](graphics-assets/lake-animations-2026-10-27/k2.gif) |
+| K3 — Tři drobné kruhy | ![K3: tři kruhy po kapce](graphics-assets/lake-animations-2026-10-27/k3.gif) |
+| K4 — Přerušené kruhy | ![K4: otevřené oblouky bez uzavřené skvrny](graphics-assets/lake-animations-2026-10-27/k4.gif) |
+| K5 — Dvě klidná místa | ![K5: kruhy střídající dvě místa](graphics-assets/lake-animations-2026-10-27/k5.gif) |
+| K6 — Kruh od břehu | ![K6: půlkruh od levého břehu](graphics-assets/lake-animations-2026-10-27/k6.gif) |
+| K7 — Široký pomalý kruh | ![K7: větší nepravidelný ovál](graphics-assets/lake-animations-2026-10-27/k7.gif) |
+
+| Návrh vlnky | Animace v kontextu |
+| --- | --- |
+| V1 — Tichý oblouk | ![V1: krátká narovnávající se vlnka](graphics-assets/lake-animations-2026-10-27/v1.gif) |
+| V2 — Dvojitá vlnka | ![V2: dvě rovnoběžné linky](graphics-assets/lake-animations-2026-10-27/v2.gif) |
+| V3 — Mírné S | ![V3: nízká zvlněná linka](graphics-assets/lake-animations-2026-10-27/v3.gif) |
+| V4 — Malá mořská vlna | ![V4: zmenšená současná mořská animace](graphics-assets/lake-animations-2026-10-27/v4.gif) |
+| V5 — Rozbíhající se vlnka | ![V5: rozšiřující se a mizející oblouk](graphics-assets/lake-animations-2026-10-27/v5.gif) |
+| V6 — Dvě vlnky za sebou | ![V6: postupná dvojice vlnek](graphics-assets/lake-animations-2026-10-27/v6.gif) |
+| V7 — Lehké čeření | ![V7: tři krátké postupně se objevující tahy](graphics-assets/lake-animations-2026-10-27/v7.gif) |
+
+4. Výtvarné doporučení k porovnání je K4 nebo V1: obě varianty ponechávají
+   hladinu přehlednou a nevytvářejí vyplněnou skvrnu. Je to návrh autora,
+   nikoli rozhodnutí uživatele nebo výsledek hráčského testu. Ověření náhledů
+   vede [evidence dokumentace](publishing.md#lake-animation-proposals-2026-10-27).
+
 ## Černé kontury vln — 27. října 2026
 
 1. Uživatel schválil [poslední náhled s černou čárou](graphics-assets/wave-contours-2026-10-27/selected-black.png):
