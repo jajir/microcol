@@ -59,6 +59,21 @@
    rozlišuje kontrolu podkladů od neprovedeného ověření hry. Přiložený
    schválený obrázek je návrh, nikoli nový snímek běžící hry.
 
+## Vybrané dvouramenné ústí — 27. října 2026
+
+1. Pro [R-0304](requirements/R-0304.md) uživatel vybral **variantu B: dvě ramena
+   kolem drobného protáhlého ostrůvku**. Jde o jediný společný vzhled; výběr
+   variant pro jednotlivé mapy ani ústí se nyní nezavádí.
+2. Řeka otevře pobřežní čáru a obě ramena souvisle navážou na moře. Ostrůvek
+   je pouze výtvarný detail, bez změny polí, pohybu, stavění nebo produkce.
+   Realizace má zachovat společné jednolité barvy a ruční charakter kresby.
+3. Obrázek je vybraný návrh vytvořený ImageGenem ze screenshotu, nikoli snímek
+   implementované hry. Výběr nemění generování řek ani pobřežní pravidla;
+   výjimku Original World na (25, 13) nadále určuje [R-0313](requirements/R-0313.md).
+   Podle předchozího pokynu zatím nekódovat je tato změna pouze dokumentační.
+
+![Vybraná dvouramenná delta B s drobným protáhlým ostrůvkem](graphics-assets/river-mouths-2026-10-27/selected-b.png)
+
 ## Delší oblouky a ústí řek — návrhy 26. října 2026
 
 1. [R-0304](requirements/R-0304.md) zachycuje uživatelovu žádost přiblížit řeky
@@ -73,8 +88,10 @@
    navazuje na přiloženou předlohu.
 3. Ústí otevírá obrys pobřeží a rozšiřuje vodní plochu mezi břehy. Krátký
    barevný přechod k moři a dekorativní ostrůvek delty jsou zde zobrazené návrhy;
-   nejsou dosud součástí přijatého plochého výtvarného stylu ani modelu terénu.
-4. R-0301/R-0302 dnes drží řeky ve vnitrozemí bez sousedství s vodou. R-0304
+   ostrůvek byl následně vybrán ve variantě B výše. Barevný přechod zůstává
+   historickým návrhem; platí společný plochý styl a ostrov není herním terénem.
+4. R-0301/R-0302 drží řeky ve vnitrozemí bez sousedství s vodou; pozdější
+   výjimku Original World na (25, 13) určuje [R-0313](requirements/R-0313.md). R-0304
    proto eviduje otázku výjimky pro koncový úsek. Výtvarné ukázky nemění
    pravidla generování, pevné mapy ani uložené hry.
 
