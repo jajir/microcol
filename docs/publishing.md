@@ -853,3 +853,20 @@ documentation in APT just to make it visible on the web.
    or skips, and the strict MkDocs build passed. Logs are retained in
    `target/r0314/docs-tests.log` and `target/r0314/mkdocs.log`. The committed
    scope contains only documentation sources and proposal images.
+
+
+## R-0318 unknown preview analysis — 2026-10-27
+
+1. [R-0318](requirements/R-0318.md) records the user's screenshot, source
+   analysis at `c9d172e18375dc891edf2bb8fdf3e8414f3bda84` and a proposed shared
+   fog painter. The requirement remains `new`; the broader limitations of
+   discovered-tile previews are identified without authorizing implementation.
+2. The task changes only the requirement, backlog link and this evidence.
+   No gameplay code, tests, runtime assets or configuration changed. Model/JUnit
+   and Docker/Xvfb checks are exempt for this documentation-only scope.
+3. All nine documentation consistency checks passed with zero failures, errors
+   or skips; strict MkDocs passed. Rendered requirement review checked its four
+   chapters, `new` status, source links and separation of proposed behavior from
+   verified facts. Logs are retained in `target/r0318/docs-tests.log` and
+   `target/r0318/mkdocs.log`. No runtime reproduction, remote CI inspection or
+   publication verification is claimed.
