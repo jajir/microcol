@@ -1,5 +1,15 @@
 # Use cases a přejímka pravidel hry
 
+## UC-011/115: počáteční pohyb ve volné hře — 2026-10-27
+
+1. [R-0310](requirements/done/R-0310.md) pokrývá pohyb počátečně zaměřené
+   galeony v Původním světě: TC193/F15/01 (`M`) a TC193/F15/02 (tažení myší).
+   TC193/F15/03–04 ověřují stejné příkazy po opětovném výběru lodi.
+2. Hra vybírá vlastní jednotku na zaměřeném poli i při úvodním tahu počítače;
+   povolení pohybu nadále vyžaduje tah lidského hráče. Cílená přejímka zahrnuje
+   také TC11/F11 (výběr a příkazy jednotek) a TC36/F28 (hranice národních tahů).
+   Skutečné výsledky vede [funkční evidence](functional-tests.md#r-0310-initial-free-play-movement-repair-2026-10-27).
+
 ## UC-008/012: ručně kreslené řeky — 2026-10-26
 
 1. [R-0300](requirements/done/R-0300.md) upravuje zobrazení známých řek a pořadí

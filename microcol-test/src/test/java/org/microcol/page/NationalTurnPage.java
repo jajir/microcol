@@ -139,10 +139,6 @@ public final class NationalTurnPage extends AbstractScreen {
         assertFalse(getModel().isGameRunning());
     }
 
-    public void exitFailedGame() {
-        getRobot().clickOn("#exit");
-    }
-
     public void verifyRecoveryMessage(final String expectedMessage) {
         final String expectedText = expectedMessage + "\n\n"
                 + new FreePlayAuditPage(getContext()).diagnosticFolderLine();

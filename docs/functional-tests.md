@@ -1,5 +1,111 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0310 initial free-play movement repair — 2026-10-27
+
+1. The user selected [R-0310](requirements/done/R-0310.md) for repair after the
+   [failed keyboard/mouse reproduction](#r-0310-initial-free-play-movement-2026-10-27).
+   The implementation is based on `d7308d49149eea9ab476966dee6968090a32f907`;
+   the earlier expected failures remain historical evidence.
+2. Root cause: Original world focuses the Dutch galleon's tile while France
+   owns the opening turn. `SelectedUnitManager` queried the current player's
+   units, so the visible tile focus had no corresponding selected ship.
+   Reselecting the tile during the Dutch turn made the same query succeed.
+   The repair requests the human owner's unit through a model query that
+   reuses the existing `UnitStorage` priorities. The current-player query
+   remains available, and movement still requires the human turn.
+3. `SelectedUnitManagerTest` uses the actual Original world model to verify
+   selection while the computer still owns the turn, unchanged location and
+   movement, and clearing selection on an empty tile. The unchanged isolated
+   TC193/F15/01–04 reproducer is integrated: initial `M`, initial mouse drag
+   and both reselection controls require arrival at `(44, 15)` and an empty
+   origin `(45, 15)`. `GamePage.dragToLocation` only becomes callable by the
+   new scenarios; existing callers and their assertions remain intact.
+4. First model dispatch `20261027T052906Z-cb37b433525b` (supervisor PID 88981,
+   timeout 600 seconds) ended `timed_out` after 20.006 seconds in the Docker
+   labelled-container preflight query. No test started and cleanup reported
+   no errors. Docker Desktop status then reported running, server version
+   29.8.2 and the same container query returned promptly. The final repair
+   was dispatched separately; this failed attempt is not counted as a pass.
+5. Model attempt `20261027T053138Z-0cd97c4cbec3` (supervisor PID 89572,
+   timeout 600 seconds) completed 4,766 tests in 345 suites: zero assertion
+   failures, **2 errors**, zero skips. Both errors were in the new test setup:
+   this Mockito version cannot mock the final `GamePanelController` class.
+   Reports: `target/verification/run-ue8wk05s/model/run-5l3uDv`.
+   The test now constructs the existing controller with its mocked model
+   service; no production change or extra mocking dependency is needed.
+   The complete model phase must pass on retry before UI acceptance.
+6. Model retry `20261027T053459Z-155e2372b051` (supervisor PID 91000,
+   timeout 600 seconds) passed: **4,766 tests in 345 XML suites, zero failures,
+   errors or skips**, phase time 141.417 seconds and runner elapsed time
+   144.502 seconds. Reports: `target/verification/run-d780reuw/model`.
+   All five changed Java files match that run's saved source snapshot.
+7. First targeted Docker/Xvfb run `20261027T053737Z-3d2032a949fd`
+   (supervisor PID 92572, timeout 1,200 seconds) completed **21 checks:
+   1 failure, 1 error, zero skips**, elapsed 165.131 seconds. All four TC193
+   cases passed, including both previously failing initial movement paths.
+   Reports: `target/docker-ui/run-fCqBnh`. The selection contains all four
+   TC193 cases, all eleven TC11/F11 cases, all three TC36/F28 cases and all
+   three `PageVerificationContractTest` checks; it is retained for retry.
+8. The broader failures exposed two stale page helpers. TC11/02 measured the
+   toolbar's decorative border-image outset as playable-control overlap:
+   screen Y 175 versus map Y 172, matching the intentional `-3` bottom inset
+   in `GamePanel.css`. `UnitTurnOrdersPage` now compares layout bounds,
+   retaining label, shortcut, visibility, fit and all gameplay assertions.
+   TC36/03 clicked `#exit`, which now opens the shared game menu, but never
+   chose `#menuMain`; it therefore searched for a recovery dialog while the
+   menu was still open. `NationalTurnPage.exitFailedGame` now follows the
+   actual exit action and waits for FX events. Recovery text and saved-state
+   expectations remain unchanged. No production layout or exit behavior was
+   changed to accommodate these tests.
+9. Model refresh `20261027T054201Z-a3798c5e2b3c` (supervisor PID 94419,
+   timeout 600 seconds): **4,766 tests in 345 XML suites, zero failures,
+   errors or skips**, model phase 134.116 seconds, runner elapsed 136.829
+   seconds. Reports: `target/verification/run-tqna2xz4/model`. This run is
+   based on `111a4eb07aac92e5a7c3df9814f4bf993400c4f6`; the intervening
+   commit only adds unrelated documentation. All seven changed Java files
+   match the retained verification source byte for byte.
+10. Targeted retry `20261027T054634Z-f0c4a800e104` (supervisor PID 94995,
+    timeout 1,200 seconds): **21 checks, zero failures, 1 error, zero skips**,
+    elapsed 191.484 seconds. Reports: `target/docker-ui/run-VRbSkD`.
+    All four TC193 cases, all eleven TC11 cases and the page contract pass.
+    TC36/03 reaches the save/discard/cancel confirmation but still expects
+    the recovery message before choosing to save. The scene query explicitly
+    reports the `save-confirmation` root; this is another obsolete step in
+    the same test journey, not a movement failure.
+11. TC36/03 now uses the existing `SavedGamesPage` actions: request saving
+    on exit, verify the failed-turn recovery message and unchanged checkpoint,
+    close the message, then leave using Discard and Continue from the same
+    checkpoint. Existing recovery, restored-state and subsequent national-round
+    assertions remain; the unused `NationalTurnPage.exitFailedGame` shortcut
+    is removed. Production save/exit behavior is unchanged.
+12. Model refresh `20261027T055107Z-8ff5f0c0aa6c` (supervisor PID 95328,
+    timeout 600 seconds): **4,766 tests in 345 XML suites, zero failures,
+    errors or skips**, phase 132.678 seconds, runner elapsed 135.506 seconds.
+    Reports: `target/verification/run-i2ro8h1f/model`; base revision remains
+    `111a4eb07aac92e5a7c3df9814f4bf993400c4f6`. All eight changed Java files
+    match the retained source, including the final recovery-test navigation.
+13. Targeted retry `20261027T055337Z-3deff2b40909` (supervisor PID 95790,
+    timeout 1,200 seconds): **21 checks, zero failures, errors or skips**,
+    elapsed 193.431 seconds. Reports: `target/docker-ui/run-9YkcOL`.
+    The unchanged selection passes in full: four TC193 movement cases,
+    eleven TC11 unit-order cases, three TC36 national-turn/recovery cases
+    and three page-contract checks. Base revision remains `111a4eb0`.
+14. Fixed smoke/support run `20261027T055707Z-cd4a0e771897` (supervisor
+    PID 95982, timeout 480 seconds): **21 tests in 12 suites, zero failures,
+    errors or skips**. The complete configured selection passed in 199.115
+    seconds; total verification took 201.479 seconds and runner elapsed
+    201.753 seconds, within the 420-second acceptance budget. Exact methods
+    and reports: `target/verification/run-do3n9hk7/summary.json`. All eight
+    changed Java files match both the final model and smoke source snapshots.
+15. Local acceptance is complete. Review confirmed that the shared model
+    selection priority and movement turn guards remain intact, with no new
+    dependency, fixture mutation or timing workaround. R-0310 is `done`;
+    the earlier failed attempts remain failed. No native desktop session
+    was needed. Remote CI and publication were not inspected.
+16. Documentation acceptance after the status move and link updates:
+    **9 consistency tests passed**, and strict MkDocs completed successfully.
+    The build log is retained at `target/r0310-mkdocs.log`.
+
 ## Requirement closure — 2026-10-27
 
 1. Scope: the user canceled [R-0253](requirements/canceled/R-0253.md),
@@ -73,7 +179,7 @@
 
 ## R-0310 initial free-play movement — 2026-10-27
 
-1. [R-0310](requirements/R-0310.md) requests reproduction only on production
+1. [R-0310](requirements/done/R-0310.md) requests reproduction only on production
    revision `afc916327ea4e7f6a4b5d02bce4c1c66044e6ece`. The isolated worktree
    `classic-initial-movement/microcol` excludes unrelated main-checkout edits.
    No production code, runtime assets or fixture data are changed.

@@ -204,8 +204,11 @@ public final class SelectedUnitManager {
 
     private void evaluateLocation(final Location location) {
         if (selectedUnit == null) {
-            selectedUnit(gameModelController.getModel()
-                    .getFirstSelectableUnitAt(location).orElse(null));
+            selectedUnit(
+                    gameModelController.getModel()
+                            .getFirstSelectableUnitAtOwnedBy(location,
+                                    gameModelController.getHumanPlayer())
+                            .orElse(null));
         } else {
             if (selectedUnit.isAtPlaceLocation()) {
                 /*
@@ -214,11 +217,15 @@ public final class SelectedUnitManager {
                  */
                 if (!selectedUnit.getLocation().equals(location)) {
                     selectedUnit(gameModelController.getModel()
-                            .getFirstSelectableUnitAt(location).orElse(null));
+                            .getFirstSelectableUnitAtOwnedBy(location,
+                                    gameModelController.getHumanPlayer())
+                            .orElse(null));
                 }
             } else {
                 selectedUnit(gameModelController.getModel()
-                        .getFirstSelectableUnitAt(location).orElse(null));
+                        .getFirstSelectableUnitAtOwnedBy(location,
+                                gameModelController.getHumanPlayer())
+                        .orElse(null));
             }
         }
         logger.debug("Selected unit at {} is now: {}", location, selectedUnit);

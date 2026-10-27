@@ -111,6 +111,12 @@ Následující přehled zachycuje vybrané vazby ve zdrojovém kódu. Nejde o ú
 | Přehled tahu | [ShowTurnEvensOnTurnStartedEvent](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/ShowTurnEvensOnTurnStartedEvent.java) otevírá report pro čerstvý tah člověka s neprázdným seznamem. [TurnEventPanel](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/TurnEventPanel.java) zobrazuje zprávu jako text s odrážkou. | Zda hráč pozná naléhavost zprávy, najde dotčenou kolonii a ví, co může udělat dál. |
 | Výuka a následná nápověda | [Default_0_mission](../microcol-game/src/main/java/org/microcol/model/campaign/Default_0_mission.java) obsahuje kontextové instrukce k počátečním úkolům. Tlačítko na mapě a klávesa H otevírají [ColonizopediaDialog](../microcol-game/src/main/java/org/microcol/gui/screen/colonizopedia/ColonizopediaDialog.java) s tématy pravidel, hledáním a zprávou o prázdném výsledku ([R-0206](requirements/done/R-0206.md)); cílené automatizované ověření prošlo, společná regrese dávky ještě následuje. | Zda hráč zvládne první kolonii a později dokáže znovu dohledat zapomenutý postup. Existence třídy dialogu neprokazuje dostupnou a úplnou nápovědu. |
 
+Při vstupu do hry mají zaměřené pole a skutečný výběr jednotky odpovídat:
+[R-0310](requirements/done/R-0310.md) vybírá vlastní jednotku nezávisle na úvodním
+tahu AI, aby hráč mohl po převzetí tahu rovnou použít `M` nebo tažení myší.
+Výběr sám neprovádí pohyb ani neobchází omezení tahu. Stav ověření je vedený
+ve [funkční evidenci](functional-tests.md#r-0310-initial-free-play-movement-repair-2026-10-27).
+
 ### Přehled práce — R-0198
 
 1. Cíl hráče: zjistit, kolik kolonistů jednotlivých typů má národ a kde každý

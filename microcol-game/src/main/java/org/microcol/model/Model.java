@@ -5212,8 +5212,12 @@ public class Model {
     }
 
     public Optional<Unit> getFirstSelectableUnitAt(final Location location) {
-        return unitStorage.getFirstSelectableUnitAt(getCurrentPlayer(),
-                location);
+        return getFirstSelectableUnitAtOwnedBy(location, getCurrentPlayer());
+    }
+
+    public Optional<Unit> getFirstSelectableUnitAtOwnedBy(
+            final Location location, final Player owner) {
+        return unitStorage.getFirstSelectableUnitAt(owner, location);
     }
 
     public List<Unit> getMoveableUnitAtOwnedBy(final Location location,

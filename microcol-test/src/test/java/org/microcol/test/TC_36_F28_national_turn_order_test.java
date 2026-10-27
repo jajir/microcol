@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.NationalTurnPage;
+import org.microcol.page.SavedGamesPage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -125,10 +126,19 @@ public class TC_36_F28_national_turn_order_test extends AbstractMicroColTest {
         turns.failNextPreparation();
         turns.verifyFailedPreparation();
         turns.clickNextTurnWithoutWaiting();
-        turns.exitFailedGame();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.action("saveConfirm");
         turns.verifyRecoveryMessage(
                 "The turn could not finish. No saved game was overwritten. Continue or load a saved game to play again.");
         org.microcol.page.DialogMessagePage.of(getContext()).close();
+        audit.verifyAutosaveUnchanged(checkpoint);
+
+        // Leave without saving the failed turn, then recover the checkpoint.
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.action("saveDiscard");
         WelcomePage.of(getContext()).verifyMainScreen();
         audit.verifyAutosaveUnchanged(checkpoint);
 

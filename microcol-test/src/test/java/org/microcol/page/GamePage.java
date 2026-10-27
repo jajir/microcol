@@ -102,7 +102,7 @@ public class GamePage extends AbstractScreen {
         return ScreenTurnReport.of(getContext());
     }
 
-    private void dragToLocation(final Location location) {
+    public void dragToLocation(final Location location) {
         // An explicit map hover is the drag source; menu checks have no hover
         // and fall back to the selected tile when returning to the map.
         final Location source = getContext().getClassFromGuice(

@@ -50,11 +50,11 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
                         org.microcol.gui.screen.game.gamepanel.GamePanelComponent.class)
                 .getCanvas();
         final javafx.geometry.Bounds controlsBounds = controls
-                .localToScreen(controls.getBoundsInLocal());
+                .localToScreen(controls.getLayoutBounds());
         final javafx.geometry.Bounds mapBounds = canvas
                 .localToScreen(canvas.getBoundsInLocal());
         assertTrue(mapBounds.getMinY() >= controlsBounds.getMaxY(),
-                "All toolbar rows must be outside the playable map: controls="
+                "Toolbar layout must be outside the playable map: controls="
                         + controlsBounds + "; map=" + mapBounds);
         final Button wait = getButtonById("waitUnit");
         final Button skip = getButtonById("skipUnitTurn");

@@ -6,12 +6,11 @@ indicator and hover coordinates using the map-file convention. Implementation
 has not been selected; the requirement distinguishes existing launch-time
 diagnostics from the proposed runtime preference.
 
-Defect reproduced on 2026-10-27: [R-0310 — initially focused free-play
-galleon](R-0310.md), A04 with A01/A02 entry flow. Keyboard and mouse movement
-fail before reselection; both controls pass afterward. The user authorized
-publishing the analysis only; tests remain isolated and uncommitted, and no
-gameplay repair is authorized. See the
-[evidence](../functional-tests.md#r-0310-initial-free-play-movement-2026-10-27).
+Accepted locally on 2026-10-27: [R-0310 — initially focused free-play
+galleon](done/R-0310.md), A04 with A01/A02 entry flow. Initial keyboard and mouse
+movement now pass without reselection. The repair and integrated regression
+tests passed all model, targeted UI and smoke checks; see the
+[repair evidence](../functional-tests.md#r-0310-initial-free-play-movement-repair-2026-10-27).
 
 Closed by user acceptance on 2026-10-27: [R-0309 — Settings design alternatives](done/R-0309.md).
 The three proposals are delivered. A later runtime change still needs a selected
