@@ -968,7 +968,7 @@ documentation in APT just to make it visible on the web.
 
 ## R-0329 help border proposals — 2026-10-28
 
-1. [R-0329](requirements/R-0329.md) captures the user's request for proposals only,
+1. [R-0329](requirements/done/R-0329.md) captures the user's request for proposals only,
    based on the supplied Help screenshot and source `3e5d70ae`. Four designs retain
    the same topic index and three-unit sample while comparing sketched frames,
    removal of alternating row fills, a single divider and fewer table decorations.
@@ -1019,3 +1019,27 @@ documentation in APT just to make it visible on the web.
    Docker/Xvfb UI and smoke were not run for this documentation-only change;
    future runtime implementation still needs those phases. Remote CI and
    publication were not inspected.
+
+
+## R-0329 Help frame implementation — 2026-10-28
+
+1. Following the [prototype comparison](#r-0329-help-border-proposals-2026-10-28),
+   the user selected **Frames without stripes** for implementation. The runtime
+   change is confined to Help CSS: two curved native-panel contours, uniform
+   ordinary topic backgrounds and wrapped long names. Layout, sand selection,
+   underline, article tables, original artwork and native input remain.
+2. Local [acceptance evidence](functional-tests.md#r-0329-help-frames-without-stripes-2026-10-28)
+   records 4,782 passing model/JUnit tests and 17 passing targeted UI/source-contract
+   checks. Three older Congress expectations were updated to the existing
+   full-window/card behavior uncovered by the shared journey; gameplay assertions
+   remain. Earlier failed attempts are retained and are not relabeled successful.
+3. Review covers the actual English full/small/Units and Czech screenshots,
+   the scoped CSS/test diff and Java formatting. Final smoke passed 21 checks
+   in 209.300 s, below the 420 s budget, with zero failures/errors/skips. Runtime
+   source hashes match final UI/smoke snapshots; model inputs are unchanged.
+   Remote CI and publication are not requested or claimed.
+
+4. Final documentation acceptance passed all nine consistency tests and strict
+   MkDocs. Logs: `target/r0329/docs-tests-final.log` and
+   `target/r0329/docs-build-final.log`. R-0329 is complete and archived under
+   `requirements/done/`; no generated site output is committed.

@@ -843,12 +843,15 @@ remain owned by their current requirements; acceptance is recorded in the
    tests; runtime appearance is unverified. The [evidence](../publishing.md#r-0328-help-background-implementation-2026-10-28)
    records that task-specific waiver, separate from the earlier proposal checks.
 
-## Help border proposals (2026-10-28)
+## Help frames without stripes (2026-10-28)
 
-1. [R-0329](R-0329.md), primary area A03 with A01 frame/control ownership, compares
-   hand-drawn inner frames, a plain topic index, a single divider and an open page
-   with fewer table lines. Status: `new`. The user requested proposals only;
-   no runtime implementation has been selected.
+1. [R-0329](done/R-0329.md), primary area A03 with A01 frame/control ownership,
+   implements the user's selected hand-drawn inner frames and plain topic rows.
+   Sand selection, underline, table headings and rules remain. Status: `done`.
+   Local acceptance passed 4,782 model/JUnit, 17 targeted and 21 smoke/support checks;
+   [evidence](../functional-tests.md#r-0329-help-frames-without-stripes-2026-10-28).
+   The original [prototype evidence](../publishing.md#r-0329-help-border-proposals-2026-10-28)
+   is separate from runtime acceptance.
 
 ## Congress founder cards (2026-10-28)
 

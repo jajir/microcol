@@ -85,12 +85,15 @@ public class TC_83_F74_wooden_buttons_test extends AbstractMicroColTest {
         page.verifyToolbarButton("europe");
         page.verifyToolbarButton("congress");
         page.captureDialog("europe", "paper-game.png");
-        page.click("congress");
-        page.verifyModalFrame("congressClose");
+        final org.microcol.page.CongressPage congress = new org.microcol.page.CongressPage(
+                getContext());
+        congress.open();
+        congress.verifyFillsGameWindow("Back to game");
         page.verifyPaperButton("congressClose");
         page.verifyVisibleButtonStyles();
         page.captureDialog("congressDialog", "paper-congress.png");
         page.click("congressClose");
+        congress.verifyReturnedToGame();
         final org.microcol.page.EuropePortScreen europe = game
                 .openEuroperPort();
         europe.verifyGold(10000);

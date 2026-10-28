@@ -184,12 +184,11 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         page.saveEvidence("r0307-settings-czech.png");
         page.open("buttonBack");
         // Congress and help retain their keyboard cancellation.
-        page.open("congress");
-        final org.microcol.page.PaperButtonsPage buttons = new org.microcol.page.PaperButtonsPage(
+        final org.microcol.page.CongressPage congress = new org.microcol.page.CongressPage(
                 getContext());
-        buttons.verifyModalFrame("congressClose");
-        buttons.captureModalOnScreen("r0322-congress-on-map.png");
-        page.verifyScreenTitle("Kongres");
+        congress.open();
+        congress.verifyFillsGameWindow("Zpět do hry");
+        congress.verifyHeading("Kongres");
         page.verifyFrame(484, 1600);
         page.scrollToBottom();
         page.verifyFrame(484, 1600);

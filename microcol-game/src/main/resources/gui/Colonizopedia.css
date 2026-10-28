@@ -27,24 +27,31 @@
 #colonizopediaBodyScroll {
     -fx-background-color: #FFFDF6;
     -fx-background-insets: 0;
-    -fx-border-color: #B9AE93;
-    -fx-border-width: 1;
-    -fx-padding: 0;
+    -fx-border-color: #716858;
+    -fx-border-width: 1.6;
+    -fx-padding: 4;
+}
+#colonizopediaTopics {
+    -fx-shape: "M3 3 C55 0 77 6 116 3 Q176 0 217 3 C220 128 214 205 217 326 Q220 512 217 637 C165 640 143 634 104 637 Q44 640 3 637 C0 512 6 435 3 314 Q0 128 3 3 Z";
+}
+#colonizopediaBodyScroll {
+    -fx-shape: "M3 3 C264 0 385 6 583 3 Q880 0 1097 3 C1100 138 1094 221 1097 352 Q1100 552 1097 687 C836 690 715 684 517 687 Q220 690 3 687 C0 552 6 469 3 338 Q0 138 3 3 Z";
 }
 
 #colonizopediaTopics .list-cell {
     -fx-background-color: #FFFDF6;
     -fx-text-fill: #292824;
-    -fx-padding: 7 9;
+    -fx-padding: 7 4;
+    -fx-pref-width: 0;
+    -fx-wrap-text: true;
 }
 
-#colonizopediaTopics .list-cell:odd { -fx-background-color: #F3F1E9; }
 #colonizopediaTopics .list-cell:empty { -fx-background-color: #FFFDF6; }
 #colonizopediaTopics .list-cell:filled:selected {
     -fx-background-color: #DEC79B;
     -fx-underline: true;
 }
-#colonizopediaTopics:focused { -fx-border-color: #716858; }
+#colonizopediaTopics:focused { -fx-border-color: #302D27; }
 
 #colonizopediaBodyScroll > .viewport { -fx-background-color: #FFFDF6; }
 #colonizopediaPage .help-article { -fx-padding: 12; }

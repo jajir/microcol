@@ -12588,3 +12588,124 @@ or website publication.
    documented in their original evidence. Logs: `target/r0326/docs-final.log`,
    `target/r0326/mkdocs-final.log`; formatting/review: `target/r0326/format.log`,
    `target/r0326/review.txt`.
+
+
+## R-0329 Help frames without stripes — 2026-10-28
+
+Final local acceptance passed: **4,782 model/JUnit tests, 17 targeted UI/source-contract
+checks and 21 fixed smoke/support tests**, all with zero failures, errors or skips.
+The final runtime is v3; v4/v5 only correct test synchronization/selection. Final UI
+and smoke hashes match the committed executable scope; model inputs are unchanged.
+Earlier failures below remain historical failures.
+
+1. [R-0329](requirements/done/R-0329.md), UC-114/119: the selected design changes only
+   Help CSS. Both native panels use pen contours; ordinary topic rows share one
+   paper background and the selected topic retains sand fill and underline.
+   TC100/F91 checks these properties at 1280 × 850 and 900 × 700, captures the
+   full Units page, and retains search, keyboard, wheel/thumb and game-state checks.
+   TC192/F225 preserves the Czech shared-window journey.
+2. Baseline `d0ad1feed73e8745143766701d63890418bc50cd` plus the task diff.
+   `target/r0329/source-manifest.json` records the initial targeted snapshot; its executable
+   files matched the first model snapshot and the working tree at that attempt.
+   User-requested concurrency follows the [isolated-run procedure](ai/completion-callbacks.md#user-requested-parallel-runs):
+   owner `501-r0329-01a17e32`, separate lock, Compose project/image and result directory.
+   The existing UX container and default owner remain outside cleanup scope.
+3. Model/JUnit: **4,782 tests in 349 suites, zero failures/errors/skips**,
+   **151.973 s** total. Report: `target/verification/run-81ekksfx/summary.json`;
+   completion `20261028T122519Z-45de7b04617c`, supervisor PID 93368, timeout 600 s,
+   no lock wait or cleanup errors.
+4. Targeted Docker UI: selection `TC_100_*,TC_192_*,PageVerificationContractTest`,
+   dispatched as `20261028T122829Z-7156e4592873`, supervisor PID 93841, timeout
+   1,800 s: **16 tests, zero failures, one error, zero skips**, 244.06 s.
+   Reports and screenshots: `target/r0329/docker-ui/run-vWoBv6`. TC100's nine
+   Help scenarios and the three source-contract tests passed. TC192/TC02 stopped
+   before Help because its older Congress check still required a transparent modal
+   after R-0332 moved Congress into the main window. TC192 and the second affected
+   caller, TC83/TC02, now use the existing full-window Congress verification;
+   their title, button, return and gameplay checks remain.
+5. Visual review also found a native horizontal topic scrollbar introduced by the
+   contour inset. Cell side padding was reduced to retain the previous text space;
+   TC100 now explicitly requires no horizontal topic scrollbar. The runtime CSS
+   changed, so model and targeted acceptance are repeated on the revised source.
+   The failed run remains failed; smoke and final acceptance are pending.
+6. The task-local cleanup check first used an incomplete fake Docker state that
+   retained an already removed container. The fake removal was corrected and the
+   check passed, confirming own-owner cleanup and preservation of a foreign owner.
+   No shared runner changes or actual Docker cleanup occurred in that check.
+
+7. Revised-source model/JUnit: **4,782 tests, zero failures/errors/skips**,
+   **142.699 s** total. Report: `target/verification/run-kldx1nee/summary.json`;
+   completion `20261028T123510Z-6b0b4b69f226`, supervisor PID 94456, timeout 600 s.
+   Executable hashes match `target/r0329/source-manifest-v2.json` and the working tree.
+8. Revised targeted selection adds `TC_83_F74_wooden_buttons_test#TC_02_custom_game_and_ship_buttons_keep_their_appearance`
+   to TC100, TC192 and PageVerificationContractTest. Completion
+   `20261028T123752Z-896f0df91bdf`, supervisor PID 94767, timeout 1,800 s;
+   **17 tests, zero failures, three errors, zero skips**, 219.099 s.
+   Report: `target/r0329/docker-ui/run-FFviMz`. The new scrollbar assertion found
+   a horizontal bar only after resizing to 900 × 700, where the vertical bar
+   reduces text width. Cells now wrap at the available width. The two Congress
+   journeys also reached an outdated shared button check: founder cards use their
+   documented 16 px padding, rather than ordinary action-button padding. The
+   shared check now verifies that distinction while retaining skin, font, artwork
+   and label assertions. The failed run remains failed; a fresh model and targeted
+   phase will cover these final changes before smoke.
+
+9. Final-source model/JUnit: **4,782 tests, zero failures/errors/skips**,
+   **155.323 s** total. Report: `target/verification/run-t2g6o2wr/summary.json`;
+   completion `20261028T124308Z-5c9a0c370c85`, supervisor PID 95298, timeout 600 s.
+   Executable hashes match `target/r0329/source-manifest-v3.json` and the working tree.
+10. The same 17 targeted checks were dispatched on v3 as
+    `20261028T124558Z-2e80fbc2ca3d`, supervisor PID 95804, timeout 1,800 s.
+    **17 tests, zero failures, one error, zero skips**, 229.91 s.
+    Report: `target/r0329/docker-ui/run-giu0rq`. Both Congress journeys now pass;
+    only TC100/TC01's scrollbar assertion immediately after resizing fails.
+11. V4 moves the existing full/small snapshots before the style assertions, so
+    `Scene.snapshot` finishes native layout and retains visual evidence even if
+    the assertion fails. No runtime, model source or model selection changed;
+    the successful model report above remains applicable. Targeted selection
+    remains 17 checks, dispatched as `20261028T125153Z-3056196eafc2`, PID 96730,
+    timeout 1,800 s; `target/r0329/source-manifest-v4.json` records this test-only
+    revision. **17 tests, zero failures, one error, zero skips**, 232.574 s;
+    report `target/r0329/docker-ui/run-paVFbf`. The saved 900 × 700 image shows
+    no horizontal scrollbar and correctly wrapped topic names. Inspection of the
+    JavaFX 17 `Node.lookup` implementation confirms it uses `Selector.applies`
+    without pseudo-class state matching: `:horizontal` selected the visible
+    vertical bar. V5 checks the actual `ScrollBar.getOrientation()` instead.
+    This changes only the test selector, not runtime behavior or its expectations.
+12. At the user's reminder to run alongside the long main tests, fixed smoke was
+    dispatched through the task's independent owner/lock as
+    `20261028T124759Z-21cc93e7c302`, PID 95949, supervisor timeout 480 s and
+    acceptance budget 420 s. It waited only for this task's short UI run and
+    started execution at 12:49:48 UTC; the default-owner long UX test remained
+    running. **21 fixed smoke/support tests passed, zero failures/errors/skips**,
+    **215.156 s** total (within 420 s). Report:
+    `target/verification/run-3ckjn1us/summary.json`; waiting was 109.516 s and
+    excluded from the execution budget. The only subsequent executable difference
+    is TC100's screenshot/assertion order, under the separate v4 targeted run;
+    runtime files and smoke scenario selection are unchanged.
+
+13. V5 keeps the same runtime and checks the horizontal bar by orientation.
+    Targeted selection remains 17 checks, dispatched as
+    `20261028T125915Z-94a1f5ea1570`, PID 98377, timeout 1,800 s;
+    `target/r0329/source-manifest-v5.json` records its sources. Full, small and
+    Czech screenshots of the unchanged runtime show continuous pen contours,
+    uniform topic backgrounds, retained sand selection and readable text.
+    **17 tests passed, zero failures/errors/skips**, 236.747 s. Reports:
+    `target/r0329/docker-ui/run-AnIR70` (TC100: 9; TC192: 4; TC83/TC02: 1;
+    source contract: 3). Executable hashes match the working tree. Reviewed images:
+    [full English](graphics-assets/help-frames-2026-10-28/r0329-help-full-en.png),
+    [small English](graphics-assets/help-frames-2026-10-28/r0329-help-small-en.png),
+    [Units](graphics-assets/help-frames-2026-10-28/r0329-help-units-en.png) and
+    [Czech](graphics-assets/help-frames-2026-10-28/r0329-help-czech.png).
+    Final smoke acceptance is recorded below.
+
+14. Fixed smoke is queued after that short UI phase on the same independent
+    task lock: `20261028T125950Z-62009522c40d`, PID 98499, supervisor timeout
+    480 s, acceptance budget 420 s. **21 tests in 12 suites passed, zero
+    failures/errors/skips**, **209.300 s** total, within the 420 s limit. Report:
+    `target/verification/run-pan61epu/summary.json`. Waiting for this task's UI
+    was 202.134 s and is excluded from execution time. Executable hashes match
+    v5 targeted sources and the final working tree, including the corrected
+    page-object selector and TC100 source-contract inputs. The long UX container
+    `c8aa87b1bff6` retained its original default owner and remained running after
+    our targeted cleanup. No remote CI or publication was inspected.

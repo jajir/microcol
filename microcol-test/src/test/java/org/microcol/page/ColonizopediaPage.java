@@ -468,6 +468,60 @@ public final class ColonizopediaPage extends AbstractScreen {
         });
     }
 
+    public void verifyHandDrawnFramesWithoutStripes() {
+        getRobot().interact(() -> {
+            final ListView<ColonizopediaTopic> list = getTopicList();
+            final ScrollPane article = getNodeFinder()
+                    .lookup("#" + ScreenColonizopedia.BODY_SCROLL_ID)
+                    .queryAs(ScrollPane.class);
+            for (final Region panel : List.of(list, article)) {
+                assertTrue(
+                        panel.getShape() instanceof javafx.scene.shape.SVGPath,
+                        "Help panels use hand-drawn contours");
+                assertTrue(
+                        ((javafx.scene.shape.SVGPath) panel.getShape())
+                                .getContent().contains("C"),
+                        "Panel edges contain curves");
+                assertEquals(1.6, panel.getBorder().getStrokes().get(0)
+                        .getWidths().getTop(), 0.01);
+                assertTrue(panel.getPadding().getLeft() >= 4,
+                        "Content leaves space for the pen contour");
+            }
+            // Node.lookup does not match pseudo-class state such as
+            // :horizontal.
+            final ScrollBar horizontal = list.lookupAll(".scroll-bar").stream()
+                    .map(ScrollBar.class::cast)
+                    .filter(bar -> bar
+                            .getOrientation() == javafx.geometry.Orientation.HORIZONTAL)
+                    .findFirst().orElseThrow();
+            assertFalse(horizontal.isVisible(),
+                    "All topic names fit without a horizontal scrollbar");
+            int ordinaryRows = 0;
+            int selectedRows = 0;
+            for (final Node node : list.lookupAll(".list-cell")) {
+                final ListCell<?> cell = (ListCell<?>) node;
+                if (cell.isEmpty() || !cell.isVisible()) {
+                    continue;
+                }
+                if (cell.isSelected()) {
+                    selectedRows++;
+                    assertEquals(javafx.scene.paint.Color.web("#DEC79B"),
+                            cell.getBackground().getFills().get(0).getFill());
+                    assertTrue(cell.isUnderline(),
+                            "Selected topic stays underlined");
+                } else {
+                    ordinaryRows++;
+                    assertEquals(javafx.scene.paint.Color.web("#FFFDF6"),
+                            cell.getBackground().getFills().get(0).getFill(),
+                            "Every ordinary topic has the same paper background");
+                }
+            }
+            assertTrue(ordinaryRows >= 2, "Check multiple ordinary topic rows");
+            assertEquals(1, selectedRows,
+                    "Exactly one visible topic is selected");
+        });
+    }
+
     public void verifyHandDrawnBodyScrollbar() {
         getRobot().interact(() -> {
             final ScrollBar bar = getNodeFinder()

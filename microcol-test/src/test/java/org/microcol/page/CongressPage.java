@@ -43,6 +43,12 @@ public final class CongressPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void verifyHeading(final String expectedTitle) {
+        assertEquals(expectedTitle,
+                ((javafx.scene.control.Label) getNodeFinder()
+                        .lookup("#congressHeading").query()).getText());
+    }
+
     public void verifyFillsGameWindow(final String expectedReturnText) {
         getRobot().interact(() -> {
             final javafx.scene.Node page = getNodeFinder()

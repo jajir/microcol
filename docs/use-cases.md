@@ -1,5 +1,14 @@
 # Use cases a přejímka pravidel hry
 
+## UC-114/119: kreslené rámečky nápovědy — 2026-10-28
+
+1. [R-0329](requirements/done/R-0329.md) zachovává otevření nápovědy, hledání,
+   navigaci a návrat do hry. `TC_100_F91_colonizopedia_test` ověřuje obrysy
+   obou panelů a rejstřík bez pruhování v běžném i menším okně; pískový výběr
+   a podtržení zůstávají. `TC_192_F225_in_game_layout_test` zachovává kontrolu
+   českého celostránkového rozložení. Skutečné výsledky patří do funkční evidence.
+
+
 ## UC-114/119: spodní řádek Čistá linka — 2026-10-27
 
 1. [R-0327](requirements/done/R-0327.md) mění společný informační panel: kontext

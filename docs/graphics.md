@@ -37,17 +37,24 @@
 
 ![Kongres s pěti kartami v širokém okně](graphics-assets/congress-cards-2026-10-28/congress-wide-en.png)
 
-## Návrhy vnitřních rámečků nápovědy — 28. října 2026
+## Kreslené rámečky nápovědy bez pruhování — 28. října 2026
 
-1. [R-0329](requirements/R-0329.md) porovnává **Kreslené rámečky**, **Rámečky bez pruhů**,
-   **Jen dělicí linka** a **Volný papír**. Jde pouze o návrhy podle nového snímku uživatele;
-   hra nadále používá implementaci R-0325/R-0328.
-2. Společné rozložení, krémový podklad, Playpen Sans Regular 14 a původní ilustrace
-   zůstávají. Varianty postupně ubírají pruhy, rámování, duplicitní tabulkovou hlavičku
-   a pomocné linky; aktivní téma vždy zachovává podtržení.
-3. Doporučení varianty bez pruhů je návrhářský úsudek, nikoli zjištění hráčské studie.
-   [Evidence](publishing.md#r-0329-help-border-proposals-2026-10-28) odděluje kontroly
-   konverzačního návrhu od budoucí přejímky hry.
+1. Pro [R-0329](requirements/done/R-0329.md) uživatel zvolil **Rámečky bez pruhů**.
+   Seznam témat a článek mají lehce nepravidelné obrysy v barvě `#716858`,
+   široké 1,6 px; fokus seznamu ztmaví obrys na `#302D27`.
+2. Běžné řádky seznamu mají jednotnou papírovou výplň `#FFFDF6`. Vybrané téma
+   zachovává pískovou `#DEC79B` a podtržení. Hledání, posuvník, rozložení,
+   krémový podklad, původní ilustrace a Playpen Sans Regular 14 zůstávají.
+3. Nadpis článku, tabulkové hlavičky a oddělovací linky zůstávají zachované.
+   Čtyřpixelové odsazení chrání kreslený obrys před obsahem nativních panelů.
+   Dlouhé názvy témat se v menším okně zalamují, aby seznam nepotřeboval vodorovný posuvník.
+4. [Původní návrhy](publishing.md#r-0329-help-border-proposals-2026-10-28)
+   zůstávají historickou evidencí. Volba uživatele není výsledkem hráčské studie;
+   [přejímka skutečné hry](functional-tests.md#r-0329-help-frames-without-stripes-2026-10-28)
+   se zaznamenává samostatně. Vizuální kontrola běhu hry potvrdila obrysy,
+   čitelné zalamování a zachovaný výběr v angličtině i češtině.
+
+![Nápověda s kreslenými rámečky bez pruhování](graphics-assets/help-frames-2026-10-28/r0329-help-units-en.png)
 
 ## Sjednocené pozadí nápovědy — 28. října 2026
 

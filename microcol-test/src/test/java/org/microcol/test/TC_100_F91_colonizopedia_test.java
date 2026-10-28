@@ -94,10 +94,13 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
                 getContext());
         window.resize(1280, 850);
         help.verifyFillsGameWindow("Colonizopedia");
-        help.captureDialog("colonizopediaPage", "r0325-help-full-en.png");
+        help.captureDialog("colonizopediaPage", "r0329-help-full-en.png");
+        help.verifyHandDrawnFramesWithoutStripes();
         window.resize(900, 700);
         help.verifyFillsGameWindow("Colonizopedia");
-        help.captureDialog("colonizopediaPage", "r0325-help-small-en.png");
+        // Snapshot flushes the native controls' layout after resizing.
+        help.captureDialog("colonizopediaPage", "r0329-help-small-en.png");
+        help.verifyHandDrawnFramesWithoutStripes();
 
         // Every rule family is listed; the first topic is shown at once.
         help.verifyTopicTitles(TOPICS);
@@ -388,6 +391,8 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.verifyReferenceProperties(
                 "colonizopediaUnitProperties_HARDY_PIONEER",
                 "completes improvements faster");
+        help.verifyHandDrawnFramesWithoutStripes();
+        help.captureDialog("colonizopediaPage", "r0329-help-units-en.png");
         help.captureDialog("colonizopediaReference", "r0284-units-en.png");
         // Unit names are searchable; the full reference remains accessible.
         help.typeSearch("ore miner");

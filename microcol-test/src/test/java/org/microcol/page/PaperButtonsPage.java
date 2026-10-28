@@ -120,7 +120,10 @@ public final class PaperButtonsPage extends AbstractScreen {
                         .getSkin() instanceof javafx.scene.control.skin.MenuButtonSkin);
         assertEquals("Playpen Sans Regular", button.getFont().getName());
         assertEquals(14, button.getFont().getSize());
-        assertEquals(new javafx.geometry.Insets(6, 3, 7, 3),
+        assertEquals(
+                button.getStyleClass().contains("congress-card")
+                        ? new javafx.geometry.Insets(16)
+                        : new javafx.geometry.Insets(6, 3, 7, 3),
                 button.getPadding(), button.getId());
         assertFalse(button.getBorder().getImages().isEmpty());
         assertTrue(button.getBorder().getImages().get(0).getImage().getUrl()
