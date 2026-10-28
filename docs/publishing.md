@@ -950,6 +950,35 @@ documentation in APT just to make it visible on the web.
    remains evidence for the proposal only. No new game screenshot, runtime visual
    acceptance, remote CI result or published distribution is claimed.
 
+## R-0329 help border proposals — 2026-10-28
+
+1. [R-0329](requirements/R-0329.md) captures the user's request for proposals only,
+   based on the supplied Help screenshot and source `3e5d70ae`. Four designs retain
+   the same topic index and three-unit sample while comparing sketched frames,
+   removal of alternating row fills, a single divider and fewer table decorations.
+   The original unit and coin artwork and Playpen Sans Regular 14 are reused.
+2. The conversation preview is a separate prototype, not a screenshot of changed
+   game code. Its narrow layout and design toggles do not introduce game settings
+   or alter minimum game-window dimensions. Other topic text is explicitly only a
+   layout placeholder; the three unit entries and Movement excerpt retain the
+   existing reference wording.
+3. Final browser checks passed **16 layout groups** (four variants at 1024, 736,
+   360 and 320 px), **four interaction groups** (search, no results, topic changes
+   and scrolling) and **six native carousel navigation steps**, with no JavaScript
+   errors. Results are retained in `target/help-borders-2026-10-28/checks.json`.
+   Visual review corrected an inherited preview font override before the final
+   checks. One intermediate check used a stale wrapper after regeneration required
+   `--force`; its failed log remains `check-stale-preview.log` and is not acceptance.
+4. Visual review covers the final desktop and narrow variants. No runtime source,
+   test scenario, asset/data or build configuration changed. Documentation
+   consistency and strict MkDocs are the applicable checks; model/JUnit and Docker
+   UI acceptance are not required for this documentation-only commit. Remote CI,
+   a published distribution and player-study results are not claimed or inspected.
+
+5. Final documentation acceptance passed nine consistency checks and strict
+   MkDocs. Logs are retained in `target/help-borders-2026-10-28/docs-tests.log`
+   and `target/help-borders-2026-10-28/mkdocs.log`.
+
 ## R-0330 coast join analysis — 2026-10-28
 
 1. [R-0330](requirements/R-0330.md) is an investigation and static preview on

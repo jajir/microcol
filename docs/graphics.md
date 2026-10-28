@@ -1,5 +1,17 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Návrhy vnitřních rámečků nápovědy — 28. října 2026
+
+1. [R-0329](requirements/R-0329.md) porovnává **Kreslené rámečky**, **Rámečky bez pruhů**,
+   **Jen dělicí linka** a **Volný papír**. Jde pouze o návrhy podle nového snímku uživatele;
+   hra nadále používá implementaci R-0325/R-0328.
+2. Společné rozložení, krémový podklad, Playpen Sans Regular 14 a původní ilustrace
+   zůstávají. Varianty postupně ubírají pruhy, rámování, duplicitní tabulkovou hlavičku
+   a pomocné linky; aktivní téma vždy zachovává podtržení.
+3. Doporučení varianty bez pruhů je návrhářský úsudek, nikoli zjištění hráčské studie.
+   [Evidence](publishing.md#r-0329-help-border-proposals-2026-10-28) odděluje kontroly
+   konverzačního návrhu od budoucí přejímky hry.
+
 ## Sjednocené pozadí nápovědy — 28. října 2026
 
 1. [R-0328](requirements/done/R-0328.md) mění prostřední podklad nápovědy

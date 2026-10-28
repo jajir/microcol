@@ -838,3 +838,10 @@ remain owned by their current requirements; acceptance is recorded in the
    Status: `done`. The user explicitly requested implementation and push without
    tests; runtime appearance is unverified. The [evidence](../publishing.md#r-0328-help-background-implementation-2026-10-28)
    records that task-specific waiver, separate from the earlier proposal checks.
+
+## Help border proposals (2026-10-28)
+
+1. [R-0329](R-0329.md), primary area A03 with A01 frame/control ownership, compares
+   hand-drawn inner frames, a plain topic index, a single divider and an open page
+   with fewer table lines. Status: `new`. The user requested proposals only;
+   no runtime implementation has been selected.
