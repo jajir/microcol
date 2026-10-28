@@ -2,6 +2,7 @@ package org.microcol.gui.screen.europe;
 
 import org.microcol.gui.util.ActionButtons;
 import org.microcol.gui.image.ButtonIcon;
+import org.microcol.gui.UnitTypes;
 import java.util.Optional;
 
 import org.microcol.gui.event.model.GameModelController;
@@ -30,6 +31,11 @@ import com.google.inject.Inject;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -52,6 +58,10 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
     private final EuropeCallback europeDialog;
 
     private final HBox shipsContainer;
+    private final ScrollPane scroll;
+    private final ToggleGroup selection = new ToggleGroup();
+    private final VBox voyageDetail = new VBox(4);
+    private int selectedShipId = -1;
 
     private final ImageProvider imageProvider;
 
@@ -92,6 +102,8 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
         this.jettisonFlow = Preconditions.checkNotNull(jettisonFlow);
 
         shipsContainer = new HBox();
+        shipsContainer.setMinWidth(Region.USE_PREF_SIZE);
+        shipsContainer.getStyleClass().add("voyage-ships");
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
                 shipsContainer, this::isItCorrectObject);
         shipsContainer.setOnDragEntered(backgroundHighlighter::onDragEntered);
@@ -102,7 +114,17 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
 
         titledPanel = new TitledPanel();
         titledPanel.getStyleClass().add("ships-container");
-        titledPanel.getChildren().add(shipsContainer);
+        scroll = new ScrollPane(shipsContainer);
+        scroll.getStyleClass().add("harbor-scroll");
+        scroll.setFitToHeight(true);
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        shipsContainer.minWidthProperty()
+                .bind(scroll.widthProperty().subtract(4));
+        scroll.setMinHeight(104);
+        scroll.setPrefHeight(104);
+        scroll.setMaxHeight(104);
+        titledPanel.getChildren().addAll(scroll, voyageDetail);
         titledPanel.setOnMouseEntered(this::onMouseEntered);
         titledPanel.setOnMouseExited(this::onMouseExited);
     }
@@ -126,8 +148,15 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
 
     @Override
     public void repaint() {
+        selection.getToggles().clear();
+        voyageDetail.getChildren().clear();
         shipsContainer.getChildren().clear();
         showShips();
+        if (selection.getSelectedToggle() == null
+                && !selection.getToggles().isEmpty()) {
+            ((ToggleButton) selection.getToggles().get(0)).fire();
+        }
+        updateLanguage(i18n);
     }
 
     private void onDragOver(final DragEvent event) {
@@ -208,11 +237,37 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
                             || gameModelController.getModel()
                                     .getCurrentPlayer() != unit.getOwner());
                     jettison.setOnAction(event -> jettisonCargo((Ship) unit));
-                    shipsContainer.getChildren()
-                            .add(new VBox(
-                                    new ImageView(
-                                            imageProvider.getUnitImage(unit)),
-                                    remaining, new HBox(4, reverse, jettison)));
+                    final Label identity = new Label(
+                            i18n.get(UnitTypes.getUnitName(unit.getType()))
+                                    + " #" + unit.getId());
+                    identity.setId("voyage-identity-" + unit.getId());
+                    final ImageView icon = new ImageView(
+                            imageProvider.getUnitImage(unit));
+                    icon.setFitWidth(45);
+                    icon.setFitHeight(45);
+                    icon.setPreserveRatio(true);
+                    final ToggleButton ship = ActionButtons
+                            .toggle(ButtonIcon.SHIP, "#" + unit.getId());
+                    ship.setGraphic(icon);
+                    ship.setId("voyage-ship-" + unit.getId());
+                    ship.setContentDisplay(ContentDisplay.TOP);
+                    ship.setToggleGroup(selection);
+                    ship.setMinWidth(Region.USE_PREF_SIZE);
+                    ship.setTooltip(new Tooltip(
+                            identity.getText() + " · " + remaining.getText()));
+                    ship.setAccessibleText(
+                            identity.getText() + " · " + remaining.getText());
+                    ship.setOnAction(event -> {
+                        ship.setSelected(true);
+                        selectedShipId = unit.getId();
+                        voyageDetail.getChildren().setAll(
+                                new HBox(12, identity, remaining),
+                                new HBox(4, reverse, jettison));
+                    });
+                    shipsContainer.getChildren().add(ship);
+                    if (selectedShipId == unit.getId()) {
+                        ship.fire();
+                    }
                 });
     }
 
@@ -248,6 +303,8 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
     public void setShownShipsTravelingToEurope(
             final boolean isShownShipsTravelingToEurope) {
         this.isShownShipsTravelingToEurope = isShownShipsTravelingToEurope;
+        scroll.setId(isShownShipsTravelingToEurope ? "europe-incoming-scroll"
+                : "europe-outgoing-scroll");
     }
 
     @Override
@@ -257,7 +314,8 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        titledPanel.setTitle(i18n.get(titleKey));
+        titledPanel.setTitle(i18n.get(titleKey) + " · "
+                + shipsContainer.getChildren().size());
     }
 
     /**

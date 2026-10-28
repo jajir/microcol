@@ -881,3 +881,8 @@ remain owned by their current requirements; acceptance is recorded in the
    environment without repeating approval or setup questions. Default runs remain serial.
 2. Status: done. Documentation-only scope; the procedure preserves other jobs, completion
    callbacks and all existing acceptance gates. [Evidence](../publishing.md#r-0333-parallel-test-instructions-2026-10-28).
+
+## Evropský přístav — 2026-10-28
+
+1. [R-0335](done/R-0335.md), primary area A06, implements the selected Námořní skicář, long stone quay, four independent scrollbars and goods set 09 — Olivové pobřeží.
+2. Status: done. The agreed harbor and shared goods icons are implemented; model, targeted UI and fixed smoke acceptance passed. [Evidence](../functional-tests.md#r-0335-europe-harbor-2026-10-28).

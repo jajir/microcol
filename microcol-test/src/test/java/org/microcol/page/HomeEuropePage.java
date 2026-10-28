@@ -43,6 +43,15 @@ public final class HomeEuropePage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    /** Select the ship whose voyage detail is shown below the list. */
+    public void selectVoyage(final int shipId) {
+        final javafx.scene.Node ship = getNodeFinder()
+                .lookup("#voyage-ship-" + shipId).query();
+        revealGameContent(ship);
+        getRobot().clickOn(ship);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     /** One crossing, with its remaining time as the Europe list shows it. */
     public void verifyVoyage(final int shipId, final boolean toEurope,
             final int position, final int remaining,

@@ -29,9 +29,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import com.google.gson.Gson;
 
-import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.HBox;
 
 /**
  * Ordinary player actions and read-only observations for the integrated
@@ -223,12 +221,8 @@ public final class ExpeditionLoopPage extends AbstractScreen {
 
     /** Drop the selected port ship on the departure panel of Europe. */
     public void sendShipBack() throws Exception {
-        final Parent panel = getNodeFinder().lookup(".to-new-world")
-                .queryAs(Parent.class);
-        final HBox target = (HBox) panel.getChildrenUnmodifiable().stream()
-                .filter(node -> node instanceof HBox
-                        && node.getOnDragDropped() != null)
-                .findFirst().orElseThrow();
+        final javafx.scene.Node target = getNodeFinder()
+                .lookup("#europe-outgoing-scroll .viewport").query();
         getRobot().drag(
                 PageComponentPanelDock.of(getContext()).getUnitsInPort().get(0),
                 MouseButton.PRIMARY).dropTo(target);

@@ -55,6 +55,7 @@ public final class PanelPortPierUnit extends HBox {
         final Image image = imageProvider.getUnitImage(unit);
         final ImageView imageIcon = new ImageView(image);
         paneImage = new Pane(imageIcon);
+        paneImage.setMaxSize(45, 45);
         paneImage.getStyleClass().add("unit-icon");
         paneImage.setId("europe-pier-unit-" + unit.getId());
         paneImage.setFocusTraversable(true);

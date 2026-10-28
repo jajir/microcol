@@ -80,6 +80,11 @@
 	-fx-max-width: 50;
 }
 
+.cargo-amount {
+    -fx-background-color: #FFF9EC;
+    -fx-padding: 0 2;
+}
+
 .paneShip{
 	-fx-min-width: 50;
 }

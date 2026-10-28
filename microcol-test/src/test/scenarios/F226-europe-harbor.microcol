@@ -1,0 +1,6659 @@
+{
+  "campaignName": "freePlay",
+  "missionName": "freePlay",
+  "goalData": {},
+  "model": {
+    "combatRandomState": 0,
+    "difficulty": "CONQUISTADOR",
+    "calendar": {
+      "startYear": 1490,
+      "endYear": 1850,
+      "scoredPlay": true,
+      "numberOfPlayedTurns": 18
+    },
+    "units": [
+      {
+        "workUpdates": 0,
+        "missionary": false,
+        "id": 0,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "placeColonyField": {},
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false
+      },
+      {
+        "workUpdates": 0,
+        "missionary": false,
+        "id": 1,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "placeColonyField": {},
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false
+      },
+      {
+        "id": 1000,
+        "type": "GALLEON",
+        "ownerId": "Dutch's King",
+        "placeMap": {
+          "location": {
+            "x": 2,
+            "y": 19
+          },
+          "orientation": "west"
+        },
+        "cargo": {
+          "slots": [
+            {},
+            {},
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 18
+      },
+      {
+        "id": 1100,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 1
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1101,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 2
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1102,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 3
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1103,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 4
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1104,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 5
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1105,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 6
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1106,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 7
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1107,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 8
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1108,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 9
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1109,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 10
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1110,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 11
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1111,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 12
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1112,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 13
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1113,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 14
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1114,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 15
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1115,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 16
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1116,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 17
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1117,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 18
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1118,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 19
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1119,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 20
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1120,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 21
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1121,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 22
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1122,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 23
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1123,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 24
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1124,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 25
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1125,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 26
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1126,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 27
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1127,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 28
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1128,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 29
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1129,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 30
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1130,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 31
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1131,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 32
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1132,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 33
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1133,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 34
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1134,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 35
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1135,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 36
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1136,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 37
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1137,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 38
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1138,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 39
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1139,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 40
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1140,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 41
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1141,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 42
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 1142,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 43
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": true,
+          "originalToEurope": true,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2100,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 1
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2101,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 2
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2102,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 3
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2103,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 4
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2104,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 5
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2105,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 6
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2106,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 7
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2107,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 8
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2108,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 9
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2109,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 10
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2110,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 11
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2111,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 12
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2112,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 13
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2113,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 14
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2114,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 15
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2115,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 16
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2116,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 17
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2117,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 18
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2118,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 19
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2119,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 20
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2120,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 21
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2121,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 22
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2122,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 23
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2123,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 24
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2124,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 25
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2125,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 26
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2126,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 27
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2127,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 28
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2128,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 29
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2129,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 30
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2130,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 31
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2131,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 32
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2132,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 33
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2133,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 34
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2134,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 35
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2135,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 36
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2136,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 37
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2137,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 38
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2138,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 39
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2139,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 40
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2140,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 41
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2141,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 42
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 2142,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 43
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeHighSeas": {
+          "isTravelToEurope": false,
+          "originalToEurope": false,
+          "position": 1,
+          "weather": 1,
+          "originalTurns": 4,
+          "remainigTurns": 3
+        }
+      },
+      {
+        "id": 3100,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 1
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3101,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 2
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3102,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 3
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3103,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 4
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3104,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 5
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3105,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 6
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3106,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 7
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3107,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 8
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3108,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 9
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3109,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 10
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3110,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 11
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3111,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 12
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3112,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 13
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3113,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 14
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3114,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 15
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3115,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 16
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3116,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 17
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3117,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 18
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3118,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 19
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3119,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 20
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3120,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 21
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3121,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 22
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3122,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 23
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3123,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 24
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3124,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 25
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3125,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 26
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3126,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 27
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3127,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 28
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3128,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 29
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3129,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 30
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3130,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 31
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3131,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 32
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3132,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 33
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3133,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 34
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3134,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 35
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3135,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 36
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3136,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 37
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3137,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 38
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3138,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 39
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3139,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 40
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3140,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 41
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3141,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 42
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 3142,
+        "type": "MERCHANTMAN",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": [
+            {
+              "goodsType": "ORE",
+              "amount": 43
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "departureLocation": {
+          "x": 2,
+          "y": 17
+        },
+        "departureDirection": "west",
+        "placeEuropePort": {
+          "isOnPier": false
+        }
+      },
+      {
+        "id": 4100,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4101,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4102,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4103,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4104,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4105,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4106,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4107,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4108,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4109,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4110,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4111,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4112,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4113,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4114,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4115,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4116,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4117,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4118,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4119,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4120,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4121,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4122,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4123,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4124,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4125,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4126,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4127,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4128,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4129,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4130,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4131,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4132,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4133,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4134,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4135,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4136,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4137,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4138,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4139,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4140,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4141,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      },
+      {
+        "id": 4142,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 0,
+        "holdingGuns": false,
+        "mounted": false,
+        "workUpdates": 0,
+        "missionary": false,
+        "placeEuropePort": {
+          "isOnPier": true
+        }
+      }
+    ],
+    "nextColonyId": 1,
+    "nativeSettlementKnowledge": [],
+    "nativeTribalAnger": [
+      {
+        "nation": "ARAWAK",
+        "european": "DUTCH",
+        "value": 0.0
+      },
+      {
+        "nation": "ARAWAK",
+        "european": "FRENCH",
+        "value": 0.0
+      },
+      {
+        "nation": "ARAWAK",
+        "european": "ENGLISH",
+        "value": 0.0
+      },
+      {
+        "nation": "ARAWAK",
+        "european": "SPANISH",
+        "value": 0.0
+      },
+      {
+        "nation": "AZTEC",
+        "european": "DUTCH",
+        "value": 0.0
+      },
+      {
+        "nation": "AZTEC",
+        "european": "FRENCH",
+        "value": 0.0
+      },
+      {
+        "nation": "AZTEC",
+        "european": "ENGLISH",
+        "value": 0.0
+      },
+      {
+        "nation": "AZTEC",
+        "european": "SPANISH",
+        "value": 0.0
+      },
+      {
+        "nation": "INCA",
+        "european": "DUTCH",
+        "value": 0.0
+      },
+      {
+        "nation": "INCA",
+        "european": "FRENCH",
+        "value": 0.0
+      },
+      {
+        "nation": "INCA",
+        "european": "ENGLISH",
+        "value": 0.0
+      },
+      {
+        "nation": "INCA",
+        "european": "SPANISH",
+        "value": 0.0
+      },
+      {
+        "nation": "TUPI",
+        "european": "DUTCH",
+        "value": 0.0
+      },
+      {
+        "nation": "TUPI",
+        "european": "FRENCH",
+        "value": 0.0
+      },
+      {
+        "nation": "TUPI",
+        "european": "ENGLISH",
+        "value": 0.0
+      },
+      {
+        "nation": "TUPI",
+        "european": "SPANISH",
+        "value": 0.0
+      },
+      {
+        "nation": "CHEROKEE",
+        "european": "DUTCH",
+        "value": 0.0
+      },
+      {
+        "nation": "CHEROKEE",
+        "european": "FRENCH",
+        "value": 0.0
+      },
+      {
+        "nation": "CHEROKEE",
+        "european": "ENGLISH",
+        "value": 0.0
+      },
+      {
+        "nation": "CHEROKEE",
+        "european": "SPANISH",
+        "value": 0.0
+      },
+      {
+        "nation": "IROQUOIS",
+        "european": "DUTCH",
+        "value": 0.0
+      },
+      {
+        "nation": "IROQUOIS",
+        "european": "FRENCH",
+        "value": 0.0
+      },
+      {
+        "nation": "IROQUOIS",
+        "european": "ENGLISH",
+        "value": 0.0
+      },
+      {
+        "nation": "IROQUOIS",
+        "european": "SPANISH",
+        "value": 0.0
+      },
+      {
+        "nation": "SIOUX",
+        "european": "DUTCH",
+        "value": 0.0
+      },
+      {
+        "nation": "SIOUX",
+        "european": "FRENCH",
+        "value": 0.0
+      },
+      {
+        "nation": "SIOUX",
+        "european": "ENGLISH",
+        "value": 0.0
+      },
+      {
+        "nation": "SIOUX",
+        "european": "SPANISH",
+        "value": 0.0
+      },
+      {
+        "nation": "APACHE",
+        "european": "DUTCH",
+        "value": 0.0
+      },
+      {
+        "nation": "APACHE",
+        "european": "FRENCH",
+        "value": 0.0
+      },
+      {
+        "nation": "APACHE",
+        "european": "ENGLISH",
+        "value": 0.0
+      },
+      {
+        "nation": "APACHE",
+        "european": "SPANISH",
+        "value": 0.0
+      }
+    ],
+    "nativeLocalAlarm": [],
+    "nativeLandRights": [],
+    "nativeLandTakings": [],
+    "nextTradeRouteId": 0,
+    "tradeRoutes": [],
+    "nativeSettlements": [],
+    "colonies": [
+      {
+        "educationCourses": [],
+        "id": 0,
+        "name": "New Amsterdam",
+        "ownerName": "Dutch",
+        "liberty": 0,
+        "lastColonialAffiliation": "Dutch",
+        "townCommonsGoods": "TOBACCO",
+        "location": {
+          "x": 24,
+          "y": 16
+        },
+        "colonyFields": [
+          {
+            "direction": {
+              "x": 0,
+              "y": -1
+            }
+          },
+          {
+            "direction": {
+              "x": 1,
+              "y": -1
+            }
+          },
+          {
+            "direction": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          {
+            "direction": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          {
+            "direction": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          {
+            "direction": {
+              "x": -1,
+              "y": 1
+            },
+            "workerId": 1,
+            "producedGoodsType": "CORN"
+          },
+          {
+            "direction": {
+              "x": -1,
+              "y": 0
+            }
+          },
+          {
+            "direction": {
+              "x": -1,
+              "y": -1
+            },
+            "workerId": 0,
+            "producedGoodsType": "TOBACCO"
+          }
+        ],
+        "constructions": [
+          {
+            "type": "TOWN_HALL",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "CARPENTERS_STAND",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "BLACKSMITHS_HOUSE",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "TOBACCONISTS_HOUSE",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "WEAVERS_HOUSE",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "RUM_DISTILLERS_HOUSE",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "FUR_TRADERS_HOUSE",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          },
+          {
+            "type": "BASIC_WAREHOUSE",
+            "slots": []
+          },
+          {
+            "type": "CHAPEL",
+            "slots": [
+              {},
+              {},
+              {}
+            ]
+          }
+        ],
+        "exportGoods": [],
+        "buildingQueue": [],
+        "colonyWarehouse": {
+          "COAT": 0,
+          "HAMMERS": 0,
+          "FUR": 0,
+          "ORE": 90,
+          "HORSE": 0,
+          "SILVER": 0,
+          "LUMBER": 0,
+          "RUM": 0,
+          "SUGAR": 0,
+          "TOBACCO": 42,
+          "SILK": 0,
+          "MUSKET": 0,
+          "CROSS": 0,
+          "CORN": 100,
+          "CIGARS": 0,
+          "GOODS": 0,
+          "BELL": 0,
+          "COTTON": 0,
+          "TOOLS": 0
+        }
+      }
+    ],
+    "turnEvents": [],
+    "map": {
+      "tiles": [
+        "column  :1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0",
+        "row-0001:a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a",
+        "row-0002:~,~,_,t,a,a,a,t,_,_,_,_,_,_,_,_,_,_,_,_,t,t,t,a,a,a,a,_,_,_,t,_,_,_,_,t,_,_,_,_,t,_,_,_,t,_,_,_,t,t",
+        "row-0003:~,~,_,_,t,a,a,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0004:~,~,_,_,_,_,t,_,_,_,_,_,_,_,_,_,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0005:~,~,_,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0006:~,~,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0007:~,~,_,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0008:~,~,_,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0009:~,~,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0010:~,~,_,_,_,_,_,_,_,_,_,_,_,m,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0011:~,~,_,_,_,_,_,_,_,_,_,_,m,g,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0012:~,~,_,_,_,_,_,_,_,_,_,_,m,g,_,g,g,g,g,g,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0013:~,~,_,_,_,_,_,_,_,_,_,_,m,h,g,g,p,p,g,h,h,h,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0014:~,~,_,_,_,_,_,_,_,_,_,_,m,h,g,p,g,p,h,h,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0015:~,~,_,_,_,_,_,_,_,_,_,_,m,h,g,p,g,g,h,g,g,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0016:~,~,_,_,_,_,_,_,_,_,_,_,m,h,g,g,g,p,p,g,g,g,h,g,_,~,~,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0017:~,~,_,_,_,_,_,_,_,_,_,_,m,h,h,h,p,p,g,h,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0018:~,~,_,_,_,_,_,_,_,_,_,_,m,m,g,g,p,p,g,g,h,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0019:~,~,_,_,_,_,_,_,_,_,_,_,m,m,g,g,p,g,g,h,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0020:~,~,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,g,g,h,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0021:~,~,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,g,h,h,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0022:~,~,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,h,m,h,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0023:~,~,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,h,h,h,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0024:~,~,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0025:~,~,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0026:~,~,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0027:~,~,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~,~",
+        "row-0028:~,~,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,t,_,_,_,_,_,_,_,t,_,_,_,_,_,_,_,t,_,_,_,_,_,_,_,t,_,_,_,_,~,~",
+        "row-0029:~,~,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,t,a,t,_,_,_,_,_,t,a,t,_,_,_,_,_,t,a,t,_,_,_,_,_,t,a,t,_,_,_,~,~",
+        "row-0030:a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a"
+      ],
+      "trees": [
+        "column  :1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0",
+        "row-0001:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0002:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0003:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0004:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0005:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0006:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0007:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0008:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0009:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0010:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0011:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0012:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,t,t,t,t,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0013:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,t,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0014:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,t,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0015:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,t,t,-,-,-,-,-,-,t,t,t,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0016:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,t,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0017:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0018:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0019:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0020:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0021:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0022:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0023:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0024:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0025:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0026:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0027:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0028:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0029:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0030:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-"
+      ],
+      "fields": [
+        "column  :1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0",
+        "row-0001:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0002:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0003:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0004:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0005:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0006:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0007:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0008:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0009:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0010:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0011:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0012:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0013:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0014:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0015:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0016:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0017:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0018:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0019:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0020:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0021:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0022:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0023:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0024:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0025:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0026:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0027:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0028:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0029:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+        "row-0030:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-"
+      ],
+      "visibility": {},
+      "maxX": 50,
+      "maxY": 30,
+      "seed": 134
+    },
+    "europe": {
+      "markets": {
+        "DUTCH": {
+          "CORN": [
+            2,
+            0,
+            0
+          ],
+          "SUGAR": [
+            3,
+            0,
+            0
+          ],
+          "TOBACCO": [
+            3,
+            0,
+            0
+          ],
+          "COTTON": [
+            3,
+            0,
+            0
+          ],
+          "FUR": [
+            4,
+            0,
+            0
+          ],
+          "LUMBER": [
+            3,
+            0,
+            0
+          ],
+          "ORE": [
+            4,
+            0,
+            0
+          ],
+          "SILVER": [
+            3,
+            0,
+            0
+          ],
+          "HORSE": [
+            2,
+            0,
+            0
+          ],
+          "RUM": [
+            11,
+            0,
+            0
+          ],
+          "CIGARS": [
+            11,
+            0,
+            0
+          ],
+          "SILK": [
+            11,
+            0,
+            0
+          ],
+          "COAT": [
+            9,
+            0,
+            0
+          ],
+          "GOODS": [
+            2,
+            0,
+            0
+          ],
+          "TOOLS": [
+            1,
+            0,
+            0
+          ],
+          "MUSKET": [
+            2,
+            0,
+            0
+          ]
+        },
+        "FRENCH": {
+          "CORN": [
+            2,
+            0,
+            0
+          ],
+          "SUGAR": [
+            3,
+            0,
+            0
+          ],
+          "TOBACCO": [
+            3,
+            0,
+            0
+          ],
+          "COTTON": [
+            3,
+            0,
+            0
+          ],
+          "FUR": [
+            4,
+            0,
+            0
+          ],
+          "LUMBER": [
+            3,
+            0,
+            0
+          ],
+          "ORE": [
+            4,
+            0,
+            0
+          ],
+          "SILVER": [
+            3,
+            0,
+            0
+          ],
+          "HORSE": [
+            2,
+            0,
+            0
+          ],
+          "RUM": [
+            11,
+            0,
+            0
+          ],
+          "CIGARS": [
+            11,
+            0,
+            0
+          ],
+          "SILK": [
+            11,
+            0,
+            0
+          ],
+          "COAT": [
+            9,
+            0,
+            0
+          ],
+          "GOODS": [
+            2,
+            0,
+            0
+          ],
+          "TOOLS": [
+            1,
+            0,
+            0
+          ],
+          "MUSKET": [
+            2,
+            0,
+            0
+          ]
+        },
+        "ENGLISH": {
+          "CORN": [
+            2,
+            0,
+            0
+          ],
+          "SUGAR": [
+            3,
+            0,
+            0
+          ],
+          "TOBACCO": [
+            3,
+            0,
+            0
+          ],
+          "COTTON": [
+            3,
+            0,
+            0
+          ],
+          "FUR": [
+            4,
+            0,
+            0
+          ],
+          "LUMBER": [
+            3,
+            0,
+            0
+          ],
+          "ORE": [
+            4,
+            0,
+            0
+          ],
+          "SILVER": [
+            3,
+            0,
+            0
+          ],
+          "HORSE": [
+            2,
+            0,
+            0
+          ],
+          "RUM": [
+            11,
+            0,
+            0
+          ],
+          "CIGARS": [
+            11,
+            0,
+            0
+          ],
+          "SILK": [
+            11,
+            0,
+            0
+          ],
+          "COAT": [
+            9,
+            0,
+            0
+          ],
+          "GOODS": [
+            2,
+            0,
+            0
+          ],
+          "TOOLS": [
+            1,
+            0,
+            0
+          ],
+          "MUSKET": [
+            2,
+            0,
+            0
+          ]
+        },
+        "SPANISH": {
+          "CORN": [
+            2,
+            0,
+            0
+          ],
+          "SUGAR": [
+            3,
+            0,
+            0
+          ],
+          "TOBACCO": [
+            3,
+            0,
+            0
+          ],
+          "COTTON": [
+            3,
+            0,
+            0
+          ],
+          "FUR": [
+            4,
+            0,
+            0
+          ],
+          "LUMBER": [
+            3,
+            0,
+            0
+          ],
+          "ORE": [
+            4,
+            0,
+            0
+          ],
+          "SILVER": [
+            3,
+            0,
+            0
+          ],
+          "HORSE": [
+            2,
+            0,
+            0
+          ],
+          "RUM": [
+            11,
+            0,
+            0
+          ],
+          "CIGARS": [
+            11,
+            0,
+            0
+          ],
+          "SILK": [
+            11,
+            0,
+            0
+          ],
+          "COAT": [
+            9,
+            0,
+            0
+          ],
+          "GOODS": [
+            2,
+            0,
+            0
+          ],
+          "TOOLS": [
+            1,
+            0,
+            0
+          ],
+          "MUSKET": [
+            2,
+            0,
+            0
+          ]
+        }
+      }
+    },
+    "focusedField": {
+      "x": 3,
+      "y": 16
+    },
+    "statistics": {
+      "turnStatistics": [
+        {
+          "player": "Dutch",
+          "turnNo": 0,
+          "econonyScore": 0,
+          "militaryScore": 3,
+          "gold": 2108,
+          "score": 2111
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 0,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 1,
+          "econonyScore": 0,
+          "militaryScore": 3,
+          "gold": 2108,
+          "score": 2111
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 1,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 2,
+          "econonyScore": 0,
+          "militaryScore": 3,
+          "gold": 2108,
+          "score": 2111
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 2,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 3,
+          "econonyScore": 0,
+          "militaryScore": 3,
+          "gold": 2108,
+          "score": 2111
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 3,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 4,
+          "econonyScore": 0,
+          "militaryScore": 3,
+          "gold": 2108,
+          "score": 2111
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 4,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 5,
+          "econonyScore": 0,
+          "militaryScore": 3,
+          "gold": 2108,
+          "score": 2111
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 5,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 6,
+          "econonyScore": 3,
+          "militaryScore": 3,
+          "gold": 2108,
+          "score": 2114
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 6,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 7,
+          "econonyScore": 6,
+          "militaryScore": 3,
+          "gold": 2108,
+          "score": 2117
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 7,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 8,
+          "econonyScore": 9,
+          "militaryScore": 3,
+          "gold": 2108,
+          "score": 2120
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 8,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 9,
+          "econonyScore": 12,
+          "militaryScore": 3,
+          "gold": 2108,
+          "score": 2123
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 9,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 10,
+          "econonyScore": 15,
+          "militaryScore": 3,
+          "gold": 2108,
+          "score": 2126
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 10,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 11,
+          "econonyScore": 18,
+          "militaryScore": 3,
+          "gold": 2108,
+          "score": 2129
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 11,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 12,
+          "econonyScore": 21,
+          "militaryScore": 4,
+          "gold": 2108,
+          "score": 2133
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 12,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 13,
+          "econonyScore": 24,
+          "militaryScore": 4,
+          "gold": 2108,
+          "score": 2136
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 13,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 14,
+          "econonyScore": 27,
+          "militaryScore": 4,
+          "gold": 2108,
+          "score": 2139
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 14,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 15,
+          "econonyScore": 30,
+          "militaryScore": 4,
+          "gold": 2108,
+          "score": 2142
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 15,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 16,
+          "econonyScore": 33,
+          "militaryScore": 4,
+          "gold": 2108,
+          "score": 2145
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 16,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 17,
+          "econonyScore": 36,
+          "militaryScore": 4,
+          "gold": 2108,
+          "score": 2148
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 17,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        },
+        {
+          "player": "Dutch",
+          "turnNo": 18,
+          "econonyScore": 39,
+          "militaryScore": 4,
+          "gold": 2108,
+          "score": 2151
+        },
+        {
+          "player": "Dutch's King",
+          "turnNo": 18,
+          "econonyScore": 0,
+          "militaryScore": 0,
+          "gold": 1108,
+          "score": 1108
+        }
+      ]
+    },
+    "europeanRelations": [],
+    "gameManager": {
+      "players": [
+        {
+          "tax": {
+            "rate": 0,
+            "activated": false,
+            "updates": 0,
+            "issued": 0,
+            "arrears": {}
+          },
+          "congress": {
+            "activated": true,
+            "bells": 0,
+            "members": [],
+            "candidates": [
+              "JOHN_PAUL_JONES",
+              "THOMAS_JEFFERSON",
+              "ADAM_SMITH",
+              "WILLIAM_PENN",
+              "FERDINAND_MAGELLAN"
+            ],
+            "generation": 1,
+            "jonesDeliveryPending": false
+          },
+          "recruitment": {
+            "pendingEarnedChoice": false,
+            "candidates": [
+              {
+                "id": 1,
+                "type": "COLONIST"
+              },
+              {
+                "id": 2,
+                "type": "COLONIST"
+              },
+              {
+                "id": 3,
+                "type": "COLONIST"
+              }
+            ],
+            "nextCandidateId": 4,
+            "paidPassages": 0,
+            "crosses": 0,
+            "earnedImmigrants": 0
+          },
+          "name": "Dutch",
+          "computer": false,
+          "gold": 10000,
+          "declaredIndependence": false,
+          "extraData": {},
+          "visible": {
+            "visible": [
+              "column  :1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0",
+              "row-0001:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0002:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0003:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0004:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0005:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-",
+              "row-0006:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0007:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0008:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0009:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0010:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0011:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0012:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0013:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0014:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0015:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0016:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0017:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0018:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0019:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0020:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0021:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0022:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0023:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+              "row-0024:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0025:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0026:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0027:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0028:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0029:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0030:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#"
+            ]
+          }
+        },
+        {
+          "name": "Dutch's King",
+          "computer": true,
+          "gold": 1108,
+          "declaredIndependence": false,
+          "whosKingThisPlayerIs": "Dutch",
+          "royalRoster": {
+            "growthCount": 0,
+            "remainder": 0,
+            "members": [
+              {
+                "id": 1,
+                "family": "INFANTRY",
+                "state": "RESERVE"
+              },
+              {
+                "id": 2,
+                "family": "INFANTRY",
+                "state": "RESERVE"
+              },
+              {
+                "id": 3,
+                "family": "INFANTRY",
+                "state": "RESERVE"
+              },
+              {
+                "id": 4,
+                "family": "INFANTRY",
+                "state": "RESERVE"
+              },
+              {
+                "id": 5,
+                "family": "INFANTRY",
+                "state": "RESERVE"
+              },
+              {
+                "id": 6,
+                "family": "INFANTRY",
+                "state": "RESERVE"
+              },
+              {
+                "id": 7,
+                "family": "CAVALRY",
+                "state": "RESERVE"
+              },
+              {
+                "id": 8,
+                "family": "CAVALRY",
+                "state": "RESERVE"
+              },
+              {
+                "id": 9,
+                "family": "CAVALRY",
+                "state": "RESERVE"
+              },
+              {
+                "id": 10,
+                "family": "CAVALRY",
+                "state": "RESERVE"
+              },
+              {
+                "id": 11,
+                "family": "ARTILLERY",
+                "state": "RESERVE"
+              },
+              {
+                "id": 12,
+                "family": "ARTILLERY",
+                "state": "RESERVE"
+              },
+              {
+                "id": 13,
+                "family": "MAN_OF_WAR",
+                "state": "RESERVE"
+              },
+              {
+                "id": 14,
+                "family": "MAN_OF_WAR",
+                "state": "RESERVE"
+              }
+            ]
+          },
+          "extraData": {},
+          "visible": {
+            "visible": [
+              "column  :1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0",
+              "row-0001:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0002:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0003:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0004:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0005:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0006:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0007:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0008:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0009:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0010:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0011:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0012:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0013:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0014:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0015:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0016:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0017:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0018:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0019:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0020:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0021:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0022:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0023:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0024:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0025:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0026:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0027:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0028:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0029:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+              "row-0030:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#"
+            ]
+          }
+        }
+      ],
+      "gameStarted": true,
+      "currentPlayer": "Dutch"
+    }
+  }
+}

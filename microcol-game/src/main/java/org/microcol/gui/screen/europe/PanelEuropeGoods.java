@@ -84,6 +84,8 @@ public final class PanelEuropeGoods
                     gameModelController, dialogNotEnoughGold, eventBus, i18n);
             panelGoods.add(panelGood);
             mainPanel.getChildren().add(panelGood.getContent());
+            HBox.setHgrow(panelGood.getContent(),
+                    javafx.scene.layout.Priority.ALWAYS);
         });
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
                 mainPanel, this::isItGoods);
@@ -93,8 +95,9 @@ public final class PanelEuropeGoods
         mainPanel.setOnDragDropped(this::onDragDropped);
 
         titledPanel = new TitledPanel();
-        titledPanel.getContentPane().getChildren()
-                .add(new VBox(mainPanel, tradeRestriction));
+        final VBox content = new VBox(mainPanel, tradeRestriction);
+        HBox.setHgrow(content, javafx.scene.layout.Priority.ALWAYS);
+        titledPanel.getContentPane().getChildren().add(content);
         titledPanel.getStyleClass().add("goods");
     }
 

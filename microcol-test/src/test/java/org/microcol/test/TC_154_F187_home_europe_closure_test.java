@@ -74,8 +74,10 @@ public class TC_154_F187_home_europe_closure_test extends AbstractMicroColTest {
                 getContext());
         final HomeEuropePage home = new HomeEuropePage(getContext());
         EuropePortScreen europe = gamePage.openEuroperPort();
+        home.selectVoyage(INBOUND);
         home.verifyVoyage(INBOUND, true, 1, 3, "Turns remaining: 3");
         home.verifyCrossingCargo(INBOUND, GoodsType.ORE, 7, INBOUND_PASSENGER);
+        home.selectVoyage(OUTBOUND);
         home.verifyVoyage(OUTBOUND, false, 0, 2, "Turns remaining: 2");
         home.verifyShipInPort(DOCKED, DOCKED_PASSENGER, GoodsType.MUSKET, 40);
         home.verifyPersonOnPier(PIER);
@@ -102,8 +104,10 @@ public class TC_154_F187_home_europe_closure_test extends AbstractMicroColTest {
         independence.verifyDeclared(false);
         independence.verifyUnitCountUnchanged();
         europe = gamePage.openEuroperPort();
+        home.selectVoyage(INBOUND);
         home.verifyVoyage(INBOUND, true, 1, 3, "Turns remaining: 3");
         home.verifyCrossingCargo(INBOUND, GoodsType.ORE, 7, INBOUND_PASSENGER);
+        home.selectVoyage(OUTBOUND);
         home.verifyVoyage(OUTBOUND, false, 0, 2, "Turns remaining: 2");
         home.verifyShipInPort(DOCKED, DOCKED_PASSENGER, GoodsType.MUSKET, 40);
         home.verifyPersonOnPier(PIER);
@@ -119,7 +123,9 @@ public class TC_154_F187_home_europe_closure_test extends AbstractMicroColTest {
         independence.verifyDeclared(false);
         independence.verifyUnitCountUnchanged();
         europe = gamePage.openEuroperPort();
+        home.selectVoyage(INBOUND);
         home.verifyVoyage(INBOUND, true, 1, 3, "Turns remaining: 3");
+        home.selectVoyage(OUTBOUND);
         home.verifyVoyage(OUTBOUND, false, 0, 2, "Turns remaining: 2");
         home.verifySeized(false, INBOUND, INBOUND_PASSENGER, DOCKED,
                 DOCKED_PASSENGER, PIER, OUTBOUND);
@@ -149,10 +155,14 @@ public class TC_154_F187_home_europe_closure_test extends AbstractMicroColTest {
         // Europe.
         final HomeEuropePage home = new HomeEuropePage(getContext());
         EuropePortScreen europe = gamePage.openEuroperPort();
+        home.selectVoyage(INBOUND);
         home.verifyVoyage(INBOUND, false, 1, 1, "Turns remaining: 1");
         home.verifyCrossingCargo(INBOUND, GoodsType.ORE, 7, INBOUND_PASSENGER);
+        home.selectVoyage(OUTBOUND);
         home.verifyVoyage(OUTBOUND, false, 0, 2, "Turns remaining: 2");
+        home.selectVoyage(INBOUND);
         home.verifyReverseControl(INBOUND, false);
+        home.selectVoyage(OUTBOUND);
         home.verifyReverseControl(OUTBOUND, false);
 
         // Hiring and purchases are closed, and the Crown holds the ship, its
@@ -172,8 +182,10 @@ public class TC_154_F187_home_europe_closure_test extends AbstractMicroColTest {
         gamePage = new FreePlayAuditPage(getContext()).continueGame();
         independence.verifyDeclared(true);
         europe = gamePage.openEuroperPort();
+        home.selectVoyage(INBOUND);
         home.verifyVoyage(INBOUND, false, 1, 1, "Turns remaining: 1");
         home.verifyCrossingCargo(INBOUND, GoodsType.ORE, 7, INBOUND_PASSENGER);
+        home.selectVoyage(OUTBOUND);
         home.verifyVoyage(OUTBOUND, false, 0, 2, "Turns remaining: 2");
         independence.verifyHomeEuropeClosed();
         home.verifyShipInPort(DOCKED, DOCKED_PASSENGER, GoodsType.MUSKET, 40);
@@ -206,6 +218,7 @@ public class TC_154_F187_home_europe_closure_test extends AbstractMicroColTest {
         final EuropePortScreen europe = gamePage.openEuroperPort();
         home.verifyArrivedAtSource(INBOUND, LANE, GoodsType.ORE, 7,
                 INBOUND_PASSENGER);
+        home.selectVoyage(OUTBOUND);
         home.verifyVoyage(OUTBOUND, false, 1, 1, "Turns remaining: 1");
 
         // The port is still held and closed.

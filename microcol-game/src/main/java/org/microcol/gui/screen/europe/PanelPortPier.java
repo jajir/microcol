@@ -31,6 +31,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.scene.control.ScrollPane;
 
 /**
  * Panels shows list of people already recruited. People from this panel could
@@ -56,6 +58,7 @@ public final class PanelPortPier
     private final DialogOrdainMissionary ordinationDialog;
 
     private final Pane panelUnits;
+    private final ScrollPane scroll;
 
     @Inject
     public PanelPortPier(final GameModelController gameModelController,
@@ -84,6 +87,13 @@ public final class PanelPortPier
         panelUnits.setMinHeight(TILE_WIDTH_IN_PX);
         panelUnits.setOnMouseEntered(this::onMouseEntered);
         panelUnits.setOnMouseExited(this::onMouseExited);
+        scroll = new ScrollPane(panelUnits);
+        scroll.setId("europe-pier-scroll");
+        scroll.getStyleClass().add("harbor-scroll");
+        scroll.setFitToHeight(true);
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        panelUnits.minWidthProperty().bind(scroll.widthProperty().subtract(4));
     }
 
     private void onMouseEntered(
@@ -151,8 +161,8 @@ public final class PanelPortPier
     }
 
     @Override
-    public Pane getContent() {
-        return panelUnits;
+    public Region getContent() {
+        return scroll;
     }
 
 }

@@ -1,5 +1,15 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Evropský přístav — Námořní skicář (28. října 2026)
+
+1. Uživatel vybral rozložení dvou plaveb vedle sebe, přístav vlevo a lidi vpravo nad dlouhým vysokým kamenným molem. Náklad patří do obdélníkového otvoru v čelní stěně. [R-0335](requirements/done/R-0335.md) převádí tento výběr do hry; ukázková čísla návrhu se nenahrazují pevnými herními údaji.
+2. Pozadí `microcol-game/src/main/resources/images/europe-harbor.png` je samostatná ilustrace bez ovládání, jednotek a čísel. Moře se přizpůsobuje výšce, čelo mola si ponechává 112 bodů pro skutečný náklad. Původní obrázky lodí a lidí zůstávají 45 × 45; čtyři seznamy mají samostatné vodorovné posuvníky, nikoli limit 42 jednotek.
+3. Vybraný pás **09 — Olivové pobřeží** převádí šestnáct obchodovatelných druhů do společného atlasu `images/goods-olive.png` (180 × 180, čtyři řádky po čtyřech buňkách 45 × 45). Stejné obrázky používá trh, náklad, kolonie a dialogy. Zvony, kladiva a kříže zůstávají původní.
+4. Produkční ilustrace a průhledná zdrojová sada byly vytvořeny nástrojem ImageGen 28. října 2026 podle vybraného návrhu. Zdroj ikon je `microcol-game/src/graphics/goods-olive-source.png`; přesné výřezy a mechanický export popisuje sousední `goods-olive-crops.json`. Export odstranil téměř průhledné pozadí (alfa pod 16), ořízl podle alfy a vepsal obrázky do 43 × 43 uprostřed buňky se zachováním poměru stran. Žádný text ani herní údaj není součástí atlasu.
+5. Skutečné JavaFX snímky z TC194 v Docker/Xvfb zachycují [anglický přístav](graphics-assets/europe-harbor-2026-10-28/r0335-harbor-full.png), [menší okno](graphics-assets/europe-harbor-2026-10-28/r0335-harbor-small.png) a český přístav níže. Každá skupina má v této testovací partii 43 jednotek. Přesný stav přejímky patří do [funkční evidence](functional-tests.md#r-0335-europe-harbor-2026-10-28).
+
+![Český evropský přístav se čtyřmi posuvníky a nákladem v kamenném molu](graphics-assets/europe-harbor-2026-10-28/r0335-harbor-czech.png)
+
 ## Kongres jako herní obrazovka — 28. října 2026
 
 1. [R-0332](requirements/done/R-0332.md) zachovává variantu Karty a původní herní

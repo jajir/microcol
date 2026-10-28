@@ -1,0 +1,153 @@
+{
+  "source": "goods-olive-source.png",
+  "output": "../main/resources/images/goods-olive.png",
+  "cellSize": 45,
+  "maxIconSize": 43,
+  "fit": "alpha below 16 removed; crop bounds; preserve aspect; center; Lanczos",
+  "cells": [
+    {
+      "goods": "corn",
+      "sourceCrop": [
+        0,
+        0,
+        310,
+        320
+      ]
+    },
+    {
+      "goods": "sugar",
+      "sourceCrop": [
+        310,
+        0,
+        583,
+        320
+      ]
+    },
+    {
+      "goods": "tobacco",
+      "sourceCrop": [
+        583,
+        0,
+        886,
+        320
+      ]
+    },
+    {
+      "goods": "cotton",
+      "sourceCrop": [
+        886,
+        0,
+        1254,
+        320
+      ]
+    },
+    {
+      "goods": "fur",
+      "sourceCrop": [
+        0,
+        320,
+        308,
+        611
+      ]
+    },
+    {
+      "goods": "lumber",
+      "sourceCrop": [
+        308,
+        320,
+        598,
+        611
+      ]
+    },
+    {
+      "goods": "ore",
+      "sourceCrop": [
+        598,
+        320,
+        900,
+        611
+      ]
+    },
+    {
+      "goods": "silver",
+      "sourceCrop": [
+        900,
+        320,
+        1254,
+        611
+      ]
+    },
+    {
+      "goods": "horse",
+      "sourceCrop": [
+        0,
+        611,
+        326,
+        896
+      ]
+    },
+    {
+      "goods": "rum",
+      "sourceCrop": [
+        326,
+        611,
+        585,
+        896
+      ]
+    },
+    {
+      "goods": "cigars",
+      "sourceCrop": [
+        585,
+        611,
+        891,
+        896
+      ]
+    },
+    {
+      "goods": "silk",
+      "sourceCrop": [
+        891,
+        611,
+        1254,
+        896
+      ]
+    },
+    {
+      "goods": "coat",
+      "sourceCrop": [
+        0,
+        896,
+        314,
+        1254
+      ]
+    },
+    {
+      "goods": "goods",
+      "sourceCrop": [
+        314,
+        896,
+        603,
+        1254
+      ]
+    },
+    {
+      "goods": "tools",
+      "sourceCrop": [
+        603,
+        896,
+        914,
+        1254
+      ]
+    },
+    {
+      "goods": "musket",
+      "sourceCrop": [
+        914,
+        896,
+        1254,
+        1254
+      ]
+    }
+  ]
+}

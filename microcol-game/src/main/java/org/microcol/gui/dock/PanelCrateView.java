@@ -11,6 +11,7 @@ import org.microcol.model.Unit;
 import com.google.common.base.Preconditions;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -52,6 +53,11 @@ public class PanelCrateView implements JavaFxComponent {
         cargoImage.setPreserveRatio(true);
 
         labelAmount = new Label(" ");
+        labelAmount.getStyleClass().add("cargo-amount");
+        labelAmount.setMouseTransparent(true);
+        labelAmount.visibleProperty()
+                .bind(labelAmount.textProperty().isNotEmpty());
+        StackPane.setAlignment(labelAmount, Pos.BOTTOM_RIGHT);
 
         mainPane = new StackPane();
         mainPane.getChildren().addAll(crateImage, labelAmount);
@@ -116,7 +122,7 @@ public class PanelCrateView implements JavaFxComponent {
         crateImage
                 .setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_OPEN));
         if (!mainPane.getChildren().contains(cargoImage)) {
-            mainPane.getChildren().add(cargoImage);
+            mainPane.getChildren().add(1, cargoImage);
         }
     }
 

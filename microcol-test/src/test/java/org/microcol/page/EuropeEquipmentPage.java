@@ -11,13 +11,11 @@ import org.microcol.model.UnitType;
 import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitWithCargo;
 import org.testfx.util.WaitForAsyncUtils;
-import javafx.scene.Parent;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.HBox;
 import javafx.stage.Window;
 
 /** Player gestures and observations for the European equipment offer. */
@@ -160,10 +158,8 @@ public final class EuropeEquipmentPage extends AbstractScreen {
     }
 
     public void depart(int shipId) throws Exception {
-        Parent panel = getNodeFinder().lookup(".to-new-world")
-                .queryAs(Parent.class);
-        HBox target = (HBox) panel.getChildrenUnmodifiable().stream()
-                .filter(node -> node instanceof HBox).findFirst().orElseThrow();
+        final javafx.scene.Node target = getNodeFinder()
+                .lookup("#europe-outgoing-scroll .viewport").query();
         getRobot().drag(
                 PageComponentPanelDock.of(getContext()).getUnitsInPort().get(0),
                 MouseButton.PRIMARY).dropTo(target);

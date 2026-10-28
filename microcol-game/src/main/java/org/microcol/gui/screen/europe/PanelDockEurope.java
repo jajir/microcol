@@ -17,6 +17,7 @@ class PanelDockEurope extends AbstractPanelDock {
             final PanelEuropeDockBehavior panelEuropeDockBehavior,
             final PanelDockProviderEurope panelDockProviderEurope) {
         super(imageProvider, panelEuropeDockBehavior, panelDockProviderEurope);
+        enableHarborLayout();
     }
 
     void repaintCurrectShipsCrates() {

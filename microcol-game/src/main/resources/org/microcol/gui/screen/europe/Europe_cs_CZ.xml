@@ -5,6 +5,8 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="title">Evropa</entry>
+	<entry key="harborDock">V přístavu · %s</entry>
+	<entry key="harborPier">Lidé na molu · %s</entry>
 	<entry key="voyageTurns">Zbývající tahy: %s</entry>
 	<entry key="voyageWaiting">Čekání: místo příjezdu je obsazené.</entry>
 	<entry key="voyageUnavailable">Loď nemůže vyplout. Musí být ve vašem evropském přístavu během vašeho tahu a mít dostupné cílové pole námořní cesty.</entry>
@@ -19,7 +21,7 @@
 	<entry key="shipsTravelingToEurope">Lodě plující do Evropy</entry>
 	<entry key="buyUnitDialog_title">Koupit jednotku</entry>
 	<entry key="buyUnitDialog_buttonBuyUnit">Koupit za</entry>
-	<entry key="goodsPanelTitle">Zboží</entry>
+	<entry key="goodsPanelTitle">Zboží · prodej / nákup</entry>
 	<entry key="recruitUnitDialogTitle">Nábor v Evropě</entry>
 	<entry key="recruitUnitDialogButton">Zaplatit cestu:</entry>
 	<entry key="statusBarEuropeDock">Evropský přístav, zde mohou být lodě nakládány a vykládány</entry>

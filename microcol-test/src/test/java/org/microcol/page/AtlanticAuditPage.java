@@ -14,7 +14,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.HBox;
 
 /** Read-only voyage observations and the ordinary Europe return gesture. */
 public final class AtlanticAuditPage extends AbstractScreen {
@@ -149,7 +148,7 @@ public final class AtlanticAuditPage extends AbstractScreen {
                 .queryAs(Parent.class);
         final var incoming = inbound.localToScene(inbound.getBoundsInLocal());
         final var outgoing = outbound.localToScene(outbound.getBoundsInLocal());
-        assertTrue(incoming.getMaxY() <= outgoing.getMinY(),
+        assertTrue(incoming.getMaxX() < outgoing.getMinX(),
                 "Incoming voyage controls must not cover the departure area: incoming="
                         + incoming + "; outgoing=" + outgoing);
     }
@@ -162,12 +161,8 @@ public final class AtlanticAuditPage extends AbstractScreen {
     }
 
     public void attemptSendShipBack() {
-        final Parent panel = getNodeFinder().lookup(".to-new-world")
-                .queryAs(Parent.class);
-        final HBox target = (HBox) panel.getChildrenUnmodifiable().stream()
-                .filter(node -> node instanceof HBox
-                        && node.getOnDragDropped() != null)
-                .findFirst().orElseThrow();
+        final javafx.scene.Node target = getNodeFinder()
+                .lookup("#europe-outgoing-scroll .viewport").query();
         getRobot().drag(
                 PageComponentPanelDock.of(getContext()).getUnitsInPort().get(0),
                 MouseButton.PRIMARY).dropTo(target);

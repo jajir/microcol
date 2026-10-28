@@ -1,5 +1,12 @@
 # UX a pravidla ovládání MicroCol
 
+## Evropský přístav — R-0335
+
+1. Přijatý směr z 28. října 2026: [Námořní skicář](graphics.md#evropsky-pristav-namorni-skicar-28-rijna-2026). Hráč vybere loď v levé části mola a v jeho stěně prohlíží či plní její náklad; lidé čekají vpravo, trh s prodejní/nákupní cenou je vždy pod kresbou.
+2. Každá skupina má nadpis, aktuální počet a vlastní vodorovné posouvání. Identifikátor a zvýraznění rozlišují konkrétní loď i ve velké flotile. Posouvání nemění výběr ani náklad; prázdná skupina zůstává dosažitelným cílem příslušného přetažení.
+3. Předpoklady a odmítnutí určují dosavadní pravidla. Výběr sám nic nekupuje; množství, potvrzení, zrušení, daně, bojkot a uzavření Evropy používají existující cesty. Menší okno posouvá stránku, nikoli zmenšené jednotky. Klávesnice nadále ovládá výběr, nabídky i návrat.
+4. [R-0335](requirements/done/R-0335.md) vlastní implementaci a cílené testy. Zde je zaznamenaná přijatá specifikace; nejde o novou studii ani pozorování skutečného hráče.
+
 ## Kongres v hlavním okně — 28. října 2026
 
 1. [R-0332](requirements/done/R-0332.md) přesouvá zvolené Karty do celé herní plochy

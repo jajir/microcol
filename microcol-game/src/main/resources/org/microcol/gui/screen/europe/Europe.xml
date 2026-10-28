@@ -5,6 +5,8 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="title">Europe</entry>
+	<entry key="harborDock">In port · %s</entry>
+	<entry key="harborPier">People on the quay · %s</entry>
 	<entry key="voyageTurns">Turns remaining: %s</entry>
 	<entry key="voyageWaiting">Waiting: the arrival square is occupied.</entry>
 	<entry key="voyageUnavailable">This ship cannot depart. It must be in your European port during your turn, with an available sea-lane destination.</entry>
@@ -19,7 +21,7 @@
 	<entry key="shipsTravelingToEurope">Ships traveling to Europe</entry>
 	<entry key="buyUnitDialog_title">Buy unit</entry>
 	<entry key="buyUnitDialog_buttonBuyUnit">Buy for</entry>
-	<entry key="goodsPanelTitle">Goods</entry>
+	<entry key="goodsPanelTitle">Goods · sell / buy</entry>
 	<entry key="recruitUnitDialogTitle">Recruit from Europe</entry>
 	<entry key="recruitUnitDialogButton">Pay passage:</entry>
 	<entry key="statusBarEuropeDock">Europe dock, ships could be loaded with goods and units.</entry>

@@ -222,10 +222,11 @@ public class ColonyScreen extends AbstractScreen {
 
     public void dragGoodsFromWarehouseToShipCargoSlot(
             final int goodsIndexInWarehouse, final int cargoSlotIndex) {
-        getRobot()
-                .drag(getListOfGoodsImagesInWarehouse()
-                        .get(goodsIndexInWarehouse), MouseButton.PRIMARY)
-                .dropTo(getListOfCrates().get(cargoSlotIndex))
+        final Pane goods = getListOfGoodsImagesInWarehouse()
+                .get(goodsIndexInWarehouse);
+        final StackPane crate = getListOfCrates().get(cargoSlotIndex);
+        revealGameContent(goods, crate);
+        getRobot().drag(goods, MouseButton.PRIMARY).dropTo(crate)
                 .release(MouseButton.PRIMARY);
     }
 
@@ -393,11 +394,10 @@ public class ColonyScreen extends AbstractScreen {
         return pageComponentPanelDock.getListOfCrates();
     }
 
-    private List<StackPane> getListOfGoodsImagesInWarehouse() {
+    private List<Pane> getListOfGoodsImagesInWarehouse() {
         final String cssClass = "." + PanelColonyGood.IMAGE_GOODS_CLASS;
-        final Set<StackPane> cratesSet = getNodeFinder().lookup(cssClass)
-                .queryAll();
-        return new ArrayList<StackPane>(cratesSet);
+        final Set<Pane> cratesSet = getNodeFinder().lookup(cssClass).queryAll();
+        return new ArrayList<Pane>(cratesSet);
     }
 
     public void verifyThatProductionIs(final GoodsType goodsType,

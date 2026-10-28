@@ -167,7 +167,7 @@ public class EuropePortScreen extends AbstractScreen {
         javafx.scene.image.ImageView icon = (javafx.scene.image.ImageView) button
                 .getGraphic();
         assertFalse(icon.getImage().isError());
-        assertEquals(32, icon.getFitWidth(), 0.01);
+        assertEquals(45, icon.getFitWidth(), 0.01);
         assertTrue(button.getBorder().getImages().get(0).getImage().getUrl()
                 .endsWith("game-toolbar-frame.png"));
     }

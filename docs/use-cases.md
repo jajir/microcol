@@ -9,6 +9,11 @@
    českého celostránkového rozložení. Skutečné výsledky patří do funkční evidence.
 
 
+## UC-018/023–025/054–059/081/114/119: evropský přístav — 2026-10-28
+
+1. [R-0335](requirements/done/R-0335.md) mění prezentaci přístavu a společné ikony zboží. Pravidla, ceny, stavy a existující identifikátory UC zůstávají beze změny.
+2. TC194/F226 přidává přejímku zaplněných seznamů, nezávislého posouvání, konkrétní lodi/nákladu a malého okna; TC06 ověřuje i prázdné skupiny. Doplňující regrese a skutečné výsledky jsou v [evidenci](functional-tests.md#r-0335-europe-harbor-2026-10-28).
+
 ## UC-114/119: spodní řádek Čistá linka — 2026-10-27
 
 1. [R-0327](requirements/done/R-0327.md) mění společný informační panel: kontext

@@ -52,13 +52,12 @@ public abstract class AbstractPanelDock
 
     @Override
     public void repaint() {
+        final Optional<UnitWithCargo> oSelectedShip = getSelectedShip();
         view.cleanShips();
         if (panelDockBehavior.getUnitsInPort().isEmpty()) {
             view.setVisible(false);
         } else {
             view.setVisible(true);
-            final Optional<UnitWithCargo> oSelectedShip = getSelectedShip();
-            view.unselectShip();
             panelDockBehavior.getUnitsInPort().forEach(unit -> {
                 view.addShip(unit);
             });
@@ -68,7 +67,11 @@ public abstract class AbstractPanelDock
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        // intentionally do nothing
+        view.updateLanguage(i18n);
+    }
+
+    protected void enableHarborLayout() {
+        view.enableHarborLayout();
     }
 
     public Optional<UnitWithCargo> getSelectedShip() {

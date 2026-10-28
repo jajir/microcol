@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.UnitTypes;
+import org.microcol.i18n.I18n;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.model.Unit;
@@ -17,6 +19,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
@@ -36,6 +42,10 @@ public class PanelDockView implements JavaFxComponent {
     private final VBox mainPanel;
 
     private Consumer<Optional<UnitWithCargo>> onSelectedUnitWasChanged;
+
+    private boolean harborLayout;
+    private I18n i18n;
+    private final Label cargoTitle = new Label();
 
     public PanelDockView(final ImageProvider imageProvider,
             final PanelDockCratesPresenter panelDockCratesPresenter) {
@@ -58,6 +68,7 @@ public class PanelDockView implements JavaFxComponent {
     private void onToggleGroupWasChanged(
             final ObservableValue<? extends Toggle> object,
             final Toggle oldValue, final Toggle newValue) {
+        updateCargoTitle();
         if (onSelectedUnitWasChanged != null) {
             if (toggleGroup.getSelectedToggle() == null) {
                 onSelectedUnitWasChanged.accept(Optional.empty());
@@ -73,15 +84,50 @@ public class PanelDockView implements JavaFxComponent {
      * @param isVisible whether the dock is visible
      */
     void setVisible(final boolean isVisible) {
-        mainPanel.setVisible(isVisible);
+        mainPanel.setVisible(isVisible || harborLayout);
     }
 
     void cleanShips() {
+        toggleGroup.selectToggle(null);
+        toggleGroup.getToggles().clear();
         panelShips.getChildren().clear();
     }
 
-    void unselectShip() {
-        toggleGroup.selectToggle(null);
+    void enableHarborLayout() {
+        harborLayout = true;
+        final Region crates = (Region) mainPanel.getChildren().remove(1);
+        final ScrollPane scroll = new ScrollPane(panelShips);
+        scroll.setId("europe-dock-scroll");
+        scroll.getStyleClass().add("harbor-scroll");
+        scroll.setFitToHeight(true);
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroll.setMinHeight(96);
+        scroll.setPrefHeight(96);
+        scroll.setMaxHeight(96);
+        panelShips.setMinWidth(Region.USE_PREF_SIZE);
+        cargoTitle.setId("europe-cargo-title");
+        final VBox cargo = new VBox(cargoTitle, crates);
+        cargo.getStyleClass().add("harbor-cargo");
+        mainPanel.getChildren().setAll(scroll, cargo);
+    }
+
+    void updateLanguage(final I18n i18n) {
+        this.i18n = i18n;
+        updateCargoTitle();
+    }
+
+    private String shipLabel(final UnitWithCargo ship) {
+        return (i18n == null ? ship.getType().name()
+                : i18n.get(UnitTypes.getUnitName(ship.getType()))) + " #"
+                + ship.getId();
+    }
+
+    private void updateCargoTitle() {
+        if (harborLayout) {
+            cargoTitle.setText(
+                    getSelectedShip().map(this::shipLabel).orElse("—"));
+        }
     }
 
     void addShip(final UnitWithCargo ship) {
@@ -89,14 +135,22 @@ public class PanelDockView implements JavaFxComponent {
                 .toggle(ButtonIcon.SHIP);
         final javafx.scene.image.ImageView icon = new javafx.scene.image.ImageView(
                 imageProvider.getUnitImage(ship));
-        icon.setFitWidth(32);
-        icon.setFitHeight(32);
+        icon.setFitWidth(harborLayout ? 45 : 32);
+        icon.setFitHeight(harborLayout ? 45 : 32);
         icon.setPreserveRatio(true);
         icon.setMouseTransparent(true);
         toggleButtonShip.getStyleClass().add(SHIP_IN_PORT_STYLE);
         toggleButtonShip.setGraphic(icon);
         toggleButtonShip.setToggleGroup(toggleGroup);
         toggleButtonShip.setUserData(ship);
+        if (harborLayout) {
+            toggleButtonShip.setId("europe-dock-ship-" + ship.getId());
+            toggleButtonShip.setText("#" + ship.getId());
+            toggleButtonShip.setContentDisplay(ContentDisplay.TOP);
+            toggleButtonShip.setTooltip(new Tooltip(shipLabel(ship)));
+            toggleButtonShip.setAccessibleText(shipLabel(ship));
+            toggleButtonShip.setMinWidth(Region.USE_PREF_SIZE);
+        }
         if (ship.isShip()) {
             toggleButtonShip.setOnDragDetected(this::onDragDetected);
         }
@@ -111,9 +165,9 @@ public class PanelDockView implements JavaFxComponent {
                 final UnitWithCargo ship = (UnitWithCargo) button.getUserData();
                 button.setSelected(selectedShip.equals(ship));
             });
-        } else {
-            // select first
-            if (panelShips.getChildren().size() > 0) {
+        }
+        if (toggleGroup.getSelectedToggle() == null) {
+            if (!panelShips.getChildren().isEmpty()) {
                 final ToggleButton button = (ToggleButton) panelShips
                         .getChildren().get(0);
                 button.setSelected(true);

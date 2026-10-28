@@ -42,6 +42,9 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         // Open Europe port
         EuropePortScreen europePort = gamePage.openEuroperPort();
 
+        // The empty harbor keeps all four labeled drop areas available.
+        new org.microcol.page.EuropeHarborPage(getContext()).verifyGroups(0);
+
         // verify that there are 100000 gold.
         europePort.verifyGold(100000);
 

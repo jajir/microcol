@@ -17,7 +17,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 
 /**
  * Panel with Europe port.
@@ -28,11 +29,13 @@ public final class EuropePanel
 
     private final EuropeButtonsPanel europeButtonsPanel;
 
-    private final StackPane mainPanel;
+    private final BorderPane mainPanel;
 
     private final Label labelTitle;
 
     private final Label immigration = new Label();
+    private final Label dockTitle = new Label();
+    private final Label pierTitle = new Label();
 
     private final GameModelController controller;
 
@@ -58,7 +61,8 @@ public final class EuropePanel
             final PanelEuropeGoods panelEuropeGoods,
             final EuropeButtonsPanel europeButtonsPanel,
             final EventBus eventBus, final I18n i18n,
-            final PanelDockEurope panelDockEurope) {
+            final PanelDockEurope panelDockEurope,
+            final EuropeBackground background) {
         this.europeButtonsPanel = europeButtonsPanel;
         this.controller = gameModelController;
         this.i18n = i18n;
@@ -95,18 +99,48 @@ public final class EuropePanel
 
         this.panelGoods = Preconditions.checkNotNull(panelEuropeGoods);
 
-        mainPanel = new StackPane();
-        mainPanel.getStyleClass().add("main-panel");
-        mainPanel.getChildren().add(labelTitle);
+        mainPanel = new BorderPane();
+        mainPanel.getStyleClass().add("europe-harbor");
+        mainPanel.setMinWidth(950);
+        final Pane scene = new Pane() {
+            @Override
+            protected void layoutChildren() {
+                final double width = getWidth();
+                final double height = getHeight();
+                final double half = width / 2;
+                background.getContent().resizeRelocate(0, 0, width, height);
+                labelTitle.resizeRelocate(32, 18, width - 64, 30);
+                immigration.resizeRelocate(32, 54, width - 64,
+                        immigration.prefHeight(width - 64));
+                shipsTravelingToEurope.getContent().resizeRelocate(32, 134,
+                        half - 48, 220);
+                shipsTravelingToNewWorld.getContent().resizeRelocate(half + 16,
+                        134, half - 48, 220);
+                dockTitle.resizeRelocate(32, height - 226, half - 48, 26);
+                europeDock.getContent().resizeRelocate(32, height - 198,
+                        half - 48, 190);
+                pierTitle.resizeRelocate(half + 16, height - 226, half - 48,
+                        26);
+                panelPortPier.getContent().resizeRelocate(half + 16,
+                        height - 198, half - 48, 96);
+            }
+        };
+        scene.setId("europe-harbor-scene");
+        scene.setMinHeight(600);
+        scene.setPrefHeight(600);
+        dockTitle.setId("europe-dock-count");
+        pierTitle.setId("europe-pier-count");
+        dockTitle.getStyleClass().add("harbor-heading");
+        pierTitle.getStyleClass().add("harbor-heading");
         immigration.setId("immigration-progress");
         immigration.setWrapText(true);
         immigration.getStyleClass().add("immigration-progress");
-        mainPanel.getChildren().add(immigration);
-        mainPanel.getChildren().add(shipsTravelingToNewWorld.getContent());
-        mainPanel.getChildren().add(shipsTravelingToEurope.getContent());
-        mainPanel.getChildren().add(panelPortPier.getContent());
-        mainPanel.getChildren().add(europeDock.getContent());
-        mainPanel.getChildren().add(panelGoods.getContent());
+        scene.getChildren().addAll(background.getContent(), labelTitle,
+                immigration, shipsTravelingToNewWorld.getContent(),
+                shipsTravelingToEurope.getContent(), dockTitle, pierTitle,
+                panelPortPier.getContent(), europeDock.getContent());
+        mainPanel.setCenter(scene);
+        mainPanel.setBottom(panelGoods.getContent());
     }
 
     @Override
@@ -163,11 +197,22 @@ public final class EuropePanel
         shipsTravelingToNewWorld.repaint();
         panelPortPier.repaint();
         panelGoods.repaint();
+        updateCounts();
     }
 
     public void repaintAfterGoodMoving() {
         europeDock.repaintCurrectShipsCrates();
         panelPortPier.repaint();
+        updateCounts();
+    }
+
+    private void updateCounts() {
+        dockTitle.setText(i18n.get(Europe.harborDock,
+                controller.getModel().getEurope().getPort()
+                        .getShipsInPort(controller.getHumanPlayer()).size()));
+        pierTitle.setText(i18n.get(Europe.harborPier,
+                controller.getModel().getEurope().getPier()
+                        .getUnits(controller.getHumanPlayer()).size()));
     }
 
     public BooleanProperty getPropertyShiftWasPressed() {
