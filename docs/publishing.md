@@ -981,7 +981,7 @@ documentation in APT just to make it visible on the web.
 
 ## R-0330 coast join analysis — 2026-10-28
 
-1. [R-0330](requirements/R-0330.md) is an investigation and static preview on
+1. [R-0330](requirements/done/R-0330.md) is an investigation and static preview on
    `3e5d70ae15a9df20d28d8513e0201115088d93b5`. No executable source, runtime
    asset, fixture or configuration was changed. The four proposed contour edits
    exist only in the temporary export and documentation comparison.

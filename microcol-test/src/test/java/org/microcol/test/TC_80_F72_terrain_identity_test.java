@@ -21,6 +21,9 @@ import org.microcol.page.TerrainBoundaryPage;
 import org.microcol.page.TerrainAppearancePage;
 import org.microcol.page.WelcomePage;
 import org.microcol.page.PassengerTransferPage;
+import org.microcol.page.FogPage;
+import org.microcol.page.FramedSettingsPage;
+import org.microcol.page.SettingPage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
@@ -68,6 +71,45 @@ public class TC_80_F72_terrain_identity_test extends AbstractMicroColTest {
                 TerrainType.TUNDRA, LAKE_NEXT_TO_COLONY, TerrainType.LAKE,
                 SHIP_START, TerrainType.LAKE, LAKE_EAST, TerrainType.LAKE);
         return WelcomePage.of(getContext()).loadGame();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_coast_joins_survive_grid_pan_resize_and_continue()
+            throws Exception {
+        // Load a prepared corner with straight north and west coast joins.
+        TerrainIdentityFixture.prepareCoasts(getContext(), testFileName,
+                "terrain-r0330-coasts.microcol", SHIP_ID, SHIP_START);
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        final TerrainAppearancePage terrain = new TerrainAppearancePage(
+                getContext());
+        final FogPage map = new FogPage(getContext());
+        final Location north = Location.of(18, 15), west = Location.of(17, 16);
+        game.panToTile(north);
+        game.panToTile(west);
+        game.moveMouseAtLocation(Location.of(20, 18));
+        map.saveMapEvidence("r0330-coasts-without-grid.png");
+        terrain.verifyCoastJoins(north, west, TerrainType.GRASSLAND, false);
+
+        // Moving and resizing the viewport keep the same clean coast joins.
+        game.panToTile(SHIP_START);
+        map.resizeMapWindow(1100, 800);
+        game.panToTile(north);
+        game.panToTile(west);
+        game.moveMouseAtLocation(Location.of(20, 18));
+        terrain.verifyCoastJoins(north, west, TerrainType.GRASSLAND, false);
+
+        // Enable the ordinary grid setting and continue the saved game.
+        game.exitToMenu();
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        new FramedSettingsPage(getContext()).click("settingGrid");
+        settings.goBack();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        game.panToTile(north);
+        game.panToTile(west);
+        game.moveMouseAtLocation(Location.of(20, 18));
+        map.saveMapEvidence("r0330-coasts-with-grid.png");
+        terrain.verifyCoastJoins(north, west, TerrainType.GRASSLAND, true);
     }
 
     @Test

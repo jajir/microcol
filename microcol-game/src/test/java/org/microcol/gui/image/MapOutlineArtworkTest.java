@@ -3,12 +3,54 @@ package org.microcol.gui.image;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.microcol.gui.util.StreamReader;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 class MapOutlineArtworkTest {
+
+    @ParameterizedTest
+    @CsvSource({ "8, 1", "9, 1", "8, 2", "9, 2" })
+    void coastEndsKeepLandFillWithoutPerpendicularInk(final int column,
+            final int row) {
+        final ImageCache cache = new ImageCache(new StreamReader());
+        new ImageLoaderTerrain().preload(cache);
+        ImageWrapper coast = ImageWrapper
+                .of(cache.getImage("type_" + column + "_" + row));
+        final ImageWrapper opposite = coast.getImageRotareRight()
+                .getImageRotareRight();
+        ImageWrapper channel = coast.addImage(opposite);
+        int edgeX = 44, edgeY = 1, insideX = 43, insideY = 1;
+        int inkX = 44, inkY = 4;
+        for (int rotation = 0; rotation < 4; rotation++) {
+            for (final ImageWrapper shape : new ImageWrapper[] { coast,
+                    channel }) {
+                final Color edge = shape.get().getPixelReader().getColor(edgeX,
+                        edgeY);
+                assertEquals(1, edge.getOpacity());
+                assertEquals(
+                        shape.get().getPixelReader().getColor(insideX, insideY),
+                        edge,
+                        "Land fill must reach the tile seam without a dark tick");
+                assertTrue(
+                        shape.get().getPixelReader().getColor(inkX, inkY)
+                                .getBrightness() < 0.4,
+                        "The continuous coastline keeps its ink");
+            }
+            final int oldEdgeX = edgeX, oldInsideX = insideX, oldInkX = inkX;
+            edgeX = 44 - edgeY;
+            edgeY = oldEdgeX;
+            insideX = 44 - insideY;
+            insideY = oldInsideX;
+            inkX = 44 - inkY;
+            inkY = oldInkX;
+            coast = coast.getImageRotareRight();
+            channel = channel.getImageRotareRight();
+        }
+    }
 
     @Test
     void forestsAndCoastsKeepReadableInkAtActualTileSize() {

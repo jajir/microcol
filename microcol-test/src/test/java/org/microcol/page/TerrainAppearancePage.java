@@ -8,7 +8,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.game.gamepanel.MapManager;
+import org.microcol.gui.screen.game.gamepanel.FogFrameProbe;
 import org.microcol.gui.util.PaintService;
 import org.microcol.model.Location;
 import org.microcol.model.ResourceOverlay;
@@ -18,6 +20,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 /**
  * Checks the shared map renderer without relying on wall-clock animation
@@ -28,6 +31,47 @@ public final class TerrainAppearancePage extends AbstractScreen {
 
     public TerrainAppearancePage(final TestContext context) {
         super(context);
+    }
+
+    public void verifyCoastJoins(final Location northernCoast,
+            final Location westernCoast, final TerrainType expectedLand,
+            final boolean expectedGrid) throws Exception {
+        WaitForAsyncUtils.waitForFxEvents();
+        WaitForAsyncUtils.asyncFx(() -> {
+            assertEquals(expectedGrid,
+                    getContext().getClassFromGuice(GamePreferences.class)
+                            .isGridShown(),
+                    "Verify coast joins with the requested grid state");
+            final Image canvas = FogFrameProbe.captureCanvas(getContext());
+            final Color land = getContext()
+                    .getClassFromGuice(ImageProvider.class)
+                    .getTerrainColor(expectedLand);
+            final Location[] coasts = { northernCoast, westernCoast };
+            final int[][] offsets = { { 0, 1 }, { 44, 1 }, { 1, 0 },
+                    { 1, 44 } };
+            for (int i = 0; i < offsets.length; i++) {
+                final Location at = coasts[i / 2];
+                assertEquals(TerrainType.OCEAN,
+                        getModel().getMap().getTerrainTypeAt(at));
+                final Point point = getContext().getArea()
+                        .convertToCanvasPoint(at);
+                final int x = point.getX() + offsets[i][0],
+                        y = point.getY() + offsets[i][1];
+                assertTrue(
+                        x >= 0 && y >= 0 && x < canvas.getWidth()
+                                && y < canvas.getHeight(),
+                        "The coast join must be visible at " + at);
+                final Color pixel = canvas.getPixelReader().getColor(x, y);
+                // Grid blending can darken land slightly; coast-edge ink
+                // cannot.
+                assertEquals(land.getRed(), pixel.getRed(), 0.2,
+                        "Land reaches the coast join at " + at);
+                assertEquals(land.getGreen(), pixel.getGreen(), 0.2,
+                        "No perpendicular ink at the coast join at " + at);
+                assertEquals(land.getBlue(), pixel.getBlue(), 0.2,
+                        "Coast join preserves the land colour at " + at);
+            }
+        }).get(5, TimeUnit.SECONDS);
     }
 
     private Map<Location, Boolean> landLayout(final long tick) {

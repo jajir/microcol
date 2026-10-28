@@ -826,10 +826,14 @@ remain owned by their current requirements; acceptance is recorded in the
 
 ## Coast join analysis (2026-10-28)
 
-1. [R-0330](R-0330.md), primary area A03 with A05/A04 dependencies, records
-   the cause of short dark coast seams and a preview using the actual atlas.
-   Status: `new`; gameplay implementation has not been selected.
-   [Comparison and proposed scope](../graphics.md#pobrezni-spoje-2026-10-28).
+1. [R-0330](done/R-0330.md), primary area A03 with A05/A04 dependencies,
+   removes short dark coast seams. Status: `done`; implementation and required
+   local acceptance completed on 2026-10-28.
+
+   [Evidence](../functional-tests.md#r-0330-coast-joins-2026-10-28) records the
+
+   checks and actual screenshots; remote publication remains independently
+   verified. [Comparison and implemented scope](../graphics.md#pobrezni-spoje-2026-10-28).
 
 ## Help background (2026-10-28)
 

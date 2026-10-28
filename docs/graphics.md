@@ -1095,10 +1095,10 @@ Všechny buňky dostanou souřadnicový klíč, i prázdné nebo pracovní. Dost
 
 ### Pobřežní spoje — 2026-10-28
 
-1. [R-0330](requirements/R-0330.md) zachycuje analýzu krátkých tmavých čárek
-   označených uživatelem na pobřeží. Jde o **návrh**, runtime se nemění.
-2. Příčinou jsou v `background.svg` obrysové křivky buněk `(8,1)`, `(9,1)`,
-   `(8,2)` a `(9,2)`: před vlastní pobřežní křivkou mají svislý úsek délky
+1. [R-0330](requirements/done/R-0330.md) zachycuje analýzu krátkých tmavých čárek
+   označených uživatelem na pobřeží a následně vybranou opravu atlasu.
+2. Příčinou byly v `background.svg` obrysové křivky buněk `(8,1)`, `(9,1)`,
+   `(8,2)` a `(9,2)`: před vlastní pobřežní křivkou měly svislý úsek délky
    `1.322919` SVG jednotek, přibližně **4,5 logického pixelu**, přesně na
    pravém okraji výřezu. Část tahu zasahuje dovnitř 45px dlaždice.
    `AbstractCoastImageLoader` dílky otáčí a zrcadlí, takže se čárka objevuje
@@ -1107,22 +1107,26 @@ Všechny buňky dostanou souřadnicový klíč, i prázdné nebo pracovní. Dost
 3. Mřížka v `GamePaintService.paintGrid` je samostatný přerušovaný tah šířky
    1 px. Není zdrojem čárky; společná poloha ji pouze zvýrazňuje.
    Stejný typ nadbytečných úseků již odstranil
-   [R-0268](requirements/done/R-0268.md) v rodině hidden. V grass/ice zůstal.
-4. Nejmenší návrh odstraní počáteční kolmý úsek ve čtyřech otevřených
-   obrysech a znovu exportuje atlas. Výplně, vlastní pobřežní křivky,
-   tloušťka kontury a mřížka zůstanou stejné. Sdílené náhledy převezmou
-   opravené dílky; při implementaci je třeba ověřit rotace, skládání a
-   zachování ostatních výřezů. Nejde o změnu herních pravidel.
-5. Srovnání níže používá skutečné 45px výřezy současného a dočasně upraveného
+   [R-0268](requirements/done/R-0268.md) v rodině hidden. R-0330 doplňuje grass/ice.
+4. Oprava odstraňuje počáteční kolmý úsek ve čtyřech otevřených obrysech
+   a používá nový export stejného atlasu. Výplně, vlastní pobřežní křivky,
+   tloušťka kontury a mřížka zůstávají stejné. Sdílené náhledy přebírají
+   opravené dílky. Nejde o změnu herních pravidel. Skutečné výsledky a snímky
+   vede [funkční přejímka](functional-tests.md#r-0330-coast-joins-2026-10-28).
+5. Srovnání níže používá skutečné 45px výřezy původního a upraveného
    atlasu, otočené o 180°, přebarvené jako travnaté pobřeží a zvětšené 4×.
    Mřížka přebírá barvu, tah, přerušení a drobné prohnutí z rendereru.
    Jde o sestavenou ukázku, **nikoli screenshot spuštěné hry** nebo retuš
    uživatelova obrázku. Spodní dvojice ukazuje příčinu bez mřížky.
    [Statická kontrola a omezení](publishing.md#r-0330-coast-join-analysis-2026-10-28).
 
-![Současné pobřežní spoje vlevo a návrh bez kolmých tahů vpravo](graphics-assets/coast-joins-2026-10-28/comparison.png)
+![Původní pobřežní spoje vlevo a opravené bez kolmých tahů vpravo](graphics-assets/coast-joins-2026-10-28/comparison.png)
 
 [Vektorový zdroj srovnání](graphics-assets/coast-joins-2026-10-28/comparison.svg).
+
+Skutečné snímky z úspěšného scénáře TC80/06 zachycují opravenou mapu
+[s mřížkou](graphics-assets/coast-joins-2026-10-28/r0330-coasts-with-grid.png)
+a [bez mřížky](graphics-assets/coast-joins-2026-10-28/r0330-coasts-without-grid.png).
 
 ### Přehled výřezů
 

@@ -93,6 +93,35 @@ final class TerrainIdentityFixture {
                 row.substring(0, colon + 1) + String.join(",", cells)));
     }
 
+    static void prepareCoasts(final TestContext context, final File source,
+            final String name, final int shipId, final Location shipAt)
+            throws IOException {
+        final java.util.List<Object> tiles = new java.util.ArrayList<>();
+        for (int y = 12; y <= 18; y++) {
+            for (int x = 14; x <= 20; x++) {
+                tiles.add(Location.of(x, y));
+                tiles.add(x < 17 || y < 15 ? TerrainType.GRASSLAND
+                        : TerrainType.OCEAN);
+            }
+        }
+        prepare(context, source, name, shipId, shipAt, tiles.toArray());
+        final File prepared = new File(System.getProperty("user.home"), name);
+        final Gson gson = new Gson();
+        final JsonObject saved = gson.fromJson(
+                Files.readString(prepared.toPath()), JsonObject.class);
+        final JsonObject map = saved.getAsJsonObject("model")
+                .getAsJsonObject("map");
+        // Retyping land as sea must also remove its land-only overlays.
+        for (int y = 15; y <= 18; y++) {
+            for (int x = 17; x <= 20; x++) {
+                final Location at = Location.of(x, y);
+                set(map.getAsJsonArray("trees"), at, "-");
+                set(map.getAsJsonArray("fields"), at, "-");
+            }
+        }
+        Files.writeString(prepared.toPath(), gson.toJson(saved));
+    }
+
     static void prepareBoundaries(final TestContext context, final File source,
             final String name, final int shipId, final Location shipAt)
             throws IOException {

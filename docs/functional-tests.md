@@ -1,5 +1,90 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0330 coast joins — 2026-10-28
+
+1. [R-0330](requirements/done/R-0330.md) removes four perpendicular contour starts
+   from the grass/ice coast atlas on base `f0e4b2a9`. The isolated checkout is
+   `/Users/jan/.codex/worktrees/coast-joins/microcol`; concurrent Congress changes
+   in the primary checkout are outside this acceptance. Runtime Java and game
+   rules are unchanged. All four changed Java test files use the shared formatter.
+2. The exported PNG differs in **44 pixels**, including atlas gutters; only
+   **16 changed pixels** lie in the four affected runtime crops. Every other
+   crop is unchanged. The edge-fill check rejects all four old crops and accepts
+   the corrected crops (`target/r0330/atlas-check.json`).
+3. Required selection: all model/JUnit checks; TC80/F72/01 and /06,
+   TC26/F18/09, and `PageVerificationContractTest`; then the fixed smoke/support
+   selection within 420 seconds. TC80/06 loads a prepared F42 coastline,
+   checks real map pixels at north/west joins, pans and resizes the map, enables
+   the grid through Settings, and Continues the save. Page verifications retain
+   all assertions; the original scenarios and their gameplay assertions remain.
+4. Model acceptance passed **4,781 tests across 348 reports**, with zero failures,
+   errors or skips, including all five `MapOutlineArtworkTest` checks.
+   Complete reports: `target/verification/run-gi9dwbsq/summary.json` and
+   `model/run-R0ncYX/microcol-game/surefire-reports` beneath that run.
+   The completion runner retained
+   `/Users/jan/Library/Logs/Microcol/completions/20261028T074651Z-40b16bd7088b`,
+   supervisor PID `51385`; execution took 135.732 seconds. The initial executable diff
+   SHA-256 was `0d068ee01de952d7fe4a9f86fd74fa128fa8ca1f5aa7000668a83cb979de7723`.
+5. The first targeted attempt failed during UI test compilation:
+   `/Users/jan/Library/Logs/Microcol/completions/20261028T075043Z-ef522521f291`,
+   supervisor PID `52848`, `target/docker-ui/run-B6F49I`. The new TC80/06 referred
+   to nonexistent `source()` instead of the class's existing `testFileName`.
+   Corrected that fixture reference and reapplied the shared formatter. No UI
+   scenarios ran in this failed attempt. Its evidence remains failed.
+   All `microcol-game` sources still match the passing model snapshot; only
+   the UI scenario changed. The same targeted selection must be rerun before
+   smoke. Remote CI and publication are not inspected.
+6. The second targeted attempt used a 900-second
+   watchdog: `/Users/jan/Library/Logs/Microcol/completions/20261028T075314Z-3096ffa247f0`,
+   supervisor PID `53824`, `target/docker-ui/run-J4RRVR`. Five checks passed;
+   TC80/06 failed before reaching the map because its new sea squares retained
+   forest overlays from F42. `Terrain.setHasTrees` correctly rejected the
+   invalid fixture. Cleared trees/fields only on newly created sea squares in
+   `prepareCoasts`; original fixtures and the coast-pixel assertions are unchanged.
+   This failed run remains preserved; the same six-check selection must pass.
+7. Third targeted dispatch (900-second watchdog):
+   `/Users/jan/Library/Logs/Microcol/completions/20261028T075845Z-453fa498f39c`,
+   supervisor PID `54914`, `target/docker-ui/run-gF9Hmy`: five checks passed,
+   TC80/06 errored after the north-coast assertions. `panToTile(north)` only
+   makes that square visible; the west coast was outside the canvas at x=-29.
+   The scenario now brings both adjacent coast tiles into view before every
+   verification. Bounds and grid-state assertions make those prerequisites
+   explicit. The same land-colour tolerances and both orientations remain checked.
+8. Fourth targeted dispatch (same selection, 900-second watchdog):
+   `/Users/jan/Library/Logs/Microcol/completions/20261028T080239Z-dd7c2b2ea29b`,
+   supervisor PID `55282`, passed **6 tests in 3 suites**, zero failures, errors
+   or skips, in 86.775 seconds after 94.072 seconds of queue wait. Complete
+   reports: `target/docker-ui/run-2YJxgE/microcol-test/surefire-reports`.
+   The accepted executable diff SHA-256 is
+   `6f2f785942897e1a3ef5e0a507a2d0c3e5038bc2be2748fc004dc9de1b31b638`.
+   All 1,710 tracked `microcol-game` files still match the passing model
+   snapshot; only UI test repairs followed it.
+9. Visual review of the actual map confirms continuous coastlines and no
+   perpendicular seam ticks, both
+
+   [with the grid](graphics-assets/coast-joins-2026-10-28/r0330-coasts-with-grid.png)
+
+   and [without it](graphics-assets/coast-joins-2026-10-28/r0330-coasts-without-grid.png).
+   These are unchanged captures from the passing TC80/06 run, separate from
+   the earlier atlas-based illustration.
+10. Fixed smoke/support completion, supervisor timeout 480 seconds:
+    `/Users/jan/Library/Logs/Microcol/completions/20261028T080605Z-9eb36ed55c5d`,
+    PID `55531`, passed **21 tests in 12 suites**, zero failures, errors or
+    skips. The fixed `scripts/ui-tests/smoke.json` selection ran without
+    repeating model tests. Verifier time: 205.582 seconds; supervisor time
+    including preparation/cleanup: 205.723 seconds, within the 420-second
+    budget. Queue wait (194.006 seconds) is separate. Complete report:
+    `target/verification/run-ezz6n4om/summary.json`.
+11. Final review confirms the four contour edits and matching runtime export,
+    unchanged remaining atlas crops, preserved gameplay assertions, and the
+    shared formatter on all four changed Java test files. The executable diff
+    still matches the accepted SHA-256 above. Local acceptance completes
+    R-0330; full remote regression and publication were not inspected.
+12. Documentation consistency checks passed all **9 tests** and the strict
+    MkDocs build completed. Logs are retained in `target/r0330/docs-tests-final.log`
+    and `target/r0330/mkdocs-final.log`. Requirement status and links close with
+    this implementation; generated site output is not committed.
+
 ## R-0325 Help refinement — 2026-10-27
 
 1. [R-0325](requirements/done/R-0325.md), UC-114/119, applies the selected **Přímá úprava**
