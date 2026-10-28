@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.UnitTypes;
+import org.microcol.gui.Loc;
 import org.microcol.i18n.I18n;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
@@ -124,9 +125,10 @@ public class PanelDockView implements JavaFxComponent {
     }
 
     private void updateCargoTitle() {
-        if (harborLayout) {
-            cargoTitle.setText(
-                    getSelectedShip().map(this::shipLabel).orElse("—"));
+        if (harborLayout && i18n != null) {
+            cargoTitle.setText(getSelectedShip()
+                    .map(ship -> i18n.get(Loc.selectedShipCargo, ship.getId()))
+                    .orElseGet(() -> i18n.get(Loc.selectShipCargo)));
         }
     }
 
@@ -145,8 +147,8 @@ public class PanelDockView implements JavaFxComponent {
         toggleButtonShip.setUserData(ship);
         if (harborLayout) {
             toggleButtonShip.setId("europe-dock-ship-" + ship.getId());
-            toggleButtonShip.setText("#" + ship.getId());
-            toggleButtonShip.setContentDisplay(ContentDisplay.TOP);
+            toggleButtonShip.getStyleClass().add("harbor-unit");
+            toggleButtonShip.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
             toggleButtonShip.setTooltip(new Tooltip(shipLabel(ship)));
             toggleButtonShip.setAccessibleText(shipLabel(ship));
             toggleButtonShip.setMinWidth(Region.USE_PREF_SIZE);

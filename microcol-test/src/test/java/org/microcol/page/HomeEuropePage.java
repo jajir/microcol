@@ -72,8 +72,8 @@ public final class HomeEuropePage extends AbstractScreen {
     public void verifyReverseControl(final int shipId,
             final boolean expectedAvailable) {
         assertEquals(expectedAvailable,
-                !getNodeFinder().lookup("#voyage-reverse-" + shipId)
-                        .queryAs(Button.class).isDisabled(),
+                !new EuropeHarborPage(getContext())
+                        .voyageOrder(shipId, "reverse").isDisable(),
                 "Reverse control of " + shipId);
     }
 

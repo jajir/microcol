@@ -61,7 +61,7 @@ public class TC_44_F35_voyage_reversal_test extends AbstractMicroColTest {
                 "Send this ship to Europe? Turns remaining: 3.");
         voyage.escapeReverse();
         voyage.verifyTransit(false, 1, 1, "Turns remaining: 1");
-        voyage.captureDialog("voyage-reverse-3", "voyage-reversed.png");
+        voyage.captureDialog("voyage-ship-3", "voyage-reversed.png");
         game = europe.close();
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();

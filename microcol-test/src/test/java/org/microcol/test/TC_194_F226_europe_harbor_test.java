@@ -41,29 +41,37 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyScrollPositions(0, 0, 1, 0);
         harbor.selectShip(3142, true);
         harbor.verifySelectedCargo(3142, 0, Goods.of(GoodsType.ORE, 43));
+        port.verifyAvailableHoldCount(4);
 
         // Buy into this ship, keeping its selection and existing cargo.
         port.buyGoodsAndMoveItToCargoSlot(0, 1);
         harbor.verifySelectedCargo(3142, 1, Goods.of(GoodsType.CORN, 100));
         harbor.verifySelectedCargo(3142, 0, Goods.of(GoodsType.ORE, 43));
+        port.verifyAvailableHoldCount(4);
         port.verifyCargoSlotEmpty(0, 1);
         harbor.verifyScrollPositions(0, 0, 1, 0);
 
         // Every other last item is reachable independently.
         harbor.scrollGroup("incoming", 1);
         harbor.verifyLastItemVisible("incoming");
-        harbor.selectVoyage(1142);
+        harbor.openVoyageOrders(1142, true);
         harbor.verifyVoyageActions(1142);
+        harbor.verifyVoyageOrdersShowing(1142, true);
+        harbor.closeVoyageOrders();
+        harbor.verifyVoyageOrdersShowing(1142, false);
         harbor.verifyScrollPositions(1, 0, 1, 0);
         harbor.scrollGroup("outgoing", 1);
         harbor.verifyLastItemVisible("outgoing");
-        harbor.selectVoyage(2142);
+        harbor.openVoyageOrders(2142, false);
         harbor.verifyVoyageActions(2142);
+        harbor.verifyVoyageOrdersShowing(2142, true);
+        harbor.closeVoyageOrders();
+        harbor.verifyVoyageOrdersShowing(2142, false);
         harbor.scrollGroup("pier", 1);
         harbor.verifyLastItemVisible("pier");
         harbor.verifyScrollPositions(1, 1, 1, 1);
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0335-harbor-full.png");
+                .saveEvidence("r0336-harbor-full.png");
 
         // Resizing keeps cargo, all prices and the original image size usable.
         harbor.resize(1000, 760);
@@ -71,8 +79,9 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyLayoutAndNativeImages();
         harbor.verifyAllGoodsVisible();
         harbor.verifySelectedCargo(3142, 0, Goods.of(GoodsType.ORE, 43));
+        port.verifyAvailableHoldCount(4);
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0335-harbor-small.png");
+                .saveEvidence("r0336-harbor-small.png");
         port.close();
         new InGameLayoutPage(getContext()).verifyMapReturned();
     }
@@ -84,7 +93,8 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         final SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.verifyLanguageOptionsShown();
         settings.setCzechLanguage();
-        settings.goBack().loadGame().openEuroperPort("Evropa");
+        final EuropePortScreen port = settings.goBack().loadGame()
+                .openEuroperPort("Evropa");
         final EuropeHarborPage harbor = new EuropeHarborPage(getContext());
         harbor.resize(1280, 900);
         harbor.verifyGroups(43);
@@ -92,9 +102,10 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.scrollGroup("dock", 1);
         harbor.selectShip(3142, false);
         harbor.verifySelectedCargo(3142, 0, Goods.of(GoodsType.ORE, 43));
+        port.verifyAvailableHoldCount(4);
         harbor.showGoods();
         harbor.verifyAllGoodsVisible();
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0335-harbor-czech.png");
+                .saveEvidence("r0336-harbor-czech.png");
     }
 }

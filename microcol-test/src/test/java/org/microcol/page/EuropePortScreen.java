@@ -168,24 +168,28 @@ public class EuropePortScreen extends AbstractScreen {
                 .getGraphic();
         assertFalse(icon.getImage().isError());
         assertEquals(45, icon.getFitWidth(), 0.01);
-        assertTrue(button.getBorder().getImages().get(0).getImage().getUrl()
-                .endsWith("game-toolbar-frame.png"));
+        assertTrue(button.getStyleClass().contains("harbor-unit"));
+        assertEquals(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY,
+                button.getContentDisplay());
     }
 
     public void verifyAvailableHoldCount(int holds) {
-        org.microcol.gui.image.ImageProvider images = getContext()
-                .getClassFromGuice(org.microcol.gui.image.ImageProvider.class);
         List<javafx.scene.layout.StackPane> crates = pageComponentPanelDock
                 .getListOfCrates();
         assertEquals(6, crates.size());
         for (int index = 0; index < crates.size(); index++) {
-            javafx.scene.image.ImageView crate = getNodeFinder()
-                    .from(crates.get(index)).lookup(".crate")
-                    .queryAs(javafx.scene.image.ImageView.class);
-            assertSame(images.getImage(index < holds
-                    ? org.microcol.gui.image.ImageProvider.IMG_CRATE_OPEN
-                    : org.microcol.gui.image.ImageProvider.IMG_CRATE_CLOSED),
-                    crate.getImage());
+            final javafx.scene.shape.SVGPath face = getNodeFinder()
+                    .from(crates.get(index)).lookup(".harbor-crate-face")
+                    .queryAs(javafx.scene.shape.SVGPath.class);
+            assertEquals(javafx.scene.paint.Color.web("#C99638"),
+                    face.getFill());
+            assertEquals(javafx.scene.paint.Color.web("#25231F"),
+                    face.getStroke());
+            assertTrue(face.getBoundsInLocal().getWidth() <= 45);
+            assertTrue(face.getBoundsInLocal().getHeight() <= 45);
+            assertEquals(index >= holds,
+                    crates.get(index).getPseudoClassStates().contains(
+                            javafx.css.PseudoClass.getPseudoClass("closed")));
         }
     }
 

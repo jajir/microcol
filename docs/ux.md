@@ -1,11 +1,13 @@
 # UX a pravidla ovládání MicroCol
 
-## Evropský přístav — R-0335
+## Evropský přístav — R-0335 a R-0336
 
 1. Přijatý směr z 28. října 2026: [Námořní skicář](graphics.md#evropsky-pristav-namorni-skicar-28-rijna-2026). Hráč vybere loď v levé části mola a v jeho stěně prohlíží či plní její náklad; lidé čekají vpravo, trh s prodejní/nákupní cenou je vždy pod kresbou.
-2. Každá skupina má nadpis, aktuální počet a vlastní vodorovné posouvání. Identifikátor a zvýraznění rozlišují konkrétní loď i ve velké flotile. Posouvání nemění výběr ani náklad; prázdná skupina zůstává dosažitelným cílem příslušného přetažení.
+2. Každá skupina má nadpis, aktuální počet a vlastní vodorovné posouvání. Průhledný ruční rámeček rozlišuje vybranou loď; identifikátor zůstává v popisku, přístupném názvu a detailu. Pod lodí není samostatné číslo. Posouvání nemění výběr ani náklad; prázdná skupina zůstává dosažitelným cílem příslušného přetažení.
 3. Předpoklady a odmítnutí určují dosavadní pravidla. Výběr sám nic nekupuje; množství, potvrzení, zrušení, daně, bojkot a uzavření Evropy používají existující cesty. Menší okno posouvá stránku, nikoli zmenšené jednotky. Klávesnice nadále ovládá výběr, nabídky i návrat.
-4. [R-0335](requirements/done/R-0335.md) vlastní implementaci a cílené testy. Zde je zaznamenaná přijatá specifikace; nejde o novou studii ani pozorování skutečného hráče.
+4. Náklad vybrané lodi tvoří šest plochých okrových beden přímo na kameni: obsah a množství, prázdná dostupná místa a kříž pro nedostupná. Bez lodi nadpis vyzývá k výběru. Přetahování používá původní pravidla a cíle.
+5. Příkazy plující lodi se otevírají pravým tlačítkem nebo klávesou nabídky / Shift+F10; tooltip tuto cestu vysvětluje. Otevření vybere správnou loď. Escape zavře nabídku beze změny, potvrzení či zrušení operace zůstává v původním dialogu. Velká tlačítka pod plavbami se nezobrazují.
+6. [R-0335](requirements/done/R-0335.md) vlastní původní implementaci, [R-0336](requirements/done/R-0336.md) její následné vizuální upřesnění a nabídku příkazů. Zde je zaznamenaná přijatá specifikace; nejde o novou studii ani pozorování skutečného hráče.
 
 ## Kongres v hlavním okně — 28. října 2026
 

@@ -21,14 +21,13 @@ public final class VoyageReversalPage extends AbstractScreen {
     }
 
     public void openReverse() {
+        new EuropeHarborPage(getContext()).openVoyageOrders(3, false);
         getRobot().clickOn("#voyage-reverse-3");
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void openReverseWithKeyboard() {
-        final Button button = getNodeFinder().lookup("#voyage-reverse-3")
-                .queryAs(Button.class);
-        getRobot().interact(button::requestFocus);
+        new EuropeHarborPage(getContext()).openVoyageOrders(3, true);
         getRobot().push(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
     }
@@ -76,10 +75,10 @@ public final class VoyageReversalPage extends AbstractScreen {
     }
 
     public void verifyReverseAction(final String expected) {
-        final Button button = getNodeFinder().lookup("#voyage-reverse-3")
-                .queryAs(Button.class);
-        assertEquals(expected, button.getText());
-        assertFalse(button.isDisabled());
+        final javafx.scene.control.MenuItem order = new EuropeHarborPage(
+                getContext()).voyageOrder(3, "reverse");
+        assertEquals(expected, order.getText());
+        assertFalse(order.isDisable());
     }
 
     public void verifyConfirmation(final String title, final String question) {

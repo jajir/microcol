@@ -30,7 +30,10 @@ import com.google.inject.Inject;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
-import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.geometry.Side;
+import javafx.scene.input.KeyCode;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -216,7 +219,7 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
                     remaining.setWrapText(true);
                     remaining.setMinHeight(Region.USE_PREF_SIZE);
                     remaining.setMaxWidth(200);
-                    final Button reverse = ActionButtons.button(ButtonIcon.BACK,
+                    final MenuItem reverse = new MenuItem(
                             i18n.get(Europe.voyageReverse));
                     reverse.setId("voyage-reverse-" + unit.getId());
                     // Turning an outbound ship toward a closed home Europe is
@@ -228,8 +231,7 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
                             || !voyage.isTravelToEurope()
                                     && !unit.getOwner().canTradeInEurope());
                     reverse.setOnAction(event -> reverseCourse((Ship) unit));
-                    final Button jettison = ActionButtons.button(
-                            ButtonIcon.JETTISON,
+                    final MenuItem jettison = new MenuItem(
                             i18n.get(Europe.voyageJettison));
                     jettison.setId("voyage-jettison-" + unit.getId());
                     jettison.setDisable(!gameModelController.getModel()
@@ -247,22 +249,36 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
                     icon.setFitHeight(45);
                     icon.setPreserveRatio(true);
                     final ToggleButton ship = ActionButtons
-                            .toggle(ButtonIcon.SHIP, "#" + unit.getId());
+                            .toggle(ButtonIcon.SHIP);
                     ship.setGraphic(icon);
                     ship.setId("voyage-ship-" + unit.getId());
-                    ship.setContentDisplay(ContentDisplay.TOP);
+                    ship.getStyleClass().add("harbor-unit");
+                    ship.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                     ship.setToggleGroup(selection);
                     ship.setMinWidth(Region.USE_PREF_SIZE);
                     ship.setTooltip(new Tooltip(
-                            identity.getText() + " · " + remaining.getText()));
+                            identity.getText() + " · " + remaining.getText()
+                                    + " · " + i18n.get(Europe.voyageOrders)));
                     ship.setAccessibleText(
-                            identity.getText() + " · " + remaining.getText());
+                            identity.getText() + " · " + remaining.getText()
+                                    + " · " + i18n.get(Europe.voyageOrders));
                     ship.setOnAction(event -> {
                         ship.setSelected(true);
                         selectedShipId = unit.getId();
-                        voyageDetail.getChildren().setAll(
-                                new HBox(12, identity, remaining),
-                                new HBox(4, reverse, jettison));
+                        voyageDetail.getChildren()
+                                .setAll(new HBox(12, identity, remaining));
+                    });
+                    final ContextMenu orders = new ContextMenu(reverse,
+                            jettison);
+                    orders.setOnShowing(event -> ship.fire());
+                    ship.setContextMenu(orders);
+                    ship.setOnKeyPressed(event -> {
+                        if (event.getCode() == KeyCode.CONTEXT_MENU
+                                || event.isShiftDown()
+                                        && event.getCode() == KeyCode.F10) {
+                            orders.show(ship, Side.BOTTOM, 0, 0);
+                            event.consume();
+                        }
                     });
                     shipsContainer.getChildren().add(ship);
                     if (selectedShipId == unit.getId()) {

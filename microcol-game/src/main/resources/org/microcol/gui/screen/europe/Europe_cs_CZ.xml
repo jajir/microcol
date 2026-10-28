@@ -97,4 +97,5 @@ Celkem: %s zlatých</entry>
   <entry key="taxOpen">Požadavek na daň</entry>
   <entry key="taxPending">Požadavek Koruny na daň čeká na vaši odpověď. Otevřete jej a pokračujte v tahu.</entry>
   <entry key="backTaxOpen">Dlužné daně</entry>
+  <entry key="voyageOrders">Příkazy: pravé tlačítko nebo Shift+F10</entry>
 </properties>

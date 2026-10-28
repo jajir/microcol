@@ -886,3 +886,9 @@ remain owned by their current requirements; acceptance is recorded in the
 
 1. [R-0335](done/R-0335.md), primary area A06, implements the selected Námořní skicář, long stone quay, four independent scrollbars and goods set 09 — Olivové pobřeží.
 2. Status: done. The agreed harbor and shared goods icons are implemented; model, targeted UI and fixed smoke acceptance passed. [Evidence](../functional-tests.md#r-0335-europe-harbor-2026-10-28).
+
+
+## Ploché bedny a průhledné lodě — 2026-10-28
+
+1. [R-0336](done/R-0336.md), primary area A06, captures the accepted flat ochre crate fronts, transparent ship selectors, blue sky, cream market and voyage context menus after R-0335.
+2. Status: done. The selected variant is implemented and locally accepted: model/JUnit, targeted UI, fixed smoke and documentation checks passed. [Evidence](../functional-tests.md#r-0336-flat-harbor-cargo-2026-10-28).

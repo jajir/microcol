@@ -1,5 +1,5 @@
 .europe-harbor {
-    -fx-background-color: #fff9e9;
+    -fx-background-color: #FFF9EC;
 }
 .europe-harbor .label-title {
     -fx-font-size: 20;
@@ -63,14 +63,13 @@
     -fx-spacing: 5;
 }
 .europe-harbor .harbor-cargo {
-    -fx-background-color: #fff8e5;
-    -fx-border-color: #34352c;
-    -fx-border-width: 2;
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
     -fx-padding: 6 10;
     -fx-spacing: 3;
 }
 .europe-harbor .goods {
-    -fx-background-color: #d9b878;
+    -fx-background-color: #FFF9EC;
     -fx-border-color: #393a2d;
     -fx-border-width: 2 0 0 0;
     -fx-padding: 8 32 10 32;
@@ -86,7 +85,34 @@
     -fx-background-color: rgba(176,0,32,0.25);
 }
 .europe-harbor .sentry-marker {
-    -fx-background-color: #fff9e9;
+    -fx-background-color: #FFF9EC;
     -fx-text-fill: #27271f;
     -fx-padding: 1 3;
+}
+
+/* Unit selection has a transparent face; application actions keep paper buttons. */
+.europe-harbor .harbor-unit,
+.europe-harbor .harbor-unit:hover,
+.europe-harbor .harbor-unit:focused,
+.europe-harbor .harbor-unit:armed,
+.europe-harbor .harbor-unit:selected {
+    -fx-background-color: transparent;
+    -fx-border-image-source: null;
+    -fx-padding: 6;
+    -fx-underline: false;
+    -fx-translate-y: 0;
+}
+.europe-harbor .harbor-unit:selected {
+    -fx-border-image-source: url("../images/game-toolbar-frame.png");
+    -fx-border-image-width: 6;
+}
+.europe-harbor .harbor-unit:focused {
+    -fx-border-color: #253A41;
+    -fx-border-style: dashed;
+    -fx-border-insets: 1;
+}
+.europe-harbor .harbor-cargo .cargo-amount {
+    -fx-background-color: #C99638;
+    -fx-text-fill: #25231F;
+    -fx-padding: 0 1;
 }

@@ -9,6 +9,10 @@ import org.testfx.util.WaitForAsyncUtils;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.input.MouseButton;
+import javafx.scene.paint.Color;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
@@ -63,11 +67,43 @@ public final class EuropeHarborPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    MenuItem voyageOrder(final int id, final String action) {
+        return getNodeFinder().lookup("#voyage-ship-" + id)
+                .queryAs(ToggleButton.class).getContextMenu().getItems()
+                .stream().filter(item -> ("voyage-" + action + "-" + id)
+                        .equals(item.getId()))
+                .findFirst().orElseThrow();
+    }
+
+    public void openVoyageOrders(final int id, final boolean keyboard) {
+        final ToggleButton ship = getNodeFinder().lookup("#voyage-ship-" + id)
+                .queryAs(ToggleButton.class);
+        revealGameContent(ship);
+        if (keyboard) {
+            getRobot().interact(ship::requestFocus);
+            getRobot().push(KeyCode.SHIFT, KeyCode.F10);
+        } else {
+            getRobot().clickOn(ship, MouseButton.SECONDARY);
+        }
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void closeVoyageOrders() {
+        getRobot().push(KeyCode.ESCAPE);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyVoyageOrdersShowing(final int id,
+            final boolean expected) {
+        assertEquals(expected, getNodeFinder().lookup("#voyage-ship-" + id)
+                .queryAs(ToggleButton.class).getContextMenu().isShowing());
+    }
+
     public void verifyVoyageActions(final int id) {
         assertTrue(getNodeFinder().lookup("#voyage-ship-" + id)
                 .queryAs(ToggleButton.class).isSelected());
-        assertNotNull(getNodeFinder().lookup("#voyage-reverse-" + id).query());
-        assertNotNull(getNodeFinder().lookup("#voyage-jettison-" + id).query());
+        assertFalse(voyageOrder(id, "reverse").isDisable());
+        assertFalse(voyageOrder(id, "jettison").isDisable());
         assertTrue(getLabeledById("voyage-identity-" + id).getText()
                 .endsWith("#" + id));
     }
@@ -164,6 +200,34 @@ public final class EuropeHarborPage extends AbstractScreen {
                     .sceneToLocal(cargo.localToScene(cargo.getBoundsInLocal()));
             assertTrue(cargoBounds.getMinY() >= scene.getHeight() - 112);
             assertTrue(cargoBounds.getMaxY() <= scene.getHeight());
+            assertTrue(cargo.getBackground().getFills().stream().allMatch(
+                    fill -> Color.TRANSPARENT.equals(fill.getFill())));
+            assertTrue(
+                    cargo.getBorder() == null || cargo.getBorder().isEmpty());
+            final Region market = getNodeFinder().lookup(".goods")
+                    .queryAs(Region.class);
+            assertEquals(Color.web("#FFF9EC"),
+                    market.getBackground().getFills().get(0).getFill());
+            for (final String name : List.of("dock", "incoming", "outgoing")) {
+                for (final Node node : ((Pane) group(name).getContent())
+                        .getChildren()) {
+                    final ToggleButton ship = (ToggleButton) node;
+                    assertEquals(ContentDisplay.GRAPHIC_ONLY,
+                            ship.getContentDisplay());
+                    assertTrue(ship.getText().isEmpty());
+                    assertTrue(ship.getBackground().getFills().stream()
+                            .allMatch(fill -> Color.TRANSPARENT
+                                    .equals(fill.getFill())));
+                    assertEquals(ship.isSelected(), ship.getBorder() != null
+                            && !ship.getBorder().getImages().isEmpty());
+                    assertNotNull(ship.getAccessibleText());
+                }
+            }
+            assertTrue(getNodeFinder().lookup(".europe-harbor Button")
+                    .queryAll().stream()
+                    .noneMatch(node -> node.getId() != null && (node.getId()
+                            .startsWith("voyage-reverse-")
+                            || node.getId().startsWith("voyage-jettison-"))));
             final ImageProvider images = getContext()
                     .getClassFromGuice(ImageProvider.class);
             for (final Node node : ((Pane) group("dock").getContent())

@@ -14,7 +14,6 @@ import org.microcol.model.unit.UnitWithCargo;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCode;
@@ -39,6 +38,7 @@ public final class JettisonPage extends AbstractScreen {
      * Use the Jettison goods control of one ship in the Europe transit list.
      */
     public void useEuropeControl(final int shipId) {
+        new EuropeHarborPage(getContext()).openVoyageOrders(shipId, false);
         getRobot().clickOn("#voyage-jettison-" + shipId);
         WaitForAsyncUtils.waitForFxEvents();
     }
@@ -110,11 +110,6 @@ public final class JettisonPage extends AbstractScreen {
                 .orElse(false);
     }
 
-    private Button getEuropeControl(final int shipId) {
-        return getNodeFinder().lookup("#voyage-jettison-" + shipId)
-                .queryAs(Button.class);
-    }
-
     public void verifyMapControlVisible(final boolean expectedVisible) {
         assertEquals(expectedVisible, isShown(MAP_CONTROL_ID),
                 "Unexpected Jettison goods control visibility");
@@ -130,7 +125,9 @@ public final class JettisonPage extends AbstractScreen {
 
     public void verifyEuropeControl(final int shipId,
             final boolean expectedEnabled) {
-        assertEquals(expectedEnabled, !getEuropeControl(shipId).isDisabled(),
+        assertEquals(expectedEnabled,
+                !new EuropeHarborPage(getContext())
+                        .voyageOrder(shipId, "jettison").isDisable(),
                 "Unexpected Europe Jettison goods control state");
     }
 
