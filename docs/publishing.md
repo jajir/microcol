@@ -921,3 +921,18 @@ documentation in APT just to make it visible on the web.
    alternatives. Model/JUnit and Docker/Xvfb tests are exempt for this scope.
    No gameplay implementation, player study, remote CI inspection or publication
    verification is claimed.
+
+## R-0328 help background proposal — 2026-10-28
+
+1. [R-0328](requirements/R-0328.md) captures a preview-only color request on base
+   `94a591ff`. The generated edit in the conversation shows an ivory middle
+   background matching the header/footer, preserving the arrangement of the
+   search/index and article. It is not a game screenshot or pixel-exact font/color
+   evidence. The intended runtime color is `#FFF9EC`.
+2. No executable source, tests, runtime assets/data or configuration changed.
+   Documentation consistency and strict MkDocs are the applicable acceptance;
+   model/JUnit and UI tests are not required for this documentation-only scope.
+3. The preview remains outside runtime assets. Implementation, remote regression
+   and distribution publication are not claimed or checked.
+4. Documentation acceptance passed: nine consistency checks and strict MkDocs.
+   Logs are retained in `target/r0328/docs-tests.log` and `target/r0328/mkdocs.log`.

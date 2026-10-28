@@ -823,3 +823,10 @@ remain owned by their current requirements; acceptance is recorded in the
    Status: `done`. Implementation and required local acceptance are complete;
    [test evidence](../functional-tests.md#r-0327-clean-status-line-2026-10-27) records
    the results. Remote regression and publication remain independently verified.
+
+## Help background proposal (2026-10-28)
+
+1. [R-0328](R-0328.md), primary area A03 with A01 frame ownership, captures the
+   proposal to match Help's middle background to the ivory header and footer
+   while retaining the existing layout and inner panels. Status: `new`;
+   implementation has not been requested.

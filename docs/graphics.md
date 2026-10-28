@@ -1,5 +1,14 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Návrh sjednoceného pozadí nápovědy — 28. října 2026
+
+1. [R-0328](requirements/R-0328.md) navrhuje pouze změnu prostředního podkladu
+   nápovědy z `#EAE2CC` na `#FFF9EC`, shodnou s horní a spodní lištou.
+   Rozložení R-0325, vnitřní světlejší panely a pískový výběr tématu zůstávají.
+2. Generovaný náhled v konverzaci je barevný návrh, nikoli nový snímek hry nebo
+   předloha ke změně typografie. Runtime zůstává beze změny;
+   [evidence](publishing.md#r-0328-help-background-proposal-2026-10-28) odděluje návrh od implementace.
+
 ## Spodní řádek Čistá linka — 27. října 2026
 
 1. Uživatel vybral **Čistou linku** z pěti návrhů a menší mince se zachováním
