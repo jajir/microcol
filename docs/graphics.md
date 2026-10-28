@@ -1,5 +1,19 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Kongres jako herní obrazovka — 28. října 2026
+
+1. [R-0332](requirements/done/R-0332.md) zachovává variantu Karty a původní herní
+   linky, ikony, písmo a barvy popsané níže. Kongres nově vyplní hlavní okno
+   bez vnějšího modálního rámu. Horní návrat má sdílenou šipku `ButtonIcon.BACK`.
+2. Dřívější snímky R-0331 níže dokumentují původní modalitu. Aktuální ověření
+   a snímky uvádí [evidence R-0332](functional-tests.md#r-0332-congress-screen-2026-10-28).
+3. Skutečné snímky z Docker/Xvfb zachycují širokou obrazovku níže,
+   [menší okno s označenou kartou](graphics-assets/congress-screen-2026-10-28/congress-small-en.png)
+   a [českou obrazovku](graphics-assets/congress-screen-2026-10-28/congress-small-cs.png).
+   Horní návrat a spodní stavový řádek zůstávají mimo posouvaný obsah.
+
+![Kongres jako samostatná obrazovka s pěti kartami](graphics-assets/congress-screen-2026-10-28/congress-wide-en.png)
+
 ## Karty Kongresu — 28. října 2026
 
 1. Uživatel vybral variantu **Karty**, kterou realizuje

@@ -11,11 +11,14 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.TilePane;
 
-/** Congress choices and persistent outcomes through the player's dialog. */
+/** Congress choices and persistent outcomes through the player's screen. */
 public final class CongressPage extends AbstractScreen {
     private com.google.gson.JsonElement previousWorld;
 
     private int rememberedBells;
+    private double windowWidth;
+    private double windowHeight;
+    private boolean windowFullScreen;
 
     public CongressPage(TestContext context) {
         super(context);
@@ -26,7 +29,63 @@ public final class CongressPage extends AbstractScreen {
     }
 
     public void open() {
+        getRobot().interact(() -> {
+            final javafx.stage.Stage stage = getContext().getPrimaryStage();
+            windowWidth = stage.getWidth();
+            windowHeight = stage.getHeight();
+            windowFullScreen = stage.isFullScreen();
+        });
         clickOnButtonWithId("congress");
+    }
+
+    public void closeWithEscape() {
+        getRobot().push(javafx.scene.input.KeyCode.ESCAPE);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyFillsGameWindow(final String expectedReturnText) {
+        getRobot().interact(() -> {
+            final javafx.scene.Node page = getNodeFinder()
+                    .lookup("#congressPage").query();
+            final javafx.scene.Scene scene = getContext().getPrimaryStage()
+                    .getScene();
+            assertEquals(scene, page.getScene(),
+                    "Congress uses the primary scene");
+            final javafx.geometry.Bounds bounds = page
+                    .localToScene(page.getLayoutBounds());
+            assertEquals(0, bounds.getMinX(), 1);
+            assertEquals(0, bounds.getMinY(), 1);
+            assertEquals(scene.getWidth(), bounds.getWidth(), 1);
+            assertEquals(scene.getHeight(), bounds.getHeight(), 1);
+            assertEquals(expectedReturnText,
+                    getButtonById("congressClose").getText());
+            final javafx.scene.Node status = page.lookup("#statusBar");
+            assertTrue(status.isVisible());
+            assertTrue(insideScene(status),
+                    "The live status bar stays in the game window");
+            assertFalse(isCssIdVisible("congress"),
+                    "The map toolbar is replaced");
+            verifyWindowUnchanged();
+        });
+    }
+
+    public void verifyReturnedToGame() throws Exception {
+        WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
+                () -> isCssIdVisible("congress"));
+        assertFalse(isCssIdVisible("congressPage"));
+        assertFalse(getButtonById("congress").isDisabled());
+        getRobot().interact(this::verifyWindowUnchanged);
+    }
+
+    private void verifyWindowUnchanged() {
+        final javafx.stage.Stage stage = getContext().getPrimaryStage();
+        assertEquals(1,
+                javafx.stage.Window.getWindows().stream()
+                        .filter(javafx.stage.Window::isShowing).count(),
+                "Congress creates no additional window");
+        assertEquals(windowWidth, stage.getWidth(), 1);
+        assertEquals(windowHeight, stage.getHeight(), 1);
+        assertEquals(windowFullScreen, stage.isFullScreen());
     }
 
     public void close() {
@@ -310,8 +369,8 @@ public final class CongressPage extends AbstractScreen {
             "congressIntervention", "congressInterventionForces",
             "congressDetail", "congressFeedback" };
 
-    /** The dialog window is no larger than the given size (R-0203). */
-    public void verifyDialogFits(int width, int height) {
+    /** The primary window is no larger than the given size (R-0203). */
+    public void verifyWindowFits(int width, int height) {
         javafx.stage.Window window = getButtonById("congressClose").getScene()
                 .getWindow();
         assertTrue(window.getWidth() <= width,

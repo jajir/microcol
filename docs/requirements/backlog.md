@@ -859,3 +859,12 @@ remain owned by their current requirements; acceptance is recorded in the
    UI/source-contract checks and 21 fixed smoke/support checks, without
    failures, errors or skips. [Evidence](../functional-tests.md#r-0331-congress-cards-2026-10-28).
 3. Remote regression and publication remain independently verified workflows.
+
+## Congress in the main window — 2026-10-28
+
+1. [R-0332](done/R-0332.md), primary area A03 with A01 navigation and A10 Congress
+   rules, keeps the approved cards in a standalone screen like Help. The user
+   selected variant 1 and authorized implementation and push.
+2. Status: done. Local acceptance passed 4,782 model/JUnit tests, 16 targeted
+   UI/source-contract checks and 21 fixed smoke/support checks, with no failures,
+   errors or skips. [Evidence](../functional-tests.md#r-0332-congress-screen-2026-10-28).

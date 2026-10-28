@@ -30,6 +30,8 @@ public class TC_56_F47_congress_test extends AbstractMicroColTest {
         CongressPage congress = new CongressPage(getContext());
         congress.rememberWorld();
         congress.open();
+        congress.verifyFillsGameWindow("Back to game");
+        congress.verifyWorldUnchanged();
         congress.verifyOffer(List.of(Founder.JOHN_PAUL_JONES,
                 Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
                 Founder.WILLIAM_PENN, Founder.FERDINAND_MAGELLAN));
@@ -48,8 +50,10 @@ public class TC_56_F47_congress_test extends AbstractMicroColTest {
                 "John Paul Jones grants one free frigate on joining.");
         congress.verifyWorldUnchanged();
         congress.scrollReportToStart();
-        congress.captureDialog("congressDialog", "r0331-congress-cards.png");
+        congress.captureDialog("congressDialog",
+                "r0332-congress-screen-small.png");
         congress.close();
+        congress.verifyReturnedToGame();
         congress.verifyWorldUnchanged();
         // A wider window fits all five cards in one row using the same
         // controls.
@@ -57,10 +61,16 @@ public class TC_56_F47_congress_test extends AbstractMicroColTest {
                 getContext());
         window.resize(1280, 850);
         congress.open();
+        congress.verifyFillsGameWindow("Back to game");
         congress.verifyCardColumns(5);
         congress.verifySelectionRequired();
-        congress.captureDialog("congressDialog", "r0331-congress-wide.png");
-        congress.close();
+        congress.captureDialog("congressDialog",
+                "r0332-congress-screen-wide.png");
+        // Escape also returns to the same map without confirming the card.
+        congress.select(Founder.THOMAS_JEFFERSON);
+        congress.closeWithEscape();
+        congress.verifyReturnedToGame();
+        congress.verifyWorldUnchanged();
         window.resize(900, 750);
         // Only explicit confirmation chooses the objective; Continue does not
         // reroll it.

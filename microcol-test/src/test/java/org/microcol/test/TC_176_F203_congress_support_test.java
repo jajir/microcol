@@ -55,7 +55,8 @@ public class TC_176_F203_congress_support_test extends AbstractMicroColTest {
         congress.open();
         congress.verifySupport("National rebel support: 0% (32 residents)", 0);
         congress.verifyRoyalForce(6, 4, 2, 2, 499);
-        congress.verifyDialogFits(900, 750);
+        congress.verifyWindowFits(900, 750);
+        congress.verifyFillsGameWindow("Back to game");
         congress.close();
         congress.verifyWorldUnchanged();
         // The turn produces bells, and the reopened report shows them.
@@ -89,7 +90,8 @@ public class TC_176_F203_congress_support_test extends AbstractMicroColTest {
         congress.open();
         congress.verifySupport("National rebel support: 49% (32 residents)",
                 49);
-        congress.verifyDialogFits(900, 750);
+        congress.verifyWindowFits(900, 750);
+        congress.verifyFillsGameWindow("Back to game");
         congress.showRoyalDetails();
         congress.verifyRoyalDetailsExpanded();
         congress.verifyTextNotClipped();
@@ -114,7 +116,8 @@ public class TC_176_F203_congress_support_test extends AbstractMicroColTest {
         congress.open();
         congress.verifySupport("National rebel support: 50% (32 residents)",
                 50);
-        congress.verifyDialogFits(900, 750);
+        congress.verifyWindowFits(900, 750);
+        congress.verifyFillsGameWindow("Back to game");
         congress.showRoyalDetails();
         congress.verifyRoyalDetailsExpanded();
         congress.verifyTextNotClipped();
@@ -142,7 +145,8 @@ public class TC_176_F203_congress_support_test extends AbstractMicroColTest {
         congress.open();
         congress.verifySupport(
                 "Celostátní podpora povstání: 49 % (32 obyvatel)", 49);
-        congress.verifyDialogFits(900, 750);
+        congress.verifyWindowFits(900, 750);
+        congress.verifyFillsGameWindow("Zpět do hry");
         congress.showRoyalDetails();
         congress.verifyRoyalDetailsExpanded();
         congress.verifyTextNotClipped();

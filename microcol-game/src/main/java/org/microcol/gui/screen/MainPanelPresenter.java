@@ -8,6 +8,7 @@ import org.microcol.gui.screen.europe.ScreenEurope;
 import org.microcol.gui.screen.game.ScreenGame;
 import org.microcol.gui.screen.goals.ScreenGoals;
 import org.microcol.gui.screen.colonizopedia.ScreenColonizopedia;
+import org.microcol.gui.screen.congress.ScreenCongress;
 import org.microcol.gui.screen.market.ScreenMarketBuy;
 import org.microcol.gui.screen.market.ScreenMarketSell;
 import org.microcol.gui.screen.menu.ScreenMenu;
@@ -57,7 +58,8 @@ public final class MainPanelPresenter {
             final ScreenStatistics screenStatistics,
             final ScreenTurnReport screenTurnReport,
             final ScreenEditor screenEditor, final ScreenGoals screenGoals,
-            final ScreenColonizopedia screenHelp) {
+            final ScreenColonizopedia screenHelp,
+            final ScreenCongress screenCongress) {
         this.view = Preconditions.checkNotNull(view);
         this.i18n = Preconditions.checkNotNull(i18n);
 
@@ -127,6 +129,9 @@ public final class MainPanelPresenter {
                 }, event -> {
                     if (Screen.GOALS == event.getScreen()) {
                         return screenGoals;
+                    }
+                    if (Screen.CONGRESS == event.getScreen()) {
+                        return screenCongress;
                     }
                     if (Screen.HELP == event.getScreen()) {
                         return screenHelp;

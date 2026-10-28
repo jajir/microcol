@@ -4,9 +4,11 @@ import org.microcol.gui.util.ActionButtons;
 import org.microcol.gui.image.ButtonIcon;
 import com.google.inject.Inject;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.util.AbstractMessageWindow;
+import com.google.common.eventbus.EventBus;
+import org.microcol.gui.screen.GameScreen;
+import org.microcol.gui.screen.Screen;
+import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.gui.util.InGamePage;
-import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.*;
 import javafx.geometry.Pos;
@@ -16,7 +18,7 @@ import javafx.scene.layout.*;
 import java.util.stream.Collectors;
 
 /** Read-only Congress overview until an explicit candidate confirmation. */
-public final class CongressDialog extends AbstractMessageWindow {
+public final class ScreenCongress implements GameScreen {
     private final GameModelController game;
     private final I18n i18n;
     private final InGamePage page;
@@ -43,14 +45,13 @@ public final class CongressDialog extends AbstractMessageWindow {
     private final Label royalSummary = label("congressRoyalSummary");
     private final TitledPane royalDetails = new TitledPane();
     private final Button choose = ActionButtons.button(ButtonIcon.CONFIRM);
-    private final Button close = ActionButtons.button(ButtonIcon.CANCEL);
+    private final Button close = ActionButtons.button(ButtonIcon.BACK);
     private Model boundModel;
     private Player player;
 
     @Inject
-    public CongressDialog(ViewUtil viewUtil, I18n i18n,
+    public ScreenCongress(EventBus eventBus, I18n i18n,
             GameModelController game, InGamePage page) {
-        super(viewUtil, i18n);
         this.i18n = i18n;
         this.game = game;
         this.page = page;
@@ -82,7 +83,8 @@ public final class CongressDialog extends AbstractMessageWindow {
         choose.setId("congressChoose");
         close.setId("congressClose");
         choose.setOnAction(event -> choose());
-        close.setOnAction(event -> close());
+        close.setOnAction(
+                event -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
         close.setCancelButton(true);
         bellProgress.setId("congressBellProgress");
         bellProgress.setMaxWidth(Double.MAX_VALUE);
@@ -135,17 +137,16 @@ public final class CongressDialog extends AbstractMessageWindow {
         page.getContent().addEventFilter(
                 javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
                     if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) {
-                        close();
+                        close.fire();
                         event.consume();
                     }
                 });
         page.setToolbar(actions);
         page.setContent(root);
         page.getContent().setId("congressPage");
-        page.getContent().getStylesheets().add(CongressDialog.class
+        page.getContent().getStylesheets().add(ScreenCongress.class
                 .getResource("/gui/Congress.css").toExternalForm());
         page.getContent().lookup(".screen-scroll").setId("congressScroll");
-        init(page.getContent());
     }
 
     private ToggleButton candidate(final FounderOffer offer) {
@@ -207,27 +208,40 @@ public final class CongressDialog extends AbstractMessageWindow {
         return label;
     }
 
-    public void showCongress() {
+    @Override
+    public void beforeShow() {
         if (!game.isGameModelReady())
             return;
         boundModel = game.getModel();
         player = game.getHumanPlayer();
-        setTitle(i18n.get(CongressText.title));
-        ((Label) page.getContent().lookup("#congressHeading"))
-                .setText(i18n.get(CongressText.title));
-        royalDetails.setText(i18n.get(CongressText.deployment));
         royalDetails.setExpanded(false);
-        final javafx.stage.Window window = page.getContent().getScene()
-                .getWindow();
-        window.setWidth(getViewUtil().getPrimaryStage().getScene().getWidth());
-        window.setHeight(
-                getViewUtil().getPrimaryStage().getScene().getHeight());
-        page.beforeShow();
-        choose.setText(i18n.get(CongressText.choose));
-        close.setText(i18n.get(CongressText.close));
+        ((ScrollPane) page.getContent().lookup("#congressScroll")).setVvalue(0);
         feedback.setText("");
-        refresh();
-        showAndWait();
+        page.beforeShow();
+        updateLanguage(i18n);
+    }
+
+    @Override
+    public void beforeHide() {
+        boundModel = null;
+        player = null;
+    }
+
+    @Override
+    public Region getContent() {
+        return page.getContent();
+    }
+
+    @Override
+    public void updateLanguage(final I18n texts) {
+        ((Label) page.getContent().lookup("#congressHeading"))
+                .setText(texts.get(CongressText.title));
+        royalDetails.setText(texts.get(CongressText.deployment));
+        choose.setText(texts.get(CongressText.choose));
+        close.setText(texts.get(CongressText.back));
+        page.updateLanguage(texts);
+        if (boundModel != null)
+            refresh();
     }
 
     private boolean isCurrent() {

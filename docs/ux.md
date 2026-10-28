@@ -1,12 +1,24 @@
 # UX a pravidla ovládání MicroCol
 
+## Kongres v hlavním okně — 28. října 2026
+
+1. [R-0332](requirements/done/R-0332.md) přesouvá zvolené Karty do celé herní plochy
+   uvnitř stávajícího okna, stejně jako nápovědu. Otevření nemění velikost okna
+   ani systémový režim celé obrazovky a nevytváří další okno.
+2. Horní Zpět do hry a Escape obnoví mapu bez potvrzení označené karty. Nové
+   otevření zobrazí aktuální přehled od začátku. Pevný stavový řádek zachovává
+   pokladnu a datum; dlouhý obsah se posouvá mezi ním a horní lištou.
+3. Níže popsané karty, potvrzení a odmítnutí zůstávají. Skutečnou přejímku
+   zaznamenává [evidence](functional-tests.md#r-0332-congress-screen-2026-10-28),
+   nikoli návrhový náhled nebo hráčská studie.
+
 ## Karty Kongresu — 28. října 2026
 
 1. [R-0331](requirements/done/R-0331.md) používá vybraný návrh **Karty**. Hráč otevře
    Kongres z mapy a porovná přínosy nabízených zakladatelů. Označení karty
    pouze zobrazí detail; samostatné tlačítko vedle detailu potvrzuje cíl zvonů.
 2. Karty se podle šířky zalamují. Detail a potvrzení lze posunout do záběru;
-   tlačítko Zavřít zůstává v horní liště. Escape zavírá bez potvrzení výběru.
+   tlačítko návratu zůstává v horní liště. Escape zavírá bez potvrzení výběru.
    Odmítnutí zastaralé nabídky nadále vysvětlí potřebu znovu otevřít Kongres.
 3. Národní podpora, zvony a členové jsou nahoře. Královské síly mají součty
    a rozbalitelné podrobnosti; Jonesova odměna a intervence zachovávají

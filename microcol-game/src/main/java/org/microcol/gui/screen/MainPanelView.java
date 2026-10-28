@@ -11,6 +11,7 @@ import org.microcol.gui.screen.europe.ScreenEurope;
 import org.microcol.gui.screen.game.ScreenGame;
 import org.microcol.gui.screen.goals.ScreenGoals;
 import org.microcol.gui.screen.colonizopedia.ScreenColonizopedia;
+import org.microcol.gui.screen.congress.ScreenCongress;
 import org.microcol.gui.screen.market.ScreenMarketBuy;
 import org.microcol.gui.screen.market.ScreenMarketSell;
 import org.microcol.gui.screen.menu.ScreenMenu;
@@ -53,7 +54,8 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
             final ScreenStatistics screenStatistics,
             final ScreenTurnReport screenTurnReport,
             final ScreenGoals screenGoals, final ScreenEditor screenEditor,
-            final ScreenColonizopedia screenHelp, final I18n i18n) {
+            final ScreenColonizopedia screenHelp,
+            final ScreenCongress screenCongress, final I18n i18n) {
         mainBox = new VBox();
         mainBox.setMinHeight(0);
         VBox.setVgrow(mainBox, javafx.scene.layout.Priority.ALWAYS);
@@ -70,6 +72,7 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
         screens.add(Preconditions.checkNotNull(screenTurnReport));
         screens.add(Preconditions.checkNotNull(screenGoals));
         screens.add(Preconditions.checkNotNull(screenHelp));
+        screens.add(Preconditions.checkNotNull(screenCongress));
         screens.add(Preconditions.checkNotNull(screenEditor));
         updateLanguage(i18n);
     }

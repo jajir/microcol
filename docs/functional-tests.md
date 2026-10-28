@@ -1,5 +1,71 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0332 Congress screen — 2026-10-28
+
+1. [R-0332](requirements/done/R-0332.md) moves the approved Congress cards into the
+   primary game window through the existing screen lifecycle. No gameplay rule,
+   save schema, fixture, shared drawing asset or test deadline changes.
+2. TC56/F47 verifies replacement of the map in the original scene, exactly one
+   window, preserved dimensions/full-screen mode, fixed status, Back and Escape,
+   unchanged world before confirmation, chosen founder, arrival and Continue.
+   TC176/F203 verifies the screen and scrollable report in English and Czech.
+   Existing TC150/F141, TC155/F189 and TC156/F190 cover Crown and intervention;
+   TC100/F91 TC_01 checks the shared navigation back from Help.
+3. Shared Eclipse formatting passed all 11 changed Java files with exact token
+   preservation and idempotence. Nine documentation checks and strict MkDocs
+   passed before closure. Frozen source hashes are in `target/r0332/source.json`.
+   Model dispatch `20261028T111515Z-df87b326f76a` (supervisor PID 84243,
+   600-second watchdog) is based on `e7857466b3ef10ebc14bde127ffed3ae1b55d661`.
+4. Local acceptance passed **4,782 model/JUnit tests, 16 targeted UI/source
+   contract checks and 21 fixed smoke/support checks**, without failures,
+   errors or skips. All three phases cover the unchanged executable source
+   recorded above. Remote CI and publication were not requested.
+
+5. The initial model job waited for the existing UX test's global Docker slot.
+   On the user's explicit request for parallel execution, that waiting job was
+   cancelled before execution after 1,832.996 seconds; its result remains
+   `cancelled`, with no cleanup errors and `command_started: false`.
+6. A one-off copy of the completion runner in `target/r0332/parallel-runner/`
+   retains the repository commands, callbacks and budgets but uses its own lock
+   and Docker owner `501-r0332-01a1815a`. The original runner and global lock are
+   unchanged. The cleanup self-check verifies preservation of a foreign owner;
+   the running UX container identity and original lock are saved in
+   `target/r0332/ux-baseline.json`. This is a user-authorized exception for this
+   task, not a change to the default serialized test policy.
+7. Parallel model dispatch `20261028T114634Z-ae89e890b310`, supervisor PID 88809,
+   passed all **4,782 model/JUnit tests in 349 complete reports**, zero failures,
+   errors or skips. The supervisor took 148.667 seconds, with no lock wait;
+   verifier evidence is `target/verification/run-t_1ustfn/`. Frozen source hashes
+   still match. After cleanup the UX container is running with its original
+   start time and the global lock record is unchanged.
+8. Isolated targeted run `20261028T114957Z-cbd49212406c`, PID 89526,
+   passed **16 tests in seven complete reports**, zero failures/errors/skips,
+   in 243.526 seconds. Reports and screenshots are in
+   `target/docker-ui/run-rjRcOS/`. The selection contains TC56/F47 (2),
+   TC176/F203 (3), TC150/F141 (2), TC155/F189 (2), TC156/F190 (3),
+   TC100/F91 `TC_01_help_button_lists_all_topics_and_keyboard_selection` (1)
+   and `PageVerificationContractTest` (3). Frozen source hashes still match.
+9. Visual review of the wide English, smaller English and Czech captures
+   confirms the full-window page, shared hand-drawn cards, wrapping and fixed
+   return/status bars. These are implementation captures, not player-study
+   observations. The foreign UX container remained running with the same
+   start identity after targeted cleanup. Screenshots are linked from the
+   [graphics page](graphics.md#kongres-jako-herni-obrazovka-28-rijna-2026).
+10. Fixed smoke dispatched through the isolated runner as
+    `20261028T115736Z-5e6975b2e8fb`, supervisor PID 90664, watchdog 480 seconds.
+    It passed **21 tests in 12 complete reports** with zero failures/errors/skips
+    in `target/verification/run-915rdlcv/`. The verifier took 215.685 seconds;
+    the supervisor including cleanup took 215.870 seconds, within the unchanged
+    420-second acceptance budget. Frozen source hashes still match. The foreign
+    UX container remains running with its original start identity and the global
+    lock record is unchanged.
+11. Final review checked screen registration and lifecycle, model guards,
+    localized navigation, unchanged shared artwork and all affected callers.
+    Documentation closure includes the real screenshots, requirement relocation
+    and repaired links; all nine consistency checks and the strict MkDocs build
+    passed after closure. No permanent runner or concurrency-policy change is included.
+
+
 ## R-0330 coast joins — 2026-10-28
 
 1. [R-0330](requirements/done/R-0330.md) removes four perpendicular contour starts

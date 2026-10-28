@@ -3,7 +3,6 @@ package org.microcol.gui.screen.game.components;
 import org.microcol.gui.util.ActionButtons;
 import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.buttonpanel.AbstractButtonsPanel;
-import org.microcol.gui.screen.congress.CongressDialog;
 import org.microcol.gui.screen.congress.CongressText;
 import org.microcol.gui.buttonpanel.Buttons;
 import org.microcol.gui.buttonpanel.NextTurnEvent;
@@ -182,7 +181,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     @Inject
     ButtonsGamePanel(final ImageProvider imageProvider, final EventBus eventBus,
             final I18n i18n, final ColoniesMenu coloniesMenu,
-            final CongressDialog congressDialog, final InGameMenu gameMenu) {
+            final InGameMenu gameMenu) {
         super(imageProvider, eventBus, Source.GAME, i18n);
         currentI18n = i18n;
         toolbarImages = imageProvider;
@@ -190,7 +189,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
         buttonCongress.setId("congress");
         buttonCongress.setText(i18n.get(CongressText.title));
-        buttonCongress.setOnAction(event -> congressDialog.showCongress());
+        buttonCongress.setOnAction(
+                event -> eventBus.post(new ShowScreenEvent(Screen.CONGRESS)));
         buttonFortify.setId("fortifyUnit");
         buttonFortify.setTooltip(fortifyTooltip);
         buttonFortify.setDisable(true);
