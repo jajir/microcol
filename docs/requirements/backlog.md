@@ -868,3 +868,11 @@ remain owned by their current requirements; acceptance is recorded in the
 2. Status: done. Local acceptance passed 4,782 model/JUnit tests, 16 targeted
    UI/source-contract checks and 21 fixed smoke/support checks, with no failures,
    errors or skips. [Evidence](../functional-tests.md#r-0332-congress-screen-2026-10-28).
+
+## Explicitly requested parallel Docker tests — 2026-10-28
+
+1. [R-0333](done/R-0333.md), primary area A01, records the user's standing instruction:
+   a brief explicit parallel-run request authorizes preparing an isolated test
+   environment without repeating approval or setup questions. Default runs remain serial.
+2. Status: done. Documentation-only scope; the procedure preserves other jobs, completion
+   callbacks and all existing acceptance gates. [Evidence](../publishing.md#r-0333-parallel-test-instructions-2026-10-28).

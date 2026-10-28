@@ -226,6 +226,18 @@ blocker, not a verified change. Use the contract's completion checklist.
 
 # Completion callbacks
 
+Local Docker test jobs are serialized by default. An explicit user request such
+as "run this in parallel", "pusť to paralelně" or "use a separate Docker image"
+authorizes an isolated concurrent run for that task without further confirmation
+or asking the user to repeat the setup instructions. Follow the
+[parallel-run procedure](docs/ai/completion-callbacks.md#user-requested-parallel-runs):
+use a separate image/container identity, task-specific lock and cleanup owner,
+source snapshot and result directory. Preserve every other run's processes,
+containers, images, volumes and lock. A different image alone does not isolate
+cleanup. Keep the normal completion callbacks, required test selection and
+acceptance budgets. Do not wait solely because another test job holds the default
+lock once the user has requested this isolated parallel mode.
+
 For long worker attempts, Docker tests and CI watches, use the
 [completion runner](docs/ai/completion-callbacks.md) with the exact originating
 Codex task UUID and an explicit timeout. Record the returned run directory and

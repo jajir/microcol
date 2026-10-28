@@ -10,6 +10,22 @@ publishes the game from the same pushed `main` revision when the change is not
 limited to `docs/`; [docs-only filtering](development-builds.md#ci-filtering)
 keeps the current game download unchanged.
 
+## R-0333 parallel-test instructions — 2026-10-28
+
+1. [R-0333](requirements/done/R-0333.md), based on `0b339cbf5328c23624a0ea877b3ec4e3bbf7740c`,
+   records an explicit user-requested exception to default local test serialization.
+   `AGENTS.md` points to the authoritative
+   [procedure](ai/completion-callbacks.md#user-requested-parallel-runs). It covers
+   per-run image/container identities, separate locks and cleanup ownership,
+   source/evidence isolation and unchanged completion/acceptance requirements.
+2. This change contains only textual instructions, the requirement and its links.
+   No executable runner, test, image, build/runtime or CI configuration changes.
+   The R-0332 concurrency evidence remains historical; no new Docker job is started.
+3. All nine documentation consistency tests and the strict MkDocs build passed;
+   final scope review confirms a documentation-only change. Model/JUnit, UI,
+   smoke and tooling tests are not required or rerun. Remote CI and publication
+   are not requested.
+
 ## Editing workflow
 
 1. Update the relevant page in `docs/` alongside the implementation or configuration

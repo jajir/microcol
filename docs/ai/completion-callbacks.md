@@ -14,6 +14,8 @@ not install a daemon, change a model, or put Codex credentials inside a containe
    use the same [OS-lock helper](../../scripts/ui-tests/local_slot.py).
    Full verification may still run its two configured UI groups inside one job.
    This is a cooperative lock, not a FIFO scheduler or a Docker-wide limit.
+   An explicit user request may use the isolated
+   [parallel-run procedure](#user-requested-parallel-runs) below.
 2. A waiting run logs `Waiting for the local Docker test lock`; `result.json`
    records `wait_seconds` separately from `elapsed_seconds`. Only waiting is
    excluded: both execution and acceptance budgets start when the lock is acquired,
@@ -49,6 +51,52 @@ not install a daemon, change a model, or put Codex credentials inside a containe
    does not guarantee that an individual run fits seven minutes. Serialization itself
    does not change test selection or the acceptance budget; the current limit is
    documented below. No remote regression is watched.
+
+## User-requested parallel runs
+
+1. **Agreed on 2026-10-28, [R-0333](../requirements/done/R-0333.md):** a brief explicit
+   request such as "run this in parallel", "pusť to paralelně" or "use a separate
+   Docker image" authorizes an isolated concurrent run for that task. Do not ask
+   for the same approval or setup details again. Without that request, retain the
+   default shared lock. This permission concerns local test jobs, not cloud-agent
+   delegation or remote CI.
+2. Record the existing runs' identities and a brief CPU, memory and disk snapshot.
+   Prepare the new run without stopping, restarting or cleaning up any other job.
+   Shared resource use alone is not a reason to request permission again; report
+   a concrete execution blocker if one is observed. Resource contention can still
+   cause a timeout or failure, which must remain visible in the evidence.
+3. Give the run a unique image tag, container name, source snapshot and result
+   directory. The verifier already builds a per-run image and pins its immutable
+   image ID. For targeted Compose runs, use a task-specific project/image identity
+   as well. Preserve other jobs' images, volumes and ports; do not use global
+   prune or project-wide teardown on shared resources.
+4. Isolate both the OS lock and cleanup owner. Use a task-specific lock path and
+   `org.microcol.local-test` value, propagated through `MICROCOL_LOCAL_TEST_OWNER`.
+   Never delete the default lock, reuse its owner label or launch a raw command
+   that skips supervision. A separate image alone cannot prevent the default
+   recovery logic from removing another job's containers.
+5. The current runner has no parallel-mode CLI flag. Use a task-local copy of
+   `scripts/codex/run.py` and `scripts/ui-tests/local_slot.py` under ignored
+   `target/`: set the copy's repository root to the chosen checkout, import its
+   copied lock helper, and give that helper a unique `LOCK_PATH` and `OWNER`.
+   Keep its callback, process-group recovery, deadlines and cleanup logic.
+   Retain per-run image isolation for verification and add the unique Compose
+   project/image identity for targeted runs. Check that cleanup selects only
+   this task's owner and preserves a foreign owner before starting it. Keep these
+   operational copies out of the task's commit; do not change the shared runner
+   merely to enable one requested run.
+6. Dispatch with the exact originating task UUID and explicit timeout. Record
+   the run directory and supervisor PID, then resume from the completion callback.
+   Preserve the required model → targeted UI → smoke order within this task,
+   source identity, complete reports and the 420-second smoke budget. After
+   cleanup, verify that other runs were left intact. If replacing this task's
+   already queued run, cancel only that identified waiting job and retain its
+   cancellation evidence.
+7. The successful [R-0332 run](../functional-tests.md#r-0332-congress-screen-2026-10-28)
+   demonstrated isolated model, targeted UI and smoke execution alongside an
+   existing UX test. This is evidence that concurrency is possible, not a measured
+   speedup guarantee or evidence of unlimited capacity. This instruction change
+   adds no runner option and launches no additional tests.
 
 ## Dispatch and resume
 
