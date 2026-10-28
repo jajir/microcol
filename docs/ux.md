@@ -1,5 +1,21 @@
 # UX a pravidla ovládání MicroCol
 
+## Karty Kongresu — 28. října 2026
+
+1. [R-0331](requirements/done/R-0331.md) používá vybraný návrh **Karty**. Hráč otevře
+   Kongres z mapy a porovná přínosy nabízených zakladatelů. Označení karty
+   pouze zobrazí detail; samostatné tlačítko vedle detailu potvrzuje cíl zvonů.
+2. Karty se podle šířky zalamují. Detail a potvrzení lze posunout do záběru;
+   tlačítko Zavřít zůstává v horní liště. Escape zavírá bez potvrzení výběru.
+   Odmítnutí zastaralé nabídky nadále vysvětlí potřebu znovu otevřít Kongres.
+3. Národní podpora, zvony a členové jsou nahoře. Královské síly mají součty
+   a rozbalitelné podrobnosti; Jonesova odměna a intervence zachovávají
+   dosavadní zprávy. Před první kolonií a po získání všech zakladatelů
+   zůstává příslušné vysvětlení místo nabídky.
+4. Jde o zvolený návrh a jeho implementaci, nikoli výsledek hráčské studie.
+   [Přejímka](functional-tests.md#r-0331-congress-cards-2026-10-28) zaznamenává
+   skutečné testy a vizuální kontrolu odděleně.
+
 ## Jednoduchý spodní řádek — 27. října 2026
 
 1. [R-0327](requirements/done/R-0327.md) zachovává vlevo existující popis objektu

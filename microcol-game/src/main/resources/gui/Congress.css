@@ -1,0 +1,45 @@
+#congressPage,
+#congressPage .screen-scroll,
+#congressPage .screen-scroll > .viewport {
+    -fx-background-color: #FFF9EC;
+}
+
+/* The same pen strokes and slice scale as the map and action buttons. */
+#congressPage .screen-toolbar,
+#congressPage .congress-metrics,
+#congressPage .congress-decision {
+    -fx-border-color: transparent;
+    -fx-border-image-source: url("../images/game-toolbar-frame.png");
+    -fx-border-image-slice: 12;
+    -fx-border-image-repeat: stretch;
+    -fx-border-image-width: 0 0 6 0;
+    -fx-border-image-insets: 0 0 -3 0;
+}
+#congressPage .congress-metrics,
+#congressPage .congress-decision { -fx-padding: 0 0 18 0; }
+#congressHeading, #congressPage .congress-founder-name { -fx-font-size: 20; }
+#congressPage .congress-card {
+    -fx-padding: 16;
+    -fx-alignment: top-left;
+    -fx-content-display: graphic-only;
+}
+#congressPage .congress-card:selected { -fx-background-color: #E7E7D0; }
+#congressPage .congress-category { -fx-text-fill: #716858; }
+#congressPage .progress-bar > .track {
+    -fx-background-color: #EAE2CC;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+}
+#congressPage .progress-bar > .bar {
+    -fx-background-color: #71864B;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 4 0;
+}
+#congressRoyalDetails { -fx-text-fill: #302D27; }
+#congressRoyalDetails > .title,
+#congressRoyalDetails > .content {
+    -fx-background-color: #FFF9EC;
+    -fx-border-color: transparent;
+    -fx-padding: 8 0;
+}

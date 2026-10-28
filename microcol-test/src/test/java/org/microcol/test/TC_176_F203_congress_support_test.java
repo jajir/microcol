@@ -90,13 +90,17 @@ public class TC_176_F203_congress_support_test extends AbstractMicroColTest {
         congress.verifySupport("National rebel support: 49% (32 residents)",
                 49);
         congress.verifyDialogFits(900, 750);
+        congress.showRoyalDetails();
+        congress.verifyRoyalDetailsExpanded();
         congress.verifyTextNotClipped();
         congress.verifySupportVisible();
         congress.captureDialog("congressDialog", "r203-congress-below-en.png");
         // The end of the report shows the Crown roster.
         congress.scrollReportToEnd();
         congress.captureDialog("congressDialog", "r203-congress-roster-en.png");
-        congress.verifyActionsAlwaysVisible();
+        congress.verifyCloseAlwaysVisible();
+        congress.showFounderDecision();
+        congress.verifyFounderDecisionVisible();
         congress.verifyReportReachableByScrolling();
         congress.close();
         // Viewing the support does not offer or make a declaration.
@@ -111,8 +115,12 @@ public class TC_176_F203_congress_support_test extends AbstractMicroColTest {
         congress.verifySupport("National rebel support: 50% (32 residents)",
                 50);
         congress.verifyDialogFits(900, 750);
+        congress.showRoyalDetails();
+        congress.verifyRoyalDetailsExpanded();
         congress.verifyTextNotClipped();
-        congress.verifyActionsAlwaysVisible();
+        congress.verifyCloseAlwaysVisible();
+        congress.showFounderDecision();
+        congress.verifyFounderDecisionVisible();
         congress.verifyReportReachableByScrolling();
         congress.close();
         new IndependencePage(getContext()).verifyDeclareButtonVisible(true);
@@ -135,13 +143,17 @@ public class TC_176_F203_congress_support_test extends AbstractMicroColTest {
         congress.verifySupport(
                 "Celostátní podpora povstání: 49 % (32 obyvatel)", 49);
         congress.verifyDialogFits(900, 750);
+        congress.showRoyalDetails();
+        congress.verifyRoyalDetailsExpanded();
         congress.verifyTextNotClipped();
         congress.verifySupportVisible();
         congress.captureDialog("congressDialog", "r203-congress-below-cs.png");
         // The end of the report shows the Crown roster.
         congress.scrollReportToEnd();
         congress.captureDialog("congressDialog", "r203-congress-roster-cs.png");
-        congress.verifyActionsAlwaysVisible();
+        congress.verifyCloseAlwaysVisible();
+        congress.showFounderDecision();
+        congress.verifyFounderDecisionVisible();
         congress.verifyReportReachableByScrolling();
         congress.close();
     }

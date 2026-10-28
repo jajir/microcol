@@ -7,7 +7,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import org.microcol.model.*;
 import org.testfx.util.WaitForAsyncUtils;
-import javafx.scene.control.ListView;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.TilePane;
 
 /** Congress choices and persistent outcomes through the player's dialog. */
 public final class CongressPage extends AbstractScreen {
@@ -32,7 +34,7 @@ public final class CongressPage extends AbstractScreen {
     }
 
     public void select(Founder founder) {
-        getRobot().clickOn("#founder-" + founder.name());
+        clickOnButtonWithId("founder-" + founder.name());
     }
 
     public void choose() {
@@ -57,12 +59,62 @@ public final class CongressPage extends AbstractScreen {
     }
 
     public void verifyOffer(List<Founder> expected) {
-        ListView<FounderOffer> list = getNodeFinder()
-                .lookup("#congressCandidates").queryAs(ListView.class);
-        assertEquals(expected, list.getItems().stream()
-                .map(FounderOffer::getFounder).collect(Collectors.toList()));
-        assertEquals(expected.size(), list.getItems().stream()
-                .map(o -> o.getFounder().getCategory()).distinct().count());
+        final TilePane cards = getNodeFinder().lookup("#congressCandidates")
+                .queryAs(TilePane.class);
+        final List<Founder> actual = cards.getChildren().stream()
+                .map(node -> ((FounderOffer) node.getUserData()).getFounder())
+                .collect(Collectors.toList());
+        assertEquals(expected, actual);
+        assertEquals(expected.size(),
+                actual.stream().map(Founder::getCategory).distinct().count());
+        for (javafx.scene.Node node : cards.getChildren()) {
+            final ToggleButton card = (ToggleButton) node;
+            assertTrue(card.getStyleClass().contains("congress-card"));
+            assertNotNull(card.getGraphic());
+            assertTrue(card.getAccessibleText().length() > 20);
+            assertTrue(card.getWidth() <= cards.getWidth() + 1);
+            assertTrue(
+                    card.getHeight() + 1 >= card.prefHeight(card.getWidth()));
+        }
+    }
+
+    public void verifyCardColumns(final int columns) {
+        final TilePane cards = getNodeFinder().lookup("#congressCandidates")
+                .queryAs(TilePane.class);
+        final double firstRow = cards.getChildren().get(0).getLayoutY();
+        final var row = cards.getChildren().stream()
+                .filter(node -> Math.abs(node.getLayoutY() - firstRow) < 1)
+                .collect(Collectors.toList());
+        assertEquals(columns, row.size(), "Cards in the first row");
+        assertEquals(cards.prefHeight(cards.getWidth()), cards.getHeight(), 1,
+                "Card panel must fit its current rows after resizing");
+        final javafx.scene.layout.Region bar = getNodeFinder()
+                .lookup("#congressBellProgress")
+                .queryAs(javafx.scene.layout.Region.class);
+        assertTrue(bar.getHeight() > 0
+                && bar.getHeight() + 1 >= bar.prefHeight(bar.getWidth()),
+                "Bell progress must retain its height");
+        final double right = row.get(row.size() - 1).getBoundsInParent()
+                .getMaxX();
+        assertTrue(Math.abs(cards.getWidth() - right) < columns + 1,
+                "Cards must use the row width");
+    }
+
+    public void verifyFounderSelection(final Founder founder,
+            final String expectedEffect) {
+        final ToggleButton card = getNodeFinder()
+                .lookup("#founder-" + founder.name())
+                .queryAs(ToggleButton.class);
+        assertTrue(card.isSelected());
+        assertEquals(expectedEffect,
+                getLabeledById("congressDetail").getText());
+        assertFalse(getButtonById("congressChoose").isDisabled());
+        assertTrue(player().getSelectedFounder().isEmpty());
+    }
+
+    public void verifySelectionRequired() {
+        assertTrue(getButtonById("congressChoose").isDisabled());
+        assertTrue(player().getSelectedFounder().isEmpty());
     }
 
     public void verifyProgress(int bells, int target, String objective,
@@ -294,23 +346,27 @@ public final class CongressPage extends AbstractScreen {
         assertTrue(visible, "The support line must be inside the viewport");
     }
 
-    /**
-     * The Choose and Close actions are inside the window and outside the
-     * scrolling report at any scroll position, so a player can always act.
-     */
-    public void verifyActionsAlwaysVisible() throws Exception {
+    /** Close stays fixed; the confirmation beside the detail is scrollable. */
+    public void verifyCloseAlwaysVisible() throws Exception {
         for (double position : new double[] { 0.0, 1.0 }) {
             scrollTo(position);
-            for (String id : new String[] { "congressChoose",
-                    "congressClose" }) {
-                final javafx.scene.Node action = getButtonById(id);
-                final boolean visible = WaitForAsyncUtils
-                        .asyncFx(() -> insideScene(action)
-                                && !insideViewportArea(action))
-                        .get(5, TimeUnit.SECONDS);
-                assertTrue(visible, id + " must stay visible at " + position);
-            }
+            final javafx.scene.Node close = getButtonById("congressClose");
+            final boolean visible = WaitForAsyncUtils.asyncFx(
+                    () -> insideScene(close) && !insideViewportArea(close))
+                    .get(5, TimeUnit.SECONDS);
+            assertTrue(visible, "Close must stay visible at " + position);
         }
+    }
+
+    public void showFounderDecision() {
+        revealGameContent(getButtonById("congressChoose"));
+    }
+
+    public void verifyFounderDecisionVisible() throws Exception {
+        final javafx.scene.Node choose = getButtonById("congressChoose");
+        final boolean reachable = WaitForAsyncUtils
+                .asyncFx(() -> insideViewport(choose)).get(5, TimeUnit.SECONDS);
+        assertTrue(reachable, "Founder confirmation must be reachable");
     }
 
     /**
@@ -338,7 +394,30 @@ public final class CongressPage extends AbstractScreen {
 
     /** Show the end of the report, where the Crown roster is. */
     public void scrollReportToEnd() throws Exception {
+        showRoyalDetails();
         scrollTo(1.0);
+    }
+
+    public void showRoyalDetails() throws Exception {
+        final TitledPane details = getNodeFinder()
+                .lookup("#congressRoyalDetails").queryAs(TitledPane.class);
+        if (details.isVisible() && !details.isExpanded()) {
+            scrollTo(1.0);
+            revealGameContent(details.lookup(".title"));
+            getRobot().clickOn(details.lookup(".arrow-button"));
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+    }
+
+    public void verifyRoyalDetailsExpanded() throws Exception {
+        final TitledPane details = getNodeFinder()
+                .lookup("#congressRoyalDetails").queryAs(TitledPane.class);
+        WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> WaitForAsyncUtils
+                .asyncFx(details::isExpanded).get(5, TimeUnit.SECONDS));
+        assertTrue(
+                WaitForAsyncUtils.asyncFx(details::isExpanded).get(5,
+                        TimeUnit.SECONDS),
+                "Royal deployment details must be expanded");
     }
 
     private void scrollTo(double position) throws Exception {

@@ -1,5 +1,28 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Karty Kongresu — 28. října 2026
+
+1. Uživatel vybral variantu **Karty**, kterou realizuje
+   [R-0331](requirements/done/R-0331.md). Pět kandidátů ukazuje obor, jméno a stručný
+   přínos; menší okno je zalomí do více řádků. Výběr má společnou světlou
+   zelenou výplň a slovní označení.
+2. Karty používají výchozí `ToolbarControls.css` a `game-toolbar-frame.png`.
+   Horní lišta a oddělení souhrnu/detailu přebírají stejný řez atlasu jako
+   linky hlavní herní obrazovky: slice 12, šířka 6, posun hrany −3.
+   Nevzniká jiný generátor čar ani nový herní obrazový asset.
+3. Podklad je společný papír `#FFF9EC`, běžný text Playpen Sans Regular 14,
+   nadpis a jména zakladatelů mají velikost 20. Ikony kategorií přebírají
+   existující motivy z `ButtonIcon`. Širší okno ukáže pět karet v řadě,
+   menší tři; při změně velikosti se zachová ukazatel zvonů i výška obsahu.
+4. Skutečné snímky z Docker/Xvfb zachycují široké okno níže,
+   [označenou kartu v menším okně](graphics-assets/congress-cards-2026-10-28/congress-selection-en.png),
+   [český přehled](graphics-assets/congress-cards-2026-10-28/congress-small-cs.png)
+   a [rozbalené královské síly](graphics-assets/congress-cards-2026-10-28/congress-roster-cs.png).
+   Přesný výběr testů a jejich výsledky uvádí
+   [funkční evidence](functional-tests.md#r-0331-congress-cards-2026-10-28).
+
+![Kongres s pěti kartami v širokém okně](graphics-assets/congress-cards-2026-10-28/congress-wide-en.png)
+
 ## Návrhy vnitřních rámečků nápovědy — 28. října 2026
 
 1. [R-0329](requirements/R-0329.md) porovnává **Kreslené rámečky**, **Rámečky bez pruhů**,

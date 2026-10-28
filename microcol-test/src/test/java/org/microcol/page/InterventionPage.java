@@ -25,9 +25,6 @@ import org.testfx.util.WaitForAsyncUtils;
  */
 public final class InterventionPage extends AbstractScreen {
 
-    /** Tab presses enough to cycle through every unit with movement left. */
-    private static final int MAX_TAB_PRESSES = 16;
-
     private List<Integer> remembered = List.of();
 
     private int usedUnitId = -1;
@@ -185,7 +182,9 @@ public final class InterventionPage extends AbstractScreen {
                 .filter(unit -> unit instanceof UnitFreeColonist
                         && ((UnitFreeColonist) unit).isMounted())
                 .mapToInt(Unit::getId).min().orElseThrow();
-        for (int press = 0; press < MAX_TAB_PRESSES
+        final int fullCycle = getModel().getCurrentPlayer().getAllUnits().size()
+                + 1;
+        for (int press = 0; press < fullCycle
                 && selectedUnitIdOrMinusOne() != usedUnitId; press++) {
             game.pressTab();
             WaitForAsyncUtils.waitForFxEvents();

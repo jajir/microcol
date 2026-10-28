@@ -849,3 +849,13 @@ remain owned by their current requirements; acceptance is recorded in the
    hand-drawn inner frames, a plain topic index, a single divider and an open page
    with fewer table lines. Status: `new`. The user requested proposals only;
    no runtime implementation has been selected.
+
+## Congress founder cards (2026-10-28)
+
+1. [R-0331](done/R-0331.md), primary area A03 with A10 Congress rules and A01
+   navigation, implements the selected card proposal using the game's shared
+   hand-drawn controls and line artwork.
+2. Status: done. Local acceptance passed 4,782 model/JUnit tests, 15 targeted
+   UI/source-contract checks and 21 fixed smoke/support checks, without
+   failures, errors or skips. [Evidence](../functional-tests.md#r-0331-congress-cards-2026-10-28).
+3. Remote regression and publication remain independently verified workflows.

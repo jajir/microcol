@@ -85,6 +85,149 @@
     and `target/r0330/mkdocs-final.log`. Requirement status and links close with
     this implementation; generated site output is not committed.
 
+## R-0331 Congress cards — 2026-10-28
+
+1. [R-0331](requirements/done/R-0331.md) changes Congress presentation to selectable
+   founder cards with existing paper frames and category icons. Game operations,
+   saved offers, bell production and rewards remain model-owned.
+2. TC56/F47 retains cancel, explicit choice, arrival, Continue and stale-offer
+   rejection and adds effect text, card layout and selection checks. TC176/F203
+   retains exact support values and English/Czech 900×750 checks; confirmation
+   beside the detail must be reachable by scrolling, while Close stays fixed.
+   The expandable royal deployment retains every roster state.
+3. Local acceptance is complete: **4,782 model/JUnit tests, 15 targeted
+   UI/source-contract checks and 21 fixed smoke/support checks**, all with
+   zero failures/errors/skips. Final evidence is in items 16, 23 and 24 below.
+   Earlier failed runs remain failed. Remote CI and publication were not checked.
+4. Initial model run `20261028T074313Z-e711d6f4e2b2` (PID 50648) failed
+   in 137.753 s: 4,778 checks, one failure, no errors or skips.
+   `ButtonPresentationContractTest` rejected direct toggle construction.
+   The card now uses `ActionButtons.toggle` and its explicit category icon.
+   Failed evidence remains in `target/verification/run-frm7p1c2/`;
+   second model run `20261028T074653Z-a205eacebe0c` (PID 51413)
+   passed all **4,778 checks**, zero failures/errors/skips, in 137.805 s
+   (134.112 s of separate lock waiting). All 349 XML reports are complete in
+   `target/verification/run-hmewegcq/`; the nine task source hashes matched
+   `target/r0331/source.json` and the tested snapshot.
+5. Initial targeted Docker/Xvfb run `20261028T075148Z-cdf7b02aceda`
+   (PID 53043, timeout 1,800 s) failed in 202.789 s: **15 checks,
+   4 failures, 0 errors, 0 skips**. Three TC176 scenarios found that the
+   modal frame added 12 pixels beyond the 900-pixel owner width. The snapshot
+   also exposed excessively tall tiles: wrapped graphics were measured without
+   their tile width. Congress now sizes the complete window and measures tile
+   height at its actual width. TC156 exhausted a fixed 16-Tab search before
+   reaching the delivered cavalry; its page action now permits one complete
+   cycle of the player's units, preserving the exact identity assertion.
+   Evidence remains in `target/docker-ui/run-JowUHo/`.
+6. Repaired-source model/JUnit run `20261028T080158Z-3ec30290638b`
+   (PID 55101, timeout 600 s) passed all **4,778 checks**, with zero
+   failures/errors/skips, in 134.546 s. All 349 reports are complete in
+   `target/verification/run-60epmslg/`; all ten task source hashes match the
+   tested snapshot and `target/r0331/source.json`.
+7. Repeated targeted Docker/Xvfb run `20261028T080440Z-93c98723fdae`
+   (PID 55426) passed **15 checks: 12 UI scenarios and 3 source-contract
+   checks**, zero failures/errors/skips, in 219.593 s. Six complete XML
+   reports and screenshots remain in `target/docker-ui/run-YwWouo/`.
+   Visual review found an unused card column caused by fractional tile sizing;
+   the final adjustment rounds down tile width and uses a 210-pixel minimum,
+   with larger founder names. TC56 now verifies that rows fill their width at
+   both 900×750 (three columns) and 1280×850 (five columns), and captures both.
+8. Final-layout model run `20261028T081154Z-88195c74bc1f`, PID 56370,
+   passed **4,778 tests**, zero failures/errors/skips, in 136.801 s total.
+   All 349 reports are complete in `target/verification/run-xyjxx6w_/`;
+   all ten task hashes match both the snapshot and current source.
+9. Final targeted UI run `20261028T081522Z-3b5718030779`, PID 57099,
+   passed **15 checks** with zero failures/errors/skips in 224.352 s.
+   Reports and screenshots: `target/docker-ui/run-9At90Z/`. Both three-column
+   and five-column row-width assertions passed; English/Czech text and all
+   existing gameplay outcomes passed.
+10. Fixed smoke/support run `20261028T081932Z-8735980f9e51`, PID 57582,
+    passed **21 checks** with zero failures/errors/skips in 209.435 s total,
+    within the 420-second local budget. All twelve XML reports are complete in
+    `target/verification/run-zeoilmpa/`; all ten source hashes match its snapshot.
+11. Diagnostic TC56 run `20261028T082322Z-7c86801a1d81`, PID 57847,
+    passed its two scenarios in 67.326 s. Temporary layout logging confirmed
+    the wide-window issue before capture: the panel retained its previous
+    518-pixel height despite a new preferred height of 308, and the bell bar
+    had zero height. Evidence: `target/docker-ui/run-t6ydG4/`. Logging was
+    removed; the panel now uses its preferred minimum/maximum height and the
+    bar preserves its preferred minimum. TC56 checks both constraints after
+    resizing, in addition to the existing column checks.
+12. Post-resize-fix model run `20261028T082557Z-320e3544c61e`, PID 58022,
+    passed **4,782 tests**, zero failures/errors/skips, in 134.252 s total.
+    All 349 XML reports are complete in `target/verification/run-p6cd06el/`;
+    all ten task source hashes match the tested snapshot and current source.
+13. Targeted run `20261028T082828Z-1d23b997d18b`, PID 58280, failed:
+    **15 checks, 1 failure, 0 errors, 0 skips**, 207.602 s. The new TC56
+    height check still observed 518 instead of 308 pixels after widening.
+    Reports remain in `target/docker-ui/run-qMXUha/`. Tile width was bound to
+    the tile pane's own width, so its height changed during its parent's layout.
+    The width binding now uses the enclosing panel, before the cards are laid out.
+14. Focused diagnostic `20261028T083341Z-01ada4b0b6c4`, PID 59714,
+    failed compilation in 7.682 s before tests: the edit moved two binding
+    dependency lines rather than the complete binding. A failed edit script
+    also dispatched `20261028T083513Z-e90f57a11d26`, PID 60060, against that
+    same incomplete edit; it failed compilation in 7.519 s, with reports in
+    `target/docker-ui/run-8gqyVn/`. The complete binding
+    is now moved and the shared formatter passes.
+15. Corrected focused TC56 run `20261028T083550Z-7e1ee305b9ce`, PID 60117,
+    passed **2 scenarios**, zero failures/errors/skips, in 65.599 s.
+    `target/docker-ui/run-N2khGZ/` confirms the post-resize height checks.
+    Visual review also confirms the visible bell bar, five-card row and
+    confirmation directly below the cards. No further runtime change followed.
+16. Final-source model run `20261028T083710Z-e54516a4c46b`, PID 60753,
+    passed **4,782 tests**, zero failures/errors/skips, in 133.339 s total.
+    All 349 reports are complete in `target/verification/run-riy475_b/`;
+    all ten task source hashes match `target/r0331/source.json` and its snapshot.
+17. Complete targeted UI run `20261028T083938Z-755d49bb251e`, PID 61041,
+    passed **15 checks**, zero failures/errors/skips, in 222.966 s.
+    Six complete reports and screenshots: `target/docker-ui/run-tIURve/`.
+    The corrected wide and small layouts were visually reviewed; four captures
+    are retained in `docs/graphics-assets/congress-cards-2026-10-28/`.
+18. Smoke run `20261028T084337Z-73ba93fa8ded`, PID 61629, passed **21 checks**,
+    zero failures/errors/skips, in 206.572 s total, within the 420-second budget.
+    Twelve complete reports: `target/verification/run-ro70os17/`.
+19. The direct expanded-state assertion added to TC176 exposed one failure
+    in the Czech scenario: diagnostic `20261028T084620Z-b8b9c08a046c`, PID 61994,
+    **3 scenarios, 1 failure, 0 errors, 0 skips**, 63.813 s.
+    Reports: `target/docker-ui/run-eCJGin/`. The page action now targets the
+    disclosure arrow and the verifier waits up to five seconds for the JavaFX
+    expanded state; it does not set that state. No gameplay assertion changed.
+20. Diagnostic `20261028T084942Z-bf735fa979ec`, PID 62591, still timed out
+    waiting for the Czech disclosure: **3 scenarios, 0 failures, 1 error,
+    0 skips**, 69.999 s. Evidence: `target/docker-ui/run-3zInKx/`.
+21. Pointer/layout diagnostic `20261028T085303Z-7f01c57d2bfa`, PID 63875,
+    timed out in the same Czech scenario (70.500 s). Its trace in
+    `target/docker-ui/run-g4gnnW/` shows the arrow outside the viewport:
+    the click at scene y=662 hit the footer's `VBox[id=description]`.
+    The page action now scrolls to the report end before revealing/clicking
+    the arrow. Temporary pointer logging was removed; no application code
+    or expected outcome changed.
+22. Corrected TC176 diagnostic `20261028T085513Z-efa723a8bec7`, PID 64445,
+    passed **3 scenarios**, zero failures/errors/skips, in 66.014 s.
+    `target/docker-ui/run-zcUAS4/` includes the visibly expanded Czech roster.
+    All six game/model-test task hashes still match the accepted model run
+    `run-riy475_b`; only the UI page action and TC176 assertions changed.
+23. Complete final targeted UI run `20261028T085641Z-d16761ec0194`, PID 64820,
+    passed **15 checks**, zero failures/errors/skips, in 221.841 s.
+    Reports: `target/docker-ui/run-Rtqvpm/`. The four documented screenshots
+    were refreshed from this run, including the expanded Czech roster.
+    All ten final task source hashes are unchanged. The model pass is reused:
+    all 1,711 tracked game/build files and all six task game/JUnit files match
+    its tested snapshot; only UI test sources changed after that pass.
+24. Final smoke run `20261028T090040Z-f354041ce50f`, PID 65605, passed
+    **21 checks**, zero failures/errors/skips, in 206.412 s total
+    (verifier: 206.289 s), within the 420-second budget. All twelve XML reports
+    are complete in `target/verification/run-01nvaaem/`; all ten final task
+    hashes match its source snapshot and current source. Accepted base revision:
+    `4d32e9651822b7eb97b7e16d17a980efa0b238c4` plus the scoped R-0331 changes.
+25. Final review covers the shared controls and line artwork, every localized
+    founder effect, guarded confirmation/cancel, wrapping and disclosure actions.
+    Seven changed Java files pass the shared formatter, exact-token preservation
+    and idempotence checks. Documentation consistency passed all **9 checks**
+    and the strict MkDocs build passed. Review found no remaining blocker;
+    the complete source/assets are ready for the authorized commit and push.
+
 ## R-0325 Help refinement — 2026-10-27
 
 1. [R-0325](requirements/done/R-0325.md), UC-114/119, applies the selected **Přímá úprava**

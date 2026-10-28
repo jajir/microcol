@@ -9,7 +9,8 @@ import org.microcol.gui.util.InGamePage;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.*;
-import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.beans.binding.Bindings;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import java.util.stream.Collectors;
@@ -35,7 +36,12 @@ public final class CongressDialog extends AbstractMessageWindow {
             "congressInterventionForces");
     private final Label feedback = label("congressFeedback");
     private final Label detail = label("congressDetail");
-    private final ListView<FounderOffer> candidates = new ListView<>();
+    private final TilePane candidates = new TilePane(12, 12);
+    private final ToggleGroup selection = new ToggleGroup();
+    private final Label founderName = label("congressFounderName");
+    private final ProgressBar bellProgress = new ProgressBar();
+    private final Label royalSummary = label("congressRoyalSummary");
+    private final TitledPane royalDetails = new TitledPane();
     private final Button choose = ActionButtons.button(ButtonIcon.CONFIRM);
     private final Button close = ActionButtons.button(ButtonIcon.CANCEL);
     private Model boundModel;
@@ -49,45 +55,83 @@ public final class CongressDialog extends AbstractMessageWindow {
         this.game = game;
         this.page = page;
         candidates.setId("congressCandidates");
-        candidates.setPrefHeight(190);
+        candidates.setPrefColumns(5);
+        candidates.setTileAlignment(Pos.TOP_LEFT);
         candidates.setMinHeight(Region.USE_PREF_SIZE);
-        candidates.setCellFactory(view -> new ListCell<>() {
-            @Override
-            protected void updateItem(FounderOffer offer, boolean empty) {
-                super.updateItem(offer, empty);
-                setText(empty || offer == null ? null
-                        : CongressText.name(i18n, offer.getFounder()) + " — "
-                                + i18n.get(CongressText.valueOf(offer
-                                        .getFounder().getCategory().name())));
-                setId(empty || offer == null ? null
-                        : "founder-" + offer.getFounder().name());
-            }
+        candidates.setMaxHeight(Region.USE_PREF_SIZE);
+        // TilePane otherwise measures wrapped button graphics without a width.
+        candidates.prefTileHeightProperty()
+                .bind(Bindings.createDoubleBinding(
+                        () -> candidates.getChildren().stream()
+                                .mapToDouble(node -> node.prefHeight(
+                                        candidates.getPrefTileWidth()))
+                                .max().orElse(0),
+                        candidates.prefTileWidthProperty(),
+                        candidates.getChildren(),
+                        selection.selectedToggleProperty()));
+        selection.selectedToggleProperty().addListener((obs, old, value) -> {
+            final FounderOffer offer = value == null ? null
+                    : (FounderOffer) value.getUserData();
+            choose.setDisable(offer == null || !isCurrent()
+                    || !player.canChooseFounder(offer));
+            founderName.setText(offer == null ? ""
+                    : CongressText.name(i18n, offer.getFounder()));
+            detail.setText(offer == null ? ""
+                    : CongressText.effect(i18n, offer.getFounder()));
         });
-        candidates.getSelectionModel().selectedItemProperty()
-                .addListener((obs, old, value) -> {
-                    choose.setDisable(value == null || !isCurrent()
-                            || !player.canChooseFounder(value));
-                    detail.setText(value != null
-                            && value.getFounder() == Founder.JOHN_PAUL_JONES
-                                    ? i18n.get(CongressText.jonesEffect)
-                                    : "");
-                });
         choose.setId("congressChoose");
         close.setId("congressClose");
         choose.setOnAction(event -> choose());
         close.setOnAction(event -> close());
         close.setCancelButton(true);
-        VBox root = new VBox(12, support, progress, objective, candidates,
-                detail, members, reward, royalInfantry, royalCavalry,
-                royalArtillery, royalMenOfWar, royalBells, royalStopped,
-                intervention, interventionForces, feedback);
+        bellProgress.setId("congressBellProgress");
+        bellProgress.setMaxWidth(Double.MAX_VALUE);
+        bellProgress.setMinHeight(Region.USE_PREF_SIZE);
+        final VBox bells = new VBox(10, progress, bellProgress);
+        final HBox metrics = new HBox(24, bells, support, members);
+        metrics.getStyleClass().add("congress-metrics");
+        for (Region metric : new Region[] { bells, support, members }) {
+            metric.setMinWidth(0);
+            metric.setMaxWidth(Double.MAX_VALUE);
+            HBox.setHgrow(metric, Priority.ALWAYS);
+            metric.prefWidthProperty()
+                    .bind(metrics.widthProperty().subtract(48).divide(3));
+        }
+        founderName.getStyleClass().add("congress-founder-name");
+        final VBox description = new VBox(8, founderName, detail);
+        description.setMinWidth(0);
+        HBox.setHgrow(description, Priority.ALWAYS);
+        choose.setMinWidth(Region.USE_PREF_SIZE);
+        final HBox decision = new HBox(24, description, choose);
+        decision.setAlignment(Pos.CENTER_LEFT);
+        decision.getStyleClass().add("congress-decision");
+        royalDetails.setId("congressRoyalDetails");
+        royalDetails.setAnimated(false);
+        royalDetails.setExpanded(false);
+        royalDetails.setContent(new VBox(8, royalInfantry, royalCavalry,
+                royalArtillery, royalMenOfWar));
+        final VBox royal = new VBox(8, royalSummary, royalDetails, royalBells,
+                royalStopped, intervention, interventionForces);
+        royal.getStyleClass().add("congress-royal");
+        final VBox root = new VBox(18, metrics, objective, candidates, decision,
+                feedback, reward, royal);
         root.setId("congressDialog");
-        root.setPadding(new Insets(20));
-        root.setPrefWidth(580);
-        final HBox actions = new HBox(12, choose, close);
+        root.setMinWidth(0);
+        candidates.prefTileWidthProperty()
+                .bind(Bindings.createDoubleBinding(() -> {
+                    final double width = Math.max(210, root.getWidth());
+                    final int columns = Math.max(1,
+                            Math.min(5, (int) ((width + 12) / 222)));
+                    return Math.floor((width - (columns - 1) * 12) / columns);
+                }, root.widthProperty()));
+        final Label heading = new Label();
+        heading.setId("congressHeading");
+        heading.setGraphic(ButtonIcon.CONGRESS.createView());
+        final Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        final HBox actions = new HBox(12, heading, spacer, close);
         actions.setId("congressActions");
-        actions.setPadding(new Insets(12, 20, 20, 20));
-        // A focused candidate list consumes Escape before scene bubbling.
+        actions.setAlignment(Pos.CENTER_LEFT);
         page.getContent().addEventFilter(
                 javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
                     if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) {
@@ -97,8 +141,60 @@ public final class CongressDialog extends AbstractMessageWindow {
                 });
         page.setToolbar(actions);
         page.setContent(root);
+        page.getContent().setId("congressPage");
+        page.getContent().getStylesheets().add(CongressDialog.class
+                .getResource("/gui/Congress.css").toExternalForm());
         page.getContent().lookup(".screen-scroll").setId("congressScroll");
         init(page.getContent());
+    }
+
+    private ToggleButton candidate(final FounderOffer offer) {
+        final Founder founder = offer.getFounder();
+        final Label category = label("");
+        category.setText(
+                i18n.get(CongressText.valueOf(founder.getCategory().name())));
+        category.getStyleClass().add("congress-category");
+        final Label name = label("");
+        name.setText(CongressText.name(i18n, founder));
+        name.getStyleClass().add("congress-founder-name");
+        final Label effect = label("");
+        effect.setText(CongressText.effect(i18n, founder));
+        final Label selected = label("");
+        final ToggleButton card = ActionButtons.toggle(categoryIcon(founder));
+        final VBox content = new VBox(10, card.getGraphic(), category, name,
+                effect, selected);
+        content.setMouseTransparent(true);
+        card.setId("founder-" + founder.name());
+        card.setUserData(offer);
+        card.setToggleGroup(selection);
+        card.getStyleClass().add("congress-card");
+        card.setGraphic(content);
+        card.setAccessibleText(CongressText.name(i18n, founder) + ". "
+                + category.getText() + ". " + effect.getText());
+        card.setMinWidth(0);
+        card.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        content.prefWidthProperty()
+                .bind(candidates.prefTileWidthProperty().subtract(32));
+        selected.textProperty().bind(Bindings.when(card.selectedProperty())
+                .then(i18n.get(CongressText.selected)).otherwise(""));
+        return card;
+    }
+
+    private static ButtonIcon categoryIcon(final Founder founder) {
+        switch (founder.getCategory()) {
+        case MILITARY:
+            return ButtonIcon.MILITARY;
+        case POLITICAL:
+            return ButtonIcon.DIPLOMACY;
+        case TRADE:
+            return ButtonIcon.TRADE;
+        case RELIGIOUS:
+            return ButtonIcon.RELIGION;
+        case EXPLORATION:
+            return ButtonIcon.CENTER;
+        default:
+            throw new IllegalArgumentException("Unknown founder category");
+        }
     }
 
     private static Label label(String id) {
@@ -106,6 +202,8 @@ public final class CongressDialog extends AbstractMessageWindow {
         label.setId(id);
         label.setWrapText(true);
         label.setMinHeight(Region.USE_PREF_SIZE);
+        label.managedProperty().bind(label.textProperty().isNotEmpty());
+        label.visibleProperty().bind(label.managedProperty());
         return label;
     }
 
@@ -115,9 +213,14 @@ public final class CongressDialog extends AbstractMessageWindow {
         boundModel = game.getModel();
         player = game.getHumanPlayer();
         setTitle(i18n.get(CongressText.title));
-        page.setTitle(i18n.get(CongressText.title));
-        page.getContent().setPrefSize(
-                getViewUtil().getPrimaryStage().getScene().getWidth(),
+        ((Label) page.getContent().lookup("#congressHeading"))
+                .setText(i18n.get(CongressText.title));
+        royalDetails.setText(i18n.get(CongressText.deployment));
+        royalDetails.setExpanded(false);
+        final javafx.stage.Window window = page.getContent().getScene()
+                .getWindow();
+        window.setWidth(getViewUtil().getPrimaryStage().getScene().getWidth());
+        window.setHeight(
                 getViewUtil().getPrimaryStage().getScene().getHeight());
         page.beforeShow();
         choose.setText(i18n.get(CongressText.choose));
@@ -150,7 +253,17 @@ public final class CongressDialog extends AbstractMessageWindow {
                         report.getMembers().size() == Founder.values().length
                                 ? CongressText.allMembers
                                 : CongressText.chooseObjective)));
-        candidates.getItems().setAll(player.getFounderOffers());
+        selection.getToggles().clear();
+        candidates.getChildren().clear();
+        player.getFounderOffers().forEach(
+                offer -> candidates.getChildren().add(candidate(offer)));
+        candidates.setManaged(!candidates.getChildren().isEmpty());
+        founderName.setText(report.getSelectedFounder()
+                .map(founder -> CongressText.name(i18n, founder)).orElse(""));
+        detail.setText(report.getSelectedFounder()
+                .map(founder -> CongressText.effect(i18n, founder)).orElse(""));
+        bellProgress.setProgress(report.getTarget() == 0 ? 0
+                : Math.min(1, (double) report.getBells() / report.getTarget()));
         choose.setDisable(true);
         members.setText(i18n.get(CongressText.members,
                 report.getMembers().isEmpty() ? i18n.get(CongressText.none)
@@ -181,6 +294,14 @@ public final class CongressDialog extends AbstractMessageWindow {
     /** Shows the Crown's real roster; blank when no Crown rules this nation. */
     private void refreshRoyal(final CongressReport report) {
         RoyalRoster crown = report.getCrownRoster().orElse(null);
+        royalSummary.setText(crown == null ? ""
+                : i18n.get(CongressText.royalSummary,
+                        crown.getTotal(RoyalRoster.Family.INFANTRY),
+                        crown.getTotal(RoyalRoster.Family.CAVALRY),
+                        crown.getTotal(RoyalRoster.Family.ARTILLERY),
+                        crown.getTotal(RoyalRoster.Family.MAN_OF_WAR)));
+        royalDetails.setManaged(crown != null);
+        royalDetails.setVisible(crown != null);
         royalInfantry.setText(crown == null ? ""
                 : familyLine(CongressText.royalInfantry, crown,
                         RoyalRoster.Family.INFANTRY));
@@ -241,7 +362,8 @@ public final class CongressDialog extends AbstractMessageWindow {
     }
 
     private void choose() {
-        FounderOffer offer = candidates.getSelectionModel().getSelectedItem();
+        FounderOffer offer = selection.getSelectedToggle() == null ? null
+                : (FounderOffer) selection.getSelectedToggle().getUserData();
         if (offer == null)
             return;
         try {

@@ -37,9 +37,31 @@ public class TC_56_F47_congress_test extends AbstractMicroColTest {
                 "Choose the next founder. Bells wait until a choice is made.",
                 "None");
         congress.captureDialog("congressDialog", "r104-congress-offer.png");
+        congress.verifySelectionRequired();
+        congress.verifyCardColumns(3);
+        // A card explains the benefit before the separate confirmation.
+        congress.select(Founder.FERDINAND_MAGELLAN);
+        congress.verifyFounderSelection(Founder.FERDINAND_MAGELLAN,
+                "Ships gain +1 movement. New voyages to Europe from the western edge take half as long, rounded up.");
         congress.select(Founder.JOHN_PAUL_JONES);
+        congress.verifyFounderSelection(Founder.JOHN_PAUL_JONES,
+                "John Paul Jones grants one free frigate on joining.");
+        congress.verifyWorldUnchanged();
+        congress.scrollReportToStart();
+        congress.captureDialog("congressDialog", "r0331-congress-cards.png");
         congress.close();
         congress.verifyWorldUnchanged();
+        // A wider window fits all five cards in one row using the same
+        // controls.
+        final MainScreenLayoutPage window = new MainScreenLayoutPage(
+                getContext());
+        window.resize(1280, 850);
+        congress.open();
+        congress.verifyCardColumns(5);
+        congress.verifySelectionRequired();
+        congress.captureDialog("congressDialog", "r0331-congress-wide.png");
+        congress.close();
+        window.resize(900, 750);
         // Only explicit confirmation chooses the objective; Continue does not
         // reroll it.
         congress.open();
