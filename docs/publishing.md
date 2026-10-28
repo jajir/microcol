@@ -924,7 +924,7 @@ documentation in APT just to make it visible on the web.
 
 ## R-0328 help background proposal — 2026-10-28
 
-1. [R-0328](requirements/R-0328.md) captures a preview-only color request on base
+1. [R-0328](requirements/done/R-0328.md) captures a preview-only color request on base
    `94a591ff`. The generated edit in the conversation shows an ivory middle
    background matching the header/footer, preserving the arrangement of the
    search/index and article. It is not a game screenshot or pixel-exact font/color
@@ -936,3 +936,16 @@ documentation in APT just to make it visible on the web.
    and distribution publication are not claimed or checked.
 4. Documentation acceptance passed: nine consistency checks and strict MkDocs.
    Logs are retained in `target/r0328/docs-tests.log` and `target/r0328/mkdocs.log`.
+
+## R-0328 help background implementation — 2026-10-28
+
+1. The user explicitly requested implementation and push **without tests** after
+   reviewing the preview. This task-specific instruction overrides ordinary local
+   acceptance for this change; it does not change the default workflow.
+2. On base `248acfcf`, Help-local CSS changes the middle page/viewport and vertical
+   scrollbar backgrounds to `#FFF9EC`. Shared styles, inner panel colors and layout
+   are unchanged. The diff was reviewed; no Java files or test scenarios changed.
+3. Model/JUnit, targeted Docker UI, smoke, documentation tests and strict MkDocs
+   were not run for this implementation. The earlier documentation-only pass
+   remains evidence for the proposal only. No new game screenshot, runtime visual
+   acceptance, remote CI result or published distribution is claimed.

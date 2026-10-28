@@ -1,3 +1,9 @@
+#colonizopediaPage,
+#colonizopediaPage .screen-scroll,
+#colonizopediaPage .screen-scroll > .viewport {
+    -fx-background-color: #FFF9EC;
+}
+
 /* Native controls keep their keyboard, wheel and drag behavior. */
 #colonizopediaSearch {
     -fx-shape: "M2 2 Q55 0 110 2 T218 2 Q220 18 218 38 Q164 40 110 38 T2 38 Q0 20 2 2 Z";
@@ -49,7 +55,7 @@
 }
 
 #colonizopediaPage .scroll-bar:vertical {
-    -fx-background-color: #EAE2CC;
+    -fx-background-color: #FFF9EC;
     -fx-padding: 3;
     -fx-pref-width: 20;
 }

@@ -824,9 +824,10 @@ remain owned by their current requirements; acceptance is recorded in the
    [test evidence](../functional-tests.md#r-0327-clean-status-line-2026-10-27) records
    the results. Remote regression and publication remain independently verified.
 
-## Help background proposal (2026-10-28)
+## Help background (2026-10-28)
 
-1. [R-0328](R-0328.md), primary area A03 with A01 frame ownership, captures the
-   proposal to match Help's middle background to the ivory header and footer
-   while retaining the existing layout and inner panels. Status: `new`;
-   implementation has not been requested.
+1. [R-0328](done/R-0328.md), primary area A03 with A01 frame ownership, matches
+   Help's middle background to the ivory header/footer using Help-local CSS.
+   Status: `done`. The user explicitly requested implementation and push without
+   tests; runtime appearance is unverified. The [evidence](../publishing.md#r-0328-help-background-implementation-2026-10-28)
+   records that task-specific waiver, separate from the earlier proposal checks.
