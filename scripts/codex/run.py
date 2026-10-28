@@ -48,6 +48,7 @@ def parse_args(argv):
     worker.add_argument("--escalate-reason")
     modes.add_parser("docker").add_argument("arguments", nargs=argparse.REMAINDER)
     modes.add_parser("verify").add_argument("arguments", nargs=argparse.REMAINDER)
+    modes.add_parser("ux").add_argument("arguments", nargs=argparse.REMAINDER)
     ci = modes.add_parser("ci")
     ci.add_argument("run_id")
     ci.add_argument("--commit", required=True)
@@ -93,6 +94,13 @@ def request(args, run_id):
         arguments = args.arguments[1:] if args.arguments[:1] == ["--"] else args.arguments
         command = [record["docker"], "compose", "-f", str(ROOT / "compose.ui-tests.yml"),
                    "run", "--build", "--rm", "--name", record["container"], "ui-tests"] + arguments
+    elif args.kind == "ux":
+        record["docker"] = installed("docker")
+        record["container"] = "microcol-ux-" + run_id.lower()
+        arguments = args.arguments[1:] if args.arguments[:1] == ["--"] else args.arguments
+        command = [sys.executable, str(ROOT / "microcol-ux-test/run.py"),
+                   "--container", record["container"]] + arguments
+        record["reports"] = str(ROOT / "microcol-ux-test/runs")
     elif args.kind == "verify":
         arguments = args.arguments[1:] if args.arguments[:1] == ["--"] else args.arguments
         if "--smoke" in arguments:
@@ -230,7 +238,7 @@ def supervise(directory):
     deadline = started + record["timeout_seconds"]
     process = None
     slot = None
-    admitted = record["kind"] not in ("docker", "verify")
+    admitted = record["kind"] not in ("docker", "verify", "ux")
     result = {"status": "failed", "exit_code": None, "cleanup_errors": [],
               "request": str(directory / "request.json"), "revision": record["revision"],
               "timeout_seconds": record["timeout_seconds"]}
@@ -238,7 +246,7 @@ def supervise(directory):
     try:
         with (directory / "command.log").open("w") as log:
             try:
-                if record["kind"] in ("docker", "verify"):
+                if record["kind"] in ("docker", "verify", "ux"):
                     slot = LocalSlot(log)
                     slot.budget = min(record["timeout_seconds"], record.get("acceptance_seconds", float("inf")))
                     slot.acquire()

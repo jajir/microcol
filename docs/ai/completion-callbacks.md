@@ -3,7 +3,9 @@
 [R-0243](../requirements/done/R-0243.md) adds one host-side
 [runner](../../scripts/codex/run.py) for long worker, Docker and CI commands.
 It uses the already installed Python, Codex CLI, Docker and GitHub CLI. It does
-not install a daemon, change a model, or put Codex credentials inside a container.
+not install a daemon or change a model. The independent UX player mounts host
+authentication only for its container session; credentials are never baked into
+an image or exported with results.
 
 ## Local Docker test lock
 
@@ -165,6 +167,12 @@ Docker stop and removal. Delivery has its own 30-second limit.
 The original foreground command remains available to human operators and CI.
 The [functional contract](../functional-tests.md#docker-ui-tests), named scenarios
 and container runner checks are unchanged.
+
+## Independent UX sessions
+
+1. The `ux` command dispatches the separate [UX playtesting runner](../ux-playtesting.md), for example `python3 scripts/codex/run.py --thread TASK_UUID --timeout 1800 ux -- check`.
+2. It uses the same local Docker admission/cleanup lock and originating-task callback, but invokes no UI regression selection. Results remain in `microcol-ux-test/runs/` and are not Surefire reports or gameplay acceptance.
+3. The caller records the selected model/reasoning and inner play budget when dispatching `play`. Outer completion is separate from the player's goals and evidence review.
 
 ## Pre-commit gate
 

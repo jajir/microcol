@@ -38,6 +38,10 @@
 
 	<!-- Native installers must be built on their target operating system. -->
 	<profiles>
+        <profile>
+            <id>ux-playtesting</id>
+            <modules><module>microcol-ux-test</module></modules>
+        </profile>
 		<profile>
 			<id>macos-distribution</id>
 			<activation><os><family>mac</family></os></activation>

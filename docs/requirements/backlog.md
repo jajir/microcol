@@ -1,5 +1,7 @@
 # Current requirement backlog
 
+Accepted locally on 2026-10-28: [R-0334 — isolated Codex UX playtesting](done/R-0334.md), A03. The independent experienced player completed 40 verified turns with screenshots and notes; tooling, model/JUnit, live desktop and fixed smoke gates passed. See [results and limits](../ux-playtesting.md).
+
 Accepted locally on 2026-10-27: [R-0320 — ink river banks and narrow mouth](done/R-0320.md),
 A03 with A05/A07 dependencies. The user-selected variant 1 replaces the island
 from R-0315. All 4,776 model/JUnit tests, 13 targeted UI/support checks and

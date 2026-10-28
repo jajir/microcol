@@ -21,6 +21,17 @@ SCRIPT = Path(run.__file__).resolve()
 
 
 class CompletionTest(unittest.TestCase):
+    def test_ux_dispatch_is_separate_from_regression(self):
+        args = run.parse_args(["--thread", THREAD, "--timeout", "600", "ux", "--", "check"])
+        with patch.object(run, "installed", side_effect=lambda name: "/bin/" + name), \
+                patch.object(run.subprocess, "check_output", return_value=SHA):
+            record = run.request(args, "20261028T000000Z-example")
+        self.assertEqual("ux", record["kind"])
+        self.assertEqual("/bin/docker", record["docker"])
+        self.assertIn("microcol-ux-test/run.py", record["command"][1])
+        self.assertEqual("check", record["command"][-1])
+        self.assertNotIn("acceptance_seconds", record)
+
     def setUp(self):
         temporary = tempfile.TemporaryDirectory(prefix="completion test ")
         self.addCleanup(temporary.cleanup)

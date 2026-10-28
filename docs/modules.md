@@ -15,6 +15,8 @@ For responsibilities inside the game and test modules, use the
 [Java package map](architecture.md). It distinguishes game rules, player state,
 AI decisions, UI, persistence and the existing cross-layer exceptions.
 
+The optional `ux-playtesting` Maven profile adds [microcol-ux-test](../microcol-ux-test/pom.xml). It owns the isolated Codex desktop player, its tooling checks and Docker lifecycle. It produces independent evidence in `microcol-ux-test/runs/`, outside Maven clean and ordinary regression. It has no game-model or TestFX dependency. See [UX playtesting](ux-playtesting.md).
+
 ## Module overview
 
 `<version>` in filenames means the Maven project version, currently

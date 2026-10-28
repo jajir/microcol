@@ -1189,3 +1189,8 @@ odpovědnost prezentačních utilit a poskytování obrázků, bez nové modelov
 AI závislosti. [Vizuální pravidlo](graphics.md#jednotna-papirova-tlacitka-2026-10-27)
 a [evidence](functional-tests.md#r-0316-shared-paper-buttons-and-action-icons-2026-10-27)
 jsou autoritativní pro vzhled a přijetí.
+
+## Průzkumný hráč mimo herní vrstvy
+
+1. [microcol-ux-test](../microcol-ux-test/pom.xml) je samostatné vývojové nářadí podle [R-0334](requirements/done/R-0334.md). Ovládá skutečnou obrazovku přes X11 a nevolá herní model, AI ani testovací page objects. Nemění odpovědnosti Java balíčků.
+2. [Provoz a evidence](ux-playtesting.md) rozlišují technické ověření nástroje, hráčská pozorování AI a běžnou regresní přejímku.
