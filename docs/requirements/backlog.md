@@ -824,6 +824,13 @@ remain owned by their current requirements; acceptance is recorded in the
    [test evidence](../functional-tests.md#r-0327-clean-status-line-2026-10-27) records
    the results. Remote regression and publication remain independently verified.
 
+## Coast join analysis (2026-10-28)
+
+1. [R-0330](R-0330.md), primary area A03 with A05/A04 dependencies, records
+   the cause of short dark coast seams and a preview using the actual atlas.
+   Status: `new`; gameplay implementation has not been selected.
+   [Comparison and proposed scope](../graphics.md#pobrezni-spoje-2026-10-28).
+
 ## Help background (2026-10-28)
 
 1. [R-0328](done/R-0328.md), primary area A03 with A01 frame ownership, matches

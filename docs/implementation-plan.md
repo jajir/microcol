@@ -35,6 +35,10 @@ proto do dílčího zadání vždy patří konkrétní UC a jeho kategorie.
 
 ## Aktuální zadávání práce — 2026-10-14
 
+Analýza z 28. října 2026: [R-0330](requirements/R-0330.md) vysvětluje kolmé
+čárky na spojích pobřeží a ukazuje návrh jejich odstranění. Status `new`;
+implementace zatím není vybraná.
+
 Všech čtyřicet původních R prošlo [migrací](requirements/migration-2026-10-14.md).
 Pro další výběr používej [nový katalog](requirements/backlog.md); staré odkazy
 v balících zůstávají dohledatelnou historií a vedou na nové vlastníky zbylého

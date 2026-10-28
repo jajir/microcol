@@ -949,3 +949,28 @@ documentation in APT just to make it visible on the web.
    were not run for this implementation. The earlier documentation-only pass
    remains evidence for the proposal only. No new game screenshot, runtime visual
    acceptance, remote CI result or published distribution is claimed.
+
+## R-0330 coast join analysis — 2026-10-28
+
+1. [R-0330](requirements/R-0330.md) is an investigation and static preview on
+   `3e5d70ae15a9df20d28d8513e0201115088d93b5`. No executable source, runtime
+   asset, fixture or configuration was changed. The four proposed contour edits
+   exist only in the temporary export and documentation comparison.
+2. Re-exporting the original SVG at 648 × 432 produced **zero different pixels**
+   against the committed runtime atlas. Removing the four initial edge segments
+   changed **44 atlas pixels**, including unused gutters, and **16 pixels inside
+   runtime crops**, all within cells `(8,1)`, `(9,1)`, `(8,2)` and `(9,2)`.
+   Every other runtime crop is pixel-identical. Assertions and counts are saved
+   in `target/r0330/preview-check.json`; source/export reproductions are alongside it.
+3. Visual review checked the [comparison](graphics-assets/coast-joins-2026-10-28/comparison.png)
+   with and without the grid. It reproduces atlas cropping, 180° rotation and
+   the grass tint; it is not a JavaFX screenshot or gameplay acceptance.
+   An initial self-check incorrectly treated atlas gutters as runtime tiles;
+   the corrected check distinguishes both and retains the complete changed-pixel
+   counts. No product source was changed to make that check pass.
+4. All **9 documentation consistency tests passed**, with zero failures, errors
+   or skips; **strict MkDocs passed**. Logs are retained in
+   `target/r0330/docs-tests.log` and `target/r0330/mkdocs.log`. Model/JUnit,
+   Docker/Xvfb UI and smoke were not run for this documentation-only change;
+   future runtime implementation still needs those phases. Remote CI and
+   publication were not inspected.

@@ -1081,6 +1081,39 @@ Všechny buňky dostanou souřadnicový klíč, i prázdné nebo pracovní. Dost
 
 ## Hlavní atlas background
 
+### Pobřežní spoje — 2026-10-28
+
+1. [R-0330](requirements/R-0330.md) zachycuje analýzu krátkých tmavých čárek
+   označených uživatelem na pobřeží. Jde o **návrh**, runtime se nemění.
+2. Příčinou jsou v `background.svg` obrysové křivky buněk `(8,1)`, `(9,1)`,
+   `(8,2)` a `(9,2)`: před vlastní pobřežní křivkou mají svislý úsek délky
+   `1.322919` SVG jednotek, přibližně **4,5 logického pixelu**, přesně na
+   pravém okraji výřezu. Část tahu zasahuje dovnitř 45px dlaždice.
+   `AbstractCoastImageLoader` dílky otáčí a zrcadlí, takže se čárka objevuje
+   i vodorovně. `TerrainBoundaryImages` přebarvuje masku podle sousední
+   pevniny, ale tah zachová. `PaintService` kreslí tuto masku na moře.
+3. Mřížka v `GamePaintService.paintGrid` je samostatný přerušovaný tah šířky
+   1 px. Není zdrojem čárky; společná poloha ji pouze zvýrazňuje.
+   Stejný typ nadbytečných úseků již odstranil
+   [R-0268](requirements/done/R-0268.md) v rodině hidden. V grass/ice zůstal.
+4. Nejmenší návrh odstraní počáteční kolmý úsek ve čtyřech otevřených
+   obrysech a znovu exportuje atlas. Výplně, vlastní pobřežní křivky,
+   tloušťka kontury a mřížka zůstanou stejné. Sdílené náhledy převezmou
+   opravené dílky; při implementaci je třeba ověřit rotace, skládání a
+   zachování ostatních výřezů. Nejde o změnu herních pravidel.
+5. Srovnání níže používá skutečné 45px výřezy současného a dočasně upraveného
+   atlasu, otočené o 180°, přebarvené jako travnaté pobřeží a zvětšené 4×.
+   Mřížka přebírá barvu, tah, přerušení a drobné prohnutí z rendereru.
+   Jde o sestavenou ukázku, **nikoli screenshot spuštěné hry** nebo retuš
+   uživatelova obrázku. Spodní dvojice ukazuje příčinu bez mřížky.
+   [Statická kontrola a omezení](publishing.md#r-0330-coast-join-analysis-2026-10-28).
+
+![Současné pobřežní spoje vlevo a návrh bez kolmých tahů vpravo](graphics-assets/coast-joins-2026-10-28/comparison.png)
+
+[Vektorový zdroj srovnání](graphics-assets/coast-joins-2026-10-28/comparison.svg).
+
+### Přehled výřezů
+
 Náhled ukazuje **skutečné runtime výřezy**, nikoli celou SVG stránku. Každá buňka je pro čitelnost zvětšená 2×; šachovnice znázorňuje průhlednost a není součástí herního obrázku.
 
 ![Výřezy hlavního atlasu se souřadnicemi](graphics-assets/background-grid.png)
