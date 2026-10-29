@@ -26,6 +26,25 @@ keeps the current game download unchanged.
    smoke and tooling tests are not required or rerun. Remote CI and publication
    are not requested.
 
+## R-0337 game-view bar proposal — 2026-10-29
+
+1. [R-0337](requirements/R-0337.md) records the requested terminology and fixed
+   toolbar-height proposal, based on source inspection at `9bbd2c42` and the
+   user's Congress/Europe screenshots. The [UX proposal](ux.md#herni-pohledy-a-vyska-list-navrh-2026-10-29)
+   distinguishes the existing 72 px minimum from proposed fixed dimensions and
+   explains narrow windows, long messages and display scaling. Status remains `new`.
+2. Scope is documentation only: requirement, shared UX guidance, the related
+   design requirement and backlog links. No Java, CSS, assets, fixtures, scripts
+   or build configuration change. Game implementation and runtime acceptance
+   remain future work.
+3. Nine documentation consistency tests passed with zero failures/errors/skips.
+   The initial strict build failed while draft cross-references were incomplete;
+   corrected links passed the strict MkDocs build (3.82 s). Rendered HTML review
+   checked the `new` status, four ordered chapters and UX/evidence anchors after
+   correcting the inspection path to the configured `.html` output. Model/JUnit,
+   UI, smoke and tooling tests do not apply to this documentation-only change.
+   Remote CI and publication verification were not requested.
+
 ## Editing workflow
 
 1. Update the relevant page in `docs/` alongside the implementation or configuration
