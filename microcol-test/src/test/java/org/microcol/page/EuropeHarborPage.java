@@ -244,6 +244,24 @@ public final class EuropeHarborPage extends AbstractScreen {
                         .equals(Integer.toString(expected.getAmount()))));
     }
 
+    public void verifyImmigrationAppearance() {
+        getRobot().interact(() -> {
+            final Label progress = getNodeFinder()
+                    .lookup("#immigration-progress").queryAs(Label.class);
+            assertTrue(progress.isVisible());
+            assertFalse(progress.getText().isBlank());
+            assertEquals(Color.web("#27271f"), progress.getTextFill());
+            assertTrue(progress.getBackground().getFills().stream().allMatch(
+                    fill -> Color.TRANSPARENT.equals(fill.getFill())));
+            final ScrollPane page = getNodeFinder().lookup(".screen-scroll")
+                    .queryAs(ScrollPane.class);
+            final Node viewport = page.lookup(".viewport");
+            assertTrue(viewport.localToScene(viewport.getBoundsInLocal())
+                    .contains(progress
+                            .localToScene(progress.getBoundsInLocal())));
+        });
+    }
+
     public void verifyLayoutAndNativeImages() {
         getRobot().interact(() -> {
             final Region scene = getNodeFinder().lookup("#europe-harbor-scene")

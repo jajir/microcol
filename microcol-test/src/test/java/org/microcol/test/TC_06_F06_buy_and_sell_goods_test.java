@@ -48,8 +48,9 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         harbor.resize(1280, 900);
         harbor.verifyGroups(0);
         harbor.verifyHorizontalScrollbars(false);
+        harbor.verifyImmigrationAppearance();
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0337-harbor-empty.png");
+                .saveEvidence("r0343-harbor-empty.png");
 
         // verify that there are 100000 gold.
         europePort.verifyGold(100000);

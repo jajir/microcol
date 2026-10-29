@@ -1,0 +1,24 @@
+{
+  "requirement": "R-0343",
+  "created": "2026-10-29",
+  "tool": "Built-in ImageGen",
+  "output": "../main/resources/images/europe-harbor.png",
+  "dimensions": [
+    1586,
+    992
+  ],
+  "references": [
+    {
+      "role": "Composition and contours",
+      "path": "../main/resources/images/europe-harbor.png",
+      "revision": "67ac93f9"
+    },
+    {
+      "role": "User-approved palette 7",
+      "path": "../../../docs/graphics-assets/harbor-palettes-2026-10-29/harbor-07.png",
+      "note": "User reattached selected design as harbor-07-1 (dragged).tiff; converted to RGB PNG for the editing reference."
+    }
+  ],
+  "prompt": "Use case: precise-object-edit, color-only production game background. Input 1 is the existing ACTUAL RUNTIME BACKGROUND to edit, with no UI: europe-harbor.png. Input 2 is the user-approved warm harbor palette concept, for COLOUR REFERENCE ONLY. Recolour input 1 to match the harbor illustration in input 2. Output ONLY the complete background illustration from input 1, NOT the screenshot from input 2. Preserve input 1 exact framing/aspect ratio, every existing contour and object position, black hand-drawn pen lines, sparse waves, horizon, birds, town in lower right, bollards, pier, quay and stone front. The stone front begins at exactly 82.5% of image height and extends to bottom; keep its geometry. Horizon remains at approximately 20.5% image height. The sky must be empty except existing birds; sea must be empty except existing waves and distant shore, town unchanged. Apply selected warm palette: muted map-like green-blue sea near #549B96 (not vivid cyan), pale gray-sage sky near #CEDBD1, warm limestone quay near #B5A58A, olive town vegetation near #ADBD79, warm cream building walls near #E0D4B5, slate-olive roofs near #7B8272 with a few muted clay roofs near #AE805E. Match the overall colours of input 2 closely. Flat 2D hand-drawn game art with even matte colour fields; no new detail, no shading or highlights, no lighting effects or new materials. ABSOLUTELY NO TEXT, LABELS, NUMBERS, WHITE/CREAM UI RECTANGLES, PROGRESS BARS, CARGO CRATES, GOODS ICONS, BUTTONS, WINDOW FRAME, SHIPS OR PEOPLE. Those belong to the live UI and must not be painted into this background. Preserve the whole background edge to edge; no borders or margins. Return a single clean recoloured runtime illustration.",
+  "note": "Only the runtime background illustration is replaced. Shared goods, unit sprites, crates, bars and controls retain their existing assets and colors."
+}

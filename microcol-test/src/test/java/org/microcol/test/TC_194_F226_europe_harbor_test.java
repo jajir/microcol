@@ -33,6 +33,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.resize(1280, 900);
         harbor.verifyGroups(43);
         harbor.verifyHorizontalScrollbars(true);
+        harbor.verifyImmigrationAppearance();
         harbor.verifyLayoutAndNativeImages();
         harbor.verifyScrollPositions(0, 0, 0, 0);
 
@@ -72,7 +73,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyLastItemVisible("pier");
         harbor.verifyScrollPositions(1, 1, 1, 1);
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0337-harbor-full.png");
+                .saveEvidence("r0343-harbor-full.png");
 
         // Resizing keeps cargo, all prices and the original image size usable.
         harbor.resize(1000, 760);
@@ -84,7 +85,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifySelectedCargo(3142, 0, Goods.of(GoodsType.ORE, 43));
         port.verifyAvailableHoldCount(4);
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0337-harbor-small.png");
+                .saveEvidence("r0343-harbor-small.png");
         port.close();
         new InGameLayoutPage(getContext()).verifyMapReturned();
     }
@@ -102,6 +103,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.resize(1280, 900);
         harbor.verifyGroups(43);
         harbor.verifyHorizontalScrollbars(true);
+        harbor.verifyImmigrationAppearance();
         harbor.verifyLayoutAndNativeImages();
         harbor.dragGroupToEnd("dock");
         harbor.selectShip(3142, false);
@@ -110,6 +112,6 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.showGoods();
         harbor.verifyAllGoodsVisible();
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0337-harbor-czech.png");
+                .saveEvidence("r0343-harbor-czech.png");
     }
 }

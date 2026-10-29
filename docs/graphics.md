@@ -1,5 +1,12 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Teplý přístav — vybraná paleta 7, 29. října 2026
+
+1. Uživatel vybral sedmý návrh „Teplý přístav“. [R-0343](requirements/done/R-0343.md) nahrazuje pouze `images/europe-harbor.png`: tlumená zelenomodrá voda, světlé šedozelené nebe, teplý kámen, olivová zeleň a několik cihlových střech. Rozměr 1586 × 992 a rozdělení čela mola na 82,5 % výšky zůstávají stejné.
+2. Ukazatel přistěhovalectví má průhledné pozadí a dosavadní tmavý text `#27271f` přímo na nebi. Lodě, lidé, nákladové bedny, zboží i společné lišty a ovládání používají dosavadní grafiku a barvy. Hlavní mapa se nemění.
+3. Samostatnou ilustraci upravil vestavěný ImageGen podle vybraného návrhu; [přesné zadání a původ](../microcol-game/src/graphics/europe-harbor-palette-07.json) jsou součástí zdrojů. Pozadí neobsahuje UI ani herní data. Stav přejímky a skutečné snímky patří do [funkční evidence](functional-tests.md#r-0343-warm-harbor-2026-10-29); historické návrhy níže zůstávají referencí.
+4. Skutečné Docker/Xvfb snímky: [český přístav](graphics-assets/harbor-palette-07-2026-10-29/r0343-harbor-czech.png), [anglický přístav s konci seznamů](graphics-assets/harbor-palette-07-2026-10-29/r0343-harbor-full.png), [prázdný přístav](graphics-assets/harbor-palette-07-2026-10-29/r0343-harbor-empty.png), [menší okno posunuté k nákladu](graphics-assets/harbor-palette-07-2026-10-29/r0343-harbor-small.png) a [víceřádkové oznámení přistěhovalce](graphics-assets/harbor-palette-07-2026-10-29/immigration-pending-english.png). Běžný i delší text zůstává čitelný na světlém nebi; zboží a ovládání zachovávají původní barvy.
+
 ## Barevné varianty přístavu podle hlavní mapy — 29. října 2026
 
 1. [R-0340](requirements/done/R-0340.md) dodává sedm **návrhů**, nikoli novou implementaci. Vycházejí z uživatelem přiloženého přístavu a hlavní mapy: sytá azurová přechází k tlumené zelenomodré, město a molo k olivovým a teplým šedým odstínům. Rozložení a ruční 2D kresba zůstávají výchozí.

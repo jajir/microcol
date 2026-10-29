@@ -20,6 +20,8 @@
 2. [R-0336](requirements/done/R-0336.md) navazuje plochými bednami a průhledným výběrem; UC-026 (odhození) a UC-028 (obrat) používají nabídku konkrétní plující lodi. TC194 ověřuje její otevření myší/klávesnicí a Escape, TC44 obrat včetně zrušení a zastaralého stavu, TC107 odhození, TC154 omezení uzavřené Evropy.
 3. TC194/F226 přidává přejímku zaplněných seznamů, nezávislého posouvání, konkrétní lodi/nákladu a malého okna; TC06 ověřuje i prázdné skupiny. Doplňující regrese a skutečné výsledky jsou v [evidenci](functional-tests.md#r-0335-europe-harbor-2026-10-28).
 
+4. [R-0343](requirements/done/R-0343.md) mění pouze paletu přístavní ilustrace a odstraňuje podklad přistěhovaleckého textu. TC194 a TC06 kontrolují průhledný, viditelný údaj nad nebeskou částí; TC47 zachovává kontroly aktuálních hodnot a čekajícího přistěhovalce v češtině i angličtině. TC192 doplňuje rozložení a návrat na mapu. [Skutečné výsledky](functional-tests.md#r-0343-warm-harbor-2026-10-29) neznamenají změnu přistěhovaleckých ani obchodních pravidel.
+
 ## UC-114/119: spodní řádek Čistá linka — 2026-10-27
 
 1. [R-0327](requirements/done/R-0327.md) mění společný informační panel: kontext

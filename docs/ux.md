@@ -15,6 +15,8 @@
 5. Příkazy plující lodi se otevírají pravým tlačítkem nebo klávesou nabídky / Shift+F10; tooltip tuto cestu vysvětluje. Otevření vybere správnou loď. Escape zavře nabídku beze změny, potvrzení či zrušení operace zůstává v původním dialogu. Velká tlačítka pod plavbami se nezobrazují.
 6. [R-0335](requirements/done/R-0335.md) vlastní původní implementaci, [R-0336](requirements/done/R-0336.md) její následné vizuální upřesnění a nabídku příkazů. Zde je zaznamenaná přijatá specifikace; nejde o novou studii ani pozorování skutečného hráče.
 
+7. [R-0343](requirements/done/R-0343.md) přebírá uživatelem vybranou teplou paletu 7. Přistěhovalecký údaj je přímo na nebi bez světlého pásu; aktuální kříže, práh a případná čekající volba zůstávají čitelné v obou jazycích. Jde o vizuální úpravu existující cesty, bez nové akce či potvrzování. Skutečné kontroly jsou oddělené v [evidenci](functional-tests.md#r-0343-warm-harbor-2026-10-29).
+
 ## Kongres v hlavním okně — 28. října 2026
 
 1. [R-0332](requirements/done/R-0332.md) přesouvá zvolené Karty do celé herní plochy

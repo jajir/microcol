@@ -921,3 +921,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Harbor palette proposals — 2026-10-29
 
 1. [R-0340](done/R-0340.md), primary area A03, provides seven illustration-only palette alternatives matching the main map while preserving shared UI and goods colours. Status: done for proposal delivery; it does not authorize runtime implementation.
+
+## Selected warm harbor palette — 2026-10-29
+
+1. [R-0343](done/R-0343.md), primary area A03 with A06, implements the user's subsequent selection of palette 7 and removes the immigration label's cream background. Status: done; local acceptance is recorded in [the functional evidence](../functional-tests.md#r-0343-warm-harbor-2026-10-29).
