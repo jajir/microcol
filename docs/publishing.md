@@ -28,7 +28,7 @@ keeps the current game download unchanged.
 
 ## R-0337 game-view bar proposal — 2026-10-29
 
-1. [R-0337](requirements/R-0337.md) records the requested terminology and fixed
+1. [R-0337](requirements/done/R-0337.md) records the requested terminology and fixed
    toolbar-height proposal, based on source inspection at `9bbd2c42` and the
    user's Congress/Europe screenshots. The [UX proposal](ux.md#herni-pohledy-a-vyska-list-navrh-2026-10-29)
    distinguishes the existing 72 px minimum from proposed fixed dimensions and
@@ -1086,7 +1086,8 @@ documentation in APT just to make it visible on the web.
 
 ## R-0341 game heading proposal — 2026-10-29
 
-1. [R-0341](requirements/R-0341.md) captures the request for shared left-hand game headings and the map title `mappa mundi`. The conversation preview uses Playpen Sans regular at 28 px, a 72-pixel top bar and 16-pixel side insets, retaining the existing map and toolbar artwork. These are proposal values, not a claim of implemented JavaFX behavior.
+1. [R-0341](requirements/done/R-0341.md) captures the request for shared left-hand game headings and the map title `mappa mundi`. The conversation preview uses Playpen Sans regular at 28 px, a 72-pixel top bar and 16-pixel side insets, retaining the existing map and toolbar artwork. These are proposal values, not a claim of implemented JavaFX behavior.
 2. The standalone preview was inspected in headless Chromium at content widths 328, 1068 and 1528 pixels. The heading explanation appeared on hover and keyboard focus and restored the ordinary status message on pointer exit. Checks observed a 72-pixel header, matching 16-pixel insets, the loaded embedded font and no outer horizontal overflow or script errors; the wide layout retained button labels and narrower layouts used icons. The optional title-size control changes only the preview.
 3. The fragment remains in this conversation as `mappa-mundi.html`; it is under the 1 MB inline limit and embeds its image/font resources. The repository change contains requirement, UX, backlog and evidence Markdown only. Source base is `0dab5d82`; game code, assets and behavior are unchanged.
 4. Diff checks and the strict MkDocs build passed. No game tests were run for this documentation-only proposal. Remote CI, Pages deployment and distributions were not inspected; preview inspection is not game acceptance or a player study.
+5. The subsequent approved implementation uses the exact spelling **Mappa Mundi** and incorporates the shared content-width limit from R-0342. Its actual JavaFX screenshots and local acceptance are recorded in [functional evidence](functional-tests.md#r-0341-shared-game-headings-2026-10-29); the preceding items remain the history of the earlier preview.

@@ -13,10 +13,7 @@
     -fx-padding: 24;
     -fx-spacing: 20;
 }
-.in-game-page .screen-title {
-    -fx-font-size: 14;
-    -fx-text-fill: #292824;
-}
+
 .in-game-page .report-content {
     -fx-padding: 24;
     -fx-background-color: #FFF9EC;

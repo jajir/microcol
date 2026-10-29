@@ -15,7 +15,7 @@ import javafx.scene.layout.VBox;
 public final class InGamePage implements JavaFxComponent, UpdatableLanguage {
     private final BorderPane root = new BorderPane();
     private final VBox body = new VBox(20);
-    private final Label title = new Label();
+    private final GameScreenHeader header = new GameScreenHeader();
     private final StatusBar statusBar;
     private final I18n i18n;
 
@@ -27,12 +27,8 @@ public final class InGamePage implements JavaFxComponent, UpdatableLanguage {
         root.getStyleClass().add("in-game-page");
         root.getStylesheets().add(InGamePage.class
                 .getResource("/gui/InGamePage.css").toExternalForm());
-        title.getStyleClass().add("screen-title");
-        title.setWrapText(true);
-        title.setVisible(false);
-        title.setManaged(false);
         body.getStyleClass().add("screen-body");
-        body.getChildren().add(title);
+        root.setTop(header);
         final ScrollPane scroll = new ScrollPane(body);
         scroll.getStyleClass().add("screen-scroll");
         scroll.setFitToWidth(true);
@@ -42,18 +38,19 @@ public final class InGamePage implements JavaFxComponent, UpdatableLanguage {
     }
 
     public void setToolbar(final Node toolbar) {
-        toolbar.getStyleClass().add("screen-toolbar");
-        root.setTop(toolbar);
+        header.setActions(toolbar);
     }
 
     public void setContent(final Region content) {
-        body.getChildren().setAll(title, content);
+        body.getChildren().setAll(content);
+    }
+
+    public void setTitle(final Label title) {
+        header.setTitle(title);
     }
 
     public void setTitle(final String text) {
-        title.setText(text);
-        title.setVisible(true);
-        title.setManaged(true);
+        header.getTitle().setText(text);
     }
 
     public void setStatusSource(final Source source) {

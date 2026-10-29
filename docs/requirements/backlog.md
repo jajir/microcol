@@ -1,15 +1,15 @@
 # Current requirement backlog
 
-Captured on 2026-10-29: [R-0341 — shared game headings and mappa mundi](R-0341.md),
-primary area A03. The interactive map proposal shows a 28-pixel Playpen Sans heading
-on the left and its Latin explanation in the bottom status bar. Status: `new`;
-runtime implementation has not started.
+Accepted locally on 2026-10-29: [R-0341 — shared game headings and Mappa Mundi](done/R-0341.md),
+primary area A03. Shared 28-pixel headings, right-aligned original controls and localized map help are implemented,
+including the authorized R-0342 width integration. Status: `done`. Model/JUnit **4,783**, targeted UI/support **52**
+and fixed smoke/support **21** passed with zero failures, errors or skips.
+[Evidence](../functional-tests.md#r-0341-shared-game-headings-2026-10-29). Remote publication is not verified.
 
-Selected on 2026-10-29: [R-0337 — fixed top toolbar and shared bar styling](R-0337.md),
-primary area A03. The top height follows the supplied map screenshot (72 logical pixels);
-bottom heights remain independent and both bars use 16-pixel side padding defined in the shared stylesheet. Status: `ready for development`; implementation
-is prepared, but the user explicitly requested a push without tests. No local acceptance
-is claimed. [Evidence](../functional-tests.md#r-0337-shared-game-bars-2026-10-29).
+Accepted locally on 2026-10-29: [R-0337 — fixed top toolbar and shared bar styling](done/R-0337.md),
+primary area A03. The 72-pixel header, independent footer and shared 16-pixel minimum side padding are covered
+by the combined R-0341 acceptance above. Status: `done`. The earlier user-requested publication without tests
+remains recorded in [historical evidence](../functional-tests.md#r-0337-shared-game-bars-2026-10-29).
 
 Accepted locally on 2026-10-28: [R-0334 — isolated Codex UX playtesting](done/R-0334.md), A03. The independent experienced player completed 40 verified turns with screenshots and notes; tooling, model/JUnit, live desktop and fixed smoke gates passed. See [results and limits](../ux-playtesting.md).
 
@@ -925,3 +925,8 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Selected warm harbor palette — 2026-10-29
 
 1. [R-0343](done/R-0343.md), primary area A03 with A06, implements the user's subsequent selection of palette 7 and removes the immigration label's cream background. Status: done; local acceptance is recorded in [the functional evidence](../functional-tests.md#r-0343-warm-harbor-2026-10-29).
+
+## Centered game-view bar contents — 2026-10-29
+
+1. [R-0342](done/R-0342.md), primary area A03, applies the user-selected maximum width of 1440 logical pixels to both bars, with full-width backgrounds and map.
+2. Status: done. Implementation and local acceptance are complete; [evidence](../functional-tests.md#r-0342-bar-content-width-2026-10-29).

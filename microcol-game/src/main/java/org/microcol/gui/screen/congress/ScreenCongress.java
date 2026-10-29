@@ -129,9 +129,8 @@ public final class ScreenCongress implements GameScreen {
         final Label heading = new Label();
         heading.setId("congressHeading");
         heading.setGraphic(ButtonIcon.CONGRESS.createView());
-        final Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        final HBox actions = new HBox(12, heading, spacer, close);
+        page.setTitle(heading);
+        final HBox actions = new HBox(close);
         actions.setId("congressActions");
         page.getContent().addEventFilter(
                 javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {

@@ -207,7 +207,7 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractMicroColTest {
         final org.microcol.page.ContextMenuPage menu = new org.microcol.page.ContextMenuPage(
                 getContext());
         menu.hoverItem("#unitContextTitle");
-        menu.verifyCompactUnitMenu("Galleon", 44);
+        menu.verifyCompactUnitMenu("Galleon", 4);
         menu.verifyShortcut("#move", "M");
         menu.verifyShortcut("#waitUnit", "Tab");
         menu.verifyShortcut("#skipUnitTurn", "Space");
@@ -270,7 +270,7 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractMicroColTest {
         final org.microcol.page.ContextMenuPage menu = new org.microcol.page.ContextMenuPage(
                 getContext());
         menu.hoverItem("#unitContextTitle");
-        menu.verifyCompactUnitMenu("galeona", 44);
+        menu.verifyCompactUnitMenu("galeona", 4);
         menu.verifyShortcut("#move", "M");
         menu.verifyShortcut("#skipUnitTurn", "Mezerník");
         menu.hoverItem("#waitUnit");

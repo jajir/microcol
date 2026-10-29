@@ -73,7 +73,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         mainPanel.getChildren().add(colonyStructures.getContent());
         mainPanel.getChildren().add(colonyFields.getContent());
         mainPanel.getChildren().add(panelDock.getContent());
-        mainPanel.getChildren().add(panelColonyName.getContent());
+
         mainPanel.getStylesheets().add(MainStageBuilder.STYLE_SHEET_MICROCOL);
     }
 

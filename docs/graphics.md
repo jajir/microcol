@@ -1,5 +1,10 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Nadpisy herních pohledů, 29. října 2026
+
+1. [R-0341](requirements/done/R-0341.md) používá společný Playpen Sans Regular 28 v levé části horní lišty, existující tlačítka zarovnává doprava a ponechává jejich vzhled. Horní výška 72, boční odsazení 16 a společný limit obsahu 1 440 logických pixelů mají jediného vlastníka v `GameScreenBars.css`.
+2. Skutečný běh Docker/Xvfb zachycuje [Mappa Mundi s nápovědou](graphics-assets/game-headings-2026-10-29/mappa-mundi.png), [Evropu na širokém okně](graphics-assets/game-headings-2026-10-29/europe-wide.png) a [českou nápovědu na širokém okně](graphics-assets/game-headings-2026-10-29/help-czech-wide.png). Jde o implementaci, nikoli návrhovou vizualizaci. Snímky byly vizuálně zkontrolovány; [evidence přejímky](functional-tests.md#r-0341-shared-game-headings-2026-10-29) rozlišuje výsledky modelu, cíleného UI a smoke.
+
 ## Teplý přístav — vybraná paleta 7, 29. října 2026
 
 1. Uživatel vybral sedmý návrh „Teplý přístav“. [R-0343](requirements/done/R-0343.md) nahrazuje pouze `images/europe-harbor.png`: tlumená zelenomodrá voda, světlé šedozelené nebe, teplý kámen, olivová zeleň a několik cihlových střech. Rozměr 1586 × 992 a rozdělení čela mola na 82,5 % výšky zůstávají stejné.
@@ -24,6 +29,12 @@
 | 7 · Teplý přístav | Mapové moře `#549B96`, teplejší kámen a několik tlumených cihlových střech. | [Celý přístav](graphics-assets/harbor-palettes-2026-10-29/harbor-07.png) |
 
 4. Doporučení autora: varianta 1 pro nejmenší rozdíl proti mapě; varianta 7 pro stejné barevné ukotvení s teplejším charakterem města. Uživatel dosud žádnou variantu nevybral. [Evidence dodání](publishing.md#r-0340-harbor-palette-proposals-2026-10-29) rozlišuje návrhy od ověření hry.
+
+## Široké herní lišty — 29. října 2026
+
+1. [R-0342](requirements/done/R-0342.md) ponechává souvislé krémové pozadí a kreslené hrany přes celé okno, ale omezuje vycentrovaný obsah podle [společného pravidla šířky](ux.md#sirka-obsahu-hernich-list-r-0342). Nevznikají plovoucí panely ani nové obrázky.
+2. Limit i oba styly zůstávají v `GameScreenBars.css`; jednotlivé obrazovky je nepřepisují. Skutečné ověření zachycuje [funkční evidence](functional-tests.md#r-0342-bar-content-width-2026-10-29).
+3. Skutečné snímky z úspěšné cílené přejímky při 2 560 × 900: [Evropa](graphics-assets/game-bar-width-2026-10-29/europe.png) a [česká nápověda](graphics-assets/game-bar-width-2026-10-29/help-czech.png). Nejde o návrhové makety; vnitřní oblast lišt má 1 440 pixelů, pozadí a hlavní obsah pokračují přes celé okno.
 
 ## Společné kreslené posuvníky — 29. října 2026
 

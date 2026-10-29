@@ -441,9 +441,9 @@ public final class ColonizopediaPage extends AbstractScreen {
             final Bounds titleBounds = title
                     .localToScene(title.getLayoutBounds());
             assertEquals(expectedTitle, title.getText());
-            assertTrue(
-                    title.getParent().getStyleClass()
-                            .contains("screen-toolbar"),
+            assertEquals(title,
+                    page.lookup(".screen-toolbar")
+                            .lookup("#" + ScreenColonizopedia.TITLE_ID),
                     "Page title belongs to the top toolbar");
             assertTrue(titleBounds.getMaxY() < searchBounds.getMinY());
             assertTrue(page.lookupAll(".report-content").isEmpty(),
@@ -458,7 +458,7 @@ public final class ColonizopediaPage extends AbstractScreen {
             assertTrue(search.getShape() != null,
                     "Search keeps its hand-drawn contour");
             assertEquals(14, search.getFont().getSize(), 0.01);
-            assertEquals(14, title.getFont().getSize(), 0.01);
+            assertEquals(28, title.getFont().getSize(), 0.01);
             assertTrue(bodyBounds.getMaxX() >= scene.getWidth() - 60,
                     "Article fills available width");
             assertTrue(bodyBounds.getMaxY() >= statusBounds.getMinY() - 60,

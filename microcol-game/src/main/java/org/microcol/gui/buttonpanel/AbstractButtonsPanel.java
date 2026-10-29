@@ -135,10 +135,22 @@ public class AbstractButtonsPanel implements JavaFxComponent {
             final Window window = getButtonPanel().getScene().getWindow();
             if (window instanceof Stage) {
                 final Stage stage = (Stage) window;
+                double frameWidth = 0;
+                for (Node parent = buttonPanel
+                        .getParent(); parent != null; parent = parent
+                                .getParent()) {
+                    if (parent instanceof org.microcol.gui.util.GameScreenHeader) {
+                        final org.microcol.gui.util.GameScreenHeader header = (org.microcol.gui.util.GameScreenHeader) parent;
+                        frameWidth = header.getInsets().getLeft()
+                                + header.getInsets().getRight()
+                                + header.getHeadingWidth();
+                        break;
+                    }
+                }
                 final double borders = Math.max(0, stage.getWidth()
                         - getButtonPanel().getScene().getWidth());
                 stage.setMinWidth(Math.max(stage.getMinWidth(),
-                        Math.ceil(iconWidth + borders)));
+                        Math.ceil(iconWidth + frameWidth + borders)));
                 if (stage.getWidth() < stage.getMinWidth()) {
                     stage.setWidth(stage.getMinWidth());
                 }

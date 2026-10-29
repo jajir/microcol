@@ -43,8 +43,7 @@ public class PanelColonyName implements JavaFxComponent {
         this.i18n = Preconditions.checkNotNull(i18n);
 
         label.setId(COLONY_NAME_ID);
-        label.setMaxWidth(380);
-        label.getStyleClass().add("label-title");
+
         label.setOnMouseEntered(this::onMouseEntered);
         label.setOnMouseExited(this::onMouseExited);
         label.setFocusTraversable(true);

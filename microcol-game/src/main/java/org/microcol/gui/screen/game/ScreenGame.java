@@ -3,6 +3,8 @@ package org.microcol.gui.screen.game;
 import java.util.function.Consumer;
 
 import org.microcol.gui.screen.GameScreen;
+import org.microcol.gui.buttonpanel.Buttons;
+import org.microcol.gui.util.GameScreenHeader;
 import org.microcol.gui.screen.game.components.ButtonsGamePanel;
 import org.microcol.gui.screen.game.components.RightPanel;
 import org.microcol.gui.screen.game.components.StatusBar;
@@ -41,10 +43,12 @@ public class ScreenGame implements GameScreen {
 
     private final StackPane mainPanel;
 
+    private final GameScreenHeader header = new GameScreenHeader();
+
     @Inject
     ScreenGame(final @Named("GamePanel") StatusBar statusBar,
             final RightPanel rightPanel, final ButtonsGamePanel buttonGamePanel,
-            final GamePanelComponent gamePanelComponents) {
+            final GamePanelComponent gamePanelComponents, final I18n i18n) {
         this.statusBar = Preconditions.checkNotNull(statusBar);
         this.rightPanel = Preconditions.checkNotNull(rightPanel);
         this.buttonGamePanel = Preconditions.checkNotNull(buttonGamePanel);
@@ -62,13 +66,18 @@ public class ScreenGame implements GameScreen {
         mainBox = new VBox();
         mainBox.setId("mainPanel");
         // Reserve the toolbar layout; its ink may overlap the map edge.
-        mainBox.paddingProperty().bind(javafx.beans.binding.Bindings
-                .createObjectBinding(() -> new javafx.geometry.Insets(
-                        buttonGamePanel.getButtonPanel().getLayoutY()
-                                + buttonGamePanel.getButtonPanel().getHeight(),
-                        0, 0, 0),
-                        buttonGamePanel.getButtonPanel().layoutYProperty(),
-                        buttonGamePanel.getButtonPanel().heightProperty()));
+        header.setActions(buttonGamePanel.getContent());
+        header.getTitle().setId("mapHeading");
+        header.getTitle().setText("Mappa Mundi");
+        header.getTitle().setFocusTraversable(true);
+        statusBar.bindHint(header.getTitle(),
+                () -> i18n.get(Buttons.mapHeadingExplanation));
+        mainBox.paddingProperty()
+                .bind(javafx.beans.binding.Bindings
+                        .createObjectBinding(
+                                () -> new javafx.geometry.Insets(
+                                        header.getHeight(), 0, 0, 0),
+                                header.heightProperty()));
         mainBox.getChildren().add(hBox);
         mainBox.getChildren().add(statusBar.getContent());
 
@@ -76,7 +85,8 @@ public class ScreenGame implements GameScreen {
         mainPanel.getStyleClass().add("game-screen");
         mainPanel.getStylesheets().add(STYLE_SHEET_GAME_PANEL);
         mainPanel.getChildren().add(mainBox);
-        mainPanel.getChildren().add(buttonGamePanel.getContent());
+        mainPanel.getChildren().add(header);
+        StackPane.setAlignment(header, javafx.geometry.Pos.TOP_CENTER);
     }
 
     /**
@@ -110,7 +120,7 @@ public class ScreenGame implements GameScreen {
     private boolean isToolbarFocused() {
         for (Node node = mainPanel.getScene()
                 .getFocusOwner(); node != null; node = node.getParent()) {
-            if (node == buttonGamePanel.getButtonPanel()) {
+            if (node == header) {
                 return true;
             }
         }

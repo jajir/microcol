@@ -181,7 +181,8 @@ public class TC_21_F15_free_play_screen_navigation_test
         audit.hoverTileDirectly(COLONY);
         game.verifyThatStatusBarContains("New Amsterdam");
         audit.hoverNextTurnDirectly();
-        game.verifyThatStatusBarContains("Next turn");
+        game.verifyThatStatusBarContains(
+                "Finish this turn and start the next one.");
 
         // Returning directly to the same tile must restore its map description.
         audit.hoverTileDirectly(COLONY);
@@ -204,7 +205,8 @@ public class TC_21_F15_free_play_screen_navigation_test
         // Return from a command to the map and open the colony with native
         // mouse input.
         audit.hoverNextTurnDirectly();
-        game.verifyThatStatusBarContains("Next turn");
+        game.verifyThatStatusBarContains(
+                "Finish this turn and start the next one.");
         game.moveMouseAtLocation(COLONY);
         game.verifyThatStatusBarContains("New Amsterdam");
         game.openColonyAt(COLONY, "New Amsterdam").close();

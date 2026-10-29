@@ -39,6 +39,73 @@ public final class GameToolbarPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void focusMapHeadingWithKeyboard() {
+        getRobot().moveTo("#canvas");
+        getRobot().push(KeyCode.O, KeyCode.ESCAPE);
+        getRobot().press(KeyCode.SHIFT).push(KeyCode.TAB)
+                .release(KeyCode.SHIFT);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void leaveMapHeading() {
+        getRobot().interact(
+                () -> getNodeFinder().lookup("#canvas").query().requestFocus());
+        moveOutsideMapHeading();
+    }
+
+    public void moveOutsideMapHeading() {
+        final Bounds title = getLabeledById("mapHeading")
+                .localToScreen(getLabeledById("mapHeading").getLayoutBounds());
+        getRobot().moveTo(title.getMaxX() + 8, title.getCenterY());
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyMapHeading(final boolean focused) {
+        getRobot().interact(() -> {
+            final Labeled heading = getLabeledById("mapHeading");
+            assertEquals("Mappa Mundi", heading.getText());
+            assertEquals(focused, heading.isFocused());
+            verifyHeading(getNodeFinder().lookup(".screen-toolbar")
+                    .queryAs(javafx.scene.layout.Region.class));
+        });
+    }
+
+    public void verifyHeading(final javafx.scene.layout.Region toolbar) {
+        final javafx.scene.control.Label heading = (javafx.scene.control.Label) toolbar
+                .lookup(".screen-title");
+        if (heading.getText().isEmpty()) {
+            assertFalse(heading.isVisible());
+            assertFalse(heading.isManaged());
+            return;
+        }
+        assertTrue(heading.isVisible());
+        assertTrue(heading.isManaged());
+        assertTrue(
+                heading.getWidth() + 1 >= Math.min(heading.prefWidth(-1),
+                        heading.maxWidth(-1)),
+                "The heading retains space for its text");
+        assertEquals("Playpen Sans", heading.getFont().getFamily());
+        assertEquals("Regular", heading.getFont().getStyle());
+        assertEquals(28, heading.getFont().getSize());
+        final Bounds frame = toolbar.localToScene(toolbar.getLayoutBounds());
+        final Bounds title = heading.localToScene(heading.getLayoutBounds());
+        final Node actions = toolbar.lookup(".screen-actions");
+        final Bounds actionBounds = actions
+                .localToScene(actions.getLayoutBounds());
+        final Node content = toolbar.lookup(".game-bar-content");
+        final Bounds inner = content.localToScene(content.getLayoutBounds());
+        assertEquals(inner.getMinX(), title.getMinX(), 1);
+        assertTrue(title.getMaxX() <= actionBounds.getMinX());
+        assertTrue(title.getMinY() >= frame.getMinY());
+        assertTrue(title.getMaxY() <= frame.getMaxY());
+        final double rightmost = toolbar.lookupAll(".button").stream()
+                .filter(node -> node.isVisible() && node.isManaged())
+                .mapToDouble(node -> node.localToScene(node.getLayoutBounds())
+                        .getMaxX())
+                .max().orElse(actionBounds.getMaxX());
+        assertEquals(inner.getMaxX(), rightmost, 1);
+    }
+
     public void activateFocusedButton() {
         getRobot().push(KeyCode.SPACE);
         WaitForAsyncUtils.waitForFxEvents();
@@ -79,10 +146,21 @@ public final class GameToolbarPage extends AbstractScreen {
                     .queryAs(FlowPane.class);
             final List<Node> controls = bar.getChildren().stream()
                     .filter(Node::isManaged).collect(Collectors.toList());
-            return controls.stream()
-                    .mapToDouble(node -> node.getBoundsInParent().getWidth())
-                    .sum() + (controls.size() - 1) * bar.getHgap()
+            final org.microcol.gui.util.GameScreenHeader header = getNodeFinder()
+                    .lookup(".screen-toolbar")
+                    .queryAs(org.microcol.gui.util.GameScreenHeader.class);
+            return header.getHeadingWidth() + header.getInsets().getLeft()
+                    + header.getInsets().getRight()
+                    + controls.stream()
+                            .mapToDouble(
+                                    node -> node.getBoundsInParent().getWidth())
+                            .sum()
+                    + (controls.size() - 1) * bar.getHgap()
                     + bar.getInsets().getLeft() + bar.getInsets().getRight()
+                    + ((javafx.scene.layout.Region) bar.getParent()).getInsets()
+                            .getLeft()
+                    + ((javafx.scene.layout.Region) bar.getParent()).getInsets()
+                            .getRight()
                     + getPrimaryStage().getWidth() - bar.getScene().getWidth();
         }).get();
     }
@@ -118,7 +196,9 @@ public final class GameToolbarPage extends AbstractScreen {
                 assertEquals(
                         iconsOnly ? ContentDisplay.GRAPHIC_ONLY
                                 : ContentDisplay.LEFT,
-                        control.getContentDisplay(), control.getId());
+                        control.getContentDisplay(),
+                        control.getId() + " within " + bar.getWidth()
+                                + " px of toolbar content");
                 assertEquals(control.getText(),
                         control.queryAccessibleAttribute(
                                 AccessibleAttribute.TEXT),

@@ -44,9 +44,36 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         final GameToolbarPage toolbar = new GameToolbarPage(getContext());
         layout.verifyPaperWindowConfiguration(expectedWindowStyle);
-        layout.resize(1200, 900);
+        layout.resize(1500, 900);
         toolbar.verifyControls(false, false);
         final double namedWidth = toolbar.getCurrentRowWindowWidth();
+
+        // The map heading explains its Latin name and restores prior context.
+        toolbar.leaveMapHeading();
+        layout.showContextMessage("Map context before the heading");
+        toolbar.hover("mapHeading");
+        toolbar.verifyMapHeading(false);
+        toolbar.verifyExplanation(
+                "Mappa Mundi is Latin for “map of the world”. Latin was widely used at the time.",
+                null);
+        layout.saveEvidence("r0341-mappa-mundi-hover.png");
+        toolbar.moveOutsideMapHeading();
+        toolbar.verifyExplanation("Map context before the heading", null);
+        toolbar.focusMapHeadingWithKeyboard();
+        toolbar.verifyMapHeading(true);
+        toolbar.activateFocusedButton();
+        toolbar.verifyUnitUnchanged(3, 3, 2);
+        toolbar.verifyExplanation(
+                "Mappa Mundi is Latin for “map of the world”. Latin was widely used at the time.",
+                null);
+        toolbar.hover("mapHeading");
+        toolbar.moveOutsideMapHeading();
+        toolbar.verifyMapHeading(true);
+        toolbar.verifyExplanation(
+                "Mappa Mundi is Latin for “map of the world”. Latin was widely used at the time.",
+                null);
+        toolbar.leaveMapHeading();
+
         // Crossing the measured boundary hides all names together and restores
         // them, with no second row or oscillation on another layout pulse.
         layout.resize(namedWidth - 2, 900);
@@ -70,7 +97,7 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         // Even an extreme resize leaves every icon accessible in one row.
         layout.resize(300, 900);
         toolbar.verifyControls(false, true);
-        layout.resize(1200, 900);
+        layout.resize(1500, 900);
         toolbar.verifyControls(false, false);
         layout.saveEvidence("toolbar-one-row-labels.png");
 
@@ -103,6 +130,12 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         final GameToolbarPage toolbar = new GameToolbarPage(getContext());
         layout.resize(900, 700);
         toolbar.verifyControls(true, true);
+        toolbar.hover("mapHeading");
+        toolbar.verifyMapHeading(false);
+        toolbar.verifyExplanation(
+                "Mappa Mundi je latinsky „mapa světa“. Latina se tehdy běžně používala.",
+                null);
+
         toolbar.verifySeason(null, 0xff71864b);
         toolbar.hover("coloniesMenu");
         toolbar.verifyExplanation("Vyberte kolonii, kterou chcete otevřít. (O)",
@@ -116,8 +149,9 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         toolbar.dismissColonies(false);
         toolbar.verifyColonies(false, true, "Zatím nemáte žádnou kolonii");
         toolbar.verifySeason(null, 0xff71864b);
-        layout.resize(1500, 700);
-        toolbar.verifyControls(true, false);
+        layout.resize(1800, 700);
+        // The shared 1440px content cap keeps the longer Czech actions iconic.
+        toolbar.verifyControls(true, true);
         layout.resize(900, 700);
         toolbar.verifyControls(true, true);
     }

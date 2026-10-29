@@ -1,15 +1,13 @@
 /* Shared owner of in-game toolbar and status-bar appearance. */
 /* Both bars share 16px side insets; vertical spacing stays independent. */
-.game-screen .buttonPanel,
-.in-game-page .screen-toolbar,
-.in-game-page #buttonPane.screen-toolbar {
+.screen-toolbar {
     -fx-padding: 6 16;
 }
 #statusBar {
     -fx-padding: 12 16;
 }
 .buttonPanel {
-    -fx-alignment: center;
+    -fx-alignment: center-right;
 }
 .buttons-panel-container {
     -fx-pref-width: 100000;
@@ -21,9 +19,7 @@
 }
 
 /* The map's existing one-row frame is the height reference. */
-.game-screen .buttonPanel,
-.in-game-page .screen-toolbar,
-.in-game-page #buttonPane.screen-toolbar {
+.screen-toolbar {
     -fx-min-height: 72;
     -fx-pref-height: 72;
     -fx-max-height: 72;
@@ -40,17 +36,17 @@
     -fx-border-image-width: 0 0 6 0;
     -fx-border-image-insets: 0 0 -3 0;
 }
-.game-screen .buttonPanel,
-.in-game-page .screen-toolbar .buttonPanel {
+.screen-toolbar .buttonPanel {
     -fx-hgap: 3;
     -fx-vgap: 4;
 }
-.in-game-page .screen-toolbar,
-.in-game-page .screen-toolbar .buttonPanel {
+.screen-toolbar,
+.screen-toolbar .screen-actions,
+.screen-toolbar .buttonPanel {
     -fx-alignment: center-right;
 }
-.in-game-page .screen-toolbar .buttonPanel,
-.in-game-page .screen-toolbar #buttonPane {
+.screen-toolbar .buttonPanel,
+.screen-toolbar #buttonPane {
     -fx-padding: 0;
 }
 .game-screen #coloniesMenu {
@@ -104,4 +100,45 @@
 #statusBar #labelEra {
     -fx-padding: 0 0 0 16;
     -fx-border-width: 0;
+}
+
+/* Actions grow into the space left by the heading, not their old overlay width. */
+.screen-toolbar .screen-actions {
+    -fx-pref-width: 0;
+}
+
+/* Heading typography and spacing have one owner across all game views. */
+.screen-toolbar > .game-bar-content {
+    -fx-spacing: 16;
+}
+.screen-toolbar .screen-title {
+    -fx-font-family: "Playpen Sans";
+    -fx-font-size: 28;
+    -fx-font-weight: normal;
+    -fx-text-fill: #292824;
+    -fx-max-width: 380;
+    -fx-padding: 0;
+    -fx-alignment: center-left;
+}
+.screen-toolbar .screen-title:focused {
+    -fx-underline: true;
+}
+
+#colonyName:hover, #colonyName:focused {
+    -fx-underline: true;
+}
+
+/* Full-width frames share one centered content limit. */
+.game-bar-content {
+    -fx-min-width: 0;
+    -fx-max-width: 1440;
+}
+.screen-toolbar, #statusBar {
+    -fx-alignment: center;
+}
+.screen-toolbar > .game-bar-content {
+    -fx-alignment: center-right;
+}
+#statusBar > .game-bar-content {
+    -fx-alignment: center-left;
 }

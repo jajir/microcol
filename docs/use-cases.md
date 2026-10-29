@@ -1,5 +1,15 @@
 # Use cases a přejímka pravidel hry
 
+## UC-079/114–119: nadpisy herních pohledů — 2026-10-29
+
+1. [R-0341](requirements/done/R-0341.md) přesouvá existující názvy vlevo do společné horní lišty, zachovává akce vpravo a na mapě přidává **Mappa Mundi**. TC188 ověřuje českou i anglickou nápovědu při najetí myší a zaměření klávesnicí, návrat kontextu a ochranu před nechtěným rozkazem jednotce.
+2. TC192, TC21, TC100 a TC176 kontrolují společný rám a navigaci; TC20 zachovává přejmenování kolonie. TC11 a TC107 nadále ověřují skutečné rozkazy, zrušení a obnovu uložené hry. [Evidence](functional-tests.md#r-0341-shared-game-headings-2026-10-29) odděluje implementaci od výsledků místní přejímky; celý obsah jednotlivých UC tím není automaticky uzavřen.
+
+## UC-114/115/119: společná šířka herních lišt — 2026-10-29
+
+1. [R-0342](requirements/done/R-0342.md) zachovává navigaci a herní stav při společném limitu lišt na širokých i menších oknech. `TC_192_F225_in_game_layout_test.TC_05_wide_bars_keep_shared_limit_and_shrink_back` pokrývá mapu, přehledy, kolonii, Evropu, hranici limitu a návrat na menší okno; `TC_06_czech_wide_readers_and_settings_keep_navigation` přidává české nastavení, Kongres a nápovědu.
+2. Stávající scénáře nadále ověřují skutečné akce a návraty. [Evidence](functional-tests.md#r-0342-bar-content-width-2026-10-29) neuzavírá celé UC pouze na základě geometrie.
+
 ## UC-018/023–025/114/115/119: společné posuvníky — 2026-10-29
 
 1. [R-0338](requirements/done/R-0338.md) sjednocuje oba směry posouvání s kresleným stylem nápovědy a schovává nepotřebné lišty čtyř evropských seznamů. Pravidla, výběr a náklad se nemění.

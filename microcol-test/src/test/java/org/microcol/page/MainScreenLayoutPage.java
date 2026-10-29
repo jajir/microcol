@@ -131,7 +131,7 @@ public final class MainScreenLayoutPage extends AbstractScreen {
                     .lookup(".game-toolbar-control").queryAs(Region.class);
             final BorderImage frame = button.getBorder().getImages().get(0);
             final double width = frame.getWidths().getTop();
-            final String[] selectors = { ".buttonPanel", "#rightPanel",
+            final String[] selectors = { ".screen-toolbar", "#rightPanel",
                     "#statusBar" };
             final BorderWidths[] edges = { new BorderWidths(0, 0, width, 0),
                     new BorderWidths(0, 0, 0, width),
@@ -193,6 +193,8 @@ public final class MainScreenLayoutPage extends AbstractScreen {
         getRobot().interact(() -> {
             final Parent screen = getNodeFinder().lookup(".game-screen")
                     .queryAs(Parent.class);
+            final Node heading = screen.lookup(".screen-title");
+            final java.util.Set<Node> headingChildren = heading.lookupAll("*");
             int checked = 0;
             for (Node child : screen.lookupAll("*")) {
                 final Font font = child instanceof Labeled
@@ -202,7 +204,11 @@ public final class MainScreenLayoutPage extends AbstractScreen {
                 if (font != null && child.isVisible()) {
                     assertEquals("Playpen Sans Regular", font.getName(),
                             child.toString());
-                    assertEquals(14, font.getSize(), 0.01, child.toString());
+                    assertEquals(
+                            child == heading || headingChildren.contains(child)
+                                    ? 28
+                                    : 14,
+                            font.getSize(), 0.01, child.toString());
                     checked++;
                 }
             }
@@ -240,7 +246,9 @@ public final class MainScreenLayoutPage extends AbstractScreen {
     public void verifyLayout(final String expectedMessage) {
         getRobot().interact(() -> {
             final Region toolbar = getNodeFinder()
-                    .lookup(".game-screen .buttonPanel").queryAs(Region.class);
+                    .lookup(".game-screen .screen-toolbar")
+                    .queryAs(Region.class);
+            new GameToolbarPage(getContext()).verifyHeading(toolbar);
             assertEquals(72, toolbar.getHeight(), 0.01,
                     "The map uses the shared fixed toolbar height");
             assertEquals(72, toolbar.getMinHeight());

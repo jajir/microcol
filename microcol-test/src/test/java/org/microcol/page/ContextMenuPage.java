@@ -56,7 +56,7 @@ public final class ContextMenuPage extends AbstractScreen {
     }
 
     public void verifyCompactUnitMenu(final String expectedTitle,
-            final double maximumActionSpacing) throws Exception {
+            final double expectedActionGap) throws Exception {
         WaitForAsyncUtils.waitForAsyncFx(5000, () -> {
             final ContextMenu popup = menu();
             assertEquals(expectedTitle, popup.getItems().get(0).getText());
@@ -84,8 +84,8 @@ public final class ContextMenuPage extends AbstractScreen {
                     .localToScreen(goTo.getBoundsInLocal());
             assertTrue(next.getMinY() >= first.getMaxY(),
                     "Command rows must not overlap");
-            assertTrue(next.getMinY() - first.getMinY() <= maximumActionSpacing,
-                    "Ordinary commands use the selected compact spacing");
+            assertEquals(expectedActionGap, next.getMinY() - first.getMaxY(),
+                    0.01, "Gap includes both menu-item borders and padding");
             return null;
         });
     }
@@ -102,9 +102,23 @@ public final class ContextMenuPage extends AbstractScreen {
     }
 
     public void verifyDrawnSelection(final String selector) throws Exception {
+        final Region selected = (Region) menu().getSkin().getNode()
+                .lookup(selector);
+        if (selected instanceof javafx.scene.control.Button) {
+            final PaperButtonsPage buttons = new PaperButtonsPage(getContext());
+            buttons.verifyPaperButton(selected.getId());
+            buttons.verifyFill(selected.getId(), "#E7E7D0", false);
+            getRobot().interact(() -> {
+                for (final javafx.scene.Node node : selected
+                        .lookupAll(".label")) {
+                    assertEquals(Color.BLACK, ((Label) node).getTextFill(),
+                            "Focused action stays readable in black ink");
+                }
+            });
+            return;
+        }
         WaitForAsyncUtils.waitForAsyncFx(5000, () -> {
-            final Region row = (Region) menu().getSkin().getNode()
-                    .lookup(selector);
+            final Region row = selected;
             assertEquals(Color.web("#dfbd91"),
                     row.getBackground().getFills().get(0).getFill());
             assertEquals(Color.BLACK,
@@ -133,8 +147,7 @@ public final class ContextMenuPage extends AbstractScreen {
             assertEquals(expectedKey, key.getText());
             assertTrue(key.isVisible());
             assertNotNull(key.getShape());
-            final Label caption = (Label) ((javafx.scene.layout.HBox) button
-                    .getGraphic()).getChildren().get(0);
+            final Label caption = (Label) button.lookup(".unit-action-caption");
             assertFalse(caption.getText().contains("("));
             assertTrue(caption.localToScreen(caption.getBoundsInLocal())
                     .getMaxX() < key.localToScreen(key.getBoundsInLocal())

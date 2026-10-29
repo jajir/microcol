@@ -31,8 +31,6 @@ public final class EuropePanel
 
     private final BorderPane mainPanel;
 
-    private final Label labelTitle;
-
     private final Label immigration = new Label();
     private final Label dockTitle = new Label();
     private final Label pierTitle = new Label();
@@ -71,9 +69,6 @@ public final class EuropePanel
         this.panelPortPier = Preconditions.checkNotNull(panelPortPier);
         this.europeDock = Preconditions.checkNotNull(panelDockEurope);
 
-        labelTitle = new Label();
-        labelTitle.getStyleClass().add("label-title");
-
         this.shipsTravelingToEurope = Preconditions
                 .checkNotNull(shipsTravelingToEurope);
         this.shipsTravelingToEurope.setShownShipsTravelingToEurope(true);
@@ -109,7 +104,6 @@ public final class EuropePanel
                 final double height = getHeight();
                 final double half = width / 2;
                 background.getContent().resizeRelocate(0, 0, width, height);
-                labelTitle.resizeRelocate(32, 18, width - 64, 30);
                 immigration.resizeRelocate(32, 54, width - 64,
                         immigration.prefHeight(width - 64));
                 shipsTravelingToEurope.getContent().resizeRelocate(32, 134,
@@ -135,8 +129,8 @@ public final class EuropePanel
         immigration.setId("immigration-progress");
         immigration.setWrapText(true);
         immigration.getStyleClass().add("immigration-progress");
-        scene.getChildren().addAll(background.getContent(), labelTitle,
-                immigration, shipsTravelingToNewWorld.getContent(),
+        scene.getChildren().addAll(background.getContent(), immigration,
+                shipsTravelingToNewWorld.getContent(),
                 shipsTravelingToEurope.getContent(), dockTitle, pierTitle,
                 panelPortPier.getContent(), europeDock.getContent());
         mainPanel.setCenter(scene);
@@ -145,7 +139,6 @@ public final class EuropePanel
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        labelTitle.setText(i18n.get(Europe.title));
         europeButtonsPanel.updateLanguage(i18n);
         shipsTravelingToNewWorld.updateLanguage(i18n);
         shipsTravelingToEurope.updateLanguage(i18n);

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.page.GamePage;
+import org.microcol.page.GameBarWidthPage;
 import org.microcol.page.InGameLayoutPage;
 import org.microcol.page.MainScreenLayoutPage;
 import org.microcol.page.SavedGamesPage;
@@ -205,4 +206,100 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         game.verifyGameInFront();
         page.verifyTurnUnchanged(2, 484);
     }
+
+    @Test
+    @Tag("local")
+    void TC_05_wide_bars_keep_shared_limit_and_shrink_back() throws Exception {
+        // Open the agreed position and exercise both sides of the width limit.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final GameBarWidthPage bars = new GameBarWidthPage(getContext());
+        final InGameLayoutPage page = new InGameLayoutPage(getContext());
+        bars.resizeContent(2560, 900);
+        bars.verifyContents(2560, 1440);
+        bars.resizeContent(1472, 900);
+        bars.verifyContents(1472, 1440);
+        bars.resizeContent(1470, 900);
+        bars.verifyContents(1470, 1438);
+        bars.resizeContent(1000, 900);
+        bars.verifyContents(1000, 968);
+
+        // Reports and work screens retain the same centered frame.
+        page.open("goals");
+        bars.resizeContent(2560, 900);
+        bars.verifyContents(2560, 1440);
+        page.verifyFrame(484, 1600);
+        bars.resizeContent(1000, 900);
+        page.open("closeButtonId");
+        page.open("statistics");
+        bars.resizeContent(2560, 900);
+        bars.verifyContents(2560, 1440);
+        page.verifyFrame(484, 1600);
+        page.saveEvidence("r0340-wide-statistics.png");
+        bars.resizeContent(1000, 900);
+        page.closeWithEscape();
+        game.openColonyWithKeyboard(0, "New Amsterdam");
+        bars.resizeContent(2560, 900);
+        bars.verifyContents(2560, 1440);
+        page.verifyFrame(484, 1600);
+        bars.resizeContent(1000, 900);
+        page.closeWithEscape();
+        game.openEuroperPort();
+        bars.resizeContent(2560, 900);
+        bars.verifyContents(2560, 1440);
+        page.verifyFrame(484, 1600);
+        page.saveEvidence("r0340-wide-europe.png");
+        bars.resizeContent(1000, 900);
+        page.open("closeButtonId");
+        game.openTurnReport();
+        bars.resizeContent(2560, 900);
+        bars.verifyContents(2560, 1440);
+        page.verifyFrame(484, 1600);
+        bars.resizeContent(1000, 900);
+        page.closeWithEscape();
+
+        // Shrinking remains possible after navigating through capped toolbars.
+        bars.resizeContent(1000, 900);
+        bars.verifyContents(1000, 968);
+        page.verifyMapReturned();
+        page.verifyTurnUnchanged(2, 484);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_czech_wide_readers_and_settings_keep_navigation()
+            throws Exception {
+        // Longer Czech labels use the same limit and existing controls.
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        settings.goBack().loadGame();
+        final GameBarWidthPage bars = new GameBarWidthPage(getContext());
+        final InGameLayoutPage page = new InGameLayoutPage(getContext());
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        saves.openMenu();
+        saves.chooseMenu("menuSettings");
+        bars.resizeContent(2560, 900);
+        bars.verifyContents(2560, 1440);
+        page.verifyFrame(484, 1600);
+        bars.resizeContent(1000, 900);
+        page.open("buttonBack");
+        new org.microcol.page.CongressPage(getContext()).open();
+        bars.resizeContent(2560, 900);
+        bars.verifyContents(2560, 1440);
+        page.verifyFrame(484, 1600);
+        bars.resizeContent(1000, 900);
+        page.closeWithEscape();
+        page.open("help");
+        bars.resizeContent(2560, 900);
+        bars.verifyContents(2560, 1440);
+        page.verifyFrame(484, 1600);
+        page.saveEvidence("r0340-wide-help-czech.png");
+        bars.resizeContent(1000, 900);
+        bars.verifyContents(1000, 968);
+        page.verifyFrame(484, 1600);
+        bars.resizeContent(1000, 900);
+        page.closeWithEscape();
+        page.verifyMapReturned();
+        page.verifyTurnUnchanged(2, 484);
+    }
+
 }

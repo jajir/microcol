@@ -8,6 +8,7 @@ import com.google.inject.Inject;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -16,7 +17,7 @@ public final class StatusBarView implements JavaFxComponent {
 
     public static final String STATUS_BAR_LABEL_ID = "statusBarLabel";
 
-    private final HBox statusBar;
+    private final StackPane statusBar;
 
     private final Label statusBarDescription;
 
@@ -51,9 +52,10 @@ public final class StatusBarView implements JavaFxComponent {
         labelGold.setGraphic(goldIcon);
         labelGold.setGraphicTextGap(8);
 
-        statusBar = new HBox();
+        final HBox content = new HBox(pane, labelGold, labelEra);
+        content.getStyleClass().add("game-bar-content");
+        statusBar = new StackPane(content);
         statusBar.setMinHeight(Region.USE_PREF_SIZE);
-        statusBar.getChildren().addAll(pane, labelGold, labelEra);
         statusBar.setId("statusBar");
     }
 

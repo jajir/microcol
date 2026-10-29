@@ -49,7 +49,7 @@ public class EuropePortScreen extends AbstractScreen {
     }
 
     public void verifyEuropePortName(final String expectedNamePart) {
-        final String cssClass = ".label-title";
+        final String cssClass = ".screen-toolbar .screen-title";
         final List<Labeled> list = getListOfNodes(cssClass);
         final Labeled labeled = list.get(0);
         logger.info("Colony name: " + labeled.getText());

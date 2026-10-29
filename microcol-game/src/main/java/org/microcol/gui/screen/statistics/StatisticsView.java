@@ -24,8 +24,9 @@ public final class StatisticsView implements JavaFxComponent, ScreenLifeCycle {
         page.setToolbar(buttons.getContent());
     }
 
-    public void setMenuPanel(final GameScreen panel) {
+    public void setMenuPanel(final StatisticsPanel panel) {
         mainPanel = panel;
+        page.setTitle(panel.getTitle());
         panel.getContent().getStyleClass().add("report-content");
         page.setContent(panel.getContent());
         VBox.setVgrow(panel.getContent(), Priority.ALWAYS);

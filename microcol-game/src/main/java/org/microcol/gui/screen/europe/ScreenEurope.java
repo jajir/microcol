@@ -45,6 +45,7 @@ public class ScreenEurope implements GameScreen, Repaintable {
 
     @Override
     public void updateLanguage(final I18n i18n) {
+        page.setTitle(i18n.get(Europe.title));
         europePanel.updateLanguage(i18n);
         page.updateLanguage(i18n);
     }

@@ -21,11 +21,7 @@
 .statistics-atlas .atlas-tab { -fx-alignment: center-left; }
 .statistics-atlas .atlas-tab:selected { -fx-background-color: #DCC49A; }
 .statistics-atlas .atlas-detail { -fx-pref-width: 640; }
-.statistics-atlas .atlas-report-title {
-    -fx-padding: 0 0 12 0;
-    -fx-border-color: #B8AC92;
-    -fx-border-width: 0 0 1 0;
-}
+
 .statistics-atlas .atlas-history-summary { -fx-text-fill: #526B4C; }
 .statistics-atlas .chart { -fx-padding: 6 0 0 0; }
 .statistics-atlas .chart-plot-background { -fx-background-color: #FFF9EC; }

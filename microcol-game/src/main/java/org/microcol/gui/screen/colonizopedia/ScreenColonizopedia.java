@@ -139,10 +139,8 @@ public final class ScreenColonizopedia implements GameScreen {
             }
         });
         title.setId(TITLE_ID);
-        title.setWrapText(true);
-        final HBox toolbar = new HBox(20, title, buttonBar.getContent());
-        HBox.setHgrow(buttonBar.getContent(), Priority.ALWAYS);
-        page.setToolbar(toolbar);
+        page.setTitle(title);
+        page.setToolbar(buttonBar.getContent());
         page.setContent(root);
         page.getContent().setId("colonizopediaPage");
         page.getContent().getStylesheets().add(ScreenColonizopedia.class

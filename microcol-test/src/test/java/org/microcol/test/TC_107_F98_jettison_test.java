@@ -73,9 +73,9 @@ public class TC_107_F98_jettison_test extends AbstractMicroColTest {
                 getContext());
         // The plain unit heading never becomes a selectable action.
         menu.hoverItem("#unitContextTitle");
-        menu.verifyCompactUnitMenu("Galleon", 44);
+        menu.verifyCompactUnitMenu("Galleon", 4);
         menu.clickUnitHeading();
-        menu.verifyCompactUnitMenu("Galleon", 44);
+        menu.verifyCompactUnitMenu("Galleon", 4);
         jettison.verifySelectedUnit(Optional.of(SHIP));
         menu.hoverItem("#jettisonUnit");
         menu.verifyDrawnSelection("#jettisonUnit");

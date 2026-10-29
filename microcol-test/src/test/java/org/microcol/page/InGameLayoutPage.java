@@ -168,6 +168,7 @@ public final class InGameLayoutPage extends AbstractScreen {
             final Region root = page();
             final Bounds pageBounds = root.localToScene(root.getLayoutBounds());
             final Region toolbar = (Region) root.lookup(".screen-toolbar");
+            new GameToolbarPage(getContext()).verifyHeading(toolbar);
             final Region status = (Region) root.lookup("#statusBar");
             final Node content = root.lookup(".screen-scroll");
             final Bounds top = toolbar.localToScene(toolbar.getLayoutBounds());
@@ -242,9 +243,9 @@ public final class InGameLayoutPage extends AbstractScreen {
             final Label name = (Label) root.lookup("#colonyName");
             assertEquals(expectedName, name.getText());
             final Bounds bounds = name.localToScene(name.getLayoutBounds());
-            final Node scroll = root.lookup(".screen-scroll");
-            final Bounds viewport = scroll
-                    .localToScene(scroll.getLayoutBounds());
+            final Node toolbar = root.lookup(".screen-toolbar");
+            final Bounds viewport = toolbar
+                    .localToScene(toolbar.getLayoutBounds());
             assertTrue(bounds.getMinX() >= viewport.getMinX());
             assertTrue(bounds.getMaxX() <= viewport.getMaxX());
             assertTrue(bounds.getMinY() >= viewport.getMinY());

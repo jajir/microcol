@@ -238,16 +238,12 @@ final class StatisticsPanel implements GameScreen {
         }
 
         reportTitle.setId("atlasReportTitle");
-        reportTitle.getStyleClass().add("atlas-report-title");
-        reportTitle.setWrapText(true);
-        reportTitle.setMaxWidth(Double.MAX_VALUE);
         historySummary.setId("atlasHistorySummary");
         historySummary.getStyleClass().add("atlas-history-summary");
         historySummary.setWrapText(true);
         chartPanel.setId("atlasReportContent");
         chartPanel.setMinWidth(0);
-        final VBox rightPanel = new VBox(16, reportTitle, historySummary,
-                chartPanel);
+        final VBox rightPanel = new VBox(16, historySummary, chartPanel);
         rightPanel.getStyleClass().add("atlas-detail");
         rightPanel.setMinWidth(0);
         HBox.setHgrow(rightPanel, Priority.ALWAYS);
@@ -341,6 +337,10 @@ final class StatisticsPanel implements GameScreen {
             throw new MicroColException(
                     "Unknown user data: " + newValue.getUserData());
         }
+    }
+
+    Label getTitle() {
+        return reportTitle;
     }
 
     private void setTitle(final Stats key) {

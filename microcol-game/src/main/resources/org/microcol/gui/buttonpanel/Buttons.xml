@@ -141,4 +141,5 @@
     <entry key="congressExplanation">Open Congress and choose a Founding Father. (K)</entry>
     <entry key="nextTurnExplanation">Finish this turn and start the next one.</entry>
     <entry key="plowProblemRiver">River squares cannot be plowed.</entry>
+    <entry key="mapHeadingExplanation">Mappa Mundi is Latin for “map of the world”. Latin was widely used at the time.</entry>
 </properties>

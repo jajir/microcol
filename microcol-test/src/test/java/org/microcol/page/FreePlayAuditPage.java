@@ -145,9 +145,8 @@ public final class FreePlayAuditPage extends AbstractScreen {
     }
 
     public void verifyReportScreen(final String expectedTitle) {
-        assertTrue(getListOfNodes(".main-title").stream()
-                .filter(n -> n instanceof Label).map(n -> ((Label) n).getText())
-                .anyMatch(t -> t.contains(expectedTitle)), "Report title");
+        assertEquals(expectedTitle, getNodeFinder().lookup("#atlasReportTitle")
+                .queryAs(Label.class).getText(), "Report title");
         assertTrue(isCssIdVisible("closeButtonId"));
     }
 

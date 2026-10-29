@@ -1,5 +1,12 @@
 # UX a pravidla ovládání MicroCol
 
+## Šířka obsahu herních lišt — R-0342
+
+1. Dohoda z 29. října 2026: horní a dolní lišta mají společnou vycentrovanou vnitřní oblast širokou nejvýše **1 440 logických pixelů**. Pozadí a kreslené vodorovné hrany lišt pokračují přes celé okno; mapa si ponechává celou dostupnou šířku.
+2. Na menších oknech se obsah přizpůsobí dostupné šířce s nejméně 16 logickými pixely na každé straně. Od vnitřní šířky okna 1 472 se obsah již neroztahuje. Text ani tlačítka se nezvětšují a stávající přechod na ikony zůstává zachovaný.
+3. Hráč může okno kdykoli znovu zmenšit. Stejné pravidlo platí na mapě, v kolonii, Evropě, obchodních obrazovkách, přehledech, Kongresu, nápovědě a herním nastavení. Úvodní nabídka a samostatné dialogy nejsou součástí této úpravy.
+4. [R-0342](requirements/done/R-0342.md) vlastní implementaci této dohody; [evidence](functional-tests.md#r-0342-bar-content-width-2026-10-29) odděluje návrhové rozhodnutí od skutečně provedených kontrol.
+
 ## Společné posouvání — R-0338
 
 1. Posuvník se v evropských seznamech lodí a lidí objeví až při přetečení; prázdná i krátká skupina ponechává nadpis a aktivní oblast pro příslušné přetažení. Dlouhé skupiny se stále posouvají nezávisle a změna velikosti okna nesmí skrýt jejich konec.
@@ -1097,13 +1104,14 @@ skutečného hráče; výsledky patří do [funkční evidence](functional-tests
 4. **Spodní lišta je nezávislá:** zachovává minimum 72, odsazení 12 nahoře/dole a 16 po stranách a zalamování nápovědy v `StatusBarView`. Není uzamčená na výšku horní lišty a může růst s dlouhou nápovědou. Vlevo zůstává kontextová zpráva, vpravo zlato a rok.
 5. **Nedostatek šířky:** horní akce mají jednu řadu; společný panel přebírá [existující chování mapy](graphics.md#jednoradkove-horni-menu-2026-10-25), tedy přechod na ikony při nedostatku místa a minimální šířku okna pro ovládací prvky. Přístupný název/nápověda zůstává. Dřívější dvě řady kolonie se slučují, aby ovládání zůstalo uvnitř pevné lišty. Návrat, Escape a dostupnost akcí se nemění.
 6. **Původní širší návrh:** název stránky vlevo, akce vpravo a varianty Úsporný (72/48), Vzdušný (88/64) a Seskupený (80/56) jsou pouze dřívější návrhy. Uživatel nyní vybral menší krok podle snímku; varianty ani nové chování dlouhých nápověd se neimplementují.
-7. [R-0337](requirements/R-0337.md) vede rozsah a další přejímku. [Funkční evidence](functional-tests.md#r-0337-shared-game-bars-2026-10-29) výslovně zaznamenává vynechání testů na žádost uživatele; změna zdrojů není výsledkem hráčské studie ani potvrzením běhu hry.
+7. [R-0337](requirements/done/R-0337.md) je dokončen po společné místní přejímce s R-0341. [Původní evidence](functional-tests.md#r-0337-shared-game-bars-2026-10-29) zachovává vynechání testů na tehdejší žádost uživatele; [následná přejímka](functional-tests.md#r-0341-shared-game-headings-2026-10-29) ověřila společné rozměry, navigaci a úzká i široká okna. Nejde o hráčskou studii ani ověření vzdálené publikace.
 
 ## Nadpisy herních pohledů — návrh 2026-10-29
 
-1. [R-0341](requirements/R-0341.md) zachycuje navazující zadání: název pohledu vlevo, akce vpravo a stejný výrazně větší Playpen Sans pro všechny nadpisy. Pohled bez názvu nepřidává náhradní text. Náhled používá regular 28 px, horní lištu 72 px a společné boční odsazení 16 px.
-2. Mapa má nadpis **mappa mundi**. Při najetí nebo fokusu se ve spodní kontextové nápovědě objeví české vysvětlení „Mappa mundi je latinsky ‚mapa světa‘. Latina se tehdy běžně používala.“ Opuštění nadpisu obnoví kontext, zlato a rok zůstávají vpravo. Informace je dostupná také bez myši.
-3. Jde o návrh předvedený na mapě, nikoli změnu běžící hry či uživatelskou studii. [Evidence](publishing.md#r-0341-game-heading-proposal-2026-10-29) popisuje kontrolu náhledu odděleně od budoucí přejímky JavaFX.
+1. Uživatel schválil [R-0341](requirements/done/R-0341.md): společný nadpis vlevo používá Playpen Sans 28, běžný řez; akce jsou vpravo. Pohled bez názvu má levou část prázdnou. Horní lišta má výšku 72 a obě lišty minimální boční odsazení 16. Jejich společně vycentrovaný obsah se zastaví na 1 440 logických pixelech podle R-0342. Vzhled tlačítek zůstává stejný.
+2. Mapa má přesný nadpis **Mappa Mundi**. Při najetí nebo fokusu se dole objeví lokalizované vysvětlení latinského názvu „mapa světa“ a dobového používání latiny. Opuštění nadpisu obnoví předchozí kontext, pokud mezitím nepřišla novější zpráva; zlato a rok zůstávají vpravo. Informace je dostupná také bez myši a neprovádí herní akci.
+3. Název kolonie si zachovává přejmenování. Při úzkém okně přejdou akce na dosavadní ikonové zobrazení a nadpis s nimi nesmí kolidovat. Společné záhlaví a jeho CSS jsou vlastníkem umístění a typografie, obsah jednotlivých pohledů je nepřepisuje.
+4. [Původní náhled](publishing.md#r-0341-game-heading-proposal-2026-10-29) zachycuje návrhovou fázi, nikoli uživatelskou studii. Průběh přejímky implementace zachycuje [evidence funkčních testů](functional-tests.md#r-0341-shared-game-headings-2026-10-29).
 
 ## Jednotná akční tlačítka (2026-10-27)
 

@@ -38,6 +38,9 @@ final class StatusBarPresenter implements UpdatableLanguage {
 
     private Source showEventsFromSource;
 
+    private String contextMessage = "";
+    private String hint;
+
     @Inject
     public StatusBarPresenter(final EventBus eventBus, final I18n text,
             final GameModelController gameModelController) {
@@ -54,8 +57,19 @@ final class StatusBarPresenter implements UpdatableLanguage {
         if (showEventsFromSource == event.getSource()) {
             logger.debug("Setting text at status bar '{}'",
                     event.getStatusMessage());
-            view.getStatusBarDescription().setText(event.getStatusMessage());
+            contextMessage = event.getStatusMessage();
+            refreshDescription();
         }
+    }
+
+    void setHint(final String text) {
+        hint = text;
+        refreshDescription();
+    }
+
+    private void refreshDescription() {
+        view.getStatusBarDescription()
+                .setText(hint == null ? contextMessage : hint);
     }
 
     void setStatusBarView(final StatusBarView statusBarView) {
@@ -106,7 +120,8 @@ final class StatusBarPresenter implements UpdatableLanguage {
         } else {
             setGoldText(0);
         }
-        view.getStatusBarDescription().setText("");
+        contextMessage = "";
+        refreshDescription();
     }
 
     private void setYearText(final Label labelEra, final Calendar calendar) {

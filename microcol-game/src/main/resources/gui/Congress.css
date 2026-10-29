@@ -16,7 +16,7 @@
 }
 #congressPage .congress-metrics,
 #congressPage .congress-decision { -fx-padding: 0 0 18 0; }
-#congressHeading, #congressPage .congress-founder-name { -fx-font-size: 20; }
+#congressPage .congress-founder-name { -fx-font-size: 20; }
 #congressPage .congress-card {
     -fx-padding: 16;
     -fx-alignment: top-left;
