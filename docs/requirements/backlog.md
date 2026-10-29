@@ -1,5 +1,10 @@
 # Current requirement backlog
 
+Captured on 2026-10-29: [R-0341 — shared game headings and mappa mundi](R-0341.md),
+primary area A03. The interactive map proposal shows a 28-pixel Playpen Sans heading
+on the left and its Latin explanation in the bottom status bar. Status: `new`;
+runtime implementation has not started.
+
 Selected on 2026-10-29: [R-0337 — fixed top toolbar and shared bar styling](R-0337.md),
 primary area A03. The top height follows the supplied map screenshot (72 logical pixels);
 bottom heights remain independent and both bars use 16-pixel side padding defined in the shared stylesheet. Status: `ready for development`; implementation

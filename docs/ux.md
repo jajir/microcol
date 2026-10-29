@@ -1097,6 +1097,12 @@ skutečného hráče; výsledky patří do [funkční evidence](functional-tests
 6. **Původní širší návrh:** název stránky vlevo, akce vpravo a varianty Úsporný (72/48), Vzdušný (88/64) a Seskupený (80/56) jsou pouze dřívější návrhy. Uživatel nyní vybral menší krok podle snímku; varianty ani nové chování dlouhých nápověd se neimplementují.
 7. [R-0337](requirements/R-0337.md) vede rozsah a další přejímku. [Funkční evidence](functional-tests.md#r-0337-shared-game-bars-2026-10-29) výslovně zaznamenává vynechání testů na žádost uživatele; změna zdrojů není výsledkem hráčské studie ani potvrzením běhu hry.
 
+## Nadpisy herních pohledů — návrh 2026-10-29
+
+1. [R-0341](requirements/R-0341.md) zachycuje navazující zadání: název pohledu vlevo, akce vpravo a stejný výrazně větší Playpen Sans pro všechny nadpisy. Pohled bez názvu nepřidává náhradní text. Náhled používá regular 28 px, horní lištu 72 px a společné boční odsazení 16 px.
+2. Mapa má nadpis **mappa mundi**. Při najetí nebo fokusu se ve spodní kontextové nápovědě objeví české vysvětlení „Mappa mundi je latinsky ‚mapa světa‘. Latina se tehdy běžně používala.“ Opuštění nadpisu obnoví kontext, zlato a rok zůstávají vpravo. Informace je dostupná také bez myši.
+3. Jde o návrh předvedený na mapě, nikoli změnu běžící hry či uživatelskou studii. [Evidence](publishing.md#r-0341-game-heading-proposal-2026-10-29) popisuje kontrolu náhledu odděleně od budoucí přejímky JavaFX.
+
 ## Jednotná akční tlačítka (2026-10-27)
 
 1. Akce na všech obrazovkách používají společný
