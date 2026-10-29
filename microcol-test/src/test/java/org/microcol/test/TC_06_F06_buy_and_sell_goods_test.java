@@ -43,7 +43,13 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         EuropePortScreen europePort = gamePage.openEuroperPort();
 
         // The empty harbor keeps all four labeled drop areas available.
-        new org.microcol.page.EuropeHarborPage(getContext()).verifyGroups(0);
+        final org.microcol.page.EuropeHarborPage harbor = new org.microcol.page.EuropeHarborPage(
+                getContext());
+        harbor.resize(1280, 900);
+        harbor.verifyGroups(0);
+        harbor.verifyHorizontalScrollbars(false);
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0337-harbor-empty.png");
 
         // verify that there are 100000 gold.
         europePort.verifyGold(100000);
@@ -59,6 +65,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
 
         // Verify that there is exactly 1 ship in port.
         europePort.verifyNumberOfShipsInPort(1);
+        harbor.verifyHorizontalScrollbars(false);
+        harbor.verifyLayoutAndNativeImages();
 
         // Verify that ship is empty.
         europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));

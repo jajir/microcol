@@ -1,5 +1,11 @@
 # UX a pravidla ovládání MicroCol
 
+## Společné posouvání — R-0338
+
+1. Posuvník se v evropských seznamech lodí a lidí objeví až při přetečení; prázdná i krátká skupina ponechává nadpis a aktivní oblast pro příslušné přetažení. Dlouhé skupiny se stále posouvají nezávisle a změna velikosti okna nesmí skrýt jejich konec.
+2. Hráč pozná posuvník podle stejné kreslené dráhy a pískového jezdce v nápovědě, Evropě, ostatních obrazovkách i dialozích. Kolečko, klávesnice a tažení zůstávají nativní. Zobrazení lišty nesmí posunout lidi mimo molo, změnit výběr nebo zasáhnout do nákladu.
+3. [R-0338](requirements/done/R-0338.md) vlastní tuto přijatou úpravu, [grafika](graphics.md#spolecne-kreslene-posuvniky-29-rijna-2026) je autoritativní pro vzhled. Jde o požadavek uživatele a následnou implementační kontrolu, nikoli novou hráčskou studii.
+
 ## Evropský přístav — R-0335 a R-0336
 
 1. Přijatý směr z 28. října 2026: [Námořní skicář](graphics.md#evropsky-pristav-namorni-skicar-28-rijna-2026). Hráč vybere loď v levé části mola a v jeho stěně prohlíží či plní její náklad; lidé čekají vpravo, trh s prodejní/nákupní cenou je vždy pod kresbou.

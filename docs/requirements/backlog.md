@@ -897,3 +897,9 @@ remain owned by their current requirements; acceptance is recorded in the
 
 1. [R-0336](done/R-0336.md), primary area A06, captures the accepted flat ochre crate fronts, transparent ship selectors, blue sky, cream market and voyage context menus after R-0335.
 2. Status: done. The selected variant is implemented and locally accepted: model/JUnit, targeted UI, fixed smoke and documentation checks passed. [Evidence](../functional-tests.md#r-0336-flat-harbor-cargo-2026-10-28).
+
+
+## Společné kreslené posuvníky — 2026-10-29
+
+1. [R-0338](done/R-0338.md), primary area A03, makes the Help scrollbar the common default for both orientations and shows the four Europe bars only when their lists overflow.
+2. Status: done. The shared styling and native overflow controls passed model/JUnit, targeted UI and fixed smoke acceptance. [Evidence](../functional-tests.md#r-0338-shared-scrollbars-2026-10-29).

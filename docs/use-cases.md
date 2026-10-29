@@ -1,5 +1,10 @@
 # Use cases a přejímka pravidel hry
 
+## UC-018/023–025/114/115/119: společné posuvníky — 2026-10-29
+
+1. [R-0338](requirements/done/R-0338.md) sjednocuje oba směry posouvání s kresleným stylem nápovědy a schovává nepotřebné lišty čtyř evropských seznamů. Pravidla, výběr a náklad se nemění.
+2. TC194/F226 pokrývá 43 jednotek, skutečné tažení vodorovného jezdce, nezávislé skupiny a svislé posouvání malého okna; TC06 prázdný a krátký přístav i následný obchod; TC100 svislý posuvník nápovědy; TC192 a TC191/01 ostatní obrazovky a dialogy. Skutečné výsledky patří do [evidence](functional-tests.md#r-0338-shared-scrollbars-2026-10-29).
+
 ## UC-114/119: kreslené rámečky nápovědy — 2026-10-28
 
 1. [R-0329](requirements/done/R-0329.md) zachovává otevření nápovědy, hledání,

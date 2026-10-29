@@ -1,0 +1,49 @@
+/* Shared native scrollbars, using the hand-drawn Colonizopedia contours. */
+.scroll-bar {
+    -fx-background-color: #FFF9EC;
+    -fx-padding: 3;
+}
+.scroll-bar:vertical { -fx-pref-width: 20; }
+.scroll-bar:horizontal { -fx-pref-height: 20; }
+.scroll-bar .track {
+    -fx-background-color: #FFF9EC;
+    -fx-border-color: #716858;
+    -fx-border-width: 1;
+}
+.scroll-bar:vertical .track {
+    -fx-shape: "M3 1 Q2 26 3 50 T3 99 L6 99 Q7 75 6 50 T6 1 Z";
+    -fx-background-insets: 0 5;
+    -fx-border-insets: 0 5;
+}
+.scroll-bar:horizontal .track {
+    -fx-shape: "M1 3 Q26 2 50 3 T99 3 L99 6 Q75 7 50 6 T1 6 Z";
+    -fx-background-insets: 5 0;
+    -fx-border-insets: 5 0;
+}
+.scroll-bar .thumb {
+    -fx-background-color: #DEC79B;
+    -fx-background-insets: 0;
+    -fx-border-color: #302D27;
+    -fx-border-width: 1.6;
+}
+.scroll-bar:vertical .thumb {
+    -fx-shape: "M2 2 Q8 0 14 2 Q16 18 14 32 T14 62 Q8 64 2 62 Q0 46 2 32 T2 2 Z";
+    -fx-min-height: 28;
+}
+.scroll-bar:horizontal .thumb {
+    -fx-shape: "M2 2 Q0 8 2 14 Q18 16 32 14 T62 14 Q64 8 62 2 Q46 0 32 2 T2 2 Z";
+    -fx-min-width: 28;
+}
+.scroll-bar .thumb:hover,
+.scroll-bar .thumb:pressed {
+    -fx-background-color: #CBB17F;
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button,
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}

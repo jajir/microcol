@@ -91,7 +91,7 @@ public final class PanelPortPier
         scroll.setId("europe-pier-scroll");
         scroll.getStyleClass().add("harbor-scroll");
         scroll.setFitToHeight(true);
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         panelUnits.minWidthProperty().bind(scroll.widthProperty().subtract(4));
     }

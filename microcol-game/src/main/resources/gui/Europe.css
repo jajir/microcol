@@ -28,23 +28,16 @@
     -fx-background-insets: 0;
     -fx-padding: 0;
 }
-.europe-harbor .harbor-scroll .scroll-bar:horizontal {
-    -fx-background-color: #f7eed4;
-    -fx-pref-height: 16;
-    -fx-border-color: #393a2d;
-    -fx-border-width: 1;
-}
-.europe-harbor .harbor-scroll .scroll-bar:horizontal .thumb {
-    -fx-background-color: #657048;
-    -fx-background-insets: 2;
-}
+/* Keep units on the same horizon when an unneeded scrollbar disappears. */
 .europe-harbor .voyage-ships {
+    -fx-max-height: 84;
     -fx-spacing: 16;
     -fx-alignment: bottom-left;
     -fx-padding: 0 2 5 2;
 }
 .europe-harbor .ships,
 .europe-harbor .panel-port-pier {
+    -fx-max-height: 76;
     -fx-spacing: 10;
     -fx-alignment: bottom-left;
     -fx-padding: 0 2 5 2;

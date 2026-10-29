@@ -120,7 +120,7 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
         scroll = new ScrollPane(shipsContainer);
         scroll.getStyleClass().add("harbor-scroll");
         scroll.setFitToHeight(true);
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         shipsContainer.minWidthProperty()
                 .bind(scroll.widthProperty().subtract(4));

@@ -32,11 +32,12 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         final EuropeHarborPage harbor = new EuropeHarborPage(getContext());
         harbor.resize(1280, 900);
         harbor.verifyGroups(43);
+        harbor.verifyHorizontalScrollbars(true);
         harbor.verifyLayoutAndNativeImages();
         harbor.verifyScrollPositions(0, 0, 0, 0);
 
         // Reach the last docked ship and select it with the keyboard.
-        harbor.scrollGroup("dock", 1);
+        harbor.dragGroupToEnd("dock");
         harbor.verifyLastItemVisible("dock");
         harbor.verifyScrollPositions(0, 0, 1, 0);
         harbor.selectShip(3142, true);
@@ -71,17 +72,19 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyLastItemVisible("pier");
         harbor.verifyScrollPositions(1, 1, 1, 1);
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0336-harbor-full.png");
+                .saveEvidence("r0337-harbor-full.png");
 
         // Resizing keeps cargo, all prices and the original image size usable.
         harbor.resize(1000, 760);
         harbor.showGoods();
+        harbor.verifyHorizontalScrollbars(true);
+        harbor.verifyPageVerticalScrollbar();
         harbor.verifyLayoutAndNativeImages();
         harbor.verifyAllGoodsVisible();
         harbor.verifySelectedCargo(3142, 0, Goods.of(GoodsType.ORE, 43));
         port.verifyAvailableHoldCount(4);
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0336-harbor-small.png");
+                .saveEvidence("r0337-harbor-small.png");
         port.close();
         new InGameLayoutPage(getContext()).verifyMapReturned();
     }
@@ -98,14 +101,15 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         final EuropeHarborPage harbor = new EuropeHarborPage(getContext());
         harbor.resize(1280, 900);
         harbor.verifyGroups(43);
+        harbor.verifyHorizontalScrollbars(true);
         harbor.verifyLayoutAndNativeImages();
-        harbor.scrollGroup("dock", 1);
+        harbor.dragGroupToEnd("dock");
         harbor.selectShip(3142, false);
         harbor.verifySelectedCargo(3142, 0, Goods.of(GoodsType.ORE, 43));
         port.verifyAvailableHoldCount(4);
         harbor.showGoods();
         harbor.verifyAllGoodsVisible();
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0336-harbor-czech.png");
+                .saveEvidence("r0337-harbor-czech.png");
     }
 }

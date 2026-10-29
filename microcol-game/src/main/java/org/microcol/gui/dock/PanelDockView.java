@@ -101,7 +101,7 @@ public class PanelDockView implements JavaFxComponent {
         scroll.setId("europe-dock-scroll");
         scroll.getStyleClass().add("harbor-scroll");
         scroll.setFitToHeight(true);
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scroll.setMinHeight(96);
         scroll.setPrefHeight(96);

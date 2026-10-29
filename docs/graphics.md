@@ -1,5 +1,12 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Společné kreslené posuvníky — 29. října 2026
+
+1. [R-0338](requirements/done/R-0338.md) přebírá uživatelem zvolený svislý posuvník nápovědy jako společný výchozí vzhled. Vodorovná podoba má stejné barvy a otočené ručně kreslené tvary.
+2. Jediný zdroj je `gui/ScrollBars.css`, importovaný z `MicroCol.css` i `dialogs.css`: krémová `#FFF9EC`, obrys dráhy `#716858`, pískový jezdec `#DEC79B` s obrysem `#302D27` a stavem najetí/stisku `#CBB17F`. Oba směry jsou široké/vysoké 20 bodů a používají nativní JavaFX ScrollBar; Slider pro množství či nastavení se nemění.
+3. Nápověda už nepotřebuje vlastní svislé pravidlo, Evropa nepoužívá původní olivový jezdec. Čtyři přístavní lišty se zobrazí jen při přetečení. Řádky jednotek drží stejnou výšku nad molem, i když lišta chybí. Původní snímky přístavu níže jsou historií před touto úpravou.
+4. Skutečné JavaFX snímky z cílených testů v Docker/Xvfb: [prázdný přístav bez lišt](graphics-assets/shared-scrollbars-2026-10-29/r0337-harbor-empty.png), [český přístav se 43 jednotkami](graphics-assets/shared-scrollbars-2026-10-29/r0337-harbor-czech.png), [všechny seznamy na konci](graphics-assets/shared-scrollbars-2026-10-29/r0337-harbor-full.png), [menší okno s oběma směry posouvání](graphics-assets/shared-scrollbars-2026-10-29/r0337-harbor-small.png) a [zachovaný vzhled nápovědy](graphics-assets/shared-scrollbars-2026-10-29/r0325-help-units-en.png). Výsledek přejímky zaznamenává [funkční evidence](functional-tests.md#r-0338-shared-scrollbars-2026-10-29).
+
 ## Evropský přístav — Námořní skicář (28. října 2026)
 
 1. Uživatel vybral rozložení dvou plaveb vedle sebe, přístav vlevo a lidi vpravo nad dlouhým vysokým kamenným molem. Původní implementaci vlastní [R-0335](requirements/done/R-0335.md); následné upřesnění [R-0336](requirements/done/R-0336.md) nahrazuje světlý panel plochými bednami přímo před čelní stěnou. Výklenky, perspektiva a stíny nejsou součástí vybraného vzhledu; ukázková čísla návrhu se nenahrazují pevnými herními údaji.

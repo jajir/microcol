@@ -7,6 +7,7 @@ import org.microcol.model.Goods;
 import org.microcol.model.unit.UnitWithCargo;
 import org.testfx.util.WaitForAsyncUtils;
 import javafx.geometry.Bounds;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -14,6 +15,7 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -34,6 +36,15 @@ public final class EuropeHarborPage extends AbstractScreen {
                 .queryAs(ScrollPane.class);
     }
 
+    private ScrollBar scrollbar(final ScrollPane scroll,
+            final Orientation orientation) {
+        // Node.lookup ignores pseudo-class state such as :horizontal.
+        return scroll.getChildrenUnmodifiable().stream()
+                .filter(ScrollBar.class::isInstance).map(ScrollBar.class::cast)
+                .filter(bar -> bar.getOrientation() == orientation).findFirst()
+                .orElseThrow();
+    }
+
     public void resize(final double width, final double height) {
         getRobot().interact(() -> {
             getContext().getPrimaryStage().setWidth(width);
@@ -45,6 +56,55 @@ public final class EuropeHarborPage extends AbstractScreen {
     public void scrollGroup(final String name, final double position) {
         getRobot().interact(() -> group(name).setHvalue(position));
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void dragGroupToEnd(final String name) {
+        final ScrollBar bar = scrollbar(group(name), Orientation.HORIZONTAL);
+        revealGameContent(bar);
+        final Node thumb = bar.lookup(".thumb");
+        final Node track = bar.lookup(".track");
+        final Bounds bounds = track.localToScreen(track.getLayoutBounds());
+        getRobot().drag(thumb, MouseButton.PRIMARY).dropTo(bounds.getMaxX() - 2,
+                (bounds.getMinY() + bounds.getMaxY()) / 2);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyHorizontalScrollbars(final boolean expectedVisible) {
+        getRobot().interact(() -> {
+            for (final String name : GROUPS) {
+                final ScrollBar bar = scrollbar(group(name),
+                        Orientation.HORIZONTAL);
+                assertEquals(expectedVisible, bar.isVisible(),
+                        name + " viewport=" + group(name).getViewportBounds()
+                                + " content="
+                                + group(name).getContent().getLayoutBounds()
+                                + " scroll=" + group(name).getLayoutBounds());
+                if (expectedVisible) {
+                    verifyHandDrawnScrollbar(bar);
+                }
+            }
+        });
+    }
+
+    public void verifyPageVerticalScrollbar() {
+        getRobot().interact(() -> {
+            final ScrollPane page = getNodeFinder().lookup(".screen-scroll")
+                    .queryAs(ScrollPane.class);
+            final ScrollBar bar = scrollbar(page, Orientation.VERTICAL);
+            assertTrue(bar.isVisible());
+            verifyHandDrawnScrollbar(bar);
+        });
+    }
+
+    private void verifyHandDrawnScrollbar(final ScrollBar bar) {
+        final Region track = (Region) bar.lookup(".track");
+        final Region thumb = (Region) bar.lookup(".thumb");
+        assertNotNull(track.getShape(), "Hand-drawn rail");
+        assertNotNull(thumb.getShape(), "Hand-drawn thumb");
+        assertEquals(Color.web("#FFF9EC"),
+                bar.getBackground().getFills().get(0).getFill());
+        assertTrue(List.of(Color.web("#DEC79B"), Color.web("#CBB17F"))
+                .contains(thumb.getBackground().getFills().get(0).getFill()));
     }
 
     public void selectShip(final int id, final boolean keyboard) {
@@ -114,7 +174,7 @@ public final class EuropeHarborPage extends AbstractScreen {
                 final ScrollPane scroll = group(name);
                 final Pane content = (Pane) scroll.getContent();
                 assertEquals(expectedCount, content.getChildren().size(), name);
-                assertEquals(ScrollPane.ScrollBarPolicy.ALWAYS,
+                assertEquals(ScrollPane.ScrollBarPolicy.AS_NEEDED,
                         scroll.getHbarPolicy());
                 assertEquals(ScrollPane.ScrollBarPolicy.NEVER,
                         scroll.getVbarPolicy());
