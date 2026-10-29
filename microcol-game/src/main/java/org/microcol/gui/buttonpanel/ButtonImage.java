@@ -4,7 +4,6 @@ import org.microcol.gui.Loc;
 
 import org.microcol.gui.util.ActionButtons;
 import org.microcol.gui.image.ButtonIcon;
-import javafx.scene.control.Tooltip;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.JavaFxComponent;
@@ -58,7 +57,6 @@ class ButtonImage<T extends Enum<T> & MessageKeyResource>
         // binding.
         if (!button.accessibleTextProperty().isBound()) {
             button.setAccessibleText(label);
-            button.setTooltip(new Tooltip(label));
         }
     }
 

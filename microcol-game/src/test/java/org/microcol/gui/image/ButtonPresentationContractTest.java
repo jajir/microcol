@@ -13,6 +13,20 @@ import org.junit.jupiter.api.Test;
 
 class ButtonPresentationContractTest {
     @Test
+    void gameDoesNotCreateHoverTooltips() throws Exception {
+        try (Stream<Path> files = Files.walk(Path.of("src/main/java"))) {
+            final List<Path> sources = files
+                    .filter(path -> path.toString().endsWith(".java"))
+                    .collect(Collectors.toList());
+            assertFalse(sources.isEmpty());
+            for (final Path source : sources) {
+                assertFalse(Files.readString(source).contains("Tooltip"),
+                        "Keep explanations inline or accessible: " + source);
+            }
+        }
+    }
+
+    @Test
     void applicationButtonsMustChooseAnExplicitIcon() throws Exception {
         final Pattern constructor = Pattern.compile(
                 "new\\s+(?:javafx\\.scene\\.control\\.)?(?:Button|ToggleButton|MenuButton|SplitMenuButton)\\s*\\(");

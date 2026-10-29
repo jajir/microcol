@@ -321,9 +321,9 @@ public class ColonyScreen extends AbstractScreen {
         final Labeled forecast = getLabeledById(
                 PanelColonyGood.FAMINE_FORECAST_ID);
         assertTrue(forecast.getText().contains("⚠"));
-        assertTrue(forecast.getTooltip().getText()
+        assertTrue(forecast.getAccessibleHelp()
                 .contains("Final production and stocks depend"));
-        assertEquals(forecast.getTooltip().getText(),
+        assertEquals(forecast.getAccessibleHelp(),
                 forecast.getAccessibleText());
     }
 

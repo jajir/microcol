@@ -1,6 +1,7 @@
 package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -91,7 +92,7 @@ public class WelcomePage extends AbstractMenuScreen {
                 assertEquals(ids.get(i), button.getId());
                 assertEquals(labels.get(i), button.getText());
                 assertEquals(labels.get(i), button.getAccessibleText());
-                assertEquals(labels.get(i), button.getTooltip().getText());
+                assertNull(button.getTooltip());
                 assertEquals("Playpen Sans Regular",
                         button.getFont().getName());
                 assertEquals(14, button.getFont().getSize(), 0.01);

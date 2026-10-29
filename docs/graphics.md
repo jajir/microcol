@@ -1,5 +1,7 @@
 # Grafické podklady a jejich použití v MicroCol
 
+Od 29. října 2026 platí pro všechny obrazovky [pravidlo bez vyskakovacích bublin](ux.md#zadne-vyskakovaci-bubliny-2026-10-29). Starší zmínky tooltipů níže popisují historický stav.
+
 ## Nadpisy herních pohledů, 29. října 2026
 
 1. [R-0341](requirements/done/R-0341.md) používá společný Playpen Sans Regular 28 v levé části horní lišty, existující tlačítka zarovnává doprava a ponechává jejich vzhled. Horní výška 72, boční odsazení 16 a společný limit obsahu 1 440 logických pixelů mají jediného vlastníka v `GameScreenBars.css`.

@@ -26,6 +26,29 @@ public final class GameToolbarPage extends AbstractScreen {
         super(context);
     }
 
+    public void verifyNoHoverPopup() {
+        getRobot().interact(() -> {
+            final javafx.scene.Parent root = getLabeledById("retire").getScene()
+                    .getRoot();
+            for (final javafx.scene.Node node : root.lookupAll("*")) {
+                if (node instanceof javafx.scene.control.Control) {
+                    assertNull(
+                            ((javafx.scene.control.Control) node).getTooltip(),
+                            node.getClass().getSimpleName() + " #"
+                                    + node.getId());
+                }
+            }
+            assertTrue(javafx.stage.Window.getWindows().stream().noneMatch(
+                    window -> window instanceof javafx.scene.control.Tooltip
+                            && window.isShowing()));
+        });
+    }
+
+    public void hoverRetire() {
+        hover("retire");
+        getRobot().sleep(1500);
+    }
+
     public void hover(final String id) {
         getRobot().moveTo("#" + id);
         WaitForAsyncUtils.waitForFxEvents();

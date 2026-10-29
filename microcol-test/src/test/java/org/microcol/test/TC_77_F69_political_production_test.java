@@ -51,7 +51,7 @@ public class TC_77_F69_political_production_test extends AbstractMicroColTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         // Exactly 50 percent gives +1: 2 Tories are below the threshold of 8.
         ColonyScreen colony = game.openColonyAt(COLONY, COLONY_NAME);
-        support.verifyColonyTooltip(COLONY_NAME, 3, 300, 50, 1, 2, 8, 0);
+        support.verifyColonyDetails(COLONY_NAME, 3, 300, 50, 1, 2, 8, 0);
         // The boosted job would make 4 tools, but only 3 ore are available.
         production.verifyPlannedTools(3, 3, 1);
         // A fourth resident takes a carpenter job and dilutes the support.
@@ -60,7 +60,7 @@ public class TC_77_F69_political_production_test extends AbstractMicroColTest {
         game = colony.close();
         // 300 of 800 points is 37 percent: no bonus, no ore shortage.
         colony = game.openColonyAt(COLONY, COLONY_NAME);
-        support.verifyColonyTooltip(COLONY_NAME, 4, 300, 37, 0, 3, 8, 0);
+        support.verifyColonyDetails(COLONY_NAME, 4, 300, 37, 0, 3, 8, 0);
         production.verifyPlannedTools(3, 3, 0);
         game = colony.close();
         // The update uses the support captured at its start.
@@ -76,7 +76,7 @@ public class TC_77_F69_political_production_test extends AbstractMicroColTest {
         production.verifyPoliticalProduction(4, 0, 3, 0);
         support.verifyLiberty(301, 4);
         GamePage.of(getContext()).openColonyAt(COLONY, COLONY_NAME);
-        support.verifyColonyTooltip(COLONY_NAME, 4, 301, 37, 0, 3, 8, 0);
+        support.verifyColonyDetails(COLONY_NAME, 4, 301, 37, 0, 3, 8, 0);
     }
 
     @Test
@@ -93,7 +93,7 @@ public class TC_77_F69_political_production_test extends AbstractMicroColTest {
                 getContext());
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(COLONY, COLONY_NAME);
-        support.verifyColonyTooltip(COLONY_NAME, 6, 0, 0, 0, 6, 6, -1);
+        support.verifyColonyDetails(COLONY_NAME, 6, 0, 0, 0, 6, 6, -1);
         // The blacksmith would make 3 tools at the base rate, now only 2.
         production.verifyPlannedTools(2, 2, 0);
         game = colony.close();
@@ -106,7 +106,7 @@ public class TC_77_F69_political_production_test extends AbstractMicroColTest {
         production.verifyPoliticalProduction(5, 0, 5, 0);
         game = colony.close();
         colony = game.openColonyAt(COLONY, COLONY_NAME);
-        support.verifyColonyTooltip(COLONY_NAME, 5, 1, 0, 0, 5, 6, 0);
+        support.verifyColonyDetails(COLONY_NAME, 5, 1, 0, 0, 5, 6, 0);
         production.verifyPlannedTools(3, 3, 0);
         game = colony.close();
         // The next update makes the full 3 tools again.
@@ -119,6 +119,6 @@ public class TC_77_F69_political_production_test extends AbstractMicroColTest {
         production.verifyWarehouse(GoodsType.TOOLS, 24);
         production.verifyPoliticalProduction(5, 0, 5, 0);
         GamePage.of(getContext()).openColonyAt(COLONY, COLONY_NAME);
-        support.verifyColonyTooltip(COLONY_NAME, 5, 2, 0, 0, 5, 6, 0);
+        support.verifyColonyDetails(COLONY_NAME, 5, 2, 0, 0, 5, 6, 0);
     }
 }

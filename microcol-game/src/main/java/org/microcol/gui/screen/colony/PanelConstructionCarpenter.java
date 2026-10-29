@@ -20,7 +20,6 @@ import com.google.common.eventbus.EventBus;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 
 /**
@@ -91,7 +90,6 @@ class PanelConstructionCarpenter extends AbstractPanelConstructionWithSlots {
 
     private Label label(final String text) {
         final Label label = new Label(text);
-        label.setTooltip(new Tooltip(text));
         return label;
     }
 

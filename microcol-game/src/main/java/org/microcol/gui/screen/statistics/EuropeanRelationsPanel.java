@@ -256,8 +256,8 @@ final class EuropeanRelationsPanel extends VBox {
                     declare.setId("declare-" + i + "-" + j);
                     declare.setDisable(!model.isGameRunning() || wait > 0);
                     if (wait > 0) {
-                        declare.setTooltip(new javafx.scene.control.Tooltip(
-                                i18n.get(Stats.declarationWaiting, wait)));
+                        declare.setAccessibleHelp(
+                                i18n.get(Stats.declarationWaiting, wait));
                     }
                     declare.setOnAction(event -> review(model, actor, target));
                     row.getChildren().add(declare);
@@ -278,10 +278,9 @@ final class EuropeanRelationsPanel extends VBox {
                             !model.isGameRunning() || (!pending && (blocked > 0
                                     || model.getAllianceVisitors(actor, target)
                                             .isEmpty())));
-                    alliance.setTooltip(
-                            new javafx.scene.control.Tooltip(blocked > 0
-                                    ? i18n.get(Stats.allianceBlocked, blocked)
-                                    : i18n.get(Stats.allianceContactRequired)));
+                    alliance.setAccessibleHelp(blocked > 0
+                            ? i18n.get(Stats.allianceBlocked, blocked)
+                            : i18n.get(Stats.allianceContactRequired));
                     alliance.setOnAction(
                             event -> propose(model, actor, target));
                     row.getChildren().add(alliance);
@@ -309,8 +308,8 @@ final class EuropeanRelationsPanel extends VBox {
                     peace.setDisable(!model.isGameRunning() || (!pending
                             && model.getPeaceVisitors(actor, target)
                                     .isEmpty()));
-                    peace.setTooltip(new javafx.scene.control.Tooltip(
-                            i18n.get(PeaceText.contactRequired)));
+                    peace.setAccessibleHelp(
+                            i18n.get(PeaceText.contactRequired));
                     peace.setOnAction(event -> negotiate(model, actor, target));
                     row.getChildren().add(peace);
                 }
@@ -328,10 +327,9 @@ final class EuropeanRelationsPanel extends VBox {
                             || (!pending && (remaining > 0
                                     || model.getTributeVisitors(actor, target)
                                             .isEmpty())));
-                    tribute.setTooltip(
-                            new javafx.scene.control.Tooltip(remaining > 0
-                                    ? i18n.get(TributeText.cooldown, remaining)
-                                    : i18n.get(TributeText.contactRequired)));
+                    tribute.setAccessibleHelp(remaining > 0
+                            ? i18n.get(TributeText.cooldown, remaining)
+                            : i18n.get(TributeText.contactRequired));
                     tribute.setOnAction(
                             event -> demandTribute(model, actor, target));
                     row.getChildren().add(tribute);

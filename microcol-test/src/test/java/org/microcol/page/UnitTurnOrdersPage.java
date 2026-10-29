@@ -62,10 +62,10 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
         assertEquals("Skip unit turn (Space)", skip.getText());
         assertEquals(
                 "Select the next available unit without spending movement.",
-                wait.getTooltip().getText());
+                wait.getAccessibleHelp());
         assertEquals(
                 "Spend all remaining movement for this unit until its next turn.",
-                skip.getTooltip().getText());
+                skip.getAccessibleHelp());
         for (final Button button : new Button[] { wait, skip,
                 getButtonById("nextTurn"), getButtonById("exit") }) {
             assertTrue(button.isVisible());

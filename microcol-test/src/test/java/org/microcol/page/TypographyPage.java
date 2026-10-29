@@ -3,8 +3,6 @@ package org.microcol.page;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.microcol.gui.util.FontService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import org.testfx.util.WaitForAsyncUtils;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
@@ -29,19 +27,17 @@ public final class TypographyPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void hoverColonyCaption() throws TimeoutException {
+    public void hoverColonyCaption() {
         getRobot().moveTo("#colonyName");
-        WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
-                () -> WaitForAsyncUtils
-                        .asyncFx(() -> getLabeledById("colonyName").getTooltip()
-                                .isShowing())
-                        .get());
+        getRobot().sleep(1500);
     }
 
-    public void verifyColonyTooltip() {
+    public void verifyColonyDetails() {
         getRobot().interact(() -> {
-            assertEquals("Playpen Sans Regular", getLabeledById("colonyName")
-                    .getTooltip().getFont().getName());
+            assertNull(getLabeledById("colonyName").getTooltip());
+            assertTrue(javafx.stage.Window.getWindows().stream().noneMatch(
+                    window -> window instanceof javafx.scene.control.Tooltip
+                            && window.isShowing()));
         });
     }
 
@@ -63,6 +59,12 @@ public final class TypographyPage extends AbstractScreen {
             root.applyCss();
             int checked = 0;
             for (Node node : root.lookupAll("*")) {
+                if (node instanceof javafx.scene.control.Control) {
+                    assertNull(
+                            ((javafx.scene.control.Control) node).getTooltip(),
+                            node.getClass().getSimpleName() + " #"
+                                    + node.getId());
+                }
                 Font font = null;
                 if (node instanceof Labeled) {
                     font = ((Labeled) node).getFont();

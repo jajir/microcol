@@ -54,7 +54,6 @@ import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.gui.event.SelectNextUnitEvent;
 import org.microcol.gui.event.SkipUnitTurnEvent;
-import javafx.scene.control.Tooltip;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
@@ -110,24 +109,18 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private final List<Button> unitCommands = new ArrayList<>();
 
     private final Button buttonSentry = ActionButtons.button(ButtonIcon.SENTRY);
-    private final Tooltip sentryTooltip = new Tooltip();
     private boolean sentryActive;
     private final Button buttonFortify = ActionButtons
             .button(ButtonIcon.FORTIFY);
-    private final Tooltip fortifyTooltip = new Tooltip();
     private boolean fortifying;
     private boolean fortified;
     private final Button buttonGoTo = ActionButtons.button(ButtonIcon.CENTER);
-    private final Tooltip goToTooltip = new Tooltip();
     private final Button buttonGoToColony = ActionButtons
             .button(ButtonIcon.COLONIES);
-    private final Tooltip goToColonyTooltip = new Tooltip();
     private final Button buttonDisband = ActionButtons
             .button(ButtonIcon.DISBAND);
-    private final Tooltip disbandTooltip = new Tooltip();
     private final Button buttonJettison = ActionButtons
             .button(ButtonIcon.JETTISON);
-    private final Tooltip jettisonTooltip = new Tooltip();
     private final Label goToStatus = new Label();
     private boolean goToOrdered;
     private boolean goToPaused;
@@ -142,14 +135,10 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
             .button(ButtonIcon.CONGRESS);
 
     private final Button buttonRetire = ActionButtons.button(ButtonIcon.RETIRE);
-    private final Tooltip retireTooltip = new Tooltip();
 
     private final Button buttonWait = ActionButtons.button(ButtonIcon.WAIT);
     private final Button buttonSkipUnitTurn = ActionButtons
             .button(ButtonIcon.NEXT);
-    private final Tooltip waitTooltip = new Tooltip();
-    private final Tooltip skipTooltip = new Tooltip();
-    private final Tooltip buildRoadTooltip = new Tooltip();
 
     private final Button buttonCenter;
     private final Button buttonHelp;
@@ -188,21 +177,16 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonCongress.setOnAction(
                 event -> eventBus.post(new ShowScreenEvent(Screen.CONGRESS)));
         buttonFortify.setId("fortifyUnit");
-        buttonFortify.setTooltip(fortifyTooltip);
         buttonFortify.setDisable(true);
         buttonGoTo.setId("goToUnit");
-        buttonGoTo.setTooltip(goToTooltip);
         buttonGoTo.setDisable(true);
         buttonGoToColony.setId("goToColonyUnit");
-        buttonGoToColony.setTooltip(goToColonyTooltip);
         buttonGoToColony.setDisable(true);
         buttonDisband.setId("disbandUnit");
-        buttonDisband.setTooltip(disbandTooltip);
         buttonDisband.setDisable(true);
         buttonDisband.setVisible(false);
         buttonDisband.setManaged(false);
         buttonJettison.setId("jettisonUnit");
-        buttonJettison.setTooltip(jettisonTooltip);
         buttonJettison.setDisable(true);
         buttonJettison.setVisible(false);
         buttonJettison.setManaged(false);
@@ -210,18 +194,14 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         goToStatus.setVisible(false);
         goToStatus.setManaged(false);
         buttonSentry.setId("sentryUnit");
-        buttonSentry.setTooltip(sentryTooltip);
         buttonSentry.setDisable(true);
         buttonWait.setId("waitUnit");
-        buttonWait.setTooltip(waitTooltip);
         buttonWait
                 .setOnAction(event -> eventBus.post(new SelectNextUnitEvent()));
         buttonSkipUnitTurn.setId("skipUnitTurn");
-        buttonSkipUnitTurn.setTooltip(skipTooltip);
         buttonSkipUnitTurn
                 .setOnAction(event -> eventBus.post(new SkipUnitTurnEvent()));
         setUnitOrdersEnabled(false, false);
-        updateLanguage(i18n);
 
         buttonCenter = makeButton(ButtonIcon.CENTER, Buttons.buttonCenter);
         buttonCenter.setOnAction(event -> eventBus.post(new CenterViewEvent()));
@@ -279,7 +259,6 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonBuildRoad
                 .setOnAction(event -> eventBus.post(new BuildRoadEvent()));
         buttonBuildRoad.setId(BUTTON_BUILD_ROAD_ID);
-        buttonBuildRoad.setTooltip(buildRoadTooltip);
         buttonCancelBuildRoad = makeButton(ButtonIcon.ROAD,
                 Buttons.buttonCancelBuildRoad);
         buttonCancelBuildRoad.setId(BUTTON_CANCEL_BUILD_ROAD_ID);
@@ -294,10 +273,11 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
                 event -> eventBus.post(new DeclareIndependenceEvent()));
         buttonDeclareIndependence.setId(BUTTON_DECLARE_INDEPENDENCE_ID);
         buttonRetire.setId("retire");
-        buttonRetire.setTooltip(retireTooltip);
         buttonRetire.setVisible(false);
         buttonRetire.setManaged(false);
         buttonRetire.setDisable(true);
+
+        updateLanguage(i18n);
 
         unitActions.setId("unitActionsMenu");
         unitActions.setConsumeAutoHidingEvents(false);
@@ -460,9 +440,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         explanation.getStyleClass().add("unit-action-explanation");
         explanation.setWrapText(true);
         explanation.setMaxWidth(290);
-        if (button.getTooltip() != null) {
-            explanation.textProperty().bind(button.getTooltip().textProperty());
-        }
+        explanation.textProperty().bind(button.accessibleHelpProperty());
         explanation.visibleProperty().bind(button.disabledProperty()
                 .and(explanation.textProperty().isNotEmpty()));
         explanation.managedProperty().bind(explanation.visibleProperty());
@@ -586,15 +564,17 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonWait.setText(i18n.get(Buttons.buttonWait).replace('\n', ' '));
         buttonSkipUnitTurn.setText(
                 i18n.get(Buttons.buttonSkipUnitTurn).replace('\n', ' '));
-        waitTooltip.setText(i18n.get(Buttons.waitExplanation));
-        skipTooltip.setText(i18n.get(Buttons.skipUnitTurnExplanation));
+        buttonWait.setAccessibleHelp(i18n.get(Buttons.waitExplanation));
+        buttonSkipUnitTurn
+                .setAccessibleHelp(i18n.get(Buttons.skipUnitTurnExplanation));
         buttonDisband.setText(i18n.get(Buttons.buttonDisband));
-        disbandTooltip.setText(i18n.get(Buttons.disbandExplanation));
+        buttonDisband.setAccessibleHelp(i18n.get(Buttons.disbandExplanation));
         buttonJettison.setText(i18n.get(Buttons.buttonJettison));
-        jettisonTooltip.setText(i18n.get(Buttons.jettisonExplanation));
-        buildRoadTooltip.setText(i18n.get(Buttons.buildRoadExplanation));
+        buttonJettison.setAccessibleHelp(i18n.get(Buttons.jettisonExplanation));
+        buttonBuildRoad
+                .setAccessibleHelp(i18n.get(Buttons.buildRoadExplanation));
         buttonRetire.setText(i18n.get(Buttons.buttonRetire));
-        retireTooltip.setText(i18n.get(Buttons.retireExplanation));
+        buttonRetire.setAccessibleHelp(i18n.get(Buttons.retireExplanation));
         toolbarLabels.forEach((control, key) -> control.setText(i18n.get(key)));
     }
 
@@ -618,10 +598,10 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     void setUnitOrdersEnabled(final boolean wait, final boolean skip) {
         buttonWait.setDisable(!wait);
         buttonSkipUnitTurn.setDisable(!skip);
-        waitTooltip.setText(currentI18n
+        buttonWait.setAccessibleHelp(currentI18n
                 .get(wait ? Buttons.waitExplanation : Buttons.waitUnavailable));
-        skipTooltip
-                .setText(currentI18n.get(skip ? Buttons.skipUnitTurnExplanation
+        buttonSkipUnitTurn.setAccessibleHelp(
+                currentI18n.get(skip ? Buttons.skipUnitTurnExplanation
                         : Buttons.skipUnavailable));
     }
 
@@ -639,7 +619,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonSentry.setText(
                 currentI18n.get(sentryActive ? Buttons.buttonActivateSentry
                         : Buttons.buttonSentry));
-        sentryTooltip.setText(currentI18n
+        buttonSentry.setAccessibleHelp(currentI18n
                 .get(buttonSentry.isDisabled() ? Buttons.sentryUnavailable
                         : sentryActive ? Buttons.activateSentryExplanation
                                 : Buttons.sentryExplanation));
@@ -699,10 +679,10 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonGoTo.setText(currentI18n.get(
                 goToOrdered ? Buttons.buttonCancelGoTo : Buttons.buttonGoTo));
         buttonGoToColony.setText(currentI18n.get(Buttons.buttonGoToColony));
-        goToTooltip.setText(
+        buttonGoTo.setAccessibleHelp(
                 currentI18n.get(goToOrdered ? Buttons.goToCancelExplanation
                         : Buttons.goToExplanation));
-        goToColonyTooltip.setText(currentI18n.get(
+        buttonGoToColony.setAccessibleHelp(currentI18n.get(
                 buttonGoToColony.isDisabled() ? Buttons.goToColonyUnavailable
                         : Buttons.goToColonyExplanation));
     }
@@ -754,7 +734,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
                 ? (fortified ? Buttons.buttonCancelFortified
                         : Buttons.buttonCancelFortifying)
                 : Buttons.buttonFortify));
-        fortifyTooltip.setText(currentI18n
+        buttonFortify.setAccessibleHelp(currentI18n
                 .get(buttonFortify.isDisabled() ? Buttons.fortifyUnavailable
                         : fortifying
                                 ? (fortified ? Buttons.fortifiedExplanation

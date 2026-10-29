@@ -19,7 +19,6 @@ import com.google.common.eventbus.EventBus;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
@@ -143,10 +142,10 @@ public final class PanelColonyGood implements JavaFxComponent {
                 && goodsStats.getInWarehouseAfter() < 0) {
             labelDiff.setText(labelDiff.getText() + " ⚠");
             final String warning = i18n.get(ColonyMsg.faminePreview);
-            labelDiff.setTooltip(new Tooltip(warning));
+            labelDiff.setAccessibleHelp(warning);
             labelDiff.setAccessibleText(warning);
         } else {
-            labelDiff.setTooltip(null);
+            labelDiff.setAccessibleHelp(null);
             labelDiff.setAccessibleText(null);
         }
     }

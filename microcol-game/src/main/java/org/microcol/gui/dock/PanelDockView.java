@@ -22,7 +22,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
@@ -149,7 +148,6 @@ public class PanelDockView implements JavaFxComponent {
             toggleButtonShip.setId("europe-dock-ship-" + ship.getId());
             toggleButtonShip.getStyleClass().add("harbor-unit");
             toggleButtonShip.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-            toggleButtonShip.setTooltip(new Tooltip(shipLabel(ship)));
             toggleButtonShip.setAccessibleText(shipLabel(ship));
             toggleButtonShip.setMinWidth(Region.USE_PREF_SIZE);
         }

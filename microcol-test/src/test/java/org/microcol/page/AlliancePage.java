@@ -254,7 +254,7 @@ public final class AlliancePage extends AbstractScreen {
         assertTrue(action.isDisabled());
         assertEquals("An alliance needs " + remaining
                 + " more rounds without tribute or attacks between these nations.",
-                action.getTooltip().getText());
+                action.getAccessibleHelp());
     }
 
     public void verifyProposalAvailable() {
@@ -300,7 +300,7 @@ public final class AlliancePage extends AbstractScreen {
         assertEquals(
                 "War cannot be declared for " + remaining
                         + " more rounds after an alliance ended.",
-                declare.getTooltip().getText());
+                declare.getAccessibleHelp());
     }
 
     public void verifyNoMessage() {

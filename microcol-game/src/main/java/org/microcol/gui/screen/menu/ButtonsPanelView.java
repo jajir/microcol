@@ -12,7 +12,6 @@ import com.google.inject.Inject;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
@@ -96,9 +95,6 @@ public final class ButtonsPanelView
             icon.setFitHeight(32);
             icon.setMouseTransparent(true);
             button.setGraphic(icon);
-            final Tooltip tooltip = new Tooltip();
-            tooltip.textProperty().bind(button.textProperty());
-            button.setTooltip(tooltip);
             button.accessibleTextProperty().bind(button.textProperty());
             buttonsBox.widthProperty()
                     .addListener(observable -> updateLabel(button));

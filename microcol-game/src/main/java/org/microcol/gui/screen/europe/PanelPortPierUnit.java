@@ -18,7 +18,6 @@ import org.microcol.model.unit.UnitFreeColonist;
 import javafx.geometry.Side;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.TransferMode;
@@ -60,7 +59,6 @@ public final class PanelPortPierUnit extends HBox {
         paneImage.setId("europe-pier-unit-" + unit.getId());
         paneImage.setFocusTraversable(true);
         paneImage.setAccessibleText(i18n.get(Europe.pierOrders));
-        Tooltip.install(paneImage, new Tooltip(i18n.get(Europe.pierOrders)));
         paneImage.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY
                     && event.isStillSincePress()) {
@@ -96,7 +94,7 @@ public final class PanelPortPierUnit extends HBox {
                     javafx.scene.layout.Region.USE_PREF_SIZE);
             marker.getStyleClass().add("sentry-marker");
             marker.setAccessibleText(i18n.get(Buttons.buttonSentry));
-            marker.setTooltip(new Tooltip(i18n.get(Buttons.sentryExplanation)));
+            marker.setAccessibleHelp(i18n.get(Buttons.sentryExplanation));
             getChildren().add(marker);
         }
         if (unit.isBoardingPriority() || unit.isBoardingOptedOut()) {

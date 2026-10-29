@@ -24,7 +24,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.Dragboard;
@@ -80,8 +79,6 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
         mainPane.setFocusTraversable(unit instanceof UnitFreeColonist);
         if (unit instanceof UnitFreeColonist) {
             mainPane.setAccessibleText(i18n.get(ColonyMsg.jobContext));
-            Tooltip.install(mainPane,
-                    new Tooltip(i18n.get(ColonyMsg.jobContext)));
         }
         mainPane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.CONTEXT_MENU || (event.isShiftDown()

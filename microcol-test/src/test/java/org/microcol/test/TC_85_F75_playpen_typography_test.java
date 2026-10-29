@@ -80,12 +80,12 @@ public class TC_85_F75_playpen_typography_test extends AbstractMicroColTest {
                 "New Amsterdam");
         colony.verifyColonyName("New Amsterdam");
         type.verifyVisibleCaption("colonyName", "New Amsterdam");
-        type.verifyTextSize("#colonyName", 14);
+        type.verifyTextSize("#colonyName", 28);
         type.verifySceneTypography("closeButtonId");
         type.verifyCanvasTypography();
         type.captureDialog("closeButtonId", "playpen-colony.png");
         type.hoverColonyCaption();
-        type.verifyColonyTooltip();
+        type.verifyColonyDetails();
         // Editing a Unicode draft uses the same font; Escape changes no name.
         final ColonyNameDialog rename = colony.rename();
         final String draft = "Příliš žluťoučký → français, Straße, Ĳssel €";

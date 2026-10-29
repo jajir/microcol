@@ -20,7 +20,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Labeled;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -122,17 +121,6 @@ public class AbstractButtonsPanel implements JavaFxComponent {
             if (getButtonPanel().getWidth() >= namedWidth) {
                 controls.forEach(control -> control
                         .setContentDisplay(ContentDisplay.LEFT));
-            } else {
-                for (final Labeled control : controls) {
-                    if (control.getTooltip() == null
-                            && !control.getText().isEmpty()
-                            && !control.getStyleClass()
-                                    .contains("game-toolbar-control")) {
-                        final Tooltip tooltip = new Tooltip();
-                        tooltip.textProperty().bind(control.textProperty());
-                        control.setTooltip(tooltip);
-                    }
-                }
             }
             final Window window = getButtonPanel().getScene().getWindow();
             if (window instanceof Stage) {

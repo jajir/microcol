@@ -1,5 +1,11 @@
 # Use cases a přejímka pravidel hry
 
+## UC-114/115/119: bez vyskakovacích bublin — 2026-10-29
+
+1. [R-0345](requirements/done/R-0345.md) odstraňuje bubliny napříč aplikací. TC188 ověřuje najetí na Retire bez popupu a zachovaný stavový řádek; TC85 kontroluje ovládání navštívených obrazovek a najetí na název kolonie. Stávající diplomatické, produkční a rozkazové scénáře dál kontrolují původní hodnoty v přístupných vysvětleních.
+2. Jde o změnu prezentace UC-114/115/119, nikoli o změnu pravidel nebo potvrzení kompletního pokrytí use cases. Úspěšnou místní přejímku i původní selhání zaznamenává [funkční evidence](functional-tests.md#r-0345-no-hover-tooltips-2026-10-29).
+
+
 ## UC-079/114–119: nadpisy herních pohledů — 2026-10-29
 
 1. [R-0341](requirements/done/R-0341.md) přesouvá existující názvy vlevo do společné horní lišty, zachovává akce vpravo a na mapě přidává **Mappa Mundi**. TC188 ověřuje českou i anglickou nápovědu při najetí myší a zaměření klávesnicí, návrat kontextu a ochranu před nechtěným rozkazem jednotce.

@@ -23,6 +23,9 @@ public final class FortifiedPopulationPage extends AbstractScreen {
                 .queryAs(Parent.class);
         Canvas canvas = (Canvas) building.getChildrenUnmodifiable().stream()
                 .filter(n -> n instanceof Canvas).findFirst().orElseThrow();
+        final javafx.scene.Node outside = getNodeFinder().lookup(".outside")
+                .queryAs(javafx.scene.Node.class);
+        revealGameContent(canvas, outside);
         java.util.concurrent.CountDownLatch done = new java.util.concurrent.CountDownLatch(
                 1);
         javafx.event.EventHandler<javafx.scene.input.DragEvent> completed = event -> done
@@ -30,11 +33,8 @@ public final class FortifiedPopulationPage extends AbstractScreen {
         getRobot().interact(() -> canvas.addEventHandler(
                 javafx.scene.input.DragEvent.DRAG_DONE, completed));
         try {
-            getRobot()
-                    .drag(canvas.localToScreen(10 + 31 * index, 82),
-                            MouseButton.PRIMARY)
-                    .dropTo(getNodeFinder().lookup(".outside")
-                            .queryAs(javafx.scene.Node.class));
+            getRobot().drag(canvas.localToScreen(10 + 31 * index, 82),
+                    MouseButton.PRIMARY).dropTo(outside);
             // Rejected native drags must finish before the next mouse gesture.
             if (!done.await(5, java.util.concurrent.TimeUnit.SECONDS))
                 throw new java.util.concurrent.TimeoutException(

@@ -106,7 +106,7 @@ public final class RebelSupportPage extends AbstractScreen {
     }
 
     /** The open colony view shows the same local values read-only. */
-    public void verifyColonyTooltip(final String name, final int population,
+    public void verifyColonyDetails(final String name, final int population,
             final long liberty, final int percent, final int bonus,
             final int tories, final int threshold, final int penalty) {
         assertEquals(name + " — Rename colony\nPopulation " + population
@@ -116,8 +116,8 @@ public final class RebelSupportPage extends AbstractScreen {
                 + ", Tories " + tories + " (penalty from " + threshold
                 + "), Tory penalty " + penalty + ", net " + (bonus + penalty),
                 getNodeFinder().lookup("#colonyName")
-                        .queryAs(javafx.scene.control.Label.class).getTooltip()
-                        .getText());
+                        .queryAs(javafx.scene.control.Label.class)
+                        .getAccessibleHelp());
     }
 
     public void verifyColonyLiberty(final int colonyId, final long liberty,

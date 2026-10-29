@@ -84,9 +84,9 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         exports.setText(i18n.get(CustomHouseText.open));
         exports.setDisable(!colony.isContainsConstructionByType(
                 org.microcol.model.ConstructionType.CUSTOM_HOUSE));
-        exports.setTooltip(new javafx.scene.control.Tooltip(
+        exports.setAccessibleHelp(
                 i18n.get(exports.isDisabled() ? CustomHouseText.unavailable
-                        : CustomHouseText.rule)));
+                        : CustomHouseText.rule));
     }
 
     /**

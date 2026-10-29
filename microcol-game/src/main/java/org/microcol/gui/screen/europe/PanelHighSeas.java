@@ -37,7 +37,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Tooltip;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -256,9 +255,9 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
                     ship.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                     ship.setToggleGroup(selection);
                     ship.setMinWidth(Region.USE_PREF_SIZE);
-                    ship.setTooltip(new Tooltip(
+                    ship.setAccessibleHelp(
                             identity.getText() + " · " + remaining.getText()
-                                    + " · " + i18n.get(Europe.voyageOrders)));
+                                    + " · " + i18n.get(Europe.voyageOrders));
                     ship.setAccessibleText(
                             identity.getText() + " · " + remaining.getText()
                                     + " · " + i18n.get(Europe.voyageOrders));

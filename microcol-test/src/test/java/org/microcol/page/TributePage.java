@@ -84,7 +84,7 @@ public final class TributePage extends AbstractScreen {
         Button action = getButtonById("tribute-0-1");
         assertTrue(action.isDisabled());
         assertEquals("Another demand is available in " + remaining + " turns.",
-                action.getTooltip().getText());
+                action.getAccessibleHelp());
     }
 
     public void verifyChanged() {

@@ -1,5 +1,8 @@
 # Current requirement backlog
 
+Accepted locally on 2026-10-29: [R-0345 — remove hover tooltips throughout the game](done/R-0345.md), A03. Model/JUnit **4,784**, targeted UI/support **61** and fixed smoke/support **21** passed with zero failures/errors/skips. The existing status line and accessible explanations remain. [Evidence](../functional-tests.md#r-0345-no-hover-tooltips-2026-10-29); remote publication is unverified.
+
+
 Accepted locally on 2026-10-29: [R-0344 — visible return-to-game labels](done/R-0344.md), A03, status `done`. English/Czech labels remain visible in compact headers; 4,783 model/JUnit, 22 targeted UI/support and 21 fixed smoke/support checks passed, zero failures/errors/skips. Remote publication is unverified. [Evidence](../functional-tests.md#r-0344-visible-return-labels-2026-10-29).
 
 Accepted locally on 2026-10-29: [R-0341 — shared game headings and Mappa Mundi](done/R-0341.md),

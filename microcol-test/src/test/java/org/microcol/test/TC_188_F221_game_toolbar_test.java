@@ -46,6 +46,12 @@ public class TC_188_F221_game_toolbar_test extends AbstractMicroColTest {
         layout.verifyPaperWindowConfiguration(expectedWindowStyle);
         layout.resize(1500, 900);
         toolbar.verifyControls(false, false);
+        // Hover keeps the status explanation without opening a popup.
+        toolbar.hoverRetire();
+        toolbar.verifyNoHoverPopup();
+        toolbar.verifyExplanation(
+                "Retire ends the game with your score. Scored play only, on your turn.",
+                null);
         final double namedWidth = toolbar.getCurrentRowWindowWidth();
 
         // The map heading explains its Latin name and restores prior context.

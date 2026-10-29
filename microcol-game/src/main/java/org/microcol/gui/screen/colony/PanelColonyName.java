@@ -15,7 +15,6 @@ import com.google.inject.Singleton;
 
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -88,10 +87,10 @@ public class PanelColonyName implements JavaFxComponent {
     void setColony(final Colony colony) {
         this.colony = colony;
         label.setText(colony.getName());
-        label.setTooltip(new Tooltip(
+        label.setAccessibleHelp(
                 colony.getName() + " — " + i18n.get(ColonyMsg.nameRename) + "\n"
                         + localSupportText(colony) + "\n"
-                        + politicalProductionText(colony)));
+                        + politicalProductionText(colony));
     }
 
     /** Read-only values from the model; nothing is produced or clamped. */

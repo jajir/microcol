@@ -1,5 +1,11 @@
 # UX a pravidla ovládání MicroCol
 
+## Žádné vyskakovací bubliny — 2026-10-29
+
+1. Dohoda [R-0345](requirements/done/R-0345.md): nikde ve hře ani v úvodním menu nezobrazovat plovoucí nápovědu po najetí nebo zastavení myši. Toto pravidlo nahrazuje starší požadavky na tooltipy uvedené níže i v historických analýzách.
+2. Popisky a přístupné názvy zůstávají. Dosavadní kontext ve spodní stavové liště, vysvětlení přímo v nabídce rozkazů a samostatná herní nápověda zůstávají běžnými cestami k informacím; klávesové ovládání ani herní pravidla se nemění.
+
+
 ## Viditelný návrat do hry — 2026-10-29
 
 1. [R-0344](requirements/done/R-0344.md): pravé návratové tlačítko v horní liště kolonie, Evropy, cílů, přehledů, zpráv tahu, Kongresu, nápovědy a herního Nastavení má šipku a společný text „Back to game“ / „Zpět do hry“. Popisek zůstává viditelný i v kompaktní liště; ostatní akce dál používají dosavadní pravidla přizpůsobení šířce.

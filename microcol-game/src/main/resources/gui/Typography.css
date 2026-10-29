@@ -12,7 +12,7 @@ SemiBold	600	"Playpen Sans SemiBold"
 
 **/
 
-.root, .tooltip, .context-menu .label-slider {
+.root, .context-menu .label-slider {
     -fx-font-family: "Playpen Sans";
     -fx-font-size: 14;
     -fx-font-weight: normal;
