@@ -54,6 +54,36 @@ public final class InGameLayoutPage extends AbstractScreen {
         }
     }
 
+    public void verifyEuropeActionLabels(final String... expectedLabels) {
+        getRobot().interact(() -> {
+            final String[] ids = { "recruitButtonId", "buyButtonId",
+                    "shipRepairsButton", "treasureOpen", "closeButtonId" };
+            assertEquals(ids.length, expectedLabels.length);
+            final Node toolbar = page().lookup(".screen-toolbar");
+            final Bounds bounds = toolbar
+                    .localToScene(toolbar.getLayoutBounds());
+            for (int i = 0; i < ids.length; i++) {
+                final Button button = getButtonById(ids[i]);
+                assertEquals(expectedLabels[i], button.getText(), ids[i]);
+                assertEquals(ContentDisplay.LEFT, button.getContentDisplay(),
+                        ids[i]);
+                assertNotNull(button.getGraphic(), ids[i]);
+                assertTrue(button.isVisible() && button.isManaged(), ids[i]);
+                final Bounds actual = button
+                        .localToScene(button.getLayoutBounds());
+                assertTrue(
+                        actual.getMinX() >= bounds.getMinX() - 1
+                                && actual.getMaxX() <= bounds.getMaxX() + 1
+                                && actual.getMinY() >= bounds.getMinY() - 1
+                                && actual.getMaxY() <= bounds.getMaxY() + 1,
+                        ids[i]);
+                final Text text = (Text) button.lookup(".text");
+                assertTrue(text.isVisible(), ids[i]);
+                assertEquals(expectedLabels[i], text.getText(), ids[i]);
+            }
+        });
+    }
+
     public void verifyBackToGame(final String id, final String expectedText) {
         getRobot().interact(() -> {
             final Button button = getButtonById(id);

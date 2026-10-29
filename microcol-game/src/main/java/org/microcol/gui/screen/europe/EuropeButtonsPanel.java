@@ -75,6 +75,7 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
     public void updateLanguage(final I18n i18n) {
         treasure.setText(i18n.get(org.microcol.gui.dialog.TreasureText.open));
         buttonRecruit.setText(i18n.get(Europe.recruitOpen));
+        buttonBuyUnit.setText(i18n.get(Europe.buttonBuyUnit));
         buttonRepairs.setText(i18n.get(Europe.repairsOpen));
         buttonTax.setText(i18n.get(Europe.taxOpen));
         buttonBackTax.setText(i18n.get(Europe.backTaxOpen));

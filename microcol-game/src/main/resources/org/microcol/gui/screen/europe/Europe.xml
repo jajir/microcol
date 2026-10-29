@@ -30,7 +30,7 @@
 	<entry key="statusBarPier">Pier, there will be units waiting for travel to New World.</entry>
 	<entry key="goodsToSell">Sell %s for %s gold or buy it for %s gold.</entry>
 	<entry key="buttonClose">Close Europe port. Return back to main world view.</entry>
-	<entry key="buttonBuyUnit">Buy new unit.</entry>
+	<entry key="buttonBuyUnit">Buy units</entry>
 
     <entry key="equipmentOpen">Equipment: click, right-click or press Enter to buy or sell</entry>
     <entry key="buyMuskets">Buy 50 muskets</entry>

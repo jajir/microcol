@@ -295,6 +295,17 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         bars.verifyContents(2560, 1440);
         page.verifyFrame(484, 1600);
         page.saveEvidence("r0340-wide-europe.png");
+        // All Europe action names fit both wide and supported narrow windows.
+        page.verifyEuropeActionLabels("Recruit", "Buy units", "Ship repairs",
+                "Redeem treasure", "Back to game");
+        page.saveEvidence("r0347-europe-labels-en.png");
+        bars.resizeContent(1000, 900);
+        page.verifyEuropeActionLabels("Recruit", "Buy units", "Ship repairs",
+                "Redeem treasure", "Back to game");
+        page.saveEvidence("r0347-europe-narrow-en.png");
+        bars.resizeContent(1280, 900);
+        page.verifyEuropeActionLabels("Recruit", "Buy units", "Ship repairs",
+                "Redeem treasure", "Back to game");
         bars.resizeContent(1000, 900);
         page.open("closeButtonId");
         game.openTurnReport();
@@ -345,6 +356,22 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         page.verifyFrame(484, 1600);
         bars.resizeContent(1000, 900);
         page.closeWithEscape();
+        page.verifyMapReturned();
+        // Czech action names also survive narrowing and reopening the port.
+        page.open("europe");
+        bars.resizeContent(1280, 900);
+        page.verifyEuropeActionLabels("Nábor", "Koupit jednotky", "Opravy lodí",
+                "Vyplatit poklad", "Zpět do hry");
+        page.saveEvidence("r0347-europe-labels-cs.png");
+        bars.resizeContent(1000, 900);
+        page.verifyEuropeActionLabels("Nábor", "Koupit jednotky", "Opravy lodí",
+                "Vyplatit poklad", "Zpět do hry");
+        bars.resizeContent(1280, 900);
+        page.open("closeButtonId");
+        page.open("europe");
+        page.verifyEuropeActionLabels("Nábor", "Koupit jednotky", "Opravy lodí",
+                "Vyplatit poklad", "Zpět do hry");
+        page.open("closeButtonId");
         page.verifyMapReturned();
         page.verifyTurnUnchanged(2, 484);
     }

@@ -935,3 +935,7 @@ remain owned by their current requirements; acceptance is recorded in the
 
 1. [R-0342](done/R-0342.md), primary area A03, applies the user-selected maximum width of 1440 logical pixels to both bars, with full-width backgrounds and map.
 2. Status: done. Implementation and local acceptance are complete; [evidence](../functional-tests.md#r-0342-bar-content-width-2026-10-29).
+
+## Europe action labels — 2026-10-29
+
+1. [R-0347](done/R-0347.md), primary area A03, fills the missing Buy units / Koupit jednotky label and verifies wide/narrow EN/CZ toolbars. Status: done. Local acceptance is recorded in the [functional evidence](../functional-tests.md#r-0347-europe-action-labels-2026-10-29).

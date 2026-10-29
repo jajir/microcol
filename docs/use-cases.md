@@ -1210,3 +1210,7 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
    assertions remain. All eight targeted checks passed without failures, errors
    or skips; the model and smoke gates also passed. Results are in the
    [dated evidence](functional-tests.md#r-0339-congress-shortcut-2026-10-29).
+
+### UC-119: Europe action labels — 2026-10-29
+
+1. [R-0347](requirements/done/R-0347.md) doplňuje název nákupu jednotek. TC192/05 a TC192/06 kontrolují celé EN/CZ názvy v širokém okně i při šířce 1000 px a po opětovném otevření. TC48/01 zachovává zrušení a skutečný nákup; výsledky jsou ve [funkční evidenci](functional-tests.md#r-0347-europe-action-labels-2026-10-29).

@@ -1138,3 +1138,8 @@ skutečného hráče; výsledky patří do [funkční evidence](functional-tests
 3. [R-0316](requirements/done/R-0316.md) a jeho
    [evidence](functional-tests.md#r-0316-shared-paper-buttons-and-action-icons-2026-10-27)
    zachycují kontrolu implementace; nejde o výsledky uživatelské studie.
+
+## Názvy akcí v horní liště — 2026-10-29
+
+1. [R-0347](requirements/done/R-0347.md): pokud se názvy vejdou, akční tlačítka mají vedle ikony celý text. Evropský nákup používá **Buy units / Koupit jednotky**, odlišený od **Recruit / Nábor**. Hráč tak pozná cíl před otevřením nabídky.
+2. Při nedostatku místa zůstává stávající přepnutí horní lišty na ikony; návrat do hry si ponechá text. Rozšíření okna názvy obnoví. Nákup, zrušení a jejich výsledky se nemění. Jde o dohodnuté chování, skutečnou přejímku uvádí [funkční evidence](functional-tests.md#r-0347-europe-action-labels-2026-10-29).
