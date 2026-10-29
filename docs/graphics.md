@@ -1,5 +1,23 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Barevné varianty přístavu podle hlavní mapy — 29. října 2026
+
+1. [R-0340](requirements/done/R-0340.md) dodává sedm **návrhů**, nikoli novou implementaci. Vycházejí z uživatelem přiloženého přístavu a hlavní mapy: sytá azurová přechází k tlumené zelenomodré, město a molo k olivovým a teplým šedým odstínům. Rozložení a ruční 2D kresba zůstávají výchozí.
+2. Mění se pouze ilustrace moře, nebe, mola a města. Barvy zboží, nákladových beden, společných lišt, ikon a tlačítek jsou v zadání zachované. Generované náhledy nepředstavují přesnou reprodukci všech pixelů rozhraní; pro budoucí implementaci se má měnit samotné pozadí, nikoli sdílené atlasy nebo styly.
+3. Všech sedm samostatných editací vytvořil vestavěný ImageGen. [Úplná zadání](graphics-assets/harbor-palettes-2026-10-29/prompts.json) obsahují obě referenční role, zachované prvky a cílové barvy. Hex hodnoty jsou návrhové zadání, ne změřené nebo již implementované barvy hry.
+
+| Varianta | Směr | Náhled |
+| --- | --- | --- |
+| 1 · Barvy mapy | Nejbližší návaznost na mapu; voda `#529C98`, šedozelené nebe a teplý šedý kámen. | [Celý přístav](graphics-assets/harbor-palettes-2026-10-29/harbor-01.png) |
+| 2 · Světlý atlas | Světlejší voda `#78ADA6`, světlý vápenec a vzdušný celek. | [Celý přístav](graphics-assets/harbor-palettes-2026-10-29/harbor-02.png) |
+| 3 · Severní přístav | Chladnější voda `#598C8D`, šedomodré nebe a břidlicové střechy. | [Celý přístav](graphics-assets/harbor-palettes-2026-10-29/harbor-03.png) |
+| 4 · Olivové pobřeží | Zelenější voda `#759F8A`, více olivové a béžové. | [Celý přístav](graphics-assets/harbor-palettes-2026-10-29/harbor-04.png) |
+| 5 · Papírová mapa | Nejměkčí paleta; voda `#89AEA4`, pergamenové nebe a pískově šedý kámen. | [Celý přístav](graphics-assets/harbor-palettes-2026-10-29/harbor-05.png) |
+| 6 · Hlubší zelenomodrá | Výraznější tlumená voda `#458C84` proti světlému nebi. | [Celý přístav](graphics-assets/harbor-palettes-2026-10-29/harbor-06.png) |
+| 7 · Teplý přístav | Mapové moře `#549B96`, teplejší kámen a několik tlumených cihlových střech. | [Celý přístav](graphics-assets/harbor-palettes-2026-10-29/harbor-07.png) |
+
+4. Doporučení autora: varianta 1 pro nejmenší rozdíl proti mapě; varianta 7 pro stejné barevné ukotvení s teplejším charakterem města. Uživatel dosud žádnou variantu nevybral. [Evidence dodání](publishing.md#r-0340-harbor-palette-proposals-2026-10-29) rozlišuje návrhy od ověření hry.
+
 ## Společné kreslené posuvníky — 29. října 2026
 
 1. [R-0338](requirements/done/R-0338.md) přebírá uživatelem zvolený svislý posuvník nápovědy jako společný výchozí vzhled. Vodorovná podoba má stejné barvy a otočené ručně kreslené tvary.

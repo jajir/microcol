@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-29",
+  "tool": "Built-in ImageGen",
+  "scope": "Seven illustrative palette proposals only; no runtime changes.",
+  "references": [
+    "codex-clipboard-7db6d41f-0bd7-4d8e-902c-10c23dc3b8ef.png (edit target)",
+    "codex-clipboard-5d9ffc87-dbfe-4ee8-8fa9-6b9c84387609.png (map palette reference)"
+  ],
+  "basePrompt": "Use case: precise-object-edit / palette-only UI concept. Image 1 is the exact edit target: the existing MicroCol European harbor screenshot. Image 2 is ONLY a color palette reference: the main game map. Produce ONE complete harbor screenshot in the SAME aspect ratio and composition as image 1, no surrounding margins, no comparison panels, no new title or numbering. Change ONLY colors of the harbor illustration: sea, sky, stone quay, town buildings/roofs/vegetation/wood. Preserve every existing contour and all positions, sizes, hand drawn black pen linework and flat 2D aesthetic. Do not add detail or realism. Eliminate photographic texture and heavy shading from recolored areas; use mostly even matte color fields, like the reference map. CRITICAL LOCKED AREAS: top app/window bar and cream toolbar and all buttons/icons, immigration white/cream progress strip, six ochre cargo crates, entire cream goods strip with all sixteen goods icons and prices, bottom status bar and coins/date MUST remain identical in color and content to image 1. All text remains exactly as existing. No recolor of shared UI or goods. Do not add ships or people or panels. Readable dark text. Use map's muted earthy family, not bright cyan. ",
+  "variants": [
+    {
+      "id": 1,
+      "name": "Barvy mapy",
+      "promptSuffix": "Variant MAP COLOURS: closest possible match to reference map. Main sea flat muted teal #529C98, pale gray-sage sky #C7D7CC, warm gray limestone quay #A49B87, pale olive town trees #A8B977, cream limestone houses #DDD6B9, low saturation slate-olive roofs #777D71. Softly warm, balanced, clear day. The existing ochre boxes and goods/controls are not in this palette change.",
+      "source": "/Users/jan/.codex/generated_images/01a17e99-12a8-7e13-850f-1df8755a7135/exec-e3f963f1-606c-4182-8cfc-7a8c25101abf.png",
+      "file": "harbor-01.png"
+    },
+    {
+      "id": 2,
+      "name": "Světlý atlas",
+      "promptSuffix": "Variant LIGHT ATLAS: lightest airy option that is still clearly the main map family. Sea #78ADA6, sky #DDE3D4, pale limestone quay #C1B79E, vegetation #B5C38B, houses #E3DCC2, roofs #8B9181. Use very pale low saturation sage sky, clear calm light teal water and light warm gray quay. Brighter than variant MAP COLOURS but never luminous cyan. Flat map-like colour.",
+      "source": "/Users/jan/.codex/generated_images/01a17e99-12a8-7e13-850f-1df8755a7135/exec-80b6d791-aa46-42ca-a13a-1376cace7de5.png",
+      "file": "harbor-02.png"
+    },
+    {
+      "id": 3,
+      "name": "Severní přístav",
+      "promptSuffix": "Variant NORTHERN HARBOR: distinctly cooler, more restrained than original and reference, but not dark. Sea muted slate teal #598C8D, sky cool pale gray-blue #CAD6D5, quay stone #A3A49A, vegetation gray olive #91A17A, houses ivory-gray #D9D8C6, roofs slate #687875. Keep high contrast with dark text. An overcast North Sea day in the map's limited pigment palette, no rain, no fog or extra detail.",
+      "source": "/Users/jan/.codex/generated_images/01a17e99-12a8-7e13-850f-1df8755a7135/exec-d509d4cb-7368-49cc-986c-6da5f7f14b1e.png",
+      "file": "harbor-03.png"
+    },
+    {
+      "id": 4,
+      "name": "Olivové pobřeží",
+      "promptSuffix": "Variant OLIVE COAST: emphasize the map's olive-grass palette in the harbor, distinctly warmer and greener. Water muted green-teal #759F8A, pale sage-cream sky #DDE0C6, olive-beige stone quay #B2AA8C, yellow-olive vegetation #A7B670, cream houses #DFD7B7, desaturated olive-gray roofs #858773. Flat, warm, clear and quiet. Keep the sea visibly different from foliage, no vivid cyan, no global sepia wash.",
+      "source": "/Users/jan/.codex/generated_images/01a17e99-12a8-7e13-850f-1df8755a7135/exec-b4eddbb0-0454-4400-a646-e93bc67c767d.png",
+      "file": "harbor-04.png"
+    },
+    {
+      "id": 5,
+      "name": "Papírová mapa",
+      "promptSuffix": "Variant PAPER ATLAS: a noticeably soft almost antique hand-coloured map palette, WITHOUT globally tinting the UI. Light desaturated sea #89AEA4, pale parchment-gray sky #E7E7D6, sandy gray quay #BDB198, vegetation muted sage #B3BF91, pale parchment buildings #E2DBC2, roofs warm gray #92917B. Sea remains green-blue and clearly distinct from sky. This is the lowest-saturation, lightest-paper option. Preserve black pen contrast and ALL original goods/button colours.",
+      "source": "/Users/jan/.codex/generated_images/01a17e99-12a8-7e13-850f-1df8755a7135/exec-eec1f1cd-1a4f-4df1-87df-3f1aca6c264b.png",
+      "file": "harbor-05.png"
+    },
+    {
+      "id": 6,
+      "name": "Hlubší zelenomodrá",
+      "promptSuffix": "Variant DEEP MAP TEAL: strongest clear distinction between quiet pale sky and mid-dark sea. Sea flat muted deep green teal #458C84, sky pale gray sage #CCD9CF, quay warm medium gray #A49B86, foliage muted map olive #A4B574, buildings limestone #DDD7BD, roofs dark desaturated green-gray #707C70. Text remains clearly readable. Richer green-blue than the light options, yet much less saturated than target image cyan. No dramatic lighting, no shadows, keep flat ink drawing.",
+      "source": "/Users/jan/.codex/generated_images/01a17e99-12a8-7e13-850f-1df8755a7135/exec-f052f643-c5a0-4e26-be06-af203a968efc.png",
+      "file": "harbor-06.png"
+    },
+    {
+      "id": 7,
+      "name": "Teplý přístav v paletě mapy",
+      "promptSuffix": "Variant WARM HARBOR WITH MAP SEA: balance closest-to-map muted green-blue sea #549B96 with pale cool sage sky #CEDBD1 and warmer stone quay #B5A58A. Use map-like olive foliage #ADBD79, warm cream walls #E0D4B5. Retain a few muted clay-orange rooftops #AE805E among slate-olive roofs #7B8272, echoing tiny ochre roofs in the main map. Slightly warmer town and quay than the exact-match option, while all large areas are restrained and flat. No bright cyan, no global filter. LOCK all shared goods, ochre cargo boxes, buttons and cream UI exactly as source.",
+      "source": "/Users/jan/.codex/generated_images/01a17e99-12a8-7e13-850f-1df8755a7135/exec-a9e2a575-eebd-41bc-bc5e-aeeb36f61366.png",
+      "file": "harbor-07.png"
+    }
+  ]
+}

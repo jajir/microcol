@@ -1075,3 +1075,10 @@ documentation in APT just to make it visible on the web.
    MkDocs. Logs: `target/r0329/docs-tests-final.log` and
    `target/r0329/docs-build-final.log`. R-0329 is complete and archived under
    `requirements/done/`; no generated site output is committed.
+
+## R-0340 harbor palette proposals — 2026-10-29
+
+1. Documentation-only scope on base `a69755e0`: seven independent built-in ImageGen palette edits, exact prompt records and the [proposal comparison](graphics.md#barevne-varianty-pristavu-podle-hlavni-mapy-29-rijna-2026). The two user-provided screenshots define composition and map palette. Runtime code, assets, tests and configuration are unchanged.
+2. The main agent visually inspected all seven generated full frames: distinct muted sea/sky/stone/vegetation families, retained layout and pen drawing, and no intentional recolouring of goods or shared controls. These are concept images, not executed game captures or pixel-identity proof. No variant has been selected.
+3. A task-local comparison retains all seven full-frame previews and both source references; previews are encoded as WebP only for delivery, while PNG originals and exact prompts are preserved in docs. Browser review passed all seven alternatives at 1024 px and 360 px: exactly one visible design per step, all nine images loaded, references expand, and no horizontal overflow. The inline fragment is 851,156 bytes; the full-size originals remain separate. Evidence is retained under `target/harbor-palettes/`.
+4. Documentation consistency passed **9 checks**, zero failures/errors/skips; strict MkDocs passed. The requirement is closed for proposal delivery only. Model/JUnit and Docker smoke are exempt for this documentation-only scope. No remote CI or publication is inspected.

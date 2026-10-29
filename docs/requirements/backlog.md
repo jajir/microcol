@@ -912,3 +912,7 @@ remain owned by their current requirements; acceptance is recorded in the
 2. Status: done. Local acceptance passed 4,783 model/JUnit, 8 targeted UI/source-contract
    and 21 fixed smoke/support checks without failures, errors or skips;
    [evidence](../functional-tests.md#r-0339-congress-shortcut-2026-10-29).
+
+## Harbor palette proposals — 2026-10-29
+
+1. [R-0340](done/R-0340.md), primary area A03, provides seven illustration-only palette alternatives matching the main map while preserving shared UI and goods colours. Status: done for proposal delivery; it does not authorize runtime implementation.
