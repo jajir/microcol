@@ -1,8 +1,8 @@
 # Current requirement backlog
 
 Captured on 2026-10-29: [R-0337 — fixed bar heights for in-game views](R-0337.md),
-primary area A03. Proposes a shared name and 72-logical-pixel bars for the map
-and other in-game screens. Status: `new`; the current bottom bar has only a
+primary area A03. The user clarified independent top/bottom heights and common left/right
+alignment; three design variants are prepared for selection. Status: `new`; the current bottom bar has only a
 minimum height. No runtime implementation or gameplay acceptance is claimed.
 
 Accepted locally on 2026-10-28: [R-0334 — isolated Codex UX playtesting](done/R-0334.md), A03. The independent experienced player completed 40 verified turns with screenshots and notes; tooling, model/JUnit, live desktop and fixed smoke gates passed. See [results and limits](../ux-playtesting.md).

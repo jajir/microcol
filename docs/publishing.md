@@ -44,6 +44,19 @@ keeps the current game download unchanged.
    correcting the inspection path to the configured `.html` output. Model/JUnit,
    UI, smoke and tooling tests do not apply to this documentation-only change.
    Remote CI and publication verification were not requested.
+4. Follow-up on 2026-10-29: the user explicitly chose independent top/bottom
+   heights with common left/right alignment. The current UX and requirement
+   incorporate that decision; the earlier equal-height proposal is superseded.
+   Three in-conversation alternatives, Úsporný (72/48), Vzdušný (88/64) and
+   Seskupený (80/56), offer separate height controls and shared side padding.
+   The central content is schematic and does not redesign the actual harbor.
+5. Browser inspection checked all three alternatives, contextual help on action
+   focus/click, the actual independent bar heights and matching text/edge
+   coordinates. A narrow-preview overflow found during review was repaired;
+   all three then fit a 360 px browser viewport (326 px product width), keeping
+   the actions, gold and year visible with zero horizontal overflow. This is
+   prototype evidence, not JavaFX or player-test acceptance. Nine documentation
+   checks and strict MkDocs passed again; no game code or runtime assets changed.
 
 ## Editing workflow
 
