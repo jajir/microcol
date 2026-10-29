@@ -377,6 +377,64 @@ public final class EuropeHarborPage extends AbstractScreen {
         });
     }
 
+    public void verifyContentAlignment() {
+        getRobot().interact(() -> {
+            final Node frame = getNodeFinder().lookup("#europeMarketFrame")
+                    .query();
+            final Node content = frame.lookup(".game-bar-content");
+            final Bounds edges = content
+                    .localToScene(content.getLayoutBounds());
+            for (final String selector : List.of("#immigration-progress",
+                    ".to-europe .bordered-titled-title", "#europe-dock-count",
+                    "#europe-cargo-title")) {
+                final Label label = getNodeFinder().lookup(selector)
+                        .queryAs(Label.class);
+                final Bounds bounds = label
+                        .localToScene(label.getLayoutBounds());
+                assertEquals(edges.getMinX(), bounds.getMinX(), 1, selector);
+                assertEquals(0, label.getPadding().getLeft(), 0.01, selector);
+            }
+            final Node crate = PageComponentPanelDock.of(getContext())
+                    .getListOfCrates().get(0);
+            assertEquals(edges.getMinX(),
+                    crate.localToScene(crate.getLayoutBounds()).getMinX(), 1,
+                    "Cargo starts at the common left edge");
+            final List<Node> goods = getListOfNodes(".panelGoods");
+            assertEquals(16, goods.size());
+            double previousRight = 0;
+            double expectedGap = 0;
+            for (int index = 0; index < goods.size(); index++) {
+                final ImageView icon = (ImageView) goods.get(index)
+                        .lookup("ImageView");
+                final Bounds bounds = icon.localToScene(icon.getLayoutBounds());
+                assertEquals(45, bounds.getWidth(), 0.01);
+                assertEquals(45, bounds.getHeight(), 0.01);
+                if (index == 0) {
+                    assertEquals(edges.getMinX(), bounds.getMinX(), 1,
+                            "First goods icon starts at the left edge");
+                } else if (index == 1) {
+                    expectedGap = bounds.getMinX() - previousRight;
+                    assertTrue(expectedGap >= 0, "Goods do not overlap");
+                } else {
+                    assertEquals(expectedGap, bounds.getMinX() - previousRight,
+                            1, "Goods have equal gaps");
+                }
+                previousRight = bounds.getMaxX();
+            }
+            assertEquals(edges.getMaxX(), previousRight, 1,
+                    "Last goods icon ends at the right edge");
+            for (final String selector : List.of(
+                    ".to-new-world .bordered-titled-title",
+                    "#europe-pier-count")) {
+                final Node heading = getNodeFinder().lookup(selector).query();
+                assertEquals(edges.getCenterX() + 16,
+                        heading.localToScene(heading.getLayoutBounds())
+                                .getMinX(),
+                        1, "Right headings keep the second column");
+            }
+        });
+    }
+
     public void verifyGoodsPricesCentered() {
         getRobot().interact(() -> {
             final List<Node> goods = getListOfNodes(".panelGoods");

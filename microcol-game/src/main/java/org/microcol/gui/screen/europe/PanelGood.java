@@ -64,6 +64,7 @@ public final class PanelGood implements JavaFxComponent, Repaintable {
         this.i18n = Preconditions.checkNotNull(i18n);
         imageView = new ImageView(imageProvider.getGoodsTypeImage(goodsType));
         final Pane paneImage = new Pane(imageView);
+        paneImage.setMinWidth(Region.USE_PREF_SIZE);
         paneImage.setOnDragDetected(this::onDragDetected);
         labelPrice = new Label();
         labelPrice.setId("europePrice" + goodsType.name());

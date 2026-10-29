@@ -7,7 +7,7 @@
 .europe-harbor .immigration-progress {
     -fx-background-color: transparent;
     -fx-text-fill: #27271f;
-    -fx-padding: 4 10;
+    -fx-padding: 4 0;
     -fx-alignment: center-left;
 }
 .europe-harbor .harbor-heading,
@@ -58,7 +58,7 @@
 .europe-harbor .harbor-cargo {
     -fx-background-color: transparent;
     -fx-border-width: 0;
-    -fx-padding: 6 10;
+    -fx-padding: 6 0;
     -fx-spacing: 3;
 }
 .europe-harbor .goods {
@@ -67,8 +67,9 @@
     -fx-border-width: 2 0 0 0;
 }
 .europe-harbor .panelGoods {
-    -fx-min-width: 50;
-    -fx-pref-width: 50;
+    -fx-min-width: 45;
+    -fx-pref-width: 45;
+    -fx-max-width: 45;
     -fx-alignment: top-center;
 }
 .europe-harbor .panelGoods.boycotted {

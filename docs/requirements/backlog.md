@@ -942,3 +942,8 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Europe action labels — 2026-10-29
 
 1. [R-0347](done/R-0347.md), primary area A03, fills the missing Buy units / Koupit jednotky label and verifies wide/narrow EN/CZ toolbars. Status: done. Local acceptance is recorded in the [functional evidence](../functional-tests.md#r-0347-europe-action-labels-2026-10-29).
+
+## Společné okraje evropského přístavu — 2026-10-29
+
+1. [R-0348](done/R-0348.md), primary area A03, implements the approved alignment preview: left harbor headings and cargo share the bars' content edge; evenly spaced goods reach both edges.
+2. Status: done. The approved alignment and local acceptance are complete; [evidence](../functional-tests.md#r-0348-harbor-alignment-2026-10-29).

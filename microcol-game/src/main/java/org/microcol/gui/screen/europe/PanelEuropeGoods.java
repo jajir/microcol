@@ -85,10 +85,13 @@ public final class PanelEuropeGoods
         GoodsType.BUYABLE_GOOD_TYPES.forEach(goodsType -> {
             final PanelGood panelGood = new PanelGood(goodsType, imageProvider,
                     gameModelController, dialogNotEnoughGold, eventBus, i18n);
+            if (!panelGoods.isEmpty()) {
+                final Region gap = new Region();
+                HBox.setHgrow(gap, javafx.scene.layout.Priority.ALWAYS);
+                mainPanel.getChildren().add(gap);
+            }
             panelGoods.add(panelGood);
             mainPanel.getChildren().add(panelGood.getContent());
-            HBox.setHgrow(panelGood.getContent(),
-                    javafx.scene.layout.Priority.ALWAYS);
         });
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
                 mainPanel, this::isItGoods);

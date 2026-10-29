@@ -1,5 +1,14 @@
 # UX a pravidla ovládání MicroCol
 
+## Zarovnání evropského přístavu — 2026-10-29
+
+[R-0348](requirements/done/R-0348.md) navazuje přistěhovalectví, příchozí lodě,
+přístav a náklad na společný levý okraj lišt. Trh rovnoměrně rozmístí ikony
+od levého k pravému okraji při zachování vystředěných cen. Vstup do Evropy,
+výběr lodi, obchod, samostatné posouvání seznamů a návrat do hry se nemění.
+Ověření zahrnuje široké i úzké okno a oba jazyky; automatické kontroly rozložení
+nejsou pozorováním nezávislého hráče.
+
 ## Ceny evropského zboží — 2026-10-29
 
 1. Hráč při prohlížení evropského trhu přiřadí dvojici prodej/nákup k ikoně přímo nad ní podle [společného středu](graphics.md#evropsky-pristav-namorni-skicar-28-rijna-2026). Jde o uživatelem vybranou prezentaci [R-0346](requirements/done/R-0346.md), bez nové akce nebo potvrzení; pravidla nákupu, prodeje a bojkotu se nemění.

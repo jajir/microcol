@@ -1,5 +1,14 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Společné okraje přístavu — 29. října 2026
+
+Schválený náhled [R-0348](requirements/done/R-0348.md) zarovnává přistěhovalectví,
+příchozí lodě, přístav a náklad s levým okrajem nadpisu Evropy a obsahu lišt.
+Krajní ikony zboží dosahují k oběma okrajům; mezery mezi ikonami jsou rovnoměrné
+a ceny zůstávají uprostřed pod nimi. Pozadí zůstává celoplošné, pravé skupiny
+ve druhém sloupci. Červená vodítka z náhledu nejsou součástí hry.
+Stav ověření uvádí [funkční evidence](functional-tests.md#r-0348-harbor-alignment-2026-10-29).
+
 Od 29. října 2026 platí pro všechny obrazovky [pravidlo bez vyskakovacích bublin](ux.md#zadne-vyskakovaci-bubliny-2026-10-29). Starší zmínky tooltipů níže popisují historický stav.
 
 ## Nadpisy herních pohledů, 29. října 2026

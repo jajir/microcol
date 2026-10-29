@@ -99,6 +99,7 @@ public class TC_79_F71_back_tax_payment_test extends AbstractMicroColTest {
         harbor.showGoods();
         harbor.verifyAllGoodsVisible();
         harbor.verifyGoodsPricesCentered();
+        harbor.verifyContentAlignment();
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0346-goods-boycott.png");
         // Paying once charges the exact arrears and lifts only the muskets.
