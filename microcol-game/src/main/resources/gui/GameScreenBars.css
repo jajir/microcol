@@ -1,4 +1,13 @@
 /* Shared owner of in-game toolbar and status-bar appearance. */
+/* Both bars share 16px side insets; vertical spacing stays independent. */
+.game-screen .buttonPanel,
+.in-game-page .screen-toolbar,
+.in-game-page #buttonPane.screen-toolbar {
+    -fx-padding: 6 16;
+}
+#statusBar {
+    -fx-padding: 12 16;
+}
 .buttonPanel {
     -fx-alignment: center;
 }
@@ -19,7 +28,6 @@
     -fx-pref-height: 72;
     -fx-max-height: 72;
     -fx-pref-width: -1;
-    -fx-padding: 6;
     -fx-background-color: #FFF9EC;
     -fx-font-family: "Playpen Sans";
     -fx-font-size: 14;
@@ -70,7 +78,6 @@
 #statusBar {
     -fx-background-color: #FFF9EC;
     -fx-min-height: 72;
-    -fx-padding: 12 16;
     -fx-alignment: center-left;
     -fx-border-color: transparent;
     -fx-border-width: 1 0 0 0;
@@ -95,6 +102,6 @@
     -fx-padding: 0 16 0 16;
 }
 #statusBar #labelEra {
-    -fx-padding: 0 16 0 16;
+    -fx-padding: 0 0 0 16;
     -fx-border-width: 0;
 }

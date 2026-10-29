@@ -246,6 +246,15 @@ public final class MainScreenLayoutPage extends AbstractScreen {
             assertEquals(72, toolbar.getMinHeight());
             assertEquals(72, toolbar.getPrefHeight());
             assertEquals(72, toolbar.getMaxHeight());
+            final Region status = (Region) node("statusBar");
+            assertEquals(16, toolbar.getPadding().getLeft());
+            assertEquals(16, toolbar.getPadding().getRight());
+            assertEquals(toolbar.getPadding().getLeft(),
+                    status.getPadding().getLeft());
+            assertEquals(toolbar.getPadding().getRight(),
+                    status.getPadding().getRight());
+            assertEquals(0, ((Label) node("labelEra")).getPadding().getRight(),
+                    "The year adds no second inset at the right edge");
             final Bounds bar = bounds("statusBar");
             final Bounds map = bounds("canvas");
             final Bounds right = bounds("rightPanel");

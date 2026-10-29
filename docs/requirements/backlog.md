@@ -2,7 +2,7 @@
 
 Selected on 2026-10-29: [R-0337 — fixed top toolbar and shared bar styling](R-0337.md),
 primary area A03. The top height follows the supplied map screenshot (72 logical pixels);
-bottom dimensions remain independent. Status: `ready for development`; implementation
+bottom heights remain independent and both bars use 16-pixel side padding defined in the shared stylesheet. Status: `ready for development`; implementation
 is prepared, but the user explicitly requested a push without tests. No local acceptance
 is claimed. [Evidence](../functional-tests.md#r-0337-shared-game-bars-2026-10-29).
 

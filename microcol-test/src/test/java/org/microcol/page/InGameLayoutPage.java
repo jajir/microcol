@@ -181,6 +181,15 @@ public final class InGameLayoutPage extends AbstractScreen {
             assertEquals(72, toolbar.getMinHeight());
             assertEquals(72, toolbar.getPrefHeight());
             assertEquals(72, toolbar.getMaxHeight());
+            assertEquals(16, toolbar.getPadding().getLeft());
+            assertEquals(16, toolbar.getPadding().getRight());
+            assertEquals(toolbar.getPadding().getLeft(),
+                    status.getPadding().getLeft());
+            assertEquals(toolbar.getPadding().getRight(),
+                    status.getPadding().getRight());
+            assertEquals(0,
+                    ((Label) root.lookup("#labelEra")).getPadding().getRight(),
+                    "The year adds no second inset at the right edge");
             assertEquals(1, toolbar.getBorder().getImages().size());
             assertEquals(1, status.getBorder().getImages().size());
             assertEquals(toolbar.getBorder().getImages().get(0).getImage(),
