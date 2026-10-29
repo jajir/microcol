@@ -6,6 +6,9 @@
 #statusBar {
     -fx-padding: 12 16;
 }
+.europe-harbor .goods {
+    -fx-padding: 8 16 10 16;
+}
 .buttonPanel {
     -fx-alignment: center-right;
 }

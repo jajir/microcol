@@ -1,5 +1,8 @@
 # Current requirement backlog
 
+Accepted locally on 2026-10-29: [R-0346 — centered European goods prices](done/R-0346.md), A03 with A06. Prices are centered under goods icons; the goods strip shares both game bars’ side insets and maximum content width. Model/JUnit **4,784**, combined targeted UI/support **14** and fixed smoke/support **21** passed with zero failures/errors/skips. [Evidence](../functional-tests.md#r-0346-centered-goods-prices-2026-10-29); remote publication remains unverified.
+
+
 Accepted locally on 2026-10-29: [R-0345 — remove hover tooltips throughout the game](done/R-0345.md), A03. Model/JUnit **4,784**, targeted UI/support **61** and fixed smoke/support **21** passed with zero failures/errors/skips. The existing status line and accessible explanations remain. [Evidence](../functional-tests.md#r-0345-no-hover-tooltips-2026-10-29); remote publication is unverified.
 
 

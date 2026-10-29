@@ -8,6 +8,7 @@ import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
 import org.microcol.page.EuropeHarborPage;
 import org.microcol.page.EuropePortScreen;
+import org.microcol.page.GameBarWidthPage;
 import org.microcol.page.InGameLayoutPage;
 import org.microcol.page.SettingPage;
 import org.microcol.page.WelcomePage;
@@ -36,6 +37,9 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyImmigrationAppearance();
         harbor.verifyLayoutAndNativeImages();
         harbor.verifyScrollPositions(0, 0, 0, 0);
+
+        // Every sell/buy price shares the center of its goods icon.
+        harbor.verifyGoodsPricesCentered();
 
         // Reach the last docked ship and select it with the keyboard.
         harbor.dragGroupToEnd("dock");
@@ -83,11 +87,41 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyLayoutAndNativeImages();
         harbor.verifyAllGoodsVisible();
         harbor.verifySelectedCargo(3142, 0, Goods.of(GoodsType.ORE, 43));
+        harbor.verifyGoodsPricesCentered();
         port.verifyAvailableHoldCount(4);
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0343-harbor-small.png");
         port.close();
         new InGameLayoutPage(getContext()).verifyMapReturned();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_03_goods_follow_shared_bar_width() throws Exception {
+        // Open Europe and compare all three content bands in a wide window.
+        WelcomePage.of(getContext()).loadGame().openEuroperPort();
+        final EuropeHarborPage harbor = new EuropeHarborPage(getContext());
+        final GameBarWidthPage bars = new GameBarWidthPage(getContext());
+        bars.resizeContent(2560, 1000);
+        bars.verifyContents(2560, 1440);
+        harbor.verifyGoodsContentWidth(1440);
+        harbor.verifyGoodsPricesCentered();
+        new InGameLayoutPage(getContext()).saveEvidence("r0346-goods-wide.png");
+
+        // The same 16px insets take over at and below the shared width cap.
+        bars.resizeContent(1472, 1000);
+        bars.verifyContents(1472, 1440);
+        harbor.verifyGoodsContentWidth(1440);
+        bars.resizeContent(1470, 1000);
+        bars.verifyContents(1470, 1438);
+        harbor.verifyGoodsContentWidth(1438);
+        bars.resizeContent(1000, 1000);
+        bars.verifyContents(1000, 968);
+        harbor.verifyGoodsContentWidth(968);
+        harbor.verifyGoodsPricesCentered();
+        harbor.verifyAllGoodsVisible();
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0346-goods-narrow.png");
     }
 
     @Test
@@ -111,6 +145,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         port.verifyAvailableHoldCount(4);
         harbor.showGoods();
         harbor.verifyAllGoodsVisible();
+        harbor.verifyGoodsPricesCentered();
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0343-harbor-czech.png");
     }

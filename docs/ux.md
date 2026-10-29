@@ -1,5 +1,11 @@
 # UX a pravidla ovládání MicroCol
 
+## Ceny evropského zboží — 2026-10-29
+
+1. Hráč při prohlížení evropského trhu přiřadí dvojici prodej/nákup k ikoně přímo nad ní podle [společného středu](graphics.md#evropsky-pristav-namorni-skicar-28-rijna-2026). Jde o uživatelem vybranou prezentaci [R-0346](requirements/done/R-0346.md), bez nové akce nebo potvrzení; pravidla nákupu, prodeje a bojkotu se nemění.
+2. Obsah zboží přebírá také [šířku a boční odsazení herních lišt](#sirka-obsahu-hernich-list-r-0342), aby při rozšiřování okna udržel stejné okraje.
+3. Rozhodnutí není výsledkem hráčské studie. Skutečné ověření obou jazyků, velikostí okna a obchodních cest patří do [funkční evidence](functional-tests.md#r-0346-centered-goods-prices-2026-10-29).
+
 ## Žádné vyskakovací bubliny — 2026-10-29
 
 1. Dohoda [R-0345](requirements/done/R-0345.md): nikde ve hře ani v úvodním menu nezobrazovat plovoucí nápovědu po najetí nebo zastavení myši. Toto pravidlo nahrazuje starší požadavky na tooltipy uvedené níže i v historických analýzách.

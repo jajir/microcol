@@ -21,6 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.text.TextAlignment;
 
 /** The illustrated harbor keeps every unit reachable at its native size. */
 public final class EuropeHarborPage extends AbstractScreen {
@@ -351,6 +352,50 @@ public final class EuropeHarborPage extends AbstractScreen {
                 assertTrue(feet.getMaxY() <= scene.getHeight() - 114);
             }
             assertEquals(16, getListOfNodes(".panelGoods").size());
+        });
+    }
+
+    public void verifyGoodsContentWidth(final double expectedWidth) {
+        getRobot().interact(() -> {
+            final Node frame = getNodeFinder().lookup("#europeMarketFrame")
+                    .query();
+            final Node content = frame.lookup(".game-bar-content");
+            final Bounds goods = content
+                    .localToScene(content.getLayoutBounds());
+            assertEquals(expectedWidth, goods.getWidth(), 1);
+            for (final String selector : List.of(".screen-toolbar",
+                    "#statusBar")) {
+                final Node bar = getNodeFinder().lookup(selector).query();
+                final Node inner = bar.lookup(".game-bar-content");
+                final Bounds bounds = inner
+                        .localToScene(inner.getLayoutBounds());
+                assertEquals(bounds.getMinX(), goods.getMinX(), 1,
+                        selector + " shares the left goods inset");
+                assertEquals(bounds.getMaxX(), goods.getMaxX(), 1,
+                        selector + " shares the right goods inset");
+            }
+        });
+    }
+
+    public void verifyGoodsPricesCentered() {
+        getRobot().interact(() -> {
+            final List<Node> goods = getListOfNodes(".panelGoods");
+            assertEquals(16, goods.size());
+            for (final Node good : goods) {
+                final ImageView icon = (ImageView) good.lookup("ImageView");
+                final Label price = (Label) good.lookup(".label");
+                final Node text = price.lookup(".text");
+                final Bounds imageBounds = icon
+                        .localToScene(icon.getBoundsInLocal());
+                final Bounds textBounds = text
+                        .localToScene(text.getBoundsInLocal());
+                assertEquals(imageBounds.getCenterX(), textBounds.getCenterX(),
+                        1, good.getId());
+                assertTrue(textBounds.getMinY() >= imageBounds.getMaxY(),
+                        good.getId() + " price is below its icon");
+                assertEquals(TextAlignment.CENTER, price.getTextAlignment(),
+                        good.getId() + " price lines are centered");
+            }
         });
     }
 

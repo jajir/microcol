@@ -49,6 +49,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         harbor.verifyGroups(0);
         harbor.verifyHorizontalScrollbars(false);
         harbor.verifyImmigrationAppearance();
+        harbor.verifyGoodsPricesCentered();
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0343-harbor-empty.png");
 

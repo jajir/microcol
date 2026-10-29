@@ -18,6 +18,7 @@ import org.microcol.model.GoodsType;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
@@ -26,6 +27,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 
 /**
  * Contains image of of type of good.
@@ -66,7 +68,10 @@ public final class PanelGood implements JavaFxComponent, Repaintable {
         labelPrice = new Label();
         labelPrice.setId("europePrice" + goodsType.name());
         labelPrice.setWrapText(true);
+        labelPrice.setAlignment(Pos.CENTER);
+        labelPrice.setTextAlignment(TextAlignment.CENTER);
         mainPanel = new VBox();
+        mainPanel.setFillWidth(false);
         mainPanel.getStyleClass().add("panelGoods");
         mainPanel.setId("europeGood" + goodsType.name());
         mainPanel.getChildren().addAll(paneImage, labelPrice);

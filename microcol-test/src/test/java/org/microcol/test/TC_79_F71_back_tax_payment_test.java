@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
 import org.microcol.page.EuropePortScreen;
+import org.microcol.page.EuropeHarborPage;
+import org.microcol.page.InGameLayoutPage;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.ScreenMarketBuy;
 import org.microcol.page.ScreenMarketSell;
@@ -78,6 +80,9 @@ public class TC_79_F71_back_tax_payment_test extends AbstractMicroColTest {
         // and charges nothing.
         taxes.openEurope();
         taxes.verifyBackTaxButton(true, false);
+        // Keep every commodity visible before dragging the last goods type.
+        final EuropeHarborPage harbor = new EuropeHarborPage(getContext());
+        harbor.resize(1000, 900);
         taxes.openBackTaxes();
         taxes.verifyBackTaxDialogOpen(true);
         taxes.chooseBackTaxCommodity(GoodsType.MUSKET);
@@ -89,6 +94,13 @@ public class TC_79_F71_back_tax_payment_test extends AbstractMicroColTest {
         taxes.verifyTax(TAX_AFTER_PROTEST, Map.of(GoodsType.MUSKET,
                 MUSKET_ARREARS, GoodsType.SILK, SILK_ARREARS));
         taxes.verifyBoycottMarked(GoodsType.MUSKET, true);
+
+        // Boycott marks keep the price lines centered below their icons.
+        harbor.showGoods();
+        harbor.verifyAllGoodsVisible();
+        harbor.verifyGoodsPricesCentered();
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0346-goods-boycott.png");
         // Paying once charges the exact arrears and lifts only the muskets.
         taxes.openBackTaxes();
         taxes.chooseBackTaxCommodity(GoodsType.MUSKET);
@@ -107,10 +119,14 @@ public class TC_79_F71_back_tax_payment_test extends AbstractMicroColTest {
         europe.selectUnitFromPort(0);
         europe.verifyCargoSlotEmpty(0, 0);
         int buyTotal = taxes.quoteMarketPrice(GoodsType.MUSKET, 2, true);
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0346-restored-goods-before-buy.png");
         ScreenMarketBuy buy = europe
                 .buyGoodsAndMoveItToCargoSlotWithPressedControl(
                         GoodsType.BUYABLE_GOOD_TYPES.indexOf(GoodsType.MUSKET),
                         0);
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0346-restored-goods-after-drag.png");
         buy.selectValueAtSlider(2);
         buy.verifySelectedMarketQuantity(2);
         buy.clickOnBuy();

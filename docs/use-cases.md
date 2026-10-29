@@ -32,6 +32,9 @@
 
 ## UC-018/023–025/054–059/081/114/119: evropský přístav — 2026-10-28
 
+Zarovnání cen UC-054/055/059/119 rozšiřuje [R-0346](requirements/done/R-0346.md): TC194 měří společný střed všech 16 cen a ikon v obou jazycích a velikostech okna; TC194/03 porovnává šířku a okraje obsahu zboží s oběma lištami, TC06 zachovává nákup/prodej a TC79/01 také bojkot. [Stav přejímky](functional-tests.md#r-0346-centered-goods-prices-2026-10-29) nemění stav celých UC.
+
+
 1. [R-0335](requirements/done/R-0335.md) mění prezentaci přístavu a společné ikony zboží. Pravidla, ceny, stavy a existující identifikátory UC zůstávají beze změny.
 2. [R-0336](requirements/done/R-0336.md) navazuje plochými bednami a průhledným výběrem; UC-026 (odhození) a UC-028 (obrat) používají nabídku konkrétní plující lodi. TC194 ověřuje její otevření myší/klávesnicí a Escape, TC44 obrat včetně zrušení a zastaralého stavu, TC107 odhození, TC154 omezení uzavřené Evropy.
 3. TC194/F226 přidává přejímku zaplněných seznamů, nezávislého posouvání, konkrétní lodi/nákladu a malého okna; TC06 ověřuje i prázdné skupiny. Doplňující regrese a skutečné výsledky jsou v [evidenci](functional-tests.md#r-0335-europe-harbor-2026-10-28).

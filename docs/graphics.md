@@ -47,6 +47,11 @@ Od 29. října 2026 platí pro všechny obrazovky [pravidlo bez vyskakovacích b
 
 ## Evropský přístav — Námořní skicář (28. října 2026)
 
+Aktuální zarovnání podle výběru uživatele z 29. října 2026, [R-0346](requirements/done/R-0346.md): dvojice cen prodej/nákup má společný vodorovný střed s ikonou příslušného zboží. Platí pro všech 16 položek i řádky s označením bojkotu. Pořadí cen, písmo, velikost ikon a jejich atlas zůstávají zachované. Obsah zboží včetně nadpisu má podle následného zadání stejné nejméně 16pixelové boční odsazení a vystředěnou maximální šířku 1 440 pixelů jako horní a spodní lišta; krémový podklad zůstává přes celou šířku. Stav skutečné přejímky uvádí [funkční evidence](functional-tests.md#r-0346-centered-goods-prices-2026-10-29).
+
+Skutečné snímky R-0346 z Docker/Xvfb, 29. října 2026: [široké okno 2 560 × 1 000](graphics-assets/europe-goods-2026-10-29/r0346-goods-wide.png) a [užší okno 1 000 × 1 000](graphics-assets/europe-goods-2026-10-29/r0346-goods-narrow.png).
+
+
 1. Uživatel vybral rozložení dvou plaveb vedle sebe, přístav vlevo a lidi vpravo nad dlouhým vysokým kamenným molem. Původní implementaci vlastní [R-0335](requirements/done/R-0335.md); následné upřesnění [R-0336](requirements/done/R-0336.md) nahrazuje světlý panel plochými bednami přímo před čelní stěnou. Výklenky, perspektiva a stíny nejsou součástí vybraného vzhledu; ukázková čísla návrhu se nenahrazují pevnými herními údaji.
 2. Pozadí `microcol-game/src/main/resources/images/europe-harbor.png` je samostatná ilustrace bez ovládání, jednotek a čísel. Moře se přizpůsobuje výšce, čelo mola si ponechává 112 bodů pro skutečný náklad. Původní obrázky lodí a lidí zůstávají 45 × 45; čtyři seznamy mají samostatné vodorovné posuvníky, nikoli limit 42 jednotek.
 3. Vybraný pás **09 — Olivové pobřeží** převádí šestnáct obchodovatelných druhů do společného atlasu `images/goods-olive.png` (180 × 180, čtyři řádky po čtyřech buňkách 45 × 45). Stejné obrázky používá trh, náklad, kolonie a dialogy. Zvony, kladiva a kříže zůstávají původní.

@@ -37,6 +37,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 
 /**
  * Show list of all available goods.
@@ -52,6 +53,8 @@ public final class PanelEuropeGoods
     private final Label tradeRestriction = new Label();
 
     private final TitledPanel titledPanel;
+
+    private final StackPane frame = new StackPane();
 
     private final GameModelController gameModelController;
 
@@ -98,7 +101,10 @@ public final class PanelEuropeGoods
         final VBox content = new VBox(mainPanel, tradeRestriction);
         HBox.setHgrow(content, javafx.scene.layout.Priority.ALWAYS);
         titledPanel.getContentPane().getChildren().add(content);
-        titledPanel.getStyleClass().add("goods");
+        titledPanel.getStyleClass().add("game-bar-content");
+        frame.setId("europeMarketFrame");
+        frame.getStyleClass().add("goods");
+        frame.getChildren().add(titledPanel);
     }
 
     @Override
@@ -179,7 +185,7 @@ public final class PanelEuropeGoods
 
     @Override
     public Region getContent() {
-        return titledPanel;
+        return frame;
     }
 
 }
