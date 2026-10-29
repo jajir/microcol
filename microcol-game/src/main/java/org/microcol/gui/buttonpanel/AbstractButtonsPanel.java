@@ -114,8 +114,10 @@ public class AbstractButtonsPanel implements JavaFxComponent {
             controls.forEach(
                     control -> control.setContentDisplay(ContentDisplay.LEFT));
             final double namedWidth = toolbarPreferredWidth();
-            controls.forEach(control -> control
-                    .setContentDisplay(ContentDisplay.GRAPHIC_ONLY));
+            controls.forEach(control -> control.setContentDisplay(
+                    control.getStyleClass().contains("back-to-game-button")
+                            ? ContentDisplay.LEFT
+                            : ContentDisplay.GRAPHIC_ONLY));
             final double iconWidth = toolbarPreferredWidth();
             if (getButtonPanel().getWidth() >= namedWidth) {
                 controls.forEach(control -> control

@@ -14,6 +14,9 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.text.Text;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
@@ -49,6 +52,39 @@ public final class InGameLayoutPage extends AbstractScreen {
                     getNodeFinder().lookup("#" + id).queryAs(Node.class));
             WaitForAsyncUtils.waitForFxEvents();
         }
+    }
+
+    public void verifyBackToGame(final String id, final String expectedText) {
+        getRobot().interact(() -> {
+            final Button button = getButtonById(id);
+            final Node toolbar = page().lookup(".screen-toolbar");
+            final Bounds barBounds = toolbar
+                    .localToScene(toolbar.getLayoutBounds());
+            final Bounds buttonBounds = button
+                    .localToScene(button.getLayoutBounds());
+            final Text text = (Text) button.lookup(".text");
+            assertEquals(expectedText, button.getText());
+            assertEquals(expectedText, text.getText(),
+                    "Return label must not be truncated");
+            assertEquals(ContentDisplay.LEFT, button.getContentDisplay());
+            assertNotNull(button.getGraphic());
+            assertTrue(button.isVisible() && text.isVisible());
+            assertTrue(barBounds.contains(buttonBounds),
+                    "Return button stays inside header");
+            assertTrue(
+                    buttonBounds.contains(
+                            text.localToScene(text.getLayoutBounds())),
+                    "Whole label fits inside return button");
+            for (final Node action : page()
+                    .lookupAll(".screen-toolbar .button")) {
+                if (action.isVisible() && action.isManaged()) {
+                    assertTrue(
+                            action.localToScene(action.getLayoutBounds())
+                                    .getMaxX() <= buttonBounds.getMaxX() + 1,
+                            "Return is the rightmost button");
+                }
+            }
+        });
     }
 
     public void verifySelectedTab(final String id) {

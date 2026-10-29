@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.europe;
 
+import org.microcol.gui.Loc;
+
 import org.microcol.gui.util.ActionButtons;
 import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.buttonpanel.AbstractButtonsPanel;
@@ -40,7 +42,7 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
             final org.microcol.gui.dialog.TreasureDialog treasureDialog) {
         super(imageProvider, eventBus, Source.EUROPE, i18n);
 
-        buttonClose = makeButton(ButtonIcon.BACK, Europe.buttonClose);
+        buttonClose = makeButton(ButtonIcon.BACK, Loc.backToGame);
         buttonClose.setOnAction(
                 evnt -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
         buttonClose.setId(CLOSE_BUTTON_ID);

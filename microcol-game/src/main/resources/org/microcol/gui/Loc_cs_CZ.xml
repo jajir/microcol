@@ -5,6 +5,7 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="ok">Ok</entry>
+	<entry key="backToGame">Zpět do hry</entry>
 	<entry key="gameTitle">MicroCol</entry>
 
 	<entry key="statusBar_tile_notExplored">Tato oblast je neprozkoumaná.</entry>

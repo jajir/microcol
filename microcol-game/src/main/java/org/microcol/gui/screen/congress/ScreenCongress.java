@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.congress;
 
+import org.microcol.gui.Loc;
+
 import org.microcol.gui.util.ActionButtons;
 import org.microcol.gui.image.ButtonIcon;
 import com.google.inject.Inject;
@@ -236,7 +238,7 @@ public final class ScreenCongress implements GameScreen {
                 .setText(texts.get(CongressText.title));
         royalDetails.setText(texts.get(CongressText.deployment));
         choose.setText(texts.get(CongressText.choose));
-        close.setText(texts.get(CongressText.back));
+        close.setText(texts.get(Loc.backToGame));
         page.updateLanguage(texts);
         if (boundModel != null)
             refresh();

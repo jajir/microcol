@@ -36,39 +36,50 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         // Goals and every statistics tab share the frame.
         page.open("goals");
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("closeButtonId", "Back to game");
         page.saveEvidence("r0307-goals.png");
         page.open("closeButtonId");
         page.open("statistics");
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("coloniesTab");
         page.verifySelectedTab("coloniesTab");
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("closeButtonId", "Back to game");
         page.saveEvidence("r0307-statistics.png");
         page.open("relationsTab");
         page.verifySelectedTab("relationsTab");
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("tradeTab");
         page.verifySelectedTab("tradeTab");
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("baseScoreTab");
         page.verifySelectedTab("baseScoreTab");
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("hallOfFameTab");
         page.verifySelectedTab("hallOfFameTab");
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("laborTab");
         page.verifySelectedTab("laborTab");
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("religionTab");
         page.verifySelectedTab("religionTab");
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("fleetTab");
         page.verifySelectedTab("fleetTab");
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("closeButtonId");
         // Colony and port retain their actions above the illustrated content.
         game.openColonyWithKeyboard(0, "New Amsterdam");
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("closeButtonId", "Back to game");
         page.verifyColonyNameVisible("New Amsterdam");
         page.saveEvidence("r0307-colony.png");
         // Escape also works when focus is in the shared toolbar.
@@ -78,16 +89,30 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         page.verifyMapReturned();
         game.openEuroperPort();
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("closeButtonId", "Back to game");
         page.saveEvidence("r0307-europe.png");
         page.open("closeButtonId");
         // A smaller window scrolls only the report body.
         game.openTurnReport();
         window.resize(900, 700);
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("closeButtonId", "Back to game");
         page.scrollToBottom();
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("closeButtonId", "Back to game");
         page.saveEvidence("r0307-turn-report-small.png");
         page.closeWithEscape();
+        page.verifyMapReturned();
+        // Help and in-game Settings share the same visible return label.
+        page.open("help");
+        page.verifyBackToGame("buttonOk", "Back to game");
+        page.open("buttonOk");
+        page.verifyMapReturned();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        saves.openMenu();
+        saves.chooseMenu("menuSettings");
+        page.verifyBackToGame("buttonBack", "Back to game");
+        page.open("buttonBack");
         page.verifyMapReturned();
         game.verifyGameInFront();
         page.verifyTurnUnchanged(2, 484);
@@ -177,11 +202,31 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         final GamePage game = settings.goBack().loadGame();
         final InGameLayoutPage page = new InGameLayoutPage(getContext());
         new MainScreenLayoutPage(getContext()).resize(1000, 925);
+        // Shared return controls retain their Czech text after changing
+        // language.
+        page.open("goals");
+        page.verifyBackToGame("closeButtonId", "Zpět do hry");
+        page.open("closeButtonId");
+        page.open("statistics");
+        page.verifyBackToGame("closeButtonId", "Zpět do hry");
+        page.open("closeButtonId");
+        game.openColonyWithKeyboard(0, "New Amsterdam");
+        page.verifyBackToGame("closeButtonId", "Zpět do hry");
+        page.closeWithEscape();
+        game.openEuroperPort("Evropa");
+        page.verifyBackToGame("closeButtonId", "Zpět do hry");
+        page.open("closeButtonId");
+        game.openTurnReport();
+        page.verifyBackToGame("closeButtonId", "Zpět do hry");
+        page.closeWithEscape();
+        page.verifyMapReturned();
+
         // In-game Settings returns to the same game through its header.
         final SavedGamesPage saves = new SavedGamesPage(getContext());
         saves.openMenu();
         saves.chooseMenu("menuSettings");
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("buttonBack", "Zpět do hry");
         page.saveEvidence("r0307-settings-czech.png");
         page.open("buttonBack");
         // Congress and help retain their keyboard cancellation.
@@ -190,6 +235,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         congress.open();
         congress.verifyFillsGameWindow("Zpět do hry");
         congress.verifyHeading("Kongres");
+        page.verifyBackToGame("congressClose", "Zpět do hry");
         page.verifyFrame(484, 1600);
         page.scrollToBottom();
         page.verifyFrame(484, 1600);
@@ -200,6 +246,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         org.microcol.page.ColonizopediaPage.of(getContext())
                 .verifyFillsGameWindow("Colonizopedia");
         page.verifyFrame(484, 1600);
+        page.verifyBackToGame("buttonOk", "Zpět do hry");
         page.saveEvidence("r0325-help-czech.png");
         page.closeWithEscape();
         page.verifyMapReturned();

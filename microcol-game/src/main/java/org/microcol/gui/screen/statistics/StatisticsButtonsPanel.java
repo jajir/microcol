@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.statistics;
 
+import org.microcol.gui.Loc;
+
 import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.buttonpanel.AbstractButtonsPanel;
 import org.microcol.gui.image.ImageProvider;
@@ -24,7 +26,7 @@ public class StatisticsButtonsPanel extends AbstractButtonsPanel {
             final EventBus eventBus, final I18n i18n) {
         super(imageProvider, eventBus, Source.EUROPE, i18n);
 
-        buttonClose = makeButton(ButtonIcon.BACK, Stats.buttonCancel);
+        buttonClose = makeButton(ButtonIcon.BACK, Loc.backToGame);
         buttonClose.setId(CLOSE_BUTTON_ID);
 
         getButtonPanel().getChildren().add(buttonClose);

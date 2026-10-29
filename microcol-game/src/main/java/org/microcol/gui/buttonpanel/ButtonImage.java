@@ -1,5 +1,7 @@
 package org.microcol.gui.buttonpanel;
 
+import org.microcol.gui.Loc;
+
 import org.microcol.gui.util.ActionButtons;
 import org.microcol.gui.image.ButtonIcon;
 import javafx.scene.control.Tooltip;
@@ -37,6 +39,9 @@ class ButtonImage<T extends Enum<T> & MessageKeyResource>
         this.i18n = Preconditions.checkNotNull(i18n);
         this.buttonKey = Preconditions.checkNotNull(buttonKey);
         button = ActionButtons.button(icon);
+        if (buttonKey.equals(Loc.backToGame)) {
+            button.getStyleClass().add("back-to-game-button");
+        }
         updateAccessibleName();
         button.sceneProperty().addListener(
                 (observable, oldScene, newScene) -> updateAccessibleName());
@@ -46,6 +51,9 @@ class ButtonImage<T extends Enum<T> & MessageKeyResource>
 
     private void updateAccessibleName() {
         final String label = i18n.get(buttonKey);
+        if (buttonKey.equals(Loc.backToGame)) {
+            button.setText(label);
+        }
         // Full toolbars own their translated label and its accessibility
         // binding.
         if (!button.accessibleTextProperty().isBound()) {

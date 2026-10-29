@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.setting;
 
+import org.microcol.gui.Loc;
+
 import org.microcol.gui.screen.AbstractScreenMenu;
 import org.microcol.gui.screen.GameScreen;
 import org.microcol.gui.screen.menu.GameMenu;
@@ -25,13 +27,15 @@ public class ScreenSetting extends AbstractScreenMenu implements GameScreen {
     private final SettingButtonsView settingButtons;
     private final InGamePage page;
     private final GameModelController game;
+    private final I18n i18n;
     private final StackPane root = new StackPane();
     private final HBox toolbar = new HBox();
 
     @Inject
     ScreenSetting(final SettingButtonsView settingButtons,
             final MenuHolderPanel menuHolderPanel, final InGamePage page,
-            final GameModelController game) {
+            final GameModelController game, final I18n i18n) {
+        this.i18n = i18n;
         this.page = page;
         this.game = game;
         page.getContent().getStylesheets().add(STYLE_SHEET_GAME_MENU);
@@ -55,12 +59,16 @@ public class ScreenSetting extends AbstractScreenMenu implements GameScreen {
     public void updateLanguage(final I18n i18n) {
         menuHolderPanel.setTitle(i18n.get(GameMenu.settingTitle));
         settingButtons.updateLanguage(i18n);
+        if (game.isGameModelReady()) {
+            settingButtons.getButtonBack().setText(i18n.get(Loc.backToGame));
+        }
         page.setTitle(i18n.get(GameMenu.settingTitle));
         page.updateLanguage(i18n);
     }
 
     @Override
     public void beforeShow() {
+        updateLanguage(i18n);
         if (game.isGameModelReady()) {
             settingButtons.setInGame(true);
             toolbar.getChildren().setAll(settingButtons.getButtonBack());

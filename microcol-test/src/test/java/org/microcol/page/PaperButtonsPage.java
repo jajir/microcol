@@ -189,7 +189,19 @@ public final class PaperButtonsPage extends AbstractScreen {
             assertFalse(ships.isEmpty());
             for (final ToggleButton ship : ships) {
                 assertEquals(ToggleButtonSkin.class, ship.getSkin().getClass());
-                verifyPaperButton(ship);
+                assertEquals(new javafx.geometry.Insets(6), ship.getPadding());
+                assertEquals(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY,
+                        ship.getContentDisplay());
+                assertTrue(ship.getText().isEmpty());
+                assertTrue(ship.getBackground().getFills().stream().allMatch(
+                        fill -> Color.TRANSPARENT.equals(fill.getFill())));
+                assertEquals(ship.isSelected(), ship.getBorder() != null
+                        && !ship.getBorder().getImages().isEmpty());
+                if (ship.isSelected()) {
+                    assertTrue(ship.getBorder().getImages().get(0).getImage()
+                            .getUrl().endsWith("game-toolbar-frame.png"));
+                }
+                assertNotNull(ship.getAccessibleText());
                 assertTrue(ship
                         .getGraphic() instanceof javafx.scene.image.ImageView);
                 assertNull(ship.lookup(".wooden-button-drawing"));

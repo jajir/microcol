@@ -1,5 +1,11 @@
 # UX a pravidla ovládání MicroCol
 
+## Viditelný návrat do hry — 2026-10-29
+
+1. [R-0344](requirements/done/R-0344.md): pravé návratové tlačítko v horní liště kolonie, Evropy, cílů, přehledů, zpráv tahu, Kongresu, nápovědy a herního Nastavení má šipku a společný text „Back to game“ / „Zpět do hry“. Popisek zůstává viditelný i v kompaktní liště; ostatní akce dál používají dosavadní pravidla přizpůsobení šířce.
+2. Kliknutí vrací do stejné partie. Nastavení otevřené z menu zachovává „Back“ / „Zpět“ a návrat do menu. Vnořené dialogy ani odchod z partie tento popisek nepřebírají.
+3. Dohodnuté chování prošlo lokálními UI kontrolami v angličtině a češtině, včetně menšího okna; výsledky a jejich omezení vede [evidence R-0344](functional-tests.md#r-0344-visible-return-labels-2026-10-29).
+
 ## Šířka obsahu herních lišt — R-0342
 
 1. Dohoda z 29. října 2026: horní a dolní lišta mají společnou vycentrovanou vnitřní oblast širokou nejvýše **1 440 logických pixelů**. Pozadí a kreslené vodorovné hrany lišt pokračují přes celé okno; mapa si ponechává celou dostupnou šířku.

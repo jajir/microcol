@@ -1,6 +1,7 @@
 package org.microcol.gui.screen.colonizopedia;
 
 import org.microcol.gui.Loc;
+import org.microcol.gui.image.ButtonIcon;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.GameScreen;
 import org.microcol.gui.screen.Screen;
@@ -78,6 +79,7 @@ public final class ScreenColonizopedia implements GameScreen {
         this.page = page;
         tables = new ColonizopediaTables(i18n, images);
         buttonBar = new ButtonBarOk(i18n);
+        buttonBar.getButtonOk().setGraphic(ButtonIcon.BACK.createView());
         buttonBar.getButtonOk().setOnAction(e -> {
             eventBus.post(new ShowScreenEvent(Screen.GAME));
         });
@@ -181,7 +183,7 @@ public final class ScreenColonizopedia implements GameScreen {
         title.setText(i18n.get(Colonizopedia.title));
         search.setPromptText(i18n.get(Colonizopedia.searchPrompt));
         noResults.setText(i18n.get(Colonizopedia.noResults));
-        buttonBar.setButtonText(i18n.get(Loc.ok));
+        buttonBar.setButtonText(i18n.get(Loc.backToGame));
         topicList.refresh();
         showBody(topicList.getSelectionModel().getSelectedItem());
     }

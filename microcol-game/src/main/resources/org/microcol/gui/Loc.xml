@@ -5,6 +5,7 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="ok">Ok</entry>
+	<entry key="backToGame">Back to game</entry>
 	<entry key="gameTitle">MicroCol</entry>
 
 	<entry key="statusBar_tile_notExplored">This area is still hidden</entry>

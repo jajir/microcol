@@ -1,5 +1,7 @@
 # Current requirement backlog
 
+Accepted locally on 2026-10-29: [R-0344 — visible return-to-game labels](done/R-0344.md), A03, status `done`. English/Czech labels remain visible in compact headers; 4,783 model/JUnit, 22 targeted UI/support and 21 fixed smoke/support checks passed, zero failures/errors/skips. Remote publication is unverified. [Evidence](../functional-tests.md#r-0344-visible-return-labels-2026-10-29).
+
 Accepted locally on 2026-10-29: [R-0341 — shared game headings and Mappa Mundi](done/R-0341.md),
 primary area A03. Shared 28-pixel headings, right-aligned original controls and localized map help are implemented,
 including the authorized R-0342 width integration. Status: `done`. Model/JUnit **4,783**, targeted UI/support **52**

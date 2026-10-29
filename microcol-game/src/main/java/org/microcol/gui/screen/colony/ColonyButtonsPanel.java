@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.Loc;
+
 import org.microcol.gui.util.ActionButtons;
 import org.microcol.gui.image.ButtonIcon;
 import java.util.List;
@@ -60,12 +62,12 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         tradeRouteCargo.setId("tradeRouteCargoOpen");
         tradeRouteCargo.setOnAction(event -> routeCargo.showFor(colony));
         tradeRouteCargo.setDisable(true);
-        buttonClose = makeButton(ButtonIcon.BACK, ColonyMsg.buttonClose);
+        buttonClose = makeButton(ButtonIcon.BACK, Loc.backToGame);
         buttonClose.setId(CLOSE_BUTTON_ID);
         buttonClose.setOnAction(
                 evnt -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
 
-        getButtonPanel().getChildren().addAll(buttonClose, exports, education);
+        getButtonPanel().getChildren().addAll(exports, education, buttonClose);
     }
 
     void setColony(org.microcol.model.Colony colony) {
@@ -95,8 +97,10 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
     }
 
     void addQuickCargoButtons(final List<Button> buttons) {
+        getButtonPanel().getChildren().remove(buttonClose);
         getButtonPanel().getChildren().addAll(treasure, tradeRouteCargo,
                 tradeRoute);
         getButtonPanel().getChildren().addAll(buttons);
+        getButtonPanel().getChildren().add(buttonClose);
     }
 }
