@@ -136,6 +136,9 @@ public class ScreenGamePresenter {
         if (KeyCode.H == event.getCode()) {
             eventBus.post(new ShowHelpEvent());
         }
+        if (KeyCode.K == event.getCode()) {
+            eventBus.post(new ShowScreenEvent(Screen.CONGRESS));
+        }
         if (KeyCode.N == event.getCode()) {
             eventBus.post(new ShowNativeSettlementsEvent());
         }

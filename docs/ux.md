@@ -26,6 +26,12 @@
 3. Níže popsané karty, potvrzení a odmítnutí zůstávají. Skutečnou přejímku
    zaznamenává [evidence](functional-tests.md#r-0332-congress-screen-2026-10-28),
    nikoli návrhový náhled nebo hráčská studie.
+4. Od 29. října 2026 doplňuje [R-0339](requirements/done/R-0339.md) na mapě
+   klávesu **K**. Český i anglický kontextový popis tlačítka uvádí „(K)“
+   stejně jako Evropa „(E)“. Klávesa otevře tentýž Kongres během připraveného
+   tahu člověka; návrat nepotvrdí výběr ani nezmění herní stav.
+   [Přejímka zkratky](functional-tests.md#r-0339-congress-shortcut-2026-10-29)
+   je oddělená od původního ověření vzhledu.
 
 ## Karty Kongresu — 28. října 2026
 

@@ -1182,3 +1182,13 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
    rozložení a tažení; stávající scénáře zachovávají obsah a chování hry.
 2. [Evidence přejímky](functional-tests.md#r-0325-help-refinement-2026-10-27)
    rozlišuje tento krok od původních návrhů a neuzavírá celé UC-114/119.
+
+### UC-079/082/114: Congress shortcut — 2026-10-29
+
+1. [R-0339](requirements/done/R-0339.md) adds K to the map navigation and both
+   localized context descriptions. TC56/F47/01 covers English help, keyboard
+   opening, Escape and unchanged world state; TC176/F203/03 covers Czech
+   help, keyboard opening and the return button. Existing founder/support
+   assertions remain. All eight targeted checks passed without failures, errors
+   or skips; the model and smoke gates also passed. Results are in the
+   [dated evidence](functional-tests.md#r-0339-congress-shortcut-2026-10-29).

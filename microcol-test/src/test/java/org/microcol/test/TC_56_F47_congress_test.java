@@ -29,6 +29,16 @@ public class TC_56_F47_congress_test extends AbstractMicroColTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         CongressPage congress = new CongressPage(getContext());
         congress.rememberWorld();
+        // Discover the shortcut, open Congress and return without a decision.
+        congress.hoverOpenButton();
+        game.verifyThatStatusBarContains(
+                "Open Congress and choose a Founding Father. (K)");
+        congress.openWithShortcut();
+        congress.verifyFillsGameWindow("Back to game");
+        congress.verifyWorldUnchanged();
+        congress.closeWithEscape();
+        congress.verifyReturnedToGame();
+        congress.verifyWorldUnchanged();
         congress.open();
         congress.verifyFillsGameWindow("Back to game");
         congress.verifyWorldUnchanged();

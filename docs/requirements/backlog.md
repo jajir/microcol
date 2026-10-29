@@ -903,3 +903,11 @@ remain owned by their current requirements; acceptance is recorded in the
 
 1. [R-0338](done/R-0338.md), primary area A03, makes the Help scrollbar the common default for both orientations and shows the four Europe bars only when their lists overflow.
 2. Status: done. The shared styling and native overflow controls passed model/JUnit, targeted UI and fixed smoke acceptance. [Evidence](../functional-tests.md#r-0338-shared-scrollbars-2026-10-29).
+
+## Congress keyboard shortcut — 2026-10-29
+
+1. [R-0339](done/R-0339.md), primary area A01 with A03 context-help text, adds K
+   to open Congress and advertises it in English and Czech like Europe (E).
+2. Status: done. Local acceptance passed 4,783 model/JUnit, 8 targeted UI/source-contract
+   and 21 fixed smoke/support checks without failures, errors or skips;
+   [evidence](../functional-tests.md#r-0339-congress-shortcut-2026-10-29).

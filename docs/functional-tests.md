@@ -1,5 +1,45 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0339 Congress shortcut — 2026-10-29
+
+1. [R-0339](requirements/done/R-0339.md) adds K beside the existing map shortcuts
+   and appends `(K)` to the English and Czech Congress context descriptions.
+   It reuses the button's screen event and ready-human-turn guard; game rules,
+   assets, save data and other shortcuts are unchanged.
+2. TC56/F47/01 checks English context help, K, Escape and unchanged world
+   state before retaining its original click/selection/production journey.
+   TC176/F203/03 checks Czech help, K and return without mutation while
+   retaining its support, layout and Crown checks. Targeted selection is
+   `TC_56_F47_congress_test,TC_176_F203_congress_support_test,PageVerificationContractTest`.
+3. Source is based on `925ab2023f9e0106e4f1c1acddaa718435aa1005`. The shared
+   formatter checked all four changed Java files with exact-token and
+   idempotence checks. Model dispatch `20261029T065951Z-a6f0b009e405`, PID 49805,
+   uses a 600-second watchdog. Model acceptance passed **4,783 checks in 350
+   complete XML reports**, zero failures/errors/skips, in 137.439 seconds.
+   Reports are in `target/verification/run-v7tirfut/` in the primary checkout.
+   All 2,290 non-documentation snapshot files match the isolated task worktree.
+4. Targeted dispatch `20261029T070314Z-7c772d899afa`, PID 51053, uses a
+   900-second watchdog in `/Users/jan/.codex/worktrees/congress-shortcut/microcol`.
+   The separate checkout excludes concurrent unrelated appearance changes.
+   All **8 targeted UI/source-contract checks in three complete XML reports**
+   passed with zero failures/errors/skips in 106.682 seconds. Reports are in
+   `target/docker-ui/run-JnJ4eD/`; all six changed executable/test files still
+   match the recorded source hashes.
+5. Smoke dispatch `20261029T070522Z-3bf979b7fdda`, PID 51852, uses a
+   480-second supervisor watchdog and the unchanged 420-second acceptance
+   budget. All **21 fixed smoke/support checks in 12 complete XML reports**
+   passed with zero failures/errors/skips in **207.169 seconds**, including
+   supervision and cleanup. Reports and the full source manifest are in
+   `target/verification/run-ma4xe6lm/`; its 2,290 non-documentation source files
+   match the reviewed candidate.
+6. Review confirmed the shared navigation event and existing turn guard,
+   unchanged click behavior, bilingual context descriptions and preserved
+   gameplay assertions. Nine documentation consistency checks and strict
+   MkDocs passed after closure. R-0339 is accepted locally. Evidence remains
+   under `target/r0339/` in the isolated checkout; remote CI and publication
+   were not inspected.
+
+
 ## R-0338 shared scrollbars — 2026-10-29
 
 1. [R-0338](requirements/done/R-0338.md) moves the existing Help scrollbar style into `ScrollBars.css`, imported by the main window and dialogs, and adds its horizontal counterpart. Europe uses AS_NEEDED for four independent lists while retaining stable native-size unit rows. Model rules and quantity sliders are unchanged.

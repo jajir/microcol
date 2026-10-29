@@ -29,13 +29,28 @@ public final class CongressPage extends AbstractScreen {
     }
 
     public void open() {
+        rememberWindow();
+        clickOnButtonWithId("congress");
+    }
+
+    public void hoverOpenButton() {
+        getRobot().moveTo(getButtonById("congress"));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void openWithShortcut() {
+        rememberWindow();
+        getRobot().push(javafx.scene.input.KeyCode.K);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    private void rememberWindow() {
         getRobot().interact(() -> {
             final javafx.stage.Stage stage = getContext().getPrimaryStage();
             windowWidth = stage.getWidth();
             windowHeight = stage.getHeight();
             windowFullScreen = stage.isFullScreen();
         });
-        clickOnButtonWithId("congress");
     }
 
     public void closeWithEscape() {

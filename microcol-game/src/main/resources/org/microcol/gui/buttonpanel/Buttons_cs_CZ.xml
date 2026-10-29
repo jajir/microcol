@@ -138,7 +138,7 @@
     <entry key="toolbarExit">Nabídka</entry>
     <entry key="toolbarIndependence">Nezávislost</entry>
     <entry key="coloniesExplanation">Vyberte kolonii, kterou chcete otevřít. (O)</entry>
-    <entry key="congressExplanation">Otevřít Kongres a vybrat Otce zakladatele.</entry>
+    <entry key="congressExplanation">Otevřít Kongres a vybrat Otce zakladatele. (K)</entry>
     <entry key="nextTurnExplanation">Dokončit tento tah a zahájit další.</entry>
     <entry key="plowProblemRiver">Na říčním políčku nelze zorat pole.</entry>
 </properties>

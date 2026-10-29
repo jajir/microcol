@@ -140,9 +140,15 @@ public class TC_176_F203_congress_support_test extends AbstractMicroColTest {
                 499);
         SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();
-        settings.goBack().loadGame();
+        GamePage game = settings.goBack().loadGame();
         CongressPage congress = new CongressPage(getContext());
-        congress.open();
+        // Czech help advertises the same shortcut and opening changes no rules.
+        congress.rememberWorld();
+        congress.hoverOpenButton();
+        game.verifyThatStatusBarContains(
+                "Otevřít Kongres a vybrat Otce zakladatele. (K)");
+        congress.openWithShortcut();
+        congress.verifyWorldUnchanged();
         congress.verifySupport(
                 "Celostátní podpora povstání: 49 % (32 obyvatel)", 49);
         congress.verifyWindowFits(900, 750);
@@ -160,5 +166,7 @@ public class TC_176_F203_congress_support_test extends AbstractMicroColTest {
         congress.verifyFounderDecisionVisible();
         congress.verifyReportReachableByScrolling();
         congress.close();
+        congress.verifyReturnedToGame();
+        congress.verifyWorldUnchanged();
     }
 }
