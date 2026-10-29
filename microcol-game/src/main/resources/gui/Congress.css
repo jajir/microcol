@@ -5,7 +5,6 @@
 }
 
 /* The same pen strokes and slice scale as the map and action buttons. */
-#congressPage .screen-toolbar,
 #congressPage .congress-metrics,
 #congressPage .congress-decision {
     -fx-border-color: transparent;

@@ -15,7 +15,6 @@ import com.google.inject.Inject;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -142,7 +141,6 @@ public final class ScreenColonizopedia implements GameScreen {
         title.setId(TITLE_ID);
         title.setWrapText(true);
         final HBox toolbar = new HBox(20, title, buttonBar.getContent());
-        toolbar.setAlignment(Pos.CENTER_LEFT);
         HBox.setHgrow(buttonBar.getContent(), Priority.ALWAYS);
         page.setToolbar(toolbar);
         page.setContent(root);

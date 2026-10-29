@@ -2,6 +2,7 @@
 @import "ToolbarControls.css";
 @import "ContextMenus.css";
 @import "ScrollBars.css";
+@import "GameScreenBars.css";
 
 /*
  * JavaFx setting for whole MicroCol.
@@ -19,38 +20,6 @@
   -fx-background-radius: 0.0;
 }
 
-
-#statusBar {
-    -fx-background-color: #FFF9EC;
-    -fx-min-height: 72;
-    -fx-padding: 12 16 12 16;
-    -fx-alignment: center-left;
-    -fx-border-color: #292824;
-    -fx-border-width: 1 0 0 0;
-}
-
-#statusBar .label {
-    -fx-font-family: "Playpen Sans";
-    -fx-font-size: 14;
-    -fx-font-weight: normal;
-}
-
-#statusBar #description {
-    -fx-alignment: center-left;
-}
-
-#statusBar #description .label {
-    -fx-padding: 0 16 0 0;
-}
-
-#statusBar #labelGold {
-    -fx-padding: 0 16 0 16;
-}
-
-#statusBar #labelEra {
-    -fx-padding: 0 16 0 16;
-    -fx-border-width: 0;
-}
 
 .label {
 }

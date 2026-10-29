@@ -1,9 +1,10 @@
 # Current requirement backlog
 
-Captured on 2026-10-29: [R-0337 — fixed bar heights for in-game views](R-0337.md),
-primary area A03. The user clarified independent top/bottom heights and common left/right
-alignment; three design variants are prepared for selection. Status: `new`; the current bottom bar has only a
-minimum height. No runtime implementation or gameplay acceptance is claimed.
+Selected on 2026-10-29: [R-0337 — fixed top toolbar and shared bar styling](R-0337.md),
+primary area A03. The top height follows the supplied map screenshot (72 logical pixels);
+bottom dimensions remain independent. Status: `ready for development`; implementation
+is prepared, but the user explicitly requested a push without tests. No local acceptance
+is claimed. [Evidence](../functional-tests.md#r-0337-shared-game-bars-2026-10-29).
 
 Accepted locally on 2026-10-28: [R-0334 — isolated Codex UX playtesting](done/R-0334.md), A03. The independent experienced player completed 40 verified turns with screenshots and notes; tooling, model/JUnit, live desktop and fixed smoke gates passed. See [results and limits](../ux-playtesting.md).
 

@@ -133,7 +133,6 @@ public final class ScreenCongress implements GameScreen {
         HBox.setHgrow(spacer, Priority.ALWAYS);
         final HBox actions = new HBox(12, heading, spacer, close);
         actions.setId("congressActions");
-        actions.setAlignment(Pos.CENTER_LEFT);
         page.getContent().addEventFilter(
                 javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
                     if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) {

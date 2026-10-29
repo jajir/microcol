@@ -1,5 +1,13 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0337 shared game bars — 2026-10-29
+
+1. [R-0337](requirements/R-0337.md) selects the existing map toolbar height (72 logical pixels) for all in-game views. `GameScreenBars.css` owns both bar styles; the bottom bar retains its independent minimum and wrapping help. No new artwork or controls are added.
+2. `AbstractButtonsPanel` reuses the map's width calculation and text/icon transition. Colony controls share one row; custom Congress, Help, market and in-game Settings toolbars use the common CSS. Existing action IDs and handlers remain unchanged.
+3. `InGameLayoutPage.verifyFrame` now checks exact toolbar height, its min/pref/max limits and the shared border image. `MainScreenLayoutPage.verifyLayout` checks the same height limits on the map. Future targeted selection: `TC_192_F225_in_game_layout_test,TC_21_F15_free_play_screen_navigation_test,TC_188_F221_game_toolbar_test,TC_11_F11_skip_to_next_unit_test,TC_100_F91_colonizopedia_test,TC_176_F203_congress_support_test` plus the page-object source contract.
+4. Source base: `925ab2023f9e0106e4f1c1acddaa718435aa1005`. The user explicitly requested **push without tests**, overriding the normal acceptance gates for this task. Model/JUnit, targeted UI, smoke and documentation tests were not run; no passing counts or local acceptance are claimed. Runtime rendering and narrow-window behavior remain unverified. The shared Eclipse formatter was applied to all eight changed Java files and confirmed idempotent output. Static review and `git diff --check` passed; `target/docs-venv/bin/python -m mkdocs build --strict --site-dir target/r0337/site` completed successfully. These checks are not runtime acceptance. The change is integrated on `ebbc36fa`, retaining the independently completed Congress shortcut.
+5. This implementation does not verify remote CI, documentation publication or a downloadable game distribution. The earlier proposal remains in [historical evidence](publishing.md#r-0337-game-view-bar-proposal-2026-10-29).
+
 ## R-0339 Congress shortcut — 2026-10-29
 
 1. [R-0339](requirements/done/R-0339.md) adds K beside the existing map shortcuts

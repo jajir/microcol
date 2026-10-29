@@ -1,0 +1,100 @@
+/* Shared owner of in-game toolbar and status-bar appearance. */
+.buttonPanel {
+    -fx-alignment: center;
+}
+.buttons-panel-container {
+    -fx-pref-width: 100000;
+    -fx-pref-height: 100000;
+}
+.buttonPanel .button {
+    -fx-min-height: 50;
+    -fx-min-width: 50;
+}
+
+/* The map's existing one-row frame is the height reference. */
+.game-screen .buttonPanel,
+.in-game-page .screen-toolbar,
+.in-game-page #buttonPane.screen-toolbar {
+    -fx-min-height: 72;
+    -fx-pref-height: 72;
+    -fx-max-height: 72;
+    -fx-pref-width: -1;
+    -fx-padding: 6;
+    -fx-background-color: #FFF9EC;
+    -fx-font-family: "Playpen Sans";
+    -fx-font-size: 14;
+    -fx-font-weight: normal;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-image-source: url("../images/game-toolbar-frame.png");
+    -fx-border-image-slice: 12;
+    -fx-border-image-repeat: stretch;
+    -fx-border-image-width: 0 0 6 0;
+    -fx-border-image-insets: 0 0 -3 0;
+}
+.game-screen .buttonPanel,
+.in-game-page .screen-toolbar .buttonPanel {
+    -fx-hgap: 3;
+    -fx-vgap: 4;
+}
+.in-game-page .screen-toolbar,
+.in-game-page .screen-toolbar .buttonPanel {
+    -fx-alignment: center-right;
+}
+.in-game-page .screen-toolbar .buttonPanel,
+.in-game-page .screen-toolbar #buttonPane {
+    -fx-padding: 0;
+}
+.game-screen #coloniesMenu {
+    -fx-min-height: 57;
+}
+.game-screen #coloniesMenu > .label {
+    -fx-padding: 0 4 0 0;
+}
+.game-screen #coloniesMenu > .arrow-button {
+    -fx-padding: 0 5 0 6;
+    -fx-border-color: #746E60;
+    -fx-border-width: 0 0 0 1;
+    -fx-background-color: transparent;
+}
+.game-screen #coloniesMenu > .arrow-button > .arrow {
+    -fx-background-color: #302D27;
+    -fx-shape: "M0 0 L5 5 L10 0 L11 1 L5 8 L-1 1 Z";
+    -fx-padding: 4 6 4 6;
+}
+.game-screen #coloniesMenu:showing > .arrow-button > .arrow {
+    -fx-rotate: 180;
+}
+
+/* Keep the status bar's independent minimum and wrapping messages. */
+#statusBar {
+    -fx-background-color: #FFF9EC;
+    -fx-min-height: 72;
+    -fx-padding: 12 16;
+    -fx-alignment: center-left;
+    -fx-border-color: transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-border-image-source: url("../images/game-toolbar-frame.png");
+    -fx-border-image-slice: 12;
+    -fx-border-image-repeat: stretch;
+    -fx-border-image-width: 6 0 0 0;
+    -fx-border-image-insets: -3 0 0 0;
+}
+#statusBar .label {
+    -fx-font-family: "Playpen Sans";
+    -fx-font-size: 14;
+    -fx-font-weight: normal;
+}
+#statusBar #description {
+    -fx-alignment: center-left;
+}
+#statusBar #description .label {
+    -fx-padding: 0 16 0 0;
+}
+#statusBar #labelGold {
+    -fx-padding: 0 16 0 16;
+}
+#statusBar #labelEra {
+    -fx-padding: 0 16 0 16;
+    -fx-border-width: 0;
+}

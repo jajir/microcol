@@ -239,6 +239,13 @@ public final class MainScreenLayoutPage extends AbstractScreen {
 
     public void verifyLayout(final String expectedMessage) {
         getRobot().interact(() -> {
+            final Region toolbar = getNodeFinder()
+                    .lookup(".game-screen .buttonPanel").queryAs(Region.class);
+            assertEquals(72, toolbar.getHeight(), 0.01,
+                    "The map uses the shared fixed toolbar height");
+            assertEquals(72, toolbar.getMinHeight());
+            assertEquals(72, toolbar.getPrefHeight());
+            assertEquals(72, toolbar.getMaxHeight());
             final Bounds bar = bounds("statusBar");
             final Bounds map = bounds("canvas");
             final Bounds right = bounds("rightPanel");

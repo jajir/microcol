@@ -16,9 +16,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.FlowPane;
 
 @Singleton
 public class ColonyButtonsPanel extends AbstractButtonsPanel {
@@ -96,26 +94,9 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         return buttonClose;
     }
 
-    /**
-     * Show the quick cargo commands and the trade route editor on a second row.
-     * The colony's own row keeps its positions, because the rename label sits
-     * above it and covers the left part of that row: a wider first row would
-     * move the close control under that label. The row is right-aligned, so the
-     * route cargo and route controls at its left end leave the quick cargo
-     * buttons where they are.
-     *
-     * @param buttons required quick load and unload buttons
-     */
     void addQuickCargoButtons(final List<Button> buttons) {
-        final FlowPane row = new FlowPane();
-        row.setId("quickCargoButtons");
-        row.getStyleClass().add("buttonPanel");
-        row.setAlignment(Pos.TOP_RIGHT);
-        // Empty space in this row must not hide the colony fields below it.
-        row.setPickOnBounds(false);
-        row.getChildren().addAll(treasure, tradeRouteCargo, tradeRoute);
-        row.getChildren().addAll(buttons);
-        addButtonRow(row);
+        getButtonPanel().getChildren().addAll(treasure, tradeRouteCargo,
+                tradeRoute);
+        getButtonPanel().getChildren().addAll(buttons);
     }
-
 }

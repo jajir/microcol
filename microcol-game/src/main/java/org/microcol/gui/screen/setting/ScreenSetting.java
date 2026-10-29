@@ -14,7 +14,6 @@ import org.microcol.gui.util.InGamePage;
 import org.microcol.gui.event.model.GameModelController;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.HBox;
-import javafx.geometry.Pos;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import javafx.scene.layout.Region;
 
@@ -37,7 +36,6 @@ public class ScreenSetting extends AbstractScreenMenu implements GameScreen {
         this.game = game;
         page.getContent().getStylesheets().add(STYLE_SHEET_GAME_MENU);
         page.setStatusSource(Source.GAME);
-        toolbar.setAlignment(Pos.CENTER_RIGHT);
         page.setToolbar(toolbar);
         this.menuHolderPanel = Preconditions.checkNotNull(menuHolderPanel);
         this.settingButtons = Preconditions.checkNotNull(settingButtons);

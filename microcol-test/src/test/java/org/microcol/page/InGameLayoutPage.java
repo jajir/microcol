@@ -167,7 +167,7 @@ public final class InGameLayoutPage extends AbstractScreen {
         getRobot().interact(() -> {
             final Region root = page();
             final Bounds pageBounds = root.localToScene(root.getLayoutBounds());
-            final Node toolbar = root.lookup(".screen-toolbar");
+            final Region toolbar = (Region) root.lookup(".screen-toolbar");
             final Region status = (Region) root.lookup("#statusBar");
             final Node content = root.lookup(".screen-scroll");
             final Bounds top = toolbar.localToScene(toolbar.getLayoutBounds());
@@ -176,8 +176,16 @@ public final class InGameLayoutPage extends AbstractScreen {
             final Bounds bottom = status.localToScene(status.getLayoutBounds());
             assertEquals(pageBounds.getMinY(), top.getMinY(), 1,
                     "Toolbar is at the top of the screen");
-            assertTrue(top.getHeight() >= 45 && top.getHeight() < 180,
-                    "Controls reserve a compact, visible toolbar");
+            assertEquals(72, top.getHeight(), 0.01,
+                    "Every game view uses the map's fixed toolbar height");
+            assertEquals(72, toolbar.getMinHeight());
+            assertEquals(72, toolbar.getPrefHeight());
+            assertEquals(72, toolbar.getMaxHeight());
+            assertEquals(1, toolbar.getBorder().getImages().size());
+            assertEquals(1, status.getBorder().getImages().size());
+            assertEquals(toolbar.getBorder().getImages().get(0).getImage(),
+                    status.getBorder().getImages().get(0).getImage(),
+                    "Both bars use the shared hand-drawn frame");
             assertTrue(middle.getMinY() >= top.getMaxY() - 1);
             assertTrue(middle.getMaxY() <= bottom.getMinY() + 1);
             assertEquals(pageBounds.getMaxY(), bottom.getMaxY(), 1,
