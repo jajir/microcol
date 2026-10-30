@@ -44,25 +44,42 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
         jobs.rememberWorld();
         layout.selectTile(1, 1);
         layout.verifyMapFocused();
-        layout.verifySelectedTileColor(1, 1, javafx.scene.paint.Color.GREY);
+        layout.verifySelectedTileColor(1, 1,
+                javafx.scene.paint.Color.web("#c99638"));
         layout.moveSelection(KeyCode.LEFT);
-        layout.verifySelectedTileColor(0, 1, javafx.scene.paint.Color.GREY);
+        layout.verifySelectedTileColor(0, 1,
+                javafx.scene.paint.Color.web("#c99638"));
         layout.verifyOutput(GoodsType.LUMBER, 2);
+        layout.verifyProductionChoices(0);
+        layout.verifyPreviewMatchesMap(0, 1);
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0362-production-en.png");
         jobs.verifyWorldUnchanged();
 
         // An explicit crop choice updates this worker, the inspector and
         // forecast.
+        layout.moveSelection(KeyCode.ENTER);
+        layout.verifyOutputFocused(GoodsType.LUMBER);
         layout.chooseOutput(GoodsType.CORN);
         layout.verifyOutput(GoodsType.CORN, 2);
         jobs.verifyFieldJob(0, Location.of(23, 16),
                 org.microcol.model.Goods.of(GoodsType.CORN, 2));
         layout.verifyLayout("New Amsterdam", 7);
+        layout.selectTile(2, 0);
+        layout.verifyEmptyField();
+        layout.verifyPreviewMatchesMap(2, 0);
         layout.selectTile(1, 1);
         layout.verifyCenter();
 
         // The warehouse remains reachable at the original window width.
         new GameBarWidthPage(getContext()).resizeContent(1000, 925);
         layout.verifyMapTileSize(Tile.TILE_WIDTH_IN_PX);
+        layout.selectTile(0, 1);
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0362-production-small.png");
+        layout.verifyProductionChoices(0);
+        layout.verifyPreviewMatchesMap(0, 1);
+        layout.selectTile(1, 1);
         layout.showStock();
         town.verifyWarehouseGoodsAndTownCommonsLayout(16, 45);
         new InGameLayoutPage(getContext())
@@ -88,6 +105,12 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
                 ConstructionType.WAREHOUSE_EXPANSION);
         layout.verifyBuildingLevel("id_dock", ConstructionType.SHIPYARD);
         layout.verifyCenter();
+        layout.selectTile(0, 1);
+        layout.verifyProductionChoices(1);
+        layout.verifyPreviewMatchesMap(0, 1);
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0362-production-cs.png");
+        layout.selectTile(1, 1);
         layout.showStock();
         town.verifyWarehouseGoodsAndTownCommonsLayout(16, 45);
         new InGameLayoutPage(getContext())
@@ -200,4 +223,34 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
                 "Zpět do hry");
         town.close();
     }
+
+    @Test
+    @Tag("local")
+    void TC_05_keyboard_choice_and_stale_offer_rejection() throws Exception {
+        // Reach the current product from the map and change it using the
+        // keyboard.
+        final ColonyScreen town = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(Location.of(24, 16), "New Amsterdam");
+        final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
+        final ColonyJobPage jobs = new ColonyJobPage(getContext());
+        layout.selectTile(0, 1);
+        layout.moveSelection(KeyCode.SPACE);
+        layout.verifyOutputFocused(GoodsType.LUMBER);
+        layout.chooseOutputWithKeyboard(GoodsType.CORN);
+        layout.verifyOutput(GoodsType.CORN, 2);
+        jobs.verifyFieldJob(0, Location.of(23, 16),
+                org.microcol.model.Goods.of(GoodsType.CORN, 2));
+
+        // A source job changed after rendering invalidates the captured offer.
+        layout.changeSourceCropWithoutRefresh(GoodsType.LUMBER);
+        jobs.rememberWorld();
+        layout.chooseOutput(GoodsType.LUMBER);
+        jobs.verifyWorldUnchanged();
+        layout.verifyOutput(GoodsType.LUMBER, 2);
+        layout.verifyActionExplanation(getContext()
+                .getClassFromGuice(org.microcol.i18n.I18n.class)
+                .get(org.microcol.gui.screen.colony.ColonyMsg.fieldChanged));
+        town.close();
+    }
+
 }

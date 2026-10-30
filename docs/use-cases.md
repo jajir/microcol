@@ -1,5 +1,11 @@
 # Use cases a přejímka pravidel hry
 
+## UC-114/119: produkce vybraného pole kolonie — 2026-10-30
+
+1. [R-0362](requirements/done/R-0362.md) zachovává výběr políčka bez změny partie a nahrazuje rozbalovací nabídku přímo viditelnými surovinami s modelovými výnosy. Detail políčka a panáčka má stejnou velikost jako okolní mapa. Kliknutí nebo klávesnice mění jen vybranou produkci; prázdné pole a střed nemají volby práce.
+2. TC195/01–02 ověřují výběr, všechny nabízené výnosy, rozměry a obraz náhledu, prázdné pole, češtinu a úzké okno. TC195/05 doplňuje klávesnici a odmítnutí zastaralé nabídky; TC40 zachovává přístup k celkové nabídce práce. [Místní evidence](functional-tests.md#r-0362-colony-tile-production-2026-10-30) nenahrazuje přijetí celých UC ani ověření publikace.
+
+
 ## Budovy Lehký nadhled — 2026-10-30
 
 1. [R-0361](requirements/done/R-0361.md) mění kresbu všech 41 podob budov podle vybrané varianty 8. UC-114/119 a městské hráčské cesty zachovávají dosavadní ceny, výrobu, pracovní místa, jazyk a navigaci. Stávající TC100/10–11 a TC195/01–02 pořizují nové snímky a zachovávají své aserce; `BuildingArtworkTest` kontroluje skutečné vektory, rozdílné obrazy a průhledné okraje. [Přejímka včetně výslovného vynechání smoke](functional-tests.md#r-0361-light-overhead-buildings-2026-10-30) je samostatná od výběru vzhledu.

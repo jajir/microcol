@@ -112,6 +112,8 @@
     <entry key="crossesSummary">Crosses / turn: %s</entry>
     <entry key="foodSummary">Food balance: %s</entry>
     <entry key="outputLabel">Production</entry>
+    <entry key="outputYield">Yield / turn</entry>
+    <entry key="outputHelp">Select a product to change work.</entry>
     <entry key="noWorker">No worker · drag a colonist here</entry>
     <entry key="yieldSummary">Yield / turn: %s</entry>
     <entry key="automaticProduction">Town commons · automatic production</entry>

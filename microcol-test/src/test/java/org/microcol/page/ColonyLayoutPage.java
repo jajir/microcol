@@ -10,7 +10,13 @@ import org.testfx.util.WaitForAsyncUtils;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.layout.VBox;
+import org.microcol.model.ColonyJobChoice;
+import org.microcol.model.Direction;
+import org.microcol.model.Goods;
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
@@ -124,15 +130,31 @@ public final class ColonyLayoutPage extends AbstractScreen {
     }
 
     public void chooseOutput(final GoodsType type) {
-        final ComboBox<?> output = getNodeFinder()
-                .lookup("#colony-field-output").queryAs(ComboBox.class);
-        revealGameContent(output);
-        final int index = output.getItems().indexOf(type);
-        getRobot().clickOn(output).push(KeyCode.HOME);
-        for (int i = 0; i < index; i++)
-            getRobot().push(KeyCode.DOWN);
-        getRobot().push(KeyCode.ENTER);
+        getRobot().clickOn("#colony-field-output-" + type.name());
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void chooseOutputWithKeyboard(final GoodsType type) {
+        final VBox output = getNodeFinder().lookup("#colony-field-output")
+                .queryAs(VBox.class);
+        final RadioButton selected = output.getChildren().stream()
+                .map(node -> (RadioButton) node).filter(RadioButton::isSelected)
+                .findFirst().orElseThrow();
+        final RadioButton target = getNodeFinder()
+                .lookup("#colony-field-output-" + type.name())
+                .queryAs(RadioButton.class);
+        final int difference = output.getChildren().indexOf(target)
+                - output.getChildren().indexOf(selected);
+        for (int index = 0; index < Math.abs(difference); index++) {
+            moveSelection(difference < 0 ? KeyCode.UP : KeyCode.DOWN);
+        }
+        moveSelection(KeyCode.SPACE);
+    }
+
+    public void changeSourceCropWithoutRefresh(final GoodsType type) {
+        getRobot().interact(() -> getModel().getColonyById(0).orElseThrow()
+                .getColonyFieldInDirection(Direction.west)
+                .setProducedGoodsType(type));
     }
 
     public void showStock() {
@@ -203,13 +225,129 @@ public final class ColonyLayoutPage extends AbstractScreen {
     }
 
     public void verifyCenter() {
-        assertTrue(getNodeFinder().lookup("#colony-field-output").query()
-                .isDisabled());
-        assertTrue(getNodeFinder().lookup("#colony-field-work").query()
-                .isDisabled());
+        verifyNoProductionChoices();
         final I18n texts = getContext().getClassFromGuice(I18n.class);
         assertEquals(texts.get(ColonyMsg.automaticProduction),
                 getLabeledById("colony-field-worker").getText());
+    }
+
+    public void verifyEmptyField() {
+        verifyNoProductionChoices();
+        assertEquals(
+                getContext().getClassFromGuice(I18n.class)
+                        .get(ColonyMsg.noWorker),
+                getLabeledById("colony-field-worker").getText());
+    }
+
+    public void verifyNoProductionChoices() {
+        final VBox output = getNodeFinder().lookup("#colony-field-output")
+                .queryAs(VBox.class);
+        assertTrue(output.getChildren().isEmpty());
+        assertFalse(output.getParent().isVisible());
+        assertFalse(output.getParent().isManaged());
+    }
+
+    public void verifyPreviewMatchesMap(final int column, final int row) {
+        getRobot().interact(() -> {
+            final Canvas map = getNodeFinder().lookup("#colony-field-map")
+                    .queryAs(Canvas.class);
+            final Canvas preview = getNodeFinder()
+                    .lookup("#colony-field-preview").queryAs(Canvas.class);
+            final int size = (int) (map.getWidth() / 3);
+            final Bounds actual = preview
+                    .localToScene(preview.getLayoutBounds());
+            assertEquals(size, actual.getWidth(), .01);
+            assertEquals(size, actual.getHeight(), .01);
+            final javafx.scene.image.PixelReader mapPixels = map
+                    .snapshot(null, null).getPixelReader();
+            final javafx.scene.image.PixelReader detailPixels = preview
+                    .snapshot(null, null).getPixelReader();
+            // Compare terrain and worker pixels outside the map's crop badge
+            // and frame.
+            for (int x = 28; x < size - 4; x++) {
+                for (int y = 4; y < size - 4; y++) {
+                    assertEquals(
+                            mapPixels.getArgb(column * size + x,
+                                    row * size + y),
+                            detailPixels.getArgb(x, y),
+                            "Preview pixel " + x + "," + y);
+                }
+            }
+        });
+    }
+
+    public void verifyProductionChoices(final int colonyId) {
+        getRobot().interact(() -> {
+            final Colony colony = getModel().getColonyById(colonyId)
+                    .orElseThrow();
+            final List<ColonyJobChoice> expected = colony
+                    .getJobChoices(
+                            colony.getColonyFieldInDirection(Direction.west)
+                                    .getUnit().orElseThrow())
+                    .stream()
+                    .filter(choice -> choice
+                            .getKind() == ColonyJobChoice.Kind.CURRENT_FIELD
+                            && choice.getUnavailableReason().isEmpty())
+                    .collect(Collectors.toList());
+            final VBox output = getNodeFinder().lookup("#colony-field-output")
+                    .queryAs(VBox.class);
+            assertTrue(output.getParent().isVisible());
+            assertTrue(output.getParent().isManaged());
+            final Node viewport = getNodeFinder()
+                    .lookup(".screen-scroll > .viewport").query();
+            final Bounds visible = viewport
+                    .localToScene(viewport.getLayoutBounds());
+            for (final Node node : output.getParent().lookupAll(".label")) {
+                final Label label = (Label) node;
+                final Text rendered = (Text) label.lookup(".text");
+                assertEquals(label.getText(), rendered.getText(),
+                        "Complete product text");
+                assertTrue(
+                        visible.contains(rendered
+                                .localToScene(rendered.getLayoutBounds())),
+                        "Product text stays in the viewport: "
+                                + label.getText());
+            }
+            assertEquals(expected.size(), output.getChildren().size());
+            assertTrue(expected.size() > 1);
+            final I18n texts = getContext().getClassFromGuice(I18n.class);
+            for (final ColonyJobChoice choice : expected) {
+                final Goods goods = choice.getPotential().orElseThrow();
+                final RadioButton option = getNodeFinder()
+                        .lookup("#colony-field-output-"
+                                + goods.getType().name())
+                        .queryAs(RadioButton.class);
+                assertTrue(option.isVisible());
+                assertFalse(option.isDisabled());
+                assertEquals(goods.getType(), option.getUserData());
+                assertEquals(Integer.toString(goods.getAmount()),
+                        getLabeledById(
+                                "colony-field-yield-" + goods.getType().name())
+                                .getText());
+                final String name = texts.get(org.microcol.gui.GoodsTypeName
+                        .getNameForGoodsType(goods.getType()));
+                assertEquals(
+                        name + ", "
+                                + texts.get(ColonyMsg.yieldSummary,
+                                        goods.getAmount()),
+                        option.getAccessibleText());
+                assertEquals(texts.get(ColonyMsg.outputHelp),
+                        option.getAccessibleHelp());
+                assertTrue(option.lookupAll(".label").stream().anyMatch(
+                        node -> name.equals(((Label) node).getText())));
+                assertTrue(
+                        output.localToScene(output.getLayoutBounds()).contains(
+                                option.localToScene(option.getLayoutBounds())));
+            }
+            assertEquals(1, output.getChildren().stream()
+                    .filter(node -> ((RadioButton) node).isSelected()).count());
+        });
+    }
+
+    public void verifyOutputFocused(final GoodsType expected) {
+        assertTrue(getNodeFinder()
+                .lookup("#colony-field-output-" + expected.name()).query()
+                .isFocused());
     }
 
     public void verifyMapFocused() {
@@ -244,14 +382,14 @@ public final class ColonyLayoutPage extends AbstractScreen {
 
     public void verifyOutput(final GoodsType expected,
             final int expectedYield) {
-        final ComboBox<?> output = getNodeFinder()
-                .lookup("#colony-field-output").queryAs(ComboBox.class);
+        final RadioButton output = getNodeFinder()
+                .lookup("#colony-field-output-" + expected.name())
+                .queryAs(RadioButton.class);
         assertFalse(output.isDisabled());
-        assertEquals(expected, output.getValue());
-        assertEquals(
-                getContext().getClassFromGuice(I18n.class)
-                        .get(ColonyMsg.yieldSummary, expectedYield),
-                getLabeledById("colony-field-yield").getText());
+        assertTrue(output.isSelected());
+        assertEquals(Integer.toString(expectedYield),
+                getLabeledById("colony-field-yield-" + expected.name())
+                        .getText());
     }
 
     public void verifyBuildingLevel(final String id,

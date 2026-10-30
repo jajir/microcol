@@ -19,6 +19,7 @@ import org.microcol.gui.util.FontService;
 import org.microcol.gui.util.PaintService;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
+import org.microcol.model.ColonyJobChoice;
 import org.microcol.model.Direction;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
@@ -35,11 +36,13 @@ import com.google.inject.Singleton;
 
 import javafx.application.Platform;
 import javafx.geometry.VPos;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -50,8 +53,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.control.Label;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import org.microcol.gui.GoodsTypeName;
 import org.microcol.gui.UnitTypes;
@@ -91,16 +94,18 @@ public final class PanelColonyFields implements JavaFxComponent {
     private final HBox mainPanel = new HBox(10);
     private final Label mapTitle = new Label();
     private final Label detailTitle = new Label();
-    private final Canvas preview = new Canvas(90, 90);
+    private final Canvas preview = new Canvas(TILE_WIDTH_IN_PX,
+            TILE_WIDTH_IN_PX);
     private final Label tileName = new Label();
     private final Label workerName = new Label();
     private final Label yield = new Label();
-    private final ComboBox<GoodsType> output = new ComboBox<>();
-    private final Button work = org.microcol.gui.util.ActionButtons
-            .button(org.microcol.gui.image.ButtonIcon.LABOR, "");
+    private final VBox output = new VBox(3);
+    private final Label productHeader = new Label();
+    private final Label yieldHeader = new Label();
+    private final Label outputHelp = new Label();
+    private final VBox production;
     private int selectedX = 1;
     private int selectedY = 1;
-    private boolean refreshing;
 
     private final I18n i18n;
 
@@ -132,9 +137,13 @@ public final class PanelColonyFields implements JavaFxComponent {
                 selectedY = Math.max(0, selectedY - 1);
             else if (code == KeyCode.DOWN)
                 selectedY = Math.min(2, selectedY + 1);
-            else if (code == KeyCode.ENTER || code == KeyCode.SPACE)
-                work.fire();
-            else
+            else if (code == KeyCode.ENTER || code == KeyCode.SPACE) {
+                output.getChildren().stream()
+                        .filter(node -> ((RadioButton) node).isSelected())
+                        .findFirst().ifPresent(javafx.scene.Node::requestFocus);
+                event.consume();
+                return;
+            } else
                 return;
             paint(canvas.getGraphicsContext2D());
             refreshDetail();
@@ -152,32 +161,30 @@ public final class PanelColonyFields implements JavaFxComponent {
         contextMenu.setAutoHide(true);
 
         final VBox map = new VBox(4, mapTitle, canvas);
-        final VBox detail = new VBox(4, detailTitle, preview, tileName,
-                workerName, output, yield, work);
+        final HBox tile = new HBox(8, preview,
+                new VBox(4, tileName, workerName));
+        tile.setAlignment(Pos.CENTER_LEFT);
+        final Region headerSpace = new Region();
+        HBox.setHgrow(headerSpace, Priority.ALWAYS);
+        final HBox columns = new HBox(8, productHeader, headerSpace,
+                yieldHeader);
+        columns.getStyleClass().add("field-output-header");
+        production = new VBox(4, columns, output, outputHelp);
+        final VBox detail = new VBox(4, detailTitle, tile, yield, production);
         detail.getStyleClass().add("tile-detail");
-        detail.setMinWidth(170);
+        detail.setMinWidth(200);
         detail.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(detail, Priority.ALWAYS);
         tileName.setWrapText(true);
         workerName.setWrapText(true);
         yield.setWrapText(true);
+        outputHelp.setWrapText(true);
+        outputHelp.setMinHeight(Region.USE_PREF_SIZE);
         output.setId("colony-field-output");
+        preview.setId("colony-field-preview");
         tileName.setId("colony-field-name");
         workerName.setId("colony-field-worker");
         yield.setId("colony-field-yield");
-        work.setId("colony-field-work");
-        output.setConverter(new javafx.util.StringConverter<GoodsType>() {
-            @Override
-            public String toString(final GoodsType type) {
-                return type == null ? ""
-                        : i18n.get(GoodsTypeName.getNameForGoodsType(type));
-            }
-
-            @Override
-            public GoodsType fromString(final String value) {
-                throw new UnsupportedOperationException("Selection only");
-            }
-        });
         mainPanel.getChildren().addAll(map, detail);
         mainPanel.getStyleClass().add("colony-fields");
     }
@@ -390,7 +397,7 @@ public final class PanelColonyFields implements JavaFxComponent {
             gc.strokeLine(0, index * tileSize(), canvas.getWidth(),
                     index * tileSize());
         }
-        gc.setStroke(Color.GREY);
+        gc.setStroke(Color.web("#c99638"));
         gc.setLineWidth(2);
         gc.strokeRect(selectedX * tileSize() + 2, selectedY * tileSize() + 2,
                 tileSize() - 4, tileSize() - 4);
@@ -431,10 +438,11 @@ public final class PanelColonyFields implements JavaFxComponent {
     }
 
     private void refreshDetail() {
-        refreshing = true;
         mapTitle.setText(i18n.get(ColonyMsg.surroundingSection));
         detailTitle.setText(i18n.get(ColonyMsg.selectedSection));
-        work.setText(i18n.get(ColonyMsg.jobOpen));
+        productHeader.setText(i18n.get(ColonyMsg.outputLabel));
+        yieldHeader.setText(i18n.get(ColonyMsg.outputYield));
+        outputHelp.setText(i18n.get(ColonyMsg.outputHelp));
         output.setAccessibleText(i18n.get(ColonyMsg.outputLabel));
         canvas.setAccessibleText(i18n.get(ColonyMsg.surroundingSection));
         final boolean center = selectedX == 1 && selectedY == 1;
@@ -444,27 +452,20 @@ public final class PanelColonyFields implements JavaFxComponent {
         final Location location = center ? colony.getLocation()
                 : field.getLocation();
         final GraphicsContext gc = preview.getGraphicsContext2D();
-        gc.clearRect(0, 0, 90, 90);
-        output.getItems().clear();
-        output.setOnAction(null);
-        work.setOnAction(null);
-        output.setDisable(true);
-        work.setDisable(true);
-        output.setVisible(false);
-        output.setManaged(false);
-        work.setVisible(false);
-        work.setManaged(false);
+        gc.clearRect(0, 0, preview.getWidth(), preview.getHeight());
+        output.getChildren().clear();
+        production.setVisible(false);
+        production.setManaged(false);
         workerName.setText(i18n.get(ColonyMsg.noWorker));
-        yield.setText(i18n.get(ColonyMsg.yieldSummary, 0));
+        yield.setVisible(center);
+        yield.setManaged(center);
         if (!center && !field.isValid()) {
             tileName.setText(i18n.get(ColonyMsg.fieldChanged));
-            refreshing = false;
             return;
         }
         final Terrain terrain = gameModelController.getModel().getMap()
                 .getTerrainAt(location);
         gc.save();
-        gc.scale(2, 2);
         paintService.paintTerrainOnTile(gc, Point.of(0, 0), location, terrain,
                 false, 0);
         if (center) {
@@ -483,37 +484,70 @@ public final class PanelColonyFields implements JavaFxComponent {
                 paintService.paintUnitWithoutFlag(gc, Point.of(0, 0), unit);
                 workerName.setText(
                         i18n.get(UnitTypes.getUnitName(unit.getType())));
-                field.getTerrain().getProduction().forEach(
-                        item -> output.getItems().add(item.getGoodsType()));
-                field.getProduction().ifPresent(goods -> {
-                    output.setValue(goods.getType());
-                    yield.setText(i18n.get(ColonyMsg.yieldSummary,
-                            goods.getAmount()));
-                });
-                output.setDisable(false);
-                work.setDisable(false);
-                output.setVisible(true);
-                output.setManaged(true);
-                work.setVisible(true);
-                work.setManaged(true);
-                work.setOnAction(event -> eventBus
-                        .post(new ShowColonyJobChoicesEvent(unit)));
-                output.setOnAction(event -> {
-                    if (!refreshing && output.getValue() != null) {
-                        try {
-                            field.setProducedGoodsType(unit, output.getValue());
-                            eventBus.post(new RepaintColonyEvent());
-                        } catch (IllegalArgumentException
-                                | IllegalStateException rejected) {
-                            showFieldProblem(ColonyMsg.fieldChanged);
-                            refreshDetail();
-                        }
-                    }
-                });
+                final ToggleGroup group = new ToggleGroup();
+                final GoodsType current = unit.getPlaceColonyField()
+                        .getProducedGoodsType();
+                colony.getJobChoices(unit).stream()
+                        .filter(choice -> choice
+                                .getKind() == ColonyJobChoice.Kind.CURRENT_FIELD
+                                && choice.getUnavailableReason().isEmpty())
+                        .forEach(choice -> addOutputChoice(choice, current,
+                                group));
+                production.setVisible(true);
+                production.setManaged(true);
             });
         }
         gc.restore();
-        refreshing = false;
+    }
+
+    private void addOutputChoice(final ColonyJobChoice choice,
+            final GoodsType current, final ToggleGroup group) {
+        final Goods goods = choice.getPotential().orElseThrow();
+        final String name = i18n
+                .get(GoodsTypeName.getNameForGoodsType(goods.getType()));
+        final ImageView icon = new ImageView(
+                imageProvider.getGoodsTypeImage(goods.getType()));
+        icon.setFitWidth(24);
+        icon.setFitHeight(24);
+        final Region space = new Region();
+        HBox.setHgrow(space, Priority.ALWAYS);
+        final Label amount = new Label(Integer.toString(goods.getAmount()));
+        amount.setId("colony-field-yield-" + goods.getType().name());
+        final HBox content = new HBox(8, icon, new Label(name), space, amount);
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.prefWidthProperty().bind(output.widthProperty().subtract(40));
+        final RadioButton row = new RadioButton();
+        row.setGraphic(content);
+        row.setMinWidth(0);
+        row.setMaxWidth(Double.MAX_VALUE);
+        row.setId("colony-field-output-" + goods.getType().name());
+        row.setUserData(goods.getType());
+        row.getStyleClass().add("field-output-choice");
+        row.setToggleGroup(group);
+        row.setSelected(goods.getType() == current);
+        row.setAccessibleText(name + ", "
+                + i18n.get(ColonyMsg.yieldSummary, goods.getAmount()));
+        row.setAccessibleHelp(i18n.get(ColonyMsg.outputHelp));
+        row.selectedProperty()
+                .addListener((observable, wasSelected, selected) -> {
+                    if (!selected) {
+                        return;
+                    }
+                    try {
+                        choice.execute();
+                        eventBus.post(new RepaintColonyEvent());
+                    } catch (IllegalArgumentException
+                            | IllegalStateException rejected) {
+                        showFieldProblem(ColonyMsg.fieldChanged);
+                        paint(canvas.getGraphicsContext2D());
+                        refreshDetail();
+                    }
+                    output.getChildren().stream().filter(
+                            node -> node.getUserData() == goods.getType())
+                            .findFirst()
+                            .ifPresent(javafx.scene.Node::requestFocus);
+                });
+        output.getChildren().add(row);
     }
 
     @Override

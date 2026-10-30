@@ -112,6 +112,8 @@
     <entry key="crossesSummary">Kříže / tah: %s</entry>
     <entry key="foodSummary">Bilance jídla: %s</entry>
     <entry key="outputLabel">Produkce</entry>
+    <entry key="outputYield">Výnos / tah</entry>
+    <entry key="outputHelp">Vyberte surovinu pro změnu práce.</entry>
     <entry key="noWorker">Bez pracovníka · přetáhněte kolonistu</entry>
     <entry key="yieldSummary">Výnos / tah: %s</entry>
     <entry key="automaticProduction">Střed města · automatická produkce</entry>
