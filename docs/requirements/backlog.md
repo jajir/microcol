@@ -1,5 +1,7 @@
 # Current requirement backlog
 
+Completed on 2026-10-30: [R-0357 — five simpler building proposals matching the main map](done/R-0357.md), A03 with A07 identity dependencies. Five further complete sets, numbered 6–10, simplify outlines and color areas in response to feedback on R-0353. Design-only scope; runtime selection and SVG implementation remain separate. [Gallery](../graphics.md#budovy-pet-jednodussich-navrhu-podle-hlavni-mapy-30-rijna-2026).
+
 Prepared for selection on 2026-10-30: [R-0356 — minimap heading and coastline refinement](R-0356.md), A03 with A05 knowledge boundaries. Three static proposals remove the dashed frame and bottom hint, add “Minimap”, and compare original, gently rounded and flowing contours. Status: waiting for refinement; final selection and runtime implementation remain pending. [Gallery](../graphics.md#minimapa-nadpis-a-hladkost-pobrezi-30-rijna-2026).
 
 Completed on 2026-10-30: [R-0353 — five complete building-tier proposals](done/R-0353.md), A03 with A07 identities. Five sets each cover all 41 existing forms (205 illustrations on ten sheets), preserving actual upgrade counts. Concept sheets, exact prompts, model mapping and the gallery were reviewed; documentation checks passed. This is design-only delivery, with no selected direction or runtime change. [Evidence](../publishing.md#r-0353-building-tier-proposals-2026-10-30).

@@ -1,0 +1,350 @@
+{
+  "requirement": "R-0357",
+  "date": "2026-10-30",
+  "purpose": "Raster design references only; five further proposals matching the supplied main-map screenshot, not production SVG.",
+  "reference": "reference/main-map.png",
+  "families": {
+    "A": [
+      [
+        "Truhlářství",
+        [
+          "CARPENTERS_STAND",
+          "LUMBER_MILL",
+          null
+        ],
+        "I open lean-to with ONE sawbench and log; II plain one-storey sawmill house, ONE simple waterwheel; III only dash"
+      ],
+      [
+        "Kovářství",
+        [
+          "BLACKSMITHS_HOUSE",
+          "BLACKSMITHS_SHOP",
+          "IRON_WORKS"
+        ],
+        "I open roof on posts, ONE anvil and tiny forge; II plain one-storey smith house plus anvil; III simple two-storey ironworks rectangle, tall chimney, anvil"
+      ],
+      [
+        "Zbrojírna",
+        [
+          "ARMORY",
+          "MAGAZINE",
+          "ARSENAL"
+        ],
+        "I open lean-to with ONE rack of two muskets; II plain one-storey arms workshop with rack; III two-storey arsenal with ONE tiny cannon"
+      ],
+      [
+        "Tabák",
+        [
+          "TOBACCONISTS_HOUSE",
+          "TOBACCONISTS_SHOP",
+          "CIGAR_FACTORY"
+        ],
+        "I open roof on posts, ONE hanging tobacco leaf and bench; II one-storey tobacco house with leaf sign; III two-storey cigar factory, leaf sign and ONE box"
+      ],
+      [
+        "Tkalcovství",
+        [
+          "WEAVERS_HOUSE",
+          "WEAVERS_SHOP",
+          "TEXTILE_MILL"
+        ],
+        "I open lean-to with ONE small loom; II one-storey weaving house with ONE hanging cloth; III two-storey textile mill, cloth sign"
+      ],
+      [
+        "Palírna",
+        [
+          "RUM_DISTILLERS_HOUSE",
+          "RUM_DISTILLERY",
+          "RUM_FACTORY"
+        ],
+        "I open roof on posts with ONE copper still; II one-storey distillery, ONE barrel; III two-storey rum factory, chimney and still sign"
+      ],
+      [
+        "Kožešiny",
+        [
+          "FUR_TRADERS_HOUSE",
+          "FUR_TRADING_POST",
+          "FUR_FACTORY"
+        ],
+        "I open shelter, ONE stretched pelt frame; II one-storey fur workshop with pelt; III two-storey fur factory with pelt sign"
+      ],
+      [
+        "Tisk",
+        [
+          "PRINTING_PRESS",
+          "NEWSPAPER",
+          null
+        ],
+        "I open lean-to with ONE small hand press; II one-storey printing house, ONE paper sheet sign; III only dash"
+      ]
+    ],
+    "B": [
+      [
+        "Radnice",
+        [
+          "TOWN_HALL",
+          null,
+          null
+        ],
+        "I very simple small civic house, triangular roof, little flag; II and III only dash"
+      ],
+      [
+        "Opevnění",
+        [
+          "STOCKADE",
+          "FORT",
+          "FORTRESS"
+        ],
+        "I basic short wooden palisade enclosure; II small low stone fort with gate; III larger simple bastioned fort, two levels and ONE cannon"
+      ],
+      [
+        "Přístav",
+        [
+          "DOCK",
+          "DRYDOCK",
+          "SHIPYARD"
+        ],
+        "I basic little wooden jetty with two posts; II simple drydock with ONE one-storey shed and slipway; III larger shipyard, two-storey shed and ONE skeletal boat"
+      ],
+      [
+        "Škola",
+        [
+          "SCHOOLHOUSE",
+          "COLLEGE",
+          "UNIVERSITY"
+        ],
+        "I open roof on posts, ONE blackboard and bench; II simple one-storey schoolhouse, book sign; III two-storey university, pediment and book, NO church cross"
+      ],
+      [
+        "Sklad",
+        [
+          "BASIC_WAREHOUSE",
+          "WAREHOUSE",
+          "WAREHOUSE_EXPANSION"
+        ],
+        "I simple open lean-to and TWO crates; II plain one-storey warehouse and loading door; III two-storey warehouse and tiny pulley"
+      ],
+      [
+        "Stáje",
+        [
+          "STABLES",
+          "LARGE_STABLES",
+          null
+        ],
+        "I very basic fenced paddock with ONE simplified horse; II simple one-storey stable with ONE horse; III only dash"
+      ],
+      [
+        "Církev",
+        [
+          "CHAPEL",
+          "CHURCH",
+          "CATHEDRAL"
+        ],
+        "I tiny open shelter with ONE cross; II simple one-storey church with small belfry; III larger two-storey church body and two plain towers"
+      ],
+      [
+        "Celnice",
+        [
+          "CUSTOM_HOUSE",
+          null,
+          null
+        ],
+        "I plain little custom house with ONE scale and crate; II and III only dash"
+      ]
+    ]
+  },
+  "jobs": [
+    {
+      "key": "6-A",
+      "n": 6,
+      "part": "A",
+      "slug": "mapove-znacky",
+      "name": "Mapové značky",
+      "prompt": "Create a complete building-icon comparison sheet for the actual MicroCol game shown in the attached screenshot. THE SCREENSHOT IS THE ONLY STYLE REFERENCE. Study its TINY HOUSE MAP ICON, toolbar icons and simplified trees: thickish wobbling dark outlines, solid flat colors, extremely few details. Draw at THAT simplicity. Do NOT draw a realistic building illustration, architectural rendering or a textured storybook.\nHARD STYLE RULES: every area one perfectly UNIFORM SOLID color; absolutely NO gradients, NO shading, NO highlights, NO drop shadows, NO cast shadows, NO paper texture, NO grain, NO hatching, NO wood grain, NO brick lines, NO roof tile lines, NO grass, NO scenery, NO people, NO decorative grounds. Only warm plain cream page #fff9ec, charcoal outlines #3e3b31, dull olive #82934e, muted ochre #bd8e50, muted terracotta #b5754c and occasional teal #519c96. No black-filled windows; use cream/teal simple squares. Single dark slightly hand-wobbly outlines, never sketchy repeated marks. At most ONE or TWO easily readable tools/props per icon. Think SVG pictograms, not richly detailed art.\nLAYOUT: portrait sheet, clean 3 columns (I, II, III) x 8 rows, narrow row-label margin at left. Exactly the listed icons in exact row order; no thumbnails, no legend, no decorative border. Clear handwritten Czech labels. Large white/cream gaps. Each icon isolated, no background plaque. The title and column labels plain hand-lettering. Tiny light separator lines allowed.\nPROGRESSION: I primitive OPEN lean-to with 2-3 posts, flat plank roof and exposed essential tool, no closed house; II very modest ONE-STOREY house, one door and 1–2 windows; III noticeably TALLER two-storey manufactory circa 1800 with only 2–4 windows, one simple chimney where appropriate. SAME sparse graphical complexity across tiers: III is larger in mass, not more intricately rendered. Exceptions are defensive, dock, religious and civic functions described per row. These are concept-sheet references; render crisp solid-color bitmap that LOOKS LIKE a few simple SVG paths.\n\nDESIGN 6: Mapové značky. STRICT FLAT FRONT ELEVATION, almost pictograms. 10–16 simple closed shapes per building. Plain rectangular walls, triangular roofs, two small square windows per floor. Deliberately match the tiny colony house icon in the attached map: just enlarge that level of simplicity. Thin uneven charcoal pen contour, ONE flat muted terracotta roof, cream walls, olive trade symbol.\nTITLE EXACTLY: \"6. Mapové značky — A\"\nColumns: \"I\", \"II\", \"III\".\nROWS (left labels exactly as supplied):\n1. \"Truhlářství\": I open lean-to with ONE sawbench and log; II plain one-storey sawmill house, ONE simple waterwheel; III only dash.\n2. \"Kovářství\": I open roof on posts, ONE anvil and tiny forge; II plain one-storey smith house plus anvil; III simple two-storey ironworks rectangle, tall chimney, anvil.\n3. \"Zbrojírna\": I open lean-to with ONE rack of two muskets; II plain one-storey arms workshop with rack; III two-storey arsenal with ONE tiny cannon.\n4. \"Tabák\": I open roof on posts, ONE hanging tobacco leaf and bench; II one-storey tobacco house with leaf sign; III two-storey cigar factory, leaf sign and ONE box.\n5. \"Tkalcovství\": I open lean-to with ONE small loom; II one-storey weaving house with ONE hanging cloth; III two-storey textile mill, cloth sign.\n6. \"Palírna\": I open roof on posts with ONE copper still; II one-storey distillery, ONE barrel; III two-storey rum factory, chimney and still sign.\n7. \"Kožešiny\": I open shelter, ONE stretched pelt frame; II one-storey fur workshop with pelt; III two-storey fur factory with pelt sign.\n8. \"Tisk\": I open lean-to with ONE small hand press; II one-storey printing house, ONE paper sheet sign; III only dash.\nThere must be exactly 22 building icons plus 2 empty cells marked with a single small dash. A dash is not an extra building. Keep the reference map's radical simplicity.",
+      "output": {
+        "file": "06-mapove-znacky-a.png",
+        "original_path": "/Users/jan/.codex/generated_images/01a18c98-2262-7752-8cb9-17e05b23de24/exec-a5c49be4-e589-4a69-8c2b-bd91fef73deb.png",
+        "sha256": "258a7504e8f441e8c447b192a57d370c4f406387c941282aa24335431c156679",
+        "size": [
+          1024,
+          1536
+        ]
+      }
+    },
+    {
+      "key": "6-B",
+      "n": 6,
+      "part": "B",
+      "slug": "mapove-znacky",
+      "name": "Mapové značky",
+      "prompt": "Create a complete building-icon comparison sheet for the actual MicroCol game shown in the attached screenshot. THE SCREENSHOT IS THE ONLY STYLE REFERENCE. Study its TINY HOUSE MAP ICON, toolbar icons and simplified trees: thickish wobbling dark outlines, solid flat colors, extremely few details. Draw at THAT simplicity. Do NOT draw a realistic building illustration, architectural rendering or a textured storybook.\nHARD STYLE RULES: every area one perfectly UNIFORM SOLID color; absolutely NO gradients, NO shading, NO highlights, NO drop shadows, NO cast shadows, NO paper texture, NO grain, NO hatching, NO wood grain, NO brick lines, NO roof tile lines, NO grass, NO scenery, NO people, NO decorative grounds. Only warm plain cream page #fff9ec, charcoal outlines #3e3b31, dull olive #82934e, muted ochre #bd8e50, muted terracotta #b5754c and occasional teal #519c96. No black-filled windows; use cream/teal simple squares. Single dark slightly hand-wobbly outlines, never sketchy repeated marks. At most ONE or TWO easily readable tools/props per icon. Think SVG pictograms, not richly detailed art.\nLAYOUT: portrait sheet, clean 3 columns (I, II, III) x 8 rows, narrow row-label margin at left. Exactly the listed icons in exact row order; no thumbnails, no legend, no decorative border. Clear handwritten Czech labels. Large white/cream gaps. Each icon isolated, no background plaque. The title and column labels plain hand-lettering. Tiny light separator lines allowed.\nPROGRESSION: I primitive OPEN lean-to with 2-3 posts, flat plank roof and exposed essential tool, no closed house; II very modest ONE-STOREY house, one door and 1–2 windows; III noticeably TALLER two-storey manufactory circa 1800 with only 2–4 windows, one simple chimney where appropriate. SAME sparse graphical complexity across tiers: III is larger in mass, not more intricately rendered. Exceptions are defensive, dock, religious and civic functions described per row. These are concept-sheet references; render crisp solid-color bitmap that LOOKS LIKE a few simple SVG paths.\n\nDESIGN 6: Mapové značky. STRICT FLAT FRONT ELEVATION, almost pictograms. 10–16 simple closed shapes per building. Plain rectangular walls, triangular roofs, two small square windows per floor. Deliberately match the tiny colony house icon in the attached map: just enlarge that level of simplicity. Thin uneven charcoal pen contour, ONE flat muted terracotta roof, cream walls, olive trade symbol.\nTITLE EXACTLY: \"6. Mapové značky — B\"\nColumns: \"I\", \"II\", \"III\".\nROWS (left labels exactly as supplied):\n1. \"Radnice\": I very simple small civic house, triangular roof, little flag; II and III only dash.\n2. \"Opevnění\": I basic short wooden palisade enclosure; II small low stone fort with gate; III larger simple bastioned fort, two levels and ONE cannon.\n3. \"Přístav\": I basic little wooden jetty with two posts; II simple drydock with ONE one-storey shed and slipway; III larger shipyard, two-storey shed and ONE skeletal boat.\n4. \"Škola\": I open roof on posts, ONE blackboard and bench; II simple one-storey schoolhouse, book sign; III two-storey university, pediment and book, NO church cross.\n5. \"Sklad\": I simple open lean-to and TWO crates; II plain one-storey warehouse and loading door; III two-storey warehouse and tiny pulley.\n6. \"Stáje\": I very basic fenced paddock with ONE simplified horse; II simple one-storey stable with ONE horse; III only dash.\n7. \"Církev\": I tiny open shelter with ONE cross; II simple one-storey church with small belfry; III larger two-storey church body and two plain towers.\n8. \"Celnice\": I plain little custom house with ONE scale and crate; II and III only dash.\nThere must be exactly 19 building icons plus 5 empty cells marked with a single small dash. A dash is not an extra building. Keep the reference map's radical simplicity.",
+      "output": {
+        "file": "06-mapove-znacky-b.png",
+        "original_path": "/Users/jan/.codex/generated_images/01a18c98-2262-7752-8cb9-17e05b23de24/exec-f720ecb0-3ac1-4394-bebf-3175bd796730.png",
+        "sha256": "94ddf23d8b9f4312a3e4aa02a10e0a7a80ed86d0b675a4fa8bf35296277f2306",
+        "size": [
+          1024,
+          1536
+        ]
+      }
+    },
+    {
+      "key": "7-A",
+      "n": 7,
+      "part": "A",
+      "slug": "mekka-kresba",
+      "name": "Měkká kresba",
+      "prompt": "Create a complete building-icon comparison sheet for the actual MicroCol game shown in the attached screenshot. THE SCREENSHOT IS THE ONLY STYLE REFERENCE. Study its TINY HOUSE MAP ICON, toolbar icons and simplified trees: thickish wobbling dark outlines, solid flat colors, extremely few details. Draw at THAT simplicity. Do NOT draw a realistic building illustration, architectural rendering or a textured storybook.\nHARD STYLE RULES: every area one perfectly UNIFORM SOLID color; absolutely NO gradients, NO shading, NO highlights, NO drop shadows, NO cast shadows, NO paper texture, NO grain, NO hatching, NO wood grain, NO brick lines, NO roof tile lines, NO grass, NO scenery, NO people, NO decorative grounds. Only warm plain cream page #fff9ec, charcoal outlines #3e3b31, dull olive #82934e, muted ochre #bd8e50, muted terracotta #b5754c and occasional teal #519c96. No black-filled windows; use cream/teal simple squares. Single dark slightly hand-wobbly outlines, never sketchy repeated marks. At most ONE or TWO easily readable tools/props per icon. Think SVG pictograms, not richly detailed art.\nLAYOUT: portrait sheet, clean 3 columns (I, II, III) x 8 rows, narrow row-label margin at left. Exactly the listed icons in exact row order; no thumbnails, no legend, no decorative border. Clear handwritten Czech labels. Large white/cream gaps. Each icon isolated, no background plaque. The title and column labels plain hand-lettering. Tiny light separator lines allowed.\nPROGRESSION: I primitive OPEN lean-to with 2-3 posts, flat plank roof and exposed essential tool, no closed house; II very modest ONE-STOREY house, one door and 1–2 windows; III noticeably TALLER two-storey manufactory circa 1800 with only 2–4 windows, one simple chimney where appropriate. SAME sparse graphical complexity across tiers: III is larger in mass, not more intricately rendered. Exceptions are defensive, dock, religious and civic functions described per row. These are concept-sheet references; render crisp solid-color bitmap that LOOKS LIKE a few simple SVG paths.\n\nDESIGN 7: Měkká kresba. FLAT FRONT ELEVATION, gently rounded and slightly wonky childlike hand-drawn geometry. Softly bowed walls and gently drooping simple roof edges. Very few big shapes; narrow olive roofs, cream walls, tiny warm ochre trade symbols. Dark brown uneven monoline. No detailed building depiction. Everything as sparse as map icons.\nTITLE EXACTLY: \"7. Měkká kresba — A\"\nColumns: \"I\", \"II\", \"III\".\nROWS (left labels exactly as supplied):\n1. \"Truhlářství\": I open lean-to with ONE sawbench and log; II plain one-storey sawmill house, ONE simple waterwheel; III only dash.\n2. \"Kovářství\": I open roof on posts, ONE anvil and tiny forge; II plain one-storey smith house plus anvil; III simple two-storey ironworks rectangle, tall chimney, anvil.\n3. \"Zbrojírna\": I open lean-to with ONE rack of two muskets; II plain one-storey arms workshop with rack; III two-storey arsenal with ONE tiny cannon.\n4. \"Tabák\": I open roof on posts, ONE hanging tobacco leaf and bench; II one-storey tobacco house with leaf sign; III two-storey cigar factory, leaf sign and ONE box.\n5. \"Tkalcovství\": I open lean-to with ONE small loom; II one-storey weaving house with ONE hanging cloth; III two-storey textile mill, cloth sign.\n6. \"Palírna\": I open roof on posts with ONE copper still; II one-storey distillery, ONE barrel; III two-storey rum factory, chimney and still sign.\n7. \"Kožešiny\": I open shelter, ONE stretched pelt frame; II one-storey fur workshop with pelt; III two-storey fur factory with pelt sign.\n8. \"Tisk\": I open lean-to with ONE small hand press; II one-storey printing house, ONE paper sheet sign; III only dash.\nThere must be exactly 22 building icons plus 2 empty cells marked with a single small dash. A dash is not an extra building. Keep the reference map's radical simplicity.",
+      "output": {
+        "file": "07-mekka-kresba-a.png",
+        "original_path": "/Users/jan/.codex/generated_images/01a18c98-2262-7752-8cb9-17e05b23de24/exec-515567bf-371b-4f70-8950-72b633258dcf.png",
+        "sha256": "48faf25b15e1ef2d15ceafae107d055ec47e85ebb8325244644257284d722639",
+        "size": [
+          1024,
+          1536
+        ]
+      }
+    },
+    {
+      "key": "7-B",
+      "n": 7,
+      "part": "B",
+      "slug": "mekka-kresba",
+      "name": "Měkká kresba",
+      "prompt": "Create a complete building-icon comparison sheet for the actual MicroCol game shown in the attached screenshot. THE SCREENSHOT IS THE ONLY STYLE REFERENCE. Study its TINY HOUSE MAP ICON, toolbar icons and simplified trees: thickish wobbling dark outlines, solid flat colors, extremely few details. Draw at THAT simplicity. Do NOT draw a realistic building illustration, architectural rendering or a textured storybook.\nHARD STYLE RULES: every area one perfectly UNIFORM SOLID color; absolutely NO gradients, NO shading, NO highlights, NO drop shadows, NO cast shadows, NO paper texture, NO grain, NO hatching, NO wood grain, NO brick lines, NO roof tile lines, NO grass, NO scenery, NO people, NO decorative grounds. Only warm plain cream page #fff9ec, charcoal outlines #3e3b31, dull olive #82934e, muted ochre #bd8e50, muted terracotta #b5754c and occasional teal #519c96. No black-filled windows; use cream/teal simple squares. Single dark slightly hand-wobbly outlines, never sketchy repeated marks. At most ONE or TWO easily readable tools/props per icon. Think SVG pictograms, not richly detailed art.\nLAYOUT: portrait sheet, clean 3 columns (I, II, III) x 8 rows, narrow row-label margin at left. Exactly the listed icons in exact row order; no thumbnails, no legend, no decorative border. Clear handwritten Czech labels. Large white/cream gaps. Each icon isolated, no background plaque. The title and column labels plain hand-lettering. Tiny light separator lines allowed.\nPROGRESSION: I primitive OPEN lean-to with 2-3 posts, flat plank roof and exposed essential tool, no closed house; II very modest ONE-STOREY house, one door and 1–2 windows; III noticeably TALLER two-storey manufactory circa 1800 with only 2–4 windows, one simple chimney where appropriate. SAME sparse graphical complexity across tiers: III is larger in mass, not more intricately rendered. Exceptions are defensive, dock, religious and civic functions described per row. These are concept-sheet references; render crisp solid-color bitmap that LOOKS LIKE a few simple SVG paths.\n\nDESIGN 7: Měkká kresba. FLAT FRONT ELEVATION, gently rounded and slightly wonky childlike hand-drawn geometry. Softly bowed walls and gently drooping simple roof edges. Very few big shapes; narrow olive roofs, cream walls, tiny warm ochre trade symbols. Dark brown uneven monoline. No detailed building depiction. Everything as sparse as map icons.\nTITLE EXACTLY: \"7. Měkká kresba — B\"\nColumns: \"I\", \"II\", \"III\".\nROWS (left labels exactly as supplied):\n1. \"Radnice\": I very simple small civic house, triangular roof, little flag; II and III only dash.\n2. \"Opevnění\": I basic short wooden palisade enclosure; II small low stone fort with gate; III larger simple bastioned fort, two levels and ONE cannon.\n3. \"Přístav\": I basic little wooden jetty with two posts; II simple drydock with ONE one-storey shed and slipway; III larger shipyard, two-storey shed and ONE skeletal boat.\n4. \"Škola\": I open roof on posts, ONE blackboard and bench; II simple one-storey schoolhouse, book sign; III two-storey university, pediment and book, NO church cross.\n5. \"Sklad\": I simple open lean-to and TWO crates; II plain one-storey warehouse and loading door; III two-storey warehouse and tiny pulley.\n6. \"Stáje\": I very basic fenced paddock with ONE simplified horse; II simple one-storey stable with ONE horse; III only dash.\n7. \"Církev\": I tiny open shelter with ONE cross; II simple one-storey church with small belfry; III larger two-storey church body and two plain towers.\n8. \"Celnice\": I plain little custom house with ONE scale and crate; II and III only dash.\nThere must be exactly 19 building icons plus 5 empty cells marked with a single small dash. A dash is not an extra building. Keep the reference map's radical simplicity.",
+      "output": {
+        "file": "07-mekka-kresba-b.png",
+        "original_path": "/Users/jan/.codex/generated_images/01a18c98-2262-7752-8cb9-17e05b23de24/exec-cd9dc758-1966-40e7-b796-1b1d5b3832e5.png",
+        "sha256": "975ca9e95c84540bec8eb43317bece3ea702572c692a8358c30b4ddcf11b3e40",
+        "size": [
+          1024,
+          1536
+        ]
+      }
+    },
+    {
+      "key": "8-A",
+      "n": 8,
+      "part": "A",
+      "slug": "lehky-nadhled",
+      "name": "Lehký nadhled",
+      "prompt": "Create a complete building-icon comparison sheet for the actual MicroCol game shown in the attached screenshot. THE SCREENSHOT IS THE ONLY STYLE REFERENCE. Study its TINY HOUSE MAP ICON, toolbar icons and simplified trees: thickish wobbling dark outlines, solid flat colors, extremely few details. Draw at THAT simplicity. Do NOT draw a realistic building illustration, architectural rendering or a textured storybook.\nHARD STYLE RULES: every area one perfectly UNIFORM SOLID color; absolutely NO gradients, NO shading, NO highlights, NO drop shadows, NO cast shadows, NO paper texture, NO grain, NO hatching, NO wood grain, NO brick lines, NO roof tile lines, NO grass, NO scenery, NO people, NO decorative grounds. Only warm plain cream page #fff9ec, charcoal outlines #3e3b31, dull olive #82934e, muted ochre #bd8e50, muted terracotta #b5754c and occasional teal #519c96. No black-filled windows; use cream/teal simple squares. Single dark slightly hand-wobbly outlines, never sketchy repeated marks. At most ONE or TWO easily readable tools/props per icon. Think SVG pictograms, not richly detailed art.\nLAYOUT: portrait sheet, clean 3 columns (I, II, III) x 8 rows, narrow row-label margin at left. Exactly the listed icons in exact row order; no thumbnails, no legend, no decorative border. Clear handwritten Czech labels. Large white/cream gaps. Each icon isolated, no background plaque. The title and column labels plain hand-lettering. Tiny light separator lines allowed.\nPROGRESSION: I primitive OPEN lean-to with 2-3 posts, flat plank roof and exposed essential tool, no closed house; II very modest ONE-STOREY house, one door and 1–2 windows; III noticeably TALLER two-storey manufactory circa 1800 with only 2–4 windows, one simple chimney where appropriate. SAME sparse graphical complexity across tiers: III is larger in mass, not more intricately rendered. Exceptions are defensive, dock, religious and civic functions described per row. These are concept-sheet references; render crisp solid-color bitmap that LOOKS LIKE a few simple SVG paths.\n\nDESIGN 8: Lehký nadhled. TINY THREE-QUARTER angle, extremely schematic, only one front and a very narrow side plane. A handful of big polygons with solid uniform paint. SAME cream color on BOTH walls, no lighting or shaded side. Muted terracotta plain roofs, olive sparse trade symbols, wobbling dark map-icon outline. Only two or three simple window squares per floor. No isometric dioramas.\nTITLE EXACTLY: \"8. Lehký nadhled — A\"\nColumns: \"I\", \"II\", \"III\".\nROWS (left labels exactly as supplied):\n1. \"Truhlářství\": I open lean-to with ONE sawbench and log; II plain one-storey sawmill house, ONE simple waterwheel; III only dash.\n2. \"Kovářství\": I open roof on posts, ONE anvil and tiny forge; II plain one-storey smith house plus anvil; III simple two-storey ironworks rectangle, tall chimney, anvil.\n3. \"Zbrojírna\": I open lean-to with ONE rack of two muskets; II plain one-storey arms workshop with rack; III two-storey arsenal with ONE tiny cannon.\n4. \"Tabák\": I open roof on posts, ONE hanging tobacco leaf and bench; II one-storey tobacco house with leaf sign; III two-storey cigar factory, leaf sign and ONE box.\n5. \"Tkalcovství\": I open lean-to with ONE small loom; II one-storey weaving house with ONE hanging cloth; III two-storey textile mill, cloth sign.\n6. \"Palírna\": I open roof on posts with ONE copper still; II one-storey distillery, ONE barrel; III two-storey rum factory, chimney and still sign.\n7. \"Kožešiny\": I open shelter, ONE stretched pelt frame; II one-storey fur workshop with pelt; III two-storey fur factory with pelt sign.\n8. \"Tisk\": I open lean-to with ONE small hand press; II one-storey printing house, ONE paper sheet sign; III only dash.\nThere must be exactly 22 building icons plus 2 empty cells marked with a single small dash. A dash is not an extra building. Keep the reference map's radical simplicity.",
+      "output": {
+        "file": "08-lehky-nadhled-a.png",
+        "original_path": "/Users/jan/.codex/generated_images/01a18c98-2262-7752-8cb9-17e05b23de24/exec-db86023d-ce38-464c-b8ca-4c17f6fcfbc2.png",
+        "sha256": "f043ad60b997d299b7958e2834d38fa23ac18e5bcd95c687f1083ac72e43f31e",
+        "size": [
+          1024,
+          1536
+        ]
+      }
+    },
+    {
+      "key": "8-B",
+      "n": 8,
+      "part": "B",
+      "slug": "lehky-nadhled",
+      "name": "Lehký nadhled",
+      "prompt": "Create a complete building-icon comparison sheet for the actual MicroCol game shown in the attached screenshot. THE SCREENSHOT IS THE ONLY STYLE REFERENCE. Study its TINY HOUSE MAP ICON, toolbar icons and simplified trees: thickish wobbling dark outlines, solid flat colors, extremely few details. Draw at THAT simplicity. Do NOT draw a realistic building illustration, architectural rendering or a textured storybook.\nHARD STYLE RULES: every area one perfectly UNIFORM SOLID color; absolutely NO gradients, NO shading, NO highlights, NO drop shadows, NO cast shadows, NO paper texture, NO grain, NO hatching, NO wood grain, NO brick lines, NO roof tile lines, NO grass, NO scenery, NO people, NO decorative grounds. Only warm plain cream page #fff9ec, charcoal outlines #3e3b31, dull olive #82934e, muted ochre #bd8e50, muted terracotta #b5754c and occasional teal #519c96. No black-filled windows; use cream/teal simple squares. Single dark slightly hand-wobbly outlines, never sketchy repeated marks. At most ONE or TWO easily readable tools/props per icon. Think SVG pictograms, not richly detailed art.\nLAYOUT: portrait sheet, clean 3 columns (I, II, III) x 8 rows, narrow row-label margin at left. Exactly the listed icons in exact row order; no thumbnails, no legend, no decorative border. Clear handwritten Czech labels. Large white/cream gaps. Each icon isolated, no background plaque. The title and column labels plain hand-lettering. Tiny light separator lines allowed.\nPROGRESSION: I primitive OPEN lean-to with 2-3 posts, flat plank roof and exposed essential tool, no closed house; II very modest ONE-STOREY house, one door and 1–2 windows; III noticeably TALLER two-storey manufactory circa 1800 with only 2–4 windows, one simple chimney where appropriate. SAME sparse graphical complexity across tiers: III is larger in mass, not more intricately rendered. Exceptions are defensive, dock, religious and civic functions described per row. These are concept-sheet references; render crisp solid-color bitmap that LOOKS LIKE a few simple SVG paths.\n\nDESIGN 8: Lehký nadhled. TINY THREE-QUARTER angle, extremely schematic, only one front and a very narrow side plane. A handful of big polygons with solid uniform paint. SAME cream color on BOTH walls, no lighting or shaded side. Muted terracotta plain roofs, olive sparse trade symbols, wobbling dark map-icon outline. Only two or three simple window squares per floor. No isometric dioramas.\nTITLE EXACTLY: \"8. Lehký nadhled — B\"\nColumns: \"I\", \"II\", \"III\".\nROWS (left labels exactly as supplied):\n1. \"Radnice\": I very simple small civic house, triangular roof, little flag; II and III only dash.\n2. \"Opevnění\": I basic short wooden palisade enclosure; II small low stone fort with gate; III larger simple bastioned fort, two levels and ONE cannon.\n3. \"Přístav\": I basic little wooden jetty with two posts; II simple drydock with ONE one-storey shed and slipway; III larger shipyard, two-storey shed and ONE skeletal boat.\n4. \"Škola\": I open roof on posts, ONE blackboard and bench; II simple one-storey schoolhouse, book sign; III two-storey university, pediment and book, NO church cross.\n5. \"Sklad\": I simple open lean-to and TWO crates; II plain one-storey warehouse and loading door; III two-storey warehouse and tiny pulley.\n6. \"Stáje\": I very basic fenced paddock with ONE simplified horse; II simple one-storey stable with ONE horse; III only dash.\n7. \"Církev\": I tiny open shelter with ONE cross; II simple one-storey church with small belfry; III larger two-storey church body and two plain towers.\n8. \"Celnice\": I plain little custom house with ONE scale and crate; II and III only dash.\nThere must be exactly 19 building icons plus 5 empty cells marked with a single small dash. A dash is not an extra building. Keep the reference map's radical simplicity.",
+      "output": {
+        "file": "08-lehky-nadhled-b.png",
+        "original_path": "/Users/jan/.codex/generated_images/01a18c98-2262-7752-8cb9-17e05b23de24/exec-905f200d-9a37-4910-a06b-9a27b89cc8d9.png",
+        "sha256": "c6b64415e23a0d488765f0f63649c4db389eb2231c72b59d13ed48e4b4bcc2a7",
+        "size": [
+          1024,
+          1536
+        ]
+      }
+    },
+    {
+      "key": "9-A",
+      "n": 9,
+      "part": "A",
+      "slug": "silna-kontura",
+      "name": "Silná kontura",
+      "prompt": "Create a complete building-icon comparison sheet for the actual MicroCol game shown in the attached screenshot. THE SCREENSHOT IS THE ONLY STYLE REFERENCE. Study its TINY HOUSE MAP ICON, toolbar icons and simplified trees: thickish wobbling dark outlines, solid flat colors, extremely few details. Draw at THAT simplicity. Do NOT draw a realistic building illustration, architectural rendering or a textured storybook.\nHARD STYLE RULES: every area one perfectly UNIFORM SOLID color; absolutely NO gradients, NO shading, NO highlights, NO drop shadows, NO cast shadows, NO paper texture, NO grain, NO hatching, NO wood grain, NO brick lines, NO roof tile lines, NO grass, NO scenery, NO people, NO decorative grounds. Only warm plain cream page #fff9ec, charcoal outlines #3e3b31, dull olive #82934e, muted ochre #bd8e50, muted terracotta #b5754c and occasional teal #519c96. No black-filled windows; use cream/teal simple squares. Single dark slightly hand-wobbly outlines, never sketchy repeated marks. At most ONE or TWO easily readable tools/props per icon. Think SVG pictograms, not richly detailed art.\nLAYOUT: portrait sheet, clean 3 columns (I, II, III) x 8 rows, narrow row-label margin at left. Exactly the listed icons in exact row order; no thumbnails, no legend, no decorative border. Clear handwritten Czech labels. Large white/cream gaps. Each icon isolated, no background plaque. The title and column labels plain hand-lettering. Tiny light separator lines allowed.\nPROGRESSION: I primitive OPEN lean-to with 2-3 posts, flat plank roof and exposed essential tool, no closed house; II very modest ONE-STOREY house, one door and 1–2 windows; III noticeably TALLER two-storey manufactory circa 1800 with only 2–4 windows, one simple chimney where appropriate. SAME sparse graphical complexity across tiers: III is larger in mass, not more intricately rendered. Exceptions are defensive, dock, religious and civic functions described per row. These are concept-sheet references; render crisp solid-color bitmap that LOOKS LIKE a few simple SVG paths.\n\nDESIGN 9: Silná kontura. FLAT FRONT ELEVATION with bold hand-drawn charcoal contour, unusually clear simplified silhouettes and big chunky profession symbols. Fewer than 16 simple shapes per icon. Muted ochre roofs, cream walls, olive shutters or profession sign. Low open lean-to vs small one-storey rectangle vs taller two-storey rectangle. Minimal windows. Sparse and highly readable.\nTITLE EXACTLY: \"9. Silná kontura — A\"\nColumns: \"I\", \"II\", \"III\".\nROWS (left labels exactly as supplied):\n1. \"Truhlářství\": I open lean-to with ONE sawbench and log; II plain one-storey sawmill house, ONE simple waterwheel; III only dash.\n2. \"Kovářství\": I open roof on posts, ONE anvil and tiny forge; II plain one-storey smith house plus anvil; III simple two-storey ironworks rectangle, tall chimney, anvil.\n3. \"Zbrojírna\": I open lean-to with ONE rack of two muskets; II plain one-storey arms workshop with rack; III two-storey arsenal with ONE tiny cannon.\n4. \"Tabák\": I open roof on posts, ONE hanging tobacco leaf and bench; II one-storey tobacco house with leaf sign; III two-storey cigar factory, leaf sign and ONE box.\n5. \"Tkalcovství\": I open lean-to with ONE small loom; II one-storey weaving house with ONE hanging cloth; III two-storey textile mill, cloth sign.\n6. \"Palírna\": I open roof on posts with ONE copper still; II one-storey distillery, ONE barrel; III two-storey rum factory, chimney and still sign.\n7. \"Kožešiny\": I open shelter, ONE stretched pelt frame; II one-storey fur workshop with pelt; III two-storey fur factory with pelt sign.\n8. \"Tisk\": I open lean-to with ONE small hand press; II one-storey printing house, ONE paper sheet sign; III only dash.\nThere must be exactly 22 building icons plus 2 empty cells marked with a single small dash. A dash is not an extra building. Keep the reference map's radical simplicity.",
+      "output": {
+        "file": "09-silna-kontura-a.png",
+        "original_path": "/Users/jan/.codex/generated_images/01a18c98-2262-7752-8cb9-17e05b23de24/exec-49faf276-9706-4713-a89b-30f727e0541a.png",
+        "sha256": "9d3e5989a8fb4a7abc993fec03f534bbcb4e08cb44d7b448789fc6fb772add27",
+        "size": [
+          1024,
+          1536
+        ]
+      }
+    },
+    {
+      "key": "9-B",
+      "n": 9,
+      "part": "B",
+      "slug": "silna-kontura",
+      "name": "Silná kontura",
+      "prompt": "Create a complete building-icon comparison sheet for the actual MicroCol game shown in the attached screenshot. THE SCREENSHOT IS THE ONLY STYLE REFERENCE. Study its TINY HOUSE MAP ICON, toolbar icons and simplified trees: thickish wobbling dark outlines, solid flat colors, extremely few details. Draw at THAT simplicity. Do NOT draw a realistic building illustration, architectural rendering or a textured storybook.\nHARD STYLE RULES: every area one perfectly UNIFORM SOLID color; absolutely NO gradients, NO shading, NO highlights, NO drop shadows, NO cast shadows, NO paper texture, NO grain, NO hatching, NO wood grain, NO brick lines, NO roof tile lines, NO grass, NO scenery, NO people, NO decorative grounds. Only warm plain cream page #fff9ec, charcoal outlines #3e3b31, dull olive #82934e, muted ochre #bd8e50, muted terracotta #b5754c and occasional teal #519c96. No black-filled windows; use cream/teal simple squares. Single dark slightly hand-wobbly outlines, never sketchy repeated marks. At most ONE or TWO easily readable tools/props per icon. Think SVG pictograms, not richly detailed art.\nLAYOUT: portrait sheet, clean 3 columns (I, II, III) x 8 rows, narrow row-label margin at left. Exactly the listed icons in exact row order; no thumbnails, no legend, no decorative border. Clear handwritten Czech labels. Large white/cream gaps. Each icon isolated, no background plaque. The title and column labels plain hand-lettering. Tiny light separator lines allowed.\nPROGRESSION: I primitive OPEN lean-to with 2-3 posts, flat plank roof and exposed essential tool, no closed house; II very modest ONE-STOREY house, one door and 1–2 windows; III noticeably TALLER two-storey manufactory circa 1800 with only 2–4 windows, one simple chimney where appropriate. SAME sparse graphical complexity across tiers: III is larger in mass, not more intricately rendered. Exceptions are defensive, dock, religious and civic functions described per row. These are concept-sheet references; render crisp solid-color bitmap that LOOKS LIKE a few simple SVG paths.\n\nDESIGN 9: Silná kontura. FLAT FRONT ELEVATION with bold hand-drawn charcoal contour, unusually clear simplified silhouettes and big chunky profession symbols. Fewer than 16 simple shapes per icon. Muted ochre roofs, cream walls, olive shutters or profession sign. Low open lean-to vs small one-storey rectangle vs taller two-storey rectangle. Minimal windows. Sparse and highly readable.\nTITLE EXACTLY: \"9. Silná kontura — B\"\nColumns: \"I\", \"II\", \"III\".\nROWS (left labels exactly as supplied):\n1. \"Radnice\": I very simple small civic house, triangular roof, little flag; II and III only dash.\n2. \"Opevnění\": I basic short wooden palisade enclosure; II small low stone fort with gate; III larger simple bastioned fort, two levels and ONE cannon.\n3. \"Přístav\": I basic little wooden jetty with two posts; II simple drydock with ONE one-storey shed and slipway; III larger shipyard, two-storey shed and ONE skeletal boat.\n4. \"Škola\": I open roof on posts, ONE blackboard and bench; II simple one-storey schoolhouse, book sign; III two-storey university, pediment and book, NO church cross.\n5. \"Sklad\": I simple open lean-to and TWO crates; II plain one-storey warehouse and loading door; III two-storey warehouse and tiny pulley.\n6. \"Stáje\": I very basic fenced paddock with ONE simplified horse; II simple one-storey stable with ONE horse; III only dash.\n7. \"Církev\": I tiny open shelter with ONE cross; II simple one-storey church with small belfry; III larger two-storey church body and two plain towers.\n8. \"Celnice\": I plain little custom house with ONE scale and crate; II and III only dash.\nThere must be exactly 19 building icons plus 5 empty cells marked with a single small dash. A dash is not an extra building. Keep the reference map's radical simplicity.",
+      "output": {
+        "file": "09-silna-kontura-b.png",
+        "original_path": "/Users/jan/.codex/generated_images/01a18c98-2262-7752-8cb9-17e05b23de24/exec-3d996967-1377-4eab-a4cd-696dacfcf9c5.png",
+        "sha256": "8369c20fdb799fd7acbaa8df80648a9539090d33852853c4d3824a001a6e30d1",
+        "size": [
+          1024,
+          1536
+        ]
+      }
+    },
+    {
+      "key": "10-A",
+      "n": 10,
+      "part": "A",
+      "slug": "stridma-perokresba",
+      "name": "Střídmá perokresba",
+      "prompt": "Create a complete building-icon comparison sheet for the actual MicroCol game shown in the attached screenshot. THE SCREENSHOT IS THE ONLY STYLE REFERENCE. Study its TINY HOUSE MAP ICON, toolbar icons and simplified trees: thickish wobbling dark outlines, solid flat colors, extremely few details. Draw at THAT simplicity. Do NOT draw a realistic building illustration, architectural rendering or a textured storybook.\nHARD STYLE RULES: every area one perfectly UNIFORM SOLID color; absolutely NO gradients, NO shading, NO highlights, NO drop shadows, NO cast shadows, NO paper texture, NO grain, NO hatching, NO wood grain, NO brick lines, NO roof tile lines, NO grass, NO scenery, NO people, NO decorative grounds. Only warm plain cream page #fff9ec, charcoal outlines #3e3b31, dull olive #82934e, muted ochre #bd8e50, muted terracotta #b5754c and occasional teal #519c96. No black-filled windows; use cream/teal simple squares. Single dark slightly hand-wobbly outlines, never sketchy repeated marks. At most ONE or TWO easily readable tools/props per icon. Think SVG pictograms, not richly detailed art.\nLAYOUT: portrait sheet, clean 3 columns (I, II, III) x 8 rows, narrow row-label margin at left. Exactly the listed icons in exact row order; no thumbnails, no legend, no decorative border. Clear handwritten Czech labels. Large white/cream gaps. Each icon isolated, no background plaque. The title and column labels plain hand-lettering. Tiny light separator lines allowed.\nPROGRESSION: I primitive OPEN lean-to with 2-3 posts, flat plank roof and exposed essential tool, no closed house; II very modest ONE-STOREY house, one door and 1–2 windows; III noticeably TALLER two-storey manufactory circa 1800 with only 2–4 windows, one simple chimney where appropriate. SAME sparse graphical complexity across tiers: III is larger in mass, not more intricately rendered. Exceptions are defensive, dock, religious and civic functions described per row. These are concept-sheet references; render crisp solid-color bitmap that LOOKS LIKE a few simple SVG paths.\n\nDESIGN 10: Střídmá perokresba. VERY SPARSE FLAT FRONT ELEVATION, light slightly irregular hand pen outline. Cream page and cream unpainted walls; ONLY roofs solid olive and ONE small profession symbol flat terracotta. Maximum negative space. No interior hatch lines. At most 12–18 simple shapes per icon. Taller final tier obvious by two floors of two empty outlined windows. Old notebook map-symbol aesthetic, not detailed illustration.\nTITLE EXACTLY: \"10. Střídmá perokresba — A\"\nColumns: \"I\", \"II\", \"III\".\nROWS (left labels exactly as supplied):\n1. \"Truhlářství\": I open lean-to with ONE sawbench and log; II plain one-storey sawmill house, ONE simple waterwheel; III only dash.\n2. \"Kovářství\": I open roof on posts, ONE anvil and tiny forge; II plain one-storey smith house plus anvil; III simple two-storey ironworks rectangle, tall chimney, anvil.\n3. \"Zbrojírna\": I open lean-to with ONE rack of two muskets; II plain one-storey arms workshop with rack; III two-storey arsenal with ONE tiny cannon.\n4. \"Tabák\": I open roof on posts, ONE hanging tobacco leaf and bench; II one-storey tobacco house with leaf sign; III two-storey cigar factory, leaf sign and ONE box.\n5. \"Tkalcovství\": I open lean-to with ONE small loom; II one-storey weaving house with ONE hanging cloth; III two-storey textile mill, cloth sign.\n6. \"Palírna\": I open roof on posts with ONE copper still; II one-storey distillery, ONE barrel; III two-storey rum factory, chimney and still sign.\n7. \"Kožešiny\": I open shelter, ONE stretched pelt frame; II one-storey fur workshop with pelt; III two-storey fur factory with pelt sign.\n8. \"Tisk\": I open lean-to with ONE small hand press; II one-storey printing house, ONE paper sheet sign; III only dash.\nThere must be exactly 22 building icons plus 2 empty cells marked with a single small dash. A dash is not an extra building. Keep the reference map's radical simplicity.",
+      "output": {
+        "file": "10-stridma-perokresba-a.png",
+        "original_path": "/Users/jan/.codex/generated_images/01a18c98-2262-7752-8cb9-17e05b23de24/exec-275eb035-db9f-436b-87a9-ef697a45e31a.png",
+        "sha256": "d7e9aa2d00d33a37b8edb5731c7389151a346377872f598814a01c4ee0773160",
+        "size": [
+          1024,
+          1536
+        ]
+      },
+      "refinement": {
+        "prompt": "Edit this complete concept sheet ONLY to make its graphic style dramatically more sparse. Preserve ALL 22 building icons, exact row order, labels, title, tier progression, layout and empty-cell dashes. Use a very THIN dark warm-gray single pen contour of roughly HALF the current thickness, with a gently human irregular shape. This is the thin-line alternative, distinct from the other bold colored proposals. CRUCIAL: erase ALL teal/blue fills, ALL brown door/wall/tool/crate fills, ALL dark fills inside windows and openings. Windows are small EMPTY cream outlined squares, doors EMPTY cream outlined rectangles. Every wall, door, tool, horse, boat, crate and interior opening has the same perfectly uniform cream fill as the page. ONLY the roof planes have a solid muted olive fill. You MAY use exactly ONE tiny solid terracotta profession attribute per icon (e.g. leaf/pelt/book/still/anvil/horse), no other colored detailing. NO shading, gradients, paper grain, texture, highlights or shadow. Preserve profession recognizability and all tier counts. Make the page airy, restrained, and considerably LESS colorful. Do not add detail. Final appearance is very spare black-pen map symbols with olive roofs, not a fully colored illustration.",
+        "referenced_image_paths": [
+          "/Users/jan/.codex/generated_images/01a18c98-2262-7752-8cb9-17e05b23de24/exec-750477cb-ab80-4940-8163-11ce9736ff6e.png"
+        ],
+        "original": "/Users/jan/.codex/generated_images/01a18c98-2262-7752-8cb9-17e05b23de24/exec-750477cb-ab80-4940-8163-11ce9736ff6e.png",
+        "retained_original": "reference/10-stridma-perokresba-a-initial.png"
+      }
+    },
+    {
+      "key": "10-B",
+      "n": 10,
+      "part": "B",
+      "slug": "stridma-perokresba",
+      "name": "Střídmá perokresba",
+      "prompt": "Create a complete building-icon comparison sheet for the actual MicroCol game shown in the attached screenshot. THE SCREENSHOT IS THE ONLY STYLE REFERENCE. Study its TINY HOUSE MAP ICON, toolbar icons and simplified trees: thickish wobbling dark outlines, solid flat colors, extremely few details. Draw at THAT simplicity. Do NOT draw a realistic building illustration, architectural rendering or a textured storybook.\nHARD STYLE RULES: every area one perfectly UNIFORM SOLID color; absolutely NO gradients, NO shading, NO highlights, NO drop shadows, NO cast shadows, NO paper texture, NO grain, NO hatching, NO wood grain, NO brick lines, NO roof tile lines, NO grass, NO scenery, NO people, NO decorative grounds. Only warm plain cream page #fff9ec, charcoal outlines #3e3b31, dull olive #82934e, muted ochre #bd8e50, muted terracotta #b5754c and occasional teal #519c96. No black-filled windows; use cream/teal simple squares. Single dark slightly hand-wobbly outlines, never sketchy repeated marks. At most ONE or TWO easily readable tools/props per icon. Think SVG pictograms, not richly detailed art.\nLAYOUT: portrait sheet, clean 3 columns (I, II, III) x 8 rows, narrow row-label margin at left. Exactly the listed icons in exact row order; no thumbnails, no legend, no decorative border. Clear handwritten Czech labels. Large white/cream gaps. Each icon isolated, no background plaque. The title and column labels plain hand-lettering. Tiny light separator lines allowed.\nPROGRESSION: I primitive OPEN lean-to with 2-3 posts, flat plank roof and exposed essential tool, no closed house; II very modest ONE-STOREY house, one door and 1–2 windows; III noticeably TALLER two-storey manufactory circa 1800 with only 2–4 windows, one simple chimney where appropriate. SAME sparse graphical complexity across tiers: III is larger in mass, not more intricately rendered. Exceptions are defensive, dock, religious and civic functions described per row. These are concept-sheet references; render crisp solid-color bitmap that LOOKS LIKE a few simple SVG paths.\n\nDESIGN 10: Střídmá perokresba. VERY SPARSE FLAT FRONT ELEVATION, light slightly irregular hand pen outline. Cream page and cream unpainted walls; ONLY roofs solid olive and ONE small profession symbol flat terracotta. Maximum negative space. No interior hatch lines. At most 12–18 simple shapes per icon. Taller final tier obvious by two floors of two empty outlined windows. Old notebook map-symbol aesthetic, not detailed illustration.\nTITLE EXACTLY: \"10. Střídmá perokresba — B\"\nColumns: \"I\", \"II\", \"III\".\nROWS (left labels exactly as supplied):\n1. \"Radnice\": I very simple small civic house, triangular roof, little flag; II and III only dash.\n2. \"Opevnění\": I basic short wooden palisade enclosure; II small low stone fort with gate; III larger simple bastioned fort, two levels and ONE cannon.\n3. \"Přístav\": I basic little wooden jetty with two posts; II simple drydock with ONE one-storey shed and slipway; III larger shipyard, two-storey shed and ONE skeletal boat.\n4. \"Škola\": I open roof on posts, ONE blackboard and bench; II simple one-storey schoolhouse, book sign; III two-storey university, pediment and book, NO church cross.\n5. \"Sklad\": I simple open lean-to and TWO crates; II plain one-storey warehouse and loading door; III two-storey warehouse and tiny pulley.\n6. \"Stáje\": I very basic fenced paddock with ONE simplified horse; II simple one-storey stable with ONE horse; III only dash.\n7. \"Církev\": I tiny open shelter with ONE cross; II simple one-storey church with small belfry; III larger two-storey church body and two plain towers.\n8. \"Celnice\": I plain little custom house with ONE scale and crate; II and III only dash.\nThere must be exactly 19 building icons plus 5 empty cells marked with a single small dash. A dash is not an extra building. Keep the reference map's radical simplicity.",
+      "output": {
+        "file": "10-stridma-perokresba-b.png",
+        "original_path": "/Users/jan/.codex/generated_images/01a18c98-2262-7752-8cb9-17e05b23de24/exec-be55a2e1-6bff-407f-afbf-f14d7f5f3624.png",
+        "sha256": "ce896fb4cd9e269b80bcc98de709817e765af0425c4fd6964304535aeaac3043",
+        "size": [
+          1024,
+          1536
+        ]
+      },
+      "refinement": {
+        "prompt": "Edit this complete concept sheet ONLY to make its graphic style dramatically more sparse. Preserve ALL 19 building icons, exact row order, labels, title, tier progression, layout and empty-cell dashes. Use a very THIN dark warm-gray single pen contour of roughly HALF the current thickness, with a gently human irregular shape. This is the thin-line alternative, distinct from the other bold colored proposals. CRUCIAL: erase ALL teal/blue fills, ALL brown door/wall/tool/crate fills, ALL dark fills inside windows and openings. Windows are small EMPTY cream outlined squares, doors EMPTY cream outlined rectangles. Every wall, door, tool, horse, boat, crate and interior opening has the same perfectly uniform cream fill as the page. ONLY the roof planes have a solid muted olive fill. You MAY use exactly ONE tiny solid terracotta profession attribute per icon (e.g. leaf/pelt/book/still/anvil/horse), no other colored detailing. NO shading, gradients, paper grain, texture, highlights or shadow. Preserve profession recognizability and all tier counts. Make the page airy, restrained, and considerably LESS colorful. Do not add detail. Final appearance is very spare black-pen map symbols with olive roofs, not a fully colored illustration.",
+        "referenced_image_paths": [
+          "/Users/jan/.codex/generated_images/01a18c98-2262-7752-8cb9-17e05b23de24/exec-4c2597eb-d43a-4066-b097-15a5ee309b5a.png"
+        ],
+        "original": "/Users/jan/.codex/generated_images/01a18c98-2262-7752-8cb9-17e05b23de24/exec-4c2597eb-d43a-4066-b097-15a5ee309b5a.png",
+        "retained_original": "reference/10-stridma-perokresba-b-initial.png"
+      }
+    }
+  ],
+  "reference_sha256": "093f5ad3bf719615e8e1076e636a197155409498e043cc41783d1c75b548f3c8",
+  "review": {
+    "date": "2026-10-30",
+    "scope": "All ten final sheets visually reviewed for row order, tier counts, profession attributes and map-inspired simplification. The final pair was revised to reduce color and line weight.",
+    "limits": "Raster concept references, not final SVG, pixel-exact palette enforcement or verified readability at game icon size."
+  }
+}

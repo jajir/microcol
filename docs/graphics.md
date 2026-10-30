@@ -1,5 +1,53 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Budovy — pět jednodušších návrhů podle hlavní mapy, 30. října 2026
+
+1. [R-0357](requirements/done/R-0357.md) navazuje na zpětnou vazbu k předchozí sérii: obsah a rozdíly stupňů jsou vhodné, ale detailní ilustrace se nehodí ke grafice hry. Nové návrhy **6–10** proto vycházejí přímo z [dodaného snímku hlavní mapy](assets/building-flat-proposals-2026-10-30/reference/main-map.png): několik jednoduchých tvarů, ruční tmavý obrys, střídmá paleta a minimum detailů.
+2. **Každý návrh obsahuje všech 41 současných podob budov**, tedy opět 205 ilustrací. List A má 22 řemeslných podob, list B dalších 19. Sloupce I–III zachovávají postup přístřešek → přízemní dům → patrová manufaktura kolem roku 1800; neindustriální budovy rostou podle svého účelu. Pomlčky označují neexistující stupně, nikoli chybějící kresby.
+3. Rozbalit návrh a kliknutím otevřít list v plném rozlišení **1024 × 1536 px**. Jde o rastrové návrhové reference vytvořené vestavěným ImageGen, nikoli nasazené herní obrázky nebo SVG. [Přesné prompty, zdrojový snímek, revize a mapování typů](assets/building-flat-proposals-2026-10-30/prompts.json) zachovávají původ; oba původní listy návrhu 10 jsou uložené před dodatečným zjednodušením.
+4. Vizuální kontrola ověřila řádky, počty, znaky profesí a zjednodušení vůči první sérii. Generované reference mohou stále obsahovat drobné barevné nerovnosti; pro případnou realizaci platí skutečné jednolité výplně a editovatelné SVG podle [zdrojového kontraktu](#zdrojovy-format-herni-grafiky). Čitelnost v herní velikosti a konečný směr zatím nejsou ověřené ani vybrané. [Evidence návrhů](publishing.md#r-0357-flat-building-proposals-2026-10-30).
+
+<details open>
+<summary><strong>6. Mapové značky</strong> — Čelní pohled a jednoduché domky nejbližší značce kolonie na hlavní mapě.</summary>
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:16px; margin:16px 0;">
+<figure style="margin:0;"><figcaption>A — řemesla, 22 podob</figcaption><a href="assets/building-flat-proposals-2026-10-30/06-mapove-znacky-a.png"><img src="assets/building-flat-proposals-2026-10-30/06-mapove-znacky-a.png" alt="6. Mapové značky, list A, 22 podob budov ve stupních I až III" style="width:100%; height:auto;" /></a></figure>
+<figure style="margin:0;"><figcaption>B — ostatní budovy, 19 podob</figcaption><a href="assets/building-flat-proposals-2026-10-30/06-mapove-znacky-b.png"><img src="assets/building-flat-proposals-2026-10-30/06-mapove-znacky-b.png" alt="6. Mapové značky, list B, 19 podob budov ve stupních I až III" style="width:100%; height:auto;" /></a></figure>
+</div>
+</details>
+
+<details>
+<summary><strong>7. Měkká kresba</strong> — Mírně oblé tvary, zelené střechy a měkčí ruční obrys.</summary>
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:16px; margin:16px 0;">
+<figure style="margin:0;"><figcaption>A — řemesla, 22 podob</figcaption><a href="assets/building-flat-proposals-2026-10-30/07-mekka-kresba-a.png"><img src="assets/building-flat-proposals-2026-10-30/07-mekka-kresba-a.png" alt="7. Měkká kresba, list A, 22 podob budov ve stupních I až III" style="width:100%; height:auto;" /></a></figure>
+<figure style="margin:0;"><figcaption>B — ostatní budovy, 19 podob</figcaption><a href="assets/building-flat-proposals-2026-10-30/07-mekka-kresba-b.png"><img src="assets/building-flat-proposals-2026-10-30/07-mekka-kresba-b.png" alt="7. Měkká kresba, list B, 19 podob budov ve stupních I až III" style="width:100%; height:auto;" /></a></figure>
+</div>
+</details>
+
+<details>
+<summary><strong>8. Lehký nadhled</strong> — Jednoduchý pohled z mírného nadhledu s úzkou boční stěnou.</summary>
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:16px; margin:16px 0;">
+<figure style="margin:0;"><figcaption>A — řemesla, 22 podob</figcaption><a href="assets/building-flat-proposals-2026-10-30/08-lehky-nadhled-a.png"><img src="assets/building-flat-proposals-2026-10-30/08-lehky-nadhled-a.png" alt="8. Lehký nadhled, list A, 22 podob budov ve stupních I až III" style="width:100%; height:auto;" /></a></figure>
+<figure style="margin:0;"><figcaption>B — ostatní budovy, 19 podob</figcaption><a href="assets/building-flat-proposals-2026-10-30/08-lehky-nadhled-b.png"><img src="assets/building-flat-proposals-2026-10-30/08-lehky-nadhled-b.png" alt="8. Lehký nadhled, list B, 19 podob budov ve stupních I až III" style="width:100%; height:auto;" /></a></figure>
+</div>
+</details>
+
+<details>
+<summary><strong>9. Silná kontura</strong> — Výraznější tmavý obrys, okrové střechy a velké znaky profese.</summary>
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:16px; margin:16px 0;">
+<figure style="margin:0;"><figcaption>A — řemesla, 22 podob</figcaption><a href="assets/building-flat-proposals-2026-10-30/09-silna-kontura-a.png"><img src="assets/building-flat-proposals-2026-10-30/09-silna-kontura-a.png" alt="9. Silná kontura, list A, 22 podob budov ve stupních I až III" style="width:100%; height:auto;" /></a></figure>
+<figure style="margin:0;"><figcaption>B — ostatní budovy, 19 podob</figcaption><a href="assets/building-flat-proposals-2026-10-30/09-silna-kontura-b.png"><img src="assets/building-flat-proposals-2026-10-30/09-silna-kontura-b.png" alt="9. Silná kontura, list B, 19 podob budov ve stupních I až III" style="width:100%; height:auto;" /></a></figure>
+</div>
+</details>
+
+<details>
+<summary><strong>10. Střídmá perokresba</strong> — Jemnější linka, převážně nevybarvené plochy a olivové střechy.</summary>
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:16px; margin:16px 0;">
+<figure style="margin:0;"><figcaption>A — řemesla, 22 podob</figcaption><a href="assets/building-flat-proposals-2026-10-30/10-stridma-perokresba-a.png"><img src="assets/building-flat-proposals-2026-10-30/10-stridma-perokresba-a.png" alt="10. Střídmá perokresba, list A, 22 podob budov ve stupních I až III" style="width:100%; height:auto;" /></a></figure>
+<figure style="margin:0;"><figcaption>B — ostatní budovy, 19 podob</figcaption><a href="assets/building-flat-proposals-2026-10-30/10-stridma-perokresba-b.png"><img src="assets/building-flat-proposals-2026-10-30/10-stridma-perokresba-b.png" alt="10. Střídmá perokresba, list B, 19 podob budov ve stupních I až III" style="width:100%; height:auto;" /></a></figure>
+</div>
+</details>
+
+
 ## Minimapa — nadpis a hladkost pobřeží, 30. října 2026
 
 1. [R-0356](requirements/R-0356.md) zachycuje tři návrhy podle dodaného výřezu. Všechny odstraňují přerušovaný vnější rámeček i spodní vysvětlivku, přidávají nadpis **Minimap** rukopisným písmem a zachovávají silný obrys mapy i bílý obdélník výřezu. Konečná varianta zatím není vybraná; hra se tímto návrhem nemění.
@@ -13,6 +61,8 @@
 
 
 ## Budovy — pět návrhů od přístřešku k manufaktuře, 30. října 2026
+
+**Zpětná vazba z 30. října 2026:** obsah těchto návrhů se uživateli líbí, jejich detailní a stínovaný styl se však nehodí k hlavní mapě. Tato série zůstává jako historie; další kolo je [jednodušší série 6–10](#budovy-pet-jednodussich-navrhu-podle-hlavni-mapy-30-rijna-2026).
 
 1. [R-0353](requirements/done/R-0353.md) připravuje pět úplných výtvarných návrhů podle uživatelova zadání. **Každý obsahuje všech 41 současných podob budov, celkem 205 ilustrací na deseti listech.** Jde o návrhy k výběru, nikoli o nové obrázky nasazené ve hře.
 2. Dohodnutý princip: **I — prostý otevřený přístřešek a základní pracovní vybavení; II — jednoduchá přízemní dílna; III — větší patrová manufaktura přibližně kolem roku 1800.** Profesi má být možné poznat podle nářadí, zařízení a výrobků. Stáje začínají prostou ohradou s koněm, žlabem a senem. Školy, kostely, opevnění, sklady a přístav rostou podle svého účelu.
@@ -736,6 +786,8 @@ v `resources/images` a tehdejší spotřebitele; nejde o aktuální úplný poč
 Výchozí stav technického inventáře k **11. říjnu 2026**, větev `develop`, revize `1854fa5446f54cbf99d4f6892d7f32aa4e3e5a00`. Rozměry níže jsou skutečné rozměry uložených obrázků v pixelech, pokud není výslovně uvedena velikost UI komponenty nebo souřadnice SVG.
 
 ## Současné zadání vzhledu
+
+Pro budovy uživatel 30. října 2026 výslovně potvrdil jednoduchost hlavní herní mapy: minimum tvarů a atributů, ručně kreslené obrysy a jednobarevné plochy. Detailní stínované ilustrace předchozí série tomuto cíli neodpovídají. [Nové návrhy](#budovy-pet-jednodussich-navrhu-podle-hlavni-mapy-30-rijna-2026) hledají konkrétní podobu; výběr a převod do produkčních SVG zůstávají samostatnou prací.
 
 Od 27. října 2026 platí pro všechna aplikační akční tlačítka
 [jediný papírový základ s ikonami](#jednotna-papirova-tlacitka-2026-10-27),
