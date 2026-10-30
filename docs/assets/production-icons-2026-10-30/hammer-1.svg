@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
+<title id="title">M1 — Tesařské kladivo</title>
+<desc id="description">MicroCol production icon proposal, 2026-10-30. Hand-authored vector paths, solid colors, transparent background. R-0363; not a runtime asset.</desc>
+<g id="ink-and-color" stroke="#3e3b31" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+<g id="carpenters-hammer" transform="rotate(34 32 32)">
+<path d="M27 24 L36 24 Q35 38 36 56 Q31 59 27 56 Q28 40 27 24 Z" fill="#bd8e50"/>
+<path d="M31 34 Q30 43 31 51" fill="none" stroke="#e2b570" stroke-width="2.5"/>
+<path d="M14 13 Q23 12 31 14 L41 14 Q44 15 49 13 L50 25 Q43 26 40 24 L32 25 Q23 27 14 25 Z" fill="#a8ada6"/>
+<path d="M15 14 L21 14 L21 25 L14 25 Z" fill="#777d79"/>
+<path d="M25 17 L35 17" fill="none" stroke="#e3e1cb" stroke-width="2"/>
+</g>
+</g>
+</svg>

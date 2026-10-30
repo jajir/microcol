@@ -1,5 +1,31 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Zvony, kříže a kladiva — tři návrhy, 30. října 2026
+
+1. [R-0363](requirements/done/R-0363.md) dodává po třech alternativách pro tři symboly označené na uživatelově snímku kolonie: **zvony Z1–Z3, kříže K1–K3 a kladiva M1–M3**. Jde o návrhy k výběru; herní atlas, načítání obrázků a výroba se touto dodávkou nemění.
+2. Všech devět kreseb vzniklo přímým návrhem vektorových cest: mírně nepravidelná tmavá kontura `#3e3b31`, plné medové, okrové, olivové a šedé plochy, průhledné pozadí. SVG neobsahují rastrové obrázky, fonty ani externí odkazy. Přehled používá projektový Playpen Sans a dole pro srovnání výřezy současného zboží; tyto referenční rastry nejsou součástí nových SVG.
+3. Velký symbol v přehledu doplňuje stejná varianta při **30 px** vedle produkčního čísla. Samostatný list ukazuje **45, 30, 25 a 15 px**. Je to statická návrhová kontrola, nikoli screenshot běžící hry či hráčský test. Při 15 px se jemné detaily slévají; hlavní silueta zůstává rozlišovacím znakem.
+
+[![Devět návrhů produkčních ikon](assets/production-icons-2026-10-30/comparison.png)](assets/production-icons-2026-10-30/comparison.png)
+
+| Symbol | Varianta 1 — SVG | Varianta 2 — SVG | Varianta 3 — SVG |
+| --- | --- | --- | --- |
+| Zvony | [Z1 — Medový zvon](assets/production-icons-2026-10-30/bell-1.svg) | [Z2 — Rozeznělý zvon](assets/production-icons-2026-10-30/bell-2.svg) | [Z3 — Zvon se závěsem](assets/production-icons-2026-10-30/bell-3.svg) |
+| Kříže | [K1 — Dřevěný kříž](assets/production-icons-2026-10-30/cross-1.svg) | [K2 — Olivový kříž](assets/production-icons-2026-10-30/cross-2.svg) | [K3 — Kříž na podstavci](assets/production-icons-2026-10-30/cross-3.svg) |
+| Kladiva | [M1 — Tesařské kladivo](assets/production-icons-2026-10-30/hammer-1.svg) | [M2 — Dřevěná palice](assets/production-icons-2026-10-30/hammer-2.svg) | [M3 — Kladivo s rozštěpem](assets/production-icons-2026-10-30/hammer-3.svg) |
+
+[![Ikony ve čtyřech malých velikostech](assets/production-icons-2026-10-30/sizes.png)](assets/production-icons-2026-10-30/sizes.png)
+
+4. Každý zdroj má `viewBox="0 0 64 64"`; vedle něj je stejnojmenný průhledný PNG 256 × 256. [Manifest](assets/production-icons-2026-10-30/manifest.json) uvádí jména, zdrojovou revizi, renderer a kontrolovaná měřítka. Export lze obnovit z kořene repozitáře existujícím rendererem:
+
+   ```sh
+   for svg in docs/assets/production-icons-2026-10-30/*.svg; do
+     rsvg-convert -w 256 -h 256 -o "${svg%.svg}.png" "$svg"
+   done
+   ```
+
+5. Výtvarné doporučení je **Z1 + K2 + M1**: jednoduchý medový zvon, olivový kříž blízký znaku kaple a kovové kladivo s dřevěnou násadou. Výběr uživatele zatím neproběhl. [Evidence](publishing.md#r-0363-production-icon-proposals-2026-10-30) odděluje kontrolu návrhů od budoucího nasazení.
+
 ## Budovy — Lehký nadhled, produkce 30. října 2026
 
 1. Uživatel vybral **návrh 8 — Lehký nadhled** z [pěti jednodušších sad](#budovy-pet-jednodussich-navrhu-podle-hlavni-mapy-30-rijna-2026) a požádal o jeho nasazení v [R-0361](requirements/done/R-0361.md). Všech 41 podob je překreslených do skutečných SVG: jednoduché tvary, úzká boční stěna, mírně nepravidelná tmavá linka a jednolité krémové, cihlové, olivové a tyrkysové plochy. Nejde o vložení rastrového návrhu do SVG ani o jeho automatické trasování.

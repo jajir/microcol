@@ -984,3 +984,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Native colony map scale — 2026-10-30
 
 1. [R-0358](done/R-0358.md), primary area A03 with A07 job-assignment dependencies, fixes the surrounding map at the main map’s 45 px tile scale. Status: done; implementation and local acceptance are complete. See [test evidence](../functional-tests.md#r-0358-native-colony-map-scale-2026-10-30).
+
+## Production icon proposals — 2026-10-30
+
+1. [R-0363](done/R-0363.md), primary area A03 with A07 meanings, supplies three vector alternatives each for bells, crosses and hammers. Status: done. This scope delivers proposals only; later selection and runtime integration remain separate. [Gallery](../graphics.md#zvony-krize-a-kladiva-tri-navrhy-30-rijna-2026).

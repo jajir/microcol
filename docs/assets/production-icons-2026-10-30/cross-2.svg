@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
+<title id="title">K2 — Olivový kříž</title>
+<desc id="description">MicroCol production icon proposal, 2026-10-30. Hand-authored vector paths, solid colors, transparent background. R-0363; not a runtime asset.</desc>
+<g id="ink-and-color" stroke="#3e3b31" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+<g id="olive-cross"><path d="M25 7 L36 7 L40 10 L39 22 L50 22 L54 25 L53 34 L40 35 L40 55 L36 58 L25 56 L26 34 L12 34 L12 22 L25 22 Z" fill="#82934e"/>
+<path d="M36 7 L35 26 L50 25 L50 31 L35 32 L36 58 L40 55 L40 35 L53 34 L54 25 L50 22 L39 22 L40 10 Z" fill="#65793f" stroke="none"/>
+<path d="M36 7 L35 25 L50 25 M35 33 L36 54" fill="none" stroke-width="1.7"/>
+</g>
+</g>
+</svg>

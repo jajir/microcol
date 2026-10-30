@@ -1,0 +1,72 @@
+{
+  "requirement": "R-0363",
+  "date": "2026-10-30",
+  "scope": "Documentation proposals only; not integrated into game",
+  "source_revision": "b17302c0c3f4b00e7d99fc6710ab9d5d0b0096cc",
+  "renderer": "rsvg-convert version 2.61.4\n\nlibraries used:\n  cairo 1.18.4\n  pango 1.57.0\n  harfbuzz 12.3.2\n  fontconfig 2.17.1",
+  "viewBox": "0 0 64 64",
+  "png_size": 256,
+  "comparison_small_icon_size": 30,
+  "size_checks": [
+    45,
+    30,
+    25,
+    15
+  ],
+  "icons": [
+    {
+      "id": "Z1",
+      "name": "Medový zvon",
+      "svg": "bell-1.svg",
+      "png": "bell-1.png"
+    },
+    {
+      "id": "Z2",
+      "name": "Rozeznělý zvon",
+      "svg": "bell-2.svg",
+      "png": "bell-2.png"
+    },
+    {
+      "id": "Z3",
+      "name": "Zvon se závěsem",
+      "svg": "bell-3.svg",
+      "png": "bell-3.png"
+    },
+    {
+      "id": "K1",
+      "name": "Dřevěný kříž",
+      "svg": "cross-1.svg",
+      "png": "cross-1.png"
+    },
+    {
+      "id": "K2",
+      "name": "Olivový kříž",
+      "svg": "cross-2.svg",
+      "png": "cross-2.png"
+    },
+    {
+      "id": "K3",
+      "name": "Kříž na podstavci",
+      "svg": "cross-3.svg",
+      "png": "cross-3.png"
+    },
+    {
+      "id": "M1",
+      "name": "Tesařské kladivo",
+      "svg": "hammer-1.svg",
+      "png": "hammer-1.png"
+    },
+    {
+      "id": "M2",
+      "name": "Dřevěná palice",
+      "svg": "hammer-2.svg",
+      "png": "hammer-2.png"
+    },
+    {
+      "id": "M3",
+      "name": "Kladivo s rozštěpem",
+      "svg": "hammer-3.svg",
+      "png": "hammer-3.png"
+    }
+  ]
+}

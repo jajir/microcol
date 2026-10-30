@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
+<title id="title">Z1 — Medový zvon</title>
+<desc id="description">MicroCol production icon proposal, 2026-10-30. Hand-authored vector paths, solid colors, transparent background. R-0363; not a runtime asset.</desc>
+<g id="ink-and-color" stroke="#3e3b31" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+<g id="hanger" fill="#bd8e50"><path d="M26 15 C24 3 39 3 38 15 L34 16 C36 8 29 8 30 16 Z"/></g>
+<g id="bell"><path d="M27 44 Q27 53 31 56 Q35 58 38 53 L37 44 Z" fill="#bd8e50"/>
+<path d="M11 45 Q18 40 19 28 C19 19 22 14 31 14 C40 13 45 20 45 29 Q46 40 53 45 L52 49 Q32 53 11 49 Z" fill="#e4b64f"/>
+<path d="M38 18 Q43 25 41 34 Q42 41 48 44" fill="none" stroke="#be8339" stroke-width="4"/>
+<path d="M14 45 Q32 48 50 45" fill="none"/>
+<path d="M24 25 Q23 29 23 33" fill="none" stroke="#fff0b4" stroke-width="3"/>
+</g>
+</g>
+</svg>

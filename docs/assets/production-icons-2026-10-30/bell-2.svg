@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
+<title id="title">Z2 — Rozeznělý zvon</title>
+<desc id="description">MicroCol production icon proposal, 2026-10-30. Hand-authored vector paths, solid colors, transparent background. R-0363; not a runtime asset.</desc>
+<g id="ink-and-color" stroke="#3e3b31" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+<g id="swinging-bell" transform="rotate(16 32 33)">
+<path d="M26 14 Q24 7 29 6 Q36 4 38 11 L36 16 L32 15 Q36 9 30 10 L30 15 Z" fill="#bd8e50"/>
+<path d="M28 42 Q26 50 29 55 Q34 58 37 53 L36 43 Z" fill="#bd8e50"/>
+<path d="M12 42 Q19 36 20 26 C20 18 24 14 31 14 Q43 12 44 26 Q46 38 53 43 L52 47 Q32 52 11 46 Z" fill="#d49a46"/>
+<path d="M22 25 Q21 34 18 38" fill="none" stroke="#f3ce76" stroke-width="3.5"/>
+<path d="M13 43 Q32 47 51 43" fill="none"/>
+</g>
+</g>
+</svg>

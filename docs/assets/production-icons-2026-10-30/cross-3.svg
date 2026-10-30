@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
+<title id="title">K3 — Kříž na podstavci</title>
+<desc id="description">MicroCol production icon proposal, 2026-10-30. Hand-authored vector paths, solid colors, transparent background. R-0363; not a runtime asset.</desc>
+<g id="ink-and-color" stroke="#3e3b31" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+<g id="standing-cross"><path d="M27 7 Q31 6 36 7 L36 21 L48 21 L48 30 L36 30 L37 48 L27 48 L27 30 L15 31 L14 22 L27 22 Z" fill="#d4aa56"/>
+<path d="M31 11 L31 22 M20 26 L42 26 M31 33 L32 43" fill="none" stroke="#b28242" stroke-width="1.7"/>
+<path d="M23 48 Q32 49 42 47 L46 55 Q31 58 18 55 Z" fill="#bd8e50"/>
+</g>
+</g>
+</svg>

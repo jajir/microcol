@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
+<title id="title">M2 — Dřevěná palice</title>
+<desc id="description">MicroCol production icon proposal, 2026-10-30. Hand-authored vector paths, solid colors, transparent background. R-0363; not a runtime asset.</desc>
+<g id="ink-and-color" stroke="#3e3b31" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+<g id="wooden-mallet" transform="translate(2.5 2.5) scale(.92) rotate(34 32 32)">
+<path d="M28 25 L36 25 Q35 39 36 55 Q32 58 28 55 Z" fill="#bd8e50"/>
+<path d="M12 12 Q29 10 51 13 L49 29 Q32 31 13 28 Z" fill="#c08a4b"/>
+<path d="M12 12 L21 13 L20 29 L13 28 Z" fill="#a36b42"/>
+<path d="M25 16 Q34 15 43 17 M31 37 L31 50" fill="none" stroke="#ebbd71" stroke-width="2.3"/>
+</g>
+</g>
+</svg>

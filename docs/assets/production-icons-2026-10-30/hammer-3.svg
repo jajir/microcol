@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
+<title id="title">M3 — Kladivo s rozštěpem</title>
+<desc id="description">MicroCol production icon proposal, 2026-10-30. Hand-authored vector paths, solid colors, transparent background. R-0363; not a runtime asset.</desc>
+<g id="ink-and-color" stroke="#3e3b31" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+<g id="claw-hammer" transform="rotate(32 32 32)">
+<path d="M28 25 L36 25 Q33 38 35 55 Q31 58 27 55 Q29 39 28 25 Z" fill="#b5754c"/>
+<path d="M31 35 L30 49" fill="none" stroke="#e1ad6a" stroke-width="2.4"/>
+<path d="M12 13 L20 13 L21 16 L33 15 Q45 13 53 23 L54 27 L45 23 L39 23 L47 28 Q38 29 33 24 L21 25 L20 28 L12 27 Z" fill="#a8ada6"/>
+<path d="M12 13 L17 13 L17 28 L12 27 Z" fill="#777d79"/>
+<path d="M25 19 L33 19" fill="none" stroke="#e3e1cb" stroke-width="2"/>
+</g>
+</g>
+</svg>
