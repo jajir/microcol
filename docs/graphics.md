@@ -1,6 +1,55 @@
 # Grafické podklady a jejich použití v MicroCol
 
 
+## Budovy — pět návrhů od přístřešku k manufaktuře, 30. října 2026
+
+1. [R-0353](requirements/done/R-0353.md) připravuje pět úplných výtvarných návrhů podle uživatelova zadání. **Každý obsahuje všech 41 současných podob budov, celkem 205 ilustrací na deseti listech.** Jde o návrhy k výběru, nikoli o nové obrázky nasazené ve hře.
+2. Dohodnutý princip: **I — prostý otevřený přístřešek a základní pracovní vybavení; II — jednoduchá přízemní dílna; III — větší patrová manufaktura přibližně kolem roku 1800.** Profesi má být možné poznat podle nářadí, zařízení a výrobků. Stáje začínají prostou ohradou s koněm, žlabem a senem. Školy, kostely, opevnění, sklady a přístav rostou podle svého účelu.
+3. List **A — řemesla** má 22 ilustrací; list **B — ostatní budovy** má 19. Všechny návrhy zachovávají stejné pořadí řádků a sloupce I–III. Pomlčka znamená, že hra další stupeň nemá: truhlářství, stáje a tisk mají dva stupně, radnice a celnice jeden. Žádný návrh nepřidává herní upgrade.
+4. Pro srovnání rozbalit návrh a kliknutím otevřít libovolný list v plném rozlišení. Obrázky vytvořil vestavěný ImageGen; [přesné prompty, revize a mapování všech typů](assets/building-tier-proposals-2026-10-30/prompts.json) jsou uložené vedle nich. V první sadě byla univerzita zpřesněna, aby se nepletla s kostelem. Počet a pořadí ilustrací byly vizuálně zkontrolovány; mapování 41 typů odpovídá současnému modelu.
+5. Rastrové návrhové listy jsou povolené předlohy podle [zdrojového kontraktu](#zdrojovy-format-herni-grafiky). Případná realizace vybraného směru vyžaduje skutečné editovatelné SVG, odvozené PNG a přejímku hry. Náhledy neprokazují čitelnost hotových ikon v herní velikosti, přesné rozměry ani historickou rekonstrukci. [Evidence návrhové práce](publishing.md#r-0353-building-tier-proposals-2026-10-30) zachycuje místní kontrolu; žádný směr zatím není vybraný.
+
+<details open>
+<summary><strong>1. Čistá linka</strong> — Krémová omítka, teplé dřevo a střídmé patrové manufaktury. Nejbližší současnému barevnému pojetí hry.</summary>
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:16px; margin:16px 0;">
+<figure style="margin:0;"><figcaption>A — řemesla, 22 podob</figcaption><a href="assets/building-tier-proposals-2026-10-30/01-cista-linka-a.png"><img src="assets/building-tier-proposals-2026-10-30/01-cista-linka-a.png" alt="Čistá linka: A — řemesla, 22 podob; porovnání stupňů I až III" loading="lazy" style="width:100%; height:auto; display:block;" /></a></figure>
+<figure style="margin:0;"><figcaption>B — ostatní budovy, 19 podob</figcaption><a href="assets/building-tier-proposals-2026-10-30/01-cista-linka-b.png"><img src="assets/building-tier-proposals-2026-10-30/01-cista-linka-b.png" alt="Čistá linka: B — ostatní budovy, 19 podob; porovnání stupňů I až III" loading="lazy" style="width:100%; height:auto; display:block;" /></a></figure>
+</div>
+</details>
+
+<details>
+<summary><strong>2. Dřevěná kolonie</strong> — Dřevěné dílny a výrazné trámy; nejvyšší úrovně přecházejí k hrázdění a zděnému přízemí.</summary>
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:16px; margin:16px 0;">
+<figure style="margin:0;"><figcaption>A — řemesla, 22 podob</figcaption><a href="assets/building-tier-proposals-2026-10-30/02-drevena-kolonie-a.png"><img src="assets/building-tier-proposals-2026-10-30/02-drevena-kolonie-a.png" alt="Dřevěná kolonie: A — řemesla, 22 podob; porovnání stupňů I až III" loading="lazy" style="width:100%; height:auto; display:block;" /></a></figure>
+<figure style="margin:0;"><figcaption>B — ostatní budovy, 19 podob</figcaption><a href="assets/building-tier-proposals-2026-10-30/02-drevena-kolonie-b.png"><img src="assets/building-tier-proposals-2026-10-30/02-drevena-kolonie-b.png" alt="Dřevěná kolonie: B — ostatní budovy, 19 podob; porovnání stupňů I až III" loading="lazy" style="width:100%; height:auto; display:block;" /></a></figure>
+</div>
+</details>
+
+<details>
+<summary><strong>3. Holandské město</strong> — Malé přístřešky a přízemní dílny přecházejí v cihlové továrny se stupňovitými štíty.</summary>
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:16px; margin:16px 0;">
+<figure style="margin:0;"><figcaption>A — řemesla, 22 podob</figcaption><a href="assets/building-tier-proposals-2026-10-30/03-holandske-mesto-a.png"><img src="assets/building-tier-proposals-2026-10-30/03-holandske-mesto-a.png" alt="Holandské město: A — řemesla, 22 podob; porovnání stupňů I až III" loading="lazy" style="width:100%; height:auto; display:block;" /></a></figure>
+<figure style="margin:0;"><figcaption>B — ostatní budovy, 19 podob</figcaption><a href="assets/building-tier-proposals-2026-10-30/03-holandske-mesto-b.png"><img src="assets/building-tier-proposals-2026-10-30/03-holandske-mesto-b.png" alt="Holandské město: B — ostatní budovy, 19 podob; porovnání stupňů I až III" loading="lazy" style="width:100%; height:auto; display:block;" /></a></figure>
+</div>
+</details>
+
+<details>
+<summary><strong>4. Pracovní dvory</strong> — Práce a vybavení zůstávají viditelné před budovou; vyšší úrovně přidávají křídla a pracovní dvory.</summary>
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:16px; margin:16px 0;">
+<figure style="margin:0;"><figcaption>A — řemesla, 22 podob</figcaption><a href="assets/building-tier-proposals-2026-10-30/04-pracovni-dvory-a.png"><img src="assets/building-tier-proposals-2026-10-30/04-pracovni-dvory-a.png" alt="Pracovní dvory: A — řemesla, 22 podob; porovnání stupňů I až III" loading="lazy" style="width:100%; height:auto; display:block;" /></a></figure>
+<figure style="margin:0;"><figcaption>B — ostatní budovy, 19 podob</figcaption><a href="assets/building-tier-proposals-2026-10-30/04-pracovni-dvory-b.png"><img src="assets/building-tier-proposals-2026-10-30/04-pracovni-dvory-b.png" alt="Pracovní dvory: B — ostatní budovy, 19 podob; porovnání stupňů I až III" loading="lazy" style="width:100%; height:auto; display:block;" /></a></figure>
+</div>
+</details>
+
+<details>
+<summary><strong>5. Výrazné siluety</strong> — Výraznější rozdíl ve výšce a objemu: nízké otevřené pracoviště, široká dílna, vysoká patrová manufaktura.</summary>
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:16px; margin:16px 0;">
+<figure style="margin:0;"><figcaption>A — řemesla, 22 podob</figcaption><a href="assets/building-tier-proposals-2026-10-30/05-vyrazne-siluety-a.png"><img src="assets/building-tier-proposals-2026-10-30/05-vyrazne-siluety-a.png" alt="Výrazné siluety: A — řemesla, 22 podob; porovnání stupňů I až III" loading="lazy" style="width:100%; height:auto; display:block;" /></a></figure>
+<figure style="margin:0;"><figcaption>B — ostatní budovy, 19 podob</figcaption><a href="assets/building-tier-proposals-2026-10-30/05-vyrazne-siluety-b.png"><img src="assets/building-tier-proposals-2026-10-30/05-vyrazne-siluety-b.png" alt="Výrazné siluety: B — ostatní budovy, 19 podob; porovnání stupňů I až III" loading="lazy" style="width:100%; height:auto; display:block;" /></a></figure>
+</div>
+</details>
+
+
 ## Zdrojový formát herní grafiky
 
 1. Nová nebo měněná herní ilustrace musí mít editovatelný zdroj SVG tvořený skutečnými vektorovými tvary. PNG smí sloužit jako odvozený export pro hru. Vložení nebo odkazování rastrového obrázku uvnitř SVG tuto podmínku nesplňuje.

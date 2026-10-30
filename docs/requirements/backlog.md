@@ -1,5 +1,7 @@
 # Current requirement backlog
 
+Completed on 2026-10-30: [R-0353 — five complete building-tier proposals](done/R-0353.md), A03 with A07 identities. Five sets each cover all 41 existing forms (205 illustrations on ten sheets), preserving actual upgrade counts. Concept sheets, exact prompts, model mapping and the gallery were reviewed; documentation checks passed. This is design-only delivery, with no selected direction or runtime change. [Evidence](../publishing.md#r-0353-building-tier-proposals-2026-10-30).
+
 Accepted locally on 2026-10-30: [R-0352 — vector building sources](done/R-0352.md), A03 with A07 identity dependency. All 41 building levels have genuine SVG sources and derived PNGs, with explicit source instructions and repeatable export. Model/JUnit **4,791**, targeted UI/support **16**, fixed smoke/support **21**, export tooling **3**; zero failures/errors/skips in final runs. [Evidence](../functional-tests.md#r-0352-vector-building-sources-2026-10-30); remote publication remains unverified.
 
 Accepted locally on 2026-10-30: [R-0351 — illustrated buildings help](done/R-0351.md), A03 with existing A07/A09 data. All 41 building levels have artwork, benefits, costs and prerequisites in English/Czech. Model/JUnit **4,790**, targeted help/support **14**, fixed smoke/support **21**, and documentation checks passed with zero failures/errors/skips. [Evidence](../functional-tests.md#r-0351-buildings-help-2026-10-30); remote publication remains unverified.
