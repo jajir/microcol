@@ -1,5 +1,12 @@
 # UX a pravidla ovládání MicroCol
 
+## Názvy a nápověda akcí města — 30. října 2026
+
+1. [R-0360](requirements/done/R-0360.md) doplňuje osm akcí horní lišty města. Široké okno ukazuje stručné názvy; při zúžení zůstávají ikony a text návratu. Naložení a vyložení pracují s vybranou lodí a nadále vyžadují původní potvrzení.
+2. Najetí ukáže ve spodní stavové liště české nebo anglické vysvětlení účelu, u nedostupného vývozu požadavek postavit celnici. Stejné vysvětlení je přístupné asistivním technologiím. Nevzniká plovoucí bublina; zákaz tooltipů podle R-0345 zůstává v platnosti.
+3. Pouhé najetí ani změna velikosti nemění partii. Potvrzení, zrušení a návrat zachovávají původní akce. Ověření rozložení a najetí patří do [funkční evidence](functional-tests.md#r-0360-colony-action-labels-and-help-2026-10-30); nejde o uživatelskou studii.
+
+
 ## Přehled budov v nápovědě — 30. října 2026
 
 1. [R-0351](requirements/done/R-0351.md) pomáhá vybrat další stavbu: z mapy otevřít nápovědu tlačítkem nebo H, zvolit **Budovy** a porovnat obrázky, přínosy a náklady všech úrovní. Řady vylepšení zůstávají pohromadě; názvy lze hledat bez diakritiky.

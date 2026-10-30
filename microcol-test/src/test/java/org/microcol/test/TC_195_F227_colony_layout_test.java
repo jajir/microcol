@@ -94,4 +94,110 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
                 .saveEvidence("r0352-colony-czech-upgrades.png");
         town.close();
     }
+
+    @Test
+    @Tag("local")
+    void TC_03_english_action_names_and_hover_help() throws Exception {
+        // Wide town names must fit before and after switching to compact icons.
+        final ColonyScreen town = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(Location.of(24, 16), "New Amsterdam");
+        final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
+        final GameBarWidthPage bars = new GameBarWidthPage(getContext());
+        final ColonyJobPage jobs = new ColonyJobPage(getContext());
+        jobs.rememberWorld();
+        bars.resizeContent(1600, 1000);
+        layout.verifyActionNames(true, "Exports", "Education…", "Treasure",
+                "Route cargo…", "Trade route…", "Load", "Unload",
+                "Back to game");
+        layout.hoverAction("educationOpen");
+        layout.verifyActionExplanation(
+                "Choose a teacher and student, manage their training, or cancel a course.");
+        new InGameLayoutPage(getContext()).saveEvidence("r0360-actions-en.png");
+        bars.resizeContent(1000, 925);
+        layout.verifyActionNames(false, "Exports", "Education…", "Treasure",
+                "Route cargo…", "Trade route…", "Load", "Unload",
+                "Back to game");
+
+        // Every icon explains its action; disabled exports explain the
+        // prerequisite.
+        layout.hoverAction("customHouseOpen");
+        layout.verifyActionExplanation(
+                "Build a custom house to choose automatic exports.");
+        layout.hoverAction("educationOpen");
+        layout.verifyActionExplanation(
+                "Choose a teacher and student, manage their training, or cancel a course.");
+        layout.hoverAction("treasureOpen");
+        layout.verifyActionExplanation(
+                "Choose a treasure in this colony and review its payout and transport fee before redeeming it.");
+        layout.hoverAction("tradeRouteCargoOpen");
+        layout.verifyActionExplanation(
+                "Set which goods to unload and load at each trade-route stop, or process a carrier waiting here.");
+        layout.hoverAction("tradeRouteOpen");
+        layout.verifyActionExplanation(
+                "Create or edit a trade route, choose its stops and assign a ship or wagon.");
+        layout.hoverAction("quickLoad");
+        layout.verifyActionExplanation(
+                "Propose goods from the warehouse to load onto the selected ship. Review the amount before confirming.");
+        layout.hoverAction("quickUnload");
+        layout.verifyActionExplanation(
+                "Propose cargo from the selected ship to unload into the warehouse. Review the amount before confirming.");
+        layout.hoverAction("closeButtonId");
+        layout.verifyActionExplanation(
+                "Close the colony and return to the world map.");
+        layout.hoverActionGap();
+        layout.verifyNoActionExplanation();
+        layout.hoverAction("quickUnload");
+        layout.leaveActions();
+        layout.verifyNoActionExplanation();
+        jobs.verifyWorldUnchanged();
+
+        // Expanding restores the complete labels and the original return
+        // action.
+        bars.resizeContent(1600, 1000);
+        layout.verifyActionNames(true, "Exports", "Education…", "Treasure",
+                "Route cargo…", "Trade route…", "Load", "Unload",
+                "Back to game");
+        town.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_04_czech_action_names_and_hover_help() throws Exception {
+        // Switching language refreshes both compact names and their
+        // explanations.
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        final ColonyScreen town = settings.goBack().loadGame()
+                .openColonyAt(Location.of(24, 16), "New Amsterdam");
+        final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
+        final GameBarWidthPage bars = new GameBarWidthPage(getContext());
+        bars.resizeContent(1600, 1000);
+        layout.verifyActionNames(true, "Vývoz", "Vzdělávání…", "Poklad",
+                "Náklad trasy…", "Obchodní trasa…", "Naložit", "Vyložit",
+                "Zpět do hry");
+        layout.hoverAction("educationOpen");
+        layout.verifyActionExplanation(
+                "Vyberte učitele a žáka, spravujte jejich výuku nebo ji zrušte.");
+        new InGameLayoutPage(getContext()).saveEvidence("r0360-actions-cs.png");
+        bars.resizeContent(1000, 925);
+        layout.verifyActionNames(false, "Vývoz", "Vzdělávání…", "Poklad",
+                "Náklad trasy…", "Obchodní trasa…", "Naložit", "Vyložit",
+                "Zpět do hry");
+        layout.hoverAction("customHouseOpen");
+        layout.verifyActionExplanation(
+                "Pro automatický vývoz nejprve postavte celnici.");
+        layout.hoverAction("quickLoad");
+        layout.verifyActionExplanation(
+                "Navrhněte zboží ze skladu k naložení na vybranou loď. Před potvrzením zkontrolujte množství.");
+        layout.hoverActionGap();
+        layout.verifyNoActionExplanation();
+        layout.hoverAction("quickUnload");
+        layout.leaveActions();
+        layout.verifyNoActionExplanation();
+        bars.resizeContent(1600, 1000);
+        layout.verifyActionNames(true, "Vývoz", "Vzdělávání…", "Poklad",
+                "Náklad trasy…", "Obchodní trasa…", "Naložit", "Vyložit",
+                "Zpět do hry");
+        town.close();
+    }
 }

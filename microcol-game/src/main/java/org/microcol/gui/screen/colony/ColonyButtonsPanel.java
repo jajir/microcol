@@ -11,6 +11,7 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.i18n.I18n;
 
@@ -19,6 +20,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 
 @Singleton
 public class ColonyButtonsPanel extends AbstractButtonsPanel {
@@ -26,6 +28,7 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
     public static final String CLOSE_BUTTON_ID = "closeButtonId";
 
     private final Button buttonClose;
+    private Button hintedButton;
     private final Button treasure = ActionButtons.button(ButtonIcon.GOLD);
     private final Button exports = ActionButtons.button(ButtonIcon.EXPORT);
     private final Button education = ActionButtons.button(ButtonIcon.EDUCATION);
@@ -68,25 +71,49 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
                 evnt -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
 
         getButtonPanel().getChildren().addAll(exports, education, buttonClose);
+        // Disabled buttons do not receive mouse events; their parent does.
+        getButtonPanel().addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
+            final Button hovered = getButtonPanel().getChildren().stream()
+                    .filter(Button.class::isInstance).map(Button.class::cast)
+                    .filter(button -> button.contains(button.sceneToLocal(
+                            event.getSceneX(), event.getSceneY())))
+                    .findFirst().orElse(null);
+            if (hovered != hintedButton) {
+                hintedButton = hovered;
+                eventBus.post(new StatusBarMessageEvent(
+                        hovered == null ? "" : hovered.getAccessibleHelp(),
+                        Source.COLONY));
+            }
+        });
+        getButtonPanel().addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+            hintedButton = null;
+            eventBus.post(new StatusBarMessageEvent(Source.COLONY));
+        });
     }
 
     void setColony(org.microcol.model.Colony colony) {
         this.colony = colony;
-        treasure.setText(i18n.get(org.microcol.gui.dialog.TreasureText.open));
+        treasure.setText(i18n.get(ColonyMsg.treasureAction));
+        treasure.setAccessibleHelp(i18n.get(ColonyMsg.treasureHelp));
         treasure.setDisable(colony.getOwner() != game.getHumanPlayer());
         education.setText(i18n.get(EducationText.open));
+        education.setAccessibleHelp(i18n.get(ColonyMsg.educationHelp));
         education.setDisable(false);
         tradeRoute.setText(i18n.get(TradeRouteText.open));
+        tradeRoute.setAccessibleHelp(i18n.get(ColonyMsg.tradeRouteHelp));
         tradeRoute.setDisable(!game.isGameModelReady()
                 || colony.getOwner() != game.getHumanPlayer());
         tradeRouteCargo.setText(i18n.get(TradeRouteText.cargoOpen));
+        tradeRouteCargo.setAccessibleHelp(i18n.get(ColonyMsg.routeCargoHelp));
         tradeRouteCargo.setDisable(tradeRoute.isDisabled());
-        exports.setText(i18n.get(CustomHouseText.open));
+        exports.setText(i18n.get(ColonyMsg.exportsAction));
         exports.setDisable(!colony.isContainsConstructionByType(
                 org.microcol.model.ConstructionType.CUSTOM_HOUSE));
         exports.setAccessibleHelp(
                 i18n.get(exports.isDisabled() ? CustomHouseText.unavailable
                         : CustomHouseText.rule));
+        buttonClose.setText(i18n.get(Loc.backToGame));
+        buttonClose.setAccessibleHelp(i18n.get(ColonyMsg.backHelp));
     }
 
     /**
@@ -102,5 +129,8 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
                 tradeRoute);
         getButtonPanel().getChildren().addAll(buttons);
         getButtonPanel().getChildren().add(buttonClose);
+        getButtonPanel().getChildren().stream().map(Button.class::cast)
+                .forEach(button -> button.accessibleTextProperty()
+                        .bind(button.textProperty()));
     }
 }

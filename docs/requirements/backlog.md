@@ -1,5 +1,7 @@
 # Current requirement backlog
 
+Completed locally on 2026-10-30: [R-0360 — colony action labels and bottom-bar help](done/R-0360.md), A03 with existing A06/A07 actions. Both languages, wide/compact labels, bottom-bar explanations and cargo actions passed: 4,795 model/JUnit and 9 targeted UI/support tests, zero failures/errors/skips. Tooltips remain prohibited. Smoke was omitted under the user's explicit instruction for this task. [Evidence](../functional-tests.md#r-0360-colony-action-labels-and-help-2026-10-30).
+
 Completed locally on 2026-10-30: [R-0356 — minimap heading and coastline refinement](done/R-0356.md), A03 with A05 knowledge boundaries. The selected middle variant adds gently rounded corners and the shared-font heading, removes the dashed frame and visible footer, and preserves navigation and concealed terrain. Status: done; 4,795 model/JUnit, all 15 targeted UI/support checks and 21 fixed smoke/support tests passed with zero failures/errors/skips. [Evidence](../functional-tests.md#r-0356-minimap-heading-and-rounded-coasts-2026-10-30).
 
 Completed locally on 2026-10-30: [R-0359 — visible colony stock changes and tobacco consumption](done/R-0359.md), A07 with A03/A04. Rendered signed values and colors, immediate worker-assignment refresh, scarce input and actual turn settlement passed: 4,791 model/JUnit and 11 targeted UI/support tests, zero failures/errors/skips. Smoke was omitted under the explicit user instruction for this task. [Evidence](../functional-tests.md#r-0359-visible-warehouse-forecasts-2026-10-30).

@@ -12,6 +12,11 @@ import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Tooltip;
+import javafx.scene.text.Text;
+import javafx.stage.Window;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.GridPane;
@@ -20,6 +25,87 @@ import javafx.scene.layout.GridPane;
 public final class ColonyLayoutPage extends AbstractScreen {
     public ColonyLayoutPage(final TestContext context) {
         super(context);
+    }
+
+    public void verifyActionNames(final boolean expanded,
+            final String... expected) {
+        final String[] ids = { "customHouseOpen", "educationOpen",
+                "treasureOpen", "tradeRouteCargoOpen", "tradeRouteOpen",
+                "quickLoad", "quickUnload", "closeButtonId" };
+        getRobot().interact(() -> {
+            assertEquals(ids.length, expected.length);
+            final Node toolbar = getNodeFinder().lookup(".screen-toolbar")
+                    .query();
+            final Bounds bounds = toolbar
+                    .localToScene(toolbar.getLayoutBounds());
+            double right = 0;
+            for (int i = 0; i < ids.length; i++) {
+                final Button button = getButtonById(ids[i]);
+                assertEquals(expected[i], button.getText(), ids[i]);
+                assertEquals(expected[i], button.getAccessibleText(), ids[i]);
+                assertNotNull(button.getAccessibleHelp(), ids[i]);
+                assertFalse(button.getAccessibleHelp().isBlank(), ids[i]);
+                assertEquals(
+                        expanded || i == ids.length - 1 ? ContentDisplay.LEFT
+                                : ContentDisplay.GRAPHIC_ONLY,
+                        button.getContentDisplay(), ids[i]);
+                final Bounds actual = button
+                        .localToScene(button.getLayoutBounds());
+                assertTrue(bounds.contains(actual),
+                        ids[i] + " stays in toolbar");
+                assertTrue(actual.getMinX() >= right,
+                        ids[i] + " does not overlap");
+                right = actual.getMaxX();
+                if (expanded || i == ids.length - 1) {
+                    final Text text = (Text) button.lookup(".text");
+                    assertTrue(text.isVisible(), ids[i]);
+                    assertEquals(expected[i], text.getText(),
+                            ids[i] + " is not truncated");
+                }
+            }
+        });
+    }
+
+    public void hoverAction(final String id) {
+        getRobot().moveTo(getButtonById(id));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void hoverActionGap() {
+        final Node panel = getNodeFinder().lookup("#colonyButtons").query();
+        getRobot().moveTo(panel.localToScreen(1, 1));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void leaveActions() {
+        getRobot().moveTo(getLabeledById("colony-population"));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyActionExplanation(final String expected) {
+        getRobot().interact(() -> {
+            final Label status = (Label) getLabeledById("statusBarLabel");
+            assertEquals(expected, status.getText());
+            final Text text = (Text) status.lookup(".text");
+            assertEquals(expected, text.getText(),
+                    "Complete explanation is rendered");
+            assertTrue(status.isVisible() && text.isVisible());
+            final Node bar = getNodeFinder().lookup("#statusBar").query();
+            assertTrue(
+                    bar.localToScene(bar.getLayoutBounds()).contains(
+                            text.localToScene(text.getLayoutBounds())),
+                    "Explanation fits in the bottom bar");
+            assertTrue(Window.getWindows().stream().noneMatch(
+                    window -> window instanceof Tooltip && window.isShowing()));
+        });
+    }
+
+    public void verifyNoActionExplanation() {
+        getRobot().interact(() -> {
+            assertEquals("", getLabeledById("statusBarLabel").getText());
+            assertTrue(Window.getWindows().stream().noneMatch(
+                    window -> window instanceof Tooltip && window.isShowing()));
+        });
     }
 
     public void selectTile(final int column, final int row) {

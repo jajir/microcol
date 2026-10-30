@@ -115,4 +115,15 @@
     <entry key="noWorker">No worker · drag a colonist here</entry>
     <entry key="yieldSummary">Yield / turn: %s</entry>
     <entry key="automaticProduction">Town commons · automatic production</entry>
+    <entry key="exportsAction">Exports</entry>
+    <entry key="treasureAction">Treasure</entry>
+    <entry key="loadAction">Load</entry>
+    <entry key="unloadAction">Unload</entry>
+    <entry key="educationHelp">Choose a teacher and student, manage their training, or cancel a course.</entry>
+    <entry key="treasureHelp">Choose a treasure in this colony and review its payout and transport fee before redeeming it.</entry>
+    <entry key="tradeRouteHelp">Create or edit a trade route, choose its stops and assign a ship or wagon.</entry>
+    <entry key="routeCargoHelp">Set which goods to unload and load at each trade-route stop, or process a carrier waiting here.</entry>
+    <entry key="loadHelp">Propose goods from the warehouse to load onto the selected ship. Review the amount before confirming.</entry>
+    <entry key="unloadHelp">Propose cargo from the selected ship to unload into the warehouse. Review the amount before confirming.</entry>
+    <entry key="backHelp">Close the colony and return to the world map.</entry>
 </properties>

@@ -71,8 +71,10 @@ final class ColonyQuickCargo implements UpdatableLanguage {
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        loadButton.setText(i18n.get(ColonyMsg.quickLoad));
-        unloadButton.setText(i18n.get(ColonyMsg.quickUnload));
+        loadButton.setText(i18n.get(ColonyMsg.loadAction));
+        unloadButton.setText(i18n.get(ColonyMsg.unloadAction));
+        loadButton.setAccessibleHelp(i18n.get(ColonyMsg.loadHelp));
+        unloadButton.setAccessibleHelp(i18n.get(ColonyMsg.unloadHelp));
     }
 
     private void run(final QuickCargoAction action) {

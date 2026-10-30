@@ -115,4 +115,15 @@
     <entry key="noWorker">Bez pracovníka · přetáhněte kolonistu</entry>
     <entry key="yieldSummary">Výnos / tah: %s</entry>
     <entry key="automaticProduction">Střed města · automatická produkce</entry>
+    <entry key="exportsAction">Vývoz</entry>
+    <entry key="treasureAction">Poklad</entry>
+    <entry key="loadAction">Naložit</entry>
+    <entry key="unloadAction">Vyložit</entry>
+    <entry key="educationHelp">Vyberte učitele a žáka, spravujte jejich výuku nebo ji zrušte.</entry>
+    <entry key="treasureHelp">Vyberte poklad v této kolonii a před vyplacením zkontrolujte výnos a poplatek za dopravu.</entry>
+    <entry key="tradeRouteHelp">Vytvořte nebo upravte obchodní trasu, vyberte zastávky a přiřaďte loď či vůz.</entry>
+    <entry key="routeCargoHelp">Nastavte zboží k vyložení a naložení na zastávkách obchodní trasy nebo odbavte dopravce, který zde čeká.</entry>
+    <entry key="loadHelp">Navrhněte zboží ze skladu k naložení na vybranou loď. Před potvrzením zkontrolujte množství.</entry>
+    <entry key="unloadHelp">Navrhněte náklad z vybrané lodi k vyložení do skladu. Před potvrzením zkontrolujte množství.</entry>
+    <entry key="backHelp">Zavřete město a vraťte se na mapu světa.</entry>
 </properties>

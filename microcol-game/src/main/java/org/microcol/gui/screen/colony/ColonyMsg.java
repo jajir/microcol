@@ -27,6 +27,8 @@ public enum ColonyMsg implements MessageKeyResource {
     townCommonsFood, townCommonsGoods, notBuilt, outsideSection, harborSection,
     stockSection, surroundingSection, selectedSection, populationSummary,
     supportSummary, bellsSummary, crossesSummary, foodSummary, outputLabel,
-    noWorker, yieldSummary, automaticProduction;
+    noWorker, yieldSummary, automaticProduction, exportsAction, treasureAction,
+    loadAction, unloadAction, educationHelp, treasureHelp, tradeRouteHelp,
+    routeCargoHelp, loadHelp, unloadHelp, backHelp;
 
 }
