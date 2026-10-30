@@ -1,5 +1,13 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+
+## R-0364 nightly regression and public test counts — 2026-10-30
+
+1. [R-0364](requirements/done/R-0364.md) changes CI scheduling and reporting only; no player behavior or scenario selection changes. The full regression runs nightly when changes outside `docs/` exist since the last attempted full run, or on explicit manual dispatch.
+2. Reporting tooling: 26 CI tests passed, including separate group counts, incomplete/malformed evidence, rerun artifact identity, stale results and escaped failure details. Actionlint 1.7.12 passed for both changed workflows. A local rendered report and both SVG badges were visually inspected; synthetic examples were not published. Parsing real model XML agreed with the verifier's 4,795 passing tests.
+3. Local model acceptance on source based on `b17302c0c3f4b00e7d99fc6710ab9d5d0b0096cc`: completion `20261030T172115Z-4e459f35ea04`, verifier `target/verification/run-whf0wbky`, 4,795 tests passed with zero failures, errors or skips; supervisor execution 142.081 seconds. The later `258c2f2c` revision contains documentation proposals only, so it does not invalidate this executable-source result. Final fixed smoke/support selection passed 21 tests across 12 suites with zero failures, errors or skips: completion `20261030T172931Z-ccd68a57fa52`, verifier `target/verification/run-1akpxz34`, supervisor execution 212.476 seconds (below the 420-second budget). Executable/configuration hashes match both retained source manifests.
+4. Earlier model and smoke runs against `bbe9f7c0` also passed but are superseded for final acceptance. Source snapshots and actual reports are retained in the isolated `nightly-test-status` worktree and completion records under `~/Library/Logs/Microcol/completions/`. All nine documentation consistency checks and strict MkDocs passed; final source and diff review found no unresolved issue. Remote publication has not yet been verified; a local pass does not establish a published report or full remote regression success.
+
 ## R-0361 light-overhead buildings — 2026-10-30
 
 1. [R-0361](requirements/done/R-0361.md), primary A03 with A07 construction-identity dependencies, implements selected proposal 8 for all 41 building levels. Canonical SVGs use genuine stroked paths, named groups and solid fills; the existing exporter produces transparent 320 × 160 PNGs for colony and English/Czech help. Runtime Java, gameplay rules, costs, worker actions and localization are unchanged.
@@ -4981,10 +4989,13 @@ modulu selže. Testové nastavení se pro každý test kopíruje do
 `microcol-test/target/test-homes/`; původní uložené hry a nastavení se nemění.
 
 [Vývojový workflow](../.github/workflows/dev-builds.yml) spouští celou sadu
-v samostatném jobu `functional` na Linuxu/JDK 17 s Xvfb a správcem oken Openbox při každém pushi na `main`.
+v samostatném jobu `functional` na Linuxu/JDK 17 s Xvfb a správcem oken Openbox
+v podmíněném nočním běhu nebo při ručním spuštění na `main`; viz
+[pravidla noční regrese](development-builds.md#ci-filtering).
 Job `publish` závisí i na tomto výsledku. Selhání tedy zabrání vydání nové
 vývojové distribuce; dřívější vydání zůstane dostupné. Reporty se ukládají jako
-artifact `tests-functional` i při selhání. Publikace dokumentace má vlastní
+artifact `tests-functional-<attempt>` i při selhání; malý `test-summary-<attempt>`
+obsahuje počty a neúspěšné testy pro [veřejný report](test-results.md). Publikace dokumentace má vlastní
 workflow a sama o sobě neprokazuje průchod hry.
 
 ### Známé omezení prostředí

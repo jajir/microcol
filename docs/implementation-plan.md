@@ -679,3 +679,14 @@ Návrhy budov z 30. října 2026 řeší [R-0357](requirements/done/R-0357.md), 
    aplikačních modalů na schválenou variantu 01. Tlačítka a herní akce zůstávají
    zachované. Přesný tvar a průhlednost vlastní [grafické zadání](graphics.md#rucne-kreslena-modalni-okna-27-rijna-2026),
    skutečné výsledky [funkční evidence](functional-tests.md#r-0322-hand-drawn-modal-silhouettes-2026-10-27).
+
+
+## R-0364 — Noční regrese a přehled výsledků na main
+
+1. [R-0364](requirements/done/R-0364.md) v P31 přesouvá úplnou regresi a ověřené herní
+   distribuce na podmíněný noční běh nebo ruční spuštění. Rychlé modelové kontroly
+   při pushi a lokální přejímka zůstávají zachované.
+2. [Veřejný report](test-results.md) propojuje dva odznaky v README se skutečnými
+   počty model/JUnit a UI testů, datem, revizí a důkazy. Novější main ani neúplná
+   sada nejsou vydávané za zelený výsledek. Pravidla vlastní
+   [vývojová distribuce](development-builds.md#ci-filtering).

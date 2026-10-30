@@ -121,8 +121,10 @@ Never force-push to publish. Task completion follows the local acceptance policy
    and report location. A requirement may become `done` after its agreed outcome
    and these required local checks pass. This is **local acceptance**, not a
    claim that the full regression passed or that publication was verified.
-4. Every push to `main` starts the complete regression in GitHub Actions,
-   including documentation-only pushes. Do not wait for, watch, inspect, rerun,
+4. **Amended on 2026-10-30:** full regression runs nightly for relevant main
+   changes or on explicit manual dispatch, under the
+   [nightly CI contract](development-builds.md#ci-filtering). Pushes retain
+   model compatibility and documentation checks. Do not wait for, watch, inspect, rerun,
    diagnose or repair CI automatically, even at the start of the next task.
    Pending or failed remote tests do not block new development or reopen the
    locally accepted task. Only an explicit user request starts regression
@@ -185,6 +187,8 @@ consistency checks, not gameplay acceptance tests.
   changes. A local commit without a push cannot trigger GitHub Actions. Several
   commits in one push produce one build of the resulting branch state.
 - On pull requests targeting `main`, as a build check without deployment.
+- When the full development regression is requested or completes, including a
+  failure, to refresh the [test counts and report](test-results.md).
 - Manually through **Actions → Publish documentation → Run workflow**, selecting
   `main` when deployment is intended.
 
@@ -210,6 +214,13 @@ Follow runs and errors in
 A successful build alone is not proof of publication: check the deployment job
 and the resulting page. For a new deployment, confirm that the changed text and
 its repository links correspond to the intended commit.
+
+The same Pages build reads the latest main regression artifact with the built-in
+`actions: read` token, appends the public report to its documentation source copy,
+and includes two generated SVG badges in the deployment. These outputs are never
+committed. A missing or invalid artifact produces explicit unknown results; test
+failure does not prevent the independent report deployment. See the
+[test-result contract](test-results.md).
 
 ## GitHub Pages configuration
 

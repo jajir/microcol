@@ -1,5 +1,13 @@
 # MicroCol
 
+[![Model / JUnit counts](https://jajir.github.io/microcol/test-results-model.svg)](https://jajir.github.io/microcol/test-results.html)
+[![Full UI test counts](https://jajir.github.io/microcol/test-results-ui.svg)](https://jajir.github.io/microcol/test-results.html)
+
+Counts describe the latest full regression of `main`, including failures and skips.
+Click either badge for the tested commit, date, failed tests and run evidence.
+Amber means a newer `main`, an incomplete run or unavailable results; it is not a pass.
+[![Push model checks](https://github.com/jajir/microcol/actions/workflows/java-compatibility.yml/badge.svg?branch=main)](https://github.com/jajir/microcol/actions/workflows/java-compatibility.yml?query=branch%3Amain)
+
 [![Development builds](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml/badge.svg?branch=main)](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml)
 [![Documentation](https://github.com/jajir/microcol/actions/workflows/docs.yml/badge.svg?branch=main)](https://github.com/jajir/microcol/actions/workflows/docs.yml)
 

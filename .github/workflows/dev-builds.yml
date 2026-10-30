@@ -1,15 +1,22 @@
 name: Build and publish development game
 
 on:
-  push:
-    branches: [main]
+  schedule:
+    - cron: '17 2 * * *'
   workflow_dispatch:
 
 permissions:
   contents: read
+  actions: read
+
+# Finish one full run; retain only the newest pending request.
+concurrency:
+  group: main-full-regression
+  cancel-in-progress: false
 
 jobs:
   changes:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     outputs:
       game_required: ${{ steps.filter.outputs.game_required }}
@@ -20,12 +27,15 @@ jobs:
           fetch-depth: 0
       - name: Test change classification
         run: python3 -m unittest discover -s scripts/ci -p 'test_*.py'
-      - name: Classify the complete change set
+      - name: Select a changed main revision or an explicit manual run
         id: filter
-        run: python3 scripts/ci/game_changes.py
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/ci/regression.py plan
 
   functional:
     needs: changes
+    if: needs.changes.outputs.game_required == 'true'
     name: Functional player scenarios
     runs-on: ubuntu-24.04
     timeout-minutes: 90
@@ -36,20 +46,32 @@ jobs:
       - name: Run game tests and all functional player scenarios in Docker
         run: |
           bash scripts/ui-tests/test-runner.sh
-          docker compose -f compose.ui-tests.yml run --build --rm ui-tests
+          bash scripts/ui-tests/verify.sh --workers 1 --timeout 5400
+      - name: Count complete and partial model and UI results
+        if: always()
+        run: python3 scripts/ci/regression.py summarize
+      - name: Keep the public test summary even on failure
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: test-summary-${{ github.run_attempt }}
+          path: target/test-status/summary.json
+          if-no-files-found: error
+          retention-days: 90
       - name: Keep functional test evidence even on failure
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: tests-functional
+          name: tests-functional-${{ github.run_attempt }}
           path: |
-            target/docker-ui/
+            target/verification/
+            !target/verification/run-*/source/**
             target/docker-ui-runner-checks/
           if-no-files-found: warn
           retention-days: 14
 
   checks:
-    needs: changes
+    needs: [changes, functional]
     if: needs.changes.outputs.game_required == 'true'
     runs-on: ubuntu-24.04
     steps:
@@ -85,7 +107,7 @@ jobs:
           retention-days: 14
 
   native:
-    needs: changes
+    needs: [changes, functional]
     if: needs.changes.outputs.game_required == 'true'
     name: Package ${{ matrix.platform }}
     strategy:

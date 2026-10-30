@@ -34,8 +34,13 @@ See the authoritative [local acceptance policy](docs/publishing.md#local-accepta
 and [smoke selection](docs/functional-tests.md#pre-commit-smoke).
 
 After local acceptance and review, commit and push `main`, then report the
-checked revision, selection and actual results. Every push to `main` starts the
-full regression in GitHub Actions. Do not wait for, watch, inspect, rerun,
+checked revision, selection and actual results. As amended on 2026-10-30, full
+regression and verified game distributions run
+nightly when relevant main changes exist, or by explicit manual dispatch.
+Pushes retain model compatibility and documentation checks. The README counts
+and linked report identify the last fully tested revision; newer main is not
+implicitly verified. See [nightly CI](docs/development-builds.md#ci-filtering).
+Do not wait for, watch, inspect, rerun,
 diagnose or repair remote CI or Pages by default, including at the start of the
 next task. Only the user's explicit instruction starts a regression-repair or
 publication-verification session; an overnight session is started only when
@@ -49,7 +54,8 @@ published; do not claim a new build/download without verification. Full local
 regression remains available for explicitly requested diagnosis or acceptance,
 but is not the ordinary pre-commit gate. Historical failed runs remain failed.
 
-Pushes to `main` publish documentation and verified development distributions.
+Pushes to `main` publish documentation; conditional nightly or manual full
+regression publishes verified development distributions.
 See [development delivery](docs/development-builds.md) for the release channel,
 launcher behavior and acceptance checks. Do not maintain a separate `develop`
 promotion step for routine tasks.

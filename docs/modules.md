@@ -159,8 +159,8 @@ major; the game version stays unchanged. See the exact mapping and paths in
 archive retains the full Maven version and CPU architecture in its name.
 Maven packaging remains local to `target/`; no release upload is part of this
 lifecycle. The separate [development delivery workflow](development-builds.md)
-builds and publishes these outputs after pushes to `main` that include changes
-outside `docs/`, or explicit manual dispatch. The shared
+builds and publishes outputs after conditional nightly full regression
+on `main`, or on explicit manual dispatch. The shared
 [CI filtering contract](development-builds.md#ci-filtering) retains the current
 game distribution for documentation-only pushes.
 
@@ -205,15 +205,15 @@ does not create or validate game distributions.
 
 ## Distribution boundaries
 
-The verification command `scripts/ui-tests/verify.sh --smoke` provides the
-mandatory pre-commit gate over the existing `microcol-game` and `microcol-test`
-modules: all model tests, support tests and the ten methods in
-`scripts/ui-tests/smoke.json`. Without `--smoke`, the same runner performs the
-complete local regression on request. It adds no Maven module or game package.
-Frozen source, manifests, logs/XML/screenshots and aggregate results remain in
-`target/verification/run-*/`; `scope` distinguishes `precommit` from `full`.
-These are verification outputs, not distributable artifacts. See the
-[smoke contract](functional-tests.md#pre-commit-smoke).
+Local acceptance runs `scripts/ui-tests/verify.sh --model` for every model/JUnit
+check, targeted UI scenarios for changed player behavior, and then `--smoke`
+for support tests and the ten methods in `scripts/ui-tests/smoke.json`. Smoke does
+not repeat model tests. With neither selection flag, the verifier performs the
+complete regression, reused by nightly CI with one UI worker. It adds no Maven
+module or game package. Frozen source, manifests, logs/XML/screenshots and
+aggregate results remain in `target/verification/run-*/`; `scope` distinguishes
+`model`, `precommit` and `full`. These are verification outputs, not distributable
+artifacts. See the [smoke contract](functional-tests.md#pre-commit-smoke).
 
 Application sources and the module descriptor target Java 11, while native
 packaging uses JDK 17 and JavaFX 17.0.20. Packages are specific to the build OS and
@@ -234,3 +234,14 @@ Rival trade remains in `microcol-game`: AI selects the bounded objective, while 
 The production rival factory stays in `microcol-game`; the passive replacement exists only in `microcol-test` for TC101 human-expedition isolation. Default gameplay and AI-specific tests retain real rivals. See [regression evidence](functional-tests.md#second-batch-regression-repairs-2026-10-21).
 
 R-0065 work in progress (2026-10-21): `microcol-game` owns generated-world settings and geography/native population in `model.generation`, assembled through the existing scenario-loading path. `microcol-test` owns the setup/start/Continue scenario TC122. Targeted tests and visual review passed ([evidence](functional-tests.md#r-0065-generated-new-world-2026-10-21)); full batch regression remains pending. Build output responsibilities are unchanged.
+
+
+## Main regression report outputs
+
+[R-0364](requirements/done/R-0364.md) adds no game module or package. The existing
+Docker verifier owns frozen source, inventory and validated model/UI reports.
+`scripts/ci/regression.py` selects scheduled work and converts those results to
+`target/test-status/summary.json`, a public Markdown report and two vector badges.
+The single MkDocs Pages workflow publishes the report alongside documentation;
+these generated results are not source commits or game distribution assets.
+See [test-result semantics](test-results.md) and [nightly CI](development-builds.md#ci-filtering).

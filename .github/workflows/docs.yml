@@ -6,9 +6,14 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+  workflow_run:
+    workflows: [Build and publish development game]
+    types: [requested, completed]
+    branches: [main]
 
 permissions:
   contents: read
+  actions: read
 
 # Check main and its pull requests; do not interrupt an active deployment.
 concurrency:
@@ -37,10 +42,20 @@ jobs:
         run: python -m unittest discover -s scripts/local-worker -p 'test_*.py'
       - name: Check documentation links and catalogue consistency
         run: python -m unittest discover -s scripts/docs -p 'test_*.py'
+      - name: Check regression selection and report generation
+        run: python -m unittest discover -s scripts/ci -p 'test_*.py'
+      - name: Prepare the latest main test report and badges
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python scripts/ci/regression.py publish --revision "$(git rev-parse HEAD)"
+          cat target/test-status/report.md >> docs/test-results.md
       - name: Build documentation and validate links
         env:
           DOCS_REVISION: ${{ github.sha }}
         run: python -m mkdocs build --strict
+      - name: Include generated test badges in the same Pages deployment
+        run: cp target/test-status/test-results-*.svg target/docs-site/
       # MkDocs builds docs/ directly at the Pages root; microcol-site is excluded.
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4

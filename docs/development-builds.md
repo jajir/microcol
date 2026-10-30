@@ -69,10 +69,13 @@ command is normally `~/.local/share/microcol-dev/launcher/microcol-dev`.
 
 ## What happens after a change
 
-1. The locally checked change is pushed to `main`; the full functional regression
-   starts asynchronously on every push. If every changed path is under `docs/`,
-   game packaging/publication is skipped, but regression still runs. Ordinary
-   development does not wait for or inspect CI results.
+1. A locally checked change is pushed to `main`; model compatibility and
+   documentation checks run. Full regression and game delivery run at 02:17 UTC
+   when relevant changes exist, or through an explicit manual workflow run on
+   main. This is 03:17 in Prague in winter and 04:17 in summer; GitHub may delay
+   scheduled execution. See [CI selection](#ci-filtering) and the
+   [latest test report](test-results.md). Ordinary development does not wait for
+   or inspect remote CI results.
 2. GitHub Actions checks the launcher and publication logic and runs the
    [functional player scenarios](functional-tests.md), then uses JDK 17 and
    Maven to build the macOS ARM64, macOS Intel and Linux x86-64 packages from the
@@ -120,32 +123,41 @@ stability campaign keep their own existing budgets.
 
 ## CI filtering
 
-1. **Updated on 2026-10-24:** every push to `main` runs the complete `functional`
-   regression job, including documentation-only pushes. Ordinary development
-   does not wait for or inspect its outcome; investigation and repair require
-   an explicit user request under the [acceptance policy](publishing.md#local-acceptance-policy).
-2. The existing `changes` job and [change classifier](../scripts/ci/game_changes.py)
-   still decide whether launcher checks, native packages, publication and the
-   separate Java-compatibility matrix are needed. Automatic game packaging is
-   skipped only for a known nonempty change set entirely under `docs/`.
-   Changes to AGENTS.md, workflows, configuration or tooling require those jobs.
-3. Push comparisons cover `before` through `after`; pull requests use the merge
-   base. Unknown/invalid event data, unavailable history, empty comparisons and
-   manual dispatch conservatively require game packaging checks. A failed
-   classifier prevents dependent jobs rather than producing a verified skip.
-4. `game_required=false` now skips `checks`, `native` and `publish` in the
-   development workflow and the compatibility matrix, **not `functional`**.
-   `true` retains every existing platform check and publication dependency.
-   Publishing a game build still requires the full functional regression on
-   that exact commit. Pages retains its independent documentation gates.
-5. When the user requests publication verification, inspect actual job results
-   and artifacts for that commit. A docs-only push does not create a game
-   release; report documentation separately from the unchanged game manifest.
-   Never claim publication from a push or a local smoke pass.
-6. The former docs-only filtering contract and dated acceptance remain in
-   [R-0113](requirements/done/R-0113.md) and the
-   [historical evidence](publishing.md#documentation-only-ci-2026-10-15).
-   Classifier checks: `python3 -m unittest discover -s scripts/ci -p 'test_*.py'`.
+1. **Agreed on 2026-10-30, [R-0364](requirements/done/R-0364.md):** the development
+   workflow has one daily schedule at 02:17 UTC and manual dispatch. It does not
+   run on every push. Only main is eligible. One full run finishes at a time;
+   only the newest pending request is retained.
+2. A scheduled run compares its entire revision range against the most recent
+   actual regression attempt. A run whose functional job was explicitly skipped
+   is not a new baseline. If the revision is unchanged, or the complete difference
+   contains only paths under `docs/`, skip game testing, packaging and publication.
+   Earlier code changes cannot be hidden by a final documentation-only commit.
+   Missing history conservatively requires tests. An unchanged failed attempt is
+   not retried every night; manual dispatch deliberately reruns it.
+3. The existing [push classifier](../scripts/ci/game_changes.py) still controls
+   the Java compatibility matrix. Unknown/non-doc paths, invalid comparison data
+   and manual runs require those checks. The nightly adapter is
+   [regression.py](../scripts/ci/regression.py); unknown plan errors fail the job
+   rather than claiming a verified skip. No additional UI subset is substituted
+   for the complete nightly selection.
+4. Full regression reuses the frozen-source Docker verifier with all model/JUnit
+   tests, including ConnectorTest, and one complete UI/support group. Native
+   packaging and launcher checks start only after the full regression passes.
+   The existing 90-minute functional-job limit and all exact-revision publication
+   gates remain. If main advances before promotion, the publisher retains the
+   previous distribution; the completed test result still describes its own SHA.
+5. The README links two [public test-count badges and a report](test-results.md).
+   Both groups come from the same most recent attempted full regression, including
+   failures. The separate push-model badge links the compatibility checks. Pages
+   refreshes on pushes and full-run start/completion; no test-result commit is
+   written to main. Summary artifacts last 90 days; detailed evidence lasts
+   14 days. Missing/expired evidence, skips, cancellation and untested newer main
+   are never presented as complete current success. Each rerun has its own summary
+   and detailed artifact names, preserving failed attempts.
+6. Ordinary tasks still finish with local acceptance. Do not watch or repair
+   remote CI without explicit instruction. A push, scheduled run, green old badge
+   or local smoke pass does not prove a new distribution or website was published.
+   Historical evidence, including the former every-push policy, remains unchanged.
 
 ## Build identity and saved games
 
@@ -201,7 +213,7 @@ A separate required `functional` job runs `microcol-test` and its game dependenc
 inside the same Docker image used for local UI tests, on JDK 17 with TestFX
 and native Glass under Xvfb with Openbox. It includes all numbered player
 scenarios, uploads
-fresh Surefire reports as `tests-functional` even on failure, and gates the
+fresh Surefire reports as `tests-functional-<attempt>` even on failure, and gates the
 `publish` job alongside build-tool and native checks. The exact commands and
 scenario maintenance rules are in the [functional test contract](functional-tests.md).
 
