@@ -69,7 +69,8 @@ public final class ColonyJobPage extends AbstractScreen {
         final Canvas canvas = (Canvas) building.getChildrenUnmodifiable()
                 .stream().filter(node -> node instanceof Canvas).findFirst()
                 .orElseThrow();
-        return canvas.localToScreen(10 + 31 * index, 82);
+        revealGameContent(canvas);
+        return canvas.localToScreen(22 + 46 * index, 104);
     }
 
     public void openFromIndoor(final String buildingId, final int index)

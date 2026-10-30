@@ -76,6 +76,12 @@
 Pro další porovnání jsou zajímavé zejména 4–6 (cílově 6×–10×); je to výtvarný úsudek, nikoli výsledek hráčského testu. Rozhodující částí generovaných screenshotů je minimapa; drobné změny ostatní kresby nejsou součástí návrhu. [Prompty](assets/minimap-scales-2026-10-30/prompts.json) byly zpracované vestavěným imagegen. [Evidence](publishing.md#r-0350-minimap-scale-proposals-2026-10-30) odlišuje kontrolu návrhů od implementace a publikace.
 
 
+## Městská obrazovka „Čistá linka“ — 30. října 2026
+
+1. Vybraný návrh a rozsah implementace jsou v [R-0349](requirements/done/R-0349.md). Světlý krémový podklad, tenké olivové dělicí čáry a tyrkysová plocha přístavu navazují na Evropu. Budovy jsou samostatné průhledné ilustrace v pevné mřížce 4 × 4; postavená úroveň určuje kresbu, nepostavená rodina je zesvětlená a označená.
+2. Generování použilo vestavěný Imagegen se schváleným návrhem jako stylovou referencí. Tři původní listy a přesné prompty jsou v `microcol-game/src/graphics/colony-buildings/` (`generation.json`). `sprites.json` zaznamenává výřezy jednotlivých budov. Jejich průhledný obsah se ořízne, proporcionálně vejde do 312 × 154 pixelů a vystředí na podklad 320 × 160 pixelů se společnou dolní hranou. Výsledných 41 PNG je v `src/main/resources/images/colony-buildings/`, pojmenovaných skutečným názvem typu budovy; všechny úrovně mají vlastní kresbu.
+3. Mapa používá existující terény a jednotky. Nová kresba nepředstavuje změnu kapacity, bonusů, povolání ani stavebních nákladů. Implementace prošla místní přejímkou; skutečné výsledky a vizuální kontrola jsou v [evidenci](functional-tests.md#r-0349-colony-workspace-2026-10-30).
+
 
 ## Minimapa — sedm návrhů, 30. října 2026
 
@@ -1534,9 +1540,11 @@ Les a pole tedy mají být samostatné překryvy. Pokud by nový les obsahoval n
 | 5 | 1 `WEAVERS_HOUSE`; 2 `WEAVERS_SHOP`; 3 `TEXTILE_MILL` |
 | 6 | Bez pojmenovaných aliasů |
 
+**Historický stav před R-0349:** následující popis atlasu a původních panelů je zachovaný jako reference. Aktuální město používá [41 samostatných ilustrací](#mestska-obrazovka-cista-linka-30-rijna-2026).
+
 Ostatní buňky zůstávají přístupné pouze svým souřadnicovým klíčem. Z 42 konstant [ConstructionType](../microcol-game/src/main/java/org/microcol/model/ConstructionType.java) má zde přiřazení 30. Chybí `FORTRESS`, `FORT`, `STOCKADE`, `ARSENAL`, `MAGAZINE`, `ARMORY`, `SHIPYARD`, `DRYDOCK`, `DOCK`, `NEWSPAPER`, `PRINTING_PRESS`, `CUSTOM_HOUSE`. Neznamená to samo o sobě 12 chyb na aktuálních obrazovkách; znamená to, že tento loader pro tyto typy obrázek neposkytuje.
 
-[AbstractPanelConstruction](../microcol-game/src/main/java/org/microcol/gui/screen/colony/AbstractPanelConstruction.java) dostane typ stavby, požádá o obrázek a vykreslí jej v původní velikosti. Tento konkrétní spotřebitel při chybějícím obrázku vyvolá chybu. [PanelConstructionBasic](../microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelConstructionBasic.java) umisťuje stavbu na `(15,0)` do samostatného rámu, [PanelConstructionSimple](../microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelConstructionSimple.java) na `(0,0)` bez něj.
+[AbstractPanelConstruction](../microcol-game/src/main/java/org/microcol/gui/screen/colony/AbstractPanelConstruction.java) dostane typ stavby, požádá o obrázek a vykreslí jej v původní velikosti. Tento konkrétní spotřebitel při chybějícím obrázku vyvolá chybu. [PanelConstructionBasic](../microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelConstructionBasic.java) umisťuje stavbu na `(15,0)` do samostatného rámu, [PanelConstructionSimple](https://github.com/jajir/microcol/blob/75a75a4e/microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelConstructionSimple.java) na `(0,0)` bez něj.
 
 Karta stavby není jediná bitmapa: rám přidává CSS, samotnou stavbu canvas, pracovníky a produkci další kreslení/UI. Aktualizace R-0025 z 14. října 2026: [QueueDialog](../microcol-game/src/main/java/org/microcol/gui/screen/colony/buildingqueue/QueueDialog.java) používá textové seznamy s cenami a důvody nedostupnosti; původní přetahovací panely s obrázkem kolonisty byly odstraněny. Viditelná karta tesaře zachovává atlas i pracovní místa a přidává tlačítko stavění a stav projektu. Existující rastry se nemění. [Cílené ověření](functional-tests.md#construction-ui-implementation-2026-10-14) zahrnuje anglický/český dialog i skutečný stav čekání na nástroje.
 
@@ -1581,7 +1589,7 @@ Pozadí menu, Evropy, tržiště a kolonie mají společný princip: barevné pl
 | [GameMenuBackground](../microcol-game/src/main/java/org/microcol/gui/screen/menu/GameMenuBackground.java) | `sunset.png` | `sunset-top-line.png` obě strany, −260; `sunset-bottom-line.png` obě strany, +230 | Obloha, moře, tráva |
 | [EuropeBackground](../microcol-game/src/main/java/org/microcol/gui/screen/europe/EuropeBackground.java) | `europe.png` | `europe-left.png` vlevo a `europe-right.png` vpravo, obě −312 | Obloha, moře, hlína |
 | [MarketBackground](../microcol-game/src/main/java/org/microcol/gui/screen/market/MarketBackground.java) | `market.png` | `market-top.png` vlevo, `market-bottom.png` vpravo, obě −299 | Obloha, moře, tráva |
-| [ColonyBackground](../microcol-game/src/main/java/org/microcol/gui/screen/colony/ColonyBackground.java) | `colony.png` | `colony-top1.png` vlevo −305; `colony-top2.png` vpravo −298; `colony-bottom.png` obě strany +265 | Obloha, tráva, tráva |
+| [ColonyBackground](https://github.com/jajir/microcol/blob/75a75a4e/microcol-game/src/main/java/org/microcol/gui/screen/colony/ColonyBackground.java) | `colony.png` | `colony-top1.png` vlevo −305; `colony-top2.png` vpravo −298; `colony-bottom.png` obě strany +265 | Obloha, tráva, tráva |
 
 Návaznost horizontu, mola, země a krajových pásů závisí současně na ilustraci, výřezech i těchto číslech. Evropské lodě a postavy umisťuje zvlášť [Europe.css](../microcol-game/src/main/resources/gui/Europe.css). Posun mola v obrázku bez úpravy odpovídajícího UI proto může způsobit, že lodě nebo lidé budou stát mimo zamýšlené místo.
 

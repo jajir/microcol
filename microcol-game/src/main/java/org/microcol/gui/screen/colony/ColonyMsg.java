@@ -24,6 +24,9 @@ public enum ColonyMsg implements MessageKeyResource {
     clearSCHOOL_SLOT, fortifiedMinimum, quickLoad, quickUnload,
     quickLoadQuestion, quickUnloadQuestion, quickConfirm, quickCancel,
     quickUNAVAILABLE, quickNO_STOCK, quickNO_HOLD, quickNO_GOODS, quickChanged,
-    townCommonsFood, townCommonsGoods;
+    townCommonsFood, townCommonsGoods, notBuilt, outsideSection, harborSection,
+    stockSection, surroundingSection, selectedSection, populationSummary,
+    supportSummary, bellsSummary, crossesSummary, foodSummary, outputLabel,
+    noWorker, yieldSummary, automaticProduction;
 
 }

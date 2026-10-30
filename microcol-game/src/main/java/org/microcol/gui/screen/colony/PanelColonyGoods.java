@@ -84,11 +84,12 @@ public final class PanelColonyGoods implements JavaFxComponent {
                             imageProvider.getGoodsTypeImage(goodsType),
                             goodsType, eventBus, i18n);
                     mainPanel.getChildren().add(out.getContent());
+                    HBox.setHgrow(out.getContent(),
+                            javafx.scene.layout.Priority.ALWAYS);
+                    out.getContent().setMaxWidth(Double.MAX_VALUE);
                     return out;
                 }).collect(ImmutableList.toImmutableList());
-        // The commons get their own full-width row above the unchanged goods
-        // row, inside the top of the warehouse frame: the frame sits at the
-        // bottom of the window, so there is no room below the goods.
+        // Keep the automatic center yield readable above all sixteen goods.
         townCommons.setId(TOWN_COMMONS_ID);
         townCommons.getStyleClass().add("town-commons");
         townCommons.setMinWidth(Region.USE_PREF_SIZE);

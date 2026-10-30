@@ -102,9 +102,6 @@ public class PanelDockView implements JavaFxComponent {
         scroll.setFitToHeight(true);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scroll.setMinHeight(96);
-        scroll.setPrefHeight(96);
-        scroll.setMaxHeight(96);
         panelShips.setMinWidth(Region.USE_PREF_SIZE);
         cargoTitle.setId("europe-cargo-title");
         final VBox cargo = new VBox(cargoTitle, crates);

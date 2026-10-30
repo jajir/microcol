@@ -100,4 +100,19 @@
     <entry key="quickNO_GOODS">The selected carrier has no goods to unload. Passengers stay aboard. Nothing was changed.</entry>
     <entry key="quickChanged">The cargo, warehouse or price changed. Nothing was transferred. Check the holds and try again.</entry>
     <entry key="nameCannotFoundOnRiver">Found the colony beside the river, not on its square.</entry>
+    <entry key="notBuilt">Not built</entry>
+    <entry key="outsideSection">People and wagons outside town</entry>
+    <entry key="harborSection">Harbor and cargo</entry>
+    <entry key="stockSection">Goods · stock / net change per turn</entry>
+    <entry key="surroundingSection">Surrounding area</entry>
+    <entry key="selectedSection">Selected tile</entry>
+    <entry key="populationSummary">Population: %s</entry>
+    <entry key="supportSummary">Rebel support: %s%%</entry>
+    <entry key="bellsSummary">Bells / turn: %s</entry>
+    <entry key="crossesSummary">Crosses / turn: %s</entry>
+    <entry key="foodSummary">Food balance: %s</entry>
+    <entry key="outputLabel">Production</entry>
+    <entry key="noWorker">No worker · drag a colonist here</entry>
+    <entry key="yieldSummary">Yield / turn: %s</entry>
+    <entry key="automaticProduction">Town commons · automatic production</entry>
 </properties>

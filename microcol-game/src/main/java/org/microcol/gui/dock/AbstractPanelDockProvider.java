@@ -27,7 +27,7 @@ public abstract class AbstractPanelDockProvider {
 
     PanelCratePresenter createPanelDockCrate() {
         PanelCrateView panelDockCrateView = new PanelCrateView(imageProvider,
-                source == Source.EUROPE);
+                source == Source.EUROPE || source == Source.COLONY);
         return new PanelCratePresenter(panelDockBehavior, i18n, eventBus,
                 source, panelDockCrateView);
     }

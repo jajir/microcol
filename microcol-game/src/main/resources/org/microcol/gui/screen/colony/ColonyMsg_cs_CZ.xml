@@ -100,4 +100,19 @@
     <entry key="quickNO_GOODS">Vybraný dopravce nemá zboží k vyložení. Pasažéři zůstanou na palubě. Nic se nezměnilo.</entry>
     <entry key="quickChanged">Náklad, sklad nebo cena se změnily. Nic se nepřevedlo. Zkontrolujte prostory a zkuste to znovu.</entry>
     <entry key="nameCannotFoundOnRiver">Kolonii založte vedle řeky. Na říčním políčku ji založit nelze.</entry>
+    <entry key="notBuilt">Nepostaveno</entry>
+    <entry key="outsideSection">Lidé a vozy vně města</entry>
+    <entry key="harborSection">Přístav a náklad</entry>
+    <entry key="stockSection">Zboží · zásoba / čistá změna za tah</entry>
+    <entry key="surroundingSection">Okolí města</entry>
+    <entry key="selectedSection">Vybrané políčko</entry>
+    <entry key="populationSummary">Obyvatelstvo: %s</entry>
+    <entry key="supportSummary">Podpora svobody: %s%%</entry>
+    <entry key="bellsSummary">Zvony / tah: %s</entry>
+    <entry key="crossesSummary">Kříže / tah: %s</entry>
+    <entry key="foodSummary">Bilance jídla: %s</entry>
+    <entry key="outputLabel">Produkce</entry>
+    <entry key="noWorker">Bez pracovníka · přetáhněte kolonistu</entry>
+    <entry key="yieldSummary">Výnos / tah: %s</entry>
+    <entry key="automaticProduction">Střed města · automatická produkce</entry>
 </properties>

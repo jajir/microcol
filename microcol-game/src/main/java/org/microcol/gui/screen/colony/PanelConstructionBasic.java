@@ -19,7 +19,7 @@ class PanelConstructionBasic extends AbstractPanelConstructionWithSlots {
     /*
      * Constructions
      */
-    private final static int CONSTRUCTION_X = 15;
+    private final static int CONSTRUCTION_X = 0;
     private final static int CONSTRUCTION_Y = 0;
     private final static Point CONSTRUCTION_SHIFT = Point.of(CONSTRUCTION_X,
             CONSTRUCTION_Y);
@@ -30,6 +30,19 @@ class PanelConstructionBasic extends AbstractPanelConstructionWithSlots {
             final ColonyProductionStats colonyStats, final Model model) {
         super(eventBus, i18n, imageProvider, construction, colonyStats, model);
         getMainPane().getStyleClass().add("constructionPane");
+        final javafx.scene.control.Label name = new javafx.scene.control.Label(
+                i18n.get(ConstructionTypeName
+                        .getNameForType(construction.getType())));
+        name.getStyleClass().add("building-name");
+        name.setMouseTransparent(true);
+        name.setMaxWidth(Double.MAX_VALUE);
+        javafx.scene.layout.StackPane.setAlignment(name,
+                javafx.geometry.Pos.TOP_CENTER);
+        javafx.scene.layout.StackPane.setMargin(name,
+                new javafx.geometry.Insets(65, 0, 0, 0));
+        getMainPane().getChildren().add(name);
+        getMainPane().setAccessibleText(name.getText());
+        getMainPane().setUserData(construction.getType());
     }
 
     @Override

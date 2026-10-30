@@ -145,10 +145,8 @@ public final class TypographyPage extends AbstractScreen {
                     .getDefault(16);
             assertEquals("Playpen Sans Regular", font.getName());
             assertEquals(16, font.getSize());
-            final Canvas canvas = getNodeFinder().lookup(".colony-fields")
-                    .queryAs(Parent.class).getChildrenUnmodifiable().stream()
-                    .filter(Canvas.class::isInstance).map(Canvas.class::cast)
-                    .findFirst().orElseThrow();
+            final Canvas canvas = getNodeFinder().lookup("#colony-field-map")
+                    .queryAs(Canvas.class);
             assertEquals("Playpen Sans Regular",
                     canvas.getGraphicsContext2D().getFont().getName());
         });

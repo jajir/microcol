@@ -3,6 +3,10 @@ package org.microcol.gui;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import org.junit.jupiter.api.Test;
 import org.microcol.gui.image.ImageCache;
@@ -12,6 +16,21 @@ import org.microcol.model.MicroColException;
 import javafx.scene.image.Image;
 
 public class ImageCacheTest {
+
+    @Test
+    public void loadingImageClosesItsResourceStream() throws Exception {
+        try (InputStream source = getClass()
+                .getResourceAsStream("/images/cursor-goto.png")) {
+            final InputStream input = spy(
+                    new ByteArrayInputStream(source.readAllBytes()));
+            final StreamReader reader = mock(StreamReader.class);
+            when(reader.openStream("images/test.png")).thenReturn(input);
+
+            new ImageCache(reader).getRawImage("test.png");
+
+            verify(input).close();
+        }
+    }
 
     @Test
     public void test_existingImage() throws Exception {

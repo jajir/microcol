@@ -17,15 +17,26 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import org.microcol.model.GoodsType;
 
 /**
- * Show Europe port.
+ * The colony workspace, using shared model operations and cargo controls.
  */
 @Listener
 public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
-    private final StackPane mainPanel;
+    private final VBox mainPanel;
+    private final HBox summary = new HBox(20);
+    private final Label outsideTitle = new Label();
+    private final Label harborTitle = new Label();
+    private final Label goodsTitle = new Label();
+    private final PanelColonyConstruction construction;
+    private final I18n i18n;
 
     private final PanelColonyName panelColonyName;
 
@@ -54,7 +65,10 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             final ColonyButtonsPanel colonyButtonsPanel,
             final PanelDockColony panelDockColony,
             final PanelColonyName panelColonyName,
-            final ColonyQuickCargo colonyQuickCargo, final EventBus eventBus) {
+            final ColonyQuickCargo colonyQuickCargo, final EventBus eventBus,
+            final PanelColonyConstruction construction, final I18n i18n) {
+        this.construction = construction;
+        this.i18n = i18n;
         this.buttons = colonyButtonsPanel;
         this.quickCargo = Preconditions.checkNotNull(colonyQuickCargo);
         this.eventBus = Preconditions.checkNotNull(eventBus);
@@ -68,11 +82,37 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
                 .checkNotNull(panelOutsideColony);
         this.panelColonyName = Preconditions.checkNotNull(panelColonyName);
 
-        mainPanel = new StackPane();
-        mainPanel.getChildren().add(panelOutsideColony.getContent());
-        mainPanel.getChildren().add(colonyStructures.getContent());
-        mainPanel.getChildren().add(colonyFields.getContent());
-        mainPanel.getChildren().add(panelDock.getContent());
+        summary.setId("colony-summary");
+        summary.getStyleClass().add("colony-summary");
+        final ScrollPane outside = new ScrollPane(
+                panelOutsideColony.getContent());
+        outside.setId("colony-outside-scroll");
+        outside.setFitToHeight(true);
+        outside.setFitToWidth(true);
+        outside.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        outside.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        outside.getStyleClass().add("colony-unit-scroll");
+        final VBox people = new VBox(3, outsideTitle, outside);
+        people.getStyleClass().add("colony-section");
+        final VBox harbor = new VBox(3, harborTitle, panelDock.getContent());
+        harbor.getStyleClass().addAll("colony-section", "colony-harbor");
+        final VBox right = new VBox(10, colonyFields.getContent(),
+                construction.getContent(), people, harbor);
+        right.setMinWidth(378);
+        right.setPrefWidth(520);
+        right.setMaxWidth(Double.MAX_VALUE);
+        right.getStyleClass().add("colony-details");
+        HBox.setHgrow(right, Priority.ALWAYS);
+        HBox.setHgrow(colonyStructures.getContent(), Priority.ALWAYS);
+        final HBox town = new HBox(18, colonyStructures.getContent(), right);
+        town.setId("colony-town");
+        final VBox stock = new VBox(2, goodsTitle, goods.getContent());
+        stock.getStyleClass().add("colony-stock");
+        mainPanel = new VBox(10, summary, town, stock);
+        mainPanel.getStyleClass().add("colony-layout");
+        mainPanel.setMinWidth(980);
+        mainPanel.setMaxWidth(1440);
+        updateLanguage(i18n);
 
         mainPanel.getStylesheets().add(MainStageBuilder.STYLE_SHEET_MICROCOL);
     }
@@ -127,9 +167,35 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             goods.repaint();
             panelDock.repaint();
             colonyStructures.repaint(colony);
+            construction.repaint(colony);
+            repaintSummary();
             panelOutsideColony.setColony(colony);
             panelOutsideColony.repaint();
         }
+    }
+
+    private void repaintSummary() {
+        summary.getChildren().setAll(
+                summaryLabel("colony-population", ColonyMsg.populationSummary,
+                        colony.getPopulation()),
+                summaryLabel("colony-support", ColonyMsg.supportSummary,
+                        colony.getRebelSupport().getDisplayPercent()),
+                summaryLabel("colony-bells", ColonyMsg.bellsSummary,
+                        colony.getGoodsStats().getStatsByType(GoodsType.BELL)
+                                .getRowProduction()),
+                summaryLabel("colony-crosses", ColonyMsg.crossesSummary,
+                        colony.getGoodsStats().getStatsByType(GoodsType.CROSS)
+                                .getRowProduction()),
+                summaryLabel("colony-food", ColonyMsg.foodSummary,
+                        colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+                                .getDiff()));
+    }
+
+    private Label summaryLabel(final String id, final ColonyMsg message,
+            final int value) {
+        final Label label = new Label(i18n.get(message, value));
+        label.setId(id);
+        return label;
     }
 
     public Colony getColony() {
@@ -145,5 +211,9 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     public void updateLanguage(final I18n i18n) {
         panelDock.updateLanguage(i18n);
         quickCargo.updateLanguage(i18n);
+        outsideTitle.setText(i18n.get(ColonyMsg.outsideSection));
+        harborTitle.setText(i18n.get(ColonyMsg.harborSection));
+        goodsTitle.setText(i18n.get(ColonyMsg.stockSection));
+        repaint();
     }
 }

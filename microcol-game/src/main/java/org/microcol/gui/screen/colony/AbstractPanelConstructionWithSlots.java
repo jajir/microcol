@@ -45,29 +45,29 @@ abstract class AbstractPanelConstructionWithSlots
     private final Logger logger = LoggerFactory
             .getLogger(AbstractPanelConstructionWithSlots.class);
 
-    private final static int CANVAS_WIDTH = 100;
-    private final static int CANVAS_HEIGHT = 135;
+    private final static int CANVAS_WIDTH = 137;
+    private final static int CANVAS_HEIGHT = 150;
     private final static Point CANVAS_SIZE = Point.of(CANVAS_WIDTH,
             CANVAS_HEIGHT);
 
-    private final static int GOOD_ICON_WIDTH = 30;
+    private final static int GOOD_ICON_WIDTH = 22;
 
     /*
      * Goods icon.
      */
-    private final static int GOODS_ICON_X = 0;
-    private final static int GOODS_ICON_Y = 100;
+    private final static int GOODS_ICON_X = 38;
+    private final static int GOODS_ICON_Y = 128;
 
     /*
      * Slot size and position definition.
      */
-    private final static int SLOT_POSITION_SLOT_GAP = -14;
+    private final static int SLOT_POSITION_SLOT_GAP = 1;
     private final static int SLOT_POSITION_WIDTH = TILE_WIDTH_IN_PX
             + SLOT_POSITION_SLOT_GAP;
     private final static Point SLOT_SIZE = Point.of(TILE_WIDTH_IN_PX,
             TILE_WIDTH_IN_PX);
-    private final static int SLOT_POSITION_X_START = -10;
-    private final static int SLOT_POSITION_Y = 60;
+    private final static int SLOT_POSITION_X_START = 0;
+    private final static int SLOT_POSITION_Y = 82;
     private final static Point[] SLOT_POSITIONS = new Point[] {
             Point.of(SLOT_POSITION_X_START, SLOT_POSITION_Y),
             Point.of(SLOT_POSITION_X_START + SLOT_POSITION_WIDTH,
@@ -92,7 +92,8 @@ abstract class AbstractPanelConstructionWithSlots
         getMainPane().setOnDragDropped(this::onDragDropped);
         getMainPane().setOnDragDetected(this::onDragDetected);
         getMainPane().setOnContextMenuRequested(event -> {
-            findConstructionSlot(Point.of(event.getX(), event.getY()))
+            findConstructionSlot(
+                    canvasPoint(event.getSceneX(), event.getSceneY()))
                     .filter(slot -> !slot.isEmpty()).ifPresent(slot -> {
                         final Unit worker = slot.getUnit();
                         final MenuItem work = new MenuItem(
@@ -113,7 +114,11 @@ abstract class AbstractPanelConstructionWithSlots
             final Point topLeftCorner = SLOT_POSITIONS[cx.get()];
             slots.put(Rectangle.ofPointAndSize(topLeftCorner, SLOT_SIZE),
                     constructionSlot);
-            if (!constructionSlot.isEmpty()) {
+            if (constructionSlot.isEmpty()) {
+                gc.setStroke(javafx.scene.paint.Color.web("#75815a"));
+                gc.strokeOval(topLeftCorner.getX() + 15,
+                        topLeftCorner.getY() + 17, 15, 15);
+            } else {
                 gc.drawImage(
                         getImageProvider()
                                 .getUnitImage(constructionSlot.getUnit()),
@@ -213,7 +218,7 @@ abstract class AbstractPanelConstructionWithSlots
 
     private void onDragDetected(final MouseEvent event) {
         logger.debug("Drag detected");
-        final Point point = Point.of(event.getX(), event.getY());
+        final Point point = canvasPoint(event.getSceneX(), event.getSceneY());
         final Optional<ConstructionSlot> loc = findConstructionSlot(point);
         if (loc.isPresent() && !loc.get().isEmpty()) {
             final Unit unit = loc.get().getUnit();
@@ -228,7 +233,7 @@ abstract class AbstractPanelConstructionWithSlots
 
     private void onDragOver(final DragEvent event) {
         offeredDropSlot = null;
-        dropTarget(Point.of(event.getX(), event.getY())).ifPresent(
+        dropTarget(canvasPoint(event.getSceneX(), event.getSceneY())).ifPresent(
                 slot -> ClipboardEval.make(model, event.getDragboard())
                         .tryReadUnit((unit, transferFrom) -> {
                             if (slot.canAccept(unit)) {
@@ -237,6 +242,12 @@ abstract class AbstractPanelConstructionWithSlots
                             }
                         }));
         event.consume();
+    }
+
+    private Point canvasPoint(final double sceneX, final double sceneY) {
+        final javafx.geometry.Point2D point = getCanvas().sceneToLocal(sceneX,
+                sceneY);
+        return Point.of((int) point.getX(), (int) point.getY());
     }
 
     private Optional<ConstructionSlot> findConstructionSlot(final Point point) {

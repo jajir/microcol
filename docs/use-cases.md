@@ -1,5 +1,11 @@
 # Use cases a přejímka pravidel hry
 
+## Rozložení městské obrazovky — 30. října 2026
+
+1. [R-0349](requirements/done/R-0349.md) mění prezentaci a přímou volbu produkce vybraného pole v UC-031/033/042 a zachovává převody nákladu UC-023/024/026. Nový TC195 ověřuje šestnáct rodin, aktuální úrovně, souhrn, čtení středu, výběr šipkami a explicitní změnu plodiny v angličtině a češtině.
+2. Stávající scénáře pracovních přesunů, staveb, opevnění, politické výroby a obecních zdrojů prošly cílenou přejímkou. Přesný výběr, počty a zachované neúspěšné pokusy jsou ve [funkční evidenci](functional-tests.md#r-0349-colony-workspace-2026-10-30).
+
+
 ## UC-114/115/119: bez vyskakovacích bublin — 2026-10-29
 
 1. [R-0345](requirements/done/R-0345.md) odstraňuje bubliny napříč aplikací. TC188 ověřuje najetí na Retire bez popupu a zachovaný stavový řádek; TC85 kontroluje ovládání navštívených obrazovek a najetí na název kolonie. Stávající diplomatické, produkční a rozkazové scénáře dál kontrolují původní hodnoty v přístupných vysvětleních.

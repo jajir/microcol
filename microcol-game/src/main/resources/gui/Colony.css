@@ -1,233 +1,56 @@
-/*
- * JavaFx setting for Colony.
- * 
- */
-.label-title {
-  -fx-font-size: 36;
-  -fx-translate-x: -250;
-  -fx-translate-y: -320;
+/* Quiet paper and independent sections, matching the European harbor. */
+.colony-page, .colony-page .screen-scroll, .colony-page .screen-scroll > .viewport {
+    -fx-background-color: #fff9ec;
 }
+.colony-page .screen-body { -fx-alignment: top-center; }
+.colony-layout { -fx-padding: 12 16 12 16; -fx-background-color: #fff9ec; }
+.colony-summary { -fx-padding: 0 0 10 0; -fx-border-color: #7c826b; -fx-border-width: 0 0 1 0; }
+.colony-summary .label { -fx-font-size: 14; }
+.colony-structures { -fx-min-width: 554; -fx-pref-width: 760; -fx-hgap: 2; -fx-vgap: 2; }
+.constructionPane { -fx-min-width: 137; -fx-pref-width: 180; -fx-max-width: Infinity; -fx-min-height: 150; -fx-pref-height: 150; -fx-max-height: 150; }
+.building-name { -fx-font-size: 14; -fx-alignment: center; }
+.building-empty { -fx-alignment: top-center; }
+.building-state { -fx-text-fill: #686956; -fx-font-size: 14; }
+.constructionPane .production { -fx-alignment: top-left; -fx-max-width: 80; -fx-max-height: 22; -fx-translate-x: 30; -fx-translate-y: 64; }
+.diffPositive { -fx-text-fill: #316b2f; }
+.diffNegative { -fx-text-fill: #b13224; }
+.colony-details { -fx-padding: 0 0 0 16; -fx-border-color: #7c826b; -fx-border-width: 0 0 0 1; }
+.colony-section { -fx-padding: 8 0 0 0; -fx-border-color: #8c9077; -fx-border-width: 1 0 0 0; }
+.colony-fields { -fx-spacing: 10; }
+.tile-detail { -fx-spacing: 5; -fx-padding: 0 0 0 10; -fx-border-color: #8c9077; -fx-border-width: 0 0 0 1; }
+.tile-detail .label { -fx-font-size: 14; }
+.tile-detail .combo-box, .tile-detail .button { -fx-max-width: Infinity; }
+.colony-unit-scroll, .colony-unit-scroll > .viewport { -fx-background-color: transparent; -fx-padding: 0; }
+.colony-unit-scroll { -fx-min-height: 68; -fx-pref-height: 68; -fx-max-height: 68; }
+.outside { -fx-min-height: 46; -fx-spacing: 6; }
+.colony-harbor .panel-dock { -fx-background-color: #83c7c4; -fx-background-radius: 12; -fx-padding: 5; -fx-spacing: 2; }
+.colony-harbor .harbor-scroll, .colony-harbor .harbor-scroll > .viewport { -fx-background-color: transparent; -fx-padding: 0; }
+.colony-harbor .harbor-scroll { -fx-min-height: 64; -fx-pref-height: 64; -fx-max-height: 64; }
+.colony-harbor .ships { -fx-spacing: 6; }
+.colony-harbor .harbor-unit { -fx-padding: 3; }
+.colony-harbor .harbor-cargo { -fx-spacing: 3; }
+.colony-stock { -fx-padding: 6 0 0 0; -fx-border-color: #7c826b; -fx-border-width: 1 0 0 0; }
+.panel-colony-goods-column { -fx-min-width: 720; }
+.panel-colony-goods { -fx-alignment: top-center; }
+.warehouseGoods { -fx-min-width: 45; -fx-alignment: top-center; }
+.goods-name { -fx-font-size: 14; }
+.town-commons { -fx-font-size: 14; -fx-padding: 0 0 4 0; }
+.constructionPaneCarpenter .label { -fx-font-size: 14; }
+.unitInPort:focused, .colony-fields .canvas:focused { -fx-border-color: #445b36; -fx-border-width: 2; }
+#colonyButtons { -fx-alignment: top-right; }
 
-.panel-dock {
-  -fx-min-width: 250;
-  -fx-max-width: 200;
-  -fx-pref-height: 200;
-  -fx-max-height: 200;
-  -fx-translate-x: -80;
-  -fx-translate-y: -110;
+.colony-harbor .harbor-unit,
+.colony-harbor .harbor-unit:hover,
+.colony-harbor .harbor-unit:focused,
+.colony-harbor .harbor-unit:selected {
+    -fx-background-color: transparent;
+    -fx-border-image-source: null;
+    -fx-underline: false;
+    -fx-padding: 0;
 }
-
-.panel-dock .ships {
-  -fx-pref-height: 50;
-  -fx-padding: 0 0 30 0;
+.colony-harbor .harbor-unit:selected {
+    -fx-border-image-source: url("../images/game-toolbar-frame.png");
+    -fx-border-image-width: 6;
 }
-
-.outside {
-  -fx-pref-width: 280;
-  -fx-max-width: 280;
-  -fx-pref-height: 50;
-  -fx-max-height: 50;
-  -fx-translate-x: 300;
-  -fx-translate-y: -192;
-  /* -fx-background-color: yellow; */
-}
-
-.colony-structures {
-  -fx-pref-width: 800;
-  -fx-max-width: 800;
-  -fx-max-height: 500;
-  -fx-translate-x: -200;
-  -fx-translate-y: 70;
-}
-
-.colony-fields {
-  -fx-max-width: 150;
-  -fx-max-height: 150;
-  -fx-padding: 4 0 0 4;
-  -fx-background-image: url("../images/colony-fields.png");
-  -fx-background-repeat: no-repeat;
-  -fx-translate-x: 330;
-  -fx-translate-y: -70;
-}
-
-.panel-colony-goods {
-  -fx-translate-x: 60;
-  -fx-pref-height: 70;
-  -fx-min-height: 70;
-  -fx-max-height: 70;
-  -fx-max-width: 720;
-}
-
-/*
- * Town commons row (22) above the goods row (70) in the 137 px warehouse
- * frame. The column is centered at top 22.5; moving it up 24 keeps the goods
- * at frame top 20.5, exactly where the former -13 shift put them, and places
- * the commons row in the free strip at the top of the frame.
- */
-.panel-colony-goods-column {
-  -fx-max-width: 720;
-  -fx-max-height: 92;
-  -fx-translate-y: -24;
-}
-
-.town-commons {
-  -fx-font-size: 14;
-  -fx-pref-height: 22;
-  -fx-min-height: 22;
-  -fx-max-height: 22;
-  -fx-translate-x: 60;
-  -fx-padding: 0 0 0 6;
-}
-
-.diffPositive {
-  -fx-text-fill: green;
-  -fx-padding: 0 0 0 0px;
-}
-
-.diffNegative {
-  -fx-text-fill: red;
-  -fx-padding: 0 0 0 0px;
-}
-
-.constructionPane {
-  -fx-pref-width: 100;
-  -fx-max-width: 100;
-  -fx-pref-height: 135;
-  -fx-max-height: 135;
-  -fx-background-image: url("../images/colony-frame.png");
-  -fx-background-repeat: no-repeat;
-}
-
-.constructionPaneSimple {
-  -fx-pref-width: 70;
-  -fx-max-width: 70;
-  -fx-pref-height: 70;
-  -fx-max-height: 70;
-}
-
-.constructionPaneCarpenter {
-  -fx-pref-width: 264;
-  -fx-max-width: 264;
-  -fx-pref-height: 137;
-  -fx-max-height: 137;
-  -fx-background-image: url("../images/colony-building-queue.png");
-  -fx-background-repeat: no-repeat;
-}
-
-.constructionPaneCarpenter .canvas {
-  -fx-translate-x: -82;
-  -fx-translate-y: 0;
-}
-
-.constructionPaneCarpenter .description {
-  -fx-pref-width: 180;
-  -fx-min-width: 180;
-  -fx-max-width: 180;
-  -fx-translate-x: 37;
-  -fx-translate-y: 0;
-}
-
-.constructionPane .diffPositive {
-  -fx-padding: 3;
-}
-
-.constructionPane .diffNegative {
-  -fx-padding: 3;
-}
-
-.constructionPane .production {
-  -fx-translate-x: 28;
-  -fx-translate-y: 103;
-}
-
-#id_town_hall {
-  -fx-translate-x: -150;
-  -fx-translate-y: -145;
-}
-
-#id_warehouse {
-  -fx-translate-x: 220;
-  -fx-translate-y: 293;
-  -fx-pref-width: 847;
-  -fx-min-width: 847;
-  -fx-pref-height: 137;
-  -fx-min-height: 137;
-  -fx-max-height: 137;
-  -fx-background-image: url("../images/colony-warehouse.png");
-  -fx-background-repeat: no-repeat;
-}
-
-#id_warehouse .canvas {
-  -fx-translate-x: 10;
-  -fx-translate-y: -20;
-}
-
-#id_church {
-  -fx-translate-x: 110;
-  -fx-translate-y: -145;
-}
-
-#id_weaver {
-  -fx-translate-x: -150;
-  -fx-translate-y: 1;
-}
-
-#id_tobacco {
-  -fx-translate-x: -20;
-  -fx-translate-y: 1;
-}
-
-#id_rum {
-  -fx-translate-x: 110;
-  -fx-translate-y: 1;
-}
-
-#id_school {
-  -fx-translate-x: 240;
-  -fx-translate-y: 1;
-}
-
-#id_armory {
-  -fx-translate-x: -150;
-  -fx-translate-y: 147;
-}
-
-#id_blacksmith {
-  -fx-translate-x: -20;
-  -fx-translate-y: 147;
-}
-
-#id_fur {
-  -fx-translate-x: 110;
-  -fx-translate-y: 147;
-}
-
-#id_carpenter {
-  -fx-translate-x: 310;
-  -fx-translate-y: 147;
-}
-
-/*# sourceMappingURL=Colony.css.map */
-
-
-.unitInPort:focused {
-    -fx-border-color: black;
-    -fx-border-width: 2;
-    -fx-border-insets: -2;
-}
-
-.constructionPaneCarpenter .description .label {
-    -fx-font-size: 11;
-    -fx-text-fill: #17120b;
-}
-
-
-#id_fort {
-  -fx-translate-x: 370;
-  -fx-translate-y: 1;
-}
-
-/* Keep the close control outside the rename label's bounds. */
-#colonyButtons {
-  -fx-alignment: top-right;
-}
+.colony-harbor .harbor-unit:focused { -fx-border-color: #253a41; -fx-border-style: dashed; }
+.colony-harbor .cargo-amount { -fx-background-color: #c99638; -fx-text-fill: #25231f; }

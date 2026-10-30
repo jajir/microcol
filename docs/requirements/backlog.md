@@ -951,3 +951,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## World minimap proposals — 2026-10-30
 
 1. [R-0350](R-0350.md), primary area A03, captures a world minimap at the top of the right sidebar: click navigation, a viewport rectangle, terrain colors and concealed unexplored areas. Status: new. Seven static alternatives are available in the [visual gallery](../graphics.md#minimapa-sedm-navrhu-30-rijna-2026); implementation awaits selection and refinement.
+
+## Colony workspace — 2026-10-30
+
+1. [R-0349](done/R-0349.md), primary area A03 with A07/A06/A10 dependencies, implements the selected Clean Line colony workspace. Status: done; implementation and required local game acceptance are complete. The selected design preserves model rules and existing cargo/job operations; [results and test-environment limits](../functional-tests.md#r-0349-colony-workspace-2026-10-30).

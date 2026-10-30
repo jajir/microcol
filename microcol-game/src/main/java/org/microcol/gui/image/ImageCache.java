@@ -1,10 +1,13 @@
 package org.microcol.gui.image;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.microcol.gui.util.StreamReader;
+import org.microcol.model.MicroColException;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -73,7 +76,12 @@ public class ImageCache {
      */
     public Image getRawImage(final String rawPath) {
         final String path = BASE_PACKAGE + "/" + rawPath;
-        return new Image(streamReader.openStream(path));
+        try (InputStream input = streamReader.openStream(path)) {
+            return new Image(input);
+        } catch (IOException failure) {
+            throw new MicroColException("Unable to close image " + path,
+                    failure);
+        }
     }
 
     /**

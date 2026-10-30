@@ -18,6 +18,7 @@ class PanelDockColony extends AbstractPanelDock {
             final PanelColonyDockBehaviour panelColonyDockBehaviour,
             final PanelDockProviderColony panelDockProviderColony) {
         super(imageProvider, panelColonyDockBehaviour, panelDockProviderColony);
+        enableHarborLayout();
     }
 
 }

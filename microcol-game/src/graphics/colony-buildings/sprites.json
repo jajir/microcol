@@ -1,0 +1,412 @@
+[
+  {
+    "type": "TOWN_HALL",
+    "sheet": "basic.png",
+    "rect": [
+      0,
+      0,
+      334,
+      380
+    ]
+  },
+  {
+    "type": "CHAPEL",
+    "sheet": "basic.png",
+    "rect": [
+      334,
+      0,
+      286,
+      380
+    ]
+  },
+  {
+    "type": "CHURCH",
+    "sheet": "middle.png",
+    "rect": [
+      326,
+      0,
+      308,
+      383
+    ]
+  },
+  {
+    "type": "CATHEDRAL",
+    "sheet": "high.png",
+    "rect": [
+      332,
+      0,
+      295,
+      347
+    ]
+  },
+  {
+    "type": "SCHOOLHOUSE",
+    "sheet": "basic.png",
+    "rect": [
+      620,
+      0,
+      312,
+      380
+    ]
+  },
+  {
+    "type": "COLLEGE",
+    "sheet": "middle.png",
+    "rect": [
+      634,
+      0,
+      317,
+      383
+    ]
+  },
+  {
+    "type": "UNIVERSITY",
+    "sheet": "high.png",
+    "rect": [
+      627,
+      0,
+      320,
+      347
+    ]
+  },
+  {
+    "type": "PRINTING_PRESS",
+    "sheet": "basic.png",
+    "rect": [
+      932,
+      0,
+      322,
+      380
+    ]
+  },
+  {
+    "type": "NEWSPAPER",
+    "sheet": "middle.png",
+    "rect": [
+      951,
+      0,
+      315,
+      383
+    ]
+  },
+  {
+    "type": "CARPENTERS_STAND",
+    "sheet": "basic.png",
+    "rect": [
+      0,
+      380,
+      334,
+      285
+    ]
+  },
+  {
+    "type": "LUMBER_MILL",
+    "sheet": "middle.png",
+    "rect": [
+      0,
+      383,
+      326,
+      300
+    ]
+  },
+  {
+    "type": "BLACKSMITHS_HOUSE",
+    "sheet": "basic.png",
+    "rect": [
+      334,
+      380,
+      286,
+      285
+    ]
+  },
+  {
+    "type": "BLACKSMITHS_SHOP",
+    "sheet": "middle.png",
+    "rect": [
+      326,
+      383,
+      308,
+      300
+    ]
+  },
+  {
+    "type": "IRON_WORKS",
+    "sheet": "high.png",
+    "rect": [
+      350,
+      347,
+      277,
+      299
+    ]
+  },
+  {
+    "type": "ARMORY",
+    "sheet": "basic.png",
+    "rect": [
+      620,
+      380,
+      312,
+      285
+    ]
+  },
+  {
+    "type": "MAGAZINE",
+    "sheet": "middle.png",
+    "rect": [
+      634,
+      383,
+      317,
+      300
+    ]
+  },
+  {
+    "type": "ARSENAL",
+    "sheet": "high.png",
+    "rect": [
+      627,
+      347,
+      320,
+      299
+    ]
+  },
+  {
+    "type": "STOCKADE",
+    "sheet": "basic.png",
+    "rect": [
+      932,
+      380,
+      322,
+      285
+    ]
+  },
+  {
+    "type": "FORT",
+    "sheet": "middle.png",
+    "rect": [
+      951,
+      383,
+      315,
+      300
+    ]
+  },
+  {
+    "type": "FORTRESS",
+    "sheet": "high.png",
+    "rect": [
+      947,
+      347,
+      307,
+      299
+    ]
+  },
+  {
+    "type": "TOBACCONISTS_HOUSE",
+    "sheet": "basic.png",
+    "rect": [
+      0,
+      665,
+      334,
+      265
+    ]
+  },
+  {
+    "type": "TOBACCONISTS_SHOP",
+    "sheet": "middle.png",
+    "rect": [
+      0,
+      683,
+      326,
+      287
+    ]
+  },
+  {
+    "type": "CIGAR_FACTORY",
+    "sheet": "high.png",
+    "rect": [
+      0,
+      646,
+      332,
+      292
+    ]
+  },
+  {
+    "type": "WEAVERS_HOUSE",
+    "sheet": "basic.png",
+    "rect": [
+      334,
+      665,
+      286,
+      265
+    ]
+  },
+  {
+    "type": "WEAVERS_SHOP",
+    "sheet": "middle.png",
+    "rect": [
+      326,
+      683,
+      308,
+      287
+    ]
+  },
+  {
+    "type": "TEXTILE_MILL",
+    "sheet": "high.png",
+    "rect": [
+      332,
+      646,
+      295,
+      292
+    ]
+  },
+  {
+    "type": "RUM_DISTILLERS_HOUSE",
+    "sheet": "basic.png",
+    "rect": [
+      620,
+      665,
+      312,
+      265
+    ]
+  },
+  {
+    "type": "RUM_DISTILLERY",
+    "sheet": "middle.png",
+    "rect": [
+      634,
+      683,
+      317,
+      287
+    ]
+  },
+  {
+    "type": "RUM_FACTORY",
+    "sheet": "high.png",
+    "rect": [
+      627,
+      646,
+      320,
+      292
+    ]
+  },
+  {
+    "type": "FUR_TRADERS_HOUSE",
+    "sheet": "basic.png",
+    "rect": [
+      932,
+      665,
+      322,
+      265
+    ]
+  },
+  {
+    "type": "FUR_TRADING_POST",
+    "sheet": "middle.png",
+    "rect": [
+      951,
+      683,
+      315,
+      287
+    ]
+  },
+  {
+    "type": "FUR_FACTORY",
+    "sheet": "high.png",
+    "rect": [
+      947,
+      646,
+      307,
+      292
+    ]
+  },
+  {
+    "type": "BASIC_WAREHOUSE",
+    "sheet": "basic.png",
+    "rect": [
+      0,
+      930,
+      334,
+      324
+    ]
+  },
+  {
+    "type": "WAREHOUSE",
+    "sheet": "middle.png",
+    "rect": [
+      0,
+      970,
+      326,
+      273
+    ]
+  },
+  {
+    "type": "WAREHOUSE_EXPANSION",
+    "sheet": "high.png",
+    "rect": [
+      0,
+      938,
+      332,
+      316
+    ]
+  },
+  {
+    "type": "STABLES",
+    "sheet": "basic.png",
+    "rect": [
+      334,
+      930,
+      286,
+      324
+    ]
+  },
+  {
+    "type": "LARGE_STABLES",
+    "sheet": "middle.png",
+    "rect": [
+      326,
+      970,
+      308,
+      273
+    ]
+  },
+  {
+    "type": "DOCK",
+    "sheet": "basic.png",
+    "rect": [
+      620,
+      930,
+      312,
+      324
+    ]
+  },
+  {
+    "type": "DRYDOCK",
+    "sheet": "middle.png",
+    "rect": [
+      634,
+      970,
+      317,
+      273
+    ]
+  },
+  {
+    "type": "SHIPYARD",
+    "sheet": "high.png",
+    "rect": [
+      650,
+      938,
+      297,
+      316
+    ]
+  },
+  {
+    "type": "CUSTOM_HOUSE",
+    "sheet": "basic.png",
+    "rect": [
+      932,
+      930,
+      322,
+      324
+    ]
+  }
+]

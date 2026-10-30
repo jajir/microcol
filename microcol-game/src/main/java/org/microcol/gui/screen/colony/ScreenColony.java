@@ -2,7 +2,6 @@ package org.microcol.gui.screen.colony;
 
 import org.microcol.gui.screen.GameScreen;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
-import org.microcol.gui.util.CenteredPage;
 import org.microcol.gui.util.InGamePage;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
@@ -24,24 +23,19 @@ public class ScreenColony implements GameScreen {
     private final ColonyPanel colonyPanel;
 
     @Inject
-    ScreenColony(final ColonyPanel colonyPanel, final CenteredPage centeredPage,
-            final InGamePage page, final ColonyBackground colonyBackground,
+    ScreenColony(final ColonyPanel colonyPanel, final InGamePage page,
             final ColonyButtonsPanel buttons, final PanelColonyName colonyName,
             final ColonyDialogCallback callback) {
         this.page = Preconditions.checkNotNull(page);
         this.colonyPanel = Preconditions.checkNotNull(colonyPanel);
         page.setStatusSource(Source.COLONY);
 
-        centeredPage.getContent().getStylesheets().add(STYLE_SHEET_COLONY);
-        centeredPage.setBackground(colonyBackground);
-        centeredPage.setMainPanel(colonyPanel);
-        centeredPage.getContent().setStyle("");
-        centeredPage.getContent().setMinSize(950, 740);
-        centeredPage.getContent().setPrefSize(950, 740);
-        page.getContent().getStyleClass().add("illustrated-page");
+        page.getContent().getStylesheets().add(STYLE_SHEET_COLONY);
+        page.getContent().getStyleClass().addAll("illustrated-page",
+                "colony-page");
         page.setToolbar(buttons.getContent());
         page.setTitle((javafx.scene.control.Label) colonyName.getContent());
-        page.setContent(centeredPage.getContent());
+        page.setContent(colonyPanel.getContent());
         page.getContent().addEventFilter(
                 javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
                     if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) {

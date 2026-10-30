@@ -38,6 +38,8 @@ public final class PanelColonyGood implements JavaFxComponent {
 
     public static final String FAMINE_FORECAST_ID = "famineForecast";
 
+    private final Label name = new Label();
+
     private final Label labelAmount;
 
     private final Label labelDiff;
@@ -78,7 +80,13 @@ public final class PanelColonyGood implements JavaFxComponent {
         mainPanel = new VBox();
         mainPanel.getStyleClass().add("warehouseGoods");
         mainPanel.getChildren().add(paneImage);
-        mainPanel.getChildren().add(hlabels);
+        name.getStyleClass().add("goods-name");
+        mainPanel.getChildren().addAll(name, hlabels);
+        mainPanel.setAlignment(Pos.TOP_CENTER);
+        paneImage.setMinSize(image.getWidth(), image.getHeight());
+        paneImage.setPrefSize(image.getWidth(), image.getHeight());
+        paneImage.setMaxSize(image.getWidth(), image.getHeight());
+        mainPanel.setMinHeight(Region.USE_PREF_SIZE);
         mainPanel.setOnMouseEntered(this::onMouseEntered);
         mainPanel.setOnMouseExited(this::onMouseExited);
     }
@@ -117,6 +125,7 @@ public final class PanelColonyGood implements JavaFxComponent {
     }
 
     void repaint() {
+        name.setText(i18n.get(GoodsTypeName.getNameForGoodsType(goodsType)));
         final ColonyProductionStats stats = colony.getGoodsStats();
         final GoodsProductionStats goodsStats = stats.getStatsByType(goodsType);
 

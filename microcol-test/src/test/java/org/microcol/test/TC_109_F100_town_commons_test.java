@@ -15,6 +15,7 @@ import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.page.ColonyScreen;
 import org.microcol.page.FreePlayAuditPage;
+import org.microcol.page.GameBarWidthPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.SettingPage;
 import org.microcol.page.WelcomePage;
@@ -133,6 +134,8 @@ public class TC_109_F100_town_commons_test extends AbstractMicroColTest {
                 "New Amsterdam");
         newAmsterdam.verifyTownCommons(EN_NEW_AMSTERDAM);
         // The commons row is whole and readable and the goods row is intact.
+        new GameBarWidthPage(getContext()).resizeContent(1000, 925);
+        newAmsterdam.showWarehouse();
         newAmsterdam.verifyTownCommonsNotEllipsized(EN_NEW_AMSTERDAM);
         newAmsterdam.verifyWarehouseGoodsAndTownCommonsLayout(
                 GoodsType.BUYABLE_GOOD_TYPES.size(), MINIMUM_GOODS_WIDTH);
@@ -180,6 +183,8 @@ public class TC_109_F100_town_commons_test extends AbstractMicroColTest {
         final ColonyScreen newAmsterdam = game.openColonyAt(NEW_AMSTERDAM,
                 "New Amsterdam");
         newAmsterdam.verifyTownCommons(CS_NEW_AMSTERDAM);
+        new GameBarWidthPage(getContext()).resizeContent(1000, 925);
+        newAmsterdam.showWarehouse();
         newAmsterdam.verifyTownCommonsNotEllipsized(CS_NEW_AMSTERDAM);
         newAmsterdam.verifyWarehouseGoodsAndTownCommonsLayout(
                 GoodsType.BUYABLE_GOOD_TYPES.size(), MINIMUM_GOODS_WIDTH);

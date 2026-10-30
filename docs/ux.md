@@ -1,5 +1,13 @@
 # UX a pravidla ovládání MicroCol
 
+## Správa města v samostatných sekcích — 30. října 2026
+
+1. [R-0349](requirements/done/R-0349.md) zachovává hráčovu pracovní smyčku: zkontrolovat obyvatele a zásoby, přiřadit práci, vybrat výstavbu a odbavit dopravce. Šestnáct rodin budov drží stejné pozice při změně úrovně; pasivní budovy nemají pracovní sloty.
+2. Kliknutí nebo šipky na mapě vybírají pouze políčko. Detail napravo ukazuje jeho aktuálního pracovníka a modelový výnos. Explicitní výběr plodiny mění produkci, tlačítko práce otevírá existující nabídku s potvrzením/zrušením. Enter či mezerník na mapě otevírá práci vybraného pracovníka. Střed města ukazuje automatické výnosy bez možnosti přidělit pracovníka nebo změnit plodinu.
+3. Přetahování, kontextové nabídky, fronta, náklad a zprávy při odmítnutí zůstávají zachované. Okolní lidé a dopravci mají vlastní vodorovný posun; celá pracovní plocha je při malém okně posuvná. Stavová nápověda nahrazuje tooltipy. Čistá bilance zásob už zahrnuje spotřebu.
+4. Toto jsou implementované ovládací záměry, nikoli závěr uživatelského výzkumu. Skutečné lokální ověření se uvádí ve [funkční evidenci](functional-tests.md).
+
+
 ## Zarovnání evropského přístavu — 2026-10-29
 
 [R-0348](requirements/done/R-0348.md) navazuje přistěhovalectví, příchozí lodě,

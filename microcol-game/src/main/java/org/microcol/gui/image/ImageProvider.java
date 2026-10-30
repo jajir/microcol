@@ -1,6 +1,7 @@
 package org.microcol.gui.image;
 
 import java.io.InputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -130,11 +131,15 @@ public final class ImageProvider {
     public static Image getRawImage(final String rawPath) {
         final String path = BASE_PACKAGE + "/" + rawPath;
         ClassLoader cl = ImageProvider.class.getClassLoader();
-        final InputStream in = cl.getResourceAsStream(path);
-        if (in == null) {
-            throw new MicroColException("Unable to load file '" + path + "'.");
-        } else {
-            return new Image(cl.getResourceAsStream(path));
+        try (InputStream input = cl.getResourceAsStream(path)) {
+            if (input == null) {
+                throw new MicroColException(
+                        "Unable to load file '" + path + "'.");
+            }
+            return new Image(input);
+        } catch (IOException failure) {
+            throw new MicroColException("Unable to close image " + path,
+                    failure);
         }
     }
 

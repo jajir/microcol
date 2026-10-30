@@ -83,10 +83,10 @@ public class ScreenTurnReport extends AbstractScreen {
                 .getParent();
         final javafx.scene.layout.Region report = (javafx.scene.layout.Region) row
                 .getParent();
-        assertTrue(row.getWidth() <= report.getMaxWidth(),
+        assertTrue(row.getWidth() <= report.getWidth(),
                 String.format(
                         "Open colony row width %s must fit the report width %s",
-                        row.getWidth(), report.getMaxWidth()));
+                        row.getWidth(), report.getWidth()));
     }
 
     /** The notice of the named colony offers Open colony. */

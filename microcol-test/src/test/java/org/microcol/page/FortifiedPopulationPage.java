@@ -23,6 +23,10 @@ public final class FortifiedPopulationPage extends AbstractScreen {
                 .queryAs(Parent.class);
         Canvas canvas = (Canvas) building.getChildrenUnmodifiable().stream()
                 .filter(n -> n instanceof Canvas).findFirst().orElseThrow();
+        // A native cross-colony drag needs both endpoints visible at once.
+        new GameBarWidthPage(getContext()).resizeContent(
+                Math.max(1200, canvas.getScene().getWidth()),
+                Math.max(925, canvas.getScene().getHeight()));
         final javafx.scene.Node outside = getNodeFinder().lookup(".outside")
                 .queryAs(javafx.scene.Node.class);
         revealGameContent(canvas, outside);
@@ -33,7 +37,7 @@ public final class FortifiedPopulationPage extends AbstractScreen {
         getRobot().interact(() -> canvas.addEventHandler(
                 javafx.scene.input.DragEvent.DRAG_DONE, completed));
         try {
-            getRobot().drag(canvas.localToScreen(10 + 31 * index, 82),
+            getRobot().drag(canvas.localToScreen(22 + 46 * index, 104),
                     MouseButton.PRIMARY).dropTo(outside);
             // Rejected native drags must finish before the next mouse gesture.
             if (!done.await(5, java.util.concurrent.TimeUnit.SECONDS))

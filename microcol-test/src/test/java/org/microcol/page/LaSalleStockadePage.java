@@ -3,7 +3,6 @@ package org.microcol.page;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
-import java.util.Optional;
 import org.microcol.model.*;
 import javafx.scene.Node;
 
@@ -33,8 +32,10 @@ public final class LaSalleStockadePage extends AbstractScreen {
 
     /** The colony screen must be open; the stockade is the id_fort picture. */
     public void verifyStockadeShown(boolean expected) {
-        Optional<Node> fort = getNodeFinder().lookup("#id_fort").tryQuery();
-        assertEquals(expected, fort.isPresent() && fort.get().isVisible());
+        Node fort = getNodeFinder().lookup("#id_fort").query();
+        assertTrue(fort.isVisible());
+        assertEquals(expected,
+                !fort.getStyleClass().contains("building-empty"));
     }
 
     public void verifyPopulation(int expected) {

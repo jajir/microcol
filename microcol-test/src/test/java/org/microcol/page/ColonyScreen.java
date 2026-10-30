@@ -32,6 +32,7 @@ import org.testfx.service.finder.NodeFinder;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.event.EventHandler;
+import javafx.scene.canvas.Canvas;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
@@ -74,6 +75,10 @@ public class ColonyScreen extends AbstractScreen {
         assertEquals(expectedText, getLabeledById(
                 org.microcol.gui.screen.colony.PanelColonyGoods.TOWN_COMMONS_ID)
                 .getText());
+    }
+
+    public void showWarehouse() {
+        revealGameContent(getNodeFinder().lookup(".colony-stock").query());
     }
 
     /**
@@ -258,6 +263,7 @@ public class ColonyScreen extends AbstractScreen {
     public void dragGoodsOutsideWindow(final int cargoSlotIndex)
             throws InterruptedException {
         final StackPane crate = getListOfCrates().get(cargoSlotIndex);
+        revealGameContent(crate);
         completeDrag(crate,
                 () -> getRobot().drag(crate, MouseButton.PRIMARY)
                         .dropTo(getPrimaryStage().getX()
@@ -644,17 +650,17 @@ public class ColonyScreen extends AbstractScreen {
     }
 
     private Point2D findPlaceOfField(final ColonyField colonyField) {
-        final PanelColonyFields panelColonyFields = getContext()
-                .getClassFromGuice(PanelColonyFields.class);
-        final Bounds boundsInScreen = panelColonyFields.getContent()
-                .localToScreen(
-                        panelColonyFields.getContent().getBoundsInLocal());
-
+        final Canvas canvas = getNodeFinder().lookup("#colony-field-map")
+                .queryAs(Canvas.class);
+        revealGameContent(canvas);
+        final Bounds boundsInScreen = canvas
+                .localToScreen(canvas.getBoundsInLocal());
+        final double tileWidth = boundsInScreen.getWidth() / 3;
         final Location loc = colonyField.getDirection().getVector();
         final double x = boundsInScreen.getMinX()
-                + (loc.getX() + 1) * TILE_WIDTH_IN_PX + TILE_CENTER.getX();
+                + (loc.getX() + 1.5) * tileWidth;
         final double y = boundsInScreen.getMinY()
-                + (loc.getY() + 1) * TILE_WIDTH_IN_PX + TILE_CENTER.getY();
+                + (loc.getY() + 1.5) * tileWidth;
         return new Point2D(x, y);
     }
 

@@ -104,7 +104,7 @@ abstract class AbstractPanelConstruction implements JavaFxComponent {
                 .getConstructionImage(construction.getType())
                 .orElseThrow(() -> new MicroColException(String
                         .format("Unable to find image for %s", construction)));
-        gc.drawImage(image, point.getX(), point.getY());
+        gc.drawImage(image, point.getX(), point.getY(), 137, 68.5);
     }
 
     protected EventBus getEventBus() {

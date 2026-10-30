@@ -26,7 +26,7 @@ public final class IndustrialProductionPage extends AbstractScreen {
                 .filter(node -> node instanceof Canvas).findFirst()
                 .orElseThrow();
         getRobot().drag("#colonyUnit-" + unitId, MouseButton.PRIMARY)
-                .dropTo(canvas.localToScreen(41, 82));
+                .dropTo(canvas.localToScreen(68, 104));
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
                 () -> getModel().getUnitById(unitId)
                         .getPlace() instanceof PlaceConstructionSlot);

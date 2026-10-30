@@ -118,7 +118,7 @@ public final class ConstructionPage extends AbstractScreen {
                 getNodeFinder().lookup("#colonyUnit-" + unitId).query(),
                 canvas);
         getRobot().drag("#colonyUnit-" + unitId, MouseButton.PRIMARY)
-                .dropTo(canvas.localToScreen(41, 82));
+                .dropTo(canvas.localToScreen(68, 104));
         WaitForAsyncUtils.waitFor(5, java.util.concurrent.TimeUnit.SECONDS,
                 () -> getModel().getUnitById(unitId)
                         .getPlace() instanceof org.microcol.model.PlaceConstructionSlot);

@@ -109,3 +109,7 @@
     -fx-text-fill: #25231F;
     -fx-padding: 0 1;
 }
+
+.europe-harbor .panel-dock .harbor-scroll {
+    -fx-min-height: 96; -fx-pref-height: 96; -fx-max-height: 96;
+}
