@@ -1,5 +1,82 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Minimapa — sedm měřítek, 30. října 2026
+
+1. Navazující zadání v [R-0350](requirements/R-0350.md) žádá větší zmenšení a dalších sedm náhledů s různými měřítky. Pro srovnání mají společný střídmý vzhled čistého atlasu a stejný prostor v pravém panelu; tento výběr pro porovnání neschvaluje finální styl.
+2. Cílová řada **3×, 4×, 5×, 6×, 8×, 10× a 12×** znamená přibližný poměr šířky světa k šířce právě viditelného hlavního výřezu. Vyšší číslo znamená menší místní terén i obdélník na minimapě. Jde o orientační zadání generátoru, nikoli přesně změřené souřadnice výsledných obrázků.
+3. Všechny návrhy zachovávají celý obdélníkový rozsah světa, barvy terénu, silné pobřežní kontury, krytí neznáma a rámeček výřezu. Širší prozkoumané okolí je ilustrativní; není převzaté ze skutečné uložené partie. V implementaci se měřítko pro zobrazení celého světa odvodí ze skutečných rozměrů světa a dostupné plochy, nikoli z pevně zvoleného násobku. Náhledy nezavádějí ovladač zoomu ani nové rozměry herního světa.
+
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; margin:20px 0;">
+<figure style="margin:0; min-width:0; border:1px solid #b8af9d; border-radius:8px; padding:12px; background:#fff9eb; color:#312e28;">
+<figcaption style="font-weight:600; margin-bottom:10px;">1. Přibližně 3×</figcaption>
+<a href="assets/minimap-scales-2026-10-30/1-svet-3x.png" aria-label="Měřítko 3× — celá obrazovka" style="display:block;">
+<span style="display:block; position:relative; overflow:hidden; width:100%; aspect-ratio:247 / 282;">
+<img src="assets/minimap-scales-2026-10-30/1-svet-3x.png" alt="Minimapa s cílovým poměrem šířky světa k hlavnímu výřezu 3 ku jedné" style="position:absolute; width:638.87%; max-width:none; height:auto; left:-536.84%; top:-39.01%;" />
+</span></a>
+<p style="margin:10px 0 0; font-size:14px; line-height:1.45;">Cíl: výřez zabírá přibližně 33 % šířky minimapy.</p>
+</figure>
+<figure style="margin:0; min-width:0; border:1px solid #b8af9d; border-radius:8px; padding:12px; background:#fff9eb; color:#312e28;">
+<figcaption style="font-weight:600; margin-bottom:10px;">2. Přibližně 4×</figcaption>
+<a href="assets/minimap-scales-2026-10-30/2-svet-4x.png" aria-label="Měřítko 4× — celá obrazovka" style="display:block;">
+<span style="display:block; position:relative; overflow:hidden; width:100%; aspect-ratio:247 / 282;">
+<img src="assets/minimap-scales-2026-10-30/2-svet-4x.png" alt="Minimapa s cílovým poměrem šířky světa k hlavnímu výřezu 4 ku jedné" style="position:absolute; width:638.87%; max-width:none; height:auto; left:-536.84%; top:-39.01%;" />
+</span></a>
+<p style="margin:10px 0 0; font-size:14px; line-height:1.45;">Cíl: výřez zabírá přibližně 25 % šířky minimapy.</p>
+</figure>
+<figure style="margin:0; min-width:0; border:1px solid #b8af9d; border-radius:8px; padding:12px; background:#fff9eb; color:#312e28;">
+<figcaption style="font-weight:600; margin-bottom:10px;">3. Přibližně 5×</figcaption>
+<a href="assets/minimap-scales-2026-10-30/3-svet-5x.png" aria-label="Měřítko 5× — celá obrazovka" style="display:block;">
+<span style="display:block; position:relative; overflow:hidden; width:100%; aspect-ratio:247 / 282;">
+<img src="assets/minimap-scales-2026-10-30/3-svet-5x.png" alt="Minimapa s cílovým poměrem šířky světa k hlavnímu výřezu 5 ku jedné" style="position:absolute; width:638.87%; max-width:none; height:auto; left:-536.84%; top:-39.01%;" />
+</span></a>
+<p style="margin:10px 0 0; font-size:14px; line-height:1.45;">Cíl: výřez zabírá přibližně 20 % šířky minimapy.</p>
+</figure>
+<figure style="margin:0; min-width:0; border:1px solid #b8af9d; border-radius:8px; padding:12px; background:#fff9eb; color:#312e28;">
+<figcaption style="font-weight:600; margin-bottom:10px;">4. Přibližně 6×</figcaption>
+<a href="assets/minimap-scales-2026-10-30/4-svet-6x.png" aria-label="Měřítko 6× — celá obrazovka" style="display:block;">
+<span style="display:block; position:relative; overflow:hidden; width:100%; aspect-ratio:247 / 282;">
+<img src="assets/minimap-scales-2026-10-30/4-svet-6x.png" alt="Minimapa s cílovým poměrem šířky světa k hlavnímu výřezu 6 ku jedné" style="position:absolute; width:638.87%; max-width:none; height:auto; left:-536.84%; top:-39.01%;" />
+</span></a>
+<p style="margin:10px 0 0; font-size:14px; line-height:1.45;">Cíl: výřez zabírá přibližně 17 % šířky minimapy.</p>
+</figure>
+<figure style="margin:0; min-width:0; border:1px solid #b8af9d; border-radius:8px; padding:12px; background:#fff9eb; color:#312e28;">
+<figcaption style="font-weight:600; margin-bottom:10px;">5. Přibližně 8×</figcaption>
+<a href="assets/minimap-scales-2026-10-30/5-svet-8x.png" aria-label="Měřítko 8× — celá obrazovka" style="display:block;">
+<span style="display:block; position:relative; overflow:hidden; width:100%; aspect-ratio:247 / 282;">
+<img src="assets/minimap-scales-2026-10-30/5-svet-8x.png" alt="Minimapa s cílovým poměrem šířky světa k hlavnímu výřezu 8 ku jedné" style="position:absolute; width:638.87%; max-width:none; height:auto; left:-536.84%; top:-39.01%;" />
+</span></a>
+<p style="margin:10px 0 0; font-size:14px; line-height:1.45;">Cíl: výřez zabírá přibližně 13 % šířky minimapy.</p>
+</figure>
+<figure style="margin:0; min-width:0; border:1px solid #b8af9d; border-radius:8px; padding:12px; background:#fff9eb; color:#312e28;">
+<figcaption style="font-weight:600; margin-bottom:10px;">6. Přibližně 10×</figcaption>
+<a href="assets/minimap-scales-2026-10-30/6-svet-10x.png" aria-label="Měřítko 10× — celá obrazovka" style="display:block;">
+<span style="display:block; position:relative; overflow:hidden; width:100%; aspect-ratio:247 / 282;">
+<img src="assets/minimap-scales-2026-10-30/6-svet-10x.png" alt="Minimapa s cílovým poměrem šířky světa k hlavnímu výřezu 10 ku jedné" style="position:absolute; width:638.87%; max-width:none; height:auto; left:-536.84%; top:-39.01%;" />
+</span></a>
+<p style="margin:10px 0 0; font-size:14px; line-height:1.45;">Cíl: výřez zabírá přibližně 10 % šířky minimapy.</p>
+</figure>
+<figure style="margin:0; min-width:0; border:1px solid #b8af9d; border-radius:8px; padding:12px; background:#fff9eb; color:#312e28;">
+<figcaption style="font-weight:600; margin-bottom:10px;">7. Přibližně 12×</figcaption>
+<a href="assets/minimap-scales-2026-10-30/7-svet-12x.png" aria-label="Měřítko 12× — celá obrazovka" style="display:block;">
+<span style="display:block; position:relative; overflow:hidden; width:100%; aspect-ratio:247 / 282;">
+<img src="assets/minimap-scales-2026-10-30/7-svet-12x.png" alt="Minimapa s cílovým poměrem šířky světa k hlavnímu výřezu 12 ku jedné" style="position:absolute; width:638.87%; max-width:none; height:auto; left:-536.84%; top:-39.01%;" />
+</span></a>
+<p style="margin:10px 0 0; font-size:14px; line-height:1.45;">Cíl: výřez zabírá přibližně 8 % šířky minimapy.</p>
+</figure>
+</div>
+
+1. [Náhled 3× — celá obrazovka](assets/minimap-scales-2026-10-30/1-svet-3x.png).
+2. [Náhled 4× — celá obrazovka](assets/minimap-scales-2026-10-30/2-svet-4x.png).
+3. [Náhled 5× — celá obrazovka](assets/minimap-scales-2026-10-30/3-svet-5x.png).
+4. [Náhled 6× — celá obrazovka](assets/minimap-scales-2026-10-30/4-svet-6x.png).
+5. [Náhled 8× — celá obrazovka](assets/minimap-scales-2026-10-30/5-svet-8x.png).
+6. [Náhled 10× — celá obrazovka](assets/minimap-scales-2026-10-30/6-svet-10x.png).
+7. [Náhled 12× — celá obrazovka](assets/minimap-scales-2026-10-30/7-svet-12x.png).
+
+Pro další porovnání jsou zajímavé zejména 4–6 (cílově 6×–10×); je to výtvarný úsudek, nikoli výsledek hráčského testu. Rozhodující částí generovaných screenshotů je minimapa; drobné změny ostatní kresby nejsou součástí návrhu. [Prompty](assets/minimap-scales-2026-10-30/prompts.json) byly zpracované vestavěným imagegen. [Evidence](publishing.md#r-0350-minimap-scale-proposals-2026-10-30) odlišuje kontrolu návrhů od implementace a publikace.
+
+
+
 ## Minimapa — sedm návrhů, 30. října 2026
 
 1. [R-0350](requirements/R-0350.md) zachycuje zadání minimapy nahoře v pravém panelu: celý rozsah hratelného světa, přesun pohledu kliknutím a obdélník aktuálního výřezu. Barvy naznačují terén a silnější linky obrys známé pevniny. Neobjevená část nesmí prozradit skrytý svět; platí [znalost mapy podle R-0070](requirements/done/R-0070.md).
