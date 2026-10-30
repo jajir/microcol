@@ -1,5 +1,11 @@
 # UX a pravidla ovládání MicroCol
 
+## Přehled budov v nápovědě — 30. října 2026
+
+1. [R-0351](requirements/done/R-0351.md) pomáhá vybrat další stavbu: z mapy otevřít nápovědu tlačítkem nebo H, zvolit **Budovy** a porovnat obrázky, přínosy a náklady všech úrovní. Řady vylepšení zůstávají pohromadě; názvy lze hledat bez diakritiky.
+2. Cena patří celé cílové úrovni, nejde o rozdíl cen sousedních budov ani o cenu urychlení za zlato. Vedle ceny jsou předpoklady a základní výrobní hodnoty; skutečný výnos závisí na pracovnících, zásobách a bonusech. U velkých stájí se výslovně uvádí, že nyní nezvyšují chov nad účinek běžných stájí.
+3. Přehled nemá stavební akci. Zpět do hry i Escape vracejí hráče na mapu bez změny partie. Ilustrace mají přístupné názvy, dlouhý obsah používá stávající posuvník a sdílenou typografii. Automatická přejímka patří do [funkční evidence](functional-tests.md); nejde o pozorování nezávislého hráče.
+
 ## Správa města v samostatných sekcích — 30. října 2026
 
 1. [R-0349](requirements/done/R-0349.md) zachovává hráčovu pracovní smyčku: zkontrolovat obyvatele a zásoby, přiřadit práci, vybrat výstavbu a odbavit dopravce. Šestnáct rodin budov drží stejné pozice při změně úrovně; pasivní budovy nemají pracovní sloty.

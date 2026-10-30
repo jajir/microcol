@@ -3,6 +3,8 @@ package org.microcol.gui.screen.colonizopedia;
 import java.text.Normalizer;
 import java.util.Arrays;
 import org.microcol.gui.LocalizationHelper;
+import org.microcol.gui.screen.colony.ConstructionTypeName;
+import org.microcol.model.ConstructionType;
 import org.microcol.model.TerrainType;
 import org.microcol.model.UnitType;
 import org.microcol.model.ResourceOverlay;
@@ -35,7 +37,9 @@ public enum ColonizopediaTopic {
             Colonizopedia.topic_terrain_body),
     RESOURCES(Colonizopedia.topic_resources_title,
             Colonizopedia.topic_resources_body),
-    UNITS(Colonizopedia.topic_units_title, Colonizopedia.topic_units_body);
+    UNITS(Colonizopedia.topic_units_title, Colonizopedia.topic_units_body),
+    BUILDINGS(Colonizopedia.topic_buildings_title,
+            Colonizopedia.topic_buildings_body);
 
     private final Colonizopedia title;
 
@@ -70,6 +74,12 @@ public enum ColonizopediaTopic {
     }
 
     private boolean referenceMatches(final I18n i18n, final String needle) {
+        if (this == BUILDINGS) {
+            return ConstructionType.ALL.stream()
+                    .anyMatch(type -> fold(
+                            i18n.get(ConstructionTypeName.getNameForType(type)))
+                            .contains(needle));
+        }
         final LocalizationHelper names = new LocalizationHelper(i18n);
         if (this == UNITS) {
             return UnitType.UNIT_TYPES.stream().anyMatch(

@@ -1,5 +1,10 @@
 # Use cases a přejímka pravidel hry
 
+## UC-114/119: budovy v nápovědě — 2026-10-30
+
+1. [R-0351](requirements/done/R-0351.md) přidává ilustrované téma Budovy do stávající herní nápovědy. Scénáře TC10–11 v `TC_100_F91_colonizopedia_test` pokrývají všech 41 úrovní budov, ceny a pořadí podle modelu, příklady přínosů, hledání názvů v češtině a angličtině, posouvání, malé i široké okno a návrat bez změny partie.
+2. Stávající TC100/01–09 zachovávají své kontroly a doplňují nové téma do seznamu v obou jazycích. Skutečné místní výsledky patří do [funkční evidence](functional-tests.md); rozšíření nemění hodnocení celých UC-114/119 ani neprokazuje publikaci.
+
 ## Rozložení městské obrazovky — 30. října 2026
 
 1. [R-0349](requirements/done/R-0349.md) mění prezentaci a přímou volbu produkce vybraného pole v UC-031/033/042 a zachovává převody nákladu UC-023/024/026. Nový TC195 ověřuje šestnáct rodin, aktuální úrovně, souhrn, čtení středu, výběr šipkami a explicitní změnu plodiny v angličtině a češtině.

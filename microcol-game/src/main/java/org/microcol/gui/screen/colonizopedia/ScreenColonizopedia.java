@@ -207,7 +207,8 @@ public final class ScreenColonizopedia implements GameScreen {
         bodyContent.getChildren().setAll(topicTitle, body);
         if (topic == ColonizopediaTopic.TERRAIN
                 || topic == ColonizopediaTopic.RESOURCES
-                || topic == ColonizopediaTopic.UNITS) {
+                || topic == ColonizopediaTopic.UNITS
+                || topic == ColonizopediaTopic.BUILDINGS) {
             bodyContent.getChildren().add(tables.create(topic));
         }
         bodyScroll.setVvalue(0);

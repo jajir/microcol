@@ -1,5 +1,12 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Budovy v nápovědě — 30. října 2026
+
+1. [R-0351](requirements/done/R-0351.md) používá stávající ilustrace všech 41 úrovní budov v přehledu **Budovy**. Obrázek a název stojí vlevo, stručný přínos, cena a předpoklady vpravo; jednotlivé řady vylepšení drží společné pořadí. Přehled přebírá papírový rám, sdílené písmo a posuvník nápovědy.
+2. Skutečné screenshoty z Docker/Xvfb: [anglické široké okno](graphics-assets/buildings-help-2026-10-30/r0351-buildings-en.png), [české okno](graphics-assets/buildings-help-2026-10-30/r0351-buildings-cs.png) a [konec českého přehledu](graphics-assets/buildings-help-2026-10-30/r0351-buildings-end-cs.png). Vizuální kontrola ověřila čitelnost, poměr stran ilustrací, zalamování a dostupný návrat do hry; automatická akceptace je v [evidenci](functional-tests.md#r-0351-buildings-help-2026-10-30).
+
+![Český přehled budov s obrázky a přínosy](graphics-assets/buildings-help-2026-10-30/r0351-buildings-cs.png)
+
 ## Minimapa — vybraný vzhled, 30. října 2026
 
 1. Uživatel vybral [přiloženou variantu](assets/minimap-scales-2026-10-30/selected-reference.png) a požádal o implementaci [R-0350](requirements/done/R-0350.md). Zachovat silné nepravidelné inkoustové tahy, tlumenou tyrkysovou vodu, zelené a okrové odstíny pevniny a neprůhledné šedohnědé neznámo.

@@ -40,7 +40,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
     private static final String SCORING = "Statistics and score";
     private static final String[] TOPICS = { MOVEMENT, CARGO, COLONIES,
             PRODUCTION, TRADE, DIPLOMACY, COMBAT, INDEPENDENCE, SCORING,
-            "Terrain", "Terrain bonuses", "Units" };
+            "Terrain", "Terrain bonuses", "Units", "Buildings" };
     private static final String MOVEMENT_PART = "movement points";
     private static final String COLONIES_PART = "Colony names must be unique";
     private static final String DIPLOMACY_PART = "tribute";
@@ -63,7 +63,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
     private static final String[] TOPICS_CZ = { MOVEMENT_CZ, CARGO_CZ,
             "Kolonie a práce", PRODUCTION_CZ, "Obchod, daně a bojkot",
             DIPLOMACY_CZ, "Boj", "Nezávislost", "Statistiky a skóre", "Terén",
-            "Bonusy terénu", "Jednotky" };
+            "Bonusy terénu", "Jednotky", "Budovy" };
     private static final String NO_RESULTS_CZ = "Žádné téma neodpovídá hledání. Vymažte hledaný text a zobrazíte všechna témata.";
 
     @Start
@@ -442,6 +442,118 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.verifyTopicTitles("Jednotky");
         help.verifyReferenceProperties("colonizopediaUnitProperties_ARTILLERY",
                 "Poškození je oslabuje");
+        help.closeWithEscape();
+        help.verifyDialogClosed();
+        help.verifyGameStateUnchanged(before);
+        help.verifyNextTurnEnabled();
+    }
+
+    /**
+     * Every building level has current artwork, rules and full upgrade costs.
+     */
+    @Test
+    @Tag("local")
+    void TC_10_buildings_reference_and_upgrade_costs() throws Exception {
+        // Open the new topic through the existing in-game help.
+        WelcomePage.of(getContext()).loadGame();
+        final ColonizopediaPage help = ColonizopediaPage.of(getContext());
+        final String before = help.snapshotGameState();
+        help.openWithHKey();
+        help.selectTopicWithMouse("Buildings");
+        help.verifySelectedTopic("Buildings",
+                "not the difference between levels");
+        final MainScreenLayoutPage window = new MainScreenLayoutPage(
+                getContext());
+        window.resize(1280, 850);
+        help.verifyFillsGameWindow("Colonizopedia");
+        help.verifyReferenceRows(41);
+        help.verifyBuildingReference("Cost: %s hammers, %s tools",
+                "Minimum population: %s", "Present from colony founding.");
+        help.verifyReferenceProperties(
+                "colonizopediaBuildingProperties_LUMBER_MILL",
+                "52 hammers, 0 tools", "Minimum population: 3",
+                "Base output per worker per turn: Hammers 6",
+                "Base input per worker per turn: Lumber 6", "Worker places: 3");
+        help.verifyReferenceProperties(
+                "colonizopediaBuildingProperties_IRON_WORKS",
+                "240 hammers, 100 tools", "Adam Smith", "Tools 9", "Ore 6");
+        help.verifyReferenceProperties(
+                "colonizopediaBuildingProperties_CATHEDRAL",
+                "176 hammers, 100 tools", "Crosses 6",
+                "Additional output without workers per turn: Crosses 3");
+        help.verifyReferenceProperties(
+                "colonizopediaBuildingProperties_ARSENAL",
+                "half the tool input", "Musket 6", "Tools 3");
+        help.verifyReferenceProperties(
+                "colonizopediaBuildingProperties_WAREHOUSE_EXPANSION", "300",
+                "80 hammers, 20 tools");
+        help.verifyReferenceProperties(
+                "colonizopediaBuildingProperties_FORTRESS", "200%",
+                "320 hammers, 200 tools");
+        help.verifyReferenceProperties(
+                "colonizopediaBuildingProperties_LARGE_STABLES",
+                "no further breeding bonus", "149 hammers, 80 tools");
+        help.captureDialog("colonizopediaPage", "r0351-buildings-en.png");
+
+        // Name search keeps the whole upgrade chain available in a narrow
+        // window.
+        help.typeSearch("IRON WORKS");
+        help.verifyTopicTitles("Buildings");
+        window.resize(900, 700);
+        help.verifyFillsGameWindow("Colonizopedia");
+        help.verifyReferenceRows(41);
+        help.verifyBuildingReference("Cost: %s hammers, %s tools",
+                "Minimum population: %s", "Present from colony founding.");
+        help.captureDialog("colonizopediaPage", "r0351-buildings-small-en.png");
+        help.dragBodyThumbToEnd();
+        help.verifyBodyScrolledToEnd();
+        help.verifyReferenceProperties(
+                "colonizopediaBuildingProperties_CUSTOM_HOUSE",
+                "160 hammers, 50 tools", "Peter Stuyvesant", "export settings");
+        help.captureDialog("colonizopediaPage", "r0351-buildings-end-en.png");
+        help.closeWithOk();
+        help.verifyDialogClosed();
+        help.verifyGameStateUnchanged(before);
+        help.verifyNextTurnEnabled();
+    }
+
+    /**
+     * Czech building names are searchable without accents; Escape is read-only.
+     */
+    @Test
+    @Tag("local")
+    void TC_11_czech_buildings_search_and_escape() throws Exception {
+        // Read the localized reference from the same running game.
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        settings.goBack().loadGame();
+        final ColonizopediaPage help = ColonizopediaPage.of(getContext());
+        final String before = help.snapshotGameState();
+        help.openFromButton();
+        help.selectTopicWithMouse("Budovy");
+        help.verifySelectedTopic("Budovy", "nikoli rozdíl mezi úrovněmi");
+        help.verifyReferenceRows(41);
+        help.verifyBuildingReference("Cena: %s kladiv, %s nářadí",
+                "Nejméně obyvatel: %s", "Součást kolonie od jejího založení.");
+        help.verifyReferenceProperties(
+                "colonizopediaBuildingProperties_LUMBER_MILL",
+                "52 kladiv, 0 nářadí", "Vylepšení budovy: Truhlářství",
+                "Nejméně obyvatel: 3", "Kladiva 6");
+        help.captureDialog("colonizopediaPage", "r0351-buildings-cs.png");
+
+        // Fold accents and case without changing the game or losing upgrades.
+        help.typeSearch("KOVARSKA MANUFAKTURA");
+        help.verifyTopicTitles("Budovy");
+        help.verifyReferenceProperties(
+                "colonizopediaBuildingProperties_IRON_WORKS",
+                "240 kladiv, 100 nářadí", "Adam Smith", "Nářadí 9");
+        help.scrollReferenceToEnd();
+        help.verifyBodyScrolledToEnd();
+        help.verifyReferenceProperties(
+                "colonizopediaBuildingProperties_CUSTOM_HOUSE",
+                "160 kladiv, 50 nářadí", "Peter Stuyvesant",
+                "nastavení vývozu");
+        help.captureDialog("colonizopediaPage", "r0351-buildings-end-cs.png");
         help.closeWithEscape();
         help.verifyDialogClosed();
         help.verifyGameStateUnchanged(before);

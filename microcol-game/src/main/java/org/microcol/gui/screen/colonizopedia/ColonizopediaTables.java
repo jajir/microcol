@@ -9,9 +9,13 @@ import org.microcol.gui.Point;
 import org.microcol.gui.Tile;
 import org.microcol.gui.image.ImageLoaderTerrain;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.colony.ConstructionTypeName;
+import org.microcol.gui.screen.congress.CongressText;
 import org.microcol.gui.util.PaintService;
 import org.microcol.i18n.I18n;
 import org.microcol.model.GoodsType;
+import org.microcol.model.ConstructionType;
+import org.microcol.model.Goods;
 import org.microcol.model.ResourceOverlay;
 import org.microcol.model.TerrainType;
 import org.microcol.model.UnitType;
@@ -50,7 +54,29 @@ final class ColonizopediaTables {
         table.add(cell(topic.getTitle(i18n)), 0, 0);
         table.add(cell(i18n.get(Colonizopedia.properties)), 1, 0);
         int row = 1;
-        if (topic == ColonizopediaTopic.UNITS) {
+        if (topic == ColonizopediaTopic.BUILDINGS) {
+            for (final ConstructionType root : ConstructionType.ALL) {
+                if (root.getUpgradeFrom().isPresent()) {
+                    continue;
+                }
+                for (final ConstructionType type : root.getUpgradeChain()) {
+                    final String name = buildingName(type);
+                    final ImageView picture = new ImageView(
+                            images.getConstructionImage(type).orElseThrow());
+                    picture.setFitWidth(128);
+                    picture.setFitHeight(96);
+                    picture.setPreserveRatio(true);
+                    picture.setAccessibleText(name);
+                    final VBox identity = cell(name, picture);
+                    identity.setId("colonizopediaBuilding_" + type.name());
+                    table.add(identity, 0, row);
+                    final VBox properties = cell(buildingProperties(type));
+                    properties.setId(
+                            "colonizopediaBuildingProperties_" + type.name());
+                    table.add(properties, 1, row++);
+                }
+            }
+        } else if (topic == ColonizopediaTopic.UNITS) {
             for (final UnitType type : UnitType.UNIT_TYPES) {
                 final String name = names.getUnitName(type);
                 final ImageView picture = new ImageView(
@@ -130,6 +156,49 @@ final class ColonizopediaTables {
             }
         }
         return table;
+    }
+
+    private String buildingName(final ConstructionType type) {
+        return i18n.get(ConstructionTypeName.getNameForType(type));
+    }
+
+    private String buildingProperties(final ConstructionType type) {
+        String details = i18n
+                .get(Colonizopedia.valueOf("building_" + type.name()));
+        details += "\n" + i18n.get(Colonizopedia.buildingCost,
+                type.getRequiredHammers(), type.getRequiredTools());
+        details += "\n" + (type.isBuildFromFounding()
+                ? i18n.get(Colonizopedia.buildingFounded)
+                : i18n.get(Colonizopedia.buildingPopulation,
+                        type.getRequiredColonyPopulation()));
+        if (type.getUpgradeFrom().isPresent()) {
+            details += "\n" + i18n.get(Colonizopedia.buildingPredecessor,
+                    buildingName(type.getUpgradeFrom().get()));
+        }
+        if (type.getRequiredFounder().isPresent()) {
+            details += "\n" + i18n.get(Colonizopedia.buildingFounder,
+                    CongressText.name(i18n, type.getRequiredFounder().get()));
+        }
+        if (type.getSlotsForWorkers() > 0) {
+            details += "\n" + i18n.get(Colonizopedia.buildingWorkers,
+                    type.getSlotsForWorkers());
+        }
+        if (type.getProductionPerTurn().isPresent()) {
+            final Goods output = type.getProductionPerTurn().get();
+            details += "\n" + i18n.get(Colonizopedia.buildingOutput,
+                    goodsName(output.getType()), output.getAmount());
+            if (type.getConsumptionPerTurn().isPresent()) {
+                final Goods input = type.getConsumptionPerTurn().get();
+                details += "\n" + i18n.get(Colonizopedia.buildingInput,
+                        goodsName(input.getType()), input.getAmount());
+            }
+            if (type.getBaseProductionPerTurn() > 0) {
+                details += "\n" + i18n.get(Colonizopedia.buildingBaseOutput,
+                        goodsName(output.getType()),
+                        type.getBaseProductionPerTurn());
+            }
+        }
+        return details;
     }
 
     private String unitProperties(final UnitType type) {

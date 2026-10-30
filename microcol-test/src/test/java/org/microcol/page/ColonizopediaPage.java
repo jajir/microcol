@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 import org.microcol.gui.screen.colonizopedia.ScreenColonizopedia;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.colony.ConstructionTypeName;
+import org.microcol.model.ConstructionType;
 import org.microcol.gui.screen.game.gamepanel.MapManager;
 import javafx.scene.image.Image;
 import org.microcol.model.TerrainType;
@@ -245,9 +247,7 @@ public final class ColonizopediaPage extends AbstractScreen {
     }
 
     public void scrollReferenceToEnd() {
-        getRobot().moveTo("#" + ScreenColonizopedia.BODY_SCROLL_ID);
-        getRobot().scroll(150, VerticalDirection.DOWN);
-        WaitForAsyncUtils.waitForFxEvents();
+        dragBodyThumbToEnd();
     }
 
     public void verifyReferenceRows(final int expectedRows) throws Exception {
@@ -263,6 +263,65 @@ public final class ColonizopediaPage extends AbstractScreen {
                 assertTrue(label.isWrapText(),
                         "Reference text must wrap within its column");
             });
+            return null;
+        }).get(5, TimeUnit.SECONDS);
+    }
+
+    public void verifyBuildingReference(final String costPattern,
+            final String populationPattern, final String startingText)
+            throws Exception {
+        WaitForAsyncUtils.asyncFx(() -> {
+            final ImageProvider images = getContext()
+                    .getClassFromGuice(ImageProvider.class);
+            for (final ConstructionType type : ConstructionType.ALL) {
+                final String name = getI18n()
+                        .get(ConstructionTypeName.getNameForType(type));
+                final VBox identity = getNodeFinder()
+                        .lookup("#colonizopediaBuilding_" + type.name())
+                        .queryAs(VBox.class);
+                assertEquals(name,
+                        ((Labeled) identity.lookup(".label")).getText());
+                final ImageView picture = (ImageView) identity
+                        .lookup("ImageView");
+                assertEquals(images.getConstructionImage(type).orElseThrow(),
+                        picture.getImage(), type.name());
+                assertFalse(picture.getImage().isError(), type.name());
+                assertEquals(name, picture.getAccessibleText());
+                assertTrue(picture.isPreserveRatio(), type.name());
+                assertTrue(picture.getBoundsInParent().getMaxX() <= identity
+                        .getWidth(), type.name());
+                final VBox properties = getNodeFinder().lookup(
+                        "#colonizopediaBuildingProperties_" + type.name())
+                        .queryAs(VBox.class);
+                final Labeled label = (Labeled) properties.lookup(".label");
+                final String text = label.getText();
+                assertTrue(text.contains(String.format(costPattern,
+                        type.getRequiredHammers(), type.getRequiredTools())),
+                        type.name());
+                assertTrue(
+                        text.contains(type.isBuildFromFounding() ? startingText
+                                : String.format(populationPattern,
+                                        type.getRequiredColonyPopulation())),
+                        type.name());
+                assertFalse(text.contains("%s"), type.name());
+                assertFalse(text.contains("building_"), type.name());
+                assertTrue(label.getBoundsInParent().getMaxX() <= properties
+                        .getWidth(), type.name());
+                if (type.getUpgradeFrom().isPresent()) {
+                    final ConstructionType predecessor = type.getUpgradeFrom()
+                            .get();
+                    final Node previous = getNodeFinder().lookup(
+                            "#colonizopediaBuilding_" + predecessor.name())
+                            .query();
+                    assertEquals(GridPane.getRowIndex(previous) + 1,
+                            GridPane.getRowIndex(identity).intValue(),
+                            type.name());
+                    assertTrue(
+                            text.contains(getI18n().get(ConstructionTypeName
+                                    .getNameForType(predecessor))),
+                            type.name());
+                }
+            }
             return null;
         }).get(5, TimeUnit.SECONDS);
     }

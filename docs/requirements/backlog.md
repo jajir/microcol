@@ -1,5 +1,8 @@
 # Current requirement backlog
 
+Accepted locally on 2026-10-30: [R-0351 — illustrated buildings help](done/R-0351.md), A03 with existing A07/A09 data. All 41 building levels have artwork, benefits, costs and prerequisites in English/Czech. Model/JUnit **4,790**, targeted help/support **14**, fixed smoke/support **21**, and documentation checks passed with zero failures/errors/skips. [Evidence](../functional-tests.md#r-0351-buildings-help-2026-10-30); remote publication remains unverified.
+
+
 Accepted locally on 2026-10-29: [R-0346 — centered European goods prices](done/R-0346.md), A03 with A06. Prices are centered under goods icons; the goods strip shares both game bars’ side insets and maximum content width. Model/JUnit **4,784**, combined targeted UI/support **14** and fixed smoke/support **21** passed with zero failures/errors/skips. [Evidence](../functional-tests.md#r-0346-centered-goods-prices-2026-10-29); remote publication remains unverified.
 
 
