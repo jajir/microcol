@@ -1,5 +1,34 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Kompaktní budovy — tři návrhy, 30. října 2026
+
+1. [R-0366](requirements/done/R-0366.md) porovnává tři úspornější rozložení podle dodaného snímku kolonie. Jde o návrhy, nikoli změnu herního rozhraní. Všechny ukazují stejných šestnáct budov, názvy, stavy výstavby, pracovní místa a výnosy. Přehled je záměrně omezený na část s budovami; ostatní panely kolonie nejsou předmětem návrhu.
+2. **Produkce vedle budovy** odpovídá uživatelovu nápadu: výnos je napravo od ilustrace, název a pracovníci pod ní. **Produkce vedle pracovníků** přesouvá výnos na spodní společný řádek. **Vodorovné položky** řadí ilustraci, název/pracovníky a výnos vedle sebe; v referenční šířce používá tři sloupce místo čtyř. Třetí varianta zkracuje jednotlivou položku, ale kvůli většímu počtu řádků nemusí zmenšit celý přehled.
+3. Doporučení pro další výběr je **Produkce vedle budovy**: odstraňuje samostatný produkční řádek a zachovává známé umístění názvů i pracovníků. Uživatel zatím variantu nevybral. Úspora celé obrazovky závisí také na rozměrech pravého panelu; návrh nedokládá menší výšku hotového okna.
+
+<details open>
+<summary><strong>Produkce vedle budovy</strong></summary>
+
+![Produkce napravo od obrázku budovy; jméno a pracovníci pod ní](assets/compact-buildings-2026-10-30/variant-1.png)
+
+</details>
+
+<details>
+<summary><strong>Produkce vedle pracovníků</strong></summary>
+
+![Produkce na stejném řádku jako tři pracovní místa](assets/compact-buildings-2026-10-30/variant-2.png)
+
+</details>
+
+<details>
+<summary><strong>Vodorovné položky</strong></summary>
+
+![Tři sloupce vodorovných položek s ilustrací vlevo a produkcí vpravo](assets/compact-buildings-2026-10-30/variant-3.png)
+
+</details>
+
+4. Náhledy používají existující [vektorové zdroje budov](../microcol-game/src/graphics/colony-buildings/README.md), produkční symboly a herní atlasy z revize `b94e1f8017f19e0277da748d73d8b29e42f3379e`. PNG jsou návrhové snímky, nikoli nové herní ilustrace nebo runtime exporty. [Evidence](publishing.md#r-0366-compact-building-proposals-2026-10-30) odděluje kontrolu náhledů od budoucí herní přejímky.
+
 ## Produkční ikony — vybraná varianta 3, 30. října 2026
 
 1. Uživatel vybral **Z3 + K3 + M3** z [návrhů R-0363](#zvony-krize-a-kladiva-tri-navrhy-30-rijna-2026) a zadal jejich použití v [R-0365](requirements/done/R-0365.md). Zvon má dřevěný závěs, kříž podstavec a kladivo rozštěpenou hlavu. Geometrie i barvy schválených SVG jsou zachované.

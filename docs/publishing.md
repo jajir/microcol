@@ -1148,3 +1148,12 @@ documentation in APT just to make it visible on the web.
 4. Documentation consistency and strict MkDocs are required for this documentation-only scope. Model/JUnit, Docker UI and smoke are exempt under the local acceptance policy. No remote CI, Pages or distribution publication is inspected or claimed.
 
 5. Local documentation acceptance passed **9 consistency tests**, zero failures/errors/skips, and **strict MkDocs**. The complete source snapshot based on `b17302c0` excludes unrelated colony changes; logs are `target/r0363/docs-tests.log` and `target/r0363/mkdocs.log`. In-app browser review at 1280 px confirmed both loaded preview images and all nine SVG links. The final commit contains documentation and documentation-only illustrations.
+
+## R-0366 compact building proposals — 2026-10-30
+
+1. Scope: [R-0366](requirements/done/R-0366.md), three documentation-only layout screenshots in the [graphics gallery](graphics.md#kompaktni-budovy-tri-navrhy-30-rijna-2026). Existing artwork comes from `b94e1f8017f19e0277da748d73d8b29e42f3379e`; game source, runtime assets, tests and build configuration are unchanged.
+2. Headless Chromium verified all three conversation-preview variants at 768, 520 and 360 px viewport widths: sixteen buildings, three nonzero production values, twenty-four worker positions, one worker and seven unbuilt labels per variant. All images loaded, the carousel switched correctly, no horizontal overflow or JavaScript error occurred. Visual inspection covered the three reference screenshots and the narrow vertical arrangements. The three-column horizontal layout is an alternative shape, not a claim of lower total height.
+3. The first preview check addressed hidden picker buttons and was interrupted while waiting; changing the check to the visible next arrow exercised the actual carousel. The corrected final nine combinations passed. Local checking code, screenshots and detailed output are retained in `target/r0366/`; this is preview verification, not JavaFX gameplay acceptance.
+4. Documentation consistency and strict MkDocs are the required acceptance for this documentation-only scope. Model/JUnit, Docker UI and smoke are exempt. Remote CI, Pages and distribution publication are not inspected or claimed.
+
+5. Final documentation acceptance passed nine consistency tests with zero failures/errors/skips and strict MkDocs. Logs: `target/r0366/docs-tests.log` and `target/r0366/mkdocs.log`. Scope review confirmed documentation and proposal screenshots only.

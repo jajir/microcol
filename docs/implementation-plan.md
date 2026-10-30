@@ -690,3 +690,7 @@ Návrhy budov z 30. října 2026 řeší [R-0357](requirements/done/R-0357.md), 
    počty model/JUnit a UI testů, datem, revizí a důkazy. Novější main ani neúplná
    sada nejsou vydávané za zelený výsledek. Pravidla vlastní
    [vývojová distribuce](development-builds.md#ci-filtering).
+
+## Kompaktní přehled budov — 30. října 2026
+
+1. P28/A03: [R-0366](requirements/done/R-0366.md) připravuje tři návrhy menších položek budov v kolonii, včetně produkce napravo od ilustrace. [Srovnání](graphics.md#kompaktni-budovy-tri-navrhy-30-rijna-2026) zachovává názvy, pracovní místa a výnosy; výběr a implementace herního rozložení jsou samostatný krok.

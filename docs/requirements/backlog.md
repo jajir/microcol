@@ -992,3 +992,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Selected production icons — 2026-10-30
 
 1. [R-0365](done/R-0365.md), primary area A03 with unchanged A07 production meanings, integrates Z3, K3 and M3 from the proposal gallery. Status: done. The user explicitly waived smoke tests for this delivery; model/JUnit, targeted UI and documentation acceptance passed. [Evidence](../functional-tests.md#r-0365-production-icons-variant-three-2026-10-30).
+
+## Compact colony building proposals — 2026-10-30
+
+1. [R-0366](done/R-0366.md), primary area A03 with unchanged A07 production meanings, delivers three compact layout alternatives, including production beside the building. Status: done; visual and documentation acceptance passed. [Gallery](../graphics.md#kompaktni-budovy-tri-navrhy-30-rijna-2026). Selection and game implementation remain separate.
