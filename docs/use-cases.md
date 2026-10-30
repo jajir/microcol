@@ -4,6 +4,10 @@
 
 1. [R-0349](requirements/done/R-0349.md) mění prezentaci a přímou volbu produkce vybraného pole v UC-031/033/042 a zachovává převody nákladu UC-023/024/026. Nový TC195 ověřuje šestnáct rodin, aktuální úrovně, souhrn, čtení středu, výběr šipkami a explicitní změnu plodiny v angličtině a češtině.
 2. Stávající scénáře pracovních přesunů, staveb, opevnění, politické výroby a obecních zdrojů prošly cílenou přejímkou. Přesný výběr, počty a zachované neúspěšné pokusy jsou ve [funkční evidenci](functional-tests.md#r-0349-colony-workspace-2026-10-30).
+## UC-114/119: minimapa světa — 2026-10-30
+
+1. [R-0350](requirements/done/R-0350.md) přidává přehled celého světa s kliknutím pro přesun kamery, klávesnicí a živým rámečkem výřezu. Pravidla průzkumu z R-0070 zůstávají autoritativní; skrytá krajina ani objekty se nezobrazují.
+2. `TC_196_F228_world_minimap_test` pokrývá kameru, okraje, změnu velikosti, průzkum, českou nápovědu a zachovaný herní stav; geometrické JUnit testy pokrývají i světy menší než pohled. Stávající TC26 a TC188 kontrolují průzkum a hlavní obrazovku. Výsledky jsou v [evidenci](functional-tests.md#r-0350-world-minimap-2026-10-30); nejde o uzavření celých UC.
 
 
 ## UC-114/115/119: bez vyskakovacích bublin — 2026-10-29

@@ -6,6 +6,12 @@
 2. Kliknutí nebo šipky na mapě vybírají pouze políčko. Detail napravo ukazuje jeho aktuálního pracovníka a modelový výnos. Explicitní výběr plodiny mění produkci, tlačítko práce otevírá existující nabídku s potvrzením/zrušením. Enter či mezerník na mapě otevírá práci vybraného pracovníka. Střed města ukazuje automatické výnosy bez možnosti přidělit pracovníka nebo změnit plodinu.
 3. Přetahování, kontextové nabídky, fronta, náklad a zprávy při odmítnutí zůstávají zachované. Okolní lidé a dopravci mají vlastní vodorovný posun; celá pracovní plocha je při malém okně posuvná. Stavová nápověda nahrazuje tooltipy. Čistá bilance zásob už zahrnuje spotřebu.
 4. Toto jsou implementované ovládací záměry, nikoli závěr uživatelského výzkumu. Skutečné lokální ověření se uvádí ve [funkční evidenci](functional-tests.md).
+## Minimapa světa — 2026-10-30
+
+1. [R-0350](requirements/done/R-0350.md) dává hráči trvalý přehled celého světa nahoře v pravém panelu. Známé oblasti používají terénní barvy, neprůhledné neznámo nic dalšího neprozrazuje a kontrastní rámeček odpovídá hlavnímu pohledu.
+2. Kliknutí do mapy ihned přesune pouze kameru. U okraje se výřez omezí na svět; svět menší než hlavní pohled zůstává vystředěný. Kliknutí do papírového okraje nemění pohled. Nejde o rozkaz jednotce, neodkrývá území ani nevyžaduje potvrzení či zrušení.
+3. Stálá česká nebo anglická nápověda popisuje kliknutí a šipky; stejný text je přístupným vysvětlením. Zaměřená minimapa má tečkovaný okraj. Šipky posunou kameru o jedno pole, Tab přejde na další ovládací prvek. Ostatní běžné způsoby posunu mapy i změna velikosti okna aktualizují rámeček.
+4. Jde o implementovaný návrh; [automatické ověření](functional-tests.md#r-0350-world-minimap-2026-10-30) a vizuální kontrola nejsou uživatelská studie.
 
 
 ## Zarovnání evropského přístavu — 2026-10-29

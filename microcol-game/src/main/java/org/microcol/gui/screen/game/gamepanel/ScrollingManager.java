@@ -1,6 +1,7 @@
 package org.microcol.gui.screen.game.gamepanel;
 
 import org.microcol.gui.WasdController;
+import org.microcol.gui.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,16 @@ public final class ScrollingManager {
         this.wasdController = Preconditions.checkNotNull(wasdController);
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
         runningAnimation = null;
+    }
+
+    /** Manual navigation replaces an unfinished automatic camera movement. */
+    public void centerOn(final Point point) {
+        runningAnimation = null;
+        latch.unlock();
+        final Point size = visibleArea.getCanvasSize();
+        visibleArea.setTopLeftPosionOfCanvas(
+                Point.of(point.getX() - size.getX() / 2,
+                        point.getY() - size.getY() / 2));
     }
 
     void paint() {

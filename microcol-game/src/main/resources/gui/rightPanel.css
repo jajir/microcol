@@ -52,3 +52,6 @@
 .unit-actions-menu .menu-item:disabled {
     -fx-opacity: 1;
 }
+
+#minimapPanel { -fx-padding: 10 0 12 0; }
+#minimapHint { -fx-font-size: 12px; -fx-text-fill: #34332b; }

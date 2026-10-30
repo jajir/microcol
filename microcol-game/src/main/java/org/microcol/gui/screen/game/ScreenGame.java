@@ -98,7 +98,7 @@ public class ScreenGame implements GameScreen {
     void setOnUnitOrder(final Consumer<KeyEvent> handler) {
         mainPanel.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.isControlDown() || event.isAltDown() || event.isMetaDown()
-                    || event.isShiftDown() || isToolbarFocused())
+                    || event.isShiftDown() || isNavigationControlFocused())
                 return;
             if (KeyCode.TAB == event.getCode()) {
                 handler.accept(event);
@@ -110,17 +110,17 @@ public class ScreenGame implements GameScreen {
         mainPanel.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
             if (KeyCode.SPACE == event.getCode() && !event.isControlDown()
                     && !event.isAltDown() && !event.isMetaDown()
-                    && !event.isShiftDown() && !isToolbarFocused()) {
+                    && !event.isShiftDown() && !isNavigationControlFocused()) {
                 handler.accept(event);
                 event.consume();
             }
         });
     }
 
-    private boolean isToolbarFocused() {
+    private boolean isNavigationControlFocused() {
         for (Node node = mainPanel.getScene()
                 .getFocusOwner(); node != null; node = node.getParent()) {
-            if (node == header) {
+            if (node == header || "worldMinimap".equals(node.getId())) {
                 return true;
             }
         }

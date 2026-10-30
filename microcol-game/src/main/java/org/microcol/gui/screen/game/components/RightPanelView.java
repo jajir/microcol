@@ -60,7 +60,7 @@ public final class RightPanelView implements JavaFxComponent {
     public RightPanelView(final I18n i18n, final UnitsPanel unitsPanel,
             final LocalizationHelper localizationHelper,
             final GameModelController gameModelController,
-            final TilePainter tilePainter) {
+            final TilePainter tilePainter, final WorldMinimap minimap) {
         this.i18n = Preconditions.checkNotNull(i18n);
         this.unitsPanel = Preconditions.checkNotNull(unitsPanel);
         this.localizationHelper = Preconditions
@@ -73,28 +73,25 @@ public final class RightPanelView implements JavaFxComponent {
         gridPane.setId("rightPanel");
         gridPane.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL);
 
-        // Y=0
+        gridPane.add(minimap, 0, 0, 2, 1);
+
         labelOnMove = new Label();
-        gridPane.add(labelOnMove, 0, 0, 2, 1);
+        gridPane.add(labelOnMove, 0, 1, 2, 1);
 
         difficultyLabel = new Label();
         difficultyLabel.setId("gameDifficulty");
-        gridPane.add(difficultyLabel, 0, 4, 2, 1);
+        gridPane.add(difficultyLabel, 0, 5, 2, 1);
 
-        // Y=1
         final Pane tileImagePane = new Pane(tilePainter.getCanvas());
         tileImagePane.setId("tileImage");
-        gridPane.add(tileImagePane, 0, 1);
+        gridPane.add(tileImagePane, 0, 2);
 
         tileName = new Label();
         tileName.setId("tileName");
-        gridPane.add(tileName, 1, 1);
+        gridPane.add(tileName, 1, 2);
 
-        // Y=2
         unitsLabel = new Label();
-        gridPane.add(unitsLabel, 0, 2);
-
-        // Y=3
+        gridPane.add(unitsLabel, 0, 3);
 
         final ScrollPane scrollPaneGamePanel = new ScrollPane(
                 unitsPanel.getNode());
@@ -102,10 +99,10 @@ public final class RightPanelView implements JavaFxComponent {
         scrollPaneRow.setVgrow(Priority.ALWAYS);
         scrollPaneRow.fillHeightProperty().set(true);
         gridPane.getRowConstraints().addAll(new RowConstraints(),
-                new RowConstraints(), new RowConstraints(), scrollPaneRow);
-        gridPane.add(scrollPaneGamePanel, 0, 3, 2, 1);
+                new RowConstraints(), new RowConstraints(),
+                new RowConstraints(), scrollPaneRow);
+        gridPane.add(scrollPaneGamePanel, 0, 4, 2, 1);
 
-        // Y=4
     }
 
     void cleanView() {

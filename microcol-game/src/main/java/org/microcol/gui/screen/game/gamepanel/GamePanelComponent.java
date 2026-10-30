@@ -2,6 +2,7 @@ package org.microcol.gui.screen.game.gamepanel;
 
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.ScreenLifeCycle;
+import org.microcol.gui.screen.game.components.WorldMinimap;
 import org.microcol.gui.util.AnimationScheduler;
 import org.microcol.gui.util.CanvasComponent;
 import org.microcol.gui.util.FpsCounter;
@@ -33,6 +34,8 @@ public final class GamePanelComponent
 
     private final FpsCounter fpsCounter;
 
+    private final WorldMinimap minimap;
+
     private final VisibleAreaService visibleAreaService;
 
     private final GamePanelPainter gamePanelPainter;
@@ -43,7 +46,9 @@ public final class GamePanelComponent
     public GamePanelComponent(final GameModelController gameModelController,
             final @Named("game") VisibleAreaService visibleAreaService,
             final CanvasComponent paneCanvas,
-            final GamePanelPainter gamePanelPainter) {
+            final GamePanelPainter gamePanelPainter,
+            final WorldMinimap minimap) {
+        this.minimap = minimap;
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.visibleAreaService = Preconditions
@@ -85,6 +90,7 @@ public final class GamePanelComponent
             logger.debug("painting: " + visibleAreaService);
             gamePanelPainter.paint(canvasComponent.getGraphicsContext2D(),
                     tick);
+            minimap.paint();
             fpsCounter.screenWasPainted();
         }
     }

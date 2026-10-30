@@ -1,8 +1,20 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Minimapa — vybraný vzhled, 30. října 2026
+
+1. Uživatel vybral [přiloženou variantu](assets/minimap-scales-2026-10-30/selected-reference.png) a požádal o implementaci [R-0350](requirements/done/R-0350.md). Zachovat silné nepravidelné inkoustové tahy, tlumenou tyrkysovou vodu, zelené a okrové odstíny pevniny a neprůhledné šedohnědé neznámo.
+2. Minimapa nad informacemi vpravo má kreslicí plochu 220 × 180 logických pixelů. Celý skutečný svět se do ní vejde se zachováním poměru stran; nevyužitá plocha zůstává papírová. Hranice prozkoumaného území neprozrazuje podklad neznámých polí. Jednotky a sídla se zde nekreslí.
+3. Krémový obdélník s tmavým podtahem ukazuje skutečně viditelný výřez hlavní mapy. Jeho rozměry se odvozují z okna a světa, nikoli z ilustračního rámečku nebo násobku v návrhu. Změna podkladu a pohyb rámečku jsou nezávislé; tahy zůstávají při posouvání stabilní.
+4. Skutečný běh v Dockeru/Xvfb po implementaci: [široké anglické okno](assets/minimap-implementation-2026-10-30/world-minimap.png), [menší okno](assets/minimap-implementation-2026-10-30/world-minimap-small.png) a [česká nápověda po průzkumu](assets/minimap-implementation-2026-10-30/world-minimap-czech.png). Snímky používají testovací pozice F221 a F228; rozsah odkrytí odpovídá těmto partiím.
+
+![Implementovaná minimapa v hlavním herním okně](assets/minimap-implementation-2026-10-30/world-minimap.png)
+
+5. Původní galerie níže jsou historie návrhů. Skutečné ověření funkce a snímků patří do [funkční evidence](functional-tests.md#r-0350-world-minimap-2026-10-30).
+
+
 ## Minimapa — sedm měřítek, 30. října 2026
 
-1. Navazující zadání v [R-0350](requirements/R-0350.md) žádá větší zmenšení a dalších sedm náhledů s různými měřítky. Pro srovnání mají společný střídmý vzhled čistého atlasu a stejný prostor v pravém panelu; tento výběr pro porovnání neschvaluje finální styl.
+1. Navazující zadání v [R-0350](requirements/done/R-0350.md) žádá větší zmenšení a dalších sedm náhledů s různými měřítky. Pro srovnání mají společný střídmý vzhled čistého atlasu a stejný prostor v pravém panelu; tento výběr pro porovnání neschvaluje finální styl.
 2. Cílová řada **3×, 4×, 5×, 6×, 8×, 10× a 12×** znamená přibližný poměr šířky světa k šířce právě viditelného hlavního výřezu. Vyšší číslo znamená menší místní terén i obdélník na minimapě. Jde o orientační zadání generátoru, nikoli přesně změřené souřadnice výsledných obrázků.
 3. Všechny návrhy zachovávají celý obdélníkový rozsah světa, barvy terénu, silné pobřežní kontury, krytí neznáma a rámeček výřezu. Širší prozkoumané okolí je ilustrativní; není převzaté ze skutečné uložené partie. V implementaci se měřítko pro zobrazení celého světa odvodí ze skutečných rozměrů světa a dostupné plochy, nikoli z pevně zvoleného násobku. Náhledy nezavádějí ovladač zoomu ani nové rozměry herního světa.
 
@@ -85,7 +97,7 @@ Pro další porovnání jsou zajímavé zejména 4–6 (cílově 6×–10×); je
 
 ## Minimapa — sedm návrhů, 30. října 2026
 
-1. [R-0350](requirements/R-0350.md) zachycuje zadání minimapy nahoře v pravém panelu: celý rozsah hratelného světa, přesun pohledu kliknutím a obdélník aktuálního výřezu. Barvy naznačují terén a silnější linky obrys známé pevniny. Neobjevená část nesmí prozradit skrytý svět; platí [znalost mapy podle R-0070](requirements/done/R-0070.md).
+1. [R-0350](requirements/done/R-0350.md) zachycuje zadání minimapy nahoře v pravém panelu: celý rozsah hratelného světa, přesun pohledu kliknutím a obdélník aktuálního výřezu. Barvy naznačují terén a silnější linky obrys známé pevniny. Neobjevená část nesmí prozradit skrytý svět; platí [znalost mapy podle R-0070](requirements/done/R-0070.md).
 2. Níže je sedm **statických výtvarných návrhů**, vytvořených z uživatelova screenshotu pomocí imagegen. Kliknutí na náhled otevře celou navrženou obrazovku. Geografie, rozměry a poloha obdélníku jsou ilustrativní; nejde o vykreslení skutečného modelu ani ověřený převod souřadnic. Ovládání minimapy zatím není implementované.
 3. Varianty porovnávají střídmý atlas, kartografický list, oranžové zvýraznění výřezu, šrafované neznámo, barevné oblasti, námořní mapu a kontrastní přehled. Žádná varianta zatím není vybraná; pro další posouzení doporučujeme zejména 1 pro jednoduchost nebo 4 pro rozlišení neznáma vzorem. Jde o návrhářský úsudek, nikoli hráčské pozorování.
 

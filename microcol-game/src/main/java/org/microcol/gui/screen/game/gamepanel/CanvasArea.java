@@ -178,6 +178,9 @@ class CanvasArea {
 
     private int moveCanvas(final int newCanvasPosition, final int canvasSize,
             final int maxMapSize) {
+        if (canvasSize >= maxMapSize) {
+            return (maxMapSize - canvasSize) / 2;
+        }
         if (newCanvasPosition < 0) {
             return 0;
         }

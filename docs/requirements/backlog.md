@@ -948,9 +948,9 @@ remain owned by their current requirements; acceptance is recorded in the
 1. [R-0348](done/R-0348.md), primary area A03, implements the approved alignment preview: left harbor headings and cargo share the bars' content edge; evenly spaced goods reach both edges.
 2. Status: done. The approved alignment and local acceptance are complete; [evidence](../functional-tests.md#r-0348-harbor-alignment-2026-10-29).
 
-## World minimap proposals — 2026-10-30
+## World minimap — 2026-10-30
 
-1. [R-0350](R-0350.md), primary area A03, captures a world minimap at the top of the right sidebar: click navigation, a viewport rectangle, terrain colors and concealed unexplored areas. Status: new. Seven static alternatives are available in the [visual gallery](../graphics.md#minimapa-sedm-navrhu-30-rijna-2026); implementation awaits selection and refinement.
+1. [R-0350](done/R-0350.md), primary area A03, captures a world minimap at the top of the right sidebar: click navigation, a viewport rectangle, terrain colors and concealed unexplored areas. Status: done. The selected strongly inked overview is implemented and locally accepted; [functional evidence](../functional-tests.md#r-0350-world-minimap-2026-10-30). The galleries remain design history.
 
 ## Colony workspace — 2026-10-30
 

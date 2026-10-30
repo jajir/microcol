@@ -294,4 +294,6 @@
     <entry key="unitsPanel_royal">Military role: Royal regular</entry>
     <entry key="selectedShipCargo">Selected ship cargo · #%s</entry>
     <entry key="selectShipCargo">Select a ship to see its cargo</entry>
+	<entry key="minimap_title">World map</entry>
+	<entry key="minimap_hint">Click to move view · Arrow keys pan</entry>
 </properties>
