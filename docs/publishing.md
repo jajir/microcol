@@ -1165,3 +1165,11 @@ documentation in APT just to make it visible on the web.
 3. This is proposal verification, not gameplay acceptance. Documentation consistency tests and strict MkDocs are the required local gates; model/JUnit, Docker UI and smoke are exempt for the documentation-only scope. No remote CI or publication check is requested or claimed.
 
 4. Local documentation acceptance passed nine consistency tests with zero failures/errors/skips and strict MkDocs. Logs: `target/r0367/docs-tests.log` and `target/r0367/mkdocs.log`. Final review covers documentation and two proposal screenshots only.
+
+## R-0368 left building alignment — 2026-10-30
+
+1. Scope: [R-0368](requirements/done/R-0368.md), one documentation-only [left-aligned proposal](graphics.md#obsah-vlevo-produkce-vpravo), prepared on `26d207ea612a5b2d3434566f73b17de6aa850a7c`. The existing centered/right-aligned previews remain available; no runtime assets, gameplay source, tests or configuration changed.
+2. Headless Chromium passed three variants at 768, 520 and 320 px viewport widths: nine combinations with sixteen buildings, twenty-four worker positions, one worker, three production values and seven unbuilt labels each. Geometry checks confirmed the new left alignment and separated right-edge production with quantity below icon. Images loaded, switching worked, and no horizontal overflow or JavaScript error occurred. Reference and narrow screenshots of the new variant were visually inspected. Checks and logs are retained in `target/r0368/`.
+3. Documentation consistency tests and strict MkDocs are the required local gates for this proposal. Model/JUnit, Docker UI and smoke are exempt for documentation-only scope. Game integration and remote publication verification are outside this request.
+
+4. Local acceptance passed nine documentation consistency tests with zero failures/errors/skips and strict MkDocs. Logs: `target/r0368/docs-tests.log` and `target/r0368/mkdocs.log`. Final review confirmed documentation and one proposal screenshot only.

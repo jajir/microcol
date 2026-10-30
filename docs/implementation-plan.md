@@ -698,3 +698,7 @@ Návrhy budov z 30. října 2026 řeší [R-0357](requirements/done/R-0357.md), 
 ## Další zarovnání budov — 30. října 2026
 
 1. P28/A03: [R-0367](requirements/done/R-0367.md) doplňuje dva návrhy k R-0366: vystředěná budova s produkcí vpravo a pravé zarovnání budovy, názvu, pracovníků i samostatného výnosu. [Galerie](graphics.md#zarovnani-budov-dva-navazujici-navrhy-30-rijna-2026) zachovává původní obsah a nevybírá implementaci.
+
+## Levé zarovnání budov — 30. října 2026
+
+1. P28/A03: [R-0368](requirements/done/R-0368.md) doplňuje srovnání R-0367 o levé zarovnání obrázku, názvu a pracovníků při zachování produkce vpravo. [Návrh](graphics.md#obsah-vlevo-produkce-vpravo) nevybírá ani nenasazuje herní implementaci.

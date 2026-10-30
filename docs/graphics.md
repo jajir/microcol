@@ -50,6 +50,13 @@
 
 3. Zdroje a významy přebíráme z R-0366 na revizi `5348e66aefe8c25d002bd28af111e5fb5c7d2ad3`. Pro přesné zarovnání je v náhledu odstraněný pouze prázdný okraj kopií SVG; geometrie kreseb i produkční soubory zůstávají původní. Snímky jsou dokumentační návrhy. [Evidence kontroly](publishing.md#r-0367-building-alignment-proposals-2026-10-30) není přejímkou hotové hry.
 
+### Obsah vlevo, produkce vpravo
+
+1. Další uživatelův návrh z 30. října 2026 zachycuje [R-0368](requirements/done/R-0368.md): ilustrace budovy, název i pracovníci sdílejí levý okraj položky; produkce zůstává samostatně vpravo s ikonou nad číslem. Dosavadní svislé pořadí a herní obsah jsou zachované.
+2. Nová varianta je v porovnání zobrazená jako první; vystředěná a pravá varianta z R-0367 zůstávají k dispozici. Jde o návrhový snímek, nikoli o nasazené herní rozhraní. [Evidence](publishing.md#r-0368-left-building-alignment-2026-10-30) uvádí místní kontrolu.
+
+![Budova, název a pracovníci zarovnaní doleva; zboží s množstvím samostatně vpravo](assets/compact-buildings-left-2026-10-30/variant-1.png)
+
 ## Produkční ikony — vybraná varianta 3, 30. října 2026
 
 1. Uživatel vybral **Z3 + K3 + M3** z [návrhů R-0363](#zvony-krize-a-kladiva-tri-navrhy-30-rijna-2026) a zadal jejich použití v [R-0365](requirements/done/R-0365.md). Zvon má dřevěný závěs, kříž podstavec a kladivo rozštěpenou hlavu. Geometrie i barvy schválených SVG jsou zachované.
