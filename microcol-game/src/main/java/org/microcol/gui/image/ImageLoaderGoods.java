@@ -48,12 +48,9 @@ public final class ImageLoaderGoods implements ImageLoader {
 
     @Override
     public void preload(final ImageCache imageCache) {
-        imageCache.registerImage(IMG_GOOD_BELL,
-                imageCache.getImage("type_9_5"));
-        imageCache.registerImage(IMG_GOOD_CROSS,
-                imageCache.getImage("type_10_5"));
-        imageCache.registerImage(IMG_GOOD_HAMMER,
-                imageCache.getImage("type_0_7"));
+        imageCache.getImage(IMG_GOOD_BELL);
+        imageCache.getImage(IMG_GOOD_CROSS);
+        imageCache.getImage(IMG_GOOD_HAMMER);
         final Image atlas = imageCache.getImage("goods-olive.png");
         final String[] names = { IMG_GOOD_CORN, IMG_GOOD_SUGAR,
                 IMG_GOOD_TOBACCO, IMG_GOOD_COTTON, IMG_GOOD_FUR,

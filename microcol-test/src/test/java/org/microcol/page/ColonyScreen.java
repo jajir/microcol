@@ -323,6 +323,51 @@ public class ColonyScreen extends AbstractScreen {
         verifyThatProductionIs(GoodsType.CROSS, expectedAmount);
     }
 
+    public void verifyProductionArtwork(final String constructionId,
+            final String expectedImage) {
+        getRobot().interact(() -> {
+            final Canvas canvas = getNodeFinder()
+                    .lookup("#" + constructionId + " .canvas")
+                    .queryAs(Canvas.class);
+            assertTrue(canvas.isVisible(), constructionId);
+            final Canvas reference = new Canvas(canvas.getWidth(),
+                    canvas.getHeight());
+            reference.getGraphicsContext2D()
+                    .drawImage(new javafx.scene.image.Image(
+                            getClass().getResource("/images/" + expectedImage)
+                                    .toExternalForm()),
+                            38, 128, 22, 22);
+            // Attached canvases otherwise inherit the scene's paper fill.
+            final var transparent = new javafx.scene.SnapshotParameters();
+            transparent.setFill(javafx.scene.paint.Color.TRANSPARENT);
+            final var expected = reference.snapshot(transparent, null)
+                    .getPixelReader();
+            final var scene = canvas.getScene();
+            final var root = (javafx.scene.layout.Region) scene.getRoot();
+            final double width = scene.getWidth();
+            final double height = scene.getHeight();
+            final double preferredWidth = root.getPrefWidth();
+            final double preferredHeight = root.getPrefHeight();
+            final javafx.scene.image.PixelReader actual;
+            try {
+                // Pin snapshot layout, as AbstractScreen.snapshotScene does.
+                root.setPrefSize(width, height);
+                actual = canvas.snapshot(transparent, null).getPixelReader();
+            } finally {
+                root.setPrefSize(preferredWidth, preferredHeight);
+                root.resize(width, height);
+                root.layout();
+            }
+            for (int y = 0; y < 22; y++) {
+                for (int x = 0; x < 22; x++) {
+                    assertEquals(expected.getArgb(38 + x, 128 + y),
+                            actual.getArgb(38 + x, 128 + y), constructionId
+                                    + " production icon at " + x + "," + y);
+                }
+            }
+        });
+    }
+
     public void verifyFamineForecast() {
         final Labeled forecast = getLabeledById(
                 PanelColonyGood.FAMINE_FORECAST_ID);

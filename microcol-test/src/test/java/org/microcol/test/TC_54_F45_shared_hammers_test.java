@@ -31,6 +31,10 @@ public class TC_54_F45_shared_hammers_test extends AbstractMicroColTest {
             throws Exception {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
+        // Approved icons appear beside real production before queue actions.
+        colony.verifyProductionArtwork("id_town_hall", "good-bell.png");
+        colony.verifyProductionArtwork("id_church", "good-cross.png");
+        colony.verifyProductionArtwork("id_carpenter", "good-hammer.png");
         ConstructionPage building = new ConstructionPage(getContext());
         building.open();
         building.select("LUMBER_MILL");
@@ -105,5 +109,7 @@ public class TC_54_F45_shared_hammers_test extends AbstractMicroColTest {
                 "New Amsterdam");
         building.verifyQueue(List.of(), List.of(), 69);
         building.verifyOutsideUnits(UnitType.WAGON, 1);
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0365-production-icons.png");
     }
 }

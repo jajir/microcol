@@ -1238,3 +1238,7 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 ### UC-119: Europe action labels — 2026-10-29
 
 1. [R-0347](requirements/done/R-0347.md) doplňuje název nákupu jednotek. TC192/05 a TC192/06 kontrolují celé EN/CZ názvy v širokém okně i při šířce 1000 px a po opětovném otevření. TC48/01 zachovává zrušení a skutečný nákup; výsledky jsou ve [funkční evidenci](functional-tests.md#r-0347-europe-action-labels-2026-10-29).
+
+## Produkční symboly Z3, K3 a M3 — 2026-10-30
+
+1. [R-0365](requirements/done/R-0365.md) mění pouze kresbu zvonů, křížů a kladiv. `TC_54_F45_shared_hammers_test` ověřuje všechny tři ikony ve skutečném plátně kolonie a zachovává původní průchod frontou a Continue; `TC_67_F58_religious_production_test` a `TC_77_F69_political_production_test` chrání dosavadní výrobu a její číselné zobrazení. Stav přejímky a výjimku pro smoke uvádí [funkční evidence](functional-tests.md#r-0365-production-icons-variant-three-2026-10-30).

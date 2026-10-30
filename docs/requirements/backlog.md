@@ -988,3 +988,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Production icon proposals — 2026-10-30
 
 1. [R-0363](done/R-0363.md), primary area A03 with A07 meanings, supplies three vector alternatives each for bells, crosses and hammers. Status: done. This scope delivers proposals only; later selection and runtime integration remain separate. [Gallery](../graphics.md#zvony-krize-a-kladiva-tri-navrhy-30-rijna-2026).
+
+## Selected production icons — 2026-10-30
+
+1. [R-0365](done/R-0365.md), primary area A03 with unchanged A07 production meanings, integrates Z3, K3 and M3 from the proposal gallery. Status: done. The user explicitly waived smoke tests for this delivery; model/JUnit, targeted UI and documentation acceptance passed. [Evidence](../functional-tests.md#r-0365-production-icons-variant-three-2026-10-30).

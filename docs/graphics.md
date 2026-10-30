@@ -1,5 +1,20 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Produkční ikony — vybraná varianta 3, 30. října 2026
+
+1. Uživatel vybral **Z3 + K3 + M3** z [návrhů R-0363](#zvony-krize-a-kladiva-tri-navrhy-30-rijna-2026) a zadal jejich použití v [R-0365](requirements/done/R-0365.md). Zvon má dřevěný závěs, kříž podstavec a kladivo rozštěpenou hlavu. Geometrie i barvy schválených SVG jsou zachované.
+2. Produkční zdroje jsou [good-bell.svg](../microcol-game/src/graphics/production-goods/good-bell.svg), [good-cross.svg](../microcol-game/src/graphics/production-goods/good-cross.svg) a [good-hammer.svg](../microcol-game/src/graphics/production-goods/good-hammer.svg). Každý má plátno 64 × 64, pojmenované vektorové skupiny a průhledné okolí. Neobsahuje rastrové vložky ani externí odkazy.
+3. Opakovatelný export vytváří stejnojmenné průhledné **45 × 45 px PNG** v `microcol-game/src/main/resources/images/`. `ImageLoaderGoods` je načítá pod původními aliasy pro sdílený `GoodsImageProvider`; ostatních šestnáct ikon zůstává v `goods-olive.png`. Staré buňky background atlasu se pro tyto tři produkty už nepoužívají. Maven export nespouští.
+
+   ```sh
+   for svg in microcol-game/src/graphics/production-goods/*.svg; do
+     name=$(basename "$svg" .svg)
+     rsvg-convert -w 45 -h 45 -o "microcol-game/src/main/resources/images/$name.png" "$svg"
+   done
+   ```
+
+4. Ikony nemění význam produktu, výrobu, stav zásob ani rozložení. Kolonie je kreslí v dosavadním poli **22 × 22 px** vedle skutečné produkce; čísla zůstávají textem UI. [Přejímka a skutečný screenshot](functional-tests.md#r-0365-production-icons-variant-three-2026-10-30) odlišují nasazení od návrhových listů. Smoke testy jsou pro tuto dodávku výslovně vynechány podle pokynu uživatele; vzdálená publikace se tím neověřuje.
+
 ## Zvony, kříže a kladiva — tři návrhy, 30. října 2026
 
 1. [R-0363](requirements/done/R-0363.md) dodává po třech alternativách pro tři symboly označené na uživatelově snímku kolonie: **zvony Z1–Z3, kříže K1–K3 a kladiva M1–M3**. Jde o návrhy k výběru; herní atlas, načítání obrázků a výroba se touto dodávkou nemění.
@@ -24,7 +39,7 @@
    done
    ```
 
-5. Výtvarné doporučení je **Z1 + K2 + M1**: jednoduchý medový zvon, olivový kříž blízký znaku kaple a kovové kladivo s dřevěnou násadou. Výběr uživatele zatím neproběhl. [Evidence](publishing.md#r-0363-production-icon-proposals-2026-10-30) odděluje kontrolu návrhů od budoucího nasazení.
+5. Výtvarné doporučení je **Z1 + K2 + M1**: jednoduchý medový zvon, olivový kříž blízký znaku kaple a kovové kladivo s dřevěnou násadou. Uživatel následně vybral **Z3 + K3 + M3**; [jejich použití ve hře](#produkcni-ikony-vybrana-varianta-3-30-rijna-2026) vlastní R-0365. [Evidence](publishing.md#r-0363-production-icon-proposals-2026-10-30) odděluje kontrolu návrhů od budoucího nasazení.
 
 ## Budovy — Lehký nadhled, produkce 30. října 2026
 
@@ -1698,15 +1713,15 @@ Všech 19 aliasů zavádí [ImageLoaderGoods](../microcol-game/src/main/java/org
 
 | Buňka | Alias | Obsah |
 | --- | --- | --- |
-| `(9,5)` | `good-bell.png` | Zvony |
-| `(10,5)` | `good-cross.png` | Kříže |
+| Samostatný PNG, dříve `(9,5)` | `good-bell.png` | Zvony, vybraná varianta Z3 |
+| Samostatný PNG, dříve `(10,5)` | `good-cross.png` | Kříže, vybraná varianta K3 |
 | `(11,5)` | `good-goods.png` | Obchodní zboží |
 | `(7,6)` | `good-horse.png` | Koně |
 | `(8,6)` | `good-cigars.png` | Doutníky |
 | `(9,6)` | `good-rum.png` | Rum |
 | `(10,6)` | `good-tobacco.png` | Tabák |
 | `(11,6)` | `good-ore.png` | Ruda |
-| `(0,7)` | `good-hammer.png` | Kladiva, stavební produkce |
+| Samostatný PNG, dříve `(0,7)` | `good-hammer.png` | Kladiva, stavební produkce, vybraná varianta M3 |
 | `(1,7)` | `good-tools.png` | Nástroje |
 | `(2,7)` | `good-lumber.png` | Dřevo |
 | `(3,7)` | `good-coat.png` | Kabáty |
@@ -1718,7 +1733,7 @@ Všech 19 aliasů zavádí [ImageLoaderGoods](../microcol-game/src/main/java/org
 | `(9,7)` | `good-corn.png` | Jídlo, ikona kukuřice |
 | `(10,7)` | `good-sugar.png` | Cukr |
 
-Množství zboží nemění obrázek; číslo a další informace doplňuje UI. Zdrojový výřez má 45 × 45, ale [PanelColonyFields](../microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelColonyFields.java) produkci polí kreslí **25 × 25**, [AbstractPanelConstructionWithSlots](../microcol-game/src/main/java/org/microcol/gui/screen/colony/AbstractPanelConstructionWithSlots.java) produkci stavby **30 × 30** a [UnitPanel](../microcol-game/src/main/java/org/microcol/gui/UnitPanel.java) malý náklad **15 × 15**. Při úpravách je nutné posuzovat i tyto skutečné zobrazované velikosti.
+Množství zboží nemění obrázek; číslo a další informace doplňuje UI. Zdrojový výřez má 45 × 45, ale [PanelColonyFields](../microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelColonyFields.java) produkci polí kreslí **25 × 25**, [AbstractPanelConstructionWithSlots](../microcol-game/src/main/java/org/microcol/gui/screen/colony/AbstractPanelConstructionWithSlots.java) produkci stavby **22 × 22** a [UnitPanel](../microcol-game/src/main/java/org/microcol/gui/UnitPanel.java) malý náklad **15 × 15**. Při úpravách je nutné posuzovat i tyto skutečné zobrazované velikosti.
 
 ### Zbývající buňky a skládání mapy
 
