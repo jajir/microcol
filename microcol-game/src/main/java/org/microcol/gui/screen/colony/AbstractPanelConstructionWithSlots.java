@@ -1,7 +1,5 @@
 package org.microcol.gui.screen.colony;
 
-import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -38,6 +36,8 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.image.ImageView;
 
 abstract class AbstractPanelConstructionWithSlots
         extends AbstractPanelConstruction {
@@ -45,29 +45,17 @@ abstract class AbstractPanelConstructionWithSlots
     private final Logger logger = LoggerFactory
             .getLogger(AbstractPanelConstructionWithSlots.class);
 
-    private final static int CANVAS_WIDTH = 137;
-    private final static int CANVAS_HEIGHT = 150;
+    private final static int CANVAS_WIDTH = 102;
+    private final static int CANVAS_HEIGHT = 32;
     private final static Point CANVAS_SIZE = Point.of(CANVAS_WIDTH,
             CANVAS_HEIGHT);
 
     private final static int GOOD_ICON_WIDTH = 22;
 
-    /*
-     * Goods icon.
-     */
-    private final static int GOODS_ICON_X = 38;
-    private final static int GOODS_ICON_Y = 128;
-
-    /*
-     * Slot size and position definition.
-     */
-    private final static int SLOT_POSITION_SLOT_GAP = 1;
-    private final static int SLOT_POSITION_WIDTH = TILE_WIDTH_IN_PX
-            + SLOT_POSITION_SLOT_GAP;
-    private final static Point SLOT_SIZE = Point.of(TILE_WIDTH_IN_PX,
-            TILE_WIDTH_IN_PX);
+    private final static int SLOT_POSITION_WIDTH = 35;
+    private final static Point SLOT_SIZE = Point.of(32, 32);
     private final static int SLOT_POSITION_X_START = 0;
-    private final static int SLOT_POSITION_Y = 82;
+    private final static int SLOT_POSITION_Y = 0;
     private final static Point[] SLOT_POSITIONS = new Point[] {
             Point.of(SLOT_POSITION_X_START, SLOT_POSITION_Y),
             Point.of(SLOT_POSITION_X_START + SLOT_POSITION_WIDTH,
@@ -116,62 +104,52 @@ abstract class AbstractPanelConstructionWithSlots
                     constructionSlot);
             if (constructionSlot.isEmpty()) {
                 gc.setStroke(javafx.scene.paint.Color.web("#75815a"));
-                gc.strokeOval(topLeftCorner.getX() + 15,
-                        topLeftCorner.getY() + 17, 15, 15);
+                gc.strokeOval(topLeftCorner.getX() + 9,
+                        topLeftCorner.getY() + 9, 13, 13);
             } else {
                 gc.drawImage(
                         getImageProvider()
                                 .getUnitImage(constructionSlot.getUnit()),
-                        topLeftCorner.getX(), topLeftCorner.getY());
+                        topLeftCorner.getX(), topLeftCorner.getY(), 32, 32);
             }
             cx.incrementAndGet();
         });
     }
 
-    void paintProduction(final GraphicsContext gc) {
+    VBox createProduction() {
+        final VBox output = new VBox(1);
+        output.setMouseTransparent(true);
+        output.getStyleClass().add("production");
         if (getConstruction().getType().getProductionPerTurn().isPresent()) {
-
             final GoodsProductionStats goodsStats = colonyStats.getStatsByType(
                     getConstruction().getProducedGoodsType().get());
-
-            if (isThereTextToPaint(goodsStats)) {
-                paintProductionIcon(gc);
+            if (goodsStats.getNetProduction() != 0
+                    || goodsStats.getBlockedProduction() != 0) {
+                final Goods produced = getConstruction().getType()
+                        .getProductionPerTurn().get();
+                final ImageView icon = new ImageView(getImageProvider()
+                        .getGoodsTypeImage(produced.getType()));
+                icon.setFitWidth(GOOD_ICON_WIDTH);
+                icon.setFitHeight(GOOD_ICON_WIDTH);
+                icon.getStyleClass().add("production-icon");
+                final HBox values = new HBox(3);
+                values.setAlignment(javafx.geometry.Pos.CENTER);
+                if (goodsStats.getNetProduction() != 0) {
+                    final Label label = new Label(
+                            "+" + goodsStats.getNetProduction());
+                    label.getStyleClass().add("diffPositive");
+                    values.getChildren().add(label);
+                }
+                if (goodsStats.getBlockedProduction() != 0) {
+                    final Label label = new Label(
+                            "-" + goodsStats.getBlockedProduction());
+                    label.getStyleClass().add("diffNegative");
+                    values.getChildren().add(label);
+                }
+                output.getChildren().addAll(icon, values);
             }
-
-            final HBox box = new HBox();
-            // Decorative output must not cover workers in the next building
-            // row.
-            box.setMouseTransparent(true);
-            box.getStyleClass().add("production");
-
-            if (goodsStats.getNetProduction() != 0) {
-                final Label label = new Label(
-                        "+" + goodsStats.getNetProduction());
-                label.getStyleClass().add("diffPositive");
-                box.getChildren().add(label);
-            }
-
-            if (goodsStats.getBlockedProduction() != 0) {
-                final Label label = new Label(
-                        "-" + goodsStats.getBlockedProduction());
-                label.getStyleClass().add("diffNegative");
-                box.getChildren().add(label);
-            }
-
-            getMainPane().getChildren().add(box);
         }
-    }
-
-    private void paintProductionIcon(final GraphicsContext gc) {
-        final Goods produced = getConstruction().getType()
-                .getProductionPerTurn().get();
-        gc.drawImage(getImageProvider().getGoodsTypeImage(produced.getType()),
-                GOODS_ICON_X, GOODS_ICON_Y, GOOD_ICON_WIDTH, GOOD_ICON_WIDTH);
-    }
-
-    private boolean isThereTextToPaint(final GoodsProductionStats goodsStats) {
-        return goodsStats.getNetProduction() != 0
-                || goodsStats.getBlockedProduction() != 0;
+        return output;
     }
 
     private Optional<ConstructionSlot> dropTarget(final Point point) {

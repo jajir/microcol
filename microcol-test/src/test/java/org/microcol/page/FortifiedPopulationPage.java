@@ -37,7 +37,7 @@ public final class FortifiedPopulationPage extends AbstractScreen {
         getRobot().interact(() -> canvas.addEventHandler(
                 javafx.scene.input.DragEvent.DRAG_DONE, completed));
         try {
-            getRobot().drag(canvas.localToScreen(22 + 46 * index, 104),
+            getRobot().drag(canvas.localToScreen(16 + 35 * index, 16),
                     MouseButton.PRIMARY).dropTo(outside);
             // Rejected native drags must finish before the next mouse gesture.
             if (!done.await(5, java.util.concurrent.TimeUnit.SECONDS))

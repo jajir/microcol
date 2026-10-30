@@ -33,6 +33,66 @@ public final class ColonyLayoutPage extends AbstractScreen {
         super(context);
     }
 
+    public void verifyCompactBuildings(final double expectedPictureRow,
+            final double expectedNameMinimum, final double expectedWorkerSize,
+            final double expectedOutputGap) {
+        getRobot().interact(() -> {
+            final GridPane grid = getNodeFinder().lookup(".colony-structures")
+                    .queryAs(GridPane.class);
+            for (final Node building : grid.getChildren()) {
+                final Node top = building.lookup(".building-top");
+                final var image = (javafx.scene.image.ImageView) building
+                        .lookup(".building-art");
+                final Label name = (Label) building.lookup(".building-name");
+                final Bounds cell = building
+                        .localToScene(building.getLayoutBounds());
+                final Bounds art = image.localToScene(image.getBoundsInLocal());
+                final Bounds title = name.localToScene(name.getLayoutBounds());
+                assertEquals(expectedPictureRow,
+                        top.getLayoutBounds().getHeight(), 0.1);
+                assertEquals(cell.getMinX(), art.getMinX(), 0.1);
+                assertEquals(cell.getMinX(), title.getMinX(), 0.1);
+                assertTrue(title.getHeight() >= expectedNameMinimum);
+                assertTrue(title.getMinY() >= art.getMaxY());
+                final Text renderedName = (Text) name.lookup(".text");
+                assertEquals(name.getText(), renderedName.getText());
+                assertTrue(
+                        renderedName.getLayoutBounds()
+                                .getHeight() <= name.getHeight() + 1,
+                        name.getText());
+                assertTrue(title.getMaxX() <= cell.getMaxX() + 0.1);
+                final Node worker = building.lookup(".canvas");
+                if (worker != null) {
+                    assertTrue(building.isPickOnBounds(),
+                            "The whole building remains a hover and drop target");
+                    final Bounds slots = worker
+                            .localToScene(worker.getLayoutBounds());
+                    assertEquals(expectedWorkerSize, slots.getHeight(), 0.1);
+                    assertEquals(cell.getMinX(), slots.getMinX(), 0.1);
+                    assertEquals(title.getMaxY(), slots.getMinY(), 0.1);
+                }
+                final Node output = building.lookup(".production-icon");
+                if (output != null) {
+                    final Bounds production = output.getParent()
+                            .localToScene(output.getParent().getLayoutBounds());
+                    assertEquals(expectedOutputGap,
+                            ((javafx.scene.layout.HBox) top).getSpacing());
+                    // JavaFX snaps the row's fractional image width to pixels.
+                    assertEquals(expectedOutputGap,
+                            production.getMinX() - art.getMaxX(), 1);
+                    assertTrue(production.getMaxX() <= cell.getMaxX() + 0.1);
+                    final Node value = output.getParent().lookup(".label");
+                    assertTrue(value.localToScene(value.getLayoutBounds())
+                            .getMinY() >= output
+                                    .localToScene(output.getBoundsInLocal())
+                                    .getMaxY());
+                }
+            }
+            assertTrue(grid.getHeight() < 500,
+                    "Compact buildings must use less than 500 px");
+        });
+    }
+
     public void verifyActionNames(final boolean expanded,
             final String... expected) {
         final String[] ids = { "customHouseOpen", "educationOpen",

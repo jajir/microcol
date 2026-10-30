@@ -244,8 +244,8 @@ public final class ExpertPurchasePage extends AbstractScreen {
                 .filter(node -> node instanceof javafx.scene.canvas.Canvas)
                 .findFirst().orElseThrow();
         // Use the non-overlapping part of the worker icon in each painted slot.
-        javafx.geometry.Point2D source = canvas.localToScreen(22 + 46 * slot,
-                104);
+        javafx.geometry.Point2D source = canvas.localToScreen(16 + 35 * slot,
+                16);
         getRobot().drag(source, javafx.scene.input.MouseButton.PRIMARY)
                 .dropTo(".outside");
         WaitForAsyncUtils.waitFor(5, java.util.concurrent.TimeUnit.SECONDS,

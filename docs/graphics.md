@@ -71,6 +71,21 @@
 
 ![Tři současně zobrazené varianty s postupně menšími mezerami mezi budovou, názvem a pracovníky](assets/compact-buildings-spacing-2026-10-30/comparison.png)
 
+### Zvolená varianta Trochu těsnější
+
+1. Uživatel pro implementaci vybral prostřední variantu srovnání R-0370. [R-0371](requirements/done/R-0371.md) přenáší levé zarovnání obrázku, názvu a pracovníků do stávající čtyřsloupcové mřížky. Produkce je hned napravo od ilustrace, ikona nad hodnotami.
+2. Řádek ilustrace má 46 px, název nejméně 22 px a pracovní pozice 32 px. Dlouhé názvy se zalamují; buňka se podle nich zvětší. Průhledný okraj původního exportu se vynechává pouze při zobrazení pomocí výřezu, SVG zdroje a odvozené PNG zůstávají beze změny.
+3. Jde o uživatelem zvolený návrh, nikoli závěr uživatelské studie. [Lokální přejímka](functional-tests.md#r-0371-compact-colony-buildings-2026-10-30) ověřila rozložení i okolní funkce; následující snímky pocházejí ze skutečné hry v Dockeru/Xvfb.
+
+![Implementovaná varianta Trochu těsnější v anglické kolonii](assets/compact-buildings-implemented-2026-10-30/english.png)
+
+<details>
+<summary>České názvy a vylepšené budovy v menším okně</summary>
+
+![Česká kolonie s vylepšenými budovami a kompaktním rozložením](assets/compact-buildings-implemented-2026-10-30/czech-small.png)
+
+</details>
+
 ## Produkční ikony — vybraná varianta 3, 30. října 2026
 
 1. Uživatel vybral **Z3 + K3 + M3** z [návrhů R-0363](#zvony-krize-a-kladiva-tri-navrhy-30-rijna-2026) a zadal jejich použití v [R-0365](requirements/done/R-0365.md). Zvon má dřevěný závěs, kříž podstavec a kladivo rozštěpenou hlavu. Geometrie i barvy schválených SVG jsou zachované.

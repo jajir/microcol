@@ -1,5 +1,10 @@
 # Use cases a přejímka pravidel hry
 
+## UC-114/119: kompaktní budovy kolonie — 2026-10-30
+
+1. [R-0371](requirements/done/R-0371.md) implementuje vybranou variantu **Trochu těsnější**. Přehled zachovává šestnáct pozic a všechny úrovně budov, zobrazuje produkci vedle obrázku a ponechává název a pracovníky vlevo pod ním. TC195 ověřuje rozložení a čitelnost v obou jazycích i velikostech okna.
+2. Cílená přejímka zahrnuje TC40 (volba práce a odmítnutí zastaralého přetažení), TC50/54 (výroba a stavba), TC53/01 (odchod z budovy), TC30/04 (odborník), TC134/05 (odmítnutí nevhodného pracovníka), TC106 (náklad) a kontrolu kontraktu stránek. Původní herní aserce zůstávají zachované; smoke je pro tento úkol výslovně vynechaný na žádost uživatele.
+
 ## UC-114/119: produkce vybraného pole kolonie — 2026-10-30
 
 1. [R-0362](requirements/done/R-0362.md) zachovává výběr políčka bez změny partie a nahrazuje rozbalovací nabídku přímo viditelnými surovinami s modelovými výnosy. Detail políčka a panáčka má stejnou velikost jako okolní mapa. Kliknutí nebo klávesnice mění jen vybranou produkci; prázdné pole a střed nemají volby práce.

@@ -33,11 +33,12 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
         new GameBarWidthPage(getContext()).resizeContent(1440, 1000);
         layout.verifyMapTileSize(Tile.TILE_WIDTH_IN_PX);
         layout.verifyLayout("New Amsterdam", 7);
+        layout.verifyCompactBuildings(46, 22, 32, 12);
         layout.verifyBuildingLevel("id_warehouse",
                 ConstructionType.WAREHOUSE_BASIC);
         layout.verifyCenter();
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0361-colony-english.png");
+                .saveEvidence("r0371-colony-english.png");
 
         // Selecting a worked tile by keyboard is read-only.
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
@@ -65,6 +66,7 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
         jobs.verifyFieldJob(0, Location.of(23, 16),
                 org.microcol.model.Goods.of(GoodsType.CORN, 2));
         layout.verifyLayout("New Amsterdam", 7);
+        layout.verifyCompactBuildings(46, 22, 32, 12);
         layout.selectTile(2, 0);
         layout.verifyEmptyField();
         layout.verifyPreviewMatchesMap(2, 0);
@@ -73,6 +75,7 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
 
         // The warehouse remains reachable at the original window width.
         new GameBarWidthPage(getContext()).resizeContent(1000, 925);
+        layout.verifyCompactBuildings(46, 22, 32, 12);
         layout.verifyMapTileSize(Tile.TILE_WIDTH_IN_PX);
         layout.selectTile(0, 1);
         new InGameLayoutPage(getContext())
@@ -83,7 +86,7 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
         layout.showStock();
         town.verifyWarehouseGoodsAndTownCommonsLayout(16, 45);
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0361-colony-small.png");
+                .saveEvidence("r0371-colony-small.png");
         town.close();
     }
 
@@ -100,6 +103,7 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
         final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
         layout.verifyMapTileSize(Tile.TILE_WIDTH_IN_PX);
         layout.verifyLayout("Delft", 0);
+        layout.verifyCompactBuildings(46, 22, 32, 12);
         layout.verifyBuildingLevel("id_fort", ConstructionType.FORTRESS);
         layout.verifyBuildingLevel("id_warehouse",
                 ConstructionType.WAREHOUSE_EXPANSION);
@@ -114,7 +118,11 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
         layout.showStock();
         town.verifyWarehouseGoodsAndTownCommonsLayout(16, 45);
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0361-colony-czech-upgrades.png");
+                .saveEvidence("r0371-colony-czech-upgrades.png");
+        new GameBarWidthPage(getContext()).resizeContent(1000, 925);
+        layout.verifyCompactBuildings(46, 22, 32, 12);
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0371-colony-czech-small.png");
         town.close();
     }
 

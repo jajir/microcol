@@ -7,17 +7,14 @@ import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Construction;
-import org.microcol.model.MicroColException;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 abstract class AbstractPanelConstruction implements JavaFxComponent {
 
@@ -25,7 +22,7 @@ abstract class AbstractPanelConstruction implements JavaFxComponent {
     private final I18n i18n;
     private final ImageProvider imageProvider;
     private final Canvas canvas;
-    private final StackPane mainPane = new StackPane();
+    private final VBox mainPane = new VBox();
     private final Construction construction;
 
     AbstractPanelConstruction(final EventBus eventBus, final I18n i18n,
@@ -35,7 +32,7 @@ abstract class AbstractPanelConstruction implements JavaFxComponent {
         this.i18n = Preconditions.checkNotNull(i18n);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.construction = Preconditions.checkNotNull(construction);
-        mainPane.setPickOnBounds(false);
+        mainPane.setPickOnBounds(true);
         canvas = new Canvas(canvasSize.getX(), canvasSize.getY());
         canvas.getStyleClass().add("canvas");
         mainPane.setOnMouseEntered(this::onMouseEntered);
@@ -93,20 +90,6 @@ abstract class AbstractPanelConstruction implements JavaFxComponent {
         eventBus.post(new StatusBarMessageEvent(Source.COLONY));
     }
 
-    void paintConstruction(final Point point) {
-        paintConstruction(canvas.getGraphicsContext2D(), getConstruction(),
-                point);
-    }
-
-    private void paintConstruction(final GraphicsContext gc,
-            final Construction construction, final Point point) {
-        final Image image = imageProvider
-                .getConstructionImage(construction.getType())
-                .orElseThrow(() -> new MicroColException(String
-                        .format("Unable to find image for %s", construction)));
-        gc.drawImage(image, point.getX(), point.getY(), 137, 68.5);
-    }
-
     protected EventBus getEventBus() {
         return eventBus;
     }
@@ -119,7 +102,7 @@ abstract class AbstractPanelConstruction implements JavaFxComponent {
         return canvas;
     }
 
-    protected StackPane getMainPane() {
+    protected VBox getMainPane() {
         return mainPane;
     }
 

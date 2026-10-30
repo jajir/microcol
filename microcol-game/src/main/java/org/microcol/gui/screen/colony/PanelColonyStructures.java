@@ -12,6 +12,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -49,10 +52,11 @@ final class PanelColonyStructures implements JavaFxComponent {
         this.events = events;
         this.i18n = i18n;
         mainPanel.getStyleClass().add("colony-structures");
+        mainPanel.setMaxHeight(Region.USE_PREF_SIZE);
         for (int i = 0; i < 4; i++) {
             final javafx.scene.layout.ColumnConstraints column = new javafx.scene.layout.ColumnConstraints();
             column.setPercentWidth(25);
-            column.setHalignment(javafx.geometry.HPos.CENTER);
+            column.setHalignment(javafx.geometry.HPos.LEFT);
             mainPanel.getColumnConstraints().add(column);
         }
     }
@@ -67,17 +71,19 @@ final class PanelColonyStructures implements JavaFxComponent {
                     .findFirst().orElse(null);
             final Region content;
             if (construction == null) {
-                final ImageView image = new ImageView(
+                final ImageView image = buildingImage(
                         images.getConstructionImage(family).orElseThrow());
-                image.setFitWidth(137);
-                image.setFitHeight(68.5);
                 image.setOpacity(0.3);
                 final Label name = new Label(
                         i18n.get(ConstructionTypeName.getNameForType(family)));
                 name.getStyleClass().add("building-name");
+                name.setWrapText(true);
+                name.setMaxWidth(Double.MAX_VALUE);
                 final Label state = new Label(i18n.get(ColonyMsg.notBuilt));
                 state.getStyleClass().add("building-state");
-                final VBox empty = new VBox(image, name, state);
+                final HBox illustration = new HBox(image);
+                illustration.getStyleClass().add("building-top");
+                final VBox empty = new VBox(illustration, name, state);
                 empty.getStyleClass().addAll("constructionPane",
                         "building-empty");
                 empty.setId(IDS[i]);
@@ -98,5 +104,36 @@ final class PanelColonyStructures implements JavaFxComponent {
     @Override
     public Region getContent() {
         return mainPanel;
+    }
+
+    static ImageView buildingImage(final Image image) {
+        final int width = (int) image.getWidth();
+        final int height = (int) image.getHeight();
+        int left = width;
+        int top = height;
+        int right = -1;
+        int bottom = -1;
+        // Ignore transparent export margins when aligning the illustration.
+        final var pixels = image.getPixelReader();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if ((pixels.getArgb(x, y) >>> 24) != 0) {
+                    left = Math.min(left, x);
+                    top = Math.min(top, y);
+                    right = Math.max(right, x);
+                    bottom = Math.max(bottom, y);
+                }
+            }
+        }
+        final ImageView view = new ImageView(image);
+        if (right >= left) {
+            view.setViewport(new Rectangle2D(left, top, right - left + 1,
+                    bottom - top + 1));
+        }
+        view.setPreserveRatio(true);
+        view.setFitWidth(64);
+        view.setFitHeight(44);
+        view.getStyleClass().add("building-art");
+        return view;
     }
 }

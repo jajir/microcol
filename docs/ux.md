@@ -19,6 +19,11 @@
 2. Kliknutí nebo šipky na mapě vybírají pouze políčko. Podle [R-0362](requirements/done/R-0362.md) detail napravo ukazuje terén a pracovníka ve stejné velikosti jako jedno políčko mapy. Obsluhované pole nabízí přímo viditelné řádky surovin a skutečné modelové výnosy za tah; aktuální surovina je označená. Výběr jiného řádku ihned mění produkci, Enter či mezerník na mapě přesouvá fokus na aktuální řádek. Změněný stav odmítne zastaralou volbu bez částečné změny a obnoví detail. Samostatná nabídka práce s potvrzením/zrušením zůstává v kontextové nabídce. Prázdné pole ukazuje terén a pokyn k přiřazení kolonisty; střed města ukazuje automatické výnosy bez možnosti změnit plodinu.
 3. Přetahování, kontextové nabídky, fronta, náklad a zprávy při odmítnutí zůstávají zachované. Okolní lidé a dopravci mají vlastní vodorovný posun; celá pracovní plocha je při malém okně posuvná. Stavová nápověda nahrazuje tooltipy. Čistá bilance zásob už zahrnuje spotřebu.
 4. Toto jsou implementované ovládací záměry, nikoli závěr uživatelského výzkumu. Skutečné lokální ověření se uvádí ve [funkční evidenci](functional-tests.md).
+### Menší položky budov — 2026-10-30
+
+1. [R-0371](requirements/done/R-0371.md) navazuje na uživatelův výběr **Trochu těsnější**. Při otevření kolonie hráč vidí obrázek, název a pracovní místa vlevo a skutečnou produkci hned vedle obrázku. Menší mezery zachovávají čitelnost názvů i rozlišení volných a obsazených míst; delší překlad se zalamuje.
+2. Přiřazení a přesun práce se dál provádí přetažením nebo existující nabídkou pracovníka. Modelové podmínky, zrušení a odmítnutí zastaralé akce se nemění. Automatické a vizuální ověření se eviduje odděleně od tohoto návrhového rozhodnutí.
+
 ## Minimapa světa — 2026-10-30
 
 1. [R-0350](requirements/done/R-0350.md) dává hráči trvalý přehled celého světa nahoře v pravém panelu. Známé oblasti používají terénní barvy, neprůhledné neznámo nic dalšího neprozrazuje a kontrastní rámeček odpovídá hlavnímu pohledu.

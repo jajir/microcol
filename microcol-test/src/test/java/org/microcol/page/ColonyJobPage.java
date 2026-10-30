@@ -70,7 +70,7 @@ public final class ColonyJobPage extends AbstractScreen {
                 .stream().filter(node -> node instanceof Canvas).findFirst()
                 .orElseThrow();
         revealGameContent(canvas);
-        return canvas.localToScreen(22 + 46 * index, 104);
+        return canvas.localToScreen(16 + 35 * index, 16);
     }
 
     public void openFromIndoor(final String buildingId, final int index)
@@ -356,9 +356,6 @@ public final class ColonyJobPage extends AbstractScreen {
             final Runnable interveningChange) throws Exception {
         final Parent building = getNodeFinder().lookup("#" + buildingId)
                 .queryAs(Parent.class);
-        final Canvas canvas = (Canvas) building.getChildrenUnmodifiable()
-                .stream().filter(node -> node instanceof Canvas).findFirst()
-                .orElseThrow();
         final javafx.event.EventHandler<javafx.scene.input.DragEvent> change = event -> {
             interveningChange.run();
             dropChangeApplied = true;
@@ -394,7 +391,8 @@ public final class ColonyJobPage extends AbstractScreen {
                 throw new IllegalStateException(
                         "The native indoor drag must start");
             }
-            getRobot().moveTo(buildingBody ? canvas.localToScreen(50, 30)
+            getRobot().moveTo(buildingBody
+                    ? building.lookup(".building-top").localToScreen(25, 23)
                     : slotPoint(buildingId, 1));
             getRobot().release(MouseButton.PRIMARY);
             released = true;
@@ -440,11 +438,8 @@ public final class ColonyJobPage extends AbstractScreen {
             final String buildingId) throws Exception {
         final Parent building = getNodeFinder().lookup("#" + buildingId)
                 .queryAs(Parent.class);
-        final Canvas canvas = (Canvas) building.getChildrenUnmodifiable()
-                .stream().filter(node -> node instanceof Canvas).findFirst()
-                .orElseThrow();
         getRobot().drag("#colonyUnit-" + workerId, MouseButton.PRIMARY)
-                .dropTo(canvas.localToScreen(50, 30));
+                .dropTo(building.lookup(".building-top").localToScreen(25, 23));
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> getModel()
                 .getUnitById(workerId).isAtPlaceConstructionSlot());
         WaitForAsyncUtils.waitForFxEvents();

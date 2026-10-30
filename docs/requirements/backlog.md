@@ -1012,3 +1012,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Building spacing comparison — 2026-10-30
 
 1. [R-0370](done/R-0370.md), primary area A03 with unchanged A07 meanings, compares the latest proposal with two tighter vertical spacings simultaneously. Status: done; visual and documentation acceptance passed. [Gallery](../graphics.md#tri-velikosti-svislych-mezer-vedle-sebe). Game layout selection remains separate.
+
+## Selected compact colony buildings — 2026-10-30
+
+1. [R-0371](done/R-0371.md), primary area A03 with unchanged A07 rules, implements the selected **Trochu těsnější** variant. Status: done; model, targeted functional, visual and documentation acceptance passed. Smoke was explicitly omitted for this request. [Evidence](../functional-tests.md#r-0371-compact-colony-buildings-2026-10-30).

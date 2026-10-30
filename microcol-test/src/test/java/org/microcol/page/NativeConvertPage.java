@@ -263,9 +263,6 @@ public final class NativeConvertPage extends AbstractScreen {
             final String buildingId) throws Exception {
         final Parent building = getNodeFinder().lookup("#" + buildingId)
                 .queryAs(Parent.class);
-        final Canvas canvas = (Canvas) building.getChildrenUnmodifiable()
-                .stream().filter(node -> node instanceof Canvas).findFirst()
-                .orElseThrow();
         final Node source = getNodeFinder().lookup("#colonyUnit-" + unitId)
                 .query();
         final CountDownLatch finished = new CountDownLatch(1);
@@ -275,7 +272,8 @@ public final class NativeConvertPage extends AbstractScreen {
                 () -> source.addEventHandler(DragEvent.DRAG_DONE, done));
         try {
             getRobot().drag("#colonyUnit-" + unitId, MouseButton.PRIMARY)
-                    .dropTo(canvas.localToScreen(50, 30));
+                    .dropTo(building.lookup(".building-top").localToScreen(25,
+                            23));
             if (!finished.await(5, TimeUnit.SECONDS)) {
                 throw new IllegalStateException("The refused drag must finish");
             }

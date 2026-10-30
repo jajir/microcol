@@ -1,28 +1,18 @@
 package org.microcol.gui.screen.colony;
 
-import org.microcol.gui.Point;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.i18n.I18n;
 import org.microcol.model.ColonyProductionStats;
 import org.microcol.model.Construction;
 import org.microcol.model.Model;
+import org.microcol.model.MicroColException;
 
 import com.google.common.eventbus.EventBus;
-
-import javafx.scene.canvas.GraphicsContext;
 
 /**
  * Panel with construction and slots for three workers.
  */
 class PanelConstructionBasic extends AbstractPanelConstructionWithSlots {
-
-    /*
-     * Constructions
-     */
-    private final static int CONSTRUCTION_X = 0;
-    private final static int CONSTRUCTION_Y = 0;
-    private final static Point CONSTRUCTION_SHIFT = Point.of(CONSTRUCTION_X,
-            CONSTRUCTION_Y);
 
     PanelConstructionBasic(final ImageProvider imageProvider,
             final EventBus eventBus, final I18n i18n,
@@ -36,26 +26,23 @@ class PanelConstructionBasic extends AbstractPanelConstructionWithSlots {
         name.getStyleClass().add("building-name");
         name.setMouseTransparent(true);
         name.setMaxWidth(Double.MAX_VALUE);
-        javafx.scene.layout.StackPane.setAlignment(name,
-                javafx.geometry.Pos.TOP_CENTER);
-        javafx.scene.layout.StackPane.setMargin(name,
-                new javafx.geometry.Insets(65, 0, 0, 0));
-        getMainPane().getChildren().add(name);
+        name.setWrapText(true);
+        final javafx.scene.layout.HBox illustration = new javafx.scene.layout.HBox(
+                12,
+                PanelColonyStructures.buildingImage(imageProvider
+                        .getConstructionImage(construction.getType())
+                        .orElseThrow(() -> new MicroColException(String.format(
+                                "Unable to find image for %s", construction)))),
+                createProduction());
+        illustration.getStyleClass().add("building-top");
+        getMainPane().getChildren().setAll(illustration, name, getCanvas());
         getMainPane().setAccessibleText(name.getText());
         getMainPane().setUserData(construction.getType());
     }
 
     @Override
     void paint() {
-        paintAll(getCanvas().getGraphicsContext2D());
-    }
-
-    private void paintAll(final GraphicsContext gc) {
-        // gc.setFill(Color.BLANCHEDALMOND);
-        // gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        paintConstruction(CONSTRUCTION_SHIFT);
-        paintWorkingSlots(gc);
-        paintProduction(gc);
+        paintWorkingSlots(getCanvas().getGraphicsContext2D());
     }
 
 }

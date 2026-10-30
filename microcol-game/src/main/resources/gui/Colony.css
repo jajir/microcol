@@ -6,12 +6,12 @@
 .colony-layout { -fx-padding: 12 16 12 16; -fx-background-color: #fff9ec; }
 .colony-summary { -fx-padding: 0 0 10 0; -fx-border-color: #7c826b; -fx-border-width: 0 0 1 0; }
 .colony-summary .label { -fx-font-size: 14; }
-.colony-structures { -fx-min-width: 554; -fx-pref-width: 760; -fx-hgap: 2; -fx-vgap: 2; }
-.constructionPane { -fx-min-width: 137; -fx-pref-width: 180; -fx-max-width: Infinity; -fx-min-height: 150; -fx-pref-height: 150; -fx-max-height: 150; }
-.building-name { -fx-font-size: 14; -fx-alignment: center; }
-.building-empty { -fx-alignment: top-center; }
-.building-state { -fx-text-fill: #686956; -fx-font-size: 14; }
-.constructionPane .production { -fx-alignment: top-left; -fx-max-width: 80; -fx-max-height: 22; -fx-translate-x: 30; -fx-translate-y: 64; }
+.colony-structures { -fx-min-width: 554; -fx-pref-width: 760; -fx-hgap: 2; -fx-vgap: 10; }
+.constructionPane { -fx-min-width: 137; -fx-pref-width: 180; -fx-max-width: Infinity; -fx-min-height: 100; -fx-alignment: top-left; }
+.building-top { -fx-min-height: 46; -fx-pref-height: 46; -fx-max-height: 46; -fx-alignment: center-left; }
+.building-name { -fx-font-size: 12; -fx-alignment: center-left; -fx-min-height: 22; }
+.building-state { -fx-text-fill: #686956; -fx-font-size: 12; -fx-min-height: 32; -fx-alignment: center-left; }
+.constructionPane .production { -fx-alignment: center; -fx-font-size: 13; }
 .diffPositive { -fx-text-fill: #316b2f; }
 .diffNegative { -fx-text-fill: #b13224; }
 .colony-details { -fx-padding: 0 0 0 16; -fx-border-color: #7c826b; -fx-border-width: 0 0 0 1; }
