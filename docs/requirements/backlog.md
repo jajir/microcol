@@ -1008,3 +1008,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Production beside the building — 2026-10-30
 
 1. [R-0369](done/R-0369.md), primary area A03 with unchanged A07 meanings, moves production directly beside the illustration in the left-aligned proposal. Status: done; visual and documentation acceptance passed. [Gallery](../graphics.md#zbozi-hned-vedle-budovy).
+
+## Building spacing comparison — 2026-10-30
+
+1. [R-0370](done/R-0370.md), primary area A03 with unchanged A07 meanings, compares the latest proposal with two tighter vertical spacings simultaneously. Status: done; visual and documentation acceptance passed. [Gallery](../graphics.md#tri-velikosti-svislych-mezer-vedle-sebe). Game layout selection remains separate.

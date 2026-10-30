@@ -1181,3 +1181,11 @@ documentation in APT just to make it visible on the web.
 3. Documentation consistency and strict MkDocs are the local acceptance gates for this documentation-only scope. Model/JUnit, Docker UI and smoke are exempt. No game integration or remote publication verification is claimed.
 
 4. Local documentation acceptance passed nine consistency tests with zero failures/errors/skips and strict MkDocs. Logs: `target/r0369/docs-tests.log` and `target/r0369/mkdocs.log`. Final review confirmed documentation and one proposal screenshot only.
+
+## R-0370 building spacing comparison — 2026-10-30
+
+1. Scope: [R-0370](requirements/done/R-0370.md), one documentation-only [comparison image](graphics.md#tri-velikosti-svislych-mezer-vedle-sebe), based on `5b8eebdb0a1fc3093e3cc757ef72f39fadfd7471`. Three panels reuse the latest proposal with progressively tighter vertical gaps; artwork and game source remain unchanged.
+2. Headless Chromium passed all three panels at 1056, 768 and 320 px viewport widths: nine combinations retaining sixteen buildings, twenty-four worker positions, one worker, three output values and seven unbuilt labels each. The wide view shows all three side by side; narrow views stack. Geometry checks confirm unchanged picture/worker sizes, decreasing picture/name and name/worker gaps, adjacent production, loaded assets and no horizontal overflow or JavaScript error. Reference and narrow screenshots were visually inspected. Checks and logs remain in `target/r0370/`.
+3. Visual review prompted a 2 px increase in the tightest name row to keep the measured text bounds clear of the illustration. Final checks above cover the revised layout. This is proposal verification, not JavaFX gameplay acceptance.
+4. Documentation consistency tests and strict MkDocs are the local acceptance gates. Model/JUnit, Docker UI and smoke are exempt for documentation-only scope. Game integration and remote publication verification were not performed.
+5. Final local acceptance passed nine documentation consistency tests with zero failures/errors/skips and strict MkDocs. Logs: `target/r0370/docs-tests.log` and `target/r0370/mkdocs.log`. Scope review confirmed documentation and one proposal screenshot only.

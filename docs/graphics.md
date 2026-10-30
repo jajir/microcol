@@ -64,6 +64,13 @@
 
 ![Zboží přímo napravo od ilustrace budovy; název a pracovníci pod ní vlevo](assets/compact-buildings-adjacent-2026-10-30/variant-1.png)
 
+### Tři velikosti svislých mezer vedle sebe
+
+1. [R-0370](requirements/done/R-0370.md) porovnává poslední návrh R-0369 se dvěma těsnějšími variantami. Všechny tři jsou zobrazené současně ve stejném měřítku: **Současné mezery**, **Trochu těsnější** a **Nejtěsnější**. Zmenšuje se prostor mezi obrázkem, názvem a místy pro pracovníky; zboží zůstává hned napravo od budovy.
+2. Pro srovnání mají panely po dvou sloupcích a zachovávají všech šestnáct budov i jejich obsah. Na úzké obrazovce se celé panely skládají pod sebe. Jde o návrh, nikoli volbu finálního rozložení nebo změnu hry. [Evidence](publishing.md#r-0370-building-spacing-comparison-2026-10-30).
+
+![Tři současně zobrazené varianty s postupně menšími mezerami mezi budovou, názvem a pracovníky](assets/compact-buildings-spacing-2026-10-30/comparison.png)
+
 ## Produkční ikony — vybraná varianta 3, 30. října 2026
 
 1. Uživatel vybral **Z3 + K3 + M3** z [návrhů R-0363](#zvony-krize-a-kladiva-tri-navrhy-30-rijna-2026) a zadal jejich použití v [R-0365](requirements/done/R-0365.md). Zvon má dřevěný závěs, kříž podstavec a kladivo rozštěpenou hlavu. Geometrie i barvy schválených SVG jsou zachované.

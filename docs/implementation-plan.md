@@ -706,3 +706,7 @@ Návrhy budov z 30. října 2026 řeší [R-0357](requirements/done/R-0357.md), 
 ## Produkce přímo vedle budovy — 30. října 2026
 
 1. P28/A03: [R-0369](requirements/done/R-0369.md) posouvá zboží těsně napravo od obrázku v návrhu R-0368. Název a pracovníci zůstávají vlevo; [srovnání](graphics.md#zbozi-hned-vedle-budovy) je vizuální návrh bez herní implementace.
+
+### Tři velikosti mezer u budov — 30. října 2026
+
+1. P28/A03: [R-0370](requirements/done/R-0370.md) porovnává současně poslední návrh R-0369 a dvě těsnější varianty mezer mezi obrázkem, názvem a pracovníky. [Srovnání](graphics.md#tri-velikosti-svislych-mezer-vedle-sebe) nemění herní implementaci ani velikost ilustrací a textu.
