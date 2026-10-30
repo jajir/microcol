@@ -294,6 +294,6 @@
     <entry key="unitsPanel_royal">Vojenská role: královský voják</entry>
     <entry key="selectedShipCargo">Náklad vybrané lodi · #%s</entry>
     <entry key="selectShipCargo">Vyberte loď pro zobrazení nákladu</entry>
-	<entry key="minimap_title">Mapa světa</entry>
+	<entry key="minimap_title">Minimapa</entry>
 	<entry key="minimap_hint">Posun: kliknutí, tažení či šipky</entry>
 </properties>

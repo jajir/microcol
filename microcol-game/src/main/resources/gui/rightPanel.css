@@ -54,4 +54,4 @@
 }
 
 #minimapPanel { -fx-padding: 10 0 12 0; }
-#minimapHint { -fx-font-size: 12px; -fx-text-fill: #34332b; }
+#minimapTitle { -fx-text-fill: #34332b; -fx-alignment: center; }

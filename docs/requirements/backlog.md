@@ -1,10 +1,10 @@
 # Current requirement backlog
 
+Completed locally on 2026-10-30: [R-0356 — minimap heading and coastline refinement](done/R-0356.md), A03 with A05 knowledge boundaries. The selected middle variant adds gently rounded corners and the shared-font heading, removes the dashed frame and visible footer, and preserves navigation and concealed terrain. Status: done; 4,795 model/JUnit, all 15 targeted UI/support checks and 21 fixed smoke/support tests passed with zero failures/errors/skips. [Evidence](../functional-tests.md#r-0356-minimap-heading-and-rounded-coasts-2026-10-30).
+
 Completed locally on 2026-10-30: [R-0359 — visible colony stock changes and tobacco consumption](done/R-0359.md), A07 with A03/A04. Rendered signed values and colors, immediate worker-assignment refresh, scarce input and actual turn settlement passed: 4,791 model/JUnit and 11 targeted UI/support tests, zero failures/errors/skips. Smoke was omitted under the explicit user instruction for this task. [Evidence](../functional-tests.md#r-0359-visible-warehouse-forecasts-2026-10-30).
 
 Completed on 2026-10-30: [R-0357 — five simpler building proposals matching the main map](done/R-0357.md), A03 with A07 identity dependencies. Five further complete sets, numbered 6–10, simplify outlines and color areas in response to feedback on R-0353. Design-only scope; runtime selection and SVG implementation remain separate. [Gallery](../graphics.md#budovy-pet-jednodussich-navrhu-podle-hlavni-mapy-30-rijna-2026).
-
-Prepared for selection on 2026-10-30: [R-0356 — minimap heading and coastline refinement](R-0356.md), A03 with A05 knowledge boundaries. Three static proposals remove the dashed frame and bottom hint, add “Minimap”, and compare original, gently rounded and flowing contours. Status: waiting for refinement; final selection and runtime implementation remain pending. [Gallery](../graphics.md#minimapa-nadpis-a-hladkost-pobrezi-30-rijna-2026).
 
 Completed on 2026-10-30: [R-0353 — five complete building-tier proposals](done/R-0353.md), A03 with A07 identities. Five sets each cover all 41 existing forms (205 illustrations on ten sheets), preserving actual upgrade counts. Concept sheets, exact prompts, model mapping and the gallery were reviewed; documentation checks passed. This is design-only delivery, with no selected direction or runtime change. [Evidence](../publishing.md#r-0353-building-tier-proposals-2026-10-30).
 

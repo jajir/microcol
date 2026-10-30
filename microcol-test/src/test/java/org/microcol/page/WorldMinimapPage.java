@@ -17,10 +17,12 @@ import com.google.inject.name.Names;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -192,13 +194,39 @@ public final class WorldMinimapPage extends AbstractScreen {
                     .getMaxY() <= map.getScene().getHeight());
             assertEquals(title, map.getAccessibleText());
             assertEquals(hint, map.getAccessibleHelp());
-            final Label label = (Label) node("minimapHint");
-            assertEquals(hint, label.getText());
+            final Label label = (Label) node("minimapTitle");
+            assertEquals(title, label.getText());
+            assertEquals(((Label) node("statusBarLabel")).getFont(),
+                    label.getFont());
+            assertEquals(b.getMinX() + b.getWidth() / 2,
+                    label.localToScene(label.getLayoutBounds()).getCenterX(),
+                    .5);
+            assertTrue(label.localToScene(label.getLayoutBounds())
+                    .getMaxY() <= b.getMinY());
+            assertTrue(
+                    getNodeFinder().lookup("#minimapHint").queryAll().isEmpty(),
+                    "The instruction is accessible help, not a visible footer");
             assertTrue(
                     label.getHeight() >= label.prefHeight(label.getWidth())
                             - .5,
-                    "Minimap hint must have room for all wrapped lines");
+                    "The minimap heading must remain fully visible");
             assertTrue(map.isFocusTraversable());
+        });
+    }
+
+    public void verifyMapFocus(final boolean focused) {
+        getRobot().interact(() -> {
+            assertEquals(focused, node("worldMinimap").isFocused());
+            assertEquals(focused, ((Label) node("minimapTitle")).isUnderline());
+            final Canvas canvas = (Canvas) node("minimapTerrain");
+            final SnapshotParameters params = new SnapshotParameters();
+            params.setFill(Color.TRANSPARENT);
+            final WritableImage image = canvas.snapshot(params, null);
+            for (int x = 0; x < image.getWidth(); x++) {
+                assertEquals(0,
+                        image.getPixelReader().getColor(x, 1).getOpacity(),
+                        "Focus must not draw a dashed outer frame");
+            }
         });
     }
 

@@ -57,7 +57,7 @@ public final class WorldMinimap extends VBox {
     private final Pane map = new Pane();
     private final Rectangle viewportOutline = new Rectangle();
     private final Rectangle viewport = new Rectangle();
-    private final Label hint = new Label();
+    private final Label title = new Label();
     private MinimapProjection projection;
     private Location worldSize;
     private byte[] painted;
@@ -123,13 +123,12 @@ public final class WorldMinimap extends VBox {
                 event.consume();
             }
         });
-        map.focusedProperty().addListener(
-                (observable, oldValue, newValue) -> painted = null);
-        hint.setId("minimapHint");
-        hint.setWrapText(true);
-        hint.setMaxWidth(WIDTH);
-        hint.setMinHeight(Region.USE_PREF_SIZE);
-        getChildren().addAll(map, hint);
+        map.focusedProperty().addListener((observable, oldValue,
+                newValue) -> title.setUnderline(newValue));
+        title.setId("minimapTitle");
+        title.setMaxWidth(WIDTH);
+        title.setMinHeight(Region.USE_PREF_SIZE);
+        getChildren().addAll(title, map);
     }
 
     private void pan(final KeyEvent event) {
@@ -170,11 +169,11 @@ public final class WorldMinimap extends VBox {
             projection = new MinimapProjection(worldSize, WIDTH, HEIGHT);
             painted = null;
         }
-        final String help = i18n.get(Loc.minimap_hint);
-        if (!help.equals(hint.getText())) {
-            hint.setText(help);
-            map.setAccessibleText(i18n.get(Loc.minimap_title));
-            map.setAccessibleHelp(help);
+        final String heading = i18n.get(Loc.minimap_title);
+        if (!heading.equals(title.getText())) {
+            title.setText(heading);
+            map.setAccessibleText(heading);
+            map.setAccessibleHelp(i18n.get(Loc.minimap_hint));
         }
         final Player player = controller.getHumanPlayer();
         final byte[] tiles = new byte[worldSize.getX() * worldSize.getY()];
@@ -254,17 +253,44 @@ public final class WorldMinimap extends VBox {
         g.setStroke(INK);
         g.setLineCap(StrokeLineCap.ROUND);
         g.setLineWidth(Math.max(1.25, Math.min(2, tile * .35)));
+        final double radius = Math.min(2.4, tile * .3);
         for (int y = 0; y < worldSize.getY(); y++) {
             for (int x = 0; x < worldSize.getX(); x++) {
                 final int index = y * worldSize.getX() + x;
                 final double px = b.getMinX() + x * tile;
                 final double py = b.getMinY() + y * tile;
+                final int corner = roundedCorner(tiles, worldSize.getX(),
+                        worldSize.getY(), x, y);
+                final double start = corner < 0 ? 0 : radius;
+                if (corner >= 0) {
+                    final int sx = corner == 0 || corner == 3 ? -1 : 1;
+                    final int sy = corner < 2 ? -1 : 1;
+                    // Fill only the small cut corner, using already known
+                    // colors.
+                    g.setFill(
+                            COLORS[tiles[(sy < 0 ? y : y - 1) * worldSize.getX()
+                                    + (sx < 0 ? x : x - 1)]]);
+                    g.beginPath();
+                    g.moveTo(px, py);
+                    g.lineTo(px + sx * radius, py);
+                    g.quadraticCurveTo(px, py, px, py + sy * radius);
+                    g.closePath();
+                    g.fill();
+                    g.beginPath();
+                    g.moveTo(px + sx * radius, py);
+                    g.quadraticCurveTo(px, py, px, py + sy * radius);
+                    g.stroke();
+                }
                 if (x > 0 && boundary(tiles[index], tiles[index - 1])) {
-                    line(g, px, py, px, py + tile, .35);
+                    final double end = roundedCorner(tiles, worldSize.getX(),
+                            worldSize.getY(), x, y + 1) < 0 ? 0 : radius;
+                    line(g, px, py + start, px, py + tile - end, .35);
                 }
                 if (y > 0 && boundary(tiles[index],
                         tiles[index - worldSize.getX()])) {
-                    line(g, px, py, px + tile, py, -.35);
+                    final double end = roundedCorner(tiles, worldSize.getX(),
+                            worldSize.getY(), x + 1, y) < 0 ? 0 : radius;
+                    line(g, px + start, py, px + tile - end, py, -.35);
                 }
             }
         }
@@ -273,13 +299,26 @@ public final class WorldMinimap extends VBox {
         line(g, b.getMaxX(), b.getMinY(), b.getMaxX(), b.getMaxY(), 1);
         line(g, b.getMaxX(), b.getMaxY(), b.getMinX(), b.getMaxY(), -.8);
         line(g, b.getMinX(), b.getMaxY(), b.getMinX(), b.getMinY(), 1);
-        if (map.isFocused()) {
-            g.setStroke(INK);
-            g.setLineWidth(1);
-            g.setLineDashes(2, 3);
-            g.strokeRect(1, 1, WIDTH - 2, HEIGHT - 2);
-            g.setLineDashes();
+    }
+
+    /** Clockwise from NW; only a single sea/land/fog corner is rounded. */
+    static int roundedCorner(final byte[] tiles, final int width,
+            final int height, final int x, final int y) {
+        if (x <= 0 || y <= 0 || x >= width || y >= height) {
+            return -1;
         }
+        final int[] kinds = { Math.min(2, tiles[(y - 1) * width + x - 1]),
+                Math.min(2, tiles[(y - 1) * width + x]),
+                Math.min(2, tiles[y * width + x]),
+                Math.min(2, tiles[y * width + x - 1]) };
+        for (int i = 0; i < 4; i++) {
+            if (kinds[i] != kinds[(i + 1) % 4]
+                    && kinds[(i + 1) % 4] == kinds[(i + 2) % 4]
+                    && kinds[(i + 2) % 4] == kinds[(i + 3) % 4]) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private boolean boundary(final byte a, final byte b) {

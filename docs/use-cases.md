@@ -1,5 +1,10 @@
 # Use cases a přejímka pravidel hry
 
+## Minimapa: nadpis a jemné pobřeží — 2026-10-30
+
+1. [R-0356](requirements/done/R-0356.md), UC-114/119: vybraná prostřední varianta přidává nadpis písmem stavové lišty, odstraňuje spodní vysvětlivku a přerušovaný rámeček a jemně zaobluje pobřeží. Klávesnicový fokus podtrhuje nadpis; navigace, výřez a neznámé území zachovávají dosavadní chování.
+2. TC196/01–02 ověřují anglický/český nadpis, shodný font, rozložení, odstraněnou vysvětlivku a fokus bez čárkování spolu s navigací a průzkumem. TC196/03 zachovává test tažení; geometrii pokrývá `WorldMinimapTest`. [Výsledky přejímky](functional-tests.md#r-0356-minimap-heading-and-rounded-coasts-2026-10-30).
+
 ## Minimapa: tažení myší — 2026-10-30
 
 1. [R-0355](requirements/done/R-0355.md), UC-114/119: tažení levým tlačítkem přesouvá výřez průběžně, končí uvolněním i mimo minimapu a zachovává prozkoumané území i stav jednotek.

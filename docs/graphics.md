@@ -50,7 +50,7 @@
 
 ## Minimapa — nadpis a hladkost pobřeží, 30. října 2026
 
-1. [R-0356](requirements/R-0356.md) zachycuje tři návrhy podle dodaného výřezu. Všechny odstraňují přerušovaný vnější rámeček i spodní vysvětlivku, přidávají nadpis **Minimap** rukopisným písmem a zachovávají silný obrys mapy i bílý obdélník výřezu. Konečná varianta zatím není vybraná; hra se tímto návrhem nemění.
+1. [R-0356](requirements/done/R-0356.md) zachycuje tři návrhy podle dodaného výřezu. Všechny odstraňují přerušovaný vnější rámeček i spodní vysvětlivku, přidávají nadpis **Minimap** rukopisným písmem a zachovávají silný obrys mapy i bílý obdélník výřezu. Uživatel 30. října 2026 vybral **prostřední variantu 2, jemné vyhlazení**, a požádal o realizaci; [implementace a přejímka](functional-tests.md#r-0356-minimap-heading-and-rounded-coasts-2026-10-30) se evidují odděleně od návrhů.
 2. Druhý a třetí obrázek vznikly úpravou prvního. Mění se míra vyhlazení obrysů známé mapy: první má původní schůdky, druhý zaoblené rohy, třetí plynulé křivky. Barvy terénu, šedé neznámo a rozložení zůstávají vizuálně odpovídající předloze. Jde o generované výtvarné reference, nikoli přesnou geometrii herního světa.
 
 | 1 — Původní pobřeží | 2 — Jemné vyhlazení | 3 — Výrazné vyhlazení |
@@ -58,6 +58,7 @@
 | ![Minimapa s nadpisem a původními hranatými obrysy](assets/minimap-refinement-2026-10-30/01-puvodni-pobrezi.png) | ![Minimapa s jemně zaoblenými rohy pobřeží](assets/minimap-refinement-2026-10-30/02-jemne-vyhlazeni.png) | ![Minimapa s plynule vyhlazenými obrysy pobřeží](assets/minimap-refinement-2026-10-30/03-vyrazne-vyhlazeni.png) |
 
 3. [Vstupní snímek](assets/minimap-refinement-2026-10-30/reference.png), [přesné prompty vestavěného ImageGen](assets/minimap-refinement-2026-10-30/prompts.json) a [evidence návrhů](publishing.md#r-0356-minimap-refinement-proposals-2026-10-30). Při realizaci zůstane mapa vykreslovaná z herních dat; tyto PNG slouží pouze k porovnání vzhledu.
+4. Vybraná varianta 2 je implementovaná a místně přijatá: [malé anglické okno](graphics-assets/minimap-refinement-2026-10-30/r0356-minimap-small.png), [čeština](graphics-assets/minimap-refinement-2026-10-30/r0356-minimap-czech.png) a [fokus podtržením nadpisu](graphics-assets/minimap-refinement-2026-10-30/r0356-minimap-focused.png). Nadpis přebírá Playpen Sans 14 ze stavové lišty; popis ovládání zůstává přístupnou nápovědou. Zaoblení používá pouze již známé barvy mapy, nikoli nový rastrový obrázek.
 
 
 ## Budovy — pět návrhů od přístřešku k manufaktuře, 30. října 2026

@@ -28,6 +28,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 
 /**
@@ -88,6 +89,7 @@ public final class RightPanelView implements JavaFxComponent {
 
         tileName = new Label();
         tileName.setId("tileName");
+        tileName.setMinHeight(Region.USE_PREF_SIZE);
         gridPane.add(tileName, 1, 2);
 
         unitsLabel = new Label();

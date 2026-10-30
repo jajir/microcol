@@ -19,7 +19,7 @@ import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 
 /**
- * R-0350/0355, UC-114/119: world navigation respects explored terrain.
+ * R-0350/0355/0356, UC-114/119: world navigation respects explored terrain.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_196_F228_world_minimap_test extends AbstractMicroColTest {
@@ -39,7 +39,7 @@ public class TC_196_F228_world_minimap_test extends AbstractMicroColTest {
         final MainScreenLayoutPage window = new MainScreenLayoutPage(
                 getContext());
         window.resize(1280, 900);
-        map.verifyLayoutAndLanguage("World map",
+        map.verifyLayoutAndLanguage("Minimap",
                 "Click, drag or arrow keys to pan");
         map.verifyTerrain(Location.of(25, 16), "#649b97", true);
         map.verifyTerrain(Location.of(40, 16), "#9c9585", false);
@@ -48,6 +48,8 @@ public class TC_196_F228_world_minimap_test extends AbstractMicroColTest {
         map.clickWorld(.5, .5);
         map.verifyCentered(.5, .5);
         map.verifyViewport();
+        map.verifyMapFocus(true);
+        window.saveEvidence("r0356-minimap-focused.png");
         map.clickWorld(.99, .99);
         map.verifyCentered(1, 1);
         map.verifyViewport();
@@ -63,20 +65,20 @@ public class TC_196_F228_world_minimap_test extends AbstractMicroColTest {
         map.verifyViewport();
         map.press(KeyCode.TAB);
         map.verifyFocusLeftMinimap();
+        map.verifyMapFocus(false);
         map.verifyGameUnchanged();
         // Existing map panning and window resize keep the rectangle aligned.
         new FogPage(getContext()).centerOn(Location.of(30, 16));
         map.verifyViewport();
         window.resize(900, 700);
-        map.verifyLayoutAndLanguage("World map",
+        window.saveEvidence("r0356-minimap-small.png");
+        map.verifyLayoutAndLanguage("Minimap",
                 "Click, drag or arrow keys to pan");
         map.verifyViewport();
-        new MainScreenLayoutPage(getContext())
-                .saveEvidence("r0350-minimap-small.png");
         window.resize(1440, 1000);
         map.verifyViewport();
         new MainScreenLayoutPage(getContext())
-                .saveEvidence("r0350-minimap.png");
+                .saveEvidence("r0356-minimap.png");
     }
 
     @Test
@@ -87,7 +89,7 @@ public class TC_196_F228_world_minimap_test extends AbstractMicroColTest {
         settings.setCzechLanguage();
         settings.goBack().loadGame();
         final WorldMinimapPage map = new WorldMinimapPage(getContext());
-        map.verifyLayoutAndLanguage("Mapa světa",
+        map.verifyLayoutAndLanguage("Minimapa",
                 "Posun: kliknutí, tažení či šipky");
         map.verifyTerrain(Location.of(28, 16), "#9c9585", false);
         // A real exploration move reveals the same sea in both map views.
@@ -97,7 +99,7 @@ public class TC_196_F228_world_minimap_test extends AbstractMicroColTest {
         map.verifyTerrain(Location.of(28, 16), "#649b97", true);
         map.verifyViewport();
         new MainScreenLayoutPage(getContext())
-                .saveEvidence("r0350-minimap-czech.png");
+                .saveEvidence("r0356-minimap-czech.png");
     }
 
     @Test
