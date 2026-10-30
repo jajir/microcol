@@ -20,6 +20,7 @@ import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -65,6 +66,24 @@ public final class WorldMinimapPage extends AbstractScreen {
             savedState = new Gson().toJson(getModel().save());
             savedView = view().getTopLeft();
         });
+    }
+
+    public void movePointer(final double xFraction, final double yFraction) {
+        getRobot().moveTo(node("worldMinimap")
+                .localToScreen(minimapPoint(xFraction, yFraction)));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void beginDrag(final double xFraction, final double yFraction,
+            final MouseButton button) {
+        movePointer(xFraction, yFraction);
+        getRobot().press(button);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void endDrag(final MouseButton button) {
+        getRobot().release(button);
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void press(final KeyCode key) {
@@ -163,12 +182,22 @@ public final class WorldMinimapPage extends AbstractScreen {
             final Node tile = node("tileImage");
             assertTrue(b.getMaxY() < tile.localToScene(tile.getLayoutBounds())
                     .getMinY());
+            final Label terrain = (Label) node("tileName");
+            assertTrue(
+                    terrain.getHeight() >= terrain
+                            .prefHeight(terrain.getWidth()) - .5,
+                    "Terrain name and movement cost must remain fully visible");
             final Node difficulty = node("gameDifficulty");
             assertTrue(difficulty.localToScene(difficulty.getLayoutBounds())
                     .getMaxY() <= map.getScene().getHeight());
             assertEquals(title, map.getAccessibleText());
             assertEquals(hint, map.getAccessibleHelp());
-            assertEquals(hint, ((Label) node("minimapHint")).getText());
+            final Label label = (Label) node("minimapHint");
+            assertEquals(hint, label.getText());
+            assertTrue(
+                    label.getHeight() >= label.prefHeight(label.getWidth())
+                            - .5,
+                    "Minimap hint must have room for all wrapped lines");
             assertTrue(map.isFocusTraversable());
         });
     }

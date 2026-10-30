@@ -295,5 +295,5 @@
     <entry key="selectedShipCargo">Náklad vybrané lodi · #%s</entry>
     <entry key="selectShipCargo">Vyberte loď pro zobrazení nákladu</entry>
 	<entry key="minimap_title">Mapa světa</entry>
-	<entry key="minimap_hint">Kliknutím přesunete výřez · Šipky posouvají</entry>
+	<entry key="minimap_hint">Posun: kliknutí, tažení či šipky</entry>
 </properties>

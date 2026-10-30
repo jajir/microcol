@@ -1,5 +1,10 @@
 # Use cases a přejímka pravidel hry
 
+## Minimapa: tažení myší — 2026-10-30
+
+1. [R-0355](requirements/done/R-0355.md), UC-114/119: tažení levým tlačítkem přesouvá výřez průběžně, končí uvolněním i mimo minimapu a zachovává prozkoumané území i stav jednotek.
+2. `TC_196_F228_world_minimap_test#TC_03_drag_tracks_pointer_until_release_without_changing_gameplay` ověřuje průběžný posun, okraje, ukončení a ignorovaná gesta; TC196/01–02 nadále ověřují kliknutí, šipky, průzkum a českou/anglickou nápovědu. [Výsledky](functional-tests.md#r-0355-minimap-drag-2026-10-30).
+
 
 ## Vektorové zdroje budov — 2026-10-30
 

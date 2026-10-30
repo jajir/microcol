@@ -15,10 +15,11 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 
 /**
- * R-0350, UC-114/119: a full-world camera control respects explored terrain.
+ * R-0350/0355, UC-114/119: world navigation respects explored terrain.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_196_F228_world_minimap_test extends AbstractMicroColTest {
@@ -39,7 +40,7 @@ public class TC_196_F228_world_minimap_test extends AbstractMicroColTest {
                 getContext());
         window.resize(1280, 900);
         map.verifyLayoutAndLanguage("World map",
-                "Click to move view · Arrow keys pan");
+                "Click, drag or arrow keys to pan");
         map.verifyTerrain(Location.of(25, 16), "#649b97", true);
         map.verifyTerrain(Location.of(40, 16), "#9c9585", false);
         map.rememberGameAndView();
@@ -68,7 +69,7 @@ public class TC_196_F228_world_minimap_test extends AbstractMicroColTest {
         map.verifyViewport();
         window.resize(900, 700);
         map.verifyLayoutAndLanguage("World map",
-                "Click to move view · Arrow keys pan");
+                "Click, drag or arrow keys to pan");
         map.verifyViewport();
         new MainScreenLayoutPage(getContext())
                 .saveEvidence("r0350-minimap-small.png");
@@ -87,7 +88,7 @@ public class TC_196_F228_world_minimap_test extends AbstractMicroColTest {
         settings.goBack().loadGame();
         final WorldMinimapPage map = new WorldMinimapPage(getContext());
         map.verifyLayoutAndLanguage("Mapa světa",
-                "Kliknutím přesunete výřez · Šipky posouvají");
+                "Posun: kliknutí, tažení či šipky");
         map.verifyTerrain(Location.of(28, 16), "#9c9585", false);
         // A real exploration move reveals the same sea in both map views.
         final FogPage fog = new FogPage(getContext());
@@ -97,5 +98,45 @@ public class TC_196_F228_world_minimap_test extends AbstractMicroColTest {
         map.verifyViewport();
         new MainScreenLayoutPage(getContext())
                 .saveEvidence("r0350-minimap-czech.png");
+    }
+
+    @Test
+    @Tag("local")
+    void TC_03_drag_tracks_pointer_until_release_without_changing_gameplay()
+            throws Exception {
+        // The camera follows native pointer movement before the button is
+        // released.
+        WelcomePage.of(getContext()).loadGame();
+        new MainScreenLayoutPage(getContext()).resize(1280, 900);
+        final WorldMinimapPage map = new WorldMinimapPage(getContext());
+        map.rememberGameAndView();
+        map.beginDrag(.35, .4, MouseButton.PRIMARY);
+        map.verifyCentered(.35, .4);
+        map.movePointer(.6, .6);
+        map.verifyCentered(.6, .6);
+        map.verifyViewport();
+        map.movePointer(.01, .01);
+        map.verifyCentered(0, 0);
+        map.verifyViewport();
+        // The native grab continues outside the minimap and stops on release
+        // there.
+        map.movePointer(.5, 1.4);
+        map.verifyCentered(.5, 1);
+        map.verifyViewport();
+        map.endDrag(MouseButton.PRIMARY);
+        map.verifyGameUnchanged();
+        map.rememberGameAndView();
+        map.movePointer(.3, .3);
+        map.verifyPan(0, 0);
+        // Secondary-button and paper-margin gestures must not move the camera.
+        map.beginDrag(.5, .5, MouseButton.SECONDARY);
+        map.movePointer(.7, .7);
+        map.endDrag(MouseButton.SECONDARY);
+        map.verifyPan(0, 0);
+        map.beginDrag(.5, -.1, MouseButton.PRIMARY);
+        map.movePointer(.3, .3);
+        map.endDrag(MouseButton.PRIMARY);
+        map.verifyPan(0, 0);
+        map.verifyGameUnchanged();
     }
 }

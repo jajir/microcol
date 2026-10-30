@@ -28,6 +28,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -60,6 +61,7 @@ public final class WorldMinimap extends VBox {
     private MinimapProjection projection;
     private Location worldSize;
     private byte[] painted;
+    private boolean dragging;
 
     @Inject
     public WorldMinimap(final GameModelController controller,
@@ -92,12 +94,26 @@ public final class WorldMinimap extends VBox {
         map.setAccessibleRole(AccessibleRole.IMAGE_VIEW);
         map.getChildren().addAll(terrain, viewportOutline, viewport);
         map.setOnMousePressed(event -> {
-            if (event.getButton() == MouseButton.PRIMARY && projection != null
-                    && projection.getBounds().contains(event.getX(),
-                            event.getY())) {
+            dragging = event.getButton() == MouseButton.PRIMARY
+                    && projection != null && projection.getBounds()
+                            .contains(event.getX(), event.getY());
+            if (dragging) {
                 map.requestFocus();
                 scrolling
                         .centerOn(projection.toMap(event.getX(), event.getY()));
+                event.consume();
+            }
+        });
+        map.setOnMouseDragged(event -> {
+            if (dragging && event.isPrimaryButtonDown()) {
+                scrolling
+                        .centerOn(projection.toMap(event.getX(), event.getY()));
+                event.consume();
+            }
+        });
+        map.setOnMouseReleased(event -> {
+            if (dragging && event.getButton() == MouseButton.PRIMARY) {
+                dragging = false;
                 event.consume();
             }
         });
@@ -112,6 +128,7 @@ public final class WorldMinimap extends VBox {
         hint.setId("minimapHint");
         hint.setWrapText(true);
         hint.setMaxWidth(WIDTH);
+        hint.setMinHeight(Region.USE_PREF_SIZE);
         getChildren().addAll(map, hint);
     }
 

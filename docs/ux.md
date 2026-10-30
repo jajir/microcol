@@ -15,9 +15,9 @@
 ## Minimapa světa — 2026-10-30
 
 1. [R-0350](requirements/done/R-0350.md) dává hráči trvalý přehled celého světa nahoře v pravém panelu. Známé oblasti používají terénní barvy, neprůhledné neznámo nic dalšího neprozrazuje a kontrastní rámeček odpovídá hlavnímu pohledu.
-2. Kliknutí do mapy ihned přesune pouze kameru. U okraje se výřez omezí na svět; svět menší než hlavní pohled zůstává vystředěný. Kliknutí do papírového okraje nemění pohled. Nejde o rozkaz jednotce, neodkrývá území ani nevyžaduje potvrzení či zrušení.
-3. Stálá česká nebo anglická nápověda popisuje kliknutí a šipky; stejný text je přístupným vysvětlením. Zaměřená minimapa má tečkovaný okraj. Šipky posunou kameru o jedno pole, Tab přejde na další ovládací prvek. Ostatní běžné způsoby posunu mapy i změna velikosti okna aktualizují rámeček.
-4. Jde o implementovaný návrh; [automatické ověření](functional-tests.md#r-0350-world-minimap-2026-10-30) a vizuální kontrola nejsou uživatelská studie.
+2. Kliknutí do mapy ihned přesune pouze kameru. Podle [R-0355](requirements/done/R-0355.md) držení levého tlačítka a tažení průběžně přesouvá pohled za kurzorem, i po vyjetí mimo minimapu. Uvolnění tlačítka posun ukončí; pravé tlačítko ani tažení zahájené v papírovém okraji kameru neovládá. U okraje se výřez omezí na svět; svět menší než hlavní pohled zůstává vystředěný. Kliknutí do papírového okraje nemění pohled. Nejde o rozkaz jednotce, neodkrývá území ani nevyžaduje potvrzení či zrušení.
+3. Stálá česká nebo anglická nápověda popisuje kliknutí, tažení a šipky; stejný text je přístupným vysvětlením. Zaměřená minimapa má tečkovaný okraj. Šipky posunou kameru o jedno pole, Tab přejde na další ovládací prvek. Ostatní běžné způsoby posunu mapy i změna velikosti okna aktualizují rámeček.
+4. Uživatel při práci s minimapou 30. října 2026 intuitivně očekával tažení; to je konkrétní podnět R-0355, nikoli obecná uživatelská studie. Jde o implementovaný návrh; [automatické ověření](functional-tests.md#r-0350-world-minimap-2026-10-30) a vizuální kontrola nejsou uživatelská studie.
 
 
 ## Zarovnání evropského přístavu — 2026-10-29
