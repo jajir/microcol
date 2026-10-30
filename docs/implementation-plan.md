@@ -702,3 +702,7 @@ Návrhy budov z 30. října 2026 řeší [R-0357](requirements/done/R-0357.md), 
 ## Levé zarovnání budov — 30. října 2026
 
 1. P28/A03: [R-0368](requirements/done/R-0368.md) doplňuje srovnání R-0367 o levé zarovnání obrázku, názvu a pracovníků při zachování produkce vpravo. [Návrh](graphics.md#obsah-vlevo-produkce-vpravo) nevybírá ani nenasazuje herní implementaci.
+
+## Produkce přímo vedle budovy — 30. října 2026
+
+1. P28/A03: [R-0369](requirements/done/R-0369.md) posouvá zboží těsně napravo od obrázku v návrhu R-0368. Název a pracovníci zůstávají vlevo; [srovnání](graphics.md#zbozi-hned-vedle-budovy) je vizuální návrh bez herní implementace.

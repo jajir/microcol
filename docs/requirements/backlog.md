@@ -1004,3 +1004,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Left-aligned building proposal — 2026-10-30
 
 1. [R-0368](done/R-0368.md), primary area A03 with unchanged A07 meanings, adds left-aligned building/name/worker content and a separate right-aligned production column. Status: done; visual and documentation acceptance passed. [Gallery](../graphics.md#obsah-vlevo-produkce-vpravo).
+
+## Production beside the building — 2026-10-30
+
+1. [R-0369](done/R-0369.md), primary area A03 with unchanged A07 meanings, moves production directly beside the illustration in the left-aligned proposal. Status: done; visual and documentation acceptance passed. [Gallery](../graphics.md#zbozi-hned-vedle-budovy).

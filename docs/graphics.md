@@ -57,6 +57,13 @@
 
 ![Budova, název a pracovníci zarovnaní doleva; zboží s množstvím samostatně vpravo](assets/compact-buildings-left-2026-10-30/variant-1.png)
 
+### Zboží hned vedle budovy
+
+1. [R-0369](requirements/done/R-0369.md) navazuje na levé zarovnání podle další žádosti z 30. října 2026. Zboží je nyní těsně napravo od obrázku budovy, nikoli na vzdáleném okraji položky. Ikona zůstává nad číslem; název a pracovníci jsou nadále zarovnaní doleva pod budovou.
+2. Nový návrh je zobrazený jako první a předchozí poloha zboží zůstává k přepnutí. Herní obsah ani runtime soubory se nemění. [Evidence](publishing.md#r-0369-adjacent-building-production-2026-10-30) zaznamenává kontrolu návrhu.
+
+![Zboží přímo napravo od ilustrace budovy; název a pracovníci pod ní vlevo](assets/compact-buildings-adjacent-2026-10-30/variant-1.png)
+
 ## Produkční ikony — vybraná varianta 3, 30. října 2026
 
 1. Uživatel vybral **Z3 + K3 + M3** z [návrhů R-0363](#zvony-krize-a-kladiva-tri-navrhy-30-rijna-2026) a zadal jejich použití v [R-0365](requirements/done/R-0365.md). Zvon má dřevěný závěs, kříž podstavec a kladivo rozštěpenou hlavu. Geometrie i barvy schválených SVG jsou zachované.

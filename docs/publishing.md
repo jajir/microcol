@@ -1173,3 +1173,11 @@ documentation in APT just to make it visible on the web.
 3. Documentation consistency tests and strict MkDocs are the required local gates for this proposal. Model/JUnit, Docker UI and smoke are exempt for documentation-only scope. Game integration and remote publication verification are outside this request.
 
 4. Local acceptance passed nine documentation consistency tests with zero failures/errors/skips and strict MkDocs. Logs: `target/r0368/docs-tests.log` and `target/r0368/mkdocs.log`. Final review confirmed documentation and one proposal screenshot only.
+
+## R-0369 adjacent building production — 2026-10-30
+
+1. Scope: [R-0369](requirements/done/R-0369.md), one documentation-only [proposal screenshot](graphics.md#zbozi-hned-vedle-budovy), based on `e47f822fd08c054b32325b9a933a65ee5255d7a4`. Production moves beside the illustration; the previous right-edge placement remains available for comparison. Runtime artwork, gameplay source, tests and configuration are unchanged.
+2. Headless Chromium passed two variants at 768, 520 and 320 px viewport widths: six combinations, each retaining sixteen buildings, twenty-four worker positions, one worker, three output values and seven unbuilt labels. Geometry checks verified a 12 px gap between the image element and the new output block, quantity below icon and retained left alignment. All assets loaded, the carousel switched correctly, and no horizontal overflow or JavaScript error occurred. The new reference and narrow screenshots were visually inspected. Checking code and logs remain in `target/r0369/`.
+3. Documentation consistency and strict MkDocs are the local acceptance gates for this documentation-only scope. Model/JUnit, Docker UI and smoke are exempt. No game integration or remote publication verification is claimed.
+
+4. Local documentation acceptance passed nine consistency tests with zero failures/errors/skips and strict MkDocs. Logs: `target/r0369/docs-tests.log` and `target/r0369/mkdocs.log`. Final review confirmed documentation and one proposal screenshot only.
