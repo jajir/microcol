@@ -1,5 +1,81 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Minimapa — sedm návrhů, 30. října 2026
+
+1. [R-0350](requirements/R-0350.md) zachycuje zadání minimapy nahoře v pravém panelu: celý rozsah hratelného světa, přesun pohledu kliknutím a obdélník aktuálního výřezu. Barvy naznačují terén a silnější linky obrys známé pevniny. Neobjevená část nesmí prozradit skrytý svět; platí [znalost mapy podle R-0070](requirements/done/R-0070.md).
+2. Níže je sedm **statických výtvarných návrhů**, vytvořených z uživatelova screenshotu pomocí imagegen. Kliknutí na náhled otevře celou navrženou obrazovku. Geografie, rozměry a poloha obdélníku jsou ilustrativní; nejde o vykreslení skutečného modelu ani ověřený převod souřadnic. Ovládání minimapy zatím není implementované.
+3. Varianty porovnávají střídmý atlas, kartografický list, oranžové zvýraznění výřezu, šrafované neznámo, barevné oblasti, námořní mapu a kontrastní přehled. Žádná varianta zatím není vybraná; pro další posouzení doporučujeme zejména 1 pro jednoduchost nebo 4 pro rozlišení neznáma vzorem. Jde o návrhářský úsudek, nikoli hráčské pozorování.
+
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; margin:20px 0;">
+<figure style="margin:0; min-width:0; border:1px solid #b8af9d; border-radius:8px; padding:12px; background:#fff9eb; color:#312e28;">
+<figcaption style="font-weight:600; margin-bottom:10px;">1. Čistý atlas</figcaption>
+<a href="assets/minimap-proposals-2026-10-30/1-cisty-atlas.png" aria-label="Čistý atlas — celá obrazovka" style="display:block;">
+<span style="display:block; position:relative; overflow:hidden; width:100%; aspect-ratio:247 / 282;">
+<img src="assets/minimap-proposals-2026-10-30/1-cisty-atlas.png" alt="Čistý atlas: detail minimapy v horní části pravého panelu" style="position:absolute; width:638.87%; max-width:none; height:auto; left:-536.84%; top:-39.01%;" />
+</span></a>
+<p style="margin:10px 0 0; font-size:14px; line-height:1.45;">Nejstřídmější podoba, světlý rámeček a jednolité neznámo.</p>
+</figure>
+<figure style="margin:0; min-width:0; border:1px solid #b8af9d; border-radius:8px; padding:12px; background:#fff9eb; color:#312e28;">
+<figcaption style="font-weight:600; margin-bottom:10px;">2. Kartografický list</figcaption>
+<a href="assets/minimap-proposals-2026-10-30/2-kartograficky-list.png" aria-label="Kartografický list — celá obrazovka" style="display:block;">
+<span style="display:block; position:relative; overflow:hidden; width:100%; aspect-ratio:247 / 282;">
+<img src="assets/minimap-proposals-2026-10-30/2-kartograficky-list.png" alt="Kartografický list: detail minimapy v horní části pravého panelu" style="position:absolute; width:638.87%; max-width:none; height:auto; left:-536.84%; top:-39.01%;" />
+</span></a>
+<p style="margin:10px 0 0; font-size:14px; line-height:1.45;">Papírový lem, titul a žlutý rámeček s tmavou konturou.</p>
+</figure>
+<figure style="margin:0; min-width:0; border:1px solid #b8af9d; border-radius:8px; padding:12px; background:#fff9eb; color:#312e28;">
+<figcaption style="font-weight:600; margin-bottom:10px;">3. Oranžový výřez</figcaption>
+<a href="assets/minimap-proposals-2026-10-30/3-inkoustove-pobrezi.png" aria-label="Oranžový výřez — celá obrazovka" style="display:block;">
+<span style="display:block; position:relative; overflow:hidden; width:100%; aspect-ratio:247 / 282;">
+<img src="assets/minimap-proposals-2026-10-30/3-inkoustove-pobrezi.png" alt="Oranžový výřez: detail minimapy v horní části pravého panelu" style="position:absolute; width:638.87%; max-width:none; height:auto; left:-536.84%; top:-39.01%;" />
+</span></a>
+<p style="margin:10px 0 0; font-size:14px; line-height:1.45;">Výrazná oranžová linka výřezu na jednoduchém mapovém podkladu.</p>
+</figure>
+<figure style="margin:0; min-width:0; border:1px solid #b8af9d; border-radius:8px; padding:12px; background:#fff9eb; color:#312e28;">
+<figcaption style="font-weight:600; margin-bottom:10px;">4. Šrafované neznámo</figcaption>
+<a href="assets/minimap-proposals-2026-10-30/4-srafovane-neznamo.png" aria-label="Šrafované neznámo — celá obrazovka" style="display:block;">
+<span style="display:block; position:relative; overflow:hidden; width:100%; aspect-ratio:247 / 282;">
+<img src="assets/minimap-proposals-2026-10-30/4-srafovane-neznamo.png" alt="Šrafované neznámo: detail minimapy v horní části pravého panelu" style="position:absolute; width:638.87%; max-width:none; height:auto; left:-536.84%; top:-39.01%;" />
+</span></a>
+<p style="margin:10px 0 0; font-size:14px; line-height:1.45;">Řídká šrafa odlišuje neobjevené oblasti i bez změny barvy.</p>
+</figure>
+<figure style="margin:0; min-width:0; border:1px solid #b8af9d; border-radius:8px; padding:12px; background:#fff9eb; color:#312e28;">
+<figcaption style="font-weight:600; margin-bottom:10px;">5. Barevné oblasti</figcaption>
+<a href="assets/minimap-proposals-2026-10-30/5-barevne-oblasti.png" aria-label="Barevné oblasti — celá obrazovka" style="display:block;">
+<span style="display:block; position:relative; overflow:hidden; width:100%; aspect-ratio:247 / 282;">
+<img src="assets/minimap-proposals-2026-10-30/5-barevne-oblasti.png" alt="Barevné oblasti: detail minimapy v horní části pravého panelu" style="position:absolute; width:638.87%; max-width:none; height:auto; left:-536.84%; top:-39.01%;" />
+</span></a>
+<p style="margin:10px 0 0; font-size:14px; line-height:1.45;">Větší barevné plochy terénu a silný bílo-červený rámeček.</p>
+</figure>
+<figure style="margin:0; min-width:0; border:1px solid #b8af9d; border-radius:8px; padding:12px; background:#fff9eb; color:#312e28;">
+<figcaption style="font-weight:600; margin-bottom:10px;">6. Námořní mapa</figcaption>
+<a href="assets/minimap-proposals-2026-10-30/6-namorni-mapa.png" aria-label="Námořní mapa — celá obrazovka" style="display:block;">
+<span style="display:block; position:relative; overflow:hidden; width:100%; aspect-ratio:247 / 282;">
+<img src="assets/minimap-proposals-2026-10-30/6-namorni-mapa.png" alt="Námořní mapa: detail minimapy v horní části pravého panelu" style="position:absolute; width:638.87%; max-width:none; height:auto; left:-536.84%; top:-39.01%;" />
+</span></a>
+<p style="margin:10px 0 0; font-size:14px; line-height:1.45;">Papírový rám, několik vlnek na moři a zvýrazněné rohy výřezu.</p>
+</figure>
+<figure style="margin:0; min-width:0; border:1px solid #b8af9d; border-radius:8px; padding:12px; background:#fff9eb; color:#312e28;">
+<figcaption style="font-weight:600; margin-bottom:10px;">7. Kontrastní přehled</figcaption>
+<a href="assets/minimap-proposals-2026-10-30/7-kontrastni-prehled.png" aria-label="Kontrastní přehled — celá obrazovka" style="display:block;">
+<span style="display:block; position:relative; overflow:hidden; width:100%; aspect-ratio:247 / 282;">
+<img src="assets/minimap-proposals-2026-10-30/7-kontrastni-prehled.png" alt="Kontrastní přehled: detail minimapy v horní části pravého panelu" style="position:absolute; width:638.87%; max-width:none; height:auto; left:-536.84%; top:-39.01%;" />
+</span></a>
+<p style="margin:10px 0 0; font-size:14px; line-height:1.45;">Tmavší neznámo a ostrý bílo-červený obdélník bez ozdob.</p>
+</figure>
+</div>
+
+1. [Čistý atlas — celá obrazovka](assets/minimap-proposals-2026-10-30/1-cisty-atlas.png). Nejstřídmější podoba, světlý rámeček a jednolité neznámo.
+2. [Kartografický list — celá obrazovka](assets/minimap-proposals-2026-10-30/2-kartograficky-list.png). Papírový lem, titul a žlutý rámeček s tmavou konturou.
+3. [Oranžový výřez — celá obrazovka](assets/minimap-proposals-2026-10-30/3-inkoustove-pobrezi.png). Výrazná oranžová linka výřezu na jednoduchém mapovém podkladu.
+4. [Šrafované neznámo — celá obrazovka](assets/minimap-proposals-2026-10-30/4-srafovane-neznamo.png). Řídká šrafa odlišuje neobjevené oblasti i bez změny barvy.
+5. [Barevné oblasti — celá obrazovka](assets/minimap-proposals-2026-10-30/5-barevne-oblasti.png). Větší barevné plochy terénu a silný bílo-červený rámeček.
+6. [Námořní mapa — celá obrazovka](assets/minimap-proposals-2026-10-30/6-namorni-mapa.png). Papírový rám, několik vlnek na moři a zvýrazněné rohy výřezu.
+7. [Kontrastní přehled — celá obrazovka](assets/minimap-proposals-2026-10-30/7-kontrastni-prehled.png). Tmavší neznámo a ostrý bílo-červený obdélník bez ozdob.
+
+Rozsah ověření: vizuální prohlídka sedmi náhledů a dokumentační kontroly; výsledky vede [lokální evidence](publishing.md#r-0350-minimap-proposals-2026-10-30). Herní chování a publikace mají samostatné budoucí ověření.
+
+
 ## Společné okraje přístavu — 29. října 2026
 
 Schválený náhled [R-0348](requirements/done/R-0348.md) zarovnává přistěhovalectví,
