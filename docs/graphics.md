@@ -1,5 +1,16 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Minimapa — nadpis a hladkost pobřeží, 30. října 2026
+
+1. [R-0356](requirements/R-0356.md) zachycuje tři návrhy podle dodaného výřezu. Všechny odstraňují přerušovaný vnější rámeček i spodní vysvětlivku, přidávají nadpis **Minimap** rukopisným písmem a zachovávají silný obrys mapy i bílý obdélník výřezu. Konečná varianta zatím není vybraná; hra se tímto návrhem nemění.
+2. Druhý a třetí obrázek vznikly úpravou prvního. Mění se míra vyhlazení obrysů známé mapy: první má původní schůdky, druhý zaoblené rohy, třetí plynulé křivky. Barvy terénu, šedé neznámo a rozložení zůstávají vizuálně odpovídající předloze. Jde o generované výtvarné reference, nikoli přesnou geometrii herního světa.
+
+| 1 — Původní pobřeží | 2 — Jemné vyhlazení | 3 — Výrazné vyhlazení |
+| --- | --- | --- |
+| ![Minimapa s nadpisem a původními hranatými obrysy](assets/minimap-refinement-2026-10-30/01-puvodni-pobrezi.png) | ![Minimapa s jemně zaoblenými rohy pobřeží](assets/minimap-refinement-2026-10-30/02-jemne-vyhlazeni.png) | ![Minimapa s plynule vyhlazenými obrysy pobřeží](assets/minimap-refinement-2026-10-30/03-vyrazne-vyhlazeni.png) |
+
+3. [Vstupní snímek](assets/minimap-refinement-2026-10-30/reference.png), [přesné prompty vestavěného ImageGen](assets/minimap-refinement-2026-10-30/prompts.json) a [evidence návrhů](publishing.md#r-0356-minimap-refinement-proposals-2026-10-30). Při realizaci zůstane mapa vykreslovaná z herních dat; tyto PNG slouží pouze k porovnání vzhledu.
+
 
 ## Budovy — pět návrhů od přístřešku k manufaktuře, 30. října 2026
 

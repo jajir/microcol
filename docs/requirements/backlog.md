@@ -1,5 +1,7 @@
 # Current requirement backlog
 
+Prepared for selection on 2026-10-30: [R-0356 — minimap heading and coastline refinement](R-0356.md), A03 with A05 knowledge boundaries. Three static proposals remove the dashed frame and bottom hint, add “Minimap”, and compare original, gently rounded and flowing contours. Status: waiting for refinement; final selection and runtime implementation remain pending. [Gallery](../graphics.md#minimapa-nadpis-a-hladkost-pobrezi-30-rijna-2026).
+
 Completed on 2026-10-30: [R-0353 — five complete building-tier proposals](done/R-0353.md), A03 with A07 identities. Five sets each cover all 41 existing forms (205 illustrations on ten sheets), preserving actual upgrade counts. Concept sheets, exact prompts, model mapping and the gallery were reviewed; documentation checks passed. This is design-only delivery, with no selected direction or runtime change. [Evidence](../publishing.md#r-0353-building-tier-proposals-2026-10-30).
 
 Accepted locally on 2026-10-30: [R-0352 — vector building sources](done/R-0352.md), A03 with A07 identity dependency. All 41 building levels have genuine SVG sources and derived PNGs, with explicit source instructions and repeatable export. Model/JUnit **4,791**, targeted UI/support **16**, fixed smoke/support **21**, export tooling **3**; zero failures/errors/skips in final runs. [Evidence](../functional-tests.md#r-0352-vector-building-sources-2026-10-30); remote publication remains unverified.

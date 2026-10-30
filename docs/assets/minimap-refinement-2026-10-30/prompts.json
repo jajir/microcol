@@ -1,0 +1,26 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-10-30",
+  "purpose": "Static UI proposals; selection and runtime implementation pending.",
+  "source_reference": "reference.png",
+  "proposals": [
+    {
+      "number": 1,
+      "file": "01-puvodni-pobrezi.png",
+      "edit_source": "reference.png",
+      "prompt": "Use case: precise-object-edit. Asset type: faithful game UI mockup, variation 1 of 3.\nEdit target: the attached cropped MicroCol minimap screenshot, not a new map.\nMake exactly these changes: remove the large dotted/dashed outer focus rectangle completely; erase the entire bottom help sentence \"Click, drag or arrow keys to pan\"; add the exact title \"Minimap\" centered above the actual map frame, in the SAME dark handwritten font style, stroke weight and approximately same lettering size as that removed bottom help sentence.\nPreserve the parchment cream background, the actual thick dark hand-drawn outer MAP border, its dimensions/aspect ratio and placement; preserve every gray unexplored region and every green/turquoise known-terrain shape at the same locations. Preserve all existing jagged/stair-step coastlines exactly in this first variant; no smoothing yet.\nCRITICAL: Keep the white/cream double outlined rectangular camera viewport in exactly the same size and position, with square corners and crisp straight lines. The dotted focus rectangle is the one to REMOVE; the solid white viewport rectangle is the one to KEEP.\nFlat UI screenshot, no perspective, no shadows or added decoration. There must be only one text label \"Minimap\", no explanatory text, numbers, labels or footer. Retain a comfortable small blank margin below the map. Output one clean panel closely matching the input 460 by 440 aspect ratio."
+    },
+    {
+      "number": 2,
+      "file": "02-jemne-vyhlazeni.png",
+      "edit_source": "01-puvodni-pobrezi.png",
+      "prompt": "Use case: precise-object-edit. Asset type: faithful MicroCol game minimap UI proposal.\nEdit target: the attached approved baseline mockup with centered handwritten title \"Minimap\".\nKeep the entire layout, exact title lettering and size, warm cream background, thick hand-drawn dark map frame, map scale, terrain colors, fog, map silhouette location, and camera viewport position/dimensions unchanged.\nCRITICAL: the cream/white double outlined CAMERA RECTANGLE must stay exactly straight with square corners, completely unchanged, and on top of the terrain. The OUTER rectangular MAP FRAME also stays completely straight. No dotted focus rectangle, no text below the map, no extra labels.\nChange ONLY the traced contours of the colored geographic features: land against sea and explored geography against gray unexplored terrain. Keep thick slightly irregular pen strokes, same contrast and stroke width as the reference. Do not blur, thin or fade lines. Keep all existing map areas in the same places, including the narrow green shoreline and tiny enclosed turquoise lake. No new geography or revealed land. Output one panel at the same aspect ratio as the input.\nVARIANT 2: SUBTLE SMOOTHING. Gently round the sharp right-angle corners of every staircase coastline, approximate corner radius around 8–12 pixels at this 1283px reference width. Preserve the recognizable stair-step structure and every small inlet. Only short curves at corners, with most straight runs retained. This should read as the original shape with softer pen-drawn corners."
+    },
+    {
+      "number": 3,
+      "file": "03-vyrazne-vyhlazeni.png",
+      "edit_source": "01-puvodni-pobrezi.png",
+      "prompt": "Use case: precise-object-edit. Asset type: faithful MicroCol game minimap UI proposal.\nEdit target: the attached approved baseline mockup with centered handwritten title \"Minimap\".\nKeep the entire layout, exact title lettering and size, warm cream background, thick hand-drawn dark map frame, map scale, terrain colors, fog, map silhouette location, and camera viewport position/dimensions unchanged.\nCRITICAL: the cream/white double outlined CAMERA RECTANGLE must stay exactly straight with square corners, completely unchanged, and on top of the terrain. The OUTER rectangular MAP FRAME also stays completely straight. No dotted focus rectangle, no text below the map, no extra labels.\nChange ONLY the traced contours of the colored geographic features: land against sea and explored geography against gray unexplored terrain. Keep thick slightly irregular pen strokes, same contrast and stroke width as the reference. Do not blur, thin or fade lines. Keep all existing map areas in the same places, including the narrow green shoreline and tiny enclosed turquoise lake. No new geography or revealed land. Output one panel at the same aspect ratio as the input.\nVARIANT 3: CLEARLY STRONGER SMOOTHING. Join the staircase-like coastline segments into continuous flowing gently curved hand-drawn contours. Smooth away small step notches while retaining all main bays, capes and the overall shape and area of the original known world. Approximate smoothing scale 25–35 pixels at this 1283px reference width. Round the tiny lake naturally but keep its location and size. Visibly smoother than merely rounding individual corners; an organic coastline while keeping strong dark ink contours. The viewport and outer frame MUST stay rectangular, not rounded."
+    }
+  ]
+}
