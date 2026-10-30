@@ -2,13 +2,76 @@ package org.microcol.gui.image;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.awt.image.BufferedImage;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.jupiter.api.Test;
 import org.microcol.model.ConstructionType;
 
 class BuildingArtworkTest {
+    @Test
+    void everyBuildingHasASelfContainedVectorSource() throws Exception {
+        final Path directory = Path.of("src/graphics/colony-buildings");
+        final Set<String> expected = new HashSet<>();
+        final var factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        factory.setFeature(
+                "http://apache.org/xml/features/disallow-doctype-decl", true);
+        final var parser = factory.newDocumentBuilder();
+        final Set<String> elements = Set.of("svg", "title", "desc", "g",
+                "path");
+        final Set<String> attributes = Set.of("xmlns", "width", "height",
+                "viewBox", "role", "aria-labelledby", "id", "transform", "d",
+                "fill");
+        for (final ConstructionType type : ConstructionType.ALL) {
+            final String name = type.name() + ".svg";
+            expected.add(name);
+            final Path source = directory.resolve(name);
+            assertTrue(Files.isRegularFile(source), name);
+            final var document = parser.parse(source.toFile());
+            final var root = document.getDocumentElement();
+            assertEquals("http://www.w3.org/2000/svg", root.getNamespaceURI(),
+                    name);
+            assertEquals("0 0 320 160", root.getAttribute("viewBox"), name);
+            assertEquals("320", root.getAttribute("width"), name);
+            assertEquals("160", root.getAttribute("height"), name);
+            final var nodes = document.getElementsByTagName("*");
+            for (int i = 0; i < nodes.getLength(); i++) {
+                final var node = nodes.item(i);
+                assertEquals(root.getNamespaceURI(), node.getNamespaceURI(),
+                        name);
+                assertTrue(elements.contains(node.getLocalName()),
+                        name + ": unsupported element " + node.getNodeName());
+                final var attrs = node.getAttributes();
+                for (int j = 0; j < attrs.getLength(); j++) {
+                    final var attribute = attrs.item(j);
+                    assertTrue(attributes.contains(attribute.getNodeName()),
+                            name + ": unsupported attribute "
+                                    + attribute.getNodeName());
+                }
+            }
+            final var paths = document
+                    .getElementsByTagNameNS(root.getNamespaceURI(), "path");
+            assertTrue(paths.getLength() > 0,
+                    name + ": missing vector geometry");
+            for (int i = 0; i < paths.getLength(); i++) {
+                final var path = (org.w3c.dom.Element) paths.item(i);
+                assertFalse(path.getAttribute("d").isBlank(), name);
+                assertTrue(path.getAttribute("fill").matches("#[0-9a-fA-F]{6}"),
+                        name);
+            }
+        }
+        try (var sources = Files.list(directory)) {
+            assertEquals(expected,
+                    sources.map(path -> path.getFileName().toString())
+                            .filter(name -> name.endsWith(".svg"))
+                            .collect(java.util.stream.Collectors.toSet()));
+        }
+    }
+
     @Test
     void everyBuildingLevelHasDistinctTransparentArtwork() throws Exception {
         final Set<Integer> pixels = new HashSet<>();

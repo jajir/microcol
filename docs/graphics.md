@@ -1,5 +1,34 @@
 # Grafické podklady a jejich použití v MicroCol
 
+
+## Zdrojový formát herní grafiky
+
+1. Nová nebo měněná herní ilustrace musí mít editovatelný zdroj SVG tvořený skutečnými vektorovými tvary. PNG smí sloužit jako odvozený export pro hru. Vložení nebo odkazování rastrového obrázku uvnitř SVG tuto podmínku nesplňuje.
+2. Rastrový výstup ImageGen je vizuální předloha. Schválení vzhledu návrhu neruší požadavek na SVG zdroj. Screenshoty, dokumentační náhledy a historické předlohy mohou být rastrové; výjimku pro produkční zdroj musí výslovně povolit uživatel.
+3. Před použitím existující grafiky ověřit její zdroj. Chybějící odpovídající SVG výslovně uvést a vyřešit v rozsahu změny; tiché převzetí starého rastru nepředstavuje schválenou výjimku.
+4. Před dokončením ověřit úplnost zdrojů, skutečnou vektorovou geometrii bez rastrových obalů, opakovatelný export a vizuální výsledek v místě použití. Samotný úspěch herních testů nebo screenshotu zdrojový formát neověřuje. Odevzdat SVG i odpovídající runtime export a popsat postup jeho obnovy.
+5. SVG není automatickou zárukou hezčí kresby ani menšího souboru. Zachovat čitelnost v herní velikosti, průhlednost, proporce a rozpoznatelnost úrovní. Škálovatelný zdroj neodstraňuje rozlišení již exportovaného PNG; pro větší runtime rozlišení je nutný nový export.
+
+## Vektorové zdroje budov — 30. října 2026
+
+1. [R-0352](requirements/done/R-0352.md) převádí všech 41 ilustrací současných budov a jejich vylepšení na samostatné `microcol-game/src/graphics/colony-buildings/TYPE.svg`. Názvy odpovídají `ConstructionType.name()`; základní sklad používá `BASIC_WAREHOUSE`. Starší `src/graphics/buildings.svg` zůstává historickým zdrojem jiné kresby.
+2. Zdroje obsahují pojmenovanou skupinu `building`, popis a samostatně identifikované vyplněné křivky `paint-NNNN` v pořadí malování. Nevkládají PNG, neodkazují na externí zdroje a nepoužívají fonty. Křivky vznikly z původních výřezů pomocí [VTracer](https://github.com/visioncortex/vtracer), Python balíček 0.6.15; přesné parametry a příprava průhlednosti jsou v `tracing.json`. Drobné odpojené zbytky sousedních budov na okrajích výřezů byly odstraněny. Jemná rastrová textura je zjednodušená, siluety a charakteristické prvky zachované.
+3. Jde o editovatelné vektorové tvary, nikoli o ručně připravené sémantické vrstvy střech, oken a zdí. Dokumenty mají přibližně stovky křivek; větší výtvarná změna může vyžadovat jejich ruční seskupení. Při běžné úpravě editovat SVG, neopakovat trasování. Původní atlasy, prompty a výřezy jsou zachovány v `colony-buildings/reference/` pouze jako historické předlohy.
+4. SVG má `viewBox="0 0 320 160"`. Kresba je proporcionálně vložená do prostoru 312 × 154, vodorovně vystředěná a dole zarovnaná k y=157. Hra i nápověda nadále používají 320 × 160 průhledné PNG se stejnými názvy; načítání, ceny, výroba ani herní pravidla se nemění. Maven export nespouští.
+5. Z kořene repozitáře spustit:
+
+   ```bash
+   python3 scripts/graphics/export-buildings.py
+   python3 scripts/graphics/export-buildings.py --check
+   python3 -m unittest discover -s scripts/graphics -p 'test_building_export.py'
+   ```
+
+   Export vyžaduje `rsvg-convert`; převodní VTracer ani Pillow nejsou závislostí exportu či hry. Kontrola nic nepřepisuje a porovnává exporty po bajtech. Referenční export 30. října 2026 používá librsvg 2.61.4 a Cairo 1.18.4; jiné verze rendereru mohou změnit bajty PNG a vyžadují vědomou obnovu a kontrolu celé sady. Export odmítne rozdílné seznamy SVG/PNG a při chybě rendereru zachová všechny dosavadní exporty.
+6. `BuildingArtworkTest` kontroluje přesně všech 41 modelových typů, SVG s povolenou vektorovou strukturou, průhledné rozměrově shodné a navzájem odlišné PNG. `TC_195_F227_colony_layout_test` kontroluje kolonii a vylepšené budovy; `TC_100_F91_colonizopedia_test` kontroluje všechny obrázky v anglické i české nápovědě. Výsledky a vizuální posouzení zaznamenává [funkční evidence](functional-tests.md#r-0352-vector-building-sources-2026-10-30); místní přejímka je dokončená, vzdálená publikace nebyla ověřována.
+
+![Přehled všech 41 vektorových budov, náhledy odvozené ze SVG](assets/building-vectors-2026-10-30/all-buildings.png)
+
+
 ## Budovy v nápovědě — 30. října 2026
 
 1. [R-0351](requirements/done/R-0351.md) používá stávající ilustrace všech 41 úrovní budov v přehledu **Budovy**. Obrázek a název stojí vlevo, stručný přínos, cena a předpoklady vpravo; jednotlivé řady vylepšení drží společné pořadí. Přehled přebírá papírový rám, sdílené písmo a posuvník nápovědy.
@@ -98,7 +127,7 @@ Pro další porovnání jsou zajímavé zejména 4–6 (cílově 6×–10×); je
 ## Městská obrazovka „Čistá linka“ — 30. října 2026
 
 1. Vybraný návrh a rozsah implementace jsou v [R-0349](requirements/done/R-0349.md). Světlý krémový podklad, tenké olivové dělicí čáry a tyrkysová plocha přístavu navazují na Evropu. Budovy jsou samostatné průhledné ilustrace v pevné mřížce 4 × 4; postavená úroveň určuje kresbu, nepostavená rodina je zesvětlená a označená.
-2. Generování použilo vestavěný Imagegen se schváleným návrhem jako stylovou referencí. Tři původní listy a přesné prompty jsou v `microcol-game/src/graphics/colony-buildings/` (`generation.json`). `sprites.json` zaznamenává výřezy jednotlivých budov. Jejich průhledný obsah se ořízne, proporcionálně vejde do 312 × 154 pixelů a vystředí na podklad 320 × 160 pixelů se společnou dolní hranou. Výsledných 41 PNG je v `src/main/resources/images/colony-buildings/`, pojmenovaných skutečným názvem typu budovy; všechny úrovně mají vlastní kresbu.
+2. Původní generování použilo vestavěný Imagegen se schváleným návrhem jako stylovou referencí. Tři původní listy, přesné prompty (`generation.json`) a souřadnice výřezů (`sprites.json`) jsou nyní archivované v `microcol-game/src/graphics/colony-buildings/reference/`. Původních 41 PNG bylo přímo odvozeno z rastrů; tento chybějící vektorový krok napravuje [současný zdroj a export budov](#vektorove-zdroje-budov-30-rijna-2026).
 3. Mapa používá existující terény a jednotky. Nová kresba nepředstavuje změnu kapacity, bonusů, povolání ani stavebních nákladů. Implementace prošla místní přejímkou; skutečné výsledky a vizuální kontrola jsou v [evidenci](functional-tests.md#r-0349-colony-workspace-2026-10-30).
 
 

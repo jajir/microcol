@@ -170,6 +170,16 @@ an unavailable formatter as a blocker rather than silently using another style.
 
 # Graphics
 
+Follow the [graphics source contract](docs/graphics.md#zdrojovy-format-herni-grafiky).
+New or modified game illustrations require an editable, genuine vector SVG source;
+runtime PNGs are derived exports. An SVG containing an embedded or linked bitmap
+does not satisfy this rule. ImageGen output is a visual reference, and approval of
+its appearance does not waive the SVG requirement. When reusing artwork, check its
+source and report missing SVGs rather than silently accepting a format exception.
+Before acceptance, verify the vector source, repeatable export and displayed result;
+passing gameplay tests alone is insufficient. Raster screenshots and design references
+are allowed; exceptions for production sources require explicit user authorization.
+
 Follow [the current visual brief](docs/graphics.md#soucasne-zadani-vzhledu) for
 graphics changes. Keep artwork broadly consistent with the existing game,
 prioritize high contrast and readability, and use your own aesthetic judgment

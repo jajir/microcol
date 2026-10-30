@@ -1,8 +1,15 @@
 # Use cases a přejímka pravidel hry
 
+
+## Vektorové zdroje budov — 2026-10-30
+
+[R-0352](requirements/done/R-0352.md) nahrazuje rastrové zdroje všech 41 budov skutečnými SVG a odvozenými PNG. UC-114/119 a městské cesty z R-0349 zachovávají stejné chování. Stávající `TC_100_F91/TC_10–TC_11` a `TC_195_F227/TC_01–TC_02` ověřily zobrazení nové sady; úplnost vektorových zdrojů kontroluje `BuildingArtworkTest`. Místní přejímka prošla; [evidence](functional-tests.md#r-0352-vector-building-sources-2026-10-30) uvádí přesný výběr a výsledky, nikoli přijetí celých UC ani ověření publikace.
+
 ## UC-114/119: budovy v nápovědě — 2026-10-30
 
 1. [R-0351](requirements/done/R-0351.md) přidává ilustrované téma Budovy do stávající herní nápovědy. Scénáře TC10–11 v `TC_100_F91_colonizopedia_test` pokrývají všech 41 úrovní budov, ceny a pořadí podle modelu, příklady přínosů, hledání názvů v češtině a angličtině, posouvání, malé i široké okno a návrat bez změny partie.
+
+
 2. Stávající TC100/01–09 zachovávají své kontroly a doplňují nové téma do seznamu v obou jazycích. Skutečné místní výsledky patří do [funkční evidence](functional-tests.md); rozšíření nemění hodnocení celých UC-114/119 ani neprokazuje publikaci.
 
 ## Rozložení městské obrazovky — 30. října 2026
@@ -14,12 +21,10 @@
 1. [R-0350](requirements/done/R-0350.md) přidává přehled celého světa s kliknutím pro přesun kamery, klávesnicí a živým rámečkem výřezu. Pravidla průzkumu z R-0070 zůstávají autoritativní; skrytá krajina ani objekty se nezobrazují.
 2. `TC_196_F228_world_minimap_test` pokrývá kameru, okraje, změnu velikosti, průzkum, českou nápovědu a zachovaný herní stav; geometrické JUnit testy pokrývají i světy menší než pohled. Stávající TC26 a TC188 kontrolují průzkum a hlavní obrazovku. Výsledky jsou v [evidenci](functional-tests.md#r-0350-world-minimap-2026-10-30); nejde o uzavření celých UC.
 
-
 ## UC-114/115/119: bez vyskakovacích bublin — 2026-10-29
 
 1. [R-0345](requirements/done/R-0345.md) odstraňuje bubliny napříč aplikací. TC188 ověřuje najetí na Retire bez popupu a zachovaný stavový řádek; TC85 kontroluje ovládání navštívených obrazovek a najetí na název kolonie. Stávající diplomatické, produkční a rozkazové scénáře dál kontrolují původní hodnoty v přístupných vysvětleních.
 2. Jde o změnu prezentace UC-114/115/119, nikoli o změnu pravidel nebo potvrzení kompletního pokrytí use cases. Úspěšnou místní přejímku i původní selhání zaznamenává [funkční evidence](functional-tests.md#r-0345-no-hover-tooltips-2026-10-29).
-
 
 ## UC-079/114–119: nadpisy herních pohledů — 2026-10-29
 
@@ -44,11 +49,9 @@
    a podtržení zůstávají. `TC_192_F225_in_game_layout_test` zachovává kontrolu
    českého celostránkového rozložení. Skutečné výsledky patří do funkční evidence.
 
-
 ## UC-018/023–025/054–059/081/114/119: evropský přístav — 2026-10-28
 
 Zarovnání cen UC-054/055/059/119 rozšiřuje [R-0346](requirements/done/R-0346.md): TC194 měří společný střed všech 16 cen a ikon v obou jazycích a velikostech okna; TC194/03 porovnává šířku a okraje obsahu zboží s oběma lištami, TC06 zachovává nákup/prodej a TC79/01 také bojkot. [Stav přejímky](functional-tests.md#r-0346-centered-goods-prices-2026-10-29) nemění stav celých UC.
-
 
 1. [R-0335](requirements/done/R-0335.md) mění prezentaci přístavu a společné ikony zboží. Pravidla, ceny, stavy a existující identifikátory UC zůstávají beze změny.
 2. [R-0336](requirements/done/R-0336.md) navazuje plochými bednami a průhledným výběrem; UC-026 (odhození) a UC-028 (obrat) používají nabídku konkrétní plující lodi. TC194 ověřuje její otevření myší/klávesnicí a Escape, TC44 obrat včetně zrušení a zastaralého stavu, TC107 odhození, TC154 omezení uzavřené Evropy.
@@ -68,7 +71,6 @@ Zarovnání cen UC-054/055/059/119 rozšiřuje [R-0346](requirements/done/R-0346
    dále chrání TC06 v pevném smoke. Skutečné výsledky jsou ve
    [funkční evidenci](functional-tests.md#r-0327-clean-status-line-2026-10-27).
 
-
 ## UC-008/012: obrys říčních břehů — R-0320 (2026-10-27)
 
 1. [R-0320](requirements/done/R-0320.md) upravuje vzhled MAP-004 a UC-008/012:
@@ -79,7 +81,6 @@ Zarovnání cen UC-054/055/059/119 rozšiřuje [R-0346](requirements/done/R-0346
    TC90/F81 kontroluje inkoust obou břehů a nepřerušenou vodu společně
    s dosavadními asercemi pohybu, produkce a mostů. Skutečnou přejímku vede
    [funkční evidence](functional-tests.md#r-0320-ink-river-banks-2026-10-27).
-
 
 ### UC-006/114/119: náhled neobjeveného pole — 2026-10-27
 
@@ -125,7 +126,6 @@ Zarovnání cen UC-054/055/059/119 rozšiřuje [R-0346](requirements/done/R-0346
 
 [R-0293 — široké rozlití vlny](requirements/done/R-0293.md), 26. října 2026: UC-114/119 používají `TC_80_F72_terrain_identity_test.TC_04_sparse_terrain_and_living_water_survive_pan_and_continue` pro dopad, rozplynutí, šestisekundovou smyčku, 100% účast dalekého moře a viditelnou statickou ukázku před i po Continue. Stav výsledků: [funkční evidence](functional-tests.md#r-0293-wide-wash-2026-10-26).
 
-
 ## UC-008/009/012/019/021/031/032/033/034/038/119: říční koridory — 2026-10-26
 
 1. [R-0290](requirements/done/R-0290.md) mění TC90/F81/02 na říční rybolov bez doku, zachovává TC90/F81/01 pro pohyb a doplňuje odmítnutí orby a založení kolonie. TC90/F81/03 nadále chrání mlhu; nové TC90/F81/04 a /05 ověřují těžbu stříbra/rudy, mostek, spotřebu zásob a Continue. Před potvrzením se ukazuje skutečný výnos, zrušení náhledu nic nemění a odmítnutí stavby vysvětlí omezení bez spotřeby nástrojů či pohybu.
@@ -141,10 +141,8 @@ Zarovnání cen UC-054/055/059/119 rozšiřuje [R-0346](requirements/done/R-0346
 
 Ověřené rozměry UI (2026-10-19): [R-0251](requirements/done/R-0251.md), UC-119, TC83/TC84/TC85; přejímka v [evidenci](functional-tests.md#r-0251-button-spacing-2026-10-19).
 
-
 Ověřená typografie (2026-10-19): [R-0250](requirements/done/R-0250.md), UC-119,
 TC83/TC84/TC85 a plná regrese. [Evidence](functional-tests.md#r-0250-playpen-sans-2026-10-19).
-
 
 **Migrace požadavků 2026-10-14:** aktuální zbytek R-0001–R-0040 a novější
 důkazy vlastní [mapa migrace](requirements/migration-2026-10-14.md), další práci
@@ -662,7 +660,6 @@ přehled všech typů jednotek, obrázky, vlastnosti, hledání v EN/CZ, rolová
 a návrat beze změny partie. Stav lokální přejímky vede
 [funkční evidence](functional-tests.md#r-0284-unit-help-2026-10-25).
 
-
 Historicky dne 12. října byly kontroly počtu lodí přesunuty z page component do samotných
 TC01 a obou scénářů TC06. TC01 souvisí s UC-024/025 (přeprava jednotek), TC06
 s UC-055/056 (nákup lodě a obchod). Tento přesun zachovává původní očekávání
@@ -805,7 +802,6 @@ R-0071 rozšiřuje UC-027/113 o jednorázově vylosované počasí a uloženou p
 délku plavby. Modelová sada (1386) a vybrané UI scénáře TC23/27/28/30
 s kontraktem (26) prošly 2026-10-16; [evidence](functional-tests.md#r-0071-voyage-duration-2026-10-16)
 odlišuje ověřené cesty od čekajícího úplného CI a účinku Magellana.
-
 
 Rozpracované R-0075 doplňuje UC-054/055 o přesně tři uložené kandidáty a
 samostatnou cenu placené cesty. TC46/F37 ověřuje zrušení, jedinou výměnu,
@@ -951,7 +947,6 @@ Model sdílí náhradní základ 1/2/3, výstup běžného/odborného kazatele a
 bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cesty TC_67_F58 prošly; úplné CI zatím čeká. Podrobné výsledky vede
 [evidence](functional-tests.md#r-0110-religious-production-2026-10-17).
 
-
 ### Dávka Claude — cílené ověření 17. října 2026
 
 1. UC-017: R-0118 doplňuje mez 20 nástrojů. Modelové mezní případy a TC25
@@ -1027,7 +1022,6 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
 2. Produkční bonusy a Tory postih vlastní R-0101. Celý UC-078 ani druhá dávka
    zatím nejsou uzavřené; česká hráčská cesta TC75 není ověřena.
 
-
 ### UC-078: politické výrobní bonusy R-0101
 
 1. [Cílená evidence R-0101](functional-tests.md#r-0101-political-production-2026-10-18)
@@ -1035,7 +1029,6 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
    a Continue; TC77_02 Tory postih a jeho zánik pod prahem. Modelové kontroly
    pokrývají přesné prahy, snímek před hladomorem a pořadí procentních účinků.
 2. Plná regrese a publikace druhé dávky zůstávají samostatně čekající.
-
 
 ### UC-006: explored-only grid — 2026-10-24
 
@@ -1049,7 +1042,6 @@ this entry does not claim remote regression or physical HiDPI verification.
 
 Rozšíření UC-114/119 [R-0269](requirements/done/R-0269.md) přidává do Colonizopedie obrazové tabulky terénů a bonusů. TC_100/TC_06–TC_07 ověřují obsah, obrázky, EN/CZ hledání a zachování stavu hry; výsledky vede [funkční evidence](functional-tests.md#r-0269-illustrated-terrain-help-2026-10-25).
 
-
 ### Sdílené kontextové nabídky — R-0271
 
 Vzhled nabídek pro UC-017/018 (vybavení), UC-015/025 (hlídka a nalodění),
@@ -1057,7 +1049,6 @@ UC-038 (práce) a UC-066 (vysvěcení) používá společný styl. Zachované he
 scénáře a samostatná kontrola klávesových akcelerátorů jsou uvedené ve
 [funkční evidenci R-0271](functional-tests.md#r-0271-context-menus-2026-10-25).
 Tato vizuální změna nemění stav úplné přejímky pravidel uvedených UC.
-
 
 ### UC-011/114/119: unit commands and global controls — 2026-10-25
 
@@ -1090,7 +1081,6 @@ Tato vizuální změna nemění stav úplné přejímky pravidel uvedených UC.
    release and empty-square rejection. State and movement assertions remain
    explicit. Results belong to the [Control-click evidence](functional-tests.md#r-0275-control-click-unit-context-2026-10-25).
 
-
 ### UC-114/115/119: toolbar 07B — 2026-10-25
 
 [R-0273](requirements/done/R-0273.md) zachovává globální herní akce a navigaci kolonií. TC188 ověřuje trvalé EN/CZ názvy a ikony, nápovědu při najetí a klávesnicovém fokusu, zalomení v úzkém okně, prázdnou nabídku, zrušení i klávesnicové otevření kolonie a změnu sezónního akcentu přes skutečný konec tahu a Continue. TC38 ověřuje původní návrat Escape, TC81 deklaraci nezávislosti a TC164 rozdíl mezi odchodem a ukončením. Skutečné výsledky jsou v [evidenci R-0273](functional-tests.md#r-0273-toolbar-07b-2026-10-25); zápis sám neuzavírá celé UC.
@@ -1117,22 +1107,18 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 1. [R-0280](requirements/done/R-0280.md) zobrazuje počet domků podle vnitřní populace (1–3 / 4–7 / 8+) a opevnění podle dokončené stavby. Mapová značka, národní vlajka, název bez rámečku a boční náhled používají stejný pozorovaný stav. Skryté změny se projeví až po obnovení dohledu.
 2. TC189/F222 ověřuje 12 kombinací, vlajky, boční náhled, otevření kolonie, Escape a Continue. TC26 zachovává pozorování a mlhu války; `CurrentSightTest` doplňuje uloženou populaci a obranu. [Výběr a skutečné výsledky](functional-tests.md#r-0280-colony-markers-2026-10-25) pokrývají tuto vizuální část; neuzavírají zbývající herní pravidla celých UC.
 
-
 ### Sdílené obrázky jednotek — R-0285
 
 [Vybraná sada 09](graphics.md#vybrane-jednotky-25-rijna-2026) mění společný vzhled typů a stavů, nikoli pravidla. TC_190/F223 kontroluje mapové obrázky, pohyb a Continue; TC_100/08–09 nápovědu, TC_25/TC_27 výbavu, TC_01 přepravu a TC_62 dělostřelectvo. [Funkční evidence](functional-tests.md#r-0285-walking-unit-artwork-2026-10-25) uvádí skutečné výsledky vybraných cest; nejde o nové přijetí celých UC.
-
 
 ### UC-114/115/119: ruční oddělovací linky — 2026-10-25
 
 1. [R-0286](requirements/done/R-0286.md) sjednocuje tah oddělovačů hlavní obrazovky s obrysy tlačítek. TC21/F15, metoda `TC_10_main_screen_panels_remain_readable_when_resized`, ověřuje společný obrázek a měřítko, jedinou viditelnou hranu, EN/CZ rozměry, stavový text, kalendář a zlato. TC188/F221 zachovává ověření navigace, klávesnice, zrušení nabídky a Continue. [Výsledky](functional-tests.md#r-0286-main-screen-separators-2026-10-25) neznamenají nové přijetí všech variant těchto UC.
 
-
 ### R-0287 — Original World landscape and connected lake
 
 1. UC-001/002 (Nastavení) and UC-007/008 (Hra): [R-0287](requirements/done/R-0287.md) extends `TC_24_F15_free_play_setup_test.TC_12_original_world_river_landing_and_colony_survive_continue` with nearby forest/bonus checks, a normal ship voyage from ocean to freshwater lake and Save/Continue there. The existing hidden-mouth, river rendering, landing and founding assertions remain.
 2. `OriginalWorldTest` checks regional coverage, legal features, connected river outlets, lake identity and saved landscape. `TC_80_F72_terrain_identity_test` retains the movement, fishing and terrain presentation boundaries. Actual results belong to the [functional record](functional-tests.md#r-0287-original-world-enrichment-2026-10-25); this bounded change does not close whole use cases.
-
 
 ### UC-114/115/119: mapa přímo u linek — 2026-10-25
 

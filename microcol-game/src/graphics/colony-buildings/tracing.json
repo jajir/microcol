@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-30",
+  "tool": "vtracer Python 0.6.15 (embedded generator 0.6.12)",
+  "reference": "reference/sprites.json",
+  "parameters": {
+    "colormode": "color",
+    "hierarchical": "stacked",
+    "mode": "spline",
+    "filter_speckle": 4,
+    "color_precision": 5,
+    "layer_difference": 32,
+    "corner_threshold": 60,
+    "length_threshold": 3.5,
+    "max_iterations": 10,
+    "splice_threshold": 45,
+    "path_precision": 2
+  },
+  "preprocessing": "Crop atlas rectangle; remove disconnected neighboring fragments touching left/right crop edges, preserving the largest component; threshold alpha at 128, clear RGB of transparent pixels; crop to visible alpha bounds.",
+  "placement": "Fit proportionally within 312 x 154; center horizontally in a 320 x 160 viewBox; bottom at y=157.",
+  "editing": "SVG paths are the canonical editable sources. Do not retrace after editing; export SVG using scripts/graphics/export-buildings.py."
+}
