@@ -1,5 +1,7 @@
 # Current requirement backlog
 
+Completed locally on 2026-10-30: [R-0359 — visible colony stock changes and tobacco consumption](done/R-0359.md), A07 with A03/A04. Rendered signed values and colors, immediate worker-assignment refresh, scarce input and actual turn settlement passed: 4,791 model/JUnit and 11 targeted UI/support tests, zero failures/errors/skips. Smoke was omitted under the explicit user instruction for this task. [Evidence](../functional-tests.md#r-0359-visible-warehouse-forecasts-2026-10-30).
+
 Completed on 2026-10-30: [R-0357 — five simpler building proposals matching the main map](done/R-0357.md), A03 with A07 identity dependencies. Five further complete sets, numbered 6–10, simplify outlines and color areas in response to feedback on R-0353. Design-only scope; runtime selection and SVG implementation remain separate. [Gallery](../graphics.md#budovy-pet-jednodussich-navrhu-podle-hlavni-mapy-30-rijna-2026).
 
 Prepared for selection on 2026-10-30: [R-0356 — minimap heading and coastline refinement](R-0356.md), A03 with A05 knowledge boundaries. Three static proposals remove the dashed frame and bottom hint, add “Minimap”, and compare original, gently rounded and flowing contours. Status: waiting for refinement; final selection and runtime implementation remain pending. [Gallery](../graphics.md#minimapa-nadpis-a-hladkost-pobrezi-30-rijna-2026).
