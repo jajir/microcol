@@ -29,6 +29,27 @@
 
 4. Náhledy používají existující [vektorové zdroje budov](../microcol-game/src/graphics/colony-buildings/README.md), produkční symboly a herní atlasy z revize `b94e1f8017f19e0277da748d73d8b29e42f3379e`. PNG jsou návrhové snímky, nikoli nové herní ilustrace nebo runtime exporty. [Evidence](publishing.md#r-0366-compact-building-proposals-2026-10-30) odděluje kontrolu náhledů od budoucí herní přejímky.
 
+## Zarovnání budov — dva navazující návrhy, 30. října 2026
+
+1. [R-0367](requirements/done/R-0367.md) doplňuje [původní trojici](#kompaktni-budovy-tri-navrhy-30-rijna-2026) podle dalšího uživatelova zadání. Obě varianty zachovávají čtyři sloupce a stejný obsah; produkce má ikonu nad číslem v samostatném sloupci u pravého okraje, jako v původním třetím návrhu.
+2. **Budova uprostřed** ponechává obrázek, název a pracovníky vystředěné v položce. **Vše zarovnané doprava** zarovnává obrázek, název i pracovníky doprava v jejich obsahovém bloku; za malou mezerou je samostatná produkce, také zarovnaná doprava. Jde o doslovné provedení požadovaného pravého zarovnání, nikoli změnu herního ovládání.
+
+<details open>
+<summary><strong>Budova uprostřed</strong></summary>
+
+![Budova, název a pracovníci uprostřed; produkce u pravého okraje](assets/compact-buildings-alignment-2026-10-30/variant-1.png)
+
+</details>
+
+<details>
+<summary><strong>Vše zarovnané doprava</strong></summary>
+
+![Budova, název a pracovníci zarovnaní doprava; samostatný sloupec produkce vpravo](assets/compact-buildings-alignment-2026-10-30/variant-2.png)
+
+</details>
+
+3. Zdroje a významy přebíráme z R-0366 na revizi `5348e66aefe8c25d002bd28af111e5fb5c7d2ad3`. Pro přesné zarovnání je v náhledu odstraněný pouze prázdný okraj kopií SVG; geometrie kreseb i produkční soubory zůstávají původní. Snímky jsou dokumentační návrhy. [Evidence kontroly](publishing.md#r-0367-building-alignment-proposals-2026-10-30) není přejímkou hotové hry.
+
 ## Produkční ikony — vybraná varianta 3, 30. října 2026
 
 1. Uživatel vybral **Z3 + K3 + M3** z [návrhů R-0363](#zvony-krize-a-kladiva-tri-navrhy-30-rijna-2026) a zadal jejich použití v [R-0365](requirements/done/R-0365.md). Zvon má dřevěný závěs, kříž podstavec a kladivo rozštěpenou hlavu. Geometrie i barvy schválených SVG jsou zachované.

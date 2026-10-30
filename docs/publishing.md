@@ -1157,3 +1157,11 @@ documentation in APT just to make it visible on the web.
 4. Documentation consistency and strict MkDocs are the required acceptance for this documentation-only scope. Model/JUnit, Docker UI and smoke are exempt. Remote CI, Pages and distribution publication are not inspected or claimed.
 
 5. Final documentation acceptance passed nine consistency tests with zero failures/errors/skips and strict MkDocs. Logs: `target/r0366/docs-tests.log` and `target/r0366/mkdocs.log`. Scope review confirmed documentation and proposal screenshots only.
+
+## R-0367 building alignment proposals — 2026-10-30
+
+1. Scope: [R-0367](requirements/done/R-0367.md), two documentation-only follow-up layouts and [screenshots](graphics.md#zarovnani-budov-dva-navazujici-navrhy-30-rijna-2026), based on `5348e66aefe8c25d002bd28af111e5fb5c7d2ad3`. Runtime artwork, game source, configuration and tests are unchanged.
+2. Headless Chromium passed both variants at 768, 520 and 320 px viewport widths: six combinations, each with sixteen buildings, twenty-four worker positions, one worker, three production values and seven unbuilt labels. All images loaded; visible carousel controls switched the variants; no horizontal overflow or JavaScript error occurred. Geometry checks confirmed centered/right-aligned building boxes and a separate output column at the right edge with the quantity below its icon. Reference and narrow screenshots were inspected visually. Logs and checking code are retained in `target/r0367/`.
+3. This is proposal verification, not gameplay acceptance. Documentation consistency tests and strict MkDocs are the required local gates; model/JUnit, Docker UI and smoke are exempt for the documentation-only scope. No remote CI or publication check is requested or claimed.
+
+4. Local documentation acceptance passed nine consistency tests with zero failures/errors/skips and strict MkDocs. Logs: `target/r0367/docs-tests.log` and `target/r0367/mkdocs.log`. Final review covers documentation and two proposal screenshots only.

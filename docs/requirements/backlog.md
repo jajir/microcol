@@ -996,3 +996,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Compact colony building proposals — 2026-10-30
 
 1. [R-0366](done/R-0366.md), primary area A03 with unchanged A07 production meanings, delivers three compact layout alternatives, including production beside the building. Status: done; visual and documentation acceptance passed. [Gallery](../graphics.md#kompaktni-budovy-tri-navrhy-30-rijna-2026). Selection and game implementation remain separate.
+
+## Building alignment proposals — 2026-10-30
+
+1. [R-0367](done/R-0367.md), primary area A03 with unchanged A07 production meanings, adds centered and right-aligned building groups with production at the right edge. Status: done; visual and documentation acceptance passed. [Gallery](../graphics.md#zarovnani-budov-dva-navazujici-navrhy-30-rijna-2026). Game implementation remains separate.

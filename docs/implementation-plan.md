@@ -694,3 +694,7 @@ Návrhy budov z 30. října 2026 řeší [R-0357](requirements/done/R-0357.md), 
 ## Kompaktní přehled budov — 30. října 2026
 
 1. P28/A03: [R-0366](requirements/done/R-0366.md) připravuje tři návrhy menších položek budov v kolonii, včetně produkce napravo od ilustrace. [Srovnání](graphics.md#kompaktni-budovy-tri-navrhy-30-rijna-2026) zachovává názvy, pracovní místa a výnosy; výběr a implementace herního rozložení jsou samostatný krok.
+
+## Další zarovnání budov — 30. října 2026
+
+1. P28/A03: [R-0367](requirements/done/R-0367.md) doplňuje dva návrhy k R-0366: vystředěná budova s produkcí vpravo a pravé zarovnání budovy, názvu, pracovníků i samostatného výnosu. [Galerie](graphics.md#zarovnani-budov-dva-navazujici-navrhy-30-rijna-2026) zachovává původní obsah a nevybírá implementaci.
