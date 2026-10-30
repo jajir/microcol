@@ -1,5 +1,14 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0354 colony tile selection — 2026-10-30
+
+1. [R-0354](requirements/done/R-0354.md) changes only the selected colony tile frame to the main map’s `Color.GREY`, 2 px, retaining the existing inset. Baseline: `000779d5` plus this task’s changes. No gameplay operation or main-map rendering changes.
+2. Existing TC195/01 now checks the rendered frame color after clicking the town center and moving to a worked field with the keyboard, while retaining all unchanged-world, production and layout checks. Targeted selection: `TC_195_F227_colony_layout_test,PageVerificationContractTest` (five checks). Model/JUnit, targeted UI and fixed smoke/support passed as recorded below.
+3. Shared Eclipse formatting applied to the three changed Java files; host test compilation, whitespace checks, nine documentation consistency tests and strict MkDocs passed. Candidate source manifest: `target/r0353-source.json`. Model/JUnit completion `20261030T142546Z-60ffec9ff936`, supervisor PID 98693, timeout 600 seconds, passed **4,791 tests / 352 fresh XML reports, zero failures/errors/skips**, `target/verification/run-e_7jccid`. Model execution: 135.580 seconds; verifier total: 138.437 seconds; supervisor including cleanup: 138.569 seconds. The source manifest still matches the candidate.
+4. Targeted Docker/Xvfb completion `20261030T142841Z-51302eb8eefc`, supervisor PID 564, timeout 600 seconds, passed **5 tests / 2 fresh XML reports, zero failures/errors/skips**, using the selection in item 2. Reports: `target/docker-ui/run-7KCieL`; execution including cleanup: 59.495 seconds, after a separate 99.760-second shared-lock wait. Both mouse and keyboard color assertions passed; the English TC195 screenshot confirms the gray selection is visible. Runtime source hashes remain unchanged.
+5. Fixed smoke/support completion `20261030T143152Z-91cb6778dc13`, supervisor PID 1869, outer timeout 480 seconds, `verify -- --smoke`, passed **21 tests / 12 fresh XML reports, zero failures/errors/skips**, `target/verification/run-s3a2asu4`. Verifier total: 210.675 seconds; supervised execution including cleanup: **210.866 seconds**, below the 420-second acceptance budget. The separate shared-lock wait was 160.593 seconds.
+6. Post-smoke review found no blocking issue. The runtime manifest and all three changed Java files match the accepted smoke snapshot. The only production change replaces the colony's two-color frame with the main map's gray, 2 px; input, crop selection and model state are unchanged. Documentation uses R-0354 after detecting a concurrent R-0353 allocation for building proposals; original run/log filenames are preserved. Unrelated proposal files remain outside this task. Nine documentation consistency tests, strict MkDocs and whitespace checks passed and are repeated after this evidence-only closure. Remote CI and publication were not inspected.
+
 
 ## R-0352 vector building sources — 2026-10-30
 

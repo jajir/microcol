@@ -126,6 +126,8 @@ Pro další porovnání jsou zajímavé zejména 4–6 (cílově 6×–10×); je
 
 ## Městská obrazovka „Čistá linka“ — 30. října 2026
 
+Vybrané políčko okolí kolonie používá podle [R-0354](requirements/done/R-0354.md) stejný šedý rámeček `Color.GREY` (`#808080`), 2 px, jako hlavní mapa. Nahrazuje původní dvojitý krémový a olivový výběr; barva jemné mřížky zůstává zachovaná. Výsledky ověření jsou ve [funkční evidenci](functional-tests.md#r-0354-colony-tile-selection-2026-10-30).
+
 1. Vybraný návrh a rozsah implementace jsou v [R-0349](requirements/done/R-0349.md). Světlý krémový podklad, tenké olivové dělicí čáry a tyrkysová plocha přístavu navazují na Evropu. Budovy jsou samostatné průhledné ilustrace v pevné mřížce 4 × 4; postavená úroveň určuje kresbu, nepostavená rodina je zesvětlená a označená.
 2. Původní generování použilo vestavěný Imagegen se schváleným návrhem jako stylovou referencí. Tři původní listy, přesné prompty (`generation.json`) a souřadnice výřezů (`sprites.json`) jsou nyní archivované v `microcol-game/src/graphics/colony-buildings/reference/`. Původních 41 PNG bylo přímo odvozeno z rastrů; tento chybějící vektorový krok napravuje [současný zdroj a export budov](#vektorove-zdroje-budov-30-rijna-2026).
 3. Mapa používá existující terény a jednotky. Nová kresba nepředstavuje změnu kapacity, bonusů, povolání ani stavebních nákladů. Implementace prošla místní přejímkou; skutečné výsledky a vizuální kontrola jsou v [evidenci](functional-tests.md#r-0349-colony-workspace-2026-10-30).

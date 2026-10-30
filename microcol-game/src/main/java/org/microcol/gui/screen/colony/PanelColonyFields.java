@@ -402,14 +402,10 @@ public final class PanelColonyFields implements JavaFxComponent {
             gc.strokeLine(0, index * tileSize(), canvas.getWidth(),
                     index * tileSize());
         }
-        gc.setStroke(Color.web("#fff9ec"));
-        gc.setLineWidth(4);
+        gc.setStroke(Color.GREY);
+        gc.setLineWidth(2);
         gc.strokeRect(selectedX * tileSize() + 2, selectedY * tileSize() + 2,
                 tileSize() - 4, tileSize() - 4);
-        gc.setStroke(Color.web("#485c35"));
-        gc.setLineWidth(1);
-        gc.strokeRect(selectedX * tileSize() + 4, selectedY * tileSize() + 4,
-                tileSize() - 8, tileSize() - 8);
     }
 
     private void paintColonyField(final GraphicsContext gc,

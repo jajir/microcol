@@ -13,6 +13,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import javafx.scene.layout.GridPane;
 
 /** Geometry and player actions for the colony workspace. */
@@ -128,6 +129,19 @@ public final class ColonyLayoutPage extends AbstractScreen {
     public void verifyMapFocused() {
         assertTrue(getNodeFinder().lookup("#colony-field-map").query()
                 .isFocused());
+    }
+
+    public void verifySelectedTileColor(final int column, final int row,
+            final Color expected) {
+        getRobot().interact(() -> {
+            final Canvas canvas = getNodeFinder().lookup("#colony-field-map")
+                    .queryAs(Canvas.class);
+            final double size = canvas.getWidth() / 3;
+            final Color actual = canvas.snapshot(null, null).getPixelReader()
+                    .getColor((int) ((column + .5) * size),
+                            (int) (row * size + 2));
+            assertEquals(expected, actual, "Selected tile frame color");
+        });
     }
 
     public void verifyOutput(final GoodsType expected,

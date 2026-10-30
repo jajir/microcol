@@ -42,7 +42,9 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
         jobs.rememberWorld();
         layout.selectTile(1, 1);
         layout.verifyMapFocused();
+        layout.verifySelectedTileColor(1, 1, javafx.scene.paint.Color.GREY);
         layout.moveSelection(KeyCode.LEFT);
+        layout.verifySelectedTileColor(0, 1, javafx.scene.paint.Color.GREY);
         layout.verifyOutput(GoodsType.LUMBER, 2);
         jobs.verifyWorldUnchanged();
 
