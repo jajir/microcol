@@ -1,11 +1,24 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Budovy — Lehký nadhled, produkce 30. října 2026
+
+1. Uživatel vybral **návrh 8 — Lehký nadhled** z [pěti jednodušších sad](#budovy-pet-jednodussich-navrhu-podle-hlavni-mapy-30-rijna-2026) a požádal o jeho nasazení v [R-0361](requirements/done/R-0361.md). Všech 41 podob je překreslených do skutečných SVG: jednoduché tvary, úzká boční stěna, mírně nepravidelná tmavá linka a jednolité krémové, cihlové, olivové a tyrkysové plochy. Nejde o vložení rastrového návrhu do SVG ani o jeho automatické trasování.
+2. Přístřešky, přízemní dílny a patrové manufaktury zachovávají profesní atributy i skutečné počty úrovní. Stáje začínají ohradou; sklady, škola, církev, opevnění a přístav používají odpovídající tvary vybrané předlohy. Zjednodušení a přesné proporce jsou přizpůsobené pevnému hernímu rámu.
+3. Jediným produkčním zdrojem zůstává `microcol-game/src/graphics/colony-buildings/TYPE.svg`; názvy, rozměry 320 × 160 a [export](#vektorove-zdroje-budov-30-rijna-2026) se nemění. Pojmenované skupiny oddělují stavbu, střechu a vybavení tam, kde se v kresbě používají. Z těchto zdrojů vznikají průhledné PNG sdílené kolonií a nápovědou. Všechny okraje plátna zůstávají průhledné.
+4. Následující přehledy jsou vykreslené z produkčních SVG, ne z ImageGenu. Podrobnosti místní přejímky a výslovnou výjimku uživatele **bez smoke testů pouze pro tuto dodávku** zaznamenává [funkční evidence](functional-tests.md#r-0361-light-overhead-buildings-2026-10-30). Publikace distribuce se neposuzuje podle samotného pushnutí.
+
+| A — řemesla, 22 podob | B — ostatní budovy, 19 podob |
+| --- | --- |
+| [![Produkční SVG budov, řemesla](assets/building-light-overhead-2026-10-30/levels-a.png)](assets/building-light-overhead-2026-10-30/levels-a.png) | [![Produkční SVG budov, ostatní rodiny](assets/building-light-overhead-2026-10-30/levels-b.png)](assets/building-light-overhead-2026-10-30/levels-b.png) |
+
+5. Skutečné výstupy cílených Docker/Xvfb testů: [základní kolonie](assets/building-light-overhead-2026-10-30/r0361-colony-english.png), [vylepšená česká kolonie](assets/building-light-overhead-2026-10-30/r0361-colony-czech-upgrades.png), [kompaktní kolonie](assets/building-light-overhead-2026-10-30/r0361-colony-small.png), [anglická nápověda v menším okně](assets/building-light-overhead-2026-10-30/r0361-buildings-small-en.png) a [konec české nápovědy](assets/building-light-overhead-2026-10-30/r0361-buildings-end-cs.png). Místní modelová a cílená UI přejímka prošla; smoke byl výslovně vynechán a vzdálená publikace není ověřená.
+
 ## Budovy — pět jednodušších návrhů podle hlavní mapy, 30. října 2026
 
 1. [R-0357](requirements/done/R-0357.md) navazuje na zpětnou vazbu k předchozí sérii: obsah a rozdíly stupňů jsou vhodné, ale detailní ilustrace se nehodí ke grafice hry. Nové návrhy **6–10** proto vycházejí přímo z [dodaného snímku hlavní mapy](assets/building-flat-proposals-2026-10-30/reference/main-map.png): několik jednoduchých tvarů, ruční tmavý obrys, střídmá paleta a minimum detailů.
 2. **Každý návrh obsahuje všech 41 současných podob budov**, tedy opět 205 ilustrací. List A má 22 řemeslných podob, list B dalších 19. Sloupce I–III zachovávají postup přístřešek → přízemní dům → patrová manufaktura kolem roku 1800; neindustriální budovy rostou podle svého účelu. Pomlčky označují neexistující stupně, nikoli chybějící kresby.
 3. Rozbalit návrh a kliknutím otevřít list v plném rozlišení **1024 × 1536 px**. Jde o rastrové návrhové reference vytvořené vestavěným ImageGen, nikoli nasazené herní obrázky nebo SVG. [Přesné prompty, zdrojový snímek, revize a mapování typů](assets/building-flat-proposals-2026-10-30/prompts.json) zachovávají původ; oba původní listy návrhu 10 jsou uložené před dodatečným zjednodušením.
-4. Vizuální kontrola ověřila řádky, počty, znaky profesí a zjednodušení vůči první sérii. Generované reference mohou stále obsahovat drobné barevné nerovnosti; pro případnou realizaci platí skutečné jednolité výplně a editovatelné SVG podle [zdrojového kontraktu](#zdrojovy-format-herni-grafiky). Čitelnost v herní velikosti a konečný směr zatím nejsou ověřené ani vybrané. [Evidence návrhů](publishing.md#r-0357-flat-building-proposals-2026-10-30).
+4. Vizuální kontrola ověřila řádky, počty, znaky profesí a zjednodušení vůči první sérii. Generované reference mohou stále obsahovat drobné barevné nerovnosti; pro realizaci platí skutečné jednolité výplně a editovatelné SVG podle [zdrojového kontraktu](#zdrojovy-format-herni-grafiky). Uživatel následně vybral **8 — Lehký nadhled**; [produkční kresbu a její přejímku](#budovy-lehky-nadhled-produkce-30-rijna-2026) odlišujeme od těchto návrhových listů. [Evidence návrhů](publishing.md#r-0357-flat-building-proposals-2026-10-30).
 
 <details open>
 <summary><strong>6. Mapové značky</strong> — Čelní pohled a jednoduché domky nejbližší značce kolonie na hlavní mapě.</summary>
@@ -121,6 +134,8 @@
 5. SVG není automatickou zárukou hezčí kresby ani menšího souboru. Zachovat čitelnost v herní velikosti, průhlednost, proporce a rozpoznatelnost úrovní. Škálovatelný zdroj neodstraňuje rozlišení již exportovaného PNG; pro větší runtime rozlišení je nutný nový export.
 
 ## Vektorové zdroje budov — 30. října 2026
+
+**Současný stav po výběru varianty 8:** [R-0361](requirements/done/R-0361.md) nahrazuje níže popsanou trasovanou kresbu jednoduchými ručně definovanými vektory. Body 1–3 a starý přehled zachycují vznik původních zdrojů v R-0352; `tracing.json` je zachovaná historie. Aktuální podoba a skupiny jsou popsané [u varianty Lehký nadhled](#budovy-lehky-nadhled-produkce-30-rijna-2026). Rozměry a exportní příkazy zůstávají stejné; současná kresba se automaticky neroztahuje k okrajům plátna.
 
 1. [R-0352](requirements/done/R-0352.md) převádí všech 41 ilustrací současných budov a jejich vylepšení na samostatné `microcol-game/src/graphics/colony-buildings/TYPE.svg`. Názvy odpovídají `ConstructionType.name()`; základní sklad používá `BASIC_WAREHOUSE`. Starší `src/graphics/buildings.svg` zůstává historickým zdrojem jiné kresby.
 2. Zdroje obsahují pojmenovanou skupinu `building`, popis a samostatně identifikované vyplněné křivky `paint-NNNN` v pořadí malování. Nevkládají PNG, neodkazují na externí zdroje a nepoužívají fonty. Křivky vznikly z původních výřezů pomocí [VTracer](https://github.com/visioncortex/vtracer), Python balíček 0.6.15; přesné parametry a příprava průhlednosti jsou v `tracing.json`. Drobné odpojené zbytky sousedních budov na okrajích výřezů byly odstraněny. Jemná rastrová textura je zjednodušená, siluety a charakteristické prvky zachované.
@@ -790,7 +805,7 @@ Výchozí stav technického inventáře k **11. říjnu 2026**, větev `develop`
 
 ## Současné zadání vzhledu
 
-Pro budovy uživatel 30. října 2026 výslovně potvrdil jednoduchost hlavní herní mapy: minimum tvarů a atributů, ručně kreslené obrysy a jednobarevné plochy. Detailní stínované ilustrace předchozí série tomuto cíli neodpovídají. [Nové návrhy](#budovy-pet-jednodussich-navrhu-podle-hlavni-mapy-30-rijna-2026) hledají konkrétní podobu; výběr a převod do produkčních SVG zůstávají samostatnou prací.
+Pro budovy uživatel 30. října 2026 výslovně potvrdil jednoduchost hlavní herní mapy: minimum tvarů a atributů, ručně kreslené obrysy a jednobarevné plochy. Detailní stínované ilustrace předchozí série tomuto cíli neodpovídají. Z [nových návrhů](#budovy-pet-jednodussich-navrhu-podle-hlavni-mapy-30-rijna-2026) vybral **8 — Lehký nadhled**; její [produkční SVG](#budovy-lehky-nadhled-produkce-30-rijna-2026) vlastní R-0361.
 
 Od 27. října 2026 platí pro všechna aplikační akční tlačítka
 [jediný papírový základ s ikonami](#jednotna-papirova-tlacitka-2026-10-27),

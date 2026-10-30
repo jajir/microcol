@@ -25,7 +25,8 @@ class BuildingArtworkTest {
                 "path");
         final Set<String> attributes = Set.of("xmlns", "width", "height",
                 "viewBox", "role", "aria-labelledby", "id", "transform", "d",
-                "fill");
+                "fill", "stroke", "stroke-width", "stroke-linecap",
+                "stroke-linejoin");
         for (final ConstructionType type : ConstructionType.ALL) {
             final String name = type.name() + ".svg";
             expected.add(name);
@@ -60,8 +61,8 @@ class BuildingArtworkTest {
             for (int i = 0; i < paths.getLength(); i++) {
                 final var path = (org.w3c.dom.Element) paths.item(i);
                 assertFalse(path.getAttribute("d").isBlank(), name);
-                assertTrue(path.getAttribute("fill").matches("#[0-9a-fA-F]{6}"),
-                        name);
+                assertTrue(path.getAttribute("fill")
+                        .matches("none|#[0-9a-fA-F]{6}"), name);
             }
         }
         try (var sources = Files.list(directory)) {
@@ -84,6 +85,18 @@ class BuildingArtworkTest {
             assertEquals(160, image.getHeight(), type.name());
             assertTrue(image.getColorModel().hasAlpha(), type.name());
             assertEquals(0, image.getRGB(0, 0) >>> 24, type.name());
+            for (int x = 0; x < image.getWidth(); x++) {
+                assertEquals(0, image.getRGB(x, 0) >>> 24,
+                        type.name() + ": artwork touches top edge");
+                assertEquals(0, image.getRGB(x, 159) >>> 24,
+                        type.name() + ": artwork touches bottom edge");
+            }
+            for (int y = 0; y < image.getHeight(); y++) {
+                assertEquals(0, image.getRGB(0, y) >>> 24,
+                        type.name() + ": artwork touches left edge");
+                assertEquals(0, image.getRGB(319, y) >>> 24,
+                        type.name() + ": artwork touches right edge");
+            }
             final int[] data = image.getRGB(0, 0, 320, 160, null, 0, 320);
             assertTrue(java.util.Arrays.stream(data)
                     .anyMatch(pixel -> (pixel >>> 24) > 200), type.name());

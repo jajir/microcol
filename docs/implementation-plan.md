@@ -665,6 +665,8 @@ Rozdělení práce a akceptace výše jsou návrhy pro následující zadání.
 
 ## Jednodušší návrhy budov — 30. října 2026
 
+Uživatel následně vybral návrh 8 — Lehký nadhled a zadal jeho implementaci v [R-0361](requirements/done/R-0361.md). Všech 41 produkčních SVG a exportů sdílí kolonie i nápověda. [Funkční evidence](functional-tests.md#r-0361-light-overhead-buildings-2026-10-30) odděluje modelové a cílené UI ověření od výslovně vynechané smoke fáze.
+
 Návrhy budov z 30. října 2026 řeší [R-0357](requirements/done/R-0357.md), oblast A03 se závislostí na identitách a počtech úrovní v A07. Pět dalších úplných sad navazuje jednoduchými obrysy a plochými barvami na hlavní mapu. Jde o výběrové předlohy; integrace herních SVG a funkční přejímka nejsou součástí této návrhové práce. [Galerie](graphics.md#budovy-pet-jednodussich-navrhu-podle-hlavni-mapy-30-rijna-2026).
 
 ## Vybraná grafika terénů — 25. října 2026

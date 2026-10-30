@@ -493,7 +493,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.verifyReferenceProperties(
                 "colonizopediaBuildingProperties_LARGE_STABLES",
                 "no further breeding bonus", "149 hammers, 80 tools");
-        help.captureDialog("colonizopediaPage", "r0352-buildings-en.png");
+        help.captureDialog("colonizopediaPage", "r0361-buildings-en.png");
 
         // Name search keeps the whole upgrade chain available in a narrow
         // window.
@@ -504,13 +504,13 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.verifyReferenceRows(41);
         help.verifyBuildingReference("Cost: %s hammers, %s tools",
                 "Minimum population: %s", "Present from colony founding.");
-        help.captureDialog("colonizopediaPage", "r0352-buildings-small-en.png");
+        help.captureDialog("colonizopediaPage", "r0361-buildings-small-en.png");
         help.dragBodyThumbToEnd();
         help.verifyBodyScrolledToEnd();
         help.verifyReferenceProperties(
                 "colonizopediaBuildingProperties_CUSTOM_HOUSE",
                 "160 hammers, 50 tools", "Peter Stuyvesant", "export settings");
-        help.captureDialog("colonizopediaPage", "r0352-buildings-end-en.png");
+        help.captureDialog("colonizopediaPage", "r0361-buildings-end-en.png");
         help.closeWithOk();
         help.verifyDialogClosed();
         help.verifyGameStateUnchanged(before);
@@ -539,7 +539,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
                 "colonizopediaBuildingProperties_LUMBER_MILL",
                 "52 kladiv, 0 nářadí", "Vylepšení budovy: Truhlářství",
                 "Nejméně obyvatel: 3", "Kladiva 6");
-        help.captureDialog("colonizopediaPage", "r0352-buildings-cs.png");
+        help.captureDialog("colonizopediaPage", "r0361-buildings-cs.png");
 
         // Fold accents and case without changing the game or losing upgrades.
         help.typeSearch("KOVARSKA MANUFAKTURA");
@@ -553,7 +553,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
                 "colonizopediaBuildingProperties_CUSTOM_HOUSE",
                 "160 kladiv, 50 nářadí", "Peter Stuyvesant",
                 "nastavení vývozu");
-        help.captureDialog("colonizopediaPage", "r0352-buildings-end-cs.png");
+        help.captureDialog("colonizopediaPage", "r0361-buildings-end-cs.png");
         help.closeWithEscape();
         help.verifyDialogClosed();
         help.verifyGameStateUnchanged(before);
