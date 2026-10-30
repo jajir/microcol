@@ -88,7 +88,6 @@ public final class PanelColonyFields implements JavaFxComponent {
 
     private final NativeLandGuard nativeLand;
 
-    private static final int FIELD_SIZE = 60;
     private final HBox mainPanel = new HBox(10);
     private final Label mapTitle = new Label();
     private final Label detailTitle = new Label();
@@ -118,7 +117,7 @@ public final class PanelColonyFields implements JavaFxComponent {
                 .checkNotNull(gameModelController);
         this.paintService = Preconditions.checkNotNull(paintService);
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        final int size = 3 * FIELD_SIZE;
+        final int size = 3 * TILE_WIDTH_IN_PX;
 
         canvas = new Canvas(size, size);
         canvas.setId("colony-field-map");
@@ -181,16 +180,6 @@ public final class PanelColonyFields implements JavaFxComponent {
         });
         mainPanel.getChildren().addAll(map, detail);
         mainPanel.getStyleClass().add("colony-fields");
-        mainPanel.widthProperty().addListener((observable, oldWidth, width) -> {
-            final double mapSize = Math.max(180,
-                    Math.min(252, width.doubleValue() - 190));
-            if (canvas.getWidth() != mapSize) {
-                canvas.setWidth(mapSize);
-                canvas.setHeight(mapSize);
-                if (colony != null)
-                    paint(canvas.getGraphicsContext2D());
-            }
-        });
     }
 
     private void onContextMenuRequested(final ContextMenuEvent event) {
@@ -383,7 +372,6 @@ public final class PanelColonyFields implements JavaFxComponent {
     private void paint(final GraphicsContext gc) {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         gc.save();
-        gc.scale(tileSize() / TILE_WIDTH_IN_PX, tileSize() / TILE_WIDTH_IN_PX);
         colony.getColonyFields()
                 .forEach(colonyField -> paintColonyField(gc, colonyField));
         final Point colonyPoint = Point.of(TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);

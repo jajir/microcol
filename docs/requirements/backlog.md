@@ -974,3 +974,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Colony tile selection — 2026-10-30
 
 1. [R-0354](done/R-0354.md), primary area A03, unifies the colony tile-selection frame with the main map. Status: done; implementation and local acceptance are complete. See [test evidence](../functional-tests.md#r-0354-colony-tile-selection-2026-10-30).
+
+## Native colony map scale — 2026-10-30
+
+1. [R-0358](done/R-0358.md), primary area A03 with A07 job-assignment dependencies, fixes the surrounding map at the main map’s 45 px tile scale. Status: done; implementation and local acceptance are complete. See [test evidence](../functional-tests.md#r-0358-native-colony-map-scale-2026-10-30).

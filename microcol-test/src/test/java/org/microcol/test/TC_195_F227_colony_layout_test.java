@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.model.ConstructionType;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
+import org.microcol.gui.Tile;
 import org.microcol.page.*;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -30,6 +31,7 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
                 .openColonyAt(Location.of(24, 16), "New Amsterdam");
         final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
         new GameBarWidthPage(getContext()).resizeContent(1440, 1000);
+        layout.verifyMapTileSize(Tile.TILE_WIDTH_IN_PX);
         layout.verifyLayout("New Amsterdam", 7);
         layout.verifyBuildingLevel("id_warehouse",
                 ConstructionType.WAREHOUSE_BASIC);
@@ -60,6 +62,7 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
 
         // The warehouse remains reachable at the original window width.
         new GameBarWidthPage(getContext()).resizeContent(1000, 925);
+        layout.verifyMapTileSize(Tile.TILE_WIDTH_IN_PX);
         layout.showStock();
         town.verifyWarehouseGoodsAndTownCommonsLayout(16, 45);
         new InGameLayoutPage(getContext())
@@ -78,6 +81,7 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
                 .openColonyAt(Location.of(26, 16), "Delft");
         new GameBarWidthPage(getContext()).resizeContent(1440, 1000);
         final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
+        layout.verifyMapTileSize(Tile.TILE_WIDTH_IN_PX);
         layout.verifyLayout("Delft", 0);
         layout.verifyBuildingLevel("id_fort", ConstructionType.FORTRESS);
         layout.verifyBuildingLevel("id_warehouse",

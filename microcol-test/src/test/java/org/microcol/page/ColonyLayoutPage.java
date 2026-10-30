@@ -131,6 +131,18 @@ public final class ColonyLayoutPage extends AbstractScreen {
                 .isFocused());
     }
 
+    public void verifyMapTileSize(final double expectedTileSize) {
+        getRobot().interact(() -> {
+            final Canvas canvas = getNodeFinder().lookup("#colony-field-map")
+                    .queryAs(Canvas.class);
+            final Bounds bounds = canvas.localToScene(canvas.getLayoutBounds());
+            assertEquals(3 * expectedTileSize, bounds.getWidth(), .01,
+                    "Surrounding map width");
+            assertEquals(3 * expectedTileSize, bounds.getHeight(), .01,
+                    "Surrounding map height");
+        });
+    }
+
     public void verifySelectedTileColor(final int column, final int row,
             final Color expected) {
         getRobot().interact(() -> {

@@ -236,6 +236,8 @@ Pro další porovnání jsou zajímavé zejména 4–6 (cílově 6×–10×); je
 
 ## Městská obrazovka „Čistá linka“ — 30. října 2026
 
+Okolí kolonie podle [R-0358](requirements/done/R-0358.md) používá stejné měřítko jako hlavní mapa: políčko 45 × 45 logických pixelů a celá mapa 3 × 3 má pevně 135 × 135. Při změně šířky okna se nezvětšuje. Tato změna využívá současnou kresbu bez nových ilustrací a exportů; přejímku zaznamenává [funkční evidence](functional-tests.md#r-0358-native-colony-map-scale-2026-10-30).
+
 Vybrané políčko okolí kolonie používá podle [R-0354](requirements/done/R-0354.md) stejný šedý rámeček `Color.GREY` (`#808080`), 2 px, jako hlavní mapa. Nahrazuje původní dvojitý krémový a olivový výběr; barva jemné mřížky zůstává zachovaná. Výsledky ověření jsou ve [funkční evidenci](functional-tests.md#r-0354-colony-tile-selection-2026-10-30).
 
 1. Vybraný návrh a rozsah implementace jsou v [R-0349](requirements/done/R-0349.md). Světlý krémový podklad, tenké olivové dělicí čáry a tyrkysová plocha přístavu navazují na Evropu. Budovy jsou samostatné průhledné ilustrace v pevné mřížce 4 × 4; postavená úroveň určuje kresbu, nepostavená rodina je zesvětlená a označená.
