@@ -12,6 +12,12 @@ zůstane dostupná přes Načíst hru a stávající filtr; ukládání bodů se
 Požadavek je ve stavu `new`, dosud není implementován. Níže popsaná současná
 navigace proto tuto položku stále obsahuje.
 
+**Schválený návrh z 31. října 2026:** [R-0377](requirements/R-0377.md)
+vlastní budoucí vložení Nastavení a Načíst hru do stránek menu/hry, posouvání
+obsahu, návraty podle skutečného původu a platformní zkratky. Stav je `new`;
+níže uvedený dialogový přehled a současné zkratky zůstávají popisem dosavadní
+implementace. Odstranění samostatné položky Body obnovy stále vlastní R-0376.
+
 ## Co už existuje
 
 1. MicroCol již má serializaci, atomický zápis a tři body obnovy: poslední

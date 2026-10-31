@@ -12,6 +12,11 @@
 2. Výběr používá checkboxy, při každém otevření všechny nezaškrtnuté. Hráč může označit jednoho, několik nebo všechny pasažéry. Nadpis mluví o více pasažérech a tlačítko „Vylodit vybrané“ je neaktivní, dokud není někdo označený. Potvrzení vylodí pouze označené; Zrušit a Escape nevylodí nikoho. Ovládání zůstává dostupné klávesnicí.
 3. Přímé vylodění jediného pasažéra nemá dodatečný krok zrušení. Zachovávají se pravidla způsobilosti, pohybu a odmítnutí neplatného převodu; změna se netýká přístavního příjezdu ani jiných operací s nákladem. Historické [R-0022](requirements/done/R-0022.md) a jeho výsledky zůstávají záznamem původního chování.
 
+## Panely Nastavení a Načíst hru — schválený návrh 31. října 2026
+
+1. Schválený, dosud neimplementovaný [R-0377](requirements/R-0377.md) vkládá obsahové panely do oblasti moře v menu nebo do současného herního rámu podle skutečného místa otevření. Posouvá se jen obsah; nadpis a Zpět / Zpět do hry zůstávají dostupné. Společné volby mají stejné pořadí a návrat obnoví konkrétní původní obrazovku.
+2. Dohodnuté zkratky jsou ⌘O / Ctrl+O pro přehled načítání a ⌘S / Ctrl+S pro ukládání. Rozsah dostupnosti, bezpečnost načtení a výjimky při vnořených operacích vlastní požadavek; stávající chování nadále popisuje [ukládání a navigace](save-load-navigation.md). Jde o dohodu, nikoli nové runtime nebo uživatelské ověření.
+
 ## Kontext mapy a návrat po konci hry — 31. října 2026
 
 1. [R-0374](requirements/done/R-0374.md) zachovává popis políčka po kliknutí z horní lišty zpět na mapu. Ztráta fokusu tlačítka nesmí ponechat stavový řádek prázdný, když ukazatel zůstává na platném políčku; neprozkoumané území dál neodhaluje informace o soupeři.
