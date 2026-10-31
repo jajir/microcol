@@ -10,6 +10,21 @@ publishes the game from the same pushed `main` revision when the change is not
 limited to `docs/`; [docs-only filtering](development-builds.md#ci-filtering)
 keeps the current game download unchanged.
 
+## R-0382 save preview requirement — 2026-10-31
+
+1. [R-0382](requirements/R-0382.md), status `new`, captures the approved save/load
+   preview and ZIP container proposal. The user explicitly retained the existing
+   game state → persistence data model → JSON conversion and its validated reverse.
+   Implementation has not been selected or performed.
+2. Scope is documentation only: the new requirement, A04 backlog entry, shared
+   save/load contract and boundary with active R-0377. Unrelated working-tree
+   edits in `docs/ux.md` and `docs/functional-tests.md` are excluded.
+3. At the user's request, no model/JUnit, Docker UI, smoke, tooling or documentation
+   consistency tests and no strict MkDocs build are run for this delivery. Review
+   is limited to the source text and commit diff; no normal local acceptance is
+   claimed. Future implementation retains its required acceptance checks.
+4. Remote CI, Pages and game distributions are not inspected or claimed verified.
+
 ## R-0381 voyage spacing reference — 2026-10-31
 
 1. [R-0381](requirements/done/R-0381.md) captures the user's selection of variant C: slightly lower Europe voyage groups and compact heading-to-ship spacing. Status is `new`; the approved design reference is saved with the documentation. No gameplay implementation or runtime asset changed.

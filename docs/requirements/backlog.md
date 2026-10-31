@@ -352,6 +352,7 @@ manual/quick saves, recovery and protected exits. Local acceptance is recorded i
 | [R-0068](done/R-0068.md) | Offer separate turn and decade recovery points | Follow-up | [R-0018](done/R-0018.md) |
 | [R-0229](canceled/R-0229.md) | Verify long-game stability and responsiveness | Canceled 2026-10-31 | P31 measured whole-game acceptance |
 | [R-0231](done/R-0231.md) | Preserve local diagnostics for recoverable failures | Done | P32 diagnostics beyond delivered save/turn recovery |
+| [R-0382](R-0382.md) | Preview saved games with a map and summary while preserving data-model/JSON serialization | New capture; approved design | User request, 2026-10-31; R-0298 save management and R-0377 screen integration |
 
 ## A05
 
