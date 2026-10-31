@@ -6,6 +6,12 @@ Níže je smlouva implementovaného chování. Výsledky testů patří do
 [funkční evidence](functional-tests.md), původní prohlídka zdrojů a kontrola
 návrhových diagramů zůstává v [publikační evidenci](publishing.md#r-0298-save-load-navigation-2026-10-26).
 
+**Zachycená změna z 31. října 2026:** [R-0376](requirements/R-0376.md)
+požaduje odstranit samostatnou položku Body obnovy z hlavní nabídky. Obnova
+zůstane dostupná přes Načíst hru a stávající filtr; ukládání bodů se nemění.
+Požadavek je ve stavu `new`, dosud není implementován. Níže popsaná současná
+navigace proto tuto položku stále obsahuje.
+
 ## Co už existuje
 
 1. MicroCol již má serializaci, atomický zápis a tři body obnovy: poslední

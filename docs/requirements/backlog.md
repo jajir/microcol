@@ -258,6 +258,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0239](R-0239.md) | Upload runnable Steam depots and launch options | New capture | P32 SteamPipe technical scope |
 | [R-0240](R-0240.md) | Verify Steam install, offline play and update recovery | New capture | P32 Steam-installed customer paths |
 | [R-0241](R-0241.md) | Review, launch and support the Steam release | New capture | P32 publisher operations and initial support |
+| [R-0376](R-0376.md) | Remove the separate Recovery points main-menu entry; retain recovery through Load game | New capture | User request, 2026-10-31; R-0298 shared save browser |
 
 ## A02
 
