@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="220" viewBox="0 0 400 220">
+  <title>Hand-drawn arrival toward the dock</title>
+  <path d="M388 12 C292 9 178 23 108 79 S29 155 24 205"
+        fill="none" stroke="#50534b" stroke-width="2.8" stroke-linecap="round"
+        stroke-dasharray="17 14 11 16 20 13 12 15"/>
+  <path d="M14 194 L24 214 L36 192 L25 198 Z" fill="#66695e" stroke="#41463e" stroke-width="2" stroke-linejoin="round"/>
+</svg>

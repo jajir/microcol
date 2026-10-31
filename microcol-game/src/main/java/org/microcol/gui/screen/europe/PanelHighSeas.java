@@ -15,7 +15,6 @@ import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Repaintable;
-import org.microcol.gui.util.TitledPanel;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 import org.microcol.i18n.MessageKeyResource;
@@ -33,6 +32,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.geometry.Side;
+import javafx.geometry.Pos;
 import javafx.scene.input.KeyCode;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
@@ -69,7 +69,8 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
 
     private final GameModelController gameModelController;
 
-    private final TitledPanel titledPanel;
+    private final VBox titledPanel;
+    private final Label title = new Label();
 
     private final EventBus eventBus;
 
@@ -114,7 +115,10 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
         shipsContainer.setOnDragDropped(this::onDragDropped);
         shipsContainer.minHeightProperty().set(60);
 
-        titledPanel = new TitledPanel();
+        title.getStyleClass().add("screen-title");
+        title.setMaxWidth(Double.MAX_VALUE);
+        title.setAlignment(Pos.CENTER);
+        titledPanel = new VBox(4, title);
         titledPanel.getStyleClass().add("ships-container");
         scroll = new ScrollPane(shipsContainer);
         scroll.getStyleClass().add("harbor-scroll");
@@ -187,18 +191,23 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
                 .make(gameModelController.getModel(), event.getDragboard())
                 .filterUnit(this::isDepartingShip).getUnit();
         if (oUnit.isPresent()) {
-            final Unit unit = oUnit.get();
-            try {
-                unit.placeToHighSeas(false);
-                europeDialog.repaint();
-                event.setDropCompleted(true);
-            } catch (IllegalStateException rejected) {
-                event.setDropCompleted(false);
-                dialogMessage.setTitle(i18n.get(Europe.title));
-                dialogMessage.setText(i18n.get(Europe.voyageUnavailable));
-                dialogMessage.showAndWait();
-            }
+            event.setDropCompleted(depart(oUnit.get()));
             event.consume();
+        }
+    }
+
+    boolean depart(final Unit unit) {
+        try {
+            Preconditions.checkState(isDepartingShip(unit));
+            unit.placeToHighSeas(false);
+            selectedShipId = unit.getId();
+            europeDialog.repaint();
+            return true;
+        } catch (IllegalStateException rejected) {
+            dialogMessage.setTitle(i18n.get(Europe.title));
+            dialogMessage.setText(i18n.get(Europe.voyageUnavailable));
+            dialogMessage.showAndWait();
+            return false;
         }
     }
 
@@ -264,8 +273,9 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
                     ship.setOnAction(event -> {
                         ship.setSelected(true);
                         selectedShipId = unit.getId();
-                        voyageDetail.getChildren()
-                                .setAll(new HBox(12, identity, remaining));
+                        final HBox detail = new HBox(12, identity, remaining);
+                        detail.setAlignment(Pos.CENTER);
+                        voyageDetail.getChildren().setAll(detail);
                     });
                     final ContextMenu orders = new ContextMenu(reverse,
                             jettison);
@@ -329,8 +339,7 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        titledPanel.setTitle(i18n.get(titleKey) + " · "
-                + shipsContainer.getChildren().size());
+        title.setText(i18n.get(titleKey));
     }
 
     /**

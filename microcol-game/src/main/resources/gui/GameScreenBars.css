@@ -16,7 +16,7 @@
     -fx-pref-width: 100000;
     -fx-pref-height: 100000;
 }
-.buttonPanel .button {
+.buttonPanel .button, .toolbar-action {
     -fx-min-height: 50;
     -fx-min-width: 50;
 }
@@ -114,13 +114,15 @@
 .screen-toolbar > .game-bar-content {
     -fx-spacing: 16;
 }
-.screen-toolbar .screen-title {
+.screen-title {
     -fx-font-family: "Playpen Sans";
     -fx-font-size: 28;
     -fx-font-weight: normal;
     -fx-text-fill: #292824;
-    -fx-max-width: 380;
     -fx-padding: 0;
+}
+.screen-toolbar .screen-title {
+    -fx-max-width: 380;
     -fx-alignment: center-left;
 }
 .screen-toolbar .screen-title:focused {

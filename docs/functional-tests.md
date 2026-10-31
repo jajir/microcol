@@ -1,5 +1,15 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+
+## R-0380 discoverable Europe departure — 2026-10-31
+
+1. [R-0380](requirements/done/R-0380.md) implements UX-08 and the selected harbor design for UC-027 and UC-025. The button and drag gesture share the existing validated model departure; no travel rule or save schema changed. Headings omit counts and share the page title's typography. The departure button shares the toolbar's button factory, styling, height rule and 32-pixel icon.
+2. Updated `TC_194_F226_europe_harbor_test` and `EuropeHarborPage` retain all list/cargo assertions and adapt heading expectations. Added `TC_04_depart_loaded_ship_with_shared_button` covers selection, keyboard and mouse departure, unchanged goods, list membership and shared control/heading appearance. The existing fixture remains unchanged.
+3. The user explicitly requested implementation, commit and push **without any tests**. Model/JUnit, targeted Docker/Xvfb UI, smoke, source/tooling and documentation tests were not run; strict MkDocs was also omitted. No new runtime screenshot, manual gameplay check, full regression or remote publication verification was performed. This is an explicit completion exception, not a passing acceptance report.
+4. The seven changed Java files were formatted with the shared `mujSunFormatter` profile through Eclipse JDT 3.47.0. `mvn -B -ntp -pl microcol-test -am -DskipTests test-compile` completed successfully in 6.907 seconds. It compiled the game and test sources and executed **zero tests**. Source review and inspection of exported artwork do not establish runtime behavior or layout correctness.
+5. The SVG sources and PNG export commands are recorded in the [graphics catalog](graphics.md#evropsky-pristav-objevitelne-odpluti-r-0380). The earlier raster-only harbor was converted to editable vector paths, then recolored; these paths simplify the original raster texture. Runtime placement and the complete player journey remain unverified.
+
+
 ## R-0375 manual regression budget and durable reports — 2026-10-31
 
 1. [R-0375](requirements/done/R-0375.md) makes the existing full regression workflow

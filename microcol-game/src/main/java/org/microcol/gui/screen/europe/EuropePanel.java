@@ -6,6 +6,9 @@ import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Repaintable;
 import org.microcol.gui.util.UpdatableLanguage;
+import org.microcol.gui.util.ActionButtons;
+import org.microcol.gui.image.ButtonIcon;
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
@@ -17,6 +20,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -36,6 +41,7 @@ public final class EuropePanel
     private final Label immigration = new Label();
     private final Label dockTitle = new Label();
     private final Label pierTitle = new Label();
+    private final Button depart = ActionButtons.button(ButtonIcon.BACK);
 
     private final GameModelController controller;
 
@@ -62,7 +68,8 @@ public final class EuropePanel
             final EuropeButtonsPanel europeButtonsPanel,
             final EventBus eventBus, final I18n i18n,
             final PanelDockEurope panelDockEurope,
-            final EuropeBackground background) {
+            final EuropeBackground background,
+            final ImageProvider imageProvider) {
         this.europeButtonsPanel = europeButtonsPanel;
         this.controller = gameModelController;
         this.i18n = i18n;
@@ -87,6 +94,13 @@ public final class EuropePanel
                 .setOnMouseEnteredKey(Europe.statusBarShipsToNewWorld);
         this.shipsTravelingToNewWorld.addStyle("to-new-world");
 
+        depart.setId("europe-depart");
+        depart.getStyleClass().add("toolbar-action");
+        depart.getGraphic().setScaleX(-1);
+        depart.setOnAction(event -> europeDock.getSelectedShip()
+                .ifPresent(shipsTravelingToNewWorld::depart));
+        europeDock.setHarborAction(depart);
+
         europeDock.getContent().setOnMouseEntered(e -> {
             eventBus.post(new StatusBarMessageEvent(
                     i18n.get(Europe.statusBarEuropeDock), Source.EUROPE));
@@ -99,12 +113,24 @@ public final class EuropePanel
         mainPanel = new BorderPane();
         mainPanel.getStyleClass().add("europe-harbor");
         mainPanel.setMinWidth(950);
+        final ImageView arrival = new ImageView(
+                imageProvider.getImage("europe-arrival-route.png"));
+        final ImageView departure = new ImageView(
+                imageProvider.getImage("europe-departure-route.png"));
+        arrival.setMouseTransparent(true);
+        departure.setMouseTransparent(true);
         final Pane content = new Pane() {
             @Override
             protected void layoutChildren() {
                 final double width = getWidth();
                 final double height = getHeight();
                 final double half = width / 2;
+                arrival.setFitWidth(half / 2 - 48);
+                arrival.setFitHeight(height - 480);
+                arrival.relocate(16, 236);
+                departure.setFitWidth(width - 180);
+                departure.setFitHeight(height - 345);
+                departure.relocate(180, 205);
                 immigration.resizeRelocate(0, 54, width,
                         immigration.prefHeight(width));
                 shipsTravelingToEurope.getContent().resizeRelocate(0, 134,
@@ -133,7 +159,7 @@ public final class EuropePanel
         immigration.setId("immigration-progress");
         immigration.setWrapText(true);
         immigration.getStyleClass().add("immigration-progress");
-        content.getChildren().addAll(immigration,
+        content.getChildren().addAll(arrival, departure, immigration,
                 shipsTravelingToNewWorld.getContent(),
                 shipsTravelingToEurope.getContent(), dockTitle, pierTitle,
                 panelPortPier.getContent(), europeDock.getContent());
@@ -143,6 +169,7 @@ public final class EuropePanel
 
     @Override
     public void updateLanguage(final I18n i18n) {
+        depart.setText(i18n.get(Europe.sailToNewWorld));
         europeButtonsPanel.updateLanguage(i18n);
         shipsTravelingToNewWorld.updateLanguage(i18n);
         shipsTravelingToEurope.updateLanguage(i18n);
@@ -204,12 +231,8 @@ public final class EuropePanel
     }
 
     private void updateCounts() {
-        dockTitle.setText(i18n.get(Europe.harborDock,
-                controller.getModel().getEurope().getPort()
-                        .getShipsInPort(controller.getHumanPlayer()).size()));
-        pierTitle.setText(i18n.get(Europe.harborPier,
-                controller.getModel().getEurope().getPier()
-                        .getUnits(controller.getHumanPlayer()).size()));
+        dockTitle.setText(i18n.get(Europe.harborDock));
+        pierTitle.setText(i18n.get(Europe.harborPier));
     }
 
     public BooleanProperty getPropertyShiftWasPressed() {

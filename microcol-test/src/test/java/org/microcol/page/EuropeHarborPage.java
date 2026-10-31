@@ -3,6 +3,9 @@ package org.microcol.page;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.europe.Europe;
+import org.microcol.i18n.I18n;
+import org.microcol.model.PlaceHighSea;
 import org.microcol.model.Goods;
 import org.microcol.model.unit.UnitWithCargo;
 import org.testfx.util.WaitForAsyncUtils;
@@ -10,6 +13,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.input.MouseButton;
@@ -186,10 +190,77 @@ public final class EuropeHarborPage extends AbstractScreen {
                             .getWidth(), name);
                 }
             }
-            assertTrue(getLabeledById("europe-dock-count").getText()
-                    .endsWith("· " + expectedCount));
-            assertTrue(getLabeledById("europe-pier-count").getText()
-                    .endsWith("· " + expectedCount));
+            final I18n i18n = getContext().getClassFromGuice(I18n.class);
+            assertEquals(i18n.get(Europe.harborDock),
+                    getLabeledById("europe-dock-count").getText());
+            assertEquals(i18n.get(Europe.harborPier),
+                    getLabeledById("europe-pier-count").getText());
+        });
+    }
+
+    public void departSelectedShip(final boolean keyboard) {
+        final Button button = getNodeFinder().lookup("#europe-depart")
+                .queryAs(Button.class);
+        revealGameContent(button);
+        if (keyboard) {
+            getRobot().interact(button::requestFocus);
+            getRobot().push(KeyCode.SPACE);
+        } else {
+            getRobot().clickOn(button);
+        }
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyDepartureDesign() {
+        getRobot().interact(() -> {
+            final Button button = getNodeFinder().lookup("#europe-depart")
+                    .queryAs(Button.class);
+            final Button toolbar = getNodeFinder().lookup("#closeButtonId")
+                    .queryAs(Button.class);
+            assertEquals(toolbar.getFont(), button.getFont());
+            assertEquals(toolbar.getHeight(), button.getHeight(), 0.1);
+            assertEquals(toolbar.getPadding(), button.getPadding());
+            assertEquals(toolbar.getGraphicTextGap(),
+                    button.getGraphicTextGap());
+            final ImageView icon = (ImageView) button.getGraphic();
+            assertEquals(32, icon.getFitWidth());
+            assertEquals(32, icon.getFitHeight());
+            assertFalse(button.isDisabled());
+            final Label pageTitle = getNodeFinder()
+                    .lookup(".screen-toolbar .screen-title")
+                    .queryAs(Label.class);
+            final I18n i18n = getContext().getClassFromGuice(I18n.class);
+            assertEquals(i18n.get(Europe.sailToNewWorld), button.getText());
+            for (final String name : List.of("europe", "new-world")) {
+                final Label heading = getNodeFinder()
+                        .lookup(".to-" + name + " .screen-title")
+                        .queryAs(Label.class);
+                assertEquals(pageTitle.getFont(), heading.getFont());
+                assertEquals(
+                        i18n.get(name.equals("europe")
+                                ? Europe.shipsTravelingToEurope
+                                : Europe.shipsTravelingToNewWorld),
+                        heading.getText());
+            }
+        });
+    }
+
+    public void verifyDepartedShip(final int id, final int slot,
+            final Goods cargo, final int expectedDocked,
+            final int expectedOutbound) {
+        getRobot().interact(() -> {
+            final UnitWithCargo ship = (UnitWithCargo) getModel()
+                    .getUnitById(id);
+            assertTrue(ship.isAtHighSea());
+            assertFalse(((PlaceHighSea) ship.getPlace()).isTravelToEurope());
+            new ShipWrapper(ship).verifyCargoGoods(slot, cargo);
+            assertEquals(expectedDocked,
+                    ((Pane) group("dock").getContent()).getChildren().size());
+            assertEquals(expectedOutbound,
+                    ((Pane) group("outgoing").getContent()).getChildren()
+                            .size());
+            assertTrue(getNodeFinder().lookup("#voyage-ship-" + id)
+                    .queryAs(ToggleButton.class).isSelected());
         });
     }
 

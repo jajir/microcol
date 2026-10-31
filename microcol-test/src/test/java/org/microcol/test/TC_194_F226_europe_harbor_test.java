@@ -132,6 +132,30 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
+    void TC_04_depart_loaded_ship_with_shared_button() throws Exception {
+        // The departure action shares the toolbar's appearance and title font.
+        WelcomePage.of(getContext()).loadGame().openEuroperPort();
+        final EuropeHarborPage harbor = new EuropeHarborPage(getContext());
+        harbor.resize(1280, 900);
+        harbor.verifyDepartureDesign();
+
+        // Select the last loaded ship and depart using the keyboard.
+        harbor.dragGroupToEnd("dock");
+        harbor.selectShip(3142, true);
+        harbor.verifySelectedCargo(3142, 0, Goods.of(GoodsType.ORE, 43));
+        harbor.departSelectedShip(true);
+        harbor.verifyDepartedShip(3142, 0, Goods.of(GoodsType.ORE, 43), 42, 44);
+
+        // The remaining docked ships still have an independent departure
+        // action.
+        harbor.scrollGroup("dock", 0);
+        harbor.selectShip(3100, false);
+        harbor.departSelectedShip(false);
+        harbor.verifyDepartedShip(3100, 0, Goods.of(GoodsType.ORE, 1), 41, 45);
+    }
+
+    @Test
+    @Tag("local")
     void TC_02_czech_crowded_harbor() throws Exception {
         // Select Czech through the existing settings screen before loading.
         final SettingPage settings = WelcomePage.of(getContext()).openSetting();

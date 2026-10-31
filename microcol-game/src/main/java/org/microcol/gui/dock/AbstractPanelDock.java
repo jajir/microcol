@@ -12,6 +12,7 @@ import org.microcol.model.unit.UnitWithCargo;
 import com.google.common.base.Preconditions;
 
 import javafx.scene.layout.Region;
+import javafx.scene.control.Button;
 
 /**
  * Contains ships in port. Good from ships could be loaded/unloaded.
@@ -72,6 +73,10 @@ public abstract class AbstractPanelDock
 
     protected void enableHarborLayout(final boolean includeWagons) {
         view.enableHarborLayout(includeWagons);
+    }
+
+    public void setHarborAction(final Button action) {
+        view.setHarborAction(action);
     }
 
     public Optional<UnitWithCargo> getSelectedShip() {

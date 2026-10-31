@@ -1,5 +1,7 @@
 # Current requirement backlog
 
+Implemented on 2026-10-31: [R-0380 — discoverable departure from Europe](done/R-0380.md), A03 with existing A06 voyage rules. Shared toolbar-style departure button, plain shared-size travel headings, hand-drawn routes and muted SVG harbor sources are complete under the user's explicit no-tests exception. Java/test compilation succeeded; no tests were executed and no gameplay, local acceptance or distribution result is claimed. [Evidence](../functional-tests.md#r-0380-discoverable-europe-departure-2026-10-31).
+
 Captured on 2026-10-31: [R-0378 — explain and confirm European goods purchases](R-0378.md),
 primary area A03 with existing A06 trade limits. Status: `new`. Ordinary dragging
 opens a purchase with the available maximum, its limiting reason, total price and

@@ -18,6 +18,10 @@ import com.google.common.base.Preconditions;
 
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Toggle;
+import javafx.scene.control.Button;
+import javafx.geometry.Pos;
+import javafx.geometry.Insets;
+import javafx.scene.layout.Priority;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ScrollPane;
@@ -115,6 +119,22 @@ public class PanelDockView implements JavaFxComponent {
     void updateLanguage(final I18n i18n) {
         this.i18n = i18n;
         updateCargoTitle();
+    }
+
+    void setHarborAction(final Button action) {
+        final ScrollPane scroll = (ScrollPane) mainPanel.getChildren()
+                .remove(0);
+        scroll.setMinWidth(0);
+        scroll.setPrefViewportWidth(60);
+        scroll.maxWidthProperty().bind(panelShips.widthProperty().add(4));
+        final HBox row = new HBox(12, scroll, action);
+        row.setAlignment(Pos.BOTTOM_LEFT);
+        HBox.setHgrow(scroll, Priority.ALWAYS);
+        HBox.setMargin(action, new Insets(0, 5, 25, 0));
+        action.setMinWidth(Region.USE_PREF_SIZE);
+        action.disableProperty()
+                .bind(toggleGroup.selectedToggleProperty().isNull());
+        mainPanel.getChildren().add(0, row);
     }
 
     private String shipLabel(final UnitWithCargo ship) {

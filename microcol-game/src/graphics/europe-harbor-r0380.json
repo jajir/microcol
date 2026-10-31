@@ -1,0 +1,34 @@
+{
+  "requirement": "R-0380",
+  "source": "existing europe-harbor.png before R-0380",
+  "source_sha256": "711bd6713dcf8ae3be998572b2f3b22ff71ddc51e23c9a0da2a8ed94d36a2620",
+  "trace_tool": "vtracer 0.6.15",
+  "trace_parameters": {
+    "colormode": "color",
+    "hierarchical": "stacked",
+    "mode": "spline",
+    "filter_speckle": 6,
+    "color_precision": 5,
+    "layer_difference": 24,
+    "corner_threshold": 60,
+    "length_threshold": 4,
+    "splice_threshold": 45,
+    "path_precision": 2
+  },
+  "editing": "Recolored vector fills; ivory sky and gray sea gradients; muted wave/bird fills. Individual paint paths remain editable. Route SVGs authored as curves and island shapes.",
+  "export_tool": "rsvg-convert",
+  "runtime_exports": {
+    "europe-harbor": [
+      1586,
+      992
+    ],
+    "europe-arrival-route": [
+      800,
+      440
+    ],
+    "europe-departure-route": [
+      2000,
+      600
+    ]
+  }
+}

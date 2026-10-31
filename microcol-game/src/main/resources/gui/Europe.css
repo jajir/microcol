@@ -1,17 +1,13 @@
 .europe-harbor {
     -fx-background-color: #FFF9EC;
 }
-.europe-harbor .label-title {
-    -fx-font-size: 20;
-}
 .europe-harbor .immigration-progress {
     -fx-background-color: transparent;
     -fx-text-fill: #27271f;
     -fx-padding: 4 0;
     -fx-alignment: center-left;
 }
-.europe-harbor .harbor-heading,
-.europe-harbor .bordered-titled-title {
+.europe-harbor .harbor-heading {
     -fx-font-size: 16;
     -fx-text-fill: #172b2e;
     -fx-padding: 0;
@@ -32,7 +28,7 @@
 .europe-harbor .voyage-ships {
     -fx-max-height: 84;
     -fx-spacing: 16;
-    -fx-alignment: bottom-left;
+    -fx-alignment: bottom-center;
     -fx-padding: 0 2 5 2;
 }
 .europe-harbor .ships,

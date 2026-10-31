@@ -5,8 +5,8 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="title">Europe</entry>
-	<entry key="harborDock">In port · %s</entry>
-	<entry key="harborPier">People on the quay · %s</entry>
+	<entry key="harborDock">In port</entry>
+	<entry key="harborPier">People on the quay</entry>
 	<entry key="voyageTurns">Turns remaining: %s</entry>
 	<entry key="voyageWaiting">Waiting: the arrival square is occupied.</entry>
 	<entry key="voyageUnavailable">This ship cannot depart. It must be in your European port during your turn, with an available sea-lane destination.</entry>
@@ -17,8 +17,8 @@
 	<entry key="voyageDestinationNewWorld">New World</entry>
 	<entry key="voyageReverseStale">This voyage changed. Review the ship and try again.</entry>
 	<entry key="voyageJettison">Jettison goods</entry>
-	<entry key="shipsTravelingToNewWorld">Ships traveling to New World</entry>
-	<entry key="shipsTravelingToEurope">Ships traveling to Europe</entry>
+	<entry key="shipsTravelingToNewWorld">Sailing to New World</entry>
+	<entry key="shipsTravelingToEurope">Sailing to Europe</entry>
 	<entry key="buyUnitDialog_title">Buy unit</entry>
 	<entry key="buyUnitDialog_buttonBuyUnit">Buy for</entry>
 	<entry key="goodsPanelTitle">Goods · sell / buy</entry>
@@ -98,4 +98,5 @@ Total: %s gold</entry>
   <entry key="taxPending">The Crown's tax demand is waiting for your answer. Open it to continue the turn.</entry>
   <entry key="backTaxOpen">Back taxes</entry>
   <entry key="voyageOrders">Orders: right-click or Shift+F10</entry>
+	<entry key="sailToNewWorld">Sail to New World</entry>
 </properties>

@@ -4,8 +4,8 @@ import org.microcol.i18n.MessageKeyResource;
 
 public enum Europe implements MessageKeyResource {
 
-    title, shipsTravelingToNewWorld, shipsTravelingToEurope, harborDock,
-    harborPier, buyUnitDialog_title, buyUnitDialog_buttonBuyUnit,
+    title, shipsTravelingToNewWorld, shipsTravelingToEurope, sailToNewWorld,
+    harborDock, harborPier, buyUnitDialog_title, buyUnitDialog_buttonBuyUnit,
     buyUnitDialog_buttonHire, buyUnitDialog_notEnoughGold,
     buyUnitDialog_unavailable, goodsPanelTitle, recruitUnitDialogTitle,
     recruitUnitDialogButton, statusBarEuropeDock, statusBarShipsToNewWorld,

@@ -252,6 +252,21 @@
 </details>
 
 
+## Evropský přístav — objevitelné odplutí (R-0380)
+
+1. [R-0380](requirements/done/R-0380.md), implementace 31. října 2026, používá vybranou tlumenou barevnost: slonovinové nebe, neutrální světle šedé moře a původní teplé město s molem. Nahrazuje níže popsanou paletu R-0343. Nadpisy plavby jsou skutečné popisky bez stuh a štítů, společným písmem titulku stránky; lodě mají stále 45 × 45 bodů.
+2. Původní ilustrace přístavu měla jen rastrový zdroj. Nový [europe-harbor.svg](../microcol-game/src/graphics/europe-harbor.svg) obsahuje editovatelné trasované křivky, pojmenované `paint-*`, a jemné vektorové přechody. Neobsahuje vložený bitmapový obrázek. Trasování zachovává kompozici a zjednodušuje texturu; původ, parametry a rozměry exportů zaznamenává [europe-harbor-r0380.json](../microcol-game/src/graphics/europe-harbor-r0380.json).
+3. Samostatné zdroje [příjezdové šipky](../microcol-game/src/graphics/europe-arrival-route.svg) a [odjezdové šipky s ostrovem](../microcol-game/src/graphics/europe-departure-route.svg) používají křivky, nepravidelně střídané čárky a ručně tvarované hroty. Příjezd míří na skutečný seznam lodí v přístavu; samostatná ikonka Evropy není součástí návrhu. Dekorace neodchytávají vstup a přizpůsobují se obsahové ploše.
+4. Opakovatelný export z kořene repozitáře používá `rsvg-convert`:
+
+    ```sh
+    rsvg-convert -w 1586 -h 992 -o microcol-game/src/main/resources/images/europe-harbor.png microcol-game/src/graphics/europe-harbor.svg
+    rsvg-convert -w 800 -h 440 -o microcol-game/src/main/resources/images/europe-arrival-route.png microcol-game/src/graphics/europe-arrival-route.svg
+    rsvg-convert -w 2000 -h 600 -o microcol-game/src/main/resources/images/europe-departure-route.png microcol-game/src/graphics/europe-departure-route.svg
+    ```
+
+5. Exporty byly vytvořeny ze SVG a ilustrace přístavu prohlédnuta. Výsledek uvnitř běžící hry nebyl v tomto kroku ověřen; uživatel výslovně požadoval push bez testů. Přesný rozsah a omezení uvádí [funkční evidence](functional-tests.md#r-0380-discoverable-europe-departure-2026-10-31). Historické screenshoty níže nejsou snímky této změny.
+
 ## Zdrojový formát herní grafiky
 
 1. Nová nebo měněná herní ilustrace musí mít editovatelný zdroj SVG tvořený skutečnými vektorovými tvary. PNG smí sloužit jako odvozený export pro hru. Vložení nebo odkazování rastrového obrázku uvnitř SVG tuto podmínku nesplňuje.

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="300" viewBox="0 0 1000 300">
+  <title>Hand-drawn departure toward the New World</title>
+  <path d="M10 285 C206 277 399 168 575 72 S795 80 877 28"
+        fill="none" stroke="#50534b" stroke-width="2.3" stroke-linecap="round"
+        stroke-dasharray="16 13 12 15 21 14 11 16"/>
+  <path d="M863 24 L888 23 L875 42 L876 30 Z" fill="#66695e" stroke="#41463e" stroke-width="1.7" stroke-linejoin="round"/>
+  <g id="new-world-island" stroke="#44483a" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M903 50 L918 45 L929 35 L942 33 L952 15 L960 13 L970 35 L983 40 L994 49 Q949 55 903 50Z" fill="#ddc58d" stroke-width="1.7"/>
+    <path d="M930 36 L943 32 L951 17 L958 14 L966 29 L972 36 L960 29 L955 34 L949 26 L940 38Z" fill="#9b9e6b" stroke-width="1.4"/>
+    <path d="M920 42 Q924 29 922 20 M982 44 Q978 31 979 24" fill="none" stroke-width="2.4"/>
+    <path d="M922 21 Q913 12 912 22 Q917 18 922 21 Q916 23 914 28 M922 21 Q923 11 927 14 L925 20 Q936 16 935 24 Q928 20 923 22 M979 25 Q971 18 970 25 L978 24 Q980 15 984 19 L981 25 Q991 20 991 28 L982 25" fill="#8b9662" stroke-width="1.6"/>
+    <path d="M929 45 L934 43 M951 45 L954 46 M973 47 L978 47" fill="none" stroke="#9f8d64" stroke-width="1.4"/>
+  </g>
+</svg>
