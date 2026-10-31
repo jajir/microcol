@@ -252,6 +252,11 @@
 </details>
 
 
+## Evropský přístav — vybrané rozestupy varianty C (R-0381)
+
+1. Uživatel 31. října 2026 vybral **variantu C**: obě sekce plavby mírně níže pod horizontem a nejmenší navržená mezera mezi nadpisem a řádkem lodí. Písmo, velikost lodí, barvy a společné ovládání zůstávají podle R-0380. Autoritativní rozsah zaznamenává [R-0381](requirements/R-0381.md), stav `new`.
+2. [Uložená varianta C](graphics-assets/europe-voyage-spacing-2026-10-31/variant-c.png) je rastrová návrhová reference vytvořená vestavěným ImageGen z uživatelova snímku. Není herním assetem, pixelově závazným měřením ani důkazem implementace. Přesné odsazení se doladí při implementaci; tento krok pouze zachovává vybraný návrh.
+
 ## Evropský přístav — objevitelné odplutí (R-0380)
 
 1. [R-0380](requirements/done/R-0380.md), implementace 31. října 2026, používá vybranou tlumenou barevnost: slonovinové nebe, neutrální světle šedé moře a původní teplé město s molem. Nahrazuje níže popsanou paletu R-0343. Nadpisy plavby jsou skutečné popisky bez stuh a štítů, společným písmem titulku stránky; lodě mají stále 45 × 45 bodů.
