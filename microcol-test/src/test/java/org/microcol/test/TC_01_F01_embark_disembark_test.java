@@ -76,17 +76,18 @@ public class TC_01_F01_embark_disembark_test extends AbstractMicroColTest {
         // disembark units
         gamePage.moveMouseAtLocation(SHORE_SEE_LOCATION);
         gamePage.dragMouseAtLocation(SHORE_LAND_LOCATION);
-        // Select and confirm each passenger separately.
+        // Select and confirm the first passenger of two.
         PassengerTransferPage passengers = new PassengerTransferPage(
                 getContext());
         passengers.choose(24);
         passengers.confirm();
         gamePage.waitForNumberOfUnitsAt(SHORE_LAND_LOCATION, 1);
+
+        // The sole remaining passenger lands directly without a choice.
         gamePage.moveMouseAtLocation(SHORE_SEE_LOCATION);
         gamePage.dragMouseAtLocation(SHORE_LAND_LOCATION);
-        passengers.choose(25);
-        passengers.confirm();
         gamePage.waitForNumberOfUnitsAt(SHORE_LAND_LOCATION, 2);
+        passengers.verifyNoChoiceDialog();
 
         // verify that units are at expected location.
         gamePage.verifyNumberOfUnitsAt(SHORE_LAND_LOCATION, 2);

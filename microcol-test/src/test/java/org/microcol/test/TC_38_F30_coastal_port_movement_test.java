@@ -110,7 +110,7 @@ public class TC_38_F30_coastal_port_movement_test extends AbstractMicroColTest {
         port.verifyPreviewCanceled();
         game.moveMouseAtLocation(WATER);
         game.dragMouseAtLocation(SHORE);
-        passengers.verifyChoice(4, true);
+        passengers.verifyChoice(4, false);
         passengers.cancel();
         port.verifyWorldUnchanged();
     }

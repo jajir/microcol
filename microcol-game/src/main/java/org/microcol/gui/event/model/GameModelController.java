@@ -236,10 +236,17 @@ public class GameModelController {
         }).start();
     }
 
-    public void disembark(final Unit passenger, final Location targetLocation) {
+    /**
+     * Land the passengers one after another; the model validates each transfer
+     * and the first rejection stops the rest (R-0379).
+     */
+    public void disembark(final List<Unit> passengers,
+            final Location targetLocation) {
         new Thread(() -> {
             try {
-                passenger.disembarkToLocation(targetLocation);
+                for (final Unit passenger : passengers) {
+                    passenger.disembarkToLocation(targetLocation);
+                }
             } catch (IllegalStateException rejected) {
                 Platform.runLater(this::showPassengerTransferRejection);
             }

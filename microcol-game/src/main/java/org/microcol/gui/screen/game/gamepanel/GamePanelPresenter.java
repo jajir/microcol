@@ -363,9 +363,14 @@ public final class GamePanelPresenter {
                     .filter(passenger -> passenger
                             .canUnitDisembarkAt(moveToLocation))
                     .collect(Collectors.toList());
-            choosePassenger.choose(passengers, moveToLocation)
-                    .ifPresent(passenger -> gameModelController
-                            .disembark(passenger, moveToLocation));
+            // A sole eligible passenger lands directly; several are chosen
+            // with check boxes (R-0379).
+            final List<Unit> landing = passengers.size() > 1
+                    ? choosePassenger.choose(passengers, moveToLocation)
+                    : passengers;
+            if (!landing.isEmpty()) {
+                gameModelController.disembark(landing, moveToLocation);
+            }
             return;
         }
 

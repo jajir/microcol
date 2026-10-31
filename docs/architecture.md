@@ -604,6 +604,11 @@ nevlastní. GUI pouze čte dotaz a zobrazuje důvod. Stav ověření vede
    obou stran vazby předchází události nalodění. Úplná regrese prošla
    lokálně i v CI (781 modelových a 98 funkčních/podpůrných případů).
    Po opravě synchronizace testovacího gesta vyšel build `dev-51-b3ba0efcf67e`. Výsledky vlastní [testová evidence](functional-tests.md#individual-passenger-transfers-2026-10-13).
+4. [R-0379](requirements/done/R-0379.md) (lokálně přijato 31. října 2026) mění jen
+   výběr na mapě: `GamePanelPresenter` vylodí jediného způsobilého pasažéra
+   přímo, `ChoosePassengerDialog` vrací seznam zaškrtnutých pasažérů a
+   `GameModelController` je vylodí postupně. Každý převod dál ověřuje
+   `AbstractUnit`; první odmítnutí zastaví zbytek bez částečné změny pasažéra.
 
 ### Odbornost najatého kolonisty (R-0023)
 

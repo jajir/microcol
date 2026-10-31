@@ -30,9 +30,10 @@ public enum Dialog implements MessageKeyResource {
     destroyColony_question, colonyWasCaptured_caption, colonyWasCaptured_text1,
     colonyWasCaptured_text2, about_caption, about_version, saveGame_title,
     loadGame_title, loadGame_invalid, buildingQueueDialog_caption,
-    passenger_title, passenger_destination, passenger_hold, passenger_confirm,
-    passenger_unavailable, turnPreparation_title, turnPreparation_unavailable,
-    recoverySave_title, recoverySave_failed, saveFolder_unavailable,
-    diagnosticLog_folder, goodsTransfer_changed, europePrice_changed;
+    passenger_title, passenger_heading, passenger_destination, passenger_hold,
+    passenger_confirm, passenger_unavailable, turnPreparation_title,
+    turnPreparation_unavailable, recoverySave_title, recoverySave_failed,
+    saveFolder_unavailable, diagnosticLog_folder, goodsTransfer_changed,
+    europePrice_changed;
 
 }

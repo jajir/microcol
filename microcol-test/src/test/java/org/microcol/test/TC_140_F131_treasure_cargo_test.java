@@ -28,8 +28,8 @@ import javafx.stage.Stage;
  * and drop as one unit in six occupied crates, with only the train's own crate
  * to drag; Continue keeps it and unloading frees all six. With five free holds
  * the dock refuses the drop and the ore stays. On the map the same train boards
- * by the unit drag, a refused boarding shows the movement message, and the
- * passenger chooser offers the train once. Capacity and the reservation
+ * by the unit drag, a refused boarding shows the movement message, and the sole
+ * aboard train lands without a chooser (R-0379). Capacity and the reservation
  * arithmetic are checked in the model tests, and the one-hold passenger path
  * stays in the passenger transfer scenarios.
  */
@@ -161,7 +161,7 @@ public class TC_140_F131_treasure_cargo_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
-    void TC_05_chooser_offers_the_aboard_train_once_and_unloading_frees_the_holds()
+    void TC_05_sole_aboard_train_lands_directly_and_unloading_frees_the_holds()
             throws Exception {
         // The train is already aboard at sea, reserving all six holds.
         final GamePage game = WelcomePage.of(getContext()).loadGame();
@@ -171,23 +171,12 @@ public class TC_140_F131_treasure_cargo_test extends AbstractMicroColTest {
         holds.loadScenario(FIXTURE, Layout.SEA, Holds.TRAIN_ABOARD);
         holds.verifyTrainAboard();
 
-        // Dragging the ship to the shore opens a chooser with one train only.
+        // Dragging the ship to the shore lands the only train without a
+        // chooser and frees all six holds.
         game.moveMouseAtLocation(TreasureCargoPage.WATER);
         game.dragMouseAtLocation(TreasureCargoPage.SHORE);
-        passengers.verifyChoiceCount(1);
-        passengers.verifyChoice(TreasureCargoPage.TRAIN_ID, true);
-        passengers.captureDialog("passenger-confirm",
-                "treasure-cargo-chooser-en.png");
-
-        // Cancel leaves the train aboard; confirming lands it and frees all
-        // six.
-        passengers.cancel();
-        holds.verifyTrainAboard();
-        game.moveMouseAtLocation(TreasureCargoPage.WATER);
-        game.dragMouseAtLocation(TreasureCargoPage.SHORE);
-        passengers.choose(TreasureCargoPage.TRAIN_ID);
-        passengers.confirm();
         game.waitForNumberOfUnitsAt(TreasureCargoPage.SHORE, 1);
+        passengers.verifyNoChoiceDialog();
         holds.verifyTrainAt(TreasureCargoPage.SHORE);
         holds.verifyHoldsReleased();
     }

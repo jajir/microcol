@@ -303,7 +303,7 @@ public class TC_101_F92_four_nation_expedition_loop_test
         }
         trip.verifyPlayedTurns(landingTurn);
         trip.disembark(game, SITE, people.get(0), 1);
-        trip.disembark(game, SITE, people.get(1), 2);
+        trip.disembarkSolePassenger(game, SITE, 2);
         game.verifyNumberOfUnitsAt(SITE, 2);
 
         // Landing spends the colonists' moves, so the colony starts next turn.

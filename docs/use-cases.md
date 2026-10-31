@@ -807,6 +807,11 @@ kolonie, vyložením vybaveného člověka mimo pracovníky a dalším Continue.
 Cestu specialisty doplňuje níže ověřené R-0023. Úplná regrese R-0022 prošla 781 modelovými
 a 98 funkčními/podpůrnými testy bez selhání, chyb a vynechání lokálně i v CI;
 publikovaný build je `dev-51-b3ba0efcf67e`.
+
+[R-0379](requirements/done/R-0379.md) (lokálně přijato 31. října 2026) mění výběr
+vylodění na mapě v UC-025: jediný způsobilý pasažér vystoupí přímo, více
+způsobilých vybírá hráč nezaškrtnutými checkboxy. Scénáře TC29/F21 jsou uvedeny
+v [evidenci](functional-tests.md#passenger-landing-selection-r-0379-2026-10-31).
 Aktuální stav a neuzavřené kontroly jsou v
 [záznamu ověření přepravy](functional-tests.md#individual-passenger-transfers-2026-10-13).
 

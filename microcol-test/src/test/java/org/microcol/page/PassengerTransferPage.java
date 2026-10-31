@@ -11,7 +11,10 @@ import org.microcol.model.unit.UnitFreeColonist;
 import org.microcol.model.unit.UnitWithCargo;
 import org.testfx.util.WaitForAsyncUtils;
 
-import javafx.scene.control.RadioButton;
+import javafx.geometry.Bounds;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Labeled;
+import javafx.scene.text.Text;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import java.util.concurrent.TimeUnit;
@@ -27,12 +30,38 @@ public final class PassengerTransferPage extends AbstractScreen {
         super(context);
     }
 
+    /** Toggles the passenger's check box with the mouse. */
     public void choose(int unitId) {
         getRobot().clickOn("#passenger-choice-" + unitId);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /** Toggles the passenger's check box with Tab and Space. */
+    public void chooseWithKeyboard(int unitId) {
+        pressWithKeyboard(getNodeFinder().lookup("#passenger-choice-" + unitId)
+                .queryAs(CheckBox.class));
     }
 
     public void confirm() {
         clickOnButtonWithId("passenger-confirm");
+    }
+
+    public void confirmWithKeyboard() {
+        pressWithKeyboard(getButtonById("passenger-confirm"));
+    }
+
+    private void pressWithKeyboard(final Node control) {
+        for (int i = 0; i < 12 && !control.isFocused(); i++) {
+            getRobot().push(KeyCode.TAB);
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+        if (!control.isFocused()) {
+            throw new IllegalStateException(
+                    "Passenger control is not keyboard reachable: "
+                            + control.getId());
+        }
+        getRobot().push(KeyCode.SPACE);
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void cancel() {
@@ -107,17 +136,66 @@ public final class PassengerTransferPage extends AbstractScreen {
     }
 
     public void verifyChoiceCount(int expectedCount) {
-        assertEquals(expectedCount,
-                getNodeFinder().lookup(".radio-button").queryAll().size());
+        assertEquals(expectedCount, getNodeFinder()
+                .lookup(node -> node instanceof CheckBox && node.getId() != null
+                        && node.getId().startsWith("passenger-choice-"))
+                .queryAll().size());
     }
 
     public void verifyChoice(int unitId, boolean selected) {
-        RadioButton choice = getNodeFinder()
-                .lookup("#passenger-choice-" + unitId)
-                .queryAs(RadioButton.class);
+        CheckBox choice = getNodeFinder().lookup("#passenger-choice-" + unitId)
+                .queryAs(CheckBox.class);
         assertTrue(choice.isVisible());
         assertEquals(selected, choice.isSelected());
         assertTrue(isCssIdVisible("passenger-confirm"));
+    }
+
+    public void verifyConfirmEnabled(boolean enabled) {
+        assertEquals(enabled, !getButtonById("passenger-confirm").isDisabled());
+    }
+
+    /**
+     * Checks the captions and that the heading, every passenger and both
+     * actions are drawn in full inside the dialog, not shortened with an
+     * ellipsis.
+     */
+    public void verifyDialogText(String heading, String confirm,
+            String cancel) {
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals(heading, getLabeledById("passenger-heading").getText());
+        assertEquals(confirm, getButtonById("passenger-confirm").getText());
+        assertEquals(cancel, getButtonById("passenger-cancel").getText());
+        final java.util.List<Labeled> shown = new java.util.ArrayList<>();
+        shown.add(getLabeledById("passenger-heading"));
+        shown.add(getButtonById("passenger-confirm"));
+        shown.add(getButtonById("passenger-cancel"));
+        getNodeFinder()
+                .lookup(node -> node instanceof CheckBox && node.getId() != null
+                        && node.getId().startsWith("passenger-choice-"))
+                .queryAll().forEach(node -> shown.add((Labeled) node));
+        for (Labeled labeled : shown) {
+            final Text drawn = labeled.getChildrenUnmodifiable().stream()
+                    .filter(child -> child instanceof Text
+                            && child.getStyleClass().contains("text"))
+                    .map(child -> (Text) child).findFirst().orElseThrow();
+            assertEquals(labeled.getText(), drawn.getText(),
+                    "Truncated caption of " + labeled.getId());
+            final Bounds bounds = labeled
+                    .localToScene(labeled.getLayoutBounds());
+            final double sceneWidth = labeled.getScene().getWidth();
+            assertTrue(bounds.getMinX() >= 0 && bounds.getMaxX() <= sceneWidth,
+                    "Caption outside the dialog: " + labeled.getId());
+            final Bounds text = labeled.localToScene(drawn.getBoundsInParent());
+            assertTrue(
+                    text.getMinX() >= bounds.getMinX() - 0.5
+                            && text.getMaxX() <= bounds.getMaxX() + 0.5,
+                    "Caption drawn outside its control: " + labeled.getId());
+        }
+    }
+
+    public void verifyNoChoiceDialog() {
+        WaitForAsyncUtils.waitForFxEvents();
+        assertFalse(isCssIdVisible("passenger-confirm"));
     }
 
     public void verifyAboard(int unitId, int slotIndex, int moves, int tools) {

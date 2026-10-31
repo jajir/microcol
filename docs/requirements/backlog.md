@@ -302,7 +302,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | Requirement | Outcome | Kind | Origin |
 | --- | --- | --- | --- |
 | [R-0377](R-0377.md) | Embed Settings and Load game in menu/game pages with scrolling content, origin-aware returns and platform shortcuts | New capture | User-approved design, 2026-10-31; implementation not requested |
-| [R-0379](R-0379.md) | Land one eligible passenger directly; select several with initially unchecked checkboxes | New capture | User agreement, 2026-10-31; [R-0022](done/R-0022.md) passenger rules |
+| [R-0379](done/R-0379.md) | Land one eligible passenger directly; select several with initially unchecked checkboxes | Done 2026-10-31 | User agreement, 2026-10-31; [R-0022](done/R-0022.md) passenger rules |
 | [R-0381](done/R-0381.md) | Lower both Europe voyage groups slightly and use the compact heading-to-ship spacing of selected variant C | Done 2026-10-31 | User-selected visual reference, 2026-10-31; [R-0380](done/R-0380.md) layout |
 | [R-0112](done/R-0112.md) | Stabilize TC27 and TC30 map interactions with evidence-backed diagnosis | New request | User request, 2026-10-15 |
 | [R-0113](done/R-0113.md) | Skip full game CI when only `docs/` changes | New request | User request, 2026-10-15 |

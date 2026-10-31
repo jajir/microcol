@@ -41,9 +41,10 @@
 	<entry key="buildingQueueDialog_caption">Building queue</entry>
 
 	<entry key="passenger_title">Disembark a passenger</entry>
-	<entry key="passenger_destination">Choose one passenger to land at %s.</entry>
+	<entry key="passenger_heading">Select passengers to disembark</entry>
+	<entry key="passenger_destination">Landing square: %s.</entry>
 	<entry key="passenger_hold">Hold %s: %s</entry>
-	<entry key="passenger_confirm">Disembark</entry>
+	<entry key="passenger_confirm">Disembark selected</entry>
 	<entry key="passenger_unavailable">This passenger cannot transfer now. Check the ship, destination, free cargo space and remaining movement.</entry>
 	<entry key="fight_declaration">Attacking %s ends peace and declares war. Fight?</entry>
 	<entry key="fight_unavailable">The attack is no longer available. No battle was started. Check the units, positions, equipment and remaining movement, then choose the attack again.</entry>

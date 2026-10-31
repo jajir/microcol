@@ -41,9 +41,10 @@
 	<entry key="buildingQueueDialog_caption">Plánování stavby</entry>
 
 	<entry key="passenger_title">Vylodit cestujícího</entry>
-	<entry key="passenger_destination">Vyberte jednoho cestujícího pro vylodění na %s.</entry>
+	<entry key="passenger_heading">Vyberte pasažéry k vylodění</entry>
+	<entry key="passenger_destination">Pole vylodění: %s.</entry>
 	<entry key="passenger_hold">Nákladový prostor %s: %s</entry>
-	<entry key="passenger_confirm">Vylodit</entry>
+	<entry key="passenger_confirm">Vylodit vybrané</entry>
 	<entry key="passenger_unavailable">Cestující teď nemůže přestoupit. Zkontrolujte loď, cíl, volný nákladový prostor a zbývající pohyb.</entry>
 	<entry key="fight_declaration">Útokem na hráče %s skončí mír a vyhlásíte válku. Bojovat?</entry>
 	<entry key="fight_unavailable">Útok už nelze provést. Boj nezačal. Zkontrolujte jednotky, polohu, vybavení a zbývající pohyb a zvolte útok znovu.</entry>

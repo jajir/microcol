@@ -169,6 +169,18 @@ public final class ExpeditionLoopPage extends AbstractScreen {
         game.waitForNumberOfUnitsAt(land, expectedUnitsAtLand);
     }
 
+    /** Land the sole eligible passenger, which needs no choice (R-0379). */
+    public void disembarkSolePassenger(final GamePage game, final Location land,
+            final int expectedUnitsAtLand) throws Exception {
+        selectShip(game);
+        final Location from = shipLocation();
+        game.panToTile(from);
+        game.panToTile(land);
+        game.moveMouseAtLocation(from);
+        game.dragMouseAtLocation(land);
+        game.waitForNumberOfUnitsAt(land, expectedUnitsAtLand);
+    }
+
     /** Make a landed colonist the selected unit before founding. */
     public void selectColonistAt(final GamePage game, final Location site)
             throws Exception {
