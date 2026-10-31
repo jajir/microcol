@@ -277,19 +277,21 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--workers", type=int, choices=(1, 2), default=2)
     parser.add_argument("--timeout", type=int, default=5400, help="Seconds per build/test group")
+    parser.add_argument("--total-timeout", type=int, help="Seconds for the complete verification, including cleanup")
     parser.add_argument("--timings", type=Path, help="Previous Surefire XML directory for balancing")
     scope = parser.add_mutually_exclusive_group()
     scope.add_argument("--model", action="store_true", help="All model/JUnit tests only")
     scope.add_argument("--smoke", action="store_true",
                        help="Support tests and ten UI scenarios; 420 seconds total; no model tests")
     args = parser.parse_args(argv)
-    if args.timeout <= 0 or (args.timings and not args.timings.is_dir()):
+    if args.timeout <= 0 or (args.total_timeout is not None and args.total_timeout <= 0) or (args.timings and not args.timings.is_dir()):
         parser.error("Positive timeout and an existing timings directory are required")
     output = ROOT / "target/verification"
     output.mkdir(parents=True, exist_ok=True)
     directory = Path(tempfile.mkdtemp(prefix="run-", dir=output))
     print("Verification directory: " + str(directory), flush=True)
     started = time.monotonic()
+    total_timeout = min(420, args.total_timeout or 420) if args.smoke else args.total_timeout
     summary = {"status": "failed", "groups": [],
                "workers": 1 if args.smoke or args.model else args.workers,
                "scope": "precommit" if args.smoke else "model" if args.model else "full"}
@@ -308,13 +310,14 @@ def main(argv=None):
                     "workers": summary["workers"], "timeout_seconds": 420 if args.smoke else args.timeout,
                     "timings": str(args.timings.resolve()) if args.timings else None}
         manifest["scope"] = summary["scope"]
+        manifest["total_timeout_seconds"] = total_timeout
         write_json(directory / "manifest.json", manifest)
         summary["revision"] = identity["revision"]
         # A unique image tag prevents another invocation's build replacing ours.
         override = directory / "compose.json"
         write_json(override, {"services": {"ui-tests": {"image": "microcol-ui-verify:" + directory.name}}})
         compose = ["docker", "compose", "-f", str(source / "compose.ui-tests.yml"), "-f", str(override)]
-        runner = Runner(compose, args.timeout, cancelled, started + 420 if args.smoke else None)
+        runner = Runner(compose, args.timeout, cancelled, started + total_timeout if total_timeout else None)
         if runner.command(["docker", "info", "--format", "{{json .}}"], directory / "docker-info.json", 120):
             raise ValueError("Docker unavailable; inspect docker-info.json")
         if runner.command(compose + ["build", "ui-tests"], directory / "build.log"):
@@ -353,6 +356,8 @@ def main(argv=None):
             raise InterruptedError("Verification cancelled")
         if args.smoke and time.monotonic() - started > 420:
             raise ValueError("Pre-commit verification exceeded 420 seconds")
+        if total_timeout and time.monotonic() - started > total_timeout:
+            raise ValueError("Verification exceeded its total time budget")
         summary["status"] = "passed"
     except (OSError, ValueError, KeyError, ET.ParseError, subprocess.SubprocessError) as error:
         summary["error"] = str(error)

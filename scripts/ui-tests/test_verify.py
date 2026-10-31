@@ -295,6 +295,28 @@ class VerificationTest(unittest.TestCase):
                 runner.command(["docker", "info"], self.reports / "preflight.log", 120)
             process.assert_not_called()
 
+    def test_full_total_deadline_includes_cleanup_without_extending_smoke(self):
+        self.setup_smoke()
+        with patch.object(verify, "ROOT", self.root), patch.object(verify, "time") as clock:
+            clock.monotonic.return_value = 0
+
+            def group(runner, *args):
+                self.assertEqual(runner.deadline, 10)
+                clock.monotonic.return_value = 11
+                return {"status": "passed"}
+
+            with patch.object(verify.Runner, "group", group):
+                self.assertEqual(verify.main(["--workers", "1", "--total-timeout", "10"]), 1)
+        summary = json.loads(next((self.root / "target/verification").glob("run-*/summary.json")).read_text())
+        self.assertIn("total time budget", summary["error"])
+        with patch.object(verify, "ROOT", self.root):
+            self.assertEqual(verify.main(["--smoke", "--total-timeout", "14400"]), 0)
+        for p in (self.root / "target/verification").glob("run-*/manifest.json"):
+            manifest = json.loads(p.read_text())
+            self.assertEqual(manifest["total_timeout_seconds"], 420 if manifest["scope"] == "precommit" else 10)
+        with self.assertRaises(SystemExit):
+            verify.main(["--total-timeout", "0"])
+
     def test_failed_process_missing_export_and_missing_suite_are_not_success(self):
         self.setup_project()
         for mode in ("bad-exit", "missing-export", "missing-suite"):

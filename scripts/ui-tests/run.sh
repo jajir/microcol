@@ -16,6 +16,9 @@ export_results() {
         if [[ -d "$source" ]]; then
             parent=${source%/*}
             parent=${parent/\/target/}
+            if [[ "$source" -ef "$RESULT_DIR/$parent/${source##*/}" ]]; then
+                continue
+            fi
             if ! mkdir -p "$RESULT_DIR/$parent" \
                 || ! cp -a "$source" "$RESULT_DIR/$parent/"; then
                 if ((status == 0)); then status=1; fi
@@ -35,6 +38,12 @@ cd /workspace
 tar -C /source --exclude=.git --exclude=target -cf - . \
     | tar -C /workspace -xf -
 
+# The snapshot excludes every target directory; keep normal Maven paths on the result mount.
+for module in microcol-game microcol-test; do
+    mkdir -p "$module/target" "$RESULT_DIR/$module/surefire-reports"
+    ln -s "$RESULT_DIR/$module/surefire-reports" "$module/target/surefire-reports"
+done
+
 xvfb-run -e "$RESULT_DIR/xvfb.log" -a \
     --server-args='-screen 0 1600x1200x24' bash -euc '
     openbox > "$RESULT_DIR/openbox.log" 2>&1 &
@@ -42,7 +51,7 @@ xvfb-run -e "$RESULT_DIR/xvfb.log" -a \
     xcompmgr -n > "$RESULT_DIR/compositor.log" 2>&1 &
     compositor_pid=$!
     trap "kill $wm_pid $compositor_pid 2>/dev/null || true" EXIT
-    mvn -B -ntp -pl "${MICROCOL_TEST_MODULE:-microcol-test}" -am clean test -P ci "$@" \
+    mvn -B -ntp -pl "${MICROCOL_TEST_MODULE:-microcol-test}" -am test -P ci "$@" \
         -Dtestfx.robot=glass -Dtestfx.headless=false -Dprism.order=sw \
         -DsoundEnabled=false
 ' bash "$@" 2>&1 | tee "$RESULT_DIR/maven.log"

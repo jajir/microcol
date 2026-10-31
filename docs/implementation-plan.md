@@ -1,5 +1,9 @@
 # Plán implementace MicroCol podle manuálu
 
+Rozšíření CI rozpočtu a ruční spouštění regrese řeší [R-0375](requirements/done/R-0375.md).
+Konfigurace je v [development delivery](development-builds.md#run-full-tests-manually),
+stav lokální přejímky ve [funkčních testech](functional-tests.md#r-0375-manual-regression-budget-and-durable-reports-2026-10-31).
+
 Follow-up closure: [R-0256](requirements/done/R-0256.md) records the final three accepted answers without changing gameplay readiness.
 
 Refinement 2026-10-20: [R-0255](requirements/done/R-0255.md) records the 38 answered topics through R-0219; gameplay implementation and existing readiness states remain separate.

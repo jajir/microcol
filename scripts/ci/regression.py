@@ -73,7 +73,11 @@ def collect_group(directory, expected):
               'state': 'incomplete', 'problems': []}
     try:
         for path in sorted(directory.rglob('TEST-*.xml')):
-            suite = ET.parse(path).getroot()
+            try:
+                suite = ET.parse(path).getroot()
+            except (OSError, ET.ParseError):
+                # An interrupted XML write must not hide other completed suites.
+                continue
             for case in suite.findall('testcase'):
                 outcome = next((key for key, tag in (('failed', 'failure'), ('errors', 'error'),
                                                      ('skipped', 'skipped'))

@@ -72,7 +72,8 @@ command is normally `~/.local/share/microcol-dev/launcher/microcol-dev`.
 1. A locally checked change is pushed to `main`; model compatibility and
    documentation checks run. Full regression and game delivery run at 02:17 UTC
    when relevant changes exist, or through an explicit manual workflow run on
-   main. This is 03:17 in Prague in winter and 04:17 in summer; GitHub may delay
+   main. Manual runs default to tests only; select the publication option for
+   game delivery. This is 03:17 in Prague in winter and 04:17 in summer; GitHub may delay
    scheduled execution. See [CI selection](#ci-filtering) and the
    [latest test report](test-results.md). Ordinary development does not wait for
    or inspect remote CI results.
@@ -108,18 +109,45 @@ replaces job/artifact/manifest checks or reruns/cancels remote CI automatically.
 
 ## Full functional regression budget
 
-[R-0249](requirements/done/R-0249.md) raises the full Docker/Xvfb functional job to
-**90 minutes**, as requested on 2026-10-19. The matching local completion
-watchdog is **5,400 seconds**. The ten-requirement integration run exceeded
-60 minutes while scenarios were still progressing; its three test failures are
-tracked separately and are not fixed by extending the deadline. Earlier
-[R-0247](requirements/done/R-0247.md) established the previous 60-minute limit;
-its historical acceptance remains unchanged.
+[R-0375](requirements/done/R-0375.md), agreed on 2026-10-31, gives each full test
+group **four hours (14,400 seconds)**. The verifier shares a **255-minute
+(15,300-second)** deadline across setup, model/UI execution and cleanup. The
+Actions job has **270 minutes**, reserving a further 15 minutes for summaries
+and artifact uploads before GitHub terminates it. CI uses one UI worker:
 
-The extra margin covers observed runner-speed variation. It does not remove any
-scenario, assertion, report requirement or publication dependency. A timeout or
-incomplete suite remains a blocker. Native packaging and the separate targeted
-stability campaign keep their own existing budgets.
+```sh
+bash scripts/ui-tests/verify.sh --workers 1 --timeout 14400 --total-timeout 15300
+```
+
+The container links each module's usual Surefire directory to the mounted
+result path before running tests on its clean source snapshot. Completed XML survives interruption;
+a currently written file may be incomplete. The report counts other valid XML
+and retains failure/incomplete status. Screenshots and the exit marker still
+have final export checks. A longer budget does not fix gameplay failures or
+waive complete reports and exact-revision distribution gates.
+
+The former 90-minute CI limit from [R-0249](requirements/done/R-0249.md) and
+60-minute limit from [R-0247](requirements/done/R-0247.md) remain historical.
+Local verifier defaults remain 5,400 seconds per build/test group unless given
+an explicit budget; local smoke always has a maximum total of 420 seconds.
+Native packaging and targeted stability campaigns retain their budgets.
+
+## Run full tests manually
+
+1. Open [Actions → Full regression tests](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml).
+2. Select **Run workflow** and branch **main**.
+3. Leave **Package and publish development builds after tests pass** unchecked.
+   This is the default: run model/JUnit and complete UI/support tests, generate
+   their summaries and refresh the public report; skip packaging and game publication.
+4. Select **Run workflow**. Follow **Functional player scenarios**, its job summary,
+   `test-summary-<attempt>` and `tests-functional-<attempt>` artifacts, or the
+   [public test report](test-results.md).
+5. Check the publication option only when deliberately requesting game delivery.
+   All existing platform and exact-revision gates then apply. Scheduled nightly
+   runs retain publication after successful tests and platform checks.
+
+Preparing this workflow does not run full regression. A manual run is explicit
+and unconditional; the nightly schedule retains its change filter.
 
 ## CI filtering
 
@@ -142,9 +170,10 @@ stability campaign keep their own existing budgets.
    for the complete nightly selection.
 4. Full regression reuses the frozen-source Docker verifier with all model/JUnit
    tests, including ConnectorTest, and one complete UI/support group. Native
-   packaging and launcher checks start only after the full regression passes.
-   The existing 90-minute functional-job limit and all exact-revision publication
-   gates remain. If main advances before promotion, the publisher retains the
+   packaging and launcher checks start only after the full regression passes,
+   for scheduled runs or when manual publication is explicitly selected.
+   The [expanded time budgets](#full-functional-regression-budget) and all
+   exact-revision publication gates apply. If main advances before promotion, the publisher retains the
    previous distribution; the completed test result still describes its own SHA.
 5. The README links two [public test-count badges and a report](test-results.md).
    Both groups come from the same most recent attempted full regression, including

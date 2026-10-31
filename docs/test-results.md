@@ -12,7 +12,9 @@ Green requires complete passing reports for the displayed commit. Failed tests
 and errors are red; skipped tests, missing reports, cancellation and a newer
 `main` are amber. The badge's failed count includes assertion failures and test
 errors; the report separates them. Missing results use “unknown”, never zero.
-Counts in an incomplete run describe only the available reports.
+Counts in an incomplete run describe only the available reports. Completed XML
+is written directly to the mounted result directory, so cancellation preserves
+finished suites; a partially written XML file never hides other completed suites.
 
 Every Pages build retrieves the latest attempted full run, including failures.
 Skipped no-change nights retain the previous result. Full regression start and
@@ -24,6 +26,9 @@ Reports retain the compact counts and failed-case list for 90 days. Raw XML,
 logs and UI screenshots are downloadable from the linked Actions run for 14 days;
 downloading Actions artifacts requires signing in to GitHub. Expired or missing
 summaries are explicitly unknown. See [nightly execution](development-builds.md#ci-filtering).
+
+For a tests-only manual run, use [Full regression tests](development-builds.md#run-full-tests-manually)
+and leave the publication option unchecked.
 
 The live section below is generated during Pages publication from Actions
 artifacts. A local documentation build contains this explanation only.

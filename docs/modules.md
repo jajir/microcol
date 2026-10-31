@@ -245,3 +245,10 @@ Docker verifier owns frozen source, inventory and validated model/UI reports.
 The single MkDocs Pages workflow publishes the report alongside documentation;
 these generated results are not source commits or game distribution assets.
 See [test-result semantics](test-results.md) and [nightly CI](development-builds.md#ci-filtering).
+
+[R-0375](requirements/done/R-0375.md) keeps the same model/UI artifacts and adds no
+game module. The Docker runner links each usual `target/surefire-reports`
+directory to `<results>/<module>/surefire-reports` before invoking Maven on a
+clean source snapshot. Completed XML and screenshots written there survive
+interruption. Ordinary Maven invocations keep their default report directories.
+Manual full regression defaults to tests only; nightly or explicitly selected publication retains the distribution gates.

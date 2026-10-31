@@ -67,6 +67,14 @@ class RegressionTests(unittest.TestCase):
         self.report(nested)
         self.assertEqual('incomplete', regression.collect_group(self.root, self.expected)['state'])
 
+    def test_interrupted_xml_preserves_other_completed_failures(self):
+        self.report(outcome='<failure message="actual failure"/>', counts='failures="1"')
+        (self.root / 'TEST-aaa-interrupted.xml').write_text('<testsuite')
+        result = regression.collect_group(self.root, self.expected)
+        self.assertEqual((1, 1, 'failed'), (result['passed'], result['failed'], result['state']))
+        self.assertIn('actual failure', result['problems'][0]['message'])
+        self.assertIn('reason', result)
+
     def test_two_groups_and_process_failure(self):
         root = self.root / 'run-one'
         root.mkdir()
@@ -191,11 +199,17 @@ class RegressionTests(unittest.TestCase):
         self.assertNotIn('  push:', workflow)
         self.assertIn("cron: '17 2 * * *'", workflow)
         self.assertIn('run: python3 scripts/ci/regression.py plan', workflow)
-        self.assertIn('bash scripts/ui-tests/verify.sh --workers 1 --timeout 5400', workflow)
+        self.assertIn('name: Full regression tests', workflow)
+        self.assertIn('timeout-minutes: 270', workflow)
+        self.assertIn('bash scripts/ui-tests/verify.sh --workers 1 --timeout 14400 --total-timeout 15300', workflow)
+        self.assertIn('publish_builds:', workflow)
+        self.assertIn('default: false', workflow)
+        self.assertEqual(3, workflow.count("(github.event_name == 'schedule' || inputs.publish_builds)"))
         self.assertIn('needs: [changes, checks, native, functional]', workflow)
         self.assertIn('name: test-summary-${{ github.run_attempt }}', workflow)
         self.assertIn('name: tests-functional-${{ github.run_attempt }}', workflow)
         docs = (regression.ROOT / '.github/workflows/docs.yml').read_text()
+        self.assertIn('workflows: [Full regression tests]', docs)
         self.assertIn('types: [requested, completed]', docs)
         self.assertIn('python scripts/ci/regression.py publish', docs)
         self.assertIn('run: cp target/test-status/test-results-*.svg target/docs-site/', docs)

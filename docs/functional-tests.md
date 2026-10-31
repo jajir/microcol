@@ -1,5 +1,37 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0375 manual regression budget and durable reports — 2026-10-31
+
+1. [R-0375](requirements/done/R-0375.md) makes the existing full regression workflow
+   manually available with tests-only defaults. Configured budgets and manual
+   instructions are in [development delivery](development-builds.md#run-full-tests-manually).
+2. Completed Surefire reports now reach the mounted result directory during the
+   run. An interrupted XML file does not hide other completed suites in the
+   report; incomplete execution still cannot pass acceptance.
+3. The 27 CI tooling tests and 37 verifier/slot tests passed. Docker runner checks
+   passed in completion `20261031T072755Z-5a3d2c093586`, including forced-stop XML
+   preservation, failed export handling, Linux permissions and lock recovery.
+4. Model/JUnit acceptance passed **4,798 tests in 354 complete XML reports**, with
+   zero failures/errors/skips, in 137.703 seconds on the task snapshot based on
+   `b393b234`. Completion `20261031T072755Z-55743a5f2791`, reports
+   `target/verification/run-460xlxhu/`; every captured non-Markdown source hash
+   matches the checkout. The fixed smoke selection passed **21 tests in 12 complete
+   XML reports**, zero failures/errors/skips, in **211.011 seconds** (limit 420).
+   Completion `20261031T085122Z-523c3a615bca`, reports
+   `target/verification/run-vs24rj4o/precommit/`; its captured non-Markdown source
+   hashes also match. No targeted player scenario is required because this change
+   affects tooling only.
+5. The superseded completion job `20261031T072340Z-fca05073548d` was canceled while
+   waiting for the lock; its test command never started. Its saved evidence remains
+   under `~/Library/Logs/Microcol/completions/`. Replacement checks use the final
+   report-path implementation. No full remote regression has been dispatched.
+6. Final review covers workflow inputs/publication guards, the Pages completion
+   trigger, timeout propagation, mounted report paths and partial XML handling.
+   Shell syntax, actionlint, nine documentation consistency tests, strict MkDocs
+   and `git diff --check` passed. Logs are under `target/manual-regression-*`.
+   No Java or gameplay code changed. Historical remote gameplay failures remain
+   unresolved; local acceptance does not prove a full remote pass or publication.
+
 ## R-0373 colony cargo depot — 2026-10-31
 
 1. [R-0373](requirements/done/R-0373.md), based on main `51876f30`, reorders the colony's depot above people outside town, changes both section headings in Czech/English, and gives the colony cargo captions ship-or-wagon wording with the selected unit's localized type and ID. Europe's ship captions remain unchanged. Existing carrier filtering, crates, transfers and model validation are reused.
@@ -4873,7 +4905,10 @@ bash scripts/ui-tests/verify.sh
 4. `--timings CESTA_K_REPORTUM` volitelně použije předchozí XML časy pro vyvážení
    celých tříd. Bez nich rozdělí třídy podle počtu. Časy nejsou inventář a nikdy
    nevyřazují nové testy. `--timeout 5400` je výchozí limit každé přípravné či
-   testovací fáze, v sekundách. Nemění limit JVM ani prostředky Compose.
+   testovací fáze, v sekundách. Nemění limit JVM ani prostředky Compose. Volitelné
+   `--total-timeout` navíc omezuje celý běh včetně přípravy a úklidu; smoke
+   zůstává omezený 420 sekundami. Delší CI rozpočet popisuje
+   [nastavení plné regrese](development-builds.md#run-full-tests-manually).
 5. Výstup je vždy unikátní `target/verification/run-*/`: `manifest.json` obsahuje
    revizi, SHA-256 souborů, inventář, skupiny a image ID; `source/` uchovává snímek.
    `build.log` a `docker-info.json` zachycují přípravu. `model/`, `ui-01/` a
@@ -4886,7 +4921,10 @@ bash scripts/ui-tests/verify.sh
    `summary.json` vznikne atomicky až po dokončení skupin a úklidu; kód 0 znamená
    úplný průchod, 1 neúspěch. Samotná přítomnost XML neprokazuje dokončení.
 7. SIGINT/SIGTERM a timeout ukončí jen vlastní procesy a kontejnery. Graceful
-   stop se pokusí exportovat reporty, potom následuje vynucený úklid. SIGKILL či
+   stop se pokusí dokončit export, potom následuje vynucený úklid. Běžné
+   Maven adresáře `target/surefire-reports` jsou v čerstvém kontejnerovém
+   workspace symlinky na připojený adresář výsledků. Již dokončená XML tak
+   zůstanou dostupná i bez EXIT cleanup; právě zapisovaný soubor může být neúplný. SIGKILL či
    výpadek hostitele nemůže garantovat úklid; chybějící `summary.json` znamená
    nedokončený běh. Zachovat dostupné chybové důkazy.
 8. GitHub Actions může použít tentýž foreground příkaz na Linux runneru s
@@ -4967,7 +5005,8 @@ zaměření oken. Hostitelský monitor se nepoužívá.
 Samotný runner lze ověřit příkazem `bash scripts/ui-tests/test-runner.sh`.
 Kontrola používá skutečný Xvfb/Openbox s malou náhradou Maven: ověří zachování
 návratového kódu 7, chybu exportu, oddělené reporty, skryté zdroje, vynechání
-starých `target` adresářů a argument s mezerou. Výsledky nechá v
+starých `target` adresářů, argument s mezerou a zachování dokončeného XML
+po SIGKILL kontejneru bez EXIT cleanup. Výsledky nechá v
 `target/docker-ui-runner-checks/`. Na vlastním Linux filesystemu kontejneru také
 ověří čtení reportů neprivilegovaným uživatelem; macOS bind mount tuto kontrolu
 oprávnění nenahrazuje. Nenahrazuje skutečné herní testy.

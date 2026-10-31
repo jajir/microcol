@@ -7,7 +7,7 @@ on:
     branches: [main]
   workflow_dispatch:
   workflow_run:
-    workflows: [Build and publish development game]
+    workflows: [Full regression tests]
     types: [requested, completed]
     branches: [main]
 

@@ -153,7 +153,9 @@ python3 scripts/codex/run.py --thread TASK_UUID --timeout 3600 docker -- \
   -Dtest=PageVerificationContractTest -Dsurefire.failIfNoSpecifiedTests=false
 ```
 
-The 90-minute watchdog matches the [full functional CI budget](../development-builds.md#full-functional-regression-budget). It does not justify accepting
+This example retains a 90-minute local diagnostic watchdog; the expanded
+[full CI budget](../development-builds.md#full-functional-regression-budget) is
+configured separately. A watchdog does not justify accepting
 partial results or shrinking a required suite. The runner owns one uniquely named
 container. Timeout/cancellation stops that container as well as its Docker client;
 other containers, images and volumes are untouched. Available reports remain in
