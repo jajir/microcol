@@ -10,6 +10,26 @@ publishes the game from the same pushed `main` revision when the change is not
 limited to `docs/`; [docs-only filtering](development-builds.md#ci-filtering)
 keeps the current game download unchanged.
 
+## R-0383 load screen requirement — 2026-10-31
+
+1. [R-0383](requirements/R-0383.md), status `new`, separately owns the approved
+   left save list and right map preview/details, explicit Load action, empty and
+   error states, keyboard access and small-window behavior. R-0382 retains save
+   creation, summary meanings and the JSON container; R-0377 retains the frame
+   and navigation. No agreed feature was removed or implemented by this split.
+2. This is documentation only: the new requirement, active requirement boundaries,
+   backlog and shared save/load contract. Unrelated working-tree edits in
+   `docs/ux.md` and `docs/functional-tests.md` are excluded from the commit.
+3. All nine documentation consistency checks passed in 0.013 s with zero
+   failures, errors or skips; log: `target/r0383/docs-tests.log`. Strict MkDocs
+   passed on an export of the staged tree, excluding unrelated working changes;
+   log: `target/r0383/mkdocs.log`. Rendered HTML review confirmed the four
+   chapters, `new` status and links to the owning requirements. The final build
+   including this evidence is retained in `target/r0383/mkdocs-final.log`.
+4. Model/JUnit, Docker UI and smoke do not apply to this documentation-only
+   change. Runtime behavior, remote CI, Pages and game distributions are not
+   verified by this task; future implementation keeps its normal acceptance gates.
+
 ## R-0382 save preview requirement — 2026-10-31
 
 1. [R-0382](requirements/R-0382.md), status `new`, captures the approved save/load

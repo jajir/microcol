@@ -335,6 +335,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0228](R-0228.md) | Ship one meaningful event cue with a visual equivalent | New capture | P30 first selected cue; extra assets not assumed |
 | [R-0238](R-0238.md) | Produce honest Steam store media from the release game | New capture | P32 store artwork/screens/trailer; P29 in-game art separate |
 | [R-0297](done/R-0297.md) | Apply the selected compact opening-menu composition | Done; local acceptance passed | User-selected single-column proposal, 2026-10-26 |
+| [R-0383](R-0383.md) | Select saved games in a left list and inspect the map preview and summary on the right | New capture; approved design | User request, 2026-10-31; R-0377 frame and R-0382 saved data |
 
 ## A04
 
@@ -352,7 +353,7 @@ manual/quick saves, recovery and protected exits. Local acceptance is recorded i
 | [R-0068](done/R-0068.md) | Offer separate turn and decade recovery points | Follow-up | [R-0018](done/R-0018.md) |
 | [R-0229](canceled/R-0229.md) | Verify long-game stability and responsiveness | Canceled 2026-10-31 | P31 measured whole-game acceptance |
 | [R-0231](done/R-0231.md) | Preserve local diagnostics for recoverable failures | Done | P32 diagnostics beyond delivered save/turn recovery |
-| [R-0382](R-0382.md) | Preview saved games with a map and summary while preserving data-model/JSON serialization | New capture; approved design | User request, 2026-10-31; R-0298 save management and R-0377 screen integration |
+| [R-0382](R-0382.md) | Save games with a map preview and summary while preserving data-model/JSON serialization | New capture; approved design | User request, 2026-10-31; R-0298 save management; load-screen content is owned by R-0383 |
 
 ## A05
 

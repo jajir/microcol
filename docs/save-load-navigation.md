@@ -20,19 +20,21 @@ implementace. Odstranění samostatné položky Body obnovy stále vlastní R-03
 
 ## Náhledy a soubor uložené hry — schváleno 31. října 2026
 
-1. [R-0382](requirements/R-0382.md), stav `new`, zachycuje schválený seznam
+1. [R-0383](requirements/R-0383.md), stav `new`, vlastní schválený seznam
    uložených pozic vlevo a náhled mapy se souhrnem vpravo. Výběr pouze zobrazí
    detail; teprve Načíst hru ověří a aktivuje pozici. Souhrn obsahuje národ,
    zlato, rok, podporu nezávislosti a počty vlastních osob, kolonií a lodí.
    Náhled respektuje znalost mapy v uloženém okamžiku.
-2. Výslovně zachovat osvědčený postup: herní stav se převede na perzistenční
+2. [R-0382](requirements/R-0382.md), stav `new`, vlastní ukládání a formát souboru.
+   Výslovně zachovat osvědčený postup: herní stav se převede na perzistenční
    datový model a ten do JSONu; načtení provede opačný převod s modelovou
    validací. Nový `.microcol` je pouze ZIP obálka pro `metadata.json`, dosavadní
    herní JSON v `game.json` a `preview.png`. Seznam čte samostatná metadata;
    údaje pro hru nadále určuje úplný datový model. Zachová se atomický zápis,
    ochrana rozpracované hry a zákaz změny souboru pouhým otevřením.
-3. Přesný rozsah, význam počtů, formát a budoucí akceptaci vlastní R-0382.
-   Vložení do stránek a návraty nadále vlastní R-0377. Jde o budoucí chování;
+3. Na žádost uživatele je načítací obrazovka samostatným rozsahem R-0383;
+   R-0382 nadále vlastní význam uložených počtů, tvorbu náhledu, ukládání a formát.
+   Vložení do stránek a návraty vlastní R-0377. Jde o budoucí chování;
    níže popsaná implementace zatím náhledy ani ZIP obálku nemá. Schválení
    návrhu neznamená zahájení implementace ani změnu četnosti autosave.
 
