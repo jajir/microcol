@@ -72,8 +72,7 @@ public class TC_02_F02_founding_colony_test extends AbstractMicroColTest {
         // The grassland center adds its unattended commons, food 4 and tobacco
         // 3 with no worker, to the founder's field: net food is the earlier 2
         // plus the 4 from the commons.
-        colonyScreen.verifyTownCommons(
-                "Town commons, no worker: food 4, Tobacco 3.");
+        colonyScreen.verifyTownCommons("Corn: 4, Tobacco: 3");
         colonyScreen.verifyThatProductionIs(GoodsType.CORN, 6);
 
         colonyScreen.verifyNumberOfUnitsAtPier(1);

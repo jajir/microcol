@@ -2,7 +2,6 @@ package org.microcol.gui.screen.colony;
 
 import java.util.List;
 
-import org.microcol.gui.GoodsTypeName;
 import org.microcol.gui.dialog.ChooseGoodsDialog;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
@@ -26,7 +25,6 @@ import com.google.inject.Singleton;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -56,15 +54,6 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     private ColonyWarehouse colonyWarehouse;
 
-    private Colony colony;
-
-    /** Stable id of the town commons label for tests and captures. */
-    public static final String TOWN_COMMONS_ID = "townCommons";
-
-    /** Unattended town commons; a label only, with no worker control. */
-    private final Label townCommons = new Label();
-
-    /** Goods row above the full-width town commons row. */
     private final VBox content = new VBox();
 
     @Inject
@@ -78,25 +67,19 @@ public final class PanelColonyGoods implements JavaFxComponent {
         this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
         this.transferWarning = Preconditions.checkNotNull(transferWarning);
         this.i18n = Preconditions.checkNotNull(i18n);
-        panelColonyGoods = GoodsType.BUYABLE_GOOD_TYPES.stream()
-                .map(goodsType -> {
-                    final PanelColonyGood out = new PanelColonyGood(
-                            imageProvider.getGoodsTypeImage(goodsType),
-                            goodsType, eventBus, i18n);
-                    mainPanel.getChildren().add(out.getContent());
-                    HBox.setHgrow(out.getContent(),
-                            javafx.scene.layout.Priority.ALWAYS);
-                    out.getContent().setMaxWidth(Double.MAX_VALUE);
-                    return out;
-                }).collect(ImmutableList.toImmutableList());
-        // Keep the automatic center yield readable above all sixteen goods.
-        townCommons.setId(TOWN_COMMONS_ID);
-        townCommons.getStyleClass().add("town-commons");
-        townCommons.setMinWidth(Region.USE_PREF_SIZE);
-        townCommons.setMaxWidth(Double.MAX_VALUE);
+        panelColonyGoods = GoodsType.GOOD_TYPES.stream().map(goodsType -> {
+            final PanelColonyGood out = new PanelColonyGood(
+                    imageProvider.getGoodsTypeImage(goodsType), goodsType,
+                    eventBus, i18n);
+            mainPanel.getChildren().add(out.getContent());
+            HBox.setHgrow(out.getContent(),
+                    javafx.scene.layout.Priority.ALWAYS);
+            out.getContent().setMaxWidth(Double.MAX_VALUE);
+            return out;
+        }).collect(ImmutableList.toImmutableList());
         content.getStyleClass().add("panel-colony-goods-column");
         content.setPickOnBounds(false);
-        content.getChildren().addAll(townCommons, mainPanel);
+        content.getChildren().add(mainPanel);
 
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
                 mainPanel, this::isItGoods);
@@ -110,7 +93,7 @@ public final class PanelColonyGoods implements JavaFxComponent {
     }
 
     public void setColony(final Colony colony) {
-        this.colony = Preconditions.checkNotNull(colony);
+        Preconditions.checkNotNull(colony);
         colonyWarehouse = colony.getWarehouse();
         panelColonyGoods
                 .forEach(panelColonyGood -> panelColonyGood.setColony(colony));
@@ -118,24 +101,7 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     void repaint() {
         panelColonyGoods.forEach(panelColonyGood -> panelColonyGood.repaint());
-        repaintTownCommons();
     };
-
-    /** Show the model's commons forecast, labeled and without a worker. */
-    private void repaintTownCommons() {
-        final List<Goods> commons = colony.getTownCommonsProduction();
-        final Goods food = commons.get(0);
-        if (commons.size() == 1) {
-            townCommons.setText(
-                    i18n.get(ColonyMsg.townCommonsFood, food.getAmount()));
-            return;
-        }
-        final Goods second = commons.get(1);
-        townCommons.setText(i18n.get(ColonyMsg.townCommonsGoods,
-                food.getAmount(),
-                i18n.get(GoodsTypeName.getNameForGoodsType(second.getType())),
-                second.getAmount()));
-    }
 
     private void onDragOver(final DragEvent event) {
         if (isItGoods(event.getDragboard())) {

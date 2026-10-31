@@ -22,7 +22,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import org.microcol.model.GoodsType;
 
 /**
  * The colony workspace, using shared model operations and cargo controls.
@@ -31,7 +30,6 @@ import org.microcol.model.GoodsType;
 public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     private final VBox mainPanel;
-    private final HBox summary = new HBox(20);
     private final Label outsideTitle = new Label();
     private final Label harborTitle = new Label();
     private final Label goodsTitle = new Label();
@@ -82,8 +80,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
                 .checkNotNull(panelOutsideColony);
         this.panelColonyName = Preconditions.checkNotNull(panelColonyName);
 
-        summary.setId("colony-summary");
-        summary.getStyleClass().add("colony-summary");
         final ScrollPane outside = new ScrollPane(
                 panelOutsideColony.getContent());
         outside.setId("colony-outside-scroll");
@@ -108,7 +104,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         town.setId("colony-town");
         final VBox stock = new VBox(2, goodsTitle, goods.getContent());
         stock.getStyleClass().add("colony-stock");
-        mainPanel = new VBox(10, summary, town, stock);
+        mainPanel = new VBox(10, town, stock);
         mainPanel.getStyleClass().add("colony-layout");
         mainPanel.setMinWidth(980);
         mainPanel.setMaxWidth(1440);
@@ -168,34 +164,9 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             panelDock.repaint();
             colonyStructures.repaint(colony);
             construction.repaint(colony);
-            repaintSummary();
             panelOutsideColony.setColony(colony);
             panelOutsideColony.repaint();
         }
-    }
-
-    private void repaintSummary() {
-        summary.getChildren().setAll(
-                summaryLabel("colony-population", ColonyMsg.populationSummary,
-                        colony.getPopulation()),
-                summaryLabel("colony-support", ColonyMsg.supportSummary,
-                        colony.getRebelSupport().getDisplayPercent()),
-                summaryLabel("colony-bells", ColonyMsg.bellsSummary,
-                        colony.getGoodsStats().getStatsByType(GoodsType.BELL)
-                                .getRowProduction()),
-                summaryLabel("colony-crosses", ColonyMsg.crossesSummary,
-                        colony.getGoodsStats().getStatsByType(GoodsType.CROSS)
-                                .getRowProduction()),
-                summaryLabel("colony-food", ColonyMsg.foodSummary,
-                        colony.getGoodsStats().getStatsByType(GoodsType.CORN)
-                                .getDiff()));
-    }
-
-    private Label summaryLabel(final String id, final ColonyMsg message,
-            final int value) {
-        final Label label = new Label(i18n.get(message, value));
-        label.setId(id);
-        return label;
     }
 
     public Colony getColony() {

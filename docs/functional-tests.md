@@ -1,5 +1,15 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0372 colony production row and removed summaries — 2026-10-31
+
+1. [R-0372](requirements/done/R-0372.md) adds hammers, crosses and bells to the goods row as per-turn production without drag initiation. It removes the entire upper summary and the town-commons sentence above the goods. The selected-center detail retains the same automatic yields. No model rule or production artwork changed.
+2. The user's latest instruction explicitly waived both UI execution and smoke before commit/push, superseding the earlier request for one UI scenario. **No UI scenario, smoke, manual game inspection, remote regression or publication verification ran for this change.** The authored TC106/03 and updated TC02/TC109/TC195 assertions are compiled, not gameplay acceptance evidence.
+3. Final model dispatch `20261031T065612Z-a866250d0cbe` (PID 472, timeout 600 s) passed **4,798 tests in 354 fresh XML reports, zero failures/errors/skips**, in 134.153 s. Reports: `target/verification/run-sgu_sdx4/model/`; base revision `bff354c5` plus the reviewed working-tree change. All eight changed game source/resource files match its captured source byte-for-byte. The earlier model pass `run-33wnmroc` preceded the additional removal and was superseded.
+4. The host-side `PageVerificationContractTest` passed **3 tests, zero failures/errors/skips**, and compiled the updated functional scenarios; it launches no UI. The first invocation failed compilation because the new scenario used the wrong helper argument and method name; corrected callers passed on the next invocation. Logs remain in `target/r0372-source-contract-attempt1.log` and `target/r0372-source-contract.log`.
+5. Shared Eclipse formatting and diff review completed. All three reused production SVGs contain vector artwork and their repeatable 45 px exports match the runtime PNGs byte-for-byte (`target/r0372-artwork-check/`). Their display in the revised row has not been visually inspected.
+6. Documentation consistency passed **9 tests, zero failures/errors/skips**, and strict MkDocs passed. Logs: `target/r0372-docs-tests.log`, `target/r0372-mkdocs.log`. Review hashes: `target/r0372-review.json`. This records local acceptance under the user's exception, not a new fully tested revision or published distribution.
+
+
 ## R-0371 compact colony buildings — 2026-10-30
 
 1. Scope: [R-0371](requirements/done/R-0371.md), selected **Trochu těsnější** layout. The existing four-column grid retains its sixteen families; artwork, wrapped names and worker groups align left, with production beside the picture. No game rule or artwork source changes.

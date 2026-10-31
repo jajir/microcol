@@ -1016,3 +1016,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Selected compact colony buildings — 2026-10-30
 
 1. [R-0371](done/R-0371.md), primary area A03 with unchanged A07 rules, implements the selected **Trochu těsnější** variant. Status: done; model, targeted functional, visual and documentation acceptance passed. Smoke was explicitly omitted for this request. [Evidence](../functional-tests.md#r-0371-compact-colony-buildings-2026-10-30).
+
+## Colony production in the goods row — 2026-10-31
+
+1. [R-0372](done/R-0372.md), primary area A03 with existing A07 rules, adds hammers, crosses and bells to the bottom goods row as non-transportable production and removes the upper summary and town-commons sentence. Status: done under the explicit UI/smoke exception; model, source-contract and documentation checks passed. UI execution and visual acceptance are not claimed. [Evidence](../functional-tests.md#r-0372-colony-production-row-and-removed-summaries-2026-10-31).

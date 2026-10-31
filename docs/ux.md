@@ -1,5 +1,11 @@
 # UX a pravidla ovládání MicroCol
 
+## Produkce kolonie ve spodním řádku — 31. října 2026
+
+1. Dohoda [R-0372](requirements/done/R-0372.md): hráč najde kladiva, kříže a zvony mezi položkami spodního přehledu zboží. Ukazují produkci za tah, nikoli skladovou zásobu. Celý horní souhrn i věta o obecních zdrojích nad zbožím se na přání uživatele odstraní; detail vybraného středu města dál ukazuje automatickou produkci.
+2. Tyto tři položky pouze informují. Nepřetahují se do lodě; najetí ve stavové liště vysvětlí, že jde o nepřepravitelnou produkci kolonie. Běžné zboží nadále ukazuje zásobu a čistou změnu a zachovává přesuny.
+3. Delší názvy se zalamují. Pravidla výroby, přidělování pracovníků a lodního nákladu se nemění. UI i smoke ověření uživatel pro tuto iteraci výslovně vynechal; skutečné výsledky patří do [funkční evidence](functional-tests.md).
+
 ## Názvy a nápověda akcí města — 30. října 2026
 
 1. [R-0360](requirements/done/R-0360.md) doplňuje osm akcí horní lišty města. Široké okno ukazuje stručné názvy; při zúžení zůstávají ikony a text návratu. Naložení a vyložení pracují s vybranou lodí a nadále vyžadují původní potvrzení.

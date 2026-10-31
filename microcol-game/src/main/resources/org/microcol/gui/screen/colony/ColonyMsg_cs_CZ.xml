@@ -5,8 +5,6 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="faminePreview">Hladomor usmrtí jednoho náhodného obyvatele. Konečná výroba a zásoby závisí na tom, kdo zemře.</entry>
-	<entry key="townCommonsFood">Obecní zdroje města, bez pracovníka: jídlo %s.</entry>
-	<entry key="townCommonsGoods">Obecní zdroje města, bez pracovníka: jídlo %s, %s %s.</entry>
 	<entry key="goods"> ve skladu</entry>
 	<entry key="colonyName">Kliknutím přejmenujete kolonii.</entry>
 	<entry key="buttonClose">Zavřít detail kolonie a vrátit se zpět na hlavní mapu.</entry>
@@ -103,14 +101,11 @@
     <entry key="notBuilt">Nepostaveno</entry>
     <entry key="outsideSection">Lidé a vozy vně města</entry>
     <entry key="harborSection">Přístav a náklad</entry>
-    <entry key="stockSection">Zboží · zásoba / čistá změna za tah</entry>
+    <entry key="stockSection">Zboží a produkce · zásoba / čistá změna nebo produkce za tah</entry>
     <entry key="surroundingSection">Okolí města</entry>
     <entry key="selectedSection">Vybrané políčko</entry>
-    <entry key="populationSummary">Obyvatelstvo: %s</entry>
-    <entry key="supportSummary">Podpora svobody: %s%%</entry>
-    <entry key="bellsSummary">Zvony / tah: %s</entry>
-    <entry key="crossesSummary">Kříže / tah: %s</entry>
-    <entry key="foodSummary">Bilance jídla: %s</entry>
+    <entry key="productionPerTurn">%s / tah</entry>
+    <entry key="localProduction"> · produkce kolonie za tah; nelze převážet</entry>
     <entry key="outputLabel">Produkce</entry>
     <entry key="outputYield">Výnos / tah</entry>
     <entry key="outputHelp">Vyberte surovinu pro změnu práce.</entry>

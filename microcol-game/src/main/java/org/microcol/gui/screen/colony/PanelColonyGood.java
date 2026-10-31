@@ -66,9 +66,12 @@ public final class PanelColonyGood implements JavaFxComponent {
         this.i18n = Preconditions.checkNotNull(i18n);
         imageView = new ImageView(image);
         final Pane paneImage = new Pane(imageView);
-        paneImage.setOnDragDetected(this::onDragDetected);
+        if (goodsType.isCanBeBought()) {
+            paneImage.setOnDragDetected(this::onDragDetected);
+        }
         paneImage.getStyleClass().add(IMAGE_GOODS_CLASS);
         labelAmount = new Label();
+        labelAmount.setWrapText(true);
         labelAmount.getStyleClass().add("amount");
         labelDiff = new Label();
         if (GoodsType.CORN.equals(goodsType)) {
@@ -78,9 +81,11 @@ public final class PanelColonyGood implements JavaFxComponent {
         final HBox hlabels = new HBox(labelAmount, labelDiff);
         hlabels.setAlignment(Pos.CENTER);
         mainPanel = new VBox();
+        mainPanel.setId("colony-good-" + goodsType.name());
         mainPanel.getStyleClass().add("warehouseGoods");
         mainPanel.getChildren().add(paneImage);
         name.getStyleClass().add("goods-name");
+        name.setWrapText(true);
         mainPanel.getChildren().addAll(name, hlabels);
         mainPanel.setAlignment(Pos.TOP_CENTER);
         paneImage.setMinSize(image.getWidth(), image.getHeight());
@@ -95,7 +100,8 @@ public final class PanelColonyGood implements JavaFxComponent {
             @SuppressWarnings("unused") final MouseEvent event) {
         eventBus.post(new StatusBarMessageEvent(
                 i18n.get(GoodsTypeName.getNameForGoodsType(goodsType))
-                        + i18n.get(ColonyMsg.goods),
+                        + i18n.get(goodsType.isCanBeBought() ? ColonyMsg.goods
+                                : ColonyMsg.localProduction),
                 Source.COLONY));
     }
 
@@ -128,6 +134,12 @@ public final class PanelColonyGood implements JavaFxComponent {
         name.setText(i18n.get(GoodsTypeName.getNameForGoodsType(goodsType)));
         final ColonyProductionStats stats = colony.getGoodsStats();
         final GoodsProductionStats goodsStats = stats.getStatsByType(goodsType);
+        if (!goodsType.isCanBeBought()) {
+            labelAmount.setText(i18n.get(ColonyMsg.productionPerTurn,
+                    goodsStats.getRowProduction()));
+            labelDiff.setText("");
+            return;
+        }
 
         String txt = String.valueOf(goodsStats.getInWarehouseBefore());
         labelAmount.setText(txt);

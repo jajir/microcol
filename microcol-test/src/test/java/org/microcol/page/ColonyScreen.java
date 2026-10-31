@@ -1,6 +1,7 @@
 package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.microcol.gui.Tile.TILE_CENTER;
 import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
@@ -32,6 +33,9 @@ import org.testfx.service.finder.NodeFinder;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.text.Text;
 import javafx.scene.canvas.Canvas;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -72,9 +76,9 @@ public class ColonyScreen extends AbstractScreen {
     }
 
     public void verifyTownCommons(final String expectedText) {
-        assertEquals(expectedText, getLabeledById(
-                org.microcol.gui.screen.colony.PanelColonyGoods.TOWN_COMMONS_ID)
-                .getText());
+        new ColonyLayoutPage(getContext()).verifyCenter();
+        assertEquals(expectedText,
+                getLabeledById("colony-field-yield").getText());
     }
 
     public void showWarehouse() {
@@ -87,8 +91,7 @@ public class ColonyScreen extends AbstractScreen {
      * the full text.
      */
     public void verifyTownCommonsNotEllipsized(final String expectedText) {
-        final Labeled label = getLabeledById(
-                org.microcol.gui.screen.colony.PanelColonyGoods.TOWN_COMMONS_ID);
+        final Labeled label = getLabeledById("colony-field-yield");
         assertEquals(expectedText, label.getText());
         final javafx.scene.text.Text shown = (javafx.scene.text.Text) label
                 .lookup(".text");
@@ -101,18 +104,16 @@ public class ColonyScreen extends AbstractScreen {
 
     /**
      * The warehouse row keeps its expected number of goods side by side, each
-     * with a usable width, and the commons row lies wholly above them inside
-     * the window.
+     * with a usable width inside the window.
      */
-    public void verifyWarehouseGoodsAndTownCommonsLayout(
-            final int expectedGoodsPanels, final double minimumGoodsWidth) {
+    public void verifyWarehouseGoodsLayout(final int expectedGoodsPanels,
+            final double minimumGoodsWidth) {
         final List<VBox> panels = new ArrayList<>(
                 this.<VBox>getListOfNodes(".warehouseGoods"));
         assertEquals(expectedGoodsPanels, panels.size());
         panels.sort(java.util.Comparator.comparingDouble(panel -> panel
                 .localToScene(panel.getBoundsInLocal()).getMinX()));
         double previousMaxX = Double.NEGATIVE_INFINITY;
-        double goodsTop = Double.POSITIVE_INFINITY;
         for (final VBox panel : panels) {
             final Bounds bounds = panel.localToScene(panel.getBoundsInLocal());
             assertTrue(bounds.getWidth() >= minimumGoodsWidth, String.format(
@@ -120,24 +121,51 @@ public class ColonyScreen extends AbstractScreen {
             assertTrue(bounds.getMinX() + 1 >= previousMaxX,
                     "Goods panels overlap each other");
             previousMaxX = bounds.getMaxX();
-            goodsTop = Math.min(goodsTop, bounds.getMinY());
+            assertTrue(
+                    bounds.getMinX() >= 0
+                            && bounds.getMaxX() <= panel.getScene().getWidth(),
+                    "Goods row must fit inside the window");
         }
-        final Labeled label = getLabeledById(
-                org.microcol.gui.screen.colony.PanelColonyGoods.TOWN_COMMONS_ID);
-        final Bounds labelBounds = label.localToScene(label.getBoundsInLocal());
-        assertTrue(labelBounds.getMaxY() <= goodsTop + 1,
-                "Commons row overlaps the goods row");
-        assertTrue(
-                labelBounds.getMinX() >= 0 && labelBounds.getMinY() >= 0
-                        && labelBounds.getMaxX() <= label.getScene().getWidth()
-                        && labelBounds.getMaxY() <= label.getScene()
-                                .getHeight(),
-                "Commons row is outside the window");
+
     }
 
     /** @return warehouse amount of the goods now, without asserting */
     public int stockOf(final org.microcol.model.GoodsType goodsType) {
         return colony.getWarehouse().getGoods(goodsType).getAmount();
+    }
+
+    public void verifyLocalProduction(final GoodsType type,
+            final String expectedName, final String expectedProduction) {
+        getRobot().interact(() -> {
+            final VBox panel = getNodeFinder()
+                    .lookup("#colony-good-" + type.name()).queryAs(VBox.class);
+            final Label name = (Label) panel.lookup(".goods-name");
+            final Label amount = (Label) panel.lookup(".amount");
+            assertEquals(expectedName, name.getText());
+            assertEquals(expectedProduction, amount.getText());
+            assertNull(panel.lookup(".imageGoods").getOnDragDetected(),
+                    "Colony production cannot initiate cargo transport");
+            for (final Label label : List.of(name, amount)) {
+                final Text text = (Text) label.lookup(".text");
+                assertEquals(label.getText(), text.getText());
+                final Bounds bounds = text
+                        .localToScene(text.getBoundsInLocal());
+                final Node viewport = panel.getScene()
+                        .lookup(".screen-scroll .viewport");
+                assertTrue(
+                        viewport.localToScene(viewport.getBoundsInLocal())
+                                .contains(bounds),
+                        "Production must fit in the viewport");
+            }
+            assertTrue(getNodeFinder().lookup("#colony-summary").queryAll()
+                    .isEmpty());
+            assertTrue(getNodeFinder().lookup("#townCommons").queryAll()
+                    .isEmpty());
+            assertTrue(getNodeFinder().lookup("#colony-bells").queryAll()
+                    .isEmpty());
+            assertTrue(getNodeFinder().lookup("#colony-crosses").queryAll()
+                    .isEmpty());
+        });
     }
 
     public void verifyWarehouseStock(

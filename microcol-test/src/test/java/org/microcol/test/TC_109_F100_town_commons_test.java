@@ -5,7 +5,6 @@ import java.io.File;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.microcol.gui.screen.colony.PanelColonyGoods;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
 import org.microcol.model.ResourceOverlay;
@@ -49,13 +48,13 @@ public class TC_109_F100_town_commons_test extends AbstractMicroColTest {
     /** A goods panel narrower than this is squeezed out of its row. */
     private static final double MINIMUM_GOODS_WIDTH = 30;
 
-    private static final String EN_NEW_AMSTERDAM = "Town commons, no worker: food 6, Tobacco 3.";
+    private static final String EN_NEW_AMSTERDAM = "Corn: 6, Tobacco: 3";
 
-    private static final String EN_DELFT = "Town commons, no worker: food 2, Ore 4.";
+    private static final String EN_DELFT = "Corn: 2, Ore: 4";
 
-    private static final String EN_HAARLEM = "Town commons, no worker: food 3, Lumber 6.";
+    private static final String EN_HAARLEM = "Corn: 3, Lumber: 6";
 
-    private static final String CS_NEW_AMSTERDAM = "Obecní zdroje města, bez pracovníka: jídlo 6, Tabák 3.";
+    private static final String CS_NEW_AMSTERDAM = "Jídlo: 6, Tabák: 3";
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -137,9 +136,9 @@ public class TC_109_F100_town_commons_test extends AbstractMicroColTest {
         new GameBarWidthPage(getContext()).resizeContent(1000, 925);
         newAmsterdam.showWarehouse();
         newAmsterdam.verifyTownCommonsNotEllipsized(EN_NEW_AMSTERDAM);
-        newAmsterdam.verifyWarehouseGoodsAndTownCommonsLayout(
-                GoodsType.BUYABLE_GOOD_TYPES.size(), MINIMUM_GOODS_WIDTH);
-        newAmsterdam.captureDialog(PanelColonyGoods.TOWN_COMMONS_ID,
+        newAmsterdam.verifyWarehouseGoodsLayout(GoodsType.GOOD_TYPES.size(),
+                MINIMUM_GOODS_WIDTH);
+        newAmsterdam.captureDialog("colony-field-yield",
                 "town-commons-en-new-amsterdam.png");
         game = newAmsterdam.close();
 
@@ -186,9 +185,9 @@ public class TC_109_F100_town_commons_test extends AbstractMicroColTest {
         new GameBarWidthPage(getContext()).resizeContent(1000, 925);
         newAmsterdam.showWarehouse();
         newAmsterdam.verifyTownCommonsNotEllipsized(CS_NEW_AMSTERDAM);
-        newAmsterdam.verifyWarehouseGoodsAndTownCommonsLayout(
-                GoodsType.BUYABLE_GOOD_TYPES.size(), MINIMUM_GOODS_WIDTH);
-        newAmsterdam.captureDialog(PanelColonyGoods.TOWN_COMMONS_ID,
+        newAmsterdam.verifyWarehouseGoodsLayout(GoodsType.GOOD_TYPES.size(),
+                MINIMUM_GOODS_WIDTH);
+        newAmsterdam.captureDialog("colony-field-yield",
                 "town-commons-cs-new-amsterdam.png");
         newAmsterdam.close();
     }

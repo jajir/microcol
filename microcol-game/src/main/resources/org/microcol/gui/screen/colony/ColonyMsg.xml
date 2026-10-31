@@ -5,8 +5,6 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="faminePreview">Famine will kill one random resident. Final production and stocks depend on who dies.</entry>
-	<entry key="townCommonsFood">Town commons, no worker: food %s.</entry>
-	<entry key="townCommonsGoods">Town commons, no worker: food %s, %s %s.</entry>
 	<entry key="goods"> in warehouse</entry>
 	<entry key="colonyName">Click to rename this colony.</entry>
 	<entry key="buttonClose">Close colony. Return back to main world view.</entry>
@@ -103,14 +101,11 @@
     <entry key="notBuilt">Not built</entry>
     <entry key="outsideSection">People and wagons outside town</entry>
     <entry key="harborSection">Harbor and cargo</entry>
-    <entry key="stockSection">Goods · stock / net change per turn</entry>
+    <entry key="stockSection">Goods and production · stock / net change or production per turn</entry>
     <entry key="surroundingSection">Surrounding area</entry>
     <entry key="selectedSection">Selected tile</entry>
-    <entry key="populationSummary">Population: %s</entry>
-    <entry key="supportSummary">Rebel support: %s%%</entry>
-    <entry key="bellsSummary">Bells / turn: %s</entry>
-    <entry key="crossesSummary">Crosses / turn: %s</entry>
-    <entry key="foodSummary">Food balance: %s</entry>
+    <entry key="productionPerTurn">%s / turn</entry>
+    <entry key="localProduction"> · colony production per turn; cannot be transported</entry>
     <entry key="outputLabel">Production</entry>
     <entry key="outputYield">Yield / turn</entry>
     <entry key="outputHelp">Select a product to change work.</entry>

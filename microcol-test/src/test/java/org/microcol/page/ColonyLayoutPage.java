@@ -144,7 +144,7 @@ public final class ColonyLayoutPage extends AbstractScreen {
     }
 
     public void leaveActions() {
-        getRobot().moveTo(getLabeledById("colony-population"));
+        getRobot().moveTo(getLabeledById("colony-field-name"));
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -257,30 +257,8 @@ public final class ColonyLayoutPage extends AbstractScreen {
             assertTrue(
                     map.localToScene(map.getLayoutBounds()).getMaxX() < detail
                             .localToScene(detail.getLayoutBounds()).getMinX());
-            final Colony colony = getModel().getColonyByName(colonyName)
-                    .orElseThrow();
-            final I18n texts = getContext().getClassFromGuice(I18n.class);
-            assertEquals(
-                    texts.get(ColonyMsg.populationSummary,
-                            colony.getPopulation()),
-                    getLabeledById("colony-population").getText());
-            assertEquals(
-                    texts.get(ColonyMsg.supportSummary,
-                            colony.getRebelSupport().getDisplayPercent()),
-                    getLabeledById("colony-support").getText());
-            assertEquals(
-                    texts.get(ColonyMsg.bellsSummary, colony.getGoodsStats()
-                            .getStatsByType(GoodsType.BELL).getRowProduction()),
-                    getLabeledById("colony-bells").getText());
-            assertEquals(texts.get(ColonyMsg.crossesSummary,
-                    colony.getGoodsStats().getStatsByType(GoodsType.CROSS)
-                            .getRowProduction()),
-                    getLabeledById("colony-crosses").getText());
-            assertEquals(
-                    texts.get(ColonyMsg.foodSummary,
-                            colony.getGoodsStats()
-                                    .getStatsByType(GoodsType.CORN).getDiff()),
-                    getLabeledById("colony-food").getText());
+            assertFalse(isCssIdVisible("colony-summary"));
+            assertFalse(isCssIdVisible("townCommons"));
         });
     }
 

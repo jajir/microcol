@@ -15,6 +15,10 @@ import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
 import org.microcol.model.unit.UnitWithCargo;
 import org.microcol.page.ColonyScreen;
+import org.microcol.page.ColonyJobPage;
+import org.microcol.page.GameBarWidthPage;
+import org.microcol.page.InGameLayoutPage;
+import org.microcol.page.SettingPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.QuickCargoPage;
 import org.microcol.page.ShipWrapper;
@@ -173,5 +177,67 @@ public class TC_106_F97_quick_cargo_test extends AbstractMicroColTest {
 
     private ShipWrapper ship() {
         return new ShipWrapper((UnitWithCargo) getModel().getUnitById(3));
+    }
+
+    @Test
+    @Tag("local")
+    void TC_03_colony_production_is_visible_but_not_cargo() throws Exception {
+        // Read colony production beside warehouse goods at both window widths.
+        final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(COLONY_LOCATION, COLONY_NAME);
+        final GameBarWidthPage width = new GameBarWidthPage(getContext());
+        width.resizeContent(1440, 1000);
+        colony.selectUnitFromPort(0);
+        colony.verifyUnitInPortSelected(0, true);
+        colony.showWarehouse();
+        colony.verifyWarehouseGoodsLayout(19, 45);
+        colony.verifyLocalProduction(GoodsType.HAMMERS, "Hammers", "0 / turn");
+        colony.verifyLocalProduction(GoodsType.CROSS, "Crosses", "1 / turn");
+        colony.verifyLocalProduction(GoodsType.BELL, "Bell of liberty",
+                "1 / turn");
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0372-production-en.png");
+
+        // None of the three production icons can start a transfer into a hold.
+        final ColonyJobPage state = new ColonyJobPage(getContext());
+        state.rememberWorld();
+        colony.dragGoodsFromWarehouseToShipCargoSlot(
+                GoodsType.GOOD_TYPES.indexOf(GoodsType.HAMMERS), 0);
+        colony.dragGoodsFromWarehouseToShipCargoSlot(
+                GoodsType.GOOD_TYPES.indexOf(GoodsType.CROSS), 0);
+        colony.dragGoodsFromWarehouseToShipCargoSlot(
+                GoodsType.GOOD_TYPES.indexOf(GoodsType.BELL), 0);
+        state.verifyWorldUnchanged();
+        ship().verifyCargoSlotEmpty(0);
+        ship().verifyCargoGoods(2, Goods.of(GoodsType.ORE, 40));
+
+        // Ordinary warehouse goods still move into the selected ship.
+        colony.dragGoodsFromWarehouseToShipCargoSlot(ORE_WAREHOUSE_INDEX, 0);
+        colony.verifyWarehouseStock(GoodsType.ORE, 0);
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.ORE, 90));
+        width.resizeContent(1000, 925);
+        colony.showWarehouse();
+        colony.verifyWarehouseGoodsLayout(19, 45);
+        colony.verifyLocalProduction(GoodsType.HAMMERS, "Hammers", "0 / turn");
+        colony.verifyLocalProduction(GoodsType.CROSS, "Crosses", "1 / turn");
+        colony.verifyLocalProduction(GoodsType.BELL, "Bell of liberty",
+                "1 / turn");
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0372-production-small.png");
+
+        // The same compact row remains readable with Czech labels.
+        final SettingPage settings = colony.close().exitToMenu().openSetting();
+        settings.setCzechLanguage();
+        final ColonyScreen czech = settings.goBack().loadGame()
+                .openColonyAt(COLONY_LOCATION, COLONY_NAME);
+        width.resizeContent(1000, 925);
+        czech.showWarehouse();
+        czech.verifyWarehouseGoodsLayout(19, 45);
+        czech.verifyLocalProduction(GoodsType.HAMMERS, "Kladiva", "0 / tah");
+        czech.verifyLocalProduction(GoodsType.CROSS, "Kříže", "1 / tah");
+        czech.verifyLocalProduction(GoodsType.BELL, "Zvony svobody", "1 / tah");
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0372-production-cs.png");
+        czech.close();
     }
 }

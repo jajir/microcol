@@ -84,7 +84,7 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
         layout.verifyPreviewMatchesMap(0, 1);
         layout.selectTile(1, 1);
         layout.showStock();
-        town.verifyWarehouseGoodsAndTownCommonsLayout(16, 45);
+        town.verifyWarehouseGoodsLayout(19, 45);
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0371-colony-small.png");
         town.close();
@@ -116,7 +116,7 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
                 .saveEvidence("r0362-production-cs.png");
         layout.selectTile(1, 1);
         layout.showStock();
-        town.verifyWarehouseGoodsAndTownCommonsLayout(16, 45);
+        town.verifyWarehouseGoodsLayout(19, 45);
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0371-colony-czech-upgrades.png");
         new GameBarWidthPage(getContext()).resizeContent(1000, 925);

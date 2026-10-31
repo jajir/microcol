@@ -1,5 +1,10 @@
 # Use cases a přejímka pravidel hry
 
+## UC-114/119: produkce ve spodním přehledu kolonie — 2026-10-31
+
+1. [R-0372](requirements/done/R-0372.md) přesouvá přehled zvonů a křížů dolů ke zboží a doplňuje kladiva. Všechny tři položky ukazují produkci za tah a nelze je táhnout do lodě; běžné zboží zachovává zásobu, změnu i přepravu. Horní souhrn i věta o obecních zdrojích nad zbožím se odstraní.
+2. Připravený TC106/03 pokrývá názvy a hodnoty, čitelnost v češtině a angličtině při dvou šířkách okna, neúčinné pokusy o naložení produkce a úspěšný přesun rudy. TC195 kontroluje devatenáct položek a nepřítomnost odstraněných řádků; TC02 a TC109 zachovávají stejné očekávané výnosy středu v detailu vybraného políčka. UI scénáře ani smoke se v této iteraci na výslovné přání uživatele nespouštějí. Výsledky jsou oddělené ve [funkční evidenci](functional-tests.md).
+
 ## UC-114/119: kompaktní budovy kolonie — 2026-10-30
 
 1. [R-0371](requirements/done/R-0371.md) implementuje vybranou variantu **Trochu těsnější**. Přehled zachovává šestnáct pozic a všechny úrovně budov, zobrazuje produkci vedle obrázku a ponechává název a pracovníky vlevo pod ním. TC195 ověřuje rozložení a čitelnost v obou jazycích i velikostech okna.
