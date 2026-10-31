@@ -1,5 +1,11 @@
 # UX a pravidla ovládání MicroCol
 
+## Potvrzení nákupu v Evropě — 31. října 2026
+
+1. Zachycený návrh [R-0378](requirements/R-0378.md) dává hráči při běžném přetažení z trhu do lodního nákladu potvrzení s předvoleným dostupným maximem. Číselný limit a jeho důvod, celková cena a zbývající zlato vysvětlují výsledek před utracením peněz; zrušení nic nekoupí. Přesnou akceptaci vlastní požadavek.
+2. Viditelná nápověda vysvětluje okamžitý nákup maxima držením Command ⌘ na Macu nebo Ctrl na ostatních systémech při upuštění. Stavová lišta následně sdělí skutečné množství a cenu. Prodej a přesuny vlastního nákladu tím nemění své ovládání; ekonomická pravidla zůstávají v modelu.
+3. Jde o budoucí chování zachycené na přání uživatele, nikoli implementaci nebo ověřený výsledek. Podnětem je uživatelova zkušenost s nevysvětleným menším nákupem; použitelnost návrhu ani zkratky zatím nebyla ověřena. Testy a validační build tohoto zápisu uživatel výslovně vynechal; [evidence](publishing.md#r-0378-europe-purchase-requirement-2026-10-31).
+
 ## Vylodění pasažérů — R-0379
 
 1. Dohodnuto 31. října 2026, dosud neimplementováno: při vylodění z lodi na vybrané sousední pole rozhoduje počet pasažérů způsobilých vystoupit právě tam, nikoli celkový počet lidí na palubě. Jediný způsobilý pasažér vystoupí přímo bez dialogu; při více způsobilých se otevře výběr. Rozsah a příklady vlastní [R-0379](requirements/R-0379.md).

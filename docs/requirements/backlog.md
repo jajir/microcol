@@ -1,5 +1,12 @@
 # Current requirement backlog
 
+Captured on 2026-10-31: [R-0378 — explain and confirm European goods purchases](R-0378.md),
+primary area A03 with existing A06 trade limits. Status: `new`. Ordinary dragging
+opens a purchase with the available maximum, its limiting reason, total price and
+remaining gold; Command on macOS / Ctrl elsewhere buys the maximum immediately.
+This request records the requirement only. Tests and validation build are explicitly
+omitted for this documentation-only push; [evidence](../publishing.md#r-0378-europe-purchase-requirement-2026-10-31).
+
 Completed on 2026-10-30: [R-0361 — implement light-overhead building artwork](done/R-0361.md), A03 with A07 identity dependencies. The user selected proposal 8 for all 41 forms and explicitly requested push without smoke tests for this task. All 41 SVG/PNG pairs are implemented; 4,795 model/JUnit and 18 targeted UI checks passed. Smoke was explicitly omitted for this task; no smoke/full-regression or publication success is claimed. [Evidence](../functional-tests.md#r-0361-light-overhead-buildings-2026-10-30).
 
 Completed locally on 2026-10-30: [R-0360 — colony action labels and bottom-bar help](done/R-0360.md), A03 with existing A06/A07 actions. Both languages, wide/compact labels, bottom-bar explanations and cargo actions passed: 4,795 model/JUnit and 9 targeted UI/support tests, zero failures/errors/skips. Tooltips remain prohibited. Smoke was omitted under the user's explicit instruction for this task. [Evidence](../functional-tests.md#r-0360-colony-action-labels-and-help-2026-10-30).

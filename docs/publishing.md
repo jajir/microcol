@@ -10,6 +10,22 @@ publishes the game from the same pushed `main` revision when the change is not
 limited to `docs/`; [docs-only filtering](development-builds.md#ci-filtering)
 keeps the current game download unchanged.
 
+## R-0378 Europe purchase requirement — 2026-10-31
+
+1. [R-0378](requirements/R-0378.md) captures the requested confirmation and explanation
+   of European goods purchases, based on the user's screenshot and source inspection
+   at `97f8463ee7b8fbc513fbd842ecdda555ae2dc0c4`. Status remains `new`; implementation
+   has not been selected or performed.
+2. Scope is documentation only: the requirement, backlog, shared UX guidance and
+   the related active screen-design requirement. No executable source, tests,
+   runtime assets, fixtures or build/CI configuration changes.
+3. The user explicitly requested this requirement to be pushed without all tests.
+   Model/JUnit, Docker UI, smoke, documentation consistency tests and strict MkDocs
+   are not run for this delivery. Source and diff review do not constitute normal
+   local acceptance; the exception applies only to this documentation task.
+4. Remote CI, Pages publication and game distributions are not inspected or claimed
+   as verified. Future gameplay implementation retains its normal acceptance gates.
+
 ## R-0333 parallel-test instructions — 2026-10-28
 
 1. [R-0333](requirements/done/R-0333.md), based on `0b339cbf5328c23624a0ea877b3ec4e3bbf7740c`,
