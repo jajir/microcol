@@ -1,5 +1,11 @@
 # Use cases a přejímka pravidel hry
 
+## UC-114/119 a návazné UC-085: ověření koloniálních cest — 2026-10-31
+
+1. [R-0374](requirements/done/R-0374.md) ověřuje změny R-0372/R-0373 a návazné cesty kolonie. TC49 kontroluje zásobu a přírůstek koní přes stabilní prvek nového přehledu; TC34 zachovává popis neprozkoumaného políčka po práci s lištou.
+2. TC187 porovnává průběh války po načtení téže pozice a ověřuje návrat do otevřené hry. TC157/158 zachovávají skutečné vítězství/porážku a kontrolují pokračování podle [platného pravidla poslední načtené nebo uložené pozice](save-load-navigation.md#4-nacist-a-pokracovat), bez opakování konce.
+3. Místní přejímka prošla: 4 801 modelových/JUnit, 362 vybraných UI a 21 smoke/support kontrol, bez selhání, chyb a přeskočení. Přesný výběr, výsledky, opravy a omezení uvádí [funkční evidence](functional-tests.md#r-0374-colony-ui-verification-and-repair-2026-10-31); nejde o nové hodnocení celých UC ani ověření publikace.
+
 ## UC-114/119: překladiště kolonie — 2026-10-31
 
 1. [R-0373](requirements/done/R-0373.md) pojmenovává společný prostor lodí a vozů **Překladiště**, pod jejich výběrem zachovává nákladové bedny a přesuny zboží. Oddělená sekce **Lidé vně města** následuje pod ním. Popisky vybraného nákladu rozlišují skutečný typ dopravce; evropský přístav si ponechává lodní popisky.

@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.HashMap;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -141,6 +142,15 @@ public final class UnitStorage {
                 tmp.add(unit);
             }
         });
+    }
+
+    void restoreSavedOrder(final ModelPo saved) {
+        final Map<Integer, Integer> positions = new HashMap<>();
+        for (int index = 0; index < saved.getUnits().size(); index++) {
+            positions.put(saved.getUnits().get(index).getId(), index);
+        }
+        units.sort(
+                Comparator.comparingInt(unit -> positions.get(unit.getId())));
     }
 
     List<Unit> getUnits() {

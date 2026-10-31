@@ -489,6 +489,9 @@ public class Model {
                     modelPo.getUnits().size(), unitStorage.getUnits().size()));
         }
 
+        // Carriers load first, but turn actions must retain the saved unit
+        // order.
+        unitStorage.restoreSavedOrder(modelPo);
         model.checkUnits();
         model.checkSavedGoToOrders();
         // Units exist only now; a processed visit must name a saved route.

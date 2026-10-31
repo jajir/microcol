@@ -208,6 +208,22 @@ class RoyalDispatchTest {
     }
 
     @Test
+    void savedRoyalUnitOrderSurvivesCarrierFirstLoading() {
+        final Model model = royalTurn(true);
+        final Player king = model.getPlayerByName(KING);
+        model.dispatchRoyalShip(king, firstReserveShip(crown(model)));
+        model.dispatchRoyalShip(king, firstReserveShip(crown(model)));
+        final List<Integer> expectedOrder = model.getAllUnits().stream()
+                .map(Unit::getId).collect(Collectors.toList());
+
+        final Model restored = Model.make(model.save(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+
+        assertEquals(expectedOrder, restored.getAllUnits().stream()
+                .map(Unit::getId).collect(Collectors.toList()));
+    }
+
+    @Test
     void savedBindingsReloadAndAnUnknownUnitIsRejected() {
         final Model model = royalTurn(true);
         final Player king = model.getPlayerByName(KING);

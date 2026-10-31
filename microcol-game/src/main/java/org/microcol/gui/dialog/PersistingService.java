@@ -282,7 +282,8 @@ public class PersistingService {
     }
 
     public boolean confirmLeave() {
-        if (!gameModelController.isGameModelReady()) {
+        if (!gameModelController.isGameModelReady()
+                || gameModelController.getModel().isGameFinished()) {
             return true;
         }
         final int choice = new SaveConfirmation(view, texts)

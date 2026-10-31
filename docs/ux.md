@@ -1,5 +1,10 @@
 # UX a pravidla ovládání MicroCol
 
+## Kontext mapy a návrat po konci hry — 31. října 2026
+
+1. [R-0374](requirements/done/R-0374.md) zachovává popis políčka po kliknutí z horní lišty zpět na mapu. Ztráta fokusu tlačítka nesmí ponechat stavový řádek prázdný, když ukazatel zůstává na platném políčku; neprozkoumané území dál neodhaluje informace o soupeři.
+2. Načtení uložené pozice po ukončené hře nevyžaduje potvrzení uložení ukončeného světa. Potvrzení zůstává pro živou partii. Výsledky opravy a skutečné ověření se zaznamenávají ve [funkční evidenci](functional-tests.md#r-0374-colony-ui-verification-and-repair-2026-10-31).
+
 ## Překladiště a lidé vně města — 31. října 2026
 
 1. [R-0373](requirements/done/R-0373.md) sdružuje lodě a vozy pod názvem **Překladiště** v pravém sloupci kolonie. Pod řádkem dopravních jednotek jsou bedny vybraného nákladu; nadpis ukazuje typ a číslo vybrané jednotky. Bez výběru výzva zmiňuje loď i vůz.

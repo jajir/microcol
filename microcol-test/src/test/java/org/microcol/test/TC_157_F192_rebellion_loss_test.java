@@ -96,10 +96,14 @@ public class TC_157_F192_rebellion_loss_test extends AbstractMicroColTest {
                 getContext());
         campaign.verifyCampaignScreen();
 
-        // No position was saved at the end, so the main menu offers no
-        // Continue.
+        // The ending does not replace the last loaded position or checkpoint.
         campaign.back();
-        new FreePlayAuditPage(getContext()).verifyContinueButtonEnabled(false);
+        new FreePlayAuditPage(getContext()).verifyContinueButtonEnabled(true);
+        new FreePlayAuditPage(getContext()).continueGame();
+        loss.verifyRebellionHolds();
+        loss.verifyColonyOwner(DELFT, DUTCH);
+        loss.verifyRebellionMembers(MEMBERS);
+        loss.verifyNoLossDialogShown(REASON_TEXT);
     }
 
     @Test

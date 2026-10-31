@@ -11,6 +11,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.microcol.diagnostics.DiagnosticLog;
+import org.microcol.gui.FileSelectingService;
+import org.microcol.gui.dialog.PersistingService;
+import org.microcol.gui.preferences.GamePreferences;
+import org.microcol.i18n.I18n;
+import org.microcol.model.Model;
+import org.microcol.model.campaign.po.PersistingTool;
+import org.microcol.model.campaign.po.SavedGames;
 import org.microcol.model.campaign.CampaignManager;
 import org.microcol.model.campaign.CampaignModule;
 import org.microcol.model.campaign.GameModelDao;
@@ -51,6 +58,31 @@ class GameLoadRejectionTest {
                 "/maps/default-campaign-mission-2-thrive.microcol");
         source = directory.resolve("game.microcol").toFile();
         files.saveToFile(source.getAbsolutePath(), data);
+    }
+
+    private PersistingService persistingService() {
+        final PersistingTool paths = mock(PersistingTool.class);
+        // Completed/inactive games must not need a dialog host to load another.
+        return new PersistingService(controller, new EventBus(), paths,
+                mock(FileSelectingService.class), current, diagnostics,
+                new SavedGames(paths, files), null, mock(I18n.class),
+                mock(GamePreferences.class));
+    }
+
+    @Test
+    void leavingWithoutAnActiveGameNeedsNoSaveConfirmation() {
+        assertTrue(persistingService().confirmLeave());
+        verify(current, never()).getModel();
+    }
+
+    @Test
+    void leavingAFinishedGameNeedsNoSaveConfirmation() {
+        final Model model = mock(Model.class);
+        when(current.isGameModelReady()).thenReturn(true);
+        when(current.getModel()).thenReturn(model);
+        when(model.isGameFinished()).thenReturn(true);
+
+        assertTrue(persistingService().confirmLeave());
     }
 
     @Test

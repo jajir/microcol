@@ -1024,3 +1024,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Colony cargo depot — 2026-10-31
 
 [R-0373](done/R-0373.md) names and orders the shared ships/wagons depot above people outside town. Existing cargo crates and transfers are reused. Committed under the user's explicit no-tests exception after compilation and source/documentation review; runtime and visual behavior remain unverified. [Evidence](../functional-tests.md#r-0373-colony-cargo-depot-2026-10-31).
+
+## Colony UI verification and repair — 2026-10-31
+
+[R-0374](done/R-0374.md), status done, verifies the colony player journeys after R-0372/R-0373. Local acceptance passed: 4,801 model/JUnit checks, 362 selected UI checks and 21 smoke/support checks; repairs preserve agreed rules. Known repeated-start memory and compact-label limitations are recorded in the evidence. [Execution evidence](../functional-tests.md#r-0374-colony-ui-verification-and-repair-2026-10-31).

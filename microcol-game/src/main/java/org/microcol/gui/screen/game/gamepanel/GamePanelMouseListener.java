@@ -182,6 +182,9 @@ public final class GamePanelMouseListener {
                 .convertToLocation(pressedAt);
         if (gameModelController.getModel().getMap().isValid(location)) {
             logger.debug("location of mouse: " + location);
+            // Toolbar focus loss clears its hint even on the same map tile.
+            mouseOverTileManager.clearMouseOverTile();
+            mouseOverTileManager.setMouseOverTile(location);
             if (modeController.isMoveMode()) {
                 gamePanelPresenter.switchToNormalMode(location);
             } else {

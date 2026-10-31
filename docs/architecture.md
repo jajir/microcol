@@ -315,6 +315,10 @@ před zaměřeným menu: presenter událost spotřebuje pouze při rušení akti
 náhledu pohybu, jinak zůstává dostupná menu. Přijetí příkazů eviduje
 [R-0053](requirements/done/R-0053.md), ověření Escape
 [R-0054](requirements/done/R-0054.md).
+Načítání nejprve vytvoří dopravce kvůli vazbám nákladu a potom obnoví pořadí
+registru z uložené hry. Pořadí akcí jednotek včetně královské armády se tak
+pouhým Save/Continue nemění; regresi sleduje
+[R-0374](requirements/done/R-0374.md).
 
 ### Potvrzení útoku (R-0028, rozpracováno)
 

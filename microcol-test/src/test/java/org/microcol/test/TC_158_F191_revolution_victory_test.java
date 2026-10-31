@@ -101,10 +101,13 @@ public class TC_158_F191_revolution_victory_test extends AbstractMicroColTest {
                 getContext());
         campaign.verifyCampaignScreen();
 
-        // No position was saved at the end, so the main menu offers no
-        // Continue.
+        // The ending does not replace the last successfully loaded position.
         campaign.back();
-        new FreePlayAuditPage(getContext()).verifyContinueButtonEnabled(false);
+        new FreePlayAuditPage(getContext()).verifyContinueButtonEnabled(true);
+        new FreePlayAuditPage(getContext()).continueGame();
+        rebellion.verifyRebellionHolds();
+        rebellion.verifyColonyOwner(DELFT, CROWN);
+        victory.verifyNoVictoryDialogShown(REASON_TEXT);
     }
 
     @Test

@@ -105,6 +105,8 @@ rozhraní v angličtině; nejde o maketu. České ovládací texty pokrývá tak
 3. **Importovat soubor** otevírá systémový výběr. Zrušení přehledu,
    systémového výběru či potvrzení nic neaktivuje.
 4. **Pokračovat** používá poslední úspěšně uloženou nebo načtenou cestu.
+   Po konci hry zůstává tato starší rozehraná pozice dostupná; samotný konec
+   ji nepřepíše ukončenou hrou.
    Úspěšný automatický checkpoint ji také aktualizuje. **F9 / Rychle načíst**
    obnovuje rychlý bod aktuální rozehrané hry; chybějící bod ohlásí bez změny hry.
 5. Před aktivací jiné pozice se u živé hry použije ochrana postupu. Kandidát
