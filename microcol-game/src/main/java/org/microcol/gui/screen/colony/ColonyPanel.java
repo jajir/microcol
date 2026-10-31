@@ -93,7 +93,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         final VBox harbor = new VBox(3, harborTitle, panelDock.getContent());
         harbor.getStyleClass().addAll("colony-section", "colony-harbor");
         final VBox right = new VBox(10, colonyFields.getContent(),
-                construction.getContent(), people, harbor);
+                construction.getContent(), harbor, people);
         right.setMinWidth(378);
         right.setPrefWidth(520);
         right.setMaxWidth(Double.MAX_VALUE);

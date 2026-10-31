@@ -99,8 +99,8 @@
     <entry key="quickChanged">Náklad, sklad nebo cena se změnily. Nic se nepřevedlo. Zkontrolujte prostory a zkuste to znovu.</entry>
     <entry key="nameCannotFoundOnRiver">Kolonii založte vedle řeky. Na říčním políčku ji založit nelze.</entry>
     <entry key="notBuilt">Nepostaveno</entry>
-    <entry key="outsideSection">Lidé a vozy vně města</entry>
-    <entry key="harborSection">Přístav a náklad</entry>
+    <entry key="outsideSection">Lidé vně města</entry>
+    <entry key="harborSection">Překladiště</entry>
     <entry key="stockSection">Zboží a produkce · zásoba / čistá změna nebo produkce za tah</entry>
     <entry key="surroundingSection">Okolí města</entry>
     <entry key="selectedSection">Vybrané políčko</entry>

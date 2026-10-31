@@ -1,5 +1,11 @@
 # UX a pravidla ovládání MicroCol
 
+## Překladiště a lidé vně města — 31. října 2026
+
+1. [R-0373](requirements/done/R-0373.md) sdružuje lodě a vozy pod názvem **Překladiště** v pravém sloupci kolonie. Pod řádkem dopravních jednotek jsou bedny vybraného nákladu; nadpis ukazuje typ a číslo vybrané jednotky. Bez výběru výzva zmiňuje loď i vůz.
+2. Sekce **Lidé vně města** je pod Překladištěm. Výběr dopravce sám nic nepřesouvá; zboží se dál přenáší stávajícím ovládáním slotů. Kapacita, vlastnictví, rušení přesunu i zpětná vazba při odmítnutí zůstávají ve stávající cestě.
+3. Jde o uspořádání a popisky nad existujícími seznamy modelu. Testy ani vizuální ověření se pro tuto iteraci na výslovné přání uživatele neprovádějí; skutečná kontrola je ve [funkční evidenci](functional-tests.md#r-0373-colony-cargo-depot-2026-10-31).
+
 ## Produkce kolonie ve spodním řádku — 31. října 2026
 
 1. Dohoda [R-0372](requirements/done/R-0372.md): hráč najde kladiva, kříže a zvony mezi položkami spodního přehledu zboží. Ukazují produkci za tah, nikoli skladovou zásobu. Celý horní souhrn i věta o obecních zdrojích nad zbožím se na přání uživatele odstraní; detail vybraného středu města dál ukazuje automatickou produkci.

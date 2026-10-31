@@ -296,4 +296,6 @@
     <entry key="selectShipCargo">Vyberte loď pro zobrazení nákladu</entry>
 	<entry key="minimap_title">Minimapa</entry>
 	<entry key="minimap_hint">Posun: kliknutí, tažení či šipky</entry>
+    <entry key="selectedCarrierCargo">Náklad · %s</entry>
+    <entry key="selectCarrierCargo">Vyberte loď nebo vůz pro zobrazení nákladu</entry>
 </properties>

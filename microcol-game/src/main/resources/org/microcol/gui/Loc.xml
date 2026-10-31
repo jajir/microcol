@@ -296,4 +296,6 @@
     <entry key="selectShipCargo">Select a ship to see its cargo</entry>
 	<entry key="minimap_title">Minimap</entry>
 	<entry key="minimap_hint">Click, drag or arrow keys to pan</entry>
+    <entry key="selectedCarrierCargo">Cargo · %s</entry>
+    <entry key="selectCarrierCargo">Select a ship or wagon to see its cargo</entry>
 </properties>

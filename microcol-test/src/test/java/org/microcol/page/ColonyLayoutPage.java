@@ -257,6 +257,19 @@ public final class ColonyLayoutPage extends AbstractScreen {
             assertTrue(
                     map.localToScene(map.getLayoutBounds()).getMaxX() < detail
                             .localToScene(detail.getLayoutBounds()).getMinX());
+            final VBox depot = getNodeFinder().lookup(".colony-harbor")
+                    .queryAs(VBox.class);
+            final Node outside = getNodeFinder()
+                    .lookup("#colony-outside-scroll").query();
+            final VBox people = (VBox) outside.getParent();
+            final I18n texts = getContext().getClassFromGuice(I18n.class);
+            assertEquals(texts.get(ColonyMsg.harborSection),
+                    ((Label) depot.getChildren().get(0)).getText());
+            assertEquals(texts.get(ColonyMsg.outsideSection),
+                    ((Label) people.getChildren().get(0)).getText());
+            assertTrue(depot.localToScene(depot.getLayoutBounds())
+                    .getMaxY() <= people.localToScene(people.getLayoutBounds())
+                            .getMinY());
             assertFalse(isCssIdVisible("colony-summary"));
             assertFalse(isCssIdVisible("townCommons"));
         });

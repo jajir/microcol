@@ -1,5 +1,10 @@
 # Use cases a přejímka pravidel hry
 
+## UC-114/119: překladiště kolonie — 2026-10-31
+
+1. [R-0373](requirements/done/R-0373.md) pojmenovává společný prostor lodí a vozů **Překladiště**, pod jejich výběrem zachovává nákladové bedny a přesuny zboží. Oddělená sekce **Lidé vně města** následuje pod ním. Popisky vybraného nákladu rozlišují skutečný typ dopravce; evropský přístav si ponechává lodní popisky.
+2. Existující `TC_195_F227_colony_layout_test` přes ověřovač rozložení nově kontroluje názvy a pořadí sekcí. Herní aserce se nemění. Testy nejsou spuštěné podle výslovného zadání; tato změna tedy nerozšiřuje ověřené přijetí celého UC. Viz [evidence](functional-tests.md#r-0373-colony-cargo-depot-2026-10-31).
+
 ## UC-114/119: produkce ve spodním přehledu kolonie — 2026-10-31
 
 1. [R-0372](requirements/done/R-0372.md) přesouvá přehled zvonů a křížů dolů ke zboží a doplňuje kladiva. Všechny tři položky ukazují produkci za tah a nelze je táhnout do lodě; běžné zboží zachovává zásobu, změnu i přepravu. Horní souhrn i věta o obecních zdrojích nad zbožím se odstraní.

@@ -70,8 +70,8 @@ public abstract class AbstractPanelDock
         view.updateLanguage(i18n);
     }
 
-    protected void enableHarborLayout() {
-        view.enableHarborLayout();
+    protected void enableHarborLayout(final boolean includeWagons) {
+        view.enableHarborLayout(includeWagons);
     }
 
     public Optional<UnitWithCargo> getSelectedShip() {

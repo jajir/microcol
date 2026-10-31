@@ -99,8 +99,8 @@
     <entry key="quickChanged">The cargo, warehouse or price changed. Nothing was transferred. Check the holds and try again.</entry>
     <entry key="nameCannotFoundOnRiver">Found the colony beside the river, not on its square.</entry>
     <entry key="notBuilt">Not built</entry>
-    <entry key="outsideSection">People and wagons outside town</entry>
-    <entry key="harborSection">Harbor and cargo</entry>
+    <entry key="outsideSection">People outside town</entry>
+    <entry key="harborSection">Cargo depot</entry>
     <entry key="stockSection">Goods and production · stock / net change or production per turn</entry>
     <entry key="surroundingSection">Surrounding area</entry>
     <entry key="selectedSection">Selected tile</entry>

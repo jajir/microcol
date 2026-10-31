@@ -1,5 +1,12 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0373 colony cargo depot — 2026-10-31
+
+1. [R-0373](requirements/done/R-0373.md), based on main `51876f30`, reorders the colony's depot above people outside town, changes both section headings in Czech/English, and gives the colony cargo captions ship-or-wagon wording with the selected unit's localized type and ID. Europe's ship captions remain unchanged. Existing carrier filtering, crates, transfers and model validation are reused.
+2. The user explicitly requested **no tests and immediate push** for this iteration. No model/JUnit, UI, smoke, source-contract or documentation test suite was run. Existing `TC_195_F227_colony_layout_test` layout verification now checks section headings and order, but these assertions have only been compiled. Runtime behavior and visual layout remain unverified.
+3. Shared Eclipse formatting applied to all seven changed Java files. `mvn -B -ntp -DskipTests -pl microcol-test -am test-compile` succeeded for all three reactor modules in 6.083 seconds, without executing tests (`target/r0373-compile.log`). Source review covers both dock callers, localized resources, section ordering and existing cargo/people lists; no gameplay rule or artwork changed.
+4. Strict MkDocs build and `git diff --check` passed (`target/r0373-mkdocs.log`). This records delivery under the explicit test exception, not a fully tested revision or verified published distribution. No remote CI or publication check was requested.
+
 ## R-0372 colony production row and removed summaries — 2026-10-31
 
 1. [R-0372](requirements/done/R-0372.md) adds hammers, crosses and bells to the goods row as per-turn production without drag initiation. It removes the entire upper summary and the town-commons sentence above the goods. The selected-center detail retains the same automatic yields. No model rule or production artwork changed.

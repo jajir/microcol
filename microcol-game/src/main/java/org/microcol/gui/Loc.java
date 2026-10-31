@@ -10,9 +10,10 @@ import org.microcol.model.Calendar.Season;
 public enum Loc implements MessageKeyResource {
 
     ok, backToGame, gameTitle, selectedShipCargo, selectShipCargo,
-    statusBar_tile_notExplored, statusBar_tile_start, statusBar_tile_withUnit,
-    statusBar_tile_unitCount, statusBar_era, statusBar_era_description,
-    statusBar_gold, statusBar_gold_description, statusBar_status_description,
+    selectedCarrierCargo, selectCarrierCargo, statusBar_tile_notExplored,
+    statusBar_tile_start, statusBar_tile_withUnit, statusBar_tile_unitCount,
+    statusBar_era, statusBar_era_description, statusBar_gold,
+    statusBar_gold_description, statusBar_status_description,
     statusBar_season_spring, statusBar_season_summer, statusBar_season_autumn,
     statusBar_season_winter, unitsPanel_description, unitsPanel_unexplored,
     unitsPanel_units, unitsPanel_veteran, unitsPanel_continental,

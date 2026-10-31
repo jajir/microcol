@@ -1020,3 +1020,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Colony production in the goods row — 2026-10-31
 
 1. [R-0372](done/R-0372.md), primary area A03 with existing A07 rules, adds hammers, crosses and bells to the bottom goods row as non-transportable production and removes the upper summary and town-commons sentence. Status: done under the explicit UI/smoke exception; model, source-contract and documentation checks passed. UI execution and visual acceptance are not claimed. [Evidence](../functional-tests.md#r-0372-colony-production-row-and-removed-summaries-2026-10-31).
+
+## Colony cargo depot — 2026-10-31
+
+[R-0373](done/R-0373.md) names and orders the shared ships/wagons depot above people outside town. Existing cargo crates and transfers are reused. Committed under the user's explicit no-tests exception after compilation and source/documentation review; runtime and visual behavior remain unverified. [Evidence](../functional-tests.md#r-0373-colony-cargo-depot-2026-10-31).

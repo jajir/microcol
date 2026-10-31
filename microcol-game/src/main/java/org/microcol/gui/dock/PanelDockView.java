@@ -44,6 +44,8 @@ public class PanelDockView implements JavaFxComponent {
     private Consumer<Optional<UnitWithCargo>> onSelectedUnitWasChanged;
 
     private boolean harborLayout;
+
+    private boolean includeWagons;
     private I18n i18n;
     private final Label cargoTitle = new Label();
 
@@ -93,8 +95,9 @@ public class PanelDockView implements JavaFxComponent {
         panelShips.getChildren().clear();
     }
 
-    void enableHarborLayout() {
+    void enableHarborLayout(final boolean includeWagons) {
         harborLayout = true;
+        this.includeWagons = includeWagons;
         final Region crates = (Region) mainPanel.getChildren().remove(1);
         final ScrollPane scroll = new ScrollPane(panelShips);
         scroll.setId("europe-dock-scroll");
@@ -123,8 +126,13 @@ public class PanelDockView implements JavaFxComponent {
     private void updateCargoTitle() {
         if (harborLayout && i18n != null) {
             cargoTitle.setText(getSelectedShip()
-                    .map(ship -> i18n.get(Loc.selectedShipCargo, ship.getId()))
-                    .orElseGet(() -> i18n.get(Loc.selectShipCargo)));
+                    .map(ship -> includeWagons
+                            ? i18n.get(Loc.selectedCarrierCargo,
+                                    shipLabel(ship))
+                            : i18n.get(Loc.selectedShipCargo, ship.getId()))
+                    .orElseGet(() -> i18n
+                            .get(includeWagons ? Loc.selectCarrierCargo
+                                    : Loc.selectShipCargo)));
         }
     }
 
