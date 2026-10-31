@@ -26,7 +26,7 @@
 }
 /* Keep units on the same horizon when an unneeded scrollbar disappears. */
 .europe-harbor .voyage-ships {
-    -fx-max-height: 84;
+    -fx-max-height: 76;
     -fx-spacing: 16;
     -fx-alignment: bottom-center;
     -fx-padding: 0 2 5 2;

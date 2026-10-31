@@ -1,6 +1,7 @@
 package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
 import java.util.List;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.europe.Europe;
@@ -11,6 +12,7 @@ import org.microcol.model.unit.UnitWithCargo;
 import org.testfx.util.WaitForAsyncUtils;
 import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
@@ -25,6 +27,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 /** The illustrated harbor keeps every unit reachable at its native size. */
@@ -115,6 +118,10 @@ public final class EuropeHarborPage extends AbstractScreen {
     public void selectShip(final int id, final boolean keyboard) {
         final ToggleButton button = getNodeFinder()
                 .lookup("#europe-dock-ship-" + id).queryAs(ToggleButton.class);
+        // Activating an already selected toggle would deselect it.
+        if (button.isSelected()) {
+            return;
+        }
         revealGameContent(button);
         if (keyboard) {
             getRobot().interact(button::requestFocus);
@@ -426,6 +433,63 @@ public final class EuropeHarborPage extends AbstractScreen {
         });
     }
 
+    /**
+     * Both voyage headings sit below the painted horizon, centered above their
+     * own list, with a small visible gap above the ship frames.
+     */
+    public void verifyVoyageHeadingSpacing() {
+        getRobot().interact(() -> {
+            final Region scene = getNodeFinder().lookup("#europe-harbor-scene")
+                    .queryAs(Region.class);
+            // The horizon is painted a quarter down the sea above the quay.
+            final double horizon = (scene.getHeight() - 112) * 0.25;
+            final List<Double> tops = new ArrayList<>();
+            for (final String name : List.of("europe", "new-world")) {
+                final Label heading = getNodeFinder()
+                        .lookup(".to-" + name + " .screen-title")
+                        .queryAs(Label.class);
+                final Text text = (Text) heading.lookup(".text");
+                final ScrollPane scroll = group(
+                        name.equals("europe") ? "incoming" : "outgoing");
+                final Bounds title = scene.sceneToLocal(
+                        heading.localToScene(heading.getLayoutBounds()));
+                final Bounds row = scene.sceneToLocal(
+                        scroll.localToScene(scroll.getLayoutBounds()));
+                assertEquals(heading.getText(), text.getText(),
+                        name + " heading is not truncated");
+                assertEquals(Pos.CENTER, heading.getAlignment());
+                assertEquals(row.getCenterX(),
+                        scene.sceneToLocal(
+                                text.localToScene(text.getBoundsInLocal()))
+                                .getCenterX(),
+                        1, name + " heading is centered above its list");
+                assertTrue(title.getMinY() >= horizon + 4,
+                        name + " heading is below the horizon: " + title
+                                + " horizon: " + horizon);
+                final double listGap = row.getMinY() - title.getMaxY();
+                assertTrue(listGap >= 2 && listGap <= 12,
+                        name + " list gap: " + listGap);
+                for (final Node node : ((Pane) scroll.getContent())
+                        .getChildren()) {
+                    final ToggleButton ship = (ToggleButton) node;
+                    final double gap = scene
+                            .sceneToLocal(
+                                    ship.localToScene(ship.getLayoutBounds()))
+                            .getMinY() - title.getMaxY();
+                    assertTrue(gap >= 2, ship.getId()
+                            + " frame keeps a visible gap: " + gap);
+                    if (ship.isSelected()) {
+                        assertTrue(gap <= 12, ship.getId()
+                                + " selected frame stays compact: " + gap);
+                    }
+                }
+                tops.add(title.getMinY());
+            }
+            assertEquals(tops.get(0), tops.get(1), 1,
+                    "Both voyage groups share one placement");
+        });
+    }
+
     public void verifyGoodsContentWidth(final double expectedWidth) {
         getRobot().interact(() -> {
             final Node frame = getNodeFinder().lookup("#europeMarketFrame")
@@ -456,7 +520,7 @@ public final class EuropeHarborPage extends AbstractScreen {
             final Bounds edges = content
                     .localToScene(content.getLayoutBounds());
             for (final String selector : List.of("#immigration-progress",
-                    ".to-europe .bordered-titled-title", "#europe-dock-count",
+                    ".to-europe .screen-title", "#europe-dock-count",
                     "#europe-cargo-title")) {
                 final Label label = getNodeFinder().lookup(selector)
                         .queryAs(Label.class);
@@ -494,8 +558,7 @@ public final class EuropeHarborPage extends AbstractScreen {
             }
             assertEquals(edges.getMaxX(), previousRight, 1,
                     "Last goods icon ends at the right edge");
-            for (final String selector : List.of(
-                    ".to-new-world .bordered-titled-title",
+            for (final String selector : List.of(".to-new-world .screen-title",
                     "#europe-pier-count")) {
                 final Node heading = getNodeFinder().lookup(selector).query();
                 assertEquals(edges.getCenterX() + 16,

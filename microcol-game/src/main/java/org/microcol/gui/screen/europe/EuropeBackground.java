@@ -10,12 +10,18 @@ import javafx.scene.image.Image;
 @Singleton
 public class EuropeBackground extends AbstractBackground {
     static final double QUAY_HEIGHT = 112;
+    /** The painted horizon lies a quarter down the stretched sea. */
+    private static final double HORIZON_SHARE = 0.25;
     private final Image image;
 
     @Inject
     public EuropeBackground(final ImageProvider imageProvider) {
         image = imageProvider.getImage("europe-harbor.png");
         getContent().setMouseTransparent(true);
+    }
+
+    static double horizon(final double height) {
+        return (height - QUAY_HEIGHT) * HORIZON_SHARE;
     }
 
     @Override

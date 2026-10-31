@@ -1,6 +1,16 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
 
+## R-0381 compact Europe voyage spacing — 2026-10-31
+
+1. [R-0381](requirements/done/R-0381.md) is locally accepted on source based on `e3a77ccea30f2b46ea7686b87665a17dfb53291a`. Both voyage groups sit below the painted horizon with a compact heading-to-selected-frame gap; only the upper route ends move. Model rules, saves, translations and SVG/PNG artwork are unchanged.
+2. `EuropeHarborPage.verifyVoyageHeadingSpacing()` checks horizon clearance, shared placement, centered untruncated headings, a 2–12 px heading-to-list gap, at least 2 px to every ship frame and at most 12 px to a selected frame. `TC_194_F226_europe_harbor_test` covers English at 1280×900 and 1000×760 (`TC_01`), Czech at both sizes (`TC_02`), and 2560×1000 / 1000×1000 (`TC_03`). `TC_06_F06_buy_and_sell_goods_test.TC_06_moving_goods` covers empty groups. Existing gameplay, scrolling, cargo and keyboard/mouse departure assertions remain.
+3. The first targeted run, `target/docker-ui/run-lRhicS`, remains failed: 11 checks, one error and no skips. After keyboard departure the dock selected ship 3100 automatically; the test helper clicked it again and deselected it. Claude repaired `selectShip` to retain an existing selection, following the colony dock helper, and added cargo verification before the real mouse departure. No game behavior or assertion was weakened.
+4. Final shared-profile Java formatting and review passed. Model run `target/verification/run-jo_cq9dd` passed **4,801 checks in 354 reports**, zero failures/errors/skips, in **135.524 s** including cleanup. Targeted Docker/Xvfb run `target/docker-ui/run-LM0Dqz` passed **11 checks**: four TC194, four TC06 and three `PageVerificationContractTest`, zero failures/errors/skips, in **144.488 s**. Fixed smoke run `target/verification/run-vqw6jv7g` passed **21 checks in 12 reports**, zero failures/errors/skips, in **211.422 s**, within the 420-second budget. Source hashes match the reviewed candidate and both verifier snapshots.
+5. Caller inspected the full, empty, Czech narrow and wide harbor screenshots against the selected variant C: the headings remain below the horizon, frames retain a visible compact gap, routes meet the voyage rows and dock ends stay in place. Screenshots are in the targeted run's `microcol-test/warehouse-qa/`; unchanged genuine vector sources and derived artwork require no re-export.
+6. Completion and source evidence is retained under `~/Library/Logs/Microcol/claude/2026-10-31-ordered/R-0381/`. The first model dispatch `20261031T130231Z-153f2134adb6` timed out during Docker preparation before any test command; the runtime subsequently responded and retries used the same limits. Historical failed attempts remain failed. All nine documentation consistency checks and the strict MkDocs build passed at closure. No remote CI, full regression or publication verification is claimed.
+
+
 ## R-0380 discoverable Europe departure — 2026-10-31
 
 1. [R-0380](requirements/done/R-0380.md) implements UX-08 and the selected harbor design for UC-027 and UC-025. The button and drag gesture share the existing validated model departure; no travel rule or save schema changed. Headings omit counts and share the page title's typography. The departure button shares the toolbar's button factory, styling, height rule and 32-pixel icon.

@@ -127,9 +127,10 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         shipsContainer.minWidthProperty()
                 .bind(scroll.widthProperty().subtract(4));
-        scroll.setMinHeight(104);
-        scroll.setPrefHeight(104);
-        scroll.setMaxHeight(104);
+        // A selected frame plus the scrollbar, keeping ships near the title.
+        scroll.setMinHeight(96);
+        scroll.setPrefHeight(96);
+        scroll.setMaxHeight(96);
         titledPanel.getChildren().addAll(scroll, voyageDetail);
         titledPanel.setOnMouseEntered(this::onMouseEntered);
         titledPanel.setOnMouseExited(this::onMouseExited);

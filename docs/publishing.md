@@ -12,7 +12,7 @@ keeps the current game download unchanged.
 
 ## R-0381 voyage spacing reference — 2026-10-31
 
-1. [R-0381](requirements/R-0381.md) captures the user's selection of variant C: slightly lower Europe voyage groups and compact heading-to-ship spacing. Status is `new`; the approved design reference is saved with the documentation. No gameplay implementation or runtime asset changed.
+1. [R-0381](requirements/done/R-0381.md) captures the user's selection of variant C: slightly lower Europe voyage groups and compact heading-to-ship spacing. Status is `new`; the approved design reference is saved with the documentation. No gameplay implementation or runtime asset changed.
 2. The user explicitly requested requirement capture and push without tests. No model/JUnit, UI, smoke or documentation consistency tests are run; strict MkDocs is also omitted for this documentation-only delivery. Future implementation keeps its normal acceptance requirements.
 3. The requirement, backlog and graphics catalog describe the selected design as proposed behavior. No runtime verification, remote CI result, Pages deployment or game distribution is claimed.
 

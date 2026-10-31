@@ -254,8 +254,9 @@
 
 ## Evropský přístav — vybrané rozestupy varianty C (R-0381)
 
-1. Uživatel 31. října 2026 vybral **variantu C**: obě sekce plavby mírně níže pod horizontem a nejmenší navržená mezera mezi nadpisem a řádkem lodí. Písmo, velikost lodí, barvy a společné ovládání zůstávají podle R-0380. Autoritativní rozsah zaznamenává [R-0381](requirements/R-0381.md), stav `new`.
-2. [Uložená varianta C](graphics-assets/europe-voyage-spacing-2026-10-31/variant-c.png) je rastrová návrhová reference vytvořená vestavěným ImageGen z uživatelova snímku. Není herním assetem, pixelově závazným měřením ani důkazem implementace. Přesné odsazení se doladí při implementaci; tento krok pouze zachovává vybraný návrh.
+1. Uživatel 31. října 2026 vybral **variantu C**: obě sekce plavby mírně níže pod horizontem a nejmenší navržená mezera mezi nadpisem a řádkem lodí. Písmo, velikost lodí, barvy a společné ovládání zůstávají podle R-0380. Autoritativní rozsah zaznamenává [R-0381](requirements/done/R-0381.md), stav `done`.
+2. [Uložená varianta C](graphics-assets/europe-voyage-spacing-2026-10-31/variant-c.png) je rastrová návrhová reference vytvořená vestavěným ImageGen z uživatelova snímku. Není herním assetem, pixelově závazným měřením ani důkazem implementace. Přesné odsazení bylo doladěno při implementaci; reference zachovává vybraný návrh.
+3. Lokálně přijatá implementace z 31. října 2026 mění jen rozvržení JavaFX: skupiny se umísťují pod namalovaný horizont (čtvrtina výšky moře nad molem) a horní konce obou tras se posouvají s nimi. SVG zdroje a PNG exporty tras i přístavu zůstávají beze změny, nový export není potřeba. Shoda s variantou C byla zkontrolována na runtime snímcích TC194 a TC06; výsledky vede [funkční evidence](functional-tests.md#r-0381-compact-europe-voyage-spacing-2026-10-31).
 
 ## Evropský přístav — objevitelné odplutí (R-0380)
 

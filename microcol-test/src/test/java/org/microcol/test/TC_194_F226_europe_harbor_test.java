@@ -38,6 +38,9 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyLayoutAndNativeImages();
         harbor.verifyScrollPositions(0, 0, 0, 0);
 
+        // Both voyage headings sit below the horizon, close to their ships.
+        harbor.verifyVoyageHeadingSpacing();
+
         // Every sell/buy price shares the center of its goods icon.
         harbor.verifyGoodsPricesCentered();
         harbor.verifyContentAlignment();
@@ -86,6 +89,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyHorizontalScrollbars(true);
         harbor.verifyPageVerticalScrollbar();
         harbor.verifyLayoutAndNativeImages();
+        harbor.verifyVoyageHeadingSpacing();
         harbor.verifyAllGoodsVisible();
         harbor.verifySelectedCargo(3142, 0, Goods.of(GoodsType.ORE, 43));
         harbor.verifyGoodsPricesCentered();
@@ -109,6 +113,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyGoodsContentWidth(1440);
         harbor.verifyGoodsPricesCentered();
         harbor.verifyContentAlignment();
+        harbor.verifyVoyageHeadingSpacing();
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0348-harbor-wide.png");
 
@@ -126,6 +131,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyGoodsPricesCentered();
         harbor.verifyContentAlignment();
         harbor.verifyAllGoodsVisible();
+        harbor.verifyVoyageHeadingSpacing();
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0348-harbor-narrow.png");
     }
@@ -150,6 +156,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         // action.
         harbor.scrollGroup("dock", 0);
         harbor.selectShip(3100, false);
+        harbor.verifySelectedCargo(3100, 0, Goods.of(GoodsType.ORE, 1));
         harbor.departSelectedShip(false);
         harbor.verifyDepartedShip(3100, 0, Goods.of(GoodsType.ORE, 1), 41, 45);
     }
@@ -169,6 +176,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyHorizontalScrollbars(true);
         harbor.verifyImmigrationAppearance();
         harbor.verifyLayoutAndNativeImages();
+        harbor.verifyVoyageHeadingSpacing();
         harbor.dragGroupToEnd("dock");
         harbor.selectShip(3142, false);
         harbor.verifySelectedCargo(3142, 0, Goods.of(GoodsType.ORE, 43));
@@ -179,5 +187,11 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyContentAlignment();
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0343-harbor-czech.png");
+
+        // Czech voyage headings keep the same compact spacing when narrow.
+        harbor.resize(1000, 760);
+        harbor.verifyVoyageHeadingSpacing();
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0381-harbor-czech-narrow.png");
     }
 }

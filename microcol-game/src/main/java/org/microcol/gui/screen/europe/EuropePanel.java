@@ -125,18 +125,23 @@ public final class EuropePanel
                 final double width = getWidth();
                 final double height = getHeight();
                 final double half = width / 2;
+                // Both voyage groups start just below the painted horizon.
+                final double voyages = EuropeBackground.horizon(height) + 12;
+                // Upper route ends follow the ship rows; dock ends stay put.
+                final double arrivalTop = voyages + 94;
+                final double departureTop = voyages + 63;
                 arrival.setFitWidth(half / 2 - 48);
-                arrival.setFitHeight(height - 480);
-                arrival.relocate(16, 236);
+                arrival.setFitHeight(height - 244 - arrivalTop);
+                arrival.relocate(16, arrivalTop);
                 departure.setFitWidth(width - 180);
-                departure.setFitHeight(height - 345);
-                departure.relocate(180, 205);
+                departure.setFitHeight(height - 140 - departureTop);
+                departure.relocate(180, departureTop);
                 immigration.resizeRelocate(0, 54, width,
                         immigration.prefHeight(width));
-                shipsTravelingToEurope.getContent().resizeRelocate(0, 134,
+                shipsTravelingToEurope.getContent().resizeRelocate(0, voyages,
                         half - 16, 220);
                 shipsTravelingToNewWorld.getContent().resizeRelocate(half + 16,
-                        134, half - 16, 220);
+                        voyages, half - 16, 220);
                 dockTitle.resizeRelocate(0, height - 226, half - 16, 26);
                 europeDock.getContent().resizeRelocate(0, height - 198,
                         half - 16, 190);
