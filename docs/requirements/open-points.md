@@ -3,6 +3,7 @@
 1. Updated: 2026-10-20 after the user’s answers to all 38 topics through R-0219 and all three follow-ups. Active requirement chapter 4 is authoritative; archived history is excluded.
 2. Accepted decisions live in the [shared game rules](../gap-analysis.md#refinement-decisions-2026-10-20). Earlier setup controls, R-0074/R-0095 implementation scope and R-0091 trade policy are already settled and are not questions again.
 3. No recorded open questions remain through R-0219. The later topics below are outside that answer batch. Answering questions alone does not change readiness or authorize implementation.
+4. Updated on 2026-10-31: questions from canceled R-0223, R-0229 and R-0230 are retained only in their archived requirements; they are no longer active refinement points.
 
 ## R-0221
 
@@ -10,29 +11,11 @@
 
 1. What geographic extent, dimensions and level of coastline/river detail define the accepted America reference map? SETUP-001 specifies the geographic choice but not an exact dataset or scale.
 
-## R-0223
-
-[Authoritative questions](R-0223.md#4-open-questions).
-
-1. What participant count, experience mix, accessibility/device coverage and success threshold will be accepted for this release round? The estimate gives scenarios, not an approved sample.
-
 ## R-0228
 
 [Authoritative questions](R-0228.md#4-open-questions).
 
 1. Which existing visual outcome should receive the first cue, and what exact audible meaning/priority should it convey? The audio page lists examples, not an agreed first asset.
-
-## R-0229
-
-[Authoritative questions](R-0229.md#4-open-questions).
-
-1. What supported map/load profile and turn, interaction, memory and crash thresholds constitute first-release acceptance? No numeric performance target is approved in the source docs.
-
-## R-0230
-
-[Authoritative questions](R-0230.md#4-open-questions).
-
-1. How many fresh-start completed campaigns and which acceptable pacing/difficulty ranges define this release's balance evidence? The estimate offers scenarios, not an approved threshold.
 
 ## R-0232
 

@@ -221,7 +221,7 @@ as lake in these templates. [R-0302](requirements/done/R-0302.md) supersedes Ori
 World's connected-lake layout from [R-0287](requirements/done/R-0287.md).
 The same correction applies the [inland river restriction](#r-0065-refinement)
 to bundled map templates: no hills/mountains or water neighbours, including
-endpoints and diagonals. On 2026-10-27, [R-0313](requirements/R-0313.md)
+endpoints and diagonals. On 2026-10-27, [R-0313](requirements/done/R-0313.md)
 authorizes one explicit exception: Original World's large river extends from
 (24, 13) to the coastal square (25, 13) for appearance work. Generated maps retain
 the inland restriction. Existing saves are not rewritten, and movement on

@@ -12629,7 +12629,7 @@ or website publication.
 ## R-0313 Original World coastal river — 2026-10-27
 
 1. At source revision `626cff98`, the user requested a river at (25, 13), commit/push
-   and explicitly no tests. [R-0313](requirements/R-0313.md) extends the existing
+   and explicitly no tests. [R-0313](requirements/done/R-0313.md) extends the existing
    large river from (24, 13); the single coastal exception is recorded in the
    [map catalogue](free-play-maps.md).
 2. `OriginalWorldTest`, `FreePlayMapsTest` and the landscape verification used by

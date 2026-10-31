@@ -1,5 +1,12 @@
 # Current requirement backlog
 
+Status decisions on 2026-10-31: [R-0304](done/R-0304.md), [R-0313](done/R-0313.md), [R-0321](done/R-0321.md) are `done`;
+[R-0209](canceled/R-0209.md), [R-0222](canceled/R-0222.md), [R-0223](canceled/R-0223.md), [R-0224](canceled/R-0224.md), [R-0226](canceled/R-0226.md), [R-0229](canceled/R-0229.md), [R-0230](canceled/R-0230.md), [R-0233](canceled/R-0233.md) are `canceled`, at the user’s explicit request.
+These administrative closures do not add implementation or acceptance evidence.
+Other requirement statuses are unchanged; older dated selections below remain history.
+[Record and verification limits](../publishing.md#requirement-status-decisions-2026-10-31).
+
+
 Implemented on 2026-10-31: [R-0380 — discoverable departure from Europe](done/R-0380.md), A03 with existing A06 voyage rules. Shared toolbar-style departure button, plain shared-size travel headings, hand-drawn routes and muted SVG harbor sources are complete under the user's explicit no-tests exception. Java/test compilation succeeded; no tests were executed and no gameplay, local acceptance or distribution result is claimed. [Evidence](../functional-tests.md#r-0380-discoverable-europe-departure-2026-10-31).
 
 Captured on 2026-10-31: [R-0378 — explain and confirm European goods purchases](R-0378.md),
@@ -79,9 +86,10 @@ miniature-lake decoration. Model/JUnit, targeted Docker/Xvfb and fixed smoke
 acceptance passed; [evidence](../functional-tests.md#r-0314-k3-lake-ripples-2026-10-27)
 records results and preserved failed attempts. Publication remains unverified.
 
-Implemented on 2026-10-27: [R-0313 — Original World river at (25, 13)](R-0313.md).
+Implemented on 2026-10-27: [R-0313 — Original World river at (25, 13)](done/R-0313.md).
 The user explicitly requested a push without test runs. Data and existing test
-expectations are updated; normal local acceptance remains unverified.
+expectations are updated; normal local acceptance remains unverified. Closed as
+`done` by the user’s decision on 2026-10-31.
 
 Accepted locally on 2026-10-27: [R-0312 — global developer shortcut](done/R-0312.md).
 F3 applies to every game screen and application dialog; the DEV status indicator
@@ -259,7 +267,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | Requirement | Outcome | Kind | Origin |
 | --- | --- | --- | --- |
 | [R-0232](R-0232.md) | Provide a first-release player quickstart and help path | New capture | P32 player documentation; in-game help R-0206/0207 separate |
-| [R-0233](R-0233.md) | Freeze and verify the first-release runtime baseline | New capture | P32 runtime/dependency acceptance; development builds credited |
+| [R-0233](canceled/R-0233.md) | Freeze and verify the first-release runtime baseline | Canceled 2026-10-31 | P32 runtime/dependency acceptance; development builds credited |
 | [R-0234](R-0234.md) | Distribute a signed and notarized macOS release | New capture | P32 public Mac release; development ARM/Intel artifacts credited |
 | [R-0235](R-0235.md) | Verify the supported Linux release runtime matrix | New capture | P32 native dependency/platform acceptance |
 | [R-0236](R-0236.md) | Promote a verified development build to stable release | New capture | P32 stable publication; Dev channel credited |
@@ -280,7 +288,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0065](done/R-0065.md) | Create a playable new-world map from setup choices | Follow-up | [R-0014](done/R-0014.md) |
 | [R-0066](done/R-0066.md) | Provide valid starting expeditions for every European participant | Follow-up | [R-0014](done/R-0014.md), [R-0015](done/R-0015.md), [R-0027](done/R-0027.md) |
 | [R-0208](done/R-0208.md) | Verify four nations across five game profiles | Verification | UC-119 reference Hra matrix; setup effects retain feature owners |
-| [R-0209](R-0209.md) | Verify the separate New Game UI and map-choice matrix | Verification | UC-119 Nastavení matrix; generator R-0065 |
+| [R-0209](canceled/R-0209.md) | Verify the separate New Game UI and map-choice matrix | Canceled 2026-10-31 | UC-119 Nastavení matrix; generator R-0065 |
 | [R-0217](done/R-0217.md) | Verify an expedition reaches a self-sustaining trade loop | Verification | UC-115 integrated Hra journey |
 | [R-0221](R-0221.md) | Start a playable geographic America world | New capture | SETUP-001/UC-001; generated random/custom maps R-0065 separate |
 | [R-0263](done/R-0263.md) | Make Original World a varied fixed map with every natural terrain feature | New capture | User request and fixed-map/polar decisions, 2026-10-24; northern tundra, southern ice and discoverable rivers |
@@ -317,11 +325,11 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0275](done/R-0275.md) | Open map unit commands with Control-click | Done; local acceptance | User requested macOS Control-primary support and regression coverage, 2026-10-25 |
 | [R-0271](done/R-0271.md) | Draw consistent context menus with distinct shortcut keys | Done; local acceptance | User request, 2026-10-25; separate action labels and actual shortcuts, preserving current actions |
 | [R-0207](deferred/R-0207.md) | Keep the opening tutorial accurate for free play | Deferred by user, 2026-10-19 | SUPPORT-004; existing guided instructions credited |
-| [R-0222](R-0222.md) | Audit shared game controls for access and recovery | New capture | P28 shared UX residual; feature owners retained |
-| [R-0223](R-0223.md) | Observe real players completing core game tasks | New capture | P28/P31 real-player evidence, not automation |
-| [R-0224](R-0224.md) | Complete and inspect runtime graphics coverage | New capture | P29 visual coverage and readability |
+| [R-0222](canceled/R-0222.md) | Audit shared game controls for access and recovery | Canceled 2026-10-31 | P28 shared UX residual; feature owners retained |
+| [R-0223](canceled/R-0223.md) | Observe real players completing core game tasks | Canceled 2026-10-31 | P28/P31 real-player evidence, not automation |
+| [R-0224](canceled/R-0224.md) | Complete and inspect runtime graphics coverage | Canceled 2026-10-31 | P29 visual coverage and readability |
 | [R-0225](R-0225.md) | Reproduce the source-to-runtime graphics export | New capture | P29 export/manifest traceability |
-| [R-0226](R-0226.md) | Play event effects without disrupting music or gameplay | New capture | P30 event audio service; existing music credited |
+| [R-0226](canceled/R-0226.md) | Play event effects without disrupting music or gameplay | Canceled 2026-10-31 | P30 event audio service; existing music credited |
 | [R-0227](R-0227.md) | Control music and effect volume independently | New capture | P30 player settings |
 | [R-0228](R-0228.md) | Ship one meaningful event cue with a visual equivalent | New capture | P30 first selected cue; extra assets not assumed |
 | [R-0238](R-0238.md) | Produce honest Steam store media from the release game | New capture | P32 store artwork/screens/trailer; P29 in-game art separate |
@@ -341,7 +349,7 @@ manual/quick saves, recovery and protected exits. Local acceptance is recorded i
 | [R-0052](done/R-0052.md) | Process each national turn once in the agreed order | Remainder | [R-0002](canceled/R-0002.md) |
 | [R-0067](done/R-0067.md) | Keep the current game safe when loading fails | Follow-up | [R-0013](done/R-0013.md), [R-0018](done/R-0018.md) |
 | [R-0068](done/R-0068.md) | Offer separate turn and decade recovery points | Follow-up | [R-0018](done/R-0018.md) |
-| [R-0229](R-0229.md) | Verify long-game stability and responsiveness | New capture | P31 measured whole-game acceptance |
+| [R-0229](canceled/R-0229.md) | Verify long-game stability and responsiveness | Canceled 2026-10-31 | P31 measured whole-game acceptance |
 | [R-0231](done/R-0231.md) | Preserve local diagnostics for recoverable failures | Done | P32 diagnostics beyond delivered save/turn recovery |
 
 ## A05
@@ -600,7 +608,7 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0214](done/R-0214.md) | Verify all 25 founder effects | Verification | UC-119 founder matrix; existing per-effect owners credited |
 | [R-0216](R-0216.md) | Verify every ending and scoring branch | Verification | UC-119 ending matrix; R-0191–0197 remain feature owners |
 | [R-0220](done/R-0220.md) | Verify independence reaches a real final score | Verification | UC-118 integrated Hra journey |
-| [R-0230](R-0230.md) | Evaluate balance and pace across full campaigns | New capture | P31 observed whole-game balancing |
+| [R-0230](canceled/R-0230.md) | Evaluate balance and pace across full campaigns | Canceled 2026-10-31 | P31 observed whole-game balancing |
 
 ## Completion callbacks — 2026-10-18
 
@@ -792,7 +800,7 @@ preserving native input, values and persistence. Other screens remain outside th
 ## Curved river proposals — 2026-10-26
 
 1. [R-0300](done/R-0300.md) captures five river appearance proposals and the required placement of bonus icons above rivers. Primary area A03; A05 river/resource identity and visibility, A07 unchanged yields. The user selected variant 2, **Ručně kreslené koryto**, for implementation. Status: `done`; targeted and mandatory local acceptance passed, with [actual evidence](../functional-tests.md#r-0300-hand-drawn-rivers-2026-10-26).
-2. [R-0304](R-0304.md) captures the follow-up for longer bends closer to that reference and natural coastal mouths, with four visual examples. Status: `new`; A03 owns appearance, with A05 terminal-placement/visibility and unchanged A07 outcomes. The existing dry coastal buffer remains a refinement dependency.
+2. [R-0304](done/R-0304.md) captures the follow-up for longer bends closer to that reference and natural coastal mouths, with four visual examples. Status: `done` by the user’s decision on 2026-10-31; A03 owns appearance, with A05 terminal-placement/visibility and unchanged A07 outcomes. The existing dry coastal buffer remains a refinement dependency.
 
 ## Generated river placement (2026-10-26)
 
@@ -828,9 +836,9 @@ remain owned by their current requirements; acceptance is recorded in the
 
 ## Screen design alternatives (2026-10-27)
 
-1. [R-0321](R-0321.md), primary area A03, captures three proposed layouts for each
+1. [R-0321](done/R-0321.md), primary area A03, captures three proposed layouts for each
    of ten in-game screen families: statistics, goals, Congress, Europe, colony,
-   trade, turn reports, relations, help and settings. Status: `new`. The user selected Atlas on 2026-10-27.
+   trade, turn reports, relations, help and settings. Status: `done` by the user’s decision on 2026-10-31. The user selected Atlas on 2026-10-27.
    [R-0323](done/R-0323.md) implements Statistics first; other screens remain separate
    refinement steps. A06/A07/A08/A10 retain their
    rules and data, and A01 retains settings/navigation responsibilities.

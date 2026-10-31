@@ -12,7 +12,7 @@ rohem. Jezera jsou oddělená od oceánu souvislou pevninou. Oprava platí pro n
 zahájené hry; uložené rozehrané pozice se nepřepisují. Ověření je vedené v
 [testové evidenci](functional-tests.md#r-0302-bundled-map-geography-2026-10-26).
 
-Výjimka z 27. října 2026: [R-0313](requirements/R-0313.md) prodlužuje velkou
+Výjimka z 27. října 2026: [R-0313](requirements/done/R-0313.md) prodlužuje velkou
 řeku Původního světa z (24, 13) na pobřežní (25, 13), aby bylo možné posuzovat
 její vzhled. Výjimka platí jen pro toto pole; generované řeky se nemění.
 Testy této změny nebyly na výslovné přání uživatele spuštěny.

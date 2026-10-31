@@ -6,8 +6,8 @@
 
 | UC | Category | Player outcome | Owners |
 | --- | --- | --- | --- |
-| UC-001 | Nastavení | Nastavit mapu nové partie | [R-0065](done/R-0065.md), [R-0221](R-0221.md), [R-0014](done/R-0014.md), [R-0209](R-0209.md) |
-| UC-002 | Nastavení | Zvolit národ a obtížnost | [R-0063](done/R-0063.md), [R-0064](done/R-0064.md), [R-0066](done/R-0066.md), [R-0209](R-0209.md) |
+| UC-001 | Nastavení | Nastavit mapu nové partie | [R-0065](done/R-0065.md), [R-0221](R-0221.md), [R-0014](done/R-0014.md), [R-0209](canceled/R-0209.md) |
+| UC-002 | Nastavení | Zvolit národ a obtížnost | [R-0063](done/R-0063.md), [R-0064](done/R-0064.md), [R-0066](done/R-0066.md), [R-0209](canceled/R-0209.md) |
 | UC-003 | Hra | Uplatnit národní výhodu | [R-0076](done/R-0076.md), [R-0153](done/R-0153.md), [R-0174](done/R-0174.md), [R-0144](done/R-0144.md), [R-0208](done/R-0208.md) |
 | UC-004 | Hra | Zachovat herní profil a postupovat kalendářem | [R-0051](done/R-0051.md), [R-0063](done/R-0063.md), [R-0064](done/R-0064.md), [R-0066](done/R-0066.md), [R-0208](done/R-0208.md) |
 | UC-005 | Hra | Dokončit tah ve správném pořadí | [R-0052](done/R-0052.md), [R-0151](done/R-0151.md) |
@@ -124,4 +124,4 @@
 | UC-116 | Hra | Dvě kolonie vytvoří výrobní síť | [R-0218](done/R-0218.md) |
 | UC-117 | Hra | Diplomacie má důsledky v ekonomice a válce | [R-0219](done/R-0219.md) |
 | UC-118 | Hra | Získat nezávislost a konečné skóre | [R-0220](done/R-0220.md) |
-| UC-119 | Regrese | Zachovat pravidla při změně vzhledu | [Functional regression contract](../functional-tests.md), [graphics acceptance](R-0224.md) |
+| UC-119 | Regrese | Zachovat pravidla při změně vzhledu | [Functional regression contract](../functional-tests.md), [graphics acceptance](canceled/R-0224.md) |

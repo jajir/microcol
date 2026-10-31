@@ -7,7 +7,7 @@
 | Rule | Owners | Boundary |
 | --- | --- | --- |
 | SETUP-001 | [R-0065](done/R-0065.md), [R-0221](R-0221.md), [R-0014](done/R-0014.md) | Generated/customized geography and authored America are distinct outcomes; existing selector retained. |
-| SETUP-002 | [R-0064](done/R-0064.md), [R-0208](done/R-0208.md), [R-0209](R-0209.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| SETUP-002 | [R-0064](done/R-0064.md), [R-0208](done/R-0208.md), [R-0209](canceled/R-0209.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | SETUP-003 | [R-0066](done/R-0066.md), [R-0063](done/R-0063.md), [R-0015](done/R-0015.md), [R-0014](done/R-0014.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | SETUP-008 | [R-0066](done/R-0066.md), [R-0051](done/R-0051.md), [R-0014](done/R-0014.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | SUPPORT-002 | [R-0203](done/R-0203.md) | One Congress/REF report owner, not duplicate SUPPORT002 and report candidate. |

@@ -657,7 +657,7 @@ Skutečné snímky R-0346 z Docker/Xvfb, 29. října 2026: [široké okno 2 560 
 
 ## Atlas statistik — 27. října 2026
 
-1. Uživatel vybral směr Atlas z [návrhů obrazovek](requirements/R-0321.md).
+1. Uživatel vybral směr Atlas z [návrhů obrazovek](requirements/done/R-0321.md).
    První implementaci vlastní [R-0323](requirements/done/R-0323.md): vlevo stálý
    rejstřík všech dvanácti přehledů, vpravo nadpis a jeden graf nebo report.
    Papírový podklad sjednocuje celou plochu; dvě části odděluje jemná linka.
@@ -855,7 +855,7 @@ Tento krok neupravuje další obrazovky z galerie.
 Tento dřívější výběr a jeho náhledy jsou historické; nahrazuje je
 [úzké ústí s obrysem](#uzke-usti-a-obrys-reky-27-rijna-2026).
 
-1. Pro [R-0304](requirements/R-0304.md) uživatel vybral **variantu B: dvě ramena
+1. Pro [R-0304](requirements/done/R-0304.md) uživatel vybral **variantu B: dvě ramena
    kolem drobného protáhlého ostrůvku**. Jde o jediný společný vzhled; výběr
    variant pro jednotlivé mapy ani ústí se nyní nezavádí.
 2. Řeka otevře pobřežní čáru a obě ramena souvisle navážou na moře. Ostrůvek
@@ -863,7 +863,7 @@ Tento dřívější výběr a jeho náhledy jsou historické; nahrazuje je
    Realizace má zachovat společné jednolité barvy a ruční charakter kresby.
 3. Obrázek je vybraný návrh vytvořený ImageGenem ze screenshotu, nikoli snímek
    implementované hry. Výběr nemění generování řek ani pobřežní pravidla;
-   výjimku Original World na (25, 13) nadále určuje [R-0313](requirements/R-0313.md).
+   výjimku Original World na (25, 13) nadále určuje [R-0313](requirements/done/R-0313.md).
    Následně uživatel výslovně zadal implementaci v [R-0315](requirements/canceled/R-0315.md).
 4. Vykreslování nyní otevírá známý koncový úsek směrem k prozkoumanému oceánu
    přes společnou hranu. Volí směr navazující na přítok; kontakt pouze rohem,
@@ -883,7 +883,7 @@ Tento dřívější výběr a jeho náhledy jsou historické; nahrazuje je
 
 ## Delší oblouky a ústí řek — návrhy 26. října 2026
 
-1. [R-0304](requirements/R-0304.md) zachycuje uživatelovu žádost přiblížit řeky
+1. [R-0304](requirements/done/R-0304.md) zachycuje uživatelovu žádost přiblížit řeky
    původní variantě „Ručně kreslené koryto“ a ukázat rozšíření ústí do oceánu.
    Současná implementace R-0300 ohýbá jednotlivá políčka; návrhy používají delší
    oblouky přes několik polí a zachovávají bonusy nad vodou.
@@ -898,7 +898,7 @@ Tento dřívější výběr a jeho náhledy jsou historické; nahrazuje je
    ostrůvek byl následně vybrán ve variantě B výše. Barevný přechod zůstává
    historickým návrhem; platí společný plochý styl a ostrov není herním terénem.
 4. R-0301/R-0302 drží řeky ve vnitrozemí bez sousedství s vodou; pozdější
-   výjimku Original World na (25, 13) určuje [R-0313](requirements/R-0313.md). R-0304
+   výjimku Original World na (25, 13) určuje [R-0313](requirements/done/R-0313.md). R-0304
    proto eviduje otázku výjimky pro koncový úsek. Výtvarné ukázky nemění
    pravidla generování, pevné mapy ani uložené hry.
 
@@ -1500,8 +1500,8 @@ na vyplněný obrys jde o geometrii, kterou `non-scaling-stroke` neochrání.
    fokus a nedostupnost. Posoudit souvislost čáry, čitelnost a neslévání detailů;
    samotná kontrola atributu v XML nestačí.
 5. Opakovatelnost exportu a evidence rozměrů patří do [R-0225](requirements/R-0225.md),
-   kontrola viditelného výsledku do [R-0224](requirements/R-0224.md) a kontrola
-   ovládání do [R-0222](requirements/R-0222.md). Tato dohoda je nezahajuje.
+   kontrola viditelného výsledku do [R-0224](requirements/canceled/R-0224.md) a kontrola
+   ovládání do [R-0222](requirements/canceled/R-0222.md). Tato dohoda je nezahajuje.
    V nynějším zápisu nebyly přegenerovány herní obrázky ani ověřen runtime.
 
 ## Jak obrázek projde od kresby do hry

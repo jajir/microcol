@@ -10,6 +10,12 @@ publishes the game from the same pushed `main` revision when the change is not
 limited to `docs/`; [docs-only filtering](development-builds.md#ci-filtering)
 keeps the current game download unchanged.
 
+## Requirement status decisions — 2026-10-31
+
+1. At the user’s explicit request, the [backlog](requirements/backlog.md) marks R-0304, R-0313 and R-0321 as `done`, and R-0209, R-0222, R-0223, R-0224, R-0226, R-0229, R-0230 and R-0233 as `canceled`. The repeated R-0230 entry is applied once.
+2. This documentation-only change moves the analyses to their status directories, repairs links and removes canceled questions from the active refinement index. Earlier implementation and acceptance records remain unchanged; no gameplay work or new acceptance result is claimed.
+3. All tests, documentation consistency checks and strict MkDocs are omitted under the user’s explicit instruction for this task. Remote CI, Pages and game distributions are not checked.
+
 ## R-0378 Europe purchase requirement — 2026-10-31
 
 1. [R-0378](requirements/R-0378.md) captures the requested confirmation and explanation
@@ -948,7 +954,7 @@ documentation in APT just to make it visible on the web.
 
 ## R-0321 screen design proposals — 2026-10-27
 
-1. [R-0321](requirements/R-0321.md) captures three proposed layouts for each of
+1. [R-0321](requirements/done/R-0321.md) captures three proposed layouts for each of
    ten screen families, based on source revision
    `d318a0508266708c61e79b92af7f8a744fdb8be0` and the saved R-0307 screenshots.
    The requirement remains `new`: choosing a screen precedes detailed refinement
