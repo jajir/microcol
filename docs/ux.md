@@ -1,5 +1,11 @@
 # UX a pravidla ovládání MicroCol
 
+## Vylodění pasažérů — R-0379
+
+1. Dohodnuto 31. října 2026, dosud neimplementováno: při vylodění z lodi na vybrané sousední pole rozhoduje počet pasažérů způsobilých vystoupit právě tam, nikoli celkový počet lidí na palubě. Jediný způsobilý pasažér vystoupí přímo bez dialogu; při více způsobilých se otevře výběr. Rozsah a příklady vlastní [R-0379](requirements/R-0379.md).
+2. Výběr používá checkboxy, při každém otevření všechny nezaškrtnuté. Hráč může označit jednoho, několik nebo všechny pasažéry. Nadpis mluví o více pasažérech a tlačítko „Vylodit vybrané“ je neaktivní, dokud není někdo označený. Potvrzení vylodí pouze označené; Zrušit a Escape nevylodí nikoho. Ovládání zůstává dostupné klávesnicí.
+3. Přímé vylodění jediného pasažéra nemá dodatečný krok zrušení. Zachovávají se pravidla způsobilosti, pohybu a odmítnutí neplatného převodu; změna se netýká přístavního příjezdu ani jiných operací s nákladem. Historické [R-0022](requirements/done/R-0022.md) a jeho výsledky zůstávají záznamem původního chování.
+
 ## Kontext mapy a návrat po konci hry — 31. října 2026
 
 1. [R-0374](requirements/done/R-0374.md) zachovává popis políčka po kliknutí z horní lišty zpět na mapu. Ztráta fokusu tlačítka nesmí ponechat stavový řádek prázdný, když ukazatel zůstává na platném políčku; neprozkoumané území dál neodhaluje informace o soupeři.
