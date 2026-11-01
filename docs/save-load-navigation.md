@@ -18,6 +18,11 @@ obsahu, návraty podle skutečného původu a platformní zkratky. Stav je `new`
 níže uvedený dialogový přehled a současné zkratky zůstávají popisem dosavadní
 implementace. Odstranění samostatné položky Body obnovy stále vlastní R-0376.
 
+**Návrh z 1. listopadu 2026:** [R-0387](requirements/R-0387.md) navrhuje
+ptát se při odchodu pouze na neuložený herní stav, oddělit nastavení od herního
+postupu a upřesnit počáteční checkpoint i význam rychlého uložení. Stav `new`;
+nejde dosud o schválenou změnu ani implementaci. Níže zůstává současný kontrakt.
+
 ## Náhledy a soubor uložené hry — schváleno 31. října 2026
 
 1. [R-0383](requirements/R-0383.md), stav `new`, vlastní schválený seznam
