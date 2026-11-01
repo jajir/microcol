@@ -26,6 +26,7 @@
 	<entry key="openEurope">Otevřít Evropu</entry>
 	<entry key="forestLumberLostFull">Les vykácen na (%s, %s): ztraceno dřeva: %s. Sklad kolonie %s je plný.</entry>
 	<entry key="forestLumberLostNoColony">Les vykácen na (%s, %s): ztraceno dřeva: %s. Do dvou polí není žádná vaše kolonie.</entry>
+	<entry key="fieldPlowed">%s #%s na (%s, %s): Práce na novém poli jsou dokončeny. Jednotka může dostat další příkazy.</entry>
 
 	<entry key="buttonBack">Zpět</entry>
 	

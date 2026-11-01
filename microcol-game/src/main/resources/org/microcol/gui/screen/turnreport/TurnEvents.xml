@@ -26,6 +26,7 @@
 	<entry key="openEurope">Open Europe</entry>
 	<entry key="forestLumberLostFull">Forest cleared at (%s, %s): lumber lost: %s. The warehouse of colony %s is full.</entry>
 	<entry key="forestLumberLostNoColony">Forest cleared at (%s, %s): lumber lost: %s. No colony of yours is within two squares.</entry>
+	<entry key="fieldPlowed">%s #%s at (%s, %s): Work on the new field is complete. The unit can receive new orders.</entry>
 	
 	<entry key="buttonBack">Back</entry>
 

@@ -1,6 +1,7 @@
 package org.microcol.test;
 
 import java.io.File;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,8 @@ import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.PlowPage;
 import org.microcol.page.RightPanelUnit;
+import org.microcol.page.ScreenTurnReport;
+import org.microcol.page.SettingPage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -20,13 +23,23 @@ import javafx.stage.Stage;
 
 /**
  * Verify that pressing P starts plowing, consumes movement and hides the
- * action, and that plow work can be rejected, canceled and completed.
+ * action, that plow work can be rejected, canceled and completed, that the unit
+ * panel shows its countdown (R-0391) and that the turn report announces the
+ * completed field once (R-0393).
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_18_F01_plow_field_test extends AbstractMicroColTest {
 
     private final static Location COLONY_LOCATION = Location.of(22, 12);
     private final static Location NEAR_LOCATION = Location.of(23, 12);
+
+    private final static String COMPLETION_NOTICE = "at (23, 12): "
+            + "Work on the new field is complete. "
+            + "The unit can receive new orders.";
+
+    private final static String CZECH_COMPLETION_NOTICE = "na (23, 12): "
+            + "Práce na novém poli jsou dokončeny. "
+            + "Jednotka může dostat další příkazy.";
 
     private final static File testFileName = new File(
             "src/test/scenarios/F01-embark-disembark.microcol");
@@ -86,6 +99,11 @@ public class TC_18_F01_plow_field_test extends AbstractMicroColTest {
         gamePage.verifyUnitAction(capturedUnit, UnitActionType.plowField);
         gamePage.verifyUnitActionPoints(capturedUnit, 0);
         gamePage.verifyUnitLocation(capturedUnit, NEAR_LOCATION);
+
+        // The unit panel shows the whole countdown of the new work.
+        gamePage.selectTile(NEAR_LOCATION);
+        new PlowPage(getContext()).verifyPlowProgressShown(NEAR_LOCATION,
+                "Plowing — 4 turns left");
     }
 
     @Test
@@ -165,6 +183,7 @@ public class TC_18_F01_plow_field_test extends AbstractMicroColTest {
         gamePage.nextTurnAndCloseDialogs();
         gamePage.selectTile(NEAR_LOCATION);
         plow.verifyRemainingUpdates(NEAR_LOCATION, 0, 3);
+        plow.verifyPlowProgressShown(NEAR_LOCATION, "Plowing — 3 turns left");
 
         // Cancel: the order is gone, no movement or tools are refunded.
         plow.cancelWork();
@@ -172,9 +191,16 @@ public class TC_18_F01_plow_field_test extends AbstractMicroColTest {
         plow.verifyCancelControlVisible(false);
         plow.verifyFieldAt(NEAR_LOCATION, false);
 
-        // Waiting beyond the original completion leaves terrain and tools.
+        // The countdown line disappears with the canceled work.
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyPlowProgressHidden();
+
+        // Waiting beyond the original completion leaves terrain and tools, and
+        // no report announces a completed field.
         for (int update = 0; update < 4; update++) {
-            gamePage.nextTurnAndCloseDialogs();
+            final Optional<ScreenTurnReport> report = gamePage.nextTurn();
+            plow.verifyNoCompletionReported(report);
+            plow.closeReport(report);
         }
         plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 100);
         plow.verifyFieldAt(NEAR_LOCATION, false);
@@ -196,13 +222,26 @@ public class TC_18_F01_plow_field_test extends AbstractMicroColTest {
         gamePage.dragMouseAtLocation(NEAR_LOCATION);
         gamePage.nextTurnAndCloseDialogs();
         gamePage.pressP();
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyPlowProgressShown(NEAR_LOCATION, "Plowing — 4 turns left");
 
-        // Two updates later the countdown is halfway and nothing is charged.
+        // One update leaves three, and Continue shows the same three.
         gamePage.nextTurnAndCloseDialogs();
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyPlowProgressShown(NEAR_LOCATION, "Plowing — 3 turns left");
+        gamePage.exitToMenu();
+        gamePage = new FreePlayAuditPage(getContext()).continueGame();
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyRemainingUpdates(NEAR_LOCATION, 0, 3);
+        plow.verifyPlowProgressShown(NEAR_LOCATION, "Plowing — 3 turns left");
+
+        // The second update makes the countdown halfway; nothing is charged.
         gamePage.nextTurnAndCloseDialogs();
         plow.verifyRemainingUpdates(NEAR_LOCATION, 0, 2);
         plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.plowField, 0, 100);
         plow.verifyFieldAt(NEAR_LOCATION, false);
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyPlowProgressShown(NEAR_LOCATION, "Plowing — 2 turns left");
 
         // Continue keeps the countdown without advancing it.
         gamePage.exitToMenu();
@@ -210,16 +249,31 @@ public class TC_18_F01_plow_field_test extends AbstractMicroColTest {
         plow.verifyRemainingUpdates(NEAR_LOCATION, 0, 2);
         plow.verifyFieldAt(NEAR_LOCATION, false);
 
-        // The next update leaves one, and the fourth completes exactly once.
-        gamePage.nextTurnAndCloseDialogs();
+        // The next update leaves the last one; no completion is reported yet.
+        Optional<ScreenTurnReport> report = gamePage.nextTurn();
+        plow.verifyNoCompletionReported(report);
+        plow.closeReport(report);
         plow.verifyRemainingUpdates(NEAR_LOCATION, 0, 1);
         plow.verifyFieldAt(NEAR_LOCATION, false);
-        gamePage.nextTurnAndCloseDialogs();
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyPlowProgressShown(NEAR_LOCATION,
+                "Plowing — completes at the start of next turn");
+
+        // The fourth update completes exactly once and reports it once.
+        report = gamePage.nextTurn();
+        plow.verifyCompletionReported(report, NEAR_LOCATION, 0,
+                COMPLETION_NOTICE, 1);
+        plow.closeReport(report);
         plow.verifyFieldAt(NEAR_LOCATION, true);
         plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 0, 80);
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyPlowProgressHidden();
 
-        // Later updates do not charge again, and Continue keeps the field.
-        gamePage.nextTurnAndCloseDialogs();
+        // Later updates do not charge or report again, and Continue keeps the
+        // field.
+        report = gamePage.nextTurn();
+        plow.verifyNoCompletionReported(report);
+        plow.closeReport(report);
         plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 80);
         gamePage.exitToMenu();
         gamePage = new FreePlayAuditPage(getContext()).continueGame();
@@ -243,14 +297,130 @@ public class TC_18_F01_plow_field_test extends AbstractMicroColTest {
         gamePage.nextTurnAndCloseDialogs();
         gamePage.pressP();
         plow.verifyRemainingUpdates(NEAR_LOCATION, 0, 2);
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyPlowProgressShown(NEAR_LOCATION, "Plowing — 2 turns left");
 
         // The first update leaves one; the second completes the field.
         gamePage.nextTurnAndCloseDialogs();
         plow.verifyRemainingUpdates(NEAR_LOCATION, 0, 1);
         plow.verifyFieldAt(NEAR_LOCATION, false);
-        gamePage.nextTurnAndCloseDialogs();
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyPlowProgressShown(NEAR_LOCATION,
+                "Plowing — completes at the start of next turn");
+        final Optional<ScreenTurnReport> report = gamePage.nextTurn();
+        plow.verifyCompletionReported(report, NEAR_LOCATION, 0,
+                COMPLETION_NOTICE, 1);
+        plow.closeReport(report);
         plow.verifyFieldAt(NEAR_LOCATION, true);
         plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 0, 80);
+
+        // The countdown line is gone once the field exists.
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyPlowProgressHidden();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_08_plowing_countdown_follows_selected_unit() throws Exception {
+        // Equip the colonists of a scoped copy and load it.
+        PlowFixture.prepare(getContext(), testFileName,
+                "plow-f01-selection.microcol", 100, null, NEAR_LOCATION);
+        GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+        final PlowPage plow = new PlowPage(getContext());
+
+        // The colony square is selected; its own idle units show no countdown.
+        gamePage.verifyThatSelectedTileIs(COLONY_LOCATION);
+        plow.verifyPlowProgressHidden();
+
+        // Move the third colonist next to the colony and start a new turn.
+        gamePage.getRightPanelUnit(2).selectUnit();
+        gamePage.moveMouseAtLocation(COLONY_LOCATION);
+        gamePage.dragMouseAtLocation(NEAR_LOCATION);
+        gamePage.nextTurnAndCloseDialogs();
+
+        // The colonist without a plowing order shows no countdown.
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyPlowProgressHidden();
+
+        // Start plowing; the same colonist now shows the countdown.
+        gamePage.pressP();
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyPlowProgressShown(NEAR_LOCATION, "Plowing — 4 turns left");
+
+        // Switch to the colony square: its idle units show no countdown.
+        gamePage = gamePage.openColonyAt(COLONY_LOCATION, "Delft").close();
+        gamePage.verifyThatSelectedTileIs(COLONY_LOCATION);
+        plow.verifyPlowProgressHidden();
+
+        // Back on the plowing square the current countdown is shown again.
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyPlowProgressShown(NEAR_LOCATION, "Plowing — 4 turns left");
+        plow.captureRightPanel("plow-countdown-selection.png");
+
+        // After an owner update the reselected square shows the new countdown.
+        gamePage.nextTurnAndCloseDialogs();
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyPlowProgressShown(NEAR_LOCATION, "Plowing — 3 turns left");
+    }
+
+    @Test
+    @Tag("local")
+    void TC_09_plowing_completion_report_survives_continue() throws Exception {
+        // Switch to Czech and load hardy pioneers in a scoped copy.
+        PlowFixture.prepare(getContext(), testFileName,
+                "plow-f01-report.microcol", 100, "HARDY_PIONEER",
+                NEAR_LOCATION);
+        SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        GamePage gamePage = settings.goBack().loadGame();
+        final PlowPage plow = new PlowPage(getContext());
+
+        // Move the third pioneer next to the colony and start plowing.
+        gamePage.getRightPanelUnit(2).selectUnit();
+        gamePage.moveMouseAtLocation(COLONY_LOCATION);
+        gamePage.dragMouseAtLocation(NEAR_LOCATION);
+        gamePage.nextTurnAndCloseDialogs();
+        gamePage.pressP();
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyPlowProgressShown(NEAR_LOCATION, "Orání — zbývají 2 tahy");
+
+        // The last remaining update is announced in Czech in the panel.
+        gamePage.nextTurnAndCloseDialogs();
+        gamePage.selectTile(NEAR_LOCATION);
+        plow.verifyPlowProgressShown(NEAR_LOCATION,
+                "Orání — dokončení na začátku příštího tahu");
+        plow.captureRightPanel("plow-countdown-last-czech.png");
+
+        // The completing update reports the new field once, in Czech.
+        Optional<ScreenTurnReport> report = gamePage.nextTurn();
+        plow.verifyCompletionReported(report, NEAR_LOCATION, 0,
+                CZECH_COMPLETION_NOTICE, 1);
+        report.get().captureDialog("closeButtonId",
+                "plow-completion-report-czech.png");
+        plow.closeReport(report);
+        plow.verifyFieldAt(NEAR_LOCATION, true);
+
+        // Continue restores the same single notice without repeating the work.
+        gamePage.exitToMenu();
+        gamePage = new FreePlayAuditPage(getContext()).continueGame();
+        plow.verifyFieldAt(NEAR_LOCATION, true);
+        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 0, 80);
+        report = Optional.of(gamePage.openTurnReport());
+        plow.verifyCompletionReported(report, NEAR_LOCATION, 0,
+                CZECH_COMPLETION_NOTICE, 1);
+        plow.closeReport(report);
+
+        // Reopening the report still lists it once.
+        report = Optional.of(gamePage.openTurnReport());
+        plow.verifyCompletionReported(report, NEAR_LOCATION, 0,
+                CZECH_COMPLETION_NOTICE, 1);
+        plow.closeReport(report);
+
+        // The next update brings no new completion and charges nothing more.
+        report = gamePage.nextTurn();
+        plow.verifyNoCompletionReported(report);
+        plow.closeReport(report);
+        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 80);
     }
 
     @Test

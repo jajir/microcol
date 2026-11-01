@@ -398,6 +398,8 @@ public class ButtonsGamePanelController {
                     StatusBarMessageEvent.Source.GAME));
         }
         updateUnitOrders();
+        // The unit panel stops showing the plowing countdown at once.
+        eventBus.post(new RefreshRightPanelEvent());
     }
 
     /**

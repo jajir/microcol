@@ -5,6 +5,7 @@ import org.microcol.model.Model;
 import org.microcol.model.Terrain;
 import org.microcol.model.store.UnitActionPlowFieldPo;
 import org.microcol.model.store.UnitActionPo;
+import org.microcol.model.turnevent.TurnEventProvider;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -94,6 +95,9 @@ public final class UnitActionPlowField implements UnitAction {
         ((UnitFreeColonist) unit).consumeWorkTools(REQUIRED_TOOLS);
         model.getMap().plowFiled(unit.getLocation());
         model.recordNativeLandUse(unit.getOwner(), unit.getLocation());
+        // Only the created field is reported, once, to the pioneer's owner.
+        model.getTurnEventStore().add(TurnEventProvider
+                .getFieldPlowed(unit.getOwner(), unit, unit.getLocation()));
         return true;
     }
 

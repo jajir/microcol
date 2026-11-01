@@ -183,6 +183,47 @@ public final class TurnEventPo {
         clearedY = value;
     }
 
+    /**
+     * Pioneer that finished plowing and the new field, for its own event type
+     * only (R-0393).
+     */
+    private Integer fieldPlowedUnitId;
+    private UnitType fieldPlowedUnitType;
+    private Integer fieldPlowedX;
+    private Integer fieldPlowedY;
+
+    public Integer getFieldPlowedUnitId() {
+        return fieldPlowedUnitId;
+    }
+
+    public void setFieldPlowedUnitId(final Integer value) {
+        fieldPlowedUnitId = value;
+    }
+
+    public UnitType getFieldPlowedUnitType() {
+        return fieldPlowedUnitType;
+    }
+
+    public void setFieldPlowedUnitType(final UnitType value) {
+        fieldPlowedUnitType = value;
+    }
+
+    public Integer getFieldPlowedX() {
+        return fieldPlowedX;
+    }
+
+    public void setFieldPlowedX(final Integer value) {
+        fieldPlowedX = value;
+    }
+
+    public Integer getFieldPlowedY() {
+        return fieldPlowedY;
+    }
+
+    public void setFieldPlowedY(final Integer value) {
+        fieldPlowedY = value;
+    }
+
     private Founder founder;
 
     private Integer income;

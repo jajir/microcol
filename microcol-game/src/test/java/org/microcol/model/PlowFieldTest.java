@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -12,7 +13,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
+import org.microcol.model.store.TurnEventPo;
 import org.microcol.model.store.UnitActionPlowFieldPo;
+import org.microcol.model.turnevent.TurnEventFieldPlowed;
 import org.microcol.model.unit.UnitActionConverter;
 import org.microcol.model.unit.UnitActionPlowField;
 import org.microcol.model.unit.UnitActionType;
@@ -77,6 +80,210 @@ class PlowFieldTest {
 
     private int remaining(final Unit unit) {
         return ((UnitActionPlowField) unit.getAction()).getRemainingTurns();
+    }
+
+    private UnitFreeColonist hardy(final Model model, final int tools,
+            final Location at) {
+        final Player buyer = model.getPlayerByName("Dutch");
+        buyer.setGold(UnitType.HARDY_PIONEER.getEuropePrice());
+        buyer.buy(UnitType.HARDY_PIONEER);
+        final UnitFreeColonist hardy = (UnitFreeColonist) buyer.getAllUnits()
+                .stream()
+                .filter(unit -> unit.getType() == UnitType.HARDY_PIONEER)
+                .findFirst().orElseThrow();
+        hardy.placeToLocation(at);
+        hardy.setTools(tools);
+        hardy.setActionPoints(hardy.getSpeed());
+        return hardy;
+    }
+
+    private List<TurnEventFieldPlowed> notices(final Model model,
+            final Player player) {
+        return model.getTurnEventStore().getForPlayer(player).stream()
+                .filter(TurnEventFieldPlowed.class::isInstance)
+                .map(TurnEventFieldPlowed.class::cast)
+                .collect(Collectors.toList());
+    }
+
+    private List<TurnEventFieldPlowed> dutchNotices(final Model model) {
+        return notices(model, model.getPlayerByName("Dutch"));
+    }
+
+    private void verifyNotice(final TurnEventFieldPlowed notice,
+            final Unit unit, final Location expectedField) {
+        assertEquals("Dutch", notice.getPlayerName());
+        assertEquals(unit.getId(), notice.getUnitId());
+        assertEquals(unit.getType(), notice.getUnitType());
+        assertEquals(expectedField, notice.getLocation());
+    }
+
+    @Test
+    void ordinaryCompletionReportsOnceToTheOwnerOnly() {
+        final Model model = fixture();
+        final UnitFreeColonist pioneer = pioneer(model, 100, TARGET);
+        pioneer.setActionType(UnitActionType.plowField);
+        assertTrue(dutchNotices(model).isEmpty());
+        for (int turn = 0; turn < 3; turn++) {
+            nextOwnerTurn(model);
+            assertTrue(dutchNotices(model).isEmpty(),
+                    "Progress must not be reported as completion");
+        }
+        nextOwnerTurn(model);
+        assertTrue(model.getMap().getTerrainAt(TARGET).isHasField());
+        final List<TurnEventFieldPlowed> notices = dutchNotices(model);
+        assertEquals(1, notices.size());
+        verifyNotice(notices.get(0), pioneer, TARGET);
+        model.getPlayers().stream()
+                .filter(player -> !"Dutch".equals(player.getName()))
+                .forEach(player -> assertTrue(notices(model, player).isEmpty(),
+                        "Another player must not see the notice"));
+        // The next owner update has no new completion and no repeat.
+        nextOwnerTurn(model);
+        assertTrue(dutchNotices(model).isEmpty());
+    }
+
+    @Test
+    void hardyCompletionReportsAfterTwoUpdates() {
+        final Model model = fixture();
+        final UnitFreeColonist hardy = hardy(model, 100, TARGET);
+        hardy.setActionType(UnitActionType.plowField);
+        assertEquals(2, remaining(hardy));
+        nextOwnerTurn(model);
+        assertEquals(1, remaining(hardy));
+        assertTrue(dutchNotices(model).isEmpty());
+        nextOwnerTurn(model);
+        final List<TurnEventFieldPlowed> notices = dutchNotices(model);
+        assertEquals(1, notices.size());
+        verifyNotice(notices.get(0), hardy, TARGET);
+        assertEquals(UnitType.HARDY_PIONEER, notices.get(0).getUnitType());
+    }
+
+    @Test
+    void canceledStaleAndToollessWorkReportNoCompletion() {
+        final Model model = fixture();
+        final UnitFreeColonist canceled = pioneer(model, 100, TARGET);
+        canceled.setActionType(UnitActionType.plowField);
+        nextOwnerTurn(model);
+        model.cancelPlow(canceled);
+        final UnitFreeColonist toolless = pioneer(model, 100, TARGET);
+        toolless.setActionType(UnitActionType.plowField);
+        toolless.setTools(5);
+        for (int turn = 0; turn < 5; turn++) {
+            nextOwnerTurn(model);
+            assertTrue(dutchNotices(model).isEmpty());
+        }
+        final UnitFreeColonist stale = pioneer(model, 100, TARGET);
+        stale.setActionType(UnitActionType.plowField);
+        model.getMap().plowFiled(TARGET);
+        nextOwnerTurn(model);
+        assertEquals(UnitActionType.noAction, stale.getAction().getType());
+        assertTrue(dutchNotices(model).isEmpty(),
+                "A field made by someone else is not this unit's completion");
+    }
+
+    @Test
+    void retainedCallbackAfterCompletionDoesNotRepeatTheNotice() {
+        final Model model = fixture();
+        final UnitFreeColonist pioneer = pioneer(model, 100, TARGET);
+        pioneer.setActionType(UnitActionType.plowField);
+        final UnitActionPlowField action = (UnitActionPlowField) pioneer
+                .getAction();
+        action.setRemainingTurns(1);
+        nextOwnerTurn(model);
+        assertEquals(1, dutchNotices(model).size());
+        assertTrue(action.startTurn(model, pioneer));
+        assertEquals(1, dutchNotices(model).size());
+    }
+
+    @Test
+    void everyCompletingPioneerGetsItsOwnNotice() {
+        final GameModelPo data = data(false, false);
+        final Set<Location> trees = data.getModel().getMap().getTreeSet();
+        final Set<Location> fields = data.getModel().getMap().getFieldSet();
+        TARGET.getNeighbors().forEach(neighbor -> {
+            trees.remove(neighbor);
+            fields.remove(neighbor);
+        });
+        data.getModel().getMap().setTrees(trees);
+        data.getModel().getMap().setFields(fields);
+        final Model model = make(data);
+        final UnitFreeColonist first = pioneer(model, 100, TARGET);
+        final UnitFreeColonist second = pioneer(model, 100, TARGET);
+        final Location other = TARGET.getNeighbors().stream()
+                .filter(neighbor -> model.getMap().isValid(neighbor))
+                .filter(neighbor -> model.getMap().getTerrainAt(neighbor)
+                        .getTerrainType().isCanHaveField()
+                        && model.getColonyAt(neighbor).isEmpty())
+                .filter(neighbor -> {
+                    second.placeToLocation(neighbor);
+                    return model.getPlowProblem(second).isEmpty();
+                }).findFirst().orElseThrow();
+        second.placeToLocation(other);
+        first.setActionType(UnitActionType.plowField);
+        second.setActionType(UnitActionType.plowField);
+        for (int turn = 0; turn < 4; turn++) {
+            nextOwnerTurn(model);
+        }
+        final List<TurnEventFieldPlowed> notices = dutchNotices(model);
+        assertEquals(2, notices.size());
+        verifyNotice(notices.stream()
+                .filter(notice -> notice.getUnitId() == first.getId())
+                .findFirst().orElseThrow(), first, TARGET);
+        verifyNotice(notices.stream()
+                .filter(notice -> notice.getUnitId() == second.getId())
+                .findFirst().orElseThrow(), second, other);
+    }
+
+    @Test
+    void completionNoticeSurvivesDiskRoundtripWithoutDuplication() {
+        final GameModelPo data = data(false, false);
+        Model model = make(data);
+        final UnitFreeColonist pioneer = pioneer(model, 100, TARGET);
+        final int id = pioneer.getId();
+        pioneer.setActionType(UnitActionType.plowField);
+        ((UnitActionPlowField) pioneer.getAction()).setRemainingTurns(1);
+        nextOwnerTurn(model);
+        assertEquals(1, dutchNotices(model).size());
+        data.setModel(model.save());
+        final Path file = directory.resolve("plowed.microcol");
+        dao.saveToFile(file.toString(), data);
+        model = make(dao.loadFromFile(file.toFile()));
+        final String saved = gson.toJson(model.save());
+        final List<TurnEventFieldPlowed> notices = dutchNotices(model);
+        assertEquals(1, notices.size());
+        verifyNotice(notices.get(0), model.getUnitById(id), TARGET);
+        // Reading the restored report again changes nothing.
+        assertEquals(1, dutchNotices(model).size());
+        assertEquals(saved, gson.toJson(model.save()));
+        nextOwnerTurn(model);
+        assertTrue(dutchNotices(model).isEmpty());
+    }
+
+    @Test
+    void incompleteOrInvalidSavedNoticeIsRejected() {
+        final TurnEventPo other = new TurnEventPo();
+        other.setType("TurnEventGoTo");
+        assertNull(TurnEventFieldPlowed.tryLoad(other));
+        for (int missing = 0; missing < 4; missing++) {
+            final TurnEventPo po = new TurnEventPo();
+            po.setType(TurnEventFieldPlowed.class.getSimpleName());
+            po.setPlayerName("Dutch");
+            po.setFieldPlowedUnitId(missing == 0 ? null : 7);
+            po.setFieldPlowedUnitType(missing == 1 ? null : UnitType.COLONIST);
+            po.setFieldPlowedX(missing == 2 ? null : 24);
+            po.setFieldPlowedY(missing == 3 ? null : 14);
+            assertThrows(IllegalArgumentException.class,
+                    () -> TurnEventFieldPlowed.tryLoad(po));
+        }
+        final TurnEventPo negative = new TurnEventPo();
+        negative.setType(TurnEventFieldPlowed.class.getSimpleName());
+        negative.setPlayerName("Dutch");
+        negative.setFieldPlowedUnitId(-1);
+        negative.setFieldPlowedUnitType(UnitType.COLONIST);
+        negative.setFieldPlowedX(24);
+        negative.setFieldPlowedY(14);
+        assertThrows(IllegalArgumentException.class,
+                () -> TurnEventFieldPlowed.tryLoad(negative));
     }
 
     @ParameterizedTest

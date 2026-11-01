@@ -8,6 +8,7 @@ import org.microcol.model.MovementPoints;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.unit.UnitActionBuildRoad;
+import org.microcol.model.unit.UnitActionPlowField;
 import org.microcol.model.unit.UnitTreasure;
 import org.microcol.model.unit.UnitWithCargo;
 
@@ -122,6 +123,19 @@ class UnitPanel {
             roadWork.setId("unitRoadWork-" + unit.getId());
             roadWork.setWrapText(true);
             box.getChildren().add(roadWork);
+        }
+        if (unit.getAction() instanceof UnitActionPlowField
+                && isUnitOwnedBy(unit, humanPlayer)) {
+            // Remaining owner updates of the plowing, read from the order.
+            final int remainingTurns = ((UnitActionPlowField) unit.getAction())
+                    .getRemainingTurns();
+            final Label plowWork = new Label(remainingTurns > 1
+                    ? i18n.get(Loc.unitsPanel_plowWork, remainingTurns)
+                    : i18n.get(Loc.unitsPanel_plowWorkLast));
+            plowWork.setId("unitPlowWork-" + unit.getId());
+            plowWork.setWrapText(true);
+            plowWork.setMinHeight(Region.USE_PREF_SIZE);
+            box.getChildren().add(plowWork);
         }
 
         // The face value belongs to the train itself, shown to every viewer.

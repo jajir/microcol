@@ -27,6 +27,8 @@
 	<entry key="unitsPanel_units">Units:</entry>
 	<entry key="unitsPanel_availableMoves">Moves:</entry>
 	<entry key="unitsPanel_roadWork">Road work: %s owner updates left</entry>
+	<entry key="unitsPanel_plowWork">Plowing — %s turns left</entry>
+	<entry key="unitsPanel_plowWorkLast">Plowing — completes at the start of next turn</entry>
 	<entry key="unitsPanel_owner">Owner:</entry>
 	<entry key="unitsPanel_currentUser">On move:</entry>
 	<entry key="unitsPanel_with">With:</entry>

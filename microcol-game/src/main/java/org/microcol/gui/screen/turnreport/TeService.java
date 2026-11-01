@@ -44,6 +44,7 @@ public class TeService {
             final TeProcessorNativeConvert nativeConvert,
             final TeProcessorConstructionWaitingForTools constructionWaitingForTools,
             final TeProcessorForestLumberLost forestLumberLost,
+            final TeProcessorFieldPlowed fieldPlowed,
             final TeProcessorLostCityRumor lostCityRumor,
             final TeProcessorPatrolInterception patrolInterception,
             final TeProcessorCoastalBattery coastalBattery,
@@ -63,6 +64,7 @@ public class TeService {
                         Preconditions.checkNotNull(nativeConvert),
                         Preconditions.checkNotNull(constructionWaitingForTools),
                         Preconditions.checkNotNull(forestLumberLost),
+                        Preconditions.checkNotNull(fieldPlowed),
                         Preconditions.checkNotNull(teProcessorPeaceOffer),
                         Preconditions.checkNotNull(teProcessorDiplomacy),
                         Preconditions

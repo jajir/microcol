@@ -1024,6 +1024,11 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
    a Continue. TC15_06 ověřuje dva pionýry a jednu spotřebu; TC18_02–07
    neplatné vybavení, dokončení a uložení. Vyšší výnos začíná až následující
    aktualizací kolonie. Úplná regrese dávky čeká.
+   Doplnění 1. listopadu 2026 (UC-019/UC-016/UC-113/UC-116): R-0391 přidává
+   řádek zbývajících tahů orání v panelu vlastní jednotky a R-0393 jednu
+   rutinní zprávu přehledu tahu o dokončeném poli. TC18_01/03/04/05 a nové
+   TC18_08/09 spolu s `PlowFieldTest` jsou napsány, dosud nespuštěny; viz
+   [funkční evidence](functional-tests.md#r-0391r-0393-plowing-countdown-and-completion-notice-2026-11-01).
 8. UC-020/UC-016: R-0120 má cíleně ověřené kácení: potvrzení 20 dřeva,
    zrušení/Escape, změněný stav, čtyři/dvě aktualizace, zrušení práce, spotřebu
    20 nástrojů a trvalý konec výnosu dřeva/kožešin. TC73/F65 ověřuje také

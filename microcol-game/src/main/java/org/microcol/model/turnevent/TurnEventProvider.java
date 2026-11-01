@@ -382,6 +382,21 @@ public final class TurnEventProvider {
     }
 
     /**
+     * Report a pioneer that finished plowing; called only after the field was
+     * created.
+     *
+     * @param player required owner of the pioneer
+     * @param unit   required pioneer that finished the work
+     * @param field  the square that became a field
+     * @return turn event object
+     */
+    public static TurnEvent getFieldPlowed(final Player player, final Unit unit,
+            final Location field) {
+        return new TurnEventFieldPlowed(player.getName(), unit.getId(),
+                unit.getType(), field);
+    }
+
+    /**
      * Get new turn event when some goods is throws away because of limited free
      * space warehouse.
      *
