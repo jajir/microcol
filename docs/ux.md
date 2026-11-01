@@ -6,6 +6,8 @@
 2. Po přepnutí do režimu obchodních tras se nahoře v hlavní herní liště zobrazí tlačítko pro novou trasu. Použije existující podobu tlačítka „Trade route…“ z detailu kolonie, které uživatel přiložil jako referenci. Hráč vybírá zastávky a jejich vlastnosti, cestu mezi městy volí hra podle [pohybových pravidel tras](gap-analysis.md#automated-trade-routes). Zrušení editace nemění uloženou trasu.
 3. Zobrazují se všechny vypočtené cesty, nejen vybraná trasa. Vedou přibližně středy dlaždic jako měkké, ladně zahýbající křivky s viditelnými nepravidelnostmi ruční kresby. Stylizace nemění modelovou cestu ani její cenu. Čitelnost a možnost jednotlivého výběru zůstávají nutné i při překryvu. Jde o dohodnutý návrh, nikoli implementovaný nebo hráčsky ověřený výsledek.
 
+4. Trasa bez dopravce má šedý náhled: pokud existuje legální pozemní i námořní cesta, zobrazí se obě, jinak jen dosažitelná varianta. Při shodné nejnižší ceně se stabilně vybere jedna cesta pro každou variantu; překreslení ji náhodně nemění. Evropa je zastávkou v high seas, ke které vede nejrychlejší legální námořní cesta podle pohybové ceny. Zobrazení nemění dobu samotné plavby ani návratové místo. Pravidla výpočtu vlastní [obchodní trasy](gap-analysis.md#automated-trade-routes).
+
 ## Zbývající tahy orání — zadání 1. listopadu 2026
 
 1. Dohodnutý [R-0391](requirements/R-0391.md) zobrazí v panelu vlastní jednotky textový odpočet orání podle skutečného stavu práce, obdobně jako u silnice. Text se aktualizuje při posunu práce, zachová po Continue a zmizí při dokončení či zrušení. Jde o připravené zadání k nálezu UX-20, nikoli implementovaný nebo nově hráčsky ověřený výsledek.
