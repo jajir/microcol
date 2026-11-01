@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Greek home-port screen — 2026-11-01
+
+1. [R-0390](R-0390.md), status `new`, captures Greek naming and presentation of the current Europe screen. Primary area A06; A03 presentation and A05 ship/unit meanings are cross-area dependencies. **Mateřský přístav / Home Port** is a proposal awaiting confirmation. Scope and remaining thematic labels need refinement; implementation has not started.
+
 ## Complete Akropia rename — 2026-11-01
 
 1. [R-0389](R-0389.md), status `new`, captures the confirmed **Akropia / akropia** spelling and the complete rename of product text, Maven modules, Java identities, file paths, tooling, tests and documentation. Primary area A03; A01 startup/navigation and A04 storage/settings are cross-area dependencies.
