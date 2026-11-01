@@ -1,5 +1,10 @@
 # Current requirement backlog
 
+## Complete Akropia rename — 2026-11-01
+
+1. [R-0389](R-0389.md), status `new`, captures the confirmed **Akropia / akropia** spelling and the complete rename of product text, Maven modules, Java identities, file paths, tooling, tests and documentation. Primary area A03; A01 startup/navigation and A04 storage/settings are cross-area dependencies.
+2. Acceptance requires a case-insensitive audit of every tracked file's contents and path. Only necessary references to the unchanged GitHub repository and its existing services may retain the former name. The user will rename that repository separately. This capture does not start implementation or alter the existing development queue.
+
 ## Ordered development resumed — 2026-11-01
 
 R-0378 implementation and requirement-specific verification are complete: 4,814 model/JUnit, 38 targeted Docker and 3 native macOS tests passed with zero failures/errors/skips. Status stays `ready for development` pending the explicitly deferred final batch smoke. R-0377 refinement is complete and its status is `ready for development`; implementation is next. [Evidence](../functional-tests.md#r-0378-implemented-and-verified-2026-11-01).

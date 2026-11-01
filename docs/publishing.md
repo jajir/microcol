@@ -10,6 +10,24 @@ publishes the game from the same pushed `main` revision when the change is not
 limited to `docs/`; [docs-only filtering](development-builds.md#ci-filtering)
 keeps the current game download unchanged.
 
+## R-0389 Akropia rename requirement — 2026-11-01
+
+1. [R-0389](requirements/R-0389.md), status `new`, captures the confirmed
+   Akropia spelling and complete rename of product text, technical identities,
+   file paths and documentation. Necessary references to the unchanged GitHub
+   repository remain the sole naming exception. Implementation has not started.
+2. This change contains only the requirement, backlog entry and this evidence.
+   Unrelated working-tree edits in `docs/ux.md` and `docs/functional-tests.md`
+   are excluded. Validation uses an export of the complete staged tree based
+   on `fc3c4090619f289cb35b05bafc36e602b32275b3`.
+3. All nine documentation consistency checks and the strict MkDocs build passed
+   with zero test failures, errors or skips. Logs: `target/r0389/docs-tests.log`
+   and `target/r0389/mkdocs.log`; the checked tree is recorded in
+   `target/r0389/acceptance.json`.
+4. Model/JUnit, Docker UI and smoke do not apply to this documentation-only
+   change. Runtime behavior, remote CI, Pages and game distribution publication
+   were not verified; future implementation retains its required acceptance.
+
 ## R-0383 load screen requirement — 2026-10-31
 
 1. [R-0383](requirements/R-0383.md), status `new`, separately owns the approved
