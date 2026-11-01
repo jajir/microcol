@@ -222,7 +222,11 @@ Routine automated UI verification must not require unlocking the host desktop.
 If Docker is unavailable, diagnose/start the existing runtime or use the Linux
 CI path; report that limitation rather than silently falling back to native
 macOS input or treating Monocle as full-suite acceptance. Reserve native desktop
-inspection for explicitly platform-specific or manual visual checks.
+inspection for explicitly requested manual checks. As amended on 2026-11-01,
+native macOS UI tests are optional manual checks only: never include them in
+routine UI execution or require them for local acceptance, including shortcut
+changes. Keep portable scenarios in Docker/Linux and platform-selection logic
+in model/JUnit tests; an unavailable or locked Mac must not block routine work.
 
 Follow [the functional test contract](docs/functional-tests.md) for every behavior
 change and every change to graphics, CSS, layout, controls or shared UI helpers.

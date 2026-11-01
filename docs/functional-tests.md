@@ -5042,6 +5042,8 @@ platformní nebo ruční vizuální kontrolu; běžná regrese nevyžaduje odem�
 
 ### Docker UI tests
 
+As agreed on 2026-11-01, native macOS UI tests run only as explicitly requested manual checks. They are excluded from routine UI execution and acceptance gates, including platform-shortcut changes. Keep portable scenarios in this Docker/Linux suite and platform-selection checks in model/JUnit tests. Do not require an unlocked Mac or launch native retries during ordinary verification. Historical native reports remain preserved; native distribution packaging checks are unaffected. See the [local acceptance policy](publishing.md#local-acceptance-policy).
+
 From R-0322, the container runs `xcompmgr -n` alongside Openbox so native
 transparent JavaFX windows are composited over their owner. It adds no shadows
 or fades; `compositor.log` is retained with the run evidence.

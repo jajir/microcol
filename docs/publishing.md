@@ -169,6 +169,9 @@ Never force-push to publish. Task completion follows the local acceptance policy
 
 ## Local acceptance policy
 
+**Manual macOS checks (amended 2026-11-01):** native macOS UI execution is optional and runs only when explicitly requested. It is not part of routine targeted UI, smoke, regression, or local acceptance, including changes to platform shortcuts. Routine UI verification uses Docker/Linux; model/JUnit tests cover platform-selection logic. Host desktop availability must not gate ordinary work. Historical native results remain evidence, not recurring requirements. This does not change native distribution packaging checks.
+
+
 1. **Amended on 2026-10-24 by explicit user instruction:** documentation-only
    commits do **not** require model/JUnit or Docker/Xvfb smoke tests. The exception
    includes requirement analyses, documentation, documentation-only illustrations
