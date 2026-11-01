@@ -1102,3 +1102,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Colony UI verification and repair — 2026-10-31
 
 [R-0374](done/R-0374.md), status done, verifies the colony player journeys after R-0372/R-0373. Local acceptance passed: 4,801 model/JUnit checks, 362 selected UI checks and 21 smoke/support checks; repairs preserve agreed rules. Known repeated-start memory and compact-label limitations are recorded in the evidence. [Execution evidence](../functional-tests.md#r-0374-colony-ui-verification-and-repair-2026-10-31).
+
+## Mapové plánování obchodních tras — 2026-11-01
+
+1. [R-0395](R-0395.md), primární oblast A06, související A03/A01/A05/A04. Status: new. Zachycuje mapový režim tras, detail v pravém panelu, akci „New trade route“ a automatickou nejrychlejší cestu podle pohybové ceny. Implementace není zahájena; otevřené otázky zůstávají v požadavku.

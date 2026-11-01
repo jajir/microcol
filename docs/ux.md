@@ -1,5 +1,10 @@
 # UX a pravidla ovládání MicroCol
 
+## Plánování obchodních tras
+
+1. Dohodnuté zadání z 1. listopadu 2026 zachycuje [R-0395](requirements/R-0395.md): přepínač vlevo nahoře přepne mapu do režimu barevných obchodních tras na tmavém podkladu. Najetí ukáže jméno a vlastnosti; výběr otevře popis a editaci konkrétní trasy v místě běžného pravého panelu.
+2. Novou trasu zahájí „New trade route“ v hlavním menu; přesné umístění menu zbývá upřesnit v požadavku. Hráč vybírá zastávky a jejich vlastnosti, cestu mezi městy volí hra podle [pohybových pravidel tras](gap-analysis.md#automated-trade-routes). Zrušení editace nemění uloženou trasu. Jde o zadání, nikoli implementovaný nebo hráčsky ověřený výsledek.
+
 ## Zbývající tahy orání — zadání 1. listopadu 2026
 
 1. Dohodnutý [R-0391](requirements/R-0391.md) zobrazí v panelu vlastní jednotky textový odpočet orání podle skutečného stavu práce, obdobně jako u silnice. Text se aktualizuje při posunu práce, zachová po Continue a zmizí při dokončení či zrušení. Jde o připravené zadání k nálezu UX-20, nikoli implementovaný nebo nově hráčsky ověřený výsledek.
