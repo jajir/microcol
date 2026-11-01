@@ -25,13 +25,40 @@ final class GeneratedGrid {
 
     private final Map<Location, TerrainType> types;
 
+    private final int maxX;
+
+    private final int maxY;
+
+    /** Grid of the generated world size. */
     GeneratedGrid(final Map<Location, TerrainType> types) {
-        this.types = types;
+        this(types, GeneratedWorld.WIDTH, GeneratedWorld.HEIGHT);
     }
 
+    GeneratedGrid(final Map<Location, TerrainType> types, final int maxX,
+            final int maxY) {
+        this.types = types;
+        this.maxX = maxX;
+        this.maxY = maxY;
+    }
+
+    /** @return {@code true} when the square lies on a generated world */
     static boolean isOnMap(final Location at) {
         return at.getX() >= 1 && at.getX() <= GeneratedWorld.WIDTH
                 && at.getY() >= 1 && at.getY() <= GeneratedWorld.HEIGHT;
+    }
+
+    /** @return {@code true} when the square lies on this grid */
+    boolean contains(final Location at) {
+        return at.getX() >= 1 && at.getX() <= maxX && at.getY() >= 1
+                && at.getY() <= maxY;
+    }
+
+    int getMaxX() {
+        return maxX;
+    }
+
+    int getMaxY() {
+        return maxY;
     }
 
     TerrainType terrainAt(final Location at) {
@@ -39,11 +66,11 @@ final class GeneratedGrid {
     }
 
     boolean isLand(final Location at) {
-        return isOnMap(at) && !terrainAt(at).isSea();
+        return contains(at) && !terrainAt(at).isSea();
     }
 
     boolean isWater(final Location at) {
-        return isOnMap(at) && terrainAt(at).isSea();
+        return contains(at) && terrainAt(at).isSea();
     }
 
     /**
@@ -55,7 +82,7 @@ final class GeneratedGrid {
         for (final int[] step : STEPS) {
             final Location next = Location.of(at.getX() + step[0],
                     at.getY() + step[1]);
-            if (isOnMap(next)) {
+            if (contains(next)) {
                 out.add(next);
             }
         }

@@ -55,6 +55,7 @@
     <entry key="setupStart">Start game</entry>
     <entry key="setupMapReference">Reference expedition (four nations)</entry>
     <entry key="setupMapGenerated">Generated new world</entry>
+    <entry key="setupMapNorthAmerica">North America</entry>
     <entry key="setupGeneratedClimate">Climate</entry>
     <entry key="setupGeneratedLand">Land share</entry>
     <entry key="setupGeneratedSeed">Seed (0 to 999999999)</entry>

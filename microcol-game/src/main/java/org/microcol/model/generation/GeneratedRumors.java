@@ -40,7 +40,8 @@ final class GeneratedRumors {
      */
     static void place(final ModelPo model, final Random random) {
         final GeneratedGrid grid = new GeneratedGrid(
-                model.getMap().getTerrainMap());
+                model.getMap().getTerrainMap(), model.getMap().getMaxX(),
+                model.getMap().getMaxY());
         final Set<Location> occupied = new HashSet<>();
         for (final NativeSettlementPo settlement : model
                 .getNativeSettlements()) {

@@ -31,7 +31,7 @@
 1. The user explicitly added R-0387, R-0388, R-0389, R-0391, R-0392, R-0393 and R-0394 to implementation and authorized reordering for efficiency. This supersedes earlier statements that those captures did not authorize implementation. Claude remains the selected implementation executor; R-0221 is already running.
 2. Remaining execution order: **R-0221 → (R-0391, R-0393) → (R-0382, R-0383, R-0387, R-0388) → R-0392 → R-0394 → R-0389 → R-0216 → R-0211**. Refine one selected requirement at a time, implement related requirements as cohesive blocks, preserve their separate acceptance criteria and stable IDs. Complete the broad project rename after other feature work to avoid repeated path/package conflicts. Final verification matrices follow the feature and terminology changes.
 3. Explicit batch acceptance amendment: the user permits smoke and other tests to be deferred to the end. Use focused checks while implementing or repairing a block; consolidate complete model/JUnit, affected Docker/Xvfb UI selections and the single fixed smoke/support run on the final combined source. This defers verification, not coverage. Unverified intermediate integrations must be identified as provisional; do not mark requirements done or claim final acceptance before consolidated checks and review. Preserve failures and repair new regressions. The existing FRIGATE-only exception remains narrow; native macOS checks remain explicit manual-only. Documentation checks remain applicable when documentation changes.
-4. Six of the expanded **18 requirements** are implemented and pushed, pending final batch acceptance: R-0378, R-0377, R-0376, R-0228, R-0227 and R-0225. Twelve remain, including active R-0221. Earlier completed R-0381 and R-0379 are outside this expanded batch. Older order/status entries below are dated history.
+4. Seven of the expanded **18 requirements** are implemented and pushed, pending final batch acceptance: R-0378, R-0377, R-0376, R-0228, R-0227, R-0225 and R-0221. Eleven remain; the R-0391/R-0393 block is active. Earlier completed R-0381 and R-0379 are outside this expanded batch. Older order/status entries below are dated history.
 
 ## Ordered development resumed — 2026-11-01
 
@@ -339,7 +339,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0208](done/R-0208.md) | Verify four nations across five game profiles | Verification | UC-119 reference Hra matrix; setup effects retain feature owners |
 | [R-0209](canceled/R-0209.md) | Verify the separate New Game UI and map-choice matrix | Canceled 2026-10-31 | UC-119 Nastavení matrix; generator R-0065 |
 | [R-0217](done/R-0217.md) | Verify an expedition reaches a self-sustaining trade loop | Verification | UC-115 integrated Hra journey |
-| [R-0221](R-0221.md) | Start a playable geographic America world | New capture | SETUP-001/UC-001; generated random/custom maps R-0065 separate |
+| [R-0221](R-0221.md) | Start a playable geographic America world | Ready for development; provisionally integrated, final batch checks pending | 31 focused checks passed; authored North America 100 × 80 |
 | [R-0263](done/R-0263.md) | Make Original World a varied fixed map with every natural terrain feature | New capture | User request and fixed-map/polar decisions, 2026-10-24; northern tundra, southern ice and discoverable rivers |
 
 | [R-0287](done/R-0287.md) | Enrich Original World and preserve connected freshwater lakes | Selected implementation | User request, 2026-10-25; follows R-0263 |

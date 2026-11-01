@@ -1,0 +1,131 @@
+# North America world (R-0221): authored, stylized 100 x 80 geography.
+#
+# This is the editable source read by NorthAmericaWorld. It is an original game
+# map drawn by hand on the tile grid, not a surveyed dataset. Coordinates are
+# x,y from 1,1 in the north-west corner; x grows east and y south.
+#
+# row        One map row, north to south, as runs from west to east. Each run
+#            is a terrain save code followed by its length (default 1); the
+#            lengths of a row add up to 100. Codes: _ ocean, ~ high sea,
+#            k lake, a arctic, t tundra, g grassland, p prairie, l plains,
+#            s savannah, d desert, r marsh, w swamp, h hill, m mountain. An
+#            upper-case letter is the same terrain covered by forest.
+# river      Size, then corner points from source to mouth. Consecutive points
+#            share a column or row; a course may end on an earlier course.
+#            Rivers keep to flat land with no water beside them.
+# settlement Native nation, optional "capital", then its square.
+#
+# Landmarks: Alaska with the Yukon, Brooks and Alaska ranges; the Arctic
+# islands and Baffin Island; Hudson Bay with James Bay and Hudson Strait;
+# Great Bear, Great Slave and Winnipeg lakes; the five Great Lakes; the
+# St. Lawrence estuary, Newfoundland and Nova Scotia; the Atlantic seaboard
+# with Chesapeake Bay and Florida; the Gulf of Mexico and the Mississippi;
+# the Rockies, Cascades and Sierra Madre; Baja California and its gulf;
+# Yucatan, Central America to Panama, Cuba, Hispaniola, Jamaica, Puerto
+# Rico, the Bahamas and the Lesser Antilles. The Atlantic high sea east of
+# the coast holds the arrival lanes.
+
+row _100
+row _36 a4 _3 a7 _12 a8 _30
+row _35 a6 _1 a10 _2 a3 _4 a11 _28
+row _35 a5 _1 a12 _1 a4 _3 a13 _26
+row _10 t3 _23 t3 _2 t11 _2 a4 _4 a13 _25
+row _7 t12 _23 t9 _4 t3 _5 a13 _24
+row _5 t19 _30 t5 _5 a13 _23
+row _3 t26 _2 t10 _3 t16 _4 a14 _22
+row _4 t6 h3 m7 h3 t37 _4 a15 _21
+row _5 t55 _5 t15 _20
+row _2 t4 T18 t12 k3 t21 _5 t15 _20
+row _2 t4 T19 h m2 h t7 k3 t19 _8 t14 _20
+row _3 t3 _3 T16 h m2 h t29 _3 t4 _2 t13 _20
+row _9 T17 h m2 h t28 _3 t4 _4 t10 _21
+row _5 t4 T17 h m2 h T20 t8 _42
+row _5 t4 T4 h m5 h T7 h m2 h T10 k4 T5 t8 _42
+row _7 T6 h7 m5 T2 h m2 h T19 t8 _12 t4 _3 t3 _20
+row _9 T8 _6 m2 T3 h m2 h T18 t7 _12 t5 _3 t4 _19
+row _10 T5 _10 T m T h m2 h T18 t7 _12 t6 _ t5 _19
+row _8 t6 _12 T m T h m2 h T19 t6 _11 t13 _18
+row _6 t6 _2 t _12 T m h m2 h T20 t6 _10 T10 t3 _18
+row _5 t5 _18 T m T h m2 h T20 t5 _9 T12 t2 _17
+row _4 t4 _21 T m h m2 h T30 _4 T14 _17
+row _ t _28 T m T h m2 h T3 p12 T13 _4 T15 _16
+row _30 T m T h m2 h T3 p14 T12 _3 T15 _16
+row _31 T m T2 h m2 h T p14 k2 T10 _3 T16 _15
+row _31 T m T2 h m2 h T p14 k2 T10 _3 T16 _15
+row _32 T2 _ T m h m2 h p13 k2 T27 _3 T _13
+row _32 T2 _2 T h m2 h p15 T27 _ T3 _13
+row _32 T2 _2 T3 h m2 h p13 T5 k3 T12 _7 T5 _3 ~9
+row _35 G2 m p h m2 h p13 T2 k7 T10 _2 T2 _4 T5 _3 ~9
+row _35 G2 m p2 h m2 h p12 T3 k5 T11 _ T4 _3 T5 _3 ~9
+row _35 G2 m p2 h m2 h p12 G6 k G2 k2 G6 T7 _4 T3 _4 ~9
+row _35 G p5 h m2 h p11 G6 k6 G6 T7 _10 ~9
+row _35 G2 m p3 h m2 h p11 G6 k2 G k3 G6 h G _ G4 _10 ~9
+row _35 G2 m p4 h m2 h p10 G6 k2 G2 k G k3 G3 h _2 G3 _3 ~17
+row _35 G2 m p4 h m2 h p10 G6 k G3 k G k2 G4 _9 ~17
+row _35 G2 m d6 m2 h p9 G6 k G4 k2 G2 h G3 _8 ~17
+row _34 G3 m d6 m2 h p9 G8 k4 G2 h G2 _10 ~17
+row _34 G3 m d6 m2 h p9 G12 h2 G2 _11 ~17
+row _34 g3 m d6 m2 h l9 G11 h2 G3 _11 ~17
+row _35 g2 m d6 m2 h l9 G10 h2 G4 _11 ~17
+row _36 g m d6 m2 h l9 G9 h2 G2 _ G2 _11 ~17
+row _36 g m d6 m2 h l9 G8 h2 G3 _ G2 _11 ~17
+row _37 g m d5 m2 h l9 G7 h2 G4 _14 ~17
+row _37 g m d5 m2 h l9 G6 h2 G7 _6 ~23
+row _38 g d9 p8 G6 h G7 _7 ~23
+row _39 g d8 p8 G8 L5 _8 ~23
+row _40 g d7 p8 G8 L4 _9 ~23
+row _40 d5 m2 h p8 G5 S6 _10 ~23
+row _40 d2 _2 d m2 h d3 p5 G2 R3 S6 _10 ~23
+row _41 d2 _ d m2 h d3 p5 G2 R3 S6 _10 ~23
+row _41 d2 _2 d m2 h d3 p4 G2 w3 _3 S3 _10 ~23
+row _41 d3 _2 d m2 h d2 p4 _3 w2 _4 S2 _10 ~23
+row _42 d2 _2 d m2 h d2 p3 _10 S3 _9 ~23
+row _43 d2 _2 m2 h d2 h m p _10 W3 _ s _9 ~21
+row _43 d2 _3 h m2 d h m p _11 w2 _11 ~21
+row _44 d2 _2 h m2 l h m p _11 w _3 s2 _7 ~21
+row _45 d _2 h m2 l h m p _24 ~21
+row _45 d _2 h m2 l h m p _9 s3 _5 s _6 ~21
+row _48 s m2 l h m s _5 s3 _ s6 _9 ~21
+row _48 s m2 l h m s _4 S4 _4 s5 _ S3 _3 ~21
+row _48 s m2 g3 s2 _3 S4 _7 s2 _ S4 _2 ~21
+row _49 s m2 h g s2 _3 S4 _11 S3 _2 ~21
+row _50 s m2 h S3 _2 S4 _6 s2 _7 s2 _20
+row _51 s h2 S9 _17 s _19
+row _53 S3 h2 S3 _39
+row _55 s2 m2 S6 _16 s _18
+row _57 s2 h2 W4 _35
+row _59 s2 h W3 _16 s _18
+row _60 s2 h W2 _35
+row _62 s W2 _15 s _19
+row _62 s h W _35
+row _63 s h W _34
+row _63 s m W _34
+row _64 s h W4 _30
+row _68 W3 _29
+row _70 W2 _28
+row _100
+row _100
+
+river LARGE 57,31 57,40 58,40 58,46 59,46 59,50 60,50 60,52
+river SMALL 48,33 52,33 52,42 57,42 58,42
+river SMALL 65,41 63,41 63,44 59,44 58,44
+river SMALL 73,36 73,34 74,34
+river LARGE 39,18 39,14 33,14 33,10
+river LARGE 24,12 12,12 12,16 9,16
+river SMALL 41,24 41,26 53,26
+river SMALL 39,31 39,34 37,34
+river SMALL 49,41 49,46 52,46 52,51 53,51 53,54
+river SMALL 44,39 44,44 43,44 43,49
+
+settlement IROQUOIS capital 72,39
+settlement IROQUOIS 69,34
+settlement CHEROKEE capital 62,47
+settlement CHEROKEE 66,50
+settlement SIOUX capital 51,30
+settlement SIOUX 54,36
+settlement APACHE capital 47,48
+settlement APACHE 50,52
+settlement AZTEC capital 54,63
+settlement AZTEC 56,66
+settlement ARAWAK capital 68,61
+settlement ARAWAK 75,63

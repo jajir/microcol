@@ -20,6 +20,7 @@ import org.microcol.model.campaign.po.PersistingTool;
 import org.microcol.model.campaign.po.RecoverySlot;
 import org.microcol.model.generation.GeneratedWorld;
 import org.microcol.model.generation.GeneratedWorldSettings;
+import org.microcol.model.generation.NorthAmericaWorld;
 import org.microcol.model.store.ModelPo;
 
 import com.google.common.base.Preconditions;
@@ -70,11 +71,13 @@ public final class GameModelDao {
         Preconditions.checkNotNull(nation, "Nation is null");
         Preconditions.checkNotNull(eventBus, "Event bus is null");
         Preconditions.checkArgument(
-                map == FreePlayMap.REFERENCE || nation == EuropeanNation.DUTCH,
+                map.isNationSelectable() || nation == EuropeanNation.DUTCH,
                 "Authored maps support the Dutch nation only");
         final GameModelPo source = gameModelPoDao
                 .loadFromClassPath(map.getResource());
-        if (map == FreePlayMap.REFERENCE) {
+        if (map == FreePlayMap.NORTH_AMERICA) {
+            source.setModel(NorthAmericaWorld.create(nation, difficulty));
+        } else if (map == FreePlayMap.REFERENCE) {
             source.setModel(ReferenceExpedition
                     .create(source.getModel().getMap(), nation, difficulty));
         } else {

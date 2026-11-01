@@ -101,11 +101,12 @@ public final class GeneratedWorld {
      * play. The candidate is loaded in full first, so an invalid world is never
      * returned.
      */
-    private static void requireLegalStarts(final ModelPo candidate) {
+    static void requireLegalStarts(final ModelPo candidate) {
         final Model model = Model.make(candidate,
                 MissionImpl.getPredefinedGameOverEvaluators());
         final GeneratedGrid grid = new GeneratedGrid(
-                candidate.getMap().getTerrainMap());
+                candidate.getMap().getTerrainMap(),
+                candidate.getMap().getMaxX(), candidate.getMap().getMaxY());
         for (final UnitPo ship : candidate.getUnits()) {
             if (!ship.getType().isShip()) {
                 continue;

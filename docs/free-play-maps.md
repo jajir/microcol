@@ -59,3 +59,32 @@ Značky K ukazují kolonie obsažené v základní šabloně.
 Pátá volba vytváří mapu podle semínka, klimatu a množství pevniny, takže nemá
 jeden pevný obrázek. Její říční pravidlo popisuje
 [R-0301](requirements/done/R-0301.md). Výše jsou všechny čtyři pevné šablony.
+
+## Severní Amerika
+
+Šestá volba **North America / Severní Amerika** ([R-0221](requirements/R-0221.md))
+spouští autorský stylizovaný svět 100 × 80 polí podle
+[pravidla geografické mapy](gap-analysis.md#north-america-reference-map). Jde o
+původní herní mapu, ne o přesná zeměpisná data. Hráč volí národ i obtížnost.
+
+1. Editovatelný zdroj je `microcol-game/src/main/resources/maps/north-america.txt`:
+   řádky terénu zapsané jako úseky kódů uložení (velké písmeno znamená les),
+   řeky jako lomené čáry a domorodé osady. `NorthAmericaWorld` z něj při každé
+   nové hře skládá stejný svět; zdroje surovin, bravové a pověsti používají
+   pevné semínko 1492.
+2. Krajina: Aljaška, arktické ostrovy, Baffinův ostrov, Hudsonův a Jamesův záliv,
+   Velké jezero Medvědí a Otročí, Winnipeg, pět Velkých jezer, ústí řeky
+   sv. Vavřince, Newfoundland, Nové Skotsko, Chesapeake, Florida, Mexický záliv,
+   Kalifornský poloostrov, Yucatán, Střední Amerika po Panamu a Velké i Malé
+   Antily. Pohoří: Skalisté hory, Kaskády a Sierra Nevada, Sierra Madre a
+   Apalačské vrchy. Řeky: Mississippi s Missouri a Ohiem, Mackenzie, Yukon,
+   Saskatchewan, Columbia, Colorado, Rio Grande a sv. Vavřinec. Řeky drží
+   vnitrozemské pravidlo R-0302.
+3. Domorodé národy: Irokézové, Čerokíové, Siouxové, Apačové, Aztékové a Arawakové,
+   každý s hlavním a jedním dalším sídlem a dvěma bravy u každého sídla.
+4. Čtyři výpravy připlouvají z atlantického širého moře: Nizozemci (92, 30),
+   Francouzi (91, 45), Angličané (98, 54) a Španělé (100, 64).
+
+Datový náhled celé mapy vzniká v modelovém testu `NorthAmericaWorldTest` jako
+`microcol-game/target/r0221/north-america-preview.svg`; snímek zatím není
+převzat do dokumentace.

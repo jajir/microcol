@@ -64,8 +64,8 @@ final class GeneratedWorldResources {
                 .squaresWith(terrain -> !terrain.isSea());
         land.removeAll(rivers);
         final List<Location> coast = new ArrayList<>();
-        for (int y = 1; y <= GeneratedWorld.HEIGHT; y++) {
-            for (int x = 1; x <= GeneratedWorld.WIDTH; x++) {
+        for (int y = 1; y <= grid.getMaxY(); y++) {
+            for (int x = 1; x <= grid.getMaxX(); x++) {
                 final Location at = Location.of(x, y);
                 if (grid.terrainAt(at) == TerrainType.OCEAN && grid
                         .neighbours(at).stream().anyMatch(grid::isLand)) {

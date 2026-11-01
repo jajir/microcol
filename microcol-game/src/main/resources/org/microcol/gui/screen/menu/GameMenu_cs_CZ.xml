@@ -54,6 +54,7 @@
     <entry key="setupStart">Začít hru</entry>
     <entry key="setupMapReference">Výpravy čtyř národů</entry>
     <entry key="setupMapGenerated">Vygenerovaný nový svět</entry>
+    <entry key="setupMapNorthAmerica">Severní Amerika</entry>
     <entry key="setupGeneratedClimate">Podnebí</entry>
     <entry key="setupGeneratedLand">Podíl pevniny</entry>
     <entry key="setupGeneratedSeed">Semínko (0 až 999999999)</entry>

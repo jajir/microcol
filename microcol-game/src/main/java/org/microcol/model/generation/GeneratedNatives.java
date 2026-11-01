@@ -59,6 +59,35 @@ final class GeneratedNatives {
 
     static final int ORDINARY_TREASURY = 1000;
 
+    /** Authored native settlement square of a fixed world. */
+    static final class NativeSite {
+
+        private final NativeNation nation;
+
+        private final boolean capital;
+
+        private final Location location;
+
+        NativeSite(final NativeNation nation, final boolean capital,
+                final Location location) {
+            this.nation = nation;
+            this.capital = capital;
+            this.location = location;
+        }
+
+        NativeNation getNation() {
+            return nation;
+        }
+
+        boolean isCapital() {
+            return capital;
+        }
+
+        Location getLocation() {
+            return location;
+        }
+    }
+
     private GeneratedNatives() {
     }
 
@@ -83,10 +112,8 @@ final class GeneratedNatives {
         Collections.shuffle(nations, random);
         final int count = MIN_NATIONS + random.nextInt(EXTRA_NATIONS);
         final List<NativeSettlementPo> settlements = new ArrayList<>();
-        final List<PlayerPo> players = new ArrayList<>();
         final List<Location> taken = new ArrayList<>();
         for (final NativeNation nation : nations.subList(0, count)) {
-            players.add(player(nation));
             settlements.add(settlement(settlements.size(), nation, true,
                     site(sites, taken)));
             if (random.nextBoolean()) {
@@ -94,7 +121,74 @@ final class GeneratedNatives {
                         site(sites, taken)));
             }
         }
-        final Set<Location> occupied = new HashSet<>(taken);
+        populate(model, settlements, random);
+    }
+
+    /**
+     * Add native nations with settlements on authored squares. Every settlement
+     * must stand on walkable land that is no mountain, arctic or river square,
+     * and every nation needs exactly one capital.
+     *
+     * @param model  required model with the expedition and terrain
+     * @param sites  required settlements in identity order
+     * @param random required generator of the braves and markets
+     * @throws IllegalStateException when a site or its braves do not fit
+     */
+    static void placeAt(final ModelPo model, final List<NativeSite> sites,
+            final Random random) {
+        final GeneratedGrid grid = gridOf(model);
+        final Set<Location> rivers = model.getMap().getRiverMap().keySet();
+        final List<NativeSettlementPo> settlements = new ArrayList<>();
+        final Set<Location> taken = new HashSet<>();
+        for (final NativeSite site : sites) {
+            final TerrainType terrain = grid.terrainAt(site.getLocation());
+            if (!grid.isLand(site.getLocation())
+                    || terrain == TerrainType.MOUNTAIN
+                    || terrain == TerrainType.ARCTIC
+                    || rivers.contains(site.getLocation())
+                    || !taken.add(site.getLocation())) {
+                throw new IllegalStateException(
+                        "Illegal native settlement at " + site.getLocation());
+            }
+            settlements.add(settlement(settlements.size(), site.getNation(),
+                    site.isCapital(), site.getLocation()));
+        }
+        for (final NativeNation nation : NativeNation.values()) {
+            final long capitals = sites.stream().filter(
+                    site -> site.getNation() == nation && site.isCapital())
+                    .count();
+            final boolean present = sites.stream()
+                    .anyMatch(site -> site.getNation() == nation);
+            if (present && capitals != 1) {
+                throw new IllegalStateException(
+                        "Native nation needs one capital: " + nation);
+            }
+        }
+        populate(model, settlements, random);
+    }
+
+    private static GeneratedGrid gridOf(final ModelPo model) {
+        return new GeneratedGrid(model.getMap().getTerrainMap(),
+                model.getMap().getMaxX(), model.getMap().getMaxY());
+    }
+
+    /**
+     * Add the participants, braves and markets of placed settlements. A nation
+     * takes part once, in the order of its first settlement.
+     */
+    private static void populate(final ModelPo model,
+            final List<NativeSettlementPo> settlements, final Random random) {
+        final GeneratedGrid grid = gridOf(model);
+        final List<PlayerPo> players = new ArrayList<>();
+        final Set<NativeNation> joined = new HashSet<>();
+        final Set<Location> occupied = new HashSet<>();
+        for (final NativeSettlementPo settlement : settlements) {
+            if (joined.add(settlement.getNation())) {
+                players.add(player(settlement.getNation(),
+                        model.getMap().getMaxX(), model.getMap().getMaxY()));
+            }
+            occupied.add(settlement.getLocation());
+        }
         final List<UnitPo> braves = new ArrayList<>();
         int braveId = FIRST_BRAVE_ID;
         for (final NativeSettlementPo settlement : settlements) {
@@ -172,7 +266,7 @@ final class GeneratedNatives {
             for (int dy = -1; dy <= 1; dy++) {
                 final Location at = Location.of(centre.getX() + dx,
                         centre.getY() + dy);
-                if (!GeneratedGrid.isOnMap(at)) {
+                if (!grid.contains(at)) {
                     continue;
                 }
                 final Terrain terrain = new Terrain(at, grid.terrainAt(at));
@@ -229,7 +323,8 @@ final class GeneratedNatives {
         return out;
     }
 
-    private static PlayerPo player(final NativeNation nation) {
+    private static PlayerPo player(final NativeNation nation, final int maxX,
+            final int maxY) {
         final PlayerPo player = new PlayerPo();
         player.setName(nation.name());
         player.setComputer(true);
@@ -238,8 +333,7 @@ final class GeneratedNatives {
         player.setNativeNation(nation);
         player.setUnitPurchaseCounts(new HashMap<>());
         final VisibilityPo visibility = new VisibilityPo();
-        visibility.setVisibility(Set.of(), GeneratedWorld.WIDTH,
-                GeneratedWorld.HEIGHT);
+        visibility.setVisibility(Set.of(), maxX, maxY);
         player.setVisible(visibility);
         return player;
     }

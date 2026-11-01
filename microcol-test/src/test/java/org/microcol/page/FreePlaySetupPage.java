@@ -17,6 +17,7 @@ import org.microcol.model.campaign.po.PersistingTool;
 import org.microcol.model.generation.GeneratedClimate;
 import org.microcol.model.generation.GeneratedLandShare;
 import org.microcol.model.generation.GeneratedWorld;
+import org.microcol.model.generation.NorthAmericaWorld;
 import org.microcol.model.store.ModelPo;
 import org.testfx.util.WaitForAsyncUtils;
 
@@ -25,6 +26,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 
 public final class FreePlaySetupPage extends AbstractScreen {
+    /** Four small bundled maps, the generated world and North America. */
+    private static final int MAP_CHOICES = 6;
+
     public FreePlaySetupPage(final TestContext context) {
         super(context);
     }
@@ -287,7 +291,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
         assertTrue(isCssIdVisible("freePlaySetup"));
         final ChoiceBox<?> map = getNodeFinder().lookup("#freePlayMap")
                 .queryAs(ChoiceBox.class);
-        assertEquals(5, map.getItems().size());
+        assertEquals(MAP_CHOICES, map.getItems().size());
         verifyGeneratedControlsHidden();
         assertEquals(expectedMapIndex,
                 map.getSelectionModel().getSelectedIndex());
@@ -310,7 +314,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
             final String expectedName) {
         final ChoiceBox<?> map = getNodeFinder().lookup("#freePlayMap")
                 .queryAs(ChoiceBox.class);
-        assertEquals(5, map.getItems().size());
+        assertEquals(MAP_CHOICES, map.getItems().size());
         assertEquals(expectedIndex, map.getSelectionModel().getSelectedIndex());
         assertEquals(expectedName, map.getSelectionModel().getSelectedItem());
     }
@@ -416,6 +420,85 @@ public final class FreePlaySetupPage extends AbstractScreen {
     public void verifyNoActiveGame() {
         assertFalse(getContext().getClassFromGuice(GameModelController.class)
                 .isGameModelReady());
+    }
+
+    /**
+     * The running world is the authored North America map: size, seed and
+     * landmarks that differ from every small bundled and generated map.
+     */
+    public void verifyNorthAmericaGeography() {
+        final WorldMap map = getModel().getMap();
+        assertEquals(NorthAmericaWorld.WIDTH, map.getMaxLocationX());
+        assertEquals(NorthAmericaWorld.HEIGHT, map.getMaxLocationY());
+        assertEquals(NorthAmericaWorld.SEED, map.getSeed().intValue());
+        // Hudson Bay, the Gulf of Mexico and Lake Superior.
+        assertEquals(TerrainType.OCEAN,
+                map.getTerrainTypeAt(Location.of(63, 20)));
+        assertEquals(TerrainType.OCEAN,
+                map.getTerrainTypeAt(Location.of(60, 58)));
+        assertEquals(TerrainType.LAKE,
+                map.getTerrainTypeAt(Location.of(62, 31)));
+        // Florida, Cuba and the Rocky Mountains.
+        assertTrue(map.getTerrainTypeAt(Location.of(67, 56)).isLand());
+        assertTrue(map.getTerrainTypeAt(Location.of(68, 61)).isLand());
+        assertEquals(TerrainType.MOUNTAIN,
+                map.getTerrainTypeAt(Location.of(42, 30)));
+        // The Mississippi.
+        assertEquals(RiverSize.LARGE, map.getRiverSizeAt(Location.of(57, 35)));
+        assertTrue(
+                map.hasRiverSegment(Location.of(57, 35), Location.of(57, 36)));
+    }
+
+    /**
+     * Every European nation, its Crown and the six native nations of the North
+     * America world take part; the selected nation is the player.
+     */
+    public void verifyNorthAmericaExpedition(final EuropeanNation selected,
+            final String playerName, final int gold,
+            final Location expectedShipStart) throws Exception {
+        final Player human = getModel()
+                .getPlayerByName(selected.getPlayerName());
+        WaitForAsyncUtils.waitFor(15, java.util.concurrent.TimeUnit.SECONDS,
+                () -> getModel().isGameRunning()
+                        && getModel().getCurrentPlayer() == human);
+        assertEquals(playerName, human.getDisplayName());
+        assertTrue(human.isHuman());
+        assertEquals(gold, human.getGold());
+        assertEquals(1, getModel().getPlayers().stream().filter(Player::isHuman)
+                .count());
+        assertEquals(14, getModel().getPlayers().size());
+        assertEquals(6, getModel().getPlayers().stream()
+                .filter(Player::isNative).count());
+        final org.microcol.model.Unit ship = human.getAllUnits().stream()
+                .filter(org.microcol.model.Unit::isShip).findFirst()
+                .orElseThrow();
+        assertEquals(expectedShipStart, ship.getLocation());
+        assertEquals(TerrainType.HIGH_SEA,
+                getModel().getMap().getTerrainTypeAt(ship.getLocation()));
+        final ModelPo saved = getModel().save();
+        assertEquals(12, saved.getNativeSettlements().size());
+        final java.util.Set<Integer> homes = saved.getNativeSettlements()
+                .stream().map(settlement -> settlement.getId())
+                .collect(java.util.stream.Collectors.toSet());
+        assertEquals(24, saved.getUnits().stream()
+                .filter(unit -> unit.getNativeHomeSettlementId() != null
+                        && homes.contains(unit.getNativeHomeSettlementId()))
+                .count());
+    }
+
+    /** The recovery save holds the same North America map as the game. */
+    public void verifySavedNorthAmericaWorld() {
+        final java.io.File file = getContext()
+                .getClassFromGuice(PersistingTool.class).getAutoSaveFile();
+        final GameModelPo data = new GameModelPoDao().loadFromFile(file);
+        assertEquals(NorthAmericaWorld.WIDTH,
+                data.getModel().getMap().getMaxX());
+        assertEquals(NorthAmericaWorld.HEIGHT,
+                data.getModel().getMap().getMaxY());
+        assertArrayEquals(getModel().save().getMap().getTiles(),
+                data.getModel().getMap().getTiles());
+        assertEquals(getModel().save().getNativeSettlements().size(),
+                data.getModel().getNativeSettlements().size());
     }
 
     public void verifyWorld(final int expectedSeed, final int expectedCityX,

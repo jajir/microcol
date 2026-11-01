@@ -41,8 +41,9 @@ import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
 /**
- * Menu setup for authored maps, selectable reference expeditions and generated
- * New Worlds. The generated choices are shown only for the generated map.
+ * Menu setup for authored maps, selectable reference expeditions, generated New
+ * Worlds and the North America world. The generated choices are shown only for
+ * the generated map.
  */
 @Singleton
 public final class ScreenFreePlay extends AbstractScreenMenu
@@ -63,8 +64,12 @@ public final class ScreenFreePlay extends AbstractScreenMenu
     private static final String ID_BACK = "freePlayBack";
     private static final String ID_FORM = "freePlaySetup";
 
-    /** Index of the generated choice, after the bundled maps. */
-    private static final int GENERATED_INDEX = FreePlayMap.values().length;
+    /** Index of the generated choice, after the small bundled maps. */
+    private static final int GENERATED_INDEX = FreePlayMap.NORTH_AMERICA
+            .ordinal();
+
+    /** Index of the North America choice, after the generated one. */
+    private static final int NORTH_AMERICA_INDEX = GENERATED_INDEX + 1;
 
     private static final String DEFAULT_SEED = "1";
 
@@ -328,7 +333,22 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         names.add(i18n.get(GameMenu.setupMapRivalExpedition));
         names.add(i18n.get(GameMenu.setupMapReference));
         names.add(i18n.get(GameMenu.setupMapGenerated));
+        names.add(i18n.get(GameMenu.setupMapNorthAmerica));
         return names;
+    }
+
+    /**
+     * @return bundled world of the selected choice, or null for the generated
+     *         choice and while the list is being refilled
+     */
+    private FreePlayMap selectedMap() {
+        final int index = mapChoiceBox.getSelectionModel().getSelectedIndex();
+        if (index == NORTH_AMERICA_INDEX) {
+            return FreePlayMap.NORTH_AMERICA;
+        }
+        return index >= 0 && index < GENERATED_INDEX
+                ? FreePlayMap.values()[index]
+                : null;
     }
 
     private void onMapChanged() {
@@ -351,9 +371,9 @@ public final class ScreenFreePlay extends AbstractScreenMenu
 
     private void updateNationAvailability() {
         // Generated worlds use the same four expeditions as the reference one.
+        final FreePlayMap map = selectedMap();
         final boolean reference = isGeneratedSelected()
-                || mapChoiceBox.getSelectionModel()
-                        .getSelectedIndex() == FreePlayMap.REFERENCE.ordinal();
+                || map != null && map.isNationSelectable();
         nationChoiceBox.setDisable(!reference);
         if (!reference) {
             nationChoiceBox.getSelectionModel().selectFirst();
@@ -458,10 +478,8 @@ public final class ScreenFreePlay extends AbstractScreenMenu
             }
             return;
         }
-        FreePlayMap map = FreePlayMap.values()[mapChoiceBox.getSelectionModel()
-                .getSelectedIndex()];
-        applicationController.startNewFreeGame(map, nameField.getText(),
-                difficultyChoiceBox.getValue(), nation);
+        applicationController.startNewFreeGame(selectedMap(),
+                nameField.getText(), difficultyChoiceBox.getValue(), nation);
     }
 
     private void onBack() {
