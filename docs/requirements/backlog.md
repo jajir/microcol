@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Plowing countdown in the unit panel — 2026-11-01
+
+1. [R-0391](R-0391.md), status `ready for development`, prepares the user-selected text countdown for UX-20 under A03, using existing A05 work state and A04 turn/save continuity. Implementation is not started or authorized by this preparation request.
+
 ## Greek sanctuary harbor — 2026-11-01
 
 1. [R-0390](done/R-0390.md), status `done`, implements the user's selected variant 7: temple, olive grove and low coastal houses. Primary area A06; A03 illustration and A05 preserved ship meanings. The refined scope preserves the palette, line weight, quay, arrows, labels and gameplay. Local acceptance passed under the explicit FRIGATE-only exception: 19 targeted UI checks and 21 smoke checks passed. [Evidence](../functional-tests.md#r-0390-greek-sanctuary-harbor-2026-11-01).

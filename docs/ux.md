@@ -1,5 +1,9 @@
 # UX a pravidla ovládání MicroCol
 
+## Zbývající tahy orání — zadání 1. listopadu 2026
+
+1. Dohodnutý [R-0391](requirements/R-0391.md) zobrazí v panelu vlastní jednotky textový odpočet orání podle skutečného stavu práce, obdobně jako u silnice. Text se aktualizuje při posunu práce, zachová po Continue a zmizí při dokončení či zrušení. Jde o připravené zadání k nálezu UX-20, nikoli implementovaný nebo nově hráčsky ověřený výsledek.
+
 ## Vylodění pasažérů — R-0379
 
 1. Implementováno a lokálně přijato 31. října 2026: při vylodění z lodi na vybrané sousední pole rozhoduje počet pasažérů způsobilých vystoupit právě tam, nikoli celkový počet lidí na palubě. Jediný způsobilý pasažér vystoupí přímo bez dialogu; při více způsobilých se otevře výběr. Rozsah a příklady vlastní [R-0379](requirements/done/R-0379.md).
