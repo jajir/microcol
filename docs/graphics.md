@@ -1,5 +1,19 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## R-0390 — Řecký přístav s chrámem
+
+1. **Vybráno 1. listopadu 2026:** uživatel schválil variantu 7 z přehledu návrhů — malý chrám na návrší, olivovníky a nízké řecké domy. [R-0390](requirements/done/R-0390.md) vlastní tuto úpravu ilustrace; názvy a herní pravidla se nemění.
+2. Editovatelný [vektorový zdroj](../microcol-game/src/graphics/europe-harbor.svg) má pojmenované skupiny chrámu, jednotlivých domů a původního okolí. Neobsahuje bitmapy. Původní zástavba zůstává ve zdroji pod ořezem jako reference; zobrazenou zástavbu tvoří nové vektorové tvary. Přední molo, jeřáb, moře a obloha se zachovávají. Samostatná směrová grafika ani UI nejsou změněné.
+3. Tlumené krémové omítky, terakotové střechy, olivová zeleň a písková skála používají tmavé obrysy přibližně 3 px v původním plátně. Export zachovává rozměry 1586 × 992 a současné vykreslení EuropeBackground.
+4. Opakovatelný export z kořene repozitáře:
+
+   ```sh
+   rsvg-convert -w 1586 -h 992 -o microcol-game/src/main/resources/images/europe-harbor.png microcol-game/src/graphics/europe-harbor.svg
+   ```
+
+5. Vektorový zdroj, opakovatelný export a herní snímky byly zkontrolovány 1. listopadu 2026. Cílené UI a smoke prošly; modelové testy mají pouze uživatelem povolené původní selhání fregaty. Viz [přesné výsledky a vizuální evidence](functional-tests.md#r-0390-greek-sanctuary-harbor-2026-11-01).
+
+
 ## Řecké jednotky — první návrh, 1. listopadu 2026
 
 1. Uživatel vybral **01 — Výrazná linka** a výslovně požádal o nasazení a push bez testů; [R-0386](requirements/done/R-0386.md). [Vybraný návrh](assets/greek-units-01-2026-11-01/selected-reference.png) je referenční rastr. Nové postavy nahrazují kolonisty, profesní specialisty, vozy, děla a lodě ve stávajícím společném atlasu. Názvy, schopnosti a pravidla zůstávají beze změny.

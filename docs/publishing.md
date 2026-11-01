@@ -169,6 +169,9 @@ Never force-push to publish. Task completion follows the local acceptance policy
 
 ## Local acceptance policy
 
+**R-0390 exception (2026-11-01):** the user explicitly instructed this task to ignore the known FRIGATE opaque-ink failure, complete/fix smoke and push the selected Greek harbor artwork. This exception covers only the unchanged `UnitArtworkTest.allTypesAndStatesHaveDistinctBoldArtworkInsideTransparentMargins` failure at 45 px for R-0390. Keep the icon, assertion and failed evidence unchanged; all other required checks and the 420-second smoke budget remain in force.
+
+
 **Ordered-batch exception (2026-11-01):** the user explicitly permits integration for the R-0378 → R-0377 → R-0376 → R-0228 → R-0227 → R-0225 → R-0221 → R-0216 → R-0211 → R-0382 → R-0383 batch despite the independently reproduced baseline `UnitArtworkTest.allTypesAndStatesHaveDistinctBoldArtworkInsideTransparentMargins` FRIGATE opaque-ink failure at 45 px. Preserve the artwork, test and failed reports; continue running the full model selection. This exception covers only that existing failure, not new failures, errors or skips. Smoke runs once at the end of this batch as already requested. Native macOS UI execution remains manual-only.
 
 **Manual macOS checks (amended 2026-11-01):** native macOS UI execution is optional and runs only when explicitly requested. It is not part of routine targeted UI, smoke, regression, or local acceptance, including changes to platform shortcuts. Routine UI verification uses Docker/Linux; model/JUnit tests cover platform-selection logic. Host desktop availability must not gate ordinary work. Historical native results remain evidence, not recurring requirements. This does not change native distribution packaging checks.

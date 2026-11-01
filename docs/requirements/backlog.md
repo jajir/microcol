@@ -1,8 +1,8 @@
 # Current requirement backlog
 
-## Greek home-port screen — 2026-11-01
+## Greek sanctuary harbor — 2026-11-01
 
-1. [R-0390](R-0390.md), status `new`, captures Greek naming and presentation of the current Europe screen. Primary area A06; A03 presentation and A05 ship/unit meanings are cross-area dependencies. **Mateřský přístav / Home Port** is a proposal awaiting confirmation. Scope and remaining thematic labels need refinement; implementation has not started.
+1. [R-0390](done/R-0390.md), status `done`, implements the user's selected variant 7: temple, olive grove and low coastal houses. Primary area A06; A03 illustration and A05 preserved ship meanings. The refined scope preserves the palette, line weight, quay, arrows, labels and gameplay. Local acceptance passed under the explicit FRIGATE-only exception: 19 targeted UI checks and 21 smoke checks passed. [Evidence](../functional-tests.md#r-0390-greek-sanctuary-harbor-2026-11-01).
 
 ## Complete Akropia rename — 2026-11-01
 

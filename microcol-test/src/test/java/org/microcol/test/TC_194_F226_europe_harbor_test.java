@@ -27,7 +27,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
     @Test
     @Tag("local")
     void TC_01_independent_scrolls_and_last_ship_trade() throws Exception {
-        // All four lists exceed forty-two units without resizing their artwork.
+        // R-0390: retain all four lists over the Greek sanctuary artwork.
         final EuropePortScreen port = WelcomePage.of(getContext()).loadGame()
                 .openEuroperPort();
         final EuropeHarborPage harbor = new EuropeHarborPage(getContext());
@@ -81,7 +81,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyLastItemVisible("pier");
         harbor.verifyScrollPositions(1, 1, 1, 1);
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0343-harbor-full.png");
+                .saveEvidence("r0390-harbor-full.png");
 
         // Resizing keeps cargo, all prices and the original image size usable.
         harbor.resize(1000, 760);
@@ -96,7 +96,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyContentAlignment();
         port.verifyAvailableHoldCount(4);
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0343-harbor-small.png");
+                .saveEvidence("r0390-harbor-small.png");
         port.close();
         new InGameLayoutPage(getContext()).verifyMapReturned();
     }
@@ -115,7 +115,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyContentAlignment();
         harbor.verifyVoyageHeadingSpacing();
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0348-harbor-wide.png");
+                .saveEvidence("r0390-harbor-wide.png");
 
         // The same 16px insets take over at and below the shared width cap.
         bars.resizeContent(1472, 1000);
@@ -133,7 +133,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyAllGoodsVisible();
         harbor.verifyVoyageHeadingSpacing();
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0348-harbor-narrow.png");
+                .saveEvidence("r0390-harbor-narrow.png");
     }
 
     @Test
@@ -186,12 +186,12 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifyGoodsPricesCentered();
         harbor.verifyContentAlignment();
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0343-harbor-czech.png");
+                .saveEvidence("r0390-harbor-czech.png");
 
         // Czech voyage headings keep the same compact spacing when narrow.
         harbor.resize(1000, 760);
         harbor.verifyVoyageHeadingSpacing();
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0381-harbor-czech-narrow.png");
+                .saveEvidence("r0390-harbor-czech-narrow.png");
     }
 }
