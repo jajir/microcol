@@ -1,5 +1,10 @@
 # Current requirement backlog
 
+## Plowing completion in turn report — 2026-11-01
+
+1. [R-0393](R-0393.md), status `new`, captures one owner-visible event when plowing creates a field, identifying the unit and location and explaining that the unit can receive further orders. No open questions; implementation not authorized.
+
+
 ## Automatic trade-route events in the turn report — 2026-11-01
 
 1. [R-0392](R-0392.md) captures per-event reporting of actual automatic route transactions and transfers. Status: `new`; scope clarified by the user to goods and money only, with no open questions. No implementation authorized.
