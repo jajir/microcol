@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.microcol.gui.GoodsTypeName;
-import org.microcol.gui.dialog.DialogNotEnoughGold;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.Screen;
@@ -70,8 +69,8 @@ public final class PanelEuropeGoods
     public PanelEuropeGoods(final EuropeCallback europeDialogCallback,
             final GameModelController gameModelController,
             final ImageProvider imageProvider,
-            final DialogNotEnoughGold dialogNotEnoughGold,
-            final EventBus eventBus, final I18n i18n) {
+            final QuickBuyShortcut quickBuyShortcut, final EventBus eventBus,
+            final I18n i18n) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.europeDialogCallback = Preconditions
@@ -84,7 +83,7 @@ public final class PanelEuropeGoods
         tradeRestriction.setWrapText(true);
         GoodsType.BUYABLE_GOOD_TYPES.forEach(goodsType -> {
             final PanelGood panelGood = new PanelGood(goodsType, imageProvider,
-                    gameModelController, dialogNotEnoughGold, eventBus, i18n);
+                    gameModelController, quickBuyShortcut, eventBus, i18n);
             if (!panelGoods.isEmpty()) {
                 final Region gap = new Region();
                 HBox.setHgrow(gap, javafx.scene.layout.Priority.ALWAYS);

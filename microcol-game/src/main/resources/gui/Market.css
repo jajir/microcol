@@ -1,3 +1,8 @@
 .column0 { -fx-min-width: 250; }
+/* Tick labels are centred on the track ends; the padding keeps "Nothing" and
+   "Maximum: 100 pcs" inside the panel. */
 .in-game-page .slider { -fx-min-height: 70; }
+.in-game-page #marketSlider { -fx-padding: 0 96 0 48; }
 .in-game-page .mainPanel { -fx-max-width: 700; }
+/* Keep wrapped glyphs inside the limit label at fractional font widths. */
+.in-game-page #marketLimit { -fx-padding: 0 2 0 2; }

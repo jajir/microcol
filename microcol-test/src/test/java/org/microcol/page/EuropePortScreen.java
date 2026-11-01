@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 import org.microcol.gui.screen.europe.EuropeButtonsPanel;
+import org.microcol.gui.screen.game.components.StatusBarView;
 import org.microcol.model.EuropeanNation;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsTrade;
@@ -77,7 +78,14 @@ public class EuropePortScreen extends AbstractScreen {
         WaitForAsyncUtils.asyncFx(() -> {
             getShipsInPort().get(0).getCargo().getSlotByIndex(cargoSlotIndex)
                     .buyAndStoreFromEuropePort(Goods.of(goodsType, amount));
+            // The harbor shows the changed hold, as after any other action.
+            getContext()
+                    .getClassFromGuice(
+                            org.microcol.gui.screen.europe.EuropePanel.class)
+                    .repaint();
         }).get(5, java.util.concurrent.TimeUnit.SECONDS);
+        // The treasury label follows the gold event on the next FX pulse.
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void verifyGoodsTransferChangedWarning(final String expectedText) {
@@ -91,6 +99,15 @@ public class EuropePortScreen extends AbstractScreen {
 
     public void closeGoodsTransferWarning() {
         clickOnButtonWithId("buttonOk");
+    }
+
+    public void verifyEuropeGoldChangedWarning(final String expectedText) {
+        final List<javafx.scene.Node> labels = getListOfNodes(".label");
+        assertTrue(
+                labels.stream().filter(node -> node instanceof Labeled)
+                        .anyMatch(node -> expectedText
+                                .equals(((Labeled) node).getText())),
+                String.format("Warning '%s' was not shown", expectedText));
     }
 
     public void verifyEuropePriceChangedWarning(final String expectedText) {
@@ -130,12 +147,14 @@ public class EuropePortScreen extends AbstractScreen {
                 "Bid and ask of %s in %s market", goodsType.name(), nation));
     }
 
-    private List<UnitWithCargo> getShipsInPort() {
-        final Player human = getModel().getPlayers().stream()
-                .filter(Player::isHuman).findAny()
-                .orElseThrow(() -> new IllegalStateException(
+    private Player getHuman() {
+        return getModel().getPlayers().stream().filter(Player::isHuman)
+                .findAny().orElseThrow(() -> new IllegalStateException(
                         "There is no human player in game model."));
-        return getModel().getEurope().getPort().getShipsInPort(human);
+    }
+
+    private List<UnitWithCargo> getShipsInPort() {
+        return getModel().getEurope().getPort().getShipsInPort(getHuman());
     }
 
     public void verifyGoodsInShip(final int cargoSlotIndex,
@@ -222,11 +241,101 @@ public class EuropePortScreen extends AbstractScreen {
 
     public void buyGoodsAndMoveItToCargoSlot(final int indexOfGoods,
             final int indexOfCargoSlot) {
+        dragMarketGoodsToHold(indexOfGoods, indexOfCargoSlot);
+        getRobot().drop().release(MouseButton.PRIMARY);
+    }
+
+    /**
+     * A normal drag from the market to a hold opens the purchase choice.
+     */
+    public ScreenMarketBuy openPurchaseChoice(final int indexOfGoods,
+            final int indexOfCargoSlot) {
+        buyGoodsAndMoveItToCargoSlot(indexOfGoods, indexOfCargoSlot);
+        WaitForAsyncUtils.waitForFxEvents();
+        return ScreenMarketBuy.of(getContext());
+    }
+
+    /**
+     * Hold the platform quick-buy key (Command on macOS, Ctrl elsewhere) for
+     * the whole drag, including the drop.
+     */
+    public void quickBuyGoods(final int indexOfGoods,
+            final int indexOfCargoSlot) {
+        getRobot().press(getQuickBuyModifier());
+        buyGoodsAndMoveItToCargoSlot(indexOfGoods, indexOfCargoSlot);
+        getRobot().release(getQuickBuyModifier());
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /**
+     * Start a plain drag and press the quick-buy key only over the hold, before
+     * the drop.
+     */
+    public void quickBuyWithKeyPressedDuringDrag(final int indexOfGoods,
+            final int indexOfCargoSlot) {
         showCargoAndGoods();
-        getRobot().drag(getGoodsImage(indexOfGoods), MouseButton.PRIMARY)
-                .dropTo(pageComponentPanelDock.getListOfCrates()
-                        .get(indexOfCargoSlot))
-                .release(MouseButton.PRIMARY);
+        dragMarketGoodsToHold(indexOfGoods, indexOfCargoSlot);
+        getRobot().press(getQuickBuyModifier());
+        // A small move lets the platform drag report the new modifier.
+        getRobot().moveBy(2, 0);
+        getRobot().drop();
+        getRobot().release(getQuickBuyModifier());
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /**
+     * Start the drag with the quick-buy key held and release it over the hold,
+     * before the drop; the drop opens the purchase choice.
+     */
+    public ScreenMarketBuy openPurchaseChoiceAfterReleasingQuickBuyKey(
+            final int indexOfGoods, final int indexOfCargoSlot) {
+        showCargoAndGoods();
+        getRobot().press(getQuickBuyModifier());
+        dragMarketGoodsToHold(indexOfGoods, indexOfCargoSlot);
+        getRobot().release(getQuickBuyModifier());
+        // A small move lets the platform drag report the released modifier.
+        getRobot().moveBy(2, 0);
+        getRobot().drop();
+        WaitForAsyncUtils.waitForFxEvents();
+        return ScreenMarketBuy.of(getContext());
+    }
+
+    /**
+     * Simulate another action changing the treasury while a purchase choice is
+     * open, or prepare it before the purchase.
+     */
+    public void changeTreasury(final int gold) throws Exception {
+        WaitForAsyncUtils.asyncFx(() -> getHuman().setGold(gold)).get(5,
+                java.util.concurrent.TimeUnit.SECONDS);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /**
+     * Simulate the Crown changing the tax while a purchase choice is open, or
+     * prepare it before the purchase.
+     */
+    public void changeCrownTax(final int percentage) throws Exception {
+        WaitForAsyncUtils
+                .asyncFx(() -> getModel().getKingOf(getHuman()).orElseThrow()
+                        .setKingsTaxPercentage(percentage))
+                .get(5, java.util.concurrent.TimeUnit.SECONDS);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /**
+     * @param expectedText exact status bar text after a purchase drop
+     */
+    public void verifyStatusMessage(final String expectedText) {
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals(expectedText,
+                getLabeledById(StatusBarView.STATUS_BAR_LABEL_ID).getText());
+    }
+
+    /** No purchase choice opened; the harbor stays shown. */
+    public void verifyNoPurchaseChoice() {
+        WaitForAsyncUtils.waitForFxEvents();
+        assertFalse(isCssIdShown("marketSlider"),
+                "The purchase choice is not shown");
     }
 
     public ScreenMarketSell sellGoodsWithPressedControl(
@@ -239,12 +348,24 @@ public class EuropePortScreen extends AbstractScreen {
     }
 
     public void sellGoods(final int indexOfCargoSlot, final int indexOfGoods) {
+        final javafx.scene.Node crate = pageComponentPanelDock.getListOfCrates()
+                .get(indexOfCargoSlot);
+        final javafx.scene.Node goods = getGoodsImage(indexOfGoods);
+        revealGameContent(crate);
+        getRobot().drag(crate, MouseButton.PRIMARY);
+        revealGameContent(goods);
+        getRobot().dropTo(goods).release(MouseButton.PRIMARY);
+    }
+
+    /** A plain drag between holds of the selected ship moves all goods. */
+    public void moveCargo(final int source, final int target) {
         showCargoAndGoods();
         getRobot()
-                .drag(pageComponentPanelDock.getListOfCrates()
-                        .get(indexOfCargoSlot), MouseButton.PRIMARY)
-                .dropTo(getGoodsImage(indexOfGoods))
+                .drag(pageComponentPanelDock.getListOfCrates().get(source),
+                        MouseButton.PRIMARY)
+                .dropTo(pageComponentPanelDock.getListOfCrates().get(target))
                 .release(MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public DialogChooseGoodsAmount moveCargoWithPressedControl(final int source,
@@ -258,6 +379,19 @@ public class EuropePortScreen extends AbstractScreen {
                 .release(MouseButton.PRIMARY);
         getRobot().release(getGoodsAmountModifiers());
         return DialogChooseGoodsAmount.of(getContext());
+    }
+
+    private void dragMarketGoodsToHold(final int goodsIndex,
+            final int cargoIndex) {
+        final javafx.scene.Node goods = getGoodsImage(goodsIndex);
+        final javafx.scene.Node crate = pageComponentPanelDock.getListOfCrates()
+                .get(cargoIndex);
+        revealGameContent(goods);
+        getRobot().drag(goods, MouseButton.PRIMARY);
+        // Narrow windows cannot show the last market good and first hold
+        // together.
+        revealGameContent(crate);
+        getRobot().moveTo(crate);
     }
 
     private void showCargoAndGoods() {

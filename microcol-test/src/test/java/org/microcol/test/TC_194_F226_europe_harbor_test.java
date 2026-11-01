@@ -53,8 +53,8 @@ public class TC_194_F226_europe_harbor_test extends AbstractMicroColTest {
         harbor.verifySelectedCargo(3142, 0, Goods.of(GoodsType.ORE, 43));
         port.verifyAvailableHoldCount(4);
 
-        // Buy into this ship, keeping its selection and existing cargo.
-        port.buyGoodsAndMoveItToCargoSlot(0, 1);
+        // Quick-buy into this ship, keeping its selection and existing cargo.
+        port.quickBuyGoods(0, 1);
         harbor.verifySelectedCargo(3142, 1, Goods.of(GoodsType.CORN, 100));
         harbor.verifySelectedCargo(3142, 0, Goods.of(GoodsType.ORE, 43));
         port.verifyAvailableHoldCount(4);

@@ -18,5 +18,19 @@
 	<entry key="buttonBuy">Koupit</entry>
 	<entry key="buttonSell">Prodat</entry>
 	<entry key="buttonCancel">Zpět</entry>
+	<entry key="maximum">Maximum: %s ks</entry>
+	<entry key="remaining">Zlato po nákupu ...</entry>
+	<entry key="limitGold">Můžeš koupit nejvýše %s kusů. Na více nemáš dost zlata.</entry>
+	<entry key="limitHold">Do tohoto nákladového prostoru se vejde ještě %s kusů.</entry>
+	<entry key="limitBoth">Můžeš koupit nejvýše %s kusů. Na více nemáš dost zlata a do tohoto nákladového prostoru se víc nevejde.</entry>
+	<entry key="quickBuyHint">Pro okamžitý nákup maximálního množství drž při přetahování %s.</entry>
+	<entry key="quickBuyKeyMac">⌘</entry>
+	<entry key="quickBuyKeyMacSpoken">Command</entry>
+	<entry key="quickBuyKeyOther">Ctrl</entry>
+	<entry key="dragToBuy">Přetáhni zboží do nákladového prostoru lodi a vyber množství. Pro okamžitý nákup maximálního množství drž při přetahování %s.</entry>
+	<entry key="bought">%s: koupeno %s ks za %s zlatých.</entry>
+	<entry key="blockedGold">%s: nemáš dost zlata ani na jeden kus. Nic se nekoupilo.</entry>
+	<entry key="blockedFull">%s: tento nákladový prostor je plný. Nic se nekoupilo.</entry>
+	<entry key="blockedHold">%s: tento nákladový prostor obsahuje jiný náklad nebo ho teď nelze použít. Nic se nekoupilo.</entry>
 
 </properties>

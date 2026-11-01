@@ -1,5 +1,21 @@
 # Current requirement backlog
 
+## Ordered development resumed — 2026-11-01
+
+R-0378 implementation and requirement-specific verification are complete: 4,814 model/JUnit, 38 targeted Docker and 3 native macOS tests passed with zero failures/errors/skips. Status stays `ready for development` pending the explicitly deferred final batch smoke. R-0377 is next. [Evidence](../functional-tests.md#r-0378-implemented-and-verified-2026-11-01).
+
+1. The user resumed R-0378, then R-0377, R-0376, R-0228, R-0227, R-0225, R-0221, R-0216, R-0211, R-0382 and R-0383 in that order, using Claude for implementation and repairs.
+2. Explicit task-specific acceptance amendment: run the fixed smoke/support selection once at the end of this batch, not after every requirement. Model/JUnit, targeted UI, required platform checks, review and documentation validation remain applicable. The final combined smoke result must be recorded separately; it is not yet a pass. The pause recorded below is historical.
+
+
+## Ordered development paused — 2026-10-31
+
+1. User stopped further work after host disk exhaustion and Docker failure. No automatic continuation is authorized until a new user instruction.
+2. [R-0381](done/R-0381.md) and [R-0379](done/R-0379.md) are `done`, accepted locally and pushed in commits `7f8d27e7` and `57be46c1` respectively.
+3. [R-0378](R-0378.md) remains `ready for development`: refinement and an implementation candidate exist, but acceptance and integration are incomplete. Changes are preserved in the isolated `claude-ordered-requirements/microcol` worktree. See [paused execution evidence](../functional-tests.md#ordered-development-paused-2026-10-31).
+4. R-0377, R-0376, R-0228, R-0227, R-0225, R-0221, R-0216 and R-0211 were not started in this ordered development session; their existing requirement statuses remain unchanged. Earlier dated capture notes below are historical.
+
+
 Status decisions on 2026-10-31: [R-0304](done/R-0304.md), [R-0313](done/R-0313.md), [R-0321](done/R-0321.md) are `done`;
 [R-0209](canceled/R-0209.md), [R-0222](canceled/R-0222.md), [R-0223](canceled/R-0223.md), [R-0224](canceled/R-0224.md), [R-0226](canceled/R-0226.md), [R-0229](canceled/R-0229.md), [R-0230](canceled/R-0230.md), [R-0233](canceled/R-0233.md) are `canceled`, at the user’s explicit request.
 These administrative closures do not add implementation or acceptance evidence.

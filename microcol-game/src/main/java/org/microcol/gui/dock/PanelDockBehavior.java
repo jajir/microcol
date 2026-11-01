@@ -10,11 +10,21 @@ import javafx.scene.Node;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.MouseDragEvent;
 
 /**
  * Define what should panel with dock do in some situations.
  */
 public interface PanelDockBehavior {
+
+    default boolean isCorrectObject(final CargoSlot cargoSlot,
+            final MouseDragEvent event) {
+        return false;
+    }
+
+    default void onDragDropped(final CargoSlot cargoSlot,
+            final MouseDragEvent event) {
+    }
 
     /**
      * Get list of units placed in dock.

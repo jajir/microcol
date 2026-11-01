@@ -14,6 +14,7 @@ import org.microcol.page.CongressPage;
 import org.microcol.page.EuropePortScreen;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
+import org.microcol.page.InGameLayoutPage;
 import org.microcol.page.ScreenMarketBuy;
 import org.microcol.page.ScreenMarketSell;
 import org.microcol.page.TaxDemandPage;
@@ -120,10 +121,14 @@ public class TC_110_F101_fugger_boycott_test extends AbstractMicroColTest {
         europe.selectUnitFromPort(0);
         europe.verifyCargoSlotEmpty(0, 0);
         int buyTotal = taxes.quoteMarketPrice(GoodsType.MUSKET, 2, true);
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0378-fugger-before-buy.png");
         ScreenMarketBuy buy = europe
                 .buyGoodsAndMoveItToCargoSlotWithPressedControl(
                         GoodsType.BUYABLE_GOOD_TYPES.indexOf(GoodsType.MUSKET),
                         0);
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0378-fugger-after-drag.png");
         buy.selectValueAtSlider(2);
         buy.verifySelectedMarketQuantity(2);
         buy.clickOnBuy();

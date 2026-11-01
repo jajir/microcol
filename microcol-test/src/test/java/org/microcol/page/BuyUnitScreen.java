@@ -27,6 +27,15 @@ public class BuyUnitScreen extends AbstractScreen {
     }
 
     public EuropePortScreen buyUnitByName(final String unitNameToBuy) {
+        return buyUnitByName(unitNameToBuy, "Europe");
+    }
+
+    /**
+     * @param unitNameToBuy    shown name of the offered unit
+     * @param expectedPortName localized port title shown after the purchase
+     */
+    public EuropePortScreen buyUnitByName(final String unitNameToBuy,
+            final String expectedPortName) {
         final List<BuyUnitPanel> buyUnitPanels = getListOfNodes(".unitPanel");
         final BuyUnitPanel buyUnitPanel = buyUnitPanels.stream()
                 .filter(node -> {
@@ -46,7 +55,7 @@ public class BuyUnitScreen extends AbstractScreen {
                 button.getId().substring("buy-unit-".length()));
         getRobot().clickOn(button, MouseButton.PRIMARY);
         WaitForAsyncUtils.waitForFxEvents();
-        return EuropePortScreen.of(getContext());
+        return EuropePortScreen.of(getContext(), expectedPortName);
     }
 
     public void verifyShipOffer(org.microcol.model.UnitType type, String name,

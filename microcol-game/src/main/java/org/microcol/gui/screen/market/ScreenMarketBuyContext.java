@@ -1,6 +1,7 @@
 package org.microcol.gui.screen.market;
 
 import org.microcol.model.CargoSlot;
+import org.microcol.model.EuropePurchaseLimit;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
 
@@ -8,28 +9,34 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
- * Holds data for correct buying goods at market.
+ * Holds data for correct buying goods at market: the model purchase snapshot
+ * shown to the player and its target hold.
  */
 public class ScreenMarketBuyContext {
-    private final Goods maxPossibleGoodsToBuy;
+    private final EuropePurchaseLimit limit;
     private final CargoSlot targetCargoSlot;
 
-    public ScreenMarketBuyContext(final Goods maxPossibleGoodsToBuy,
+    public ScreenMarketBuyContext(final EuropePurchaseLimit limit,
             final CargoSlot targetCargoSlot) {
-        this.maxPossibleGoodsToBuy = Preconditions
-                .checkNotNull(maxPossibleGoodsToBuy);
+        this.limit = Preconditions.checkNotNull(limit);
+        Preconditions.checkArgument(!limit.isBlocked(),
+                "Nothing can be bought for %s", limit);
         this.targetCargoSlot = Preconditions.checkNotNull(targetCargoSlot);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(ScreenMarketBuyContext.class)
-                .add("maxPossibleGoodsToBuy", maxPossibleGoodsToBuy)
-                .add("targetCargoSlot", targetCargoSlot).toString();
+                .add("limit", limit).add("targetCargoSlot", targetCargoSlot)
+                .toString();
+    }
+
+    public EuropePurchaseLimit getLimit() {
+        return limit;
     }
 
     public Goods getMaxPossibleGoodsToBuy() {
-        return maxPossibleGoodsToBuy;
+        return limit.getMaximum();
     }
 
     public CargoSlot getTargetCargoSlot() {
@@ -37,10 +44,10 @@ public class ScreenMarketBuyContext {
     }
 
     public GoodsType getGoodsType() {
-        return maxPossibleGoodsToBuy.getType();
+        return limit.getGoodsType();
     }
 
     public int getAmountOfMaxPossibleGoodsToBuy() {
-        return maxPossibleGoodsToBuy.getAmount();
+        return limit.getMaximum().getAmount();
     }
 }

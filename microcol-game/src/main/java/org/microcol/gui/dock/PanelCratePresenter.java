@@ -47,6 +47,21 @@ public final class PanelCratePresenter implements JavaFxComponent {
         getContent().setOnDragExited(this::onDragExited);
         getContent().setOnDragOver(this::onDragOver);
         getContent().setOnDragDropped(this::onDragDropped);
+        getContent().setOnMouseDragEntered(event -> {
+            if (cargoSlot != null
+                    && panelDockBehavior.isCorrectObject(cargoSlot, event)) {
+                view.setBackgroundHighlighted();
+            }
+        });
+        getContent().setOnMouseDragExited(event -> view.setBackgroundNormal());
+        getContent().setOnMouseDragReleased(event -> {
+            view.setBackgroundNormal();
+            if (cargoSlot != null
+                    && panelDockBehavior.isCorrectObject(cargoSlot, event)) {
+                panelDockBehavior.onDragDropped(cargoSlot, event);
+                event.consume();
+            }
+        });
     }
 
     public void showCargoSlot(final CargoSlot cargoSlot) {

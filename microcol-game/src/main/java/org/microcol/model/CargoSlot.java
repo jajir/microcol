@@ -263,6 +263,73 @@ public class CargoSlot {
                 Preconditions.checkNotNull(offered, "Offered quote is null"));
     }
 
+    /**
+     * Describe the largest European purchase of one commodity into this hold,
+     * limited by its free space and by the treasury including tax.
+     *
+     * @param goodsType required market commodity
+     * @return current immutable purchase snapshot
+     */
+    public EuropePurchaseLimit getEuropePurchaseLimit(
+            final GoodsType goodsType) {
+        Preconditions.checkNotNull(goodsType);
+        final Player player = getOwnerPlayer();
+        final EuropeTradeQuote unitQuote = player
+                .quoteEuropeTrade(Goods.of(goodsType, 1), true);
+        final boolean holdUsable = isCarrierOperational() && getGoods()
+                .map(stored -> stored.getType() == goodsType).orElse(true);
+        final int room = holdUsable ? getAvailableCapacity() : 0;
+        final EuropePurchaseLimit.Blocker blocker;
+        if (!player.canTradeInEurope()) {
+            blocker = EuropePurchaseLimit.Blocker.TRADE_UNAVAILABLE;
+        } else if (player.isBoycotted(goodsType)) {
+            blocker = EuropePurchaseLimit.Blocker.BOYCOTTED;
+        } else if (!holdUsable || isLoadedUnit() || isReservedHold()) {
+            blocker = EuropePurchaseLimit.Blocker.HOLD_UNAVAILABLE;
+        } else if (room == 0) {
+            blocker = EuropePurchaseLimit.Blocker.HOLD_FULL;
+        } else if (!player.canAffordEuropePurchase(Goods.of(goodsType, 1))) {
+            blocker = EuropePurchaseLimit.Blocker.NOT_ENOUGH_GOLD;
+        } else {
+            blocker = EuropePurchaseLimit.Blocker.NONE;
+        }
+        if (blocker != EuropePurchaseLimit.Blocker.NONE) {
+            return new EuropePurchaseLimit(goodsType, blocker, 0, room,
+                    player.getGold(), unitQuote, false, false);
+        }
+        final int maximum = Math.min(room,
+                player.getMaxBuyableGoods(goodsType).getAmount());
+        // Both limits apply on a tie: one more piece neither fits nor is paid.
+        final boolean limitedByGold = maximum < room || !player
+                .canAffordEuropePurchase(Goods.of(goodsType, maximum + 1));
+        return new EuropePurchaseLimit(goodsType, blocker, maximum, room,
+                player.getGold(), unitQuote, limitedByGold, maximum == room);
+    }
+
+    /**
+     * Buy exactly the confirmed amount at the terms of the shown snapshot. A
+     * change of market access, this hold, price, tax or treasury since it was
+     * shown rejects the purchase before anything is charged or stored.
+     *
+     * @param shown  required snapshot the player confirmed
+     * @param amount required amount from one to the shown maximum
+     * @return the bought goods
+     * @throws EuropePurchaseChangedException when the snapshot is stale
+     */
+    public Goods buyFromEuropePort(final EuropePurchaseLimit shown,
+            final int amount) {
+        Preconditions.checkNotNull(shown, "Shown purchase limit is null");
+        Preconditions.checkArgument(!shown.isBlocked(),
+                "Nothing can be bought for %s", shown);
+        Preconditions.checkArgument(
+                amount > 0 && amount <= shown.getMaximum().getAmount(),
+                "Amount %s is outside 1..%s", amount,
+                shown.getMaximum().getAmount());
+        shown.verifyCurrent(getEuropePurchaseLimit(shown.getGoodsType()));
+        return storeFromEuropePort(Goods.of(shown.getGoodsType(), amount),
+                shown.quote(amount));
+    }
+
     /** @param offered confirmed quote, or {@code null} for the live price */
     private Goods storeFromEuropePort(final Goods goods,
             final EuropeTradeQuote offered) {
@@ -436,6 +503,12 @@ public class CargoSlot {
                     "Tranfered cargo is diffrent type this is stored in slot. Stored=(%s), transfered=(%s)",
                     getGoods().get(), cargoGoods);
         }
+    }
+
+    private boolean isCarrierOperational() {
+        final Unit carrier = getOwnerUnit();
+        return !(carrier instanceof Ship && ((Ship) carrier).isDamaged())
+                && !carrier.isCrownSeized();
     }
 
     private void requireOperationalCarrier() {

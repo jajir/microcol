@@ -2135,15 +2135,24 @@ public abstract class Player {
         }
         for (int amount = CargoSlot.MAX_CARGO_SLOT_CAPACITY; amount > 0; amount--) {
             final Goods goods = Goods.of(type, amount);
-            try {
-                if (quoteEuropeTrade(goods, true).getTotal() <= gold) {
-                    return goods;
-                }
-            } catch (ArithmeticException overflow) {
-                // A price beyond integer treasury capacity is unaffordable.
+            if (canAffordEuropePurchase(goods)) {
+                return goods;
             }
         }
         return Goods.of(type, 0);
+    }
+
+    /**
+     * @param goods required goods to buy
+     * @return whether the current treasury pays the purchase including tax
+     */
+    boolean canAffordEuropePurchase(final Goods goods) {
+        try {
+            return quoteEuropeTrade(goods, true).getTotal() <= gold;
+        } catch (ArithmeticException overflow) {
+            // A price beyond integer treasury capacity is unaffordable.
+            return false;
+        }
     }
 
     /**

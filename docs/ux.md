@@ -2,9 +2,9 @@
 
 ## Potvrzení nákupu v Evropě — 31. října 2026
 
-1. Zachycený návrh [R-0378](requirements/R-0378.md) dává hráči při běžném přetažení z trhu do lodního nákladu potvrzení s předvoleným dostupným maximem. Číselný limit a jeho důvod, celková cena a zbývající zlato vysvětlují výsledek před utracením peněz; zrušení nic nekoupí. Přesnou akceptaci vlastní požadavek.
-2. Viditelná nápověda vysvětluje okamžitý nákup maxima držením Command ⌘ na Macu nebo Ctrl na ostatních systémech při upuštění. Stavová lišta následně sdělí skutečné množství a cenu. Prodej a přesuny vlastního nákladu tím nemění své ovládání; ekonomická pravidla zůstávají v modelu.
-3. Jde o budoucí chování zachycené na přání uživatele, nikoli implementaci nebo ověřený výsledek. Podnětem je uživatelova zkušenost s nevysvětleným menším nákupem; použitelnost návrhu ani zkratky zatím nebyla ověřena. Testy a validační build tohoto zápisu uživatel výslovně vynechal; [evidence](publishing.md#r-0378-europe-purchase-requirement-2026-10-31).
+1. Implementace [R-0378](requirements/R-0378.md) dává hráči při běžném přetažení z trhu do lodního nákladu potvrzení s předvoleným dostupným maximem. Číselný limit a jeho důvod, celková cena a zbývající zlato vysvětlují výsledek před utracením peněz; Zpět a Escape nic nekoupí, nula nejde potvrdit.
+2. Viditelná nápověda vysvětluje okamžitý nákup maxima držením Command ⌘ na Macu nebo Ctrl na ostatních systémech při upuštění. Rozhoduje klávesa právě při upuštění. Stavová lišta sdělí skutečné množství a cenu nebo důvod blokace. Prodej a přesuny vlastního nákladu zachovávají dosavadní ovládání; pravidla a odmítnutí zastaralé nabídky vlastní model.
+3. Modelové, cílené Docker a nativní macOS scénáře prošly 1. listopadu 2026; snímky EN/CZ a úzkých/širokých oken byly zkontrolovány. Nejde o uživatelskou studii. Konečný smoke celé vybrané série zůstává podle pokynu uživatele odložen; [aktuální evidence](functional-tests.md#r-0378-implemented-and-verified-2026-11-01). Původní zachycení návrhu bez testů zůstává v [historické evidenci](publishing.md#r-0378-europe-purchase-requirement-2026-10-31).
 
 ## Vylodění pasažérů — R-0379
 

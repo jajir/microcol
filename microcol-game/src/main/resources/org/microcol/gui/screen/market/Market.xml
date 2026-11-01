@@ -18,5 +18,19 @@
 	<entry key="buttonBuy">Buy</entry>
 	<entry key="buttonSell">Sell</entry>
 	<entry key="buttonCancel">Back</entry>
+	<entry key="maximum">Maximum: %s pcs</entry>
+	<entry key="remaining">Gold left after buying ...</entry>
+	<entry key="limitGold">You can buy at most %s pieces. You don't have enough gold for more.</entry>
+	<entry key="limitHold">This cargo hold has room for %s more pieces.</entry>
+	<entry key="limitBoth">You can buy at most %s pieces. You don't have enough gold for more, and this cargo hold has no room for more.</entry>
+	<entry key="quickBuyHint">To buy the maximum amount immediately, hold %s while dragging.</entry>
+	<entry key="quickBuyKeyMac">⌘</entry>
+	<entry key="quickBuyKeyMacSpoken">Command</entry>
+	<entry key="quickBuyKeyOther">Ctrl</entry>
+	<entry key="dragToBuy">Drop the goods on a ship's cargo hold to choose the amount. To buy the maximum amount immediately, hold %s while dragging.</entry>
+	<entry key="bought">%s: bought %s pieces for %s gold.</entry>
+	<entry key="blockedGold">%s: you don't have enough gold for even one piece. Nothing was bought.</entry>
+	<entry key="blockedFull">%s: this cargo hold is full. Nothing was bought.</entry>
+	<entry key="blockedHold">%s: this cargo hold holds other cargo or can't be used now. Nothing was bought.</entry>
 
 </properties>

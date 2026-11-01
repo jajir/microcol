@@ -19,6 +19,8 @@
 	<entry key="notEnoughGold_caption">You don't have enough gold.</entry>
 	<entry key="goodsTransfer_changed">The cargo hold changed and the purchase was not made. Nothing was charged.</entry>
 	<entry key="europePrice_changed">The European price changed and the trade was not made. Nothing was charged or moved.</entry>
+	<entry key="europeGold_changed">Your gold changed and the purchase was not made. Nothing was charged.</entry>
+	<entry key="europeTrade_changed">These goods can no longer be bought in Europe, so the purchase was not made. Nothing was charged.</entry>
 	
 
 	<entry key="unitCantMoveHere_caption">I't not possible to move unit here.</entry>

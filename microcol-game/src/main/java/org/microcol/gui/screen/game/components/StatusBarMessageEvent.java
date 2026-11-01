@@ -22,6 +22,8 @@ public final class StatusBarMessageEvent {
 
     private final String statusMessage;
 
+    private final boolean outcome;
+
     /**
      * Text in parameter will be in status bar.
      *
@@ -30,8 +32,28 @@ public final class StatusBarMessageEvent {
      */
     public StatusBarMessageEvent(final String statusMessage,
             final Source source) {
+        this(statusMessage, source, false);
+    }
+
+    private StatusBarMessageEvent(final String statusMessage,
+            final Source source, final boolean outcome) {
         this.statusMessage = statusMessage;
         this.source = Preconditions.checkNotNull(source);
+        this.outcome = outcome;
+    }
+
+    /**
+     * The result of a player's action. Hover help does not replace it until the
+     * player moves the pointer or presses a mouse button again.
+     *
+     * @param statusMessage required result message
+     * @param source        required source where event was raised
+     * @return the event
+     */
+    public static StatusBarMessageEvent outcome(final String statusMessage,
+            final Source source) {
+        return new StatusBarMessageEvent(
+                Preconditions.checkNotNull(statusMessage), source, true);
     }
 
     /**
@@ -52,7 +74,12 @@ public final class StatusBarMessageEvent {
     public String toString() {
         return MoreObjects.toStringHelper(StatusBarMessageEvent.class)
                 .add("statusMesssage", statusMessage).add("source", source)
-                .toString();
+                .add("outcome", outcome).toString();
+    }
+
+    /** @return whether the message is the result of a player's action */
+    public boolean isOutcome() {
+        return outcome;
     }
 
     public String getStatusMessage() {

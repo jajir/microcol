@@ -20,7 +20,10 @@ import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 
 @Listener
 final class StatusBarPresenter implements UpdatableLanguage {
@@ -38,8 +41,14 @@ final class StatusBarPresenter implements UpdatableLanguage {
 
     private Source showEventsFromSource;
 
+    /** Pointer travel in pixels that releases a shown result. */
+    private static final double OUTCOME_MOVE = 4;
+
     private String contextMessage = "";
     private String hint;
+    private boolean outcomeShown;
+    private Point2D outcomeAnchor;
+    private final EventHandler<MouseEvent> mouseFilter = this::onMouse;
 
     @Inject
     public StatusBarPresenter(final EventBus eventBus, final I18n text,
@@ -55,10 +64,38 @@ final class StatusBarPresenter implements UpdatableLanguage {
         Preconditions.checkNotNull(showEventsFromSource,
                 "It's not defined which events should be shown in status bar.");
         if (showEventsFromSource == event.getSource()) {
+            if (outcomeShown && !event.isOutcome()) {
+                // Hover help waits until the player has seen the result.
+                return;
+            }
             logger.debug("Setting text at status bar '{}'",
                     event.getStatusMessage());
             contextMessage = event.getStatusMessage();
+            outcomeShown = event.isOutcome();
+            outcomeAnchor = null;
             refreshDescription();
+        }
+    }
+
+    /**
+     * A shown result gives way to hover help once the pointer really moves or a
+     * mouse button is pressed; the enter and exit events that follow the drop
+     * or the screen change keep it.
+     */
+    private void onMouse(final MouseEvent event) {
+        if (!outcomeShown) {
+            return;
+        }
+        if (MouseEvent.MOUSE_PRESSED == event.getEventType()) {
+            outcomeShown = false;
+        } else if (MouseEvent.MOUSE_MOVED == event.getEventType()) {
+            final Point2D position = new Point2D(event.getScreenX(),
+                    event.getScreenY());
+            if (outcomeAnchor == null) {
+                outcomeAnchor = position;
+            } else if (outcomeAnchor.distance(position) > OUTCOME_MOVE) {
+                outcomeShown = false;
+            }
         }
     }
 
@@ -74,6 +111,15 @@ final class StatusBarPresenter implements UpdatableLanguage {
 
     void setStatusBarView(final StatusBarView statusBarView) {
         this.view = Preconditions.checkNotNull(statusBarView);
+        statusBarView.getContent().sceneProperty()
+                .addListener((property, oldScene, newScene) -> {
+                    if (oldScene != null) {
+                        oldScene.removeEventFilter(MouseEvent.ANY, mouseFilter);
+                    }
+                    if (newScene != null) {
+                        newScene.addEventFilter(MouseEvent.ANY, mouseFilter);
+                    }
+                });
         statusBarView.getLabelEra().setOnMouseEntered(event -> {
             Preconditions.checkNotNull(showEventsFromSource,
                     "It's not defined which events should be shown in status bar.");
@@ -121,6 +167,7 @@ final class StatusBarPresenter implements UpdatableLanguage {
             setGoldText(0);
         }
         contextMessage = "";
+        outcomeShown = false;
         refreshDescription();
     }
 

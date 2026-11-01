@@ -59,6 +59,15 @@ public abstract class AbstractScreen {
                 : new KeyCode[] { KeyCode.CONTROL, KeyCode.SHIFT };
     }
 
+    protected boolean isMacPlatform() {
+        return System.getProperty("os.name").startsWith("Mac");
+    }
+
+    protected KeyCode getQuickBuyModifier() {
+        // The quick purchase uses Command on macOS and Ctrl elsewhere.
+        return isMacPlatform() ? KeyCode.COMMAND : KeyCode.CONTROL;
+    }
+
     protected Model getModel() {
         return context.getModel();
     }
