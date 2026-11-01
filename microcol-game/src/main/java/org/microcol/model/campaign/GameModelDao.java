@@ -22,6 +22,7 @@ import org.microcol.model.campaign.po.RecoverySlot;
 import org.microcol.model.campaign.po.SaveMetadataPo;
 import org.microcol.model.campaign.po.SaveSummaryPo;
 import org.microcol.model.campaign.po.SavedGames;
+import org.microcol.model.campaign.po.TurnSnapshot;
 import org.microcol.model.generation.GeneratedWorld;
 import org.microcol.model.generation.GeneratedWorldSettings;
 import org.microcol.model.generation.NorthAmericaWorld;
@@ -31,6 +32,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.gson.JsonElement;
 
 /**
  * Load and save model campaign from to file.
@@ -253,8 +255,9 @@ public final class GameModelDao {
      * @param name    optional save name, normalized and validated before any
      *                write
      * @param preview optional PNG preview of the same state
+     * @return the gameplay state the written file holds (R-0387)
      */
-    public void saveGame(final File file, final GameModel game,
+    public JsonElement saveGame(final File file, final GameModel game,
             final SavedGames.Kind kind, final String name,
             final byte[] preview) {
         Preconditions.checkNotNull(file);
@@ -269,32 +272,60 @@ public final class GameModelDao {
         snapshot.setSaveName(given == null ? defaultName(summary) : given);
         gameModelPoDao.savePlayerGame(file.getAbsolutePath(), snapshot,
                 metadata(snapshot, kind, summary), preview);
+        return gameModelPoDao.gameplayState(snapshot);
     }
 
-    public void saveRecoverySlots(final GameModel game,
-            final PersistingTool paths, final List<RecoverySlot> slots) {
-        saveRecoverySlots(game, paths, slots, null);
+    /**
+     * @param game required game
+     * @return its current gameplay state in the form a save would store it
+     * @throws org.microcol.model.TurnPreparationException while the turn is not
+     *                                                     complete
+     */
+    public JsonElement gameplayState(final GameModel game) {
+        return gameModelPoDao
+                .gameplayState(Preconditions.checkNotNull(game).getModelPo());
     }
 
-    public void saveRecoverySlots(final GameModel game,
-            final PersistingTool paths, final List<RecoverySlot> slots,
-            final byte[] preview) {
+    /**
+     * Save the prepared turn as the next turn snapshot of its playthrough
+     * (R-0388). The new snapshot is written completely first; only then is it
+     * copied into the recovery slots and are the oldest snapshots beyond
+     * {@link SavedGames#TURN_HISTORY} removed. A failed write changes no file.
+     *
+     * @param game    required game at a prepared human turn
+     * @param saves   required save catalogue
+     * @param paths   required save locations
+     * @param slots   required recovery slots receiving the same snapshot
+     * @param preview optional PNG preview of the same state
+     * @return the written snapshot with its slot and cleanup outcome
+     * @throws MicroColException when the snapshot cannot be written
+     */
+    public TurnSnapshot saveTurnSnapshot(final GameModel game,
+            final SavedGames saves, final PersistingTool paths,
+            final List<RecoverySlot> slots, final byte[] preview) {
         Preconditions.checkNotNull(game);
+        Preconditions.checkNotNull(saves);
         Preconditions.checkNotNull(paths);
         Preconditions.checkNotNull(slots);
-        if (slots.isEmpty()) {
-            return;
+        final File file = saves.nextTurnSnapshot(game.getPlaythroughId());
+        final JsonElement state = saveGame(file, game,
+                SavedGames.Kind.AUTOMATIC, null, preview);
+        MicroColException slotFailure = null;
+        try {
+            for (final RecoverySlot slot : slots) {
+                gameModelPoDao.copyPlayerGame(file,
+                        paths.getRecoveryFile(slot));
+            }
+        } catch (MicroColException failed) {
+            slotFailure = failed;
         }
-        final GameModelPo snapshot = game.getModelPo();
-        final SaveSummaryPo summary = summary(game, snapshot);
-        snapshot.setSaveName(defaultName(summary));
-        final SaveMetadataPo metadata = metadata(snapshot,
-                SavedGames.Kind.AUTOMATIC, summary);
-        for (final RecoverySlot slot : slots) {
-            gameModelPoDao.savePlayerGame(
-                    paths.getRecoveryFile(slot).getAbsolutePath(), snapshot,
-                    metadata, preview);
+        boolean pruned;
+        try {
+            pruned = saves.pruneTurnSnapshots(game.getPlaythroughId());
+        } catch (MicroColException unavailable) {
+            pruned = false;
         }
+        return new TurnSnapshot(file, state, slotFailure, pruned);
     }
 
     private static SaveSummaryPo summary(final GameModel game,

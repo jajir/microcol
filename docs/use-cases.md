@@ -1283,3 +1283,5 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 ## Produkční symboly Z3, K3 a M3 — 2026-10-30
 
 1. [R-0365](requirements/done/R-0365.md) mění pouze kresbu zvonů, křížů a kladiv. `TC_54_F45_shared_hammers_test` ověřuje všechny tři ikony ve skutečném plátně kolonie a zachovává původní průchod frontou a Continue; `TC_67_F58_religious_production_test` a `TC_77_F69_political_production_test` chrání dosavadní výrobu a její číselné zobrazení. Stav přejímky a výjimku pro smoke uvádí [funkční evidence](functional-tests.md#r-0365-production-icons-variant-three-2026-10-30).
+
+Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-0387/R-0388 ověřují ochranu skutečně neuloženého stavu, ruční dialog při odchodu, zrušení/selhání ukládání a pět automatických pozic na partii. TC191/06–08, TC42/03–05 a TC43/07 doplňují dosavadní scénáře; [výběr a výsledky](functional-tests.md#r-0387r-0388-unsaved-state-and-rolling-autosaves-2026-11-01). Finální společná přejímka dávky zbývá.

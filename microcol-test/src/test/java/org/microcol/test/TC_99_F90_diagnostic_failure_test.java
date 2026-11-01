@@ -10,6 +10,7 @@ import org.microcol.model.campaign.po.RecoverySlot;
 import org.microcol.page.DialogMessagePage;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
+import org.microcol.page.SettingPage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -36,25 +37,30 @@ public class TC_99_F90_diagnostic_failure_test extends AbstractMicroColTest {
     @Tag("local")
     void TC_01_exit_save_failure_keeps_game_and_records_safe_diagnostic()
             throws Exception {
-        // Load the fixture and make the save folder unusable as a directory.
-        WelcomePage.of(getContext()).loadGame();
+        // Without turn checkpoints, play one unsaved turn from the fixture.
+        final SettingPage setting = WelcomePage.of(getContext()).openSetting();
+        setting.setAutosaveEnabled(false);
+        setting.goBack().loadGame().nextTurnAndCloseDialogs();
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
-        audit.verifyCurrentTurn(18);
+        audit.verifyCurrentTurn(19);
+
+        // Make the save folder unusable as a directory.
         audit.rememberActiveGameBeforeSaveFailure();
         final boolean gridShown = audit.isGridShown();
         audit.replaceSaveFolderWithFile();
 
-        // Exit reports the failure and names the diagnostic folder.
+        // Save and continue reports the unusable folder before any Save
+        // dialog and names the diagnostic folder.
         audit.attemptExitToMenu();
         DialogMessagePage.of(getContext())
-                .verifyDialogTextContains("The game could not be saved.");
+                .verifyDialogTextContains("The save folder could not be used.");
         DialogMessagePage.of(getContext())
                 .verifyDialogTextContains(audit.diagnosticFolderLine());
         DialogMessagePage.of(getContext()).close();
 
         // The active game and its settings are unchanged; the record is safe.
         audit.verifyGridShown(gridShown);
-        audit.verifyCurrentTurn(18);
+        audit.verifyCurrentTurn(19);
         audit.verifyCurrentPlayerIsHuman();
         audit.verifyActiveGameUnchangedAfterSaveFailure();
         audit.verifyDiagnosticRecord(DiagnosticEvent.EXIT_SAVE_FAILED,
@@ -63,17 +69,23 @@ public class TC_99_F90_diagnostic_failure_test extends AbstractMicroColTest {
         // After restoring the save folder, Exit saves normally.
         audit.restoreSaveFolder();
         GamePage.of(getContext()).exitToMenu().verifyMainScreen();
-        audit.verifyRecoveryTurn(RecoverySlot.LATEST_POSITION, 18);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+        audit.continueGame();
+        audit.verifyCurrentTurn(19);
     }
 
     @Test
     @Tag("local")
     void TC_02_blocked_diagnostic_folder_keeps_save_failure_feedback()
             throws Exception {
-        // Block the log folder as well as the save folder.
-        WelcomePage.of(getContext()).loadGame();
+        // Without turn checkpoints, play one unsaved turn from the fixture.
+        final SettingPage setting = WelcomePage.of(getContext()).openSetting();
+        setting.setAutosaveEnabled(false);
+        setting.goBack().loadGame().nextTurnAndCloseDialogs();
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
-        audit.verifyCurrentTurn(18);
+        audit.verifyCurrentTurn(19);
+
+        // Block the log folder as well as the save folder.
         audit.rememberActiveGameBeforeSaveFailure();
         audit.blockDiagnosticFolder();
         audit.replaceSaveFolderWithFile();
@@ -81,17 +93,19 @@ public class TC_99_F90_diagnostic_failure_test extends AbstractMicroColTest {
         // The save failure is still reported with the blocked folder named.
         audit.attemptExitToMenu();
         DialogMessagePage.of(getContext())
-                .verifyDialogTextContains("The game could not be saved.");
+                .verifyDialogTextContains("The save folder could not be used.");
         DialogMessagePage.of(getContext())
                 .verifyDialogTextContains(audit.diagnosticFolderLine());
         DialogMessagePage.of(getContext()).close();
 
         // The game remains playable; after restoring folders Exit saves again.
-        audit.verifyCurrentTurn(18);
+        audit.verifyCurrentTurn(19);
         audit.verifyActiveGameUnchangedAfterSaveFailure();
         audit.unblockDiagnosticFolder();
         audit.restoreSaveFolder();
         GamePage.of(getContext()).exitToMenu().verifyMainScreen();
-        audit.verifyRecoveryTurn(RecoverySlot.LATEST_POSITION, 18);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+        audit.continueGame();
+        audit.verifyCurrentTurn(19);
     }
 }

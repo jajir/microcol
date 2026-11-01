@@ -33,14 +33,18 @@ public final class ApplicationController {
 
     private final EventBus eventBus;
 
+    private final PersistingService persistingService;
+
     @Inject
     public ApplicationController(final GameController gameController,
             final MusicController musicController,
-            final GamePreferences gamePreferences, final EventBus eventBus) {
+            final GamePreferences gamePreferences, final EventBus eventBus,
+            final PersistingService persistingService) {
         this.gameController = Preconditions.checkNotNull(gameController);
         this.musicController = Preconditions.checkNotNull(musicController);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.persistingService = Preconditions.checkNotNull(persistingService);
     }
 
     /**
@@ -55,6 +59,7 @@ public final class ApplicationController {
             final Difficulty difficulty, final EuropeanNation nation) {
         gameController.startFreePlay(map, playerName, difficulty, nation);
         eventBus.post(new ShowScreenEvent(Screen.GAME));
+        persistingService.checkpointNewGame();
     }
 
     /**
@@ -69,6 +74,7 @@ public final class ApplicationController {
             return false;
         }
         eventBus.post(new ShowScreenEvent(Screen.GAME));
+        persistingService.checkpointNewGame();
         return true;
     }
 

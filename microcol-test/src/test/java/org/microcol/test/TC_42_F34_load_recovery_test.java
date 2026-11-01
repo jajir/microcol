@@ -8,7 +8,12 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.model.Location;
+import org.microcol.model.Difficulty;
+import org.microcol.model.campaign.po.RecoverySlot;
 import org.microcol.page.DialogMessagePage;
+import org.microcol.page.HostedPanelPage;
+import org.microcol.page.SavedGamesPage;
+import org.microcol.page.SettingPage;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.FreePlaySetupPage;
 import org.microcol.page.GamePage;
@@ -16,6 +21,7 @@ import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 /** Failed Load and Continue keep the previous position and allow retry. */
@@ -86,5 +92,125 @@ public class TC_42_F34_load_recovery_test extends AbstractMicroColTest {
         audit.verifyValidRetryReplacedGame();
         game.openColonyAt(Location.of(24, 16), "New Amsterdam")
                 .verifyColonyPresent("New Amsterdam", true);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_03_failed_load_keeps_unsaved_progress_and_loading_writes_nothing()
+            throws Exception {
+        // Without turn checkpoints, play one unsaved turn from the fixture.
+        final SettingPage setting = WelcomePage.of(getContext()).openSetting();
+        setting.setAutosaveEnabled(false);
+        final GamePage game = setting.goBack().loadGame();
+        final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        audit.rememberPlaythrough();
+        audit.rememberRecoveryBytes();
+        game.nextTurnAndCloseDialogs();
+        saves.rememberGame();
+
+        // A malformed save is rejected before any leave prompt.
+        audit.prepareMalformedLoadFile("{");
+        audit.attemptInvalidSavedGameWhilePlaying();
+        DialogMessagePage.of(getContext()).close();
+        audit.verifyRejectedLoadPreservedGameAndFile();
+
+        // The progress is still unsaved: leaving asks and Cancel keeps it.
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.verifyLeaveConfirmation(true);
+        saves.action("saveCancel");
+        saves.verifyGameUnchanged();
+
+        // Neither loading nor the rejected load wrote any recovery point.
+        audit.verifyRecoveryBytesUnchanged();
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+        audit.verifyTurnSnapshots();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_04_failed_initial_checkpoint_keeps_the_new_world_unsaved()
+            throws Exception {
+        // Block the managed save folder, then start a new world with autosave.
+        final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        audit.obstructManagedSaves();
+        final FreePlaySetupPage setup = WelcomePage.of(getContext())
+                .openFreePlaySetup();
+        final GamePage game = setup.start();
+
+        // The failed first snapshot is reported over the playable new game.
+        DialogMessagePage.of(getContext())
+                .verifyDialogTextContains("The game could not be saved.");
+        DialogMessagePage.of(getContext()).close();
+        game.verifyGameInFront();
+        audit.verifyCurrentPlayerIsHuman();
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_TURN);
+
+        // Leaving says the starting world was never saved; Cancel stays.
+        saves.rememberGame();
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.verifyLeaveMessage("This game has never been saved");
+        saves.action("saveCancel");
+        saves.verifyGameUnchanged();
+
+        // After unblocking, Save and continue opens the manual Save dialog;
+        // the named save preserves the starting world before leaving.
+        audit.removeManagedSavesObstruction();
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.action("saveConfirm");
+        saves.verifySaveDialogOpen(true);
+        saves.saveName("Starting world");
+        WelcomePage.of(getContext()).verifyMainScreen();
+        saves.verifySavedName("Starting world", 1);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+        setup.verifySavedDifficulty(Difficulty.CONQUISTADOR);
+        audit.continueGame();
+        setup.verifyGameDifficulty(Difficulty.CONQUISTADOR, "Conquistador");
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_load_replacement_saves_through_the_manual_dialog()
+            throws Exception {
+        // Keep a named 1508 save, then play an unsaved turn.
+        final SettingPage setting = WelcomePage.of(getContext()).openSetting();
+        setting.setAutosaveEnabled(false);
+        final GamePage game = setting.goBack().loadGame();
+        final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        final HostedPanelPage hosted = new HostedPanelPage(getContext());
+        saves.openSave();
+        saves.saveName("Older position");
+        game.nextTurnAndCloseDialogs();
+        saves.rememberGame();
+
+        // Loading the valid older save asks; Save and continue opens the Save
+        // dialog, whose Escape keeps the Load page, its choice and the game.
+        saves.openLoad();
+        saves.select("Older position");
+        saves.action("loadSelected");
+        saves.action("saveConfirm");
+        saves.verifySaveDialogOpen(true);
+        hosted.press(KeyCode.ESCAPE);
+        saves.verifySaveDialogOpen(false);
+        audit.verifyLoadPageOpen();
+        hosted.verifySelectedSave("Older position");
+        saves.verifyGameUnchanged();
+
+        // A named save of the played turn completes, then the older save
+        // loads.
+        saves.action("loadSelected");
+        saves.action("saveConfirm");
+        saves.saveName("Before loading");
+        game.verifyGameInFront();
+        hosted.verifyLoadClosed();
+        audit.verifyCurrentTurn(18);
+        saves.verifyLoadedSave("Older position");
+        saves.verifySavedName("Before loading", 1);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
     }
 }

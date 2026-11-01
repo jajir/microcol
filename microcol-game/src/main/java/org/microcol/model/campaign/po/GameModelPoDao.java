@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.inject.Singleton;
 
@@ -314,6 +315,38 @@ public final class GameModelPoDao {
                 }
             }
         });
+    }
+
+    /**
+     * The gameplay state of a persistent model in the production JSON form,
+     * compared structurally (R-0387). Only the save name and the focused map
+     * square, a view position, are not gameplay.
+     *
+     * @param gameModelPo required persistent model
+     * @return JSON tree of the gameplay state
+     */
+    public JsonElement gameplayState(final GameModelPo gameModelPo) {
+        final JsonElement out = gson.toJsonTree(
+                Preconditions.checkNotNull(gameModelPo), GameModelPo.class);
+        out.getAsJsonObject().remove("saveName");
+        final JsonElement model = out.getAsJsonObject().get("model");
+        if (model != null && model.isJsonObject()) {
+            model.getAsJsonObject().remove("focusedField");
+        }
+        return out;
+    }
+
+    /**
+     * Copy a complete save to another file through the same temporary file and
+     * atomic replacement as a new save. A failure keeps the previous target.
+     *
+     * @param source required complete save
+     * @param target required target file
+     */
+    public void copyPlayerGame(final File source, final File target) {
+        checkFile(source);
+        writeAtomically(target.getAbsolutePath(),
+                out -> Files.copy(source.toPath(), out));
     }
 
     /**

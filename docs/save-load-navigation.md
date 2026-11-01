@@ -58,9 +58,15 @@ Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověře
    příštím úspěšném autosave. Vypnutí autosave zachová historii; zapnutí pokračuje
    na příští bezpečné hranici tahu bez doplňování minulosti. Podrobná akceptace
    a zobrazení výsledku jsou v R-0388. Jde o schválené chování, ne ověřený běh.
-6. R-0387 i R-0388 zůstávají `new`; schválení chování není implementací ani
-   úspěšným runtime testem. Následující oddíly nadále popisují dosavadní
-   implementaci, včetně současné výzvy při každém odchodu z aktivní hry.
+6. Kandidátní implementace (1. listopadu 2026, `ready for development` do
+   závěrečné dávkové akceptace): uloženým stavem je produkční JSON herního stavu
+   z posledního úspěšného uložení nebo ověřeného a spuštěného načtení,
+   porovnávaný strukturně; vyjmuté jsou jen název uložení a zaměřené pole mapy.
+   Stav chrání jen tehdy, když jeho soubor stále existuje se stejnou velikostí
+   a časem změny. Snímky tahů leží v `saves/<id-partie>/turn-NNNNNNNNNN.microcol`;
+   pořadí určuje číslo zápisu ze jmen souborů. Nejnovější snímek se kopíruje do
+   bodu Poslední tah, případně Předchozí desetiletí. Testy jsou připravené, ale
+   tato kandidátní změna je dosud nespustila; viz kapitolu 3 obou požadavků.
 
 ## Náhledy a soubor uložené hry — schváleno 31. října 2026
 
@@ -239,15 +245,23 @@ rozhraní v angličtině; nejde o maketu. České ovládací texty pokrývá tak
 [Zdroj PlantUML](diagrams/save-load/leave.puml)
 
 1. Načtení jiné pozice, restart mise, návrat do hlavní nabídky, ukončení i
-   zavření okna používají **Uložit a pokračovat / Odejít bez uložení / Zpět**.
-2. Uložit a pokračovat zapíše současný stav do bodu obnovy poslední pozice.
-   Teprve úspěch provede původní přechod. Chyba nebo neúplný tah zachová
-   rozehranou hru; hráč může později výslovně odejít bez uložení nebo obnovit bod.
+   zavření okna sdílejí jedno pravidlo: je-li současný herní stav bezpečně
+   uložen, přechod proběhne bez výzvy; jinak nabídne **Uložit a pokračovat /
+   Odejít bez uložení / Zpět**. Hotová hra se dál opouští bez výzvy (R-0374).
+2. Uložit a pokračovat otevře týž ruční dialog Uložit jako herní nabídka:
+   nové pojmenované uložení, nebo potvrzené přepsání vybraného ručního uložení.
+   Teprve úspěšný zápis provede původní přechod; u načtení se ověřená pozice
+   použije až potom. Zrušit, Esc, zavření dialogu, chyba zápisu, nepoužitelná
+   složka nebo neúplný tah zachová rozehranou hru, okno, stránku Načíst s výběrem
+   i neuložený stav; žádný bod obnovy se místo toho nezapíše. Hráč může později
+   výslovně odejít bez uložení.
 3. Zpět a Esc ruší přechod. Odchod bez uložení vyžaduje samostatnou výslovnou
-   volbu. Bez rozehrané hry se ochrana neukazuje.
-4. První implementace se ptá vždy, když existuje aktivní hra. Rozpoznávání
-   nezměněného stavu je odložené vylepšení; nevydáváme pohyb kamery za změnu
-   herního postupu ani netvrdíme, že sledování změn už existuje.
-5. Cloud, grafické seskupování podle rozehrané hry a dodatečná rotace
-   checkpointů nejsou součástí této implementace. Náhledy a souhrny popisuje
+   volbu. Bez rozehrané hry se ochrana neukazuje. Nová partie, která nikdy nebyla
+   uložena, to ve výzvě vysvětlí.
+4. Kandidátní implementace R-0387 porovnává herní stav s posledním úspěšným
+   uložením či načtením (viz pravidlo 6 výše); pohyb kamery, výběr ani nastavení
+   stav nemění. Do závěrečné akceptace jde o neověřený kandidát.
+5. Cloud a grafické seskupování podle rozehrané hry nejsou součástí této
+   implementace. Rotaci snímků tahů popisuje [R-0388](requirements/R-0388.md).
+   Náhledy a souhrny popisuje
    [oddíl R-0382/R-0383](#nahledy-a-soubor-ulozene-hry-schvaleno-31-rijna-2026).

@@ -154,6 +154,65 @@ public final class SavedGamesPage extends AbstractScreen {
         assertTrue(getContext().getPrimaryStage().isShowing());
     }
 
+    /**
+     * The leave confirmation with its three choices is open exactly when
+     * leaving would lose gameplay (R-0387).
+     */
+    public void verifyLeaveConfirmation(final boolean shown) {
+        WaitForAsyncUtils.waitForFxEvents();
+        for (final String id : java.util.List.of("saveConfirm", "saveDiscard",
+                "saveCancel")) {
+            assertEquals(shown,
+                    !getNodeFinder().lookup("#" + id).queryAll().isEmpty(), id);
+        }
+    }
+
+    /**
+     * The regular manual Save dialog is open exactly when expected, e.g. after
+     * Save and continue (R-0387).
+     */
+    public void verifySaveDialogOpen(final boolean open) {
+        WaitForAsyncUtils.waitForFxEvents();
+        // Only the Save browser has Save game; the Load page has Load.
+        assertEquals(open,
+                !getNodeFinder().lookup("#saveNew").queryAll().isEmpty());
+    }
+
+    /** The open leave confirmation explains what leaving would lose. */
+    public void verifyLeaveMessage(final String expectedPart) {
+        WaitForAsyncUtils.waitForFxEvents();
+        final javafx.scene.Node cancel = getNodeFinder().lookup("#saveCancel")
+                .query();
+        assertTrue(getNodeFinder().from(cancel.getScene().getRoot()).lookup((
+                javafx.scene.Node node) -> node instanceof javafx.scene.control.Label
+                        && ((javafx.scene.control.Label) node).getText() != null
+                        && ((javafx.scene.control.Label) node).getText()
+                                .contains(expectedPart))
+                .tryQuery().isPresent(), expectedPart);
+    }
+
+    /** The live game holds the gameplay of the named save. */
+    public void verifyLoadedSave(final String name) throws Exception {
+        final var files = new org.microcol.model.campaign.po.GameModelPoDao();
+        final var expected = files.loadPlayerGame(entry(name).file);
+        final java.nio.file.Path actualFile = java.nio.file.Files
+                .createTempFile("loaded-save-", ".microcol");
+        try {
+            getContext()
+                    .getClassFromGuice(
+                            org.microcol.model.campaign.GameModelDao.class)
+                    .saveToFile(actualFile.toString(), game());
+            final var actual = files.loadPlayerGame(actualFile.toFile());
+            final var gson = new com.google.gson.Gson();
+            assertEquals(expected.getPlaythroughId(),
+                    actual.getPlaythroughId());
+            assertEquals(gson.toJsonTree(expected.getModel()),
+                    gson.toJsonTree(actual.getModel()));
+        } finally {
+            java.nio.file.Files.deleteIfExists(actualFile);
+        }
+    }
+
     public void prepareCampaignImport() throws java.io.IOException {
         final var reader = new org.microcol.model.campaign.po.GameModelPoDao();
         final java.io.File file = java.io.File.createTempFile("campaign-menu-",

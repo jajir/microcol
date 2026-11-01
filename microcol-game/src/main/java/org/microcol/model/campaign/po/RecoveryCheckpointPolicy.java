@@ -28,4 +28,14 @@ public final class RecoveryCheckpointPolicy {
         }
         return List.of(RecoverySlot.LATEST_TURN);
     }
+
+    /**
+     * The ready start of a new game is its first turn snapshot (R-0388); a
+     * loaded game never is.
+     */
+    public static List<RecoverySlot> slotsForNewGame(final boolean human,
+            final boolean autosaveEnabled) {
+        return human && autosaveEnabled ? List.of(RecoverySlot.LATEST_TURN)
+                : List.of();
+    }
 }

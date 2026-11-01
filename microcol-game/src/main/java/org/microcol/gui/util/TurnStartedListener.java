@@ -1,86 +1,39 @@
 package org.microcol.gui.util;
 
-import org.microcol.diagnostics.DiagnosticEvent;
-import org.microcol.diagnostics.DiagnosticLog;
-import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.dialog.PersistingService;
 import org.microcol.gui.preferences.GamePreferences;
-import org.microcol.gui.screen.game.components.SavePreview;
-import org.microcol.model.MicroColException;
-import org.microcol.model.TurnPreparationException;
-import org.microcol.model.campaign.GameModelDao;
-import org.microcol.model.campaign.po.PersistingTool;
 import org.microcol.model.campaign.po.RecoveryCheckpointPolicy;
 import org.microcol.model.event.TurnStartedEvent;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
-import javafx.application.Platform;
 
 /**
- * When turn when human player is on turn than it store game state to save file.
+ * When a prepared human turn starts, the shared saving owner stores it as the
+ * next turn snapshot and in the selected recovery slots.
  */
 @Listener
 public final class TurnStartedListener {
 
     private final GamePreferences gamePreferences;
 
-    private final GameModelDao gameModelDao;
-
-    private final GameModelController gameModelController;
-
-    private final PersistingTool persistingTool;
-
-    private final DiagnosticLog diagnosticLog;
+    private final PersistingService persistingService;
 
     @Inject
     TurnStartedListener(final GamePreferences gamePreferences,
-            final GameModelDao gameModelDao,
-            final GameModelController gameModelController,
-            final PersistingTool persistingTool,
-            final DiagnosticLog diagnosticLog) {
-        this.diagnosticLog = Preconditions.checkNotNull(diagnosticLog);
+            final PersistingService persistingService) {
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-        this.gameModelDao = Preconditions.checkNotNull(gameModelDao);
-        this.gameModelController = Preconditions
-                .checkNotNull(gameModelController);
-        this.persistingTool = Preconditions.checkNotNull(persistingTool);
+        this.persistingService = Preconditions.checkNotNull(persistingService);
     }
 
     @Subscribe
     private void onTurnStarted(final TurnStartedEvent event) {
-        final var slots = RecoveryCheckpointPolicy.slotsForTurn(
-                event.getModel().getCalendar(), event.isFreshStart(),
-                event.getPlayer().isHuman(),
-                gamePreferences.isAutosaveEnabled());
-        if (!slots.isEmpty()) {
-            try {
-                gameModelDao.saveRecoverySlots(
-                        gameModelController.getGameModel(), persistingTool,
-                        slots, SavePreview.render(event.getModel()));
-                gamePreferences.setGameInProgressSaveFile(persistingTool
-                        .getRecoveryFile(
-                                org.microcol.model.campaign.po.RecoverySlot.LATEST_TURN)
-                        .getAbsolutePath());
-            } catch (TurnPreparationException rejected) {
-                diagnosticLog.record(DiagnosticEvent.TURN_PREPARATION_REJECTED,
-                        rejected);
-                showOnFxThread(
-                        gameModelController::showTurnPreparationUnavailable);
-            } catch (MicroColException failedWrite) {
-                diagnosticLog.record(DiagnosticEvent.RECOVERY_SAVE_FAILED,
-                        failedWrite);
-                showOnFxThread(gameModelController::showRecoverySaveFailure);
-            }
-        }
-    }
-
-    private void showOnFxThread(final Runnable message) {
-        if (Platform.isFxApplicationThread()) {
-            message.run();
-        } else {
-            Platform.runLater(message);
-        }
+        persistingService.checkpoint(event.getModel(),
+                RecoveryCheckpointPolicy.slotsForTurn(
+                        event.getModel().getCalendar(), event.isFreshStart(),
+                        event.getPlayer().isHuman(),
+                        gamePreferences.isAutosaveEnabled()));
     }
 
 }

@@ -652,16 +652,127 @@ public final class FreePlayAuditPage extends AbstractScreen {
         clickOnButtonWithId("importSave");
     }
 
+    /**
+     * @return bytes of the recovery save Continue opens: the last successful
+     *         save or load (R-0387)
+     */
     public byte[] readAutosave() throws Exception {
-        return Files.readAllBytes(
-                getContext().getClassFromGuice(PersistingTool.class)
-                        .getAutoSaveFile().toPath());
+        return Files.readAllBytes(continueFile().toPath());
     }
 
     public FileTime getAutosaveLastModifiedTime() throws Exception {
-        return Files.getLastModifiedTime(
-                getContext().getClassFromGuice(PersistingTool.class)
-                        .getAutoSaveFile().toPath());
+        return Files.getLastModifiedTime(continueFile().toPath());
+    }
+
+    private File continueFile() {
+        return getContext()
+                .getClassFromGuice(
+                        org.microcol.gui.dialog.PersistingService.class)
+                .continueFile();
+    }
+
+    private String playthroughId;
+
+    /** Remember the active playthrough for checks made from the menu. */
+    public void rememberPlaythrough() {
+        playthroughId = getContext()
+                .getClassFromGuice(
+                        org.microcol.gui.event.model.GameModelController.class)
+                .getGameModel().getPlaythroughId();
+    }
+
+    private List<File> turnSnapshots() {
+        return getContext()
+                .getClassFromGuice(
+                        org.microcol.model.campaign.po.SavedGames.class)
+                .turnSnapshots(playthroughId);
+    }
+
+    /**
+     * The remembered playthrough keeps turn snapshots of exactly these turns,
+     * oldest write first (R-0388).
+     */
+    public void verifyTurnSnapshots(final Integer... expectedTurns) {
+        final var files = new org.microcol.model.campaign.po.GameModelPoDao();
+        assertEquals(List.of(expectedTurns),
+                turnSnapshots().stream()
+                        .map(file -> files.loadPlayerGame(file).getModel()
+                                .getCalendar().getNumberOfPlayedTurns())
+                        .collect(Collectors.toList()));
+    }
+
+    public void verifyTurnSnapshotCount(final int expected) {
+        assertEquals(expected, turnSnapshots().size());
+    }
+
+    /** Continue opens the newest turn snapshot of the playthrough. */
+    public void verifyContinueOpensNewestTurnSnapshot() {
+        final List<File> snapshots = turnSnapshots();
+        assertFalse(snapshots.isEmpty());
+        assertEquals(snapshots.get(snapshots.size() - 1).getAbsoluteFile(),
+                continueFile().getAbsoluteFile());
+    }
+
+    /**
+     * The open Load page lists the turn snapshots as recovery points, newest
+     * write first, each with its game year in the detail.
+     */
+    public void verifyTurnSnapshotOptions(final String... expectedYears) {
+        final List<File> newestFirst = new java.util.ArrayList<>(
+                turnSnapshots());
+        java.util.Collections.reverse(newestFirst);
+        final var list = savedList();
+        final var listed = list.getItems().stream()
+                .filter(entry -> newestFirst.contains(entry.file))
+                .collect(Collectors.toList());
+        assertEquals(newestFirst, listed.stream().map(entry -> entry.file)
+                .collect(Collectors.toList()));
+        assertEquals(expectedYears.length, listed.size());
+        for (int i = 0; i < listed.size(); i++) {
+            final var entry = listed.get(i);
+            assertEquals(
+                    org.microcol.model.campaign.po.SavedGames.Kind.AUTOMATIC,
+                    entry.kind);
+            getRobot().interact(() -> list.getSelectionModel().select(entry));
+            WaitForAsyncUtils.waitForFxEvents();
+            final String detail = getLabeledById("savedGameSummary").getText();
+            assertTrue(detail.contains(expectedYears[i]), detail);
+        }
+    }
+
+    /** Load the oldest turn snapshot from the open Load page. */
+    public void chooseOldestTurnSnapshot() {
+        final File oldest = turnSnapshots().get(0);
+        final var list = savedList();
+        final var entry = list.getItems().stream()
+                .filter(value -> value.file.equals(oldest)).findFirst()
+                .orElseThrow();
+        getRobot().interact(() -> list.getSelectionModel().select(entry));
+        clickOnButtonWithId("loadSelected");
+    }
+
+    /**
+     * Damage the game data of the newest turn snapshot, keeping its metadata.
+     */
+    public void corruptNewestTurnSnapshotGame() throws Exception {
+        final List<File> snapshots = turnSnapshots();
+        SavedGamesPage.replaceEntry(snapshots.get(snapshots.size() - 1),
+                "game.json",
+                "{".getBytes(java.nio.charset.StandardCharsets.UTF_8));
+    }
+
+    /** Make the managed save folder unusable by placing a file there. */
+    public void obstructManagedSaves() throws Exception {
+        Files.writeString(managedSaves(), "not a folder");
+    }
+
+    public void removeManagedSavesObstruction() throws Exception {
+        Files.delete(managedSaves());
+    }
+
+    private java.nio.file.Path managedSaves() {
+        return getContext().getClassFromGuice(PersistingTool.class)
+                .getRootSaveDirectory().toPath().resolve("saves");
     }
 
     public void verifyAutosaveLastModifiedTime(final FileTime expected)

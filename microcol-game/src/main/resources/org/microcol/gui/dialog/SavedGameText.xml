@@ -27,7 +27,7 @@
     <entry key="folder">Open save folder</entry>
     <entry key="cancel">Cancel</entry>
     <entry key="confirm">Confirm</entry>
-    <entry key="leave">Save the current game before leaving it? Choose Cancel to stay. Saving replaces the latest-position recovery point.</entry>
+    <entry key="leave">Save the current game before leaving it? Choose Cancel to stay. Save and continue opens Save game, where you name a new save or choose one to overwrite.</entry>
     <entry key="saveContinue">Save and continue</entry>
     <entry key="discard">Leave without saving</entry>
     <entry key="saved">Game saved.</entry>
@@ -48,4 +48,7 @@
     <entry key="currentGame">New save of the current game</entry>
     <entry key="target">Selected save to overwrite: %s · %s</entry>
     <entry key="targetNone">No existing save is selected; Save game creates a new one.</entry>
+    <entry key="leaveNew">This game has never been saved, so leaving it now loses the starting world. Save it before leaving? Choose Cancel to stay. Save and continue opens Save game, where you name a new save or choose one to overwrite.</entry>
+    <entry key="autosaved">Turn saved automatically: %s.</entry>
+    <entry key="autosaveCleanup">An older automatic save could not be removed; it will be retried.</entry>
 </properties>

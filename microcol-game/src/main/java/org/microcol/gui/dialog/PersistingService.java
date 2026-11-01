@@ -5,6 +5,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 
 import org.microcol.diagnostics.DiagnosticEvent;
 import org.microcol.diagnostics.DiagnosticLog;
@@ -17,15 +19,23 @@ import org.microcol.model.MicroColException;
 import org.microcol.model.Model;
 import org.microcol.model.TurnPreparationException;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.model.campaign.GameModel;
 import org.microcol.model.campaign.po.PersistingTool;
+import org.microcol.model.campaign.po.RecoveryCheckpointPolicy;
+import org.microcol.model.campaign.po.RecoverySlot;
+import org.microcol.model.campaign.po.SaveBaseline;
 import org.microcol.model.campaign.po.SaveSummaryPo;
 import org.microcol.model.campaign.po.SavedGames;
+import org.microcol.model.campaign.po.TurnSnapshot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
+import com.google.gson.JsonElement;
 import com.google.inject.Inject;
+
+import javafx.application.Platform;
 
 /**
  * Perform load and save operations. When it's necessary it shows system file
@@ -54,6 +64,19 @@ public class PersistingService {
 
     private boolean busy;
 
+    /**
+     * The last successfully saved or loaded gameplay state with its file, or
+     * <code>null</code> when the active game was never saved (R-0387).
+     */
+    private volatile SaveBaseline baseline;
+
+    /** Model and turn of the last turn snapshot, so a repeat writes nothing. */
+    private Model snapshotModel;
+
+    private int snapshotTurn;
+
+    private final Consumer<Runnable> fxThread;
+
     @Inject
     public PersistingService(final GameController gameController,
             final EventBus eventBus, final PersistingTool persistingTool,
@@ -64,6 +87,25 @@ public class PersistingService {
             final org.microcol.gui.util.ViewUtil view,
             final org.microcol.i18n.I18n texts,
             final org.microcol.gui.preferences.GamePreferences preferences) {
+        this(gameController, eventBus, persistingTool, fileSelectingService,
+                gameModelController, diagnosticLog, savedGames, view, texts,
+                preferences, PersistingService::runOnFxThread);
+    }
+
+    /**
+     * @param fxThread runs feedback of the model thread on the JavaFX thread
+     */
+    public PersistingService(final GameController gameController,
+            final EventBus eventBus, final PersistingTool persistingTool,
+            final FileSelectingService fileSelectingService,
+            final GameModelController gameModelController,
+            final DiagnosticLog diagnosticLog,
+            final org.microcol.model.campaign.po.SavedGames savedGames,
+            final org.microcol.gui.util.ViewUtil view,
+            final org.microcol.i18n.I18n texts,
+            final org.microcol.gui.preferences.GamePreferences preferences,
+            final Consumer<Runnable> fxThread) {
+        this.fxThread = Preconditions.checkNotNull(fxThread);
         this.savedGames = savedGames;
         this.view = view;
         this.texts = texts;
@@ -78,8 +120,15 @@ public class PersistingService {
                 .checkNotNull(fileSelectingService);
     }
 
-    public void saveModel(final Model model) {
+    /**
+     * Export the game to a file the player chooses.
+     *
+     * @return <code>true</code> only when the chosen file was written
+     */
+    public boolean saveModel(final Model model) {
         final File saveFile;
+        // Export may run inside a load that is already busy.
+        final boolean wasBusy = busy;
         busy = true;
         try {
             saveFile = fileSelectingService.saveFile(
@@ -88,15 +137,15 @@ public class PersistingService {
         } catch (MicroColException unavailable) {
             diagnosticLog.record(DiagnosticEvent.SAVE_FAILED, unavailable);
             gameModelController.showRecoverySaveFailure();
-            return;
+            return false;
         } finally {
-            busy = false;
+            busy = wasBusy;
         }
         if (saveFile == null) {
             logger.debug("User didn't select any file to save game");
-        } else {
-            saveModelToFile(saveFile);
+            return false;
         }
+        return saveModelToFile(saveFile);
     }
 
     /**
@@ -140,10 +189,10 @@ public class PersistingService {
         return false;
     }
 
-    private void saveModelToFile(final File targetFile) {
+    private boolean saveModelToFile(final File targetFile) {
         final File file = correctFileNameExtension(targetFile);
         logger.debug("Saving game to file '{}' ", file.getAbsolutePath());
-        writeModelToFile(file, SavedGames.Kind.MANUAL);
+        return writeModelToFile(file, SavedGames.Kind.MANUAL);
     }
 
     private boolean loadFromFile(final File sourceFile) {
@@ -158,8 +207,50 @@ public class PersistingService {
         }
         if (loaded) {
             preferences.setGameInProgressSaveFile(file.getAbsolutePath());
+            // The validated and started game is the state its file holds.
+            remember(file, this::currentState);
         }
         return loaded;
+    }
+
+    @FunctionalInterface
+    private interface SavedState {
+        JsonElement get();
+    }
+
+    private JsonElement currentState() {
+        return gameController.gameplayState();
+    }
+
+    /**
+     * Make the state the baseline; without a usable state the game counts as
+     * never saved.
+     */
+    private void remember(final File file, final SavedState state) {
+        try {
+            baseline = SaveBaseline.of(file, state.get());
+        } catch (IllegalStateException | IllegalArgumentException unavailable) {
+            // Includes TurnPreparationException of an incomplete turn.
+            baseline = null;
+        }
+    }
+
+    /**
+     * @return whether leaving now loses no gameplay: the current state is the
+     *         one the last successful save or load left in its unchanged file
+     */
+    public boolean isProgressSaved() {
+        final SaveBaseline saved = baseline;
+        if (saved == null || !gameModelController.isHumanTurnReady()) {
+            return false;
+        }
+        try {
+            return saved.covers(currentState());
+        } catch (IllegalStateException incomplete) {
+            // An incomplete turn (TurnPreparationException) is never safely
+            // saved.
+            return false;
+        }
     }
 
     /**
@@ -201,7 +292,9 @@ public class PersistingService {
     private boolean writeModelToFile(final File targetFile,
             final SavedGames.Kind kind) {
         try {
-            gameController.writeModelToFile(targetFile, kind);
+            final JsonElement state = gameController
+                    .writeModelToFile(targetFile, kind);
+            remember(targetFile, () -> state);
             preferences.setGameInProgressSaveFile(targetFile.getAbsolutePath());
             feedback(SavedGameText.saved);
             return true;
@@ -225,8 +318,21 @@ public class PersistingService {
             eventBus.post(new ShowScreenEvent(Screen.LOAD, recoveryOnly));
             return;
         }
+        saveThroughBrowser(DiagnosticEvent.SAVE_FAILED);
+    }
+
+    /**
+     * Open the manual Save browser for the current game. A failed action
+     * reports itself and keeps the browser for another choice.
+     *
+     * @param failure diagnostic event of an unusable save folder
+     * @return <code>true</code> only when the player completed a save that
+     *         succeeded; Cancel, Escape, closing the browser or a failure
+     *         return <code>false</code>
+     */
+    private boolean saveThroughBrowser(final DiagnosticEvent failure) {
         if (!gameModelController.isHumanTurnReady()) {
-            return;
+            return false;
         }
         // The detail shows the state a new save would store.
         final var game = gameModelController.getGameModel();
@@ -234,15 +340,22 @@ public class PersistingService {
         final byte[] currentImage = SavePreview.render(game.getModel());
         final String suggestedName = suggestedName(current);
         while (true) {
-            final List<SavedGames.Entry> entries = listSavedGames();
-            if (entries == null) {
-                return;
+            final List<SavedGames.Entry> entries;
+            try {
+                entries = savedGames.list();
+            } catch (MicroColException unavailable) {
+                diagnosticLog.record(failure, unavailable);
+                gameModelController.showSaveFolderUnavailable();
+                return false;
             }
             final SavedGamesDialog.Choice choice = new SavedGamesDialog(view,
                     texts).chooseSave(entries, this::preview, current,
                             currentImage, suggestedName);
-            if (choice == null || perform(choice)) {
-                return;
+            if (choice == null) {
+                return false;
+            }
+            if (perform(choice)) {
+                return true;
             }
         }
     }
@@ -331,8 +444,7 @@ public class PersistingService {
             case IMPORT:
                 return importGame(false);
             case EXPORT:
-                saveModel(gameModelController.getModel());
-                return true;
+                return saveModel(gameModelController.getModel());
             case FOLDER:
                 java.awt.Desktop.getDesktop()
                         .open(persistingTool.getRootSaveDirectory());
@@ -361,7 +473,9 @@ public class PersistingService {
     private boolean saveNamed(final File file, final String name,
             final SavedGames.Kind kind) {
         try {
-            gameController.writeNamedGame(file, name, kind);
+            final JsonElement state = gameController.writeNamedGame(file, name,
+                    kind);
+            remember(file, () -> state);
             preferences.setGameInProgressSaveFile(file.getAbsolutePath());
             feedback(SavedGameText.saved);
             return true;
@@ -378,26 +492,56 @@ public class PersistingService {
         return false;
     }
 
+    /**
+     * The one leave rule of menu, quit, window close, restart and load: a
+     * safely saved game is left at once, otherwise the player chooses to save,
+     * discard or stay (R-0387).
+     *
+     * @return <code>true</code> when the game may be replaced or left
+     */
     public boolean confirmLeave() {
         if (!gameModelController.isGameModelReady()
-                || gameModelController.getModel().isGameFinished()) {
+                || gameModelController.getModel().isGameFinished()
+                || isProgressSaved()) {
             return true;
         }
+        // A game never saved, e.g. a new world without autosave, says so.
         final int choice = new SaveConfirmation(view, texts)
-                .choose(texts.get(SavedGameText.leave), true);
-        if (choice == 2) {
-            return true;
-        }
-        if (choice != 1) {
+                .choose(texts.get(baseline == null ? SavedGameText.leaveNew
+                        : SavedGameText.leave), true);
+        return leaveAfter(choice, this::saveBeforeLeaving);
+    }
+
+    /**
+     * @param choice 2 leaves without saving, 1 saves first, anything else stays
+     * @param save   saves the game, telling whether a save succeeded
+     * @return whether the pending leave action may continue
+     */
+    static boolean leaveAfter(final int choice, final BooleanSupplier save) {
+        return choice == 2 || choice == 1 && save.getAsBoolean();
+    }
+
+    /**
+     * Save and continue opens the regular manual Save browser, where the player
+     * names a new save or confirms an overwrite (R-0387 user correction). No
+     * recovery file is written instead.
+     */
+    private boolean saveBeforeLeaving() {
+        // An incomplete turn cannot be saved; the game stays and no Save
+        // browser opens.
+        if (!gameModelController.isHumanTurnReady()) {
+            gameModelController.showTurnPreparationUnavailable();
             return false;
         }
         try {
-            return writeModelToFile(persistingTool.getAutoSaveFile(),
-                    SavedGames.Kind.AUTOMATIC);
-        } catch (MicroColException failed) {
-            gameModelController.showRecoverySaveFailure();
+            currentState();
+        } catch (TurnPreparationException rejected) {
+            diagnosticLog.record(DiagnosticEvent.TURN_PREPARATION_REJECTED,
+                    rejected);
+            gameModelController.showTurnPreparationUnavailable();
             return false;
         }
+        return saveThroughBrowser(DiagnosticEvent.EXIT_SAVE_FAILED);
     }
 
     private boolean confirm(final String message) {
@@ -453,13 +597,102 @@ public class PersistingService {
     public void restartMission() {
         if (gameController.restartMission(this::confirmLeave)) {
             eventBus.post(new ShowScreenEvent(Screen.GAME));
+            checkpointNewGame();
+        }
+    }
+
+    /**
+     * A new game starts unsaved; with autosave its ready start becomes its
+     * first turn snapshot (R-0387, R-0388).
+     */
+    public void checkpointNewGame() {
+        baseline = null;
+        if (!gameModelController.isGameModelReady()) {
+            return;
+        }
+        checkpoint(gameModelController.getModel(),
+                RecoveryCheckpointPolicy.slotsForNewGame(
+                        gameModelController.isHumanTurnReady(),
+                        preferences.isAutosaveEnabled()));
+    }
+
+    /**
+     * Save a prepared human turn as the next turn snapshot of its playthrough
+     * and copy it into the selected recovery slots (R-0388). The new snapshot
+     * is complete before Continue, the baseline or cleanup change; a repeated
+     * notification of the same boundary writes nothing. Called on the model
+     * thread.
+     *
+     * @param model required model whose turn is ready
+     * @param slots required recovery slots; none means no snapshot
+     */
+    public synchronized void checkpoint(final Model model,
+            final List<RecoverySlot> slots) {
+        Preconditions.checkNotNull(model);
+        if (Preconditions.checkNotNull(slots).isEmpty()) {
+            return;
+        }
+        final GameModel game = gameModelController.getGameModel();
+        final int turn = model.getCalendar().getNumberOfPlayedTurns();
+        if (game == null || game.getModel() != model
+                || model == snapshotModel && turn == snapshotTurn) {
+            return;
+        }
+        final TurnSnapshot snapshot;
+        try {
+            snapshot = gameController.writeTurnSnapshot(savedGames,
+                    persistingTool, slots);
+        } catch (TurnPreparationException rejected) {
+            diagnosticLog.record(DiagnosticEvent.TURN_PREPARATION_REJECTED,
+                    rejected);
+            onFxThread(gameModelController::showTurnPreparationUnavailable);
+            return;
+        } catch (MicroColException failedWrite) {
+            // History, Continue and the unsaved status stay as they were.
+            diagnosticLog.record(DiagnosticEvent.RECOVERY_SAVE_FAILED,
+                    failedWrite);
+            onFxThread(gameModelController::showRecoverySaveFailure);
+            return;
+        }
+        snapshotModel = model;
+        snapshotTurn = turn;
+        remember(snapshot.getFile(), snapshot::getState);
+        preferences.setGameInProgressSaveFile(
+                snapshot.getFile().getAbsolutePath());
+        if (snapshot.getSlotFailure().isPresent()) {
+            diagnosticLog.record(DiagnosticEvent.RECOVERY_SAVE_FAILED,
+                    snapshot.getSlotFailure().get());
+            onFxThread(gameModelController::showRecoverySaveFailure);
+            return;
+        }
+        final String saved = texts.get(SavedGameText.autosaved,
+                model.getCalendar().getCurrentYear());
+        // Extra snapshots stay until a later successful autosave removes them.
+        final String message = snapshot.isPruned() ? saved
+                : saved + " " + texts.get(SavedGameText.autosaveCleanup);
+        onFxThread(() -> feedback(message));
+    }
+
+    private void onFxThread(final Runnable action) {
+        fxThread.accept(action);
+    }
+
+    private static void runOnFxThread(final Runnable action) {
+        if (Platform.isFxApplicationThread()) {
+            action.run();
+        } else {
+            Platform.runLater(action);
         }
     }
 
     private void feedback(final SavedGameText text) {
+        feedback(texts.get(text));
+    }
+
+    private void feedback(final String text) {
         eventBus.post(
                 new org.microcol.gui.screen.game.components.StatusBarMessageEvent(
-                        texts.get(text),
+                        text,
                         org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source.GAME));
     }
 }

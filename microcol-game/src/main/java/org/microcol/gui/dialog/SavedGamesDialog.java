@@ -9,6 +9,8 @@ import org.microcol.i18n.I18n;
 import org.microcol.model.campaign.po.SaveSummaryPo;
 import org.microcol.model.campaign.po.SavedGames.Entry;
 import javafx.geometry.Insets;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 
 /**
@@ -69,6 +71,15 @@ public final class SavedGamesDialog extends AbstractMessageWindow {
                 Math.min(860, getViewUtil().getPrimaryStage().getWidth() - 40),
                 Math.min(600,
                         getViewUtil().getPrimaryStage().getHeight() - 40));
+        // Handle Escape before the focused list or name field consumes it; the
+        // filter menu and confirmations are separate windows that handle
+        // their own Escape first.
+        content.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                event.consume();
+                close();
+            }
+        });
         init(content);
         getScene().getStylesheets().add(
                 getClass().getResource("/gui/SavedGames.css").toExternalForm());

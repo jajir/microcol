@@ -356,10 +356,21 @@ public class GamePage extends AbstractScreen {
         return new ColonyNameDialog(getContext());
     }
 
+    /**
+     * Leave through the session menu. Unsaved progress is saved through the
+     * leave confirmation and the manual Save dialog as a new save with the
+     * suggested name; a safely saved game is left without the confirmation
+     * (R-0387). Scenarios about the confirmation itself verify it explicitly.
+     */
     public WelcomePage exitToMenu() {
         clickOnButtonWithId("exit");
         getRobot().clickOn("#menuMain");
-        clickOnButtonWithId("saveConfirm");
+        WaitForAsyncUtils.waitForFxEvents();
+        if (!getNodeFinder().lookup("#saveConfirm").queryAll().isEmpty()) {
+            clickOnButtonWithId("saveConfirm");
+            clickOnButtonWithId("saveNew");
+            WaitForAsyncUtils.waitForFxEvents();
+        }
         return WelcomePage.of(getContext());
     }
 

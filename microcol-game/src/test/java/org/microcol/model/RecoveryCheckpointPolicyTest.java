@@ -53,4 +53,14 @@ class RecoveryCheckpointPolicyTest {
             assertEquals(List.of(), slots(turn, true, true, false));
         }
     }
+
+    @Test
+    void readyNewGameIsAFirstSnapshotOnlyWithAutosave() {
+        assertEquals(List.of(RecoverySlot.LATEST_TURN),
+                RecoveryCheckpointPolicy.slotsForNewGame(true, true));
+        assertEquals(List.of(),
+                RecoveryCheckpointPolicy.slotsForNewGame(true, false));
+        assertEquals(List.of(),
+                RecoveryCheckpointPolicy.slotsForNewGame(false, true));
+    }
 }

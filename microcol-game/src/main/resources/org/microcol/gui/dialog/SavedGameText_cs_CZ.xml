@@ -27,7 +27,7 @@
     <entry key="folder">Otevřít složku uložení</entry>
     <entry key="cancel">Zpět</entry>
     <entry key="confirm">Potvrdit</entry>
-    <entry key="leave">Uložit rozehranou hru před jejím opuštěním? Volba Zpět vás vrátí do hry. Uložení přepíše bod obnovy poslední pozice.</entry>
+    <entry key="leave">Uložit rozehranou hru před jejím opuštěním? Volba Zpět vás vrátí do hry. Uložit a pokračovat otevře Uložit hru, kde pojmenujete nové uložení nebo vyberete uložení k přepsání.</entry>
     <entry key="saveContinue">Uložit a pokračovat</entry>
     <entry key="discard">Odejít bez uložení</entry>
     <entry key="saved">Hra byla uložena.</entry>
@@ -48,4 +48,7 @@
     <entry key="currentGame">Nové uložení současné hry</entry>
     <entry key="target">Vybrané uložení k přepsání: %s · %s</entry>
     <entry key="targetNone">Není vybráno žádné uložení; Uložit hru vytvoří nové.</entry>
+    <entry key="leaveNew">Tato hra ještě nebyla uložena, odchodem nyní ztratíte vytvořený počáteční svět. Uložit ji před odchodem? Volba Zpět vás vrátí do hry. Uložit a pokračovat otevře Uložit hru, kde pojmenujete nové uložení nebo vyberete uložení k přepsání.</entry>
+    <entry key="autosaved">Tah byl automaticky uložen: %s.</entry>
+    <entry key="autosaveCleanup">Starší automatické uložení se nepodařilo odstranit; pokus se zopakuje.</entry>
 </properties>

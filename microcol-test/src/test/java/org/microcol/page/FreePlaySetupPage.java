@@ -13,7 +13,6 @@ import org.microcol.model.TerrainType;
 import org.microcol.model.WorldMap;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
-import org.microcol.model.campaign.po.PersistingTool;
 import org.microcol.model.generation.GeneratedClimate;
 import org.microcol.model.generation.GeneratedLandShare;
 import org.microcol.model.generation.GeneratedWorld;
@@ -130,11 +129,19 @@ public final class FreePlaySetupPage extends AbstractScreen {
         assertTrue(label.getText().contains(expectedLabel), label.getText());
     }
 
-    public void verifySavedDifficulty(final Difficulty expected) {
-        final java.io.File file = getContext()
+    /**
+     * @return the recovery save Continue opens: the initial turn snapshot, or
+     *         the latest position when leaving saved the game (R-0387)
+     */
+    private java.io.File continueFile() {
+        return getContext()
                 .getClassFromGuice(
-                        org.microcol.model.campaign.po.PersistingTool.class)
-                .getAutoSaveFile();
+                        org.microcol.gui.dialog.PersistingService.class)
+                .continueFile();
+    }
+
+    public void verifySavedDifficulty(final Difficulty expected) {
+        final java.io.File file = continueFile();
         final org.microcol.model.campaign.po.GameModelPo data = new org.microcol.model.campaign.po.GameModelPoDao()
                 .loadPlayerGame(file);
         assertEquals(expected, data.getModel().getDifficulty());
@@ -222,8 +229,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
 
     public void verifySavedGeneratedWorld(final int expectedSeed)
             throws Exception {
-        final java.io.File file = getContext()
-                .getClassFromGuice(PersistingTool.class).getAutoSaveFile();
+        final java.io.File file = continueFile();
         final GameModelPo data = new GameModelPoDao().loadPlayerGame(file);
         assertEquals(expectedSeed,
                 data.getModel().getGeneratedWorld().getSeed().intValue());
@@ -488,8 +494,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
 
     /** The recovery save holds the same North America map as the game. */
     public void verifySavedNorthAmericaWorld() {
-        final java.io.File file = getContext()
-                .getClassFromGuice(PersistingTool.class).getAutoSaveFile();
+        final java.io.File file = continueFile();
         final GameModelPo data = new GameModelPoDao().loadPlayerGame(file);
         assertEquals(NorthAmericaWorld.WIDTH,
                 data.getModel().getMap().getMaxX());

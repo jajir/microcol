@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.model.Location;
+import org.microcol.model.campaign.po.RecoverySlot;
 import org.microcol.page.ColonyScreen;
 import org.microcol.page.DeveloperModePage;
 import org.microcol.page.EuropePortScreen;
@@ -15,6 +16,7 @@ import org.microcol.page.DialogMessagePage;
 import org.microcol.page.HostedPanelPage;
 import org.microcol.page.InGameLayoutPage;
 import org.microcol.page.SavedGamesPage;
+import org.microcol.page.SettingPage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -34,8 +36,12 @@ public class TC_191_F224_session_menu_test extends AbstractMicroColTest {
     @Tag("local")
     void TC_01_named_save_cancellation_quick_restore_and_window_close()
             throws Exception {
+        // Turn autosaves off, so played turns stay unsaved progress.
+        final SettingPage setting = WelcomePage.of(getContext()).openSetting();
+        setting.setAutosaveEnabled(false);
+
         // Import a known position and inspect the shared dropdown actions.
-        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final GamePage game = setting.goBack().loadGame();
         final SavedGamesPage saves = new SavedGamesPage(getContext());
         saves.openMenu();
         saves.verifyMenu();
@@ -60,6 +66,10 @@ public class TC_191_F224_session_menu_test extends AbstractMicroColTest {
         saves.captureDialog("savedGamesList", "r0298-saved-games.png");
         saves.saveName("  Přístav / před bitvou  ");
         saves.verifySavedName("Přístav / před bitvou", 1);
+
+        // Play one turn, so the named save no longer holds the live game.
+        game.nextTurnAndCloseDialogs();
+        saves.rememberGame();
 
         // Cancelling overwrite and load keeps both the save and the live game.
         saves.openSave();
@@ -89,6 +99,9 @@ public class TC_191_F224_session_menu_test extends AbstractMicroColTest {
         saves.quickLoad();
         saves.action("saveDiscard");
         saves.verifyRestoredGame();
+
+        // Play another turn, so leaving the restored game would lose it.
+        game.nextTurnAndCloseDialogs();
         saves.rememberGame();
 
         // Both main-menu exit and the native window-close route can be
@@ -129,10 +142,14 @@ public class TC_191_F224_session_menu_test extends AbstractMicroColTest {
     @Tag("local")
     void TC_02_campaign_restart_can_be_cancelled_or_start_the_original_mission()
             throws Exception {
+        // Turn autosaves off, so the played turn stays unsaved progress.
+        final SettingPage setting = WelcomePage.of(getContext()).openSetting();
+        setting.setAutosaveEnabled(false);
+
         // Import a campaign position and keep the original mission state.
         final SavedGamesPage saves = new SavedGamesPage(getContext());
         saves.prepareCampaignImport();
-        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final GamePage game = setting.goBack().loadGame();
         // A new campaign mission presents its two introductory messages.
         DialogMessagePage.of(getContext()).close();
         DialogMessagePage.of(getContext()).close();
@@ -245,8 +262,12 @@ public class TC_191_F224_session_menu_test extends AbstractMicroColTest {
     @Tag("local")
     void TC_04_platform_shortcuts_respect_plain_keys_typing_and_dialogs()
             throws Exception {
+        // Turn autosaves off, so a played turn stays unsaved progress.
+        final SettingPage setting = WelcomePage.of(getContext()).openSetting();
+        setting.setAutosaveEnabled(false);
+
         // The session menu names the platform shortcuts.
-        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final GamePage game = setting.goBack().loadGame();
         game.waitWhileMoving();
         final SavedGamesPage saves = new SavedGamesPage(getContext());
         final HostedPanelPage hosted = new HostedPanelPage(getContext());
@@ -277,6 +298,10 @@ public class TC_191_F224_session_menu_test extends AbstractMicroColTest {
         saves.saveName("Shortcut save");
         saves.verifySavedName("Shortcut save", 1);
 
+        // Play one turn, so loading the save would discard progress.
+        game.nextTurnAndCloseDialogs();
+        saves.rememberGame();
+
         // Shortcut+O loads only after confirmation; the shortcut does not
         // interrupt the confirmation and cancel keeps page and selection.
         hosted.pressShortcut(KeyCode.O);
@@ -295,7 +320,7 @@ public class TC_191_F224_session_menu_test extends AbstractMicroColTest {
         saves.action("saveDiscard");
         game.verifyGameInFront();
         hosted.verifyLoadClosed();
-        saves.verifyRestoredGame();
+        saves.verifyLoadedSave("Shortcut save");
 
         // The main menu names the same Load shortcut.
         game.exitToMenu().verifyMainScreen();
@@ -410,5 +435,204 @@ public class TC_191_F224_session_menu_test extends AbstractMicroColTest {
         saves.action("saveDiscard");
         game.verifyGameInFront();
         saves.verifyRestoredGame();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_saved_game_leaves_without_prompt_until_gameplay_changes()
+            throws Exception {
+        // Turn autosaves off and import a known position.
+        final SettingPage setting = WelcomePage.of(getContext()).openSetting();
+        setting.setAutosaveEnabled(false);
+        final GamePage game = setting.goBack().loadGame();
+        game.waitWhileMoving();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        final HostedPanelPage hosted = new HostedPanelPage(getContext());
+        final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+
+        // Selecting a unit's square and a settings round trip change no
+        // gameplay.
+        game.selectTile(Location.of(25, 16));
+        saves.openMenu();
+        saves.chooseMenu("menuSettings");
+        saves.action("buttonBack");
+        game.verifyGameInFront();
+
+        // Leaving the loaded game needs no prompt and writes no recovery point.
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.verifyLeaveConfirmation(false);
+        WelcomePage.of(getContext()).verifyMainScreen();
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+
+        // Continue opens the same save; a played turn makes leaving ask.
+        final GamePage resumed = audit.continueGame();
+        resumed.nextTurnAndCloseDialogs();
+        saves.rememberGame();
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.verifyLeaveConfirmation(true);
+        saves.verifyLeaveMessage("Save the current game before leaving it?");
+
+        // Escape keeps the game and its screen.
+        hosted.press(KeyCode.ESCAPE);
+        resumed.verifyGameInFront();
+        saves.verifyGameUnchanged();
+
+        // Save and continue opens the manual Save dialog; Escape there stays.
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.action("saveConfirm");
+        saves.verifySaveDialogOpen(true);
+        hosted.press(KeyCode.ESCAPE);
+        saves.verifySaveDialogOpen(false);
+        resumed.verifyGameInFront();
+        saves.verifyGameUnchanged();
+
+        // Its Cancel also keeps the game, and no recovery file is written.
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.action("saveConfirm");
+        saves.cancelBrowser();
+        resumed.verifyGameInFront();
+        saves.verifyGameUnchanged();
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+
+        // A new named save completes the leave.
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.action("saveConfirm");
+        saves.saveName("Leaving 1509");
+        WelcomePage.of(getContext()).verifyMainScreen();
+        saves.verifySavedName("Leaving 1509", 1);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+
+        // Continue opens that save, which is left without a prompt.
+        audit.continueGame();
+        audit.verifyCurrentTurn(19);
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.verifyLeaveConfirmation(false);
+        WelcomePage.of(getContext()).verifyMainScreen();
+
+        // Overwriting the selected save needs its own confirmation; Cancel
+        // keeps the browser and then the game.
+        audit.continueGame().nextTurnAndCloseDialogs();
+        saves.rememberGame();
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.action("saveConfirm");
+        saves.select("Leaving 1509");
+        saves.action("overwriteSave");
+        saves.verifyOverwriteConfirmation("Leaving 1509");
+        saves.action("saveCancel");
+        saves.verifySaveDialogOpen(true);
+        saves.cancelBrowser();
+        saves.verifyGameUnchanged();
+
+        // A confirmed overwrite saves the played turn, then leaves.
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.action("saveConfirm");
+        saves.select("Leaving 1509");
+        saves.action("overwriteSave");
+        saves.action("saveConfirm");
+        WelcomePage.of(getContext()).verifyMainScreen();
+        saves.verifySavedName("Leaving 1509", 1);
+        audit.continueGame();
+        audit.verifyCurrentTurn(20);
+
+        // Leaving changed progress without saving keeps every existing save.
+        GamePage.of(getContext()).nextTurnAndCloseDialogs();
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.action("saveDiscard");
+        WelcomePage.of(getContext()).verifyMainScreen();
+        saves.verifySavedName("Leaving 1509", 1);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_08_window_close_save_dialog_cancel_and_failure_keep_the_game()
+            throws Exception {
+        // Turn autosaves off and play one unsaved turn from the fixture.
+        final SettingPage setting = WelcomePage.of(getContext()).openSetting();
+        setting.setAutosaveEnabled(false);
+        final GamePage game = setting.goBack().loadGame();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        game.nextTurnAndCloseDialogs();
+        saves.rememberGame();
+
+        // Closing the window asks; Save and continue opens the Save dialog,
+        // whose Cancel keeps the window and the game.
+        saves.closeWindow();
+        saves.verifyLeaveConfirmation(true);
+        saves.action("saveConfirm");
+        saves.verifySaveDialogOpen(true);
+        saves.cancelBrowser();
+        saves.verifyWindowOpen();
+        saves.verifyGameUnchanged();
+
+        // A failed manual save is reported, keeps the Save dialog and, after
+        // Cancel, the window and the game; nothing is written instead.
+        audit.obstructManagedSaves();
+        saves.closeWindow();
+        saves.action("saveConfirm");
+        saves.saveName("Cannot be written");
+        DialogMessagePage.of(getContext())
+                .verifyDialogTextContains("The file operation failed.");
+        DialogMessagePage.of(getContext()).close();
+        saves.verifySaveDialogOpen(true);
+        saves.cancelBrowser();
+        saves.verifyWindowOpen();
+        saves.verifyGameUnchanged();
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+        audit.removeManagedSavesObstruction();
+        saves.verifySavedName("Cannot be written", 0);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_07_new_world_initial_snapshot_or_never_saved_prompt()
+            throws Exception {
+        // With autosave on, a new world is saved before the first move.
+        final GamePage game = WelcomePage.of(getContext()).startFreeGame();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        audit.rememberPlaythrough();
+        audit.verifyTurnSnapshotCount(1);
+        audit.verifyContinueOpensNewestTurnSnapshot();
+
+        // Leaving it at once needs no prompt.
+        game.verifyGameInFront();
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.verifyLeaveConfirmation(false);
+        WelcomePage.of(getContext()).verifyMainScreen();
+
+        // With autosave off, a new world has never been saved.
+        final SettingPage setting = WelcomePage.of(getContext()).openSetting();
+        setting.setAutosaveEnabled(false);
+        setting.goBack().startFreeGame();
+        audit.rememberPlaythrough();
+        audit.verifyTurnSnapshotCount(0);
+
+        // Leaving says the starting world would be lost; Cancel stays.
+        saves.rememberGame();
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.verifyLeaveConfirmation(true);
+        saves.verifyLeaveMessage("This game has never been saved");
+        saves.action("saveCancel");
+        saves.verifyGameUnchanged();
+
+        // Leaving without saving returns to the menu and writes nothing.
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.action("saveDiscard");
+        WelcomePage.of(getContext()).verifyMainScreen();
+        audit.verifyTurnSnapshotCount(0);
     }
 }

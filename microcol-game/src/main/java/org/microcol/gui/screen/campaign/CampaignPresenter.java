@@ -2,6 +2,7 @@ package org.microcol.gui.screen.campaign;
 
 import java.util.function.Consumer;
 
+import org.microcol.gui.dialog.PersistingService;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
@@ -29,6 +30,8 @@ public final class CampaignPresenter {
 
     private final EventBus eventBus;
 
+    private final PersistingService persistingService;
+
     public interface Display {
 
         Button getButtonBack();
@@ -39,9 +42,11 @@ public final class CampaignPresenter {
 
     @Inject
     public CampaignPresenter(final CampaignPresenter.Display display,
-            final EventBus eventBus, final GameController gameController) {
+            final EventBus eventBus, final GameController gameController,
+            final PersistingService persistingService) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.gameController = Preconditions.checkNotNull(gameController);
+        this.persistingService = Preconditions.checkNotNull(persistingService);
         display.getButtonBack().setOnAction(
                 event -> eventBus.post(new ShowScreenEvent(Screen.MENU)));
         display.setOnSelectedMission(this::onSelectedMission);
@@ -54,6 +59,7 @@ public final class CampaignPresenter {
         gameController.startCampaignMission(CampaignNames.defaultCampaign,
                 name);
         eventBus.post(new ShowScreenEvent(Screen.GAME));
+        persistingService.checkpointNewGame();
     }
 
 }
