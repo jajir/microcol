@@ -1,5 +1,14 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Kůň a kladiva — oprava siluety, 1. listopadu 2026
+
+1. [R-0385](requirements/done/R-0385.md) opravuje uživatelem označený tvar koně ve vybrané sadě 15: jediný čenich směřuje doprava, krk pokračuje dolů a hříva leží za hlavou. Hlavy obou kladiv — v nástrojích i samostatné produkci — jsou o něco tenčí. Styl, barvy, násady a všechny herní hodnoty zůstávají zachované.
+2. Upravené zdroje `good-horse.svg`, `good-tools.svg` a `good-hammer.svg` obsahují pouze ručně nakreslené vektorové cesty s plnými barvami. [Stávající export](#recke-zbozi-vyrazna-linka-1-listopadu-2026) obnovuje atlas a samostatné obrázky; druhý export dal stejné SHA-256 všech čtyř PNG. Změnily se pouze atlas a PNG kladiva. Přehled ukazuje zvětšení, 45 px a 22 px.
+
+![Opravený kůň a užší kladiva](assets/greek-goods-refinement-2026-11-01/preview.png)
+
+3. Cílené Docker/Xvfb ověření na základu `76ee5f87` s touto opravou: **7 testů, 0 selhání, 0 chyb, 0 vynechání**. Výběr: `GoodsArtworkTest` (2), `PageVerificationContractTest` (3), `TC_06_F06_buy_and_sell_goods_test#TC_06_moving_goods` (1), `TC_54_F45_shared_hammers_test` (1). Běh `20261101T122505Z-75492b776f28`, PID `52412`, limit 900 s, dokončen za 121,981 s, callback `queued`; čerstvé reporty `target/docker-ui/run-1eVQLp`. Zkontrolované skutečné snímky: [obchod](assets/greek-goods-refinement-2026-11-01/europe.png), [produkce a náklad](assets/greek-goods-refinement-2026-11-01/colony.png). Všech 9 dokumentačních kontrol a strict MkDocs prošlo; logy `target/r0385/`. Platí uživatelem zadaná minimální okolní přejímka bez smoke a celé modelové/regresní sady; vzdálená publikace se neověřuje.
+
 ## Řecké zboží — výrazná linka, 1. listopadu 2026
 
 1. Uživatel vybral **návrh 15 — Výrazná linka**: stručné, roztomilé ruční obrysy a jednobarevné výplně podle herní mapy. [R-0384](requirements/done/R-0384.md) vlastní tuto výměnu všech 19 obrázků. [Vybraná rastrová předloha](assets/greek-goods-15-2026-11-01/selected-reference.png) je pouze výtvarná reference; následující přehled vznikl ze skutečných SVG.

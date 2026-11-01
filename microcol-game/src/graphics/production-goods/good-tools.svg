@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
 <title id="title">Nástroje</title>
-<desc id="description">MicroCol R-0384, selected proposal 15, 2026-11-01. Hand-authored vector paths; solid fills and transparent surroundings.</desc>
+<desc id="description">MicroCol R-0384 / R-0385, selected proposal 15, 2026-11-01. Hand-authored vector paths; solid fills and transparent surroundings.</desc>
 <g id="bold-hand-drawn-outline" transform="translate(2 2) scale(0.9375)" stroke="#41413b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
 <g id="pickaxe"><path d="M23 18 L55 52 L50 58 L18 24 Z" fill="#ac8352"/><path d="M5 30 Q15 7 42 8 Q22 15 5 30 Z" fill="#858787"/></g>
-<g id="hammer"><path d="M39 22 L46 28 L15 58 L10 52 Z" fill="#ac8352"/><path d="M37 8 L59 29 L49 39 L28 18 Z" fill="#858787"/></g>
+<g id="hammer"><path d="M39 22 L46 28 L15 58 L10 52 Z" fill="#ac8352"/><path d="M35 10 L57 31 L51 37 L30 16 Z" fill="#858787"/></g>
 </g>
 </svg>
