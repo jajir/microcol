@@ -1,16 +1,17 @@
 # UX a pravidla ovládání MicroCol
 
-## Potvrzení nákupu v Evropě — 31. října 2026
-
-1. Implementace [R-0378](requirements/R-0378.md) dává hráči při běžném přetažení z trhu do lodního nákladu potvrzení s předvoleným dostupným maximem. Číselný limit a jeho důvod, celková cena a zbývající zlato vysvětlují výsledek před utracením peněz; Zpět a Escape nic nekoupí, nula nejde potvrdit.
-2. Viditelná nápověda vysvětluje okamžitý nákup maxima držením Command ⌘ na Macu nebo Ctrl na ostatních systémech při upuštění. Rozhoduje klávesa právě při upuštění. Stavová lišta sdělí skutečné množství a cenu nebo důvod blokace. Prodej a přesuny vlastního nákladu zachovávají dosavadní ovládání; pravidla a odmítnutí zastaralé nabídky vlastní model.
-3. Modelové, cílené Docker a nativní macOS scénáře prošly 1. listopadu 2026; snímky EN/CZ a úzkých/širokých oken byly zkontrolovány. Nejde o uživatelskou studii. Konečný smoke celé vybrané série zůstává podle pokynu uživatele odložen; [aktuální evidence](functional-tests.md#r-0378-implemented-and-verified-2026-11-01). Původní zachycení návrhu bez testů zůstává v [historické evidenci](publishing.md#r-0378-europe-purchase-requirement-2026-10-31).
-
 ## Vylodění pasažérů — R-0379
 
 1. Implementováno a lokálně přijato 31. října 2026: při vylodění z lodi na vybrané sousední pole rozhoduje počet pasažérů způsobilých vystoupit právě tam, nikoli celkový počet lidí na palubě. Jediný způsobilý pasažér vystoupí přímo bez dialogu; při více způsobilých se otevře výběr. Rozsah a příklady vlastní [R-0379](requirements/done/R-0379.md).
 2. Výběr používá checkboxy, při každém otevření všechny nezaškrtnuté. Hráč může označit jednoho, několik nebo všechny pasažéry. Nadpis „Vyberte pasažéry k vylodění“ mluví o více pasažérech a tlačítko „Vylodit vybrané“ je neaktivní, dokud není někdo označený. Potvrzení vylodí pouze označené; Zrušit a Escape nevylodí nikoho. Ovládání zůstává dostupné klávesnicí (Tab a mezerník).
 3. Přímé vylodění jediného pasažéra nemá dodatečný krok zrušení. Zachovávají se pravidla způsobilosti, pohybu a odmítnutí neplatného převodu; změna se netýká přístavního příjezdu ani jiných operací s nákladem. Historické [R-0022](requirements/done/R-0022.md) a jeho výsledky zůstávají záznamem původního chování.
+
+
+## Potvrzení nákupu v Evropě — 31. října 2026
+
+1. Implementace [R-0378](requirements/R-0378.md) dává hráči při běžném přetažení z trhu do lodního nákladu potvrzení s předvoleným dostupným maximem. Číselný limit a jeho důvod, celková cena a zbývající zlato vysvětlují výsledek před utracením peněz; Zpět a Escape nic nekoupí, nula nejde potvrdit.
+2. Viditelná nápověda vysvětluje okamžitý nákup maxima držením Command ⌘ na Macu nebo Ctrl na ostatních systémech při upuštění. Rozhoduje klávesa právě při upuštění. Stavová lišta sdělí skutečné množství a cenu nebo důvod blokace. Prodej a přesuny vlastního nákladu zachovávají dosavadní ovládání; pravidla a odmítnutí zastaralé nabídky vlastní model.
+3. Modelové, cílené Docker a nativní macOS scénáře prošly 1. listopadu 2026; snímky EN/CZ a úzkých/širokých oken byly zkontrolovány. Nejde o uživatelskou studii. Konečný smoke celé vybrané série zůstává podle pokynu uživatele odložen; [aktuální evidence](functional-tests.md#r-0378-implemented-and-verified-2026-11-01). Původní zachycení návrhu bez testů zůstává v [historické evidenci](publishing.md#r-0378-europe-purchase-requirement-2026-10-31).
 
 ## Panely Nastavení a Načíst hru — schválený návrh 31. října 2026
 

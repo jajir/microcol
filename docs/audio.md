@@ -129,6 +129,13 @@ Pro efekty zavést samostatnou službu nebo vědomě rozšířit audio vrstvu o 
 
 První implementace musí bezpečně obsloužit vlastní prostředky, respektovat současné vypnutí zvuku a zvládnout chybu bez dopadu na herní akci. Určit, co se stane při souběhu zvuků. Oddělené ovládání hudby a efektů doplnit při rozšíření nastavení; není podmínkou každého jednotlivého efektu. Pravidla pro prioritu, odstup nebo potlačení opakování ukládat k jednotlivým efektům a skutečně je zapojit do kódu; samotný zápis v dokumentaci nic nepřehrává ani neomezuje.
 
+## První efekt schválený 1. listopadu 2026
+
+1. Uživatel pro [R-0228](requirements/R-0228.md) vybral krátké potvrzení vítězství v misi a pouze podporu přehrávání nezbytnou pro tento efekt. [R-0226](requirements/canceled/R-0226.md) zůstává zrušen; jeho obecný rozsah se tím neobnovuje.
+2. Efekt doplní první zobrazení potvrzeného úspěšného dokončení lidské mise (splněné cíle nebo potvrzené vítězství nezávislosti). Prohra, časový limit, odchod do důchodu, běžné kalendářní ukončení, znovuotevření zprávy a načtení dokončené hry jej nespustí. Stávající text a výsledek nesou úplnou informaci i bez zvuku.
+3. Jedna dokončená partie má nejvýše jeden zvuk; nevzniká fronta ani překryv. Nově rozehraná partie může mít vlastní vítězství. Do R-0227 platí současná hlasitost a nulová hodnota znamená ticho; `soundEnabled=false` má vždy přednost. Hudba běží nezávisle. Chyba zařízení nebo souboru nesmí ovlivnit hru ani zdržet UI.
+4. Jde o schválené zadání, nikoli dosud implementovaný nebo poslechem ověřený efekt. R-0228 doplní původní editovatelný zdroj, export, práva a skutečné výsledky do katalogu. [R-0227](requirements/R-0227.md) následně přidá samostatné ovládání kategorií.
+
 ## Katalog a šablona nového zvuku
 
 Současný katalog tvoří [jedna skladba popsaná výše](#co-je-nyni-ulozeno-v-projektu). Nové efekty přidávat sem s vlastní stručnou podkapitolou podle následující šablony. Katalog rozšiřovat podle skutečných funkčních změn; počty zvuků v [odhadu pracnosti](implementation-estimate.md#provisional-additional-work) jsou plánovací scénáře, nikoli schválený seznam povinných assetů.
