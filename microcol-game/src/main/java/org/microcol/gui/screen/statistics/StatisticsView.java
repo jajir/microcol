@@ -43,6 +43,12 @@ public final class StatisticsView implements JavaFxComponent, ScreenLifeCycle {
         mainPanel.beforeShow();
     }
 
+    /** Keep the selected report when Settings or Load return here. */
+    @Override
+    public void beforeReturn() {
+        page.beforeShow();
+    }
+
     @Override
     public void beforeHide() {
         mainPanel.beforeHide();

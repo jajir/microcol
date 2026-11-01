@@ -20,4 +20,13 @@ public interface ScreenLifeCycle {
      */
     void beforeHide();
 
+    /**
+     * Notify screen that it will be shown again after Settings or Load returned
+     * to it. Screens that reset their selection on {@link #beforeShow()} keep
+     * it here.
+     */
+    default void beforeReturn() {
+        beforeShow();
+    }
+
 }

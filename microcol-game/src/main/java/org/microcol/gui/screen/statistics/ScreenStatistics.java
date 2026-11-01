@@ -44,6 +44,11 @@ public class ScreenStatistics implements GameScreen {
     }
 
     @Override
+    public void beforeReturn() {
+        statisticsView.beforeReturn();
+    }
+
+    @Override
     public void beforeHide() {
         statisticsView.beforeHide();
     }

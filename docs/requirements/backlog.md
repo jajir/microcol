@@ -7,7 +7,7 @@
 
 ## Ordered development resumed — 2026-11-01
 
-R-0378 implementation and requirement-specific verification are complete: 4,814 model/JUnit, 38 targeted Docker and 3 native macOS tests passed with zero failures/errors/skips. Status stays `ready for development` pending the explicitly deferred final batch smoke. R-0377 refinement is complete and its status is `ready for development`; implementation is next. [Evidence](../functional-tests.md#r-0378-implemented-and-verified-2026-11-01).
+R-0378 implementation and requirement-specific verification are complete: 4,814 model/JUnit, 38 targeted Docker and 3 native macOS tests passed with zero failures/errors/skips. Status stays `ready for development` pending the explicitly deferred final batch smoke. R-0377 implementation and targeted verification are complete under the explicit baseline artwork exception; status remains `ready for development` pending final batch smoke. R-0376 is next. [Evidence](../functional-tests.md#r-0378-implemented-and-verified-2026-11-01).
 
 1. The user resumed R-0378, then R-0377, R-0376, R-0228, R-0227, R-0225, R-0221, R-0216, R-0211, R-0382 and R-0383 in that order, using Claude for implementation and repairs.
 2. Explicit task-specific acceptance amendment: run the fixed smoke/support selection once at the end of this batch, not after every requirement. Model/JUnit, targeted UI, required platform checks, review and documentation validation remain applicable. The final combined smoke result must be recorded separately; it is not yet a pass. The pause recorded below is historical.
@@ -322,7 +322,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 
 | Requirement | Outcome | Kind | Origin |
 | --- | --- | --- | --- |
-| [R-0377](R-0377.md) | Embed Settings and Load game in menu/game pages with scrolling content, origin-aware returns and platform shortcuts | New capture | User-approved design, 2026-10-31; implementation not requested |
+| [R-0377](R-0377.md) | Embed Settings and Load game in menu/game pages with scrolling content, origin-aware returns and platform shortcuts | Ready for development; implemented, final batch smoke pending | Targeted checks passed; explicit baseline artwork exception, 2026-11-01 |
 | [R-0379](done/R-0379.md) | Land one eligible passenger directly; select several with initially unchecked checkboxes | Done 2026-10-31 | User agreement, 2026-10-31; [R-0022](done/R-0022.md) passenger rules |
 | [R-0381](done/R-0381.md) | Lower both Europe voyage groups slightly and use the compact heading-to-ship spacing of selected variant C | Done 2026-10-31 | User-selected visual reference, 2026-10-31; [R-0380](done/R-0380.md) layout |
 | [R-0112](done/R-0112.md) | Stabilize TC27 and TC30 map interactions with evidence-backed diagnosis | New request | User request, 2026-10-15 |

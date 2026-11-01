@@ -200,6 +200,9 @@ public class TC_24_F15_free_play_setup_test extends AbstractMicroColTest {
             org.microcol.page.DialogMessagePage.of(getContext()).close();
             audit.verifyRejectedLoadPreservedGameAndFile();
             audit.verifyAutosaveUnchanged(continuation);
+            // The Load page stays open for another choice; Back returns.
+            audit.verifyLoadPageOpen();
+            audit.closeLoadPage();
             WelcomePage.of(getContext()).verifyMainScreen();
         }
     }

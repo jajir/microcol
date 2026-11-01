@@ -76,6 +76,8 @@ public class TC_42_F34_load_recovery_test extends AbstractMicroColTest {
         game.exitToMenu();
         audit.cancelLoadChooser();
         audit.verifyRejectedSourceUnchanged();
+        audit.verifyLoadPageOpen();
+        audit.closeLoadPage();
         WelcomePage.of(getContext()).verifyMainScreen();
 
         // Choosing a valid save after the failure replaces the current game.

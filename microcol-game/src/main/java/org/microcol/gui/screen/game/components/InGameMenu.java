@@ -16,6 +16,9 @@ import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 
 /**
  * Session actions use the same JavaFX popup controls as the colony selector.
@@ -51,9 +54,11 @@ public final class InGameMenu {
         item(SavedGameText.resume, "menuResume", () -> {
         });
         menu.getItems().add(new SeparatorMenuItem());
-        item(SavedGameText.save, "menuSave", () -> saves.browse(true, false))
+        item(SavedGameText.saveMenu, "menuSave",
+                () -> saves.browse(true, false), KeyCode.S)
                 .setDisable(!game.isHumanTurnReady());
-        item(SavedGameText.load, "menuLoad", () -> saves.browse(false, false));
+        item(SavedGameText.loadMenu, "menuLoad",
+                () -> saves.browse(false, false), KeyCode.O);
         item(SavedGameText.quickSave, "menuQuickSave", saves::quickSave)
                 .setDisable(!game.isHumanTurnReady());
         item(SavedGameText.quickLoad, "menuQuickLoad", saves::quickLoad)
@@ -72,9 +77,27 @@ public final class InGameMenu {
         menu.show(anchor, Side.BOTTOM, 0, 0);
     }
 
+    /**
+     * Show the platform shortcut (Command on macOS, Ctrl elsewhere) in the
+     * label; the main window's shortcut owner handles the key itself.
+     */
+    private MenuItem item(final SavedGameText text, final String id,
+            final Runnable action, final KeyCode shortcut) {
+        return item(
+                texts.get(text,
+                        new KeyCodeCombination(shortcut,
+                                KeyCombination.SHORTCUT_DOWN).getDisplayText()),
+                id, action);
+    }
+
     private MenuItem item(final SavedGameText text, final String id,
             final Runnable action) {
-        final MenuItem item = new MenuItem(texts.get(text));
+        return item(texts.get(text), id, action);
+    }
+
+    private MenuItem item(final String text, final String id,
+            final Runnable action) {
+        final MenuItem item = new MenuItem(text);
         item.setId(id);
         item.setOnAction(event -> {
             menu.hide();

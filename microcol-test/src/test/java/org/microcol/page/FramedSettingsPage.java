@@ -31,12 +31,24 @@ public final class FramedSettingsPage extends AbstractScreen {
         return (Control) getNodeFinder().lookup("#" + id).query();
     }
 
+    private static javafx.scene.control.ScrollPane scrollOf(
+            final javafx.scene.Node node) {
+        javafx.scene.Node ancestor = node.getParent();
+        while (ancestor != null
+                && !(ancestor instanceof javafx.scene.control.ScrollPane)) {
+            ancestor = ancestor.getParent();
+        }
+        return (javafx.scene.control.ScrollPane) ancestor;
+    }
+
     public void click(final String id) {
+        revealGameContent(control(id));
         getRobot().clickOn(control(id));
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void press(final String id, final KeyCode key) {
+        revealGameContent(control(id));
         getRobot().interact(() -> control(id).requestFocus());
         getRobot().push(key);
         WaitForAsyncUtils.waitForFxEvents();
@@ -44,6 +56,7 @@ public final class FramedSettingsPage extends AbstractScreen {
 
     public void dragSlider(final String id, final double fraction) {
         final Slider slider = (Slider) control(id);
+        revealGameContent(slider);
         final Region track = (Region) slider.lookup(".track");
         final Bounds bounds = track.localToScreen(track.getBoundsInLocal());
         getRobot().moveTo(slider.lookup(".thumb")).press(MouseButton.PRIMARY)
@@ -58,6 +71,7 @@ public final class FramedSettingsPage extends AbstractScreen {
     }
 
     public void clickSliderEnd(final String id) {
+        revealGameContent(control(id));
         final Region track = (Region) control(id).lookup(".track");
         final Bounds bounds = track.localToScreen(track.getBoundsInLocal());
         getRobot().clickOn(bounds.getMaxX() - 1,
@@ -87,6 +101,7 @@ public final class FramedSettingsPage extends AbstractScreen {
     }
 
     public void hover(final String id) {
+        revealGameContent(control(id));
         getRobot().moveTo(control(id));
         WaitForAsyncUtils.waitForFxEvents();
     }
@@ -106,10 +121,18 @@ public final class FramedSettingsPage extends AbstractScreen {
             final javafx.scene.Node heading = getNodeFinder()
                     .lookup(".main-title").query();
             final Control first = control("rbCzech");
-            assertTrue(heading.localToScene(heading.getBoundsInLocal())
-                    .getMaxY() <= first.localToScene(first.getBoundsInLocal())
-                            .getMinY(),
-                    "Settings controls must remain below the heading");
+            final javafx.scene.control.ScrollPane contentScroll = scrollOf(
+                    first);
+            final javafx.scene.Node visibleContent = contentScroll == null
+                    ? first
+                    : contentScroll.lookup(".viewport");
+            assertTrue(
+                    heading.localToScene(heading.getBoundsInLocal())
+                            .getMaxY() <= visibleContent
+                                    .localToScene(
+                                            visibleContent.getBoundsInLocal())
+                                    .getMinY(),
+                    "The visible Settings content must remain below the heading");
             for (final String id : new String[] { "settingDeveloperMode",
                     "settingGrid", "settingFightAdvisor", "settingTurnSummary",
                     "settingOpenEuropeOnArrival", "autosaveEnabled", "rbCzech",
@@ -138,8 +161,26 @@ public final class FramedSettingsPage extends AbstractScreen {
                         c.getWidth() > 0
                                 && c.getWidth() <= c.getScene().getWidth(),
                         id + " width=" + c.getWidth());
-                assertTrue(b.getMinY() >= 0
-                        && b.getMaxY() <= c.getScene().getHeight(), id);
+                // Scrolled Settings keep every control inside the content
+                // and the visible viewport inside the window.
+                final javafx.scene.control.ScrollPane scroll = scrollOf(c);
+                final Bounds area = scroll == null
+                        ? new javafx.geometry.BoundingBox(0, 0,
+                                c.getScene().getWidth(),
+                                c.getScene().getHeight())
+                        : scroll.getContent().localToScene(
+                                scroll.getContent().getBoundsInLocal());
+                assertTrue(b.getMinY() >= area.getMinY() - 1
+                        && b.getMaxY() <= area.getMaxY() + 1, id);
+                if (scroll != null) {
+                    final Bounds viewport = scroll
+                            .localToScene(scroll.getBoundsInLocal());
+                    assertTrue(viewport.getMinY() >= 0
+                            && viewport.getMaxY() <= c.getScene().getHeight(),
+                            id);
+                    assertTrue(b.getMaxX() <= viewport.getMaxX() + 1,
+                            id + " stays without horizontal scrolling");
+                }
             }
         });
     }

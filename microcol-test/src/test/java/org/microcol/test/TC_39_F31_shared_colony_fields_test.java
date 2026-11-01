@@ -78,8 +78,10 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractMicroColTest {
         org.microcol.page.DialogMessagePage.of(getContext()).close();
 
         // Both buttons stay on the menu, keep the previous game reference, and
-        // leave bytes intact.
+        // leave bytes intact; Load stays open until Back.
         audit.verifyRejectedLoadPreservedGameAndFile();
+        audit.verifyLoadPageOpen();
+        audit.closeLoadPage();
         WelcomePage.of(getContext()).verifyMainScreen();
     }
 

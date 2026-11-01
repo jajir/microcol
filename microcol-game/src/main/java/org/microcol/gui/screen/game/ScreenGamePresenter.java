@@ -145,7 +145,7 @@ public class ScreenGamePresenter {
         if (KeyCode.E == event.getCode()) {
             eventBus.post(new ShowScreenEvent(Screen.EUROPE));
         }
-        if (KeyCode.O == event.getCode()) {
+        if (KeyCode.O == event.getCode() && !event.isShortcutDown()) {
             coloniesMenu.show();
             event.consume();
             return;
@@ -165,9 +165,8 @@ public class ScreenGamePresenter {
         if (KeyCode.B == event.getCode()) {
             eventBus.post(new BuildColonyEvent());
         }
-        if (KeyCode.S == event.getCode() & event.isControlDown()) {
-            persistingService.browse(true, false);
-            event.consume();
+        if (KeyCode.S == event.getCode() && event.isShortcutDown()) {
+            // The main window's shortcut owner opens saving; never scroll.
             return;
         }
 

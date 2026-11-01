@@ -2,6 +2,7 @@ package org.microcol.gui.dialog;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Locale;
 
 import org.microcol.diagnostics.DiagnosticEvent;
@@ -15,6 +16,7 @@ import org.microcol.model.Model;
 import org.microcol.model.TurnPreparationException;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.model.campaign.po.PersistingTool;
+import org.microcol.model.campaign.po.SavedGames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +49,8 @@ public class PersistingService {
 
     private final DiagnosticLog diagnosticLog;
 
+    private boolean busy;
+
     @Inject
     public PersistingService(final GameController gameController,
             final EventBus eventBus, final PersistingTool persistingTool,
@@ -73,6 +77,7 @@ public class PersistingService {
 
     public void saveModel(final Model model) {
         final File saveFile;
+        busy = true;
         try {
             saveFile = fileSelectingService.saveFile(
                     persistingTool.getRootSaveDirectory(),
@@ -81,6 +86,8 @@ public class PersistingService {
             diagnosticLog.record(DiagnosticEvent.SAVE_FAILED, unavailable);
             gameModelController.showRecoverySaveFailure();
             return;
+        } finally {
+            busy = false;
         }
         if (saveFile == null) {
             logger.debug("User didn't select any file to save game");
@@ -103,25 +110,31 @@ public class PersistingService {
         }
     }
 
-    private void importGame(final boolean isSecretOptionEnabled) {
+    private boolean importGame(final boolean isSecretOptionEnabled) {
         final File saveFile;
+        busy = true;
         try {
             saveFile = fileSelectingService
                     .loadFile(persistingTool.getRootSaveDirectory());
         } catch (MicroColException unavailable) {
             diagnosticLog.record(DiagnosticEvent.LOAD_FAILED, unavailable);
             gameModelController.showSaveFolderUnavailable();
-            return;
+            return false;
+        } finally {
+            busy = false;
         }
         if (saveFile == null) {
             logger.debug("User didn't select any file to load game");
         } else {
             if (isSecretOptionEnabled) {
                 eventBus.post(new ShowScreenEvent(Screen.EDITOR, saveFile));
+                return true;
             } else if (loadFromFile(saveFile)) {
                 eventBus.post(new ShowScreenEvent(Screen.GAME));
+                return true;
             }
         }
+        return false;
     }
 
     private void saveModelToFile(final File targetFile) {
@@ -133,8 +146,13 @@ public class PersistingService {
     private boolean loadFromFile(final File sourceFile) {
         final File file = correctFileNameExtension(sourceFile);
         logger.debug("Loading game from file '{}' ", file.getAbsolutePath());
-        final boolean loaded = gameController.loadModelFromFile(file,
-                this::confirmLeave);
+        final boolean loaded;
+        busy = true;
+        try {
+            loaded = gameController.loadModelFromFile(file, this::confirmLeave);
+        } finally {
+            busy = false;
+        }
         if (loaded) {
             preferences.setGameInProgressSaveFile(file.getAbsolutePath());
         }
@@ -194,72 +212,102 @@ public class PersistingService {
         return false;
     }
 
+    /**
+     * Saving uses the modal browser; loading opens the main-window Load page,
+     * which returns to the screen that opened it.
+     */
     public void browse(final boolean saving, final boolean recoveryOnly) {
-        if (saving && !gameModelController.isHumanTurnReady()) {
+        if (!saving) {
+            eventBus.post(new ShowScreenEvent(Screen.LOAD, recoveryOnly));
+            return;
+        }
+        if (!gameModelController.isHumanTurnReady()) {
             return;
         }
         while (true) {
-            final SavedGamesDialog.Choice choice;
-            try {
-                choice = new SavedGamesDialog(view, texts).choose(saving,
-                        savedGames.list(), recoveryOnly);
-            } catch (MicroColException failed) {
-                gameModelController.showSaveFolderUnavailable();
+            final List<SavedGames.Entry> entries = listSavedGames();
+            if (entries == null) {
                 return;
             }
-            if (choice == null) {
+            final SavedGamesDialog.Choice choice = new SavedGamesDialog(view,
+                    texts).choose(true, entries, false);
+            if (choice == null || perform(choice)) {
                 return;
-            }
-            try {
-                switch (choice.action) {
-                case SAVE:
-                    if (saveNamed(savedGames.target(gameModelController
-                            .getGameModel().getPlaythroughId(), false),
-                            choice.name)) {
-                        return;
-                    }
-                    break;
-                case LOAD:
-                    if (loadFromFile(choice.entry.file)) {
-                        eventBus.post(new ShowScreenEvent(Screen.GAME));
-                    }
-                    return;
-                case OVERWRITE:
-                    if (confirm(texts.get(SavedGameText.overwrite) + "\n"
-                            + choice.entry.getName())
-                            && saveNamed(choice.entry.file,
-                                    choice.entry.getName())) {
-                        return;
-                    }
-                    break;
-                case DELETE:
-                    if (confirm(texts.get(SavedGameText.delete) + "\n"
-                            + choice.entry.getName())) {
-                        java.nio.file.Files.delete(choice.entry.file.toPath());
-                    }
-                    break;
-                case IMPORT:
-                    importGame(false);
-                    return;
-                case EXPORT:
-                    saveModel(gameModelController.getModel());
-                    return;
-                case FOLDER:
-                    java.awt.Desktop.getDesktop()
-                            .open(persistingTool.getRootSaveDirectory());
-                    break;
-                default:
-                    throw new IllegalStateException(
-                            "Unknown saved-game action");
-                }
-            } catch (java.io.IOException | UnsupportedOperationException
-                    | SecurityException | MicroColException failed) {
-                diagnosticLog.record(DiagnosticEvent.SAVE_FAILED, failed);
-                final DialogMessage message = new DialogMessage(view, texts);
-                message.setText(texts.get(SavedGameText.failed));
-                message.showAndWait();
             }
         }
+    }
+
+    /**
+     * @return current saved games, or <code>null</code> after reporting an
+     *         unavailable save folder
+     */
+    public List<SavedGames.Entry> listSavedGames() {
+        try {
+            return savedGames.list();
+        } catch (MicroColException failed) {
+            gameModelController.showSaveFolderUnavailable();
+            return null;
+        }
+    }
+
+    /**
+     * Perform one saved-games browser action. Failures are reported and keep
+     * the browser, the live game and the files.
+     *
+     * @param choice required chosen action
+     * @return <code>true</code> when the action completed the browser
+     */
+    public boolean perform(final SavedGamesDialog.Choice choice) {
+        try {
+            switch (choice.action) {
+            case SAVE:
+                return saveNamed(savedGames.target(
+                        gameModelController.getGameModel().getPlaythroughId(),
+                        false), choice.name);
+            case LOAD:
+                if (loadFromFile(choice.entry.file)) {
+                    eventBus.post(new ShowScreenEvent(Screen.GAME));
+                    return true;
+                }
+                return false;
+            case OVERWRITE:
+                return confirm(texts.get(SavedGameText.overwrite) + "\n"
+                        + choice.entry.getName())
+                        && saveNamed(choice.entry.file, choice.entry.getName());
+            case DELETE:
+                if (confirm(texts.get(SavedGameText.delete) + "\n"
+                        + choice.entry.getName())) {
+                    java.nio.file.Files.delete(choice.entry.file.toPath());
+                }
+                return false;
+            case IMPORT:
+                return importGame(false);
+            case EXPORT:
+                saveModel(gameModelController.getModel());
+                return true;
+            case FOLDER:
+                java.awt.Desktop.getDesktop()
+                        .open(persistingTool.getRootSaveDirectory());
+                return false;
+            default:
+                throw new IllegalStateException("Unknown saved-game action");
+            }
+        } catch (java.io.IOException | UnsupportedOperationException
+                | SecurityException | MicroColException failed) {
+            diagnosticLog.record(DiagnosticEvent.SAVE_FAILED, failed);
+            final DialogMessage message = new DialogMessage(view, texts);
+            message.setText(texts.get(SavedGameText.failed));
+            message.showAndWait();
+            return false;
+        }
+    }
+
+    /**
+     * @return <code>true</code> while a file chooser, load or save is in
+     *         progress
+     */
+    public boolean isBusy() {
+        return busy;
     }
 
     private boolean saveNamed(final File file, final String name) {

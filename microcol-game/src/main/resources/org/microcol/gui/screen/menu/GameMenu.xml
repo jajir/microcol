@@ -6,12 +6,12 @@
 
 	<entry key="mainMenu">MicroCol</entry>
 	<entry key="buttonContinue">Continue</entry>
-	<entry key="buttonLoadSave">Load saved game</entry>
+	<entry key="buttonLoadSave">Load saved game (%s)</entry>
 	<entry key="buttonPlayCampaign">Play campaign</entry>
 	<entry key="buttonFreeGame">New free play game</entry>
 	<entry key="buttonHallOfFame">Hall of Fame</entry>
 	<entry key="buttonExitMicroCol">Quit MicroCol</entry>
-	<entry key="settingTitle">MicroCol -> Setting</entry>
+	<entry key="settingTitle">Settings</entry>
 	<entry key="buttonSetting">Setting</entry>
 	<entry key="buttonBack">Back</entry>
 	<entry key="campaignTitle">MicroCol -> Campaign</entry>

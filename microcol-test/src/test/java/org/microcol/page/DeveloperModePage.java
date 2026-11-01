@@ -26,6 +26,7 @@ public final class DeveloperModePage extends AbstractScreen {
         final CheckBox checkbox = getNodeFinder()
                 .lookup("#settingDeveloperMode").queryAs(CheckBox.class);
         if (checkbox.isSelected() != enabled) {
+            revealGameContent(checkbox);
             getRobot().clickOn(checkbox);
         }
         WaitForAsyncUtils.waitForFxEvents();

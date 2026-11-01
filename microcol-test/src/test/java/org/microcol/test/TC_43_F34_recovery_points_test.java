@@ -11,11 +11,15 @@ import org.microcol.model.campaign.po.RecoverySlot;
 import org.microcol.page.DialogMessagePage;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
+import org.microcol.page.HostedPanelPage;
+import org.microcol.page.InGameLayoutPage;
+import org.microcol.page.SavedGamesPage;
 import org.microcol.page.SettingPage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 /** Recovery points retain their own dates and only selected slots load. */
@@ -114,6 +118,8 @@ public class TC_43_F34_recovery_points_test extends AbstractMicroColTest {
                 "Unavailable or invalid saved-game details");
         audit.chooseRecovery(RecoverySlot.LATEST_TURN);
         DialogMessagePage.of(getContext()).close();
+        audit.verifyLoadPageOpen();
+        audit.closeLoadPage();
         WelcomePage.of(getContext()).verifyMainScreen();
         audit.continueGame();
         audit.verifyCurrentTurn(19);
@@ -160,5 +166,73 @@ public class TC_43_F34_recovery_points_test extends AbstractMicroColTest {
         audit.captureDialog("savedGamesCancel", "recovery-chooser-czech.png");
         audit.cancelRecovery();
         WelcomePage.of(getContext()).verifyMainScreen();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_load_page_keeps_filters_corrupt_retry_and_protection()
+            throws Exception {
+        // Load the fixture with recovery points enabled.
+        final SettingPage setting = WelcomePage.of(getContext()).openSetting();
+        setting.setAutosaveEnabled(true);
+        final GamePage game = setting.goBack().loadGame();
+        final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        final HostedPanelPage hosted = new HostedPanelPage(getContext());
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        audit.verifyCurrentTurn(18);
+
+        // The embedded page keeps its types; an empty filter explains itself.
+        hosted.pressShortcut(KeyCode.O);
+        hosted.verifyInGameHosted("Load game");
+        hosted.chooseFilter("saveFilterMANUAL");
+        hosted.verifyEmptyListExplained("No saved games in this view.");
+        new InGameLayoutPage(getContext())
+                .saveEvidence("r0377-load-empty-filter-en.png");
+        hosted.click("savedGamesCancel");
+
+        // Keep a quick save of 1508, then play into 1509 and corrupt its point.
+        saves.quickSave();
+        saves.verifyQuickSave();
+        game.nextTurnAndCloseDialogs();
+        audit.verifyCurrentTurn(19);
+        audit.corruptRecovery(RecoverySlot.LATEST_TURN);
+        saves.rememberGame();
+        audit.rememberRecoveryBytes();
+
+        // Recovery points remain a filter; selecting only shows the details.
+        saves.openLoad();
+        hosted.chooseFilter("saveFilterAUTOMATIC");
+        audit.verifyRecoveryOption(RecoverySlot.LATEST_TURN, true,
+                "Unavailable or invalid saved-game details");
+        audit.selectRecovery(RecoverySlot.LATEST_TURN);
+        saves.verifyGameUnchanged();
+        audit.verifyRecoveryBytesUnchanged();
+
+        // The corrupt point fails before any leave prompt and keeps the page.
+        saves.action("loadSelected");
+        audit.verifyInvalidSavedGameMessage(
+                "The saved game contains invalid data and could not be loaded. The current game and save file were not changed.");
+        DialogMessagePage.of(getContext()).close();
+        audit.verifyLoadPageOpen();
+        saves.verifyGameUnchanged();
+        audit.verifyRecoveryBytesUnchanged();
+
+        // Another save asks before leaving; Back keeps page, choice and game.
+        hosted.chooseFilter("saveFilterQUICK");
+        saves.select("Quick save");
+        saves.action("loadSelected");
+        hosted.verifyConfirmationOpen("saveCancel");
+        saves.action("saveCancel");
+        hosted.verifySelectedSave("Quick save");
+        audit.verifyLoadPageOpen();
+        saves.verifyGameUnchanged();
+
+        // Leaving without saving starts the 1508 save, not the old origin.
+        saves.action("loadSelected");
+        saves.action("saveDiscard");
+        game.verifyGameInFront();
+        hosted.verifyLoadClosed();
+        audit.verifyCurrentTurn(18);
+        audit.verifyRecoveryBytesUnchanged();
     }
 }

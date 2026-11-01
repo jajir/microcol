@@ -113,16 +113,8 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         buttonsBox.getChildren().add(settingAnimationSpeedView.getContent());
         buttonsBox.getChildren().add(developerSection);
         buttonsBox.getChildren().add(settingVersionView.getContent());
-        buttonsBox.getChildren().add(buttonBack);
 
         updateLanguage(i18n);
-    }
-
-    void setInGame(final boolean inGame) {
-        buttonsBox.getChildren().remove(buttonBack);
-        if (!inGame) {
-            buttonsBox.getChildren().add(buttonBack);
-        }
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.page.FramedSettingsPage;
 import org.microcol.page.DeveloperModePage;
 import org.microcol.page.GamePage;
+import org.microcol.page.HostedPanelPage;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.ColonizopediaPage;
 import org.microcol.model.Location;
@@ -24,6 +25,12 @@ import javafx.stage.Stage;
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_84_F75_framed_settings_test extends AbstractMicroColTest {
+    private static final java.util.List<String> SETTINGS_ORDER = java.util.List
+            .of("rbCzech", "rbEnglish", "settingGrid", "settingFightAdvisor",
+                    "autosaveEnabled", "settingTurnSummary",
+                    "settingOpenEuropeOnArrival", "settingVolume",
+                    "settingAnimationSpeed", "settingDeveloperMode");
+
     @Start
     private void start(final Stage stage) throws Exception {
         initialize(stage, getClass(),
@@ -277,7 +284,7 @@ public class TC_84_F75_framed_settings_test extends AbstractMicroColTest {
         developer.verifyState(true);
         developer.verifyText("freePlayPlayerName", "Map author");
         setup.back().verifyMainScreen();
-        // Direct-created dialogs use the same shortcut as injected dialogs.
+        // The embedded Load page uses the same shortcut as the menu.
         final org.microcol.page.SavedGamesPage saved = new org.microcol.page.SavedGamesPage(
                 getContext());
         saved.action("buttonLoad");
@@ -318,6 +325,49 @@ public class TC_84_F75_framed_settings_test extends AbstractMicroColTest {
         developer.backToGame();
         developer.verifyNoIndicator();
         developer.verifyGameUnchanged();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_08_menu_origin_keeps_settings_in_the_sea_with_a_live_game()
+            throws Exception {
+        // Keep a loaded game in memory while the main menu is shown.
+        WelcomePage.of(getContext()).loadGame();
+        final HostedPanelPage hosted = new HostedPanelPage(getContext());
+        final org.microcol.page.SavedGamesPage saves = new org.microcol.page.SavedGamesPage(
+                getContext());
+        saves.rememberGame();
+        hosted.showMainMenuOverLiveGame();
+        // Settings opened from the menu stays in the menu sea, not the game
+        // frame.
+        SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        hosted.verifyMenuHosted("Settings", "buttonBack", "Back");
+        hosted.verifySettingsOrder(SETTINGS_ORDER);
+        // A small window scrolls only the content; title and Back stay.
+        new FramedSettingsPage(getContext()).resizeWindow(900, 700);
+        hosted.verifyMenuHosted("Settings", "buttonBack", "Back");
+        hosted.verifyScrollBarFollowsOverflow();
+        hosted.verifyCompleteTexts();
+        hosted.scrollContentToEnd();
+        hosted.verifyTitleAndBackVisible("buttonBack");
+        hosted.captureDialog("buttonBack",
+                "r0377-settings-menu-scrolled-en.png");
+        // Czech keeps the same order, full labels and menu return.
+        settings.setCzechLanguage();
+        hosted.verifyMenuHosted("Nastavení", "buttonBack", "Zpět");
+        hosted.verifySettingsOrder(SETTINGS_ORDER);
+        hosted.verifyCompleteTexts();
+        hosted.captureDialog("buttonBack", "r0377-settings-menu-cs.png");
+        settings.setEnglishLanguage();
+        // Escape returns to the menu and leaves the live game untouched.
+        hosted.press(KeyCode.ESCAPE);
+        WelcomePage.of(getContext()).verifyMainScreen();
+        saves.verifyGameUnchanged();
+        // Reopening from the menu still uses the sea with its Back control.
+        settings = WelcomePage.of(getContext()).openSetting();
+        hosted.verifyMenuHosted("Settings", "buttonBack", "Back");
+        settings.goBack().verifyMainScreen();
+        saves.verifyGameUnchanged();
     }
 
 }

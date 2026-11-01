@@ -213,6 +213,8 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 .filter(value -> value.file.equals(file)).findFirst();
         assertEquals(available, entry.isPresent());
         if (available) {
+            getRobot().interact(() -> list.scrollTo(entry.get()));
+            org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
             final var cell = getNodeFinder().lookup(".list-cell")
                     .queryAllAs(javafx.scene.control.ListCell.class).stream()
                     .filter(value -> value.getItem() == entry.get()).findFirst()
@@ -244,6 +246,22 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 .orElseThrow();
         getRobot().interact(() -> list.getSelectionModel().select(entry));
         clickOnButtonWithId("loadSelected");
+    }
+
+    /** Select a recovery point with the keyboard without loading it. */
+    public void selectRecovery(final RecoverySlot slot) {
+        final java.io.File file = getContext()
+                .getClassFromGuice(PersistingTool.class).getRecoveryFile(slot);
+        final var list = savedList();
+        final int index = java.util.stream.IntStream
+                .range(0, list.getItems().size())
+                .filter(i -> list.getItems().get(i).file.equals(file))
+                .findFirst().orElseThrow();
+        getRobot().clickOn(list).push(KeyCode.HOME);
+        for (int i = 0; i < index; i++) {
+            getRobot().push(KeyCode.DOWN);
+        }
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void cancelRecovery() {
@@ -568,6 +586,22 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 getContext().getClassFromGuice(
                         org.microcol.gui.event.model.GameModelController.class)
                         .getGameModel());
+    }
+
+    /** Leave the Load page with its visible return control. */
+    public void closeLoadPage() {
+        clickOnButtonWithId("savedGamesCancel");
+    }
+
+    /** The Load page stays open in the main window for another choice. */
+    public void verifyLoadPageOpen() {
+        WaitForAsyncUtils.waitForFxEvents();
+        final javafx.scene.Node list = getNodeFinder().lookup("#savedGamesList")
+                .query();
+        assertNotNull(list);
+        assertSame(getContext().getPrimaryStage().getScene(), list.getScene());
+        assertTrue(getButtonById("loadSelected").isVisible());
+        assertTrue(getButtonById("savedGamesCancel").isVisible());
     }
 
     public void cancelLoadChooser() {

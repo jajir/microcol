@@ -2,8 +2,10 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
     <entry key="resume">Zpět do hry</entry>
-    <entry key="save">Uložit hru (Ctrl+S)</entry>
+    <entry key="save">Uložit hru</entry>
     <entry key="load">Načíst hru</entry>
+    <entry key="saveMenu">Uložit hru (%s)</entry>
+    <entry key="loadMenu">Načíst hru (%s)</entry>
     <entry key="quickSave">Rychle uložit (F5)</entry>
     <entry key="quickLoad">Rychle načíst (F9)</entry>
     <entry key="restart">Začít misi znovu</entry>

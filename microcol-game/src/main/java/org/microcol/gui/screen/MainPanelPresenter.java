@@ -1,12 +1,19 @@
 package org.microcol.gui.screen;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import org.microcol.gui.dialog.PersistingService;
 import org.microcol.gui.event.ChangeLanguageEvent;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.campaign.ScreenCampaign;
 import org.microcol.gui.screen.colony.ScreenColony;
 import org.microcol.gui.screen.editor.ScreenEditor;
 import org.microcol.gui.screen.europe.ScreenEurope;
 import org.microcol.gui.screen.game.ScreenGame;
 import org.microcol.gui.screen.goals.ScreenGoals;
+import org.microcol.gui.screen.load.ScreenLoad;
 import org.microcol.gui.screen.colonizopedia.ScreenColonizopedia;
 import org.microcol.gui.screen.congress.ScreenCongress;
 import org.microcol.gui.screen.market.ScreenMarketBuy;
@@ -25,6 +32,11 @@ import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+
+import javafx.scene.Scene;
+import javafx.scene.control.TextInputControl;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.Window;
 
 /**
  * MicroCol's main panel. Based on commands and events just change between main
@@ -46,12 +58,28 @@ public final class MainPanelPresenter {
 
     private GameScreen shownScreen;
 
+    /**
+     * Screens that opened Settings and Load; <code>null</code> before the first
+     * screen.
+     */
+    private final Map<GameScreen, GameScreen> origins = new HashMap<>();
+
+    private final ScreenGame screenGame;
+    private final ScreenMenu screenMenu;
+    private final ScreenCampaign screenCampaign;
+    private final ScreenFreePlay screenFreePlay;
+    private final ScreenSetting screenSetting;
+    private final ScreenLoad screenLoad;
+    private final ScreenEditor screenEditor;
+    private final PersistingService persistingService;
+    private final GameModelController gameModelController;
+
     @Inject
     public MainPanelPresenter(final MainPanelView view, final I18n i18n,
             final ScreenGame screenGame, final ScreenMenu screenMenu,
             final ScreenCampaign screenCampaign,
             final ScreenEurope screenEurope, final ScreenSetting screenSetting,
-            final ScreenFreePlay screenFreePlay,
+            final ScreenLoad screenLoad, final ScreenFreePlay screenFreePlay,
             final ScreenColony screenColony,
             final ScreenMarketBuy screenMarketBuy,
             final ScreenMarketSell screenMarketSell,
@@ -59,9 +87,21 @@ public final class MainPanelPresenter {
             final ScreenTurnReport screenTurnReport,
             final ScreenEditor screenEditor, final ScreenGoals screenGoals,
             final ScreenColonizopedia screenHelp,
-            final ScreenCongress screenCongress) {
+            final ScreenCongress screenCongress,
+            final PersistingService persistingService,
+            final GameModelController gameModelController) {
         this.view = Preconditions.checkNotNull(view);
         this.i18n = Preconditions.checkNotNull(i18n);
+        this.screenGame = Preconditions.checkNotNull(screenGame);
+        this.screenMenu = Preconditions.checkNotNull(screenMenu);
+        this.screenCampaign = Preconditions.checkNotNull(screenCampaign);
+        this.screenFreePlay = Preconditions.checkNotNull(screenFreePlay);
+        this.screenSetting = Preconditions.checkNotNull(screenSetting);
+        this.screenLoad = Preconditions.checkNotNull(screenLoad);
+        this.screenEditor = Preconditions.checkNotNull(screenEditor);
+        this.persistingService = Preconditions.checkNotNull(persistingService);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
 
         /*
          * Wasd controlled is used just in game screen. In game screen wasd
@@ -87,6 +127,11 @@ public final class MainPanelPresenter {
                 }, event -> {
                     if (Screen.SETTING == event.getScreen()) {
                         return screenSetting;
+                    }
+                    return null;
+                }, event -> {
+                    if (Screen.LOAD == event.getScreen()) {
+                        return screenLoad;
                     }
                     return null;
                 }, event -> {
@@ -149,6 +194,85 @@ public final class MainPanelPresenter {
     @Subscribe
     private void onShowScreen(final ShowScreenEvent event) {
         final GameScreen screen = screenResolver.apply(event);
+        if (isOriginTracked(screen)) {
+            if (screen == shownScreen) {
+                // Reopening keeps the shown page and its first origin.
+                return;
+            }
+            origins.put(screen, shownScreen);
+            final boolean menuHosted = isMenuScreen(shownScreen);
+            if (screen == screenSetting) {
+                screenSetting.setMenuHosted(menuHosted);
+            } else {
+                screenLoad.setMenuHosted(menuHosted);
+                screenLoad.setRecoveryOnly(
+                        Boolean.TRUE.equals(event.getContext()));
+            }
+        }
+        show(screen);
+    }
+
+    @SuppressWarnings("unused")
+    @Subscribe
+    private void onReturnToOrigin(final ReturnToOriginEvent event) {
+        if (!isOriginTracked(shownScreen)) {
+            return;
+        }
+        final GameScreen origin = Optional.ofNullable(origins.get(shownScreen))
+                .orElse(screenMenu);
+        beforeHide(shownScreen);
+        origin.beforeReturn();
+        view.showScreen(origin);
+        shownScreen = origin;
+    }
+
+    /**
+     * Install the platform shortcut+O and shortcut+S keys of the main window.
+     *
+     * @param scene required main window scene
+     */
+    public void installShortcuts(final Scene scene) {
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            final boolean blocked = scene
+                    .getFocusOwner() instanceof TextInputControl
+                    || isOtherWindowShowing(scene.getWindow())
+                    || persistingService.isBusy();
+            final SessionShortcut.Action action = SessionShortcut.resolve(event,
+                    blocked, shownScreen != null && shownScreen != screenEditor,
+                    shownScreen == screenGame
+                            && gameModelController.isHumanTurnReady());
+            if (action == SessionShortcut.Action.LOAD) {
+                event.consume();
+                persistingService.browse(false, false);
+            } else if (action == SessionShortcut.Action.SAVE) {
+                event.consume();
+                persistingService.browse(true, false);
+            }
+        });
+    }
+
+    /**
+     * Dialogs, popup menus and file choosers are separate windows; while one is
+     * shown it owns the keys.
+     */
+    private static boolean isOtherWindowShowing(final Window main) {
+        return Window.getWindows().stream()
+                .anyMatch(window -> window != main && window.isShowing());
+    }
+
+    private boolean isOriginTracked(final GameScreen screen) {
+        return screen == screenSetting || screen == screenLoad;
+    }
+
+    private boolean isMenuScreen(final GameScreen screen) {
+        if (isOriginTracked(screen)) {
+            return isMenuScreen(origins.get(screen));
+        }
+        return screen == null || screen == screenMenu
+                || screen == screenCampaign || screen == screenFreePlay;
+    }
+
+    private void show(final GameScreen screen) {
         beforeHide(shownScreen);
         beforeShow(screen);
         view.showScreen(screen);

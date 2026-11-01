@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.page.GamePage;
 import org.microcol.page.GameBarWidthPage;
+import org.microcol.page.HostedPanelPage;
 import org.microcol.page.InGameLayoutPage;
 import org.microcol.page.MainScreenLayoutPage;
 import org.microcol.page.SavedGamesPage;
@@ -13,6 +14,7 @@ import org.microcol.page.SettingPage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 /** R-0307, UC-114/115/119: navigation has fixed controls and live status. */
@@ -374,6 +376,113 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         page.open("closeButtonId");
         page.verifyMapReturned();
         page.verifyTurnUnchanged(2, 484);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_07_settings_and_load_fit_both_hosts_languages_and_sizes()
+            throws Exception {
+        // English Settings and Load stay inside the menu sea, wide and narrow.
+        final MainScreenLayoutPage window = new MainScreenLayoutPage(
+                getContext());
+        final HostedPanelPage hosted = new HostedPanelPage(getContext());
+        final InGameLayoutPage page = new InGameLayoutPage(getContext());
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        window.resize(1280, 850);
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        hosted.verifyMenuHosted("Settings", "buttonBack", "Back");
+        hosted.verifyScrollBarFollowsOverflow();
+        hosted.verifyCompleteTexts();
+        hosted.rememberFonts();
+        hosted.captureDialog("buttonBack", "r0377-settings-menu-wide-en.png");
+        window.resize(900, 700);
+        hosted.verifyMenuHosted("Settings", "buttonBack", "Back");
+        hosted.verifyScrollBarFollowsOverflow();
+        hosted.verifyCompleteTexts();
+        hosted.verifyFontsUnchanged();
+        hosted.scrollContentToEnd();
+        hosted.verifyTitleAndBackVisible("buttonBack");
+        hosted.captureDialog("buttonBack", "r0377-settings-menu-narrow-en.png");
+        hosted.pressShortcut(KeyCode.O);
+        hosted.verifyMenuHosted("Load game", "savedGamesCancel", "Back");
+        hosted.verifyScrollBarFollowsOverflow();
+        hosted.verifyCompleteTexts();
+        hosted.captureDialog("savedGamesList", "r0377-load-menu-narrow-en.png");
+        hosted.press(KeyCode.ESCAPE);
+        hosted.verifyMenuHosted("Settings", "buttonBack", "Back");
+
+        // English in-game Settings and Load share the frame in both sizes.
+        final GamePage game = settings.goBack().loadGame();
+        saves.openMenu();
+        saves.chooseMenu("menuSettings");
+        hosted.verifyInGameHosted("Settings");
+        page.verifyFrame(484, 1600);
+        page.verifyBackToGame("buttonBack", "Back to game");
+        hosted.verifyScrollBarFollowsOverflow();
+        hosted.verifyCompleteTexts();
+        hosted.pressShortcut(KeyCode.O);
+        hosted.verifyInGameHosted("Load game");
+        page.verifyFrame(484, 1600);
+        page.verifyBackToGame("savedGamesCancel", "Back to game");
+        hosted.verifyScrollBarFollowsOverflow();
+        hosted.verifyCompleteTexts();
+        page.saveEvidence("r0377-load-game-narrow-en.png");
+        window.resize(1280, 850);
+        page.verifyBackToGame("savedGamesCancel", "Back to game");
+        hosted.verifyScrollBarFollowsOverflow();
+        hosted.verifyCompleteTexts();
+        page.saveEvidence("r0377-load-game-wide-en.png");
+        hosted.press(KeyCode.ESCAPE);
+
+        // Czech in-game Settings keeps the frame, order and full labels.
+        settings.setCzechLanguage();
+        hosted.verifyInGameHosted("Nastavení");
+        page.verifyBackToGame("buttonBack", "Zpět do hry");
+        hosted.verifySettingsOrder(java.util.List.of("rbCzech", "rbEnglish",
+                "settingGrid", "settingFightAdvisor", "autosaveEnabled",
+                "settingTurnSummary", "settingOpenEuropeOnArrival",
+                "settingVolume", "settingAnimationSpeed",
+                "settingDeveloperMode"));
+        hosted.verifyScrollBarFollowsOverflow();
+        hosted.verifyCompleteTexts();
+        hosted.rememberFonts();
+        page.saveEvidence("r0377-settings-game-wide-cs.png");
+        window.resize(900, 700);
+        page.verifyFrame(484, 1600);
+        page.verifyBackToGame("buttonBack", "Zpět do hry");
+        hosted.verifyScrollBarFollowsOverflow();
+        hosted.verifyCompleteTexts();
+        hosted.verifyFontsUnchanged();
+        hosted.scrollContentToEnd();
+        hosted.verifyTitleAndBackVisible("buttonBack");
+        page.saveEvidence("r0377-settings-game-narrow-cs.png");
+        hosted.pressShortcut(KeyCode.O);
+        hosted.verifyInGameHosted("Načíst hru");
+        page.verifyBackToGame("savedGamesCancel", "Zpět do hry");
+        hosted.verifyScrollBarFollowsOverflow();
+        hosted.verifyCompleteTexts();
+        page.saveEvidence("r0377-load-game-narrow-cs.png");
+        hosted.press(KeyCode.ESCAPE);
+        page.open("buttonBack");
+        page.verifyMapReturned();
+        page.verifyTurnUnchanged(2, 484);
+
+        // Czech menu hosts use the same sea geometry after leaving the game.
+        game.exitToMenu();
+        window.resize(1280, 850);
+        WelcomePage.of(getContext()).openSetting();
+        hosted.verifyMenuHosted("Nastavení", "buttonBack", "Zpět");
+        hosted.verifyScrollBarFollowsOverflow();
+        hosted.verifyCompleteTexts();
+        hosted.captureDialog("buttonBack", "r0377-settings-menu-wide-cs.png");
+        window.resize(900, 700);
+        hosted.pressShortcut(KeyCode.O);
+        hosted.verifyMenuHosted("Načíst hru", "savedGamesCancel", "Zpět");
+        hosted.verifyScrollBarFollowsOverflow();
+        hosted.verifyCompleteTexts();
+        hosted.captureDialog("savedGamesList", "r0377-load-menu-narrow-cs.png");
+        hosted.click("savedGamesCancel");
+        hosted.verifyMenuHosted("Nastavení", "buttonBack", "Zpět");
     }
 
 }

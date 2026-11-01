@@ -76,13 +76,17 @@ public class WelcomePage extends AbstractMenuScreen {
             final List<String> ids = List.of("buttonContinue", "buttonRecovery",
                     "buttonLoad", "buttonCampaign", "buttonStartFreeGame",
                     "buttonHallOfFame", "buttonSetting", "buttonExit");
+            // Load names the platform shortcut: Command on macOS, Ctrl
+            // elsewhere.
+            final String load = isMacPlatform() ? " (⌘O)" : " (Ctrl+O)";
             final List<String> labels = czech
-                    ? List.of("Pokračovat", "Body obnovy", "Nahrát hru",
+                    ? List.of("Pokračovat", "Body obnovy", "Nahrát hru" + load,
                             "Spustit kampaň", "Nová neomezená hra", "Síň slávy",
                             "Nastavení", "Ukončit hru")
-                    : List.of("Continue", "Recovery points", "Load saved game",
-                            "Play campaign", "New free play game",
-                            "Hall of Fame", "Setting", "Quit MicroCol");
+                    : List.of("Continue", "Recovery points",
+                            "Load saved game" + load, "Play campaign",
+                            "New free play game", "Hall of Fame", "Setting",
+                            "Quit MicroCol");
             final VBox column = getNodeFinder().lookup(".game-menu-inner")
                     .queryAs(VBox.class);
             assertEquals(ids.size(), column.getChildren().size());

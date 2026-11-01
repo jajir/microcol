@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 
 import org.microcol.gui.event.QuitGameEvent;
 import org.microcol.gui.preferences.GamePreferences;
+import org.microcol.gui.screen.MainPanelPresenter;
 import org.microcol.gui.screen.MainPanelView;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.gui.util.ViewUtil;
@@ -39,6 +40,8 @@ public final class MainStageBuilder {
 
     private final MainPanelView mainPanelView;
 
+    private final MainPanelPresenter mainPanelPresenter;
+
     private final GamePreferences gamePreferences;
 
     private final I18n i18n;
@@ -46,9 +49,12 @@ public final class MainStageBuilder {
 
     @Inject
     public MainStageBuilder(final MainPanelView mainPanelView,
+            final MainPanelPresenter mainPanelPresenter,
             final GamePreferences gamePreferences, final EventBus eventBus,
             final I18n i18n, final ViewUtil viewUtil) {
         this.mainPanelView = Preconditions.checkNotNull(mainPanelView);
+        this.mainPanelPresenter = Preconditions
+                .checkNotNull(mainPanelPresenter);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
@@ -108,6 +114,7 @@ public final class MainStageBuilder {
         final VBox mainBox = new VBox();
         final Scene scene = new Scene(mainBox);
         viewUtil.installSceneShortcuts(scene);
+        mainPanelPresenter.installShortcuts(scene);
         scene.setFill(Color.web("#FFF9EC"));
         scene.getStylesheets().add(STYLE_SHEET_MICROCOL);
         mainBox.getChildren().add(mainPanelView.getContent());

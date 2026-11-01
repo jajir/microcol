@@ -12,8 +12,9 @@ import org.microcol.i18n.I18n;
 
 /**
  * Every menu text is formatted by I18n, so text without arguments must be a
- * valid format with none, and the generated-world preview must accept its
- * arguments. The setup screen builds these texts while the application starts.
+ * valid format with none, and the generated-world preview and the Load button
+ * with its platform shortcut must accept their arguments. The setup screen
+ * builds these texts while the application starts.
  */
 class GameMenuTextTest {
 
@@ -30,7 +31,8 @@ class GameMenuTextTest {
                 new Locale("cs", "CZ") }) {
             final I18n i18n = i18n(locale);
             for (final GameMenu key : GameMenu.values()) {
-                if (key != GameMenu.setupGeneratedPreview) {
+                if (key != GameMenu.setupGeneratedPreview
+                        && key != GameMenu.buttonLoadSave) {
                     final String text = assertDoesNotThrow(() -> i18n.get(key),
                             () -> locale + " " + key);
                     assertFalse(text.isBlank(), () -> locale + " " + key);
@@ -57,6 +59,14 @@ class GameMenuTextTest {
                 "Náhled: mapa 50 × 30 polí, podnebí Mírné, pevnina 40 %, semínko 1.",
                 i18n(new Locale("cs", "CZ")).get(GameMenu.setupGeneratedPreview,
                         50, 30, "Mírné", 40, "1"));
+    }
+
+    @Test
+    void loadButtonNamesThePlatformShortcutInBothLanguages() {
+        assertEquals("Load saved game (Ctrl+O)",
+                i18n(Locale.ROOT).get(GameMenu.buttonLoadSave, "Ctrl+O"));
+        assertEquals("Nahrát hru (⌘O)", i18n(new Locale("cs", "CZ"))
+                .get(GameMenu.buttonLoadSave, "⌘O"));
     }
 
 }

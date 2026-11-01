@@ -161,8 +161,11 @@ public class TC_21_F15_free_play_screen_navigation_test
         FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         byte[] saved = audit.readAutosave();
 
-        // Cancelling the native chooser leaves the menu and save intact.
+        // Cancelling the native chooser keeps the Load page and the save
+        // intact; Back returns to the menu.
         audit.cancelLoadChooser();
+        audit.verifyLoadPageOpen();
+        audit.closeLoadPage();
         WelcomePage.of(getContext()).verifyMainScreen();
         audit.verifyAutosaveUnchanged(saved);
         audit.verifyContinueButtonEnabled(true);

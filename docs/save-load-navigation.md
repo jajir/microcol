@@ -12,11 +12,24 @@ zůstane dostupná přes Načíst hru a stávající filtr; ukládání bodů se
 Požadavek je ve stavu `new`, dosud není implementován. Níže popsaná současná
 navigace proto tuto položku stále obsahuje.
 
-**Schválený návrh z 31. října 2026:** [R-0377](requirements/R-0377.md)
-vlastní budoucí vložení Nastavení a Načíst hru do stránek menu/hry, posouvání
-obsahu, návraty podle skutečného původu a platformní zkratky. Stav je `new`;
-níže uvedený dialogový přehled a současné zkratky zůstávají popisem dosavadní
-implementace. Odstranění samostatné položky Body obnovy stále vlastní R-0376.
+**Kandidát implementace z 1. listopadu 2026, dosud bez přejímky:**
+[R-0377](requirements/R-0377.md) vkládá Nastavení a Načíst hru do hlavního
+okna. Obrazovka, která je otevřela, určuje hostitele (mořská oblast menu nebo
+herní rám) i návrat tlačítkem Zpět a klávesou Esc. Načíst otevírá také ⌘O na
+macOS a Ctrl+O jinde; ⌘S / Ctrl+S na mapě otevírá dosavadní dialog Uložit.
+Hlavní menu i herní nabídka uvádějí zkratku platformy v textu položky.
+Chyba načtení, zrušený výběr souboru i zrušená ochrana postupu ponechají
+stránku otevřenou. Zkratky nereagují při psaní do textového pole, při
+otevřeném dialogu, nabídce či výběru souboru ani během souborové operace.
+
+Jde o popis kandidátního kódu, nikoli o ověřené chování: přejímka (model/JUnit,
+cílené Docker/Xvfb scénáře, nativní kontrola ⌘O/⌘S na macOS a prohlídka
+snímků) dosud neproběhla úspěšně a výsledky patří do
+[funkční evidence](functional-tests.md). Nejistá zůstává zejména geometrie
+mořského panelu v nejmenším oknu a délka popisku tlačítka Načíst v úzkém
+sloupci menu. Text níže platí po přejímce s touto změnou; snímky a diagramy
+z 26. října zachycují předchozí dialogový přehled. Odstranění samostatné
+položky Body obnovy stále vlastní R-0376.
 
 ## Pravidla ukládání schválená 1. listopadu 2026
 
@@ -101,8 +114,10 @@ rozhraní v angličtině; nejde o maketu. České ovládací texty pokrývá tak
 3. Nová hra a výběr mise zůstávají samostatnými vstupy hlavní nabídky.
    Pokračování z uložené pozice obnovuje stav rozehrané mise; restart
    zahajuje původní misi a není pokračováním uložené pozice.
-4. Z Nastavení se tlačítkem Zpět i klávesou Esc vrací hráč do stále rozehrané
-   hry, pokud z ní přišel; jinak do hlavní nabídky. Návrat sám hru neukládá.
+4. Z Nastavení a Načíst se tlačítkem Zpět i klávesou Esc vrací hráč na
+   obrazovku, ze které je otevřel: do menu, na mapu se stejným pohledem a
+   výběrem, do stejné kolonie, Evropy, přehledu nebo Nastavení (R-0377).
+   Existence hry na pozadí hostitele nemění. Návrat sám hru neukládá.
 
 ## 2. Okolní herní obrazovky
 
@@ -110,8 +125,10 @@ rozhraní v angličtině; nejde o maketu. České ovládací texty pokrývá tak
 
 [Zdroj PlantUML](diagrams/save-load/game-screens.puml)
 
-1. Přehled zahrnuje všech 13 hodnot současného
+1. Diagram z 26. října 2026 zachycuje 13 tehdy popsaných hodnot
    [výčtu Screen](../microcol-game/src/main/java/org/microcol/gui/screen/Screen.java).
+   Výčet má nyní 16 hodnot; kandidát R-0377 přidává `LOAD` pro stránku
+   Načíst hru, kterou diagram zatím neukazuje.
    Kolonie, Evropa, nákup/prodej, statistiky, hlášení tahu a cíle zachovávají
    své návraty; nejde o nové uložené hry. Herní dialogy zůstávají uvnitř
    volající obrazovky. Vývojový editor používá samostatný systémový výběr.
@@ -126,7 +143,7 @@ rozhraní v angličtině; nejde o maketu. České ovládací texty pokrývá tak
 
 [Zdroj PlantUML](diagrams/save-load/save.puml)
 
-1. **Uložit / Ctrl+S** otevře přehled s názvem nového uložení. Potvrzení
+1. **Uložit / ⌘S na macOS, Ctrl+S jinde** otevře přehled s názvem nového uložení. Potvrzení
    vytvoří nový soubor; shodný název sám o sobě nic nepřepíše. Okrajové
    Unicode mezery se oříznou, vnitřní mezery, diakritika a interpunkce zůstanou.
    Název musí mít 1–64 Unicode znaků bez řídicích znaků. Název není cesta.
@@ -159,9 +176,12 @@ rozhraní v angličtině; nejde o maketu. České ovládací texty pokrývá tak
    Chybějící soubory se nevypisují; prázdný filtr má vlastní vysvětlení.
 2. Poškozené údaje nezablokují prohlížení ostatních řádků. Výběr souboru
    je pouze čtení. Až Načíst rekonstruuje a ověří celý kandidátní stav;
-   chyba vrací do volající obrazovky a zachová původní hru i zdroj.
+   chyba se ohlásí nad stránkou Načíst, která zůstane otevřená pro jinou
+   volbu, a zachová původní hru i zdroj (R-0377).
 3. **Importovat soubor** otevírá systémový výběr. Zrušení přehledu,
-   systémového výběru či potvrzení nic neaktivuje.
+   systémového výběru či potvrzení nic neaktivuje. U kandidáta R-0377 zrušený
+   výběr i odmítnutý importovaný soubor ponechají stránku Načíst otevřenou;
+   teprve Zpět nebo Esc vrátí hráče na původní obrazovku.
 4. **Pokračovat** používá poslední úspěšně uloženou nebo načtenou cestu.
    Po konci hry zůstává tato starší rozehraná pozice dostupná; samotný konec
    ji nepřepíše ukončenou hrou.

@@ -44,6 +44,7 @@ public class SettingPage extends AbstractMenuScreen {
                 .lookup("#autosaveEnabled")
                 .queryAs(javafx.scene.control.CheckBox.class);
         if (check.isSelected() != enabled) {
+            revealGameContent(check);
             getRobot().clickOn(check);
             org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
         }

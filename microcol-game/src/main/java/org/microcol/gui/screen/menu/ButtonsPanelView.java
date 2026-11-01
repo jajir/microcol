@@ -14,6 +14,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.text.Text;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -131,7 +134,10 @@ public final class ButtonsPanelView
     public void updateLanguage(final I18n i18n) {
         buttonContinue.setText(i18n.get(GameMenu.buttonContinue));
         buttonRecovery.setText(i18n.get(GameMenu.buttonRecovery));
-        buttonLoad.setText(i18n.get(GameMenu.buttonLoadSave));
+        // Name the platform shortcut: Command-O on macOS, Ctrl+O elsewhere.
+        buttonLoad.setText(i18n.get(GameMenu.buttonLoadSave,
+                new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN)
+                        .getDisplayText()));
         buttonPlayCampaign.setText(i18n.get(GameMenu.buttonPlayCampaign));
         buttonStartFreeGame.setText(i18n.get(GameMenu.buttonFreeGame));
         buttonHallOfFame.setText(i18n.get(GameMenu.buttonHallOfFame));

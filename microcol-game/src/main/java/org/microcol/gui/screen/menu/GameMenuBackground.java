@@ -21,6 +21,16 @@ import javafx.scene.paint.Color;
 
 public class GameMenuBackground extends AbstractAnimatedBackground {
 
+    /**
+     * Height of the sea stripe, the reserved area of menu content panels.
+     */
+    public static final int SEA_HEIGHT = 440;
+
+    /**
+     * Vertical shift of the sea stripe center from the window center.
+     */
+    public static final int SEA_SHIFT = 30;
+
     private final static String IMG_TOP = "sunset-top-line.png";
 
     private final static String IMG_BOTTOM = "sunset-bottom-line.png";
@@ -53,11 +63,11 @@ public class GameMenuBackground extends AbstractAnimatedBackground {
         final ThreeStripesPref pref = ThreeStripesPref.build()
                 .setTopStripe(StripeDef.of(-240,
                         colorScheme.getColor(GuiColors.SKY_1)))
-                .setCenterStripe(
-                        StripeDef.of(30, colorScheme.getColor(GuiColors.SEA_1)))
+                .setCenterStripe(StripeDef.of(SEA_SHIFT,
+                        colorScheme.getColor(GuiColors.SEA_1)))
                 .setBottomStripe(StripeDef.of(270,
                         colorScheme.getColor(GuiColors.GRASS_1)))
-                .setCenterStripeHeight(440).make();
+                .setCenterStripeHeight(SEA_HEIGHT).make();
         this.threeStripesPainter = new ThreeStripesPainter(pref);
 
         final Point centerImageSize = Point.of(imageCenter.getWidth(),

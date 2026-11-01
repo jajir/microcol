@@ -67,3 +67,21 @@
 .settings-screen .game-menu-inner {
     -fx-spacing: 4;
 }
+
+/* Sea pages place the title above the sea; the code derives both offsets. */
+.sea-page .main-title {
+    -fx-translate-x: 0;
+    -fx-alignment: center;
+}
+.sea-page .label-slider {
+    -fx-padding: 0 20 0 0;
+}
+.sea-scroll, .sea-scroll > .viewport {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+.sea-page .settings-controls {
+    -fx-background-color: #FFF9EC;
+    -fx-padding: 16;
+}
