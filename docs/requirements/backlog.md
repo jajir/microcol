@@ -11,7 +11,7 @@
 
 ## Ordered development resumed — 2026-11-01
 
-R-0378 implementation and requirement-specific verification are complete: 4,814 model/JUnit, 38 targeted Docker and 3 native macOS tests passed with zero failures/errors/skips. Status stays `ready for development` pending the explicitly deferred final batch smoke. R-0377 implementation and targeted verification are complete under the explicit baseline artwork exception; status remains `ready for development` pending final batch smoke. R-0376 implementation and targeted verification are also complete under the same exception; final batch smoke remains pending. R-0228 is next. [Evidence](../functional-tests.md#r-0378-implemented-and-verified-2026-11-01).
+R-0378 implementation and requirement-specific verification are complete: 4,814 model/JUnit, 38 targeted Docker and 3 native macOS tests passed with zero failures/errors/skips. Status stays `ready for development` pending the explicitly deferred final batch smoke. R-0377 implementation and targeted verification are complete under the explicit baseline artwork exception; status remains `ready for development` pending final batch smoke. R-0376 implementation and targeted verification are also complete under the same exception; final batch smoke remains pending. R-0228 victory cue is implemented and its preview approved; targeted checks pass under the same exception, with final smoke deferred. R-0227 is next. [Evidence](../functional-tests.md#r-0378-implemented-and-verified-2026-11-01).
 
 1. The user resumed R-0378, then R-0377, R-0376, R-0228, R-0227, R-0225, R-0221, R-0216, R-0211, R-0382 and R-0383 in that order, using Claude for implementation and repairs.
 2. Explicit task-specific acceptance amendment: run the fixed smoke/support selection once at the end of this batch, not after every requirement. Model/JUnit, targeted UI, required platform checks, review and documentation validation remain applicable. The final combined smoke result must be recorded separately; it is not yet a pass. The pause recorded below is historical.
@@ -357,7 +357,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0225](R-0225.md) | Reproduce the source-to-runtime graphics export | New capture | P29 export/manifest traceability |
 | [R-0226](canceled/R-0226.md) | Play event effects without disrupting music or gameplay | Canceled 2026-10-31 | P30 event audio service; existing music credited |
 | [R-0227](R-0227.md) | Control music and effect volume independently | New capture | P30 player settings |
-| [R-0228](R-0228.md) | Ship one meaningful event cue with a visual equivalent | New capture | P30 first selected cue; extra assets not assumed |
+| [R-0228](R-0228.md) | Mission-victory cue with visual equivalent | Ready for development; implemented, final batch smoke pending | Preview approved; 19 targeted checks passed; baseline artwork exception |
 | [R-0238](R-0238.md) | Produce honest Steam store media from the release game | New capture | P32 store artwork/screens/trailer; P29 in-game art separate |
 | [R-0297](done/R-0297.md) | Apply the selected compact opening-menu composition | Done; local acceptance passed | User-selected single-column proposal, 2026-10-26 |
 | [R-0383](R-0383.md) | Select saved games in a left list and inspect the map preview and summary on the right | New capture; approved design | User request, 2026-10-31; R-0377 frame and R-0382 saved data |

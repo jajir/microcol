@@ -22,7 +22,7 @@ final class GameOverProcessors {
                 context.getEvent().getGameOverResult().getGameOverReason())) {
             LOGGER.info("Game over, time is up.");
             context.fireEvent(
-                    new EventFinishMission(Missions.gameOver_timeIsUp));
+                    EventFinishMission.ended(Missions.gameOver_timeIsUp));
             return "ok";
         }
         return null;
@@ -37,7 +37,7 @@ final class GameOverProcessors {
                 context.getEvent().getGameOverResult().getGameOverReason())) {
             LOGGER.info("Game over, free play ended in spring 1850.");
             context.fireEvent(
-                    new EventFinishMission(Missions.gameOver_freePlayEnded));
+                    EventFinishMission.ended(Missions.gameOver_freePlayEnded));
             return "ok";
         }
         return null;
@@ -53,7 +53,7 @@ final class GameOverProcessors {
                 context.getEvent().getGameOverResult().getGameOverReason())) {
             LOGGER.info("Game over, the nation retired.");
             context.fireEvent(
-                    new EventFinishMission(Missions.gameOver_retired));
+                    EventFinishMission.ended(Missions.gameOver_retired));
             return "ok";
         }
         return null;
@@ -63,8 +63,8 @@ final class GameOverProcessors {
         if (GameOverEvaluator.REASON_NO_COLONIES.equals(
                 context.getEvent().getGameOverResult().getGameOverReason())) {
             LOGGER.info("Game over, no colonies.");
-            context.fireEvent(new EventFinishMission(
-                    Missions.gameOver_allColoniesAreLost));
+            context.fireEvent(EventFinishMission
+                    .ended(Missions.gameOver_allColoniesAreLost));
             return "ok";
         }
         return null;
@@ -96,7 +96,7 @@ final class GameOverProcessors {
             return null;
         }
         LOGGER.info("Game over, rebellion lost: {}.", reason);
-        context.fireEvent(new EventFinishMission(message));
+        context.fireEvent(EventFinishMission.ended(message));
         return "ok";
     };
 
@@ -108,8 +108,8 @@ final class GameOverProcessors {
         if (GameOverEvaluator.REASON_REBELLION_VICTORY.equals(
                 context.getEvent().getGameOverResult().getGameOverReason())) {
             LOGGER.info("Game over, rebellion won.");
-            context.fireEvent(
-                    new EventFinishMission(Missions.gameOver_rebellionVictory));
+            context.fireEvent(EventFinishMission
+                    .victory(Missions.gameOver_rebellionVictory));
             return "ok";
         }
         return null;

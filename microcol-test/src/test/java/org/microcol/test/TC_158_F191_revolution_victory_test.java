@@ -7,6 +7,8 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.microcol.gui.SuccessCuePlayer;
+import org.microcol.mock.RecordingSuccessCuePlayer;
 import org.microcol.model.Location;
 import org.microcol.page.AttackPage;
 import org.microcol.page.CampaignScreenPage;
@@ -14,9 +16,12 @@ import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.RebellionLossPage;
 import org.microcol.page.RebellionVictoryPage;
+import org.microcol.page.SuccessCuePage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+
+import com.google.inject.Binder;
 
 import javafx.stage.Stage;
 
@@ -30,7 +35,9 @@ import javafx.stage.Stage;
  * falls back to the rebels, and the rebellion is won at that moment with its
  * explicit reason. The game then leaves for the campaign screen, saves no end
  * position, and a saved open position still continues without repeating the
- * end.
+ * end. The victory message requests one success cue that Continue does not
+ * repeat; without an audio device the victory is shown and recorded the same
+ * way (R-0228).
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_158_F191_revolution_victory_test extends AbstractMicroColTest {
@@ -62,6 +69,13 @@ public class TC_158_F191_revolution_victory_test extends AbstractMicroColTest {
         Files.deleteIfExists(Path.of(System.getProperty("user.home"),
                 ".microcol", "autosave.microcol"));
         initialize(primaryStage, getClass(), testFileName);
+    }
+
+    /** The success cue is only counted, never heard (R-0228). */
+    @Override
+    protected void bind(final Binder binder) {
+        binder.bind(SuccessCuePlayer.class)
+                .toInstance(new RecordingSuccessCuePlayer());
     }
 
     @Test
@@ -153,5 +167,86 @@ public class TC_158_F191_revolution_victory_test extends AbstractMicroColTest {
         rebellion.verifyRebellionHolds();
         rebellion.verifyColonyOwner(DELFT, CROWN);
         victory.verifyNoVictoryDialogShown(REASON_TEXT);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_03_the_won_rebellion_requests_one_success_cue_and_continue_requests_none()
+            throws Exception {
+        RoyalVictoryFixture.prepare(getContext(), testFileName,
+                "rebellion-victory-f191-cue.microcol", DELFT, ATTACK_FROM);
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final RebellionLossPage rebellion = new RebellionLossPage(getContext());
+        final RebellionVictoryPage victory = new RebellionVictoryPage(
+                getContext());
+        final AttackPage attack = new AttackPage(getContext());
+        final SuccessCuePage cue = new SuccessCuePage(getContext());
+        final CampaignScreenPage campaign = new CampaignScreenPage(
+                getContext());
+        rebellion.verifyRebellionHolds();
+        cue.verifySuccessCueRequests(0);
+
+        // The real battle that retakes Delft wins the rebellion; one success
+        // cue accompanies the victory message.
+        game.panToTile(DELFT_AT);
+        attack.chooseExistingOutcome(RoyalVictoryFixture.ATTACKER, true);
+        attack.chooseAttack(ATTACK_FROM, DELFT_AT);
+        attack.confirm();
+        victory.verifyVictoryDialog(REASON_TEXT);
+        victory.verifyCaptureNotice(DELFT_NAME);
+        victory.verifyVictoryRecorded();
+        cue.verifySuccessCueRequests(1);
+
+        // Acknowledging both messages leaves for the campaign screen without
+        // another cue.
+        victory.closeVictoryDialog(REASON_TEXT);
+        victory.closeCaptureNotice(DELFT_NAME);
+        campaign.verifyCampaignScreen();
+        cue.verifySuccessCueRequests(1);
+
+        // Continue reopens the open position; neither the victory message nor
+        // its cue is repeated.
+        campaign.back();
+        new FreePlayAuditPage(getContext()).continueGame();
+        rebellion.verifyRebellionHolds();
+        victory.verifyNoVictoryDialogShown(REASON_TEXT);
+        cue.verifySuccessCueRequests(1);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_04_without_an_audio_device_the_victory_is_still_shown_and_recorded()
+            throws Exception {
+        RoyalVictoryFixture.prepare(getContext(), testFileName,
+                "rebellion-victory-f191-no-audio.microcol", DELFT, ATTACK_FROM);
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final RebellionLossPage rebellion = new RebellionLossPage(getContext());
+        final RebellionVictoryPage victory = new RebellionVictoryPage(
+                getContext());
+        final AttackPage attack = new AttackPage(getContext());
+        final SuccessCuePage cue = new SuccessCuePage(getContext());
+        final CampaignScreenPage campaign = new CampaignScreenPage(
+                getContext());
+        rebellion.verifyRebellionHolds();
+
+        // The audio device is gone before the battle.
+        cue.makeAudioDeviceUnavailable();
+
+        // The same real battle wins the rebellion; the failed cue changes
+        // nothing that the player sees or the model records.
+        game.panToTile(DELFT_AT);
+        attack.chooseExistingOutcome(RoyalVictoryFixture.ATTACKER, true);
+        attack.chooseAttack(ATTACK_FROM, DELFT_AT);
+        attack.confirm();
+        victory.verifyVictoryDialog(REASON_TEXT);
+        victory.verifyCaptureNotice(DELFT_NAME);
+        victory.verifyVictoryRecorded();
+        rebellion.verifyColonyOwner(DELFT, DUTCH);
+        cue.verifySuccessCueRequests(1);
+
+        // Acknowledging both messages still leaves for the campaign screen.
+        victory.closeVictoryDialog(REASON_TEXT);
+        victory.closeCaptureNotice(DELFT_NAME);
+        campaign.verifyCampaignScreen();
     }
 }

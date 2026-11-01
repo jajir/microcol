@@ -128,6 +128,7 @@ public abstract class AbstractMicroColTest {
                     .thenReturn(microcolFileToLoad);
             binder.bind(FileSelectingService.class)
                     .toInstance(fileSelectingService);
+            bind(binder);
         });
     }
 

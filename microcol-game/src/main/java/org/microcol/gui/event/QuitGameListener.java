@@ -1,6 +1,7 @@
 package org.microcol.gui.event;
 
 import org.microcol.gui.MusicController;
+import org.microcol.gui.SuccessCuePlayer;
 import org.microcol.gui.util.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +23,15 @@ public final class QuitGameListener {
     private final MusicController musicController;
     private final org.microcol.gui.dialog.PersistingService saves;
 
+    private final SuccessCuePlayer successCuePlayer;
+
     @Inject
     public QuitGameListener(final MusicController musicController,
-            final org.microcol.gui.dialog.PersistingService saves) {
+            final org.microcol.gui.dialog.PersistingService saves,
+            final SuccessCuePlayer successCuePlayer) {
         this.saves = saves;
         this.musicController = Preconditions.checkNotNull(musicController);
+        this.successCuePlayer = Preconditions.checkNotNull(successCuePlayer);
     }
 
     @Subscribe
@@ -37,6 +42,7 @@ public final class QuitGameListener {
         }
         logger.info("Shutting down MicroCol");
         musicController.stop();
+        successCuePlayer.stop();
         System.exit(0);
     }
 

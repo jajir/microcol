@@ -41,8 +41,8 @@ final class Default_0_mission extends AbstractMission<Default_0_goals> {
                     if (MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE
                             .equals(context.getEvent().getGameOverResult()
                                     .getGameOverReason())) {
-                        fireEvent(new EventFinishMission(
-                                Missions.default_m0_gameOver));
+                        fireEvent(EventFinishMission
+                                .victory(Missions.default_m0_gameOver));
                         return "ok";
                     }
                     return null;

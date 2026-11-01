@@ -8,14 +8,19 @@ import java.util.Set;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.microcol.gui.SuccessCuePlayer;
+import org.microcol.mock.RecordingSuccessCuePlayer;
 import org.microcol.model.GameOverEvaluator;
 import org.microcol.page.CampaignScreenPage;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.RebellionLossPage;
+import org.microcol.page.SuccessCuePage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+
+import com.google.inject.Binder;
 
 import javafx.stage.Stage;
 
@@ -27,7 +32,8 @@ import javafx.stage.Stage;
  * player only ends turns: in its own turn the Crown storms Delft, and the
  * rebellion is over, with its explicit reason, in the same turn. The game then
  * leaves for the campaign screen, saves no end position, and a saved open
- * position still continues without repeating the end.
+ * position still continues without repeating the end. A loss never requests the
+ * success cue (R-0228).
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_157_F192_rebellion_loss_test extends AbstractMicroColTest {
@@ -62,6 +68,13 @@ public class TC_157_F192_rebellion_loss_test extends AbstractMicroColTest {
         Files.deleteIfExists(Path.of(System.getProperty("user.home"),
                 ".microcol", "autosave.microcol"));
         initialize(primaryStage, getClass(), testFileName);
+    }
+
+    /** The success cue is only counted, never heard (R-0228). */
+    @Override
+    protected void bind(final Binder binder) {
+        binder.bind(SuccessCuePlayer.class)
+                .toInstance(new RecordingSuccessCuePlayer());
     }
 
     @Test
@@ -141,5 +154,32 @@ public class TC_157_F192_rebellion_loss_test extends AbstractMicroColTest {
         loss.verifyColonyOwner(DELFT, DUTCH);
         loss.verifyRebellionMembers(MEMBERS);
         loss.verifyNoLossDialogShown(REASON_TEXT);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_03_a_lost_rebellion_is_shown_without_a_success_cue()
+            throws Exception {
+        RebellionLossFixture.prepare(getContext(), testFileName,
+                "rebellion-loss-f192-cue.microcol", HAARLEM);
+        WelcomePage.of(getContext()).loadGame();
+        final RebellionLossPage loss = new RebellionLossPage(getContext());
+        final SuccessCuePage cue = new SuccessCuePage(getContext());
+        final CampaignScreenPage campaign = new CampaignScreenPage(
+                getContext());
+        loss.verifyRebellionHolds();
+
+        // The player ends turns until the Crown storms Delft; the loss is
+        // shown and recorded, and no success cue is requested.
+        loss.endTurnsUntilTheGameEnds(MOST_TURNS);
+        loss.verifyLossDialog(REASON_TEXT);
+        loss.verifyGameOverReason(REASON_CODE);
+        cue.verifySuccessCueRequests(0);
+
+        // Acknowledging the message leaves for the campaign screen, still
+        // without a cue.
+        loss.closeLossDialog();
+        campaign.verifyCampaignScreen();
+        cue.verifySuccessCueRequests(0);
     }
 }

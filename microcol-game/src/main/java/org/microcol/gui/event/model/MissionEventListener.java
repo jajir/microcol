@@ -3,6 +3,7 @@ package org.microcol.gui.event.model;
 import java.util.Optional;
 
 import org.microcol.gui.LocalizationHelper;
+import org.microcol.gui.SuccessCuePlayer;
 import org.microcol.gui.dialog.DialogMessage;
 import org.microcol.gui.dialog.DialogWithMan;
 import org.microcol.gui.screen.Screen;
@@ -28,7 +29,8 @@ import javafx.application.Platform;
  * Class is called from mission instance when mission want's to say something to
  * player. When a scored game ends (R-0193, R-0197), the finished result with
  * its breakdown and place is shown after the end messages and before the
- * campaign screen, so the two windows never overlap.
+ * campaign screen, so the two windows never overlap. A won mission's first
+ * message is accompanied by the success cue (R-0228).
  */
 @Listener
 public final class MissionEventListener {
@@ -49,12 +51,15 @@ public final class MissionEventListener {
 
     private final LocalizationHelper localization;
 
+    private final MissionVictoryCue victoryCue;
+
     @Inject
     MissionEventListener(final I18n i18n, final DialogMessage dialogMessage,
             final DialogWithMan dialogWithMan, final EventBus eventBus,
             final GameModelController gameModelController,
             final ViewUtil viewUtil, final HallOfFameDao hallOfFameDao,
-            final LocalizationHelper localization) {
+            final LocalizationHelper localization,
+            final SuccessCuePlayer successCuePlayer) {
         this.i18n = Preconditions.checkNotNull(i18n);
         this.dialogMessage = Preconditions.checkNotNull(dialogMessage);
         this.dialogWithMan = Preconditions.checkNotNull(dialogWithMan);
@@ -64,6 +69,7 @@ public final class MissionEventListener {
         this.viewUtil = Preconditions.checkNotNull(viewUtil);
         this.hallOfFameDao = Preconditions.checkNotNull(hallOfFameDao);
         this.localization = Preconditions.checkNotNull(localization);
+        this.victoryCue = new MissionVictoryCue(successCuePlayer);
     }
 
     @Subscribe
@@ -87,7 +93,10 @@ public final class MissionEventListener {
         // Captured now, while the finished game is still the current one: the
         // window later shows this snapshot even after the game is left.
         final Optional<HallOfFameEntry> finished = finishedResult();
+        final Optional<String> playthrough = finishedPlaythrough();
         Platform.runLater(() -> {
+            playthrough.ifPresent(id -> victoryCue
+                    .onFinishMessageShown(event.isVictory(), id));
             event.getMessages().forEach(messageKey -> {
                 dialogMessage.setText(i18n.get(messageKey));
                 dialogMessage.showAndWait();
@@ -106,6 +115,16 @@ public final class MissionEventListener {
     private Optional<HallOfFameEntry> finishedResult() {
         return gameModelController.isGameModelReady()
                 ? gameModelController.getModel().getHallOfFameEntry()
+                : Optional.empty();
+    }
+
+    /**
+     * @return identity of the game that has just ended, empty without a game
+     */
+    private Optional<String> finishedPlaythrough() {
+        return gameModelController.isGameModelReady()
+                ? Optional.of(
+                        gameModelController.getGameModel().getPlaythroughId())
                 : Optional.empty();
     }
 

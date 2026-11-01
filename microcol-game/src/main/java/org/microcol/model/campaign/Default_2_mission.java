@@ -25,7 +25,7 @@ final class Default_2_mission extends AbstractMission<Default_2_goals> {
                     if (MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE
                             .equals(context.getEvent().getGameOverResult()
                                     .getGameOverReason())) {
-                        fireEvent(new EventFinishMission(
+                        fireEvent(EventFinishMission.victory(
                                 Missions.default_m2_done1,
                                 Missions.default_m2_done2));
                         return "ok";

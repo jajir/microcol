@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
 import org.microcol.model.GameOverEvaluator;
@@ -40,6 +41,7 @@ class MissionEventsTest {
         verify(eventBus).post(event.capture());
         assertEquals(List.of(Missions.gameOver_timeIsUp),
                 event.getValue().getMessages());
+        assertFalse(event.getValue().isVictory());
     }
 
     @Test
@@ -116,6 +118,76 @@ class MissionEventsTest {
                 ends.getAllValues().get(1).getMessages());
         assertEquals(List.of(Missions.gameOver_retired),
                 ends.getAllValues().get(2).getMessages());
+        // Only the won rebellion is a success (R-0228).
+        assertTrue(ends.getAllValues().get(0).isVictory());
+        assertFalse(ends.getAllValues().get(1).isVictory());
+        assertFalse(ends.getAllValues().get(2).isVictory());
+    }
+
+    @Test
+    void everyEndOtherThanAWonMissionOrIndependenceIsNoVictory() {
+        // Each free-play and campaign end that is not a success states so
+        // explicitly; its messages are not inspected (R-0228).
+        final List<String> reasons = List.of(
+                GameOverEvaluator.REASON_TIME_IS_UP,
+                GameOverEvaluator.REASON_FREE_PLAY_ENDED,
+                GameOverEvaluator.REASON_RETIRED,
+                GameOverEvaluator.REASON_NO_COLONIES,
+                GameOverEvaluator.REASON_REBELLION_NO_COLONIES,
+                GameOverEvaluator.REASON_REBELLION_ALL_COLONIES_CROWN,
+                GameOverEvaluator.REASON_REBELLION_COASTAL_CROWN,
+                GameOverEvaluator.REASON_REBELLION_RESIDENTS_CROWN,
+                GameOverEvaluator.REASON_REBELLION_UNRESOLVED);
+        final FreePlay_0_mission freePlay = new FreePlay_0_mission(
+                context(mock(Model.class), new GameModelPo()),
+                new MissionGoalsEmpty());
+        for (final String reason : reasons) {
+            assertFalse(finish(freePlay, reason).isVictory(), reason);
+        }
+        assertTrue(finish(freePlay, GameOverEvaluator.REASON_REBELLION_VICTORY)
+                .isVictory());
+    }
+
+    @Test
+    void completedCampaignMissionsAreVictories() {
+        final String done = MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE;
+        final Default_0_mission tutorial = new Default_0_mission(
+                context(mock(Model.class), new GameModelPo()),
+                new Default_0_goals(new HashMap<>()));
+        final Default_1_mission second = new Default_1_mission(
+                context(mock(Model.class), new GameModelPo()),
+                new Default_1_goals(new HashMap<>()));
+        final Default_2_mission third = new Default_2_mission(
+                context(mock(Model.class), new GameModelPo()),
+                new Default_2_goals(new HashMap<>()));
+        final EventFinishMission tutorialEnd = finish(tutorial, done);
+        assertTrue(tutorialEnd.isVictory());
+        assertEquals(List.of(Missions.default_m0_gameOver),
+                tutorialEnd.getMessages());
+        assertTrue(finish(second, done).isVictory());
+        assertTrue(finish(third, done).isVictory());
+        // A lost campaign mission is still no victory.
+        assertFalse(
+                finish(third, GameOverEvaluator.REASON_TIME_IS_UP).isVictory());
+    }
+
+    /**
+     * Runs the mission's end processors in their order, as the game over
+     * evaluator does, and returns the one end it posts.
+     */
+    private EventFinishMission finish(final AbstractMission<?> mission,
+            final String reason) {
+        reset(eventBus);
+        for (final Function<GameOverProcessingContext, String> processor : mission
+                .prepareProcessors()) {
+            if (processor.apply(gameOver(reason)) != null) {
+                break;
+            }
+        }
+        final ArgumentCaptor<EventFinishMission> event = ArgumentCaptor
+                .forClass(EventFinishMission.class);
+        verify(eventBus).post(event.capture());
+        return event.getValue();
     }
 
     @Test

@@ -5,6 +5,7 @@ import org.microcol.gui.MainStageBuilder;
 import org.microcol.diagnostics.DiagnosticEvent;
 import org.microcol.diagnostics.DiagnosticLog;
 import org.microcol.gui.MicroColModule;
+import org.microcol.gui.SuccessCuePlayer;
 import org.microcol.gui.dialog.ApplicationController;
 import org.microcol.gui.image.ModuleImages;
 import org.microcol.gui.preferences.GamePreferences;
@@ -122,6 +123,7 @@ public final class MicroColApplication extends Application {
     @Override
     public void stop() {
         if (injector != null) {
+            injector.getInstance(SuccessCuePlayer.class).stop();
             injector.getInstance(
                     org.microcol.gui.screen.MainPanelPresenter.class).stop();
         }
