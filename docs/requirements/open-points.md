@@ -7,9 +7,7 @@
 
 ## R-0221
 
-[Authoritative questions](R-0221.md#4-open-questions).
-
-1. What geographic extent, dimensions and level of coastline/river detail define the accepted America reference map? SETUP-001 specifies the geographic choice but not an exact dataset or scale.
+1. Resolved on 2026-11-01: [North America reference-map rule](../gap-analysis.md#north-america-reference-map).
 
 ## R-0228
 

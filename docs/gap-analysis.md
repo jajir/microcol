@@ -153,6 +153,12 @@ Bounded correction on 2026-10-17: [R-0117](requirements/done/R-0117.md) reconcil
 
 The catalogue is organized by [setup](#setup-and-turn-sequence), [map](#map-terrain-and-exploration), [movement](#movement-and-persistent-orders), [equipment](#equipment-and-pioneers), [transport](#transport-ships-and-atlantic-travel), [routes](#automated-trade-routes), [colonies](#colony-workforce-food-and-storage), [production](#production-and-professions), [construction](#construction-upgrades-and-building-effects), [education](#education-and-skill-acquisition), [immigration](#immigration-and-european-hiring), [trade](#trade-and-the-european-market), [native relations](#native-nations-settlements-and-relations), [diplomacy](#european-diplomacy-and-rivalry), [combat](#land-combat-naval-combat-and-capture), [government](#government-taxation-and-independence), [founders](#founding-father-effects), [endgame](#end-conditions-and-scoring), and [supporting information](#supporting-persistence-and-information).
 
+### North America reference map
+
+1. Agreed on 2026-11-01 for [R-0221](requirements/R-0221.md): the geographic America choice covers **North America only, with more detail**, rather than both Americas. It is a stable authored world, separate from generated/customized geography.
+2. Implementation target: 100 × 80 tiles with recognizable mainland/coastline, Alaska, Canada, Great Lakes, eastern seaboard, Florida, Gulf of Mexico, Mexico/Central America and nearby Caribbean islands. Coherent mountain/forest/climate regions and major river systems provide playable detail. Simplification is intentional; no surveyed accuracy or external dataset is promised.
+3. Preserve legal Atlantic access, terrain and river rules, existing national expeditions, native settlements and home-linked braves. Every supported European nation must start legally and support landing, founding, exploration, a complete turn and Save/Continue. Repeating setup preserves geography. Cancellation must not replace the active game. This records agreed behavior, not implementation evidence.
+
 ### Setup and turn sequence
 
 | ID | Manual (printed / PDF) | Expected rule | Current implementation and gap | Status | Acceptance / evidence |
