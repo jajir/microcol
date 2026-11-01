@@ -29,6 +29,7 @@ public final class TurnEventStore {
                     TurnEventGoodsWasThrownAway::tryLoad,
                     TurnEventForestLumberLost::tryLoad,
                     TurnEventFieldPlowed::tryLoad,
+                    TurnEventTradeRouteTransfer::tryLoad,
                     TurnEventNewUnitInColony::tryLoad,
                     TurnEventNewUnitInEurope::tryLoad,
                     TurnEventFounderArrived::tryLoad,

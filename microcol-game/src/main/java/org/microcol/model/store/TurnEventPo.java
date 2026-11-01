@@ -224,6 +224,75 @@ public final class TurnEventPo {
         fieldPlowedY = value;
     }
 
+    /**
+     * Snapshot of the route, carrier and stop of one automatic route transfer,
+     * with its direction and actual treasury change, for its own event type
+     * only (R-0392). The goods and the stop colony use the shared fields.
+     */
+    private Integer tradeRouteId;
+    private String tradeRouteName;
+    private Integer tradeRouteCarrierId;
+    private UnitType tradeRouteCarrierType;
+    private Integer tradeRouteStopIndex;
+    private Boolean tradeRouteUnload;
+    private Integer tradeRouteGold;
+
+    public Integer getTradeRouteId() {
+        return tradeRouteId;
+    }
+
+    public void setTradeRouteId(final Integer value) {
+        tradeRouteId = value;
+    }
+
+    public String getTradeRouteName() {
+        return tradeRouteName;
+    }
+
+    public void setTradeRouteName(final String value) {
+        tradeRouteName = value;
+    }
+
+    public Integer getTradeRouteCarrierId() {
+        return tradeRouteCarrierId;
+    }
+
+    public void setTradeRouteCarrierId(final Integer value) {
+        tradeRouteCarrierId = value;
+    }
+
+    public UnitType getTradeRouteCarrierType() {
+        return tradeRouteCarrierType;
+    }
+
+    public void setTradeRouteCarrierType(final UnitType value) {
+        tradeRouteCarrierType = value;
+    }
+
+    public Integer getTradeRouteStopIndex() {
+        return tradeRouteStopIndex;
+    }
+
+    public void setTradeRouteStopIndex(final Integer value) {
+        tradeRouteStopIndex = value;
+    }
+
+    public Boolean isTradeRouteUnload() {
+        return tradeRouteUnload;
+    }
+
+    public void setTradeRouteUnload(final Boolean value) {
+        tradeRouteUnload = value;
+    }
+
+    public Integer getTradeRouteGold() {
+        return tradeRouteGold;
+    }
+
+    public void setTradeRouteGold(final Integer value) {
+        tradeRouteGold = value;
+    }
+
     private Founder founder;
 
     private Integer income;

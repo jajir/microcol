@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.Preconditions;
@@ -13,7 +14,10 @@ import com.google.common.base.Preconditions;
  * Every transfer is a call to the existing atomic cargo, warehouse or European
  * trade operation, so a refused call changes nothing by itself. The carrier's
  * visit is marked as soon as the first quantity is settled, so no later failure
- * can let the stop repeat a transfer that was already paid.
+ * can let the stop repeat a transfer that was already paid. In an automatic
+ * visit, every entry that settled a quantity, including one rejected part-way,
+ * adds one turn notice for the carrier's owner in processing order (R-0392); a
+ * stop the player processes explicitly shows its result directly instead.
  */
 final class TradeRouteStopProcessor {
 
@@ -25,14 +29,20 @@ final class TradeRouteStopProcessor {
 
     private final Model model;
     private final UnitWithCargo carrier;
+    private final TradeRoute route;
+    /** Whether the route navigator, not the player, runs this visit. */
+    private final boolean automatic;
     private final TradeRouteStop stop;
     private final TradeRouteVisit visit;
     private final List<TradeRouteTransfer> transfers = new ArrayList<>();
 
     TradeRouteStopProcessor(final Model model, final UnitWithCargo carrier,
-            final TradeRouteStop stop, final TradeRouteVisit visit) {
+            final TradeRoute route, final TradeRouteStop stop,
+            final TradeRouteVisit visit, final boolean automatic) {
         this.model = Preconditions.checkNotNull(model);
         this.carrier = Preconditions.checkNotNull(carrier);
+        this.route = Preconditions.checkNotNull(route);
+        this.automatic = automatic;
         this.stop = Preconditions.checkNotNull(stop);
         this.visit = Preconditions.checkNotNull(visit);
     }
@@ -62,17 +72,36 @@ final class TradeRouteStopProcessor {
             return true;
         }
         final Tally tally = new Tally();
+        final TradeRouteTransfer done;
         try {
-            transfers.add(execute(unload, type, tally));
-            return false;
+            done = execute(unload, type, tally);
         } catch (final IllegalArgumentException | IllegalStateException
                 | ArithmeticException | MicroColException rejected) {
             // Quantities settled before the refusal stay reported; the visit
             // was already marked when the first of them was settled.
-            transfers.add(new TradeRouteTransfer(unload, type, tally.amount,
+            settle(new TradeRouteTransfer(unload, type, tally.amount,
                     tally.gold, TradeRouteTransferReason.REJECTED,
                     String.valueOf(rejected.getMessage())));
             return true;
+        }
+        settle(done);
+        return false;
+    }
+
+    /**
+     * Keeps the entry result and, in an automatic visit, reports the quantity
+     * it actually moved to the owner; an entry that moved nothing is not a
+     * transaction.
+     */
+    private void settle(final TradeRouteTransfer transfer) {
+        transfers.add(transfer);
+        if (automatic && transfer.getAmount() > 0) {
+            model.addTurnEvent(TurnEventProvider.getTradeRouteTransfer(route,
+                    visit.getStopIndex(), carrier,
+                    stop.isEurope() ? null
+                            : model.getColonyById(stop.getColonyId())
+                                    .orElseThrow(),
+                    transfer));
         }
     }
 

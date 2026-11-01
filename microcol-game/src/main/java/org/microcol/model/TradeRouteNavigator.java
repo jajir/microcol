@@ -193,10 +193,11 @@ final class TradeRouteNavigator {
             final TradeRouteStop stop, final TradeRouteAssignment assignment) {
         final int index = assignment.getStopIndex();
         if (carrier.getProcessedTradeRouteVisit().isEmpty()) {
-            new TradeRouteStopProcessor(model, (UnitWithCargo) carrier, stop,
+            new TradeRouteStopProcessor(model, (UnitWithCargo) carrier, route,
+                    stop,
                     new TradeRouteVisit(route.getId(), index,
-                            stop.isEurope() ? null : carrier.getLocation()))
-                    .run();
+                            stop.isEurope() ? null : carrier.getLocation()),
+                    true).run();
         }
         assignment.setStopIndex((index + 1) % route.getStops().size());
         // The next leg starts at this boundary, so it takes the route as saved

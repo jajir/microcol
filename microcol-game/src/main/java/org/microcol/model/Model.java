@@ -1102,8 +1102,9 @@ public class Model {
         final TradeRouteStop stop = route.getStops().get(stopIndex);
         final TradeRouteVisit visit = new TradeRouteVisit(route.getId(),
                 stopIndex, stop.isEurope() ? null : carrier.getLocation());
-        return new TradeRouteStopProcessor(this, (UnitWithCargo) carrier, stop,
-                visit).run();
+        // The dialog shows this explicit result; only automatic visits report.
+        return new TradeRouteStopProcessor(this, (UnitWithCargo) carrier, route,
+                stop, visit, false).run();
     }
 
     /**

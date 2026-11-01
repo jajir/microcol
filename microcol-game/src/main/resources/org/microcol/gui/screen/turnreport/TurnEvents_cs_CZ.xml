@@ -27,6 +27,10 @@
 	<entry key="forestLumberLostFull">Les vykácen na (%s, %s): ztraceno dřeva: %s. Sklad kolonie %s je plný.</entry>
 	<entry key="forestLumberLostNoColony">Les vykácen na (%s, %s): ztraceno dřeva: %s. Do dvou polí není žádná vaše kolonie.</entry>
 	<entry key="fieldPlowed">%s #%s na (%s, %s): Práce na novém poli jsou dokončeny. Jednotka může dostat další příkazy.</entry>
+	<entry key="tradeRouteUnloaded">Obchodní trasa %s, %s č. %s, zastávka %s (%s): vyloženo %s × %s.</entry>
+	<entry key="tradeRouteLoaded">Obchodní trasa %s, %s č. %s, zastávka %s (%s): naloženo %s × %s.</entry>
+	<entry key="tradeRouteSold">Obchodní trasa %s, %s č. %s, zastávka %s (Evropa): prodáno %s × %s, %s zlata.</entry>
+	<entry key="tradeRouteBought">Obchodní trasa %s, %s č. %s, zastávka %s (Evropa): nakoupeno %s × %s, %s zlata.</entry>
 
 	<entry key="buttonBack">Zpět</entry>
 	

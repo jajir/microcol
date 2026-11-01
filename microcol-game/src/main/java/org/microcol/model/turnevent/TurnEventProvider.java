@@ -7,6 +7,8 @@ import org.microcol.model.ColonyBuildingItemProgressUnit;
 import org.microcol.model.Goods;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
+import org.microcol.model.TradeRoute;
+import org.microcol.model.TradeRouteTransfer;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.microcol.model.GoodsType;
@@ -394,6 +396,28 @@ public final class TurnEventProvider {
             final Location field) {
         return new TurnEventFieldPlowed(player.getName(), unit.getId(),
                 unit.getType(), field);
+    }
+
+    /**
+     * Report one route entry that actually moved goods; called only for a
+     * nonzero settled quantity.
+     *
+     * @param route    required route the carrier processed
+     * @param stop     index of the processed stop
+     * @param carrier  required carrier, whose owner receives the notice
+     * @param colony   the stop colony, or null for Europe
+     * @param transfer required settled result of the entry
+     * @return turn event object
+     */
+    public static TurnEvent getTradeRouteTransfer(final TradeRoute route,
+            final int stop, final Unit carrier, final Colony colony,
+            final TradeRouteTransfer transfer) {
+        return new TurnEventTradeRouteTransfer(carrier.getOwner().getName(),
+                route.getId(), route.getName(), carrier.getId(),
+                carrier.getType(), stop, colony == null ? null : colony.getId(),
+                colony == null ? null : colony.getName(), transfer.isUnload(),
+                Goods.of(transfer.getGoodsType(), transfer.getAmount()),
+                transfer.getGoldChange());
     }
 
     /**

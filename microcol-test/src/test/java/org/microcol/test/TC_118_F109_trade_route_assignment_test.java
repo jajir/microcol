@@ -2,6 +2,7 @@ package org.microcol.test;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.microcol.model.TradeRouteStop;
 import org.microcol.page.ColonyScreen;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
+import org.microcol.page.ScreenTurnReport;
 import org.microcol.page.SettingPage;
 import org.microcol.page.TradeRouteCargoDialog;
 import org.microcol.page.TradeRouteDialog;
@@ -49,6 +51,11 @@ public class TC_118_F109_trade_route_assignment_test
     private static final int DELFT_STOP = 0;
     /** Index of the New Amsterdam stop in the Delft, New Amsterdam route. */
     private static final int NEW_AMSTERDAM_STOP = 1;
+    private static final String ROUTE_ROW = "Trade route Ore Cart, Wagon #4";
+    private static final String ORE_LOADED = "Trade route Ore Cart, Wagon #4, stop 2 (New Amsterdam): loaded 90 Ore.";
+    private static final String ORE_UNLOADED = "Trade route Ore Cart, Wagon #4, stop 1 (Delft): unloaded 90 Ore.";
+    private static final String MUSKET_LOADED = "Trade route Ore Cart, Wagon #4, stop 1 (Delft): loaded 50 Musket.";
+    private static final String MUSKET_UNLOADED = "Trade route Ore Cart, Wagon #4, stop 2 (New Amsterdam): unloaded 50 Musket.";
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -141,8 +148,13 @@ public class TC_118_F109_trade_route_assignment_test
         game = colony.close();
 
         // First turn: the wagon loads the ore once in New Amsterdam and takes
-        // its first step. The waiting wagon resumes and takes its first step.
-        game.nextTurnAndCloseDialogs();
+        // its first step, and the turn report lists the load once. The
+        // waiting wagon resumes and takes its first step.
+        Optional<ScreenTurnReport> report = game.nextTurn();
+        game.verifyTurnReportPresent(report);
+        report.get().verifyEventMessageCount(ORE_LOADED, 1);
+        report.get().verifyEventMessageCount(ROUTE_ROW, 1);
+        report.get().close();
         cargo.verifyHold(WAGON_ID, 0, Goods.of(GoodsType.ORE, 90));
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 0));
         cargo.verifyUnitBetween(WAGON_ID, NEW_AMSTERDAM_LOCATION,
@@ -152,20 +164,42 @@ public class TC_118_F109_trade_route_assignment_test
                 DELFT_LOCATION);
         cargo.verifyAssignment(IDLE_WAGON_ID, "Idle cart", 0, false);
 
-        // Second turn: in Delft the ore comes off and the musket goes on.
-        game.nextTurnAndCloseDialogs();
+        // Second turn: in Delft the ore comes off and the musket goes on, one
+        // report row each.
+        report = game.nextTurn();
+        game.verifyTurnReportPresent(report);
+        report.get().verifyEventMessageCount(ORE_UNLOADED, 1);
+        report.get().verifyEventMessageCount(MUSKET_LOADED, 1);
+        report.get().verifyEventMessageCount(ROUTE_ROW, 2);
+        report.get().close();
         cargo.verifyUnitAt(WAGON_ID, DELFT_LOCATION);
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 90));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.MUSKET, 0));
         cargo.verifyHold(WAGON_ID, 0, Goods.of(GoodsType.MUSKET, 50));
         cargo.verifyAssignment(WAGON_ID, "Ore Cart", NEW_AMSTERDAM_STOP, false);
 
+        // Save and Continue keep both rows once and transfer nothing again.
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        report = Optional.of(game.openTurnReport());
+        report.get().verifyEventMessageCount(ORE_UNLOADED, 1);
+        report.get().verifyEventMessageCount(MUSKET_LOADED, 1);
+        report.get().verifyEventMessageCount(ROUTE_ROW, 2);
+        report.get().close();
+        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 90));
+        cargo.verifyHold(WAGON_ID, 0, Goods.of(GoodsType.MUSKET, 50));
+
         // Third and fourth turn: back in New Amsterdam the musket comes off
-        // and the empty ore stock loads nothing. The first circuit is done.
+        // and the empty ore stock loads nothing, so only the unload has a
+        // report row. The first circuit is done.
         game.nextTurnAndCloseDialogs();
         cargo.verifyUnitBetween(WAGON_ID, NEW_AMSTERDAM_LOCATION,
                 DELFT_LOCATION);
-        game.nextTurnAndCloseDialogs();
+        report = game.nextTurn();
+        game.verifyTurnReportPresent(report);
+        report.get().verifyEventMessageCount(MUSKET_UNLOADED, 1);
+        report.get().verifyEventMessageCount(ROUTE_ROW, 1);
+        report.get().close();
         cargo.verifyUnitAt(WAGON_ID, NEW_AMSTERDAM_LOCATION);
         cargo.verifyHoldEmpty(WAGON_ID, 0);
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID,

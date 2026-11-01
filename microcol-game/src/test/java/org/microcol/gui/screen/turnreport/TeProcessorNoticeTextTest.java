@@ -19,6 +19,7 @@ import org.microcol.model.turnevent.TurnEvent;
 import org.microcol.model.turnevent.TurnEventGoodsWasThrownAway;
 import org.microcol.model.turnevent.TurnEventNewUnitInColony;
 import org.microcol.model.turnevent.TurnEventProjectCompleted;
+import org.microcol.model.turnevent.TurnEventTradeRouteTransfer;
 
 /**
  * The completed-project, overflow and birth notices name their colony and
@@ -137,6 +138,74 @@ class TeProcessorNoticeTextTest {
                     new TeProcessorGoodsWasThrownAway(english)
                             .apply(thrownAway(type, 1)).getMessage());
         }
+    }
+
+    private static TurnEvent routeTransfer(final boolean europe,
+            final boolean unload, final Goods goods, final int gold) {
+        final TurnEventPo po = new TurnEventPo();
+        po.setType(TurnEventTradeRouteTransfer.class.getSimpleName());
+        po.setPlayerName("Dutch");
+        po.setTradeRouteId(2);
+        po.setTradeRouteName("Rum Run");
+        po.setTradeRouteCarrierId(3);
+        po.setTradeRouteCarrierType(UnitType.GALLEON);
+        po.setTradeRouteStopIndex(europe ? 0 : 1);
+        if (!europe) {
+            po.setColonyId(7);
+            po.setColonyName("Delft");
+        }
+        po.setTradeRouteUnload(unload);
+        po.setGoods(goods);
+        po.setTradeRouteGold(gold);
+        return TurnEventTradeRouteTransfer.tryLoad(po);
+    }
+
+    private static String routeText(final Locale locale,
+            final TurnEvent event) {
+        return new TeProcessorTradeRouteTransfer(i18n(locale)).apply(event)
+                .getMessage();
+    }
+
+    @Test
+    void routeColonyTransfersNameRouteCarrierStopAndQuantity() {
+        final TurnEvent unloaded = routeTransfer(false, true,
+                Goods.of(GoodsType.ORE, 30), 0);
+        final TurnEvent loaded = routeTransfer(false, false,
+                Goods.of(GoodsType.HORSE, 20), 0);
+        assertEquals(
+                "Trade route Rum Run, Galleon #3, stop 2 (Delft): unloaded 30 Ore.",
+                routeText(Locale.ROOT, unloaded));
+        assertEquals(
+                "Trade route Rum Run, Galleon #3, stop 2 (Delft): loaded 20 Horse.",
+                routeText(Locale.ROOT, loaded));
+        assertEquals(
+                "Obchodní trasa Rum Run, galeona č. 3, zastávka 2 (Delft): vyloženo 30 × Železná ruda.",
+                routeText(CZECH, unloaded));
+        assertEquals(
+                "Obchodní trasa Rum Run, galeona č. 3, zastávka 2 (Delft): naloženo 20 × Koně.",
+                routeText(CZECH, loaded));
+    }
+
+    @Test
+    void routeEuropeTradesShowTheSignedTreasuryChange() {
+        final TurnEvent sold = routeTransfer(true, true,
+                Goods.of(GoodsType.ORE, 60), 120);
+        final TurnEvent bought = routeTransfer(true, false,
+                Goods.of(GoodsType.MUSKET, 40), -50);
+        assertEquals(
+                "Trade route Rum Run, Galleon #3, stop 1 (Europe): sold 60 Ore, +120 gold.",
+                routeText(Locale.ROOT, sold));
+        assertEquals(
+                "Trade route Rum Run, Galleon #3, stop 1 (Europe): bought 40 Musket, -50 gold.",
+                routeText(Locale.ROOT, bought));
+        assertEquals(
+                "Obchodní trasa Rum Run, galeona č. 3, zastávka 1 (Evropa): prodáno 60 × Železná ruda, +120 zlata.",
+                routeText(CZECH, sold));
+        assertEquals(
+                "Obchodní trasa Rum Run, galeona č. 3, zastávka 1 (Evropa): nakoupeno 40 × Muškety, -50 zlata.",
+                routeText(CZECH, bought));
+        assertNull(new TeProcessorTradeRouteTransfer(i18n(Locale.ROOT))
+                .apply(thrownAway(GoodsType.ORE, 3)));
     }
 
     @Test
