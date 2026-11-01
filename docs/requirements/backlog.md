@@ -19,7 +19,7 @@
 
 ## Complete Akropia rename — 2026-11-01
 
-1. [R-0389](R-0389.md), status `new`, captures the confirmed **Akropia / akropia** spelling and the complete rename of product text, Maven modules, Java identities, file paths, tooling, tests and documentation. Primary area A03; A01 startup/navigation and A04 storage/settings are cross-area dependencies.
+1. [R-0389](R-0389.md), status `ready for development`, records the prepared source inventory and acceptance plan for the confirmed **Akropia / akropia** spelling and the complete rename of product text, Maven modules, Java identities, file paths, tooling, tests and documentation. Primary area A03; A01 startup/navigation and A04 storage/settings are cross-area dependencies.
 2. Acceptance requires a case-insensitive audit of every tracked file's contents and path. Only necessary references to the unchanged GitHub repository and its existing services may retain the former name. The user will rename that repository separately. This capture does not start implementation or alter the existing development queue.
 
 ## Ordered development resumed — 2026-11-01
@@ -393,7 +393,7 @@ manual/quick saves, recovery and protected exits. Local acceptance is recorded i
 | [R-0231](done/R-0231.md) | Preserve local diagnostics for recoverable failures | Done | P32 diagnostics beyond delivered save/turn recovery |
 | [R-0382](R-0382.md) | Save games with a map preview and summary while preserving data-model/JSON serialization | New capture; approved design | User request, 2026-10-31; R-0298 save management; load-screen content is owned by R-0383 |
 | [R-0387](R-0387.md) | Prompt only for unsaved gameplay and clarify save destinations and timing | New proposal | User request, 2026-11-01; R-0298 protected exits |
-| [R-0388](R-0388.md) | Keep a rolling history of turn autosaves per playthrough | New proposal; rotation requested | User request, 2026-11-01; R-0068 checkpoints and R-0387 save policy |
+| [R-0388](R-0388.md) | Keep a rolling history of turn autosaves per playthrough | New capture; five-save retention/failure/replay rules approved 2026-11-01 | User request, 2026-11-01; R-0068 checkpoints and R-0387 save policy |
 
 ## A05
 

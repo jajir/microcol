@@ -42,10 +42,18 @@ Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověře
    Nejde o každý pohyb jednotky. Pokud nová partie dosud nemá uloženou kopii
    (autosave vypnuto nebo selhalo), odchod nabídne její zachování i bez prvního
    herního kroku. Po načtení nezměněné uložené hry se výzva neukáže.
-5. Uživatel navíc požaduje průběžnou rotaci těchto tahových pozic.
-   [R-0388](requirements/R-0388.md) navrhuje **pět posledních úspěšných
-   autosave pro každou partii**, odděleně od dosavadního desetiletého bodu,
-   rychlého a ručních uložení. Počet pět a podrobnosti rotace jsou zatím návrh.
+5. Uživatel 1. listopadu 2026 schválil [R-0388](requirements/R-0388.md):
+   při zapnutém autosave uchovat pět posledních úspěšných snímků tahu každé
+   partie včetně počátečního bezpečného stavu. Desetiletý bod, quick save,
+   ruční uložení a poslední záchranné uložení při odchodu jsou mimo tento limit.
+   Načtení starší pozice nic nezapisuje ani nemaže; další bezpečné začátky tahů
+   přidávají snímky do stejné historie podle pořadí úspěšných zápisů, ne podle
+   herního roku. Nový snímek se bezpečně zapíše před odstraněním nejstaršího.
+   Chyba zápisu zachová předchozí soubory a cíl Continue; chyba mazání se oznámí
+   a může dočasně ponechat více než pět snímků, s dalším pokusem o úklid při
+   příštím úspěšném autosave. Vypnutí autosave zachová historii; zapnutí pokračuje
+   na příští bezpečné hranici tahu bez doplňování minulosti. Podrobná akceptace
+   a zobrazení výsledku jsou v R-0388. Jde o schválené chování, ne ověřený běh.
 6. R-0387 i R-0388 zůstávají `new`; schválení chování není implementací ani
    úspěšným runtime testem. Následující oddíly nadále popisují dosavadní
    implementaci, včetně současné výzvy při každém odchodu z aktivní hry.
