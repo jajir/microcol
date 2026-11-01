@@ -2,7 +2,7 @@
 
 ## Ordered development resumed — 2026-11-01
 
-R-0378 implementation and requirement-specific verification are complete: 4,814 model/JUnit, 38 targeted Docker and 3 native macOS tests passed with zero failures/errors/skips. Status stays `ready for development` pending the explicitly deferred final batch smoke. R-0377 is next. [Evidence](../functional-tests.md#r-0378-implemented-and-verified-2026-11-01).
+R-0378 implementation and requirement-specific verification are complete: 4,814 model/JUnit, 38 targeted Docker and 3 native macOS tests passed with zero failures/errors/skips. Status stays `ready for development` pending the explicitly deferred final batch smoke. R-0377 refinement is complete and its status is `ready for development`; implementation is next. [Evidence](../functional-tests.md#r-0378-implemented-and-verified-2026-11-01).
 
 1. The user resumed R-0378, then R-0377, R-0376, R-0228, R-0227, R-0225, R-0221, R-0216, R-0211, R-0382 and R-0383 in that order, using Claude for implementation and repairs.
 2. Explicit task-specific acceptance amendment: run the fixed smoke/support selection once at the end of this batch, not after every requirement. Model/JUnit, targeted UI, required platform checks, review and documentation validation remain applicable. The final combined smoke result must be recorded separately; it is not yet a pass. The pause recorded below is historical.
