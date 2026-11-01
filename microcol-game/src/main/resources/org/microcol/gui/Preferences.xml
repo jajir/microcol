@@ -4,9 +4,11 @@
 <properties>
 	<comment>Define keys for Europe dialog</comment>
 
-	<entry key="volume_caption">Volume</entry>
-	<entry key="volume_low">Low</entry>
+	<entry key="volume_caption">Music</entry>
+	<entry key="effectsVolume_caption">Effects</entry>
+	<entry key="volume_silent">Silent</entry>
 	<entry key="volume_high">High</entry>
+	<entry key="volume_value">%d %%</entry>
 
 	<entry key="animationSpeed_caption">Animation speed</entry>
 	<entry key="animationSpeed_fast">Fast</entry>

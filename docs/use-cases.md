@@ -1251,6 +1251,16 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 2. [Evidence přejímky](functional-tests.md#r-0325-help-refinement-2026-10-27)
    rozlišuje tento krok od původních návrhů a neuzavírá celé UC-114/119.
 
+## Hlasitost hudby a efektů — R-0227, 2026-11-01
+
+1. UC-119: [R-0227](requirements/R-0227.md) dělí hlasitost na hudbu a efekty.
+   Nový TC84/09 ověřuje popisky a tichý konec v EN/CZ, nezávislé změny
+   klávesnicí, Escape a znovuotevření, restart aplikace a nastavení ve hře.
+   TC84/01–02, TC84/08 a TC192/02, 06–07 zachovávají vzhled, pořadí, posouvání a
+   původní ovládání posuvníků; TC157/TC158 zachovávají zvuk vítězství.
+2. Výsledky běhů zapíše [funkční evidence](functional-tests.md); napsané testy
+   samy změnu neověřují a neuzavírají celé UC-119.
+
 ### UC-079/082/114: Congress shortcut — 2026-10-29
 
 1. [R-0339](requirements/done/R-0339.md) adds K to the map navigation and both

@@ -13,8 +13,8 @@ Toto je výchozí pracovní zadání pro nové zvuky. Podrobný hudební styl, n
 - **Výsledek má působit příjemně a přiměřeně.** Běžné potvrzení má být krátké a nenápadné, významný úspěch může mít výraznější motiv. Zvuky nemají rušit při dlouhé hře ani přehlušovat důležitější upozornění. Konkrétní estetické řešení lze zvolit vlastním úsudkem v rámci tohoto zadání.
 - **Přehrávat skutečný výsledek ve správný okamžik.** Úspěch oznamovat až po provedení akce. Samotné stisknutí tlačítka ani obecný konec mise neprokazují úspěch. U animovaných dějů určit, zda efekt patří k zahájení, zásahu nebo dokončení.
 - **Hlídání opakování je součást návrhu.** Jedna událost nemá znít několikrát kvůli překreslení obrazovky či otevření stejného reportu. U častých událostí určit slučování, minimální odstup a případné varianty; u jednorázového úspěchu obvykle stačí jeden zvuk.
-- **Zvuk respektuje hráčův pohled a nastavení.** Neprozrazovat dění, které hráč nevidí nebo o něm zatím nemá vědět. Nové efekty musejí respektovat vypnutí zvuku; oddělená hlasitost hudby a efektů je cíl budoucího rozšíření, nikoli současná funkce.
-- **Chyba zvuku nesmí zablokovat herní akci.** Při rozšíření zajistit dokončení herní akce i bez dostupného audiozařízení či konkrétního efektu. Současný přehrávač toto ještě plně nezajišťuje.
+- **Zvuk respektuje hráčův pohled a nastavení.** Neprozrazovat dění, které hráč nevidí nebo o něm zatím nemá vědět. Nové efekty musejí respektovat vypnutí zvuku a od [R-0227](requirements/R-0227.md) samostatnou [hlasitost efektů](#hlasitost-a-vypnuti-zvuku); hudba má vlastní hlasitost.
+- **Chyba zvuku nesmí zablokovat herní akci.** Při rozšíření zajistit dokončení herní akce i bez dostupného audiozařízení či konkrétního efektu. Hudba i zvuk vítězství při chybě jen ztichnou a uvolní prostředky (R-0227, R-0228).
 
 ## Co je nyní uloženo v projektu
 
@@ -51,44 +51,48 @@ Zvuk používá **Java Sound z `javax.sound.sampled`**, nikoli JavaFX `MediaPlay
 ### Spuštění a přehrání skladby
 
 1. [MicroColApplication](../microcol-game/src/main/java/org/microcol/MicroColApplication.java) nastaví `primaryStage.setOnShowing` na volání `ApplicationController.startMusic()` a zobrazí hlavní okno. Hudba tedy začíná při otevření aplikace, už v nabídce, nikoli až se začátkem konkrétní partie.
-2. [ApplicationController](../microcol-game/src/main/java/org/microcol/gui/dialog/ApplicationController.java) vezme uloženou hlasitost z `GamePreferences` a předá ji do `MusicController.start()`.
-3. [MusicController](../microcol-game/src/main/java/org/microcol/gui/MusicController.java) ověří `isSoundEnabled()` a spustí nové vlákno, které zavolá `MusicPlayer.playSound("music/AnnounceMyName_1.wav", defaultVolume)`. Výběr skladby je pevně zapsaný v kódu.
-4. [MusicPlayer](../microcol-game/src/main/java/org/microcol/gui/MusicPlayer.java) otevře `AudioInputStream`, zjistí jeho formát, získá a otevře odpovídající `SourceDataLine`, nastaví hlasitost a spustí ji. Data čte po blocích s bufferem **128 000 bajtů** a zapisuje je do zvukového výstupu. Nenačítá předem celou skladbu do paměťové cache.
-5. Po konci souboru zavolá `drain()` a `close()` na výstupní lince. Další skladba ani opakování nenásledují. Změna obrazovky, konec tahu nebo výsledek mise nejsou v této cestě zvukové spouštěče.
+2. [ApplicationController](../microcol-game/src/main/java/org/microcol/gui/dialog/ApplicationController.java) vezme uloženou hlasitost hudby (`GamePreferences.getMusicVolume()`) a předá ji do `MusicController.start()`.
+3. [MusicController](../microcol-game/src/main/java/org/microcol/gui/MusicController.java) ověří `isSoundEnabled()`, nastaví hlasitost přehrávače a spustí nové vlákno, které zavolá `MusicPlayer.playSound("music/AnnounceMyName_1.wav")`. Výběr skladby je pevně zapsaný v kódu.
+4. [MusicPlayer](../microcol-game/src/main/java/org/microcol/gui/MusicPlayer.java) otevře `AudioInputStream` a ověří formát: přijme jen signed 16bitové PCM little endian (počet kanálů a frekvenci nechá na lince). Pak získá a otevře odpovídající `SourceDataLine` a spustí ji. Data čte po blocích **16 384 bajtů** (asi 0,1 s stereo skladby), každý blok vynásobí aktuální hlasitostí a zapíše do výstupu. Nenačítá předem celou skladbu do paměťové cache.
+5. Po konci souboru zavolá `drain()` a v každém případě `close()` na lince i vstupním streamu. Další skladba ani opakování nenásledují. Změna obrazovky, konec tahu nebo výsledek mise nejsou v této cestě zvukové spouštěče.
 
-`MusicPlayer` a `MusicController` jsou sdílené instance vytvořené přes Guice. [MicroColModule](../microcol-game/src/main/java/org/microcol/gui/MicroColModule.java) registruje instance s anotací `@Listener` do společného Guava `EventBus`; na události reagují metody označené `@Subscribe`. Současný `MusicController` takto poslouchá pouze změnu hlasitosti.
+`MusicPlayer` a `MusicController` jsou sdílené instance vytvořené přes Guice. [MicroColModule](../microcol-game/src/main/java/org/microcol/gui/MicroColModule.java) registruje instance s anotací `@Listener` do společného Guava `EventBus`; na události reagují metody označené `@Subscribe`. `MusicController` takto poslouchá pouze `VolumeChangeEvent` a podle jeho kategorie předá hodnotu buď hudbě, nebo přehrávači zvuku vítězství.
 
 ### Hlasitost a vypnutí zvuku
 
+Od [R-0227](requirements/R-0227.md) má hudba a efekty každá vlastní hlasitost.
+
 | Nastavení | Současná implementace |
 | --- | --- |
-| Ovládací prvek | Jeden posuvník v nastavení; [SettingVolumeView](../microcol-game/src/main/java/org/microcol/gui/screen/setting/SettingVolumeView.java). |
-| Rozsah | 0 až 100; výchozí hodnota 75. |
-| Změna za běhu | [SettingVolumePresenter](../microcol-game/src/main/java/org/microcol/gui/screen/setting/SettingVolumePresenter.java) propojuje posuvník s `PreferencesProperties.volumeProperty`. |
-| Uložení | [PreferencesProperties](../microcol-game/src/main/java/org/microcol/gui/preferences/PreferencesProperties.java) při změně uloží hodnotu přes `GamePreferences` a vyšle `VolumeChangeEvent`. |
-| Soubor nastavení | Pole `volume` v `${user.home}/.microcol/.setting.json`; [SettingService](../microcol-game/src/main/java/org/microcol/gui/preferences/SettingService.java), [SettingDao](../microcol-game/src/main/java/org/microcol/gui/preferences/SettingDao.java) a [PersistingTool](../microcol-game/src/main/java/org/microcol/model/campaign/po/PersistingTool.java). |
-| Zpracování události | `MusicController` předá hodnotu do `MusicPlayer.setVolume()`, pokud je zvuk povolený. |
-| Vypnutí při spuštění | JVM vlastnost `soundEnabled=false`, například argument `-DsoundEnabled=false` předaný přímo JVM hry. |
-| Výchozí povolení | `GamePreferences.isSoundEnabled()` používá výchozí hodnotu **`true`**. Komentář o výchozím `false` je zastaralý. |
+| Ovládací prvky | Dva posuvníky v nastavení, **Hudba / Music** (`settingVolume`) a **Efekty / Effects** (`settingEffectsVolume`), v nabídce i ve hře; [SettingVolumeView](../microcol-game/src/main/java/org/microcol/gui/screen/setting/SettingVolumeView.java). Každý má popisek, konce **Ticho / Silent** a **Nahlas / High** a vedle sebe aktuální hodnotu (`75 %`, při nule `Ticho` / `Silent`). Samostatný přepínač mute není; nula je ticho. |
+| Rozsah a ovládání | Celá čísla 0 až 100. Šipky mění hodnotu o 10, Home a End nastaví konce; tažení a klik na lištu zůstávají. |
+| Výchozí hodnoty | Nová instalace: obě 75. Nastavení uložené před R-0227 bez hlasitosti efektů: efekty převezmou uloženou hlasitost hudby, takže hráč, který zvolil ticho, zůstane v tichu. Hudba si ponechá uloženou hodnotu. Při první změně hudby se tato odvozená hlasitost efektů uloží ve stejném zápisu, takže se s hudbou nepohne; samotné čtení soubor nemění. |
+| Změna za běhu | [SettingVolumePresenter](../microcol-game/src/main/java/org/microcol/gui/screen/setting/SettingVolumePresenter.java) propojuje posuvníky s `PreferencesProperties.musicVolumeProperty` a `effectsVolumeProperty`. |
+| Uložení | [PreferencesProperties](../microcol-game/src/main/java/org/microcol/gui/preferences/PreferencesProperties.java) při každé změně okamžitě uloží jen danou kategorii přes `GamePreferences` a vyšle `VolumeChangeEvent` s její kategorií. Zpět, Escape, znovuotevření i restart aplikace ukážou uložené hodnoty. Jde o nastavení aplikace, ne o data uložené hry. |
+| Soubor nastavení | Pole `volume` (hudba; název zůstal) a `effectsVolume` v `${user.home}/.microcol/.setting.json`; [SettingService](../microcol-game/src/main/java/org/microcol/gui/preferences/SettingService.java), [SettingDao](../microcol-game/src/main/java/org/microcol/gui/preferences/SettingDao.java) a [PersistingTool](../microcol-game/src/main/java/org/microcol/model/campaign/po/PersistingTool.java). |
+| Neplatné hodnoty | `GamePreferences` odmítne zápis mimo 0–100. Ručně upravenou hodnotu mimo rozsah při čtení omezí na 0, resp. 100; chybějící hudba má výchozí 75. Nečitelný soubor (například text místo čísla) nahradí výchozím nastavením jako u ostatních voleb. |
+| Zpracování události | `MusicController` předá hodnotu hudby do `MusicPlayer.setVolume()` a hodnotu efektů do `SuccessCuePlayer.setVolume()`, pokud je zvuk povolený. Kategorie se navzájem neovlivňují. |
+| Vypnutí při spuštění | JVM vlastnost `soundEnabled=false`, například argument `-DsoundEnabled=false` předaný přímo JVM hry. Utiší hudbu i efekty bez ohledu na uložené hodnoty a nemění je. |
+| Výchozí povolení | `GamePreferences.isSoundEnabled()` používá výchozí hodnotu **`true`**. |
 
 Ukládání probíhá přes JSON, ačkoli starší komentář v [GamePreferences](../microcol-game/src/main/java/org/microcol/gui/preferences/GamePreferences.java) ještě odkazuje na `java.util.prefs`. Při přidání dalších nastavení navázat na skutečnou cestu přes `Setting`, `SettingService` a `SettingDao`.
 
-Hodnota 0–100 se lineárně mapuje mezi minimum a maximum ovladače `MASTER_GAIN` konkrétního výstupu. **Není to přímé procento amplitudy.** Nula pouze nastavuje minimální gain; není implementovaná zvláštní funkce mute. Neexistují samostatné posuvníky hudby a efektů ani uložený přepínač jejich vypnutí.
+Hudba i zvuk vítězství násobí vzorky signed 16bitového PCM hodnotou `hlasitost / 100` (sdílená metoda `JavaSoundSuccessCuePlayer.scale`). **Je to přímé procento amplitudy**, 50 je asi −6 dB a 100 beze změny; nic se nezesiluje ani neořezává. Ovladač `MASTER_GAIN` linky se nepoužívá, takže zařízení bez něj hlasitost i ticho respektuje. Při nule hudba dál zapisuje nulové vzorky, skladba tedy běží potichu a po zvýšení pokračuje ve stejném místě. Změna platí od dalšího zapsaného bloku; k tomu se přidá vyrovnávací paměť linky, jejíž délku určuje Java Sound a zařízení.
 
 `soundEnabled` je systémová vlastnost JVM, ne pole v uživatelském JSON. Při spuštění přes nástroj vytvářející další JVM je nutné ověřit předání vlastnosti právě procesu hry; samotný parametr Maven příkazu to nemusí zajistit.
 
 ### Ukončení a omezení důležitá pro rozšíření
 
-[QuitGameListener](../microcol-game/src/main/java/org/microcol/gui/event/QuitGameListener.java) při `QuitGameEvent` zavolá `MusicController.stop()` a poté `System.exit(0)`. `MusicPlayer.stop()` pouze nastaví příznak `run=false`; nečeká na konec vlákna. V běžné přehrávací smyčce by následovalo dohrání bufferu přes `drain()` a zavření linky.
+[QuitGameListener](../microcol-game/src/main/java/org/microcol/gui/event/QuitGameListener.java) při `QuitGameEvent` zavolá `MusicController.stop()` a poté `System.exit(0)`; od R-0227 hudbu zastaví i `MicroColApplication.stop()`. `MusicPlayer.stop()` nastaví příznak `run=false` a otevřenou linku zastaví a vyprázdní, takže blokovaný zápis hned skončí; nečeká na konec vlákna. Přehrávací vlákno pak bez `drain()` zavře linku i stream.
 
-Před použitím pro efekty je potřeba počítat s těmito vlastnostmi současného kódu:
+Před použitím pro další efekty je potřeba počítat s těmito vlastnostmi současného kódu:
 
 - Přehrávač má jedinou sdílenou `sourceLine` a příznak `run`. Nemá řízení souběžných hlasů, frontu, priority ani ochranu proti opakovanému `start()`. Spustit pro každý efekt další `MusicController.start()` by znovu spouštělo tutéž skladbu a sdílelo stav.
-- Po `stop()` se `run` nevrací na `true`; příznak také nemá výslovnou synchronizaci mezi vlákny. Restart přehrávače tedy nelze považovat za hotovou funkci.
-- `setVolume()` předpokládá existující použitelnou linku a podporu `MASTER_GAIN`. Kód neřeší změnu před otevřením či po zavření linky ani zařízení bez tohoto ovladače.
-- Chybějící resource, nepodporovaný soubor nebo chyba otevření výstupu vedou k `MicroColException`. Chyba čtení dat se jen vypíše; chybí řízený přechod do tichého režimu. Vstupní audio stream není explicitně uzavřen a úklid není zajištěn blokem `finally` pro všechny chyby.
+- Po `stop()` se `run` nevrací na `true`. Restart přehrávače v téže instanci tedy nelze považovat za hotovou funkci.
+- Od R-0227 lze `setVolume()` volat kdykoli, i před otevřením linky, po jejím zavření nebo bez zařízení; hodnota se jen uloží pro další blok. Hodnotu mimo 0–100 odmítne.
+- Chybějící resource, soubor v jiném formátu, nedostupné zařízení (`LineUnavailableException` i `IllegalArgumentException` z Java Sound) nebo chyba čtení či zápisu jen zapíší varování a hudba zůstane tichá; stream i linka se zavřou v blocích `finally` / try-with-resources. Nastavení ani hra o chybě nevědí a fungují dál.
 
-To jsou omezení odvozená ze zdrojového kódu, nikoli závěr, že se všechna projevila při hraní. Tato dokumentace přehrávač nemění.
+Nepodporované formáty se odmítají, nikoli převádějí; podpora jiných formátů vyžaduje samostatné ověření.
 
 ## Kde hra nyní oznamuje události
 
@@ -166,9 +170,9 @@ Současný katalog tvoří [jedna skladba popsaná výše](#co-je-nyni-ulozeno-v
 | Soubory | Runtime `sounds/mission-success-01.wav` v `microcol-game/src/main/resources/`; konstanta `JavaSoundSuccessCuePlayer.RESOURCE`. Editovatelný zdroj [mission-success-01.py](../microcol-game/src/audio/mission-success-01.py). Autor: projekt MicroCol, listopad 2026; původní dílo vypočtené jen z čísel ve zdroji, bez převzaté nahrávky či melodie. Šíří se stejně jako ostatní původní zdroje projektu; cizí kredit není potřeba. |
 | Export | Z kořene repozitáře `python3 -I microcol-game/src/audio/mission-success-01.py`. Bez náhody; stejný Python na stejné platformě zapíše stejný soubor. |
 | Parametry | Zadané ve zdroji: WAV, nekomprimované PCM, 44 100 Hz, 16 bitů, mono, 1,4 s, jedna varianta, bez smyčky. Vzestupný rozložený akord C dur (C5 E5 G5 C6) se zvonivým tónem, náběh 8 ms, doznění 0,25 s do přesného ticha, špička −6 dBFS. Export ověřen: 61 740 rámců, 1,400 s, 44 100 Hz, 16bitové mono PCM, špička 16 384; opakovaný export je bitově totožný. |
-| Hlasitost a priorita | Kategorie efekt, vlastní linka vedle hudby; hudba běží nezávisle. Do R-0227 platí uložená hlasitost 0–100: přehrávač lineárně násobí vzorky exportu `hlasitost / 100` (50 je asi −6 dB, 100 beze změny), takže nezávisí na `MASTER_GAIN` zařízení a nikdy nezesiluje ani neořezává. Ovladač gain linky nepoužívá. Hudba si ponechává vlastní mapování na `MASTER_GAIN`. Během přehrávání se další požadavek zahodí; fronta ani překryv nevznikají. |
+| Hlasitost a priorita | Kategorie efekt, vlastní linka vedle hudby; hudba běží nezávisle. Od R-0227 platí jen uložená [hlasitost efektů](#hlasitost-a-vypnuti-zvuku) 0–100, hlasitost hudby se nečte: přehrávač lineárně násobí vzorky exportu `hlasitost / 100` (50 je asi −6 dB, 100 beze změny), takže nezávisí na `MASTER_GAIN` zařízení a nikdy nezesiluje ani neořezává. Změna během přehrávání platí od dalšího bloku 4 096 bajtů (asi 46 ms); nula pak zapisuje ticho. Ovladač gain linky nepoužívá; stejné násobení používá od R-0227 i hudba. Během přehrávání se další požadavek zahodí; fronta ani překryv nevznikají. |
 | Opakování | Nejvýše jednou za partii a běh aplikace. Opakované oznámení, zprávy, Continue, načtení či vítězství znovu dosažené ze starší pozice téže partie jej nespustí; nová partie má vlastní. |
-| Vypnutí a chyba | `soundEnabled=false` a hlasitost 0 zvuk potlačí. Chybějící či nečitelný soubor, soubor v jiném formátu než 44 100 Hz, 16 bitů, mono, signed PCM little endian (odmítne se před otevřením linky), nedostupné zařízení, selhání zápisu nebo vlákna jen zvuk vynechají a zapíší varování; stream i linka se vždy zavřou. Ukončení hry (`QuitGameListener`) i aplikace (`MicroColApplication.stop`) přehrávání zastaví. |
+| Vypnutí a chyba | `soundEnabled=false` a hlasitost efektů 0 zvuk potlačí; nulová hlasitost hudby jej neovlivní. Chybějící či nečitelný soubor, soubor v jiném formátu než 44 100 Hz, 16 bitů, mono, signed PCM little endian (odmítne se před otevřením linky), nedostupné zařízení, selhání zápisu nebo vlákna jen zvuk vynechají a zapíší varování; stream i linka se vždy zavřou. Ukončení hry (`QuitGameListener`) i aplikace (`MicroColApplication.stop`) přehrávání zastaví. |
 | Ověření | 1. listopadu 2026: 4 840 modelových testů, pouze schválené známé selhání FRIGATE, žádné chyby/přeskočení; 19 cílených Docker kontrol prošlo. Uživatel přehrál náhled a schválil „Sounds good—use it“. Jde o schválení náhledu, nikoli ověření mixu hudby a efektu na všech platformách. Přesné běhy jsou ve [funkční evidenci](functional-tests.md#r-0228-mission-victory-cue-2026-11-01). |
 
 
@@ -189,4 +193,6 @@ Kontrola z **11. října 2026** zahrnuje prohledání audio resources a jejich v
 
 Dokumentace prošla téhož dne sestavením `target/docs-venv/bin/python -m mkdocs build --strict`, kontrolou odkazů a vizuální kontrolou místního náhledu.
 
-Pro budoucí rozšíření ještě zůstává rozhodnout konkrétní zvukový charakter a obsazení, výběr efektů pro první herní situace, případné nové skladby a jejich opakování. Technicky zbývá zavést obsluhu efektů, oddělená nastavení a ověření bez audiozařízení i na podporovaných platformách. Žádná z těchto položek neznamená, že musí vzniknout předem celá rozsáhlá zvuková sada; doplňovat je spolu s konkrétními funkcemi.
+**R-0227, 1. listopadu 2026 (implementace):** [MusicPlayerTest](../microcol-game/src/test/java/org/microcol/gui/MusicPlayerTest.java) a rozšířený [JavaSoundSuccessCuePlayerTest](../microcol-game/src/test/java/org/microcol/gui/JavaSoundSuccessCuePlayerTest.java) kontrolují skutečně zapsané vzorky přes testovací linku: násobení hlasitostí bez `MASTER_GAIN`, změnu během přehrávání, nulu jako nulové vzorky, oddělení kategorií, `soundEnabled=false`, nedostupné zařízení, nepodporovaný formát a zavření prostředků. [GamePreferencesVolumeTest](../microcol-game/src/test/java/org/microcol/gui/preferences/GamePreferencesVolumeTest.java) pokrývá výchozí hodnoty, převzetí hudby u starého nastavení, nezávislé uložení, restart a neplatné hodnoty; `TC_84_F75_framed_settings_test.TC_09` ovládání v nabídce i ve hře. Výsledky běhů zapisuje [funkční evidence](functional-tests.md); poslech mixu hudby a efektu ani test na skutečném zařízení v rámci R-0227 neproběhl.
+
+Pro budoucí rozšíření ještě zůstává rozhodnout konkrétní zvukový charakter a obsazení, výběr efektů pro první herní situace, případné nové skladby a jejich opakování. Technicky zbývá zavést obecnou obsluhu dalších efektů a ověřit poslech i chování zařízení na podporovaných platformách; oddělená nastavení hudby a efektů doplnila R-0227. Žádná z těchto položek neznamená, že musí vzniknout předem celá rozsáhlá zvuková sada; doplňovat je spolu s konkrétními funkcemi.

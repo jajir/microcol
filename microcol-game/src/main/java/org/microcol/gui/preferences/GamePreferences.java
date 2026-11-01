@@ -5,6 +5,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
+import org.microcol.gui.MusicPlayer;
 import org.microcol.gui.util.Language;
 import org.microcol.gui.util.PathPlanningService;
 
@@ -55,8 +56,8 @@ public class GamePreferences {
     public static final String SYSTEM_PROPERTY_DEVELOPMENT = "development";
 
     /**
-     * Default value is false. When it's set to 'false' than sound in game is
-     * disabled.
+     * Default value is true. When it's set to 'false' than music and effects
+     * are silent whatever volumes are saved.
      */
     private static final String SYSTEM_PROPERTY_SOUND_ENABLED = "soundEnabled";
 
@@ -134,12 +135,65 @@ public class GamePreferences {
         return lang.orElse(Language.en);
     }
 
-    public void setVolume(final int volume) {
-        settingService.update(setting -> setting.setVolume(volume));
+    /**
+     * A setting without its own effects volume first keeps the effects at the
+     * value they had through the music, so changing the music never moves them.
+     *
+     * @param volume music volume from 0 (silent) to 100
+     */
+    public void setMusicVolume(final int volume) {
+        checkVolume(volume);
+        settingService.update(setting -> {
+            if (setting.getEffectsVolume() == null) {
+                setting.setEffectsVolume(effectsVolume(setting));
+            }
+            setting.setVolume(volume);
+        });
     }
 
-    public int getVolume() {
-        return settingService.load().getVolume();
+    public int getMusicVolume() {
+        return validVolume(settingService.load().getVolume());
+    }
+
+    public void setEffectsVolume(final int volume) {
+        checkVolume(volume);
+        settingService.update(setting -> setting.setEffectsVolume(volume));
+    }
+
+    /**
+     * A setting saved before the separate effects volume has none; effects then
+     * follow the saved music volume, so a player who chose silence stays
+     * silent.
+     *
+     * @return effects volume from 0 (silent) to 100
+     */
+    public int getEffectsVolume() {
+        return effectsVolume(settingService.load());
+    }
+
+    private static int effectsVolume(final Setting setting) {
+        return validVolume(
+                setting.getEffectsVolume() == null ? setting.getVolume()
+                        : setting.getEffectsVolume());
+    }
+
+    private static void checkVolume(final int volume) {
+        Preconditions.checkArgument(
+                volume >= MusicPlayer.MIN_VOLUME
+                        && volume <= MusicPlayer.MAX_VOLUME,
+                "Volume %s is out of range", volume);
+    }
+
+    /**
+     * A missing saved volume uses the default; an edited file outside the range
+     * is clamped to it.
+     */
+    private static int validVolume(final Integer saved) {
+        if (saved == null) {
+            return DEFAULT_VOLUME;
+        }
+        return Math.max(MusicPlayer.MIN_VOLUME,
+                Math.min(MusicPlayer.MAX_VOLUME, saved));
     }
 
     public void setShowFightAdvisor(final boolean showFightAdvisor) {

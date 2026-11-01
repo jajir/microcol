@@ -56,7 +56,8 @@ class JavaSoundSuccessCuePlayerTest {
     @BeforeEach
     void setUp() {
         when(preferences.isSoundEnabled()).thenReturn(true);
-        when(preferences.getVolume()).thenReturn(75);
+        when(preferences.getEffectsVolume()).thenReturn(75);
+        when(preferences.getMusicVolume()).thenReturn(0);
         final byte[] cue = wav(FRAMES);
         when(streamReader.openStream(JavaSoundSuccessCuePlayer.RESOURCE))
                 .thenAnswer(invocation -> stream(cue));
@@ -93,8 +94,9 @@ class JavaSoundSuccessCuePlayerTest {
     }
 
     @Test
-    void zeroVolumeIsSilence() {
-        when(preferences.getVolume()).thenReturn(0);
+    void zeroEffectsVolumeIsSilence() {
+        when(preferences.getEffectsVolume()).thenReturn(0);
+        when(preferences.getMusicVolume()).thenReturn(100);
         final List<Runnable> tasks = new ArrayList<>();
         player(tasks::add).play();
 
@@ -117,25 +119,72 @@ class JavaSoundSuccessCuePlayerTest {
     }
 
     @Test
-    void theWrittenSamplesFollowTheSavedVolumeWithoutAGainControl() {
+    void theWrittenSamplesFollowTheSavedEffectsVolumeWithoutAGainControl() {
         // Silence, both full-scale extremes and two quiet samples.
         final short[] samples = { 0, 32767, -32768, 1000, -1000, 0 };
         cueOf(samples);
         final List<byte[]> written = recordWrites();
 
-        when(preferences.getVolume()).thenReturn(25);
+        when(preferences.getEffectsVolume()).thenReturn(25);
         player(Runnable::run).play();
         assertArrayEquals(new short[] { 0, 8191, -8192, 250, -250, 0 },
                 samples(written));
 
         written.clear();
-        when(preferences.getVolume()).thenReturn(100);
+        when(preferences.getEffectsVolume()).thenReturn(100);
         player(Runnable::run).play();
         // Full volume writes the exported samples unchanged, never louder.
         assertArrayEquals(samples, samples(written));
 
         // The line's own gain is neither required nor applied twice.
         verify(line, never()).getControl(any());
+        // The music volume (0 here) is never read for the cue.
+        verify(preferences, never()).getMusicVolume();
+    }
+
+    @Test
+    void anEffectsVolumeChangedWhilePlayingAppliesToTheNextBlocks() {
+        // Several blocks of a constant loud sample.
+        final short[] samples = new short[FRAMES];
+        Arrays.fill(samples, (short) 20000);
+        cueOf(samples);
+        final JavaSoundSuccessCuePlayer player = player(Runnable::run);
+        final List<byte[]> written = new ArrayList<>();
+        when(line.write(any(byte[].class), anyInt(), anyInt()))
+                .thenAnswer(invocation -> {
+                    final byte[] data = invocation.getArgument(0);
+                    final int length = invocation.getArgument(2);
+                    written.add(Arrays.copyOf(data, length));
+                    // The player lowers the effects while the first block
+                    // plays, then silences them during the second.
+                    player.setVolume(written.size() == 1 ? 50 : 0);
+                    return length;
+                });
+        player.play();
+
+        assertTrue(written.size() >= 3, "blocks: " + written.size());
+        assertEquals(samples.length, samples(written).length);
+        // First block at the starting 75, the second at 50, the rest silent.
+        assertSamples(15000, written.get(0));
+        assertSamples(10000, written.get(1));
+        written.subList(2, written.size())
+                .forEach(block -> assertSamples(0, block));
+        verify(line).close();
+    }
+
+    private static void assertSamples(final int expected, final byte[] block) {
+        for (final short sample : samples(List.of(block))) {
+            assertEquals(expected, sample);
+        }
+    }
+
+    @Test
+    void anEffectsVolumeOutsideTheRangeIsRejected() {
+        final JavaSoundSuccessCuePlayer player = player(Runnable::run);
+        assertThrows(IllegalArgumentException.class,
+                () -> player.setVolume(101));
+        assertThrows(IllegalArgumentException.class,
+                () -> player.setVolume(-1));
     }
 
     @Test

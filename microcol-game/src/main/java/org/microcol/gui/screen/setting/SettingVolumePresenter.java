@@ -9,8 +9,10 @@ public class SettingVolumePresenter {
     @Inject
     SettingVolumePresenter(final SettingVolumeView view,
             final PreferencesProperties preferencesProperties) {
-        view.getVolumeValueProperty()
-                .bindBidirectional(preferencesProperties.getVolumeProperty());
+        view.getMusicVolumeValueProperty().bindBidirectional(
+                preferencesProperties.getMusicVolumeProperty());
+        view.getEffectsVolumeValueProperty().bindBidirectional(
+                preferencesProperties.getEffectsVolumeProperty());
     }
 
 }

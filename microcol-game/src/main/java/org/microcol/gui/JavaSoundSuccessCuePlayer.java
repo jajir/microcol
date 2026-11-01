@@ -24,11 +24,12 @@ import com.google.inject.Singleton;
 
 /**
  * Plays the mission success cue through Java Sound on its own daemon thread,
- * beside the music line. Until separate category controls exist (R-0227), the
- * cue follows the saved volume by scaling its samples, zero is silence and the
- * <code>soundEnabled=false</code> property always suppresses it. A missing
- * file, a file in another format or an unavailable audio device only skips the
- * cue; the input stream and the line are always closed.
+ * beside the music line. The cue follows the effects volume (R-0227) by scaling
+ * its samples; a change while it plays applies from the next written block.
+ * Zero is silence and the <code>soundEnabled=false</code> property always
+ * suppresses it. A missing file, a file in another format or an unavailable
+ * audio device only skips the cue; the input stream and the line are always
+ * closed.
  */
 @Singleton
 public final class JavaSoundSuccessCuePlayer implements SuccessCuePlayer {
@@ -42,7 +43,7 @@ public final class JavaSoundSuccessCuePlayer implements SuccessCuePlayer {
     private final static int BUFFER_SIZE = 4096;
 
     /**
-     * Opens an output line for the cue's format.
+     * Opens an output line for the cue's format; the music uses it too.
      */
     interface Lines {
 
@@ -66,6 +67,8 @@ public final class JavaSoundSuccessCuePlayer implements SuccessCuePlayer {
     private volatile boolean stopped;
 
     private volatile SourceDataLine line;
+
+    private volatile int volume;
 
     @Inject
     JavaSoundSuccessCuePlayer(final GamePreferences gamePreferences,
@@ -95,15 +98,16 @@ public final class JavaSoundSuccessCuePlayer implements SuccessCuePlayer {
         if (stopped || !gamePreferences.isSoundEnabled()) {
             return;
         }
-        final int volume = gamePreferences.getVolume();
-        if (volume <= MusicPlayer.MIN_VOLUME
+        final int saved = gamePreferences.getEffectsVolume();
+        if (saved <= MusicPlayer.MIN_VOLUME
                 || !playing.compareAndSet(false, true)) {
             return;
         }
+        volume = saved;
         try {
             executor.execute(() -> {
                 try {
-                    playOnce(volume);
+                    playOnce();
                 } finally {
                     playing.set(false);
                 }
@@ -115,7 +119,7 @@ public final class JavaSoundSuccessCuePlayer implements SuccessCuePlayer {
         }
     }
 
-    private void playOnce(final int volume) {
+    private void playOnce() {
         try (InputStream in = streamReader.openStream(RESOURCE);
                 AudioInputStream audio = AudioSystem
                         .getAudioInputStream(new BufferedInputStream(in))) {
@@ -163,10 +167,10 @@ public final class JavaSoundSuccessCuePlayer implements SuccessCuePlayer {
     }
 
     /**
-     * Scales the samples to the saved volume, 0 to 100 percent of the exported
-     * amplitude. The line's own gain control is not used, because not every
-     * device has one. Scaling never raises a sample, so it cannot clip, and
-     * silence stays silence.
+     * Scales signed 16-bit little-endian samples to the volume, 0 to 100
+     * percent of the exported amplitude; the music uses it too. The line's own
+     * gain control is not used, because not every device has one. Scaling never
+     * raises a sample, so it cannot clip, and zero writes silence.
      */
     static void scale(final byte[] data, final int length, final int volume) {
         for (int i = 0; i + 1 < length; i += 2) {
@@ -175,6 +179,15 @@ public final class JavaSoundSuccessCuePlayer implements SuccessCuePlayer {
             data[i] = (byte) scaled;
             data[i + 1] = (byte) (scaled >> 8);
         }
+    }
+
+    @Override
+    public void setVolume(final int volume) {
+        Preconditions.checkArgument(
+                volume >= MusicPlayer.MIN_VOLUME
+                        && volume <= MusicPlayer.MAX_VOLUME,
+                "Volume %s is out of range", volume);
+        this.volume = volume;
     }
 
     @Override

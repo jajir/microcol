@@ -4,7 +4,8 @@ import org.microcol.i18n.MessageKeyResource;
 
 public enum Preferences implements MessageKeyResource {
 
-    volume_caption, volume_low, volume_high, animationSpeed_caption,
-    animationSpeed_fast, animationSpeed_slow;
+    volume_caption, effectsVolume_caption, volume_silent, volume_high,
+    volume_value, animationSpeed_caption, animationSpeed_fast,
+    animationSpeed_slow;
 
 }

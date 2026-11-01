@@ -11,10 +11,18 @@ import com.google.inject.ImplementedBy;
 public interface SuccessCuePlayer {
 
     /**
-     * Start the cue, unless sound is off, the volume is zero or a cue is
-     * already playing; such a request is dropped, not queued.
+     * Start the cue, unless sound is off, the effects volume is zero or a cue
+     * is already playing; such a request is dropped, not queued.
      */
     void play();
+
+    /**
+     * Apply a changed effects volume to a playing cue; a later cue reads the
+     * saved effects volume.
+     *
+     * @param volume from 0, silence, to 100
+     */
+    void setVolume(int volume);
 
     /**
      * Stop a playing cue, release its audio resources and play no further cue.

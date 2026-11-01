@@ -24,6 +24,11 @@ public class RecordingSuccessCuePlayer implements SuccessCuePlayer {
     }
 
     @Override
+    public void setVolume(final int volume) {
+        // nothing is playing
+    }
+
+    @Override
     public void stop() {
         // nothing is playing
     }

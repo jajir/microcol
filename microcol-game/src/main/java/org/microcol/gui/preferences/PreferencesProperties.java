@@ -18,7 +18,9 @@ public class PreferencesProperties {
 
     private final SimpleIntegerProperty animationSpeedProperty;
 
-    private final SimpleIntegerProperty volumeProperty;
+    private final SimpleIntegerProperty musicVolumeProperty;
+
+    private final SimpleIntegerProperty effectsVolumeProperty;
 
     private final SimpleBooleanProperty showFightAdvisorProperty;
 
@@ -31,10 +33,18 @@ public class PreferencesProperties {
             gamePreferences.setAnimationSpeed(newValue.intValue());
         });
 
-        volumeProperty = new SimpleIntegerProperty(gamePreferences.getVolume());
-        volumeProperty.addListener((object, old, newValue) -> {
-            gamePreferences.setVolume(newValue.intValue());
-            eventBus.post(new VolumeChangeEvent(newValue.intValue()));
+        musicVolumeProperty = new SimpleIntegerProperty(
+                gamePreferences.getMusicVolume());
+        musicVolumeProperty.addListener((object, old, newValue) -> {
+            gamePreferences.setMusicVolume(newValue.intValue());
+            eventBus.post(new VolumeChangeEvent(false, newValue.intValue()));
+        });
+
+        effectsVolumeProperty = new SimpleIntegerProperty(
+                gamePreferences.getEffectsVolume());
+        effectsVolumeProperty.addListener((object, old, newValue) -> {
+            gamePreferences.setEffectsVolume(newValue.intValue());
+            eventBus.post(new VolumeChangeEvent(true, newValue.intValue()));
         });
 
         showFightAdvisorProperty = new SimpleBooleanProperty();
@@ -48,8 +58,12 @@ public class PreferencesProperties {
         return animationSpeedProperty;
     }
 
-    public SimpleIntegerProperty getVolumeProperty() {
-        return volumeProperty;
+    public SimpleIntegerProperty getMusicVolumeProperty() {
+        return musicVolumeProperty;
+    }
+
+    public SimpleIntegerProperty getEffectsVolumeProperty() {
+        return effectsVolumeProperty;
     }
 
     public SimpleBooleanProperty getShowFightAdvisorProperty() {

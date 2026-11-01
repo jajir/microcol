@@ -136,7 +136,8 @@ public final class FramedSettingsPage extends AbstractScreen {
             for (final String id : new String[] { "settingDeveloperMode",
                     "settingGrid", "settingFightAdvisor", "settingTurnSummary",
                     "settingOpenEuropeOnArrival", "autosaveEnabled", "rbCzech",
-                    "rbEnglish", "settingVolume", "settingAnimationSpeed" }) {
+                    "rbEnglish", "settingVolume", "settingEffectsVolume",
+                    "settingAnimationSpeed" }) {
                 final Control c = control(id);
                 assertTrue(c.getSkin() instanceof FramedCheckBoxSkin
                         || c.getSkin() instanceof FramedRadioButtonSkin
@@ -233,15 +234,63 @@ public final class FramedSettingsPage extends AbstractScreen {
         assertEquals(!czech, ((RadioButton) control("rbEnglish")).isSelected());
     }
 
-    public void verifySliders(final int volume, final int speed) {
+    public void verifySliders(final int musicVolume, final int speed) {
         final GamePreferences prefs = getContext()
                 .getClassFromGuice(GamePreferences.class);
-        assertEquals(volume, ((Slider) control("settingVolume")).getValue(),
-                .001);
+        assertEquals(musicVolume,
+                ((Slider) control("settingVolume")).getValue(), .001);
         assertEquals(speed,
                 ((Slider) control("settingAnimationSpeed")).getValue(), .001);
-        assertEquals(volume, prefs.getVolume());
+        assertEquals(musicVolume, prefs.getMusicVolume());
         assertEquals(speed, prefs.getAnimationSpeed());
+    }
+
+    /**
+     * Checks both volume sliders, the current values they show and the stored
+     * preferences.
+     */
+    public void verifyVolumes(final int music, final int effects,
+            final String musicValue, final String effectsValue) {
+        final GamePreferences prefs = getContext()
+                .getClassFromGuice(GamePreferences.class);
+        assertEquals(music, ((Slider) control("settingVolume")).getValue(),
+                .001);
+        assertEquals(effects,
+                ((Slider) control("settingEffectsVolume")).getValue(), .001);
+        assertEquals(musicValue,
+                ((Labeled) control("settingVolumeValue")).getText());
+        assertEquals(effectsValue,
+                ((Labeled) control("settingEffectsVolumeValue")).getText());
+        assertEquals(music, prefs.getMusicVolume());
+        assertEquals(effects, prefs.getEffectsVolume());
+    }
+
+    /**
+     * Checks the volume captions and that each slider names its silent
+     * endpoint, in the normal Settings font.
+     */
+    public void verifyVolumeTexts(final String musicCaption,
+            final String effectsCaption, final String silent) {
+        getRobot().interact(() -> {
+            // Tick labels are rebuilt in the axis layout after a language
+            // change.
+            control("settingVolume").getScene().getRoot().layout();
+            verifyVolumeRow("settingVolume", musicCaption, silent);
+            verifyVolumeRow("settingEffectsVolume", effectsCaption, silent);
+        });
+    }
+
+    private void verifyVolumeRow(final String id, final String caption,
+            final String silent) {
+        final Labeled label = (Labeled) control(id + "Caption");
+        assertEquals(caption, label.getText());
+        assertEquals("Playpen Sans", label.getFont().getFamily());
+        assertTrue(label.isVisible() && label.getWidth() > 0, id);
+        assertTrue(
+                control(id).lookupAll("Text").stream()
+                        .anyMatch(node -> node.isVisible()
+                                && silent.equals(((Text) node).getText())),
+                id + " shows its silent endpoint");
     }
 
     public void verifyFocused(final String id) {

@@ -22,7 +22,12 @@ public class Setting {
 
     private Locale locale;
 
+    /**
+     * Music volume; the JSON name predates the effects volume.
+     */
     private Integer volume;
+
+    private Integer effectsVolume;
 
     private Integer animationSpeed;
 
@@ -54,6 +59,7 @@ public class Setting {
         out.mainFrameState = mainFrameState;
         out.locale = locale;
         out.volume = volume;
+        out.effectsVolume = effectsVolume;
         out.animationSpeed = animationSpeed;
         out.showGrid = showGrid;
         out.developerMode = developerMode;
@@ -69,7 +75,7 @@ public class Setting {
     @Override
     public int hashCode() {
         return Objects.hashCode(mainFramePosition, mainFrameState, locale,
-                volume, animationSpeed, showGrid, developerMode,
+                volume, effectsVolume, animationSpeed, showGrid, developerMode,
                 showFightAdvisor, version, gameInProgressSaveFile,
                 autosaveEnabled, turnSummaryEnabled, openEuropeOnArrival);
     }
@@ -87,6 +93,7 @@ public class Setting {
                 && Objects.equal(this.mainFrameState, other.mainFrameState)
                 && Objects.equal(this.locale, other.locale)
                 && Objects.equal(this.volume, other.volume)
+                && Objects.equal(this.effectsVolume, other.effectsVolume)
                 && Objects.equal(this.animationSpeed, other.animationSpeed)
                 && Objects.equal(this.showGrid, other.showGrid)
                 && this.developerMode == other.developerMode
@@ -107,8 +114,9 @@ public class Setting {
         return MoreObjects.toStringHelper(Setting.class)
                 .add("mainFramePosition", mainFramePosition)
                 .add("mainFrameState", mainFrameState).add("locale", locale)
-                .add("volume", volume).add("animationSpeed", animationSpeed)
-                .add("showGrid", showGrid).add("developerMode", developerMode)
+                .add("volume", volume).add("effectsVolume", effectsVolume)
+                .add("animationSpeed", animationSpeed).add("showGrid", showGrid)
+                .add("developerMode", developerMode)
                 .add("showFightAdvisor", showFightAdvisor)
                 .add("autosaveEnabled", autosaveEnabled)
                 .add("turnSummaryEnabled", turnSummaryEnabled)
@@ -148,6 +156,20 @@ public class Setting {
 
     public void setVolume(Integer volume) {
         this.volume = volume;
+    }
+
+    /**
+     * Missing value means a setting saved before the separate effects volume;
+     * see {@link GamePreferences#getEffectsVolume()}.
+     *
+     * @return saved effects volume or <code>null</code>
+     */
+    public Integer getEffectsVolume() {
+        return effectsVolume;
+    }
+
+    public void setEffectsVolume(Integer effectsVolume) {
+        this.effectsVolume = effectsVolume;
     }
 
     public Integer getAnimationSpeed() {

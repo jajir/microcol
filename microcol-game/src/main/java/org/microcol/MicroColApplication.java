@@ -5,6 +5,7 @@ import org.microcol.gui.MainStageBuilder;
 import org.microcol.diagnostics.DiagnosticEvent;
 import org.microcol.diagnostics.DiagnosticLog;
 import org.microcol.gui.MicroColModule;
+import org.microcol.gui.MusicController;
 import org.microcol.gui.SuccessCuePlayer;
 import org.microcol.gui.dialog.ApplicationController;
 import org.microcol.gui.image.ModuleImages;
@@ -124,6 +125,7 @@ public final class MicroColApplication extends Application {
     public void stop() {
         if (injector != null) {
             injector.getInstance(SuccessCuePlayer.class).stop();
+            injector.getInstance(MusicController.class).stop();
             injector.getInstance(
                     org.microcol.gui.screen.MainPanelPresenter.class).stop();
         }

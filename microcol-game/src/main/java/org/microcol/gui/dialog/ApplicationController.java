@@ -48,7 +48,7 @@ public final class ApplicationController {
      */
     public void startMusic() {
         logger.debug("Application started.");
-        musicController.start(gamePreferences.getVolume());
+        musicController.start(gamePreferences.getMusicVolume());
     }
 
     public void startNewFreeGame(final FreePlayMap map, final String playerName,

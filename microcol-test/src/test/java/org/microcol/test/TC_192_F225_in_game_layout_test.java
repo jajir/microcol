@@ -441,8 +441,8 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         hosted.verifySettingsOrder(java.util.List.of("rbCzech", "rbEnglish",
                 "settingGrid", "settingFightAdvisor", "autosaveEnabled",
                 "settingTurnSummary", "settingOpenEuropeOnArrival",
-                "settingVolume", "settingAnimationSpeed",
-                "settingDeveloperMode"));
+                "settingVolume", "settingEffectsVolume",
+                "settingAnimationSpeed", "settingDeveloperMode"));
         hosted.verifyScrollBarFollowsOverflow();
         hosted.verifyCompleteTexts();
         hosted.rememberFonts();

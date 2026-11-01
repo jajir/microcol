@@ -195,6 +195,7 @@ public class SettingService {
     private Setting getDefaultSetting() {
         final Setting out = new Setting();
         out.setVolume(GamePreferences.DEFAULT_VOLUME);
+        out.setEffectsVolume(GamePreferences.DEFAULT_VOLUME);
         out.setAnimationSpeed(GamePreferences.DEFAULT_ANIMATION_SPEED);
         out.setShowGrid(GamePreferences.DEFAULT_SHOW_GRID);
         out.setShowFightAdvisor(GamePreferences.DEFAULT_SHOW_FIGHT_ADVISOR);
