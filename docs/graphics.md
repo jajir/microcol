@@ -34,6 +34,8 @@
 
 ## Řecké zboží — výrazná linka, 1. listopadu 2026
 
+Navazující [R-0394](requirements/R-0394.md) připravuje sjednocení názvů napříč projektem. Uživatel 1. listopadu 2026 potvrdil **vlnu s ikonou ovce**; pochodně a sovy zachovají dosavadní účinky křížů a zvonů. Níže je evidence původní grafické dodávky, nikoli implementace nového názvosloví.
+
 1. Uživatel vybral **návrh 15 — Výrazná linka**: stručné, roztomilé ruční obrysy a jednobarevné výplně podle herní mapy. [R-0384](requirements/done/R-0384.md) vlastní tuto výměnu všech 19 obrázků. [Vybraná rastrová předloha](assets/greek-goods-15-2026-11-01/selected-reference.png) je pouze výtvarná reference; následující přehled vznikl ze skutečných SVG.
 2. Každý obrázek má ručně nakreslené vektorové cesty, pojmenované skupiny, plátno 64 × 64 a průhledné okolí. Bez rastrových vložek, přechodů, textur a externích odkazů. Přehled porovnává zvětšení a skutečné velikosti **45 a 22 px**; jde o kontrolní list, nikoli screenshot hry.
 

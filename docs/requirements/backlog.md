@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Mediterranean goods terminology — 2026-11-01
+
+1. [R-0394](R-0394.md), status `ready for development`, unifies goods, related producers, identifiers, assets and texts across the project. Wool uses the sheep icon; torches and owls preserve the existing cross/bell effects. All production ratios, prices, yields and other rules remain unchanged. Preparation only, no implementation authorized.
+
 ## Plowing completion in turn report — 2026-11-01
 
 1. [R-0393](R-0393.md), status `new`, captures one owner-visible event when plowing creates a field, identifying the unit and location and explaining that the unit can receive further orders. No open questions; implementation not authorized.

@@ -718,3 +718,8 @@ Návrhy budov z 30. října 2026 řeší [R-0357](requirements/done/R-0357.md), 
 ## Vybrané kompaktní budovy — 30. října 2026
 
 1. P28/A03: [R-0371](requirements/done/R-0371.md) implementuje vybranou variantu **Trochu těsnější** z R-0370 v existující čtyřsloupcové mřížce. Modelové testy a cílené funkční okolí zůstávají povinné; uživatel pro tento úkol výslovně vynechal smoke.
+
+
+## Mediterranean goods terminology follow-up
+
+1. [R-0394](requirements/R-0394.md) prepares the project-wide Mediterranean goods and producer terminology, reusing existing Greek artwork and preserving every economic and gameplay rule. Status: ready for development; no implementation started. The authoritative [agreed naming rules](gap-analysis.md#mediterranean-goods-naming) distinguish this change from new mechanics.

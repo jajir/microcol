@@ -1958,3 +1958,10 @@ A rule becomes behaviorally verified only when its cited acceptance scenario has
 ### Local diagnostic logs
 
 1. Accepted on 2026-10-19: keep local diagnostic logs outside saved games, bounded to three files of at most 5 MB each. On macOS use ~/Library/Logs/MicroCol. Failure guidance identifies the log location. Do not include saved-game content or player-entered text in diagnostic reports, and do not transmit anything automatically.
+
+
+## Mediterranean goods naming
+
+1. **Agreed 2026-11-01:** [R-0394](requirements/R-0394.md) owns the complete CS/EN mapping and project-wide terminology change following the Greek artwork. Grain, olives, grapes, wool (sheep icon), clay, olive oil, wine, cloth, amphorae and weapons replace their corresponding colonial goods one-to-one. The other goods retain their meanings.
+2. The user's corrected answer explicitly preserves **all existing game rules**, including production ratios, prices, yields, terrain conditions, specialist bonuses, equipment, trade, immigration and political effects. Torches replace crosses only in naming/appearance; owls replace bells likewise. They remain non-tradeable production measures, not research or currency. Wool is a commodity, not a new animal unit.
+3. These are agreed requirements, not implemented or verified results. Existing rule and test IDs remain stable. Historical manual terminology and evidence retain their historical meaning; current implementation terminology changes with R-0394.
