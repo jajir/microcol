@@ -42,10 +42,15 @@ class SvgFontTest(unittest.TestCase):
 
     def test_export_environment_contains_only_bundled_face(self):
         command = [sys.executable, str(HERE / 'with-fonts.py')]
-        files = subprocess.check_output(command + ['fc-list', '-f', '%{file}\n'], text=True)
-        self.assertEqual([str(svg_font.FONT)], files.splitlines())
-        probe = 'import os,sys; sys.exit(7 if os.environ["PANGOCAIRO_BACKEND"] == "fc" else 8)'
-        self.assertEqual(7, subprocess.run(command + [sys.executable, '-c', probe]).returncode)
+        # The listed face is a private copy that disappears with the run; compare it inside.
+        probe = ('import os, pathlib, subprocess, sys\n'
+                 'files = subprocess.check_output(["fc-list", "-f", "%{file}\\n"], text=True)'
+                 '.splitlines()\n'
+                 'same = len(files) == 1 and pathlib.Path(files[0]).read_bytes()'
+                 ' == pathlib.Path(sys.argv[1]).read_bytes()\n'
+                 'sys.exit(7 if same and os.environ["PANGOCAIRO_BACKEND"] == "fc" else 8)')
+        self.assertEqual(7, subprocess.run(
+            command + [sys.executable, '-c', probe, str(svg_font.FONT)]).returncode)
 
 
 if __name__ == '__main__':

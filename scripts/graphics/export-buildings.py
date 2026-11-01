@@ -1,36 +1,24 @@
 #!/usr/bin/env python3
-"""Export the canonical building SVGs, or check their committed PNG exports."""
-import argparse
-from pathlib import Path
-import subprocess
-import tempfile
+"""Export the canonical building SVGs, or check their committed PNG exports.
 
-ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / "microcol-game/src/graphics/colony-buildings"
-TARGET = ROOT / "microcol-game/src/main/resources/images/colony-buildings"
+Shortcut for the manifest group ``buildings`` of export-graphics.py; without
+--check it installs the fresh exports into the runtime resources.
+"""
+import argparse
+import importlib.util
+from pathlib import Path
+
+spec = importlib.util.spec_from_file_location("export_graphics",
+                                              Path(__file__).with_name("export-graphics.py"))
+graphics = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(graphics)
 
 
 def export(check=False):
-    sources = sorted(SOURCE.glob("*.svg"))
-    if not sources:
-        raise ValueError("No building SVG sources found")
-    expected = {source.with_suffix(".png").name for source in sources}
-    if expected != {path.name for path in TARGET.glob("*.png")}:
-        raise ValueError("Building SVG and runtime PNG inventories differ")
-    with tempfile.TemporaryDirectory(prefix="microcol-building-export-") as directory:
-        pending = []
-        for source in sources:
-            rendered = Path(directory) / source.with_suffix(".png").name
-            subprocess.run(["rsvg-convert", "--width", "320", "--height", "160",
-                            "--output", str(rendered), str(source)], check=True)
-            target = TARGET / rendered.name
-            if check and rendered.read_bytes() != target.read_bytes():
-                raise ValueError(f"Stale building export: {target.name}")
-            pending.append((rendered, target))
-        if not check:
-            for rendered, target in pending:
-                target.write_bytes(rendered.read_bytes())
-    return len(sources)
+    count, stale, _ = graphics.run(["buildings"], check=check, install=not check)
+    if stale:
+        raise ValueError("Stale building export: " + ", ".join(stale))
+    return count
 
 
 if __name__ == "__main__":

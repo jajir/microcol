@@ -362,7 +362,7 @@ PY
    python3 -m unittest discover -s scripts/graphics -p 'test_building_export.py'
    ```
 
-   Export vyžaduje `rsvg-convert`; převodní VTracer ani Pillow nejsou závislostí exportu či hry. Kontrola nic nepřepisuje a porovnává exporty po bajtech. Referenční export 30. října 2026 používá librsvg 2.61.4 a Cairo 1.18.4; jiné verze rendereru mohou změnit bajty PNG a vyžadují vědomou obnovu a kontrolu celé sady. Export odmítne rozdílné seznamy SVG/PNG a při chybě rendereru zachová všechny dosavadní exporty.
+   Export vyžaduje `rsvg-convert`; převodní VTracer ani Pillow nejsou závislostí exportu či hry. Kontrola nic nepřepisuje a porovnává exporty po bajtech. Referenční export 30. října 2026 používá librsvg 2.61.4 a Cairo 1.18.4; jiné verze rendereru mohou změnit bajty PNG a vyžadují vědomou obnovu a kontrolu celé sady. Od R-0225 je skript zkratkou skupiny `buildings` v [manifestu exportu](#manifest-exportu-r-0225). Export odmítne runtime PNG bez SVG zdroje (nový zdroj bez PNG kontrola ohlásí jako chybějící) a při chybě rendereru zachová všechny dosavadní exporty.
 6. `BuildingArtworkTest` kontroluje přesně všech 41 modelových typů, SVG s povolenou vektorovou strukturou, průhledné rozměrově shodné a navzájem odlišné PNG. `TC_195_F227_colony_layout_test` kontroluje kolonii a vylepšené budovy; `TC_100_F91_colonizopedia_test` kontroluje všechny obrázky v anglické i české nápovědě. Výsledky a vizuální posouzení zaznamenává [funkční evidence](functional-tests.md#r-0352-vector-building-sources-2026-10-30); místní přejímka je dokončená, vzdálená publikace nebyla ověřována.
 
 ![Přehled všech 41 vektorových budov, náhledy odvozené ze SVG](assets/building-vectors-2026-10-30/all-buildings.png)
@@ -1293,8 +1293,9 @@ se změnou CSS nepřepnou. Dostupnost v JavaFX ověřuje TC85/02; výsledky vede
    fontTools 4.60.2 pouze při tvorbě podkladů. Hra ani otevření SVG ho nepotřebují.
 3. Některé grafické editory nepodporují vložený webfont. Pro nástroje používající
    Fontconfig slouží [with-fonts.py](../scripts/graphics/with-fonts.py): dočasná
-   konfigurace obsahuje pouze projektový TTF, ověří jeho výběr a po exportu se
-   odstraní. Na macOS vynucuje `PANGOCAIRO_BACKEND=fc`, protože výchozí CoreText
+   konfigurace obsahuje pouze soukromou kopii projektového Light TTF (adresář
+   fontů obsahuje i další řezy), ověří přes `fc-list`, že jde o jediný dostupný
+   soubor, a přes `fc-match` jeho výběr; po exportu se odstraní. Na macOS vynucuje `PANGOCAIRO_BACKEND=fc`, protože výchozí CoreText
    v librsvg izolovaný Fontconfig ignoruje. Neinstaluje nic do systému.
    Nativní Inkscape nebyl na tomto stroji ověřen; ověřen je librsvg 2.61.4.
 4. `logo.svg` má výslovnou oblast a rozměr 200 × 200; nápis se vejde bez
@@ -1664,6 +1665,82 @@ Pracovní SVG mají různě velké stránky, často A4, a kresby mohou sahat mim
 U `colony-frame.svg` jsou výslovná metadata `colony-warehouse.png` právě ve viditelné vrstvě **`g1251`, nazvané `colony-building-queue copy`**, nikoli ve skryté vrstvě pojmenované `colony-warehouse`. Při obnově tohoto exportu je tedy potřeba řídit se konkrétními objekty a jejich obsahem, ne pouze názvem vrstvy.
 
 ## Export SVG do rastrových souborů
+
+### Manifest exportu R-0225
+
+1. Autoritativním seznamem udržovaných receptů je
+   [export-manifest.json](../microcol-game/src/graphics/export-manifest.json);
+   spouští jej [export-graphics.py](../scripts/graphics/export-graphics.py).
+   Každá položka uvádí zdroj SVG, výstup v `resources/images`, nativní rozměr,
+   způsob vykreslení, případný výřez nebo mřížku atlasu s vlastníkem aliasů,
+   spotřebitele, výslednou logickou velikost a roli tahu podle
+   [sdílené dohody](#stejna-tloustka-car-na-obrazovce). Skupiny podle rodin:
+   `buildings`, `goods`, `units`, `terrain-fog`, `colonies`, `controls`,
+   `menu`, `harbor` a `legacy-raster`. Další sekce tohoto katalogu zůstávají
+   historií a vysvětlením; při rozporu rozhoduje manifest.
+2. Způsoby vykreslení přebírají dosavadní recepty beze změny kresby:
+   `native` (`rsvg-convert` bez rozměru), `size` (`--width`/`--height`),
+   `zoom` (`--zoom`, horní lišta R-0278), `viewbox` (dočasná kopie SVG
+   s novým kořenovým `width`, `height`, `viewBox` a případně
+   `preserveAspectRatio`, recepty R-0265 a R-0266), `crop` (stejná kopie
+   s viewBoxem odpovídajícím pixelovému výřezu nadřazeného výstupu) a `atlas`
+   (složení prvních skupin zdrojových SVG do mřížky, recept zboží R-0384).
+   `fonts: true` spouští renderer přes [with-fonts.py](../scripts/graphics/with-fonts.py).
+   `preserved` označuje rastr bez receptu: kontroluje se jen formát a rozměr,
+   soubor se nikdy nepřekódovává.
+3. Bezpečnost výstupu: bez přepínače se exportuje do nového dočasného adresáře,
+   jehož cestu nástroj vypíše. `--output` přijme jen nový nebo prázdný adresář,
+   který se nepřekrývá se `src/graphics` ani `resources/images`. Pomocná SVG
+   vznikají v samostatném dočasném adresáři, nikdy ve výstupu. `--check`
+   porovnává čerstvý export po bajtech s uloženými soubory, nic nezapisuje
+   a vypíše všechny rozdíly; s `--output` čerstvé exporty ponechá k porovnání.
+   Runtime soubory přepíše jen výslovné `--install`, a to až po úspěchu všech
+   vybraných exportů. [export-buildings.py](../scripts/graphics/export-buildings.py)
+   je zkratka pro skupinu `buildings` s dosavadními příkazy.
+4. Kontroly: manifest musí mít bezpečné relativní cesty, jediného vlastníka
+   každého výstupu, mřížku atlasu odpovídající rozměru, výřez uvnitř
+   nadřazeného obrázku a vyplněné role. Zdroj musí být SVG bez elementu
+   `image`; bitmapový obal se odmítne. Chybějící `rsvg-convert` nebo
+   `fc-match` je chyba s návodem, nástroj nic neinstaluje. Výsledek musí mít
+   skutečný obsah PNG (nebo GIF u `preserved`), přesný rozměr a u průhledných
+   assetů alfa kanál. Průhlednost konkrétních pixelů a podobu buněk dál
+   ověřují existující `BuildingArtworkTest`, `GoodsArtworkTest`,
+   `UnitArtworkTest`, `SelectedTerrainArtworkTest` a
+   `ButtonPresentationContractTest`.
+5. Rozdíl při `--check` neznamená automatickou opravu. Při stejném rendereru
+   a nezměněném zdroji jde o odchylku receptu nebo neověřitelný historický
+   export; jiná verze librsvg/Cairo může změnit bajty sama. Referenční verze
+   je librsvg 2.61.4 s Cairo 1.18.4. Každý rozdíl se posoudí vizuálně a nový
+   export vstupuje do změny jen se zdůvodněním. Nejistý je zejména recept
+   `sunset*`: viewBox z historické oblasti × 25,4/96 je v manifestu
+   zaokrouhlen na šest desetinných míst, přesná čísla exportu z 25. října
+   2026 nejsou zapsaná.
+
+```sh
+python3 scripts/graphics/export-graphics.py --list
+python3 scripts/graphics/export-graphics.py goods units --output target/graphics-export
+python3 scripts/graphics/export-graphics.py --check
+python3 scripts/graphics/export-graphics.py --check --output target/graphics-check
+python3 scripts/graphics/export-graphics.py goods --install
+python3 -m unittest discover -s scripts/graphics -p 'test_*export.py'
+```
+
+6. Pokrytí podle ručního inventáře 1. listopadu 2026: 106 runtime souborů,
+   z toho 62 udržovaných exportů (41 budov a 21 dalších) a 5 položek
+   `preserved` (`bird.png` a `bird-1.png` jsou GIF, `crossed-swords.png`
+   a dvě bojové značky trasy nemají zdroj). Mimo manifest zůstává 39 souborů;
+   `--list` je vypíše. Manifest tedy **nepokrývá všechny obrázky**:
+
+| Třída | Soubory | Důvod |
+| --- | --- | --- |
+| Historický recept `images.groovy` | `colony.png`, `colony-top1/top2/bottom.png`, `europe.png`, `europe-left/right.png`, `market*.png` (3), `crates.png`, `crate-*.png`, `cursors.png`, `cursor-goto.png`, `icon-steps(-anchor)(-turn)-25x25.png` (4), `bullet.png` | Inkscape s pevnými cestami, na tomto stroji neověřený; drobné pixelové odchylky výřezů jsou popsané [níže](#presne-nasledne-vyrezy-png). |
+| Pouze exportní metadata | `background-wood.png`, `book2.png`, `page.png`, `book.png`, `background-wood2.png`, `buildings.png`, `buttons.png`, `cloud-1.png`, `cloud-2.png`, `colony-building-queue.png`, `colony-fields.png`, `colony-frame.png`, `colony-warehouse.png`, `dialog-petr.png`, `kings-seal.png`, `kings-seal-shadow.png` | Vrstva, výběr či oblast nejsou doložené; `clouds.svg` navíc obsahuje vložený rastr pozadí. |
+| Zdroj bez spotřebitele | `artillery.png`, `artillery-damaged.png` | Hra používá buňku 39 atlasu `units.png`. |
+| Bez zdroje | `icon-steps.png` | Odkaz ani původ nenalezen. |
+
+7. Stav: nástroj, manifest a testy nástrojů jsou připravené. Skutečný export
+   a jeho výsledky patří do [funkční evidence](functional-tests.md); tento
+   zápis je nedokládá.
 
 ### Co dnes provádí exportní skript
 
@@ -2093,8 +2170,8 @@ Výtvarné volby se řídí [minimalistickým manuálem](#minimalisticky-grafick
 
 | Zjištěný stav | Význam pro další práci |
 | --- | --- |
-| Export není součást buildu a skript nyní volá jen `bullet()` | Hromadná reprodukovatelná regenerace zatím není doložená. |
-| Ruční exporty nemají jednotný manifest výběrů/vrstev | Metadata jsou vodítko; u některých zdrojů je nutné potvrdit přesný recept. |
+| Export není součást buildu a skript nyní volá jen `bullet()` | Udržované rodiny pokrývá [manifest exportu](#manifest-exportu-r-0225); jeho skutečná shoda se uloženými PNG se dokládá ve funkční evidenci. |
+| Ruční exporty nemají jednotný manifest výběrů/vrstev | Platí pro 39 souborů mimo manifest; metadata jsou vodítko a přesný recept je nutné potvrdit. |
 | `sunset`/`sunset2`, `europe`/`europe1`, dvě sady rámů | Je potřeba zachovat rozlišení aktuálně doloženého zdroje a alternativní kresby. |
 | `button_cut_tree` a `button_build_road` sdílejí `(3,2)` | Mapování se liší od očekávání podle kresby pařezu v `(1,2)`; v tomto rozboru nebylo opraveno. |
 | `frigate_left` je registrovaná bez odpovídajícího současného použití | Vůz má od R-0024 aktivní resolver; zrcadlo fregaty zůstává samostatnou odchylkou. |

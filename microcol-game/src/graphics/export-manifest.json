@@ -1,0 +1,376 @@
+{
+  "description": "Maintained SVG to runtime image recipes (R-0225). Index and classification: docs/graphics.md#manifest-exportu-r-0225.",
+  "renderer": {
+    "command": "rsvg-convert",
+    "reference": "librsvg 2.61.4 with Cairo 1.18.4; other versions may change PNG bytes",
+    "fonts": "entries with fonts=true run through scripts/graphics/with-fonts.py (bundled Playpen Sans Light only)"
+  },
+  "sourceRoot": "microcol-game/src/graphics",
+  "runtimeRoot": "microcol-game/src/main/resources/images",
+  "groups": {
+    "buildings": {
+      "family": "41 colony buildings, R-0352/R-0361",
+      "outputs": [
+        {
+          "output": "colony-buildings/*.png",
+          "source": "colony-buildings/*.svg",
+          "render": "size",
+          "size": [320, 160],
+          "transparent": true,
+          "consumer": "ImageLoaderBuilding registers building_<ConstructionType> for ImageProvider.getConstructionImage",
+          "display": "colony PanelColonyStructures fit 64 x 44; Colonizopedia 128 px wide",
+          "stroke": "outline scales with the 320 px PNG (about 0.2x in the colony, 0.4x in help)"
+        }
+      ]
+    },
+    "goods": {
+      "family": "19 goods icons, R-0384/R-0385",
+      "outputs": [
+        {
+          "output": "goods-olive.png",
+          "render": "atlas",
+          "sources": [
+            "production-goods/good-corn.svg", "production-goods/good-sugar.svg",
+            "production-goods/good-tobacco.svg", "production-goods/good-cotton.svg",
+            "production-goods/good-fur.svg", "production-goods/good-lumber.svg",
+            "production-goods/good-ore.svg", "production-goods/good-silver.svg",
+            "production-goods/good-horse.svg", "production-goods/good-rum.svg",
+            "production-goods/good-cigars.svg", "production-goods/good-silk.svg",
+            "production-goods/good-coat.svg", "production-goods/good-goods.svg",
+            "production-goods/good-tools.svg", "production-goods/good-musket.svg"
+          ],
+          "sourceCell": 64,
+          "size": [180, 180],
+          "atlas": {
+            "columns": 4, "rows": 4, "step": 45,
+            "aliases": "ImageLoaderGoods good-corn ... good-musket in source order, row by row"
+          },
+          "transparent": true,
+          "consumer": "ImageLoaderGoods for GoodsImageProvider",
+          "display": "45 Europe/cargo, 24 colony fields, 22 building production, 15 unit cargo",
+          "stroke": "bold outline drawn in a 64 unit cell, exported at 45 px (0.70x)"
+        },
+        {
+          "output": "good-bell.png",
+          "source": "production-goods/good-bell.svg",
+          "render": "size",
+          "size": [45, 45],
+          "transparent": true,
+          "consumer": "ImageLoaderGoods good-bell.png",
+          "display": "same goods sizes as goods-olive.png",
+          "stroke": "same as goods-olive.png"
+        },
+        {
+          "output": "good-cross.png",
+          "source": "production-goods/good-cross.svg",
+          "render": "size",
+          "size": [45, 45],
+          "transparent": true,
+          "consumer": "ImageLoaderGoods good-cross.png",
+          "display": "same goods sizes as goods-olive.png",
+          "stroke": "same as goods-olive.png"
+        },
+        {
+          "output": "good-hammer.png",
+          "source": "production-goods/good-hammer.svg",
+          "render": "size",
+          "size": [45, 45],
+          "transparent": true,
+          "consumer": "ImageLoaderGoods good-hammer.png",
+          "display": "same goods sizes as goods-olive.png",
+          "stroke": "same as goods-olive.png"
+        }
+      ]
+    },
+    "units": {
+      "family": "40 unit cells, R-0386 (artwork unchanged by user decision)",
+      "outputs": [
+        {
+          "output": "units.png",
+          "source": "units.svg",
+          "render": "native",
+          "size": [360, 225],
+          "atlas": {
+            "columns": 8, "rows": 5, "step": 45,
+            "aliases": "ImageLoaderUnit ARTWORK_ORDER cells 0-34, equipped colonists 35-38, artillery-damaged.png 39; mirrored -west galleon/caravel/merchantman"
+          },
+          "transparent": true,
+          "consumer": "ImageLoaderUnit for UnitImageProvider",
+          "display": "45 x 45 on map, Europe, colony, combat and help",
+          "stroke": "traced filled outlines at native 45 px (about 2 px dark contour)"
+        }
+      ]
+    },
+    "terrain-fog": {
+      "family": "map tiles, coasts, forests, hidden-map fog and terrain symbols, R-0261/R-0277/R-0291",
+      "outputs": [
+        {
+          "output": "background.png",
+          "source": "background.svg",
+          "render": "viewbox",
+          "viewBox": [0, 0, 190.5, 127],
+          "size": [648, 432],
+          "fonts": true,
+          "atlas": {
+            "columns": 12, "rows": 8, "step": 54, "cell": 45,
+            "aliases": "ImageLoaderTerrain tile-*/tree-* and type_x_y keys used by the coast and hidden-edge loaders"
+          },
+          "transparent": true,
+          "consumer": "ImageLoaderTerrain, coast loaders, hidden-map edges and tile-hidden fog",
+          "display": "45 x 45 map tile; editor and help previews",
+          "stroke": "coast/forest/fog contours 0.47 SVG units, about 1.6 px (R-0291)"
+        },
+        {
+          "output": "terrain-symbols.png",
+          "source": "terrain-symbols.svg",
+          "render": "native",
+          "size": [630, 1305],
+          "atlas": {
+            "columns": 14, "rows": 29, "step": 45,
+            "aliases": "ImageLoaderTerrainSymbols row 0 terrain previews, row 1 resources, row 2 decorations, rows 3-28 120 wave frames each for ocean, high sea and lake"
+          },
+          "transparent": true,
+          "consumer": "ImageLoaderTerrainSymbols for TerrainImageProvider, PaintService and Colonizopedia",
+          "display": "45 x 45 map tile and help tables",
+          "stroke": "terrain 1.69 px, resources 1.62 px, ocean/high-sea waves 0.85 px"
+        }
+      ]
+    },
+    "colonies": {
+      "family": "map colonies and flags, R-0280",
+      "outputs": [
+        {
+          "output": "colonies.png",
+          "source": "colonies.svg",
+          "render": "native",
+          "size": [512, 512],
+          "atlas": {
+            "columns": 4, "rows": 4, "step": 128,
+            "aliases": "ImageLoaderColonies colony_<fortification>_<houses>, flags colony_<nation>_3"
+          },
+          "transparent": true,
+          "consumer": "ImageLoaderColonies",
+          "display": "64 x 64 logical on the map (2x export), side preview 53 px wide",
+          "stroke": "1.6 logical px"
+        }
+      ]
+    },
+    "controls": {
+      "family": "toolbar, shared action icons, frame and status coin, R-0278/R-0316/R-0327",
+      "outputs": [
+        {
+          "output": "game-toolbar.png",
+          "source": "game-toolbar.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [1152, 192],
+          "atlas": {
+            "columns": 12, "rows": 2, "step": 96,
+            "aliases": "ImageLoaderGameToolbar gameToolbar_<id>_summer/_winter; ButtonIcon columns 0-11 of row 0"
+          },
+          "transparent": true,
+          "consumer": "ImageLoaderGameToolbar and ButtonIcon",
+          "display": "32 x 32 logical",
+          "stroke": "2.4 units in a 48 unit cell, 1.6 logical px"
+        },
+        {
+          "output": "game-toolbar-frame.png",
+          "source": "game-toolbar-frame.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [192, 96],
+          "transparent": true,
+          "consumer": "CSS border-image in ToolbarControls, GamePanel, GameScreenBars, Congress, Colony and Europe",
+          "display": "12 px slice shown 6 logical px wide",
+          "stroke": "2 source units, about 2 logical px"
+        },
+        {
+          "output": "action-icons.png",
+          "source": "action-icons.svg",
+          "render": "size",
+          "size": [4224, 96],
+          "atlas": {
+            "columns": 44, "rows": 1, "step": 96,
+            "aliases": "ButtonIcon CONFIRM ... STOP, columns 0-43"
+          },
+          "transparent": true,
+          "consumer": "ButtonIcon via ActionButtons",
+          "display": "32 x 32 logical",
+          "stroke": "2.4 units in a 48 unit cell, 1.6 logical px"
+        },
+        {
+          "output": "status-gold.png",
+          "source": "status-gold.svg",
+          "render": "size",
+          "size": [64, 52],
+          "transparent": true,
+          "consumer": "StatusBarView statusGoldIcon",
+          "display": "32 x 26 logical",
+          "stroke": "1.6 logical px"
+        }
+      ]
+    },
+    "menu": {
+      "family": "opening menu scene, icons, title waves and JVM splash, R-0266/R-0297/R-0250",
+      "outputs": [
+        {
+          "output": "sunset.png",
+          "source": "sunset2.svg",
+          "render": "viewbox",
+          "viewBox": [-118.004167, -29.897917, 494.241667, 413.54375],
+          "preserveAspectRatio": "none",
+          "size": [781, 651],
+          "fonts": true,
+          "consumer": "ImageLoaderExtra and GameMenuBackground centre",
+          "display": "native 781 x 651, centred without scaling",
+          "stroke": "scene contours at native size"
+        },
+        {
+          "output": "sunset-top-line.png",
+          "render": "crop",
+          "of": "sunset.png",
+          "crop": [0, 65, 65, 90],
+          "size": [65, 90],
+          "fonts": true,
+          "consumer": "GameMenuBackground repeated edge, Y -260 from centre",
+          "display": "native, repeated horizontally",
+          "stroke": "same as sunset.png"
+        },
+        {
+          "output": "sunset-bottom-line.png",
+          "render": "crop",
+          "of": "sunset.png",
+          "crop": [0, 555, 48, 75],
+          "size": [48, 75],
+          "fonts": true,
+          "consumer": "GameMenuBackground repeated edge, Y +230 from centre",
+          "display": "native, repeated horizontally",
+          "stroke": "same as sunset.png"
+        },
+        {
+          "output": "menu-icons.png",
+          "source": "menu-icons.svg",
+          "render": "size",
+          "size": [768, 96],
+          "atlas": {
+            "columns": 8, "rows": 1, "step": 96,
+            "aliases": "ButtonIcon PLAY ... SETTINGS, columns 0-6; column 7 unused"
+          },
+          "transparent": true,
+          "consumer": "ButtonIcon and ButtonsPanelView",
+          "display": "32 x 32 logical",
+          "stroke": "2.4 units in a 48 unit cell, 1.6 logical px"
+        },
+        {
+          "output": "menu-title-waves.png",
+          "source": "menu-title-waves.svg",
+          "render": "native",
+          "size": [120, 18],
+          "transparent": true,
+          "consumer": "GameMenu.css .main-title graphic",
+          "display": "native 120 x 18",
+          "stroke": "native size"
+        },
+        {
+          "output": "splash-screen.png",
+          "source": "logo.svg",
+          "render": "size",
+          "size": [200, 200],
+          "fonts": true,
+          "consumer": "JVM splash image (microcol-game/pom.xml)",
+          "display": "native 200 x 200",
+          "stroke": "native size; text uses bundled Playpen Sans Light"
+        },
+        {
+          "output": "bird.png",
+          "render": "preserved",
+          "format": "gif",
+          "size": [480, 270],
+          "reason": "animated GIF89a with a .png name and no SVG source; 80 frames must not be re-encoded",
+          "consumer": "GameMenuBackground animated bird",
+          "display": "drawn 80 x 45",
+          "stroke": "not applicable, historical raster"
+        }
+      ]
+    },
+    "harbor": {
+      "family": "Europe harbour and voyage routes, R-0380/R-0390",
+      "outputs": [
+        {
+          "output": "europe-harbor.png",
+          "source": "europe-harbor.svg",
+          "render": "size",
+          "size": [1586, 992],
+          "consumer": "EuropeBackground",
+          "display": "native, centred in the content area",
+          "stroke": "about 3 px at native size"
+        },
+        {
+          "output": "europe-arrival-route.png",
+          "source": "europe-arrival-route.svg",
+          "render": "size",
+          "size": [800, 440],
+          "transparent": true,
+          "consumer": "EuropePanel arrival ImageView",
+          "display": "2x export fitted to the content area",
+          "stroke": "dashed route line, half of the PNG width at 1x"
+        },
+        {
+          "output": "europe-departure-route.png",
+          "source": "europe-departure-route.svg",
+          "render": "size",
+          "size": [2000, 600],
+          "transparent": true,
+          "consumer": "EuropePanel departure ImageView",
+          "display": "2x export fitted to the content area",
+          "stroke": "dashed route line, half of the PNG width at 1x"
+        }
+      ]
+    },
+    "legacy-raster": {
+      "family": "runtime rasters without a documented SVG recipe; checked for format and size only",
+      "outputs": [
+        {
+          "output": "crossed-swords.png",
+          "render": "preserved",
+          "format": "png",
+          "size": [70, 70],
+          "reason": "no SVG source or export recipe documented",
+          "consumer": "AnimationFight and DialogFight",
+          "display": "native 70 x 70",
+          "stroke": "not applicable, historical raster"
+        },
+        {
+          "output": "icon-steps-fight-25x25.png",
+          "render": "preserved",
+          "format": "png",
+          "size": [25, 25],
+          "reason": "no SVG source or export recipe documented",
+          "consumer": "ImageProvider fight route marker",
+          "display": "25 x 25 at offset (10,10) in a 45 px tile",
+          "stroke": "not applicable, historical raster"
+        },
+        {
+          "output": "icon-steps-fight-turn-25x25.png",
+          "render": "preserved",
+          "format": "png",
+          "size": [25, 25],
+          "reason": "no SVG source or export recipe documented",
+          "consumer": "ImageProvider next-turn fight route marker",
+          "display": "25 x 25 at offset (10,10) in a 45 px tile",
+          "stroke": "not applicable, historical raster"
+        },
+        {
+          "output": "bird-1.png",
+          "render": "preserved",
+          "format": "gif",
+          "size": [480, 270],
+          "reason": "animated GIF89a with a .png name and no SVG source",
+          "consumer": "no current reference found",
+          "display": "not displayed",
+          "stroke": "not applicable, historical raster"
+        }
+      ]
+    }
+  }
+}
