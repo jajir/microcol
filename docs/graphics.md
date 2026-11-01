@@ -1,5 +1,14 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Řecké jednotky — první návrh, 1. listopadu 2026
+
+1. Uživatel vybral **01 — Výrazná linka** a výslovně požádal o nasazení a push bez testů; [R-0386](requirements/done/R-0386.md). [Vybraný návrh](assets/greek-units-01-2026-11-01/selected-reference.png) je referenční rastr. Nové postavy nahrazují kolonisty, profesní specialisty, vozy, děla a lodě ve stávajícím společném atlasu. Názvy, schopnosti a pravidla zůstávají beze změny.
+2. Produkční [units.svg](../microcol-game/src/graphics/units.svg) obsahuje 40 pojmenovaných skupin U01–U35 a E01–E05, celkem 764 skutečných vektorových cest s plnými výplněmi; neobsahuje bitmapy, externí obrázky ani filtry. Kontury vznikly převodem vybrané předlohy a sjednocením barevných ploch; [záznam výřezů a palety](assets/greek-units-01-2026-11-01/tracing.json). Nahrazuje původní rastrovou kompozici z 25. října; historické podklady zůstávají zachované.
+3. Atlas má nadále 360 × 225 px, osm sloupců a pět řádků po 45 px; ilustrace jsou vystředěné do prostoru nejvýše 40 × 40 px. Stávající poskytovatel zachovává přednost výbavy, poškozený katapult a tři zrcadlené varianty transportních lodí. Změna dosahuje do mapy, kolonie, Evropy, boje a nápovědy přes stejný resource, bez změny Java kódu.
+4. Opakovatelný export z kořene repozitáře: `rsvg-convert -o microcol-game/src/main/resources/images/units.png microcol-game/src/graphics/units.svg`. Maven export nespouští. Opakovaný export byl bajtově shodný; kontrola XML potvrdila pouze vektorové elementy. [Vizuálně zkontrolovaný export ve zvětšení a 45 px](assets/greek-units-01-2026-11-01/vector-preview.png) ukazuje všech 40 buněk. Jde o náhled atlasu, nikoli snímek běžící hry.
+5. Model/JUnit, UI, smoke a dokumentační testy nebyly na výslovnou žádost uživatele spuštěny. Tato dodávka není regresně ověřená; historická testová evidence se na ni nepřenáší. Místní balíček se sestavuje s vynecháním testů; push sám nepotvrzuje publikaci nové distribuce.
+
+
 ## Kůň a kladiva — oprava siluety, 1. listopadu 2026
 
 1. [R-0385](requirements/done/R-0385.md) opravuje uživatelem označený tvar koně ve vybrané sadě 15: jediný čenich směřuje doprava, krk pokračuje dolů a hříva leží za hlavou. Hlavy obou kladiv — v nástrojích i samostatné produkci — jsou o něco tenčí. Styl, barvy, násady a všechny herní hodnoty zůstávají zachované.
@@ -2270,7 +2279,7 @@ Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.
 
 1. Uživatel vybral **09 — Lehký pohyb** z [deseti návrhů](graphics-unit-proposals.md) a požádal o implementaci se zřetelnou, nepříliš tenkou linkou; [R-0285](requirements/done/R-0285.md). Implementace prošla lokální přejímkou; [výsledky a snímek ze hry](functional-tests.md#r-0285-walking-unit-artwork-2026-10-25) rozlišují přijatou změnu od samostatně ověřovaného vydání.
 2. Sada rozlišuje 35 typů, čtyři stavy výbavy kolonisty a poškozené dělo. Výbava podle modelu přebíjí profesní obrázek; po odebrání výbavy se vrací profese. Rekvizita profese nedává jednotce výbavu ani novou schopnost. Národní/action značka se kreslí samostatně a výběr ani pravidla se nemění.
-3. Zdroj [units-walking-source.png](../microcol-game/src/graphics/units-walking-source.png) je průhledný rastr odvozený ImageGenem z vybraného listu; [zadání úprav](../microcol-game/src/graphics/units-walking-prompts.json) je zachované. [units.svg](../microcol-game/src/graphics/units.svg) skládá jeho výřezy do atlasu 360 × 225 px, osm sloupců a pět řad v pořadí U01–U35, E01–E05. Jde o rastrové podklady a editovatelnou kompozici, nikoli o vektorové kontury.
+3. Historický zdroj (nahrazený [řeckou vektorovou sadou](#recke-jednotky-prvni-navrh-1-listopadu-2026)) [units-walking-source.png](../microcol-game/src/graphics/units-walking-source.png) je průhledný rastr odvozený ImageGenem z vybraného listu; [zadání úprav](../microcol-game/src/graphics/units-walking-prompts.json) je zachované. Tehdejší `units.svg` skládal jeho výřezy do atlasu 360 × 225 px, osm sloupců a pět řad v pořadí U01–U35, E01–E05. Jde o rastrové podklady a editovatelnou kompozici, nikoli o vektorové kontury.
 4. Každá 45px buňka má průhledný okraj a obrázek se vejde do 41px prostoru. Výraznější tmavý tah se posuzuje v konečné mapové velikosti, s cílem přibližně 2 px. Obrázek už nepotřebuje starý posun o 2/4 px; mapa jej kotví přímo na začátek políčka. Sdílený poskytovatel vybírá obrázky také pro Evropu, kolonii, boj a nápovědu.
 5. Export: `rsvg-convert -o microcol-game/src/main/resources/images/units.png microcol-game/src/graphics/units.svg`. Staré výřezy jednotek v background atlasu a staré soubory děl zůstávají historickými podklady; aktuální společný poskytovatel je nepoužívá.
 
