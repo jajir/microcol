@@ -3,7 +3,8 @@
 ## Plánování obchodních tras
 
 1. Dohodnuté zadání z 1. listopadu 2026 zachycuje [R-0395](requirements/R-0395.md): přepínač vlevo nahoře přepne mapu do režimu barevných obchodních tras na tmavém podkladu. Najetí ukáže jméno a vlastnosti; výběr otevře popis a editaci konkrétní trasy v místě běžného pravého panelu.
-2. Novou trasu zahájí „New trade route“ v hlavním menu; přesné umístění menu zbývá upřesnit v požadavku. Hráč vybírá zastávky a jejich vlastnosti, cestu mezi městy volí hra podle [pohybových pravidel tras](gap-analysis.md#automated-trade-routes). Zrušení editace nemění uloženou trasu. Jde o zadání, nikoli implementovaný nebo hráčsky ověřený výsledek.
+2. Po přepnutí do režimu obchodních tras se nahoře v hlavní herní liště zobrazí tlačítko pro novou trasu. Použije existující podobu tlačítka „Trade route…“ z detailu kolonie, které uživatel přiložil jako referenci. Hráč vybírá zastávky a jejich vlastnosti, cestu mezi městy volí hra podle [pohybových pravidel tras](gap-analysis.md#automated-trade-routes). Zrušení editace nemění uloženou trasu.
+3. Zobrazují se všechny vypočtené cesty, nejen vybraná trasa. Vedou přibližně středy dlaždic jako měkké, ladně zahýbající křivky s viditelnými nepravidelnostmi ruční kresby. Stylizace nemění modelovou cestu ani její cenu. Čitelnost a možnost jednotlivého výběru zůstávají nutné i při překryvu. Jde o dohodnutý návrh, nikoli implementovaný nebo hráčsky ověřený výsledek.
 
 ## Zbývající tahy orání — zadání 1. listopadu 2026
 
