@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
+<title id="title">Kůň</title>
+<desc id="description">MicroCol R-0384, selected proposal 15, 2026-11-01. Hand-authored vector paths; solid fills and transparent surroundings.</desc>
+<g id="bold-hand-drawn-outline" transform="translate(2 2) scale(0.9375)" stroke="#41413b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+<g id="mane"><path d="M28 13 Q39 6 43 20 L49 25 L45 27 L53 36 L48 38 L56 49 L50 51 L53 58 L30 57 L18 37 Z" fill="#725d47"/></g>
+<g id="head"><path d="M26 17 L25 5 Q32 7 35 19 L40 9 L40 24 Q42 31 53 39 Q59 45 52 50 Q46 54 37 43 L35 58 L16 57 L20 36 Q13 37 9 31 Q8 25 18 21 Z" fill="#be945d"/><path d="M27.6 28 a1.4 1.4 0 1 0 2.8 0 a1.4 1.4 0 1 0 -2.8 0" fill="#41413b"/><path d="M48 44 a1 1 0 1 0 2 0 a1 1 0 1 0 -2 0" fill="#41413b"/><path d="M26 36 Q29 42 37 43" fill="none"/></g>
+</g>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
+<title id="title">Olivy</title>
+<desc id="description">MicroCol R-0384, selected proposal 15, 2026-11-01. Hand-authored vector paths; solid fills and transparent surroundings.</desc>
+<g id="bold-hand-drawn-outline" transform="translate(2 2) scale(0.9375)" stroke="#41413b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+<g id="stem-and-leaf"><path d="M22 30 Q30 16 34 10 M43 31 Q40 21 34 10" fill="none"/><path d="M33 13 Q42 2 56 6 Q50 19 33 13 Z" fill="#87934c"/></g>
+<g id="olives"><path d="M23 24 C9 19 4 48 15 53 C29 60 36 28 23 24 Z" fill="#87934c"/><path d="M42 26 C30 25 29 49 42 53 C58 55 58 29 42 26 Z" fill="#87934c"/></g>
+</g>
+</svg>

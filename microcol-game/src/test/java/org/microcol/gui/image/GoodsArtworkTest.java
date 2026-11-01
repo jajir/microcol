@@ -54,7 +54,10 @@ class GoodsArtworkTest {
         final Set<String> attributes = Set.of("xmlns", "width", "height",
                 "viewBox", "aria-labelledby", "id", "stroke", "stroke-width",
                 "stroke-linecap", "stroke-linejoin", "d", "fill", "transform");
-        for (final String name : Set.of("bell", "cross", "hammer")) {
+        for (final String name : Set.of("corn", "sugar", "tobacco", "cotton",
+                "fur", "lumber", "ore", "silver", "horse", "rum", "cigars",
+                "silk", "coat", "goods", "tools", "musket", "bell", "cross",
+                "hammer")) {
             final var source = java.nio.file.Path
                     .of("src/graphics/production-goods/good-" + name + ".svg");
             final var document = parser.parse(source.toFile());

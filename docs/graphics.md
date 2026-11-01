@@ -1,5 +1,38 @@
 # Grafické podklady a jejich použití v MicroCol
 
+## Řecké zboží — výrazná linka, 1. listopadu 2026
+
+1. Uživatel vybral **návrh 15 — Výrazná linka**: stručné, roztomilé ruční obrysy a jednobarevné výplně podle herní mapy. [R-0384](requirements/done/R-0384.md) vlastní tuto výměnu všech 19 obrázků. [Vybraná rastrová předloha](assets/greek-goods-15-2026-11-01/selected-reference.png) je pouze výtvarná reference; následující přehled vznikl ze skutečných SVG.
+2. Každý obrázek má ručně nakreslené vektorové cesty, pojmenované skupiny, plátno 64 × 64 a průhledné okolí. Bez rastrových vložek, přechodů, textur a externích odkazů. Přehled porovnává zvětšení a skutečné velikosti **45 a 22 px**; jde o kontrolní list, nikoli screenshot hry.
+
+![Nové vektorové ikony ve třech velikostech](assets/greek-goods-15-2026-11-01/vector-preview.png)
+
+3. Stávající identifikátory a textové názvy zůstávají zachované. Přechod na antickou ekonomiku a překlady není součástí této grafické dodávky. Mapování: `corn` → obilí, `sugar` → olivy, `tobacco` → hrozny, `cotton` → ovce, `fur` → hlína, `rum` → olej, `cigars` → víno, `silk` → látka, `coat` → amfory, `musket` → štít s kopím, `cross` → pochodeň, `bell` → sova. Dřevo, ruda, stříbro, kůň, zboží, nástroje a kladiva mají odpovídající nový vzhled. Jde záměrně o přechodný stav: obrázek již ukazuje řecký protějšek, dosavadní text ještě původní komoditu.
+4. Zdroje jsou v `microcol-game/src/graphics/production-goods/good-*.svg`. Sdílený `ImageLoaderGoods` dál čte šestnáct polí 45 × 45 px z `goods-olive.png` a samostatné `good-bell.png`, `good-cross.png`, `good-hammer.png`. Model, AI, načítání, skladové hodnoty ani rozložení se nemění. Následující export z kořene repozitáře používá Python standardní knihovnu a `rsvg-convert`; Maven jej nespouští.
+
+```sh
+python3 - <<'PY'
+from pathlib import Path
+import subprocess
+from xml.etree import ElementTree as ET
+source = Path('microcol-game/src/graphics/production-goods')
+output = Path('microcol-game/src/main/resources/images')
+names = 'corn sugar tobacco cotton fur lumber ore silver horse rum cigars silk coat goods tools musket'.split()
+ns = 'http://www.w3.org/2000/svg'
+ET.register_namespace('', ns)
+atlas = ET.Element(f'{{{ns}}}svg', width='180', height='180', viewBox='0 0 256 256')
+for i, name in enumerate(names):
+    group = ET.SubElement(atlas, f'{{{ns}}}g', transform=f'translate({i % 4 * 64} {i // 4 * 64})')
+    group.append(ET.parse(source / f'good-{name}.svg').getroot().find(f'{{{ns}}}g'))
+result = subprocess.run(['rsvg-convert', '-o', str(output / 'goods-olive.png')], input=ET.tostring(atlas), check=True)
+for name in ('bell', 'cross', 'hammer'):
+    subprocess.run(['rsvg-convert', '-w', '45', '-h', '45', '-o', str(output / f'good-{name}.png'), str(source / f'good-{name}.svg')], check=True)
+PY
+```
+
+5. Ověření 1. listopadu 2026: opakovaný export všech čtyř runtime PNG má totožné SHA-256. Sdílený Java formatter prošel změněným `GoodsArtworkTest` s kontrolou zachování tokenů a idempotence. Docker/Xvfb na zdrojovém základu `14ace5a0` s touto grafickou změnou: **7 testů, 0 selhání, 0 chyb, 0 vynechání** — `GoodsArtworkTest` (2), `PageVerificationContractTest` (3), `TC_54_F45_shared_hammers_test` (1), `TC_06_F06_buy_and_sell_goods_test#TC_06_moving_goods` (1). Dokončovací běh `20261101T120954Z-78e1ba0d24e9`, supervisor PID `49905`, limit 900 s, dokončeno za 118,692 s; reporty `target/docker-ui/run-TSnsoO`. Předání callbacku potvrzené jako `queued`. Zkontrolované skutečné snímky: [produkce a náklad kolonie](assets/greek-goods-15-2026-11-01/colony.png), [evropský obchod](assets/greek-goods-15-2026-11-01/europe.png). Všech 9 dokumentačních kontrol a strict MkDocs prošlo; logy `target/r0384/`.
+6. Uživatel výslovně omezil tuto dodávku na minimální okolní ověření a vynechal smoke. Plná modelová sada, úplná regrese ani vzdálená publikace nejsou touto dodávkou ověřené.
+
 ## Kompaktní budovy — tři návrhy, 30. října 2026
 
 1. [R-0366](requirements/done/R-0366.md) porovnává tři úspornější rozložení podle dodaného snímku kolonie. Jde o návrhy, nikoli změnu herního rozhraní. Všechny ukazují stejných šestnáct budov, názvy, stavy výstavby, pracovní místa a výnosy. Přehled je záměrně omezený na část s budovami; ostatní panely kolonie nejsou předmětem návrhu.

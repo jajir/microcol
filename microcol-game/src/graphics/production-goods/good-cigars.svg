@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
+<title id="title">Víno</title>
+<desc id="description">MicroCol R-0384, selected proposal 15, 2026-11-01. Hand-authored vector paths; solid fills and transparent surroundings.</desc>
+<g id="bold-hand-drawn-outline" transform="translate(2 2) scale(0.9375)" stroke="#41413b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+<g id="handle"><path d="M42 17 C63 9 64 36 46 39 L43 32 C54 31 55 19 44 24 Z" fill="#8e6b91"/></g>
+<g id="jug"><path d="M25 6 L40 7 L38 20 Q50 31 47 44 L41 58 L20 58 L15 44 Q12 30 25 20 Z" fill="#8e6b91"/><path d="M23 9 Q31 12 39 9" fill="none"/></g>
+<g id="contents-symbol"><path d="M23.4 34 a2.6 2.6 0 1 0 5.2 0 a2.6 2.6 0 1 0 -5.2 0" fill="#604869"/><path d="M33.4 34 a2.6 2.6 0 1 0 5.2 0 a2.6 2.6 0 1 0 -5.2 0" fill="#604869"/><path d="M28.4 42 a2.6 2.6 0 1 0 5.2 0 a2.6 2.6 0 1 0 -5.2 0" fill="#604869"/></g>
+</g>
+</svg>
