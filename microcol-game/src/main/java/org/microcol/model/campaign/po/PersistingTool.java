@@ -24,7 +24,7 @@ public class PersistingTool {
 
     public static final String SAVE_FILE_EXTENSION = "microcol";
 
-    private final static String EXTENSION = "." + SAVE_FILE_EXTENSION;
+    final static String EXTENSION = "." + SAVE_FILE_EXTENSION;
 
     private final static String HALL_OF_FAME_FILE_NAME = "hall-of-fame.json";
 

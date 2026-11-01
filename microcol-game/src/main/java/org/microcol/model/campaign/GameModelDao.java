@@ -1,6 +1,7 @@
 package org.microcol.model.campaign;
 
 import java.io.File;
+import java.time.Instant;
 import java.util.List;
 import java.util.function.Function;
 
@@ -18,6 +19,9 @@ import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.campaign.po.PersistingTool;
 import org.microcol.model.campaign.po.RecoverySlot;
+import org.microcol.model.campaign.po.SaveMetadataPo;
+import org.microcol.model.campaign.po.SaveSummaryPo;
+import org.microcol.model.campaign.po.SavedGames;
 import org.microcol.model.generation.GeneratedWorld;
 import org.microcol.model.generation.GeneratedWorldSettings;
 import org.microcol.model.generation.NorthAmericaWorld;
@@ -50,10 +54,25 @@ public final class GameModelDao {
                 .checkNotNull(missionFactoryManager);
     }
 
+    /**
+     * Load a player save; only a valid saved-game archive is accepted.
+     */
     public GameModel loadFromFile(final File file, final EventBus eventBus) {
         Preconditions.checkNotNull(file, "Save file is null");
         Preconditions.checkNotNull(eventBus, "Event bus is null");
-        return makeFromModelPo(gameModelPoDao.loadFromFile(file), eventBus);
+        return makeFromModelPo(gameModelPoDao.loadPlayerGame(file), eventBus);
+    }
+
+    /**
+     * Load an authored scenario in plain JSON, the same validation as a save.
+     * Used by test setup that turns an authored position into a player save.
+     */
+    public GameModel loadScenarioFromFile(final File file,
+            final EventBus eventBus) {
+        Preconditions.checkNotNull(file, "Scenario file is null");
+        Preconditions.checkNotNull(eventBus, "Event bus is null");
+        return makeFromModelPo(gameModelPoDao.loadScenarioFromFile(file),
+                eventBus);
     }
 
     public GameModel loadFromClassPath(final String fileName,
@@ -214,18 +233,52 @@ public final class GameModelDao {
     }
 
     public void saveToFile(final String fileName, final GameModel gameMode) {
-        gameModelPoDao.saveToFile(fileName, gameMode.getModelPo());
+        saveGame(new File(fileName), gameMode, SavedGames.Kind.MANUAL, null,
+                null);
     }
 
     public void saveNamedGame(final File file, final GameModel game,
             final String name) {
+        saveGame(file, game, SavedGames.Kind.MANUAL,
+                Preconditions.checkNotNull(name), null);
+    }
+
+    /**
+     * Save the game as one archive whose metadata and summary describe the same
+     * snapshot as its game data (R-0382).
+     *
+     * @param file    required target file
+     * @param game    required game
+     * @param kind    required kind of the save
+     * @param name    optional save name, normalized and validated before any
+     *                write
+     * @param preview optional PNG preview of the same state
+     */
+    public void saveGame(final File file, final GameModel game,
+            final SavedGames.Kind kind, final String name,
+            final byte[] preview) {
+        Preconditions.checkNotNull(file);
+        Preconditions.checkNotNull(game);
+        Preconditions.checkNotNull(kind);
+        final String given = name == null ? null
+                : Player.normalizeDisplayName(name);
         final GameModelPo snapshot = game.getModelPo();
-        snapshot.setSaveName(Player.normalizeDisplayName(name));
-        gameModelPoDao.saveToFile(file.getAbsolutePath(), snapshot);
+        final SaveSummaryPo summary = summary(game, snapshot);
+        // Every save has a readable name; without one it names the player and
+        // the date.
+        snapshot.setSaveName(given == null ? defaultName(summary) : given);
+        gameModelPoDao.savePlayerGame(file.getAbsolutePath(), snapshot,
+                metadata(snapshot, kind, summary), preview);
     }
 
     public void saveRecoverySlots(final GameModel game,
             final PersistingTool paths, final List<RecoverySlot> slots) {
+        saveRecoverySlots(game, paths, slots, null);
+    }
+
+    public void saveRecoverySlots(final GameModel game,
+            final PersistingTool paths, final List<RecoverySlot> slots,
+            final byte[] preview) {
         Preconditions.checkNotNull(game);
         Preconditions.checkNotNull(paths);
         Preconditions.checkNotNull(slots);
@@ -233,10 +286,44 @@ public final class GameModelDao {
             return;
         }
         final GameModelPo snapshot = game.getModelPo();
+        final SaveSummaryPo summary = summary(game, snapshot);
+        snapshot.setSaveName(defaultName(summary));
+        final SaveMetadataPo metadata = metadata(snapshot,
+                SavedGames.Kind.AUTOMATIC, summary);
         for (final RecoverySlot slot : slots) {
-            gameModelPoDao.saveToFile(
-                    paths.getRecoveryFile(slot).getAbsolutePath(), snapshot);
+            gameModelPoDao.savePlayerGame(
+                    paths.getRecoveryFile(slot).getAbsolutePath(), snapshot,
+                    metadata, preview);
         }
+    }
+
+    private static SaveSummaryPo summary(final GameModel game,
+            final GameModelPo snapshot) {
+        return SaveSummaryPo.describe(game.getModel(),
+                snapshot.getCampaignName(), snapshot.getMissionName());
+    }
+
+    private static SaveMetadataPo metadata(final GameModelPo snapshot,
+            final SavedGames.Kind kind, final SaveSummaryPo summary) {
+        return SaveMetadataPo.of(snapshot.getSaveName(), kind, Instant.now(),
+                snapshot.getPlaythroughId(), summary);
+    }
+
+    /**
+     * @return the player's name and the game date within the 64-code-point name
+     *         limit
+     */
+    static String defaultName(final SaveSummaryPo summary) {
+        final String date = " " + summary.getYear()
+                + (summary.getSeason() == null ? ""
+                        : " " + summary.getSeason());
+        String player = summary.getPlayerName();
+        // The 64-code-point limit of Player.normalizeDisplayName.
+        final int room = 64 - date.length();
+        if (player.codePointCount(0, player.length()) > room) {
+            player = player.substring(0, player.offsetByCodePoints(0, room));
+        }
+        return Player.normalizeDisplayName(player + date);
     }
 
 }

@@ -3,6 +3,7 @@ package org.microcol.test;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.game.gamepanel.CursorService;
 import org.microcol.mock.CursorServiceNoOpp;
 import org.microcol.model.Model;
+import org.microcol.page.PlayerSaveFixture;
 import org.microcol.page.TestContext;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
@@ -28,7 +30,12 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Binder;
+import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.spi.Element;
+import com.google.inject.spi.Elements;
+import com.google.inject.spi.InstanceBinding;
+import com.google.inject.util.Modules;
 
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -150,10 +157,52 @@ public abstract class AbstractMicroColTest {
         logger.info("Starting MicroCol UI test " + clazz.getName());
         System.setProperty(GamePreferences.SYSTEM_PROPERTY_DEVELOPMENT,
                 Boolean.TRUE.toString());
-        final MicroColApplication microCol = new MicroColApplication(
-                overridenModule);
+        // Fixtures stub the bound chooser; the game sees what it chooses as a
+        // player would, with authored scenarios saved as player saves.
+        final FileSelectingService stubbed = boundChooser(overridenModule);
+        final Module module = stubbed == null ? overridenModule
+                : Modules.override(overridenModule)
+                        .with(binder -> binder.bind(FileSelectingService.class)
+                                .toInstance(playerChooser(stubbed)));
+        final MicroColApplication microCol = new MicroColApplication(module);
         microCol.start(primaryStage);
         context = new TestContext(microCol, primaryStage);
+        context.useStubbedChooser(stubbed);
+    }
+
+    /**
+     * @return the chooser instance the test module binds, or <code>null</code>
+     */
+    private static FileSelectingService boundChooser(final Module module) {
+        for (final Element element : Elements.getElements(module)) {
+            if (element instanceof InstanceBinding
+                    && ((InstanceBinding<?>) element).getKey()
+                            .equals(Key.get(FileSelectingService.class))) {
+                return (FileSelectingService) ((InstanceBinding<?>) element)
+                        .getInstance();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * A chooser forwarding every call to the stubbed one; a chosen file to load
+     * reaches the game through {@link PlayerSaveFixture#asPlayerSave(File)}.
+     */
+    private static FileSelectingService playerChooser(
+            final FileSelectingService stubbed) {
+        return Mockito.mock(FileSelectingService.class, invocation -> {
+            final Object answer;
+            try {
+                answer = invocation.getMethod().invoke(stubbed,
+                        invocation.getArguments());
+            } catch (final InvocationTargetException failed) {
+                throw failed.getCause();
+            }
+            return "loadFile".equals(invocation.getMethod().getName())
+                    ? PlayerSaveFixture.asPlayerSave((File) answer)
+                    : answer;
+        });
     }
 
     /**

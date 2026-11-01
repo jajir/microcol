@@ -4,6 +4,7 @@ import org.microcol.diagnostics.DiagnosticEvent;
 import org.microcol.diagnostics.DiagnosticLog;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.preferences.GamePreferences;
+import org.microcol.gui.screen.game.components.SavePreview;
 import org.microcol.model.MicroColException;
 import org.microcol.model.TurnPreparationException;
 import org.microcol.model.campaign.GameModelDao;
@@ -56,7 +57,7 @@ public final class TurnStartedListener {
             try {
                 gameModelDao.saveRecoverySlots(
                         gameModelController.getGameModel(), persistingTool,
-                        slots);
+                        slots, SavePreview.render(event.getModel()));
                 gamePreferences.setGameInProgressSaveFile(persistingTool
                         .getRecoveryFile(
                                 org.microcol.model.campaign.po.RecoverySlot.LATEST_TURN)

@@ -35,4 +35,17 @@
     <entry key="corrupt">Unavailable or invalid saved-game details</entry>
     <entry key="noQuick">This playthrough has no quick save yet.</entry>
     <entry key="freePlay">Free play</entry>
+    <entry key="detailPrompt">Select a saved game to see its map and summary.</entry>
+    <entry key="previewMissing">Preview not available</entry>
+    <entry key="unsupported">This saved game uses an unsupported format and cannot be loaded.</entry>
+    <entry key="summaryMissing">Summary not available</entry>
+    <entry key="summaryPlayer">Player: %s · %s</entry>
+    <entry key="summaryYear">Year: %s</entry>
+    <entry key="summaryGold">Gold: %s</entry>
+    <entry key="summarySupport">Rebel support: %s %%</entry>
+    <entry key="summaryCounts">People: %s · Colonies: %s · Ships: %s</entry>
+    <entry key="summarySaved">Saved: %s</entry>
+    <entry key="currentGame">New save of the current game</entry>
+    <entry key="target">Selected save to overwrite: %s · %s</entry>
+    <entry key="targetNone">No existing save is selected; Save game creates a new one.</entry>
 </properties>

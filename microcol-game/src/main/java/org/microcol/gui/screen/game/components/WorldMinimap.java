@@ -11,9 +11,6 @@ import org.microcol.gui.screen.game.gamepanel.ScrollingManager;
 import org.microcol.gui.screen.game.gamepanel.VisibleAreaService;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Location;
-import org.microcol.model.Player;
-import org.microcol.model.Terrain;
-import org.microcol.model.TerrainType;
 import org.microcol.model.WorldMap;
 
 import com.google.inject.Inject;
@@ -42,12 +39,7 @@ public final class WorldMinimap extends VBox {
     private static final double WIDTH = 220, HEIGHT = 180;
     private static final Color INK = Color.web("#34332b");
     private static final Color PAPER = Color.web("#fff9ec");
-    private static final Color[] COLORS = { Color.web("#9c9585"),
-            Color.web("#649b97"), Color.web("#b6c78d"), Color.web("#6f8953"),
-            Color.web("#c5c18a"), Color.web("#cbbb76"), Color.web("#b6b77b"),
-            Color.web("#899d7b"), Color.web("#718d72"), Color.web("#d5ba76"),
-            Color.web("#b2b49a"), Color.web("#e8e6d5"), Color.web("#ad895c"),
-            Color.web("#898477") };
+    private static final Color[] COLORS = MinimapTiles.COLORS;
 
     private final GameModelController controller;
     private final VisibleAreaService visibleArea;
@@ -175,18 +167,8 @@ public final class WorldMinimap extends VBox {
             map.setAccessibleText(heading);
             map.setAccessibleHelp(i18n.get(Loc.minimap_hint));
         }
-        final Player player = controller.getHumanPlayer();
-        final byte[] tiles = new byte[worldSize.getX() * worldSize.getY()];
-        for (int y = 0; y < worldSize.getY(); y++) {
-            for (int x = 0; x < worldSize.getX(); x++) {
-                final Location location = Location.of(x + 1, y + 1);
-                // Never inspect terrain behind the unexplored mask.
-                if (player.isVisible(location)) {
-                    tiles[y * worldSize.getX() + x] = color(
-                            world.getTerrainAt(location));
-                }
-            }
-        }
+        final byte[] tiles = MinimapTiles
+                .knownTiles(controller.getHumanPlayer(), world);
         // Only redraw geography when the permitted terrain changes.
         if (!Arrays.equals(tiles, painted)) {
             drawTerrain(tiles);
@@ -201,35 +183,6 @@ public final class WorldMinimap extends VBox {
             rectangle.setWidth(view.getWidth());
             rectangle.setHeight(view.getHeight());
         }
-    }
-
-    private byte color(final Terrain tile) {
-        final TerrainType type = tile.getTerrainType();
-        if (type.isSea())
-            return 1;
-        if (tile.isHasTrees())
-            return 3;
-        if (type == TerrainType.PRAIRIE)
-            return 4;
-        if (type == TerrainType.SAVANNAH)
-            return 5;
-        if (type == TerrainType.PLAINS)
-            return 6;
-        if (type == TerrainType.MARSH)
-            return 7;
-        if (type == TerrainType.SWAMP)
-            return 8;
-        if (type == TerrainType.DESERT)
-            return 9;
-        if (type == TerrainType.TUNDRA)
-            return 10;
-        if (type == TerrainType.ARCTIC)
-            return 11;
-        if (type == TerrainType.HILL)
-            return 12;
-        if (type == TerrainType.MOUNTAIN)
-            return 13;
-        return 2;
     }
 
     private void drawTerrain(final byte[] tiles) {

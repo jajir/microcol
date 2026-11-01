@@ -110,15 +110,14 @@ public class TC_43_F34_recovery_points_test extends AbstractMicroColTest {
         audit.continueGame();
         audit.verifyCurrentTurn(19);
 
-        // A corrupt point stays selectable and reports failure; valid retry
-        // works.
+        // A corrupt point stays listed with its reason but cannot be
+        // confirmed; valid retry works.
         GamePage.of(getContext()).exitToMenu();
         audit.corruptRecovery(RecoverySlot.LATEST_TURN);
         audit.openRecoveryChooser();
         audit.verifyRecoveryOption(RecoverySlot.LATEST_TURN, true,
                 "Unavailable or invalid saved-game details");
-        audit.chooseRecovery(RecoverySlot.LATEST_TURN);
-        DialogMessagePage.of(getContext()).close();
+        audit.verifyLoadDisabled("Unavailable or invalid saved-game details");
         audit.verifyLoadPageOpen();
         audit.closeLoadPage();
         WelcomePage.of(getContext()).verifyMainScreen();
@@ -196,15 +195,15 @@ public class TC_43_F34_recovery_points_test extends AbstractMicroColTest {
         saves.verifyQuickSave();
         game.nextTurnAndCloseDialogs();
         audit.verifyCurrentTurn(19);
-        audit.corruptRecovery(RecoverySlot.LATEST_TURN);
+        // Its readable metadata hide the damaged game until it is loaded.
+        audit.corruptRecoveryGame(RecoverySlot.LATEST_TURN);
         saves.rememberGame();
         audit.rememberRecoveryBytes();
 
         // Recovery points remain a filter; selecting only shows the details.
         saves.openLoad();
         hosted.chooseFilter("saveFilterAUTOMATIC");
-        audit.verifyRecoveryOption(RecoverySlot.LATEST_TURN, true,
-                "Unavailable or invalid saved-game details");
+        audit.verifyRecoveryOption(RecoverySlot.LATEST_TURN, true, "1509");
         audit.selectRecovery(RecoverySlot.LATEST_TURN);
         saves.verifyGameUnchanged();
         audit.verifyRecoveryBytesUnchanged();

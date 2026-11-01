@@ -485,4 +485,56 @@ public class TC_192_F225_in_game_layout_test extends AbstractMicroColTest {
         hosted.verifyMenuHosted("Nastavení", "buttonBack", "Zpět");
     }
 
+    @Test
+    @Tag("local")
+    void TC_08_load_list_and_detail_fit_small_windows_in_both_languages()
+            throws Exception {
+        // Open the agreed position and keep one named save.
+        final MainScreenLayoutPage window = new MainScreenLayoutPage(
+                getContext());
+        final HostedPanelPage hosted = new HostedPanelPage(getContext());
+        final InGameLayoutPage page = new InGameLayoutPage(getContext());
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        window.resize(1280, 850);
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        saves.openSave();
+        saves.saveName("Small window harbour");
+        saves.verifySavedName("Small window harbour", 1);
+
+        // English in-game Load keeps both panels and the actions reachable.
+        window.resize(900, 700);
+        hosted.pressShortcut(KeyCode.O);
+        hosted.verifyInGameHosted("Load game");
+        saves.select("Small window harbour");
+        saves.verifyDetailName("Small window harbour");
+        saves.verifyPreview(true);
+        saves.verifySummaryLines("Year: ", "Gold: ", "People: ");
+        page.verifyBackToGame("savedGamesCancel", "Back to game");
+        hosted.verifyScrollBarFollowsOverflow();
+        hosted.verifyCompleteTexts();
+        hosted.scrollContentToEnd();
+        saves.verifyLoadEnabled(true);
+        page.saveEvidence("r0383-load-detail-narrow-en.png");
+        hosted.press(KeyCode.ESCAPE);
+
+        // Czech menu Load shows the same detail with full labels.
+        game.exitToMenu();
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        settings.goBack().verifyMainScreen();
+        hosted.pressShortcut(KeyCode.O);
+        hosted.verifyMenuHosted("Načíst hru", "savedGamesCancel", "Zpět");
+        saves.select("Small window harbour");
+        saves.verifyDetailName("Small window harbour");
+        saves.verifyPreview(true);
+        saves.verifySummaryLines("Rok: ", "Zlato: ", "Podpora nezávislosti: ",
+                "Osoby: ", "Kolonie: ", "Lodě: ");
+        hosted.verifyScrollBarFollowsOverflow();
+        hosted.verifyCompleteTexts();
+        hosted.captureDialog("savedGamesList",
+                "r0383-load-detail-narrow-cs.png");
+        hosted.press(KeyCode.ESCAPE);
+        WelcomePage.of(getContext()).verifyMainScreen();
+    }
+
 }

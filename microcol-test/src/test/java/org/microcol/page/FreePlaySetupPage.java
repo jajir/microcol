@@ -136,7 +136,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
                         org.microcol.model.campaign.po.PersistingTool.class)
                 .getAutoSaveFile();
         final org.microcol.model.campaign.po.GameModelPo data = new org.microcol.model.campaign.po.GameModelPoDao()
-                .loadFromFile(file);
+                .loadPlayerGame(file);
         assertEquals(expected, data.getModel().getDifficulty());
     }
 
@@ -224,7 +224,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
             throws Exception {
         final java.io.File file = getContext()
                 .getClassFromGuice(PersistingTool.class).getAutoSaveFile();
-        final GameModelPo data = new GameModelPoDao().loadFromFile(file);
+        final GameModelPo data = new GameModelPoDao().loadPlayerGame(file);
         assertEquals(expectedSeed,
                 data.getModel().getGeneratedWorld().getSeed().intValue());
         assertArrayEquals(getModel().save().getMap().getTiles(),
@@ -490,7 +490,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
     public void verifySavedNorthAmericaWorld() {
         final java.io.File file = getContext()
                 .getClassFromGuice(PersistingTool.class).getAutoSaveFile();
-        final GameModelPo data = new GameModelPoDao().loadFromFile(file);
+        final GameModelPo data = new GameModelPoDao().loadPlayerGame(file);
         assertEquals(NorthAmericaWorld.WIDTH,
                 data.getModel().getMap().getMaxX());
         assertEquals(NorthAmericaWorld.HEIGHT,

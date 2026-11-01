@@ -288,10 +288,12 @@ public class TC_32_F24_construction_eligibility_test
         construction.open();
         construction.select("LUMBER_MILL");
         org.microcol.model.Model previous = getModel();
+        final File save = org.microcol.page.PlayerSaveFixture
+                .toPlayerSave(FIXTURE);
         getContext().getRobot()
                 .interact(() -> getContext().getClassFromGuice(
                         org.microcol.gui.event.model.GameController.class)
-                        .loadModelFromFile(FIXTURE));
+                        .loadModelFromFile(save));
         construction.confirm();
         construction.verifyChangedOffer();
         construction.verifyReplacedModelUnchanged(previous);
@@ -442,10 +444,12 @@ public class TC_32_F24_construction_eligibility_test
 
         // Loading another game makes the retained action stale.
         org.microcol.model.Model previous = getModel();
+        final File save = org.microcol.page.PlayerSaveFixture
+                .toPlayerSave(FIXTURE);
         getContext().getRobot()
                 .interact(() -> getContext().getClassFromGuice(
                         org.microcol.gui.event.model.GameController.class)
-                        .loadModelFromFile(FIXTURE));
+                        .loadModelFromFile(save));
 
         // The stale action opens neither colony and leaves a usable map.
         turnReport.fireRetainedOpenColonyAction();

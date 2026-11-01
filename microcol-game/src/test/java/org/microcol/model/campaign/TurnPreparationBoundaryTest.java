@@ -173,7 +173,7 @@ class TurnPreparationBoundaryTest {
         final JsonElement completed = snapshot(model);
         save(model, file);
         final Model resumed = make(
-                files.loadFromFile(file.toFile()).getModel());
+                files.loadPlayerGame(file.toFile()).getModel());
         resumed.startGame();
         resumed.startGame();
         assertEquals(completed, snapshot(resumed));
@@ -250,7 +250,7 @@ class TurnPreparationBoundaryTest {
         assertArrayEquals(before, Files.readAllBytes(file));
         assertEquals(0, freshNotifications.get());
         final Model recovered = make(
-                files.loadFromFile(file.toFile()).getModel());
+                files.loadPlayerGame(file.toFile()).getModel());
         final Model expected = preparedFixture();
         expected.endTurn();
         recovered.startGame();
@@ -343,7 +343,7 @@ class TurnPreparationBoundaryTest {
         model.endTurn();
         assertEquals(1, finished.get());
         final Model restored = make(
-                files.loadFromFile(file.toFile()).getModel());
+                files.loadPlayerGame(file.toFile()).getModel());
         assertTrue(restored.isGameFinished());
         assertEquals(snapshot(model), snapshot(restored));
     }

@@ -219,16 +219,29 @@ public final class FreePlayAuditPage extends AbstractScreen {
                     .queryAllAs(javafx.scene.control.ListCell.class).stream()
                     .filter(value -> value.getItem() == entry.get()).findFirst()
                     .orElseThrow();
-            assertTrue(cell.getText().contains(date), cell.getText());
+            // The row shows the real time of the save; the game year and any
+            // problem belong to the detail of the selected row.
             final String modified = java.time.format.DateTimeFormatter
                     .ofLocalizedDateTime(java.time.format.FormatStyle.SHORT)
                     .withLocale(getContext()
                             .getClassFromGuice(org.microcol.i18n.I18n.class)
                             .getCurrentLocale())
-                    .format(java.time.Instant.ofEpochMilli(file.lastModified())
+                    .format(java.time.Instant.ofEpochMilli(entry.get().modified)
                             .atZone(java.time.ZoneId.systemDefault()));
             assertTrue(cell.getText().contains(modified), cell.getText());
+            getRobot().interact(
+                    () -> list.getSelectionModel().select(entry.get()));
+            org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
+            final String detail = getLabeledById("savedGameSummary").getText();
+            assertTrue(detail.contains(date), detail);
         }
+    }
+
+    /** The selected save cannot be confirmed; its detail names the reason. */
+    public void verifyLoadDisabled(final String reason) {
+        org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(getButtonById("loadSelected").isDisabled());
+        assertEquals(reason, getLabeledById("savedGameSummary").getText());
     }
 
     @SuppressWarnings("unchecked")
@@ -273,7 +286,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
         final java.io.File file = getContext()
                 .getClassFromGuice(PersistingTool.class).getRecoveryFile(slot);
         final org.microcol.model.campaign.po.GameModelPo saved = new org.microcol.model.campaign.po.GameModelPoDao()
-                .loadFromFile(file);
+                .loadPlayerGame(file);
         assertEquals(expectedTurn,
                 saved.getModel().getCalendar().getNumberOfPlayedTurns());
     }
@@ -283,7 +296,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
         final File source = getContext().getClassFromGuice(PersistingTool.class)
                 .getRecoveryFile(slot);
         final var files = new org.microcol.model.campaign.po.GameModelPoDao();
-        final var expected = files.loadFromFile(source);
+        final var expected = files.loadPlayerGame(source);
         final java.nio.file.Path actualFile = Files
                 .createTempFile("restored-recovery-", ".microcol");
         try {
@@ -294,7 +307,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
                             getContext().getClassFromGuice(
                                     org.microcol.gui.event.model.GameModelController.class)
                                     .getGameModel());
-            final var actual = files.loadFromFile(actualFile.toFile());
+            final var actual = files.loadPlayerGame(actualFile.toFile());
             final var gson = new com.google.gson.Gson();
             assertEquals(gson.toJsonTree(expected), gson.toJsonTree(actual));
         } finally {
@@ -317,6 +330,18 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 getContext().getClassFromGuice(PersistingTool.class)
                         .getRecoveryFile(slot).toPath(),
                 "{");
+    }
+
+    /**
+     * Keep the readable metadata of a recovery point but damage its game, so
+     * the problem is found only when the point is loaded.
+     */
+    public void corruptRecoveryGame(final RecoverySlot slot) throws Exception {
+        SavedGamesPage.replaceEntry(
+                getContext().getClassFromGuice(PersistingTool.class)
+                        .getRecoveryFile(slot),
+                "game.json",
+                "{".getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
 
     public void obstructLatestPositionSave() throws Exception {
@@ -458,7 +483,9 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 ? getContext().getClassFromGuice(PersistingTool.class)
                         .getAutoSaveFile()
                 : Files.createTempFile("invalid-game-", ".microcol").toFile();
-        files.saveToFile(invalidSave.getAbsolutePath(), data);
+        // A player save with valid metadata whose game data are invalid.
+        PlayerSaveFixture.writeInvalidGame(invalidSave, data,
+                "/maps/default-campaign-mission-2-thrive.microcol");
         invalidSaveBytes = Files.readAllBytes(invalidSave.toPath());
         previousGame = getContext()
                 .getClassFromGuice(
@@ -483,8 +510,12 @@ public final class FreePlayAuditPage extends AbstractScreen {
             throws Exception {
         final File source = getContext().getClassFromGuice(PersistingTool.class)
                 .getAutoSaveFile();
+        // The recovery point is an archive; its game entry is edited as plain
+        // scenario JSON.
         final com.google.gson.JsonObject data = new com.google.gson.JsonParser()
-                .parse(Files.readString(source.toPath())).getAsJsonObject();
+                .parse(new org.microcol.model.campaign.po.GameModelPoDao()
+                        .loadGameJson(source))
+                .getAsJsonObject();
         final com.google.gson.JsonObject model = data.getAsJsonObject("model");
         if (difficulty == null) {
             model.remove("difficulty");
@@ -493,7 +524,11 @@ public final class FreePlayAuditPage extends AbstractScreen {
         }
         invalidSave = Files.createTempFile("invalid-difficulty-", ".microcol")
                 .toFile();
-        Files.writeString(invalidSave.toPath(), data.toString());
+        // Keep the save's own metadata and replace only its game data.
+        Files.copy(source.toPath(), invalidSave.toPath(),
+                java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        SavedGamesPage.replaceEntry(invalidSave, "game.json", data.toString()
+                .getBytes(java.nio.charset.StandardCharsets.UTF_8));
         invalidSaveBytes = Files.readAllBytes(invalidSave.toPath());
         previousGame = getContext()
                 .getClassFromGuice(
@@ -510,6 +545,8 @@ public final class FreePlayAuditPage extends AbstractScreen {
         invalidSave = Files.createTempFile("malformed-game-", ".microcol")
                 .toFile();
         Files.writeString(invalidSave.toPath(), contents);
+        // Deliberately malformed: it reaches the game as chosen.
+        PlayerSaveFixture.chooseAsRejected(invalidSave);
         invalidSaveBytes = Files.readAllBytes(invalidSave.toPath());
         previousGame = getContext()
                 .getClassFromGuice(

@@ -1,14 +1,20 @@
 package org.microcol.gui.dialog;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
+import org.microcol.model.campaign.po.SaveSummaryPo;
 import org.microcol.model.campaign.po.SavedGames.Entry;
 import javafx.geometry.Insets;
 import javafx.scene.layout.Region;
 
-/** Modal host of the shared saved-games view; used for saving. */
+/**
+ * Modal host of the shared saved-games view; used for saving. The detail shows
+ * the current game, kept apart from a selected overwrite target.
+ */
 public final class SavedGamesDialog extends AbstractMessageWindow {
     public enum Action {
         SAVE, LOAD, OVERWRITE, DELETE, IMPORT, EXPORT, FOLDER
@@ -34,20 +40,34 @@ public final class SavedGamesDialog extends AbstractMessageWindow {
         this.texts = texts;
     }
 
-    public Choice choose(final boolean saving, final List<Entry> entries,
-            final boolean recoveryOnly) {
+    /**
+     * Show the Save browser over the main window.
+     *
+     * @param entries       listed saves; a selected manual save is the
+     *                      overwrite target
+     * @param previews      reads the preview of one selected save
+     * @param current       summary of the game being saved
+     * @param currentImage  optional preview of the game being saved
+     * @param suggestedName prefilled editable name
+     * @return chosen action, or <code>null</code> when cancelled
+     */
+    public Choice chooseSave(final List<Entry> entries,
+            final Function<Entry, Optional<byte[]>> previews,
+            final SaveSummaryPo current, final byte[] currentImage,
+            final String suggestedName) {
         result = null;
-        final SavedGamesView view = new SavedGamesView(texts, saving,
-                recoveryOnly, choice -> {
+        final SavedGamesView view = new SavedGamesView(texts, true, false,
+                choice -> {
                     result = choice;
                     close();
-                }, this::close);
+                }, this::close, previews);
         view.setEntries(entries);
+        view.setCurrentGame(current, currentImage, suggestedName);
         final Region content = view.getContent();
         content.setPadding(new Insets(16));
         content.setPrefSize(
-                Math.min(760, getViewUtil().getPrimaryStage().getWidth() - 40),
-                Math.min(520,
+                Math.min(860, getViewUtil().getPrimaryStage().getWidth() - 40),
+                Math.min(600,
                         getViewUtil().getPrimaryStage().getHeight() - 40));
         init(content);
         getScene().getStylesheets().add(

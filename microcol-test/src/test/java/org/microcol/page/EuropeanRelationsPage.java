@@ -176,9 +176,11 @@ public final class EuropeanRelationsPage extends AbstractScreen {
     }
 
     public void simulateGameReplacement(final File fixture) {
+        // A player load accepts only player saves.
+        final File save = PlayerSaveFixture.toPlayerSave(fixture);
         getRobot().interact(
                 () -> getContext().getClassFromGuice(GameController.class)
-                        .loadModelFromFile(fixture));
+                        .loadModelFromFile(save));
         WaitForAsyncUtils.waitForFxEvents();
     }
 

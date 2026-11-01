@@ -16,7 +16,10 @@ import org.microcol.model.campaign.GameModel;
 import org.microcol.model.campaign.GameModelDao;
 import org.microcol.model.campaign.FreePlayMap;
 import org.microcol.model.campaign.MissionName;
+import org.microcol.model.Player;
+import org.microcol.model.campaign.po.SavedGames;
 import org.microcol.model.generation.GeneratedWorldSettings;
+import org.microcol.gui.screen.game.components.SavePreview;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
@@ -52,14 +55,30 @@ public final class GameController {
         this.diagnosticLog = Preconditions.checkNotNull(diagnosticLog);
     }
 
-    public void writeModelToFile(final File targetFile) {
-        gameModelDao.saveToFile(targetFile.getAbsolutePath(),
-                gameModelController.getGameModel());
+    /**
+     * Save the current game with its summary and map preview.
+     *
+     * @param targetFile required target
+     * @param kind       required kind of the save
+     */
+    public void writeModelToFile(final File targetFile,
+            final SavedGames.Kind kind) {
+        final GameModel game = gameModelController.getGameModel();
+        gameModelDao.saveGame(targetFile, game, kind, null,
+                SavePreview.render(game.getModel()));
     }
 
     public void writeNamedGame(final File file, final String name) {
-        gameModelDao.saveNamedGame(file, gameModelController.getGameModel(),
-                name);
+        writeNamedGame(file, name, SavedGames.Kind.MANUAL);
+    }
+
+    public void writeNamedGame(final File file, final String name,
+            final SavedGames.Kind kind) {
+        final GameModel game = gameModelController.getGameModel();
+        // The name is validated before the preview is drawn or a file written.
+        Player.normalizeDisplayName(name);
+        gameModelDao.saveGame(file, game, kind, name,
+                SavePreview.render(game.getModel()));
     }
 
     public boolean restartMission(

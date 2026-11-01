@@ -35,4 +35,17 @@
     <entry key="corrupt">Údaje uložené hry nejsou dostupné nebo jsou neplatné</entry>
     <entry key="noQuick">Tato rozehraná hra zatím nemá rychlé uložení.</entry>
     <entry key="freePlay">Neomezená hra</entry>
+    <entry key="detailPrompt">Vyberte uloženou hru a zobrazí se její mapa a přehled.</entry>
+    <entry key="previewMissing">Náhled není k dispozici</entry>
+    <entry key="unsupported">Tato uložená hra má nepodporovaný formát a nelze ji načíst.</entry>
+    <entry key="summaryMissing">Přehled není k dispozici</entry>
+    <entry key="summaryPlayer">Hráč: %s · %s</entry>
+    <entry key="summaryYear">Rok: %s</entry>
+    <entry key="summaryGold">Zlato: %s</entry>
+    <entry key="summarySupport">Podpora nezávislosti: %s %%</entry>
+    <entry key="summaryCounts">Osoby: %s · Kolonie: %s · Lodě: %s</entry>
+    <entry key="summarySaved">Uloženo: %s</entry>
+    <entry key="currentGame">Nové uložení současné hry</entry>
+    <entry key="target">Vybrané uložení k přepsání: %s · %s</entry>
+    <entry key="targetNone">Není vybráno žádné uložení; Uložit hru vytvoří nové.</entry>
 </properties>

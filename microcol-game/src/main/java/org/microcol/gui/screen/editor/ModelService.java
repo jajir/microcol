@@ -52,7 +52,8 @@ class ModelService {
      */
     void load(final File file) {
         this.file = Preconditions.checkNotNull(file);
-        this.gameModelPo = gameModelPoDao.loadFromFile(file);
+        // The editor opens authored scenarios, never player saves.
+        this.gameModelPo = gameModelPoDao.loadScenarioFromFile(file);
         visibleAreaService.setMapSize(getMapSize());
         initCache();
     }
@@ -78,7 +79,8 @@ class ModelService {
      * Save currently loaded game model.
      */
     void save() {
-        gameModelPoDao.saveToFile(file.getAbsolutePath(), gameModelPo);
+        // The editor writes authored scenarios as plain JSON.
+        gameModelPoDao.saveScenarioToFile(file.getAbsolutePath(), gameModelPo);
     }
 
     public ModelPo getModelPo() {

@@ -43,9 +43,9 @@ public final class ScreenLoad extends AbstractScreenMenu implements GameScreen {
     public static final String BUTTON_BACK_ID = "savedGamesCancel";
 
     /**
-     * The list needs more room than the Settings column.
+     * The list and the wider detail need more room than the Settings column.
      */
-    private static final double MENU_WIDTH = 860;
+    private static final double MENU_WIDTH = 960;
 
     private static final String STYLE_SHEET_SAVED_GAMES = ScreenLoad.class
             .getResource("/gui/SavedGames.css").toExternalForm();
@@ -124,7 +124,7 @@ public final class ScreenLoad extends AbstractScreenMenu implements GameScreen {
         shown = true;
         updateLanguage(i18n);
         view = new SavedGamesView(i18n, false, recoveryOnly, this::perform,
-                null);
+                null, saves::preview);
         refresh();
         if (menuHosted) {
             toolbar.getChildren().clear();

@@ -23,6 +23,7 @@ import org.microcol.model.campaign.CampaignModule;
 import org.microcol.model.campaign.GameModelDao;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
+import org.microcol.model.campaign.po.SaveArchives;
 import org.microcol.model.campaign.store.CampaignsDao;
 import org.microcol.model.campaign.store.CampaignsPo;
 import org.microcol.model.store.PlaceMapPo;
@@ -42,7 +43,7 @@ class GameLoadRejectionTest {
     private GameModelPo data;
 
     @BeforeEach
-    void prepare() {
+    void prepare() throws Exception {
         final CampaignsDao campaigns = mock(CampaignsDao.class);
         when(campaigns.load()).thenReturn(new CampaignsPo());
         final Injector injector = Guice.createInjector(new CampaignModule(),
@@ -57,7 +58,21 @@ class GameLoadRejectionTest {
         data = files.loadFromClassPath(
                 "/maps/default-campaign-mission-2-thrive.microcol");
         source = directory.resolve("game.microcol").toFile();
-        files.saveToFile(source.getAbsolutePath(), data);
+        save(THRIVE);
+    }
+
+    private static final String THRIVE = "/maps/default-campaign-mission-2-thrive.microcol";
+
+    private static final String FREE_PLAY = "/maps/free-play.microcol";
+
+    /**
+     * Write the current data as a player save. Its metadata describe the valid
+     * authored state with the identity and campaign keys of the data, so only
+     * the game data can be wrong.
+     */
+    private void save(final String map) throws Exception {
+        files.savePlayerGame(source.getAbsolutePath(), data, SaveArchives
+                .metadata(files.loadFromClassPath(map), "Thrive", data), null);
     }
 
     private PersistingService persistingService() {
@@ -90,7 +105,7 @@ class GameLoadRejectionTest {
             throws Exception {
         data.getModel().getColonies().get(1)
                 .setName(data.getModel().getColonies().get(0).getName());
-        files.saveToFile(source.getAbsolutePath(), data);
+        save(THRIVE);
         final byte[] before = Files.readAllBytes(source.toPath());
 
         assertFalse(controller.loadModelFromFile(source));
@@ -146,13 +161,13 @@ class GameLoadRejectionTest {
     void missingIdentityAndInvalidReferencesDoNotReplaceTheGame()
             throws Exception {
         data.getModel().getGameManager().getPlayers().get(0).setName(null);
-        files.saveToFile(source.getAbsolutePath(), data);
+        save(THRIVE);
         assertRejectedSource();
 
         data = files.loadFromClassPath(
                 "/maps/default-campaign-mission-2-thrive.microcol");
         data.getModel().getUnits().get(0).setOwnerId("unknown participant");
-        files.saveToFile(source.getAbsolutePath(), data);
+        save(THRIVE);
         assertRejectedSource();
 
         verify(current, times(2)).showInvalidSavedGame();
@@ -163,7 +178,7 @@ class GameLoadRejectionTest {
     void missingNestedLocationRejectsBeforeReplacingTheCurrentGame()
             throws Exception {
         data.getModel().getUnits().get(0).setPlaceMap(new PlaceMapPo());
-        files.saveToFile(source.getAbsolutePath(), data);
+        save(THRIVE);
 
         assertRejectedSource();
         verify(current).showInvalidSavedGame();
@@ -178,7 +193,7 @@ class GameLoadRejectionTest {
                 .filter(unit -> unit.getType().isShip()
                         && !unit.getCargo().getSlots().isEmpty())
                 .findFirst().orElseThrow().getCargo().getSlots().set(0, null);
-        files.saveToFile(source.getAbsolutePath(), data);
+        save(FREE_PLAY);
 
         assertRejectedSource();
         verify(current).showInvalidSavedGame();
@@ -189,11 +204,11 @@ class GameLoadRejectionTest {
     void truncatedTerrainRowsRejectWithoutReplacingTheCurrentGame()
             throws Exception {
         final com.google.gson.JsonObject root = new com.google.gson.JsonParser()
-                .parse(Files.readString(source.toPath())).getAsJsonObject();
+                .parse(files.loadGameJson(source)).getAsJsonObject();
         final com.google.gson.JsonArray rows = root.getAsJsonObject("model")
                 .getAsJsonObject("map").getAsJsonArray("tiles");
         rows.remove(rows.size() - 1);
-        Files.writeString(source.toPath(), root.toString());
+        SaveArchives.replace(source.toPath(), "game.json", root.toString());
 
         assertRejectedSource();
         verify(current).showInvalidSavedGame();
@@ -204,11 +219,11 @@ class GameLoadRejectionTest {
     void nullTerrainRowRejectsWithoutReplacingTheCurrentGame()
             throws Exception {
         final com.google.gson.JsonObject root = new com.google.gson.JsonParser()
-                .parse(Files.readString(source.toPath())).getAsJsonObject();
+                .parse(files.loadGameJson(source)).getAsJsonObject();
         root.getAsJsonObject("model").getAsJsonObject("map")
                 .getAsJsonArray("tiles")
                 .set(1, com.google.gson.JsonNull.INSTANCE);
-        Files.writeString(source.toPath(), root.toString());
+        SaveArchives.replace(source.toPath(), "game.json", root.toString());
 
         assertRejectedSource();
         verify(current).showInvalidSavedGame();
@@ -219,11 +234,11 @@ class GameLoadRejectionTest {
     void shortTerrainRowRejectsWithoutReplacingTheCurrentGame()
             throws Exception {
         final com.google.gson.JsonObject root = new com.google.gson.JsonParser()
-                .parse(Files.readString(source.toPath())).getAsJsonObject();
+                .parse(files.loadGameJson(source)).getAsJsonObject();
         root.getAsJsonObject("model").getAsJsonObject("map")
                 .getAsJsonArray("tiles")
                 .set(1, new com.google.gson.JsonPrimitive("row-0001:_"));
-        Files.writeString(source.toPath(), root.toString());
+        SaveArchives.replace(source.toPath(), "game.json", root.toString());
 
         assertRejectedSource();
         verify(current).showInvalidSavedGame();
@@ -233,13 +248,13 @@ class GameLoadRejectionTest {
     @Test
     void unknownCampaignAndMissionDoNotReplaceTheGame() throws Exception {
         data.setCampaignName("unknown campaign");
-        files.saveToFile(source.getAbsolutePath(), data);
+        save(THRIVE);
         assertRejectedSource();
 
         data = files.loadFromClassPath(
                 "/maps/default-campaign-mission-2-thrive.microcol");
         data.setMissionName("unknown mission");
-        files.saveToFile(source.getAbsolutePath(), data);
+        save(THRIVE);
         assertRejectedSource();
 
         verify(current, times(2)).showInvalidSavedGame();
@@ -304,7 +319,7 @@ class GameLoadRejectionTest {
         verify(current).setAndStartModel(loaded.capture());
         when(current.getGameModel()).thenReturn(loaded.getValue());
         controller.writeNamedGame(source, "\u2003Přístav / první\u00a0");
-        final var saved = files.loadFromFile(source);
+        final var saved = files.loadPlayerGame(source);
         assertEquals("Přístav / první", saved.getSaveName());
         assertEquals(loaded.getValue().getPlaythroughId(),
                 saved.getPlaythroughId());
@@ -317,5 +332,65 @@ class GameLoadRejectionTest {
         verify(current).setAndStartModel(loaded.capture());
         assertEquals(saved.getPlaythroughId(),
                 loaded.getValue().getPlaythroughId());
+    }
+
+    @Test
+    void savesStoreKindSummaryAndPreviewOfTheSameState() throws Exception {
+        assertTrue(controller.loadModelFromFile(source));
+        final var loaded = org.mockito.ArgumentCaptor
+                .forClass(org.microcol.model.campaign.GameModel.class);
+        verify(current).setAndStartModel(loaded.capture());
+        when(current.getGameModel()).thenReturn(loaded.getValue());
+        final Model model = loaded.getValue().getModel();
+        final File quick = directory.resolve("quick.microcol").toFile();
+
+        controller.writeNamedGame(quick, "Quick save", SavedGames.Kind.QUICK);
+        controller.writeModelToFile(source, SavedGames.Kind.AUTOMATIC);
+
+        final var metadata = files.loadMetadata(quick);
+        assertEquals(SavedGames.Kind.QUICK, metadata.getKind());
+        assertEquals("Quick save", metadata.getSaveName());
+        assertEquals(loaded.getValue().getPlaythroughId(),
+                metadata.getPlaythroughId());
+        assertEquals(model.getCalendar().getCurrentYear(),
+                metadata.getSummary().getYear());
+        // The summary and the game data describe the same snapshot.
+        final var game = files.loadPlayerGame(quick);
+        assertEquals(game.getCampaignName(),
+                metadata.getSummary().getCampaignName());
+        assertEquals(game.getMissionName(),
+                metadata.getSummary().getMissionName());
+        assertEquals(game.getModel().getCalendar().getNumberOfPlayedTurns(),
+                model.getCalendar().getNumberOfPlayedTurns());
+        assertTrue(files.loadPreview(quick).isPresent(),
+                "A player save has its map preview");
+        assertEquals(SavedGames.Kind.AUTOMATIC,
+                files.loadMetadata(source).getKind());
+        // Without a manual name the save names the player and the year.
+        assertTrue(files.loadMetadata(source).getSaveName().contains(
+                String.valueOf(model.getCalendar().getCurrentYear())));
+        assertTrue(files.loadPreview(source).isPresent());
+    }
+
+    @Test
+    void plainJsonIsNotAPlayerSaveAndDoesNotReplaceTheGame() throws Exception {
+        files.saveScenarioToFile(source.getAbsolutePath(), data);
+
+        assertRejectedSource();
+        verify(current).showInvalidSavedGame();
+        verify(current, never()).setAndStartModel(any());
+    }
+
+    @Test
+    void unsupportedArchiveDoesNotReplaceTheGame() throws Exception {
+        final String metadata = new String(
+                SaveArchives.read(source.toPath()).get("metadata.json"),
+                java.nio.charset.StandardCharsets.UTF_8);
+        SaveArchives.replace(source.toPath(), "metadata.json", metadata
+                .replace("\"formatVersion\": 1", "\"formatVersion\": 7"));
+
+        assertRejectedSource();
+        verify(current).showInvalidSavedGame();
+        verify(current, never()).setAndStartModel(any());
     }
 }

@@ -1,9 +1,7 @@
 package org.microcol.test;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +10,7 @@ import org.microcol.page.AtlanticAuditPage;
 import org.microcol.page.EuropePortScreen;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
+import org.microcol.page.PlayerSaveFixture;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -30,10 +29,10 @@ public class TC_23_F16_atlantic_voyage_audit_test extends AbstractMicroColTest {
 
     @Start
     private void start(final Stage stage) throws Exception {
-        Files.copy(FIXTURE.toPath(),
+        // Continue opens the authored position as the latest player save.
+        PlayerSaveFixture.copyAsSave(FIXTURE,
                 Path.of(System.getProperty("user.home"), ".microcol",
-                        "autosave.microcol"),
-                StandardCopyOption.REPLACE_EXISTING);
+                        "autosave.microcol"));
         initialize(stage, getClass(), FIXTURE);
     }
 

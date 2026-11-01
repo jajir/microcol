@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.microcol.diagnostics.DiagnosticEvent;
 import org.microcol.diagnostics.DiagnosticLog;
@@ -11,11 +12,13 @@ import org.microcol.gui.FileSelectingService;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
+import org.microcol.gui.screen.game.components.SavePreview;
 import org.microcol.model.MicroColException;
 import org.microcol.model.Model;
 import org.microcol.model.TurnPreparationException;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.model.campaign.po.PersistingTool;
+import org.microcol.model.campaign.po.SaveSummaryPo;
 import org.microcol.model.campaign.po.SavedGames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,7 +143,7 @@ public class PersistingService {
     private void saveModelToFile(final File targetFile) {
         final File file = correctFileNameExtension(targetFile);
         logger.debug("Saving game to file '{}' ", file.getAbsolutePath());
-        writeModelToFile(file);
+        writeModelToFile(file, SavedGames.Kind.MANUAL);
     }
 
     private boolean loadFromFile(final File sourceFile) {
@@ -195,9 +198,10 @@ public class PersistingService {
         }
     }
 
-    private boolean writeModelToFile(final File targetFile) {
+    private boolean writeModelToFile(final File targetFile,
+            final SavedGames.Kind kind) {
         try {
-            gameController.writeModelToFile(targetFile);
+            gameController.writeModelToFile(targetFile, kind);
             preferences.setGameInProgressSaveFile(targetFile.getAbsolutePath());
             feedback(SavedGameText.saved);
             return true;
@@ -224,17 +228,46 @@ public class PersistingService {
         if (!gameModelController.isHumanTurnReady()) {
             return;
         }
+        // The detail shows the state a new save would store.
+        final var game = gameModelController.getGameModel();
+        final SaveSummaryPo current = game.getSaveSummary();
+        final byte[] currentImage = SavePreview.render(game.getModel());
+        final String suggestedName = suggestedName(current);
         while (true) {
             final List<SavedGames.Entry> entries = listSavedGames();
             if (entries == null) {
                 return;
             }
             final SavedGamesDialog.Choice choice = new SavedGamesDialog(view,
-                    texts).choose(true, entries, false);
+                    texts).chooseSave(entries, this::preview, current,
+                            currentImage, suggestedName);
             if (choice == null || perform(choice)) {
                 return;
             }
         }
+    }
+
+    /**
+     * @param entry required listed save
+     * @return its bounded preview, read only for the selected save
+     */
+    public Optional<byte[]> preview(final SavedGames.Entry entry) {
+        return savedGames.preview(entry);
+    }
+
+    private String suggestedName(final SaveSummaryPo current) {
+        String out = current.getPlayerName() + " " + current.getYear();
+        if (current.getSeason() != null) {
+            out += " " + texts.get(org.microcol.gui.Loc
+                    .getTerrainDescription(org.microcol.model.Calendar.Season
+                            .valueOf(current.getSeason())));
+        }
+        return out;
+    }
+
+    private String describeTarget(final SavedGames.Entry entry) {
+        return entry.getName() + "\n"
+                + SavedGamesView.formatTime(texts, entry.modified);
     }
 
     /**
@@ -261,22 +294,37 @@ public class PersistingService {
         try {
             switch (choice.action) {
             case SAVE:
-                return saveNamed(savedGames.target(
-                        gameModelController.getGameModel().getPlaythroughId(),
-                        false), choice.name);
+                return saveNamed(
+                        savedGames.target(gameModelController.getGameModel()
+                                .getPlaythroughId(), false),
+                        choice.name, SavedGames.Kind.MANUAL);
             case LOAD:
+                if (choice.entry.metadata == null) {
+                    return false;
+                }
                 if (loadFromFile(choice.entry.file)) {
                     eventBus.post(new ShowScreenEvent(Screen.GAME));
                     return true;
                 }
                 return false;
             case OVERWRITE:
+                // Only a catalogued manual save is a target; its stored kind
+                // grants nothing.
+                if (choice.entry == null
+                        || choice.entry.kind != SavedGames.Kind.MANUAL) {
+                    return false;
+                }
                 return confirm(texts.get(SavedGameText.overwrite) + "\n"
-                        + choice.entry.getName())
-                        && saveNamed(choice.entry.file, choice.entry.getName());
+                        + describeTarget(choice.entry))
+                        && saveNamed(choice.entry.file, choice.entry.getName(),
+                                SavedGames.Kind.MANUAL);
             case DELETE:
+                if (choice.entry == null
+                        || choice.entry.kind != SavedGames.Kind.MANUAL) {
+                    return false;
+                }
                 if (confirm(texts.get(SavedGameText.delete) + "\n"
-                        + choice.entry.getName())) {
+                        + describeTarget(choice.entry))) {
                     java.nio.file.Files.delete(choice.entry.file.toPath());
                 }
                 return false;
@@ -310,9 +358,10 @@ public class PersistingService {
         return busy;
     }
 
-    private boolean saveNamed(final File file, final String name) {
+    private boolean saveNamed(final File file, final String name,
+            final SavedGames.Kind kind) {
         try {
-            gameController.writeNamedGame(file, name);
+            gameController.writeNamedGame(file, name, kind);
             preferences.setGameInProgressSaveFile(file.getAbsolutePath());
             feedback(SavedGameText.saved);
             return true;
@@ -343,7 +392,8 @@ public class PersistingService {
             return false;
         }
         try {
-            return writeModelToFile(persistingTool.getAutoSaveFile());
+            return writeModelToFile(persistingTool.getAutoSaveFile(),
+                    SavedGames.Kind.AUTOMATIC);
         } catch (MicroColException failed) {
             gameModelController.showRecoverySaveFailure();
             return false;
@@ -362,7 +412,7 @@ public class PersistingService {
             saveNamed(
                     savedGames.target(gameModelController.getGameModel()
                             .getPlaythroughId(), true),
-                    texts.get(SavedGameText.quick));
+                    texts.get(SavedGameText.quick), SavedGames.Kind.QUICK);
         } catch (MicroColException failed) {
             gameModelController.showRecoverySaveFailure();
         }

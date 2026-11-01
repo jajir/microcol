@@ -60,23 +60,57 @@ Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověře
 
 ## Náhledy a soubor uložené hry — schváleno 31. října 2026
 
-1. [R-0383](requirements/R-0383.md), stav `new`, vlastní schválený seznam
+**Implementováno 1. listopadu 2026; cílené testy a závěrečná přejímka dávky
+čekají:** R-0382 a R-0383 jsou zapracované v kódu podle bodů níže. Až
+zaznamenané výsledky ve [funkční evidenci](functional-tests.md) jsou ověřením;
+samotná implementace jím není.
+
+1. Každá hráčská pozice (ruční, rychlá, bod obnovy, uložení při odchodu
+   i export) je ZIP s položkami `metadata.json`, `game.json` a volitelným
+   `preview.png`. `game.json` je beze změny JSON současného datového modelu.
+   Metadata nesou verzi formátu 1, verzi hry, název, druh, čas uložení v UTC,
+   identitu rozehrané hry a souhrn lidského hráče (jméno, národ, obtížnost,
+   rok a období, zlato, podporu nezávislosti, počty osob, kolonií a lodí,
+   kampaň a misi). Souhrn slouží jen k zobrazení; načtení ho nepoužije.
+2. Čtení odmítá jiné, zdvojené či adresářové položky, chybějící metadata nebo
+   hru, nepodporovanou verzi a překročení limitů 1 MiB metadat, 64 MiB hry,
+   8 MiB obrázku a 80 MiB souboru, počítané podle skutečně přečtených bajtů.
+   Náhled nad 960 × 540 px či vadný náhled se ignoruje bez zneplatnění pozice.
+3. Načíst, Importovat, Pokračovat i rychlé načtení přijímají jen úplný archiv
+   s platnými metadaty: verzí, neprázdnou identitou sestavení, názvem, druhem,
+   časem, platnou identitou rozehrané hry a úplným souhrnem. Identita a klíče
+   kampaně/mise v metadatech musí odpovídat hernímu JSONu. Prostý JSON není
+   hráčská pozice; přehled ho ukáže jako neplatný. Autorské scénáře a editor
+   používají samostatné čtení a zápis prostého JSONu stejného datového modelu.
+   Pozice bez ručního názvu dostane čitelný název ze jména hráče a data hry;
+   povinný je i u bodů obnovy a exportu. Volitelný je jen náhled.
+4. Náhled kreslí GUI bez scény JavaFX z prozkoumaných polí lidského hráče
+   v barvách minimapy; jednotky, kolonie ani dialogy neobsahuje. Souhrn
+   a náhled vznikají ze stejného stavu jako `game.json`.
+5. Načíst hru má seznam vlevo a detail vpravo v poměru přibližně 1 : 2.
+   Řádek ukazuje název (dlouhý zkrácený), druh a čas uložení; detail celý
+   název, náhled nebo „Náhled není k dispozici“ a souhrn. Bez výběru vyzve
+   k volbě a Načíst hru je neaktivní; změna filtru či zmizení pozice detail
+   vymaže. Nečitelná či nepodporovaná pozice ukáže důvod a nelze ji potvrdit.
+6. Uložit ukazuje stav nového uložení se souhrnem a náhledem, předvyplněný
+   upravitelný název a zvlášť vybraný cíl přepsání. Potvrzení přepsání
+   i smazání uvádí název a čas cílové pozice.
+
+7. [R-0383](requirements/R-0383.md), stav `ready for development`, vlastní schválený seznam
    uložených pozic vlevo a náhled mapy se souhrnem vpravo. Výběr pouze zobrazí
    detail; teprve Načíst hru ověří a aktivuje pozici. Souhrn obsahuje národ,
    zlato, rok, podporu nezávislosti a počty vlastních osob, kolonií a lodí.
    Náhled respektuje znalost mapy v uloženém okamžiku.
-2. [R-0382](requirements/R-0382.md), stav `new`, vlastní ukládání a formát souboru.
+8. [R-0382](requirements/R-0382.md), stav `ready for development`, vlastní ukládání a formát souboru.
    Výslovně zachovat osvědčený postup: herní stav se převede na perzistenční
    datový model a ten do JSONu; načtení provede opačný převod s modelovou
    validací. Nový `.microcol` je pouze ZIP obálka pro `metadata.json`, dosavadní
    herní JSON v `game.json` a `preview.png`. Seznam čte samostatná metadata;
    údaje pro hru nadále určuje úplný datový model. Zachová se atomický zápis,
    ochrana rozpracované hry a zákaz změny souboru pouhým otevřením.
-3. Na žádost uživatele je načítací obrazovka samostatným rozsahem R-0383;
+9. Na žádost uživatele je načítací obrazovka samostatným rozsahem R-0383;
    R-0382 nadále vlastní význam uložených počtů, tvorbu náhledu, ukládání a formát.
-   Vložení do stránek a návraty vlastní R-0377. Jde o budoucí chování;
-   níže popsaná implementace zatím náhledy ani ZIP obálku nemá. Schválení
-   návrhu neznamená zahájení implementace ani změnu četnosti autosave.
+   Vložení do stránek a návraty vlastní R-0377. Četnost autosave se nemění.
 
 ## Co už existuje
 
@@ -149,7 +183,7 @@ rozhraní v angličtině; nejde o maketu. České ovládací texty pokrývá tak
    Unicode mezery se oříznou, vnitřní mezery, diakritika a interpunkce zůstanou.
    Název musí mít 1–64 Unicode znaků bez řídicích znaků. Název není cesta.
 2. Vybrané ruční uložení lze výslovně přepsat nebo smazat. Obě operace mají
-   potvrzení s názvem cíle. Rychlé a automatické pozice takto přepsat ani
+   potvrzení s názvem a časem cíle. Rychlé a automatické pozice takto přepsat ani
    smazat nelze. Chyba zápisu ponechá starý soubor a nabídne další pokus.
 3. **F5 / Rychle uložit** zapíše jeden rychlý bod dané rozehrané hry. Nová
    hra dostane vlastní identitu; načtení uložené hry ji zachová. Jména a
@@ -172,11 +206,13 @@ rozhraní v angličtině; nejde o maketu. České ovládací texty pokrývá tak
 [Zdroj PlantUML](diagrams/save-load/load.puml)
 
 1. Jeden seznam nabízí filtr Všechna uložení / Ruční / Rychlé / Body obnovy.
-   Řádky jsou od nejnovějšího a ukazují název, typ, skutečný čas zápisu,
-   misi, rok, obtížnost, jméno hráče a jeho národ.
+   Řádky jsou od nejnovějšího a ukazují název, typ a skutečný čas uložení;
+   misi, rok, obtížnost, jméno hráče, národ a další souhrn ukazuje detail
+   vybrané pozice (R-0383).
    Chybějící soubory se nevypisují; prázdný filtr má vlastní vysvětlení.
 2. Poškozené údaje nezablokují prohlížení ostatních řádků. Výběr souboru
-   je pouze čtení. Až Načíst rekonstruuje a ověří celý kandidátní stav;
+   je pouze čtení. Nečitelnou nebo nepodporovanou pozici nelze potvrdit.
+   Až Načíst rekonstruuje a ověří celý kandidátní stav;
    chyba se ohlásí nad stránkou Načíst, která zůstane otevřená pro jinou
    volbu, a zachová původní hru i zdroj (R-0377).
 3. **Importovat soubor** otevírá systémový výběr. Zrušení přehledu,
@@ -208,5 +244,6 @@ rozhraní v angličtině; nejde o maketu. České ovládací texty pokrývá tak
 4. První implementace se ptá vždy, když existuje aktivní hra. Rozpoznávání
    nezměněného stavu je odložené vylepšení; nevydáváme pohyb kamery za změnu
    herního postupu ani netvrdíme, že sledování změn už existuje.
-5. Cloud, náhledové obrázky, grafické seskupování podle rozehrané hry a
-   dodatečná rotace checkpointů nejsou součástí této implementace.
+5. Cloud, grafické seskupování podle rozehrané hry a dodatečná rotace
+   checkpointů nejsou součástí této implementace. Náhledy a souhrny popisuje
+   [oddíl R-0382/R-0383](#nahledy-a-soubor-ulozene-hry-schvaleno-31-rijna-2026).

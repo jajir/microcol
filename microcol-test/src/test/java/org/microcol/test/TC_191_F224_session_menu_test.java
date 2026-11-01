@@ -8,6 +8,7 @@ import org.microcol.model.Location;
 import org.microcol.page.ColonyScreen;
 import org.microcol.page.DeveloperModePage;
 import org.microcol.page.EuropePortScreen;
+import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.FreePlaySetupPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.DialogMessagePage;
@@ -310,5 +311,104 @@ public class TC_191_F224_session_menu_test extends AbstractMicroColTest {
         new DeveloperModePage(getContext()).verifyText("freePlayPlayerName",
                 "Ocean");
         setup.back().verifyMainScreen();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_save_and_load_show_preview_summary_and_safe_choices()
+            throws Exception {
+        // Import a known position; Save shows the current game apart from any
+        // old target.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        game.waitWhileMoving();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        final HostedPanelPage hosted = new HostedPanelPage(getContext());
+        final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        saves.rememberGame();
+        saves.openSave();
+        saves.verifySaveTarget("New save of the current game",
+                "No existing save is selected");
+        saves.verifyPreview(true);
+        saves.verifySummaryLines("Year: 1508", "Gold: ", "Rebel support: ",
+                "People: ", "Colonies: ", "Ships: ");
+        saves.verifySuggestedName("1508");
+        saves.captureDialog("savedGamesList", "r0382-save-current-en.png");
+        saves.saveName("Harbour before the storm");
+        saves.verifySavedName("Harbour before the storm", 1);
+        saves.verifyStoredSummaryMatchesGame("Harbour before the storm");
+        saves.openSave();
+        saves.saveName("Future format");
+        saves.openSave();
+        saves.saveName("Removed later");
+        saves.verifyGameUnchanged();
+
+        // A selected old save is only the overwrite target; its confirmation
+        // names it with its time.
+        saves.openSave();
+        saves.select("Harbour before the storm");
+        saves.verifySaveTarget("New save of the current game",
+                "Selected save to overwrite: Harbour before the storm");
+        saves.action("overwriteSave");
+        saves.verifyOverwriteConfirmation("Harbour before the storm");
+        saves.action("saveCancel");
+        saves.cancelBrowser();
+        saves.verifyGameUnchanged();
+
+        // Load starts without a selection; selecting shows only the detail.
+        saves.openLoad();
+        hosted.verifyInGameHosted("Load game");
+        saves.verifyNoSelectedDetail(
+                "Select a saved game to see its map and summary.");
+        saves.select("Harbour before the storm");
+        saves.verifyDetailName("Harbour before the storm");
+        saves.verifyPreview(true);
+        saves.verifySelectedDetails("Dutch", "1508", "Conquistador");
+        saves.verifyLoadEnabled(true);
+        saves.captureDialog("savedGamesList", "r0383-load-detail-en.png");
+        saves.verifyGameUnchanged();
+
+        // A filter without the selected save clears its detail and action.
+        hosted.chooseFilter("saveFilterQUICK");
+        saves.verifyNoSelectedDetail(
+                "Select a saved game to see its map and summary.");
+        hosted.chooseFilter("saveFilterMANUAL");
+        saves.verifyNoSelectedDetail(
+                "Select a saved game to see its map and summary.");
+        hosted.click("savedGamesCancel");
+
+        // An unsupported save names the reason and cannot be confirmed.
+        saves.markUnsupported("Future format");
+        saves.openLoad();
+        saves.selectMarked();
+        audit.verifyLoadDisabled(
+                "This saved game uses an unsupported format and cannot be loaded.");
+        saves.verifyGameUnchanged();
+
+        // A save removed behind the list fails safely and keeps the game.
+        saves.select("Removed later");
+        saves.deleteBehindList("Removed later");
+        saves.action("loadSelected");
+        DialogMessagePage.of(getContext()).close();
+        audit.verifyLoadPageOpen();
+        saves.verifyGameUnchanged();
+        hosted.click("savedGamesCancel");
+
+        // A missing or damaged image explains itself; the save still loads.
+        saves.removePreview("Harbour before the storm");
+        saves.openLoad();
+        saves.select("Harbour before the storm");
+        saves.verifyPreview(false);
+        saves.verifyLoadEnabled(true);
+        hosted.click("savedGamesCancel");
+        saves.damagePreview("Harbour before the storm");
+        saves.openLoad();
+        saves.select("Harbour before the storm");
+        saves.verifyPreview(false);
+        saves.verifyLoadEnabled(true);
+        saves.captureDialog("savedGamesList", "r0383-load-no-preview-en.png");
+        saves.action("loadSelected");
+        saves.action("saveDiscard");
+        game.verifyGameInFront();
+        saves.verifyRestoredGame();
     }
 }

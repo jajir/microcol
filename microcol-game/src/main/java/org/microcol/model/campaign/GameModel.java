@@ -37,6 +37,14 @@ public final class GameModel {
         }
     }
 
+    /**
+     * @return overview of the current state as a new save would store it
+     */
+    public org.microcol.model.campaign.po.SaveSummaryPo getSaveSummary() {
+        return org.microcol.model.campaign.po.SaveSummaryPo.describe(model,
+                campaign.getName().toString(), campaignMission.getName());
+    }
+
     public boolean isCampaignMission() {
         return campaign.getName().equals(CampaignNames.defaultCampaign);
     }

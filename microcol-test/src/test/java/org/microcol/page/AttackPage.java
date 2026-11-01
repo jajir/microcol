@@ -114,10 +114,13 @@ public final class AttackPage extends AbstractScreen {
     }
 
     public void replaceGame(final java.io.File fixture) {
+        // A player load accepts only player saves; convert outside the FX
+        // thread so an invalid fixture fails here with its path.
+        final java.io.File save = PlayerSaveFixture.toPlayerSave(fixture);
         getRobot().interact(() -> getContext()
                 .getClassFromGuice(
                         org.microcol.gui.event.model.GameController.class)
-                .loadModelFromFile(fixture));
+                .loadModelFromFile(save));
         WaitForAsyncUtils.waitForFxEvents();
     }
 

@@ -19,6 +19,26 @@
     -fx-background-color: #DFBD91;
     -fx-text-fill: black;
 }
+.saved-games .saved-game-detail {
+    -fx-border-color: #302D27;
+    -fx-border-width: 1.25;
+    -fx-padding: 10;
+}
+.saved-games .saved-game-name {
+    -fx-font-weight: bold;
+    -fx-text-fill: #302D27;
+}
+.saved-games .saved-game-preview {
+    -fx-background-color: #E8E6D5;
+    -fx-border-color: #302D27;
+    -fx-border-width: 1;
+    -fx-padding: 1;
+    -fx-min-height: 60;
+}
+.saved-games .saved-game-preview .label {
+    -fx-text-fill: #302D27;
+    -fx-padding: 12;
+}
 .saved-games .menu-button .arrow-button {
     -fx-background-color: transparent;
     -fx-padding: 0 7 0 7;

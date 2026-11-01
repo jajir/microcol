@@ -1,6 +1,7 @@
 package org.microcol.page;
 
 import org.microcol.MicroColApplication;
+import org.microcol.gui.FileSelectingService;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.game.gamepanel.Area;
 import org.microcol.gui.screen.game.gamepanel.GamePanelPainter;
@@ -37,7 +38,24 @@ public class TestContext {
         return primaryStage;
     }
 
+    /**
+     * The stubbed file chooser of the test. The game uses a chooser that
+     * forwards to it and passes chosen authored scenarios as player saves.
+     */
+    private FileSelectingService stubbedChooser;
+
+    /**
+     * @param stubbed optional chooser that scenarios and fixtures stub
+     */
+    public void useStubbedChooser(final FileSelectingService stubbed) {
+        stubbedChooser = stubbed;
+    }
+
     public <T> T getClassFromGuice(final Class<T> clazz) {
+        if (clazz == FileSelectingService.class && stubbedChooser != null) {
+            // Fixtures stub and verify the chooser behind the game's one.
+            return clazz.cast(stubbedChooser);
+        }
         final T t = getMicroCol().getInjector().getInstance(clazz);
         return Preconditions.checkNotNull(t);
     }

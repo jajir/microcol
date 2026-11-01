@@ -296,10 +296,12 @@ public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
         ExpertPurchasePage purchase = new ExpertPurchasePage(getContext());
         purchase.verifyOffer(true, "");
         org.microcol.model.Model previous = getModel();
+        final File save = org.microcol.page.PlayerSaveFixture
+                .toPlayerSave(FIXTURE);
         getContext().getRobot()
                 .interact(() -> getContext().getClassFromGuice(
                         org.microcol.gui.event.model.GameController.class)
-                        .loadModelFromFile(FIXTURE));
+                        .loadModelFromFile(save));
         purchase.confirm();
         purchase.verifyUnavailableWarning();
         purchase.closeUnavailableWarning();
