@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Automatic trade-route events in the turn report — 2026-11-01
+
+1. [R-0392](R-0392.md) captures per-event reporting of actual automatic route transactions and transfers. Status: `new`; scope clarified by the user to goods and money only, with no open questions. No implementation authorized.
+
 ## Plowing countdown in the unit panel — 2026-11-01
 
 1. [R-0391](R-0391.md), status `ready for development`, prepares the user-selected text countdown for UX-20 under A03, using existing A05 work state and A04 turn/save continuity. Implementation is not started or authorized by this preparation request.

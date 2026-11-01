@@ -286,6 +286,8 @@ This matrix does not establish the implementation of terrain defense in combat, 
 
 ### Automated trade routes
 
+**Agreed 2026-11-01 (user clarification):** each actual automatic route purchase/sale or goods load/unload must appear in the owner’s turn report, with actual goods quantity and any net treasury change. A European transaction has one record covering both goods and money; zero transfers produce no successful-transfer record. Passenger transport is outside this scope. This is an agreed requirement, not verified implementation; [R-0392](requirements/R-0392.md) owns acceptance and save/load duplicate prevention.
+
 | ID | Manual (printed / PDF) | Expected rule | Current implementation and gap | Status | Acceptance / evidence |
 | --- | --- | --- | --- | --- | --- |
 | ROUTE-001 | 28 / 34 | Create a named land/sea route starting from a colony, with up to four ordered reachable destinations. | [Model](../microcol-game/src/main/java/org/microcol/model/Model.java) and its persisted [ModelPo](../microcol-game/src/main/java/org/microcol/model/store/ModelPo.java) contain players, map, units, colonies, calendar and events, but no route collection or itineraries; [ScreenGamePresenter](../microcol-game/src/main/java/org/microcol/gui/screen/game/ScreenGamePresenter.java) has no route editor. | Missing | Proposed: create/save/load routes, enforce four stops, and filter stops by land/sea reachability, allowing Europe for an appropriate sea route. |
