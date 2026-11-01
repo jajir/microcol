@@ -34,9 +34,13 @@ Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověře
    herního postupu. Předvolby se ukládají samostatně. Herní akce, rozkazy,
    obchod a zpracování tahu změnou jsou; nestačí sledovat pohyb jednotek.
 3. Odchod nabídne Uložit a pokračovat / Odejít bez uložení / Zpět, pouze je-li
-   to potřeba. Uložení musí uspět před přechodem; chyba zachová partii i starý
-   platný soubor. Zůstávají oddělené ruční pozice, rychlý slot dané partie
-   a body obnovy. Pouhé načtení zdrojový soubor nepřepisuje.
+   to potřeba. **Upřesnění uživatele 1. listopadu 2026:** Ano / Uložit a pokračovat
+   otevře běžný ruční dialog Uložit, kde hráč vybere cílovou pozici nebo potvrdí
+   její přepsání. Platí i pro ⌘Q, zavření okna a ostatní opuštění živé partie.
+   Tichý autosave ani zápis poslední pozice tuto volbu nenahrazuje. Původní
+   odchod pokračuje až po úspěšném uložení; Zrušit, Escape, zavření dialogu
+   nebo chyba zápisu ponechá hru i okno otevřené. Zůstávají oddělené ruční
+   pozice, rychlý slot a body obnovy. Zdroj načtené hry se nikdy nepřepíše potichu.
 4. Při zapnutém autosave vznikne počáteční bezpečný checkpoint a potom
    uložení každého připraveného lidského tahu po dokončení zpracování světa.
    Nejde o každý pohyb jednotky. Pokud nová partie dosud nemá uloženou kopii
