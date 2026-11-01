@@ -3,6 +3,7 @@ package org.microcol.test;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -160,8 +161,8 @@ public class TC_43_F34_recovery_points_test extends AbstractMicroColTest {
         // Return to the menu and inspect the localized recovery chooser.
         setting.goBack().verifyMainScreen();
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
-        audit.verifyRecoveryMenuLabel("Body obnovy");
         audit.openRecoveryChooser();
+        new HostedPanelPage(getContext()).verifyFilterLabel("Body obnovy");
         audit.verifyRecoveryChooserLabels("Uložené hry", "Načíst hru", "Zpět");
         audit.captureDialog("savedGamesCancel", "recovery-chooser-czech.png");
         audit.cancelRecovery();
@@ -234,5 +235,61 @@ public class TC_43_F34_recovery_points_test extends AbstractMicroColTest {
         hosted.verifyLoadClosed();
         audit.verifyCurrentTurn(18);
         audit.verifyRecoveryBytesUnchanged();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_load_game_replaces_recovery_menu_entry() throws Exception {
+        // The English menu keeps its order without Recovery points.
+        final WelcomePage welcome = WelcomePage.of(getContext());
+        final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        final HostedPanelPage hosted = new HostedPanelPage(getContext());
+        welcome.verifyMenuEntries(List.of("Continue", "Load saved game",
+                "Play campaign", "New free play game", "Hall of Fame",
+                "Setting", "Quit MicroCol"));
+
+        // Tab to Load game and open it with Space; all save types are shown.
+        welcome.tabToMenuButton("buttonLoad");
+        welcome.verifyMenuButtonFocused("buttonLoad");
+        hosted.press(KeyCode.SPACE);
+        audit.verifyLoadPageOpen();
+        hosted.verifyFilterLabel("All saves");
+
+        // Choose Recovery points with the keyboard; the empty view explains
+        // itself.
+        hosted.chooseFilterWithKeyboard("saveFilterAUTOMATIC");
+        hosted.verifyFilterLabel("Recovery points");
+        hosted.verifyEmptyListExplained("No saved games in this view.");
+
+        // Back returns to the menu without writing any recovery point.
+        audit.cancelRecovery();
+        welcome.verifyMainScreen();
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_TURN);
+        audit.verifyRecoveryAbsent(RecoverySlot.PREVIOUS_DECADE);
+
+        // The Czech menu has the same order without Body obnovy.
+        final SettingPage setting = welcome.openSetting();
+        setting.setCzechLanguage();
+        setting.goBack().verifyMainScreen();
+        welcome.verifyMenuEntries(List.of("Pokračovat", "Nahrát hru",
+                "Spustit kampaň", "Nová neomezená hra", "Síň slávy",
+                "Nastavení", "Ukončit hru"));
+
+        // The platform shortcut opens Load game with the Czech recovery
+        // filter.
+        hosted.pressShortcut(KeyCode.O);
+        audit.verifyLoadPageOpen();
+        hosted.chooseFilter("saveFilterAUTOMATIC");
+        hosted.verifyFilterLabel("Body obnovy");
+        hosted.verifyEmptyListExplained(
+                "V tomto přehledu nejsou žádné uložené hry.");
+
+        // Escape returns to the menu and still writes nothing.
+        hosted.press(KeyCode.ESCAPE);
+        welcome.verifyMainScreen();
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
+        audit.verifyRecoveryAbsent(RecoverySlot.LATEST_TURN);
+        audit.verifyRecoveryAbsent(RecoverySlot.PREVIOUS_DECADE);
     }
 }

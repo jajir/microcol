@@ -11,7 +11,7 @@
 
 ## Ordered development resumed — 2026-11-01
 
-R-0378 implementation and requirement-specific verification are complete: 4,814 model/JUnit, 38 targeted Docker and 3 native macOS tests passed with zero failures/errors/skips. Status stays `ready for development` pending the explicitly deferred final batch smoke. R-0377 implementation and targeted verification are complete under the explicit baseline artwork exception; status remains `ready for development` pending final batch smoke. R-0376 is next. [Evidence](../functional-tests.md#r-0378-implemented-and-verified-2026-11-01).
+R-0378 implementation and requirement-specific verification are complete: 4,814 model/JUnit, 38 targeted Docker and 3 native macOS tests passed with zero failures/errors/skips. Status stays `ready for development` pending the explicitly deferred final batch smoke. R-0377 implementation and targeted verification are complete under the explicit baseline artwork exception; status remains `ready for development` pending final batch smoke. R-0376 implementation and targeted verification are also complete under the same exception; final batch smoke remains pending. R-0228 is next. [Evidence](../functional-tests.md#r-0378-implemented-and-verified-2026-11-01).
 
 1. The user resumed R-0378, then R-0377, R-0376, R-0228, R-0227, R-0225, R-0221, R-0216, R-0211, R-0382 and R-0383 in that order, using Claude for implementation and repairs.
 2. Explicit task-specific acceptance amendment: run the fixed smoke/support selection once at the end of this batch, not after every requirement. Model/JUnit, targeted UI, required platform checks, review and documentation validation remain applicable. The final combined smoke result must be recorded separately; it is not yet a pass. The pause recorded below is historical.
@@ -300,7 +300,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0239](R-0239.md) | Upload runnable Steam depots and launch options | New capture | P32 SteamPipe technical scope |
 | [R-0240](R-0240.md) | Verify Steam install, offline play and update recovery | New capture | P32 Steam-installed customer paths |
 | [R-0241](R-0241.md) | Review, launch and support the Steam release | New capture | P32 publisher operations and initial support |
-| [R-0376](R-0376.md) | Remove the separate Recovery points main-menu entry; retain recovery through Load game | New capture | User request, 2026-10-31; R-0298 shared save browser |
+| [R-0376](R-0376.md) | Remove duplicate Recovery points main-menu entry; retain Load recovery filter | Ready for development; implemented, final batch smoke pending | Targeted checks passed; baseline artwork exception, 2026-11-01 |
 
 ## A02
 

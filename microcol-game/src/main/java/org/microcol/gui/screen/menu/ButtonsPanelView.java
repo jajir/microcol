@@ -31,8 +31,6 @@ public final class ButtonsPanelView
 
     public static final String BUTTON_CONTINUE_ID = "buttonContinue";
 
-    public static final String BUTTON_RECOVERY_ID = "buttonRecovery";
-
     public static final String BUTTON_LOAD_ID = "buttonLoad";
 
     public static final String BUTTON_PLAY_CAMPAIGN_ID = "buttonCampaign";
@@ -43,10 +41,13 @@ public final class ButtonsPanelView
 
     public static final String BUTTON_HALL_OF_FAME_ID = "buttonHallOfFame";
 
-    private final Button buttonContinue = ActionButtons.button(ButtonIcon.PLAY);
+    /**
+     * Columns of menu-icons.png in button order; column 1 holds the recovery
+     * artwork, which no longer has a main-menu entry (R-0376).
+     */
+    private static final int[] ICON_COLUMNS = { 0, 2, 3, 4, 5, 6, 7 };
 
-    private final Button buttonRecovery = ActionButtons
-            .button(ButtonIcon.RECOVER);
+    private final Button buttonContinue = ActionButtons.button(ButtonIcon.PLAY);
 
     private final Button buttonLoad = ActionButtons.button(ButtonIcon.FOLDER);
 
@@ -70,7 +71,6 @@ public final class ButtonsPanelView
     @Inject
     ButtonsPanelView(final ImageProvider images) {
         buttonContinue.setId(BUTTON_CONTINUE_ID);
-        buttonRecovery.setId(BUTTON_RECOVERY_ID);
         buttonLoad.setId(BUTTON_LOAD_ID);
         buttonPlayCampaign.setId(BUTTON_PLAY_CAMPAIGN_ID);
         buttonStartFreeGame.setId(BUTTON_START_FREE_GAME_ID);
@@ -79,7 +79,6 @@ public final class ButtonsPanelView
         buttonExitMicroCol.setId(BUTTON_EXIT_ID);
         buttonsBox.getStyleClass().add("game-menu-inner");
         buttonsBox.getChildren().add(buttonContinue);
-        buttonsBox.getChildren().add(buttonRecovery);
         buttonsBox.getChildren().add(buttonLoad);
         buttonsBox.getChildren().add(buttonPlayCampaign);
         buttonsBox.getChildren().add(buttonStartFreeGame);
@@ -93,7 +92,8 @@ public final class ButtonsPanelView
             button.setMinWidth(0);
             button.setMaxWidth(Region.USE_PREF_SIZE);
             final ImageView icon = new ImageView(icons);
-            icon.setViewport(new Rectangle2D(index * 96, 0, 96, 96));
+            icon.setViewport(
+                    new Rectangle2D(ICON_COLUMNS[index] * 96, 0, 96, 96));
             icon.setFitWidth(32);
             icon.setFitHeight(32);
             icon.setMouseTransparent(true);
@@ -133,7 +133,6 @@ public final class ButtonsPanelView
     @Override
     public void updateLanguage(final I18n i18n) {
         buttonContinue.setText(i18n.get(GameMenu.buttonContinue));
-        buttonRecovery.setText(i18n.get(GameMenu.buttonRecovery));
         // Name the platform shortcut: Command-O on macOS, Ctrl+O elsewhere.
         buttonLoad.setText(i18n.get(GameMenu.buttonLoadSave,
                 new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN)
@@ -166,10 +165,6 @@ public final class ButtonsPanelView
      */
     public Button getButtonContinue() {
         return buttonContinue;
-    }
-
-    public Button getButtonRecovery() {
-        return buttonRecovery;
     }
 
     /**

@@ -6,13 +6,13 @@ Níže je smlouva implementovaného chování. Výsledky testů patří do
 [funkční evidence](functional-tests.md), původní prohlídka zdrojů a kontrola
 návrhových diagramů zůstává v [publikační evidenci](publishing.md#r-0298-save-load-navigation-2026-10-26).
 
-**Zachycená změna z 31. října 2026:** [R-0376](requirements/R-0376.md)
-požaduje odstranit samostatnou položku Body obnovy z hlavní nabídky. Obnova
-zůstane dostupná přes Načíst hru a stávající filtr; ukládání bodů se nemění.
-Požadavek je ve stavu `new`, dosud není implementován. Níže popsaná současná
-navigace proto tuto položku stále obsahuje.
+**Implementováno 1. listopadu 2026; závěrečný smoke série čeká:**
+[R-0376](requirements/R-0376.md) odstraňuje samostatnou položku Body obnovy
+z hlavní nabídky. Obnova je dostupná přes Načíst hru a stávající filtr Body
+obnovy; ukládání bodů, nastavení autosave a Pokračovat se nemění. Navigace
+níže už tuto položku neobsahuje.
 
-**Kandidát implementace z 1. listopadu 2026, dosud bez přejímky:**
+**Implementováno 1. listopadu 2026; závěrečný smoke série čeká:**
 [R-0377](requirements/R-0377.md) vkládá Nastavení a Načíst hru do hlavního
 okna. Obrazovka, která je otevřela, určuje hostitele (mořská oblast menu nebo
 herní rám) i návrat tlačítkem Zpět a klávesou Esc. Načíst otevírá také ⌘O na
@@ -22,14 +22,7 @@ Chyba načtení, zrušený výběr souboru i zrušená ochrana postupu ponechaj�
 stránku otevřenou. Zkratky nereagují při psaní do textového pole, při
 otevřeném dialogu, nabídce či výběru souboru ani během souborové operace.
 
-Jde o popis kandidátního kódu, nikoli o ověřené chování: přejímka (model/JUnit,
-cílené Docker/Xvfb scénáře, nativní kontrola ⌘O/⌘S na macOS a prohlídka
-snímků) dosud neproběhla úspěšně a výsledky patří do
-[funkční evidence](functional-tests.md). Nejistá zůstává zejména geometrie
-mořského panelu v nejmenším oknu a délka popisku tlačítka Načíst v úzkém
-sloupci menu. Text níže platí po přejímce s touto změnou; snímky a diagramy
-z 26. října zachycují předchozí dialogový přehled. Odstranění samostatné
-položky Body obnovy stále vlastní R-0376.
+Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověření má pouze známé selhání kontrastu FRIGATE, pro které uživatel schválil [výjimku pro tuto sérii](publishing.md#local-acceptance-policy). Nativní macOS ověření je pouze volitelné ruční ověření. Přesné výsledky vlastní [funkční evidence](functional-tests.md). Historické snímky a diagramy z 26. října zachycují předchozí dialogový přehled.
 
 ## Pravidla ukládání schválená 1. listopadu 2026
 
@@ -106,8 +99,8 @@ rozhraní v angličtině; nejde o maketu. České ovládací texty pokrývá tak
 [Zdroj PlantUML](diagrams/save-load/navigation.puml)
 
 1. Hlavní nabídka zachovává Pokračovat, Načíst, Novou neomezenou hru, Kampaň,
-   Síň slávy, Nastavení a Ukončit. Body obnovy jsou zkratkou do stejného
-   seznamu jako Načíst, s předvoleným filtrem automatických pozic.
+   Síň slávy, Nastavení a Ukončit. Samostatná položka Body obnovy již
+   není (R-0376); body obnovy ukáže filtr Body obnovy na stránce Načíst.
 2. Herní nabídka obsahuje Zpět do hry, Uložit, Načíst, Rychle uložit, Rychle
    načíst, Nastavení, Hlavní nabídku a Ukončit. V kampani navíc nabízí
    **Začít misi znovu**, která po potvrzení otevře původní scénář mise.

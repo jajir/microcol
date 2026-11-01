@@ -10,7 +10,7 @@ state "Chyba načtení\npůvodní hra i soubor zůstávají" as Error
 state "O: Ochrana postupu\npouze pokud je aktivní hra" as Guard
 state "Aktivovat ověřenou hru" as Activate
 state "Mapa\nGAME" as Game
-Caller --> List : Načíst / Body obnovy
+Caller --> List : Načíst
 List --> Caller : Zpět / Esc
 List --> Import : Importovat soubor
 Import --> Caller : zrušit

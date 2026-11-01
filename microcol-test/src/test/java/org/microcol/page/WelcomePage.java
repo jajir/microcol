@@ -12,12 +12,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 
 import org.microcol.gui.screen.menu.ButtonsPanelView;
 import org.testfx.util.WaitForAsyncUtils;
 
 public class WelcomePage extends AbstractMenuScreen {
+
+    /** Main-menu buttons from top to bottom. */
+    private static final List<String> MENU_IDS = List.of("buttonContinue",
+            "buttonLoad", "buttonCampaign", "buttonStartFreeGame",
+            "buttonHallOfFame", "buttonSetting", "buttonExit");
 
     public static WelcomePage of(final TestContext context) {
         return new WelcomePage(context);
@@ -73,20 +79,20 @@ public class WelcomePage extends AbstractMenuScreen {
     public void verifyOpeningControls(final boolean czech,
             final boolean iconsOnly) {
         getRobot().interact(() -> {
-            final List<String> ids = List.of("buttonContinue", "buttonRecovery",
-                    "buttonLoad", "buttonCampaign", "buttonStartFreeGame",
-                    "buttonHallOfFame", "buttonSetting", "buttonExit");
+            final List<String> ids = MENU_IDS;
             // Load names the platform shortcut: Command on macOS, Ctrl
             // elsewhere.
             final String load = isMacPlatform() ? " (⌘O)" : " (Ctrl+O)";
             final List<String> labels = czech
-                    ? List.of("Pokračovat", "Body obnovy", "Nahrát hru" + load,
+                    ? List.of("Pokračovat", "Nahrát hru" + load,
                             "Spustit kampaň", "Nová neomezená hra", "Síň slávy",
                             "Nastavení", "Ukončit hru")
-                    : List.of("Continue", "Recovery points",
-                            "Load saved game" + load, "Play campaign",
-                            "New free play game", "Hall of Fame", "Setting",
-                            "Quit MicroCol");
+                    : List.of("Continue", "Load saved game" + load,
+                            "Play campaign", "New free play game",
+                            "Hall of Fame", "Setting", "Quit MicroCol");
+            // Each button keeps its artwork; column 1 is the retired
+            // Recovery points entry (R-0376).
+            final List<Integer> columns = List.of(0, 2, 3, 4, 5, 6, 7);
             final VBox column = getNodeFinder().lookup(".game-menu-inner")
                     .queryAs(VBox.class);
             assertEquals(ids.size(), column.getChildren().size());
@@ -107,7 +113,8 @@ public class WelcomePage extends AbstractMenuScreen {
                 final ImageView icon = (ImageView) button.getGraphic();
                 assertEquals(32, icon.getFitWidth(), 0.01);
                 assertEquals(32, icon.getFitHeight(), 0.01);
-                assertEquals(i * 96, icon.getViewport().getMinX(), 0.01);
+                assertEquals(columns.get(i) * 96, icon.getViewport().getMinX(),
+                        0.01);
                 assertEquals(
                         iconsOnly ? ContentDisplay.GRAPHIC_ONLY
                                 : ContentDisplay.LEFT,
@@ -151,6 +158,50 @@ public class WelcomePage extends AbstractMenuScreen {
             assertTrue(((ImageView) title.getGraphic()).getImage().getUrl()
                     .endsWith("menu-title-waves.png"));
         });
+    }
+
+    /**
+     * The menu shows exactly these labels in order, without a separate Recovery
+     * points entry. Load also names the platform shortcut: Command on macOS,
+     * Ctrl elsewhere.
+     *
+     * @param labels expected labels, Load without its shortcut
+     */
+    public void verifyMenuEntries(final List<String> labels) {
+        final String load = isMacPlatform() ? " (⌘O)" : " (Ctrl+O)";
+        getRobot().interact(() -> {
+            final VBox column = getNodeFinder().lookup(".game-menu-inner")
+                    .queryAs(VBox.class);
+            assertEquals(MENU_IDS.size(), column.getChildren().size());
+            for (int i = 0; i < MENU_IDS.size(); i++) {
+                final Button button = (Button) column.getChildren().get(i);
+                assertEquals(MENU_IDS.get(i), button.getId());
+                assertEquals(
+                        labels.get(i) + (ButtonsPanelView.BUTTON_LOAD_ID
+                                .equals(MENU_IDS.get(i)) ? load : ""),
+                        button.getText());
+            }
+            assertTrue(getNodeFinder().lookup("#buttonRecovery").queryAll()
+                    .isEmpty(), "No separate Recovery points entry");
+        });
+    }
+
+    /** Move keyboard focus with Tab until the given menu button has it. */
+    public void tabToMenuButton(final String id) {
+        for (int i = 0; i <= 2 * MENU_IDS.size() && !isFocused(id); i++) {
+            getRobot().push(KeyCode.TAB);
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+    }
+
+    public void verifyMenuButtonFocused(final String id) {
+        assertTrue(isFocused(id), id + " has keyboard focus");
+    }
+
+    private boolean isFocused(final String id) {
+        final javafx.scene.Node owner = getContext().getPrimaryStage()
+                .getScene().getFocusOwner();
+        return owner != null && id.equals(owner.getId());
     }
 
     public SettingPage openSetting() {

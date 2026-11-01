@@ -164,12 +164,12 @@ public final class FreePlayAuditPage extends AbstractScreen {
         return GamePage.of(getContext());
     }
 
+    /** Open Load game from the main menu and show only recovery points. */
     public void openRecoveryChooser() {
-        clickOnButtonWithId("buttonRecovery");
-    }
-
-    public void verifyRecoveryMenuLabel(final String expected) {
-        assertEquals(expected, getLabeledById("buttonRecovery").getText());
+        clickOnButtonWithId("buttonLoad");
+        clickOnButtonWithId("savedGamesFilter");
+        getRobot().clickOn("#saveFilterAUTOMATIC");
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void verifyRecoveryChooserLabels(final String title,

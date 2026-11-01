@@ -63,7 +63,6 @@ public final class ButtonsPanelPresenter {
         this.secretOption = Preconditions.checkNotNull(secretOption);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         view.getButtonContinue().setOnAction(this::onGameContinue);
-        view.getButtonRecovery().setOnAction(this::onRecovery);
         view.getButtonLoad().setOnAction(this::onLoadWasPressed);
         view.getButtonPlayCampaign().setOnAction(
                 event -> eventBus.post(new ShowScreenEvent(Screen.CAMPAIGN)));
@@ -95,10 +94,6 @@ public final class ButtonsPanelPresenter {
     @SuppressWarnings("unused")
     private void onGameContinue(final ActionEvent actionEvent) {
         persistingService.continueGame();
-    }
-
-    private void onRecovery(final ActionEvent actionEvent) {
-        persistingService.browse(false, true);
     }
 
     public void refresh() {

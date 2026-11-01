@@ -28,7 +28,7 @@ Scores --> Main : zavřít
 Main --> Settings : nastavení
 Settings --> Main : zpět bez rozehrané hry
 Settings --> Map : zpět do rozehrané hry
-Main --> Files : načíst / body obnovy
+Main --> Files : načíst (filtr body obnovy)
 Files --> Main : zrušit bez rozehrané hry
 Files --> Map : načíst / zrušit během hry
 Main --> Map : pokračovat po úspěšném načtení
