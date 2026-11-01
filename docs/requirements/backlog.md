@@ -371,6 +371,7 @@ manual/quick saves, recovery and protected exits. Local acceptance is recorded i
 | [R-0231](done/R-0231.md) | Preserve local diagnostics for recoverable failures | Done | P32 diagnostics beyond delivered save/turn recovery |
 | [R-0382](R-0382.md) | Save games with a map preview and summary while preserving data-model/JSON serialization | New capture; approved design | User request, 2026-10-31; R-0298 save management; load-screen content is owned by R-0383 |
 | [R-0387](R-0387.md) | Prompt only for unsaved gameplay and clarify save destinations and timing | New proposal | User request, 2026-11-01; R-0298 protected exits |
+| [R-0388](R-0388.md) | Keep a rolling history of turn autosaves per playthrough | New proposal; rotation requested | User request, 2026-11-01; R-0068 checkpoints and R-0387 save policy |
 
 ## A05
 

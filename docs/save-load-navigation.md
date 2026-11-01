@@ -18,10 +18,31 @@ obsahu, návraty podle skutečného původu a platformní zkratky. Stav je `new`
 níže uvedený dialogový přehled a současné zkratky zůstávají popisem dosavadní
 implementace. Odstranění samostatné položky Body obnovy stále vlastní R-0376.
 
-**Návrh z 1. listopadu 2026:** [R-0387](requirements/R-0387.md) navrhuje
-ptát se při odchodu pouze na neuložený herní stav, oddělit nastavení od herního
-postupu a upřesnit počáteční checkpoint i význam rychlého uložení. Stav `new`;
-nejde dosud o schválenou změnu ani implementaci. Níže zůstává současný kontrakt.
+## Pravidla ukládání schválená 1. listopadu 2026
+
+1. Uživatel přijal návrh [R-0387](requirements/R-0387.md): při opuštění nebo
+   nahrazení partie se ptát jen tehdy, kdy by se ztratil neuložený herní stav.
+   Úspěšné ruční, rychlé i automatické uložení aktuálního stavu odstraní potřebu
+   výzvy až do další herní změny. Neúspěšný zápis ani zrušení ji neodstraní.
+2. Prohlížení mapy, výběr jednotky a otevření/zavření nastavení nejsou změnou
+   herního postupu. Předvolby se ukládají samostatně. Herní akce, rozkazy,
+   obchod a zpracování tahu změnou jsou; nestačí sledovat pohyb jednotek.
+3. Odchod nabídne Uložit a pokračovat / Odejít bez uložení / Zpět, pouze je-li
+   to potřeba. Uložení musí uspět před přechodem; chyba zachová partii i starý
+   platný soubor. Zůstávají oddělené ruční pozice, rychlý slot dané partie
+   a body obnovy. Pouhé načtení zdrojový soubor nepřepisuje.
+4. Při zapnutém autosave vznikne počáteční bezpečný checkpoint a potom
+   uložení každého připraveného lidského tahu po dokončení zpracování světa.
+   Nejde o každý pohyb jednotky. Pokud nová partie dosud nemá uloženou kopii
+   (autosave vypnuto nebo selhalo), odchod nabídne její zachování i bez prvního
+   herního kroku. Po načtení nezměněné uložené hry se výzva neukáže.
+5. Uživatel navíc požaduje průběžnou rotaci těchto tahových pozic.
+   [R-0388](requirements/R-0388.md) navrhuje **pět posledních úspěšných
+   autosave pro každou partii**, odděleně od dosavadního desetiletého bodu,
+   rychlého a ručních uložení. Počet pět a podrobnosti rotace jsou zatím návrh.
+6. R-0387 i R-0388 zůstávají `new`; schválení chování není implementací ani
+   úspěšným runtime testem. Následující oddíly nadále popisují dosavadní
+   implementaci, včetně současné výzvy při každém odchodu z aktivní hry.
 
 ## Náhledy a soubor uložené hry — schváleno 31. října 2026
 
