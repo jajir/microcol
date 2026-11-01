@@ -169,6 +169,9 @@ Never force-push to publish. Task completion follows the local acceptance policy
 
 ## Local acceptance policy
 
+**Expanded batch amendment (2026-11-01):** for the [expanded development batch](requirements/backlog.md#expanded-development-batch-2026-11-01), the user explicitly authorized grouping/reordering work and deferring smoke or other test phases until the end. Focused checks may run during implementation; complete model/JUnit, all affected Docker UI selections and one fixed smoke/support run remain final combined-source acceptance obligations. Intermediate integration is provisional and must not be reported as verified completion. Keep failed evidence, the existing narrow FRIGATE exception, manual-only native macOS policy and the 420-second smoke budget. This is a task-specific scheduling exception, not a permanent reduction of test coverage or authorization to skip final verification.
+
+
 **R-0390 exception (2026-11-01):** the user explicitly instructed this task to ignore the known FRIGATE opaque-ink failure, complete/fix smoke and push the selected Greek harbor artwork. This exception covers only the unchanged `UnitArtworkTest.allTypesAndStatesHaveDistinctBoldArtworkInsideTransparentMargins` failure at 45 px for R-0390. Keep the icon, assertion and failed evidence unchanged; all other required checks and the 420-second smoke budget remain in force.
 
 
