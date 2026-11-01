@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.microcol.model.Colony;
 import org.microcol.model.TradeRoute;
 import org.microcol.model.TradeRouteKind;
 import org.microcol.model.TradeRouteStop;
@@ -59,6 +60,30 @@ public final class TradeRouteDialog extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    /**
+     * Chooses the starting colony with the keyboard, as offered when the editor
+     * opens from the map planner.
+     */
+    public void chooseStartColony(final String colonyName) {
+        final ComboBox<Colony> combo = startBox();
+        int index = -1;
+        for (int i = 0; i < combo.getItems().size(); i++) {
+            if (combo.getItems().get(i).getName().equals(colonyName)) {
+                index = i;
+            }
+        }
+        if (index < 0) {
+            throw new IllegalStateException(
+                    "Colony is not offered: " + colonyName);
+        }
+        getRobot().clickOn(combo).push(KeyCode.HOME);
+        for (int i = 0; i < index; i++) {
+            getRobot().push(KeyCode.DOWN);
+        }
+        getRobot().push(KeyCode.ENTER);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public void create() {
         clickOnButtonWithId("tradeRouteCreate");
         WaitForAsyncUtils.waitForFxEvents();
@@ -72,6 +97,10 @@ public final class TradeRouteDialog extends AbstractScreen {
     private TextField name() {
         return getNodeFinder().lookup("#tradeRouteName")
                 .queryAs(TextField.class);
+    }
+
+    private ComboBox<Colony> startBox() {
+        return getNodeFinder().lookup("#tradeRouteStartColony").queryComboBox();
     }
 
     private ComboBox<TradeRouteKind> kindBox() {
@@ -104,6 +133,18 @@ public final class TradeRouteDialog extends AbstractScreen {
 
     public void verifyKind(final TradeRouteKind expected) {
         assertEquals(expected, kindBox().getValue());
+    }
+
+    /**
+     * @param expectedChosen  colony chosen to start the route
+     * @param expectedOffered every owned colony offered, in order
+     */
+    public void verifyStartColony(final String expectedChosen,
+            final String... expectedOffered) {
+        assertTrue(startBox().isVisible());
+        assertEquals(expectedChosen, startBox().getValue().getName());
+        assertEquals(List.of(expectedOffered), startBox().getItems().stream()
+                .map(Colony::getName).collect(Collectors.toList()));
     }
 
     public void verifyStopOptions(final int row, final String... expected) {

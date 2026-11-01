@@ -9,7 +9,9 @@ import org.microcol.gui.screen.game.components.ButtonsGamePanel;
 import org.microcol.gui.screen.game.components.RightPanel;
 import org.microcol.gui.screen.game.components.StatusBar;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
+import org.microcol.gui.screen.game.components.TradeRoutePlanningPanel;
 import org.microcol.gui.screen.game.gamepanel.GamePanelComponent;
+import org.microcol.gui.screen.game.gamepanel.TradeRoutePlanning;
 import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
@@ -45,23 +47,38 @@ public class ScreenGame implements GameScreen {
 
     private final GameScreenHeader header = new GameScreenHeader();
 
+    private final HBox hBox = new HBox();
+
+    private final TradeRoutePlanning tradeRoutePlanning;
+
+    private final TradeRoutePlanningPanel tradeRoutePlanningPanel;
+
     @Inject
     ScreenGame(final @Named("GamePanel") StatusBar statusBar,
             final RightPanel rightPanel, final ButtonsGamePanel buttonGamePanel,
-            final GamePanelComponent gamePanelComponents, final I18n i18n) {
+            final GamePanelComponent gamePanelComponents, final I18n i18n,
+            final TradeRoutePlanning tradeRoutePlanning,
+            final TradeRoutePlanningPanel tradeRoutePlanningPanel) {
         this.statusBar = Preconditions.checkNotNull(statusBar);
         this.rightPanel = Preconditions.checkNotNull(rightPanel);
         this.buttonGamePanel = Preconditions.checkNotNull(buttonGamePanel);
         this.gamePanelComponents = Preconditions
                 .checkNotNull(gamePanelComponents);
+        this.tradeRoutePlanning = Preconditions
+                .checkNotNull(tradeRoutePlanning);
+        this.tradeRoutePlanningPanel = Preconditions
+                .checkNotNull(tradeRoutePlanningPanel);
         this.statusBar.setShowEventsFromSource(Source.GAME);
 
-        final HBox hBox = new HBox();
         hBox.setId("mainBox");
         VBox.setVgrow(hBox, javafx.scene.layout.Priority.ALWAYS);
         hBox.setMinHeight(0);
         hBox.getChildren().add(gamePanelComponents.getContent());
         hBox.getChildren().add(rightPanel.getContent());
+        // The planner switch sits in the map's upper-left corner; the planner
+        // panel takes the place of the normal right panel while it is on.
+        gamePanelComponents.addMapControl(tradeRoutePlanningPanel.getToggle());
+        tradeRoutePlanning.addListener(this::showRightPanel);
 
         mainBox = new VBox();
         mainBox.setId("mainPanel");
@@ -89,16 +106,31 @@ public class ScreenGame implements GameScreen {
         StackPane.setAlignment(header, javafx.geometry.Pos.TOP_CENTER);
     }
 
+    private void showRightPanel() {
+        final Node wanted = tradeRoutePlanning.isActive()
+                ? tradeRoutePlanningPanel.getContent()
+                : rightPanel.getContent();
+        if (hBox.getChildren().get(1) != wanted) {
+            hBox.getChildren().set(1, wanted);
+            if (!tradeRoutePlanning.isActive()) {
+                rightPanel.refresh();
+            }
+        }
+    }
+
     /**
      * Handles unit shortcuts before focused controls can consume them. Space
-     * acts on release, so holding it does not skip multiple units.
+     * acts on release, so holding it does not skip multiple units. The route
+     * planner gives no unit orders, so Tab and Space keep their ordinary
+     * keyboard meaning there.
      *
      * @param handler required unit-order handler
      */
     void setOnUnitOrder(final Consumer<KeyEvent> handler) {
         mainPanel.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.isControlDown() || event.isAltDown() || event.isMetaDown()
-                    || event.isShiftDown() || isNavigationControlFocused())
+                    || event.isShiftDown() || isNavigationControlFocused()
+                    || tradeRoutePlanning.isActive())
                 return;
             if (KeyCode.TAB == event.getCode()) {
                 handler.accept(event);
@@ -110,7 +142,8 @@ public class ScreenGame implements GameScreen {
         mainPanel.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
             if (KeyCode.SPACE == event.getCode() && !event.isControlDown()
                     && !event.isAltDown() && !event.isMetaDown()
-                    && !event.isShiftDown() && !isNavigationControlFocused()) {
+                    && !event.isShiftDown() && !isNavigationControlFocused()
+                    && !tradeRoutePlanning.isActive()) {
                 handler.accept(event);
                 event.consume();
             }
@@ -120,7 +153,8 @@ public class ScreenGame implements GameScreen {
     private boolean isNavigationControlFocused() {
         for (Node node = mainPanel.getScene()
                 .getFocusOwner(); node != null; node = node.getParent()) {
-            if (node == header || "worldMinimap".equals(node.getId())) {
+            if (node == header || "worldMinimap".equals(node.getId())
+                    || node == tradeRoutePlanningPanel.getToggle()) {
                 return true;
             }
         }
@@ -164,7 +198,9 @@ public class ScreenGame implements GameScreen {
 
     @Override
     public Region getContent() {
-        rightPanel.refresh();
+        if (!tradeRoutePlanning.isActive()) {
+            rightPanel.refresh();
+        }
         return mainPanel;
     }
 

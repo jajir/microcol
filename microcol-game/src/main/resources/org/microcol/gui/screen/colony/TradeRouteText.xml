@@ -104,6 +104,9 @@
   <entry key="assignedPending">%s: heading to %s. The change to %s applies after that stop.</entry>
   <entry key="assignedRepaired">%s: waiting at the lost stop %s. The repaired stop %s is taken next turn.</entry>
   <entry key="affectedNone">none</entry>
+  <entry key="newTitle">New trade route</entry>
+  <entry key="startPickLabel">Starting colony</entry>
+  <entry key="noStartColony">Found a colony first; every route starts at one of your colonies.</entry>
   <entry key="deleteRoute">Delete route</entry>
   <entry key="routeDeleted">Route deleted. Carriers released to manual orders: %s.</entry>
   <entry key="stopLost">lost colony</entry>

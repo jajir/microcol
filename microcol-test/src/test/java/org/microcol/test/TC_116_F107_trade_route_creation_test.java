@@ -15,6 +15,7 @@ import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.SettingPage;
 import org.microcol.page.TradeRouteDialog;
+import org.microcol.page.TradeRoutePlanningPage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -221,5 +222,143 @@ public class TC_116_F107_trade_route_creation_test
         route.verifyDialogClosed();
         route.verifyStoredRoutes(0);
         colony.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_map_planner_creates_a_route_from_the_bar_and_returns_to_the_map()
+            throws Exception {
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        final TradeRoutePlanningPage planner = new TradeRoutePlanningPage(
+                getContext());
+        final TradeRouteDialog route = new TradeRouteDialog(getContext());
+
+        // The normal map shows the planner switch in its upper-left corner;
+        // New trade route belongs to the planner only.
+        planner.verifyPlannerShown(false);
+        planner.verifyToggleText("Trade routes");
+        planner.verifyToggleInMapCorner();
+        planner.verifyNewRouteButton(null);
+
+        // The planner replaces the right panel and explains the empty list.
+        planner.open();
+        planner.verifyPlannerShown(true);
+        planner.verifyToggleText("Back to map");
+        planner.verifyNewRouteButton("New trade route");
+        planner.verifyEmpty(
+                "You have no trade routes yet. Use New trade route in the bar above to create one.");
+        planner.captureScreen("trade-route-planner-empty.png");
+
+        // New trade route opens the shared editor without a colony screen;
+        // the player chooses the start. Canceling stores nothing.
+        planner.newRoute();
+        route.verifyTitle("New trade route");
+        route.verifyStartColony("New Amsterdam", "New Amsterdam", "Delft");
+        route.enterName("Unused Road");
+        route.chooseStop(0, DELFT);
+        route.cancel();
+        route.verifyDialogClosed();
+        route.verifyStoredRoutes(0);
+        planner.verifyPlannerShown(true);
+        planner.verifyRouteList();
+
+        // A created route is drawn over its towns and described at once.
+        planner.newRoute();
+        route.verifyNoStopsChosen();
+        route.enterName("Wagon Road");
+        route.chooseStop(0, DELFT);
+        route.create();
+        route.verifyDialogClosed();
+        route.verifyStoredRoute("Wagon Road", TradeRouteKind.LAND, "Delft");
+        planner.verifyMessage("Route Wagon Road was created.");
+        planner.verifyRouteList("Wagon Road");
+        planner.verifySelectedRoute("Wagon Road");
+        planner.verifyKind("Land route");
+        planner.verifyCarriers("No carrier assigned");
+        planner.verifyPreviewNote(
+                "No carrier yet: the grey lines show where a wagon (solid) or a ship (dashed) could travel. The route kind does not change: Land route.");
+        planner.verifyStops("1. Delft — unload: nothing; load: nothing");
+        planner.verifyLegsContain("New Amsterdam → Delft: by land");
+        planner.verifyRouteDrawnOver("Wagon Road", Location.of(24, 16));
+        planner.verifyRouteDrawnOver("Wagon Road", Location.of(28, 16));
+
+        // Hovering a town on the route names it; clicking it keeps the
+        // planner open instead of opening the colony.
+        game.hoverTile(Location.of(28, 16));
+        planner.verifyStatusBar(
+                "Wagon Road: Land route, stops: 1, No carrier assigned.");
+        planner.captureScreen("trade-route-planner-route.png");
+        game.clickTile(Location.of(28, 16));
+        planner.verifyPlannerShown(true);
+        planner.verifySelectedRoute("Wagon Road");
+
+        // The corner switch returns to the normal map and right panel.
+        planner.close();
+        planner.verifyPlannerShown(false);
+        planner.verifyToggleText("Trade routes");
+        planner.verifyNewRouteButton(null);
+
+        // Save and Continue keep the route; the game reopens on the normal
+        // map, and the list selects the route by keyboard.
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        planner.verifyPlannerShown(false);
+        planner.open();
+        planner.verifyRouteList("Wagon Road");
+        planner.verifyNoSelection(
+                "Choose a route to see its stops, goods, carriers and paths.");
+        planner.verifyEditEnabled(false);
+        planner.chooseRoute("Wagon Road");
+        planner.verifySelectedRoute("Wagon Road");
+        planner.verifyEditEnabled(true);
+        route.verifyStoredRoute("Wagon Road", TradeRouteKind.LAND, "Delft");
+
+        // Escape leaves the planner as well.
+        planner.pressEscape();
+        planner.verifyPlannerShown(false);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_czech_planner_stays_readable_in_a_small_window()
+            throws Exception {
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        settings.goBack().loadGame();
+        final TradeRoutePlanningPage planner = new TradeRoutePlanningPage(
+                getContext());
+        final TradeRouteDialog route = new TradeRouteDialog(getContext());
+
+        // Czech texts on the switch, the bar button and the empty list.
+        planner.verifyToggleText("Obchodní trasy");
+        planner.open();
+        planner.verifyToggleText("Zpět na mapu");
+        planner.verifyNewRouteButton("Nová obchodní trasa");
+        planner.verifyEmpty(
+                "Zatím nemáte žádné obchodní trasy. Založte je tlačítkem Nová obchodní trasa v liště nahoře.");
+
+        // A route started from Delft in the Czech editor.
+        planner.newRoute();
+        route.verifyTitle("Nová obchodní trasa");
+        route.chooseStartColony("Delft");
+        route.verifyStartColony("Delft", "New Amsterdam", "Delft");
+        route.enterName("Povozová cesta");
+        route.chooseStop(0, NEW_AMSTERDAM);
+        route.create();
+        route.verifyStoredRoute("Povozová cesta", TradeRouteKind.LAND,
+                "New Amsterdam");
+        planner.verifySelectedRoute("Povozová cesta");
+        planner.verifyKind("Pozemní trasa");
+        planner.verifyCarriers("Bez přiřazeného dopravce");
+        planner.verifyStops("1. New Amsterdam — vyložit: nic; naložit: nic");
+        planner.verifyLegsContain("Delft → New Amsterdam: po souši");
+        planner.captureScreen("trade-route-planner-czech.png");
+
+        // In a small window the panel, its list and its buttons stay visible.
+        planner.resizeWindow(1024, 640);
+        planner.verifyPanelFitsWindow();
+        planner.captureScreen("trade-route-planner-narrow-czech.png");
+        planner.back();
+        planner.verifyPlannerShown(false);
     }
 }

@@ -32,8 +32,10 @@ import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
 /**
- * Editor for one new trade route from an owned colony. Every choice comes from
- * the model; the dialog only stages it and reports the model's first refusal.
+ * Editor for one new trade route from an owned colony. Opened from a colony it
+ * starts there; opened from the map planner the player also chooses the
+ * starting colony. Every choice comes from the model; the dialog only stages it
+ * and reports the model's first refusal.
  */
 public final class DialogTradeRoute extends AbstractMessageWindow {
 
@@ -46,6 +48,10 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
     private final Label existing = new Label();
     private final Label message = new Label();
     private final Label start = new Label();
+    private final Label startPickLabel = new Label();
+    /** Starting colony, offered only when the editor opens from the map. */
+    private final ComboBox<Colony> startBox = new ComboBox<>();
+    private final HBox startPick;
     private final TextField name = new TextField();
     private final ComboBox<TradeRouteKind> kind = new ComboBox<>();
     private final List<ComboBox<TradeRouteStop>> stops = new ArrayList<>();
@@ -58,6 +64,8 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
     private Model model;
     private Player player;
     private Colony colony;
+    /** Route stored by the last press of Create since this editor opened. */
+    private TradeRoute created;
     /** Set while rows are rebuilt, so their own events do not recurse. */
     private boolean refreshing;
 
@@ -105,8 +113,30 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
                 refreshStops();
             }
         });
-        final VBox root = new VBox(10, caption, rule, start, existing,
-                nameLabel, name, kindLabel, kind);
+        startBox.setId("tradeRouteStartColony");
+        startPickLabel.setLabelFor(startBox);
+        startBox.setConverter(new StringConverter<Colony>() {
+            @Override
+            public String toString(final Colony value) {
+                return value == null ? "" : value.getName();
+            }
+
+            @Override
+            public Colony fromString(final String value) {
+                throw new UnsupportedOperationException();
+            }
+        });
+        startBox.setOnAction(event -> {
+            if (!refreshing) {
+                colony = startBox.getValue();
+                refreshStops();
+            }
+        });
+        startPick = new HBox(12, startPickLabel, startBox);
+        startPick.managedProperty().bind(startPick.visibleProperty());
+        start.managedProperty().bind(start.visibleProperty());
+        final VBox root = new VBox(10, caption, rule, start, startPick,
+                existing, nameLabel, name, kindLabel, kind);
         for (int index = 0; index < STOP_ROWS; index++) {
             stops.add(makeStopBox(index));
             final Label label = new Label();
@@ -163,6 +193,8 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
         kindLabel.setText(i18n.get(TradeRouteText.kindLabel));
         cancel.setText(i18n.get(TradeRouteText.cancel));
         create.setText(i18n.get(TradeRouteText.create));
+        startPickLabel.setText(i18n.get(TradeRouteText.startPickLabel));
+        startBox.setAccessibleText(startPickLabel.getText());
         for (int index = 0; index < stops.size(); index++) {
             final String text = i18n.get(TradeRouteText.stopLabel, index + 1);
             stopLabels.get(index).setText(text);
@@ -177,7 +209,6 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
      * @param start required colony the route starts from
      */
     public void showFor(final Colony start) {
-        this.colony = start;
         this.model = game.getModel();
         this.player = game.getHumanPlayer();
         translate();
@@ -185,6 +216,47 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
         caption.setText(i18n.get(TradeRouteText.title, start.getName()));
         this.start
                 .setText(i18n.get(TradeRouteText.startLabel, start.getName()));
+        this.start.setVisible(true);
+        startPick.setVisible(false);
+        open(start, false);
+    }
+
+    /**
+     * Opens the editor from the map planner, independently of any colony
+     * screen. The player chooses the starting colony among the owned ones; the
+     * first one is preselected. Nothing is changed unless the player presses
+     * Create.
+     */
+    public void showNew() {
+        this.model = game.getModel();
+        this.player = game.getHumanPlayer();
+        translate();
+        setTitle(i18n.get(TradeRouteText.newTitle));
+        caption.setText(i18n.get(TradeRouteText.newTitle));
+        this.start.setVisible(false);
+        startPick.setVisible(true);
+        final List<Colony> owned = model.getColonies(player);
+        refreshing = true;
+        try {
+            startBox.getItems().setAll(owned);
+            startBox.setValue(owned.isEmpty() ? null : owned.get(0));
+        } finally {
+            refreshing = false;
+        }
+        open(startBox.getValue(), true);
+    }
+
+    /**
+     * @return the route stored by Create since the editor last opened, or empty
+     *         when the player canceled
+     */
+    public Optional<TradeRoute> getCreatedRoute() {
+        return Optional.ofNullable(created);
+    }
+
+    private void open(final Colony first, final boolean pickStart) {
+        this.colony = first;
+        this.created = null;
         final List<TradeRoute> routes = model.getTradeRoutes(player);
         existing.setText(routes.isEmpty() ? i18n.get(TradeRouteText.noRoutes)
                 : i18n.get(TradeRouteText.existing,
@@ -205,7 +277,11 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
         }
         refreshStops();
         Platform.runLater(() -> {
-            name.requestFocus();
+            if (pickStart) {
+                startBox.requestFocus();
+            } else {
+                name.requestFocus();
+            }
         });
         showAndWait();
     }
@@ -227,9 +303,9 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
                     continue;
                 }
                 final TradeRouteStop previous = box.getValue();
-                final List<TradeRouteStop> options = model
-                        .getTradeRouteStopOptions(player, kind.getValue(),
-                                colony.getId(), chain);
+                final List<TradeRouteStop> options = colony == null ? List.of()
+                        : model.getTradeRouteStopOptions(player,
+                                kind.getValue(), colony.getId(), chain);
                 box.getItems().setAll(options);
                 box.setValue(options.contains(previous) ? previous : null);
                 box.setDisable(false);
@@ -258,6 +334,12 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
 
     private boolean validate() {
         if (model == null || player == null || kind.getValue() == null) {
+            return false;
+        }
+        if (colony == null) {
+            // Opened from the map without any owned colony to start from.
+            message.setText(i18n.get(TradeRouteText.noStartColony));
+            create.setDisable(true);
             return false;
         }
         final Optional<TradeRouteProblem> problem = model.getTradeRouteProblem(
@@ -307,8 +389,8 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
             return;
         }
         try {
-            model.createTradeRoute(player, name.getText(), kind.getValue(),
-                    colony.getId(), chosenChain());
+            created = model.createTradeRoute(player, name.getText(),
+                    kind.getValue(), colony.getId(), chosenChain());
         } catch (IllegalArgumentException | IllegalStateException exception) {
             // Another change may have made a stop or name stale; nothing was
             // stored, so the staged choices are rebuilt from the model.

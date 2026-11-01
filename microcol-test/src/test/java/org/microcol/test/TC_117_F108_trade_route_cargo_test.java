@@ -17,6 +17,7 @@ import org.microcol.page.GamePage;
 import org.microcol.page.SettingPage;
 import org.microcol.page.TradeRouteCargoDialog;
 import org.microcol.page.TradeRouteDialog;
+import org.microcol.page.TradeRoutePlanningPage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -258,5 +259,92 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractMicroColTest {
         cargo.verifyProcessEnabled(false);
         cargo.close();
         colony.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_04_planner_panel_edits_cargo_and_carrier_of_a_europe_route()
+            throws Exception {
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        final TradeRoutePlanningPage planner = new TradeRoutePlanningPage(
+                getContext());
+        final TradeRouteDialog route = new TradeRouteDialog(getContext());
+        final TradeRouteCargoDialog cargo = new TradeRouteCargoDialog(
+                getContext());
+
+        // A sea route from Delft to Europe and back, created from the bar.
+        planner.open();
+        planner.newRoute();
+        route.chooseStartColony("Delft");
+        route.enterName("Rum Run");
+        route.chooseKind(TradeRouteKind.SEA);
+        route.chooseStop(0, EUROPE);
+        route.chooseStop(1, DELFT);
+        route.create();
+        route.verifyStoredRoute("Rum Run", TradeRouteKind.SEA, "Europe",
+                "Delft");
+
+        // Without a carrier only a ship can reach Europe, so each leg shows
+        // its sea path; Europe is drawn out on the high sea.
+        planner.verifySelectedRoute("Rum Run");
+        planner.verifyKind("Sea route");
+        planner.verifyCarriers("No carrier assigned");
+        planner.verifyLegsContain("Delft → Europe: by sea");
+        planner.verifyLegsContain("Europe → Delft: by sea");
+        planner.verifyRouteDrawnOver("Rum Run", DELFT_LOCATION);
+        planner.captureScreen("trade-route-planner-europe.png");
+
+        // The panel opens the shared route window with this route. Closing it
+        // after staging goods keeps the stored stop unchanged.
+        planner.editSelected();
+        cargo.verifyOpened();
+        cargo.verifyChosenRoute("Rum Run");
+        cargo.chooseStop(DELFT_STOP);
+        cargo.addUnload(GoodsType.ORE);
+        cargo.close();
+        cargo.verifyDialogClosed();
+        planner.verifyStops("1. Europe — unload: nothing; load: nothing\n"
+                + "2. Delft — unload: nothing; load: nothing");
+
+        // Saved goods and the assigned galleon appear in the panel.
+        planner.editSelected();
+        cargo.chooseStop(DELFT_STOP);
+        cargo.addUnload(GoodsType.ORE);
+        cargo.save();
+        cargo.verifyStoredCargo("Rum Run", DELFT_STOP, List.of(GoodsType.ORE),
+                List.of());
+        cargo.chooseCarrier(0);
+        cargo.chooseFirstStop(0);
+        cargo.assign();
+        cargo.verifyMessage("Assigned. The unit starts on your next turn.");
+        cargo.close();
+        planner.verifyStops("1. Europe — unload: nothing; load: nothing\n"
+                + "2. Delft — unload: Ore; load: nothing");
+        planner.verifyCarriers("Carriers: Galleon #3");
+        planner.verifyPreviewNote(
+                "Paths are shown for Galleon #3. Other carriers of the route use their own movement costs.");
+        planner.verifyLegsContain("Delft → Europe: by sea");
+        planner.captureScreen("trade-route-planner-detail.png");
+
+        // Viewing, editing and assigning moved and transferred nothing.
+        cargo.verifyUnitAt(GALLEON_ID, DELFT_LOCATION);
+        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.ORE, 60));
+        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 0));
+        planner.close();
+
+        // Save and Continue keep the route and its carrier; nothing is
+        // processed again.
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        cargo.verifyUnitAt(GALLEON_ID, DELFT_LOCATION);
+        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.ORE, 60));
+        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 0));
+        planner.open();
+        planner.chooseRoute("Rum Run");
+        planner.verifyCarriers("Carriers: Galleon #3");
+        planner.verifyStops("1. Europe — unload: nothing; load: nothing\n"
+                + "2. Delft — unload: Ore; load: nothing");
+        planner.close();
+        planner.verifyPlannerShown(false);
     }
 }

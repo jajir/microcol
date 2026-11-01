@@ -64,9 +64,9 @@ final class TradeRouteRules {
 
     /**
      * Owned colony square; a sea route also needs the colony to be a coastal
-     * port of the owner.
+     * port of the owner. The route preview uses the same test.
      */
-    private Optional<Location> colonySquare(final Player owner,
+    Optional<Location> colonySquare(final Player owner,
             final TradeRouteKind kind, final TradeRouteStop stop) {
         return model.getColonyById(stop.getColonyId())
                 .filter(colony -> colony.getOwner() == owner)

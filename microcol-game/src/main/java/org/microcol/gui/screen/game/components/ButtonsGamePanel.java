@@ -18,6 +18,7 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
+import org.microcol.gui.screen.game.gamepanel.TradeRoutePlanning;
 import org.microcol.i18n.I18n;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -163,14 +164,19 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private final Button buttonCancelBuildRoad;
     private final Button buttonBuildColony;
 
+    private final TradeRoutePlanningPanel tradeRoutePlanningPanel;
+
     @Inject
     ButtonsGamePanel(final ImageProvider imageProvider, final EventBus eventBus,
             final I18n i18n, final ColoniesMenu coloniesMenu,
-            final InGameMenu gameMenu) {
+            final InGameMenu gameMenu,
+            final TradeRoutePlanningPanel tradeRoutePlanningPanel,
+            final TradeRoutePlanning tradeRoutePlanning) {
         super(imageProvider, eventBus, Source.GAME, i18n);
         currentI18n = i18n;
         toolbarImages = imageProvider;
         toolbarEvents = eventBus;
+        this.tradeRoutePlanningPanel = tradeRoutePlanningPanel;
 
         buttonCongress.setId("congress");
         buttonCongress.setText(i18n.get(CongressText.title));
@@ -320,6 +326,16 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         addUnitCommand(buttonJettison, null);
         addUnitCommand(buttonDisband, null);
 
+        // New trade route keeps the colony screen's Trade route button face.
+        // It is shown only in the route planner, where centering on the
+        // selected unit gives way to it, so the bar keeps its width.
+        final Button newTradeRoute = tradeRoutePlanningPanel
+                .getNewRouteButton();
+        getButtonPanel().getChildren().add(newTradeRoute);
+        tradeRoutePlanning.addListener(() -> {
+            buttonCenter.setVisible(!tradeRoutePlanning.isActive());
+            buttonCenter.setManaged(!tradeRoutePlanning.isActive());
+        });
         getButtonPanel().getChildren().add(buttonDeclareIndependence);
         getButtonPanel().getChildren().add(coloniesMenu.getContent());
         getButtonPanel().getChildren().add(buttonCongress);
@@ -576,6 +592,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonRetire.setText(i18n.get(Buttons.buttonRetire));
         buttonRetire.setAccessibleHelp(i18n.get(Buttons.retireExplanation));
         toolbarLabels.forEach((control, key) -> control.setText(i18n.get(key)));
+        tradeRoutePlanningPanel.updateLanguage(i18n);
     }
 
     void setRetireAction(final Runnable action) {
@@ -772,6 +789,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonCancelBuildRoad.setDisable(disable);
         buttonBuildColony.setDisable(disable);
         buttonDeclareIndependence.setDisable(disable);
+        tradeRoutePlanningPanel.setControlsDisabled(disable);
     }
 
     public void setVisibleButtonMove(final boolean isVisible) {

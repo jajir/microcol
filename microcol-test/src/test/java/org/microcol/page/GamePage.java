@@ -149,6 +149,14 @@ public class GamePage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    /** Primary click on a map tile, as a player picks what is drawn there. */
+    public void clickTile(final Location location) {
+        closeUnitActions();
+        final javafx.geometry.Point2D point = screenPoint(location);
+        getRobot().clickOn(point.getX(), point.getY(), MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public void panFromTile(final Location location) {
         closeUnitActions();
         final javafx.geometry.Point2D start = screenPoint(location);

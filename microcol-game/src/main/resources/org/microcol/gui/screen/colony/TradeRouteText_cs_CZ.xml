@@ -104,6 +104,9 @@
   <entry key="assignedPending">%s: míří na %s. Změna na %s platí po této zastávce.</entry>
   <entry key="assignedRepaired">%s: čeká na ztracené zastávce %s. Opravenou zastávku %s převezme příští tah.</entry>
   <entry key="affectedNone">žádné</entry>
+  <entry key="newTitle">Nová obchodní trasa</entry>
+  <entry key="startPickLabel">Výchozí kolonie</entry>
+  <entry key="noStartColony">Nejprve založte kolonii; každá trasa začíná v jedné z vašich kolonií.</entry>
   <entry key="deleteRoute">Smazat trasu</entry>
   <entry key="routeDeleted">Trasa smazána. Jednotky vrácené na ruční příkazy: %s.</entry>
   <entry key="stopLost">ztracená kolonie</entry>

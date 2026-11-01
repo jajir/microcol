@@ -37,5 +37,7 @@ public enum TradeRouteText implements MessageKeyResource {
     editProblemSTOP_NOT_REACHABLE, editProblemTURN_BUSY,
     // Choosing a carrier to cancel, confirming a delete, and pending changes.
     assignedPickLabel, confirmDeleteRoute, deleteConfirm, deleteReleases,
-    replaceAffects, assignedPending, assignedRepaired, affectedNone;
+    replaceAffects, assignedPending, assignedRepaired, affectedNone,
+    // A new route started from the map planner chooses its starting colony.
+    newTitle, startPickLabel, noStartColony;
 }

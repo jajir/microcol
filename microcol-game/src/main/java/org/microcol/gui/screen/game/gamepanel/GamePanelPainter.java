@@ -60,6 +60,10 @@ public final class GamePanelPainter {
 
     private final MapManager mapManager;
 
+    private final TradeRoutePlanning tradeRoutePlanning;
+
+    private final TradeRoutePlanningPainter tradeRoutePlanningPainter;
+
     @Inject
     public GamePanelPainter(final GameModelController gameModelController,
             final PathPlanning pathPlanning, final ImageProvider imageProvider,
@@ -77,7 +81,9 @@ public final class GamePanelPainter {
             final OneTurnMoveHighlighter oneTurnMoveHighlighter,
             final AnimationClouds animationClouds,
             final GamePaintService gamePaintService,
-            final MapManager mapManager) {
+            final MapManager mapManager,
+            final TradeRoutePlanning tradeRoutePlanning,
+            final TradeRoutePlanningPainter tradeRoutePlanningPainter) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
@@ -101,7 +107,10 @@ public final class GamePanelPainter {
         this.animationClouds = Preconditions.checkNotNull(animationClouds);
         this.gamePaintService = Preconditions.checkNotNull(gamePaintService);
         this.mapManager = Preconditions.checkNotNull(mapManager);
-
+        this.tradeRoutePlanning = Preconditions
+                .checkNotNull(tradeRoutePlanning);
+        this.tradeRoutePlanningPainter = Preconditions
+                .checkNotNull(tradeRoutePlanningPainter);
     }
 
     void skipCenterViewAtLocation(final Location location) {
@@ -145,6 +154,11 @@ public final class GamePanelPainter {
         final Area area = getArea();
         final CanvasInMapCoordinates canvasInMapCoordinates = CanvasInMapCoordinates
                 .make(visibleAreaService, gameModelController.getMapSize());
+        if (tradeRoutePlanning.isActive()) {
+            paintTradeRoutePlanning(g, area, canvasInMapCoordinates,
+                    currentGameTick);
+            return;
+        }
         gamePaintService.paintTerrain(g, area, canvasInMapCoordinates,
                 currentGameTick);
         gamePaintService.paintRivers(g, area, canvasInMapCoordinates);
@@ -168,6 +182,29 @@ public final class GamePanelPainter {
             g.fillRect(0, 0, visibleAreaService.getCanvasSize().getX(),
                     visibleAreaService.getCanvasSize().getY());
         }
+    }
+
+    /**
+     * The planner shows the known map darkened, with towns and route paths on
+     * top. Fog is painted last, so neither a route nor its pen wobble can show
+     * an unexplored square. No movement preview or tile cursor is drawn.
+     */
+    private void paintTradeRoutePlanning(final GraphicsContext g,
+            final Area area, final CanvasInMapCoordinates coordinates,
+            final long currentGameTick) {
+        gamePaintService.paintTerrain(g, area, coordinates, currentGameTick);
+        gamePaintService.paintRivers(g, area, coordinates);
+        gamePaintService.paintTerrainOverlays(g, area, oneTurnMoveHighlighter,
+                coordinates);
+        gamePaintService.paintUnits(g, gameModelController.getModel(), area,
+                excludePainting, selectedUnitManager.getSelectedUnit());
+        paintAnimation(g, area);
+        tradeRoutePlanningPainter.darken(g,
+                visibleAreaService.getCanvasSize().getX(),
+                visibleAreaService.getCanvasSize().getY());
+        gamePaintService.paintColonies(g, gameModelController.getModel(), area);
+        tradeRoutePlanningPainter.paintRoutes(g, area);
+        gamePaintService.paintFog(g, area, coordinates);
     }
 
     private void paintAnimation(final GraphicsContext graphics,

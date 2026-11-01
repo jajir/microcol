@@ -135,6 +135,7 @@ public class Model {
     private final TradeRoutes tradeRoutes;
     private final TradeRouteRules tradeRouteRules;
     private final TradeRouteNavigator tradeRouteNavigator;
+    private final TradeRoutePlanner tradeRoutePlanner;
     /** Settings of a generated New World, or null for a bundled world. */
     private final GeneratedWorldPo generatedWorld;
 
@@ -424,6 +425,8 @@ public class Model {
         tradeRouteRules = new TradeRouteRules(this);
         tradeRoutes = new TradeRoutes(this, modelPo);
         tradeRouteNavigator = new TradeRouteNavigator(this, tradeRouteRules);
+        tradeRoutePlanner = new TradeRoutePlanner(this, tradeRouteRules,
+                tradeRouteNavigator);
     }
 
     /**
@@ -897,6 +900,33 @@ public class Model {
     public List<TradeRoute> getTradeRoutes(final Player player) {
         Preconditions.checkNotNull(player);
         return tradeRoutes.getRoutes(player);
+    }
+
+    /**
+     * Map preview of the paths of one saved route. Every leg uses the shared
+     * finder, entry costs, explored squares and departure and return squares of
+     * actual route travel. An assigned carrier of the route's kind with the
+     * lowest ID stands for the route; without one, the wagon and galleon
+     * profiles are both tried. Reads only: no unit is created, moved or
+     * numbered, and the route's kind does not change.
+     *
+     * @param owner required route owner
+     * @param route required route as currently saved
+     * @return the preview of every leg
+     * @throws IllegalArgumentException when the route is not the owner's
+     *                                  current route
+     */
+    public TradeRoutePreview getTradeRoutePreview(final Player owner,
+            final TradeRoute route) {
+        Preconditions.checkNotNull(owner, "Owner is null");
+        Preconditions.checkNotNull(route, "Route is null");
+        Preconditions.checkArgument(route.getOwner() == owner,
+                "Trade route belongs to another player");
+        Preconditions.checkArgument(
+                tradeRoutes.find(route.getId())
+                        .filter(stored -> stored == route).isPresent(),
+                "Trade route %s is not current", route.getId());
+        return tradeRoutePlanner.preview(owner, route);
     }
 
     /**

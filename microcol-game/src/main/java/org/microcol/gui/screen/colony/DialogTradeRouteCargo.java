@@ -359,6 +359,21 @@ public final class DialogTradeRouteCargo extends AbstractMessageWindow {
      * @param opened required colony screen the dialog was opened from
      */
     public void showFor(final Colony opened) {
+        open(Optional.empty());
+    }
+
+    /**
+     * Opens the dialog from the map planner with one route chosen. The same
+     * stops, goods and carrier controls apply; nothing is changed unless the
+     * player presses one of the dialog's own actions.
+     *
+     * @param route required route chosen in the planner
+     */
+    public void showForRoute(final TradeRoute route) {
+        open(Optional.of(route.getId()));
+    }
+
+    private void open(final Optional<Integer> routeId) {
         this.model = game.getModel();
         this.player = game.getHumanPlayer();
         translate();
@@ -376,7 +391,7 @@ public final class DialogTradeRouteCargo extends AbstractMessageWindow {
         } finally {
             refreshing = false;
         }
-        reloadRoutes(Optional.empty(), 0);
+        reloadRoutes(routeId, 0);
         fitToScreen();
         Platform.runLater(() -> routeBox.requestFocus());
         showAndWait();

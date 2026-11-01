@@ -836,19 +836,8 @@ public abstract class AbstractUnit implements Unit {
 
     @Override
     public int getEntryCostThirds(final Location from, final Location to) {
-        Preconditions.checkNotNull(from);
-        Preconditions.checkNotNull(to);
-        // Ships keep one whole point for every sea-lane, lake or port step.
-        if (isShip()) {
-            return MovementPoints.THIRDS_PER_POINT;
-        }
-        // A connected road needs a road on both squares of the step; a river
-        // course needs its own segment. Either one gives the same third.
-        final boolean connectedRoad = model.getMap().hasRoadAt(from)
-                && model.getMap().hasRoadAt(to);
-        final boolean connectedRiver = model.getMap().hasRiverSegment(from, to);
-        return model.getMap().getTerrainTypeAt(to).getMoveCostThirds(
-                model.getMap().hasTreesAt(to), connectedRoad || connectedRiver);
+        // Route previews price their steps by the same shared rule.
+        return MovementProfile.entryCostThirds(model, isShip(), from, to);
     }
 
     @Override
@@ -2626,6 +2615,28 @@ public abstract class AbstractUnit implements Unit {
      * @return the route without the start square, or empty when none exists
      */
     Optional<List<Location>> findGoToRoute(final Location destination) {
+        return findGoToRoute(destination,
+                new PathFinder(this, true, location -> true));
+    }
+
+    /**
+     * Route of a trade route leg from the live position over squares the owner
+     * has explored only. Unlike {@link #findGoToRoute} it is the route of
+     * lowest total entry cost under this unit's own step rules, even when a
+     * dearer route could be finished in this turn, so it is the path the map
+     * preview of the route shows. Each step is still paid from the remaining
+     * movement.
+     *
+     * @param destination required destination square
+     * @return the route without the start square, or empty when none exists
+     */
+    Optional<List<Location>> findKnownGoToRoute(final Location destination) {
+        return findGoToRoute(destination,
+                PathFinder.cheapestOverall(this, true, owner::isVisible));
+    }
+
+    private Optional<List<Location>> findGoToRoute(final Location destination,
+            final PathFinder finder) {
         Preconditions.checkNotNull(destination);
         final Place current = getPlace();
         if (!(current instanceof PlaceLocation)) {
@@ -2635,14 +2646,15 @@ public abstract class AbstractUnit implements Unit {
         if (destination.equals(start)) {
             return Optional.empty();
         }
-        return Optional.ofNullable(
-                new PathFinder(this, true).find(start, destination, false));
+        return Optional.ofNullable(finder.find(start, destination, false));
     }
 
     /**
-     * Route to the nearest square the owner can see that satisfies the goal, by
-     * the same shared finder and costs as a go-to order; no high-sea departure
-     * step is part of it.
+     * Route over explored squares to the nearest one that satisfies the goal,
+     * by the same shared finder and costs as a go-to order; no high-sea
+     * departure step is part of it. A trade route leg to Europe uses it: like
+     * {@link #findKnownGoToRoute} it takes the lowest total entry cost without
+     * preferring a route of this turn, as its map preview does.
      *
      * @param isGoal required test of the squares to reach
      * @return the route without the start square, or empty when none exists
@@ -2654,10 +2666,9 @@ public abstract class AbstractUnit implements Unit {
         if (!(current instanceof PlaceLocation)) {
             return Optional.empty();
         }
-        return Optional.ofNullable(new PathFinder(this, true).findNearest(
-                ((PlaceLocation) current).getLocation(),
-                location -> owner.isVisible(location)
-                        && isGoal.test(location)));
+        return Optional.ofNullable(PathFinder
+                .cheapestOverall(this, true, owner::isVisible)
+                .findNearest(((PlaceLocation) current).getLocation(), isGoal));
     }
 
     /**

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="toggleOpen">Trade routes</entry>
+  <entry key="toggleClose">Back to map</entry>
+  <entry key="toggleHelp">Shows all your trade routes on the darkened map. Viewing routes gives no orders and changes nothing in the game.</entry>
+  <entry key="newRoute">New trade route</entry>
+  <entry key="newRouteHelp">Creates a new route: choose its starting colony, its stops in order and land or sea transport. The game finds the paths between the stops.</entry>
+  <entry key="title">Trade routes</entry>
+  <entry key="rule">Click a route on the map or choose it in the list. The game picks the fastest legal path between stops by movement cost, not by the number of tiles.</entry>
+  <entry key="empty">You have no trade routes yet. Use New trade route in the bar above to create one.</entry>
+  <entry key="listLabel">Your routes</entry>
+  <entry key="noSelection">Choose a route to see its stops, goods, carriers and paths.</entry>
+  <entry key="kindLAND">Land route</entry>
+  <entry key="kindSEA">Sea route</entry>
+  <entry key="carriersNone">No carrier assigned</entry>
+  <entry key="carriers">Carriers: %s</entry>
+  <entry key="previewFor">Paths are shown for %s. Other carriers of the route use their own movement costs.</entry>
+  <entry key="previewUnassigned">No carrier yet: the grey lines show where a wagon (solid) or a ship (dashed) could travel. The route kind does not change: %s.</entry>
+  <entry key="stopsHeading">Stops</entry>
+  <entry key="stopLine">%s. %s — unload: %s; load: %s</entry>
+  <entry key="goodsNone">nothing</entry>
+  <entry key="legsHeading">Paths</entry>
+  <entry key="legLAND">%s → %s: by land, %s steps, %s</entry>
+  <entry key="legSEA">%s → %s: by sea, %s steps, %s</entry>
+  <entry key="legProblemSTOP_LOST">%s → %s: not shown, a stop is no longer your colony.</entry>
+  <entry key="legProblemNOT_PORT">%s → %s: not shown, a ship needs a coastal port.</entry>
+  <entry key="legProblemEUROPE_BY_LAND">%s → %s: not shown, a wagon cannot travel to Europe.</entry>
+  <entry key="legProblemNO_PATH">%s → %s: unreachable over the explored map.</entry>
+  <entry key="points">%s %s/3 movement points</entry>
+  <entry key="pointsWhole">%s movement points</entry>
+  <entry key="pointsThirds">%s/3 movement point</entry>
+  <entry key="stopLost">lost colony</entry>
+  <entry key="edit">Stops, goods and carriers…</entry>
+  <entry key="editHelp">Opens the route window with this route chosen: replace stops, set goods to unload and load, and assign or cancel carriers.</entry>
+  <entry key="back">Back to map</entry>
+  <entry key="hoverRoute">%s: %s, stops: %s, %s.</entry>
+  <entry key="hoverRoutes">Routes here: %s</entry>
+  <entry key="created">Route %s was created.</entry>
+</properties>

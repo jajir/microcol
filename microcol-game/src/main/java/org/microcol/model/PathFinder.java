@@ -19,12 +19,27 @@ import com.google.common.base.Preconditions;
  * Cheapest routes by entry cost in movement thirds. A route the unit can walk
  * in this turn is preferred; otherwise the cheapest route at all is returned so
  * that planning can show it and the move is rejected by
- * {@link Unit#canAffordPath}.
+ * {@link Unit#canAffordPath}. A finder for a {@link MovementProfile} without a
+ * unit, and one for trade route travel ({@link #cheapestOverall}), has no turn
+ * preference and always returns the cheapest route at all. The search is
+ * deterministic: unchanged squares, costs and start give the same route,
+ * including the choice among routes of equal cost.
  */
 final class PathFinder {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    /** Moving unit, or {@code null} for a preview without a unit. */
     private final AbstractUnit unit;
+
+    private final MovementProfile profile;
+
+    /**
+     * Whether a route the unit can walk within its remaining movement, with one
+     * terminal expensive step from a full allowance, is preferred to the
+     * cheapest route at all. Manual moves and go-to orders prefer it; trade
+     * route travel and previews do not.
+     */
+    private final boolean preferThisTurn;
 
     /** Whether a ship route must not contain a high-sea departure step. */
     private final boolean avoidDeparture;
@@ -57,7 +72,49 @@ final class PathFinder {
      */
     PathFinder(final AbstractUnit unit, final boolean avoidDeparture,
             final Predicate<Location> usable) {
-        this.unit = Preconditions.checkNotNull(unit);
+        this(Preconditions.checkNotNull(unit), MovementProfile.of(unit),
+                avoidDeparture, usable, true);
+    }
+
+    /**
+     * Finder for automatic trade route travel. It selects the route of lowest
+     * total entry cost under the unit's own step rules, exactly as the route
+     * preview does, and never prefers a dearer route only because the unit
+     * could finish it in this turn. Selecting a route spends nothing: each step
+     * is still paid from the unit's remaining movement when it is made.
+     *
+     * @param unit           required moving unit
+     * @param avoidDeparture when {@code true}, a ship route never contains a
+     *                       step that would depart to the high sea
+     * @param usable         required test of the squares a route may use
+     * @return the finder
+     */
+    static PathFinder cheapestOverall(final AbstractUnit unit,
+            final boolean avoidDeparture, final Predicate<Location> usable) {
+        return new PathFinder(Preconditions.checkNotNull(unit),
+                MovementProfile.of(unit), avoidDeparture, usable, false);
+    }
+
+    /**
+     * Finder for a route preview. No unit exists, so routes are priced without
+     * a turn allowance and nothing in the model is read except the profile.
+     *
+     * @param profile        required step rule and costs
+     * @param avoidDeparture when {@code true}, a ship route never contains a
+     *                       step that would depart to the high sea
+     * @param usable         required test of the squares a route may use
+     */
+    PathFinder(final MovementProfile profile, final boolean avoidDeparture,
+            final Predicate<Location> usable) {
+        this(null, profile, avoidDeparture, usable, false);
+    }
+
+    private PathFinder(final AbstractUnit unit, final MovementProfile profile,
+            final boolean avoidDeparture, final Predicate<Location> usable,
+            final boolean preferThisTurn) {
+        this.unit = unit;
+        this.preferThisTurn = preferThisTurn;
+        this.profile = Preconditions.checkNotNull(profile);
         this.avoidDeparture = avoidDeparture;
         this.usable = Preconditions.checkNotNull(usable);
     }
@@ -73,6 +130,7 @@ final class PathFinder {
      */
     List<Location> find(final Location destination,
             final boolean excludeDestination) {
+        Preconditions.checkState(unit != null, "A preview has no unit");
         return find(unit.getLocation(), destination, excludeDestination);
     }
 
@@ -97,7 +155,7 @@ final class PathFinder {
                 "Start and destination must be different (%s).", start);
 
         if (!excludeDestination && (!usable.test(destination)
-                || !unit.isPossibleToMoveAt(destination))) {
+                || !profile.canEnter(destination))) {
             logger.debug("Path finding finished in {} ms.",
                     System.currentTimeMillis() - startTime);
             return null;
@@ -105,12 +163,7 @@ final class PathFinder {
         final Predicate<Location> isTarget = location -> excludeDestination
                 && location.isNeighbor(destination)
                 || location.equals(destination);
-        final Optional<Node> affordable = search(start,
-                unit.getMovementThirds(), unit.hasFullMovement(), isTarget,
-                new HashSet<>());
-        final Optional<Node> found = affordable.isPresent() ? affordable
-                : search(start, Integer.MAX_VALUE, false, isTarget,
-                        new HashSet<>());
+        final Optional<Node> found = cheapest(start, isTarget);
         logger.debug("Path finding finished in {} ms.",
                 System.currentTimeMillis() - startTime);
         return found.map(this::createList).orElse(null);
@@ -131,13 +184,7 @@ final class PathFinder {
         Preconditions.checkNotNull(isGoal);
         final Predicate<Location> isTarget = location -> !location.equals(start)
                 && isGoal.test(location);
-        final Optional<Node> affordable = search(start,
-                unit.getMovementThirds(), unit.hasFullMovement(), isTarget,
-                new HashSet<>());
-        final Optional<Node> found = affordable.isPresent() ? affordable
-                : search(start, Integer.MAX_VALUE, false, isTarget,
-                        new HashSet<>());
-        return found.map(this::createList).orElse(null);
+        return cheapest(start, isTarget).map(this::createList).orElse(null);
     }
 
     /**
@@ -147,10 +194,30 @@ final class PathFinder {
      * @return reachable locations; the returned set can be changed by caller
      */
     Set<Location> findReachable() {
+        Preconditions.checkState(unit != null, "A preview has no unit");
         final Set<Location> reached = new HashSet<>();
         search(unit.getLocation(), unit.getMovementThirds(),
                 unit.hasFullMovement(), location -> false, reached);
         return reached;
+    }
+
+    /**
+     * A manual move or go-to first looks for a route within the unit's
+     * remaining movement; trade route travel and a preview take the cheapest
+     * route at once.
+     */
+    private Optional<Node> cheapest(final Location start,
+            final Predicate<Location> isTarget) {
+        if (unit != null && preferThisTurn) {
+            final Optional<Node> affordable = search(start,
+                    unit.getMovementThirds(), unit.hasFullMovement(), isTarget,
+                    new HashSet<>());
+            if (affordable.isPresent()) {
+                return affordable;
+            }
+        }
+        return search(start, Integer.MAX_VALUE, false, isTarget,
+                new HashSet<>());
     }
 
     /**
@@ -189,15 +256,16 @@ final class PathFinder {
             }
             for (final Location neighbor : current.location.getNeighbors()) {
                 if (closed.contains(neighbor) || !usable.test(neighbor)
-                        || !unit.isPossibleToMoveAt(neighbor)) {
+                        || !profile.canEnter(neighbor)) {
                     continue;
                 }
-                if (avoidDeparture && unit.isShip() && unit.model.getHighSea()
-                        .isDepartureStep(current.location, neighbor)) {
+                if (avoidDeparture && profile.isShip()
+                        && profile.getModel().getHighSea()
+                                .isDepartureStep(current.location, neighbor)) {
                     continue;
                 }
-                final int cost = current.cost
-                        + unit.getEntryCostThirds(current.location, neighbor);
+                final int cost = current.cost + profile
+                        .getEntryCostThirds(current.location, neighbor);
                 if (cost <= allowance) {
                     open.add(new Node(neighbor, cost, current, false));
                 } else if (fullAllowance && current.parent == null) {

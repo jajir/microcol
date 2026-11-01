@@ -55,6 +55,7 @@ public final class GamePanelMouseListener {
 
     private final SelectedUnitManager selectedUnitManager;
     private final Provider<ButtonsGamePanel> gameButtons;
+    private final TradeRoutePlanning tradeRoutePlanning;
     private final Canvas canvas;
     private Point contextPress;
     private boolean contextDragged;
@@ -73,7 +74,10 @@ public final class GamePanelMouseListener {
             final GamePanelComponent gamePanelComponent,
             final GamePanelPresenter gamePanelPresenter,
             final SelectedUnitManager selectedUnitManager,
-            final Provider<ButtonsGamePanel> gameButtons) {
+            final Provider<ButtonsGamePanel> gameButtons,
+            final TradeRoutePlanning tradeRoutePlanning) {
+        this.tradeRoutePlanning = Preconditions
+                .checkNotNull(tradeRoutePlanning);
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.gamePanelView = Preconditions.checkNotNull(gamePanelPainter);
@@ -185,7 +189,17 @@ public final class GamePanelMouseListener {
             // Toolbar focus loss clears its hint even on the same map tile.
             mouseOverTileManager.clearMouseOverTile();
             mouseOverTileManager.setMouseOverTile(location);
-            if (modeController.isMoveMode()) {
+            if (tradeRoutePlanning.isActive()) {
+                // The planner only selects routes; a click never selects,
+                // moves or orders a unit and never opens a colony.
+                if (modeController.isMoveMode()) {
+                    selectedUnitManager.getSelectedUnit()
+                            .ifPresent(gamePanelPresenter::disableMoveMode);
+                }
+                if (e.isPrimaryButtonDown()) {
+                    tradeRoutePlanning.selectAt(location);
+                }
+            } else if (modeController.isMoveMode()) {
                 gamePanelPresenter.switchToNormalMode(location);
             } else {
                 if (e.isPrimaryButtonDown()) {
@@ -215,7 +229,10 @@ public final class GamePanelMouseListener {
 
     private void onMouseReleased(final MouseEvent event) {
         if (contextPress != null || isContextClick(event)) {
-            if (contextPress != null && !contextDragged) {
+            // In the planner a secondary drag still scrolls the map, but no
+            // unit menu opens.
+            if (contextPress != null && !contextDragged
+                    && !tradeRoutePlanning.isActive()) {
                 showUnitContext(
                         gamePanelView.getArea().convertToLocation(contextPress),
                         event.getScreenX(), event.getScreenY());
@@ -223,7 +240,8 @@ public final class GamePanelMouseListener {
             contextPress = null;
             return;
         }
-        if (modeController.isMoveMode() && lastMousePosition.isPresent()) {
+        if (modeController.isMoveMode() && lastMousePosition.isPresent()
+                && !tradeRoutePlanning.isActive()) {
             final Location loc = gamePanelView.getArea()
                     .convertToLocation(lastMousePosition.get());
             gamePanelPresenter.switchToNormalMode(loc);
@@ -256,7 +274,8 @@ public final class GamePanelMouseListener {
 
     private void showSelectedUnitContext() {
         if (!gamePanelController.isMouseEnabled()
-                || gamePanelController.isUnitMoving()) {
+                || gamePanelController.isUnitMoving()
+                || tradeRoutePlanning.isActive()) {
             return;
         }
         selectedUnitManager.getSelectedUnit()

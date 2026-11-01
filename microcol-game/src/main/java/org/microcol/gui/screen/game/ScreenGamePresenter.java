@@ -19,6 +19,7 @@ import org.microcol.gui.screen.game.components.ColoniesMenu;
 import org.microcol.gui.screen.game.gamepanel.ModeController;
 import org.microcol.gui.screen.game.gamepanel.MouseOverTileManager;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitManager;
+import org.microcol.gui.screen.game.gamepanel.TradeRoutePlanning;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,7 @@ public class ScreenGamePresenter {
 
     private final ColoniesMenu coloniesMenu;
     private final org.microcol.gui.screen.game.components.InGameMenu gameMenu;
+    private final TradeRoutePlanning tradeRoutePlanning;
 
     @Inject
     ScreenGamePresenter(final ScreenGame screenGame, final EventBus eventBus,
@@ -66,8 +68,11 @@ public class ScreenGamePresenter {
             final GameModelController gameModelController,
             final WasdController wasdController,
             final ColoniesMenu coloniesMenu,
-            final org.microcol.gui.screen.game.components.InGameMenu gameMenu) {
+            final org.microcol.gui.screen.game.components.InGameMenu gameMenu,
+            final TradeRoutePlanning tradeRoutePlanning) {
         this.gameMenu = gameMenu;
+        this.tradeRoutePlanning = Preconditions
+                .checkNotNull(tradeRoutePlanning);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.mouseOverTileManager = Preconditions
                 .checkNotNull(mouseOverTileManager);
@@ -90,6 +95,14 @@ public class ScreenGamePresenter {
                 eventBus.post(new SkipUnitTurnEvent());
             }
         });
+        // Entering the planner drops an unconfirmed movement preview, so no
+        // later click can complete it.
+        tradeRoutePlanning.addListener(() -> {
+            if (tradeRoutePlanning.isActive() && modeController.isMoveMode()) {
+                selectedUnitManager.getSelectedUnit()
+                        .ifPresent(gamePanelPresenter::disableMoveMode);
+            }
+        });
     }
 
     private void onKeyPressed(final KeyEvent event) {
@@ -101,6 +114,10 @@ public class ScreenGamePresenter {
             return;
         }
         if (!gameModelController.isHumanTurnReady()) {
+            return;
+        }
+        if (tradeRoutePlanning.isActive() && isUnitKey(event.getCode())) {
+            // The route planner gives no unit orders.
             return;
         }
         if (event.getCode() == KeyCode.F5) {
@@ -179,6 +196,11 @@ public class ScreenGamePresenter {
                 + event.getCode().isModifierKey() + "'");
     }
 
+    private static boolean isUnitKey(final KeyCode code) {
+        return code == KeyCode.ENTER || code == KeyCode.M || code == KeyCode.P
+                || code == KeyCode.F || code == KeyCode.B;
+    }
+
     private void onKeyMWasPressed() {
         if (selectedUnitManager.getSelectedUnit().isPresent()) {
             final Unit unit = selectedUnitManager.getSelectedUnit().get();
@@ -207,7 +229,11 @@ public class ScreenGamePresenter {
     }
 
     private void onKeyPressed_escape(final KeyEvent event) {
-        if (modeController.isMoveMode()) {
+        if (tradeRoutePlanning.isActive()) {
+            // Escape leaves the planner first and restores the normal map.
+            tradeRoutePlanning.setActive(false);
+            event.consume();
+        } else if (modeController.isMoveMode()) {
             Preconditions.checkArgument(modeController.isMoveMode(),
                     "switch to move mode was called from move mode");
             final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();

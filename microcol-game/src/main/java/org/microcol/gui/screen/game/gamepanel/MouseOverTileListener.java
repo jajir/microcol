@@ -8,6 +8,7 @@ import org.microcol.gui.event.NativeRelationsChangedEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageService;
+import org.microcol.gui.screen.game.components.TradeRoutePlanningPanel;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Location;
@@ -38,12 +39,17 @@ public final class MouseOverTileListener {
 
     private final MouseOverTileManager mouseOverTileManager;
 
+    private final TradeRoutePlanningPanel tradeRoutePlanningPanel;
+
     @Inject
     public MouseOverTileListener(final GameModelController gameModelController,
             final EventBus eventBus,
             final StatusBarMessageService statusBarMessageService,
             final MouseOverTileManager mouseOverTileManager,
-            final org.microcol.gui.preferences.DeveloperMode developerMode) {
+            final org.microcol.gui.preferences.DeveloperMode developerMode,
+            final TradeRoutePlanningPanel tradeRoutePlanningPanel) {
+        this.tradeRoutePlanningPanel = Preconditions
+                .checkNotNull(tradeRoutePlanningPanel);
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.eventBus = Preconditions.checkNotNull(eventBus);
@@ -63,7 +69,15 @@ public final class MouseOverTileListener {
 
     @Subscribe
     private void onMouseOverTileChanged(final MouseOverTileChangedEvent event) {
-        if (gameModelController.getModel().getMap()
+        // In the planner a square on a route names the routes drawn there.
+        final Optional<String> routes = gameModelController.getModel().getMap()
+                .isValid(event.getMouseOverTileLocaton())
+                        ? tradeRoutePlanningPanel
+                                .hoverText(event.getMouseOverTileLocaton())
+                        : Optional.empty();
+        if (routes.isPresent()) {
+            eventBus.post(new StatusBarMessageEvent(routes.get(), Source.GAME));
+        } else if (gameModelController.getModel().getMap()
                 .isValid(event.getMouseOverTileLocaton())) {
             final TerrainType terrain = gameModelController.getModel().getMap()
                     .getTerrainTypeAt(event.getMouseOverTileLocaton());

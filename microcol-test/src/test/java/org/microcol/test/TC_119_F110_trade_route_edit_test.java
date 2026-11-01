@@ -14,6 +14,7 @@ import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.SettingPage;
 import org.microcol.page.TradeRouteCargoDialog;
+import org.microcol.page.TradeRoutePlanningPage;
 import org.microcol.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -519,5 +520,59 @@ public class TC_119_F110_trade_route_edit_test extends AbstractMicroColTest {
         cargo.closeWithEscape();
         cargo.verifyDialogClosed();
         colony.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_07_planner_explains_unshown_legs_and_repairs_the_lost_stop()
+            throws Exception {
+        WelcomePage.of(getContext()).loadGame();
+        final TradeRoutePlanningPage planner = new TradeRoutePlanningPage(
+                getContext());
+        final TradeRouteCargoDialog cargo = new TradeRouteCargoDialog(
+                getContext());
+
+        // The lost stop draws no path; each leg touching it says why.
+        planner.open();
+        planner.verifyRouteList("Ore cart", "Lost cart", "Atlantic run");
+        planner.chooseRoute("Lost cart");
+        planner.verifyCarriers("Carriers: Wagon #8");
+        planner.verifyStops("1. Delft — unload: nothing; load: nothing\n"
+                + "2. lost colony — unload: nothing; load: nothing");
+        planner.verifyLegsContain("New Amsterdam → Delft: by land");
+        planner.verifyLegsContain(
+                "Delft → lost colony: not shown, a stop is no longer your colony.");
+        planner.verifyLegsContain(
+                "lost colony → Delft: not shown, a stop is no longer your colony.");
+        planner.captureScreen("trade-route-planner-lost-stop.png");
+
+        // Replacing the stop in the shared route window brings the leg back.
+        planner.editSelected();
+        cargo.verifyChosenRoute("Lost cart");
+        cargo.chooseStop(LOST_STOP);
+        cargo.chooseReplacement("Haarlem");
+        cargo.replaceStop();
+        cargo.verifyMessage(
+                "The stop changed. Carriers take it at their next stop.");
+        cargo.close();
+        planner.verifyStops("1. Delft — unload: nothing; load: nothing\n"
+                + "2. Haarlem — unload: nothing; load: nothing");
+        planner.verifyLegsContain("Delft → Haarlem: by land");
+        planner.verifyLegsContain("Haarlem → Delft: by land");
+        planner.verifyRouteDrawnOver("Lost cart", HAARLEM_LOCATION);
+        cargo.verifyUnitAt(LOST_WAGON_ID, NEW_AMSTERDAM_LOCATION);
+
+        // The galleon at sea stands for the Atlantic run; its return leg
+        // starts where it will come back from Europe.
+        planner.chooseRoute("Atlantic run");
+        planner.verifyCarriers("Carriers: Galleon #7");
+        planner.verifyPreviewNote(
+                "Paths are shown for Galleon #7. Other carriers of the route use their own movement costs.");
+        planner.verifyLegsContain("Delft → Europe: by sea");
+        planner.verifyLegsContain("Europe → Delft: by sea");
+        planner.verifyRouteDrawnOver("Atlantic run", DELFT_LOCATION);
+        planner.captureScreen("trade-route-planner-atlantic.png");
+        planner.close();
+        planner.verifyPlannerShown(false);
     }
 }

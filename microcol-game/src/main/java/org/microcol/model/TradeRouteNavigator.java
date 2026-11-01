@@ -89,8 +89,8 @@ final class TradeRouteNavigator {
                     .orElse(false);
         }
         return carrier.isAtPlaceLocation()
-                && (carrier.getLocation().equals(colonyLocation)
-                        || carrier.findGoToRoute(colonyLocation).isPresent());
+                && (carrier.getLocation().equals(colonyLocation) || carrier
+                        .findKnownGoToRoute(colonyLocation).isPresent());
     }
 
     /**
@@ -180,8 +180,9 @@ final class TradeRouteNavigator {
         if (carrier.isAtEuropePort()) {
             return departFromEurope(carrier, assignment.get(), square);
         }
-        return walk(carrier, assignment.get(), carrier.findGoToRoute(square),
-                walked);
+        // Explored squares only, as legality and the map preview use.
+        return walk(carrier, assignment.get(),
+                carrier.findKnownGoToRoute(square), walked);
     }
 
     /**
@@ -234,8 +235,9 @@ final class TradeRouteNavigator {
     }
 
     /**
-     * Cheapest route to the nearest departure square the owner can see. It is
-     * one search of the shared finder, so a step costs the same as any go-to.
+     * Cheapest route over explored squares to the nearest departure square. It
+     * is one search of the shared finder, so a step costs the same as any
+     * go-to, and the map preview finds the same departure.
      */
     private Optional<List<Location>> findDepartureRoute(
             final AbstractUnit ship) {
@@ -262,7 +264,12 @@ final class TradeRouteNavigator {
         return Progress.MOVED;
     }
 
-    private Optional<Location> returnOrigin(final Ship ship) {
+    /**
+     * Square a ship in or bound for Europe returns to: its recorded departure
+     * square, or the default arrival square when it never left the map. The
+     * route preview starts its return leg here.
+     */
+    Optional<Location> returnOrigin(final Ship ship) {
         return ship.getDepartureLocation()
                 .or(() -> model.getHighSea().getDefaultArrivalLocation());
     }

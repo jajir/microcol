@@ -22,6 +22,15 @@
 	-fx-padding: 0 0 0 10;
 }
 
+/* The route planner takes the right panel's place and width. */
+#tradeRoutePlanningPanel {
+	-fx-padding: 8 8 8 10;
+}
+
+.trade-route-planning-title {
+	-fx-font-weight: bold;
+}
+
 #tileImage {
 	-fx-pref-width: 55px;
 }

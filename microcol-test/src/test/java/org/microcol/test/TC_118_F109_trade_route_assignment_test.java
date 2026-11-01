@@ -16,6 +16,7 @@ import org.microcol.page.ColonyScreen;
 import org.microcol.page.FreePlayAuditPage;
 import org.microcol.page.GamePage;
 import org.microcol.page.ScreenTurnReport;
+import org.microcol.page.TradeRoutePlanningPage;
 import org.microcol.page.SettingPage;
 import org.microcol.page.TradeRouteCargoDialog;
 import org.microcol.page.TradeRouteDialog;
@@ -321,5 +322,100 @@ public class TC_118_F109_trade_route_assignment_test
         cargo.verifyAssigned("Povoz č. 4: míří na New Amsterdam.");
         cargo.close();
         colony.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_04_overlapping_routes_are_chosen_one_by_one_and_get_a_carrier()
+            throws Exception {
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        final TradeRoutePlanningPage planner = new TradeRoutePlanningPage(
+                getContext());
+        final TradeRouteDialog route = new TradeRouteDialog(getContext());
+        final TradeRouteCargoDialog cargo = new TradeRouteCargoDialog(
+                getContext());
+
+        // The saved Idle cart route is drawn for its wagon 6.
+        planner.open();
+        planner.verifyRouteList("Idle cart");
+        planner.chooseRoute("Idle cart");
+        planner.verifySelectedRoute("Idle cart");
+        planner.verifyCarriers("Carriers: Wagon #6");
+        planner.verifyPreviewNote(
+                "Paths are shown for Wagon #6. Other carriers of the route use their own movement costs.");
+        planner.verifyLegsContain("New Amsterdam → Delft: by land, 2 steps");
+
+        // A second route over the same towns, created from the bar.
+        planner.newRoute();
+        route.enterName("Ore Cart");
+        route.chooseStop(0, DELFT);
+        route.chooseStop(1, NEW_AMSTERDAM);
+        route.create();
+        route.verifyStoredRoute("Ore Cart", TradeRouteKind.LAND, "Delft",
+                "New Amsterdam");
+        planner.verifyRouteList("Idle cart", "Ore Cart");
+        planner.verifySelectedRoute("Ore Cart");
+        planner.verifyRouteDrawnOver("Idle cart", DELFT_LOCATION);
+        planner.verifyRouteDrawnOver("Ore Cart", DELFT_LOCATION);
+
+        // Hovering the shared town names both routes.
+        game.hoverTile(DELFT_LOCATION);
+        planner.verifyStatusBar(
+                "Routes here: Idle cart: Land route, stops: 1, Carriers: Wagon #6. "
+                        + "Ore Cart: Land route, stops: 2, No carrier assigned.");
+        planner.captureScreen("trade-route-planner-overlap.png");
+
+        // Clicks on the shared square step through the routes there; the
+        // list picks either one by name.
+        game.clickTile(DELFT_LOCATION);
+        planner.verifySelectedRoute("Idle cart");
+        game.clickTile(DELFT_LOCATION);
+        planner.verifySelectedRoute("Ore Cart");
+        planner.chooseRoute("Idle cart");
+        planner.verifySelectedRoute("Idle cart");
+        planner.chooseRoute("Ore Cart");
+        planner.verifySelectedRoute("Ore Cart");
+
+        // Viewing and clicking the map ordered and moved no unit.
+        cargo.verifyNotAssigned(WAGON_ID);
+        cargo.verifyUnitAt(WAGON_ID, NEW_AMSTERDAM_LOCATION);
+        cargo.verifyUnitAt(IDLE_WAGON_ID, NEW_AMSTERDAM_LOCATION);
+
+        // Closing the shared window after choosing a carrier assigns
+        // nothing; assigning in it gives the route its wagon.
+        planner.editSelected();
+        cargo.verifyChosenRoute("Ore Cart");
+        cargo.chooseStop(NEW_AMSTERDAM_STOP);
+        cargo.chooseCarrier(0);
+        cargo.chooseFirstStop(DELFT_STOP);
+        cargo.close();
+        cargo.verifyNotAssigned(WAGON_ID);
+        planner.verifyCarriers("No carrier assigned");
+        planner.editSelected();
+        cargo.chooseStop(NEW_AMSTERDAM_STOP);
+        cargo.chooseCarrier(0);
+        cargo.chooseFirstStop(DELFT_STOP);
+        cargo.assign();
+        cargo.verifyAssignment(WAGON_ID, "Ore Cart", DELFT_STOP, false);
+        cargo.close();
+        planner.verifyCarriers("Carriers: Wagon #4");
+        planner.verifyPreviewNote(
+                "Paths are shown for Wagon #4. Other carriers of the route use their own movement costs.");
+        cargo.verifyUnitAt(WAGON_ID, NEW_AMSTERDAM_LOCATION);
+        cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 90));
+
+        // Save and Continue keep the assignment; nothing moves or transfers.
+        planner.close();
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        planner.verifyPlannerShown(false);
+        cargo.verifyAssignment(WAGON_ID, "Ore Cart", DELFT_STOP, false);
+        cargo.verifyUnitAt(WAGON_ID, NEW_AMSTERDAM_LOCATION);
+        cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 90));
+        planner.open();
+        planner.chooseRoute("Ore Cart");
+        planner.verifyCarriers("Carriers: Wagon #4");
+        planner.back();
+        planner.verifyPlannerShown(false);
     }
 }

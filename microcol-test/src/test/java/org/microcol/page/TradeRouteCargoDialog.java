@@ -336,6 +336,11 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 .isEmpty());
     }
 
+    /** @param expectedName route shown as chosen when the dialog opened */
+    public void verifyChosenRoute(final String expectedName) {
+        assertEquals(expectedName, routeBox().getValue().getName());
+    }
+
     public void verifyTitle(final String expected) {
         assertEquals(expected,
                 getLabeledById("tradeRouteCargoTitle").getText());

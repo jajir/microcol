@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="toggleOpen">Obchodní trasy</entry>
+  <entry key="toggleClose">Zpět na mapu</entry>
+  <entry key="toggleHelp">Ukáže všechny vaše obchodní trasy na ztmavené mapě. Prohlížení tras nezadává rozkazy a ve hře nic nemění.</entry>
+  <entry key="newRoute">Nová obchodní trasa</entry>
+  <entry key="newRouteHelp">Založí novou trasu: zvolte výchozí kolonii, zastávky v pořadí a pozemní nebo námořní dopravu. Cesty mezi zastávkami najde hra.</entry>
+  <entry key="title">Obchodní trasy</entry>
+  <entry key="rule">Klikněte na trasu na mapě nebo ji vyberte v seznamu. Hra mezi zastávkami volí nejrychlejší legální cestu podle pohybové ceny, ne podle počtu polí.</entry>
+  <entry key="empty">Zatím nemáte žádné obchodní trasy. Založte je tlačítkem Nová obchodní trasa v liště nahoře.</entry>
+  <entry key="listLabel">Vaše trasy</entry>
+  <entry key="noSelection">Vyberte trasu a uvidíte její zastávky, zboží, dopravce a cesty.</entry>
+  <entry key="kindLAND">Pozemní trasa</entry>
+  <entry key="kindSEA">Námořní trasa</entry>
+  <entry key="carriersNone">Bez přiřazeného dopravce</entry>
+  <entry key="carriers">Dopravci: %s</entry>
+  <entry key="previewFor">Cesty jsou zobrazeny pro %s. Ostatní dopravci trasy se řídí vlastní cenou pohybu.</entry>
+  <entry key="previewUnassigned">Zatím bez dopravce: šedé čáry ukazují, kudy by mohl jet vůz (plná) nebo loď (čárkovaná). Typ trasy se nemění: %s.</entry>
+  <entry key="stopsHeading">Zastávky</entry>
+  <entry key="stopLine">%s. %s — vyložit: %s; naložit: %s</entry>
+  <entry key="goodsNone">nic</entry>
+  <entry key="legsHeading">Cesty</entry>
+  <entry key="legLAND">%s → %s: po souši, %s kroků, %s</entry>
+  <entry key="legSEA">%s → %s: po moři, %s kroků, %s</entry>
+  <entry key="legProblemSTOP_LOST">%s → %s: nezobrazeno, zastávka už není vaše kolonie.</entry>
+  <entry key="legProblemNOT_PORT">%s → %s: nezobrazeno, loď potřebuje přístav u moře.</entry>
+  <entry key="legProblemEUROPE_BY_LAND">%s → %s: nezobrazeno, vůz nemůže do Evropy.</entry>
+  <entry key="legProblemNO_PATH">%s → %s: po prozkoumané mapě nedosažitelné.</entry>
+  <entry key="points">%s %s/3 bodu pohybu</entry>
+  <entry key="pointsWhole">%s b. pohybu</entry>
+  <entry key="pointsThirds">%s/3 bodu pohybu</entry>
+  <entry key="stopLost">ztracená kolonie</entry>
+  <entry key="edit">Zastávky, zboží a dopravci…</entry>
+  <entry key="editHelp">Otevře okno trasy s touto trasou: nahraďte zastávky, nastavte zboží k vyložení a naložení a přiřaďte nebo zrušte dopravce.</entry>
+  <entry key="back">Zpět na mapu</entry>
+  <entry key="hoverRoute">%s: %s, zastávek: %s, %s.</entry>
+  <entry key="hoverRoutes">Trasy zde: %s</entry>
+  <entry key="created">Trasa %s byla založena.</entry>
+</properties>

@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Region;
 
@@ -27,6 +28,9 @@ public final class GamePanelComponent
 
     private final Logger logger = LoggerFactory
             .getLogger(GamePanelComponent.class);
+
+    /** Distance of a map control from the map's corner, in pixels. */
+    private static final double MAP_CONTROL_MARGIN = 10;
 
     private final CanvasComponent canvasComponent;
 
@@ -114,6 +118,17 @@ public final class GamePanelComponent
 
     public Canvas getCanvas() {
         return canvasComponent.getCanvas();
+    }
+
+    /**
+     * Places a control over the map's upper-left corner. It takes its own
+     * clicks; the rest of the map still reaches the canvas.
+     *
+     * @param control required control
+     */
+    public void addMapControl(final Node control) {
+        control.relocate(MAP_CONTROL_MARGIN, MAP_CONTROL_MARGIN);
+        canvasComponent.getCanvasPane().getChildren().add(control);
     }
 
 }
