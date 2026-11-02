@@ -1109,3 +1109,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Mapové plánování obchodních tras — 2026-11-01
 
 1. [R-0395](R-0395.md), primární oblast A06, související A03/A01/A05/A04. Status: new. Zachycuje mapový režim tras, detail v pravém panelu, zakládací tlačítko z detailu kolonie v hlavní herní liště režimu tras a automatickou nejrychlejší cestu podle pohybové ceny (vůz po pevnině, lodě po moři). Všechny vypočtené cesty zobrazí ručně působící křivky přibližně středy dlaždic. Doplněn šedý náhled dostupné pozemní i námořní varianty bez dopravce, stabilní výběr jedné optimální cesty a Evropa jako zastávka v high seas. Otevřené otázky jsou zodpovězené; implementace není zahájena a technická příprava zbývá.
+
+## Jednorázová plavba Go to — 2026-11-02
+
+1. [R-0396](R-0396.md), primární oblast A05, závislosti A03/A01/A04/A06. Status: new. Objectives (O) uvolní G pro výběr Evropy nebo vlastního přístavu, trvalou plavbu a jednorázové zprávy Turn reportu o příjezdu či přerušení. Otevřená je náhradní zkratka nabídky kolonií; implementace nezahájena.

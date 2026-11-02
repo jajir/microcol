@@ -1,5 +1,10 @@
 # UX a pravidla ovládání Akropia
 
+## Jednorázová plavba Go to
+
+1. Dohoda z 2. listopadu 2026 v [R-0396](requirements/R-0396.md) přejmenovává Goals na Objectives (O), česky Cíle. G otevírá Go to… / Plout do… pro vybranou vlastní loď. Zkratky se odvozují z angličtiny v obou jazycích; kolize s dosavadní nabídkou kolonií O zbývá vyřešit před implementací.
+2. Nabídka zpřístupní Evropu a vlastní přístavy. Zrušení nic nezmění; po potvrzení loď zobrazuje cíl a umožní změnu či zrušení rozkazu. Výsledek nebo nemožnost pokračovat vysvětlí jednorázová zpráva Turn reportu se jménem lodi, cílem a případným důvodem. [Pravidla plavby](gap-analysis.md#r-0396-ship-destinations) vlastní model. Jde o dohodnutý návrh, nikoli pozorování hráčů nebo ověřenou implementaci.
+
 ## Plánování obchodních tras
 
 1. Dohodnuté zadání z 1. listopadu 2026 zachycuje [R-0395](requirements/R-0395.md): přepínač vlevo nahoře přepne mapu do režimu barevných obchodních tras na tmavém podkladu. Najetí ukáže jméno a vlastnosti; výběr otevře popis a editaci konkrétní trasy v místě běžného pravého panelu.
