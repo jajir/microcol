@@ -1,5 +1,13 @@
 # First-release rules gap analysis
 
+<a id="greek-player-identities"></a>
+
+## Greek city-states and local peoples — agreed 2026-11-02
+
+1. [R-0402](requirements/R-0402.md) owns the agreed roster, narrative characteristics and initial flag directions: four Greek city-states replace the four existing colonial identities; eight local peoples replace the eight existing native identities. The complete roster and stories are maintained in that requirement, not duplicated here.
+2. The collective player-facing term becomes “místní národy / local peoples”, not “tribes”. Narrative themes do not introduce bonuses or fixed diplomatic attitudes. Existing mechanics remain unchanged; exact identity/modifier/settlement-class mapping and the adaptation of the homeland story still require refinement.
+3. Names, roster and initial Greek flag motifs are accepted decisions. Final flag artwork and the shared palette are the next design step under the [graphics contract](graphics.md#greek-player-flags). This records intended behavior only; implementation and gameplay acceptance have not started.
+
 **2026-10-14 requirement migration:** current ownership and newer evidence for
 R-0001–R-0040 are in the [migration map](requirements/migration-2026-10-14.md);
 select future work from the [new backlog](requirements/backlog.md). Older source

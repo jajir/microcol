@@ -1,5 +1,12 @@
 # Writing and publishing documentation
 
+## R-0402 Greek identities requirement — 2026-11-02
+
+1. [R-0402](requirements/R-0402.md), status `new`, captures the user's accepted four Greek city-states, eight local peoples, narrative characteristics and initial Greek flag directions. Final artwork and palette remain the next design step; gameplay implementation is not started.
+2. Documentation-only scope: requirement, backlog and shared rules/graphics links, plus this evidence. Base revision `b1ad4726`; no executable source, runtime assets, fixtures or configuration changed.
+3. Local acceptance: 14 documentation consistency tests passed with zero failures/errors/skips; the name audit found zero unexplained occurrences; strict MkDocs passed. Review checks the four chapters and both roster tables in rendered HTML.
+4. Model/JUnit, Docker UI and smoke are exempt for this documentation-only scope. Remote CI, Pages publication and game distributions are not inspected or claimed verified.
+
 The project website is [jajir.github.io/microcol](https://jajir.github.io/microcol/).
 It publishes only the Markdown documentation and assets from `docs/` on `main`,
 directly at that address. MkDocs renders the pages and builds navigation and

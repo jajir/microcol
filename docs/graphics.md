@@ -1,5 +1,13 @@
 # Grafické podklady a jejich použití v Akropia
 
+<a id="greek-player-flags"></a>
+
+## Vlajky městských států a místních národů — dohoda 2026-11-02
+
+1. [R-0402](requirements/R-0402.md) zachycuje schválené čtyři městské státy, osm místních národů a jejich příběhy. Pro městské státy jsou přijaty výchozí motivy a barevné směry z kapitoly 2; finální paleta, kresba a značky osmi místních národů čekají na následující návrh.
+2. Vlastnictví vyjadřuje vlajka s barevnou plochou, jednoduchým kontrastním symbolem a výraznou konturou. Symbol musí fungovat i bez rozlišení barev. Identita je společná pro jednotky, sídla a přehledy a oddělená od výběru jednotky, činnosti a diplomatického vztahu.
+3. Jde o herní stylizaci inspirovanou mincovními motivy, nikoli historicky doložené státní vlajky. Platí společný SVG kontrakt. Konkrétní rozměry a čitelnost se ověří při návrhu v herní velikosti; nyní nejsou dodány nové runtime obrázky ani výsledky hráčského ověření.
+
 ## Lodě B5 a karavela K5 — 2026-11-02
 
 1. Uživatel vybral [B5](graphics-assets/ships-2026-11-02/selected-b5.png) pro všech šest lodí, s karavelou nahrazenou variantou [K5](graphics-assets/ships-2026-11-02/selected-caravel-k5.png). Výběr a přejímku vlastní [R-0397](requirements/done/R-0397.md). PNG návrhy jsou vizuální předlohy, nikoli produkční zdroje.
