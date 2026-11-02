@@ -1,5 +1,8 @@
 # Current requirement backlog
 
+## Výběr jednotky z pravého panelu mapy — 2026-11-02
+1. [R-0401](R-0401.md), status `new`, oblast A03 se závislostí A05: kliknutí na kartu vlastní jednotky ji vybere a následné příkazy ovládají právě ji. Nahrazuje omezení informačního panelu z R-0272; zachycení požadavku, implementace nezahájena.
+
 ## Zásoby a změna za kolo v liště města — 2026-11-02
 1. [R-0400](R-0400.md), status `new`, oblast A03: místní zásoba a samostatná změna za kolo, zelený přírůstek a červený úbytek. Pouze pochodně a sovy zobrazují jen místní příspěvek za kolo; kladiva ukazují i nahromaděný stav. Zachycení požadavku, implementace nezahájena.
 

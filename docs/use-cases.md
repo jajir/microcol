@@ -1116,6 +1116,11 @@ Tato vizuální změna nemění stav úplné přejímky pravidel uvedených UC.
 
 ### UC-011/114/119: unit context on the map — 2026-10-25
 
+Agreed follow-up on 2026-11-02: [R-0401](requirements/R-0401.md) requests selecting
+a specific own unit by clicking its right-panel card, with subsequent commands
+targeting that unit. This supersedes the read-only-card expectation below once
+implemented; capture only, with no new implementation or verification claimed.
+
 1. [R-0272](requirements/done/R-0272.md) supersedes the card-based input path from
    R-0270: right-click a unit in the map, including one inside a colony; left
    click still enters the colony. The side panel is informational only.

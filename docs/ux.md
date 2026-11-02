@@ -1098,6 +1098,13 @@ ani vysvětlení nedostupných akcí. Viz [R-0279](requirements/done/R-0279.md).
 
 
 ### Příkazy jednotky přímo na mapě — R-0272
+Nové dohodnuté zadání z 2. listopadu 2026: [R-0401](requirements/R-0401.md)
+mění níže uvedené omezení informačního panelu. Kliknutí na kartu vlastní
+jednotky v pravém panelu ji má vybrat pro následné příkazy, se shodným
+zvýrazněním a skutečným cílem akcí. Výběr sám neprovede pohyb ani nezruší
+stávající rozkaz; nezpřístupní jinak nepovolené akce. Jde o zachycený
+požadavek, nikoli ověřenou implementaci; následující body popisují dosavadní kontrakt.
+
 
 1. Upřesnění uživatele z 25. října 2026 v [R-0272](requirements/done/R-0272.md)
    nahrazuje ovládání přes kartu jednotky z R-0270. Horní lišta obsahuje
