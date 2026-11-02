@@ -28,7 +28,7 @@ class CompletionTest(unittest.TestCase):
             record = run.request(args, "20261028T000000Z-example")
         self.assertEqual("ux", record["kind"])
         self.assertEqual("/bin/docker", record["docker"])
-        self.assertIn("microcol-ux-test/run.py", record["command"][1])
+        self.assertIn("akropia-ux-test/run.py", record["command"][1])
         self.assertEqual("check", record["command"][-1])
         self.assertNotIn("acceptance_seconds", record)
 
@@ -266,25 +266,25 @@ emit()
 if sys.argv[1] == 'compose':
     time.sleep(20)
 elif sys.argv[1] in ('stop', 'rm'):
-    assert sys.argv[-1] == 'microcol-test-123'
+    assert sys.argv[-1] == 'akropia-test-123'
 else:
     raise SystemExit(10)
 ''')
-        result = self.execute(kind="docker", docker=str(docker), container="microcol-test-123",
+        result = self.execute(kind="docker", docker=str(docker), container="akropia-test-123",
                               timeout_seconds=1, command=[str(docker), "compose"])
         self.assertEqual(result["status"], "timed_out")
         self.assertEqual(result["cleanup_errors"], [])
         calls = [e["args"] for e in self.observed() if e["tool"] == "docker"]
-        self.assertEqual(calls, [["compose"], ["stop", "--timeout", "10", "microcol-test-123"],
-                                 ["rm", "--force", "microcol-test-123"]])
+        self.assertEqual(calls, [["compose"], ["stop", "--timeout", "10", "akropia-test-123"],
+                                 ["rm", "--force", "akropia-test-123"]])
 
     def test_docker_client_failure_also_cleans_up_and_records_errors(self):
         docker = self.stub("docker", "emit(); print('daemon unavailable', file=sys.stderr); raise SystemExit(1)\n")
-        result = self.execute(kind="docker", docker=str(docker), container="microcol-owned",
+        result = self.execute(kind="docker", docker=str(docker), container="akropia-owned",
                               command=[str(docker), "compose"])
         self.assertEqual(result["status"], "failed")
         self.assertEqual(len(result["cleanup_errors"]), 2)
-        self.assertTrue(all(e["args"][-1] == "microcol-owned" for e in self.observed()
+        self.assertTrue(all(e["args"][-1] == "akropia-owned" for e in self.observed()
                             if e["tool"] == "docker" and e["args"][0] != "compose"))
 
     def test_docker_cleanup_waits_for_compose_automatic_removal(self):
@@ -296,12 +296,12 @@ if sys.argv[1] == 'rm':
     marker = Path(os.environ['PROBE_EVENTS'] + '.removing')
     if not marker.exists():
         marker.touch()
-        print('removal of container microcol-owned is already in progress', file=sys.stderr)
+        print('removal of container akropia-owned is already in progress', file=sys.stderr)
     else:
-        print('error: no such object: microcol-owned', file=sys.stderr)
+        print('error: no such object: akropia-owned', file=sys.stderr)
     raise SystemExit(1)
 ''')
-        result = self.execute(kind="docker", docker=str(docker), container="microcol-owned",
+        result = self.execute(kind="docker", docker=str(docker), container="akropia-owned",
                               command=[str(docker), "compose"])
         self.assertEqual((result["status"], result["exit_code"]), ("failed", 7))
         self.assertEqual(result["cleanup_errors"], [])
@@ -337,7 +337,7 @@ if sys.argv[1] == 'rm':
         with patch.object(run.subprocess, "check_output", return_value=SHA):
             record = run.request(args, "different-id")
         self.assertEqual(record["command"][-2:], ["ui-tests", "-Dsample=two words"])
-        self.assertEqual(record["container"], "microcol-different-id")
+        self.assertEqual(record["container"], "akropia-different-id")
         args = run.parse_args(["--thread", THREAD, "--timeout", "10800", "verify", "--",
                                "--workers", "2", "--timings", "path with spaces"])
         with patch.object(run.subprocess, "check_output", return_value=SHA):

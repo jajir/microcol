@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
-<title id="title">Hrozny</title>
-<desc id="description">MicroCol R-0384, selected proposal 15, 2026-11-01. Hand-authored vector paths; solid fills and transparent surroundings.</desc>
-<g id="bold-hand-drawn-outline" transform="translate(2 2) scale(0.9375)" stroke="#41413b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
-<g id="leaf"><path d="M31 19 L34 8 Q44 4 47 10 L56 12 L48 19 L52 27 Q39 28 34 19" fill="#87934c"/></g>
-<g id="grapes"><path d="M9 24 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M26 25 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M40 36 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M17 39 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M32 49 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M18 54 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/></g>
-</g>
-</svg>

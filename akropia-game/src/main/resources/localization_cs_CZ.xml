@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Test data for RBCPTest.java</comment>
+	
+	<entry key="mainMenu.game">Hra</entry>
+	<entry key="mainMenu.game.declareIndependence">Vyhlásit nezávislost</entry>
+	<entry key="mainMenu.game.newGame">Nová neomezená hra</entry>
+	<entry key="mainMenu.game.exitGame">Ukončit hru</entry>
+	<entry key="mainMenu.game.saveGame">Uložit hru</entry>
+	<entry key="mainMenu.game.loadGame">Načíst hru</entry>
+	<entry key="mainMenu.game.quitGame">Ukončit hru</entry>
+
+	<entry key="mainMenu.view">Zobrazení</entry>
+	<entry key="mainMenu.view.center">Na aktivní jednotku</entry>
+	<entry key="mainMenu.view.europe">Evropský přístav</entry>
+	<entry key="mainMenu.view.turnReport">Turn report</entry>
+	<entry key="mainMenu.view.statistics">Statistiky</entry>
+	<entry key="mainMenu.view.menuItemGoals">Cíle mise</entry>
+
+	<entry key="mainMenu.unit">Jednotka</entry>
+	<entry key="mainMenu.unit.move">Táhnout</entry>
+	<entry key="mainMenu.unit.buildColony">Založit kolonii</entry>
+	<entry key="mainMenu.unit.nextUnit">Další jednotka</entry>
+	<entry key="mainMenu.unit.plowFied">Založit pole</entry>
+
+	<entry key="mainMenu.preferences">Nastavení</entry>
+	<entry key="mainMenu.preferences.language">Jazyk</entry>
+	<entry key="mainMenu.preferences.language.cz">Česky</entry>
+	<entry key="mainMenu.preferences.language.en">Anglicky</entry>
+	<entry key="mainMenu.preferences.volume">Hlasitost</entry>
+	<entry key="mainMenu.preferences.animationSpeed">Rychlost animací</entry>
+	<entry key="mainMenu.preferences.showGrid">Zobrazit síť</entry>
+	<entry key="mainMenu.preferences.showFightAdvisor">Použít náhled před bojem</entry>
+
+	<entry key="mainMenu.help">Nápověda</entry>
+	<entry key="mainMenu.help.about">O hře Akropia</entry>
+	<entry key="mainMenu.help.colonizopedia">Colonizopedia</entry>
+
+	<entry key="aboutDialog.caption">O hře Akropia</entry>
+	<entry key="nextTurnButton">Další tah</entry>
+	<entry key="nextTurnButton.desctiption">Provede další tah, kdy táhnou ostatní hráči</entry>
+	<entry key="tile.ocean.name">Oceán</entry>
+	<entry key="tile.ocean.description">Široký a pustý oceán</entry>
+
+	<entry key="chooseGoodAmount.caption">Kolik chcete převést?</entry>
+	<entry key="chooseGoodAmount.zero">Nic</entry>
+	<entry key="chooseGoodAmount.everything">Všechno</entry>
+	<entry key="chooseGoodAmount.selectedAmount">Vybráno: </entry>
+
+	<entry key="europeDialog.caption">Evropský přístav</entry>
+	
+	<entry key="buyUnitDialog.title">Koupit jednotku</entry>
+	<entry key="buyUnitDialog.buttonBuyUnit">Koupit za</entry>
+
+	<entry key="recruitUnitDialog.title">Přispět na cestu</entry>
+	<entry key="recruitUnitDialog.buttonRecruiteUnit">Přispět</entry>
+
+	<entry key="newGameDialog.title">Nová hra</entry>
+	<entry key="newGameDialog.selectMap">Vyberte mapu</entry>
+	<entry key="newGameDialog.cancel">Zpět</entry>
+	<entry key="newGameDialog.startGame">Hrát</entry>
+
+	<entry key="europe.title">Evropa</entry>
+	<entry key="europe.shipsTravelingToNewWorld">Lodě plující do nového světa</entry>
+	<entry key="europe.shipsTravelingToEurope">Lodě plující do Evropy</entry>
+	<entry key="europe.pier">Molo</entry>
+	<entry key="europe.recruit">Najmout</entry>
+	<entry key="europe.buy">Koupit</entry>
+	
+</properties>

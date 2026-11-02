@@ -1,0 +1,71 @@
+package org.akropia.model.campaign.po;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.akropia.model.store.ModelPo;
+
+public class GameModelPo {
+    private String playthroughId;
+    private String saveName;
+
+    public String getPlaythroughId() {
+        return playthroughId;
+    }
+
+    public void setPlaythroughId(final String value) {
+        playthroughId = value;
+    }
+
+    public String getSaveName() {
+        return saveName;
+    }
+
+    public void setSaveName(final String value) {
+        saveName = value;
+    }
+
+    private String campaignName;
+
+    private String missionName;
+
+    private Map<String, String> goalData;
+
+    private ModelPo model;
+
+    public String getCampaignName() {
+        return campaignName;
+    }
+
+    public void setCampaignName(String campaignName) {
+        this.campaignName = campaignName;
+    }
+
+    public String getMissionName() {
+        return missionName;
+    }
+
+    public void setMissionName(String missionName) {
+        this.missionName = missionName;
+    }
+
+    public ModelPo getModel() {
+        return model;
+    }
+
+    public void setModel(ModelPo model) {
+        this.model = model;
+    }
+
+    public Map<String, String> getGoalData() {
+        if (goalData == null) {
+            goalData = new HashMap<>();
+        }
+        return goalData;
+    }
+
+    public void setData(Map<String, String> data) {
+        this.goalData = data;
+    }
+
+}

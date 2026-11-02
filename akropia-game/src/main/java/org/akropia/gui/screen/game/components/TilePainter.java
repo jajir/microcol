@@ -1,0 +1,82 @@
+package org.akropia.gui.screen.game.components;
+
+import static org.akropia.gui.Tile.TILE_WIDTH_IN_PX;
+
+import java.util.List;
+
+import org.akropia.gui.Point;
+import org.akropia.gui.event.model.GameModelController;
+import org.akropia.gui.util.PaintService;
+import org.akropia.model.Location;
+import org.akropia.model.ColonySighting;
+import org.akropia.model.Terrain;
+import org.akropia.model.Unit;
+
+import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
+/**
+ * Holds small canvas of fixed size of one tile. Class provide method to paint
+ * selected tile.
+ */
+class TilePainter {
+
+    private final PaintService paintService;
+
+    private final Canvas canvas;
+    private final GameModelController gameModelController;
+
+    @Inject
+    public TilePainter(final PaintService paintService,
+            final GameModelController gameModelController) {
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
+        this.paintService = Preconditions.checkNotNull(paintService);
+        canvas = new Canvas(TILE_WIDTH_IN_PX + 8, TILE_WIDTH_IN_PX);
+    }
+
+    void setTerrain(final Terrain terrain, final Location location) {
+        canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(),
+                canvas.getHeight());
+        paintService.paintTerrainPreview(canvas.getGraphicsContext2D(),
+                Point.of(4, 0), location, terrain,
+                gameModelController.getModel().getMap(),
+                gameModelController.getHumanPlayer());
+    }
+
+    void paintUnit(final List<Unit> units) {
+        final Unit unit = units.stream().findFirst().get();
+        paintService.paintUnit(canvas.getGraphicsContext2D(), Point.of(4, 0),
+                unit);
+    }
+
+    void paintColony(final ColonySighting sighting) {
+        paintService.paintColony(canvas.getGraphicsContext2D(), Point.of(4, 0),
+                sighting, false);
+    }
+
+    void setHiddenTerrain(final Location location) {
+        final GraphicsContext graphics = canvas.getGraphicsContext2D();
+        graphics.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        paintService.paintHiddenTile(graphics, Point.of(4, 0));
+        paintService.paintUnknownMark(graphics, Point.of(4, 0), location);
+    }
+
+    void clear() {
+        final GraphicsContext g = canvas.getGraphicsContext2D();
+        g.setFill(new Color(0, 0, 0, 0.34));
+        g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    }
+
+    /**
+     * @return the canvas
+     */
+    public Canvas getCanvas() {
+        return canvas;
+    }
+
+}

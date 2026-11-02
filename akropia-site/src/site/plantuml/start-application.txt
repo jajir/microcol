@@ -1,0 +1,15 @@
+@startsalt
+{+
+{/ Game | View | Unit | Preferences | Help }
+  --
+{
+  Akropia - game menu
+  [Continue in last saved game]
+  [Load saved game]
+  [Play campaign]
+  [New free play]
+  --
+  [  Exit Akropia  ]
+}
+}
+@endsalt

@@ -18,7 +18,7 @@ import time
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
-MODULES = ("microcol-game", "microcol-test")
+MODULES = ("akropia-game", "akropia-test")
 NS = {"m": "http://maven.apache.org/POM/4.0.0"}
 
 
@@ -188,7 +188,7 @@ class Runner:
         with log.open("w") as output:
             process = subprocess.Popen(command, stdout=output, stderr=subprocess.STDOUT,
                                        stdin=subprocess.DEVNULL,
-                                       start_new_session=not os.getenv("MICROCOL_TEST_PROCESS_GROUP"))
+                                       start_new_session=not os.getenv("AKROPIA_TEST_PROCESS_GROUP"))
             try:
                 while True:
                     if self.cancelled.is_set():
@@ -201,14 +201,14 @@ class Runner:
                         pass
             finally:
                 if process.poll() is None:
-                    if os.getenv("MICROCOL_TEST_PROCESS_GROUP"):
+                    if os.getenv("AKROPIA_TEST_PROCESS_GROUP"):
                         process.terminate()
                     else:
                         os.killpg(process.pid, signal.SIGTERM)
                     try:
                         process.wait(timeout=5)
                     except subprocess.TimeoutExpired:
-                        if os.getenv("MICROCOL_TEST_PROCESS_GROUP"):
+                        if os.getenv("AKROPIA_TEST_PROCESS_GROUP"):
                             process.kill()
                         else:
                             os.killpg(process.pid, signal.SIGKILL)
@@ -221,7 +221,7 @@ class Runner:
                   "expected": expected}
         command = self.compose + ["run", "--rm", "--no-deps", "--name", container,
                                   "-v", str(directory) + ":/results", "-e",
-                                  "MICROCOL_TEST_MODULE=" + module, "ui-tests"]
+                                  "AKROPIA_TEST_MODULE=" + module, "ui-tests"]
         # Explicit complete selection also includes the legacy-excluded ConnectorTest.
         command += ["-Dtest=" + ",".join(selection if selection is not None else expected),
                     "-Dsurefire.failIfNoSpecifiedTests=false"]
@@ -301,11 +301,11 @@ def main(argv=None):
     try:
         source = directory / "source"
         identity = snapshot(ROOT, source)
-        modules = ("microcol-test",) if args.smoke else ("microcol-game",) if args.model else MODULES
+        modules = ("akropia-test",) if args.smoke else ("akropia-game",) if args.model else MODULES
         expected = {module: inventory(source, module) for module in modules}
         if args.smoke:
-            expected["microcol-test"] = smoke_inventory(source, expected["microcol-test"])
-        allocations = partition(expected.get("microcol-test", {}), summary["workers"], read_timings(args.timings))
+            expected["akropia-test"] = smoke_inventory(source, expected["akropia-test"])
+        allocations = partition(expected.get("akropia-test", {}), summary["workers"], read_timings(args.timings))
         manifest = {"source": identity, "expected": expected, "ui_groups": allocations,
                     "workers": summary["workers"], "timeout_seconds": 420 if args.smoke else args.timeout,
                     "timings": str(args.timings.resolve()) if args.timings else None}
@@ -315,7 +315,7 @@ def main(argv=None):
         summary["revision"] = identity["revision"]
         # A unique image tag prevents another invocation's build replacing ours.
         override = directory / "compose.json"
-        write_json(override, {"services": {"ui-tests": {"image": "microcol-ui-verify:" + directory.name}}})
+        write_json(override, {"services": {"ui-tests": {"image": "akropia-ui-verify:" + directory.name}}})
         compose = ["docker", "compose", "-f", str(source / "compose.ui-tests.yml"), "-f", str(override)]
         runner = Runner(compose, args.timeout, cancelled, started + total_timeout if total_timeout else None)
         if runner.command(["docker", "info", "--format", "{{json .}}"], directory / "docker-info.json", 120):
@@ -323,29 +323,29 @@ def main(argv=None):
         if runner.command(compose + ["build", "ui-tests"], directory / "build.log"):
             raise ValueError("Image build failed; inspect build.log")
         if runner.command(["docker", "image", "inspect", "--format", "{{.Id}}",
-                           "microcol-ui-verify:" + directory.name], directory / "image-id.txt", 30):
+                           "akropia-ui-verify:" + directory.name], directory / "image-id.txt", 30):
             raise ValueError("Cannot identify built image")
         manifest["image_id"] = (directory / "image-id.txt").read_text().strip()
         write_json(directory / "manifest.json", manifest)
         write_json(override, {"services": {"ui-tests": {"image": manifest["image_id"]}}})
         if args.smoke:
-            selected = expected["microcol-test"]
+            selected = expected["akropia-test"]
             selection = [name + "#" + "+".join(methods)
                          if name.rsplit(".", 1)[-1].startswith("TC_") else name
                          for name, methods in selected.items()]
-            summary["groups"].append(runner.group(directory / "precommit", "microcol-test", selected,
-                                                "microcol-verify-" + directory.name + "-precommit", selection))
+            summary["groups"].append(runner.group(directory / "precommit", "akropia-test", selected,
+                                                "akropia-verify-" + directory.name + "-precommit", selection))
         else:
-            model = runner.group(directory / "model", "microcol-game", expected["microcol-game"],
-                                 "microcol-verify-" + directory.name + "-model")
+            model = runner.group(directory / "model", "akropia-game", expected["akropia-game"],
+                                 "akropia-verify-" + directory.name + "-model")
             summary["groups"].append(model)
             if model["status"] != "passed":
                 raise ValueError("Model verification failed; UI groups were not started")
             if not args.model:
                 with ThreadPoolExecutor(max_workers=args.workers) as executor:
                     futures = [executor.submit(runner.group, directory / ("ui-%02d" % (i + 1)),
-                                               "microcol-test", {name: expected["microcol-test"][name] for name in names},
-                                               "microcol-verify-" + directory.name + "-ui-%02d" % (i + 1))
+                                               "akropia-test", {name: expected["akropia-test"][name] for name in names},
+                                               "akropia-verify-" + directory.name + "-ui-%02d" % (i + 1))
                                for i, names in enumerate(allocations)]
                     summary["groups"].extend(future.result() for future in futures)
         if hashes(source, list(identity["files"])) != identity["files"]:

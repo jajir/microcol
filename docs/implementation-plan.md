@@ -1,4 +1,4 @@
-# Plán implementace MicroCol podle manuálu
+# Plán implementace Akropia podle manuálu
 
 Rozšíření CI rozpočtu a ruční spouštění regrese řeší [R-0375](requirements/done/R-0375.md).
 Konfigurace je v [development delivery](development-builds.md#run-full-tests-manually),
@@ -94,11 +94,11 @@ Pracovní výklad o samostatné výuce lze upřesnit při potvrzení cíle.
 
 **Současný stav doložený kódem, revize
 [`27a89c8e`](https://github.com/jajir/microcol/commit/27a89c8e87d732cc67227fa7dd70b43bdc193aac):**
-[ButtonsPanelPresenter.refresh](../microcol-game/src/main/java/org/microcol/gui/screen/menu/ButtonsPanelPresenter.java)
+[ButtonsPanelPresenter.refresh](../akropia-game/src/main/java/org/akropia/gui/screen/menu/ButtonsPanelPresenter.java)
 zpřístupňuje volnou hru až po dokončení kampaně. Naproti tomu
-[ApplicationController.startNewFreeGame](../microcol-game/src/main/java/org/microcol/gui/dialog/ApplicationController.java)
+[ApplicationController.startNewFreeGame](../akropia-game/src/main/java/org/akropia/gui/dialog/ApplicationController.java)
 už přímo spouští režim `freePlay` a jeho
-[factory](../microcol-game/src/main/java/org/microcol/model/campaign/FreePlay_0_missionFactory.java)
+[factory](../akropia-game/src/main/java/org/akropia/model/campaign/FreePlay_0_missionFactory.java)
 používá prázdné cíle mise. To neprokazuje úplnost pravidel ani dohratelnost
 celé partie; ty zůstávají předmětem balíků níže. Jde o čtení zdrojů,
 nikoli o nově provedený průchod běžící hrou.
@@ -437,10 +437,10 @@ navržené UX řešení varování z manuálu, nikoli tvrzení o původním dial
 - Potraviny, zahazování přebytků výroby a přepracování všech dokovacích panelů
   jsou mimo tento řez.
 
-Vstupní kód: [PanelColonyGoods](../microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelColonyGoods.java),
-[ColonyWarehouse](../microcol-game/src/main/java/org/microcol/model/ColonyWarehouse.java),
-[ColonyWarehouseTest](../microcol-game/src/test/java/org/microcol/model/ColonyWarehouseTest.java)
-a [CargoSlotTest](../microcol-game/src/test/java/org/microcol/model/CargoSlotTest.java).
+Vstupní kód: [PanelColonyGoods](../akropia-game/src/main/java/org/akropia/gui/screen/colony/PanelColonyGoods.java),
+[ColonyWarehouse](../akropia-game/src/main/java/org/akropia/model/ColonyWarehouse.java),
+[ColonyWarehouseTest](../akropia-game/src/test/java/org/akropia/model/ColonyWarehouseTest.java)
+a [CargoSlotTest](../akropia-game/src/test/java/org/akropia/model/CargoSlotTest.java).
 
 **Stav 11. října 2026:** realizace v samostatném PR do `main`; [evidence modelu,
 UI scénářů a přejímky](functional-tests.md#z01-bezpecne-vylozeni-nakladu).
@@ -502,9 +502,9 @@ není samostatnou podmínkou přijetí herních pravidel.
   terénních pravidel a zavedení konvertitů je samostatný řez COL-011.
 - Ověřit běžný, zrušený a neplatný průchod a návrat na mapu.
 
-Vstupní kód: [Model](../microcol-game/src/main/java/org/microcol/model/Model.java),
-[ModelListenerImpl](../microcol-game/src/main/java/org/microcol/gui/event/model/ModelListenerImpl.java)
-a [SelectedUnitManager](../microcol-game/src/main/java/org/microcol/gui/screen/game/gamepanel/SelectedUnitManager.java).
+Vstupní kód: [Model](../akropia-game/src/main/java/org/akropia/model/Model.java),
+[ModelListenerImpl](../akropia-game/src/main/java/org/akropia/gui/event/model/ModelListenerImpl.java)
+a [SelectedUnitManager](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/SelectedUnitManager.java).
 
 ### Z03 Specifikace a první řez průchodu tahem
 
@@ -663,7 +663,7 @@ Rozdělení práce a akceptace výše jsou návrhy pro následující zadání.
 
 ### Original World: authored content verification, 2026-10-24
 
-1. [R-0263](requirements/done/R-0263.md) now uses the separate `original-world.microcol` resource. The reference expedition continues to use `free-play.microcol`; Original World retains its existing Dutch-only start, French colonies and seed 134.
+1. [R-0263](requirements/done/R-0263.md) now uses the separate `original-world.akropia` resource. The reference expedition continues to use `free-play.akropia`; Original World retains its existing Dutch-only start, French colonies and seed 134.
 2. The fixed natural landscape contains every base terrain and resource kind, northern tundra attached to the continent, a southern ice shelf without tundra, and a small-to-large river reaching (25,13). The ordinary Dutch approach from (45,15) reaches sea square (26,14), reveals the mouth, and allows landing/founding at (25,14). Initial mineral reserves follow the shared rules: silver 100, ore 200, mixed 200 of each.
 3. The actual setup, sea journey, river rendering, landing, founding and Continue passed targeted tests. [Execution evidence](functional-tests.md#r-0263-fixed-original-world-2026-10-24) records counts and the passed smoke gate. The subsequent map palette/pen-outline change is not part of these content results.
 

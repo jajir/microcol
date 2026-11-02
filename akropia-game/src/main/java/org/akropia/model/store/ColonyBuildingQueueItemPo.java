@@ -1,0 +1,72 @@
+package org.akropia.model.store;
+
+import org.akropia.model.ConstructionType;
+import org.akropia.model.UnitType;
+
+public class ColonyBuildingQueueItemPo {
+
+    private QueueItemType type;
+
+    private Integer id;
+
+    private UnitType unitType;
+
+    private ConstructionType constructionType;
+
+    /**
+     * @return the type
+     */
+    public QueueItemType getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(QueueItemType type) {
+        this.type = type;
+    }
+
+    /**
+     * @return the id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the unitType
+     */
+    public UnitType getUnitType() {
+        return unitType;
+    }
+
+    /**
+     * @param unitType the unitType to set
+     */
+    public void setUnitType(UnitType unitType) {
+        this.unitType = unitType;
+    }
+
+    /**
+     * @return the constructionType
+     */
+    public ConstructionType getConstructionType() {
+        return constructionType;
+    }
+
+    /**
+     * @param constructionType the constructionType to set
+     */
+    public void setConstructionType(ConstructionType constructionType) {
+        this.constructionType = constructionType;
+    }
+
+}

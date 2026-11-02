@@ -1,0 +1,196 @@
+package org.akropia.test;
+
+import java.io.File;
+
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.akropia.model.Goods;
+import org.akropia.model.GoodsType;
+import org.akropia.model.Location;
+import org.akropia.page.ColonyScreen;
+import org.akropia.page.DialogChooseGoodsAmount;
+import org.akropia.page.GamePage;
+import org.akropia.page.WelcomePage;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
+import org.testfx.util.WaitForAsyncUtils;
+
+import javafx.stage.Stage;
+
+@ExtendWith(ApplicationExtension.class)
+public class TC_05_F05_moving_goods_test extends AbstractAkropiaTest {
+
+    private final static File testFileName = new File(
+            "src/test/scenarios/F05-moving-goods.akropia");
+
+    @Start
+    private void start(final Stage primaryStage) throws Exception {
+        initialize(primaryStage, getClass(), testFileName);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_moving_goods() throws Exception {
+        // open Akropia and load defined game
+        GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+        WaitForAsyncUtils.waitForFxEvents();
+
+        // Open colony Delft
+        final ColonyScreen colonyScreen = gamePage
+                .openColonyAt(Location.of(22, 12), "Delft");
+
+        // Drag food from first warehouse slot to first ship's cargo slot
+        colonyScreen.dragGoodsFromWarehouseToShipCargoSlot(0, 0);
+
+        // Verify that 100 grain was transferred.
+        colonyScreen.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 100));
+
+        // Drag grapes from third warehouse slot to second ship's cargo slot
+        colonyScreen.dragGoodsFromWarehouseToShipCargoSlot(2, 1);
+
+        // Verify that 54 grapes was transferred.
+        colonyScreen.verifyGoodsInShip(1, Goods.of(GoodsType.GRAPES, 54));
+
+        // Drag food from first warehouse slot to first ship's cargo slot.
+        // Ship's cargo
+        // slot is already full.
+        colonyScreen.dragGoodsFromWarehouseToShipCargoSlot(0, 0);
+
+        // Verify that still just 100 grain is in cargo.
+        colonyScreen.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 100));
+
+        // Drag 100 grain to third cargo slot, press control during dragging
+        final DialogChooseGoodsAmount dialog = colonyScreen
+                .dragGoodsFromWarehouseToShipCargoSlotWithPressedControll(0, 2);
+
+        // Select that just 47 grain will be transferred.
+        dialog.verifyNumberOfSliders(1);
+        dialog.selectValueAtSlider(47);
+
+        // Close dialog for choosing transferred amount.
+        dialog.clickOnOk();
+
+        // Verify that just 47 grain was transferred.
+        colonyScreen.verifyGoodsInShip(2, Goods.of(GoodsType.GRAIN, 47));
+
+        // Drag grain from ship cargo slot to warehouse, press control during
+        // dragging.
+        final DialogChooseGoodsAmount dialog2 = colonyScreen
+                .dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(0, 0);
+
+        // Select that just 77 goods will be transfered
+        dialog2.verifyNumberOfSliders(1);
+        dialog2.selectValueAtSlider(77);
+
+        // Close dialog
+        dialog2.clickOnOk();
+
+        // Verify that just 23 grain is in first cargo slot.
+        colonyScreen.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 23));
+
+        // Unload 17 grain from the third cargo slot into the first warehouse
+        // slot.
+        final DialogChooseGoodsAmount dialog3 = colonyScreen
+                .dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(2, 0);
+        dialog3.verifyNumberOfSliders(1);
+        dialog3.selectValueAtSlider(17);
+        dialog3.clickOnOk();
+
+        // Verify that the selected cargo slot lost goods and the first slot did
+        // not.
+        colonyScreen.verifyGoodsInShip(2, Goods.of(GoodsType.GRAIN, 30));
+        colonyScreen.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 23));
+
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_moving_goods_without_pressed_control() throws Exception {
+        // open Akropia and load defined game
+        GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+        WaitForAsyncUtils.waitForFxEvents();
+
+        // Open colony Delft
+        final ColonyScreen colonyScreen = gamePage
+                .openColonyAt(Location.of(22, 12), "Delft");
+
+        // Drag food from first warehouse slot to first ship's cargo slot
+        colonyScreen.dragGoodsFromWarehouseToShipCargoSlot(0, 0);
+
+        // Verify that 100 grain was transferred.
+        colonyScreen.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 100));
+
+        // Drag grapes from third warehouse slot to second ship's cargo slot
+        colonyScreen.dragGoodsFromWarehouseToShipCargoSlot(2, 1);
+
+        // Verify that 54 grapes was transferred.
+        colonyScreen.verifyGoodsInShip(1, Goods.of(GoodsType.GRAPES, 54));
+
+        // Drag food from first warehouse slot to first ship's cargo slot.
+        // Ship's cargo
+        // slot is already full.
+        colonyScreen.dragGoodsFromWarehouseToShipCargoSlot(0, 0);
+
+        // Verify that still just 100 grain is in cargo.
+        colonyScreen.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 100));
+
+        // Drag 100 grain to third cargo slot
+        colonyScreen.dragGoodsFromWarehouseToShipCargoSlot(0, 2);
+
+        // Verify that just 100 grain was transferred.
+        colonyScreen.verifyGoodsInShip(2, Goods.of(GoodsType.GRAIN, 96));
+
+        // Drag grain from ship cargo slot to warehouse
+        colonyScreen.dragGoodsFromShipCargoSlotToWarehouse(0, 0);
+        DialogChooseGoodsAmount.of(getContext()).clickOnOk();
+
+        // Verify that just 0 grain is in first cargo slot.
+        colonyScreen.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
+
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_mooving_to_warehouse_more_than_limit() throws Exception {
+        // open Akropia and load defined game
+        GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+        WaitForAsyncUtils.waitForFxEvents();
+
+        // Open colony Delft
+        ColonyScreen colonyScreen = gamePage.openColonyAt(Location.of(22, 12),
+                "Delft");
+
+        // Drag food from first warehouse slot to first ship's cargo slot
+        colonyScreen.dragGoodsFromWarehouseToShipCargoSlot(0, 0);
+
+        // Verify that 100 grain was transferred.
+        colonyScreen.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 100));
+
+        gamePage = colonyScreen.close();
+
+        gamePage.nextTurnAndCloseDialogs();
+
+        gamePage.nextTurnAndCloseDialogs();
+
+        gamePage.nextTurnAndCloseDialogs();
+
+        // Open colony Delft
+        colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
+
+        // Record the warehouse grain before unloading the full cargo slot.
+        final int grainBefore = getModel().getColonyAt(Location.of(22, 12))
+                .get().getWarehouse().getGoods(GoodsType.GRAIN).getAmount();
+
+        // Drag grain from ship cargo slot to warehouse.
+        colonyScreen.dragGoodsFromShipCargoSlotToWarehouse(0, 0);
+        DialogChooseGoodsAmount.of(getContext()).clickOnOk();
+
+        // All 100 grain should reach the warehouse; the ship's slot should be
+        // empty.
+        colonyScreen.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
+        colonyScreen.verifyWarehouseGoods(
+                Goods.of(GoodsType.GRAIN, grainBefore + 100));
+    }
+
+}

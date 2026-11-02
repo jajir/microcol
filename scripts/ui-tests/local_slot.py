@@ -13,9 +13,9 @@ import sys
 import time
 from urllib.parse import urlsplit
 
-LOCK_PATH = Path.home() / ".cache/microcol/docker-tests.lock"
+LOCK_PATH = Path.home() / ".cache/akropia/docker-tests.lock"
 OWNER = str(os.getuid())
-LABEL = "org.microcol.local-test=" + OWNER
+LABEL = "org.akropia.local-test=" + OWNER
 CLEANUP_SECONDS = 20
 
 
@@ -211,8 +211,8 @@ class LocalSlot:
         event(self.log, self.phase, "start", command=command)
         read_fd, write_fd = os.pipe()
         try:
-            env = dict(os.environ, MICROCOL_LOCAL_TEST_OWNER=OWNER,
-                       MICROCOL_TEST_PROCESS_GROUP="1")
+            env = dict(os.environ, AKROPIA_LOCAL_TEST_OWNER=OWNER,
+                       AKROPIA_TEST_PROCESS_GROUP="1")
             self.process = subprocess.Popen(
                 [sys.executable, str(Path(__file__).resolve()), "--gated", str(read_fd), *command],
                 pass_fds=(read_fd,), start_new_session=True, env=env, **kwargs)

@@ -1,0 +1,925 @@
+package org.akropia.model;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
+/**
+ * This is class defining all in game available units. Enumeration doesn't
+ * support nice builders. Because of that this class is not enumerations.
+ *
+ * <p>
+ * It's not necessary to implements equals because of number of instances is
+ * defined here in class. Outside of this class other instances can't be
+ * created.
+ * </p>
+ */
+public final class UnitType {
+
+    /**
+     * Default production of all goods in default case.
+     */
+    private static final float DEFAULT_PRODUCTION_MODIFIER = 1F;
+
+    /**
+     * Default frigate price in Europe port.
+     */
+    private static final int DEFAULT_FRIGATE_EUROPE_PRICE = 4_000;
+
+    /**
+     * Default frigate speed.
+     */
+    private static final int DEFAULT_FRIGATE_SPEED = 6;
+
+    /**
+     * Default frigate price in Europe port.
+     */
+    private static final int DEFAULT_GALLEON_EUROPE_PRICE = 5_000;
+
+    /**
+     * Default galleon cargo capacity.
+     */
+    private static final int DEFAULT_GALLEON_CARGO_CAPACITY = 6;
+
+    /**
+     * Holds one treasure train reserves in a ship (R-0134): it fills all six
+     * holds of a galleon, so no other cargo fits beside it.
+     */
+    private static final int TREASURE_REQUIRED_HOLDS = 6;
+
+    /**
+     * Default galleon speed.
+     */
+    private static final int DEFAULT_GALLEON_SPEED = 6;
+
+    /**
+     * Default master blacksmith price in Europe port.
+     */
+    private static final int DEFAULT_FREE_COLONIST_EUROPE_PRICE = 1_400;
+
+    /**
+     * Default ore miner price in Europe port.
+     */
+    private static final int DEFAULT_ORE_MINER_EUROPE_PRICE = 1_000;
+
+    /**
+     * Default master blacksmith price in Europe port.
+     */
+    private static final int DEFAULT_MASTER_BLACKSMITH_EUROPE_PRICE = 2_200;
+
+    /**
+     * There is no unit that could be attacked.
+     */
+    private static final Predicate<UnitType> UNIT_TYPE_CANT_ATTACK = unitType -> false;
+
+    /**
+     * When unit is in colony that this define number of food ate per turn.
+     */
+    private final static int ATE_FOOD_PER_TURN = 2;
+
+    private final String name;
+    private final List<TerrainType> moveableTerrains;
+    private final int speed;
+    private final int cargoCapacity;
+    private final boolean storable;
+    /**
+     * How many ship holds a stored unit of this type reserves; one for an
+     * ordinary passenger, six for a treasure train (R-0134).
+     */
+    private final int requiredHolds;
+    private final int europePrice;
+    private final BiFunction<Model, Colony, Boolean> canByBuildInColony;
+
+    /**
+     * Here is good type in which production is unit exceptional. When it's
+     * <code>null</code> than unit is not expert on producing any type of goods.
+     */
+    private final GoodsType expertInProducing;
+
+    /**
+     * Production multiplier on basic good production.
+     */
+    private final float expertProductionModifier;
+
+    /**
+     * Predicate allows to find unit types that could be attacked by this unit
+     * type.
+     */
+    private final Predicate<UnitType> attackableUnitTypeFilter;
+
+    /**
+     * it's <code>true</code> when unit could plow field.
+     */
+    private final boolean canPlowField;
+
+    /**
+     * it's <code>true</code> when unit could build road.
+     */
+    private final boolean canBuildRoad;
+
+    /**
+     * it's <code>true</code> when unit could cut down trees.
+     */
+    private final boolean canCutTrees;
+
+    /**
+     * How many tools is required to build unit.
+     */
+    private final Integer requiredTools;
+
+    /**
+     * How many hammers is required to build unit.
+     */
+    private final Integer requiredHammers;
+
+    public static final UnitType COLONIST = UnitType.make().setName("COLONIST")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+            .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
+            .setCargoCapacity(0).setStorable(true)
+            .setEuropePrice(DEFAULT_FREE_COLONIST_EUROPE_PRICE)
+            .setCanBuildRoad(true).setCanCutTrees(true).setCanPlowField(true)
+            .build();
+
+    /**
+     * Native brave with its home link. Its strength comes from its role
+     * (R-0173); its walking speed is assumed equal to the colonist until a
+     * movement value is accepted. It attacks land units like the other walking
+     * units.
+     */
+    public static final UnitType BRAVE = UnitType.make().setName("BRAVE")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+            .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
+            .setCargoCapacity(0).setStorable(false).setEuropePrice(0).build();
+
+    public static final UnitType INDENTURED_SERVANT = UnitType.make()
+            .setName("INDENTURED_SERVANT")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+            .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
+            .setCargoCapacity(0).setStorable(true).setEuropePrice(0)
+            .setCanBuildRoad(true).setCanCutTrees(true).setCanPlowField(true)
+            .build();
+
+    public static final UnitType PETTY_CRIMINAL = UnitType.make()
+            .setName("PETTY_CRIMINAL")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+            .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
+            .setCargoCapacity(0).setStorable(true).setEuropePrice(0)
+            .setCanBuildRoad(true).setCanCutTrees(true).setCanPlowField(true)
+            .build();
+
+    public static final UnitType EXPERT_ORE_MINER = UnitType.make()
+            .setName("EXPERT_ORE_MINER")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+            .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
+            .setCargoCapacity(0).setStorable(true)
+            .setEuropePrice(DEFAULT_ORE_MINER_EUROPE_PRICE)
+            .setExpertise(GoodsType.ORE, 2.0F).setCanBuildRoad(true)
+            .setCanCutTrees(true).setCanPlowField(true).build();
+
+    private static UnitType specialist(final String name, final int price,
+            final GoodsType expertise) {
+        final UnitTypeBuilder builder = UnitType.make().setName(name)
+                .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+                .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
+                .setCargoCapacity(0).setStorable(true).setEuropePrice(price)
+                .setCanBuildRoad(true).setCanCutTrees(true)
+                .setCanPlowField(true);
+        if (expertise != null) {
+            builder.setExpertise(expertise, 2.0F);
+        }
+        return builder.build();
+    }
+
+    public static final UnitType EXPERT_FARMER = specialist("EXPERT_FARMER",
+            1_000, GoodsType.GRAIN);
+    public static final UnitType EXPERT_FISHERMAN = specialist(
+            "EXPERT_FISHERMAN", 1_000, GoodsType.GRAIN);
+    public static final UnitType EXPERT_CLAY_DIGGER = specialist(
+            "EXPERT_CLAY_DIGGER", 1_000, GoodsType.CLAY);
+    public static final UnitType EXPERT_SILVER_MINER = specialist(
+            "EXPERT_SILVER_MINER", 1_000, GoodsType.SILVER);
+    public static final UnitType EXPERT_LUMBERJACK = specialist(
+            "EXPERT_LUMBERJACK", 1_000, GoodsType.LUMBER);
+    /** Native/school skills are intentionally unavailable for Europe buying. */
+    public static final UnitType MASTER_OLIVE_GROWER = specialist(
+            "MASTER_OLIVE_GROWER", 0, GoodsType.OLIVES);
+    public static final UnitType MASTER_SHEPHERD = specialist("MASTER_SHEPHERD",
+            0, GoodsType.WOOL);
+    public static final UnitType MASTER_GRAPE_GROWER = specialist(
+            "MASTER_GRAPE_GROWER", 0, GoodsType.GRAPES);
+
+    public static final UnitType MASTER_CARPENTER = specialist(
+            "MASTER_CARPENTER", 1_000, GoodsType.HAMMERS);
+    public static final UnitType MASTER_OIL_MAKER = specialist(
+            "MASTER_OIL_MAKER", 2_000, GoodsType.OLIVE_OIL);
+    public static final UnitType MASTER_WEAVER = specialist("MASTER_WEAVER",
+            2_000, GoodsType.CLOTH);
+    public static final UnitType MASTER_WINEMAKER = specialist(
+            "MASTER_WINEMAKER", 2_000, GoodsType.WINE);
+    public static final UnitType MASTER_POTTER = specialist("MASTER_POTTER",
+            2_000, GoodsType.AMPHORAE);
+    public static final UnitType MASTER_WEAPONSMITH = specialist(
+            "MASTER_WEAPONSMITH", 2_000, GoodsType.WEAPONS);
+
+    public static final UnitType FIREBRAND_PREACHER = specialist(
+            "FIREBRAND_PREACHER", 3_000, GoodsType.TORCHES);
+    public static final UnitType ELDER_STATESMAN = specialist("ELDER_STATESMAN",
+            3_000, GoodsType.OWLS);
+    public static final UnitType SEASONED_SCOUT = specialist("SEASONED_SCOUT",
+            1_000, null);
+    public static final UnitType HARDY_PIONEER = specialist("HARDY_PIONEER",
+            1_000, null);
+    public static final UnitType VETERAN_SOLDIER = specialist("VETERAN_SOLDIER",
+            2_000, null);
+    public static final UnitType JESUIT_MISSIONARY = specialist(
+            "JESUIT_MISSIONARY", 3_000, null);
+
+    public static final UnitType WAGON = UnitType.make().setName("WAGON")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+            .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
+            .setCargoCapacity(2).setStorable(false).setEuropePrice(0)
+            .setCanBuildRoad(false).setCanCutTrees(false).setCanPlowField(false)
+            .setRequiredTools(40).setRequiredHammers(0)
+            .setCanByBuildInColony((model, colony) -> {
+                return colony
+                        .wasConstructionBuilded(ConstructionType.LUMBER_MILL);
+            }).build();
+
+    /**
+     * Treasure train of a conquered native settlement (R-0175). It is a land
+     * unit with no combat strength of its own, and its face value is carried by
+     * the unit, not by the owner's gold. Europe does not sell it, no colony
+     * builds it. A ship stores it only in six free holds, which it reserves as
+     * one unit (R-0134).
+     */
+    public static final UnitType TREASURE_TRAIN = UnitType.make()
+            .setName("TREASURE_TRAIN")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+            .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
+            .setCargoCapacity(0).setStorable(true)
+            .setRequiredHolds(TREASURE_REQUIRED_HOLDS).setEuropePrice(0)
+            .build();
+
+    public static final UnitType ARTILLERY = UnitType.make()
+            .setName("ARTILLERY")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+            .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
+            .setCargoCapacity(0).setStorable(true).setEuropePrice(500)
+            .setRequiredHammers(200).setRequiredTools(100)
+            .setCanByBuildInColony((model, colony) -> colony
+                    .wasConstructionBuilded(ConstructionType.ARMORY)
+                    || colony.wasConstructionBuilded(ConstructionType.MAGAZINE)
+                    || colony.wasConstructionBuilded(ConstructionType.ARSENAL))
+            .build();
+
+    public static final UnitType MASTER_BLACKSMITH = UnitType.make()
+            .setName("MASTER_BLACKSMITH")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT).setSpeed(1)
+            .setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
+            .setCargoCapacity(0).setStorable(true)
+            .setEuropePrice(DEFAULT_MASTER_BLACKSMITH_EUROPE_PRICE)
+            .setExpertise(GoodsType.TOOLS, 2.0F).setCanBuildRoad(true)
+            .setCanCutTrees(true).setCanPlowField(true).build();
+
+    public static final UnitType FRIGATE = UnitType.make().setName("FRIGATE")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT)
+            .setSpeed(DEFAULT_FRIGATE_SPEED)
+            .setAttackableUnitTypeFilter(unitType -> unitType.isShip())
+            .setCargoCapacity(4).setStorable(false)
+            .setEuropePrice(DEFAULT_FRIGATE_EUROPE_PRICE).setRequiredTools(100)
+            .setRequiredHammers(100).setCanByBuildInColony((model, colony) -> {
+                return colony.wasConstructionBuilded(ConstructionType.SHIPYARD)
+                        && model.isOwnedCoastalPort(colony.getOwner(),
+                                colony.getLocation());
+            }).build();
+
+    public static final UnitType GALLEON = UnitType.make().setName("GALLEON")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT)
+            .setSpeed(DEFAULT_GALLEON_SPEED)
+            .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
+            .setCargoCapacity(DEFAULT_GALLEON_CARGO_CAPACITY).setStorable(false)
+            .setEuropePrice(DEFAULT_GALLEON_EUROPE_PRICE).setRequiredTools(100)
+            .setRequiredHammers(100).setCanByBuildInColony((model, colony) -> {
+                return colony.wasConstructionBuilded(ConstructionType.SHIPYARD)
+                        && model.isOwnedCoastalPort(colony.getOwner(),
+                                colony.getLocation());
+            }).build();
+
+    public static final UnitType CARAVEL = UnitType.make().setName("CARAVEL")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT).setSpeed(4)
+            .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
+            .setCargoCapacity(2).setStorable(false).setEuropePrice(1_000)
+            .build();
+
+    public static final UnitType MERCHANTMAN = UnitType.make()
+            .setName("MERCHANTMAN")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT).setSpeed(5)
+            .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
+            .setCargoCapacity(4).setStorable(false).setEuropePrice(2_000)
+            .build();
+
+    public static final UnitType PRIVATEER = UnitType.make()
+            .setName("PRIVATEER")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT).setSpeed(8)
+            .setAttackableUnitTypeFilter(unitType -> unitType.isShip())
+            .setCargoCapacity(2).setStorable(false).setEuropePrice(2_000)
+            .build();
+
+    public static final UnitType MAN_OF_WAR = UnitType.make()
+            .setName("MAN_OF_WAR")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT).setSpeed(6)
+            .setAttackableUnitTypeFilter(unitType -> unitType.isShip())
+            .setCargoCapacity(6).setStorable(false).setEuropePrice(0).build();
+
+    /**
+     * List of all available unit types.
+     */
+    public static final List<UnitType> EUROPEAN_SPECIALISTS = ImmutableList.of(
+            EXPERT_FARMER, EXPERT_FISHERMAN, EXPERT_CLAY_DIGGER,
+            EXPERT_SILVER_MINER, EXPERT_LUMBERJACK, EXPERT_ORE_MINER,
+            MASTER_CARPENTER, MASTER_OIL_MAKER, MASTER_WEAVER, MASTER_WINEMAKER,
+            MASTER_POTTER, MASTER_BLACKSMITH, MASTER_WEAPONSMITH,
+            FIREBRAND_PREACHER, ELDER_STATESMAN, SEASONED_SCOUT, HARDY_PIONEER,
+            VETERAN_SOLDIER, JESUIT_MISSIONARY);
+
+    public static final List<UnitType> SCHOOL_ONLY_SPECIALISTS = ImmutableList
+            .of(MASTER_OLIVE_GROWER, MASTER_SHEPHERD, MASTER_GRAPE_GROWER);
+
+    /**
+     * Skills marked as teachable by natives on the skills card (R-0157). A
+     * settlement offers one of them, chosen at map creation. The order is
+     * fixed, because the map seed draws from it.
+     */
+    public static final List<UnitType> NATIVE_TEACHABLE_SKILLS = ImmutableList
+            .of(EXPERT_FARMER, EXPERT_FISHERMAN, EXPERT_CLAY_DIGGER,
+                    EXPERT_SILVER_MINER, MASTER_OLIVE_GROWER, MASTER_SHEPHERD,
+                    MASTER_GRAPE_GROWER, SEASONED_SCOUT);
+
+    public static final List<UnitType> UNIT_TYPES = ImmutableList
+            .<UnitType>builder()
+            .add(COLONIST, INDENTURED_SERVANT, PETTY_CRIMINAL, ARTILLERY,
+                    FRIGATE, GALLEON, CARAVEL, MERCHANTMAN, PRIVATEER,
+                    MAN_OF_WAR, WAGON, BRAVE, TREASURE_TRAIN)
+            .addAll(EUROPEAN_SPECIALISTS).addAll(SCHOOL_ONLY_SPECIALISTS)
+            .build();
+
+    private static final Map<String, UnitType> UNIT_TYPES_BY_NAME = UNIT_TYPES
+            .stream().collect(ImmutableMap.toImmutableMap(UnitType::name,
+                    Function.identity()));
+
+    /**
+     * Unit type builder.
+     */
+    private static final class UnitTypeBuilder {
+
+        private String name;
+        private List<TerrainType> moveableTerrains;
+        private int speed;
+        private int cargoCapacity;
+        private Predicate<UnitType> attackableUnitTypeFilter;
+        private boolean storable;
+        private int requiredHolds = 1;
+        private int europePrice;
+        private GoodsType expertInProducing;
+        private float expertProductionModifier;
+        private boolean canPlowField = false;
+        private boolean canBuildRoad = false;
+        private boolean canCutTrees = false;
+        private Integer requiredTools = null;
+        private Integer requiredHammers = null;
+        private BiFunction<Model, Colony, Boolean> canByBuildInColony = null;
+
+        /**
+         * Method that build final unit type and return it.
+         *
+         * @return Return final unit type definition.
+         */
+        UnitType build() {
+            return new UnitType(name, moveableTerrains, speed,
+                    attackableUnitTypeFilter, cargoCapacity, storable,
+                    requiredHolds, europePrice, expertInProducing,
+                    expertProductionModifier, canPlowField, canBuildRoad,
+                    canCutTrees, requiredTools, requiredHammers,
+                    canByBuildInColony);
+        }
+
+        /**
+         * Allows to set unit type's name.
+         *
+         * @param unitTypeName required unit types's name
+         * @return return unit type builder object
+         */
+        UnitTypeBuilder setName(final String unitTypeName) {
+            this.name = unitTypeName;
+            return this;
+        }
+
+        /**
+         * Allows to set list of terrain types on which unit could move.
+         *
+         * @param moveableTerrainList required list of terrain types
+         * @return return unit type builder object
+         */
+        UnitTypeBuilder setMoveableTerrains(
+                final List<TerrainType> moveableTerrainList) {
+            this.moveableTerrains = moveableTerrainList;
+            return this;
+        }
+
+        /**
+         * Allows to set unit type speed.
+         *
+         * @param newSpeed required speed
+         * @return return unit type builder object
+         */
+        UnitTypeBuilder setSpeed(final int newSpeed) {
+            this.speed = newSpeed;
+            return this;
+        }
+
+        /**
+         * Allows to filter to find attackable unit types.
+         *
+         * @param filter required filter definition
+         * @return return unit type builder object
+         */
+        UnitTypeBuilder setAttackableUnitTypeFilter(
+                final Predicate<UnitType> filter) {
+            this.attackableUnitTypeFilter = filter;
+            return this;
+        }
+
+        /**
+         * Allows to set cargo capacity.
+         *
+         * @param newCargoCapacity required cargo capacity.
+         * @return return unit type builder object
+         */
+        UnitTypeBuilder setCargoCapacity(final int newCargoCapacity) {
+            this.cargoCapacity = newCargoCapacity;
+            return this;
+        }
+
+        /**
+         * Allows to set if unit could be stored in cargo.
+         *
+         * @param defaultStorable required information if unit could be place to
+         *                        store.
+         * @return return unit type builder object
+         */
+        UnitTypeBuilder setStorable(final boolean defaultStorable) {
+            this.storable = defaultStorable;
+            return this;
+        }
+
+        /**
+         * @param holds required number of ship holds one stored unit reserves
+         * @return return unit type builder object
+         */
+        UnitTypeBuilder setRequiredHolds(final int holds) {
+            this.requiredHolds = holds;
+            return this;
+        }
+
+        /**
+         * Allows to set price in Europe.
+         *
+         * @param defaultEuropePrice required price in Europe
+         * @return return unit type builder object
+         */
+        UnitTypeBuilder setEuropePrice(final int defaultEuropePrice) {
+            this.europePrice = defaultEuropePrice;
+            return this;
+        }
+
+        /**
+         * Allows to set if unit type define expert unit and if there is any
+         * production modifiers.
+         *
+         * @param newExpertInProducing        Required if unit is expert in
+         *                                    production
+         * @param newExpertProductionModifier Required if there is some
+         *                                    production modifiers.
+         * @return return unit type builder object
+         */
+        UnitTypeBuilder setExpertise(final GoodsType newExpertInProducing,
+                final float newExpertProductionModifier) {
+            this.expertInProducing = newExpertInProducing;
+            this.expertProductionModifier = newExpertProductionModifier;
+            return this;
+        }
+
+        /**
+         * @param canPlowField the canPlowField to set
+         * @return this builder
+         */
+        UnitTypeBuilder setCanPlowField(final boolean canPlowField) {
+            this.canPlowField = canPlowField;
+            return this;
+        }
+
+        /**
+         * @param canBuildRoad the canBuildRoad to set
+         * @return this builder
+         */
+        UnitTypeBuilder setCanBuildRoad(final boolean canBuildRoad) {
+            this.canBuildRoad = canBuildRoad;
+            return this;
+        }
+
+        /**
+         * @param canCutTrees the canCutTrees to set
+         * @return this builder
+         */
+        UnitTypeBuilder setCanCutTrees(final boolean canCutTrees) {
+            this.canCutTrees = canCutTrees;
+            return this;
+        }
+
+        /**
+         * @param requiredTools the requiredTools to set
+         * @return this builder
+         */
+        UnitTypeBuilder setRequiredTools(final Integer requiredTools) {
+            this.requiredTools = requiredTools;
+            return this;
+        }
+
+        /**
+         * @param requiredHammers the requiredHammers to set
+         * @return this builder
+         */
+        UnitTypeBuilder setRequiredHammers(final Integer requiredHammers) {
+            this.requiredHammers = requiredHammers;
+            return this;
+        }
+
+        /**
+         * @param canByBuildInColony the canByBuildInColony to set
+         * @return this builder
+         */
+        UnitTypeBuilder setCanByBuildInColony(
+                BiFunction<Model, Colony, Boolean> canByBuildInColony) {
+            this.canByBuildInColony = canByBuildInColony;
+            return this;
+        }
+
+    }
+
+    /**
+     * Unit type constructor. Should be called just from this class.
+     *
+     * @param name                     required name
+     * @param moveableTerrains         required list of terrain that unit could
+     *                                 move on
+     * @param speed                    required default speed
+     * @param attackableUnitTypeFilter required function that could select
+     *                                 attackable unit type
+     * @param cargoCapacity            required default cargo capacity
+     * @param storable                 required if unit could be placed in cargo
+     * @param requiredHolds            required number of ship holds a stored
+     *                                 unit reserves, at least one
+     * @param europePrice              required default price in Europe port
+     * @param expertInProducing        required unit's expertise
+     * @param expertProductionModifier required production modifiers
+     * @param canPlowField             required if unit could plow field
+     * @param canBuildRoad             required if unit could build road
+     * @param canCutTrees              required if unit could cut down trees
+     * @param requiredTools            optional number of tools required to
+     *                                 build unit
+     * @param requiredHammers          optional number of hammers required to
+     *                                 build unit
+     * @param canByBuildInColony       optional function defining rules which
+     *                                 have to be met to be able to build unit
+     *                                 in colony. When it's <code>null</code>
+     *                                 than it's never possible to build unit in
+     *                                 colony.
+     */
+    UnitType(final String name, final List<TerrainType> moveableTerrains,
+            final int speed, final Predicate<UnitType> attackableUnitTypeFilter,
+            final int cargoCapacity, final boolean storable,
+            final int requiredHolds, final int europePrice,
+            final GoodsType expertInProducing,
+            final float expertProductionModifier, final boolean canPlowField,
+            final boolean canBuildRoad, final boolean canCutTrees,
+            final Integer requiredTools, final Integer requiredHammers,
+            final BiFunction<Model, Colony, Boolean> canByBuildInColony) {
+        this.name = Preconditions.checkNotNull(name);
+        this.moveableTerrains = Preconditions.checkNotNull(moveableTerrains);
+        this.speed = speed;
+        this.attackableUnitTypeFilter = Preconditions
+                .checkNotNull(attackableUnitTypeFilter);
+        this.cargoCapacity = cargoCapacity;
+        this.storable = storable;
+        Preconditions.checkArgument(requiredHolds >= 1,
+                "A stored unit reserves at least one hold");
+        this.requiredHolds = requiredHolds;
+        this.europePrice = europePrice;
+        this.expertInProducing = expertInProducing;
+        this.expertProductionModifier = expertProductionModifier;
+        this.canPlowField = canPlowField;
+        this.canBuildRoad = canBuildRoad;
+        this.canCutTrees = canCutTrees;
+        this.requiredTools = requiredTools;
+        this.requiredHammers = requiredHammers;
+        this.canByBuildInColony = canByBuildInColony;
+    }
+
+    /**
+     * Static factory for unit type builder.
+     *
+     * @return Return unit type builder.
+     */
+    private static UnitTypeBuilder make() {
+        return new UnitTypeBuilder();
+    }
+
+    /**
+     * Unit type name.
+     *
+     * @return Return unit type name.
+     */
+    public String name() {
+        return name;
+    }
+
+    /**
+     * Same function as in enum type. It convert string type to class.
+     *
+     * @param unitTypeName required unit type as string
+     * @return Return corresponding class
+     * @throws IllegalArgumentException Exception is thrown when give string
+     *                                  doesn't match any class.
+     */
+    public static UnitType valueOf(final String unitTypeName) {
+        if (UNIT_TYPES_BY_NAME.get(unitTypeName) == null) {
+            throw new IllegalArgumentException(String
+                    .format("There is no such UnitType (%s)", unitTypeName));
+        } else {
+            return UNIT_TYPES_BY_NAME.get(unitTypeName);
+        }
+    }
+
+    /**
+     * Get info if this unit is ship.
+     *
+     * @return Return <code>true</code> if this unit type is some kind of ship
+     *         otherwise return <code>false</code>.
+     */
+    public boolean isShip() {
+        return this == UnitType.FRIGATE || this == UnitType.GALLEON
+                || this == UnitType.CARAVEL || this == UnitType.MERCHANTMAN
+                || this == UnitType.PRIVATEER || this == UnitType.MAN_OF_WAR;
+    }
+
+    /**
+     * Get list of terrain types on which unit could move.
+     *
+     * @return List of unit type.
+     */
+    public List<TerrainType> getMoveableTerrains() {
+        return moveableTerrains;
+    }
+
+    /**
+     * How many food eat unit when is located in colony per turn.
+     *
+     * @return number of ate food
+     */
+    public int getAteFoodPerTurn() {
+        return ATE_FOOD_PER_TURN;
+    }
+
+    /**
+     * Get unit type speed. It's used as maximum number of action points per
+     * turn.
+     *
+     * @return Unit type's speed.
+     */
+    public int getSpeed() {
+        return speed;
+    }
+
+    /**
+     * Get info if unit could attack any unit.
+     *
+     * @return Return <code>true</code> if unit could attack any other unit
+     *         otherwise return <code>false</code>.
+     */
+    public boolean canAttack() {
+        return !getAttackableUnitType().isEmpty();
+    }
+
+    /**
+     * Get list of unit types that could be attacked by this unit type. When
+     * list is empty than there is no unit that could be attacked.
+     *
+     * @return List of unit type that could be attacked.
+     */
+    public List<UnitType> getAttackableUnitType() {
+        return UNIT_TYPES.stream().filter(attackableUnitTypeFilter)
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    /**
+     * Get cargo capacity.
+     *
+     * @return Return cargo capacity.
+     */
+    public int getCargoCapacity() {
+        return cargoCapacity;
+    }
+
+    /**
+     * Return information whether unit could be stored in cargo of some other
+     * unit.
+     *
+     * @return Return <code>true</code> if unit could be stored in cargo
+     *         otherwise return <code>false</code>.
+     */
+    public boolean isStorable() {
+        return storable;
+    }
+
+    /**
+     * How many ship holds a stored unit of this type reserves. A passenger
+     * occupies all of them as one unit, so it is never copied into each hold.
+     *
+     * @return number of holds, at least one
+     */
+    public int getRequiredHolds() {
+        return requiredHolds;
+    }
+
+    /**
+     * Return information whether unit could move at given terrain.
+     *
+     * @param terrain required terrain
+     * @return Return <code>true</code> when unit type coud move at given
+     *         terrain otherwise return <code>false</code>.
+     */
+    public boolean canMoveAtTerrain(final TerrainType terrain) {
+        Preconditions.checkNotNull(terrain);
+        return moveableTerrains.contains(terrain);
+    }
+
+    /**
+     * Get info if unit could hold cargo.
+     *
+     * @return Return <code>true</code> when unit could hold cargo otherwise
+     *         return <code>false</code>.
+     */
+    public boolean canHoldCargo() {
+        return cargoCapacity > 0;
+    }
+
+    /**
+     * Can unit type build new colony.
+     *
+     * @return Return <code>true</code> when unit type could build colony. When
+     *         return <code>false</code> unit type can't build colony.
+     */
+    public boolean canBuildColony() {
+        return !isShip() && !canHoldCargo() && this != TREASURE_TRAIN;
+    }
+
+    /**
+     * @return the goods this type is an expert in producing, or {@code null}
+     *         when it is not a producing specialist, such as a scout
+     */
+    public GoodsType getExpertInProducing() {
+        return expertInProducing;
+    }
+
+    /**
+     * How much more of given goods type could unit produce.
+     *
+     * @param goodsType required good type
+     * @return goods type related production modifier
+     */
+    public float getProductionModifier(final GoodsType goodsType) {
+        if (goodsType.equals(expertInProducing)) {
+            return expertProductionModifier;
+        } else {
+            return DEFAULT_PRODUCTION_MODIFIER;
+        }
+    }
+
+    public float getFieldProductionModifier(final GoodsType goodsType,
+            final Terrain terrain) {
+        Preconditions.checkNotNull(goodsType);
+        Preconditions.checkNotNull(terrain);
+        final boolean fishing = terrain.getTerrainType().isSea()
+                || terrain.getRiverSize() != RiverSize.NONE;
+        if (goodsType == GoodsType.GRAIN) {
+            if (this == EXPERT_FARMER) {
+                return fishing ? 1.0F : 2.0F;
+            }
+            if (this == EXPERT_FISHERMAN) {
+                return fishing ? 2.0F : 1.0F;
+            }
+        }
+        return getProductionModifier(goodsType);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof UnitType) {
+            final UnitType other = (UnitType) obj;
+            return name.equals(other.name);
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("name", name())
+                .add("speed", speed).add("canAttack", canAttack())
+                .add("cargoCapacity", cargoCapacity).add("storable", storable)
+                .toString();
+    }
+
+    /**
+     * Default item price in Europe port.
+     *
+     * @return return price in Europe
+     */
+    public int getEuropePrice() {
+        return europePrice;
+    }
+
+    /**
+     * @return the canPlowField
+     */
+    public boolean isCanPlowField() {
+        return canPlowField;
+    }
+
+    /**
+     * @return the canBuildRoad
+     */
+    public boolean isCanBuildRoad() {
+        return canBuildRoad;
+    }
+
+    /**
+     * @return the canCutTrees
+     */
+    public boolean isCanCutTrees() {
+        return canCutTrees;
+    }
+
+    /**
+     * @return the requiredTools
+     */
+    public Integer getRequiredTools() {
+        return requiredTools;
+    }
+
+    /**
+     * @return the requiredHammers
+     */
+    public Integer getRequiredHammers() {
+        return requiredHammers;
+    }
+
+    /**
+     * Get information if unit could be build in colony lumber mill.
+     *
+     * @return return <code>true</code> when unit could be build in colony
+     *         lumber mill otherwise return <code>false</code>
+     */
+    public boolean canBeBuildInColony() {
+        return requiredTools != null && requiredHammers != null;
+    }
+
+    /**
+     * @return the canByBuildInColony
+     */
+    public BiFunction<Model, Colony, Boolean> getCanByBuildInColony() {
+        if (canByBuildInColony == null) {
+            return (model, colony) -> false;
+        } else {
+            return canByBuildInColony;
+        }
+    }
+
+}

@@ -1,0 +1,45 @@
+package org.akropia.model.event;
+
+import org.akropia.model.Location;
+import org.akropia.model.Model;
+import org.akropia.model.Path;
+import org.akropia.model.Unit;
+
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+
+/**
+ * Event is send when movement is finished. Event contains movement description.
+ */
+public final class UnitMoveFinishedEvent extends AbstractModelEvent {
+
+    private final Unit unit;
+
+    private final Path path;
+
+    public UnitMoveFinishedEvent(final Model model, final Unit unit,
+            final Path path) {
+        super(model);
+
+        this.unit = Preconditions.checkNotNull(unit);
+        this.path = Preconditions.checkNotNull(path);
+    }
+
+    public Unit getUnit() {
+        return unit;
+    }
+
+    public Location getStartLocation() {
+        return path.getStart();
+    }
+
+    public Location getTargetLocation() {
+        return path.getTarget();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("unit", unit).toString();
+    }
+
+}

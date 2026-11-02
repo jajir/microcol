@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
-<title id="title">Pochodeň</title>
-<desc id="description">MicroCol R-0384, selected proposal 15, 2026-11-01. Hand-authored vector paths; solid fills and transparent surroundings.</desc>
-<g id="bold-hand-drawn-outline" transform="translate(2 2) scale(0.9375)" stroke="#41413b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
-<g id="flame"><path d="M21 36 Q9 25 24 13 L25 22 Q37 15 34 5 Q50 18 42 26 L48 20 Q51 34 37 42 Z" fill="#ee933a"/><path d="M27 37 Q20 31 29 26 L30 31 L37 22 Q44 35 35 41 Z" fill="#f1c74f"/></g>
-<g id="torch-handle"><path d="M23 38 L36 41 L28 59 L20 57 Z" fill="#ac8352"/></g>
-</g>
-</svg>

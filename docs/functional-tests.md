@@ -1,5 +1,16 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0389 Akropia project rename — 2026-11-02
+
+1. Candidate based on `4cf07149`, implemented by Claude completion `20261102T014414Z-04fc3d7a9953` (737.824 s), followed by bounded tooling/evidence completion `20261102T015959Z-4cdd9cb24efe` (379.962 s). Parent reviewed the rename, applied the shared formatter to 1,919 Java files and regenerated branded graphics. All ten modules remain, including the reference-only `akropia-site`. Existing player data and external host directories were not moved or rewritten. New model alias configuration is not proof that those aliases are installed.
+2. Model/JUnit completion `20261102T015901Z-bb4d5307b519`, `target/verification/run-yszus1zn`, completed **4,954 tests: 1 failure, 0 errors, 0 skips** in 157.490 supervised seconds. The sole failure is `UnitArtworkTest.allTypesAndStatesHaveDistinctBoldArtworkInsideTransparentMargins`, FRIGATE opaque ink at 45 px. The user explicitly allowed this existing baseline exception while preserving the artwork. This run remains failed; it is not recorded as an all-green model result.
+3. Tooling checks passed: UI runner 37, CI 27, completion runner 24, local-worker 21; final graphics 17 and documentation 14 tests, all without failures. The initial documentation attempt used the graphics virtualenv and failed on missing Markdown; rerunning in the existing docs virtualenv passed. Strict MkDocs passed. The per-occurrence tracked-source/path name audit reports zero unexplained remnants; remaining external repository/Pages identities stay valid. Historical log references use explicitly explained pre-rename root placeholders, not invented relocated files.
+4. All 62 maintained graphics exports match fresh rendering. Three legacy text icons were regenerated from genuine `icon.svg`; repeated exports are byte-identical. Parent visually reviewed the Akropia splash and text icon. The separate church distribution icon and FRIGATE artwork are unchanged. Embedded font checks for the changed logo, icon and navigation diagram passed; incidental font refreshes on unrelated historical diagrams were reverted. The font helper now supports explicit files and text SVGs without an existing defs element, with a regression test.
+5. Initial launcher verification `20261102T020834Z-479d4375e50f` failed in 1.832 s because the caller's Surefire filter selected no tests. No source repair was needed. The unfiltered standard command `mvn -B -ntp -pl akropia-build-tests -am verify` under JDK 17 passed in completion `20261102T020936Z-65afb7c8592f` (20.214 s): **36 tests, zero failures/errors/skips**. Exact suites: ArchiveSupportTest (5), GameReportSupportTest (5), LauncherTest (11), MacosWrapperTest (4), PublicationTest (10) and LauncherPackageIT (1). This checks assembled launcher archives and simulated update/publication behavior; it neither publishes a release nor verifies a complete native game distribution.
+6. Initial focused Docker/Xvfb run `20261102T020232Z-fea61cac0dcd`, `run-qVo2ue`, completed 43 tests with 1 failure, no errors/skips (536.880 s). TC84 corner-coordinate hover hit the new trade-route overlay button. Claude repair `20261102T021233Z-092ab0c74618` (128.287 s) changes only the shared GamePage pointer helper: choose the nearest uncovered point on the same tile, considering visible map controls and the lower toolbar. First/last corner assertions and production camera behavior are unchanged. Parent reviewed and formatted the repair.
+7. Expanded retry `20261102T021543Z-8086bc3bdd16`, `target/docker-ui/run-6W56Aq`, passed **48 tests, zero failures/errors/skips**, in 638.703 supervised seconds: TC12 (1), TC21 (10), TC84 (9), TC191 (8), TC42 (5), TC43 (7), TC02 (1), TC07 (2), TC28 (2) and PageVerificationContractTest (3). Parent visually reviewed the [new-brand main menu](assets/r0389-2026-11-02/main-menu.png). Production/model sources are unchanged since the model phase; only the UI test helper was repaired.
+8. This is provisional batch integration under the user's explicit deferral of combined acceptance. Native-distribution profile checks, broader shared-helper callers, combined batch acceptance and the single final smoke/support phase remain pending. R-0389 remains ready for development. Current new-brand download filenames are pending the next independently verified publication, not claimed available downloads.
+
 ## R-0394 Mediterranean goods terminology — 2026-11-02
 
 1. [R-0394](requirements/R-0394.md) is implemented provisionally; final combined batch acceptance remains pending. Goods, professions, building tiers, resource overlays, localization keys, assets, equipment save fields and test identifiers follow the agreed one-to-one mapping. Stable scenario IDs and gameplay quantities remain unchanged. Historical evidence below retains the terminology and test names applicable to its tested revision.
@@ -30,7 +41,7 @@
 Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f65209113ec176e7ec184383636898e`** subsequently passed 4,814 model, 38 targeted Docker and 3 native macOS tests. Concurrent artwork commits `76ee5f87` and `d147bb72` are included in that checked revision. The later `fb0d635a` artwork commit is outside this verification. Final batch smoke remains pending; detailed combined-revision results are recorded at the end of this page.
 
 1. Ordinary European market drops now open a purchase choice at the model's affordable/capacity maximum, explain the limit, and show tax, total and remaining gold. Cancel and Escape buy nothing; stale offers reject without partial effects. Command on macOS or Ctrl elsewhere buys the current maximum at drop, with visible outcome feedback.
-2. Final source: 33 changed executable/test/resource files based on `57be46c12ce07509c873a3f31d029656ce78170a`; newer main changes through `14ace5a0` are documentation-only. The final source hashes and review record are saved in `~/Library/Logs/Microcol/claude/2026-10-31-ordered/R-0378/acceptance-source-codex-final.json` and `review-progress.json`.
+2. Final source: 33 changed executable/test/resource files based on `57be46c12ce07509c873a3f31d029656ce78170a`; newer main changes through `14ace5a0` are documentation-only. The final source hashes and review record are saved in `$PRE_R0389_LOGS/claude/2026-10-31-ordered/R-0378/acceptance-source-codex-final.json` and `review-progress.json`.
 3. Model/JUnit: **4,814 tests**, 356 reports, zero failures/errors/skips (`run-dlrmwds3`, completion `20261101T132127Z-891ae91c3039`, 141.920 s). Targeted Docker/Xvfb: **38 tests**, zero failures/errors/skips (`run-amI6He`, completion `20261101T132409Z-e93052788c21`, 551.542 s). Selection: TC06, TC194, TC94, TC95, TC108, TC79, TC110, TC27 and PageVerificationContractTest.
 4. Native macOS: **3 tests**, zero failures/errors/skips (completion `20261101T133342Z-51293aa3efab`, 63.169 s): TC06 key held at drop, gold-limit/tax/remaining-gold choice and cargo movement. This verifies actual Command press-during-drag and release-before-drop behavior, alongside the existing Control quantity gesture. Reports and screenshots are retained in the job's `native-final/` directory.
 5. English/Czech narrow/wide purchase screenshots and the wrapped both-limit explanation were reviewed; native screenshots show the Command hint. Shared Java formatting, nine documentation consistency tests and strict MkDocs passed. These automated checks are not a player usability study. Historical failed/canceled runs below remain failed/canceled.
@@ -57,23 +68,23 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 ## Ordered development paused — 2026-10-31
 
 1. At the user's explicit request, further development, verification and integration stopped after host disk exhaustion and Docker becoming unresponsive. Resume only on a new user instruction; no background job is being started by this status update.
-2. R-0381 (`7f8d27e7`) and R-0379 (`57be46c1`) were locally accepted and pushed. R-0378's candidate remains uncommitted in `/Users/jan/.codex/worktrees/claude-ordered-requirements/microcol`; its refined requirement is synchronized here solely to record the actual state. No candidate executable files are integrated by this update.
+2. R-0381 (`7f8d27e7`) and R-0379 (`57be46c1`) were locally accepted and pushed. R-0378's candidate remains uncommitted in `/Users/jan/.codex/worktrees/claude-ordered-requirements/$PRE_R0389_CHECKOUT`; its refined requirement is synchronized here solely to record the actual state. No candidate executable files are integrated by this update.
 3. R-0378's initial model phase passed 4,814 checks, zero failures/errors/skips (`run-uej15yhr`). Targeted UI run `20261031T150201Z-54c038e79740` failed during test compilation before UI execution. Claude's focused repair resolved the ambiguous lookup; local `test-compile` subsequently passed, executing no tests. Repaired-source verification `20261031T150548Z-a550bd1c5acc` was interrupted by disk exhaustion without a completion record; retry `20261031T193344Z-a6a0bd90f5a2` timed out in Docker preparation before tests started. Neither is an acceptance pass.
-4. Repaired-source model acceptance, targeted Docker UI tests, native macOS shortcut verification, screenshot review, smoke and final documentation validation remain pending. Later requirements in the requested order were not started. Detailed evidence, source hashes and recovery records are preserved under `~/Library/Logs/Microcol/claude/2026-10-31-ordered/R-0378/` and the completion directories. This status-only update runs no tests/builds and makes no new publication claim.
+4. Repaired-source model acceptance, targeted Docker UI tests, native macOS shortcut verification, screenshot review, smoke and final documentation validation remain pending. Later requirements in the requested order were not started. Detailed evidence, source hashes and recovery records are preserved under `$PRE_R0389_LOGS/claude/2026-10-31-ordered/R-0378/` and the completion directories. This status-only update runs no tests/builds and makes no new publication claim.
 
 
 ## Europe purchase confirmation — R-0378 (2026-10-31)
 
 1. [R-0378](requirements/R-0378.md), UC-056/057, introduces a model-owned purchase limit and immutable displayed terms. Ordinary market-to-hold drops open the purchase choice at the affordable/capacity maximum; the platform quick-buy key held at the drop buys that maximum immediately. Changes to price, tax, treasury, trade access or the hold reject a stale confirmation before mutation. Implementation and acceptance are in progress.
-2. Claude Code first attempt `20261031T143024Z-d72e27f328ff` completed in **1,552.532 s** on base `57be46c1`. Caller reviewed the model snapshot, confirmation path, drop dispatch and test coverage, then applied the shared Eclipse formatter to all **25 changed Java files**, including new files. Source hashes and worker evidence are retained under `~/Library/Logs/Microcol/claude/2026-10-31-ordered/R-0378/`.
+2. Claude Code first attempt `20261031T143024Z-d72e27f328ff` completed in **1,552.532 s** on base `57be46c1`. Caller reviewed the model snapshot, confirmation path, drop dispatch and test coverage, then applied the shared Eclipse formatter to all **25 changed Java files**, including new files. Source hashes and worker evidence are retained under `$PRE_R0389_LOGS/claude/2026-10-31-ordered/R-0378/`.
 3. Model/JUnit run `target/verification/run-uej15yhr`, completion `20261031T145912Z-a6fc20710fc6`, passed **4,814 checks in 356 fresh XML reports**, zero failures/errors/skips, in **148.005 s** including preparation and cleanup. All 29 changed executable/test/resource file hashes match the tested source snapshot. New checks comprise 11 `EuropePurchaseLimitTest` and two `QuickBuyShortcutTest` checks; shortcut unit tests do not establish native macOS behavior.
 4. Targeted Docker/Xvfb selection: `TC_06_F06_buy_and_sell_goods_test,TC_194_F226_europe_harbor_test,TC_94_F85_national_market_pressure_test,TC_95_F86_dutch_market_pressure_test,TC_108_F99_trade_accounts_test,TC_79_F71_back_tax_payment_test,TC_110_F101_fugger_boycott_test,TC_27_F19_europe_equipment_test,PageVerificationContractTest`. Dispatch `20261031T150201Z-54c038e79740`, PID `66346`, timeout 3,600 s; results pending. Native macOS Command-at-drop verification, screenshot review, fixed smoke/support, documentation validation and final acceptance remain pending.
 
-5. The first targeted attempt above failed during `microcol-test` test compilation, before any UI scenario started: `ScreenMarketBuy.java:120` used a lambda ambiguous between TestFX `NodeQuery.lookup(Predicate)` and `lookup(Function)`. Evidence is retained in `target/docker-ui/run-XS4RWN` and completion `20261031T150201Z-54c038e79740`; elapsed **32.072 s**, exit 1, cleanup successful. Caller sent the exact compiler diagnostic to the same Claude session for focused repair 1; no assertions or required tests were waived.
+5. The first targeted attempt above failed during `akropia-test` test compilation, before any UI scenario started: `ScreenMarketBuy.java:120` used a lambda ambiguous between TestFX `NodeQuery.lookup(Predicate)` and `lookup(Function)`. Evidence is retained in `target/docker-ui/run-XS4RWN` and completion `20261031T150201Z-54c038e79740`; elapsed **32.072 s**, exit 1, cleanup successful. Caller sent the exact compiler diagnostic to the same Claude session for focused repair 1; no assertions or required tests were waived.
 
 6. Claude repair 1 (`20261031T150455Z-12f91b7bc779`, **23.396 s**) introduced a typed `Predicate<Node>` for the same slider-label match; all assertions and scenario IDs remain unchanged. Caller reviewed the exact difference and reapplied the shared formatter. Repaired-source model dispatch: `20261031T150548Z-a550bd1c5acc`, PID `67034`, timeout 600 s. A separate native-source preparation failed when the host disk reached 117 MiB free; no native compilation or UI test started. Caller removed only the unused task-created native copies and began compressing completed earlier source snapshots with per-file hash verification, preserving reports, logs and screenshots.
 
-7. Storage recovery consolidated the six completed R-0381/R-0379 source snapshots into `~/Library/Logs/Microcol/claude/2026-10-31-ordered/R-0378/completed-source-snapshots.tar.gz`. All **19,464 source-file hashes** were verified before removing the duplicate copies; each original run retains `source-archive.json` with its member prefix, archive hash and per-file hashes. Reports, logs and screenshots remain at their original paths. The verified archive is **227,026,687 bytes**; host free space recovered to **2,101,649,408 bytes**. This housekeeping does not change any historical test outcome.
+7. Storage recovery consolidated the six completed R-0381/R-0379 source snapshots into `$PRE_R0389_LOGS/claude/2026-10-31-ordered/R-0378/completed-source-snapshots.tar.gz`. All **19,464 source-file hashes** were verified before removing the duplicate copies; each original run retains `source-archive.json` with its member prefix, archive hash and per-file hashes. Reports, logs and screenshots remain at their original paths. The verified archive is **227,026,687 bytes**; host free space recovered to **2,101,649,408 bytes**. This housekeeping does not change any historical test outcome.
 
 8. Follow-up inspection after the missing callback found repaired-source model run `20261031T150548Z-a550bd1c5acc` incomplete: its process was gone, `result.json`, notification evidence and verifier summary were absent, and its log ended during cleanup with `write /dev/stdout: no space left on device`. The earlier statement that it was still running was incorrect. This attempt is retained as incomplete, not accepted; all repaired candidate source hashes remain unchanged. Verification resumes only after the storage recovery above.
 
@@ -88,8 +99,8 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 
 
 5. Final source based on `7f8d27e718c5f7e1311982db7b1d53ec9f575dd3` passed shared Java formatting and caller review. Model run `target/verification/run-sjv_spj9` passed **4,801 checks in 354 reports**, zero failures/errors/skips, in **136.966 s** including cleanup. The full targeted selection was rerun after the layout repair: `target/docker-ui/run-REAnRV` passed the same **30 checks** and seven selected classes/method selections, zero failures/errors/skips, in **1,192.717 s**. This includes all nine TC29 cases and the rendered-text assertions.
-6. Caller inspected the repaired English and Czech screenshots in that targeted run's `microcol-test/warehouse-qa/`: passenger names and both action captions are fully visible and clear of the frame. Fixed smoke `target/verification/run-vtn9le1a` passed **21 checks in 12 reports**, zero failures/errors/skips, in **214.401 s**, within the 420-second budget. Reviewed source hashes match the accepted candidate and verifier snapshots.
-7. Completion/source evidence is retained under `~/Library/Logs/Microcol/claude/2026-10-31-ordered/R-0379/`. Initial model dispatch `20261031T133318Z-c01aa67d9704` timed out during Docker preparation before tests; the runtime subsequently responded and the unchanged phase was retried. The obsolete smoke remains canceled and the first candidate remains visually rejected. All nine documentation consistency checks and the strict MkDocs build passed at closure. No remote CI, full regression or publication verification is claimed.
+6. Caller inspected the repaired English and Czech screenshots in that targeted run's `akropia-test/warehouse-qa/`: passenger names and both action captions are fully visible and clear of the frame. Fixed smoke `target/verification/run-vtn9le1a` passed **21 checks in 12 reports**, zero failures/errors/skips, in **214.401 s**, within the 420-second budget. Reviewed source hashes match the accepted candidate and verifier snapshots.
+7. Completion/source evidence is retained under `$PRE_R0389_LOGS/claude/2026-10-31-ordered/R-0379/`. Initial model dispatch `20261031T133318Z-c01aa67d9704` timed out during Docker preparation before tests; the runtime subsequently responded and the unchanged phase was retried. The obsolete smoke remains canceled and the first candidate remains visually rejected. All nine documentation consistency checks and the strict MkDocs build passed at closure. No remote CI, full regression or publication verification is claimed.
 
 
 ## R-0381 compact Europe voyage spacing — 2026-10-31
@@ -98,8 +109,8 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 2. `EuropeHarborPage.verifyVoyageHeadingSpacing()` checks horizon clearance, shared placement, centered untruncated headings, a 2–12 px heading-to-list gap, at least 2 px to every ship frame and at most 12 px to a selected frame. `TC_194_F226_europe_harbor_test` covers English at 1280×900 and 1000×760 (`TC_01`), Czech at both sizes (`TC_02`), and 2560×1000 / 1000×1000 (`TC_03`). `TC_06_F06_buy_and_sell_goods_test.TC_06_moving_goods` covers empty groups. Existing gameplay, scrolling, cargo and keyboard/mouse departure assertions remain.
 3. The first targeted run, `target/docker-ui/run-lRhicS`, remains failed: 11 checks, one error and no skips. After keyboard departure the dock selected ship 3100 automatically; the test helper clicked it again and deselected it. Claude repaired `selectShip` to retain an existing selection, following the colony dock helper, and added cargo verification before the real mouse departure. No game behavior or assertion was weakened.
 4. Final shared-profile Java formatting and review passed. Model run `target/verification/run-jo_cq9dd` passed **4,801 checks in 354 reports**, zero failures/errors/skips, in **135.524 s** including cleanup. Targeted Docker/Xvfb run `target/docker-ui/run-LM0Dqz` passed **11 checks**: four TC194, four TC06 and three `PageVerificationContractTest`, zero failures/errors/skips, in **144.488 s**. Fixed smoke run `target/verification/run-vqw6jv7g` passed **21 checks in 12 reports**, zero failures/errors/skips, in **211.422 s**, within the 420-second budget. Source hashes match the reviewed candidate and both verifier snapshots.
-5. Caller inspected the full, empty, Czech narrow and wide harbor screenshots against the selected variant C: the headings remain below the horizon, frames retain a visible compact gap, routes meet the voyage rows and dock ends stay in place. Screenshots are in the targeted run's `microcol-test/warehouse-qa/`; unchanged genuine vector sources and derived artwork require no re-export.
-6. Completion and source evidence is retained under `~/Library/Logs/Microcol/claude/2026-10-31-ordered/R-0381/`. The first model dispatch `20261031T130231Z-153f2134adb6` timed out during Docker preparation before any test command; the runtime subsequently responded and retries used the same limits. Historical failed attempts remain failed. All nine documentation consistency checks and the strict MkDocs build passed at closure. No remote CI, full regression or publication verification is claimed.
+5. Caller inspected the full, empty, Czech narrow and wide harbor screenshots against the selected variant C: the headings remain below the horizon, frames retain a visible compact gap, routes meet the voyage rows and dock ends stay in place. Screenshots are in the targeted run's `akropia-test/warehouse-qa/`; unchanged genuine vector sources and derived artwork require no re-export.
+6. Completion and source evidence is retained under `$PRE_R0389_LOGS/claude/2026-10-31-ordered/R-0381/`. The first model dispatch `20261031T130231Z-153f2134adb6` timed out during Docker preparation before any test command; the runtime subsequently responded and retries used the same limits. Historical failed attempts remain failed. All nine documentation consistency checks and the strict MkDocs build passed at closure. No remote CI, full regression or publication verification is claimed.
 
 
 ## R-0380 discoverable Europe departure — 2026-10-31
@@ -107,7 +118,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 1. [R-0380](requirements/done/R-0380.md) implements UX-08 and the selected harbor design for UC-027 and UC-025. The button and drag gesture share the existing validated model departure; no travel rule or save schema changed. Headings omit counts and share the page title's typography. The departure button shares the toolbar's button factory, styling, height rule and 32-pixel icon.
 2. Updated `TC_194_F226_europe_harbor_test` and `EuropeHarborPage` retain all list/cargo assertions and adapt heading expectations. Added `TC_04_depart_loaded_ship_with_shared_button` covers selection, keyboard and mouse departure, unchanged goods, list membership and shared control/heading appearance. The existing fixture remains unchanged.
 3. The user explicitly requested implementation, commit and push **without any tests**. Model/JUnit, targeted Docker/Xvfb UI, smoke, source/tooling and documentation tests were not run; strict MkDocs was also omitted. No new runtime screenshot, manual gameplay check, full regression or remote publication verification was performed. This is an explicit completion exception, not a passing acceptance report.
-4. The seven changed Java files were formatted with the shared `mujSunFormatter` profile through Eclipse JDT 3.47.0. `mvn -B -ntp -pl microcol-test -am -DskipTests test-compile` completed successfully in 6.907 seconds. It compiled the game and test sources and executed **zero tests**. Source review and inspection of exported artwork do not establish runtime behavior or layout correctness.
+4. The seven changed Java files were formatted with the shared `mujSunFormatter` profile through Eclipse JDT 3.47.0. `mvn -B -ntp -pl akropia-test -am -DskipTests test-compile` completed successfully in 6.907 seconds. It compiled the game and test sources and executed **zero tests**. Source review and inspection of exported artwork do not establish runtime behavior or layout correctness.
 5. The SVG sources and PNG export commands are recorded in the [graphics catalog](graphics.md#evropsky-pristav-objevitelne-odpluti-r-0380). The earlier raster-only harbor was converted to editable vector paths, then recolored; these paths simplify the original raster texture. Runtime placement and the complete player journey remain unverified.
 
 ## R-0375 manual regression budget and durable reports — 2026-10-31
@@ -133,7 +144,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
    affects tooling only.
 5. The superseded completion job `20261031T072340Z-fca05073548d` was canceled while
    waiting for the lock; its test command never started. Its saved evidence remains
-   under `~/Library/Logs/Microcol/completions/`. Replacement checks use the final
+   under `$PRE_R0389_LOGS/completions/`. Replacement checks use the final
    report-path implementation. No full remote regression has been dispatched.
 6. Final review covers workflow inputs/publication guards, the Pages completion
    trigger, timeout propagation, mounted report paths and partial XML handling.
@@ -146,7 +157,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 
 1. [R-0374](requirements/done/R-0374.md) verifies the colony UI after R-0372/R-0373 on base `b393b234`. The user now explicitly requests UI tests, repairs, then smoke and commit/push; the earlier per-iteration test exceptions remain historical and do not apply to this task.
 2. Selected **78 UI classes plus `PageVerificationContractTest`**, containing **356 authored test methods**. Selection covers direct colony-screen journeys, keyboard access, the independence journey's colony helper, and the shared Europe harbor. Exact class selector is retained in `target/r0374/colony-selection.txt` and `.json`; completion requests preserve the executed selector. UI class IDs: 01, 02, 05, 07, 08, 09, 10, 11, 19, 20, 21, 22, 24, 25, 26, 27, 29, 30, 31, 32, 34, 38, 39, 40, 41, 42, 49, 50, 51, 52, 53, 54, 55, 57, 58, 62, 67, 68, 72, 75, 77, 80, 84, 85, 86, 88, 90, 91, 96, 97, 101, 102, 104, 106, 109, 114, 116, 117, 118, 119, 134, 140, 143, 149, 166, 167, 168, 180, 183, 184, 185, 187, 188, 189, 192, 194, 195, 197. Expected method count is a source inventory, not a completed result.
-3. Initial model dispatch: `20261031T071514Z-f3b710b567d3`, supervisor PID `3977`, timeout 600 seconds. Evidence: `/Users/jan/Library/Logs/Microcol/completions/20261031T071514Z-f3b710b567d3/`. Passed **4,798 tests in 354 complete XML reports, zero failures/errors/skips**, in 134.320 seconds (139.580 seconds including supervision); reports `target/verification/run-rvzt1riq/model/`. All captured game source hashes still match the checkout.
+3. Initial model dispatch: `20261031T071514Z-f3b710b567d3`, supervisor PID `3977`, timeout 600 seconds. Evidence: `$PRE_R0389_LOGS/completions/20261031T071514Z-f3b710b567d3/`. Passed **4,798 tests in 354 complete XML reports, zero failures/errors/skips**, in 134.320 seconds (139.580 seconds including supervision); reports `target/verification/run-rvzt1riq/model/`. All captured game source hashes still match the checkout.
 
 4. Initial targeted Docker/Xvfb dispatch: `20261031T071827Z-57eba4d9ae91`, supervisor PID `5089`, timeout 5,400 seconds, all 79 selected classes. The run timed out after 5,410.561 supervised seconds (exit 130). `target/docker-ui/run-JlOza2/maven.log` reports 76 completed suites / 331 tests, two failures and four errors; TC19, TC77 and TC101 have no completed summary. The interrupted old runner retained no XML reports or screenshots, so none of this partial run is accepted. Its console summaries and failure traces are retained in `target/r0374/ui-initial-console.json`; smoke has not started.
 
@@ -163,7 +174,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 10. Model rerun `20261031T092013Z-3887948e3ca0` (PID 19487, timeout 600 seconds) did not start tests: preparation query `docker ps` exceeded its 20-second limit (22.081 supervised seconds). Docker Desktop logs show its idle VM waking at 09:20:14 UTC and becoming ready at 09:20:45 UTC. A fresh bounded probe returned successfully with no containers; no runtime restart, lock removal or deadline change was needed. The failed attempt and its delivered notification remain saved. Retry `20261031T092440Z-6bd8c27ffb31` (PID 20074, timeout 600 seconds) passed **4,801 tests in 354 complete XML reports, zero failures/errors/skips**, in 135.286 seconds (139.216 supervised). Reports: `target/verification/run-t3pvzcsu/model/`. All captured non-Markdown source hashes match the current checkout. The final UI selection expands by TC157, TC158 and TC191 (six checks) to cover defeat/victory continuation and the active-session menu: **82 classes / 362 methods in nine sequential batches**. These are additions to the original selection, not replacements. The first batch will be repeated after model acceptance.
 
 
-11. First UI batch retry `20261031T092727Z-7d33041e3f15` (PID 21567, timeout 1,800 seconds) passed **17 tests in four complete XML reports, zero failures/errors/skips**, in 813.838 supervised seconds. Reports: `target/docker-ui/run-gSYOi8`. Exact expected method names and all captured non-Markdown source hashes match. TC34/06 restored the hidden-tile status, all three horse-preview paths passed, and both complete independence journeys passed, including the paired saved-game ledger and final Continue. No `EVENT_HANDLER_FAILED`, exception or error diagnostics appear in the captured XML output. Visual review of `microcol-test/warehouse-qa/rival-first-colony-map.png` confirms the hidden-tile description is visible in the status bar and the undiscovered terrain remains concealed. Documentation checks passed (nine tests and strict MkDocs); repeat after final evidence updates.
+11. First UI batch retry `20261031T092727Z-7d33041e3f15` (PID 21567, timeout 1,800 seconds) passed **17 tests in four complete XML reports, zero failures/errors/skips**, in 813.838 supervised seconds. Reports: `target/docker-ui/run-gSYOi8`. Exact expected method names and all captured non-Markdown source hashes match. TC34/06 restored the hidden-tile status, all three horse-preview paths passed, and both complete independence journeys passed, including the paired saved-game ledger and final Continue. No `EVENT_HANDLER_FAILED`, exception or error diagnostics appear in the captured XML output. Visual review of `akropia-test/warehouse-qa/rival-first-colony-map.png` confirms the hidden-tile description is visible in the status bar and the undiscovered terrain remains concealed. Documentation checks passed (nine tests and strict MkDocs); repeat after final evidence updates.
 
 12. UI batch 2 `20261031T094136Z-b214440256b5` (PID 24025, timeout 1,800 seconds) failed in 615.644 supervised seconds. It retained **41 passing checks in 11 complete XML reports**, zero reported failures/errors/skips, but TC19 (18 checks) terminated its JVM during a later application startup and produced no suite report. This incomplete batch is not accepted. Reports: `target/docker-ui/run-Y4mfes`. Its log identifies `STARTUP_FAILED` with a Guice `CreationException`; the dumpstream also records an exception in the process-reaper exception handler. Neither establishes the underlying cause.
 
@@ -229,7 +240,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 
 1. [R-0373](requirements/done/R-0373.md), based on main `51876f30`, reorders the colony's depot above people outside town, changes both section headings in Czech/English, and gives the colony cargo captions ship-or-wagon wording with the selected unit's localized type and ID. Europe's ship captions remain unchanged. Existing carrier filtering, crates, transfers and model validation are reused.
 2. The user explicitly requested **no tests and immediate push** for this iteration. No model/JUnit, UI, smoke, source-contract or documentation test suite was run. Existing `TC_195_F227_colony_layout_test` layout verification now checks section headings and order, but these assertions have only been compiled. Runtime behavior and visual layout remain unverified.
-3. Shared Eclipse formatting applied to all seven changed Java files. `mvn -B -ntp -DskipTests -pl microcol-test -am test-compile` succeeded for all three reactor modules in 6.083 seconds, without executing tests (`target/r0373-compile.log`). Source review covers both dock callers, localized resources, section ordering and existing cargo/people lists; no gameplay rule or artwork changed.
+3. Shared Eclipse formatting applied to all seven changed Java files. `mvn -B -ntp -DskipTests -pl akropia-test -am test-compile` succeeded for all three reactor modules in 6.083 seconds, without executing tests (`target/r0373-compile.log`). Source review covers both dock callers, localized resources, section ordering and existing cargo/people lists; no gameplay rule or artwork changed.
 4. Strict MkDocs build and `git diff --check` passed (`target/r0373-mkdocs.log`). This records delivery under the explicit test exception, not a fully tested revision or verified published distribution. No remote CI or publication check was requested.
 
 ## R-0372 colony production row and removed summaries — 2026-10-31
@@ -260,7 +271,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 1. [R-0364](requirements/done/R-0364.md) changes CI scheduling and reporting only; no player behavior or scenario selection changes. The full regression runs nightly when changes outside `docs/` exist since the last attempted full run, or on explicit manual dispatch.
 2. Reporting tooling: 26 CI tests passed, including separate group counts, incomplete/malformed evidence, rerun artifact identity, stale results and escaped failure details. Actionlint 1.7.12 passed for both changed workflows. A local rendered report and both SVG badges were visually inspected; synthetic examples were not published. Parsing real model XML agreed with the verifier's 4,795 passing tests.
 3. Local model acceptance on source based on `b17302c0c3f4b00e7d99fc6710ab9d5d0b0096cc`: completion `20261030T172115Z-4e459f35ea04`, verifier `target/verification/run-whf0wbky`, 4,795 tests passed with zero failures, errors or skips; supervisor execution 142.081 seconds. The later `258c2f2c` revision contains documentation proposals only, so it does not invalidate this executable-source result. Final fixed smoke/support selection passed 21 tests across 12 suites with zero failures, errors or skips: completion `20261030T172931Z-ccd68a57fa52`, verifier `target/verification/run-1akpxz34`, supervisor execution 212.476 seconds (below the 420-second budget). Executable/configuration hashes match both retained source manifests.
-4. Earlier model and smoke runs against `bbe9f7c0` also passed but are superseded for final acceptance. Source snapshots and actual reports are retained in the isolated `nightly-test-status` worktree and completion records under `~/Library/Logs/Microcol/completions/`. All nine documentation consistency checks and strict MkDocs passed; final source and diff review found no unresolved issue. Remote publication has not yet been verified; a local pass does not establish a published report or full remote regression success.
+4. Earlier model and smoke runs against `bbe9f7c0` also passed but are superseded for final acceptance. Source snapshots and actual reports are retained in the isolated `nightly-test-status` worktree and completion records under `$PRE_R0389_LOGS/completions/`. All nine documentation consistency checks and strict MkDocs passed; final source and diff review found no unresolved issue. Remote publication has not yet been verified; a local pass does not establish a published report or full remote regression success.
 
 5. Public verification on 2026-10-30: [first full run 41100096346](https://github.com/jajir/microcol/actions/runs/41100096346) tested `6a01160ef05837a15e49b03edd62a070b3830d9a`. Model/JUnit exported 4,795 passing tests with zero failures/errors/skips. The UI job was canceled at approximately the 90-minute job limit and exported no complete UI inventory; this is not a full-regression pass. Both `test-summary-1` and `tests-functional-1` were retained. Initial report publication observed stale GitHub API state; [documentation refresh 41112962193](https://github.com/jajir/microcol/actions/runs/41112962193) succeeded for documentation source `5348e66aefe8c25d002bd28af111e5fb5c7d2ad3`. Direct HTTP checks verified the [public report](https://jajir.github.io/microcol/test-results.html), both SVG badges, 4,795 model passes, incomplete UI, the tested SHA and its run link. Amber correctly identifies the incomplete run and newer untested main. Earlier watch failures were GitHub API HTTP 502 errors, not failed tests; temporary direct-state completion watches retained their evidence. No full test rerun or UI-regression repair was performed.
 
@@ -272,7 +283,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 4. The shared Eclipse formatter checked all three changed Java test files with exact-code-token preservation and idempotence. Export/check covers all 41 SVG/PNG pairs, and the existing exporter tooling suite passed 3 tests. The source guard still rejects bitmaps, external references, filters and gradients; it now permits stroked paths with `fill="none"`. Runtime-image checks additionally require a transparent margin on every edge.
 5. The first authoring review corrected a gap between drydock ramps and their building. The added edge check then found the front paddock fence and three dock wave drawings touching the lower edge; these were moved inside the existing canvas without changing dimensions or weakening the check. Initial model completion `20261030T165405Z-cc2eaf4c08d5`, supervisor PID 37587, timed out during preparation because Docker's managed-container query exceeded 20 seconds. **No test command started**; this is not a model-test failure or pass. Its evidence remains preserved.
 6. Corrected-source model completion `20261030T165523Z-8d4bd7d16efd`, supervisor PID 38072, timeout 600 seconds, passed **4,795 tests in 353 XML reports, zero failures/errors/skips**. The Docker preparation query succeeded in 0.033 seconds on this attempt. `target/verification/run-og5xpux5` retains the source manifest, complete reports and passed summary (138.621 seconds). Relevant executable, test and graphics source hashes are compared before reuse.
-7. Targeted Docker/Xvfb completion `20261030T170042Z-a2195e7fef1b`, supervisor PID 40385, timeout 1,200 seconds, passed **18 tests in 3 fresh XML reports, zero failures/errors/skips**, in 183.838 seconds. Selection: TC100 (11), TC195 (4), PageVerificationContractTest (3). Complete reports and original screenshots are in `target/docker-ui/run-QETzf4/microcol-test`; the completion result confirms successful exit and cleanup. All 2,296 executable/test/graphics files compared with the successful model manifest remain identical; subsequent changes are documentation/evidence only.
+7. Targeted Docker/Xvfb completion `20261030T170042Z-a2195e7fef1b`, supervisor PID 40385, timeout 1,200 seconds, passed **18 tests in 3 fresh XML reports, zero failures/errors/skips**, in 183.838 seconds. Selection: TC100 (11), TC195 (4), PageVerificationContractTest (3). Complete reports and original screenshots are in `target/docker-ui/run-QETzf4/akropia-test`; the completion result confirms successful exit and cleanup. All 2,296 executable/test/graphics files compared with the successful model manifest remain identical; subsequent changes are documentation/evidence only.
 8. Visual inspection covered all 41 exported drawings, the English base colony, the Czech fully upgraded colony, the compact colony and English/Czech help. The selected silhouettes, solid fills, profession attributes, preserved ratio and labels remain readable in these captured sizes. [Retained screenshots and SVG-derived overviews](graphics.md#budovy-lehky-nadhled-produkce-30-rijna-2026) distinguish actual UI output from the original proposal. No player study or unsupported display-size claim is made.
 9. Final documentation consistency passed **9 tests**, and strict MkDocs passed. Logs: `target/r0361/docs-tests.log`, `target/r0361/mkdocs.log`, and `target/r0361/model-source-check.log`. Final review covers only this task's graphics, tests and documentation. Smoke was not run under the explicit task-specific user exception; ordinary future acceptance policy is unchanged.
 
@@ -282,7 +293,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 2. Acceptance selection: `verify.sh --model`, then Docker/Xvfb `TC_195_F227_colony_layout_test,TC_106_F97_quick_cargo_test,PageVerificationContractTest`. TC195/03–04 check complete wide labels, compact icons, resizing back, live bottom-bar explanations on hover (including disabled exports), no tooltip windows, accessibility names and no world mutation. TC195/01–02 retain building, production, map and stock checks; TC106 retains cargo confirmation/cancellation.
 3. Model dispatch: completion `20261030T162537Z-ec7b88d56fdf`, supervisor PID `32343`, timeout 600 seconds. This first snapshot failed its previous blanket tooltip prohibition: 4,791 tests / 352 reports, one failure, zero errors/skips, 141.132 supervised seconds after a separate 44.516-second lock wait. Evidence remains in `target/verification/run-a548y56b`. The attempted exception was reverted after the user's clarification: explanations belong in the bottom status bar and the global tooltip prohibition remains unchanged. Intermediate run `20261030T162905Z-ddc115e1b056` (PID `33322`) was deliberately cancelled after 88.163 seconds with clean cleanup; it is not acceptance. The current candidate uses the existing `StatusBarMessageEvent`. Required smoke/support is omitted only under the user's explicit instruction on 2026-10-30; no general acceptance policy changes.
 4. Current candidate includes integrated `main` revision `84e8e4924cb899f7d644fcef8c7a386521478f81`. Fresh model completion `20261030T163146Z-1fec407a20e8` (PID `33886`, timeout 600 s) passed **4,795 tests / 353 fresh XML reports, zero failures/errors/skips**, in 140.325 verifier seconds / 140.524 supervised seconds, no lock wait. Reports and complete matching non-documentation source manifest: `target/verification/run-x0sbyse5`. Nine documentation checks and strict MkDocs passed on the draft; final closure validation is recorded below.
-5. Targeted Docker/Xvfb dispatch: `20261030T163436Z-d9a5d86fbcb5`, supervisor PID `34718`, timeout 1,200 seconds, complete selection in item 2. Passed **9 tests / 3 complete fresh XML reports, zero failures/errors/skips**, in **110.469 supervised seconds**, no lock wait, clean cleanup. Reports: `target/docker-ui/run-GA7Omj`. All four TC195 methods, both TC106 methods and all three page-contract methods are present. Visual review of `microcol-test/warehouse-qa/r0360-actions-en.png` and `r0360-actions-cs.png` confirms full wide labels and readable bottom-bar explanations. All non-documentation hashes still match the successful model manifest.
+5. Targeted Docker/Xvfb dispatch: `20261030T163436Z-d9a5d86fbcb5`, supervisor PID `34718`, timeout 1,200 seconds, complete selection in item 2. Passed **9 tests / 3 complete fresh XML reports, zero failures/errors/skips**, in **110.469 supervised seconds**, no lock wait, clean cleanup. Reports: `target/docker-ui/run-GA7Omj`. All four TC195 methods, both TC106 methods and all three page-contract methods are present. Visual review of `akropia-test/warehouse-qa/r0360-actions-en.png` and `r0360-actions-cs.png` confirms full wide labels and readable bottom-bar explanations. All non-documentation hashes still match the successful model manifest.
 6. Final review retains original gameplay handlers, fixtures and the unmodified blanket tooltip prohibition. No runtime graphics, schema or dependencies changed. Smoke is deliberately omitted for this task. Remote CI and publication are not inspected or claimed.
 7. Closure moved R-0360 to `done` and repaired incoming/relative links. All **9 documentation consistency tests** and **strict MkDocs** passed; final logs are `target/r0360/docs-tests-final.log` and `target/r0360/mkdocs-final.log`. Formatter log: `target/r0360/format.log`.
 
@@ -351,7 +362,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 17. Combined targeted acceptance passed in `target/docker-ui/run-cVxg3z`: **15 tests / 4 fresh XML reports, zero failures/errors/skips**, 192.140 supervised seconds, no lock wait. All three TC196 journeys, three TC188 checks, six TC192 checks and three page-contract checks completed. Final English/Czech screenshots were inspected: the hints, terrain names, movement costs and unit details remain visible. Candidate hashes are unchanged.
 18. Final combined fixed smoke/support dispatched as `20261030T145432Z-56535df8d514`, supervisor PID 9665, outer timeout 480 seconds, required total local budget 420 seconds. Source remains stable while this phase runs; no remote regression or publication is inspected.
 19. Final combined smoke/support passed in `target/verification/run-yg00_juf`: **21 tests / 12 fresh XML reports, zero failures/errors/skips**, 212.819 verifier seconds / **212.984 supervised seconds including cleanup**, within the 420-second budget, no lock wait. All **2,387 non-documentation files** match its source snapshot. Local game acceptance is **4,791 model/JUnit + 15 targeted UI/support + 21 smoke/support checks**, all with zero failures/errors/skips, on baseline `7563baa6` plus this patch.
-20. Final review confirms only camera input and hint layout change: primary drags retain native pointer capture, release ends navigation outside the control, ignored gestures do not mutate the game, and clamping reuses the existing camera path. Final EN/CZ small-window captures were reviewed in `target/docker-ui/run-cVxg3z/microcol-test/warehouse-qa/`. R-0355 moved to `done` with incoming links repaired; historical failed and cancelled runs remain preserved. Remote CI and publication were not inspected.
+20. Final review confirms only camera input and hint layout change: primary drags retain native pointer capture, release ends navigation outside the control, ignored gestures do not mutate the game, and clamping reuses the existing camera path. Final EN/CZ small-window captures were reviewed in `target/docker-ui/run-cVxg3z/akropia-test/warehouse-qa/`. R-0355 moved to `done` with incoming links repaired; historical failed and cancelled runs remain preserved. Remote CI and publication were not inspected.
 21. Final closure passed all **9 documentation consistency tests** and **strict MkDocs** after the requirement move and link repairs. The shared formatter left all three changed Java files byte-identical to the accepted source; whitespace review passed. Unrelated staged building-proposal work in the primary checkout is excluded from this task. The containing commit identifies the accepted revision.
 22. Before integration, `main` advanced to `075f7aaa` with documentation-only building concepts. That revision was incorporated without conflicts; all **2,387 non-documentation files** still match the accepted smoke snapshot, so the passing game phases remain applicable. The documentation checks cover the combined final documentation. Existing R-0353/R-0354 requirements and design assets are preserved.
 
@@ -372,7 +383,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 3. Initial model/JUnit completion `20261030T133811Z-564e73708d0b`, PID `89469`, timeout 600 seconds, failed after **136.065 seconds**: **4,791 tests in 352 XML reports, one failure, zero errors/skips**. Reports are in `target/verification/run-l5hve7hh/model`. The new source test found empty vector paths generated by tracing: one in `DOCK.svg` and 65 in `SHIPYARD.svg`. Removed only those empty nodes; `export-buildings.py --check` confirms byte-identical runtime images. This failed run remains failed. Model retry `20261030T134210Z-a931abbca963`, PID `90284`, passed **4,791 tests in 352 XML reports, zero failures/errors/skips**, in **134.067 seconds**. Reports: `target/verification/run-3exwiyi_/model`.
 4. Export-tool checks passed **3 tests**: stale-export detection without mutation, mismatched inventories and preservation of all existing images after a renderer failure. Actual `export-buildings.py --check` passed for **41 images**, using librsvg 2.61.4/Cairo 1.18.4. VTracer was used only for the initial conversion and is not a game/export dependency.
 5. Visual source review compared all 41 old/new images at runtime size, the [complete new overview](assets/building-vectors-2026-10-30/all-buildings.png), and an enlarged shipyard. Silhouettes, upgrade distinctions and transparency are retained; raster texture is simplified. Disconnected neighboring atlas fragments were removed. These are editable paths, not semantic roof/window layers. Original atlases, prompts and crop coordinates remain in `src/graphics/colony-buildings/reference/`.
-6. Targeted Docker/Xvfb completion `20261030T134523Z-7fbf755b0483`, PID `90928`, timeout 1,200 seconds, passed **16 checks in 3 XML reports, zero failures/errors/skips**, in **162.138 seconds**. Selection: `TC_100_F91_colonizopedia_test` (11), `TC_195_F227_colony_layout_test` (2), `PageVerificationContractTest` (3). Reports and screenshots: `target/docker-ui/run-qOTb04/microcol-test`. Existing gameplay assertions and scenario IDs are preserved; screenshot names identify R-0352.
+6. Targeted Docker/Xvfb completion `20261030T134523Z-7fbf755b0483`, PID `90928`, timeout 1,200 seconds, passed **16 checks in 3 XML reports, zero failures/errors/skips**, in **162.138 seconds**. Selection: `TC_100_F91_colonizopedia_test` (11), `TC_195_F227_colony_layout_test` (2), `PageVerificationContractTest` (3). Reports and screenshots: `target/docker-ui/run-qOTb04/akropia-test`. Existing gameplay assertions and scenario IDs are preserved; screenshot names identify R-0352.
 7. In-game visual review passed for the [upgraded Czech colony](assets/building-vectors-2026-10-30/r0352-colony-czech-upgrades.png), compact colony stock view, [English help](assets/building-vectors-2026-10-30/r0352-buildings-en.png), [Czech help](assets/building-vectors-2026-10-30/r0352-buildings-cs.png), narrow help and the last help rows. Current building identities remain recognizable, exports are proportional and transparent, and the reference can scroll to its last building. The compact colony screenshot is intentionally scrolled to stock, so its top row is partly outside the viewport; this is existing scrolling behavior.
 8. Fixed smoke/support completion `20261030T134824Z-6bd996de223a`, PID `91439`, timeout 480 seconds, passed **21 checks in 12 XML reports, zero failures/errors/skips**, in **206.023 seconds**, within the **420-second** local budget. Reports: `target/verification/run-wj_wbdvr`. The final model and smoke snapshots match all 100 source-manifest paths. Smoke did not repeat model tests.
 9. Documentation validation uses nine consistency tests and strict MkDocs; logs are `target/r0352/docs-tests.log` and `target/r0352/mkdocs.log`. Final source/export review found no remaining defects in the requested scope. The archived five provenance files are byte-identical to their originals. This is local acceptance only: remote CI, Pages and distribution publication are not inspected or claimed.
@@ -385,7 +396,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 3. Initial `--model` acceptance passed **4,790 tests in 352 XML reports, zero failures/errors/skips**, including construction metadata, production and artwork tests. Completion `20261030T114534Z-1160f7434008`, PID `81097`, timeout 600 seconds, supervised elapsed **136.906 seconds**; reports `target/verification/run-jcis4efd/model`. The initial game/test patch hash was `3be070cbce7a649adc6630c813a97de3309ac5df8603c8f1596753b1d7f0ef7c`.
 4. First targeted Docker/Xvfb run `20261030T114832Z-fd9d7716b457`, PID `81610`, timeout 1,200 seconds, completed in **183.795 seconds** with **14 checks, zero failures, two errors, zero skips** (`target/docker-ui/run-iXGp3p`). Both new building scenarios exposed unescaped percent signs in benefit prose: `I18n.get` uses Java format strings. The nine earlier help scenarios and three source-contract checks passed. Literal percentages in the new English/Czech descriptions were escaped, and a direct Java self-check formatted all 82 descriptions successfully. This failed run remains failed.
 5. Fresh `--model` phase on corrected resources passed **4,790 tests in 352 XML reports, zero failures/errors/skips**, in **136.664 seconds**. Completion `20261030T115213Z-aa47e677eac7`, PID `82010`, timeout 600 seconds; reports `target/verification/run-ycxs5me7/model`. All tested game files match the final checkout. Targeted retry `20261030T115445Z-0b9b61d1e340`, PID `82483`, completed in **205.889 seconds** with **14 checks, zero failures, one error, zero skips** (`target/docker-ui/run-Yfemti`). TC11 timed out at the end-of-page check because 150 wheel steps did not reach the end of the longer Czech catalogue. After checking every caller, the shared test action now reuses the existing real scrollbar-thumb drag. Assertions and product behavior are unchanged; model results remain applicable. This failed run remains failed.
-6. Final complete targeted selection `TC_100_F91_colonizopedia_test,PageVerificationContractTest` passed **14 checks: all 11 help scenarios and 3 source-contract checks, zero failures/errors/skips**. Completion `20261030T115948Z-e00dce9ee1da`, PID `83257`, timeout 1,200 seconds, elapsed **143.434 seconds**; XML and screenshots `target/docker-ui/run-RMuiwY/microcol-test`. New TC10/11 verify all pictures, costs and upgrade ordering, representative benefits and production, localized name search, English wide/narrow layouts, scrolling, return controls and unchanged game state. All expected method names occur in the fresh XML.
+6. Final complete targeted selection `TC_100_F91_colonizopedia_test,PageVerificationContractTest` passed **14 checks: all 11 help scenarios and 3 source-contract checks, zero failures/errors/skips**. Completion `20261030T115948Z-e00dce9ee1da`, PID `83257`, timeout 1,200 seconds, elapsed **143.434 seconds**; XML and screenshots `target/docker-ui/run-RMuiwY/akropia-test`. New TC10/11 verify all pictures, costs and upgrade ordering, representative benefits and production, localized name search, English wide/narrow layouts, scrolling, return controls and unchanged game state. All expected method names occur in the fresh XML.
 7. Fixed `--smoke` selection passed **21 checks in 12 XML reports, zero failures/errors/skips**. Completion `20261030T120224Z-78d9a7165aa4`, PID `83602`, outer timeout 480 seconds; total supervised local time **207.925 seconds**, within the **420-second** acceptance budget. Reports and selection manifest: `target/verification/run-8jvcnalq`. Model tests were not repeated by smoke.
 8. Visual review confirmed readable English/Czech layouts, original artwork proportions, wrapped text and complete bottom rows; [selected runtime screenshots](graphics.md#budovy-v-napovede-30-rijna-2026) are retained. Nine documentation consistency tests and strict MkDocs passed; final closure logs are `target/r0351/docs-tests.log` and `target/r0351/mkdocs.log`. This is local acceptance. Remote CI and publication were not inspected.
 
@@ -393,7 +404,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 
 1. [R-0349](requirements/done/R-0349.md) replaces absolute colony positioning with sixteen building families, a tile inspector, a separate construction queue, outside units, harbor and stock sections. Model rules are unchanged. TC195/F227 covers the new presentation and explicit crop choice; existing job, cargo, construction and production assertions remain required.
 2. Source baseline is `a1ff4220` plus this task's working changes. Compilation and test compilation passed. Changed Java files use `.vscode/eclipse-formatter.xml` through installed Eclipse JDT 3.47.0; the formatter checked idempotence. Nine documentation checks and strict MkDocs passed after replacing two links to removed legacy classes with immutable historical source links.
-3. Preserved preparation failures: completion runs `20261030T063252Z-8fe0601d493e` (PID 53104) and `20261030T063856Z-5ecc3a62f8c0` (PID 53926), both timeout 600 s, failed before the test command because `docker ps -aq --filter label=org.microcol.local-test=501` exceeded the 20 s preparation limit. Their result and notification records remain in `~/Library/Logs/Microcol/completions/`. A subsequent exact-command probe succeeded in 0.1 s with no containers; the next dispatch immediately followed that probe. Diagnostic output is in `target/r0349-docker-diagnosis.log`.
+3. Preserved preparation failures: completion runs `20261030T063252Z-8fe0601d493e` (PID 53104) and `20261030T063856Z-5ecc3a62f8c0` (PID 53926), both timeout 600 s, failed before the test command because `docker ps -aq --filter label=org.akropia.local-test=501` exceeded the 20 s preparation limit. Their result and notification records remain in `$PRE_R0389_LOGS/completions/`. A subsequent exact-command probe succeeded in 0.1 s with no containers; the next dispatch immediately followed that probe. Diagnostic output is in `target/r0349-docker-diagnosis.log`.
 4. Model attempt `20261030T064111Z-d905b1661833` (PID 54372), verification `target/verification/run-4ah5yrj3`, ran 4,785 tests: one failure, zero errors/skips. `ButtonPresentationContractTest` rejected the inspector's plain Button. It now uses the shared factory and an explicit labor icon. The outside-unit scroll also fills its viewport so an empty section remains a drag target.
 5. Fresh model acceptance passed in completion run `20261030T064507Z-a066d5bde966` (PID 54940, timeout 600 s), verification `target/verification/run-w_4xkvms`: 4,785 tests, zero failures/errors/skips. The phase took 135.723 s. Initial targeted TC195 and PageVerificationContractTest are running in `20261030T064745Z-3910e8c619d6` (PID 56224, timeout 900 s). Broader targeted Docker/Xvfb and fixed smoke/support are still pending; local acceptance, commit and publication are not yet claimed.
 
@@ -438,20 +449,20 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 
 27. Second bounded warehouse batch: completion `20261030T085754Z-b4b5ad37dae3`, supervisor PID 71589, timeout 600 seconds; `TC_19_F14_warehouse_unloading_test#TC_1*,PageVerificationContractTest`: **12 tests / 2 fresh XML reports, zero failures, one error, zero skips**, `target/docker-ui/run-jMltoL`, 103.666 seconds. TC19/17 could not finish its native drag because its page action did not reveal the source cargo crate in the scrollable layout. The action now uses the existing content-reveal helper before dragging; the native completion wait and cargo-preservation assertions remain unchanged. Acceptance remains pending.
 
-28. Repair verification `20261030T090506Z-5916f5bd4d3c`, supervisor PID 72715, timeout 600 seconds, passed the same second warehouse batch: **12 tests / 2 fresh XML reports, zero failures/errors/skips**, `target/docker-ui/run-fLbQdG`, 99.696 execution seconds plus 205.593 seconds shared-lock wait. All TC19/10–18 IDs are present, including the repaired cancellation followed by a successful transfer in TC19/17. Host test compilation passed after shared formatting. All tracked/task-added `microcol-game/src` file contents still match the successful 4,786-test model snapshot; only the TC19/17 page action changed.
+28. Repair verification `20261030T090506Z-5916f5bd4d3c`, supervisor PID 72715, timeout 600 seconds, passed the same second warehouse batch: **12 tests / 2 fresh XML reports, zero failures/errors/skips**, `target/docker-ui/run-fLbQdG`, 99.696 execution seconds plus 205.593 seconds shared-lock wait. All TC19/10–18 IDs are present, including the repaired cancellation followed by a successful transfer in TC19/17. Host test compilation passed after shared formatting. All tracked/task-added `akropia-game/src` file contents still match the successful 4,786-test model snapshot; only the TC19/17 page action changed.
 
 29. Remaining targeted acceptance `20261030T091046Z-2bc58c5b66b9`, supervisor PID 73356, timeout 3,600 seconds: **90 tests / 20 fresh XML reports passed, zero failures/errors/skips**, `target/docker-ui/run-S0yw5i`, 1,216.746 seconds. Selection: `TC_195_*,TC_05_*,TC_06_*,TC_07_*,TC_30_*,TC_31_*,TC_32_*,TC_39_*,TC_40_*,TC_53_*,TC_67_*,TC_72_*,TC_75_*,TC_77_*,TC_85_*,TC_106_*,TC_109_*,TC_194_*,TC_134_F125_native_convert_test#TC_04_a_convert_works_a_field_at_plus_one_and_a_brief_building_job_pauses_the_count_across_continue,PageVerificationContractTest`. Together with both completed warehouse batches this covers all **108 distinct selected checks** (the three page-contract checks recur in each batch). All 2,393 non-documentation source hashes still match the recorded candidate. Fixed smoke/support remains pending.
 
 30. Fixed smoke/support passed: completion `20261030T093137Z-2c27ca6cc328`, supervisor PID 74601, outer timeout 480 seconds, `verify -- --smoke`, `target/verification/run-fkk39m4k`: **21 tests / 12 fresh XML reports, zero failures/errors/skips**. The verifier took 209.332 seconds; supervised execution including cleanup took **209.488 seconds**, below the unchanged 420-second acceptance budget. The prior 266.510 seconds waiting for the shared lock are separate. No model tests were repeated. The source manifest still matches the accepted candidate.
 
-31. Final candidate inspection: the actual TC195 screenshots in `target/docker-ui/run-S0yw5i/microcol-test/warehouse-qa/` show the English base town, Czech upgraded town and the stock section in a 1,000 × 925 window. All sixteen families and goods remain accessible; the smaller viewport scrolls vertically. This is implementation inspection, not player-study evidence. Shared formatting was reapplied to all 31 changed/new Java files with no byte changes, and `git diff --check` passed. The review checked the model-owned production/limits, explicit crop changes, native drag completion, passive versus staffed buildings and shared harbor styling; no additional blocking code issue was found. Final local game acceptance is **4,786 model/JUnit + 108 distinct targeted UI/support + 21 fixed smoke/support checks**, all zero failures/errors/skips. Test batching addresses the known repeated-start heap limit; it does not fix that lifecycle issue. Remote CI and publication were not inspected. Documentation closure does not change executable sources.
+31. Final candidate inspection: the actual TC195 screenshots in `target/docker-ui/run-S0yw5i/akropia-test/warehouse-qa/` show the English base town, Czech upgraded town and the stock section in a 1,000 × 925 window. All sixteen families and goods remain accessible; the smaller viewport scrolls vertically. This is implementation inspection, not player-study evidence. Shared formatting was reapplied to all 31 changed/new Java files with no byte changes, and `git diff --check` passed. The review checked the model-owned production/limits, explicit crop changes, native drag completion, passive versus staffed buildings and shared harbor styling; no additional blocking code issue was found. Final local game acceptance is **4,786 model/JUnit + 108 distinct targeted UI/support + 21 fixed smoke/support checks**, all zero failures/errors/skips. Test batching addresses the known repeated-start heap limit; it does not fix that lifecycle issue. Remote CI and publication were not inspected. Documentation closure does not change executable sources.
 
 32. Closure on 2026-10-30: nine documentation consistency tests and strict MkDocs passed; R-0349 moved to `requirements/done/` and incoming links were updated. Post-smoke review found no blocking issue. All 2,234 runtime/build/test files compared with the smoke source snapshot match, as do all 2,393 non-documentation files in the recorded candidate manifest. The accepted source is baseline `241daa13cd326ab57e2f2538289cfd0ebca14aa8` plus this task's reviewed changes; the final committed revision is reported at delivery. Final documentation and whitespace checks are repeated after this evidence-only closure.
 
 ## R-0350 world minimap — 2026-10-30
 
 1. [R-0350](requirements/done/R-0350.md), UC-114/119: `MinimapProjectionTest` checks landscape/portrait coordinate conversion, the full-world viewport and shared camera clamping for small maps. `TC_196_F228_world_minimap_test` uses F228, derived from the existing F18 fog position, for click and keyboard navigation, unchanged serialized gameplay state, synchronized view bounds, window resizing, opaque unknown tiles, discovery and Czech accessible help.
-2. Targeted selection: TC196, TC26 (fog), TC188 (main-screen layout), TC192 (shared frame) and `PageVerificationContractTest`. After the drawing correction, the final formatted game sources passed model/JUnit in `target/verification/run-5w335z2z`: **4,788 tests, zero failures/errors/skips**, 136.734 seconds. Earlier runs `run-c4n17edz` (137.133 seconds) and pre-format `run-eopchnzh` also passed; they predate the color-fill correction and do not replace the final run. The final targeted run `target/docker-ui/run-Pwggtq` completed **24 tests, zero failures/errors/skips** (TC196: 2, TC26: 10, TC188: 3, TC192: 6, page contract: 3); supervisor execution 300.593 seconds. Visual review confirms solid terrain fills, strong stable boundaries, opaque unknown areas and a readable viewport at wide/narrow sizes in English and Czech. [Retained screenshots](graphics.md#minimapa-vybrany-vzhled-30-rijna-2026) are actual runtime evidence. The isolated-source smoke/support run `target/verification/run-u2koh2gj` passed in 207.441 verifier seconds / 207.581 supervisor seconds, within the 420-second budget. Screenshots are written to `microcol-test/target/warehouse-qa/r0350-minimap*.png` in the retained run results.
+2. Targeted selection: TC196, TC26 (fog), TC188 (main-screen layout), TC192 (shared frame) and `PageVerificationContractTest`. After the drawing correction, the final formatted game sources passed model/JUnit in `target/verification/run-5w335z2z`: **4,788 tests, zero failures/errors/skips**, 136.734 seconds. Earlier runs `run-c4n17edz` (137.133 seconds) and pre-format `run-eopchnzh` also passed; they predate the color-fill correction and do not replace the final run. The final targeted run `target/docker-ui/run-Pwggtq` completed **24 tests, zero failures/errors/skips** (TC196: 2, TC26: 10, TC188: 3, TC192: 6, page contract: 3); supervisor execution 300.593 seconds. Visual review confirms solid terrain fills, strong stable boundaries, opaque unknown areas and a readable viewport at wide/narrow sizes in English and Czech. [Retained screenshots](graphics.md#minimapa-vybrany-vzhled-30-rijna-2026) are actual runtime evidence. The isolated-source smoke/support run `target/verification/run-u2koh2gj` passed in 207.441 verifier seconds / 207.581 supervisor seconds, within the 420-second budget. Screenshots are written to `akropia-test/target/warehouse-qa/r0350-minimap*.png` in the retained run results.
 3. The first targeted run `target/docker-ui/run-O9zPxQ` completed 24 tests: zero failures, two errors, zero skips. Both errors were in TC196: its raw attached-Canvas snapshot triggered the root's oversized preferred layout, causing Prism texture errors and invalid subsequent pointer geometry. The page now uses the existing bounded `snapshotScene` helper. Visual review also found fractional-fill hairline seams in the overview; integer-aligned color fills remove those seams. TC26, TC188, TC192 and the page contract passed in that run. This failed evidence remains retained; new model and targeted runs are required after the drawing correction. Completion `20261030T090019Z-1b4fc47497c4` was explicitly cancelled after a caller patch assertion prevented the repair from being written; it is not acceptance evidence. The corrected source is checked by the replacement run.
 4. Targeted retry `target/docker-ui/run-3CYG7Y` again completed 24 tests with two TC196 errors and zero failures/skips. The texture/layout errors are gone and the center/right-edge navigation assertions passed. The top-left click was rounded outside the interior by the native pointer; the test now targets a point safely inside each corner while preserving the exact clamped-view assertions. Its exploration probe moved from already explored (27,16) to the original TC26 frontier (28,16), which the real move reveals. The model visibility assertion now precedes the pixel wait. These are test-path repairs, with unchanged game sources after model run `run-5w335z2z`; the full targeted selection is repeated.
 5. Targeted run `target/docker-ui/run-c2u05g` completed 24 tests with two errors, zero failures/skips. TC196's camera, state-preservation, keyboard, small-window and discovery assertions passed up to evidence capture. Both errors came from calling the report-page screenshot helper on the main map; TC196 now uses the existing `MainScreenLayoutPage.saveEvidence`. The larger-window steps after the first failed capture still require the complete rerun. No game source changed.
@@ -499,7 +510,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 
 1. [R-0343](requirements/done/R-0343.md) applies the user-selected warm palette 7 to the standalone harbor background and makes the immigration label background transparent. Goods, native unit sprites, cargo crates, shared controls, the main map and model rules retain their existing assets/behavior.
 2. Source base: `67ac93f9`. Required order: all model/JUnit → targeted Docker/Xvfb → fixed smoke within 420 seconds, then review and documentation checks. Targeted selection: `PageVerificationContractTest,TC_194_F226_europe_harbor_test,TC_06_F06_buy_and_sell_goods_test,TC_47_F38_immigration_test,TC_192_F225_in_game_layout_test`. TC194/TC06 explicitly check transparent, dark and visible immigration text; existing gameplay, native-image, scrolling, cargo and trade assertions remain intact. TC47 retains actual immigration progress and pending-choice checks in both languages.
-3. The shared Eclipse formatter was applied to the three changed Java test/page files; `git diff --check` passed. Changed runtime/test hashes are recorded in `target/r0343/source.json`. Model dispatch `20261029T081234Z-5f2da9897716`, PID 64804, timeout 600 seconds, passed **4,783 tests in 350 fresh XML reports, zero failures/errors/skips** in `target/verification/run-wo60e6ei`: 133.636 test seconds / 136.907 seconds including cleanup, after 176.079 seconds waiting for the shared Docker lock. Changed-source hashes still match. Completion evidence is under `~/Library/Logs/Microcol/completions/20261029T081234Z-5f2da9897716/`.
+3. The shared Eclipse formatter was applied to the three changed Java test/page files; `git diff --check` passed. Changed runtime/test hashes are recorded in `target/r0343/source.json`. Model dispatch `20261029T081234Z-5f2da9897716`, PID 64804, timeout 600 seconds, passed **4,783 tests in 350 fresh XML reports, zero failures/errors/skips** in `target/verification/run-wo60e6ei`: 133.636 test seconds / 136.907 seconds including cleanup, after 176.079 seconds waiting for the shared Docker lock. Changed-source hashes still match. Completion evidence is under `$PRE_R0389_LOGS/completions/20261029T081234Z-5f2da9897716/`.
 4. Initial documentation consistency passed **9 tests** and strict MkDocs passed (`target/r0343/doc-tests.log`, `target/r0343/mkdocs.log`). Visual inspection of the generated 1586 × 992 background confirms the selected muted sea/sky and warm stone, existing composition and no baked-in UI.
 5. Complete targeted selection `20261029T081849Z-770310025a2c`, PID 66119, timeout 1,800 seconds, passed **15 tests (12 player scenarios and 3 page-contract checks), five fresh XML reports, zero failures/errors/skips** in `target/docker-ui/run-4i6nXz`, 209.625 seconds including cleanup after 183.314 seconds waiting for the shared Docker lock. Source hashes still match. Actual English/Czech 1280 × 900 and smaller 1000 × 760 captures were reviewed: warm palette, transparent immigration label, native sprites, cargo, goods, independent lists and hidden unnecessary bars remain usable. TC47's smaller window also shows the complete pending-immigrant announcement directly on the sky. See [five game screenshots](graphics.md#teply-pristav-vybrana-paleta-7-29-rijna-2026). These are Docker/Xvfb observations, not a native macOS/HiDPI check or player study.
 6. Fixed smoke/support `20261029T082657Z-541417df265f`, PID 67161, passed **21 tests in 12 fresh XML reports, zero failures/errors/skips** in `target/verification/run-znwr85gz`: 205.356 test seconds / 209.216 verifier seconds / **209.365 seconds including cleanup**, within the 420-second total budget. The separate shared-lock wait was 358.895 seconds. Smoke did not repeat model tests; source hashes still match.
@@ -584,7 +595,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
    Reports are in `target/verification/run-v7tirfut/` in the primary checkout.
    All 2,290 non-documentation snapshot files match the isolated task worktree.
 4. Targeted dispatch `20261029T070314Z-7c772d899afa`, PID 51053, uses a
-   900-second watchdog in `/Users/jan/.codex/worktrees/congress-shortcut/microcol`.
+   900-second watchdog in `/Users/jan/.codex/worktrees/congress-shortcut/$PRE_R0389_CHECKOUT`.
    The separate checkout excludes concurrent unrelated appearance changes.
    All **8 targeted UI/source-contract checks in three complete XML reports**
    passed with zero failures/errors/skips in 106.682 seconds. Reports are in
@@ -609,7 +620,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 
 1. [R-0338](requirements/done/R-0338.md) moves the existing Help scrollbar style into `ScrollBars.css`, imported by the main window and dialogs, and adds its horizontal counterpart. Europe uses AS_NEEDED for four independent lists while retaining stable native-size unit rows. Model rules and quantity sliders are unchanged.
 2. Local model, targeted UI and smoke acceptance passed on source based on `9bbd2c42`. Changed-source hashes, including the new CSS, and the exact targeted selection are retained under `target/r0337/`. The main agent applied the shared Java formatter before dispatching model verification `20261029T060742Z-5afb79dd88c0`, PID 39609.
-3. Initial dispatch `20261029T060742Z-5afb79dd88c0` timed out during preparation: Docker did not answer `docker ps` within 20 seconds; no tests started. Subsequent bounded diagnostics confirmed server 29.8.2 responded with no running containers, without a restart. The retry is `20261029T061353Z-25163fc0e3bc`, PID 40646. Both completion directories remain under `~/Library/Logs/Microcol/completions/`.
+3. Initial dispatch `20261029T060742Z-5afb79dd88c0` timed out during preparation: Docker did not answer `docker ps` within 20 seconds; no tests started. Subsequent bounded diagnostics confirmed server 29.8.2 responded with no running containers, without a restart. The retry is `20261029T061353Z-25163fc0e3bc`, PID 40646. Both completion directories remain under `$PRE_R0389_LOGS/completions/`.
 4. Model/JUnit passed **4,783 tests, zero failures/errors/skips** in `run-z5jde7jt`: 133.769 verifier seconds / 135.017 seconds including cleanup. Changed-source hashes still matched before targeted UI dispatch.
 5. Targeted dispatch `20261029T061648Z-56eca01375c7` (PID 41302, timeout 2,400 seconds) completed in `run-eUQP1f`: **26 tests, 2 errors, zero failures/skips**, 401.764 seconds including cleanup. Both TC194 scenarios reported a hidden bar in the crowded incoming fleet because their selector inspected the vertical control; all other selected suites passed. The historical run remains failed. The selected UI coverage is PageVerificationContractTest, TC194/F226, TC06/F06, TC05/F05, TC100/F91, TC192/F225 and TC191/F224/01. It retains existing gameplay checks and adds hidden-bar checks for empty/short lists, real horizontal thumb dragging with 43 units and common horizontal/vertical appearance. No remote CI or publication is being inspected.
 
@@ -727,7 +738,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 
 1. [R-0330](requirements/done/R-0330.md) removes four perpendicular contour starts
    from the grass/ice coast atlas on base `f0e4b2a9`. The isolated checkout is
-   `/Users/jan/.codex/worktrees/coast-joins/microcol`; concurrent Congress changes
+   `/Users/jan/.codex/worktrees/coast-joins/$PRE_R0389_CHECKOUT`; concurrent Congress changes
    in the primary checkout are outside this acceptance. Runtime Java and game
    rules are unchanged. All four changed Java test files use the shared formatter.
 2. The exported PNG differs in **44 pixels**, including atlas gutters; only
@@ -743,22 +754,22 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 4. Model acceptance passed **4,781 tests across 348 reports**, with zero failures,
    errors or skips, including all five `MapOutlineArtworkTest` checks.
    Complete reports: `target/verification/run-gi9dwbsq/summary.json` and
-   `model/run-R0ncYX/microcol-game/surefire-reports` beneath that run.
+   `model/run-R0ncYX/akropia-game/surefire-reports` beneath that run.
    The completion runner retained
-   `/Users/jan/Library/Logs/Microcol/completions/20261028T074651Z-40b16bd7088b`,
+   `$PRE_R0389_LOGS/completions/20261028T074651Z-40b16bd7088b`,
    supervisor PID `51385`; execution took 135.732 seconds. The initial executable diff
    SHA-256 was `0d068ee01de952d7fe4a9f86fd74fa128fa8ca1f5aa7000668a83cb979de7723`.
 5. The first targeted attempt failed during UI test compilation:
-   `/Users/jan/Library/Logs/Microcol/completions/20261028T075043Z-ef522521f291`,
+   `$PRE_R0389_LOGS/completions/20261028T075043Z-ef522521f291`,
    supervisor PID `52848`, `target/docker-ui/run-B6F49I`. The new TC80/06 referred
    to nonexistent `source()` instead of the class's existing `testFileName`.
    Corrected that fixture reference and reapplied the shared formatter. No UI
    scenarios ran in this failed attempt. Its evidence remains failed.
-   All `microcol-game` sources still match the passing model snapshot; only
+   All `akropia-game` sources still match the passing model snapshot; only
    the UI scenario changed. The same targeted selection must be rerun before
    smoke. Remote CI and publication are not inspected.
 6. The second targeted attempt used a 900-second
-   watchdog: `/Users/jan/Library/Logs/Microcol/completions/20261028T075314Z-3096ffa247f0`,
+   watchdog: `$PRE_R0389_LOGS/completions/20261028T075314Z-3096ffa247f0`,
    supervisor PID `53824`, `target/docker-ui/run-J4RRVR`. Five checks passed;
    TC80/06 failed before reaching the map because its new sea squares retained
    forest overlays from F42. `Terrain.setHasTrees` correctly rejected the
@@ -766,7 +777,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
    `prepareCoasts`; original fixtures and the coast-pixel assertions are unchanged.
    This failed run remains preserved; the same six-check selection must pass.
 7. Third targeted dispatch (900-second watchdog):
-   `/Users/jan/Library/Logs/Microcol/completions/20261028T075845Z-453fa498f39c`,
+   `$PRE_R0389_LOGS/completions/20261028T075845Z-453fa498f39c`,
    supervisor PID `54914`, `target/docker-ui/run-gF9Hmy`: five checks passed,
    TC80/06 errored after the north-coast assertions. `panToTile(north)` only
    makes that square visible; the west coast was outside the canvas at x=-29.
@@ -774,13 +785,13 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
    verification. Bounds and grid-state assertions make those prerequisites
    explicit. The same land-colour tolerances and both orientations remain checked.
 8. Fourth targeted dispatch (same selection, 900-second watchdog):
-   `/Users/jan/Library/Logs/Microcol/completions/20261028T080239Z-dd7c2b2ea29b`,
+   `$PRE_R0389_LOGS/completions/20261028T080239Z-dd7c2b2ea29b`,
    supervisor PID `55282`, passed **6 tests in 3 suites**, zero failures, errors
    or skips, in 86.775 seconds after 94.072 seconds of queue wait. Complete
-   reports: `target/docker-ui/run-2YJxgE/microcol-test/surefire-reports`.
+   reports: `target/docker-ui/run-2YJxgE/akropia-test/surefire-reports`.
    The accepted executable diff SHA-256 is
    `6f2f785942897e1a3ef5e0a507a2d0c3e5038bc2be2748fc004dc9de1b31b638`.
-   All 1,710 tracked `microcol-game` files still match the passing model
+   All 1,710 tracked `akropia-game` files still match the passing model
    snapshot; only UI test repairs followed it.
 9. Visual review of the actual map confirms continuous coastlines and no
    perpendicular seam ticks, both
@@ -791,7 +802,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
    These are unchanged captures from the passing TC80/06 run, separate from
    the earlier atlas-based illustration.
 10. Fixed smoke/support completion, supervisor timeout 480 seconds:
-    `/Users/jan/Library/Logs/Microcol/completions/20261028T080605Z-9eb36ed55c5d`,
+    `$PRE_R0389_LOGS/completions/20261028T080605Z-9eb36ed55c5d`,
     PID `55531`, passed **21 tests in 12 suites**, zero failures, errors or
     skips. The fixed `scripts/ui-tests/smoke.json` selection ran without
     repeating model tests. Verifier time: 205.582 seconds; supervisor time
@@ -974,7 +985,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 5. That first targeted run remains **failed**: 16 tests, 1 failure, 0 errors,
    0 skips, 223.426 s. TC100/01 observed no topic-list focus immediately after
    opening; all other scenarios, layout assertions and thumb dragging passed.
-   Reports: `target/docker-ui/run-dSAUrj/microcol-test/surefire-reports/`.
+   Reports: `target/docker-ui/run-dSAUrj/akropia-test/surefire-reports/`.
    The page verification now allows up to five seconds for the existing
    asynchronous focus transition, without setting focus or changing assertions.
    No runtime file changed after the model pass; only the UI page verification
@@ -982,7 +993,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 6. The same complete targeted selection, `20261027T195408Z-e48b42a7ff37`,
    PID 26392, timeout 1,800 s, also remains **failed**: 16 tests, 0 failures,
    1 error, 0 skips, 226.650 s. TC100/01 timed out waiting for topic-list focus;
-   reports are retained in `target/docker-ui/run-B0DS5n/microcol-test/surefire-reports/`.
+   reports are retained in `target/docker-ui/run-B0DS5n/akropia-test/surefire-reports/`.
    Waiting alone did not solve the defect. The focus request now follows the
    topic list's own scene attachment, after the ScrollPane skin attaches its
    content, instead of following the outer page's earlier attachment.
@@ -996,7 +1007,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
    `20261027T200047Z-5b99160b8f9e`, PID 26987, timeout 1,800 s, passed **16 tests,
    0 failures, 0 errors, 0 skips** in 224.461 s. The initial mouse-open focus,
    repeated keyboard-open focus, layout and dragging checks now pass.
-   Reports: `target/docker-ui/run-mxB7UN/microcol-test/surefire-reports/`.
+   Reports: `target/docker-ui/run-mxB7UN/akropia-test/surefire-reports/`.
 9. Visual review of the final candidate confirms the toolbar title, removed
    outer frame, aligned narrow search, taller article, pen contours, readable
    reference table and intact status bar in [English at 1280×850](graphics-assets/help-refinement-2026-10-27/r0325-help-full-en.png),
@@ -1031,7 +1042,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 3. Targeted Docker/Xvfb selection passed **11 tests, 0 failures, 0 errors,
    0 skips**: TC21/10, TC37/01–03, TC188/01–02, TC192/01–02 and the three
    `PageVerificationContractTest` checks. Reports are retained in
-   `target/docker-ui/run-VSgdQW/microcol-test/surefire-reports/`.
+   `target/docker-ui/run-VSgdQW/akropia-test/surefire-reports/`.
 4. Model/JUnit acceptance passed **4,777 tests, 0 failures, 0 errors, 0 skips**
    in 134.872 s (`target/verification/run-e62puz3i/summary.json`), completion
    `20261027T192636Z-6c994db5035c`, PID 21557, timeout 600 s. All 17 changed
@@ -1070,7 +1081,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
    `target/r0324/source.json`. Model/JUnit dispatch:
    `20261027T175757Z-4bacc2ff576c`, supervisor PID `7145`, timeout 600 s.
    Evidence directory:
-   `/Users/jan/Library/Logs/Microcol/completions/20261027T175757Z-4bacc2ff576c`.
+   `$PRE_R0389_LOGS/completions/20261027T175757Z-4bacc2ff576c`.
    Model, targeted UI, visual review and fixed smoke acceptance remain pending.
 
 3. The first model dispatch timed out during preparation (22.093 s): the initial
@@ -1093,12 +1104,12 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
    `7656`, timeout 1,800 s. Selection: complete `TC_100_*`, complete `TC_192_*`,
    and `PageVerificationContractTest` (13 player scenarios and 3 contract checks).
    Evidence directory:
-   `/Users/jan/Library/Logs/Microcol/completions/20261027T180139Z-cce448d32639`.
+   `$PRE_R0389_LOGS/completions/20261027T180139Z-cce448d32639`.
    Targeted, visual and fixed smoke acceptance remain pending.
 
 7. Targeted acceptance passed **16 checks (13 player scenarios and 3 contract
    checks), zero failures, errors or skips**, in three fresh XML reports under
-   `target/docker-ui/run-c1eBmb/microcol-test/surefire-reports`. Completion elapsed
+   `target/docker-ui/run-c1eBmb/akropia-test/surefire-reports`. Completion elapsed
    time: 222.390 s. The current candidate hashes remain unchanged.
 8. Visual review inspected the actual full-size and small-window English captures,
    the Czech frame and the Czech unit reference. Content fills the main window,
@@ -1109,7 +1120,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
    These are implementation checks, not a player study.
 9. Fixed smoke/support dispatch: `20261027T180549Z-71e09803374d`, supervisor PID
    `7799`, timeout 480 s with a 420 s total acceptance budget. Evidence directory:
-   `/Users/jan/Library/Logs/Microcol/completions/20261027T180549Z-71e09803374d`.
+   `$PRE_R0389_LOGS/completions/20261027T180549Z-71e09803374d`.
    Smoke acceptance remains pending; remote CI and publication are outside this task.
 
 10. Fixed smoke acceptance passed **21 checks (10 player scenarios and 11 support
@@ -1143,7 +1154,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
    `target/r0323/source.json`. Model/JUnit phase dispatched through the completion
    runner at `20261027T173410Z-1d32d83ebf98`, supervisor PID `5033`, timeout 600 s.
    Evidence directory:
-   `/Users/jan/Library/Logs/Microcol/completions/20261027T173410Z-1d32d83ebf98`.
+   `$PRE_R0389_LOGS/completions/20261027T173410Z-1d32d83ebf98`.
    The accepted results for each phase are recorded below.
 3. Model/JUnit acceptance passed: **4,777 tests, zero failures, errors or
    skips**, across 348 fresh XML reports in `target/verification/run-5kmgm3rg/model`.
@@ -1158,7 +1169,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 
 5. Targeted acceptance passed: **11 checks (8 player scenarios and 3 source-contract
    checks), zero failures, errors or skips**, in six fresh XML reports under
-   `target/docker-ui/run-c9RYPZ/microcol-test/surefire-reports`. Completion elapsed
+   `target/docker-ui/run-c9RYPZ/akropia-test/surefire-reports`. Completion elapsed
    time: 186.409 s. Current source hashes still match the model candidate.
 6. Visual review of the actual Docker/Xvfb game captures confirmed the graph,
    sidebar selection, Czech empty/single-record messages and the 900×700 fleet
@@ -1172,7 +1183,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 7. Fixed smoke/support phase dispatched as `20261027T174205Z-c70a1e834269`,
    supervisor PID `5731`, outer timeout 480 s and total acceptance budget 420 s.
    Evidence directory:
-   `/Users/jan/Library/Logs/Microcol/completions/20261027T174205Z-c70a1e834269`.
+   `$PRE_R0389_LOGS/completions/20261027T174205Z-c70a1e834269`.
    No remote CI or publication verification is part of this task.
 
 8. Fixed smoke acceptance passed: **21 checks (10 player scenarios and 11 support
@@ -1202,7 +1213,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 2. Model phase dispatched through completion runner
    `20261027T164250Z-a7ba35d22dee`, supervisor PID `96982`, timeout 600 seconds.
    Evidence directory:
-   `/Users/jan/Library/Logs/Microcol/completions/20261027T164250Z-a7ba35d22dee`.
+   `$PRE_R0389_LOGS/completions/20261027T164250Z-a7ba35d22dee`.
    It timed out during preparation after 22.086 seconds: the initial
    `docker ps` exceeded its 20-second step limit. The test command never
    started; this run supplies no accepted tests. Notification was successfully
@@ -1261,7 +1272,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 11. Repeated targeted selection dispatched as
     `20261027T170310Z-11964258aecb`, supervisor PID `99799`, timeout 1,800
     seconds, with the same six classes and 13 checks. Evidence directory:
-    `/Users/jan/Library/Logs/Microcol/completions/20261027T170310Z-11964258aecb`.
+    `$PRE_R0389_LOGS/completions/20261027T170310Z-11964258aecb`.
     Targeted acceptance and subsequent smoke/support phase remain pending.
 
 12. The repeated targeted run passed **13 checks, zero failures, errors or
@@ -1279,7 +1290,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
     Fresh model/JUnit phase: `20261027T170930Z-ddad02ea64d4`, supervisor
     PID `222`, timeout 600 seconds; source hashes are recorded in
     `target/r0322/source-ui-repair3.json`. Evidence directory:
-    `/Users/jan/Library/Logs/Microcol/completions/20261027T170930Z-ddad02ea64d4`.
+    `$PRE_R0389_LOGS/completions/20261027T170930Z-ddad02ea64d4`.
     Acceptance remains pending; the changed production source requires new
     model, targeted UI and smoke evidence.
 
@@ -1290,7 +1301,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 15. The same targeted 13-check Docker/Xvfb selection was dispatched as
     `20261027T171210Z-575c5988c288`, supervisor PID `631`, timeout 1,800
     seconds. Evidence directory:
-    `/Users/jan/Library/Logs/Microcol/completions/20261027T171210Z-575c5988c288`.
+    `$PRE_R0389_LOGS/completions/20261027T171210Z-575c5988c288`.
     Targeted visual acceptance and smoke/support remain pending.
 
 16. Final targeted candidate passed **13 checks, zero failures, errors or
@@ -1308,7 +1319,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
     `20261027T171538Z-d578ae23ea0f`, supervisor PID `959`, timeout 480 seconds,
     with the verification script's unchanged total budget of 420 seconds.
     Evidence directory:
-    `/Users/jan/Library/Logs/Microcol/completions/20261027T171538Z-d578ae23ea0f`.
+    `$PRE_R0389_LOGS/completions/20261027T171538Z-d578ae23ea0f`.
     Smoke acceptance and final integration remain pending. Remote regression
     and publication are outside this session's verification scope.
 
@@ -1381,7 +1392,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
    edge antialiasing at different canvas origins. Every pixel in the original
    comparison region is still checked; existing bridge, resource, production,
    fog and movement assertions remain. Added bridge preview screenshots.
-   Production code and all `microcol-game` model/JUnit inputs are unchanged;
+   Production code and all `akropia-game` model/JUnit inputs are unchanged;
    retain the passing model run. Reformatted UI source hashes are in
    `target/r0319/source-repair2.json`. Full targeted selection repeated as
    `20261027T155228Z-276f4d816f79`, PID 88274, 900-second timeout. Acceptance pending.
@@ -1405,7 +1416,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
     `target/verification/run-um9edbtx/summary.json` and 12 complete XML reports.
     The smoke source copy and current six Java files match the accepted
     `target/r0319/source-repair2.json` hashes. The retained model phase covers
-    unchanged `microcol-game` inputs; the final targeted phase compiles/checks
+    unchanged `akropia-game` inputs; the final targeted phase compiles/checks
     the adjusted UI tests. No required test is skipped.
 11. Final source review confirms unchanged map pass ordering and visibility
     filtering, clipping only of the terrain preview, preserved colony/unit
@@ -1507,7 +1518,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 12. Final targeted completion `20261027T152133Z-5ca550ee3046`, PID 82124,
     timeout 900 seconds, passed all **17 selected checks**, zero failures/errors/
     skips, in **221.462 seconds** including preparation and cleanup. Complete
-    reports are in `target/docker-ui/run-YPFYMq/microcol-test/surefire-reports/`:
+    reports are in `target/docker-ui/run-YPFYMq/akropia-test/surefire-reports/`:
     TC26 ten, TC56 two, TC69 one, TC111 one, source contract three. Source hashes
     still match. Visual review confirmed both [marked](graphics-assets/unknown-preview-2026-10-27/marked.png)
     and [unmarked](graphics-assets/unknown-preview-2026-10-27/unmarked.png)
@@ -1671,9 +1682,9 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
    TC26/F18/10 (black question marks, navigation, resize, Continue and
    exploration) and all three `PageVerificationContractTest` checks.
 6. Native R-0281 inspection used a fresh local app image named
-   `MicroColRequirementCheck`, built from the checked source with an isolated
+   `AkropiaRequirementCheck`, built from the checked source with an isolated
    test home and preferences, Java 17.0.18 and JavaFX 17.0.20 on macOS 27.0.1.
-   The earlier installed MicroCol app was recognized as stale and excluded.
+   The earlier installed app, then under the former product name, was recognized as stale and excluded.
    Menu and Settings were inspected and the native zoom action was exercised.
    The tool capture did not reliably show the actual native decorations; the
    user inspected the window directly and explicitly reported a different
@@ -1715,7 +1726,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 
 1. [R-0310](requirements/done/R-0310.md) requests reproduction only on production
    revision `afc916327ea4e7f6a4b5d02bce4c1c66044e6ece`. The isolated worktree
-   `classic-initial-movement/microcol` excludes unrelated main-checkout edits.
+   `classic-initial-movement/akropia` excludes unrelated main-checkout edits.
    No production code, runtime assets or fixture data are changed.
 2. `TC_193_F15_initial_ship_movement_test` covers fresh Free game → Original
    world entry: `TC_01` uses `M` and a destination click, `TC_02` drags the
@@ -1860,7 +1871,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 1. [R-0303](requirements/done/R-0303.md) separates the existing verifier into all-model `--model` and UI/support `--smoke` phases. Model tests include `ConnectorTest`; smoke retains all existing support checks and the same ten UI scenarios. Default full verification is unchanged. Smoke has a 420-second acceptance budget at both entry points, with a separate 480-second callback watchdog.
 2. Tooling validation passed: 27 verifier/local-slot tests in 15.833 seconds (`target/r0303/ui-tooling-separated.log`) and 20 unchanged callback-tooling tests in 7.459 seconds (`callback-tooling.log`), zero failures/errors/skips. Tests cover model-only selection, exclusion of model tests from the smoke Maven command and manifest, mutually exclusive mode flags, full verification and the 361/420/421-second boundary. Shell syntax, nine documentation checks and strict MkDocs passed.
 3. The earlier combined gate `20261026T202042Z-4a3007b49a37` (PID 34350, `run-zsiu17q4`) passed all 4,784 checks with zero failures/errors/skips in 306.773 verifier seconds, 306.884 seconds including cleanup. That result precedes the requested separation and does not verify the new modes. Its original reports are retained.
-4. Model-only acceptance passed on base `ce978ad0e97186ed6982403f63e49870ab4d5525` plus this task's isolated changes: `20261026T202906Z-3db34454fb9b`, PID 37177, `target/verification/run-iah9bq0c`. All **4,763 model/JUnit tests in 344 suites passed**, zero failures/errors/skips, **137.116 verifier seconds**, 137.273 seconds including cleanup and a separate 120.895-second lock wait. The manifest contains only `microcol-game`, includes `ConnectorTest`, and the complete XML reports match the source inventory. All non-documentation source hashes still match the tested snapshot.
+4. Model-only acceptance passed on base `ce978ad0e97186ed6982403f63e49870ab4d5525` plus this task's isolated changes: `20261026T202906Z-3db34454fb9b`, PID 37177, `target/verification/run-iah9bq0c`. All **4,763 model/JUnit tests in 344 suites passed**, zero failures/errors/skips, **137.116 verifier seconds**, 137.273 seconds including cleanup and a separate 120.895-second lock wait. The manifest contains only `akropia-game`, includes `ConnectorTest`, and the complete XML reports match the source inventory. All non-documentation source hashes still match the tested snapshot.
 5. Separate smoke passed: `20261026T203401Z-9f985645181e`, PID 38254, `target/verification/run-xkgxaqbt`. All **21 UI/support checks in 12 suites passed**, zero failures/errors/skips and **zero model tests**, in **201.879 verifier seconds**, 202.046 seconds including cleanup, within 420 seconds. The separate lock wait was 270.927 seconds. The manifest and complete XML reports contain exactly the support tests and ten selected UI methods, with no model-suite overlap.
 6. During verification, `main` advanced to `384f0acf9f47f671c9398b3f98ee69271f20c452` with the independently accepted R-0302 map and test changes. They are now included unchanged in the isolated checkout. Both phases are repeated on this final combination before commit; the earlier separate-mode results remain valid evidence for their original source. This task changes no gameplay or Java and needs no additional targeted player scenario. Remote regression and publication are not inspected.
 7. Final model phase on `384f0acf9f47f671c9398b3f98ee69271f20c452` plus R-0303 passed: `20261026T204339Z-083acf9c0caf`, PID 40551, `target/verification/run-091gaoko`. All **4,764 model/JUnit tests in 344 suites passed**, zero failures/errors/skips, **143.941 verifier seconds**, 144.110 seconds including cleanup, no lock wait. Complete reports match the model-only inventory including `ConnectorTest`; all non-documentation source hashes match.
@@ -1921,7 +1932,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
    source identity is also retained in `target/r0300-checked-source.json`.
    Final changes after the game gate only close documentation/evidence and
    add its actual screenshot. Completion records remain under
-   `~/Library/Logs/Microcol/completions/`; historical failed attempts remain
+   `$PRE_R0389_LOGS/completions/`; historical failed attempts remain
    failed. Remote regression and distribution/website publication are not
    inspected and are not claimed by this local acceptance.
 7. Documentation closure passed all nine consistency tests and the strict
@@ -1967,7 +1978,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 ## R-0290 river corridors — 2026-10-26
 
 1. [R-0290](requirements/done/R-0290.md), UC-008/009/012/019/021/031/032/033/034/038/119: rivers allow roads, fishing and finite silver/ore, exclude forest, plowing and settlements, and retain connected travel. The agreed production and generation probabilities are authoritative in [river rules](gap-analysis.md#river-corridors). Native land purchase rights remain valid on rivers after save/load.
-2. The isolated checkout `/Users/jan/.codex/worktrees/river-rules/microcol` incorporates `7a219e51575041156c958bd8a5fb8fea988d842d` before acceptance. Original World retains 28 river squares, 81 forests and all resource kinds; ten forests and two incompatible bonuses move to nearby legal squares, with four river silver deposits and one river ore deposit. The other bundled maps contain no rivers requiring conversion.
+2. The isolated checkout `/Users/jan/.codex/worktrees/river-rules/$PRE_R0389_CHECKOUT` incorporates `7a219e51575041156c958bd8a5fb8fea988d842d` before acceptance. Original World retains 28 river squares, 81 forests and all resource kinds; ten forests and two incompatible bonuses move to nearby legal squares, with four river silver deposits and one river ore deposit. The other bundled maps contain no rivers requiring conversion.
 3. Initial targeted model testing exposed an obsolete hill/mountain assumption for river deposits; the first full model run exposed five incomplete terrain mocks. After repair, all 4,744 then-current model/JUnit tests passed without failures, errors or skips (`target/r0290/all-model-repaired.log`). Later coverage adds pending plow rejection, invalid saved combinations and river purchase rights. The first purchase-right assertion incorrectly expected no quote; the existing API returns a `PAID` quote. The corrected 14-test purchase suite passed (`target/r0290/river-rights-repaired.log`); failed logs remain preserved.
 4. Docker/Xvfb completion `20261026T065921Z-b7c47ab71af6` (PID 98992, timeout 1,800 s) passed 8 checks in 95.468 s: five TC90/F81 river scenarios and three `PageVerificationContractTest` checks. The broader completion `20261026T070957Z-be9376c3c942` (PID 3246, timeout 1,800 s) passed 34 checks in 515.319 s, zero failures/errors/skips, in `target/docker-ui/run-WvkFiq`. Selection: TC90/F81 (5), TC24/F15/12 Original World (1), TC80/F72 (4), TC88/F79 (5), TC89/F80 (1), TC91/F82 (3), TC102/F93 (3), TC15/F05 (2), TC18/F01 (7), source contract (3). These targeted runs are separate from the five-minute commit gate.
 5. Visual inspection of the exported map found the bridge aligned with a horizontal river. Its deck now turns across a visible river branch; the pixel assertion checks the crossing. The first mandatory gate, completion `20261026T072137Z-459b35e811d4` (PID 6528, outer timeout 420 s), passed 4,768 checks with zero failures/errors/skips in 299.474 s, within the unchanged 300-second limit (`target/verification/run-hx9ozxxk`). That snapshot predates the final bridge/right corrections and concurrent outline change `c5d59492`; it is preserved as intermediate evidence, not final acceptance. The checkout now includes that outline commit.
@@ -2000,9 +2011,9 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 2. Spuštění z kořene repozitáře: nejprve `bash scripts/ui-tests/verify.sh --model`,
    potom cílené UI scénáře změněného okolí a nakonec `bash scripts/ui-tests/verify.sh --smoke`.
    Pro práci agenta použít [completion runner](ai/completion-callbacks.md#pre-commit-gate).
-   Režim `--model` ověří všechny testy `microcol-game` včetně `ConnectorTest`
+   Režim `--model` ověří všechny testy `akropia-game` včetně `ConnectorTest`
    a žádné UI. Samostatný smoke kontejner provede všechny stávající podpůrné
-   třídy bez prefixu `TC_` v `microcol-test` a deset metod uvedených níže.
+   třídy bez prefixu `TC_` v `akropia-test` a deset metod uvedených níže.
    Modelové testy se ve smoke znovu nespouštějí. Podpůrné třídy zahrnují i základní TestFX kontroly
    `SimpleOperationsTest`; nejde jen o čisté jednotkové testy.
 3. Autoritativní spustitelný výběr je
@@ -2287,7 +2298,7 @@ final full two-container run are still required.
 zero failures, errors or skips, 658.398 s. Both TC185 variants passed, including
 Save/Continue after the first complete circuit and before the second;
 all five selected TC classes and all 14 recorded source hashes were checked.
-Evidence: `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0218-targeted-2-review.json`.
+Evidence: `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0218-targeted-2-review.json`.
 Complete final regression remains pending.
 
 **First targeted run passed (attempt 3, 2026-10-24).** Callback
@@ -2312,7 +2323,7 @@ rerun. [R-0218](requirements/done/R-0218.md) stays `ready for development`; UC-1
 Continue mid-leg after turn 2 and between the complete cycles after turn 4) and
 `TC_02` (uninterrupted reference, same balances). The network supplies ore from
 Delft to New Amsterdam. One initial world, built before loading by
-`ProductionNetworkFixture` from `F109-trade-route-assignment.microcol`: two Dutch
+`ProductionNetworkFixture` from `F109-trade-route-assignment.akropia`: two Dutch
 colonies, New Amsterdam (id 0, 26,16) and Delft (id 1, 28,16), started game,
 Dutch current. Removed: the idle wagon 6 and its route, horses (no breeding).
 Added: a school, teacher 200 (Master Carpenter), student 201 on a corn field,
@@ -2380,7 +2391,7 @@ rerun for the turn-4 checkpoint; results are added after the run.
 4,717 model/JUnit tests (333 reports) and 27 UI/support tests (8 reports),
 zero failures, errors or skips, 382.487 s. All five selected TC classes,
 including TC162_04, were present; all nine source hashes matched.
-Evidence: `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0216-targeted-3-review.json`.
+Evidence: `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0216-targeted-3-review.json`.
 This verifies the independent ending matrix and representative player paths;
 complete final regression is pending, and R-0220's integrated earned-victory
 journey remains outside this run's claim.
@@ -2400,7 +2411,7 @@ scene's lifecycle, not the rules:
 - `theFirstCompletionTakesOrderOneAndTheOtherNationTakesOrderTwo` (line 385):
   expected order `Optional[1]`, actual empty. `Model.judgeRebellions` judges
   only an open game (`GameManager.isOpen`: started, not stopped, not finished),
-  and the shipped `free-play.microcol` has `gameStarted: false`, so nothing was
+  and the shipped `free-play.akropia` has `gameStarted: false`, so nothing was
   judged.
 - `savedOrdersAreKeptAndNeverAssignedAgainOnContinue` (line 422): "Game must be
   started." `Model.save` reads the current player, which exists only in a
@@ -2463,7 +2474,7 @@ matrix; it is unverified and not claimed.
   "You lost all colonies.", the `NO_COLONIES` reason, one `FINAL` result, first
   place and one stored entry while the result window is open, and one entry
   after closing and reopening the ranking from the main menu twice. The earlier
-  relative path to `microcol-game` is gone.
+  relative path to `akropia-game` is gone.
 - Source of the end text: `FreePlay_0_mission` registers `NO_COLONIES_PROCESSOR`
   and `MissionEventListener.onFinishMission` shows the message and then the
   result window for any ended game that has a result, which is the path TC_03
@@ -2494,8 +2505,8 @@ matrix; it is unverified and not claimed.
 ### Gaps and blockers
 
 1. **Zero-colony UI scene (written, not run).** No file in
-   `microcol-test/src/test/scenarios` has a human nation without colonies, so
-   `TC_162` TC_04 derives its save from the shipped `free-play.microcol`. The
+   `akropia-test/src/test/scenarios` has a human nation without colonies, so
+   `TC_162` TC_04 derives its save from the shipped `free-play.akropia`. The
    shipped map is unstarted and its first nation is the computer France, so the
    fixture writes the started state with the Dutch current, the same fields
    `LostCityRumorFixture` sets for this map. Not yet confirmed by a run: that
@@ -2519,7 +2530,7 @@ matrix; it is unverified and not claimed.
    the sea square (18,10), the square of `PatrolInterceptionTest`'s harbour,
    whose comment places Quebec's worked field west of the port; the attempt-2
    run loaded the scene, so the conversion was accepted. The scene's literals (four Dutch colonists, 2,108 gold, declaration year
-   1490) are read from `free-play.microcol` and are confirmed only by a passing
+   1490) are read from `free-play.akropia` and are confirmed only by a passing
    run.
 4. **R-0220 integrated earned victory** is `new` and unverified. No evidence is
    reused and this matrix does not claim that path.
@@ -2555,7 +2566,7 @@ journey (see gaps).
    `ScoreBoundaryFixture` (test module), `ScoreBoundaryPage` and
    `TC_162_F193_score_boundary_test`. Review the diff. Attempt 3 has not been
    formatted.
-2. All model JUnit tests in `microcol-game` on the final source state. The cells
+2. All model JUnit tests in `akropia-game` on the final source state. The cells
    to watch are the two `RebellionVictoryTest` tests that failed in attempt 2
    and the two new `MissionEventsTest` tests; the rest of the attempt-1 pass
    and the other attempt-2 tests passed as run.
@@ -2574,7 +2585,7 @@ Callback `20261024T001456Z-6ef7c792a381`, `target/docker-ui/run-aJYBql`:
 zero failures, errors or skips, 398.808 s. All five selected TC classes and
 144 matching source hashes were checked. Actual industrial reports contain
 398 manufacturing cases, 20 stock-resume cases and 9 warehouse cases.
-Evidence: `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0215-targeted-2-review.json`.
+Evidence: `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0215-targeted-2-review.json`.
 Complete batch acceptance remains pending.
 
 **Implementation history.** No matrix pass, batch acceptance,
@@ -2664,7 +2675,7 @@ is claimed.
 1. Apply the shared formatter to the changed Java files:
    `IndustrialProductionTest.java`, `CargoSlotTest.java`,
    `EuropeTradeAccountTest.java` and `DisbandTest.java`. Review the diff.
-2. All model JUnit tests in `microcol-game` on the final source state. Attempt 1
+2. All model JUnit tests in `akropia-game` on the final source state. Attempt 1
    failed only in the new staging (see above); rerun the whole model suite.
 3. Docker/Xvfb selected UI: TC_50, TC_41, TC_19, TC_104 and TC_108, using the
    [container command](#docker-ui-tests).
@@ -2679,7 +2690,7 @@ Results, counts and evidence paths are added after the run.
 4,277 model/JUnit tests (333 reports) and 24 UI/support tests (8 reports),
 zero failures, errors or skips, 323.729 s. All five selected TC classes were
 present and all 139 recorded source hashes matched. Evidence:
-`/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0214-targeted-4-review.json`.
+`$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0214-targeted-4-review.json`.
 This is the ninth targeted requirement of batch eight; complete batch acceptance
 is still pending. The model joins cover the effects while the shared UI join
 path and representative visible effects are covered by the selected scenarios;
@@ -2721,7 +2732,7 @@ Penn and Brebeuf passed. Attempt 3 repairs that test with a no-founder control
 update and adds the other joins listed below. The attempt-3 results and later repairs are recorded above. No whole-matrix pass, batch acceptance, commit or
 publication is claimed. Main runs the model suite and the selected UI scenarios
 listed below. Evidence of the failed run:
-`/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0214-targeted-1-review.json`.
+`$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0214-targeted-1-review.json`.
 
 Legend. `R` = actual join or arrival (Congress choice and the owner's own
 `startTurn`, or the UI `congress.select`). `F` = fixture membership only
@@ -2768,7 +2779,7 @@ source and named tests: FATHER-001, 004, 007, 010, 013, 015, 016, 018, 020 and
 
 ### Real joins (attempts 2 and 3, written, not run in attempt 3)
 
-Shared helper `RealFounderJoin` (test package `org.microcol.model`): `readyFor`
+Shared helper `RealFounderJoin` (test package `org.akropia.model`): `readyFor`
 sets 1,000 bells (above any difficulty's first target; run-J1yb1B passed with
 100), no member and one offer per category including the founder;
 `joinThroughOwnerUpdate` has the current owner choose the offer, runs that
@@ -2831,7 +2842,7 @@ scenarios above after the model run.
 
 1. Apply the shared formatter to the changed Java files (the new
    `RealFounderJoin` and the edited model tests listed above), then all model JUnit
-   tests in `microcol-game` on the final source state.
+   tests in `akropia-game` on the final source state.
 2. Docker/Xvfb selected UI: TC56, TC57, TC97, TC113 and TC148, using the
    [container command](#docker-ui-tests).
 3. The documented documentation checks and strict MkDocs build for these doc changes.
@@ -2866,7 +2877,7 @@ publication is claimed.
 Cause: `Colony.isContainsConstructionByType` is true for a predecessor once its
 upgrade is built, because it matches any building whose upgrade-from chain contains
 the requested type. The test used that semantic predicate for physical absence.
-Evidence: `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0213-targeted-1-review.json`.
+Evidence: `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0213-targeted-1-review.json`.
 Production behaviour is unchanged.
 
 **Attempt 2, written, not run.** The predecessor and completion checks count
@@ -3104,7 +3115,7 @@ those sources, not read back from `UnitType`, `EducationSkills` or the job
 tables.
 
 Evidence classes. *Card text* (the source, not a claim about the game): the 22
-rows, their minimum school and the native-teaching marks. *Accepted MicroCol
+rows, their minimum school and the native-teaching marks. *Accepted Akropia
 rules* that go beyond or deviate from the card: the expert ×2 output, the
 1000/2000/3000 prices with the retained 2200 blacksmith, the exclusion of the
 three planters from Europe, school course lengths, and hardy-pioneer durations
@@ -3114,12 +3125,12 @@ first targeted run unless a line says otherwise. *Written, not yet verified*:
 only what a line marks as pending. Full 22-skill UI coverage is not claimed;
 TC184 is the single representative acquisition-to-work journey.
 
-Legend. Model tests are in `microcol-game/src/test/java/org/microcol/model`.
+Legend. Model tests are in `akropia-game/src/test/java/org/akropia/model`.
 `SCMT` SkillsCardMatrixTest (new); `EST` EuropeanSpecialistTest; `SPT`
 SpecialistProductionTest (three planter rows new); `EDT` EducationTest (card
 school-row test new); `NTST` NativeTeachableSkillsTest; `NTT` NativeTeachingTest;
 `CST` ClearSpecialtyTest; `CFT` ClearForestTest; `BRT` BuildRoadTest. `TCnn` are
-scenarios in `microcol-test`. Tier is the minimum school; "one lower" is the
+scenarios in `akropia-test`. Tier is the minimum school; "one lower" is the
 school that must refuse the same skill.
 
 ### Per-skill ledger
@@ -3286,7 +3297,7 @@ Run history reported by the main agent, not reproduced by the author:
 
 ### Added in this pass
 
-1. `UnitRoleLedgerTest` (new, `microcol-game` model package, 4 tests): land
+1. `UnitRoleLedgerTest` (new, `akropia-game` model package, 4 tests): land
    walk/sail domains; type-level attack flags; target domains (land attackers
    never target ships, armed ships target only ships); one hold per passenger
    with the six-hold treasure train; wagon not storable; artillery storable.
@@ -3325,7 +3336,7 @@ Run history reported by the main agent, not reproduced by the author:
    a purchased Seasoned Scout cannot attack unarmed, and armed and mounted has
    attack base 3 and total 4.5 with its specialist type unchanged.
 8. Attempt 3 player path: `TC_183_F211_scout_to_dragoon_test` (new, two starts,
-   scenario `F17-colony-equipment.microcol`), written with the colony controls
+   scenario `F17-colony-equipment.akropia`), written with the colony controls
    and the page verification methods of TC25 only. `TC_01` mounts horses (muskets
    49, horses 50, scout sight 2), is refused muskets at 49 and cancels with every
    stock unchanged, then leaves the game and Continues with the same scout.
@@ -3338,7 +3349,7 @@ Run history reported by the main agent, not reproduced by the author:
 Status values: **covered** = an existing assertion in the named owner matches the
 card or an accepted rule; **added** = a check written for R-0211, unverified until
 the main run; **accepted absence** = an accepted requirement decided that the
-card row has no such cell in MicroCol; **open Qn** = the rule is not decided, see
+card row has no such cell in Akropia; **open Qn** = the rule is not decided, see
 [R-0211](requirements/R-0211.md#4-open-questions). A player path is named only
 where the row cites a TC scenario.
 
@@ -3495,7 +3506,7 @@ evidence, not acceptance. Facts from `maven.log` and the dumpstream:
    Continued; the 19th was England at Conquistador, Continued at 1491.
 2. The 20th `@Start` (20:03:56.898) logged `Loading image provider` and 1.3 s
    later `event=STARTUP_FAILED cause=com.google.inject.CreationException` at
-   `MicroColApplication.initializeMicrocol(71)`, the `Guice.createInjector`
+   `AkropiaApplication.initializeAkropia(71)`, the `Guice.createInjector`
    call; then `System.exit(1)`. A normal start takes about 0.45 s from image
    loading to `STARTED`. The failure is in injector creation, before the
    cell's own code (Spanish Viceroy fixture, Load), so no cell-specific content
@@ -3840,7 +3851,7 @@ the Europe-arrival journey. Formatter and `mvn` runs are still required before a
    `r203-congress-below-cs.png`, `r203-congress-roster-cs.png`. All assertions
    remain in named `verify…` methods and every player action is still a click.
 5. Not run: this session has no shell. The formatter, compilation and the UI
-   rerun belong to the main agent. Selection for the rerun: all `microcol-game`
+   rerun belong to the main agent. Selection for the rerun: all `akropia-game`
    JUnit tests, then `TC_176`, `TC_56`, `TC_150`, `TC_81` and `TC_03`.
    Remaining risks: the 560-pixel viewport and the resulting window height
    (about 650 pixels) are computed, not measured; Czech wrapping at 580 pixels is
@@ -3890,7 +3901,7 @@ the Europe-arrival journey. Formatter and `mvn` runs are still required before a
    selected founder, so the UI scenarios start with no pending founder; the
    Conquistador factor is 100, so the first objective costs 100 bells. Expected
    Crown labels are the same as in TC_150.
-7. Selection for the main run: all JUnit tests of `microcol-game`, and TC_176,
+7. Selection for the main run: all JUnit tests of `akropia-game`, and TC_176,
    TC_56, TC_150, TC_81 and TC_03. The main run has not started; nothing above
    has passed.
 
@@ -3933,7 +3944,7 @@ the Europe-arrival journey. Formatter and `mvn` runs are still required before a
    the total without double counting.
 7. Not run: this session had no shell, so no Maven, formatter, Docker or UI run
    happened. Recorded selection for the main run: `CongressReportTest`, the full
-   `microcol-game` JUnit suite, and the UI classes TC_176, TC_56, TC_150, TC_81 and
+   `akropia-game` JUnit suite, and the UI classes TC_176, TC_56, TC_150, TC_81 and
    TC_03. The 900×750 layout check is not measured; the dialog gained one label and
    no scroll pane.
 8. Status: written, not verified. The requirement stays `ready for development`
@@ -3985,7 +3996,7 @@ the Europe-arrival journey. Formatter and `mvn` runs are still required before a
    ships, the owner switch, pure reads with reload, foreign or null identity, and
    a reflection check that the foreign row holds no live unit, player, cargo or
    goods handle. Its 16 other tests passed in the failed run above.
-5. Navigation, rerun needed: `FleetNavigatorTest` (microcol-game) uses the saved
+5. Navigation, rerun needed: `FleetNavigatorTest` (akropia-game) uses the saved
    free-play map, a real `SelectedTileManager` on a mocked bus, and the real
    `FleetNavigator`. It covers an own Europe ship, an own map ship, a visible
    foreign ship, a repair ship that opens nothing, a replaced game with the same
@@ -4405,7 +4416,7 @@ the Europe-arrival journey. Formatter and `mvn` runs are still required before a
    `religion-report-czech-pending.png`. Status stays `ready for development`; the
    repair, the Czech assertions and the captures are not verified.
 
-Targeted verification passed on 2026-10-23: completion `20261023T134700Z-3e5fe36a48bc`, reports `target/docker-ui/run-jjHKD7`, duration 340.282 seconds. All 3,935 model/JUnit tests in 316 reports and 20 UI/support tests in 8 reports passed, with zero failures/errors/skips. Selection: TC167, TC166, TC67, TC47, TC70 and all JUnit. All 207 source hashes matched. Shared formatting and diff checks passed. EN/CS pending-report screenshots in the run’s `microcol-test/warehouse-qa/` were visually reviewed: ten sidebar tabs fit and the report text is readable in its scrollable panel. Full seventh-batch acceptance remains pending; previous failed evidence remains failed.
+Targeted verification passed on 2026-10-23: completion `20261023T134700Z-3e5fe36a48bc`, reports `target/docker-ui/run-jjHKD7`, duration 340.282 seconds. All 3,935 model/JUnit tests in 316 reports and 20 UI/support tests in 8 reports passed, with zero failures/errors/skips. Selection: TC167, TC166, TC67, TC47, TC70 and all JUnit. All 207 source hashes matched. Shared formatting and diff checks passed. EN/CS pending-report screenshots in the run’s `akropia-test/warehouse-qa/` were visually reviewed: ten sidebar tabs fit and the report text is readable in its scrollable panel. Full seventh-batch acceptance remains pending; previous failed evidence remains failed.
 
 ## R-0198 labor advisor — written, not verified — 2026-10-23
 
@@ -4436,7 +4447,7 @@ Targeted verification passed on 2026-10-23: completion `20261023T134700Z-3e5fe36
    Crown-seized exclusion, viewpoint isolation, a foreign-model owner rejected, live
    placement change and save/reload. Written, not run.
 4. UI scenario: `TC_166_F199_labor_report_test` (`TC_01`) uses the existing
-   [F22 fixture](../microcol-test/src/test/scenarios/F22-expert-purchase.microcol)
+   [F22 fixture](../akropia-test/src/test/scenarios/F22-expert-purchase.akropia)
    and `LaborReportPage`. It checks five free colonists in one type row, each
    placement text, Show for a colony, the galleon tile and Europe, keyboard
    arrival with Escape close, and movement unchanged by opening and closing. A
@@ -4484,7 +4495,7 @@ Targeted verification passed on 2026-10-23: completion `20261023T131557Z-f32cadd
 ## R-0197 Síň slávy — cílené ověření — 2026-10-23
 
 1. [R-0197](requirements/done/R-0197.md) přidává trvalých deset nejlepších
-   hodnocených výsledků do `~/.microcol/hall-of-fame.json`. Soubor leží vedle
+   hodnocených výsledků do `~/.akropia/hall-of-fame.json`. Soubor leží vedle
    uložených her, čte jej `HallOfFameDao` přes `PersistingTool` a zapisuje
    atomicky. Neplatný nebo nečitelný soubor se nepřepíše; neúspěšný zápis
    ponechá předchozí soubor.
@@ -4554,7 +4565,7 @@ Targeted verification passed on 2026-10-23: completion `20261023T131557Z-f32cadd
    souběžně implementované požadavky. Jejich přejímka musí spouštěč spustit
    znovu na finálním vlastním stavu. GitHub Actions ani publikace se neověřovaly.
 
-Funkční scénáře v `microcol-test` jsou společnou kontrolou toho, co hráč dokáže
+Funkční scénáře v `akropia-test` jsou společnou kontrolou toho, co hráč dokáže
 ve hře udělat a jaký herní výsledek dostane. Každá změna chování musí mít
 odpovídající pokrytí v těchto scénářích. Při úpravě vzhledu musí stejné kroky
 nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
@@ -4619,7 +4630,7 @@ nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
    abeced, číslice a euro v statickém řezu 300; nejde o běhovou přejímku UI.
 2. Cílený Docker/Xvfb běh `20261019T175234Z-c26c8db601dc`, supervisor PID 17427,
    zahrnuje TC83, TC84, nový TC85 a PageVerificationContractTest. Běh selhal při kompilaci nového testu: přístup k injektoru patří
-   TestContext, nikoli MicroColApplication. Opraveno bez změny herních očekávání;
+   TestContext, nikoli AkropiaApplication. Opraveno bez změny herních očekávání;
    cílený běh se opakuje. Následuje celá funkční regrese, vizuální kontrola
    screenshotů a ověření publikace. Nativní HiDPI zatím nebylo ověřeno.
 3. Opravený cílený běh `20261019T175402Z-47b9719fa854`, supervisor PID 18172,
@@ -4631,7 +4642,7 @@ nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
 4. Screenshoty menu, Nastavení, Kongresu, Evropy a kolonie ukazují nový řez.
    Kolonie v okně 900 × 750 ořezává nadpis a dolní obsah; stejný problém je
    vidět ve starším `run-LQjNin/warehouse-qa/education-colony-czech.png`
-   (skutečný soubor v podsložce `microcol-test`). Jde o původní pevné rozložení,
+   (skutečný soubor v podsložce `akropia-test`). Jde o původní pevné rozložení,
    nikoli novou regresi fontu. Jeho redesign není součástí této změny.
    TC85 navíc ověřuje úplný nadpis při 1280 × 900, tooltip a Unicode vstup
    se zrušením bez změny názvu. Tento rozšířený běh:
@@ -4827,8 +4838,8 @@ nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
     a přesný zdrojový commit `3894bdc354dfca94e30932a9d5bad820d7523b8a`.
     Ověřeny jsou všechny tři platformy v manifestu a 9 kontrolních součtů
     release assetů proti SHA-256 digestům GitHubu. Stažení a ZIP integrita
-    [macOS launcheru](https://github.com/jajir/microcol/releases/download/dev/MicroCol-Dev-macos.zip)
-    byly ověřeny; launcher při příštím spuštění nabídne aktuální build.
+    [macOS launcheru](https://github.com/jajir/microcol/releases/tag/dev)
+    (tehdy publikovaného pod dřívějším názvem produktu) byly ověřeny; launcher při příštím spuštění nabídne aktuální build.
     Tato přejímka nepředstírá ruční spuštění hry na všech třech systémech
     ani kontrolu nativního HiDPI. Nové varianty fontů zůstávají návrhy.
 
@@ -4881,7 +4892,7 @@ nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
    všechny modelové testy, 83 TC tříd a 3 podpůrné UI třídy:
    model + TC01–30 + podpůrné; TC31–60; TC61–83.
 7. První část `run-MMqOoO` (completion `20261018T221835Z-725cf5d05b47`)
-   prošla. Exportované XML dokládá **2 349 testů v 202 třídách microcol-game**
+   prošla. Exportované XML dokládá **2 349 testů v 202 třídách akropia-game**
    a **138 UI/podpůrných testů v 33 třídách**, vždy 0 selhání/chyb/přeskočených.
    Explicitní výběr zahrnul navíc úspěšný integrační `ConnectorTest`, který
    původní běh nevybíral.
@@ -4924,7 +4935,7 @@ nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
     completion `20261019T000902Z-5d2333283b08` není jediným podkladem závěru.
 
 Pracovní pravidla platí od **11. října 2026**. Vzorem čitelné struktury je
-[TC_18_F01_plow_field_test](../microcol-test/src/test/java/org/microcol/test/TC_18_F01_plow_field_test.java).
+[TC_18_F01_plow_field_test](../akropia-test/src/test/java/org/akropia/test/TC_18_F01_plow_field_test.java).
 Testy chrání konkrétní ověřené cesty; nejsou důkazem úplnosti pravidel podle
 manuálu ani zárukou, že ve hře nemůže být jiná chyba. Chybějící pravidla nadále
 eviduje [analýza rozdílů](gap-analysis.md).
@@ -4952,7 +4963,7 @@ ovládání a bezpečného výsledku v UI.
 
 | Druh změny | Povinné pokrytí |
 | --- | --- |
-| Nová funkce nebo změna pravidla | Doplnit nebo upravit pojmenovaný scénář `TC_...`, který provede akci přes UI a ověří herní výsledek. Výpočty a hraniční případy doplnit do modelových testů v `microcol-game`. |
+| Nová funkce nebo změna pravidla | Doplnit nebo upravit pojmenovaný scénář `TC_...`, který provede akci přes UI a ověří herní výsledek. Výpočty a hraniční případy doplnit do modelových testů v `akropia-game`. |
 | Oprava chyby | Přidat reprodukční kroky a očekávaný správný výsledek; ověřit, že test zachytí původní chybu a po opravě projde. |
 | Obrázky, CSS, rozměry, rozmístění nebo popisky | Zachovat očekávané herní výsledky a provést dotčené funkční scénáře. Ověřit také skutečný obraz, klikatelnost, výběr a klávesové ovládání podle [UX pravidel](ux.md). |
 | Sdílené tlačítko, dialog, ovládání mapy nebo page object | Najít všechna použití a pokrýt související scénáře; před commitem projít [smoke bránou](#pre-commit-smoke), úplnou regresi provede GitHub Actions. |
@@ -4974,10 +4985,10 @@ Zachovat současný JUnit 5 a TestFX a členění následujících souborů:
 
 | Místo | Odpovědnost |
 | --- | --- |
-| [`org.microcol.test`](../microcol-test/src/test/java/org/microcol/test/) | Čitelný příběh hráče: příprava, kroky a explicitní volání `verify…` s očekávanými výsledky. |
-| [`org.microcol.page`](../microcol-test/src/test/java/org/microcol/page/) | Vyhledání prvků, akce a čekání; oddělené pojmenované metody `verify…` pro ověření výsledků. |
-| [`src/test/scenarios`](../microcol-test/src/test/scenarios/) | Reprodukovatelné uložené hry a testové nastavení. |
-| [`AbstractMicroColTest`](../microcol-test/src/test/java/org/microcol/test/AbstractMicroColTest.java) | Společné spuštění aplikace a přístup k testovému kontextu a modelu. |
+| [`org.akropia.test`](../akropia-test/src/test/java/org/akropia/test/) | Čitelný příběh hráče: příprava, kroky a explicitní volání `verify…` s očekávanými výsledky. |
+| [`org.akropia.page`](../akropia-test/src/test/java/org/akropia/page/) | Vyhledání prvků, akce a čekání; oddělené pojmenované metody `verify…` pro ověření výsledků. |
+| [`src/test/scenarios`](../akropia-test/src/test/scenarios/) | Reprodukovatelné uložené hry a testové nastavení. |
+| [`AbstractAkropiaTest`](../akropia-test/src/test/java/org/akropia/test/AbstractAkropiaTest.java) | Společné spuštění aplikace a přístup k testovému kontextu a modelu. |
 
 **Aktuální pravidlo od 12. října 2026:** aserce v balíčku `page` patří pouze
 do metod začínajících `verify`, dále pojmenovaných podle ověřované věci.
@@ -5003,7 +5014,7 @@ Kontroly identity obrazovek zůstávají v pojmenovaných `verify…` metodách;
 stávající navigace je může volat při přechodu. Přímá herní očekávání scénáře
 zůstávají explicitní, například výběr lodi a stav zásob.
 
-[PageVerificationContractTest](../microcol-test/src/test/java/org/microcol/test/PageVerificationContractTest.java)
+[PageVerificationContractTest](../akropia-test/src/test/java/org/akropia/test/PageVerificationContractTest.java)
 při běžném Maven testu parsuje zdroje pomocí JDK compiler API: odmítne aserce
 v `TC_...` a aserce mimo `verify…` v `page`. Zahrnuje i Java `assert`, lambdy
 a kvalifikovaná volání; vlastní negativní příklad chrání funkčnost této
@@ -5052,7 +5063,7 @@ a klávesu P. Před příkazem kontroluje dostupnou akci, jeden bod pohybu a sta
 polohu téže jednotky a skrytí již probíhající akce.
 
 Samotné zmizení ikony by nestačilo: chyba by mohla ikonu skrýt, aniž by
-jednotka začala pracovat. [TC15](../microcol-test/src/test/java/org/microcol/test/TC_15_F05_plow_field_test.java)
+jednotka začala pracovat. [TC15](../akropia-test/src/test/java/org/akropia/test/TC_15_F05_plow_field_test.java)
 navíc ověřuje zobrazení nulového pohybu v pravém panelu. Tyto scénáře samy
 neověřují délku orby, spotřebu nástrojů ani konečné výnosy pole; změna těchto
 pravidel musí doplnit příslušné kroky a modelové testy.
@@ -5174,8 +5185,8 @@ Maven závislosti se ukládají v samostatném Docker volume.
 
 Každý běh ponechá vlastní adresář `target/docker-ui/run-XXXXXX/` s `maven.log`,
 `xvfb.log`, `openbox.log`, `exit-code.txt` a dostupnými reporty v
-`microcol-game/surefire-reports/`, `microcol-test/surefire-reports/` a screenshoty
-v `microcol-test/warehouse-qa/`. Při selhání zůstávají dostupné výsledky zachované
+`akropia-game/surefire-reports/`, `akropia-test/surefire-reports/` a screenshoty
+v `akropia-test/warehouse-qa/`. Při selhání zůstávají dostupné výsledky zachované
 a příkaz vrací nenulový stav. Kontrolovat výsledky konkrétního nového běhu,
 ne starší sousední adresář. Na Linuxu jsou exportované soubory vlastněné rootem
 kontejneru; obsah je čitelný pro nahrání CI artifactu.
@@ -5230,7 +5241,7 @@ heapu a konkrétní důkazy zachovává [R-0033](requirements/done/R-0033.md).
 Rychlá cílená kontrola obou scénářů orby při vývoji:
 
 ```sh
-mvn -B -ntp -pl microcol-test -am test \
+mvn -B -ntp -pl akropia-test -am test \
   -Dtest=TC_18_F01_plow_field_test,TC_15_F05_plow_field_test \
   -Dsurefire.failIfNoSpecifiedTests=false \
   -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw \
@@ -5239,7 +5250,7 @@ mvn -B -ntp -pl microcol-test -am test \
 ```
 
 Příznak `surefire.failIfNoSpecifiedTests=false` slouží jen pro závislé moduly,
-které cílenou třídu neobsahují. V `microcol-test/target/surefire-reports/` musí
+které cílenou třídu neobsahují. V `akropia-test/target/surefire-reports/` musí
 být čerstvé výsledky obou vybraných scénářů; cílený příkaz nenahrazuje celou sadu.
 Tento cílený běh používá [Monocle 17.0.10](https://github.com/TestFX/Monocle#gradle)
 kompatibilní s JavaFX 17. Monocle však nepodporuje přenosový režim `LINK`,
@@ -5251,7 +5262,7 @@ Profily `local` a `ci` vybírají tagy `ci, local`. Nové scénáře mají
 `@Tag("local")`, stejně jako TC18. Surefire zahrnuje všechny třídy `TC_...`
 včetně historického názvu TC12 bez přípony `_test` a při prázdném výběru
 modulu selže. Testové nastavení se pro každý test kopíruje do
-`microcol-test/target/test-homes/`; původní uložené hry a nastavení se nemění.
+`akropia-test/target/test-homes/`; původní uložené hry a nastavení se nemění.
 
 [Vývojový workflow](../.github/workflows/dev-builds.yml) spouští celou sadu
 v samostatném jobu `functional` na Linuxu/JDK 17 s Xvfb a správcem oken Openbox
@@ -5272,7 +5283,7 @@ bez mezer. Tato úprava testů nemění produkční `FontService`; případná o
 načítání fontů musí mít vlastní regresi. Původní Monocle `jdk-11+26` navíc
 selhávalo na rozhraní časovače JavaFX 17 a bylo nahrazeno kompatibilní verzí.
 
-Na Linuxu nastavuje `MicroCol.configureJavaFx()` před startem JavaFX
+Na Linuxu nastavuje `Akropia.configureJavaFx()` před startem JavaFX
 `glass.disableGrab=true`. Stejný produkční vstup volá `@BeforeAll` funkčních
 testů. Jde o dočasné obejití chyby GTK/Glass, kdy po drag/drop zůstává myš
 zachycená u původního okna a nově otevřený modální dialog nedostává kliknutí.
@@ -5428,8 +5439,8 @@ výjimkou před změnou inventářů. UI používá stejný náhled při přeta�
 návratu z dialogu. Automaticky se nic nezahazuje ani nezmenšuje již potvrzený
 požadavek.
 
-[TC19 / F14](../microcol-test/src/test/java/org/microcol/test/TC_19_F14_warehouse_unloading_test.java)
-má vlastní [fixture](../microcol-test/src/test/scenarios/F14-warehouse-unloading.microcol);
+[TC19 / F14](../akropia-test/src/test/java/org/akropia/test/TC_19_F14_warehouse_unloading_test.java)
+má vlastní [fixture](../akropia-test/src/test/scenarios/F14-warehouse-unloading.akropia);
 F05 sdílená s TC15 se nemění. Metody jsou samostatné lineární příběhy podle
 TC18, s `@Start`, komentovanými anglickými kroky, page objects a explicitními
 inventárními asercemi.
@@ -5452,7 +5463,7 @@ hráč přetažením a potvrzením v UI; simulace neobchází tuto akci. Syntakt
 nemožné vstupy z UI, například `null` a záporný objekt `Goods`, chrání modelové
 testy. Prázdný či jednotkou obsazený zdroj nemůže být přetažen jako zboží.
 
-[ColonyWarehouseUnloadTest](../microcol-game/src/test/java/org/microcol/model/ColonyWarehouseUnloadTest.java)
+[ColonyWarehouseUnloadTest](../akropia-game/src/test/java/org/akropia/model/ColonyWarehouseUnloadTest.java)
 ověřuje všechny nepotravinové druhy při kapacitách 100/200/300, neměnný náhled,
 atomické odmítnutí a zachování nákladu. Nové Zrušit používá také sdílený dialog
 v Evropě: rozšíření TC06 kontroluje, že zrušený přesun mezi prostory nevytvoří
@@ -5523,7 +5534,7 @@ TC_16 chrání také zdroj mimo mapu. Místně byly prohlédnuty screenshoty
 omezeného množství, plného skladu a změny stavu: text i tlačítka jsou viditelné.
 
 Screenshoty dialogů se ukládají do ignorovaného
-`microcol-test/target/warehouse-qa/` a CI je přiloží k `tests-functional`.
+`akropia-test/target/warehouse-qa/` a CI je přiloží k `tests-functional`.
 Slouží k vizuální kontrole textu a ovládání, nenahrazují herní aserce.
 Samostatný [PR #44](https://github.com/jajir/microcol/pull/44) míří do `main`;
 do sloučení nepublikuje nový vývojový release
@@ -5544,7 +5555,7 @@ Jde o ochranu UC-023, UC-036 a UC-119, nikoli nové herní chování. Kontrola
 zdrojů a společný formatter prošly pro všech šest změněných Java souborů.
 Lokálně na macOS/JDK 17 prošel TC01 s Monocle: 1 test, 0 selhání, chyb
 a vynechání; Maven přitom zkompiloval všechny testové třídy. Příkaz byl
-`mvn -B -ntp -pl microcol-test -am test -Dtest=TC_01_F01_embark_disembark_test -Dsurefire.failIfNoSpecifiedTests=false -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dheadless.geometry=1600x1200-32 -Dprism.allowhidpi=false -DsoundEnabled=false`.
+`mvn -B -ntp -pl akropia-test -am test -Dtest=TC_01_F01_embark_disembark_test -Dsurefire.failIfNoSpecifiedTests=false -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dheadless.geometry=1600x1200-32 -Dprism.allowhidpi=false -DsoundEnabled=false`.
 Prošlo také všech 9 dokumentačních kontrol a přísné sestavení MkDocs.
 
 **Ověřeno 12. října 2026:** [CI běh 24](https://github.com/jajir/microcol/actions/runs/38242771215)
@@ -5592,7 +5603,7 @@ Stažené Surefire XML z
 [tests-functional](https://github.com/jajir/microcol/actions/runs/38247066928/artifacts/11745963820)
 potvrzuje **663 herních testů, všech 44 UI scénářů a 3 kontroly
 PageVerificationContractTest**, vždy 0 selhání, 0 chyb a 0 vynechání.
-TC19 prošlo všech 17 scénářů. Modul `microcol-test` tedy nově vykazuje
+TC19 prošlo všech 17 scénářů. Modul `akropia-test` tedy nově vykazuje
 47 testů, nikoli 47 hráčských scénářů. Místní kopie XML je v
 `target/pr44-verifier-ci-evidence/`.
 
@@ -5647,7 +5658,7 @@ ID a zprávy s historickým jménem. Chybějící či chybná identita se odmít
 kompatibilita se starým save formátem není požadována.
 
 **Lokálně ověřeno 12. října 2026:** JDK 17/macOS, `mvn -B -ntp -pl
-microcol-game -am test`: **673 testů**, bez selhání, chyb a vynechání.
+akropia-game -am test`: **673 testů**, bez selhání, chyb a vynechání.
 TC20 prošlo **5/5**, TC02 **1/1** a kontrakt page verifikací **3/3** s
 Monocle (`-Dtest=TC_20_F02_colony_names_test,TC_02_F02_founding_colony_test,PageVerificationContractTest`
 a headless parametry popsanými výše). Logy: `target/z02-game.log`,
@@ -5659,13 +5670,13 @@ jméno je nyní nad ním, s omezenou šířkou a tooltipem pro dlouhé názvy,
 aby nepřekrývalo ostatní ovládání. Testovací clipboardové zkratky v místním
 headless prostředí neměnily text; page helper nyní používá klávesy a textový
 vstup TestFX. Neúspěšné kroky byly znovu spuštěny se stejnými očekáváními.
-Screenshot `microcol-test/target/warehouse-qa/duplicate-name.png` byl
+Screenshot `akropia-test/target/warehouse-qa/duplicate-name.png` byl
 prohlédnut: červené pole, úplné vysvětlení, Zrušit a neaktivní Uložit jsou
 čitelné. Jde o kontrolu implementátorem, nikoli studii s hráči.
 
 **První úplné CI na `d598be1f`:** [běh 27](https://github.com/jajir/microcol/actions/runs/38262477833)
 ověřil 673 modelových testů a všechny tři distribuce. Z 52 testů modulu
-`microcol-test` prošlo 49; TC20/TC_01 četlo po kliknutí na Generovat ještě
+`akropia-test` prošlo 49; TC20/TC_01 četlo po kliknutí na Generovat ještě
 původní návrh a otevřený dialog zablokoval následující dva scénáře. Žádný
 test nebyl vynechán. Všechny původní UI scénáře prošly.
 
@@ -5686,7 +5697,7 @@ všech 32 dotčených Java souborů včetně zachování tokenů a idempotence.
 **Úplné CI po opravě, 12. října 2026:** [běh 28](https://github.com/jajir/microcol/actions/runs/38264716437)
 na revizi `d494f18de25f310f5d07b3f8ed9591425b6428a3` prošel. Stažené
 Surefire XML z [tests-functional](https://github.com/jajir/microcol/actions/runs/38264716437/artifacts/11753973451)
-potvrzuje **673 herních testů a 52 testů modulu microcol-test**, vždy
+potvrzuje **673 herních testů a 52 testů modulu akropia-test**, vždy
 0 selhání, 0 chyb a 0 vynechání. Druhý součet zahrnuje 43 pojmenovaných
 TC scénářů (včetně všech pěti TC20), pět `SimpleOperationsTest`, jeden
 `EnvironmentTest` a tři kontroly `PageVerificationContractTest`; nejde o
@@ -5706,13 +5717,13 @@ nikoli ověřený kód nebo fixtures.
 ## R-0011 — hranice modelu
 
 1. Dne 13. října 2026 prošlo na macOS/JDK 17.0.18 všech **683 testů**
-   `microcol-game` příkazem `mvn -B -ntp -pl microcol-game -am test`.
+   `akropia-game` příkazem `mvn -B -ntp -pl akropia-game -am test`.
    ArchUnit kontroluje produkční model včetně podbalíčků bez výjimek;
    konkrétní kontrakt vlastní [R-0011](requirements/done/R-0011.md).
 2. Nové regrese chrání identifikátory a oba překlady zpráv o konci hry
    a nezávislosti, zahájení a jednorázové objevení kontinentu v tutoriálu,
    pořadí stejně hodnocených cílů AI a limit tří kontinentů.
-3. Cílený běh `mvn -B -ntp -pl microcol-test -am test
+3. Cílený běh `mvn -B -ntp -pl akropia-test -am test
    -Dtest=TC_03_F03_declare_independence_test,TC_12_F11_start_free_game,TC_20_F02_colony_names_test,PageVerificationContractTest
    -Dsurefire.failIfNoSpecifiedTests=false` s dokumentovanými přepínači Monocle
    prošel: **10 kontrol, 0 selhání, 0 chyb, 0 vynechaných**. To zahrnuje
@@ -5760,7 +5771,7 @@ Lokální ověření na macOS/JDK 17:
    `ClipboardAssistance` při drag-and-drop. Ostatní nové cesty včetně obou
    stavů autosave prošly. Následná kontrola fixture opravila cestujícího na
    legální výbavu 80 nástrojů bez mušket; konečný stav ověřuje nativní brána.
-2. Úplný příkaz `mvn -B -ntp -pl microcol-test -am clean test -P ci
+2. Úplný příkaz `mvn -B -ntp -pl akropia-test -am clean test -P ci
    -Dtestfx.robot=glass -Dtestfx.headless=false -Dprism.order=sw
    -DsoundEnabled=false` v samostatném checkoutu bez mezer: **683 herních
    testů prošlo**; funkční sada vybrala 64 kontrol, měla 56 selhání a 2 chyby,
@@ -5772,7 +5783,7 @@ Lokální ověření na macOS/JDK 17:
 4. Konečnou UI přejímku a publikaci musí potvrdit Linux/JDK 17/Xvfb/Openbox
    v povinném [vývojovém workflow](../.github/workflows/dev-builds.yml).
    Lokální překážky se neskrývají pomocí skipů, retry ani slabších asercí.
-   Logy jsou v `~/Library/Logs/Microcol/freeplay-audit-2026-10-13/`.
+   Logy jsou v `$PRE_R0389_LOGS/freeplay-audit-2026-10-13/`.
 
 ### Výsledná nativní přejímka a publikace
 
@@ -5820,7 +5831,7 @@ Lokální ověření na macOS/JDK 17:
    TC_13 po změně 20→19 zruší aktualizovanou volbu, TC_18 ji výslovně potvrdí;
    TC_14 po zániku kolonie vrací mapu. Žádná zamítnutá změna se neprovede částečně.
 5. První společný běh odhalil heap OOM: fixture po zavření okna neukončila
-   mapovou animaci. `MicroColApplication.stop()` nyní ukončí aktivní obrazovku
+   mapovou animaci. `AkropiaApplication.stop()` nyní ukončí aktivní obrazovku
    přes presenter a `AfterEach` volá stejný úklid. Stejný cílený příkaz poté
    prošel všemi **32 kontrolami** (TC19/24/25 a page contract), bez skipů.
    Limit paměti ani herní očekávání nebyly oslabeny. První úplný běh odhalil
@@ -5844,7 +5855,7 @@ Lokální ověření na macOS/JDK 17:
    `target/docker-ui/run-AMGZOF/`. Prošel sdílený Java formatter včetně kontroly
    zachování tokenů a idempotence, devět dokumentačních kontrol a strict MkDocs.
    Dílčí logy, odmítnuté lokální výstupy a opravy jsou v
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r*-*/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-13-r*-*/`.
 9. Toto je přijetí uvedeného rozsahu, nikoli celé matice národů/obtížností,
    kompletní ekonomické AI nebo všech UC. Výběr národa zůstává výslovně náhledem.
    Zveřejnění této revize musí potvrdit její [vývojový workflow](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml)
@@ -6140,7 +6151,7 @@ Lokální ověření na macOS/JDK 17:
     sestavením, náhled byl zkontrolován. CI a publikace balíčků zatím čekají.
 16. Rozdíl **782** ve výslovném výběru a **781** v běžném herním běhu
     je ověřen porovnáním XML: explicitní `-Dtest` navíc zahrnul jeden
-    `org.microcol.integration.ConnectorTest`, který standardní Maven
+    `org.akropia.integration.ConnectorTest`, který standardní Maven
     konfigurace historicky vylučuje. Tento dodatečný test také prošel.
     Žádná jiná třída ani počet případů se mezi oběma herními výběry neliší;
     nejde o odstraněný či vynechaný test nové přepravy.
@@ -6503,7 +6514,7 @@ Lokální ověření na macOS/JDK 17:
 6. The actual English/Czech picker screenshots and the colony's waiting state
    were inspected. Costs, unavailable reasons, confirmation and the visible
    `64 / 64` hammer and `19 / 20` tool state are readable. Screenshots are
-   diagnostic evidence under the run's `microcol-test/warehouse-qa/`; they are
+   diagnostic evidence under the run's `akropia-test/warehouse-qa/`; they are
    not a substitute for the passing player assertions. This is automated
    interaction and visual inspection, not a player study.
 7. Commands used in the isolated worker tree, after unloading GPT-OSS:
@@ -6709,7 +6720,7 @@ Lokální ověření na macOS/JDK 17:
    nedokončila pohyb do dvou sekund a selhala, dvě prošly. Po omezení hledání na
    konečný průchod sousedy prošel `run-sAeMOC`: **3 nové pohybové případy,
    8 EuropeanRelationAiTest a 3 page-contract kontroly**, bez chyb a vynechání.
-2. Nový přibalený svět `free-play-rival-expedition.microcol` má francouzskou loď
+2. Nový přibalený svět `free-play-rival-expedition.akropia` má francouzskou loď
    s kolonistou a žádné francouzské kolonie. Původní a dvouostrovní svět nadále
    splňují R-0015. `run-mZrKO0` prošel **4 modelovými případy**, včetně skutečného
    diskového round tripu, a **11 hráčskými/podpůrnými případy**: šest stávajících
@@ -6897,7 +6908,7 @@ Lokální ověření na macOS/JDK 17:
 
 1. Rozpracované [R-0028](requirements/done/R-0028.md) pokrývá UC-072 a
    COMBAT-001/002/003 s návazností na DIP-002. `TC_35_F27_attack_eligibility_test`
-   používá `F27-attack-eligibility.microcol`: ozbrojeného kolonistu, neozbrojeného
+   používá `F27-attack-eligibility.akropia`: ozbrojeného kolonistu, neozbrojeného
    pracovníka, ozbrojeného jezdce s profesí mistra kováře, vůz a francouzského
    obránce. Hlavní hráčská cesta používá skutečné gesto na mapě, potvrzení,
    běžné uložení a Continue. Úpravy modelu během dialogu výslovně simulují
@@ -6997,7 +7008,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    [0825596c, pokus 1](https://github.com/jajir/microcol/actions/runs/38578635563/attempts/1)
    dokončil 144 funkčních/kontrolních případů s jediným selháním: TC27/07
    očekával ve stavovém řádku text `26`, ale řádek byl prázdný. Git objekty
-   `microcol-game`, `microcol-test`, `compose.ui-tests.yml`, `scripts/ui-tests`,
+   `akropia-game`, `akropia-test`, `compose.ui-tests.yml`, `scripts/ui-tests`,
    kořenového `pom.xml` a vývojového workflow jsou mezi těmito třemi revizemi
    shodné. Shoda zdrojů neprokazuje shodné časování ani obsah sestavených obrazů.
 3. Dodatečná kontrola **15. října 2026** potvrdila, že i
@@ -7007,7 +7018,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    [CI pro f96b5710](https://github.com/jajir/microcol/actions/runs/38551980402)
    mělo stejný počet případů a jediné selhání TC30/04 na textu `24`.
 4. Oba scénáře používají společné mapové pomůcky. Zdroj
-   [GamePage](../microcol-test/src/test/java/org/microcol/page/GamePage.java)
+   [GamePage](../akropia-test/src/test/java/org/akropia/page/GamePage.java)
    po přesunu kurzoru ihned kontroluje text bez explicitního čekání na jeho
    aktualizaci; to je podezřelé místo, nikoli doložená příčina. Starší
    [oprava návratu na stejné pole](#wagon-unloading-implementation-2026-10-13)
@@ -7170,7 +7181,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 3. The caller applied the shared Eclipse formatter to all seven final changed Java
    files, checking exact code-token preservation and idempotence. The first two
    targeted builds exposed caller-written test compatibility errors: parameterized
-   JUnit was absent in `microcol-test`, then its Mockito version lacked
+   JUnit was absent in `akropia-test`, then its Mockito version lacked
    `verifyNoInteractions`. Ordinary JUnit tests and the existing Mockito API fixed
    those source errors without adding dependencies. Review then identified unsupported final-class mocking in those four
    listener checks. The caller replaced them with TC37 scenarios observing real
@@ -7557,7 +7568,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 1. The user requested publication of the current checkpoint while [R-0055](requirements/done/R-0055.md) was in progress. Its status remains `ready for development`; COL-003 and UC-032 are only partially covered. The shared rules and affected active requirements record the agreed answers without keeping resolved questions open.
 2. The checkpoint implements the live model assignment query/guard, global shared-square admission, equipment preflight and expected-worker crop changes. The colony screen uses the query for native drag admission and the existing localized status bar for rejection. Load and Continue switch screens only after the real loader succeeds; invalid data is explained before replacing the current game.
 3. `SharedColonyFieldAssignmentTest` checks rejection snapshots and release/reassignment with last-resident preservation and stale crop identity. `GameLoadRejectionTest` uses the real loader with invalid duplicate colony identity, checks unchanged file bytes/no replacement, successful loading and propagation of unrelated failures. This does not test the pending saved-field validator. The first check failed compilation on an unavailable Mockito API; the next ran **64 model/controller cases, with four setup errors** from mocking final classes. Correcting the setup to real campaign/loader objects produced **64 passing cases**, zero failures/errors/skips.
-4. `TC_39_F31_shared_colony_fields_test` uses `F31-shared-colony-fields.microcol`: neighboring colonies, known workers and stocks. The player path rejects the occupied shared square with visible feedback, moves the neighbor's last resident, then successfully assigns the freed square without stock changes. Two further cases exercise actual Load/Continue with existing invalid-identity validation, checking the message, unchanged menu/game reference and source bytes. Selected Docker UI results and screenshots are recorded below after execution.
+4. `TC_39_F31_shared_colony_fields_test` uses `F31-shared-colony-fields.akropia`: neighboring colonies, known workers and stocks. The player path rejects the occupied shared square with visible feedback, moves the neighbor's last resident, then successfully assigns the freed square without stock changes. Two further cases exercise actual Load/Continue with existing invalid-identity validation, checking the message, unchanged menu/game reference and source bytes. Selected Docker UI results and screenshots are recorded below after execution.
 5. Saved-field validation was not integrated: the final local-worker generation was deliberately stopped for this publication request, not accepted or timed out. See [worker evidence](ai/local-qwen.md#shared-field-persistence-worker-2026-10-16). Remaining R-0055 acceptance includes contradictory saved assignments, the full role/identity/owner/direction/turn/equipment matrix, drag cancellation, stale UI actions, crop production across turns and complete round-trip acceptance. No completion of that requirement or the broader UC-032 is claimed.
 6. The shared Eclipse formatter passed token-preservation and idempotence checks. Local documentation validation passed **21 worker-launcher tests, nine documentation tests and strict MkDocs**. Final UI results and publication evidence are recorded below.
 
@@ -7719,13 +7730,13 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 2. R-0057 adds the 199/200/201 effective-food matrix to `NationalTurnPreparationTest`: three residents consume six food, two outside visitors survive, newborn identity/owner/outside placement and one report agree, and loading the completed boundary does not repeat accounting. TC08 reopens the colony without mutation and opens/cancels newborn 27's job chooser. No game code needed repair. Shared Java formatting preserved code tokens and was idempotent.
 
-3. Docker `run-WMZvXr` passed 5 model checks, TC17 and 3 page-contract checks but failed TC08 because the worker compared a snapshot held by another page-object instance. Targeted repair fixed that error; `run-KPAz0p` retained those passes but exposed an unsuitable focus assertion. The second repair used the actual job-choice interaction; Docker `run-bScZIQ` passed TC08 (1 test, no failures/errors/skips). Main reviewed final source and parsed the XML. Logs remain under the isolated tree `~/Library/Application Support/Microcol/cloud-worker/worktrees/2026-10-16-r57/target/`. These focused results do not yet establish full batch regression or publication.
+3. Docker `run-WMZvXr` passed 5 model checks, TC17 and 3 page-contract checks but failed TC08 because the worker compared a snapshot held by another page-object instance. Targeted repair fixed that error; `run-KPAz0p` retained those passes but exposed an unsuitable focus assertion. The second repair used the actual job-choice interaction; Docker `run-bScZIQ` passed TC08 (1 test, no failures/errors/skips). Main reviewed final source and parsed the XML. Logs remain under the isolated tree `$PRE_R0389_SUPPORT/cloud-worker/worktrees/2026-10-16-r57/target/`. These focused results do not yet establish full batch regression or publication.
 
 4. R-0058 removes the food-only 200 ceiling, retains checked representable amounts and nonfood limits, and creates one birth/report per complete 200 after consumption. Ship and wagon food unloading share an explicit amount/timing confirmation. A changed source requires a fresh offer; comparison uses that offer's snapshot, not the obsolete initial drag. Focused model XML records 131 passes (national preparation 8, warehouse 35, unload 59, wagon 8, goods 20, overflow 1); Docker TC05 `run-sAEeS1` passed 3 scenarios and TC41 `run-VZxx96` passed 2, all zero failures/errors/skips. The main agent reviewed changes and verified XML, then formatted all 15 changed/new Java files with token preservation and idempotence.
 
 5. R-0058 test repairs: the initial F33 expectation incorrectly assumed another fixture's net food output. Explicit accounting establishes 16 produced and 16 consumed: 190 + 20 ship + 20 wagon − 200 birth = 30 retained. A subsequent explicit accounting assertion initially used 6 rather than 16 and failed in `run-DtVVp4`; the corrected assertion passes in `run-VZxx96`. TC41 also verifies cancellation, no immediate birth, stale cargo rejection without transfer, and refreshed acceptance of 19. These are fixture/test corrections, not weakened production expectations. Full integrated regression remains pending.
 
-6. Main-agent R-0058 integration regression (`mvn -q -pl microcol-game -am test`) passed all **1308 model/controller tests**, zero failures/errors/skips, verified from 135 XML reports. The page-object source contract passed and strict MkDocs build succeeded. Logs are in `target/r57-r61/`; the full UI acceptance remains pending for the completed batch.
+6. Main-agent R-0058 integration regression (`mvn -q -pl akropia-game -am test`) passed all **1308 model/controller tests**, zero failures/errors/skips, verified from 135 XML reports. The page-object source contract passed and strict MkDocs build succeeded. Logs are in `target/r57-r61/`; the full UI acceptance remains pending for the completed batch.
 
 7. R-0059 commits survivor food after one random internal loss, keeps zero safe and clamps remaining shortage without another death. The immutable famine report stores victim identity/type and actual final stocks; destroyed colonies report no remaining stocks. UI uses localized names and a visible, accessible uncertainty warning. `ColonyFamineTest` passed eight checks: food and indoor/outdoor-input victims, exactly two cigars from two surviving tobacco, nonempty carried-passenger/visitor preservation, last-resident loss, zero and completed-boundary continuation. Main review strengthened originally non-exact output and potentially vacuous passenger assertions before acceptance. Docker `run-DKrKjr` passed TC09, TC10 and all three page-contract checks (5 total, zero failures/errors/skips). Main inspected final XML and source, and formatted 13 Java files with token preservation/idempotence. Full integrated regression remains pending.
 
@@ -7752,7 +7763,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    The caller added fixture and UI coverage and applied the shared formatter to
    six Java files, with code-token preservation and idempotence passing.
 3. Local macOS model regression passed **1329 tests, zero failures/errors/skips**
-   (`mvn -q -pl microcol-game -am test`, `target/r62/model-full.log`). The final
+   (`mvn -q -pl akropia-game -am test`, `target/r62/model-full.log`). The final
    review assertions passed a separate four-case `ColonyCrossProductionTest`
    rerun (`target/r62/model-review.log`). Earlier focused selection passed 111.
 4. Docker/Xvfb/Openbox run `target/docker-ui/run-Ums7nw` passed **8 model and
@@ -8359,7 +8370,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 6. Suggested UI classes for the main agent's pass, around five: the new
    `TC_165_F198_purchased_jesuit_mission_test`, TC30 (unchanged, rerun to
    classify the item 8 error), TC133, TC96 and
-   [TC123](../microcol-test/src/test/java/org/microcol/test/TC_123_F114_lost_city_rumor_test.java).
+   [TC123](../akropia-test/src/test/java/org/akropia/test/TC_123_F114_lost_city_rumor_test.java).
    TC96, TC123, TC132 and TC135 are unchanged and still start from fixture
    units; they are listed for regression only.
 7. Main run on 2026-10-23 (completion `20261023T113236Z-93044f45eec7`, revision
@@ -8545,7 +8556,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    saves/Continues again without duplication. Czech progress and English
    pending screenshots were inspected: text and controls remain readable.
 4. Shared formatter checked **13 Java files**, exact-token preservation and
-   idempotence passed. `mvn -q -pl microcol-game -am -DskipTests package`
+   idempotence passed. `mvn -q -pl akropia-game -am -DskipTests package`
    passed, including Javadoc; this packaging command does not repeat tests.
    Documentation checks and strict MkDocs are run before commit. Complete CI,
    platform compatibility and publication remain separate pending gates.
@@ -9232,7 +9243,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 3. Production code and new tests are in progress. No new model/UI pass or
    publication is claimed; main `1f56c85b` CI is a separate earlier snapshot.
 
-4. First completed model acceptance: `mvn -pl microcol-game -am test -q`
+4. First completed model acceptance: `mvn -pl akropia-game -am test -q`
    passed **1681 tests, zero failures/errors/skips** across 171 report files.
    Main independently totaled the XML reports. An earlier run exposed three
    obsolete destruction expectations, updated to assert the agreed survivor
@@ -9265,7 +9276,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    independent gates; the earlier 1681-test model run predates only the two
    additional model tests and GUI notification scheduling correction.
 
-9. Packaging/Javadoc (`mvn -pl microcol-test -am package -DskipTests`)
+9. Packaging/Javadoc (`mvn -pl akropia-test -am package -DskipTests`)
    passed after the repair. Main integrated 85 reviewed source/fixture files
    with unchanged-original hash checks; unrelated R-0070 remained untouched.
    The final integrated documentation checks and publication are tracked below.
@@ -9948,7 +9959,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    errors or skips: 26 waiting-report, 18 queue-integrity, 20 queue-save, ten
    rush, ten TC32 and three source-contract cases. The caller inspected fresh
    Surefire results and the Czech screenshot at
-   `target/docker-ui/run-6Psd2R/microcol-test/warehouse-qa/turn-report-waiting-tools-czech.png`:
+   `target/docker-ui/run-6Psd2R/akropia-test/warehouse-qa/turn-report-waiting-tools-czech.png`:
    the full action remains inside the paper, with readable text and no overlap.
    Shared formatting passed for 15 changed Java files with no changes, exact
    code tokens and idempotence. This is automated application/visual evidence,
@@ -9962,7 +9973,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    intervening main commits changed documentation only. Reports, logs and
    screenshots from all trial runs are preserved in the primary checkout's
    `target/docker-ui/`, and invocation logs remain under
-   `~/Library/Logs/Microcol/claude/2026-10-17-r0086/`.
+   `$PRE_R0389_LOGS/claude/2026-10-17-r0086/`.
 7. The integration commit is `3c0342c4260b5141ba38be1dfc5143c1692bcf67`.
    Local documentation acceptance passed 21 worker-launcher checks, nine
    documentation checks and strict MkDocs. The rendered requirement shows the
@@ -10456,7 +10467,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    Continental/royal roles retain identity, expertise and equipment, persist
    across Continue, use the agreed 4/5 and 5/6 bases, and are destroyed on defeat.
    Full REF deployment, intervention and R-0178 situational bonuses remain open.
-2. Docker `run-0D4uNt` passes **2,349 model tests and 52 checks in microcol-test**,
+2. Docker `run-0D4uNt` passes **2,349 model tests and 52 checks in akropia-test**,
    zero failures, errors or skips. The latter are 43 named player scenarios,
    six basic/environment checks and three source-contract checks. Selection:
    `*Test,TC_81*,TC_82*,TC_03*,TC_33*,TC_35*,TC_76*,TC_77*,TC_58*`.
@@ -10480,7 +10491,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    evidence are recorded in [operations](ai/local-qwen.md).
 
 5. Full batch run `run-u9GsTq` reaches the 2,700-second watchdog; cleanup
-   succeeds, exit 130. Its Maven log records 272 completed microcol-test checks
+   succeeds, exit 130. Its Maven log records 272 completed akropia-test checks
    with three failures and no errors/skips. Forced termination did not export
    Surefire XML, so this is partial log evidence, not a successful full run.
    TC07, TC08 and TC41 expose old fixtures with eight Delft residents and zero
@@ -10496,7 +10507,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    complete the second ten selected requirements. Their earlier targeted
    evidence remains above. Acceptance combines completed suites from
    `run-u9GsTq`, the 108-check remainder `run-bakaPf`, and `run-QhdhWp`:
-   **2,348 default model tests and 372 distinct microcol-test checks pass**,
+   **2,348 default model tests and 372 distinct akropia-test checks pass**,
    zero remaining failures, errors or skips. This is a reconciled regression,
    not a claim that the initial timed-out invocation succeeded. The targeted
    run also passed `ConnectorTest`, normally excluded by the default Maven
@@ -10536,7 +10547,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    Original player outcomes and rejection assertions remain; bare lumber jobs
    now have legal forests, and expected effective yields account for modifiers.
 4. Final Docker/Xvfb/Openbox `run-u3rX4Y` passes **2,382 model tests and 34
-   microcol-test checks**, zero failures/errors/skips: TC40 (15), TC86 (1),
+   akropia-test checks**, zero failures/errors/skips: TC40 (15), TC86 (1),
    TC34 (9), SimpleOperationsTest (5), EnvironmentTest (1) and the page source
    contract (3). Unchanged TC18 (7), TC73 (6), TC80 (3), TC50 (3), and TC07 (2)
    passed in `run-l1Cr0G`. Together these prove 55 distinct selected UI checks.
@@ -10776,7 +10787,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 1. [R-0253](requirements/canceled/R-0253.md) measures four concurrent containers using the unchanged serial runner on source `108e13e58bbc8a19c9e888eb7bdce138d79bf82c`. No production CI, assertion, fixture or JVM isolation setting changed. Docker remains amd64 on ARM64, with approximately 8 GiB engine memory and three unrelated application containers.
 2. Timing input: successful CI `39342872217` at `d0572790ae3d756fedf3a41217b475bd276a3a99`, 101 UI/support suites and 413 checks. Current source has the same class set; TC85 adds one method after that baseline. Model test sources are unchanged. Whole classes were assigned greedily by descending XML duration, reserving the prior model-module duration in group 1. The manifest, source hashes and resource samples are under `target/ui-parallel/`. This older CI run is not a controlled same-machine benchmark.
-3. Four groups contain 28, 17, 28 and 28 UI classes. All 223 baseline model classes run only in group 1; the other groups allow the dependent module to have no selected tests. Every dispatch has a 5,400-second timeout and originating task `01a15723-6fc7-7750-b6f3-f10734c531f7`. Completion directories under `~/Library/Logs/Microcol/completions/` and supervisor PIDs:
+3. Four groups contain 28, 17, 28 and 28 UI classes. All 223 baseline model classes run only in group 1; the other groups allow the dependent module to have no selected tests. Every dispatch has a 5,400-second timeout and originating task `01a15723-6fc7-7750-b6f3-f10734c531f7`. Completion directories under `$PRE_R0389_LOGS/completions/` and supervisor PIDs:
 
     1. `20261020T025410Z-7b43d3eb0c30`, PID 55104.
     2. `20261020T025410Z-27b65a02e419`, PID 55114.
@@ -10805,7 +10816,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 1. UC-021/PION-005 uses `RoadProductionTest` (six model cases) and `TC_88_F79_road_construction_test.TC_05_trapping_road_adds_one_fur_to_preview_and_production`. The player sees the resource before the builder occupies it, builds a road with ordinary controls, cancels and confirms the fur job preview, receives the predicted warehouse output after a turn, and keeps the road/output/stock through Save/Continue without producing on load.
 2. First selection `run-Q5eCvR` passed 2,592 model checks but failed one of 28 UI/support checks: the unit sprite obscured the marker pixel. `run-gzcGqm` again passed all model checks, but one of 29 UI/support checks errored because a now-selected empty square had no unit panel entries. These failed runs remain evidence; later TC88_05 steps were not executed in them. Haiku repaired marker timing and fixture preservation; Sonnet removed the unnecessary empty-square selection. Assertions were retained.
 3. Docker completion `20261020T042026Z-1cd97e439c10`, supervisor PID 80413, exited 0 after 252.391 seconds. `target/docker-ui/run-QI21QE/` contains 225 model XML reports with **2,592 tests**, and nine UI/support reports with **29 tests**; both have **zero failures, errors and skips**. Selection was all standard unit-test class patterns plus TC88, TC89, TC86, TC91, TC02 and TC21. TC88 ran all five methods, including the new complete player path. Formatter checked four Java files with token preservation/idempotence passing; final formatter changed none.
-4. Checked source is based on `7dfe3402b24c65b726ca9d2f04467eb0472643ca` plus the exact saved patch, untracked source and SHA-256 manifest under `~/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0122-targeted-source/`. This is complete per-change verification, not full UI-suite acceptance. R-0122 remains pending until the authorized ten-item batch and final source pass all local suites. No commit, push or publication is claimed here.
+4. Checked source is based on `7dfe3402b24c65b726ca9d2f04467eb0472643ca` plus the exact saved patch, untracked source and SHA-256 manifest under `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0122-targeted-source/`. This is complete per-change verification, not full UI-suite acceptance. R-0122 remains pending until the authorized ten-item batch and final source pass all local suites. No commit, push or publication is claimed here.
 
 
 ## R-0128 mineral depletion — 2026-10-20
@@ -10813,14 +10824,14 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 1. UC-009/MAP-006 now has pure silver, pure ore and independent mixed-reserve player scenarios in `TC_102_F93_mineral_depletion_test`, using near-boundary fixtures before loading, real job selection/owner turns, production previews, warehouse checks and disk Save/Continue. Model coverage includes full initial quantities, independent reserves, last partial output after specialist modifiers, zero/non-mining output, post-famine production, unchanged previews, and malformed/persisted reserve data. R-0122 road behavior remains covered.
 2. Haiku attempt 1 authored the implementation. Docker `20261020T044206Z-55f4440f7484` exported `run-wiQ03B`: 2,614 model tests, 2,609 passed and five errors, zero failures/skips. Old `ColonyFieldTest` mocks supplied only the previous terrain API; the UI module did not run. The failed evidence is retained. Haiku attempt 2 updated only those test doubles to supply the new production inputs, preserving all existing assertions and amounts; no production null fallback was added.
 3. Docker `20261020T044506Z-837c4502e4c5`, supervisor PID 84371, exited 0 after 347.758 seconds. `target/docker-ui/run-TiSChg/` contains 228 model XML reports with **2,614 tests** and eight UI/support reports with **36 tests**, all with **zero failures/errors/skips**. Selection: all standard unit-test class patterns and TC102, TC88, TC91, TC86, TC40. All three TC102 methods ran. Formatter checked 20 Java files with no final changes and exact-token/idempotence passing.
-4. Checked source is the initial main revision `7dfe3402b24c65b726ca9d2f04467eb0472643ca` plus the exact patch, untracked files and SHA-256 manifest in `~/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0128-targeted-source/`. This is per-change verification; full batch acceptance and push remain pending, with no CI/publication claim.
+4. Checked source is the initial main revision `7dfe3402b24c65b726ca9d2f04467eb0472643ca` plus the exact patch, untracked files and SHA-256 manifest in `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0128-targeted-source/`. This is per-change verification; full batch acceptance and push remain pending, with no CI/publication claim.
 
 ## R-0130 persistent go-to — 2026-10-20
 
 1. UC-013 and the go-to part of UC-016 are covered by 17 `GoToOrderTest` cases and five `TC_103_F94_persistent_go_to_test` scenarios: multi-turn map/named journeys, named selection and cancel, explicit order cancellation, paused status/notice, and disk Continue. Model boundaries include fractional costs, rerouting, stale/foreign requests, named destination loss, ship routes and saved order validation. This does not close all UC-016 order owners.
 2. Three failed local runs remain failed evidence: `run-xyLbvk` had 2,619 model tests with four failures; `run-erwN1N` had 2,622 with one failure; `run-jSX4pH` had 2,631 with one failure. Each had zero errors/skips and stopped before UI. Repairs corrected initial movement/loaded-owner fixtures, turn-notice lifecycle expectations and equal-cost ship-route expectations. Two Haiku attempts, one Sonnet attempt and one Opus attempt also completed named-choice UI, movement completion/FX-thread handling and deterministic UI fixtures; assertions were preserved.
 3. Docker completion `20261020T054455Z-cd9b991160b9`, supervisor PID 88404, exited 0 in 256.680 seconds. `target/docker-ui/run-btwcXf/` contains 229 model reports with **2,631 tests** and nine UI/support reports with **32 tests**, all with **zero failures, errors and skips**. Selection: all standard unit-test patterns plus TC103, TC87, TC89, TC21, TC45 and TC61. The shared formatter checked 48 changed Java files, changed one, and passed token preservation and idempotence.
-4. Checked source is baseline `7dfe3402b24c65b726ca9d2f04467eb0472643ca` plus the exact patch, untracked source and SHA-256 manifest in `~/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0130-attempt-4-source/`. Full batch acceptance remains pending. This run does not separately exercise deferred tax/immigration-dialog continuation or multiple simultaneous go-to units. No commit, push or verified publication is claimed.
+4. Checked source is baseline `7dfe3402b24c65b726ca9d2f04467eb0472643ca` plus the exact patch, untracked source and SHA-256 manifest in `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0130-attempt-4-source/`. Full batch acceptance remains pending. This run does not separately exercise deferred tax/immigration-dialog continuation or multiple simultaneous go-to units. No commit, push or verified publication is claimed.
 
 ## R-0131 disband and regression repairs — 2026-10-20
 
@@ -10828,20 +10839,20 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 2. The four Claude attempts were followed by Codex repair under the agreed ladder. Failed evidence remains: `run-1meJ96` passed 2,643 model tests but failed UI-test compilation; `run-2xmJaq` failed model-test compilation; `run-BUBUB1` passed 2,646 model tests with two errors among 35 UI/support checks; `run-7eXfTJ` passed all four TC104 scenarios but had one TC45 error among 35 UI/support checks. That error exposed a map query reading a unit's place twice while boarding changed it to cargo. Shared map queries now capture one place reference; a deterministic `UnitStorageTest` covers that boundary and retains the membership concurrency test.
 3. The next run, `run-Izqkga`, had one failure among 2,647 model tests and never reached UI: the R-0128 famine test assumed the miner survived random selection. The test now uses the existing seeded famine setup for both miner-survives and miner-dies cases, checking exact production, reserve, population and identity. No famine gameplay rule changed, and earlier failed evidence is not reclassified.
 4. Docker completion `20261020T063648Z-80c83a7b7450`, supervisor PID 91922, exited 0 in 344.558 seconds. `target/docker-ui/run-SnNvbI/` contains 230 model reports with **2,648 tests** and ten UI/support reports with **38 tests**, all with **zero failures, errors and skips**. Selection: all standard unit-test patterns plus TC104, TC103, TC25, TC45, TC53, TC11 and TC102. The shared formatter checked 59 changed Java files, changed one in the final repair and passed token preservation/idempotence.
-5. Checked source is baseline `7dfe3402b24c65b726ca9d2f04467eb0472643ca` plus exact patch, untracked source and SHA-256 manifest in `~/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0131-codex-repair-2-source/`. Full batch acceptance remains pending; no commit, push or verified publication is claimed.
+5. Checked source is baseline `7dfe3402b24c65b726ca9d2f04467eb0472643ca` plus exact patch, untracked source and SHA-256 manifest in `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0131-codex-repair-2-source/`. Full batch acceptance remains pending; no commit, push or verified publication is claimed.
 
 ## R-0135 immigrant boarding — 2026-10-20
 
 1. UC-025/CARGO-006 now includes paid and earned immigrant willingness, opt-out/restore and one explicitly prioritized immigrant per owner. The existing departure transfer combines eligible willing immigrants and sentries: the front choice first, then stable unit IDs. Model tests cover defaults, rejected requests, priority replacement, zero/one/two free holds, opted-out sentries, persistence and duplicate-priority rejection. `TC_105_F96_immigrant_boarding_test` exercises dock controls, recruitment, real departure, limited holds and disk Continue; the selected regression includes Brewster earned choices.
 2. Haiku attempt 1 completed authoring; Docker completion `20261020T065743Z-41130a85dfe0`, supervisor PID 93205, exited 0 in 352.221 seconds. `target/docker-ui/run-fGop3U/` contains 231 model reports with **2,657 tests** and nine UI/support reports with **35 tests**, all with **zero failures, errors and skips**. Selection: all standard unit-test patterns plus TC105, TC45, TC46, TC47, TC70 and TC27. The new F96 fixture loaded in the real UI run. The formatter checked 66 changed Java files, changed six and passed token preservation/idempotence.
-3. Checked source is baseline `7dfe3402b24c65b726ca9d2f04467eb0472643ca` plus exact patch, untracked source and SHA-256 manifest in `~/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0135-attempt-1-source/`. Full batch acceptance remains pending. No commit, push or verified publication is claimed.
+3. Checked source is baseline `7dfe3402b24c65b726ca9d2f04467eb0472643ca` plus exact patch, untracked source and SHA-256 manifest in `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0135-attempt-1-source/`. Full batch acceptance remains pending. No commit, push or verified publication is claimed.
 
 ## R-0137 quick cargo — 2026-10-20
 
 1. UC-026/CARGO-010 now has model-ranked quick loading and first-goods-hold unloading at an owned colony, using the existing transfer paths. `QuickCargoTest` covers current one-unit net sale quotes, ties/exclusions, partial-before-empty order, stock/hold limits, ship/wagon context and stale confirmations. Two `TC_106_F97_quick_cargo_test` scenarios cover preview/cancel, repeated transfers, no-stock/full-warehouse reasons, balances, unchanged treasury and disk Continue. The stale-confirmation scenario explicitly injects an external stock change while the dialog is open, following existing warehouse stale-state tests; it does not substitute for the real transfer journey.
 2. Haiku attempt 1 passed 2,669 model tests but `run-5jM6VR` had 24 failures and two errors among 52 UI/support checks. Adding wide buttons to the right-aligned colony row moved its close control into the name-label area. Attempt 2 placed quick controls on a separate row, preserving the original close-row positions and all test assertions. The repeated UI run verifies the affected navigation and controls; no separate visual-design approval is claimed.
 3. Docker completion `20261020T073032Z-186e8fa23e19`, supervisor PID 96829, exited 0 in 467.742 seconds. `target/docker-ui/run-M9Isq8/` contains 232 model reports with **2,669 tests** and nine UI/support reports with **52 tests**, all with **zero failures, errors and skips**. Selection: all standard unit-test patterns plus TC106, TC31, TC19, TC05, TC06 and TC25. The formatter checked 79 changed Java files, changed one and passed token preservation/idempotence.
-4. Checked source is baseline `7dfe3402b24c65b726ca9d2f04467eb0472643ca` plus exact patch, untracked source and SHA-256 manifest in `~/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0137-attempt-2-source/`. Full batch acceptance remains pending; no commit, push or verified publication is claimed.
+4. Checked source is baseline `7dfe3402b24c65b726ca9d2f04467eb0472643ca` plus exact patch, untracked source and SHA-256 manifest in `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0137-attempt-2-source/`. Full batch acceptance remains pending; no commit, push or verified publication is claimed.
 
 
 ## R-0138 jettison — 2026-10-20
@@ -10849,7 +10860,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 1. Targeted implementation evidence for UC-026/CARGO-016: `JettisonTest` covers selected partial/full goods removal, quantity bounds, live ownership, phase including pending preparation, map-sea/Atlantic eligibility, forbidden docks/land/Europe, empty/passenger holds, stale goods/location/voyage and removed identity. `TC_107_F98_jettison_test` exercises the map and Atlantic controls, quantity and destructive confirmation, Cancel/Escape, stale rejection, other cargo/passenger preservation and disk Continue. This is automated evidence, not a separate visual usability review.
 2. Haiku attempts 1/2, Sonnet attempt 3 and Opus attempt 4 used Headroom in session `c1aee0cd-eac1-4366-8678-f00ba89034ce`. Initial run `run-WpiY3W` passed 2,675 model and 28 UI/support tests but lacked boundary coverage. `run-9boC0h` failed one model test because its assumed empty hold was occupied; no UI acceptance. Sonnet repaired that fixture and added preparation rejection. `run-UiWXqU` passed 2,688 model tests but failed one of 28 UI/support tests in TC23: a go-to route query read a ship location again after concurrent departure. These failures remain failed evidence.
 3. Opus repaired shared path queries to use a captured place/start, with a deterministic `GoToOrderTest` regression. Main reviewed the route, entry-cost and admission paths and applied the shared Java formatter (90 files checked, two changed; code tokens preserved and idempotence passed). Completion `20261020T082112Z-3199db91e44a`, supervisor PID 5874, exported `target/docker-ui/run-yIe1aB`: **2,689 model/unit tests in 233 reports and 33 UI/support tests in 10 reports; zero failures, errors or skips**. UI selection: TC107, TC44 voyage reversal, TC23 voyage audit, TC11 unit selection, TC05 cargo transfers, TC06 trading and TC103 persistent go-to.
-4. Exact dirty-source patch, untracked files and SHA-256 manifest: `~/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0138-attempt-4-source/`; execution records are adjacent. Full batch acceptance remains pending; requirement stays ready for development. No commit, push or verified publication is claimed.
+4. Exact dirty-source patch, untracked files and SHA-256 manifest: `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0138-attempt-4-source/`; execution records are adjacent. Full batch acceptance remains pending; requirement stays ready for development. No commit, push or verified publication is claimed.
 
 
 ## R-0145 European trade accounts — 2026-10-20
@@ -10857,8 +10868,8 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 1. UC-058/114: immutable national commodity accounts preserve purchased/sold quantities and actual spent/received gold. Ordinary cargo/equipment settlement, normal and revolutionary custom-house exports and rushed construction's imported tools update the accounts. Revolutionary exports are labeled as a subset of sales; hammer costs and already stocked tools are not purchases. Model checks cover net tax, repricing, rejected trades, persistence, custom-house batches and overflow before mutation.
 2. Claude session `41dfe47b-39b2-49c5-9089-d42b0dd4cb5a` used two Haiku attempts (558.967 and 113.021 seconds) and one bounded Sonnet UI-verification attempt (111.909 seconds), all through Headroom. `run-qvYR6G` failed 1 assertion and 3 errors among 2,699 model tests because the existing PlayerTest market mock lacked the new account; UI did not run. The repair preserves its gold/tax/exception checks, supplies the mock account, and adds missing rush-import accounting. `run-CFpv5i` then passed 2,702 model and 32 UI/support tests. These results do not replace final-source evidence.
 3. Final targeted completion `20261020T085511Z-f5eb37305bd8`, supervisor PID 6898, exported `target/docker-ui/run-a5frOZ`: **2,702 model/unit tests in 234 reports and 34 UI/support tests in nine reports; zero failures, errors or skips**. Selection: TC108 trade report, TC06 trade, TC58 custom house, TC94 national market, TC25 equipment and TC55 rush construction. Main applied the shared formatter: 104 files checked, two changed, code-token preservation and idempotence passed.
-4. TC108 exercises real partial buy/sell, cancellation, report reopening and disk Continue, plus real keyboard tab selection, focus, Escape, scrolling and Czech text. Main inspected `microcol-test/warehouse-qa/trade-report-{en,cs}-{top,scrolled}.png` in that export: values, source lines and tab focus are readable without clipped labels. Rival/revolutionary report rows use saved fixtures; actual revolutionary export settlement is model-tested, not a claimed live UI export journey. Player display names remain existing names in both languages.
-5. Exact source patch, untracked files and SHA-256 manifest are in `~/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0145-attempt-3-source/`; checked source hashes were revalidated after the run. Full batch acceptance, commit and push remain pending. No remote CI or publication verification is claimed.
+4. TC108 exercises real partial buy/sell, cancellation, report reopening and disk Continue, plus real keyboard tab selection, focus, Escape, scrolling and Czech text. Main inspected `akropia-test/warehouse-qa/trade-report-{en,cs}-{top,scrolled}.png` in that export: values, source lines and tab focus are readable without clipped labels. Rival/revolutionary report rows use saved fixtures; actual revolutionary export settlement is model-tested, not a claimed live UI export journey. Player display names remain existing names in both languages.
+5. Exact source patch, untracked files and SHA-256 manifest are in `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0145-attempt-3-source/`; checked source hashes were revalidated after the run. Full batch acceptance, commit and push remain pending. No remote CI or publication verification is claimed.
 
 
 ## R-0146 town commons — 2026-10-20
@@ -10867,8 +10878,8 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 2. Claude session `9df37052-befa-4d06-824e-2812f8389dd3` used Haiku twice (512.103 and 399.293 seconds), Sonnet (368.734 seconds) and Opus (99.859 seconds), all through Headroom. Main performed a deterministic JSON update for 108 colonies in 66 test scenarios from actual terrain/forest baselines, checking other parsed content unchanged. Bundled maps and constructors were updated separately; no player autosave migration was performed.
 3. Failed evidence remains failed: `run-DQ7JzT` had 14 failures and one error among 2,702 model tests; UI did not run. `run-ftEhgH` passed 2,740 model tests but failed four of 36 UI/support tests, and images exposed a compressed warehouse row. `run-1lgymj` passed 2,740 model tests but failed three of 38 UI/support tests: the new label was outside the window and one old net-food range excluded commons. Fixtures isolating famine/shortage now use appropriate barren centers; their original loss/rounding outcomes remain checked.
 4. Final completion `20261020T094603Z-19c493486081`, supervisor PID 8493, exported `target/docker-ui/run-k21ygJ`: **2,740 model/unit tests in 235 reports and 38 UI/support tests in nine reports; zero failures, errors or skips**. Selection: TC109 commons, TC02 founding, TC09 famine destruction, TC41 imported food, TC50 manufacturing and TC19 warehouse transfer. Main formatter checked 122 files with zero further changes; token preservation and idempotence passed.
-5. TC109 checks contrasting center labels, Prime Timber exclusion, renewable food, a real owner update, no surrounding-field workers, food production/consumption and lumber settlement, disk Continue, O/arrows/Enter/Escape and unchanged stocks on reopening. Main inspected `microcol-test/warehouse-qa/town-commons-{en,cs}-new-amsterdam.png`: label readable above nonoverlapping full-size goods icons. Bounds and ellipsis checks passed. Existing cropped title/status-bar proximity in this fixed-size colony screen is not claimed repaired by this task.
-6. Exact patch, untracked source and SHA-256 manifest: `~/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0146-attempt-4-source/`; source hashes matched after execution. Full batch acceptance, done status, commit and push remain pending. Remote CI was not checked.
+5. TC109 checks contrasting center labels, Prime Timber exclusion, renewable food, a real owner update, no surrounding-field workers, food production/consumption and lumber settlement, disk Continue, O/arrows/Enter/Escape and unchanged stocks on reopening. Main inspected `akropia-test/warehouse-qa/town-commons-{en,cs}-new-amsterdam.png`: label readable above nonoverlapping full-size goods icons. Bounds and ellipsis checks passed. Existing cropped title/status-bar proximity in this fixed-size colony screen is not claimed repaired by this task.
+6. Exact patch, untracked source and SHA-256 manifest: `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0146-attempt-4-source/`; source hashes matched after execution. Full batch acceptance, done status, commit and push remain pending. Remote CI was not checked.
 
 
 ## R-0181 Fugger debt forgiveness — 2026-10-20
@@ -10877,7 +10888,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 2. Claude session `68f005e1-e5cf-49e6-bcf1-dd38941ac058` used Haiku twice (276.682 and 112.307 seconds) and Sonnet (49.25 seconds), through Headroom. `run-axex9y` passed 2,741 model and 22 UI/support tests but lacked the foreign-debt boundary. `run-FbkSDd` failed one of 2,742 model tests on an invalid fixture debt below the model minimum; UI did not run. Sonnet corrected the fixture and a reviewed helper that had not advanced the initial Dutch turn. Production validation and exact foreign-ledger/all-stock assertions remain intact.
 3. Final completion `20261020T100920Z-3db886f87811`, supervisor PID 10821, exported `target/docker-ui/run-J5Zafn`: **2,742 model/unit tests in 235 reports and 22 UI/support tests in eight reports; zero failures, errors or skips**. Selection: TC110 Fugger, TC56 Congress, TC78 tax demand, TC79 back-tax payment and TC06 trade. Main formatter checked 125 files with no further changes; token preservation and idempotence passed.
 4. TC110 uses real choice cancellation, confirmation, founder arrival notice, two restored commodity indicators, no gold payment, actual musket purchase/sale and disk Continue. Foreign debt and post-arrival new protest are model-tested; no additional UI journey is claimed for those boundaries. Existing feedback/screens were reused without new layout.
-5. Exact source patch, untracked files and SHA-256 manifest: `~/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0181-attempt-3-source/`; source hashes matched after execution. This is the tenth targeted-verified requirement in the first batch. Full local acceptance must still pass before done status, commit and push; remote CI was not checked.
+5. Exact source patch, untracked files and SHA-256 manifest: `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0181-attempt-3-source/`; source hashes matched after execution. This is the tenth targeted-verified requirement in the first batch. Full local acceptance must still pass before done status, commit and push; remote CI was not checked.
 
 
 ## First ten requirements — full regression repair, 2026-10-20
@@ -10886,7 +10897,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 2. Legacy staffed-production fixtures F07/F08/F10/F31/F49 now use nonproducing arctic colony centers; their surrounding worker fields and original assertions remain unchanged. TC109 separately checks productive commons. TC101 preserves real fresh-game terrain and includes actual commons production in exact turn-by-turn stock expectations. Incoming voyage reversal and jettison controls share a horizontal row to avoid overlapping outgoing voyages. Existing user typography settings remain intact; typography checks expect Regular/Medium 14 while retaining geometry, keyboard and explicit font-face checks.
 3. Typography repair used one Headroom Haiku attempt under R-0252, session `2a38cef1-da0b-4cee-b795-6b58966d8ba6`. Codex retained exhausted R-0146/R-0138 regression repairs and the bounded shared gesture diagnosis. Run `run-broGji` passed 2,742 model checks but failed four of 63 UI/support checks. Diagnostic `run-MQ1o06` passed 2,742 model checks and failed four of 27 UI/support checks. Logs show selecting a ship wrapping the toolbar, resizing the canvas from 594 to 545 pixels high, and invalidating the gesture's previously computed target.
 4. `GamePage` now finishes queued FX work and layout before converting map coordinates, computes drag destinations after mouse press selects the unit, and repositions the pointer after a selection changes layout. Existing movement, rejection, cargo and order assertions remain. Intermediate `run-QLNDx7` and `run-9rfWBO` each passed 2,742 model checks but failed two of 27 UI/support checks; these remain failed evidence. Temporary diagnostic logging was restored to its original configuration.
-5. Completion `20261020T122213Z-39e150a7a74f` exported `run-EIBMhd`: **2,742 model/unit checks in 235 reports and 27 UI/support checks in eight reports, zero failures/errors/skips**. The five selected UI classes are TC01, TC29, TC45, TC80 and TC103. `ConnectorTest` is included. Main reviewed the helper, applied the shared formatter (130 files checked; token preservation and idempotence pass) and verified dirty-source SHA-256 hashes against `batch-1-map-repair-3-source`. This targeted pass does not replace the pending complete regression. Evidence remains under `~/Library/Logs/Microcol/claude/2026-10-20-through-r0219/`; no remote CI or publication verification was performed.
+5. Completion `20261020T122213Z-39e150a7a74f` exported `run-EIBMhd`: **2,742 model/unit checks in 235 reports and 27 UI/support checks in eight reports, zero failures/errors/skips**. The five selected UI classes are TC01, TC29, TC45, TC80 and TC103. `ConnectorTest` is included. Main reviewed the helper, applied the shared formatter (130 files checked; token preservation and idempotence pass) and verified dirty-source SHA-256 hashes against `batch-1-map-repair-3-source`. This targeted pass does not replace the pending complete regression. Evidence remains under `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/`; no remote CI or publication verification was performed.
 
 6. Complete acceptance `20261020T122811Z-0f7afd4c7860` (supervisor PID 15365, 5,250.649 seconds) exported `run-fXYp8R`: **2,742 model/unit checks in 235 reports and 440 UI/support checks in 110 reports, zero failures/errors/skips**. All 107 `TC_...` classes present in source have reports; `ConnectorTest` is included. Source hashes match `batch-1-full-attempt-2-source`. This accepts the ten requirements listed above. Subsequent closure edits change documentation only; remote CI and publication remain unverified.
 
@@ -10895,7 +10906,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 1. UC-106/FATHER-021: actual Coronado arrival reveals existing European colony tiles and eight valid neighbors, remembers foreign colonies, and grants no current sight or private unit information. Later-founded colonies remain unknown through subsequent turns and reload. Model tests cover actual corner founding, exact explored sets, foreign viewpoints, unearned selection and persistence. TC111 exercises Congress cancel/choose/arrival, visible remembered terrain and hidden foreign units, then disk Continue.
 2. Headroom Claude session `f6ba1757-dd25-49ff-b700-3f7fbe0a9325` used Haiku twice and Sonnet once. `run-PRq1gQ` passed 2,746 model checks but failed one of 21 UI/support checks because the new fixture lacked its mandatory warehouse. `run-851t9L` had two setup errors among 2,748 model checks: the boundary fixture incorrectly treated a colonist as a cargo carrier; UI did not run. Sonnet used the actual map-standing colonist and retained all boundary assertions.
-3. Completion `20261020T150817Z-d37fdf2b88f9` (PID 19252) exported `run-8Oc4KB`: **2,748 model checks in 236 reports and 21 UI/support checks in eight reports, zero failures/errors/skips**. Selected TC111, TC26, TC56, TC69 and TC110 plus all unit patterns including ConnectorTest. Main reviewed fog ownership and fixture repairs, applied the shared formatter, and verified source hashes against `R-0183-attempt-3-source` under `~/Library/Logs/Microcol/claude/2026-10-20-through-r0219/`. Full second-batch acceptance remains pending; this is not publication evidence.
+3. Completion `20261020T150817Z-d37fdf2b88f9` (PID 19252) exported `run-8Oc4KB`: **2,748 model checks in 236 reports and 21 UI/support checks in eight reports, zero failures/errors/skips**. Selected TC111, TC26, TC56, TC69 and TC110 plus all unit patterns including ConnectorTest. Main reviewed fog ownership and fixture repairs, applied the shared formatter, and verified source hashes against `R-0183-attempt-3-source` under `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/`. Full second-batch acceptance remains pending; this is not publication evidence.
 
 
 ## R-0150 native settlement identity — 2026-10-20
@@ -11058,7 +11069,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ### Third-batch complete local acceptance — 2026-10-21
 
-1. Parallel `verify -- --workers 2`, completion `20261021T180851Z-d1b3d5ea9e9c`, supervisor PID 27675, passed in **3,247.323 seconds**. Evidence: `target/verification/run-7wxf5idf/summary.json` and `manifest.json`; `result.json` and `command.log` in `/Users/jan/Library/Logs/Microcol/completions/20261021T180851Z-d1b3d5ea9e9c/`.
+1. Parallel `verify -- --workers 2`, completion `20261021T180851Z-d1b3d5ea9e9c`, supervisor PID 27675, passed in **3,247.323 seconds**. Evidence: `target/verification/run-7wxf5idf/summary.json` and `manifest.json`; `result.json` and `command.log` in `$PRE_R0389_LOGS/completions/20261021T180851Z-d1b3d5ea9e9c/`.
 2. All **3,223 model/JUnit tests in 272 reports** and **505 UI/support tests in 131 reports** passed, zero failures/errors/skips. UI-01 ran 265; UI-02 ran 240. All expected report classes and methods (including parameterized invocations) were checked. Each Docker/Xvfb group compiled independently.
 3. All 2,207 source hashes matched the checkout, based on `3278a50ba832f89e4a6e43d760410637a2efd078` plus reviewed changes. Closure changes only documentation and requirement locations. Shared formatting, token equivalence and idempotence passed on 160 changed Java files. Earlier failed/canceled runs remain failed evidence.
 4. Closes R-0092, R-0065, R-0129, R-0155, R-0173, R-0095, R-0148, R-0160, R-0161 and R-0159. R-0154/0156/0157 retain recorded pending integrations. R-0207 remains deferred. Remote CI/publication were not checked.
@@ -11115,7 +11126,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ### Fourth-batch full acceptance — 2026-10-22
 
-1. Parallel `verify -- --workers 2`, completion `20261022T012132Z-b257ce501be3`, supervisor PID 43248, passed in **3,987.865 seconds** (callback duration 3,987.941 seconds). Evidence: `target/verification/run-mzjigr_7/summary.json` and `manifest.json`; completion `result.json` and `command.log` under `/Users/jan/Library/Logs/Microcol/completions/20261022T012132Z-b257ce501be3/`.
+1. Parallel `verify -- --workers 2`, completion `20261022T012132Z-b257ce501be3`, supervisor PID 43248, passed in **3,987.865 seconds** (callback duration 3,987.941 seconds). Evidence: `target/verification/run-mzjigr_7/summary.json` and `manifest.json`; completion `result.json` and `command.log` under `$PRE_R0389_LOGS/completions/20261022T012132Z-b257ce501be3/`.
 2. Model: **3,384 tests in 281 reports**. UI-01: **250 tests in 69 reports**; UI-02: **296 tests in 69 reports**, totaling **546 UI/support tests**. All groups passed with zero failures, errors or skips. Main independently matched every expected class and method against the exported XML, checked duplicate reports and reconciled counts.
 3. All **2,264 source file hashes** match the checkout at acceptance, on base revision `3016f8f7a807eb519676c7e9ba632163da9a10c7`. Formatting, documentation/tool checks and strict MkDocs passed. Subsequent requirement closure changes documentation only; no game implementation changes are included after this acceptance run.
 4. This completes R-0158, R-0149, R-0164, R-0165, R-0166, R-0156, R-0174, R-0162, R-0154 and R-0157. Earlier failures and visually rejected runs retain their original results. R-0175 treasure remains separate; R-0207 remains excluded. Remote CI and publication were not verified.
@@ -11130,7 +11141,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 ## R-0134 treasure cargo — 2026-10-22
 
 1. Targeted Docker/Xvfb run `run-hJTRvI` passed 3,416 model tests (283 reports) and 53 UI/support tests (10 reports), with zero failures, errors or skipped tests. Selection: all JUnit conventions plus TC140/139/137/26/62/24/29. Completion `20261022T075209Z-373e683cb935` took 557.769 seconds. All 43 recorded source hashes matched.
-2. TC140 covers port boarding into six holds, five-free-hold refusal, reserved-slot drag, unloading, Continue, Czech display, map boarding, one-entry passenger chooser/cancel and rejected movement. Screenshots remain under `target/docker-ui/run-hJTRvI/microcol-test/warehouse-qa/`. Main inspected the Czech six-hold view. Earlier failed runs remain failed evidence; the third attempt repaired tests that incorrectly looked for dock crates on the map.
+2. TC140 covers port boarding into six holds, five-free-hold refusal, reserved-slot drag, unloading, Continue, Czech display, map boarding, one-entry passenger chooser/cancel and rejected movement. Screenshots remain under `target/docker-ui/run-hJTRvI/akropia-test/warehouse-qa/`. Main inspected the Czech six-hold view. Earlier failed runs remain failed evidence; the third attempt repaired tests that incorrectly looked for dock crates on the map.
 3. Shared formatter checked 35 changed Java files with exact-token and idempotence checks. Full batch regression and R-0175 redemption are pending; this targeted result is not complete local acceptance.
 
 ## R-0176 naval interception — 2026-10-22
@@ -11142,19 +11153,19 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 ## R-0177 coastal batteries — 2026-10-22
 
 1. Targeted Docker/Xvfb run `run-LAU90f` passed 3,453 model tests (285 reports) and 35 UI/support tests (9 reports), with zero failures, errors or skipped tests. Selection: all JUnit conventions plus TC142/141/64/65/29/26. Completion `20261022T091703Z-f0de71701899` took 388.221 seconds; all 70 recorded source hashes matched.
-2. Checks cover battery strength, hit/miss, stable colony order, early repair, battery-before-patrol, saved per-owner shot records, renewal through real turn transitions and existing repair fallback. TC142 exercises real coastal movement, continued passage/Continue and hit/repair. Main inspected the readable Czech hit notice in `target/docker-ui/run-LAU90f/microcol-test/warehouse-qa/coastal-battery-hit-cs.png`.
+2. Checks cover battery strength, hit/miss, stable colony order, early repair, battery-before-patrol, saved per-owner shot records, renewal through real turn transitions and existing repair fallback. TC142 exercises real coastal movement, continued passage/Continue and hit/repair. Main inspected the readable Czech hit notice in `target/docker-ui/run-LAU90f/akropia-test/warehouse-qa/coastal-battery-hit-cs.png`.
 3. Shared formatter checked 56 changed Java files with exact-token and idempotence checks. Earlier invalid-fixture and turn-notice-count failures remain failed evidence. Full batch regression remains pending; this targeted pass is not complete local acceptance.
 
 ## R-0182 Las Casas converts — 2026-10-22
 
 1. Targeted Docker/Xvfb run `run-fmuH6P` passed 3,459 model tests (286 reports) and 47 UI/support tests (10 reports), with zero failures, errors or skipped tests. Selection: all JUnit conventions plus TC143/134/133/30/56/72/29. Completion `20261022T094728Z-1e93a7b6f46f` took 653.150 seconds; all 79 recorded source hashes matched.
-2. Model checks cover earned/unearned join, existing map/field/building/cargo converts, stable identity, foreign-owner exclusion, removed expiry/restrictions, ordinary yields under the same political snapshot, later converts and reload. TC143 covers real Congress choice/cancel, arrival, field-job retention and output, manufacturing availability, Continue and later mission acquisition. Main inspected the readable Czech arrival/freedom report in `target/docker-ui/run-fmuH6P/microcol-test/warehouse-qa/las-casas-freed-cs.png`.
+2. Model checks cover earned/unearned join, existing map/field/building/cargo converts, stable identity, foreign-owner exclusion, removed expiry/restrictions, ordinary yields under the same political snapshot, later converts and reload. TC143 covers real Congress choice/cancel, arrival, field-job retention and output, manufacturing availability, Continue and later mission acquisition. Main inspected the readable Czech arrival/freedom report in `target/docker-ui/run-fmuH6P/akropia-test/warehouse-qa/las-casas-freed-cs.png`.
 3. Shared formatter checked 64 changed Java files with exact-token and idempotence checks. Earlier fixture and assertion failures remain failed evidence. Full batch regression remains pending; this targeted pass is not complete local acceptance.
 
 ## R-0168 foreign power comparison — 2026-10-22
 
 1. Targeted Docker/Xvfb run `run-2sYEmn` passed 3,476 model tests (288 reports) and 42 UI/support tests (10 reports), with zero failures, errors or skipped tests. Selection: all JUnit conventions plus TC144/33/56/120/30/26. Completion `20261022T105019Z-387f47b504f0` took 519.000 seconds; all 98 recorded source hashes matched.
-2. Model checks cover viewpoint/founder/contact disclosure, remembered unit and ship contact, pure reads, canonical military/naval bases including damaged armed ships, ownership refresh, empty-colony averages and net European-sale history. TC144 earns de Witt through Congress, checks unknown-power withholding, exact report values, reopening/Continue and mouse/keyboard access in English and Czech. Main inspected both revealed screenshots under `target/docker-ui/run-2sYEmn/microcol-test/warehouse-qa/`; the wide comparison table has a horizontal scrollbar.
+2. Model checks cover viewpoint/founder/contact disclosure, remembered unit and ship contact, pure reads, canonical military/naval bases including damaged armed ships, ownership refresh, empty-colony averages and net European-sale history. TC144 earns de Witt through Congress, checks unknown-power withholding, exact report values, reopening/Continue and mouse/keyboard access in English and Czech. Main inspected both revealed screenshots under `target/docker-ui/run-2sYEmn/akropia-test/warehouse-qa/`; the wide comparison table has a horizontal scrollbar.
 3. Shared formatter checked 79 changed Java files with exact-token and idempotence checks. After four Claude attempts, Codex removed the obsolete cargo-place marker from map unit 0 in F25; the strict loader and all assertions remain. Earlier failed runs remain failed evidence. Full batch regression remains pending.
 
 ## R-0170 rival land military — 2026-10-22
@@ -11184,7 +11195,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 ## R-0175 treasure redemption — 2026-10-22
 
 1. Targeted Docker/Xvfb run `run-yEN5st` passed 3,573 model tests (292 reports) and 41 UI/support tests (11 reports), with zero failures, errors or skipped tests. Selection: all JUnit conventions plus TC149/139/140/26/29/56/144. Completion `20261022T161614Z-51fe53548e2a` took 430.162 seconds; all 146 recorded source hashes matched.
-2. TC149 covers explicit own-galleon redemption, cancellation, exact proceeds, six released holds, Continue, royal collection after a real owner turn, pending-save persistence and Czech text. Model checks add stale treasury/tax, locked confirmed proceeds, overflow, moved/lost trains, invalid saved pickup, independence closing both routes and once-only payment. Main inspected `target/docker-ui/run-yEN5st/microcol-test/warehouse-qa/treasure-redemption-cs.png`: the deductions, rule and controls are readable.
+2. TC149 covers explicit own-galleon redemption, cancellation, exact proceeds, six released holds, Continue, royal collection after a real owner turn, pending-save persistence and Czech text. Model checks add stale treasury/tax, locked confirmed proceeds, overflow, moved/lost trains, invalid saved pickup, independence closing both routes and once-only payment. Main inspected `target/docker-ui/run-yEN5st/akropia-test/warehouse-qa/treasure-redemption-cs.png`: the deductions, rule and controls are readable.
 3. The preceding integration run `run-OcGFBT` passed 3,569 model and 40 UI/support tests. Earlier compilation and fixture failures remain failed evidence. Formatter checked 116 changed Java files with exact-token and idempotence checks. R-0175 and the ten-requirement fifth batch await complete local regression; neither targeted run is complete acceptance.
 
 ## Fifth-batch regression repair — 2026-10-22
@@ -11264,7 +11275,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 1. Shared model membership persists colonies held at declaration and subsequently acquired/founded, retains occupied members and removes destroyed ones. Four loss conditions use current ownership/residents and persist one reason. Judging occurs after completed actions/updates; loss prevents intervention delivery. R-0191 victory remains pending.
 2. Completion `20261023T024827Z-2b4884637c59` (PID 9886) passed 3,738 model tests in 302 reports and 27 UI/support tests in 9 reports, zero failures, errors or skips, in 393.922 seconds. Reports: `target/docker-ui/run-fi2sF6`; all 219 recorded source hashes matched. Selection: all JUnit plus TC157, TC156, TC155, TC154, TC151 and TC81.
-3. TC157 performs the actual Crown capture, checks the explicit loss reason and campaign exit, and verifies both absent Continue and preserved open-position Continue. Its isolated autosave is cleared under `.microcol` before startup. Model checks cover independent loss conditions, current residents, the 90 percent boundary, zero denominator, membership changes, help precedence, AI loss and terminal reload.
+3. TC157 performs the actual Crown capture, checks the explicit loss reason and campaign exit, and verifies both absent Continue and preserved open-position Continue. Its isolated autosave is cleared under `.akropia` before startup. Model checks cover independent loss conditions, current residents, the 90 percent boundary, zero denominator, membership changes, help precedence, AI loss and terminal reload.
 4. Four Claude attempts were followed by Codex fixture/import/test-isolation repairs. Earlier failed runs remain failed evidence. Shared Java formatting passed; complete sixth-batch acceptance and combined victory precedence remain pending.
 
 ## R-0191 targeted revolution-victory verification (2026-10-23)
@@ -11290,7 +11301,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 ## Sixth-batch full local acceptance (2026-10-23)
 
 1. Accepted R-0185, R-0178, R-0186, R-0188, R-0187, R-0189, R-0190, R-0192, R-0191 and R-0169 after full run `20261023T061737Z-0861e79ba81d` (supervisor PID 23670). The prior failed full run remains failed evidence.
-2. Evidence: `target/verification/run-mltnh1r6/summary.json`, its `manifest.json`, all three group results and XML exports; completion logs at `/Users/jan/Library/Logs/Microcol/completions/20261023T061737Z-0861e79ba81d/`. Total elapsed time 4,371.927 seconds.
+2. Evidence: `target/verification/run-mltnh1r6/summary.json`, its `manifest.json`, all three group results and XML exports; completion logs at `$PRE_R0389_LOGS/completions/20261023T061737Z-0861e79ba81d/`. Total elapsed time 4,371.927 seconds.
 3. Model: 3,793 tests / 306 reports. UI group 1: 282 tests / 80 reports. UI group 2: 328 tests / 80 reports. Every group passed, with zero failures, errors and skips. All expected suite reports were present with no duplicate or extra report; runner method-inventory validation passed.
 4. All 2,390 source hashes matched the frozen manifest before documentation closure. Shared Java formatter, diff review and scoped repair checks passed. Subsequent changes close requirement status and repair documentation links only; no implementation changed after acceptance. Commit/push follows documentation validation. Remote CI and publication were not checked.
 
@@ -11406,13 +11417,13 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 1. The third worker attempt was reviewed and the shared Java formatter checked 92 changed Java files, formatting one; token preservation and idempotence passed.
 2. Completion `20261023T213640Z-252e4b5c4fa7`, Docker evidence `target/docker-ui/run-VNoE55`: 4,085 model/JUnit tests in 331 reports and 49 UI/support tests in 11 reports, zero failures, errors or skips; duration 568.503 seconds. Selected TC25/27/62/64/66/140/145/183 and the three support suites all have reports. All 116 recorded source hashes matched.
 3. TC183 verifies both the 49-musket refusal and the successful scout-to-dragoon transition through colony controls and Continue. Earlier run `run-Y08GD9` remains failed evidence (one assertion failure and three invalid-fixture errors; UI did not run). Its repairs preserve the artillery survival expectations and use the persisted combat RNG.
-4. This is targeted evidence, not complete acceptance. R-0211 remains open pending the user's decision on the fate of standalone civilians/wagons and the corresponding player-path verification. Full batch acceptance, documentation checks and commit/push remain pending. Detailed local review records: `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0211-targeted-3-review.json`.
+4. This is targeted evidence, not complete acceptance. R-0211 remains open pending the user's decision on the fate of standalone civilians/wagons and the corresponding player-path verification. Full batch acceptance, documentation checks and commit/push remain pending. Detailed local review records: `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0211-targeted-3-review.json`.
 
 ## Eighth-batch full acceptance (2026-10-24)
 
 1. R-0205, R-0202, R-0203, R-0204, R-0208, R-0210, R-0212, R-0213, R-0214 and R-0215 passed complete local acceptance. Completion `20261024T002237Z-5977b6168df9` (PID 84578) used one model phase and two isolated Docker/Xvfb UI workers.
-2. Evidence: `target/verification/run-u2fg1l20/summary.json` and `manifest.json`; callback `result.json` and `command.log` under `/Users/jan/Library/Logs/Microcol/completions/20261024T002237Z-5977b6168df9/`. Model: 4,707 tests in 333 reports. UI group 1: 323 tests in 94 reports; UI group 2: 361 tests in 94 reports. Total UI/support: 684. All 521 expected reports are present; every group has zero failures, errors and skips. Runner duration 4,725.877 seconds; supervisor 4,725.927 seconds.
-3. All 2,525 recorded source hashes matched before documentation-only status and link updates. Main-agent evidence review is `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/eighth-batch-full-review.json`. Earlier failed runs remain failed evidence. Local acceptance does not establish remote CI or publication.
+2. Evidence: `target/verification/run-u2fg1l20/summary.json` and `manifest.json`; callback `result.json` and `command.log` under `$PRE_R0389_LOGS/completions/20261024T002237Z-5977b6168df9/`. Model: 4,707 tests in 333 reports. UI group 1: 323 tests in 94 reports; UI group 2: 361 tests in 94 reports. Total UI/support: 684. All 521 expected reports are present; every group has zero failures, errors and skips. Runner duration 4,725.877 seconds; supervisor 4,725.927 seconds.
+3. All 2,525 recorded source hashes matched before documentation-only status and link updates. Main-agent evidence review is `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/eighth-batch-full-review.json`. Earlier failed runs remain failed evidence. Local acceptance does not establish remote CI or publication.
 4. The implemented R-0211 role/combat checks were included in this regression, but R-0211 remains open pending the civilian/wagon defeat decision. R-0209 remains open pending America/R-0221 scope. R-0207 remains deferred by explicit user instruction.
 
 
@@ -11437,7 +11448,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 1. Accepted source: `af18b251608590194e0d17d22e5e1840f48be781` plus the frozen final-remainder changes in `target/verification/run-ti0bri0g/source`. Callback `20261024T113551Z-64ffabcf6cac`; summary `target/verification/run-ti0bri0g/summary.json`, source manifest `target/verification/run-ti0bri0g/manifest.json`. All 2,531 source hashes matched the checkout before documentation-only status/link updates.
 2. All model tests: **4,720 tests in 333 reports**. UI worker 1: **327 tests in 95 reports**; UI worker 2: **364 tests in 95 reports**. Total **691 UI/support tests**, **523 reports**, **zero failures, errors and skips**. Expected suite and method lists matched the XML; UI partitions are disjoint and cover the complete expected suite. Runner duration **4,825.238 s** (80 min 25 s), supervisor **4,825.334 s**.
 3. This accepts R-0218 and R-0219, including both resumed/reference journeys and the corrected deterministic pursuit fixture. R-0216's independent ending/score matrix additions also passed, but its R-0220 integrated earned-victory dependency remains unverified, so R-0216 remains open. R-0209 and R-0211 retain their unresolved decisions; R-0207 remains explicitly deferred.
-4. Main-agent formatter checked 19 changed Java files with token preservation and idempotence passing. Review and per-change evidence are stored under `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/`, particularly `final-remainder-full-2-review.json`. Previous failed runs remain failed evidence. No remote CI or publication verification is claimed.
+4. Main-agent formatter checked 19 changed Java files with token preservation and idempotence passing. Review and per-change evidence are stored under `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/`, particularly `final-remainder-full-2-review.json`. Previous failed runs remain failed evidence. No remote CI or publication verification is claimed.
 
 
 ### R-0220 — declaration-message repair (2026-10-24)
@@ -11507,7 +11518,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 ### R-0220 — paired journey verified (2026-10-24)
 
-1. Callback `20261024T163906Z-b95086d4b25f` passed in 957.390 s: all 4,720 model/JUnit and 26 UI/support tests, 341 reports, zero failures/errors/skips. Recorded source hashes matched. Evidence and exact report directory: `/Users/jan/Library/Logs/Microcol/claude/2026-10-20-through-r0219/R-0220-targeted-14-review.json`.
+1. Callback `20261024T163906Z-b95086d4b25f` passed in 957.390 s: all 4,720 model/JUnit and 26 UI/support tests, 341 reports, zero failures/errors/skips. Recorded source hashes matched. Evidence and exact report directory: `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/R-0220-targeted-14-review.json`.
 2. The uninterrupted reference and its replay from the same saved voyage state agree on base/result components, terminal turn, survivor identities and royal roster. All three printed score ledgers in this run were population points 132, treasury 1620, support 76, excess bells 989, total 1214. Both independent and paired assertions passed; this is observed evidence, not a fixed result for arbitrary separately randomized games.
 3. The user requested the updated development/testing policy before R-0261–0263. Under the 2026-10-24 policy, closure now requires the fixed precommit smoke gate and documentation checks rather than another automatic full local regression. Historical failures remain failed; no remote regression or publication is claimed.
 
@@ -11522,28 +11533,28 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 
 1. `TC_26_F18_fog_of_war_test.TC_09_explored_grid_stops_at_unknown_boundary` enables the real grid setting, checks dashed explored land/water and uniform gray unknown squares including edges, explores and leaves sight, continues the saved game, and disables the grid without moving the ship. Existing fog disclosure and settings scenarios remain included.
 2. First targeted run `20261024T170639Z-d7c8ce41a8c1` failed one of 13 tests: the diagnostic renderer requested an unnamed viewport instead of the actual named `game` viewport. The test probe was repaired; the failed evidence remains in `target/docker-ui/run-JkvUqn`.
-3. Repeat `20261024T171002Z-98cd157783ac` passed **13 tests (10 UI + 3 source-contract), zero failures/errors/skips**, in 122.483 s, with three XML reports under `target/docker-ui/run-NKkOf3/microcol-test/surefire-reports`. The originating completion directory is `/Users/jan/Library/Logs/Microcol/completions/20261024T171002Z-98cd157783ac`.
-4. Actual-size review of `target/docker-ui/run-NKkOf3/microcol-test/warehouse-qa/R-0261-explored-grid.png` found subdued dashed land/water edges, readable colony/ship/label and continuous warm gray unknown territory. The pre-existing outer terrain outline and selection marker are preserved. The screenshot is Linux/Xvfb evidence, not a physical Retina display observation.
+3. Repeat `20261024T171002Z-98cd157783ac` passed **13 tests (10 UI + 3 source-contract), zero failures/errors/skips**, in 122.483 s, with three XML reports under `target/docker-ui/run-NKkOf3/akropia-test/surefire-reports`. The originating completion directory is `$PRE_R0389_LOGS/completions/20261024T171002Z-98cd157783ac`.
+4. Actual-size review of `target/docker-ui/run-NKkOf3/akropia-test/warehouse-qa/R-0261-explored-grid.png` found subdued dashed land/water edges, readable colony/ship/label and continuous warm gray unknown territory. The pre-existing outer terrain outline and selection marker are preserved. The screenshot is Linux/Xvfb evidence, not a physical Retina display observation.
 5. Follow-up `20261024T171308Z-17ed5d599ef5` adds resized-window coverage and checks the grid/fog renderer at logical scales 1× and 2×. It failed the new 2× gray-edge assertion because the probe scaled the completed bitmap, interpolating edge pixels. The probe now renders into a doubled canvas using a graphics transform instead. Failed evidence is retained in `target/docker-ui/run-6VKuwL`; fresh targeted checks, the mandatory smoke gate and documentation checks remain pending.
-6. Corrected render-scale probe: callback `20261024T171531Z-10e79c21c858` passed **13 tests, three XML reports, zero failures/errors/skips**, in 123.771 s. Reports and both actual-size map captures are under `target/docker-ui/run-IHivTp/microcol-test/`. The test checks logical 1×/2× rendering, the resized viewport, retained explored grid after Continue and setting-off behavior. Review of `warehouse-qa/R-0261-resized-grid.png` confirmed stable alignment and the same quiet unknown fill; physical HiDPI hardware was not tested.
-7. Shared Java formatting passed token-preservation and idempotence checks on all five changed Java files; diff review found no gameplay mutation or new model dependency. Fixed smoke acceptance `20261024T171756Z-117d85aa0a01` (supervisor PID 34894) passed: **4,720 model + 10 fixed UI smoke + 9 support = 4,739 tests**, 344 XML reports, zero failures/errors/skips; group 270.244 s, verifier 272.528 s, supervisor 272.609 s. Evidence: `target/verification/run-vqr8nk3t/summary.json` and the completion directory under `/Users/jan/Library/Logs/Microcol/completions/`. All expected suites are present. Executable/test source hashes match the frozen snapshot; subsequent differences are documentation only. Nine documentation tests and strict MkDocs also passed. This is local acceptance, not full regression or verified publication.
+6. Corrected render-scale probe: callback `20261024T171531Z-10e79c21c858` passed **13 tests, three XML reports, zero failures/errors/skips**, in 123.771 s. Reports and both actual-size map captures are under `target/docker-ui/run-IHivTp/akropia-test/`. The test checks logical 1×/2× rendering, the resized viewport, retained explored grid after Continue and setting-off behavior. Review of `warehouse-qa/R-0261-resized-grid.png` confirmed stable alignment and the same quiet unknown fill; physical HiDPI hardware was not tested.
+7. Shared Java formatting passed token-preservation and idempotence checks on all five changed Java files; diff review found no gameplay mutation or new model dependency. Fixed smoke acceptance `20261024T171756Z-117d85aa0a01` (supervisor PID 34894) passed: **4,720 model + 10 fixed UI smoke + 9 support = 4,739 tests**, 344 XML reports, zero failures/errors/skips; group 270.244 s, verifier 272.528 s, supervisor 272.609 s. Evidence: `target/verification/run-vqr8nk3t/summary.json` and the completion directory under `$PRE_R0389_LOGS/completions/`. All expected suites are present. Executable/test source hashes match the frozen snapshot; subsequent differences are documentation only. Nine documentation tests and strict MkDocs also passed. This is local acceptance, not full regression or verified publication.
 
 
 ### R-0262 — main-screen paper layout (2026-10-24)
 
 1. `TC_21_F15_free_play_screen_navigation_test.TC_10_main_screen_panels_remain_readable_when_resized` checks the actual 1280×850 English and 1000×700 Czech windows, long wrapped status text, separate map/right/status bounds, Regular 14 typography, complete treasury/date and unchanged turn/gold. Existing TC21 journeys preserve command and keyboard behavior; TC83 retains skin, bounds, states and interaction checks; TC26 checks fog/grid behavior.
 2. Initial callback `20261024T172531Z-bb3bb452f020`, `target/docker-ui/run-ArvGUH`, failed one old font assertion: TC83 expected Medium on the main-screen Congress control. Its expected family now explicitly requires the agreed Regular on that control; other screens retain their own assertions. No gameplay assertion was removed. The selected-unit panel also uses the paper palette and can fit the side panel without a horizontal scrollbar.
-3. Callback `20261024T172911Z-9f3469c90c01` passed **24 tests (21 UI + 3 source-contract), four XML reports, zero failures/errors/skips**, in 170.139 s. Reports: `target/docker-ui/run-Hr4CpI/microcol-test/surefire-reports`; actual-size images: `warehouse-qa/R-0262-main-English.png` and `warehouse-qa/R-0262-main-Czech-small.png` under that module's results directory. Reviewed both images: consistent paper grouping, framed controls, distinct selected-unit block, readable wrapped Czech and separated treasury/date. Existing terrain and command artwork were reused.
+3. Callback `20261024T172911Z-9f3469c90c01` passed **24 tests (21 UI + 3 source-contract), four XML reports, zero failures/errors/skips**, in 170.139 s. Reports: `target/docker-ui/run-Hr4CpI/akropia-test/surefire-reports`; actual-size images: `warehouse-qa/R-0262-main-English.png` and `warehouse-qa/R-0262-main-Czech-small.png` under that module's results directory. Reviewed both images: consistent paper grouping, framed controls, distinct selected-unit block, readable wrapped Czech and separated treasury/date. Existing terrain and command artwork were reused.
 4. Main-screen status minimum is 72 logical pixels with 12 px vertical / 16 px horizontal padding. Natural height can grow for wrapped text; map layout receives the remaining height. Economy labels retain preferred width. Styles are scoped to `.game-screen`; shared status-label width protection also benefits existing status consumers without changing their panel height.
 5. All six changed/new Java files passed the shared formatter and diff review. Smoke callback `20261024T173217Z-1bf5dca2563f` (PID 35748) passed: **4,739 tests (4,720 model + 10 fixed UI smoke + 9 support)**, 344 XML reports, no missing expected suites, zero failures/errors/skips. Group duration 269.483 s, verifier 271.873 s, supervisor 271.954 s. Evidence: `target/verification/run-pdg99l56/summary.json`. Executable/test source matches the recorded snapshot; only documentation changed afterwards. Nine documentation tests and strict MkDocs passed. R-0262 is locally accepted. Physical HiDPI hardware and remote CI/publication are not verified by these Linux/Xvfb results.
 
 
 ### R-0263 — fixed Original World (2026-10-24)
 
-1. Original World now has its own `original-world.microcol`; `REFERENCE` retains the unchanged `free-play.microcol`. Original retains the Dutch-only authored expedition, French colonies and seed 134. The northern shield connects to the main continent; the Antarctic shelf has ice without tundra. Natural content includes all 14 base terrain types, forests/open land, a ten-square small-to-large river and all 12 nonempty resource kinds with valid mineral reserves.
+1. Original World now has its own `original-world.akropia`; `REFERENCE` retains the unchanged `free-play.akropia`. Original retains the Dutch-only authored expedition, French colonies and seed 134. The northern shield connects to the main continent; the Antarctic shelf has ice without tundra. Natural content includes all 14 base terrain types, forests/open land, a ten-square small-to-large river and all 12 nonempty resource kinds with valid mineral reserves.
 2. `OriginalWorldTest` checks inventory, terrain/resource legality, north/south polar placement, the open approach and river mouth, fresh-load determinism, saved-map roundtrip and reference separation. First callback `20261024T173953Z-26627dff70dc` failed map validation: fishery was on coastal land. Corrected the fishery to (26,13), mouth to (25,13), sea approach to (26,14), landing to (25,14), and the silver reserve to 100. Callback `20261024T174109Z-bd06c857bdce` passed 26 model + 14 UI/support tests, zero failures/errors/skips, in 180.951 s (`target/docker-ui/run-JDxONl`).
 3. New `TC_24_F15_free_play_setup_test.TC_12_original_world_river_landing_and_colony_survive_continue` starts through setup, sails from (45,15), discovers and pixel-checks the river, lands a passenger, founds River Haven and continues. Callback `20261024T174511Z-ea6689dc4ebc` failed because the new journey dragged without first selecting the ship; explicit normal selection was added. Callback `20261024T174917Z-14c8e7ce926e` reached and verified the river and landing, but attempted founding with zero movement after disembarkation. The journey now ends the turn before founding. Failed reports remain under `target/docker-ui/run-xmhQDm` and `target/docker-ui/run-qITDy6`.
-4. Callback `20261024T175328Z-be773bd3512b` (PID 38534) passed **41 tests (26 model + 12 UI + 3 source-contract), five XML reports, zero failures/errors/skips**, in 225.070 s. Reports: `target/docker-ui/run-UtRynp`; image `microcol-test/warehouse-qa/R-0263-river-approach.png` confirms the visible river on the coastal approach. Colony founding and Continue passed. Required smoke gate `20261024T175727Z-402805c6e782` (PID 38830) passed: **4,742 tests (4,723 model + 10 fixed UI smoke + 9 support)**, 345 XML reports, no missing suites and zero failures/errors/skips. Group 272.371 s, verifier 274.803 s, supervisor 274.892 s. Evidence: `target/verification/run-clnklppu/summary.json`. Executable/test source matches the snapshot; later differences are documentation only. Nine documentation tests and strict MkDocs passed. R-0263 is locally accepted; publication is not verified. The user's subsequent main-map palette/ballpoint-outline request remains a separate visual follow-up, including a new screenshot after verification.
+4. Callback `20261024T175328Z-be773bd3512b` (PID 38534) passed **41 tests (26 model + 12 UI + 3 source-contract), five XML reports, zero failures/errors/skips**, in 225.070 s. Reports: `target/docker-ui/run-UtRynp`; image `akropia-test/warehouse-qa/R-0263-river-approach.png` confirms the visible river on the coastal approach. Colony founding and Continue passed. Required smoke gate `20261024T175727Z-402805c6e782` (PID 38830) passed: **4,742 tests (4,723 model + 10 fixed UI smoke + 9 support)**, 345 XML reports, no missing suites and zero failures/errors/skips. Group 272.371 s, verifier 274.803 s, supervisor 274.892 s. Evidence: `target/verification/run-clnklppu/summary.json`. Executable/test source matches the snapshot; later differences are documentation only. Nine documentation tests and strict MkDocs passed. R-0263 is locally accepted; publication is not verified. The user's subsequent main-map palette/ballpoint-outline request remains a separate visual follow-up, including a new screenshot after verification.
 
 ### R-0265 — map palette and ballpoint contours (2026-10-24)
 
@@ -11558,8 +11569,8 @@ all TC_24_F15_free_play_setup_test and TC_26_F18_fog_of_war_test scenarios, and
 PageVerificationContractTest. Run `20261024T181354Z-9fb46f42c168` completed in
 299.675 seconds: **24 tests (21 UI + 3 support), four XML reports, zero failures,
 errors or skips**. Evidence: `target/docker-ui/run-hAtI9H/`; screenshots
-`microcol-test/warehouse-qa/R-0265-main-English.png` and
-`microcol-test/warehouse-qa/R-0265-main-Czech-small.png` were reviewed.
+`akropia-test/warehouse-qa/R-0265-main-English.png` and
+`akropia-test/warehouse-qa/R-0265-main-Czech-small.png` were reviewed.
 The earlier run `20261024T180823Z-5d5e135ec9f9` remains failed: the new direct
 Canvas.snapshot call raised a JavaFX rendering exception. Reusing the existing
 scene snapshot/canvas crop helper fixed that test; the complete selection above
@@ -11570,7 +11581,7 @@ smoke + 9 support**, 345 suites/reports, zero failures, errors or skips, all
 expected selections present. Group time was 272.562 seconds (within the 300-second
 budget), verifier 275.009 seconds and callback supervisor 275.088 seconds.
 Evidence: `target/verification/run-z6w1q4k0/summary.json`, frozen `source/`, and
-`/Users/jan/Library/Logs/Microcol/completions/20261024T181925Z-86487006c3d1/`.
+`$PRE_R0389_LOGS/completions/20261024T181925Z-86487006c3d1/`.
 The changed executable sources and assets were compared byte-for-byte with that
 snapshot before commit; only documentation was completed afterward. Java
 formatting, diff review, nine documentation tests and strict MkDocs passed.
@@ -11588,14 +11599,14 @@ old rectangular color blocks are absent.
 Targeted Docker/Xvfb run `20261025T072152Z-18d2c5e04f28` passed in 55.835 seconds:
 **6 tests (3 TC_83 UI + 3 PageVerificationContractTest), two XML reports, zero
 failures/errors/skips**. Evidence: `target/docker-ui/run-ghPiti/`, screenshots
-`microcol-test/warehouse-qa/R-0266-menu-normal.png` and `R-0266-menu-wide.png`.
+`akropia-test/warehouse-qa/R-0266-menu-normal.png` and `R-0266-menu-wide.png`.
 Java formatting passed with unchanged code tokens and idempotence; nine docs
 tests and strict MkDocs passed. The final precommit smoke gate passed: **4,742 tests (4,723 model/JUnit,
 10 fixed UI smoke, 9 support)** in 345 XML reports, all expected suites present
 and zero failures/errors/skips. Run `20261025T072314Z-9a9913e465d4` took 270.301
 seconds for the group, 272.576 seconds for verification and 272.631 seconds for
 the supervisor. Evidence: `target/verification/run-ef7lmgv5/summary.json` and
-`/Users/jan/Library/Logs/Microcol/completions/20261025T072314Z-9a9913e465d4/`.
+`$PRE_R0389_LOGS/completions/20261025T072314Z-9a9913e465d4/`.
 The changed executable sources/assets match the frozen source byte-for-byte;
 only documentation was completed afterward. Physical macOS/HiDPI display,
 remote CI and publication were not checked.
@@ -11720,14 +11731,14 @@ remote CI and publication were not checked.
 
 1. Scope: [R-0269](requirements/done/R-0269.md), UC-114/119. Two localized Colonizopedia topics show all 14 terrains, supported forest previews and all 12 special resources, with model-derived properties, compatibility and reserves. Existing prose, keyboard/close actions and game state are preserved.
 2. Targeted selection: `TC_100_F91_colonizopedia_test` TC_01–TC_07 and `PageVerificationContractTest`. TC_06 covers English tables, terrain/resource name search, pictures, representative production/movement/defense and deposit values, scrolling and unchanged state. TC_07 covers Czech text, accent-insensitive search and closing without mutation. Existing TC_01–TC_05 remain intact except the expanded expected topic lists.
-3. Initial Docker/Xvfb attempt: `/Users/jan/Library/Logs/Microcol/completions/20261025T090047Z-ba1cf43ec976`, supervisor PID 64660, timeout 600 s. The build failed before tests: the reference used an enum-style `GoodsType.values()` instead of the model’s `GOOD_TYPES` list. Corrected to the existing model API; this failed attempt remains failed. A pre-result review corrected TC_07's expected search list: `teren` also matches the existing Movement prose; that is intended title/body search behavior.
-4. Corrected targeted attempt: `/Users/jan/Library/Logs/Microcol/completions/20261025T090310Z-2744bc944295`, supervisor PID 65674, timeout 600 s. Reports in `target/docker-ui/run-klW1Ym`: 10 checks, 2 failures, zero errors/skips (7 TC_100 scenarios and 3 page-contract checks). TC_06 passed all English reference assertions; screenshots show wrapped text, terrain/forest previews and all resource markers through the final Fishery row. TC_03 expected overflow although scoring prose now fits the larger viewport; it now verifies that the actual text end is visible, retaining all score-content assertions. TC_06 retains strict overflow/end checks for the long reference. TC_07 expected too few `teren` search results: Production prose also contains terrain. Corrected the expected list, preserving title/body search. This attempt remains failed; local smoke acceptance is pending. Documentation consistency tests passed all 9 tests and strict MkDocs built successfully before the evidence update.
-5. Third targeted attempt: `/Users/jan/Library/Logs/Microcol/completions/20261025T090703Z-c1b1ec5da99e`, supervisor PID 66485, timeout 600 s; same complete 10-check selection. Passed: TC_100/TC_01–TC_07 (7) and page contract (3), zero failures/errors/skips; 113.814 s overall. XML reports are in `target/docker-ui/run-HUkDrS/microcol-test/surefire-reports`. Reviewed English and Czech screenshots in the adjacent `warehouse-qa` directory: readable Regular text, wrapped columns, actual open/forest tiles and resource markers, and the final resource row reached by scrolling.
-6. Required smoke acceptance launched with `verify -- --smoke`: `/Users/jan/Library/Logs/Microcol/completions/20261025T090835Z-df814a92d77d`, supervisor PID 66751, supervisor timeout 420 s (the acceptance gate keeps its 300 s budget). Passed all 4,742 checks in 277.04 s: 4,723 model/JUnit and 19 UI/support, with zero failures/errors/skips. Reports: `target/verification/run-5ilsdn12`. All 9 task Java/resource files matched the snapshot. Snapshot review also found 7 unrelated uncommitted runtime files from concurrent work, so this successful shared-worktree run is retained as evidence but is not the isolated acceptance for this commit.
+3. Initial Docker/Xvfb attempt: `$PRE_R0389_LOGS/completions/20261025T090047Z-ba1cf43ec976`, supervisor PID 64660, timeout 600 s. The build failed before tests: the reference used an enum-style `GoodsType.values()` instead of the model’s `GOOD_TYPES` list. Corrected to the existing model API; this failed attempt remains failed. A pre-result review corrected TC_07's expected search list: `teren` also matches the existing Movement prose; that is intended title/body search behavior.
+4. Corrected targeted attempt: `$PRE_R0389_LOGS/completions/20261025T090310Z-2744bc944295`, supervisor PID 65674, timeout 600 s. Reports in `target/docker-ui/run-klW1Ym`: 10 checks, 2 failures, zero errors/skips (7 TC_100 scenarios and 3 page-contract checks). TC_06 passed all English reference assertions; screenshots show wrapped text, terrain/forest previews and all resource markers through the final Fishery row. TC_03 expected overflow although scoring prose now fits the larger viewport; it now verifies that the actual text end is visible, retaining all score-content assertions. TC_06 retains strict overflow/end checks for the long reference. TC_07 expected too few `teren` search results: Production prose also contains terrain. Corrected the expected list, preserving title/body search. This attempt remains failed; local smoke acceptance is pending. Documentation consistency tests passed all 9 tests and strict MkDocs built successfully before the evidence update.
+5. Third targeted attempt: `$PRE_R0389_LOGS/completions/20261025T090703Z-c1b1ec5da99e`, supervisor PID 66485, timeout 600 s; same complete 10-check selection. Passed: TC_100/TC_01–TC_07 (7) and page contract (3), zero failures/errors/skips; 113.814 s overall. XML reports are in `target/docker-ui/run-HUkDrS/akropia-test/surefire-reports`. Reviewed English and Czech screenshots in the adjacent `warehouse-qa` directory: readable Regular text, wrapped columns, actual open/forest tiles and resource markers, and the final resource row reached by scrolling.
+6. Required smoke acceptance launched with `verify -- --smoke`: `$PRE_R0389_LOGS/completions/20261025T090835Z-df814a92d77d`, supervisor PID 66751, supervisor timeout 420 s (the acceptance gate keeps its 300 s budget). Passed all 4,742 checks in 277.04 s: 4,723 model/JUnit and 19 UI/support, with zero failures/errors/skips. Reports: `target/verification/run-5ilsdn12`. All 9 task Java/resource files matched the snapshot. Snapshot review also found 7 unrelated uncommitted runtime files from concurrent work, so this successful shared-worktree run is retained as evidence but is not the isolated acceptance for this commit.
 7. Code review confirmed that reference values read the existing terrain/resource definitions, resource painting reuses the map renderer, search covers localized entry names, and opening/filtering/closing help does not mutate game state. No new assets, dependencies or gameplay rules. Java formatting passed the shared profile with exact code-token and idempotence checks; `git diff --check` passed.
 
-8. Isolated acceptance copies only this task’s 9 Java/resource files onto `fb6ee004765c15253691fb26ba456dc447b2784e` in `target/r0269-acceptance`. Smoke callback: `/Users/jan/Library/Logs/Microcol/completions/20261025T091648Z-9a3802a48961`, supervisor PID 70812, timeout 420 s, fixed gate budget 300 s. Passed all 4,742 checks: 4,723 model/JUnit and 19 UI/support (ten fixed smoke scenarios), zero failures/errors/skips in 282.224 s (285.382 s including orchestration). All 345 XML reports in `target/verification/run-1bw1lg42` were parsed. The 9 Java/resource files match both the frozen source and the main checkout byte for byte. Other working-tree changes are preserved and excluded from this task’s commit.
-9. The same 10 targeted checks are rerunning in the isolated checkout: `/Users/jan/Library/Logs/Microcol/completions/20261025T092212Z-df53b1030ea3`, supervisor PID 72472, timeout 600 s. Passed all 10 checks (7 TC_100 and 3 page-contract), zero failures/errors/skips in 115.061 s. XML reports and reviewed screenshots were preserved in `target/docker-ui/run-po9pXP`; the isolated Czech screenshot confirms the same readable layout. This final targeted run excludes concurrent changes. An isolated strict documentation build first exposed three pre-existing links to moved R-0261 in R-0224, R-0225 and the backlog. The already-present working-tree link corrections are included, without other concurrent edits. R-0259 is credited for the delivered terrain/forest/resource subset while its additional feature illustrations remain open. Nine documentation consistency tests and strict MkDocs passed for the isolated commit scope; no remote CI or publication verification is claimed.
+8. Isolated acceptance copies only this task’s 9 Java/resource files onto `fb6ee004765c15253691fb26ba456dc447b2784e` in `target/r0269-acceptance`. Smoke callback: `$PRE_R0389_LOGS/completions/20261025T091648Z-9a3802a48961`, supervisor PID 70812, timeout 420 s, fixed gate budget 300 s. Passed all 4,742 checks: 4,723 model/JUnit and 19 UI/support (ten fixed smoke scenarios), zero failures/errors/skips in 282.224 s (285.382 s including orchestration). All 345 XML reports in `target/verification/run-1bw1lg42` were parsed. The 9 Java/resource files match both the frozen source and the main checkout byte for byte. Other working-tree changes are preserved and excluded from this task’s commit.
+9. The same 10 targeted checks are rerunning in the isolated checkout: `$PRE_R0389_LOGS/completions/20261025T092212Z-df53b1030ea3`, supervisor PID 72472, timeout 600 s. Passed all 10 checks (7 TC_100 and 3 page-contract), zero failures/errors/skips in 115.061 s. XML reports and reviewed screenshots were preserved in `target/docker-ui/run-po9pXP`; the isolated Czech screenshot confirms the same readable layout. This final targeted run excludes concurrent changes. An isolated strict documentation build first exposed three pre-existing links to moved R-0261 in R-0224, R-0225 and the backlog. The already-present working-tree link corrections are included, without other concurrent edits. R-0259 is credited for the delivered terrain/forest/resource subset while its additional feature illustrations remain open. Nine documentation consistency tests and strict MkDocs passed for the isolated commit scope; no remote CI or publication verification is claimed.
 
 
 ## R-0271 context menus — 2026-10-25
@@ -11798,7 +11809,7 @@ remote CI and publication were not checked.
    Existing TC11 retains move preview, no-selection, turn preparation and
    Save/Continue coverage. Model rules and saved fixtures are unchanged.
 3. First targeted Docker/Xvfb run: completion directory
-   `/Users/jan/Library/Logs/Microcol/completions/20261025T091324Z-bdc00741d84a`,
+   `$PRE_R0389_LOGS/completions/20261025T091324Z-bdc00741d84a`,
    supervisor PID 68253, timeout 600 s; selection TC11 and
    `PageVerificationContractTest`. Results pending. Shared formatter checked
    all 16 task-owned Java files with token preservation and idempotence.
@@ -11906,7 +11917,7 @@ remote CI and publication were not checked.
    are pending; historical R-0270 evidence remains unchanged.
 
 2. First targeted verification uses completion directory
-   `/Users/jan/Library/Logs/Microcol/completions/20261025T100310Z-e3317f8d8a39`,
+   `$PRE_R0389_LOGS/completions/20261025T100310Z-e3317f8d8a39`,
    supervisor PID 85218 and a 600-second timeout. Selection: complete
    `TC_11_F11_skip_to_next_unit_test` and `PageVerificationContractTest`.
    Eleven changed Java files passed the shared formatter with exact code-token
@@ -12209,31 +12220,31 @@ remote CI and publication were not checked.
 2. TC188/F221 now checks both sides of the measured width boundary, a further layout pulse, English and Czech wide–narrow–wide transitions, an extreme resize, one-row geometry, accessible names, keyboard activation and colony-dropdown cancellation/selection. Existing seasonal, Continue and gameplay assertions remain. TC81/F73/04 also exercises the conditional independence action at wide and narrow widths before its existing cancel/confirm/muster checks.
 3. The shared formatter checked six task Java files, preserving exact tokens and idempotence. Targeted Docker run `20261025T144215Z-c0cbfc009a23` (PID `36843`, timeout 600 seconds) selects `TC_188_F221_game_toolbar_test,TC_81_F73_declare_independence_support_test#TC_04*,TC_12_F11_start_free_game,TC_23_F16_atlantic_voyage_audit_test#TC_01*,SimpleOperationsTest,PageVerificationContractTest`. It stopped at compilation after 9.199 seconds (`target/docker-ui/run-R9oGBK`): the new code used an `instanceof` pattern while the project compiles with Java 11 source compatibility. No UI scenario ran. The repair uses a conventional cast and `Collectors.toList()` without changing Java/build settings, and width measurement now respects each control's minimum/maximum constraints. Formatting passed again. Run `20261025T144814Z-bf742c722e86` (PID `37943`, timeout 600 seconds; `target/docker-ui/run-vZ94ig`) finished with 14 tests, zero failures, four errors and zero skips in 100.120 seconds. The original start, basic movement and voyage paths passed, confirming the unsupported-style repair. Two new TC188 checks incorrectly expected `DECORATED` although TestFX supplies `UNDECORATED`; they now capture the incoming style before initialization and require it to remain unchanged on unsupported platforms. Two layout checks found a missing accessible name; toolbar accessible text now binds to the localized label. No gameplay assertion or selected scenario was removed. Formatting passed again. The same selection passed in `20261025T145217Z-24d41298b6fa` (PID `38499`, timeout 600 seconds; `target/docker-ui/run-TewyNu`): 14 tests in six complete XML reports, zero failures/errors/skips, 125.652 seconds including runner overhead, successful cleanup and queued notification.
 4. Actual Docker/Xvfb screenshots were reviewed: [English icons at 900 px](graphics-assets/top-menu-2026-10-25/toolbar-one-row-icons.png), [restored names at 1200 px](graphics-assets/top-menu-2026-10-25/toolbar-one-row-labels.png), [Czech icons at 900 px](graphics-assets/top-menu-2026-10-25/toolbar-one-row-czech.png) and [keyboard focus](graphics-assets/top-menu-2026-10-25/toolbar-one-row-keyboard-focus.png). The toolbar occupies one compact row, with intact frames and dropdown arrow; restoration, boundary and minimum-width assertions passed. The shared checkout also contains concurrent map artwork, outside this toolbar acceptance.
-5. Review confirmed that the existing action handlers, order, shortcuts and dropdown remain in place; labels are retained and exposed explicitly to accessibility. Width measurement respects CSS insets, spacing and control size constraints. The mandatory complete model/JUnit and fixed smoke gate was dispatched as `20261025T145822Z-747137c46d6f` (PID `39433`, outer timeout 420 seconds, unchanged 300-second acceptance budget). Another local Docker job, `microcol-20261025T145800Z-62fdd44fb3f0`, was active at dispatch. This run failed after 146.244 seconds (`target/verification/run-zjcrxb48`): 4,732 model/JUnit checks, one failure and one error, zero skips; the UI module did not run. The failures are in concurrent colony work: `ColonyDefenseTest.wonFieldBattleCapturesOnlyThatWorkerWithTheCompletedExitCap` (serialized state mismatch) and `CurrentSightTest.hiddenPopulationAndFortificationSurviveReloadUntilReobserved` (fortification requires three residents). This is not acceptance and no unrelated model/test files were changed by the toolbar task. Nine documentation consistency tests passed; strict MkDocs currently finds a missing evidence anchor in the concurrent R-0282 documentation, so final documentation acceptance is pending. No publication is claimed.
+5. Review confirmed that the existing action handlers, order, shortcuts and dropdown remain in place; labels are retained and exposed explicitly to accessibility. Width measurement respects CSS insets, spacing and control size constraints. The mandatory complete model/JUnit and fixed smoke gate was dispatched as `20261025T145822Z-747137c46d6f` (PID `39433`, outer timeout 420 seconds, unchanged 300-second acceptance budget). Another local Docker job, `akropia-20261025T145800Z-62fdd44fb3f0`, was active at dispatch. This run failed after 146.244 seconds (`target/verification/run-zjcrxb48`): 4,732 model/JUnit checks, one failure and one error, zero skips; the UI module did not run. The failures are in concurrent colony work: `ColonyDefenseTest.wonFieldBattleCapturesOnlyThatWorkerWithTheCompletedExitCap` (serialized state mismatch) and `CurrentSightTest.hiddenPopulationAndFortificationSurviveReloadUntilReobserved` (fortification requires three residents). This is not acceptance and no unrelated model/test files were changed by the toolbar task. Nine documentation consistency tests passed; strict MkDocs currently finds a missing evidence anchor in the concurrent R-0282 documentation, so final documentation acceptance is pending. No publication is claimed.
 
-6. To test the actual proposed commit scope, created an isolated acceptance worktree at `/Users/jan/.codex/worktrees/toolbar-acceptance/microcol`, based on `3feabbecd0d57c060dc36920962fce2442d507be`, and copied only the six reviewed titlebar/toolbar Java files. Full mandatory selection is unchanged. Completion `20261025T150441Z-fe9e62304590`, supervisor PID `41166`, outer timeout 420 seconds and acceptance deadline 300 seconds. The run failed its deadline (`target/verification/run-9o7_hewg`): group 307.977 seconds, verifier 310.571 seconds, wrapper 310.636 seconds. The exported Maven log contains completed model and partial UI summaries without a recorded assertion failure, but no complete XML report set; this is not acceptance. The final active scenario was `TC_06_F06_buy_and_sell_goods_test`. Cleanup recorded a removal race, and the owned container is absent. The notification was queued successfully. Concurrent colony/map work remains untouched in the main checkout.
+6. To test the actual proposed commit scope, created an isolated acceptance worktree at `/Users/jan/.codex/worktrees/toolbar-acceptance/$PRE_R0389_CHECKOUT`, based on `3feabbecd0d57c060dc36920962fce2442d507be`, and copied only the six reviewed titlebar/toolbar Java files. Full mandatory selection is unchanged. Completion `20261025T150441Z-fe9e62304590`, supervisor PID `41166`, outer timeout 420 seconds and acceptance deadline 300 seconds. The run failed its deadline (`target/verification/run-9o7_hewg`): group 307.977 seconds, verifier 310.571 seconds, wrapper 310.636 seconds. The exported Maven log contains completed model and partial UI summaries without a recorded assertion failure, but no complete XML report set; this is not acceptance. The final active scenario was `TC_06_F06_buy_and_sell_goods_test`. Cleanup recorded a removal race, and the owned container is absent. The notification was queued successfully. Concurrent colony/map work remains untouched in the main checkout.
 
-7. A bounded local process waited for other `microcol-` Docker containers to finish, then dispatched the unchanged gate as `20261025T151516Z-0038becdbd82`, supervisor PID `43128` (dispatch record `target/titlebar-probe/idle-dispatch.json`). It failed the deadline again: group 308.356 seconds, verifier 310.945 seconds, wrapper 310.991 seconds; `target/verification/run-mnsgq1fe`. The log has completed summaries for 4,727 model/JUnit checks and 14 UI/support checks, without a recorded failure/error/skip, but no complete XML report set. Historical failures remain failed. Docker was idle at dispatch, but another gate, `microcol-verify-run-ru2o9ffu-precommit`, started at 15:16:49 UTC during this run. Compared with the accepted R-0278 gate, `SimpleOperationsTest` rose from 16.369 to 23.988 seconds and colony founding from 12.703 to 20.595 seconds. Further retries are paused pending an agreed test execution order; there is no commit or acceptance yet.
+7. A bounded local process waited for other `akropia-` Docker containers to finish, then dispatched the unchanged gate as `20261025T151516Z-0038becdbd82`, supervisor PID `43128` (dispatch record `target/titlebar-probe/idle-dispatch.json`). It failed the deadline again: group 308.356 seconds, verifier 310.945 seconds, wrapper 310.991 seconds; `target/verification/run-mnsgq1fe`. The log has completed summaries for 4,727 model/JUnit checks and 14 UI/support checks, without a recorded failure/error/skip, but no complete XML report set. Historical failures remain failed. Docker was idle at dispatch, but another gate, `akropia-verify-run-ru2o9ffu-precommit`, started at 15:16:49 UTC during this run. Compared with the accepted R-0278 gate, `SimpleOperationsTest` rose from 16.369 to 23.988 seconds and colony founding from 12.703 to 20.595 seconds. Further retries are paused pending an agreed test execution order; there is no commit or acceptance yet.
 
 
-8. The user explicitly authorized coordination with the other Microcol tasks on 2026-10-25. The final agreed order is this toolbar gate, colony artwork, then R-0282 unknown-map marks. The acceptance worktree was updated to `1495156fcf2c5894598804d1ccf704374039c058`; only the six task Java files were reapplied, preserving the already committed help work. The unchanged mandatory gate started with Docker idle as completion `20261025T154039Z-f336eb8ef4cc`, supervisor PID `46494`, outer timeout 420 seconds and acceptance deadline 300 seconds. It passed: group 291.983 seconds, verifier 294.427 seconds, wrapper 294.482 seconds, with 349 complete XML reports containing 4,727 model/JUnit and 21 UI/support checks, zero failures/errors/skips (`target/verification/run-in6byebv`). The manifest confirms all six task Java files match the accepted frozen source. Cleanup completed and the notification was queued. The fixed selection was unchanged. Final review and nine documentation consistency checks plus strict MkDocs passed. R-0283 is locally accepted; R-0281 retains its pending native macOS visual inspection. Remote CI and distribution publication were not inspected.
+8. The user explicitly authorized coordination with the other Akropia tasks on 2026-10-25. The final agreed order is this toolbar gate, colony artwork, then R-0282 unknown-map marks. The acceptance worktree was updated to `1495156fcf2c5894598804d1ccf704374039c058`; only the six task Java files were reapplied, preserving the already committed help work. The unchanged mandatory gate started with Docker idle as completion `20261025T154039Z-f336eb8ef4cc`, supervisor PID `46494`, outer timeout 420 seconds and acceptance deadline 300 seconds. It passed: group 291.983 seconds, verifier 294.427 seconds, wrapper 294.482 seconds, with 349 complete XML reports containing 4,727 model/JUnit and 21 UI/support checks, zero failures/errors/skips (`target/verification/run-in6byebv`). The manifest confirms all six task Java files match the accepted frozen source. Cleanup completed and the notification was queued. The fixed selection was unchanged. Final review and nine documentation consistency checks plus strict MkDocs passed. R-0283 is locally accepted; R-0281 retains its pending native macOS visual inspection. Remote CI and distribution publication were not inspected.
 
 ## R-0284 unit help — 2026-10-25
 
 1. Scope: [R-0284](requirements/done/R-0284.md), UC-114/119. Units / Jednotky lists all 35 current unit types using shared game artwork and localized names, model-derived base movement, cargo/passenger space, initial Europe prices, expertise and pioneer flags. Explanations distinguish equipment/role-dependent abilities, unavailable purchases and land/water food expertise. No gameplay or saved-state changes.
 2. TC_100_F91/TC_08 verifies every type/name/image, representative ship/civilian/native/treasure/specialist values, localized-name search, the last row, scrolling and unchanged state after OK. TC_09 covers Czech text, accent-insensitive name search, Escape and unchanged state. TC_01–TC_07 retain their checks with the expanded topic lists. PageVerificationContractTest remains required.
-3. Isolated checkout: `/Users/jan/.codex/worktrees/units-help/microcol`, based on `3feabbecd0d57c060dc36920962fce2442d507be`. Targeted Docker/Xvfb selection: `TC_100_F91_colonizopedia_test,PageVerificationContractTest`; callback directory `/Users/jan/Library/Logs/Microcol/completions/20261025T150708Z-d6f761ccd4a7`, supervisor PID 41629, timeout 600 s. The first run failed: 12 checks, two failures, zero errors/skips in 126.922 s. TC_08 did not select the final topic: the page selector had accepted row centers inside the whole control bounds, including partly clipped rows. It now requires the complete row inside the actual list viewport. TC_09 incorrectly expected “Nástroje” instead of the existing goods translation “Nářadí”; the expected text is corrected. Reports: `target/docker-ui/run-sy1NZe`. The failed attempt remains failed. The introduction was also shortened so the unit list is visible sooner. Acceptance and screenshot review are pending.
+3. Isolated checkout: `/Users/jan/.codex/worktrees/units-help/$PRE_R0389_CHECKOUT`, based on `3feabbecd0d57c060dc36920962fce2442d507be`. Targeted Docker/Xvfb selection: `TC_100_F91_colonizopedia_test,PageVerificationContractTest`; callback directory `$PRE_R0389_LOGS/completions/20261025T150708Z-d6f761ccd4a7`, supervisor PID 41629, timeout 600 s. The first run failed: 12 checks, two failures, zero errors/skips in 126.922 s. TC_08 did not select the final topic: the page selector had accepted row centers inside the whole control bounds, including partly clipped rows. It now requires the complete row inside the actual list viewport. TC_09 incorrectly expected “Nástroje” instead of the existing goods translation “Nářadí”; the expected text is corrected. Reports: `target/docker-ui/run-sy1NZe`. The failed attempt remains failed. The introduction was also shortened so the unit list is visible sooner. Acceptance and screenshot review are pending.
 
-4. Corrected targeted run: `/Users/jan/Library/Logs/Microcol/completions/20261025T151037Z-7d4ddcfb8989`, supervisor PID 42270, timeout 600 s. Passed all 12 checks (TC_100/TC_01–TC_09 and three page-contract checks), zero failures/errors/skips, in 160.014 s. Reports: `target/docker-ui/run-YLAgtY`. Reviewed EN/CZ start and final-row screenshots: readable wrapped text, shared unit artwork, intact keyboard/mouse navigation and last row reached. Visual review found the Czech singular “1 oddílů”; the label is now count-neutral, “Přeprava lodí — počet oddílů: 1”. TC_09 is repeated for the corrected copy before the mandatory gate.
+4. Corrected targeted run: `$PRE_R0389_LOGS/completions/20261025T151037Z-7d4ddcfb8989`, supervisor PID 42270, timeout 600 s. Passed all 12 checks (TC_100/TC_01–TC_09 and three page-contract checks), zero failures/errors/skips, in 160.014 s. Reports: `target/docker-ui/run-YLAgtY`. Reviewed EN/CZ start and final-row screenshots: readable wrapped text, shared unit artwork, intact keyboard/mouse navigation and last row reached. Visual review found the Czech singular “1 oddílů”; the label is now count-neutral, “Přeprava lodí — počet oddílů: 1”. TC_09 is repeated for the corrected copy before the mandatory gate.
 
-5. Czech-copy follow-up: `/Users/jan/Library/Logs/Microcol/completions/20261025T151421Z-6a2e051fc36a`, supervisor PID 42983, timeout 300 s. Selection: `TC_100_F91_colonizopedia_test#TC_09_czech_units_search_and_escape`; passed one scenario, zero failures/errors/skips, in 49.516 s. Reports and corrected Czech screenshot: `target/docker-ui/run-ELke26`.
+5. Czech-copy follow-up: `$PRE_R0389_LOGS/completions/20261025T151421Z-6a2e051fc36a`, supervisor PID 42983, timeout 300 s. Selection: `TC_100_F91_colonizopedia_test#TC_09_czech_units_search_and_escape`; passed one scenario, zero failures/errors/skips, in 49.516 s. Reports and corrected Czech screenshot: `target/docker-ui/run-ELke26`.
 
-6. Mandatory local gate dispatched with `verify -- --smoke`: `/Users/jan/Library/Logs/Microcol/completions/20261025T151601Z-92208c2b37d1`, supervisor PID 43264, timeout 420 s; the gate retains its 300-second acceptance budget. Failed by deadline: 308.11 s including cleanup (310.792 s supervisor total), no complete XML export. Log entries for 343 finished suites contain 4,738 checks, zero reported failures/errors/skips, but TC_21 and later smoke checks are incomplete; these are partial log counts, not acceptance. Evidence: `target/verification/run-q0yj5yyh`. Cleanup reported removal already in progress; Docker confirmed the owned container was gone. An unrelated R-0282 smoke container ran from 15:16:49 UTC during almost the entire attempt, so resource contention is a plausible cause. It had exited before the retry; neither its work nor test limits were changed.
+6. Mandatory local gate dispatched with `verify -- --smoke`: `$PRE_R0389_LOGS/completions/20261025T151601Z-92208c2b37d1`, supervisor PID 43264, timeout 420 s; the gate retains its 300-second acceptance budget. Failed by deadline: 308.11 s including cleanup (310.792 s supervisor total), no complete XML export. Log entries for 343 finished suites contain 4,738 checks, zero reported failures/errors/skips, but TC_21 and later smoke checks are incomplete; these are partial log counts, not acceptance. Evidence: `target/verification/run-q0yj5yyh`. Cleanup reported removal already in progress; Docker confirmed the owned container was gone. An unrelated R-0282 smoke container ran from 15:16:49 UTC during almost the entire attempt, so resource contention is a plausible cause. It had exited before the retry; neither its work nor test limits were changed.
 
-7. Unchanged fixed-gate retry after the overlapping container exited: `/Users/jan/Library/Logs/Microcol/completions/20261025T152234Z-a15e626703a0`, supervisor PID 43992, timeout 420 s, unchanged 300-second gate budget and selection. Passed all 4,748 checks: 4,727 model/JUnit and 21 UI/support (the ten fixed smoke scenarios plus support tests), zero failures/errors/skips across 349 fresh XML reports. Gate 290.16 s; orchestration 292.748 s; supervisor 292.839 s. Reports: `target/verification/run-evlqk3vx`. All 2,275 non-documentation files match the frozen manifest. The earlier timeout remains failed.
+7. Unchanged fixed-gate retry after the overlapping container exited: `$PRE_R0389_LOGS/completions/20261025T152234Z-a15e626703a0`, supervisor PID 43992, timeout 420 s, unchanged 300-second gate budget and selection. Passed all 4,748 checks: 4,727 model/JUnit and 21 UI/support (the ten fixed smoke scenarios plus support tests), zero failures/errors/skips across 349 fresh XML reports. Gate 290.16 s; orchestration 292.748 s; supervisor 292.839 s. Reports: `target/verification/run-evlqk3vx`. All 2,275 non-documentation files match the frozen manifest. The earlier timeout remains failed.
 
 8. Review confirmed read-only access to shared unit definitions, localized name search, all-type picture/name coverage, explicit base/equipment distinctions and unchanged game state. Shared Eclipse formatting passed for six Java files, preserving code tokens and idempotence. Nine documentation consistency checks and strict MkDocs passed after moving R-0284 to done; `git diff --check` passed. No dependency, runtime asset, model operation or save schema was added.
-9. Evidence is preserved after integration under `/Users/jan/projects/microcol/target/r0284/acceptance/`, retaining the original `docker-ui/` and `verification/` report layouts and `r0284-acceptance-counts.json`. The commit contains only this task’s source/documentation changes; unrelated main-worktree edits are preserved. This is local acceptance, not full regression or publication verification; remote CI and Pages were not inspected.
+9. Evidence is preserved after integration under `/Users/jan/projects/$PRE_R0389_CHECKOUT/target/r0284/acceptance/`, retaining the original `docker-ui/` and `verification/` report layouts and `r0284-acceptance-counts.json`. The commit contains only this task’s source/documentation changes; unrelated main-worktree edits are preserved. This is local acceptance, not full regression or publication verification; remote CI and Pages were not inspected.
 
 ## R-0280 — Colony markers — 2026-10-25
 
@@ -12301,10 +12312,10 @@ remote CI and publication were not checked.
 
 1. Source: `ab874f83` plus R-0287 in isolated local checkout `target/r0287/acceptance`. Unrelated R-0286 layout changes in the shared checkout are excluded. The map has 81 forest squares, 43 resource bonuses, 28 river squares joined by 24 segments, four freshwater squares and five exploration rumors. Starts, colonies, occupied colonial food fields and the landing at (25,14) are preserved.
 2. `OriginalWorldTest` adds regional coverage, repeated resources, river outlets and lake/ocean identity checks; save/load also compares forests, rumors and finite reserves. `TC_24_F15_free_play_setup_test.TC_12_original_world_river_landing_and_colony_survive_continue` retains its original journey and adds coast-to-lake sailing and a second Continue, with verification methods in `FreePlaySetupPage`.
-3. Targeted Docker/Xvfb selection: `OriginalWorldTest,TerrainIdentityTest,FreePlayNationBoundaryTest,TC_24_F15_free_play_setup_test,TC_80_F72_terrain_identity_test,PageVerificationContractTest`. Completion directory `/Users/jan/Library/Logs/Microcol/completions/20261025T191955Z-3a2e49ad6bae`, supervisor PID 63824, timeout 900 s. Passed **32 tests in six XML reports: 13 model, 16 UI and 3 source-contract checks; zero failures, errors or skips**, supervisor 285.270 s. Reports: `target/r0287/acceptance/target/docker-ui/run-h5m2ik`. The four changed runtime/test files match this accepted source byte for byte.
+3. Targeted Docker/Xvfb selection: `OriginalWorldTest,TerrainIdentityTest,FreePlayNationBoundaryTest,TC_24_F15_free_play_setup_test,TC_80_F72_terrain_identity_test,PageVerificationContractTest`. Completion directory `$PRE_R0389_LOGS/completions/20261025T191955Z-3a2e49ad6bae`, supervisor PID 63824, timeout 900 s. Passed **32 tests in six XML reports: 13 model, 16 UI and 3 source-contract checks; zero failures, errors or skips**, supervisor 285.270 s. Reports: `target/r0287/acceptance/target/docker-ui/run-h5m2ik`. The four changed runtime/test files match this accepted source byte for byte.
 
-4. Visual review of `microcol-test/warehouse-qa/R-0287-connected-lake.png` confirms the ship on the distinct lake water, forest regions and visible river. A data review verified four connected river networks without loops or orphan squares, legal terrain/feature combinations and identical non-map game data. Java formatting passed token preservation and idempotence for all three changed Java files.
-5. The shared branch subsequently accepted independent R-0286 as `a26d9e7c`. The isolated acceptance checkout fast-forwarded to that revision, preserving only the four R-0287 runtime/test changes. Fresh mandatory smoke dispatch: completion `/Users/jan/Library/Logs/Microcol/completions/20261025T192515Z-6997f1b0b2df`, supervisor PID 67920, outer timeout 420 s and unchanged internal 300 s acceptance budget. The result is recorded below; remote CI/publication is not watched.
+4. Visual review of `akropia-test/warehouse-qa/R-0287-connected-lake.png` confirms the ship on the distinct lake water, forest regions and visible river. A data review verified four connected river networks without loops or orphan squares, legal terrain/feature combinations and identical non-map game data. Java formatting passed token preservation and idempotence for all three changed Java files.
+5. The shared branch subsequently accepted independent R-0286 as `a26d9e7c`. The isolated acceptance checkout fast-forwarded to that revision, preserving only the four R-0287 runtime/test changes. Fresh mandatory smoke dispatch: completion `$PRE_R0389_LOGS/completions/20261025T192515Z-6997f1b0b2df`, supervisor PID 67920, outer timeout 420 s and unchanged internal 300 s acceptance budget. The result is recorded below; remote CI/publication is not watched.
 6. Mandatory smoke passed: **4,759 tests across 351 XML reports — 4,738 model/JUnit, ten fixed UI smoke scenarios and eleven support checks — zero failures, errors or skips**. Group 291.918 s, verifier 294.577 s, supervisor 294.657 s, within the 300-second gate. Reports and frozen source: `target/r0287/acceptance/target/verification/run-j9gtkvhy`. All four task runtime/test files match that source byte for byte. R-0287 is locally accepted; publication is separate.
 7. All nine documentation consistency checks and the strict MkDocs build passed for the isolated final documentation. No generated HTML is committed. Required acceptance and diff review are complete; the normal commit/push does not claim a published game distribution or successful full remote regression.
 
@@ -12335,7 +12346,7 @@ remote CI and publication were not checked.
 2. The existing TC26/10 checks the actual selected curve through repaint, pan, resize and Continue, then verifies permanent removal after ship movement reveals the square. Its reference uses explicit canvas curve operations; the implementation uses the selected SVG path. Every existing fog/privacy/grid and resource assertion remains in place. The shared formatter checked the three touched Java files with exact code-token preservation and idempotence. Results of targeted and mandatory acceptance are recorded below.
 3. Targeted Docker/Xvfb dispatch: `20261026T131759Z-8ea57b04d3b0`, supervisor PID 67881, outer timeout 600 s. Selection: TerrainDecorationTest, all TC26 and TC91 scenarios, and PageVerificationContractTest. The production SVG path was independently compared with both paths in the approved `variant-a.svg` and matches exactly; the three Java source hashes are recorded in `target/r0296/targeted-source-hashes.json`.
 4. Targeted run passed in **158.486 s**, with no queue wait: **20 checks, 0 failures, 0 errors, 0 skips**, in four complete XML reports (`target/docker-ui/run-muikR4`): TerrainDecorationTest 5, TC26 9, TC91 3 and PageVerificationContractTest 3. All three recorded Java source hashes still match. Visual review of the [actual game capture](graphics-assets/question-marks-2026-10-26/implemented-map.png) confirms the selected rounded A, larger ink height and terrain contour weight, on the opaque unknown background. Nine documentation consistency tests and strict MkDocs also passed for the prepared scope; final closure remains dependent on the mandatory gate.
-5. Mandatory model/JUnit plus fixed smoke dispatch: `20261026T132253Z-41f048cf757c`, supervisor PID 69324, outer timeout 420 s, unchanged `verify -- --smoke` selection and current 360-second local acceptance budget. Evidence directory: `/Users/jan/Library/Logs/Microcol/completions/20261026T132253Z-41f048cf757c`. The completed result follows.
+5. Mandatory model/JUnit plus fixed smoke dispatch: `20261026T132253Z-41f048cf757c`, supervisor PID 69324, outer timeout 420 s, unchanged `verify -- --smoke` selection and current 360-second local acceptance budget. Evidence directory: `$PRE_R0389_LOGS/completions/20261026T132253Z-41f048cf757c`. The completed result follows.
 6. The mandatory gate **passed** in `target/verification/run-6rezx2pj`: **4,775 checks, 0 failures, 0 errors, 0 skips**, with 353 complete XML reports. This comprises **4,754 model/JUnit checks** in 341 suites and **21 fixed smoke/support checks** in 12 suites. The unchanged `scripts/ui-tests/smoke.json` selection ran under Docker/Xvfb/Openbox. Verification took **303.630 s**, within the **360 s** budget (command 301.073 s; supervisor execution 303.778 s). The local lock queued the job for 86.361 s before its execution budget began. Every file hash in the frozen source manifest matched the checkout at post-run review; the three Java files also matched the earlier targeted run.
 7. Final review confirmed the exact approved A path, rounded stroke, restored canvas transform/style, unchanged 4% saved-seed placement, and unchanged fog/exploration behavior. No runtime asset, model operation, save field, dependency or package responsibility changed. Only documentation closure follows acceptance; unrelated working-tree changes remain excluded from the task's commit. Remote CI and game/site publication were not inspected or claimed.
 8. Final documentation closure passed all nine consistency checks and strict MkDocs in an isolated copy of the staged commit. R-0296 is archived as done with repaired inbound links. The executable files remain byte-identical to both accepted runs; no further game test is inferred from the documentation-only closure.
@@ -12362,7 +12373,7 @@ remote CI and publication were not checked.
 
 1. [R-0299](requirements/done/R-0299.md) addresses all nine open Dependabot alerts captured through the authenticated GitHub API on base `f902716f1889f4f832dc1c5e4a40fcf5c2b448a2`: Log4j Core #1, #7, #11, #16–20 and Gson #8. `target/r0299/dependabot-alerts.json` retains the original alert/advisory data. Maven resolves Log4j Core/API/SLF4J binding 2.25.5 and Gson 2.8.9; unrelated libraries retain their versions.
 2. Packaging checks found two compatibility failures before acceptance. `module-check-before-fix.log` records Log4j's `ServiceConfigurationError` because the combined module omitted `uses`; the descriptor now retains its runtime consumers/providers. `runtime-package-jdk17.log` records JDK 17 linking failure on a versioned Log4j package; both combined JARs now declare `Multi-Release: true`. These failed attempts remain failed evidence in `target/r0299/`.
-3. Final JDK 17 packaging (`mvn -B -ntp -pl microcol-dist -am -DskipTests package`) passed in 13.811 seconds. This packaging command does not replace tests. A temporary assert-based `DependencyCheck.java` verified actual Log4j Core selection, an emitted SLF4J log marker and a Gson Unicode round trip on the assembled classpath JAR, named module and linked runtime. All three passed on JDK 17 without logger errors. Archive inspection verified the four selected artifact versions and both multi-release manifests; logs and checks are retained in `target/r0299/`.
+3. Final JDK 17 packaging (`mvn -B -ntp -pl akropia-dist -am -DskipTests package`) passed in 13.811 seconds. This packaging command does not replace tests. A temporary assert-based `DependencyCheck.java` verified actual Log4j Core selection, an emitted SLF4J log marker and a Gson Unicode round trip on the assembled classpath JAR, named module and linked runtime. All three passed on JDK 17 without logger errors. Archive inspection verified the four selected artifact versions and both multi-release manifests; logs and checks are retained in `target/r0299/`.
 4. The shared Eclipse profile formatted the changed module descriptor; token preservation and formatter idempotence passed. Scope review keeps game rules, fixtures, logging configuration, package ownership and build output names unchanged. The combined module's packaging responsibility is documented in [modules](modules.md#modular-jar).
 5. Final mandatory gate `20261026T140723Z-71a15ae2ec5c` (supervisor PID 92030) passed on the base above plus the complete change: **4,775 checks in 353 fresh XML reports**, comprising **4,754 model/JUnit checks and 21 fixed smoke/support checks**, with zero failures, errors or skips. Verifier time was **295.942 seconds** (container group 293.558 s); supervisor execution and cleanup took **296.096 seconds**, below the unchanged 360-second budget, with no lock wait. Evidence is in `target/verification/run-52b2gque/`; cleanup and queued completion delivery succeeded. All 2,301 non-documentation manifest hashes matched the reviewed tree before final integration, including the three changed runtime/build files also recorded in `target/r0299/checked-source.json`.
 6. Earlier run `20261026T140000Z-e744967050e2` passed 4,775 checks, zero failures/errors/skips, in 304.985 seconds of supervisor execution/cleanup (`target/verification/run-mkj44osr/`), but predates the packaging fixes. Superseded run `20261026T140342Z-16ae7fe0a448` was explicitly canceled, with successful cleanup; it waited 82.819 seconds for the lock and executed for 91.069 seconds. Neither substitutes for the final gate.
@@ -12433,7 +12444,7 @@ remote CI and publication were not checked.
     suites and the fixed 12-suite Docker/Xvfb smoke selection; the manifest
     records the exact scenarios. Evidence is in
     `target/verification/run-u0sqibzo/{manifest,summary}.json` and the
-    completion directory under `~/Library/Logs/Microcol/completions/`.
+    completion directory under `$PRE_R0389_LOGS/completions/`.
     Every tracked source hash matched the tested snapshot before finalizing
     requirement status and this evidence. The shared Java formatter checked
     29 changed Java files with exact code-token preservation and idempotence.
@@ -12454,7 +12465,7 @@ remote CI and publication were not checked.
 4. Local Maven selection `GeneratedWorldTest,GeneratedWorldRiversTest,PageVerificationContractTest` passed 16 tests in three complete reports, zero failures/errors/skips. The shared Java formatter checked five changed Java files with code-token preservation and idempotence. The first documentation check rejected a missing status prefix in the UC row; restoring the existing prefix fixes the format without claiming whole-UC acceptance.
 5. Docker dispatch `20261026T193247Z-c3d9603f846d` (PID 25166, timeout 600 s) timed out during the initial `docker ps` check after 20.010 s; no tests started. Docker Desktop reported running, and a subsequent bounded engine check succeeded with no containers present, without restarting the runtime. The same selection `TC_122_F113_generated_world_test,PageVerificationContractTest` is being retried. The failed result and queued notification remain in the completion directory.
 6. Retry `20261026T193450Z-eec40473184c` (PID 25307, timeout 600 s, `target/docker-ui/run-mY9jek`) passed the same selection: eight tests in two complete reports, zero failures/errors/skips, 89.679 s. TC122 exercises both new-game starts and Continue; this is automated evidence, not a player observation.
-7. Mandatory dispatch `20261026T193456Z-028adcf96bb4` (PID 25327, supervisor timeout 420 s, fixed acceptance budget 360 s) ran `bash scripts/ui-tests/verify.sh --smoke` against base `f0f0a12a644564972c2c9d5bc414212a82dc84b5` plus the complete R-0301 implementation. It passed **4,784 tests in 356 complete expected reports, zero failures, errors or skips**, in 313.264 s. The selection is all 344 fast model/JUnit suites and the fixed 12-suite Docker/Xvfb smoke gate. Waiting 83.893 s for the shared Docker lock was recorded separately from execution. Exact selections and hashes are in `target/verification/run-x2ml74zc/{manifest,summary}.json`; completion evidence remains under `~/Library/Logs/Microcol/completions/`.
+7. Mandatory dispatch `20261026T193456Z-028adcf96bb4` (PID 25327, supervisor timeout 420 s, fixed acceptance budget 360 s) ran `bash scripts/ui-tests/verify.sh --smoke` against base `f0f0a12a644564972c2c9d5bc414212a82dc84b5` plus the complete R-0301 implementation. It passed **4,784 tests in 356 complete expected reports, zero failures, errors or skips**, in 313.264 s. The selection is all 344 fast model/JUnit suites and the fixed 12-suite Docker/Xvfb smoke gate. Waiting 83.893 s for the shared Docker lock was recorded separately from execution. Exact selections and hashes are in `target/verification/run-x2ml74zc/{manifest,summary}.json`; completion evidence remains under `$PRE_R0389_LOGS/completions/`.
 8. All tracked source hashes matched the accepted snapshot before finalizing documentation and requirement status. The final nine documentation consistency checks and strict MkDocs build passed. Local acceptance does not establish full remote regression or publication success; neither was inspected.
 
 ## R-0302 bundled map geography (2026-10-26)
@@ -12462,7 +12473,7 @@ remote CI and publication were not checked.
 1. [R-0302](requirements/done/R-0302.md), UC-001 / SETUP-001 and MAP-001/004, audits all four `FreePlayMap` templates, corrects Original World rivers/coastal lake and classifies enclosed water at (15, 12) as lake in Original World, Rival Expedition and Reference. The [map catalogue](free-play-maps.md) contains data-derived SVG/PNG previews, not player observations. Existing saves and unrelated scenarios are not rewritten.
 2. `FreePlayMapsTest.everyBundledWorldKeepsRiversInlandAndLakesSeparateFromTheSea` covers all templates. `OriginalWorldTest` retains forest/resource and save/load assertions. `TC_24_F15_free_play_setup_test.TC_12_original_world_river_landing_and_colony_survive_continue` preserves sailing, normal passenger landing, colony founding and Continue, and replaces the retired connected-lake voyage with rejected ocean-to-enclosed-lake entry.
 3. Local `OriginalWorldTest,FreePlayMapsTest,PageVerificationContractTest` passed 12 tests with zero failures, errors or skips. The shared formatter checked all four changed Java files with exact code-token preservation and idempotence.
-4. Initial Docker dispatch `20261026T200239Z-8d7d707c6b27` (PID 31071, timeout 600 s) and retry `20261026T201008Z-a74bc174d32b` (PID 31967, timeout 600 s) timed out during the initial `docker ps` cleanup query after 20.005 s and 20.008 s respectively, before any tests ran. Both remain failed evidence under `~/Library/Logs/Microcol/completions/`. A later read-only repeat of that exact query, including detached-session execution, returned normally; the intermittent Docker response has no confirmed root cause. No runtime restart or lock bypass was used.
+4. Initial Docker dispatch `20261026T200239Z-8d7d707c6b27` (PID 31071, timeout 600 s) and retry `20261026T201008Z-a74bc174d32b` (PID 31967, timeout 600 s) timed out during the initial `docker ps` cleanup query after 20.005 s and 20.008 s respectively, before any tests ran. Both remain failed evidence under `$PRE_R0389_LOGS/completions/`. A later read-only repeat of that exact query, including detached-session execution, returned normally; the intermittent Docker response has no confirmed root cause. No runtime restart or lock bypass was used.
 5. Mandatory dispatch `20261026T201129Z-f49de4247548` (PID 32066, supervisor timeout 420 s, inner budget 360 s) passed all 4,785 tests in 356 complete expected reports with zero failures, errors or skips in 299.179 s. Its base was `ce978ad0e97186ed6982403f63e49870ab4d5525` plus the R-0302 changes; all source hashes matched `target/verification/run-uc9suzj8/manifest.json`. This pass preceded the targeted UI interaction repair below and remains intermediate evidence.
 6. Targeted dispatch `20261026T201355Z-f524039a5150` (PID 32513, timeout 600 s, `target/docker-ui/run-l5LNkm`) completed five tests: four passed and TC24/TC12 failed, with zero errors or skips. Execution took 96.995 s after 156.269 s waiting for the shared Docker lock. Its river-width pixel assertion sampled the west arm before its neighbouring inland square was explored; `GamePaintService.paintRivers` intentionally hides that arm. The repair moves the same width assertion after normal passenger landing and explicitly checks that the neighbour is explored. No gameplay assertion was removed.
 7. Repair dispatch `20261026T201915Z-f6f5fd733fcc` (PID 33915, timeout 600 s, `target/docker-ui/run-M7S9rt`) also completed five tests with one TC24/TC12 failure, zero errors or skips, in 86.771 s. The new exploration assertion showed that landing alone does not reveal the west neighbour: an ordinary colonist has sight radius one. The scenario now walks one square inland, checks the same visible river arm and width, and returns to the original coastal founding site. Dispatch `20261026T202111Z-63c739fd5e64` (PID 34427, timeout 600 s) repeats TC24/TC01, TC24/TC12 and `PageVerificationContractTest`; the result is recorded below.
@@ -12483,7 +12494,7 @@ remote CI and publication were not checked.
    timeout 600 s, runs `verify.sh --model` on the working implementation. Results
    and targeted UI/smoke acceptance are pending. Completion alone is not acceptance.
 3. Initial dispatch failed before executing tests: the managed-container cleanup
-   query `docker ps -aq --filter label=org.microcol.local-test=501` timed out after
+   query `docker ps -aq --filter label=org.akropia.local-test=501` timed out after
    20.008 s. Cleanup reported no errors and notification was queued successfully.
    Both the direct query and a detached-session repeat then returned normally
    (detached repeat 0.021 s); the transient cause is unconfirmed. Failed evidence
@@ -12594,7 +12605,7 @@ supervisor PID 75551, timeout 1,500 s: TC01/83/84/100/168/176/177/178/188/191
 
 23. Focused repeat passed **9 checks**, zero failures/errors/skips, in
 129.465 s with no lock wait. Complete reports and screenshots:
-`target/docker-ui/run-KgHve7/microcol-test/{surefire-reports,warehouse-qa}`.
+`target/docker-ui/run-KgHve7/akropia-test/{surefire-reports,warehouse-qa}`.
 TC06 (4), TC192 (2) and PageVerificationContractTest (3) all completed.
 Visual review confirms buy/sell controls, prices, totals and gold/date
 remain visible at 900 × 750. No `EVENT_HANDLER_FAILED` occurs in the log.
@@ -12608,10 +12619,10 @@ shared lock. No model tests are repeated by smoke. Results pending.
 
 25. Remaining selection passed **32 scenarios in 10 complete suites**,
 zero failures/errors/skips, in 469.003 s (111.939 s lock wait). Reports:
-`target/docker-ui/run-PIWfdq/microcol-test/surefire-reports`. Together with
+`target/docker-ui/run-PIWfdq/akropia-test/surefire-reports`. Together with
 the focused repeat, all **41 targeted UI/support checks** passed. No
 `EVENT_HANDLER_FAILED` occurs in either passing targeted log. All
-`microcol-game` inputs still match the passing model gate; subsequent
+`akropia-game` inputs still match the passing model gate; subsequent
 changes only adapted the TC06 page-object scrolling and diagnostic image.
 
 26. Fixed smoke/support passed **21 tests in 12 complete suites**, zero
@@ -12653,7 +12664,7 @@ or website publication.
 
 6. Repaired all-model/JUnit phase passed **4,770 tests in 346 complete XML
    reports**, zero failures, errors or skips, in 133.476 verifier seconds
-   (133.616 seconds including cleanup). All `microcol-game` sources match
+   (133.616 seconds including cleanup). All `akropia-game` sources match
    `target/verification/run-qv055dh8/source/`; results and the exact selection
    are in that run's manifest/summary. This includes two `DeveloperModeTest`
    checks and fifteen `StatusBarMessageServiceTest` checks.
@@ -12691,7 +12702,7 @@ or website publication.
 
 13. Repaired targeted phase passed **12 checks in four complete XML suites**,
     zero failures/errors/skips, in 153.879 seconds including cleanup. Reports:
-    `target/docker-ui/run-5X2mKY/microcol-test/surefire-reports/`. The selection
+    `target/docker-ui/run-5X2mKY/akropia-test/surefire-reports/`. The selection
     remains all TC84 (6), TC26/01+04 (2), TC80/01 (1), and the source contract
     (3). The Czech Settings and map screenshots in that run's `warehouse-qa/`
     were inspected: controls follow the title, all Settings controls fit, and
@@ -12706,7 +12717,7 @@ or website publication.
     hover visibility filtering and refresh, status indicator lifecycle,
     EN/CZ Settings layout, and the restarted test application. No blocking
     code issue remains. All 2,172 tracked/untracked inputs under
-    `microcol-game/` and `microcol-test/` still match the passing model
+    `akropia-game/` and `akropia-test/` still match the passing model
     snapshot; no executable source changed during the passing targeted run.
     Formatting covered all 22 task Java files. Smoke and final documentation
     acceptance are still required before commit.
@@ -12798,13 +12809,13 @@ or website publication.
 
 9. Repeated targeted selection: completion `20261027T070615Z-1c75d093aa3d`,
    supervisor PID 6968, timeout 1,200 seconds. All fifteen checks from item 7
-   are retained. All `microcol-game` inputs match the passing model snapshot,
+   are retained. All `akropia-game` inputs match the passing model snapshot,
    so that gate is reused; only TC84's observation timing changed.
 
 10. Repeated targeted phase passed **15 checks in five complete XML suites**,
     zero failures/errors/skips, in 180.528 seconds including cleanup. Exact
     selection is unchanged from item 7; reports are in
-    `target/docker-ui/run-hAAfjq/microcol-test/surefire-reports/`. No
+    `target/docker-ui/run-hAAfjq/akropia-test/surefire-reports/`. No
     `EVENT_HANDLER_FAILED` occurs in the command log. The reviewed source
     hashes still match all 2,172 game/test inputs. The map screenshot from
     `run-6x26CW` was visually checked against unchanged runtime sources: the
@@ -12870,7 +12881,7 @@ or website publication.
    The user explicitly authorized implementation while the instruction not to run
    tests remains in effect. The requirement remains active, not locally accepted.
 2. Shared Eclipse formatting and source review cover all six changed Java files.
-   `mvn -B -ntp -pl microcol-test -am -DskipTests test-compile` compiled the game,
+   `mvn -B -ntp -pl akropia-test -am -DskipTests test-compile` compiled the game,
    unit tests and functional-test sources successfully. Log:
    `target/r0315/compile-final.log`. Strict MkDocs also passed; log:
    `target/r0315/mkdocs.log`. No test selection was executed: zero
@@ -12974,7 +12985,7 @@ or website publication.
 19. Review confirmed no action-handler or game-rule changes in the production
     diff. All 197 production factory call sites choose an icon; no remaining
     direct constructors or wooden skins exist outside the shared factory.
-    The then-current `microcol-game/src` tree exactly matched the accepted model
+    The then-current `akropia-game/src` tree exactly matched the accepted model
     snapshot. Java formatting checked 92 files with exact code-token and
     idempotence validation; documentation checks passed 9 tests and strict
     MkDocs. Final documentation acceptance follows the completion update.
@@ -13105,7 +13116,7 @@ or website publication.
 4. Model retry `20261027T111441Z-0468f20236d3`, supervisor PID 54526, timeout
    600 s, passed in 133.647 s. All **4,776 model/JUnit tests** in 347 fresh XML
    reports passed with zero failures, errors or skips. Reports:
-   `target/verification/run-5h9qqq26/model/run-891ND4/microcol-game/surefire-reports`.
+   `target/verification/run-5h9qqq26/model/run-891ND4/akropia-game/surefire-reports`.
    All eight changed runtime/test sources match the immutable verification copy.
 5. Initial targeted Docker/Xvfb attempt `20261027T111753Z-91c6aece8994`,
    supervisor PID 55579, timeout 600 s, failed in 158.093 s: 13 tests,
@@ -13114,7 +13125,7 @@ or website publication.
    the target lay outside the visible canvas, leaving the status bar empty.
    Its initial pan now targets the same tile as the hover. All assertions and
    subsequent boundary/Continue steps remain intact; failed evidence is retained
-   in `target/docker-ui/run-Dh4OQE/microcol-test/surefire-reports`.
+   in `target/docker-ui/run-Dh4OQE/akropia-test/surefire-reports`.
 6. Targeted retry `20261027T112245Z-edf5d2592296`, supervisor PID 56767,
    timeout 600 s, selects all five TC80 scenarios, all three TC91 scenarios,
    TC100/06–07 and `PageVerificationContractTest`. This covers lake navigation,
@@ -13123,14 +13134,14 @@ or website publication.
    sources/assets/model tests still match the passing model copy, whose result
    is reused. Source hashes and dispatch records are under `target/r0314/`.
    The retry passed all **13 tests** with zero failures/errors/skips in 156.602 s.
-   Reports: `target/docker-ui/run-iKlusy/microcol-test/surefire-reports`.
+   Reports: `target/docker-ui/run-iKlusy/akropia-test/surefire-reports`.
 7. Fixed smoke `20261027T112646Z-434180d62a75`, supervisor PID 57318,
    outer timeout 480 s, passed in **203.026 s including recovery and cleanup**,
    within the unchanged 420-second acceptance budget (verifier 202.894 s;
    container group 199.496 s). All **21 tests in 12 fresh XML reports** passed
    with zero failures/errors/skips: the unchanged ten scenarios from
    `scripts/ui-tests/smoke.json` plus eleven support checks. Reports:
-   `target/verification/run-0gg_h2zr/precommit/run-bQO7Bl/microcol-test/surefire-reports`.
+   `target/verification/run-0gg_h2zr/precommit/run-bQO7Bl/akropia-test/surefire-reports`.
 8. Review confirmed atlas/frame indexing, the K3 geometry and transparent fade,
    synchronized six-second selection/frame boundaries, coast/resource priority,
    unchanged sea frames and preserved gameplay assertions. All eight changed
@@ -13162,7 +13173,7 @@ or website publication.
 4. Required model dispatch: `20261027T161507Z-fc0b8c72f54e`, PID `93697`, timeout
    600 s. Passed all **4,776 model/JUnit tests**, 347 fresh XML reports,
    zero failures/errors/skips in 136.321 s including local admission/cleanup.
-   Reports: `target/verification/run-xvhjiy7c/model/run-fmJ5to/microcol-game/surefire-reports`.
+   Reports: `target/verification/run-xvhjiy7c/model/run-fmJ5to/akropia-game/surefire-reports`.
 5. Targeted dispatch `20261027T161751Z-5318c44c6e74`, PID `94031`, timeout
    600 s, selects TC24/F15/12, all five TC90/F81 scenarios, all three TC91/F82
    scenarios, TC80/F72/05 and the three `PageVerificationContractTest` checks.
@@ -13181,18 +13192,18 @@ or website publication.
    `20261027T162207Z-096db831bc1b`, PID `94677`, timeout 600 s. Passed all
    **13 checks in five complete XML reports**, zero failures/errors/skips,
    in 233.432 s including local admission/cleanup. Reports:
-   `target/docker-ui/run-dLF1Bn/microcol-test/surefire-reports`.
+   `target/docker-ui/run-dLF1Bn/akropia-test/surefire-reports`.
 8. Visually inspected the [actual-map screenshot](graphics-assets/river-banks-2026-10-27/implemented-map.png)
    and both selected land/sea previews from the passing Docker run. The bank
    outline joins the sea coast without a transverse line or island; resource
    layering and the clipped preview remain readable. Saved originals are
-   `target/docker-ui/run-dLF1Bn/microcol-test/warehouse-qa/R-0320-*.png`.
+   `target/docker-ui/run-dLF1Bn/akropia-test/warehouse-qa/R-0320-*.png`.
 9. Fixed smoke dispatch: `20261027T162620Z-d117fed9b05a`, PID `95225`, outer
    timeout 480 s with the unchanged 420-second acceptance budget. Passed all
    **21 fixed smoke/support checks in 12 complete XML reports**, zero
    failures/errors/skips, in **201.891 s including admission and cleanup**
    (verifier 201.739 s, container group 198.999 s). Reports:
-   `target/verification/run-hxt5soh4/precommit/run-jx6b8p/microcol-test/surefire-reports`.
+   `target/verification/run-hxt5soh4/precommit/run-jx6b8p/akropia-test/surefire-reports`.
 10. Final review confirmed shared map/preview composition, bank thickness,
     open coastline, foreground resources/bridges and unchanged model/visibility
     rules. All three changed Java files match the accepted smoke source copy
@@ -13220,16 +13231,16 @@ or website publication.
    This standalone headless render is visual evidence, not Docker/Xvfb acceptance.
 4. Model dispatch: `20261027T185201Z-9eaeefde625f`, supervisor PID `16085`,
    timeout 600 s. Evidence directory:
-   `/Users/jan/Library/Logs/Microcol/completions/20261027T185201Z-9eaeefde625f`.
+   `$PRE_R0389_LOGS/completions/20261027T185201Z-9eaeefde625f`.
    Passed 4,777 tests in 348 complete XML reports, zero failures/errors/skips,
    in 138.891 s including local admission/cleanup. Reports:
-   `target/verification/run-iu6527qr/model/run-L2R53p/microcol-game/surefire-reports`.
+   `target/verification/run-iu6527qr/model/run-L2R53p/akropia-game/surefire-reports`.
 5. Targeted Docker/Xvfb dispatch: `20261027T185445Z-7a38b30ffd5a`, supervisor
    PID `16877`, timeout 600 s, using the selection in item 2. Evidence directory:
-   `/Users/jan/Library/Logs/Microcol/completions/20261027T185445Z-7a38b30ffd5a`.
+   `$PRE_R0389_LOGS/completions/20261027T185445Z-7a38b30ffd5a`.
    Passed all 13 checks in five complete XML reports, zero failures/errors/skips,
    in 228.541 s including local admission/cleanup. Reports:
-   `target/docker-ui/run-m8pHnx/microcol-test/surefire-reports`.
+   `target/docker-ui/run-m8pHnx/akropia-test/surefire-reports`.
 6. Visually inspected the actual
    [map](graphics-assets/river-mixing-2026-10-27/implemented-map.png),
    [land preview](graphics-assets/river-mixing-2026-10-27/preview-land.png) and
@@ -13239,10 +13250,10 @@ or website publication.
 7. Smoke dispatch: `20261027T185858Z-e86342829075`, supervisor PID `18059`,
    outer timeout 480 s; local smoke acceptance budget remains 420 s.
    Evidence directory:
-   `/Users/jan/Library/Logs/Microcol/completions/20261027T185858Z-e86342829075`.
+   `$PRE_R0389_LOGS/completions/20261027T185858Z-e86342829075`.
    Passed all 21 checks in 12 complete XML reports, zero failures/errors/skips,
    in 203.365 s including local admission/cleanup. Reports:
-   `target/verification/run-67eq89d_/precommit/run-mLxOzX/microcol-test/surefire-reports`.
+   `target/verification/run-67eq89d_/precommit/run-mLxOzX/akropia-test/surefire-reports`.
 8. Final source review found no actionable issue: the shared clipping stays
    inside the existing water silhouette, restores the preview clip and leaves
    bank/overlay order, visibility, model rules and save data intact. Runtime,
@@ -13392,7 +13403,7 @@ Earlier failures below remain historical failures.
 
 1. [R-0348](requirements/done/R-0348.md) changes Europe layout only: centered harbor content shares the existing bar width, headings and cargo lose extra horizontal insets, and flexible gaps distribute all sixteen fixed-size goods icons to the two content edges. No model rules, fixture or artwork changes.
 2. TC194 retains the crowded English/Czech journeys, independent scrolling, final-ship purchase/sale and small-window assertions. Its page verification now compares actual heading/cargo/icon bounds, equal gaps, unchanged 45-pixel icons and the right column at wide, capped and narrow widths. TC06 covers all four trading journeys; TC79/01 covers boycott cancellation, payment and restored trade. Page assertions remain in named verification methods.
-3. Shared Eclipse formatting and diff review completed. Model/JUnit dispatch: `20261029T193415Z-7f6a82dfa1a1`, supervisor PID `17141`, timeout 600 seconds, originating task `01a1891f-364e-7882-80e6-2f915c8c1b9e`. Completion records live under `~/Library/Logs/Microcol/completions/`. Acceptance was pending at dispatch; the subsequent results below complete the required gates.
+3. Shared Eclipse formatting and diff review completed. Model/JUnit dispatch: `20261029T193415Z-7f6a82dfa1a1`, supervisor PID `17141`, timeout 600 seconds, originating task `01a1891f-364e-7882-80e6-2f915c8c1b9e`. Completion records live under `$PRE_R0389_LOGS/completions/`. Acceptance was pending at dispatch; the subsequent results below complete the required gates.
 4. Model/JUnit accepted: `target/verification/run-dmpieu18`, **4,784 tests in 350 complete XML reports, zero failures/errors/skips**, 134.627 seconds including cleanup. Changed-source hashes in `target/r0348/source.json` match the tested snapshot and current files. Targeted dispatch `20261029T193729Z-16f4bc204107`, supervisor PID `18238`, timeout 1,200 seconds: `TC_194_F226_europe_harbor_test,TC_06_F06_buy_and_sell_goods_test,TC_79_F71_back_tax_payment_test#TC_01_cancel_keeps_back_taxes_then_pay_and_trade_the_restored_musket,PageVerificationContractTest`.
 5. First targeted run `target/docker-ui/run-hyLAQX` completed **11 tests in four XML reports, zero failures, one error, zero skips**; the error is the wrapped centering assertion for boycotted SILK in TC79/01 (icon center 719.5, price center 717.472). TC194's three alignment/scrolling/EN/CZ journeys, TC06's four trading journeys and three page-contract checks passed. The 45-pixel goods cell exposed a shrinking image wrapper under the 2-pixel boycott border. `PanelGood` now preserves the wrapper's intrinsic minimum width; TC79/01 also checks the common content edges. No assertion was relaxed. Wide and small screenshots were reviewed; the failed reports remain preserved. Runtime repair requires fresh model, targeted UI and smoke acceptance.
 6. Repaired-source model dispatch: `20261029T194127Z-d77c7026644b`, supervisor PID `18870`, timeout 600 seconds. Candidate hashes are in `target/r0348/source-repaired.json`.
@@ -13424,7 +13435,7 @@ Earlier failures below remain historical failures.
 4. Final Docker/Xvfb selection: `TC_54_F45_shared_hammers_test` (1), `TC_67_F58_religious_production_test` (2), `TC_77_F69_political_production_test` (2) and `PageVerificationContractTest` (3). **All 8 checks in four complete XML reports passed, with zero failures/errors/skips**. Run `20261030T181330Z-ea221eb60298`, supervisor PID 63338, timeout 1200 s, finished in 174.486 s without lock wait; reports are in `target/docker-ui/run-j97BnE/`. All 2,292 recorded game/test/POM source hashes remain unchanged. TC54 retains its complete queue, production and Continue journey and compares the exact rendered pixels of all three icons through `ColonyScreen.verifyProductionArtwork`.
 5. The [actual final colony screenshot](graphics-assets/production-icons-2026-10-30/r0365-production-icons.png) was visually reviewed: all three selected icons remain readable at the existing 22 px display size beside their production amounts. Documentation consistency tests (9) and strict MkDocs passed. Review found no remaining task-scope defect. Main integration must preserve these accepted source hashes.
 6. Earlier failed runs remain failed. The first two exposed snapshot setup differences: attached canvases inherited paper fill, and a detached reference drawn at the origin differed at an antialiased edge. Both sides now use transparent fill, identical canvas dimensions and identical draw coordinates, without pixel tolerance. Later failures occurred because the attached snapshot autosized the root to its preferred width: the live window was `(100,100,900,750)` while the close button lay at screen X `1267–1414`, beyond its right edge at X `1000`. Moving full-scene evidence capture and restoring only actual root dimensions did not solve this. The final verifier uses the full existing `AbstractScreen.snapshotScene` protocol: pin preferred dimensions before capture, then restore preferred and actual dimensions in `finally`. Temporary diagnostics were removed; no game actions or gameplay assertions were relaxed.
-7. Evidence is retained in the primary checkout under `target/r0365/`: `model-initial/`, `model-final/`, `model-integrated/`, `ui-initial-failed/`, `ui-second-failed/`, `ui-third-failed/`, `ui-fourth-failed/`, `ui-diagnostic-failed/`, `ui-restore-only-failed/` and `ui-final/`. `runs.json` records dispatches/PIDs, `final-source-hashes.json` binds the accepted source, and `graphics-checks.json` records exports. Completion `result.json`, `command.log` and notification records remain under `/Users/jan/Library/Logs/Microcol/completions/<run>/`. Model timeouts were 600 s; UI timeouts were 1200 s. Earlier model passes used base `258c2f2c`; combined-source acceptance uses `4d3da658`.
+7. Evidence is retained in the primary checkout under `target/r0365/`: `model-initial/`, `model-final/`, `model-integrated/`, `ui-initial-failed/`, `ui-second-failed/`, `ui-third-failed/`, `ui-fourth-failed/`, `ui-diagnostic-failed/`, `ui-restore-only-failed/` and `ui-final/`. `runs.json` records dispatches/PIDs, `final-source-hashes.json` binds the accepted source, and `graphics-checks.json` records exports. Completion `result.json`, `command.log` and notification records remain under `$PRE_R0389_LOGS/completions/<run>/`. Model timeouts were 600 s; UI timeouts were 1200 s. Earlier model passes used base `258c2f2c`; combined-source acceptance uses `4d3da658`.
 
 | Completion run | Supervisor PID | Selection | Actual result |
 | --- | ---: | --- | --- |
@@ -13469,7 +13480,7 @@ Combined-revision acceptance update for `0e752b7b`: model 4,814/356 reports pass
 2. Initial model check stopped at mixed-enum localization compilation errors. After repair, 4,818 model tests ran with three failures: two candidate contract issues and an independently reproduced pre-existing R-0386 ship-artwork visibility failure. The two candidate contracts were repaired; all 14 focused checks passed in `run-EVWtLY` (41.373 s). This does not substitute for complete model acceptance.
 3. Baseline `UnitArtworkTest` failed on main without R-0377: three tests, one failure, zero errors/skips, `run-t8LBm6`, 34.880 s. Four ship cells fall below the existing 100-dark-pixel threshold at 45 px. The user explicitly chose **leave artwork unchanged**. Neither artwork nor test thresholds were changed; this remains an acceptance blocker.
 4. Targeted UI run `run-2lF55G` executed 40 tests: 35 passed, one failure, four errors, zero skips (467.545 s). Diagnosis found test assumptions about horizontal language controls, scrolled heading bounds, virtualized recovery cells and a stale map-origin snapshot. The Codex parent corrected those helpers/steps while retaining exact gameplay and visible-order assertions; no production behavior was changed in this repair. Focused run `20261101T154557Z-3b77d8f12050` is pending (PID 79563, timeout 1,200 s).
-5. Full targeted acceptance, native macOS shortcuts and documentation/visual review remain pending. Smoke is still deferred to the end of the ordered batch. No commit/push, remote regression success or distribution publication is claimed for this candidate. Detailed evidence is under `~/Library/Logs/Microcol/claude/2026-11-01-ordered/R-0377/`.
+5. Full targeted acceptance, native macOS shortcuts and documentation/visual review remain pending. Smoke is still deferred to the end of the ordered batch. No commit/push, remote regression success or distribution publication is claimed for this candidate. Detailed evidence is under `$PRE_R0389_LOGS/claude/2026-11-01-ordered/R-0377/`.
 
 6. The first Codex focused rerun (`20261101T154557Z-3b77d8f12050`, `run-pPIhtR`) completed 8 tests with one failure, no errors/skips (133.293 s). The remaining comparison retained the map focus from before visiting a colony (`focusedField.x` 25 versus 24). The scenario now snapshots and verifies model state around each Load roundtrip from colony, Europe, report and Settings. The follow-up (`20261101T155059Z-1ca1c49014f8`, `run-n1RqPZ`) passed all 4 selected checks, zero failures/errors/skips (65.589 s). Full targeted selection dispatched as `20261101T155223Z-c19050d4ff60` (PID 81320, timeout 3,600 s); its result remains pending. Nine documentation consistency tests and strict MkDocs passed for the candidate before this evidence update. The unchanged artwork failure still blocks full model acceptance.
 
@@ -13489,15 +13500,15 @@ Combined-revision acceptance update for `0e752b7b`: model 4,814/356 reports pass
 2. Full model run `20261101T162924Z-7da3faf0d312`, `run-e4cwoi98`: 4,819 tests in 357 reports, one failure, zero errors/skips, 136.978 s. The only failure is the unchanged baseline FRIGATE opaque-ink check covered by the user's batch exception; the failure remains recorded.
 3. Initial Docker selection `20261101T163201Z-3701bc259835`, `run-QFnALg`: 18 tests, one failure, zero errors/skips, 231.217 s. Selection: all TC_43, TC_83, TC_191, TC_42 scenarios plus PageVerificationContractTest. New TC_43 TC_06 selected Quick save instead of Recovery points because its keyboard helper assumed the initial popup focus. The repair follows actual popup focus using real key presses and preserves assertions.
 4. Rerun `20261101T163727Z-bd2cdf5403d9`, `run-JmasqY`: all six TC_43 scenarios and three page-contract checks passed, zero failures/errors/skips, 112.190 s. Other passing selections from the first run remain applicable: only the new keyboard helper changed, and those scenarios do not use it. No production/model source changed after the model run.
-5. Visual review of `R-0308-menu-czech-small.png` confirmed the removed entry, readable labels and retained icon mapping. Both changed PlantUML sources were exported with `plantuml -tsvg`; nine documentation checks and strict MkDocs passed. Main's intervening documentation changes were preserved. Native macOS is manual-only; final smoke is deferred to the end of the ordered batch. Requirement remains `ready for development` until that final gate. Full evidence lives under `~/Library/Logs/Microcol/claude/2026-11-01-ordered/R-0376/`.
+5. Visual review of `R-0308-menu-czech-small.png` confirmed the removed entry, readable labels and retained icon mapping. Both changed PlantUML sources were exported with `plantuml -tsvg`; nine documentation checks and strict MkDocs passed. Main's intervening documentation changes were preserved. Native macOS is manual-only; final smoke is deferred to the end of the ordered batch. Requirement remains `ready for development` until that final gate. Full evidence lives under `$PRE_R0389_LOGS/claude/2026-11-01-ordered/R-0376/`.
 
 ## R-0228 mission victory cue — 2026-11-01
 
 1. Claude implemented the explicitly selected mission-victory cue and minimum playback support (`20261101T164333Z-0fd9713d2854`, 867.079 s), then fixed hardware-independent volume after parent review (`20261101T170125Z-b2da9de5d524`, 96.557 s). Parent applied the shared Java formatter. Explicit outcome metadata distinguishes successful mission/independence results from losses, timeout, retirement and ordinary calendar completion. Existing visual results and game rules remain unchanged. Playback uses the current saved volume, honors global mute, suppresses duplicate playthrough cues and isolates sound failures.
 2. Initial model run `run-8degx6rj` completed 4,839 checks with only the baseline artwork failure. Final model run `20261101T170317Z-1e83c2b96690`, `run-jtl82vd0`: 4,840 checks in 360 reports, one unchanged FRIGATE artwork failure, zero errors/skips, 134.518 s. The user's batch exception applies; the failed reports remain failed. Output-byte tests cover actual PCM volume scaling without hardware gain, zero/global mute, invalid format and failure/cleanup behavior.
 3. Docker run `20261101T170551Z-f59b5a43f1e3`, `run-FlPcyi`: 19 tests, zero failures/errors/skips, 291.694 s execution and 118.539 s lock wait. Selection: TC_157_F192_rebellion_loss_test, TC_158_F191_revolution_victory_test, TC_161_F196_result_score_test, TC_163_F197_hall_of_fame_test and PageVerificationContractTest. New TC_158 TC_03/TC_04 verify one cue, no Continue replay and unchanged victory under device failure; TC_157 TC_03 verifies no loss cue.
-4. Parent generated the original cue with `python3 -I microcol-game/src/audio/mission-success-01.py`: 61,740 frames, 44,100 Hz, 16-bit mono PCM, 1.400 s, peak 16,384. A second export was byte-identical. The user listened to the supplied preview and approved “Sounds good—use it” on 2026-11-01. This is preview listening evidence, not a claim of on-device music/effect mix verification on every platform.
-5. Nine documentation consistency checks and strict MkDocs passed before integration. R-0226 remains canceled; only the minimum playback support was authorized here. Final batch smoke is deferred; status remains `ready for development` until that gate. Native macOS UI tests remain manual-only. R-0227 follows with independent persisted category controls. Evidence: `~/Library/Logs/Microcol/claude/2026-11-01-ordered/R-0228/`.
+4. Parent generated the original cue with `python3 -I akropia-game/src/audio/mission-success-01.py`: 61,740 frames, 44,100 Hz, 16-bit mono PCM, 1.400 s, peak 16,384. A second export was byte-identical. The user listened to the supplied preview and approved “Sounds good—use it” on 2026-11-01. This is preview listening evidence, not a claim of on-device music/effect mix verification on every platform.
+5. Nine documentation consistency checks and strict MkDocs passed before integration. R-0226 remains canceled; only the minimum playback support was authorized here. Final batch smoke is deferred; status remains `ready for development` until that gate. Native macOS UI tests remain manual-only. R-0227 follows with independent persisted category controls. Evidence: `$PRE_R0389_LOGS/claude/2026-11-01-ordered/R-0228/`.
 
 ### R-0228 combined revision after concurrent menu change — 2026-11-01
 
@@ -13512,21 +13523,21 @@ Combined-revision acceptance update for `0e752b7b`: model 4,814/356 reports pass
 2. Initial model run `run-lafwzyhn`: 4,859 checks, two failures (missing-effects independence and baseline FRIGATE), no errors/skips. The preference repair passed in `run-un4blnxm`. Final model run `20261101T181029Z-2ff154ca9051`, `run-al1m763z`: 4,861 checks in 362 reports, only the approved unchanged FRIGATE failure, zero errors/skips, 139.172 s. Tests cover persisted categories/defaults, read-only behavior, live PCM output scaling, silence, global override and device failures.
 3. Initial Docker `run-ez4yvj`: 26 checks, one error at TC_84 TC_09's Czech silent endpoint, no failures/skips, 417.579 s. Final Docker `20261101T181315Z-c30b455dfed3`, `run-9GVtyB`: all 26 passed, zero failures/errors/skips, 423.762 s. Selection: all TC_84, TC_192, TC_157, TC_158 and PageVerificationContractTest scenarios. TC_09 also checks switching back to English, category independence, keyboard endpoints and reopen persistence.
 4. Screenshots `r0227-volumes-cs.png` and `r0227-volumes-game.png` were reviewed: distinct labels/current values, localized silent endpoints and existing vertical scroll/Back layout are retained. No new audio asset was introduced. Byte-level output verification is not an all-device listening/mix claim; the earlier victory-cue preview approval remains the actual listening evidence.
-5. Documentation consistency and strict MkDocs passed. Intervening main commits changed documentation only and are preserved. This requirement remains `ready for development` until final batch smoke, which is still deferred; the known artwork exception remains narrow. No native macOS gate or remote CI inspection. Evidence: `~/Library/Logs/Microcol/claude/2026-11-01-ordered/R-0227/`. R-0225 follows.
+5. Documentation consistency and strict MkDocs passed. Intervening main commits changed documentation only and are preserved. This requirement remains `ready for development` until final batch smoke, which is still deferred; the known artwork exception remains narrow. No native macOS gate or remote CI inspection. Evidence: `$PRE_R0389_LOGS/claude/2026-11-01-ordered/R-0227/`. R-0225 follows.
 
 ### R-0225 reproducible graphics export — 2026-11-01
 
 1. Candidate based on `ce7d2e68`: manifest and safe export runner cover 62 maintained vector exports and validate five preserved raster references. All 62 freshly rendered outputs are byte-identical to runtime resources with `rsvg-convert 2.61.4` (Cairo 1.18.4, Pango 1.57.0, HarfBuzz 12.3.2, Fontconfig 2.17.1). No runtime assets, vector artwork or Java changed; targeted player UI execution is therefore not applicable to this tooling-only change.
 2. Full graphics tooling selection `target/graphics-venv/bin/python -m unittest discover -s scripts/graphics -p 'test_*.py'`: **13 passed**, zero failures/errors/skips (1.899 s). The documented environment uses fonttools 4.60.2. Earlier system-Python import failure and the full-suite font-isolation failure remain preserved. The shared wrapper now exposes exactly the bundled Light face; the retry checks its bytes and child exit propagation. Real export retry: `python3 scripts/graphics/export-graphics.py --check --output target/r0225-check-after-repair`, exit 0, 62 matches.
 3. Full model/JUnit: **4,861 tests in 362 reports, one failure, zero errors/skips**, `target/verification/run-o9dtbf1s`, 135.072 s. The sole failure is the existing `UnitArtworkTest.allTypesAndStatesHaveDistinctBoldArtworkInsideTransparentMargins` FRIGATE ink threshold at 45 px. The user's explicit batch exception applies; artwork and assertion remain unchanged. Completion `20261101T183602Z-4fa3edc4fb33` remains failed, not relabeled green.
-4. Claude implementation `20261101T182228Z-2097b03ad7a1` took 760.406 s; focused font repair `20261101T183719Z-1abaca9d8d5e` took 47.793 s. Parent reviewed tooling, manifest and the repair. Local logs are preserved in `/Users/jan/Library/Logs/Microcol/claude/2026-11-01-ordered/R-0225/`. The manifest explicitly leaves 39 legacy runtime images outside reproducible coverage; see [classification and recipes](graphics.md#manifest-exportu-r-0225). This is not a full visual audit or proof that missing legacy sources were recovered.
+4. Claude implementation `20261101T182228Z-2097b03ad7a1` took 760.406 s; focused font repair `20261101T183719Z-1abaca9d8d5e` took 47.793 s. Parent reviewed tooling, manifest and the repair. Local logs are preserved in `$PRE_R0389_LOGS/claude/2026-11-01-ordered/R-0225/`. The manifest explicitly leaves 39 legacy runtime images outside reproducible coverage; see [classification and recipes](graphics.md#manifest-exportu-r-0225). This is not a full visual audit or proof that missing legacy sources were recovered.
 5. Documentation consistency and strict MkDocs are checked before integration. Final batch smoke remains deferred by explicit user instruction. No native macOS UI check, remote CI or distribution publication verification was performed.
 
 ## R-0391/R-0393 plowing countdown and completion notice — 2026-11-01
 
 1. Provisional integration of the selected-unit plowing countdown and owner-only persisted completion notice. Parent reviewed source, applied the shared formatter and checked the actual [Czech countdown](assets/r0391-r0393-2026-11-01/plow-countdown-last-czech.png) and [completion report](assets/r0391-r0393-2026-11-01/plow-completion-report-czech.png). Ordinary/hardy work, cancellation, selection, localization and Save/Continue retain their existing gameplay assertions.
 2. Focused Docker/Xvfb selection `PlowFieldTest,TC_18_F01_plow_field_test,PageVerificationContractTest`: **43 passed, zero failures/errors/skips** (31 model, 9 player scenarios, 3 page-contract checks), `target/docker-ui/run-UEH5ZQ`, completion `20261101T192746Z-43bffe04a2e4`, PID 29140, 1,200 s timeout, 180.321 s elapsed. Source base `ac6f9dcd`; integration preserves the separately delivered R-0221 files.
-3. Earlier run `run-Er2RAv` failed TC18/TC03: cancel cleared the model order but left the countdown visible. The plowing cancel handler omitted `RefreshRightPanelEvent`, unlike road cancellation. Claude's focused repair added the same refresh; no assertions or scenarios were removed. Initial worker `20261101T191422Z-103e085af344` took 504.533 s, repair `20261101T192647Z-29c119bbc153` took 39.903 s. Failed evidence remains preserved in `/Users/jan/Library/Logs/Microcol/claude/2026-11-01-ordered/R-0391-R-0393/` and completion records.
+3. Earlier run `run-Er2RAv` failed TC18/TC03: cancel cleared the model order but left the countdown visible. The plowing cancel handler omitted `RefreshRightPanelEvent`, unlike road cancellation. Claude's focused repair added the same refresh; no assertions or scenarios were removed. Initial worker `20261101T191422Z-103e085af344` took 504.533 s, repair `20261101T192647Z-29c119bbc153` took 39.903 s. Failed evidence remains preserved in `$PRE_R0389_LOGS/claude/2026-11-01-ordered/R-0391-R-0393/` and completion records.
 4. Documentation consistency and strict MkDocs are checked before integration. Full combined model/JUnit, broader affected UI (including road countdown), and smoke remain deferred under the expanded-batch amendment. No native macOS or remote CI/publication verification. Both requirements remain ready for development until final acceptance; foreign-unit countdown visibility has no dedicated UI fixture in this focused selection.
 
 ## R-0382/R-0383 save archive, preview and Load detail — 2026-11-01
@@ -13535,7 +13546,7 @@ Combined-revision acceptance update for `0e752b7b`: model 4,814/356 reports pass
 2. Focused model selection: **66 passed, zero failures/errors/skips** in 11 reports, `run-jDxVU8` (also passed in `run-4NORbL`): `GameModelPoDaoTest` (15), `SavedGamesTest` (4), `RecoveryPersistenceTest` (3), `SaveSummaryPoTest` (2), `GameLoadRejectionTest` (21), `SavePreviewTest` (1), `SavedGamesViewTest` (1), `WorldMinimapTest` (4), `EditorRumorSerializationTest` (2), `ModelArchitectureTest` (1), `TurnPreparationBoundaryTest` (12). Subsequent production changes only adjust JavaFX layout; the changed view's focused check was rerun.
 3. Final Docker/Xvfb **26 passed, zero failures/errors/skips**, `target/docker-ui/run-6WTV66`, 399.563 s, completion `20261101T210248Z-1540e990bc29`, PID 38702, timeout 900 s: complete TC23 (2), TC191 (5), TC42 (2), TC43 (6), TC192 (8), PageVerificationContractTest (3). Parent reviewed [Save current game](assets/r0382-r0383-2026-11-01/save.png), [Load detail](assets/r0382-r0383-2026-11-01/load.png) and [Czech narrow layout](assets/r0382-r0383-2026-11-01/narrow-cs.png). Details scroll vertically; preview stays in its frame. No native desktop or remote CI verification.
 4. Preserved failed attempts: `run-j6iO1U` had 51 tests with one new test error from plain Gson bypassing project adapters; `run-4NORbL` passed 66 model tests but timed out in TC192/TC04 because a direct test fixture load supplied raw JSON to the archive-only player boundary. Claude repaired explicit fixture conversion, metadata validation and caller coverage. The formerly hanging scenario passed alone in `run-vDk8tn` (48.217 s). `run-jDxVU8` ran 92 tests with two layout errors; `run-tqWY8f` left one empty-placeholder truncation error and visual inspection found preview overlap. Parent corrected label/preview minimum heights and wrapping without weakening assertions. `run-NSSnuG` passed all six focused view/layout/contract checks, 85.218 s, and final UI selection above passed.
-5. Claude initial/repair1/repair2 durations: 1,547.279 / 854.676 / 205.228 s. After the two-repair allowance, parent took over the bounded layout correction under the user's prior Codex authorization. Evidence is retained in `/Users/jan/Library/Logs/Microcol/claude/2026-11-01-ordered/R-0382-R-0383/`. Documentation consistency and strict MkDocs are checked before integration. Broader shared-fixture consumers (including direct-load TC30/32/33/35/62/125), complete model/UI and smoke remain in consolidated final acceptance. Both requirements stay ready for development; no new distribution publication is claimed.
+5. Claude initial/repair1/repair2 durations: 1,547.279 / 854.676 / 205.228 s. After the two-repair allowance, parent took over the bounded layout correction under the user's prior Codex authorization. Evidence is retained in `$PRE_R0389_LOGS/claude/2026-11-01-ordered/R-0382-R-0383/`. Documentation consistency and strict MkDocs are checked before integration. Broader shared-fixture consumers (including direct-load TC30/32/33/35/62/125), complete model/UI and smoke remain in consolidated final acceptance. Both requirements stay ready for development; no new distribution publication is claimed.
 
 ## R-0387/R-0388 unsaved state and rolling autosaves — 2026-11-01
 

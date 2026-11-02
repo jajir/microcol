@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
+<title id="title">Amfory</title>
+<desc id="description">Akropia R-0384, selected proposal 15, 2026-11-01. Hand-authored vector paths; solid fills and transparent surroundings.</desc>
+<g id="bold-hand-drawn-outline" transform="translate(2 2) scale(0.9375)" stroke="#41413b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+<g id="amphora-3" transform="translate(3 3) scale(1)"><path d="M16 17 C0 10 2 34 16 36 L17 29 C7 27 8 17 17 23 Z" fill="#c77f50"/><path d="M32 17 C48 11 47 34 32 36 L32 29 C43 25 40 17 32 23 Z" fill="#c77f50"/><path d="M15 7 Q25 5 34 7 L31 20 Q40 29 34 42 L28 54 L20 54 L13 42 Q7 28 18 20 Z" fill="#c77f50"/></g>
+<g id="amphora-29" transform="translate(29 18) scale(0.75)"><path d="M16 17 C0 10 2 34 16 36 L17 29 C7 27 8 17 17 23 Z" fill="#c77f50"/><path d="M32 17 C48 11 47 34 32 36 L32 29 C43 25 40 17 32 23 Z" fill="#c77f50"/><path d="M15 7 Q25 5 34 7 L31 20 Q40 29 34 42 L28 54 L20 54 L13 42 Q7 28 18 20 Z" fill="#c77f50"/></g>
+</g>
+</svg>

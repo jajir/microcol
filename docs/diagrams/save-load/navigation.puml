@@ -1,5 +1,5 @@
 @startuml
-title MicroCol — nabídky a obrazovky (26. 10. 2026)
+title Akropia — nabídky a obrazovky (26. 10. 2026)
 skinparam shadowing false
 skinparam defaultFontName SansSerif
 skinparam state {

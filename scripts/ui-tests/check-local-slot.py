@@ -13,7 +13,7 @@ import local_slot
 
 def configure(token):
     local_slot.OWNER = token
-    local_slot.LABEL = "org.microcol.local-test=" + token
+    local_slot.LABEL = "org.akropia.local-test=" + token
 
 
 def holder(directory, image, token):
@@ -34,7 +34,7 @@ def holder(directory, image, token):
 
 def check(image):
     directory = Path(tempfile.mkdtemp(prefix="lock-recovery-", dir="target/docker-ui-runner-checks")).resolve()
-    token = "microcol-slot-check-" + uuid.uuid4().hex[:12]
+    token = "akropia-slot-check-" + uuid.uuid4().hex[:12]
     foreign = token + "-unlabelled"
     configure(token)
     owner = None

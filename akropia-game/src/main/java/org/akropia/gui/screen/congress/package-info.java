@@ -1,0 +1,8 @@
+/**
+ * Congress screen in the main game window: frozen model offers, national
+ * support and owl progress, lasting membership and the Crown's real royal force
+ * counts, all read from {@code model.CongressReport}. Selection uses guarded
+ * Player operations; this package does not draw candidates, produce owls, grow
+ * the force or dispatch rewards.
+ */
+package org.akropia.gui.screen.congress;

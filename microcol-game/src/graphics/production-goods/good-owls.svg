@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
-<title id="title">Sova</title>
-<desc id="description">MicroCol R-0384, selected proposal 15, 2026-11-01. Hand-authored vector paths; solid fills and transparent surroundings.</desc>
-<g id="bold-hand-drawn-outline" transform="translate(2 2) scale(0.9375)" stroke="#41413b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
-<g id="feet"><path d="M24 51 L23 59 M18 58 L23 55 L28 58 M41 52 L42 59 M37 58 L42 55 L46 58" fill="none"/></g>
-<g id="owl-body"><path d="M14 19 L12 8 L25 12 Q32 10 39 12 L51 9 L49 21 Q58 51 34 55 Q9 56 13 35 Z" fill="#a28c68"/><path d="M16 28 Q15 44 27 48 Q42 52 47 33 L41 28 Z" fill="#e1c99e"/><path d="M16 30 Q6 41 15 49 Q23 45 26 35" fill="none"/></g>
-<g id="eyes"><path d="M15 24 a9 9 0 1 0 18 0 a9 9 0 1 0 -18 0" fill="#fff5da"/><path d="M33 24 a9 9 0 1 0 18 0 a9 9 0 1 0 -18 0" fill="#fff5da"/><path d="M21.5 24 a2.5 2.5 0 1 0 5.0 0 a2.5 2.5 0 1 0 -5.0 0" fill="#41413b"/><path d="M39.5 24 a2.5 2.5 0 1 0 5.0 0 a2.5 2.5 0 1 0 -5.0 0" fill="#41413b"/><path d="M29 34 L36 34 L32 40 Z" fill="#e7b65a"/></g>
-</g>
-</svg>

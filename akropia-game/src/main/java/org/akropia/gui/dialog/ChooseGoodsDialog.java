@@ -1,0 +1,141 @@
+package org.akropia.gui.dialog;
+
+import org.akropia.gui.screen.europe.ChooseGoods;
+import org.akropia.gui.screen.market.SimpleStringConverter;
+import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ButtonsBarYesNo;
+import org.akropia.gui.util.ViewUtil;
+import org.akropia.i18n.I18n;
+import org.akropia.model.Goods;
+
+import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+
+import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+/**
+ * Allows user to choose how many goods wants to transfer.
+ */
+public final class ChooseGoodsDialog extends AbstractMessageWindow {
+
+    final static int MIN_VALUE = 0;
+
+    private Goods actualValue;
+
+    private final Slider slider;
+
+    private final I18n i18n;
+
+    private int maximalNumberToTransfer;
+
+    private final Label labelActualValue;
+
+    private final Label labelCaption;
+
+    private final Label explanation = new Label();
+
+    private final Button cancel;
+
+    @Inject
+    public ChooseGoodsDialog(final ViewUtil viewUtil, final I18n i18n) {
+        super(viewUtil, i18n);
+        this.i18n = Preconditions.checkNotNull(i18n);
+
+        VBox root = new VBox();
+        init(root);
+
+        labelCaption = new Label();
+        explanation.setId("goodsTransferExplanation");
+        explanation.setWrapText(true);
+        explanation.setMaxWidth(420);
+
+        final HBox boxActualValue = new HBox();
+        labelActualValue = new Label();
+        final Label labelValue = new Label(String.valueOf(actualValue));
+        labelValue.setId("goodsTransferAmount");
+        boxActualValue.getChildren().addAll(labelActualValue, labelValue);
+
+        slider = new Slider();
+        slider.setId("goodsTransferSlider");
+        slider.setLabelFormatter(
+                new SimpleStringConverter(this::converToString));
+        slider.setMin(MIN_VALUE);
+        slider.setSnapToTicks(false);
+        slider.setMajorTickUnit(10);
+        slider.setMinorTickCount(1);
+        slider.setBlockIncrement(1);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(false);
+
+        slider.valueProperty().addListener((obj, oldValue, newValue) -> {
+            labelValue.setText(String.valueOf(newValue.intValue()));
+            actualValue = Goods.of(actualValue.getType(), newValue.intValue());
+        });
+
+        final ButtonsBarYesNo buttonsBar = new ButtonsBarYesNo(i18n);
+        buttonsBar.getButtonYes().setId("buttonOk");
+        cancel = buttonsBar.getButtonNo();
+        buttonsBar.getButtonYes().setOnAction(e -> {
+            close();
+        });
+        buttonsBar.getButtonYes().requestFocus();
+        buttonsBar.getButtonYes().disableProperty()
+                .bind(slider.valueProperty().lessThan(1));
+        cancel.setId("buttonCancel");
+        cancel.setOnAction(e -> onCancelDialog());
+
+        root.getChildren().addAll(labelCaption, explanation, boxActualValue,
+                slider, buttonsBar.getContent());
+    }
+
+    public void init(final Goods maximalGoodsToTransfer) {
+        init(maximalGoodsToTransfer, "");
+    }
+
+    public void init(final Goods maximalGoodsToTransfer, final String reason) {
+        actualValue = maximalGoodsToTransfer;
+        explanation.setText(reason);
+        explanation.setVisible(!reason.isEmpty());
+        explanation.setManaged(!reason.isEmpty());
+        this.maximalNumberToTransfer = maximalGoodsToTransfer.getAmount();
+        slider.setMax(maximalGoodsToTransfer.getAmount());
+        slider.setValue(maximalGoodsToTransfer.getAmount());
+        showAndWait();
+    }
+
+    @Override
+    protected void onCancelDialog() {
+        actualValue = Goods.of(actualValue.getType());
+        super.onCancelDialog();
+    }
+
+    @Override
+    public void updateLanguage(final I18n i18n) {
+        setTitle(i18n.get(ChooseGoods.caption));
+        labelCaption.setText(i18n.get(ChooseGoods.caption));
+        labelActualValue.setText(i18n.get(ChooseGoods.selectedAmount));
+        cancel.setText(i18n.get(Dialog.cancel));
+        getScene().getWindow().sizeToScene();
+    }
+
+    public Goods getActualValue() {
+        return actualValue;
+    }
+
+    private String converToString(final Double value) {
+        int v = value.intValue();
+        if (MIN_VALUE == value) {
+            return i18n.get(ChooseGoods.zero);
+        } else if (maximalNumberToTransfer == value) {
+            return i18n.get(ChooseGoods.everything);
+        } else if (v % 10 == 0) {
+            return String.valueOf(v);
+        }
+        return null;
+    }
+
+}

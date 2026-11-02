@@ -77,10 +77,10 @@ documentation changes. Commit sources and assets, not generated HTML. The Pages
 workflow publishes pushed `main` changes; do not duplicate new pages in the
 legacy Maven site or use its old publishing commands.
 
-Preserve `microcol-site` in place as a useful design and development reference,
+Preserve `akropia-site` in place as a useful design and development reference,
 even where its content is outdated. Publish only `docs/` at the project website
-root, `/microcol/`, through GitHub Actions. Exclude `microcol-site` and previously
-generated Maven pages from publication. Do not remove or relocate the source
+root, `https://jajir.github.io/microcol/`, through GitHub Actions. Exclude
+`akropia-site` and previously generated Maven pages from publication. Do not remove or relocate the source
 module unless the user requests it.
 
 # Requirement analysis
@@ -232,10 +232,10 @@ Follow [the functional test contract](docs/functional-tests.md) for every behavi
 change and every change to graphics, CSS, layout, controls or shared UI helpers.
 Select affected [use cases](docs/use-cases.md), preserve their stable IDs, and
 update implementation and verification evidence alongside the change.
-Map changed behavior to named `TC_...` scenarios in `microcol-test`; add or update
+Map changed behavior to named `TC_...` scenarios in `akropia-test`; add or update
 the scenario and relevant rule tests in the same change. Preserve the existing
 fixture, `@Start`, linear commented player steps, page objects and explicit
-verification calls. Assertions in `org.microcol.page` belong only in dedicated
+verification calls. Assertions in `org.akropia.page` belong only in dedicated
 `verify...` methods named for the checked subject, with expected values as
 parameters where appropriate. Keep them out of action/getter/constructor bodies;
 `TC_...` classes call those verification methods, not assertions directly or

@@ -1,4 +1,4 @@
-# MicroCol Dev: automatic development updates
+# Akropia Dev: automatic development updates
 
 Development, integration and publication use **`main`**. After a completed task
 has been checked, its changes are committed and pushed as part of the normal
@@ -8,7 +8,7 @@ the current game download under the [CI filtering contract](#ci-filtering). The 
 becomes available after the build and publication checks finish; saving a file
 or creating a local commit alone does not publish it.
 
-The **MicroCol Dev** launcher checks for the latest successful development build
+The **Akropia Dev** launcher checks for the latest successful development build
 when opened, downloads it if necessary, and starts the game. Install the launcher
 once on the computer where you play. That computer does not need the source
 checkout, Maven, a separately installed Java runtime, or access to the development
@@ -16,10 +16,19 @@ Mac mini.
 
 ## Downloads
 
-- [MicroCol Dev for macOS](https://github.com/jajir/microcol/releases/download/dev/MicroCol-Dev-macos.zip)
-- [MicroCol Dev for Linux](https://github.com/jajir/microcol/releases/download/dev/MicroCol-Dev-linux.tar.gz)
+- [Akropia Dev for macOS](https://github.com/jajir/microcol/releases/download/dev/Akropia-Dev-macos.zip)
+  (pending publication)
+- [Akropia Dev for Linux](https://github.com/jajir/microcol/releases/download/dev/Akropia-Dev-linux.tar.gz)
+  (pending publication)
 - [Development channel and current build](https://github.com/jajir/microcol/releases/tag/dev)
 - [Build progress and failures](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml)
+
+The two Akropia launcher links name assets that the next verified publication
+after [R-0389](requirements/R-0389.md) creates; until that publication is
+verified they do not resolve. Builds and launchers published before the rename
+remain in the development channel under the former product name; an installed
+launcher from that time does not look for the Akropia assets, so install the new
+launcher once it is published.
 
 The macOS launcher selects Apple Silicon or Intel automatically. Linux builds
 currently target x86-64. The release page also links to DMG and DEB installers
@@ -29,27 +38,27 @@ or replacing a system package.
 
 ## Install once, then open the game
 
-On **macOS**, download and extract the launcher ZIP, then move **MicroCol Dev.app**
+On **macOS**, download and extract the launcher ZIP, then move **Akropia Dev.app**
 to Applications (or your personal Applications folder). Open that app whenever
-you want to test the current game. The included **MicroCol Dev.command** is an
+you want to test the current game. The included **Akropia Dev.command** is an
 alternative that displays download progress and errors in Terminal.
 
 On **Linux x86-64**, extract the launcher archive and run:
 
 ```sh
-./microcol-dev/install.sh
+./akropia-dev/install.sh
 ```
 
-This installs into your user account and adds **MicroCol Dev** to the application
+This installs into your user account and adds **Akropia Dev** to the application
 menu; it does not require `sudo`. You can also run the extracted
-`microcol-dev/microcol-dev` directly. Linux needs Bash, curl, tar, sha256sum and the
+`akropia-dev/akropia-dev` directly. Linux needs Bash, curl, tar, sha256sum and the
 usual JavaFX desktop libraries, including GTK 3. Java is bundled with the game.
 
 The first start needs internet access and downloads roughly 60 MB. Later starts
 download a game archive only when its build ID changes. If a first download
 fails, reconnect and open the launcher again. On macOS, a failed Finder launch
 shows a dialog and adds one short record (time and exit status, no console
-text) to `~/Library/Logs/MicroCol/microcol.log`; the launcher's console output
+text) to `~/Library/Logs/Akropia/akropia.log`; the launcher's console output
 is not kept, so no player or save text is copied. That log is bounded to three
 files of 5 MiB and also holds the game's own failure records, see
 [local diagnostics](diagnostics.md#macos-launcher).
@@ -64,8 +73,8 @@ The command-line launcher supports:
 | `--rollback` | Select the previous installed build and hold back the rejected build until a different one appears. Open the launcher again to play. |
 | `--version` | Show the bootstrap launcher's version. |
 
-On macOS, pass these options to `MicroCol Dev.command`; the installed Linux
-command is normally `~/.local/share/microcol-dev/launcher/microcol-dev`.
+On macOS, pass these options to `Akropia Dev.command`; the installed Linux
+command is normally `~/.local/share/akropia-dev/launcher/akropia-dev`.
 
 ## What happens after a change
 
@@ -87,7 +96,7 @@ command is normally `~/.local/share/microcol-dev/launcher/microcol-dev`.
 4. Only after those outputs are available does publication update the small
    manifest in the `dev` release. Publication is serialized and checks source
    freshness, so an older workflow finishing later cannot roll the channel back.
-5. On its next launch, MicroCol Dev checks that manifest and selects the archive
+5. On its next launch, Akropia Dev checks that manifest and selects the archive
    matching the local operating system and CPU. It verifies the SHA-256 checksum,
    extracts into a new build directory and then switches the current installation.
 
@@ -196,14 +205,14 @@ version display includes the CI build ID. Use that ID when reporting a problem;
 the shared snapshot version alone does not identify the tested change.
 
 Application downloads and saved games live in different directories. Updating
-an application does not delete `~/.microcol`, where the game stores its files.
+an application does not delete `~/.akropia`, where the game stores its files.
 The current development and manually installed game use the same saved-game
 location. Before testing changes that affect save compatibility, back up important
 saves. Returning to an older binary does not reverse a newer save-file format.
 
 Downloaded applications are stored in
-`~/Library/Application Support/MicroCol Dev/versions/` on macOS and
-`${XDG_DATA_HOME:-~/.local/share}/microcol-dev/versions/` on Linux. Builds are kept
+`~/Library/Application Support/Akropia Dev/versions/` on macOS and
+`${XDG_DATA_HOME:-~/.local/share}/akropia-dev/versions/` on Linux. Builds are kept
 in separate directories and are not automatically deleted, because a running
 game may still use an older directory. To reclaim space, close all game instances,
 use `--status` to identify current and previous builds, and remove only older
@@ -227,18 +236,18 @@ update transport used here.
 
 The [development workflow](../.github/workflows/dev-builds.yml) runs Maven builds
 and then publishes their verified outputs. Packaging belongs to the native Maven
-modules and [microcol-launcher](../microcol-launcher/pom.xml): Assembly creates
+modules and [akropia-launcher](../akropia-launcher/pom.xml): Assembly creates
 ZIP/TAR downloads, resource configuration supplies metadata and icons, and AntRun
 creates SHA-256 sidecars. Each module writes its release assets into
 `target/dev-assets/`; GitHub Actions collects those files without repackaging them.
 
-[microcol-build-tests](../microcol-build-tests/pom.xml) runs Java/JUnit checks of
+[akropia-build-tests](../akropia-build-tests/pom.xml) runs Java/JUnit checks of
 the actual launcher packages and publication behavior. Its native profiles run
 Failsafe checks after the game packages exist, including archive permissions and
 paths, real game test counts, the bundled JVM, and Linux startup under Xvfb.
 The workflow calls `mvn verify` so these checks must pass before upload.
 
-A separate required `functional` job runs `microcol-test` and its game dependency
+A separate required `functional` job runs `akropia-test` and its game dependency
 inside the same Docker image used for local UI tests, on JDK 17 with TestFX
 and native Glass under Xvfb with Openbox. It includes all numbered player
 scenarios, uploads
@@ -290,12 +299,12 @@ layout and executable modes, installer signatures and SHA-256 sidecars, and
 executed the Java runtime extracted from the archive. Linux additionally opened
 a usable production game window under Xvfb.
 
-A clean `mvn -pl microcol-build-tests -am test` separately passed its 31 behavior
+A clean `mvn -pl akropia-build-tests -am test` separately passed its 31 behavior
 tests without prebuilt archives. `verify` then packaged and checked both
 bootstraps through Failsafe. Launcher packaging also passed a repeated run that
 removed stale output. The documentation passed six link-hook tests and a strict
 build of the staged source tree. Local logs and reports are retained under
-`~/Library/Logs/Microcol/maven-distribution/2026-10-11/`.
+`$PRE_R0389_LOGS/maven-distribution/2026-10-11/`.
 
 The disposable Linux test host required `jq`, `unzip` and `x11-utils` in addition
 to its existing packaging libraries; CI declares these dependencies explicitly.
@@ -319,10 +328,10 @@ These local checks are separate from GitHub publication. For a specific commit,
 follow its [Actions run](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml)
 and the build/commit recorded in the [development channel](https://github.com/jajir/microcol/releases/tag/dev).
 A successful native build with a failed publishing job is not an available update.
-Local evidence is retained under `~/Library/Logs/Microcol/dev-delivery/2026-10-11/`
-and `~/Library/Logs/Microcol/dev-ci-smoke/`.
+Local evidence is retained under `$PRE_R0389_LOGS/dev-delivery/2026-10-11/`
+and `$PRE_R0389_LOGS/dev-ci-smoke/`.
 
-The user subsequently confirmed that MicroCol Dev opened the game on their
+The user subsequently confirmed that Akropia Dev opened the game on their
 MacBook after approving it in macOS. This is a user-reported launch result;
 full gameplay and audio are not covered by the automated checks. The packages
 remain unsigned and unnotarized.

@@ -21,7 +21,7 @@ import tempfile
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
-MANIFEST = ROOT / "microcol-game/src/graphics/export-manifest.json"
+MANIFEST = ROOT / "akropia-game/src/graphics/export-manifest.json"
 WITH_FONTS = Path(__file__).with_name("with-fonts.py")
 SVG = "{http://www.w3.org/2000/svg}"
 RENDERS = ("native", "size", "zoom", "viewbox", "crop", "atlas", "preserved")
@@ -303,7 +303,7 @@ def require(jobs):
 
 def destination(output, root, manifest):
     if output is None:
-        return Path(tempfile.mkdtemp(prefix="microcol-graphics-export-"))
+        return Path(tempfile.mkdtemp(prefix="akropia-graphics-export-"))
     path = Path(output).resolve()
     for field in ("sourceRoot", "runtimeRoot"):
         protected = (root / manifest[field]).resolve()
@@ -327,11 +327,11 @@ def run(groups=(), output=None, check=False, install=False, manifest=None, root=
     if exports:
         require(exports)
     keep = not install and (output is not None or not check)
-    work = None if keep else tempfile.TemporaryDirectory(prefix="microcol-graphics-check-")
+    work = None if keep else tempfile.TemporaryDirectory(prefix="akropia-graphics-check-")
     directory = destination(output, root, manifest) if keep else Path(work.name)
     stale = []
     try:
-        with tempfile.TemporaryDirectory(prefix="microcol-graphics-helpers-") as helpers:
+        with tempfile.TemporaryDirectory(prefix="akropia-graphics-helpers-") as helpers:
             for job in exports:
                 render(job, directory, Path(helpers))
         if check:

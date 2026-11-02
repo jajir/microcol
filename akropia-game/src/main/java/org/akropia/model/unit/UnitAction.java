@@ -1,0 +1,61 @@
+package org.akropia.model.unit;
+
+import org.akropia.model.AbstractUnit;
+import org.akropia.model.Model;
+import org.akropia.model.store.UnitActionNoActionPo;
+import org.akropia.model.store.UnitActionPo;
+
+/**
+ * Unit could be send to perform some activity that is longer than one turn.
+ * This state will be stored in untit's activity. There are actions:
+ * <ul>
+ * <li>Fortify</li>
+ * <li>Wait one turn</li>
+ * <li>Plow field</li>
+ * <li>Build road - unit build road</li>
+ * <li>Sentry - Unit actively look for opponents. It looks within some limited
+ * range.</li>
+ * <li>Explore - unit will try to find new undiscovered areas</li>
+ * </ul>
+ */
+public interface UnitAction {
+
+    /**
+     * Verify that unit doesn't execute any action.
+     *
+     * @return Return <code>true</code> when unit is waiting for user's command
+     *         otherwise unit is executing action and <code>false</code> is
+     *         returned.
+     */
+    default boolean isNoAction() {
+        return false;
+    }
+
+    /**
+     * Persist action state to persistent object.
+     *
+     * @return Return unit action persistent object.
+     */
+    default UnitActionPo save() {
+        return new UnitActionNoActionPo();
+    }
+
+    /**
+     * Get unit action type.
+     *
+     * @return Return unit action type.
+     */
+    UnitActionType getType();
+
+    /**
+     * This should be called when player start turn.
+     *
+     * @param model required model
+     * @param unit  required unit
+     * @return whether the continuing action completed
+     */
+    default boolean startTurn(final Model model, final AbstractUnit unit) {
+        return false;
+    }
+
+}

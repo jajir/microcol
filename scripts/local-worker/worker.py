@@ -16,7 +16,7 @@ import urllib.request
 
 
 ROOT = Path(__file__).resolve().parents[2]
-LOCK = Path.home() / "Library/Application Support/Microcol/local-worker/active.lock"
+LOCK = Path.home() / "Library/Application Support/Akropia/local-worker/active.lock"
 
 
 def read_json(path):

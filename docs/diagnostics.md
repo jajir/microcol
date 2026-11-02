@@ -10,17 +10,17 @@ latest repair has verified this behavior; see [Evidence](#evidence).
 
 | Platform | Location |
 | --- | --- |
-| macOS | `~/Library/Logs/MicroCol/microcol.log` |
-| Linux | `$XDG_STATE_HOME/microcol/logs/microcol.log`, or `~/.local/state/microcol/logs/microcol.log` when `XDG_STATE_HOME` is unset or not absolute |
-| Windows | `%LOCALAPPDATA%\MicroCol\Logs\microcol.log` (not a release target) |
+| macOS | `~/Library/Logs/Akropia/akropia.log` |
+| Linux | `$XDG_STATE_HOME/akropia/logs/akropia.log`, or `~/.local/state/akropia/logs/akropia.log` when `XDG_STATE_HOME` is unset or not absolute |
+| Windows | `%LOCALAPPDATA%\Akropia\Logs\akropia.log` (not a release target) |
 
-The log is never inside the save folder `~/.microcol`, so saved games and the
+The log is never inside the save folder `~/.akropia`, so saved games and the
 settings backup performed by `SettingService` neither move nor delete it.
 
 ## Retention
 
 The whole diagnostic set is at most three files, including the active file:
-`microcol.log`, `microcol.1.log` and `microcol.2.log`, each at most 5 MiB
+`akropia.log`, `akropia.1.log` and `akropia.2.log`, each at most 5 MiB
 (15 MiB in total). When the active file would exceed 5 MiB, the oldest archive
 is removed and the others move one step older. The game and the macOS launcher
 wrapper write to this same set with the same rule. No other copy of console
@@ -40,7 +40,7 @@ line followed by up to eight stack-frame lines:
    `TURN_PREPARATION_REJECTED`. The macOS launcher wrapper adds
    `LAUNCHER_FAILED` with the numeric exit status.
 5. The exception class chain, at most four classes.
-6. At most eight stack frames from `org.microcol.*` as class, method and line
+6. At most eight stack frames from `org.akropia.*` as class, method and line
    number.
 
 Every non-fixed value (build, platform fields, class and method names) is
@@ -105,7 +105,7 @@ continue:
 
 A failed startup no longer prints a raw stack trace (exception messages may
 hold paths). It records `STARTUP_FAILED` with the safe fields above, prints
-`MicroCol diagnostic log: <path>` and exits with status 1. If even the log
+`Akropia diagnostic log: <path>` and exits with status 1. If even the log
 cannot be prepared, only the exception class is printed. No dialog is shown by
 the game; the macOS Finder launcher shows its own dialog, see below.
 
@@ -126,7 +126,7 @@ native failure dialog and adds one fixed line to the diagnostic set above:
 
 The wrapper exits with status 1 as before, applies the same three-file,
 5 MiB-per-file rotation, and never fails because the log is unwritable. It
-deletes the former `launcher.log` in `~/Library/Application Support/MicroCol
+deletes the former `launcher.log` in `~/Library/Application Support/Akropia
 Dev/`, a raw console copy kept by earlier versions. The Terminal launcher still
 prints errors to the terminal.
 
@@ -137,7 +137,7 @@ prints errors to the terminal.
 - Manual Save and turn-start checkpoint failures record and report through the
   shared path, but no UI scenario covers them yet.
 - The launcher records only the exit status, not why the launcher failed.
-- Two MicroCol processes writing the same log may race on rotation.
+- Two Akropia processes writing the same log may race on rotation.
 - Existing console loggers still print exception messages to the console.
 
 ## Evidence

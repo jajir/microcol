@@ -35,7 +35,7 @@ elif 'run' in a:
     out = Path(a[a.index('-v') + 1].removesuffix(':/results')) / 'run-export'
     out.mkdir()
     mode = os.environ.get('DOCKER_MODE', '')
-    is_ui = 'MICROCOL_TEST_MODULE=microcol-test' in a
+    is_ui = 'AKROPIA_TEST_MODULE=akropia-test' in a
     if mode == 'hang' and is_ui:
         time.sleep(20)
     time.sleep(0.2)
@@ -84,8 +84,8 @@ class VerificationTest(unittest.TestCase):
         return path
 
     def setup_project(self):
-        for module, names in (("microcol-game", ["ModelTest"]),
-                              ("microcol-test", ["FirstTest", "SecondTest"])):
+        for module, names in (("akropia-game", ["ModelTest"]),
+                              ("akropia-test", ["FirstTest", "SecondTest"])):
             for name in names:
                 self.source(module, name, "class " + name + " { @Test void test_run() {} }")
         subprocess.run(["git", "init", "-q", str(self.root)], check=True)
@@ -106,20 +106,20 @@ class VerificationTest(unittest.TestCase):
         self.addCleanup(environment.stop)
 
     def test_source_inventory_inheritance_literals_and_new_tests(self):
-        self.source("microcol-game", "BaseTest", "abstract class BaseTest { @Test void inherited() {} }")
-        self.source("microcol-game", "ChildTest", '''class ChildTest extends BaseTest {
+        self.source("akropia-game", "BaseTest", "abstract class BaseTest { @Test void inherited() {} }")
+        self.source("akropia-game", "ChildTest", '''class ChildTest extends BaseTest {
             // @Test void commented() {}
             String example = "@Test void quoted() {}";
             @ParameterizedTest @ValueSource(ints={1,2}) void parameter(int n) {}
         }''')
-        self.source("microcol-game", "HelperTest", "class HelperTest {}")
-        self.assertEqual(verify.inventory(self.root, "microcol-game"),
+        self.source("akropia-game", "HelperTest", "class HelperTest {}")
+        self.assertEqual(verify.inventory(self.root, "akropia-game"),
                          {"sample.ChildTest": ["inherited", "parameter"]})
-        self.source("microcol-game", "NewTest", "class NewTest { @Test void added() {} }")
-        self.assertIn("sample.NewTest", verify.inventory(self.root, "microcol-game"))
-        self.source("microcol-game", "DynamicTest", "class DynamicTest { @TestFactory Object generated() {} }")
+        self.source("akropia-game", "NewTest", "class NewTest { @Test void added() {} }")
+        self.assertIn("sample.NewTest", verify.inventory(self.root, "akropia-game"))
+        self.source("akropia-game", "DynamicTest", "class DynamicTest { @TestFactory Object generated() {} }")
         with self.assertRaisesRegex(ValueError, "Unsupported"):
-            verify.inventory(self.root, "microcol-game")
+            verify.inventory(self.root, "akropia-game")
 
     def test_balancing_covers_all_classes_once(self):
         groups = verify.partition(["a", "b", "c", "d"], 2, {"a": 10, "b": 5, "c": 3, "d": 2})
@@ -169,12 +169,12 @@ class VerificationTest(unittest.TestCase):
 
     def test_snapshot_preserves_dirty_untracked_sources_and_rejects_edits(self):
         self.setup_project()
-        path = self.root / "microcol-game/pom.xml"
+        path = self.root / "akropia-game/pom.xml"
         path.write_text(POM + "\n")
         (self.root / "new.txt").write_text("untracked")
         identity = verify.snapshot(self.root, self.root / "target/source")
         self.assertEqual((self.root / "target/source/new.txt").read_text(), "untracked")
-        self.assertIn("microcol-game/pom.xml", identity["files"])
+        self.assertIn("akropia-game/pom.xml", identity["files"])
         copy = verify.shutil.copy2
 
         def change_during_copy(source, destination):
@@ -198,7 +198,7 @@ class VerificationTest(unittest.TestCase):
         for result in results:
             self.assertEqual(sum(g["counts"]["tests"] for g in result["groups"]), 3)
         events = [json.loads(line) for line in self.events.read_text().splitlines()]
-        ui_starts = [e["time"] for e in events if "MICROCOL_TEST_MODULE=microcol-test" in e.get("args", [])]
+        ui_starts = [e["time"] for e in events if "AKROPIA_TEST_MODULE=akropia-test" in e.get("args", [])]
         ui_ends = [e["time"] for e in events if "-ui-" in e.get("done", "")]
         self.assertLess(max(ui_starts[:2]), min(ui_ends[:2]))
 
@@ -207,7 +207,7 @@ class VerificationTest(unittest.TestCase):
         selections = []
         for index in range(10):
             name = "TC_%02d_Test" % index
-            self.source("microcol-test", name, "class " + name
+            self.source("akropia-test", name, "class " + name
                         + " { @Test void test_run() {} @Test void slower_test() {} }")
             selections.append("sample." + name + "#test_run")
         path = self.root / "scripts/ui-tests/smoke.json"
@@ -217,7 +217,7 @@ class VerificationTest(unittest.TestCase):
 
     def test_model_only_runs_all_model_tests_without_ui(self):
         self.setup_smoke()
-        self.source("microcol-game", "ConnectorTest", "class ConnectorTest { @Test void test_run() {} }")
+        self.source("akropia-game", "ConnectorTest", "class ConnectorTest { @Test void test_run() {} }")
         with patch.object(verify, "ROOT", self.root):
             self.assertEqual(verify.main(["--model"]), 0)
         directory = next((self.root / "target/verification").glob("run-*"))
@@ -226,12 +226,12 @@ class VerificationTest(unittest.TestCase):
         self.assertEqual(summary["scope"], "model")
         self.assertEqual(summary["workers"], 1)
         self.assertEqual(len(summary["groups"]), 1)
-        self.assertEqual(set(manifest["expected"]), {"microcol-game"})
+        self.assertEqual(set(manifest["expected"]), {"akropia-game"})
         self.assertEqual(manifest["ui_groups"], [])
         group = summary["groups"][0]
         self.assertEqual(group["counts"]["tests"], 2)
         self.assertEqual(set(group["expected"]), {"sample.ModelTest", "sample.ConnectorTest"})
-        self.assertIn("MICROCOL_TEST_MODULE=microcol-game", group["command"])
+        self.assertIn("AKROPIA_TEST_MODULE=akropia-game", group["command"])
 
     def test_model_and_smoke_are_separate_selections(self):
         with self.assertRaises(SystemExit) as error:
@@ -250,7 +250,7 @@ class VerificationTest(unittest.TestCase):
         self.assertEqual(summary["workers"], 1)
         self.assertEqual(len(summary["groups"]), 1)
         group = summary["groups"][0]
-        self.assertEqual(set(manifest["expected"]), {"microcol-test"})
+        self.assertEqual(set(manifest["expected"]), {"akropia-test"})
         self.assertEqual(group["counts"]["tests"], 12)
         self.assertNotIn("sample.ModelTest", group["expected"])
         selection = next(arg for arg in group["command"] if arg.startswith("-Dtest="))
@@ -261,7 +261,7 @@ class VerificationTest(unittest.TestCase):
     def test_smoke_rejects_duplicate_or_unknown_scenarios(self):
         path = self.setup_smoke()
         selections = json.loads(path.read_text())
-        expected = verify.inventory(self.root, "microcol-test")
+        expected = verify.inventory(self.root, "akropia-test")
         path.write_text(json.dumps([selections[0]] * 10))
         with self.assertRaisesRegex(ValueError, "distinct"):
             verify.smoke_inventory(self.root, expected)
@@ -338,7 +338,7 @@ class VerificationTest(unittest.TestCase):
         self.assertIn("startup timed out", summary["error"])
 
     def test_managed_group_timeout_cleans_up_both_owned_ui_containers(self):
-        with patch.dict(os.environ, {"MICROCOL_TEST_PROCESS_GROUP": "1"}):
+        with patch.dict(os.environ, {"AKROPIA_TEST_PROCESS_GROUP": "1"}):
             self.test_timeout_cleans_up_both_owned_ui_containers()
 
     def test_timeout_cleans_up_both_owned_ui_containers(self):
@@ -360,7 +360,7 @@ class VerificationTest(unittest.TestCase):
         try:
             deadline = time.monotonic() + 5
             while time.monotonic() < deadline:
-                if self.events.exists() and self.events.read_text().count('MICROCOL_TEST_MODULE=microcol-test') == 2:
+                if self.events.exists() and self.events.read_text().count('AKROPIA_TEST_MODULE=akropia-test') == 2:
                     break
                 time.sleep(0.02)
             else:

@@ -1,14 +1,14 @@
-# Grafické podklady a jejich použití v MicroCol
+# Grafické podklady a jejich použití v Akropia
 
 ## R-0390 — Řecký přístav s chrámem
 
 1. **Vybráno 1. listopadu 2026:** uživatel schválil variantu 7 z přehledu návrhů — malý chrám na návrší, olivovníky a nízké řecké domy. [R-0390](requirements/done/R-0390.md) vlastní tuto úpravu ilustrace; názvy a herní pravidla se nemění.
-2. Editovatelný [vektorový zdroj](../microcol-game/src/graphics/europe-harbor.svg) má pojmenované skupiny chrámu, jednotlivých domů a původního okolí. Neobsahuje bitmapy. Původní zástavba zůstává ve zdroji pod ořezem jako reference; zobrazenou zástavbu tvoří nové vektorové tvary. Přední molo, jeřáb, moře a obloha se zachovávají. Samostatná směrová grafika ani UI nejsou změněné.
+2. Editovatelný [vektorový zdroj](../akropia-game/src/graphics/europe-harbor.svg) má pojmenované skupiny chrámu, jednotlivých domů a původního okolí. Neobsahuje bitmapy. Původní zástavba zůstává ve zdroji pod ořezem jako reference; zobrazenou zástavbu tvoří nové vektorové tvary. Přední molo, jeřáb, moře a obloha se zachovávají. Samostatná směrová grafika ani UI nejsou změněné.
 3. Tlumené krémové omítky, terakotové střechy, olivová zeleň a písková skála používají tmavé obrysy přibližně 3 px v původním plátně. Export zachovává rozměry 1586 × 992 a současné vykreslení EuropeBackground.
 4. Opakovatelný export z kořene repozitáře:
 
    ```sh
-   rsvg-convert -w 1586 -h 992 -o microcol-game/src/main/resources/images/europe-harbor.png microcol-game/src/graphics/europe-harbor.svg
+   rsvg-convert -w 1586 -h 992 -o akropia-game/src/main/resources/images/europe-harbor.png akropia-game/src/graphics/europe-harbor.svg
    ```
 
 5. Vektorový zdroj, opakovatelný export a herní snímky byly zkontrolovány 1. listopadu 2026. Cílené UI a smoke prošly; modelové testy mají pouze uživatelem povolené původní selhání fregaty. Viz [přesné výsledky a vizuální evidence](functional-tests.md#r-0390-greek-sanctuary-harbor-2026-11-01).
@@ -17,9 +17,9 @@
 ## Řecké jednotky — první návrh, 1. listopadu 2026
 
 1. Uživatel vybral **01 — Výrazná linka** a výslovně požádal o nasazení a push bez testů; [R-0386](requirements/done/R-0386.md). [Vybraný návrh](assets/greek-units-01-2026-11-01/selected-reference.png) je referenční rastr. Nové postavy nahrazují kolonisty, profesní specialisty, vozy, děla a lodě ve stávajícím společném atlasu. Názvy, schopnosti a pravidla zůstávají beze změny.
-2. Produkční [units.svg](../microcol-game/src/graphics/units.svg) obsahuje 40 pojmenovaných skupin U01–U35 a E01–E05, celkem 764 skutečných vektorových cest s plnými výplněmi; neobsahuje bitmapy, externí obrázky ani filtry. Kontury vznikly převodem vybrané předlohy a sjednocením barevných ploch; [záznam výřezů a palety](assets/greek-units-01-2026-11-01/tracing.json). Nahrazuje původní rastrovou kompozici z 25. října; historické podklady zůstávají zachované.
+2. Produkční [units.svg](../akropia-game/src/graphics/units.svg) obsahuje 40 pojmenovaných skupin U01–U35 a E01–E05, celkem 764 skutečných vektorových cest s plnými výplněmi; neobsahuje bitmapy, externí obrázky ani filtry. Kontury vznikly převodem vybrané předlohy a sjednocením barevných ploch; [záznam výřezů a palety](assets/greek-units-01-2026-11-01/tracing.json). Nahrazuje původní rastrovou kompozici z 25. října; historické podklady zůstávají zachované.
 3. Atlas má nadále 360 × 225 px, osm sloupců a pět řádků po 45 px; ilustrace jsou vystředěné do prostoru nejvýše 40 × 40 px. Stávající poskytovatel zachovává přednost výbavy, poškozený katapult a tři zrcadlené varianty transportních lodí. Změna dosahuje do mapy, kolonie, Evropy, boje a nápovědy přes stejný resource, bez změny Java kódu.
-4. Opakovatelný export z kořene repozitáře: `rsvg-convert -o microcol-game/src/main/resources/images/units.png microcol-game/src/graphics/units.svg`. Maven export nespouští. Opakovaný export byl bajtově shodný; kontrola XML potvrdila pouze vektorové elementy. [Vizuálně zkontrolovaný export ve zvětšení a 45 px](assets/greek-units-01-2026-11-01/vector-preview.png) ukazuje všech 40 buněk. Jde o náhled atlasu, nikoli snímek běžící hry.
+4. Opakovatelný export z kořene repozitáře: `rsvg-convert -o akropia-game/src/main/resources/images/units.png akropia-game/src/graphics/units.svg`. Maven export nespouští. Opakovaný export byl bajtově shodný; kontrola XML potvrdila pouze vektorové elementy. [Vizuálně zkontrolovaný export ve zvětšení a 45 px](assets/greek-units-01-2026-11-01/vector-preview.png) ukazuje všech 40 buněk. Jde o náhled atlasu, nikoli snímek běžící hry.
 5. Model/JUnit, UI, smoke a dokumentační testy nebyly na výslovnou žádost uživatele spuštěny. Tato dodávka není regresně ověřená; historická testová evidence se na ni nepřenáší. Místní balíček se sestavuje s vynecháním testů; push sám nepotvrzuje publikaci nové distribuce.
 
 
@@ -34,7 +34,7 @@
 
 ## Středomořské názvosloví zboží — R-0394, 2. listopadu 2026
 
-1. [R-0394](requirements/R-0394.md) přejmenovává zdroje i runtime obrázky podle závazného mapování: `production-goods/good-grain.svg`, `good-olives`, `good-grapes`, `good-wool` (ovce), `good-clay`, `good-olive-oil`, `good-wine`, `good-cloth`, `good-amphorae`, `good-weapons`, `good-torches` a `good-owls`; samostatné runtime soubory jsou `good-torches.png` a `good-owls.png`. Budovy mají soubory `SMALL_WINERY`/`WINERY`/`LARGE_WINERY`, `SMALL_OIL_PRESS`/`OIL_PRESS`/`LARGE_OIL_PRESS` a `SMALL_POTTERY`/`POTTERY`/`LARGE_POTTERY`. Přesunuté soubory mají bajtově shodný obsah; [manifest exportu](../microcol-game/src/graphics/export-manifest.json) zachovává 62 položek.
+1. [R-0394](requirements/R-0394.md) přejmenovává zdroje i runtime obrázky podle závazného mapování: `production-goods/good-grain.svg`, `good-olives`, `good-grapes`, `good-wool` (ovce), `good-clay`, `good-olive-oil`, `good-wine`, `good-cloth`, `good-amphorae`, `good-weapons`, `good-torches` a `good-owls`; samostatné runtime soubory jsou `good-torches.png` a `good-owls.png`. Budovy mají soubory `SMALL_WINERY`/`WINERY`/`LARGE_WINERY`, `SMALL_OIL_PRESS`/`OIL_PRESS`/`LARGE_OIL_PRESS` a `SMALL_POTTERY`/`POTTERY`/`LARGE_POTTERY`. Přesunuté soubory mají bajtově shodný obsah; [manifest exportu](../akropia-game/src/graphics/export-manifest.json) zachovává 62 položek.
 2. Výrobní symboly, které stále ukazovaly nahrazené zboží, nahradily beze změny cest schválené vektory R-0384: hrozny místo tabákového listu u tří vinařských dílen, amfora místo napnuté kůže u tří hrnčířských dílen, džbán olivového oleje místo destilačního kotle u malé lisovny a v `terrain-symbols.svg` hlína, ovce, hrozny a olivy místo kůže, bavlny, tabáku a cukrové třtiny. Sudy obou větších lisoven zůstávají. Přesunuté, ale nezměněné SVG si ponechávají původní text `title`/`desc`; změněné soubory mají nové názvy.
 3. Stav: zdroje upraveny, **runtime PNG sedmi budov a `terrain-symbols.png` ještě nejsou znovu exportované** a vzhled ve hře v 45/22 px není ověřen. Evidence patří do [funkčních testů](functional-tests.md#r-0394-mediterranean-goods-terminology-2026-11-02).
 
@@ -48,15 +48,15 @@ Navazující [R-0394](requirements/R-0394.md) připravuje sjednocení názvů na
 ![Nové vektorové ikony ve třech velikostech](assets/greek-goods-15-2026-11-01/vector-preview.png)
 
 3. Stávající identifikátory a textové názvy zůstávají zachované. Přechod na antickou ekonomiku a překlady není součástí této grafické dodávky. Mapování: `corn` → obilí, `sugar` → olivy, `tobacco` → hrozny, `cotton` → ovce, `fur` → hlína, `rum` → olej, `cigars` → víno, `silk` → látka, `coat` → amfory, `musket` → štít s kopím, `cross` → pochodeň, `bell` → sova. Dřevo, ruda, stříbro, kůň, zboží, nástroje a kladiva mají odpovídající nový vzhled. Jde záměrně o přechodný stav: obrázek již ukazuje řecký protějšek, dosavadní text ještě původní komoditu.
-4. Zdroje jsou v `microcol-game/src/graphics/production-goods/good-*.svg`. Sdílený `ImageLoaderGoods` dál čte šestnáct polí 45 × 45 px z `goods-olive.png` a samostatné `good-bell.png`, `good-cross.png`, `good-hammer.png`. Model, AI, načítání, skladové hodnoty ani rozložení se nemění. Následující export z kořene repozitáře používá Python standardní knihovnu a `rsvg-convert`; Maven jej nespouští.
+4. Zdroje jsou v `akropia-game/src/graphics/production-goods/good-*.svg`. Sdílený `ImageLoaderGoods` dál čte šestnáct polí 45 × 45 px z `goods-olive.png` a samostatné `good-bell.png`, `good-cross.png`, `good-hammer.png`. Model, AI, načítání, skladové hodnoty ani rozložení se nemění. Následující export z kořene repozitáře používá Python standardní knihovnu a `rsvg-convert`; Maven jej nespouští.
 
 ```sh
 python3 - <<'PY'
 from pathlib import Path
 import subprocess
 from xml.etree import ElementTree as ET
-source = Path('microcol-game/src/graphics/production-goods')
-output = Path('microcol-game/src/main/resources/images')
+source = Path('akropia-game/src/graphics/production-goods')
+output = Path('akropia-game/src/main/resources/images')
 names = 'corn sugar tobacco cotton fur lumber ore silver horse rum cigars silk coat goods tools musket'.split()
 ns = 'http://www.w3.org/2000/svg'
 ET.register_namespace('', ns)
@@ -100,7 +100,7 @@ PY
 
 </details>
 
-4. Náhledy používají existující [vektorové zdroje budov](../microcol-game/src/graphics/colony-buildings/README.md), produkční symboly a herní atlasy z revize `b94e1f8017f19e0277da748d73d8b29e42f3379e`. PNG jsou návrhové snímky, nikoli nové herní ilustrace nebo runtime exporty. [Evidence](publishing.md#r-0366-compact-building-proposals-2026-10-30) odděluje kontrolu náhledů od budoucí herní přejímky.
+4. Náhledy používají existující [vektorové zdroje budov](../akropia-game/src/graphics/colony-buildings/README.md), produkční symboly a herní atlasy z revize `b94e1f8017f19e0277da748d73d8b29e42f3379e`. PNG jsou návrhové snímky, nikoli nové herní ilustrace nebo runtime exporty. [Evidence](publishing.md#r-0366-compact-building-proposals-2026-10-30) odděluje kontrolu náhledů od budoucí herní přejímky.
 
 ## Zarovnání budov — dva navazující návrhy, 30. října 2026
 
@@ -162,13 +162,13 @@ PY
 ## Produkční ikony — vybraná varianta 3, 30. října 2026
 
 1. Uživatel vybral **Z3 + K3 + M3** z [návrhů R-0363](#zvony-krize-a-kladiva-tri-navrhy-30-rijna-2026) a zadal jejich použití v [R-0365](requirements/done/R-0365.md). Zvon má dřevěný závěs, kříž podstavec a kladivo rozštěpenou hlavu. Geometrie i barvy schválených SVG jsou zachované.
-2. Produkční zdroje jsou [good-bell.svg](../microcol-game/src/graphics/production-goods/good-owls.svg), [good-cross.svg](../microcol-game/src/graphics/production-goods/good-torches.svg) a [good-hammer.svg](../microcol-game/src/graphics/production-goods/good-hammer.svg). Každý má plátno 64 × 64, pojmenované vektorové skupiny a průhledné okolí. Neobsahuje rastrové vložky ani externí odkazy.
-3. Opakovatelný export vytváří stejnojmenné průhledné **45 × 45 px PNG** v `microcol-game/src/main/resources/images/`. `ImageLoaderGoods` je načítá pod původními aliasy pro sdílený `GoodsImageProvider`; ostatních šestnáct ikon zůstává v `goods-olive.png`. Staré buňky background atlasu se pro tyto tři produkty už nepoužívají. Maven export nespouští.
+2. Produkční zdroje jsou [good-bell.svg](../akropia-game/src/graphics/production-goods/good-owls.svg), [good-cross.svg](../akropia-game/src/graphics/production-goods/good-torches.svg) a [good-hammer.svg](../akropia-game/src/graphics/production-goods/good-hammer.svg). Každý má plátno 64 × 64, pojmenované vektorové skupiny a průhledné okolí. Neobsahuje rastrové vložky ani externí odkazy.
+3. Opakovatelný export vytváří stejnojmenné průhledné **45 × 45 px PNG** v `akropia-game/src/main/resources/images/`. `ImageLoaderGoods` je načítá pod původními aliasy pro sdílený `GoodsImageProvider`; ostatních šestnáct ikon zůstává v `goods-olive.png`. Staré buňky background atlasu se pro tyto tři produkty už nepoužívají. Maven export nespouští.
 
    ```sh
-   for svg in microcol-game/src/graphics/production-goods/*.svg; do
+   for svg in akropia-game/src/graphics/production-goods/*.svg; do
      name=$(basename "$svg" .svg)
-     rsvg-convert -w 45 -h 45 -o "microcol-game/src/main/resources/images/$name.png" "$svg"
+     rsvg-convert -w 45 -h 45 -o "akropia-game/src/main/resources/images/$name.png" "$svg"
    done
    ```
 
@@ -204,7 +204,7 @@ PY
 
 1. Uživatel vybral **návrh 8 — Lehký nadhled** z [pěti jednodušších sad](#budovy-pet-jednodussich-navrhu-podle-hlavni-mapy-30-rijna-2026) a požádal o jeho nasazení v [R-0361](requirements/done/R-0361.md). Všech 41 podob je překreslených do skutečných SVG: jednoduché tvary, úzká boční stěna, mírně nepravidelná tmavá linka a jednolité krémové, cihlové, olivové a tyrkysové plochy. Nejde o vložení rastrového návrhu do SVG ani o jeho automatické trasování.
 2. Přístřešky, přízemní dílny a patrové manufaktury zachovávají profesní atributy i skutečné počty úrovní. Stáje začínají ohradou; sklady, škola, církev, opevnění a přístav používají odpovídající tvary vybrané předlohy. Zjednodušení a přesné proporce jsou přizpůsobené pevnému hernímu rámu.
-3. Jediným produkčním zdrojem zůstává `microcol-game/src/graphics/colony-buildings/TYPE.svg`; názvy, rozměry 320 × 160 a [export](#vektorove-zdroje-budov-30-rijna-2026) se nemění. Pojmenované skupiny oddělují stavbu, střechu a vybavení tam, kde se v kresbě používají. Z těchto zdrojů vznikají průhledné PNG sdílené kolonií a nápovědou. Všechny okraje plátna zůstávají průhledné.
+3. Jediným produkčním zdrojem zůstává `akropia-game/src/graphics/colony-buildings/TYPE.svg`; názvy, rozměry 320 × 160 a [export](#vektorove-zdroje-budov-30-rijna-2026) se nemění. Pojmenované skupiny oddělují stavbu, střechu a vybavení tam, kde se v kresbě používají. Z těchto zdrojů vznikají průhledné PNG sdílené kolonií a nápovědou. Všechny okraje plátna zůstávají průhledné.
 4. Následující přehledy jsou vykreslené z produkčních SVG, ne z ImageGenu. Podrobnosti místní přejímky a výslovnou výjimku uživatele **bez smoke testů pouze pro tuto dodávku** zaznamenává [funkční evidence](functional-tests.md#r-0361-light-overhead-buildings-2026-10-30). Publikace distribuce se neposuzuje podle samotného pushnutí.
 
 | A — řemesla, 22 podob | B — ostatní budovy, 19 podob |
@@ -334,14 +334,14 @@ PY
 ## Evropský přístav — objevitelné odplutí (R-0380)
 
 1. [R-0380](requirements/done/R-0380.md), implementace 31. října 2026, používá vybranou tlumenou barevnost: slonovinové nebe, neutrální světle šedé moře a původní teplé město s molem. Nahrazuje níže popsanou paletu R-0343. Nadpisy plavby jsou skutečné popisky bez stuh a štítů, společným písmem titulku stránky; lodě mají stále 45 × 45 bodů.
-2. Původní ilustrace přístavu měla jen rastrový zdroj. Nový [europe-harbor.svg](../microcol-game/src/graphics/europe-harbor.svg) obsahuje editovatelné trasované křivky, pojmenované `paint-*`, a jemné vektorové přechody. Neobsahuje vložený bitmapový obrázek. Trasování zachovává kompozici a zjednodušuje texturu; původ, parametry a rozměry exportů zaznamenává [europe-harbor-r0380.json](../microcol-game/src/graphics/europe-harbor-r0380.json).
-3. Samostatné zdroje [příjezdové šipky](../microcol-game/src/graphics/europe-arrival-route.svg) a [odjezdové šipky s ostrovem](../microcol-game/src/graphics/europe-departure-route.svg) používají křivky, nepravidelně střídané čárky a ručně tvarované hroty. Příjezd míří na skutečný seznam lodí v přístavu; samostatná ikonka Evropy není součástí návrhu. Dekorace neodchytávají vstup a přizpůsobují se obsahové ploše.
+2. Původní ilustrace přístavu měla jen rastrový zdroj. Nový [europe-harbor.svg](../akropia-game/src/graphics/europe-harbor.svg) obsahuje editovatelné trasované křivky, pojmenované `paint-*`, a jemné vektorové přechody. Neobsahuje vložený bitmapový obrázek. Trasování zachovává kompozici a zjednodušuje texturu; původ, parametry a rozměry exportů zaznamenává [europe-harbor-r0380.json](../akropia-game/src/graphics/europe-harbor-r0380.json).
+3. Samostatné zdroje [příjezdové šipky](../akropia-game/src/graphics/europe-arrival-route.svg) a [odjezdové šipky s ostrovem](../akropia-game/src/graphics/europe-departure-route.svg) používají křivky, nepravidelně střídané čárky a ručně tvarované hroty. Příjezd míří na skutečný seznam lodí v přístavu; samostatná ikonka Evropy není součástí návrhu. Dekorace neodchytávají vstup a přizpůsobují se obsahové ploše.
 4. Opakovatelný export z kořene repozitáře používá `rsvg-convert`:
 
     ```sh
-    rsvg-convert -w 1586 -h 992 -o microcol-game/src/main/resources/images/europe-harbor.png microcol-game/src/graphics/europe-harbor.svg
-    rsvg-convert -w 800 -h 440 -o microcol-game/src/main/resources/images/europe-arrival-route.png microcol-game/src/graphics/europe-arrival-route.svg
-    rsvg-convert -w 2000 -h 600 -o microcol-game/src/main/resources/images/europe-departure-route.png microcol-game/src/graphics/europe-departure-route.svg
+    rsvg-convert -w 1586 -h 992 -o akropia-game/src/main/resources/images/europe-harbor.png akropia-game/src/graphics/europe-harbor.svg
+    rsvg-convert -w 800 -h 440 -o akropia-game/src/main/resources/images/europe-arrival-route.png akropia-game/src/graphics/europe-arrival-route.svg
+    rsvg-convert -w 2000 -h 600 -o akropia-game/src/main/resources/images/europe-departure-route.png akropia-game/src/graphics/europe-departure-route.svg
     ```
 
 5. Exporty byly vytvořeny ze SVG a ilustrace přístavu prohlédnuta. Výsledek uvnitř běžící hry nebyl v tomto kroku ověřen; uživatel výslovně požadoval push bez testů. Přesný rozsah a omezení uvádí [funkční evidence](functional-tests.md#r-0380-discoverable-europe-departure-2026-10-31). Historické screenshoty níže nejsou snímky této změny.
@@ -358,7 +358,7 @@ PY
 
 **Současný stav po výběru varianty 8:** [R-0361](requirements/done/R-0361.md) nahrazuje níže popsanou trasovanou kresbu jednoduchými ručně definovanými vektory. Body 1–3 a starý přehled zachycují vznik původních zdrojů v R-0352; `tracing.json` je zachovaná historie. Aktuální podoba a skupiny jsou popsané [u varianty Lehký nadhled](#budovy-lehky-nadhled-produkce-30-rijna-2026). Rozměry a exportní příkazy zůstávají stejné; současná kresba se automaticky neroztahuje k okrajům plátna.
 
-1. [R-0352](requirements/done/R-0352.md) převádí všech 41 ilustrací současných budov a jejich vylepšení na samostatné `microcol-game/src/graphics/colony-buildings/TYPE.svg`. Názvy odpovídají `ConstructionType.name()`; základní sklad používá `BASIC_WAREHOUSE`. Starší `src/graphics/buildings.svg` zůstává historickým zdrojem jiné kresby.
+1. [R-0352](requirements/done/R-0352.md) převádí všech 41 ilustrací současných budov a jejich vylepšení na samostatné `akropia-game/src/graphics/colony-buildings/TYPE.svg`. Názvy odpovídají `ConstructionType.name()`; základní sklad používá `BASIC_WAREHOUSE`. Starší `src/graphics/buildings.svg` zůstává historickým zdrojem jiné kresby.
 2. Zdroje obsahují pojmenovanou skupinu `building`, popis a samostatně identifikované vyplněné křivky `paint-NNNN` v pořadí malování. Nevkládají PNG, neodkazují na externí zdroje a nepoužívají fonty. Křivky vznikly z původních výřezů pomocí [VTracer](https://github.com/visioncortex/vtracer), Python balíček 0.6.15; přesné parametry a příprava průhlednosti jsou v `tracing.json`. Drobné odpojené zbytky sousedních budov na okrajích výřezů byly odstraněny. Jemná rastrová textura je zjednodušená, siluety a charakteristické prvky zachované.
 3. Jde o editovatelné vektorové tvary, nikoli o ručně připravené sémantické vrstvy střech, oken a zdí. Dokumenty mají přibližně stovky křivek; větší výtvarná změna může vyžadovat jejich ruční seskupení. Při běžné úpravě editovat SVG, neopakovat trasování. Původní atlasy, prompty a výřezy jsou zachovány v `colony-buildings/reference/` pouze jako historické předlohy.
 4. SVG má `viewBox="0 0 320 160"`. Kresba je proporcionálně vložená do prostoru 312 × 154, vodorovně vystředěná a dole zarovnaná k y=157. Hra i nápověda nadále používají 320 × 160 průhledné PNG se stejnými názvy; načítání, ceny, výroba ani herní pravidla se nemění. Maven export nespouští.
@@ -478,7 +478,7 @@ Okolí kolonie podle [R-0358](requirements/done/R-0358.md) používá stejné m�
 Vybrané políčko okolí kolonie používá podle [R-0354](requirements/done/R-0354.md) stejný šedý rámeček `Color.GREY` (`#808080`), 2 px, jako hlavní mapa. Nahrazuje původní dvojitý krémový a olivový výběr; barva jemné mřížky zůstává zachovaná. Výsledky ověření jsou ve [funkční evidenci](functional-tests.md#r-0354-colony-tile-selection-2026-10-30).
 
 1. Vybraný návrh a rozsah implementace jsou v [R-0349](requirements/done/R-0349.md). Světlý krémový podklad, tenké olivové dělicí čáry a tyrkysová plocha přístavu navazují na Evropu. Budovy jsou samostatné průhledné ilustrace v pevné mřížce 4 × 4; postavená úroveň určuje kresbu, nepostavená rodina je zesvětlená a označená.
-2. Původní generování použilo vestavěný Imagegen se schváleným návrhem jako stylovou referencí. Tři původní listy, přesné prompty (`generation.json`) a souřadnice výřezů (`sprites.json`) jsou nyní archivované v `microcol-game/src/graphics/colony-buildings/reference/`. Původních 41 PNG bylo přímo odvozeno z rastrů; tento chybějící vektorový krok napravuje [současný zdroj a export budov](#vektorove-zdroje-budov-30-rijna-2026).
+2. Původní generování použilo vestavěný Imagegen se schváleným návrhem jako stylovou referencí. Tři původní listy, přesné prompty (`generation.json`) a souřadnice výřezů (`sprites.json`) jsou nyní archivované v `akropia-game/src/graphics/colony-buildings/reference/`. Původních 41 PNG bylo přímo odvozeno z rastrů; tento chybějící vektorový krok napravuje [současný zdroj a export budov](#vektorove-zdroje-budov-30-rijna-2026).
 3. Mapa používá existující terény a jednotky. Nová kresba nepředstavuje změnu kapacity, bonusů, povolání ani stavebních nákladů. Implementace prošla místní přejímkou; skutečné výsledky a vizuální kontrola jsou v [evidenci](functional-tests.md#r-0349-colony-workspace-2026-10-30).
 
 
@@ -578,7 +578,7 @@ Od 29. října 2026 platí pro všechny obrazovky [pravidlo bez vyskakovacích b
 
 1. Uživatel vybral sedmý návrh „Teplý přístav“. [R-0343](requirements/done/R-0343.md) nahrazuje pouze `images/europe-harbor.png`: tlumená zelenomodrá voda, světlé šedozelené nebe, teplý kámen, olivová zeleň a několik cihlových střech. Rozměr 1586 × 992 a rozdělení čela mola na 82,5 % výšky zůstávají stejné.
 2. Ukazatel přistěhovalectví má průhledné pozadí a dosavadní tmavý text `#27271f` přímo na nebi. Lodě, lidé, nákladové bedny, zboží i společné lišty a ovládání používají dosavadní grafiku a barvy. Hlavní mapa se nemění.
-3. Samostatnou ilustraci upravil vestavěný ImageGen podle vybraného návrhu; [přesné zadání a původ](../microcol-game/src/graphics/europe-harbor-palette-07.json) jsou součástí zdrojů. Pozadí neobsahuje UI ani herní data. Stav přejímky a skutečné snímky patří do [funkční evidence](functional-tests.md#r-0343-warm-harbor-2026-10-29); historické návrhy níže zůstávají referencí.
+3. Samostatnou ilustraci upravil vestavěný ImageGen podle vybraného návrhu; [přesné zadání a původ](../akropia-game/src/graphics/europe-harbor-palette-07.json) jsou součástí zdrojů. Pozadí neobsahuje UI ani herní data. Stav přejímky a skutečné snímky patří do [funkční evidence](functional-tests.md#r-0343-warm-harbor-2026-10-29); historické návrhy níže zůstávají referencí.
 4. Skutečné Docker/Xvfb snímky: [český přístav](graphics-assets/harbor-palette-07-2026-10-29/r0343-harbor-czech.png), [anglický přístav s konci seznamů](graphics-assets/harbor-palette-07-2026-10-29/r0343-harbor-full.png), [prázdný přístav](graphics-assets/harbor-palette-07-2026-10-29/r0343-harbor-empty.png), [menší okno posunuté k nákladu](graphics-assets/harbor-palette-07-2026-10-29/r0343-harbor-small.png) a [víceřádkové oznámení přistěhovalce](graphics-assets/harbor-palette-07-2026-10-29/immigration-pending-english.png). Běžný i delší text zůstává čitelný na světlém nebi; zboží a ovládání zachovávají původní barvy.
 
 ## Barevné varianty přístavu podle hlavní mapy — 29. října 2026
@@ -608,7 +608,7 @@ Od 29. října 2026 platí pro všechny obrazovky [pravidlo bez vyskakovacích b
 ## Společné kreslené posuvníky — 29. října 2026
 
 1. [R-0338](requirements/done/R-0338.md) přebírá uživatelem zvolený svislý posuvník nápovědy jako společný výchozí vzhled. Vodorovná podoba má stejné barvy a otočené ručně kreslené tvary.
-2. Jediný zdroj je `gui/ScrollBars.css`, importovaný z `MicroCol.css` i `dialogs.css`: krémová `#FFF9EC`, obrys dráhy `#716858`, pískový jezdec `#DEC79B` s obrysem `#302D27` a stavem najetí/stisku `#CBB17F`. Oba směry jsou široké/vysoké 20 bodů a používají nativní JavaFX ScrollBar; Slider pro množství či nastavení se nemění.
+2. Jediný zdroj je `gui/ScrollBars.css`, importovaný z `Akropia.css` i `dialogs.css`: krémová `#FFF9EC`, obrys dráhy `#716858`, pískový jezdec `#DEC79B` s obrysem `#302D27` a stavem najetí/stisku `#CBB17F`. Oba směry jsou široké/vysoké 20 bodů a používají nativní JavaFX ScrollBar; Slider pro množství či nastavení se nemění.
 3. Nápověda už nepotřebuje vlastní svislé pravidlo, Evropa nepoužívá původní olivový jezdec. Čtyři přístavní lišty se zobrazí jen při přetečení. Řádky jednotek drží stejnou výšku nad molem, i když lišta chybí. Původní snímky přístavu níže jsou historií před touto úpravou.
 4. Skutečné JavaFX snímky z cílených testů v Docker/Xvfb: [prázdný přístav bez lišt](graphics-assets/shared-scrollbars-2026-10-29/r0337-harbor-empty.png), [český přístav se 43 jednotkami](graphics-assets/shared-scrollbars-2026-10-29/r0337-harbor-czech.png), [všechny seznamy na konci](graphics-assets/shared-scrollbars-2026-10-29/r0337-harbor-full.png), [menší okno s oběma směry posouvání](graphics-assets/shared-scrollbars-2026-10-29/r0337-harbor-small.png) a [zachovaný vzhled nápovědy](graphics-assets/shared-scrollbars-2026-10-29/r0325-help-units-en.png). Výsledek přejímky zaznamenává [funkční evidence](functional-tests.md#r-0338-shared-scrollbars-2026-10-29).
 
@@ -620,9 +620,9 @@ Skutečné snímky R-0346 z Docker/Xvfb, 29. října 2026: [široké okno 2 560 
 
 
 1. Uživatel vybral rozložení dvou plaveb vedle sebe, přístav vlevo a lidi vpravo nad dlouhým vysokým kamenným molem. Původní implementaci vlastní [R-0335](requirements/done/R-0335.md); následné upřesnění [R-0336](requirements/done/R-0336.md) nahrazuje světlý panel plochými bednami přímo před čelní stěnou. Výklenky, perspektiva a stíny nejsou součástí vybraného vzhledu; ukázková čísla návrhu se nenahrazují pevnými herními údaji.
-2. Pozadí `microcol-game/src/main/resources/images/europe-harbor.png` je samostatná ilustrace bez ovládání, jednotek a čísel. Moře se přizpůsobuje výšce, čelo mola si ponechává 112 bodů pro skutečný náklad. Původní obrázky lodí a lidí zůstávají 45 × 45; čtyři seznamy mají samostatné vodorovné posuvníky, nikoli limit 42 jednotek.
+2. Pozadí `akropia-game/src/main/resources/images/europe-harbor.png` je samostatná ilustrace bez ovládání, jednotek a čísel. Moře se přizpůsobuje výšce, čelo mola si ponechává 112 bodů pro skutečný náklad. Původní obrázky lodí a lidí zůstávají 45 × 45; čtyři seznamy mají samostatné vodorovné posuvníky, nikoli limit 42 jednotek.
 3. Vybraný pás **09 — Olivové pobřeží** převádí šestnáct obchodovatelných druhů do společného atlasu `images/goods-olive.png` (180 × 180, čtyři řádky po čtyřech buňkách 45 × 45). Stejné obrázky používá trh, náklad, kolonie a dialogy. Zvony, kladiva a kříže zůstávají původní.
-4. Produkční ilustrace a průhledná zdrojová sada byly vytvořeny nástrojem ImageGen 28. října 2026 podle vybraného návrhu. Zdroj ikon je `microcol-game/src/graphics/goods-olive-source.png`; přesné výřezy a mechanický export popisuje sousední `goods-olive-crops.json`. Export odstranil téměř průhledné pozadí (alfa pod 16), ořízl podle alfy a vepsal obrázky do 43 × 43 uprostřed buňky se zachováním poměru stran. Žádný text ani herní údaj není součástí atlasu.
+4. Produkční ilustrace a průhledná zdrojová sada byly vytvořeny nástrojem ImageGen 28. října 2026 podle vybraného návrhu. Zdroj ikon je `akropia-game/src/graphics/goods-olive-source.png`; přesné výřezy a mechanický export popisuje sousední `goods-olive-crops.json`. Export odstranil téměř průhledné pozadí (alfa pod 16), ořízl podle alfy a vepsal obrázky do 43 × 43 uprostřed buňky se zachováním poměru stran. Žádný text ani herní údaj není součástí atlasu.
 5. Historické JavaFX snímky původního R-0335 z TC194 v Docker/Xvfb zachycují [anglický přístav](graphics-assets/europe-harbor-2026-10-28/r0335-harbor-full.png), [menší okno](graphics-assets/europe-harbor-2026-10-28/r0335-harbor-small.png) a [český přístav R-0335](graphics-assets/europe-harbor-2026-10-28/r0335-harbor-czech.png). Každá skupina má v této testovací partii 43 jednotek. Přesný stav přejímky patří do [funkční evidence](functional-tests.md#r-0335-europe-harbor-2026-10-28).
 
 6. Upřesnění z 28. října: průhledné okolí lodí bez čísel pod obrázky, ruční rámeček výběru, světle modré nebe a ploché kamenné čelo. Trh používá krémovou `#FFF9EC` jako lišty. Jednotkové přepínače jsou výslovně vybranou výjimkou z papírových akčních tlačítek. Příkazy plavby jsou v místní nabídce.
@@ -708,10 +708,10 @@ Skutečné snímky R-0346 z Docker/Xvfb, 29. října 2026: [široké okno 2 560 
 2. Písmo zůstává Playpen Sans Regular 14. Ikona má 32×26 logických px,
    tah 1,6 px, inkoust `#302D27` a jednolité okrové výplně. Zmenšení ikony
    proto neztenčuje obrys. Číslo pokladny se nezmenšuje.
-3. Vektorová předloha [status-gold.svg](../microcol-game/src/graphics/status-gold.svg)
+3. Vektorová předloha [status-gold.svg](../akropia-game/src/graphics/status-gold.svg)
    navazuje na schválenou siluetu mincí a kreslené herní postavičky.
-   [Runtime PNG](../microcol-game/src/main/resources/images/status-gold.png)
-   má 64×52 px; export: `rsvg-convert -w 64 -h 52 -o microcol-game/src/main/resources/images/status-gold.png microcol-game/src/graphics/status-gold.svg`.
+   [Runtime PNG](../akropia-game/src/main/resources/images/status-gold.png)
+   má 64×52 px; export: `rsvg-convert -w 64 -h 52 -o akropia-game/src/main/resources/images/status-gold.png akropia-game/src/graphics/status-gold.svg`.
 4. Skutečné ověření a snímky vede [funkční evidence](functional-tests.md#r-0327-clean-status-line-2026-10-27).
 
 
@@ -1012,14 +1012,14 @@ Tento dřívější výběr a jeho náhledy jsou historické; nahrazuje je
 2. Smyčka trvá šest sekund a obsahuje 120 průhledných snímků 45 × 45 px. Používá stávající 30Hz hodiny a rozdílné fáze podle seedu a souřadnic. Časování odpovídá schválenému návrhu; pohyb se za běhu nepočítá ze SVG.
 3. Vhodné daleké moře má 100% účast v animaci. Úplné rozplynutí vlny je záměrná fáze, nikoli náhodné vynechání políčka. Bílá směrová značka zůstává přítomná. Statické náhledy a nápověda zobrazují převis (snímek 53), takže se nezastaví na prázdné hladině.
 4. Zachované jsou barvy terénů, tmavá kresba oceánu `#152f31`, světlá kresba dalekého moře `#6ec9cf`, 5% četnost oceánu, jezera, priorita atributů a skrytí neprozkoumaných políček. Tah hlavní vlny má podle schváleného náhledu 0,6 logického px, doznívající stopa přibližně 0,47 px; ostatní kontury se nemění. Výběr oceánských políček se mění pouze na hranici jejich šestisekundové smyčky, aby se nepřerušil dopad; jezera zachovávají čtyřsekundový interval.
-5. [SVG atlas](../microcol-game/src/graphics/terrain-symbols.svg) má 14 sloupců a 21 řádků: první tři řádky zachovávají původní význam, následuje 120 oceánských a 120 dalekomořských snímků. Export: `rsvg-convert -o microcol-game/src/main/resources/images/terrain-symbols.png microcol-game/src/graphics/terrain-symbols.svg`. [Skutečný snímek hry v Dockeru](graphics-assets/wide-wash-2026-10-26/implemented-map.png); stav ověření vede [funkční evidence](functional-tests.md#r-0293-wide-wash-2026-10-26).
+5. [SVG atlas](../akropia-game/src/graphics/terrain-symbols.svg) má 14 sloupců a 21 řádků: první tři řádky zachovávají původní význam, následuje 120 oceánských a 120 dalekomořských snímků. Export: `rsvg-convert -o akropia-game/src/main/resources/images/terrain-symbols.png akropia-game/src/graphics/terrain-symbols.svg`. [Skutečný snímek hry v Dockeru](graphics-assets/wide-wash-2026-10-26/implemented-map.png); stav ověření vede [funkční evidence](functional-tests.md#r-0293-wide-wash-2026-10-26).
 
 
-MicroCol používá SVG jako editovatelné výtvarné podklady. Za běhu načítá rastrové soubory z `microcol-game/src/main/resources/images`, z některých vyřezává malé obrázky a další skládá do pozadí obrazovek. Změna SVG se ve hře projeví až po exportu a zařazení odpovídajícího rastrového souboru mezi resources.
+Akropia používá SVG jako editovatelné výtvarné podklady. Za běhu načítá rastrové soubory z `akropia-game/src/main/resources/images`, z některých vyřezává malé obrázky a další skládá do pozadí obrazovek. Změna SVG se ve hře projeví až po exportu a zařazení odpovídajícího rastrového souboru mezi resources.
 
 Stránka vlastní [minimalistický grafický manuál](#minimalisticky-graficky-manual)
 z 18. října 2026 s upřesněním z 24. října 2026 a technické vazby obrázků. Historický inventář níže
-zachycuje **24 SVG** v `microcol-game/src/graphics`, **47 rastrových souborů**
+zachycuje **24 SVG** v `akropia-game/src/graphics`, **47 rastrových souborů**
 v `resources/images` a tehdejší spotřebitele; nejde o aktuální úplný počet.
 
 Výchozí stav technického inventáře k **11. říjnu 2026**, větev `develop`, revize `1854fa5446f54cbf99d4f6892d7f32aa4e3e5a00`. Rozměry níže jsou skutečné rozměry uložených obrázků v pixelech, pokud není výslovně uvedena velikost UI komponenty nebo souřadnice SVG.
@@ -1064,10 +1064,10 @@ odlišný vzhled sám o sobě není výjimkou z nového cíle.
 
 1. Uživatel vybral **T01–T14 ze sady 10**, **B01–B03 ze sady 09**
    a **B04–B12 ze sady 08**; implementaci vlastní [R-0274](requirements/done/R-0274.md).
-   Zdrojové listy jsou zachované jako [sada 10](../microcol-game/src/graphics/terrain-selection-10.png),
-   [sada 09](../microcol-game/src/graphics/terrain-selection-09.png)
-   a [sada 08](../microcol-game/src/graphics/terrain-selection-08.png).
-2. Editovatelný přepis vybraných siluet je [terrain-symbols.svg](../microcol-game/src/graphics/terrain-symbols.svg).
+   Zdrojové listy jsou zachované jako [sada 10](../akropia-game/src/graphics/terrain-selection-10.png),
+   [sada 09](../akropia-game/src/graphics/terrain-selection-09.png)
+   a [sada 08](../akropia-game/src/graphics/terrain-selection-08.png).
+2. Editovatelný přepis vybraných siluet je [terrain-symbols.svg](../akropia-game/src/graphics/terrain-symbols.svg).
    Atlas po rozšíření R-0277 má 630 × 135 px: první řada obsahuje 14 náhledů terénů v pořadí
    `TerrainType.TERRAINS`, druhá 12 bonusů v pořadí neprázdných `ResourceOverlay`
    a dvě prázdné buňky. Třetí řada obsahuje průhledné kresby stejných 14 terénů. Každá buňka má 45 × 45 px bez mezery.
@@ -1080,7 +1080,7 @@ odlišný vzhled sám o sobě není výjimkou z nového cíle.
    společné obrázky pro mapu, náhledy a nápovědu. `PaintService` kreslí bonus
    stejnou cestou jako Colonizopedia. Náhodné staré terény a velryby již vybrané
    motivy nestřídají; existující variace lesa zůstává samostatnou vrstvou.
-5. Reprodukce exportu: `rsvg-convert -o microcol-game/src/main/resources/images/terrain-symbols.png microcol-game/src/graphics/terrain-symbols.svg`.
+5. Reprodukce exportu: `rsvg-convert -o akropia-game/src/main/resources/images/terrain-symbols.png akropia-game/src/graphics/terrain-symbols.svg`.
    Zdroj neobsahuje text ani externí obrázky. Aktuální přejímku a vizuální kontrolu
    eviduje [funkční ověření](functional-tests.md#r-0274-selected-terrain-artwork-2026-10-25).
 
@@ -1146,9 +1146,9 @@ odlišný vzhled sám o sobě není výjimkou z nového cíle.
 3. Oceán zachovává tmavý tah `#152f31`, daleké moře světlý `#6ec9cf` a dosavadní
    bílou směrovou značku. Nápověda používá první snímek; mapové a statické
    výběrové náhledy používají stejnou sadu. Nevzniká nové nastavení animace.
-4. Zdroj [terrain-symbols.svg](../microcol-game/src/graphics/terrain-symbols.svg)
+4. Zdroj [terrain-symbols.svg](../akropia-game/src/graphics/terrain-symbols.svg)
    má nově čtvrtý řádek: čtyři fáze oceánu a čtyři fáze dalekého moře.
-   Export: `rsvg-convert -o microcol-game/src/main/resources/images/terrain-symbols.png microcol-game/src/graphics/terrain-symbols.svg`.
+   Export: `rsvg-convert -o akropia-game/src/main/resources/images/terrain-symbols.png akropia-game/src/graphics/terrain-symbols.svg`.
    Dřívější řádky zůstávají na původních souřadnicích.
 5. [Skutečný snímek hry z Dockeru](graphics-assets/waves-2026-10-26/implemented-map.png)
    ukazuje převod návrhu do mapy. Samotný obrázek nepotvrzuje celou přejímku; výsledky vede
@@ -1156,7 +1156,7 @@ odlišný vzhled sám o sobě není výjimkou z nového cíle.
 
 ## Minimalistický grafický manuál
 
-**Každá obrazovka MicroCol působí jako kresba stejnou kuličkovou propiskou
+**Každá obrazovka Akropia působí jako kresba stejnou kuličkovou propiskou
 na papíře, vybarvená jednolitými barevnými plochami. Ovládání zůstává čitelné
 a přesné.**
 
@@ -1219,7 +1219,7 @@ použitím v běžném UI.
    zdroje. Nepoužívá překrývání barvou pozadí ani syntetickou kurzívu; přesná
    rasterizace prohlížeče a JavaFX se může lišit. Navazující [R-0251](requirements/done/R-0251.md) stanoví hlavní nadpisy 36 px a výchozí běžný text 18 px, včetně popisků Jazyk a Verze v Nastavení; místní drobné údaje kolonie a mapy zůstávají výjimkou.
 3. Soubor, licence OFL a reprodukční údaje jsou v
-   `microcol-game/src/main/resources/fonts/PlaypenSans`. Načtení nevyžaduje
+   `akropia-game/src/main/resources/fonts/PlaypenSans`. Načtení nevyžaduje
    síť ani instalaci fontu do systému. Zdroj obsahuje ověřené základní abecedy
    češtiny, angličtiny, němčiny, francouzštiny a nizozemštiny, číslice a euro;
    nejde o tvrzení o všech evropských jazycích ani nové překlady hry.
@@ -1289,12 +1289,12 @@ se změnou CSS nepřepnou. Dostupnost v JavaFX ověřuje TC85/02; výsledky vede
 
 1. Podle doplnění z 19. října 2026 obsahuje všech pět SVG s textem
    (`background.svg`, `logo.svg`, `icon.svg` a referenční `screen-flow.svg`,
-   `units.svg` v ponechaném `microcol-site`) Playpen Sans Light 300.
+   `units.svg` v ponechaném `akropia-site`) Playpen Sans Light 300.
    Každý soubor má vložený WOFF subset potřebných znaků v `@font-face`;
    prohlížeč nepotřebuje systémovou instalaci ani stahování fontu.
    Copyright a OFL zůstávají také uvnitř subsetu.
 2. Autoritativní plný TTF a licence jsou ve
-   [fonts/PlaypenSans](../microcol-game/src/main/resources/fonts/PlaypenSans/).
+   [fonts/PlaypenSans](../akropia-game/src/main/resources/fonts/PlaypenSans/).
    Po změně SVG textu obnovit subsety pomocí
    [svg-font.py](../scripts/graphics/svg-font.py); `--check` zjistí zastaralý
    subset a chybějící znaky jsou chyba, nikoli tichý fallback. Skript používá
@@ -1311,16 +1311,24 @@ se změnou CSS nepřepnou. Dostupnost v JavaFX ověřuje TC85/02; výsledky vede
    do hry. `icon.svg` používá standardní SVG text místo nepřenositelného
    `flowRoot`; není zdrojem distribuční ikony s kostelem. Skryté popisky atlasu
    nemění bitmapu atlasu. U historických diagramů zůstává původní rozsah stránky.
+5. Od R-0389 (2. listopadu 2026) přijímá `svg-font.py` cesty konkrétních SVG
+   relativně ke kořeni repozitáře; bez nich zpracuje všechny verzované SVG.
+   SVG s textem bez prvku `defs` dostane `@font-face` jako první potomek
+   kořenového `svg`; dříve skript takový soubor odmítl. Bez cest by běh vložil
+   font i do datovaných dokumentačních návrhů, které ho dosud nemají; po změně
+   konkrétního zdroje proto obnovit a zkontrolovat jen tento soubor.
 
 ```sh
 python3 -m venv target/graphics-venv
 target/graphics-venv/bin/python -m pip install fonttools==4.60.2
-target/graphics-venv/bin/python scripts/graphics/svg-font.py
-target/graphics-venv/bin/python scripts/graphics/svg-font.py --check
+target/graphics-venv/bin/python scripts/graphics/svg-font.py akropia-game/src/graphics/logo.svg \
+  akropia-game/src/graphics/icon.svg
+target/graphics-venv/bin/python scripts/graphics/svg-font.py --check akropia-game/src/graphics/logo.svg \
+  akropia-game/src/graphics/icon.svg
 target/graphics-venv/bin/python -m unittest discover -s scripts/graphics -p 'test_*.py'
 python3 scripts/graphics/with-fonts.py rsvg-convert --width 200 --height 200 \
-  -o microcol-game/src/main/resources/images/splash-screen.png \
-  microcol-game/src/graphics/logo.svg
+  -o akropia-game/src/main/resources/images/splash-screen.png \
+  akropia-game/src/graphics/logo.svg
 ```
 
 Poslední příkaz vyžaduje `fc-match` a `rsvg-convert`. Nový testovací/exportní
@@ -1405,7 +1413,7 @@ renderování 2× od dosud neprovedené kontroly na fyzickém HiDPI displeji.
 ### Hlavní herní obrazovka a spodní panel
 
 **Upřesnění 25. října 2026, [R-0267](requirements/done/R-0267.md):** spodní panel
-má stejný vzhled na mapě, v kolonii i v Evropě. Sdílený styl v `MicroCol.css`
+má stejný vzhled na mapě, v kolonii i v Evropě. Sdílený styl v `Akropia.css`
 určuje krémové pozadí, minimální výšku 72 px, odsazení 12/16 px a Playpen Sans
 Regular 14. Rok nemá vlastní rámeček; od zlata jej odděluje jediná svislá
 čára. Oddělovač popisu zůstává. Pravidlo Regular 14 platí také pro názvy
@@ -1561,7 +1569,7 @@ na vyplněný obrys jde o geometrii, kterou `non-scaling-stroke` neochrání.
 
 ### Export a kontrola výsledné velikosti
 
-1. MicroCol dnes používá cestu **SVG → PNG → UI**. Po exportu už PNG nezná
+1. Akropia dnes používá cestu **SVG → PNG → UI**. Po exportu už PNG nezná
    tahy ani `vector-effect`; jeho zmenšení zeslabí i čáry. Samotný atribut
    v SVG proto stejnou tloušťku ve hře nezaručuje.
 2. Pro každý dotčený asset zapsat zdroj, exportní velikost, cílovou logickou
@@ -1588,8 +1596,8 @@ na vyplněný obrys jde o geometrii, kterou `non-scaling-stroke` neochrání.
 
 ### Dělostřelectvo R-0095 (2026-10-16)
 
-Nové vektorové podklady [artillery.svg](../microcol-game/src/graphics/artillery.svg)
-a [artillery-damaged.svg](../microcol-game/src/graphics/artillery-damaged.svg)
+Nové vektorové podklady [artillery.svg](../akropia-game/src/graphics/artillery.svg)
+a [artillery-damaged.svg](../akropia-game/src/graphics/artillery-damaged.svg)
 mají samostatné exporty 45 × 45 px v `resources/images`. `UnitImageProvider`
 vybírá poškozené dělo podle modelového stavu; nabídka nákupu používá celé dělo.
 Poškození znázorňuje zlomená hlaveň a zároveň je popsáno textem v náhledu boje
@@ -1610,11 +1618,11 @@ Po načtení přes `ImageCache` a `ImageProvider` se použije buď celý obráze
 
 ### Načítání a paměťová cache
 
-[ImageCache](../microcol-game/src/main/java/org/microcol/gui/image/ImageCache.java) při `getImage(name)` nejprve hledá již připravený obrázek v paměti. Pokud ho nemá, otevře resource `images/<name>` a vytvoří JavaFX `Image`. Opakované volání vrací stejnou instanci. Registrace aliasu také sdílí tutéž instanci; registrace stejného jména podruhé je chyba. Chybějící resource ohlásí [StreamReader](../microcol-game/src/main/java/org/microcol/gui/util/StreamReader.java).
+[ImageCache](../akropia-game/src/main/java/org/akropia/gui/image/ImageCache.java) při `getImage(name)` nejprve hledá již připravený obrázek v paměti. Pokud ho nemá, otevře resource `images/<name>` a vytvoří JavaFX `Image`. Opakované volání vrací stejnou instanci. Registrace aliasu také sdílí tutéž instanci; registrace stejného jména podruhé je chyba. Chybějící resource ohlásí [StreamReader](../akropia-game/src/main/java/org/akropia/gui/util/StreamReader.java).
 
-[ImageLoaderImpl](../microcol-game/src/main/java/org/microcol/gui/image/ImageLoaderImpl.java) připravuje grafiku v tomto pořadí: hlavní atlas → zelené pobřeží → ledové pobřeží → okraje neodhalené mapy → zboží → budovy → tlačítka → několik samostatných pozadí → jednotky. Pořadí je významné: například jednotky a zboží přejmenovávají výřezy vytvořené prvním loaderem.
+[ImageLoaderImpl](../akropia-game/src/main/java/org/akropia/gui/image/ImageLoaderImpl.java) připravuje grafiku v tomto pořadí: hlavní atlas → zelené pobřeží → ledové pobřeží → okraje neodhalené mapy → zboží → budovy → tlačítka → několik samostatných pozadí → jednotky. Pořadí je významné: například jednotky a zboží přejmenovávají výřezy vytvořené prvním loaderem.
 
-[ImageProvider](../microcol-game/src/main/java/org/microcol/gui/image/ImageProvider.java) nabízí `getImage(name)`, `getTerrainImage(terrain)`, `getUnitImage(unit/type)` a `getGoodsTypeImage(goods/type)`. `getConstructionImage(type)` vrací `Optional<Image>`, protože pro některé typy staveb obrázek registrovaný není. Statická metoda `getRawImage` načítá resource přímo, bez této instance cache.
+[ImageProvider](../akropia-game/src/main/java/org/akropia/gui/image/ImageProvider.java) nabízí `getImage(name)`, `getTerrainImage(terrain)`, `getUnitImage(unit/type)` a `getGoodsTypeImage(goods/type)`. `getConstructionImage(type)` vrací `Optional<Image>`, protože pro některé typy staveb obrázek registrovaný není. Statická metoda `getRawImage` načítá resource přímo, bez této instance cache.
 
 Samostatné obrázky mohou být načteny až při prvním použití. To, že nejsou uvedeny ve startup loaderu, proto neznamená, že je hra nepoužívá. Další cestou je JavaFX CSS; ta nepotřebuje aliasy v `ImageCache`. Uživatelské rozhraní sestavují Java třídy, v prohlédnutém repozitáři nejsou FXML soubory.
 
@@ -1628,45 +1636,45 @@ Odkazy v této části otevírají editovatelné zdroje. **Skriptovaná vazba** 
 
 | SVG | Obsah a vrstvy | Výstup a způsob použití |
 | --- | --- | --- |
-| [background.svg](../microcol-game/src/graphics/background.svg) | Terén, pobřeží, stromy, pole, město, jednotky a zboží. Viditelná vrstva `main`, skrytá pomocná `description`. | Skriptovaná vazba na `background.png` **648 × 432**. Loader vytvoří 96 výřezů **45 × 45** a další odvozené varianty. Podrobná mapa je níže. Metadata obsahují i staré překlepy `backgroud.png` a `backgroud2.png`; aktuální runtime jméno je `background.png`. |
-| [buildings.svg](../microcol-game/src/graphics/buildings.svg) | Kresby staveb v mřížce, jedna vrstva `Layer 1`. Barevné krajní čtverce jsou součástí podkladu, nikoli registrované typy staveb. | Metadata míří na `buildings.png` **560 × 490**. `images.groovy` pro něj nemá funkci. Runtime řeže 56 buněk **70 × 70**, z nichž 30 má alias podle typu stavby. DPI na kořeni SVG a na jednotlivých objektech se liší; rozhodující je cílový rozměr a mřížka PNG. |
-| [buttons.svg](../microcol-game/src/graphics/buttons.svg) | Ikony ve vrstvách `background` a `main`. | Metadata míří na `buttons.png` **200 × 200**, skriptovaný export chybí. Runtime řeže 16 buněk **50 × 50**. Obrázky jsou symboly tlačítek; rozložení, události a okolní vzhled tlačítek řeší UI a CSS. |
+| [background.svg](../akropia-game/src/graphics/background.svg) | Terén, pobřeží, stromy, pole, město, jednotky a zboží. Viditelná vrstva `main`, skrytá pomocná `description`. | Skriptovaná vazba na `background.png` **648 × 432**. Loader vytvoří 96 výřezů **45 × 45** a další odvozené varianty. Podrobná mapa je níže. Metadata obsahují i staré překlepy `backgroud.png` a `backgroud2.png`; aktuální runtime jméno je `background.png`. |
+| [buildings.svg](../akropia-game/src/graphics/buildings.svg) | Kresby staveb v mřížce, jedna vrstva `Layer 1`. Barevné krajní čtverce jsou součástí podkladu, nikoli registrované typy staveb. | Metadata míří na `buildings.png` **560 × 490**. `images.groovy` pro něj nemá funkci. Runtime řeže 56 buněk **70 × 70**, z nichž 30 má alias podle typu stavby. DPI na kořeni SVG a na jednotlivých objektech se liší; rozhodující je cílový rozměr a mřížka PNG. |
+| [buttons.svg](../akropia-game/src/graphics/buttons.svg) | Ikony ve vrstvách `background` a `main`. | Metadata míří na `buttons.png` **200 × 200**, skriptovaný export chybí. Runtime řeže 16 buněk **50 × 50**. Obrázky jsou symboly tlačítek; rozložení, události a okolní vzhled tlačítek řeší UI a CSS. |
 
 ### Velká pozadí
 
 | SVG | Obsah a vrstvy | Výstup a způsob použití |
 | --- | --- | --- |
-| [sunset2.svg](../microcol-game/src/graphics/sunset2.svg) | Scéna moře, slunce a pobřeží; vrstvy `fill` a `contours`. | Zdroj funkce `sunset()`: `sunset.png` **781 × 651**, z něj `sunset-top-line.png` **65 × 90** a `sunset-bottom-line.png` **48 × 75**. Menu skládá středovou scénu a opakované kraje. |
-| [sunset.svg](../microcol-game/src/graphics/sunset.svg) | Jednodušší varianta scény, jedna vrstva. Staré exportní metadata ukazují na Windows cestu k `sunset.png`. | Současná funkce `sunset()` tento soubor **nebere**; používá `sunset2.svg`. Jde o alternativní podklad bez aktuální skriptované vazby. Stejné jméno PNG v metadatech neznamená, že se používají obě SVG. |
-| [europe1.svg](../microcol-game/src/graphics/europe1.svg) | Evropský přístav; `background`, skrytá `house1`, viditelná `house2`. | Zdroj funkce `europe()`: `europe.png` **780 × 624** a kraje `europe-left.png` **83 × 624**, `europe-right.png` **22 × 624**. Lodě, lidé a zboží jsou nad scénou samostatné prvky UI. |
-| [europe.svg](../microcol-game/src/graphics/europe.svg) | Jiná kompozice přístavu; vrstvy `background` a `port`. | Také má metadata pro `europe.png`, ale současný skript vybírá `europe1.svg`. Tento zdroj proto nelze automaticky považovat za aktuální předlohu runtime pozadí. |
-| [market.svg](../microcol-game/src/graphics/market.svg) | Tržištní tabule v krajině; vrstvy `background`, `ptak`, `lines`. | Funkce `market()` vytvoří `market.png` **700 × 598**, `market-top.png` **10 × 598** a `market-bottom.png` **65 × 598**. Poslední dva názvy jsou zavádějící: ve hře jde o levý a pravý kraj. |
-| [colony-background.svg](../microcol-game/src/graphics/colony-background.svg) | Krajina s molem za obrazovkou kolonie, jedna vrstva. | Funkce `colony()` vytvoří `colony.png` **780 × 758** a tři kraje: `colony-top1.png` **65 × 203**, `colony-top2.png` **85 × 190**, `colony-bottom.png` **71 × 62**. Výrobní budovy, rámce, pracovníci a pole se doplňují zvlášť. Některá stará metadata na objektech zmiňují i `sunset.png`; zdrojovou vazbu zde určuje skript. |
-| [wood.svg](../microcol-game/src/graphics/wood.svg) | Dřevěná textura; skryté pracovní vrstvy `work`, `parts`, viditelná `main`. | Metadata objektů míří na `background-wood2.png` **600 × 922**. Statistiky a přehled tahu jej opakují v obou osách. Kořenové metadata `/Users/jan/bitmap.png` jsou stará pracovní cesta, nikoli runtime resource. |
+| [sunset2.svg](../akropia-game/src/graphics/sunset2.svg) | Scéna moře, slunce a pobřeží; vrstvy `fill` a `contours`. | Zdroj funkce `sunset()`: `sunset.png` **781 × 651**, z něj `sunset-top-line.png` **65 × 90** a `sunset-bottom-line.png` **48 × 75**. Menu skládá středovou scénu a opakované kraje. |
+| [sunset.svg](../akropia-game/src/graphics/sunset.svg) | Jednodušší varianta scény, jedna vrstva. Staré exportní metadata ukazují na Windows cestu k `sunset.png`. | Současná funkce `sunset()` tento soubor **nebere**; používá `sunset2.svg`. Jde o alternativní podklad bez aktuální skriptované vazby. Stejné jméno PNG v metadatech neznamená, že se používají obě SVG. |
+| [europe1.svg](../akropia-game/src/graphics/europe1.svg) | Evropský přístav; `background`, skrytá `house1`, viditelná `house2`. | Zdroj funkce `europe()`: `europe.png` **780 × 624** a kraje `europe-left.png` **83 × 624**, `europe-right.png` **22 × 624**. Lodě, lidé a zboží jsou nad scénou samostatné prvky UI. |
+| [europe.svg](../akropia-game/src/graphics/europe.svg) | Jiná kompozice přístavu; vrstvy `background` a `port`. | Také má metadata pro `europe.png`, ale současný skript vybírá `europe1.svg`. Tento zdroj proto nelze automaticky považovat za aktuální předlohu runtime pozadí. |
+| [market.svg](../akropia-game/src/graphics/market.svg) | Tržištní tabule v krajině; vrstvy `background`, `ptak`, `lines`. | Funkce `market()` vytvoří `market.png` **700 × 598**, `market-top.png` **10 × 598** a `market-bottom.png` **65 × 598**. Poslední dva názvy jsou zavádějící: ve hře jde o levý a pravý kraj. |
+| [colony-background.svg](../akropia-game/src/graphics/colony-background.svg) | Krajina s molem za obrazovkou kolonie, jedna vrstva. | Funkce `colony()` vytvoří `colony.png` **780 × 758** a tři kraje: `colony-top1.png` **65 × 203**, `colony-top2.png` **85 × 190**, `colony-bottom.png` **71 × 62**. Výrobní budovy, rámce, pracovníci a pole se doplňují zvlášť. Některá stará metadata na objektech zmiňují i `sunset.png`; zdrojovou vazbu zde určuje skript. |
+| [wood.svg](../akropia-game/src/graphics/wood.svg) | Dřevěná textura; skryté pracovní vrstvy `work`, `parts`, viditelná `main`. | Metadata objektů míří na `background-wood2.png` **600 × 922**. Statistiky a přehled tahu jej opakují v obou osách. Kořenové metadata `/Users/jan/bitmap.png` jsou stará pracovní cesta, nikoli runtime resource. |
 
 ### Papír, rámečky a dialogy
 
 | SVG | Obsah a vrstvy | Výstup a způsob použití |
 | --- | --- | --- |
-| [books.svg](../microcol-game/src/graphics/books.svg) | Otevřená kniha ve vrstvě `main`. | Metadata pro `book.png` **895 × 585**. Soubor je v resources, současný odkaz z Java/CSS/build kódu nebyl nalezen. Statistiky používají `book2.png`. |
-| [books2.svg](../microcol-game/src/graphics/books2.svg) | Více samostatných návrhů: skryté `element`, `papers`, `wood`; viditelná `page`. | Metadata spojují `papers` s `book2.png` **900 × 888**, `page` s `page.png` **600 × 727** a `wood` s `background-wood.png` **200 × 506**. Exportuje se správná vrstva či výběr, nikoli všechny návrhy dohromady. Aktivní jsou kniha statistik a list přehledu tahu; pro tuto první dřevěnou variantu nebyl nalezen runtime odkaz. |
-| [colony-frame.svg](../microcol-game/src/graphics/colony-frame.svg) | Více rámů. Skryté vrstvy `pok`, `colony-building-queue`, `colony-fields`, `colony-frame`, `colony-warehouse`; viditelná `colony-building-queue copy`. Název viditelné kopie sám neurčuje exportní soubor. | Metadata pro `colony-fields.png` **145 × 145**, `colony-building-queue.png` **264 × 135** a `colony-warehouse.png` **846 × 134**. DPI uložené v těchto PNG odpovídá po zaokrouhlení metadatům tohoto SVG. Pro `colony-frame.png` **100 × 134** obsahuje odpovídající rámovou vrstvu, ale výslovný exportní atribut pro tento název chybí. Rámy jsou CSS pozadí samostatných panelů. |
-| [colony-frames.svg](../microcol-game/src/graphics/colony-frames.svg) | Další sada rámů; všechny tři vrstvy `structures`, `fields`, `building-queue` jsou v uloženém stavu skryté. | Metadata zmiňují stejné `colony-fields.png` a `colony-building-queue.png`, avšak při jiných DPI než současné PNG; dále `colony-structures.png` a na kořeni `colony-dock.png`, které v `resources/images` nejsou. Je to konkurenční/alternativní podklad; současné malé rámy nelze bez ověření regenerovat z tohoto souboru. |
-| [dialog.svg](../microcol-game/src/graphics/dialog.svg) | Rámeček společně s postavou muže, jedna vrstva. | Metadata pro `dialog-petr.png` **501 × 378**. Hra používá celou kompozici jako CSS pozadí dialogu. Text, tlačítka a obsah dialogu nejsou součástí obrázku. |
+| [books.svg](../akropia-game/src/graphics/books.svg) | Otevřená kniha ve vrstvě `main`. | Metadata pro `book.png` **895 × 585**. Soubor je v resources, současný odkaz z Java/CSS/build kódu nebyl nalezen. Statistiky používají `book2.png`. |
+| [books2.svg](../akropia-game/src/graphics/books2.svg) | Více samostatných návrhů: skryté `element`, `papers`, `wood`; viditelná `page`. | Metadata spojují `papers` s `book2.png` **900 × 888**, `page` s `page.png` **600 × 727** a `wood` s `background-wood.png` **200 × 506**. Exportuje se správná vrstva či výběr, nikoli všechny návrhy dohromady. Aktivní jsou kniha statistik a list přehledu tahu; pro tuto první dřevěnou variantu nebyl nalezen runtime odkaz. |
+| [colony-frame.svg](../akropia-game/src/graphics/colony-frame.svg) | Více rámů. Skryté vrstvy `pok`, `colony-building-queue`, `colony-fields`, `colony-frame`, `colony-warehouse`; viditelná `colony-building-queue copy`. Název viditelné kopie sám neurčuje exportní soubor. | Metadata pro `colony-fields.png` **145 × 145**, `colony-building-queue.png` **264 × 135** a `colony-warehouse.png` **846 × 134**. DPI uložené v těchto PNG odpovídá po zaokrouhlení metadatům tohoto SVG. Pro `colony-frame.png` **100 × 134** obsahuje odpovídající rámovou vrstvu, ale výslovný exportní atribut pro tento název chybí. Rámy jsou CSS pozadí samostatných panelů. |
+| [colony-frames.svg](../akropia-game/src/graphics/colony-frames.svg) | Další sada rámů; všechny tři vrstvy `structures`, `fields`, `building-queue` jsou v uloženém stavu skryté. | Metadata zmiňují stejné `colony-fields.png` a `colony-building-queue.png`, avšak při jiných DPI než současné PNG; dále `colony-structures.png` a na kořeni `colony-dock.png`, které v `resources/images` nejsou. Je to konkurenční/alternativní podklad; současné malé rámy nelze bez ověření regenerovat z tohoto souboru. |
+| [dialog.svg](../akropia-game/src/graphics/dialog.svg) | Rámeček společně s postavou muže, jedna vrstva. | Metadata pro `dialog-petr.png` **501 × 378**. Hra používá celou kompozici jako CSS pozadí dialogu. Text, tlačítka a obsah dialogu nejsou součástí obrázku. |
 
 ### Drobné obrázky a pracovní předlohy
 
 | SVG | Obsah a vrstvy | Výstup a způsob použití |
 | --- | --- | --- |
-| [crates.svg](../microcol-game/src/graphics/crates.svg) | Zavřená a otevřená bedna nad sebou, vrstva `main`. | Funkce `crates()` vytvoří `crates.png` **200 × 400** a dva řezy **200 × 200**: `crate-closed.png`, `crate-open.png`. Runtime načítá jednotlivé řezy a zmenšuje je do nákladového slotu **45 × 45**. |
-| [cursors.svg](../microcol-game/src/graphics/cursors.svg) | Šipka, značka chůze a kotva nad sebou, vrstva `main`. | Funkce `cursors()` vytvoří `cursors.png` **30 × 90**, kurzor **30 × 30** a čtyři značky **25 × 25**. Bojové značky tímto skriptem nevznikají. |
-| [bullet.svg](../microcol-game/src/graphics/bullet.svg) | Malý nepravidelný kroužek, vrstva `main`. | Funkce `bullet()` vytvoří `bullet.png` **15 × 15**. Slouží jako odrážka přehledu tahu, nikoli jako střela v bojové animaci. Je to jediná nyní aktivně zavolaná exportní funkce skriptu. |
-| [clouds.svg](../microcol-game/src/graphics/clouds.svg) | Viditelné `example-background` a `cloud-1`, skrytá `cloud-2`. Ukázkové pozadí je vložený raster přímo uvnitř SVG. | Skupina `g929` má metadata pro `cloud-1.png` **799 × 479**, `g1215` pro `cloud-2.png` **1000 × 795**. Exportovat se má mrak bez referenčního pozadí. Mapa posouvá celý `cloud-1.png`; pro `cloud-2.png` nebyl nalezen runtime odkaz. |
-| [kings-seal.svg](../microcol-game/src/graphics/kings-seal.svg) | Skrytá vrstva `main` a viditelná `shadow`. | Dva samostatné exporty `kings-seal.png` a `kings-seal-shadow.png`, oba **40 × 41**. V přehledu cílů se vybírá plná pečeť pro splněný cíl a světlá varianta pro nesplněný. Hra je nevrství přes sebe jako objekt a jeho stín. |
-| [person.svg](../microcol-game/src/graphics/person.svg) | Tři kopie drobné postavy a větší otevřený rám, jedna vrstva s opacitou `0.94`. | Nemá skriptovaný výstup ani exportní metadata. Patnáct ze sedmnácti atributů cest `d` je doslova shodných s cestami v `background.svg`; dvě zbývající rámové cesty odpovídají `colony-frame.svg`. Dokládá sdílené kresby, ne automatické propojení. Herní kolonista se načítá z atlasu, nikoli z tohoto souboru. |
-| [wagon.svg](../microcol-game/src/graphics/wagon.svg) | Viditelná vektorová vrstva `draw`, skrytá vrstva `image` s vloženou rastrovou předlohou. | Všech 12 cest `d` je doslova obsaženo také v `background.svg`. Samostatný export ve skriptu není. Loader registruje `wagon` z buňky `(1,6)` atlasu; R-0024 jej nyní používá v `UnitImageProvider` pro typ i instanci vozu. Změna zdejšího vozu sama atlas neaktualizuje. |
-| [logo.svg](../microcol-game/src/graphics/logo.svg) | Kostel, pozadí a nápis MicroCol. Skrytá `background`, viditelné `background-2` a `logo`. | Metadata pro `splash-screen.png` **200 × 200**. Build jej vkládá do manifestu jako spouštěcí obrázek JVM a používá jej také argument `-splash`. Text zůstává editovatelný s vloženým fontem. Od R-0250 má zdroj stránku 200 × 200 a export používá přibalený TTF; viz [postup](#pribaleny-font-v-svg-a-exportu). |
-| [icon.svg](../microcol-game/src/graphics/icon.svg) | Černý standardní SVG text MicroCol s vloženým Playpen Sans Light, nikoli ilustrace kostela. Rozměr dokumentu **1024 × 1024**. | Metadata ukazují na starou cestu `microcol-game/src/icon.png`, která v současném stromu není. Současná distribuční ikona s kostelem má odlišný obsah; tento SVG nelze označit za její doložený zdroj. R-0250 nahradil historický `flowRoot` přenositelným textem; obsah je viditelný i v běžném SVG rendereru. |
+| [crates.svg](../akropia-game/src/graphics/crates.svg) | Zavřená a otevřená bedna nad sebou, vrstva `main`. | Funkce `crates()` vytvoří `crates.png` **200 × 400** a dva řezy **200 × 200**: `crate-closed.png`, `crate-open.png`. Runtime načítá jednotlivé řezy a zmenšuje je do nákladového slotu **45 × 45**. |
+| [cursors.svg](../akropia-game/src/graphics/cursors.svg) | Šipka, značka chůze a kotva nad sebou, vrstva `main`. | Funkce `cursors()` vytvoří `cursors.png` **30 × 90**, kurzor **30 × 30** a čtyři značky **25 × 25**. Bojové značky tímto skriptem nevznikají. |
+| [bullet.svg](../akropia-game/src/graphics/bullet.svg) | Malý nepravidelný kroužek, vrstva `main`. | Funkce `bullet()` vytvoří `bullet.png` **15 × 15**. Slouží jako odrážka přehledu tahu, nikoli jako střela v bojové animaci. Je to jediná nyní aktivně zavolaná exportní funkce skriptu. |
+| [clouds.svg](../akropia-game/src/graphics/clouds.svg) | Viditelné `example-background` a `cloud-1`, skrytá `cloud-2`. Ukázkové pozadí je vložený raster přímo uvnitř SVG. | Skupina `g929` má metadata pro `cloud-1.png` **799 × 479**, `g1215` pro `cloud-2.png` **1000 × 795**. Exportovat se má mrak bez referenčního pozadí. Mapa posouvá celý `cloud-1.png`; pro `cloud-2.png` nebyl nalezen runtime odkaz. |
+| [kings-seal.svg](../akropia-game/src/graphics/kings-seal.svg) | Skrytá vrstva `main` a viditelná `shadow`. | Dva samostatné exporty `kings-seal.png` a `kings-seal-shadow.png`, oba **40 × 41**. V přehledu cílů se vybírá plná pečeť pro splněný cíl a světlá varianta pro nesplněný. Hra je nevrství přes sebe jako objekt a jeho stín. |
+| [person.svg](../akropia-game/src/graphics/person.svg) | Tři kopie drobné postavy a větší otevřený rám, jedna vrstva s opacitou `0.94`. | Nemá skriptovaný výstup ani exportní metadata. Patnáct ze sedmnácti atributů cest `d` je doslova shodných s cestami v `background.svg`; dvě zbývající rámové cesty odpovídají `colony-frame.svg`. Dokládá sdílené kresby, ne automatické propojení. Herní kolonista se načítá z atlasu, nikoli z tohoto souboru. |
+| [wagon.svg](../akropia-game/src/graphics/wagon.svg) | Viditelná vektorová vrstva `draw`, skrytá vrstva `image` s vloženou rastrovou předlohou. | Všech 12 cest `d` je doslova obsaženo také v `background.svg`. Samostatný export ve skriptu není. Loader registruje `wagon` z buňky `(1,6)` atlasu; R-0024 jej nyní používá v `UnitImageProvider` pro typ i instanci vozu. Změna zdejšího vozu sama atlas neaktualizuje. |
+| [logo.svg](../akropia-game/src/graphics/logo.svg) | Kostel, pozadí a nápis Akropia. Skrytá `background`, viditelné `background-2` a `logo`. | Metadata pro `splash-screen.png` **200 × 200**. Build jej vkládá do manifestu jako spouštěcí obrázek JVM a používá jej také argument `-splash`. Text zůstává editovatelný s vloženým fontem. Od R-0250 má zdroj stránku 200 × 200 a export používá přibalený TTF; viz [postup](#pribaleny-font-v-svg-a-exportu). |
+| [icon.svg](../akropia-game/src/graphics/icon.svg) | Černý standardní SVG text Akropia s vloženým Playpen Sans Light, nikoli ilustrace kostela. Rozměr dokumentu **1024 × 1024**. | Metadata ukazují na starou cestu `akropia-game/src/icon.png`, která v současném stromu není. Současná distribuční ikona s kostelem má odlišný obsah; tento SVG nelze označit za její doložený zdroj. R-0250 nahradil historický `flowRoot` přenositelným textem; obsah je viditelný i v běžném SVG rendereru. |
 
 Pracovní SVG mají různě velké stránky, často A4, a kresby mohou sahat mimo stránku. Rozměr stránky není rozměr herního obrázku. Staré absolutní cesty, výběry objektů, skryté vrstvy a exportní DPI nejsou automatický exportní manifest. Zejména soubory s více návrhy vyžadují určení správné vrstvy a exportované oblasti.
 
@@ -1677,7 +1685,7 @@ U `colony-frame.svg` jsou výslovná metadata `colony-warehouse.png` právě ve 
 ### Manifest exportu R-0225
 
 1. Autoritativním seznamem udržovaných receptů je
-   [export-manifest.json](../microcol-game/src/graphics/export-manifest.json);
+   [export-manifest.json](../akropia-game/src/graphics/export-manifest.json);
    spouští jej [export-graphics.py](../scripts/graphics/export-graphics.py).
    Každá položka uvádí zdroj SVG, výstup v `resources/images`, nativní rozměr,
    způsob vykreslení, případný výřez nebo mřížku atlasu s vlastníkem aliasů,
@@ -1752,9 +1760,9 @@ python3 -m unittest discover -s scripts/graphics -p 'test_*export.py'
 
 ### Co dnes provádí exportní skript
 
-[images.groovy](../microcol-game/src/main/groovy/images.groovy) je samostatný přípravný nástroj. Maven build `microcol-game` jej nespouští; balí již připravené soubory z `src/main/resources`. Samotná úprava SVG tedy při běžném buildu PNG nepřegeneruje.
+[images.groovy](../akropia-game/src/main/groovy/images.groovy) je samostatný přípravný nástroj. Maven build `akropia-game` jej nespouští; balí již připravené soubory z `src/main/resources`. Samotná úprava SVG tedy při běžném buildu PNG nepřegeneruje.
 
-Skript má natvrdo uložené cesty k Inkscape a ke starému checkoutu `/Users/jan/Documents/repo/github/microcol/`. SVG kopíruje do `microcol-game/target/`, v kopii případně zamění barvy, zavolá Inkscape a některé PNG následně rozřeže přes Java `ImageIO`. Originální SVG přebarvováním nepřepisuje.
+Skript má natvrdo uložené cesty k Inkscape a ke starému checkoutu `/Users/jan/Documents/repo/github/akropia/`. SVG kopíruje do `akropia-game/target/`, v kopii případně zamění barvy, zavolá Inkscape a některé PNG následně rozřeže přes Java `ImageIO`. Originální SVG přebarvováním nepřepisuje.
 
 V horní části jsou volání `sunset`, `colony`, `europe`, `market`, `background` a `cursors` zakomentovaná. **Spouští se pouze `bullet(conf, colors)`.** Funkce `crates()` existuje, ale v seznamu volání vůbec není. Spustit současný soubor proto neznamená vyexportovat veškerou grafiku.
 
@@ -1802,7 +1810,7 @@ Varianty chůze a kotvy s `-turn` jsou podle skriptu stejný výřez jako zákla
 
 ## Barvy a přebarvování
 
-[colors.properties](../microcol-game/src/main/resources/colors.properties) má dvojí účel: exportní skript podle něj přebarvuje část SVG a [ColorScheme](../microcol-game/src/main/java/org/microcol/gui/ColorScheme.java) jej čte za běhu pro barevné výplně okolo pozadí.
+[colors.properties](../akropia-game/src/main/resources/colors.properties) má dvojí účel: exportní skript podle něj přebarvuje část SVG a [ColorScheme](../akropia-game/src/main/java/org/akropia/gui/ColorScheme.java) jej čte za běhu pro barevné výplně okolo pozadí.
 
 | ID | Aktuální hodnota | Význam v souboru |
 | --- | --- | --- |
@@ -1826,11 +1834,11 @@ Varianty chůze a kotvy s `-turn` jsou podle skriptu stejný výřez jako zákla
 
 Ostatních 18 SVG tyto konkrétní definice nemá. Proto mohou původní SVG v editoru vypadat barevně jinak než hotová PNG. Po načtení upraveného `colors.properties` použije hra nové barvy pro výplně kreslené kódem, ale **pixely existujících PNG se tím nepřebarví**. Pro shodu se scénou je nutný i nový export příslušných PNG a krajů. `ColorScheme` načítá soubor jednou při svém vytvoření; změny souboru za chodu automaticky nesleduje.
 
-Soubor [colors-backup.properties](../microcol-game/src/main/resources/colors-backup.properties) uchovává starší čtyřbarevnou variantu. Současný skript a `ColorScheme` vybírají `colors.properties`. Další barvy jsou zároveň přímo v SVG, Java kódu a CSS, takže těchto šest hodnot ještě není úplná paleta celé hry.
+Soubor [colors-backup.properties](../akropia-game/src/main/resources/colors-backup.properties) uchovává starší čtyřbarevnou variantu. Současný skript a `ColorScheme` vybírají `colors.properties`. Další barvy jsou zároveň přímo v SVG, Java kódu a CSS, takže těchto šest hodnot ještě není úplná paleta celé hry.
 
 ## Jak se řežou tři atlasy
 
-[AbstractTiledImageLoader](../microcol-game/src/main/java/org/microcol/gui/image/AbstractTiledImageLoader.java) nejprve zkontroluje přesný rozměr souboru a potom přes `PixelReader` a `WritableImage` vytvoří všechny čtvercové výřezy. Nesprávný celkový rozměr vyvolá chybu při načítání.
+[AbstractTiledImageLoader](../akropia-game/src/main/java/org/akropia/gui/image/AbstractTiledImageLoader.java) nejprve zkontroluje přesný rozměr souboru a potom přes `PixelReader` a `WritableImage` vytvoří všechny čtvercové výřezy. Nesprávný celkový rozměr vyvolá chybu při načítání.
 
 Souřadnice `(x,y)` v dalších tabulkách znamenají **sloupec a řádek od nuly**, nikoli pixel. Sloupec roste doprava a řádek dolů. To je jiný prostor souřadnic než herní `Location`, která mapové pozice čísluje od jedničky.
 
@@ -1842,7 +1850,7 @@ Souřadnice `(x,y)` v dalších tabulkách znamenají **sloupec a řádek od nul
 
 Obecný výřez je `(x × krok, y × krok, velikost, velikost)`. Například galeona v `type_4_5` vzniká z pixelů začínajících na **(216,270)**, v obdélníku **45 × 45**.
 
-U hlavního atlasu po 45 pixelech obrázku následuje **9 pixelů mezery vpravo a dole**. Není to devítipixelový vnitřní okraj ze všech stran. Mezera se počítá i za posledním sloupcem a řádkem. Odděluje kresby při antialiasingu exportu. [TileImageParams](../microcol-game/src/main/java/org/microcol/gui/image/TileImageParams.java) z ní odvozuje krok a rozměry.
+U hlavního atlasu po 45 pixelech obrázku následuje **9 pixelů mezery vpravo a dole**. Není to devítipixelový vnitřní okraj ze všech stran. Mezera se počítá i za posledním sloupcem a řádkem. Odděluje kresby při antialiasingu exportu. [TileImageParams](../akropia-game/src/main/java/org/akropia/gui/image/TileImageParams.java) z ní odvozuje krok a rozměry.
 
 Všechny buňky dostanou souřadnicový klíč, i prázdné nebo pracovní. Dostupnost v cache sama nedokládá, že je hra někde zobrazuje.
 
@@ -1891,7 +1899,7 @@ Náhled ukazuje **skutečné runtime výřezy**, nikoli celou SVG stránku. Kaž
 
 ### Terén, les, pole a město
 
-Mapování je v [ImageLoaderTerrain](../microcol-game/src/main/java/org/microcol/gui/image/ImageLoaderTerrain.java).
+Mapování je v [ImageLoaderTerrain](../akropia-game/src/main/java/org/akropia/gui/image/ImageLoaderTerrain.java).
 
 | Buňka | Alias v paměti | Obsah |
 | --- | --- | --- |
@@ -1910,9 +1918,9 @@ Mapování je v [ImageLoaderTerrain](../microcol-game/src/main/java/org/microcol
 | `(1,5)` | `field` | Překryv obdělávaného pole |
 | `(6,5)`, `(7,5)` | `tile-hill-1.png`, `tile-hill-2.png` | Dvě varianty kopců |
 
-[TerrainImageProvider](../microcol-game/src/main/java/org/microcol/gui/image/TerrainImageProvider.java) vybírá jednu výchozí variantu podle `TerrainType`. Hlavní mapa navíc používá [ImageRandomProvider](../microcol-game/src/main/java/org/microcol/gui/image/ImageRandomProvider.java) a [WorldMapRandoms](../microcol-game/src/main/java/org/microcol/gui/image/WorldMapRandoms.java). Variace závislé na seedu mapy jsou pro dané políčko stabilní: hory, kopce, prérie a arktida mají dvě varianty podle parity náhodného čísla, druhá tundra se vybírá při dělitelnosti sedmi, druhý les při dělitelnosti třemi a velryba při dělitelnosti 63.
+[TerrainImageProvider](../akropia-game/src/main/java/org/akropia/gui/image/TerrainImageProvider.java) vybírá jednu výchozí variantu podle `TerrainType`. Hlavní mapa navíc používá [ImageRandomProvider](../akropia-game/src/main/java/org/akropia/gui/image/ImageRandomProvider.java) a [WorldMapRandoms](../akropia-game/src/main/java/org/akropia/gui/image/WorldMapRandoms.java). Variace závislé na seedu mapy jsou pro dané políčko stabilní: hory, kopce, prérie a arktida mají dvě varianty podle parity náhodného čísla, druhá tundra se vybírá při dělitelnosti sedmi, druhý les při dělitelnosti třemi a velryba při dělitelnosti 63.
 
-Vlnka je časované přepnutí na jiný statický výřez, nikoli animace několika snímků. Počáteční výběr má šanci 1/51 a trvání 0–6 sekund; pozdější výběr se zkouší po tickách a trvá 10–21 sekund. Používá jiný generátor náhodných čísel než stabilní vzhled terénu. [TileAnimation](../microcol-game/src/main/java/org/microcol/gui/image/TileAnimation.java) převádí sekundy na tick podle `AnimationScheduler.FPS`, nyní 30.
+Vlnka je časované přepnutí na jiný statický výřez, nikoli animace několika snímků. Počáteční výběr má šanci 1/51 a trvání 0–6 sekund; pozdější výběr se zkouší po tickách a trvá 10–21 sekund. Používá jiný generátor náhodných čísel než stabilní vzhled terénu. [TileAnimation](../akropia-game/src/main/java/org/akropia/gui/image/TileAnimation.java) převádí sekundy na tick podle `AnimationScheduler.FPS`, nyní 30.
 
 ### Pobřeží a okraje neodhalené mapy
 
@@ -1933,17 +1941,17 @@ Pomocná vrstva `description` v `background.svg` obsahuje čísla sloupců 0–1
 | 8 | `i-shapeNorth-04` | Další zakončení I |
 | 9 | `i-shapeNorth-b4` | Další zakončení I |
 
-[AbstractCoastImageLoader](../microcol-game/src/main/java/org/microcol/gui/image/AbstractCoastImageLoader.java) z deseti zdrojů každé rodiny vytvoří **81 runtime obrázků**: 1 well, 16 U, 16 L, 16 I a 32 II. Další orientace vznikají otočením po 90°, zrcadlením a transpozicí. II je složení dvou protilehlých I přechodů. Celkem tak vznikají tři rodiny po 81 obrázcích bez dalších SVG souborů.
+[AbstractCoastImageLoader](../akropia-game/src/main/java/org/akropia/gui/image/AbstractCoastImageLoader.java) z deseti zdrojů každé rodiny vytvoří **81 runtime obrázků**: 1 well, 16 U, 16 L, 16 I a 32 II. Další orientace vznikají otočením po 90°, zrcadlením a transpozicí. II je složení dvou protilehlých I přechodů. Celkem tak vznikají tři rodiny po 81 obrázcích bez dalších SVG souborů.
 
-Koncovky jako `03` nebo `2a` označují body napojení hran, nikoli čísla animačních snímků. Dvanáct konektorů `0..9,a,b` a jejich uspořádání popisují [AbstractCoastMapGenerator](../microcol-game/src/main/java/org/microcol/gui/image/AbstractCoastMapGenerator.java) a [Connector](../microcol-game/src/main/java/org/microcol/gui/image/Connector.java).
+Koncovky jako `03` nebo `2a` označují body napojení hran, nikoli čísla animačních snímků. Dvanáct konektorů `0..9,a,b` a jejich uspořádání popisují [AbstractCoastMapGenerator](../akropia-game/src/main/java/org/akropia/gui/image/AbstractCoastMapGenerator.java) a [Connector](../akropia-game/src/main/java/org/akropia/gui/image/Connector.java).
 
-Konkrétní tvar určí osm okolních políček: přímí sousedé hlavní tvar a diagonály zakončení. Zelené pobřeží odděluje moře od pevniny kromě tundry/arktidy; ledové od tundry/arktidy. Kreslí se jako průhledný překryv na mořském políčku. Neodhalený okraj obdobně odděluje viditelnou a neviditelnou oblast. [MapManager](../microcol-game/src/main/java/org/microcol/gui/screen/game/gamepanel/MapManager.java) dává při souběhu přednost zelenému pobřeží před ledovým; automaticky obě neskládá na jedno místo.
+Konkrétní tvar určí osm okolních políček: přímí sousedé hlavní tvar a diagonály zakončení. Zelené pobřeží odděluje moře od pevniny kromě tundry/arktidy; ledové od tundry/arktidy. Kreslí se jako průhledný překryv na mořském políčku. Neodhalený okraj obdobně odděluje viditelnou a neviditelnou oblast. [MapManager](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/MapManager.java) dává při souběhu přednost zelenému pobřeží před ledovým; automaticky obě neskládá na jedno místo.
 
-Technicky důležité je chování [ImageWrapper](../microcol-game/src/main/java/org/microcol/gui/image/ImageWrapper.java): při skládání vybírá v každém pixelu barvu s **větší neprůhledností**, při rovnosti první obrázek. Není to běžné prolnutí alfa kanálů. Operace jsou pevně velikosti 45 × 45. Průhlednost, napojení hran a otočitelnost kresby jsou tedy funkční vlastnosti. Spolu s pobřežím se otočí i případný nakreslený stín nebo směrová textura.
+Technicky důležité je chování [ImageWrapper](../akropia-game/src/main/java/org/akropia/gui/image/ImageWrapper.java): při skládání vybírá v každém pixelu barvu s **větší neprůhledností**, při rovnosti první obrázek. Není to běžné prolnutí alfa kanálů. Operace jsou pevně velikosti 45 × 45. Průhlednost, napojení hran a otočitelnost kresby jsou tedy funkční vlastnosti. Spolu s pobřežím se otočí i případný nakreslený stín nebo směrová textura.
 
 ### Jednotky
 
-Mapování je v [ImageLoaderUnit](../microcol-game/src/main/java/org/microcol/gui/image/ImageLoaderUnit.java), výběr varianty v [UnitImageProvider](../microcol-game/src/main/java/org/microcol/gui/image/UnitImageProvider.java).
+Mapování je v [ImageLoaderUnit](../akropia-game/src/main/java/org/akropia/gui/image/ImageLoaderUnit.java), výběr varianty v [UnitImageProvider](../akropia-game/src/main/java/org/akropia/gui/image/UnitImageProvider.java).
 
 | Buňka | Alias | Výběr |
 | --- | --- | --- |
@@ -1960,13 +1968,13 @@ Mapování je v [ImageLoaderUnit](../microcol-game/src/main/java/org/microcol/gu
 
 U kolonisty má nejprve význam kůň, potom zbraně a u pěšího nástroje. Orientace nemění jeho sprite. Galeona, karavela a obchodní loď používají západní nebo výchozí východní podobu transportní lodi; fregata, korzárská a řadová loď používají základní bojovou variantu. R-0108 znovu používá tyto dvě rodiny obrázků, nikoli šest samostatných ilustrací; typy rozlišují přeložené názvy. Stav ověření vede [R-0108](requirements/done/R-0108.md). Jednotka mimo mapovou lokaci používá při běžném dotazu výchozí orientaci east.
 
-Tytéž obrázky se používají na mapě, v přístavu, v docích, v nákladových slotech a seznamech. [PaintService](../microcol-game/src/main/java/org/microcol/gui/util/PaintService.java) kreslí jednotku i mapovou kolonii s posunem **(2,4)** od levého horního rohu mapového políčka, bez zmenšení. Obrázek proto může přesáhnout hranici svého políčka. Vlajku, jméno kolonie a znak akce jednotky kreslí kód zvlášť.
+Tytéž obrázky se používají na mapě, v přístavu, v docích, v nákladových slotech a seznamech. [PaintService](../akropia-game/src/main/java/org/akropia/gui/util/PaintService.java) kreslí jednotku i mapovou kolonii s posunem **(2,4)** od levého horního rohu mapového políčka, bez zmenšení. Obrázek proto může přesáhnout hranici svého políčka. Vlajku, jméno kolonie a znak akce jednotky kreslí kód zvlášť.
 
-[AnimationWalk](../microcol-game/src/main/java/org/microcol/gui/screen/game/gamepanel/AnimationWalk.java) pohybuje stejným obrázkem po trase. V současném atlasu není sekvence fází chůze.
+[AnimationWalk](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/AnimationWalk.java) pohybuje stejným obrázkem po trase. V současném atlasu není sekvence fází chůze.
 
 ### Zboží a produkce
 
-Názvy aliasů a obsah odpovídají středomořskému názvosloví [R-0394](requirements/R-0394.md); souřadnice buněk jsou původní pozice v dlaždicovém atlasu před R-0384. Všech 19 aliasů zavádí [ImageLoaderGoods](../microcol-game/src/main/java/org/microcol/gui/image/ImageLoaderGoods.java); [GoodsImageProvider](../microcol-game/src/main/java/org/microcol/gui/image/GoodsImageProvider.java) je přiřazuje k `GoodsType`.
+Názvy aliasů a obsah odpovídají středomořskému názvosloví [R-0394](requirements/R-0394.md); souřadnice buněk jsou původní pozice v dlaždicovém atlasu před R-0384. Všech 19 aliasů zavádí [ImageLoaderGoods](../akropia-game/src/main/java/org/akropia/gui/image/ImageLoaderGoods.java); [GoodsImageProvider](../akropia-game/src/main/java/org/akropia/gui/image/GoodsImageProvider.java) je přiřazuje k `GoodsType`.
 
 | Buňka | Alias | Obsah |
 | --- | --- | --- |
@@ -1990,23 +1998,23 @@ Názvy aliasů a obsah odpovídají středomořskému názvosloví [R-0394](requ
 | `(9,7)` | `good-grain.png` | Obilí |
 | `(10,7)` | `good-olives.png` | Olivy |
 
-Množství zboží nemění obrázek; číslo a další informace doplňuje UI. Zdrojový výřez má 45 × 45, ale [PanelColonyFields](../microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelColonyFields.java) produkci polí kreslí **25 × 25**, [AbstractPanelConstructionWithSlots](../microcol-game/src/main/java/org/microcol/gui/screen/colony/AbstractPanelConstructionWithSlots.java) produkci stavby **22 × 22** a [UnitPanel](../microcol-game/src/main/java/org/microcol/gui/UnitPanel.java) malý náklad **15 × 15**. Při úpravách je nutné posuzovat i tyto skutečné zobrazované velikosti.
+Množství zboží nemění obrázek; číslo a další informace doplňuje UI. Zdrojový výřez má 45 × 45, ale [PanelColonyFields](../akropia-game/src/main/java/org/akropia/gui/screen/colony/PanelColonyFields.java) produkci polí kreslí **25 × 25**, [AbstractPanelConstructionWithSlots](../akropia-game/src/main/java/org/akropia/gui/screen/colony/AbstractPanelConstructionWithSlots.java) produkci stavby **22 × 22** a [UnitPanel](../akropia-game/src/main/java/org/akropia/gui/UnitPanel.java) malý náklad **15 × 15**. Při úpravách je nutné posuzovat i tyto skutečné zobrazované velikosti.
 
 ### Zbývající buňky a skládání mapy
 
 Pro následující buňky nebyl v loaderech nalezen pojmenovaný alias ani použití jako zdroj pobřeží: `(2,0)`, `(10,0)`, `(11,0)`, `(10,1)`, `(11,1)`, `(10,2)`, `(11,2)`, `(11,3)`, `(7,4)` až `(11,4)`, `(2,5)`, `(3,5)`, `(8,5)`, `(3,6)`, `(4,6)`, `(11,7)`. Nadále existují jako `type_x_y`; některé obsahují kresbu či barevnou značku. Nejsou tím automaticky označeny za volné místo pro nové assety.
 
-Pořadí uvnitř viditelného mapového políčka je: **základní terén → pobřeží → les → pole → barevné zvýraznění → okraj neodhalené oblasti**. Neviditelné políčko dostává celé `tile-hidden.png`. Nad mapou se dále vykreslují mřížka/výběr, kolonie, jednotky, plán cesty a animace; mrak je až nad nimi. Konkrétní pořadí určují [PaintService](../microcol-game/src/main/java/org/microcol/gui/util/PaintService.java), [GamePaintService](../microcol-game/src/main/java/org/microcol/gui/screen/game/gamepanel/GamePaintService.java) a [GamePanelPainter](../microcol-game/src/main/java/org/microcol/gui/screen/game/gamepanel/GamePanelPainter.java).
+Pořadí uvnitř viditelného mapového políčka je: **základní terén → pobřeží → les → pole → barevné zvýraznění → okraj neodhalené oblasti**. Neviditelné políčko dostává celé `tile-hidden.png`. Nad mapou se dále vykreslují mřížka/výběr, kolonie, jednotky, plán cesty a animace; mrak je až nad nimi. Konkrétní pořadí určují [PaintService](../akropia-game/src/main/java/org/akropia/gui/util/PaintService.java), [GamePaintService](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/GamePaintService.java) a [GamePanelPainter](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/GamePanelPainter.java).
 
 Les a pole tedy mají být samostatné překryvy. Pokud by nový les obsahoval neprůhlednou celou plochu podkladového terénu, zakryl by předchozí vrstvy. To je současný technický požadavek, nikoli rozhodnutí o budoucím stylu.
 
-[EditorPaintingService](../microcol-game/src/main/java/org/microcol/gui/screen/editor/EditorPaintingService.java) používá jednodušší náhled: pevnou výchozí variantu terénu, vždy `tree-1.png` a překryv pole. Nevybírá náhodné varianty hlavní mapy ani generované pobřeží. Mapovou kolonii kreslí přímo do levého horního rohu políčka, bez herního posunu `(2,4)`. Náhled v editoru proto není úplnou kontrolou výsledného vzhledu ve hře.
+[EditorPaintingService](../akropia-game/src/main/java/org/akropia/gui/screen/editor/EditorPaintingService.java) používá jednodušší náhled: pevnou výchozí variantu terénu, vždy `tree-1.png` a překryv pole. Nevybírá náhodné varianty hlavní mapy ani generované pobřeží. Mapovou kolonii kreslí přímo do levého horního rohu políčka, bez herního posunu `(2,4)`. Náhled v editoru proto není úplnou kontrolou výsledného vzhledu ve hře.
 
 ## Atlas budov
 
 ![Výřezy atlasu budov se souřadnicemi](graphics-assets/buildings-grid.png)
 
-[ImageLoaderBuilding](../microcol-game/src/main/java/org/microcol/gui/image/ImageLoaderBuilding.java) převádí následující buňky na aliasy `building_<ConstructionType>`. Všechny výřezy mají 70 × 70.
+[ImageLoaderBuilding](../akropia-game/src/main/java/org/akropia/gui/image/ImageLoaderBuilding.java) převádí následující buňky na aliasy `building_<ConstructionType>`. Všechny výřezy mají 70 × 70.
 
 | Řádek y | Sloupec x a typ stavby |
 | ---: | --- |
@@ -2020,17 +2028,17 @@ Les a pole tedy mají být samostatné překryvy. Pokud by nový les obsahoval n
 
 **Historický stav před R-0349:** následující popis atlasu a původních panelů je zachovaný jako reference. Aktuální město používá [41 samostatných ilustrací](#mestska-obrazovka-cista-linka-30-rijna-2026).
 
-Ostatní buňky zůstávají přístupné pouze svým souřadnicovým klíčem. Z 42 konstant [ConstructionType](../microcol-game/src/main/java/org/microcol/model/ConstructionType.java) má zde přiřazení 30. Chybí `FORTRESS`, `FORT`, `STOCKADE`, `ARSENAL`, `MAGAZINE`, `ARMORY`, `SHIPYARD`, `DRYDOCK`, `DOCK`, `NEWSPAPER`, `PRINTING_PRESS`, `CUSTOM_HOUSE`. Neznamená to samo o sobě 12 chyb na aktuálních obrazovkách; znamená to, že tento loader pro tyto typy obrázek neposkytuje.
+Ostatní buňky zůstávají přístupné pouze svým souřadnicovým klíčem. Z 42 konstant [ConstructionType](../akropia-game/src/main/java/org/akropia/model/ConstructionType.java) má zde přiřazení 30. Chybí `FORTRESS`, `FORT`, `STOCKADE`, `ARSENAL`, `MAGAZINE`, `ARMORY`, `SHIPYARD`, `DRYDOCK`, `DOCK`, `NEWSPAPER`, `PRINTING_PRESS`, `CUSTOM_HOUSE`. Neznamená to samo o sobě 12 chyb na aktuálních obrazovkách; znamená to, že tento loader pro tyto typy obrázek neposkytuje.
 
-[AbstractPanelConstruction](../microcol-game/src/main/java/org/microcol/gui/screen/colony/AbstractPanelConstruction.java) dostane typ stavby, požádá o obrázek a vykreslí jej v původní velikosti. Tento konkrétní spotřebitel při chybějícím obrázku vyvolá chybu. [PanelConstructionBasic](../microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelConstructionBasic.java) umisťuje stavbu na `(15,0)` do samostatného rámu, [PanelConstructionSimple](https://github.com/jajir/microcol/blob/75a75a4e/microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelConstructionSimple.java) na `(0,0)` bez něj.
+[AbstractPanelConstruction](../akropia-game/src/main/java/org/akropia/gui/screen/colony/AbstractPanelConstruction.java) dostane typ stavby, požádá o obrázek a vykreslí jej v původní velikosti. Tento konkrétní spotřebitel při chybějícím obrázku vyvolá chybu. [PanelConstructionBasic](../akropia-game/src/main/java/org/akropia/gui/screen/colony/PanelConstructionBasic.java) umisťuje stavbu na `(15,0)` do samostatného rámu, [PanelConstructionSimple](https://github.com/jajir/microcol/blob/75a75a4e/microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelConstructionSimple.java) na `(0,0)` bez něj.
 
-Karta stavby není jediná bitmapa: rám přidává CSS, samotnou stavbu canvas, pracovníky a produkci další kreslení/UI. Aktualizace R-0025 z 14. října 2026: [QueueDialog](../microcol-game/src/main/java/org/microcol/gui/screen/colony/buildingqueue/QueueDialog.java) používá textové seznamy s cenami a důvody nedostupnosti; původní přetahovací panely s obrázkem kolonisty byly odstraněny. Viditelná karta tesaře zachovává atlas i pracovní místa a přidává tlačítko stavění a stav projektu. Existující rastry se nemění. [Cílené ověření](functional-tests.md#construction-ui-implementation-2026-10-14) zahrnuje anglický/český dialog i skutečný stav čekání na nástroje.
+Karta stavby není jediná bitmapa: rám přidává CSS, samotnou stavbu canvas, pracovníky a produkci další kreslení/UI. Aktualizace R-0025 z 14. října 2026: [QueueDialog](../akropia-game/src/main/java/org/akropia/gui/screen/colony/buildingqueue/QueueDialog.java) používá textové seznamy s cenami a důvody nedostupnosti; původní přetahovací panely s obrázkem kolonisty byly odstraněny. Viditelná karta tesaře zachovává atlas i pracovní místa a přidává tlačítko stavění a stav projektu. Existující rastry se nemění. [Cílené ověření](functional-tests.md#construction-ui-implementation-2026-10-14) zahrnuje anglický/český dialog i skutečný stav čekání na nástroje.
 
 ## Atlas tlačítek
 
 ![Výřezy atlasu tlačítek se souřadnicemi](graphics-assets/buttons-grid.png)
 
-Následuje skutečné přiřazení z [ImageLoaderButtons](../microcol-game/src/main/java/org/microcol/gui/image/ImageLoaderButtons.java), včetně existujícího nesouladu u kácení.
+Následuje skutečné přiřazení z [ImageLoaderButtons](../akropia-game/src/main/java/org/akropia/gui/image/ImageLoaderButtons.java), včetně existujícího nesouladu u kácení.
 
 | Buňka | Alias | Význam |
 | --- | --- | --- |
@@ -2050,9 +2058,9 @@ Následuje skutečné přiřazení z [ImageLoaderButtons](../microcol-game/src/m
 | `(1,3)` | `button_buy` | Nákup |
 | `(2,3)`, `(3,3)` | Bez pojmenovaných aliasů | Prázdná/pracovní buňka |
 
-[ButtonImage](../microcol-game/src/main/java/org/microcol/gui/buttonpanel/ButtonImage.java) použije obrázek jako vycentrované neopakované pozadí tlačítka. [ButtonsPanel.css](../microcol-game/src/main/resources/gui/ButtonsPanel.css) stanovuje minimální velikost tlačítka 50 × 50. Samostatné výřezy pro hover a stisk se v této třídě nevybírají; chování a případné další zvýraznění řeší UI/CSS.
+[ButtonImage](../akropia-game/src/main/java/org/akropia/gui/buttonpanel/ButtonImage.java) použije obrázek jako vycentrované neopakované pozadí tlačítka. [ButtonsPanel.css](../akropia-game/src/main/resources/gui/ButtonsPanel.css) stanovuje minimální velikost tlačítka 50 × 50. Samostatné výřezy pro hover a stisk se v této třídě nevybírají; chování a případné další zvýraznění řeší UI/CSS.
 
-[ButtonsGamePanel](../microcol-game/src/main/java/org/microcol/gui/screen/game/components/ButtonsGamePanel.java) tlačítko nápovědy vytvoří, ale jeho přidání do panelu je zakomentované. Pro `BUTTON_CUT_TREE` a `BUTTON_BUILD_ROAD` nebyl nalezen spotřebitel mimo jejich definici a registraci. Sdílený chybný výřez proto dokumentujeme jako stav mapování, nikoli jako ověřenou viditelnou chybu na obrazovce. Tlačítka v ostatních screenech často sdílejí `button_exit`; nákup v Evropě používá `button_buy`.
+[ButtonsGamePanel](../akropia-game/src/main/java/org/akropia/gui/screen/game/components/ButtonsGamePanel.java) tlačítko nápovědy vytvoří, ale jeho přidání do panelu je zakomentované. Pro `BUTTON_CUT_TREE` a `BUTTON_BUILD_ROAD` nebyl nalezen spotřebitel mimo jejich definici a registraci. Sdílený chybný výřez proto dokumentujeme jako stav mapování, nikoli jako ověřenou viditelnou chybu na obrazovce. Tlačítka v ostatních screenech často sdílejí `button_exit`; nákup v Evropě používá `button_buy`.
 
 ## Jak se sestavují samostatné obrázky na obrazovkách
 
@@ -2060,22 +2068,22 @@ Následuje skutečné přiřazení z [ImageLoaderButtons](../microcol-game/src/m
 
 Pozadí menu, Evropy, tržiště a kolonie mají společný princip: barevné plochy přes celý canvas, opakované krajové obrázky a nakonec centrální PNG v původní velikosti. Kód jej umístí na `(velikost canvasu − velikost obrázku) / 2`. Změna velikosti okna tedy obrázek automaticky nenatahuje ani nezmenšuje; menší okno může kresbu oříznout.
 
-[ImageStripePainter](../microcol-game/src/main/java/org/microcol/gui/background/ImageStripePainter.java) opakuje celé krajové PNG vodorovně. Volné místo uprostřed má šířku centrálního obrázku minus 10 px, takže střed překryje kraje přibližně o 5 px na každé straně. Následující posuny Y jsou měřené **od svislého středu canvasu**, nikoli od horního okraje hlavního PNG.
+[ImageStripePainter](../akropia-game/src/main/java/org/akropia/gui/background/ImageStripePainter.java) opakuje celé krajové PNG vodorovně. Volné místo uprostřed má šířku centrálního obrázku minus 10 px, takže střed překryje kraje přibližně o 5 px na každé straně. Následující posuny Y jsou měřené **od svislého středu canvasu**, nikoli od horního okraje hlavního PNG.
 
 | Obrazovka a kód | Střed | Opakované kraje a posun Y | Barevné výplně |
 | --- | --- | --- | --- |
-| [GameMenuBackground](../microcol-game/src/main/java/org/microcol/gui/screen/menu/GameMenuBackground.java) | `sunset.png` | `sunset-top-line.png` obě strany, −260; `sunset-bottom-line.png` obě strany, +230 | Obloha, moře, tráva |
-| [EuropeBackground](../microcol-game/src/main/java/org/microcol/gui/screen/europe/EuropeBackground.java) | `europe.png` | `europe-left.png` vlevo a `europe-right.png` vpravo, obě −312 | Obloha, moře, hlína |
-| [MarketBackground](../microcol-game/src/main/java/org/microcol/gui/screen/market/MarketBackground.java) | `market.png` | `market-top.png` vlevo, `market-bottom.png` vpravo, obě −299 | Obloha, moře, tráva |
+| [GameMenuBackground](../akropia-game/src/main/java/org/akropia/gui/screen/menu/GameMenuBackground.java) | `sunset.png` | `sunset-top-line.png` obě strany, −260; `sunset-bottom-line.png` obě strany, +230 | Obloha, moře, tráva |
+| [EuropeBackground](../akropia-game/src/main/java/org/akropia/gui/screen/europe/EuropeBackground.java) | `europe.png` | `europe-left.png` vlevo a `europe-right.png` vpravo, obě −312 | Obloha, moře, hlína |
+| [MarketBackground](../akropia-game/src/main/java/org/akropia/gui/screen/market/MarketBackground.java) | `market.png` | `market-top.png` vlevo, `market-bottom.png` vpravo, obě −299 | Obloha, moře, tráva |
 | [ColonyBackground](https://github.com/jajir/microcol/blob/75a75a4e/microcol-game/src/main/java/org/microcol/gui/screen/colony/ColonyBackground.java) | `colony.png` | `colony-top1.png` vlevo −305; `colony-top2.png` vpravo −298; `colony-bottom.png` obě strany +265 | Obloha, tráva, tráva |
 
-Návaznost horizontu, mola, země a krajových pásů závisí současně na ilustraci, výřezech i těchto číslech. Evropské lodě a postavy umisťuje zvlášť [Europe.css](../microcol-game/src/main/resources/gui/Europe.css). Posun mola v obrázku bez úpravy odpovídajícího UI proto může způsobit, že lodě nebo lidé budou stát mimo zamýšlené místo.
+Návaznost horizontu, mola, země a krajových pásů závisí současně na ilustraci, výřezech i těchto číslech. Evropské lodě a postavy umisťuje zvlášť [Europe.css](../akropia-game/src/main/resources/gui/Europe.css). Posun mola v obrázku bez úpravy odpovídajícího UI proto může způsobit, že lodě nebo lidé budou stát mimo zamýšlené místo.
 
 ### Papír, dřevo a skutečné grafy
 
-[StatisticsBackground](../microcol-game/src/main/java/org/microcol/gui/screen/statistics/StatisticsBackground.java) opakuje `background-wood2.png` a doprostřed položí `book2.png`. [TurnReportBackground](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/TurnReportBackground.java) postupuje stejně s `page.png`. Oba prostřední obrázky zachovávají původní rozměr. [RepeatingBackgroundPainter](../microcol-game/src/main/java/org/microcol/gui/background/RepeatingBackgroundPainter.java) začíná dláždění dřeva od středu canvasu směrem ven.
+[StatisticsBackground](../akropia-game/src/main/java/org/akropia/gui/screen/statistics/StatisticsBackground.java) opakuje `background-wood2.png` a doprostřed položí `book2.png`. [TurnReportBackground](../akropia-game/src/main/java/org/akropia/gui/screen/turnreport/TurnReportBackground.java) postupuje stejně s `page.png`. Oba prostřední obrázky zachovávají původní rozměr. [RepeatingBackgroundPainter](../akropia-game/src/main/java/org/akropia/gui/background/RepeatingBackgroundPainter.java) začíná dláždění dřeva od středu canvasu směrem ven.
 
-Čáry grafů nejsou nakreslené v SVG knihy. [StatisticsPanel](../microcol-game/src/main/java/org/microcol/gui/screen/statistics/StatisticsPanel.java) vytváří JavaFX `NumberAxis` a `LineChart<Number,Number>` nad skutečnými herními daty. Budoucí změna vzhledu grafů proto patří také do tohoto kódu a [Statistics.css](../microcol-game/src/main/resources/gui/Statistics.css), nejen do ilustrace pozadí.
+Čáry grafů nejsou nakreslené v SVG knihy. [StatisticsPanel](../akropia-game/src/main/java/org/akropia/gui/screen/statistics/StatisticsPanel.java) vytváří JavaFX `NumberAxis` a `LineChart<Number,Number>` nad skutečnými herními daty. Budoucí změna vzhledu grafů proto patří také do tohoto kódu a [Statistics.css](../akropia-game/src/main/resources/gui/Statistics.css), nejen do ilustrace pozadí.
 
 ### Rámy a dialogy přes CSS
 
@@ -2083,28 +2091,28 @@ Návaznost horizontu, mola, země a krajových pásů závisí současně na ilu
 
 | Obrázek | Rozměr souboru | Současná komponenta a obsah |
 | --- | --- | --- |
-| `dialog-petr.png` | 501 × 378 | [dialogs.css](../microcol-game/src/main/resources/gui/dialogs.css): panel 505 × 380, pravý textový padding 200 kvůli postavě; [DialogWithMan](../microcol-game/src/main/java/org/microcol/gui/dialog/DialogWithMan.java) připojuje styl. |
-| `bullet.png` | 15 × 15 | [TurnReport.css](../microcol-game/src/main/resources/gui/TurnReport.css): prvek min. 20 × 20, posun Y 5. |
-| `colony-fields.png` | 145 × 145 | [Colony.css](../microcol-game/src/main/resources/gui/Colony.css): panel max. 150 × 150 s paddingem 4 vlevo/nahoře. Vnitřní canvas kreslí 3 × 3 políčka, tedy 135 × 135. |
+| `dialog-petr.png` | 501 × 378 | [dialogs.css](../akropia-game/src/main/resources/gui/dialogs.css): panel 505 × 380, pravý textový padding 200 kvůli postavě; [DialogWithMan](../akropia-game/src/main/java/org/akropia/gui/dialog/DialogWithMan.java) připojuje styl. |
+| `bullet.png` | 15 × 15 | [TurnReport.css](../akropia-game/src/main/resources/gui/TurnReport.css): prvek min. 20 × 20, posun Y 5. |
+| `colony-fields.png` | 145 × 145 | [Colony.css](../akropia-game/src/main/resources/gui/Colony.css): panel max. 150 × 150 s paddingem 4 vlevo/nahoře. Vnitřní canvas kreslí 3 × 3 políčka, tedy 135 × 135. |
 | `colony-frame.png` | 100 × 134 | Panel běžné stavby má preferované i maximální rozměry 100 × 135; uvnitř stavba, pracovníci a produkce. |
 | `colony-building-queue.png` | 264 × 135 | Panel tesaře má preferované i maximální rozměry 264 × 137; canvas má posun X −82, popis X +37; kliknutí otevírá stavební frontu. |
 | `colony-warehouse.png` | 846 × 134 | Panel skladu má minimální a preferovanou šířku 847, pevnou výšku 137 a posun X 220 a Y 293; vnitřní canvas posun `(10,−20)`. |
 
-Pro `Colony.css` existuje také [Colony.scss](../microcol-game/src/main/sass/Colony.scss). Maven profil `sass` definuje generování CSS; běžný build tento profil automaticky nepoužívá. Při budoucích změnách rámů je nutné držet zdroj SCSS a používané CSS ve shodě.
+Pro `Colony.css` existuje také [Colony.scss](../akropia-game/src/main/sass/Colony.scss). Maven profil `sass` definuje generování CSS; běžný build tento profil automaticky nepoužívá. Při budoucích změnách rámů je nutné držet zdroj SCSS a používané CSS ve shodě.
 
 ### Náklad, kurzory, značky trasy a animace
 
-[PanelCrateView](../microcol-game/src/main/java/org/microcol/gui/dock/PanelCrateView.java) zobrazuje `crate-open.png` nebo `crate-closed.png` přes `ImageView` s `fitWidth=45`, `fitHeight=45` a zachováním poměru stran. Na otevřenou bednu se přidává obrázek jednotky či zboží. Vlastní PNG bedny má 200 × 200.
+[PanelCrateView](../akropia-game/src/main/java/org/akropia/gui/dock/PanelCrateView.java) zobrazuje `crate-open.png` nebo `crate-closed.png` přes `ImageView` s `fitWidth=45`, `fitHeight=45` a zachováním poměru stran. Na otevřenou bednu se přidává obrázek jednotky či zboží. Vlastní PNG bedny má 200 × 200.
 
-[CursorServiceImpl](../microcol-game/src/main/java/org/microcol/gui/screen/game/gamepanel/CursorServiceImpl.java) z `cursor-goto.png` vytváří JavaFX `ImageCursor` s aktivním bodem **(1,1)**. [MoveModeSupport](../microcol-game/src/main/java/org/microcol/gui/screen/game/gamepanel/MoveModeSupport.java) vybírá běžnou, kotevní nebo bojovou značku plánované trasy. [GamePaintService](../microcol-game/src/main/java/org/microcol/gui/screen/game/gamepanel/GamePaintService.java) pro značky 25 × 25 používá posun **(10,10)** uvnitř políčka 45 × 45 a podle dostupných kroků vybírá i variantu pro další tah.
+[CursorServiceImpl](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/CursorServiceImpl.java) z `cursor-goto.png` vytváří JavaFX `ImageCursor` s aktivním bodem **(1,1)**. [MoveModeSupport](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/MoveModeSupport.java) vybírá běžnou, kotevní nebo bojovou značku plánované trasy. [GamePaintService](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/GamePaintService.java) pro značky 25 × 25 používá posun **(10,10)** uvnitř políčka 45 × 45 a podle dostupných kroků vybírá i variantu pro další tah.
 
-[AnimationClouds](../microcol-game/src/main/java/org/microcol/gui/screen/game/gamepanel/AnimationClouds.java) posouvá celý `cloud-1.png`, nezmenšuje jej a po průchodu opakuje cyklus. [AnimationFight](../microcol-game/src/main/java/org/microcol/gui/screen/game/gamepanel/AnimationFight.java) při boji kreslí statický `crossed-swords.png`; tentýž soubor používá [DialogFight](../microcol-game/src/main/java/org/microcol/gui/dialog/DialogFight.java). Jednotlivé fáze mraku a mečů se z atlasu nečtou.
+[AnimationClouds](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/AnimationClouds.java) posouvá celý `cloud-1.png`, nezmenšuje jej a po průchodu opakuje cyklus. [AnimationFight](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/AnimationFight.java) při boji kreslí statický `crossed-swords.png`; tentýž soubor používá [DialogFight](../akropia-game/src/main/java/org/akropia/gui/dialog/DialogFight.java). Jednotlivé fáze mraku a mečů se z atlasu nečtou.
 
 Odlišný případ je `bird.png` v menu: přes svou příponu jde o **animovaný GIF89a, 480 × 270, 80 snímků**. Java načte celý resource jako `Image`; kód jej kreslí do **80 × 45** a zároveň posouvá horizontálně. `bird-1.png` je také 80snímkový GIF, ale současný odkaz na něj nebyl nalezen. Při budoucím zpracování těchto souborů se nelze řídit pouze příponou.
 
 ## Úplný inventář rastrových souborů
 
-Všechny položky jsou v [resources/images](../microcol-game/src/main/resources/images). Zkratka „odkaz nenalezen“ znamená výsledek hledání v aktuálním Java/CSS/build kódu, nikoli doporučení soubor odstranit. Podrobnosti spotřebitelů jsou uvedeny výše. „Původ nedoložen“ znamená, že mezi 24 posuzovanými SVG ani ve skriptu není potvrzený export tohoto obrázku.
+Všechny položky jsou v [resources/images](../akropia-game/src/main/resources/images). Zkratka „odkaz nenalezen“ znamená výsledek hledání v aktuálním Java/CSS/build kódu, nikoli doporučení soubor odstranit. Podrobnosti spotřebitelů jsou uvedeny výše. „Původ nedoložen“ znamená, že mezi 24 posuzovanými SVG ani ve skriptu není potvrzený export tohoto obrázku.
 
 | Soubor | Rozměr | Zdroj nebo role |
 | --- | --- | --- |
@@ -2158,7 +2166,23 @@ Všechny položky jsou v [resources/images](../microcol-game/src/main/resources/
 
 [Obrazový přehled všech 47 souborů](graphics-assets/raster-overview.jpg) ukazuje zmenšené náhledy. U GIFů zachycuje pouze první snímek. Pro přesné výřezy atlasů slouží samostatné mřížky výše; pro posouzení detailů původní soubory.
 
-Distribuční ikony mimo tento adresář nejsou součástí uvedených 47 položek. `microcol-dist/src/icon.png` obsahuje kostel a odpovídá 1024px obrazu v tamním `icon.icns`, zatímco `microcol-module` uchovává i staré textové ikony. Současný [MainStageBuilder](../microcol-game/src/main/java/org/microcol/gui/MainStageBuilder.java) vlastní ikonu okna nenastavuje a konfigurace `src/icon.icns` v [microcol-dist/pom.xml](../microcol-dist/pom.xml) je v zakomentovaném appbundle pluginu. Vazbu současných distribučních výstupů na konkrétní SVG bude potřeba sjednotit zvlášť.
+Distribuční ikony mimo tento adresář nejsou součástí uvedených 47 položek. `akropia-dist/src/icon.png` obsahuje kostel a odpovídá 1024px obrazu v tamním `icon.icns`, zatímco `akropia-module` uchovává i staré textové ikony. Současný [MainStageBuilder](../akropia-game/src/main/java/org/akropia/gui/MainStageBuilder.java) vlastní ikonu okna nenastavuje a konfigurace `src/icon.icns` v [akropia-dist/pom.xml](../akropia-dist/pom.xml) je v zakomentovaném appbundle pluginu. Vazbu současných distribučních výstupů na konkrétní SVG bude potřeba sjednotit zvlášť.
+
+Od R-0389 (2. listopadu 2026) mají staré textové ikony `akropia-module/src/icon.icns`,
+`icon.ico` a `icon_square_64x64.ico` opakovatelný export z
+[icon.svg](../akropia-game/src/graphics/icon.svg). Žádné sestavení je nepoužívá;
+distribuční ikona s kostelem se exportem nemění. Potřebné nástroje hostitele jsou
+`python3`, `rsvg-convert` (librsvg; spouští se přes `with-fonts.py` s Fontconfig)
+a pro ICNS macOS `iconutil`. ICO skládá
+[export-legacy-icons.py](../scripts/graphics/export-legacy-icons.py) ze standardní
+knihovny Pythonu z PNG obrazů 256, 128, 64, 48, 32 a 16 px; Pillow není potřeba.
+ICNS obsahuje standardní sadu `iconutil` 16–512 px včetně variant @2x. Výsledek se
+kontroluje vizuálně; samotný běh skriptu není důkaz vzhledu.
+
+```sh
+python3 scripts/graphics/export-legacy-icons.py
+python3 -m unittest discover -s scripts/graphics -p 'test_legacy_icons.py'
+```
 
 ## Co zachovat při budoucích grafických úpravách
 
@@ -2189,7 +2213,7 @@ Výtvarné volby se řídí [minimalistickým manuálem](#minimalisticky-grafick
 | Některé soubory nemají nalezený runtime odkaz či doložené SVG | Je nutné dohledat záměr/původ před úklidem; tento popis je neoznačuje k odstranění. |
 | Barvy existují v properties, SVG, CSS i Java | Jednotná budoucí paleta bude vyžadovat sladění všech těchto míst. |
 
-Starší [vývojová dokumentace](../microcol-site/src/site/apt/development.apt) popisuje ruční export `background.svg` a skrývání vrstvy `description`. Obsahuje ale překlep `scr/graphics` a odkaz na již nepřítomnou třídu `BackgroundImageLoader`. Aktuálním zdrojem rozměrů jsou výše uvedené loadery a `TileImageParams`.
+Starší [vývojová dokumentace](../akropia-site/src/site/apt/development.apt) popisuje ruční export `background.svg` a skrývání vrstvy `description`. Obsahuje ale překlep `scr/graphics` a odkaz na již nepřítomnou třídu `BackgroundImageLoader`. Aktuálním zdrojem rozměrů jsou výše uvedené loadery a `TileImageParams`.
 
 ## Rozsah ověření
 
@@ -2197,7 +2221,7 @@ Katalog vznikl z XML struktury všech 24 SVG, exportních metadat, exportního s
 
 Hra nebyla během tohoto rozboru spuštěna a Maven testy nebyly opakovány; popis zobrazování vychází z kódu a uložených obrázků. Produkční kód ani herní grafika nebyly změněny. Statické kontroly nedokládají pixelově totožnou regeneraci všech PNG ze současných SVG ani správný vzhled všech živých obrazovek.
 
-Existující [ImageCacheTest](../microcol-game/src/test/java/org/microcol/gui/ImageCacheTest.java) ověřuje načtení, opakované použití a chybějící resource. Startup loadery kontrolují rozměry atlasů. [ImageProviderTestUtil](../microcol-game/src/test/java/org/microcol/integration/ImageProviderTestUtil.java) je ruční `main` utilita pro export obrázků z cache do `target/img`; není automatický vizuální test a exportuje jen tehdy načtené položky. Ke klíčům připojuje `.png`, takže některé výstupy mají `.png.png`.
+Existující [ImageCacheTest](../akropia-game/src/test/java/org/akropia/gui/ImageCacheTest.java) ověřuje načtení, opakované použití a chybějící resource. Startup loadery kontrolují rozměry atlasů. [ImageProviderTestUtil](../akropia-game/src/test/java/org/akropia/integration/ImageProviderTestUtil.java) je ruční `main` utilita pro export obrázků z cache do `target/img`; není automatický vizuální test a exportuje jen tehdy načtené položky. Ke klíčům připojuje `.png`, takže některé výstupy mají `.png.png`.
 
 
 ### Zapojení vozu — 13. října 2026
@@ -2240,7 +2264,7 @@ vegetace `#76865C`, sníh/papír `#FFF9EC`, neprozkoumané území `#9B9486`
 a obrysový inkoust `#292824`. Řeky používají tmavší tyrkysovou `#426F70`;
 jejich dvě šířky zůstávají významově beze změny.
 
-Zdroj `microcol-game/src/graphics/background.svg` zachovává rozložení atlasu.
+Zdroj `akropia-game/src/graphics/background.svg` zachovává rozložení atlasu.
 Původní přijetí R-0265 používalo u pobřežních a průzkumných kontur tah 0,28 SVG jednotky
 (přibližně 0,95 pixelu v exportu), u stromů 0,22 jednotky. Aktuální sílu sjednocuje
 [R-0291](#sjednocena-sila-kontur-mapy-26-rijna-2026). Obrys se kreslí jen
@@ -2251,7 +2275,7 @@ Sdílený atlas používají také náhledy terénu; jejich barvy se proto měn�
 Reprodukce exportu: zkopírovat SVG do dočasného souboru, nastavit kořenový
 `viewBox="0 0 190.5 127"`, `width="648"` a `height="432"` (stávající výřez
 720 × 480 zdrojových pixelů), potom použít
-`python3 scripts/graphics/with-fonts.py rsvg-convert -o microcol-game/src/main/resources/images/background.png <dočasné.svg>`.
+`python3 scripts/graphics/with-fonts.py rsvg-convert -o akropia-game/src/main/resources/images/background.png <dočasné.svg>`.
 Nespouštět celý historický `images.groovy` kvůli jedinému atlasu. Stav ověření
 patří do [funkční evidence](functional-tests.md), nikoli do tohoto popisu barev.
 
@@ -2280,7 +2304,7 @@ ověření tlačítek a návratu z nastavení. Výsledky patří do funkční ev
 
 ## Kontextové nabídky — R-0271
 
-1. Společný vzhled v [ContextMenus.css](../microcol-game/src/main/resources/gui/ContextMenus.css)
+1. Společný vzhled v [ContextMenus.css](../akropia-game/src/main/resources/gui/ContextMenus.css)
    používá papírovou plochu a Playpen Sans Regular 14. Uživatelem vybraná varianta 1
    z 25. října 2026 v [R-0276](requirements/done/R-0276.md) požaduje viditelně ruční
    jediný tah pera: nepravidelný obrys, mírně prohnuté hrany a měkké spoje.
@@ -2314,14 +2338,14 @@ Dne 25. října 2026 vzniklo [deset výtvarných variant ikon, popisků a výbě
 Uživatel následně vybral **07 — Čistý skicář** pro další rozpracování a požádal o dvě až tři podvarianty s drobnou nepravidelností samotných ikon. [Tři podvarianty 07A–07C](graphics-top-menu-proposals.md) zachovávají čisté ovládací prvky, pevnou tloušťku linky, plné výplně a domluvené **Playpen Sans 14 Regular**. Ruční charakter má vznikat lehce asymetrickými obrysy a jednotlivě kreslenými detaily. Následně téhož dne výslovně vybral **07B — Přirozený rukopis** k implementaci.
 
 
-1. Produkční [atlas SVG](../microcol-game/src/graphics/game-toolbar.svg) a [rámeček SVG](../microcol-game/src/graphics/game-toolbar-frame.svg) obsahují ručně navržené lehce asymetrické křivky, jednolité plochy a žádný text. Atlas má 12 sloupců po 48 px a dvě řady; oba odstíny používají totožné sdílené tvary. Ikona se zobrazuje ve 40 × 40 logických px, tah 1,5 px v SVG tedy odpovídá 1,25 px v UI. Rámeček má tah 1,2 px a čtyřpixelové rohy při devítidílném roztažení.
+1. Produkční [atlas SVG](../akropia-game/src/graphics/game-toolbar.svg) a [rámeček SVG](../akropia-game/src/graphics/game-toolbar-frame.svg) obsahují ručně navržené lehce asymetrické křivky, jednolité plochy a žádný text. Atlas má 12 sloupců po 48 px a dvě řady; oba odstíny používají totožné sdílené tvary. Ikona se zobrazuje ve 40 × 40 logických px, tah 1,5 px v SVG tedy odpovídá 1,25 px v UI. Rámeček má tah 1,2 px a čtyřpixelové rohy při devítidílném roztažení.
 2. Pevný inkoust je `#302D27`, roční tahy a jaro/léto/podzim mají `#71864B`, zima `#568B9B`. Pozadí zůstává `#FFF9EC`. Motivy jsou kolonie, Kongres, vystředění, statistiky, hlášení, cíle, kniha nápovědy, koruna Evropy, šipka dalšího tahu, vlajka s vavřínem pro ukončení, dveře pro odchod a zvon nezávislosti. Dostupnost akcí určuje dosavadní model.
-3. `ImageLoaderGameToolbar` načítá [atlas PNG](../microcol-game/src/main/resources/images/game-toolbar.png); předchozí `buttons.png` zůstává pro ostatní obrazovky. `GamePanel.css` používá [rámeček PNG](../microcol-game/src/main/resources/images/game-toolbar-frame.png). Názvy a spodní vysvětlení jsou lokalizované UI texty, nikoli kresba z návrhového listu. Užší okno zalomí lištu. Menu kolonií je navigace, proto zobrazuje „Kolonie“ a nevymýšlí trvale vybranou kolonii.
+3. `ImageLoaderGameToolbar` načítá [atlas PNG](../akropia-game/src/main/resources/images/game-toolbar.png); předchozí `buttons.png` zůstává pro ostatní obrazovky. `GamePanel.css` používá [rámeček PNG](../akropia-game/src/main/resources/images/game-toolbar-frame.png). Názvy a spodní vysvětlení jsou lokalizované UI texty, nikoli kresba z návrhového listu. Užší okno zalomí lištu. Menu kolonií je navigace, proto zobrazuje „Kolonie“ a nevymýšlí trvale vybranou kolonii.
 4. Regenerace nevyžaduje fonty, protože SVG neobsahuje text:
 
 ```sh
-rsvg-convert -o microcol-game/src/main/resources/images/game-toolbar.png microcol-game/src/graphics/game-toolbar.svg
-rsvg-convert -o microcol-game/src/main/resources/images/game-toolbar-frame.png microcol-game/src/graphics/game-toolbar-frame.svg
+rsvg-convert -o akropia-game/src/main/resources/images/game-toolbar.png akropia-game/src/graphics/game-toolbar.svg
+rsvg-convert -o akropia-game/src/main/resources/images/game-toolbar-frame.png akropia-game/src/graphics/game-toolbar-frame.svg
 ```
 
 5. Přejímka 07B a snímky skutečného UI patří do [funkční evidence](functional-tests.md#r-0273-toolbar-07b-2026-10-25); samotný export není důkazem přijetí ani publikace.
@@ -2330,14 +2354,14 @@ rsvg-convert -o microcol-game/src/main/resources/images/game-toolbar-frame.png m
 
 1. Dne 25. října 2026 uživatel vybral [první zobrazený návrh](graphics-assets/top-menu-2026-10-25/toolbar-horizontal-proposal.png): ikona vlevo a název vedle ní. Jde o výtvarný návrh, nikoli snímek běžící hry. [R-0278](requirements/done/R-0278.md) navazuje na 07B z R-0273; motivy ikon, jejich pořadí, sezónní barvy a Playpen Sans 14 Regular zůstávají.
 2. Podle uživatelova porovnání skutečné hry s návrhem z 25. října 2026 jsou linky zesílené a rozestupy menší. Ikony mají 32 × 32 logických px, zdrojový tah 2,4 jednotky (1,6 logického px). Názvy zůstávají vedle ikon; mezera mezi ikonou a textem i mezi tlačítky je 3 px. Užší okno zalamuje celá tlačítka. Výběr kolonií zachovává oddělenou šipku s menším odsazením.
-3. [Rámeček SVG](../microcol-game/src/graphics/game-toolbar-frame.svg) má souřadnice 96 × 48, tah 2 px, nestejné rohy a lehce zvlněné hrany. Oba rastry se exportují ve dvojnásobném rozlišení: atlas 1152 × 192 px s buňkami 96 px a rámeček 192 × 96 px. Dvanáctipixelový řez rámečku se zobrazuje v šířce šesti logických px. Zaměření klávesnicí zachovává kreslený rámeček a označuje název podtržením i výplní.
+3. [Rámeček SVG](../akropia-game/src/graphics/game-toolbar-frame.svg) má souřadnice 96 × 48, tah 2 px, nestejné rohy a lehce zvlněné hrany. Oba rastry se exportují ve dvojnásobném rozlišení: atlas 1152 × 192 px s buňkami 96 px a rámeček 192 × 96 px. Dvanáctipixelový řez rámečku se zobrazuje v šířce šesti logických px. Zaměření klávesnicí zachovává kreslený rámeček a označuje název podtržením i výplní.
 4. Ověření EN/CZ rozložení, klávesnice, nabídky kolonií a skutečné snímky vede [funkční evidence](functional-tests.md#r-0278-horizontal-toolbar-2026-10-25). Úprava provedení sama není důkazem přijetí ani publikace.
 
 Aktuální export (nahrazuje jednonásobný export R-0273):
 
 ```sh
-rsvg-convert --zoom 2 -o microcol-game/src/main/resources/images/game-toolbar.png microcol-game/src/graphics/game-toolbar.svg
-rsvg-convert --zoom 2 -o microcol-game/src/main/resources/images/game-toolbar-frame.png microcol-game/src/graphics/game-toolbar-frame.svg
+rsvg-convert --zoom 2 -o akropia-game/src/main/resources/images/game-toolbar.png akropia-game/src/graphics/game-toolbar.svg
+rsvg-convert --zoom 2 -o akropia-game/src/main/resources/images/game-toolbar-frame.png akropia-game/src/graphics/game-toolbar-frame.svg
 ```
 
 ## Titulkový pruh macOS — 2026-10-25
@@ -2371,16 +2395,16 @@ neprohlašuje ověření hry ani publikace.
 
 Uživatel vybral **B — Do hloubky** z [porovnání](graphics-colony-proposals.md). Počet domků se řídí obyvateli pracujícími uvnitř kolonie: **1–3 → jeden, 4–7 → dva, 8 a více → tři**. Jednotky na mapě se nezapočítávají. Palisáda, fort a fortress se kreslí podle nejvyšší skutečně dokončené obranné stavby i po nuceném úbytku obyvatel. Bez stavby se hradba nekreslí. Zůstává malá národní vlajka, název bez rámečku a podle [R-0291](#sjednocena-sila-kontur-mapy-26-rijna-2026) tah 1,6 logického pixelu; drobný přesah patří ke schválenému motivu. Kolonie mimo dohled používá poslední pozorovaný počet obyvatel, opevnění, jméno a vlastníka. Implementaci a ověření sleduje [R-0280](requirements/done/R-0280.md).
 
-Zdroj runtime atlasu je [`colonies.svg`](../microcol-game/src/graphics/colonies.svg), exportovaný příkazem `rsvg-convert -o microcol-game/src/main/resources/images/colonies.png microcol-game/src/graphics/colonies.svg`. PNG má 512 × 512 px; každý výřez 128 × 128 px se kreslí jako 64 × 64 logických px s počátkem políčka posunutým o 10 px. První tři řádky nesou jeden/dva/tři domky, sloupce žádné opevnění/palisádu/fort/fortress. Poslední řádek obsahuje samostatné nizozemské, francouzské, anglické a španělské vlajky. Korunní kolonie používá národ příslušné Koruny. Boční náhled má šířku 53 px, aby drobný přesah zůstal viditelný.
+Zdroj runtime atlasu je [`colonies.svg`](../akropia-game/src/graphics/colonies.svg), exportovaný příkazem `rsvg-convert -o akropia-game/src/main/resources/images/colonies.png akropia-game/src/graphics/colonies.svg`. PNG má 512 × 512 px; každý výřez 128 × 128 px se kreslí jako 64 × 64 logických px s počátkem políčka posunutým o 10 px. První tři řádky nesou jeden/dva/tři domky, sloupce žádné opevnění/palisádu/fort/fortress. Poslední řádek obsahuje samostatné nizozemské, francouzské, anglické a španělské vlajky. Korunní kolonie používá národ příslušné Koruny. Boční náhled má šířku 53 px, aby drobný přesah zůstal viditelný.
 
 
 ## Vybrané jednotky — 25. října 2026
 
 1. Uživatel vybral **09 — Lehký pohyb** z [deseti návrhů](graphics-unit-proposals.md) a požádal o implementaci se zřetelnou, nepříliš tenkou linkou; [R-0285](requirements/done/R-0285.md). Implementace prošla lokální přejímkou; [výsledky a snímek ze hry](functional-tests.md#r-0285-walking-unit-artwork-2026-10-25) rozlišují přijatou změnu od samostatně ověřovaného vydání.
 2. Sada rozlišuje 35 typů, čtyři stavy výbavy kolonisty a poškozené dělo. Výbava podle modelu přebíjí profesní obrázek; po odebrání výbavy se vrací profese. Rekvizita profese nedává jednotce výbavu ani novou schopnost. Národní/action značka se kreslí samostatně a výběr ani pravidla se nemění.
-3. Historický zdroj (nahrazený [řeckou vektorovou sadou](#recke-jednotky-prvni-navrh-1-listopadu-2026)) [units-walking-source.png](../microcol-game/src/graphics/units-walking-source.png) je průhledný rastr odvozený ImageGenem z vybraného listu; [zadání úprav](../microcol-game/src/graphics/units-walking-prompts.json) je zachované. Tehdejší `units.svg` skládal jeho výřezy do atlasu 360 × 225 px, osm sloupců a pět řad v pořadí U01–U35, E01–E05. Jde o rastrové podklady a editovatelnou kompozici, nikoli o vektorové kontury.
+3. Historický zdroj (nahrazený [řeckou vektorovou sadou](#recke-jednotky-prvni-navrh-1-listopadu-2026)) [units-walking-source.png](../akropia-game/src/graphics/units-walking-source.png) je průhledný rastr odvozený ImageGenem z vybraného listu; [zadání úprav](../akropia-game/src/graphics/units-walking-prompts.json) je zachované. Tehdejší `units.svg` skládal jeho výřezy do atlasu 360 × 225 px, osm sloupců a pět řad v pořadí U01–U35, E01–E05. Jde o rastrové podklady a editovatelnou kompozici, nikoli o vektorové kontury.
 4. Každá 45px buňka má průhledný okraj a obrázek se vejde do 41px prostoru. Výraznější tmavý tah se posuzuje v konečné mapové velikosti, s cílem přibližně 2 px. Obrázek už nepotřebuje starý posun o 2/4 px; mapa jej kotví přímo na začátek políčka. Sdílený poskytovatel vybírá obrázky také pro Evropu, kolonii, boj a nápovědu.
-5. Export: `rsvg-convert -o microcol-game/src/main/resources/images/units.png microcol-game/src/graphics/units.svg`. Staré výřezy jednotek v background atlasu a staré soubory děl zůstávají historickými podklady; aktuální společný poskytovatel je nepoužívá.
+5. Export: `rsvg-convert -o akropia-game/src/main/resources/images/units.png akropia-game/src/graphics/units.svg`. Staré výřezy jednotek v background atlasu a staré soubory děl zůstávají historickými podklady; aktuální společný poskytovatel je nepoužívá.
 
 
 ## Oddělovací linky hlavní obrazovky — 2026-10-25
@@ -2434,9 +2458,9 @@ přístupným názvem; po rozšíření se text obnoví. Stav ověření vede
 [funkční evidence](functional-tests.md#r-0308-opening-menu-content-width-2026-10-27).
 
 
-1. **Dohoda 26. října 2026:** uživatel vybral [návrh s jedním sloupcem vlevo](graphics-assets/opening-menu-2026-10-26/approved-proposal.png), nikoli dřívější dva sloupce. Pod názvem MicroCol jsou dvě krátké ručně kreslené vlnky. Obrázek je výtvarný návrh, nikoli snímek běžící hry; spodní vzorník ikon není další herní lišta.
+1. **Dohoda 26. října 2026:** uživatel vybral [návrh s jedním sloupcem vlevo](graphics-assets/opening-menu-2026-10-26/approved-proposal.png), nikoli dřívější dva sloupce. Pod názvem Akropia jsou dvě krátké ručně kreslené vlnky. Obrázek je výtvarný návrh, nikoli snímek běžící hry; spodní vzorník ikon není další herní lišta.
 2. [R-0297](requirements/done/R-0297.md) přebírá přímo `game-toolbar-frame.png` a společný `ToolbarControls.css`. Menu a herní lišta mají stejné odsazení, ikony 32 × 32 a Playpen Sans Regular 14; tlačítka menu nejsou vyšší. Sloupec má výchozí šířku 300 px, mezery 8 px a levý okraj 80 px i v širším okně. Pozadí, animace a dostupnost původních akcí zůstávají.
-3. Nové ikony vlastní [menu-icons.svg](../microcol-game/src/graphics/menu-icons.svg), osm buněk 48 × 48, tah 2,4 jednotky a stejný inkoust/olivový akcent jako herní lišta. Export `rsvg-convert -w 768 -h 96 -o microcol-game/src/main/resources/images/menu-icons.png microcol-game/src/graphics/menu-icons.svg` se přes existující obrazovou cache řeže po 96 px a zobrazuje po 32 px. [menu-title-waves.svg](../microcol-game/src/graphics/menu-title-waves.svg) se exportuje přímo na 120 × 18 příkazem `rsvg-convert -o microcol-game/src/main/resources/images/menu-title-waves.png microcol-game/src/graphics/menu-title-waves.svg`.
+3. Nové ikony vlastní [menu-icons.svg](../akropia-game/src/graphics/menu-icons.svg), osm buněk 48 × 48, tah 2,4 jednotky a stejný inkoust/olivový akcent jako herní lišta. Export `rsvg-convert -w 768 -h 96 -o akropia-game/src/main/resources/images/menu-icons.png akropia-game/src/graphics/menu-icons.svg` se přes existující obrazovou cache řeže po 96 px a zobrazuje po 32 px. [menu-title-waves.svg](../akropia-game/src/graphics/menu-title-waves.svg) se exportuje přímo na 120 × 18 příkazem `rsvg-convert -o akropia-game/src/main/resources/images/menu-title-waves.png akropia-game/src/graphics/menu-title-waves.svg`.
 4. Text tlačítka se zobrazí jen při dostatku místa vedle ikony. Jinak se skryje celý; nezalamuje se ani nezkracuje výpustkou. Přístupný název a tooltip zůstávají. Skutečné testy a snímky vlastní [funkční evidence](functional-tests.md#r-0297-opening-menu-2026-10-26).
 
 ## Rám herních obrazovek — 2026-10-27
@@ -2477,12 +2501,12 @@ přístupným názvem; po rozšíření se text obnoví. Stav ověření vede
    logických px; tlačítko výběru konkrétní lodi používá její skutečný obrázek.
    Původní ikony hlavního a úvodního menu zůstávají zachované.
 4. Chybějící ikony jsou ve zdroji
-   [action-icons.svg](../microcol-game/src/graphics/action-icons.svg): 44 buněk
+   [action-icons.svg](../akropia-game/src/graphics/action-icons.svg): 44 buněk
    po 48 jednotkách, tah 2,4, zaoblené konce, stejný inkoust a olivový akcent
    `#71864B`. Export do průhledného atlasu s buňkami 96 × 96 px:
 
    ```sh
-   rsvg-convert -w 4224 -h 96 -o microcol-game/src/main/resources/images/action-icons.png microcol-game/src/graphics/action-icons.svg
+   rsvg-convert -w 4224 -h 96 -o akropia-game/src/main/resources/images/action-icons.png akropia-game/src/graphics/action-icons.svg
    ```
 
 5. [Funkční evidence](functional-tests.md#r-0316-shared-paper-buttons-and-action-icons-2026-10-27)

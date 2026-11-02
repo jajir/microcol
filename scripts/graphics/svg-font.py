@@ -17,7 +17,7 @@ from fontTools import subset
 from fontTools.ttLib import TTFont
 
 ROOT = Path(__file__).resolve().parents[2]
-FONT = ROOT / "microcol-game/src/main/resources/fonts/PlaypenSans/PlaypenSans-Light.ttf"
+FONT = ROOT / "akropia-game/src/main/resources/fonts/PlaypenSans/PlaypenSans-Light.ttf"
 SVG = "{http://www.w3.org/2000/svg}"
 
 
@@ -42,11 +42,11 @@ def update(source):
     font.save(output)
     payload = base64.b64encode(output.getvalue()).decode("ascii")
     digest = hashlib.sha256(FONT.read_bytes()).hexdigest()
-    style = ('<style id="microcol-font" type="text/css" data-font-sha256="' + digest
+    style = ('<style id="akropia-font" type="text/css" data-font-sha256="' + digest
              + '">@font-face{font-family:"Playpen Sans Light";font-style:normal;'
              + 'font-weight:300;src:url("data:font/woff;base64,' + payload
              + '") format("woff");}</style>\n\n  ')
-    source = re.sub(r'<style id="microcol-font".*?</style>\s*', '', source, flags=re.S)
+    source = re.sub(r'<style id="akropia-font".*?</style>\s*', '', source, flags=re.S)
     source = re.sub(r'(?<![-\w])font-family:[^;"<]+', "font-family:'Playpen Sans Light'", source)
     source = re.sub(r'-inkscape-font-specification:[^;"<]+',
                     "-inkscape-font-specification:'Playpen Sans Light'", source)
@@ -54,7 +54,12 @@ def update(source):
     source = re.sub(r'(?<![-\w])font-style:[^;"<]+', 'font-style:normal', source)
     source, count = re.subn(r'<defs\b', lambda match: style + match.group(), source, count=1)
     if count != 1:
-        raise ValueError("Expected an SVG defs element")
+        # Without defs the face becomes the first child of the root element.
+        source, count = re.subn(r'<svg\b[^>]*(?<!/)>',
+                                lambda match: match.group() + '\n  ' + style.rstrip(),
+                                source, count=1)
+    if count != 1:
+        raise ValueError("Expected an SVG root element")
     ET.fromstring(source)
     return source
 
@@ -62,8 +67,11 @@ def update(source):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("files", nargs="*",
+                        help="SVG paths relative to the repository root (default: all tracked SVGs)")
     args = parser.parse_args()
-    files = subprocess.check_output(['git', 'ls-files', '*.svg'], cwd=ROOT, text=True).splitlines()
+    files = args.files or subprocess.check_output(['git', 'ls-files', '*.svg'], cwd=ROOT,
+                                                  text=True).splitlines()
     changed = []
     for name in files:
         path = ROOT / name

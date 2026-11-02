@@ -2,12 +2,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.microcol</groupId>
-	<artifactId>microcol-root</artifactId>
+	<groupId>org.akropia</groupId>
+	<artifactId>akropia-root</artifactId>
 	<packaging>pom</packaging>
 	<version>0.7.0-SNAPSHOT</version>
-	<name>MocroCol parent module</name>
-	<url>https://microcol.sourceforge.net/</url>
+	<name>Akropia parent module</name>
+	<url>https://github.com/jajir/microcol</url>
 	<description>
 		War game in space environment with single target - eliminate enemy.
 	</description>
@@ -22,35 +22,35 @@
 		<!-- JavaFX 17 supplies native Apple Silicon libraries while retaining Java 11 compatibility. -->
 		<javafx.version>17.0.20</javafx.version>
 		<!-- CI supplies its immutable build tag; local builds keep the plain game version. -->
-		<microcol.build.id>local</microcol.build.id>
+		<akropia.build.id>local</akropia.build.id>
 	</properties>
 
 	<modules>
-		<module>microcol-game</module>
-		<module>microcol-test</module>
-		<module>microcol-module</module>
-		<module>microcol-dist</module>
+		<module>akropia-game</module>
+		<module>akropia-test</module>
+		<module>akropia-module</module>
+		<module>akropia-dist</module>
 		<!-- Bootstrap archives and their verification are regular Maven products. -->
-		<module>microcol-launcher</module>
-		<module>microcol-build-tests</module>
-		<module>microcol-site</module>
+		<module>akropia-launcher</module>
+		<module>akropia-build-tests</module>
+		<module>akropia-site</module>
 	</modules>
 
 	<!-- Native installers must be built on their target operating system. -->
 	<profiles>
         <profile>
             <id>ux-playtesting</id>
-            <modules><module>microcol-ux-test</module></modules>
+            <modules><module>akropia-ux-test</module></modules>
         </profile>
 		<profile>
 			<id>macos-distribution</id>
 			<activation><os><family>mac</family></os></activation>
-			<modules><module>microcol-dist-macos</module></modules>
+			<modules><module>akropia-dist-macos</module></modules>
 		</profile>
 		<profile>
 			<id>linux-distribution</id>
 			<activation><os><name>Linux</name></os></activation>
-			<modules><module>microcol-dist-linux</module></modules>
+			<modules><module>akropia-dist-linux</module></modules>
 		</profile>
 	</profiles>
 

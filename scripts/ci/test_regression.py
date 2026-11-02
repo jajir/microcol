@@ -80,7 +80,7 @@ class RegressionTests(unittest.TestCase):
         root.mkdir()
         (root / 'manifest.json').write_text(json.dumps({
             'source': {'revision': 'a' * 40}, 'scope': 'full',
-            'expected': {'microcol-game': self.expected, 'microcol-test': self.expected}}))
+            'expected': {'akropia-game': self.expected, 'akropia-test': self.expected}}))
         (root / 'summary.json').write_text(json.dumps({'status': 'passed'}))
         for folder in ('model', 'ui-01'):
             self.report(root / folder / 'run-export' / 'surefire-reports')

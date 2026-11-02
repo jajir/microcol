@@ -45,13 +45,13 @@ jobs:
           java-version: ${{ matrix.java }}
           cache: maven
       - name: Inspect resolved Guava dependencies
-        run: mvn -B -ntp -pl microcol-game -am dependency:tree -Dverbose "-Dincludes=com.google.guava:*,com.google.inject:*"
+        run: mvn -B -ntp -pl akropia-game -am dependency:tree -Dverbose "-Dincludes=com.google.guava:*,com.google.inject:*"
       - name: Compile, test and package the game
-        run: mvn -B -ntp -pl microcol-game -am clean verify
+        run: mvn -B -ntp -pl akropia-game -am clean verify
       - name: Keep game test evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: game-tests-${{ matrix.os }}-java-${{ matrix.java }}
-          path: microcol-game/target/surefire-reports/
+          path: akropia-game/target/surefire-reports/
           if-no-files-found: warn

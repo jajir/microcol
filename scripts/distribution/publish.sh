@@ -4,7 +4,7 @@
 set -euo pipefail
 export LC_ALL=C
 
-die() { printf 'MicroCol publication: %s\n' "$*" >&2; exit 1; }
+die() { printf 'Akropia publication: %s\n' "$*" >&2; exit 1; }
 [ "$#" -eq 5 ] && [ "$4" = --repository ] || die 'Usage: publish.sh DIRECTORY BUILD_ID FULL_SHA --repository OWNER/REPO'
 DIRECTORY=$(CDPATH= cd -- "$1" && pwd) || die 'Asset directory does not exist.'
 BUILD=$2
@@ -18,7 +18,7 @@ REPOSITORY_PATTERN='^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$'
 command -v jq >/dev/null || die 'jq is required.'
 command -v gh >/dev/null || die 'GitHub CLI is required.'
 if command -v sha256sum >/dev/null; then HASH_COMMAND=(sha256sum); else HASH_COMMAND=(shasum -a 256); fi
-WORK=$(mktemp -d "${TMPDIR:-/tmp}/microcol-publication.XXXXXXXX") || die 'Cannot create temporary directory.'
+WORK=$(mktemp -d "${TMPDIR:-/tmp}/akropia-publication.XXXXXXXX") || die 'Cannot create temporary directory.'
 trap 'rm -rf -- "$WORK"' EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM HUP
@@ -40,17 +40,17 @@ hash_file() {
 archive_name() {
     local extension=zip
     [ "$1" != linux-x86_64 ] || extension=tar.gz
-    printf 'MicroCol-%s-%s.%s\n' "$1" "$2" "$extension"
+    printf 'Akropia-%s-%s.%s\n' "$1" "$2" "$extension"
 }
 
 required_names() {
-    printf '%s\n' MicroCol-Dev-macos.zip MicroCol-Dev-linux.tar.gz
+    printf '%s\n' Akropia-Dev-macos.zip Akropia-Dev-linux.tar.gz
     local platform extension
     for platform in macos-arm64 macos-x86_64 linux-x86_64; do
         archive_name "$platform" "$BUILD"
         extension=dmg
         [ "$platform" != linux-x86_64 ] || extension=deb
-        printf 'MicroCol-%s-%s.%s\n' "$platform" "$BUILD" "$extension"
+        printf 'Akropia-%s-%s.%s\n' "$platform" "$BUILD" "$extension"
     done
 }
 required_names | sort > "$WORK/assets"
@@ -92,7 +92,7 @@ check_input() {
 
 make_manifest() {
     local directory=$1 platform name
-    printf 'microcol-dev-v1\nbuild\t%s\t%s\n' "$BUILD" "$COMMIT"
+    printf 'akropia-dev-v1\nbuild\t%s\t%s\n' "$BUILD" "$COMMIT"
     for platform in macos-arm64 macos-x86_64 linux-x86_64; do
         name=$(archive_name "$platform" "$BUILD")
         printf 'asset\t%s\t%s\t%s\n' "$platform" "$name" "$(hash_file "$directory/$name")"
@@ -115,7 +115,7 @@ parse_manifest() {
         number=$((number + 1))
         case "$line" in *$'\r'*) die 'Invalid manifest line ending.' ;; esac
         if [ "$number" -eq 1 ]; then
-            [ "$line" = microcol-dev-v1 ] || die 'Invalid manifest header.'
+            [ "$line" = akropia-dev-v1 ] || die 'Invalid manifest header.'
             continue
         fi
         tabs=${line//[!$'\t']/}
@@ -204,7 +204,7 @@ Development build \`$BUILD\` from \`$COMMIT\`.
 
 All three native builds and their game unit tests completed successfully. macOS packages are unsigned and are not notarized.
 
-Install the one-time **MicroCol Dev** launcher to receive the latest successful development build when starting the game. Download manual DMG/DEB installers from [this complete build release](https://github.com/$REPOSITORY/releases/tag/$BUILD).
+Install the one-time **Akropia Dev** launcher to receive the latest successful development build when starting the game. Download manual DMG/DEB installers from [this complete build release](https://github.com/$REPOSITORY/releases/tag/$BUILD).
 
 [Installation instructions](https://${REPOSITORY%%/*}.github.io/${REPOSITORY##*/}/development-builds.html)
 EOF
@@ -225,7 +225,7 @@ if [ "$EXISTS" -eq 1 ] && [ "$(jq -er '.draft | tostring' "$WORK/release.json")"
     DIRECTORY=$WORK/original
 else
     if [ "$EXISTS" -eq 0 ]; then
-        gh_release create "$BUILD" --target "$COMMIT" --prerelease --draft --title "MicroCol $BUILD" --notes-file "$WORK/notes.md" || die 'Cannot create draft release.'
+        gh_release create "$BUILD" --target "$COMMIT" --prerelease --draft --title "Akropia $BUILD" --notes-file "$WORK/notes.md" || die 'Cannot create draft release.'
     fi
     ASSET_PATHS=()
     while IFS= read -r name; do ASSET_PATHS+=("$DIRECTORY/$name"); done < "$WORK/published"
@@ -237,14 +237,14 @@ fi
 
 if ! can_promote; then printf 'Built %s; keeping the newer/current development channel unchanged.\n' "$BUILD"; exit 0; fi
 if ! lookup_release dev "$WORK/channel.json"; then
-    gh_release create dev --target "$COMMIT" --prerelease --latest=false --title 'MicroCol development channel' --notes-file "$WORK/notes.md" || die 'Cannot create development channel.'
+    gh_release create dev --target "$COMMIT" --prerelease --latest=false --title 'Akropia development channel' --notes-file "$WORK/notes.md" || die 'Cannot create development channel.'
 fi
-gh_release upload dev "$DIRECTORY/MicroCol-Dev-macos.zip" "$DIRECTORY/MicroCol-Dev-linux.tar.gz" --clobber || die 'Launcher publication failed.'
+gh_release upload dev "$DIRECTORY/Akropia-Dev-macos.zip" "$DIRECTORY/Akropia-Dev-linux.tar.gz" --clobber || die 'Launcher publication failed.'
 # Main may advance during uploads. Recheck both source revision and promoted run.
 if ! can_promote; then printf 'Main advanced during publication; leaving the development manifest unchanged.\n'; exit 0; fi
 gh_release upload dev "$DIRECTORY/manifest.tsv" --clobber || die 'Development manifest publication failed.'
-gh_release edit dev --title 'MicroCol development channel' --notes-file "$WORK/notes.md" --prerelease --latest=false || die 'Cannot update development release notes.'
+gh_release edit dev --title 'Akropia development channel' --notes-file "$WORK/notes.md" --prerelease --latest=false || die 'Cannot update development release notes.'
 printf 'Promoted development channel to %s\n' "$BUILD"
 if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
-    printf 'Published [%s](https://github.com/%s/releases/tag/%s) and updated **MicroCol Dev**.\n' "$BUILD" "$REPOSITORY" "$BUILD" >> "$GITHUB_STEP_SUMMARY"
+    printf 'Published [%s](https://github.com/%s/releases/tag/%s) and updated **Akropia Dev**.\n' "$BUILD" "$REPOSITORY" "$BUILD" >> "$GITHUB_STEP_SUMMARY"
 fi

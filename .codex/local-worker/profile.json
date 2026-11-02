@@ -1,5 +1,5 @@
 {
-  "model": "microcol-gpt-oss:20b-96k-output64k",
+  "model": "akropia-gpt-oss:20b-96k-output64k",
   "reasoning": "medium",
   "attempt_seconds": 7200,
   "task_seconds": 14400,

@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
-<title id="title">Stříbro</title>
-<desc id="description">MicroCol R-0384, selected proposal 15, 2026-11-01. Hand-authored vector paths; solid fills and transparent surroundings.</desc>
-<g id="bold-hand-drawn-outline" transform="translate(2 2) scale(0.9375)" stroke="#41413b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
-<g id="silver-bars"><path d="M13 14 L40 8 L58 18 L53 33 L24 37 L6 27 Z" fill="#c9cbca"/><path d="M13 14 L31 23 L58 18 M31 23 L24 37" fill="none"/><path d="M9 35 L35 29 L54 39 L49 55 L21 59 L4 49 Z" fill="#c9cbca"/><path d="M9 35 L27 44 L54 39 M27 44 L21 59" fill="none"/></g>
-</g>
-</svg>

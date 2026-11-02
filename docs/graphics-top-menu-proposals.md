@@ -129,7 +129,7 @@ Výtvarná podoba převedená do SVG, skutečných lokalizovaných textů a nati
 
 ![07B ve hře — české menší okno](graphics-assets/top-menu-2026-10-25/toolbar-07b-czech-narrow.png)
 
-Editovatelné [ikony SVG](../microcol-game/src/graphics/game-toolbar.svg), [atlas PNG](../microcol-game/src/main/resources/images/game-toolbar.png), [rámeček SVG](../microcol-game/src/graphics/game-toolbar-frame.svg) a [rámeček PNG](../microcol-game/src/main/resources/images/game-toolbar-frame.png) obsahují produkční kresbu bez textů.
+Editovatelné [ikony SVG](../akropia-game/src/graphics/game-toolbar.svg), [atlas PNG](../akropia-game/src/main/resources/images/game-toolbar.png), [rámeček SVG](../akropia-game/src/graphics/game-toolbar-frame.svg) a [rámeček PNG](../akropia-game/src/main/resources/images/game-toolbar-frame.png) obsahují produkční kresbu bez textů.
 
 
 ![07B — viditelný fokus klávesnice na Vycentrovat](graphics-assets/top-menu-2026-10-25/toolbar-07b-keyboard-focus.png)

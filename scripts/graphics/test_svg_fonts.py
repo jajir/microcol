@@ -40,6 +40,17 @@ class SvgFontTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             svg_font.update('<svg xmlns="http://www.w3.org/2000/svg"><defs/><text>漢</text></svg>')
 
+    def test_text_without_defs_gets_repeatable_face_in_root(self):
+        source = ('<?xml version="1.0"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="9">\n'
+                  '  <text>Haarlem</text>\n</svg>\n')
+        result = svg_font.update(source)
+        self.assertEqual(result, svg_font.update(result))
+        root = ET.fromstring(result)
+        self.assertEqual('{http://www.w3.org/2000/svg}style', root[0].tag)
+        self.assertEqual('akropia-font', root[0].get('id'))
+        with self.assertRaises(ValueError):
+            svg_font.update('<svg xmlns="http://www.w3.org/2000/svg"><text>漢</text></svg>')
+
     def test_export_environment_contains_only_bundled_face(self):
         command = [sys.executable, str(HERE / 'with-fonts.py')]
         # The listed face is a private copy that disappears with the run; compare it inside.

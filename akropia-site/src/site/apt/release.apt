@@ -1,0 +1,133 @@
+ ----
+ How to make release
+ ----
+ 
+How to make release
+
+ Here is describe how to make release and publish release artefacts.
+
+* Release versioning
+ 
+ x.y.z
+ 
+ where:
+ 
+ * x - major change
+ 
+ * y - minor change - Should be done few time per year. Saved data should be compatible with previous release.
+ 
+ * z - bug fixing release
+
+[]
+
+* How to make a release
+
+** Release related files
+
+ * <akropia-dist/src/icon_square_64x64.ico> - should be 64 x 64 px square Microsoft icon
+
+** Release prerequisite
+
+ * Installed java 1.8.
+ 
+ * Installed graphviz. It could be verified by running <./dot>. It's required by plant UML diagrams maven plugin.
+ 
+ * All test are passing.
+
+** Release steps
+
+ Following guide is useful when new minor or major change should be released. Guide suppose releasing version <x.y.0>. 
+
+ [[0]] Verify that project is clean and all files committed. Command:
+ 
++----+
+git status
++----+
+ 
+ [[0]] Create new branch and switch to it:
+ 
++----+
+git checkout -b rel-x.y
++----+
+
+ Now all further operations will be done in <rel-x.y> branch.
+ 
+ [[0]] Set final package version:
+ 
++----+
+mvn versions:set -DnewVersion=x.y.0
++----+
+
+ [[0]] Release binaries:
+ 
++----+
+mvn clean package
++----+
+ 
+ Verify release binaries. Release files could be found at places:
+ 
+  * <akropia-dist/target/akropia.jar> - universal executable JAR file
+ 
+  * <akropia-dist/target/akropia.exe> - Windows executable
+ 
+  * <akropia-dist/target/Akropia.app> - Apple distribution
+ 
+ [[0]] Upload released binaries to sourceforge.
+  In section <Files> at sourceforge create new directory Akropia x.x and upload there all generated files.
+  In detail of each file click on <i> icon and platform. There is list of platform for which is file default. 
+
+ [[0]] Remove maven backup files <pom.xml.versionsBackup>
+  
++----+
+mvn versions:commit
++----+
+
+ [[0]] Commit all changes in git branch
+
++----+
+git add --all
+git commit -m "rel-x.y.0"
+git push
++----+
+
+[] 
+
+ TODO add guide when branch x.y.2 already exists and version x.y.3 should be released.
+
+* How to publish documentation
+
+ Documentation is stored at github in extra branch called <gh-pages>.
+ To publish new version of documentation it's enough to commit it to <gh-pages> branch.
+ It could be donein a few easy steps.
+
+ [[1]] Verify settings.xml
+ 
+ In your home directory is file ~/.m2/settings.xml. If file doesn't exist crate new one. Edit server section:
+ 
++----+
+<servers>
+	...
+	<server>
+		<id>github</id>
+		<username>user</username>
+		<password>s!cr!t</password>
+	</server>
+	...
+</servers>
++----+
+ 
+ This setting provide user name and password for github account.
+
+
+ [[1]] Navigate to directory to <akropia-site> and type:
+ 
++----+
+mvn clean site-deploy
++----+
+
+ Than after few minutes new site version should be uploaded at {{{https://jajir.github.io/microcol/}https://jajir.github.io/microcol/}}.
+
+ [[1]] Go to {{{https://jajir.github.io/microcol/}https://jajir.github.io/microcol/}} and verify that there is latest version.
+ 
+[]
+    

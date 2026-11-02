@@ -1,0 +1,257 @@
+package org.akropia.test;
+
+import java.io.File;
+
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.akropia.model.GoodsType;
+import org.akropia.model.Location;
+import org.akropia.model.ResourceOverlay;
+import org.akropia.model.TerrainType;
+import org.akropia.model.campaign.po.GameModelPo;
+import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.store.ColonyPo;
+import org.akropia.page.ColonyScreen;
+import org.akropia.page.FreePlayAuditPage;
+import org.akropia.page.GameBarWidthPage;
+import org.akropia.page.GamePage;
+import org.akropia.page.SettingPage;
+import org.akropia.page.WelcomePage;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
+import org.testfx.util.WaitForAsyncUtils;
+
+import javafx.stage.Stage;
+
+/**
+ * Town commons (R-0146, UC-031): the unattended center output is shown as a
+ * labeled forecast without any worker, settles once per owner update and
+ * survives Continue. The fixture is derived in memory from the founding save: a
+ * prime-food center, a hill center and a forested center with prime timber.
+ */
+@ExtendWith(ApplicationExtension.class)
+public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
+
+    private static final File SOURCE_FILE = new File(
+            "src/test/scenarios/F02-founding-colony.akropia");
+
+    private static final File DERIVED_FILE = new File(
+            "target/town-commons/F100-town-commons.akropia");
+
+    private static final Location NEW_AMSTERDAM = Location.of(25, 14);
+
+    private static final Location DELFT = Location.of(22, 12);
+
+    private static final Location HAARLEM = Location.of(23, 17);
+
+    /** A goods panel narrower than this is squeezed out of its row. */
+    private static final double MINIMUM_GOODS_WIDTH = 30;
+
+    private static final String EN_NEW_AMSTERDAM = "Grain: 6, Grapes: 3";
+
+    private static final String EN_DELFT = "Grain: 2, Ore: 4";
+
+    private static final String EN_HAARLEM = "Grain: 3, Lumber: 6";
+
+    private static final String CS_NEW_AMSTERDAM = "Obilí: 6, Hrozny: 3";
+
+    @Start
+    private void start(final Stage stage) throws Exception {
+        initialize(stage, getClass(), derivedFixture());
+    }
+
+    /** Derive the scenario from the founding save; no bundled file changes. */
+    private static File derivedFixture() throws Exception {
+        final GameModelPoDao dao = new GameModelPoDao();
+        final GameModelPo data = dao.loadFromFile(SOURCE_FILE);
+        final java.util.Map<Location, ResourceOverlay> resources = data
+                .getModel().getMap().getResourceMap();
+        resources.put(NEW_AMSTERDAM, ResourceOverlay.PRIME_FOOD);
+        resources.put(HAARLEM, ResourceOverlay.PRIME_TIMBER);
+        data.getModel().getMap().setResources(resources);
+        final java.util.Map<Location, TerrainType> terrain = data.getModel()
+                .getMap().getTerrainMap();
+        terrain.put(DELFT, TerrainType.HILL);
+        data.getModel().getMap().setTerrainType(terrain);
+        addForest(data, HAARLEM);
+        // Identity follows the derived center: hill ore, forested lumber, and
+        // the grassland grapes of New Amsterdam unchanged.
+        colonyNamed(data, "Delft").setTownCommonsGoods("ORE");
+        final ColonyPo haarlem = colonyNamed(data, "Haarlem");
+        haarlem.setTownCommonsGoods("LUMBER");
+        // Haarlem keeps only its three winemakers indoors: its surrounding
+        // fields have no worker, so the center is the only food and lumber.
+        final java.util.Set<Integer> fieldWorkers = new java.util.HashSet<>();
+        haarlem.getColonyFields().forEach(field -> {
+            if (field.getWorkerId() != null) {
+                fieldWorkers.add(field.getWorkerId());
+                field.setWorkerId(null);
+                field.setProducedGoodsType(null);
+            }
+        });
+        data.getModel()
+                .setUnits(data.getModel().getUnits().stream()
+                        .filter(unit -> !fieldWorkers.contains(unit.getId()))
+                        .collect(java.util.stream.Collectors.toList()));
+        DERIVED_FILE.getParentFile().mkdirs();
+        dao.saveToFile(DERIVED_FILE.getPath(), data);
+        return DERIVED_FILE;
+    }
+
+    private static ColonyPo colonyNamed(final GameModelPo data,
+            final String name) {
+        return data.getModel().getColonies().stream()
+                .filter(colony -> name.equals(colony.getName())).findFirst()
+                .orElseThrow();
+    }
+
+    private static void addForest(final GameModelPo data, final Location at) {
+        final String[] trees = data.getModel().getMap().getTrees().clone();
+        final String prefix = String.format("row-%04d:", at.getY());
+        for (int index = 0; index < trees.length; index++) {
+            if (trees[index].startsWith(prefix)) {
+                final String[] cells = trees[index].substring(prefix.length())
+                        .split(",");
+                cells[at.getX() - 1] = "t";
+                trees[index] = prefix + String.join(",", cells);
+            }
+        }
+        data.getModel().getMap().setTrees(trees);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_01_forecast_settles_once_and_survives_continue_in_english()
+            throws Exception {
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        WaitForAsyncUtils.waitForFxEvents();
+
+        // Each center shows its own commons: overlay, hill ore, forest and
+        // prime timber, with no worker and no Prime Timber bonus on lumber.
+        ColonyScreen newAmsterdam = game.openColonyAt(NEW_AMSTERDAM,
+                "New Amsterdam");
+        newAmsterdam.verifyTownCommons(EN_NEW_AMSTERDAM);
+        // The commons row is whole and readable and the goods row is intact.
+        new GameBarWidthPage(getContext()).resizeContent(1000, 925);
+        newAmsterdam.showWarehouse();
+        newAmsterdam.verifyTownCommonsNotEllipsized(EN_NEW_AMSTERDAM);
+        newAmsterdam.verifyWarehouseGoodsLayout(GoodsType.GOOD_TYPES.size(),
+                MINIMUM_GOODS_WIDTH);
+        newAmsterdam.captureDialog("colony-field-yield",
+                "town-commons-en-new-amsterdam.png");
+        game = newAmsterdam.close();
+
+        ColonyScreen delft = game.openColonyAt(DELFT, "Delft");
+        delft.verifyTownCommons(EN_DELFT);
+        final int oreBefore = delft.stockOf(GoodsType.ORE);
+        game = delft.close();
+
+        // Pan the map until Haarlem is in view; this does nothing if it already
+        // is.
+        game.panToTile(HAARLEM);
+        ColonyScreen haarlem = game.openColonyAt(HAARLEM, "Haarlem");
+        haarlem.verifyTownCommons(EN_HAARLEM);
+        game = haarlem.close();
+
+        // One owner update settles the hill ore once: four ore enter the
+        // warehouse, and the label still reads the same forecast.
+        game.nextTurnAndCloseDialogs();
+        delft = game.openColonyAt(DELFT, "Delft");
+        delft.verifyWarehouseStock(GoodsType.ORE, oreBefore + 4);
+        delft.verifyTownCommons(EN_DELFT);
+        game = delft.close();
+
+        // Save and Continue from disk do not repeat the update.
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        delft = game.openColonyAt(DELFT, "Delft");
+        delft.verifyWarehouseStock(GoodsType.ORE, oreBefore + 4);
+        delft.verifyTownCommons(EN_DELFT);
+        delft.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_02_forecast_label_is_czech_and_captured() throws Exception {
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        final GamePage game = settings.goBack().loadGame();
+        WaitForAsyncUtils.waitForFxEvents();
+
+        final ColonyScreen newAmsterdam = game.openColonyAt(NEW_AMSTERDAM,
+                "New Amsterdam");
+        newAmsterdam.verifyTownCommons(CS_NEW_AMSTERDAM);
+        new GameBarWidthPage(getContext()).resizeContent(1000, 925);
+        newAmsterdam.showWarehouse();
+        newAmsterdam.verifyTownCommonsNotEllipsized(CS_NEW_AMSTERDAM);
+        newAmsterdam.verifyWarehouseGoodsLayout(GoodsType.GOOD_TYPES.size(),
+                MINIMUM_GOODS_WIDTH);
+        newAmsterdam.captureDialog("colony-field-yield",
+                "town-commons-cs-new-amsterdam.png");
+        newAmsterdam.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_03_keyboard_opens_and_closes_colony_with_unchanged_commons()
+            throws Exception {
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        WaitForAsyncUtils.waitForFxEvents();
+
+        // Press O for the colonies menu, arrow down to New Amsterdam, Enter.
+        ColonyScreen newAmsterdam = game.openColonyWithKeyboard(0,
+                "New Amsterdam");
+        newAmsterdam.verifyTownCommons(EN_NEW_AMSTERDAM);
+        newAmsterdam.verifyTownCommonsNotEllipsized(EN_NEW_AMSTERDAM);
+        final int grapesBefore = newAmsterdam.stockOf(GoodsType.GRAPES);
+
+        // Escape leaves the colony; opening it again by keys changes nothing.
+        game = newAmsterdam.closeWithEscape();
+        newAmsterdam = game.openColonyWithKeyboard(0, "New Amsterdam");
+        newAmsterdam.verifyTownCommons(EN_NEW_AMSTERDAM);
+        newAmsterdam.verifyWarehouseStock(GoodsType.GRAPES, grapesBefore);
+        newAmsterdam.closeWithEscape();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_04_unworked_surroundings_forecast_matches_settlement_and_continue()
+            throws Exception {
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        WaitForAsyncUtils.waitForFxEvents();
+
+        // Haarlem has no worker on any surrounding field; its three residents
+        // work indoors and eat 6 food, so the forecast holds only the commons.
+        game.panToTile(HAARLEM);
+        ColonyScreen haarlem = game.openColonyAt(HAARLEM, "Haarlem");
+        haarlem.verifyNumberOfUnitsOnFields(0);
+        haarlem.verifyTownCommons(EN_HAARLEM);
+        haarlem.verifyFoodAccounting(3, 6);
+        haarlem.verifyThatProductionIs(GoodsType.GRAIN, -3);
+        haarlem.verifyThatProductionIs(GoodsType.LUMBER, 6);
+        haarlem.verifyWarehouseStock(GoodsType.GRAIN, 134);
+        haarlem.verifyWarehouseStock(GoodsType.LUMBER, 0);
+        game = haarlem.close();
+
+        // One owner update settles exactly the forecast: 134 + 3 - 6 food and
+        // 6 lumber, with no Prime Timber bonus.
+        game.nextTurnAndCloseDialogs();
+        game.panToTile(HAARLEM);
+        haarlem = game.openColonyAt(HAARLEM, "Haarlem");
+        haarlem.verifyWarehouseStock(GoodsType.GRAIN, 131);
+        haarlem.verifyWarehouseStock(GoodsType.LUMBER, 6);
+        haarlem.verifyNumberOfUnitsOnFields(0);
+        game = haarlem.close();
+
+        // Save and Continue from disk do not settle the update again.
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        game.panToTile(HAARLEM);
+        haarlem = game.openColonyAt(HAARLEM, "Haarlem");
+        haarlem.verifyWarehouseStock(GoodsType.GRAIN, 131);
+        haarlem.verifyWarehouseStock(GoodsType.LUMBER, 6);
+        haarlem.verifyTownCommons(EN_HAARLEM);
+        haarlem.close();
+    }
+}

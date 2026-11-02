@@ -10,7 +10,7 @@ Varianta **09 — Lehký pohyb** je zapojená se zesílenými tmavými obrysy. S
 
 ## Stav před úpravou (revize cbbe0abb)
 
-Soupis vychází ze zdrojů revize `cbbe0abb`: [UnitType](../microcol-game/src/main/java/org/microcol/model/UnitType.java), [výběr obrázků](../microcol-game/src/main/java/org/microcol/gui/image/UnitImageProvider.java), [výřezy atlasu](../microcol-game/src/main/java/org/microcol/gui/image/ImageLoaderUnit.java) a [české názvy](../microcol-game/src/main/resources/org/microcol/gui/UnitTypes_cs_CZ.xml). Jde o přehled skutečně načítaných resources, nikoli o nové překreslení nebo snímek spuštěné hry.
+Soupis vychází ze zdrojů revize `cbbe0abb`: [UnitType](../akropia-game/src/main/java/org/akropia/model/UnitType.java), [výběr obrázků](../akropia-game/src/main/java/org/akropia/gui/image/UnitImageProvider.java), [výřezy atlasu](../akropia-game/src/main/java/org/akropia/gui/image/ImageLoaderUnit.java) a [české názvy](../akropia-game/src/main/resources/org/akropia/gui/UnitTypes_cs_CZ.xml). Jde o přehled skutečně načítaných resources, nikoli o nové překreslení nebo snímek spuštěné hry.
 
 1. Hra má **35 typů**, ale jen **pět základních ilustrací**: člověk, povoz, dělo a dvě lodě. Stejnou postavu používá 26 lidských typů včetně specialistů a domorodého bojovníka.
 2. Karavela, obchodní loď a galeona sdílejí galeonu; frigata, korzárská a řadová loď sdílejí frigatu. Povoz a pokladní povoz mají společný obrázek.

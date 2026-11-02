@@ -1,0 +1,430 @@
+package org.akropia.ai;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Comparator;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.akropia.gui.screen.game.gamepanel.AnimationLock;
+import org.akropia.model.Colony;
+import org.akropia.model.ColonyJobChoice;
+import org.akropia.model.GoodsType;
+import org.akropia.model.Location;
+import org.akropia.model.Model;
+import org.akropia.model.FounderOffer;
+import org.akropia.model.Path;
+import org.akropia.model.Player;
+import org.akropia.model.TerrainType;
+import org.akropia.model.Unit;
+import org.akropia.model.unit.UnitFreeColonist;
+
+import com.google.common.base.MoreObjects;
+
+public final class SimpleAiPlayer extends AbstractRobotPlayer {
+
+    private final SimpleUnitBehavior simpleUnitBehavior = new SimpleUnitBehavior();
+
+    private final UnitMoveNavigator unitDirections;
+
+    private final RivalTradeCycle rivalTrade;
+
+    private final RivalExpansionCycle rivalExpansion;
+
+    private final RivalLandMilitaryCycle rivalLand;
+
+    private final RivalNavalMilitaryCycle rivalNaval;
+
+    private Unit founder;
+
+    private Unit carrier;
+
+    public SimpleAiPlayer(final Model model, final Player player,
+            final AnimationLock animationManager) {
+        super(model, player, animationManager);
+        unitDirections = new UnitMoveNavigator();
+        rivalTrade = new RivalTradeCycle(this);
+        rivalExpansion = new RivalExpansionCycle(this, rivalTrade);
+        rivalLand = new RivalLandMilitaryCycle(this);
+        rivalNaval = new RivalNavalMilitaryCycle(this, rivalTrade,
+                rivalExpansion);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this.getClass()).toString();
+    }
+
+    @Override
+    void moveUnit(final Unit unit) {
+        if (!unit.getAction().isNoAction()) {
+            return;
+        }
+        if (rivalTrade.isCarrier(unit) || rivalTrade.isParked(unit)) {
+            // The supply cycle moves its own carrier and keeps a parked one in
+            // port; see RivalTradeCycle.
+            return;
+        }
+        if (rivalExpansion.isParticipant(unit)
+                || rivalExpansion.isHeldCarrier(unit)) {
+            // The expansion moves its own founder and carrier, and keeps a
+            // prepared transport in port until the reserves allow a release.
+            return;
+        }
+        if (rivalLand.isParticipant(unit)) {
+            // The land policy moves and fights its armed units; see
+            // RivalLandMilitaryCycle.
+            return;
+        }
+        if (rivalNaval.isParticipant(unit)) {
+            // The naval policy moves and fights its spare warships; see
+            // RivalNavalMilitaryCycle.
+            return;
+        }
+        if (unit == founder || unit == carrier) {
+            pursueFirstColony(unit);
+            return;
+        }
+        while (isActiveTurn()
+                && getModel().getCurrentPlayer() == unit.getOwner()
+                && unit.isAtPlaceLocation() && unit.getMovementThirds() > 0) {
+            final List<Location> locations = computeMoveLocation(unit);
+            if (!locations.isEmpty()) {
+                getModel().moveUnit(unit, Path.of(locations));
+            }
+            if (!isActiveTurn()) {
+                return;
+            }
+            simpleUnitBehavior.tryToFight(unit);
+            if (locations.isEmpty()) {
+                break;
+            }
+        }
+        if (isActiveTurn()) {
+            tryToEmbark(unit);
+        }
+    }
+
+    /**
+     * @param unit required unit of this robot
+     * @return whether the expansion keeps this ship in its colony port for the
+     *         current turn
+     */
+    boolean isHeldCarrier(final Unit unit) {
+        return rivalExpansion.isHeldCarrier(unit);
+    }
+
+    private List<Location> computeMoveLocation(final Unit unit) {
+        final List<Location> locations = new ArrayList<>();
+        Location lastLocation = unit.getLocation();
+        while (locations.size() < 1 && unit.getMovementThirds() > 0) {
+            if (isPossibleToAttack(unit, lastLocation)) {
+                return locations;
+            }
+            final Location preferred = lastLocation
+                    .add(unitDirections.getLastVector(unit));
+            if (canMoveAt(unit, preferred)) {
+                locations.add(preferred);
+                lastLocation = preferred;
+                continue;
+            }
+            boolean moved = false;
+            for (Location neighbor : lastLocation.getNeighbors()) {
+                if (canMoveAt(unit, neighbor)) {
+                    locations.add(neighbor);
+                    lastLocation = neighbor;
+                    moved = true;
+                    break;
+                }
+            }
+            if (!moved) {
+                return locations;
+            }
+            unitDirections.resetDirection(unit);
+        }
+        return locations;
+    }
+
+    /**
+     * Prevent move unit to wrong place.
+     * <p>
+     * Ships are blocked to go to high-seas
+     * </p>
+     * .
+     *
+     * @param unit     required unit
+     * @param location required location
+     * @return return <code>true</code> when unit can move to given location
+     */
+    private boolean canMoveAt(final Unit unit, final Location location) {
+        return unit.isPossibleToMoveAt(location)
+                && unit.canAffordStepTo(location)
+                && !getModel().getMap().getTerrainTypeAt(location)
+                        .equals(TerrainType.HIGH_SEA);
+    }
+
+    private boolean isPossibleToAttack(final Unit unit,
+            final Location lastLocation) {
+        if (unit.canAttack()) {
+            for (final Location location : lastLocation.getNeighbors()) {
+                if (unit.isPossibleToAttackAt(location)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void tryToEmbark(final Unit unit) {
+        // A treasure train reserves six holds and is never boarded by the
+        // computer, so only one-hold passengers board here (R-0134).
+        if (unit.isStorable() && unit.getType().getRequiredHolds() == 1
+                && unit.isAtPlaceLocation() && unit.getActionPoints() > 0) {
+            unit.getNeighborUnitsWithFreeSlot().stream()
+                    .flatMap(u -> u.getCargo().getSlots().stream())
+                    .filter(unit::canEmbark).findFirst()
+                    .ifPresent(unit::embarkFromLocation);
+        }
+    }
+
+    @Override
+    void turnStarted() {
+        founder = null;
+        carrier = null;
+        if (!getPlayer().getFounderOffers().isEmpty()) {
+            final FounderOffer offer = getPlayer().getFounderOffers().get(0);
+            if (getPlayer().canChooseFounder(offer)) {
+                getPlayer().chooseFounder(offer);
+            }
+        }
+        if (getPlayer().isKing()) {
+            return;
+        }
+        // Priority: famine prevention, immediate defense, ongoing transport,
+        // supplies and export, then expansion. The famine pass only moves
+        // residents to food while a colony's balance is negative, so the
+        // expansion reads repaired balances. Spare lumber work and newcomers
+        // wait for the last workforce pass, so they cannot spend the surplus a
+        // release reads. Each step sees the claims of the earlier ones, and
+        // offence and naval patrols come after expansion, so they never take a
+        // reserved or parked carrier.
+        if (getPlayer().getColonies().isEmpty()) {
+            chooseFirstColonyFounder();
+        }
+        sortedColonies().forEach(colony -> assignColonyWorkforce(colony, true));
+        rivalLand.advanceDefense();
+        // A supply cycle whose colony is gone retires here, before expansion.
+        rivalTrade.advance();
+        rivalExpansion.advance();
+        rivalLand.advanceOffense();
+        // The first-colony transport is chosen first, so the naval policy
+        // leaves it alone even when it is armed or loaded.
+        rivalNaval.advance(Optional.ofNullable(carrier));
+        sortedColonies()
+                .forEach(colony -> assignColonyWorkforce(colony, false));
+    }
+
+    private List<Colony> sortedColonies() {
+        return getPlayer().getColonies().stream()
+                .sorted(Comparator.comparingInt(Colony::getId))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Without a colony the lowest idle founder, on the map or aboard an idle
+     * own ship, is the first-colony objective; the ship that carries it is its
+     * transport.
+     */
+    private void chooseFirstColonyFounder() {
+        founder = getPlayer().getAllUnits().stream()
+                .filter(unit -> unit.getType().canBuildColony()
+                        && unit.getAction().isNoAction())
+                .filter(unit -> unit.isAtPlaceLocation() || (unit
+                        .isAtCargoSlot()
+                        && unit.getPlaceCargoSlot().getOwnerUnit().isShip()
+                        && unit.getPlaceCargoSlot().getOwnerUnit()
+                                .getOwner() == getPlayer()
+                        && unit.getPlaceCargoSlot().getOwnerUnit()
+                                .isAtPlaceLocation()
+                        && unit.getPlaceCargoSlot().getOwnerUnit().getAction()
+                                .isNoAction()))
+                .min(Comparator.comparingInt(Unit::getId)).orElse(null);
+        if (founder != null && founder.isAtCargoSlot()) {
+            carrier = founder.getPlaceCargoSlot().getOwnerUnit();
+        }
+    }
+
+    /**
+     * One bounded pass over the colony's available workers: food first, then
+     * spare workers on lumber. Offers and execution stay model-validated.
+     *
+     * @param foodOnly when true, the famine pass: only residents move, and only
+     *                 to food while the colony's food balance is negative
+     */
+    private void assignColonyWorkforce(final Colony colony,
+            final boolean foodOnly) {
+        final Set<Integer> teaching = new HashSet<>();
+        colony.getEducationCourses().forEach(course -> {
+            teaching.add(course.getStudentId());
+            if (course.getTeacherId() != null) {
+                teaching.add(course.getTeacherId());
+            }
+        });
+        final List<Unit> workers = new ArrayList<>();
+        workers.addAll(colony.getUnitsInsideColony());
+        getModel().getUnitsAt(colony.getLocation()).stream().filter(
+                unit -> unit.isAtPlaceLocation() && !workers.contains(unit))
+                .forEach(workers::add);
+        workers.sort(Comparator.comparingInt(Unit::getId));
+        for (final Unit worker : workers) {
+            if (!isActiveTurn() || !colony.isValid()) {
+                return;
+            }
+            if (!isOrdinaryWorker(worker) || teaching.contains(worker.getId())
+                    || rivalExpansion.isParticipant(worker)) {
+                continue;
+            }
+            try {
+                assignWorker(colony, worker, foodOnly);
+            } catch (IllegalArgumentException | IllegalStateException stale) {
+                // The model rejected a stale offer; keep the worker as is.
+                org.slf4j.LoggerFactory.getLogger(SimpleAiPlayer.class)
+                        .debug("Colony job was rejected", stale);
+            }
+        }
+    }
+
+    /** Own, unordered civilian colonists; armed or mounted units keep duty. */
+    private boolean isOrdinaryWorker(final Unit unit) {
+        return unit instanceof UnitFreeColonist
+                && unit.getOwner() == getPlayer()
+                && unit.getAction().isNoAction()
+                && !((UnitFreeColonist) unit).isHoldingWeapons()
+                && !((UnitFreeColonist) unit).isMounted();
+    }
+
+    private void assignWorker(final Colony colony, final Unit worker,
+            final boolean foodOnly) {
+        final boolean resident = colony.getUnitsInsideColony().contains(worker);
+        if (foodOnly && (!resident || colony.getGoodsStats()
+                .getStatsByType(GoodsType.GRAIN).getNetProduction() >= 0)) {
+            // Newcomers and colonies without a deficit wait for the last pass.
+            return;
+        }
+        final GoodsType current = worker.isAtPlaceColonyField()
+                ? worker.getPlaceColonyField().getProducedGoodsType()
+                : null;
+        final List<ColonyJobChoice> choices = colony.getJobChoices(worker)
+                .stream()
+                .filter(choice -> choice.getUnavailableReason().isEmpty()
+                        && choice.getPotential().isPresent()
+                        && choice.getPotential().get().getAmount() > 0
+                        && choice.getKind() != ColonyJobChoice.Kind.INDOOR)
+                .collect(Collectors.toList());
+        final Optional<ColonyJobChoice> food = bestChoice(choices,
+                GoodsType.GRAIN);
+        final Optional<ColonyJobChoice> lumber = bestChoice(choices,
+                GoodsType.LUMBER);
+        final int net = colony.getGoodsStats().getStatsByType(GoodsType.GRAIN)
+                .getNetProduction();
+        final int eaten = resident ? 0 : worker.getType().getAteFoodPerTurn();
+        final int produced = current == GoodsType.GRAIN
+                ? choices.stream()
+                        .filter(choice -> choice
+                                .getKind() == ColonyJobChoice.Kind.CURRENT_FIELD
+                                && choice.getGoodsType() == GoodsType.GRAIN)
+                        .mapToInt(choice -> choice.getPotential().get()
+                                .getAmount())
+                        .findFirst().orElse(0)
+                : 0;
+        if (current == GoodsType.GRAIN) {
+            if (net < 0) {
+                // Short of food: move only to a strictly better legal field.
+                if (food.isPresent() && food.get().getPotential().get()
+                        .getAmount() > produced) {
+                    food.get().execute();
+                }
+            } else if (!foodOnly && lumber.isPresent() && net - produced >= 0) {
+                // Clear surplus: this food worker is spare.
+                lumber.get().execute();
+            }
+        } else if (resident) {
+            if (net < 0 && food.isPresent()) {
+                food.get().execute();
+            } else if (!foodOnly && net >= 0 && current != GoodsType.LUMBER
+                    && lumber.isPresent()) {
+                lumber.get().execute();
+            }
+        } else if (lumber.isPresent() && net - eaten >= 0) {
+            lumber.get().execute();
+        } else if (food.isPresent()) {
+            food.get().execute();
+        }
+    }
+
+    /** Highest yield wins; the current field, then offer order, break ties. */
+    private Optional<ColonyJobChoice> bestChoice(
+            final List<ColonyJobChoice> choices, final GoodsType goods) {
+        ColonyJobChoice best = null;
+        for (final ColonyJobChoice choice : choices) {
+            if (choice.getGoodsType() == goods && (best == null
+                    || choice.getPotential().get().getAmount() > best
+                            .getPotential().get().getAmount())) {
+                best = choice;
+            }
+        }
+        return Optional.ofNullable(best);
+    }
+
+    private void pursueFirstColony(final Unit mover) {
+        // One extra iteration permits landing after the carrier spends its last
+        // point.
+        final int limit = mover.getActionPoints() + 1;
+        for (int step = 0; step < limit && isActiveTurn()
+                && mover.isAtPlaceLocation(); step++) {
+            final Optional<Location> next = FirstColonyPlanner
+                    .nextStep(getModel(), founder);
+            if (next.isEmpty()) {
+                return;
+            }
+            final Location target = next.get();
+            try {
+                if (founder.isAtPlaceLocation()
+                        && target.equals(founder.getLocation())) {
+                    if (getModel().canUnitBuildColony(founder)) {
+                        getModel().buildColony(getPlayer(), founder,
+                                getModel().suggestColonyName(Set.of()));
+                    }
+                    return;
+                }
+                if (founder.isAtCargoSlot() && getModel().getMap()
+                        .getTerrainTypeAt(target).isLand()) {
+                    if (founder.canUnitDisembarkAt(target)) {
+                        founder.disembarkToLocation(target);
+                        waitForAnimations();
+                    }
+                    return;
+                }
+                if (!mover.canAffordStepTo(target)) {
+                    return;
+                }
+                final Location before = mover.getLocation();
+                getModel().moveUnit(mover, Path.of(List.of(target)));
+                waitForAnimations();
+                if (!isActiveTurn() || !mover.isAtPlaceLocation()
+                        || mover.getLocation().equals(before)) {
+                    return;
+                }
+            } catch (IllegalArgumentException
+                    | IllegalStateException rejected) {
+                // A live model rejection ends this attempt; the next turn
+                // replans.
+                org.slf4j.LoggerFactory.getLogger(SimpleAiPlayer.class)
+                        .debug("First-colony action was rejected", rejected);
+                return;
+            }
+        }
+    }
+}

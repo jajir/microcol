@@ -1,0 +1,160 @@
+package org.akropia.gui.screen.europe;
+
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
+import java.util.List;
+import org.akropia.model.Model;
+import org.akropia.model.Player;
+import org.akropia.model.NotEnoughtGoldException;
+import org.akropia.gui.dialog.DialogMessage;
+
+import org.akropia.gui.LocalizationHelper;
+import org.akropia.gui.dialog.DialogNotEnoughGold;
+import org.akropia.gui.event.model.GameModelController;
+import org.akropia.gui.image.ImageProvider;
+import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ButtonBarOk;
+import org.akropia.gui.util.ViewUtil;
+import org.akropia.i18n.I18n;
+import org.akropia.model.UnitType;
+
+import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+
+import javafx.geometry.Insets;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+
+/**
+ * Show Europe port.
+ */
+public final class BuyUnitsDialog extends AbstractMessageWindow {
+
+    private final static int MAX_UNITS_IN_ROW = 2;
+
+    private final EuropeCallback europeDialogCallback;
+
+    private final Label labelCaption;
+    private final GameModelController gameModelController;
+    private final DialogNotEnoughGold dialogNotEnoughGold;
+    private final DialogMessage rejection;
+    private final I18n i18n;
+    private final List<BuyUnitPanel> panels = new ArrayList<>();
+    private final ScrollPane offers = new ScrollPane();
+    private Player buyer;
+    private Model openedModel;
+    private boolean actionTaken;
+
+    @Inject
+    public BuyUnitsDialog(final ViewUtil viewUtil, final I18n i18n,
+            final ImageProvider imageProvider,
+            final GameModelController gameModelController,
+            final LocalizationHelper localizationHelper,
+            final EuropeCallback europeDialogCallback,
+            final DialogNotEnoughGold dialogNotEnoughGold,
+            final DialogMessage rejection) {
+        super(viewUtil, i18n);
+        this.europeDialogCallback = Preconditions
+                .checkNotNull(europeDialogCallback);
+        Preconditions.checkNotNull(imageProvider);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
+        this.dialogNotEnoughGold = dialogNotEnoughGold;
+        this.rejection = rejection;
+        this.i18n = i18n;
+        labelCaption = new Label();
+
+        final VBox root = new VBox();
+        root.setId("mainVbox");
+        init(root);
+
+        final GridPane gridWithUnits = new GridPane();
+
+        AtomicInteger column = new AtomicInteger(0);
+        AtomicInteger row = new AtomicInteger(0);
+        UnitType.UNIT_TYPES.stream()
+                .filter(unitType -> unitType.getEuropePrice() > 0)
+                .forEach(unitType -> {
+                    final BuyUnitPanel buyUnitPanel = new BuyUnitPanel(unitType,
+                            imageProvider, localizationHelper, i18n, this);
+                    panels.add(buyUnitPanel);
+                    GridPane.setMargin(buyUnitPanel,
+                            new Insets(10, 10, 10, 10));
+                    gridWithUnits.add(buyUnitPanel, column.intValue(),
+                            row.intValue());
+                    column.incrementAndGet();
+                    if (column.intValue() >= MAX_UNITS_IN_ROW) {
+                        column.set(0);
+                        row.incrementAndGet();
+                    }
+                });
+
+        final ButtonBarOk buttonBar = new ButtonBarOk(i18n);
+        buttonBar.getButtonOk().setOnAction(e -> {
+            close();
+        });
+
+        offers.setId("buy-unit-offers");
+        offers.setContent(gridWithUnits);
+        offers.setFitToWidth(true);
+        offers.setPrefViewportWidth(600);
+        root.getChildren().addAll(labelCaption, offers, buttonBar.getContent());
+    }
+
+    @Override
+    public void showAndWait() {
+        offers.setPrefViewportHeight(Math.max(240, Math.min(520,
+                getViewUtil().getPrimaryStage().getHeight() - 180)));
+        offers.setVvalue(0);
+        buyer = gameModelController.getHumanPlayer();
+        openedModel = gameModelController.getModel();
+        actionTaken = false;
+        panels.forEach(panel -> panel.refresh(buyer));
+        try {
+            super.showAndWait();
+        } finally {
+            buyer = null;
+            openedModel = null;
+        }
+    }
+
+    void buy(final UnitType type, final int quotedPrice) {
+        if (buyer == null || actionTaken) {
+            return;
+        }
+        actionTaken = true;
+        try {
+            Preconditions.checkState(
+                    gameModelController.getModel() == openedModel,
+                    "Purchase belongs to a replaced game");
+            buyer.buy(type, quotedPrice);
+        } catch (NotEnoughtGoldException e) {
+            actionTaken = false;
+            dialogNotEnoughGold.showAndWait();
+            panels.forEach(panel -> panel.refresh(buyer));
+            return;
+        } catch (IllegalStateException e) {
+            actionTaken = false;
+            rejection.setTitle(i18n.get(Europe.buyUnitDialog_title));
+            rejection.setText(i18n.get(Europe.buyUnitDialog_unavailable));
+            rejection.showAndWait();
+            close();
+            return;
+        }
+        closeAndRepaint();
+    }
+
+    @Override
+    public void updateLanguage(final I18n i18n) {
+        setTitle(i18n.get(Europe.buyUnitDialog_title));
+        labelCaption.setText(i18n.get(Europe.buyUnitDialog_title));
+    }
+
+    public void closeAndRepaint() {
+        europeDialogCallback.repaint();
+        close();
+    }
+
+}

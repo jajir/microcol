@@ -34,7 +34,7 @@ class RepositoryLinksTest(unittest.TestCase):
     def test_web_urls_anchors_and_docs_assets_are_unchanged(self):
         for href in (
             "https://example.com/a?q=1#x", "mailto:jan@example.com",
-            "//example.com/a", "/microcol/legacy/", "#section", "?q=1",
+            "//example.com/a", "/akropia/legacy/", "#section", "?q=1",
             "modules.md#module-overview", "images/a%20b.png", "",
         ):
             with self.subTest(href=href):

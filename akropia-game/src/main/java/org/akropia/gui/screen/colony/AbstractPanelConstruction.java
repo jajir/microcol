@@ -1,0 +1,117 @@
+package org.akropia.gui.screen.colony;
+
+import org.akropia.gui.Point;
+import org.akropia.gui.image.ImageProvider;
+import org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source;
+import org.akropia.gui.screen.game.components.StatusBarMessageEvent;
+import org.akropia.gui.util.JavaFxComponent;
+import org.akropia.i18n.I18n;
+import org.akropia.model.Construction;
+
+import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
+
+import javafx.scene.canvas.Canvas;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+
+abstract class AbstractPanelConstruction implements JavaFxComponent {
+
+    private final EventBus eventBus;
+    private final I18n i18n;
+    private final ImageProvider imageProvider;
+    private final Canvas canvas;
+    private final VBox mainPane = new VBox();
+    private final Construction construction;
+
+    AbstractPanelConstruction(final EventBus eventBus, final I18n i18n,
+            final ImageProvider imageProvider, final Construction construction,
+            final Point canvasSize) {
+        this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.i18n = Preconditions.checkNotNull(i18n);
+        this.imageProvider = Preconditions.checkNotNull(imageProvider);
+        this.construction = Preconditions.checkNotNull(construction);
+        mainPane.setPickOnBounds(true);
+        canvas = new Canvas(canvasSize.getX(), canvasSize.getY());
+        canvas.getStyleClass().add("canvas");
+        mainPane.setOnMouseEntered(this::onMouseEntered);
+        mainPane.setOnMouseExited(this::onMouseExited);
+        mainPane.getChildren().add(canvas);
+    }
+
+    @Override
+    public Region getContent() {
+        return getMainPane();
+    }
+
+    abstract void paint();
+
+    /**
+     * Allows t set css construction id. It allows to place construction at
+     * specific place.
+     *
+     * @param id required css id
+     */
+    void setCssId(final String id) {
+        getMainPane().setId(id);
+    }
+
+    private void onMouseEntered(
+            @SuppressWarnings("unused") final MouseEvent event) {
+        eventBus.post(new StatusBarMessageEvent(getConstructionName(),
+                Source.COLONY));
+    }
+
+    /**
+     * Get localized construction name.
+     *
+     * @return construction name in the current language
+     */
+    private String getConstructionName() {
+        String baseName = i18n.get(
+                ConstructionTypeName.getNameForType(construction.getType()));
+        java.util.List<org.akropia.model.ConstructionSlot> slots = construction
+                .getConstructionSlots();
+        java.util.List<String> workerNames = slots.stream()
+                .filter(slot -> !slot.isEmpty()).map(slot -> {
+                    org.akropia.model.Unit unit = slot.getUnit();
+                    return i18n.get(org.akropia.gui.UnitTypes
+                            .getUnitName(unit.getType()));
+                }).collect(java.util.stream.Collectors.toList());
+        if (workerNames.isEmpty()) {
+            return baseName;
+        }
+        return baseName + ": " + String.join(", ", workerNames);
+    }
+
+    private void onMouseExited(
+            @SuppressWarnings("unused") final MouseEvent event) {
+        eventBus.post(new StatusBarMessageEvent(Source.COLONY));
+    }
+
+    protected EventBus getEventBus() {
+        return eventBus;
+    }
+
+    protected I18n getI18n() {
+        return i18n;
+    }
+
+    protected Canvas getCanvas() {
+        return canvas;
+    }
+
+    protected VBox getMainPane() {
+        return mainPane;
+    }
+
+    protected Construction getConstruction() {
+        return construction;
+    }
+
+    protected ImageProvider getImageProvider() {
+        return imageProvider;
+    }
+
+}

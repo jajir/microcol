@@ -1,0 +1,360 @@
+package org.akropia.gui.screen.europe;
+
+import org.akropia.gui.util.ActionButtons;
+import org.akropia.gui.image.ButtonIcon;
+import org.akropia.gui.UnitTypes;
+import java.util.Optional;
+
+import org.akropia.gui.event.model.GameModelController;
+import org.akropia.gui.dialog.DialogMessage;
+import org.akropia.gui.dialog.JettisonFlow;
+import org.akropia.gui.image.ImageProvider;
+import org.akropia.gui.screen.game.components.StatusBarMessageEvent;
+import org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source;
+import org.akropia.gui.util.BackgroundHighlighter;
+import org.akropia.gui.util.ClipboardEval;
+import org.akropia.gui.util.JavaFxComponent;
+import org.akropia.gui.util.Repaintable;
+import org.akropia.gui.util.UpdatableLanguage;
+import org.akropia.i18n.I18n;
+import org.akropia.i18n.MessageKeyResource;
+import org.akropia.model.Unit;
+import org.akropia.model.PlaceHighSea;
+import org.akropia.model.VoyageReversalOffer;
+import org.akropia.model.unit.Ship;
+
+import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
+import com.google.inject.Inject;
+
+import javafx.scene.image.ImageView;
+import javafx.scene.control.Label;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.geometry.Side;
+import javafx.geometry.Pos;
+import javafx.scene.input.KeyCode;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
+
+/**
+ * Panels shows ships in seas. Ships are incoming to port or are going to new
+ * world.
+ *
+ * @param <T> message key type used for ship travel text
+ */
+public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
+        implements JavaFxComponent, Repaintable, UpdatableLanguage {
+
+    private boolean isShownShipsTravelingToEurope;
+
+    private final EuropeCallback europeDialog;
+
+    private final HBox shipsContainer;
+    private final ScrollPane scroll;
+    private final ToggleGroup selection = new ToggleGroup();
+    private final VBox voyageDetail = new VBox(4);
+    private int selectedShipId = -1;
+
+    private final ImageProvider imageProvider;
+
+    private final GameModelController gameModelController;
+
+    private final VBox titledPanel;
+    private final Label title = new Label();
+
+    private final EventBus eventBus;
+
+    private final I18n i18n;
+
+    private final DialogMessage dialogMessage;
+
+    private final VoyageReversalDialog reversalDialog;
+
+    private final JettisonFlow jettisonFlow;
+
+    private T titleKey;
+
+    private T onMouseEnteredKey;
+
+    @Inject
+    public PanelHighSeas(final EuropeCallback europeDialog,
+            final ImageProvider imageProvider,
+            final GameModelController gameModelController,
+            final EventBus eventBus, final I18n i18n,
+            final DialogMessage dialogMessage,
+            final VoyageReversalDialog reversalDialog,
+            final JettisonFlow jettisonFlow) {
+        this.europeDialog = Preconditions.checkNotNull(europeDialog);
+        this.imageProvider = Preconditions.checkNotNull(imageProvider);
+        this.gameModelController = Preconditions
+                .checkNotNull(gameModelController);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.i18n = Preconditions.checkNotNull(i18n);
+        this.dialogMessage = Preconditions.checkNotNull(dialogMessage);
+        this.reversalDialog = Preconditions.checkNotNull(reversalDialog);
+        this.jettisonFlow = Preconditions.checkNotNull(jettisonFlow);
+
+        shipsContainer = new HBox();
+        shipsContainer.setMinWidth(Region.USE_PREF_SIZE);
+        shipsContainer.getStyleClass().add("voyage-ships");
+        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
+                shipsContainer, this::isItCorrectObject);
+        shipsContainer.setOnDragEntered(backgroundHighlighter::onDragEntered);
+        shipsContainer.setOnDragExited(backgroundHighlighter::onDragExited);
+        shipsContainer.setOnDragOver(this::onDragOver);
+        shipsContainer.setOnDragDropped(this::onDragDropped);
+        shipsContainer.minHeightProperty().set(60);
+
+        title.getStyleClass().add("screen-title");
+        title.setMaxWidth(Double.MAX_VALUE);
+        title.setAlignment(Pos.CENTER);
+        titledPanel = new VBox(4, title);
+        titledPanel.getStyleClass().add("ships-container");
+        scroll = new ScrollPane(shipsContainer);
+        scroll.getStyleClass().add("harbor-scroll");
+        scroll.setFitToHeight(true);
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        shipsContainer.minWidthProperty()
+                .bind(scroll.widthProperty().subtract(4));
+        // A selected frame plus the scrollbar, keeping ships near the title.
+        scroll.setMinHeight(96);
+        scroll.setPrefHeight(96);
+        scroll.setMaxHeight(96);
+        titledPanel.getChildren().addAll(scroll, voyageDetail);
+        titledPanel.setOnMouseEntered(this::onMouseEntered);
+        titledPanel.setOnMouseExited(this::onMouseExited);
+    }
+
+    private void onMouseEntered(
+            @SuppressWarnings("unused") final MouseEvent event) {
+        if (onMouseEnteredKey != null) {
+            eventBus.post(new StatusBarMessageEvent(i18n.get(onMouseEnteredKey),
+                    Source.EUROPE));
+        }
+    }
+
+    private void onMouseExited(
+            @SuppressWarnings("unused") final MouseEvent event) {
+        eventBus.post(new StatusBarMessageEvent(Source.EUROPE));
+    }
+
+    public void addStyle(final String style) {
+        titledPanel.getStyleClass().add(style);
+    }
+
+    @Override
+    public void repaint() {
+        selection.getToggles().clear();
+        voyageDetail.getChildren().clear();
+        shipsContainer.getChildren().clear();
+        showShips();
+        if (selection.getSelectedToggle() == null
+                && !selection.getToggles().isEmpty()) {
+            ((ToggleButton) selection.getToggles().get(0)).fire();
+        }
+        updateLanguage(i18n);
+    }
+
+    private void onDragOver(final DragEvent event) {
+        if (isItCorrectObject(event.getDragboard())) {
+            event.acceptTransferModes(TransferMode.MOVE);
+            event.consume();
+        }
+    }
+
+    private boolean isItCorrectObject(final Dragboard db) {
+        if (!isShownShipsTravelingToEurope && db.hasString()) {
+            return ClipboardEval.make(gameModelController.getModel(), db)
+                    .filterUnit(this::isDepartingShip).getUnit().isPresent();
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isDepartingShip(final Unit unit) {
+        return unit.isShip() && unit.isAtEuropePort()
+                && unit.getOwner() == gameModelController.getHumanPlayer();
+    }
+
+    private void onDragDropped(final DragEvent event) {
+        final Optional<Unit> oUnit = ClipboardEval
+                .make(gameModelController.getModel(), event.getDragboard())
+                .filterUnit(this::isDepartingShip).getUnit();
+        if (oUnit.isPresent()) {
+            event.setDropCompleted(depart(oUnit.get()));
+            event.consume();
+        }
+    }
+
+    boolean depart(final Unit unit) {
+        try {
+            Preconditions.checkState(isDepartingShip(unit));
+            unit.placeToHighSeas(false);
+            selectedShipId = unit.getId();
+            europeDialog.repaint();
+            return true;
+        } catch (IllegalStateException rejected) {
+            dialogMessage.setTitle(i18n.get(Europe.title));
+            dialogMessage.setText(i18n.get(Europe.voyageUnavailable));
+            dialogMessage.showAndWait();
+            return false;
+        }
+    }
+
+    private void showShips() {
+        gameModelController.getModel().getHighSea()
+                .getUnitsTravelingTo(gameModelController.getHumanPlayer(),
+                        isShownShipsTravelingToEurope)
+                .forEach(unit -> {
+                    final PlaceHighSea voyage = (PlaceHighSea) unit.getPlace();
+                    final Label remaining = new Label(
+                            voyage.getRemainigTurns() == 0
+                                    && !voyage.isTravelToEurope()
+                                            ? i18n.get(Europe.voyageWaiting)
+                                            : i18n.get(Europe.voyageTurns,
+                                                    voyage.getRemainigTurns()));
+                    remaining.setId("voyage-remaining-" + unit.getId());
+                    remaining.setWrapText(true);
+                    remaining.setMinHeight(Region.USE_PREF_SIZE);
+                    remaining.setMaxWidth(200);
+                    final MenuItem reverse = new MenuItem(
+                            i18n.get(Europe.voyageReverse));
+                    reverse.setId("voyage-reverse-" + unit.getId());
+                    // Turning an outbound ship toward a closed home Europe is
+                    // refused by the model, so the control is unavailable.
+                    reverse.setDisable(!gameModelController.getModel()
+                            .isGameRunning()
+                            || gameModelController.getModel()
+                                    .getCurrentPlayer() != unit.getOwner()
+                            || !voyage.isTravelToEurope()
+                                    && !unit.getOwner().canTradeInEurope());
+                    reverse.setOnAction(event -> reverseCourse((Ship) unit));
+                    final MenuItem jettison = new MenuItem(
+                            i18n.get(Europe.voyageJettison));
+                    jettison.setId("voyage-jettison-" + unit.getId());
+                    jettison.setDisable(!gameModelController.getModel()
+                            .isGameRunning()
+                            || gameModelController.getModel()
+                                    .getCurrentPlayer() != unit.getOwner());
+                    jettison.setOnAction(event -> jettisonCargo((Ship) unit));
+                    final Label identity = new Label(
+                            i18n.get(UnitTypes.getUnitName(unit.getType()))
+                                    + " #" + unit.getId());
+                    identity.setId("voyage-identity-" + unit.getId());
+                    final ImageView icon = new ImageView(
+                            imageProvider.getUnitImage(unit));
+                    icon.setFitWidth(45);
+                    icon.setFitHeight(45);
+                    icon.setPreserveRatio(true);
+                    final ToggleButton ship = ActionButtons
+                            .toggle(ButtonIcon.SHIP);
+                    ship.setGraphic(icon);
+                    ship.setId("voyage-ship-" + unit.getId());
+                    ship.getStyleClass().add("harbor-unit");
+                    ship.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    ship.setToggleGroup(selection);
+                    ship.setMinWidth(Region.USE_PREF_SIZE);
+                    ship.setAccessibleHelp(
+                            identity.getText() + " · " + remaining.getText()
+                                    + " · " + i18n.get(Europe.voyageOrders));
+                    ship.setAccessibleText(
+                            identity.getText() + " · " + remaining.getText()
+                                    + " · " + i18n.get(Europe.voyageOrders));
+                    ship.setOnAction(event -> {
+                        ship.setSelected(true);
+                        selectedShipId = unit.getId();
+                        final HBox detail = new HBox(12, identity, remaining);
+                        detail.setAlignment(Pos.CENTER);
+                        voyageDetail.getChildren().setAll(detail);
+                    });
+                    final ContextMenu orders = new ContextMenu(reverse,
+                            jettison);
+                    orders.setOnShowing(event -> ship.fire());
+                    ship.setContextMenu(orders);
+                    ship.setOnKeyPressed(event -> {
+                        if (event.getCode() == KeyCode.CONTEXT_MENU
+                                || event.isShiftDown()
+                                        && event.getCode() == KeyCode.F10) {
+                            orders.show(ship, Side.BOTTOM, 0, 0);
+                            event.consume();
+                        }
+                    });
+                    shipsContainer.getChildren().add(ship);
+                    if (selectedShipId == unit.getId()) {
+                        ship.fire();
+                    }
+                });
+    }
+
+    /**
+     * Discards goods through the shared flow. The list is redrawn afterwards
+     * even when the flow was canceled or refused, so it shows the live cargo.
+     */
+    private void jettisonCargo(final Ship ship) {
+        jettisonFlow.jettison(gameModelController.getModel(), ship);
+        europeDialog.repaint();
+    }
+
+    private void reverseCourse(final Ship ship) {
+        try {
+            final VoyageReversalOffer offer = gameModelController.getModel()
+                    .offerVoyageReversal(ship);
+            if (reversalDialog.confirm(offer)) {
+                gameModelController.getModel().reverseVoyage(offer);
+                europeDialog.repaint();
+            }
+        } catch (IllegalStateException | IllegalArgumentException rejected) {
+            europeDialog.repaint();
+            dialogMessage.setTitle(i18n.get(Europe.title));
+            dialogMessage.setText(i18n.get(Europe.voyageReverseStale));
+            dialogMessage.showAndWait();
+        }
+    }
+
+    /**
+     * @param isShownShipsTravelingToEurope the isShownShipsTravelingToEurope to
+     *                                      set
+     */
+    public void setShownShipsTravelingToEurope(
+            final boolean isShownShipsTravelingToEurope) {
+        this.isShownShipsTravelingToEurope = isShownShipsTravelingToEurope;
+        scroll.setId(isShownShipsTravelingToEurope ? "europe-incoming-scroll"
+                : "europe-outgoing-scroll");
+    }
+
+    @Override
+    public Region getContent() {
+        return titledPanel;
+    }
+
+    @Override
+    public void updateLanguage(final I18n i18n) {
+        title.setText(i18n.get(titleKey));
+    }
+
+    /**
+     * @param titleKey the titleKey to set
+     */
+    public void setTitleKey(T titleKey) {
+        this.titleKey = Preconditions.checkNotNull(titleKey);
+    }
+
+    /**
+     * @param onMouseOverKey the onMouseOverKey to set
+     */
+    public void setOnMouseEnteredKey(T onMouseOverKey) {
+        this.onMouseEnteredKey = Preconditions.checkNotNull(onMouseOverKey);
+    }
+
+}

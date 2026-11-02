@@ -1,0 +1,31 @@
+package org.akropia.gui.screen.game.gamepanel;
+
+import java.util.List;
+
+import org.akropia.model.Location;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+/**
+ * Helps to highlight area where use could move in first turn.
+ */
+@Singleton
+public final class OneTurnMoveHighlighter {
+
+    private List<Location> locations;
+
+    @Inject
+    OneTurnMoveHighlighter() {
+
+    }
+
+    public void setLocations(final List<Location> locations) {
+        this.locations = locations;
+    }
+
+    public boolean isItHighlighted(final Location location) {
+        return locations != null && locations.contains(location);
+    }
+
+}

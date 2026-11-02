@@ -36,7 +36,7 @@ if a[0] == 'ps':
     if count >= int(os.getenv('SLOT_DELAY_AFTER', '0')):
         time.sleep(float(os.getenv('SLOT_PS_DELAY', '0')))
     assert a[1:3] == ['-aq', '--filter']
-    assert a[3] == 'label=org.microcol.local-test=' + str(os.getuid())
+    assert a[3] == 'label=org.akropia.local-test=' + str(os.getuid())
     print('owned' if state.get('owned') else '')
 elif a[0] == 'logs':
     assert a[1] == 'owned'
@@ -53,7 +53,7 @@ else:
 
 class LocalSlotTest(unittest.TestCase):
     def setUp(self):
-        temporary = tempfile.TemporaryDirectory(prefix="microcol slot ")
+        temporary = tempfile.TemporaryDirectory(prefix="akropia slot ")
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
         self.lock = self.root / "shared.lock"

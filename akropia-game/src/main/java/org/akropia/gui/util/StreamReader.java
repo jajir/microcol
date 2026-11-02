@@ -1,0 +1,54 @@
+package org.akropia.gui.util;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
+import org.akropia.model.AkropiaException;
+
+import com.google.common.base.Preconditions;
+import com.google.inject.Singleton;
+
+/**
+ * Class for reading stream from class path. Class handle java module security.
+ */
+@Singleton
+public class StreamReader {
+
+    /**
+     * Open stream from class path. It's compatible with java module.
+     *
+     * @param fileName required file name relative to class path.
+     * @return return input stream
+     */
+    public InputStream openStream(final String fileName) {
+        Preconditions.checkNotNull(fileName, "File name can't be null.");
+        final Module module = this.getClass().getModule();
+        final PrivilegedAction<InputStream> pa = () -> {
+            try {
+                return module.getResourceAsStream(fileName);
+            } catch (IOException e) {
+                throw new AkropiaException(e.getMessage(), e);
+            }
+        };
+        final InputStream stream = AccessController.doPrivileged(pa);
+        if (stream == null) {
+            throw new AkropiaException(String.format(
+                    "Unabble to load file %s from class path in module %s",
+                    fileName, module.getName()));
+        }
+        return stream;
+    }
+
+    public String toResourceName(final String bundleName, final String suffix) {
+        if (bundleName.contains("://")) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder(
+                bundleName.length() + 1 + suffix.length());
+        sb.append(bundleName.replace('.', '/')).append('.').append(suffix);
+        return sb.toString();
+    }
+
+}

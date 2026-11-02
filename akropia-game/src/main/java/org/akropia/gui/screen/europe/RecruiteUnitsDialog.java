@@ -1,0 +1,185 @@
+package org.akropia.gui.screen.europe;
+
+import org.akropia.gui.LocalizationHelper;
+import org.akropia.gui.dialog.DialogNotEnoughGold;
+import org.akropia.gui.dialog.DialogMessage;
+import org.akropia.gui.event.model.GameModelController;
+import org.akropia.gui.image.ImageProvider;
+import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ButtonBarOk;
+import org.akropia.gui.util.ViewUtil;
+import org.akropia.i18n.I18n;
+import org.akropia.model.Model;
+import org.akropia.model.Player;
+import org.akropia.model.RecruitmentOffer;
+import org.akropia.model.EarnedImmigrationOffer;
+import org.akropia.model.NotEnoughtGoldException;
+
+import com.google.inject.Inject;
+
+import javafx.geometry.Insets;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+/** Paid and earned arrivals use the same saved pool and model-owned offers. */
+public final class RecruiteUnitsDialog extends AbstractMessageWindow {
+
+    private final Label caption = new Label();
+    private final HBox candidates = new HBox(16);
+    private final ImageProvider images;
+    private final GameModelController controller;
+    private final LocalizationHelper names;
+    private final DialogNotEnoughGold insufficientGold;
+    private final DialogMessage rejection;
+    private final I18n i18n;
+    private final EuropeCallback europe;
+    private Player buyer;
+    private Model openedModel;
+    private boolean actionTaken;
+    private boolean earnedMode;
+    private boolean open;
+
+    @Inject
+    public RecruiteUnitsDialog(final ViewUtil viewUtil,
+            final ImageProvider images, final GameModelController controller,
+            final LocalizationHelper names,
+            final DialogNotEnoughGold insufficientGold, final I18n i18n,
+            final DialogMessage rejection, final EuropeCallback europe) {
+        super(viewUtil, i18n);
+        this.images = images;
+        this.controller = controller;
+        this.names = names;
+        this.insufficientGold = insufficientGold;
+        this.i18n = i18n;
+        this.rejection = rejection;
+        this.europe = europe;
+        final VBox root = new VBox(12);
+        root.setId("recruitment-dialog");
+        candidates.setPadding(new Insets(10));
+        final ButtonBarOk buttons = new ButtonBarOk(i18n);
+        buttons.getButtonOk().setOnAction(event -> close());
+        root.getChildren().addAll(caption, candidates, buttons.getContent());
+        init(root);
+    }
+
+    @Override
+    public void showAndWait() {
+        buyer = controller.getHumanPlayer();
+        openedModel = controller.getModel();
+        actionTaken = false;
+        earnedMode = openedModel.isAwaitingImmigrationChoice();
+        try {
+            if (!earnedMode && buyer.hasPendingImmigrant()) {
+                showRejection(Europe.immigrationPending);
+                buyer = null;
+                openedModel = null;
+                return;
+            }
+            refresh();
+        } catch (IllegalStateException e) {
+            showRejection(Europe.recruitUnavailable);
+            buyer = null;
+            openedModel = null;
+            return;
+        }
+        try {
+            open = true;
+            super.showAndWait();
+        } finally {
+            open = false;
+            earnedMode = false;
+            buyer = null;
+            openedModel = null;
+        }
+    }
+
+    public boolean isOpen() {
+        return open;
+    }
+
+    private void refresh() {
+        candidates.getChildren().clear();
+        if (earnedMode) {
+            buyer.getEarnedImmigrationOffers()
+                    .forEach(offer -> candidates.getChildren()
+                            .add(new RecruiteUnitPanel(offer, buyer, images,
+                                    names, i18n, this)));
+            updateLanguage(i18n);
+            return;
+        }
+        buyer.getRecruitmentOffers()
+                .forEach(offer -> candidates.getChildren()
+                        .add(new RecruiteUnitPanel(offer, buyer, images, names,
+                                i18n, this)));
+    }
+
+    void recruit(final RecruitmentOffer offer) {
+        if (buyer == null || actionTaken) {
+            return;
+        }
+        actionTaken = true;
+        try {
+            if (controller.getModel() != openedModel) {
+                throw new IllegalStateException(
+                        "Recruitment belongs to a replaced game");
+            }
+            buyer.recruit(offer);
+        } catch (NotEnoughtGoldException e) {
+            insufficientGold.showAndWait();
+            actionTaken = false;
+            refresh();
+            return;
+        } catch (IllegalStateException e) {
+            showRejection(Europe.recruitChanged);
+            close();
+            return;
+        }
+        europe.repaint();
+        close();
+    }
+
+    void chooseEarned(final EarnedImmigrationOffer offer) {
+        if (buyer == null || actionTaken) {
+            return;
+        }
+        actionTaken = true;
+        try {
+            if (controller.getModel() != openedModel) {
+                throw new IllegalStateException(
+                        "Immigration belongs to a replaced game");
+            }
+            buyer.chooseEarnedImmigrant(offer);
+        } catch (IllegalStateException rejected) {
+            showRejection(Europe.recruitChanged);
+            close();
+            return;
+        }
+        europe.repaint();
+        if (openedModel.isAwaitingImmigrationChoice()) {
+            actionTaken = false;
+            refresh();
+        } else {
+            close();
+        }
+    }
+
+    private void showRejection(final Europe text) {
+        rejection.setTitle(i18n.get(Europe.recruitUnitDialogTitle));
+        rejection.setText(i18n.get(text));
+        rejection.showAndWait();
+    }
+
+    @Override
+    public void updateLanguage(final I18n i18n) {
+        setTitle(i18n.get(earnedMode ? Europe.earnedTitle
+                : Europe.recruitUnitDialogTitle));
+        caption.setText(earnedMode && buyer != null
+                ? i18n.get(Europe.earnedExplanation,
+                        buyer.getImmigrationTorches(),
+                        buyer.getImmigrationTarget())
+                : i18n.get(Europe.recruitUnitDialogTitle));
+        caption.setWrapText(true);
+        caption.setMaxWidth(580);
+    }
+}

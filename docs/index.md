@@ -1,9 +1,9 @@
-# MicroCol documentation
+# Akropia documentation
 
 Development planning: [current requirements R-0050+](requirements/backlog.md)
 and the [migration of the original forty requirements](requirements/migration-2026-10-14.md).
 
-MicroCol is a colonization strategy game implemented in Java and JavaFX. This
+Akropia is a colonization strategy game implemented in Java and JavaFX. This
 website publishes the documentation maintained in the repository's `docs/`
 directory on `main`. Development, integration and publication all use `main`.
 
@@ -12,7 +12,7 @@ directory on `main`. Development, integration and publication all use `main`.
 | [Modules and build outputs](modules.md) | Responsibilities of the Maven modules, generated products, and current distribution limitations. |
 | [Java package responsibilities](architecture.md) | Where rules, player state, AI, UI and persistence belong; existing exceptions and how to maintain the boundaries. |
 | [macOS and Linux distributions](distribution.md) | Maven commands, bundled runtimes, DMG/DEB/archive outputs, and verified build and launch results. |
-| [MicroCol Dev and automatic updates](development-builds.md) | Install the development launcher once and receive each successful build from `main`. |
+| [Akropia Dev and automatic updates](development-builds.md) | Install the development launcher once and receive each successful build from `main`. |
 | [Local diagnostics](diagnostics.md) | Where the bounded local failure log is, what a record may contain, and how settings and the launcher behave when storage is lost. |
 | [Graphics sources and usage](graphics.md) | SVG and raster inventory, atlas coordinates, export paths, and the current visual brief. |
 | [Sound and player feedback](audio.md) | Current music playback, file formats, event feedback, and guidelines and a catalog for future sounds. |
@@ -36,11 +36,11 @@ The navigation includes all Markdown pages in `docs/`, including newly committed
 pages. Assessment dates and verification notes on each page distinguish observed
 behavior from proposals and historical results.
 
-The [`microcol-site` source module](../microcol-site/) remains in the repository
+The [`akropia-site` source module](../akropia-site/) remains in the repository
 as a useful foundation and source of design ideas, including where its pages and
 reports are outdated. It is excluded from publication. The project website at
-[/microcol/](https://jajir.github.io/microcol/) publishes only `docs/`.
+[https://jajir.github.io/microcol/](https://jajir.github.io/microcol/) publishes only `docs/`.
 
 ```bash
-mvn -pl microcol-game compile javafx:run
+mvn -pl akropia-game compile javafx:run
 ```

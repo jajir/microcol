@@ -4,7 +4,7 @@
 
 ## Rozměr a společná pravidla
 
-1. [Herní políčko](../microcol-game/src/main/java/org/microcol/gui/Tile.java) má **45 × 45 logických px**. Na dodaném screenshotu má 90 × 90 obrazových px. První desetice se celá vešla do tohoto rozměru. V navazujících zkouškách A–C zůstává políčko stejným bodem ukotvení, ale podle dalšího přání uživatele mohou domky a opevnění mírně přesáhnout. Aktuální návrh zkouší až 4 px do stran; tento číselný limit není zatím závazné herní pravidlo. Náhledy jsou exportované v měřítku 1×.
+1. [Herní políčko](../akropia-game/src/main/java/org/akropia/gui/Tile.java) má **45 × 45 logických px**. Na dodaném screenshotu má 90 × 90 obrazových px. První desetice se celá vešla do tohoto rozměru. V navazujících zkouškách A–C zůstává políčko stejným bodem ukotvení, ale podle dalšího přání uživatele mohou domky a opevnění mírně přesáhnout. Aktuální návrh zkouší až 4 px do stran; tento číselný limit není zatím závazné herní pravidlo. Náhledy jsou exportované v měřítku 1×.
 2. Návrhy používají jeden, dva nebo tři domky a čtyři nezávislé stavy obrany. Při prvních návrzích nebyly populační hranice dohodnuté; nynější dohodu uvádí [zadání pro hru](graphics.md#vybrana-podoba-kolonie-2026-10-25). Domky nemají okna, tašky, jednotlivé kameny ani dekorativní okolí. Základní tah původních i navazujících rodin má 1,35 px; kresba se rozšiřuje změnou rozložení a geometrie, nikoli zvětšením celé ikony včetně čáry.
 3. Jméno zůstává bez rámečku. Nizozemská vlajka slouží jako společný příklad; Quebec má francouzskou. Národní vlajky nejsou samostatné varianty velikosti či obrany. Při implementaci je nutné sladit konkrétní národní motivy se společným značením hráčů.
 4. Všechny návrhové kompozice používají původní screenshot jako nezměněný podklad. Překryté jsou původní značky a jejich výběrový obrys; místní podklad/řeka je pod novou značkou doplněn. **Haarlem je přidaný ukázkový bod**, aby bylo možné současně porovnat všechny obrany. Pravý informační panel zůstává původní.
@@ -31,7 +31,7 @@
 
 ## Jaká opevnění hra má
 
-1. Model definuje řetězec **palisáda → fort → fortress**. Zvlášť existuje stav bez opevnění. Ceny a minimální počet vnitřních obyvatel pro stavbu vlastní [ConstructionType](../microcol-game/src/main/java/org/microcol/model/ConstructionType.java); obranné účinky vlastní [CombatStrengths](../microcol-game/src/main/java/org/microcol/model/CombatStrengths.java). Následující hodnoty byly přečteny ze zdrojů 25. října 2026; nejde o nový běh herních testů.
+1. Model definuje řetězec **palisáda → fort → fortress**. Zvlášť existuje stav bez opevnění. Ceny a minimální počet vnitřních obyvatel pro stavbu vlastní [ConstructionType](../akropia-game/src/main/java/org/akropia/model/ConstructionType.java); obranné účinky vlastní [CombatStrengths](../akropia-game/src/main/java/org/akropia/model/CombatStrengths.java). Následující hodnoty byly přečteny ze zdrojů 25. října 2026; nejde o nový běh herních testů.
 
 | Stav | Kladiva / nástroje / obyvatelé pro stavbu | Obranný bonus opevnění | Značka v návrhu |
 | --- | --- | --- | --- |

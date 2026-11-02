@@ -50,7 +50,7 @@ neúspěšném načtení patří do A04, [R-0067](done/R-0067.md).
 výchozí výprava a referenční profil běžné hry. Patří sem i návrh složení partie:
 kteří protivníci se účastní, co lze měnit a co je přednastavené. Samostatná
 volba počtu, jmen nebo „inteligence“ soupeřů zatím není přijatým požadavkem;
-je potřeba odlišit možnosti MicroCol od pravidel manuálu. A08 vlastní stav
+je potřeba odlišit možnosti Akropia od pravidel manuálu. A08 vlastní stav
 národů a rozhodování AI, A04 kalendář. Výstupem přípravy je seznam voleb,
 výchozích hodnot, validací a výsledek potvrzení či zrušení nastavení.
 

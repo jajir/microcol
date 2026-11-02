@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title description">
+<title id="title">Zbraně</title>
+<desc id="description">Akropia R-0384, selected proposal 15, 2026-11-01. Hand-authored vector paths; solid fills and transparent surroundings.</desc>
+<g id="bold-hand-drawn-outline" transform="translate(2 2) scale(0.9375)" stroke="#41413b" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+<g id="spear"><path d="M48 26 L53 28 L47 58 L42 57 Z" fill="#ac8352"/><path d="M46 26 L45 18 L56 5 L59 24 L52 31 Z" fill="#858787"/></g>
+<g id="round-shield"><path d="M40 35 C41 12 6 10 5 36 C4 62 41 62 40 35 Z" fill="#e7b65a"/><path d="M34 35 C35 19 11 18 10 36 C10 54 35 55 34 35 Z" fill="#b19557"/><path d="M18 36 a4 4 0 1 0 8 0 a4 4 0 1 0 -8 0" fill="#e7b65a"/></g>
+</g>
+</svg>

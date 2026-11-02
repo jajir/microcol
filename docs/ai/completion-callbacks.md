@@ -11,7 +11,7 @@ an image or exported with results.
 
 1. [R-0292](../requirements/done/R-0292.md), agreed on 2026-10-26, serializes local
    test **jobs** for the current user across worktrees. `docker` and `verify`
-   completion commands acquire `~/.cache/microcol/docker-tests.lock` before
+   completion commands acquire `~/.cache/akropia/docker-tests.lock` before
    starting their execution watchdog. Direct `verify.sh` and `test-runner.sh`
    use the same [OS-lock helper](../../scripts/ui-tests/local_slot.py).
    Full verification may still run its two configured UI groups inside one job.
@@ -31,7 +31,7 @@ an image or exported with results.
    holder terminates that recorded group before checking Docker. A reused PID,
    corrupt recovery record or unsuccessful cleanup fails closed. Never remove
    the lock file to bypass a live lock; file existence is not lock ownership.
-4. Managed containers carry `org.microcol.local-test` with the local user's UID.
+4. Managed containers carry `org.akropia.local-test` with the local user's UID.
    Recovery retains their Docker logs in the next command log and removes only
    those containers, then confirms none remain. Unlabelled/foreign containers
    are untouched. If Docker is unavailable, no new test command starts. Existing
@@ -53,6 +53,24 @@ an image or exported with results.
    does not guarantee that an individual run fits seven minutes. Serialization itself
    does not change test selection or the acceptance budget; the current limit is
    documented below. No remote regression is watched.
+7. The [R-0389](../requirements/R-0389.md) rename changed the lock path, the
+   `org.akropia.local-test` container label, the Compose project and the
+   completion log root. Tooling from a revision before that rename uses the
+   former names, so the two generations neither share the lock nor see each
+   other's containers. Do not start a renamed run while a pre-rename job is
+   active; the first renamed run also starts with empty Compose volumes.
+   No concurrent run of the two generations has been verified as safe.
+8. Host directories created before 2026-11-02 keep the former product name and
+   are not moved, renamed or migrated by R-0389. Historical evidence refers to
+   them with these placeholders instead of the literal former name:
+   `$PRE_R0389_LOGS` is the former product directory under `~/Library/Logs/`
+   (completion records, Claude handoffs, local-worker, UX, delivery and
+   distribution evidence); `$PRE_R0389_SUPPORT` is the former product directory
+   under `~/Library/Application Support/` (local-worker lock and worktrees);
+   `$PRE_R0389_CHECKOUT` is the directory name of host checkouts and Codex
+   worktrees created before the rename. Completion IDs, dates and revisions in
+   the evidence identify the records; the placeholders are not active paths.
+   Runs started with renamed tooling write to `~/Library/Logs/Akropia/`.
 
 ## User-requested parallel runs
 
@@ -73,7 +91,7 @@ an image or exported with results.
    as well. Preserve other jobs' images, volumes and ports; do not use global
    prune or project-wide teardown on shared resources.
 4. Isolate both the OS lock and cleanup owner. Use a task-specific lock path and
-   `org.microcol.local-test` value, propagated through `MICROCOL_LOCAL_TEST_OWNER`.
+   `org.akropia.local-test` value, propagated through `AKROPIA_LOCAL_TEST_OWNER`.
    Never delete the default lock, reuse its owner label or launch a raw command
    that skips supervision. A separate image alone cannot prevent the default
    recovery logic from removing another job's containers.
@@ -173,7 +191,7 @@ and container runner checks are unchanged.
 ## Independent UX sessions
 
 1. The `ux` command dispatches the separate [UX playtesting runner](../ux-playtesting.md), for example `python3 scripts/codex/run.py --thread TASK_UUID --timeout 1800 ux -- check`.
-2. It uses the same local Docker admission/cleanup lock and originating-task callback, but invokes no UI regression selection. Results remain in `microcol-ux-test/runs/` and are not Surefire reports or gameplay acceptance.
+2. It uses the same local Docker admission/cleanup lock and originating-task callback, but invokes no UI regression selection. Results remain in `akropia-ux-test/runs/` and are not Surefire reports or gameplay acceptance.
 3. The caller records the selected model/reasoning and inner play budget when dispatching `play`. Outer completion is separate from the player's goals and evidence review.
 
 ## Pre-commit gate
@@ -194,7 +212,7 @@ python3 scripts/codex/run.py --thread TASK_UUID --timeout 600 verify -- --model
 python3 scripts/codex/run.py --thread TASK_UUID --timeout 480 verify -- --smoke
 ```
 
-The model phase explicitly selects all `microcol-game` tests, including
+The model phase explicitly selects all `akropia-game` tests, including
 `ConnectorTest`, and no UI tests. Smoke selects only the existing UI/support
 checks and enforces a **420-second total acceptance budget**; it does not repeat
 model tests. [R-0303](../requirements/done/R-0303.md) records the 2026-10-26 agreement.
@@ -256,7 +274,7 @@ commands alone do not establish correct publication.
 ## Evidence, cancellation and delivery failures
 
 Each run keeps `request.json`, `supervisor.json` (PID), `command.log`, `supervisor.log`, `result.json` and
-`notification.json` in `~/Library/Logs/Microcol/completions/`. Notification status
+`notification.json` in `~/Library/Logs/Akropia/completions/`. Notification status
 is separate from command outcome. Cancel an owned supervisor with `kill -TERM PID`
 using its recorded PID; cleanup and a cancellation callback then run. Do not kill
 the worker model or arbitrary containers by name guessing.

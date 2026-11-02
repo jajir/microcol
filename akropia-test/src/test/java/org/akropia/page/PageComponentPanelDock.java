@@ -1,0 +1,64 @@
+package org.akropia.page;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
+
+import org.akropia.gui.dock.PanelCrateView;
+import org.akropia.gui.dock.PanelDockView;
+import org.testfx.util.WaitForAsyncUtils;
+
+import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.StackPane;
+
+public class PageComponentPanelDock extends AbstractPageComponent {
+
+    public static PageComponentPanelDock of(final TestContext context) {
+        return new PageComponentPanelDock(context);
+    }
+
+    private PageComponentPanelDock(TestContext context) {
+        super(context);
+    }
+
+    public void selectUnitFromPort(final int unitIndex) {
+        final ToggleButton ship = getUnitsInPort().get(unitIndex);
+        if (!ship.isSelected()) {
+            getRobot().clickOn(ship);
+        }
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public boolean isUnitInPortSelected(final int unitIndex) {
+        return getUnitsInPort().get(unitIndex).isSelected();
+    }
+
+    public List<ToggleButton> getUnitsInPort() {
+        return getListOfNodes("." + PanelDockView.SHIP_IN_PORT_STYLE);
+    }
+
+    public int getNumberOfShipsInPort() {
+        return getUnitsInPort().size();
+    }
+
+    public void verifyNumberOfShipsInPort(final int expectedCount) {
+        assertEquals(expectedCount, getNumberOfShipsInPort(),
+                "Unexpected number of ships in port");
+    }
+
+    public void verifyUnitInPortSelected(final int unitIndex,
+            final boolean expectedSelected) {
+        assertEquals(expectedSelected, isUnitInPortSelected(unitIndex),
+                "Unexpected ship selection");
+    }
+
+    /**
+     * Return list of crates where user could put some goods or units.
+     *
+     * @return list of crates
+     */
+    public List<StackPane> getListOfCrates() {
+        return getListOfNodes("." + PanelCrateView.CRATE_CLASS);
+    }
+
+}

@@ -1,6 +1,6 @@
 # Odpovědnosti Java balíčků
 
-Tento přehled určuje, kam v MicroCol patří nová změna a které části mají
+Tento přehled určuje, kam v Akropia patří nová změna a které části mají
 spolupracovat. Před zadáním práce vybrat vlastníka pravidla a dotčené balíčky
 z této mapy; není potřeba pokaždé znovu odvozovat rozdělení celé hry ze zdrojů.
 Konkrétní metody a jejich volající je před úpravou stále nutné přečíst.
@@ -21,7 +21,7 @@ jsou uvedené níže; samotný zápis je neodstraňuje.
 | Co musí zůstat zachované po uložení a načtení? | Herní objekty spolu s `model.store`; obálka hry v `model.campaign.po`. |
 | Jaký cíl nebo scénář platí v konkrétní misi? | `model.campaign`. |
 | Jak se text přeloží a jak se vybere obrázek? | `i18n`, respektive `gui.image`; význam herního výsledku zůstává v modelu. |
-| Jak ověříme pravidlo a skutečnou cestu hráče? | Modelové testy a `microcol-test` podle [funkčního kontraktu](functional-tests.md). |
+| Jak ověříme pravidlo a skutečnou cestu hráče? | Modelové testy a `akropia-test` podle [funkčního kontraktu](functional-tests.md). |
 
 **Stav hráče patří do modelu pro člověka i robota.** `Player`, `PlayerHuman`
 a `PlayerKing` popisují hráče a jeho herní stav. Strategie počítače patří do
@@ -54,8 +54,8 @@ gui: volba člověka ───┐
 ai: volba počítače ───┘
 ```
 
-Existujícím příkladem je pohyb: [GameModelController](../microcol-game/src/main/java/org/microcol/gui/event/model/GameModelController.java)
-i [SimpleAiPlayer](../microcol-game/src/main/java/org/microcol/ai/SimpleAiPlayer.java)
+Existujícím příkladem je pohyb: [GameModelController](../akropia-game/src/main/java/org/akropia/gui/event/model/GameModelController.java)
+i [SimpleAiPlayer](../akropia-game/src/main/java/org/akropia/ai/SimpleAiPlayer.java)
 volají `Model.moveUnit`. Diagram vyjadřuje hranici pro herní operace;
 neznamená, že všechny současné akce už používají totožnou cestu.
 
@@ -389,23 +389,23 @@ Regresní důkaz a stav úplné sady uvádí [evidence R-0023](functional-tests.
 
 ## Model a rozhodování počítače
 
-V následujících tabulkách jsou názvy relativní k `org.microcol` v
-`microcol-game/src/main/java`. Odkaz otevírá příslušný adresář.
+V následujících tabulkách jsou názvy relativní k `org.akropia` v
+`akropia-game/src/main/java`. Odkaz otevírá příslušný adresář.
 
 | Balíček | Odpovědnost a orientační třídy | Hranice pro další změny |
 | --- | --- | --- |
-| [kořen org.microcol](../microcol-game/src/main/java/org/microcol/) | Vstup do aplikace, nastavení nativního toolkitu před startem, JavaFX životní cyklus a sestavení závislostí: `MicroCol`, `MicroColApplication`, `ExternalModule`, výměnné vazby pro testy. UI testy přebírají nastavení přes `MicroCol.configureJavaFx()`. | Pravidla a konkrétní obrazovky patří do svých balíčků. |
-| [model](../microcol-game/src/main/java/org/microcol/model/) | Svět, hráči, jednotky, kolonie, ekonomika, cesty a tahy: `Model`, `Player`, `AbstractUnit`, `Colony`, `GoodsTrade`, `PathFinder`, `GameManager`, `Calendar`, neměnné evropské cenové nabídky `EuropeTradeQuote`; společná topologie kontinentů a `MicroColException`. | Autoritativní pravidla a změny stavu; nepřidávat závislosti na obrazovkách, JavaFX ani strategiích AI. Efektivní `Unit.getSightRadius` určuje dohled podle typu a výstroje; `getVisibleLocations` jej ořízne na mapu, `Visibility` uchovává objevený terén nezávisle na pohybu. |
-| [model.unit](../microcol-game/src/main/java/org/microcol/model/unit/) | Konkrétní druhy jednotek, továrna a jednotkové akce, například `UnitFactory`, `Ship`, `UnitActionPlowField`. Sdílené `Unit`, `AbstractUnit` a `UnitType` jsou nadále v `model`. | Schopnosti a provedení akcí; rozhodování soupeře a animace patří jinam. |
-| [model.event](../microcol-game/src/main/java/org/microcol/model/event/) | Události změn a přechodů modelu, včetně zrušitelných událostí před akcí; odběratelé používají `ModelListener`. | Popis herního děje bez UI ovládacích prvků. Nejde o uloženou historii zpráv pro hráče. |
-| [model.turnevent](../microcol-game/src/main/java/org/microcol/model/turnevent/) | Zprávy aktuálního přehledu tahu o příjezdu lodí, hladu, ztrátě kolonie a dalších výsledcích: `TurnEvent`, `TurnEventStore`. | Záznamy se ukládají s hrou, protože je nelze spolehlivě obnovit z aktuálního světa. Při ukončení tahu se zprávy hráče čistí; nejde o trvalý archiv. Zobrazení vlastní `gui.screen.turnreport`. `TurnEventCriticality` určuje kritické záznamy (hlad, ztráta či zánik kolonie), které se ukážou i při vypnutém rutinním přehledu (R-0204). |
-| [model.store](../microcol-game/src/main/java/org/microcol/model/store/) | Datové objekty uloženého světa a Gson převody: `ModelPo`, `UnitPo`, `CargoPo`, adaptéry akcí a typů. | Ukládaná reprezentace; výpočty herních pravidel zůstávají v modelových objektech. Tento balíček sám nezajišťuje celý souborový save/load. |
-| [model.campaign](../microcol-game/src/main/java/org/microcol/model/campaign/) | Kampaně, mise, cíle a jejich posluchače; `GameModel` spojuje misi a `Model`, `GameModelDao` sestavuje a obnovuje hru. Obsahuje i volnou hru `FreePlay`; `FreePlayMap` vybírá přibalený svět a `GameModelDao.createFreePlay` jej připraví před nahrazením rozehrané hry; volbu `NORTH_AMERICA` sestaví `model.generation.NorthAmericaWorld`. | Specifické podmínky mise; obecná ekonomika, boj a pohyb patří do společného modelu. |
-| [model.campaign.po](../microcol-game/src/main/java/org/microcol/model/campaign/po/) | Obálka celé uložené hry: svět, jméno kampaně/mise, data cílů a souborové čtení/zápis přes `GameModelPoDao`. | Formát a převod dat; hráčská pozice je od R-0382 ZIP s `metadata.json` (`SaveMetadataPo` s odvozeným `SaveSummaryPo`), `game.json` z téhož datového modelu a volitelným `preview.png`, autorské scénáře zůstávají prostým JSONem se samostatným čtením/zápisem; `GameModelPoDao` vynucuje limity, strukturu archivu a povinná metadata shodná s hrou (`loadPlayerGame`/`savePlayerGame`); `PersistingTool` vlastní adresář a názvy save souborů i příponu; `SavedGames` čte přehled jen z metadat, náhled vybrané pozice a vytváří cesty ručních/rychlých pozic, obálka nese volitelnou identitu rozehrané hry a název uložení; `HallOfFameDao` ukládá trvalý žebříček R-0197 do vlastního souboru vedle nich. `RecoverySlot` rozlišuje tři body obnovy, `RecoveryCheckpointPolicy` vybírá bezpečné hranice a `GameModelPoDao` nahrazuje soubor atomicky. `SavedGames` dále pojmenovává, řadí podle čísla zápisu a uklízí pět snímků tahů každé partie (R-0388); `GameModelPoDao.gameplayState` dává produkční JSON herního stavu a `SaveBaseline` drží stav posledního úspěšného uložení či načtení s jeho souborem (R-0387). Výzvu k uložení a zpětnou vazbu vlastní `gui.dialog.PersistingService`. Nespouštět zde herní akce ani dialogy. |
-| [model.campaign.store](../microcol-game/src/main/java/org/microcol/model/campaign/store/) | Uložení postupu kampaně, například dokončených misí, přes `CampaignsDao`. | Odlišovat postup kampaně od rozehrané pozice a od uživatelských nastavení. |
-| [ai](../microcol-game/src/main/java/org/microcol/ai/) | Rozhodování evropských a královských soupeřů: `SimpleAiPlayer`, `KingRobotPlayer`, chování jednotek a volba cílů přes `ContinentTargets` nad topologií z modelu. | Volit akce nad společnými pravidly; neobcházet modelové operace a nepřidávat nové závislosti na GUI. Současné vazby na animace jsou výjimkou níže. |
-| [i18n](../microcol-game/src/main/java/org/microcol/i18n/) | Překladové klíče, XML resource bundles, jejich načítání, cache a kontrola úplnosti. | Překlad významu; neurčuje herní pravidla, rozložení obrazovek ani okamžik otevření dialogu. |
-| [diagnostics](../microcol-game/src/main/java/org/microcol/diagnostics/) | Lokální omezený záznam obnovitelných chyb: pevné události, verze a platforma, bez zpráv výjimek a hráčského textu. Popis vlastní [diagnostika](diagnostics.md). Dialogy uložení, odchodu, načtení a nedokončeného tahu uvádějí složku záznamu. | Jen zápis záznamu; nesmí přerušit hru, uložení ani načtení. Model na něj nezávisí; volají ho GUI a spouštěcí kód. |
+| [kořen org.akropia](../akropia-game/src/main/java/org/akropia/) | Vstup do aplikace, nastavení nativního toolkitu před startem, JavaFX životní cyklus a sestavení závislostí: `Akropia`, `AkropiaApplication`, `ExternalModule`, výměnné vazby pro testy. UI testy přebírají nastavení přes `Akropia.configureJavaFx()`. | Pravidla a konkrétní obrazovky patří do svých balíčků. |
+| [model](../akropia-game/src/main/java/org/akropia/model/) | Svět, hráči, jednotky, kolonie, ekonomika, cesty a tahy: `Model`, `Player`, `AbstractUnit`, `Colony`, `GoodsTrade`, `PathFinder`, `GameManager`, `Calendar`, neměnné evropské cenové nabídky `EuropeTradeQuote`; společná topologie kontinentů a `AkropiaException`. | Autoritativní pravidla a změny stavu; nepřidávat závislosti na obrazovkách, JavaFX ani strategiích AI. Efektivní `Unit.getSightRadius` určuje dohled podle typu a výstroje; `getVisibleLocations` jej ořízne na mapu, `Visibility` uchovává objevený terén nezávisle na pohybu. |
+| [model.unit](../akropia-game/src/main/java/org/akropia/model/unit/) | Konkrétní druhy jednotek, továrna a jednotkové akce, například `UnitFactory`, `Ship`, `UnitActionPlowField`. Sdílené `Unit`, `AbstractUnit` a `UnitType` jsou nadále v `model`. | Schopnosti a provedení akcí; rozhodování soupeře a animace patří jinam. |
+| [model.event](../akropia-game/src/main/java/org/akropia/model/event/) | Události změn a přechodů modelu, včetně zrušitelných událostí před akcí; odběratelé používají `ModelListener`. | Popis herního děje bez UI ovládacích prvků. Nejde o uloženou historii zpráv pro hráče. |
+| [model.turnevent](../akropia-game/src/main/java/org/akropia/model/turnevent/) | Zprávy aktuálního přehledu tahu o příjezdu lodí, hladu, ztrátě kolonie a dalších výsledcích: `TurnEvent`, `TurnEventStore`. | Záznamy se ukládají s hrou, protože je nelze spolehlivě obnovit z aktuálního světa. Při ukončení tahu se zprávy hráče čistí; nejde o trvalý archiv. Zobrazení vlastní `gui.screen.turnreport`. `TurnEventCriticality` určuje kritické záznamy (hlad, ztráta či zánik kolonie), které se ukážou i při vypnutém rutinním přehledu (R-0204). |
+| [model.store](../akropia-game/src/main/java/org/akropia/model/store/) | Datové objekty uloženého světa a Gson převody: `ModelPo`, `UnitPo`, `CargoPo`, adaptéry akcí a typů. | Ukládaná reprezentace; výpočty herních pravidel zůstávají v modelových objektech. Tento balíček sám nezajišťuje celý souborový save/load. |
+| [model.campaign](../akropia-game/src/main/java/org/akropia/model/campaign/) | Kampaně, mise, cíle a jejich posluchače; `GameModel` spojuje misi a `Model`, `GameModelDao` sestavuje a obnovuje hru. Obsahuje i volnou hru `FreePlay`; `FreePlayMap` vybírá přibalený svět a `GameModelDao.createFreePlay` jej připraví před nahrazením rozehrané hry; volbu `NORTH_AMERICA` sestaví `model.generation.NorthAmericaWorld`. | Specifické podmínky mise; obecná ekonomika, boj a pohyb patří do společného modelu. |
+| [model.campaign.po](../akropia-game/src/main/java/org/akropia/model/campaign/po/) | Obálka celé uložené hry: svět, jméno kampaně/mise, data cílů a souborové čtení/zápis přes `GameModelPoDao`. | Formát a převod dat; hráčská pozice je od R-0382 ZIP s `metadata.json` (`SaveMetadataPo` s odvozeným `SaveSummaryPo`), `game.json` z téhož datového modelu a volitelným `preview.png`, autorské scénáře zůstávají prostým JSONem se samostatným čtením/zápisem; `GameModelPoDao` vynucuje limity, strukturu archivu a povinná metadata shodná s hrou (`loadPlayerGame`/`savePlayerGame`); `PersistingTool` vlastní adresář a názvy save souborů i příponu; `SavedGames` čte přehled jen z metadat, náhled vybrané pozice a vytváří cesty ručních/rychlých pozic, obálka nese volitelnou identitu rozehrané hry a název uložení; `HallOfFameDao` ukládá trvalý žebříček R-0197 do vlastního souboru vedle nich. `RecoverySlot` rozlišuje tři body obnovy, `RecoveryCheckpointPolicy` vybírá bezpečné hranice a `GameModelPoDao` nahrazuje soubor atomicky. `SavedGames` dále pojmenovává, řadí podle čísla zápisu a uklízí pět snímků tahů každé partie (R-0388); `GameModelPoDao.gameplayState` dává produkční JSON herního stavu a `SaveBaseline` drží stav posledního úspěšného uložení či načtení s jeho souborem (R-0387). Výzvu k uložení a zpětnou vazbu vlastní `gui.dialog.PersistingService`. Nespouštět zde herní akce ani dialogy. |
+| [model.campaign.store](../akropia-game/src/main/java/org/akropia/model/campaign/store/) | Uložení postupu kampaně, například dokončených misí, přes `CampaignsDao`. | Odlišovat postup kampaně od rozehrané pozice a od uživatelských nastavení. |
+| [ai](../akropia-game/src/main/java/org/akropia/ai/) | Rozhodování evropských a královských soupeřů: `SimpleAiPlayer`, `KingRobotPlayer`, chování jednotek a volba cílů přes `ContinentTargets` nad topologií z modelu. | Volit akce nad společnými pravidly; neobcházet modelové operace a nepřidávat nové závislosti na GUI. Současné vazby na animace jsou výjimkou níže. |
+| [i18n](../akropia-game/src/main/java/org/akropia/i18n/) | Překladové klíče, XML resource bundles, jejich načítání, cache a kontrola úplnosti. | Překlad významu; neurčuje herní pravidla, rozložení obrazovek ani okamžik otevření dialogu. |
+| [diagnostics](../akropia-game/src/main/java/org/akropia/diagnostics/) | Lokální omezený záznam obnovitelných chyb: pevné události, verze a platforma, bez zpráv výjimek a hráčského textu. Popis vlastní [diagnostika](diagnostics.md). Dialogy uložení, odchodu, načtení a nedokončeného tahu uvádějí složku záznamu. | Jen zápis záznamu; nesmí přerušit hru, uložení ani načtení. Model na něj nezávisí; volají ho GUI a spouštěcí kód. |
 
 ## Uživatelské rozhraní a podpůrné služby
 
@@ -445,16 +445,16 @@ mají povinné identifikátory. Podrobnosti a limity vlastní výše uvedený ko
 
 | Balíček | Odpovědnost a orientační třídy | Hranice pro další změny |
 | --- | --- | --- |
-| [gui](../microcol-game/src/main/java/org/microcol/gui/) | Sdílené UI služby a typy: hlavní okno, Guice vazby, barvy, pixelové souřadnice, panely jednotek, klávesové ovládání, hudba a přehrávač jediného zvuku vítězství v misi (`SuccessCuePlayer`, R-0228). | Prezentace a propojení aplikace; další ekonomické a herní výpočty patří do modelu. Hudba ani přehrávač zvuku vítězství nejsou obecnou službou herních zvukových událostí; viz [audio](audio.md). |
-| [gui.background](../microcol-game/src/main/java/org/microcol/gui/background/) | Dekorativní pozadí, pruhy a opakované obrazy. | Kreslení bez změn herního terénu a jeho vlastností. |
-| [gui.buttonpanel](../microcol-game/src/main/java/org/microcol/gui/buttonpanel/) | Sdílené panely tlačítek a předání jejich akcí, například dalšího tahu. | Pravidla zpracování tahu vlastní model. |
-| [gui.dialog](../microcol-game/src/main/java/org/microcol/gui/dialog/) | Dialogy a potvrzení; dnes také `ApplicationController` a `PersistingService`, které koordinují spuštění, načtení a uložení hry. | Dialog získá rozhodnutí hráče; výpočet výsledku a formát uložené hry řeší jejich vlastníci. |
-| [gui.dock](../microcol-game/src/main/java/org/microcol/gui/dock/) | Sdílený přístav, nákladní sloty a drag & drop; konkrétní chování dodává kolonie nebo Evropa. | Kapacita, vlastnictví a přenos musí být platné i při jiném vstupu než přetažení myší. |
-| [gui.event](../microcol-game/src/main/java/org/microcol/gui/event/) | Záměry UI a posluchače: založení kolonie, orání, jazyk, výběr a zobrazení. | Předat herní akci modelu; modelové události patří do `model.event`. |
-| [gui.event.model](../microcol-game/src/main/java/org/microcol/gui/event/model/) | Most mezi hrou a UI: `GameModelController`, `GameController`, `ModelListenerImpl`, zapojení robotů a reakce na mise včetně rozhodnutí o zvuku vítězství (`MissionVictoryCue`). | Integrační balíček uvnitř GUI, nikoli druhý model. Nepřidávat sem strategie soupeřů a výpočty pravidel. |
-| [gui.image](../microcol-game/src/main/java/org/microcol/gui/image/) | Načítání, skládání a cache obrazů, pobřeží a kosmetických variant. | `WorldMapRandoms` vybírá obrazové varianty; negeneruje herní svět ani bojovou náhodu. |
-| [gui.preferences](../microcol-game/src/main/java/org/microcol/gui/preferences/) | Uživatelské nastavení a jeho JSON persistence: jazyk, hlasitost hudby a efektů, okno, animace a zobrazení. `SettingService.load` při nedostupném úložišti vrací poslední známé nastavení (nebo výchozí hodnoty), znovu zkouší čtení a nic nepřepisuje ani nepřesouvá; `save`/`update` selhání hlásí. | Rozehraná partie a její pravidla patří do modelové persistence. Nastavení nesmí při ztrátě umístění uložených her přerušit probíhající hru. |
-| [gui.util](../microcol-game/src/main/java/org/microcol/gui/util/) | Sdílené UI komponenty, dialogové základy, clipboard, fonty, animace a souborové pomůcky. | Nepřidávat nesouvisející obecné třídy. `PathPlanning` interpoluje pixely animace; herní cestu hledá `model.PathFinder`. |
+| [gui](../akropia-game/src/main/java/org/akropia/gui/) | Sdílené UI služby a typy: hlavní okno, Guice vazby, barvy, pixelové souřadnice, panely jednotek, klávesové ovládání, hudba a přehrávač jediného zvuku vítězství v misi (`SuccessCuePlayer`, R-0228). | Prezentace a propojení aplikace; další ekonomické a herní výpočty patří do modelu. Hudba ani přehrávač zvuku vítězství nejsou obecnou službou herních zvukových událostí; viz [audio](audio.md). |
+| [gui.background](../akropia-game/src/main/java/org/akropia/gui/background/) | Dekorativní pozadí, pruhy a opakované obrazy. | Kreslení bez změn herního terénu a jeho vlastností. |
+| [gui.buttonpanel](../akropia-game/src/main/java/org/akropia/gui/buttonpanel/) | Sdílené panely tlačítek a předání jejich akcí, například dalšího tahu. | Pravidla zpracování tahu vlastní model. |
+| [gui.dialog](../akropia-game/src/main/java/org/akropia/gui/dialog/) | Dialogy a potvrzení; dnes také `ApplicationController` a `PersistingService`, které koordinují spuštění, načtení a uložení hry. | Dialog získá rozhodnutí hráče; výpočet výsledku a formát uložené hry řeší jejich vlastníci. |
+| [gui.dock](../akropia-game/src/main/java/org/akropia/gui/dock/) | Sdílený přístav, nákladní sloty a drag & drop; konkrétní chování dodává kolonie nebo Evropa. | Kapacita, vlastnictví a přenos musí být platné i při jiném vstupu než přetažení myší. |
+| [gui.event](../akropia-game/src/main/java/org/akropia/gui/event/) | Záměry UI a posluchače: založení kolonie, orání, jazyk, výběr a zobrazení. | Předat herní akci modelu; modelové události patří do `model.event`. |
+| [gui.event.model](../akropia-game/src/main/java/org/akropia/gui/event/model/) | Most mezi hrou a UI: `GameModelController`, `GameController`, `ModelListenerImpl`, zapojení robotů a reakce na mise včetně rozhodnutí o zvuku vítězství (`MissionVictoryCue`). | Integrační balíček uvnitř GUI, nikoli druhý model. Nepřidávat sem strategie soupeřů a výpočty pravidel. |
+| [gui.image](../akropia-game/src/main/java/org/akropia/gui/image/) | Načítání, skládání a cache obrazů, pobřeží a kosmetických variant. | `WorldMapRandoms` vybírá obrazové varianty; negeneruje herní svět ani bojovou náhodu. |
+| [gui.preferences](../akropia-game/src/main/java/org/akropia/gui/preferences/) | Uživatelské nastavení a jeho JSON persistence: jazyk, hlasitost hudby a efektů, okno, animace a zobrazení. `SettingService.load` při nedostupném úložišti vrací poslední známé nastavení (nebo výchozí hodnoty), znovu zkouší čtení a nic nepřepisuje ani nepřesouvá; `save`/`update` selhání hlásí. | Rozehraná partie a její pravidla patří do modelové persistence. Nastavení nesmí při ztrátě umístění uložených her přerušit probíhající hru. |
+| [gui.util](../akropia-game/src/main/java/org/akropia/gui/util/) | Sdílené UI komponenty, dialogové základy, clipboard, fonty, animace a souborové pomůcky. | Nepřidávat nesouvisející obecné třídy. `PathPlanning` interpoluje pixely animace; herní cestu hledá `model.PathFinder`. |
 
 ## Obrazovky
 
@@ -464,41 +464,41 @@ verzi pravidla. [UX](ux.md) a [grafika](graphics.md) popisují společné požad
 
 | Balíček | Konkrétní odpovědnost |
 | --- | --- |
-| [gui.screen](../microcol-game/src/main/java/org/microcol/gui/screen/) | Volba obrazovky, životní cyklus a hlavní kontejner. `MainPanelPresenter.stop()` ukončí aktuální obrazovku při JavaFX shutdownu; testovací fixture stejný úklid volá po každém scénáři. `MainPanelPresenter` také zaznamená skutečný původ Nastavení a Načíst hru, podle něj volí hostitele a návrat (`ReturnToOriginEvent`) a vlastní zkratky shortcut+O/S hlavního okna (R-0377). |
-| [gui.screen.game](../microcol-game/src/main/java/org/microcol/gui/screen/game/) | Sestavení herní obrazovky a její klávesové vstupy. |
-| [gui.screen.game.components](../microcol-game/src/main/java/org/microcol/gui/screen/game/components/) | Pravý panel, tlačítka, stavový řádek a údaje o poli a jednotkách; `MinimapTiles` sdílí znalost mapy minimapy s náhledem uložené hry `SavePreview` (R-0382). `TradeRoutePlanningPanel` nahrazuje pravý panel v plánovači tras (R-0395). |
-| [gui.screen.game.gamepanel](../microcol-game/src/main/java/org/microcol/gui/screen/game/gamepanel/) | Canvas mapy, viditelná oblast, výběr, kurzor, posun, zvýraznění cesty a animace; stav a kresba mapového plánovače obchodních tras (R-0395). |
-| [gui.screen.colony](../microcol-game/src/main/java/org/microcol/gui/screen/colony/) | Pracovníci, pole, sklad, budovy a přístav na obrazovce kolonie. |
-| [gui.screen.colony.buildingqueue](../microcol-game/src/main/java/org/microcol/gui/screen/colony/buildingqueue/) | Lokalizovaný výběr a explicitní potvrzení projektu, pořadí a odebrání z fronty. Výběr drží původní kolonii/model a kontroluje změnu zobrazeného stavu; pravidla dostupnosti, ceny a zpracování fronty zůstávají v modelu. |
-| [gui.screen.europe](../microcol-game/src/main/java/org/microcol/gui/screen/europe/) | Evropský přístav, nákup a nábor jednotek, zboží a přehled plavby; nabídky vybavení na molu zobrazují ceny a důvody odmítnutí z modelu. |
-| [gui.screen.market](../microcol-game/src/main/java/org/microcol/gui/screen/market/) | Obrazovky nákupu a prodeje a prezentace cen. |
-| [gui.screen.campaign](../microcol-game/src/main/java/org/microcol/gui/screen/campaign/) | Výběr kampaně a mise. |
-| [gui.screen.goals](../microcol-game/src/main/java/org/microcol/gui/screen/goals/) | Zobrazení cílů mise a jejich postupu. |
-| [gui.screen.statistics](../microcol-game/src/main/java/org/microcol/gui/screen/statistics/) | Zobrazení herních statistik, grafů, základních evropských vztahů, síně slávy (R-0197; zápis výsledku jde přes `HallOfFameDao`) a přehledu práce (R-0198; počty a místa čte `model.LaborReport`, odkaz otevírá existující obrazovky přes `LaborNavigator`) a přehledu náboženství (R-0199; výstup a postup čte `model.ReligionReport`, zobrazení nemění pochodně ani přistěhovalce) a přehledu kolonií (R-0200; populaci, zásoby, očekávaný výstup, příští stav a projekt čte `model.ColonyAdvisorReport`, otevření kolonie přes `ColonyAdvisorNavigator` ověřuje model a vlastnictví; projekt a nástroje používají stejné pravidlo jako oznámení R-0086); přehled lodí (R-0202; loďstvo, plavby, opravy a náklad čte `model.FleetReport`, cizí lodě jen počet obsazených prostorů, otevření přes `FleetNavigator` ověřuje živý přehled); potvrzení vyhlášení války se kontroluje proti původní hře a hráčům před modelovou operací. |
-| [gui.screen.congress](../microcol-game/src/main/java/org/microcol/gui/screen/congress/) | `ScreenCongress` v hlavním okně přes `InGamePage` (R-0332); zobrazení neměnné nabídky otců, národních sov, cíle a členství. Národní podporu, členy, cíl a skutečnou REF vlastního národa čte `model.CongressReport` (R-0203) jedním dotazem bez mezipaměti. Výslovná volba používá hlídanou operaci hráče; UI nelosuje ani neuděluje odměny. |
-| [gui.screen.turnreport](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/) | Prezentace uložených zpráv `model.turnevent`. Rutinní přehled řídí předvolba v `gui.preferences` (R-0204); kritické zprávy otevřou přehled i při jejím vypnutí. Akce Otevřít kolonii (chybějící nástroje, dokončený projekt, zahozené zboží, narození) a Otevřít Evropu ověřují aktuální hru a nic nespotřebují. `EuropeOpeningRequest` drží automatické otevření Evropy až za přehledem a zruší se při jeho opuštění (R-0204). |
-| [gui.screen.menu](../microcol-game/src/main/java/org/microcol/gui/screen/menu/) | Hlavní menu, navigace a nastavení volné hry (`ScreenFreePlay`); skutečná volba mapy, validovaný zobrazovaný název hráče a výslovně označený náhled národa. |
-| [gui.screen.setting](../microcol-game/src/main/java/org/microcol/gui/screen/setting/) | Ovládání uživatelských nastavení. |
-| [gui.screen.load](../microcol-game/src/main/java/org/microcol/gui/screen/load/) | Stránka Načíst hru v hlavním okně (R-0377): sdílený `gui.dialog.SavedGamesView` se seznamem vlevo a detailem s náhledem a souhrnem vpravo (R-0383) v mořské oblasti menu nebo v herním rámu podle obrazovky, která ji otevřela. Výpis, ověření a načtení zůstávají v `PersistingService`; původ a návrat vlastní `MainPanelPresenter`. |
-| [gui.screen.colonizopedia](../microcol-game/src/main/java/org/microcol/gui/screen/colonizopedia/) | Herní nápověda: tlačítko a klávesa H otevírají plnou hlavní obrazovku s tématy pravidel, hledáním a texty z `i18n`. `ScreenColonizopedia` používá společnou navigaci a `InGamePage`; referenční obsah čte pouze statické definice terénů, bonusů, typů jednotek a budov (včetně řad vylepšení, cen a produkce). Sdílený stavový panel čte stav partie, nápověda jej nemění. Viz [R-0324](requirements/done/R-0324.md). |
-| [gui.screen.editor](../microcol-game/src/main/java/org/microcol/gui/screen/editor/) | Nástroje pro editaci mapového podkladu a jeho PO dat. Editor záměrně mění mapu mimo běžné herní tahy; tato cesta není vzorem provádění akcí hráče či AI. |
+| [gui.screen](../akropia-game/src/main/java/org/akropia/gui/screen/) | Volba obrazovky, životní cyklus a hlavní kontejner. `MainPanelPresenter.stop()` ukončí aktuální obrazovku při JavaFX shutdownu; testovací fixture stejný úklid volá po každém scénáři. `MainPanelPresenter` také zaznamená skutečný původ Nastavení a Načíst hru, podle něj volí hostitele a návrat (`ReturnToOriginEvent`) a vlastní zkratky shortcut+O/S hlavního okna (R-0377). |
+| [gui.screen.game](../akropia-game/src/main/java/org/akropia/gui/screen/game/) | Sestavení herní obrazovky a její klávesové vstupy. |
+| [gui.screen.game.components](../akropia-game/src/main/java/org/akropia/gui/screen/game/components/) | Pravý panel, tlačítka, stavový řádek a údaje o poli a jednotkách; `MinimapTiles` sdílí znalost mapy minimapy s náhledem uložené hry `SavePreview` (R-0382). `TradeRoutePlanningPanel` nahrazuje pravý panel v plánovači tras (R-0395). |
+| [gui.screen.game.gamepanel](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/) | Canvas mapy, viditelná oblast, výběr, kurzor, posun, zvýraznění cesty a animace; stav a kresba mapového plánovače obchodních tras (R-0395). |
+| [gui.screen.colony](../akropia-game/src/main/java/org/akropia/gui/screen/colony/) | Pracovníci, pole, sklad, budovy a přístav na obrazovce kolonie. |
+| [gui.screen.colony.buildingqueue](../akropia-game/src/main/java/org/akropia/gui/screen/colony/buildingqueue/) | Lokalizovaný výběr a explicitní potvrzení projektu, pořadí a odebrání z fronty. Výběr drží původní kolonii/model a kontroluje změnu zobrazeného stavu; pravidla dostupnosti, ceny a zpracování fronty zůstávají v modelu. |
+| [gui.screen.europe](../akropia-game/src/main/java/org/akropia/gui/screen/europe/) | Evropský přístav, nákup a nábor jednotek, zboží a přehled plavby; nabídky vybavení na molu zobrazují ceny a důvody odmítnutí z modelu. |
+| [gui.screen.market](../akropia-game/src/main/java/org/akropia/gui/screen/market/) | Obrazovky nákupu a prodeje a prezentace cen. |
+| [gui.screen.campaign](../akropia-game/src/main/java/org/akropia/gui/screen/campaign/) | Výběr kampaně a mise. |
+| [gui.screen.goals](../akropia-game/src/main/java/org/akropia/gui/screen/goals/) | Zobrazení cílů mise a jejich postupu. |
+| [gui.screen.statistics](../akropia-game/src/main/java/org/akropia/gui/screen/statistics/) | Zobrazení herních statistik, grafů, základních evropských vztahů, síně slávy (R-0197; zápis výsledku jde přes `HallOfFameDao`) a přehledu práce (R-0198; počty a místa čte `model.LaborReport`, odkaz otevírá existující obrazovky přes `LaborNavigator`) a přehledu náboženství (R-0199; výstup a postup čte `model.ReligionReport`, zobrazení nemění pochodně ani přistěhovalce) a přehledu kolonií (R-0200; populaci, zásoby, očekávaný výstup, příští stav a projekt čte `model.ColonyAdvisorReport`, otevření kolonie přes `ColonyAdvisorNavigator` ověřuje model a vlastnictví; projekt a nástroje používají stejné pravidlo jako oznámení R-0086); přehled lodí (R-0202; loďstvo, plavby, opravy a náklad čte `model.FleetReport`, cizí lodě jen počet obsazených prostorů, otevření přes `FleetNavigator` ověřuje živý přehled); potvrzení vyhlášení války se kontroluje proti původní hře a hráčům před modelovou operací. |
+| [gui.screen.congress](../akropia-game/src/main/java/org/akropia/gui/screen/congress/) | `ScreenCongress` v hlavním okně přes `InGamePage` (R-0332); zobrazení neměnné nabídky otců, národních sov, cíle a členství. Národní podporu, členy, cíl a skutečnou REF vlastního národa čte `model.CongressReport` (R-0203) jedním dotazem bez mezipaměti. Výslovná volba používá hlídanou operaci hráče; UI nelosuje ani neuděluje odměny. |
+| [gui.screen.turnreport](../akropia-game/src/main/java/org/akropia/gui/screen/turnreport/) | Prezentace uložených zpráv `model.turnevent`. Rutinní přehled řídí předvolba v `gui.preferences` (R-0204); kritické zprávy otevřou přehled i při jejím vypnutí. Akce Otevřít kolonii (chybějící nástroje, dokončený projekt, zahozené zboží, narození) a Otevřít Evropu ověřují aktuální hru a nic nespotřebují. `EuropeOpeningRequest` drží automatické otevření Evropy až za přehledem a zruší se při jeho opuštění (R-0204). |
+| [gui.screen.menu](../akropia-game/src/main/java/org/akropia/gui/screen/menu/) | Hlavní menu, navigace a nastavení volné hry (`ScreenFreePlay`); skutečná volba mapy, validovaný zobrazovaný název hráče a výslovně označený náhled národa. |
+| [gui.screen.setting](../akropia-game/src/main/java/org/akropia/gui/screen/setting/) | Ovládání uživatelských nastavení. |
+| [gui.screen.load](../akropia-game/src/main/java/org/akropia/gui/screen/load/) | Stránka Načíst hru v hlavním okně (R-0377): sdílený `gui.dialog.SavedGamesView` se seznamem vlevo a detailem s náhledem a souhrnem vpravo (R-0383) v mořské oblasti menu nebo v herním rámu podle obrazovky, která ji otevřela. Výpis, ověření a načtení zůstávají v `PersistingService`; původ a návrat vlastní `MainPanelPresenter`. |
+| [gui.screen.colonizopedia](../akropia-game/src/main/java/org/akropia/gui/screen/colonizopedia/) | Herní nápověda: tlačítko a klávesa H otevírají plnou hlavní obrazovku s tématy pravidel, hledáním a texty z `i18n`. `ScreenColonizopedia` používá společnou navigaci a `InGamePage`; referenční obsah čte pouze statické definice terénů, bonusů, typů jednotek a budov (včetně řad vylepšení, cen a produkce). Sdílený stavový panel čte stav partie, nápověda jej nemění. Viz [R-0324](requirements/done/R-0324.md). |
+| [gui.screen.editor](../akropia-game/src/main/java/org/akropia/gui/screen/editor/) | Nástroje pro editaci mapového podkladu a jeho PO dat. Editor záměrně mění mapu mimo běžné herní tahy; tato cesta není vzorem provádění akcí hráče či AI. |
 
 ## Testy a ostatní adresáře
 
 | Místo | Odpovědnost |
 | --- | --- |
-| [`microcol-game/src/test/java`](../microcol-game/src/test/java/) | Jednotkové a modelové testy u odpovídajících balíčků; nezávislé očekávané výsledky pravidel. |
-| [`microcol-test/src/test/java/org/microcol/test`](../microcol-test/src/test/java/org/microcol/test/) | Čitelné hráčské scénáře `TC_...`, jejich příprava a očekávání předávaná metodám `verify…`; bez přímých asercí ve třídách TC. Strukturální test kontroluje toto rozdělení. |
-| [`microcol-test/src/test/java/org/microcol/page`](../microcol-test/src/test/java/org/microcol/page/) | Page objects: selektory, kliknutí, souřadnice a čekání na dokončení UI; oddělené metody `verify…` obsahují aserce a čtou skutečný stav. Akce/gettery neobsahují těla asercí. Viz [funkční kontrakt](functional-tests.md#stala-a-citelna-struktura-scenaru). |
-| [`microcol-test/src/test/java/org/microcol/model`](../microcol-test/src/test/java/org/microcol/model/) | Pouze příprava souběžné modelové události vyžadující package access (například zánik lodi při otevřeném dialogu). Testovaná hráčská akce nadále prochází UI; adaptér není součástí hry. |
-| [`microcol-test/src/main/java/org/microcol/mock`](../microcol-test/src/main/java/org/microcol/mock/) | Náhrady UI služeb potřebné pro testovací prostředí. |
-| [`microcol-test/src/test/java/org/microcol/gui/screen/game/gamepanel`](../microcol-test/src/test/java/org/microcol/gui/screen/game/gamepanel/) | Testovací přístup ke skutečnému mapovému kompozitoru; `FogFrameProbe` vloží diagnostickou animaci a zachytí výsledek. Očekávání vyhodnocuje `FogPage`, nejde o produkční vykreslovací cestu. |
-| [`microcol-test/src/test/scenarios`](../microcol-test/src/test/scenarios/) | Výchozí uložené pozice a nastavení scénářů; zachovávat podle [testového kontraktu](functional-tests.md). |
-| [`microcol-build-tests/src/test/java/org/microcol/build`](../microcol-build-tests/src/test/java/org/microcol/build/) | Kontroly launcheru, publikace a nativních distribucí. |
-| [`microcol-game/src/main/resources`](../microcol-game/src/main/resources/) | Herní a UI prostředky, texty, mapy a obrazové podklady; použití popisují příslušné katalogy. |
+| [`akropia-game/src/test/java`](../akropia-game/src/test/java/) | Jednotkové a modelové testy u odpovídajících balíčků; nezávislé očekávané výsledky pravidel. |
+| [`akropia-test/src/test/java/org/akropia/test`](../akropia-test/src/test/java/org/akropia/test/) | Čitelné hráčské scénáře `TC_...`, jejich příprava a očekávání předávaná metodám `verify…`; bez přímých asercí ve třídách TC. Strukturální test kontroluje toto rozdělení. |
+| [`akropia-test/src/test/java/org/akropia/page`](../akropia-test/src/test/java/org/akropia/page/) | Page objects: selektory, kliknutí, souřadnice a čekání na dokončení UI; oddělené metody `verify…` obsahují aserce a čtou skutečný stav. Akce/gettery neobsahují těla asercí. Viz [funkční kontrakt](functional-tests.md#stala-a-citelna-struktura-scenaru). |
+| [`akropia-test/src/test/java/org/akropia/model`](../akropia-test/src/test/java/org/akropia/model/) | Pouze příprava souběžné modelové události vyžadující package access (například zánik lodi při otevřeném dialogu). Testovaná hráčská akce nadále prochází UI; adaptér není součástí hry. |
+| [`akropia-test/src/main/java/org/akropia/mock`](../akropia-test/src/main/java/org/akropia/mock/) | Náhrady UI služeb potřebné pro testovací prostředí. |
+| [`akropia-test/src/test/java/org/akropia/gui/screen/game/gamepanel`](../akropia-test/src/test/java/org/akropia/gui/screen/game/gamepanel/) | Testovací přístup ke skutečnému mapovému kompozitoru; `FogFrameProbe` vloží diagnostickou animaci a zachytí výsledek. Očekávání vyhodnocuje `FogPage`, nejde o produkční vykreslovací cestu. |
+| [`akropia-test/src/test/scenarios`](../akropia-test/src/test/scenarios/) | Výchozí uložené pozice a nastavení scénářů; zachovávat podle [testového kontraktu](functional-tests.md). |
+| [`akropia-build-tests/src/test/java/org/akropia/build`](../akropia-build-tests/src/test/java/org/akropia/build/) | Kontroly launcheru, publikace a nativních distribucí. |
+| [`akropia-game/src/main/resources`](../akropia-game/src/main/resources/) | Herní a UI prostředky, texty, mapy a obrazové podklady; použití popisují příslušné katalogy. |
 | [`docs`](index.md) | Autoritativní projektová dokumentace a zdroj veřejného webu. |
 
-Odpovědnosti Maven modulů, distribucí, launcheru a zachovaného `microcol-site`
+Odpovědnosti Maven modulů, distribucí, launcheru a zachovaného `akropia-site`
 udržuje samostatný [přehled modulů](modules.md). Balíky P01–P32 v
 [implementačním plánu](implementation-plan.md) jsou členění práce; jedna funkce
 může zasáhnout několik Java balíčků. Nevytvářet balíček jen podle čísla úkolu.
@@ -518,10 +518,10 @@ doklad čistého oddělení nebo seznam oprav nutných před každou další fun
 
 | Současný přesah | Jak postupovat při relevantní změně |
 | --- | --- |
-| [`AbstractRobotPlayer`](../microcol-game/src/main/java/org/microcol/ai/AbstractRobotPlayer.java) a `SimpleAiPlayer` používají `AnimationLock`/`AnimationManager` z GUI. | Při práci na AI nebo řízení tahu oddělit rozhodování a herní dokončení od čekání na obraz; zachovat pořadí akcí a ověřit oba režimy. |
+| [`AbstractRobotPlayer`](../akropia-game/src/main/java/org/akropia/ai/AbstractRobotPlayer.java) a `SimpleAiPlayer` používají `AnimationLock`/`AnimationManager` z GUI. | Při práci na AI nebo řízení tahu oddělit rozhodování a herní dokončení od čekání na obraz; zachovat pořadí akcí a ověřit oba režimy. |
 | `i18n` používá `gui.util.StreamReader`. | Historické umístění čtečky prostředků; tato zbývající vazba leží mimo model. |
 | Založení/spuštění/uložení aplikace je rozdělené mezi `gui.event.model`, `gui.dialog.ApplicationController` a `PersistingService`. | Při změně projít celý tok; název `dialog` dnes nezaručuje pouze zobrazování oken. |
-| Podmínky orání doplňuje také [`ButtonsGamePanelController`](../microcol-game/src/main/java/org/microcol/gui/screen/game/components/ButtonsGamePanelController.java); AI při nalodění používá jiný vstup než člověk v `GameModelController`. | Při změně těchto akcí sjednotit autoritativní kontrolu a provedení v modelu; ověřit tlačítko, klávesu a AI podle dotčeného rozsahu. Zápis není nově provedená runtime reprodukce. |
+| Podmínky orání doplňuje také [`ButtonsGamePanelController`](../akropia-game/src/main/java/org/akropia/gui/screen/game/components/ButtonsGamePanelController.java); AI při nalodění používá jiný vstup než člověk v `GameModelController`. | Při změně těchto akcí sjednotit autoritativní kontrolu a provedení v modelu; ověřit tlačítko, klávesu a AI podle dotčeného rozsahu. Zápis není nově provedená runtime reprodukce. |
 
 Nový kód má respektovat směr `gui → model` a `ai → model`. Stávající přesahy
 neopravovat plošně v nesouvisejícím úkolu ani je nerozšiřovat. Vazby modelu
@@ -529,17 +529,17 @@ na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy 
 
 ## Automatická hranice modelu
 
-1. [ModelArchitectureTest](../microcol-game/src/test/java/org/microcol/ModelArchitectureTest.java)
+1. [ModelArchitectureTest](../akropia-game/src/test/java/org/akropia/ModelArchitectureTest.java)
    používá [ArchUnit](https://www.archunit.org/userguide/html/000_Index.html)
    1.5.1 v rozsahu `test`. Běží jako běžný JUnit Jupiter test při `mvn test`,
    včetně povinného CI před publikací distribucí. Není součástí hry.
-2. Produkční `org.microcol.model..` nesmí záviset na žádné třídě
-   `org.microcol..` mimo vlastní podstrom. Zahrnuté jsou i podbalíčky kampaní,
+2. Produkční `org.akropia.model..` nesmí záviset na žádné třídě
+   `org.akropia..` mimo vlastní podstrom. Zahrnuté jsou i podbalíčky kampaní,
    persistence a událostí. Testy se neimportují a prázdný výběr selže.
    Přímé vazby na `javafx..` jsou také zakázané. Java a ostatní externí
    knihovny zůstávají povolené; jde o kontrolu závislostí
    v bytecode, nikoli řetězců pro reflexi nebo nepoužitých importů.
-3. Výjimka `MicroColException` je v `model`, souborová pomůcka `PersistingTool`
+3. Výjimka `AkropiaException` je v `model`, souborová pomůcka `PersistingTool`
    v `model.campaign.po`. Topologie `Continent`, `Continents` a `ContinentTool`
    je společná; skórování a pořadí cílů v `ai.ContinentTargets` zachovává
    dosavadní rozhodování královské armády.
@@ -547,7 +547,7 @@ na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy 
    původní české a anglické zprávy; `I18n` překládá enumy bez požadavku,
    aby model implementoval rozhraní překladové služby.
 5. Ověření a dodání vlastní [R-0011](requirements/done/R-0011.md). Ručně lze
-   spustit `mvn -pl microcol-game -am test -Dtest=ModelArchitectureTest
+   spustit `mvn -pl akropia-game -am test -Dtest=ModelArchitectureTest
    -Dsurefire.failIfNoSpecifiedTests=false`. Pravidlo nemá seznam výjimek
    ani zmrazený seznam historických porušení.
 
@@ -1206,5 +1206,5 @@ jsou autoritativní pro vzhled a přijetí.
 
 ## Průzkumný hráč mimo herní vrstvy
 
-1. [microcol-ux-test](../microcol-ux-test/pom.xml) je samostatné vývojové nářadí podle [R-0334](requirements/done/R-0334.md). Ovládá skutečnou obrazovku přes X11 a nevolá herní model, AI ani testovací page objects. Nemění odpovědnosti Java balíčků.
+1. [akropia-ux-test](../akropia-ux-test/pom.xml) je samostatné vývojové nářadí podle [R-0334](requirements/done/R-0334.md). Ovládá skutečnou obrazovku přes X11 a nevolá herní model, AI ani testovací page objects. Nemění odpovědnosti Java balíčků.
 2. [Provoz a evidence](ux-playtesting.md) rozlišují technické ověření nástroje, hráčská pozorování AI a běžnou regresní přejímku.

@@ -38,8 +38,8 @@ jobs:
             git rev-parse HEAD
             git status --porcelain
             uname -a
-            docker image inspect microcol-ui-ui-tests --format '{{.Id}} {{.Architecture}}'
-            sha256sum microcol-test/src/test/scenarios/F19* microcol-test/src/test/scenarios/F22*
+            docker image inspect akropia-ui-ui-tests --format '{{.Id}} {{.Architecture}}'
+            sha256sum akropia-test/src/test/scenarios/F19* akropia-test/src/test/scenarios/F22*
           } > target/docker-ui/campaign-source.txt
       - name: Run each journey in a fresh JVM and container on every repetition
         run: |

@@ -110,7 +110,7 @@ retains configuration evidence; publication is verified for the resulting commit
 2. The known contradictory attack handoff is not replayed. Its previous partial
    result remains in the paired-trial record; a corrected attack task would
    require a new contract and would not be an unchanged replay.
-3. Evidence lives under `~/Library/Logs/Microcol/local-qwen/jobs/` in
+3. Evidence lives under `$PRE_R0389_LOGS/local-qwen/jobs/` in
    `2026-10-14-r37-high64-relations` and `2026-10-14-r37-comparison`. These retain
    the unpublished draft prefix; concurrent Guava work used R-0037, so the final
    requirement is R-0038. A caller
@@ -216,7 +216,7 @@ retains configuration evidence; publication is verified for the resulting commit
    unchanged dispatch offered no concrete correction to that limit; another
    sampled answer might differ, but changing the profile would be a different
    experiment. No caller implementation takeover occurred.
-6. Evidence is retained in `~/Library/Logs/Microcol/local-qwen/jobs/` under
+6. Evidence is retained in `$PRE_R0389_LOGS/local-qwen/jobs/` under
    `2026-10-14-r36-{medium,high,qwen}-{relations,attack}` and the shared
    `2026-10-14-r36-comparison` directory. Per-attempt records distinguish model
    output, application, formatting, fresh test XML and acceptance. Replayed Java
@@ -339,7 +339,7 @@ retains configuration evidence; publication is verified for the resulting commit
    success-rate, throughput or cloud-token-saving measurement.
 6. Full prompts, original prompts, response JSON, runtime samples, exact
    application records, diagnoses and Docker logs remain under the two job IDs
-   in `~/Library/Logs/Microcol/local-qwen/jobs/`. The acceptance records explicitly
+   in `$PRE_R0389_LOGS/local-qwen/jobs/`. The acceptance records explicitly
    distinguish worker output, caller formatting and failures. No failing candidate
    was integrated and no failed check was weakened or relabeled as passing.
 7. Caller launcher verification passed **14 behavioral tests** without inference:
@@ -380,7 +380,7 @@ retains configuration evidence; publication is verified for the resulting commit
    Only the two production replacements came from the first worker result.
 4. Runtime samples confirmed the configured alias/digest and context **32768**;
    each attempt unloaded before caller Docker checks. Full evidence is in
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r23-unit-registry/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-13-r23-unit-registry/`.
    Actual red/green and integration checks remain caller-owned and are recorded
    in the [functional test evidence](../functional-tests.md#expert-purchase-implementation-2026-10-13).
    No savings or successful test-authoring claim follows from this attempt.
@@ -407,7 +407,7 @@ only after both targeted repairs failed, then implemented the helper and its
 normalization, boundary, duplicate and suggestion tests. No cloud worker fallback
 or savings claim. The local model was unloaded before Maven and the owned lock
 released. Full prompts, results and process evidence remain in
-`~/Library/Logs/Microcol/local-qwen/jobs/2026-10-12-z02-names/`.
+`$PRE_R0389_LOGS/local-qwen/jobs/2026-10-12-z02-names/`.
 
 This failure does not establish that more time would help. A new interface
 absent from the baseline must be explicitly identified in the initial handoff;
@@ -424,7 +424,7 @@ acceptance. Integration verification is recorded in the
 | [Worker Modelfile](../../.codex/local-worker/Modelfile) | Installed weights and the sole configured context/output limits. |
 | [Launcher profile](../../.codex/local-worker/profile.json) | Alias, reasoning, attempt/task deadlines and repair limit. |
 | [Launcher](../../scripts/local-worker/worker.py) | Preflight, local-only dispatch, tool restrictions, budgets, cleanup and validated application. |
-| This document | Microcol environment, operating profile, integration status, verification and measurements. |
+| This document | Akropia environment, operating profile, integration status, verification and measurements. |
 | [Rules gap analysis](../gap-analysis.md) | Existing gameplay findings and historical test commands/results. |
 
 The user decides game behavior and priorities. Astra owns task scope, context,
@@ -469,7 +469,7 @@ installation, configuration changes or a cloud fallback when the worker fails.
    The voyage task shows that even a text-only prompt can fail: accept only
    reviewed source and actual tests. Remaining time never resets the two-repair
    limit. No cloud worker fallback or token-savings claim was made.
-6. Job directories under `~/Library/Logs/Microcol/local-qwen/jobs/` retain prompts,
+6. Job directories under `$PRE_R0389_LOGS/local-qwen/jobs/` retain prompts,
    raw responses, elapsed times, reviews and caller corrections. Qwen was unloaded
    before Maven; Ollama remains running as requested. The final native CI passed 683 game tests and all 64 functional/control tests
    at `64927cde`, including all 12 new scenarios. Actual player evidence and
@@ -477,7 +477,7 @@ installation, configuration changes or a cloud fallback when the worker fails.
 
 ## R-0012–R-0018 implementation — 2026-10-13
 
-1. Baseline `85644389`; the configured `microcol-gpt-oss:20b-32k` worker runs in separate detached worktrees. Ollama, Codex CLI and Docker were available. The caller owns architecture, integration, actual checks and publication; no cloud worker substitution.
+1. Baseline `85644389`; the configured `akropia-gpt-oss:20b-32k` worker runs in separate detached worktrees. Ollama, Codex CLI and Docker were available. The caller owns architecture, integration, actual checks and publication; no cloud worker substitution.
 2. Each task retains the 300-second attempt, 600-second cumulative and two-repair limits. Generated text is validated against exact source matches before application. Model inference and Maven/Docker checks run separately.
 
 | Task | Worker seconds by attempt | Accepted output and recovery |
@@ -487,7 +487,7 @@ installation, configuration changes or a cloud fallback when the worker fails.
 
 3. These accepted results required review and repairs; CLI exit zero alone did not establish correctness. The first two tasks consumed 480.810 and 576.957 worker seconds respectively. No token-saving or autonomous-completion claim is made.
 4. Equipment, unloading and complete integration checks passed. Final acceptance counts and delivery evidence are in the [functional record](../functional-tests.md#free-play-implementation-2026-10-13).
-5. Prompts, responses, runtime samples, rejected results and caller evidence are retained under `~/Library/Logs/Microcol/local-qwen/jobs/` using the task IDs above. Production changes were not accepted until their assigned caller checks passed.
+5. Prompts, responses, runtime samples, rejected results and caller evidence are retained under `$PRE_R0389_LOGS/local-qwen/jobs/` using the task IDs above. Production changes were not accepted until their assigned caller checks passed.
 
 ### R-0012–R-0018 additional local assignments — 2026-10-13
 
@@ -561,7 +561,7 @@ installation, configuration changes or a cloud fallback when the worker fails.
    root fix. Speculative test-click changes and diagnostic prints were reverted.
 8. These assignments used the configured GPT-OSS alias at context 32768, unloaded
    before verification. Prompts, rejected results, runtime samples and acceptance
-   reports remain under `~/Library/Logs/Microcol/local-qwen/jobs/` using the task
+   reports remain under `$PRE_R0389_LOGS/local-qwen/jobs/` using the task
    names above. These intermediate results do not establish acceptance of all
    seven requirements or any measured cloud-token saving.
 9. Across these eight assignments the recorded worker attempts total
@@ -646,7 +646,7 @@ runtime and service state are recorded separately under installation verificatio
 
 | Item | Preparation snapshot on 2026-10-10 |
 | --- | --- |
-| Shell and filesystem | Commands execute directly on macOS, with checkout `/Users/jan/projects/microcol`; not in a cloud Linux container. |
+| Shell and filesystem | Commands execute directly on macOS, with checkout `/Users/jan/projects/$PRE_R0389_CHECKOUT`; not in a cloud Linux container. |
 | Hardware | `system_profiler SPHardwareDataType`: **Mac mini**, `Mac16,10`, Apple M4, 10 CPU cores, 16 GB memory. `sysctl hw.memsize`: 17,179,869,184 bytes (16 GiB). |
 | OS and architecture | `sw_vers`: macOS 27.0, build 26A428; `uname -srm`: Darwin 27.0.0 arm64. |
 | Git baseline | `origin` is `https://github.com/jajir/microcol.git`; branch `validation`, HEAD `2413a296535868d34c099523b7a26714f1fe8db1`. Working tree was clean before these documentation changes. |
@@ -696,10 +696,10 @@ Homebrew also installed `openssl@4` 4.0.3, `mlx` 0.32.3 and `mlx-c` 0.7.0,
 and upgraded `ca-certificates` to 2026-09-25 and `python@3.14` to 3.14.8_2.
 The install log records unlinking the old `openssl@3` command symlinks; the old
 package was not removed. These are effects of dependency resolution for this
-installation, not changes to Microcol's Java dependencies.
+installation, not changes to Akropia's Java dependencies.
 
 Installation evidence is stored outside the repository at
-`/Users/jan/Library/Logs/Microcol/local-qwen/2026-10-10-install/`:
+`$PRE_R0389_LOGS/local-qwen/2026-10-10-install/`:
 `brew-install.log`, `ollama-pull.log`, `installed-environment.json`,
 `model-show.json` and `model-tags.json` record installation and identity.
 The request/response JSON, `smoke-summary.json`, `czech-thinking-summary.json`,
@@ -756,7 +756,7 @@ Qwen during these installation checks; they are not the delegated-worker accepta
 ### Historical Qwen worker profile — 2026-10-10 to 2026-10-13
 
 The earlier tasks used `qwen3.5:9b-q4_K_M`, project alias
-`microcol-qwen:9b-q4_K_M-8k`, digest
+`akropia-qwen:9b-q4_K_M-8k`, digest
 `dfe6877b76ae37d766653b62909426fc769288fc42575cb5069c2b9b366a79a2`.
 Its weight blob was `sha256-02d45dc1cf451ba2475ac33b301c2dd8f985abe4c182ce04a1f2f5bf0260278d`.
 The alias allocated context 8192 and generation limit 2048; Codex requested
@@ -773,8 +773,8 @@ service configuration. `brew services stop ollama` stops it;
 [Homebrew manual](https://docs.brew.sh/Manpage#services-subcommand).
 
 Inspect the installed worker using `ollama list`, `ollama show
-microcol-gpt-oss:20b-32k`, `ollama --version` and `ollama ps`.
-`ollama stop microcol-gpt-oss:20b-32k` unloads it before Maven while retaining the
+akropia-gpt-oss:20b-32k`, `ollama --version` and `ollama ps`.
+`ollama stop akropia-gpt-oss:20b-32k` unloads it before Maven while retaining the
 server. The old Qwen weights/alias and the initial GPT-OSS 8k alias remain
 installed for explicit comparison; do not select them automatically or load
 multiple models concurrently.
@@ -795,7 +795,7 @@ below supersedes its context and alias for new assignments.
 local package is **13,793,441,566 bytes**, reports **20.9B / MXFP4** and uses the
 `llamacpp` runner. The base digest is
 `f38aa0c53da5f8c49d08c43a99df24ff53167fe68e24664a7777288e7656fdfe`;
-the initial `microcol-gpt-oss:20b-8k` alias digest is
+the initial `akropia-gpt-oss:20b-8k` alias digest is
 `855c7ef433e4a7ed323d53dba8c5ce5e3a57ab5398e3844af84a02047ef124a7`.
 `/api/show` confirms `num_ctx 8192`, `num_predict 4096`, tool support and
 thinking levels `low`, `medium`, `high` with default `medium`. Creating the
@@ -838,14 +838,14 @@ No Java or player behavior changed; local Maven/TestFX was not rerun for this
 configuration and instruction change.
 
 Download, setup, model metadata and subsequent worker evidence are retained in
-`~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-gpt-oss-switch/`.
+`$PRE_R0389_LOGS/local-qwen/jobs/2026-10-13-gpt-oss-switch/`.
 The previous Qwen task was still verifying Docker UI tests during setup; no
 inference was started while its shared worker lock was held.
 
 ### 32k context verification — 2026-10-13
 
 After the initial installation, the user requested context **32768** because
-previous assignments exhausted 8k. The new alias `microcol-gpt-oss:20b-32k`
+previous assignments exhausted 8k. The new alias `akropia-gpt-oss:20b-32k`
 reuses the installed weights; its digest is
 `425bbbff577bec88a59f86c437ff81eb369e011cfcd047121431a05951076fef`.
 Both Ollama `num_ctx` and Codex `model_context_window` are 32768. Generation
@@ -875,7 +875,7 @@ incorrect output or guarantee that long tasks finish inside the attempt budget.
 The fallback-metadata and alias-telemetry warnings remain the same known CLI
 limitation as in the initial trial. Evidence, source hashes, task, response,
 validation and runtime samples are under
-`~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-gpt-oss-32k/`.
+`$PRE_R0389_LOGS/local-qwen/jobs/2026-10-13-gpt-oss-32k/`.
 
 Caller verification passed all **9 documentation tests**, a strict MkDocs build,
 the rendered-page review and `git diff --check`. No Java or UI behavior changed;
@@ -895,7 +895,7 @@ jobs retain their original evidence and need their original frozen profile to re
 | Setting | Current configured value |
 | --- | --- |
 | Runtime | Existing Ollama 0.40.2 and Codex CLI 0.142.3, local loopback only. |
-| Model | `gpt-oss:20b`, alias `microcol-gpt-oss:20b-96k-output64k`; no cloud fallback. |
+| Model | `gpt-oss:20b`, alias `akropia-gpt-oss:20b-96k-output64k`; no cloud fallback. |
 | Context / generation | `num_ctx 98304`, `num_predict 65536`; generation includes reasoning and final output. Input, tools and generated text share the context. |
 | Reasoning | `medium`; installed GPT-OSS supports `low`, `medium`, `high`. This is a request setting, not a different set of weights. |
 | Limits | 7200 seconds per attempt, 14400 cumulative seconds per task, at most two repairs across both reasoning levels. |
@@ -908,13 +908,19 @@ files and recreate the alias from the existing weights while holding the worker
 lock. A reasoning-only change is passed per request and needs no alias rebuild:
 
 ```sh
-ollama create microcol-gpt-oss:20b-96k-output64k -f .codex/local-worker/Modelfile
+ollama create akropia-gpt-oss:20b-96k-output64k -f .codex/local-worker/Modelfile
 ```
 
 Changing the file alone does not update Ollama. The launcher rejects a mismatch
 between the installed alias's context/output parameters and repository settings.
 The model alias is configurable in the profile; model changes require an explicit
 operator decision and verification. No launch installs or downloads a model.
+
+Since [R-0389](../requirements/R-0389.md) the profiles name `akropia-` aliases.
+The installed host aliases were created under the former project prefix; until
+the operator creates the new alias with the command above and verifies it with
+`/api/show`, the launcher rejects the missing alias. Do not fall back to another
+alias or model.
 
 The alias now has digest
 `aa2f84a12eb2606aeb426045b0d256cff9ffe8f92b8ee6f11b5499a08c0a174f`.
@@ -946,7 +952,7 @@ room for a full 65536-token generation. Installed metadata and the
 [official model documentation](https://developers.openai.com/api/docs/models/gpt-oss-20b)
 report a 131072-token context limit; this does not guarantee sufficient host memory.
 
-The separate alias is `microcol-gpt-oss:20b-96k-output64k`, digest
+The separate alias is `akropia-gpt-oss:20b-96k-output64k`, digest
 `aa2f84a12eb2606aeb426045b0d256cff9ffe8f92b8ee6f11b5499a08c0a174f`.
 Its installed parameters match the files. Alias creation reuses existing weights;
 service settings remain unchanged. R-0039 also selects this alias for the default
@@ -954,7 +960,7 @@ medium profile; reasoning is the only difference between the current two profile
 
 ```sh
 # Hold the existing worker lock while recreating an explicitly changed alias.
-ollama create microcol-gpt-oss:20b-96k-output64k -f .codex/local-worker/gpt-oss-high-64k/Modelfile
+ollama create akropia-gpt-oss:20b-96k-output64k -f .codex/local-worker/gpt-oss-high-64k/Modelfile
 python3 scripts/local-worker/worker.py run "$worker_job" --profile .codex/local-worker/gpt-oss-high-64k
 ```
 
@@ -965,7 +971,7 @@ The authorized installation on **2026-10-14** uses exactly
 Q4_K_M quantization. The separate
 [Modelfile](../../.codex/local-worker/qwen2.5-coder-14b/Modelfile) and
 [profile](../../.codex/local-worker/qwen2.5-coder-14b/profile.json) select alias
-`microcol-qwen2.5-coder:14b-q4_K_M-32k`, context **32768**, output **16384**, and
+`akropia-qwen2.5-coder:14b-q4_K_M-32k`, context **32768**, output **16384**, and
 the historical 1800/3600-second limits and two repairs. Its installed digest is
 `9ea50088a1236ab5b3d379b1b266636db45a63eb7db2108becb47c394f8f8fa0`.
 The model does not expose thinking capability; `reasoning: none` and disabled
@@ -974,7 +980,7 @@ reasoning summaries reflect that capability. There is no Qwen `high` level.
 ```sh
 # Installation was explicitly authorized for this comparison; runs never install.
 ollama pull qwen2.5-coder:14b-instruct-q4_K_M
-ollama create microcol-qwen2.5-coder:14b-q4_K_M-32k -f .codex/local-worker/qwen2.5-coder-14b/Modelfile
+ollama create akropia-qwen2.5-coder:14b-q4_K_M-32k -f .codex/local-worker/qwen2.5-coder-14b/Modelfile
 python3 scripts/local-worker/worker.py run "$worker_job" --profile .codex/local-worker/qwen2.5-coder-14b
 ```
 
@@ -1067,7 +1073,7 @@ including actual acceptance and lock release, remain mandatory.
    replay, use its recorded historical main revision and explicitly copy the
    original acceptance inputs. Never give the worker the main checkout.
 2. Create a unique job directory in
-   `~/Library/Logs/Microcol/local-qwen/jobs/<task-id>/` containing `task.md`,
+   `$PRE_R0389_LOGS/local-qwen/jobs/<task-id>/` containing `task.md`,
    `worker-role.md` and `job.json`. Copy the current role from the skill; a
    historical replay records use of its original role explicitly. Supply the
    applicable rules, exact source/APIs, unchanged acceptance checks and caller
@@ -1159,8 +1165,8 @@ This is a read-only review of **14 recorded attempts** from 10–11 October, not
 14 independent tasks or a controlled model benchmark. It includes retries and
 one startup failure. Sources are each job's `events.jsonl`, execution metadata,
 `stderr.log`, and caller verification/acceptance records under
-`~/Library/Logs/Microcol/local-qwen/jobs/`. The derived attempt inventory is in
-`~/Library/Logs/Microcol/local-qwen/analysis/2026-10-12-timeouts/summary.json`.
+`$PRE_R0389_LOGS/local-qwen/jobs/`. The derived attempt inventory is in
+`$PRE_R0389_LOGS/local-qwen/analysis/2026-10-12-timeouts/summary.json`.
 
 | Recorded outcome | Attempts | Interpretation |
 | --- | --- | --- |
@@ -1217,7 +1223,7 @@ the original warehouse feature, reset that task's budget, or modify game code.
 | Missing-home reproduction | Attempt 0 exited 1 before inference because its child `CODEX_HOME` did not exist; 1.062 seconds including cleanup. |
 | Caller setup correction | The documented quoted, fail-fast preflight created the child home. The retry retained the same task ID and charged the first attempt's elapsed time. |
 | Targeted Qwen retry | Attempt 1 exited 0 in 48.509 seconds including cleanup. Qwen changed only the undefined reference to the already-defined `old_method`; no caller code repair was needed. |
-| Runtime verification | Samples matched local alias `microcol-qwen:9b-q4_K_M-8k`, the documented digest and actual context 8192. The model was unloaded before caller checks. |
+| Runtime verification | Samples matched local alias `akropia-qwen:9b-q4_K_M-8k`, the documented digest and actual context 8192. The model was unloaded before caller checks. |
 | Same acceptance check after repair | The identical command passed all 4 tests, with no failures, errors or skips. Caller checked that the test file hash and all tracked repository files were unchanged. |
 | Budget and result | Total worker time 49.571 seconds, within the 300/600-second limits. Both reproduced failures have verified recovery; the repaired probe remains isolated. |
 
@@ -1237,15 +1243,15 @@ recorded in `preflight-checks.json` and do not require model inference.
 
 Task input, updated worker role, `diagnosis.json`, both attempt directories,
 original/corrected probe, immutable tests, red/green logs and `verification.json`
-are retained in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-12-recovery-check/`.
+are retained in `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-12-recovery-check/`.
 The isolated checkout remains under the standard worker worktree directory.
 
-### Current Microcol pilot — 2026-10-10
+### Current Akropia pilot — 2026-10-10
 
 Task `2026-10-10-goods-trade` uses worktree
-`/Users/jan/Library/Application Support/Microcol/local-worker/worktrees/2026-10-10-goods-trade`
+`$PRE_R0389_SUPPORT/local-worker/worktrees/2026-10-10-goods-trade`
 and artifacts in
-`/Users/jan/Library/Logs/Microcol/local-qwen/jobs/2026-10-10-goods-trade/`.
+`$PRE_R0389_LOGS/local-qwen/jobs/2026-10-10-goods-trade/`.
 The baseline, exact executed command, task and role are retained in the artifacts.
 
 | Attempt/check | Recorded status |
@@ -1257,7 +1263,7 @@ The baseline, exact executed command, task and role are retained in the artifact
 | Review and delivery | Astra accepted the diff in the isolated worktree. When the user subsequently selected `develop` for ongoing development, the same patch was incorporated into the main checkout on that branch. The original worktree and artifacts retain the pilot evidence. |
 
 `retry-8k/verification.json` records the command result, tests, runtime identity,
-measurements and review; the copied `TEST-org.microcol.model.GoodsTradeTest.xml`
+measurements and review; the copied `TEST-org.akropia.model.GoodsTradeTest.xml`
 contains the nine cases. The model ran at 8192 context with no compaction or
 truncation warnings and zero reasoning events. Observed prompt lengths were
 2945, 3347 and 4011 tokens. Reported usage sums across requests: **10,303 input
@@ -1279,7 +1285,7 @@ helper visibility, resource closing and whitespace/placeholder handling before
 acceptance. The caller then ran all five new cases on JDK 11 successfully; the
 integrated JDK 17 distribution build passed 601 game tests. The accepted files
 were brought into `main`. Evidence, the worker's original output and the recorded
-repairs are in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-11-build-identity/`.
+repairs are in `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-11-build-identity/`.
 This task required main-agent corrections and establishes no savings percentage.
 
 ### Workflow documentation check — 2026-10-11
@@ -1301,7 +1307,7 @@ usage and loading/generation timing were unavailable. The main agent's final
 checks passed six documentation hook tests and a strict MkDocs build; game tests
 were not run locally for these documentation-only changes. Logs, the original
 diff, runtime samples and acceptance evidence are retained under
-`~/Library/Logs/Microcol/local-qwen/jobs/2026-10-11-qwen-default-workflow/`.
+`$PRE_R0389_LOGS/local-qwen/jobs/2026-10-11-qwen-default-workflow/`.
 This check verifies the handoff path and the need for review, not unattended
 reliability or measured Codex-budget savings.
 
@@ -1326,7 +1332,7 @@ and savings were not established.
 
 Input, command, runtime samples, draft, empty worker patch, caller repairs and
 verification evidence are retained in
-`~/Library/Logs/Microcol/local-qwen/jobs/2026-10-11-plan-worker-handoff/`.
+`$PRE_R0389_LOGS/local-qwen/jobs/2026-10-11-plan-worker-handoff/`.
 The detached worktree remains under the standard worktree root with that task ID.
 
 ### Earlier native feasibility evidence — 2026-10-10
@@ -1342,7 +1348,7 @@ establish thinking-off. Its first invocation rejected `agents.enabled=false`
 before inference; the retry used `features.multi_agent=false`.
 
 Artifacts are in
-`/Users/jan/Library/Logs/Microcol/local-qwen/2026-10-10-native-probe/`, including
+`$PRE_R0389_LOGS/local-qwen/2026-10-10-native-probe/`, including
 `retry/command.json`, events, summary, samples and server evidence. No project
 files were available for editing, and the model was unloaded afterwards.
 A separate loader-only check of desktop runtime **0.154.0-alpha.6.2** accepted and
@@ -1351,10 +1357,10 @@ turn or establish a mixed-provider child. Sanitized evidence is in `agent-loader
 That alternative and the earlier MCP design are not required for the selected
 CLI route; no custom server, runner package or project MCP registration was added.
 
-## Microcol verification and pilot scope
+## Akropia verification and pilot scope
 
-The inspected [root POM](../../pom.xml) still declares modules `microcol-game`,
-`microcol-test`, `microcol-module`, `microcol-dist`, `microcol-site`, Java release
+The inspected [root POM](../../pom.xml) still declares modules `akropia-game`,
+`akropia-test`, `akropia-module`, `akropia-dist`, `akropia-site`, Java release
 11, JavaFX 13, JUnit 5.5.2 and Surefire 3.0.0-M3. These match the consultation's
 reference. This inspection originally used `validation`; the user subsequently
 selected `develop` for ongoing development and integrated the existing work there.
@@ -1368,25 +1374,25 @@ the installation. The current pilot separately verifies its focused baseline.
 The JDK 11 path is still present here; set the chosen JVM explicitly and verify
 it with Maven when establishing the pilot baseline.
 
-The [TestFX POM](../../microcol-test/pom.xml) has TestFX 4.0.16-alpha, Monocle
+The [TestFX POM](../../akropia-test/pom.xml) has TestFX 4.0.16-alpha, Monocle
 `jdk-11+26`, and Surefire `groups=${testedTags}`. The default `local` profile sets
 `ci, local`; `ci` sets `ci-save` with a comment about disabling all tests. No
 `ci-save` annotation was found in the inspected test sources. The historical
 [Travis configuration](../../.travis.yml) skips tests during install and uses
 that `ci` profile for its site step. A green Maven command is not evidence that
-the intended test ran. The [game POM](../../microcol-game/pom.xml) also excludes
-`org/microcol/integration/**.java`. Check the selected classes, cases, skipped
+the intended test ran. The [game POM](../../akropia-game/pom.xml) also excludes
+`org/akropia/integration/**.java`. Check the selected classes, cases, skipped
 counts and fresh Surefire XML in the module's `target/surefire-reports/`.
 
 Existing references checked during preparation:
 
-- [TC_06_F06_buy_and_sell_goods_test](../../microcol-test/src/test/java/org/microcol/test/TC_06_F06_buy_and_sell_goods_test.java) covers a partial sale and buying into a full slot; do not duplicate these cases.
-- [EuropePortScreen](../../microcol-test/src/test/java/org/microcol/page/EuropePortScreen.java) has sale and gold-check helpers.
-- [SimpleOperationsTest](../../microcol-test/src/test/java/org/microcol/test/SimpleOperationsTest.java) includes language switching and historical headless limitations.
-- [CargoSlotTest](../../microcol-game/src/test/java/org/microcol/model/CargoSlotTest.java) already checks selling all goods from a slot, emptying it and calling the player transaction. [PlayerTest](../../microcol-game/src/test/java/org/microcol/model/PlayerTest.java) separately checks sale proceeds. A full-cargo sale is not generally an uncovered model behavior.
+- [TC_06_F06_buy_and_sell_goods_test](../../akropia-test/src/test/java/org/akropia/test/TC_06_F06_buy_and_sell_goods_test.java) covers a partial sale and buying into a full slot; do not duplicate these cases.
+- [EuropePortScreen](../../akropia-test/src/test/java/org/akropia/page/EuropePortScreen.java) has sale and gold-check helpers.
+- [SimpleOperationsTest](../../akropia-test/src/test/java/org/akropia/test/SimpleOperationsTest.java) includes language switching and historical headless limitations.
+- [CargoSlotTest](../../akropia-game/src/test/java/org/akropia/model/CargoSlotTest.java) already checks selling all goods from a slot, emptying it and calling the player transaction. [PlayerTest](../../akropia-game/src/test/java/org/akropia/model/PlayerTest.java) separately checks sale proceeds. A full-cargo sale is not generally an uncovered model behavior.
 
 **Completed pilot:** added missing money boundaries to
-[GoodsTradeTest](../../microcol-game/src/test/java/org/microcol/model/GoodsTradeTest.java).
+[GoodsTradeTest](../../akropia-game/src/test/java/org/akropia/model/GoodsTradeTest.java).
 At a positive buy price of 12, available gold of 0, 11, 12, 1199, 1200 and 1201
 should purchase 0, 0, 1, 99, 100 and 100 units respectively, using the current
 100-unit slot capacity. The three baseline cases cover 10000, 120 and 131. Expected values follow the
@@ -1400,14 +1406,14 @@ Caller verification from the assigned worktree root (baseline already passed):
 
 ```sh
 JAVA_HOME=/opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk/Contents/Home \
-  mvn -B -pl microcol-game -am test \
+  mvn -B -pl akropia-game -am test \
   -Dmaven.test.skip=false -DskipTests=false \
   -Dtest=GoodsTradeTest -Dsurefire.failIfNoSpecifiedTests=false
 ```
 
 The last flag permits upstream reactor modules without this test. The runner
 must still require a fresh
-`microcol-game/target/surefire-reports/TEST-org.microcol.model.GoodsTradeTest.xml`
+`akropia-game/target/surefire-reports/TEST-org.akropia.model.GoodsTradeTest.xml`
 containing the intended cases. Adding the six assigned parameter rows to the three baseline rows requires
 nine executed cases, zero failures/errors and zero skipped. Record the real count rather than assuming it from build success.
 
@@ -1415,7 +1421,7 @@ nine executed cases, zero failures/errors and zero skipped. Record the real coun
 
 On **2026-10-11**, the Maven packaging migration delegated launcher metadata to
 the local worker as job `2026-10-11-maven-launcher-metadata`. The worker used
-`microcol-qwen:9b-q4_K_M-8k`, digest
+`akropia-qwen:9b-q4_K_M-8k`, digest
 `dfe6877b76ae37d766653b62909426fc769288fc42575cb5069c2b9b366a79a2`, with an
 8192-token context. One attempt finished in 128.69 seconds with exit 0 and no
 worker repair rounds. Review accepted its static macOS `Info.plist`; its Linux
@@ -1473,7 +1479,7 @@ Preparation checks on 2026-10-10:
   whitespace check of each new file against `/dev/null` found no issues.
 - Standalone Codex CLI 0.142.3 was started in stdio app-server mode solely for a
   read-only discovery check. After initialization, `skills/list` with
-  `cwds: ["/Users/jan/projects/microcol"]` and `forceReload: true` returned exactly
+  `cwds: ["/Users/jan/projects/$PRE_R0389_CHECKOUT"]` and `forceReload: true` returned exactly
   one `local-worker` at `.agents/skills/local-worker/SKILL.md`, `scope: "repo"`,
   `enabled: true`, with no repository skill errors. The temporary process was
   stopped; no model thread/turn was started. This verifies the installed CLI's
@@ -1529,7 +1535,7 @@ from starting the unpacked game. See the [functional test contract](../functiona
 for commands and the environment limits.
 
 Evidence is retained under
-`/Users/jan/Library/Logs/Microcol/local-qwen/jobs/2026-10-11-functional-plow-contract/`:
+`$PRE_R0389_LOGS/local-qwen/jobs/2026-10-11-functional-plow-contract/`:
 worker input/result, runtime identity, patches, failed environment attempts,
 `game-final.log`, `plow-final.log`, mission red/green logs and verification summary.
 The worker model was unloaded before Maven. Source fixtures were unchanged by
@@ -1555,14 +1561,14 @@ JDK 17 Maven compilation with tests skipped. This documents no gameplay change;
 the publication workflow independently runs its usual checks on push.
 
 Input, raw worker patch, runtime samples and caller evidence are retained in
-`/Users/jan/Library/Logs/Microcol/local-qwen/jobs/2026-10-11-package-responsibilities/`.
+`$PRE_R0389_LOGS/local-qwen/jobs/2026-10-11-package-responsibilities/`.
 The partial result does not establish a measured saving or broader capability.
 
 
 ### Z01 attempt evidence — 11 October 2026
 
 Baseline: `89354999954f8a1bfa4c9a6ac0030751056f63e2`. The caller prepared the
-isolated worker tree `~/Library/Application Support/Microcol/local-worker/worktrees/2026-10-11-warehouse-unloading`
+isolated worker tree `$PRE_R0389_SUPPORT/local-worker/worktrees/2026-10-11-warehouse-unloading`
 and the PR branch `codex/rules-warehouse-unloading` in a separate checkout.
 The requested delivery is an open PR into `main`, so no direct main push or merge.
 
@@ -1588,7 +1594,7 @@ complete native test suite. No local Qwen code was accepted. The configured
 local runner was not silently replaced or reconfigured. This is a failed local
 delegation, not measured token savings.
 Logs, commands, runtime samples and exit reports remain under
-`~/Library/Logs/Microcol/local-qwen/jobs/` in the directories above. Actual
+`$PRE_R0389_LOGS/local-qwen/jobs/` in the directories above. Actual
 model and functional verification is recorded in the
 [Z01 test evidence](../functional-tests.md#z01-bezpecne-vylozeni-nakladu).
 
@@ -1630,7 +1636,7 @@ comments, fixtures, conditional click and FX wait. The shared formatter checked
 all six changed Java files with unchanged tokens/comments and idempotent output.
 Actual test evidence is recorded in the [functional contract](../functional-tests.md#pr-44-presun-aserci-doku).
 Inputs, rejected results, runtime samples and exit reports remain under
-`~/Library/Logs/Microcol/local-qwen/jobs/2026-10-12-pr44-dock-selection/`.
+`$PRE_R0389_LOGS/local-qwen/jobs/2026-10-12-pr44-dock-selection/`.
 
 ## PR #44 named page verifications — 2026-10-12
 
@@ -1663,7 +1669,7 @@ it was updated and the same check rerun successfully. The source-contract tests
 then passed 2/2. Final functional evidence is kept in the
 [test contract](../functional-tests.md#pr-44-pojmenovane-verifikace).
 Inputs, raw results, token reports, model samples and process evidence remain in
-`~/Library/Logs/Microcol/local-qwen/jobs/` under the two task IDs above.
+`$PRE_R0389_LOGS/local-qwen/jobs/` under the two task IDs above.
 
 ## Dock assertion move — 2026-10-12
 
@@ -1709,7 +1715,7 @@ attempts have no completed-turn usage totals. More time alone is not an
 established fix: output format and handoff changed too. The useful recovery
 was exact replacement matching plus a targeted syntax repair, not blind retry.
 Artifacts, failed patches, responses and caller verification are under
-`/Users/jan/Library/Logs/Microcol/local-qwen/jobs/2026-10-12-dock-assertions/`.
+`$PRE_R0389_LOGS/local-qwen/jobs/2026-10-12-dock-assertions/`.
 
 
 ## Docker UI runner — 2026-10-13
@@ -1737,7 +1743,7 @@ turn reported 16879 cached input tokens, the others zero. Runtime samples
 confirmed the documented local model and 8192 context. Loading and generation
 timings are unavailable; no savings claim is made. Qwen was unloaded before
 container builds and Maven. Inputs, rejected drafts, reviews and measurements
-remain in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-docker-ui-runner/`.
+remain in `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-13-docker-ui-runner/`.
 Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
 
 
@@ -1745,7 +1751,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
 
 1. Task `2026-10-13-r19-fog-rendering`, baseline `0fbd65b0`, assigned three
    existing renderer/preview classes. Runtime samples confirmed
-   `microcol-gpt-oss:20b-32k`, digest
+   `akropia-gpt-oss:20b-32k`, digest
    `425bbbff577bec88a59f86c437ff81eb369e011cfcd047121431a05951076fef`, context
    32768. The caller owned the manual decision, fixture, regression tests,
    review and publication.
@@ -1776,7 +1782,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    checks. Full-regression acceptance belongs to the
    [functional record](../functional-tests.md#fog-implementation-2026-10-13).
    Prompts, responses, runtime samples and reviews remain in
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r19-fog-rendering/`;
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-13-r19-fog-rendering/`;
    caller logs are in `target/r19-r31/`. No token-saving claim is made.
 
 
@@ -1811,7 +1817,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    purchase/sale scenarios and three page-contract checks. The complete R-0020
    equipment journey remains pending; this pricing foundation does not complete
    pier equipment trading.
-   Logs and reviews are in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r20-trade-quote/`
+   Logs and reviews are in `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-13-r20-trade-quote/`
    and `target/r19-r31/pricing-*.log`. No savings claim is made.
 
 ### R-0020 pier equipment model — 2026-10-13
@@ -1837,7 +1843,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    formatted with the shared profile and integrated only `UnitFreeColonist`.
    Model evidence does not establish working pier UI or complete R-0020.
 4. Logs and before/after results remain in the task's directory under
-   `~/Library/Logs/Microcol/local-qwen/jobs/`; acceptance log is
+   `$PRE_R0389_LOGS/local-qwen/jobs/`; acceptance log is
    `target/r19-r31/equipment-model-fixed.log` in the caller checkout.
    No autonomous-success or token-saving claim is made.
 
@@ -1897,7 +1903,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    and three source-contract tests**, no failures, errors or skips. The caller
    integrated only `HighSea` and its test, then released the owned lock.
 5. Logs, all rejected responses and caller review remain under the task's
-   directory in `~/Library/Logs/Microcol/local-qwen/jobs/`. Acceptance logs are
+   directory in `$PRE_R0389_LOGS/local-qwen/jobs/`. Acceptance logs are
    `target/r19-r31/sea-lane-policy*.log` in the caller checkout. Full voyage
    integration remains pending; no savings or broader quality claim is made.
 
@@ -1933,7 +1939,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    11 model and five functional/control tests in main `run-ZBBq6H`. The whole
    regression and publication remain separate from this worker acceptance.
 5. Prompts, source responses, model samples and before/after diagnoses remain
-   in the task directory under `~/Library/Logs/Microcol/local-qwen/jobs/`.
+   in the task directory under `$PRE_R0389_LOGS/local-qwen/jobs/`.
    The isolated checkout separates worker verification from main integration.
    No local inference overlapped Maven/Docker and no savings claim is made.
 
@@ -1957,7 +1963,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    the caller restored initial selection and corrected the link, then used
    ordinary coordinates in the caption instead of the model object's `toString`.
 4. Total worker time **521.698 seconds**, three attempts, two repairs. All actual
-   runtime samples identify `microcol-gpt-oss:20b-32k`, context **32768**, digest
+   runtime samples identify `akropia-gpt-oss:20b-32k`, context **32768**, digest
    `425bbbff577bec88a59f86c437ff81eb369e011cfcd047121431a05951076fef`.
    The runner unloaded after every attempt before Docker checks. No measured
    token saving or autonomous acceptance is claimed.
@@ -1980,7 +1986,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    copied only its class into main and released the owned lock. All 20 current
    main Java changes then passed the shared formatter/token/idempotence check.
    Full R-0022 acceptance remains pending broader boundaries and regression.
-6. Evidence: `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r22-passenger-dialog/`
+6. Evidence: `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-13-r22-passenger-dialog/`
    contains task revisions, generated source, runtime samples, execution budgets
    and caller review. Main-checkout logs are
    `target/r19-r31/passenger-model-first.log`, `passenger-integrated.log` and
@@ -2012,7 +2018,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    and context 32768. The model was unloaded before formatting and Docker
    verification. No cloud fallback or savings claim. Full prompts, responses,
    execution metadata and caller reviews remain under
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r22-frigate-tests/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-13-r22-frigate-tests/`.
 5. The five assigned frigate tests and three page-contract tests passed in
    isolated `run-myTaDs`. Only the assigned class was integrated into `main`
    and the owned worker lock released. The complete selected model group
@@ -2049,7 +2055,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    `425bbbff577bec88a59f86c437ff81eb369e011cfcd047121431a05951076fef`, context
    32768. The runner unloaded before each Docker check and released its owned
    lock after acceptance. Evidence remains in
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r23-specialist-type/`,
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-13-r23-specialist-type/`,
    including rejected outputs, review/application records and `acceptance.json`.
    No token-saving or general quality claim is made from this assignment.
 
@@ -2084,7 +2090,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    remain pending; this is not whole-R-0023 acceptance.
 5. Prompts, runtime samples, generated output, exact application, caller
    failure diagnoses and `acceptance.json` remain in
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r23-worker-identity/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-13-r23-worker-identity/`.
    No throughput or token-saving claim is made.
 
 
@@ -2122,7 +2128,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    TC22 artwork diagnostic, preserving its stable ID.
 5. Prompts, rejected responses, execution records and caller application
    evidence remain in
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r24-wagon-display/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-13-r24-wagon-display/`.
    No token-saving claim. Inference did not overlap local Maven/Docker tests.
 
 
@@ -2154,7 +2160,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
 5. Accepted 28 source/resource/test/fixture files were integrated after checking
    their original main blobs. The task lock was released. Evidence, rejected
    responses, runtime samples, caller completion and file hashes remain under
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r25-building-metadata/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-13-r25-building-metadata/`.
    This accepts only metadata; full R-0025 queue behavior and UI remain unfinished.
 
 ### R-0025 construction admission — 2026-10-13
@@ -2189,7 +2195,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    of queue transactions, persistence and UI integration. This does not
    establish completion of R-0025. Full prompts, rejected outputs, corrections,
    runtime samples and acceptance evidence are in
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r25-construction-admission/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-13-r25-construction-admission/`.
    No token-saving claim follows from this result.
 
 ### R-0025 completion prerequisites — 2026-10-13
@@ -2218,7 +2224,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    an abandoned colony and a unit whose required mill disappeared.
 5. The caller integrated the two changed files after checking their recorded
    input hashes. The task evidence is in
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-13-r25-completion-prerequisites/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-13-r25-completion-prerequisites/`.
    The caller subsequently ran the broader model selection and repaired two
    stale passenger tests with nonstandard discovery names; those results belong
    to the [construction evidence](../functional-tests.md#construction-model-implementation-2026-10-13).
@@ -2250,7 +2256,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    source contract also passed. After a separate caller Escape fix, all seven
    TC32 scenarios and the five TC22 scenarios passed. Exact runs and the earlier
    UI failures are in the [construction evidence](../functional-tests.md#construction-ui-implementation-2026-10-14). Full prompts, responses and
-   diagnoses remain under `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r25-queue-controller/`.
+   diagnoses remain under `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-14-r25-queue-controller/`.
 5. Caller procedure correction: inspect the application result before dispatching
    the dependent formatter. Twice formatting ran after a parser rejection;
    it made no semantic repair, but should not be treated as evidence that the
@@ -2322,7 +2328,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    still reported a running game. Restoring the flags made both pass in the
    targeted group. Thirteen formatted Java files were copied to main; the
    worker authored only the provider method. Evidence and acceptance remain in
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r26-save-cases/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-14-r26-save-cases/`.
    The owned lock was released. No cloud fallback or token-savings claim.
 
 
@@ -2356,7 +2362,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    touched Java files passed shared formatting, token preservation and
    idempotence before integration. The owned lock was released.
 6. Prompts, rejected response, diagnosis, accepted replacement and actual reports
-   remain in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r26-hostility-queries/`.
+   remain in `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-14-r26-hostility-queries/`.
    The caller owns the manual decisions, additional capture repair, test authoring,
    integration and wider checks. No cloud fallback or token-savings claim.
 
@@ -2389,7 +2395,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    cancellation and stale-state rejection. Broader acceptance remains in the
    [functional evidence](../functional-tests.md#european-hostility-and-political-report-2026-10-14).
 6. Full prompts, generated text, diagnoses, runtime samples and caller application
-   records remain in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r26-declaration-dialog/`.
+   records remain in `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-14-r26-declaration-dialog/`.
    Valid JSON and exact anchors alone do not prove compilable Java: inspect inserted
    escapes before application. No cloud fallback or savings claim.
 
@@ -2414,7 +2420,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    context **32768**. The model unloaded before tests; the two formatted Java
    files were integrated byte-for-byte and the owned lock released. Prompts,
    runtime evidence, caller review and `acceptance.json` remain under
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r27-bounded-navigation/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-14-r27-bounded-navigation/`.
    Full first-colony/UI acceptance and publication remain pending.
 
 ## R-0027 expedition map selection — 2026-10-14
@@ -2447,7 +2453,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    acceptance and publication remain pending.
 5. Full inputs, generated text, caller setup diagnosis, bounded execution and
    application records remain in
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r27-map-selection/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-14-r27-map-selection/`.
    No cloud fallback or token-savings claim.
 
 
@@ -2477,7 +2483,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    belong to the [functional evidence](../functional-tests.md#rival-first-colony-preparation-2026-10-14).
 5. Accepted sources were copied to main and the owned lock released. Prompts,
    failed outputs, runtime samples, diagnoses and `acceptance.json` remain in
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r27-founding-query/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-14-r27-founding-query/`.
    This accepts a shared-model prerequisite; first-colony AI, full regression
    and publication are still pending.
 
@@ -2505,7 +2511,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    accepted caller implementation. The owned lock was released after those checks.
 4. Evidence, original and repair prompts, runtime samples, cancellation diagnosis
    and `caller-takeover.json` remain under
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r27-first-colony-planner/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-14-r27-first-colony-planner/`.
    A complete search algorithm proved too large for this worker's output/time
    allowance in this attempt. Future handoffs should isolate one supplied
    algorithmic step before dispatch; do not spend the allowance rediscovering
@@ -2527,7 +2533,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    it completed in **131.770 s** with five valid JSON replacements. Total worker
    time was **384.633 s**, one repair, within the unchanged 600-second budget.
 3. Across the two attempts, **346 loaded runtime samples** matched alias
-   `microcol-gpt-oss:20b-32k`, digest
+   `akropia-gpt-oss:20b-32k`, digest
    `425bbbff577bec88a59f86c437ff81eb369e011cfcd047121431a05951076fef` and context
    32768. The model was unloaded before formatting and Maven. The shared formatter
    checked five Java files, changed two and passed token/idempotence checks.
@@ -2539,7 +2545,7 @@ Acceptance and publication belong to [R-0033](../requirements/done/R-0033.md).
    this worker result; complete R-0028 player acceptance remains pending.
 5. Commands, exact anchors, original empty response, repair, runtime samples,
    diagnosis and acceptance are retained under
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-r28-attack-roles/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-14-r28-attack-roles/`.
    No token-saving or full-feature success claim follows from this prerequisite.
 
 ### R-0028 live AI step integration — 2026-10-14
@@ -2592,7 +2598,7 @@ analysis and migration. The local worker received only a bounded Python
 worktree based on `062f8ce9ec5e1d04f85bc2f182346417a2274f6b`. No game change,
 Java formatting, worker commits or worker-side tests were authorized.
 
-Job: `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-14-requirements-catalogue/`.
+Job: `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-14-requirements-catalogue/`.
 The installed GPT-OSS alias/digest matches the current operating profile.
 Attempt 0 (medium/64k, **525.670 seconds**) returned applicable JSON but failed
 caller acceptance: multiline heading/table patterns lacked multiline matching;
@@ -2654,7 +2660,7 @@ should reuse existing validation and a focused audit before proposing new toolin
    token usage is unavailable. No worker code was applied or integrated, and no
    further retry/takeover of that withdrawn hypothesis was needed. The original
    output defects remain unresolved. `disposition.json` and all attempt evidence
-   remain in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-15-r112-entry-regression/`.
+   remain in `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-15-r112-entry-regression/`.
 4. This host check observed Codex CLI **0.162.1** and Ollama **0.40.2** with the
    configured model digest/context. CLI warnings about ignored reasoning-summary
    metadata did not prevent inference. No model/runtime setup was performed and
@@ -2666,8 +2672,8 @@ should reuse existing validation and a focused audit before proposing new toolin
    and native UI reproducer. Worker scope was only four unit cases. Attempt 0
    delivered valid replacements in **561.455 s**, **2165 input / 4322 output
    tokens**. The negative control exposed three expected owner failures and a
-   caller-handoff error: Mockito inline was available in `microcol-test`, not
-   `microcol-game`, so a mocked final movement event failed before that check.
+   caller-handoff error: Mockito inline was available in `akropia-test`, not
+   `akropia-game`, so a mocked final movement event failed before that check.
 6. The caller supplied exact real-event constructors for one-method repair.
    Repair 1 took **292.214 s**, **1543 input / 1380 output tokens**, preserving the
    same job/worktree/budget; cumulative **853.669 s**, one repair. Both batches
@@ -2714,7 +2720,7 @@ should reuse existing validation and a focused audit before proposing new toolin
    final attempt. Both repair slots were consumed. The caller implemented the
    four-file scope directly; no worker implementation was applied or accepted.
 5. Prompts, stream errors, runtime observations and the caller diagnosis remain
-   under `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-15-r113-ci-filter/`.
+   under `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-15-r113-ci-filter/`.
    The existing main checks passed 21 launcher and 9 documentation tests. Strict
    MkDocs passed after the caller implementation. Its 13 Git-fixture/CLI tests
    and workflow preservation check passed. These local checks do not prove live
@@ -2752,7 +2758,7 @@ should reuse existing validation and a focused audit before proposing new toolin
    Main also owns the small Player/Ship stage split and all acceptance tests;
    none of the worker patch was copied into main.
 5. Runtime logs and rejected output remain under
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-15-r52-national-order/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-15-r52-national-order/`.
    Caller before/after checks are in `target/r52/`; accepted results are recorded
    in [functional evidence](../functional-tests.md#r-0052-partial-turn-order-delivery-2026-10-15).
    No token savings are inferred. R-0052 remains open for preparation-time
@@ -2783,7 +2789,7 @@ should reuse existing validation and a focused audit before proposing new toolin
    Java verification. Main owns command guards, internal action completion,
    GUI recovery, tests, formatting and actual acceptance.
 4. Full job records remain under
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-15-r52-preparation-boundary/`;
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-15-r52-preparation-boundary/`;
    caller checks remain in `target/r52/boundary-*.log`. No token saving is
    inferred from these measurements. Verification is recorded with the
    [functional evidence](../functional-tests.md).
@@ -2806,7 +2812,7 @@ should reuse existing validation and a focused audit before proposing new toolin
    escalates to high/64k under the normal policy because medium lost multiple
    semantic and test requirements. Prior elapsed time remains 559.222 s;
    the shared limits and two-repair budget are not reset. Evidence is under
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-15-r53-unit-orders/` and
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-15-r53-unit-orders/` and
    `target/r53/`. No token savings are claimed.
 
 4. High repair 1 did not return a patch before the caller stopped its owned
@@ -2838,8 +2844,8 @@ should reuse existing validation and a focused audit before proposing new toolin
    allowed output is one validated full-file replacement, with no production
    changes. The caller owns refinement, F30 and TC38 player paths, review,
    formatting, actual Docker acceptance and publication.
-2. Job and raw evidence: `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-15-r54-coastal-movement/`;
-   isolated checkout: `~/Library/Application Support/Microcol/local-worker/worktrees/2026-10-15-r54-coastal-movement/`.
+2. Job and raw evidence: `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-15-r54-coastal-movement/`;
+   isolated checkout: `$PRE_R0389_SUPPORT/local-worker/worktrees/2026-10-15-r54-coastal-movement/`.
    The launcher verifies the configured alias and observed context 98304.
 3. Medium completed in **866.448 seconds**, exit 0 and unload 0, reporting
    **7375 input / 4841 output tokens** (4258 cached input). Validated application
@@ -2921,7 +2927,7 @@ should reuse existing validation and a focused audit before proposing new toolin
 3. The caller restored both exact source anchors and removed the ambiguous example values, explicitly requiring complete Java implementation and test bodies. The same job/profile is retrying with the original acceptance scope and cumulative budget. This is a caller prompt correction, not accepted worker code or evidence of gameplay completion. Subsequent application, formatting and test results remain pending.
 4. Attempt 1 took **778.012 seconds**, exit 0 and successful unload; cumulative worker time was **893.570 seconds**. Caller source review rejected invalid Java boundaries/imports and invented APIs before compilation (**0 tests run**). More seriously, the draft required indoor workers to have outdoor places while omitting outdoor ownership and orphan-reference validation. The source and rejection diagnosis are retained in that attempt directory; no production change was integrated.
 5. The caller restored the original anchors and used the final allowed repair with high/64k, explicitly recording the medium failure as the escalation reason. The handoff now supplies a single-pass validation algorithm, exact API spelling and an entire-test-file anchor to avoid duplicate class boundaries. The caller also fixed its own immutability helper to compare the parsed DTO actually passed to loading. Acceptance scope and the cumulative budget remain unchanged; the final repair and its checks are pending.
-6. Future handoffs should describe the JSON shape without putting plausible literal prose in its `new` values. Source-anchor validation protects application identity and location; it does not prove that a returned value is usable source. Logs, prompts, rejected output and the caller review remain in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-16-r55-field-persistence/`.
+6. Future handoffs should describe the JSON shape without putting plausible literal prose in its `new` values. Source-anchor validation protects application identity and location; it does not prove that a returned value is usable source. Logs, prompts, rejected output and the caller review remain in `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-16-r55-field-persistence/`.
 
 7. During the final repair the caller found another handoff error: the source scenario contains only Dutch and the Dutch king, not the claimed France player. The foreign-owner tests must use the registered king player, so their rejection proves the assignment rule rather than unknown-owner lookup. The caller will correct this fixture detail after generation and verify the original cases; the running attempt and its frozen prompt are retained.
 
@@ -2973,7 +2979,7 @@ should reuse existing validation and a focused audit before proposing new toolin
    UI entry points; these do not duplicate the worker's model implementation.
    Java formatting and Docker verification wait until inference unloads. Logs,
    frozen prompt, anchors and eventual result belong to
-   `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-16-r56-indoor-boundaries/`.
+   `$PRE_R0389_LOGS/local-qwen/jobs/2026-10-16-r56-indoor-boundaries/`.
    No runtime or token-savings result is claimed for this unfinished attempt.
 
 4. Attempt 0 finished with exit 0 and successful unload after **1030.897
@@ -3135,7 +3141,7 @@ committed for this experiment.
    bounded Sol low implementation and hourly reports. The current main session
    still reported `gpt-6-astra`/`high` when inspected; the user was asked to switch
    the thread setting. Do not report medium usage until observed. The hourly
-   thread heartbeat `microcol-hodinov-postup` is active.
+   thread heartbeat `akropia-hodinov-postup` is active.
 2. R-0062 model work used `gpt-6-sol`/`low` in isolated worktree
    `2026-10-16-r62`, based on `f15adba0`. One worker was active; no local model
    was invoked. Caller-owned UI/fixture work did not duplicate its implementation.
@@ -3460,7 +3466,7 @@ committed for this experiment.
    The user settled R-0086's notification policy before refinement and dispatch.
    This does not change ordinary worker defaults or start another requirement.
 2. Baseline `3942b5de`; isolated managed worktree
-   `~/.codex/worktrees/claude-r0086/microcol`. The unrelated main-checkout edit in
+   `~/.codex/worktrees/claude-r0086/$PRE_R0389_CHECKOUT`. The unrelated main-checkout edit in
    R-0070 was excluded and preserved. Caller owns refinement, review, acceptance,
    integration and publication; Claude owns implementation and test authoring.
    No additional cloud subagents or local inference were used.
@@ -3477,7 +3483,7 @@ committed for this experiment.
    access, installations and native desktop control. Worktree isolation is not a
    filesystem sandbox. A caller process enforced 7200 seconds per invocation,
    14400 seconds cumulative and at most two caller-requested repairs. Logs and
-   handoffs are under `~/Library/Logs/Microcol/claude/2026-10-17-r0086/`.
+   handoffs are under `$PRE_R0389_LOGS/claude/2026-10-17-r0086/`.
 5. Initial invocation completed in **739.596 seconds**. Its first Docker run,
    `run-K2zc8M`, ran 78 model cases with one error and no skips; UI did not run.
    The new unit-project test directly replaced a construction while a worker
@@ -3596,8 +3602,8 @@ committed for this experiment.
    practical default and escalation rule after both batches, not a universal optimum.
 6. Sonnet preflight returned OK with actual `claude-sonnet-5-5` identity. No
    global Claude settings were changed. Baseline, handoffs and run data are under
-   `~/Library/Logs/Microcol/claude/2026-10-17-batch20/`; the managed worktree is
-   `~/.codex/worktrees/claude-batch20/microcol`. The previous R-0086 Opus trial
+   `$PRE_R0389_LOGS/claude/2026-10-17-batch20/`; the managed worktree is
+   `~/.codex/worktrees/claude-batch20/$PRE_R0389_CHECKOUT`. The previous R-0086 Opus trial
    is historical comparison, not a same-task benchmark.
 
 7. R-0118: actual `claude-sonnet-5-5`, medium, one attempt, 57.762 seconds,
@@ -4046,7 +4052,7 @@ committed for this experiment.
     ordinary affiliation equals the stated colonial owner, and occupied New
     Amsterdam in F04/F06 explicitly retains Dutch affiliation. The caller's
     script first encountered the intentionally malformed `test-currupted-file`
-    fixture and a directory named `.microcol`; its scan was corrected to leave
+    fixture and a directory named `.akropia`; its scan was corrected to leave
     malformed fixtures intact and process files only. These were caller setup
     issues, not Claude failures. The final field-only equivalence check passes.
 
@@ -4409,7 +4415,7 @@ committed for this experiment.
     single-colony eligibility, truthful colony destruction outcomes and TC82.
     All three original attempts are consumed; no fresh budget is created.
     Main formats 36 Java files (six changed, token/idempotence pass).
-    Docker `run-0D4uNt` passes 2,349 model and 52 microcol-test checks with no
+    Docker `run-0D4uNt` passes 2,349 model and 52 akropia-test checks with no
     failures/errors/skips. Main directly clarifies one English/Czech battle
     warning: ordinary defeated soldiers still lose equipment. This small
     wording repair follows review after the worker budget, rather than a new
@@ -4466,7 +4472,7 @@ committed for this experiment.
    (15-second deadline, 31.467 seconds including cleanup, no leftover container);
    CI success `20261018T184549Z-0229709c7dc1` (existing Pages run 39124554783,
    exact commit `eb4422281e71c7abdbdf415c6bd04016785a6f7f`). Per-run evidence is
-   retained under `~/Library/Logs/Microcol/completions/`. These prove callback
+   retained under `$PRE_R0389_LOGS/completions/`. These prove callback
    delivery, not acceptance of the new source or a new publication.
 7. The five existing Docker runner checks passed: success, test failure, export
    failure, read-only clean source with quoted argument forwarding, and report
@@ -4582,7 +4588,7 @@ committed for this experiment.
    [Java compatibility](https://github.com/jajir/microcol/actions/runs/39164417893)
    and [Pages deployment](https://github.com/jajir/microcol/actions/runs/39164417878).
    Downloaded `tests-functional` Surefire XML confirms **2,348 model and 372
-   microcol-test checks**, zero failures, errors or skips. All three native
+   akropia-test checks**, zero failures, errors or skips. All three native
    packaging jobs and the publication job succeed. Live documentation contains
    the acceptance record and source links for the exact source commit.
 2. Published build [dev-177-ea552be4d534](https://github.com/jajir/microcol/releases/tag/dev-177-ea552be4d534)
@@ -4610,15 +4616,15 @@ committed for this experiment.
 
 1. The user selected the [85-item remaining scope](../requirements/backlog.md#authorized-completion-through-r-0219-2026-10-20), excluding R-0207, and the Haiku → Haiku repair → Sonnet → Opus → Codex escalation. This task-specific choice supersedes the earlier Sonnet-first operating recommendation for this batch. Main retains requirements, architecture, review, formatting, verification and integration.
 2. Initial source is `7dfe3402b24c65b726ca9d2f04467eb0472643ca` on clean `main`. Preflight found Headroom 0.41.0 healthy at `127.0.0.1:8787`, Claude authenticated through its subscription, Docker Engine 29.8.2 available, and the shared Eclipse formatter runtime present. These observations do not establish gameplay acceptance or measured token savings.
-3. The plan, handoffs and worker evidence are under `~/Library/Logs/Microcol/claude/2026-10-20-through-r0219/`. R-0122 attempt 1 initialized actual `claude-haiku-5-5`, medium, session `1e9e779f-9e83-4f36-822c-e04a2ba0014f`, in the main checkout with bounded Read/Edit/Write/Glob/Grep tools. The adapted existing authoring launcher preserves the two-hour attempt/four-hour cumulative time budget and allows four authoring attempts. Quota interruptions require explicit reconciliation before resuming.
-4. R-0122 runs through the existing completion supervisor, kind `claude`, with a 7,300-second outer timeout. Originating task is `01a15770-cb5a-7ad2-96e4-4ffed9f4db2a`; completion directory is `~/Library/Logs/Microcol/completions/20261020T040241Z-5f5e931ef0b4/`, supervisor PID 76239. Main will inspect its result and notification record; no implementation, test pass or acceptance is claimed at dispatch.
+3. The plan, handoffs and worker evidence are under `$PRE_R0389_LOGS/claude/2026-10-20-through-r0219/`. R-0122 attempt 1 initialized actual `claude-haiku-5-5`, medium, session `1e9e779f-9e83-4f36-822c-e04a2ba0014f`, in the main checkout with bounded Read/Edit/Write/Glob/Grep tools. The adapted existing authoring launcher preserves the two-hour attempt/four-hour cumulative time budget and allows four authoring attempts. Quota interruptions require explicit reconciliation before resuming.
+4. R-0122 runs through the existing completion supervisor, kind `claude`, with a 7,300-second outer timeout. Originating task is `01a15770-cb5a-7ad2-96e4-4ffed9f4db2a`; completion directory is `$PRE_R0389_LOGS/completions/20261020T040241Z-5f5e931ef0b4/`, supervisor PID 76239. Main will inspect its result and notification record; no implementation, test pass or acceptance is claimed at dispatch.
 5. R-0122 Haiku attempt 1 completed in 241.585 seconds, exit 0, with no permission denials. Main formatted four changed/new Java files (three changed), with exact code-token preservation and idempotence passing. Review traced shared terrain consumers and road-fixture callers; it found that the expanded fixture unnecessarily cleared unrelated resource cells.
 6. Docker completion `20261020T040710Z-683ffef97f53` (supervisor PID 78185) failed after 267.103 seconds. Reports in `target/docker-ui/run-Q5eCvR/` contain **2,592 passing model tests** and **28 UI-module checks: 27 passed, 1 failed, zero errors or skips**. Selection: standard unit-test class patterns plus TC88 road construction, TC86 terrain production, TC91 resource overlays, TC02 colony founding and TC21 navigation. The sole failure is TC88_05's trapping-marker pixel check on the builder-occupied square (expected RGB 14711609, actual 7027227); later assertions in that scenario were not reached. This is failed evidence, not acceptance.
 7. Main sent the same Haiku session a bounded second attempt to diagnose the marker/render ordering, retain the marker and gameplay assertions on an unobstructed legal path, preserve unrelated fixture resources, and correct the model-test ordering comment. Completion `20261020T041301Z-d2e97543eb5a`, supervisor PID 78489, retains the 7,300-second outer timeout and original task budget. After review/formatting, rerun every model test and the affected UI selection, adding TC89 because it shares RoadFixture. Actual repair verification remains pending.
 8. R-0122 Haiku attempt 2 completed in 53.641 seconds, exit 0, no permission denials. It moved the marker assertion before the unit occupied the square and preserved existing fixture resources. Formatter again checked four Java files with no changes and token/idempotence passing. Docker `20261020T041413Z-bc91569414ba` (PID 78875, 237.096 seconds) exported `run-gzcGqm`: 2,592 model tests passed; 29 UI/support checks included one error, no failures/skips. TC88_05 had selected an empty square before asking the colony unit panel for index 2; the marker assertion now passed. This remains failed evidence.
 9. After two unsuccessful authoring attempts, the same session escalated to Sonnet medium. Attempt 3 completed in 71.488 seconds, exit 0, no permission denials, with 366.714 cumulative worker seconds. It removed the unnecessary empty-square selection; the preceding verification methods do not need selection. All marker/road/job/warehouse/Save/Continue assertions remain. Formatter checked four Java files without changes, with token/idempotence passing.
 10. Docker `20261020T042026Z-1cd97e439c10` (PID 80413) passed all **2,592 model and 29 selected UI/support checks**, zero failures/errors/skips, in 252.391 seconds. Raw reports are `target/docker-ui/run-QI21QE/`; the [functional evidence](../functional-tests.md#r-0122-road-production-2026-10-20) records exact selection and immutable source snapshot. R-0122 has per-change verification and awaits full batch acceptance; it is not marked done and no push has occurred.
-11. Main refined R-0128 against the actual `Colony.startTurn()` snapshot path and started Haiku medium attempt 1 with the shared formatter/functional contracts and explicit reserve, persistence and player-test boundaries. Completion directory `~/Library/Logs/Microcol/completions/20261020T042740Z-aeb2cc0ccd81/`, supervisor PID 80826, outer timeout 7,300 seconds; handoff and execution evidence stay under the same batch log root. R-0122's uncommitted changes must be preserved. No R-0128 implementation or test result is claimed at dispatch.
+11. Main refined R-0128 against the actual `Colony.startTurn()` snapshot path and started Haiku medium attempt 1 with the shared formatter/functional contracts and explicit reserve, persistence and player-test boundaries. Completion directory `$PRE_R0389_LOGS/completions/20261020T042740Z-aeb2cc0ccd81/`, supervisor PID 80826, outer timeout 7,300 seconds; handoff and execution evidence stay under the same batch log root. R-0122's uncommitted changes must be preserved. No R-0128 implementation or test result is claimed at dispatch.
 12. R-0128 Haiku attempt 1 completed in 848.603 seconds, exit 0, no permission denials, session `010f63eb-7dd1-4c7e-99b5-45bb300bb4f1`. Main reviewed map/store validation, capped field production and the post-famine extraction hook, then formatted 19 Java files (12 changed), preserving exact code tokens/idempotence. Docker `20261020T044206Z-55f4440f7484` (PID 81787) failed after 65.292 seconds: `run-wiQ03B` contains 2,614 model checks with five errors in old `ColonyFieldTest` mocks and no failures/skips. UI did not run. The new mineral checks passed, but the change was not accepted.
 13. Haiku attempt 2 completed in 33.443 seconds, exit 0, no permission denials, with 882.046 cumulative worker seconds. It changed only the two old mock setup paths to supply both branches of the new shared terrain-production API, keeping original assertions and amounts; no production fallback was added. Main formatter checked 20 Java files, zero changed, exact tokens/idempotence passing.
 14. Docker `20261020T044506Z-837c4502e4c5` (PID 84371) passed in 347.758 seconds: **2,614 model and 36 UI/support checks**, zero failures/errors/skips, exported to `target/docker-ui/run-TiSChg/`. The [functional evidence](../functional-tests.md#r-0128-mineral-depletion-2026-10-20) records the full selection and immutable source snapshot. R-0128 awaits full batch acceptance; R-0122/R-0128 remain uncommitted on main.

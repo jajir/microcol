@@ -19,7 +19,7 @@ import uuid
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts/ui-tests"))
 from local_slot import LocalSlot
-LOG_ROOT = Path.home() / "Library/Logs/Microcol/completions"
+LOG_ROOT = Path.home() / "Library/Logs/Akropia/completions"
 GRACE_SECONDS = 45
 QUEUE_SECONDS = 30
 
@@ -89,18 +89,18 @@ def request(args, run_id):
             command += ["--escalate-reason", args.escalate_reason]
     elif args.kind == "docker":
         record["docker"] = installed("docker")
-        record["container"] = "microcol-" + run_id
+        record["container"] = "akropia-" + run_id
         record["reports"] = str(ROOT / "target/docker-ui")
         arguments = args.arguments[1:] if args.arguments[:1] == ["--"] else args.arguments
         command = [record["docker"], "compose", "-f", str(ROOT / "compose.ui-tests.yml"),
                    "run", "--build", "--rm", "--name", record["container"], "ui-tests"] + arguments
     elif args.kind == "ux":
         record["docker"] = installed("docker")
-        record["container"] = "microcol-ux-" + run_id.lower()
+        record["container"] = "akropia-ux-" + run_id.lower()
         arguments = args.arguments[1:] if args.arguments[:1] == ["--"] else args.arguments
-        command = [sys.executable, str(ROOT / "microcol-ux-test/run.py"),
+        command = [sys.executable, str(ROOT / "akropia-ux-test/run.py"),
                    "--container", record["container"]] + arguments
-        record["reports"] = str(ROOT / "microcol-ux-test/runs")
+        record["reports"] = str(ROOT / "akropia-ux-test/runs")
     elif args.kind == "verify":
         arguments = args.arguments[1:] if args.arguments[:1] == ["--"] else args.arguments
         if "--smoke" in arguments:
@@ -213,7 +213,7 @@ def notify(directory, record):
             detail += " Step exceeded " + str(round(result["step_timeout_seconds"], 3)) + " s."
         if result.get("command_started") is False:
             detail += " Test command did not start."
-    message = ("Microcol " + record["kind"] + " " + record["run_id"] + ": " + result["status"]
+    message = ("Akropia " + record["kind"] + " " + record["run_id"] + ": " + result["status"]
                + "; exit " + str(result["exit_code"]) + "." + detail + " Evidence: " + str(directory / "result.json")
                + ". Verification and review remain pending; inspect evidence before continuing "
                  "the already authorized task.")

@@ -6,7 +6,7 @@ RUN apt-get update \
         xvfb xauth openbox xcompmgr \
     && rm -rf /var/lib/apt/lists/*
 
-COPY run.sh /usr/local/bin/microcol-ui-tests
-RUN chmod +x /usr/local/bin/microcol-ui-tests
+COPY run.sh /usr/local/bin/akropia-ui-tests
+RUN chmod +x /usr/local/bin/akropia-ui-tests
 WORKDIR /workspace
-ENTRYPOINT ["/usr/local/bin/microcol-ui-tests"]
+ENTRYPOINT ["/usr/local/bin/akropia-ui-tests"]

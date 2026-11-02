@@ -1,0 +1,812 @@
+package org.akropia.page;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.akropia.gui.Tile.TILE_CENTER;
+
+import java.io.File;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import org.akropia.gui.Point;
+import org.akropia.gui.screen.game.components.ButtonsGamePanel;
+import org.akropia.gui.screen.game.components.StatusBarView;
+import org.akropia.gui.screen.game.gamepanel.GamePanelController;
+import org.akropia.gui.screen.game.gamepanel.SelectedTileManager;
+import org.akropia.model.Location;
+import org.akropia.model.Unit;
+import org.akropia.model.unit.Ship;
+import org.akropia.model.unit.UnitActionType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testfx.robot.Motion;
+import org.testfx.util.WaitForAsyncUtils;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+
+import javafx.scene.control.Button;
+import javafx.scene.control.Labeled;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.VBox;
+
+/**
+ * Represents main game page with world map.
+ */
+public class GamePage extends AbstractScreen {
+
+    private final Logger logger = LoggerFactory.getLogger(GamePage.class);
+
+    public static GamePage of(final TestContext context) {
+        return new GamePage(context);
+    }
+
+    private GamePage(final TestContext context) {
+        super(context);
+        WaitForAsyncUtils.waitForFxEvents();
+        verifyThatStatusBarIsVisible();
+    }
+
+    /** Move the pointer without assuming diagnostics are enabled. */
+    public void hoverTile(final Location location) {
+        final javafx.geometry.Point2D p = screenPoint(location);
+        getRobot().moveTo(p.getX(), p.getY(), Motion.DEFAULT);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void moveMouseAtLocation(final Location location) {
+        verifyThatTileIsVisible(location);
+        hoverTile(location);
+        verifyThatStatusBarContains(String.valueOf(location.getX()));
+        verifyThatStatusBarContains(String.valueOf(location.getY()));
+    }
+
+    public void dragMouseAtLocation(final Location location) throws Exception {
+        verifyThatTileIsVisible(location);
+        dragToLocation(location);
+        waitWhileMoving();
+        verifyThatStatusBarContains(String.valueOf(location.getX()));
+        verifyThatStatusBarContains(String.valueOf(location.getY()));
+    }
+
+    public void dragMouseAtLocationWithFeedback(final Location location,
+            final String expectedFeedback) throws Exception {
+        verifyThatTileIsVisible(location);
+        dragToLocation(location);
+        waitWhileMoving();
+        WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
+                () -> WaitForAsyncUtils.asyncFx(
+                        () -> getLabeledById(StatusBarView.STATUS_BAR_LABEL_ID)
+                                .getText().contains(expectedFeedback))
+                        .get());
+        verifyThatStatusBarContains(expectedFeedback);
+    }
+
+    /**
+     * Drag the selected unit onto a tile whose entry opens the turn report. The
+     * report replaces the map, so the idle status bar is not waited for.
+     *
+     * @param location required tile the unit enters
+     * @return the report that the entry opened
+     * @throws Exception if the report does not appear
+     */
+    public ScreenTurnReport dragMouseAtLocationAndOpenReport(
+            final Location location) throws Exception {
+        verifyThatTileIsVisible(location);
+        dragToLocation(location);
+        WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS,
+                () -> WaitForAsyncUtils
+                        .asyncFx(() -> getNodeFinder().lookup("#closeButtonId")
+                                .tryQuery().isPresent())
+                        .get(60, TimeUnit.SECONDS));
+        return ScreenTurnReport.of(getContext());
+    }
+
+    public void dragToLocation(final Location location) {
+        // An explicit map hover is the drag source; menu checks have no hover
+        // and fall back to the selected tile when returning to the map.
+        final Location source = getContext().getClassFromGuice(
+                org.akropia.gui.screen.game.gamepanel.MouseOverTileManager.class)
+                .getMouseOverTile()
+                .orElseGet(() -> getContext()
+                        .getClassFromGuice(SelectedTileManager.class)
+                        .getSelectedTile().orElseThrow());
+        closeUnitActions();
+        final javafx.geometry.Point2D start = screenPoint(source);
+        getRobot().moveTo(start.getX(), start.getY(), Motion.DEFAULT);
+        getRobot().drag(MouseButton.PRIMARY);
+        final javafx.geometry.Point2D point = screenPoint(location);
+        getRobot().drag(point.getX(), point.getY())
+                .release(MouseButton.PRIMARY);
+    }
+
+    public void openUnitContextAt(final Location location) {
+        closeUnitActions();
+        final javafx.geometry.Point2D point = screenPoint(location);
+        getRobot().clickOn(point.getX(), point.getY(), MouseButton.SECONDARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void controlClickUnitAt(final Location location,
+            final boolean releaseControlFirst) {
+        closeUnitActions();
+        final javafx.geometry.Point2D point = screenPoint(location);
+        getRobot().moveTo(point.getX(), point.getY()).press(KeyCode.CONTROL);
+        try {
+            getRobot().press(MouseButton.PRIMARY);
+            if (releaseControlFirst) {
+                getRobot().release(KeyCode.CONTROL);
+            }
+            getRobot().release(MouseButton.PRIMARY);
+        } finally {
+            getRobot().release(KeyCode.CONTROL);
+        }
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /** Primary click on a map tile, as a player picks what is drawn there. */
+    public void clickTile(final Location location) {
+        closeUnitActions();
+        final javafx.geometry.Point2D point = screenPoint(location);
+        getRobot().clickOn(point.getX(), point.getY(), MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void panFromTile(final Location location) {
+        closeUnitActions();
+        final javafx.geometry.Point2D start = screenPoint(location);
+        getRobot().moveTo(start.getX(), start.getY())
+                .press(MouseButton.SECONDARY).moveBy(80, 50)
+                .release(MouseButton.SECONDARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void selectMapUnit(final int unitId) {
+        final Unit unit = getModel().getUnitById(unitId);
+        openUnitContextAt(unit.getLocation());
+        if (isCssIdShown("unitChoices")) {
+            getRobot().moveTo("#unitChoices");
+            // Enter the submenu before moving down across other action rows.
+            getRobot().clickOn("#selectUnit-" + unitId,
+                    Motion.HORIZONTAL_FIRST);
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+        closeUnitActions();
+    }
+
+    private javafx.geometry.Point2D screenPoint(final Location location) {
+        WaitForAsyncUtils.waitForFxEvents();
+        // Selecting a unit can wrap its toolbar and resize the map viewport.
+        getRobot().interact(() -> {
+            final javafx.scene.Parent root = getContext().getClassFromGuice(
+                    org.akropia.gui.screen.game.gamepanel.GamePanelComponent.class)
+                    .getCanvas().getScene().getRoot();
+            root.applyCss();
+            root.layout();
+        });
+        final Point tile = getContext().getArea()
+                .convertToCanvasPoint(location);
+        final javafx.scene.canvas.Canvas canvas = getContext()
+                .getClassFromGuice(
+                        org.akropia.gui.screen.game.gamepanel.GamePanelComponent.class)
+                .getCanvas();
+        final double centerX = tile.getX() + TILE_CENTER.getX();
+        final double centerY = tile.getY() + TILE_CENTER.getY();
+        // The toolbar and map controls such as the trade-route toggle lie over
+        // the canvas; a player reaches a covered tile through its free part.
+        final List<javafx.geometry.Bounds> covered = Lists.newArrayList();
+        final javafx.scene.Node toolbar = getNodeFinder().lookup(".buttonPanel")
+                .query();
+        covered.add(toolbar.localToScreen(toolbar.getBoundsInLocal()));
+        for (final javafx.scene.Node control : canvas.getParent()
+                .getChildrenUnmodifiable()) {
+            if (control != canvas && control.isVisible()) {
+                covered.add(control.localToScreen(control.getBoundsInLocal()));
+            }
+        }
+        final int size = org.akropia.gui.Tile.TILE_WIDTH_IN_PX;
+        final double minX = Math.max(tile.getX() + 2, 1);
+        final double maxX = Math.min(tile.getX() + size - 2,
+                canvas.getWidth() - 1);
+        final double minY = Math.max(tile.getY() + 2, 1);
+        final double maxY = Math.min(tile.getY() + size - 2,
+                canvas.getHeight() - 1);
+        javafx.geometry.Point2D best = null;
+        double bestDistance = Double.MAX_VALUE;
+        for (double y = minY; y <= maxY; y++) {
+            for (double x = minX; x <= maxX; x++) {
+                final javafx.geometry.Point2D point = canvas.localToScreen(x,
+                        y);
+                final double distance = Math.hypot(x - centerX, y - centerY);
+                if (distance < bestDistance && covered.stream().noneMatch(
+                        bounds -> bounds.getMinX() - 3 <= point.getX()
+                                && point.getX() <= bounds.getMaxX() + 3
+                                && bounds.getMinY() - 3 <= point.getY()
+                                && point.getY() <= bounds.getMaxY() + 3)) {
+                    best = point;
+                    bestDistance = distance;
+                }
+            }
+        }
+        if (best == null) {
+            throw new IllegalStateException(
+                    "The tile remains covered by the game controls");
+        }
+        return best;
+    }
+
+    public void dragMouseAtLocationAndClosePossibleDialog(
+            final Location location) throws Exception {
+        dragMouseAtLocation(location);
+        if (isCssIdVisible("buttonOk")) {
+            clickOnButtonWithId("buttonOk");
+        }
+    }
+
+    public void verifyThatStatusBarContains(final String string) {
+        final Labeled label = getLabeledById(StatusBarView.STATUS_BAR_LABEL_ID);
+        final String actual = label.getText();
+        logger.info("Status bar: " + actual);
+        assertTrue(actual.contains(string), () -> {
+            final GamePanelController controller = getContext()
+                    .getClassFromGuice(GamePanelController.class);
+            return String.format(
+                    "Text '%s' should appear in status bar. But status bar contains text '%s'. Map input enabled=%s, moving=%s. Pointer now %s; %s",
+                    string, actual, controller.isMouseEnabled(),
+                    controller.isUnitMoving(), pointerPosition(),
+                    mapDiagnostics());
+        });
+    }
+
+    /**
+     * @return real screen position of the pointer, read on the FX thread, or
+     *         the reason it is unavailable; used only in diagnostics
+     */
+    private String pointerPosition() {
+        try {
+            return String.valueOf(WaitForAsyncUtils.asyncFx(
+                    () -> new javafx.scene.robot.Robot().getMousePosition())
+                    .get(5, TimeUnit.SECONDS));
+        } catch (final Exception e) {
+            return "unavailable (" + e + ")";
+        }
+    }
+
+    /**
+     * @return canvas screen bounds, canvas size, visible area, hovered tile and
+     *         selected tile at this moment; used only in diagnostics
+     */
+    private String mapDiagnostics() {
+        try {
+            final javafx.scene.canvas.Canvas canvas = getContext()
+                    .getClassFromGuice(
+                            org.akropia.gui.screen.game.gamepanel.GamePanelComponent.class)
+                    .getCanvas();
+            final javafx.geometry.Bounds bounds = WaitForAsyncUtils.asyncFx(
+                    () -> canvas.localToScreen(canvas.getBoundsInLocal()))
+                    .get(5, TimeUnit.SECONDS);
+            return String.format(
+                    "canvas screen bounds=%s, canvas size=%sx%s, area=%s, hover=%s, selected=%s",
+                    bounds, canvas.getWidth(), canvas.getHeight(),
+                    getContext().getArea(),
+                    getContext().getClassFromGuice(
+                            org.akropia.gui.screen.game.gamepanel.MouseOverTileManager.class)
+                            .getMouseOverTile(),
+                    getContext().getClassFromGuice(SelectedTileManager.class)
+                            .getSelectedTile());
+        } catch (final Exception e) {
+            return "map state unavailable (" + e + ")";
+        }
+    }
+
+    private void verifyThatStatusBarIsVisible() {
+        assertTrue(isCssIdVisible(StatusBarView.STATUS_BAR_LABEL_ID),
+                String.format("Status bar is not visible."));
+        assertTrue(isCssIdVisible(ButtonsGamePanel.BUTTON_NEXT_TURN_ID),
+                String.format("Next turn button is not visible."));
+    }
+
+    public void verifyThatTileIsVisible(final Location location) {
+        assertTrue(getContext().getArea().isLocationVisible(location));
+    }
+
+    public void selectTile(final Location location) {
+        Preconditions.checkNotNull(location);
+        moveMouseAtLocation(location);
+        getRobot().clickOn(MouseButton.PRIMARY);
+        final javafx.geometry.Point2D point = screenPoint(location);
+        getRobot().moveTo(point.getX(), point.getY(), Motion.DEFAULT);
+    }
+
+    public void panToTile(final Location location) throws Exception {
+        Preconditions.checkNotNull(location);
+        final javafx.scene.canvas.Canvas canvas = getContext()
+                .getClassFromGuice(
+                        org.akropia.gui.screen.game.gamepanel.GamePanelComponent.class)
+                .getCanvas();
+        final int tileSize = org.akropia.gui.Tile.TILE_WIDTH_IN_PX;
+        final int topInset = Math.min(tileSize,
+                Math.max(0, location.getY() - 1) * tileSize);
+        final java.util.function.BooleanSupplier verticallyVisible = () -> {
+            final double y = getContext().getArea()
+                    .convertToCanvasPoint(location).getY();
+            return y >= topInset && y <= canvas.getHeight() - tileSize;
+        };
+        if (!verticallyVisible.getAsBoolean()) {
+            final KeyCode direction = getContext().getArea()
+                    .convertToCanvasPoint(location).getY() < topInset
+                            ? KeyCode.W
+                            : KeyCode.S;
+            getRobot().press(direction);
+            try {
+                WaitForAsyncUtils.waitFor(20, TimeUnit.SECONDS,
+                        verticallyVisible::getAsBoolean);
+            } finally {
+                getRobot().release(direction);
+            }
+        }
+        final java.util.function.BooleanSupplier horizontallyVisible = () -> {
+            final double x = getContext().getArea()
+                    .convertToCanvasPoint(location).getX();
+            return x >= 0 && x <= canvas.getWidth()
+                    - org.akropia.gui.Tile.TILE_WIDTH_IN_PX;
+        };
+        if (!horizontallyVisible.getAsBoolean()) {
+            final KeyCode direction = getContext().getArea()
+                    .convertToCanvasPoint(location).getX() < 0 ? KeyCode.A
+                            : KeyCode.D;
+            getRobot().press(direction);
+            try {
+                WaitForAsyncUtils.waitFor(20, TimeUnit.SECONDS,
+                        horizontallyVisible::getAsBoolean);
+            } finally {
+                getRobot().release(direction);
+            }
+        }
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void saveGame() {
+        getRobot().push(KeyCode.CONTROL, KeyCode.S);
+        clickOnButtonWithId("exportSave");
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public ColonyNameDialog foundColony() {
+        getRobot().push(KeyCode.B);
+        WaitForAsyncUtils.waitForFxEvents();
+        return new ColonyNameDialog(getContext());
+    }
+
+    public ColonyNameDialog foundColonyFromActions() {
+        clickOnButtonWithId("buildColony");
+        return new ColonyNameDialog(getContext());
+    }
+
+    /**
+     * Leave through the session menu. Unsaved progress is saved through the
+     * leave confirmation and the manual Save dialog as a new save with the
+     * suggested name; a safely saved game is left without the confirmation
+     * (R-0387). Scenarios about the confirmation itself verify it explicitly.
+     */
+    public WelcomePage exitToMenu() {
+        clickOnButtonWithId("exit");
+        getRobot().clickOn("#menuMain");
+        WaitForAsyncUtils.waitForFxEvents();
+        if (!getNodeFinder().lookup("#saveConfirm").queryAll().isEmpty()) {
+            clickOnButtonWithId("saveConfirm");
+            clickOnButtonWithId("saveNew");
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+        return WelcomePage.of(getContext());
+    }
+
+    public Optional<ScreenTurnReport> nextTurn() throws Exception {
+        endTurnAndAwaitPreparation();
+        if (!getModel()
+                .isTurnEventsMessagesEmpty(getModel().getCurrentPlayer())) {
+            WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS,
+                    () -> WaitForAsyncUtils.asyncFx(this::isButtonBackVisible)
+                            .get(60, TimeUnit.SECONDS));
+            WaitForAsyncUtils.waitForFxEvents();
+            return Optional.of(ScreenTurnReport.of(getContext()));
+        }
+        WaitForAsyncUtils.waitForFxEvents();
+        return Optional.empty();
+    }
+
+    /**
+     * End the turn when the report is not expected to open by itself, such as a
+     * routine-only notice with the summary off. The game stays in front.
+     *
+     * @return this game screen
+     */
+    public GamePage nextTurnWithoutOpeningReport() throws Exception {
+        endTurnAndAwaitRouting();
+        return this;
+    }
+
+    /**
+     * End the turn when a ship arrival is expected to open Europe directly,
+     * without a report in front of it.
+     *
+     * @return the European port that opened by itself
+     */
+    public EuropePortScreen nextTurnIntoEurope() throws Exception {
+        endTurnAndAwaitRouting();
+        return EuropePortScreen.of(getContext());
+    }
+
+    /**
+     * End the turn and wait until the player interface has routed this human
+     * turn start, so a screen that did not open is not a screen that is late.
+     * The preparation latch alone is released on another thread than the GUI
+     * bridge. ModelListenerImpl posts the turn start and then the native
+     * relations change from one thread, and the synchronous event bus finishes
+     * every screen change queued by the first post before the second one, so
+     * the second post marks the end of the routing.
+     */
+    private void endTurnAndAwaitRouting() throws Exception {
+        final TurnStartRouting routing = new TurnStartRouting(getModel(),
+                getModel().getCalendar().getNumberOfPlayedTurns());
+        final com.google.common.eventbus.EventBus eventBus = getContext()
+                .getClassFromGuice(com.google.common.eventbus.EventBus.class);
+        eventBus.register(routing);
+        try {
+            endTurnAndAwaitPreparation();
+            routing.await();
+        } finally {
+            eventBus.unregister(routing);
+        }
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /** Marks the end of the interface routing of one human turn start. */
+    private static final class TurnStartRouting {
+        private final org.akropia.model.Model model;
+        private final int previousRound;
+        private final java.util.concurrent.CountDownLatch routed = new java.util.concurrent.CountDownLatch(
+                1);
+        private volatile Thread humanTurnThread;
+
+        TurnStartRouting(final org.akropia.model.Model model,
+                final int previousRound) {
+            this.model = model;
+            this.previousRound = previousRound;
+        }
+
+        @com.google.common.eventbus.Subscribe
+        public void onTurnStarted(
+                final org.akropia.model.event.TurnStartedEvent event) {
+            if (event.getPlayer().isHuman() && model.getCalendar()
+                    .getNumberOfPlayedTurns() > previousRound) {
+                humanTurnThread = Thread.currentThread();
+            }
+        }
+
+        @com.google.common.eventbus.Subscribe
+        public void onRelationsChanged(
+                final org.akropia.gui.event.NativeRelationsChangedEvent event) {
+            if (humanTurnThread == Thread.currentThread()) {
+                routed.countDown();
+            }
+        }
+
+        void await() throws InterruptedException, TimeoutException {
+            if (!routed.await(60, TimeUnit.SECONDS)) {
+                throw new TimeoutException(
+                        "Human turn start was not routed to the interface");
+            }
+        }
+    }
+
+    /** The report must not be on screen; the game stays in front. */
+    public void verifyTurnReportNotShown() {
+        assertFalse(isCssIdVisible("closeButtonId"),
+                "The turn report must not open by itself");
+    }
+
+    /** The game screen is in front: its Next turn button is visible. */
+    public void verifyGameInFront() {
+        assertTrue(isCssIdVisible(ButtonsGamePanel.BUTTON_NEXT_TURN_ID),
+                "The game screen must be in front");
+    }
+
+    private void endTurnAndAwaitPreparation() throws Exception {
+        final int previousRound = getModel().getCalendar()
+                .getNumberOfPlayedTurns();
+        final java.util.concurrent.CountDownLatch prepared = new java.util.concurrent.CountDownLatch(
+                1);
+        final org.akropia.model.ModelListenerAdapter listener = new org.akropia.model.ModelListenerAdapter() {
+            @Override
+            public void onTurnStarted(
+                    final org.akropia.model.event.TurnStartedEvent event) {
+                if (event.getPlayer().isHuman() && getModel().getCalendar()
+                        .getNumberOfPlayedTurns() > previousRound) {
+                    prepared.countDown();
+                }
+            }
+        };
+        getModel().addListener(listener);
+        try {
+            final Button buttonNextTurn = getButtonById(
+                    ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
+            getRobot().clickOn(buttonNextTurn);
+            // Running state and movement callbacks precede completion of all
+            // standing orders.
+            if (!prepared.await(60, TimeUnit.SECONDS)) {
+                throw new TimeoutException(
+                        "Human turn preparation did not finish");
+            }
+        } finally {
+            getModel().removeListener(listener);
+        }
+        waitWhileMoving();
+    }
+
+    public void nextTurnAndCloseDialogs() throws Exception {
+        final Optional<ScreenTurnReport> oTurnEvents = nextTurn();
+        if (oTurnEvents.isPresent()) {
+            final ScreenTurnReport dialog = oTurnEvents.get();
+            dialog.close();
+        }
+    }
+
+    /** Press the declare button; the page then observes the confirmation. */
+    public IndependencePage declareIndependence() throws Exception {
+        final IndependencePage independence = new IndependencePage(
+                getContext());
+        independence.openConfirmation();
+        return independence;
+    }
+
+    public ScreenTurnReport openTurnReport() throws Exception {
+        final Button buttonNextTurn = getButtonById(
+                ButtonsGamePanel.BUTTON_TURN_REPORT_ID);
+        getRobot().clickOn(buttonNextTurn);
+        WaitForAsyncUtils.waitForFxEvents();
+        return ScreenTurnReport.of(getContext());
+    }
+
+    public ColonyScreen openColonyAt(final Location colonyLocation,
+            final String expectedNamePart) {
+        moveMouseAtLocation(colonyLocation);
+        getRobot().clickOn(MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+        return ColonyScreen.of(getContext(), expectedNamePart);
+    }
+
+    /**
+     * Open a colony only with keys: O opens the colonies menu, arrow down walks
+     * to the colony by its position in the menu (ordered by colony id) and
+     * Enter opens it.
+     *
+     * @param menuIndex        zero-based position of the colony in the menu
+     * @param expectedNamePart text expected in the opened colony name
+     * @return the opened colony screen
+     */
+    public ColonyScreen openColonyWithKeyboard(final int menuIndex,
+            final String expectedNamePart) {
+        getRobot().push(KeyCode.O);
+        WaitForAsyncUtils.waitForFxEvents();
+        for (int index = 0; index <= menuIndex; index++) {
+            getRobot().push(KeyCode.DOWN);
+        }
+        getRobot().push(KeyCode.ENTER);
+        WaitForAsyncUtils.waitForFxEvents();
+        return ColonyScreen.of(getContext(), expectedNamePart);
+    }
+
+    public GamePage verifyMapRemainsVisibleAt(final Location colonyLocation) {
+        verifyThatStatusBarContains(String.valueOf(colonyLocation.getX()));
+        verifyThatStatusBarContains(String.valueOf(colonyLocation.getY()));
+        return this;
+    }
+
+    public EuropePortScreen openEuroperPort() {
+        return openEuroperPort("Europe");
+    }
+
+    public EuropePortScreen openEuroperPort(final String expectedName) {
+        final Button buttonNextTurn = getButtonById(
+                ButtonsGamePanel.BUTTON_EUROPE_ID);
+        getRobot().clickOn(buttonNextTurn);
+        WaitForAsyncUtils.waitForFxEvents();
+        return EuropePortScreen.of(getContext(), expectedName);
+    }
+
+    public EuropePortScreen openEuroperPortByPressingKey() {
+        getRobot().press(KeyCode.E).sleep(200, TimeUnit.MILLISECONDS)
+                .release(KeyCode.E);
+        WaitForAsyncUtils.waitForFxEvents();
+        return EuropePortScreen.of(getContext());
+    }
+
+    /**
+     * Wait until the current animation releases the next turn button. The
+     * button may briefly become available between units in a multi-unit action.
+     *
+     * @throws TimeoutException if the next turn button stays disabled
+     */
+    public void waitWhileMoving() throws TimeoutException {
+        final String id = ButtonsGamePanel.BUTTON_NEXT_TURN_ID;
+        // Query on the FX thread while the scene graph may be changing.
+        WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS,
+                () -> WaitForAsyncUtils.asyncFx(() -> getNodeFinder()
+                        .lookup("#" + id).<Button>tryQuery()
+                        .map(button -> !button.isDisabled()).orElse(true))
+                        .get(60, TimeUnit.SECONDS));
+    }
+
+    /**
+     * Wait for an expected unit count after an asynchronous map action.
+     *
+     * @param location      map tile whose units are counted
+     * @param expectedCount unit count to wait for
+     * @throws TimeoutException if the unit count or movement does not settle
+     */
+    public void waitForNumberOfUnitsAt(final Location location,
+            final int expectedCount) throws TimeoutException {
+        WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS,
+                () -> getModel().getUnitsAt(location).size() == expectedCount);
+        waitWhileMoving();
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyNumberOfUnitInRightPanel(int expectedUnitsInRightPanel) {
+        final List<VBox> set = getListOfUnitsInRightPanel();
+        assertNotNull(set);
+        assertEquals(expectedUnitsInRightPanel, set.size(), String.format(
+                "Expected number of unit in right panel is '%s' but there are '%s'",
+                expectedUnitsInRightPanel, set.size()));
+    }
+
+    public void pressTab() {
+        getRobot().push(KeyCode.TAB);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void pressP() {
+        getRobot().push(KeyCode.P);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /**
+     * Assert that just unit at specific index is selected and other units are
+     * unselected.
+     *
+     * @param unitIndex required unit index
+     */
+    public void verifyThatUnitIsSelected(final int unitIndex) {
+        final int numberOfUnitsInRightPanel = getListOfUnitsInRightPanel()
+                .size();
+        for (int i = 0; i < numberOfUnitsInRightPanel; i++) {
+            final RightPanelUnit rightPanelUnit = getRightPanelUnit(i);
+            if (i == unitIndex) {
+                assertTrue(rightPanelUnit.isSelected());
+            } else {
+                assertFalse(rightPanelUnit.isSelected());
+            }
+        }
+    }
+
+    public void verifyOneUnitIsSelected() {
+        assertEquals(1, getListOfUnitsInRightPanel().stream().filter(
+                unit -> RightPanelUnit.of(getContext(), unit).isSelected())
+                .count());
+    }
+
+    public void verifyThatSelectedTileIs(final Location expectedSelectedTile) {
+        final SelectedTileManager selectedTileManager = getContext()
+                .getClassFromGuice(SelectedTileManager.class);
+        Preconditions.checkNotNull(selectedTileManager);
+
+        assertTrue(selectedTileManager.getSelectedTile().isPresent(),
+                "No tile is selected");
+        assertEquals(expectedSelectedTile,
+                selectedTileManager.getSelectedTile().get(),
+                String.format(
+                        "Tile at %s should be selected but tile %s is really selected.",
+                        expectedSelectedTile,
+                        selectedTileManager.getSelectedTile().get()));
+    }
+
+    public void verifyThatThereIsNoColonyAt(final Location colonyLocation) {
+        assertTrue(getModel().getColonyAt(colonyLocation).isEmpty(), String
+                .format("At %s should not be any colony.", colonyLocation));
+    }
+
+    public RightPanelUnit getRightPanelUnit(final int unitIndexInRightPanel) {
+        final VBox unitBox = getListOfUnitsInRightPanel()
+                .get(unitIndexInRightPanel);
+        return RightPanelUnit.of(getContext(), unitBox);
+    }
+
+    private List<VBox> getListOfUnitsInRightPanel() {
+        return Lists.newArrayList(
+                getNodeFinder().lookup(".unitPanel").queryAllAs(VBox.class));
+    }
+
+    public void verifyThatBuildColonyButtonIsHidden() {
+        assertFalse(isCssIdVisible("buildColony"));
+        closeUnitActions();
+    }
+
+    public void verifyThatPlowFieldButtonIsHidden() {
+        assertFalse(isCssIdVisible("plowField"));
+        closeUnitActions();
+    }
+
+    public void verifyThatPlowFieldButtonIsVisible() {
+        assertTrue(isCssIdVisible("plowField"));
+        closeUnitActions();
+    }
+
+    public void verifyShipPresentAt(final Location location) {
+        assertFalse(getModel().getUnitsAt(location).isEmpty(), String
+                .format("There should be at leat on ship at %s.", location));
+    }
+
+    public ShipWrapper getShipAt(final Location location) {
+        return new ShipWrapper((Ship) getModel().getUnitsAt(location).get(0));
+    }
+
+    public void verifyNumberOfUnitsAt(final Location location,
+            final int expectedCount) {
+        assertEquals(expectedCount, getModel().getUnitsAt(location).size());
+    }
+
+    public void verifyUnitAction(final Unit unit,
+            final UnitActionType expectedAction) {
+        assertEquals(expectedAction, unit.getAction().getType(),
+                "Unexpected unit action");
+    }
+
+    public void verifyUnitActionPoints(final Unit unit,
+            final int expectedPoints) {
+        assertEquals(expectedPoints, unit.getActionPoints(),
+                "Unexpected unit action points");
+    }
+
+    public void verifyUnitLocation(final Unit unit,
+            final Location expectedLocation) {
+        assertEquals(expectedLocation, unit.getLocation(),
+                "Unexpected unit location");
+    }
+
+    public void verifyMinimumArmedKingSoldiersOnMap(final int expectedMinimum) {
+        final long count = getModel().getAllUnits().stream()
+                .filter(unit -> unit.getOwner().isKing())
+                .filter(unit -> unit.isAtPlaceLocation() && unit.canAttack()
+                        && !unit.getType().isShip())
+                .count();
+        assertTrue(count >= expectedMinimum,
+                "Expected at least " + expectedMinimum
+                        + " armed royal soldiers on land, found " + count);
+    }
+
+    public void verifyNumberOfHumanUnitsAt(final List<Location> locations,
+            final int expectedCount) {
+        final long count = locations.stream()
+                .flatMap(location -> getModel().getUnitsAt(location).stream())
+                .filter(unit -> unit.getOwner().isHuman()).count();
+        assertEquals(expectedCount, count,
+                "Unexpected number of escaped human units");
+    }
+
+    public void verifyTurnReportPresent(
+            final Optional<ScreenTurnReport> report) {
+        assertTrue(report.isPresent(), "The turn report must be shown");
+    }
+
+    public void verifySavedGame(final File savedFile) {
+        assertTrue(savedFile.isFile(), "The saved game must exist");
+        assertTrue(savedFile.length() > 0, "The saved game must not be empty");
+    }
+
+}

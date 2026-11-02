@@ -1,0 +1,193 @@
+package org.akropia.test;
+
+import java.io.File;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.akropia.model.Calendar.Season;
+import org.akropia.page.ColonyScreen;
+import org.akropia.page.FreePlayAuditPage;
+import org.akropia.page.GamePage;
+import org.akropia.page.GameToolbarPage;
+import org.akropia.page.MainScreenLayoutPage;
+import org.akropia.page.SettingPage;
+import org.akropia.page.WelcomePage;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.application.ConditionalFeature;
+import javafx.application.Platform;
+
+/** Horizontal labels, freehand frames, seasonal art and colony navigation. */
+@ExtendWith(ApplicationExtension.class)
+public class TC_188_F221_game_toolbar_test extends AbstractAkropiaTest {
+    private StageStyle expectedWindowStyle;
+
+    @Start
+    private void start(final Stage stage) throws Exception {
+        expectedWindowStyle = Platform.isSupported(
+                ConditionalFeature.UNIFIED_WINDOW) ? StageStyle.UNIFIED
+                        : stage.getStyle();
+        initialize(stage, getClass(),
+                new File("src/test/scenarios/F221-game-toolbar.akropia"));
+    }
+
+    @Test
+    @Tag("local")
+    void TC_01_labels_focus_seasons_and_continue() throws Exception {
+        // The native window keeps its paper fill through screen changes.
+        final MainScreenLayoutPage layout = new MainScreenLayoutPage(
+                getContext());
+        layout.verifyPaperWindowConfiguration(expectedWindowStyle);
+        // Read all names and discover actions by hover and keyboard focus.
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        final GameToolbarPage toolbar = new GameToolbarPage(getContext());
+        layout.verifyPaperWindowConfiguration(expectedWindowStyle);
+        layout.resize(1500, 900);
+        toolbar.verifyControls(false, false);
+        // Hover keeps the status explanation without opening a popup.
+        toolbar.hoverRetire();
+        toolbar.verifyNoHoverPopup();
+        toolbar.verifyExplanation(
+                "Retire ends the game with your score. Scored play only, on your turn.",
+                null);
+        final double namedWidth = toolbar.getCurrentRowWindowWidth();
+
+        // The map heading explains its Latin name and restores prior context.
+        toolbar.leaveMapHeading();
+        layout.showContextMessage("Map context before the heading");
+        toolbar.hover("mapHeading");
+        toolbar.verifyMapHeading(false);
+        toolbar.verifyExplanation(
+                "Mappa Mundi is Latin for “map of the world”. Latin was widely used at the time.",
+                null);
+        layout.saveEvidence("r0341-mappa-mundi-hover.png");
+        toolbar.moveOutsideMapHeading();
+        toolbar.verifyExplanation("Map context before the heading", null);
+        toolbar.focusMapHeadingWithKeyboard();
+        toolbar.verifyMapHeading(true);
+        toolbar.activateFocusedButton();
+        toolbar.verifyUnitUnchanged(3, 3, 2);
+        toolbar.verifyExplanation(
+                "Mappa Mundi is Latin for “map of the world”. Latin was widely used at the time.",
+                null);
+        toolbar.hover("mapHeading");
+        toolbar.moveOutsideMapHeading();
+        toolbar.verifyMapHeading(true);
+        toolbar.verifyExplanation(
+                "Mappa Mundi is Latin for “map of the world”. Latin was widely used at the time.",
+                null);
+        toolbar.leaveMapHeading();
+
+        // Crossing the measured boundary hides all names together and restores
+        // them, with no second row or oscillation on another layout pulse.
+        layout.resize(namedWidth - 2, 900);
+        toolbar.verifyControls(false, true);
+        layout.showContextMessage("Resize boundary");
+        toolbar.verifyControls(false, true);
+        layout.resize(namedWidth + 2, 900);
+        toolbar.verifyControls(false, false);
+        layout.resize(900, 900);
+        toolbar.verifyControls(false, true);
+        toolbar.verifySeason(Season.autumn, 0xff71864b);
+        toolbar.hover("europe");
+        toolbar.verifyExplanation("Europe port. (E)", null);
+        toolbar.focusCenterWithTab();
+        toolbar.verifyExplanation("Find focused place. (C)", "center");
+        toolbar.verifyUnitUnchanged(3, 3, 2);
+        layout.saveEvidence("toolbar-one-row-keyboard-focus.png");
+        toolbar.activateFocusedButton();
+        toolbar.verifyUnitUnchanged(3, 3, 2);
+        layout.saveEvidence("toolbar-one-row-icons.png");
+        // Even an extreme resize leaves every icon accessible in one row.
+        layout.resize(300, 900);
+        toolbar.verifyControls(false, true);
+        layout.resize(1500, 900);
+        toolbar.verifyControls(false, false);
+        layout.saveEvidence("toolbar-one-row-labels.png");
+
+        // A real turn changes only the accent to winter blue; Continue keeps
+        // it.
+        game.nextTurnAndCloseDialogs();
+        toolbar.verifySeason(Season.winter, 0xff568b9b);
+        layout.saveEvidence("toolbar-compact-winter.png");
+        game.exitToMenu();
+        layout.verifyPaperWindowConfiguration(expectedWindowStyle);
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        layout.verifyPaperWindowConfiguration(expectedWindowStyle);
+        toolbar.verifySeason(Season.winter, 0xff568b9b);
+        game.nextTurnAndCloseDialogs();
+        toolbar.verifySeason(Season.spring, 0xff71864b);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_02_czech_narrow_window_and_empty_colonies() throws Exception {
+        // Start an ordinary annual game in Czech; all names fit a narrow
+        // window.
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        final MainScreenLayoutPage layout = new MainScreenLayoutPage(
+                getContext());
+        layout.verifyPaperWindowConfiguration(expectedWindowStyle);
+        settings.setCzechLanguage();
+        settings.goBack().startFreeGame();
+        layout.verifyPaperWindowConfiguration(expectedWindowStyle);
+        final GameToolbarPage toolbar = new GameToolbarPage(getContext());
+        layout.resize(900, 700);
+        toolbar.verifyControls(true, true);
+        toolbar.hover("mapHeading");
+        toolbar.verifyMapHeading(false);
+        toolbar.verifyExplanation(
+                "Mappa Mundi je latinsky „mapa světa“. Latina se tehdy běžně používala.",
+                null);
+
+        toolbar.verifySeason(null, 0xff71864b);
+        toolbar.hover("coloniesMenu");
+        toolbar.verifyExplanation("Vyberte kolonii, kterou chcete otevřít. (O)",
+                null);
+        layout.saveEvidence("toolbar-one-row-czech.png");
+
+        // Empty navigation explains itself and Escape leaves the game
+        // untouched.
+        toolbar.openColoniesWithKeyboard();
+        toolbar.verifyColonies(true, true, "Zatím nemáte žádnou kolonii");
+        toolbar.dismissColonies(false);
+        toolbar.verifyColonies(false, true, "Zatím nemáte žádnou kolonii");
+        toolbar.verifySeason(null, 0xff71864b);
+        layout.resize(1800, 700);
+        // The shared 1440px content cap keeps the longer Czech actions iconic.
+        toolbar.verifyControls(true, true);
+        layout.resize(900, 700);
+        toolbar.verifyControls(true, true);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_03_colony_dropdown_cancel_and_keyboard_choice() throws Exception {
+        // The styled dropdown lists real owned colonies; outside click cancels.
+        WelcomePage.of(getContext()).loadGame();
+        final GameToolbarPage toolbar = new GameToolbarPage(getContext());
+        new MainScreenLayoutPage(getContext()).resize(900, 700);
+        toolbar.verifyControls(false, true);
+        toolbar.openColoniesWithKeyboard();
+        toolbar.verifyColonies(true, false, "New Amsterdam");
+        final org.akropia.page.ContextMenuPage menu = new org.akropia.page.ContextMenuPage(
+                getContext());
+        menu.hoverItem(".menu-item");
+        menu.verifyDrawnSelection(".menu-item:focused");
+        menu.captureMenu("r0276-colony-focus.png");
+        toolbar.dismissColonies(true);
+        toolbar.verifyColonies(false, false, "New Amsterdam");
+
+        // Keyboard selection opens the named colony and normal return preserves
+        // it.
+        toolbar.openColoniesWithKeyboard();
+        toolbar.chooseFirstColony();
+        final ColonyScreen colony = ColonyScreen.of(getContext(),
+                "New Amsterdam");
+        colony.verifyColonyName("New Amsterdam");
+        colony.close();
+        toolbar.verifySeason(Season.autumn, 0xff71864b);
+    }
+}

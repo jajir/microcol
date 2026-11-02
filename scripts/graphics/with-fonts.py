@@ -13,10 +13,10 @@ def main():
     if len(sys.argv) < 2:
         raise SystemExit("Usage: with-fonts.py COMMAND [ARG ...]")
     root = Path(__file__).resolve().parents[2]
-    font = root / 'microcol-game/src/main/resources/fonts/PlaypenSans/PlaypenSans-Light.ttf'
+    font = root / 'akropia-game/src/main/resources/fonts/PlaypenSans/PlaypenSans-Light.ttf'
     if not font.is_file():
         raise SystemExit("Missing bundled Playpen Sans Light font")
-    with tempfile.TemporaryDirectory(prefix='microcol-fonts-') as tmp:
+    with tempfile.TemporaryDirectory(prefix='akropia-fonts-') as tmp:
         # The bundled directory holds further weights; expose a private copy of Light only.
         fonts = Path(tmp) / 'fonts'
         fonts.mkdir()

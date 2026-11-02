@@ -1,4 +1,4 @@
-# MicroCol
+# Akropia
 
 [![Model / JUnit counts](https://jajir.github.io/microcol/test-results-model.svg)](https://jajir.github.io/microcol/test-results.html)
 [![Full UI test counts](https://jajir.github.io/microcol/test-results-ui.svg)](https://jajir.github.io/microcol/test-results.html)
@@ -17,7 +17,9 @@ Colonisation remake
 [Current documentation](https://jajir.github.io/microcol/) is maintained in
 [`docs/`](docs/index.md) and published automatically from `main`.
 Development, integration and publication use `main`.
-The [`microcol-site`](microcol-site/) source module remains in the repository as
+The GitHub repository keeps its former name for now; check it out into the
+`akropia` directory with `git clone https://github.com/jajir/microcol.git akropia`.
+The [`akropia-site`](akropia-site/) source module remains in the repository as
 a development reference; it is excluded from website publication.
 See [modules and build outputs](docs/modules.md) and
 [writing and publishing documentation](docs/publishing.md).
@@ -25,6 +27,8 @@ See [modules and build outputs](docs/modules.md) and
 Build self-contained macOS and Linux packages with Maven and JDK 17; see
 [distribution build commands and outputs](docs/distribution.md).
 
-For everyday testing, install [MicroCol Dev](docs/development-builds.md) once.
+For everyday testing, install [Akropia Dev](docs/development-builds.md) once.
 It downloads the latest successful development build when opened; published
 installers are also available from the [development channel](https://github.com/jajir/microcol/releases/tag/dev).
+Akropia-named launchers and installers are pending the next verified publication;
+until then the channel holds builds published under the former product name.

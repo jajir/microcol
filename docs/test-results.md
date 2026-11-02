@@ -2,7 +2,7 @@
 
 The repository badges show two groups from the latest full nightly or manually
 requested regression of `main`: model/JUnit and full UI/support. The UI count is
-the complete `microcol-test` selection, not the small pre-commit smoke selection.
+the complete `akropia-test` selection, not the small pre-commit smoke selection.
 Java compatibility checks still run separately on relevant pushes; their
 [workflow status](https://github.com/jajir/microcol/actions/workflows/java-compatibility.yml?query=branch%3Amain)
 is also visible in the repository README. Their repeated platform executions

@@ -1,4 +1,4 @@
-name: microcol-ui
+name: akropia-ui
 
 services:
   ui-tests:
@@ -6,7 +6,7 @@ services:
     build: ./scripts/ui-tests
     init: true
     labels:
-      org.microcol.local-test: "${MICROCOL_LOCAL_TEST_OWNER:-unmanaged}"
+      org.akropia.local-test: "${AKROPIA_LOCAL_TEST_OWNER:-unmanaged}"
     mem_limit: 4g
     shm_size: 256mb
     environment:

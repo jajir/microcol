@@ -92,11 +92,11 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y jq unzip
       - name: Package launchers and test the updater and publication contract
         # The launcher dependency creates both archives before the Java tests run.
-        run: mvn -B -ntp -pl microcol-build-tests -am clean verify
+        run: mvn -B -ntp -pl akropia-build-tests -am clean verify
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: dev-launchers
-          path: microcol-launcher/target/dev-assets/*
+          path: akropia-launcher/target/dev-assets/*
           if-no-files-found: error
           compression-level: 0
           retention-days: 14
@@ -106,8 +106,8 @@ jobs:
         with:
           name: tests-build-tools
           path: |
-            microcol-build-tests/target/surefire-reports/
-            microcol-build-tests/target/failsafe-reports/
+            akropia-build-tests/target/surefire-reports/
+            akropia-build-tests/target/failsafe-reports/
           if-no-files-found: warn
           retention-days: 14
 
@@ -121,17 +121,17 @@ jobs:
         include:
           - platform: macos-arm64
             runner: macos-15
-            module: microcol-dist-macos
+            module: akropia-dist-macos
             verification: verify-macos
             architecture: aarch64
           - platform: macos-x86_64
             runner: macos-15-intel
-            module: microcol-dist-macos
+            module: akropia-dist-macos
             verification: verify-macos
             architecture: x64
           - platform: linux-x86_64
             runner: ubuntu-24.04
-            module: microcol-dist-linux
+            module: akropia-dist-linux
             verification: verify-linux
             architecture: x64
     runs-on: ${{ matrix.runner }}
@@ -156,8 +156,8 @@ jobs:
           PLATFORM: ${{ matrix.platform }}
           VERIFICATION_PROFILE: ${{ matrix.verification }}
         run: |
-          maven_command=(mvn -B -ntp -pl microcol-build-tests -am -P"$VERIFICATION_PROFILE" clean verify
-            -Dmicrocol.platform="$PLATFORM" -Dmicrocol.build.id="dev-${GITHUB_RUN_NUMBER}-${GITHUB_SHA:0:12}")
+          maven_command=(mvn -B -ntp -pl akropia-build-tests -am -P"$VERIFICATION_PROFILE" clean verify
+            -Dakropia.platform="$PLATFORM" -Dakropia.build.id="dev-${GITHUB_RUN_NUMBER}-${GITHUB_SHA:0:12}")
           if [[ "$RUNNER_OS" == Linux ]]; then
             xvfb-run -a --server-args='-screen 0 1280x1024x24' "${maven_command[@]}"
           else
@@ -176,10 +176,10 @@ jobs:
         with:
           name: tests-${{ matrix.platform }}
           path: |
-            microcol-game/target/surefire-reports/
-            microcol-build-tests/target/surefire-reports/
-            microcol-build-tests/target/failsafe-reports/
-            microcol-build-tests/target/native-smoke/
+            akropia-game/target/surefire-reports/
+            akropia-build-tests/target/surefire-reports/
+            akropia-build-tests/target/failsafe-reports/
+            akropia-build-tests/target/native-smoke/
           if-no-files-found: warn
           retention-days: 14
 
@@ -192,7 +192,7 @@ jobs:
       contents: write
     # Never interrupt an upload; the publisher also rejects an older promotion.
     concurrency:
-      group: microcol-dev-publication
+      group: akropia-dev-publication
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

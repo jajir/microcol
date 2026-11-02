@@ -1,0 +1,62 @@
+@import "Typography.css";
+@import "ToolbarControls.css";
+@import "ContextMenus.css";
+@import "ScrollBars.css";
+@import "GameScreenBars.css";
+
+/*
+ * JavaFx setting for whole Akropia.
+ * 
+ */
+ 
+
+/**
+ */
+
+/* disable focused border on component */
+.scroll-pane:focused {
+  -fx-background-color: -fx-focus-color,-fx-box-border,-fx-control-inner-background;
+  -fx-background-insets: 0.0,0.0,0.0,0.0;
+  -fx-background-radius: 0.0;
+}
+
+
+.label {
+}
+
+.bordered-titled-title {
+  -fx-padding: 10 0 0 0;
+}
+
+.bordered-titled-border {
+  -fx-content-display: top;
+  /*
+  -fx-background-color: lightgrey;
+   */
+}
+
+/* I don't know if it's not a bug. Popup background is about 100px bigger than real size of menu items.
+ * Popup on canvas cover with background surrounding area.
+ */
+.popup{
+  -fx-background-color: rgba(0, 0, 0, 0);
+}
+
+
+.cratePanel{
+	-fx-min-width: 50;
+	-fx-max-width: 50;
+	-fx-min-height: 50;
+	-fx-max-width: 50;
+}
+
+.cargo-amount {
+    -fx-background-color: #FFF9EC;
+    -fx-padding: 0 2;
+}
+
+.paneShip{
+	-fx-min-width: 50;
+}
+
+

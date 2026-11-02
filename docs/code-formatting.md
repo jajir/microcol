@@ -1,6 +1,6 @@
 # Formátování Java kódu ve VS Code
 
-Microcol používá stejný Eclipse formatter jako HestiaStore:
+Akropia používá stejný Eclipse formatter jako HestiaStore:
 [`.vscode/eclipse-formatter.xml`](../.vscode/eclipse-formatter.xml), profil
 `mujSunFormatter`. Soubor byl převzat beze změn **11. října 2026** z projektu
 HestiaStore, revize `6da25f8d2edfcb35fc090cb0bcf177026066b7a3`.
@@ -12,7 +12,7 @@ tento text je pouze jejich stručný přehled.
 
 ## Použití
 
-1. Otevřít ve VS Code kořenovou složku `microcol`, aby editor načetl projektové
+1. Otevřít ve VS Code kořenovou složku `akropia`, aby editor načetl projektové
    [`.vscode/settings.json`](../.vscode/settings.json).
 2. Mít povolené rozšíření **Language Support for Java by Red Hat** (`redhat.java`).
 3. Uložit Java soubor nebo spustit příkaz **Format Document**.
@@ -72,11 +72,11 @@ určen příkazem `git ls-files '*.java'`, bez generovaných souborů v `target/
 
 | Modul | Zkontrolované Java soubory | Změněné |
 | --- | --- | --- |
-| microcol-game | 745 | 594 |
-| microcol-test | 42 | 42 |
-| microcol-build-tests | 11 | 11 |
-| microcol-dist | 2 | 2 |
-| microcol-module | 2 | 1 |
+| akropia-game | 745 | 594 |
+| akropia-test | 42 | 42 |
+| akropia-build-tests | 11 | 11 |
+| akropia-dist | 2 | 2 |
+| akropia-module | 2 | 1 |
 
 Použit byl již nainstalovaný Eclipse JDT Core **3.47.0.v20260828-1141**
 z `redhat.java` 1.56.0, všech 394 voleb profilu `mujSunFormatter` a zdrojová
@@ -92,7 +92,7 @@ koncových mezer už výsledek nezmění. Scénáře TC zachovaly své identifik
 také ručně. Jde o změnu formátu, nikoli pravidel nebo očekávání testů.
 
 Lokálně na macOS/JDK 17 prošlo **603 herních testů**, bez selhání, chyb
-a vynechání, příkazem `mvn -B -ntp -pl microcol-game -am test`. Úplnou
+a vynechání, příkazem `mvn -B -ntp -pl akropia-game -am test`. Úplnou
 funkční sadu a nativní distribuce ověřuje povinný workflow publikované revize
 podle [funkčního kontraktu](functional-tests.md#spousteni-a-ochrana-publikace).
 Formátovač zůstává editorovou a jednorázově použitou pomůckou; tento úkol

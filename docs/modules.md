@@ -1,6 +1,6 @@
 # Maven modules and build outputs
 
-MicroCol has one parent POM and nine child modules. Seven are shared modules;
+Akropia has one parent POM and nine child modules. Seven are shared modules;
 the macOS or Linux profile selects the matching native distribution module on
 that host. The distribution pipeline assembles the game, makes it a Java module,
 links a Java runtime, and packages the result with `jpackage` and Maven Assembly.
@@ -11,11 +11,16 @@ records actual build and launch evidence. The linked POMs remain the source of
 truth, and [Building macOS and Linux distributions](distribution.md) owns the
 build commands and release limitations.
 
+Since [R-0389](requirements/R-0389.md) every module directory and artifact uses the
+`akropia-` prefix, the parent is `org.akropia:akropia-root`, Java packages start
+with `org.akropia` and the Java module is `akropia.game`. Only links that address
+the unrenamed GitHub repository and its Pages site keep the former name.
+
 For responsibilities inside the game and test modules, use the
 [Java package map](architecture.md). It distinguishes game rules, player state,
 AI decisions, UI, persistence and the existing cross-layer exceptions.
 
-The optional `ux-playtesting` Maven profile adds [microcol-ux-test](../microcol-ux-test/pom.xml). It owns the isolated Codex desktop player, its tooling checks and Docker lifecycle. It produces independent evidence in `microcol-ux-test/runs/`, outside Maven clean and ordinary regression. It has no game-model or TestFX dependency. See [UX playtesting](ux-playtesting.md).
+The optional `ux-playtesting` Maven profile adds [akropia-ux-test](../akropia-ux-test/pom.xml). It owns the isolated Codex desktop player, its tooling checks and Docker lifecycle. It produces independent evidence in `akropia-ux-test/runs/`, outside Maven clean and ordinary regression. It has no game-model or TestFX dependency. See [UX playtesting](ux-playtesting.md).
 
 ## Module overview
 
@@ -24,16 +29,16 @@ The optional `ux-playtesting` Maven profile adds [microcol-ux-test](../microcol-
 
 | Module | Responsibility | Main configured outputs |
 | --- | --- | --- |
-| [microcol-root](../pom.xml) | Parent and reactor: shared versions, compiler settings, plugin configuration, and the list of modules. Packaging is `pom`. | Parent POM; no application binary. |
-| [microcol-game](../microcol-game/pom.xml) | Game logic, JavaFX UI, resources, unit tests, the [ArchUnit model boundary](architecture.md#automaticka-hranice-modelu) (test scope only), and the `org.microcol.diagnostics` [local failure log](diagnostics.md) (bounded to three files of 5 MiB under the platform log directory, outside saved games). | `microcol-game/target/microcol-game-<version>.jar`; `microcol-game-<version>-jar-with-dependencies.jar`, `-sources.jar`, and `-javadoc.jar` in the same directory. |
-| [microcol-test](../microcol-test/pom.xml) | GUI and integration tests using TestFX and Monocle, plus shared test support. | `microcol-test/target/microcol-test-<version>.jar` for main-source support code; test results in `microcol-test/target/surefire-reports/`. This is not another game distribution. |
-| [microcol-module](../microcol-module/pom.xml) | Converts the game JAR with dependencies into the explicit Java module `microcol.game`. | `microcol-module/target/microcol-module-<version>.jar`, containing the game, dependencies, and `module-info.class`. |
-| [microcol-dist](../microcol-dist/pom.xml) | Uses the modular game to create a linked image with its own Java runtime. | `microcol-dist/target/dist/`, including `bin/launcher` on Unix; also a helper `microcol-dist-<version>.jar` in `target/`. |
-| [microcol-dist-macos](../microcol-dist-macos/pom.xml) | Packages the linked runtime as a macOS application, disk image and updater ZIP. Selected on macOS; packaging is `pom`. | `microcol-dist-macos/target/app-image/MicroCol.app`, DMG in `target/packages/`, and ZIP/DMG assets with SHA-256 sidecars in `target/dev-assets/`. |
-| [microcol-dist-linux](../microcol-dist-linux/pom.xml) | Packages the linked runtime as a Linux application, Debian installer, and portable archive. Selected on Linux; packaging is `pom`. | `microcol-dist-linux/target/app-image/MicroCol/`, DEB in `target/packages/`, portable TAR, and TAR/DEB assets with SHA-256 sidecars in `target/dev-assets/`. |
-| [microcol-launcher](../microcol-launcher/pom.xml) | Assembles the existing Bash updater, wrapper, metadata and icons into platform-independent bootstrap downloads. Packaging is `pom`; no game or Java runtime is bundled here. The macOS wrapper discards console output and adds only a fixed failure record to the [local diagnostic log](diagnostics.md#macos-launcher). | `microcol-launcher/target/dev-assets/MicroCol-Dev-macos.zip`, `MicroCol-Dev-linux.tar.gz`, and SHA-256 sidecars. |
-| [microcol-build-tests](../microcol-build-tests/pom.xml) | Java/JUnit checks for updater behavior and release publication; optional native package verification, Linux startup tests, and packaged diagnostic checks (start record, startup-failure record, record privacy and size). | `target/surefire-reports/`, `target/failsafe-reports/` and `target/native-smoke/` within the module. Its helper JAR is not a player download. |
-| [microcol-site](../microcol-site/pom.xml) | Legacy Maven website built from APT pages, static resources, and PlantUML diagrams. Packaging is `pom`. | `microcol-site/target/site/` during the Maven `site` lifecycle. No game binary. |
+| [akropia-root](../pom.xml) | Parent and reactor: shared versions, compiler settings, plugin configuration, and the list of modules. Packaging is `pom`. | Parent POM; no application binary. |
+| [akropia-game](../akropia-game/pom.xml) | Game logic, JavaFX UI, resources, unit tests, the [ArchUnit model boundary](architecture.md#automaticka-hranice-modelu) (test scope only), and the `org.akropia.diagnostics` [local failure log](diagnostics.md) (bounded to three files of 5 MiB under the platform log directory, outside saved games). | `akropia-game/target/akropia-game-<version>.jar`; `akropia-game-<version>-jar-with-dependencies.jar`, `-sources.jar`, and `-javadoc.jar` in the same directory. |
+| [akropia-test](../akropia-test/pom.xml) | GUI and integration tests using TestFX and Monocle, plus shared test support. | `akropia-test/target/akropia-test-<version>.jar` for main-source support code; test results in `akropia-test/target/surefire-reports/`. This is not another game distribution. |
+| [akropia-module](../akropia-module/pom.xml) | Converts the game JAR with dependencies into the explicit Java module `akropia.game`. | `akropia-module/target/akropia-module-<version>.jar`, containing the game, dependencies, and `module-info.class`. |
+| [akropia-dist](../akropia-dist/pom.xml) | Uses the modular game to create a linked image with its own Java runtime. | `akropia-dist/target/dist/`, including `bin/launcher` on Unix; also a helper `akropia-dist-<version>.jar` in `target/`. |
+| [akropia-dist-macos](../akropia-dist-macos/pom.xml) | Packages the linked runtime as a macOS application, disk image and updater ZIP. Selected on macOS; packaging is `pom`. | `akropia-dist-macos/target/app-image/Akropia.app`, DMG in `target/packages/`, and ZIP/DMG assets with SHA-256 sidecars in `target/dev-assets/`. |
+| [akropia-dist-linux](../akropia-dist-linux/pom.xml) | Packages the linked runtime as a Linux application, Debian installer, and portable archive. Selected on Linux; packaging is `pom`. | `akropia-dist-linux/target/app-image/Akropia/`, DEB in `target/packages/`, portable TAR, and TAR/DEB assets with SHA-256 sidecars in `target/dev-assets/`. |
+| [akropia-launcher](../akropia-launcher/pom.xml) | Assembles the existing Bash updater, wrapper, metadata and icons into platform-independent bootstrap downloads. Packaging is `pom`; no game or Java runtime is bundled here. The macOS wrapper discards console output and adds only a fixed failure record to the [local diagnostic log](diagnostics.md#macos-launcher). | `akropia-launcher/target/dev-assets/Akropia-Dev-macos.zip`, `Akropia-Dev-linux.tar.gz`, and SHA-256 sidecars. |
+| [akropia-build-tests](../akropia-build-tests/pom.xml) | Java/JUnit checks for updater behavior and release publication; optional native package verification, Linux startup tests, and packaged diagnostic checks (start record, startup-failure record, record privacy and size). | `target/surefire-reports/`, `target/failsafe-reports/` and `target/native-smoke/` within the module. Its helper JAR is not a player download. |
+| [akropia-site](../akropia-site/pom.xml) | Legacy Maven website built from APT pages, static resources, and PlantUML diagrams. Packaging is `pom`. | `akropia-site/target/site/` during the Maven `site` lifecycle. No game binary. |
 
 ## From game code to a distribution
 
@@ -65,23 +70,23 @@ tests run with the documentation checks. See [worker operations](ai/local-qwen.m
 for the contract and measured results.
 
 ```text
-microcol-game: JAR with dependencies
-    -> microcol-module: modular JAR
-        -> microcol-dist: application + Java runtime + launcher
-            -> microcol-dist-macos: MicroCol.app + DMG + ZIP
-            -> microcol-dist-linux: application directory + DEB + tar.gz
+akropia-game: JAR with dependencies
+    -> akropia-module: modular JAR
+        -> akropia-dist: application + Java runtime + launcher
+            -> akropia-dist-macos: Akropia.app + DMG + ZIP
+            -> akropia-dist-linux: application directory + DEB + tar.gz
 
-microcol-game -> microcol-test: GUI and integration tests
-microcol-launcher: Mac and Linux MicroCol Dev bootstrap archives
-microcol-launcher + optional native package -> microcol-build-tests: verification
-microcol-site: separate legacy website lifecycle
+akropia-game -> akropia-test: GUI and integration tests
+akropia-launcher: Mac and Linux Akropia Dev bootstrap archives
+akropia-launcher + optional native package -> akropia-build-tests: verification
+akropia-site: separate legacy website lifecycle
 ```
 
 ### Game and test products
 
 The game module creates its JAR with dependencies in `prepare-package`, using
-the Maven Assembly Plugin. Its manifest names `org.microcol.MicroCol` as the
-main class and `microcol.game` as the automatic module name. The ordinary JAR,
+the Maven Assembly Plugin. Its manifest names `org.akropia.Akropia` as the
+main class and `akropia.game` as the automatic module name. The ordinary JAR,
 source archive, and Javadoc archive are created during packaging. The JaCoCo
 report is also bound to `package` and writes to `target/site/jacoco/` when test
 execution data is available. Surefire results are in `target/surefire-reports/`.
@@ -97,7 +102,7 @@ when no tests are selected. The complete TestFX suite uses native Glass under
 Xvfb/Openbox on Linux/JDK 17 in the shared Docker environment, locally and in
 CI. Each container run exports logs and reports into a separate
 `target/docker-ui/run-XXXXXX/` directory; module Surefire reports are under
-`microcol-game/surefire-reports/` and `microcol-test/surefire-reports/` there.
+`akropia-game/surefire-reports/` and `akropia-test/surefire-reports/` there.
 This test image is not a player distribution. Monocle 17.0.10 supports targeted
 headless checks, but cannot exercise the modified goods drag used by TC05/TC06.
 Each test copies its initial settings
@@ -111,8 +116,8 @@ from the helper JAR.
 
 The module project copies the game JAR with dependencies during
 `generate-resources`. During `process-resources`,
-[compile.groovy](../microcol-module/src/main/groovy/compile.groovy) compiles
-[module-info.java](../microcol-module/src/main/java/module-info.java) against
+[compile.groovy](../akropia-module/src/main/groovy/compile.groovy) compiles
+[module-info.java](../akropia-module/src/main/java/module-info.java) against
 that JAR using Maven's JDK and the shared Java release setting, currently 11.
 The script passes arguments without shell splitting and stops on compiler errors.
 The Shade Plugin inserts the compiled descriptor into the final JAR during
@@ -127,7 +132,7 @@ to retain the bundled libraries' versioned classes and support JDK 17 linking.
 
 The JAR plugin recreates the input before each shading run, so repeated packaging
 does not reuse the previous shaded output. The
-`original-microcol-module-<version>.jar` backup is an intermediate product, not
+`original-akropia-module-<version>.jar` backup is an intermediate product, not
 another distribution. Generating `dependency-reduced-pom.xml` is disabled.
 
 ### Runtime image and native packaging
@@ -136,15 +141,15 @@ The distribution module copies the modular game into `target/modules/` and runs
 Maven's JDK `jlink` through the Exec Plugin in `prepare-package`. It deletes the
 old output first and waits for a successful link. The image is `target/dist/`,
 with launcher name `launcher` and main class
-`microcol.game/org.microcol.MicroCol`. The linked roots are `microcol.game` and
+`akropia.game/org.akropia.Akropia`. The linked roots are `akropia.game` and
 `java.naming`; the runtime includes their required Java modules. Debug data,
 headers, and man pages are omitted.
 
 This step is part of the normal build; the old `travis-ci` profile no longer
-controls it. `microcol-dist` also produces its helper JAR, and installing this
+controls it. `akropia-dist` also produces its helper JAR, and installing this
 artifact is no longer skipped.
 
-Each native module depends on `microcol-dist`, which orders the reactor when
+Each native module depends on `akropia-dist`, which orders the reactor when
 building with `-am`. During `package`, it invokes `jpackage` first for the
 application image and then for the DMG or DEB, reusing the linked runtime.
 Both modules use Maven Assembly to create updater archives, retaining executable
@@ -166,19 +171,19 @@ game distribution for documentation-only pushes.
 
 ### Launcher packaging and distribution checks
 
-`microcol-launcher` uses ordinary Maven resource and assembly configuration to
+`akropia-launcher` uses ordinary Maven resource and assembly configuration to
 package the shell sources from `scripts/launcher/`. The Mac bundle's `Info.plist`
 is a source file; it does not need a metadata-generation script. AntRun checksum
 tasks generate SHA-256 sidecars. These build-time files let the publisher verify
 that uploaded assets are the exact Maven outputs.
 
-`microcol-build-tests` runs behavior tests through Surefire during `test`. Its
+`akropia-build-tests` runs behavior tests through Surefire during `test`. Its
 launcher module dependency orders packaging before Failsafe inspects the actual
 bootstrap downloads during `verify`. The `verify-macos` and `verify-linux` profiles
 add the corresponding native module dependency and its Failsafe integration
 test. Use `verify` to execute the archive checks; stopping at `package`
 does not run Failsafe verification. The profiles are separate from the legacy
-TestFX suite in `microcol-test`. See [the distribution commands](distribution.md#build-commands).
+TestFX suite in `akropia-test`. See [the distribution commands](distribution.md#build-commands).
 
 GitHub publication is a separate, explicitly invoked shell operation using `gh`.
 The game distribution build, launcher checks and packaged-game tests do not need
@@ -187,15 +192,15 @@ Python. The documentation website continues to use MkDocs.
 ## Website versus application builds
 
 `package` and `install` belong to the application build lifecycle. Maven website
-generation uses the separate `site` lifecycle. In `microcol-site`, the inputs are
+generation uses the separate `site` lifecycle. In `akropia-site`, the inputs are
 under `src/site/`; PlantUML reads `src/site/plantuml/**/*.txt` and also writes to
 `target/site/`. The game and test modules have their own Maven report
 configuration.
 
-Keep `microcol-site` in its existing location. Its documentation remains a useful
+Keep `akropia-site` in its existing location. Its documentation remains a useful
 design and development reference even where it is outdated. GitHub Actions
-publishes only the Markdown documentation from `docs/` at `/microcol/`;
-`microcol-site` and previously generated Maven pages are excluded from publication.
+publishes only the Markdown documentation from `docs/` at `https://jajir.github.io/microcol/`;
+`akropia-site` and previously generated Maven pages are excluded from publication.
 
 The legacy GitHub site plugin is bound to `site-deploy`; `mvn site` alone does not
 invoke it. These Maven website sources and report plugins are separate from the
@@ -223,17 +228,17 @@ all machines running that OS; see the
 for signing, Linux system libraries and platform validation, and
 [development delivery](development-builds.md) for automatic publication.
 
-The legacy [release guide](../microcol-site/src/site/apt/release.apt) describes
+The legacy [release guide](../akropia-site/src/site/apt/release.apt) describes
 Java 8 and historical outputs. Keep it as a development reference; use the
 current distribution page for the Maven packaging commands and outputs.
 
-Native actors remain within `microcol-game`: the shared model owns native player/unit identity and turn boundaries, AI handles actionless native turns, and GUI renders only known identities. `microcol-test` covers the player-visible turn and Continue paths. No new module or build output is introduced; see the [package responsibility map](architecture.md) and [R-0151 evidence](functional-tests.md#r-0151-native-actors-and-home-linked-braves-2026-10-20).
+Native actors remain within `akropia-game`: the shared model owns native player/unit identity and turn boundaries, AI handles actionless native turns, and GUI renders only known identities. `akropia-test` covers the player-visible turn and Continue paths. No new module or build output is introduced; see the [package responsibility map](architecture.md) and [R-0151 evidence](functional-tests.md#r-0151-native-actors-and-home-linked-braves-2026-10-20).
 
-Rival trade remains in `microcol-game`: AI selects the bounded objective, while the model owns persistent identity, voyage and trade transactions. `microcol-test` verifies the real rival cycle and Continue. No module or build output was added; see [R-0091 evidence](functional-tests.md#r-0091-rival-trade-and-supplies-2026-10-21).
+Rival trade remains in `akropia-game`: AI selects the bounded objective, while the model owns persistent identity, voyage and trade transactions. `akropia-test` verifies the real rival cycle and Continue. No module or build output was added; see [R-0091 evidence](functional-tests.md#r-0091-rival-trade-and-supplies-2026-10-21).
 
-The production rival factory stays in `microcol-game`; the passive replacement exists only in `microcol-test` for TC101 human-expedition isolation. Default gameplay and AI-specific tests retain real rivals. See [regression evidence](functional-tests.md#second-batch-regression-repairs-2026-10-21).
+The production rival factory stays in `akropia-game`; the passive replacement exists only in `akropia-test` for TC101 human-expedition isolation. Default gameplay and AI-specific tests retain real rivals. See [regression evidence](functional-tests.md#second-batch-regression-repairs-2026-10-21).
 
-R-0065 work in progress (2026-10-21): `microcol-game` owns generated-world settings and geography/native population in `model.generation`, assembled through the existing scenario-loading path. `microcol-test` owns the setup/start/Continue scenario TC122. Targeted tests and visual review passed ([evidence](functional-tests.md#r-0065-generated-new-world-2026-10-21)); full batch regression remains pending. Build output responsibilities are unchanged.
+R-0065 work in progress (2026-10-21): `akropia-game` owns generated-world settings and geography/native population in `model.generation`, assembled through the existing scenario-loading path. `akropia-test` owns the setup/start/Continue scenario TC122. Targeted tests and visual review passed ([evidence](functional-tests.md#r-0065-generated-new-world-2026-10-21)); full batch regression remains pending. Build output responsibilities are unchanged.
 
 
 ## Main regression report outputs

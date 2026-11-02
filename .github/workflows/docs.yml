@@ -42,6 +42,8 @@ jobs:
         run: python -m unittest discover -s scripts/local-worker -p 'test_*.py'
       - name: Check documentation links and catalogue consistency
         run: python -m unittest discover -s scripts/docs -p 'test_*.py'
+      - name: Check tracked paths and contents for the former product name
+        run: python scripts/docs/name_audit.py
       - name: Check regression selection and report generation
         run: python -m unittest discover -s scripts/ci -p 'test_*.py'
       - name: Prepare the latest main test report and badges
@@ -56,7 +58,7 @@ jobs:
         run: python -m mkdocs build --strict
       - name: Include generated test badges in the same Pages deployment
         run: cp target/test-status/test-results-*.svg target/docs-site/
-      # MkDocs builds docs/ directly at the Pages root; microcol-site is excluded.
+      # MkDocs builds docs/ directly at the Pages root; akropia-site is excluded.
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:

@@ -1,0 +1,79 @@
+package org.akropia.model.unit;
+
+import org.akropia.model.ChainOfCommandStrategy;
+import org.akropia.model.store.UnitActionBuildRoadPo;
+import org.akropia.model.store.UnitActionClearForestPo;
+import org.akropia.model.store.UnitActionPlowFieldPo;
+import org.akropia.model.store.UnitActionFortifyPo;
+import org.akropia.model.store.UnitActionPo;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+
+/**
+ * Utility class converting unit action persistent object to model unit action
+ * object.
+ */
+public final class UnitActionConverter {
+
+    /**
+     * Private constructor. To prevent user from instantiate it.
+     */
+    private UnitActionConverter() {
+    }
+
+    private static ChainOfCommandStrategy<UnitActionPo, UnitAction> convertor = new ChainOfCommandStrategy<>(
+            ImmutableList.of(po -> {
+                if (UnitActionType.noAction.equals(po.getType())) {
+                    return new UnitActionNoAction();
+                }
+                return null;
+            }, po -> {
+                if (UnitActionType.sentry.equals(po.getType())) {
+                    return new UnitActionSentry();
+                }
+                return null;
+            }, po -> {
+                if (UnitActionType.fortify.equals(po.getType())) {
+                    final UnitActionFortifyPo saved = (UnitActionFortifyPo) po;
+                    Preconditions.checkArgument(saved.getFortified() != null,
+                            "Fortification state is missing");
+                    return new UnitActionFortify(saved.getFortified());
+                }
+                return null;
+            }, po -> {
+                if (UnitActionType.plowField.equals(po.getType())) {
+                    final UnitActionPlowField out = new UnitActionPlowField();
+                    out.setRemainingTurns(
+                            ((UnitActionPlowFieldPo) po).getRemainingTurns());
+                    return out;
+                }
+                return null;
+            }, po -> {
+                if (UnitActionType.clearForest.equals(po.getType())) {
+                    final UnitActionClearForest out = new UnitActionClearForest();
+                    out.setRemainingTurns(
+                            ((UnitActionClearForestPo) po).getRemainingTurns());
+                    return out;
+                }
+                if (UnitActionType.buildRoad.equals(po.getType())) {
+                    final UnitActionBuildRoad out = new UnitActionBuildRoad();
+                    out.setRemainingTurns(
+                            ((UnitActionBuildRoadPo) po).getRemainingTurns());
+                    return out;
+                }
+                return null;
+            }));
+
+    /**
+     * Convert persistent object to correct model object.
+     *
+     * @param unitActionPo required persistent object
+     * @return model object
+     */
+    public static UnitAction convert(final UnitActionPo unitActionPo) {
+        Preconditions.checkNotNull(unitActionPo, "unitActionPo is null");
+        return convertor.apply(unitActionPo);
+    }
+
+}

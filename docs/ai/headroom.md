@@ -13,11 +13,15 @@ does not choose the executor or authorize switching between these options.
 ## Configured scope
 
 1. Headroom **0.41.0**, installed with the `proxy,code` extras in
-   `~/.local/share/microcol/headroom/venv`, serves only `127.0.0.1:8787`.
+   `~/.local/share/$HEADROOM_PROFILE/headroom/venv`, serves only `127.0.0.1:8787`.
    `~/.local/bin/headroom` points into that environment. Its native persistent
-   service profile is `microcol`; macOS launchd starts it at login and restarts
-   it after exit. No Docker service, cloud proxy or shell-wide API override was
-   added.
+   service profile is `$HEADROOM_PROFILE`; macOS launchd starts it at login and
+   restarts it after exit. The profile was installed on 2026-10-18 under the
+   former product name, before [R-0389](../requirements/R-0389.md); that rename
+   did not reinstall, rename or migrate it. Set `HEADROOM_PROFILE` to the
+   installed profile name listed under `~/.headroom/deploy/`. Reinstalling the
+   service under `akropia` is a separate host change. No Docker service, cloud
+   proxy or shell-wide API override was added.
 2. `~/.codex/config.toml` has this **root-level** setting:
 
    ```toml
@@ -67,23 +71,23 @@ The applied native installation command was:
 
 ```sh
 headroom install apply --preset persistent-service --runtime python \
-  --scope provider --providers manual --target claude --profile microcol \
+  --scope provider --providers manual --target claude --profile "$HEADROOM_PROFILE" \
   --port 8787 --mode cache --backend anthropic --no-telemetry --no-rate-limit \
   --env HEADROOM_OUTPUT_SHAPER=0 --env HEADROOM_MEMORY_ENABLED=0 \
   --env HEADROOM_BEACON=off --env DO_NOT_TRACK=1 \
-  --env HF_HOME="$HOME/.local/share/microcol/headroom/huggingface-cache" \
-  --env TIKTOKEN_CACHE_DIR="$HOME/.local/share/microcol/headroom/tiktoken-cache"
+  --env HF_HOME="$HOME/.local/share/$HEADROOM_PROFILE/headroom/huggingface-cache" \
+  --env TIKTOKEN_CACHE_DIR="$HOME/.local/share/$HEADROOM_PROFILE/headroom/tiktoken-cache"
 ```
 
 This command configures Claude; the native Codex setting above is managed
 separately. The installation manifest is
-`~/.headroom/deploy/microcol/manifest.json`, with a generated launcher in that
-directory and `~/Library/LaunchAgents/com.headroom.microcol.plist`.
+`~/.headroom/deploy/$HEADROOM_PROFILE/manifest.json`, with a generated launcher in that
+directory and `~/Library/LaunchAgents/com.headroom.$HEADROOM_PROFILE.plist`.
 Do not copy credentials into project configuration or commit host backups.
 
 ```sh
-headroom install status --profile microcol
-headroom install restart --profile microcol
+headroom install status --profile "$HEADROOM_PROFILE"
+headroom install restart --profile "$HEADROOM_PROFILE"
 curl --fail --silent http://127.0.0.1:8787/health
 ```
 
@@ -114,8 +118,8 @@ files. Existing model/effort choices still apply.
 
 To disable persistently, first remove **only** the root `openai_base_url` entry
 that points to this proxy from `~/.codex/config.toml`. Then use
-`headroom install stop --profile microcol` to stop the service and restore its
-managed Claude settings; `headroom install remove --profile microcol` removes
+`headroom install stop --profile "$HEADROOM_PROFILE"` to stop the service and restore its
+managed Claude settings; `headroom install remove --profile "$HEADROOM_PROFILE"` removes
 the service installation. Confirm settings before opening new client sessions.
 The installer does not own our native Codex entry and cannot remove it for us.
 Do not overwrite newer settings with a whole old backup. A later service start
@@ -159,7 +163,7 @@ coordinator preparation/review and smoke requests. These historical copies did
 not run full game publication. The initial recommendation was more balanced
 pairs; the user subsequently chose general adoption with these limitations.
 
-Local evidence: `~/Library/Logs/Microcol/headroom-ab/r0101-pair1/`, including
+Local evidence: `$PRE_R0389_LOGS/headroom-ab/r0101-pair1/`, including
 `protocol.json`, `comparison.json`, both review records and raw test reports.
 
 ## Rollout verification — 2026-10-18
@@ -198,7 +202,7 @@ Local evidence: `~/Library/Logs/Microcol/headroom-ab/r0101-pair1/`, including
    game fixture, gameplay assertion, CI workflow or required gate changed.
 
 Local rollout evidence and private backups are in
-`~/Library/Logs/Microcol/headroom-rollout/2026-10-18/`. This change updates host
+`$PRE_R0389_LOGS/headroom-rollout/2026-10-18/`. This change updates host
 tooling and documentation only. Publication checks Pages and intentional
 [docs-only game-job skips](../development-builds.md#ci-filtering); it does not
 request a new game distribution.

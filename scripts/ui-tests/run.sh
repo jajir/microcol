@@ -11,8 +11,8 @@ export_results() {
     trap - EXIT
     set +e
     local source parent
-    for source in microcol-game/target/surefire-reports \
-        microcol-test/target/surefire-reports microcol-test/target/warehouse-qa; do
+    for source in akropia-game/target/surefire-reports \
+        akropia-test/target/surefire-reports akropia-test/target/warehouse-qa; do
         if [[ -d "$source" ]]; then
             parent=${source%/*}
             parent=${parent/\/target/}
@@ -39,7 +39,7 @@ tar -C /source --exclude=.git --exclude=target -cf - . \
     | tar -C /workspace -xf -
 
 # The snapshot excludes every target directory; keep normal Maven paths on the result mount.
-for module in microcol-game microcol-test; do
+for module in akropia-game akropia-test; do
     mkdir -p "$module/target" "$RESULT_DIR/$module/surefire-reports"
     ln -s "$RESULT_DIR/$module/surefire-reports" "$module/target/surefire-reports"
 done
@@ -51,7 +51,7 @@ xvfb-run -e "$RESULT_DIR/xvfb.log" -a \
     xcompmgr -n > "$RESULT_DIR/compositor.log" 2>&1 &
     compositor_pid=$!
     trap "kill $wm_pid $compositor_pid 2>/dev/null || true" EXIT
-    mvn -B -ntp -pl "${MICROCOL_TEST_MODULE:-microcol-test}" -am test -P ci "$@" \
+    mvn -B -ntp -pl "${AKROPIA_TEST_MODULE:-akropia-test}" -am test -P ci "$@" \
         -Dtestfx.robot=glass -Dtestfx.headless=false -Dprism.order=sw \
         -DsoundEnabled=false
 ' bash "$@" 2>&1 | tee "$RESULT_DIR/maven.log"

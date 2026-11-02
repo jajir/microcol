@@ -67,7 +67,7 @@ spouští autorský stylizovaný svět 100 × 80 polí podle
 [pravidla geografické mapy](gap-analysis.md#north-america-reference-map). Jde o
 původní herní mapu, ne o přesná zeměpisná data. Hráč volí národ i obtížnost.
 
-1. Editovatelný zdroj je `microcol-game/src/main/resources/maps/north-america.txt`:
+1. Editovatelný zdroj je `akropia-game/src/main/resources/maps/north-america.txt`:
    řádky terénu zapsané jako úseky kódů uložení (velké písmeno znamená les),
    řeky jako lomené čáry a domorodé osady. `NorthAmericaWorld` z něj při každé
    nové hře skládá stejný svět; zdroje surovin, bravové a pověsti používají
@@ -86,5 +86,5 @@ původní herní mapu, ne o přesná zeměpisná data. Hráč volí národ i obt
    Francouzi (91, 45), Angličané (98, 54) a Španělé (100, 64).
 
 Datový náhled celé mapy vzniká v modelovém testu `NorthAmericaWorldTest` jako
-`microcol-game/target/r0221/north-america-preview.svg`; snímek zatím není
+`akropia-game/target/r0221/north-america-preview.svg`; snímek zatím není
 převzat do dokumentace.

@@ -4,7 +4,7 @@ The project website is [jajir.github.io/microcol](https://jajir.github.io/microc
 It publishes only the Markdown documentation and assets from `docs/` on `main`,
 directly at that address. MkDocs renders the pages and builds navigation and
 search; GitHub Actions deploys the result. Publishing documentation does not
-build `microcol-site`, compile the game, run Maven tests, or create game distributions.
+build `akropia-site`, compile the game, run Maven tests, or create game distributions.
 The separate [development delivery workflow](development-builds.md) builds and
 publishes the game from the same pushed `main` revision when the change is not
 limited to `docs/`; [docs-only filtering](development-builds.md#ci-filtering)
@@ -240,12 +240,15 @@ From the repository root, with Python 3.9 or newer:
 python3 -m venv target/docs-venv
 target/docs-venv/bin/python -m pip install -r requirements-docs.txt
 target/docs-venv/bin/python -m unittest discover -s scripts/docs -p 'test_*.py'
+target/docs-venv/bin/python scripts/docs/name_audit.py
 target/docs-venv/bin/python -m mkdocs build --strict
 target/docs-venv/bin/python -m mkdocs serve
 ```
 
-The documentation-only acceptance checks are `scripts/docs` discovery and
-`mkdocs build --strict`; `serve` is an optional local preview. When completion-runner
+The documentation-only acceptance checks are `scripts/docs` discovery,
+`python scripts/docs/name_audit.py` and `mkdocs build --strict`. The audit
+reports every occurrence of the former product name outside the GitHub
+repository identity, its Pages base and pinned historical links (R-0389); `serve` is an optional local preview. When completion-runner
 or local-worker tooling changes, also run its corresponding test suite:
 
 ```sh
@@ -253,8 +256,8 @@ target/docs-venv/bin/python -m unittest discover -s scripts/codex -p 'test_*.py'
 target/docs-venv/bin/python -m unittest discover -s scripts/local-worker -p 'test_*.py'
 ```
 
-Open the address printed by `serve` (normally
-`http://127.0.0.1:8000/microcol/`). The complete static website is in
+Open the address printed by `serve` (normally `http://127.0.0.1:8000/`
+followed by the repository path from `site_url`). The complete static website is in
 `target/docs-site/`, with its homepage at `target/docs-site/index.html`.
 CI publishes this directory directly, without adding Maven pages.
 
@@ -288,7 +291,7 @@ The build uses Python 3.12, installs the pinned documentation tools, and execute
 the completion-runner and local worker launcher tests (without inference), the repository-link checks
 and `python -m mkdocs build --strict`. It
 uploads `target/docs-site/` as the Pages artifact. The dependent deployment job
-publishes only successful builds from `main` at `/microcol/`. Source-code links in
+publishes only successful builds from `main` at `https://jajir.github.io/microcol/`. Source-code links in
 a published page point to that build's commit rather than a moving branch. The
 page's source/edit shortcut points to `main`, where changes are prepared;
 local previews also use `main` for source links unless `DOCS_REVISION`
@@ -329,7 +332,7 @@ the artifact, permissions, and deployment requirements in
 
 ## Retained Maven source module
 
-Keep [`microcol-site`](../microcol-site/) at its existing repository path. Its
+Keep [`akropia-site`](../akropia-site/) at its existing repository path. Its
 APT pages, report configuration, and PlantUML sources remain a useful foundation
 for game development and design ideas, even where the content is outdated.
 Do not remove or relocate the source module without a user request.
@@ -338,7 +341,7 @@ The Pages workflow excludes this module and previously generated Maven pages.
 It neither builds the module nor copies a website snapshot from `gh-pages`.
 The retained `gh-pages` branch is not a publication source while Pages uses
 GitHub Actions. The published homepage and all current documentation come from
-`docs/`; they are no longer served under a separate `/microcol/docs/` prefix.
+`docs/`; they are no longer served under a separate `/akropia/docs/` prefix.
 
 See [Modules and build outputs](modules.md) for the retained module's role. Do not use
 `mvn site-deploy` or `mkdocs gh-deploy` for current documentation publication;
@@ -378,7 +381,7 @@ documentation in APT just to make it visible on the web.
 1. [R-0115](requirements/done/R-0115.md) records the documentation-only adoption
    of [Q-01–Q-11](gap-analysis.md#accepted-game-rules). The register
    distinguishes the user's fixed 1490 start, explicit manual rules, pinned
-   FreeCol research precedents and provisional MicroCol estimates. Remaining
+   FreeCol research precedents and provisional Akropia estimates. Remaining
    balance/fidelity questions have nonblocking revisit conditions.
 2. The change links 51 active requirements without changing their statuses.
    A direct audit preserves all 119 UC implementation states and changes 89
@@ -571,7 +574,7 @@ documentation in APT just to make it visible on the web.
    tools normally, discard all lumber and notify next turn. The starting preview
    is an expectation, with no second confirmation at completion. The shared
    work rule and UC-020 now agree; the last question is removed, status stays
-   `new`. This is an accepted MicroCol rule, not verified original-game parity.
+   `new`. This is an accepted Akropia rule, not verified original-game parity.
 2. A bounded Sol medium edit and caller review retained existing terrain-yield,
    cancellation, capacity and persistence acceptance. Local checks passed 21
    launcher unit tests without inference, nine documentation tests, strict
@@ -793,8 +796,8 @@ documentation in APT just to make it visible on the web.
 3. The downloaded `dev/manifest.tsv` names **`dev-171-333de9b6bf8f`** and
    the exact source SHA above. The [immutable release](https://github.com/jajir/microcol/releases/tag/dev-171-333de9b6bf8f)
    contains nonempty macOS ARM64/Intel and Linux distributions. The existing
-   [macOS Dev launcher](https://github.com/jajir/microcol/releases/download/dev/MicroCol-Dev-macos.zip)
-   selects this build at its next startup. This verification did not launch a
+   [macOS Dev launcher](https://github.com/jajir/microcol/releases/tag/dev), then
+   published under the former product name, selects this build at its next startup. This verification did not launch a
    native desktop play session; native packaging/smoke evidence belongs to CI.
 4. R-0070 and later second-batch work are excluded from this build. A later
    documentation-only commit recording this evidence does not replace the game
@@ -847,7 +850,7 @@ documentation in APT just to make it visible on the web.
    286.426 seconds against the 300-second budget. Complete reports and the
    source manifest are preserved locally under
    `target/verification/run-l2fjomct/`; completion record:
-   `~/Library/Logs/Microcol/completions/20261024T161047Z-0a97e661a446/`.
+   `$PRE_R0389_LOGS/completions/20261024T161047Z-0a97e661a446/`.
 3. All 19 completion-runner, 21 local-worker and nine documentation checks
    passed, as did strict MkDocs. The generated graphics page embeds an
    existing PNG reference at the correct relative path. Closing the status,
@@ -1216,7 +1219,7 @@ documentation in APT just to make it visible on the web.
 4. These are static design references, not SVG production assets, runtime screenshots, historical reconstruction or evidence of readability at final game icon size. Existing local acceptance policy exempts this documentation-only scope from model/JUnit, Docker UI and smoke runs. Documentation consistency, strict MkDocs and gallery review are the local completion checks; remote CI/Pages/distribution publication is not inspected.
 
 5. Local validation passed **9 documentation consistency tests** and a strict MkDocs build. Logs are `target/r0353/docs-tests.log` and `target/r0353/mkdocs.log`. In-app browser review at a 1280-pixel viewport verified all five expand/collapse controls and all ten loaded final images; the page had no horizontal overflow. Individual poster content was reviewed directly at its delivered size. No final-size runtime or mobile gallery usability claim is made. Final documentation-only diff review and model identity/chain coverage checks passed.
-6. The first partial index snapshot omitted non-document repository-link targets (including `microcol-site/`), so that snapshot's strict build failed during link checking. The setup log remains `target/r0353/mkdocs-incomplete-snapshot.log`. The final check uses a complete index snapshot, still excluding unrelated untracked files; no link or validation rule was weakened.
+6. The first partial index snapshot omitted non-document repository-link targets (including `akropia-site/`), so that snapshot's strict build failed during link checking. The setup log remains `target/r0353/mkdocs-incomplete-snapshot.log`. The final check uses a complete index snapshot, still excluding unrelated untracked files; no link or validation rule was weakened.
 ## R-0356 minimap refinement proposals — 2026-10-30
 
 1. Documentation-only proposal scope on baseline `8d1c44b4`: [R-0356](requirements/done/R-0356.md), three PNG mockups, the user-supplied reference, exact built-in ImageGen prompts and a comparison in [graphics](graphics.md#minimapa-nadpis-a-hladkost-pobrezi-30-rijna-2026). No runtime source, assets, data, tests or build configuration change.

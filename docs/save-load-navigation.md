@@ -63,7 +63,7 @@ Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověře
    z posledního úspěšného uložení nebo ověřeného a spuštěného načtení,
    porovnávaný strukturně; vyjmuté jsou jen název uložení a zaměřené pole mapy.
    Stav chrání jen tehdy, když jeho soubor stále existuje se stejnou velikostí
-   a časem změny. Snímky tahů leží v `saves/<id-partie>/turn-NNNNNNNNNN.microcol`;
+   a časem změny. Snímky tahů leží v `saves/<id-partie>/turn-NNNNNNNNNN.akropia`;
    pořadí určuje číslo zápisu ze jmen souborů. Nejnovější snímek se kopíruje do
    bodu Poslední tah, případně Předchozí desetiletí. Testy jsou připravené, ale
    tato kandidátní změna je dosud nespustila; viz kapitolu 3 obou požadavků.
@@ -114,7 +114,7 @@ samotná implementace jím není.
 8. [R-0382](requirements/R-0382.md), stav `ready for development`, vlastní ukládání a formát souboru.
    Výslovně zachovat osvědčený postup: herní stav se převede na perzistenční
    datový model a ten do JSONu; načtení provede opačný převod s modelovou
-   validací. Nový `.microcol` je pouze ZIP obálka pro `metadata.json`, dosavadní
+   validací. Nový `.akropia` je pouze ZIP obálka pro `metadata.json`, dosavadní
    herní JSON v `game.json` a `preview.png`. Seznam čte samostatná metadata;
    údaje pro hru nadále určuje úplný datový model. Zachová se atomický zápis,
    ochrana rozpracované hry a zákaz změny souboru pouhým otevřením.
@@ -124,7 +124,7 @@ samotná implementace jím není.
 
 ## Co už existuje
 
-1. MicroCol již má serializaci, atomický zápis a tři body obnovy: poslední
+1. Akropia již má serializaci, atomický zápis a tři body obnovy: poslední
    pozici, poslední tah a předchozí desetiletí. [R-0068](requirements/done/R-0068.md)
    nadále určuje jejich četnost a nastavení automatického ukládání.
 2. Načtení musí ověřit celý nový stav před výměnou rozehrané hry podle
@@ -150,6 +150,15 @@ rozhraní v angličtině; nejde o maketu. České ovládací texty pokrývá tak
 
 [Zdroj PlantUML](diagrams/save-load/navigation.puml)
 
+Po změně zdroje (naposledy nadpis v R-0389) se SVG obnovuje opakovatelně
+z kořene repozitáře; druhý příkaz obnoví vložený font stejně jako u ostatních
+diagramů této stránky:
+
+```sh
+plantuml -tsvg docs/diagrams/save-load/navigation.puml
+target/graphics-venv/bin/python scripts/graphics/svg-font.py docs/diagrams/save-load/navigation.svg
+```
+
 1. Hlavní nabídka zachovává Pokračovat, Načíst, Novou neomezenou hru, Kampaň,
    Síň slávy, Nastavení a Ukončit. Samostatná položka Body obnovy již
    není (R-0376); body obnovy ukáže filtr Body obnovy na stránce Načíst.
@@ -171,7 +180,7 @@ rozhraní v angličtině; nejde o maketu. České ovládací texty pokrývá tak
 [Zdroj PlantUML](diagrams/save-load/game-screens.puml)
 
 1. Diagram z 26. října 2026 zachycuje 13 tehdy popsaných hodnot
-   [výčtu Screen](../microcol-game/src/main/java/org/microcol/gui/screen/Screen.java).
+   [výčtu Screen](../akropia-game/src/main/java/org/akropia/gui/screen/Screen.java).
    Výčet má nyní 16 hodnot; kandidát R-0377 přidává `LOAD` pro stránku
    Načíst hru, kterou diagram zatím neukazuje.
    Kolonie, Evropa, nákup/prodej, statistiky, hlášení tahu a cíle zachovávají
@@ -199,11 +208,11 @@ rozhraní v angličtině; nejde o maketu. České ovládací texty pokrývá tak
    hra dostane vlastní identitu; načtení uložené hry ji zachová. Jména a
    identita přehledu jsou metadata obálky, nikoli náhrada povinných identit
    hráčů, kolonií či jednotek. Autorské scénáře je nemusejí mít.
-4. Spravované soubory jsou v `~/.microcol/saves/<identita-hry>/`;
-   rychlý soubor se jmenuje `quick.microcol`, ruční názvy souborů generuje
-   hra. Starší ruční soubory a body obnovy v `~/.microcol` jsou viditelné
+4. Spravované soubory jsou v `~/.akropia/saves/<identita-hry>/`;
+   rychlý soubor se jmenuje `quick.akropia`, ruční názvy souborů generuje
+   hra. Starší ruční soubory a body obnovy v `~/.akropia` jsou viditelné
    ve stejném přehledu. Export umožní zvolit vlastní soubor.
-5. **Otevřít složku uložení** otevře `~/.microcol` systémovým správcem souborů.
+5. **Otevřít složku uložení** otevře `~/.akropia` systémovým správcem souborů.
    Pokud to prostředí nepodporuje, hra oznámí chybu a zachová přehled.
 6. Ukládání a rychlé akce jsou běžně dostupné během připraveného lidského
    tahu. Model stále odmítá neúplnou přípravu tahu. Potvrzený zápis zobrazí

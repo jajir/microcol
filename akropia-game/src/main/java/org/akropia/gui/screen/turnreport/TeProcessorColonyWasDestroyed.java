@@ -1,0 +1,41 @@
+package org.akropia.gui.screen.turnreport;
+
+import java.util.function.Function;
+
+import org.akropia.i18n.I18n;
+import org.akropia.model.turnevent.TurnEvent;
+import org.akropia.model.turnevent.TurnEventColonyWasDestroyed;
+
+import com.google.inject.Inject;
+
+/**
+ * Define function that for input model turn event create front-end object.
+ */
+public class TeProcessorColonyWasDestroyed extends AbstractTeProcessor
+        implements Function<TurnEvent, TeItemSimple> {
+
+    @Inject
+    TeProcessorColonyWasDestroyed(final I18n i18n) {
+        super(i18n);
+    }
+
+    @Override
+    public TeItemSimple apply(final TurnEvent turnEvent) {
+        if (turnEvent instanceof TurnEventColonyWasDestroyed) {
+            final TurnEventColonyWasDestroyed te = (TurnEventColonyWasDestroyed) turnEvent;
+            final String message = getMessage(te.getColonyName());
+            return new TeItemSimple(
+                    te.getLostShips() == 0 ? message
+                            : message + " "
+                                    + getI18n().get(
+                                            TurnEvents.shipsLostWithColony,
+                                            te.getLostShips()));
+        }
+        return null;
+    }
+
+    private String getMessage(final String colonyName) {
+        return getI18n().get(TurnEvents.colonyWasDestroyed, colonyName);
+    }
+
+}

@@ -1,0 +1,253 @@
+package org.akropia.model.campaign;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
+import org.junit.jupiter.api.Test;
+import org.akropia.model.GameOverEvaluator;
+import org.akropia.model.GameOverResult;
+import org.akropia.model.Location;
+import org.akropia.model.Model;
+import org.akropia.model.Path;
+import org.akropia.model.Unit;
+import org.akropia.model.campaign.po.GameModelPo;
+import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.campaign.store.CampaignsDao;
+import org.akropia.model.event.GameFinishedEvent;
+import org.akropia.model.event.GameStartedEvent;
+import org.akropia.model.event.UnitMoveFinishedEvent;
+import org.mockito.ArgumentCaptor;
+
+import com.google.common.eventbus.EventBus;
+
+class MissionEventsTest {
+
+    private final EventBus eventBus = mock(EventBus.class);
+
+    @Test
+    void timeLimitEmitsTimeLimitOutcome() {
+        final String result = GameOverProcessors.TIME_IS_UP_PROCESSOR
+                .apply(gameOver(
+                        org.akropia.model.GameOverEvaluator.REASON_TIME_IS_UP));
+        assertEquals("ok", result);
+        final ArgumentCaptor<EventFinishMission> event = ArgumentCaptor
+                .forClass(EventFinishMission.class);
+        verify(eventBus).post(event.capture());
+        assertEquals(List.of(Missions.gameOver_timeIsUp),
+                event.getValue().getMessages());
+        assertFalse(event.getValue().isVictory());
+    }
+
+    @Test
+    void lostColoniesEmitLostColoniesOutcome() {
+        final String result = GameOverProcessors.NO_COLONIES_PROCESSOR
+                .apply(gameOver(
+                        org.akropia.model.GameOverEvaluator.REASON_NO_COLONIES));
+        assertEquals("ok", result);
+        final ArgumentCaptor<EventFinishMission> event = ArgumentCaptor
+                .forClass(EventFinishMission.class);
+        verify(eventBus).post(event.capture());
+        assertEquals(List.of(Missions.gameOver_allColoniesAreLost),
+                event.getValue().getMessages());
+    }
+
+    @Test
+    void unrelatedReasonEmitsNoOutcome() {
+        assertNull(GameOverProcessors.TIME_IS_UP_PROCESSOR
+                .apply(gameOver("other")));
+        assertNull(GameOverProcessors.NO_COLONIES_PROCESSOR
+                .apply(gameOver("other")));
+        verifyZeroInteractions(eventBus);
+    }
+
+    @Test
+    void eachRebellionLossReasonEmitsItsOwnMessage() {
+        // The five losses of R-0192 and R-0193, each with its own message that
+        // names why the rebellion failed.
+        final Map<String, Missions> expected = new LinkedHashMap<>();
+        expected.put(GameOverEvaluator.REASON_REBELLION_NO_COLONIES,
+                Missions.gameOver_rebellionNoColonies);
+        expected.put(GameOverEvaluator.REASON_REBELLION_ALL_COLONIES_CROWN,
+                Missions.gameOver_rebellionAllColoniesCrown);
+        expected.put(GameOverEvaluator.REASON_REBELLION_COASTAL_CROWN,
+                Missions.gameOver_rebellionCoastalCrown);
+        expected.put(GameOverEvaluator.REASON_REBELLION_RESIDENTS_CROWN,
+                Missions.gameOver_rebellionResidentsCrown);
+        expected.put(GameOverEvaluator.REASON_REBELLION_UNRESOLVED,
+                Missions.gameOver_rebellionUnresolved);
+        assertEquals(5, expected.values().stream().distinct().count());
+        for (final Map.Entry<String, Missions> loss : expected.entrySet()) {
+            reset(eventBus);
+            assertEquals("ok", GameOverProcessors.REBELLION_LOST_PROCESSOR
+                    .apply(gameOver(loss.getKey())));
+            final ArgumentCaptor<EventFinishMission> event = ArgumentCaptor
+                    .forClass(EventFinishMission.class);
+            verify(eventBus).post(event.capture());
+            assertEquals(List.of(loss.getValue()),
+                    event.getValue().getMessages(), loss.getKey());
+            // The victory processor never answers a loss.
+            assertNull(GameOverProcessors.REBELLION_WON_PROCESSOR
+                    .apply(gameOver(loss.getKey())));
+        }
+    }
+
+    @Test
+    void victoryAndTheOtherFreePlayEndsEmitTheirOwnMessage() {
+        final String victory = GameOverEvaluator.REASON_REBELLION_VICTORY;
+        assertEquals("ok", GameOverProcessors.REBELLION_WON_PROCESSOR
+                .apply(gameOver(victory)));
+        // The loss processor never answers a victory.
+        assertNull(GameOverProcessors.REBELLION_LOST_PROCESSOR
+                .apply(gameOver(victory)));
+        assertEquals("ok", GameOverProcessors.FREE_PLAY_ENDED_PROCESSOR
+                .apply(gameOver(GameOverEvaluator.REASON_FREE_PLAY_ENDED)));
+        assertEquals("ok", GameOverProcessors.RETIRED_PROCESSOR
+                .apply(gameOver(GameOverEvaluator.REASON_RETIRED)));
+        final ArgumentCaptor<EventFinishMission> ends = ArgumentCaptor
+                .forClass(EventFinishMission.class);
+        verify(eventBus, times(3)).post(ends.capture());
+        assertEquals(List.of(Missions.gameOver_rebellionVictory),
+                ends.getAllValues().get(0).getMessages());
+        assertEquals(List.of(Missions.gameOver_freePlayEnded),
+                ends.getAllValues().get(1).getMessages());
+        assertEquals(List.of(Missions.gameOver_retired),
+                ends.getAllValues().get(2).getMessages());
+        // Only the won rebellion is a success (R-0228).
+        assertTrue(ends.getAllValues().get(0).isVictory());
+        assertFalse(ends.getAllValues().get(1).isVictory());
+        assertFalse(ends.getAllValues().get(2).isVictory());
+    }
+
+    @Test
+    void everyEndOtherThanAWonMissionOrIndependenceIsNoVictory() {
+        // Each free-play and campaign end that is not a success states so
+        // explicitly; its messages are not inspected (R-0228).
+        final List<String> reasons = List.of(
+                GameOverEvaluator.REASON_TIME_IS_UP,
+                GameOverEvaluator.REASON_FREE_PLAY_ENDED,
+                GameOverEvaluator.REASON_RETIRED,
+                GameOverEvaluator.REASON_NO_COLONIES,
+                GameOverEvaluator.REASON_REBELLION_NO_COLONIES,
+                GameOverEvaluator.REASON_REBELLION_ALL_COLONIES_CROWN,
+                GameOverEvaluator.REASON_REBELLION_COASTAL_CROWN,
+                GameOverEvaluator.REASON_REBELLION_RESIDENTS_CROWN,
+                GameOverEvaluator.REASON_REBELLION_UNRESOLVED);
+        final FreePlay_0_mission freePlay = new FreePlay_0_mission(
+                context(mock(Model.class), new GameModelPo()),
+                new MissionGoalsEmpty());
+        for (final String reason : reasons) {
+            assertFalse(finish(freePlay, reason).isVictory(), reason);
+        }
+        assertTrue(finish(freePlay, GameOverEvaluator.REASON_REBELLION_VICTORY)
+                .isVictory());
+    }
+
+    @Test
+    void completedCampaignMissionsAreVictories() {
+        final String done = MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE;
+        final Default_0_mission tutorial = new Default_0_mission(
+                context(mock(Model.class), new GameModelPo()),
+                new Default_0_goals(new HashMap<>()));
+        final Default_1_mission second = new Default_1_mission(
+                context(mock(Model.class), new GameModelPo()),
+                new Default_1_goals(new HashMap<>()));
+        final Default_2_mission third = new Default_2_mission(
+                context(mock(Model.class), new GameModelPo()),
+                new Default_2_goals(new HashMap<>()));
+        final EventFinishMission tutorialEnd = finish(tutorial, done);
+        assertTrue(tutorialEnd.isVictory());
+        assertEquals(List.of(Missions.default_m0_gameOver),
+                tutorialEnd.getMessages());
+        assertTrue(finish(second, done).isVictory());
+        assertTrue(finish(third, done).isVictory());
+        // A lost campaign mission is still no victory.
+        assertFalse(
+                finish(third, GameOverEvaluator.REASON_TIME_IS_UP).isVictory());
+    }
+
+    /**
+     * Runs the mission's end processors in their order, as the game over
+     * evaluator does, and returns the one end it posts.
+     */
+    private EventFinishMission finish(final AbstractMission<?> mission,
+            final String reason) {
+        reset(eventBus);
+        for (final Function<GameOverProcessingContext, String> processor : mission
+                .prepareProcessors()) {
+            if (processor.apply(gameOver(reason)) != null) {
+                break;
+            }
+        }
+        final ArgumentCaptor<EventFinishMission> event = ArgumentCaptor
+                .forClass(EventFinishMission.class);
+        verify(eventBus).post(event.capture());
+        return event.getValue();
+    }
+
+    @Test
+    void freePlayIndependenceEmitsItsOutcome() {
+        final FreePlay_0_mission mission = new FreePlay_0_mission(
+                context(mock(Model.class), new GameModelPo()),
+                new MissionGoalsEmpty());
+        mission.onIndependenceWasDeclared();
+        final ArgumentCaptor<EventShowMessages> event = ArgumentCaptor
+                .forClass(EventShowMessages.class);
+        verify(eventBus).post(event.capture());
+        assertEquals(List.of(Missions.independenceWasDeclared_caption),
+                event.getValue().getMessages());
+    }
+
+    @Test
+    void tutorialStartsAndDiscoversTheContinentOnce() {
+        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
+                "/maps/default-campaign-mission-0-findNewWorld.akropia");
+        final Model model = Model.make(data.getModel(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        final Default_0_goals goals = new Default_0_goals(new HashMap<>());
+        final Default_0_mission mission = new Default_0_mission(
+                context(model, data), goals);
+        mission.onGameStarted(new GameStartedEvent(model));
+        final Unit unit = mock(Unit.class);
+        when(unit.getActionPoints()).thenReturn(1);
+        when(unit.isAtPlaceLocation()).thenReturn(true);
+        when(unit.getLocation()).thenReturn(Location.of(45, 15));
+        final UnitMoveFinishedEvent movement = new UnitMoveFinishedEvent(model,
+                unit,
+                Path.of(List.of(Location.of(45, 15), Location.of(44, 15))));
+        mission.onUnitMoveFinished(movement);
+        assertFalse(goals.getGoalFindNewWorld().isFinished());
+        when(unit.getLocation()).thenReturn(Location.of(19, 15));
+        final UnitMoveFinishedEvent near = new UnitMoveFinishedEvent(model,
+                unit,
+                Path.of(List.of(Location.of(18, 15), Location.of(19, 15))));
+        mission.onUnitMoveFinished(near);
+        assertTrue(goals.getGoalFindNewWorld().isFinished());
+        mission.onUnitMoveFinished(near);
+        final ArgumentCaptor<EventShowDialogWithMan> messages = ArgumentCaptor
+                .forClass(EventShowDialogWithMan.class);
+        verify(eventBus, times(2)).post(messages.capture());
+        assertEquals(List.of(Missions.default_m0_start),
+                messages.getAllValues().get(0).getMessages());
+        assertEquals(List.of(Missions.default_m0_continentInSight),
+                messages.getAllValues().get(1).getMessages());
+    }
+
+    private GameOverProcessingContext gameOver(final String reason) {
+        return new GameOverProcessingContext(new GameFinishedEvent(
+                mock(Model.class), new GameOverResult(reason)), eventBus);
+    }
+
+    private MissionCreationContext context(final Model model,
+            final GameModelPo data) {
+        return new MissionCreationContext(eventBus, model, data,
+                new CampaignManager(List.of(), mock(CampaignsDao.class)),
+                new CampaignMission(mock(MissionName.class), 0),
+                new ExternalGameOver("test"));
+    }
+}

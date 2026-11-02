@@ -1,0 +1,278 @@
+package org.akropia.ai;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.Duration;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.akropia.gui.screen.game.gamepanel.AnimationManager;
+import org.akropia.model.Colony;
+import org.akropia.model.EuropeanRelationState;
+import org.akropia.model.Location;
+import org.akropia.model.Model;
+import org.akropia.model.Player;
+import org.akropia.model.Unit;
+import org.akropia.model.campaign.MissionImpl;
+import org.akropia.model.campaign.po.GameModelPo;
+import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.unit.UnitFreeColonist;
+
+import com.google.common.eventbus.EventBus;
+import com.google.gson.Gson;
+
+class EuropeanRelationAiTest {
+    private Model model;
+    private Unit rival;
+    private Unit human;
+    private final SimpleUnitBehavior behavior = new SimpleUnitBehavior();
+
+    @BeforeEach
+    void prepareAdjacentArmies() {
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/free-play.akropia");
+        data.getModel().getGameManager().setGameStarted(true);
+        data.getModel().getGameManager().setCurrentPlayer("France");
+        model = Model.make(data.getModel(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        rival = model.getUnitById(6);
+        rival.placeToLocation(Location.of(17, 11));
+        human = model.getUnitById(0);
+        human.placeToLocation(Location.of(18, 11));
+        ((UnitFreeColonist) human).setHoldingWeapons(true);
+        assertEquals(1, rival.getActionPoints());
+    }
+
+    private Player france() {
+        return model.getPlayerByName("France");
+    }
+
+    private Player dutch() {
+        return model.getPlayerByName("Dutch");
+    }
+
+    private String snapshot() {
+        return new Gson().toJson(model.save());
+    }
+
+    private void moveWithRealAi() {
+        final SimpleAiPlayer ai = new SimpleAiPlayer(model, france(),
+                new AnimationManager(new EventBus()));
+        try {
+            assertTimeoutPreemptively(Duration.ofSeconds(5),
+                    () -> ai.moveUnit(rival));
+        } finally {
+            ai.stop();
+        }
+    }
+
+    @Test
+    void routineFightSelectionLeavesPeacefulNeighboursUntouched() {
+        final String before = snapshot();
+        behavior.tryToFight(rival);
+        assertEquals(before, snapshot());
+    }
+
+    @Test
+    void immediatePlannerDoesNotStopForAPeacefulAttackTarget() {
+        final Location start = rival.getLocation();
+        final int count = model.getAllUnits().size();
+        final String humanBefore = new Gson().toJson(human.save());
+        moveWithRealAi();
+        assertNotEquals(start, rival.getLocation());
+        assertEquals(0, rival.getActionPoints());
+        assertEquals(count, model.getAllUnits().size());
+        assertEquals(humanBefore, new Gson().toJson(human.save()));
+        assertEquals(EuropeanRelationState.PEACE,
+                model.getEuropeanRelation(france(), dutch()));
+    }
+
+    @Test
+    void immediatePlannerUsesExistingFightAtWar() {
+        model.declareHostilities(france(), dutch());
+        final int count = model.getAllUnits().size();
+        moveWithRealAi();
+        assertEquals(count, model.getAllUnits().size());
+        assertSame(human, model.getUnitById(human.getId()));
+        assertSame(rival, model.getUnitById(rival.getId()));
+        assertEquals(0, human.getActionPoints());
+        assertEquals(0, rival.getActionPoints());
+        assertTrue(!((UnitFreeColonist) human).isHoldingWeapons()
+                || !((UnitFreeColonist) rival).isHoldingWeapons());
+        assertEquals(EuropeanRelationState.WAR,
+                model.getEuropeanRelation(france(), dutch()));
+    }
+
+    @Test
+    void acceptedPeaceStopsRoutineFightingAndImmediateAttackPlanning() {
+        model.declareHostilities(france(), dutch());
+        model.acceptPeace(france(), dutch());
+        final String before = snapshot();
+        behavior.tryToFight(rival);
+        assertEquals(before, snapshot());
+        final Location start = rival.getLocation();
+        final int count = model.getAllUnits().size();
+        moveWithRealAi();
+        assertNotEquals(start, rival.getLocation());
+        assertEquals(count, model.getAllUnits().size());
+        assertEquals(0, rival.getActionPoints());
+        assertEquals(EuropeanRelationState.PEACE,
+                model.getEuropeanRelation(france(), dutch()));
+    }
+
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(booleans = { false, true })
+    void mountedWandererRechecksCombatAfterEachActualStep(
+            final boolean stopAfterStep) throws Exception {
+        rival.placeToLocation(Location.of(18, 12));
+        human.placeToLocation(Location.of(18, 14));
+        ((UnitFreeColonist) rival).setMounted(true);
+        ((org.akropia.model.AbstractUnit) rival).setActionPoints(3);
+        rival.getOwner().revealMapForUnit(rival);
+        model.declareHostilities(france(), dutch());
+        final int count = model.getAllUnits().size();
+        model = org.mockito.Mockito.spy(model);
+        final SimpleAiPlayer ai = new SimpleAiPlayer(model, france(),
+                new AnimationManager(new EventBus()));
+        // Keep the ordinary random direction deterministic, towards the enemy.
+        final java.lang.reflect.Field navigatorField = SimpleAiPlayer.class
+                .getDeclaredField("unitDirections");
+        navigatorField.setAccessible(true);
+        final java.lang.reflect.Field directionsField = UnitMoveNavigator.class
+                .getDeclaredField("lastDirections");
+        directionsField.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        final java.util.Map<Unit, org.akropia.model.Direction> directions = (java.util.Map<Unit, org.akropia.model.Direction>) directionsField
+                .get(navigatorField.get(ai));
+        directions.put(rival, org.akropia.model.Direction.south);
+        final java.util.concurrent.atomic.AtomicInteger steps = new java.util.concurrent.atomic.AtomicInteger();
+        model.addListener(new org.akropia.model.ModelListenerAdapter() {
+            @Override
+            public void onUnitMovedStepFinished(
+                    final org.akropia.model.event.UnitMovedStepFinishedEvent event) {
+                steps.incrementAndGet();
+            }
+        });
+        // Stop between model commands, after the real move has returned from
+        // event dispatch.
+        org.mockito.Mockito.doAnswer(invocation -> {
+            invocation.callRealMethod();
+            if (stopAfterStep) {
+                ai.stop();
+            }
+            return null;
+        }).when(model).moveUnit(org.mockito.ArgumentMatchers.eq(rival),
+                org.mockito.ArgumentMatchers.any(org.akropia.model.Path.class));
+        final String defenderBefore = new Gson().toJson(human.save());
+        try {
+            assertTimeoutPreemptively(Duration.ofSeconds(5),
+                    () -> ai.moveUnit(rival));
+        } finally {
+            ai.stop();
+        }
+        assertEquals(1, steps.get());
+        if (stopAfterStep) {
+            assertEquals(count, model.getAllUnits().size());
+            assertEquals(Location.of(18, 13), rival.getLocation());
+            assertTrue(rival.getActionPoints() > 0);
+            assertEquals(defenderBefore, new Gson().toJson(human.save()));
+            return;
+        }
+        assertEquals(count, model.getAllUnits().size());
+        assertSame(human, model.getUnitById(human.getId()));
+        assertSame(rival, model.getUnitById(rival.getId()));
+        assertTrue(!((UnitFreeColonist) human).isHoldingWeapons()
+                || !((UnitFreeColonist) rival).isMounted());
+        assertEquals(0, rival.getActionPoints());
+        assertEquals(0, human.getActionPoints());
+    }
+
+    private Colony undefendedHumanColony() {
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/free-play.akropia");
+        data.getModel().getGameManager().setGameStarted(true);
+        data.getModel().getGameManager().setCurrentPlayer("France");
+        final var colonyPo = data.getModel().getColonies().stream()
+                .filter(c -> c.getId() == 0).findFirst().orElseThrow();
+        colonyPo.setOwnerName("Dutch");
+        colonyPo.setLastColonialAffiliation("Dutch");
+        data.getModel().getUnits().stream().filter(u -> u.getId() == 4)
+                .findFirst().orElseThrow().setOwnerId("Dutch");
+        // A saved state whose first draw wins an ordinary land battle.
+        data.getModel().setCombatRandomState(winningCombatState());
+        model = Model.make(data.getModel(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        rival = model.getUnitById(6);
+        rival.placeToLocation(Location.of(18, 10));
+        rival.getOwner().revealMapForUnit(rival);
+        return model.getColonyById(0).orElseThrow();
+    }
+
+    /**
+     * First saved state whose first draw is below 0.3 and whose second draw
+     * promotes nobody; mirrors the model's generator.
+     */
+    private static long winningCombatState() {
+        final long gamma = 0x9E3779B97F4A7C15L;
+        for (long state = 0;; state++) {
+            if (draw(state + gamma) < 0.3 && draw(state + 2 * gamma) >= 0.25) {
+                return state;
+            }
+        }
+    }
+
+    private static double draw(final long advanced) {
+        long z = advanced;
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+        z ^= z >>> 31;
+        return (z >>> 11) * 0x1.0p-53;
+    }
+
+    @Test
+    void routineCaptureCannotTakeAPeacefulUnguardedColony() {
+        final Colony colony = undefendedHumanColony();
+        final String before = snapshot();
+        behavior.tryToFight(rival);
+        assertEquals(before, snapshot());
+    }
+
+    @Test
+    void acceptedPeaceClosesTheRoutineCapturePathAgain() {
+        final Colony colony = undefendedHumanColony();
+        model.declareHostilities(france(), dutch());
+        // Stepping in is never enough; the inhabitants' battle is offered.
+        assertFalse(rival.isPossibleToMoveAt(colony.getLocation()));
+        assertTrue(rival.isPossibleToAttackAt(colony.getLocation()));
+        model.acceptPeace(france(), dutch());
+        final String before = snapshot();
+        behavior.tryToFight(rival);
+        assertEquals(before, snapshot());
+    }
+
+    @Test
+    void wartimeRoutineAttackWinsTheCivilianBattleAndRetainsTheArmedForce() {
+        final Colony colony = undefendedHumanColony();
+        model.declareHostilities(france(), dutch());
+        behavior.tryToFight(rival);
+        assertSame(france(), colony.getOwner());
+        assertSame(france(), model.getUnitById(4).getOwner());
+        assertSame(rival, model.getUnitById(6));
+        assertTrue(((UnitFreeColonist) rival).isHoldingWeapons());
+        assertTrue(rival.isAtPlaceLocation());
+        assertEquals(colony.getLocation(), rival.getLocation());
+        assertEquals(0, rival.getActionPoints());
+    }
+
+    @Test
+    void routineCaptureSkipsAPortWhoseShipCannotEscape() {
+        final Colony colony = undefendedHumanColony();
+        model.declareHostilities(france(), dutch());
+        // The reference settlement has no adjacent sea for this vessel.
+        model.getUnitById(3).placeToLocation(colony.getLocation());
+        final String before = snapshot();
+        // The conquest would be non-atomic, so not even the battle starts.
+        behavior.tryToFight(rival);
+        assertEquals(before, snapshot());
+    }
+}

@@ -108,7 +108,7 @@ def summarize(directory, revision):
     if manifest['source']['revision'] != revision or manifest['scope'] != 'full':
         raise ValueError('Report is not a full regression of the requested revision')
     summary = json.loads((root / 'summary.json').read_text()) if (root / 'summary.json').exists() else {}
-    for key, module, folder in (('model', 'microcol-game', 'model'), ('ui', 'microcol-test', 'ui-01')):
+    for key, module, folder in (('model', 'akropia-game', 'model'), ('ui', 'akropia-test', 'ui-01')):
         group = collect_group(root / folder, manifest['expected'][module])
         outcome = root / folder / 'result.json'
         process = json.loads(outcome.read_text()) if outcome.exists() else {}

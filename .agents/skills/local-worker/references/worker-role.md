@@ -41,7 +41,7 @@ Routine UI verification uses the documented Docker/Xvfb/Openbox environment,
 not host-desktop interaction. A locked Mac does not require an unlock request
 for these tests; leave actual execution to the assigned caller.
 
-For MicroCol functional tests, follow `docs/functional-tests.md`: assertions in
+For Akropia functional tests, follow `docs/functional-tests.md`: assertions in
 page classes belong only in named `verify...` methods with relevant expected
 parameters. TC scenarios call these methods, never assertions directly; keep
 action/getter/constructor bodies separate from assertion bodies. Do not weaken

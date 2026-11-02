@@ -1,19 +1,19 @@
-MicroCol Dev launcher
+Akropia Dev launcher
 ====================
 
-macOS: extract MicroCol-Dev-macos.zip and move MicroCol Dev.app to Applications
+macOS: extract Akropia-Dev-macos.zip and move Akropia Dev.app to Applications
 or your own Applications folder. Open it to update and launch the game. The
-MicroCol Dev.command file is an alternative that shows progress in Terminal.
+Akropia Dev.command file is an alternative that shows progress in Terminal.
 The launcher and development game are unsigned. Use normal macOS approval if
 requested; the launcher never removes quarantine or bypasses Gatekeeper.
 A failed Finder launch adds one short record (time and exit status, no console
 text) to the local diagnostic log, which keeps at most three files of 5 MiB:
-  ~/Library/Logs/MicroCol/microcol.log
+  ~/Library/Logs/Akropia/akropia.log
 
-Linux x86-64: extract MicroCol-Dev-linux.tar.gz, then run:
-  ./microcol-dev/install.sh
-The installer adds MicroCol Dev to your application menu without root access.
-You can also run the extracted microcol-dev script directly. Bash, curl, tar,
+Linux x86-64: extract Akropia-Dev-linux.tar.gz, then run:
+  ./akropia-dev/install.sh
+The installer adds Akropia Dev to your application menu without root access.
+You can also run the extracted akropia-dev script directly. Bash, curl, tar,
 sha256sum, and the game's Linux system libraries (including GTK 3) are required.
 The launcher does not require Java, Python, or Maven on either platform.
 
@@ -31,15 +31,15 @@ CLI options:
   --version       Print the launcher version.
 
 Game versions are stored under:
-  macOS: ~/Library/Application Support/MicroCol Dev/versions/
-  Linux: ${XDG_DATA_HOME:-~/.local/share}/microcol-dev/versions/
-MICROCOL_DEV_ROOT may select another absolute cache directory. Existing game
-saves/preferences in ~/.microcol are untouched. Versions are immutable and are
+  macOS: ~/Library/Application Support/Akropia Dev/versions/
+  Linux: ${XDG_DATA_HOME:-~/.local/share}/akropia-dev/versions/
+AKROPIA_DEV_ROOT may select another absolute cache directory. Existing game
+saves/preferences in ~/.akropia are untouched. Versions are immutable and are
 not automatically deleted, so a running game keeps its files during an update.
 The state.tsv file records current, previous, and held-back build identifiers.
-For manual cleanup, close all running MicroCol games first, run --status, and
+For manual cleanup, close all running Akropia games first, run --status, and
 remove only older directories in versions/ that are neither Current nor Previous.
-Do not remove state.tsv, the active versions, or ~/.microcol as part of cleanup.
+Do not remove state.tsv, the active versions, or ~/.akropia as part of cleanup.
 
 Only application files are rolled back; saved games are not reverted. Game
 format changes can therefore affect older builds. This launcher follows the

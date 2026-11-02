@@ -1,0 +1,360 @@
+package org.akropia.model.generation;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+
+import org.akropia.model.Direction;
+import org.akropia.model.GoodsType;
+import org.akropia.model.Location;
+import org.akropia.model.MovementPoints;
+import org.akropia.model.NativeMarketRules;
+import org.akropia.model.NativeNation;
+import org.akropia.model.NativeRelations;
+import org.akropia.model.NativeTeachableSkills;
+import org.akropia.model.ResourceOverlay;
+import org.akropia.model.RiverSize;
+import org.akropia.model.Terrain;
+import org.akropia.model.TerrainType;
+import org.akropia.model.UnitType;
+import org.akropia.model.store.ModelPo;
+import org.akropia.model.store.NativeGoodsStockPo;
+import org.akropia.model.store.NativeSettlementPo;
+import org.akropia.model.store.PlaceMapPo;
+import org.akropia.model.store.PlayerPo;
+import org.akropia.model.store.UnitActionNoActionPo;
+import org.akropia.model.store.UnitPo;
+import org.akropia.model.store.VisibilityPo;
+import org.akropia.model.store.WorldMapPo;
+import org.akropia.model.unit.UnitNativeBrave;
+
+/**
+ * Native nations of a generated world, saved with the current identity schema:
+ * one computer participant per nation, one capital and optionally ordinary
+ * settlements, and home-linked braves beside each settlement. Nothing is an
+ * empty placeholder and no identity is invented outside that schema.
+ */
+final class GeneratedNatives {
+
+    /** Smallest distance in squares between two native settlements. */
+    static final int SETTLEMENT_SPACING = 7;
+
+    /** Nations with settlements: between this many and two more. */
+    static final int MIN_NATIONS = 3;
+
+    static final int EXTRA_NATIONS = 3;
+
+    /** Braves that start beside every settlement. */
+    static final int BRAVES = 2;
+
+    /** Brave IDs start above the expedition's units. */
+    static final int FIRST_BRAVE_ID = 100;
+
+    static final int CAPITAL_TREASURY = 2000;
+
+    static final int ORDINARY_TREASURY = 1000;
+
+    /** Authored native settlement square of a fixed world. */
+    static final class NativeSite {
+
+        private final NativeNation nation;
+
+        private final boolean capital;
+
+        private final Location location;
+
+        NativeSite(final NativeNation nation, final boolean capital,
+                final Location location) {
+            this.nation = nation;
+            this.capital = capital;
+            this.location = location;
+        }
+
+        NativeNation getNation() {
+            return nation;
+        }
+
+        boolean isCapital() {
+            return capital;
+        }
+
+        Location getLocation() {
+            return location;
+        }
+    }
+
+    private GeneratedNatives() {
+    }
+
+    /**
+     * Add the native nations, settlements and braves to an expedition model
+     * whose terrain is already generated.
+     *
+     * @param model  required model with the expedition and terrain
+     * @param random required generator of this attempt
+     * @throws IllegalStateException when the land has no room for the natives
+     */
+    static void place(final ModelPo model, final Random random) {
+        final GeneratedGrid grid = new GeneratedGrid(
+                model.getMap().getTerrainMap());
+        final List<Location> sites = grid.squaresWith(
+                terrain -> !terrain.isSea() && terrain != TerrainType.MOUNTAIN
+                        && terrain != TerrainType.ARCTIC);
+        sites.removeAll(model.getMap().getRiverMap().keySet());
+        Collections.shuffle(sites, random);
+        final List<NativeNation> nations = new ArrayList<>(
+                List.of(NativeNation.values()));
+        Collections.shuffle(nations, random);
+        final int count = MIN_NATIONS + random.nextInt(EXTRA_NATIONS);
+        final List<NativeSettlementPo> settlements = new ArrayList<>();
+        final List<Location> taken = new ArrayList<>();
+        for (final NativeNation nation : nations.subList(0, count)) {
+            settlements.add(settlement(settlements.size(), nation, true,
+                    site(sites, taken)));
+            if (random.nextBoolean()) {
+                settlements.add(settlement(settlements.size(), nation, false,
+                        site(sites, taken)));
+            }
+        }
+        populate(model, settlements, random);
+    }
+
+    /**
+     * Add native nations with settlements on authored squares. Every settlement
+     * must stand on walkable land that is no mountain, arctic or river square,
+     * and every nation needs exactly one capital.
+     *
+     * @param model  required model with the expedition and terrain
+     * @param sites  required settlements in identity order
+     * @param random required generator of the braves and markets
+     * @throws IllegalStateException when a site or its braves do not fit
+     */
+    static void placeAt(final ModelPo model, final List<NativeSite> sites,
+            final Random random) {
+        final GeneratedGrid grid = gridOf(model);
+        final Set<Location> rivers = model.getMap().getRiverMap().keySet();
+        final List<NativeSettlementPo> settlements = new ArrayList<>();
+        final Set<Location> taken = new HashSet<>();
+        for (final NativeSite site : sites) {
+            final TerrainType terrain = grid.terrainAt(site.getLocation());
+            if (!grid.isLand(site.getLocation())
+                    || terrain == TerrainType.MOUNTAIN
+                    || terrain == TerrainType.ARCTIC
+                    || rivers.contains(site.getLocation())
+                    || !taken.add(site.getLocation())) {
+                throw new IllegalStateException(
+                        "Illegal native settlement at " + site.getLocation());
+            }
+            settlements.add(settlement(settlements.size(), site.getNation(),
+                    site.isCapital(), site.getLocation()));
+        }
+        for (final NativeNation nation : NativeNation.values()) {
+            final long capitals = sites.stream().filter(
+                    site -> site.getNation() == nation && site.isCapital())
+                    .count();
+            final boolean present = sites.stream()
+                    .anyMatch(site -> site.getNation() == nation);
+            if (present && capitals != 1) {
+                throw new IllegalStateException(
+                        "Native nation needs one capital: " + nation);
+            }
+        }
+        populate(model, settlements, random);
+    }
+
+    private static GeneratedGrid gridOf(final ModelPo model) {
+        return new GeneratedGrid(model.getMap().getTerrainMap(),
+                model.getMap().getMaxX(), model.getMap().getMaxY());
+    }
+
+    /**
+     * Add the participants, braves and markets of placed settlements. A nation
+     * takes part once, in the order of its first settlement.
+     */
+    private static void populate(final ModelPo model,
+            final List<NativeSettlementPo> settlements, final Random random) {
+        final GeneratedGrid grid = gridOf(model);
+        final List<PlayerPo> players = new ArrayList<>();
+        final Set<NativeNation> joined = new HashSet<>();
+        final Set<Location> occupied = new HashSet<>();
+        for (final NativeSettlementPo settlement : settlements) {
+            if (joined.add(settlement.getNation())) {
+                players.add(player(settlement.getNation(),
+                        model.getMap().getMaxX(), model.getMap().getMaxY()));
+            }
+            occupied.add(settlement.getLocation());
+        }
+        final List<UnitPo> braves = new ArrayList<>();
+        int braveId = FIRST_BRAVE_ID;
+        for (final NativeSettlementPo settlement : settlements) {
+            final List<Location> around = new ArrayList<>();
+            for (final Location neighbour : grid
+                    .neighbours(settlement.getLocation())) {
+                if (grid.isLand(neighbour)) {
+                    around.add(neighbour);
+                }
+            }
+            Collections.shuffle(around, random);
+            int placed = 0;
+            for (final Location at : around) {
+                if (placed == BRAVES) {
+                    break;
+                }
+                if (occupied.add(at)) {
+                    braves.add(brave(braveId++, settlement, at));
+                    placed++;
+                }
+            }
+            if (placed < BRAVES) {
+                throw new IllegalStateException(
+                        "No room for the braves of a settlement");
+            }
+        }
+        // Drawn after the layout, so the braves of a seed never move. The
+        // market
+        // draws nothing, so the teaching skill of a seed is the same as before.
+        final WorldMapPo map = model.getMap();
+        for (final NativeSettlementPo settlement : settlements) {
+            final List<Terrain> around = surroundings(map, grid,
+                    settlement.getLocation());
+            settlement.setTeachableSkill(
+                    NativeTeachableSkills.choose(around, random).name());
+            settlement.setOfferedGoods(offeredStock(around));
+            settlement.setWantedGoods(wantedGoods(around));
+            settlement.setTrade(new ArrayList<>());
+        }
+        model.getGameManager().getPlayers().addAll(players);
+        model.setNativeSettlements(settlements);
+        model.setNativeSettlementKnowledge(new ArrayList<>());
+        model.setNativeContacts(new ArrayList<>());
+        model.setNativeLocalAlarm(NativeRelations.freshLocalAlarm(settlements));
+        model.getUnits().addAll(braves);
+    }
+
+    /**
+     * @return the first free site at least {@link #SETTLEMENT_SPACING} away
+     *         from every taken site; the site is then taken
+     */
+    private static Location site(final List<Location> sites,
+            final List<Location> taken) {
+        for (final Location candidate : sites) {
+            if (taken.stream().allMatch(other -> other
+                    .getDistanceChebyshev(candidate) >= SETTLEMENT_SPACING)) {
+                taken.add(candidate);
+                return candidate;
+            }
+        }
+        throw new IllegalStateException("No room for a native settlement");
+    }
+
+    /**
+     * @return the square of a settlement and its on-map neighbours, with the
+     *         saved trees and resources that change its natural output
+     */
+    private static List<Terrain> surroundings(final WorldMapPo map,
+            final GeneratedGrid grid, final Location centre) {
+        final Set<Location> trees = map.getTreeSet();
+        final Map<Location, ResourceOverlay> resources = map.getResourceMap();
+        final Map<Location, RiverSize> rivers = map.getRiverMap();
+        final List<Terrain> out = new ArrayList<>();
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                final Location at = Location.of(centre.getX() + dx,
+                        centre.getY() + dy);
+                if (!grid.contains(at)) {
+                    continue;
+                }
+                final Terrain terrain = new Terrain(at, grid.terrainAt(at));
+                if (trees.contains(at)) {
+                    terrain.setHasTrees(true);
+                }
+                terrain.setRiverSize(rivers.getOrDefault(at, RiverSize.NONE));
+                terrain.setResourceOverlay(
+                        resources.getOrDefault(at, ResourceOverlay.NONE));
+                out.add(terrain);
+            }
+        }
+        return out;
+    }
+
+    /**
+     * @return the offered goods of a new settlement, each at its initial stock
+     */
+    private static List<NativeGoodsStockPo> offeredStock(
+            final List<Terrain> surroundings) {
+        final List<NativeGoodsStockPo> out = new ArrayList<>();
+        for (final GoodsType goods : NativeMarketRules
+                .offeredGoods(surroundings)) {
+            final NativeGoodsStockPo stock = new NativeGoodsStockPo();
+            stock.setGoods(goods.name());
+            stock.setStock(NativeMarketRules.INITIAL_STOCK);
+            out.add(stock);
+        }
+        return out;
+    }
+
+    /**
+     * @return the goods names a new settlement wants to buy, in demand order
+     */
+    private static List<String> wantedGoods(final List<Terrain> surroundings) {
+        final List<String> out = new ArrayList<>();
+        for (final GoodsType goods : NativeMarketRules
+                .wantedGoods(surroundings)) {
+            out.add(goods.name());
+        }
+        return out;
+    }
+
+    private static NativeSettlementPo settlement(final int id,
+            final NativeNation nation, final boolean capital,
+            final Location at) {
+        final NativeSettlementPo out = new NativeSettlementPo();
+        out.setId(id);
+        out.setNation(nation);
+        out.setSettlementClass(nation.getSettlementClass());
+        out.setCapital(capital);
+        out.setLocation(at);
+        out.setTreasury(capital ? CAPITAL_TREASURY : ORDINARY_TREASURY);
+        return out;
+    }
+
+    private static PlayerPo player(final NativeNation nation, final int maxX,
+            final int maxY) {
+        final PlayerPo player = new PlayerPo();
+        player.setName(nation.name());
+        player.setComputer(true);
+        player.setGold(0);
+        player.setDeclaredIndependence(false);
+        player.setNativeNation(nation);
+        player.setUnitPurchaseCounts(new HashMap<>());
+        final VisibilityPo visibility = new VisibilityPo();
+        visibility.setVisibility(Set.of(), maxX, maxY);
+        player.setVisible(visibility);
+        return player;
+    }
+
+    private static UnitPo brave(final int id,
+            final NativeSettlementPo settlement, final Location at) {
+        final UnitPo brave = new UnitPo();
+        brave.setId(id);
+        brave.setType(UnitType.BRAVE);
+        brave.setOwnerId(settlement.getNation().name());
+        brave.setAction(new UnitActionNoActionPo());
+        brave.setMovementThirds(
+                MovementPoints.ofPoints(UnitType.BRAVE.getSpeed()));
+        final PlaceMapPo place = new PlaceMapPo();
+        place.setLocation(at);
+        place.setOrientation(Direction.west);
+        brave.setPlaceMap(place);
+        brave.setNativeHomeSettlementId(settlement.getId());
+        brave.setNativeHomeless(false);
+        brave.setNativeRole(UnitNativeBrave.Role.BRAVE.name());
+        return brave;
+    }
+
+}

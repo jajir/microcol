@@ -1,0 +1,45 @@
+package org.akropia.gui;
+
+import org.akropia.i18n.I18n;
+import org.akropia.model.Difficulty;
+import org.akropia.model.ResourceOverlay;
+import org.akropia.model.TerrainType;
+import org.akropia.model.UnitType;
+
+import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+
+/**
+ * Helps localize messages.
+ */
+public final class LocalizationHelper {
+
+    /**
+     * Localization class.
+     */
+    private final I18n i18n;
+
+    @Inject
+    public LocalizationHelper(final I18n i18n) {
+        this.i18n = Preconditions.checkNotNull(i18n);
+    }
+
+    public String getTerrainName(final TerrainType terrainType) {
+        return i18n.get(TerrainTypes.getTerrainName(terrainType));
+    }
+
+    public String getResourceOverlayName(final ResourceOverlay overlay) {
+        return i18n.get(ResourceOverlayNames.getName(overlay));
+    }
+
+    public String getDifficultyName(final Difficulty difficulty) {
+        Preconditions.checkNotNull(difficulty);
+        return i18n.get(Loc.valueOf("difficulty_"
+                + difficulty.name().toLowerCase(java.util.Locale.ROOT)));
+    }
+
+    public String getUnitName(final UnitType unitType) {
+        return i18n.get(UnitTypes.getUnitName(unitType));
+    }
+
+}
