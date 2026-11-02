@@ -1245,3 +1245,10 @@ skutečného hráče; výsledky patří do [funkční evidence](functional-tests
 
 1. [R-0347](requirements/done/R-0347.md): pokud se názvy vejdou, akční tlačítka mají vedle ikony celý text. Evropský nákup používá **Buy units / Koupit jednotky**, odlišený od **Recruit / Nábor**. Hráč tak pozná cíl před otevřením nabídky.
 2. Při nedostatku místa zůstává stávající přepnutí horní lišty na ikony; návrat do hry si ponechá text. Rozšíření okna názvy obnoví. Nákup, zrušení a jejich výsledky se nemění. Jde o dohodnuté chování, skutečnou přejímku uvádí [funkční evidence](functional-tests.md#r-0347-europe-action-labels-2026-10-29).
+
+## Upozornění před koncem tahu
+
+1. Dohodnuto 2026-11-02, dosud neimplementováno: [R-0398](requirements/R-0398.md) zavádí při každém Next turn společný dialog pro aktuální upozornění. Bez upozornění tah pokračuje rovnou. Více druhů a kolonií se zobrazí pohromadě; další druhy se určí později.
+2. První kontrola označí každého vlastního kolonistu na políčku vlastní kolonie bez práce uvnitř či na okolních polích a bez Fortify, Sentry nebo jiného zaměstnávajícího rozkazu, bez ohledu na způsob příchodu. Vyčerpaný pohyb není výjimkou; cestující na lodi se nezahrnují. Pozastavené a zablokované rozkazy zbývá rozhodnout v R-0398.
+3. „Zpět“, Escape a zavření dialogu ponechají tah rozehraný. Odkaz u upozornění otevře příslušnou kolonii a umožní přidělit práci. „Přesto pokračovat“ potvrdí jen právě ukončovaný tah; nevyřešené upozornění se v příštím tahu znovu objeví. Kontrola nic sama nemění a práci nepřiděluje.
+4. Jde o dohodnutý návrh navazující na uživatelovo pozorování UX-24, nikoli důkaz implementace nebo úspěšný hráčský test. Podrobné přijetí a nevyřešená hranice nečinnosti jsou v R-0398.

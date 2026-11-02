@@ -1113,3 +1113,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Jednorázová plavba Go to — 2026-11-02
 
 1. [R-0396](R-0396.md), primární oblast A05, závislosti A03/A01/A04/A06. Status: new. Objectives (O) uvolní G pro výběr Evropy nebo vlastního přístavu, trvalou plavbu a jednorázové zprávy Turn reportu o příjezdu či přerušení. Nabídka kolonií přejde na I bez Shiftu; P zůstává orání. Otevřené otázky jsou zodpovězené; implementace nezahájena a technická příprava zbývá.
+
+## Upozornění před koncem tahu — 2026-11-02
+
+1. [R-0398](R-0398.md), primární oblast A04, závislosti A03/A07/A05. Status: new. Společný dialog při každém Next turn shrne aktuální upozornění, umožní návrat či otevření kolonie a vědomé pokračování. První kontrola pokrývá nečinné kolonisty bez práce a zaměstnávajícího rozkazu; vyčerpaný pohyb je nevylučuje, cestující na lodi se nezahrnují. Posouzení pozastavených a zablokovaných rozkazů zbývá otevřené. Implementace není zahájena.
