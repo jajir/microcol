@@ -3,13 +3,14 @@ package org.akropia.gui.buttonpanel;
 import org.akropia.i18n.MessageKeyResource;
 
 public enum Buttons implements MessageKeyResource {
+    endTurnWarningTitle, endTurnWarningCaption, endTurnProceed, endTurnBack,
     mapHeadingExplanation, toolbarColonies, toolbarCongress, toolbarCenter,
     toolbarStatistics, toolbarTurnReport, toolbarGoals, toolbarHelp,
     toolbarEurope, toolbarNextTurn, toolbarRetire, toolbarExit,
     toolbarIndependence, coloniesExplanation, congressExplanation,
     nextTurnExplanation, waitUnavailable, skipUnavailable, sentryUnavailable,
-    fortifyUnavailable, goToColonyUnavailable, chooseUnit, cancelPlowingLabel,
-    cancelClearingLabel, cancelRoadLabel,
+    fortifyUnavailable, goToColonyUnavailable, goToEurope, chooseUnit,
+    cancelPlowingLabel, cancelClearingLabel, cancelRoadLabel,
 
     buttonColonies, noColonies, buttonStatistics, buttonCenter,
     buttonTurnReport, buttonGoals, buttonHelp, buttonExit, buttonNextTurn,

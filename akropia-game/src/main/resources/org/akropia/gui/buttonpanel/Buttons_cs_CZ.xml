@@ -7,7 +7,7 @@
 	<entry key="buttonStatistics">Statistiky - jak se daří. (R)</entry>
 	<entry key="buttonCenter">Najít místo jehož detaily jsou v pravém panelu. (C)</entry>
 	<entry key="buttonTurnReport">Upozornění na důležité události. (T)</entry>
-	<entry key="buttonGoals">Cíle ve hře. (G)</entry>
+	<entry key="buttonGoals">Cíle ve hře. (O)</entry>
 	<entry key="buttonHelp">Nápověda - Colonizopedie. (H)</entry>
 	<entry key="buttonExit">Otevřít herní nabídku (Esc)</entry>
 	<entry key="buttonNextTurn">Další tah</entry>
@@ -17,7 +17,7 @@
 	<entry key="buttonBuildColony">Vybudovat novou kolonii. (B)</entry>
 	<entry key="buttonDeclareIndependence">Vyhlásit nezávislost na králi.</entry>
 	
-    <entry key="buttonColonies">Kolonie (O)</entry>
+    <entry key="buttonColonies">Kolonie (I)</entry>
     <entry key="noColonies">Zatím nemáte žádnou kolonii</entry>
     <entry key="buttonWait">Čekat&#10;(Tab)</entry>
     <entry key="buttonSkipUnitTurn">Vynechat tah jednotky (Mezerník)</entry>
@@ -38,11 +38,11 @@
     <entry key="goToChanged">Cíl přesunu se změnil. Vyberte jej znovu.</entry>
     <entry key="goToStatusActive">Přesun do %s</entry>
     <entry key="goToStatusPaused">Pozastaveno, k cíli %s nevede cesta</entry>
-    <entry key="buttonGoToColony">Do kolonie</entry>
-    <entry key="goToColonyExplanation">Vyberte jednu ze svých kolonií, kam jednotka dojde. Jednotka tam dojde během vašich dalších tahů.</entry>
-    <entry key="goToColonyTitle">Přesun do kolonie</entry>
-    <entry key="goToColonyCaption">Vyberte kolonii, do které má jednotka jít:</entry>
-    <entry key="goToColonyConfirm">Jít</entry>
+    <entry key="buttonGoToColony">Plout do… (G)</entry>
+    <entry key="goToColonyExplanation">Vyberte dostupný cíl. Lodě mohou do Evropy nebo vlastních přístavů; rozkaz pokračuje v dalších vlastních tazích.</entry>
+    <entry key="goToColonyTitle">Cíl přesunu</entry>
+    <entry key="goToColonyCaption">Vyberte dostupný cíl vybrané jednotky:</entry>
+    <entry key="goToColonyConfirm">Vyrazit</entry>
     <entry key="goToColonyCancel">Zrušit</entry>
     <entry key="buttonDisband">Rozpustit</entry>
     <entry key="disbandExplanation">Trvale odstraní tuto jednotku. Pasažéry a zboží je nutné nejprve vyložit; vybavení přejde do vaší kolonie na tomto poli, jinak se ztratí.</entry>
@@ -124,7 +124,7 @@
     <entry key="skipUnavailable">Vyžaduje váš tah a jednotku na mapě se zbývajícím pohybem a bez aktivního rozkazu.</entry>
     <entry key="sentryUnavailable">Vyžaduje váš tah a jednotku bez jiného rozkazu na mapě nebo na vhodném evropském molu.</entry>
     <entry key="fortifyUnavailable">Vyžaduje váš tah a ozbrojenou pozemní jednotku na pevnině, se zbývajícím pohybem a bez jiného rozkazu.</entry>
-    <entry key="goToColonyUnavailable">Pro tuto jednotku v současném stavu není dostupná vlastní kolonie jako cíl cesty.</entry>
+    <entry key="goToColonyUnavailable">Pro tuto jednotku nyní není dostupný cíl cesty.</entry>
     <entry key="toolbarColonies">Kolonie</entry>
     <entry key="toolbarCongress">Kongres</entry>
     <entry key="toolbarCenter">Vycentrovat</entry>
@@ -137,9 +137,14 @@
     <entry key="toolbarRetire">Ukončit</entry>
     <entry key="toolbarExit">Nabídka</entry>
     <entry key="toolbarIndependence">Nezávislost</entry>
-    <entry key="coloniesExplanation">Vyberte kolonii, kterou chcete otevřít. (O)</entry>
+    <entry key="coloniesExplanation">Vyberte kolonii, kterou chcete otevřít. (I)</entry>
     <entry key="congressExplanation">Otevřít Kongres a vybrat Otce zakladatele. (K)</entry>
     <entry key="nextTurnExplanation">Dokončit tento tah a zahájit další.</entry>
     <entry key="plowProblemRiver">Na říčním políčku nelze zorat pole.</entry>
     <entry key="mapHeadingExplanation">Mappa Mundi je latinsky „mapa světa“. Latina se tehdy běžně používala.</entry>
+    <entry key="goToEurope">Evropa</entry>
+    <entry key="endTurnWarningTitle">Před koncem tahu</entry>
+    <entry key="endTurnWarningCaption">V těchto koloniích čekají kolonisté bez práce. Otevřete kolonii a přidělte jim práci, vraťte se do hry, nebo přesto ukončete tento tah.</entry>
+    <entry key="endTurnProceed">Přesto ukončit tah</entry>
+    <entry key="endTurnBack">Zpět</entry>
 </properties>

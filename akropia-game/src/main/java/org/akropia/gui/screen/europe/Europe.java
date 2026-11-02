@@ -25,7 +25,8 @@ public enum Europe implements MessageKeyResource {
     earnedTitle, earnedExplanation, earnedChoose, earnedOpen, earnedPending,
     equipmentBOYCOTTED, goodsBoycottedMark, goodsBoycotted, taxOpen, taxPending,
     backTaxOpen, goToPAUSED, goToCANCELLED_REMOVED, goToCANCELLED_NOT_FRIENDLY,
-    goToCANCELLED_DAMAGED, immigrantFrontMarker, immigrantAshoreMarker,
+    goToCANCELLED_DAMAGED, goToARRIVED, goToARRIVED_EUROPE,
+    goToCANCELLED_BLOCKED, immigrantFrontMarker, immigrantAshoreMarker,
     immigrantStayAshore, immigrantBoardAgain, immigrantFrontOfQueue,
     immigrantBoardingUnavailable;
 

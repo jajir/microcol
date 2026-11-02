@@ -1285,3 +1285,9 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 1. [R-0365](requirements/done/R-0365.md) mění pouze kresbu zvonů, křížů a kladiv. `TC_54_F45_shared_hammers_test` ověřuje všechny tři ikony ve skutečném plátně kolonie a zachovává původní průchod frontou a Continue; `TC_67_F58_religious_production_test` a `TC_77_F69_political_production_test` chrání dosavadní výrobu a její číselné zobrazení. Stav přejímky a výjimku pro smoke uvádí [funkční evidence](functional-tests.md#r-0365-production-icons-variant-three-2026-10-30).
 
 Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-0387/R-0388 ověřují ochranu skutečně neuloženého stavu, ruční dialog při odchodu, zrušení/selhání ukládání a pět automatických pozic na partii. TC191/06–08, TC42/03–05 a TC43/07 doplňují dosavadní scénáře; [výběr a výsledky](functional-tests.md#r-0387r-0388-unsaved-state-and-rolling-autosaves-2026-11-01). Finální společná přejímka dávky zbývá.
+
+
+### R-0396 / R-0398 local acceptance (2026-11-02)
+
+1. UC-013/016 and UC-113: persistent ship destinations and saved arrival notices map to `GoToOrderTest` and `TC_103_F94_persistent_go_to_test`; O/I/G navigation also uses TC188/191/192. This extends existing coverage without closing unrelated order cases.
+2. UC-005/015/038: pre-turn idle-colonist review maps to the model warning tests in `GoToOrderTest` and `TC_199_F52_end_turn_warnings_test`. Model, targeted UI and final smoke passed; exact selections and limits are in the [shared evidence](functional-tests.md#r-0396-and-r-0398-destinations-and-end-turn-warnings-2026-11-02).

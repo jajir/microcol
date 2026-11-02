@@ -491,7 +491,7 @@ public class UnitFactory {
         ((AbstractUnit) unit).restoreCrownSeized(unitPo.isCrownSeized());
         // A saved order is restored only, never advanced: loading moves
         // nothing.
-        if (unitPo.getGoToDestination() == null) {
+        if (unitPo.getGoToDestination() == null && !unitPo.isGoToEurope()) {
             Preconditions.checkArgument(
                     unitPo.getGoToColonyId() == null
                             && unitPo.getGoToDestinationName() == null
@@ -500,7 +500,7 @@ public class UnitFactory {
         } else {
             ((AbstractUnit) unit).restoreGoTo(unitPo.getGoToDestination(),
                     unitPo.getGoToColonyId(), unitPo.getGoToDestinationName(),
-                    unitPo.isGoToPaused());
+                    unitPo.isGoToPaused(), unitPo.isGoToEurope());
         }
         // A saved assignment is restored only; loading moves the carrier and
         // processes no stop, which waits for the owner's next turn.

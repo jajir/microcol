@@ -538,9 +538,7 @@ public class GamePage extends AbstractScreen {
         };
         getModel().addListener(listener);
         try {
-            final Button buttonNextTurn = getButtonById(
-                    ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
-            getRobot().clickOn(buttonNextTurn);
+            clickOnButtonWithId(ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
             // Running state and movement callbacks precede completion of all
             // standing orders.
             if (!prepared.await(60, TimeUnit.SECONDS)) {
@@ -586,7 +584,7 @@ public class GamePage extends AbstractScreen {
     }
 
     /**
-     * Open a colony only with keys: O opens the colonies menu, arrow down walks
+     * Open a colony only with keys: I opens the colonies menu, arrow down walks
      * to the colony by its position in the menu (ordered by colony id) and
      * Enter opens it.
      *
@@ -596,7 +594,7 @@ public class GamePage extends AbstractScreen {
      */
     public ColonyScreen openColonyWithKeyboard(final int menuIndex,
             final String expectedNamePart) {
-        getRobot().push(KeyCode.O);
+        getRobot().push(KeyCode.I);
         WaitForAsyncUtils.waitForFxEvents();
         for (int index = 0; index <= menuIndex; index++) {
             getRobot().push(KeyCode.DOWN);

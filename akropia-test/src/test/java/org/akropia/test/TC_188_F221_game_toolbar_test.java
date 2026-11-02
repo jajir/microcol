@@ -144,7 +144,7 @@ public class TC_188_F221_game_toolbar_test extends AbstractAkropiaTest {
 
         toolbar.verifySeason(null, 0xff71864b);
         toolbar.hover("coloniesMenu");
-        toolbar.verifyExplanation("Vyberte kolonii, kterou chcete otevřít. (O)",
+        toolbar.verifyExplanation("Vyberte kolonii, kterou chcete otevřít. (I)",
                 null);
         layout.saveEvidence("toolbar-one-row-czech.png");
 

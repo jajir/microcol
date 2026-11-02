@@ -2,8 +2,8 @@
 
 ## Jednorázová plavba Go to
 
-1. Dohoda z 2. listopadu 2026 v [R-0396](requirements/R-0396.md) přejmenovává Goals na Objectives (O), česky Cíle. G otevírá Go to… / Plout do… pro vybranou vlastní loď. Dosavadní nabídka kolonií přechází z O na I, bez Shiftu a shodně v obou jazycích. I je výslovně dohodnutá výjimka z odvozování zkratky podle názvu. P zůstává pro Plow field (orání).
-2. Nabídka zpřístupní Evropu a vlastní přístavy. Zrušení nic nezmění; po potvrzení loď zobrazuje cíl a umožní změnu či zrušení rozkazu. Výsledek nebo nemožnost pokračovat vysvětlí jednorázová zpráva Turn reportu se jménem lodi, cílem a případným důvodem. [Pravidla plavby](gap-analysis.md#r-0396-ship-destinations) vlastní model. Jde o dohodnutý návrh, nikoli pozorování hráčů nebo ověřenou implementaci.
+1. Dohoda z 2. listopadu 2026 v [R-0396](requirements/done/R-0396.md) přejmenovává Goals na Objectives (O), česky Cíle. G otevírá Go to… / Plout do… pro vybranou vlastní loď. Dosavadní nabídka kolonií přechází z O na I, bez Shiftu a shodně v obou jazycích. I je výslovně dohodnutá výjimka z odvozování zkratky podle názvu. P zůstává pro Plow field (orání).
+2. Nabídka zpřístupní Evropu a vlastní přístavy. Zrušení nic nezmění; po potvrzení loď zobrazuje cíl a umožní změnu či zrušení rozkazu. Výsledek nebo nemožnost pokračovat vysvětlí jednorázová zpráva Turn reportu se jménem lodi, cílem a případným důvodem. [Pravidla plavby](gap-analysis.md#r-0396-ship-destinations) vlastní model. Implementaci a cílené ověření zachycuje [evidence R-0396/R-0398](functional-tests.md#r-0396-and-r-0398-destinations-and-end-turn-warnings-2026-11-02); nejde o nové pozorování hráčů.
 
 ## Plánování obchodních tras
 
@@ -1128,7 +1128,7 @@ ani vysvětlení nedostupných akcí. Viz [R-0279](requirements/done/R-0279.md).
 
 ## Horní lišta 07B — 2026-10-25
 
-1. [R-0273](requirements/done/R-0273.md) používá ikonku a trvalý lokalizovaný název u každé globální akce. Najetí nebo klávesnicové zaměření zobrazí vysvětlení dole. Po O/Escape je fokus na výběru kolonií; Tab postupuje mezi prvky lišty, Shift+Tab se vrací a mezerník aktivuje zaměřené tlačítko bez vyčerpání pohybu jednotky. Fokus je navíc označen přerušovaným rámečkem; barva sama nenese stav akce. Playpen Sans Regular 14 se nemění.
+1. [R-0273](requirements/done/R-0273.md) používá ikonku a trvalý lokalizovaný název u každé globální akce. Najetí nebo klávesnicové zaměření zobrazí vysvětlení dole. Po I/Escape je fokus na výběru kolonií; Tab postupuje mezi prvky lišty, Shift+Tab se vrací a mezerník aktivuje zaměřené tlačítko bez vyčerpání pohybu jednotky. Fokus je navíc označen přerušovaným rámečkem; barva sama nenese stav akce. Playpen Sans Regular 14 se nemění.
 2. Kolonie jsou přímá navigační nabídka s vlastním symbolem, rámečkem a oddělenou šipkou. Klávesa O ji otevře, kurzorové klávesy vyberou položku, Enter otevře kolonii; Escape nebo kliknutí mimo nabídku ji zruší. Prázdný seznam vysvětlí, že zatím není dostupná kolonie. Položky se při otevření znovu načtou a při výběru ověří vlastník i platnost.
 3. Další tah, odchod do menu, ukončení se skóre a podmíněná nezávislost zachovávají dosavadní pravidla a potvrzení. Lišta se v užším okně zalomí nad mapou a nezkracuje názvy. Zimní modrá a ostatní zelená slouží atmosféře; neomezují objevitelnost akcí.
 4. Automatizovaná přejímka a technická vizuální kontrola jsou v [evidenci](functional-tests.md#r-0273-toolbar-07b-2026-10-25). Nejde o uživatelskou studii.
@@ -1248,7 +1248,9 @@ skutečného hráče; výsledky patří do [funkční evidence](functional-tests
 
 ## Upozornění před koncem tahu
 
-1. Dohodnuto 2026-11-02, dosud neimplementováno: [R-0398](requirements/R-0398.md) zavádí při každém Next turn společný dialog pro aktuální upozornění. Bez upozornění tah pokračuje rovnou. Více druhů a kolonií se zobrazí pohromadě; další druhy se určí později.
-2. První kontrola označí každého vlastního kolonistu na políčku vlastní kolonie bez práce uvnitř či na okolních polích a bez Fortify, Sentry nebo jiného zaměstnávajícího rozkazu, bez ohledu na způsob příchodu. Vyčerpaný pohyb není výjimkou; cestující na lodi se nezahrnují. Pozastavené a zablokované rozkazy zbývá rozhodnout v R-0398.
+1. Dohodnuto 2026-11-02, dosud neimplementováno: [R-0398](requirements/done/R-0398.md) zavádí při každém Next turn společný dialog pro aktuální upozornění. Bez upozornění tah pokračuje rovnou. Více druhů a kolonií se zobrazí pohromadě; další druhy se určí později.
+2. První kontrola označí každého vlastního kolonistu na políčku vlastní kolonie bez práce uvnitř či na okolních polích a bez Fortify, Sentry nebo jiného zaměstnávajícího rozkazu, bez ohledu na způsob příchodu. Vyčerpaný pohyb není výjimkou; cestující na lodi se nezahrnují. Pozastavený nebo skutečně zablokovaný rozkaz kolonistu z upozornění nevylučuje; běžné čekání na obnovení pohybových bodů se za nečinnost nepovažuje.
 3. „Zpět“, Escape a zavření dialogu ponechají tah rozehraný. Odkaz u upozornění otevře příslušnou kolonii a umožní přidělit práci. „Přesto pokračovat“ potvrdí jen právě ukončovaný tah; nevyřešené upozornění se v příštím tahu znovu objeví. Kontrola nic sama nemění a práci nepřiděluje.
 4. Jde o dohodnutý návrh navazující na uživatelovo pozorování UX-24, nikoli důkaz implementace nebo úspěšný hráčský test. Podrobné přijetí a nevyřešená hranice nečinnosti jsou v R-0398.
+
+7. Dohoda 2026-11-02: pozastavený nebo skutečně zablokovaný rozkaz nevyřadí jinak nepracujícího kolonistu z upozornění. Běžné čekání na obnovení pohybových bodů není nečinnost.

@@ -70,7 +70,8 @@ public final class NativeAlarmPage extends AbstractScreen {
         try {
             final Button nextTurn = getButtonById(
                     ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
-            getRobot().interact(nextTurn::fire);
+            WaitForAsyncUtils.asyncFx(nextTurn::fire);
+            confirmEndTurnWarningsIfShown();
             if (!prepared.await(60, TimeUnit.SECONDS)) {
                 throw new TimeoutException(
                         "Human turn preparation did not finish");

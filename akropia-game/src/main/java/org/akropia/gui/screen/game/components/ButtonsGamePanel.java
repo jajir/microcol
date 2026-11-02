@@ -5,7 +5,7 @@ import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.buttonpanel.AbstractButtonsPanel;
 import org.akropia.gui.screen.congress.CongressText;
 import org.akropia.gui.buttonpanel.Buttons;
-import org.akropia.gui.buttonpanel.NextTurnEvent;
+import org.akropia.gui.buttonpanel.RequestNextTurnEvent;
 import org.akropia.gui.event.ShowHelpEvent;
 import org.akropia.gui.event.BuildColonyEvent;
 import org.akropia.gui.event.CenterViewEvent;
@@ -240,8 +240,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonNextTurn = makeButton(ButtonIcon.NEXT, Buttons.buttonNextTurn);
         buttonNextTurn.setId(BUTTON_NEXT_TURN_ID);
         buttonNextTurn.setOnAction(event -> {
-            buttonNextTurn.setDisable(true);
-            eventBus.post(new NextTurnEvent());
+            eventBus.post(new RequestNextTurnEvent());
         });
         buttonMove = makeButton(ButtonIcon.CENTER, Buttons.buttonMove);
         buttonMove.setOnAction(event -> eventBus.post(new StartMoveEvent()));
@@ -672,14 +671,14 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
      */
     void setGoToOrder(final boolean ordered, final boolean paused,
             final boolean enabled, final boolean colonyEnabled,
-            final String destination) {
+            final String destination, final boolean ship) {
         goToOrdered = ordered;
         goToPaused = paused;
         goToDestination = destination;
         buttonGoTo.setDisable(!enabled);
         buttonGoToColony.setDisable(!colonyEnabled);
-        buttonGoToColony.setVisible(!ordered);
-        buttonGoToColony.setManaged(!ordered);
+        buttonGoToColony.setVisible(!ordered || ship);
+        buttonGoToColony.setManaged(!ordered || ship);
         updateGoToText();
     }
 

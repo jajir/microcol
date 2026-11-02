@@ -9,6 +9,7 @@ import org.akropia.gui.util.ButtonsBarYesNo;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Colony;
+import org.akropia.model.TradeRouteStop;
 
 import com.google.inject.Inject;
 
@@ -28,7 +29,7 @@ public final class GoToColonyDialog extends AbstractMessageWindow {
 
     private final I18n i18n;
 
-    private Optional<Colony> result = Optional.empty();
+    private Optional<TradeRouteStop> result = Optional.empty();
 
     @Inject
     GoToColonyDialog(final ViewUtil viewUtil, final I18n i18n) {
@@ -43,7 +44,8 @@ public final class GoToColonyDialog extends AbstractMessageWindow {
      * @return the chosen colony, or empty when the dialog was canceled or
      *         closed
      */
-    public Optional<Colony> choose(final List<Colony> colonies) {
+    public Optional<TradeRouteStop> choose(final List<Colony> colonies,
+            final boolean europe) {
         result = Optional.empty();
         final Label caption = new Label(i18n.get(Buttons.goToColonyCaption));
         caption.setId("goToColonyCaption");
@@ -53,10 +55,19 @@ public final class GoToColonyDialog extends AbstractMessageWindow {
         final VBox root = new VBox(10);
         root.setPadding(new Insets(10));
         root.getChildren().add(caption);
+        if (europe) {
+            final RadioButton choice = new RadioButton(
+                    i18n.get(Buttons.goToEurope));
+            choice.setToggleGroup(group);
+            choice.setUserData(TradeRouteStop.europe());
+            choice.setId("goto-europe");
+            choice.setSelected(true);
+            root.getChildren().add(choice);
+        }
         for (final Colony colony : colonies) {
             final RadioButton choice = new RadioButton(colony.getName());
             choice.setToggleGroup(group);
-            choice.setUserData(colony);
+            choice.setUserData(TradeRouteStop.ofColony(colony.getId()));
             choice.setId("goto-colony-" + colony.getId());
             if (group.getToggles().size() == 1) {
                 choice.setSelected(true);
@@ -72,7 +83,7 @@ public final class GoToColonyDialog extends AbstractMessageWindow {
         confirm.disableProperty().bind(group.selectedToggleProperty().isNull());
         confirm.setOnAction(event -> {
             result = Optional.ofNullable(
-                    (Colony) group.getSelectedToggle().getUserData());
+                    (TradeRouteStop) group.getSelectedToggle().getUserData());
             close();
         });
         buttons.getButtonNo().setOnAction(event -> onCancelDialog());

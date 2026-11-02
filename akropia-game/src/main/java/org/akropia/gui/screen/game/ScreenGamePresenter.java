@@ -147,8 +147,14 @@ public class ScreenGamePresenter {
         if (KeyCode.T == event.getCode()) {
             eventBus.post(new ShowScreenEvent(Screen.TURN_REPORT));
         }
-        if (KeyCode.G == event.getCode()) {
+        if (KeyCode.O == event.getCode() && !event.isShortcutDown()) {
             eventBus.post(new ShowScreenEvent(Screen.GOALS));
+        }
+        if (KeyCode.G == event.getCode() && !event.isShortcutDown()) {
+            eventBus.post(
+                    new org.akropia.gui.event.ChooseGoToDestinationEvent());
+            event.consume();
+            return;
         }
         if (KeyCode.H == event.getCode()) {
             eventBus.post(new ShowHelpEvent());
@@ -162,7 +168,7 @@ public class ScreenGamePresenter {
         if (KeyCode.E == event.getCode()) {
             eventBus.post(new ShowScreenEvent(Screen.EUROPE));
         }
-        if (KeyCode.O == event.getCode() && !event.isShortcutDown()) {
+        if (KeyCode.I == event.getCode() && !event.isShortcutDown()) {
             coloniesMenu.show();
             event.consume();
             return;
@@ -197,8 +203,8 @@ public class ScreenGamePresenter {
     }
 
     private static boolean isUnitKey(final KeyCode code) {
-        return code == KeyCode.ENTER || code == KeyCode.M || code == KeyCode.P
-                || code == KeyCode.F || code == KeyCode.B;
+        return code == KeyCode.G || code == KeyCode.ENTER || code == KeyCode.M
+                || code == KeyCode.P || code == KeyCode.F || code == KeyCode.B;
     }
 
     private void onKeyMWasPressed() {

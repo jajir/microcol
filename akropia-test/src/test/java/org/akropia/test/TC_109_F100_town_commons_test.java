@@ -199,7 +199,7 @@ public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         WaitForAsyncUtils.waitForFxEvents();
 
-        // Press O for the colonies menu, arrow down to New Amsterdam, Enter.
+        // Press I for the colonies menu, arrow down to New Amsterdam, Enter.
         ColonyScreen newAmsterdam = game.openColonyWithKeyboard(0,
                 "New Amsterdam");
         newAmsterdam.verifyTownCommons(EN_NEW_AMSTERDAM);

@@ -1,5 +1,12 @@
 # Current requirement backlog
 
+## R-0396 / R-0398 — current implementation checkpoint (2026-11-02)
+
+1. Both requirements are selected for development directly in Codex. Their authoritative analyses are [R-0396](done/R-0396.md) and [R-0398](done/R-0398.md), both `done`. Local acceptance is complete; earlier capture entries below are historical.
+2. R-0398 includes paused and genuinely blocked orders by the user's decision. Ordinary waiting for movement points is not idle work. The answer is incorporated into the requirement and [UX rule](../ux.md#upozorneni-pred-koncem-tahu); there is no unanswered decision on that point.
+3. Final-source checks passed 4,967 model tests, 14 focused UI/support tests and 21 smoke/support tests. Integration and the checked source are tracked in the [acceptance evidence](../functional-tests.md#r-0396-and-r-0398-destinations-and-end-turn-warnings-2026-11-02).
+
+
 ## Completed development batch — 2026-11-02
 
 1. All **19 selected requirements** are implemented and locally accepted: [R-0378](done/R-0378.md), [R-0377](done/R-0377.md), [R-0376](done/R-0376.md), [R-0228](done/R-0228.md), [R-0227](done/R-0227.md), [R-0225](done/R-0225.md), [R-0221](done/R-0221.md), [R-0216](done/R-0216.md), [R-0211](done/R-0211.md), [R-0382](done/R-0382.md), [R-0383](done/R-0383.md), [R-0387](done/R-0387.md), [R-0388](done/R-0388.md), [R-0389](done/R-0389.md), [R-0391](done/R-0391.md), [R-0392](done/R-0392.md), [R-0393](done/R-0393.md), [R-0394](done/R-0394.md), [R-0395](done/R-0395.md). Their status is `done`.
@@ -1122,8 +1129,8 @@ remain owned by their current requirements; acceptance is recorded in the
 
 ## Jednorázová plavba Go to — 2026-11-02
 
-1. [R-0396](R-0396.md), primární oblast A05, závislosti A03/A01/A04/A06. Status: new. Objectives (O) uvolní G pro výběr Evropy nebo vlastního přístavu, trvalou plavbu a jednorázové zprávy Turn reportu o příjezdu či přerušení. Nabídka kolonií přejde na I bez Shiftu; P zůstává orání. Otevřené otázky jsou zodpovězené; implementace nezahájena a technická příprava zbývá.
+1. [R-0396](done/R-0396.md), primární oblast A05, závislosti A03/A01/A04/A06. Status: new. Objectives (O) uvolní G pro výběr Evropy nebo vlastního přístavu, trvalou plavbu a jednorázové zprávy Turn reportu o příjezdu či přerušení. Nabídka kolonií přejde na I bez Shiftu; P zůstává orání. Otevřené otázky jsou zodpovězené; implementace nezahájena a technická příprava zbývá.
 
 ## Upozornění před koncem tahu — 2026-11-02
 
-1. [R-0398](R-0398.md), primární oblast A04, závislosti A03/A07/A05. Status: new. Společný dialog při každém Next turn shrne aktuální upozornění, umožní návrat či otevření kolonie a vědomé pokračování. První kontrola pokrývá nečinné kolonisty bez práce a zaměstnávajícího rozkazu; vyčerpaný pohyb je nevylučuje, cestující na lodi se nezahrnují. Posouzení pozastavených a zablokovaných rozkazů zbývá otevřené. Implementace není zahájena.
+1. [R-0398](done/R-0398.md), primární oblast A04, závislosti A03/A07/A05. Status: new. Společný dialog při každém Next turn shrne aktuální upozornění, umožní návrat či otevření kolonie a vědomé pokračování. První kontrola pokrývá nečinné kolonisty bez práce a zaměstnávajícího rozkazu; vyčerpaný pohyb je nevylučuje, cestující na lodi se nezahrnují. Posouzení pozastavených a zablokovaných rozkazů zbývá otevřené. Implementace není zahájena.

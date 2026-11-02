@@ -86,6 +86,23 @@ public abstract class AbstractScreen {
         revealGameContent(getNodeFinder().lookup(id).query());
         getRobot().clickOn(id);
         WaitForAsyncUtils.waitForFxEvents();
+        if ("nextTurn".equals(buttonId)) {
+            confirmEndTurnWarningsIfShown();
+        }
+    }
+
+    /**
+     * Existing journeys explicitly accept warnings when asking to end a turn.
+     */
+    protected void confirmEndTurnWarningsIfShown() {
+        WaitForAsyncUtils.waitForFxEvents();
+        getNodeFinder().lookup("#end-turn-proceed")
+                .tryQueryAs(javafx.scene.control.Button.class)
+                .ifPresent(button -> {
+                    getRobot().interact(button::requestFocus);
+                    getRobot().push(javafx.scene.input.KeyCode.SPACE);
+                    WaitForAsyncUtils.waitForFxEvents();
+                });
     }
 
     /**

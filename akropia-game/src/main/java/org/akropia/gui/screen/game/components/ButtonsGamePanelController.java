@@ -574,8 +574,12 @@ public class ButtonsGamePanelController {
                                     ? getModel().canCancelGoTo(selected)
                                     : getModel().canStartGoTo(selected)),
                     ready && selected != null
-                            && !getModel().getGoToColonies(selected).isEmpty(),
-                    goTo.orElse(null));
+                            && (!getModel().getGoToColonies(selected).isEmpty()
+                                    || getModel().canIssueGoToEurope(selected)),
+                    getModel().isGoToEurope(selected)
+                            ? i18n.get(Buttons.goToEurope)
+                            : goTo.orElse(null),
+                    selected != null && selected.isShip());
             view.setDisbandOrder(
                     selected != null && selected.getOwner().isHuman(),
                     ready && selected != null);
@@ -617,7 +621,7 @@ public class ButtonsGamePanelController {
         if (unit == null) {
             return;
         }
-        if (getModel().getGoToDestination(unit).isPresent()) {
+        if (getModel().getGoToDestinationName(unit).isPresent()) {
             try {
                 getModel().cancelGoTo(unit);
             } catch (IllegalStateException rejected) {
@@ -635,22 +639,37 @@ public class ButtonsGamePanelController {
      * Shows the colonies the model currently offers and issues the order for
      * the chosen one. Closing or canceling the dialog changes nothing.
      */
+    @Subscribe
+    private void onChooseGoToDestination(
+            final org.akropia.gui.event.ChooseGoToDestinationEvent event) {
+        chooseGoToColony();
+    }
+
     private void chooseGoToColony() {
         final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
         if (unit == null || !gameModelController.isHumanTurnReady()) {
             return;
         }
         final List<Colony> offered = getModel().getGoToColonies(unit);
-        if (offered.isEmpty()) {
+        final boolean europe = getModel().canIssueGoToEurope(unit);
+        if (offered.isEmpty() && !europe) {
             eventBus.post(
                     new StatusBarMessageEvent(i18n.get(Buttons.goToChanged),
                             StatusBarMessageEvent.Source.GAME));
             updateUnitOrders();
             return;
         }
-        goToColonyDialog.get().choose(offered)
-                .ifPresent(colony -> gameModelController.performGoTo(unit,
-                        colony.getLocation(), colony));
+        goToColonyDialog.get().choose(offered, europe)
+                .ifPresent(destination -> {
+                    if (destination.isEurope()) {
+                        gameModelController.performGoToEurope(unit);
+                    } else {
+                        getModel().getColonyById(destination.getColonyId())
+                                .ifPresent(colony -> gameModelController
+                                        .performGoTo(unit, colony.getLocation(),
+                                                colony));
+                    }
+                });
     }
 
     private void changeFortifyOrder() {

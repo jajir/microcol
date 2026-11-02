@@ -115,6 +115,7 @@ public abstract class Ship extends UnitWithCargo {
                 "The ship has not reached its destination");
         if (place.isTravelToEurope()) {
             model.getEurope().getPort().placeShipToPort(this);
+            completeEuropeGoTo();
             model.getTurnEventStore()
                     .add(TurnEventProvider.getShipComeEuropePort(getOwner()));
         } else if (isPossibleToMoveAt(departureLocation)) {

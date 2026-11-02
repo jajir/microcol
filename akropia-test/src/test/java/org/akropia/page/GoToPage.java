@@ -50,6 +50,47 @@ public final class GoToPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void openDestinationWithG() {
+        getRobot().push(KeyCode.G);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyDestinationChooserClosed() {
+        assertTrue(getNodeFinder().lookup("#goto-colony-confirm").tryQuery()
+                .isEmpty());
+    }
+
+    public void verifyEuropeOffered() {
+        assertTrue(
+                getNodeFinder().lookup("#goto-europe").tryQuery().isPresent());
+    }
+
+    public void chooseEurope() {
+        getRobot().clickOn("#goto-europe");
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void waitForHighSea(final int id) throws Exception {
+        WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS,
+                () -> getModel().getUnitById(id).isAtHighSea());
+        waitUntilWalkIsOver();
+    }
+
+    public void verifyEuropeVoyage(final int id) {
+        assertTrue(getModel().getUnitById(id).isAtHighSea());
+        assertTrue(getModel().isGoToEurope(getModel().getUnitById(id)));
+    }
+
+    public int remainingVoyageTurns(final int id) {
+        return ((org.akropia.model.PlaceHighSea) getModel().getUnitById(id)
+                .getPlace()).getRemainigTurns();
+    }
+
+    public void verifyArrivedInEurope(final int id) {
+        assertTrue(getModel().getUnitById(id).isAtEuropePort());
+        assertFalse(getModel().isGoToEurope(getModel().getUnitById(id)));
+    }
+
     public void chooseColony(final int colonyId) {
         getRobot().clickOn("#goto-colony-" + colonyId);
         WaitForAsyncUtils.waitForFxEvents();
@@ -127,7 +168,7 @@ public final class GoToPage extends AbstractScreen {
         assertEquals(shown, isShown("goToColonyUnit"));
         if (shown) {
             final Button button = getButtonById("goToColonyUnit");
-            assertEquals("Go to colony", button.getText());
+            assertEquals("Go to… (G)", button.getText());
             assertEquals(enabled, !button.isDisabled());
         }
         closeUnitActions();

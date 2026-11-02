@@ -2108,6 +2108,7 @@ public abstract class AbstractUnit implements Unit {
             unitPo.setGoToColonyId(goTo.getColonyId());
             unitPo.setGoToDestinationName(goTo.getDestinationName());
             unitPo.setGoToPaused(goTo.isPaused());
+            unitPo.setGoToEurope(goTo.isEurope());
         }
         if (tradeRouteAssignment != null) {
             unitPo.setTradeRouteAssignmentRouteId(
@@ -2399,7 +2400,8 @@ public abstract class AbstractUnit implements Unit {
      * @param order required order; the unit must not have another order
      */
     void startGoTo(final GoToOrder order) {
-        Preconditions.checkState(!hasStandingOrder(),
+        Preconditions.checkState(
+                tradeRouteAssignment == null && (goTo == null || isShip()),
                 "Unit %s has a standing order", this);
         goTo = Preconditions.checkNotNull(order);
     }
@@ -2508,6 +2510,25 @@ public abstract class AbstractUnit implements Unit {
      */
     public void restoreGoTo(final Location destination, final Integer colonyId,
             final String destinationName, final boolean paused) {
+        restoreGoTo(destination, colonyId, destinationName, paused, false);
+    }
+
+    public void restoreGoTo(final Location destination, final Integer colonyId,
+            final String destinationName, final boolean paused,
+            final boolean europe) {
+        if (europe) {
+            Preconditions.checkArgument(
+                    isShip() && !((Ship) this).isDamaged() && !paused
+                            && (isAtPlaceLocation() || isAtHighSea())
+                            && unitAction.isNoAction() && destination == null
+                            && colonyId == null && destinationName != null
+                            && !destinationName.isBlank()
+                            && (!isAtHighSea() || ((PlaceHighSea) getPlace())
+                                    .isTravelToEurope()),
+                    "Invalid saved Europe go-to order");
+            startGoTo(new GoToOrder(null, null, destinationName, false, true));
+            return;
+        }
         Preconditions.checkArgument(
                 isAtPlaceLocation() && unitAction.isNoAction()
                         && destination != null
@@ -2560,12 +2581,19 @@ public abstract class AbstractUnit implements Unit {
         // Every step replans from the live position, because a step can reveal
         // an obstruction. Each pass either spends movement or ends the walk.
         while (goTo != null && isAtPlaceLocation()) {
-            if (getLocation().equals(goTo.getDestination())) {
+            if (!goTo.isEurope()
+                    && getLocation().equals(goTo.getDestination())) {
+                if (isShip() && goTo.getColonyId() != null) {
+                    model.addTurnEvent(TurnEventProvider.getGoToOrder(owner,
+                            TurnEventGoTo.Kind.ARRIVED, id, getType(),
+                            goTo.getDestinationName()));
+                }
                 goTo = null;
                 break;
             }
-            final Optional<List<Location>> route = findGoToRoute(
-                    goTo.getDestination());
+            final Optional<List<Location>> route = goTo.isEurope()
+                    ? findEuropeGoToRoute()
+                    : findGoToRoute(goTo.getDestination());
             if (route.isEmpty() || route.get().isEmpty()) {
                 blocked = true;
                 break;
@@ -2583,6 +2611,9 @@ public abstract class AbstractUnit implements Unit {
                 break;
             }
             walked.add(step);
+        }
+        if (goTo != null && blocked && isShip()) {
+            cancelGoToWithNotice(TurnEventGoTo.Kind.CANCELLED_BLOCKED);
         }
         if (goTo != null) {
             goTo.setPaused(blocked);
@@ -2614,9 +2645,30 @@ public abstract class AbstractUnit implements Unit {
      * @param destination required destination square
      * @return the route without the start square, or empty when none exists
      */
+    Optional<List<Location>> findEuropeGoToRoute() {
+        if (!isShip() || !isAtPlaceLocation() || !owner.canTradeInEurope()) {
+            return Optional.empty();
+        }
+        for (final Location neighbor : getLocation().getNeighbors()) {
+            if (model.getHighSea().isDepartureMove(this, neighbor)) {
+                return Optional.of(List.of(neighbor));
+            }
+        }
+        return findNearestRoute(new TradeRouteRules(model)::isDepartureSquare);
+    }
+
+    /** Called only after the ordinary voyage has placed the ship in Europe. */
+    public void completeEuropeGoTo() {
+        if (goTo != null && goTo.isEurope()) {
+            Preconditions.checkState(isAtEuropePort(),
+                    "Ship has not arrived in Europe");
+            cancelGoToWithNotice(TurnEventGoTo.Kind.ARRIVED_EUROPE);
+        }
+    }
+
     Optional<List<Location>> findGoToRoute(final Location destination) {
-        return findGoToRoute(destination,
-                new PathFinder(this, true, location -> true));
+        return findGoToRoute(destination, new PathFinder(this, true,
+                isShip() ? owner::isVisible : location -> true));
     }
 
     /**

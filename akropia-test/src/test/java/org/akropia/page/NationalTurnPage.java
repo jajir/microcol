@@ -82,7 +82,7 @@ public final class NationalTurnPage extends AbstractScreen {
     }
 
     public void clickNextTurnWithoutWaiting() {
-        getRobot().clickOn("#nextTurn");
+        clickOnButtonWithId("nextTurn");
     }
 
     public void clickMapTile(final org.akropia.model.Location location) {

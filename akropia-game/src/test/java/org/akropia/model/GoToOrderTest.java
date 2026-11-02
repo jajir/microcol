@@ -153,6 +153,54 @@ class GoToOrderTest {
     // ---------------------------------------------
 
     @Test
+    void idleWarningIsReadOnlyIncludesExhaustedColonistsAndSurvivesLoad() {
+        final Model model = load(scenario());
+        final Colony colony = model.getColonyById(0).orElseThrow();
+        final Unit idle = colonist(model, colony.getLocation(), 0);
+        final String before = snapshot(model);
+        assertTrue(model.getIdleColonistsBeforeEndTurn().get(colony)
+                .contains(idle));
+        assertEquals(before, snapshot(model));
+        final GameModelPo data = mission();
+        data.setModel(model.save());
+        final Model restored = load(data);
+        assertTrue(restored.getIdleColonistsBeforeEndTurn().values().stream()
+                .flatMap(List::stream)
+                .anyMatch(unit -> unit.getId() == idle.getId()));
+    }
+
+    @Test
+    void idleWarningExcludesSentryAndWorkingColonists() {
+        final Model model = load(scenario());
+        final Colony colony = model.getColonyById(0).orElseThrow();
+        final Unit sentry = colonist(model, colony.getLocation(), 3);
+        model.setSentry(sentry);
+        assertTrue(model.getIdleColonistsBeforeEndTurn().values().stream()
+                .flatMap(List::stream)
+                .noneMatch(unit -> unit == sentry || !unit.isAtPlaceLocation()
+                        || !(unit instanceof org.akropia.model.unit.UnitFreeColonist)));
+    }
+
+    @Test
+    void idleWarningIncludesPausedAndBlockedButNotMovementWaitingOrder() {
+        final Model model = load(scenario());
+        final Colony colony = model.getColonyById(0).orElseThrow();
+        final Unit waiting = colonist(model, colony.getLocation(), 0);
+        ((AbstractUnit) waiting).restoreGoTo(strip(28), null, "28, 15", false);
+        assertTrue(model.getIdleColonistsBeforeEndTurn().values().stream()
+                .flatMap(List::stream).noneMatch(unit -> unit == waiting));
+        ((AbstractUnit) waiting).cancelGoTo();
+        ((AbstractUnit) waiting).restoreGoTo(strip(28), null, "28, 15", true);
+        assertTrue(model.getIdleColonistsBeforeEndTurn().get(colony)
+                .contains(waiting));
+        ((AbstractUnit) waiting).cancelGoTo();
+        ((AbstractUnit) waiting).restoreGoTo(Location.of(1, 1), null, "1, 1",
+                false);
+        assertTrue(model.getIdleColonistsBeforeEndTurn().get(colony)
+                .contains(waiting));
+    }
+
+    @Test
     void threeTurnJourneyFollowsSharedCostsAndArrivesOnce() {
         final Model model = load(scenario());
         final Unit colonist = colonist(model, strip(31), 3);
@@ -592,6 +640,108 @@ class GoToOrderTest {
         savedData.setModel(second.save());
         unitPo(savedData, id).setGoToDestination(strip(30));
         assertThrows(IllegalArgumentException.class, () -> load(savedData));
+    }
+
+    @Test
+    void shipCanReplaceItsOrderButInvalidReplacementPreservesIt() {
+        final Model model = load(shipScenario());
+        final Ship ship = (Ship) model.getUnitById(3);
+        ship.setMovementThirds(0);
+        model.issueGoToColony(ship, model.getColonyById(0).orElseThrow());
+        assertEquals(Optional.of(COLONY), model.getGoToDestination(ship));
+        final Location target = Location.of(44, 14);
+        model.issueGoTo(ship, target);
+        assertEquals(Optional.of(target), model.getGoToDestination(ship));
+        final String before = snapshot(model);
+        assertThrows(IllegalStateException.class,
+                () -> model.issueGoTo(ship, ship.getLocation()));
+        assertEquals(before, snapshot(model));
+        assertEquals(0, ship.getMovementThirds());
+    }
+
+    @Test
+    void shipCancelsAnUnreachableDestinationOnceInsteadOfPausingForever() {
+        final GameModelPo data = shipScenario();
+        final Model model = load(data);
+        final Ship ship = (Ship) model.getUnitById(3);
+        ship.setMovementThirds(0);
+        final Location target = Location.of(44, 14);
+        model.issueGoTo(ship, target);
+        final Model restored = reload(model, data,
+                saved -> terrain(saved, target, TerrainType.GRASSLAND));
+        final AbstractUnit loaded = (AbstractUnit) restored.getUnitById(3);
+        loaded.advanceGoTo();
+        assertTrue(restored.getGoToDestinationName(loaded).isEmpty());
+        assertEquals(1, notices(restored, loaded,
+                TurnEventGoTo.Kind.CANCELLED_BLOCKED));
+        loaded.advanceGoTo();
+        assertEquals(1, notices(restored, loaded,
+                TurnEventGoTo.Kind.CANCELLED_BLOCKED));
+    }
+
+    @Test
+    void destroyedPortCancelsNamedShipOrderWithItsOriginalName() {
+        final Model model = load(shipScenario());
+        final Ship ship = (Ship) model.getUnitById(3);
+        ship.setMovementThirds(0);
+        final Colony port = model.getColonyById(0).orElseThrow();
+        model.issueGoToColony(ship, port);
+        model.destroyColony(port);
+        ((AbstractUnit) ship).advanceGoTo();
+        assertTrue(model.getGoToDestinationName(ship).isEmpty());
+        assertEquals(1,
+                notices(model, ship, TurnEventGoTo.Kind.CANCELLED_REMOVED));
+    }
+
+    @Test
+    void namedShipArrivalIsReportedOnceAndSurvivesLoad() {
+        final GameModelPo data = shipScenario();
+        final Model model = load(data);
+        final Unit ship = model.getUnitById(3);
+        final Colony port = model.getColonyById(0).orElseThrow();
+        assertTrue(model.getGoToColonies(ship).contains(port));
+        model.issueGoToColony(ship, port);
+        assertEquals(port.getLocation(), ship.getLocation());
+        assertTrue(model.getGoToDestinationName(ship).isEmpty());
+        assertEquals(1, notices(model, ship, TurnEventGoTo.Kind.ARRIVED));
+        final Model restored = reload(model, data, saved -> {
+        });
+        assertEquals(1, notices(restored, restored.getUnitById(3),
+                TurnEventGoTo.Kind.ARRIVED));
+        assertTrue(restored.getGoToDestinationName(restored.getUnitById(3))
+                .isEmpty());
+    }
+
+    @Test
+    void europeOrderPersistsAtSeaAndReportsOnlyActualArrival() {
+        final GameModelPo data = shipScenario();
+        final Model model = load(data);
+        final Ship ship = (Ship) model.getUnitById(3);
+        final Location departure = Location.of(model.getMap().getMaxLocationX(),
+                14);
+        ship.placeToLocation(departure);
+        assertTrue(model.canIssueGoToEurope(ship));
+        model.issueGoToEurope(ship);
+        assertTrue(ship.isAtHighSea());
+        assertTrue(model.isGoToEurope(ship));
+        assertEquals(0,
+                notices(model, ship, TurnEventGoTo.Kind.ARRIVED_EUROPE));
+        final Model restored = reload(model, data, saved -> {
+        });
+        final Ship loaded = (Ship) restored.getUnitById(3);
+        assertTrue(loaded.isAtHighSea());
+        assertTrue(restored.isGoToEurope(loaded));
+        for (int turn = 0; turn < 12 && loaded.isAtHighSea(); turn++) {
+            loaded.advanceVoyage();
+        }
+        assertTrue(loaded.isAtEuropePort());
+        assertFalse(restored.isGoToEurope(loaded));
+        assertEquals(1,
+                notices(restored, loaded, TurnEventGoTo.Kind.ARRIVED_EUROPE));
+        final Model reloaded = reload(restored, data, saved -> {
+        });
+        assertEquals(1, notices(reloaded, reloaded.getUnitById(3),
+                TurnEventGoTo.Kind.ARRIVED_EUROPE));
     }
 
     // ---- Ships

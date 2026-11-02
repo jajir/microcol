@@ -17,14 +17,31 @@ final class GoToOrder {
     private final String destinationName;
     private boolean paused;
 
+    private final boolean europe;
+
     GoToOrder(final Location destination, final Integer colonyId,
             final String destinationName, final boolean paused) {
-        this.destination = Preconditions.checkNotNull(destination,
-                "Go-to destination is null");
+        this(destination, colonyId, destinationName, paused, false);
+    }
+
+    GoToOrder(final Location destination, final Integer colonyId,
+            final String destinationName, final boolean paused,
+            final boolean europe) {
+        Preconditions
+                .checkArgument(
+                        europe ? destination == null && colonyId == null
+                                : destination != null,
+                        "Invalid go-to destination");
+        this.europe = europe;
+        this.destination = destination;
         this.colonyId = colonyId;
         this.destinationName = Preconditions.checkNotNull(destinationName,
                 "Go-to destination name is null");
         this.paused = paused;
+    }
+
+    boolean isEurope() {
+        return europe;
     }
 
     Location getDestination() {

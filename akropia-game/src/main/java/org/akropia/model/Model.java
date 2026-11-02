@@ -4563,7 +4563,10 @@ public class Model {
                 && getCurrentPlayer() == unit.getOwner()
                 && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
                 && unit.isAtPlaceLocation() && unit.getAction().isNoAction()
-                && !hasGoToOrder(unit);
+                && (!hasGoToOrder(unit) || unit.isShip())
+                && ((AbstractUnit) unit).getTradeRouteAssignment().isEmpty()
+                && (!(unit instanceof org.akropia.model.unit.Ship)
+                        || !((org.akropia.model.unit.Ship) unit).isDamaged());
     }
 
     private static Optional<GoToOrder> goToOrderOf(final Unit unit) {
@@ -4640,6 +4643,22 @@ public class Model {
         checkTurnPreparationComplete();
         startGoToOrder(unit, new GoToOrder(colony.getLocation(), colony.getId(),
                 colony.getName(), false));
+    }
+
+    public boolean canIssueGoToEurope(final Unit unit) {
+        return isGoToCandidate(unit) && unit.isShip()
+                && ((AbstractUnit) unit).findEuropeGoToRoute().isPresent();
+    }
+
+    public void issueGoToEurope(final Unit unit) {
+        Preconditions.checkState(canIssueGoToEurope(unit),
+                "Ship cannot go to Europe");
+        checkTurnPreparationComplete();
+        startGoToOrder(unit, new GoToOrder(null, null, "Europe", false, true));
+    }
+
+    public boolean isGoToEurope(final Unit unit) {
+        return goToOrderOf(unit).map(GoToOrder::isEurope).orElse(false);
     }
 
     private void startGoToOrder(final Unit unit, final GoToOrder order) {
@@ -5266,6 +5285,43 @@ public class Model {
         return colonies.stream()
                 .filter(colony -> colony.getLocation().equals(location))
                 .findFirst();
+    }
+
+    /** Read-only warnings for the current player's end-turn confirmation. */
+    public Map<Colony, List<Unit>> getIdleColonistsBeforeEndTurn() {
+        final Map<Colony, List<Unit>> warnings = new java.util.LinkedHashMap<>();
+        for (final Colony colony : getColonies(getCurrentPlayer())) {
+            final List<Unit> idle = getAllUnits().stream()
+                    .filter(unit -> unit.getOwner() == getCurrentPlayer()
+                            && unit instanceof UnitFreeColonist
+                            && unit.isAtPlaceLocation()
+                            && unit.getLocation().equals(colony.getLocation())
+                            && unit.getAction().isNoAction())
+                    .filter(this::hasNoEmployingGoToOrder)
+                    .collect(java.util.stream.Collectors.toList());
+            if (!idle.isEmpty()) {
+                warnings.put(colony, List.copyOf(idle));
+            }
+        }
+        return java.util.Collections.unmodifiableMap(warnings);
+    }
+
+    private boolean hasNoEmployingGoToOrder(final Unit unit) {
+        final Optional<GoToOrder> order = goToOrderOf(unit);
+        if (order.isEmpty()) {
+            return true;
+        }
+        final GoToOrder goTo = order.get();
+        return goTo.isPaused()
+                || goTo.getDestination().equals(unit.getLocation())
+                || (goTo.getColonyId() != null
+                        && getColonyById(goTo.getColonyId())
+                                .filter(Colony::isValid)
+                                .filter(colony -> colony.getOwner() == unit
+                                        .getOwner())
+                                .isEmpty())
+                || ((AbstractUnit) unit).findGoToRoute(goTo.getDestination())
+                        .isEmpty();
     }
 
     public List<Colony> getColonies(final Player owner) {

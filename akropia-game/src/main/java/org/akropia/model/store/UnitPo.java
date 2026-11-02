@@ -330,6 +330,16 @@ public class UnitPo {
 
     private boolean goToPaused;
 
+    private boolean goToEurope;
+
+    public boolean isGoToEurope() {
+        return goToEurope;
+    }
+
+    public void setGoToEurope(final boolean value) {
+        goToEurope = value;
+    }
+
     public Location getGoToDestination() {
         return goToDestination;
     }

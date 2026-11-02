@@ -55,7 +55,7 @@ public final class GameToolbarPage extends AbstractScreen {
     }
 
     public void focusCenterWithTab() {
-        getRobot().push(KeyCode.O);
+        getRobot().push(KeyCode.I);
         getRobot().push(KeyCode.ESCAPE);
         getRobot().push(KeyCode.TAB);
         getRobot().push(KeyCode.TAB);
@@ -64,7 +64,7 @@ public final class GameToolbarPage extends AbstractScreen {
 
     public void focusMapHeadingWithKeyboard() {
         getRobot().moveTo("#canvas");
-        getRobot().push(KeyCode.O, KeyCode.ESCAPE);
+        getRobot().push(KeyCode.I, KeyCode.ESCAPE);
         getRobot().press(KeyCode.SHIFT).push(KeyCode.TAB)
                 .release(KeyCode.SHIFT);
         WaitForAsyncUtils.waitForFxEvents();
@@ -145,7 +145,7 @@ public final class GameToolbarPage extends AbstractScreen {
 
     public void openColoniesWithKeyboard() {
         getRobot().moveTo("#labelEra");
-        getRobot().push(KeyCode.O);
+        getRobot().push(KeyCode.I);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -195,8 +195,8 @@ public final class GameToolbarPage extends AbstractScreen {
                             "Statistiky", "Hlášení", "Cíle", "Nápověda",
                             "Evropa", "Další tah", "Ukončit", "Nabídka" }
                     : new String[] { "Colonies", "Congress", "Center",
-                            "Statistics", "Report", "Goals", "Help", "Europe",
-                            "Next turn", "Retire", "Menu" };
+                            "Statistics", "Report", "Objectives", "Help",
+                            "Europe", "Next turn", "Retire", "Menu" };
             final FlowPane bar = getNodeFinder().lookup(".buttonPanel")
                     .queryAs(FlowPane.class);
             for (int i = 0; i < IDS.size(); i++) {

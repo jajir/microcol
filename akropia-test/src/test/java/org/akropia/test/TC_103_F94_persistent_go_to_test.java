@@ -250,4 +250,101 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         goTo.verifyButton("Go to", true);
         goTo.verifyMoveButtonShown(true);
     }
+
+    @Test
+    @Tag("local")
+    void TC_06_ship_destination_cancel_and_port_arrival_survive_continue()
+            throws Exception {
+        // G offers named destinations; Escape must not give the selected ship
+        // an order.
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        final GoToPage goTo = new GoToPage(getContext());
+        final Location start = Location.of(25, 15);
+        game.panToTile(start);
+        game.selectTile(start);
+        goTo.openDestinationWithG();
+        goTo.verifyEuropeOffered();
+        goTo.cancelPickWithEscape();
+        goTo.verifyNoDestination(3);
+        goTo.verifyLocation(3, start);
+
+        // A named port is reached through the ordinary movement rules exactly
+        // once.
+        goTo.openDestinationWithG();
+        goTo.chooseColony(0);
+        goTo.confirmColonyChoice();
+        goTo.waitUntilUnitIsAt(3, GoToFixture.COLONY);
+        goTo.verifyNoDestination(3);
+        ScreenTurnReport report = game.openTurnReport();
+        report.verifyEventMessageCount("arrived at port New Amsterdam", 1);
+        report.close();
+
+        // Loading the completed voyage neither moves the ship nor repeats the
+        // notice.
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        goTo.verifyLocation(3, GoToFixture.COLONY);
+        goTo.verifyNoDestination(3);
+        report = game.openTurnReport();
+        report.verifyEventMessageCount("arrived at port New Amsterdam", 1);
+        report.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_07_europe_destination_survives_continue_until_real_arrival()
+            throws Exception {
+        GoToFixture.prepareShipAtOceanEdge(getContext(), SOURCE);
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        final GoToPage goTo = new GoToPage(getContext());
+        // G opens the same chooser; confirming Europe starts an ordinary
+        // voyage.
+        game.panToTile(Location.of(50, 15));
+        game.selectTile(Location.of(50, 15));
+        goTo.openDestinationWithG();
+        goTo.chooseEurope();
+        goTo.confirmColonyChoice();
+        goTo.waitForHighSea(3);
+        goTo.verifyEuropeVoyage(3);
+        // Loading at sea retains the order without announcing arrival.
+        game.exitToMenu();
+        game = new FreePlayAuditPage(getContext()).continueGame();
+        goTo.verifyEuropeVoyage(3);
+        ScreenTurnReport report = game.openTurnReport();
+        report.verifyEventMessageCount("arrived in Europe", 0);
+        report.close();
+        // Only the actual arrival completes the order and emits its notice.
+        final int remainingTurns = goTo.remainingVoyageTurns(3);
+        for (int turn = 0; turn < remainingTurns; turn++) {
+            game.nextTurnAndCloseDialogs();
+        }
+        goTo.verifyArrivedInEurope(3);
+        report = game.openTurnReport();
+        report.verifyEventMessageCount("arrived in Europe", 1);
+        report.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_08_planning_mode_does_not_accept_ship_go_to_shortcut()
+            throws Exception {
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final GoToPage goTo = new GoToPage(getContext());
+        final Location start = Location.of(25, 15);
+        game.panToTile(start);
+        game.selectTile(start);
+        // The planner is a preview: unit shortcuts cannot issue orders here.
+        final TradeRoutePlanningPage planning = new TradeRoutePlanningPage(
+                getContext());
+        planning.open();
+        goTo.openDestinationWithG();
+        goTo.verifyDestinationChooserClosed();
+        goTo.verifyNoDestination(3);
+        goTo.verifyLocation(3, start);
+        planning.close();
+        // The same shortcut remains available after returning to the map.
+        goTo.openDestinationWithG();
+        goTo.verifyEuropeOffered();
+        goTo.cancelPickWithEscape();
+    }
 }

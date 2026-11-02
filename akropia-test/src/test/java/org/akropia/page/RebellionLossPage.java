@@ -67,6 +67,7 @@ public final class RebellionLossPage extends AbstractScreen {
             try {
                 getRobot().clickOn(
                         getButtonById(ButtonsGamePanel.BUTTON_NEXT_TURN_ID));
+                confirmEndTurnWarningsIfShown();
                 if (!settled.await(60, TimeUnit.SECONDS)) {
                     throw new TimeoutException(
                             "Neither the next human turn nor the end of the game came");

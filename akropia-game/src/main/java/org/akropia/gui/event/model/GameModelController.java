@@ -202,9 +202,20 @@ public class GameModelController {
      */
     public void performGoTo(final Unit unit, final Location destination,
             final Colony colony) {
+        performGoTo(unit, destination, colony, false);
+    }
+
+    public void performGoToEurope(final Unit unit) {
+        performGoTo(unit, null, null, true);
+    }
+
+    private void performGoTo(final Unit unit, final Location destination,
+            final Colony colony, final boolean europe) {
         new Thread(() -> {
             try {
-                if (colony == null) {
+                if (europe) {
+                    getModel().issueGoToEurope(unit);
+                } else if (colony == null) {
                     getModel().issueGoTo(unit, destination);
                 } else {
                     getModel().issueGoToColony(unit, colony);

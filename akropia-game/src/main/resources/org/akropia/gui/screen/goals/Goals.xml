@@ -4,7 +4,7 @@
 <properties>
 	<comment>Define keys for game goals.</comment>
 	
-	<entry key="title">Goals</entry>
+	<entry key="title">Objectives</entry>
 	<entry key="notYetDone">Not yet done.</entry>
 	<entry key="buttonBack">Back</entry>
 

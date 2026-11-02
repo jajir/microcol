@@ -99,4 +99,7 @@ Celkem: %s zlatých</entry>
   <entry key="backTaxOpen">Dlužné daně</entry>
   <entry key="voyageOrders">Příkazy: pravé tlačítko nebo Shift+F10</entry>
 	<entry key="sailToNewWorld">Odplout do Nového světa</entry>
+    <entry key="goToARRIVED">%s #%s dorazila do přístavu %s.</entry>
+    <entry key="goToARRIVED_EUROPE">%s #%s dorazila do Evropy.</entry>
+    <entry key="goToCANCELLED_BLOCKED">%s #%s přerušila plavbu do %s: nezbývá žádná legální cesta.</entry>
 </properties>

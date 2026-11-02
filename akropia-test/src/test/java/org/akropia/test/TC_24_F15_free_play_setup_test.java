@@ -131,7 +131,7 @@ public class TC_24_F15_free_play_setup_test extends AbstractAkropiaTest {
         // choices.
         WelcomePage.of(getContext()).startFreeGame();
         FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
-        audit.press(javafx.scene.input.KeyCode.O);
+        audit.press(javafx.scene.input.KeyCode.I);
         audit.verifyColonyMenu("No colonies yet");
         audit.press(javafx.scene.input.KeyCode.ESCAPE);
         GamePage.of(getContext());

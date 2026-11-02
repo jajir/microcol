@@ -278,8 +278,8 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.chooseMenu("menuResume");
         saves.rememberGame();
 
-        // Plain O still opens the colony list instead of Load.
-        hosted.press(KeyCode.O);
+        // Plain I opens the colony list; Shortcut+O remains Load.
+        hosted.press(KeyCode.I);
         hosted.verifyLoadClosed();
         hosted.press(KeyCode.ESCAPE);
         game.verifyGameInFront();

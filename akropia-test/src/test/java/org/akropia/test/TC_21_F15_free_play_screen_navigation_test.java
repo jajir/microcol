@@ -104,7 +104,7 @@ public class TC_21_F15_free_play_screen_navigation_test
         audit.verifyColonyMenu("New Amsterdam");
         audit.chooseColony("New Amsterdam");
         ColonyScreen.of(getContext(), "New Amsterdam").close();
-        audit.press(KeyCode.O);
+        audit.press(KeyCode.I);
         audit.verifyColonyMenu("New Amsterdam");
         audit.press(KeyCode.DOWN);
         audit.press(KeyCode.ENTER);

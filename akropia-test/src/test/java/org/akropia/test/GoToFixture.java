@@ -79,6 +79,28 @@ final class GoToFixture {
                 destinationName, paused);
     }
 
+    static void prepareShipAtOceanEdge(final TestContext context,
+            final File source) throws IOException {
+        final JsonObject saved = new Gson()
+                .fromJson(Files.readString(source.toPath()), JsonObject.class);
+        saved.getAsJsonObject("model").getAsJsonArray("units")
+                .forEach(element -> {
+                    final JsonObject unit = element.getAsJsonObject();
+                    if (unit.get("id").getAsInt() == 3) {
+                        final JsonObject location = unit
+                                .getAsJsonObject("placeMap")
+                                .getAsJsonObject("location");
+                        location.addProperty("x", 50);
+                        location.addProperty("y", 15);
+                    }
+                });
+        final File prepared = new File(System.getProperty("user.home"),
+                "F94-ship-europe.akropia");
+        Files.writeString(prepared.toPath(), saved.toString());
+        when(context.getClassFromGuice(FileSelectingService.class)
+                .loadFile(any(File.class))).thenReturn(prepared);
+    }
+
     private static void write(final TestContext context, final File source,
             final String name, final Location start, final int movementThirds,
             final Location destination, final String destinationName,

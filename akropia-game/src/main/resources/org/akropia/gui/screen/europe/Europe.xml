@@ -99,4 +99,7 @@ Total: %s gold</entry>
   <entry key="backTaxOpen">Back taxes</entry>
   <entry key="voyageOrders">Orders: right-click or Shift+F10</entry>
 	<entry key="sailToNewWorld">Sail to New World</entry>
+    <entry key="goToARRIVED">%s #%s arrived at port %s.</entry>
+    <entry key="goToARRIVED_EUROPE">%s #%s arrived in Europe.</entry>
+    <entry key="goToCANCELLED_BLOCKED">%s #%s stopped sailing to %s: no legal route remains.</entry>
 </properties>
