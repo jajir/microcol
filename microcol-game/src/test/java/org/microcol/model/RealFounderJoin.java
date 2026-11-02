@@ -34,13 +34,13 @@ final class RealFounderJoin {
 
     /**
      * Ready the Congress so that one owner update joins the founder: no member
-     * yet, the target bells, and one offer per category including the founder.
+     * yet, the target owls, and one offer per category including the founder.
      */
     static void readyFor(final CongressPo congress, final Founder founder) {
         congress.setActivated(true);
         congress.setGeneration(1);
         // Above any difficulty's first target; a surplus carries over.
-        congress.setBells(1000);
+        congress.setOwls(1000);
         congress.setMembers(List.of());
         congress.setSelected(null);
         congress.setJonesDeliveryPending(false);
@@ -57,7 +57,7 @@ final class RealFounderJoin {
 
     /**
      * The current owner chooses the founder and runs its ordinary update, which
-     * credits the bells and joins the founder once.
+     * credits the owls and joins the founder once.
      */
     static void joinThroughOwnerUpdate(final Model model,
             final Founder founder) {

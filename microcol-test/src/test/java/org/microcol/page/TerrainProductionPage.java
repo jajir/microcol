@@ -31,13 +31,13 @@ public final class TerrainProductionPage extends AbstractScreen {
     }
 
     /** Check the aid-card baseline of a forested grassland square. */
-    public void verifyBaseline(final Location location, final int expectedCorn,
-            final int expectedFur, final int expectedLumber) {
+    public void verifyBaseline(final Location location, final int expectedGrain,
+            final int expectedClay, final int expectedLumber) {
         final Terrain terrain = getModel().getMap().getTerrainAt(location);
-        assertEquals(expectedCorn, terrain.canProduceAmmount(GoodsType.CORN),
-                "Unexpected corn output at " + location);
-        assertEquals(expectedFur, terrain.canProduceAmmount(GoodsType.FUR),
-                "Unexpected fur output at " + location);
+        assertEquals(expectedGrain, terrain.canProduceAmmount(GoodsType.GRAIN),
+                "Unexpected grain output at " + location);
+        assertEquals(expectedClay, terrain.canProduceAmmount(GoodsType.CLAY),
+                "Unexpected clay output at " + location);
         assertEquals(expectedLumber,
                 terrain.canProduceAmmount(GoodsType.LUMBER),
                 "Unexpected lumber output at " + location);

@@ -749,7 +749,7 @@ class AllianceModelTest {
         final Model model = contact(data);
         final Unit visitor = model.getUnitById(0);
         ((org.microcol.model.unit.UnitFreeColonist) visitor)
-                .setHoldingGuns(true);
+                .setHoldingWeapons(true);
         final String before = snapshot(model);
         assertTrue(visitor.prepareAttack(COLONY, true).isEmpty());
         assertFalse(visitor.isPossibleToAttackAt(COLONY));
@@ -779,7 +779,7 @@ class AllianceModelTest {
         final Model model = contact(data);
         final Unit capturer = model.getUnitById(0);
         ((org.microcol.model.unit.UnitFreeColonist) capturer)
-                .setHoldingGuns(true);
+                .setHoldingWeapons(true);
         // A step never takes a colony its inhabitants defend; the won battle
         // is the actual aggression that obliges the victim's allies.
         assertFalse(capturer.isPossibleToMoveAt(COLONY));

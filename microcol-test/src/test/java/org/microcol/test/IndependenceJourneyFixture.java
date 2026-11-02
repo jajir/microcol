@@ -30,11 +30,11 @@ import com.google.gson.JsonObject;
  * Changes, all legal saved data: the game is scored free play on the Discoverer
  * profile, so the royal force is the fresh Discoverer roster of four infantry,
  * two cavalry, two artillery and two men-of-war and the intervention target is
- * ceil(500 x 75 / 100) = 375 bells; the calendar stands at turn 698, spring
+ * ceil(500 x 75 / 100) = 375 owls; the calendar stands at turn 698, spring
  * 1747; the Dutch hold 1,500 gold, below the 5,000 at which mercenaries are
  * offered; every colony holds 762 liberty of its 1,600, which is 47 percent,
  * and its three elder statesmen work in the town hall, with a newspaper; every
- * colony stores 100 corn, so the two derived updates can neither starve a
+ * colony stores 100 grain, so the two derived updates can neither starve a
  * resident nor reach the 200 of a birth; New Amsterdam has a completed custom
  * house and a warehouse that stores 200, with 160 ore; colonies 0, 1 and 2 hold
  * four armed, mounted veterans each on their square, and Leiden holds none. The
@@ -58,14 +58,14 @@ final class IndependenceJourneyFixture {
     /** Gold of the Dutch treasury at the start. */
     static final int GOLD = 1500;
 
-    /** Liberty before the 38 bells that bring each colony to 800 of 1,600. */
+    /** Liberty before the 38 owls that bring each colony to 800 of 1,600. */
     static final long LIBERTY = 762;
 
     /** Ore stored in New Amsterdam; the part above 100 can be exported. */
     static final int ORE = 160;
 
-    /** Corn of every colony: no famine and no birth in the derived updates. */
-    static final int CORN = 100;
+    /** Grain of every colony: no famine and no birth in the derived updates. */
+    static final int GRAIN = 100;
 
     /** First veteran identity; colony c holds 500 + 4c to 503 + 4c. */
     static final int FIRST_VETERAN = 500;
@@ -124,7 +124,8 @@ final class IndependenceJourneyFixture {
         for (final JsonElement element : colonies) {
             final JsonObject colony = element.getAsJsonObject();
             colony.addProperty("liberty", LIBERTY);
-            colony.getAsJsonObject("colonyWarehouse").addProperty("CORN", CORN);
+            colony.getAsJsonObject("colonyWarehouse").addProperty("GRAIN",
+                    GRAIN);
             staffTownHall(colony);
             final JsonObject newspaper = new JsonObject();
             newspaper.addProperty("type", "NEWSPAPER");
@@ -217,8 +218,8 @@ final class IndependenceJourneyFixture {
     }
 
     /**
-     * Move the workers of the tobacconist's house into the town hall of the
-     * colony. They keep their identity, and only the slot changes.
+     * Move the workers of the small winery into the town hall of the colony.
+     * They keep their identity, and only the slot changes.
      */
     private static void staffTownHall(final JsonObject colony) {
         JsonArray hall = null;
@@ -229,7 +230,7 @@ final class IndependenceJourneyFixture {
             final String type = construction.get("type").getAsString();
             if ("TOWN_HALL".equals(type)) {
                 hall = construction.getAsJsonArray("slots");
-            } else if ("TOBACCONISTS_HOUSE".equals(type)) {
+            } else if ("SMALL_WINERY".equals(type)) {
                 house = construction.getAsJsonArray("slots");
             }
         }
@@ -284,7 +285,7 @@ final class IndependenceJourneyFixture {
         unit.add("cargo", cargo);
         unit.add("action", action);
         unit.addProperty("movementThirds", MovementPoints.ofPoints(1));
-        unit.addProperty("holdingGuns", true);
+        unit.addProperty("holdingWeapons", true);
         unit.addProperty("mounted", true);
         unit.addProperty("veteran", true);
         return unit;

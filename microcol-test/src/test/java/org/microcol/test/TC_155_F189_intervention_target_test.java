@@ -33,7 +33,7 @@ public class TC_155_F189_intervention_target_test extends AbstractMicroColTest {
     /** Full liberty in the four colonies of the scenario, as in TC_154. */
     private final static long FULL = 1600L;
 
-    /** The scenario is Conquistador, so the target is 500 bells. */
+    /** The scenario is Conquistador, so the target is 500 owls. */
     private final static int TARGET = 500;
 
     private final static File testFileName = new File(
@@ -46,7 +46,7 @@ public class TC_155_F189_intervention_target_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
-    void TC_01_first_update_announces_the_target_counts_its_bells_and_survives_continue()
+    void TC_01_first_update_announces_the_target_counts_its_owls_and_survives_continue()
             throws Exception {
         // The nation is declared, but its first update has not happened yet.
         IndependenceFixture.prepareDeclared(getContext(), testFileName,
@@ -61,8 +61,8 @@ public class TC_155_F189_intervention_target_test extends AbstractMicroColTest {
         congress.close();
 
         // The first real update fixes the target, announces it once and counts
-        // the bells that its colonies produce.
-        final int planned = intervention.plannedBells();
+        // the owls that its colonies produce.
+        final int planned = intervention.plannedOwls();
         final ScreenTurnReport report = gamePage.nextTurn().orElseThrow();
         intervention.verifyAnnouncement(report, TARGET);
         intervention.closeReport(report);
@@ -80,9 +80,9 @@ public class TC_155_F189_intervention_target_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
-    void TC_02_real_update_earns_the_target_once_and_later_bells_earn_nothing_again()
+    void TC_02_real_update_earns_the_target_once_and_later_owls_earn_nothing_again()
             throws Exception {
-        // Saved progress stands one bell short of the target, so the next real
+        // Saved progress stands one owl short of the target, so the next real
         // update of the colonies reaches it.
         IndependenceFixture.prepareDeclared(getContext(), testFileName,
                 "intervention-f189-earn.microcol", YEAR_1747, END_YEAR,
@@ -104,7 +104,7 @@ public class TC_155_F189_intervention_target_test extends AbstractMicroColTest {
         congress.verifyInterventionEarned(TARGET);
         congress.close();
 
-        // A later update adds bells, but the earning is not reported again.
+        // A later update adds owls, but the earning is not reported again.
         final Optional<ScreenTurnReport> later = gamePage.nextTurn();
         intervention.verifyNoEarnedNotice(later);
         intervention.closeReport(later);

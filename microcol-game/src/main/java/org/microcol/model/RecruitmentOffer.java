@@ -17,13 +17,13 @@ public final class RecruitmentOffer {
 
     private final int paidPassages;
 
-    private final int crosses;
+    private final int torches;
 
     private final int earnedImmigrants;
 
     RecruitmentOffer(final RecruitmentPool pool, final int slot,
             final int candidateId, final UnitType type, final int price,
-            final int paidPassages, final int crosses,
+            final int paidPassages, final int torches,
             final int earnedImmigrants) {
         this.pool = pool;
         this.slot = slot;
@@ -31,7 +31,7 @@ public final class RecruitmentOffer {
         this.type = type;
         this.price = price;
         this.paidPassages = paidPassages;
-        this.crosses = crosses;
+        this.torches = torches;
         this.earnedImmigrants = earnedImmigrants;
     }
 
@@ -43,8 +43,8 @@ public final class RecruitmentOffer {
         return paidPassages;
     }
 
-    int getCrosses() {
-        return crosses;
+    int getTorches() {
+        return torches;
     }
 
     int getEarnedImmigrants() {

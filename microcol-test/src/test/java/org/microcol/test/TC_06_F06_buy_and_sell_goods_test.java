@@ -73,7 +73,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         harbor.verifyLayoutAndNativeImages();
 
         // Verify that ship is empty.
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
 
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0307-europe-before-trade.png");
@@ -81,7 +81,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         // Cancel a purchase choice; hold and treasury stay unchanged.
         europePort.buyGoodsAndMoveItToCargoSlotWithPressedControl(0, 0)
                 .clickOnCancel();
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
         europePort.verifyGold(95000);
 
         /*
@@ -100,8 +100,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         screenMarketBuy.verifyQuotedPrice("4 gold", "252 gold");
         screenMarketBuy.clickOnBuy();
 
-        // Verify that in first cargo slot is 63 corn.
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 63));
+        // Verify that in first cargo slot is 63 grain.
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 63));
 
         // Verify that amount of gold dropped.
         europePort.verifyGold(94748);
@@ -121,8 +121,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         screenMarketSell.verifyQuotedPrice("2 gold", "54 gold");
         screenMarketSell.clickOnSell();
 
-        // Verify that in first cargo slot is 36 corn.
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 36));
+        // Verify that in first cargo slot is 36 grain.
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 36));
 
         // Verify that amount of gold raised.
         europePort.verifyGold(94802);
@@ -141,7 +141,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         // Open Europe port and buy a ship.
         EuropePortScreen europePort = gamePage.openEuroperPort();
         europePort = europePort.openBuyUnitScreen().buyUnitByName("Galleon");
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
 
         // Open the purchase choice; the offer is the full 100 units.
         ScreenMarketBuy screenMarketBuy = europePort
@@ -149,7 +149,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         screenMarketBuy.verifySelectedMarketQuantity(100);
 
         // Another action fills half of the hold while the choice is open.
-        europePort.competingPurchase(0, GoodsType.CORN, 50);
+        europePort.competingPurchase(0, GoodsType.GRAIN, 50);
 
         // Confirming the stale 100 units is rejected without any charge.
         screenMarketBuy.clickOnBuy();
@@ -157,9 +157,9 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
                 "The cargo hold changed and the purchase was not made. Nothing was charged.");
         europePort.closeGoodsTransferWarning();
 
-        // Europe is shown again: 50 corn at 4 gold were charged to the
+        // Europe is shown again: 50 grain at 4 gold were charged to the
         // competing purchase only (95000 - 200).
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 50));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 50));
         europePort.verifyGold(94800);
 
         // Choose again; only the current free space of 50 is offered.
@@ -170,7 +170,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         screenMarketBuy.clickOnBuy();
 
         // Exactly the offered quantity was bought and charged.
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 100));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 100));
         europePort.verifyGold(94600);
 
         // Close Europe port, save through the menu and continue the game.
@@ -180,7 +180,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         europePort = gamePage.openEuroperPort();
 
         // The continued game keeps the exact cargo and treasury.
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 100));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 100));
         europePort.verifyGold(94600);
         gamePage = europePort.close();
     }
@@ -196,25 +196,25 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         // Open Europe port and buy a ship.
         EuropePortScreen europePort = gamePage.openEuroperPort();
         europePort = europePort.openBuyUnitScreen().buyUnitByName("Galleon");
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
 
-        // Open the corn purchase choice for the empty first slot.
+        // Open the grain purchase choice for the empty first slot.
         ScreenMarketBuy screenMarketBuy = europePort
                 .buyGoodsAndMoveItToCargoSlotWithPressedControl(0, 0);
         screenMarketBuy.verifySelectedMarketQuantity(100);
 
         // Another action stores different goods in that slot.
-        europePort.competingPurchase(0, GoodsType.CIGARS, 10);
+        europePort.competingPurchase(0, GoodsType.WINE, 10);
 
-        // Confirming corn is rejected; hold and treasury stay unchanged.
+        // Confirming grain is rejected; hold and treasury stay unchanged.
         screenMarketBuy.clickOnBuy();
         europePort.verifyGoodsTransferChangedWarning(
                 "The cargo hold changed and the purchase was not made. Nothing was charged.");
         europePort.closeGoodsTransferWarning();
 
-        // Only the competing purchase of 10 cigars at 12 gold was charged
+        // Only the competing purchase of 10 wine at 12 gold was charged
         // (95000 - 120).
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CIGARS, 10));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.WINE, 10));
         europePort.verifyGold(94880);
 
         // Close Europe port, save through the menu and continue the game.
@@ -224,7 +224,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         europePort = gamePage.openEuroperPort();
 
         // The continued game keeps the exact cargo and treasury.
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CIGARS, 10));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.WINE, 10));
         europePort.verifyGold(94880);
         gamePage = europePort.close();
     }
@@ -256,16 +256,17 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         europePort.verifyNumberOfShipsInPort(1);
 
         // Verify that ship is empty.
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
 
-        // Quick-buy 100 of corn into the first cargo slot with the platform
+        // Quick-buy 100 of grain into the first cargo slot with the platform
         // key held at the drop.
         europePort.quickBuyGoods(0, 0);
         europePort.verifyNoPurchaseChoice();
-        europePort.verifyStatusMessage("Corn: bought 100 pieces for 400 gold.");
+        europePort
+                .verifyStatusMessage("Grain: bought 100 pieces for 400 gold.");
 
-        // Verify that in first cargo slot is 100 corn.
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 100));
+        // Verify that in first cargo slot is 100 grain.
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 100));
 
         // Verify that amount of gold dropped.
         europePort.verifyGold(94600);
@@ -273,19 +274,19 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         // Cancel a partial transfer to an empty slot; zero goods must not
         // occupy it.
         europePort.moveCargoWithPressedControl(0, 1).cancel();
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 100));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 100));
         europePort.verifyCargoSlotEmpty(0, 1);
         europePort.verifyGold(94600);
 
-        // Drag more corn onto the full first cargo slot; no choice opens and
+        // Drag more grain onto the full first cargo slot; no choice opens and
         // the status bar explains why.
         europePort.buyGoodsAndMoveItToCargoSlot(0, 0);
         europePort.verifyNoPurchaseChoice();
         europePort.verifyStatusMessage(
-                "Corn: this cargo hold is full. Nothing was bought.");
+                "Grain: this cargo hold is full. Nothing was bought.");
 
-        // Verify that in first cargo slot is 100 corn.
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 100));
+        // Verify that in first cargo slot is 100 grain.
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 100));
 
         // More than 100 goods can't be in one cargo slot.
         // Verify that amount of gold is not changed from previous state.
@@ -307,7 +308,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         EuropePortScreen europePort = gamePage.openEuroperPort();
         europePort = europePort.openBuyUnitScreen().buyUnitByName("Galleon");
 
-        // The Crown taxes 10% and the treasury holds 200 gold: 45 corn cost
+        // The Crown taxes 10% and the treasury holds 200 gold: 45 grain cost
         // 198 gold, 46 would cost 202.
         europePort.changeCrownTax(10);
         europePort.changeTreasury(200);
@@ -317,7 +318,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         // although the hold has room for 100; nothing is bought yet.
         ScreenMarketBuy screenMarketBuy = europePort.openPurchaseChoice(0, 0);
         screenMarketBuy.verifySelectedMarketQuantity(45);
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
         europePort.verifyGold(200);
 
         // The choice explains the gold limit and names the numeric maximum.
@@ -352,14 +353,14 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
                 "You are buying 30 pieces for ...", "4 gold", "120 gold",
                 "King tax is 10%. It's totally ...", "12 gold", "132 gold",
                 "68 gold");
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
         europePort.verifyGold(200);
 
         // Confirm; exactly the shown amount is bought for the shown total.
         screenMarketBuy.clickOnBuy();
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 30));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 30));
         europePort.verifyGold(68);
-        europePort.verifyStatusMessage("Corn: bought 30 pieces for 132 gold.");
+        europePort.verifyStatusMessage("Grain: bought 30 pieces for 132 gold.");
 
         // Close Europe port, save through the menu and continue the game.
         gamePage = europePort.close();
@@ -368,7 +369,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         europePort = gamePage.openEuroperPort();
 
         // The continued game keeps the exact cargo and treasury.
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 30));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 30));
         europePort.verifyGold(68);
         gamePage = europePort.close();
     }
@@ -385,14 +386,14 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         EuropePortScreen europePort = gamePage.openEuroperPort();
         europePort = europePort.openBuyUnitScreen().buyUnitByName("Galleon");
 
-        // Buy 55 corn through the choice, leaving room for 45 more.
+        // Buy 55 grain through the choice, leaving room for 45 more.
         ScreenMarketBuy screenMarketBuy = europePort.openPurchaseChoice(0, 0);
         screenMarketBuy.verifyLimitExplanation(
                 "This cargo hold has room for 100 more pieces.");
         screenMarketBuy.verifyMaximumAtSliderEnd("Maximum: 100 pcs");
         screenMarketBuy.selectValueAtSlider(55);
         screenMarketBuy.clickOnBuy();
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 55));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 55));
         europePort.verifyGold(94780);
 
         // With plenty of gold only the hold limits the choice.
@@ -409,7 +410,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         // Back returns to the harbor without a trade.
         screenMarketBuy.clickOnCancel();
         europePort.verifyNoPurchaseChoice();
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 55));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 55));
         europePort.verifyGold(94780);
 
         // With a 10% tax, 200 gold pay exactly the 45 pieces that still fit.
@@ -430,7 +431,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         // Escape returns to the harbor without a trade.
         screenMarketBuy.cancelWithEscape();
         europePort.verifyNoPurchaseChoice();
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 55));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 55));
         europePort.verifyGold(200);
         gamePage = europePort.close();
     }
@@ -457,7 +458,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
                 "0 gold", "0 gold", "95000 gold");
         screenMarketBuy.clickOnBuy();
         screenMarketBuy.verifySelectedMarketQuantity(0);
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
         europePort.verifyGold(95000);
         screenMarketBuy.clickOnCancel();
 
@@ -475,9 +476,9 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
 
         // Exactly the shown amount was bought for the shown total.
         europePort.verifyNoPurchaseChoice();
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 63));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 63));
         europePort.verifyGold(94748);
-        europePort.verifyStatusMessage("Corn: bought 63 pieces for 252 gold.");
+        europePort.verifyStatusMessage("Grain: bought 63 pieces for 252 gold.");
         gamePage = europePort.close();
     }
 
@@ -493,36 +494,36 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         EuropePortScreen europePort = gamePage.openEuroperPort();
         europePort = europePort.openBuyUnitScreen().buyUnitByName("Galleon");
 
-        // Another action stores 10 cigars in the first hold (95000 - 120).
-        europePort.competingPurchase(0, GoodsType.CIGARS, 10);
+        // Another action stores 10 wine in the first hold (95000 - 120).
+        europePort.competingPurchase(0, GoodsType.WINE, 10);
         europePort.verifyGold(94880);
 
-        // Corn dropped on the cigar hold opens no choice and explains why.
+        // Grain dropped on the wine hold opens no choice and explains why.
         europePort.buyGoodsAndMoveItToCargoSlot(0, 0);
         europePort.verifyNoPurchaseChoice();
         europePort.verifyStatusMessage(
-                "Corn: this cargo hold holds other cargo or can't be used now. Nothing was bought.");
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CIGARS, 10));
+                "Grain: this cargo hold holds other cargo or can't be used now. Nothing was bought.");
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.WINE, 10));
         europePort.verifyGold(94880);
 
-        // Another action fills the second hold with 100 corn (94880 - 400).
-        europePort.competingPurchase(1, GoodsType.CORN, 100);
+        // Another action fills the second hold with 100 grain (94880 - 400).
+        europePort.competingPurchase(1, GoodsType.GRAIN, 100);
         europePort.verifyGold(94480);
 
-        // Corn dropped on the full hold opens no choice and explains why.
+        // Grain dropped on the full hold opens no choice and explains why.
         europePort.quickBuyGoods(0, 1);
         europePort.verifyNoPurchaseChoice();
         europePort.verifyStatusMessage(
-                "Corn: this cargo hold is full. Nothing was bought.");
-        europePort.verifyGoodsInShip(1, Goods.of(GoodsType.CORN, 100));
+                "Grain: this cargo hold is full. Nothing was bought.");
+        europePort.verifyGoodsInShip(1, Goods.of(GoodsType.GRAIN, 100));
         europePort.verifyGold(94480);
 
-        // With 3 gold not one piece of corn at 4 gold can be bought.
+        // With 3 gold not one piece of grain at 4 gold can be bought.
         europePort.changeTreasury(3);
         europePort.buyGoodsAndMoveItToCargoSlot(0, 2);
         europePort.verifyNoPurchaseChoice();
         europePort.verifyStatusMessage(
-                "Corn: you don't have enough gold for even one piece. Nothing was bought.");
+                "Grain: you don't have enough gold for even one piece. Nothing was bought.");
         europePort.verifyCargoSlotEmpty(0, 2);
         europePort.verifyGold(3);
         gamePage = europePort.close();
@@ -539,7 +540,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         EuropePortScreen europePort = gamePage.openEuroperPort();
         europePort = europePort.openBuyUnitScreen().buyUnitByName("Galleon");
 
-        // Open the choice for 100 corn at 400 gold.
+        // Open the choice for 100 grain at 400 gold.
         ScreenMarketBuy screenMarketBuy = europePort.openPurchaseChoice(0, 0);
         screenMarketBuy.verifySelectedMarketQuantity(100);
         screenMarketBuy.verifyPurchaseDetails(
@@ -555,7 +556,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         europePort.verifyEuropePriceChangedWarning(
                 "The European price changed and the trade was not made. Nothing was charged or moved.");
         europePort.closeGoodsTransferWarning();
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
         europePort.verifyGold(95000);
 
         // A new choice shows the current taxed total.
@@ -573,7 +574,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         europePort.verifyEuropeGoldChangedWarning(
                 "Your gold changed and the purchase was not made. Nothing was charged.");
         europePort.closeGoodsTransferWarning();
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
         europePort.verifyGold(90000);
 
         // The next valid choice buys exactly the shown amount and total.
@@ -583,7 +584,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
                 "King tax is 10%. It's totally ...", "40 gold", "440 gold",
                 "89560 gold");
         screenMarketBuy.clickOnBuy();
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 100));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 100));
         europePort.verifyGold(89560);
         gamePage = europePort.close();
     }
@@ -607,18 +608,19 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         // maximum of 45 at once, without a choice.
         europePort.quickBuyGoods(0, 0);
         europePort.verifyNoPurchaseChoice();
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 45));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 45));
         europePort.verifyGold(2);
-        europePort.verifyStatusMessage("Corn: bought 45 pieces for 198 gold.");
+        europePort.verifyStatusMessage("Grain: bought 45 pieces for 198 gold.");
 
         // The key pressed only over the hold, before the drop, also buys the
         // maximum: here the full hold of 100 for 440 gold.
         europePort.changeTreasury(95000);
         europePort.quickBuyWithKeyPressedDuringDrag(0, 1);
         europePort.verifyNoPurchaseChoice();
-        europePort.verifyGoodsInShip(1, Goods.of(GoodsType.CORN, 100));
+        europePort.verifyGoodsInShip(1, Goods.of(GoodsType.GRAIN, 100));
         europePort.verifyGold(94560);
-        europePort.verifyStatusMessage("Corn: bought 100 pieces for 440 gold.");
+        europePort
+                .verifyStatusMessage("Grain: bought 100 pieces for 440 gold.");
 
         // The key released before the drop opens the normal choice instead.
         ScreenMarketBuy screenMarketBuy = europePort
@@ -635,8 +637,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         europePort = gamePage.openEuroperPort();
 
         // The continued game keeps both quick purchases once.
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 45));
-        europePort.verifyGoodsInShip(1, Goods.of(GoodsType.CORN, 100));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 45));
+        europePort.verifyGoodsInShip(1, Goods.of(GoodsType.GRAIN, 100));
         europePort.verifyGold(94560);
         gamePage = europePort.close();
     }
@@ -648,24 +650,24 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         GamePage gamePage = WelcomePage.of(getContext()).loadGame();
         WaitForAsyncUtils.waitForFxEvents();
 
-        // Open Europe port, buy a ship and 63 corn through the choice.
+        // Open Europe port, buy a ship and 63 grain through the choice.
         EuropePortScreen europePort = gamePage.openEuroperPort();
         europePort = europePort.openBuyUnitScreen().buyUnitByName("Galleon");
         ScreenMarketBuy screenMarketBuy = europePort.openPurchaseChoice(0, 0);
         screenMarketBuy.selectValueAtSlider(63);
         screenMarketBuy.clickOnBuy();
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 63));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 63));
         europePort.verifyGold(94748);
 
         // A plain drag between holds still moves all goods at once.
         europePort.moveCargo(0, 1);
         europePort.verifyCargoSlotEmpty(0, 0);
-        europePort.verifyGoodsInShip(1, Goods.of(GoodsType.CORN, 63));
+        europePort.verifyGoodsInShip(1, Goods.of(GoodsType.GRAIN, 63));
 
         // The special move still asks for the amount; cancel keeps the cargo.
         europePort.moveCargoWithPressedControl(1, 0).cancel();
         europePort.verifyCargoSlotEmpty(0, 0);
-        europePort.verifyGoodsInShip(1, Goods.of(GoodsType.CORN, 63));
+        europePort.verifyGoodsInShip(1, Goods.of(GoodsType.GRAIN, 63));
 
         // A plain drag to the market still sells everything at bid 2 without
         // a choice.
@@ -721,7 +723,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractMicroColTest {
         // Back (Zpět) returns to the harbor without a trade.
         screenMarketBuy.clickOnCancel();
         europePort.verifyNoPurchaseChoice();
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
         europePort.verifyGold(200);
     }
 

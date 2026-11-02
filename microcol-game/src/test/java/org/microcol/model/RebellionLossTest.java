@@ -121,7 +121,7 @@ class RebellionLossTest {
     private static InterventionPo pendingHelp() {
         final InterventionPo po = new InterventionPo();
         po.setTarget(TARGET);
-        po.setBells((long) TARGET);
+        po.setOwls((long) TARGET);
         po.setEarned(true);
         po.setDelivered(false);
         return po;
@@ -390,7 +390,7 @@ class RebellionLossTest {
         final Colony colony = model.getColonyById(colonyId).orElseThrow();
         for (int index = 0; index < count; index++) {
             ((UnitFreeColonist) model.addUnitOutSideColony(colony))
-                    .setHoldingGuns(true);
+                    .setHoldingWeapons(true);
         }
     }
 

@@ -28,12 +28,12 @@ final class GeneratedWorldResources {
     /** Chance that a mineral square yields both silver and ore. */
     private static final double MIXED_SHARE = 0.25;
 
-    /** Chance that a grassland square is a tobacco rather than food field. */
-    private static final double TOBACCO_SHARE = 0.5;
+    /** Chance that a grassland square is a grapes rather than food field. */
+    private static final double GRAPES_SHARE = 0.5;
 
-    /** Forest squares give timber, trapping or game in equal turns. */
+    /** Forest squares give timber, clay pit or game in equal turns. */
     private static final ResourceOverlay[] FOREST_OVERLAYS = {
-            ResourceOverlay.PRIME_TIMBER, ResourceOverlay.TRAPPING,
+            ResourceOverlay.PRIME_TIMBER, ResourceOverlay.CLAY_PIT,
             ResourceOverlay.GAME };
 
     /** Resource families in their fixed placement order. */
@@ -176,14 +176,14 @@ final class GeneratedWorldResources {
             return ResourceOverlay.FISHERY;
         }
         if (terrain == TerrainType.SAVANNAH) {
-            return ResourceOverlay.PRIME_SUGAR;
+            return ResourceOverlay.PRIME_OLIVES;
         }
         if (terrain == TerrainType.PLAINS) {
-            return ResourceOverlay.PRIME_COTTON;
+            return ResourceOverlay.PRIME_WOOL;
         }
         if (terrain == TerrainType.GRASSLAND
-                && random.nextDouble() < TOBACCO_SHARE) {
-            return ResourceOverlay.PRIME_TOBACCO;
+                && random.nextDouble() < GRAPES_SHARE) {
+            return ResourceOverlay.PRIME_GRAPES;
         }
         return ResourceOverlay.PRIME_FOOD;
     }

@@ -136,7 +136,7 @@ public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
         europe.openBuyUnitScreen();
         purchase.confirm();
         purchase.verifyTreasuryAndPierExperts(2200, List.of(103));
-        equipment.open(103, "Buy 50 muskets");
+        equipment.open(103, "Buy 50 weapons");
         equipment.confirm();
         purchase.verifyExpertState(103, 2025, true, PlaceEuropePier.class);
         GamePage game = europe.close();
@@ -469,9 +469,9 @@ public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
         purchase.revealSpecialist("EXPERT_FISHERMAN");
         purchase.verifySpecialistOffer("EXPERT_FISHERMAN", "Expert Fisherman",
                 1000, "Hire specialist for ");
-        purchase.revealSpecialist("EXPERT_FUR_TRAPPER");
-        purchase.verifySpecialistOffer("EXPERT_FUR_TRAPPER",
-                "Expert Fur Trapper", 1000, "Hire specialist for ");
+        purchase.revealSpecialist("EXPERT_CLAY_DIGGER");
+        purchase.verifySpecialistOffer("EXPERT_CLAY_DIGGER",
+                "Expert Clay Digger", 1000, "Hire specialist for ");
         purchase.revealSpecialist("EXPERT_SILVER_MINER");
         purchase.verifySpecialistOffer("EXPERT_SILVER_MINER",
                 "Expert Silver Miner", 1000, "Hire specialist for ");
@@ -484,24 +484,24 @@ public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
         purchase.revealSpecialist("MASTER_CARPENTER");
         purchase.verifySpecialistOffer("MASTER_CARPENTER", "Master Carpenter",
                 1000, "Hire specialist for ");
-        purchase.revealSpecialist("MASTER_DISTILLER");
-        purchase.verifySpecialistOffer("MASTER_DISTILLER", "Master Distiller",
+        purchase.revealSpecialist("MASTER_OIL_MAKER");
+        purchase.verifySpecialistOffer("MASTER_OIL_MAKER", "Master Oil Maker",
                 2000, "Hire specialist for ");
         purchase.revealSpecialist("MASTER_WEAVER");
         purchase.verifySpecialistOffer("MASTER_WEAVER", "Master Weaver", 2000,
                 "Hire specialist for ");
-        purchase.revealSpecialist("MASTER_TOBACCONIST");
-        purchase.verifySpecialistOffer("MASTER_TOBACCONIST",
-                "Master Tobacconist", 2000, "Hire specialist for ");
-        purchase.revealSpecialist("MASTER_FUR_TRADER");
-        purchase.verifySpecialistOffer("MASTER_FUR_TRADER", "Master Fur Trader",
+        purchase.revealSpecialist("MASTER_WINEMAKER");
+        purchase.verifySpecialistOffer("MASTER_WINEMAKER", "Master Winemaker",
                 2000, "Hire specialist for ");
+        purchase.revealSpecialist("MASTER_POTTER");
+        purchase.verifySpecialistOffer("MASTER_POTTER", "Master Potter", 2000,
+                "Hire specialist for ");
         purchase.revealSpecialist("MASTER_BLACKSMITH");
         purchase.verifySpecialistOffer("MASTER_BLACKSMITH", "Master Blacksmith",
                 2200, "Hire specialist for ");
-        purchase.revealSpecialist("MASTER_GUNSMITH");
-        purchase.verifySpecialistOffer("MASTER_GUNSMITH", "Master Gunsmith",
-                2000, "Hire specialist for ");
+        purchase.revealSpecialist("MASTER_WEAPONSMITH");
+        purchase.verifySpecialistOffer("MASTER_WEAPONSMITH",
+                "Master Weaponsmith", 2000, "Hire specialist for ");
         purchase.revealSpecialist("FIREBRAND_PREACHER");
         purchase.verifySpecialistOffer("FIREBRAND_PREACHER",
                 "Firebrand Preacher", 3000, "Hire specialist for ");
@@ -520,7 +520,7 @@ public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
         purchase.revealSpecialist("JESUIT_MISSIONARY");
         purchase.verifySpecialistOffer("JESUIT_MISSIONARY", "Jesuit Missionary",
                 3000, "Hire specialist for ");
-        purchase.verifyExcludedPlanters();
+        purchase.verifyExcludedGrowers();
         purchase.captureDialog("mainVbox", "specialists-english.png");
         purchase.escape();
         europe.verifyGold(4400);
@@ -553,9 +553,9 @@ public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
         purchase.revealSpecialist("EXPERT_FISHERMAN");
         purchase.verifySpecialistOffer("EXPERT_FISHERMAN", "zkušený rybář",
                 1000, "Najmout odborníka za ");
-        purchase.revealSpecialist("EXPERT_FUR_TRAPPER");
-        purchase.verifySpecialistOffer("EXPERT_FUR_TRAPPER",
-                "zkušený lovec kožešin", 1000, "Najmout odborníka za ");
+        purchase.revealSpecialist("EXPERT_CLAY_DIGGER");
+        purchase.verifySpecialistOffer("EXPERT_CLAY_DIGGER",
+                "zkušený těžař hlíny", 1000, "Najmout odborníka za ");
         purchase.revealSpecialist("EXPERT_SILVER_MINER");
         purchase.verifySpecialistOffer("EXPERT_SILVER_MINER",
                 "zkušený těžař stříbra", 1000, "Najmout odborníka za ");
@@ -568,24 +568,24 @@ public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
         purchase.revealSpecialist("MASTER_CARPENTER");
         purchase.verifySpecialistOffer("MASTER_CARPENTER", "mistr tesař", 1000,
                 "Najmout odborníka za ");
-        purchase.revealSpecialist("MASTER_DISTILLER");
-        purchase.verifySpecialistOffer("MASTER_DISTILLER", "mistr palírník",
-                2000, "Najmout odborníka za ");
+        purchase.revealSpecialist("MASTER_OIL_MAKER");
+        purchase.verifySpecialistOffer("MASTER_OIL_MAKER", "mistr olejář", 2000,
+                "Najmout odborníka za ");
         purchase.revealSpecialist("MASTER_WEAVER");
         purchase.verifySpecialistOffer("MASTER_WEAVER", "mistr tkadlec", 2000,
                 "Najmout odborníka za ");
-        purchase.revealSpecialist("MASTER_TOBACCONIST");
-        purchase.verifySpecialistOffer("MASTER_TOBACCONIST",
-                "mistr výrobce doutníků", 2000, "Najmout odborníka za ");
-        purchase.revealSpecialist("MASTER_FUR_TRADER");
-        purchase.verifySpecialistOffer("MASTER_FUR_TRADER", "mistr kožešník",
-                2000, "Najmout odborníka za ");
+        purchase.revealSpecialist("MASTER_WINEMAKER");
+        purchase.verifySpecialistOffer("MASTER_WINEMAKER", "mistr vinař", 2000,
+                "Najmout odborníka za ");
+        purchase.revealSpecialist("MASTER_POTTER");
+        purchase.verifySpecialistOffer("MASTER_POTTER", "mistr hrnčíř", 2000,
+                "Najmout odborníka za ");
         purchase.revealSpecialist("MASTER_BLACKSMITH");
         purchase.verifySpecialistOffer("MASTER_BLACKSMITH", "mistr kovář", 2200,
                 "Najmout odborníka za ");
-        purchase.revealSpecialist("MASTER_GUNSMITH");
-        purchase.verifySpecialistOffer("MASTER_GUNSMITH", "mistr puškař", 2000,
-                "Najmout odborníka za ");
+        purchase.revealSpecialist("MASTER_WEAPONSMITH");
+        purchase.verifySpecialistOffer("MASTER_WEAPONSMITH", "mistr zbrojíř",
+                2000, "Najmout odborníka za ");
         purchase.revealSpecialist("FIREBRAND_PREACHER");
         purchase.verifySpecialistOffer("FIREBRAND_PREACHER", "horlivý kazatel",
                 3000, "Najmout odborníka za ");
@@ -604,7 +604,7 @@ public class TC_30_F22_expert_purchase_test extends AbstractMicroColTest {
         purchase.revealSpecialist("JESUIT_MISSIONARY");
         purchase.verifySpecialistOffer("JESUIT_MISSIONARY",
                 "jezuitský misionář", 3000, "Najmout odborníka za ");
-        purchase.verifyExcludedPlanters();
+        purchase.verifyExcludedGrowers();
         purchase.captureDialog("mainVbox", "specialists-cs.png");
         purchase.escape();
         europe.verifyGold(4400);

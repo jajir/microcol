@@ -139,17 +139,17 @@ class CargoCapacityTest {
             "100,99", "100,100", "100,101" })
     void europeBuyChargesOnlyForTheAcceptedAmount(final int stored,
             final int requested) {
-        put(target, GoodsType.CORN, stored);
+        put(target, GoodsType.GRAIN, stored);
         final int expected = Math.min(requested, 100 - stored);
         final EuropeTradeQuote accepted = player
-                .quoteEuropeTrade(Goods.of(GoodsType.CORN, expected), true);
+                .quoteEuropeTrade(Goods.of(GoodsType.GRAIN, expected), true);
         final int price = expected == 0 ? 0 : accepted.getTotal();
         final int goldBefore = player.getGold();
 
-        final Goods bought = target
-                .buyAndStoreFromEuropePort(Goods.of(GoodsType.CORN, requested));
+        final Goods bought = target.buyAndStoreFromEuropePort(
+                Goods.of(GoodsType.GRAIN, requested));
 
-        assertEquals(Goods.of(GoodsType.CORN, expected), bought);
+        assertEquals(Goods.of(GoodsType.GRAIN, expected), bought);
         assertEquals(stored + expected, amountIn(target));
         // Only the accepted amount is charged, at the quote read before the
         // purchase; the unaccepted remainder never moves gold or the market.
@@ -159,11 +159,11 @@ class CargoCapacityTest {
         }
         // Independent market expectation: the Dutch own market takes -4 eighths
         // per accepted unit (half of 8) and a bid step per 800, here from the
-        // Dutch corn bid 2.
-        final GoodsTrade corn = model.getEurope()
-                .getGoodsTradeForType(GoodsType.CORN, EuropeanNation.DUTCH);
-        assertEquals(2 + 4 * expected / 800, corn.getSellPrice());
-        assertEquals(-(4 * expected % 800), corn.getPressure());
+        // Dutch grain bid 2.
+        final GoodsTrade grain = model.getEurope()
+                .getGoodsTradeForType(GoodsType.GRAIN, EuropeanNation.DUTCH);
+        assertEquals(2 + 4 * expected / 800, grain.getSellPrice());
+        assertEquals(-(4 * expected % 800), grain.getPressure());
     }
 
     @Test
@@ -172,7 +172,7 @@ class CargoCapacityTest {
         final String before = snapshot();
 
         assertThrows(NotEnoughtGoldException.class, () -> target
-                .buyAndStoreFromEuropePort(Goods.of(GoodsType.CORN, 101)));
+                .buyAndStoreFromEuropePort(Goods.of(GoodsType.GRAIN, 101)));
 
         assertEquals(before, snapshot());
         assertTrue(target.isEmpty());
@@ -181,7 +181,7 @@ class CargoCapacityTest {
 
     @Test
     void incompatibleGoodsAreRejectedAtomicallyOnEveryRoute() {
-        put(target, GoodsType.CIGARS, 10);
+        put(target, GoodsType.WINE, 10);
         put(source, GoodsType.ORE, 50);
         colony.getWarehouse().setGoods(Goods.of(GoodsType.ORE, 100));
         final String before = snapshot();
@@ -202,7 +202,7 @@ class CargoCapacityTest {
         final String before = snapshot();
 
         assertThrows(IllegalArgumentException.class, () -> target
-                .storeFromCargoSlot(Goods.of(GoodsType.CORN, 20), source));
+                .storeFromCargoSlot(Goods.of(GoodsType.GRAIN, 20), source));
         assertThrows(IllegalArgumentException.class,
                 () -> target.storeFromCargoSlot(Goods.of(GoodsType.ORE, 20),
                         cargoOf(SOURCE_WAGON_ID).getSlotByIndex(1)));
@@ -269,7 +269,7 @@ class CargoCapacityTest {
         assertThrows(IllegalArgumentException.class, () -> occupied
                 .storeFromCargoSlot(Goods.of(GoodsType.ORE, 20), source));
         assertThrows(IllegalArgumentException.class, () -> occupied
-                .buyAndStoreFromEuropePort(Goods.of(GoodsType.CORN, 20)));
+                .buyAndStoreFromEuropePort(Goods.of(GoodsType.GRAIN, 20)));
         assertThrows(IllegalArgumentException.class,
                 () -> occupied.addGoods(Goods.of(GoodsType.ORE, 1)));
 

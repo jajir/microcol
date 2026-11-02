@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 
 class PrintingProductionTest {
 
-    private static Stream<Arguments> bellCases() {
+    private static Stream<Arguments> owlCases() {
         return Stream.of(Arguments.of("", null, 1),
                 Arguments.of("", ConstructionType.PRINTING_PRESS, 1),
                 Arguments.of("", ConstructionType.NEWSPAPER, 2),
@@ -94,7 +94,7 @@ class PrintingProductionTest {
     }
 
     @ParameterizedTest
-    @MethodSource("bellCases")
+    @MethodSource("owlCases")
     void bonusAppliesOnceToWholeTownHallAndMatchesTurnAndReload(
             final String workers, final ConstructionType printing,
             final int expected) {
@@ -105,12 +105,12 @@ class PrintingProductionTest {
         assertEquals(expected, hall.getProduction().getProducedGoods()
                 .orElseThrow().getAmount());
         assertEquals(expected, colony.getGoodsStats()
-                .getStatsByType(GoodsType.BELL).getRowProduction());
-        final int before = colony.getWarehouse().getGoods(GoodsType.BELL)
+                .getStatsByType(GoodsType.OWLS).getRowProduction());
+        final int before = colony.getWarehouse().getGoods(GoodsType.OWLS)
                 .getAmount();
         colony.startTurn();
         assertEquals(before + expected,
-                colony.getWarehouse().getGoods(GoodsType.BELL).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.OWLS).getAmount());
         final Model resumed = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         final String saved = new Gson().toJson(resumed.save());
@@ -118,7 +118,7 @@ class PrintingProductionTest {
         assertEquals(saved, new Gson().toJson(resumed.save()));
         assertEquals(expected,
                 resumed.getColonyById(0).orElseThrow().getGoodsStats()
-                        .getStatsByType(GoodsType.BELL).getRowProduction());
+                        .getStatsByType(GoodsType.OWLS).getRowProduction());
     }
 
     @Test
@@ -134,13 +134,13 @@ class PrintingProductionTest {
         final Model model = load(data);
         final Colony colony = model.getColonyById(0).orElseThrow();
         colony.getColonyBuildingQueue().addAtEnd(ConstructionType.NEWSPAPER);
-        assertEquals(6, colony.getGoodsStats().getStatsByType(GoodsType.BELL)
+        assertEquals(6, colony.getGoodsStats().getStatsByType(GoodsType.OWLS)
                 .getRowProduction());
-        final int before = colony.getWarehouse().getGoods(GoodsType.BELL)
+        final int before = colony.getWarehouse().getGoods(GoodsType.OWLS)
                 .getAmount();
         colony.startTurn();
         assertEquals(before + 6,
-                colony.getWarehouse().getGoods(GoodsType.BELL).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.OWLS).getAmount());
         assertTrue(colony.wasConstructionBuilded(ConstructionType.NEWSPAPER));
         assertFalse(
                 colony.wasConstructionBuilded(ConstructionType.PRINTING_PRESS));
@@ -148,7 +148,7 @@ class PrintingProductionTest {
                 colony.getColonyBuildingQueue().getBuildingQueue().size());
         assertEquals(0, colony.getConstructionByType(ConstructionType.TOWN_HALL)
                 .getConstructionSlots().get(0).getUnit().getId());
-        assertEquals(8, colony.getGoodsStats().getStatsByType(GoodsType.BELL)
+        assertEquals(8, colony.getGoodsStats().getStatsByType(GoodsType.OWLS)
                 .getRowProduction());
     }
 

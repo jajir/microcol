@@ -200,7 +200,7 @@ public class ModelPo {
     }
 
     /**
-     * Muskets and horses sold below the next native arms step, saved only when
+     * Weapons and horses sold below the next native arms step, saved only when
      * nonzero. Absent means none is retained.
      */
     private List<NativeArmsSalePo> nativeArmsSales;

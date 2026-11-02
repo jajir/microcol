@@ -127,7 +127,7 @@ public final class HomeEuropePage extends AbstractScreen {
     public void verifyPierMenuClosed(final int unitId) {
         final List<MenuItem> items = showingMenuItems();
         for (final String id : List.of("europe-sentry-" + unitId,
-                "europe-equipment-MUSKET", "europe-equipment-HORSE",
+                "europe-equipment-WEAPONS", "europe-equipment-HORSE",
                 "europe-equipment-TOOLS", "europe-ordain-" + unitId)) {
             assertTrue(item(items, id).isDisable(), "Pier action " + id);
         }
@@ -138,8 +138,8 @@ public final class HomeEuropePage extends AbstractScreen {
         final List<MenuItem> items = showingMenuItems();
         assertFalse(item(items, "europe-sentry-" + unitId).isDisable(),
                 "Sentry order of " + unitId);
-        assertFalse(item(items, "europe-equipment-MUSKET").isDisable(),
-                "Muskets for " + unitId);
+        assertFalse(item(items, "europe-equipment-WEAPONS").isDisable(),
+                "Weapons for " + unitId);
     }
 
     private List<MenuItem> showingMenuItems() {

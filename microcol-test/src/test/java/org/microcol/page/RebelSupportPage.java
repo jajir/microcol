@@ -31,7 +31,7 @@ public final class RebelSupportPage extends AbstractScreen {
     private static final int MOVING_RESIDENT = 17;
 
     private long libertyBefore;
-    private int bellsBefore;
+    private int owlsBefore;
 
     public RebelSupportPage(final TestContext context) {
         super(context);
@@ -39,7 +39,7 @@ public final class RebelSupportPage extends AbstractScreen {
 
     /**
      * F67: New Amsterdam holds the given liberty and has three residents, the
-     * third one working in the town hall where it produces bells.
+     * third one working in the town hall where it produces owls.
      */
     public void prepareFixture(final long liberty) throws Exception {
         final JsonObject saved = new Gson()
@@ -77,11 +77,11 @@ public final class RebelSupportPage extends AbstractScreen {
         return getModel().getColonyById(0).orElseThrow();
     }
 
-    /** Remember stored liberty and the bells the next update will produce. */
-    public void rememberLibertyAndPlannedBells() {
+    /** Remember stored liberty and the owls the next update will produce. */
+    public void rememberLibertyAndPlannedOwls() {
         libertyBefore = colony().getLiberty();
-        bellsBefore = Math.max(0, colony().getGoodsStats()
-                .getStatsByType(GoodsType.BELL).getRowProduction());
+        owlsBefore = Math.max(0, colony().getGoodsStats()
+                .getStatsByType(GoodsType.OWLS).getRowProduction());
     }
 
     public void verifyNationalSupport(final int percent, final int residents) {
@@ -170,7 +170,7 @@ public final class RebelSupportPage extends AbstractScreen {
             units.add(resident(next));
             slot(delft, "TOWN_HALL", position[0], next++);
             units.add(resident(next));
-            slot(delft, "TOBACCONISTS_HOUSE", position[0], next++);
+            slot(delft, "SMALL_WINERY", position[0], next++);
         }
         units.add(resident(next));
         slot(delft, "WEAVERS_HOUSE", 0, next);
@@ -200,7 +200,7 @@ public final class RebelSupportPage extends AbstractScreen {
         unit.add("action", action);
         unit.addProperty("movementThirds", MovementPoints.ofPoints(1));
         unit.addProperty("tools", 0);
-        unit.addProperty("holdingGuns", false);
+        unit.addProperty("holdingWeapons", false);
         unit.addProperty("mounted", false);
         return unit;
     }
@@ -259,11 +259,11 @@ public final class RebelSupportPage extends AbstractScreen {
         assertEquals(liberty, colony().getLiberty());
     }
 
-    /** One update credited the bells that were planned, and only once. */
+    /** One update credited the owls that were planned, and only once. */
     public void verifyLibertyCreditedOnce() {
-        assertTrue(bellsBefore > 0, "The town hall worker must make bells");
+        assertTrue(owlsBefore > 0, "The town hall worker must make owls");
         assertEquals(
-                Math.min(libertyBefore + bellsBefore,
+                Math.min(libertyBefore + owlsBefore,
                         200L * colony().getPopulation()),
                 colony().getLiberty());
     }

@@ -34,7 +34,7 @@ public class TC_09_F09_famine_destroy_colony_test extends AbstractMicroColTest {
         GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
         // Verify that in colony is 3 food.
-        verifyCornInColony(gamePage, 3);
+        verifyGrainInColony(gamePage, 3);
 
         // End the turn and verify the recorded famine outcome.
         final Optional<ScreenTurnReport> report = gamePage.nextTurn();
@@ -77,14 +77,14 @@ public class TC_09_F09_famine_destroy_colony_test extends AbstractMicroColTest {
 
     }
 
-    private GamePage verifyCornInColony(final GamePage gamePage,
+    private GamePage verifyGrainInColony(final GamePage gamePage,
             final int expectedFood) {
 
         // Open colony Delft at [22,12].
         final ColonyScreen colonyScreen = gamePage
                 .openColonyAt(Location.of(22, 12), "Delft");
 
-        // Verify number of corn is 185.
+        // Verify number of grain is 185.
         colonyScreen.verifyNumberOfGoodsInWrehouse(0, expectedFood);
 
         // Close colony screen.

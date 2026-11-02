@@ -194,13 +194,13 @@ public final class NativeRaidPage extends AbstractScreen {
         final JsonObject unit = unit(id, "COLONIST", at);
         unit.addProperty("workUpdates", 0);
         unit.addProperty("missionary", false);
-        unit.addProperty("holdingGuns", true);
+        unit.addProperty("holdingWeapons", true);
         return unit;
     }
 
     private static JsonObject gun(final int id, final Location at) {
         final JsonObject unit = unit(id, "ARTILLERY", at);
-        unit.addProperty("holdingGuns", false);
+        unit.addProperty("holdingWeapons", false);
         unit.addProperty("artilleryDamaged", false);
         return unit;
     }
@@ -253,12 +253,12 @@ public final class NativeRaidPage extends AbstractScreen {
     }
 
     /**
-     * The Dutch soldier was raided by the brave and lost its muskets; it was
+     * The Dutch soldier was raided by the brave and lost its weapons; it was
      * not destroyed, and it stands where it stood. The Dutch turn prepared the
      * soldier again after the natives acted, so its movement proves nothing;
      * the brave has spent its own movement and stays on its square.
      */
-    public void verifySoldierLostMusketsToRaid(final int soldierId,
+    public void verifySoldierLostWeaponsToRaid(final int soldierId,
             final Location soldierAt, final int braveId, final Location braveAt)
             throws Exception {
         GamePage.of(getContext()).waitWhileMoving();
@@ -266,8 +266,8 @@ public final class NativeRaidPage extends AbstractScreen {
                 .getUnitById(soldierId);
         assertEquals("Dutch", soldier.getOwner().getName());
         assertEquals(soldierAt, soldier.getLocation());
-        assertFalse(soldier.isHoldingGuns(),
-                "The raided soldier kept its muskets");
+        assertFalse(soldier.isHoldingWeapons(),
+                "The raided soldier kept its weapons");
         final UnitNativeBrave brave = (UnitNativeBrave) getModel()
                 .getUnitById(braveId);
         assertEquals(braveAt, brave.getLocation());
@@ -283,7 +283,7 @@ public final class NativeRaidPage extends AbstractScreen {
                 .getUnitById(soldierId);
         assertEquals("Dutch", soldier.getOwner().getName());
         assertEquals(soldierAt, soldier.getLocation());
-        assertTrue(soldier.isHoldingGuns());
+        assertTrue(soldier.isHoldingWeapons());
     }
 
     /**

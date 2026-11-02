@@ -93,7 +93,7 @@ public final class NativeCombatPage extends AbstractScreen {
         unit.add("action", action);
         unit.addProperty("movementThirds", 3);
         unit.addProperty("tools", 0);
-        unit.addProperty("holdingGuns", true);
+        unit.addProperty("holdingWeapons", true);
         unit.addProperty("mounted", false);
         return unit;
     }
@@ -181,7 +181,7 @@ public final class NativeCombatPage extends AbstractScreen {
 
     /**
      * The defeated brave is gone with its equipment, and the armed winner kept
-     * its muskets, spent its movement and stands on the won square.
+     * its weapons, spent its movement and stands on the won square.
      */
     public void verifyBraveDestroyed(final int braveId, final int soldierId,
             final Location soldierAt) throws Exception {
@@ -196,26 +196,26 @@ public final class NativeCombatPage extends AbstractScreen {
         assertEquals("Dutch", soldier.getOwner().getName());
         assertEquals(soldierAt, soldier.getLocation());
         assertEquals(0, soldier.getActionPoints());
-        assertTrue(soldier.isHoldingGuns());
+        assertTrue(soldier.isHoldingWeapons());
     }
 
     /**
      * The defeated soldier survives unarmed where it stood, and the winning
      * brave is unharmed in place; both have spent their movement.
      */
-    public void verifySoldierLostMuskets(final int braveId,
+    public void verifySoldierLostWeapons(final int braveId,
             final Location braveAt, final int soldierId,
             final Location soldierAt) throws Exception {
         WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
                 () -> !((UnitFreeColonist) getModel().getUnitById(soldierId))
-                        .isHoldingGuns());
+                        .isHoldingWeapons());
         GamePage.of(getContext()).waitWhileMoving();
         final UnitFreeColonist soldier = (UnitFreeColonist) getModel()
                 .getUnitById(soldierId);
         assertEquals("Dutch", soldier.getOwner().getName());
         assertEquals(soldierAt, soldier.getLocation());
         assertEquals(0, soldier.getActionPoints());
-        assertFalse(soldier.isHoldingGuns());
+        assertFalse(soldier.isHoldingWeapons());
         assertFalse(soldier.isMounted());
         assertEquals(braveAt, getModel().getUnitById(braveId).getLocation());
         assertEquals(0, getModel().getUnitById(braveId).getActionPoints());

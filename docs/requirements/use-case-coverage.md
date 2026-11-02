@@ -45,7 +45,7 @@
 | UC-037 | Hra | Vyrobit zboží ze surovin | [R-0061](done/R-0061.md) |
 | UC-038 | Hra | Zaměstnat všechny druhy pracovníků | [R-0074](done/R-0074.md), [R-0148](done/R-0148.md), [R-0212](done/R-0212.md) |
 | UC-039 | Hra | Zaměstnat domorodého konvertitu | [R-0149](done/R-0149.md) |
-| UC-040 | Hra | Produkovat kříže | [R-0062](done/R-0062.md), [R-0110](done/R-0110.md) |
+| UC-040 | Hra | Produkovat pochodně | [R-0062](done/R-0062.md), [R-0110](done/R-0110.md) |
 | UC-041 | Hra | Chovat koně | [R-0078](done/R-0078.md) |
 | UC-042 | Hra | Zpřístupnit správný stavební projekt | [R-0025](done/R-0025.md), [R-0213](done/R-0213.md) |
 | UC-043 | Hra | Dokončit projekt a změnit rozestavěný | [R-0025](done/R-0025.md), [R-0109](done/R-0109.md), [R-0086](done/R-0086.md) |
@@ -59,7 +59,7 @@
 | UC-051 | Hra | Postoupit od zločince k odborníkovi | [R-0107](done/R-0107.md) |
 | UC-052 | Hra | Zrušit odbornost a naučit jinou | [R-0147](done/R-0147.md), [R-0107](done/R-0107.md) |
 | UC-053 | Hra | Rozlišit evropské a domorodé dovednosti | [R-0148](done/R-0148.md), [R-0074](done/R-0074.md) |
-| UC-054 | Hra | Přilákat přistěhovalce kříži | [R-0076](done/R-0076.md), [R-0075](done/R-0075.md) |
+| UC-054 | Hra | Přilákat přistěhovalce pochodněmi | [R-0076](done/R-0076.md), [R-0075](done/R-0075.md) |
 | UC-055 | Hra | Zaplatit nábor, výcvik a nákup jednotky | [R-0075](done/R-0075.md), [R-0074](done/R-0074.md), [R-0023](done/R-0023.md), [R-0077](done/R-0077.md) |
 | UC-056 | Hra | Koupit a prodat přesné množství | [R-0020](done/R-0020.md), [R-0215](done/R-0215.md) |
 | UC-057 | Hra | Vidět správnou cenu a daň | [R-0020](done/R-0020.md), [R-0215](done/R-0215.md) |

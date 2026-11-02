@@ -45,7 +45,7 @@ class FranklinPeaceOfferTest {
                     Founder.FERDINAND_MAGELLAN));
             congress.setSelected(
                     joinsThisUpdate ? Founder.BENJAMIN_FRANKLIN : null);
-            congress.setBells(joinsThisUpdate ? 1000 : 0);
+            congress.setOwls(joinsThisUpdate ? 1000 : 0);
         }
         return data;
     }
@@ -161,7 +161,7 @@ class FranklinPeaceOfferTest {
         po.setId(900);
         po.setOwnerId("Spain");
         po.getPlaceMap().setLocation(at);
-        po.setHoldingGuns(false);
+        po.setHoldingWeapons(false);
         po.setMounted(false);
         model.createUnit(model.save(), po);
     }
@@ -268,7 +268,7 @@ class FranklinPeaceOfferTest {
                 Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
                 Founder.WILLIAM_PENN, Founder.FERDINAND_MAGELLAN));
         frenchCongress.setSelected(null);
-        frenchCongress.setBells(0);
+        frenchCongress.setOwls(0);
 
         final Model initial = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());

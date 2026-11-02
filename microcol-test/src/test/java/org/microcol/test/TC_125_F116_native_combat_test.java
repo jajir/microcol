@@ -28,7 +28,7 @@ import javafx.stage.Stage;
  * the shared strength breakdown with the native ambush of the defender's
  * square, cancelling changes nothing, and a confirmed battle follows the saved
  * random draw: a defeated brave is destroyed with its equipment, a defeated
- * soldier loses its muskets, and the native relation effect is recorded once
+ * soldier loses its weapons, and the native relation effect is recorded once
  * and survives Continue. Native attackers and the fates of unarmed Europeans
  * are checked in the model tests until native raids exist in play.
  */
@@ -56,9 +56,9 @@ public class TC_125_F116_native_combat_test extends AbstractMicroColTest {
     /** Soldier 3 against brave 1 with the hill ambush of 100%. */
     private static final double HILL_ODDS = 3.0 / 5.0;
 
-    private static final String LOSS_EN = "A defeated native brave is destroyed together with its equipment. A defeated unarmed colonist dies and is not captured. An armed European loses horses or muskets; artillery is damaged first. Both participants spend their remaining movement.";
+    private static final String LOSS_EN = "A defeated native brave is destroyed together with its equipment. A defeated unarmed colonist dies and is not captured. An armed European loses horses or weapons; artillery is damaged first. Both participants spend their remaining movement.";
     private static final String ANGER_EN = "Attacking a native brave raises the anger of its nation toward you, whoever wins.";
-    private static final String LOSS_CS = "Poražený domorodý bojovník je zničen i s výstrojí. Poražený neozbrojený kolonista zahyne a nebude zajat. Ozbrojený Evropan ztratí koně nebo muškety; dělo se nejprve poškodí. Oba účastníci spotřebují zbývající pohyb.";
+    private static final String LOSS_CS = "Poražený domorodý bojovník je zničen i s výstrojí. Poražený neozbrojený kolonista zahyne a nebude zajat. Ozbrojený Evropan ztratí koně nebo zbraně; dělo se nejprve poškodí. Oba účastníci spotřebují zbývající pohyb.";
     private static final String ANGER_CS = "Útok na domorodého bojovníka zvýší hněv jeho kmene vůči vám, ať zvítězí kdokoli.";
 
     @Start
@@ -187,10 +187,10 @@ public class TC_125_F116_native_combat_test extends AbstractMicroColTest {
                 "Attacker win chance: 60%");
         attack.confirm();
 
-        // The soldier loses its muskets and survives unarmed; the brave stays.
-        combat.verifySoldierLostMuskets(HILL_BRAVE_ID, HILL_BRAVE, SOLDIER_ID,
+        // The soldier loses its weapons and survives unarmed; the brave stays.
+        combat.verifySoldierLostWeapons(HILL_BRAVE_ID, HILL_BRAVE, SOLDIER_ID,
                 HILL_SOLDIER);
-        combat.verifyFeedback("lost its muskets");
+        combat.verifyFeedback("lost its weapons");
         fog.saveMapEvidence("native-combat-loss-en.png");
 
         // The brave's nation and home settlement were angered exactly once.
@@ -202,7 +202,7 @@ public class TC_125_F116_native_combat_test extends AbstractMicroColTest {
         // Continue from disk keeps the result without repeating the effect.
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
-        combat.verifySoldierLostMuskets(HILL_BRAVE_ID, HILL_BRAVE, SOLDIER_ID,
+        combat.verifySoldierLostWeapons(HILL_BRAVE_ID, HILL_BRAVE, SOLDIER_ID,
                 HILL_SOLDIER);
         relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
                 10);

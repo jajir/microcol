@@ -281,8 +281,8 @@ public final class EuropeanRelationsPage extends AbstractScreen {
     /**
      * Initial state of the foreign report scenario, derived from F25 so no
      * second 743-line copy exists. The Dutch hold Montreal (and its worker 5)
-     * so their town hall earns bells, and their Congress offers Jan de Witt at
-     * 99 of 100 bells; the founder is therefore earned by choosing him and
+     * so their town hall earns owls, and their Congress offers Jan de Witt at
+     * 99 of 100 owls; the founder is therefore earned by choosing him and
      * ending the turn. France keeps Quebec (worker 4, soldier 6, base 2) and
      * gets a sentried veteran dragoon (base 4.5, unit 7) and a sentried frigate
      * at sea (base 16, unit 8), so the computer round leaves them untouched.
@@ -305,7 +305,7 @@ public final class EuropeanRelationsPage extends AbstractScreen {
                         "{\"FRENCH\": [0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0]}",
                         JsonObject.class));
         europe.add("accounts",
-                gson.fromJson("{\"FRENCH\": {\"CORN\": [0, 0, 6, 12, 0, 0]}}",
+                gson.fromJson("{\"FRENCH\": {\"GRAIN\": [0, 0, 6, 12, 0, 0]}}",
                         JsonObject.class));
         final JsonArray units = model.getAsJsonArray("units");
         JsonObject soldier = null;
@@ -353,7 +353,7 @@ public final class EuropeanRelationsPage extends AbstractScreen {
             if ("Dutch".equals(
                     player.getAsJsonObject().get("name").getAsString())) {
                 player.getAsJsonObject().add("congress",
-                        gson.fromJson("{\"activated\": true, \"bells\": 99, "
+                        gson.fromJson("{\"activated\": true, \"owls\": 99, "
                                 + "\"members\": [], "
                                 + "\"candidates\": [\"JOHN_PAUL_JONES\", "
                                 + "\"THOMAS_JEFFERSON\", \"JAN_DE_WITT\", "
@@ -424,7 +424,7 @@ public final class EuropeanRelationsPage extends AbstractScreen {
                 .getUnitById(0);
         assertTrue(force.isAtPlaceLocation());
         assertEquals(forceAt, force.getLocation());
-        assertTrue(force.isHoldingGuns());
+        assertTrue(force.isHoldingWeapons());
         assertEquals(movement, force.getActionPoints());
         assertEquals(colonyStores, stocks());
         assertEquals(List.of(owner),

@@ -44,7 +44,7 @@ class RecruitmentActionTest {
                 candidate(3, UnitType.PETTY_CRIMINAL)));
         po.setNextCandidateId(4);
         po.setPaidPassages(0);
-        po.setCrosses(0);
+        po.setTorches(0);
         po.setEarnedImmigrants(0);
         po.setPendingEarnedChoice(false);
         return po;
@@ -110,7 +110,7 @@ class RecruitmentActionTest {
         assertEquals(4,
                 reloaded.getRecruitmentOffers().get(1).getCandidateId());
         assertEquals(1, reloaded.save().getRecruitment().getPaidPassages());
-        assertEquals(0, reloaded.save().getRecruitment().getCrosses());
+        assertEquals(0, reloaded.save().getRecruitment().getTorches());
         assertEquals(0, reloaded.save().getRecruitment().getEarnedImmigrants());
     }
 
@@ -137,11 +137,11 @@ class RecruitmentActionTest {
     }
 
     @Test
-    void pendingEarnedCrossesHidePaidQuotesWithoutChangingState() {
+    void pendingEarnedTorchesHidePaidQuotesWithoutChangingState() {
         final GameModelPo data = scenario();
         data.getModel().getGameManager().getPlayers().stream()
                 .filter(player -> "Dutch".equals(player.getName())).findFirst()
-                .orElseThrow().getRecruitment().setCrosses(100);
+                .orElseThrow().getRecruitment().setTorches(100);
         final Model model = load(data);
         final Player buyer = model.getPlayerByName("Dutch");
         final String before = snapshot(model);

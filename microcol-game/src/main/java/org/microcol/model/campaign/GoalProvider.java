@@ -23,29 +23,29 @@ final class GoalProvider {
 
     }
 
-    static class GoalProduceCigars extends MissionGoal {
+    static class GoalProduceWine extends MissionGoal {
 
-        GoalProduceCigars(final Map<String, String> data) {
-            super("produceCigars", Missions.default_m0_g3, data);
+        GoalProduceWine(final Map<String, String> data) {
+            super("produceWine", Missions.default_m0_g3, data);
         }
 
     }
 
-    static class GoalSellCigars extends MissionGoal {
+    static class GoalSellWine extends MissionGoal {
 
-        private final static String MAP_KEY_SOLD_CIGARS = "cigarsWasSold";
+        private final static String MAP_KEY_SOLD_WINE = "wineWasSold";
 
         private int alreadyWasSold;
 
-        GoalSellCigars(final Map<String, String> data) {
-            super("sellCigars", Missions.default_m0_g4, data);
-            alreadyWasSold = getInt(data, MAP_KEY_SOLD_CIGARS);
+        GoalSellWine(final Map<String, String> data) {
+            super("sellWine", Missions.default_m0_g4, data);
+            alreadyWasSold = getInt(data, MAP_KEY_SOLD_WINE);
         }
 
         @Override
         void save(Map<String, String> data) {
             super.save(data);
-            data.put(MAP_KEY_SOLD_CIGARS, String.valueOf(alreadyWasSold));
+            data.put(MAP_KEY_SOLD_WINE, String.valueOf(alreadyWasSold));
         }
 
         /**

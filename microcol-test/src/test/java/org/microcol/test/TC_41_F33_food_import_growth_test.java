@@ -36,9 +36,9 @@ public class TC_41_F33_food_import_growth_test extends AbstractMicroColTest {
         // Open the colony with food below the birth threshold.
         GamePage gamePage = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = gamePage.openColonyAt(DELFT, "Delft");
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 190));
-        colony.verifyCarrierGoods(3, 0, Goods.of(GoodsType.CORN, 20));
-        colony.verifyCarrierGoods(5000, 0, Goods.of(GoodsType.CORN, 20));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 190));
+        colony.verifyCarrierGoods(3, 0, Goods.of(GoodsType.GRAIN, 20));
+        colony.verifyCarrierGoods(5000, 0, Goods.of(GoodsType.GRAIN, 20));
         // Staffed fields made 10; the grassland center adds 4 commons food.
         colony.verifyFoodAccounting(14, 16);
 
@@ -51,16 +51,16 @@ public class TC_41_F33_food_import_growth_test extends AbstractMicroColTest {
         dialog.verifyExplanation(
                 "Up to 20 Food can be accepted. Choose the amount to unload or cancel. Population growth is checked at the next colony update, after food consumption.");
         dialog.cancel();
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 190));
-        colony.verifyCarrierGoods(3, 0, Goods.of(GoodsType.CORN, 20));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 190));
+        colony.verifyCarrierGoods(3, 0, Goods.of(GoodsType.GRAIN, 20));
 
         // Confirm the same ship cargo; crossing 200 does not create a unit yet.
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 0);
         dialog = DialogChooseGoodsAmount.of(getContext());
         dialog.verifyOfferedAmount(20);
         dialog.clickOnOk();
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 210));
-        colony.verifyCarrierGoods(3, 0, Goods.of(GoodsType.CORN, 0));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 210));
+        colony.verifyCarrierGoods(3, 0, Goods.of(GoodsType.GRAIN, 0));
         colony.verifyNumberOfUnitsAtPier(2);
 
         // The wagon uses the same preview, cancellation and confirmation.
@@ -69,14 +69,14 @@ public class TC_41_F33_food_import_growth_test extends AbstractMicroColTest {
         dialog = DialogChooseGoodsAmount.of(getContext());
         dialog.verifyOfferedAmount(20);
         dialog.cancel();
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 210));
-        colony.verifyCarrierGoods(5000, 0, Goods.of(GoodsType.CORN, 20));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 210));
+        colony.verifyCarrierGoods(5000, 0, Goods.of(GoodsType.GRAIN, 20));
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 0);
         dialog = DialogChooseGoodsAmount.of(getContext());
         dialog.verifyOfferedAmount(20);
         dialog.clickOnOk();
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 230));
-        colony.verifyCarrierGoods(5000, 0, Goods.of(GoodsType.CORN, 0));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 230));
+        colony.verifyCarrierGoods(5000, 0, Goods.of(GoodsType.GRAIN, 0));
         colony.verifyNumberOfUnitsAtPier(2);
 
         // Only the next national update consumes food and creates a colonist.
@@ -84,7 +84,7 @@ public class TC_41_F33_food_import_growth_test extends AbstractMicroColTest {
         gamePage.nextTurnAndCloseDialogs();
         colony = gamePage.openColonyAt(DELFT, "Delft");
         // 230 + 14 produced - 16 eaten = 228: one colonist (200), 28 left.
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 28));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 28));
         colony.verifyNumberOfUnitsAtPier(3);
         colony.close();
     }
@@ -99,10 +99,10 @@ public class TC_41_F33_food_import_growth_test extends AbstractMicroColTest {
         final DialogChooseGoodsAmount firstOffer = DialogChooseGoodsAmount
                 .of(getContext());
         firstOffer.verifyOfferedAmount(20);
-        colony.reduceCarrierCargoForStaleOffer(3, Goods.of(GoodsType.CORN, 1));
+        colony.reduceCarrierCargoForStaleOffer(3, Goods.of(GoodsType.GRAIN, 1));
         firstOffer.clickOnOk();
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 190));
-        colony.verifyCarrierGoods(3, 0, Goods.of(GoodsType.CORN, 19));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 190));
+        colony.verifyCarrierGoods(3, 0, Goods.of(GoodsType.GRAIN, 19));
         colony.closeWarehouseWarning();
 
         // The refreshed offer can transfer the exact remaining cargo.
@@ -110,8 +110,8 @@ public class TC_41_F33_food_import_growth_test extends AbstractMicroColTest {
                 .of(getContext());
         refreshed.verifyOfferedAmount(19);
         refreshed.clickOnOk();
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 209));
-        colony.verifyCarrierGoods(3, 0, Goods.of(GoodsType.CORN, 0));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 209));
+        colony.verifyCarrierGoods(3, 0, Goods.of(GoodsType.GRAIN, 0));
         colony.close();
     }
 }

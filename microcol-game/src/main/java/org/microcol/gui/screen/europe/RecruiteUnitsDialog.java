@@ -176,7 +176,7 @@ public final class RecruiteUnitsDialog extends AbstractMessageWindow {
                 : Europe.recruitUnitDialogTitle));
         caption.setText(earnedMode && buyer != null
                 ? i18n.get(Europe.earnedExplanation,
-                        buyer.getImmigrationCrosses(),
+                        buyer.getImmigrationTorches(),
                         buyer.getImmigrationTarget())
                 : i18n.get(Europe.recruitUnitDialogTitle));
         caption.setWrapText(true);

@@ -91,7 +91,7 @@ class IndependenceDeclarationTest {
         data.getModel().getColonies().stream()
                 .flatMap(colony -> colony.getColonyFields().stream())
                 .filter(field -> field.getWorkerId() != null)
-                .forEach(field -> field.setProducedGoodsType(GoodsType.CORN));
+                .forEach(field -> field.setProducedGoodsType(GoodsType.GRAIN));
     }
 
     private Model load(final GameModelPo data) {
@@ -157,7 +157,7 @@ class IndependenceDeclarationTest {
         out.setPlaceMap(place);
         out.setAction(new UnitActionNoActionPo());
         out.setAvailableMoves(1);
-        out.setHoldingGuns(armed);
+        out.setHoldingWeapons(armed);
         out.setMounted(mounted);
         out.setVeteran(veteran);
         out.setWorkUpdates(0);
@@ -364,8 +364,8 @@ class IndependenceDeclarationTest {
 
         final int unitCount = model.getAllUnits().size();
         final int gold = dutch.getGold();
-        final int muskets = model.getColonyById(0).orElseThrow().getWarehouse()
-                .getGoods(GoodsType.MUSKET).getAmount();
+        final int weapons = model.getColonyById(0).orElseThrow().getWarehouse()
+                .getGoods(GoodsType.WEAPONS).getAmount();
         final List<UnitFreeColonist> before = new ArrayList<>();
         final List<String> shape = new ArrayList<>();
         for (final int id : expected) {
@@ -388,8 +388,8 @@ class IndependenceDeclarationTest {
         // Nothing is created, paid or destroyed by the muster.
         assertEquals(unitCount, model.getAllUnits().size());
         assertEquals(gold, dutch.getGold());
-        assertEquals(muskets, model.getColonyById(0).orElseThrow()
-                .getWarehouse().getGoods(GoodsType.MUSKET).getAmount());
+        assertEquals(weapons, model.getColonyById(0).orElseThrow()
+                .getWarehouse().getGoods(GoodsType.WEAPONS).getAmount());
         // Excluded units keep the ordinary role.
         for (final int id : List.of(9006, 9007, 13, 0)) {
             assertEquals(MilitaryRole.COLONIAL,
@@ -403,7 +403,7 @@ class IndependenceDeclarationTest {
     }
 
     private String describe(final UnitFreeColonist unit) {
-        return unit.getType() + ":" + unit.isHoldingGuns() + ":"
+        return unit.getType() + ":" + unit.isHoldingWeapons() + ":"
                 + unit.isMounted() + ":" + unit.isVeteran() + ":"
                 + unit.getLocation() + ":" + unit.getOwner().getName();
     }
@@ -418,9 +418,9 @@ class IndependenceDeclarationTest {
         assertSame(expert, model.getUnitById(9003));
         assertEquals(MilitaryRole.CONTINENTAL, expert.getMilitaryRole());
         assertEquals(UnitType.MASTER_BLACKSMITH, expert.getType());
-        assertTrue(expert.isHoldingGuns());
+        assertTrue(expert.isHoldingWeapons());
         assertTrue(colonist(model, 9002).isMounted());
-        assertTrue(colonist(model, 9002).isHoldingGuns());
+        assertTrue(colonist(model, 9002).isHoldingWeapons());
     }
 
     @Test
@@ -582,7 +582,7 @@ class IndependenceDeclarationTest {
     }
 
     @Test
-    void pendingDeliveryDoesNotPostponeTheExcessBellsOfTheEarnedTarget() {
+    void pendingDeliveryDoesNotPostponeTheExcessOwlsOfTheEarnedTarget() {
         // The declaration is real, so the Crown seizure and the rebellion
         // members are valid; only the earned, undelivered target is authored.
         final Model declared = load(musterData(120L));
@@ -590,7 +590,7 @@ class IndependenceDeclarationTest {
         final ModelPo saved = declared.save();
         final InterventionPo intervention = new InterventionPo();
         intervention.setTarget(500);
-        intervention.setBells(525L);
+        intervention.setOwls(525L);
         intervention.setEarned(true);
         intervention.setDelivered(false);
         savedDutch(saved).setIntervention(intervention);
@@ -602,7 +602,7 @@ class IndependenceDeclarationTest {
 
         final String before = snapshot(model);
         final ResultScore result = dutch.getResultScore();
-        assertEquals(25, result.getBellsAfterTarget());
+        assertEquals(25, result.getOwlsAfterTarget());
         assertEquals(before, snapshot(model));
         assertFalse(dutch.getIntervention().orElseThrow().isDelivered());
     }
@@ -622,13 +622,13 @@ class IndependenceDeclarationTest {
     }
 
     /**
-     * A declared nation whose first colony can take the 50 muskets back: the
+     * A declared nation whose first colony can take the 50 weapons back: the
      * scenario's warehouse holds 100, which is exactly the basic limit.
      */
-    private Model declaredWithRoomForMuskets(final boolean room) {
+    private Model declaredWithRoomForWeapons(final boolean room) {
         final GameModelPo data = musterData(200L);
         if (room) {
-            savedColony(data, 0).getColonyWarehouse().put("MUSKET", 0);
+            savedColony(data, 0).getColonyWarehouse().put("WEAPONS", 0);
         }
         final Model model = load(data);
         model.getPlayerByName("Dutch").declareIndependence();
@@ -641,7 +641,7 @@ class IndependenceDeclarationTest {
         if ("field".equals(job)) {
             unit.placeToColonyField(
                     colony.getColonyFieldInDirection(Direction.east),
-                    GoodsType.CORN);
+                    GoodsType.GRAIN);
         } else {
             unit.placeToColonyStructureSlot(
                     colony.getConstructionByType(ConstructionType.TOWN_HALL)
@@ -652,7 +652,7 @@ class IndependenceDeclarationTest {
     @ParameterizedTest
     @CsvSource({ "field", "building" })
     void aColonyJobListenerNeverSeesASpecialRoleInsideTheJob(final String job) {
-        final Model model = declaredWithRoomForMuskets(true);
+        final Model model = declaredWithRoomForWeapons(true);
         final UnitFreeColonist continental = colonist(model, 9001);
         assertEquals(MilitaryRole.CONTINENTAL, continental.getMilitaryRole());
         final List<String> observed = new ArrayList<>();
@@ -682,17 +682,17 @@ class IndependenceDeclarationTest {
         placeInJob(model, continental, job);
         assertEquals(List.of("true:COLONIAL:COLONIAL"), observed);
         assertEquals(MilitaryRole.COLONIAL, continental.getMilitaryRole());
-        assertFalse(continental.isHoldingGuns());
+        assertFalse(continental.isHoldingWeapons());
         assertEquals(50, model.getColonyById(0).orElseThrow().getWarehouse()
-                .getGoods(GoodsType.MUSKET).getAmount());
+                .getGoods(GoodsType.WEAPONS).getAmount());
     }
 
     @ParameterizedTest
     @CsvSource({ "field", "building" })
     void aRejectedJobPlacementKeepsTheRoleEquipmentAndPlace(final String job) {
-        // The full warehouse cannot take the muskets back, so the real
+        // The full warehouse cannot take the weapons back, so the real
         // validation refuses before anything changes.
-        final Model model = declaredWithRoomForMuskets(false);
+        final Model model = declaredWithRoomForWeapons(false);
         final UnitFreeColonist continental = colonist(model, 9001);
         final String before = snapshot(model);
         final AtomicInteger announced = new AtomicInteger();
@@ -714,7 +714,7 @@ class IndependenceDeclarationTest {
         assertEquals(before, snapshot(model));
         assertEquals(0, announced.get());
         assertEquals(MilitaryRole.CONTINENTAL, continental.getMilitaryRole());
-        assertTrue(continental.isHoldingGuns());
+        assertTrue(continental.isHoldingWeapons());
         assertTrue(continental.isAtPlaceLocation());
     }
 

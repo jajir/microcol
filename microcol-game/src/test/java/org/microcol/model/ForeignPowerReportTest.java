@@ -90,7 +90,7 @@ class ForeignPowerReportTest {
     private void recruitDeWitt(final PlayerPo player) {
         final CongressPo congress = new CongressPo();
         congress.setActivated(true);
-        congress.setBells(0);
+        congress.setOwls(0);
         congress.setGeneration(1);
         congress.setMembers(List.of(Founder.JAN_DE_WITT));
         congress.setCandidates(List.of(Founder.JOHN_PAUL_JONES,
@@ -148,14 +148,14 @@ class ForeignPowerReportTest {
      */
     private Unit colonist(final int id, final String owner, final Location at,
             final boolean veteran, final boolean mounted,
-            final boolean holdingGuns) {
+            final boolean holdingWeapons) {
         final UnitPo po = model.getUnitById(6).save();
         po.setId(id);
         po.setOwnerId(owner);
         po.getPlaceMap().setLocation(at);
         po.setVeteran(veteran);
         po.setMounted(mounted);
-        po.setHoldingGuns(holdingGuns);
+        po.setHoldingWeapons(holdingWeapons);
         return model.createUnit(model.save(), po);
     }
 
@@ -165,7 +165,7 @@ class ForeignPowerReportTest {
         po.setId(id);
         po.setOwnerId(owner);
         po.setType(UnitType.ARTILLERY);
-        po.setHoldingGuns(false);
+        po.setHoldingWeapons(false);
         po.setMounted(false);
         po.setMissionary(null);
         po.setWorkUpdates(null);
@@ -447,10 +447,10 @@ class ForeignPowerReportTest {
 
         // Net sales count, purchases do not.
         final int sold = france
-                .quoteEuropeTrade(Goods.of(GoodsType.CORN, 10), false)
+                .quoteEuropeTrade(Goods.of(GoodsType.GRAIN, 10), false)
                 .getTotal();
-        france.sellGoods(Goods.of(GoodsType.CORN, 10));
-        france.buyGoods(Goods.of(GoodsType.TOBACCO, 5));
+        france.sellGoods(Goods.of(GoodsType.GRAIN, 10));
+        france.buyGoods(Goods.of(GoodsType.GRAPES, 5));
         assertTrue(sold > 0);
 
         moveScout(SCOUT_AT_QUEBEC);

@@ -105,7 +105,7 @@ public final class AttackPage extends AbstractScreen {
     public void simulateDisarm(final int unit) {
         getRobot().interact(
                 () -> ((org.microcol.model.unit.UnitFreeColonist) getModel()
-                        .getUnitById(unit)).setHoldingGuns(false));
+                        .getUnitById(unit)).setHoldingWeapons(false));
     }
 
     public void simulateMovedDefender(final Location to) {
@@ -188,7 +188,7 @@ public final class AttackPage extends AbstractScreen {
         GamePage.of(getContext()).waitWhileMoving();
         final org.microcol.model.unit.UnitFreeColonist defeated = (org.microcol.model.unit.UnitFreeColonist) getModel()
                 .getUnitById(defeatedId);
-        assertEquals(guns, defeated.isHoldingGuns());
+        assertEquals(guns, defeated.isHoldingWeapons());
         assertEquals(mounted, defeated.isMounted());
         assertEquals(attackerAt,
                 getModel().getUnitById(attackerId).getLocation());

@@ -38,8 +38,8 @@ class CombatOutcomeTest {
                 .getUnitById(6);
         attacker.placeToLocation(ORIGIN);
         defender.placeToLocation(TARGET);
-        attacker.setHoldingGuns(true);
-        defender.setHoldingGuns(true);
+        attacker.setHoldingWeapons(true);
+        defender.setHoldingWeapons(true);
         defender.setMounted(defenderMounted);
         attacker.getOwner().revealMapForUnit(attacker);
         return model;
@@ -57,7 +57,7 @@ class CombatOutcomeTest {
                 .stream().filter(unit -> unit.getId() == 6).findFirst()
                 .orElseThrow();
         defenderPo.getPlaceMap().setLocation(TARGET);
-        defenderPo.setHoldingGuns(true);
+        defenderPo.setHoldingWeapons(true);
         defenderPo.setMounted(mounted);
         defenderPo.setAvailableMoves(1);
         final UnitActionFortifyPo action = new UnitActionFortifyPo();
@@ -68,7 +68,7 @@ class CombatOutcomeTest {
         final UnitFreeColonist attacker = (UnitFreeColonist) model
                 .getUnitById(0);
         attacker.placeToLocation(ORIGIN);
-        attacker.setHoldingGuns(true);
+        attacker.setHoldingWeapons(true);
         attacker.getOwner().revealMapForUnit(attacker);
         return model;
     }
@@ -85,7 +85,7 @@ class CombatOutcomeTest {
             @Override
             public void onUnitAttacked(UnitAttackedEvent event) {
                 assertFalse(defender.isMounted());
-                assertTrue(defender.isHoldingGuns());
+                assertTrue(defender.isHoldingWeapons());
                 events.add(event);
             }
         });
@@ -110,21 +110,21 @@ class CombatOutcomeTest {
     }
 
     @Test
-    void soldierLoserDropsMusketsAndContinueNeverDrawsAgain() {
+    void soldierLoserDropsWeaponsAndContinueNeverDrawsAgain() {
         final Model model = game(0L, false);
         final UnitFreeColonist attacker = (UnitFreeColonist) model
                 .getUnitById(0);
         final UnitFreeColonist defender = (UnitFreeColonist) model
                 .getUnitById(6);
         attacker.prepareAttack(TARGET, true).orElseThrow().execute();
-        assertFalse(attacker.isHoldingGuns());
-        assertTrue(defender.isHoldingGuns());
+        assertFalse(attacker.isHoldingWeapons());
+        assertTrue(defender.isHoldingWeapons());
         assertEquals(0L + 2 * STEP, model.save().getCombatRandomState());
         final Model restored = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         restored.startGame();
-        assertFalse(
-                ((UnitFreeColonist) restored.getUnitById(0)).isHoldingGuns());
+        assertFalse(((UnitFreeColonist) restored.getUnitById(0))
+                .isHoldingWeapons());
         assertEquals(0, restored.getUnitById(0).getActionPoints());
         assertEquals(0L + 2 * STEP, restored.save().getCombatRandomState());
     }
@@ -158,7 +158,7 @@ class CombatOutcomeTest {
         assertSame(defender, model.getUnitById(6));
         assertSame(owner, defender.getOwner());
         assertEquals(TARGET, defender.getLocation());
-        assertFalse(defender.isHoldingGuns());
+        assertFalse(defender.isHoldingWeapons());
         assertEquals(UnitActionType.noAction, defender.getAction().getType());
         assertFalse(model.isFortified(defender));
         assertEquals(0, defender.getActionPoints());
@@ -170,7 +170,7 @@ class CombatOutcomeTest {
                 .getUnitById(6);
         assertEquals(TARGET, continued.getLocation());
         assertEquals("France", continued.getOwner().getName());
-        assertFalse(continued.isHoldingGuns());
+        assertFalse(continued.isHoldingWeapons());
         assertEquals(UnitActionType.noAction, continued.getAction().getType());
         assertEquals(0, continued.getActionPoints());
     }
@@ -189,7 +189,7 @@ class CombatOutcomeTest {
         assertSame(owner, defender.getOwner());
         assertEquals(TARGET, defender.getLocation());
         assertFalse(defender.isMounted());
-        assertTrue(defender.isHoldingGuns());
+        assertTrue(defender.isHoldingWeapons());
         assertEquals(UnitActionType.fortify, defender.getAction().getType());
         assertTrue(model.isFortified(defender));
         assertEquals(0, defender.getActionPoints());
@@ -202,7 +202,7 @@ class CombatOutcomeTest {
         assertEquals(TARGET, continued.getLocation());
         assertEquals("France", continued.getOwner().getName());
         assertFalse(continued.isMounted());
-        assertTrue(continued.isHoldingGuns());
+        assertTrue(continued.isHoldingWeapons());
         assertEquals(UnitActionType.fortify, continued.getAction().getType());
         assertTrue(restored.isFortified(continued));
         assertEquals(0, continued.getActionPoints());

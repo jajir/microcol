@@ -24,12 +24,12 @@ import org.microcol.model.unit.UnitWithCargo;
 
 /**
  * Owner-turn navigation of assigned carriers on the shared F108 scenario.
- * Dutch's galleon 3 (movement 18 thirds, six holds [ORE 60, RUM 100, passenger,
- * SUGAR 100, TOBACCO 100, COTTON 100]) stands in the port of Delft at (28,16);
- * the Dutch player's other colony New Amsterdam (id 0, ORE 90) lies inland at
- * (24,16). The sea lane to Europe is the east edge of the 50 by 30 map, and
- * Dutch's King is the only other player. Delft's warehouse holds CORN 100,
- * HORSE 50, MUSKET 50, TOOLS 50 and no ORE, RUM, SUGAR or TOBACCO.
+ * Dutch's galleon 3 (movement 18 thirds, six holds [ORE 60, OLIVE_OIL 100,
+ * passenger, OLIVES 100, GRAPES 100, WOOL 100]) stands in the port of Delft at
+ * (28,16); the Dutch player's other colony New Amsterdam (id 0, ORE 90) lies
+ * inland at (24,16). The sea lane to Europe is the east edge of the 50 by 30
+ * map, and Dutch's King is the only other player. Delft's warehouse holds GRAIN
+ * 100, HORSE 50, WEAPONS 50, TOOLS 50 and no ORE, OLIVE_OIL, OLIVES or GRAPES.
  * <p>
  * Where exact amounts matter the owner update is driven directly, so no colony
  * production lies between the assignment and the check. Movement, voyages and
@@ -204,7 +204,7 @@ class TradeRouteNavigationTest {
         final UnitPo wagon = savedUnit(po, WAGON_ID);
         wagon.setType(UnitType.WAGON);
         wagon.setTools(0);
-        wagon.setHoldingGuns(false);
+        wagon.setHoldingWeapons(false);
         wagon.setMounted(false);
         wagon.setWorkUpdates(null);
         wagon.setWorkSkill(null);
@@ -278,12 +278,12 @@ class TradeRouteNavigationTest {
                 TradeRouteKind.SEA, DELFT, List.of(TradeRouteStop.europe(),
                         TradeRouteStop.ofColony(DELFT)));
         route = w.model.configureTradeRouteStopCargo(w.dutch, route, 0,
-                List.of(GoodsType.RUM, GoodsType.SUGAR, GoodsType.TOBACCO,
-                        GoodsType.CORN, GoodsType.HORSE, GoodsType.MUSKET),
+                List.of(GoodsType.OLIVE_OIL, GoodsType.OLIVES, GoodsType.GRAPES,
+                        GoodsType.GRAIN, GoodsType.HORSE, GoodsType.WEAPONS),
                 List.of());
         route = w.model.configureTradeRouteStopCargo(w.dutch, route, 1,
                 List.of(),
-                List.of(GoodsType.CORN, GoodsType.HORSE, GoodsType.MUSKET));
+                List.of(GoodsType.GRAIN, GoodsType.HORSE, GoodsType.WEAPONS));
         final int gold = w.dutch.getGold();
         w.model.assignTradeRoute(w.ship, route, 0);
 
@@ -294,13 +294,13 @@ class TradeRouteNavigationTest {
         assertTrue(rounds < MAX_ROUNDS, "second Europe visit never happened");
 
         // First Europe visit sold the three full holds exactly once each.
-        assertEquals(1, w.soldCount(GoodsType.RUM));
-        assertEquals(1, w.soldCount(GoodsType.SUGAR));
-        assertEquals(1, w.soldCount(GoodsType.TOBACCO));
+        assertEquals(1, w.soldCount(GoodsType.OLIVE_OIL));
+        assertEquals(1, w.soldCount(GoodsType.OLIVES));
+        assertEquals(1, w.soldCount(GoodsType.GRAPES));
         // Delft was reached once between the visits and filled the holds that
         // the first visit freed; the second visit sold them once.
         assertEquals(1, w.soldCount(GoodsType.HORSE));
-        assertEquals(1, w.soldCount(GoodsType.MUSKET));
+        assertEquals(1, w.soldCount(GoodsType.WEAPONS));
         assertEquals(1, w.shipSteps.stream().filter(DELFT_AT::equals).count());
         // Both outward legs were real departures, and the ship holds neither
         // the sold goods nor anything it never carried.
@@ -310,7 +310,7 @@ class TradeRouteNavigationTest {
         assertEquals(Optional.empty(), w.held(3));
         assertEquals(Optional.empty(), w.held(4));
         assertEquals(Optional.of(Goods.of(GoodsType.ORE, 60)), w.held(0));
-        assertEquals(Optional.of(Goods.of(GoodsType.COTTON, 100)), w.held(5));
+        assertEquals(Optional.of(Goods.of(GoodsType.WOOL, 100)), w.held(5));
         assertEquals(Optional.empty(), w.pause());
         // The recorded departure square is a square of the east sea lane, from
         // which the ship returned: departing needs a step to the next column.
@@ -324,7 +324,7 @@ class TradeRouteNavigationTest {
         TradeRoute route = w.model.createTradeRoute(w.dutch, "Europe only",
                 TradeRouteKind.SEA, DELFT, List.of(TradeRouteStop.europe()));
         route = w.model.configureTradeRouteStopCargo(w.dutch, route, 0,
-                List.of(GoodsType.RUM), List.of());
+                List.of(GoodsType.OLIVE_OIL), List.of());
         w.model.getEurope().getPort().placeShipToPort(w.ship);
         assertTrue(w.ship.isAtEuropePort());
         final int gold = w.dutch.getGold();
@@ -333,7 +333,7 @@ class TradeRouteNavigationTest {
         w.ownerUpdate();
 
         // The visit is processed once and the single stop is next again.
-        assertEquals(1, w.soldCount(GoodsType.RUM));
+        assertEquals(1, w.soldCount(GoodsType.OLIVE_OIL));
         assertEquals(Optional.empty(), w.held(1));
         assertEquals(0, w.stopIndex());
         assertEquals(Optional.empty(), w.pause());
@@ -345,14 +345,14 @@ class TradeRouteNavigationTest {
         // More updates, including one after Save and Continue, sell nothing.
         w.ownerUpdate();
         w.ownerUpdate();
-        assertEquals(1, w.soldCount(GoodsType.RUM));
+        assertEquals(1, w.soldCount(GoodsType.OLIVE_OIL));
         assertEquals(afterFirst, w.dutch.getGold());
         final World restored = w.saveAndContinue();
         assertTrue(restored.ship.isAtEuropePort());
         assertTrue(restored.ship.getProcessedTradeRouteVisit().isPresent());
         assertEquals(afterFirst, restored.dutch.getGold());
         restored.ownerUpdate();
-        assertEquals(0, restored.soldCount(GoodsType.RUM));
+        assertEquals(0, restored.soldCount(GoodsType.OLIVE_OIL));
         assertEquals(afterFirst, restored.dutch.getGold());
         assertEquals(0, restored.stopIndex());
     }
@@ -366,9 +366,9 @@ class TradeRouteNavigationTest {
                 List.of(TradeRouteStop.europe(), TradeRouteStop.ofColony(DELFT),
                         TradeRouteStop.europe()));
         route = w.model.configureTradeRouteStopCargo(w.dutch, route, 0,
-                List.of(GoodsType.SUGAR), List.of());
+                List.of(GoodsType.OLIVES), List.of());
         route = w.model.configureTradeRouteStopCargo(w.dutch, route, 2,
-                List.of(GoodsType.RUM), List.of());
+                List.of(GoodsType.OLIVE_OIL), List.of());
         w.model.getEurope().getPort().placeShipToPort(w.ship);
         w.model.assignTradeRoute(w.ship, route, 2);
 
@@ -376,8 +376,8 @@ class TradeRouteNavigationTest {
 
         // The last stop was processed; the coincident first stop is the same
         // visit and is passed, and the ship starts for Delft.
-        assertEquals(1, w.soldCount(GoodsType.RUM));
-        assertEquals(0, w.soldCount(GoodsType.SUGAR));
+        assertEquals(1, w.soldCount(GoodsType.OLIVE_OIL));
+        assertEquals(0, w.soldCount(GoodsType.OLIVES));
         assertEquals(1, w.stopIndex());
         assertEquals(Optional.empty(), w.pause());
         assertTrue(w.ship.isAtHighSea());
@@ -462,8 +462,8 @@ class TradeRouteNavigationTest {
     @Test
     void midLegSaveAndContinueKeepsEverythingAndMovesNothing() {
         final World w = new World();
-        final TradeRoute route = w.seaRoute(List.of(GoodsType.RUM), List.of(),
-                List.of());
+        final TradeRoute route = w.seaRoute(List.of(GoodsType.OLIVE_OIL),
+                List.of(), List.of());
         w.model.assignTradeRoute(w.ship, route, 0);
         w.playRound();
         final Location mid = w.ship.getLocation();
@@ -477,9 +477,9 @@ class TradeRouteNavigationTest {
         assertEquals(movement, restored.ship.getMovementThirds());
         assertEquals(0, restored.stopIndex());
         assertEquals(gold, restored.dutch.getGold());
-        assertEquals(Optional.of(Goods.of(GoodsType.RUM, 100)),
+        assertEquals(Optional.of(Goods.of(GoodsType.OLIVE_OIL, 100)),
                 restored.held(1));
-        assertEquals(0, restored.soldCount(GoodsType.RUM));
+        assertEquals(0, restored.soldCount(GoodsType.OLIVE_OIL));
         assertTrue(restored.shipSteps.isEmpty());
     }
 

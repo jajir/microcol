@@ -84,35 +84,36 @@ class NativeSaleTextTest {
 
     @Test
     void purchaseTextsTakeTheirArgumentsInBothLanguages() {
-        assertEquals("Buy Corn: 100 in stock at 4 gold each.", i18n(Locale.ROOT)
-                .get(Loc.nativePurchaseOfferLine, "Corn", 100, 4));
-        assertEquals("Buy 5 pieces of Corn for 9 gold.",
-                i18n(Locale.ROOT).get(Loc.nativePurchasePreview, 5, "Corn", 9));
-        assertEquals("You bought 5 pieces of Corn for 9 gold.",
-                i18n(Locale.ROOT).get(Loc.nativePurchaseBought, 5, "Corn", 9));
-        assertEquals("Koupit Jídlo: skladem 100, za 4 zlata za kus.",
+        assertEquals("Buy Grain: 100 in stock at 4 gold each.",
+                i18n(Locale.ROOT).get(Loc.nativePurchaseOfferLine, "Grain", 100,
+                        4));
+        assertEquals("Buy 5 pieces of Grain for 9 gold.", i18n(Locale.ROOT)
+                .get(Loc.nativePurchasePreview, 5, "Grain", 9));
+        assertEquals("You bought 5 pieces of Grain for 9 gold.",
+                i18n(Locale.ROOT).get(Loc.nativePurchaseBought, 5, "Grain", 9));
+        assertEquals("Koupit Obilí: skladem 100, za 4 zlata za kus.",
                 i18n(new Locale("cs", "CZ")).get(Loc.nativePurchaseOfferLine,
-                        "Jídlo", 100, 4));
-        assertEquals("Koupíte 5 kusů zboží Jídlo za 9 zlata.",
+                        "Obilí", 100, 4));
+        assertEquals("Koupíte 5 kusů zboží Obilí za 9 zlata.",
                 i18n(new Locale("cs", "CZ")).get(Loc.nativePurchasePreview, 5,
-                        "Jídlo", 9));
-        assertEquals("Koupili jste 5 kusů zboží Jídlo za 9 zlata.",
+                        "Obilí", 9));
+        assertEquals("Koupili jste 5 kusů zboží Obilí za 9 zlata.",
                 i18n(new Locale("cs", "CZ")).get(Loc.nativePurchaseBought, 5,
-                        "Jídlo", 9));
+                        "Obilí", 9));
     }
 
     @Test
     void previewsTakeTheirArgumentsInBothLanguages() {
-        assertEquals("Sell 50 pieces of Corn for 112 gold.", i18n(Locale.ROOT)
-                .get(Loc.nativeSalePreviewSale, 50, "Corn", 112));
-        assertEquals("Give 50 pieces of Corn as a gift. No gold is paid.",
-                i18n(Locale.ROOT).get(Loc.nativeSalePreviewGift, 50, "Corn"));
-        assertEquals("Prodáte 50 kusů zboží Jídlo za 112 zlata.",
+        assertEquals("Sell 50 pieces of Grain for 112 gold.", i18n(Locale.ROOT)
+                .get(Loc.nativeSalePreviewSale, 50, "Grain", 112));
+        assertEquals("Give 50 pieces of Grain as a gift. No gold is paid.",
+                i18n(Locale.ROOT).get(Loc.nativeSalePreviewGift, 50, "Grain"));
+        assertEquals("Prodáte 50 kusů zboží Obilí za 112 zlata.",
                 i18n(new Locale("cs", "CZ")).get(Loc.nativeSalePreviewSale, 50,
-                        "Jídlo", 112));
-        assertEquals("Darujete 50 kusů zboží Jídlo. Žádné zlato se neplatí.",
+                        "Obilí", 112));
+        assertEquals("Darujete 50 kusů zboží Obilí. Žádné zlato se neplatí.",
                 i18n(new Locale("cs", "CZ")).get(Loc.nativeSalePreviewGift, 50,
-                        "Jídlo"));
+                        "Obilí"));
     }
 
 }

@@ -75,7 +75,7 @@ public class TC_126_F117_native_raids_test extends AbstractMicroColTest {
      * 1 (staying at 0) and adds the Dutch pressure. Every scenario has the same
      * base: the armed frigate within two squares adds 2, the two colony workers
      * within the city's home radius of two add 0.25 each, and the unpaid colony
-     * square and worked corn field the capital claims add 2 each, so 6.5. The
+     * square and worked grain field the capital claims add 2 each, so 6.5. The
      * Aztec tribal anger then decays by 1 and gains the mean Aztec local alarm
      * divided by 20. The local factor of the Dutch is 1.
      */
@@ -87,7 +87,7 @@ public class TC_126_F117_native_raids_test extends AbstractMicroColTest {
     /** An armed unit within two squares. */
     private static final double ARMED = 2;
 
-    /** The raided soldier has lost its muskets: it counts only as resident. */
+    /** The raided soldier has lost its weapons: it counts only as resident. */
     private static final double RAIDED_ALARM = BASE_ALARM + RESIDENT;
 
     /** The unharmed soldier, or the gun, counts as resident and as armed. */
@@ -126,11 +126,11 @@ public class TC_126_F117_native_raids_test extends AbstractMicroColTest {
                 HOSTILE_ANGER);
 
         // The human ends the turn; the hostile brave raids the soldier beside
-        // it, which loses its muskets, and the brave stays on its square.
+        // it, which loses its weapons, and the brave stays on its square.
         // The raid commits no relation effect; only the peaceful Dutch update
         // moves the relations, counting the disarmed soldier as a resident.
         GamePage.of(getContext()).nextTurnAndCloseDialogs();
-        raid.verifySoldierLostMusketsToRaid(SOLDIER_ID, SOLDIER, AZTEC_BRAVE_ID,
+        raid.verifySoldierLostWeaponsToRaid(SOLDIER_ID, SOLDIER, AZTEC_BRAVE_ID,
                 AZTEC_BRAVE);
         combat.verifyRelationOutcomeCount(0);
         relations.verifyLocalAlarm(EuropeanNation.DUTCH, AZTEC_CAPITAL,
@@ -142,7 +142,7 @@ public class TC_126_F117_native_raids_test extends AbstractMicroColTest {
         // another update.
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
-        raid.verifySoldierLostMusketsToRaid(SOLDIER_ID, SOLDIER, AZTEC_BRAVE_ID,
+        raid.verifySoldierLostWeaponsToRaid(SOLDIER_ID, SOLDIER, AZTEC_BRAVE_ID,
                 AZTEC_BRAVE);
         relations.verifyLocalAlarm(EuropeanNation.DUTCH, AZTEC_CAPITAL,
                 RAIDED_ALARM);

@@ -88,41 +88,42 @@ class PoliticalProductionIntegrationTest {
 
     @ParameterizedTest
     @CsvSource({ "0,1,1", "500,1,1", "1000,1,1" })
-    void unattendedBellsAndCrossesNeverReceiveTheSupportBonus(
-            final long liberty, final int bells, final int crosses) {
-        // The town hall base is 1 bell and the empty chapel 1 cross.
+    void unattendedOwlsAndTorchesNeverReceiveTheSupportBonus(final long liberty,
+            final int owls, final int torches) {
+        // The town hall base is 1 owl and the empty chapel 1 torch.
         final Model model = load(data(liberty));
         final Colony colony = model.getColonyById(0).orElseThrow();
-        assertEquals(bells, planned(colony, GoodsType.BELL));
-        assertEquals(crosses, planned(colony, GoodsType.CROSS));
-        final int bellsBefore = stored(colony, GoodsType.BELL);
-        final int crossesBefore = stored(colony, GoodsType.CROSS);
+        assertEquals(owls, planned(colony, GoodsType.OWLS));
+        assertEquals(torches, planned(colony, GoodsType.TORCHES));
+        final int owlsBefore = stored(colony, GoodsType.OWLS);
+        final int torchesBefore = stored(colony, GoodsType.TORCHES);
         colony.startTurn();
-        assertEquals(bellsBefore + bells, stored(colony, GoodsType.BELL));
-        assertEquals(crossesBefore + crosses, stored(colony, GoodsType.CROSS));
+        assertEquals(owlsBefore + owls, stored(colony, GoodsType.OWLS));
+        assertEquals(torchesBefore + torches,
+                stored(colony, GoodsType.TORCHES));
     }
 
     @ParameterizedTest
     @CsvSource({ "0,10", "500,12", "1000,13" })
     void specialistThenPoliticalThenPrintingPressPercentage(final long liberty,
-            final int expectedBells) {
+            final int expectedOwls) {
         // Elder statesman: 3 doubled to 6, +0/+1/+2 for support, plus the
         // hall's
-        // unattended bell, then the press adds half: (6 + p + 1) * 3 / 2.
+        // unattended owl, then the press adds half: (6 + p + 1) * 3 / 2.
         final GameModelPo data = data(liberty);
         addBuilding(data, ConstructionType.PRINTING_PRESS);
         moveToBuilding(data, 0, ConstructionType.TOWN_HALL, 0,
                 UnitType.ELDER_STATESMAN);
         final Colony colony = load(data).getColonyById(0).orElseThrow();
         assertEquals(5, colony.getPopulation());
-        assertEquals(expectedBells, planned(colony, GoodsType.BELL));
-        assertEquals(expectedBells,
+        assertEquals(expectedOwls, planned(colony, GoodsType.OWLS));
+        assertEquals(expectedOwls,
                 colony.getConstructionByType(ConstructionType.TOWN_HALL)
                         .getProduction().getProducedGoods().orElseThrow()
                         .getAmount());
-        final int before = stored(colony, GoodsType.BELL);
+        final int before = stored(colony, GoodsType.OWLS);
         colony.startTurn();
-        assertEquals(before + expectedBells, stored(colony, GoodsType.BELL));
+        assertEquals(before + expectedOwls, stored(colony, GoodsType.OWLS));
     }
 
     /** A valid active Congress whose only member is the given founder. */
@@ -134,7 +135,7 @@ class PoliticalProductionIntegrationTest {
                 .findFirst().orElseThrow().getCongress();
         congress.setActivated(true);
         congress.setGeneration(1);
-        congress.setBells(0);
+        congress.setOwls(0);
         congress.setSelected(null);
         congress.setJonesDeliveryPending(false);
         congress.setMembers(List.of(founder));
@@ -155,7 +156,7 @@ class PoliticalProductionIntegrationTest {
             "CATHEDRAL,0,22", "CATHEDRAL,500,24", "CATHEDRAL,1000,25" })
     void pennMultipliesTheBoostedPreacherAndUnattendedBase(
             final ConstructionType tier, final long liberty,
-            final int expectedCrosses) {
+            final int expectedTorches) {
         // Firebrand preacher doubles the tier's base (3 or 6); the political
         // change (+0/+1/+2) is added to that job only, the unattended base
         // (2 or 3) is added without it, and Penn then takes floor(total * 3 /
@@ -170,11 +171,11 @@ class PoliticalProductionIntegrationTest {
         final Model model = load(data);
         final Colony colony = model.getColonyById(0).orElseThrow();
         assertEquals(5, colony.getPopulation());
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CROSS, 0));
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
-        assertEquals(expectedCrosses, planned(colony, GoodsType.CROSS));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.TORCHES, 0));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
+        assertEquals(expectedTorches, planned(colony, GoodsType.TORCHES));
         colony.startTurn();
-        assertEquals(expectedCrosses, stored(colony, GoodsType.CROSS));
+        assertEquals(expectedTorches, stored(colony, GoodsType.TORCHES));
     }
 
     @Test
@@ -185,7 +186,7 @@ class PoliticalProductionIntegrationTest {
                 UnitType.ELDER_STATESMAN);
         final Colony colony = load(data).getColonyById(0).orElseThrow();
         // (6 + 2 + 1) * 2
-        assertEquals(18, planned(colony, GoodsType.BELL));
+        assertEquals(18, planned(colony, GoodsType.OWLS));
     }
 
     @ParameterizedTest
@@ -199,11 +200,11 @@ class PoliticalProductionIntegrationTest {
         saved(data).getColonyWarehouse().put("HORSE", 2);
         final Colony colony = load(data).getColonyById(0).orElseThrow();
         // Leave exactly 3 food after the residents: one foal is born.
-        final int net = colony.getRawGoodsStats().getStatsByType(GoodsType.CORN)
-                .getNetProduction();
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 3 - net));
-        assertEquals(3, colony.getRawGoodsStats().getStatsByType(GoodsType.CORN)
-                .getInWarehouseAfter());
+        final int net = colony.getRawGoodsStats()
+                .getStatsByType(GoodsType.GRAIN).getNetProduction();
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 3 - net));
+        assertEquals(3, colony.getRawGoodsStats()
+                .getStatsByType(GoodsType.GRAIN).getInWarehouseAfter());
         assertEquals(1, planned(colony, GoodsType.HORSE));
         colony.startTurn();
         assertEquals(3, stored(colony, GoodsType.HORSE));
@@ -218,7 +219,7 @@ class PoliticalProductionIntegrationTest {
         moveToBuilding(data, 0, ConstructionType.BLACKSMITHS_HOUSE, 0,
                 UnitType.COLONIST);
         saved(data).getColonyWarehouse().put("ORE", 3);
-        saved(data).getColonyWarehouse().put("CORN", 100);
+        saved(data).getColonyWarehouse().put("GRAIN", 100);
         // Start below the storage cap so new tools are not trimmed.
         saved(data).getColonyWarehouse().put("TOOLS", 0);
         final Colony colony = load(data).getColonyById(0).orElseThrow();
@@ -242,7 +243,7 @@ class PoliticalProductionIntegrationTest {
         moveToBuilding(data, 0, ConstructionType.BLACKSMITHS_HOUSE, 0,
                 UnitType.COLONIST);
         saved(data).getColonyWarehouse().put("ORE", 40);
-        saved(data).getColonyWarehouse().put("CORN", 100);
+        saved(data).getColonyWarehouse().put("GRAIN", 100);
         // Start below the storage cap so new tools are not trimmed.
         saved(data).getColonyWarehouse().put("TOOLS", 0);
         final Colony colony = load(data).getColonyById(0).orElseThrow();
@@ -260,43 +261,43 @@ class PoliticalProductionIntegrationTest {
         final GameModelPo data = data(1000);
         final Model model = load(data);
         final Colony colony = model.getColonyById(0).orElseThrow();
-        // Keep the three field workers: corn 0 and tobacco 1 and 2.
+        // Keep the three field workers: grain 0 and grapes 1 and 2.
         for (final Unit unit : List.copyOf(colony.getUnitsInsideColony())) {
             if (!Set.of(0, 1, 2).contains(unit.getId())) {
                 unit.getPlace().destroy();
                 model.destroyUnit(unit);
             }
         }
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.TOBACCO, 0));
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAPES, 0));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
         // Liberty was capped to full support of three residents: +2.
         assertEquals(2, colony.getPoliticalProduction().getBonus());
-        int expectedTobacco = 0;
+        int expectedGrapes = 0;
         for (final ColonyField field : colony.getColonyFields()) {
             if (field.getUnit().isEmpty()
                     || field.getUnit().get().getPlaceColonyField()
-                            .getProducedGoodsType() != GoodsType.TOBACCO) {
+                            .getProducedGoodsType() != GoodsType.GRAPES) {
                 continue;
             }
             final Unit worker = field.getUnit().get();
-            final int base = field.getGoodsTypeProduction(GoodsType.TOBACCO);
+            final int base = field.getGoodsTypeProduction(GoodsType.GRAPES);
             assertTrue(base > 0);
             final int expected = (int) (base
                     * worker.getType().getFieldProductionModifier(
-                            GoodsType.TOBACCO, field.getTerrain()))
+                            GoodsType.GRAPES, field.getTerrain()))
                     + 2;
             assertEquals(expected,
                     field.getProduction().orElseThrow().getAmount());
-            expectedTobacco += expected;
+            expectedGrapes += expected;
         }
-        // The grassland center also yields its unattended tobacco: base 3, no
+        // The grassland center also yields its unattended grapes: base 3, no
         // forest and no overlay, with no worker or political bonus.
-        final int commonsTobacco = 3;
-        assertEquals(expectedTobacco + commonsTobacco,
-                planned(colony, GoodsType.TOBACCO));
+        final int commonsGrapes = 3;
+        assertEquals(expectedGrapes + commonsGrapes,
+                planned(colony, GoodsType.GRAPES));
         colony.startTurn();
-        assertEquals(expectedTobacco + commonsTobacco,
-                stored(colony, GoodsType.TOBACCO));
+        assertEquals(expectedGrapes + commonsGrapes,
+                stored(colony, GoodsType.GRAPES));
         // A good the terrain cannot yield gets nothing from the bonus.
         final Unit anyone = colony.getUnitsInsideColony().get(0);
         int zeroYield = 0;

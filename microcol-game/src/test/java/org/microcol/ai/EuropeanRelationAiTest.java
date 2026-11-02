@@ -39,7 +39,7 @@ class EuropeanRelationAiTest {
         rival.placeToLocation(Location.of(17, 11));
         human = model.getUnitById(0);
         human.placeToLocation(Location.of(18, 11));
-        ((UnitFreeColonist) human).setHoldingGuns(true);
+        ((UnitFreeColonist) human).setHoldingWeapons(true);
         assertEquals(1, rival.getActionPoints());
     }
 
@@ -97,8 +97,8 @@ class EuropeanRelationAiTest {
         assertSame(rival, model.getUnitById(rival.getId()));
         assertEquals(0, human.getActionPoints());
         assertEquals(0, rival.getActionPoints());
-        assertTrue(!((UnitFreeColonist) human).isHoldingGuns()
-                || !((UnitFreeColonist) rival).isHoldingGuns());
+        assertTrue(!((UnitFreeColonist) human).isHoldingWeapons()
+                || !((UnitFreeColonist) rival).isHoldingWeapons());
         assertEquals(EuropeanRelationState.WAR,
                 model.getEuropeanRelation(france(), dutch()));
     }
@@ -182,7 +182,7 @@ class EuropeanRelationAiTest {
         assertEquals(count, model.getAllUnits().size());
         assertSame(human, model.getUnitById(human.getId()));
         assertSame(rival, model.getUnitById(rival.getId()));
-        assertTrue(!((UnitFreeColonist) human).isHoldingGuns()
+        assertTrue(!((UnitFreeColonist) human).isHoldingWeapons()
                 || !((UnitFreeColonist) rival).isMounted());
         assertEquals(0, rival.getActionPoints());
         assertEquals(0, human.getActionPoints());
@@ -259,7 +259,7 @@ class EuropeanRelationAiTest {
         assertSame(france(), colony.getOwner());
         assertSame(france(), model.getUnitById(4).getOwner());
         assertSame(rival, model.getUnitById(6));
-        assertTrue(((UnitFreeColonist) rival).isHoldingGuns());
+        assertTrue(((UnitFreeColonist) rival).isHoldingWeapons());
         assertTrue(rival.isAtPlaceLocation());
         assertEquals(colony.getLocation(), rival.getLocation());
         assertEquals(0, rival.getActionPoints());

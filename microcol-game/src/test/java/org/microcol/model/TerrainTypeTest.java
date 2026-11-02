@@ -78,13 +78,13 @@ public class TerrainTypeTest {
         assertFalse(TerrainType.UNIT_CAN_WALK_AT.contains(TerrainType.LAKE));
         assertEquals(TerrainType.OCEAN.getMoveCost(),
                 TerrainType.LAKE.getMoveCost());
-        assertEquals(3, TerrainType.LAKE.getBaseProduction(GoodsType.CORN)
+        assertEquals(3, TerrainType.LAKE.getBaseProduction(GoodsType.GRAIN)
                 .orElseThrow().getBase());
         assertEquals(
-                TerrainType.OCEAN.getBaseProduction(GoodsType.CORN)
+                TerrainType.OCEAN.getBaseProduction(GoodsType.GRAIN)
                         .orElseThrow().getBase(),
-                TerrainType.LAKE.getBaseProduction(GoodsType.CORN).orElseThrow()
-                        .getBase());
+                TerrainType.LAKE.getBaseProduction(GoodsType.GRAIN)
+                        .orElseThrow().getBase());
     }
 
     @Test

@@ -46,11 +46,11 @@ class EuropeEquipmentTest {
     static Stream<Arguments> equipmentLots() {
         // The sale follows the purchase in the same Dutch national market.
         // Buying a lot of n units adds -4n eighths of pressure (half of the
-        // ordinary -8n), and 800 eighths raise the bid by one: 50 muskets or
+        // ordinary -8n), and 800 eighths raise the bid by one: 50 weapons or
         // horses (-200) keep bid 2, and 100 tools (-400) keep the tool bid at
         // 1,
         // so the sale pays 100 x 1.
-        return Stream.of(Arguments.of(GoodsType.MUSKET, 50, 150, 100),
+        return Stream.of(Arguments.of(GoodsType.WEAPONS, 50, 150, 100),
                 Arguments.of(GoodsType.HORSE, 50, 250, 100),
                 Arguments.of(GoodsType.TOOLS, 100, 200, 100));
     }
@@ -83,53 +83,53 @@ class EuropeEquipmentTest {
 
     @Test
     void equipmentTradesPressTheMarketOnlyWhenAccepted() {
-        final GoodsTrade musket = europe.getGoodsTradeForType(GoodsType.MUSKET,
+        final GoodsTrade weapon = europe.getGoodsTradeForType(GoodsType.WEAPONS,
                 EuropeanNation.DUTCH);
-        final GoodsTrade frenchMusket = europe
-                .getGoodsTradeForType(GoodsType.MUSKET, EuropeanNation.FRENCH);
+        final GoodsTrade frenchWeapon = europe
+                .getGoodsTradeForType(GoodsType.WEAPONS, EuropeanNation.FRENCH);
         final EuropeTradeQuote offer = unit
-                .getEuropeEquipmentQuote(GoodsType.MUSKET, true);
+                .getEuropeEquipmentQuote(GoodsType.WEAPONS, true);
         // The market moves under the open offer: rejected, nothing pressed.
-        musket.setBuyPrice(4);
+        weapon.setBuyPrice(4);
         assertThrows(IllegalStateException.class, () -> unit
-                .tradeEquipmentInEurope(GoodsType.MUSKET, true, offer));
+                .tradeEquipmentInEurope(GoodsType.WEAPONS, true, offer));
         assertEquals(1000, player.getGold());
-        assertEquals(0, equipment(GoodsType.MUSKET));
-        assertEquals(0, musket.getPressure());
-        assertFalse(frenchMusket.isTradedSinceUpdate());
-        musket.setBuyPrice(3);
+        assertEquals(0, equipment(GoodsType.WEAPONS));
+        assertEquals(0, weapon.getPressure());
+        assertFalse(frenchWeapon.isTradedSinceUpdate());
+        weapon.setBuyPrice(3);
 
-        // An accepted purchase of the 50-musket lot: -200 own (half of the
+        // An accepted purchase of the 50-weapon lot: -200 own (half of the
         // ordinary -400 for the Dutch market), -100 elsewhere.
-        unit.tradeEquipmentInEurope(GoodsType.MUSKET, true,
-                unit.getEuropeEquipmentQuote(GoodsType.MUSKET, true));
+        unit.tradeEquipmentInEurope(GoodsType.WEAPONS, true,
+                unit.getEuropeEquipmentQuote(GoodsType.WEAPONS, true));
         assertEquals(850, player.getGold());
-        assertEquals(-200, musket.getPressure());
-        assertEquals(-100, frenchMusket.getPressure());
-        assertTrue(frenchMusket.isTradedSinceUpdate());
+        assertEquals(-200, weapon.getPressure());
+        assertEquals(-100, frenchWeapon.getPressure());
+        assertTrue(frenchWeapon.isTradedSinceUpdate());
 
         // The sale of the same lot cancels the remainders exactly.
-        unit.tradeEquipmentInEurope(GoodsType.MUSKET, false,
-                unit.getEuropeEquipmentQuote(GoodsType.MUSKET, false));
-        assertEquals(0, musket.getPressure());
-        assertEquals(0, frenchMusket.getPressure());
+        unit.tradeEquipmentInEurope(GoodsType.WEAPONS, false,
+                unit.getEuropeEquipmentQuote(GoodsType.WEAPONS, false));
+        assertEquals(0, weapon.getPressure());
+        assertEquals(0, frenchWeapon.getPressure());
     }
 
     @Test
     void dragoonEquipmentCanBeSoldSeparately() {
-        buy(GoodsType.MUSKET);
+        buy(GoodsType.WEAPONS);
         buy(GoodsType.HORSE);
-        assertTrue(unit.isHoldingGuns());
+        assertTrue(unit.isHoldingWeapons());
         assertTrue(unit.isMounted());
         assertEquals(600, player.getGold());
-        unit.tradeEquipmentInEurope(GoodsType.MUSKET, false,
-                unit.getEuropeEquipmentQuote(GoodsType.MUSKET, false));
-        assertFalse(unit.isHoldingGuns());
+        unit.tradeEquipmentInEurope(GoodsType.WEAPONS, false,
+                unit.getEuropeEquipmentQuote(GoodsType.WEAPONS, false));
+        assertFalse(unit.isHoldingWeapons());
         assertTrue(unit.isMounted());
         assertEquals(700, player.getGold());
         assertEquals(0, unit.getTools());
         assertTrue(unit.save().isMounted());
-        assertFalse(unit.save().isHoldingGuns());
+        assertFalse(unit.save().isHoldingWeapons());
     }
 
     @Test
@@ -172,7 +172,7 @@ class EuropeEquipmentTest {
             int purchasePrice, int salePrice) {
         if (type == GoodsType.TOOLS) {
             unit.setMounted(true);
-            unit.setHoldingGuns(true);
+            unit.setHoldingWeapons(true);
         } else {
             unit.setTools(37);
         }
@@ -185,26 +185,26 @@ class EuropeEquipmentTest {
         when(model.getKingsTaxForPlayer(player)).thenReturn(17);
         player.setGold(174);
         final EuropeTradeQuote offer = unit
-                .getEuropeEquipmentQuote(GoodsType.MUSKET, true);
+                .getEuropeEquipmentQuote(GoodsType.WEAPONS, true);
         assertEquals(175, offer.getTotal());
-        assertRejected(GoodsType.MUSKET, true, offer,
+        assertRejected(GoodsType.WEAPONS, true, offer,
                 EquipmentProblem.NOT_ENOUGH_GOLD);
         player.setGold(175);
-        unit.tradeEquipmentInEurope(GoodsType.MUSKET, true, offer);
+        unit.tradeEquipmentInEurope(GoodsType.WEAPONS, true, offer);
         assertEquals(0, player.getGold());
-        assertTrue(unit.isHoldingGuns());
+        assertTrue(unit.isHoldingWeapons());
     }
 
     @Test
     void priceChangeRejectsOldOfferUntilNewOfferIsConfirmed() {
         final EuropeTradeQuote oldOffer = unit
-                .getEuropeEquipmentQuote(GoodsType.MUSKET, true);
-        europe.getGoodsTradeForType(GoodsType.MUSKET, EuropeanNation.DUTCH)
+                .getEuropeEquipmentQuote(GoodsType.WEAPONS, true);
+        europe.getGoodsTradeForType(GoodsType.WEAPONS, EuropeanNation.DUTCH)
                 .setBuyPrice(4);
-        assertRejected(GoodsType.MUSKET, true, oldOffer, null);
-        buy(GoodsType.MUSKET);
+        assertRejected(GoodsType.WEAPONS, true, oldOffer, null);
+        buy(GoodsType.WEAPONS);
         assertEquals(800, player.getGold());
-        assertTrue(unit.isHoldingGuns());
+        assertTrue(unit.isHoldingWeapons());
     }
 
     @Test
@@ -228,42 +228,42 @@ class EuropeEquipmentTest {
     @Test
     void foreignTurnRejectsWithoutMutatingTheOwner() {
         final EuropeTradeQuote offer = unit
-                .getEuropeEquipmentQuote(GoodsType.MUSKET, true);
+                .getEuropeEquipmentQuote(GoodsType.WEAPONS, true);
         final PlayerHuman french = new PlayerHuman("French", false, 1000, model,
                 false, new HashMap<>(), new HashSet<>());
         when(model.getCurrentPlayer()).thenReturn(french);
-        assertRejected(GoodsType.MUSKET, true, offer,
+        assertRejected(GoodsType.WEAPONS, true, offer,
                 EquipmentProblem.UNIT_UNAVAILABLE);
     }
 
     @Test
     void leavingPierInvalidatesAnOpenOffer() {
         final EuropeTradeQuote offer = unit
-                .getEuropeEquipmentQuote(GoodsType.MUSKET, true);
+                .getEuropeEquipmentQuote(GoodsType.WEAPONS, true);
         unit.placeToLocation(Location.of(3, 3));
-        assertRejected(GoodsType.MUSKET, true, offer,
+        assertRejected(GoodsType.WEAPONS, true, offer,
                 EquipmentProblem.UNIT_UNAVAILABLE);
     }
 
     @Test
     void removedOrReplacedObjectCannotUseItsOldIdentity() {
         final EuropeTradeQuote offer = unit
-                .getEuropeEquipmentQuote(GoodsType.MUSKET, true);
+                .getEuropeEquipmentQuote(GoodsType.WEAPONS, true);
         when(model.getUnitsOwnedBy(player, true))
                 .thenReturn(List.of(makeUnit(player)));
-        assertRejected(GoodsType.MUSKET, true, offer,
+        assertRejected(GoodsType.WEAPONS, true, offer,
                 EquipmentProblem.UNIT_UNAVAILABLE);
         when(model.getUnitsOwnedBy(player, true)).thenReturn(List.of());
-        assertRejected(GoodsType.MUSKET, true, offer,
+        assertRejected(GoodsType.WEAPONS, true, offer,
                 EquipmentProblem.UNIT_UNAVAILABLE);
     }
 
     @Test
     void stoppedGameRejectsTrade() {
         final EuropeTradeQuote offer = unit
-                .getEuropeEquipmentQuote(GoodsType.MUSKET, true);
+                .getEuropeEquipmentQuote(GoodsType.WEAPONS, true);
         when(model.isGameRunning()).thenReturn(false);
-        assertRejected(GoodsType.MUSKET, true, offer,
+        assertRejected(GoodsType.WEAPONS, true, offer,
                 EquipmentProblem.UNIT_UNAVAILABLE);
     }
 
@@ -274,12 +274,12 @@ class EuropeEquipmentTest {
         unit = makeUnit(player);
         when(model.getCurrentPlayer()).thenReturn(player);
         when(model.getUnitsOwnedBy(player, true)).thenReturn(List.of(unit));
-        assertRejected(GoodsType.MUSKET, true,
-                unit.getEuropeEquipmentQuote(GoodsType.MUSKET, true),
+        assertRejected(GoodsType.WEAPONS, true,
+                unit.getEuropeEquipmentQuote(GoodsType.WEAPONS, true),
                 EquipmentProblem.TRADE_RESTRICTED);
-        unit.setHoldingGuns(true);
-        assertRejected(GoodsType.MUSKET, false,
-                unit.getEuropeEquipmentQuote(GoodsType.MUSKET, false),
+        unit.setHoldingWeapons(true);
+        assertRejected(GoodsType.WEAPONS, false,
+                unit.getEuropeEquipmentQuote(GoodsType.WEAPONS, false),
                 EquipmentProblem.TRADE_RESTRICTED);
     }
 
@@ -295,23 +295,23 @@ class EuropeEquipmentTest {
     @Test
     void overflowingQuoteIsReportedBeforeEquipmentMutation() {
         final EuropeTradeQuote offer = unit
-                .getEuropeEquipmentQuote(GoodsType.MUSKET, true);
-        europe.getGoodsTradeForType(GoodsType.MUSKET, EuropeanNation.DUTCH)
+                .getEuropeEquipmentQuote(GoodsType.WEAPONS, true);
+        europe.getGoodsTradeForType(GoodsType.WEAPONS, EuropeanNation.DUTCH)
                 .setBuyPrice(Integer.MAX_VALUE);
-        assertRejected(GoodsType.MUSKET, true, offer,
+        assertRejected(GoodsType.WEAPONS, true, offer,
                 EquipmentProblem.GOLD_LIMIT);
     }
 
     @Test
     void unsupportedTypeAndNullOfferDoNotChangeState() {
         assertThrows(IllegalArgumentException.class,
-                () -> unit.getEuropeEquipmentQuote(GoodsType.CORN, true));
+                () -> unit.getEuropeEquipmentQuote(GoodsType.GRAIN, true));
         assertThrows(IllegalArgumentException.class,
-                () -> unit.getEuropeEquipmentProblem(GoodsType.CORN, true));
+                () -> unit.getEuropeEquipmentProblem(GoodsType.GRAIN, true));
         assertThrows(NullPointerException.class, () -> unit
-                .tradeEquipmentInEurope(GoodsType.MUSKET, true, null));
+                .tradeEquipmentInEurope(GoodsType.WEAPONS, true, null));
         assertEquals(1000, player.getGold());
-        assertFalse(unit.isHoldingGuns());
+        assertFalse(unit.isHoldingWeapons());
     }
 
     private void buy(GoodsType type) {
@@ -321,7 +321,7 @@ class EuropeEquipmentTest {
 
     private int equipment(GoodsType type) {
         return type == GoodsType.TOOLS ? unit.getTools()
-                : type == GoodsType.MUSKET ? (unit.isHoldingGuns() ? 50 : 0)
+                : type == GoodsType.WEAPONS ? (unit.isHoldingWeapons() ? 50 : 0)
                         : (unit.isMounted() ? 50 : 0);
     }
 
@@ -329,7 +329,7 @@ class EuropeEquipmentTest {
             EuropeTradeQuote offer, EquipmentProblem expectedProblem) {
         final int gold = player.getGold();
         final int tools = unit.getTools();
-        final boolean guns = unit.isHoldingGuns();
+        final boolean guns = unit.isHoldingWeapons();
         final boolean horses = unit.isMounted();
         final Place place = unit.getPlace();
         assertEquals(Optional.ofNullable(expectedProblem),
@@ -338,7 +338,7 @@ class EuropeEquipmentTest {
                 () -> unit.tradeEquipmentInEurope(type, buy, offer));
         assertEquals(gold, player.getGold());
         assertEquals(tools, unit.getTools());
-        assertEquals(guns, unit.isHoldingGuns());
+        assertEquals(guns, unit.isHoldingWeapons());
         assertEquals(horses, unit.isMounted());
         assertSame(place, unit.getPlace());
         assertSame(player, unit.getOwner());

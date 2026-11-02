@@ -209,7 +209,7 @@ public final class NativeIncitementPage extends AbstractScreen {
         unit.add("placeMap", place);
         unit.addProperty("movementThirds", 3);
         unit.addProperty("tools", 0);
-        unit.addProperty("holdingGuns", false);
+        unit.addProperty("holdingWeapons", false);
         unit.addProperty("mounted", false);
         return unit;
     }

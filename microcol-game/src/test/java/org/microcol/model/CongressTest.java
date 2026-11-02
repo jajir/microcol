@@ -34,41 +34,41 @@ class CongressTest {
             Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH, Founder.WILLIAM_PENN,
             Founder.FERDINAND_MAGELLAN);
 
-    private CongressPo active(final int bells, final Founder selected) {
+    private CongressPo active(final int owls, final Founder selected) {
         final CongressPo po = Congress.initial();
         po.setActivated(true);
-        po.setBells(bells);
+        po.setOwls(owls);
         po.setCandidates(OFFER);
         po.setSelected(selected);
         po.setGeneration(1);
         return po;
     }
 
-    private GameModelPo fixture(final int bells, final Founder selected) {
+    private GameModelPo fixture(final int owls, final Founder selected) {
         final GameModelPo data = new GameModelPoDao().loadFromClassPath(
                 "/maps/default-campaign-mission-2-thrive.microcol");
         for (final PlayerPo player : data.getModel().getGameManager()
                 .getPlayers()) {
             if (player.getWhosKingThisPlayerIs() == null) {
                 player.setCongress(player.getName().equals("Dutch")
-                        ? active(bells, selected)
+                        ? active(owls, selected)
                         : Congress.initial());
             }
         }
         return data;
     }
 
-    private Model model(final int bells, final Founder selected) {
-        return Model.make(fixture(bells, selected).getModel(),
+    private Model model(final int owls, final Founder selected) {
+        return Model.make(fixture(owls, selected).getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
     }
 
-    private int oneUpdateBellProduction() {
+    private int oneUpdateOwlProduction() {
         final Model preview = model(0, null);
         final Player owner = preview.getCurrentPlayer();
         return owner.getColonies().stream()
                 .mapToInt(colony -> Math.max(0, colony.getGoodsStats()
-                        .getStatsByType(GoodsType.BELL).getRowProduction()))
+                        .getStatsByType(GoodsType.OWLS).getRowProduction()))
                 .sum();
     }
 
@@ -196,24 +196,24 @@ class CongressTest {
     }
 
     @Test
-    void ordinaryBellProductionJoinsJonesOnceAndPreservesLocalBells() {
-        final int produced = oneUpdateBellProduction();
+    void ordinaryOwlProductionJoinsJonesOnceAndPreservesLocalOwls() {
+        final int produced = oneUpdateOwlProduction();
         final Model model = model(100 - produced, Founder.JOHN_PAUL_JONES);
         final Player owner = model.getCurrentPlayer();
         final Colony colony = model.getColonyByName("Delft").orElseThrow();
-        final int localBefore = colony.getWarehouse().getGoods(GoodsType.BELL)
+        final int localBefore = colony.getWarehouse().getGoods(GoodsType.OWLS)
                 .getAmount();
         final long shipsBefore = model.getAllUnits().stream()
                 .filter(unit -> unit.getOwner() == owner
                         && unit.getType() == UnitType.FRIGATE)
                 .count();
         owner.startTurn();
-        assertEquals(0, owner.getCongressBells());
+        assertEquals(0, owner.getCongressOwls());
         assertEquals(List.of(Founder.JOHN_PAUL_JONES),
                 owner.getCongressMembers());
         assertEquals(200, owner.getCongressTarget());
         assertEquals(localBefore + 1,
-                colony.getWarehouse().getGoods(GoodsType.BELL).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.OWLS).getAmount());
         assertEquals(shipsBefore + 1,
                 model.getAllUnits().stream()
                         .filter(unit -> unit.getOwner() == owner
@@ -234,11 +234,11 @@ class CongressTest {
 
     @Test
     void surplusIsCarriedToNextObjectiveAndOnlyOneJoins() {
-        final int produced = oneUpdateBellProduction();
+        final int produced = oneUpdateOwlProduction();
         final Model model = model(120 - produced, Founder.JOHN_PAUL_JONES);
         final Player owner = model.getCurrentPlayer();
         owner.startTurn();
-        assertEquals(20, owner.getCongressBells());
+        assertEquals(20, owner.getCongressOwls());
         assertEquals(200, owner.getCongressTarget());
         assertEquals(1, owner.getCongressMembers().size());
     }
@@ -251,13 +251,13 @@ class CongressTest {
         assertTrue(first.canJoin(Difficulty.CONQUISTADOR));
         assertEquals(Founder.JOHN_PAUL_JONES,
                 first.join(Difficulty.CONQUISTADOR));
-        assertEquals(0, first.bells());
+        assertEquals(0, first.owls());
 
         final Congress surplus = new Congress(
                 active(120, Founder.JOHN_PAUL_JONES), Difficulty.CONQUISTADOR);
         assertEquals(Founder.JOHN_PAUL_JONES,
                 surplus.join(Difficulty.CONQUISTADOR));
-        assertEquals(20, surplus.bells());
+        assertEquals(20, surplus.owls());
         assertEquals(200, surplus.target(Difficulty.CONQUISTADOR));
     }
 

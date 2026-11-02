@@ -217,9 +217,9 @@ načtení nikdy nelosuje náhradní kandidáty. Novou nabídku vytvářejí pouz
 cesty zahájení nové hry. `UnitLaborer` zachovává služebníka/trestance přes
 vybavení a přepravu; `ConstructionSlot` sdílí jejich výrobní úpravu mezi
 náhledem, skutečným výstupem a spotřebou vstupů.
-R-0076 doplňuje přičítání skutečného přírůstku křížů z `Colony.startTurn`
+R-0076 doplňuje přičítání skutečného přírůstku pochodní z `Colony.startTurn`
 do národního poolu a vyřízení dosažených prahů v evropské fázi příštího
-`Player.startTurn`. Místní sklad křížů zůstává evidencí produkce; jeho
+`Player.startTurn`. Místní sklad pochodní zůstává evidencí produkce; jeho
 kumulovaný obsah se znovu nepřičítá. Čtecí dotazy UI příchozí nevytvářejí.
 Brewsterův účinek
 vyžaduje skutečné členství z R-0104. Stav přejímky vede [R-0075](requirements/done/R-0075.md).
@@ -323,7 +323,7 @@ pouhým Save/Continue nemění; regresi sleduje
 ### Potvrzení útoku (R-0028, rozpracováno)
 
 1. `Unit.canAttack()` určuje schopnost podle aktuálního vybavení. Královská
-   továrna v `Model` proto své nové vojáky vybavuje mušketami; nepoužívá
+   továrna v `Model` proto své nové vojáky vybavuje zbraněmi; nepoužívá
    výjimku pro neozbrojeného krále. Typ jednotky
    samostatně vymezuje přípustný druh cíle. `prepareAttack` pouze čte živý stav:
    aktuálního hráče, registrovanou jednotku, sousedství, známý cíl, terén, pohyb
@@ -474,8 +474,8 @@ verzi pravidla. [UX](ux.md) a [grafika](graphics.md) popisují společné požad
 | [gui.screen.market](../microcol-game/src/main/java/org/microcol/gui/screen/market/) | Obrazovky nákupu a prodeje a prezentace cen. |
 | [gui.screen.campaign](../microcol-game/src/main/java/org/microcol/gui/screen/campaign/) | Výběr kampaně a mise. |
 | [gui.screen.goals](../microcol-game/src/main/java/org/microcol/gui/screen/goals/) | Zobrazení cílů mise a jejich postupu. |
-| [gui.screen.statistics](../microcol-game/src/main/java/org/microcol/gui/screen/statistics/) | Zobrazení herních statistik, grafů, základních evropských vztahů, síně slávy (R-0197; zápis výsledku jde přes `HallOfFameDao`) a přehledu práce (R-0198; počty a místa čte `model.LaborReport`, odkaz otevírá existující obrazovky přes `LaborNavigator`) a přehledu náboženství (R-0199; výstup a postup čte `model.ReligionReport`, zobrazení nemění kříže ani přistěhovalce) a přehledu kolonií (R-0200; populaci, zásoby, očekávaný výstup, příští stav a projekt čte `model.ColonyAdvisorReport`, otevření kolonie přes `ColonyAdvisorNavigator` ověřuje model a vlastnictví; projekt a nástroje používají stejné pravidlo jako oznámení R-0086); přehled lodí (R-0202; loďstvo, plavby, opravy a náklad čte `model.FleetReport`, cizí lodě jen počet obsazených prostorů, otevření přes `FleetNavigator` ověřuje živý přehled); potvrzení vyhlášení války se kontroluje proti původní hře a hráčům před modelovou operací. |
-| [gui.screen.congress](../microcol-game/src/main/java/org/microcol/gui/screen/congress/) | `ScreenCongress` v hlavním okně přes `InGamePage` (R-0332); zobrazení neměnné nabídky otců, národních zvonů, cíle a členství. Národní podporu, členy, cíl a skutečnou REF vlastního národa čte `model.CongressReport` (R-0203) jedním dotazem bez mezipaměti. Výslovná volba používá hlídanou operaci hráče; UI nelosuje ani neuděluje odměny. |
+| [gui.screen.statistics](../microcol-game/src/main/java/org/microcol/gui/screen/statistics/) | Zobrazení herních statistik, grafů, základních evropských vztahů, síně slávy (R-0197; zápis výsledku jde přes `HallOfFameDao`) a přehledu práce (R-0198; počty a místa čte `model.LaborReport`, odkaz otevírá existující obrazovky přes `LaborNavigator`) a přehledu náboženství (R-0199; výstup a postup čte `model.ReligionReport`, zobrazení nemění pochodně ani přistěhovalce) a přehledu kolonií (R-0200; populaci, zásoby, očekávaný výstup, příští stav a projekt čte `model.ColonyAdvisorReport`, otevření kolonie přes `ColonyAdvisorNavigator` ověřuje model a vlastnictví; projekt a nástroje používají stejné pravidlo jako oznámení R-0086); přehled lodí (R-0202; loďstvo, plavby, opravy a náklad čte `model.FleetReport`, cizí lodě jen počet obsazených prostorů, otevření přes `FleetNavigator` ověřuje živý přehled); potvrzení vyhlášení války se kontroluje proti původní hře a hráčům před modelovou operací. |
+| [gui.screen.congress](../microcol-game/src/main/java/org/microcol/gui/screen/congress/) | `ScreenCongress` v hlavním okně přes `InGamePage` (R-0332); zobrazení neměnné nabídky otců, národních sov, cíle a členství. Národní podporu, členy, cíl a skutečnou REF vlastního národa čte `model.CongressReport` (R-0203) jedním dotazem bez mezipaměti. Výslovná volba používá hlídanou operaci hráče; UI nelosuje ani neuděluje odměny. |
 | [gui.screen.turnreport](../microcol-game/src/main/java/org/microcol/gui/screen/turnreport/) | Prezentace uložených zpráv `model.turnevent`. Rutinní přehled řídí předvolba v `gui.preferences` (R-0204); kritické zprávy otevřou přehled i při jejím vypnutí. Akce Otevřít kolonii (chybějící nástroje, dokončený projekt, zahozené zboží, narození) a Otevřít Evropu ověřují aktuální hru a nic nespotřebují. `EuropeOpeningRequest` drží automatické otevření Evropy až za přehledem a zruší se při jeho opuštění (R-0204). |
 | [gui.screen.menu](../microcol-game/src/main/java/org/microcol/gui/screen/menu/) | Hlavní menu, navigace a nastavení volné hry (`ScreenFreePlay`); skutečná volba mapy, validovaný zobrazovaný název hráče a výslovně označený náhled národa. |
 | [gui.screen.setting](../microcol-game/src/main/java/org/microcol/gui/screen/setting/) | Ovládání uživatelských nastavení. |
@@ -686,9 +686,9 @@ ověřuje podmínku při přijetí i dokončení. UI překládá konkrétní mod
 důvod a nepřevádí pracovníka ani materiál při odmítnutí.
 Rozsah a přejímku vede [R-0080](requirements/done/R-0080.md).
 
-### Tisk a společná produkce zvonů (R-0081)
+### Tisk a společná produkce sov (R-0081)
 
-`Construction.getProduction()` počítá jeden základní zvon radnice i bez
+`Construction.getProduction()` počítá jednu základní sovu radnice i bez
 pracovníků, přičítá příspěvky státníků a aplikuje tiskárnu (+50 %) nebo
 noviny (+100 %, nahrazují tiskárnu). Zaokrouhluje dolů jednou nad celým
 součtem. Stejný výsledek používá náhled i změna skladu. Dokončení stavby
@@ -733,10 +733,10 @@ nepočítá. Viz [R-0083](requirements/done/R-0083.md).
 ### Podpora nezávislosti (R-0100)
 
 `Colony` vlastní uloženou místní svobodu a poslední koloniální příslušnost.
-Skutečnou produkci zvonů připíše při aktualizaci kolonie; dokončený odchod
+Skutečnou produkci sov připíše při aktualizaci kolonie; dokončený odchod
 obyvatele upraví limit podle zbývajících pracovníků. Přesun mezi pracemi uvnitř
 stejné kolonie limit nemění. Dobytí Evropanem mění příslušnost, královská okupace
-ji zachovává a vyrobené zvony odečítá. `model.store.ColonyPo` vyžaduje obě hodnoty;
+ji zachovává a vyrobené sovy odečítá. `model.store.ColonyPo` vyžaduje obě hodnoty;
 načítání nedoplňuje chybějící údaje ani neopravuje neplatný limit.
 `RebelSupport` představuje přesný celočíselný zlomek včetně počtu obyvatel,
 `Player` sčítá příspěvky příslušných kolonií. Bolivarův bonus pochází z jejich
@@ -747,8 +747,8 @@ Produkční bonusy R-0101 a vyhlášení nezávislosti R-0105 mají tento výpo�
 ### Kongres a příchod otce (R-0104)
 
 `Player` vlastní uložený `Congress`: nabídku kandidátů, zvolený cíl, národní
-zvony, členy a případnou čekající Jonesovu fregatu. `Colony` připisuje novou
-výrobu zvonů nezávisle na místním skladu. Po aktualizaci kolonií hráč dokončí
+sovy, členy a případnou čekající Jonesovu fregatu. `Colony` připisuje novou
+výrobu sov nezávisle na místním skladu. Po aktualizaci kolonií hráč dokončí
 nejvýše jeden cíl a zachová přebytek. `FounderOffer` váže potvrzení na
 původního hráče a generaci nabídky. Model vytváří odměnu a uloženou zprávu
 příchodu; rozhraní pouze překládá a zobrazuje. Continue neopakuje aktualizaci.
@@ -864,7 +864,7 @@ pracovního místa. `ConstructionSlot` použije existující odbornost;
 Pennových 150 % se zaokrouhlením dolů. Náhled kolonie i skutečný tah používají
 stejný výpočet. Dokončení stavby následuje po produkci: nový náhled je okamžitý,
 skutečný přírůstek nového stupně přijde v dalším tahu. Národní imigrační fond
-přebírá skutečné vyprodukované kříže. [Přejímka](requirements/done/R-0110.md).
+přebírá skutečné vyprodukované pochodně. [Přejímka](requirements/done/R-0110.md).
 
 ### Výuka a odborná praxe
 
@@ -999,7 +999,7 @@ prošlo; úplná přejímka dávky zůstává samostatným krokem.
 
 ## Přistěhovalci na molu (R-0135)
 
-1. `Player` označuje nové přistěhovalce pouze při placeném náboru a příchodu získaném kříži. Jednotka uchovává ochotu a případnou přednost, `Model` ověřuje změny a jedinou přednost na vlastníka. `EuropePier` poskytuje stejné pořadí jako společný sběr cestujících při odjezdu v `AbstractUnit`; GUI nevytváří vlastní pořadí ani další cestu změny nákladu.
+1. `Player` označuje nové přistěhovalce pouze při placeném náboru a příchodu získaném pochodněmi. Jednotka uchovává ochotu a případnou přednost, `Model` ověřuje změny a jedinou přednost na vlastníka. `EuropePier` poskytuje stejné pořadí jako společný sběr cestujících při odjezdu v `AbstractUnit`; GUI nevytváří vlastní pořadí ani další cestu změny nákladu.
 2. `UnitPo` ukládá volby a načtení je pouze ověřuje. Nástup zruší čekající přistěhovalecký stav, takže navrácený cestující není automaticky novým přistěhovalcem. [Cílené testy](functional-tests.md#r-0135-immigrant-boarding-2026-10-20) nenahrazují úplnou akceptaci dávky.
 
 ## Rychlé převody nákladu (R-0137)
@@ -1115,7 +1115,7 @@ Obchod s cizí kolonií (R-0167) používá modelovou nabídku a atomický přev
 ### Evidence královské armády (R-0185)
 
 `model.RoyalRoster` vlastní trvalé identity a složení královské armády, stav rezervy,
-odeslaných a zničených členů a zbytek vyprodukovaných zvonů. `PlayerKing` ji ukládá
+odeslaných a zničených členů a zbytek vyprodukovaných sov. `PlayerKing` ji ukládá
 přes `model.store`; produkce koloniálního hráče ji rozšiřuje pouze před vyhlášením
 nezávislosti. Načtení ověřuje složení podle obtížnosti a cyklu růstu, nepřidává
 náhrady za zničené členy. Kongres pouze čte a zobrazuje stav. Skutečnou přepravu
@@ -1158,7 +1158,7 @@ produkce se nemění. Viz [ověření](functional-tests.md#r-0188-targeted-cause
 
 ### Cíl zahraniční pomoci po vyhlášení nezávislosti
 
-`model.InterventionTarget` vlastní pevný cíl, skutečně vyrobené zvony a jednorázově získaný nárok. `Player` jej zahajuje před produkcí prvního povstaleckého tahu a ukládá přes `store.InterventionPo`; načtení ani zobrazení nepřičítá produkci. Kongres a hlášení tahu pouze zobrazují modelový stav. Fyzická dodávka patří do R-0190, následné skórování do R-0196. [Cílené ověření R-0189](functional-tests.md#r-0189-targeted-intervention-target-verification-2026-10-23) nenahrazuje úplnou přejímku dávky.
+`model.InterventionTarget` vlastní pevný cíl, skutečně vyrobené sovy a jednorázově získaný nárok. `Player` jej zahajuje před produkcí prvního povstaleckého tahu a ukládá přes `store.InterventionPo`; načtení ani zobrazení nepřičítá produkci. Kongres a hlášení tahu pouze zobrazují modelový stav. Fyzická dodávka patří do R-0190, následné skórování do R-0196. [Cílené ověření R-0189](functional-tests.md#r-0189-targeted-intervention-target-verification-2026-10-23) nenahrazuje úplnou přejímku dávky.
 
 
 `Model.deliverInterventionForces` nyní ověřuje získaný a dosud nevyužitý nárok, příslušnost hráče, přístupnost zvoleného přístavu a kapacitu ID před vytvořením osmi jednotek. Výběr nejnižšího ID používá geografickou dostupnost; blokace zachovává čekající stav místo přesunu do dalšího přístavu. Úspěch ukládá příznak doručení spolu s hlášením, načtení samo dodávku neprovádí. [Ověření R-0190](functional-tests.md#r-0190-targeted-intervention-delivery-verification-2026-10-23) zatím nezahrnuje následnou integraci přednosti porážky R-0192.

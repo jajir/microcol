@@ -141,7 +141,7 @@ class ImmigrantBoardingTest {
         assertFalse(purchased.isWillingToBoard());
 
         final GameModelPo earnedData = scenario();
-        savedDutchPool(earnedData).setCrosses(100);
+        savedDutchPool(earnedData).setTorches(100);
         final Model earned = load(earnedData);
         advanceToNextDutchTurn(earned);
         final Unit arrival = earned.getPlayerByName("Dutch").getAllUnits()

@@ -25,7 +25,7 @@ import com.google.common.collect.Lists;
 
 final class Default_0_mission extends AbstractMission<Default_0_goals> {
 
-    private final static Integer TRAGET_AMOUNT_OF_CIGARS = 30;
+    private final static Integer TRAGET_AMOUNT_OF_WINE = 30;
 
     Default_0_mission(final MissionCreationContext context,
             final Default_0_goals goals) {
@@ -112,14 +112,14 @@ final class Default_0_mission extends AbstractMission<Default_0_goals> {
     public void onTurnStarted() {
         super.onTurnStarted();
         if (getGoals().getGoalFoundColony().isFinished()) {
-            if (!getGoals().getGoalProduceCigars().isFinished()) {
-                // verify cigars producing
+            if (!getGoals().getGoalProduceWine().isFinished()) {
+                // verify wine producing
                 final Player human = getHumanPlayer(getModel());
-                if (human.getPlayerStatistics().getGoodsStatistics().getGoods(
-                        GoodsType.CIGARS) >= TRAGET_AMOUNT_OF_CIGARS) {
+                if (human.getPlayerStatistics().getGoodsStatistics()
+                        .getGoods(GoodsType.WINE) >= TRAGET_AMOUNT_OF_WINE) {
                     fireEvent(new EventShowDialogWithMan(
-                            Missions.default_m0_sellCigarsInEuropePort));
-                    getGoals().getGoalProduceCigars().setFinished(true);
+                            Missions.default_m0_sellWineInEuropePort));
+                    getGoals().getGoalProduceWine().setFinished(true);
                 }
 
             }
@@ -127,16 +127,16 @@ final class Default_0_mission extends AbstractMission<Default_0_goals> {
     }
 
     public void onGoodsWasSoldInEurope(final GoodsWasSoldInEuropeEvent event) {
-        if (event.getGoods().getType() == GoodsType.CIGARS) {
-            getGoals().getGoalSellCigars()
-                    .setWasSold(getGoals().getGoalSellCigars().getWasSold()
+        if (event.getGoods().getType() == GoodsType.WINE) {
+            getGoals().getGoalSellWine()
+                    .setWasSold(getGoals().getGoalSellWine().getWasSold()
                             + event.getGoods().getAmount());
         }
-        if (getGoals().getGoalSellCigars()
-                .getWasSold() >= TRAGET_AMOUNT_OF_CIGARS) {
-            getGoals().getGoalSellCigars().setFinished(true);
+        if (getGoals().getGoalSellWine()
+                .getWasSold() >= TRAGET_AMOUNT_OF_WINE) {
+            getGoals().getGoalSellWine().setFinished(true);
             fireEvent(new EventShowDialogWithMan(
-                    Missions.default_m0_cigarsWasSold));
+                    Missions.default_m0_wineWasSold));
         }
     }
 
@@ -145,7 +145,7 @@ final class Default_0_mission extends AbstractMission<Default_0_goals> {
             getGoals().getGoalFoundColony().setFinished(true);
             fireEvent(new EventShowDialogWithMan(
                     Missions.default_m0_firstColonyWasFounded,
-                    Missions.default_m0_produce100cigars));
+                    Missions.default_m0_produce100wine));
         }
     }
 

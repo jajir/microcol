@@ -34,7 +34,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 /**
- * All units can attack with muskets except wagon.
+ * All units can attack with weapons except wagon.
  */
 public abstract class AbstractUnit implements Unit {
 
@@ -1263,11 +1263,11 @@ public abstract class AbstractUnit implements Unit {
         movementThirds = 0;
         defender.movementThirds = 0;
         if (kind == ColonyDefense.Kind.REVERE) {
-            // The emergency militia costs stored muskets only now that the
+            // The emergency militia costs stored weapons only now that the
             // battle is confirmed; it is never free equipment.
             colony.getWarehouse().removeGoods(
-                    Goods.of(GoodsType.MUSKET, defense.getRevereMuskets()));
-            ((UnitFreeColonist) defender).setHoldingGuns(true);
+                    Goods.of(GoodsType.WEAPONS, defense.getRevereWeapons()));
+            ((UnitFreeColonist) defender).setHoldingWeapons(true);
         }
         final MilitaryPromotion promotion = promoteWinningColonist(
                 winnerAttacker ? this : defender);
@@ -1320,7 +1320,7 @@ public abstract class AbstractUnit implements Unit {
         if (militiaExits) {
             // A victory over an attacker is a forced, completed exit of the
             // armed worker (liberty cap applied once); only the last resident
-            // stays inside with its muskets.
+            // stays inside with its weapons.
             defender.leaveJobAfterBattle(colony.getLocation(), true);
         }
     }
@@ -1331,7 +1331,7 @@ public abstract class AbstractUnit implements Unit {
             return null;
         }
         final UnitFreeColonist colonist = (UnitFreeColonist) winner;
-        if (!colonist.isHoldingGuns() || colonist.isVeteran()
+        if (!colonist.isHoldingWeapons() || colonist.isVeteran()
                 || colonist.getMilitaryRole().isSpecial()) {
             return null;
         }

@@ -40,7 +40,7 @@
         },
         "movementThirds": 18,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -57,7 +57,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "placeConstructionSlot": {}
       },
@@ -75,7 +75,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "placeConstructionSlot": {}
       },
@@ -93,7 +93,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "placeMap": {
           "location": {
@@ -116,7 +116,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "id": 100,
         "placeEuropePort": {
@@ -140,7 +140,7 @@
         },
         "movementThirds": 18,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "id": 102,
         "placeEuropePort": {
@@ -161,7 +161,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "placeConstructionSlot": {}
       },
@@ -179,7 +179,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "placeMap": {
           "location": {
@@ -455,7 +455,7 @@
             ]
           },
           {
-            "type": "TOBACCONISTS_HOUSE",
+            "type": "SMALL_WINERY",
             "slots": [
               {},
               {},
@@ -471,7 +471,7 @@
             ]
           },
           {
-            "type": "RUM_DISTILLERS_HOUSE",
+            "type": "SMALL_OIL_PRESS",
             "slots": [
               {},
               {},
@@ -479,7 +479,7 @@
             ]
           },
           {
-            "type": "FUR_TRADERS_HOUSE",
+            "type": "SMALL_POTTERY",
             "slots": [
               {},
               {},
@@ -502,24 +502,24 @@
         "exportGoods": [],
         "buildingQueue": [],
         "colonyWarehouse": {
-          "COAT": 0,
+          "AMPHORAE": 0,
           "HAMMERS": 0,
-          "FUR": 0,
+          "CLAY": 0,
           "ORE": 0,
           "HORSE": 0,
           "SILVER": 0,
           "LUMBER": 0,
-          "RUM": 0,
-          "SUGAR": 0,
-          "TOBACCO": 4,
-          "SILK": 0,
-          "MUSKET": 0,
-          "CROSS": 0,
-          "CORN": 50,
-          "CIGARS": 0,
+          "OLIVE_OIL": 0,
+          "OLIVES": 0,
+          "GRAPES": 4,
+          "CLOTH": 0,
+          "WEAPONS": 0,
+          "TORCHES": 0,
+          "GRAIN": 50,
+          "WINE": 0,
           "GOODS": 0,
-          "BELL": 0,
-          "COTTON": 0,
+          "OWLS": 0,
+          "WOOL": 0,
           "TOOLS": 0
         }
       }
@@ -633,27 +633,27 @@
     "europe": {
       "markets": {
         "DUTCH": {
-          "CORN": [
+          "GRAIN": [
             2,
             0,
             0
           ],
-          "SUGAR": [
+          "OLIVES": [
             3,
             0,
             0
           ],
-          "TOBACCO": [
+          "GRAPES": [
             3,
             0,
             0
           ],
-          "COTTON": [
+          "WOOL": [
             3,
             0,
             0
           ],
-          "FUR": [
+          "CLAY": [
             4,
             0,
             0
@@ -678,22 +678,22 @@
             0,
             0
           ],
-          "RUM": [
+          "OLIVE_OIL": [
             11,
             0,
             0
           ],
-          "CIGARS": [
+          "WINE": [
             11,
             0,
             0
           ],
-          "SILK": [
+          "CLOTH": [
             11,
             0,
             0
           ],
-          "COAT": [
+          "AMPHORAE": [
             9,
             0,
             0
@@ -708,34 +708,34 @@
             0,
             0
           ],
-          "MUSKET": [
+          "WEAPONS": [
             2,
             0,
             0
           ]
         },
         "FRENCH": {
-          "CORN": [
+          "GRAIN": [
             2,
             0,
             0
           ],
-          "SUGAR": [
+          "OLIVES": [
             3,
             0,
             0
           ],
-          "TOBACCO": [
+          "GRAPES": [
             3,
             0,
             0
           ],
-          "COTTON": [
+          "WOOL": [
             3,
             0,
             0
           ],
-          "FUR": [
+          "CLAY": [
             4,
             0,
             0
@@ -760,22 +760,22 @@
             0,
             0
           ],
-          "RUM": [
+          "OLIVE_OIL": [
             11,
             0,
             0
           ],
-          "CIGARS": [
+          "WINE": [
             11,
             0,
             0
           ],
-          "SILK": [
+          "CLOTH": [
             11,
             0,
             0
           ],
-          "COAT": [
+          "AMPHORAE": [
             9,
             0,
             0
@@ -790,34 +790,34 @@
             0,
             0
           ],
-          "MUSKET": [
+          "WEAPONS": [
             2,
             0,
             0
           ]
         },
         "ENGLISH": {
-          "CORN": [
+          "GRAIN": [
             2,
             0,
             0
           ],
-          "SUGAR": [
+          "OLIVES": [
             3,
             0,
             0
           ],
-          "TOBACCO": [
+          "GRAPES": [
             3,
             0,
             0
           ],
-          "COTTON": [
+          "WOOL": [
             3,
             0,
             0
           ],
-          "FUR": [
+          "CLAY": [
             4,
             0,
             0
@@ -842,22 +842,22 @@
             0,
             0
           ],
-          "RUM": [
+          "OLIVE_OIL": [
             11,
             0,
             0
           ],
-          "CIGARS": [
+          "WINE": [
             11,
             0,
             0
           ],
-          "SILK": [
+          "CLOTH": [
             11,
             0,
             0
           ],
-          "COAT": [
+          "AMPHORAE": [
             9,
             0,
             0
@@ -872,34 +872,34 @@
             0,
             0
           ],
-          "MUSKET": [
+          "WEAPONS": [
             2,
             0,
             0
           ]
         },
         "SPANISH": {
-          "CORN": [
+          "GRAIN": [
             2,
             0,
             0
           ],
-          "SUGAR": [
+          "OLIVES": [
             3,
             0,
             0
           ],
-          "TOBACCO": [
+          "GRAPES": [
             3,
             0,
             0
           ],
-          "COTTON": [
+          "WOOL": [
             3,
             0,
             0
           ],
-          "FUR": [
+          "CLAY": [
             4,
             0,
             0
@@ -924,22 +924,22 @@
             0,
             0
           ],
-          "RUM": [
+          "OLIVE_OIL": [
             11,
             0,
             0
           ],
-          "CIGARS": [
+          "WINE": [
             11,
             0,
             0
           ],
-          "SILK": [
+          "CLOTH": [
             11,
             0,
             0
           ],
-          "COAT": [
+          "AMPHORAE": [
             9,
             0,
             0
@@ -954,7 +954,7 @@
             0,
             0
           ],
-          "MUSKET": [
+          "WEAPONS": [
             2,
             0,
             0
@@ -1287,7 +1287,7 @@
           },
           "congress": {
             "activated": true,
-            "bells": 0,
+            "owls": 0,
             "members": [],
             "candidates": [
               "JOHN_PAUL_JONES",
@@ -1317,7 +1317,7 @@
             ],
             "nextCandidateId": 4,
             "paidPassages": 0,
-            "crosses": 0,
+            "torches": 0,
             "earnedImmigrants": 0
           },
           "name": "Dutch",

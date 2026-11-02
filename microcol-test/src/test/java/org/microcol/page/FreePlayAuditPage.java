@@ -806,7 +806,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 .getUnitById(100);
         assertTrue(PlaceEuropePier.class.isInstance(unit.getPlace()));
         assertEquals(expectedTools, unit.getTools());
-        assertFalse(unit.isHoldingGuns());
+        assertFalse(unit.isHoldingWeapons());
         assertFalse(unit.isMounted());
         assertTrue(getListOfNodes(".context-menu").isEmpty(),
                 "No equipment menu appears");
@@ -849,7 +849,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 .getUnitById(id);
         assertTrue(placeType.isInstance(unit.getPlace()));
         assertEquals(tools, unit.getTools());
-        assertEquals(guns, unit.isHoldingGuns());
+        assertEquals(guns, unit.isHoldingWeapons());
     }
 
     public void verifyWagonArtworkSupported() {

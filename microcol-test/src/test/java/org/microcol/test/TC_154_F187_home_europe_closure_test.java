@@ -79,7 +79,7 @@ public class TC_154_F187_home_europe_closure_test extends AbstractMicroColTest {
         home.verifyCrossingCargo(INBOUND, GoodsType.ORE, 7, INBOUND_PASSENGER);
         home.selectVoyage(OUTBOUND);
         home.verifyVoyage(OUTBOUND, false, 0, 2, "Turns remaining: 2");
-        home.verifyShipInPort(DOCKED, DOCKED_PASSENGER, GoodsType.MUSKET, 40);
+        home.verifyShipInPort(DOCKED, DOCKED_PASSENGER, GoodsType.WEAPONS, 40);
         home.verifyPersonOnPier(PIER);
         home.verifySeized(false, INBOUND, INBOUND_PASSENGER, DOCKED,
                 DOCKED_PASSENGER, PIER, OUTBOUND);
@@ -109,7 +109,7 @@ public class TC_154_F187_home_europe_closure_test extends AbstractMicroColTest {
         home.verifyCrossingCargo(INBOUND, GoodsType.ORE, 7, INBOUND_PASSENGER);
         home.selectVoyage(OUTBOUND);
         home.verifyVoyage(OUTBOUND, false, 0, 2, "Turns remaining: 2");
-        home.verifyShipInPort(DOCKED, DOCKED_PASSENGER, GoodsType.MUSKET, 40);
+        home.verifyShipInPort(DOCKED, DOCKED_PASSENGER, GoodsType.WEAPONS, 40);
         home.verifyPersonOnPier(PIER);
         home.verifySeized(false, INBOUND, INBOUND_PASSENGER, DOCKED,
                 DOCKED_PASSENGER, PIER, OUTBOUND);
@@ -168,7 +168,7 @@ public class TC_154_F187_home_europe_closure_test extends AbstractMicroColTest {
         // Hiring and purchases are closed, and the Crown holds the ship, its
         // goods and passenger and the person on the pier.
         independence.verifyHomeEuropeClosed();
-        home.verifyShipInPort(DOCKED, DOCKED_PASSENGER, GoodsType.MUSKET, 40);
+        home.verifyShipInPort(DOCKED, DOCKED_PASSENGER, GoodsType.WEAPONS, 40);
         home.verifyPersonOnPier(PIER);
         home.verifySeized(true, DOCKED, DOCKED_PASSENGER, PIER);
         home.verifySeized(false, INBOUND, INBOUND_PASSENGER, OUTBOUND);
@@ -188,7 +188,7 @@ public class TC_154_F187_home_europe_closure_test extends AbstractMicroColTest {
         home.selectVoyage(OUTBOUND);
         home.verifyVoyage(OUTBOUND, false, 0, 2, "Turns remaining: 2");
         independence.verifyHomeEuropeClosed();
-        home.verifyShipInPort(DOCKED, DOCKED_PASSENGER, GoodsType.MUSKET, 40);
+        home.verifyShipInPort(DOCKED, DOCKED_PASSENGER, GoodsType.WEAPONS, 40);
         home.verifyPersonOnPier(PIER);
         home.verifySeized(true, DOCKED, DOCKED_PASSENGER, PIER);
         home.verifySeized(false, INBOUND, INBOUND_PASSENGER, OUTBOUND);
@@ -222,7 +222,7 @@ public class TC_154_F187_home_europe_closure_test extends AbstractMicroColTest {
         home.verifyVoyage(OUTBOUND, false, 1, 1, "Turns remaining: 1");
 
         // The port is still held and closed.
-        home.verifyShipInPort(DOCKED, DOCKED_PASSENGER, GoodsType.MUSKET, 40);
+        home.verifyShipInPort(DOCKED, DOCKED_PASSENGER, GoodsType.WEAPONS, 40);
         home.verifyPersonOnPier(PIER);
         home.verifySeized(true, DOCKED, DOCKED_PASSENGER, PIER);
         independence.verifyHomeEuropeClosed();

@@ -81,11 +81,11 @@ public class TC_76_F68_colony_defense_test extends AbstractMicroColTest {
         WelcomePage.of(getContext()).loadGame();
         final AttackPage attack = new AttackPage(getContext());
         attack.establishExistingWar();
-        // A lost battle costs the attacker its muskets, not the colonists.
+        // A lost battle costs the attacker its weapons, not the colonists.
         colony.chooseColonyOutcome(false);
         attack.chooseAttack(SOLDIER, QUEBEC);
         attack.confirm();
-        colony.verifyColonyHeld(1, 0, 50, SOLDIER, "lost its muskets");
+        colony.verifyColonyHeld(1, 0, 50, SOLDIER, "lost its weapons");
         // Continue keeps the result and spends no second draw.
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
@@ -114,25 +114,25 @@ public class TC_76_F68_colony_defense_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
-    void TC_04_revere_militia_wins_keeps_muskets_and_joins_the_garrison()
+    void TC_04_revere_militia_wins_keeps_weapons_and_joins_the_garrison()
             throws Exception {
-        // Quebec has two workers, 300 liberty and 50 stored muskets.
+        // Quebec has two workers, 300 liberty and 50 stored weapons.
         final ColonyDefensePage colony = new ColonyDefensePage(getContext());
         colony.prepareFixture("revere-exit", true, true, 300);
         WelcomePage.of(getContext()).loadGame();
         final AttackPage attack = new AttackPage(getContext());
         attack.establishExistingWar();
         attack.rememberWorld();
-        // The review names the armed worker and the muskets it would use.
+        // The review names the armed worker and the weapons it would use.
         attack.chooseAttack(SOLDIER, QUEBEC);
         colony.verifyColonyReview("Free Colonist (armed by Paul Revere)",
                 "Base: 2", "Paul Revere arms one worker");
-        // Cancelling never consumes the stored muskets.
+        // Cancelling never consumes the stored weapons.
         attack.cancel();
         attack.verifyReviewClosed();
         attack.verifyGameplayUnchanged();
-        colony.verifyStoredMuskets(50);
-        // The militia wins: it keeps its muskets and leaves its job.
+        colony.verifyStoredWeapons(50);
+        // The militia wins: it keeps its weapons and leaves its job.
         colony.chooseColonyOutcome(false);
         attack.chooseAttack(SOLDIER, QUEBEC);
         attack.confirm();
@@ -161,7 +161,7 @@ public class TC_76_F68_colony_defense_test extends AbstractMicroColTest {
         colony.verifyColonyReview("Free Colonist (armed by Paul Revere)",
                 "Base: 2", "Paul Revere arms one worker");
         attack.confirm();
-        colony.verifyColonyHeld(1, 150, 0, SOLDIER, "lost its muskets");
+        colony.verifyColonyHeld(1, 150, 0, SOLDIER, "lost its weapons");
         colony.verifyMilitia(ColonyDefensePage.RESIDENT, false);
         // Continue keeps the armed worker in its job.
         GamePage.of(getContext()).exitToMenu();
@@ -186,12 +186,12 @@ public class TC_76_F68_colony_defense_test extends AbstractMicroColTest {
         colony.closeCapturedColonyMessage();
         colony.verifyColonyCaptured("Dutch", 2, 0, QUEBEC,
                 "captured with all its workers");
-        // The spent muskets are gone and nobody is armed for free.
-        colony.verifyStoredMuskets(0);
+        // The spent weapons are gone and nobody is armed for free.
+        colony.verifyStoredWeapons(0);
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
         colony.verifyColonyCaptured("Dutch", 2, 0, QUEBEC, null);
-        colony.verifyStoredMuskets(0);
+        colony.verifyStoredWeapons(0);
     }
 
     @Test

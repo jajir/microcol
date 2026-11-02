@@ -129,12 +129,12 @@ public class TC_145_F136_rival_land_military_test extends AbstractMicroColTest {
             final UnitFreeColonist rival = (UnitFreeColonist) model
                     .getUnitById(RIVAL_ID);
             rival.placeToLocation(rivalAt);
-            rival.setHoldingGuns(true);
+            rival.setHoldingWeapons(true);
             rival.setMounted(mountedRival);
             final UnitFreeColonist human = (UnitFreeColonist) model
                     .getUnitById(HUMAN_ID);
             human.placeToLocation(humanAt);
-            human.setHoldingGuns(true);
+            human.setHoldingWeapons(true);
             model.declareHostilities(model.getPlayerByName("Dutch"),
                     model.getPlayerByName("France"));
             data.setModel(model.save());
@@ -233,7 +233,7 @@ public class TC_145_F136_rival_land_military_test extends AbstractMicroColTest {
             fought = rival.isBattleFought(combatBefore);
         }
         // The pinned draw wins for France: the Dutch colonist keeps its square
-        // and owner but loses its muskets, the French colonist keeps its own.
+        // and owner but loses its weapons, the French colonist keeps its own.
         rival.verifyOffenceBattle(RIVAL_ID, EQUAL_RIVAL, HUMAN_ID, EQUAL_HUMAN,
                 fought, OFFENCE_ROUNDS, false, true);
     }

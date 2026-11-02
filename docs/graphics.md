@@ -32,6 +32,12 @@
 
 3. Cílené Docker/Xvfb ověření na základu `76ee5f87` s touto opravou: **7 testů, 0 selhání, 0 chyb, 0 vynechání**. Výběr: `GoodsArtworkTest` (2), `PageVerificationContractTest` (3), `TC_06_F06_buy_and_sell_goods_test#TC_06_moving_goods` (1), `TC_54_F45_shared_hammers_test` (1). Běh `20261101T122505Z-75492b776f28`, PID `52412`, limit 900 s, dokončen za 121,981 s, callback `queued`; čerstvé reporty `target/docker-ui/run-1eVQLp`. Zkontrolované skutečné snímky: [obchod](assets/greek-goods-refinement-2026-11-01/europe.png), [produkce a náklad](assets/greek-goods-refinement-2026-11-01/colony.png). Všech 9 dokumentačních kontrol a strict MkDocs prošlo; logy `target/r0385/`. Platí uživatelem zadaná minimální okolní přejímka bez smoke a celé modelové/regresní sady; vzdálená publikace se neověřuje.
 
+## Středomořské názvosloví zboží — R-0394, 2. listopadu 2026
+
+1. [R-0394](requirements/R-0394.md) přejmenovává zdroje i runtime obrázky podle závazného mapování: `production-goods/good-grain.svg`, `good-olives`, `good-grapes`, `good-wool` (ovce), `good-clay`, `good-olive-oil`, `good-wine`, `good-cloth`, `good-amphorae`, `good-weapons`, `good-torches` a `good-owls`; samostatné runtime soubory jsou `good-torches.png` a `good-owls.png`. Budovy mají soubory `SMALL_WINERY`/`WINERY`/`LARGE_WINERY`, `SMALL_OIL_PRESS`/`OIL_PRESS`/`LARGE_OIL_PRESS` a `SMALL_POTTERY`/`POTTERY`/`LARGE_POTTERY`. Přesunuté soubory mají bajtově shodný obsah; [manifest exportu](../microcol-game/src/graphics/export-manifest.json) zachovává 62 položek.
+2. Výrobní symboly, které stále ukazovaly nahrazené zboží, nahradily beze změny cest schválené vektory R-0384: hrozny místo tabákového listu u tří vinařských dílen, amfora místo napnuté kůže u tří hrnčířských dílen, džbán olivového oleje místo destilačního kotle u malé lisovny a v `terrain-symbols.svg` hlína, ovce, hrozny a olivy místo kůže, bavlny, tabáku a cukrové třtiny. Sudy obou větších lisoven zůstávají. Přesunuté, ale nezměněné SVG si ponechávají původní text `title`/`desc`; změněné soubory mají nové názvy.
+3. Stav: zdroje upraveny, **runtime PNG sedmi budov a `terrain-symbols.png` ještě nejsou znovu exportované** a vzhled ve hře v 45/22 px není ověřen. Evidence patří do [funkčních testů](functional-tests.md#r-0394-mediterranean-goods-terminology-2026-11-02).
+
 ## Řecké zboží — výrazná linka, 1. listopadu 2026
 
 Navazující [R-0394](requirements/R-0394.md) připravuje sjednocení názvů napříč projektem. Uživatel 1. listopadu 2026 potvrdil **vlnu s ikonou ovce**; pochodně a sovy zachovají dosavadní účinky křížů a zvonů. Níže je evidence původní grafické dodávky, nikoli implementace nového názvosloví.
@@ -156,7 +162,7 @@ PY
 ## Produkční ikony — vybraná varianta 3, 30. října 2026
 
 1. Uživatel vybral **Z3 + K3 + M3** z [návrhů R-0363](#zvony-krize-a-kladiva-tri-navrhy-30-rijna-2026) a zadal jejich použití v [R-0365](requirements/done/R-0365.md). Zvon má dřevěný závěs, kříž podstavec a kladivo rozštěpenou hlavu. Geometrie i barvy schválených SVG jsou zachované.
-2. Produkční zdroje jsou [good-bell.svg](../microcol-game/src/graphics/production-goods/good-bell.svg), [good-cross.svg](../microcol-game/src/graphics/production-goods/good-cross.svg) a [good-hammer.svg](../microcol-game/src/graphics/production-goods/good-hammer.svg). Každý má plátno 64 × 64, pojmenované vektorové skupiny a průhledné okolí. Neobsahuje rastrové vložky ani externí odkazy.
+2. Produkční zdroje jsou [good-bell.svg](../microcol-game/src/graphics/production-goods/good-owls.svg), [good-cross.svg](../microcol-game/src/graphics/production-goods/good-torches.svg) a [good-hammer.svg](../microcol-game/src/graphics/production-goods/good-hammer.svg). Každý má plátno 64 × 64, pojmenované vektorové skupiny a průhledné okolí. Neobsahuje rastrové vložky ani externí odkazy.
 3. Opakovatelný export vytváří stejnojmenné průhledné **45 × 45 px PNG** v `microcol-game/src/main/resources/images/`. `ImageLoaderGoods` je načítá pod původními aliasy pro sdílený `GoodsImageProvider`; ostatních šestnáct ikon zůstává v `goods-olive.png`. Staré buňky background atlasu se pro tyto tři produkty už nepoužívají. Maven export nespouští.
 
    ```sh
@@ -1598,7 +1604,7 @@ Po načtení přes `ImageCache` a `ImageProvider` se použije buď celý obráze
 
 **Atlas** je jeden větší obrázek obsahující více malých obrázků v pravidelné mřížce. Hra má tři: `background.png`, `buildings.png` a `buttons.png`. Kód nepoznává obsah kresby. Prostě vyřízne předem určený obdélník. Přesunout postavu do jiného políčka atlasu tedy znamená změnit i její mapování v kódu.
 
-**Alias** je jméno obrázku v paměti. Například `good-corn.png` není samostatný soubor v repozitáři, ale pojmenovaný výřez z `background.png`. Ani přípona `.png` v názvu konstanty nezaručuje, že takový soubor existuje.
+**Alias** je jméno obrázku v paměti. Například `good-grain.png` není samostatný soubor v repozitáři, ale pojmenovaný výřez z `goods-olive.png`. Ani přípona `.png` v názvu konstanty nezaručuje, že takový soubor existuje.
 
 **Vrstva a ID v SVG** pomáhají při editaci a exportu. Hra z nich jednotlivé objekty nevybírá. Výjimkou v přípravě podkladů je přebarvování vybraných definic podle jejich ID; to probíhá v exportním skriptu, nikoli při vykreslování SVG ve hře.
 
@@ -1948,8 +1954,8 @@ Mapování je v [ImageLoaderUnit](../microcol-game/src/main/java/org/microcol/gu
 | `(2,4)` | `free-colonist` | Základní kolonista |
 | `(0,6)` | `free-colonist-mounted` | Kolonista na koni |
 | `(2,6)` | `free-colonist-tools` | Pěší kolonista s nástroji |
-| `(6,6)` | `free-colonist-muskets` | Pěší kolonista se zbraněmi |
-| `(5,6)` | `free-colonist-mounted-muskets` | Ozbrojený kolonista na koni |
+| `(6,6)` | `free-colonist-weapons` | Pěší kolonista se zbraněmi |
+| `(5,6)` | `free-colonist-mounted-weapons` | Ozbrojený kolonista na koni |
 | `(1,6)` | `wagon` | R-0024: obraz typu i instance vozu, stejný výřez pro oba směry |
 
 U kolonisty má nejprve význam kůň, potom zbraně a u pěšího nástroje. Orientace nemění jeho sprite. Galeona, karavela a obchodní loď používají západní nebo výchozí východní podobu transportní lodi; fregata, korzárská a řadová loď používají základní bojovou variantu. R-0108 znovu používá tyto dvě rodiny obrázků, nikoli šest samostatných ilustrací; typy rozlišují přeložené názvy. Stav ověření vede [R-0108](requirements/done/R-0108.md). Jednotka mimo mapovou lokaci používá při běžném dotazu výchozí orientaci east.
@@ -1960,29 +1966,29 @@ Tytéž obrázky se používají na mapě, v přístavu, v docích, v nákladov�
 
 ### Zboží a produkce
 
-Všech 19 aliasů zavádí [ImageLoaderGoods](../microcol-game/src/main/java/org/microcol/gui/image/ImageLoaderGoods.java); [GoodsImageProvider](../microcol-game/src/main/java/org/microcol/gui/image/GoodsImageProvider.java) je přiřazuje k `GoodsType`.
+Názvy aliasů a obsah odpovídají středomořskému názvosloví [R-0394](requirements/R-0394.md); souřadnice buněk jsou původní pozice v dlaždicovém atlasu před R-0384. Všech 19 aliasů zavádí [ImageLoaderGoods](../microcol-game/src/main/java/org/microcol/gui/image/ImageLoaderGoods.java); [GoodsImageProvider](../microcol-game/src/main/java/org/microcol/gui/image/GoodsImageProvider.java) je přiřazuje k `GoodsType`.
 
 | Buňka | Alias | Obsah |
 | --- | --- | --- |
-| Samostatný PNG, dříve `(9,5)` | `good-bell.png` | Zvony, vybraná varianta Z3 |
-| Samostatný PNG, dříve `(10,5)` | `good-cross.png` | Kříže, vybraná varianta K3 |
+| Samostatný PNG, dříve `(9,5)` | `good-owls.png` | Sovy (dříve zvony; kresba sovy z R-0384) |
+| Samostatný PNG, dříve `(10,5)` | `good-torches.png` | Pochodně (dříve kříže; kresba pochodně z R-0384) |
 | `(11,5)` | `good-goods.png` | Obchodní zboží |
 | `(7,6)` | `good-horse.png` | Koně |
-| `(8,6)` | `good-cigars.png` | Doutníky |
-| `(9,6)` | `good-rum.png` | Rum |
-| `(10,6)` | `good-tobacco.png` | Tabák |
+| `(8,6)` | `good-wine.png` | Víno |
+| `(9,6)` | `good-olive-oil.png` | Olivový olej |
+| `(10,6)` | `good-grapes.png` | Hrozny |
 | `(11,6)` | `good-ore.png` | Ruda |
 | Samostatný PNG, dříve `(0,7)` | `good-hammer.png` | Kladiva, stavební produkce, vybraná varianta M3 |
 | `(1,7)` | `good-tools.png` | Nástroje |
 | `(2,7)` | `good-lumber.png` | Dřevo |
-| `(3,7)` | `good-coat.png` | Kabáty |
-| `(4,7)` | `good-fur.png` | Kožešiny |
-| `(5,7)` | `good-cotton.png` | Bavlna |
-| `(6,7)` | `good-musket.png` | Muškety |
-| `(7,7)` | `good-silk.png` | Textil, v kódu pojmenovaný silk |
+| `(3,7)` | `good-amphorae.png` | Amfory |
+| `(4,7)` | `good-clay.png` | Hlína |
+| `(5,7)` | `good-wool.png` | Vlna, ikona ovce |
+| `(6,7)` | `good-weapons.png` | Zbraně, kopí a štít |
+| `(7,7)` | `good-cloth.png` | Látka |
 | `(8,7)` | `good-silver.png` | Stříbro |
-| `(9,7)` | `good-corn.png` | Jídlo, ikona kukuřice |
-| `(10,7)` | `good-sugar.png` | Cukr |
+| `(9,7)` | `good-grain.png` | Obilí |
+| `(10,7)` | `good-olives.png` | Olivy |
 
 Množství zboží nemění obrázek; číslo a další informace doplňuje UI. Zdrojový výřez má 45 × 45, ale [PanelColonyFields](../microcol-game/src/main/java/org/microcol/gui/screen/colony/PanelColonyFields.java) produkci polí kreslí **25 × 25**, [AbstractPanelConstructionWithSlots](../microcol-game/src/main/java/org/microcol/gui/screen/colony/AbstractPanelConstructionWithSlots.java) produkci stavby **22 × 22** a [UnitPanel](../microcol-game/src/main/java/org/microcol/gui/UnitPanel.java) malý náklad **15 × 15**. Při úpravách je nutné posuzovat i tyto skutečné zobrazované velikosti.
 
@@ -2005,9 +2011,9 @@ Les a pole tedy mají být samostatné překryvy. Pokud by nový les obsahoval n
 | Řádek y | Sloupec x a typ stavby |
 | ---: | --- |
 | 0 | 1 `CHAPEL`; 2 `CHURCH`; 3 `CATHEDRAL`; 4 `TOWN_HALL`; 5 `STABLES`; 6 `LARGE_STABLES` |
-| 1 | 1 `TOBACCONISTS_HOUSE`; 2 `TOBACCONISTS_SHOP`; 3 `CIGAR_FACTORY`; 5 `CARPENTERS_STAND`; 6 dříve `CARPENTERS_SHOP`, od R-0025 bez registrace; 7 `LUMBER_MILL` |
-| 2 | 1 `FUR_TRADING_POST`; 2 `FUR_TRADERS_HOUSE`; 3 `FUR_FACTORY`; 5 `SCHOOLHOUSE`; 6 `COLLEGE`; 7 `UNIVERSITY` |
-| 3 | 1 `BLACKSMITHS_HOUSE`; 2 `BLACKSMITHS_SHOP`; 3 `IRON_WORKS`; 5 `RUM_DISTILLERS_HOUSE`; 6 `RUM_DISTILLERY`; 7 `RUM_FACTORY` |
+| 1 | 1 `SMALL_WINERY`; 2 `WINERY`; 3 `LARGE_WINERY`; 5 `CARPENTERS_STAND`; 6 dříve `CARPENTERS_SHOP`, od R-0025 bez registrace; 7 `LUMBER_MILL` |
+| 2 | 1 `POTTERY`; 2 `SMALL_POTTERY`; 3 `LARGE_POTTERY`; 5 `SCHOOLHOUSE`; 6 `COLLEGE`; 7 `UNIVERSITY` |
+| 3 | 1 `BLACKSMITHS_HOUSE`; 2 `BLACKSMITHS_SHOP`; 3 `IRON_WORKS`; 5 `SMALL_OIL_PRESS`; 6 `OIL_PRESS`; 7 `LARGE_OIL_PRESS` |
 | 4 | 1 `WAREHOUSE_BASIC`; 2 `WAREHOUSE`; 3 `WAREHOUSE_EXPANSION` |
 | 5 | 1 `WEAVERS_HOUSE`; 2 `WEAVERS_SHOP`; 3 `TEXTILE_MILL` |
 | 6 | Bez pojmenovaných aliasů |

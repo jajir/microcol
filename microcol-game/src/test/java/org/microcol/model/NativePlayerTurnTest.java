@@ -551,11 +551,11 @@ class NativePlayerTurnTest {
 
     @Test
     void europeanUnitCannotEnterButMayAttackABraveSquare() {
-        // A Dutch musketeer beside the INCA brave.
+        // A Dutch soldier beside the INCA brave.
         final NativeTurnScene scene = baseline().dutchColonist(1, 0);
         final List<UnitPo> saved = scene.po().getUnits();
         final UnitPo armed = saved.get(saved.size() - 1);
-        armed.setHoldingGuns(true);
+        armed.setHoldingWeapons(true);
         final Model model = scene.model();
         model.startGame();
         int guard = 0;
@@ -563,29 +563,29 @@ class NativePlayerTurnTest {
             model.endTurn();
             assertTrue(++guard < 20, "The Dutch turn never came");
         }
-        final Unit musketeer = model.getUnitById(armed.getId());
+        final Unit soldier = model.getUnitById(armed.getId());
         final Location braveSquare = braveOf(model, NativeNation.INCA)
                 .getLocation();
-        assertTrue(musketeer.canAttack(), "The scene needs an armed unit");
-        assertTrue(musketeer.getMovementThirds() > 0,
+        assertTrue(soldier.canAttack(), "The scene needs an armed unit");
+        assertTrue(soldier.getMovementThirds() > 0,
                 "The scene needs a unit that could act");
-        assertTrue(musketeer.getLocation().isNeighbor(braveSquare));
+        assertTrue(soldier.getLocation().isNeighbor(braveSquare));
         // Ordinary movement still treats the foreign occupant as a blocker.
-        assertFalse(musketeer.isPossibleToMoveAt(braveSquare),
+        assertFalse(soldier.isPossibleToMoveAt(braveSquare),
                 "A foreign unit blocks the square");
         // R-0173: the passive hostility query stays closed (no AI attack), but
         // an explicit decision opens the shared battle without any declaration,
         // and merely preparing it changes neither the unit nor the saved state.
-        final int movesBefore = musketeer.getMovementThirds();
+        final int movesBefore = soldier.getMovementThirds();
         final long randomBefore = model.save().getCombatRandomState();
         final int outcomesBefore = model.save().getNativeRelationOutcomeIds()
                 .size();
-        assertFalse(musketeer.isPossibleToAttackAt(braveSquare));
-        assertTrue(musketeer.prepareAttack(braveSquare, false).isEmpty());
-        final AttackOrder order = musketeer.prepareAttack(braveSquare, true)
+        assertFalse(soldier.isPossibleToAttackAt(braveSquare));
+        assertTrue(soldier.prepareAttack(braveSquare, false).isEmpty());
+        final AttackOrder order = soldier.prepareAttack(braveSquare, true)
                 .orElseThrow();
         assertFalse(order.isDeclarationRequired());
-        assertEquals(movesBefore, musketeer.getMovementThirds());
+        assertEquals(movesBefore, soldier.getMovementThirds());
         assertEquals(randomBefore, model.save().getCombatRandomState());
         assertEquals(outcomesBefore,
                 model.save().getNativeRelationOutcomeIds().size());

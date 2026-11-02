@@ -42,7 +42,7 @@ import javafx.stage.Stage;
 /**
  * UC-115 / R-0217: a fresh Discoverer reference expedition of every nation
  * explores, lands, founds a named colony, feeds two colonists, manufactures
- * cigars, sails them to Europe, sells them, pays for a recruit and brings the
+ * wine, sails them to Europe, sells them, pays for a recruit and brings the
  * recruit home, using only ordinary player actions after New Game.
  *
  * <p>
@@ -64,18 +64,18 @@ import javafx.stage.Stage;
  *
  * <p>
  * Food and manufacture ledger per colony update (one update at the start of
- * each own turn after founding): each colonist eats 2 corn; the founder works a
- * 4-corn grassland field and the second colonist a 3-tobacco grassland field,
- * so corn stays at 0 and tobacco rises by 3. After one update the second
- * colonist moves into the tobacconist's house, which turns 3 tobacco into 3
- * cigars per update. The unstaffed chapel credits one cross per update.
+ * each own turn after founding): each colonist eats 2 grain; the founder works
+ * a 4-grain grassland field and the second colonist a 3-grapes grassland field,
+ * so grain stays at 0 and grapes rises by 3. After one update the second
+ * colonist moves into the small winery, which turns 3 grapes into 3 wine per
+ * update. The unstaffed chapel credits one torch per update.
  * </p>
  *
  * <p>
  * Trade ledger: the treasury starts at 1000 (Discoverer) and nothing is bought.
- * Three cigars sell at 11 gold with a 0 % tax. The recruit costs 150 gold (200
- * x 75 %) reduced in proportion to the crosses earned out of the immigration
- * target (75 crosses, 50 for England), never below 50.
+ * Three wine sell at 11 gold with a 0 % tax. The recruit costs 150 gold (200 x
+ * 75 %) reduced in proportion to the torches earned out of the immigration
+ * target (75 torches, 50 for England), never below 50.
  * </p>
  */
 @ExtendWith(ApplicationExtension.class)
@@ -85,8 +85,8 @@ public class TC_101_F92_four_nation_expedition_loop_test
             "src/test/scenarios/F15-free-play-audit.microcol");
     private static final int REFERENCE_MAP = 3;
     private static final int START_GOLD = 1000;
-    private static final int CIGARS = 3;
-    private static final int CIGAR_BID = 11;
+    private static final int WINE = 3;
+    private static final int WINE_BID = 11;
     private static final String PLAYER_NAME = "Jan Výprava";
 
     /** Colony square on the island's east coast. */
@@ -229,13 +229,13 @@ public class TC_101_F92_four_nation_expedition_loop_test
     }
 
     /**
-     * Crosses earned after the founding turn lower the passage price by the
-     * R-0075 rule: 150 x (target - crosses) / target, rounded up, at least 50.
+     * Torches earned after the founding turn lower the passage price by the
+     * R-0075 rule: 150 x (target - torches) / target, rounded up, at least 50.
      */
     private static int expectedPassage(final EuropeanNation nation,
-            final int crosses) {
+            final int torches) {
         final int target = nation == EuropeanNation.ENGLISH ? 50 : 75;
-        return Math.max(50, (150 * (target - crosses) + target - 1) / target);
+        return Math.max(50, (150 * (target - torches) + target - 1) / target);
     }
 
     private void playExpedition(final Route route,
@@ -322,27 +322,26 @@ public class TC_101_F92_four_nation_expedition_loop_test
                 previousColonyCount + 1);
         ColonyScreen colony = ColonyScreen.of(getContext(), route.colonyName);
         colony.verifyNumberOfUnitsOnFields(1);
-        colony.verifyThatProductionIs(GoodsType.CORN, 6);
+        colony.verifyThatProductionIs(GoodsType.GRAIN, 6);
         colony.verifyNumberOfUnitsAtPier(1);
 
-        // The second colonist grows tobacco; commons keep net food at four.
+        // The second colonist grows grapes; commons keep net food at four.
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromCenter(worker);
-        jobs.select(Kind.BEST_FIELD, GoodsType.TOBACCO);
+        jobs.select(Kind.BEST_FIELD, GoodsType.GRAPES);
         jobs.confirm();
         jobs.verifyClosed();
         trip.verifyWorkerOutput(route.colonyName, worker,
-                Goods.of(GoodsType.TOBACCO, 3));
-        colony.verifyThatProductionIs(GoodsType.CORN, 4);
-        colony.verifyThatProductionIs(GoodsType.TOBACCO, 6);
+                Goods.of(GoodsType.GRAPES, 3));
+        colony.verifyThatProductionIs(GoodsType.GRAIN, 4);
+        colony.verifyThatProductionIs(GoodsType.GRAPES, 6);
         game = colony.close();
 
         // The ship enters the colony port so cargo can be loaded later.
         trip.sailTo(game, SITE);
         trip.verifyShipAt(SITE);
-        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.CORN, 0));
-        trip.verifyColonyStock(route.colonyName,
-                Goods.of(GoodsType.TOBACCO, 0));
+        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.GRAIN, 0));
+        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.GRAPES, 0));
 
         // Checkpoint 2: Continue keeps the working colony and the docked ship.
         if (saveAndContinue) {
@@ -352,47 +351,45 @@ public class TC_101_F92_four_nation_expedition_loop_test
             trip.verifyLedgerUnchanged();
         }
 
-        // First update: field and commons store six tobacco and four net food.
+        // First update: field and commons store six grapes and four net food.
         game.nextTurnAndCloseDialogs();
         trip.verifyPlayedTurns(founded + 1);
-        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.CORN, 4));
-        trip.verifyColonyStock(route.colonyName,
-                Goods.of(GoodsType.TOBACCO, 6));
-        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.CIGARS, 0));
+        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.GRAIN, 4));
+        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.GRAPES, 6));
+        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.WINE, 0));
 
-        // Move the second colonist into the tobacconist's house.
+        // Move the second colonist into the small winery.
         game.panToTile(SITE);
         colony = game.openColonyAt(SITE, route.colonyName);
         trip.openFieldJobChoice(colony, worker);
-        jobs.select(Kind.INDOOR, GoodsType.CIGARS);
+        jobs.select(Kind.INDOOR, GoodsType.WINE);
         jobs.confirm();
         jobs.verifyClosed();
         trip.verifyWorkerIndoors(route.colonyName, worker,
-                ConstructionType.TOBACCONISTS_HOUSE);
-        colony.verifyThatProductionIs(GoodsType.CIGARS, CIGARS);
-        colony.verifyThatProductionIs(GoodsType.TOBACCO, 3 - CIGARS);
-        colony.verifyThatProductionIs(GoodsType.CORN, 4);
+                ConstructionType.SMALL_WINERY);
+        colony.verifyThatProductionIs(GoodsType.WINE, WINE);
+        colony.verifyThatProductionIs(GoodsType.GRAPES, 3 - WINE);
+        colony.verifyThatProductionIs(GoodsType.GRAIN, 4);
         game = colony.close();
 
-        // Second update: commons replace the consumed tobacco and add four
+        // Second update: commons replace the consumed grapes and add four
         // food.
         game.nextTurnAndCloseDialogs();
         trip.verifyPlayedTurns(founded + 2);
-        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.CORN, 8));
+        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.GRAIN, 8));
+        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.GRAPES, 6));
         trip.verifyColonyStock(route.colonyName,
-                Goods.of(GoodsType.TOBACCO, 6));
-        trip.verifyColonyStock(route.colonyName,
-                Goods.of(GoodsType.CIGARS, CIGARS));
+                Goods.of(GoodsType.WINE, WINE));
 
-        // Load the cigars from the warehouse into the docked ship.
+        // Load the wine from the warehouse into the docked ship.
         game.panToTile(SITE);
         colony = game.openColonyAt(SITE, route.colonyName);
         colony.selectUnitFromPort(0);
         colony.dragGoodsFromWarehouseToShipCargoSlot(
-                GoodsType.BUYABLE_GOOD_TYPES.indexOf(GoodsType.CIGARS), 0);
-        trip.waitUntilShipCarries(0, GoodsType.CIGARS);
-        trip.verifyShipCargo(0, Goods.of(GoodsType.CIGARS, CIGARS));
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CIGARS, 0));
+                GoodsType.BUYABLE_GOOD_TYPES.indexOf(GoodsType.WINE), 0);
+        trip.waitUntilShipCarries(0, GoodsType.WINE);
+        trip.verifyShipCargo(0, Goods.of(GoodsType.WINE, WINE));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.WINE, 0));
         game = colony.close();
 
         // Sail east one turn per leg and start the Atlantic crossing.
@@ -409,7 +406,7 @@ public class TC_101_F92_four_nation_expedition_loop_test
         trip.sailTo(game, EXIT);
         final int outwardTurns = trip.verifyVoyage(true);
         final int outwardWeather = trip.voyageWeather();
-        trip.verifyShipCargo(0, Goods.of(GoodsType.CIGARS, CIGARS));
+        trip.verifyShipCargo(0, Goods.of(GoodsType.WINE, WINE));
 
         // Checkpoint 3: Continue keeps the voyage, its weather and the cargo.
         if (saveAndContinue) {
@@ -433,26 +430,26 @@ public class TC_101_F92_four_nation_expedition_loop_test
         trip.verifyPlayedTurns(arrival);
         trip.verifyShipInEurope(true);
 
-        // Sell the cigars at the quoted bid; no tax is charged yet.
+        // Sell the wine at the quoted bid; no tax is charged yet.
         EuropePortScreen europe = game.openEuroperPort();
         europe.verifyGold(START_GOLD);
-        europe.verifyGoodsBidAndAsk(GoodsType.CIGARS, "11/12");
+        europe.verifyGoodsBidAndAsk(GoodsType.WINE, "11/12");
         europe.selectUnitFromPort(0);
         europe.sellGoods(0,
-                GoodsType.BUYABLE_GOOD_TYPES.indexOf(GoodsType.CIGARS));
+                GoodsType.BUYABLE_GOOD_TYPES.indexOf(GoodsType.WINE));
         trip.waitUntilShipSlotIsEmpty(0);
         europe.verifyCargoSlotEmpty(0, 0);
-        europe.verifyGold(START_GOLD + CIGARS * CIGAR_BID);
+        europe.verifyGold(START_GOLD + WINE * WINE_BID);
 
-        // Pay for one recruit; each update since founding earned one cross.
+        // Pay for one recruit; each update since founding earned one torch.
         final int passage = expectedPassage(nation, arrival - founded);
         final RecruitmentPage recruit = new RecruitmentPage(getContext());
         recruit.open();
         recruit.verifyOffer(null, passage, true, "Pay passage: ", "");
         recruit.confirm(0);
         final int recruitId = trip.waitForRecruitOnPier();
-        europe.verifyGold(START_GOLD + CIGARS * CIGAR_BID - passage);
-        trip.verifyGold(START_GOLD + CIGARS * CIGAR_BID - passage);
+        europe.verifyGold(START_GOLD + WINE * WINE_BID - passage);
+        trip.verifyGold(START_GOLD + WINE * WINE_BID - passage);
 
         // Put the recruit on the ship and send it back to the New World.
         new EuropeEquipmentPage(getContext()).embark(recruitId);
@@ -494,7 +491,7 @@ public class TC_101_F92_four_nation_expedition_loop_test
             }
         }
         trip.verifyUnitAt(recruitId, SITE);
-        trip.verifyShipCargo(0, Goods.of(GoodsType.CIGARS, 0));
+        trip.verifyShipCargo(0, Goods.of(GoodsType.WINE, 0));
         game.verifyNumberOfUnitsAt(SITE, 2);
 
         // The first tax demand falls on colony update 20 (turn founded + 20);
@@ -502,14 +499,13 @@ public class TC_101_F92_four_nation_expedition_loop_test
         trip.verifyNoTaxDecisionPending();
 
         // The balances at the end follow the ledger exactly.
-        trip.verifyGold(START_GOLD + CIGARS * CIGAR_BID - passage);
+        trip.verifyGold(START_GOLD + WINE * WINE_BID - passage);
         final int colonyUpdates = back + route.homeward.size() - 1 - founded;
         trip.verifyColonyStock(route.colonyName,
-                Goods.of(GoodsType.CORN, 4 * colonyUpdates));
+                Goods.of(GoodsType.GRAIN, 4 * colonyUpdates));
+        trip.verifyColonyStock(route.colonyName, Goods.of(GoodsType.GRAPES, 6));
         trip.verifyColonyStock(route.colonyName,
-                Goods.of(GoodsType.TOBACCO, 6));
-        trip.verifyColonyStock(route.colonyName,
-                Goods.of(GoodsType.CIGARS, CIGARS * (colonyUpdates - 2)));
+                Goods.of(GoodsType.WINE, WINE * (colonyUpdates - 2)));
 
         // Checkpoint 5: Continue keeps the arrived recruit and the balances.
         if (saveAndContinue) {

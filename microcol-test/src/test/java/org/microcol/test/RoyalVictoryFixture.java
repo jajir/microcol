@@ -185,7 +185,7 @@ final class RoyalVictoryFixture {
         unit.add("cargo", cargo);
         unit.add("action", action);
         unit.addProperty("movementThirds", MovementPoints.ofPoints(1));
-        unit.addProperty("holdingGuns", true);
+        unit.addProperty("holdingWeapons", true);
         unit.addProperty("mounted", false);
         unit.addProperty("veteran", false);
         return unit;

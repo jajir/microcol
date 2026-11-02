@@ -38,14 +38,14 @@ class AttackRoleTest {
     @CsvSource({ "false,false,false", "false,false,true", "false,true,false",
             "false,true,true", "true,false,false", "true,false,true",
             "true,true,false", "true,true,true" })
-    void musketsPermitLandAttackForColonistsAndSpecialists(
+    void weaponsPermitLandAttackForColonistsAndSpecialists(
             final boolean specialist, final boolean guns,
             final boolean horses) {
         final Model model = border(
                 specialist ? UnitType.MASTER_BLACKSMITH : UnitType.COLONIST);
         final UnitFreeColonist attacker = (UnitFreeColonist) model
                 .getUnitById(0);
-        attacker.setHoldingGuns(guns);
+        attacker.setHoldingWeapons(guns);
         attacker.setMounted(horses);
         attacker.setTools(guns ? 0 : 100);
         final Location target = model.getUnitById(6).getLocation();
@@ -61,19 +61,19 @@ class AttackRoleTest {
 
     /**
      * R-0028 chapter 4: a purchased Seasoned Scout is a supported specialist.
-     * Muskets confer the soldier role and horses then the dragoon base 3, so
+     * Weapons confer the soldier role and horses then the dragoon base 3, so
      * there is no unarmed open-field scout attack and no separate specialty.
      */
     @Test
-    void seasonedScoutAttacksOnlyWithMusketsAndThenFightsAsAnOrdinaryDragoon() {
+    void seasonedScoutAttacksOnlyWithWeaponsAndThenFightsAsAnOrdinaryDragoon() {
         final Model model = border(UnitType.SEASONED_SCOUT);
         final UnitFreeColonist scout = (UnitFreeColonist) model.getUnitById(0);
         final Location target = model.getUnitById(6).getLocation();
         scout.setTools(0);
         scout.setMounted(true);
-        scout.setHoldingGuns(false);
+        scout.setHoldingWeapons(false);
         assertFalse(scout.isPossibleToAttackAt(target));
-        scout.setHoldingGuns(true);
+        scout.setHoldingWeapons(true);
         assertTrue(scout.isPossibleToAttackAt(target));
         final CombatStrengths strengths = scout.prepareAttack(target, true)
                 .orElseThrow().getCombatStrengths().orElseThrow();
@@ -84,16 +84,16 @@ class AttackRoleTest {
 
     @ParameterizedTest
     @CsvSource({ "false", "true" })
-    void removingMusketsClosesAnEarlierLegalAttackWithoutEffects(
+    void removingWeaponsClosesAnEarlierLegalAttackWithoutEffects(
             final boolean specialist) {
         final Model model = border(
                 specialist ? UnitType.MASTER_BLACKSMITH : UnitType.COLONIST);
         final UnitFreeColonist attacker = (UnitFreeColonist) model
                 .getUnitById(0);
-        attacker.setHoldingGuns(true);
+        attacker.setHoldingWeapons(true);
         final Location target = model.getUnitById(6).getLocation();
         assertTrue(attacker.isPossibleToAttackAt(target));
-        attacker.setHoldingGuns(false);
+        attacker.setHoldingWeapons(false);
         final String before = gson.toJson(model.save());
         assertFalse(attacker.isPossibleToAttackAt(target));
         assertThrows(IllegalStateException.class,

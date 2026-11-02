@@ -93,7 +93,7 @@ Your treasury when quoted: %s gold.</entry>
 	<entry key="resultTitle">Calculated result preview, not recorded</entry>
 	<entry key="resultNote">Read-only. It applies the war and difficulty terms to the base subtotal. Nothing is recorded and no ranking is shown.</entry>
 	<entry key="resultDeduction">Destroyed native settlements: %s at %s each, deduction -%s points</entry>
-	<entry key="resultBells">Bells after the intervention target: +%s points</entry>
+	<entry key="resultOwls">Owls after the intervention target: +%s points</entry>
 	<entry key="resultClampedBase">Base not below zero: %s points</entry>
 	<entry key="resultBonus">Successful independence: order bonus +%s%%, early declaration points: %s</entry>
 	<entry key="resultDifficulty">Difficulty factor: %s%%</entry>

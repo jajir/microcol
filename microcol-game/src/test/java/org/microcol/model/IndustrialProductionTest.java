@@ -25,8 +25,8 @@ import com.google.gson.Gson;
 class IndustrialProductionTest {
 
     /**
-     * Colony 0 residents of the fixture: ids 0-2 work fields, 4-5 the
-     * tobacconist house.
+     * Colony 0 residents of the fixture: ids 0-2 work fields, 4-5 the small
+     * winery.
      */
     private static final List<Integer> RESIDENT_IDS = List.of(0, 1, 2, 4, 5);
 
@@ -98,18 +98,17 @@ class IndustrialProductionTest {
             "BLACKSMITHS_HOUSE,3:3,MASTER_BLACKSMITH",
             "BLACKSMITHS_SHOP,6:6,MASTER_BLACKSMITH",
             "IRON_WORKS,6:9,MASTER_BLACKSMITH",
-            "TOBACCONISTS_HOUSE,3:3,MASTER_TOBACCONIST",
-            "TOBACCONISTS_SHOP,6:6,MASTER_TOBACCONIST",
-            "CIGAR_FACTORY,6:9,MASTER_TOBACCONIST",
+            "SMALL_WINERY,3:3,MASTER_WINEMAKER", "WINERY,6:6,MASTER_WINEMAKER",
+            "LARGE_WINERY,6:9,MASTER_WINEMAKER",
             "WEAVERS_HOUSE,3:3,MASTER_WEAVER", "WEAVERS_SHOP,6:6,MASTER_WEAVER",
             "TEXTILE_MILL,6:9,MASTER_WEAVER",
-            "RUM_DISTILLERS_HOUSE,3:3,MASTER_DISTILLER",
-            "RUM_DISTILLERY,6:6,MASTER_DISTILLER",
-            "RUM_FACTORY,6:9,MASTER_DISTILLER",
-            "FUR_TRADERS_HOUSE,3:3,MASTER_FUR_TRADER",
-            "FUR_TRADING_POST,6:6,MASTER_FUR_TRADER",
-            "FUR_FACTORY,6:9,MASTER_FUR_TRADER", "ARMORY,3:3,MASTER_GUNSMITH",
-            "MAGAZINE,6:6,MASTER_GUNSMITH", "ARSENAL,3:6,MASTER_GUNSMITH");
+            "SMALL_OIL_PRESS,3:3,MASTER_OIL_MAKER",
+            "OIL_PRESS,6:6,MASTER_OIL_MAKER",
+            "LARGE_OIL_PRESS,6:9,MASTER_OIL_MAKER",
+            "SMALL_POTTERY,3:3,MASTER_POTTER", "POTTERY,6:6,MASTER_POTTER",
+            "LARGE_POTTERY,6:9,MASTER_POTTER", "ARMORY,3:3,MASTER_WEAPONSMITH",
+            "MAGAZINE,6:6,MASTER_WEAPONSMITH",
+            "ARSENAL,3:6,MASTER_WEAPONSMITH");
 
     private static Stream<Arguments> industryTiers() {
         return Stream.of(Arguments.of(ConstructionType.CARPENTERS_STAND, 3, 3),
@@ -117,18 +116,18 @@ class IndustrialProductionTest {
                 Arguments.of(ConstructionType.BLACKSMITHS_HOUSE, 3, 3),
                 Arguments.of(ConstructionType.BLACKSMITHS_SHOP, 6, 6),
                 Arguments.of(ConstructionType.IRON_WORKS, 6, 9),
-                Arguments.of(ConstructionType.TOBACCONISTS_HOUSE, 3, 3),
-                Arguments.of(ConstructionType.TOBACCONISTS_SHOP, 6, 6),
-                Arguments.of(ConstructionType.CIGAR_FACTORY, 6, 9),
+                Arguments.of(ConstructionType.SMALL_WINERY, 3, 3),
+                Arguments.of(ConstructionType.WINERY, 6, 6),
+                Arguments.of(ConstructionType.LARGE_WINERY, 6, 9),
                 Arguments.of(ConstructionType.WEAVERS_HOUSE, 3, 3),
                 Arguments.of(ConstructionType.WEAVERS_SHOP, 6, 6),
                 Arguments.of(ConstructionType.TEXTILE_MILL, 6, 9),
-                Arguments.of(ConstructionType.RUM_DISTILLERS_HOUSE, 3, 3),
-                Arguments.of(ConstructionType.RUM_DISTILLERY, 6, 6),
-                Arguments.of(ConstructionType.RUM_FACTORY, 6, 9),
-                Arguments.of(ConstructionType.FUR_TRADERS_HOUSE, 3, 3),
-                Arguments.of(ConstructionType.FUR_TRADING_POST, 6, 6),
-                Arguments.of(ConstructionType.FUR_FACTORY, 6, 9),
+                Arguments.of(ConstructionType.SMALL_OIL_PRESS, 3, 3),
+                Arguments.of(ConstructionType.OIL_PRESS, 6, 6),
+                Arguments.of(ConstructionType.LARGE_OIL_PRESS, 6, 9),
+                Arguments.of(ConstructionType.SMALL_POTTERY, 3, 3),
+                Arguments.of(ConstructionType.POTTERY, 6, 6),
+                Arguments.of(ConstructionType.LARGE_POTTERY, 6, 9),
                 Arguments.of(ConstructionType.ARMORY, 3, 3),
                 Arguments.of(ConstructionType.MAGAZINE, 6, 6),
                 Arguments.of(ConstructionType.ARSENAL, 3, 6));
@@ -184,7 +183,7 @@ class IndustrialProductionTest {
     }
 
     @Test
-    void oreBecomesToolsAndThenMusketsInOneUpdateWithoutDoubleSpend() {
+    void oreBecomesToolsAndThenWeaponsInOneUpdateWithoutDoubleSpend() {
         final GameModelPo data = new GameModelPoDao().loadFromClassPath(
                 "/maps/default-campaign-mission-2-thrive.microcol");
         final var saved = data.getModel().getColonies().stream()
@@ -220,7 +219,7 @@ class IndustrialProductionTest {
         armory.getSlots().get(0).setWorkerId(2);
         saved.getColonyWarehouse().put("ORE", 3);
         saved.getColonyWarehouse().put("TOOLS", 0);
-        saved.getColonyWarehouse().put("MUSKET", 0);
+        saved.getColonyWarehouse().put("WEAPONS", 0);
 
         final Model model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
@@ -230,7 +229,7 @@ class IndustrialProductionTest {
                 preview.getStatsByType(GoodsType.TOOLS).getRowProduction());
         assertEquals(3, preview.getStatsByType(GoodsType.TOOLS).getConsumed());
         assertEquals(3,
-                preview.getStatsByType(GoodsType.MUSKET).getRowProduction());
+                preview.getStatsByType(GoodsType.WEAPONS).getRowProduction());
         final int oreAfter = preview.getStatsByType(GoodsType.ORE)
                 .getInWarehouseAfter();
         colony.startTurn();
@@ -239,7 +238,7 @@ class IndustrialProductionTest {
         assertEquals(0,
                 colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount());
         assertEquals(3,
-                colony.getWarehouse().getGoods(GoodsType.MUSKET).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.WEAPONS).getAmount());
         final Model resumed = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         final String savedState = new Gson().toJson(resumed.save());
@@ -251,7 +250,7 @@ class IndustrialProductionTest {
      * Colony 0 of the fixture with no second town commodity ({@code NONE}) and
      * its residents staged. The first {@code workers} residents staff the
      * tested building with the crew's unit types; the rest wait in the chapel
-     * or on corn fields. Every other goods-consuming building is removed, so
+     * or on grain fields. Every other goods-consuming building is removed, so
      * the tested chain is the only consumer, and its input and output stocks
      * are explicit.
      */
@@ -314,12 +313,12 @@ class IndustrialProductionTest {
                     final var field = saved.getColonyFields()
                             .get(FIELD_ORDER.get(idle - chapel.size()));
                     field.setWorkerId(id);
-                    field.setProducedGoodsType(GoodsType.CORN);
+                    field.setProducedGoodsType(GoodsType.GRAIN);
                 }
             }
         }
         final var warehouseGoods = saved.getColonyWarehouse();
-        warehouseGoods.put(GoodsType.CORN.name(), 100);
+        warehouseGoods.put(GoodsType.GRAIN.name(), 100);
         warehouseGoods.put(inputType.name(), input);
         warehouseGoods.put(outputType.name(), outputStock);
         return Model.make(data.getModel(),
@@ -387,20 +386,21 @@ class IndustrialProductionTest {
             "BLACKSMITHS_HOUSE,MASTER_BLACKSMITH,10,6,4",
             "BLACKSMITHS_SHOP,MASTER_BLACKSMITH,16,12,4",
             "IRON_WORKS,MASTER_BLACKSMITH,16,18,4",
-            "TOBACCONISTS_HOUSE,MASTER_TOBACCONIST,10,6,4",
-            "TOBACCONISTS_SHOP,MASTER_TOBACCONIST,16,12,4",
-            "CIGAR_FACTORY,MASTER_TOBACCONIST,16,18,4",
+            "SMALL_WINERY,MASTER_WINEMAKER,10,6,4",
+            "WINERY,MASTER_WINEMAKER,16,12,4",
+            "LARGE_WINERY,MASTER_WINEMAKER,16,18,4",
             "WEAVERS_HOUSE,MASTER_WEAVER,10,6,4",
             "WEAVERS_SHOP,MASTER_WEAVER,16,12,4",
             "TEXTILE_MILL,MASTER_WEAVER,16,18,4",
-            "RUM_DISTILLERS_HOUSE,MASTER_DISTILLER,10,6,4",
-            "RUM_DISTILLERY,MASTER_DISTILLER,16,12,4",
-            "RUM_FACTORY,MASTER_DISTILLER,16,18,4",
-            "FUR_TRADERS_HOUSE,MASTER_FUR_TRADER,10,6,4",
-            "FUR_TRADING_POST,MASTER_FUR_TRADER,16,12,4",
-            "FUR_FACTORY,MASTER_FUR_TRADER,16,18,4",
-            "ARMORY,MASTER_GUNSMITH,10,6,4", "MAGAZINE,MASTER_GUNSMITH,16,12,4",
-            "ARSENAL,MASTER_GUNSMITH,10,12,4" })
+            "SMALL_OIL_PRESS,MASTER_OIL_MAKER,10,6,4",
+            "OIL_PRESS,MASTER_OIL_MAKER,16,12,4",
+            "LARGE_OIL_PRESS,MASTER_OIL_MAKER,16,18,4",
+            "SMALL_POTTERY,MASTER_POTTER,10,6,4",
+            "POTTERY,MASTER_POTTER,16,12,4",
+            "LARGE_POTTERY,MASTER_POTTER,16,18,4",
+            "ARMORY,MASTER_WEAPONSMITH,10,6,4",
+            "MAGAZINE,MASTER_WEAPONSMITH,16,12,4",
+            "ARSENAL,MASTER_WEAPONSMITH,10,12,4" })
     void actualStocksSurviveSaveAndContinueWithoutReplay(final String building,
             final String expert, final int input, final int produced,
             final int inputAfter) {

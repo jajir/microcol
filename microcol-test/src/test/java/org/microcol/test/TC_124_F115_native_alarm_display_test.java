@@ -29,7 +29,7 @@ import javafx.stage.Stage;
  *
  * <p>
  * The fixture is the current-schema F104 scenario, as in TC_113: saved alarm 30
- * is uneasy with tribal anger 10 and the Congress has 100 bells for the chosen
+ * is uneasy with tribal anger 10 and the Congress has 100 owls for the chosen
  * founder. Dutch pressure on the capital is 2.5; Pocahontas halves it to 1.25.
  * The arrival turn is observed at 30, cleared and updated to 1.25, a change of
  * -28.75. The next turn gives 1.25 - 1 + 1.25 = 1.5, a change of +0.25.
@@ -77,7 +77,7 @@ public class TC_124_F115_native_alarm_display_test
         alarm.closeWithEscape();
         alarm.verifyDialogClosed();
 
-        // Choose Pocahontas in Congress; the 100 saved bells bring her next
+        // Choose Pocahontas in Congress; the 100 saved owls bring her next
         // turn.
         congress.open();
         congress.select(Founder.POCAHONTAS);

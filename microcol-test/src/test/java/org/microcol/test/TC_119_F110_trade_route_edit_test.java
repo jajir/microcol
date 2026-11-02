@@ -23,15 +23,15 @@ import javafx.stage.Stage;
 
 /**
  * Editing, canceling and deleting trade routes. New Amsterdam (id 0, ORE 90,
- * MUSKET 50) stands at (26,16), Delft (id 1, ORE 0, MUSKET 50) at (28,16) and
- * Haarlem (id 2, ORE 40, MUSKET 20) at (24,16), each two squares from the next
+ * WEAPONS 50) stands at (26,16), Delft (id 1, ORE 0, WEAPONS 50) at (28,16) and
+ * Haarlem (id 2, ORE 40, WEAPONS 20) at (24,16), each two squares from the next
  * over grass, so a wagon needs two turns for a leg. Wagons 4 and 6 stand free
- * in New Amsterdam. The "Ore cart" route unloads ORE and loads MUSKET in Delft
+ * in New Amsterdam. The "Ore cart" route unloads ORE and loads WEAPONS in Delft
  * and does the opposite in New Amsterdam. Wagon 8 waits there with a lost stop
  * on "Lost cart", whose second stop names a colony that was never founded.
- * Galleon 7, holding RUM 100 and COTTON 60 in its six holds, is on the Atlantic
- * with two turns left, following "Atlantic run". The Dutch player has 10000
- * gold. Each test starts from the same saved position.
+ * Galleon 7, holding OLIVE_OIL 100 and WOOL 60 in its six holds, is on the
+ * Atlantic with two turns left, following "Atlantic run". The Dutch player has
+ * 10000 gold. Each test starts from the same saved position.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_119_F110_trade_route_edit_test extends AbstractMicroColTest {
@@ -125,19 +125,20 @@ public class TC_119_F110_trade_route_edit_test extends AbstractMicroColTest {
         game.nextTurnAndCloseDialogs();
         game.nextTurnAndCloseDialogs();
 
-        // Wagon 4 took the MUSKET in Delft and is on its way back. Wagon 6
-        // stands in Delft; the MUSKET was gone, so it took nothing, and its
+        // Wagon 4 took the WEAPONS in Delft and is on its way back. Wagon 6
+        // stands in Delft; the WEAPONS was gone, so it took nothing, and its
         // visit there is processed.
         cargo.verifyUnitBetween(FIRST_WAGON_ID, NEW_AMSTERDAM_LOCATION,
                 DELFT_LOCATION);
-        cargo.verifyHold(FIRST_WAGON_ID, 0, Goods.of(GoodsType.MUSKET, 50));
+        cargo.verifyHold(FIRST_WAGON_ID, 0, Goods.of(GoodsType.WEAPONS, 50));
         cargo.verifyUnitAt(SECOND_WAGON_ID, DELFT_LOCATION);
         cargo.verifyHoldEmpty(SECOND_WAGON_ID, 0);
         cargo.verifyVisitProcessed(SECOND_WAGON_ID, true);
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 90));
-        cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.MUSKET, 50));
+        cargo.verifyWarehouse(NEW_AMSTERDAM_ID,
+                Goods.of(GoodsType.WEAPONS, 50));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 0));
-        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.MUSKET, 0));
+        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 0));
 
         // Both wagons are listed although neither stands in New Amsterdam.
         // The player replaces the New Amsterdam stop with Haarlem.
@@ -170,7 +171,8 @@ public class TC_119_F110_trade_route_edit_test extends AbstractMicroColTest {
         cargo.verifyUnitBetween(FIRST_WAGON_ID, NEW_AMSTERDAM_LOCATION,
                 DELFT_LOCATION);
         cargo.verifyUnitAt(SECOND_WAGON_ID, DELFT_LOCATION);
-        cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.MUSKET, 50));
+        cargo.verifyWarehouse(NEW_AMSTERDAM_ID,
+                Goods.of(GoodsType.WEAPONS, 50));
         cargo.verifyGold(10000);
         cargo.captureDialog("tradeRouteCargoDialog",
                 "trade-route-edit-pending.png");
@@ -184,23 +186,24 @@ public class TC_119_F110_trade_route_edit_test extends AbstractMicroColTest {
         game = new FreePlayAuditPage(getContext()).continueGame();
         cargo.verifyUnitAtRememberedLocation(FIRST_WAGON_ID);
         cargo.verifyUnitAt(SECOND_WAGON_ID, DELFT_LOCATION);
-        cargo.verifyHold(FIRST_WAGON_ID, 0, Goods.of(GoodsType.MUSKET, 50));
+        cargo.verifyHold(FIRST_WAGON_ID, 0, Goods.of(GoodsType.WEAPONS, 50));
         cargo.verifyVisitProcessed(SECOND_WAGON_ID, true);
         cargo.verifyStoredStop("Ore cart", NEW_AMSTERDAM_STOP, "Haarlem");
         cargo.verifyAcceptedStop(FIRST_WAGON_ID, NEW_AMSTERDAM_STOP,
                 "New Amsterdam");
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 90));
-        cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.MUSKET, 50));
-        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.MUSKET, 0));
+        cargo.verifyWarehouse(NEW_AMSTERDAM_ID,
+                Goods.of(GoodsType.WEAPONS, 50));
+        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 0));
 
         // Next turn: wagon 4 reaches the stop it had accepted and processes it
-        // once, MUSKET off and ORE on. Wagon 6 leaves Delft for Haarlem.
+        // once, WEAPONS off and ORE on. Wagon 6 leaves Delft for Haarlem.
         game.nextTurnAndCloseDialogs();
         cargo.verifyUnitAt(FIRST_WAGON_ID, NEW_AMSTERDAM_LOCATION);
         cargo.verifyHold(FIRST_WAGON_ID, 0, Goods.of(GoodsType.ORE, 90));
         cargo.verifyHoldEmpty(FIRST_WAGON_ID, 1);
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID,
-                Goods.of(GoodsType.MUSKET, 100));
+                Goods.of(GoodsType.WEAPONS, 100));
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 0));
         cargo.verifyAcceptedStop(FIRST_WAGON_ID, NEW_AMSTERDAM_STOP, "Haarlem");
         cargo.verifyAssignment(FIRST_WAGON_ID, "Ore cart", DELFT_STOP, false);
@@ -208,7 +211,7 @@ public class TC_119_F110_trade_route_edit_test extends AbstractMicroColTest {
                 NEW_AMSTERDAM_LOCATION);
         cargo.verifyAssignment(SECOND_WAGON_ID, "Ore cart", NEW_AMSTERDAM_STOP,
                 false);
-        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.MUSKET, 0));
+        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 0));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 0));
 
         // Three more turns: wagon 4 unloads its ORE in Delft, and wagon 6
@@ -219,10 +222,10 @@ public class TC_119_F110_trade_route_edit_test extends AbstractMicroColTest {
         cargo.verifyUnitAt(SECOND_WAGON_ID, HAARLEM_LOCATION);
         cargo.verifyHold(SECOND_WAGON_ID, 0, Goods.of(GoodsType.ORE, 40));
         cargo.verifyWarehouse(HAARLEM_ID, Goods.of(GoodsType.ORE, 0));
-        cargo.verifyWarehouse(HAARLEM_ID, Goods.of(GoodsType.MUSKET, 20));
+        cargo.verifyWarehouse(HAARLEM_ID, Goods.of(GoodsType.WEAPONS, 20));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 90));
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID,
-                Goods.of(GoodsType.MUSKET, 100));
+                Goods.of(GoodsType.WEAPONS, 100));
         cargo.verifyAssignment(SECOND_WAGON_ID, "Ore cart", DELFT_STOP, false);
         cargo.verifyGold(10000);
     }
@@ -287,7 +290,7 @@ public class TC_119_F110_trade_route_edit_test extends AbstractMicroColTest {
         cargo.close();
         game = colony.close();
 
-        // The next turn: wagon 6 reaches Delft and takes the MUSKET, while
+        // The next turn: wagon 6 reaches Delft and takes the WEAPONS, while
         // wagon 4 stays where it was released and gets its allowance back.
         game.nextTurnAndCloseDialogs();
         cargo.verifyUnitAt(FIRST_WAGON_ID, ROAD_LOCATION);
@@ -295,9 +298,9 @@ public class TC_119_F110_trade_route_edit_test extends AbstractMicroColTest {
         cargo.verifyNoStandingOrder(FIRST_WAGON_ID);
         cargo.verifyMovementThirds(FIRST_WAGON_ID, 3);
         cargo.verifyUnitAt(SECOND_WAGON_ID, DELFT_LOCATION);
-        cargo.verifyHold(SECOND_WAGON_ID, 0, Goods.of(GoodsType.MUSKET, 50));
+        cargo.verifyHold(SECOND_WAGON_ID, 0, Goods.of(GoodsType.WEAPONS, 50));
         cargo.verifyHoldEmpty(FIRST_WAGON_ID, 0);
-        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.MUSKET, 0));
+        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 0));
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 90));
         cargo.verifyAssignment(SECOND_WAGON_ID, "Ore cart", NEW_AMSTERDAM_STOP,
                 false);
@@ -333,8 +336,8 @@ public class TC_119_F110_trade_route_edit_test extends AbstractMicroColTest {
         cargo.verifyAssigned("Galleon #7: heading to Delft.");
         cargo.verifyAssignedChoices("Galleon #7");
         cargo.verifyAtSea(GALLEON_ID, 2);
-        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.RUM, 100));
-        cargo.verifyHold(GALLEON_ID, 1, Goods.of(GoodsType.COTTON, 60));
+        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.OLIVE_OIL, 100));
+        cargo.verifyHold(GALLEON_ID, 1, Goods.of(GoodsType.WOOL, 60));
         cargo.verifyGold(10000);
 
         // The first press on Delete only names the carrier it would release.
@@ -357,8 +360,8 @@ public class TC_119_F110_trade_route_edit_test extends AbstractMicroColTest {
         cargo.verifyRouteStored("Atlantic run", false);
         cargo.verifyNotAssigned(GALLEON_ID);
         cargo.verifyAtSea(GALLEON_ID, 2);
-        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.RUM, 100));
-        cargo.verifyHold(GALLEON_ID, 1, Goods.of(GoodsType.COTTON, 60));
+        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.OLIVE_OIL, 100));
+        cargo.verifyHold(GALLEON_ID, 1, Goods.of(GoodsType.WOOL, 60));
         cargo.verifyGold(10000);
         cargo.verifyAssignment(LOST_WAGON_ID, "Lost cart", LOST_STOP, true);
         cargo.close();
@@ -375,7 +378,7 @@ public class TC_119_F110_trade_route_edit_test extends AbstractMicroColTest {
         cargo.verifyRouteStored("Atlantic run", false);
         cargo.verifyNotAssigned(GALLEON_ID);
         cargo.verifyAtSea(GALLEON_ID, 1);
-        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.RUM, 100));
+        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.OLIVE_OIL, 100));
         cargo.verifyGold(10000);
 
         // The crossing ends as usual. The ship lands on the sea lane with its
@@ -384,8 +387,8 @@ public class TC_119_F110_trade_route_edit_test extends AbstractMicroColTest {
         cargo.verifyNotAtSea(GALLEON_ID);
         cargo.verifyUnitAt(GALLEON_ID, LANE_LOCATION);
         cargo.verifyNoStandingOrder(GALLEON_ID);
-        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.RUM, 100));
-        cargo.verifyHold(GALLEON_ID, 1, Goods.of(GoodsType.COTTON, 60));
+        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.OLIVE_OIL, 100));
+        cargo.verifyHold(GALLEON_ID, 1, Goods.of(GoodsType.WOOL, 60));
         cargo.verifyGold(10000);
 
         // The player sails the landed ship one square west by hand.
@@ -395,8 +398,8 @@ public class TC_119_F110_trade_route_edit_test extends AbstractMicroColTest {
         game.dragMouseAtLocation(WEST_OF_LANE_LOCATION);
         cargo.verifyUnitAt(GALLEON_ID, WEST_OF_LANE_LOCATION);
         cargo.verifyNoStandingOrder(GALLEON_ID);
-        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.RUM, 100));
-        cargo.verifyHold(GALLEON_ID, 1, Goods.of(GoodsType.COTTON, 60));
+        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.OLIVE_OIL, 100));
+        cargo.verifyHold(GALLEON_ID, 1, Goods.of(GoodsType.WOOL, 60));
         cargo.verifyGold(10000);
     }
 
@@ -455,7 +458,7 @@ public class TC_119_F110_trade_route_edit_test extends AbstractMicroColTest {
         cargo.verifyVisitProcessed(LOST_WAGON_ID, true);
         cargo.verifyAssignment(LOST_WAGON_ID, "Lost cart", 0, false);
         cargo.verifyWarehouse(HAARLEM_ID, Goods.of(GoodsType.ORE, 40));
-        cargo.verifyWarehouse(HAARLEM_ID, Goods.of(GoodsType.MUSKET, 20));
+        cargo.verifyWarehouse(HAARLEM_ID, Goods.of(GoodsType.WEAPONS, 20));
         cargo.verifyGold(10000);
     }
 

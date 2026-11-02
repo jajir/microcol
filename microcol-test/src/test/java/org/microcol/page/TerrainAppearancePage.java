@@ -169,7 +169,7 @@ public final class TerrainAppearancePage extends AbstractScreen {
             assertFalse(map.isTerrainDecorated(decoratedAt, forest, 0),
                     "Road suppresses decoration");
             forest.setHasRoad(false);
-            forest.setResourceOverlay(ResourceOverlay.PRIME_TOBACCO);
+            forest.setResourceOverlay(ResourceOverlay.PRIME_GRAPES);
             assertFalse(map.isTerrainDecorated(decoratedAt, forest, 0),
                     "Bonus suppresses decoration");
             final Canvas bonus = new Canvas(45, 45);
@@ -178,7 +178,7 @@ public final class TerrainAppearancePage extends AbstractScreen {
             bonus.getGraphicsContext2D().fillRect(0, 0, 45, 45);
             paintBoundaryBackground(bonus, decoratedAt, TerrainType.GRASSLAND);
             bonus.getGraphicsContext2D().drawImage(
-                    images.getResourceImage(ResourceOverlay.PRIME_TOBACCO), 0,
+                    images.getResourceImage(ResourceOverlay.PRIME_GRAPES), 0,
                     0);
             verifyPixels(bonus.snapshot(null, null),
                     render(decoratedAt, forest, 0));

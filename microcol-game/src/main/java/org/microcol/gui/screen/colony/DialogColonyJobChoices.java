@@ -320,12 +320,10 @@ public final class DialogColonyJobChoices extends AbstractMessageWindow {
                 .add(i18n.get(ColonyMsg.jobBestYield, goodsText(goods))));
         choice.getTargetLocation().ifPresent(at -> lines
                 .add(i18n.get(ColonyMsg.jobTarget, at.getX(), at.getY())));
-        choice.getPotential()
-                .ifPresent(goods -> lines.add(i18n.get(
-                        goods.getType() == GoodsType.BELL
-                                ? ColonyMsg.jobBellContribution
-                                : ColonyMsg.jobPotential,
-                        goods.getAmount(), goodsName(goods.getType()))));
+        choice.getPotential().ifPresent(goods -> lines.add(i18n.get(
+                goods.getType() == GoodsType.OWLS ? ColonyMsg.jobOwlContribution
+                        : ColonyMsg.jobPotential,
+                goods.getAmount(), goodsName(goods.getType()))));
         choice.getInputNeeded().ifPresent(input -> {
             final Goods stock = choice.getCurrentStock().orElseThrow();
             lines.add(i18n.get(ColonyMsg.jobInput, input.getAmount(),

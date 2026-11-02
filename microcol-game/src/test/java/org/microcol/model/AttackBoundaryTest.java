@@ -47,7 +47,7 @@ class AttackBoundaryTest {
                 role == UnitType.COLONIST || role == UnitType.MASTER_BLACKSMITH
                         ? 0
                         : null);
-        force.setHoldingGuns(true);
+        force.setHoldingWeapons(true);
         force.setMissionary(
                 role == UnitType.COLONIST || role == UnitType.MASTER_BLACKSMITH
                         ? false
@@ -133,7 +133,7 @@ class AttackBoundaryTest {
             ((AbstractUnit) attacker).setActionPoints(0);
             break;
         case "tools-only":
-            ((UnitFreeColonist) attacker).setHoldingGuns(false);
+            ((UnitFreeColonist) attacker).setHoldingWeapons(false);
             ((UnitFreeColonist) attacker).setTools(100);
             break;
         case "working":
@@ -143,7 +143,7 @@ class AttackBoundaryTest {
             break;
         case "aboard":
             attacker = model.getUnitById(0);
-            ((UnitFreeColonist) attacker).setHoldingGuns(true);
+            ((UnitFreeColonist) attacker).setHoldingWeapons(true);
             break;
         case "unregistered":
             model.destroyUnit(attacker);

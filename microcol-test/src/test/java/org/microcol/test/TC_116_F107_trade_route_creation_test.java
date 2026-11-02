@@ -70,7 +70,7 @@ public class TC_116_F107_trade_route_creation_test
         route.verifyDialogClosed();
         route.verifyStoredRoute("Wagon Road", TradeRouteKind.LAND, "Delft",
                 "New Amsterdam");
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 100));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 100));
 
         // Cancel after staging changes nothing.
         route.open();

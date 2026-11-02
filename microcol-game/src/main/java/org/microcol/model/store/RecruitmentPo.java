@@ -11,7 +11,7 @@ public final class RecruitmentPo {
 
     private Integer paidPassages;
 
-    private Integer crosses;
+    private Integer torches;
 
     private Integer earnedImmigrants;
 
@@ -49,12 +49,12 @@ public final class RecruitmentPo {
         this.paidPassages = paidPassages;
     }
 
-    public Integer getCrosses() {
-        return crosses;
+    public Integer getTorches() {
+        return torches;
     }
 
-    public void setCrosses(final Integer crosses) {
-        this.crosses = crosses;
+    public void setTorches(final Integer torches) {
+        this.torches = torches;
     }
 
     public Integer getEarnedImmigrants() {

@@ -254,7 +254,7 @@ class PoliticalProductionTest {
     }
 
     @Test
-    void bellsCreditedInAnUpdateAffectOnlyTheNextUpdate() {
+    void owlsCreditedInAnUpdateAffectOnlyTheNextUpdate() {
         final GameModelPo data = data(Difficulty.CONQUISTADOR);
         // One liberty point below the 50 % line of five residents.
         liberty(data, 0, 499);
@@ -264,14 +264,14 @@ class PoliticalProductionTest {
                 colony.getConstructionByType(ConstructionType.TOWN_HALL)
                         .getSlotAt(0));
         assertEquals(0, colony.getPoliticalProduction().getBonus());
-        final int before = colony.getGoodsStats().getStatsByType(GoodsType.BELL)
+        final int before = colony.getGoodsStats().getStatsByType(GoodsType.OWLS)
                 .getRowProduction();
-        assertTrue(before > 0, "The town hall worker must make bells");
+        assertTrue(before > 0, "The town hall worker must make owls");
         colony.startTurn();
-        // The update used the snapshot taken before crediting its own bells.
+        // The update used the snapshot taken before crediting its own owls.
         assertEquals(499 + before, colony.getLiberty());
         assertEquals(1, colony.getPoliticalProduction().getBonus());
-        assertTrue(colony.getGoodsStats().getStatsByType(GoodsType.BELL)
+        assertTrue(colony.getGoodsStats().getStatsByType(GoodsType.OWLS)
                 .getRowProduction() > before);
     }
 
@@ -294,21 +294,20 @@ class PoliticalProductionTest {
         assertEquals(5, colony.getPopulation());
         assertEquals(1, colony.getPoliticalProduction().getBonus());
         // The job choices expose the same distinction.
-        final Optional<Goods> residentBells = bellsChoice(model, colony,
+        final Optional<Goods> residentOwls = owlsChoice(model, colony,
                 resident);
-        final Optional<Goods> outsideBells = bellsChoice(model, colony,
-                outside);
-        assertTrue(residentBells.isPresent(), "resident town hall choice");
-        assertTrue(outsideBells.isPresent(), "outside town hall choice");
-        assertTrue(residentBells.get().getAmount() > outsideBells.get()
-                .getAmount());
+        final Optional<Goods> outsideOwls = owlsChoice(model, colony, outside);
+        assertTrue(residentOwls.isPresent(), "resident town hall choice");
+        assertTrue(outsideOwls.isPresent(), "outside town hall choice");
+        assertTrue(
+                residentOwls.get().getAmount() > outsideOwls.get().getAmount());
     }
 
-    private Optional<Goods> bellsChoice(final Model model, final Colony colony,
+    private Optional<Goods> owlsChoice(final Model model, final Colony colony,
             final Unit worker) {
         return ColonyJobChoice.forWorker(model, colony, worker).stream().filter(
                 choice -> choice.getKind() == ColonyJobChoice.Kind.INDOOR
-                        && choice.getGoodsType() == GoodsType.BELL)
+                        && choice.getGoodsType() == GoodsType.OWLS)
                 .findFirst().flatMap(ColonyJobChoice::getPotential);
     }
 

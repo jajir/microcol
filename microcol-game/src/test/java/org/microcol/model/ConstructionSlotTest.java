@@ -54,7 +54,7 @@ public class ConstructionSlotTest {
             throws Exception {
         slot.set(placeConstructionSlot);
         Optional<Goods> altProduction = Optional
-                .of(Goods.of(GoodsType.RUM, 10));
+                .of(Goods.of(GoodsType.OLIVE_OIL, 10));
         when(construction.getType()).thenReturn(constructionType);
         when(constructionType.getProductionPerTurn()).thenReturn(altProduction);
         when(placeConstructionSlot.getUnit()).thenReturn(unit);
@@ -88,9 +88,9 @@ public class ConstructionSlotTest {
     void test_getProduction_noConsumption_construction_consume_goods()
             throws Exception {
         final Optional<Goods> altProduction = Optional
-                .of(Goods.of(GoodsType.RUM, 0));
+                .of(Goods.of(GoodsType.OLIVE_OIL, 0));
         final Optional<Goods> altConsumption = Optional
-                .of(Goods.of(GoodsType.SUGAR, 0));
+                .of(Goods.of(GoodsType.OLIVES, 0));
         when(construction.getType()).thenReturn(constructionType);
         when(constructionType.getProductionPerTurn()).thenReturn(altProduction);
         when(constructionType.getConsumptionPerTurn())
@@ -104,7 +104,7 @@ public class ConstructionSlotTest {
     @Test
     void test_getProduction_noConsumption_noUnit() throws Exception {
         final Optional<Goods> production = Optional
-                .of(Goods.of(GoodsType.BELL, 5));
+                .of(Goods.of(GoodsType.OWLS, 5));
         when(construction.getType()).thenReturn(constructionType);
         when(constructionType.getConsumptionPerTurn())
                 .thenReturn(Optional.empty());
@@ -114,14 +114,14 @@ public class ConstructionSlotTest {
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(GoodsType.BELL, ret.getProducedGoods().get().getType());
+        assertEquals(GoodsType.OWLS, ret.getProducedGoods().get().getType());
         assertEquals(0, ret.getProducedGoods().get().getAmount());
     }
 
     @Test
     void test_getProduction_noConsumption_withFreeColonist() throws Exception {
         final Optional<Goods> production = Optional
-                .of(Goods.of(GoodsType.BELL, 5));
+                .of(Goods.of(GoodsType.OWLS, 5));
         when(construction.getType()).thenReturn(constructionType);
         when(constructionType.getConsumptionPerTurn())
                 .thenReturn(Optional.empty());
@@ -132,7 +132,7 @@ public class ConstructionSlotTest {
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(GoodsType.BELL, ret.getProducedGoods().get().getType());
+        assertEquals(GoodsType.OWLS, ret.getProducedGoods().get().getType());
         assertEquals(5, ret.getProducedGoods().get().getAmount());
     }
 
@@ -227,10 +227,10 @@ public class ConstructionSlotTest {
     void wrongSourceTypeIsRejectedForOccupiedAndEmptySlots() {
         configureSmithy(3);
         assertThrows(IllegalArgumentException.class,
-                () -> slot.getProduction(Goods.of(GoodsType.SUGAR, 3)));
+                () -> slot.getProduction(Goods.of(GoodsType.OLIVES, 3)));
         mockUnitForProductionModifier(UnitType.COLONIST);
         assertThrows(IllegalArgumentException.class,
-                () -> slot.getProduction(Goods.of(GoodsType.SUGAR, 3)));
+                () -> slot.getProduction(Goods.of(GoodsType.OLIVES, 3)));
     }
 
     private void configureSmithy(final int perTurn) {

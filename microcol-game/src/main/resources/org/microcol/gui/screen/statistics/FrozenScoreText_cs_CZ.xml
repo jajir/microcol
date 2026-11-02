@@ -4,7 +4,7 @@
   <entry key="frozenTitle">Zmrazený výsledek: tento výsledek je zapsán a pozdější hra jej nemění.</entry>
   <entry key="frozenIdentity">Identita výsledku: %s</entry>
   <entry key="frozenBaseTitle">Zmrazené základní skóre, zapsáno</entry>
-  <entry key="frozenBaseNote">Tyto složky byly zapsány při zmrazení výsledku. Pozdější zlato, obyvatelé, zvony ani ztráty je nemění.</entry>
+  <entry key="frozenBaseNote">Tyto složky byly zapsány při zmrazení výsledku. Pozdější zlato, obyvatelé, sovy ani ztráty je nemění.</entry>
   <entry key="frozenResultTitle">Zmrazený vypočtený výsledek, zapsáno</entry>
   <entry key="frozenResultNote">Válečné a obtížnostní složky byly použity jednou při zmrazení výsledku. Nic zde zobrazeného se nepřepočítává.</entry>
   <entry key="statusAwaiting">Čeká se na tvou volbu: pokračovat bez bodování, nebo rozhodnout později. Hra zůstane pozastavena, dokud nevybereš.</entry>

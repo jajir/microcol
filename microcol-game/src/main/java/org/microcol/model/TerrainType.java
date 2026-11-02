@@ -46,40 +46,40 @@ public final class TerrainType {
             .setName("GRASSLAND").setCode("g").setCanHaveTree(true)
             .setSea(false).setMoveCost(1).setMoveCostWithTree(2)
             .setDefenseBonus(0).setDefenseBonusWithTree(50)
-            .setProduction(GoodsType.CORN).setBase(4).build()
-            .setProduction(GoodsType.SUGAR).setBase(1).build()
-            .setProduction(GoodsType.TOBACCO).setBase(3).build()
-            .setProduction(GoodsType.COTTON).setBase(2).build()
-            .setForestProduction(GoodsType.CORN).setBase(3).build()
-            .setForestProduction(GoodsType.TOBACCO).setBase(1).build()
-            .setForestProduction(GoodsType.COTTON).setBase(1).build()
-            .setForestProduction(GoodsType.FUR).setBase(2).build()
+            .setProduction(GoodsType.GRAIN).setBase(4).build()
+            .setProduction(GoodsType.OLIVES).setBase(1).build()
+            .setProduction(GoodsType.GRAPES).setBase(3).build()
+            .setProduction(GoodsType.WOOL).setBase(2).build()
+            .setForestProduction(GoodsType.GRAIN).setBase(3).build()
+            .setForestProduction(GoodsType.GRAPES).setBase(1).build()
+            .setForestProduction(GoodsType.WOOL).setBase(1).build()
+            .setForestProduction(GoodsType.CLAY).setBase(2).build()
             .setForestProduction(GoodsType.LUMBER).setBase(6).build().build();
 
     public final static TerrainType PRAIRIE = TerrainType.make()
             .setName("PRAIRIE").setCode("p").setCanHaveTree(true).setSea(false)
             .setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0)
-            .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
-            .setBase(4).build().setProduction(GoodsType.TOBACCO).setBase(2)
-            .build().setProduction(GoodsType.COTTON).setBase(3).build()
-            .setForestProduction(GoodsType.CORN).setBase(3).build()
-            .setForestProduction(GoodsType.TOBACCO).setBase(1).build()
-            .setForestProduction(GoodsType.COTTON).setBase(1).build()
-            .setForestProduction(GoodsType.FUR).setBase(2).build()
+            .setDefenseBonusWithTree(50).setProduction(GoodsType.GRAIN)
+            .setBase(4).build().setProduction(GoodsType.GRAPES).setBase(2)
+            .build().setProduction(GoodsType.WOOL).setBase(3).build()
+            .setForestProduction(GoodsType.GRAIN).setBase(3).build()
+            .setForestProduction(GoodsType.GRAPES).setBase(1).build()
+            .setForestProduction(GoodsType.WOOL).setBase(1).build()
+            .setForestProduction(GoodsType.CLAY).setBase(2).build()
             .setForestProduction(GoodsType.LUMBER).setBase(4).build().build();
 
     public final static TerrainType SAVANNAH = TerrainType.make()
             .setName("SAVANNAH").setCode("s").setCanHaveTree(true).setSea(false)
             .setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0)
-            .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
-            .setBase(4).build().setProduction(GoodsType.SUGAR).setBase(3)
-            .build().setProduction(GoodsType.TOBACCO).setBase(2).build()
-            .setProduction(GoodsType.COTTON).setBase(3).build()
-            .setForestProduction(GoodsType.CORN).setBase(3).build()
-            .setForestProduction(GoodsType.SUGAR).setBase(1).build()
-            .setForestProduction(GoodsType.TOBACCO).setBase(1).build()
-            .setForestProduction(GoodsType.COTTON).setBase(1).build()
-            .setForestProduction(GoodsType.FUR).setBase(2).build()
+            .setDefenseBonusWithTree(50).setProduction(GoodsType.GRAIN)
+            .setBase(4).build().setProduction(GoodsType.OLIVES).setBase(3)
+            .build().setProduction(GoodsType.GRAPES).setBase(2).build()
+            .setProduction(GoodsType.WOOL).setBase(3).build()
+            .setForestProduction(GoodsType.GRAIN).setBase(3).build()
+            .setForestProduction(GoodsType.OLIVES).setBase(1).build()
+            .setForestProduction(GoodsType.GRAPES).setBase(1).build()
+            .setForestProduction(GoodsType.WOOL).setBase(1).build()
+            .setForestProduction(GoodsType.CLAY).setBase(2).build()
             .setForestProduction(GoodsType.LUMBER).setBase(4).build().build();
 
     /**
@@ -88,13 +88,13 @@ public final class TerrainType {
     public final static TerrainType PLAINS = TerrainType.make()
             .setName("PLAINS").setCode("l").setCanHaveTree(true).setSea(false)
             .setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0)
-            .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
-            .setBase(4).build().setProduction(GoodsType.TOBACCO).setBase(1)
-            .build().setProduction(GoodsType.COTTON).setBase(2).build()
-            .setForestProduction(GoodsType.CORN).setBase(3).build()
-            .setForestProduction(GoodsType.TOBACCO).setBase(1).build()
-            .setForestProduction(GoodsType.COTTON).setBase(1).build()
-            .setForestProduction(GoodsType.FUR).setBase(3).build()
+            .setDefenseBonusWithTree(50).setProduction(GoodsType.GRAIN)
+            .setBase(4).build().setProduction(GoodsType.GRAPES).setBase(1)
+            .build().setProduction(GoodsType.WOOL).setBase(2).build()
+            .setForestProduction(GoodsType.GRAIN).setBase(3).build()
+            .setForestProduction(GoodsType.GRAPES).setBase(1).build()
+            .setForestProduction(GoodsType.WOOL).setBase(1).build()
+            .setForestProduction(GoodsType.CLAY).setBase(3).build()
             .setForestProduction(GoodsType.LUMBER).setBase(6).build().build();
 
     /**
@@ -103,47 +103,47 @@ public final class TerrainType {
     public final static TerrainType MARSH = TerrainType.make().setName("MARSH")
             .setCode("r").setCanHaveTree(true).setSea(false).setMoveCost(2)
             .setMoveCostWithTree(3).setDefenseBonus(25)
-            .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
-            .setBase(3).build().setProduction(GoodsType.SUGAR).setBase(1)
-            .build().setProduction(GoodsType.TOBACCO).setBase(3).build()
+            .setDefenseBonusWithTree(50).setProduction(GoodsType.GRAIN)
+            .setBase(3).build().setProduction(GoodsType.OLIVES).setBase(1)
+            .build().setProduction(GoodsType.GRAPES).setBase(3).build()
             .setProduction(GoodsType.ORE).setBase(3).build()
-            .setForestProduction(GoodsType.CORN).setBase(2).build()
-            .setForestProduction(GoodsType.SUGAR).setBase(1).build()
-            .setForestProduction(GoodsType.TOBACCO).setBase(2).build()
-            .setForestProduction(GoodsType.FUR).setBase(2).build()
+            .setForestProduction(GoodsType.GRAIN).setBase(2).build()
+            .setForestProduction(GoodsType.OLIVES).setBase(1).build()
+            .setForestProduction(GoodsType.GRAPES).setBase(2).build()
+            .setForestProduction(GoodsType.CLAY).setBase(2).build()
             .setForestProduction(GoodsType.LUMBER).setBase(4).build()
             .setForestProduction(GoodsType.ORE).setBase(2).build().build();
 
     public final static TerrainType SWAMP = TerrainType.make().setName("SWAMP")
             .setCode("w").setCanHaveTree(true).setSea(false).setMoveCost(2)
             .setMoveCostWithTree(3).setDefenseBonus(25)
-            .setDefenseBonusWithTree(75).setProduction(GoodsType.CORN)
-            .setBase(3).build().setProduction(GoodsType.SUGAR).setBase(3)
-            .build().setProduction(GoodsType.TOBACCO).setBase(1).build()
-            .setForestProduction(GoodsType.CORN).setBase(2).build()
-            .setForestProduction(GoodsType.SUGAR).setBase(2).build()
+            .setDefenseBonusWithTree(75).setProduction(GoodsType.GRAIN)
+            .setBase(3).build().setProduction(GoodsType.OLIVES).setBase(3)
+            .build().setProduction(GoodsType.GRAPES).setBase(1).build()
+            .setForestProduction(GoodsType.GRAIN).setBase(2).build()
+            .setForestProduction(GoodsType.OLIVES).setBase(2).build()
             .setForestProduction(GoodsType.LUMBER).setBase(4).build().build();
 
     public final static TerrainType DESERT = TerrainType.make()
             .setName("DESERT").setCode("d").setCanHaveTree(true).setSea(false)
             .setMoveCost(1).setMoveCostWithTree(1).setDefenseBonus(0)
-            .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
-            .setBase(2).build().setProduction(GoodsType.TOBACCO).setBase(1)
-            .build().setProduction(GoodsType.COTTON).setBase(1).build()
+            .setDefenseBonusWithTree(50).setProduction(GoodsType.GRAIN)
+            .setBase(2).build().setProduction(GoodsType.GRAPES).setBase(1)
+            .build().setProduction(GoodsType.WOOL).setBase(1).build()
             .setProduction(GoodsType.ORE).setBase(2).build()
-            .setForestProduction(GoodsType.CORN).setBase(2).build()
-            .setForestProduction(GoodsType.COTTON).setBase(1).build()
-            .setForestProduction(GoodsType.FUR).setBase(2).build()
+            .setForestProduction(GoodsType.GRAIN).setBase(2).build()
+            .setForestProduction(GoodsType.WOOL).setBase(1).build()
+            .setForestProduction(GoodsType.CLAY).setBase(2).build()
             .setForestProduction(GoodsType.LUMBER).setBase(2).build()
             .setForestProduction(GoodsType.ORE).setBase(1).build().build();
 
     public final static TerrainType TUNDRA = TerrainType.make()
             .setName("TUNDRA").setCode("t").setCanHaveTree(true).setSea(false)
             .setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0)
-            .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN)
+            .setDefenseBonusWithTree(50).setProduction(GoodsType.GRAIN)
             .setBase(3).build().setProduction(GoodsType.ORE).setBase(2).build()
-            .setForestProduction(GoodsType.CORN).setBase(2).build()
-            .setForestProduction(GoodsType.FUR).setBase(3).build()
+            .setForestProduction(GoodsType.GRAIN).setBase(2).build()
+            .setForestProduction(GoodsType.CLAY).setBase(3).build()
             .setForestProduction(GoodsType.LUMBER).setBase(4).build()
             .setForestProduction(GoodsType.ORE).setBase(1).build().build();
 
@@ -155,7 +155,7 @@ public final class TerrainType {
     public final static TerrainType HILL = TerrainType.make().setName("HILL")
             .setCode("h").setCanHaveTree(false).setSea(false).setMoveCost(2)
             .setMoveCostWithTree(2).setDefenseBonus(100)
-            .setDefenseBonusWithTree(100).setProduction(GoodsType.CORN)
+            .setDefenseBonusWithTree(100).setProduction(GoodsType.GRAIN)
             .setBase(2).build().setProduction(GoodsType.ORE).setBase(4).build()
             .build();
 
@@ -169,14 +169,14 @@ public final class TerrainType {
     public final static TerrainType HIGH_SEA = TerrainType.make()
             .setName("HIGH_SEA").setCode("~").setCanHaveTree(false).setSea(true)
             .setMoveCost(1).setMoveCostWithTree(1).setDefenseBonus(0)
-            .setDefenseBonusWithTree(0).setProduction(GoodsType.CORN).setBase(3)
-            .build().build();
+            .setDefenseBonusWithTree(0).setProduction(GoodsType.GRAIN)
+            .setBase(3).build().build();
 
     public final static TerrainType OCEAN = TerrainType.make().setName("OCEAN")
             .setCode("_").setCanHaveTree(false).setSea(true).setMoveCost(1)
             .setMoveCostWithTree(1).setDefenseBonus(0)
-            .setDefenseBonusWithTree(0).setProduction(GoodsType.CORN).setBase(3)
-            .build().build();
+            .setDefenseBonusWithTree(0).setProduction(GoodsType.GRAIN)
+            .setBase(3).build().build();
 
     /**
      * Fresh-water lake. It keeps its own saved identity but behaves like an
@@ -185,8 +185,8 @@ public final class TerrainType {
     public final static TerrainType LAKE = TerrainType.make().setName("LAKE")
             .setCode("k").setCanHaveTree(false).setSea(true).setMoveCost(1)
             .setMoveCostWithTree(1).setDefenseBonus(0)
-            .setDefenseBonusWithTree(0).setProduction(GoodsType.CORN).setBase(3)
-            .build().build();
+            .setDefenseBonusWithTree(0).setProduction(GoodsType.GRAIN)
+            .setBase(3).build().build();
 
     public final static List<TerrainType> TERRAINS = ImmutableList.of(GRASSLAND,
             PRAIRIE, SAVANNAH, PLAINS, MARSH, SWAMP, DESERT, TUNDRA, ARCTIC,

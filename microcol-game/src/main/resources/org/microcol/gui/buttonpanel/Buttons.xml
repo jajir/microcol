@@ -62,7 +62,7 @@
     <entry key="disbandNoColony">No colony of yours is on this square, so all equipment is lost.</entry>
     <entry key="disbandToolsLine">Tools: %s kept, %s lost.</entry>
     <entry key="disbandHorsesLine">Horses: %s kept, %s lost.</entry>
-    <entry key="disbandMusketsLine">Muskets: %s kept, %s lost.</entry>
+    <entry key="disbandWeaponsLine">Weapons: %s kept, %s lost.</entry>
     <entry key="disbandOverflowAcknowledge">I accept losing the excess above the warehouse limit.</entry>
     <entry key="disbandConfirm">Disband</entry>
     <entry key="disbandCancel">Cancel</entry>

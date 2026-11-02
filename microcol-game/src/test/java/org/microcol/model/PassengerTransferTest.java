@@ -326,7 +326,7 @@ class PassengerTransferTest {
                     .flatMap(colony -> colony.getColonyFields().stream())
                     .filter(field -> field.getWorkerId() != null)
                     .forEach(field -> field
-                            .setProducedGoodsType(GoodsType.CORN));
+                            .setProducedGoodsType(GoodsType.GRAIN));
             data.getModel().getMap().setTerrainType(terrain);
             model = Model.make(data.getModel(),
                     MissionImpl.getPredefinedGameOverEvaluators());

@@ -49,9 +49,9 @@ final class ClearForestFixture {
         final JsonObject model = saved.getAsJsonObject("model");
         model.getAsJsonArray("units").forEach(value -> {
             final JsonObject unit = value.getAsJsonObject();
-            // An armed colonist keeps its muskets only: tools and muskets are
+            // An armed colonist keeps its weapons only: tools and weapons are
             // separate equipment and the game never combines them.
-            final JsonElement armed = unit.get("holdingGuns");
+            final JsonElement armed = unit.get("holdingWeapons");
             if ("COLONIST".equals(unit.get("type").getAsString())
                     && (armed == null || !armed.getAsBoolean())) {
                 unit.addProperty("tools", tools);

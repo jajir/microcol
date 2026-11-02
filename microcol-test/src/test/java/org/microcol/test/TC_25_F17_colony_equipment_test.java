@@ -41,26 +41,26 @@ public class TC_25_F17_colony_equipment_test extends AbstractMicroColTest {
                 .openColonyAt(COLONY, "New Amsterdam");
         final EquipmentPage equipment = new EquipmentPage(getContext());
         equipment.verifySightRadius(1);
-        equipment.open("Equip with muskets");
-        equipment.verifyChoice("Equip with muskets", false, MISSING);
+        equipment.open("Equip with weapons");
+        equipment.verifyChoice("Equip with weapons", false, MISSING);
         equipment.verifyCostContains("50");
         equipment.captureDialog("equipmentDialog", "equipment-missing.png");
         equipment.cancel();
         equipment.verifyState(49, 100, 80, false, false, 0);
 
-        // Obtain the missing muskets through the existing cargo journey.
+        // Obtain the missing weapons through the existing cargo journey.
         colony.selectUnitFromPort(0);
         colony.verifyUnitInPortSelected(0, true);
         colony.dragGoodsFromShipCargoSlotToWarehouse(0,
-                GoodsType.BUYABLE_GOOD_TYPES.indexOf(GoodsType.MUSKET));
+                GoodsType.BUYABLE_GOOD_TYPES.indexOf(GoodsType.WEAPONS));
         equipment.verifyState(100, 100, 80, false, false, 0);
-        equipment.open("Equip with muskets");
-        equipment.verifyChoice("Equip with muskets", true, "");
+        equipment.open("Equip with weapons");
+        equipment.verifyChoice("Equip with weapons", true, "");
         equipment.escape();
         equipment.verifyState(100, 100, 80, false, false, 0);
 
-        // Confirmation consumes exactly the goods; horses retain the muskets.
-        equipment.open("Equip with muskets");
+        // Confirmation consumes exactly the goods; horses retain the weapons.
+        equipment.open("Equip with weapons");
         equipment.confirmWithEnter();
         equipment.verifyState(50, 100, 80, true, false, 0);
         equipment.open("Mount horses");
@@ -159,8 +159,8 @@ public class TC_25_F17_colony_equipment_test extends AbstractMicroColTest {
         settings.goBack().loadGame().openColonyAt(COLONY, "New Amsterdam");
         final EquipmentPage equipment = new EquipmentPage(getContext());
         equipment.verifySightRadius(1);
-        equipment.open("Vybavit mušketami");
-        equipment.verifyChoice("Vybavit mušketami", false,
+        equipment.open("Vybavit zbraněmi");
+        equipment.verifyChoice("Vybavit zbraněmi", false,
                 "Ve skladu není dostatek zboží. Zrušte volbu a obstarejte potřebné zboží.");
         equipment.escape();
 

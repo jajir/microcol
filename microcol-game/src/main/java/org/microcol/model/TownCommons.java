@@ -13,15 +13,15 @@ import com.google.common.collect.ImmutableList;
  */
 final class TownCommons {
 
-    /** Food of the commons, the baseline corn output of the center. */
-    static final GoodsType FOOD = GoodsType.CORN;
+    /** Food of the commons, the baseline grain output of the center. */
+    static final GoodsType FOOD = GoodsType.GRAIN;
 
     /**
      * Fixed tie order of the second commodity; the first highest positive
      * baseline wins.
      */
     static final List<GoodsType> SECOND_COMMODITIES = ImmutableList.of(
-            GoodsType.SUGAR, GoodsType.TOBACCO, GoodsType.COTTON, GoodsType.FUR,
+            GoodsType.OLIVES, GoodsType.GRAPES, GoodsType.WOOL, GoodsType.CLAY,
             GoodsType.LUMBER, GoodsType.ORE, GoodsType.SILVER);
 
     /** Saved code of a center without a positive second output. */

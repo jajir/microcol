@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="160" viewBox="0 0 320 160" role="img" aria-labelledby="title description">
-<title id="title">Fur Factory — Lehký nadhled</title>
-<desc id="description">Kožešiny; level 3. Editable flat vector drawing after selected proposal 8, R-0361. Transparent background, simple hand-drawn contours and a narrow side view.</desc>
+<title id="title">Large Pottery — Lehký nadhled</title>
+<desc id="description">Amfory (R-0394 symbol from the approved R-0384 amphorae vector); level 3. Editable flat vector drawing after selected proposal 8, R-0361. Transparent background, simple hand-drawn contours and a narrow side view.</desc>
 <g id="pen-outline" stroke="#3e3b31" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round">
 <g id="building">
 <g id="building-structure">
@@ -20,7 +20,10 @@
 </g>
 </g>
 <g id="profession-equipment">
-<path id="shape-009" d="M200 91 Q206 86 209 94 Q213.5 99 219 94 Q224 87 227 91 L222 100 Q217 108.0 227 125 L219 122 Q213.5 115 208 122 L200 125 Q208 108.0 205 101 Z" fill="#bd8e50"/>
+<g id="amphorae-symbol" transform="translate(194.75 89.25) scale(0.5859)" stroke-width="5.29">
+<g id="amphora-3" transform="translate(3 3) scale(1)"><path d="M16 17 C0 10 2 34 16 36 L17 29 C7 27 8 17 17 23 Z" fill="#c77f50"/><path d="M32 17 C48 11 47 34 32 36 L32 29 C43 25 40 17 32 23 Z" fill="#c77f50"/><path d="M15 7 Q25 5 34 7 L31 20 Q40 29 34 42 L28 54 L20 54 L13 42 Q7 28 18 20 Z" fill="#c77f50"/></g>
+<g id="amphora-29" transform="translate(29 18) scale(0.75)"><path d="M16 17 C0 10 2 34 16 36 L17 29 C7 27 8 17 17 23 Z" fill="#c77f50"/><path d="M32 17 C48 11 47 34 32 36 L32 29 C43 25 40 17 32 23 Z" fill="#c77f50"/><path d="M15 7 Q25 5 34 7 L31 20 Q40 29 34 42 L28 54 L20 54 L13 42 Q7 28 18 20 Z" fill="#c77f50"/></g>
+</g>
 </g>
 </g>
 </g>

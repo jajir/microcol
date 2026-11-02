@@ -293,7 +293,7 @@ public final class RoyalScenarioFixtures {
         soldier.setId(FIRST_PASSENGER_ID + indexOf(aboardIds, id));
         soldier.setOwnerId(KING);
         soldier.setType(UnitType.COLONIST);
-        soldier.setHoldingGuns(true);
+        soldier.setHoldingWeapons(true);
         soldier.setMounted(family == Family.CAVALRY);
         soldier.setMilitaryRole(MilitaryRole.ROYAL);
         soldier.setWorkUpdates(0);

@@ -52,7 +52,7 @@ public final class ReligiousProductionPage extends AbstractScreen {
         });
     }
 
-    public void verifyCrosses(ColonyScreen screen, int production,
+    public void verifyTorches(ColonyScreen screen, int production,
             int credited) {
         javafx.scene.Node building = getNodeFinder().lookup("#id_church")
                 .query();
@@ -61,9 +61,9 @@ public final class ReligiousProductionPage extends AbstractScreen {
             assertTrue(parent.isVisible(),
                     "Religious building must be visible through every ancestor");
         }
-        screen.verifyCrossProduction(production);
-        screen.verifyWarehouseGoods(Goods.of(GoodsType.CROSS, credited));
+        screen.verifyTorchProduction(production);
+        screen.verifyWarehouseGoods(Goods.of(GoodsType.TORCHES, credited));
         assertEquals(credited,
-                getModel().getPlayerByName("Dutch").getImmigrationCrosses());
+                getModel().getPlayerByName("Dutch").getImmigrationTorches());
     }
 }

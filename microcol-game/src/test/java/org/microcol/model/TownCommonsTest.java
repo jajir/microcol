@@ -77,13 +77,13 @@ class TownCommonsTest {
 
     /** Terrain baseline rows: open and forested, with the saved food. */
     @ParameterizedTest
-    @CsvSource({ "GRASSLAND,false,TOBACCO,3,4", "GRASSLAND,true,LUMBER,6,3",
-            "PRAIRIE,false,COTTON,3,4", "PRAIRIE,true,LUMBER,4,3",
-            "SAVANNAH,false,SUGAR,3,4", "SAVANNAH,true,LUMBER,4,3",
-            "PLAINS,false,COTTON,2,4", "PLAINS,true,LUMBER,6,3",
-            "MARSH,false,TOBACCO,3,3", "MARSH,true,LUMBER,4,2",
-            "SWAMP,false,SUGAR,3,3", "SWAMP,true,LUMBER,4,2",
-            "DESERT,false,ORE,2,2", "DESERT,true,FUR,2,2",
+    @CsvSource({ "GRASSLAND,false,GRAPES,3,4", "GRASSLAND,true,LUMBER,6,3",
+            "PRAIRIE,false,WOOL,3,4", "PRAIRIE,true,LUMBER,4,3",
+            "SAVANNAH,false,OLIVES,3,4", "SAVANNAH,true,LUMBER,4,3",
+            "PLAINS,false,WOOL,2,4", "PLAINS,true,LUMBER,6,3",
+            "MARSH,false,GRAPES,3,3", "MARSH,true,LUMBER,4,2",
+            "SWAMP,false,OLIVES,3,3", "SWAMP,true,LUMBER,4,2",
+            "DESERT,false,ORE,2,2", "DESERT,true,CLAY,2,2",
             "TUNDRA,false,ORE,2,3", "TUNDRA,true,LUMBER,4,2",
             "ARCTIC,false,NONE,0,0", "HILL,false,ORE,4,2" })
     void baselineTableSelectsTheSecondCommodityAndFood(final String terrain,
@@ -94,21 +94,21 @@ class TownCommonsTest {
                 ? Optional.empty()
                 : Optional.of(GoodsType.valueOf(second));
         assertEquals(expected, TownCommons.chooseSecondCommodity(square));
-        assertEquals(food, square.getCommonsProduction(GoodsType.CORN));
+        assertEquals(food, square.getCommonsProduction(GoodsType.GRAIN));
         expected.ifPresent(goods -> assertEquals(secondAmount,
                 square.getCommonsProduction(goods)));
     }
 
     @Test
     void tiesFollowTheFixedCommodityOrder() {
-        // Savanna sugar and cotton 3: sugar is earlier in the fixed order.
-        assertEquals(Optional.of(GoodsType.SUGAR), TownCommons
+        // Savanna olives and wool 3: olives come earlier in the fixed order.
+        assertEquals(Optional.of(GoodsType.OLIVES), TownCommons
                 .chooseSecondCommodity(center(TerrainType.SAVANNAH, false)));
-        // Marsh tobacco and ore 3: tobacco is earlier.
-        assertEquals(Optional.of(GoodsType.TOBACCO), TownCommons
+        // Marsh grapes and ore 3: grapes is earlier.
+        assertEquals(Optional.of(GoodsType.GRAPES), TownCommons
                 .chooseSecondCommodity(center(TerrainType.MARSH, false)));
-        // Forested desert fur and lumber 2: fur is earlier.
-        assertEquals(Optional.of(GoodsType.FUR), TownCommons
+        // Forested desert clay and lumber 2: clay is earlier.
+        assertEquals(Optional.of(GoodsType.CLAY), TownCommons
                 .chooseSecondCommodity(center(TerrainType.DESERT, true)));
     }
 
@@ -122,14 +122,14 @@ class TownCommonsTest {
     }
 
     @ParameterizedTest
-    @CsvSource({ "GRASSLAND,false,PRIME_FOOD,CORN,6",
-            "GRASSLAND,false,PRIME_TOBACCO,TOBACCO,5",
-            // Matching only: cotton overlay leaves the tobacco second output.
-            "GRASSLAND,false,PRIME_COTTON,TOBACCO,3",
+    @CsvSource({ "GRASSLAND,false,PRIME_FOOD,GRAIN,6",
+            "GRASSLAND,false,PRIME_GRAPES,GRAPES,5",
+            // Matching only: wool overlay leaves the grapes second output.
+            "GRASSLAND,false,PRIME_WOOL,GRAPES,3",
             // Prime Timber adds nothing to commons lumber.
             "GRASSLAND,true,PRIME_TIMBER,LUMBER,6",
             // A zero baseline stays zero.
-            "ARCTIC,false,GAME,CORN,0",
+            "ARCTIC,false,GAME,GRAIN,0",
             // Finite ore: baseline 4 plus the bonus 2 from the reserve.
             "HILL,false,ORE,ORE,6" })
     void overlayAddsOnlyToAMatchingPositiveBaseline(final String terrain,
@@ -163,7 +163,7 @@ class TownCommonsTest {
         for (int preview = 0; preview < 3; preview++) {
             colony.getGoodsStats();
             assertEquals(
-                    List.of(Goods.of(GoodsType.CORN, 2),
+                    List.of(Goods.of(GoodsType.GRAIN, 2),
                             Goods.of(GoodsType.ORE, 6)),
                     colony.getTownCommonsProduction());
         }
@@ -194,17 +194,17 @@ class TownCommonsTest {
         final Model model = load(data);
         final Colony colony = model.getColonyById(0).orElseThrow();
         assertEquals(
-                List.of(Goods.of(GoodsType.CORN, 6),
-                        Goods.of(GoodsType.TOBACCO, 3)),
+                List.of(Goods.of(GoodsType.GRAIN, 6),
+                        Goods.of(GoodsType.GRAPES, 3)),
                 colony.getTownCommonsProduction());
 
         // A renewable bonus has no reserve, so the turn must not try to debit
-        // one; startTurn would throw if it asked the map to extract corn.
+        // one; startTurn would throw if it asked the map to extract grain.
         colony.startTurn();
 
         assertEquals(
-                List.of(Goods.of(GoodsType.CORN, 6),
-                        Goods.of(GoodsType.TOBACCO, 3)),
+                List.of(Goods.of(GoodsType.GRAIN, 6),
+                        Goods.of(GoodsType.GRAPES, 3)),
                 colony.getTownCommonsProduction());
     }
 
@@ -230,26 +230,26 @@ class TownCommonsTest {
         final GameModelPo data = mission();
         colonyPo(data).setTownCommonsGoods("NONE");
         final Colony colony = load(data).getColonyById(0).orElseThrow();
-        assertEquals(List.of(Goods.of(GoodsType.CORN, 4)),
+        assertEquals(List.of(Goods.of(GoodsType.GRAIN, 4)),
                 colony.getTownCommonsProduction());
     }
 
     @Test
     void savedIdentitySurvivesTerrainChangeAndSaveLoad() {
         final GameModelPo data = mission();
-        // Saved TOBACCO stays chosen; hill gives no tobacco, so output is zero.
+        // Saved GRAPES stays chosen; hill gives no grapes, so output is zero.
         setCenter(data, TerrainType.HILL);
         final Model model = load(data);
         final Colony colony = model.getColonyById(0).orElseThrow();
         assertEquals(
-                List.of(Goods.of(GoodsType.CORN, 2),
-                        Goods.of(GoodsType.TOBACCO, 0)),
+                List.of(Goods.of(GoodsType.GRAIN, 2),
+                        Goods.of(GoodsType.GRAPES, 0)),
                 colony.getTownCommonsProduction());
 
         final ColonyPo saved = model.save().getColonies().stream()
                 .filter(colony0 -> colony0.getId() == 0).findFirst()
                 .orElseThrow();
-        assertEquals("TOBACCO", saved.getTownCommonsGoods());
+        assertEquals("GRAPES", saved.getTownCommonsGoods());
         final Colony restored = Model
                 .make(model.save(),
                         MissionImpl.getPredefinedGameOverEvaluators())
@@ -260,7 +260,7 @@ class TownCommonsTest {
 
     @ParameterizedTest
     @NullSource
-    @ValueSource(strings = { "MUSKET", "CORN", "tobacco", "" })
+    @ValueSource(strings = { "WEAPONS", "GRAIN", "grapes", "" })
     void missingOrInvalidIdentityIsRejectedOnLoad(final String saved) {
         final GameModelPo data = mission();
         colonyPo(data).setTownCommonsGoods(saved);

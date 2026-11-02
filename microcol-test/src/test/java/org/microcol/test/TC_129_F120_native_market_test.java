@@ -44,7 +44,7 @@ public class TC_129_F120_native_market_test extends AbstractMicroColTest {
     private static final File FIXTURE = new File(
             "src/test/scenarios/F106-native-turns.microcol");
 
-    /** The Aztec capital, with corn and tobacco on offer. */
+    /** The Aztec capital, with grain and grapes on offer. */
     private static final Location CAPITAL = Location.of(23, 15);
 
     /** Ordinary scout, land square west of the capital. */
@@ -73,8 +73,8 @@ public class TC_129_F120_native_market_test extends AbstractMicroColTest {
     /** Sea square west of the Cherokee capital. */
     private static final Location CHEROKEE_SHIP_AT = Location.of(29, 18);
 
-    private static final GoodsType CORN = GoodsType.CORN;
-    private static final GoodsType TOBACCO = GoodsType.TOBACCO;
+    private static final GoodsType GRAIN = GoodsType.GRAIN;
+    private static final GoodsType GRAPES = GoodsType.GRAPES;
 
     private static final String CONTACT_NONE_EN = "Contact: none yet. A land unit must introduce your nation first.";
     private static final String CONTACT_KNOWN_EN = "Contact: this tribe knows your nation.";
@@ -82,10 +82,10 @@ public class TC_129_F120_native_market_test extends AbstractMicroColTest {
     private static final String ADMITTED_EN = "Trade: this unit may inspect the market here.";
     private static final String SHIP_UNEASY_EN = "Trade: uneasy natives refuse ship trade.";
     private static final String SHIP_INLAND_EN = "Trade: a ship can trade only from the sea beside a coastal settlement.";
-    private static final String OFFER_CORN_EN = "Sells Corn: 100 in stock.";
-    private static final String OFFER_TOBACCO_EN = "Sells Tobacco: 100 in stock.";
+    private static final String OFFER_GRAIN_EN = "Sells Grain: 100 in stock.";
+    private static final String OFFER_GRAPES_EN = "Sells Grapes: 100 in stock.";
     private static final String UNAVAILABLE_EN = "Sale slot unavailable: no more goods grow here.";
-    private static final String WANTED_EN = "Wants to buy: Musket, Tools, Horse.";
+    private static final String WANTED_EN = "Wants to buy: Weapons, Tools, Horse.";
     private static final String TREASURY_EN = "Treasury: 2000 gold.";
     private static final String EXPEDITION_CLOSED_EN = "No expedition is open here yet.";
     private static final String EXPEDITION_OPEN_EN = "This carrier's expedition is open here.";
@@ -93,10 +93,10 @@ public class TC_129_F120_native_market_test extends AbstractMicroColTest {
     private static final String CONTACT_NONE_CS = "Kontakt: zatím žádný. Jednotka na souši musí nejprve představit váš národ.";
     private static final String CONTACT_KNOWN_CS = "Kontakt: tento kmen zná váš národ.";
     private static final String ADMITTED_CS = "Obchod: tato jednotka si může trh prohlédnout.";
-    private static final String OFFER_CORN_CS = "Prodává Jídlo: na skladě 100.";
-    private static final String OFFER_TOBACCO_CS = "Prodává Tabák: na skladě 100.";
+    private static final String OFFER_GRAIN_CS = "Prodává Obilí: na skladě 100.";
+    private static final String OFFER_GRAPES_CS = "Prodává Hrozny: na skladě 100.";
     private static final String UNAVAILABLE_CS = "Prodejní místo je nedostupné: zde už neroste žádné zboží.";
-    private static final String WANTED_CS = "Chce koupit: Muškety, Nářadí, Koně.";
+    private static final String WANTED_CS = "Chce koupit: Zbraně, Nářadí, Koně.";
     private static final String TREASURY_CS = "Pokladna: 2000 zlata.";
 
     @Start
@@ -170,7 +170,7 @@ public class TC_129_F120_native_market_test extends AbstractMicroColTest {
         // stock, wanted goods and treasury.
         visit.enterSettlement(WAGON_AT, CAPITAL);
         market.verifyAdmission(ADMITTED_EN);
-        market.verifyMarketShown(OFFER_CORN_EN, OFFER_TOBACCO_EN,
+        market.verifyMarketShown(OFFER_GRAIN_EN, OFFER_GRAPES_EN,
                 UNAVAILABLE_EN, WANTED_EN, TREASURY_EN);
         market.verifyExpeditionLine(EXPEDITION_CLOSED_EN);
         visit.verifyChooserFits(900, 750);
@@ -188,8 +188,8 @@ public class TC_129_F120_native_market_test extends AbstractMicroColTest {
 
         // The natives' own owner update restocks once and adds their treasury.
         teaching.nextTurn();
-        market.verifyStock(CAPITAL, CORN, 110);
-        market.verifyStock(CAPITAL, TOBACCO, 110);
+        market.verifyStock(CAPITAL, GRAIN, 110);
+        market.verifyStock(CAPITAL, GRAPES, 110);
         market.verifyTreasury(CAPITAL, 2040);
         market.verifyExpeditionOpenFor(WAGON_ID, CAPITAL);
 
@@ -198,7 +198,7 @@ public class TC_129_F120_native_market_test extends AbstractMicroColTest {
         new FreePlayAuditPage(getContext()).continueGame();
         market.verifyIntroduced(EuropeanNation.DUTCH, NativeNation.AZTEC);
         market.verifyExpeditionOpenFor(WAGON_ID, CAPITAL);
-        market.verifyStock(CAPITAL, CORN, 110);
+        market.verifyStock(CAPITAL, GRAIN, 110);
         market.verifyTreasury(CAPITAL, 2040);
     }
 
@@ -234,7 +234,7 @@ public class TC_129_F120_native_market_test extends AbstractMicroColTest {
         // The wagon is admitted at the same attitude.
         visit.enterSettlement(CHEROKEE_WAGON_AT, CHEROKEE_CAPITAL);
         market.verifyAdmission(ADMITTED_EN);
-        market.verifyMarketShown(OFFER_CORN_EN, OFFER_TOBACCO_EN,
+        market.verifyMarketShown(OFFER_GRAIN_EN, OFFER_GRAPES_EN,
                 UNAVAILABLE_EN, WANTED_EN, TREASURY_EN);
         visit.escape();
         visit.verifyChooserClosed();
@@ -262,7 +262,7 @@ public class TC_129_F120_native_market_test extends AbstractMicroColTest {
 
         visit.enterSettlement(WAGON_AT, CAPITAL);
         market.verifyAdmission(ADMITTED_CS);
-        market.verifyMarketShown(OFFER_CORN_CS, OFFER_TOBACCO_CS,
+        market.verifyMarketShown(OFFER_GRAIN_CS, OFFER_GRAPES_CS,
                 UNAVAILABLE_CS, WANTED_CS, TREASURY_CS);
         visit.verifyChooserFits(900, 750);
         market.captureChooser("native-market-cs.png");

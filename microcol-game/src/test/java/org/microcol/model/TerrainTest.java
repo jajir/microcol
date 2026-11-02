@@ -46,22 +46,22 @@ public class TerrainTest {
                 TerrainType.PRAIRIE, TerrainType.SAVANNAH }) {
             final Terrain plain = new Terrain(Location.of(1, 1), type);
             final Terrain field = plowed(type);
-            for (final GoodsType crop : new GoodsType[] { GoodsType.CORN,
-                    GoodsType.SUGAR, GoodsType.COTTON, GoodsType.TOBACCO }) {
+            for (final GoodsType crop : new GoodsType[] { GoodsType.GRAIN,
+                    GoodsType.OLIVES, GoodsType.WOOL, GoodsType.GRAPES }) {
                 final int base = plain.canProduceAmmount(crop);
                 assertEquals(base > 0 ? base + 1 : 0,
                         field.canProduceAmmount(crop), type + " " + crop);
             }
         }
         assertEquals(5, plowed(TerrainType.GRASSLAND)
-                .canProduceAmmount(GoodsType.CORN));
-        assertEquals(0,
-                plowed(TerrainType.PRAIRIE).canProduceAmmount(GoodsType.SUGAR));
+                .canProduceAmmount(GoodsType.GRAIN));
+        assertEquals(0, plowed(TerrainType.PRAIRIE)
+                .canProduceAmmount(GoodsType.OLIVES));
     }
 
     @Test
     public void plowLeavesNonCropOutputUnchanged() {
-        for (final GoodsType goods : new GoodsType[] { GoodsType.FUR,
+        for (final GoodsType goods : new GoodsType[] { GoodsType.CLAY,
                 GoodsType.LUMBER, GoodsType.ORE, GoodsType.SILVER }) {
             assertEquals(
                     new Terrain(Location.of(1, 1), TerrainType.GRASSLAND)

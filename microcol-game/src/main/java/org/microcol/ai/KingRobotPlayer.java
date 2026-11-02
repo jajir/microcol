@@ -321,10 +321,10 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
     }
 
     /**
-     * An empty carrier sails back to its sea lane and crosses to Europe, but
+     * An empty carrier sails back to its sea lane and torches to Europe, but
      * only while ground units wait in reserve that no other carrier on its way
      * home or already in port can take. It never leaves the legal sea route and
-     * never crosses with nothing to fetch.
+     * never torches with nothing to fetch.
      */
     private void sailHomeForReserve(final UnitWithCargo ship) {
         if (!needsAnotherCarrier() || !(ship instanceof Ship)) {

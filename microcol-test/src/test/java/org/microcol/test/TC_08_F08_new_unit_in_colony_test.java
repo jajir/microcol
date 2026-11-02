@@ -35,7 +35,7 @@ public class TC_08_F08_new_unit_in_colony_test extends AbstractMicroColTest {
         GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
         // Verify that in colony is 190 food.
-        verifyCornInColony(gamePage, 190);
+        verifyGrainInColony(gamePage, 190);
 
         // Reopening the colony does not run its food update.
         ColonyScreen colonyScreen = gamePage.openColonyAt(Location.of(22, 12),
@@ -51,19 +51,19 @@ public class TC_08_F08_new_unit_in_colony_test extends AbstractMicroColTest {
         gamePage.nextTurnAndCloseDialogs();
 
         // Verify that in colony is 193 food.
-        verifyCornInColony(gamePage, 193);
+        verifyGrainInColony(gamePage, 193);
 
         // Perform next turn and ignore turn events dialog.
         gamePage.nextTurnAndCloseDialogs();
 
         // Verify that in colony is 196 food.
-        verifyCornInColony(gamePage, 196);
+        verifyGrainInColony(gamePage, 196);
 
         // Perform next turn and ignore turn events dialog.
         gamePage.nextTurnAndCloseDialogs();
 
         // Verify that in colony is 199 food.
-        verifyCornInColony(gamePage, 199);
+        verifyGrainInColony(gamePage, 199);
 
         // The fourth update crosses 200 food: the report names the colony of
         // the birth once and offers to open it.
@@ -75,7 +75,7 @@ public class TC_08_F08_new_unit_in_colony_test extends AbstractMicroColTest {
         birth.get().close();
 
         // Four +3 updates cross 200 food; the birth leaves exactly 2.
-        verifyCornInColony(gamePage, 2);
+        verifyGrainInColony(gamePage, 2);
 
         // Verify that new unit was born and placed outside colony.
         verifyNumberOfUnitsOutsideColony(gamePage, 3);
@@ -93,7 +93,7 @@ public class TC_08_F08_new_unit_in_colony_test extends AbstractMicroColTest {
 
     }
 
-    private GamePage verifyCornInColony(final GamePage gamePage,
+    private GamePage verifyGrainInColony(final GamePage gamePage,
             final int expectedFood) {
 
         // Open colony Delft at [22,12].
@@ -114,7 +114,7 @@ public class TC_08_F08_new_unit_in_colony_test extends AbstractMicroColTest {
         final ColonyScreen colonyScreen = gamePage
                 .openColonyAt(Location.of(22, 12), "Delft");
 
-        // Verify number of corn is 'expectedNumberOfUnits'.
+        // Verify number of grain is 'expectedNumberOfUnits'.
         colonyScreen.verifyNumberOfUnitsAtPier(expectedNumberOfUnits);
 
         // Close colony screen.

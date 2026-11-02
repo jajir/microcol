@@ -50,7 +50,7 @@ public final class ProductionNetworkPage extends AbstractScreen {
 
     public void verifyColonyFed(final int colonyId) {
         assertTrue(
-                colony(colonyId).getWarehouse().getGoods(GoodsType.CORN)
+                colony(colonyId).getWarehouse().getGoods(GoodsType.GRAIN)
                         .getAmount() > 0,
                 "Colony " + colonyId + " still has food");
     }

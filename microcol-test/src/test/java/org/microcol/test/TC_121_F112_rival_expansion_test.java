@@ -57,7 +57,7 @@ import javafx.stage.Stage;
  *
  * On the first France turn the crew still stand on the colony square, so the
  * reserves refuse a release; the second ship is held in the port, and the crew
- * take the corn fields. With no trees there is no lumber work, so every
+ * take the grain fields. With no trees there is no lumber work, so every
  * resident grows food and the lowest ID, the founder, is the spare released on
  * the next turn. It boards the second ship and sails to the site. Save and
  * Continue midway keeps the same objective and placement. The founder founds
@@ -76,7 +76,7 @@ public class TC_121_F112_rival_expansion_test extends AbstractMicroColTest {
     private static final Location SITE_BLOCK = Location.of(23, 13);
     /** Land beside the Dutch ship, so the human keeps a colony. */
     private static final Location DUTCH_SITE = Location.of(31, 15);
-    /** Land beside the colony: five corn fields, one for each colonist. */
+    /** Land beside the colony: five grain fields, one for each colonist. */
     private static final List<Location> FIELDS = List.of(Location.of(22, 1),
             Location.of(22, 2), Location.of(22, 3), Location.of(21, 3),
             Location.of(20, 3));
@@ -87,7 +87,7 @@ public class TC_121_F112_rival_expansion_test extends AbstractMicroColTest {
     private static final int DUTCH_SETTLER_ID = 0;
     private static final int FIRST_CREW_ID = 6;
     private static final int CREW_COUNT = 3;
-    /** Corn in stock: more than five turns of the remaining residents eat. */
+    /** Grain in stock: more than five turns of the remaining residents eat. */
     private static final int FOOD = 60;
     /** Crew who reach the colony square: the founder and three colonists. */
     private static final Set<Integer> CREW = Set.of(FOUNDER_ID, 6, 7, 8);
@@ -130,7 +130,7 @@ public class TC_121_F112_rival_expansion_test extends AbstractMicroColTest {
             }
         }
         terrain.put(COLONY, TerrainType.GRASSLAND);
-        // Corn fields beside the colony, so the crew can work it from the
+        // Grain fields beside the colony, so the crew can work it from the
         // start.
         for (final Location field : FIELDS) {
             terrain.put(field, TerrainType.GRASSLAND);
@@ -183,7 +183,7 @@ public class TC_121_F112_rival_expansion_test extends AbstractMicroColTest {
             model.getUnitById(SHIP_ID).placeToLocation(COLONY);
             model.getUnitById(SECOND_SHIP_ID).placeToLocation(COLONY);
             model.getColonyById(COLONY_ID).orElseThrow().getWarehouse()
-                    .addGoods(Goods.of(GoodsType.CORN, FOOD));
+                    .addGoods(Goods.of(GoodsType.GRAIN, FOOD));
             france.endTurn();
 
             // On the human turn the Dutch settle beside their own ship.

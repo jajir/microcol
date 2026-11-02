@@ -17,22 +17,22 @@ public class Europe {
 
     /** Catalogue quotes; the spread between bid and ask stays constant. */
     private static final List<GoodsTrade> CATALOGUE = ImmutableList.of(
-            new GoodsTrade(GoodsType.CORN, 2, 4),
-            new GoodsTrade(GoodsType.SUGAR, 3, 5),
-            new GoodsTrade(GoodsType.TOBACCO, 3, 5),
-            new GoodsTrade(GoodsType.COTTON, 3, 5),
-            new GoodsTrade(GoodsType.FUR, 4, 8),
+            new GoodsTrade(GoodsType.GRAIN, 2, 4),
+            new GoodsTrade(GoodsType.OLIVES, 3, 5),
+            new GoodsTrade(GoodsType.GRAPES, 3, 5),
+            new GoodsTrade(GoodsType.WOOL, 3, 5),
+            new GoodsTrade(GoodsType.CLAY, 4, 8),
             new GoodsTrade(GoodsType.LUMBER, 3, 8),
             new GoodsTrade(GoodsType.ORE, 4, 8),
             new GoodsTrade(GoodsType.SILVER, 3, 20),
             new GoodsTrade(GoodsType.HORSE, 2, 5),
-            new GoodsTrade(GoodsType.RUM, 11, 12),
-            new GoodsTrade(GoodsType.CIGARS, 11, 12),
-            new GoodsTrade(GoodsType.SILK, 11, 12),
-            new GoodsTrade(GoodsType.COAT, 9, 10),
+            new GoodsTrade(GoodsType.OLIVE_OIL, 11, 12),
+            new GoodsTrade(GoodsType.WINE, 11, 12),
+            new GoodsTrade(GoodsType.CLOTH, 11, 12),
+            new GoodsTrade(GoodsType.AMPHORAE, 9, 10),
             new GoodsTrade(GoodsType.GOODS, 2, 3),
             new GoodsTrade(GoodsType.TOOLS, 1, 2),
-            new GoodsTrade(GoodsType.MUSKET, 2, 3));
+            new GoodsTrade(GoodsType.WEAPONS, 2, 3));
 
     /** Eighths of pressure per unit of goods in the actor's own market. */
     private static final int OWN_EIGHTHS_PER_UNIT = 8;

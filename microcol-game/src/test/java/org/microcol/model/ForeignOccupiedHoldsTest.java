@@ -64,7 +64,7 @@ class ForeignOccupiedHoldsTest {
     void partialHoldsCountGoodsAndPassengersOncePerHold() {
         final ModelPo po = world();
         withGoods(po, 1, GoodsType.ORE, 10);
-        withGoods(po, 2, GoodsType.CIGARS, 1);
+        withGoods(po, 2, GoodsType.WINE, 1);
         final Model model = NativeTurnScene.make(po);
         // The colonist boards the first free hold through the model.
         colonist(model)
@@ -89,7 +89,7 @@ class ForeignOccupiedHoldsTest {
     void fullShipDisclosesEveryHoldAsOccupied() {
         final ModelPo po = world();
         for (int hold = 0; hold < HOLDS; hold++) {
-            withGoods(po, hold, GoodsType.CORN, 1);
+            withGoods(po, hold, GoodsType.GRAIN, 1);
         }
         final Model model = NativeTurnScene.make(po);
 
@@ -115,7 +115,7 @@ class ForeignOccupiedHoldsTest {
     @Test
     void ownerSwitchHidesOwnShipAndDisclosesToTheNewForeignViewerOnly() {
         final ModelPo po = world();
-        withGoods(po, 0, GoodsType.CORN, 5);
+        withGoods(po, 0, GoodsType.GRAIN, 5);
         final Model model = NativeTurnScene.make(po);
         final Ship ship = ship(model);
 
@@ -137,7 +137,7 @@ class ForeignOccupiedHoldsTest {
     @Test
     void staleRemovedOrForeignModelIdentityDisclosesNothing() {
         final ModelPo po = world();
-        withGoods(po, 0, GoodsType.CORN, 5);
+        withGoods(po, 0, GoodsType.GRAIN, 5);
         final Model model = NativeTurnScene.make(po);
         final Ship ship = ship(model);
         assertEquals(OptionalInt.of(1),
@@ -178,7 +178,7 @@ class ForeignOccupiedHoldsTest {
     @Test
     void queryNeverChangesCargoExplorationOrMovement() {
         final ModelPo po = world();
-        withGoods(po, 0, GoodsType.CORN, 30);
+        withGoods(po, 0, GoodsType.GRAIN, 30);
         final Model model = NativeTurnScene.make(po);
         final Ship ship = ship(model);
         final Player dutch = dutch(model);

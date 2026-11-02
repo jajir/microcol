@@ -7,6 +7,7 @@ import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.MainPanelPresenter;
 import org.microcol.gui.screen.MainPanelView;
 import org.microcol.gui.screen.ShowScreenEvent;
+import org.microcol.gui.util.ListenerRegistrations;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.MicroColException;
@@ -47,6 +48,14 @@ public final class MainStageBuilder {
     private final I18n i18n;
     private final ViewUtil viewUtil;
 
+    /**
+     * Removes the listeners this application added to the primary stage. The
+     * stage outlives the application when it is restarted on the same stage, as
+     * in UI tests; a remaining listener would keep the whole previous
+     * application reachable.
+     */
+    private final ListenerRegistrations primaryStageListeners = new ListenerRegistrations();
+
     @Inject
     public MainStageBuilder(final MainPanelView mainPanelView,
             final MainPanelPresenter mainPanelPresenter,
@@ -76,25 +85,29 @@ public final class MainStageBuilder {
             event.consume();
             eventBus.post(new QuitGameEvent());
         });
-        primaryStage.xProperty().addListener((object, oldValue, newValue) -> {
-            final Rectangle rectangle = gamePreferences.getMainFramePosition();
-            rectangle.x = newValue.intValue();
-            rememberFramePosition(rectangle);
-        });
-        primaryStage.yProperty().addListener((object, oldValue, newValue) -> {
-            final Rectangle rectangle = gamePreferences.getMainFramePosition();
-            rectangle.y = newValue.intValue();
-            rememberFramePosition(rectangle);
-        });
-        primaryStage.widthProperty()
-                .addListener((object, oldValue, newValue) -> {
+        primaryStageListeners.add(primaryStage.xProperty(),
+                (object, oldValue, newValue) -> {
+                    final Rectangle rectangle = gamePreferences
+                            .getMainFramePosition();
+                    rectangle.x = newValue.intValue();
+                    rememberFramePosition(rectangle);
+                });
+        primaryStageListeners.add(primaryStage.yProperty(),
+                (object, oldValue, newValue) -> {
+                    final Rectangle rectangle = gamePreferences
+                            .getMainFramePosition();
+                    rectangle.y = newValue.intValue();
+                    rememberFramePosition(rectangle);
+                });
+        primaryStageListeners.add(primaryStage.widthProperty(),
+                (object, oldValue, newValue) -> {
                     final Rectangle rectangle = gamePreferences
                             .getMainFramePosition();
                     rectangle.width = newValue.intValue();
                     rememberFramePosition(rectangle);
                 });
-        primaryStage.heightProperty()
-                .addListener((object, oldValue, newValue) -> {
+        primaryStageListeners.add(primaryStage.heightProperty(),
+                (object, oldValue, newValue) -> {
                     final Rectangle rectangle = gamePreferences
                             .getMainFramePosition();
                     rectangle.height = newValue.intValue();
@@ -122,6 +135,14 @@ public final class MainStageBuilder {
         eventBus.post(new ShowScreenEvent(org.microcol.gui.screen.Screen.MENU));
 
         primaryStage.setScene(scene);
+    }
+
+    /**
+     * Removes the listeners added to the primary stage by
+     * {@link #buildPrimaryStage(Stage)}. Calling it again has no effect.
+     */
+    public void releasePrimaryStage() {
+        primaryStageListeners.removeAll();
     }
 
     /**

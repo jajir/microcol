@@ -180,9 +180,9 @@ class ColonyJobChoiceTest {
         final Model model = model();
         final Unit worker = model.getUnitById(0);
         final Place source = worker.getPlace();
-        choice(model, 0, Kind.CURRENT_FIELD, GoodsType.CORN).execute();
+        choice(model, 0, Kind.CURRENT_FIELD, GoodsType.GRAIN).execute();
         assertSame(source, worker.getPlace());
-        assertEquals(GoodsType.CORN,
+        assertEquals(GoodsType.GRAIN,
                 worker.getPlaceColonyField().getProducedGoodsType());
         final ColonyJobChoice best = choice(model, 0, Kind.BEST_FIELD,
                 GoodsType.LUMBER);
@@ -203,7 +203,7 @@ class ColonyJobChoiceTest {
             final Model model = model();
             final Unit worker = model.getUnitById(4);
             if (indoors) {
-                choice(model, 4, Kind.INDOOR, GoodsType.BELL).execute();
+                choice(model, 4, Kind.INDOOR, GoodsType.OWLS).execute();
             }
             final ColonyJobChoice best = choice(model, 4, Kind.BEST_FIELD,
                     GoodsType.LUMBER);
@@ -268,7 +268,7 @@ class ColonyJobChoiceTest {
         final ColonyJobChoice offered = choice(model, 0, Kind.BEST_FIELD,
                 GoodsType.LUMBER);
         final Place original = model.getUnitById(0).getPlace();
-        field(model, Direction.west).setProducedGoodsType(GoodsType.CORN);
+        field(model, Direction.west).setProducedGoodsType(GoodsType.GRAIN);
         assertSame(original, model.getUnitById(0).getPlace());
         rejected(model, offered);
     }
@@ -309,7 +309,7 @@ class ColonyJobChoiceTest {
 
     @Test
     void changedPotentialRejectsWithoutChangingTheCurrentJob() {
-        // Plowing adds food only on bare land, so the best corn square (bare
+        // Plowing adds food only on bare land, so the best grain square (bare
         // grassland, 4) must not carry a forest.
         final GameModelPo data = data();
         final Location northWest = data.getModel().getColonies().get(0)
@@ -320,9 +320,9 @@ class ColonyJobChoiceTest {
         data.getModel().getMap().setTrees(trees);
         final Model model = load(data);
         final ColonyJobChoice offer = choice(model, 0, Kind.BEST_FIELD,
-                GoodsType.CORN);
+                GoodsType.GRAIN);
         assertEquals(northWest, offer.getTargetLocation().orElseThrow());
-        assertEquals(Goods.of(GoodsType.CORN, 4),
+        assertEquals(Goods.of(GoodsType.GRAIN, 4),
                 offer.getPotential().orElseThrow());
         model.getMap().plowFiled(offer.getTargetLocation().orElseThrow());
         rejected(model, offer);
@@ -377,14 +377,14 @@ class ColonyJobChoiceTest {
     void noInputJobExcludesAutomaticBaseProduction() {
         final Model model = model();
         final ColonyJobChoice offer = choice(model, 4, Kind.INDOOR,
-                GoodsType.BELL);
+                GoodsType.OWLS);
         offer.execute();
         assertTrue(offer.getInputNeeded().isEmpty());
         assertEquals(offer.getPotential(),
                 model.getUnitById(4).getPlaceConstruction()
                         .getConstructionSlot().getProduction()
                         .getProducedGoods());
-        assertEquals(Goods.of(GoodsType.BELL, 3),
+        assertEquals(Goods.of(GoodsType.OWLS, 3),
                 offer.getPotential().orElseThrow());
     }
 
@@ -394,13 +394,13 @@ class ColonyJobChoiceTest {
         final Construction building = colony(model)
                 .getConstructionByType(ConstructionType.TOWN_HALL);
         final ColonyJobChoice offer = choice(model, 4, Kind.INDOOR,
-                GoodsType.BELL);
+                GoodsType.OWLS);
         model.getUnitById(1).placeToColonyStructureSlot(building.getSlotAt(0));
         rejected(model, offer);
         model.getUnitById(2).placeToColonyStructureSlot(building.getSlotAt(1));
         model.getUnitById(5).placeToColonyStructureSlot(building.getSlotAt(2));
         final ColonyJobChoice full = choice(model, 4, Kind.INDOOR,
-                GoodsType.BELL);
+                GoodsType.OWLS);
         assertEquals(UnavailableReason.BUILDING_FULL,
                 full.getUnavailableReason().orElseThrow());
         assertTrue(full.getPotential().isEmpty());
@@ -500,7 +500,7 @@ class ColonyJobChoiceTest {
         for (int ore : new int[] { 0, 3, 6, 9 }) {
             final GameModelPo data = data();
             final ColonyPo saved = data.getModel().getColonies().get(0);
-            saved.getColonyWarehouse().put("CORN", 100);
+            saved.getColonyWarehouse().put("GRAIN", 100);
             saved.getColonyWarehouse().put("ORE", ore);
             saved.getColonyWarehouse().put("TOOLS", 0);
             unit(data, 4).setType(UnitType.MASTER_BLACKSMITH);
@@ -543,7 +543,7 @@ class ColonyJobChoiceTest {
     void savedCompletedBoundaryDoesNotRepeatSmithyProduction() {
         final GameModelPo data = data();
         final ColonyPo saved = data.getModel().getColonies().get(0);
-        saved.getColonyWarehouse().put("CORN", 100);
+        saved.getColonyWarehouse().put("GRAIN", 100);
         saved.getColonyWarehouse().put("ORE", 9);
         saved.getColonyWarehouse().put("TOOLS", 0);
         unit(data, 4).setType(UnitType.MASTER_BLACKSMITH);

@@ -201,8 +201,8 @@ public final class PanelColonyGoods implements JavaFxComponent {
     private Goods adjustedAmount(final Goods originalAmount,
             final Goods available, final boolean specialOperationWasSelected) {
         if (specialOperationWasSelected || !available.equals(originalAmount)
-                || available.getType() == GoodsType.CORN) {
-            chooseGoods.init(available, available.getType() == GoodsType.CORN
+                || available.getType() == GoodsType.GRAIN) {
+            chooseGoods.init(available, available.getType() == GoodsType.GRAIN
                     ? i18n.get(ColonyMsg.unloadFood, available.getAmount())
                     : available.equals(originalAmount) ? ""
                             : i18n.get(ColonyMsg.unloadLimited,

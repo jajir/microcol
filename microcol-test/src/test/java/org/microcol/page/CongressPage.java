@@ -15,7 +15,7 @@ import javafx.scene.layout.TilePane;
 public final class CongressPage extends AbstractScreen {
     private com.google.gson.JsonElement previousWorld;
 
-    private int rememberedBells;
+    private int rememberedOwls;
     private double windowWidth;
     private double windowHeight;
     private boolean windowFullScreen;
@@ -169,11 +169,11 @@ public final class CongressPage extends AbstractScreen {
         assertEquals(cards.prefHeight(cards.getWidth()), cards.getHeight(), 1,
                 "Card panel must fit its current rows after resizing");
         final javafx.scene.layout.Region bar = getNodeFinder()
-                .lookup("#congressBellProgress")
+                .lookup("#congressOwlProgress")
                 .queryAs(javafx.scene.layout.Region.class);
         assertTrue(bar.getHeight() > 0
                 && bar.getHeight() + 1 >= bar.prefHeight(bar.getWidth()),
-                "Bell progress must retain its height");
+                "Owl progress must retain its height");
         final double right = row.get(row.size() - 1).getBoundsInParent()
                 .getMaxX();
         assertTrue(Math.abs(cards.getWidth() - right) < columns + 1,
@@ -197,26 +197,26 @@ public final class CongressPage extends AbstractScreen {
         assertTrue(player().getSelectedFounder().isEmpty());
     }
 
-    public void verifyProgress(int bells, int target, String objective,
+    public void verifyProgress(int owls, int target, String objective,
             String members) {
-        assertEquals("Congress bells: " + bells + " / " + target,
+        assertEquals("Congress owls: " + owls + " / " + target,
                 getLabeledById("congressProgress").getText());
         assertEquals(objective, getLabeledById("congressObjective").getText());
         assertEquals("Members: " + members,
                 getLabeledById("congressMembers").getText());
-        assertEquals(bells, player().getCongressBells());
+        assertEquals(owls, player().getCongressOwls());
         assertEquals(target, player().getCongressTarget());
     }
 
-    public void verifyReward(int frigates, int gold, int colonyBells) {
+    public void verifyReward(int frigates, int gold, int colonyOwls) {
         assertEquals(frigates,
                 player().getAllUnits().stream()
                         .filter(unit -> unit.getType() == UnitType.FRIGATE
                                 && unit.isAtEuropePort())
                         .count());
         assertEquals(gold, player().getGold());
-        assertEquals(colonyBells, getModel().getColonyById(0).orElseThrow()
-                .getWarehouse().getGoods(GoodsType.BELL).getAmount());
+        assertEquals(colonyOwls, getModel().getColonyById(0).orElseThrow()
+                .getWarehouse().getGoods(GoodsType.OWLS).getAmount());
         assertEquals(Set.of(Founder.JOHN_PAUL_JONES),
                 Set.copyOf(player().getCongressMembers()));
         assertFalse(player().isJonesDeliveryPending());
@@ -254,16 +254,15 @@ public final class CongressPage extends AbstractScreen {
                         + (shipped ? menOfWar : 0)
                         + " shipped, 0 destroyed, 0 captured",
                 getLabeledById("congressRoyalMenOfWar").getText());
-        assertEquals(
-                "Crown bells toward the next unit: " + remainder + " / 500",
-                getLabeledById("congressRoyalBells").getText());
+        assertEquals("Crown owls toward the next unit: " + remainder + " / 500",
+                getLabeledById("congressRoyalOwls").getText());
         RoyalRoster crown = player().getCrownRoster().orElseThrow();
         assertEquals(infantry, crown.getTotal(RoyalRoster.Family.INFANTRY));
         assertEquals(cavalry, crown.getTotal(RoyalRoster.Family.CAVALRY));
         assertEquals(artillery, crown.getTotal(RoyalRoster.Family.ARTILLERY));
         assertEquals(menOfWar, crown.getTotal(RoyalRoster.Family.MAN_OF_WAR));
-        assertEquals(remainder, crown.getBellRemainder());
-        assertEquals(500, crown.getBellThreshold());
+        assertEquals(remainder, crown.getOwlRemainder());
+        assertEquals(500, crown.getOwlThreshold());
     }
 
     /**
@@ -299,9 +298,9 @@ public final class CongressPage extends AbstractScreen {
                         RoyalRoster.Family.MAN_OF_WAR),
                 getLabeledById("congressRoyalMenOfWar").getText());
         assertEquals(
-                "Crown bells toward the next unit: " + crown.getBellRemainder()
-                        + " / " + crown.getBellThreshold(),
-                getLabeledById("congressRoyalBells").getText());
+                "Crown owls toward the next unit: " + crown.getOwlRemainder()
+                        + " / " + crown.getOwlThreshold(),
+                getLabeledById("congressRoyalOwls").getText());
     }
 
     private static String royalFamilyText(String label, RoyalRoster crown,
@@ -317,15 +316,15 @@ public final class CongressPage extends AbstractScreen {
                 + " captured";
     }
 
-    /** Remember the Congress bells before a turn produces more of them. */
-    public void rememberBells() {
-        rememberedBells = player().getCongressBells();
+    /** Remember the Congress owls before a turn produces more of them. */
+    public void rememberOwls() {
+        rememberedOwls = player().getCongressOwls();
     }
 
-    /** Congress keeps banking bells after independence; the Crown does not. */
-    public void verifyBellsProducedSinceRemembered() {
-        assertTrue(player().getCongressBells() > rememberedBells,
-                "The colony must produce bells after the declaration");
+    /** Congress keeps banking owls after independence; the Crown does not. */
+    public void verifyOwlsProducedSinceRemembered() {
+        assertTrue(player().getCongressOwls() > rememberedOwls,
+                "The colony must produce owls after the declaration");
     }
 
     public void verifyRoyalGrowthRunning() {
@@ -347,13 +346,13 @@ public final class CongressPage extends AbstractScreen {
                 getLabeledById("congressIntervention").getText());
     }
 
-    public void verifyInterventionProgress(final long bells, final int target) {
+    public void verifyInterventionProgress(final long owls, final int target) {
         final InterventionTarget state = player().getIntervention()
                 .orElseThrow();
         assertEquals(target, state.getTarget());
-        assertEquals(bells, state.getBells());
+        assertEquals(owls, state.getOwls());
         assertFalse(state.isEarned());
-        assertEquals("Foreign intervention bells: " + bells + " / " + target,
+        assertEquals("Foreign intervention owls: " + owls + " / " + target,
                 getLabeledById("congressIntervention").getText());
     }
 
@@ -361,7 +360,7 @@ public final class CongressPage extends AbstractScreen {
         assertTrue(player().getIntervention().orElseThrow().isEarned());
         assertEquals(
                 "Foreign intervention is earned: the target of " + target
-                        + " bells is reached.",
+                        + " owls is reached.",
                 getLabeledById("congressIntervention").getText());
     }
 
@@ -386,9 +385,9 @@ public final class CongressPage extends AbstractScreen {
             "congressProgress", "congressObjective", "congressMembers",
             "congressReward", "congressRoyalInfantry", "congressRoyalCavalry",
             "congressRoyalArtillery", "congressRoyalMenOfWar",
-            "congressRoyalBells", "congressRoyalStopped",
-            "congressIntervention", "congressInterventionForces",
-            "congressDetail", "congressFeedback" };
+            "congressRoyalOwls", "congressRoyalStopped", "congressIntervention",
+            "congressInterventionForces", "congressDetail",
+            "congressFeedback" };
 
     /** The primary window is no larger than the given size (R-0203). */
     public void verifyWindowFits(int width, int height) {

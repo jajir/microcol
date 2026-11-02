@@ -141,7 +141,7 @@ public final class NativeContestPage extends AbstractScreen {
         unit.add("action", action);
         unit.addProperty("movementThirds", 3);
         unit.addProperty("tools", 0);
-        unit.addProperty("holdingGuns", false);
+        unit.addProperty("holdingWeapons", false);
         unit.addProperty("mounted", false);
         unit.addProperty("workUpdates", 0);
         unit.addProperty("missionary", true);

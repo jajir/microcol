@@ -28,7 +28,8 @@ class NativeAdvisorReportTest {
         return NativeRelationsScene.island(NativeNation.ARAWAK)
                 .unit(DUTCH, UnitType.COLONIST, NativeRelationsScene.at(0, 1),
                         NativeRelationsScene.UNARMED)
-                .market(1, List.of(GoodsType.CORN), List.of(GoodsType.MUSKET));
+                .market(1, List.of(GoodsType.GRAIN),
+                        List.of(GoodsType.WEAPONS));
     }
 
     @Test
@@ -79,8 +80,8 @@ class NativeAdvisorReportTest {
                 EuropeanNation.DUTCH, NativeChiefOutcome.INFORMATION).toModel();
         final NativeChiefResult.Information facts = report(informed, DUTCH)
                 .getSettlements().get(0).getChiefFacts().orElseThrow();
-        assertEquals(List.of(GoodsType.CORN), facts.getOfferedGoods());
-        assertEquals(List.of(GoodsType.MUSKET), facts.getWantedGoods());
+        assertEquals(List.of(GoodsType.GRAIN), facts.getOfferedGoods());
+        assertEquals(List.of(GoodsType.WEAPONS), facts.getWantedGoods());
         assertEquals(UnitType.EXPERT_FARMER, facts.getTeachableSkill());
 
         final Model gold = learnedByDutch()
@@ -164,7 +165,7 @@ class NativeAdvisorReportTest {
                 .get(0);
         assertEquals(first.getSettlements().get(0).getRelation().getAttitude(),
                 row.getRelation().getAttitude());
-        assertEquals(List.of(GoodsType.CORN),
+        assertEquals(List.of(GoodsType.GRAIN),
                 row.getChiefFacts().orElseThrow().getOfferedGoods());
     }
 

@@ -161,9 +161,9 @@ public class ColonyScreen extends AbstractScreen {
                     .isEmpty());
             assertTrue(getNodeFinder().lookup("#townCommons").queryAll()
                     .isEmpty());
-            assertTrue(getNodeFinder().lookup("#colony-bells").queryAll()
+            assertTrue(getNodeFinder().lookup("#colony-owls").queryAll()
                     .isEmpty());
-            assertTrue(getNodeFinder().lookup("#colony-crosses").queryAll()
+            assertTrue(getNodeFinder().lookup("#colony-torches").queryAll()
                     .isEmpty());
         });
     }
@@ -334,7 +334,7 @@ public class ColonyScreen extends AbstractScreen {
         assertTrue(
                 actualProduction >= expectedMinimum
                         && actualProduction <= expectedMaximum,
-                String.format("Unexpected corn production '%s'",
+                String.format("Unexpected grain production '%s'",
                         actualProduction));
     }
 
@@ -343,12 +343,12 @@ public class ColonyScreen extends AbstractScreen {
                 .getGoods(expectedGoods.getType()).getAmount());
     }
 
-    public void verifyCrossProduction(final int expectedAmount) {
+    public void verifyTorchProduction(final int expectedAmount) {
         final Labeled output = getNodeFinder()
                 .lookup("#id_church .production .diffPositive").queryLabeled();
         assertTrue(output.isVisible());
         assertEquals("+" + expectedAmount, output.getText());
-        verifyThatProductionIs(GoodsType.CROSS, expectedAmount);
+        verifyThatProductionIs(GoodsType.TORCHES, expectedAmount);
     }
 
     public void verifyProductionArtwork(final String constructionId,
@@ -407,7 +407,7 @@ public class ColonyScreen extends AbstractScreen {
 
     public void verifyFoodAccounting(final int produced, final int consumed) {
         final GoodsProductionStats food = colony.getGoodsStats()
-                .getStatsByType(GoodsType.CORN);
+                .getStatsByType(GoodsType.GRAIN);
         assertEquals(produced, food.getRowProduction());
         assertEquals(consumed, food.getConsumed());
     }
@@ -505,12 +505,12 @@ public class ColonyScreen extends AbstractScreen {
      * Drag unit from pier to random empty field.
      *
      * @param indexOfUnitAtPier which unit will be dragged
-     * @return net production of corn at newly occupied field
+     * @return net production of grain at newly occupied field
      */
     public int moveUnitFromPietToEmptyField(final int indexOfUnitAtPier) {
         final ColonyField colonyField = colony.getColonyFields().stream()
                 .filter(field -> field.isEmpty()
-                        && field.getGoodsTypeProduction(GoodsType.CORN) > 0)
+                        && field.getGoodsTypeProduction(GoodsType.GRAIN) > 0)
                 .findAny().get();
         getRobot()
                 .drag(getUnitsAtPier().get(indexOfUnitAtPier),
@@ -518,7 +518,7 @@ public class ColonyScreen extends AbstractScreen {
                 .dropTo(findPlaceOfField(colonyField))
                 .release(MouseButton.PRIMARY);
         WaitForAsyncUtils.waitForFxEvents();
-        return colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+        return colony.getGoodsStats().getStatsByType(GoodsType.GRAIN)
                 .getNetProduction();
     }
 
@@ -544,7 +544,7 @@ public class ColonyScreen extends AbstractScreen {
                     getModel().getColonyById(1).orElseThrow()
                             .getColonyFieldInDirection(
                                     org.microcol.model.Direction.west),
-                    GoodsType.CORN);
+                    GoodsType.GRAIN);
             rememberWorld();
         });
     }
@@ -640,15 +640,15 @@ public class ColonyScreen extends AbstractScreen {
     }
 
     public void verifyFieldWorker(final int expectedUnitId,
-            final Location expectedLocation, final int expectedCornYield) {
+            final Location expectedLocation, final int expectedGrainYield) {
         final ColonyField field = colony.getColonyFields().stream()
                 .filter(candidate -> candidate.getUnit().map(Unit::getId)
                         .orElse(-1) == expectedUnitId)
                 .findFirst().orElseThrow();
         assertEquals(expectedLocation, field.getLocation());
-        assertEquals(expectedCornYield,
+        assertEquals(expectedGrainYield,
                 field.getProduction().orElseThrow().getAmount());
-        assertEquals(GoodsType.CORN,
+        assertEquals(GoodsType.GRAIN,
                 field.getProduction().orElseThrow().getType());
         assertEquals(1, colony.getColonyFields().stream()
                 .filter(ColonyField::isNotEmpty).count());
@@ -703,7 +703,7 @@ public class ColonyScreen extends AbstractScreen {
                     getModel().getUnitById(unitId).placeToColonyField(
                             colony.getColonyFieldInDirection(
                                     org.microcol.model.Direction.north),
-                            GoodsType.CORN);
+                            GoodsType.GRAIN);
                     rememberWorld();
                 }));
     }

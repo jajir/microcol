@@ -70,7 +70,7 @@ public final class NavalBattlePage extends AbstractScreen {
         assertEquals(0, ship.getActionPoints());
         assertEquals(Goods.of(GoodsType.ORE, 100),
                 ship.getCargo().getSlotByIndex(0).getGoods().orElseThrow());
-        assertEquals(Goods.of(GoodsType.FUR, 60),
+        assertEquals(Goods.of(GoodsType.CLAY, 60),
                 ship.getCargo().getSlotByIndex(2).getGoods().orElseThrow());
         assertEquals(Goods.of(GoodsType.ORE, 2),
                 ship.getCargo().getSlotByIndex(3).getGoods().orElseThrow());

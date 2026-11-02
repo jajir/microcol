@@ -120,7 +120,7 @@ public final class MissionaryOrdinationPage extends AbstractScreen {
         unit.add("action", action);
         unit.addProperty("movementThirds", 3);
         unit.addProperty("tools", tools);
-        unit.addProperty("holdingGuns", false);
+        unit.addProperty("holdingWeapons", false);
         unit.addProperty("mounted", false);
         return unit;
     }

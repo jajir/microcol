@@ -4,66 +4,66 @@
 <properties>
 	<comment>Define keys for Europe dialog</comment>
 
-	<entry key="corn">Corn</entry>
-	<entry key="sugar">Sugar cane</entry>
-	<entry key="tobacco">Tobacco</entry>
-	<entry key="cotton">Cotton</entry>
-	<entry key="fur">Fur</entry>
+	<entry key="grain">Grain</entry>
+	<entry key="olives">Olives</entry>
+	<entry key="grapes">Grapes</entry>
+	<entry key="wool">Wool</entry>
+	<entry key="clay">Clay</entry>
 	<entry key="lumber">Lumber</entry>
 	<entry key="ore">Ore</entry>
 	<entry key="silver">Silver</entry>
 	<entry key="horse">Horse</entry>
-	<entry key="rum">Rum</entry>
-	<entry key="cigars">Cigars</entry>
-	<entry key="silk">Silk</entry>
-	<entry key="coat">Coats</entry>
+	<entry key="olive_oil">Olive oil</entry>
+	<entry key="wine">Wine</entry>
+	<entry key="cloth">Cloth</entry>
+	<entry key="amphorae">Amphorae</entry>
 	<entry key="goods">Goods</entry>
 	<entry key="tools">Tools</entry>
-	<entry key="musket">Musket</entry>
+	<entry key="weapons">Weapons</entry>
 	<entry key="hammers">Hammers</entry>
-	<entry key="cross">Crosses</entry>
-	<entry key="bell">Bell of liberty</entry>
+	<entry key="torches">Torches</entry>
+	<entry key="owls">Owls</entry>
 
 	<!-- Declension - 2 case - genitiv - plurar, it's -->
-	<entry key="corn_dc2_pl">Corn</entry>
-	<entry key="sugar_dc2_pl">Sugar cane</entry>
-	<entry key="tobacco_dc2_pl">Tobacco</entry>
-	<entry key="cotton_dc2_pl">Cottons</entry>
-	<entry key="fur_dc2_pl">Furs</entry>
+	<entry key="grain_dc2_pl">Grain</entry>
+	<entry key="olives_dc2_pl">Olives</entry>
+	<entry key="grapes_dc2_pl">Grapes</entry>
+	<entry key="wool_dc2_pl">Wool</entry>
+	<entry key="clay_dc2_pl">Clay</entry>
 	<entry key="lumber_dc2_pl">Lumber</entry>
 	<entry key="ore_dc2_pl">Ore</entry>
 	<entry key="silver_dc2_pl">Silvers</entry>
 	<entry key="horse_dc2_pl">Horses</entry>
-	<entry key="rum_dc2_pl">Rum</entry>
-	<entry key="cigars_dc2_pl">Cigars</entry>
-	<entry key="silk_dc2_pl">Silk</entry>
-	<entry key="coat_dc2_pl">Coats</entry>
+	<entry key="olive_oil_dc2_pl">Olive oil</entry>
+	<entry key="wine_dc2_pl">Wine</entry>
+	<entry key="cloth_dc2_pl">Cloth</entry>
+	<entry key="amphorae_dc2_pl">Amphorae</entry>
 	<entry key="goods_dc2_pl">Goods</entry>
 	<entry key="tools_dc2_pl">Tools</entry>
-	<entry key="musket_dc2_pl">Muskets</entry>
+	<entry key="weapons_dc2_pl">Weapons</entry>
 	<entry key="hammers_dc2_pl">Hammers</entry>
-	<entry key="cross_dc2_pl">Crosses</entry>
-	<entry key="bell_dc2_pl">Bells of liberty</entry>
+	<entry key="torches_dc2_pl">Torches</entry>
+	<entry key="owls_dc2_pl">Owls</entry>
 
 	<!-- Declension - 7 case - instrumental - plurar, it's -->
-	<entry key="corn_dc7_pl">Corn</entry>
-	<entry key="sugar_dc7_pl">Sugar cane</entry>
-	<entry key="tobacco_dc7_pl">Tobacco</entry>
-	<entry key="cotton_dc7_pl">Cottons</entry>
-	<entry key="fur_dc7_pl">Furs</entry>
+	<entry key="grain_dc7_pl">Grain</entry>
+	<entry key="olives_dc7_pl">Olives</entry>
+	<entry key="grapes_dc7_pl">Grapes</entry>
+	<entry key="wool_dc7_pl">Wool</entry>
+	<entry key="clay_dc7_pl">Clay</entry>
 	<entry key="lumber_dc7_pl">Lumber</entry>
 	<entry key="ore_dc7_pl">Ore</entry>
 	<entry key="silver_dc7_pl">Silvers</entry>
 	<entry key="horse_dc7_pl">Horses</entry>
-	<entry key="rum_dc7_pl">Rum</entry>
-	<entry key="cigars_dc7_pl">Cigars</entry>
-	<entry key="silk_dc7_pl">Silk</entry>
-	<entry key="coat_dc7_pl">Coats</entry>
+	<entry key="olive_oil_dc7_pl">Olive oil</entry>
+	<entry key="wine_dc7_pl">Wine</entry>
+	<entry key="cloth_dc7_pl">Cloth</entry>
+	<entry key="amphorae_dc7_pl">Amphorae</entry>
 	<entry key="goods_dc7_pl">Goods</entry>
 	<entry key="tools_dc7_pl">Tools</entry>
-	<entry key="musket_dc7_pl">Muskets</entry>
+	<entry key="weapons_dc7_pl">Weapons</entry>
 	<entry key="hammers_dc7_pl">Hammers</entry>
-	<entry key="cross_dc7_pl">Crosses</entry>
-	<entry key="bell_dc7_pl">Bells of liberty</entry>
+	<entry key="torches_dc7_pl">Torches</entry>
+	<entry key="owls_dc7_pl">Owls</entry>
 
 </properties>

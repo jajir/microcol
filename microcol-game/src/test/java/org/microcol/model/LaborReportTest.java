@@ -154,7 +154,7 @@ class LaborReportTest {
     private static Unit addFieldWorker(final Model model) {
         final Colony montreal = model.getColonyById(1).orElseThrow();
         final Unit worker = model.addUnitOutSideColony(montreal);
-        worker.placeToColonyField(emptyField(montreal), GoodsType.CORN);
+        worker.placeToColonyField(emptyField(montreal), GoodsType.GRAIN);
         return worker;
     }
 
@@ -164,8 +164,8 @@ class LaborReportTest {
     }
 
     private static ColonyField emptyField(final Colony colony) {
-        return colony.getEmptyFieldsWithMaxCornProduction().stream().findFirst()
-                .orElseThrow();
+        return colony.getEmptyFieldsWithMaxGrainProduction().stream()
+                .findFirst().orElseThrow();
     }
 
     private static Kind kindOf(final LaborReport report, final int unitId) {
@@ -198,7 +198,7 @@ class LaborReportTest {
                 all.findMember(mapColonist.getId()).orElseThrow().getLocation()
                         .getLocation().orElseThrow());
         assertEquals(Kind.COLONY, kindOf(all, fieldWorker.getId()));
-        assertEquals(Optional.of(GoodsType.CORN),
+        assertEquals(Optional.of(GoodsType.GRAIN),
                 all.findMember(fieldWorker.getId()).orElseThrow().getLocation()
                         .getFieldGoods());
         assertEquals(base.getCount(UnitType.COLONIST) + 4,
@@ -306,7 +306,7 @@ class LaborReportTest {
         assertEquals(Kind.MAP, kindOf(onMap, colonist.getId()));
 
         final Colony montreal = model.getColonyById(1).orElseThrow();
-        colonist.placeToColonyField(emptyField(montreal), GoodsType.CORN);
+        colonist.placeToColonyField(emptyField(montreal), GoodsType.GRAIN);
         final LaborReport inField = model.getLaborReport(france);
         assertEquals(onMap.getTotal(), inField.getTotal());
         assertEquals(Kind.COLONY, kindOf(inField, colonist.getId()));

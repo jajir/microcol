@@ -9,7 +9,7 @@ class GoodsProductionStatsOverflowTest {
     @Test
     void foodPreviewRejectsOverflowBeforeAnyColonyMutation() {
         final GoodsProductionStats stats = new GoodsProductionStats(
-                GoodsType.CORN);
+                GoodsType.GRAIN);
         stats.setInWarehouseBefore(Integer.MAX_VALUE);
         stats.addRowProduction(1);
         assertThrows(ArithmeticException.class, stats::getInWarehouseAfter);

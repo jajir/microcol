@@ -30,12 +30,12 @@ public class GoodsTradeTest {
     public void test_getAvailableAmountFor(final int sellPrice,
             final int buyPrice, final int availableGold,
             final int expectedAmount) throws Exception {
-        final GoodsTrade gt = new GoodsTrade(GoodsType.CIGARS, sellPrice,
+        final GoodsTrade gt = new GoodsTrade(GoodsType.WINE, sellPrice,
                 buyPrice);
 
         final Goods ga = gt.getAvailableAmountFor(availableGold);
 
-        assertEquals(GoodsType.CIGARS, ga.getType());
+        assertEquals(GoodsType.WINE, ga.getType());
         assertEquals(expectedAmount, ga.getAmount());
     }
 

@@ -18,14 +18,14 @@ import com.google.gson.JsonObject;
 /**
  * Scoped runtime fixture for special-resource scenarios. It derives a prepared
  * copy of the shared F01 scenario and authors two resources east of Delft: a
- * prime sugar land on the colony's east field, which the Delft worker leaves,
+ * prime olives land on the colony's east field, which the Delft worker leaves,
  * and a game area one square further east. The shared F01 file keeps its
  * content.
  */
 final class ResourceFixture {
 
-    /** Delft's east field: grassland with a prime sugar cane resource. */
-    static final Location SUGAR_LOCATION = Location.of(23, 12);
+    /** Delft's east field: grassland with a prime olives resource. */
+    static final Location OLIVES_LOCATION = Location.of(23, 12);
 
     /**
      * Grassland two squares east of Delft: a game area, unexplored in tests.
@@ -43,7 +43,7 @@ final class ResourceFixture {
      * @param context  running application context
      * @param source   shared scenario
      * @param name     file name of the prepared copy
-     * @param workerId unit that worked the sugar square
+     * @param workerId unit that worked the olives square
      */
     static void prepare(final TestContext context, final File source,
             final String name, final int workerId) throws IOException {
@@ -54,7 +54,7 @@ final class ResourceFixture {
         final JsonObject map = model.getAsJsonObject("map");
         final JsonArray resources = RoadFixture
                 .emptyRows(map.getAsJsonArray("trees"));
-        RoadFixture.set(resources, SUGAR_LOCATION, "ps");
+        RoadFixture.set(resources, OLIVES_LOCATION, "ps");
         RoadFixture.set(resources, GAME_LOCATION, "ga");
         map.add("resources", resources);
         final File prepared = new File(System.getProperty("user.home"), name);

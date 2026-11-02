@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="160" viewBox="0 0 320 160" role="img" aria-labelledby="title description">
-<title id="title">Rum Distillers House — Lehký nadhled</title>
-<desc id="description">Palírna; level 1. Editable flat vector drawing after selected proposal 8, R-0361. Transparent background, simple hand-drawn contours and a narrow side view.</desc>
+<title id="title">Small Oil Press — Lehký nadhled</title>
+<desc id="description">Olivový olej (R-0394 symbol from the approved R-0384 olive oil vector); level 1. Editable flat vector drawing after selected proposal 8, R-0361. Transparent background, simple hand-drawn contours and a narrow side view.</desc>
 <g id="pen-outline" stroke="#3e3b31" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round">
 <g id="building">
 <g id="open-shelter">
@@ -10,8 +10,11 @@
 <path id="shape-004" d="M79 74 Q135.10 61.97 191 49 Q208.12 54.67 225 61 Q167.89 73.53 111 87 Q94.87 80.82 79 74 Z" fill="#b5754c"/>
 </g>
 <g id="profession-equipment">
-<path id="shape-005" d="M145 122 L145 114 Q152 106 159 114 L159 122 Q178 134 161 148 L143 148 Q129 132 145 122 Z" fill="#b5754c"/>
-<path id="shape-006" d="M152 111 C150 92 165 96 175 108 L181 112 L178 116 Q163 101 159 107 L158 113 Z" fill="#b5754c"/>
+<g id="olive-oil-symbol" transform="translate(132.56 97.56) scale(0.7324)" stroke-width="4.23">
+<g id="handle"><path d="M42 17 C63 9 64 36 46 39 L43 32 C54 31 55 19 44 24 Z" fill="#e7b65a"/></g>
+<g id="jug"><path d="M21 8 Q30 6 40 8 L39 22 Q51 31 49 46 Q47 57 33 58 Q16 59 13 45 Q10 32 23 23 Z" fill="#e7b65a"/><path d="M23 9 Q31 12 39 9" fill="none"/></g>
+<g id="contents-symbol"><path d="M24 44 Q25 30 40 29 Q37 43 24 44 Z" fill="#87934c"/></g>
+</g>
 <path id="shape-007" d="M194 120 Q202.0 116 210 120 Q216 132.5 210 145 Q202.0 148 194 145 Q188 132.5 194 120 Z" fill="#bd8e50"/>
 <path id="shape-008" d="M192 128 Q202.00 128.48 212 128" fill="none"/>
 <path id="shape-009" d="M192 137 Q202.00 137.48 212 137" fill="none"/>

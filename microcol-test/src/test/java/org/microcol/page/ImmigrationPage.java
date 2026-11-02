@@ -15,12 +15,12 @@ public final class ImmigrationPage extends AbstractScreen {
         super(context);
     }
 
-    public void verifyProgress(String expected, int crosses, int target,
+    public void verifyProgress(String expected, int torches, int target,
             boolean pending) {
         Player player = getModel().getPlayerByName("Dutch");
         assertEquals(expected,
                 getLabeledById("immigration-progress").getText());
-        assertEquals(crosses, player.getImmigrationCrosses());
+        assertEquals(torches, player.getImmigrationTorches());
         assertEquals(target, player.getImmigrationTarget());
         assertEquals(pending, player.hasPendingImmigrant());
     }

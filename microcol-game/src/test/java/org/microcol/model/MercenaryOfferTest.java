@@ -556,7 +556,7 @@ class MercenaryOfferTest {
             assertSame(dutch, soldier.getOwner());
             assertEquals(UnitType.VETERAN_SOLDIER, soldier.getType());
             assertTrue(soldier.isVeteran());
-            assertTrue(soldier.isHoldingGuns());
+            assertTrue(soldier.isHoldingWeapons());
             // Paid mercenaries are not Continentals of the intervention.
             assertEquals(MilitaryRole.COLONIAL, soldier.getMilitaryRole());
             assertFalse(soldier.isInterventionDelivered());

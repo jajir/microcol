@@ -28,7 +28,7 @@ public class TC_70_F61_brewster_test extends AbstractMicroColTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         CongressPage congress = new CongressPage(getContext());
         BrewsterPage brewster = new BrewsterPage(getContext());
-        // Select Brewster and earn his arrival through ordinary bell
+        // Select Brewster and earn his arrival through ordinary owl
         // production.
         congress.open();
         congress.select(Founder.WILLIAM_BREWSTER);
@@ -59,7 +59,7 @@ public class TC_70_F61_brewster_test extends AbstractMicroColTest {
         brewster.captureDialog("recruitment-dialog", "brewster-english.png");
         brewster.rememberPool();
         brewster.deferChoice();
-        // Reopening the deferred chooser preserves all candidates and crosses.
+        // Reopening the deferred chooser preserves all candidates and torches.
         recruitment.open();
         brewster.verifyPoolUnchanged();
         brewster.deferChoice();
@@ -69,7 +69,7 @@ public class TC_70_F61_brewster_test extends AbstractMicroColTest {
         brewster.continuePending();
         brewster.verifyWaiting(230, 0, List.of(1, 2, 3), "Choose for free");
         brewster.verifyPoolUnchanged();
-        // One choice uses 100 crosses and only replaces the selected slot.
+        // One choice uses 100 torches and only replaces the selected slot.
         recruitment.confirm(1);
         brewster.verifyWaiting(130, 1, List.of(1, 4, 3), "Choose for free");
         brewster.rememberPool();
@@ -80,7 +80,7 @@ public class TC_70_F61_brewster_test extends AbstractMicroColTest {
         brewster.verifyWaiting(130, 1, List.of(1, 4, 3), "Choose for free");
         brewster.verifyPoolUnchanged();
         // The second choice uses 125; only now do the chapel produces one
-        // cross.
+        // torch.
         recruitment.confirm(2);
         brewster.finishArrivalReport();
         brewster.verifyCompleted(6, 2, 1, UnitType.MASTER_CARPENTER,

@@ -59,7 +59,7 @@ class CoastalPortMovementTest {
                                 ? 6
                                 : null);
                 field.setProducedGoodsType(
-                        field.getWorkerId() == null ? null : GoodsType.CORN);
+                        field.getWorkerId() == null ? null : GoodsType.GRAIN);
             }
         }
         final java.util.Set<Location> trees = data.getModel().getMap()
@@ -73,7 +73,7 @@ class CoastalPortMovementTest {
         data.getModel().getColonies().stream()
                 .flatMap(colony -> colony.getColonyFields().stream())
                 .filter(field -> field.getWorkerId() != null)
-                .forEach(field -> field.setProducedGoodsType(GoodsType.CORN));
+                .forEach(field -> field.setProducedGoodsType(GoodsType.GRAIN));
         final UnitPo ship = data.getModel().getUnits().stream()
                 .filter(u -> u.getId() == 3).findFirst().orElseThrow();
         ship.setPlaceHighSeas(null);

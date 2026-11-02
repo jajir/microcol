@@ -42,7 +42,7 @@ class TurnPreparationActionTest {
                 "/maps/default-campaign-mission-2-thrive.microcol");
         data.getModel().getCalendar().setStartYear(1700);
         data.getModel().getCalendar().setNumberOfPlayedTurns(10);
-        data.getModel().getColonies().get(1).getColonyWarehouse().put("CORN",
+        data.getModel().getColonies().get(1).getColonyWarehouse().put("GRAIN",
                 200);
         data.getModel().getColonies().get(0).getColonyWarehouse().put("TOOLS",
                 0);
@@ -128,13 +128,13 @@ class TurnPreparationActionTest {
         final Cargo cargo = ((UnitWithCargo) model.getUnitById(3)).getCargo();
         final CargoSlot target = cargo.getSlotByIndex(0);
         final CargoSlot source = cargo.getSlotByIndex(4);
-        final Goods corn = Goods.of(GoodsType.CORN, 1);
+        final Goods grain = Goods.of(GoodsType.GRAIN, 1);
         final Goods ore = Goods.of(GoodsType.ORE, 1);
         switch (name) {
         case "buy":
-            return () -> player.buyGoods(corn);
+            return () -> player.buyGoods(grain);
         case "sell":
-            return () -> player.sellGoods(corn);
+            return () -> player.sellGoods(grain);
         case "rename":
             return () -> model.renameColony(player, colony, "Prepared colony");
         case "independence":
@@ -152,19 +152,19 @@ class TurnPreparationActionTest {
             return () -> queue
                     .moveItemAtTheEnd(queue.getBuildingQueue().get(0));
         case "cargo-buy":
-            return () -> target.buyAndStoreFromEuropePort(corn);
+            return () -> target.buyAndStoreFromEuropePort(grain);
         case "cargo-sell":
             return () -> model.sellGoods(source, ore);
         case "cargo-transfer":
             return () -> target.storeFromCargoSlot(ore, source);
         case "warehouse-load":
-            return () -> target.storeFromColonyWarehouse(corn, colony);
+            return () -> target.storeFromColonyWarehouse(grain, colony);
         case "warehouse-unload":
             return () -> colony.getWarehouse().moveToWarehouse(ore, source);
         case "field":
             return () -> unit.placeToColonyField(
                     colony.getColonyFieldInDirection(Direction.north),
-                    GoodsType.CORN);
+                    GoodsType.GRAIN);
         case "indoor":
             return () -> unit.placeToColonyStructureSlot(
                     colony.getConstructionByType(ConstructionType.TOWN_HALL)
@@ -178,7 +178,7 @@ class TurnPreparationActionTest {
             return () -> model.getUnitById(0).placeToMap(colony.getLocation());
         case "crop":
             return () -> colony.getColonyFieldInDirection(Direction.west)
-                    .setProducedGoodsType(GoodsType.CORN);
+                    .setProducedGoodsType(GoodsType.GRAIN);
         case "action":
             return () -> model.getUnitById(PLOWER_ID)
                     .setActionType(UnitActionType.plowField);

@@ -94,7 +94,7 @@ class NativeRelationsPressureTest {
 
     @Test
     void armedRadiusIsTwoWhileResidentRadiusFollowsTheClass() {
-        // A camp ignores a resident two squares away but not its musket.
+        // A camp ignores a resident two squares away but not its weapon.
         assertRelations(
                 dutchWith(NativeNation.TUPI, UnitType.COLONIST, SOLDIER, 2, 0),
                 DUTCH, NativeNation.TUPI, 2.0, 0.1);
@@ -118,7 +118,7 @@ class NativeRelationsPressureTest {
     }
 
     @Test
-    void ranksToolsAndHorsesWithoutMusketsAreOnlyResidents() {
+    void ranksToolsAndHorsesWithoutWeaponsAreOnlyResidents() {
         assertRelations(
                 dutchWith(NativeNation.AZTEC, UnitType.COLONIST,
                         UNARMED_VETERAN, 1, 0),

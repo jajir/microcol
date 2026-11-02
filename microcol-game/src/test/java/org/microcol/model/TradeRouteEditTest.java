@@ -149,11 +149,11 @@ class TradeRouteEditTest {
         model.assignTradeRoute(free, oreCart, 1);
 
         final TradeRoute edited = model.configureTradeRouteStopCargo(dutch,
-                oreCart, 0, List.of(GoodsType.ORE), List.of(GoodsType.MUSKET));
+                oreCart, 0, List.of(GoodsType.ORE), List.of(GoodsType.WEAPONS));
 
         assertEquals(oreCart.getId(), edited.getId());
         assertEquals(ORE_CART, edited.getName());
-        assertEquals(List.of(GoodsType.MUSKET),
+        assertEquals(List.of(GoodsType.WEAPONS),
                 edited.getStops().get(0).getLoadGoods());
         final TradeRouteAssignment assignment = model
                 .getTradeRouteAssignment(free).orElseThrow();

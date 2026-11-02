@@ -81,17 +81,18 @@ public final class EquipmentPage extends AbstractScreen {
                 getLabeledById("equipmentCost").getText().contains(expected));
     }
 
-    public void verifyState(final int muskets, final int horses,
+    public void verifyState(final int weapons, final int horses,
             final int tools, final boolean armed, final boolean mounted,
             final int heldTools) {
         final UnitFreeColonist unit = (UnitFreeColonist) getModel()
                 .getUnitById(4);
         final org.microcol.model.ColonyWarehouse warehouse = getModel()
                 .getColonyAt(Location.of(24, 16)).orElseThrow().getWarehouse();
-        assertEquals(muskets, warehouse.getGoods(GoodsType.MUSKET).getAmount());
+        assertEquals(weapons,
+                warehouse.getGoods(GoodsType.WEAPONS).getAmount());
         assertEquals(horses, warehouse.getGoods(GoodsType.HORSE).getAmount());
         assertEquals(tools, warehouse.getGoods(GoodsType.TOOLS).getAmount());
-        assertEquals(armed, unit.isHoldingGuns());
+        assertEquals(armed, unit.isHoldingWeapons());
         assertEquals(mounted, unit.isMounted());
         assertEquals(heldTools, unit.getTools());
         assertEquals(UnitType.COLONIST, unit.getType());

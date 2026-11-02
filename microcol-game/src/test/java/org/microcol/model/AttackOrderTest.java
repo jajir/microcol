@@ -33,8 +33,8 @@ class AttackOrderTest {
         defender = (UnitFreeColonist) model.getUnitById(6);
         attacker.placeToLocation(Location.of(18, 10));
         defender.placeToLocation(Location.of(17, 11));
-        attacker.setHoldingGuns(true);
-        defender.setHoldingGuns(true);
+        attacker.setHoldingWeapons(true);
+        defender.setHoldingWeapons(true);
         attacker.getOwner().revealMapForUnit(attacker);
     }
 
@@ -79,7 +79,7 @@ class AttackOrderTest {
             defender.placeToLocation(Location.of(17, 12));
             break;
         case "disarmed":
-            attacker.setHoldingGuns(false);
+            attacker.setHoldingWeapons(false);
             break;
         case "spent":
             attacker.setActionPoints(0);
@@ -154,7 +154,7 @@ class AttackOrderTest {
         assertEquals(origin, attacker.getLocation());
         assertEquals(target, defender.getLocation());
         assertEquals(0, lost.getActionPoints());
-        assertFalse(((UnitFreeColonist) lost).isHoldingGuns());
+        assertFalse(((UnitFreeColonist) lost).isHoldingWeapons());
         assertEquals(0, survivor.getActionPoints());
         final String after = snapshot();
         assertThrows(IllegalStateException.class, order::execute);
@@ -165,7 +165,7 @@ class AttackOrderTest {
         final Unit continued = restored.getUnitById(survivor.getId());
         assertEquals(0, continued.getActionPoints());
         assertFalse(((UnitFreeColonist) restored.getUnitById(lost.getId()))
-                .isHoldingGuns());
+                .isHoldingWeapons());
         assertEquals(EuropeanRelationState.WAR,
                 restored.getEuropeanRelation(restored.getPlayerByName("Dutch"),
                         restored.getPlayerByName("France")));

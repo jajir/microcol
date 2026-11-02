@@ -92,11 +92,10 @@ class LasCasasConvertTest {
         }
     }
 
-    private static CongressPo congress(final Founder selected,
-            final int bells) {
+    private static CongressPo congress(final Founder selected, final int owls) {
         final CongressPo po = Congress.initial();
         po.setActivated(true);
-        po.setBells(bells);
+        po.setOwls(owls);
         po.setMembers(List.of());
         po.setCandidates(OFFER);
         po.setSelected(selected);
@@ -104,13 +103,13 @@ class LasCasasConvertTest {
         return po;
     }
 
-    private static Model load(final Founder selected, final int bells,
+    private static Model load(final Founder selected, final int owls,
             final Consumer<ModelPo> edit) {
         final GameModelPo data = new GameModelPoDao().loadFromClassPath(MAP);
         for (final PlayerPo player : data.getModel().getGameManager()
                 .getPlayers()) {
             if (player.getName().equals(DUTCH_NAME)) {
-                player.setCongress(congress(selected, bells));
+                player.setCongress(congress(selected, owls));
             }
         }
         edit.accept(data.getModel());
@@ -152,8 +151,8 @@ class LasCasasConvertTest {
         return unit;
     }
 
-    private static Scene scene(final Founder selected, final int bells) {
-        final Model model = load(selected, bells, po -> {
+    private static Scene scene(final Founder selected, final int owls) {
+        final Model model = load(selected, owls, po -> {
             asConvert(po, PASSENGER);
             po.getUnits().add(foreignConvert());
         });
@@ -166,12 +165,12 @@ class LasCasasConvertTest {
         inField.setActionPoints(inField.getSpeed());
         final ColonyField field = colony.getColonyFields().stream()
                 .filter(candidate -> candidate.isValid()
-                        && candidate.canAccept(inField, GoodsType.CORN)
+                        && candidate.canAccept(inField, GoodsType.GRAIN)
                         && candidate.getPotentialProduction(ordinary,
-                                GoodsType.CORN, PoliticalProduction.NONE)
+                                GoodsType.GRAIN, PoliticalProduction.NONE)
                                 .getAmount() > 0)
                 .findFirst().orElseThrow();
-        inField.placeToColonyField(field, GoodsType.CORN);
+        inField.placeToColonyField(field, GoodsType.GRAIN);
         final UnitFreeColonist inBuilding = convertAt(model, colony);
         inBuilding.setActionPoints(inBuilding.getSpeed());
         final ConstructionSlot slot = colony
@@ -292,18 +291,18 @@ class LasCasasConvertTest {
         // leaves the convert rule as the only difference.
         PoliticalProduction political = colony.getPoliticalProduction();
         final int base = scene.field.getPotentialProduction(scene.ordinary,
-                GoodsType.CORN, political).getAmount();
-        final int ordinaryBell = scene.slot
+                GoodsType.GRAIN, political).getAmount();
+        final int ordinaryOwl = scene.slot
                 .getPotentialProduction(scene.ordinary, political).getAmount();
-        assertTrue(ordinaryBell > 0);
+        assertTrue(ordinaryOwl > 0);
         // Before the join: outdoor +1 and indoor -1 apply to the convert, in
         // the preview and in the live output of the resident worker.
         assertEquals(base + NativeConversion.OUTDOOR_BONUS,
                 scene.field.getPotentialProduction(scene.inField,
-                        GoodsType.CORN, political).getAmount());
+                        GoodsType.GRAIN, political).getAmount());
         assertEquals(base + NativeConversion.OUTDOOR_BONUS,
                 scene.field.getProduction().orElseThrow().getAmount());
-        assertEquals(ordinaryBell - NativeConversion.INDOOR_PENALTY,
+        assertEquals(ordinaryOwl - NativeConversion.INDOOR_PENALTY,
                 scene.slot.getPotentialProduction(scene.inBuilding, political)
                         .getAmount());
         assertFalse(ConstructionSlot.isWorkAllowed(scene.inBuilding,
@@ -311,15 +310,15 @@ class LasCasasConvertTest {
 
         assertTrue(dutch.startTurn());
 
-        // The update credited its own bells, so read the snapshot again; both
+        // The update credited its own owls, so read the snapshot again; both
         // workers are measured against it.
         political = colony.getPoliticalProduction();
         final int ordinaryField = scene.field.getPotentialProduction(
-                scene.ordinary, GoodsType.CORN, political).getAmount();
+                scene.ordinary, GoodsType.GRAIN, political).getAmount();
         assertSame(scene.inField, scene.field.getUnit().orElseThrow());
         assertEquals(ordinaryField,
                 scene.field.getPotentialProduction(scene.inField,
-                        GoodsType.CORN, political).getAmount());
+                        GoodsType.GRAIN, political).getAmount());
         assertEquals(ordinaryField,
                 scene.field.getProduction().orElseThrow().getAmount());
         assertSame(scene.inBuilding, scene.slot.getUnit());

@@ -112,8 +112,8 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
         mainPane.requestFocus();
         final UnitFreeColonist colonist = (UnitFreeColonist) unit;
         contextMenu.getItems().clear();
-        addEquipmentChoice(colonist, GoodsType.MUSKET,
-                !colonist.isHoldingGuns());
+        addEquipmentChoice(colonist, GoodsType.WEAPONS,
+                !colonist.isHoldingWeapons());
         addEquipmentChoice(colonist, GoodsType.HORSE, !colonist.isMounted());
         addEquipmentChoice(colonist, GoodsType.TOOLS,
                 !colonist.isHoldingTools());

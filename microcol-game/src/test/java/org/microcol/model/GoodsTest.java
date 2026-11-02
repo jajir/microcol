@@ -17,33 +17,34 @@ public class GoodsTest {
 
     @Test
     void verify_of_with_no_goods() throws Exception {
-        final Goods corn = Goods.of(GoodsType.CORN);
+        final Goods grain = Goods.of(GoodsType.GRAIN);
 
-        assertEquals(GoodsType.CORN, corn.getType());
-        assertEquals(0, corn.getAmount());
+        assertEquals(GoodsType.GRAIN, grain.getType());
+        assertEquals(0, grain.getAmount());
     }
 
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 10, 100, 200, 10000 })
-    void verify_parametrized_amount_of_corn(final int amount) throws Exception {
-        final Goods corn = Goods.of(GoodsType.CORN, amount);
+    void verify_parametrized_amount_of_grain(final int amount)
+            throws Exception {
+        final Goods grain = Goods.of(GoodsType.GRAIN, amount);
 
-        assertEquals(GoodsType.CORN, corn.getType());
-        assertEquals(amount, corn.getAmount());
+        assertEquals(GoodsType.GRAIN, grain.getType());
+        assertEquals(amount, grain.getAmount());
         if (amount == 0) {
-            assertTrue(corn.isZero());
-            assertFalse(corn.isNotZero());
+            assertTrue(grain.isZero());
+            assertFalse(grain.isNotZero());
         } else {
-            assertFalse(corn.isZero());
-            assertTrue(corn.isNotZero());
+            assertFalse(grain.isZero());
+            assertTrue(grain.isNotZero());
         }
     }
 
     @Test
-    void verify_of_minus_10_corns() throws Exception {
+    void verify_of_minus_10_grain() throws Exception {
         final IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> Goods.of(GoodsType.CORN, -10));
+                () -> Goods.of(GoodsType.GRAIN, -10));
 
         assertEquals("Amount (-10) can't be less than zero",
                 exception.getMessage());
@@ -54,26 +55,26 @@ public class GoodsTest {
                 arguments(37, 17, 20), arguments(100, 100, 0));
     }
 
-    @ParameterizedTest(name = "{index}: Corn {0} minus {1} = {2}")
+    @ParameterizedTest(name = "{index}: Grain {0} minus {1} = {2}")
     @MethodSource("substractData")
     void verify_substract(int item1, int item2, int item) throws Exception {
-        final Goods corn1 = Goods.of(GoodsType.CORN, item1);
-        final Goods corn2 = Goods.of(GoodsType.CORN, item2);
+        final Goods grain1 = Goods.of(GoodsType.GRAIN, item1);
+        final Goods grain2 = Goods.of(GoodsType.GRAIN, item2);
 
-        final Goods corn = corn1.substract(corn2);
-        assertEquals(item, corn.getAmount());
+        final Goods grain = grain1.substract(grain2);
+        assertEquals(item, grain.getAmount());
     }
 
     @Test
     void verify_that_different_goods_cant_be_substract() throws Exception {
-        final Goods corn1 = Goods.of(GoodsType.CORN, 34);
-        final Goods corn2 = Goods.of(GoodsType.TOBACCO, 5);
+        final Goods grain1 = Goods.of(GoodsType.GRAIN, 34);
+        final Goods grain2 = Goods.of(GoodsType.GRAPES, 5);
 
         final IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class, () -> corn1.substract(corn2));
+                IllegalArgumentException.class, () -> grain1.substract(grain2));
 
         assertEquals(
-                "Substracted goods have differet type (Goods{GoodsType=TOBACCO, amount=5}) from current one (Goods{GoodsType=CORN, amount=34})",
+                "Substracted goods have differet type (Goods{GoodsType=GRAPES, amount=5}) from current one (Goods{GoodsType=GRAIN, amount=34})",
                 exception.getMessage());
     }
 
@@ -82,50 +83,50 @@ public class GoodsTest {
                 arguments(37, 17, 54), arguments(100, 100, 200));
     }
 
-    @ParameterizedTest(name = "{index}: Corn {0} plus {1} = {2}")
+    @ParameterizedTest(name = "{index}: Grain {0} plus {1} = {2}")
     @MethodSource("addData")
     void verify_add(int item1, int item2, int item) throws Exception {
-        final Goods corn1 = Goods.of(GoodsType.CORN, item1);
-        final Goods corn2 = Goods.of(GoodsType.CORN, item2);
+        final Goods grain1 = Goods.of(GoodsType.GRAIN, item1);
+        final Goods grain2 = Goods.of(GoodsType.GRAIN, item2);
 
-        final Goods corn = corn1.add(corn2);
-        assertEquals(item, corn.getAmount());
+        final Goods grain = grain1.add(grain2);
+        assertEquals(item, grain.getAmount());
     }
 
     @Test
     void foodAdditionRejectsUnrepresentableAmount() {
         assertEquals(Integer.MAX_VALUE,
-                Goods.of(GoodsType.CORN, Integer.MAX_VALUE - 1)
-                        .add(Goods.of(GoodsType.CORN, 1)).getAmount());
+                Goods.of(GoodsType.GRAIN, Integer.MAX_VALUE - 1)
+                        .add(Goods.of(GoodsType.GRAIN, 1)).getAmount());
         assertThrows(IllegalArgumentException.class,
-                () -> Goods.of(GoodsType.CORN, Integer.MAX_VALUE)
-                        .add(Goods.of(GoodsType.CORN, 1)));
+                () -> Goods.of(GoodsType.GRAIN, Integer.MAX_VALUE)
+                        .add(Goods.of(GoodsType.GRAIN, 1)));
     }
 
     @Test
     void verify_that_different_goods_cant_be_add() throws Exception {
-        final Goods corn1 = Goods.of(GoodsType.CORN, 34);
-        final Goods corn2 = Goods.of(GoodsType.TOBACCO, 5);
+        final Goods grain1 = Goods.of(GoodsType.GRAIN, 34);
+        final Goods grain2 = Goods.of(GoodsType.GRAPES, 5);
 
         final IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class, () -> corn1.add(corn2));
+                IllegalArgumentException.class, () -> grain1.add(grain2));
 
         assertEquals(
-                "Added goods have differet type (Goods{GoodsType=TOBACCO, amount=5}) from current one (Goods{GoodsType=CORN, amount=34})",
+                "Added goods have differet type (Goods{GoodsType=GRAPES, amount=5}) from current one (Goods{GoodsType=GRAIN, amount=34})",
                 exception.getMessage());
     }
 
     @Test
     void verify_equals() throws Exception {
-        assertFalse(Goods.of(GoodsType.CORN, 34).equals(null));
-        assertFalse(Goods.of(GoodsType.CORN, 34)
-                .equals(Goods.of(GoodsType.TOBACCO, 5)));
-        assertFalse(Goods.of(GoodsType.CORN, 34)
-                .equals(Goods.of(GoodsType.CORN, 5)));
-        assertTrue(Goods.of(GoodsType.CORN, 34)
-                .equals(Goods.of(GoodsType.CORN, 34)));
-        assertTrue(Goods.of(GoodsType.CORN, 0)
-                .equals(Goods.of(GoodsType.CORN, 0)));
+        assertFalse(Goods.of(GoodsType.GRAIN, 34).equals(null));
+        assertFalse(Goods.of(GoodsType.GRAIN, 34)
+                .equals(Goods.of(GoodsType.GRAPES, 5)));
+        assertFalse(Goods.of(GoodsType.GRAIN, 34)
+                .equals(Goods.of(GoodsType.GRAIN, 5)));
+        assertTrue(Goods.of(GoodsType.GRAIN, 34)
+                .equals(Goods.of(GoodsType.GRAIN, 34)));
+        assertTrue(Goods.of(GoodsType.GRAIN, 0)
+                .equals(Goods.of(GoodsType.GRAIN, 0)));
     }
 
 }

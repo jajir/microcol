@@ -25,7 +25,7 @@
         },
         "movementThirds": 0,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -43,7 +43,7 @@
         },
         "movementThirds": 0,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -75,7 +75,7 @@
         },
         "movementThirds": 0,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       }
     ],
@@ -194,7 +194,7 @@
       "maxY": 30,
       "seed": 134
     },
-    "europe": {"markets": {"DUTCH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "FRENCH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "ENGLISH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "SPANISH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}}},
+    "europe": {"markets": {"DUTCH": {"GRAIN": [2,0,0], "OLIVES": [3,0,0], "GRAPES": [3,0,0], "WOOL": [3,0,0], "CLAY": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "OLIVE_OIL": [11,0,0], "WINE": [11,0,0], "CLOTH": [11,0,0], "AMPHORAE": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "WEAPONS": [2,0,0]}, "FRENCH": {"GRAIN": [2,0,0], "OLIVES": [3,0,0], "GRAPES": [3,0,0], "WOOL": [3,0,0], "CLAY": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "OLIVE_OIL": [11,0,0], "WINE": [11,0,0], "CLOTH": [11,0,0], "AMPHORAE": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "WEAPONS": [2,0,0]}, "ENGLISH": {"GRAIN": [2,0,0], "OLIVES": [3,0,0], "GRAPES": [3,0,0], "WOOL": [3,0,0], "CLAY": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "OLIVE_OIL": [11,0,0], "WINE": [11,0,0], "CLOTH": [11,0,0], "AMPHORAE": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "WEAPONS": [2,0,0]}, "SPANISH": {"GRAIN": [2,0,0], "OLIVES": [3,0,0], "GRAPES": [3,0,0], "WOOL": [3,0,0], "CLAY": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "OLIVE_OIL": [11,0,0], "WINE": [11,0,0], "CLOTH": [11,0,0], "AMPHORAE": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "WEAPONS": [2,0,0]}}},
     "focusedField": {
       "x": 45,
       "y": 15
@@ -215,13 +215,13 @@
           },
           "congress": {
             "activated": false,
-            "bells": 0,
+            "owls": 0,
             "members": [],
             "candidates": [],
             "generation": 0,
             "jonesDeliveryPending": false
           },
-          "recruitment": {"pendingEarnedChoice": false,"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"crosses":0,"earnedImmigrants":0},
+          "recruitment": {"pendingEarnedChoice": false,"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"torches":0,"earnedImmigrants":0},
           "name": "Dutch",
           "computer": false,
           "gold": 2108,

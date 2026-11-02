@@ -212,7 +212,7 @@ public final class EuropePanel
                 .get(earnedChoice ? Europe.earnedOpen : Europe.recruitOpen));
         immigration
                 .setText(i18n.get(Europe.immigrationProgress,
-                        player.getImmigrationCrosses(), player
+                        player.getImmigrationTorches(), player
                                 .getImmigrationTarget())
                         + (player.hasPendingImmigrant()
                                 ? "\n" + i18n

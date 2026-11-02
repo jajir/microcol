@@ -23,8 +23,9 @@ import org.microcol.model.unit.UnitWithCargo;
 /**
  * Turn notices of goods that a trade route actually moved (R-0392), on the
  * shared F108 scenario. Dutch's galleon 3 stands in the port of Delft (colony
- * 1) with [ORE 60, RUM 100, passenger, SUGAR 100, TOBACCO 100, COTTON 100].
- * Delft's warehouse holds CORN 100, HORSE 50, MUSKET 50 and no ORE or RUM.
+ * 1) with [ORE 60, OLIVE_OIL 100, passenger, OLIVES 100, GRAPES 100, WOOL 100].
+ * Delft's warehouse holds GRAIN 100, HORSE 50, WEAPONS 50 and no ORE or
+ * OLIVE_OIL.
  */
 class TradeRouteTurnEventTest {
 
@@ -153,23 +154,23 @@ class TradeRouteTurnEventTest {
     void colonyUnloadAndLoadAreReportedInOrderWithoutGold() {
         final World w = new World();
         final TradeRoute route = w.route("Coast", DELFT_STOP,
-                List.of(GoodsType.ORE, GoodsType.CIGARS, GoodsType.RUM),
-                List.of(GoodsType.HORSE, GoodsType.MUSKET, GoodsType.CORN));
+                List.of(GoodsType.ORE, GoodsType.WINE, GoodsType.OLIVE_OIL),
+                List.of(GoodsType.HORSE, GoodsType.WEAPONS, GoodsType.GRAIN));
         final int gold = w.dutch.getGold();
 
         w.arrive(route, DELFT_STOP);
 
-        // Cigars are not on board and corn finds no third free hold: no row.
+        // Wine are not on board and grain finds no third free hold: no row.
         final List<TurnEventTradeRouteTransfer> notices = w.notices();
         assertEquals(4, notices.size());
         verifyNotice(notices.get(0), route, DELFT_STOP, true,
                 Goods.of(GoodsType.ORE, 60), 0);
         verifyNotice(notices.get(1), route, DELFT_STOP, true,
-                Goods.of(GoodsType.RUM, 100), 0);
+                Goods.of(GoodsType.OLIVE_OIL, 100), 0);
         verifyNotice(notices.get(2), route, DELFT_STOP, false,
                 Goods.of(GoodsType.HORSE, 50), 0);
         verifyNotice(notices.get(3), route, DELFT_STOP, false,
-                Goods.of(GoodsType.MUSKET, 50), 0);
+                Goods.of(GoodsType.WEAPONS, 50), 0);
         notices.forEach(TradeRouteTurnEventTest::verifyDelft);
         assertEquals(gold, w.dutch.getGold());
         // Only the owner of the carrier receives the notices.
@@ -184,10 +185,10 @@ class TradeRouteTurnEventTest {
         w.putShipInEurope();
         w.slot(0).removeCargo(Goods.of(GoodsType.ORE, 60));
         w.dutch.setGold(100000);
-        final TradeRoute route = w.route("Rum Run", EUROPE_STOP,
-                List.of(GoodsType.RUM), List.of(GoodsType.MUSKET));
+        final TradeRoute route = w.route("Oil Run", EUROPE_STOP,
+                List.of(GoodsType.OLIVE_OIL), List.of(GoodsType.WEAPONS));
         final int sale = w.dutch
-                .quoteEuropeTrade(Goods.of(GoodsType.RUM, 100), false)
+                .quoteEuropeTrade(Goods.of(GoodsType.OLIVE_OIL, 100), false)
                 .getTotal();
 
         final TradeRouteStopResult result = w.arrive(route, EUROPE_STOP);
@@ -195,9 +196,9 @@ class TradeRouteTurnEventTest {
         final List<TurnEventTradeRouteTransfer> notices = w.notices();
         assertEquals(2, notices.size());
         verifyNotice(notices.get(0), route, EUROPE_STOP, true,
-                Goods.of(GoodsType.RUM, 100), sale);
+                Goods.of(GoodsType.OLIVE_OIL, 100), sale);
         verifyNotice(notices.get(1), route, EUROPE_STOP, false,
-                Goods.of(GoodsType.MUSKET, 200),
+                Goods.of(GoodsType.WEAPONS, 200),
                 result.getTransfers().get(1).getGoldChange());
         notices.forEach(TradeRouteTurnEventTest::verifyEurope);
         assertTrue(sale > 0);
@@ -212,9 +213,9 @@ class TradeRouteTurnEventTest {
         final World w = new World();
         w.putShipInEurope();
         w.slot(0).removeCargo(Goods.of(GoodsType.ORE, 60));
-        w.slot(0).addGoods(Goods.of(GoodsType.RUM, 50));
-        final TradeRoute route = w.route("Rum Run", EUROPE_STOP,
-                List.of(GoodsType.RUM), List.of());
+        w.slot(0).addGoods(Goods.of(GoodsType.OLIVE_OIL, 50));
+        final TradeRoute route = w.route("Oil Run", EUROPE_STOP,
+                List.of(GoodsType.OLIVE_OIL), List.of());
         final int gold = w.dutch.getGold();
 
         final TradeRouteStopResult result = w.arrive(route, EUROPE_STOP);
@@ -222,7 +223,7 @@ class TradeRouteTurnEventTest {
         final List<TurnEventTradeRouteTransfer> notices = w.notices();
         assertEquals(1, notices.size());
         verifyNotice(notices.get(0), route, EUROPE_STOP, true,
-                Goods.of(GoodsType.RUM, 150),
+                Goods.of(GoodsType.OLIVE_OIL, 150),
                 result.getTransfers().get(0).getGoldChange());
         assertEquals(gold + notices.get(0).getGoldChange(), w.dutch.getGold());
     }
@@ -232,11 +233,11 @@ class TradeRouteTurnEventTest {
         final World w = new World();
         w.putShipInEurope();
         w.slot(0).removeCargo(Goods.of(GoodsType.ORE, 60));
-        w.slot(1).removeCargo(Goods.of(GoodsType.RUM, 100));
+        w.slot(1).removeCargo(Goods.of(GoodsType.OLIVE_OIL, 100));
         final TradeRoute route = w.route("Arms", EUROPE_STOP, List.of(),
-                List.of(GoodsType.MUSKET, GoodsType.HORSE));
+                List.of(GoodsType.WEAPONS, GoodsType.HORSE));
         final int money = w.dutch
-                .quoteEuropeTrade(Goods.of(GoodsType.MUSKET, 40), true)
+                .quoteEuropeTrade(Goods.of(GoodsType.WEAPONS, 40), true)
                 .getTotal();
         w.dutch.setGold(money);
 
@@ -246,7 +247,7 @@ class TradeRouteTurnEventTest {
         final List<TurnEventTradeRouteTransfer> notices = w.notices();
         assertEquals(1, notices.size());
         verifyNotice(notices.get(0), route, EUROPE_STOP, false,
-                Goods.of(GoodsType.MUSKET, 40), -money);
+                Goods.of(GoodsType.WEAPONS, 40), -money);
         assertEquals(0, w.dutch.getGold());
     }
 
@@ -254,11 +255,11 @@ class TradeRouteTurnEventTest {
     void settledHoldIsKeptWhenTheNextHoldOfTheSameEntryIsRejected() {
         final World w = new World();
         w.putShipInEurope();
-        w.slot(1).removeCargo(Goods.of(GoodsType.RUM, 100));
+        w.slot(1).removeCargo(Goods.of(GoodsType.OLIVE_OIL, 100));
         w.slot(1).addGoods(Goods.of(GoodsType.ORE, 100));
         final TradeRoute route = w.route("Ore Run", EUROPE_STOP,
-                List.of(GoodsType.ORE, GoodsType.SUGAR),
-                List.of(GoodsType.MUSKET));
+                List.of(GoodsType.ORE, GoodsType.OLIVES),
+                List.of(GoodsType.WEAPONS));
         // The first hold's sale fills the treasury to the largest int; the
         // second hold's sale would overflow it and is refused unchanged.
         final int first = w.dutch
@@ -285,7 +286,7 @@ class TradeRouteTurnEventTest {
         final World w = new World();
         // Nothing to unload and no free hold to load into.
         final TradeRoute idle = w.route("Idle", DELFT_STOP,
-                List.of(GoodsType.CIGARS), List.of(GoodsType.CORN));
+                List.of(GoodsType.WINE), List.of(GoodsType.GRAIN));
         final TradeRouteStopResult result = w.arrive(idle, DELFT_STOP);
         assertEquals(TradeRouteTransferReason.NOTHING_ON_BOARD,
                 result.getTransfers().get(0).getReason());
@@ -298,7 +299,7 @@ class TradeRouteTurnEventTest {
         final World closed = new World(declared());
         closed.putShipInEurope();
         final TradeRoute trade = closed.route("Closed", EUROPE_STOP,
-                List.of(GoodsType.RUM), List.of(GoodsType.MUSKET));
+                List.of(GoodsType.OLIVE_OIL), List.of(GoodsType.WEAPONS));
         final int gold = closed.dutch.getGold();
         final TradeRouteStopResult refused = closed.arrive(trade, EUROPE_STOP);
         assertEquals(TradeRouteTransferReason.EUROPE_CLOSED,
@@ -323,11 +324,11 @@ class TradeRouteTurnEventTest {
         // In Europe: the sale is paid as before, still without a report row.
         final World europe = new World();
         europe.putShipInEurope();
-        final TradeRoute trade = europe.route("Rum Run", EUROPE_STOP,
-                List.of(GoodsType.RUM), List.of());
+        final TradeRoute trade = europe.route("Oil Run", EUROPE_STOP,
+                List.of(GoodsType.OLIVE_OIL), List.of());
         final int gold = europe.dutch.getGold();
         final int sale = europe.dutch
-                .quoteEuropeTrade(Goods.of(GoodsType.RUM, 100), false)
+                .quoteEuropeTrade(Goods.of(GoodsType.OLIVE_OIL, 100), false)
                 .getTotal();
         final TradeRouteStopResult sold = europe.process(trade, EUROPE_STOP);
         assertEquals(sale, sold.getTransfers().get(0).getGoldChange());

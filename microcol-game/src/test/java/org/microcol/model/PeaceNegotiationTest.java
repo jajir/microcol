@@ -155,9 +155,9 @@ class PeaceNegotiationTest {
     void strengthQuoteAndFranklinDiscountAreFixedBeforeAcceptance() {
         for (final boolean franklin : new boolean[] { false, true }) {
             final Model model = model(franklin);
-            ((UnitFreeColonist) model.getUnitById(0)).setHoldingGuns(true);
-            ((UnitFreeColonist) model.getUnitById(6)).setHoldingGuns(true);
-            ((UnitFreeColonist) model.getUnitById(4)).setHoldingGuns(true);
+            ((UnitFreeColonist) model.getUnitById(0)).setHoldingWeapons(true);
+            ((UnitFreeColonist) model.getUnitById(6)).setHoldingWeapons(true);
+            ((UnitFreeColonist) model.getUnitById(4)).setHoldingWeapons(true);
             final Player actor = model.getPlayerByName("Dutch");
             final Player rival = model.getPlayerByName("France");
             final PeaceOffer offer = model
@@ -253,12 +253,12 @@ class PeaceNegotiationTest {
         actor.setGold(500);
         final PeaceOffer quote = model.preparePeaceOffer(model.getUnitById(0),
                 rival);
-        ((UnitFreeColonist) model.getUnitById(0)).setHoldingGuns(true);
+        ((UnitFreeColonist) model.getUnitById(0)).setHoldingWeapons(true);
         final String changedStrength = saved(model);
         assertThrows(IllegalStateException.class,
                 () -> model.acceptPeaceOffer(quote));
         assertEquals(changedStrength, saved(model));
-        ((UnitFreeColonist) model.getUnitById(0)).setHoldingGuns(false);
+        ((UnitFreeColonist) model.getUnitById(0)).setHoldingWeapons(false);
         rival.setGold(rival.getGold() + 1);
         final String changedGold = saved(model);
         assertThrows(IllegalStateException.class,

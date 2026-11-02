@@ -18,14 +18,14 @@ import org.microcol.model.unit.UnitWithCargo;
 
 /**
  * Editing, canceling and deleting trade routes on the shared F110 scenario.
- * Dutch owns New Amsterdam (id 0, ORE 90, MUSKET 50) at (26,16), Delft (id 1,
- * ORE 0, MUSKET 50) at (28,16) and Haarlem (id 2, ORE 40, MUSKET 20) at
+ * Dutch owns New Amsterdam (id 0, ORE 90, WEAPONS 50) at (26,16), Delft (id 1,
+ * ORE 0, WEAPONS 50) at (28,16) and Haarlem (id 2, ORE 40, WEAPONS 20) at
  * (24,16), each two squares from the next over grass. Free wagons 4 and 6 stand
  * in New Amsterdam, and a wagon moves one square a turn. The saved "Ore cart"
- * route unloads ORE and loads MUSKET in Delft and does the opposite in New
+ * route unloads ORE and loads WEAPONS in Delft and does the opposite in New
  * Amsterdam. Wagon 8 waits with a lost stop on "Lost cart", whose second stop
- * names colony 3, which was never founded. Galleon 7, with six holds [RUM 100,
- * COTTON 60, empty x4], is on the Atlantic with two turns left, assigned to
+ * names colony 3, which was never founded. Galleon 7, with six holds [OLIVE_OIL
+ * 100, WOOL 60, empty x4], is on the Atlantic with two turns left, assigned to
  * "Atlantic run". The Dutch player has 10000 gold and no tax is active.
  */
 class TradeRouteEditTimingTest {
@@ -52,8 +52,8 @@ class TradeRouteEditTimingTest {
     private static final String LOST_CART = "Lost cart";
     private static final String ATLANTIC_RUN = "Atlantic run";
     private static final List<GoodsType> TRACKED = List.of(GoodsType.ORE,
-            GoodsType.MUSKET, GoodsType.HORSE, GoodsType.RUM, GoodsType.COTTON,
-            GoodsType.TOOLS);
+            GoodsType.WEAPONS, GoodsType.HORSE, GoodsType.OLIVE_OIL,
+            GoodsType.WOOL, GoodsType.TOOLS);
     /** Longest sequence of rounds any scenario below may need. */
     private static final int MAX_ROUNDS = 40;
 
@@ -237,8 +237,8 @@ class TradeRouteEditTimingTest {
     /**
      * The first wagon sails a square ahead of the second. After three rounds
      * the first stands a square from Delft on its way back to New Amsterdam,
-     * having taken MUSKET 50 in Delft, and the second stands in Delft having
-     * found no MUSKET left, so its visit is processed and it has not left.
+     * having taken WEAPONS 50 in Delft, and the second stands in Delft having
+     * found no WEAPONS left, so its visit is processed and it has not left.
      */
     private static TradeRoute twoCarriersAtDifferentLegs(final World w) {
         final TradeRoute route = w.route(ORE_CART);
@@ -257,7 +257,7 @@ class TradeRouteEditTimingTest {
         assertTrue(first.getLocation().isNeighbor(DELFT_AT));
         assertEquals(1, w.assignment(FIRST_WAGON).getStopIndex());
         assertEquals(Optional.empty(), first.getProcessedTradeRouteVisit());
-        assertEquals(Optional.of(Goods.of(GoodsType.MUSKET, 50)),
+        assertEquals(Optional.of(Goods.of(GoodsType.WEAPONS, 50)),
                 w.held(FIRST_WAGON, 0));
         final UnitWithCargo second = w.carrier(SECOND_WAGON);
         assertEquals(DELFT_AT, second.getLocation());
@@ -266,9 +266,9 @@ class TradeRouteEditTimingTest {
                 .orElseThrow().getRouteId());
         assertEquals(Optional.empty(), w.held(SECOND_WAGON, 0));
         assertEquals(0, w.stock(DELFT, GoodsType.ORE));
-        assertEquals(0, w.stock(DELFT, GoodsType.MUSKET));
+        assertEquals(0, w.stock(DELFT, GoodsType.WEAPONS));
         assertEquals(90, w.stock(NEW_AMSTERDAM, GoodsType.ORE));
-        assertEquals(50, w.stock(NEW_AMSTERDAM, GoodsType.MUSKET));
+        assertEquals(50, w.stock(NEW_AMSTERDAM, GoodsType.WEAPONS));
     }
 
     @Test
@@ -292,7 +292,7 @@ class TradeRouteEditTimingTest {
                 edited.getStops().get(0).getUnloadGoods());
         assertEquals(HAARLEM, edited.getStops().get(1).getColonyId());
         // The replaced stop keeps what it unloaded and loaded.
-        assertEquals(List.of(GoodsType.MUSKET),
+        assertEquals(List.of(GoodsType.WEAPONS),
                 edited.getStops().get(1).getUnloadGoods());
         assertEquals(List.of(GoodsType.ORE),
                 edited.getStops().get(1).getLoadGoods());
@@ -325,13 +325,13 @@ class TradeRouteEditTimingTest {
 
         w.playRound();
 
-        // The first wagon reached the stop it had accepted, once: MUSKET off,
+        // The first wagon reached the stop it had accepted, once: WEAPONS off,
         // ORE on, then it takes the latest plan for the next leg.
         assertEquals(NEW_AMSTERDAM_AT, w.carrier(FIRST_WAGON).getLocation());
         assertEquals(Optional.of(Goods.of(GoodsType.ORE, 90)),
                 w.held(FIRST_WAGON, 0));
         assertEquals(Optional.empty(), w.held(FIRST_WAGON, 1));
-        assertEquals(100, w.stock(NEW_AMSTERDAM, GoodsType.MUSKET));
+        assertEquals(100, w.stock(NEW_AMSTERDAM, GoodsType.WEAPONS));
         assertEquals(0, w.stock(NEW_AMSTERDAM, GoodsType.ORE));
         assertEquals(0, w.assignment(FIRST_WAGON).getStopIndex());
         assertEquals(HAARLEM,
@@ -344,7 +344,7 @@ class TradeRouteEditTimingTest {
         assertEquals(HAARLEM,
                 w.assignment(SECOND_WAGON).getStops().get(1).getColonyId());
         assertEquals(0, w.stock(DELFT, GoodsType.ORE));
-        assertEquals(0, w.stock(DELFT, GoodsType.MUSKET));
+        assertEquals(0, w.stock(DELFT, GoodsType.WEAPONS));
 
         // The second wagon reaches Haarlem and loads its ORE 40 once.
         int rounds = 0;
@@ -356,11 +356,11 @@ class TradeRouteEditTimingTest {
         assertEquals(Optional.of(Goods.of(GoodsType.ORE, 40)),
                 w.held(SECOND_WAGON, 0));
         assertEquals(0, w.stock(HAARLEM, GoodsType.ORE));
-        assertEquals(20, w.stock(HAARLEM, GoodsType.MUSKET));
+        assertEquals(20, w.stock(HAARLEM, GoodsType.WEAPONS));
         assertEquals(0, w.assignment(SECOND_WAGON).getStopIndex());
         // Nothing was created or lost on the way.
         assertEquals(130, w.total(GoodsType.ORE));
-        assertEquals(120, w.total(GoodsType.MUSKET));
+        assertEquals(120, w.total(GoodsType.WEAPONS));
         assertEquals(10000, w.dutch.getGold());
     }
 
@@ -372,7 +372,7 @@ class TradeRouteEditTimingTest {
         w.playRound();
         final String placement = w.placementAndGoods();
 
-        // Delft is now to load TOOLS instead of MUSKET. TOOLS has no producer,
+        // Delft is now to load TOOLS instead of WEAPONS. TOOLS has no producer,
         // unlike HORSE, which breeds, so the amounts stay exact.
         w.model.configureTradeRouteStopCargo(w.dutch, route, 0,
                 List.of(GoodsType.ORE), List.of(GoodsType.TOOLS));
@@ -384,7 +384,7 @@ class TradeRouteEditTimingTest {
         assertEquals(Optional.of(Goods.of(GoodsType.TOOLS, 50)),
                 w.held(FIRST_WAGON, 0));
         assertEquals(0, w.stock(DELFT, GoodsType.TOOLS));
-        assertEquals(50, w.stock(DELFT, GoodsType.MUSKET));
+        assertEquals(50, w.stock(DELFT, GoodsType.WEAPONS));
         assertEquals(10000, w.dutch.getGold());
     }
 
@@ -481,7 +481,7 @@ class TradeRouteEditTimingTest {
 
         // The canceled wagon stays where it was; the other keeps going.
         assertEquals(firstAt, w.carrier(FIRST_WAGON).getLocation());
-        assertEquals(Optional.of(Goods.of(GoodsType.MUSKET, 50)),
+        assertEquals(Optional.of(Goods.of(GoodsType.WEAPONS, 50)),
                 w.held(FIRST_WAGON, 0));
         assertNotEquals(DELFT_AT, w.carrier(SECOND_WAGON).getLocation());
         assertEquals(1, w.assignment(SECOND_WAGON).getStopIndex());
@@ -513,9 +513,9 @@ class TradeRouteEditTimingTest {
         // It landed on the sea lane with its cargo and is a plain ship now.
         assertTrue(ship.isAtPlaceLocation());
         assertEquals(LANE_AT, ship.getLocation());
-        assertEquals(Optional.of(Goods.of(GoodsType.RUM, 100)),
+        assertEquals(Optional.of(Goods.of(GoodsType.OLIVE_OIL, 100)),
                 w.held(GALLEON, 0));
-        assertEquals(Optional.of(Goods.of(GoodsType.COTTON, 60)),
+        assertEquals(Optional.of(Goods.of(GoodsType.WOOL, 60)),
                 w.held(GALLEON, 1));
         assertEquals(10000, w.dutch.getGold());
         assertFalse(((AbstractUnit) ship).hasStandingOrder());
@@ -559,7 +559,7 @@ class TradeRouteEditTimingTest {
                 .getRemainigTurns());
         restored.playRound();
         assertEquals(LANE_AT, restored.carrier(GALLEON).getLocation());
-        assertEquals(Optional.of(Goods.of(GoodsType.RUM, 100)),
+        assertEquals(Optional.of(Goods.of(GoodsType.OLIVE_OIL, 100)),
                 restored.held(GALLEON, 0));
         assertEquals(10000, restored.dutch.getGold());
     }
@@ -572,7 +572,7 @@ class TradeRouteEditTimingTest {
         w.playRound();
         w.model.assignTradeRoute(w.carrier(SECOND_WAGON), route, 0);
         w.playRound();
-        // The first wagon stands in Delft with MUSKET 50 and a receipt for
+        // The first wagon stands in Delft with WEAPONS 50 and a receipt for
         // the Delft stop; the second is on its way there.
         assertEquals(DELFT_AT, w.carrier(FIRST_WAGON).getLocation());
         assertTrue(w.carrier(FIRST_WAGON).getProcessedTradeRouteVisit()
@@ -607,9 +607,9 @@ class TradeRouteEditTimingTest {
             restored.playRound();
         }
         assertEquals(DELFT_AT, restored.carrier(FIRST_WAGON).getLocation());
-        assertEquals(Optional.of(Goods.of(GoodsType.MUSKET, 50)),
+        assertEquals(Optional.of(Goods.of(GoodsType.WEAPONS, 50)),
                 restored.held(FIRST_WAGON, 0));
-        assertEquals(0, restored.stock(DELFT, GoodsType.MUSKET));
+        assertEquals(0, restored.stock(DELFT, GoodsType.WEAPONS));
         assertEquals(90, restored.stock(NEW_AMSTERDAM, GoodsType.ORE));
     }
 
@@ -642,13 +642,13 @@ class TradeRouteEditTimingTest {
                 restored.carrier(FIRST_WAGON).getLocation());
         assertEquals(Optional.of(Goods.of(GoodsType.ORE, 90)),
                 restored.held(FIRST_WAGON, 0));
-        assertEquals(100, restored.stock(NEW_AMSTERDAM, GoodsType.MUSKET));
+        assertEquals(100, restored.stock(NEW_AMSTERDAM, GoodsType.WEAPONS));
         assertEquals(0, restored.stock(NEW_AMSTERDAM, GoodsType.ORE));
-        assertEquals(0, restored.stock(DELFT, GoodsType.MUSKET));
+        assertEquals(0, restored.stock(DELFT, GoodsType.WEAPONS));
         assertEquals(HAARLEM, restored.assignment(SECOND_WAGON).getStops()
                 .get(1).getColonyId());
         assertEquals(130, restored.total(GoodsType.ORE));
-        assertEquals(120, restored.total(GoodsType.MUSKET));
+        assertEquals(120, restored.total(GoodsType.WEAPONS));
     }
 
     @Test

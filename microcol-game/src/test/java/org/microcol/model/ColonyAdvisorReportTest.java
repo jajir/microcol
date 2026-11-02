@@ -165,8 +165,8 @@ class ColonyAdvisorReportTest {
      * one for one with the stock, so the stock that reaches a target is known.
      */
     private static int foodOffset(final Colony colony) {
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 0));
-        return colony.getRawGoodsStats().getStatsByType(GoodsType.CORN)
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 0));
+        return colony.getRawGoodsStats().getStatsByType(GoodsType.GRAIN)
                 .getInWarehouseAfter();
     }
 
@@ -175,7 +175,7 @@ class ColonyAdvisorReportTest {
             final int target) {
         colony.getWarehouse().setGoods(Goods.of(GoodsType.HORSE, 0));
         colony.getWarehouse().setGoods(
-                Goods.of(GoodsType.CORN, target - foodOffset(colony)));
+                Goods.of(GoodsType.GRAIN, target - foodOffset(colony)));
     }
 
     /** Adds a warehouse so that goods above the basic limit can be stored. */
@@ -198,7 +198,7 @@ class ColonyAdvisorReportTest {
     void twoUnequalColoniesKeepTheirOwnFiguresInIdOrder() {
         final Colony first = model.getColonyById(0).orElseThrow();
         final Colony second = model.getColonyById(1).orElseThrow();
-        // The first colony staffs its chapel, so its crosses double at once.
+        // The first colony staffs its chapel, so its torches double at once.
         model.addUnitOutSideColony(first).placeToColonyStructureSlot(first
                 .getConstructionByType(ConstructionType.CHAPEL).getSlotAt(0));
 
@@ -208,8 +208,8 @@ class ColonyAdvisorReportTest {
                 .map(ColonyStatus::getColonyId).collect(Collectors.toList()));
         final ColonyStatus staffed = statusOf(report, first);
         final ColonyStatus unattended = statusOf(report, second);
-        assertEquals(2, lineOf(staffed, GoodsType.CROSS).getProduced());
-        assertEquals(1, lineOf(unattended, GoodsType.CROSS).getProduced());
+        assertEquals(2, lineOf(staffed, GoodsType.TORCHES).getProduced());
+        assertEquals(1, lineOf(unattended, GoodsType.TORCHES).getProduced());
         assertEquals(first.getPopulation(), staffed.getPopulation());
         assertEquals(second.getPopulation(), unattended.getPopulation());
         assertEquals(first.getName(), staffed.getName());
@@ -229,12 +229,12 @@ class ColonyAdvisorReportTest {
                     model.getColonyAdvisorReport(delft.getOwner()), delft);
             assertEquals(targets[index] < 0, status.isFamine());
             assertEquals(births[index], status.getNewColonists());
-            assertEquals(required, lineOf(status, GoodsType.CORN).getConsumed()
+            assertEquals(required, lineOf(status, GoodsType.GRAIN).getConsumed()
                     - births[index] * FOOD_PER_NEW_COLONIST);
             // Famine empties the food; a birth keeps the rest of the food.
             final int nextFood = targets[index] < 0 ? 0
                     : targets[index] % FOOD_PER_NEW_COLONIST;
-            assertEquals(nextFood, lineOf(status, GoodsType.CORN).getNext());
+            assertEquals(nextFood, lineOf(status, GoodsType.GRAIN).getNext());
             assertEquals(targets[index] < 0 ? Uncertainty.LOST_COLONIST
                     : Uncertainty.NONE, status.getUncertainty());
         }
@@ -264,8 +264,8 @@ class ColonyAdvisorReportTest {
             assertEquals(residents - (status.isFamine() ? 1 : 0),
                     delft.getPopulation(), "Residents at food " + target);
             if (!status.isFamine()) {
-                assertEquals(lineOf(status, GoodsType.CORN).getNext(),
-                        amount(GoodsType.CORN),
+                assertEquals(lineOf(status, GoodsType.GRAIN).getNext(),
+                        amount(GoodsType.GRAIN),
                         "Food after the update at " + target);
             }
         }
@@ -311,7 +311,7 @@ class ColonyAdvisorReportTest {
         leaveOneResident();
         setFoodAfterResidents(delft, -1);
         // The legitimate setup: the stored food is positive and still short.
-        assertEquals(1, amount(GoodsType.CORN));
+        assertEquals(1, amount(GoodsType.GRAIN));
         final Player owner = delft.getOwner();
         final String before = snapshot();
 
@@ -323,7 +323,7 @@ class ColonyAdvisorReportTest {
         assertEquals(0, status.getNewColonists());
         assertEquals(1, status.getPopulation());
         // The stock shown is the stock now.
-        assertEquals(1, lineOf(status, GoodsType.CORN).getStock());
+        assertEquals(1, lineOf(status, GoodsType.GRAIN).getStock());
 
         delft.startTurn();
         assertFalse(delft.isValid());

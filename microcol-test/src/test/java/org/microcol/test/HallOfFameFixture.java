@@ -79,7 +79,7 @@ final class HallOfFameFixture {
         entry.addProperty("gold", 0);
         entry.addProperty("supportPercent", 0);
         entry.addProperty("destroyedSettlements", 0);
-        entry.addProperty("bellsBeyondTarget", 0);
+        entry.addProperty("owlsBeyondTarget", 0);
         entry.addProperty("total", servants * BaseScore.SERVANT_POINTS);
         return entry;
     }

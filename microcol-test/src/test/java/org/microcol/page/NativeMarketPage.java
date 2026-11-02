@@ -193,7 +193,7 @@ public final class NativeMarketPage extends AbstractScreen {
         unit.add("action", action);
         unit.addProperty("movementThirds", 3);
         unit.addProperty("tools", 0);
-        unit.addProperty("holdingGuns", false);
+        unit.addProperty("holdingWeapons", false);
         unit.addProperty("mounted", false);
         return unit;
     }
@@ -207,7 +207,7 @@ public final class NativeMarketPage extends AbstractScreen {
         return unit;
     }
 
-    /** A wagon or ship carrying one load of corn, so it holds goods. */
+    /** A wagon or ship carrying one load of grain, so it holds goods. */
     private static JsonObject carrier(final int id, final String type,
             final Location at) {
         final JsonObject unit = unit(id, type, at);
@@ -216,12 +216,13 @@ public final class NativeMarketPage extends AbstractScreen {
     }
 
     private static JsonObject cargo() {
-        final JsonObject corn = new JsonObject();
-        corn.addProperty("goodsType", "CORN");
-        corn.addProperty("amount", 50);
-        // Both wagon and caravel hold two slots: the corn, then one empty slot.
+        final JsonObject grain = new JsonObject();
+        grain.addProperty("goodsType", "GRAIN");
+        grain.addProperty("amount", 50);
+        // Both wagon and caravel hold two slots: the grain, then one empty
+        // slot.
         final JsonArray slots = new JsonArray();
-        slots.add(corn);
+        slots.add(grain);
         slots.add(new JsonObject());
         final JsonObject cargo = new JsonObject();
         cargo.add("slots", slots);
@@ -434,10 +435,10 @@ public final class NativeMarketPage extends AbstractScreen {
                 quantity, false);
         final String preview = getLabeledById(SALE_PREVIEW_ID).getText();
         assertTrue(preview.contains(
-                String.format("Prodáte %d kusů zboží Jídlo za %d zlata.",
+                String.format("Prodáte %d kusů zboží Obilí za %d zlata.",
                         quantity, sale.getGold())));
         assertTrue(preview.contains(String.format(
-                "Darujete %d kusů zboží Jídlo. Žádné zlato se neplatí.",
+                "Darujete %d kusů zboží Obilí. Žádné zlato se neplatí.",
                 quantity)));
     }
 
@@ -537,11 +538,11 @@ public final class NativeMarketPage extends AbstractScreen {
     }
 
     private static String englishName(final GoodsType goods) {
-        if (goods.equals(GoodsType.CORN)) {
-            return "Corn";
+        if (goods.equals(GoodsType.GRAIN)) {
+            return "Grain";
         }
-        if (goods.equals(GoodsType.TOBACCO)) {
-            return "Tobacco";
+        if (goods.equals(GoodsType.GRAPES)) {
+            return "Grapes";
         }
         return goods.name();
     }

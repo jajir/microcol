@@ -35,7 +35,7 @@ public class TC_10_F10_famine_will_plague_colony_test
         GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
         // One town-hall resident has two food, enough for this turn only.
-        verifyCornInColony(gamePage, 2);
+        verifyGrainInColony(gamePage, 2);
 
         // Perform next turn and ignore turn events dialog.
         Optional<ScreenTurnReport> oTurnDialog = gamePage.nextTurn();
@@ -75,14 +75,14 @@ public class TC_10_F10_famine_will_plague_colony_test
 
     }
 
-    private GamePage verifyCornInColony(final GamePage gamePage,
+    private GamePage verifyGrainInColony(final GamePage gamePage,
             final int expectedFood) {
 
         // Open colony Delft at [22,12].
         final ColonyScreen colonyScreen = gamePage
                 .openColonyAt(Location.of(22, 12), "Delft");
 
-        // Verify number of corn is 185.
+        // Verify number of grain is 185.
         colonyScreen.verifyNumberOfGoodsInWrehouse(0, expectedFood);
 
         // Close colony screen.

@@ -136,7 +136,7 @@ class BaseScoreTest {
         final CongressPo po = Congress.initial();
         po.setActivated(true);
         po.setGeneration(1);
-        po.setBells(0);
+        po.setOwls(0);
         po.setSelected(null);
         po.setJonesDeliveryPending(false);
         po.setMembers(members);
@@ -194,7 +194,7 @@ class BaseScoreTest {
         assertEquals(expert.getSubtotal(), france.getBaseScore().getSubtotal());
         assertEquals(expert.getExperts(), france.getBaseScore().getExperts());
 
-        colonist.setHoldingGuns(true);
+        colonist.setHoldingWeapons(true);
         colonist.assignMilitaryRole(MilitaryRole.CONTINENTAL);
         assertEquals(MilitaryRole.CONTINENTAL, colonist.getMilitaryRole());
         assertEquals(expert.getSubtotal(), france.getBaseScore().getSubtotal());

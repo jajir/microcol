@@ -81,7 +81,7 @@ class TradeRoutePlanningTest {
                 .orElseThrow();
         wagon.setType(UnitType.WAGON);
         wagon.setTools(0);
-        wagon.setHoldingGuns(false);
+        wagon.setHoldingWeapons(false);
         wagon.setMounted(false);
         wagon.setWorkUpdates(null);
         wagon.setWorkSkill(null);
@@ -436,7 +436,7 @@ class TradeRoutePlanningTest {
         });
         final Model original = load(data.getModel());
         landRoute(original);
-        // Water now rings New Amsterdam two squares out: no wagon crosses it
+        // Water now rings New Amsterdam two squares out: no wagon torches it
         // and the inland colony has no port for a ship.
         final ModelPo saved = original.save();
         for (int x = 22; x <= 26; x++) {

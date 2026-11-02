@@ -52,18 +52,18 @@ public class EuropeSaleRevenueTest {
     public void test_committedNetSalesAddUpAndPurchasesNeverCount() {
         // The 10 per cent tax is already out of the gold actually received.
         when(model.getKingsTaxForPlayer(any(Player.class))).thenReturn(10);
-        final int cornSold = dutch
-                .quoteEuropeTrade(Goods.of(GoodsType.CORN, 3), false)
+        final int grainSold = dutch
+                .quoteEuropeTrade(Goods.of(GoodsType.GRAIN, 3), false)
                 .getTotal();
-        dutch.sellGoods(Goods.of(GoodsType.CORN, 3));
-        final int silkSold = dutch
-                .quoteEuropeTrade(Goods.of(GoodsType.SILK, 2), false)
+        dutch.sellGoods(Goods.of(GoodsType.GRAIN, 3));
+        final int clothSold = dutch
+                .quoteEuropeTrade(Goods.of(GoodsType.CLOTH, 2), false)
                 .getTotal();
-        dutch.sellGoods(Goods.of(GoodsType.SILK, 2));
-        dutch.buyGoods(Goods.of(GoodsType.CORN, 10));
+        dutch.sellGoods(Goods.of(GoodsType.CLOTH, 2));
+        dutch.buyGoods(Goods.of(GoodsType.GRAIN, 10));
 
-        assertEquals(5, cornSold);
-        assertEquals(cornSold + silkSold,
+        assertEquals(5, grainSold);
+        assertEquals(grainSold + clothSold,
                 europe.getRecentSaleRevenue(EuropeanNation.DUTCH));
         assertEquals(0, europe.getRecentSaleRevenue(EuropeanNation.FRENCH));
     }
@@ -71,14 +71,14 @@ public class EuropeSaleRevenueTest {
     @Test
     public void test_refusedAndStaleSalesAddNothing() {
         final EuropeTradeQuote offered = dutch
-                .quoteEuropeTrade(Goods.of(GoodsType.CORN, 10), false);
-        europe.applyTrade(EuropeanNation.DUTCH, GoodsType.CORN, 200);
+                .quoteEuropeTrade(Goods.of(GoodsType.GRAIN, 10), false);
+        europe.applyTrade(EuropeanNation.DUTCH, GoodsType.GRAIN, 200);
         assertThrows(EuropePriceChangedException.class,
-                () -> dutch.sellGoods(Goods.of(GoodsType.CORN, 10), offered));
+                () -> dutch.sellGoods(Goods.of(GoodsType.GRAIN, 10), offered));
         final Player independent = new PlayerHuman("Dutch", false, 1000, model,
                 true, Map.of(), Set.of());
         assertThrows(IllegalStateException.class,
-                () -> independent.sellGoods(Goods.of(GoodsType.CORN, 10)));
+                () -> independent.sellGoods(Goods.of(GoodsType.GRAIN, 10)));
 
         assertEquals(0, europe.getRecentSaleRevenue(EuropeanNation.DUTCH));
         assertEquals(1000, dutch.getGold());
@@ -88,35 +88,35 @@ public class EuropeSaleRevenueTest {
     @Test
     public void test_refusedSaleAfterCommittedSaleLeavesHistoryUnchanged() {
         final int committed = dutch
-                .quoteEuropeTrade(Goods.of(GoodsType.CORN, 3), false)
+                .quoteEuropeTrade(Goods.of(GoodsType.GRAIN, 3), false)
                 .getTotal();
-        dutch.sellGoods(Goods.of(GoodsType.CORN, 3));
+        dutch.sellGoods(Goods.of(GoodsType.GRAIN, 3));
         final int revenue = europe.getRecentSaleRevenue(EuropeanNation.DUTCH);
         final EuropeTradeAccount account = europe
-                .getTradeAccount(EuropeanNation.DUTCH, GoodsType.CORN);
+                .getTradeAccount(EuropeanNation.DUTCH, GoodsType.GRAIN);
         final int gold = dutch.getGold();
         assertEquals(committed, revenue);
 
         // A stale confirmation and canceled reviews (previews only) leave the
         // committed window, account and gold exactly as they were.
         final EuropeTradeQuote stale = dutch
-                .quoteEuropeTrade(Goods.of(GoodsType.CORN, 3), false);
-        europe.applyTrade(EuropeanNation.DUTCH, GoodsType.CORN, 200);
+                .quoteEuropeTrade(Goods.of(GoodsType.GRAIN, 3), false);
+        europe.applyTrade(EuropeanNation.DUTCH, GoodsType.GRAIN, 200);
         assertThrows(EuropePriceChangedException.class,
-                () -> dutch.sellGoods(Goods.of(GoodsType.CORN, 3), stale));
-        dutch.quoteEuropeTrade(Goods.of(GoodsType.SILK, 2), false);
-        dutch.quoteEuropeTrade(Goods.of(GoodsType.SILK, 2), true);
+                () -> dutch.sellGoods(Goods.of(GoodsType.GRAIN, 3), stale));
+        dutch.quoteEuropeTrade(Goods.of(GoodsType.CLOTH, 2), false);
+        dutch.quoteEuropeTrade(Goods.of(GoodsType.CLOTH, 2), true);
 
         assertEquals(revenue,
                 europe.getRecentSaleRevenue(EuropeanNation.DUTCH));
         assertEquals(account,
-                europe.getTradeAccount(EuropeanNation.DUTCH, GoodsType.CORN));
+                europe.getTradeAccount(EuropeanNation.DUTCH, GoodsType.GRAIN));
         assertEquals(gold, dutch.getGold());
     }
 
     @Test
     public void test_saleCountsForTenOwnerTurnsThenExpires() {
-        dutch.sellGoods(Goods.of(GoodsType.CORN, 10));
+        dutch.sellGoods(Goods.of(GoodsType.GRAIN, 10));
         assertEquals(20, europe.getRecentSaleRevenue(EuropeanNation.DUTCH));
 
         // The sale turn and the nine owner turns after it still show it.
@@ -132,9 +132,9 @@ public class EuropeSaleRevenueTest {
 
     @Test
     public void test_otherOwnersTurnsDoNotMoveAWindow() {
-        france.sellGoods(Goods.of(GoodsType.SILK, 2));
+        france.sellGoods(Goods.of(GoodsType.CLOTH, 2));
         final int french = europe.getRecentSaleRevenue(EuropeanNation.FRENCH);
-        dutch.sellGoods(Goods.of(GoodsType.CORN, 1));
+        dutch.sellGoods(Goods.of(GoodsType.GRAIN, 1));
 
         // Ten turns of the Dutch do not age the French sale.
         advanceOwnerTurns(EuropeanNation.DUTCH, 10);
@@ -145,7 +145,7 @@ public class EuropeSaleRevenueTest {
 
     @Test
     public void test_loadedWindowKeepsItsPositionAndLoadNeverAdvancesIt() {
-        dutch.sellGoods(Goods.of(GoodsType.CORN, 10));
+        dutch.sellGoods(Goods.of(GoodsType.GRAIN, 10));
         advanceOwnerTurns(EuropeanNation.DUTCH, 4);
         final EuropePo saved = europe.save();
         final String json = new Gson().toJson(saved);
@@ -194,13 +194,13 @@ public class EuropeSaleRevenueTest {
         final Player seller = new PlayerHuman("Dutch", false, 1000, model,
                 false, Map.of(), Set.of());
         assertThrows(ArithmeticException.class,
-                () -> seller.sellGoods(Goods.of(GoodsType.CORN, 1)));
+                () -> seller.sellGoods(Goods.of(GoodsType.GRAIN, 1)));
 
         assertEquals(1000, seller.getGold());
         assertEquals(Integer.MAX_VALUE - 1,
                 nearFull.getRecentSaleRevenue(EuropeanNation.DUTCH));
         assertTrue(
-                nearFull.getTradeAccount(EuropeanNation.DUTCH, GoodsType.CORN)
+                nearFull.getTradeAccount(EuropeanNation.DUTCH, GoodsType.GRAIN)
                         .isEmpty());
     }
 

@@ -229,7 +229,7 @@ public class Colony {
     /**
      * Exact local support: {@code min(liberty + bonus, 200 * N)} out of
      * {@code 200 * N}, where the bonus is 40 per resident when the affiliated
-     * nation has Simon Bolivar. Read-only; no bells are created.
+     * nation has Simon Bolivar. Read-only; no owls are created.
      */
     public RebelSupport getRebelSupport() {
         return getRebelSupport(getPopulation());
@@ -291,14 +291,14 @@ public class Colony {
     }
 
     /**
-     * Add produced bells to local liberty, or remove them under Crown
+     * Add produced owls to local liberty, or remove them under Crown
      * occupation; liberty never leaves zero to 200 per resident.
      */
-    private void applyProducedBells(final int producedBells) {
+    private void applyProducedOwls(final int producedOwls) {
         if (owner.isKing()) {
-            liberty = Math.max(0, liberty - producedBells);
+            liberty = Math.max(0, liberty - producedOwls);
         } else {
-            liberty = Math.min(Math.addExact(liberty, producedBells),
+            liberty = Math.min(Math.addExact(liberty, producedOwls),
                     Math.multiplyExact((long) getPopulation(),
                             (long) RebelSupport.POINTS_PER_RESIDENT));
         }
@@ -807,11 +807,11 @@ public class Colony {
         }
         ColonyDefense.Kind kind = ColonyDefense.Kind.CIVILIANS;
         Unit representative = civilians.get(0);
-        int muskets = 0;
+        int weapons = 0;
         boolean exits = false;
         if (owner.getCongressMembers().contains(Founder.PAUL_REVERE)
-                && warehouse.getGoods(GoodsType.MUSKET)
-                        .getAmount() >= UnitFreeColonist.REQUIRED_MUSKETS_FOR_ARMED_UNIT) {
+                && warehouse.getGoods(GoodsType.WEAPONS)
+                        .getAmount() >= UnitFreeColonist.REQUIRED_WEAPONS_FOR_ARMED_UNIT) {
             final Optional<Unit> militia = getUnitsInsideColony().stream()
                     .filter(this::isEmergencyEligible)
                     .min(Comparator
@@ -823,7 +823,7 @@ public class Colony {
             if (militia.isPresent()) {
                 kind = ColonyDefense.Kind.REVERE;
                 representative = militia.get();
-                muskets = UnitFreeColonist.REQUIRED_MUSKETS_FOR_ARMED_UNIT;
+                weapons = UnitFreeColonist.REQUIRED_WEAPONS_FOR_ARMED_UNIT;
                 // Only the last resident stays inside. A victory is a forced
                 // exit, so the voluntary fortified-colony minimum is not
                 // consulted.
@@ -831,9 +831,9 @@ public class Colony {
             }
         }
         return Optional.of(new ColonyDefense(this, location, kind,
-                representative, civilians, transfer.get(), muskets, exits,
+                representative, civilians, transfer.get(), weapons, exits,
                 describeDefense(location, kind, representative, civilians,
-                        transfer.get(), muskets, exits)));
+                        transfer.get(), weapons, exits)));
     }
 
     private boolean isEmergencyEligible(final Unit unit) {
@@ -841,7 +841,7 @@ public class Colony {
             return false;
         }
         final UnitFreeColonist colonist = (UnitFreeColonist) unit;
-        return !colonist.isHoldingGuns() && !colonist.isMounted()
+        return !colonist.isHoldingWeapons() && !colonist.isMounted()
                 && !colonist.isHoldingTools();
     }
 
@@ -853,14 +853,14 @@ public class Colony {
     private String describeDefense(final Location battlefield,
             final ColonyDefense.Kind kind, final Unit representative,
             final List<Unit> roster, final Map<Unit, Location> escapes,
-            final int muskets, final boolean exits) {
+            final int weapons, final boolean exits) {
         final StringBuilder out = new StringBuilder();
         out.append(id).append('@').append(battlefield).append('/')
                 .append(owner.getName()).append('/').append(kind)
                 .append("/rep=").append(representative.getId()).append("/exit=")
-                .append(exits).append("/muskets=").append(muskets)
+                .append(exits).append("/weapons=").append(weapons)
                 .append("/stock=")
-                .append(warehouse.getGoods(GoodsType.MUSKET).getAmount())
+                .append(warehouse.getGoods(GoodsType.WEAPONS).getAmount())
                 .append("/revere=")
                 .append(owner.getCongressMembers()
                         .contains(Founder.PAUL_REVERE))
@@ -880,7 +880,7 @@ public class Colony {
                 .append(describePlace(unit));
         if (unit instanceof UnitFreeColonist) {
             final UnitFreeColonist colonist = (UnitFreeColonist) unit;
-            out.append(':').append(colonist.isHoldingGuns())
+            out.append(':').append(colonist.isHoldingWeapons())
                     .append(colonist.isMounted())
                     .append(colonist.isHoldingTools())
                     .append(colonist.isVeteran())
@@ -1034,24 +1034,24 @@ public class Colony {
     }
 
     /**
-     * Get list of empty fields with maximal corn production. At all returned
+     * Get list of empty fields with maximal grain production. At all returned
      * field could be place unit and start producing food.
      *
      * @return list of colony fields
      */
-    List<ColonyField> getEmptyFieldsWithMaxCornProduction() {
+    List<ColonyField> getEmptyFieldsWithMaxGrainProduction() {
         final List<ColonyField> available = colonyFields.stream()
                 .filter(ColonyField::isEmpty)
                 .filter(field -> model.isColonyFieldAvailable(owner,
                         field.getLocation()))
-                .filter(field -> field.canProduce(GoodsType.CORN)
-                        && field.getGoodsTypeProduction(GoodsType.CORN) > 0)
+                .filter(field -> field.canProduce(GoodsType.GRAIN)
+                        && field.getGoodsTypeProduction(GoodsType.GRAIN) > 0)
                 .collect(ImmutableList.toImmutableList());
         final int max = available.stream()
-                .map(field -> field.getGoodsTypeProduction(GoodsType.CORN))
+                .map(field -> field.getGoodsTypeProduction(GoodsType.GRAIN))
                 .max(Comparator.naturalOrder()).orElse(0);
         return available.stream().filter(
-                field -> field.getGoodsTypeProduction(GoodsType.CORN) == max)
+                field -> field.getGoodsTypeProduction(GoodsType.GRAIN) == max)
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -1075,7 +1075,7 @@ public class Colony {
      * </ul>
      */
     public void startTurn() {
-        // One snapshot for food, births, famine and post-famine output; bells
+        // One snapshot for food, births, famine and post-famine output; owls
         // credited below affect the next update only.
         final PoliticalProduction political = getPoliticalProduction();
         final ColonyProductionStats initialProduction = getRawGoodsStats(
@@ -1083,12 +1083,12 @@ public class Colony {
         final int breeding = getBreedingCount(initialProduction);
         // Validate national progress before famine, births or warehouse
         // changes.
-        final int possibleCrosses = Math.max(0, initialProduction
-                .getStatsByType(GoodsType.CROSS).getRowProduction());
-        owner.checkCanCreditProducedCrosses(possibleCrosses);
-        final int possibleBells = Math.max(0, initialProduction
-                .getStatsByType(GoodsType.BELL).getRowProduction());
-        owner.checkCanCreditProducedBells(possibleBells);
+        final int possibleTorches = Math.max(0, initialProduction
+                .getStatsByType(GoodsType.TORCHES).getRowProduction());
+        owner.checkCanCreditProducedTorches(possibleTorches);
+        final int possibleOwls = Math.max(0, initialProduction
+                .getStatsByType(GoodsType.OWLS).getRowProduction());
+        owner.checkCanCreditProducedOwls(possibleOwls);
         final Unit famineVictim = eatFoodAndOptionallyMakeNewColonist(
                 political);
         // from now colony could be destroyed by famine.
@@ -1099,14 +1099,14 @@ public class Colony {
             // can change any worker's skill.
             final Map<Location, Goods> deposits = getDepositExtractions(
                     political);
-            final int producedCrosses = Math.max(0, colonyStats
-                    .getStatsByType(GoodsType.CROSS).getRowProduction());
-            final int producedBells = Math.max(0, colonyStats
-                    .getStatsByType(GoodsType.BELL).getRowProduction());
+            final int producedTorches = Math.max(0, colonyStats
+                    .getStatsByType(GoodsType.TORCHES).getRowProduction());
+            final int producedOwls = Math.max(0, colonyStats
+                    .getStatsByType(GoodsType.OWLS).getRowProduction());
             colonyStats.forEach((goodsType, stats) -> {
-                if (GoodsType.CORN.equals(goodsType)) {
+                if (GoodsType.GRAIN.equals(goodsType)) {
                     if (famineVictim != null) {
-                        warehouse.setGoods(Goods.of(GoodsType.CORN,
+                        warehouse.setGoods(Goods.of(GoodsType.GRAIN,
                                 Math.max(0, stats.getInWarehouseAfter())));
                     }
                     if (stats.getInWarehouseAfter() < 0) {
@@ -1124,14 +1124,14 @@ public class Colony {
                             .removeGoods(Goods.of(goodsType, -stats.getDiff()));
                 }
             });
-            owner.creditProducedCrosses(producedCrosses);
-            owner.creditProducedBells(producedBells);
-            applyProducedBells(producedBells);
+            owner.creditProducedTorches(producedTorches);
+            owner.creditProducedOwls(producedOwls);
+            applyProducedOwls(producedOwls);
             advanceEducationAndExperience(colonyStats, political);
             model.getMap().extractMinerals(deposits);
             if (breeding > 0) {
                 warehouse.addGoods(Goods.of(GoodsType.HORSE, breeding));
-                warehouse.removeGoods(Goods.of(GoodsType.CORN, breeding));
+                warehouse.removeGoods(Goods.of(GoodsType.GRAIN, breeding));
             }
             colonyBuildingQueue.startTurn();
             exportSelectedSurplus();
@@ -1191,7 +1191,7 @@ public class Colony {
             final Goods goods = field.getProduction(political).get();
             EducationSkills
                     .forProduction(goods.getType(),
-                            goods.getType() == GoodsType.CORN
+                            goods.getType() == GoodsType.GRAIN
                                     && field.getTerrainType().isSea())
                     .ifPresent(skill -> jobs.put(field.getUnit().get(), skill));
             if (goods.getAmount() > 0) {
@@ -1381,28 +1381,28 @@ public class Colony {
     private Unit eatFoodAndOptionallyMakeNewColonist(
             final PoliticalProduction political) {
         final ColonyProductionStats stats = getRawGoodsStats(political);
-        final GoodsProductionStats cornStats = stats
-                .getStatsByType(GoodsType.CORN);
-        if (cornStats.getInWarehouseAfter() < 0) {
+        final GoodsProductionStats grainStats = stats
+                .getStatsByType(GoodsType.GRAIN);
+        if (grainStats.getInWarehouseAfter() < 0) {
             final Unit victim = killOneRandomUnit();
-            warehouse.setGoods(Goods.of(GoodsType.CORN, 0));
+            warehouse.setGoods(Goods.of(GoodsType.GRAIN, 0));
             return victim;
         } else {
-            final int foodAfterConsumption = cornStats.getInWarehouseAfter();
+            final int foodAfterConsumption = grainStats.getInWarehouseAfter();
             if (foodAfterConsumption >= FOOD_LEVEL_TO_FREE_COLONIST) {
                 final int births = newColonistsFor(foodAfterConsumption);
-                warehouse.setGoods(Goods.of(GoodsType.CORN,
+                warehouse.setGoods(Goods.of(GoodsType.GRAIN,
                         foodAfterConsumption % FOOD_LEVEL_TO_FREE_COLONIST));
                 for (int index = 0; index < births; index++) {
                     produceNewColonist();
                 }
             } else {
-                if (cornStats.getDiff() < 0) {
+                if (grainStats.getDiff() < 0) {
                     warehouse.removeGoods(
-                            Goods.of(GoodsType.CORN, -cornStats.getDiff()));
+                            Goods.of(GoodsType.GRAIN, -grainStats.getDiff()));
                 } else {
                     warehouse.addGoodsWithThrowingAway(
-                            Goods.of(GoodsType.CORN, cornStats.getDiff()),
+                            Goods.of(GoodsType.GRAIN, grainStats.getDiff()),
                             thrownAwayGoods -> {
                                 model.addTurnEvent(
                                         TurnEventProvider.getGoodsWasThrowsAway(
@@ -1675,8 +1675,8 @@ public class Colony {
             return false;
         }
         final UnitFreeColonist colonist = (UnitFreeColonist) unit;
-        return (!colonist.isHoldingGuns() || colonist
-                .getEquipmentProblem(GoodsType.MUSKET, false).isEmpty())
+        return (!colonist.isHoldingWeapons() || colonist
+                .getEquipmentProblem(GoodsType.WEAPONS, false).isEmpty())
                 && (!colonist.isHoldingTools() || colonist
                         .getEquipmentProblem(GoodsType.TOOLS, false).isEmpty())
                 && (!colonist.isMounted() || colonist
@@ -1710,7 +1710,7 @@ public class Colony {
     public ColonyProductionStats getGoodsStats() {
         final ColonyProductionStats preview = getRawGoodsStats();
         final GoodsProductionStats food = preview
-                .getStatsByType(GoodsType.CORN);
+                .getStatsByType(GoodsType.GRAIN);
         final int afterResidents = food.getInWarehouseAfter();
         if (afterResidents >= 0) {
             final int births = afterResidents / FOOD_LEVEL_TO_FREE_COLONIST;
@@ -1737,7 +1737,7 @@ public class Colony {
     }
 
     private int getBreedingCount(final ColonyProductionStats raw) {
-        final int foodAfterResidents = raw.getStatsByType(GoodsType.CORN)
+        final int foodAfterResidents = raw.getStatsByType(GoodsType.GRAIN)
                 .getInWarehouseAfter();
         if (foodAfterResidents < 0) {
             return 0;
@@ -1809,7 +1809,7 @@ public class Colony {
                 .forEach(goods -> out.getStatsByType(goods.getType())
                         .addRowProduction(goods.getAmount()));
 
-        out.getStatsByType(GoodsType.CORN)
+        out.getStatsByType(GoodsType.GRAIN)
                 .addConsumed(getRequiredFoodPerTurn());
 
         // get production from town factories that doesn't consume any sources

@@ -93,7 +93,7 @@ Vaše pokladna při nabídce: %s zlatých.</entry>
 	<entry key="resultTitle">Náhled vypočteného výsledku, nezapsáno</entry>
 	<entry key="resultNote">Pouze pro čtení. Na základní mezisoučet se použijí válečné a obtížnostní složky. Nic se nezapisuje a žádné pořadí se nezobrazuje.</entry>
 	<entry key="resultDeduction">Zničená domorodá sídla: %s po %s bodech, odpočet -%s bodů</entry>
-	<entry key="resultBells">Zvony po cíli intervence: +%s bodů</entry>
+	<entry key="resultOwls">Sovy po cíli intervence: +%s bodů</entry>
 	<entry key="resultClampedBase">Základ nejníže nula: %s bodů</entry>
 	<entry key="resultBonus">Úspěšná nezávislost: bonus za pořadí +%s %%, body za včasné vyhlášení: %s</entry>
 	<entry key="resultDifficulty">Koeficient obtížnosti: %s %%</entry>

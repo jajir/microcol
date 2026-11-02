@@ -67,7 +67,7 @@ public class TC_66_F57_military_promotion_test extends AbstractMicroColTest {
         attack.chooseAttack(SOLDIER, DEFENDER);
         attack.confirm();
         attack.verifyEquipmentOutcome(0, 6, false, false, SOLDIER,
-                "lost its muskets");
+                "lost its weapons");
         new MilitaryPromotionPage(getContext()).verifyRank(0, UnitType.COLONIST,
                 false, false);
     }

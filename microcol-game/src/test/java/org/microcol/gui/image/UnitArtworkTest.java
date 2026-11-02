@@ -40,8 +40,8 @@ class UnitArtworkTest {
         for (final String key : List.of(
                 ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_MOUNTED,
                 ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_TOOLS,
-                ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_MUSKETS,
-                ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_MOUNTED_MUSKETS,
+                ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_WEAPONS,
+                ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_MOUNTED_WEAPONS,
                 "artillery-damaged.png")) {
             verifyArtwork(cache.getImage(key), fingerprints, key);
         }
@@ -84,16 +84,16 @@ class UnitArtworkTest {
         when(unit.isHoldingTools()).thenReturn(true);
         assertSame(cache.getImage(ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_TOOLS),
                 images.getUnitImage(unit, Direction.east));
-        when(unit.isHoldingGuns()).thenReturn(true);
+        when(unit.isHoldingWeapons()).thenReturn(true);
         assertSame(
-                cache.getImage(ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_MUSKETS),
+                cache.getImage(ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_WEAPONS),
                 images.getUnitImage(unit, Direction.east));
         when(unit.isMounted()).thenReturn(true);
         assertSame(
                 cache.getImage(
-                        ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_MOUNTED_MUSKETS),
+                        ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_MOUNTED_WEAPONS),
                 images.getUnitImage(unit, Direction.east));
-        when(unit.isHoldingGuns()).thenReturn(false);
+        when(unit.isHoldingWeapons()).thenReturn(false);
         assertSame(
                 cache.getImage(ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_MOUNTED),
                 images.getUnitImage(unit, Direction.east));

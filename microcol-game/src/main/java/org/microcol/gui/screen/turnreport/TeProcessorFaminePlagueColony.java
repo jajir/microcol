@@ -38,7 +38,7 @@ public class TeProcessorFaminePlagueColony extends AbstractTeProcessor
                     getI18n().get(UnitTypes.getUnitName(te.getVictim())),
                     te.getStocks().stream().filter(
                             goods -> goods.isNotZero() || goods.getType()
-                                    .equals(org.microcol.model.GoodsType.CORN))
+                                    .equals(org.microcol.model.GoodsType.GRAIN))
                             .map(goods -> getI18n()
                                     .get(GoodsTypeName.getNameForGoodsType(
                                             goods.getType()))

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import com.google.common.collect.Lists;
 
 /**
- * Test construct church shop and try to produce crosses. Verify that input is
+ * Test construct church shop and try to produce torches. Verify that input is
  * ignored.
  */
 public class Construction_CHURCH_Test extends AbstractConstructionTest {
@@ -39,7 +39,7 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(Goods.of(GoodsType.CROSS, 2),
+        assertEquals(Goods.of(GoodsType.TORCHES, 2),
                 ret.getProducedGoods().get());
     }
 
@@ -54,7 +54,7 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(Goods.of(GoodsType.CROSS, 7),
+        assertEquals(Goods.of(GoodsType.TORCHES, 7),
                 ret.getProducedGoods().get());
     }
 
@@ -69,18 +69,18 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         assertFalse(ret.getConsumedGoods().isPresent());
         assertTrue(ret.getProducedGoods().isPresent());
         assertFalse(ret.getBlockedGoods().isPresent());
-        assertEquals(Goods.of(GoodsType.CROSS, 12),
+        assertEquals(Goods.of(GoodsType.TORCHES, 12),
                 ret.getProducedGoods().get());
     }
 
     private ConstructionTurnProduction empty() {
         return new ConstructionTurnProduction(null,
-                Goods.of(GoodsType.CROSS, 0), null);
+                Goods.of(GoodsType.TORCHES, 0), null);
     }
 
     private ConstructionTurnProduction full() {
         return new ConstructionTurnProduction(null,
-                Goods.of(GoodsType.CROSS, 5), null);
+                Goods.of(GoodsType.TORCHES, 5), null);
     }
 
     @BeforeEach

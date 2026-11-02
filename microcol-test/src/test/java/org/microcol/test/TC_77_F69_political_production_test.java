@@ -67,7 +67,7 @@ public class TC_77_F69_political_production_test extends AbstractMicroColTest {
         game.nextTurnAndCloseDialogs();
         production.verifyWarehouse(GoodsType.TOOLS, 22);
         production.verifyWarehouse(GoodsType.ORE, 0);
-        // The empty town hall adds its single unattended bell, without bonus.
+        // The empty town hall adds its single unattended owl, without bonus.
         support.verifyLiberty(301, 4);
         // Continue restores the same colony and adds no modifier again.
         game.exitToMenu();

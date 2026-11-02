@@ -7,9 +7,9 @@ import java.util.List;
 import com.google.common.base.Preconditions;
 
 /**
- * Religion report of one colonial nation (R-0199): the cross output each colony
+ * Religion report of one colonial nation (R-0199): the torch output each colony
  * gives to the national pool at the next update, the accumulated immigration
- * crosses, the next threshold and the state of the earned immigrant. Output and
+ * torches, the next threshold and the state of the earned immigrant. Output and
  * progress are separate figures. The report is a snapshot of the live model;
  * nothing is kept between calls and nothing is settled or spent.
  */
@@ -27,23 +27,23 @@ public final class ReligionReport {
         CHOICE_WAITING,
         /**
          * The threshold is reached, but a declared nation receives no arrivals
-         * from Europe; the crosses stay saved.
+         * from Europe; the torches stay saved.
          */
         BLOCKED_EUROPE
     }
 
-    /** Cross output of one colony at the next update. */
+    /** Torch output of one colony at the next update. */
     public static final class ColonyOutput {
 
         private final int colonyId;
         private final String name;
-        private final int crosses;
+        private final int torches;
 
         private ColonyOutput(final int colonyId, final String name,
-                final int crosses) {
+                final int torches) {
             this.colonyId = colonyId;
             this.name = name;
-            this.crosses = crosses;
+            this.torches = torches;
         }
 
         /** @return stable colony ID */
@@ -57,11 +57,11 @@ public final class ReligionReport {
         }
 
         /**
-         * @return crosses this colony gives to the national pool at the next
+         * @return torches this colony gives to the national pool at the next
          *         update, staffed and unattended output together
          */
-        public int getCrosses() {
-            return crosses;
+        public int getTorches() {
+            return torches;
         }
     }
 
@@ -88,7 +88,7 @@ public final class ReligionReport {
 
     /**
      * Build the report of the current state of one colonial nation. Each colony
-     * reports the same cross row that its next update credits, so Penn's bonus
+     * reports the same torch row that its next update credits, so Penn's bonus
      * is already inside each colony and is never applied to the total again.
      *
      * @param owner required colonial nation; the caller has checked that it
@@ -105,14 +105,14 @@ public final class ReligionReport {
             if (!colony.isValid()) {
                 continue;
             }
-            final int crosses = Math.max(0, colony.getRawGoodsStats()
-                    .getStatsByType(GoodsType.CROSS).getRowProduction());
+            final int torches = Math.max(0, colony.getRawGoodsStats()
+                    .getStatsByType(GoodsType.TORCHES).getRowProduction());
             outputs.add(new ColonyOutput(colony.getId(), colony.getName(),
-                    crosses));
-            nationalOutput = Math.addExact(nationalOutput, crosses);
+                    torches));
+            nationalOutput = Math.addExact(nationalOutput, torches);
         }
         outputs.sort(Comparator.comparingInt(ColonyOutput::getColonyId));
-        final int accumulated = owner.getImmigrationCrosses();
+        final int accumulated = owner.getImmigrationTorches();
         final int target = owner.getImmigrationTarget();
         return new ReligionReport(List.copyOf(outputs), nationalOutput,
                 accumulated, target, Math.max(0, target - accumulated),
@@ -142,24 +142,24 @@ public final class ReligionReport {
     }
 
     /**
-     * @return crosses the nation gives to the national pool at the next update
+     * @return torches the nation gives to the national pool at the next update
      */
     public int getNationalOutput() {
         return nationalOutput;
     }
 
-    /** @return crosses already accumulated toward the next immigrant */
+    /** @return torches already accumulated toward the next immigrant */
     public int getAccumulated() {
         return accumulated;
     }
 
-    /** @return crosses needed for the next immigrant, from the shared model */
+    /** @return torches needed for the next immigrant, from the shared model */
     public int getTarget() {
         return target;
     }
 
     /**
-     * @return crosses still missing to the next threshold; zero once the
+     * @return torches still missing to the next threshold; zero once the
      *         threshold is reached
      */
     public int getRemaining() {

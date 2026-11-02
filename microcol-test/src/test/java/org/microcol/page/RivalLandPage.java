@@ -179,7 +179,7 @@ public final class RivalLandPage extends AbstractScreen {
     /**
      * The attack came within the bound and ended with the expected fate of both
      * colonists: each still lives on its own square under its owner, the
-     * attacker spent its movement, and each holds muskets only as expected. A
+     * attacker spent its movement, and each holds weapons only as expected. A
      * rival that only moved, or a battle with another result, fails here.
      */
     public void verifyOffenceBattle(final int rivalId,
@@ -202,12 +202,12 @@ public final class RivalLandPage extends AbstractScreen {
         assertEquals(0, rival.getActionPoints(), situation);
         assertEquals(expectedHumanArmed,
                 ((org.microcol.model.unit.UnitFreeColonist) human)
-                        .isHoldingGuns(),
-                "Defender muskets after the battle; " + situation);
+                        .isHoldingWeapons(),
+                "Defender weapons after the battle; " + situation);
         assertEquals(expectedRivalArmed,
                 ((org.microcol.model.unit.UnitFreeColonist) rival)
-                        .isHoldingGuns(),
-                "Attacker muskets after the battle; " + situation);
+                        .isHoldingWeapons(),
+                "Attacker weapons after the battle; " + situation);
     }
 
     /** Start of the no-target scenario: the armed colonist stands alone. */

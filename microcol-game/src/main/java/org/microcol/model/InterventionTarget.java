@@ -5,48 +5,48 @@ import org.microcol.model.store.InterventionPo;
 import com.google.common.base.Preconditions;
 
 /**
- * Foreign-intervention bell target of one declared colonial nation (R-0189).
- * The target is fixed when it starts, so a later difficulty change does not
- * move it. Bells counted from the first owner update accumulate without a cap;
- * the part above the target is exactly {@link #getBellsBeyondTarget()}, and the
+ * Foreign-intervention owl target of one declared colonial nation (R-0189). The
+ * target is fixed when it starts, so a later difficulty change does not move
+ * it. Owls counted from the first owner update accumulate without a cap; the
+ * part above the target is exactly {@link #getOwlsBeyondTarget()}, and the
  * earning happens once. The delivery of the earned forces is kept apart from
  * the earning and happens once too (R-0190).
  */
 public final class InterventionTarget {
 
-    /** Bell base of the intervention rule, before the difficulty factor. */
-    private static final int TARGET_BELLS = 500;
+    /** Owl base of the intervention rule, before the difficulty factor. */
+    private static final int TARGET_OWLS = 500;
 
     private final int target;
 
-    private long bells;
+    private long owls;
 
     private boolean earned;
 
     private boolean delivered;
 
-    private InterventionTarget(final int target, final long bells,
+    private InterventionTarget(final int target, final long owls,
             final boolean earned, final boolean delivered) {
         this.target = target;
-        this.bells = bells;
+        this.owls = owls;
         this.earned = earned;
         this.delivered = delivered;
     }
 
     /**
      * @param difficulty required selected difficulty
-     * @return the target, {@code ceil(500 × k)} bells
+     * @return the target, {@code ceil(500 × k)} owls
      */
     public static int targetFor(final Difficulty difficulty) {
         Preconditions.checkNotNull(difficulty, "Difficulty is null");
-        return (TARGET_BELLS * RecruitmentPool.factor(difficulty) + 99) / 100;
+        return (TARGET_OWLS * RecruitmentPool.factor(difficulty) + 99) / 100;
     }
 
     /**
      * Start the target at the first owner update after declaration.
      *
      * @param difficulty required selected difficulty
-     * @return target with no bells counted yet
+     * @return target with no owls counted yet
      */
     static InterventionTarget start(final Difficulty difficulty) {
         return new InterventionTarget(targetFor(difficulty), 0L, false, false);
@@ -61,16 +61,16 @@ public final class InterventionTarget {
         Preconditions.checkArgument(po != null, "Missing intervention target");
         Preconditions.checkArgument(
                 po.getTarget() != null && po.getTarget() > 0
-                        && po.getBells() != null && po.getBells() >= 0
+                        && po.getOwls() != null && po.getOwls() >= 0
                         && po.getEarned() != null && po.getDelivered() != null,
                 "Incomplete intervention target");
         Preconditions.checkArgument(
-                po.getEarned() == (po.getBells() >= po.getTarget()),
-                "Intervention earning does not match its bells");
+                po.getEarned() == (po.getOwls() >= po.getTarget()),
+                "Intervention earning does not match its owls");
         Preconditions.checkArgument(!po.getDelivered() || po.getEarned(),
                 "Intervention delivery needs an earned target");
         target = po.getTarget();
-        bells = po.getBells();
+        owls = po.getOwls();
         earned = po.getEarned();
         delivered = po.getDelivered();
     }
@@ -78,26 +78,26 @@ public final class InterventionTarget {
     /**
      * Check a credit without changing anything.
      *
-     * @param produced bells the colonial nation actually produced
+     * @param produced owls the colonial nation actually produced
      */
     void checkCredit(final int produced) {
         Preconditions.checkArgument(produced >= 0,
-                "Produced bells must be nonnegative");
-        Preconditions.checkState(bells <= Long.MAX_VALUE - produced,
-                "Intervention bells are exhausted");
+                "Produced owls must be nonnegative");
+        Preconditions.checkState(owls <= Long.MAX_VALUE - produced,
+                "Intervention owls are exhausted");
     }
 
     /**
-     * Count newly produced bells. Only the first credit that reaches the target
+     * Count newly produced owls. Only the first credit that reaches the target
      * earns it.
      *
-     * @param produced bells the colonial nation actually produced
+     * @param produced owls the colonial nation actually produced
      * @return whether this credit earns the intervention
      */
     boolean credit(final int produced) {
         checkCredit(produced);
-        bells += produced;
-        if (earned || bells < target) {
+        owls += produced;
+        if (earned || owls < target) {
             return false;
         }
         earned = true;
@@ -105,33 +105,33 @@ public final class InterventionTarget {
     }
 
     /**
-     * @return fixed target in bells
+     * @return fixed target in owls
      */
     public int getTarget() {
         return target;
     }
 
     /**
-     * @return bells counted since the first owner update, including any above
+     * @return owls counted since the first owner update, including any above
      *         the target
      */
-    public long getBells() {
-        return bells;
+    public long getOwls() {
+        return owls;
     }
 
     /**
-     * @return whether the cumulative bells reached the target; never reverts
+     * @return whether the cumulative owls reached the target; never reverts
      */
     public boolean isEarned() {
         return earned;
     }
 
     /**
-     * @return bells counted above the target, which are the post-target part
-     *         for later score accounting; zero before the target is reached
+     * @return owls counted above the target, which are the post-target part for
+     *         later score accounting; zero before the target is reached
      */
-    public long getBellsBeyondTarget() {
-        return Math.max(0L, bells - target);
+    public long getOwlsBeyondTarget() {
+        return Math.max(0L, owls - target);
     }
 
     /**
@@ -155,7 +155,7 @@ public final class InterventionTarget {
     InterventionPo save() {
         final InterventionPo po = new InterventionPo();
         po.setTarget(target);
-        po.setBells(bells);
+        po.setOwls(owls);
         po.setEarned(earned);
         po.setDelivered(delivered);
         return po;

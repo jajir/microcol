@@ -42,13 +42,13 @@
  * prepares voyages/immigration, tax decisions, colonies and then unit work;
  * individual rule owners retain their own accounting. AtlanticVoyageDuration
  * owns the ordinary crossing formula; Congress keeps frozen founder offers, a
- * separate national bell account and durable membership; colony production
+ * separate national owl account and durable membership; colony production
  * credits it once per update. Each Crown's RoyalRoster holds its prewar force
- * (identities, reserve/shipped/destroyed state, bell remainder) and grows from
- * the same produced bells until the colonial nation declares independence.
- * Model dispatches a reserve man-of-war with its ground passengers as real
- * units bound to their roster members; a surviving empty carrier that returned
- * to the European port is reloaded with the remaining reserve through the same
+ * (identities, reserve/shipped/destroyed state, owl remainder) and grows from
+ * the same produced owls until the colonial nation declares independence. Model
+ * dispatches a reserve man-of-war with its ground passengers as real units
+ * bound to their roster members; a surviving empty carrier that returned to the
+ * European port is reloaded with the remaining reserve through the same
  * Atlantic voyage, without a new ship. A bound unit's loss is recorded once as
  * destroyed and its change of owner once as captured, and the Crown's landing
  * target and retry count are saved with its ship. The Crown learns its
@@ -74,7 +74,7 @@
  * diplomacy and an immutable ordinary-land strength explanation. The model
  * revalidates the whole quote before drawing from persisted combat random
  * state, declaring war or spending movement. Ordinary armed land losers retain
- * identity and position while losing horses or muskets; other combat families
+ * identity and position while losing horses or weapons; other combat families
  * retain their separate outcome rules. Eligible land victories advance social
  * rank or veteran status through one saved draw, with immutable promotion facts
  * sent alongside the resolved combat event.
@@ -84,7 +84,7 @@
  *
  * RecruitmentPool owns three persistent candidate tokens, paid-passage quotes
  * and counters; Player validates live offers before a single pier arrival.
- * Colony credits new cross production once; Player settles earned immigration
+ * Colony credits new torch production once; Player settles earned immigration
  * in the next Europe phase before processing that turn's colonies. Brewster
  * filters the pool on actual Congress arrival and allows human choices from
  * frozen earned offers; the pool persists that pending boundary.

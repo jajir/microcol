@@ -246,7 +246,7 @@ class NativeTreasureTest {
         addUnit(unarmed, "France", UnitType.TREASURE_TRAIN, 500);
         for (final UnitPo unit : unarmed.getUnits()) {
             if (unit.getId() == ATTACKER_ID) {
-                unit.setHoldingGuns(false);
+                unit.setHoldingWeapons(false);
             }
         }
         assertTrue(model(unarmed).getUnitById(ATTACKER_ID)
@@ -325,7 +325,7 @@ class NativeTreasureTest {
         po.getGameManager().setCurrentPlayer(DUTCH);
         for (final UnitPo unit : po.getUnits()) {
             if (unit.getId() == ATTACKER_ID) {
-                unit.setHoldingGuns(true);
+                unit.setHoldingWeapons(true);
                 unit.setMovementThirds(MovementPoints.ofPoints(1));
             }
         }
@@ -347,7 +347,7 @@ class NativeTreasureTest {
     private static CongressPo cortesCongress() {
         final CongressPo congress = new CongressPo();
         congress.setActivated(true);
-        congress.setBells(0);
+        congress.setOwls(0);
         congress.setMembers(List.of(Founder.HERNAN_CORTES));
         congress.setCandidates(List.of(Founder.FRANCIS_DRAKE,
                 Founder.SIMON_BOLIVAR, Founder.ADAM_SMITH,

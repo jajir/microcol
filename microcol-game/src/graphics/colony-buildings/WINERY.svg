@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="160" viewBox="0 0 320 160" role="img" aria-labelledby="title description">
-<title id="title">Rum Distillery — Lehký nadhled</title>
-<desc id="description">Palírna; level 2. Editable flat vector drawing after selected proposal 8, R-0361. Transparent background, simple hand-drawn contours and a narrow side view.</desc>
+<title id="title">Winery — Lehký nadhled</title>
+<desc id="description">Víno (R-0394 symbol from the approved R-0384 grapes vector); level 2. Editable flat vector drawing after selected proposal 8, R-0361. Transparent background, simple hand-drawn contours and a narrow side view.</desc>
 <g id="pen-outline" stroke="#3e3b31" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round">
 <g id="building">
 <g id="building-structure">
@@ -18,9 +18,10 @@
 </g>
 </g>
 <g id="profession-equipment">
-<path id="shape-007" d="M231 116 Q241.5 112 252 116 Q258 133.5 252 151 Q241.5 154 231 151 Q225 133.5 231 116 Z" fill="#bd8e50"/>
-<path id="shape-008" d="M229 124 Q241.50 124.48 254 124" fill="none"/>
-<path id="shape-009" d="M229 143 Q241.50 143.48 254 143" fill="none"/>
+<g id="grapes-symbol" transform="translate(195.35 101.30) scale(0.4688)" stroke-width="6.61">
+<g id="leaf"><path d="M31 19 L34 8 Q44 4 47 10 L56 12 L48 19 L52 27 Q39 28 34 19" fill="#87934c"/></g>
+<g id="grapes"><path d="M9 24 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M26 25 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M40 36 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M17 39 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M32 49 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M18 54 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/></g>
+</g>
 </g>
 </g>
 </g>

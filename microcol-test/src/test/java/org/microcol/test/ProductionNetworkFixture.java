@@ -60,7 +60,7 @@ final class ProductionNetworkFixture {
         final JsonObject delft = colony(model, DELFT);
 
         // The school: the teacher waits in the carpenters' stand until the
-        // player assigns the course, the student works a corn field.
+        // player assigns the course, the student works a grain field.
         addSchool(newAmsterdam);
         addUnit(units, template, TEACHER, "MASTER_CARPENTER",
                 "placeConstructionSlot");
@@ -69,7 +69,7 @@ final class ProductionNetworkFixture {
         final JsonObject field = newAmsterdam.getAsJsonArray("colonyFields")
                 .get(0).getAsJsonObject();
         field.addProperty("workerId", STUDENT);
-        field.addProperty("producedGoodsType", "CORN");
+        field.addProperty("producedGoodsType", "GRAIN");
 
         // Two blacksmiths turn delivered ore into tools.
         addUnit(units, template, BLACKSMITH_ONE, "COLONIST",
@@ -84,12 +84,12 @@ final class ProductionNetworkFixture {
         stock(newAmsterdam, "TOOLS", 0);
         stock(newAmsterdam, "HAMMERS", 64);
         stock(newAmsterdam, "HORSE", 0);
-        stock(newAmsterdam, "CORN", FOOD);
+        stock(newAmsterdam, "GRAIN", FOOD);
         stock(delft, "ORE", 0);
         stock(delft, "TOOLS", 0);
         stock(delft, "HAMMERS", 0);
         stock(delft, "HORSE", 0);
-        stock(delft, "CORN", FOOD);
+        stock(delft, "GRAIN", FOOD);
 
         final File prepared = new File(System.getProperty("user.home"), name);
         Files.writeString(prepared.toPath(), saved.toString());

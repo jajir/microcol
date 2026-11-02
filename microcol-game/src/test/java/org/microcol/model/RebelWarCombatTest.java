@@ -89,7 +89,7 @@ class RebelWarCombatTest {
         out.setPlaceMap(place);
         out.setAction(new UnitActionNoActionPo());
         out.setAvailableMoves(1);
-        out.setHoldingGuns(true);
+        out.setHoldingWeapons(true);
         out.setMounted(mounted);
         out.setVeteran(false);
         out.setMilitaryRole(role);
@@ -706,7 +706,7 @@ class RebelWarCombatTest {
                 .forEach(unit -> unit.setOwnerId(OWN_CROWN));
         data.getModel().getUnits().stream()
                 .filter(unit -> unit.getId() == GARRISON)
-                .forEach(unit -> unit.setHoldingGuns(false));
+                .forEach(unit -> unit.setHoldingWeapons(false));
         final UnitPo attacker = soldier(ATTACKER, REBEL, ORIGIN, false,
                 MilitaryRole.COLONIAL);
         data.getModel().getUnits().add(attacker);
@@ -777,7 +777,7 @@ class RebelWarCombatTest {
         final Colony quebec = model.getColonyById(0).orElseThrow();
         final UnitFreeColonist unit = (UnitFreeColonist) model
                 .addUnitOutSideColony(quebec);
-        unit.setHoldingGuns(true);
+        unit.setHoldingWeapons(true);
         unit.assignMilitaryRole(MilitaryRole.CONTINENTAL);
         unit.markInterventionDelivered();
         assertTrue(unit.isInterventionDelivered());
@@ -790,7 +790,7 @@ class RebelWarCombatTest {
         final UnitFreeColonist unit = deliveredContinental(model);
         final ColonyField field = model.getColonyById(0).orElseThrow()
                 .getColonyFieldInDirection(Direction.east);
-        unit.placeToColonyField(field, GoodsType.CORN);
+        unit.placeToColonyField(field, GoodsType.GRAIN);
         assertTrue(unit.isAtPlaceColonyField());
         assertEquals(MilitaryRole.COLONIAL, unit.getMilitaryRole());
         assertFalse(unit.isInterventionDelivered());
@@ -812,10 +812,10 @@ class RebelWarCombatTest {
                 .getColonyFieldInDirection(Direction.east);
         final String before = new Gson().toJson(model.save());
         assertThrows(IllegalArgumentException.class,
-                () -> unit.placeToColonyField(field, GoodsType.MUSKET));
+                () -> unit.placeToColonyField(field, GoodsType.WEAPONS));
         assertEquals(MilitaryRole.CONTINENTAL, unit.getMilitaryRole());
         assertTrue(unit.isInterventionDelivered());
-        assertTrue(unit.isHoldingGuns());
+        assertTrue(unit.isHoldingWeapons());
         assertTrue(unit.isAtPlaceLocation());
         assertEquals(before, new Gson().toJson(model.save()));
     }

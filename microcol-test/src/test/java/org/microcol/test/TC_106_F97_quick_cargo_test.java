@@ -192,9 +192,8 @@ public class TC_106_F97_quick_cargo_test extends AbstractMicroColTest {
         colony.showWarehouse();
         colony.verifyWarehouseGoodsLayout(19, 45);
         colony.verifyLocalProduction(GoodsType.HAMMERS, "Hammers", "0 / turn");
-        colony.verifyLocalProduction(GoodsType.CROSS, "Crosses", "1 / turn");
-        colony.verifyLocalProduction(GoodsType.BELL, "Bell of liberty",
-                "1 / turn");
+        colony.verifyLocalProduction(GoodsType.TORCHES, "Torches", "1 / turn");
+        colony.verifyLocalProduction(GoodsType.OWLS, "Owls", "1 / turn");
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0372-production-en.png");
 
@@ -204,9 +203,9 @@ public class TC_106_F97_quick_cargo_test extends AbstractMicroColTest {
         colony.dragGoodsFromWarehouseToShipCargoSlot(
                 GoodsType.GOOD_TYPES.indexOf(GoodsType.HAMMERS), 0);
         colony.dragGoodsFromWarehouseToShipCargoSlot(
-                GoodsType.GOOD_TYPES.indexOf(GoodsType.CROSS), 0);
+                GoodsType.GOOD_TYPES.indexOf(GoodsType.TORCHES), 0);
         colony.dragGoodsFromWarehouseToShipCargoSlot(
-                GoodsType.GOOD_TYPES.indexOf(GoodsType.BELL), 0);
+                GoodsType.GOOD_TYPES.indexOf(GoodsType.OWLS), 0);
         state.verifyWorldUnchanged();
         ship().verifyCargoSlotEmpty(0);
         ship().verifyCargoGoods(2, Goods.of(GoodsType.ORE, 40));
@@ -219,9 +218,8 @@ public class TC_106_F97_quick_cargo_test extends AbstractMicroColTest {
         colony.showWarehouse();
         colony.verifyWarehouseGoodsLayout(19, 45);
         colony.verifyLocalProduction(GoodsType.HAMMERS, "Hammers", "0 / turn");
-        colony.verifyLocalProduction(GoodsType.CROSS, "Crosses", "1 / turn");
-        colony.verifyLocalProduction(GoodsType.BELL, "Bell of liberty",
-                "1 / turn");
+        colony.verifyLocalProduction(GoodsType.TORCHES, "Torches", "1 / turn");
+        colony.verifyLocalProduction(GoodsType.OWLS, "Owls", "1 / turn");
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0372-production-small.png");
 
@@ -234,8 +232,8 @@ public class TC_106_F97_quick_cargo_test extends AbstractMicroColTest {
         czech.showWarehouse();
         czech.verifyWarehouseGoodsLayout(19, 45);
         czech.verifyLocalProduction(GoodsType.HAMMERS, "Kladiva", "0 / tah");
-        czech.verifyLocalProduction(GoodsType.CROSS, "Kříže", "1 / tah");
-        czech.verifyLocalProduction(GoodsType.BELL, "Zvony svobody", "1 / tah");
+        czech.verifyLocalProduction(GoodsType.TORCHES, "Pochodně", "1 / tah");
+        czech.verifyLocalProduction(GoodsType.OWLS, "Sovy", "1 / tah");
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0372-production-cs.png");
         czech.close();

@@ -95,7 +95,7 @@ class FoundingPreconditionsTest {
                 TerrainType.GRASSLAND);
         final UnitFreeColonist founder = (UnitFreeColonist) model
                 .getUnitById(4);
-        founder.setHoldingGuns(true);
+        founder.setHoldingWeapons(true);
         founder.setTools(101);
         final String before = snapshot(model);
         assertThrows(IllegalStateException.class, () -> found(model));
@@ -135,10 +135,10 @@ class FoundingPreconditionsTest {
         final ColonyField outside = colony
                 .getColonyFieldInDirection(Direction.west);
         assertFalse(outside.isValid());
-        assertFalse(outside.canProduce(GoodsType.CORN));
-        assertEquals(0, outside.getGoodsTypeProduction(GoodsType.CORN));
+        assertFalse(outside.canProduce(GoodsType.GRAIN));
+        assertEquals(0, outside.getGoodsTypeProduction(GoodsType.GRAIN));
         assertThrows(IllegalStateException.class, () -> model.getUnitById(4)
-                .placeToColonyField(outside, GoodsType.CORN));
+                .placeToColonyField(outside, GoodsType.GRAIN));
         assertEquals(before, snapshot(model));
     }
 
@@ -151,7 +151,7 @@ class FoundingPreconditionsTest {
         assertSame(model.getUnitById(4), colony.getUnitsInsideColony().get(0));
         assertTrue(colony.getColonyFields().stream()
                 .allMatch(ColonyField::isEmpty));
-        assertEquals(0, colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+        assertEquals(0, colony.getGoodsStats().getStatsByType(GoodsType.GRAIN)
                 .getRowProduction());
     }
 
@@ -161,15 +161,15 @@ class FoundingPreconditionsTest {
                 TerrainType.GRASSLAND);
         final UnitFreeColonist founder = (UnitFreeColonist) model
                 .getUnitById(4);
-        founder.setHoldingGuns(true);
+        founder.setHoldingWeapons(true);
         founder.setMounted(true);
         final Colony colony = found(model);
         assertSame(founder, colony.getUnitsInsideColony().get(0));
         assertEquals(50,
-                colony.getWarehouse().getGoods(GoodsType.MUSKET).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.WEAPONS).getAmount());
         assertEquals(50,
                 colony.getWarehouse().getGoods(GoodsType.HORSE).getAmount());
-        assertFalse(founder.isHoldingGuns());
+        assertFalse(founder.isHoldingWeapons());
         assertFalse(founder.isMounted());
         assertEquals(6, model.getAllUnits().size());
     }

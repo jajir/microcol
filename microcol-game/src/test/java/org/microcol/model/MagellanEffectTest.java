@@ -93,7 +93,7 @@ class MagellanEffectTest {
                 .filter(player -> "Dutch".equals(player.getName())).findFirst()
                 .orElseThrow().getCongress();
         congress.setSelected(Founder.FERDINAND_MAGELLAN);
-        congress.setBells(99);
+        congress.setOwls(99);
         final Model model = load(data);
         final Ship ship = (Ship) model.getUnitById(3);
         final int ordinaryVoyage = ((PlaceHighSea) ship.getPlace())

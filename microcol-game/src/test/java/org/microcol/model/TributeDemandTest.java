@@ -34,7 +34,7 @@ class TributeDemandTest {
     }
 
     private void arm(final Model model, final int id) {
-        ((UnitFreeColonist) model.getUnitById(id)).setHoldingGuns(true);
+        ((UnitFreeColonist) model.getUnitById(id)).setHoldingWeapons(true);
     }
 
     @Test
@@ -46,7 +46,7 @@ class TributeDemandTest {
         arm(model, 0);
         assertEquals(List.of(model.getUnitById(0)),
                 model.getTributeVisitors(dutch, france));
-        ((UnitFreeColonist) model.getUnitById(0)).setHoldingGuns(false);
+        ((UnitFreeColonist) model.getUnitById(0)).setHoldingWeapons(false);
         ((UnitFreeColonist) model.getUnitById(0)).setMounted(true);
         assertEquals(List.of(model.getUnitById(0)),
                 model.getTributeVisitors(dutch, france));
@@ -232,7 +232,7 @@ class TributeDemandTest {
         final Player rival = strength.getPlayerByName("France");
         final TributeDemand quote = strength
                 .prepareTributeDemand(strength.getUnitById(0), rival);
-        ((UnitFreeColonist) strength.getUnitById(1)).setHoldingGuns(false);
+        ((UnitFreeColonist) strength.getUnitById(1)).setHoldingWeapons(false);
         final String changedStrength = saved(strength);
         assertThrows(IllegalStateException.class,
                 () -> strength.confirmTributeDemand(quote));
@@ -246,7 +246,7 @@ class TributeDemandTest {
         final Player roleRival = role.getPlayerByName("France");
         final TributeDemand roleQuote = role
                 .prepareTributeDemand(role.getUnitById(0), roleRival);
-        ((UnitFreeColonist) role.getUnitById(0)).setHoldingGuns(false);
+        ((UnitFreeColonist) role.getUnitById(0)).setHoldingWeapons(false);
         final String changedRole = saved(role);
         assertThrows(IllegalStateException.class,
                 () -> role.confirmTributeDemand(roleQuote));

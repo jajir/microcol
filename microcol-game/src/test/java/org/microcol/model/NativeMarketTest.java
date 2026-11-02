@@ -33,7 +33,7 @@ import com.google.gson.Gson;
 class NativeMarketTest {
 
     /** Wanted goods of the scenes; each is tradable and never offered. */
-    private static final List<GoodsType> WANTED = List.of(GoodsType.MUSKET,
+    private static final List<GoodsType> WANTED = List.of(GoodsType.WEAPONS,
             GoodsType.TOOLS, GoodsType.HORSE);
 
     /** Goods slots holding the given goods, one slot each. */
@@ -48,7 +48,7 @@ class NativeMarketTest {
         };
     }
 
-    private static final Consumer<UnitPo> LOADED = carrying(GoodsType.CORN);
+    private static final Consumer<UnitPo> LOADED = carrying(GoodsType.GRAIN);
 
     private static final int WAGON = 200;
 
@@ -174,27 +174,28 @@ class NativeMarketTest {
     }
 
     @Test
-    void onlyAVillageRefusesTheSameGoodExceptMuskets() {
+    void onlyAVillageRefusesTheSameGoodExceptWeapons() {
         assertTrue(NativeMarketRules.repeatsPreviousGood(
-                NativeSettlementClass.VILLAGE, GoodsType.CORN, GoodsType.CORN));
+                NativeSettlementClass.VILLAGE, GoodsType.GRAIN,
+                GoodsType.GRAIN));
         assertFalse(NativeMarketRules.repeatsPreviousGood(
-                NativeSettlementClass.CAMP, GoodsType.CORN, GoodsType.CORN));
+                NativeSettlementClass.CAMP, GoodsType.GRAIN, GoodsType.GRAIN));
         assertFalse(NativeMarketRules.repeatsPreviousGood(
-                NativeSettlementClass.CITY, GoodsType.CORN, GoodsType.CORN));
+                NativeSettlementClass.CITY, GoodsType.GRAIN, GoodsType.GRAIN));
         assertFalse(NativeMarketRules.repeatsPreviousGood(
-                NativeSettlementClass.VILLAGE, GoodsType.MUSKET,
-                GoodsType.MUSKET));
+                NativeSettlementClass.VILLAGE, GoodsType.WEAPONS,
+                GoodsType.WEAPONS));
         assertFalse(NativeMarketRules.repeatsPreviousGood(
-                NativeSettlementClass.VILLAGE, GoodsType.CORN,
-                GoodsType.TOBACCO));
+                NativeSettlementClass.VILLAGE, GoodsType.GRAIN,
+                GoodsType.GRAPES));
         assertFalse(NativeMarketRules.repeatsPreviousGood(
-                NativeSettlementClass.VILLAGE, null, GoodsType.CORN));
+                NativeSettlementClass.VILLAGE, null, GoodsType.GRAIN));
     }
 
     @Test
     void unintroducedWagonIsRefusedAndSeesNoMarketDetails() {
         final Model model = island(NativeNation.AZTEC)
-                .market(100, List.of(GoodsType.CORN), WANTED)
+                .market(100, List.of(GoodsType.GRAIN), WANTED)
                 .unit(DUTCH, UnitType.WAGON, at(-1, 0), LOADED).toModel();
         final NativeMarketView view = view(model, WAGON);
         assertFalse(view.isContacted());
@@ -207,7 +208,7 @@ class NativeMarketTest {
     @Test
     void landIntroductionAdmitsLoadedWagonAndChangesNothingElse() {
         final Model model = island(NativeNation.AZTEC)
-                .market(100, List.of(GoodsType.CORN, GoodsType.TOBACCO), WANTED)
+                .market(100, List.of(GoodsType.GRAIN, GoodsType.GRAPES), WANTED)
                 .unit(DUTCH, UnitType.WAGON, at(-1, 0), LOADED).toModel();
         final Location before = model.getUnitById(WAGON).getLocation();
         final int gold = model.getPlayerByName(DUTCH).getGold();
@@ -309,7 +310,7 @@ class NativeMarketTest {
     private static Model trading(final double anger) {
         return island(NativeNation.AZTEC)
                 .contact(EuropeanNation.DUTCH, NativeNation.AZTEC)
-                .market(100, List.of(GoodsType.CORN), WANTED)
+                .market(100, List.of(GoodsType.GRAIN), WANTED)
                 .tribal(NativeNation.AZTEC, EuropeanNation.DUTCH, anger)
                 .unit(DUTCH, UnitType.WAGON, at(-1, 0), LOADED)
                 .unit(DUTCH, UnitType.CARAVEL, SEA_ONE, LOADED).toModel();
@@ -361,50 +362,51 @@ class NativeMarketTest {
 
     /**
      * The village refuses the goods the previous delivery brought, except
-     * muskets. Tobacco is carried but not on offer, so it must still count: the
+     * weapons. Grapes is carried but not on offer, so it must still count: the
      * rule concerns what the village receives from the player, not its stock.
      */
     @Test
-    void villageRefusesTheGoodsOfThePreviousDeliveryExceptMuskets() {
+    void villageRefusesTheGoodsOfThePreviousDeliveryExceptWeapons() {
         final Model model = island(NativeNation.CHEROKEE)
                 .contact(EuropeanNation.DUTCH, NativeNation.CHEROKEE)
-                .market(100, List.of(GoodsType.CORN, GoodsType.MUSKET), WANTED)
+                .market(100, List.of(GoodsType.GRAIN, GoodsType.WEAPONS),
+                        WANTED)
                 .unit(DUTCH, UnitType.WAGON, at(-1, 0),
-                        carrying(GoodsType.TOBACCO))
+                        carrying(GoodsType.GRAPES))
                 .withMovesForLastUnit()
                 .unit(DUTCH, UnitType.WAGON, at(0, -1),
-                        carrying(GoodsType.TOBACCO, GoodsType.MUSKET))
+                        carrying(GoodsType.GRAPES, GoodsType.WEAPONS))
                 .unit(DUTCH, UnitType.WAGON, at(0, 1),
-                        carrying(GoodsType.TOBACCO, GoodsType.MUSKET))
+                        carrying(GoodsType.GRAPES, GoodsType.WEAPONS))
                 .toModel();
         final Unit first = model.getUnitById(WAGON);
         final Unit second = model.getUnitById(WAGON + 1);
         final Unit third = model.getUnitById(WAGON + 2);
         final NativeSettlement village = settlement(model);
 
-        // The first delivery brings tobacco, which is not offered: accepted.
+        // The first delivery brings grapes, which is not offered: accepted.
         model.enterNativeMarket(first, village);
-        model.recordNativeGoodsReceived(first, village, GoodsType.TOBACCO);
+        model.recordNativeGoodsReceived(first, village, GoodsType.GRAPES);
         assertFalse(model.isRepeatedReceivedGoods(first, village,
-                GoodsType.TOBACCO));
+                GoodsType.GRAPES));
         first.moveOneStep(at(-1, -1));
 
-        // The next expedition refuses tobacco but accepts muskets.
+        // The next expedition refuses grapes but accepts weapons.
         model.enterNativeMarket(second, village);
         assertTrue(model.isRepeatedReceivedGoods(second, village,
-                GoodsType.TOBACCO));
+                GoodsType.GRAPES));
         assertThrows(IllegalStateException.class, () -> model
-                .recordNativeGoodsReceived(second, village, GoodsType.TOBACCO));
+                .recordNativeGoodsReceived(second, village, GoodsType.GRAPES));
         assertFalse(model.isRepeatedReceivedGoods(second, village,
-                GoodsType.MUSKET));
-        model.recordNativeGoodsReceived(second, village, GoodsType.MUSKET);
+                GoodsType.WEAPONS));
+        model.recordNativeGoodsReceived(second, village, GoodsType.WEAPONS);
 
-        // After muskets, tobacco is allowed again and muskets stay allowed.
+        // After weapons, grapes is allowed again and weapons stay allowed.
         model.enterNativeMarket(third, village);
         assertFalse(model.isRepeatedReceivedGoods(third, village,
-                GoodsType.TOBACCO));
+                GoodsType.GRAPES));
         assertFalse(model.isRepeatedReceivedGoods(third, village,
-                GoodsType.MUSKET));
+                GoodsType.WEAPONS));
     }
 
     @Test
@@ -413,11 +415,11 @@ class NativeMarketTest {
         final Unit wagon = model.getUnitById(WAGON);
         assertThrows(IllegalStateException.class,
                 () -> model.recordNativeGoodsReceived(wagon, settlement(model),
-                        GoodsType.CORN));
+                        GoodsType.GRAIN));
         model.enterNativeMarket(wagon, settlement(model));
         assertThrows(IllegalStateException.class,
                 () -> model.recordNativeGoodsReceived(wagon, settlement(model),
-                        GoodsType.TOBACCO));
+                        GoodsType.GRAPES));
     }
 
     @Test
@@ -425,16 +427,16 @@ class NativeMarketTest {
         final Model model = trading(10);
         model.enterNativeMarket(model.getUnitById(WAGON), settlement(model));
         model.recordNativeGoodsReceived(model.getUnitById(WAGON),
-                settlement(model), GoodsType.CORN);
+                settlement(model), GoodsType.GRAIN);
         final Model restored = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         assertTrue(restored.isNativeContacted(EuropeanNation.DUTCH,
                 NativeNation.AZTEC));
         assertTrue(view(restored, WAGON).isExpeditionOpen());
-        assertEquals(Optional.of(GoodsType.CORN),
+        assertEquals(Optional.of(GoodsType.GRAIN),
                 settlement(restored).findTrade(EuropeanNation.DUTCH)
                         .orElseThrow().getLastReceived());
-        assertEquals(100, settlement(restored).getStock(GoodsType.CORN));
+        assertEquals(100, settlement(restored).getStock(GoodsType.GRAIN));
         assertEquals(2000, settlement(restored).getTreasury());
     }
 
@@ -447,7 +449,7 @@ class NativeMarketTest {
     void twoCarriersKeepTheirOwnOpenExpeditions() {
         final Model model = island(NativeNation.CHEROKEE)
                 .contact(EuropeanNation.DUTCH, NativeNation.CHEROKEE)
-                .market(100, List.of(GoodsType.CORN), WANTED)
+                .market(100, List.of(GoodsType.GRAIN), WANTED)
                 .unit(DUTCH, UnitType.WAGON, at(-1, 0), LOADED)
                 .unit(DUTCH, UnitType.WAGON, at(0, -1), LOADED).toModel();
         final Unit first = model.getUnitById(WAGON);
@@ -455,20 +457,20 @@ class NativeMarketTest {
         final NativeSettlement village = settlement(model);
 
         model.enterNativeMarket(first, village);
-        model.recordNativeGoodsReceived(first, village, GoodsType.CORN);
-        // The second carrier opens after the first delivered corn: its refusal
-        // is corn, and the first carrier's expedition stays open.
+        model.recordNativeGoodsReceived(first, village, GoodsType.GRAIN);
+        // The second carrier opens after the first delivered grain: its refusal
+        // is grain, and the first carrier's expedition stays open.
         model.enterNativeMarket(second, village);
         assertTrue(view(model, WAGON).isExpeditionOpen());
         assertTrue(view(model, WAGON + 1).isExpeditionOpen());
-        assertTrue(
-                model.isRepeatedReceivedGoods(second, village, GoodsType.CORN));
+        assertTrue(model.isRepeatedReceivedGoods(second, village,
+                GoodsType.GRAIN));
         // Reopening the first carrier reuses its expedition: its refusal did
         // not
-        // move to corn, and nothing it began was reset.
+        // move to grain, and nothing it began was reset.
         model.enterNativeMarket(first, village);
         assertFalse(
-                model.isRepeatedReceivedGoods(first, village, GoodsType.CORN));
+                model.isRepeatedReceivedGoods(first, village, GoodsType.GRAIN));
         assertEquals(2, model.save().getNativeSettlements().get(0).getTrade()
                 .get(0).getExpeditions().size());
         assertTrue(view(model, WAGON).isExpeditionOpen());
@@ -483,7 +485,7 @@ class NativeMarketTest {
     void leavingAndReturningEndsTheExpeditionThroughSaveAndContinue() {
         final NativeRelationsScene scene = island(NativeNation.AZTEC)
                 .contact(EuropeanNation.DUTCH, NativeNation.AZTEC)
-                .market(100, List.of(GoodsType.CORN), WANTED)
+                .market(100, List.of(GoodsType.GRAIN), WANTED)
                 .unit(DUTCH, UnitType.WAGON, at(-1, 0), LOADED)
                 .withMovesForLastUnit();
         final Model model = scene.toModel();
@@ -520,12 +522,12 @@ class NativeMarketTest {
     @Test
     void ownerUpdateRestocksOnceAndCapsWithoutConfiscation() {
         final Model model = island(NativeNation.AZTEC)
-                .market(195, List.of(GoodsType.CORN), WANTED).toModel();
+                .market(195, List.of(GoodsType.GRAIN), WANTED).toModel();
         model.updateNativeMarkets(NativeNation.AZTEC);
-        assertEquals(200, settlement(model).getStock(GoodsType.CORN));
+        assertEquals(200, settlement(model).getStock(GoodsType.GRAIN));
         assertEquals(2040, settlement(model).getTreasury());
         model.updateNativeMarkets(NativeNation.AZTEC);
-        assertEquals(200, settlement(model).getStock(GoodsType.CORN));
+        assertEquals(200, settlement(model).getStock(GoodsType.GRAIN));
         assertEquals(2080, settlement(model).getTreasury());
         // Another nation's update changes nothing here.
         model.updateNativeMarkets(NativeNation.CHEROKEE);
@@ -551,8 +553,8 @@ class NativeMarketTest {
     void invalidMarketSavesAreRejectedBeforeTheModelIsBuilt() {
         assertThrows(IllegalArgumentException.class,
                 () -> island(NativeNation.AZTEC).market(100,
-                        List.of(GoodsType.CORN, GoodsType.TOBACCO,
-                                GoodsType.SUGAR, GoodsType.COTTON),
+                        List.of(GoodsType.GRAIN, GoodsType.GRAPES,
+                                GoodsType.OLIVES, GoodsType.WOOL),
                         WANTED).toModel(),
                 "more than three offered goods");
         assertThrows(IllegalArgumentException.class,
@@ -562,12 +564,13 @@ class NativeMarketTest {
                 "goods that cannot be bought");
         assertThrows(IllegalArgumentException.class,
                 () -> island(NativeNation.AZTEC)
-                        .market(201, List.of(GoodsType.CORN), WANTED).toModel(),
+                        .market(201, List.of(GoodsType.GRAIN), WANTED)
+                        .toModel(),
                 "stock above the cap");
         assertThrows(IllegalArgumentException.class,
                 () -> island(NativeNation.AZTEC)
-                        .market(100, List.of(GoodsType.CORN),
-                                List.of(GoodsType.MUSKET, GoodsType.MUSKET))
+                        .market(100, List.of(GoodsType.GRAIN),
+                                List.of(GoodsType.WEAPONS, GoodsType.WEAPONS))
                         .toModel(),
                 "duplicate wanted goods");
         assertThrows(IllegalArgumentException.class,

@@ -53,11 +53,11 @@ class InterventionDeliveryTest {
                 .orElseThrow();
     }
 
-    private static InterventionPo po(final int target, final long bells,
+    private static InterventionPo po(final int target, final long owls,
             final boolean earned, final boolean delivered) {
         final InterventionPo po = new InterventionPo();
         po.setTarget(target);
-        po.setBells(bells);
+        po.setOwls(owls);
         po.setEarned(earned);
         po.setDelivered(delivered);
         return po;
@@ -96,8 +96,8 @@ class InterventionDeliveryTest {
         final Colony port = expectedPort(model, dutch);
         final int unitsBefore = dutch.getAllUnits().size();
         final long shipsBefore = menOfWarAt(model, port, dutch);
-        dutch.creditProducedBells(
-                Math.toIntExact(state.getTarget() - state.getBells()));
+        dutch.creditProducedOwls(
+                Math.toIntExact(state.getTarget() - state.getOwls()));
         assertTrue(state.isEarned());
         assertFalse(state.isDelivered());
         // The earning alone delivers nothing; the next owner update does.
@@ -116,7 +116,7 @@ class InterventionDeliveryTest {
                 soldiers.stream().filter(UnitFreeColonist::isMounted).count());
         assertTrue(soldiers.stream().allMatch(
                 soldier -> soldier.getMilitaryRole() == MilitaryRole.CONTINENTAL
-                        && soldier.isHoldingGuns()
+                        && soldier.isHoldingWeapons()
                         && soldier.getLocation().equals(port.getLocation())));
         // A later owner update never delivers a second time.
         assertTrue(dutch.startTurn());
@@ -130,8 +130,8 @@ class InterventionDeliveryTest {
         final Player dutch = dutch(model);
         assertTrue(dutch.startTurn());
         final InterventionTarget state = dutch.getIntervention().orElseThrow();
-        dutch.creditProducedBells(
-                Math.toIntExact(state.getTarget() - state.getBells()));
+        dutch.creditProducedOwls(
+                Math.toIntExact(state.getTarget() - state.getOwls()));
         assertTrue(dutch.startTurn());
         final int unitsAfterDelivery = dutch.getAllUnits().size();
         final Model restored = load(model.save());

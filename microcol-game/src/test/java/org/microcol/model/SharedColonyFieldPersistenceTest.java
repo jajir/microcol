@@ -70,7 +70,7 @@ class SharedColonyFieldPersistenceTest {
         ColonyField west = restored.getColonyById(0).orElseThrow()
                 .getColonyFieldInDirection(Direction.west);
         assertEquals(0, west.getUnit().orElseThrow().getId());
-        assertEquals(GoodsType.CORN,
+        assertEquals(GoodsType.GRAIN,
                 west.getProduction().orElseThrow().getType());
         assertEquals(6,
                 restored.getColonyById(1).orElseThrow()
@@ -104,7 +104,7 @@ class SharedColonyFieldPersistenceTest {
         terrain.put(Location.of(25, 13), TerrainType.GRASSLAND);
         data.getModel().getMap().setTerrainType(terrain);
         field(data, 0, Direction.north).setWorkerId(0);
-        field(data, 0, Direction.north).setProducedGoodsType(GoodsType.CORN);
+        field(data, 0, Direction.north).setProducedGoodsType(GoodsType.GRAIN);
         rejectedWithoutWriting(data);
     }
 
@@ -112,7 +112,7 @@ class SharedColonyFieldPersistenceTest {
     void oneWorkerCannotHaveBothOutdoorAndIndoorJobs() throws Exception {
         GameModelPo data = fixture();
         data.getModel().getColonies().get(0).getConstructions().stream()
-                .filter(c -> c.getType() == ConstructionType.TOBACCONISTS_HOUSE)
+                .filter(c -> c.getType() == ConstructionType.SMALL_WINERY)
                 .findFirst().orElseThrow().getSlots().get(0).setWorkerId(0);
         rejectedWithoutWriting(data);
     }
@@ -205,13 +205,13 @@ class SharedColonyFieldPersistenceTest {
             break;
         case "empty-crop":
             field(data, 0, Direction.north)
-                    .setProducedGoodsType(GoodsType.CORN);
+                    .setProducedGoodsType(GoodsType.GRAIN);
             break;
         case "missing-crop":
             west.setProducedGoodsType(null);
             break;
         case "unsupported-crop":
-            west.setProducedGoodsType(GoodsType.MUSKET);
+            west.setProducedGoodsType(GoodsType.WEAPONS);
             break;
         case "off-map":
             data.getModel().getColonies().get(0).setLocation(Location.of(0, 0));

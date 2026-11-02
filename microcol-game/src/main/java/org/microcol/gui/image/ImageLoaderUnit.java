@@ -9,20 +9,20 @@ public final class ImageLoaderUnit extends AbstractTiledImageLoader {
 
     public static final String IMG_UNIT_FREE_COLONIST_MOUNTED = "free-colonist-mounted";
     public static final String IMG_UNIT_FREE_COLONIST_TOOLS = "free-colonist-tools";
-    public static final String IMG_UNIT_FREE_COLONIST_MUSKETS = "free-colonist-muskets";
-    public static final String IMG_UNIT_FREE_COLONIST_MOUNTED_MUSKETS = "free-colonist-mounted-muskets";
+    public static final String IMG_UNIT_FREE_COLONIST_WEAPONS = "free-colonist-weapons";
+    public static final String IMG_UNIT_FREE_COLONIST_MOUNTED_WEAPONS = "free-colonist-mounted-weapons";
 
     // Source sheet order U01–U35, independent of the model's display order.
     private static final List<UnitType> ARTWORK_ORDER = List.of(
             UnitType.COLONIST, UnitType.BRAVE, UnitType.INDENTURED_SERVANT,
             UnitType.PETTY_CRIMINAL, UnitType.EXPERT_ORE_MINER,
             UnitType.EXPERT_FARMER, UnitType.EXPERT_FISHERMAN,
-            UnitType.EXPERT_FUR_TRAPPER, UnitType.EXPERT_SILVER_MINER,
-            UnitType.EXPERT_LUMBERJACK, UnitType.MASTER_SUGAR_PLANTER,
-            UnitType.MASTER_COTTON_PLANTER, UnitType.MASTER_TOBACCO_PLANTER,
-            UnitType.MASTER_CARPENTER, UnitType.MASTER_DISTILLER,
-            UnitType.MASTER_WEAVER, UnitType.MASTER_TOBACCONIST,
-            UnitType.MASTER_FUR_TRADER, UnitType.MASTER_GUNSMITH,
+            UnitType.EXPERT_CLAY_DIGGER, UnitType.EXPERT_SILVER_MINER,
+            UnitType.EXPERT_LUMBERJACK, UnitType.MASTER_OLIVE_GROWER,
+            UnitType.MASTER_SHEPHERD, UnitType.MASTER_GRAPE_GROWER,
+            UnitType.MASTER_CARPENTER, UnitType.MASTER_OIL_MAKER,
+            UnitType.MASTER_WEAVER, UnitType.MASTER_WINEMAKER,
+            UnitType.MASTER_POTTER, UnitType.MASTER_WEAPONSMITH,
             UnitType.FIREBRAND_PREACHER, UnitType.ELDER_STATESMAN,
             UnitType.SEASONED_SCOUT, UnitType.HARDY_PIONEER,
             UnitType.VETERAN_SOLDIER, UnitType.JESUIT_MISSIONARY,
@@ -45,8 +45,8 @@ public final class ImageLoaderUnit extends AbstractTiledImageLoader {
         }
         register(imageCache, IMG_UNIT_FREE_COLONIST_MOUNTED, 35);
         register(imageCache, IMG_UNIT_FREE_COLONIST_TOOLS, 36);
-        register(imageCache, IMG_UNIT_FREE_COLONIST_MUSKETS, 37);
-        register(imageCache, IMG_UNIT_FREE_COLONIST_MOUNTED_MUSKETS, 38);
+        register(imageCache, IMG_UNIT_FREE_COLONIST_WEAPONS, 37);
+        register(imageCache, IMG_UNIT_FREE_COLONIST_MOUNTED_WEAPONS, 38);
         register(imageCache, "artillery-damaged.png", 39);
         for (final UnitType type : List.of(UnitType.GALLEON, UnitType.CARAVEL,
                 UnitType.MERCHANTMAN)) {

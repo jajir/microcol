@@ -383,7 +383,7 @@ public final class CombatStrengths {
      * Frozen strengths of a land battle for a colony tile. The defender is the
      * representative selected by the colony's defense roster: the strongest
      * armed defender, the civilian group (base 1), or the Revere emergency
-     * militiaman, who is quoted as armed before the muskets are actually
+     * militiaman, who is quoted as armed before the weapons are actually
      * consumed.
      *
      * @param model    required model
@@ -551,7 +551,7 @@ public final class CombatStrengths {
     /** Actual armed capability, not the type-level attack flag. */
     static boolean isArmedLand(Unit unit) {
         return unit instanceof UnitArtillery || unit instanceof UnitFreeColonist
-                && ((UnitFreeColonist) unit).isHoldingGuns();
+                && ((UnitFreeColonist) unit).isHoldingWeapons();
     }
 
     /**
@@ -607,7 +607,7 @@ public final class CombatStrengths {
             return unit.getType().name();
         }
         UnitFreeColonist colonist = (UnitFreeColonist) unit;
-        return colonist.isMounted() + ":" + colonist.isHoldingGuns() + ':'
+        return colonist.isMounted() + ":" + colonist.isHoldingWeapons() + ':'
                 + colonist.isVeteran() + ':' + colonist.getMilitaryRole() + ':'
                 + colonist.isInterventionDelivered();
     }

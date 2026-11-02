@@ -30,20 +30,20 @@
           "output": "goods-olive.png",
           "render": "atlas",
           "sources": [
-            "production-goods/good-corn.svg", "production-goods/good-sugar.svg",
-            "production-goods/good-tobacco.svg", "production-goods/good-cotton.svg",
-            "production-goods/good-fur.svg", "production-goods/good-lumber.svg",
+            "production-goods/good-grain.svg", "production-goods/good-olives.svg",
+            "production-goods/good-grapes.svg", "production-goods/good-wool.svg",
+            "production-goods/good-clay.svg", "production-goods/good-lumber.svg",
             "production-goods/good-ore.svg", "production-goods/good-silver.svg",
-            "production-goods/good-horse.svg", "production-goods/good-rum.svg",
-            "production-goods/good-cigars.svg", "production-goods/good-silk.svg",
-            "production-goods/good-coat.svg", "production-goods/good-goods.svg",
-            "production-goods/good-tools.svg", "production-goods/good-musket.svg"
+            "production-goods/good-horse.svg", "production-goods/good-olive-oil.svg",
+            "production-goods/good-wine.svg", "production-goods/good-cloth.svg",
+            "production-goods/good-amphorae.svg", "production-goods/good-goods.svg",
+            "production-goods/good-tools.svg", "production-goods/good-weapons.svg"
           ],
           "sourceCell": 64,
           "size": [180, 180],
           "atlas": {
             "columns": 4, "rows": 4, "step": 45,
-            "aliases": "ImageLoaderGoods good-corn ... good-musket in source order, row by row"
+            "aliases": "ImageLoaderGoods good-grain ... good-weapons in source order, row by row"
           },
           "transparent": true,
           "consumer": "ImageLoaderGoods for GoodsImageProvider",
@@ -51,22 +51,22 @@
           "stroke": "bold outline drawn in a 64 unit cell, exported at 45 px (0.70x)"
         },
         {
-          "output": "good-bell.png",
-          "source": "production-goods/good-bell.svg",
+          "output": "good-owls.png",
+          "source": "production-goods/good-owls.svg",
           "render": "size",
           "size": [45, 45],
           "transparent": true,
-          "consumer": "ImageLoaderGoods good-bell.png",
+          "consumer": "ImageLoaderGoods good-owls.png",
           "display": "same goods sizes as goods-olive.png",
           "stroke": "same as goods-olive.png"
         },
         {
-          "output": "good-cross.png",
-          "source": "production-goods/good-cross.svg",
+          "output": "good-torches.png",
+          "source": "production-goods/good-torches.svg",
           "render": "size",
           "size": [45, 45],
           "transparent": true,
-          "consumer": "ImageLoaderGoods good-cross.png",
+          "consumer": "ImageLoaderGoods good-torches.png",
           "display": "same goods sizes as goods-olive.png",
           "stroke": "same as goods-olive.png"
         },

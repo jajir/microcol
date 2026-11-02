@@ -27,7 +27,7 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
     private static final File FIXTURE = new File(
             "src/test/scenarios/F19-europe-equipment.microcol");
     private static final String CHANGED = "The offer changed. Review the updated price and confirm again or cancel.";
-    private static final String INCOMPATIBLE = "Sell the incompatible equipment first. Horses and muskets can be combined; tools require an unequipped colonist.";
+    private static final String INCOMPATIBLE = "Sell the incompatible equipment first. Horses and weapons can be combined; tools require an unequipped colonist.";
     private static final String FUNDS = "Not enough gold. Nothing was changed. Cancel and obtain the required gold.";
     private static final String UNAVAILABLE = "This colonist is no longer available on your European pier during your turn. Nothing was changed. Cancel and select the colonist again.";
     private static final String RESTRICTED = "Trade with your European port is unavailable. Nothing was changed.";
@@ -51,39 +51,39 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         equipment.openContextMenu(100);
         org.microcol.page.ContextMenuPage menu = new org.microcol.page.ContextMenuPage(
                 getContext());
-        menu.verifyPaperMenuWithoutShortcuts("Buy 50 muskets");
+        menu.verifyPaperMenuWithoutShortcuts("Buy 50 weapons");
         menu.captureMenu("context-menu-europe-english.png");
         menu.escape();
         menu.verifyClosed();
         equipment.verifyState(100, 1000, false, false, 0,
                 PlaceEuropePier.class);
-        equipment.open(100, "Buy 50 muskets");
-        equipment.verifyChoice("Buy 50 muskets", true, "");
+        equipment.open(100, "Buy 50 weapons");
+        equipment.verifyChoice("Buy 50 weapons", true, "");
         equipment.verifyQuote(
-                "50 Muskets\nUnit price: 3 gold\nTax: 17% (25 gold)\nTotal: 175 gold");
+                "50 Weapons\nUnit price: 3 gold\nTax: 17% (25 gold)\nTotal: 175 gold");
         equipment.captureDialog("europeEquipmentDialog",
                 "europe-equipment-buy.png");
         equipment.cancel();
         equipment.verifyState(100, 1000, false, false, 0,
                 PlaceEuropePier.class);
-        equipment.open(100, "Buy 50 muskets");
+        equipment.open(100, "Buy 50 weapons");
         equipment.escape();
         equipment.verifyState(100, 1000, false, false, 0,
                 PlaceEuropePier.class);
-        equipment.open(100, "Buy 50 muskets");
+        equipment.open(100, "Buy 50 weapons");
         equipment.confirm();
         equipment.verifyState(100, 825, true, false, 0, PlaceEuropePier.class);
         europe.verifyGold(825);
 
-        // Add horses without losing muskets, then sell each item separately.
+        // Add horses without losing weapons, then sell each item separately.
         equipment.open(100, "Buy 50 horses");
         equipment.verifyQuote(
                 "50 Horses\nUnit price: 5 gold\nTax: 17% (42 gold)\nTotal: 292 gold");
         equipment.confirm();
         equipment.verifyState(100, 533, true, true, 0, PlaceEuropePier.class);
-        equipment.open(100, "Sell muskets");
+        equipment.open(100, "Sell weapons");
         equipment.verifyQuote(
-                "50 Muskets\nUnit price: 2 gold\nTax: 17% (17 gold)\nTotal: 83 gold");
+                "50 Weapons\nUnit price: 2 gold\nTax: 17% (17 gold)\nTotal: 83 gold");
         equipment.confirm();
         equipment.verifyState(100, 616, false, true, 0, PlaceEuropePier.class);
         equipment.open(100, "Sell horses");
@@ -118,8 +118,8 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         EuropeEquipmentPage equipment = new EuropeEquipmentPage(getContext());
         equipment.captureDialog("closeButtonId",
                 "r0316-europe-equipment-before.png");
-        equipment.open(101, "Buy 50 muskets");
-        equipment.verifyChoice("Buy 50 muskets", false, INCOMPATIBLE);
+        equipment.open(101, "Buy 50 weapons");
+        equipment.verifyChoice("Buy 50 weapons", false, INCOMPATIBLE);
         equipment.cancel();
         equipment.verifyState(101, 1000, false, false, 37,
                 PlaceEuropePier.class);
@@ -148,11 +148,11 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         WelcomePage.of(getContext()).loadGame().openEuroperPort();
         EuropeEquipmentPage equipment = new EuropeEquipmentPage(getContext());
         // Simulate another expense while the original offer is visible.
-        equipment.open(100, "Buy 50 muskets");
+        equipment.open(100, "Buy 50 weapons");
         getContext().getRobot().interact(
                 () -> getModel().getPlayerByName("Dutch").setGold(174));
         equipment.confirm();
-        equipment.verifyChoice("Buy 50 muskets", false, FUNDS);
+        equipment.verifyChoice("Buy 50 weapons", false, FUNDS);
         equipment.captureDialog("europeEquipmentDialog",
                 "europe-equipment-insufficient.png");
         equipment.cancel();
@@ -162,8 +162,8 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         // used.
         getContext().getRobot().interact(
                 () -> getModel().getPlayerByName("Dutch").setGold(175));
-        equipment.open(100, "Buy 50 muskets");
-        equipment.verifyChoice("Buy 50 muskets", true, "");
+        equipment.open(100, "Buy 50 weapons");
+        equipment.verifyChoice("Buy 50 weapons", true, "");
         equipment.confirm();
         equipment.verifyState(100, 0, true, false, 0, PlaceEuropePier.class);
     }
@@ -174,14 +174,14 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         WelcomePage.of(getContext()).loadGame().openEuroperPort();
         EuropeEquipmentPage equipment = new EuropeEquipmentPage(getContext());
         // The market changes while the player is deciding on the old quote.
-        equipment.open(100, "Buy 50 muskets");
+        equipment.open(100, "Buy 50 weapons");
         getContext().getRobot().interact(() -> getModel().getEurope()
-                .getGoodsTradeForType(GoodsType.MUSKET, EuropeanNation.DUTCH)
+                .getGoodsTradeForType(GoodsType.WEAPONS, EuropeanNation.DUTCH)
                 .setBuyPrice(4));
         equipment.confirm();
-        equipment.verifyChoice("Buy 50 muskets", true, CHANGED);
+        equipment.verifyChoice("Buy 50 weapons", true, CHANGED);
         equipment.verifyQuote(
-                "50 Muskets\nUnit price: 4 gold\nTax: 17% (34 gold)\nTotal: 234 gold");
+                "50 Weapons\nUnit price: 4 gold\nTax: 17% (34 gold)\nTotal: 234 gold");
         equipment.verifyState(100, 1000, false, false, 0,
                 PlaceEuropePier.class);
         equipment.captureDialog("europeEquipmentDialog",
@@ -198,11 +198,11 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         WelcomePage.of(getContext()).loadGame().openEuroperPort();
         EuropeEquipmentPage equipment = new EuropeEquipmentPage(getContext());
         // A competing move invalidates the subject, with no partial charge.
-        equipment.open(100, "Buy 50 muskets");
+        equipment.open(100, "Buy 50 weapons");
         getContext().getRobot().interact(() -> getModel().getUnitById(100)
                 .placeToLocation(Location.of(24, 16)));
         equipment.confirm();
-        equipment.verifyChoice("Buy 50 muskets", false, UNAVAILABLE);
+        equipment.verifyChoice("Buy 50 weapons", false, UNAVAILABLE);
         equipment.cancel();
         equipment.verifyState(100, 1000, false, false, 0, PlaceLocation.class);
 
@@ -215,7 +215,7 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         EuropeEquipmentPage equipment = new EuropeEquipmentPage(getContext());
         // A focused pier icon exposes the same choices to the keyboard.
         equipment.openWithKeyboard(100, 0);
-        equipment.verifyChoice("Buy 50 muskets", true, "");
+        equipment.verifyChoice("Buy 50 weapons", true, "");
         equipment.escape();
         equipment.verifyState(100, 1000, false, false, 0,
                 PlaceEuropePier.class);
@@ -336,7 +336,7 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         europe.verifyGoodsInShip(1,
                 org.microcol.model.Goods.of(GoodsType.ORE, 7));
         europe.buyGoodsAndMoveItToCargoSlot(
-                GoodsType.BUYABLE_GOOD_TYPES.indexOf(GoodsType.MUSKET), 0);
+                GoodsType.BUYABLE_GOOD_TYPES.indexOf(GoodsType.WEAPONS), 0);
         europe.verifyCargoSlotEmpty(0, 0);
         europe.verifyGold(1000);
         equipment.captureDialog("europeMarketRestriction",
@@ -353,28 +353,28 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
-    void TC_10_protested_muskets_stay_closed_while_horses_keep_their_quote()
+    void TC_10_protested_weapons_stay_closed_while_horses_keep_their_quote()
             throws Exception {
-        // A real protest destroys the muskets and boycotts them; the rate
+        // A real protest destroys the weapons and boycotts them; the rate
         // stays 17%.
         org.microcol.page.TaxDemandPage taxes = new org.microcol.page.TaxDemandPage(
                 getContext());
         taxes.prepare(new org.microcol.page.TaxDemandPage.Fixture(FIXTURE,
                 "tax-equipment").due()
-                .warehouse(java.util.Map.of(GoodsType.MUSKET, 100,
-                        GoodsType.CORN, 40)));
+                .warehouse(java.util.Map.of(GoodsType.WEAPONS, 100,
+                        GoodsType.GRAIN, 40)));
         WelcomePage.of(getContext()).loadGame();
         taxes.startUpdate();
         taxes.protest();
         taxes.finishUpdate();
-        taxes.verifyTax(17, java.util.Map.of(GoodsType.MUSKET, 400));
+        taxes.verifyTax(17, java.util.Map.of(GoodsType.WEAPONS, 400));
         // The pier refuses to buy the closed commodity and changes nothing.
         EuropePortScreen europe = GamePage.of(getContext()).openEuroperPort();
         EuropeEquipmentPage equipment = new EuropeEquipmentPage(getContext());
-        taxes.verifyBoycottMarked(GoodsType.MUSKET, true);
+        taxes.verifyBoycottMarked(GoodsType.WEAPONS, true);
         taxes.verifyBoycottMarked(GoodsType.HORSE, false);
-        equipment.open(100, "Buy 50 muskets");
-        equipment.verifyChoice("Buy 50 muskets", false,
+        equipment.open(100, "Buy 50 weapons");
+        equipment.verifyChoice("Buy 50 weapons", false,
                 "This commodity is boycotted by the Crown. Nothing was changed.");
         equipment.cancel();
         equipment.verifyState(100, 1000, false, false, 0,
@@ -389,7 +389,7 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         // Continue keeps the closed commodity without asking again.
         europe.close().exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame().openEuroperPort();
-        taxes.verifyTax(17, java.util.Map.of(GoodsType.MUSKET, 400));
+        taxes.verifyTax(17, java.util.Map.of(GoodsType.WEAPONS, 400));
         equipment.verifyState(100, 708, false, true, 0, PlaceEuropePier.class);
     }
 
@@ -410,12 +410,12 @@ public class TC_27_F19_europe_equipment_test extends AbstractMicroColTest {
         equipment.openContextMenu(100);
         org.microcol.page.ContextMenuPage menu = new org.microcol.page.ContextMenuPage(
                 getContext());
-        menu.verifyPaperMenuWithoutShortcuts("Koupit 50 mušket");
+        menu.verifyPaperMenuWithoutShortcuts("Koupit 50 zbraní");
         menu.captureMenu("context-menu-europe-czech.png");
         menu.escape();
         menu.verifyClosed();
-        equipment.open(100, "Koupit 50 mušket");
-        equipment.verifyChoice("Koupit 50 mušket", true, "");
+        equipment.open(100, "Koupit 50 zbraní");
+        equipment.verifyChoice("Koupit 50 zbraní", true, "");
         equipment.captureDialog("europeEquipmentDialog",
                 "europe-equipment-czech.png");
         equipment.confirmWithEnter();

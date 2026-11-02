@@ -264,7 +264,7 @@ public class TC_141_F132_naval_interception_test extends AbstractMicroColTest {
         unit.add("action", action);
         unit.addProperty("movementThirds", 24);
         unit.addProperty("tools", 0);
-        unit.addProperty("holdingGuns", false);
+        unit.addProperty("holdingWeapons", false);
         unit.addProperty("mounted", false);
         final JsonObject place = new JsonObject();
         final JsonObject location = new JsonObject();

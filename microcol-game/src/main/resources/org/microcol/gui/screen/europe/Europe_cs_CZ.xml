@@ -33,8 +33,8 @@
 	<entry key="buttonBuyUnit">Koupit jednotky</entry>
 
     <entry key="equipmentOpen">Výbava: kliknutím, pravým tlačítkem nebo Enter nakoupíte či prodáte</entry>
-    <entry key="buyMuskets">Koupit 50 mušket</entry>
-    <entry key="sellMuskets">Prodat muškety</entry>
+    <entry key="buyWeapons">Koupit 50 zbraní</entry>
+    <entry key="sellWeapons">Prodat zbraně</entry>
     <entry key="buyHorses">Koupit 50 koní</entry>
     <entry key="sellHorses">Prodat koně</entry>
     <entry key="buyTools">Koupit 100 nástrojů</entry>
@@ -48,7 +48,7 @@ Daň: %s%% (%s zlatých)
 Celkem: %s zlatých</entry>
     <entry key="equipmentUNIT_UNAVAILABLE">Tento kolonista už není dostupný na vašem evropském molu ve vašem tahu. Nic se nezměnilo. Zrušte nabídku a vyberte kolonistu znovu.</entry>
     <entry key="equipmentALREADY_SET">Výbava se už změnila. Nic se neprovedlo. Zrušte nabídku a vyberte znovu.</entry>
-    <entry key="equipmentINCOMPATIBLE_EQUIPMENT">Nejprve prodejte neslučitelnou výbavu. Koně a muškety lze kombinovat; nástroje vyžadují kolonistu bez jiné výbavy.</entry>
+    <entry key="equipmentINCOMPATIBLE_EQUIPMENT">Nejprve prodejte neslučitelnou výbavu. Koně a zbraně lze kombinovat; nástroje vyžadují kolonistu bez jiné výbavy.</entry>
     <entry key="equipmentNOT_ENOUGH_GOLD">Nemáte dost zlata. Nic se nezměnilo. Zrušte nabídku a zajistěte potřebné zlato.</entry>
     <entry key="equipmentTRADE_RESTRICTED">Obchod s vaším evropským přístavem není dostupný. Nic se nezměnilo.</entry>
     <entry key="equipmentGOLD_LIMIT">Tento obchod překračuje limit pokladny. Nic se nezměnilo.</entry>
@@ -61,7 +61,7 @@ Celkem: %s zlatých</entry>
 	<entry key="recruitOpen">Nábor</entry>
 	<entry key="recruitChanged">Kandidát nebo cena cesty se změnili. Otevřete nábor znovu.</entry>
 	<entry key="recruitUnavailable">V tomto tahu není nábor dostupný.</entry>
-    <entry key="immigrationProgress">Přistěhovalectví: %s / %s křížů</entry>
+    <entry key="immigrationProgress">Přistěhovalectví: %s / %s pochodní</entry>
     <entry key="immigrationPending">Získaný přistěhovalec dorazí na začátku vašeho příštího tahu. Do té doby nelze zaplatit cestu.</entry>
     <entry key="repairsOpen">Opravy lodí</entry>
     <entry key="repairsEmpty">Žádné lodě se neopravují.</entry>
@@ -87,7 +87,7 @@ Celkem: %s zlatých</entry>
     <entry key="immigrantBoardingUnavailable">Pořadí nástupu této osoby se změnilo. Nic se nezměnilo.</entry>
     <entry key="goToCANCELLED_NOT_FRIENDLY">%s #%s: rozkaz přesunu zrušen, kolonie %s již není přátelská.</entry>
   <entry key="earnedTitle">Vyberte získaného přistěhovalce</entry>
-  <entry key="earnedExplanation">Kříže: %s / %s. Vyberte jednoho přistěhovalce zdarma. Tah pokračuje po výběru všech získaných přistěhovalců. Zavřením okna výběr odložíte.</entry>
+  <entry key="earnedExplanation">Pochodně: %s / %s. Vyberte jednoho přistěhovalce zdarma. Tah pokračuje po výběru všech získaných přistěhovalců. Zavřením okna výběr odložíte.</entry>
   <entry key="earnedChoose">Vybrat zdarma</entry>
   <entry key="earnedOpen">Vybrat přistěhovalce</entry>
   <entry key="earnedPending">Získaný přistěhovalec čeká na váš výběr. Pokračujte v tahu přes nábor.</entry>

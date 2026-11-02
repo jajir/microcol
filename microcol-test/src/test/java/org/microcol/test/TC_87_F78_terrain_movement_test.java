@@ -159,7 +159,7 @@ public class TC_87_F78_terrain_movement_test extends AbstractMicroColTest {
         terrain.put(MOUNTAIN, TerrainType.MOUNTAIN);
         data.getModel().getMap().setTerrainType(terrain);
         // The colony's eastern field is the mountain square; a mountain cannot
-        // grow tobacco, so that field produces ore, which mountains do have.
+        // grow grapes, so that field produces ore, which mountains do have.
         data.getModel().getColonies().stream()
                 .filter(colony -> COLONY.equals(colony.getLocation()))
                 .flatMap(colony -> colony.getColonyFields().stream())

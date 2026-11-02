@@ -14,9 +14,10 @@ public final class UnitMasterBlacksmith extends UnitFreeColonist {
     public UnitMasterBlacksmith(final Model model, final Integer id,
             final Function<Unit, Place> placeBuilder, final Player owner,
             final int availableMoves, final UnitAction unitAction,
-            final int tools, final boolean holdingGuns, final boolean mounted) {
+            final int tools, final boolean holdingWeapons,
+            final boolean mounted) {
         super(model, id, placeBuilder, owner, availableMoves, unitAction, tools,
-                holdingGuns, mounted);
+                holdingWeapons, mounted);
     }
 
     @Override

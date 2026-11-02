@@ -57,8 +57,8 @@ class CombatStrengthTest {
                 .getUnitById(6);
         attacker.placeToLocation(ATTACKER);
         defender.placeToLocation(DEFENDER);
-        attacker.setHoldingGuns(true);
-        defender.setHoldingGuns(true);
+        attacker.setHoldingWeapons(true);
+        defender.setHoldingWeapons(true);
         attacker.getOwner().revealMapForUnit(attacker);
         return model;
     }
@@ -147,7 +147,8 @@ class CombatStrengthTest {
         setCombatState(withForest, state);
         forestOrder.execute();
         assertFalse(
-                ((UnitFreeColonist) withForest.getUnitById(0)).isHoldingGuns(),
+                ((UnitFreeColonist) withForest.getUnitById(0))
+                        .isHoldingWeapons(),
                 "attacker loses against " + name + " forest");
 
         final Model cleared = model(scenario(type, true));
@@ -158,7 +159,8 @@ class CombatStrengthTest {
                 .getAttackerWinProbability());
         setCombatState(cleared, state);
         bareOrder.execute();
-        assertFalse(((UnitFreeColonist) cleared.getUnitById(6)).isHoldingGuns(),
+        assertFalse(
+                ((UnitFreeColonist) cleared.getUnitById(6)).isHoldingWeapons(),
                 "defender loses once " + name + " is bare");
     }
 
@@ -203,7 +205,7 @@ class CombatStrengthTest {
                 .stream().filter(unit -> unit.getId() == 6).findFirst()
                 .orElseThrow();
         defenderPo.getPlaceMap().setLocation(DEFENDER);
-        defenderPo.setHoldingGuns(true);
+        defenderPo.setHoldingWeapons(true);
         defenderPo.setAvailableMoves(0);
         final UnitActionFortifyPo action = new UnitActionFortifyPo();
         action.setFortified(false);
@@ -213,7 +215,7 @@ class CombatStrengthTest {
         final UnitFreeColonist attacker = (UnitFreeColonist) pending
                 .getUnitById(0);
         attacker.placeToLocation(ATTACKER);
-        attacker.setHoldingGuns(true);
+        attacker.setHoldingWeapons(true);
         attacker.getOwner().revealMapForUnit(attacker);
         assertEquals(0, quote(pending).getDefender().getFortificationBonus());
         final ModelPo effectiveData = pending.save();
@@ -272,7 +274,7 @@ class CombatStrengthTest {
         place.setLocation(DEFENDER);
         place.setOrientation(Direction.east);
         second.setPlaceMap(place);
-        second.setHoldingGuns(true);
+        second.setHoldingWeapons(true);
         second.setMounted(true);
         data.getUnits().add(second);
         final Model model = model(data);

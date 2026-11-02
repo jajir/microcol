@@ -60,7 +60,7 @@ public class TC_170_F205_inspection_without_moving_test
     private static final int RANGE_RADIUS = 8;
 
     private static final String[] HIDDEN_CONTENTS = { "With:", "No goods",
-            "Silver", "Ore", "Fur", "Colonist" };
+            "Silver", "Ore", "Clay", "Colonist" };
 
     @Start
     private void start(final Stage stage) throws Exception {

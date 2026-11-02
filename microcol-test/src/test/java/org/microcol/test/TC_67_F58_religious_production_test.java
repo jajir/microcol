@@ -11,7 +11,7 @@ import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
 /**
- * Build religious upgrades, assign preachers and retain actual cross credit.
+ * Build religious upgrades, assign preachers and retain actual torch credit.
  * Fixture purpose: F58 isolates religious production from politics. It has 8
  * residents and no liberty, so it uses the Discoverer profile (Tory line at 10)
  * and the net political change stays zero; political effects are in TC_77.
@@ -31,10 +31,10 @@ public class TC_67_F58_religious_production_test extends AbstractMicroColTest {
     void TC_01_upgrade_then_expert_and_continue() throws Exception {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
-        ReligiousProductionPage crosses = new ReligiousProductionPage(
+        ReligiousProductionPage torches = new ReligiousProductionPage(
                 getContext());
         ConstructionPage building = new ConstructionPage(getContext());
-        crosses.verifyCrosses(colony, 1, 0);
+        torches.verifyTorches(colony, 1, 0);
         // Completing the church keeps this turn's chapel production.
         building.open();
         building.select("CHURCH");
@@ -44,15 +44,15 @@ public class TC_67_F58_religious_production_test extends AbstractMicroColTest {
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         building.verifyBuilding(ConstructionType.CHURCH, 1);
-        crosses.verifyCrosses(colony, 2, 1);
+        torches.verifyTorches(colony, 2, 1);
         // One ordinary preacher gives five; the cathedral immediately previews
         // nine.
         ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromIndoor("id_town_hall", 0);
-        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.CROSS);
+        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.TORCHES);
         jobs.confirm();
-        crosses.verifyCrosses(colony, 5, 1);
-        crosses.prepareCathedralMaterials();
+        torches.verifyTorches(colony, 5, 1);
+        torches.prepareCathedralMaterials();
         building.open();
         building.select("CATHEDRAL");
         building.confirm();
@@ -62,27 +62,27 @@ public class TC_67_F58_religious_production_test extends AbstractMicroColTest {
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         building.verifyBuilding(ConstructionType.CHURCH, 0);
         building.verifyBuilding(ConstructionType.CATHEDRAL, 1);
-        crosses.verifyCrosses(colony, 9, 6);
+        torches.verifyTorches(colony, 9, 6);
         // Removing the worker retains the tier; a firebrand doubles only
         // staffed output.
         jobs.openFromIndoor("id_church", 0);
-        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.BELL);
+        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.OWLS);
         jobs.confirm();
-        crosses.verifyCrosses(colony, 3, 6);
+        torches.verifyTorches(colony, 3, 6);
         jobs.openFromIndoor("id_blacksmith", 0);
-        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.CROSS);
+        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.TORCHES);
         jobs.confirm();
-        crosses.verifyCrosses(colony, 15, 6);
-        crosses.captureDialog("id_church", "religion-english.png");
+        torches.verifyTorches(colony, 15, 6);
+        torches.captureDialog("id_church", "religion-english.png");
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        crosses.verifyCrosses(colony, 15, 21);
+        torches.verifyTorches(colony, 15, 21);
         game = colony.close();
         game.exitToMenu();
         colony = new FreePlayAuditPage(getContext()).continueGame()
                 .openColonyAt(COLONY, "New Amsterdam");
-        crosses.verifyCrosses(colony, 15, 21);
+        torches.verifyTorches(colony, 15, 21);
     }
 
     @Test
@@ -91,12 +91,12 @@ public class TC_67_F58_religious_production_test extends AbstractMicroColTest {
         SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();
         settings.goBack().loadGame();
-        ReligiousProductionPage crosses = new ReligiousProductionPage(
+        ReligiousProductionPage torches = new ReligiousProductionPage(
                 getContext());
-        crosses.loadPennFixture();
+        torches.loadPennFixture();
         GamePage game = GamePage.of(getContext());
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
-        crosses.verifyCrosses(colony, 1, 0);
+        torches.verifyTorches(colony, 1, 0);
         ConstructionPage building = new ConstructionPage(getContext());
         building.open();
         building.select("CHURCH");
@@ -105,13 +105,13 @@ public class TC_67_F58_religious_production_test extends AbstractMicroColTest {
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        crosses.verifyCrosses(colony, 3, 1);
+        torches.verifyTorches(colony, 3, 1);
         ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromIndoor("id_town_hall", 0);
-        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.CROSS);
+        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.TORCHES);
         jobs.confirm();
-        crosses.verifyCrosses(colony, 7, 1);
-        crosses.prepareCathedralMaterials();
+        torches.verifyTorches(colony, 7, 1);
+        torches.prepareCathedralMaterials();
         building.open();
         building.select("CATHEDRAL");
         building.confirm();
@@ -119,16 +119,16 @@ public class TC_67_F58_religious_production_test extends AbstractMicroColTest {
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        crosses.verifyCrosses(colony, 13, 8);
-        crosses.captureDialog("id_church", "religion-czech.png");
+        torches.verifyTorches(colony, 13, 8);
+        torches.captureDialog("id_church", "religion-czech.png");
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        crosses.verifyCrosses(colony, 13, 21);
+        torches.verifyTorches(colony, 13, 21);
         game = colony.close();
         game.exitToMenu();
         colony = new FreePlayAuditPage(getContext()).continueGame()
                 .openColonyAt(COLONY, "New Amsterdam");
-        crosses.verifyCrosses(colony, 13, 21);
+        torches.verifyTorches(colony, 13, 21);
     }
 }

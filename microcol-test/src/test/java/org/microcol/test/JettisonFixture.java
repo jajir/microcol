@@ -18,7 +18,7 @@ import com.google.gson.JsonObject;
  * Scoped runtime fixture for the goods jettison scenarios. It derives a
  * prepared copy of a shared scenario before the game is loaded: the ship keeps
  * its passenger in slot 1, gets ore in slot 0 with the requested amount, and
- * gets tobacco in slot 2 as the other goods hold that must never change. The
+ * gets grapes in slot 2 as the other goods hold that must never change. The
  * shared file is never edited.
  */
 final class JettisonFixture {
@@ -32,13 +32,13 @@ final class JettisonFixture {
     /** Passenger that must stay aboard. */
     static final int PASSENGER_HOLD = 1;
 
-    /** Other goods hold that must keep its tobacco. */
+    /** Other goods hold that must keep its grapes. */
     static final int OTHER_HOLD = 2;
 
     /** Passenger that must stay aboard. */
     static final int PASSENGER_ID = 4;
 
-    /** Tobacco amount placed in the other goods hold. */
+    /** Grapes amount placed in the other goods hold. */
     static final int OTHER_AMOUNT = 6;
 
     private JettisonFixture() {
@@ -65,7 +65,7 @@ final class JettisonFixture {
             final JsonArray slots = unit.getAsJsonObject("cargo")
                     .getAsJsonArray("slots");
             slots.set(ORE_HOLD, goods("ORE", oreAmount));
-            slots.set(OTHER_HOLD, goods("TOBACCO", OTHER_AMOUNT));
+            slots.set(OTHER_HOLD, goods("GRAPES", OTHER_AMOUNT));
         });
         final File prepared = new File(System.getProperty("user.home"), name);
         Files.writeString(prepared.toPath(), saved.toString());

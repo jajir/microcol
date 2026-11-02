@@ -36,7 +36,7 @@ final class ColonyBattles {
                 model.declareHostilities(owner, colony.getOwner());
             }
             if (force instanceof UnitFreeColonist) {
-                ((UnitFreeColonist) force).setHoldingGuns(true);
+                ((UnitFreeColonist) force).setHoldingWeapons(true);
             }
             final Location from = colony.getLocation().getNeighbors().stream()
                     .filter(model.getMap()::isValid)

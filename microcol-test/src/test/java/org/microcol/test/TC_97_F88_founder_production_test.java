@@ -19,7 +19,7 @@ import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
 /**
- * Jefferson, Paine and Hudson change the town-hall total and the fur field of
+ * Jefferson, Paine and Hudson change the town-hall total and the clay field of
  * the Dutch colony. The scenario is the printing scenario with three real
  * Congress members, valid candidates and a 20 percent tax rate.
  */
@@ -61,16 +61,16 @@ public class TC_97_F88_founder_production_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
-    void TC_01_founders_change_town_hall_press_newspaper_and_fur_and_continue()
+    void TC_01_founders_change_town_hall_press_newspaper_and_clay_and_continue()
             throws Exception {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
-        PrintingProductionPage bells = new PrintingProductionPage(getContext());
+        PrintingProductionPage owls = new PrintingProductionPage(getContext());
         FounderProductionPage founders = new FounderProductionPage(
                 getContext());
         // Unattended 1 at 120% plus two ordinary statesmen 6 at 170%:
         // floor((120 + 1020) / 100) = 11.
-        bells.verifyBells(11, 0, 0, 1);
+        owls.verifyOwls(11, 0, 0, 1);
         ConstructionPage building = new ConstructionPage(getContext());
         building.open();
         building.select("PRINTING_PRESS");
@@ -79,10 +79,10 @@ public class TC_97_F88_founder_production_test extends AbstractMicroColTest {
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        // The turn credits 11 bells before the press completes; with the press
+        // The turn credits 11 owls before the press completes; with the press
         // floor((170 + 1320) / 100) = 14.
-        bells.verifyBells(14, 11, 0, 1);
-        bells.prepareNewspaperMaterials();
+        owls.verifyOwls(14, 11, 0, 1);
+        owls.prepareNewspaperMaterials();
         building.open();
         building.select("NEWSPAPER");
         building.confirm();
@@ -91,24 +91,24 @@ public class TC_97_F88_founder_production_test extends AbstractMicroColTest {
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         // Newspaper replaces the press: floor((220 + 1620) / 100) = 18.
-        bells.verifyBells(18, 25, 0, 1);
+        owls.verifyOwls(18, 25, 0, 1);
         ColonyJobPage jobs = new ColonyJobPage(getContext());
-        // Ordinary colonist on bare grassland: trapping gives 2 furs, and
+        // Ordinary colonist on bare grassland: clay pit gives 2 clay, and
         // Hudson doubles them to 4.
         jobs.openFromCenter(4);
-        jobs.select(ColonyJobChoice.Kind.BEST_FIELD, GoodsType.FUR);
-        jobs.verifyDetails("Best eligible field: 4 Fur per turn", true);
+        jobs.select(ColonyJobChoice.Kind.BEST_FIELD, GoodsType.CLAY);
+        jobs.verifyDetails("Best eligible field: 4 Clay per turn", true);
         jobs.confirm();
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        founders.verifyFieldFur(4, 4);
-        bells.verifyBells(18, 43, 0, 1);
+        founders.verifyFieldClay(4, 4);
+        owls.verifyOwls(18, 43, 0, 1);
         game = colony.close();
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame().openColonyAt(COLONY,
                 "New Amsterdam");
-        bells.verifyBells(18, 43, 0, 1);
-        founders.verifyFieldFur(4, 4);
+        owls.verifyOwls(18, 43, 0, 1);
+        founders.verifyFieldClay(4, 4);
     }
 }

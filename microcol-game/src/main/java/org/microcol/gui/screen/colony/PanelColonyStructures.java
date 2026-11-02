@@ -27,16 +27,16 @@ final class PanelColonyStructures implements JavaFxComponent {
             ConstructionType.SCHOOLHOUSE, ConstructionType.PRINTING_PRESS,
             ConstructionType.CARPENTERS_STAND,
             ConstructionType.BLACKSMITHS_HOUSE, ConstructionType.ARMORY,
-            ConstructionType.STOCKADE, ConstructionType.TOBACCONISTS_HOUSE,
-            ConstructionType.WEAVERS_HOUSE,
-            ConstructionType.RUM_DISTILLERS_HOUSE,
-            ConstructionType.FUR_TRADERS_HOUSE,
-            ConstructionType.WAREHOUSE_BASIC, ConstructionType.STABLES,
-            ConstructionType.DOCK, ConstructionType.CUSTOM_HOUSE };
+            ConstructionType.STOCKADE, ConstructionType.SMALL_WINERY,
+            ConstructionType.WEAVERS_HOUSE, ConstructionType.SMALL_OIL_PRESS,
+            ConstructionType.SMALL_POTTERY, ConstructionType.WAREHOUSE_BASIC,
+            ConstructionType.STABLES, ConstructionType.DOCK,
+            ConstructionType.CUSTOM_HOUSE };
     private static final String[] IDS = { "id_town_hall", "id_church",
             "id_school", "id_press", "id_carpenter", "id_blacksmith",
-            "id_armory", "id_fort", "id_tobacco", "id_weaver", "id_rum",
-            "id_fur", "id_warehouse", "id_stables", "id_dock", "id_customs" };
+            "id_armory", "id_fort", "id_winery", "id_weaver", "id_oil_press",
+            "id_pottery", "id_warehouse", "id_stables", "id_dock",
+            "id_customs" };
     private final GridPane mainPanel = new GridPane();
     private final ImageProvider images;
     private final GameModelController controller;

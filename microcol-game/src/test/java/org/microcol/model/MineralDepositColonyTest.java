@@ -35,7 +35,7 @@ class MineralDepositColonyTest {
 
     private final GameModelPoDao dao = new GameModelPoDao();
 
-    /** Mission colony at full support, with corn so no update starves. */
+    /** Mission colony at full support, with grain so no update starves. */
     private GameModelPo data() {
         final GameModelPo data = dao.loadFromClassPath(
                 "/maps/default-campaign-mission-2-thrive.microcol");
@@ -44,7 +44,7 @@ class MineralDepositColonyTest {
             colony.setLastColonialAffiliation(colony.getOwnerName());
         });
         saved(data).setLiberty(1000L);
-        saved(data).getColonyWarehouse().put("CORN", 100);
+        saved(data).getColonyWarehouse().put("GRAIN", 100);
         return data;
     }
 
@@ -257,8 +257,8 @@ class MineralDepositColonyTest {
                 GoodsType.SILVER);
         final Model model = load(data);
         final Colony colony = model.getColonyById(COLONY_ID).orElseThrow();
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 0));
-        assertTrue(colony.getRawGoodsStats().getStatsByType(GoodsType.CORN)
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 0));
+        assertTrue(colony.getRawGoodsStats().getStatsByType(GoodsType.GRAIN)
                 .getInWarehouseAfter() < 0);
         final int residents = colony.getPopulation();
         final Unit victim = colony.getUnitsInsideColony().stream()

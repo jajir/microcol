@@ -53,18 +53,18 @@ final class RoadFixture {
 
     /**
      * Same as {@link #prepare(TestContext, File, String, int, Location...)} but
-     * the given square also carries a trapping resource, so bare grassland
-     * yields fur 2 before any road. The given worker of Delft leaves its east
+     * the given square also carries a clay pit resource, so bare grassland
+     * yields clay 2 before any road. The given worker of Delft leaves its east
      * field and stands in the colony centre, as in the resource fixture.
      *
      * @param context  running application context
      * @param source   shared scenario
      * @param name     file name of the prepared copy
      * @param tools    tools carried by each colonist
-     * @param workerId unit that worked the trapping square
-     * @param at       square with the trapping resource, bare and without road
+     * @param workerId unit that worked the clay pit square
+     * @param at       square with the clay pit resource, bare and without road
      */
-    static void prepareTrapping(final TestContext context, final File source,
+    static void prepareClayPit(final TestContext context, final File source,
             final String name, final int tools, final int workerId,
             final Location at) throws IOException {
         write(context, source, name, tools, null, new Location[0],
@@ -108,7 +108,7 @@ final class RoadFixture {
     private static void write(final TestContext context, final File source,
             final String name, final int tools, final String unitType,
             final Location[] roadsAt, final Location[] bareAt,
-            final Location[] trappingAt, final Integer freedWorkerId)
+            final Location[] clayPitAt, final Integer freedWorkerId)
             throws IOException {
         final JsonObject saved = new Gson()
                 .fromJson(Files.readString(source.toPath()), JsonObject.class);
@@ -143,7 +143,7 @@ final class RoadFixture {
         final JsonArray resources = map.has("resources")
                 ? map.getAsJsonArray("resources")
                 : emptyRows(map.getAsJsonArray("trees"));
-        for (final Location at : trappingAt) {
+        for (final Location at : clayPitAt) {
             set(resources, at, "tr");
         }
         map.add("resources", resources);

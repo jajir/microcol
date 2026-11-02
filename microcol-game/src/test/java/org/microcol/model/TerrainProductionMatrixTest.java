@@ -21,7 +21,7 @@ import org.microcol.model.campaign.po.GameModelPoDao;
  *
  * Source: aid card 4, "Terrain Chart", PDF page 135 of
  * {@code docs/Sid_Meiers_Colonization_manual.pdf}, rechecked on 2026-10-23.
- * Fish is the water output {@code CORN}; no land square has a separate fish
+ * Fish is the water output {@code GRAIN}; no land square has a separate fish
  * cell, so the fish column is asserted only through water squares.
  */
 class TerrainProductionMatrixTest {
@@ -38,8 +38,8 @@ class TerrainProductionMatrixTest {
     }
 
     /**
-     * Literal baseline for one legal variant, in the order CORN, SUGAR,
-     * TOBACCO, COTTON, FUR, LUMBER, ORE, SILVER.
+     * Literal baseline for one legal variant, in the order GRAIN, OLIVES,
+     * GRAPES, WOOL, CLAY, LUMBER, ORE, SILVER.
      */
     @ParameterizedTest(name = "{0} forest={1}")
     @CsvSource({ "PLAINS,false,4,0,1,2,0,0,0,0", "PLAINS,true,3,0,1,1,3,6,0,0",
@@ -54,22 +54,21 @@ class TerrainProductionMatrixTest {
             "MOUNTAIN,false,0,0,0,0,0,0,3,1", "OCEAN,false,3,0,0,0,0,0,0,0",
             "LAKE,false,3,0,0,0,0,0,0,0", "HIGH_SEA,false,3,0,0,0,0,0,0,0" })
     void baselineCellsMatchTheAidCardLiterally(final String name,
-            final boolean forest, final int corn, final int sugar,
-            final int tobacco, final int cotton, final int fur,
-            final int lumber, final int ore, final int silver) {
+            final boolean forest, final int grain, final int olives,
+            final int grapes, final int wool, final int clay, final int lumber,
+            final int ore, final int silver) {
         final Terrain terrain = terrain(TerrainType.valueOf(name), forest);
         assertAll(
-                () -> assertEquals(corn,
-                        terrain.canProduceAmmount(GoodsType.CORN), "CORN"),
-                () -> assertEquals(sugar,
-                        terrain.canProduceAmmount(GoodsType.SUGAR), "SUGAR"),
-                () -> assertEquals(tobacco,
-                        terrain.canProduceAmmount(GoodsType.TOBACCO),
-                        "TOBACCO"),
-                () -> assertEquals(cotton,
-                        terrain.canProduceAmmount(GoodsType.COTTON), "COTTON"),
-                () -> assertEquals(fur,
-                        terrain.canProduceAmmount(GoodsType.FUR), "FUR"),
+                () -> assertEquals(grain,
+                        terrain.canProduceAmmount(GoodsType.GRAIN), "GRAIN"),
+                () -> assertEquals(olives,
+                        terrain.canProduceAmmount(GoodsType.OLIVES), "OLIVES"),
+                () -> assertEquals(grapes,
+                        terrain.canProduceAmmount(GoodsType.GRAPES), "GRAPES"),
+                () -> assertEquals(wool,
+                        terrain.canProduceAmmount(GoodsType.WOOL), "WOOL"),
+                () -> assertEquals(clay,
+                        terrain.canProduceAmmount(GoodsType.CLAY), "CLAY"),
                 () -> assertEquals(lumber,
                         terrain.canProduceAmmount(GoodsType.LUMBER), "LUMBER"),
                 () -> assertEquals(ore,
@@ -93,9 +92,10 @@ class TerrainProductionMatrixTest {
      */
     @Test
     void everyGoodsTypeOutsideTheChartIsZeroOnEveryLegalVariant() {
-        final List<GoodsType> charted = List.of(GoodsType.CORN, GoodsType.SUGAR,
-                GoodsType.TOBACCO, GoodsType.COTTON, GoodsType.FUR,
-                GoodsType.LUMBER, GoodsType.ORE, GoodsType.SILVER);
+        final List<GoodsType> charted = List.of(GoodsType.GRAIN,
+                GoodsType.OLIVES, GoodsType.GRAPES, GoodsType.WOOL,
+                GoodsType.CLAY, GoodsType.LUMBER, GoodsType.ORE,
+                GoodsType.SILVER);
         for (final TerrainType type : TerrainType.TERRAINS) {
             final List<Boolean> variants = type.isCanHaveTree()
                     ? List.of(false, true)
@@ -122,37 +122,37 @@ class TerrainProductionMatrixTest {
                 () -> terrain.setHasTrees(true));
         assertFalse(terrain.isHasTrees());
         assertEquals(0, terrain.canProduceAmmount(GoodsType.LUMBER));
-        assertEquals(0, terrain.canProduceAmmount(GoodsType.FUR));
+        assertEquals(0, terrain.canProduceAmmount(GoodsType.CLAY));
     }
 
     @Test
     void forestedSquareOnlyOffersGoodsItsRowLists() {
         final Terrain tundra = terrain(TerrainType.TUNDRA, true);
-        assertTrue(tundra.canProduce(GoodsType.FUR));
-        assertFalse(tundra.canProduce(GoodsType.SUGAR));
+        assertTrue(tundra.canProduce(GoodsType.CLAY));
+        assertFalse(tundra.canProduce(GoodsType.OLIVES));
         assertEquals(
-                List.of(GoodsType.CORN, GoodsType.FUR, GoodsType.LUMBER,
+                List.of(GoodsType.GRAIN, GoodsType.CLAY, GoodsType.LUMBER,
                         GoodsType.ORE),
                 tundra.getProduction().stream()
                         .map(TerrainProduction::getGoodsType)
                         .collect(Collectors.toList()));
         final Terrain bare = terrain(TerrainType.TUNDRA, false);
-        assertFalse(bare.canProduce(GoodsType.FUR));
+        assertFalse(bare.canProduce(GoodsType.CLAY));
         assertFalse(bare.canProduce(GoodsType.LUMBER));
     }
 
     @Test
     void clearedSwampFallsBackToBareRowWithoutDuplicatingOutput() {
         final Terrain swamp = terrain(TerrainType.SWAMP, true);
-        assertEquals(2, swamp.canProduceAmmount(GoodsType.CORN));
+        assertEquals(2, swamp.canProduceAmmount(GoodsType.GRAIN));
         assertEquals(4, swamp.canProduceAmmount(GoodsType.LUMBER));
         swamp.setHasTrees(false);
         swamp.setCleared(true);
-        assertEquals(3, swamp.canProduceAmmount(GoodsType.CORN));
-        assertEquals(3, swamp.canProduceAmmount(GoodsType.SUGAR));
-        assertEquals(1, swamp.canProduceAmmount(GoodsType.TOBACCO));
+        assertEquals(3, swamp.canProduceAmmount(GoodsType.GRAIN));
+        assertEquals(3, swamp.canProduceAmmount(GoodsType.OLIVES));
+        assertEquals(1, swamp.canProduceAmmount(GoodsType.GRAPES));
         assertEquals(0, swamp.canProduceAmmount(GoodsType.LUMBER));
-        assertEquals(0, swamp.canProduceAmmount(GoodsType.FUR));
+        assertEquals(0, swamp.canProduceAmmount(GoodsType.CLAY));
         assertEquals(3, swamp.getProduction().size());
     }
 
@@ -194,8 +194,8 @@ class TerrainProductionMatrixTest {
                 .filter(candidate -> candidate.getLocation().equals(target))
                 .findFirst().orElseThrow();
         assertEquals(TerrainType.SWAMP, field.getTerrainType());
-        assertEquals(2, field.getGoodsTypeProduction(GoodsType.CORN));
-        assertFalse(field.canProduce(GoodsType.FUR));
+        assertEquals(2, field.getGoodsTypeProduction(GoodsType.GRAIN));
+        assertFalse(field.canProduce(GoodsType.CLAY));
         final Unit colonist = model.addUnitOutSideColony(colony);
         colonist.placeToColonyField(field, GoodsType.LUMBER);
 

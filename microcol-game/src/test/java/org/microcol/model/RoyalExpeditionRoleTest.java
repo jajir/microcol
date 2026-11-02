@@ -39,7 +39,7 @@ class RoyalExpeditionRoleTest {
                 .filter(unit -> unit instanceof UnitFreeColonist
                         && !((UnitFreeColonist) unit).isMounted())
                 .map(unit -> (UnitFreeColonist) unit).findFirst().orElseThrow();
-        assertTrue(soldier.isHoldingGuns());
+        assertTrue(soldier.isHoldingWeapons());
         assertTrue(soldier.canAttack());
         assertTrue(soldier.isAtCargoSlot());
         assertSame(king, soldier.getOwner());
@@ -49,7 +49,7 @@ class RoyalExpeditionRoleTest {
                 MissionImpl.getPredefinedGameOverEvaluators());
         final UnitFreeColonist saved = (UnitFreeColonist) restored
                 .getUnitById(soldier.getId());
-        assertTrue(saved.isHoldingGuns());
+        assertTrue(saved.isHoldingWeapons());
         assertTrue(saved.canAttack());
         assertTrue(saved.isAtCargoSlot());
         assertEquals(MilitaryRole.ROYAL, saved.getMilitaryRole());

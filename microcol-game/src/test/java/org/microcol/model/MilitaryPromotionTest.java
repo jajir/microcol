@@ -68,8 +68,8 @@ class MilitaryPromotionTest {
                 .getUnitById(6);
         attacker.placeToLocation(ORIGIN);
         defender.placeToLocation(TARGET);
-        attacker.setHoldingGuns(true);
-        defender.setHoldingGuns(true);
+        attacker.setHoldingWeapons(true);
+        defender.setHoldingWeapons(true);
         attacker.getOwner().revealMapForUnit(attacker);
         return model;
     }
@@ -102,7 +102,7 @@ class MilitaryPromotionTest {
         assertFalse(step.wasVeteran());
         assertTrue(step.isVeteran());
         assertTrue(soldier.isVeteran());
-        assertTrue(soldier.isHoldingGuns());
+        assertTrue(soldier.isHoldingWeapons());
         assertEquals(7L + 2 * STEP, promoted.save().getCombatRandomState());
         final Model restored = Model.make(promoted.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
@@ -154,7 +154,7 @@ class MilitaryPromotionTest {
         assertEquals(UnitType.MASTER_BLACKSMITH,
                 events.get(0).getPromotion().orElseThrow().getToType());
         assertEquals(19L + 2 * STEP, model.save().getCombatRandomState());
-        expert.setHoldingGuns(false);
+        expert.setHoldingWeapons(false);
         assertTrue(expert.isVeteran());
         final Model restored = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
@@ -162,7 +162,7 @@ class MilitaryPromotionTest {
                 .getUnitById(6);
         assertEquals(UnitType.MASTER_BLACKSMITH, continued.getType());
         assertTrue(continued.isVeteran());
-        assertFalse(continued.isHoldingGuns());
+        assertFalse(continued.isHoldingWeapons());
     }
 
     @Test
@@ -240,7 +240,7 @@ class MilitaryPromotionTest {
             assertSame(winner, model.getUnitById(0));
             assertEquals(before[i], promotion.getFromType());
             assertEquals(after[i], promotion.getToType());
-            assertTrue(winner.isHoldingGuns());
+            assertTrue(winner.isHoldingWeapons());
             assertEquals(i == 2, winner.isVeteran());
             if (i < before.length - 1) {
                 final ModelPo next = model.save();
@@ -248,7 +248,7 @@ class MilitaryPromotionTest {
                 for (final UnitPo unit : next.getUnits()) {
                     if (unit.getId() == 0 || unit.getId() == 6) {
                         unit.setAvailableMoves(1);
-                        unit.setHoldingGuns(true);
+                        unit.setHoldingWeapons(true);
                     }
                 }
                 model = Model.make(next,
@@ -270,11 +270,11 @@ class MilitaryPromotionTest {
         veteran.prepareAttack(TARGET, true).orElseThrow().execute();
         assertTrue(events.get(0).getPromotion().isEmpty());
         assertEquals(7L + STEP, model.save().getCombatRandomState());
-        veteran.setHoldingGuns(false);
+        veteran.setHoldingWeapons(false);
         assertTrue(veteran.isVeteran());
         veteran.setMounted(true);
-        veteran.setHoldingGuns(true);
-        ((UnitFreeColonist) model.getUnitById(6)).setHoldingGuns(true);
+        veteran.setHoldingWeapons(true);
+        ((UnitFreeColonist) model.getUnitById(6)).setHoldingWeapons(true);
         assertEquals(4.5,
                 CombatStrengths.forBattle(model, veteran, model.getUnitById(6))
                         .orElseThrow().getAttacker().getBase());

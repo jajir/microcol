@@ -101,31 +101,31 @@ class TaxBoycottTest {
 
     @Test
     void boycottClosesPurchaseAndSaleOfThatCommodityOnly() {
-        final Model model = modelWithWagon(GoodsType.CORN);
+        final Model model = modelWithWagon(GoodsType.GRAIN);
         final Player dutch = model.getPlayerByName("Dutch");
         final CargoSlot target = slot(model, 0);
         final CargoSlot source = slot(model, 1);
-        source.addGoods(Goods.of(GoodsType.CORN, 30));
+        source.addGoods(Goods.of(GoodsType.GRAIN, 30));
         final String before = snapshot(model);
         final int gold = dutch.getGold();
 
-        assertTrue(dutch.isBoycotted(GoodsType.CORN));
+        assertTrue(dutch.isBoycotted(GoodsType.GRAIN));
         assertThrows(IllegalStateException.class, () -> target
-                .buyAndStoreFromEuropePort(Goods.of(GoodsType.CORN, 20)));
+                .buyAndStoreFromEuropePort(Goods.of(GoodsType.GRAIN, 20)));
         assertThrows(IllegalStateException.class,
-                () -> model.sellGoods(source, Goods.of(GoodsType.CORN, 10)));
+                () -> model.sellGoods(source, Goods.of(GoodsType.GRAIN, 10)));
         assertThrows(IllegalStateException.class,
-                () -> dutch.buyGoods(Goods.of(GoodsType.CORN, 1)));
+                () -> dutch.buyGoods(Goods.of(GoodsType.GRAIN, 1)));
         assertThrows(IllegalStateException.class,
-                () -> dutch.sellGoods(Goods.of(GoodsType.CORN, 1)));
+                () -> dutch.sellGoods(Goods.of(GoodsType.GRAIN, 1)));
         assertEquals(before, snapshot(model));
         assertEquals(gold, dutch.getGold());
         assertTrue(target.isEmpty());
         assertEquals(30, amountIn(source));
-        assertTrue(dutch.getMaxBuyableGoods(GoodsType.CORN).isZero());
+        assertTrue(dutch.getMaxBuyableGoods(GoodsType.GRAIN).isZero());
 
         // The arithmetic quote stays usable for the revolutionary exception.
-        assertTrue(dutch.quoteEuropeTrade(Goods.of(GoodsType.CORN, 10), false)
+        assertTrue(dutch.quoteEuropeTrade(Goods.of(GoodsType.GRAIN, 10), false)
                 .getTotal() > 0);
 
         // Another commodity trades normally.
@@ -160,7 +160,7 @@ class TaxBoycottTest {
                 () -> model.sellGoods(source, Goods.of(GoodsType.ORE, 30)));
         assertEquals(before, snapshot(model));
         assertTrue(dutch.getMaxBuyableGoods(GoodsType.ORE).isZero());
-        assertFalse(dutch.getMaxBuyableGoods(GoodsType.CORN).isZero());
+        assertFalse(dutch.getMaxBuyableGoods(GoodsType.GRAIN).isZero());
     }
 
     @Test
@@ -171,7 +171,7 @@ class TaxBoycottTest {
         final Player dutch = restored.getPlayerByName("Dutch");
         assertTrue(dutch.isBoycotted(GoodsType.ORE));
         assertTrue(dutch.isBoycotted(GoodsType.SILVER));
-        assertFalse(dutch.isBoycotted(GoodsType.CORN));
+        assertFalse(dutch.isBoycotted(GoodsType.GRAIN));
         assertEquals(snapshot(model), snapshot(restored));
     }
 
@@ -324,26 +324,26 @@ class TaxBoycottTest {
 
     @Test
     void pierEquipmentIsClosedInBothDirectionsForTheBoycottedCommodityOnly() {
-        preparePier(GoodsType.MUSKET);
+        preparePier(GoodsType.WEAPONS);
         assertEquals(Optional.of(EquipmentProblem.BOYCOTTED),
-                colonist.getEuropeEquipmentProblem(GoodsType.MUSKET, true));
+                colonist.getEuropeEquipmentProblem(GoodsType.WEAPONS, true));
         final EuropeTradeQuote offer = colonist
-                .getEuropeEquipmentQuote(GoodsType.MUSKET, true);
+                .getEuropeEquipmentQuote(GoodsType.WEAPONS, true);
         assertThrows(IllegalStateException.class, () -> colonist
-                .tradeEquipmentInEurope(GoodsType.MUSKET, true, offer));
+                .tradeEquipmentInEurope(GoodsType.WEAPONS, true, offer));
         assertEquals(1000, pierOwner.getGold());
-        assertFalse(colonist.isHoldingGuns());
+        assertFalse(colonist.isHoldingWeapons());
 
-        colonist.setHoldingGuns(true);
+        colonist.setHoldingWeapons(true);
         assertEquals(Optional.of(EquipmentProblem.BOYCOTTED),
-                colonist.getEuropeEquipmentProblem(GoodsType.MUSKET, false));
+                colonist.getEuropeEquipmentProblem(GoodsType.WEAPONS, false));
         final EuropeTradeQuote sale = colonist
-                .getEuropeEquipmentQuote(GoodsType.MUSKET, false);
+                .getEuropeEquipmentQuote(GoodsType.WEAPONS, false);
         assertThrows(IllegalStateException.class, () -> colonist
-                .tradeEquipmentInEurope(GoodsType.MUSKET, false, sale));
+                .tradeEquipmentInEurope(GoodsType.WEAPONS, false, sale));
         assertEquals(1000, pierOwner.getGold());
-        assertTrue(colonist.isHoldingGuns());
-        colonist.setHoldingGuns(false);
+        assertTrue(colonist.isHoldingWeapons());
+        colonist.setHoldingWeapons(false);
 
         // Horses and tools stay tradable.
         assertEquals(Optional.empty(),

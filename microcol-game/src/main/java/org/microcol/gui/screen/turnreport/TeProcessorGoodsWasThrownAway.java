@@ -1,17 +1,17 @@
 package org.microcol.gui.screen.turnreport;
 
-import static org.microcol.model.GoodsType.BELL;
-import static org.microcol.model.GoodsType.CIGARS;
-import static org.microcol.model.GoodsType.COAT;
-import static org.microcol.model.GoodsType.COTTON;
-import static org.microcol.model.GoodsType.CROSS;
+import static org.microcol.model.GoodsType.OWLS;
+import static org.microcol.model.GoodsType.WINE;
+import static org.microcol.model.GoodsType.AMPHORAE;
+import static org.microcol.model.GoodsType.WOOL;
+import static org.microcol.model.GoodsType.TORCHES;
 import static org.microcol.model.GoodsType.GOODS;
 import static org.microcol.model.GoodsType.HORSE;
-import static org.microcol.model.GoodsType.MUSKET;
+import static org.microcol.model.GoodsType.WEAPONS;
 import static org.microcol.model.GoodsType.ORE;
-import static org.microcol.model.GoodsType.RUM;
-import static org.microcol.model.GoodsType.SUGAR;
-import static org.microcol.model.GoodsType.TOBACCO;
+import static org.microcol.model.GoodsType.OLIVE_OIL;
+import static org.microcol.model.GoodsType.OLIVES;
+import static org.microcol.model.GoodsType.GRAPES;
 
 import java.util.List;
 import java.util.function.Function;
@@ -32,14 +32,15 @@ import com.google.inject.Inject;
 public class TeProcessorGoodsWasThrownAway extends AbstractTeProcessor
         implements Function<TurnEvent, TeItemSimple> {
 
-    final static List<GoodsType> masculine = ImmutableList.of(TOBACCO, HORSE,
-            RUM, CIGARS, COAT, CROSS, BELL);
+    final static List<GoodsType> masculine = ImmutableList.of(GRAPES, HORSE,
+            OLIVE_OIL, WINE, AMPHORAE, TORCHES, OWLS);
 
-    final static List<GoodsType> feminine = ImmutableList.of(SUGAR, COTTON, ORE,
-            GOODS, MUSKET);
+    final static List<GoodsType> feminine = ImmutableList.of(OLIVES, WOOL, ORE,
+            GOODS, WEAPONS);
 
-    // final static List<GoodsType> neuter = ImmutableList.of(CORN, FUR, LUMBER,
-    // SILVER, COTTON, TOOLS,
+    // final static List<GoodsType> neuter = ImmutableList.of(GRAIN, CLAY,
+    // LUMBER,
+    // SILVER, WOOL, TOOLS,
     // HAMMERS);
 
     @Inject

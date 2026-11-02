@@ -143,11 +143,11 @@ public final class DialogEquipment extends AbstractMessageWindow {
         }
 
         try {
-            if (type == GoodsType.MUSKET) {
+            if (type == GoodsType.WEAPONS) {
                 if (equip)
-                    unit.equipWithMuskets();
+                    unit.equipWithWeapons();
                 else
-                    unit.unequipWithMuskets();
+                    unit.unequipWithWeapons();
             } else if (type == GoodsType.HORSE) {
                 if (equip)
                     unit.equipWithHorses();
@@ -169,8 +169,8 @@ public final class DialogEquipment extends AbstractMessageWindow {
     }
 
     public static ColonyMsg actionKey(GoodsType type, boolean equip) {
-        if (type == GoodsType.MUSKET) {
-            return equip ? ColonyMsg.equipMuskets : ColonyMsg.unequipMuskets;
+        if (type == GoodsType.WEAPONS) {
+            return equip ? ColonyMsg.equipWeapons : ColonyMsg.unequipWeapons;
         } else if (type == GoodsType.HORSE) {
             return equip ? ColonyMsg.equipHorses : ColonyMsg.unequipHorses;
         } else if (type == GoodsType.TOOLS) {

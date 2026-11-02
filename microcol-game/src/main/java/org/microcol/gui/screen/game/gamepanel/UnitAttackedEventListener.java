@@ -119,7 +119,7 @@ public final class UnitAttackedEventListener {
         if (event.wasDestroyed() && event
                 .getDefeated() instanceof org.microcol.model.unit.UnitFreeColonist
                 && !((org.microcol.model.unit.UnitFreeColonist) event
-                        .getDefeated()).isHoldingGuns()
+                        .getDefeated()).isHoldingWeapons()
                 && (event
                         .getAttacker() instanceof org.microcol.model.unit.UnitNativeBrave
                         || event.getDefender() instanceof org.microcol.model.unit.UnitNativeBrave)) {
@@ -144,9 +144,9 @@ public final class UnitAttackedEventListener {
             final org.microcol.model.unit.UnitFreeColonist defeated = (org.microcol.model.unit.UnitFreeColonist) event
                     .getDefeated();
             return i18n.get(
-                    defeated.isHoldingGuns()
+                    defeated.isHoldingWeapons()
                             ? org.microcol.gui.dialog.Dialog.fight_lostHorses
-                            : org.microcol.gui.dialog.Dialog.fight_lostMuskets,
+                            : org.microcol.gui.dialog.Dialog.fight_lostWeapons,
                     defeated.getOwner().getDisplayName());
         }
         return null;

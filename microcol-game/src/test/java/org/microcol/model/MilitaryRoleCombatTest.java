@@ -60,7 +60,7 @@ class MilitaryRoleCombatTest {
         out.setPlaceMap(place);
         out.setAction(new UnitActionNoActionPo());
         out.setAvailableMoves(1);
-        out.setHoldingGuns(true);
+        out.setHoldingWeapons(true);
         out.setMounted(mounted);
         out.setVeteran(veteran);
         out.setMilitaryRole(role);
@@ -217,7 +217,7 @@ class MilitaryRoleCombatTest {
         assertTrue(model.getUnitsAt(ORIGIN).isEmpty());
         assertTrue(model.getAllUnits().stream()
                 .noneMatch(unit -> unit.getId() == ATTACKER));
-        assertTrue(colonist(model, DEFENDER).isHoldingGuns());
+        assertTrue(colonist(model, DEFENDER).isHoldingWeapons());
     }
 
     @Test
@@ -235,7 +235,7 @@ class MilitaryRoleCombatTest {
         assertTrue(model.getAllUnits().stream()
                 .noneMatch(unit -> unit.getId() == DEFENDER));
         assertSame(winner, model.getUnitById(ATTACKER));
-        assertTrue(winner.isHoldingGuns());
+        assertTrue(winner.isHoldingWeapons());
         assertTrue(winner.isMounted());
     }
 
@@ -257,14 +257,14 @@ class MilitaryRoleCombatTest {
         });
         order(model).execute();
         assertSame(royal, model.getUnitById(DEFENDER));
-        assertTrue(royal.isHoldingGuns());
+        assertTrue(royal.isHoldingWeapons());
         assertTrue(royal.isMounted());
         assertFalse(royal.isVeteran());
         assertEquals(MilitaryRole.ROYAL, royal.getMilitaryRole());
         assertEquals(1, events.size());
         assertTrue(events.get(0).getPromotion().isEmpty());
-        // The ordinary attacker is not destroyed: it only loses its muskets.
-        assertFalse(colonist(model, ATTACKER).isHoldingGuns());
+        // The ordinary attacker is not destroyed: it only loses its weapons.
+        assertFalse(colonist(model, ATTACKER).isHoldingWeapons());
     }
 
     @Test
@@ -280,7 +280,7 @@ class MilitaryRoleCombatTest {
         final UnitFreeColonist defeated = colonist(model, DEFENDER);
         assertNotNull(defeated);
         assertEquals(unitsBefore, model.getAllUnits().size());
-        assertFalse(defeated.isHoldingGuns());
+        assertFalse(defeated.isHoldingWeapons());
         assertTrue(defeated.isVeteran());
         assertEquals(MilitaryRole.COLONIAL, defeated.getMilitaryRole());
     }

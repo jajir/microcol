@@ -114,8 +114,8 @@ public final class PanelPortPierUnit extends HBox {
         equipmentMenu.getItems().clear();
         if (unit instanceof UnitFreeColonist) {
             final UnitFreeColonist colonist = (UnitFreeColonist) unit;
-            addEquipmentChoice(colonist, GoodsType.MUSKET,
-                    !colonist.isHoldingGuns());
+            addEquipmentChoice(colonist, GoodsType.WEAPONS,
+                    !colonist.isHoldingWeapons());
             addEquipmentChoice(colonist, GoodsType.HORSE,
                     !colonist.isMounted());
             addEquipmentChoice(colonist, GoodsType.TOOLS,

@@ -45,7 +45,7 @@ public final class TributePage extends AbstractScreen {
     public void weakenAndMakePeace() {
         getRobot().interact(() -> {
             ((UnitFreeColonist) getModel().getUnitById(1))
-                    .setHoldingGuns(false);
+                    .setHoldingWeapons(false);
             getModel().acceptPeace(getModel().getPlayerByName("Dutch"),
                     getModel().getPlayerByName("France"));
         });

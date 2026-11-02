@@ -2,14 +2,14 @@ package org.microcol.model.store;
 
 /**
  * Saved foreign-intervention target of a declared colonial nation: the fixed
- * target, the cumulative bells counted from its first owner update, the earned
+ * target, the cumulative owls counted from its first owner update, the earned
  * flag (R-0189) and the delivered flag of the earned forces (R-0190).
  */
 public final class InterventionPo {
 
     private Integer target;
 
-    private Long bells;
+    private Long owls;
 
     private Boolean earned;
 
@@ -23,12 +23,12 @@ public final class InterventionPo {
         this.target = target;
     }
 
-    public Long getBells() {
-        return bells;
+    public Long getOwls() {
+        return owls;
     }
 
-    public void setBells(final Long bells) {
-        this.bells = bells;
+    public void setOwls(final Long owls) {
+        this.owls = owls;
     }
 
     public Boolean getEarned() {

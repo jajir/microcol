@@ -70,9 +70,9 @@ final class DisbandFixture {
             location.addProperty("y", at.getY());
             unit.addProperty("tools", tools);
             unit.addProperty("mounted", mounted);
-            // The shared scenario arms this colonist; muskets are not part of
+            // The shared scenario arms this colonist; weapons are not part of
             // the disbanding scenarios.
-            unit.addProperty("holdingGuns", false);
+            unit.addProperty("holdingWeapons", false);
         });
         model.getAsJsonArray("colonies").forEach(value -> {
             final JsonObject colony = value.getAsJsonObject();

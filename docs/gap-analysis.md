@@ -149,6 +149,8 @@ proposed acceptance checks remain explicit parts of the backlog.
 
 ## Rule catalogue
 
+Terminology note, 2026-11-02: rule descriptions in this catalogue cite the original manual and keep its colonial goods and profession names (corn, sugar, tobacco, cotton, furs, rum, cigars, cloth/silk, coats, muskets, crosses, bells). Current game, code and save identifiers use the one-to-one [Mediterranean mapping](#mediterranean-goods-naming); for example manual muskets are current weapons and manual crosses/bells are current torches/owls with unchanged numbers and effects.
+
 Bounded correction on 2026-10-17: [R-0117](requirements/done/R-0117.md) reconciles eleven current rule descriptions with source `57e16d91` and existing dated acceptance. Static classifications in those rows are updated; the historical counts above and other rows are not a fresh whole-catalogue audit.
 
 The catalogue is organized by [setup](#setup-and-turn-sequence), [map](#map-terrain-and-exploration), [movement](#movement-and-persistent-orders), [equipment](#equipment-and-pioneers), [transport](#transport-ships-and-atlantic-travel), [routes](#automated-trade-routes), [colonies](#colony-workforce-food-and-storage), [production](#production-and-professions), [construction](#construction-upgrades-and-building-effects), [education](#education-and-skill-acquisition), [immigration](#immigration-and-european-hiring), [trade](#trade-and-the-european-market), [native relations](#native-nations-settlements-and-relations), [diplomacy](#european-diplomacy-and-rivalry), [combat](#land-combat-naval-combat-and-capture), [government](#government-taxation-and-independence), [founders](#founding-father-effects), [endgame](#end-conditions-and-scoring), and [supporting information](#supporting-persistence-and-information).
@@ -207,7 +209,7 @@ Source: the rendered terrain chart on aid card 4, PDF page 135, checked visually
 | Arctic | `2` → `2` | `0` → `0` | None: all outputs zero. |
 | Hills | `2` → `1` | `100` → `0` | None: food 2 and ore 4, all others zero. |
 | Mountains | `3` → `1` | `150` → `0` | None: ore 3 and silver 1, all others zero. |
-| Ocean / sea lane | `1` → `1` | `0` → `0` | Same edible output of 3, represented by `GoodsType.CORN` rather than a separate fish commodity. The manual puts 3 in its Fish column and 0 in Fd; this naming representation alone is not counted as a behavioral gap. |
+| Ocean / sea lane | `1` → `1` | `0` → `0` | Same edible output of 3, represented by `GoodsType.GRAIN` rather than a separate fish commodity. The manual puts 3 in its Fish column and 0 in Fd; this naming representation alone is not counted as a behavioral gap. |
 
 Reference correction (2026-10-19): visual reinspection of aid card 4 / PDF 135
 confirms swamp fur `0/0`; the earlier audit omitted this difference from the
@@ -217,7 +219,7 @@ Accepted MicroCol decision (2026-10-18): fresh-water lakes retain their own
 terrain identity but otherwise use ordinary ocean water rules. Ships may sail
 on them under the same movement/access conditions and cost as ocean; land units
 need the same transport as on ocean. Colonial fishing uses the ocean baseline
-of three food (the existing `CORN` representation), with the same dock or
+of three food (the existing `GRAIN` representation), with the same dock or
 higher-tier prerequisite and subsequent modifiers. A lake is not a sea-lane
 exit to Europe. Water restrictions, including no forests or roads, apply.
 Bundled-map correction (2026-10-26): lakes in the New free game templates are
@@ -335,9 +337,9 @@ The core colony economy exists: workers occupy fields/buildings, input goods fee
 
 | ID | Manual (printed / PDF) | Expected rule | Current implementation and gap | Status | Acceptance / evidence |
 | --- | --- | --- | --- | --- | --- |
-| PROD-001 | 45, 47, 50–54 / 51, 53, 56–60 | The seven conversion chains are lumber→hammers, ore→tools, tobacco→cigars, cotton→cloth, sugar→rum, furs→coats and tools→muskets. | All seven mappings exist in [ConstructionType](../microcol-game/src/main/java/org/microcol/model/ConstructionType.java); cloth is named `SILK` internally. [Colony.computeSecondaryProduction](../microcol-game/src/main/java/org/microcol/model/Colony.java) accounts for inputs/outputs. Numeric and upgrade problems are separate rows. | Matches | Static mapping only. Proposed: exercise every chain with available inputs and check inventory conservation. Clarify the player-visible cloth/silk name independently of mechanics. |
+| PROD-001 | 45, 47, 50–54 / 51, 53, 56–60 | The seven conversion chains are lumber→hammers, ore→tools, tobacco→cigars, cotton→cloth, sugar→rum, furs→coats and tools→muskets. | All seven mappings exist in [ConstructionType](../microcol-game/src/main/java/org/microcol/model/ConstructionType.java); cloth is named `CLOTH` internally. [Colony.computeSecondaryProduction](../microcol-game/src/main/java/org/microcol/model/Colony.java) accounts for inputs/outputs. Numeric and upgrade problems are separate rows. | Matches | Static mapping only. Proposed: exercise every chain with available inputs and check inventory conservation. Clarify the player-visible cloth/silk name independently of mechanics. |
 | PROD-002 | 47 / 53 | Current-turn raw output is immediately available for processing; stock covers any remaining need, and unavailable inputs limit output. | [Colony.getGoodsStats/computeSecondaryProduction](../microcol-game/src/main/java/org/microcol/model/Colony.java) runs field output, then first/second conversion layers using `getInWarehouseAfter`; [Construction.getProduction](../microcol-game/src/main/java/org/microcol/model/Construction.java) limits slots by remaining input. | Matches | Static match for ordinary workers. Proposed: manual example of 3 ore produced/3 tools made leaves prior ore untouched; 6-tool demand consumes another 3 stored ore, and shortage limits output. Expert input mismatch is PROD-006. |
-| PROD-003 | 33 / 39 | A free colonist normally produces three manufactured goods per turn in a basic building. | Most basic buildings use three, but the automatically supplied `FUR_TRADERS_HOUSE` uses six in [ConstructionType](../microcol-game/src/main/java/org/microcol/model/ConstructionType.java). | Differs | Proposed: one free colonist in each original workshop with ample input yields three; audit carpenter naming and the reversed fur upgrade chain in the building matrix. |
+| PROD-003 | 33 / 39 | A free colonist normally produces three manufactured goods per turn in a basic building. | Most basic buildings use three, but the automatically supplied `SMALL_POTTERY` uses six in [ConstructionType](../microcol-game/src/main/java/org/microcol/model/ConstructionType.java). | Differs | Proposed: one free colonist in each original workshop with ample input yields three; audit carpenter naming and the reversed fur upgrade chain in the building matrix. |
 | PROD-004 | 33 / 39 | Petty criminals produce one manufactured good per turn; indentured servants produce two. Both remain useful outdoor laborers. | Servants/criminals are registered, persistable colonist types. Shared [ConstructionSlot](../microcol-game/src/main/java/org/microcol/model/ConstructionSlot.java) applies the agreed indoor −1/−2, minimum zero, and retains ordinary outdoor yield. | Partial | RecruitmentLaborTest verifies actual 3/2/1 smithy output, input accounting and outdoor parity. Recruitment/cargo UI is in TC46; final role/job journeys and publication remain in [R-0075](requirements/done/R-0075.md). |
 | PROD-005 | 34; Skills aid card 2 / 40, 133 | All listed experts are more productive at their specialty and behave as free colonists at other work. | [ConstructionSlot.getProductionModifier/getProduction](../microcol-game/src/main/java/org/microcol/model/ConstructionSlot.java) already applies indoor worker expertise to matching goods and uses multiplier 1 otherwise. However, ore-miner/blacksmith constants are excluded from [UnitType.UNIT_TYPES](../microcol-game/src/main/java/org/microcol/model/UnitType.java) and [UnitFactory](../microcol-game/src/main/java/org/microcol/model/unit/UnitFactory.java), leaving those specialists unreachable through normal creation/load. [ColonyField.getProduction](../microcol-game/src/main/java/org/microcol/model/ColonyField.java) also ignores outdoor expertise. Credit the generic indoor calculation; the gaps are usable specialist types, outdoor behavior and the input mismatch in PROD-006. | Partial | Proposed: every expert in the skills matrix can be created, saved/loaded, and assigned; specialty and ordinary jobs differ as specified. Use the accepted expert multipliers in [economy, production and education](#economy-production-and-education). |
 | PROD-006 | 47 / 53 | The example expert blacksmith requires six ore to make six tools; three newly mined ore plus three stored ore fulfill this need. | [ConstructionSlot.getProduction](../microcol-game/src/main/java/org/microcol/model/ConstructionSlot.java) multiplies output by expertise but consumes the unmodified per-slot input. A 2× blacksmith in the basic house can therefore produce six tools from three ore. The expert is currently unreachable through normal creation. | Differs | Proposed: enable the expert, reproduce both manual examples, and assert six-input/six-output with sufficient ore and three-input/three-output when only three ore exists. |
@@ -356,7 +358,7 @@ The core colony economy exists: workers occupy fields/buildings, input goods fee
 | BUILD-003 | 49 / 55 | Changing construction retains already accumulated hammers and applies them to the new project. | `ColonyBuildingQueue` uses the colony warehouse HAMMERS pool. Queue entries retain identity/type/order, not personal progress; completion consumes exact costs and retains surplus. | Partial | R-0109 verifies reorder, removal, empty queues, shortages, one completion per update and Continue; see [execution evidence](functional-tests.md#r-0109-shared-hammers-2026-10-16). |
 | BUILD-004 | 49 / 55 | Spend treasury gold to rush the current project, with the quoted cost and a cancel/accept decision. | `ConstructionRushQuote` and `ColonyBuildingQueue.rush` provide a bound quote and validated completion; the construction picker shows an explicit cancel/pay dialog. | Partial | R-0083 implements the agreed two-gold hammer price plus taxed Europe tools, direct project supply and stale-state rejection. Local model and player acceptance passed; full CI/publication are pending. See [rush evidence](functional-tests.md#r-0083-rush-completion-2026-10-16). |
 | BUILD-005 | 50–52; Building aid card 3 / 56–58, 134 | The initial carpenter's shop upgrades once to a lumber mill at 52 hammers/0 tools/population 3, doubling hammer output and lumber need. | `CARPENTERS_STAND` upgrades directly to `LUMBER_MILL` (52/0/3); ordinary input/output rises from 3/3 to 6/6. | Partial | R-0079 verifies actual completion, the same worker, stocks and Continue; see [industrial evidence](functional-tests.md#r-0079-industrial-production-2026-10-16). |
-| BUILD-006 | 51, 54; Building aid card 3 / 57, 60, 134 | Fur trader's house is initial; trading post costs 56 hammers/20 tools/population 3, then fur factory costs 160/100/population 6. | The initial `FUR_TRADERS_HOUSE` upgrades to `FUR_TRADING_POST`, then `FUR_FACTORY`; input/output budgets are 3/3, 6/6 and 6/9. | Partial | Chain admission was corrected in R-0025; R-0079 tests the agreed production budgets. Factory admission remains R-0084. |
+| BUILD-006 | 51, 54; Building aid card 3 / 57, 60, 134 | Fur trader's house is initial; trading post costs 56 hammers/20 tools/population 3, then fur factory costs 160/100/population 6. | The initial `SMALL_POTTERY` upgrades to `POTTERY`, then `LARGE_POTTERY`; input/output budgets are 3/3, 6/6 and 6/9. | Partial | Chain admission was corrected in R-0025; R-0079 tests the agreed production budgets. Factory admission remains R-0084. |
 | BUILD-007 | 52, 54; Building aid card 3 / 58, 60, 134 | Adam Smith is required before starting ironworks, luxury factories, and arsenal. | `ConstructionType.getRequiredFounder` identifies the six factories; `ColonyBuildingQueue` checks the current owner's Smith membership at admission and normal/rush completion. | Partial | R-0084 model and selected player checks passed; full CI/publication are pending; see [execution evidence](functional-tests.md#r-0084-founder-construction-2026-10-16). |
 | BUILD-008 | 54 / 60 | A magazine doubles armory musket output, with corresponding tools available. | `ARMORY` uses 3 tools→3 muskets; `MAGAZINE` uses 6→6. R-0079 shares aggregate shortage limiting with the other industries. | Partial | Model tier and shortage checks are recorded in [R-0079 evidence](functional-tests.md#r-0079-industrial-production-2026-10-16); full UC acceptance remains separate. |
 | BUILD-009 | 54 / 60 | Arsenal uses half as many tools for a given musket output as armory/magazine. | `ARSENAL` uses 3 tools→6 muskets for an ordinary worker, including tools made earlier in the same update. | Partial | R-0079 player/model checks cover the half-input ratio and real stocks; founder admission remains R-0084. |
@@ -761,7 +763,7 @@ keeps answered questions out of the current catalogue and active requirements.
     | Governor | 1.15 | 7 | 250 |
     | Viceroy | 1.30 | 6 | 0 |
 
-2. England needs `ceil(2 × normal cross threshold / 3)` per immigrant. France
+2. England needs `ceil(2 × normal torch threshold / 3)` per immigrant. France
    generates half the positive local alarm of an otherwise identical nation;
    direct tribal anger is unchanged. Netherlands applies half the market pressure
    per traded unit. Preserve fractional pressure/alarm so repeated single-unit
@@ -789,7 +791,7 @@ keeps answered questions out of the current catalogue and active requirements.
    ship in a distinct valid eastern sea-lane cell with a reachable landing coast.
    Use the same roster at all difficulties; gold alone varies by [difficulty and national effects](#difficulty-and-national-effects).
 4. Netherlands starts with a merchantman; the other nations with a caravel.
-   Each carries two free colonists: one soldier with 50 muskets and one pioneer
+   Each carries two free colonists: one soldier with 50 weapons and one pioneer
    with 100 tools, no horses or other cargo. Equipment is carried by people and
    does not consume a third hold. No starting expert is implied. Use the manual's
    ship capacities/speeds. Native settlement placement belongs to map generation;
@@ -865,7 +867,7 @@ rules; implementation and acceptance are tracked by that requirement.
 
 ### Support, production and Congress
 
-1. Each colony stores nonnegative local liberty `L`. Each produced bell adds
+1. Each colony stores nonnegative local liberty `L`. Each produced owl adds
    one point; no passive decay. After a population change/update cap it at
    `200 × resident population N`. Base rebel fraction is `L / (200N)`, zero at
    `N=0`; Bolivar adds [founder details](#founder-details)'s 20 percentage points, capped at 100%. Display
@@ -877,8 +879,8 @@ rules; implementation and acceptance are tracked by that requirement.
    residents with L=200 and 400 have 50% and 25%, national 30%. Move one resident
    from the first to the second: L is unchanged, local values become 100% and
    22% displayed, national remains 30%. Population loss can discard excess L at
-   the cap; it cannot export bells. Occupation preserves L but Crown-produced
-   bells subtract from it down to zero, strengthening Tories; liberation resumes
+   the cap; it cannot export owls. Occupation preserves L but Crown-produced
+   owls subtract from it down to zero, strengthening Tories; liberation resumes
    additions. User decision (2026-10-17): capture by another European colonial
    nation preserves L but transfers the colony's national support contribution
    to the new nation and applies that nation's Bolivar bonus. Crown occupation
@@ -894,16 +896,16 @@ rules; implementation and acceptance are tracked by that requirement.
    order in [economy, production and education](#economy-production-and-education). No extra −2 penalty is inferred. Unattended outputs, breeding
    and resource creation with zero base yield get no political job bonus.
    Example: Conquistador, N=10 and 20% support gives 8 Tories and −1; 50%
-   support gives 5 Tories and +1. Newly produced bells affect the next production
+   support gives 5 Tories and +1. Newly produced owls affect the next production
    snapshot, preventing a same-turn bonus loop.
-4. Congress independently accumulates every produced bell after the first
+4. Congress independently accumulates every produced owl after the first
    colony, without subtracting from local support or applying local caps. The
    next founder costs `ceil(100 × (joined founders + 1) × k)`. Carry surplus
    forward; join at most one per national update. Offer one uniformly selected
    unjoined father per nonempty manual category (up to five), frozen until a
    choice is made; no yearly refresh. Only the chosen candidate earns progress;
-   unspent bells wait while selection is pending. On joining, offer a new set.
-   Example at k=1: 120 bells recruits the first founder for 100, retains 20
+   unspent owls wait while selection is pending. On joining, offer a new set.
+   Example at k=1: 120 owls recruits the first founder for 100, retains 20
    toward the next 200. Recruit John Paul Jones first in the implementation
    acceptance journey: one free frigate proves a real, exactly-once effect.
 5. Independence requires exact national support ≥50% and a declaration before
@@ -917,7 +919,7 @@ rules; implementation and acceptance are tracked by that requirement.
 ### Revolution and intervention
 
 1. Per Crown, initial REF is `4+d` regular infantry, `2+d` cavalry, 2 artillery
-   and 2 men-of-war. Before declaration, each `ceil(500/k)` cumulative bells
+   and 2 men-of-war. Before declaration, each `ceil(500/k)` cumulative owls
    produced by its colonial nation adds one ground unit, cycling infantry,
    cavalry, artillery. Add a man-of-war whenever total ground units exceed
    six times the number of REF ships. No post-declaration growth. Persist the
@@ -938,7 +940,7 @@ rules; implementation and acceptance are tracked by that requirement.
    and once; at three surviving ground units there is no victory. These explicit
    set/denominator choices remain balance policy, not a historical formula.
 4. On the first rebel update after declaration announce a fixed intervention
-   target `ceil(500 × k)` bells; count new bells from that update onward. Deliver
+   target `ceil(500 × k)` owls; count new owls from that update onward. Deliver
    once: 2 men-of-war, 4 Continental infantry and 2 Continental cavalry, at the
    lowest-ID owned reachable coastal colony. If temporarily obstructed, keep
    the delivery pending; no duplicate units or forced displacement. With no
@@ -968,7 +970,7 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
 1. Keep all 25 named effects in the catalogue. Fill omissions only: Cortes
    guarantees treasure and doubles [native and european relations](#native-and-european-relations)'s base treasure amount. Bolivar gives
    a persistent **+20 percentage points**, including future colonies, capped
-   at 100%; he does not create spendable Congress bells. La Salle grants a
+   at 100%; he does not create spendable Congress owls. La Salle grants a
    stockade to existing and future owned colonies at population ≥3, once per
    eligible colony; never replaces a fort/fortress with a lesser building.
 2. Washington makes each eligible military victory promote one step with
@@ -993,13 +995,13 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
    and excludes them from future draws; existing people remain. He enables
    choosing from the three for religious immigration. Jones's free frigate
    arrives at the home port before rebellion, otherwise uses [revolution and intervention](#revolution-and-intervention)'s port
-   delivery rule. Revere arms one eligible worker with 50 stored muskets only
+   delivery rule. Revere arms one eligible worker with 50 stored weapons only
    if no armed defender exists; choose the strongest resulting defender then
    unit ID, and do not create free equipment. User decision (2026-10-17;
    [R-0096](requirements/done/R-0096.md)): after victory the emergency defender
-   keeps its muskets and joins the outside garrison on the colony tile,
+   keeps its weapons and joins the outside garrison on the colony tile,
    vacating its job. If it is the last resident, it instead stays inside
-   with its muskets so victory cannot remove the colony. This compulsory
+   with its weapons so victory cannot remove the colony. This compulsory
    combat outcome is distinct from a voluntary worker exit: the fortified-colony
    minimum does not add another exception to the agreed last-resident rule.
    Voluntary exit restrictions remain unchanged. This placement is agreed
@@ -1031,7 +1033,7 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
 3. Preserve SCORE-001–005 and SCORE-007. A native convert contributes 2 population
    points; count each owned living person once across colonies, map, cargo and
    accessible Europe. Let B be population + fathers + floor(gold/1000) + displayed
-   national support − destroyed native settlements × (d+1) + bells produced
+   national support − destroyed native settlements × (d+1) + owls produced
    after intervention. Result is `floor((max(0,B) × (1+order bonus) + early points)
    × difficulty factor)`, with factors 0.5/0.75/1/1.25/1.5. Example: B=100,
    second independence, declaration 1770, Conquistador yields 160. Without
@@ -1124,7 +1126,7 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
    only on their next ordinary owner turn.
 3. Ordinary eligible soldier/dragoon victory has 25% chance of one [founder details](#founder-details)
    promotion step, no promotion on defeat. A defeated dragoon loses 50 horses
-   and becomes a soldier; a defeated soldier loses 50 muskets and becomes an
+   and becomes a soldier; a defeated soldier loses 50 weapons and becomes an
    unarmed survivor. Equipment is lost, not awarded to the victor. A defeated
    unarmed field worker is captured by a European opponent; colony residents
    change allegiance on capture, keeping jobs/identity, and the armed capturer
@@ -1196,7 +1198,7 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
    if refused. Buying one claimed tile costs `ceil(100 × k)` gold (capital
    claims double), permanently removes unpaid-use alarm for that European and
    tile. Land payment/claim changes are atomic. Nearby arms sold to natives
-   add +5 T per complete 50 muskets/horses; retain partial counters.
+   add +5 T per complete 50 weapons/horses; retain partial counters.
 3. A trade reduces local alarm by 2, a gift by 5 per 100 goods, proportionally;
    at a capital double the reduction and apply it to tribal anger too. Native
    hostile AI normally attacks the nearest reachable enemy within two tiles, otherwise
@@ -1319,7 +1321,7 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
 
 ### Economy, production and education
 
-Authored resource-overlay placement decision (2026-10-19): all land resource kinds may occur on any land terrain; fishery is valid only on ocean or lake, not the high-seas transit lane. Generated natural distribution remains R-0065. Food and fish use the existing CORN commodity; no separate fish inventory is introduced.
+Authored resource-overlay placement decision (2026-10-19): all land resource kinds may occur on any land terrain; fishery is valid only on ocean or lake, not the high-seas transit lane. Generated natural distribution remains R-0065. Food and fish use the existing GRAIN commodity; no separate fish inventory is introduced.
 
 1. Aid-card cells remain authoritative, including zero/exceptional terrain cells
    and Newspaper population **4**, already accepted in R-0025. Use no smoothing
@@ -1328,12 +1330,12 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
    independent reserves of 200 silver and 200 ore under the [2026-10-20 decision](#r-0128-refinement). Only the matching bonus
    extracted consumes its own reserve, and the last extraction is capped by it. Resource
    discovery/loading never replenishes it. River squares instead use the [2026-10-26 river rule](#river-corridors);
-   on non-river land, roads add +1 to positive ore/furs/lumber and
+   on non-river land, roads add +1 to positive ore/clay/lumber and
    mountain silver only with a silver deposit. Plow adds +1 to positive food/
-   sugar/cotton/tobacco on suitable cleared land. These are chosen additions,
+   olives/wool/grapes on suitable cleared land. These are chosen additions,
    not replacements for explicit aid-card bonuses. Where no resource bonus is
    explicitly printed, use +2 to the named resource output: silver, ore, both
-   for mixed minerals, furs for trapping, lumber for prime timber, the named
+   for mixed minerals, clay for clay pit, lumber for prime timber, the named
    crop for prime crop, food for game/oasis/prime food, fish for fishery. Treat
    that overlay as part of the base before job modifiers; only an explicit
    resource overlay may introduce its named output on a zero-yield terrain.
@@ -1345,7 +1347,7 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
    output; converts get +1 outdoors, −1 indoors, and cannot do manual-forbidden
    jobs. Experts on another job use ordinary output. Bonuses never manufacture
    goods from zero base yield. Print/Paine/Penn affect unattended eligible output
-   too; Jefferson only staffed statesman output. Example: staffed bells 3,
+   too; Jefferson only staffed statesman output. Example: staffed owls 3,
    expert ×2, political +1, press +50%, Jefferson +50%, tax/Paine +20% gives
    floor(7×2.2)=15; newspaper replaces press, giving floor(7×2.7)=18.
 3. Ordinary worker manufacturing pairs input→output are carpenter 3→3, lumber
@@ -1359,12 +1361,12 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
    worker's fractions. Manufacture in dependency order, with stable building ID
    tie-break; each producer runs once. Keep the previously accepted
    smith-house expert baseline 6 ore→6 tools.
-4. Unattended crosses: initial colony/chapel 1, church 2, cathedral 3 total
+4. Unattended torches: initial colony/chapel 1, church 2, cathedral 3 total
    (replacement tiers, not cumulative). Staffed ordinary preacher adds 3 per
    person in a church and 6 in a cathedral; expert doubles those staffed
    values. Keep existing staffing limits; one ordinary preacher gives 5/9
    total before Penn, then floor(5×1.5)=7 or floor(9×1.5)=13. Town hall supplies 1 unattended
-   bell plus 3 per ordinary statesman before modifiers. Large Stables remains
+   owl plus 3 per ordinary statesman before modifiers. Large Stables remains
    an explicit nonmanual extension with the **same** breeding effect as Stables;
    no deletion or invented second historical bonus in this refinement.
 5. Colony update: predict food using current residents; if production plus
@@ -1400,7 +1402,7 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 8. Retain R-0020: purchase `floor(gross×(100+tax)/100)`, sale
    `floor(gross×(100−tax)/100)`; fixed unit purchases are untaxed. Retain master
    blacksmith 2200. Other missing expert prices: schoolhouse-tier 1000, college
-   2000, university 3000; exclude sugar/cotton/tobacco planters from European
+   2000, university 3000; exclude olive growers, grape growers and shepherds from European
    purchase and immigration, retaining the other native-teachable experts as
    eligible. This is the chosen formerly uncertain exclusion list. Existing
    positive ship/artillery base prices remain; missing bases caravel 1000,
@@ -1413,17 +1415,17 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
    Brewster reallocates the excluded 30% to free colonists. Base passage cost
    `ceil((200+20p)×k)` for p prior paid passages, independent of unit type;
    after settling any pending earned immigration, price is
-   `max(50, ceil(base passage × (1 − min(crosses,target)/target)))`.
-   Paid passage does not consume cross progress or increment earned-immigrant
+   `max(50, ceil(base passage × (1 − min(torches,target)/target)))`.
+   Paid passage does not consume torch progress or increment earned-immigrant
    count. Cross target for e previously earned immigrants is
    `ceil((100+25e)×k)`, then England's [difficulty and national effects](#difficulty-and-national-effects) factor. At update, consume each
    reached threshold, carry surplus, select a random pool slot without Brewster
    or prompt with him; freeze pending choices and resume sequentially. At k=1,
-   230 crosses earns two immigrants (100+125), leaves 5 toward 150. Remove the
+   230 torches earns two immigrants (100+125), leaves 5 toward 150. Remove the
    old periodic grant when this mechanism is implemented. Under the agreed
    [national turn order](#national-turn-processing), settle stored national
-   crosses in the Europe-arrival phase before colony production. Credit each
-   colony's actual new cross production once later in that preparation; a target
+   torches in the Europe-arrival phase before colony production. Credit each
+   colony's actual new torch production once later in that preparation; a target
    reached by that production is settled in the next national arrival phase.
    Opening Europe or resuming a save never settles immigration.
 10. Dynamic market starts at each commodity's existing quote and spread (missing
@@ -1536,7 +1538,7 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
    to the nation of the nearest native settlement, uniformly choosing one settlement on a distance tie with persisted game randomness, none if absent. De Soto converts either bad
    outcome to empty. Consume the rumor once; save/load never rerolls it.
 7. Quick load chooses highest current tax-net sale value per unit, excluding
-   horses/tools/muskets, ties goods ID, fills compatible partial holds first,
+   horses/tools/weapons, ties goods ID, fills compatible partial holds first,
    then empty holds in index order; no hidden future-price prediction. Jettison
    selects one hold and quantity with confirmation, never other holds/passengers.
    Disband requires an empty carrier; unload passengers/goods first. Cancel
@@ -1623,24 +1625,24 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 
 1. Answer **13** — Town commons yield: Explicitly reuse the ordinary-worker baseline of the actual center terrain as the commons rule: food plus its highest positive nonfood raw-resource output, without profession bonuses. Select and persist that second commodity at founding from terrain baseline, using a fixed commodity order for ties; if no positive second output exists, produce none. Then apply the matching eligible resource effect, retaining the Prime Timber exception; a resource does not create an unrelated output. Derive and publish the complete commons table from the shared baseline instead of introducing an independent formula. Exact tie-order enumeration remains an implementation detail to document before readiness.
 2. Owner: [R-0146](requirements/done/R-0146.md); acceptance and unresolved follow-ups remain there.
-3. Implementation tie order, fixed before development on 2026-10-20: `SUGAR`, `TOBACCO`, `COTTON`, `FUR`, `LUMBER`, `ORE`, `SILVER`, following their existing raw-goods order. Choose the first highest positive terrain baseline. Forest presence is part of the actual center terrain; founding does not clear it. Persist the chosen commodity (or explicit none), rather than reselecting it on load or after terrain changes.
+3. Implementation tie order, fixed before development on 2026-10-20: `OLIVES`, `GRAPES`, `WOOL`, `CLAY`, `LUMBER`, `ORE`, `SILVER`, following their existing raw-goods order. Choose the first highest positive terrain baseline. Forest presence is part of the actual center terrain; founding does not clear it. Persist the chosen commodity (or explicit none), rather than reselecting it on load or after terrain changes.
 4. The derived table below is the ordinary unattended terrain baseline, before eligible overlays. It reuses `TerrainType` values, not an independent production matrix. Commons have no worker/profession bonuses; roads, plowing, rivers and worker political modifiers do not enter this terrain-baseline rule. Matching renewable overlays add their existing positive-output bonus, except Prime Timber adds nothing. Matching finite ore bonuses use the shared reserve cap and depletion, debited only on the committed owner update, never previews or loading.
 
 | Center terrain | Open: food / second output | Forested: food / second output |
 | --- | --- | --- |
-| Grassland | 4 / tobacco 3 | 3 / lumber 6 |
-| Prairie | 4 / cotton 3 | 3 / lumber 4 |
-| Savannah | 4 / sugar 3 | 3 / lumber 4 |
-| Plains | 4 / cotton 2 | 3 / lumber 6 |
-| Marsh | 3 / tobacco 3 | 2 / lumber 4 |
-| Swamp | 3 / sugar 3 | 2 / lumber 4 |
-| Desert | 2 / ore 2 | 2 / fur 2 |
+| Grassland | 4 / grapes 3 | 3 / lumber 6 |
+| Prairie | 4 / wool 3 | 3 / lumber 4 |
+| Savannah | 4 / olives 3 | 3 / lumber 4 |
+| Plains | 4 / wool 2 | 3 / lumber 6 |
+| Marsh | 3 / grapes 3 | 2 / lumber 4 |
+| Swamp | 3 / olives 3 | 2 / lumber 4 |
+| Desert | 2 / ore 2 | 2 / clay 2 |
 | Tundra | 3 / ore 2 | 2 / lumber 4 |
 | Arctic | 0 / none | Not applicable |
 | Hill | 2 / ore 4 | Not applicable |
 | Mountain, ocean, high sea, lake | No legal colony center; founding rules unchanged | Not applicable |
 
-5. Savannah's sugar/cotton tie selects sugar, marsh's tobacco/ore tie selects tobacco, and forested desert's fur/lumber tie selects fur. An overlay cannot select a different commodity or create a zero-baseline output. The saved selection remains stable; yield uses the current center terrain's baseline for that selected commodity. These are refined rules, not runtime evidence.
+5. Savannah's olives/wool tie selects olives, marsh's grapes/ore tie selects grapes, and forested desert's clay/lumber tie selects clay. An overlay cannot select a different commodity or create a zero-baseline output. The saved selection remains stable; yield uses the current center terrain's baseline for that selected commodity. These are refined rules, not runtime evidence.
 
 
 #### R-0149 refinement
@@ -1972,4 +1974,5 @@ A rule becomes behaviorally verified only when its cited acceptance scenario has
 
 1. **Agreed 2026-11-01:** [R-0394](requirements/R-0394.md) owns the complete CS/EN mapping and project-wide terminology change following the Greek artwork. Grain, olives, grapes, wool (sheep icon), clay, olive oil, wine, cloth, amphorae and weapons replace their corresponding colonial goods one-to-one. The other goods retain their meanings.
 2. The user's corrected answer explicitly preserves **all existing game rules**, including production ratios, prices, yields, terrain conditions, specialist bonuses, equipment, trade, immigration and political effects. Torches replace crosses only in naming/appearance; owls replace bells likewise. They remain non-tradeable production measures, not research or currency. Wool is a commodity, not a new animal unit.
-3. These are agreed requirements, not implemented or verified results. Existing rule and test IDs remain stable. Historical manual terminology and evidence retain their historical meaning; current implementation terminology changes with R-0394.
+3. Existing rule and test IDs remain stable. Historical manual terminology and evidence retain their historical meaning; current implementation terminology changes with R-0394. The [accepted game rules](#accepted-game-rules) use the current names; the rule catalogue cites the manual with a terminology note.
+4. **Implementation written 2026-11-02, not yet verified:** the current identifiers are `GRAIN`, `OLIVES`, `GRAPES`, `WOOL`, `CLAY`, `OLIVE_OIL`, `WINE`, `CLOTH`, `AMPHORAE`, `WEAPONS`, `TORCHES` and `OWLS`. Professions: `MASTER_OLIVE_GROWER`, `MASTER_GRAPE_GROWER`, `MASTER_SHEPHERD`, `EXPERT_CLAY_DIGGER`, `MASTER_OIL_MAKER`, `MASTER_WINEMAKER`, `MASTER_POTTER`, `MASTER_WEAPONSMITH`. Building tiers: `SMALL_WINERY`/`WINERY`/`LARGE_WINERY`, `SMALL_OIL_PRESS`/`OIL_PRESS`/`LARGE_OIL_PRESS`, `SMALL_POTTERY`/`POTTERY`/`LARGE_POTTERY`. Resources: `CLAY_PIT`, `PRIME_WOOL`, `PRIME_GRAPES`, `PRIME_OLIVES`; their compact saved map codes `tr`, `pc`, `pt`, `ps` are unchanged. Verification results belong to the [functional evidence](functional-tests.md#r-0394-mediterranean-goods-terminology-2026-11-02).

@@ -198,40 +198,40 @@ public final class UnitType {
     }
 
     public static final UnitType EXPERT_FARMER = specialist("EXPERT_FARMER",
-            1_000, GoodsType.CORN);
+            1_000, GoodsType.GRAIN);
     public static final UnitType EXPERT_FISHERMAN = specialist(
-            "EXPERT_FISHERMAN", 1_000, GoodsType.CORN);
-    public static final UnitType EXPERT_FUR_TRAPPER = specialist(
-            "EXPERT_FUR_TRAPPER", 1_000, GoodsType.FUR);
+            "EXPERT_FISHERMAN", 1_000, GoodsType.GRAIN);
+    public static final UnitType EXPERT_CLAY_DIGGER = specialist(
+            "EXPERT_CLAY_DIGGER", 1_000, GoodsType.CLAY);
     public static final UnitType EXPERT_SILVER_MINER = specialist(
             "EXPERT_SILVER_MINER", 1_000, GoodsType.SILVER);
     public static final UnitType EXPERT_LUMBERJACK = specialist(
             "EXPERT_LUMBERJACK", 1_000, GoodsType.LUMBER);
     /** Native/school skills are intentionally unavailable for Europe buying. */
-    public static final UnitType MASTER_SUGAR_PLANTER = specialist(
-            "MASTER_SUGAR_PLANTER", 0, GoodsType.SUGAR);
-    public static final UnitType MASTER_COTTON_PLANTER = specialist(
-            "MASTER_COTTON_PLANTER", 0, GoodsType.COTTON);
-    public static final UnitType MASTER_TOBACCO_PLANTER = specialist(
-            "MASTER_TOBACCO_PLANTER", 0, GoodsType.TOBACCO);
+    public static final UnitType MASTER_OLIVE_GROWER = specialist(
+            "MASTER_OLIVE_GROWER", 0, GoodsType.OLIVES);
+    public static final UnitType MASTER_SHEPHERD = specialist("MASTER_SHEPHERD",
+            0, GoodsType.WOOL);
+    public static final UnitType MASTER_GRAPE_GROWER = specialist(
+            "MASTER_GRAPE_GROWER", 0, GoodsType.GRAPES);
 
     public static final UnitType MASTER_CARPENTER = specialist(
             "MASTER_CARPENTER", 1_000, GoodsType.HAMMERS);
-    public static final UnitType MASTER_DISTILLER = specialist(
-            "MASTER_DISTILLER", 2_000, GoodsType.RUM);
+    public static final UnitType MASTER_OIL_MAKER = specialist(
+            "MASTER_OIL_MAKER", 2_000, GoodsType.OLIVE_OIL);
     public static final UnitType MASTER_WEAVER = specialist("MASTER_WEAVER",
-            2_000, GoodsType.SILK);
-    public static final UnitType MASTER_TOBACCONIST = specialist(
-            "MASTER_TOBACCONIST", 2_000, GoodsType.CIGARS);
-    public static final UnitType MASTER_FUR_TRADER = specialist(
-            "MASTER_FUR_TRADER", 2_000, GoodsType.COAT);
-    public static final UnitType MASTER_GUNSMITH = specialist("MASTER_GUNSMITH",
-            2_000, GoodsType.MUSKET);
+            2_000, GoodsType.CLOTH);
+    public static final UnitType MASTER_WINEMAKER = specialist(
+            "MASTER_WINEMAKER", 2_000, GoodsType.WINE);
+    public static final UnitType MASTER_POTTER = specialist("MASTER_POTTER",
+            2_000, GoodsType.AMPHORAE);
+    public static final UnitType MASTER_WEAPONSMITH = specialist(
+            "MASTER_WEAPONSMITH", 2_000, GoodsType.WEAPONS);
 
     public static final UnitType FIREBRAND_PREACHER = specialist(
-            "FIREBRAND_PREACHER", 3_000, GoodsType.CROSS);
+            "FIREBRAND_PREACHER", 3_000, GoodsType.TORCHES);
     public static final UnitType ELDER_STATESMAN = specialist("ELDER_STATESMAN",
-            3_000, GoodsType.BELL);
+            3_000, GoodsType.OWLS);
     public static final UnitType SEASONED_SCOUT = specialist("SEASONED_SCOUT",
             1_000, null);
     public static final UnitType HARDY_PIONEER = specialist("HARDY_PIONEER",
@@ -342,16 +342,15 @@ public final class UnitType {
      * List of all available unit types.
      */
     public static final List<UnitType> EUROPEAN_SPECIALISTS = ImmutableList.of(
-            EXPERT_FARMER, EXPERT_FISHERMAN, EXPERT_FUR_TRAPPER,
+            EXPERT_FARMER, EXPERT_FISHERMAN, EXPERT_CLAY_DIGGER,
             EXPERT_SILVER_MINER, EXPERT_LUMBERJACK, EXPERT_ORE_MINER,
-            MASTER_CARPENTER, MASTER_DISTILLER, MASTER_WEAVER,
-            MASTER_TOBACCONIST, MASTER_FUR_TRADER, MASTER_BLACKSMITH,
-            MASTER_GUNSMITH, FIREBRAND_PREACHER, ELDER_STATESMAN,
-            SEASONED_SCOUT, HARDY_PIONEER, VETERAN_SOLDIER, JESUIT_MISSIONARY);
+            MASTER_CARPENTER, MASTER_OIL_MAKER, MASTER_WEAVER, MASTER_WINEMAKER,
+            MASTER_POTTER, MASTER_BLACKSMITH, MASTER_WEAPONSMITH,
+            FIREBRAND_PREACHER, ELDER_STATESMAN, SEASONED_SCOUT, HARDY_PIONEER,
+            VETERAN_SOLDIER, JESUIT_MISSIONARY);
 
     public static final List<UnitType> SCHOOL_ONLY_SPECIALISTS = ImmutableList
-            .of(MASTER_SUGAR_PLANTER, MASTER_COTTON_PLANTER,
-                    MASTER_TOBACCO_PLANTER);
+            .of(MASTER_OLIVE_GROWER, MASTER_SHEPHERD, MASTER_GRAPE_GROWER);
 
     /**
      * Skills marked as teachable by natives on the skills card (R-0157). A
@@ -359,10 +358,9 @@ public final class UnitType {
      * fixed, because the map seed draws from it.
      */
     public static final List<UnitType> NATIVE_TEACHABLE_SKILLS = ImmutableList
-            .of(EXPERT_FARMER, EXPERT_FISHERMAN, EXPERT_FUR_TRAPPER,
-                    EXPERT_SILVER_MINER, MASTER_SUGAR_PLANTER,
-                    MASTER_COTTON_PLANTER, MASTER_TOBACCO_PLANTER,
-                    SEASONED_SCOUT);
+            .of(EXPERT_FARMER, EXPERT_FISHERMAN, EXPERT_CLAY_DIGGER,
+                    EXPERT_SILVER_MINER, MASTER_OLIVE_GROWER, MASTER_SHEPHERD,
+                    MASTER_GRAPE_GROWER, SEASONED_SCOUT);
 
     public static final List<UnitType> UNIT_TYPES = ImmutableList
             .<UnitType>builder()
@@ -820,7 +818,7 @@ public final class UnitType {
         Preconditions.checkNotNull(terrain);
         final boolean fishing = terrain.getTerrainType().isSea()
                 || terrain.getRiverSize() != RiverSize.NONE;
-        if (goodsType == GoodsType.CORN) {
+        if (goodsType == GoodsType.GRAIN) {
             if (this == EXPERT_FARMER) {
                 return fishing ? 1.0F : 2.0F;
             }

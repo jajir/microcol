@@ -53,10 +53,10 @@ class NativeConquestTest {
     private static final Location TARGET_AT = NativeTurnScene.at(0, 0);
 
     private static final Consumer<UnitPo> SOLDIER = unit -> unit
-            .setHoldingGuns(true);
+            .setHoldingWeapons(true);
 
     private static final Consumer<UnitPo> DRAGOON = unit -> {
-        unit.setHoldingGuns(true);
+        unit.setHoldingWeapons(true);
         unit.setMounted(true);
     };
 
@@ -468,7 +468,7 @@ class NativeConquestTest {
     private static void armColonyAttacker(final ModelPo po) {
         for (final UnitPo unit : po.getUnits()) {
             if (unit.getId() == COLONY_ATTACKER_ID) {
-                unit.setHoldingGuns(true);
+                unit.setHoldingWeapons(true);
                 unit.setMovementThirds(MovementPoints.ofPoints(1));
             }
         }
@@ -691,7 +691,7 @@ class NativeConquestTest {
         assertEquals(0, result.getDefendersDefeated());
         assertNotNull(site(model));
         assertEquals(1, bravesOnTarget(model));
-        assertFalse(((UnitFreeColonist) attacker(model)).isHoldingGuns());
+        assertFalse(((UnitFreeColonist) attacker(model)).isHoldingWeapons());
         assertEquals(NativeNation.ARAWAK, site(model).getNation());
         assertTrue(conquests(model).isEmpty());
         // Attacked but not destroyed: (20) tribal anger once.

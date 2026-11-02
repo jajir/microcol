@@ -7,12 +7,12 @@
 	<entry key="SILVER_name">Stříbrné ložisko</entry>
 	<entry key="ORE_name">Rudné ložisko</entry>
 	<entry key="MIXED_MINERALS_name">Smíšené ložisko (ruda a stříbro)</entry>
-	<entry key="TRAPPING_name">Lovecká oblast</entry>
+	<entry key="CLAY_PIT_name">Hliniště</entry>
 	<entry key="GAME_name">Oblast zvěře</entry>
 	<entry key="OASIS_name">Oáza</entry>
-	<entry key="PRIME_COTTON_name">Výborná půda pro bavlnu</entry>
-	<entry key="PRIME_TOBACCO_name">Výborná půda pro tabák</entry>
-	<entry key="PRIME_SUGAR_name">Výborná půda pro cukrovou třtinu</entry>
+	<entry key="PRIME_WOOL_name">Výborná pastvina pro ovce</entry>
+	<entry key="PRIME_GRAPES_name">Výborná půda pro révu</entry>
+	<entry key="PRIME_OLIVES_name">Výborná půda pro olivy</entry>
 	<entry key="PRIME_TIMBER_name">Výborný lesní porost</entry>
 	<entry key="PRIME_FOOD_name">Výborná půda pro potraviny</entry>
 	<entry key="FISHERY_name">Rybolov</entry>

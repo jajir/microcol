@@ -68,7 +68,7 @@ class InterventionDeliveryPortTest {
     private static InterventionPo earnedPending() {
         final InterventionPo po = new InterventionPo();
         po.setTarget(TARGET);
-        po.setBells((long) TARGET);
+        po.setOwls((long) TARGET);
         po.setEarned(true);
         po.setDelivered(false);
         return po;
@@ -220,7 +220,7 @@ class InterventionDeliveryPortTest {
         for (final UnitFreeColonist soldier : soldiers) {
             assertSame(dutch, soldier.getOwner());
             assertEquals(MilitaryRole.CONTINENTAL, soldier.getMilitaryRole());
-            assertTrue(soldier.isHoldingGuns());
+            assertTrue(soldier.isHoldingWeapons());
             assertEquals(port.getLocation(), soldier.getLocation());
         }
         assertEquals(1, arrivals(model).size());
@@ -468,12 +468,12 @@ class InterventionDeliveryPortTest {
         assertEquals(started, unitIds(model));
         assertFalse(state.isDelivered());
 
-        dutch.creditProducedBells(
-                Math.toIntExact(state.getTarget() - state.getBells()));
+        dutch.creditProducedOwls(
+                Math.toIntExact(state.getTarget() - state.getOwls()));
         // An ordinary armed colonist exists beside the delivery.
         final UnitFreeColonist ordinary = (UnitFreeColonist) model
                 .addUnitOutSideColony(colony(model, NEXT_COLONY));
-        ordinary.setHoldingGuns(true);
+        ordinary.setHoldingWeapons(true);
         final Set<Integer> beforeDelivery = unitIds(model);
         assertTrue(model.deliverInterventionForces(dutch).isPresent());
         final Set<Integer> delivered = unitIds(model);

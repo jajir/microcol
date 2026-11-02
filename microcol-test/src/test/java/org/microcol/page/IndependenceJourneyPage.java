@@ -571,11 +571,11 @@ public final class IndependenceJourneyPage extends AbstractScreen {
                 "Stock of " + goods);
     }
 
-    /** Bells counted toward the foreign intervention since the declaration. */
-    public void verifyInterventionBells(final long expected) {
+    /** Owls counted toward the foreign intervention since the declaration. */
+    public void verifyInterventionOwls(final long expected) {
         assertEquals(expected,
-                dutch().getIntervention().orElseThrow().getBells(),
-                "Intervention bells");
+                dutch().getIntervention().orElseThrow().getOwls(),
+                "Intervention owls");
     }
 
     /** Whether the earned forces were delivered to the map. */
@@ -634,12 +634,12 @@ public final class IndependenceJourneyPage extends AbstractScreen {
     /**
      * The terms of the frozen result that the rules fix for this journey,
      * independent of the course of the war: no father joined, no settlement was
-     * destroyed, the bells after the target are the counted bells less the
+     * destroyed, the owls after the target are the counted owls less the
      * target, the order bonus, the early points and the difficulty factor, and
      * the total is the single floor of the calculated result.
      *
      * @param fatherPoints      expected father points
-     * @param target            intervention target in bells
+     * @param target            intervention target in owls
      * @param orderBonusPercent expected order bonus
      * @param earlyPoints       expected early declaration points
      * @param difficultyPercent expected difficulty factor
@@ -656,9 +656,8 @@ public final class IndependenceJourneyPage extends AbstractScreen {
                 "Father points");
         assertEquals(0, score.getDestroyedSettlements(),
                 "Destroyed settlements");
-        assertEquals(
-                dutch().getIntervention().orElseThrow().getBells() - target,
-                score.getBellsAfterTarget(), "Bells after the target");
+        assertEquals(dutch().getIntervention().orElseThrow().getOwls() - target,
+                score.getOwlsAfterTarget(), "Owls after the target");
         assertEquals(orderBonusPercent, score.getOrderBonusPercent(),
                 "Order bonus");
         assertEquals(earlyPoints, score.getEarlyPoints(), "Early points");
@@ -688,9 +687,9 @@ public final class IndependenceJourneyPage extends AbstractScreen {
                 "Treasury after the single ore export");
         final long subtotal = population + fatherPoints + expectedGold / 1000
                 + support;
-        final long bells = dutch().getIntervention().orElseThrow().getBells()
+        final long owls = dutch().getIntervention().orElseThrow().getOwls()
                 - target;
-        final long adjusted = subtotal + bells;
+        final long adjusted = subtotal + owls;
         final long expectedTotal = (adjusted * (100 + orderBonusPercent)
                 + 100 * earlyPoints) * difficultyPercent / 10000;
         assertEquals(population, result.getBaseScore().getPopulationPoints(),
@@ -709,7 +708,7 @@ public final class IndependenceJourneyPage extends AbstractScreen {
         assertEquals(expectedTotal, score.getTotal(),
                 "Independent final score");
         System.out.println("R0220 score ledger: population=" + population
-                + ", gold=" + expectedGold + ", support=" + support + ", bells="
-                + bells + ", total=" + expectedTotal);
+                + ", gold=" + expectedGold + ", support=" + support + ", owls="
+                + owls + ", total=" + expectedTotal);
     }
 }

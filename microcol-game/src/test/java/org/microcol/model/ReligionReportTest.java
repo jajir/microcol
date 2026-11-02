@@ -17,9 +17,9 @@ import org.microcol.model.store.CongressPo;
 import org.microcol.model.store.PlayerPo;
 
 /**
- * R-0199 religion report: each colony shows the cross output of its next
+ * R-0199 religion report: each colony shows the torch output of its next
  * update, the national total is the sum of those outputs, and the accumulated
- * crosses, target and remainder come from the shared nation state. Penn's bonus
+ * torches, target and remainder come from the shared nation state. Penn's bonus
  * is read once inside each colony. The report reads only the viewer's own
  * nation, changes nothing and survives a save.
  */
@@ -31,10 +31,10 @@ class ReligionReportTest {
 
     private static final String DUTCH = "Dutch";
 
-    /** The thrive Dutch nation with the given saved cross count. */
-    private static GameModelPo withCrosses(final int crosses) {
+    /** The thrive Dutch nation with the given saved torch count. */
+    private static GameModelPo withTorches(final int torches) {
         final GameModelPo data = thrive();
-        dutchPo(data).getRecruitment().setCrosses(crosses);
+        dutchPo(data).getRecruitment().setTorches(torches);
         return data;
     }
 
@@ -53,11 +53,11 @@ class ReligionReportTest {
                 .orElseThrow();
     }
 
-    private static int crossesOf(final ReligionReport report,
+    private static int torchesOf(final ReligionReport report,
             final Colony colony) {
         return report.getColonies().stream()
                 .filter(output -> output.getColonyId() == colony.getId())
-                .findFirst().orElseThrow().getCrosses();
+                .findFirst().orElseThrow().getTorches();
     }
 
     @Test
@@ -70,7 +70,7 @@ class ReligionReportTest {
         final ReligionReport report = model.getReligionReport(dutch);
         assertTrue(report.getColonies().isEmpty());
         assertEquals(0, report.getNationalOutput());
-        assertEquals(dutch.getImmigrationCrosses(), report.getAccumulated());
+        assertEquals(dutch.getImmigrationTorches(), report.getAccumulated());
         assertEquals(dutch.getImmigrationTarget(), report.getTarget());
         assertEquals(report.getTarget() - report.getAccumulated(),
                 report.getRemaining());
@@ -85,12 +85,12 @@ class ReligionReportTest {
         final Colony second = model.getColonyById(1).orElseThrow();
         final Colony third = model.getColonyById(2).orElseThrow();
 
-        // Each of the three colonies carries an unstaffed chapel: one cross.
+        // Each of the three colonies carries an unstaffed chapel: one torch.
         final ReligionReport report = model.getReligionReport(first.getOwner());
         assertEquals(3, report.getColonies().size());
-        assertEquals(1, crossesOf(report, first));
-        assertEquals(1, crossesOf(report, second));
-        assertEquals(1, crossesOf(report, third));
+        assertEquals(1, torchesOf(report, first));
+        assertEquals(1, torchesOf(report, second));
+        assertEquals(1, torchesOf(report, third));
         assertEquals(3, report.getNationalOutput());
     }
 
@@ -102,7 +102,7 @@ class ReligionReportTest {
         final Colony third = model.getColonyById(2).orElseThrow();
         final Player owner = first.getOwner();
         for (final Colony colony : List.of(first, second, third)) {
-            colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
+            colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
         }
         assertEquals(3, model.getReligionReport(owner).getNationalOutput());
 
@@ -111,17 +111,17 @@ class ReligionReportTest {
         worker.placeToColonyStructureSlot(first
                 .getConstructionByType(ConstructionType.CHAPEL).getSlotAt(0));
         final ReligionReport staffed = model.getReligionReport(owner);
-        assertEquals(2, crossesOf(staffed, first));
-        assertEquals(1, crossesOf(staffed, second));
-        assertEquals(1, crossesOf(staffed, third));
+        assertEquals(2, torchesOf(staffed, first));
+        assertEquals(1, torchesOf(staffed, second));
+        assertEquals(1, torchesOf(staffed, third));
         assertEquals(4, staffed.getNationalOutput());
 
-        final int accumulated = owner.getImmigrationCrosses();
+        final int accumulated = owner.getImmigrationTorches();
         first.startTurn();
         second.startTurn();
         third.startTurn();
         assertEquals(accumulated + staffed.getNationalOutput(),
-                owner.getImmigrationCrosses());
+                owner.getImmigrationTorches());
     }
 
     @Test
@@ -147,32 +147,32 @@ class ReligionReportTest {
         final ReligionReport report = model.getReligionReport(first.getOwner());
         // Staffed chapel 2 becomes 3; each unstaffed chapel 1 stays 1. The
         // total is 5, not 5 multiplied by 3/2 once more.
-        assertEquals(3, crossesOf(report, first));
-        assertEquals(1, crossesOf(report, second));
-        assertEquals(1, crossesOf(report, third));
+        assertEquals(3, torchesOf(report, first));
+        assertEquals(1, torchesOf(report, second));
+        assertEquals(1, torchesOf(report, third));
         assertEquals(5, report.getNationalOutput());
     }
 
     @Test
     void thresholdBeforeAtAndAfterKeepsProgressTargetAndRemainderConsistent() {
-        final int target = load(withCrosses(0)).getPlayerByName(DUTCH)
+        final int target = load(withTorches(0)).getPlayerByName(DUTCH)
                 .getImmigrationTarget();
-        for (final int crosses : new int[] { target - 1, target, target + 1 }) {
-            final Model model = load(withCrosses(crosses));
+        for (final int torches : new int[] { target - 1, target, target + 1 }) {
+            final Model model = load(withTorches(torches));
             final Player dutch = model.getPlayerByName(DUTCH);
             final ReligionReport report = model.getReligionReport(dutch);
-            assertEquals(crosses, report.getAccumulated());
+            assertEquals(torches, report.getAccumulated());
             assertEquals(target, report.getTarget());
-            assertEquals(Math.max(0, target - crosses), report.getRemaining());
-            assertEquals(crosses >= target ? Immigration.ARRIVES_NEXT_TURN
+            assertEquals(Math.max(0, target - torches), report.getRemaining());
+            assertEquals(torches >= target ? Immigration.ARRIVES_NEXT_TURN
                     : Immigration.NONE, report.getImmigration());
             assertEquals(0, report.getChoiceOfferCount());
         }
     }
 
     @Test
-    void aPendingBrewsterChoiceShowsItsOffersWithoutSpendingCrosses() {
-        final GameModelPo data = withCrosses(230);
+    void aPendingBrewsterChoiceShowsItsOffersWithoutSpendingTorches() {
+        final GameModelPo data = withTorches(230);
         final CongressPo congress = dutchPo(data).getCongress();
         congress.setMembers(List.of(Founder.WILLIAM_BREWSTER));
         congress.setSelected(null);
@@ -193,17 +193,17 @@ class ReligionReportTest {
         assertEquals(3, report.getChoiceOfferCount());
         assertEquals(230, report.getAccumulated());
         assertEquals(0, report.getRemaining());
-        // Reading again neither settles the offer nor spends the crosses.
+        // Reading again neither settles the offer nor spends the torches.
         assertEquals(230, model.getReligionReport(dutch).getAccumulated());
-        assertEquals(230, dutch.getImmigrationCrosses());
+        assertEquals(230, dutch.getImmigrationTorches());
         assertTrue(model.isAwaitingImmigrationChoice());
     }
 
     @Test
     void aDeclaredNationKeepsItsReachedThresholdAsBlockedWithoutAnError() {
-        final int target = load(withCrosses(0)).getPlayerByName(DUTCH)
+        final int target = load(withTorches(0)).getPlayerByName(DUTCH)
                 .getImmigrationTarget();
-        final GameModelPo data = withCrosses(target);
+        final GameModelPo data = withTorches(target);
         RebellionFixtures.set(data.getModel(), dutchPo(data), true);
         final Model model = load(data);
         final Player dutch = model.getPlayerByName(DUTCH);
@@ -217,20 +217,20 @@ class ReligionReportTest {
     }
 
     @Test
-    void readingTheReportChangesNoCrossesGoldOrColonyStock() {
-        final Model model = load(withCrosses(99));
+    void readingTheReportChangesNoTorchesGoldOrColonyStock() {
+        final Model model = load(withTorches(99));
         final Player dutch = model.getPlayerByName(DUTCH);
         final Colony colony = model.getColonyById(0).orElseThrow();
         final int gold = dutch.getGold();
-        final int stock = colony.getWarehouse().getGoods(GoodsType.CROSS)
+        final int stock = colony.getWarehouse().getGoods(GoodsType.TORCHES)
                 .getAmount();
         for (int i = 0; i < 3; i++) {
             model.getReligionReport(dutch);
         }
-        assertEquals(99, dutch.getImmigrationCrosses());
+        assertEquals(99, dutch.getImmigrationTorches());
         assertEquals(gold, dutch.getGold());
         assertEquals(stock,
-                colony.getWarehouse().getGoods(GoodsType.CROSS).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.TORCHES).getAmount());
         assertFalse(dutch.hasPendingImmigrant());
         assertEquals(0, dutch.save().getRecruitment().getEarnedImmigrants());
     }
@@ -255,7 +255,7 @@ class ReligionReportTest {
 
     @Test
     void aSavedAndReloadedNationShowsTheSameFigures() {
-        final Model model = load(withCrosses(99));
+        final Model model = load(withTorches(99));
         final ReligionReport before = model
                 .getReligionReport(model.getPlayerByName(DUTCH));
         final Model restored = Model.make(model.save(),

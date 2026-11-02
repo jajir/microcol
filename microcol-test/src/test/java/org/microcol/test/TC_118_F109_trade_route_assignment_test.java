@@ -27,8 +27,8 @@ import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
 /**
- * Assigning a wagon to a trade route. New Amsterdam (id 0, ORE 90, MUSKET 50)
- * stands at (26,16) and Delft (id 1, ORE 0, MUSKET 50) at (28,16), two squares
+ * Assigning a wagon to a trade route. New Amsterdam (id 0, ORE 90, WEAPONS 50)
+ * stands at (26,16) and Delft (id 1, ORE 0, WEAPONS 50) at (28,16), two squares
  * apart over grass. A wagon moves one square a turn, so each leg takes two
  * turns. Wagon 4 stands in New Amsterdam without orders. Wagon 6 stands there
  * too and was saved following the "Idle cart" route with a waiting reason, so
@@ -55,8 +55,8 @@ public class TC_118_F109_trade_route_assignment_test
     private static final String ROUTE_ROW = "Trade route Ore Cart, Wagon #4";
     private static final String ORE_LOADED = "Trade route Ore Cart, Wagon #4, stop 2 (New Amsterdam): loaded 90 Ore.";
     private static final String ORE_UNLOADED = "Trade route Ore Cart, Wagon #4, stop 1 (Delft): unloaded 90 Ore.";
-    private static final String MUSKET_LOADED = "Trade route Ore Cart, Wagon #4, stop 1 (Delft): loaded 50 Musket.";
-    private static final String MUSKET_UNLOADED = "Trade route Ore Cart, Wagon #4, stop 2 (New Amsterdam): unloaded 50 Musket.";
+    private static final String WEAPONS_LOADED = "Trade route Ore Cart, Wagon #4, stop 1 (Delft): loaded 50 Weapons.";
+    private static final String WEAPONS_UNLOADED = "Trade route Ore Cart, Wagon #4, stop 2 (New Amsterdam): unloaded 50 Weapons.";
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -97,21 +97,21 @@ public class TC_118_F109_trade_route_assignment_test
         cargo.verifyAssignment(IDLE_WAGON_ID, "Idle cart", 0, true);
 
         // The new route has no carrier yet. Its cargo: Delft takes the ore off
-        // and puts the musket on, New Amsterdam does the opposite.
+        // and puts the weapon on, New Amsterdam does the opposite.
         cargo.chooseRoute("Ore Cart");
         cargo.verifyAssigned("No ship or wagon follows this route.");
         cargo.chooseStop(DELFT_STOP);
         cargo.addUnload(GoodsType.ORE);
-        cargo.addLoad(GoodsType.MUSKET);
+        cargo.addLoad(GoodsType.WEAPONS);
         cargo.save();
         cargo.verifyStoredCargo("Ore Cart", DELFT_STOP, List.of(GoodsType.ORE),
-                List.of(GoodsType.MUSKET));
+                List.of(GoodsType.WEAPONS));
         cargo.chooseStop(NEW_AMSTERDAM_STOP);
-        cargo.addUnload(GoodsType.MUSKET);
+        cargo.addUnload(GoodsType.WEAPONS);
         cargo.addLoad(GoodsType.ORE);
         cargo.save();
         cargo.verifyStoredCargo("Ore Cart", NEW_AMSTERDAM_STOP,
-                List.of(GoodsType.MUSKET), List.of(GoodsType.ORE));
+                List.of(GoodsType.WEAPONS), List.of(GoodsType.ORE));
 
         // Both wagons stand at this stop. The one that already has an order
         // is refused with its reason; the free one can be assigned.
@@ -165,18 +165,18 @@ public class TC_118_F109_trade_route_assignment_test
                 DELFT_LOCATION);
         cargo.verifyAssignment(IDLE_WAGON_ID, "Idle cart", 0, false);
 
-        // Second turn: in Delft the ore comes off and the musket goes on, one
+        // Second turn: in Delft the ore comes off and the weapon goes on, one
         // report row each.
         report = game.nextTurn();
         game.verifyTurnReportPresent(report);
         report.get().verifyEventMessageCount(ORE_UNLOADED, 1);
-        report.get().verifyEventMessageCount(MUSKET_LOADED, 1);
+        report.get().verifyEventMessageCount(WEAPONS_LOADED, 1);
         report.get().verifyEventMessageCount(ROUTE_ROW, 2);
         report.get().close();
         cargo.verifyUnitAt(WAGON_ID, DELFT_LOCATION);
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 90));
-        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.MUSKET, 0));
-        cargo.verifyHold(WAGON_ID, 0, Goods.of(GoodsType.MUSKET, 50));
+        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 0));
+        cargo.verifyHold(WAGON_ID, 0, Goods.of(GoodsType.WEAPONS, 50));
         cargo.verifyAssignment(WAGON_ID, "Ore Cart", NEW_AMSTERDAM_STOP, false);
 
         // Save and Continue keep both rows once and transfer nothing again.
@@ -184,13 +184,13 @@ public class TC_118_F109_trade_route_assignment_test
         game = new FreePlayAuditPage(getContext()).continueGame();
         report = Optional.of(game.openTurnReport());
         report.get().verifyEventMessageCount(ORE_UNLOADED, 1);
-        report.get().verifyEventMessageCount(MUSKET_LOADED, 1);
+        report.get().verifyEventMessageCount(WEAPONS_LOADED, 1);
         report.get().verifyEventMessageCount(ROUTE_ROW, 2);
         report.get().close();
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 90));
-        cargo.verifyHold(WAGON_ID, 0, Goods.of(GoodsType.MUSKET, 50));
+        cargo.verifyHold(WAGON_ID, 0, Goods.of(GoodsType.WEAPONS, 50));
 
-        // Third and fourth turn: back in New Amsterdam the musket comes off
+        // Third and fourth turn: back in New Amsterdam the weapon comes off
         // and the empty ore stock loads nothing, so only the unload has a
         // report row. The first circuit is done.
         game.nextTurnAndCloseDialogs();
@@ -198,13 +198,13 @@ public class TC_118_F109_trade_route_assignment_test
                 DELFT_LOCATION);
         report = game.nextTurn();
         game.verifyTurnReportPresent(report);
-        report.get().verifyEventMessageCount(MUSKET_UNLOADED, 1);
+        report.get().verifyEventMessageCount(WEAPONS_UNLOADED, 1);
         report.get().verifyEventMessageCount(ROUTE_ROW, 1);
         report.get().close();
         cargo.verifyUnitAt(WAGON_ID, NEW_AMSTERDAM_LOCATION);
         cargo.verifyHoldEmpty(WAGON_ID, 0);
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID,
-                Goods.of(GoodsType.MUSKET, 100));
+                Goods.of(GoodsType.WEAPONS, 100));
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 0));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 90));
         cargo.verifyAssignment(WAGON_ID, "Ore Cart", DELFT_STOP, false);
@@ -222,7 +222,7 @@ public class TC_118_F109_trade_route_assignment_test
         cargo.verifyAssignment(WAGON_ID, "Ore Cart", DELFT_STOP, false);
         cargo.verifyHoldEmpty(WAGON_ID, 0);
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID,
-                Goods.of(GoodsType.MUSKET, 100));
+                Goods.of(GoodsType.WEAPONS, 100));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 90));
 
         // Sixth to eighth turn: the second circuit passes both stops again and
@@ -237,10 +237,10 @@ public class TC_118_F109_trade_route_assignment_test
         cargo.verifyHoldEmpty(WAGON_ID, 0);
         cargo.verifyHoldEmpty(WAGON_ID, 1);
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID,
-                Goods.of(GoodsType.MUSKET, 100));
+                Goods.of(GoodsType.WEAPONS, 100));
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 0));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 90));
-        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.MUSKET, 0));
+        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 0));
         cargo.verifyAssignment(WAGON_ID, "Ore Cart", DELFT_STOP, false);
     }
 

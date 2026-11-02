@@ -22,14 +22,14 @@ import com.google.gson.Gson;
 class EducationTest {
     private static Stream<UnitType> schoolSkills() {
         return Stream.of(UnitType.EXPERT_FARMER, UnitType.EXPERT_FISHERMAN,
-                UnitType.EXPERT_FUR_TRAPPER, UnitType.EXPERT_SILVER_MINER,
+                UnitType.EXPERT_CLAY_DIGGER, UnitType.EXPERT_SILVER_MINER,
                 UnitType.EXPERT_LUMBERJACK, UnitType.EXPERT_ORE_MINER,
                 UnitType.MASTER_CARPENTER, UnitType.SEASONED_SCOUT,
-                UnitType.HARDY_PIONEER, UnitType.MASTER_SUGAR_PLANTER,
-                UnitType.MASTER_COTTON_PLANTER, UnitType.MASTER_TOBACCO_PLANTER,
-                UnitType.MASTER_DISTILLER, UnitType.MASTER_WEAVER,
-                UnitType.MASTER_TOBACCONIST, UnitType.MASTER_FUR_TRADER,
-                UnitType.MASTER_BLACKSMITH, UnitType.MASTER_GUNSMITH,
+                UnitType.HARDY_PIONEER, UnitType.MASTER_OLIVE_GROWER,
+                UnitType.MASTER_SHEPHERD, UnitType.MASTER_GRAPE_GROWER,
+                UnitType.MASTER_OIL_MAKER, UnitType.MASTER_WEAVER,
+                UnitType.MASTER_WINEMAKER, UnitType.MASTER_POTTER,
+                UnitType.MASTER_BLACKSMITH, UnitType.MASTER_WEAPONSMITH,
                 UnitType.VETERAN_SOLDIER, UnitType.FIREBRAND_PREACHER,
                 UnitType.ELDER_STATESMAN, UnitType.JESUIT_MISSIONARY);
     }
@@ -102,20 +102,20 @@ class EducationTest {
      */
     @ParameterizedTest
     @CsvSource({ "EXPERT_FARMER,SCHOOLHOUSE,", "EXPERT_FISHERMAN,SCHOOLHOUSE,",
-            "EXPERT_FUR_TRAPPER,SCHOOLHOUSE,",
+            "EXPERT_CLAY_DIGGER,SCHOOLHOUSE,",
             "EXPERT_SILVER_MINER,SCHOOLHOUSE,",
             "EXPERT_LUMBERJACK,SCHOOLHOUSE,", "EXPERT_ORE_MINER,SCHOOLHOUSE,",
             "MASTER_CARPENTER,SCHOOLHOUSE,", "SEASONED_SCOUT,SCHOOLHOUSE,",
             "HARDY_PIONEER,SCHOOLHOUSE,",
-            "MASTER_SUGAR_PLANTER,COLLEGE,SCHOOLHOUSE",
-            "MASTER_COTTON_PLANTER,COLLEGE,SCHOOLHOUSE",
-            "MASTER_TOBACCO_PLANTER,COLLEGE,SCHOOLHOUSE",
-            "MASTER_DISTILLER,COLLEGE,SCHOOLHOUSE",
+            "MASTER_OLIVE_GROWER,COLLEGE,SCHOOLHOUSE",
+            "MASTER_SHEPHERD,COLLEGE,SCHOOLHOUSE",
+            "MASTER_GRAPE_GROWER,COLLEGE,SCHOOLHOUSE",
+            "MASTER_OIL_MAKER,COLLEGE,SCHOOLHOUSE",
             "MASTER_WEAVER,COLLEGE,SCHOOLHOUSE",
-            "MASTER_TOBACCONIST,COLLEGE,SCHOOLHOUSE",
-            "MASTER_FUR_TRADER,COLLEGE,SCHOOLHOUSE",
+            "MASTER_WINEMAKER,COLLEGE,SCHOOLHOUSE",
+            "MASTER_POTTER,COLLEGE,SCHOOLHOUSE",
             "MASTER_BLACKSMITH,COLLEGE,SCHOOLHOUSE",
-            "MASTER_GUNSMITH,COLLEGE,SCHOOLHOUSE",
+            "MASTER_WEAPONSMITH,COLLEGE,SCHOOLHOUSE",
             "VETERAN_SOLDIER,COLLEGE,SCHOOLHOUSE",
             "FIREBRAND_PREACHER,UNIVERSITY,COLLEGE",
             "ELDER_STATESMAN,UNIVERSITY,COLLEGE",
@@ -158,7 +158,7 @@ class EducationTest {
      */
     @ParameterizedTest
     @ValueSource(strings = { "EXPERT_FARMER", "EXPERT_FISHERMAN",
-            "EXPERT_FUR_TRAPPER", "EXPERT_SILVER_MINER", "EXPERT_LUMBERJACK",
+            "EXPERT_CLAY_DIGGER", "EXPERT_SILVER_MINER", "EXPERT_LUMBERJACK",
             "EXPERT_ORE_MINER", "MASTER_CARPENTER", "SEASONED_SCOUT",
             "HARDY_PIONEER" })
     void schoolhouseSkillsAreRefusedWithoutAnySchool(final String name) {
@@ -237,7 +237,7 @@ class EducationTest {
         for (final UnitType expected : steps) {
             final UnitType previous = student.getType();
             for (int update = 1; update <= 4; update++) {
-                colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
+                colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
                 colony.startTurn();
                 assertEquals(update == 4 ? expected : previous,
                         student.getType());
@@ -258,7 +258,7 @@ class EducationTest {
         final Colony colony = model.getColonyById(0).orElseThrow();
         final Unit student = model.getUnitById(0);
         for (int update = 1; update <= 19; update++) {
-            colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
+            colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
             colony.startTurn();
             assertEquals(UnitType.COLONIST, student.getType());
             assertEquals(update,
@@ -271,7 +271,7 @@ class EducationTest {
         final Colony resumedColony = restored.getColonyById(0).orElseThrow();
         assertEquals(19, ((org.microcol.model.unit.UnitFreeColonist) resumed)
                 .getWorkUpdates());
-        resumedColony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
+        resumedColony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
         resumedColony.startTurn();
         assertSame(resumed, restored.getUnitById(0));
         assertEquals(UnitType.EXPERT_FARMER, resumed.getType());
@@ -295,26 +295,26 @@ class EducationTest {
         data.getModel().getColonies().get(0).getColonyFields().stream()
                 .filter(field -> Integer.valueOf(1).equals(field.getWorkerId())
                         || Integer.valueOf(2).equals(field.getWorkerId()))
-                .forEach(field -> field.setProducedGoodsType(GoodsType.CORN));
+                .forEach(field -> field.setProducedGoodsType(GoodsType.GRAIN));
         final Model model = load(data);
         final Colony colony = model.getColonyById(0).orElseThrow();
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.TOBACCO, 0));
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CIGARS, 0));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAPES, 0));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.WINE, 0));
         colony.startTurn();
         final var first = (org.microcol.model.unit.UnitFreeColonist) model
                 .getUnitById(5);
         final var second = (org.microcol.model.unit.UnitFreeColonist) model
                 .getUnitById(4);
         assertEquals(0, first.getWorkUpdates() + second.getWorkUpdates());
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.TOBACCO, 1));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAPES, 1));
         colony.startTurn();
         assertEquals(1, first.getWorkUpdates() + second.getWorkUpdates());
         assertEquals(1,
-                colony.getWarehouse().getGoods(GoodsType.CIGARS).getAmount());
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.TOBACCO, 0));
+                colony.getWarehouse().getGoods(GoodsType.WINE).getAmount());
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAPES, 0));
         colony.startTurn();
         assertEquals(1, first.getWorkUpdates() + second.getWorkUpdates(),
                 "The same job with no available input pauses experience");
@@ -330,16 +330,16 @@ class EducationTest {
         final Unit student = model.getUnitById(0);
         colony.assignEducation(teacher, student, UnitType.MASTER_CARPENTER);
         for (int update = 0; update < 2; update++) {
-            colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
+            colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
             colony.startTurn();
         }
         assertEquals(2,
                 colony.getEducationCourses().get(0).getCompletedUpdates());
-        teacher.placeToColonyStructureSlot(colony
-                .getConstructionByType(ConstructionType.TOBACCONISTS_HOUSE)
-                .getFirstEmptySlot().orElseThrow());
+        teacher.placeToColonyStructureSlot(
+                colony.getConstructionByType(ConstructionType.SMALL_WINERY)
+                        .getFirstEmptySlot().orElseThrow());
         assertTrue(colony.getEducationCourses().get(0).isPaused());
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
         colony.startTurn();
         assertEquals(2,
                 colony.getEducationCourses().get(0).getCompletedUpdates());
@@ -348,7 +348,7 @@ class EducationTest {
         assertEquals(2,
                 colony.getEducationCourses().get(0).getCompletedUpdates());
         for (int update = 0; update < 2; update++) {
-            colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
+            colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
             colony.startTurn();
         }
         assertEquals(UnitType.MASTER_CARPENTER, student.getType());
@@ -367,7 +367,7 @@ class EducationTest {
                 UnitType.MASTER_CARPENTER));
         assertThrows(IllegalArgumentException.class, () -> colony
                 .assignEducation(teacher, teacher, UnitType.MASTER_CARPENTER));
-        assertEquals(ConstructionType.TOBACCONISTS_HOUSE,
+        assertEquals(ConstructionType.SMALL_WINERY,
                 teacher.getPlaceConstruction().getConstructionSlot()
                         .getConstructionType());
         assertTrue(colony.getEducationCourses().isEmpty());
@@ -433,11 +433,11 @@ class EducationTest {
         final Unit student = model.getUnitById(0);
         colony.assignEducation(model.getUnitById(4), student,
                 UnitType.MASTER_CARPENTER);
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
         colony.startTurn();
-        student.placeToColonyStructureSlot(colony
-                .getConstructionByType(ConstructionType.TOBACCONISTS_HOUSE)
-                .getFirstEmptySlot().orElseThrow());
+        student.placeToColonyStructureSlot(
+                colony.getConstructionByType(ConstructionType.SMALL_WINERY)
+                        .getFirstEmptySlot().orElseThrow());
         assertEquals(1, colony.getEducationCourses().size());
         assertEquals(1,
                 colony.getEducationCourses().get(0).getCompletedUpdates());
@@ -541,7 +541,7 @@ class EducationTest {
         final Unit student = model.getUnitById(0);
         colony.assignEducation(model.getUnitById(4), student,
                 UnitType.MASTER_CARPENTER);
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
         colony.startTurn();
         assertEquals(UnitType.EXPERT_FARMER, student.getType());
         assertTrue(colony.getEducationCourses().isEmpty());
@@ -569,9 +569,8 @@ class EducationTest {
                 .setEducationCourses(List.of(saved));
         final var teacherPo = data.getModel().getUnits().stream()
                 .filter(unit -> unit.getId() == 4).findFirst().orElseThrow();
-        data.getModel().getColonies().get(0).getConstructions().stream()
-                .filter(building -> building
-                        .getType() == ConstructionType.TOBACCONISTS_HOUSE)
+        data.getModel().getColonies().get(0).getConstructions().stream().filter(
+                building -> building.getType() == ConstructionType.SMALL_WINERY)
                 .findFirst().orElseThrow().getSlots().stream()
                 .filter(slot -> Integer.valueOf(4).equals(slot.getWorkerId()))
                 .findFirst().orElseThrow().setWorkerId(null);
@@ -583,7 +582,7 @@ class EducationTest {
         final Model model = load(data);
         final Colony colony = model.getColonyById(0).orElseThrow();
         final Unit student = model.getUnitById(0);
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
         colony.startTurn();
         assertEquals(UnitType.MASTER_CARPENTER, student.getType());
         assertEquals(1,

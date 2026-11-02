@@ -20,7 +20,7 @@ class RiverProductionTest {
                 final Terrain terrain = river(type, size);
                 terrain.setHasRoad(true);
                 for (final GoodsType goods : GoodsType.GOOD_TYPES) {
-                    final int expected = goods == GoodsType.CORN
+                    final int expected = goods == GoodsType.GRAIN
                             && type.getBaseProduction(goods)
                                     .map(p -> p.getBase() > 0).orElse(false)
                                             ? (size == RiverSize.SMALL ? 3 : 4)
@@ -47,7 +47,7 @@ class RiverProductionTest {
                     terrain.canProduceAmmount(goods));
             terrain.setMineralReserve(MineralReserve.EMPTY);
             assertEquals(0, terrain.canProduceAmmount(goods));
-            assertEquals(4, terrain.canProduceAmmount(GoodsType.CORN));
+            assertEquals(4, terrain.canProduceAmmount(GoodsType.GRAIN));
         }
     }
 
@@ -89,14 +89,14 @@ class RiverProductionTest {
     void fishermanRatherThanFarmerReceivesRiverFoodExpertise() {
         final Terrain river = river(TerrainType.GRASSLAND, RiverSize.SMALL);
         assertEquals(2, UnitType.EXPERT_FISHERMAN
-                .getFieldProductionModifier(GoodsType.CORN, river));
+                .getFieldProductionModifier(GoodsType.GRAIN, river));
         assertEquals(1, UnitType.EXPERT_FARMER
-                .getFieldProductionModifier(GoodsType.CORN, river));
+                .getFieldProductionModifier(GoodsType.GRAIN, river));
         final Terrain land = river(TerrainType.GRASSLAND, RiverSize.NONE);
         assertEquals(2, UnitType.EXPERT_FARMER
-                .getFieldProductionModifier(GoodsType.CORN, land));
+                .getFieldProductionModifier(GoodsType.GRAIN, land));
         assertEquals(1, UnitType.EXPERT_FISHERMAN
-                .getFieldProductionModifier(GoodsType.CORN, land));
+                .getFieldProductionModifier(GoodsType.GRAIN, land));
     }
 
     @Test
@@ -114,8 +114,8 @@ class RiverProductionTest {
     @Test
     void nativeNaturalOutputAndTeachingUseRiverFishing() {
         final Terrain terrain = river(TerrainType.GRASSLAND, RiverSize.SMALL);
-        assertEquals(3, terrain.getNaturalOutput(GoodsType.CORN));
-        assertEquals(0, terrain.getNaturalOutput(GoodsType.TOBACCO));
+        assertEquals(3, terrain.getNaturalOutput(GoodsType.GRAIN));
+        assertEquals(0, terrain.getNaturalOutput(GoodsType.GRAPES));
         assertEquals(UnitType.EXPERT_FISHERMAN, NativeTeachableSkills
                 .choose(java.util.List.of(terrain), new java.util.Random(290)));
     }

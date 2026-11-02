@@ -34,14 +34,14 @@ public class UnitFreeColonist extends CanMount {
 
     public final static int REQUIRED_HORSES_FOR_MOUNTED_UNIT = 50;
 
-    public final static int REQUIRED_MUSKETS_FOR_ARMED_UNIT = 50;
+    public final static int REQUIRED_WEAPONS_FOR_ARMED_UNIT = 50;
 
     private final static int MAXIMAL_NUMBER_OF_TOOLS = CargoSlot.MAX_CARGO_SLOT_CAPACITY;
     private final static int MINIMAL_NUMBER_OF_TOOLS = 20;
 
     private int tools;
 
-    private boolean holdingGuns;
+    private boolean holdingWeapons;
 
     private boolean mounted;
 
@@ -73,10 +73,11 @@ public class UnitFreeColonist extends CanMount {
     public UnitFreeColonist(final Model model, final Integer id,
             final Function<Unit, Place> placeBuilder, final Player owner,
             final int availableMoves, final UnitAction unitAction,
-            final int tools, final boolean holdingGuns, final boolean mounted) {
+            final int tools, final boolean holdingWeapons,
+            final boolean mounted) {
         super(model, id, placeBuilder, owner, availableMoves, unitAction);
         this.tools = tools;
-        this.holdingGuns = holdingGuns;
+        this.holdingWeapons = holdingWeapons;
         this.mounted = mounted;
     }
 
@@ -85,7 +86,7 @@ public class UnitFreeColonist extends CanMount {
         final UnitPo out = super.save();
         out.setTools(tools);
         out.setMounted(mounted);
-        out.setHoldingGuns(holdingGuns);
+        out.setHoldingWeapons(holdingWeapons);
         out.setVeteran(isVeteran());
         out.setMilitaryRole(militaryRole);
         out.setInterventionDelivered(interventionDelivered);
@@ -264,7 +265,7 @@ public class UnitFreeColonist extends CanMount {
                 "A special role is required");
         validateRoleOwner(role, getOwner());
         Preconditions.checkState(
-                militaryRole == MilitaryRole.COLONIAL && isHoldingGuns()
+                militaryRole == MilitaryRole.COLONIAL && isHoldingWeapons()
                         && isAtPlaceLocation(),
                 "Only an armed ordinary colonist on the map takes a role");
         militaryRole = role;
@@ -279,7 +280,7 @@ public class UnitFreeColonist extends CanMount {
     public void assignRoyalRole() {
         Preconditions.checkState(
                 getOwner().isKing() && militaryRole == MilitaryRole.COLONIAL
-                        && isHoldingGuns(),
+                        && isHoldingWeapons(),
                 "Only an armed colonist of a Crown becomes a royal regular");
         militaryRole = MilitaryRole.ROYAL;
     }
@@ -456,7 +457,7 @@ public class UnitFreeColonist extends CanMount {
         // A defender fighting from its colony job is promoted like a unit on
         // the map; the registered unit and its place stay.
         Preconditions.checkState(
-                isHoldingGuns() && !isVeteran() && !militaryRole.isSpecial()
+                isHoldingWeapons() && !isVeteran() && !militaryRole.isSpecial()
                         && (isAtPlaceLocation() || isAtPlaceColonyField()
                                 || isAtPlaceConstructionSlot()),
                 "Unit cannot gain military rank");
@@ -529,7 +530,7 @@ public class UnitFreeColonist extends CanMount {
     }
 
     /**
-     * @param type muskets, horses or tools
+     * @param type weapons, horses or tools
      * @param buy  true for a purchase, false for sale of carried equipment
      * @return current market quote without changing this colonist
      */
@@ -537,11 +538,11 @@ public class UnitFreeColonist extends CanMount {
             boolean buy) {
         Preconditions
                 .checkArgument(
-                        type == GoodsType.MUSKET || type == GoodsType.HORSE
+                        type == GoodsType.WEAPONS || type == GoodsType.HORSE
                                 || type == GoodsType.TOOLS,
                         "Unsupported equipment");
         int amount;
-        if (type == GoodsType.MUSKET || type == GoodsType.HORSE) {
+        if (type == GoodsType.WEAPONS || type == GoodsType.HORSE) {
             amount = 50;
         } else { // TOOLS
             amount = buy ? 100 : tools;
@@ -550,14 +551,14 @@ public class UnitFreeColonist extends CanMount {
     }
 
     /**
-     * @param type muskets, horses or tools
+     * @param type weapons, horses or tools
      * @param buy  true for a purchase, false for a sale
      * @return a rejection reason, or empty when the current trade is allowed
      */
     public Optional<EquipmentProblem> getEuropeEquipmentProblem(GoodsType type,
             boolean buy) {
         Preconditions.checkArgument(
-                type == GoodsType.MUSKET || type == GoodsType.HORSE
+                type == GoodsType.WEAPONS || type == GoodsType.HORSE
                         || type == GoodsType.TOOLS,
                 "Unsupported equipment type: %s", type);
 
@@ -578,8 +579,8 @@ public class UnitFreeColonist extends CanMount {
         }
 
         boolean present = false;
-        if (type == GoodsType.MUSKET) {
-            present = holdingGuns;
+        if (type == GoodsType.WEAPONS) {
+            present = holdingWeapons;
         } else if (type == GoodsType.HORSE) {
             present = mounted;
         } else if (type == GoodsType.TOOLS) {
@@ -590,7 +591,7 @@ public class UnitFreeColonist extends CanMount {
             return Optional.of(EquipmentProblem.ALREADY_SET);
         }
 
-        if (buy && ((type == GoodsType.TOOLS && (holdingGuns || mounted))
+        if (buy && ((type == GoodsType.TOOLS && (holdingWeapons || mounted))
                 || (type != GoodsType.TOOLS && tools > 0))) {
             return Optional.of(EquipmentProblem.INCOMPATIBLE_EQUIPMENT);
         }
@@ -618,7 +619,7 @@ public class UnitFreeColonist extends CanMount {
     /**
      * Validate the live pier, equipment and offer before any treasury mutation.
      *
-     * @param type    muskets, horses or tools
+     * @param type    weapons, horses or tools
      * @param buy     true for a purchase, false for a sale
      * @param offered the exact quote the caller confirmed
      * @throws IllegalStateException when eligibility or the quote changed
@@ -641,8 +642,8 @@ public class UnitFreeColonist extends CanMount {
             getOwner().sellGoods(fresh.getGoods());
         }
 
-        if (type == GoodsType.MUSKET) {
-            holdingGuns = buy;
+        if (type == GoodsType.WEAPONS) {
+            holdingWeapons = buy;
         } else if (type == GoodsType.HORSE) {
             mounted = buy;
         } else if (type == GoodsType.TOOLS) {
@@ -652,8 +653,8 @@ public class UnitFreeColonist extends CanMount {
 
     private void unequipAll() {
         // Validate every return before the first inventory mutation.
-        if (isHoldingGuns())
-            checkEquipmentChange(GoodsType.MUSKET, false);
+        if (isHoldingWeapons())
+            checkEquipmentChange(GoodsType.WEAPONS, false);
         if (isHoldingTools())
             checkEquipmentChange(GoodsType.TOOLS, false);
         if (isMounted())
@@ -661,8 +662,8 @@ public class UnitFreeColonist extends CanMount {
         if (isMounted()) {
             unequipWithHorses();
         }
-        if (isHoldingGuns()) {
-            unequipWithMuskets();
+        if (isHoldingWeapons()) {
+            unequipWithWeapons();
         }
         if (isHoldingTools()) {
             unequipWithTools();
@@ -671,7 +672,7 @@ public class UnitFreeColonist extends CanMount {
 
     @Override
     public boolean canAttack() {
-        return isHoldingGuns();
+        return isHoldingWeapons();
     }
 
     @Override
@@ -684,14 +685,15 @@ public class UnitFreeColonist extends CanMount {
     }
 
     /**
-     * Ordinary scouts are mounted colonists without muskets; seasoned scouts
+     * Ordinary scouts are mounted colonists without weapons; seasoned scouts
      * are the specialist of that name. Both see two squares further and enter
      * lost-city rumors.
      *
      * @return whether this unit is an ordinary or seasoned scout
      */
     public boolean isScout() {
-        return getType() == UnitType.SEASONED_SCOUT || mounted && !holdingGuns;
+        return getType() == UnitType.SEASONED_SCOUT
+                || mounted && !holdingWeapons;
     }
 
     @Override
@@ -707,17 +709,17 @@ public class UnitFreeColonist extends CanMount {
 
     @Override
     public double getMilitaryStrenght() {
-        if (militaryRole.isSpecial() && isHoldingGuns()) {
+        if (militaryRole.isSpecial() && isHoldingWeapons()) {
             return militaryRole.getBase(isMounted());
         }
         if (isMounted()) {
-            if (isHoldingGuns()) {
+            if (isHoldingWeapons()) {
                 return isVeteran() ? 4.5 : 2;
             } else {
                 return 1.5;
             }
         } else {
-            if (isHoldingGuns()) {
+            if (isHoldingWeapons()) {
                 return isVeteran() ? 3 : 1.5;
             } else {
                 return 1;
@@ -731,8 +733,8 @@ public class UnitFreeColonist extends CanMount {
                 "A defeated special role is destroyed, not downgraded");
         if (mounted) {
             mounted = false;
-        } else if (holdingGuns) {
-            holdingGuns = false;
+        } else if (holdingWeapons) {
+            holdingWeapons = false;
             clearFortificationAfterDefeat();
         } else {
             throw new IllegalStateException("Unarmed ordinary loser");
@@ -765,29 +767,29 @@ public class UnitFreeColonist extends CanMount {
         mounted = false;
     }
 
-    public void equipWithMuskets() {
-        checkEquipmentChange(GoodsType.MUSKET, true);
+    public void equipWithWeapons() {
+        checkEquipmentChange(GoodsType.WEAPONS, true);
         final Colony colony = verifyThatUnitIsOutsideColony();
-        final int muskets = colony.getWarehouse().getGoods(GoodsType.MUSKET)
+        final int weapons = colony.getWarehouse().getGoods(GoodsType.WEAPONS)
                 .getAmount();
-        Preconditions.checkState(muskets >= REQUIRED_MUSKETS_FOR_ARMED_UNIT,
-                "In colony (%s) is not enought muskets to arm unit with them",
+        Preconditions.checkState(weapons >= REQUIRED_WEAPONS_FOR_ARMED_UNIT,
+                "In colony (%s) is not enought weapons to arm unit with them",
                 colony);
         if (isHoldingTools()) {
             unequipWithTools();
         }
         colony.getWarehouse().removeGoods(
-                Goods.of(GoodsType.MUSKET, REQUIRED_MUSKETS_FOR_ARMED_UNIT));
-        holdingGuns = true;
+                Goods.of(GoodsType.WEAPONS, REQUIRED_WEAPONS_FOR_ARMED_UNIT));
+        holdingWeapons = true;
     }
 
-    public void unequipWithMuskets() {
+    public void unequipWithWeapons() {
         final int previousRadius = getSightRadius();
-        checkEquipmentChange(GoodsType.MUSKET, false);
+        checkEquipmentChange(GoodsType.WEAPONS, false);
         final Colony colony = verifyThatUnitIsOutsideColony();
         colony.getWarehouse().addGoods(
-                Goods.of(GoodsType.MUSKET, REQUIRED_MUSKETS_FOR_ARMED_UNIT));
-        holdingGuns = false;
+                Goods.of(GoodsType.WEAPONS, REQUIRED_WEAPONS_FOR_ARMED_UNIT));
+        holdingWeapons = false;
         revealExpandedSight(previousRadius);
     }
 
@@ -801,8 +803,8 @@ public class UnitFreeColonist extends CanMount {
         if (isMounted()) {
             unequipWithHorses();
         }
-        if (isHoldingGuns()) {
-            unequipWithMuskets();
+        if (isHoldingWeapons()) {
+            unequipWithWeapons();
         }
         final int removeTools = Math.min(totalTools, MAXIMAL_NUMBER_OF_TOOLS);
         colony.getWarehouse()
@@ -826,7 +828,7 @@ public class UnitFreeColonist extends CanMount {
     public java.util.Optional<EquipmentProblem> getEquipmentProblem(
             GoodsType type, boolean equip) {
         com.google.common.base.Preconditions.checkArgument(
-                type == GoodsType.MUSKET || type == GoodsType.HORSE
+                type == GoodsType.WEAPONS || type == GoodsType.HORSE
                         || type == GoodsType.TOOLS,
                 "Unsupported GoodsType: %s", type);
 
@@ -843,14 +845,14 @@ public class UnitFreeColonist extends CanMount {
         }
 
         if (equip) {
-            if (type == GoodsType.MUSKET && holdingGuns)
+            if (type == GoodsType.WEAPONS && holdingWeapons)
                 return java.util.Optional.of(EquipmentProblem.ALREADY_SET);
             if (type == GoodsType.HORSE && mounted)
                 return java.util.Optional.of(EquipmentProblem.ALREADY_SET);
             if (type == GoodsType.TOOLS && tools > 0)
                 return java.util.Optional.of(EquipmentProblem.ALREADY_SET);
         } else {
-            if (type == GoodsType.MUSKET && !holdingGuns)
+            if (type == GoodsType.WEAPONS && !holdingWeapons)
                 return java.util.Optional.of(EquipmentProblem.ALREADY_SET);
             if (type == GoodsType.HORSE && !mounted)
                 return java.util.Optional.of(EquipmentProblem.ALREADY_SET);
@@ -886,19 +888,19 @@ public class UnitFreeColonist extends CanMount {
     public java.util.Map<GoodsType, Integer> getEquipmentGoodsChange(
             GoodsType type, boolean equip) {
         com.google.common.base.Preconditions.checkArgument(
-                type == GoodsType.MUSKET || type == GoodsType.HORSE
+                type == GoodsType.WEAPONS || type == GoodsType.HORSE
                         || type == GoodsType.TOOLS,
                 "Unsupported GoodsType: %s", type);
         Colony colony = verifyThatUnitIsOutsideColony();
 
         java.util.Map<GoodsType, Integer> changes = new java.util.LinkedHashMap<>();
 
-        final int gunCost = REQUIRED_MUSKETS_FOR_ARMED_UNIT;
+        final int gunCost = REQUIRED_WEAPONS_FOR_ARMED_UNIT;
         final int horseCost = REQUIRED_HORSES_FOR_MOUNTED_UNIT;
         final int toolsMax = MAXIMAL_NUMBER_OF_TOOLS;
 
-        if (type == GoodsType.MUSKET) {
-            changes.put(GoodsType.MUSKET, equip ? -gunCost : gunCost);
+        if (type == GoodsType.WEAPONS) {
+            changes.put(GoodsType.WEAPONS, equip ? -gunCost : gunCost);
             if (equip && tools > 0)
                 changes.put(GoodsType.TOOLS, tools);
         } else if (type == GoodsType.HORSE) {
@@ -910,8 +912,8 @@ public class UnitFreeColonist extends CanMount {
                     colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount(),
                     toolsMax);
             changes.put(GoodsType.TOOLS, equip ? -consume : tools);
-            if (equip && holdingGuns)
-                changes.put(GoodsType.MUSKET, REQUIRED_MUSKETS_FOR_ARMED_UNIT);
+            if (equip && holdingWeapons)
+                changes.put(GoodsType.WEAPONS, REQUIRED_WEAPONS_FOR_ARMED_UNIT);
             if (equip && mounted)
                 changes.put(GoodsType.HORSE, REQUIRED_HORSES_FOR_MOUNTED_UNIT);
         }
@@ -950,14 +952,14 @@ public class UnitFreeColonist extends CanMount {
 
     /**
      * Equipment this colonist carries, as the goods it would return to a
-     * warehouse: muskets and horses at their fixed cost, tools at the remaining
+     * warehouse: weapons and horses at their fixed cost, tools at the remaining
      * amount.
      *
-     * @return immutable amounts of muskets, horses and tools
+     * @return immutable amounts of weapons, horses and tools
      */
     public java.util.Map<GoodsType, Integer> getCarriedEquipment() {
-        return ImmutableMap.of(GoodsType.MUSKET,
-                holdingGuns ? REQUIRED_MUSKETS_FOR_ARMED_UNIT : 0,
+        return ImmutableMap.of(GoodsType.WEAPONS,
+                holdingWeapons ? REQUIRED_WEAPONS_FOR_ARMED_UNIT : 0,
                 GoodsType.HORSE, mounted ? REQUIRED_HORSES_FOR_MOUNTED_UNIT : 0,
                 GoodsType.TOOLS, tools);
     }
@@ -992,22 +994,22 @@ public class UnitFreeColonist extends CanMount {
     }
 
     /**
-     * @return the holdingGuns
+     * @return the holdingWeapons
      */
-    public boolean isHoldingGuns() {
-        return holdingGuns;
+    public boolean isHoldingWeapons() {
+        return holdingWeapons;
     }
 
     /**
-     * @param holdingGuns the holdingGuns to set
+     * @param holdingWeapons the holdingWeapons to set
      */
-    public void setHoldingGuns(boolean holdingGuns) {
+    public void setHoldingWeapons(boolean holdingWeapons) {
         Preconditions.checkState(
                 getAction().getType() != UnitActionType.fortify
-                        || this.holdingGuns == holdingGuns,
+                        || this.holdingWeapons == holdingWeapons,
                 "Cancel fortification before equipping");
         final int previousRadius = getSightRadius();
-        this.holdingGuns = holdingGuns;
+        this.holdingWeapons = holdingWeapons;
         revealExpandedSight(previousRadius);
     }
 

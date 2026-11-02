@@ -23,7 +23,7 @@ class RecruitmentPoolTest {
                 candidate(3, UnitType.PETTY_CRIMINAL)));
         po.setNextCandidateId(4);
         po.setPaidPassages(0);
-        po.setCrosses(0);
+        po.setTorches(0);
         po.setEarnedImmigrants(0);
         po.setPendingEarnedChoice(false);
         return po;
@@ -81,7 +81,7 @@ class RecruitmentPoolTest {
         assertEquals(6, saved.getNextCandidateId());
         pool.validateBrewsterPool(true);
         assertEquals(0, saved.getPaidPassages());
-        assertEquals(0, saved.getCrosses());
+        assertEquals(0, saved.getTorches());
         assertEquals(0, saved.getEarnedImmigrants());
     }
 
@@ -108,7 +108,7 @@ class RecruitmentPoolTest {
         }
         final RecruitmentPo progressed = state(UnitType.COLONIST);
         progressed.setPaidPassages(1);
-        progressed.setCrosses(25);
+        progressed.setTorches(25);
         progressed.setEarnedImmigrants(1);
         final RecruitmentPool later = new RecruitmentPool(progressed);
         assertEquals(125,
@@ -117,7 +117,7 @@ class RecruitmentPoolTest {
                 RecruitmentPool.target(Difficulty.CONQUISTADOR, "England", 1));
         assertEquals(176, later.price(Difficulty.CONQUISTADOR, "Dutch"));
         assertEquals(155, later.price(Difficulty.CONQUISTADOR, "England"));
-        progressed.setCrosses(124);
+        progressed.setTorches(124);
         assertEquals(50, new RecruitmentPool(progressed)
                 .price(Difficulty.CONQUISTADOR, "Dutch"));
     }
@@ -129,10 +129,10 @@ class RecruitmentPoolTest {
         assertThrows(IllegalArgumentException.class,
                 () -> new RecruitmentPool(po));
         po.setNextCandidateId(4);
-        po.setCrosses(-1);
+        po.setTorches(-1);
         assertThrows(IllegalArgumentException.class,
                 () -> new RecruitmentPool(po));
-        po.setCrosses(0);
+        po.setTorches(0);
         po.setCandidates(List.of(candidate(1, UnitType.COLONIST),
                 candidate(1, UnitType.COLONIST),
                 candidate(3, UnitType.PETTY_CRIMINAL)));

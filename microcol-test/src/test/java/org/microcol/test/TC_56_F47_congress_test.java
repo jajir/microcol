@@ -46,7 +46,7 @@ public class TC_56_F47_congress_test extends AbstractMicroColTest {
                 Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
                 Founder.WILLIAM_PENN, Founder.FERDINAND_MAGELLAN));
         congress.verifyProgress(99, 100,
-                "Choose the next founder. Bells wait until a choice is made.",
+                "Choose the next founder. Owls wait until a choice is made.",
                 "None");
         congress.captureDialog("congressDialog", "r104-congress-offer.png");
         congress.verifySelectionRequired();
@@ -96,7 +96,7 @@ public class TC_56_F47_congress_test extends AbstractMicroColTest {
         congress.verifyProgress(99, 100, "Working toward: John Paul Jones",
                 "None");
         congress.close();
-        // The unattended town hall makes one bell in the normal national
+        // The unattended town hall makes one owl in the normal national
         // update.
         var report = game.nextTurn();
         game.verifyTurnReportPresent(report);
@@ -105,7 +105,7 @@ public class TC_56_F47_congress_test extends AbstractMicroColTest {
         report.orElseThrow().close();
         congress.open();
         congress.verifyProgress(0, 200,
-                "Choose the next founder. Bells wait until a choice is made.",
+                "Choose the next founder. Owls wait until a choice is made.",
                 "John Paul Jones");
         congress.verifyReward(1, 10000, 1);
         congress.captureDialog("congressDialog", "r104-congress-member.png");
@@ -115,15 +115,15 @@ public class TC_56_F47_congress_test extends AbstractMicroColTest {
         congress.open();
         congress.verifyReward(1, 10000, 1);
         congress.verifyProgress(0, 200,
-                "Choose the next founder. Bells wait until a choice is made.",
+                "Choose the next founder. Owls wait until a choice is made.",
                 "John Paul Jones");
         congress.close();
-        // Pending selection banks new bells and never repeats the joining
+        // Pending selection banks new owls and never repeats the joining
         // effect.
         game.nextTurnAndCloseDialogs();
         congress.open();
         congress.verifyProgress(1, 200,
-                "Choose the next founder. Bells wait until a choice is made.",
+                "Choose the next founder. Owls wait until a choice is made.",
                 "John Paul Jones");
         congress.verifyReward(1, 10000, 2);
         congress.close();

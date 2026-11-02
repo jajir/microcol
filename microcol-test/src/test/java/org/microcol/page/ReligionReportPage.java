@@ -63,9 +63,9 @@ public final class ReligionReportPage extends AbstractScreen {
 
     /**
      * Replaces the saved game with the F58 fixture whose Dutch nation holds the
-     * given crosses. Everything else of the fixture stays as saved.
+     * given torches. Everything else of the fixture stays as saved.
      */
-    public void loadCrossFixture(final int crosses) throws Exception {
+    public void loadTorchFixture(final int torches) throws Exception {
         final Gson gson = new Gson();
         final JsonObject game = gson
                 .fromJson(Files.readString(Path.of(FIXTURE)), JsonObject.class);
@@ -73,8 +73,8 @@ public final class ReligionReportPage extends AbstractScreen {
                 .getAsJsonObject("gameManager").getAsJsonArray("players")) {
             final JsonObject player = entry.getAsJsonObject();
             if (player.get("name").getAsString().equals("Dutch")) {
-                player.getAsJsonObject("recruitment").addProperty("crosses",
-                        crosses);
+                player.getAsJsonObject("recruitment").addProperty("torches",
+                        torches);
             }
         }
         final Path file = Files.createTempFile("religion-report-", ".microcol");
@@ -118,45 +118,45 @@ public final class ReligionReportPage extends AbstractScreen {
     }
 
     public void verifyNationalOutput(final int expected) {
-        assertEquals("National output: " + expected + " crosses per turn",
+        assertEquals("National output: " + expected + " torches per turn",
                 text("religionNational"), "National output");
     }
 
     /** The colony row names the colony and its output at the next update. */
     public void verifyColonyOutput(final int colonyId, final String name,
-            final int crosses) {
-        assertEquals("Colony " + name + ": " + crosses + " crosses per turn",
+            final int torches) {
+        assertEquals("Colony " + name + ": " + torches + " torches per turn",
                 text("religionColony-" + colonyId), "Output of " + name);
     }
 
     public void verifyAccumulated(final int expected) {
-        assertEquals("Accumulated crosses: " + expected,
-                text("religionAccumulated"), "Accumulated crosses");
+        assertEquals("Accumulated torches: " + expected,
+                text("religionAccumulated"), "Accumulated torches");
     }
 
-    /** The threshold and the crosses still missing to it. */
+    /** The threshold and the torches still missing to it. */
     public void verifyTarget(final int target, final int remaining) {
         assertEquals(
-                "Next immigrant at " + target + " crosses; " + remaining
+                "Next immigrant at " + target + " torches; " + remaining
                         + " more needed",
                 text("religionTarget"), "Next immigrant");
     }
 
     /**
      * The same figures read from the Czech labels. The fixture has one colony
-     * that produces crosses, so the national row repeats its output.
+     * that produces torches, so the national row repeats its output.
      */
     public void verifyCzechLabels(final int colonyId, final String name,
             final int output, final int accumulated, final int target,
             final int remaining, final String immigration) {
-        assertEquals("Kolonie " + name + " — počet křížů za tah: " + output,
+        assertEquals("Kolonie " + name + " — počet pochodní za tah: " + output,
                 text("religionColony-" + colonyId), "Czech colony output");
-        assertEquals("Počet křížů za tah celkem: " + output,
+        assertEquals("Počet pochodní za tah celkem: " + output,
                 text("religionNational"), "Czech national output");
-        assertEquals("Nasbírané kříže: " + accumulated,
-                text("religionAccumulated"), "Czech accumulated crosses");
+        assertEquals("Nasbírané pochodně: " + accumulated,
+                text("religionAccumulated"), "Czech accumulated torches");
         assertEquals(
-                "Další přistěhovalec při " + target + " křížích; zbývá "
+                "Další přistěhovalec při " + target + " pochodních; zbývá "
                         + remaining,
                 text("religionTarget"), "Czech next immigrant");
         assertEquals(immigration, text("religionImmigration"),

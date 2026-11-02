@@ -55,7 +55,7 @@ public class TC_64_F55_naval_combat_test extends AbstractMicroColTest {
         naval.chooseSavedSeed(7);
         attack.chooseAttack(ATTACKER, DEFENDER);
         attack.confirm();
-        naval.verifyOutcomeText("#6 sank.", "captured: 60 Fur, 7 Ore.",
+        naval.verifyOutcomeText("#6 sank.", "captured: 60 Clay, 7 Ore.",
                 "Lost passengers: 1. Lost goods: 150 Silver.");
         naval.captureDialog("navalBattleOutcome", "naval-sinking-english.png");
         naval.closeOutcome();
@@ -177,7 +177,7 @@ public class TC_64_F55_naval_combat_test extends AbstractMicroColTest {
     private static JsonObject drakeCongress() {
         final JsonObject congress = new JsonObject();
         congress.addProperty("activated", true);
-        congress.addProperty("bells", 0);
+        congress.addProperty("owls", 0);
         congress.add("members", strings("FRANCIS_DRAKE"));
         congress.add("candidates",
                 strings("JOHN_PAUL_JONES", "THOMAS_JEFFERSON", "ADAM_SMITH",

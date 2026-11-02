@@ -122,7 +122,7 @@ class FleetReportTest {
     @Test
     void partialGoodsAreCountedByHoldAndByType() {
         final ModelPo po = ownWorld();
-        withGoods(po, 0, GoodsType.CORN, 5);
+        withGoods(po, 0, GoodsType.GRAIN, 5);
         withGoods(po, 2, GoodsType.ORE, 3);
         final Model model = NativeTurnScene.make(po);
 
@@ -130,7 +130,7 @@ class FleetReportTest {
         assertEquals(0, ship.getPassengers());
         assertEquals(2, ship.getOccupiedHolds());
         assertEquals(HOLDS - 2, ship.getFreeHolds());
-        assertEquals(Map.of(GoodsType.CORN, 5, GoodsType.ORE, 3),
+        assertEquals(Map.of(GoodsType.GRAIN, 5, GoodsType.ORE, 3),
                 ship.getGoods());
     }
 
@@ -138,7 +138,7 @@ class FleetReportTest {
     void fullShipHasNoFreeHold() {
         final ModelPo po = ownWorld();
         for (int hold = 0; hold < HOLDS; hold++) {
-            withGoods(po, hold, GoodsType.CORN, 1);
+            withGoods(po, hold, GoodsType.GRAIN, 1);
         }
         final Model model = NativeTurnScene.make(po);
 
@@ -248,7 +248,7 @@ class FleetReportTest {
     void visibleForeignShipDisclosesOnlyItsOccupiedHolds() {
         final ModelPo po = foreignWorld(SEA);
         withForeignGoods(po, 1, GoodsType.ORE, 10);
-        withForeignGoods(po, 3, GoodsType.CORN, 2);
+        withForeignGoods(po, 3, GoodsType.GRAIN, 2);
         final Model model = NativeTurnScene.make(po);
 
         final FleetReport report = model.getFleetReport(dutch(model));
@@ -282,7 +282,7 @@ class FleetReportTest {
     @Test
     void ownerSwitchMovesTheShipBetweenOwnAndForeignLists() {
         final ModelPo po = foreignWorld(SEA);
-        withForeignGoods(po, 0, GoodsType.CORN, 5);
+        withForeignGoods(po, 0, GoodsType.GRAIN, 5);
         final Model model = NativeTurnScene.make(po);
         final Ship ship = (Ship) model.getUnitById(FOREIGN_ID);
 
@@ -324,7 +324,7 @@ class FleetReportTest {
     @Test
     void readingNeverChangesTheSavedGameAndReloadKeepsTheFigures() {
         final ModelPo po = ownWorld();
-        withGoods(po, 0, GoodsType.CORN, 5);
+        withGoods(po, 0, GoodsType.GRAIN, 5);
         final Model model = NativeTurnScene.make(po);
         colonist(model).embarkFromLocation(
                 ownShip(model).getCargo().getSlotByIndex(1));

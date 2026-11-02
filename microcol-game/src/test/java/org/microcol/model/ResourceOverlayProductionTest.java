@@ -30,9 +30,9 @@ class ResourceOverlayProductionTest {
     @Test
     void everyKindAddsTwoToItsMatchingOutput() {
         // Base outputs come from the aid-card chart: mountain ore 3 and
-        // silver 1, hill ore 4, grassland corn 4, sugar 1 and tobacco 3,
-        // plains cotton 2, desert corn 2, prairie corn 4, ocean and lake
-        // corn 3.
+        // silver 1, hill ore 4, grassland grain 4, olives 1 and grapes 3,
+        // plains wool 2, desert grain 2, prairie grain 4, ocean and lake
+        // grain 3.
         assertEquals(1 + ResourceOverlay.BONUS,
                 output(terrain(TerrainType.MOUNTAIN, ResourceOverlay.SILVER),
                         GoodsType.SILVER));
@@ -45,46 +45,46 @@ class ResourceOverlayProductionTest {
                 terrain(TerrainType.MOUNTAIN, ResourceOverlay.MIXED_MINERALS),
                 GoodsType.SILVER));
         assertEquals(ResourceOverlay.BONUS,
-                output(terrain(TerrainType.GRASSLAND, ResourceOverlay.TRAPPING),
-                        GoodsType.FUR));
+                output(terrain(TerrainType.GRASSLAND, ResourceOverlay.CLAY_PIT),
+                        GoodsType.CLAY));
         assertEquals(4 + ResourceOverlay.BONUS,
                 output(terrain(TerrainType.GRASSLAND, ResourceOverlay.GAME),
-                        GoodsType.CORN));
+                        GoodsType.GRAIN));
         assertEquals(2 + ResourceOverlay.BONUS,
                 output(terrain(TerrainType.DESERT, ResourceOverlay.OASIS),
-                        GoodsType.CORN));
-        assertEquals(2 + ResourceOverlay.BONUS, output(
-                terrain(TerrainType.PLAINS, ResourceOverlay.PRIME_COTTON),
-                GoodsType.COTTON));
+                        GoodsType.GRAIN));
+        assertEquals(2 + ResourceOverlay.BONUS,
+                output(terrain(TerrainType.PLAINS, ResourceOverlay.PRIME_WOOL),
+                        GoodsType.WOOL));
         assertEquals(3 + ResourceOverlay.BONUS, output(
-                terrain(TerrainType.GRASSLAND, ResourceOverlay.PRIME_TOBACCO),
-                GoodsType.TOBACCO));
+                terrain(TerrainType.GRASSLAND, ResourceOverlay.PRIME_GRAPES),
+                GoodsType.GRAPES));
         assertEquals(1 + ResourceOverlay.BONUS, output(
-                terrain(TerrainType.GRASSLAND, ResourceOverlay.PRIME_SUGAR),
-                GoodsType.SUGAR));
+                terrain(TerrainType.GRASSLAND, ResourceOverlay.PRIME_OLIVES),
+                GoodsType.OLIVES));
         assertEquals(4 + ResourceOverlay.BONUS,
                 output(terrain(TerrainType.PRAIRIE, ResourceOverlay.PRIME_FOOD),
-                        GoodsType.CORN));
+                        GoodsType.GRAIN));
         assertEquals(ResourceOverlay.BONUS, output(
                 terrain(TerrainType.PRAIRIE, ResourceOverlay.PRIME_TIMBER),
                 GoodsType.LUMBER));
         assertEquals(3 + ResourceOverlay.BONUS,
                 output(terrain(TerrainType.OCEAN, ResourceOverlay.FISHERY),
-                        GoodsType.CORN));
+                        GoodsType.GRAIN));
         assertEquals(3 + ResourceOverlay.BONUS,
                 output(terrain(TerrainType.LAKE, ResourceOverlay.FISHERY),
-                        GoodsType.CORN));
+                        GoodsType.GRAIN));
     }
 
     @Test
     void matchingOverlayIntroducesOnlyItsOwnOutputOnZeroBaseline() {
-        // Bare grassland has no fur, ore or lumber; trapping gives fur only.
-        final Terrain trapping = terrain(TerrainType.GRASSLAND,
-                ResourceOverlay.TRAPPING);
-        assertEquals(2, output(trapping, GoodsType.FUR));
-        assertEquals(0, output(trapping, GoodsType.ORE));
-        assertEquals(0, output(trapping, GoodsType.LUMBER));
-        assertEquals(0, output(trapping, GoodsType.SILVER));
+        // Bare grassland has no clay, ore or lumber; clay pit gives clay only.
+        final Terrain clayPit = terrain(TerrainType.GRASSLAND,
+                ResourceOverlay.CLAY_PIT);
+        assertEquals(2, output(clayPit, GoodsType.CLAY));
+        assertEquals(0, output(clayPit, GoodsType.ORE));
+        assertEquals(0, output(clayPit, GoodsType.LUMBER));
+        assertEquals(0, output(clayPit, GoodsType.SILVER));
         // Hills have no silver; an ore deposit cannot give silver there.
         assertEquals(0, output(terrain(TerrainType.HILL, ResourceOverlay.ORE),
                 GoodsType.SILVER));
@@ -92,21 +92,21 @@ class ResourceOverlayProductionTest {
         final Terrain timber = terrain(TerrainType.PRAIRIE,
                 ResourceOverlay.PRIME_TIMBER);
         assertEquals(2, output(timber, GoodsType.LUMBER));
-        assertEquals(0, output(timber, GoodsType.FUR));
+        assertEquals(0, output(timber, GoodsType.CLAY));
     }
 
     @Test
     void nonmatchingOutputsAndSquaresWithoutOverlayAreUnchanged() {
-        final Terrain sugar = terrain(TerrainType.GRASSLAND,
-                ResourceOverlay.PRIME_SUGAR);
-        assertEquals(4, output(sugar, GoodsType.CORN));
-        assertEquals(3, output(sugar, GoodsType.TOBACCO));
-        assertEquals(2, output(sugar, GoodsType.COTTON));
-        assertEquals(0, output(sugar, GoodsType.FUR));
+        final Terrain olives = terrain(TerrainType.GRASSLAND,
+                ResourceOverlay.PRIME_OLIVES);
+        assertEquals(4, output(olives, GoodsType.GRAIN));
+        assertEquals(3, output(olives, GoodsType.GRAPES));
+        assertEquals(2, output(olives, GoodsType.WOOL));
+        assertEquals(0, output(olives, GoodsType.CLAY));
         // Without an overlay the baseline stays as the aid-card chart gives it.
         final Terrain plain = new Terrain(AT, TerrainType.GRASSLAND);
         assertEquals(ResourceOverlay.NONE, plain.getResourceOverlay());
-        assertEquals(1, output(plain, GoodsType.SUGAR));
+        assertEquals(1, output(plain, GoodsType.OLIVES));
         assertEquals(0, output(plain, GoodsType.SILVER));
         assertEquals(1,
                 output(terrain(TerrainType.MOUNTAIN, ResourceOverlay.NONE),
@@ -132,22 +132,22 @@ class ResourceOverlayProductionTest {
 
     @Test
     void plowAppliesAfterResourceBonusButRiverRejectsTheseCombinations() {
-        final Terrain sugar = terrain(TerrainType.GRASSLAND,
-                ResourceOverlay.PRIME_SUGAR);
-        sugar.setHasField(true);
-        assertEquals(4, output(sugar, GoodsType.SUGAR));
+        final Terrain olives = terrain(TerrainType.GRASSLAND,
+                ResourceOverlay.PRIME_OLIVES);
+        olives.setHasField(true);
+        assertEquals(4, output(olives, GoodsType.OLIVES));
         assertThrows(IllegalArgumentException.class,
-                () -> sugar.setRiverSize(RiverSize.SMALL));
+                () -> olives.setRiverSize(RiverSize.SMALL));
         final Terrain food = terrain(TerrainType.GRASSLAND,
                 ResourceOverlay.PRIME_FOOD);
         food.setHasField(true);
-        assertEquals(7, output(food, GoodsType.CORN));
+        assertEquals(7, output(food, GoodsType.GRAIN));
         assertThrows(IllegalArgumentException.class,
                 () -> food.setRiverSize(RiverSize.LARGE));
-        final Terrain trapping = terrain(TerrainType.GRASSLAND,
-                ResourceOverlay.TRAPPING);
+        final Terrain clayPit = terrain(TerrainType.GRASSLAND,
+                ResourceOverlay.CLAY_PIT);
         assertThrows(IllegalArgumentException.class,
-                () -> trapping.setRiverSize(RiverSize.LARGE));
+                () -> clayPit.setRiverSize(RiverSize.LARGE));
     }
 
     @Test
@@ -158,19 +158,19 @@ class ResourceOverlayProductionTest {
         forest.setHasTrees(true);
         assertEquals(6 + ResourceOverlay.BONUS,
                 output(forest, GoodsType.LUMBER));
-        // Its forested corn stays the forest baseline of 3, with no bonus.
-        assertEquals(3, output(forest, GoodsType.CORN));
+        // Its forested grain stays the forest baseline of 3, with no bonus.
+        assertEquals(3, output(forest, GoodsType.GRAIN));
     }
 
     @Test
     void resourceOnlyAppearsInTheProductionListWhenItYields() {
-        final Terrain trapping = terrain(TerrainType.GRASSLAND,
-                ResourceOverlay.TRAPPING);
-        assertTrue(trapping.getProduction().stream()
-                .anyMatch(prod -> prod.getGoodsType() == GoodsType.FUR));
+        final Terrain clayPit = terrain(TerrainType.GRASSLAND,
+                ResourceOverlay.CLAY_PIT);
+        assertTrue(clayPit.getProduction().stream()
+                .anyMatch(prod -> prod.getGoodsType() == GoodsType.CLAY));
         assertFalse(new Terrain(AT, TerrainType.GRASSLAND).getProduction()
                 .stream()
-                .anyMatch(prod -> prod.getGoodsType() == GoodsType.FUR));
+                .anyMatch(prod -> prod.getGoodsType() == GoodsType.CLAY));
     }
 
     @Test
@@ -179,7 +179,7 @@ class ResourceOverlayProductionTest {
         assertThrows(IllegalArgumentException.class,
                 () -> sea.setResourceOverlay(ResourceOverlay.SILVER));
         assertThrows(IllegalArgumentException.class,
-                () -> sea.setResourceOverlay(ResourceOverlay.TRAPPING));
+                () -> sea.setResourceOverlay(ResourceOverlay.CLAY_PIT));
         assertEquals(ResourceOverlay.NONE, sea.getResourceOverlay());
         final Terrain lake = new Terrain(AT, TerrainType.LAKE);
         assertThrows(IllegalArgumentException.class,

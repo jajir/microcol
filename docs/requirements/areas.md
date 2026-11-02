@@ -100,7 +100,7 @@ pole, jídlo, růst, hlad, sklad, výroba, stavby a vzdělávání. Výstupem je
 přehled stavů kolonie, pořadí výpočtů a nezávislé příklady vstupů a výstupů.
 Zobrazení použije A03, aktualizace A04, venkovní data A05 a převody A06.
 Aktuální kandidáti jsou v [A07 nového katalogu](backlog.md#a07), zejména
-sdílená pole R-0055, spotřeba rudy R-0061 a základní kříž R-0062.
+sdílená pole R-0055, spotřeba rudy R-0061 a základní pochodeň R-0062.
 Dokončené Z01/Z02 zůstávají přijatými výchozími kontrakty, ne novými úkoly.
 
 ### A08
@@ -122,7 +122,7 @@ A08. Španělská výhoda patří sem; zvláštní podmínky revoluce navazují 
 
 ### A10
 
-**Politika, nezávislost a výsledek hry.** Daně, bojkot, zvony, podpora,
+**Politika, nezávislost a výsledek hry.** Daně, bojkot, sovy, podpora,
 Kongres, všech 25 zakladatelů, revoluce, královská armáda, intervence,
 výhra/prohra, skóre a síň slávy. Připravíme stavy politiky a konce hry,
 podmínky přechodů a místo zapojení každého efektu. Nábor a životní cyklus
@@ -164,7 +164,7 @@ IMM-005/006 neexistují; mezery v ID nedoplňujeme.
    a národa se přijímají také v dotčených herních oblastech; nastavení samo
    nesplňuje pravidla soupeřů, výroby nebo boje.
 2. COL-010: skladový limit A07 a vyložení A06 mají společnou bezpečnou
-   transakci. PROD-008/009: výroba křížů A07 ještě neznamená imigraci A06.
+   transakci. PROD-008/009: výroba pochodní A07 ještě neznamená imigraci A06.
 3. EDU-006: domácí vzdělávání A07 se propojuje s domorodou výukou A08.
    BUILD-010: možnost pracovat na vodě spojuje stavbu A07 s terénem A05.
 4. DIP-007: pravidlo zpřístupnění informací vlastní A08, zobrazení A03.

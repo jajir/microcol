@@ -109,7 +109,7 @@ public class TC_113_F104_native_relations_test extends AbstractMicroColTest {
                 10);
         relations.verifyLocalAlarm(EuropeanNation.DUTCH, AZTEC_CAPITAL, 30);
 
-        // The next Dutch turn has enough bells: Pocahontas joins Congress, the
+        // The next Dutch turn has enough owls: Pocahontas joins Congress, the
         // old 10 and 30 are cleared once and only 1.25 of halved pressure and
         // its 1.25 / 20 remain.
         var report = game.nextTurn();

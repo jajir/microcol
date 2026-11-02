@@ -112,7 +112,7 @@ class RoyalDispatchTest {
             } else {
                 final UnitFreeColonist royal = (UnitFreeColonist) soldier;
                 assertEquals(MilitaryRole.ROYAL, royal.getMilitaryRole());
-                assertTrue(royal.isHoldingGuns());
+                assertTrue(royal.isHoldingWeapons());
                 assertTrue(royal.canAttack());
                 if (royal.isMounted()) {
                     mounted++;
@@ -337,7 +337,7 @@ class RoyalDispatchTest {
         for (final Unit soldier : aboard) {
             final UnitFreeColonist royal = (UnitFreeColonist) soldier;
             assertEquals(MilitaryRole.ROYAL, royal.getMilitaryRole());
-            assertTrue(royal.isHoldingGuns());
+            assertTrue(royal.isHoldingWeapons());
             final RoyalRoster.Member member = crown
                     .findByUnitId(soldier.getId()).orElseThrow();
             assertEquals(State.SHIPPED, member.getState());

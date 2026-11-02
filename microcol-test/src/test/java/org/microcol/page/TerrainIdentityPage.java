@@ -25,15 +25,16 @@ public final class TerrainIdentityPage extends AbstractScreen {
      */
     public void rememberFoodAndNetProduction(final int colonyId) {
         final Colony colony = getModel().getColonyById(colonyId).orElseThrow();
-        foodBefore = colony.getWarehouse().getGoods(GoodsType.CORN).getAmount();
-        netFoodBefore = colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+        foodBefore = colony.getWarehouse().getGoods(GoodsType.GRAIN)
+                .getAmount();
+        netFoodBefore = colony.getGoodsStats().getStatsByType(GoodsType.GRAIN)
                 .getNetProduction();
     }
 
     public void verifyFoodAfterTurn(final int colonyId) {
         assertEquals(foodBefore + netFoodBefore,
                 getModel().getColonyById(colonyId).orElseThrow().getWarehouse()
-                        .getGoods(GoodsType.CORN).getAmount(),
+                        .getGoods(GoodsType.GRAIN).getAmount(),
                 "Stored food must change by the quoted net production");
     }
 

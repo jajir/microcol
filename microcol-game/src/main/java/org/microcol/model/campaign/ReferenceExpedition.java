@@ -152,7 +152,7 @@ public final class ReferenceExpedition {
             }
             model.getUnits().add(ship);
             final UnitPo soldier = unit(id++, owner, UnitType.COLONIST);
-            soldier.setHoldingGuns(true);
+            soldier.setHoldingWeapons(true);
             final UnitPo pioneer = unit(id++, owner, UnitType.COLONIST);
             pioneer.setTools(100);
             for (final UnitPo passenger : List.of(soldier, pioneer)) {

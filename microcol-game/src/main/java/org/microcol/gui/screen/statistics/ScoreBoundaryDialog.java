@@ -63,7 +63,7 @@ public final class ScoreBoundaryDialog extends AbstractMessageWindow {
         final Label adjustments = wrapped(
                 new Label(i18n.get(ScoreBoundaryText.adjustments,
                         score.getDestructionDeduction(),
-                        score.getBellsAfterTarget(),
+                        score.getOwlsAfterTarget(),
                         score.getOrderBonusPercent(), score.getEarlyPoints(),
                         score.getDifficultyPercent())),
                 "scoreBoundaryAdjustments");

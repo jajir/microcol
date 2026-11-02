@@ -115,7 +115,7 @@ public final class RetirementQuote {
     private static boolean sameScore(final ResultScore a, final ResultScore b) {
         return a.getTotal() == b.getTotal()
                 && a.getDestroyedSettlements() == b.getDestroyedSettlements()
-                && a.getBellsAfterTarget() == b.getBellsAfterTarget()
+                && a.getOwlsAfterTarget() == b.getOwlsAfterTarget()
                 && a.getOrderBonusPercent() == b.getOrderBonusPercent()
                 && a.getEarlyPoints() == b.getEarlyPoints()
                 && a.getDifficultyPercent() == b.getDifficultyPercent();

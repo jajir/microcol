@@ -37,7 +37,7 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractMicroColTest {
         colony.verifyFieldWorker(0, Location.of(23, 16), 4);
         colony.verifyThatStatusBarContains("Another colony works this square");
         colony.captureDialog("statusBarLabel", "shared-field-rejection.png");
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 100));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 100));
         game = colony.close();
 
         // Moving the neighbor's last resident frees the square without
@@ -46,7 +46,7 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractMicroColTest {
         colony.dragFieldWorkerTo(1, Direction.east);
         colony.verifyFieldWorker(1, Location.of(27, 16), 4);
         colony.verifyColonyPresent("Delft", true);
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 100));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 100));
         game = colony.close();
 
         // The original worker can now take the free square, once, without
@@ -55,7 +55,7 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractMicroColTest {
         colony.dragFieldWorkerTo(0, Direction.east);
         colony.verifyFieldWorker(0, Location.of(25, 16), 4);
         colony.verifyColonyPresent("New Amsterdam", true);
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 100));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 100));
     }
 
     @Test
@@ -167,8 +167,8 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractMicroColTest {
         colony.verifyCropMenuShowing(false);
         colony.verifyWorldUnchanged();
         colony.openCropMenu(0);
-        colony.chooseCrop(GoodsType.TOBACCO, 3);
-        colony.verifyFieldProduction(0, Location.of(23, 16), GoodsType.TOBACCO,
+        colony.chooseCrop(GoodsType.GRAPES, 3);
+        colony.verifyFieldProduction(0, Location.of(23, 16), GoodsType.GRAPES,
                 3);
         game = colony.close();
 
@@ -177,7 +177,7 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractMicroColTest {
         game = new org.microcol.page.FreePlayAuditPage(getContext())
                 .continueGame();
         colony = game.openColonyAt(Location.of(24, 16), "New Amsterdam");
-        colony.verifyFieldProduction(0, Location.of(23, 16), GoodsType.TOBACCO,
+        colony.verifyFieldProduction(0, Location.of(23, 16), GoodsType.GRAPES,
                 3);
         game = colony.close();
 
@@ -185,12 +185,12 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractMicroColTest {
         // resident plus two new horses in each colony.
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(Location.of(24, 16), "New Amsterdam");
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 96));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 96));
         colony.verifyWarehouseGoods(Goods.of(GoodsType.HORSE, 52));
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.TOBACCO, 3));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAPES, 3));
         game = colony.close();
         colony = game.openColonyAt(Location.of(26, 16), "Delft");
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CORN, 100));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 100));
         colony.verifyWarehouseGoods(Goods.of(GoodsType.HORSE, 52));
         colony.verifyFieldWorker(1, Location.of(25, 16), 4);
     }
@@ -207,7 +207,7 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractMicroColTest {
         // Change the job after menu opening, immediately before its action
         // handler.
         colony.moveWorkerWhenCropIsConfirmed(0);
-        colony.chooseCrop(GoodsType.TOBACCO, 3);
+        colony.chooseCrop(GoodsType.GRAPES, 3);
         colony.verifyWorldUnchanged();
         colony.verifyFieldWorker(0, Location.of(24, 15), 4);
         colony.verifyThatStatusBarContains(

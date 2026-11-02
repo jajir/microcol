@@ -49,8 +49,8 @@ public class ConstructionType {
     private final Goods consumptionPerTurn;
 
     /**
-     * Basic production per turn. For example one bell is produced in each
-     * colony each turn event when no unit is in construction.
+     * Basic production per turn. For example one owl is produced in each colony
+     * each turn event when no unit is in construction.
      * <p>
      * Could be null. When construction do not produce any goods without
      * colonists working in.
@@ -69,7 +69,7 @@ public class ConstructionType {
     private final int requiredColonyPopulation;
 
     public final static ConstructionType TOWN_HALL = ConstructionTypeBuilder
-            .make().setName("TOWN_HALL").setProductionPerTurn(Goods.of(BELL, 3))
+            .make().setName("TOWN_HALL").setProductionPerTurn(Goods.of(OWLS, 3))
             .setBaseProductionPerTurn(1).setSlotsForWorkers(3)
             .setUpgradeTo(null).setRequiredColonyPopulation(1).build();
 
@@ -119,97 +119,95 @@ public class ConstructionType {
             .setRequiredTools(0).setSlotsForWorkers(0).setUpgradeTo(FORT)
             .setRequiredColonyPopulation(3).build();
 
-    public final static ConstructionType CIGAR_FACTORY = ConstructionTypeBuilder
-            .make().setName("CIGAR_FACTORY").setRequiredHammers(160)
-            .setRequiredTools(100).setConsumptionPerTurn(Goods.of(TOBACCO, 6))
-            .setProductionPerTurn(Goods.of(CIGARS, 9)).setSlotsForWorkers(3)
+    public final static ConstructionType LARGE_WINERY = ConstructionTypeBuilder
+            .make().setName("LARGE_WINERY").setRequiredHammers(160)
+            .setRequiredTools(100).setConsumptionPerTurn(Goods.of(GRAPES, 6))
+            .setProductionPerTurn(Goods.of(WINE, 9)).setSlotsForWorkers(3)
             .setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
-    public final static ConstructionType TOBACCONISTS_SHOP = ConstructionTypeBuilder
-            .make().setName("TOBACCONISTS_SHOP").setRequiredHammers(64)
-            .setRequiredTools(20).setConsumptionPerTurn(Goods.of(TOBACCO, 6))
-            .setProductionPerTurn(Goods.of(CIGARS, 6)).setSlotsForWorkers(3)
-            .setUpgradeTo(CIGAR_FACTORY).setRequiredColonyPopulation(4).build();
+    public final static ConstructionType WINERY = ConstructionTypeBuilder.make()
+            .setName("WINERY").setRequiredHammers(64).setRequiredTools(20)
+            .setConsumptionPerTurn(Goods.of(GRAPES, 6))
+            .setProductionPerTurn(Goods.of(WINE, 6)).setSlotsForWorkers(3)
+            .setUpgradeTo(LARGE_WINERY).setRequiredColonyPopulation(4).build();
 
-    public final static ConstructionType TOBACCONISTS_HOUSE = ConstructionTypeBuilder
-            .make().setName("TOBACCONISTS_HOUSE").setRequiredHammers(0)
-            .setRequiredTools(0).setConsumptionPerTurn(Goods.of(TOBACCO, 3))
-            .setProductionPerTurn(Goods.of(CIGARS, 3))
-            .setUpgradeTo(TOBACCONISTS_SHOP).setSlotsForWorkers(3)
-            .setRequiredColonyPopulation(1).build();
+    public final static ConstructionType SMALL_WINERY = ConstructionTypeBuilder
+            .make().setName("SMALL_WINERY").setRequiredHammers(0)
+            .setRequiredTools(0).setConsumptionPerTurn(Goods.of(GRAPES, 3))
+            .setProductionPerTurn(Goods.of(WINE, 3)).setUpgradeTo(WINERY)
+            .setSlotsForWorkers(3).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType TEXTILE_MILL = ConstructionTypeBuilder
             .make().setName("TEXTILE_MILL").setRequiredHammers(160)
-            .setRequiredTools(100).setConsumptionPerTurn(Goods.of(COTTON, 6))
-            .setProductionPerTurn(Goods.of(SILK, 9)).setSlotsForWorkers(3)
+            .setRequiredTools(100).setConsumptionPerTurn(Goods.of(WOOL, 6))
+            .setProductionPerTurn(Goods.of(CLOTH, 9)).setSlotsForWorkers(3)
             .setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType WEAVERS_SHOP = ConstructionTypeBuilder
             .make().setName("WEAVERS_SHOP").setRequiredHammers(64)
-            .setRequiredTools(20).setConsumptionPerTurn(Goods.of(COTTON, 6))
-            .setProductionPerTurn(Goods.of(SILK, 6)).setSlotsForWorkers(3)
+            .setRequiredTools(20).setConsumptionPerTurn(Goods.of(WOOL, 6))
+            .setProductionPerTurn(Goods.of(CLOTH, 6)).setSlotsForWorkers(3)
             .setUpgradeTo(TEXTILE_MILL).setRequiredColonyPopulation(4).build();
 
     public final static ConstructionType WEAVERS_HOUSE = ConstructionTypeBuilder
             .make().setName("WEAVERS_HOUSE").setRequiredHammers(0)
-            .setRequiredTools(0).setConsumptionPerTurn(Goods.of(COTTON, 3))
-            .setProductionPerTurn(Goods.of(SILK, 3)).setSlotsForWorkers(3)
+            .setRequiredTools(0).setConsumptionPerTurn(Goods.of(WOOL, 3))
+            .setProductionPerTurn(Goods.of(CLOTH, 3)).setSlotsForWorkers(3)
             .setUpgradeTo(WEAVERS_SHOP).setRequiredColonyPopulation(1).build();
 
-    public final static ConstructionType RUM_FACTORY = ConstructionTypeBuilder
-            .make().setName("RUM_FACTORY").setRequiredHammers(160)
-            .setRequiredTools(100).setConsumptionPerTurn(Goods.of(SUGAR, 6))
-            .setProductionPerTurn(Goods.of(RUM, 9)).setSlotsForWorkers(3)
+    public final static ConstructionType LARGE_OIL_PRESS = ConstructionTypeBuilder
+            .make().setName("LARGE_OIL_PRESS").setRequiredHammers(160)
+            .setRequiredTools(100).setConsumptionPerTurn(Goods.of(OLIVES, 6))
+            .setProductionPerTurn(Goods.of(OLIVE_OIL, 9)).setSlotsForWorkers(3)
             .setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
-    public final static ConstructionType RUM_DISTILLERY = ConstructionTypeBuilder
-            .make().setName("RUM_DISTILLERY").setRequiredHammers(64)
-            .setRequiredTools(20).setConsumptionPerTurn(Goods.of(SUGAR, 6))
-            .setProductionPerTurn(Goods.of(RUM, 6)).setSlotsForWorkers(3)
-            .setUpgradeTo(RUM_FACTORY).setRequiredColonyPopulation(4).build();
-
-    public final static ConstructionType RUM_DISTILLERS_HOUSE = ConstructionTypeBuilder
-            .make().setName("RUM_DISTILLERS_HOUSE").setRequiredHammers(0)
-            .setRequiredTools(0).setConsumptionPerTurn(Goods.of(SUGAR, 3))
-            .setProductionPerTurn(Goods.of(RUM, 3)).setSlotsForWorkers(3)
-            .setUpgradeTo(RUM_DISTILLERY).setRequiredColonyPopulation(1)
+    public final static ConstructionType OIL_PRESS = ConstructionTypeBuilder
+            .make().setName("OIL_PRESS").setRequiredHammers(64)
+            .setRequiredTools(20).setConsumptionPerTurn(Goods.of(OLIVES, 6))
+            .setProductionPerTurn(Goods.of(OLIVE_OIL, 6)).setSlotsForWorkers(3)
+            .setUpgradeTo(LARGE_OIL_PRESS).setRequiredColonyPopulation(4)
             .build();
 
-    public final static ConstructionType FUR_FACTORY = ConstructionTypeBuilder
-            .make().setName("FUR_FACTORY").setRequiredHammers(160)
-            .setRequiredTools(100).setConsumptionPerTurn(Goods.of(FUR, 6))
-            .setProductionPerTurn(Goods.of(COAT, 9)).setSlotsForWorkers(3)
+    public final static ConstructionType SMALL_OIL_PRESS = ConstructionTypeBuilder
+            .make().setName("SMALL_OIL_PRESS").setRequiredHammers(0)
+            .setRequiredTools(0).setConsumptionPerTurn(Goods.of(OLIVES, 3))
+            .setProductionPerTurn(Goods.of(OLIVE_OIL, 3)).setSlotsForWorkers(3)
+            .setUpgradeTo(OIL_PRESS).setRequiredColonyPopulation(1).build();
+
+    public final static ConstructionType LARGE_POTTERY = ConstructionTypeBuilder
+            .make().setName("LARGE_POTTERY").setRequiredHammers(160)
+            .setRequiredTools(100).setConsumptionPerTurn(Goods.of(CLAY, 6))
+            .setProductionPerTurn(Goods.of(AMPHORAE, 9)).setSlotsForWorkers(3)
             .setUpgradeTo(null).setRequiredColonyPopulation(6).build();
 
-    public final static ConstructionType FUR_TRADING_POST = ConstructionTypeBuilder
-            .make().setName("FUR_TRADING_POST").setRequiredHammers(56)
-            .setRequiredTools(20).setConsumptionPerTurn(Goods.of(FUR, 6))
-            .setProductionPerTurn(Goods.of(COAT, 6)).setSlotsForWorkers(3)
-            .setUpgradeTo(FUR_FACTORY).setRequiredColonyPopulation(3).build();
+    public final static ConstructionType POTTERY = ConstructionTypeBuilder
+            .make().setName("POTTERY").setRequiredHammers(56)
+            .setRequiredTools(20).setConsumptionPerTurn(Goods.of(CLAY, 6))
+            .setProductionPerTurn(Goods.of(AMPHORAE, 6)).setSlotsForWorkers(3)
+            .setUpgradeTo(LARGE_POTTERY).setRequiredColonyPopulation(3).build();
 
-    public final static ConstructionType FUR_TRADERS_HOUSE = ConstructionTypeBuilder
-            .make().setName("FUR_TRADERS_HOUSE").setRequiredHammers(0)
-            .setRequiredTools(0).setConsumptionPerTurn(Goods.of(FUR, 3))
-            .setProductionPerTurn(Goods.of(COAT, 3)).setSlotsForWorkers(3)
-            .setUpgradeTo(FUR_TRADING_POST).setRequiredColonyPopulation(1)
-            .build();
+    public final static ConstructionType SMALL_POTTERY = ConstructionTypeBuilder
+            .make().setName("SMALL_POTTERY").setRequiredHammers(0)
+            .setRequiredTools(0).setConsumptionPerTurn(Goods.of(CLAY, 3))
+            .setProductionPerTurn(Goods.of(AMPHORAE, 3)).setSlotsForWorkers(3)
+            .setUpgradeTo(POTTERY).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType ARSENAL = ConstructionTypeBuilder
             .make().setName("ARSENAL").setRequiredHammers(240)
             .setRequiredTools(100).setConsumptionPerTurn(Goods.of(TOOLS, 3))
-            .setProductionPerTurn(Goods.of(MUSKET, 6)).setSlotsForWorkers(3)
+            .setProductionPerTurn(Goods.of(WEAPONS, 6)).setSlotsForWorkers(3)
             .setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType MAGAZINE = ConstructionTypeBuilder
             .make().setName("MAGAZINE").setRequiredHammers(120)
             .setRequiredTools(50).setConsumptionPerTurn(Goods.of(TOOLS, 6))
-            .setProductionPerTurn(Goods.of(MUSKET, 6)).setSlotsForWorkers(3)
+            .setProductionPerTurn(Goods.of(WEAPONS, 6)).setSlotsForWorkers(3)
             .setUpgradeTo(ARSENAL).setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType ARMORY = ConstructionTypeBuilder.make()
             .setName("ARMORY").setRequiredHammers(52).setRequiredTools(0)
             .setConsumptionPerTurn(Goods.of(TOOLS, 3))
-            .setProductionPerTurn(Goods.of(MUSKET, 3)).setSlotsForWorkers(3)
+            .setProductionPerTurn(Goods.of(WEAPONS, 3)).setSlotsForWorkers(3)
             .setUpgradeTo(MAGAZINE).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType SHIPYARD = ConstructionTypeBuilder
@@ -270,18 +268,18 @@ public class ConstructionType {
 
     public final static ConstructionType CATHEDRAL = ConstructionTypeBuilder
             .make().setName("CATHEDRAL").setRequiredHammers(176)
-            .setRequiredTools(100).setProductionPerTurn(Goods.of(CROSS, 6))
+            .setRequiredTools(100).setProductionPerTurn(Goods.of(TORCHES, 6))
             .setBaseProductionPerTurn(3).setSlotsForWorkers(3)
             .setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType CHURCH = ConstructionTypeBuilder.make()
             .setName("CHURCH").setRequiredHammers(52).setRequiredTools(0)
-            .setProductionPerTurn(Goods.of(CROSS, 3))
+            .setProductionPerTurn(Goods.of(TORCHES, 3))
             .setBaseProductionPerTurn(2).setSlotsForWorkers(3)
             .setUpgradeTo(CATHEDRAL).setRequiredColonyPopulation(3).build();
 
     public final static ConstructionType CHAPEL = ConstructionTypeBuilder.make()
-            .setName("CHAPEL").setProductionPerTurn(Goods.of(CROSS, 1))
+            .setName("CHAPEL").setProductionPerTurn(Goods.of(TORCHES, 1))
             .setBaseProductionPerTurn(1).setSlotsForWorkers(3)
             .setUpgradeTo(CHURCH).setRequiredColonyPopulation(3).build();
 
@@ -304,8 +302,8 @@ public class ConstructionType {
      * @return the founder required to build this construction, if any
      */
     public Optional<Founder> getRequiredFounder() {
-        if (this == IRON_WORKS || this == CIGAR_FACTORY || this == TEXTILE_MILL
-                || this == RUM_FACTORY || this == FUR_FACTORY
+        if (this == IRON_WORKS || this == LARGE_WINERY || this == TEXTILE_MILL
+                || this == LARGE_OIL_PRESS || this == LARGE_POTTERY
                 || this == ARSENAL) {
             return Optional.of(Founder.ADAM_SMITH);
         }
@@ -315,14 +313,13 @@ public class ConstructionType {
 
     public final static List<ConstructionType> ALL = ImmutableList.of(TOWN_HALL,
             LUMBER_MILL, CARPENTERS_STAND, IRON_WORKS, BLACKSMITHS_SHOP,
-            BLACKSMITHS_HOUSE, FORTRESS, FORT, STOCKADE, CIGAR_FACTORY,
-            TOBACCONISTS_SHOP, TOBACCONISTS_HOUSE, TEXTILE_MILL, WEAVERS_SHOP,
-            WEAVERS_HOUSE, RUM_FACTORY, RUM_DISTILLERY, RUM_DISTILLERS_HOUSE,
-            FUR_FACTORY, FUR_TRADING_POST, FUR_TRADERS_HOUSE, ARSENAL, MAGAZINE,
-            ARMORY, SHIPYARD, DRYDOCK, DOCK, UNIVERSITY, COLLEGE, SCHOOLHOUSE,
-            WAREHOUSE_EXPANSION, WAREHOUSE, WAREHOUSE_BASIC, STABLES,
-            LARGE_STABLES, CHAPEL, CATHEDRAL, CHURCH, NEWSPAPER, PRINTING_PRESS,
-            CUSTOM_HOUSE);
+            BLACKSMITHS_HOUSE, FORTRESS, FORT, STOCKADE, LARGE_WINERY, WINERY,
+            SMALL_WINERY, TEXTILE_MILL, WEAVERS_SHOP, WEAVERS_HOUSE,
+            LARGE_OIL_PRESS, OIL_PRESS, SMALL_OIL_PRESS, LARGE_POTTERY, POTTERY,
+            SMALL_POTTERY, ARSENAL, MAGAZINE, ARMORY, SHIPYARD, DRYDOCK, DOCK,
+            UNIVERSITY, COLLEGE, SCHOOLHOUSE, WAREHOUSE_EXPANSION, WAREHOUSE,
+            WAREHOUSE_BASIC, STABLES, LARGE_STABLES, CHAPEL, CATHEDRAL, CHURCH,
+            NEWSPAPER, PRINTING_PRESS, CUSTOM_HOUSE);
 
     /**
      * List of construction types that are in all newly builded colonies.

@@ -269,7 +269,7 @@ public final class PanelColonyFields implements JavaFxComponent {
                 .getDirection(fieldPoint(event.getX(), event.getY()))
                 .map(colony::getColonyFieldInDirection);
         if (unit.isPresent() && field.isPresent()
-                && field.get().canAccept(unit.get(), GoodsType.CORN)) {
+                && field.get().canAccept(unit.get(), GoodsType.GRAIN)) {
             event.acceptTransferModes(TransferMode.MOVE);
             eventBus.post(new StatusBarMessageEvent(Source.COLONY));
         } else {
@@ -297,7 +297,7 @@ public final class PanelColonyFields implements JavaFxComponent {
                     }
                     // The land question comes only for a field the worker may
                     // take; any other drop is refused as before.
-                    if (field.canAccept(unit.get(), GoodsType.CORN)
+                    if (field.canAccept(unit.get(), GoodsType.GRAIN)
                             && isUnpaidClaim(field)) {
                         // Ask after the drop gesture has finished; canceling
                         // leaves the worker where it was.
@@ -345,7 +345,7 @@ public final class PanelColonyFields implements JavaFxComponent {
     private boolean place(final Unit unit, final ColonyField field,
             final NativeLandDialog.Result land) {
         try {
-            unit.placeToColonyField(field, GoodsType.CORN);
+            unit.placeToColonyField(field, GoodsType.GRAIN);
             eventBus.post(new RepaintColonyEvent());
             return true;
         } catch (IllegalArgumentException | IllegalStateException rejected) {

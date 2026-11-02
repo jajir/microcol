@@ -65,7 +65,7 @@ class TurnPreparationBoundaryTest {
                 "/maps/default-campaign-mission-2-thrive.microcol");
         data.getModel().getCalendar().setNumberOfPlayedTurns(10);
         data.getModel().getGameManager().setCurrentPlayer("Dutch's King");
-        data.getModel().getColonies().get(1).getColonyWarehouse().put("CORN",
+        data.getModel().getColonies().get(1).getColonyWarehouse().put("GRAIN",
                 200);
         data.getModel().getUnits().stream().filter(unit -> unit.getId() == 3)
                 .findFirst().orElseThrow().getPlaceHighSeas()

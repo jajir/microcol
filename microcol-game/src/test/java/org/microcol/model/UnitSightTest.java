@@ -63,7 +63,7 @@ class UnitSightTest {
                 type, owner, new UnitActionNoAction(),
                 MovementPoints.ofPoints(1));
         request.setCargoBuilder(unit -> mock(Cargo.class));
-        request.setHoldingGuns(guns);
+        request.setHoldingWeapons(guns);
         request.setMounted(horses);
         return new UnitFactory().createUnit(request);
     }
@@ -86,7 +86,7 @@ class UnitSightTest {
         assertEquals(2, scout.getSightRadius());
         scout.setMounted(true);
         assertEquals(2, scout.getSightRadius());
-        scout.setHoldingGuns(true);
+        scout.setHoldingWeapons(true);
         assertEquals(2, scout.getSightRadius());
         scout.setMounted(false);
         assertEquals(2, scout.getSightRadius());
@@ -104,7 +104,7 @@ class UnitSightTest {
             if ("France".equals(player.getName())) {
                 final CongressPo congress = Congress.initial();
                 congress.setActivated(true);
-                congress.setBells(99);
+                congress.setOwls(99);
                 congress.setGeneration(1);
                 congress.setCandidates(List.of(Founder.JOHN_PAUL_JONES,
                         Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
@@ -203,7 +203,7 @@ class UnitSightTest {
         scout.setMounted(true);
         assertEquals(2, scout.getSightRadius());
         assertTrue(dutch.isVisible(frontier));
-        scout.setHoldingGuns(true);
+        scout.setHoldingWeapons(true);
         assertEquals(1, scout.getSightRadius());
         assertTrue(dutch.isVisible(frontier));
         scout.setMounted(false);
@@ -221,7 +221,7 @@ class UnitSightTest {
                 UnitType.COLONIST, Location.of(3, 3), true, true);
         final Player owner = dragoon.getOwner();
         assertEquals(1, dragoon.getSightRadius());
-        dragoon.setHoldingGuns(false);
+        dragoon.setHoldingWeapons(false);
         assertEquals(2, dragoon.getSightRadius());
         verify(owner).revealMapForUnit(dragoon);
 
@@ -273,11 +273,11 @@ class UnitSightTest {
             final Location colonyLocation = Location.of(25, 14);
             final Location frontier = Location.of(27, 16);
             dragoon.placeToLocation(colonyLocation);
-            dragoon.setHoldingGuns(true);
+            dragoon.setHoldingWeapons(true);
             dragoon.setMounted(true);
             final ColonyWarehouse warehouse = model.getColonyAt(colonyLocation)
                     .orElseThrow().getWarehouse();
-            warehouse.removeGoods(Goods.of(GoodsType.MUSKET, 50));
+            warehouse.removeGoods(Goods.of(GoodsType.WEAPONS, 50));
             warehouse.removeGoods(Goods.of(GoodsType.HORSE, 50));
             owner.revealMapForUnit(dragoon);
             assertFalse(owner.isVisible(frontier));

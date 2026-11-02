@@ -85,9 +85,9 @@ public final class CustomHousePage extends AbstractScreen {
                 .contains("During revolution"));
     }
 
-    public void verifyStocks(int tobacco, int ore, int silver, int gold) {
-        assertEquals(tobacco, colony().getWarehouse()
-                .getGoods(GoodsType.TOBACCO).getAmount());
+    public void verifyStocks(int grapes, int ore, int silver, int gold) {
+        assertEquals(grapes,
+                colony().getWarehouse().getGoods(GoodsType.GRAPES).getAmount());
         assertEquals(ore,
                 colony().getWarehouse().getGoods(GoodsType.ORE).getAmount());
         assertEquals(silver,

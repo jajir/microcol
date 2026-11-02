@@ -31,12 +31,12 @@ import javafx.stage.Stage;
 public class TC_79_F71_back_tax_payment_test extends AbstractMicroColTest {
     private static final File FIXTURE = new File(
             "src/test/scenarios/F19-europe-equipment.microcol");
-    private static final int MUSKET_ARREARS = 400;
-    private static final int SILK_ARREARS = 100;
+    private static final int WEAPONS_ARREARS = 400;
+    private static final int CLOTH_ARREARS = 100;
     private static final int START_GOLD = 1000;
     private static final int TAX_AFTER_PROTEST = 17;
-    private static final String MUSKET_OWED = "Arrears to pay: 400 gold.";
-    private static final String MUSKET_RESTORE = "Paying lifts the boycott: buying and selling Musket in Europe will be allowed again. Other boycotts stay.";
+    private static final String WEAPONS_OWED = "Arrears to pay: 400 gold.";
+    private static final String WEAPONS_RESTORE = "Paying lifts the boycott: buying and selling Weapons in Europe will be allowed again. Other boycotts stay.";
     private static final String SHORT = "Not enough gold. This payment needs 400 gold.";
     private static final String CHANGED = "The back taxes changed or the payment is no longer possible. Nothing was charged.";
     private static final String NO_SHORTAGE = "";
@@ -47,13 +47,13 @@ public class TC_79_F71_back_tax_payment_test extends AbstractMicroColTest {
     }
 
     /**
-     * Silk is already boycotted; the protest destroys muskets and closes them
+     * Cloth is already boycotted; the protest destroys weapons and closes them
      * with the same 400 gold arrears as the protest scenario.
      */
     private Fixture fixture(final int gold) {
         return new Fixture(FIXTURE, "back-tax").due()
-                .warehouse(Map.of(GoodsType.MUSKET, 100, GoodsType.CORN, 40))
-                .arrears(Map.of(GoodsType.SILK, SILK_ARREARS)).gold(gold);
+                .warehouse(Map.of(GoodsType.WEAPONS, 100, GoodsType.GRAIN, 40))
+                .arrears(Map.of(GoodsType.CLOTH, CLOTH_ARREARS)).gold(gold);
     }
 
     private static String treasury(final int gold) {
@@ -62,19 +62,19 @@ public class TC_79_F71_back_tax_payment_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
-    void TC_01_cancel_keeps_back_taxes_then_pay_and_trade_the_restored_musket()
+    void TC_01_cancel_keeps_back_taxes_then_pay_and_trade_the_restored_weapon()
             throws Exception {
         TaxDemandPage taxes = new TaxDemandPage(getContext());
         taxes.prepare(fixture(START_GOLD));
         WelcomePage.of(getContext()).loadGame();
-        // The protest closes muskets with their exact arrears; silk stays
+        // The protest closes weapons with their exact arrears; cloth stays
         // closed.
         taxes.startUpdate();
         taxes.verifyDemandOffersProtest();
         taxes.protest();
         taxes.finishUpdate();
-        taxes.verifyTax(TAX_AFTER_PROTEST, Map.of(GoodsType.MUSKET,
-                MUSKET_ARREARS, GoodsType.SILK, SILK_ARREARS));
+        taxes.verifyTax(TAX_AFTER_PROTEST, Map.of(GoodsType.WEAPONS,
+                WEAPONS_ARREARS, GoodsType.CLOTH, CLOTH_ARREARS));
         int gold = taxes.gold();
         // Europe offers the back taxes; cancelling shows the exact consequence
         // and charges nothing.
@@ -85,15 +85,15 @@ public class TC_79_F71_back_tax_payment_test extends AbstractMicroColTest {
         harbor.resize(1000, 900);
         taxes.openBackTaxes();
         taxes.verifyBackTaxDialogOpen(true);
-        taxes.chooseBackTaxCommodity(GoodsType.MUSKET);
-        taxes.verifyBackTaxDialog(MUSKET_OWED, MUSKET_RESTORE, treasury(gold),
+        taxes.chooseBackTaxCommodity(GoodsType.WEAPONS);
+        taxes.verifyBackTaxDialog(WEAPONS_OWED, WEAPONS_RESTORE, treasury(gold),
                 NO_SHORTAGE, true);
         taxes.cancelBackTax();
         taxes.verifyBackTaxDialogOpen(false);
         taxes.verifyGold(gold);
-        taxes.verifyTax(TAX_AFTER_PROTEST, Map.of(GoodsType.MUSKET,
-                MUSKET_ARREARS, GoodsType.SILK, SILK_ARREARS));
-        taxes.verifyBoycottMarked(GoodsType.MUSKET, true);
+        taxes.verifyTax(TAX_AFTER_PROTEST, Map.of(GoodsType.WEAPONS,
+                WEAPONS_ARREARS, GoodsType.CLOTH, CLOTH_ARREARS));
+        taxes.verifyBoycottMarked(GoodsType.WEAPONS, true);
 
         // Boycott marks keep the price lines centered below their icons.
         harbor.showGoods();
@@ -102,56 +102,56 @@ public class TC_79_F71_back_tax_payment_test extends AbstractMicroColTest {
         harbor.verifyContentAlignment();
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0346-goods-boycott.png");
-        // Paying once charges the exact arrears and lifts only the muskets.
+        // Paying once charges the exact arrears and lifts only the weapons.
         taxes.openBackTaxes();
-        taxes.chooseBackTaxCommodity(GoodsType.MUSKET);
+        taxes.chooseBackTaxCommodity(GoodsType.WEAPONS);
         taxes.payBackTax();
         taxes.verifyBackTaxDialogOpen(false);
-        gold = gold - MUSKET_ARREARS;
+        gold = gold - WEAPONS_ARREARS;
         taxes.verifyGold(gold);
         taxes.verifyTax(TAX_AFTER_PROTEST,
-                Map.of(GoodsType.SILK, SILK_ARREARS));
-        taxes.verifyBoycottMarked(GoodsType.MUSKET, false);
-        taxes.verifyBoycottMarked(GoodsType.SILK, true);
+                Map.of(GoodsType.CLOTH, CLOTH_ARREARS));
+        taxes.verifyBoycottMarked(GoodsType.WEAPONS, false);
+        taxes.verifyBoycottMarked(GoodsType.CLOTH, true);
         taxes.verifyBackTaxButton(true, false);
-        // The restored musket trades for the exact model quote, while silk
+        // The restored weapon trades for the exact model quote, while cloth
         // remains boycotted and its gold is untouched.
         EuropePortScreen europe = EuropePortScreen.of(getContext());
         europe.selectUnitFromPort(0);
         europe.verifyCargoSlotEmpty(0, 0);
-        int buyTotal = taxes.quoteMarketPrice(GoodsType.MUSKET, 2, true);
+        int buyTotal = taxes.quoteMarketPrice(GoodsType.WEAPONS, 2, true);
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0346-restored-goods-before-buy.png");
         ScreenMarketBuy buy = europe
                 .buyGoodsAndMoveItToCargoSlotWithPressedControl(
-                        GoodsType.BUYABLE_GOOD_TYPES.indexOf(GoodsType.MUSKET),
+                        GoodsType.BUYABLE_GOOD_TYPES.indexOf(GoodsType.WEAPONS),
                         0);
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0346-restored-goods-after-drag.png");
         buy.selectValueAtSlider(2);
         buy.verifySelectedMarketQuantity(2);
         buy.clickOnBuy();
-        europe.verifyGoodsInShip(0, Goods.of(GoodsType.MUSKET, 2));
+        europe.verifyGoodsInShip(0, Goods.of(GoodsType.WEAPONS, 2));
         gold = gold - buyTotal;
         taxes.verifyGold(gold);
-        int saleTotal = taxes.quoteMarketPrice(GoodsType.MUSKET, 2, false);
+        int saleTotal = taxes.quoteMarketPrice(GoodsType.WEAPONS, 2, false);
         ScreenMarketSell sell = europe.sellGoodsWithPressedControl(0,
-                GoodsType.BUYABLE_GOOD_TYPES.indexOf(GoodsType.MUSKET));
+                GoodsType.BUYABLE_GOOD_TYPES.indexOf(GoodsType.WEAPONS));
         sell.selectValueAtSlider(2);
         sell.verifySelectedMarketQuantity(2);
         sell.clickOnSell();
-        europe.verifyGoodsInShip(0, Goods.of(GoodsType.MUSKET, 0));
+        europe.verifyGoodsInShip(0, Goods.of(GoodsType.WEAPONS, 0));
         gold = gold + saleTotal;
         taxes.verifyGold(gold);
-        taxes.verifyBoycottMarked(GoodsType.SILK, true);
-        // Continue keeps the payment, the trade result and the silk boycott.
+        taxes.verifyBoycottMarked(GoodsType.CLOTH, true);
+        // Continue keeps the payment, the trade result and the cloth boycott.
         europe.close().exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame().openEuroperPort();
         taxes.verifyGold(gold);
         taxes.verifyTax(TAX_AFTER_PROTEST,
-                Map.of(GoodsType.SILK, SILK_ARREARS));
-        taxes.verifyBoycottMarked(GoodsType.MUSKET, false);
-        taxes.verifyBoycottMarked(GoodsType.SILK, true);
+                Map.of(GoodsType.CLOTH, CLOTH_ARREARS));
+        taxes.verifyBoycottMarked(GoodsType.WEAPONS, false);
+        taxes.verifyBoycottMarked(GoodsType.CLOTH, true);
     }
 
     @Test
@@ -164,22 +164,22 @@ public class TC_79_F71_back_tax_payment_test extends AbstractMicroColTest {
         taxes.startUpdate();
         taxes.protest();
         taxes.finishUpdate();
-        taxes.verifyTax(TAX_AFTER_PROTEST, Map.of(GoodsType.MUSKET,
-                MUSKET_ARREARS, GoodsType.SILK, SILK_ARREARS));
+        taxes.verifyTax(TAX_AFTER_PROTEST, Map.of(GoodsType.WEAPONS,
+                WEAPONS_ARREARS, GoodsType.CLOTH, CLOTH_ARREARS));
         int gold = taxes.gold();
         taxes.openEurope();
         taxes.openBackTaxes();
-        taxes.chooseBackTaxCommodity(GoodsType.MUSKET);
+        taxes.chooseBackTaxCommodity(GoodsType.WEAPONS);
         // Pay is unavailable while the treasury is short; nothing is charged.
-        taxes.verifyBackTaxDialog(MUSKET_OWED, MUSKET_RESTORE, treasury(gold),
+        taxes.verifyBackTaxDialog(WEAPONS_OWED, WEAPONS_RESTORE, treasury(gold),
                 SHORT, false);
         taxes.cancelBackTax();
         taxes.verifyBackTaxDialogOpen(false);
         taxes.verifyGold(gold);
-        taxes.verifyTax(TAX_AFTER_PROTEST, Map.of(GoodsType.MUSKET,
-                MUSKET_ARREARS, GoodsType.SILK, SILK_ARREARS));
-        taxes.verifyBoycottMarked(GoodsType.MUSKET, true);
-        taxes.verifyBoycottMarked(GoodsType.SILK, true);
+        taxes.verifyTax(TAX_AFTER_PROTEST, Map.of(GoodsType.WEAPONS,
+                WEAPONS_ARREARS, GoodsType.CLOTH, CLOTH_ARREARS));
+        taxes.verifyBoycottMarked(GoodsType.WEAPONS, true);
+        taxes.verifyBoycottMarked(GoodsType.CLOTH, true);
     }
 
     @Test
@@ -195,16 +195,16 @@ public class TC_79_F71_back_tax_payment_test extends AbstractMicroColTest {
         int gold = taxes.gold();
         taxes.openEurope();
         taxes.openBackTaxes();
-        taxes.chooseBackTaxCommodity(GoodsType.MUSKET);
+        taxes.chooseBackTaxCommodity(GoodsType.WEAPONS);
         // Another command pays the same debt while the dialog is open.
-        taxes.payBackTaxElsewhere(GoodsType.MUSKET);
+        taxes.payBackTaxElsewhere(GoodsType.WEAPONS);
         taxes.payBackTax();
         taxes.verifyBackTaxFeedback(CHANGED);
         taxes.verifyBackTaxDialogOpen(true);
-        taxes.verifyGold(gold - MUSKET_ARREARS);
+        taxes.verifyGold(gold - WEAPONS_ARREARS);
         taxes.verifyTax(TAX_AFTER_PROTEST,
-                Map.of(GoodsType.SILK, SILK_ARREARS));
+                Map.of(GoodsType.CLOTH, CLOTH_ARREARS));
         taxes.cancelBackTax();
-        taxes.verifyBoycottMarked(GoodsType.MUSKET, false);
+        taxes.verifyBoycottMarked(GoodsType.WEAPONS, false);
     }
 }

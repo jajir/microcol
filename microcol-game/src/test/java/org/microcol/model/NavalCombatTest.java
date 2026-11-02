@@ -172,7 +172,7 @@ class NavalCombatTest {
             final Founder selected) {
         final CongressPo po = Congress.initial();
         po.setActivated(true);
-        po.setBells(0);
+        po.setOwls(0);
         po.setMembers(members);
         po.setCandidates(
                 List.of(selected == null ? Founder.JOHN_PAUL_JONES : selected,
@@ -275,7 +275,7 @@ class NavalCombatTest {
                 .getTotal());
         // The frozen review is kept while the same owner joins Drake through
         // the production path.
-        owner.creditProducedBells(owner.getCongressTarget());
+        owner.creditProducedOwls(owner.getCongressTarget());
         owner.startTurn();
         assertEquals(List.of(Founder.FRANCIS_DRAKE),
                 owner.getCongressMembers());

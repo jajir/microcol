@@ -26,9 +26,9 @@ import javafx.stage.Stage;
 public class TC_78_F70_tax_demand_test extends AbstractMicroColTest {
     private static final String RATES = "Current tax: 0%. The Crown demands 2%.";
     private static final String ACCEPT = "Accepting raises the tax to 2% and destroys nothing.";
-    private static final String PROTEST = "Protest destroys 60 Rum in New Amsterdam (stock 60), adds 100 liberty there, boycotts that commodity and records 1320 gold of arrears. The tax stays 0%.";
+    private static final String PROTEST = "Protest destroys 60 Olive oil in New Amsterdam (stock 60), adds 100 liberty there, boycotts that commodity and records 1320 gold of arrears. The tax stays 0%.";
     private static final String NO_PROTEST = "No protest consequence is available now, so only acceptance is possible.";
-    private static final int CONGRESS_BELLS = 99;
+    private static final int CONGRESS_OWLS = 99;
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -36,10 +36,11 @@ public class TC_78_F70_tax_demand_test extends AbstractMicroColTest {
     }
 
     private Fixture fixture() {
-        // Rum is the most valuable stock: 60 * 11 beats 40 * 11 and 40 * 2.
+        // Olive oil is the most valuable stock: 60 * 11 beats 40 * 11 and 40 *
+        // 2.
         return new Fixture(TaxDemandPage.CORE_SOURCE, "tax-demand").due()
-                .warehouse(Map.of(GoodsType.RUM, 60, GoodsType.SILK, 40,
-                        GoodsType.CORN, 40));
+                .warehouse(Map.of(GoodsType.OLIVE_OIL, 60, GoodsType.CLOTH, 40,
+                        GoodsType.GRAIN, 40));
     }
 
     @Test
@@ -54,8 +55,8 @@ public class TC_78_F70_tax_demand_test extends AbstractMicroColTest {
         taxes.verifyPaused(0, 0);
         taxes.verifyDemandDialog(RATES, ACCEPT, PROTEST, true);
         taxes.captureDialog("taxDemandDialog", "r102-tax-demand.png");
-        taxes.verifyStock(GoodsType.RUM, 60);
-        taxes.verifyStock(GoodsType.SILK, 40);
+        taxes.verifyStock(GoodsType.OLIVE_OIL, 60);
+        taxes.verifyStock(GoodsType.CLOTH, 40);
         // Closing the window does not answer; Europe offers the demand again.
         taxes.defer();
         taxes.verifyDialogOpen(false);
@@ -78,15 +79,15 @@ public class TC_78_F70_tax_demand_test extends AbstractMicroColTest {
         taxes.accept();
         taxes.finishUpdate();
         taxes.verifyTax(2, Map.of());
-        taxes.verifyStock(GoodsType.RUM, 60);
-        taxes.verifyStock(GoodsType.SILK, 40);
-        taxes.verifyResumed(0, CONGRESS_BELLS);
+        taxes.verifyStock(GoodsType.OLIVE_OIL, 60);
+        taxes.verifyStock(GoodsType.CLOTH, 40);
+        taxes.verifyResumed(0, CONGRESS_OWLS);
         // Continue does not ask again and does not update again.
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
         taxes.verifyTax(2, Map.of());
-        taxes.verifyStock(GoodsType.RUM, 60);
-        taxes.verifyResumed(0, CONGRESS_BELLS);
+        taxes.verifyStock(GoodsType.OLIVE_OIL, 60);
+        taxes.verifyResumed(0, CONGRESS_OWLS);
     }
 
     @Test
@@ -98,25 +99,26 @@ public class TC_78_F70_tax_demand_test extends AbstractMicroColTest {
         WelcomePage.of(getContext()).loadGame();
         taxes.startUpdate();
         taxes.verifyDemandDialog(RATES, ACCEPT, PROTEST, true);
-        // Protesting keeps the rate, destroys the quoted rum and closes it.
+        // Protesting keeps the rate, destroys the quoted olive oil and closes
+        // it.
         taxes.protest();
         taxes.finishUpdate();
-        taxes.verifyTax(0, Map.of(GoodsType.RUM, 1320));
-        taxes.verifyStock(GoodsType.RUM, 0);
-        taxes.verifyStock(GoodsType.SILK, 40);
-        // The protest liberty stays in the colony and earns no Congress bells.
-        taxes.verifyResumed(100, CONGRESS_BELLS);
+        taxes.verifyTax(0, Map.of(GoodsType.OLIVE_OIL, 1320));
+        taxes.verifyStock(GoodsType.OLIVE_OIL, 0);
+        taxes.verifyStock(GoodsType.CLOTH, 40);
+        // The protest liberty stays in the colony and earns no Congress owls.
+        taxes.verifyResumed(100, CONGRESS_OWLS);
         // The market marks only the closed commodity.
         taxes.openEurope();
-        taxes.verifyBoycottMarked(GoodsType.RUM, true);
-        taxes.verifyBoycottMarked(GoodsType.SILK, false);
+        taxes.verifyBoycottMarked(GoodsType.OLIVE_OIL, true);
+        taxes.verifyBoycottMarked(GoodsType.CLOTH, false);
         taxes.returnToMap();
         // Continue keeps the boycott, the loss and the liberty exactly.
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
-        taxes.verifyTax(0, Map.of(GoodsType.RUM, 1320));
-        taxes.verifyStock(GoodsType.RUM, 0);
-        taxes.verifyResumed(100, CONGRESS_BELLS);
+        taxes.verifyTax(0, Map.of(GoodsType.OLIVE_OIL, 1320));
+        taxes.verifyStock(GoodsType.OLIVE_OIL, 0);
+        taxes.verifyResumed(100, CONGRESS_OWLS);
     }
 
     @Test
@@ -128,17 +130,17 @@ public class TC_78_F70_tax_demand_test extends AbstractMicroColTest {
         WelcomePage.of(getContext()).loadGame();
         taxes.startUpdate();
         // Another command changes the quoted stock while the window is open.
-        taxes.removeStockElsewhere(GoodsType.RUM, 1);
+        taxes.removeStockElsewhere(GoodsType.OLIVE_OIL, 1);
         taxes.protest();
         taxes.verifyFeedback(
                 "Protest is no longer possible. Nothing was changed.");
         taxes.verifyPaused(0, 0);
-        taxes.verifyStock(GoodsType.RUM, 59);
+        taxes.verifyStock(GoodsType.OLIVE_OIL, 59);
         taxes.verifyDemandDialog(RATES, ACCEPT, NO_PROTEST, false);
         taxes.accept();
         taxes.finishUpdate();
         taxes.verifyTax(2, Map.of());
-        taxes.verifyStock(GoodsType.RUM, 59);
-        taxes.verifyResumed(0, CONGRESS_BELLS);
+        taxes.verifyStock(GoodsType.OLIVE_OIL, 59);
+        taxes.verifyResumed(0, CONGRESS_OWLS);
     }
 }

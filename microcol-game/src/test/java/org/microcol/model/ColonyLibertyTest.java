@@ -69,7 +69,7 @@ class ColonyLibertyTest {
         final CongressPo congress = dutch.getCongress();
         congress.setActivated(true);
         congress.setGeneration(1);
-        congress.setBells(0);
+        congress.setOwls(0);
         congress.setSelected(null);
         congress.setJonesDeliveryPending(false);
         congress.setMembers(List.of(Founder.SIMON_BOLIVAR));
@@ -230,7 +230,7 @@ class ColonyLibertyTest {
         assertEquals(0, bonusOnly.getRebelSupport().getDisplayPercent());
 
         // Control: the same owner update without Bolivar. The ordinary
-        // unattended bell of that update is the only liberty it credits.
+        // unattended owl of that update is the only liberty it credits.
         final Model control = load(data());
         assertTrue(control.getCurrentPlayer().startTurn());
         final Colony controlColony = control.getColonyById(1).orElseThrow();
@@ -347,32 +347,32 @@ class ColonyLibertyTest {
     }
 
     @Test
-    void producedBellsAreAddedOnceAtTurnStartAndRepeatedReadsAddNothing() {
+    void producedOwlsAreAddedOnceAtTurnStartAndRepeatedReadsAddNothing() {
         final GameModelPo data = data();
         final Model model = load(data);
         final Colony colony = model.getColonyById(0).orElseThrow();
         colony.getUnitsInsideColony().get(0).placeToColonyStructureSlot(
                 colony.getConstructionByType(ConstructionType.TOWN_HALL)
                         .getSlotAt(0));
-        final int bells = colony.getGoodsStats().getStatsByType(GoodsType.BELL)
+        final int owls = colony.getGoodsStats().getStatsByType(GoodsType.OWLS)
                 .getRowProduction();
-        assertTrue(bells > 0, "The town hall worker must make bells");
+        assertTrue(owls > 0, "The town hall worker must make owls");
         final String before = new Gson().toJson(model.save());
         colony.getRebelSupport();
         colony.getOwner().getNationalRebelSupport();
         colony.getGoodsStats();
         assertEquals(before, new Gson().toJson(model.save()));
-        // Stored warehouse bells are not new production.
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.BELL, 77));
+        // Stored warehouse owls are not new production.
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.OWLS, 77));
         colony.startTurn();
-        assertEquals(Math.min(bells, capacity(colony)), colony.getLiberty());
+        assertEquals(Math.min(owls, capacity(colony)), colony.getLiberty());
         final Model resumed = load(wrap(model.save()));
         assertEquals(colony.getLiberty(),
                 resumed.getColonyById(0).orElseThrow().getLiberty());
     }
 
     @Test
-    void crownOccupationKeepsAffiliationAndLibertyAndSubtractsProducedBells() {
+    void crownOccupationKeepsAffiliationAndLibertyAndSubtractsProducedOwls() {
         final GameModelPo data = data();
         giveBolivar(data);
         savedColony(data, 0).setLiberty(400L);
@@ -401,10 +401,10 @@ class ColonyLibertyTest {
                 .orElseThrow().getLastColonialAffiliation());
         assertSame(saved.getPlayerByName("Dutch's King"),
                 saved.getColonyById(0).orElseThrow().getOwner());
-        final int bells = Math.max(0, colony.getGoodsStats()
-                .getStatsByType(GoodsType.BELL).getRowProduction());
+        final int owls = Math.max(0, colony.getGoodsStats()
+                .getStatsByType(GoodsType.OWLS).getRowProduction());
         colony.startTurn();
-        assertEquals(Math.max(0, 400L - bells), colony.getLiberty());
+        assertEquals(Math.max(0, 400L - owls), colony.getLiberty());
         // Liberation by the Dutch keeps liberty and the same affiliation.
         final long remaining = colony.getLiberty();
         force.takeOver(dutch);
@@ -452,7 +452,7 @@ class ColonyLibertyTest {
             final Player nation) {
         final Unit force = model.addUnitOutSideColony(colony);
         force.takeOver(nation);
-        ((UnitFreeColonist) force).setHoldingGuns(true);
+        ((UnitFreeColonist) force).setHoldingWeapons(true);
         return force;
     }
 

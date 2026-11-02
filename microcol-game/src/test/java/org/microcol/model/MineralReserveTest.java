@@ -27,9 +27,9 @@ class MineralReserveTest {
         assertEquals(200, ResourceOverlay.MIXED_MINERALS
                 .getInitialReserve(GoodsType.ORE));
         assertEquals(0,
-                ResourceOverlay.TRAPPING.getInitialReserve(GoodsType.FUR));
+                ResourceOverlay.CLAY_PIT.getInitialReserve(GoodsType.CLAY));
         assertEquals(0,
-                ResourceOverlay.FISHERY.getInitialReserve(GoodsType.CORN));
+                ResourceOverlay.FISHERY.getInitialReserve(GoodsType.GRAIN));
         assertEquals(200, MineralReserve.initial(ResourceOverlay.MIXED_MINERALS)
                 .getRemaining(GoodsType.ORE));
         assertEquals(0, MineralReserve.initial(ResourceOverlay.NONE)
@@ -41,7 +41,7 @@ class MineralReserveTest {
         assertTrue(ResourceOverlay.SILVER.isFinite());
         assertTrue(ResourceOverlay.ORE.isFinite());
         assertTrue(ResourceOverlay.MIXED_MINERALS.isFinite());
-        assertFalse(ResourceOverlay.TRAPPING.isFinite());
+        assertFalse(ResourceOverlay.CLAY_PIT.isFinite());
         assertFalse(ResourceOverlay.NONE.isFinite());
     }
 
@@ -71,10 +71,10 @@ class MineralReserveTest {
         assertFalse(MineralReserve.of(-1, 0).isAllowedFor(ResourceOverlay.ORE));
         assertTrue(MineralReserve.of(200, 200)
                 .isAllowedFor(ResourceOverlay.MIXED_MINERALS));
-        // Trapping holds no finite units, so only the empty reserve fits it.
+        // Clay pit holds no finite units, so only the empty reserve fits it.
         assertTrue(
-                MineralReserve.of(0, 0).isAllowedFor(ResourceOverlay.TRAPPING));
+                MineralReserve.of(0, 0).isAllowedFor(ResourceOverlay.CLAY_PIT));
         assertFalse(
-                MineralReserve.of(1, 0).isAllowedFor(ResourceOverlay.TRAPPING));
+                MineralReserve.of(1, 0).isAllowedFor(ResourceOverlay.CLAY_PIT));
     }
 }

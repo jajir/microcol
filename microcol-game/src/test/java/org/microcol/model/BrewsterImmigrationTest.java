@@ -25,7 +25,7 @@ import org.microcol.model.store.ModelPo;
 /** The earned choice interrupts, then resumes, one national preparation. */
 class BrewsterImmigrationTest {
 
-    private GameModelPo fixture(final int crosses) {
+    private GameModelPo fixture(final int torches) {
         final GameModelPo data = new GameModelPoDao().loadFromClassPath(
                 "/maps/default-campaign-mission-2-thrive.microcol");
         final PlayerPo dutch = data.getModel().getGameManager().getPlayers()
@@ -34,7 +34,7 @@ class BrewsterImmigrationTest {
         final CongressPo congress = dutch.getCongress();
         congress.setMembers(List.of(Founder.WILLIAM_BREWSTER));
         congress.setSelected(null);
-        dutch.getRecruitment().setCrosses(crosses);
+        dutch.getRecruitment().setTorches(torches);
         dutch.getRecruitment().getCandidates().forEach(candidate -> {
             if (candidate.getType() == UnitType.INDENTURED_SERVANT
                     || candidate.getType() == UnitType.PETTY_CRIMINAL) {
@@ -66,16 +66,16 @@ class BrewsterImmigrationTest {
         final Model model = load(fixture(230));
         final Player dutch = model.getPlayerByName("Dutch");
         final int pierBefore = peopleAtPier(dutch);
-        final int bellsBefore = dutch.getCongressBells();
-        final int producedCrosses = dutch.getColonies().stream()
+        final int owlsBefore = dutch.getCongressOwls();
+        final int producedTorches = dutch.getColonies().stream()
                 .mapToInt(colony -> colony.getGoodsStats()
-                        .getStatsByType(GoodsType.CROSS).getRowProduction())
+                        .getStatsByType(GoodsType.TORCHES).getRowProduction())
                 .sum();
         nextDutchTurn(model);
         assertTrue(model.isAwaitingImmigrationChoice());
         assertFalse(model.isGameRunning());
-        assertEquals(230, dutch.getImmigrationCrosses());
-        assertEquals(bellsBefore, dutch.getCongressBells());
+        assertEquals(230, dutch.getImmigrationTorches());
+        assertEquals(owlsBefore, dutch.getCongressOwls());
         assertEquals(pierBefore, peopleAtPier(dutch));
         assertThrows(IllegalStateException.class, model::endTurn);
         final List<EarnedImmigrationOffer> first = dutch
@@ -88,13 +88,13 @@ class BrewsterImmigrationTest {
         final Player owner = restored.getPlayerByName("Dutch");
         restored.startGame();
         assertTrue(restored.isAwaitingImmigrationChoice());
-        assertEquals(230, owner.getImmigrationCrosses());
+        assertEquals(230, owner.getImmigrationTorches());
         assertEquals(pierBefore, peopleAtPier(owner));
         final EarnedImmigrationOffer chosen = owner.getEarnedImmigrationOffers()
                 .get(0);
         owner.chooseEarnedImmigrant(chosen);
         assertTrue(restored.isAwaitingImmigrationChoice());
-        assertEquals(130, owner.getImmigrationCrosses());
+        assertEquals(130, owner.getImmigrationTorches());
         assertEquals(125, owner.getImmigrationTarget());
         assertEquals(pierBefore + 1, peopleAtPier(owner));
         assertFalse(owner.canChooseEarnedImmigrant(chosen));
@@ -104,23 +104,23 @@ class BrewsterImmigrationTest {
         final Player resumed = between.getPlayerByName("Dutch");
         between.startGame();
         assertTrue(between.isAwaitingImmigrationChoice());
-        assertEquals(130, resumed.getImmigrationCrosses());
+        assertEquals(130, resumed.getImmigrationTorches());
         resumed.chooseEarnedImmigrant(
                 resumed.getEarnedImmigrationOffers().get(1));
         assertFalse(between.isAwaitingImmigrationChoice());
         assertTrue(between.isGameRunning());
-        assertEquals(5 + producedCrosses, resumed.getImmigrationCrosses());
+        assertEquals(5 + producedTorches, resumed.getImmigrationTorches());
         assertEquals(2, resumed.save().getRecruitment().getEarnedImmigrants());
         assertEquals(pierBefore + 2, peopleAtPier(resumed));
-        assertTrue(resumed.getCongressBells() > bellsBefore);
+        assertTrue(resumed.getCongressOwls() > owlsBefore);
         final Model after = Model.make(between.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         final Player finalOwner = after.getPlayerByName("Dutch");
-        final int finalCrosses = finalOwner.getImmigrationCrosses();
+        final int finalTorches = finalOwner.getImmigrationTorches();
         final int finalPier = peopleAtPier(finalOwner);
         after.startGame();
         assertFalse(after.isAwaitingImmigrationChoice());
-        assertEquals(finalCrosses, finalOwner.getImmigrationCrosses());
+        assertEquals(finalTorches, finalOwner.getImmigrationTorches());
         assertEquals(finalPier, peopleAtPier(finalOwner));
     }
 
@@ -130,13 +130,13 @@ class BrewsterImmigrationTest {
         data.getModel().getGameManager().setGameStarted(false);
         final Model model = load(data);
         final Player dutch = model.getPlayerByName("Dutch");
-        final int bellsBefore = dutch.getCongressBells();
+        final int owlsBefore = dutch.getCongressOwls();
         final int peopleBefore = peopleAtPier(dutch);
         model.startGame();
         assertTrue(model.isAwaitingImmigrationChoice());
         assertEquals("Dutch", model.getCurrentPlayer().getName());
-        assertEquals(100, dutch.getImmigrationCrosses());
-        assertEquals(bellsBefore, dutch.getCongressBells());
+        assertEquals(100, dutch.getImmigrationTorches());
+        assertEquals(owlsBefore, dutch.getCongressOwls());
         assertEquals(peopleBefore, peopleAtPier(dutch));
         final Model restored = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
@@ -148,7 +148,7 @@ class BrewsterImmigrationTest {
         assertTrue(restored.isGameRunning());
         assertEquals(1, owner.save().getRecruitment().getEarnedImmigrants());
         assertEquals(peopleBefore + 1, peopleAtPier(owner));
-        assertTrue(owner.getCongressBells() > bellsBefore);
+        assertTrue(owner.getCongressOwls() > owlsBefore);
     }
 
     @Test
@@ -171,10 +171,10 @@ class BrewsterImmigrationTest {
         assertEquals(
                 5 + dutch.getColonies().stream()
                         .mapToInt(colony -> colony.getGoodsStats()
-                                .getStatsByType(GoodsType.CROSS)
+                                .getStatsByType(GoodsType.TORCHES)
                                 .getRowProduction())
                         .sum(),
-                dutch.getImmigrationCrosses());
+                dutch.getImmigrationTorches());
     }
 
     @Test
@@ -203,15 +203,15 @@ class BrewsterImmigrationTest {
         final Model model = load(fixture(100));
         nextDutchTurn(model);
         final Player dutch = model.getPlayerByName("Dutch");
-        final int before = dutch.getImmigrationCrosses();
+        final int before = dutch.getImmigrationTorches();
         assertTrue(model.isAwaitingImmigrationChoice());
         model.beginImmigrationChoice(dutch);
         assertThrows(TurnPreparationException.class, model::save);
         assertThrows(IllegalStateException.class, model::endTurn);
-        assertEquals(before, dutch.getImmigrationCrosses());
+        assertEquals(before, dutch.getImmigrationTorches());
         model.continueImmigrationChoice();
         assertTrue(model.isAwaitingImmigrationChoice());
-        assertEquals(before, dutch.getImmigrationCrosses());
+        assertEquals(before, dutch.getImmigrationTorches());
         assertTrue(model.save().getGameManager().isGameStarted());
     }
 
@@ -286,7 +286,7 @@ class BrewsterImmigrationTest {
                 Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
                 Founder.WILLIAM_BREWSTER, Founder.FERDINAND_MAGELLAN));
         congress.setSelected(Founder.WILLIAM_BREWSTER);
-        congress.setBells(99);
+        congress.setOwls(99);
         final RecruitmentPo pool = dutchPo.getRecruitment();
         pool.getCandidates().get(1).setType(UnitType.INDENTURED_SERVANT);
         pool.getCandidates().get(2).setType(UnitType.PETTY_CRIMINAL);

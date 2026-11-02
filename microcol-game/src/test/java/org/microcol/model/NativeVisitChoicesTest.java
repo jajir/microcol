@@ -80,7 +80,7 @@ class NativeVisitChoicesTest {
 
     private static final Consumer<UnitPo> LOADED = unit -> {
         final CargoSlotPo slot = new CargoSlotPo();
-        slot.setGoodsType(GoodsType.CORN);
+        slot.setGoodsType(GoodsType.GRAIN);
         slot.setAmount(50);
         unit.getCargo().getSlots().add(slot);
     };

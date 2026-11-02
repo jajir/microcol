@@ -98,7 +98,7 @@ public class UnitFactory {
                 request.getUnitId(), request.getPlaceBuilder(),
                 request.getOwner(), request.getMovementThirds(),
                 request.getAction(), request.getTools(),
-                request.isHoldingGuns(), request.isMounted());
+                request.isHoldingWeapons(), request.isMounted());
         return out;
     }
 
@@ -106,7 +106,7 @@ public class UnitFactory {
         return new UnitMasterBlacksmith(request.getModel(), request.getUnitId(),
                 request.getPlaceBuilder(), request.getOwner(),
                 request.getMovementThirds(), request.getAction(),
-                request.getTools(), request.isHoldingGuns(),
+                request.getTools(), request.isHoldingWeapons(),
                 request.isMounted());
     }
 
@@ -114,7 +114,7 @@ public class UnitFactory {
         return new UnitSpecialist(request.getModel(), request.getUnitId(),
                 request.getPlaceBuilder(), request.getOwner(),
                 request.getMovementThirds(), request.getAction(),
-                request.getTools(), request.isHoldingGuns(),
+                request.getTools(), request.isHoldingWeapons(),
                 request.isMounted(), request.getUnitType());
     }
 
@@ -122,7 +122,7 @@ public class UnitFactory {
         return new UnitLaborer(request.getModel(), request.getUnitId(),
                 request.getPlaceBuilder(), request.getOwner(),
                 request.getMovementThirds(), request.getAction(),
-                request.getTools(), request.isHoldingGuns(),
+                request.getTools(), request.isHoldingWeapons(),
                 request.isMounted(), request.getUnitType());
     }
 
@@ -326,7 +326,7 @@ public class UnitFactory {
         Preconditions.checkArgument(
                 unitPo.getType() == UnitType.ARTILLERY
                         ? unitPo.getArtilleryDamaged() != null
-                                && !unitPo.isHoldingGuns()
+                                && !unitPo.isHoldingWeapons()
                                 && !unitPo.isMounted() && unitPo.getTools() == 0
                                 && unitPo.getPlaceColonyField() == null
                                 && unitPo.getPlaceConstructionSlot() == null
@@ -363,7 +363,7 @@ public class UnitFactory {
                 unitPo.getMovementThirds());
         unitCreateRequest.setCargoBuilder(unit -> new Cargo(unit,
                 unit.getType().getCargoCapacity(), unitPo.getCargo()));
-        unitCreateRequest.setHoldingGuns(unitPo.isHoldingGuns());
+        unitCreateRequest.setHoldingWeapons(unitPo.isHoldingWeapons());
         unitCreateRequest.setMounted(unitPo.isMounted());
         unitCreateRequest.setTools(unitPo.getTools());
         unitCreateRequest.setArtilleryDamaged(
@@ -447,15 +447,21 @@ public class UnitFactory {
             }
         }
         if (unit.getAction().getType() == UnitActionType.fortify) {
-            Preconditions.checkArgument((unit instanceof UnitFreeColonist
-                    && ((UnitFreeColonist) unit).isHoldingGuns()
-                    || unit instanceof UnitArtillery)
-                    && unit.isAtPlaceLocation()
-                    && model.getMap().getTerrainTypeAt(unit.getLocation())
-                            .isLand()
-                    && (((UnitActionFortify) unit.getAction()).isFortified()
-                            || unit.getMovementThirds() == 0),
-                    "Invalid saved fortification");
+            Preconditions
+                    .checkArgument(
+                            (unit instanceof UnitFreeColonist
+                                    && ((UnitFreeColonist) unit)
+                                            .isHoldingWeapons()
+                                    || unit instanceof UnitArtillery)
+                                    && unit.isAtPlaceLocation()
+                                    && model.getMap()
+                                            .getTerrainTypeAt(
+                                                    unit.getLocation())
+                                            .isLand()
+                                    && (((UnitActionFortify) unit.getAction())
+                                            .isFortified()
+                                            || unit.getMovementThirds() == 0),
+                            "Invalid saved fortification");
         }
         final boolean hasLocation = unitPo.getDepartureLocation() != null;
         final boolean hasDirection = unitPo.getDepartureDirection() != null;

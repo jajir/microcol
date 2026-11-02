@@ -79,7 +79,7 @@ public class Model {
     public static final int ALLIANCE_WAR_WAIT_ROUNDS = EuropeanRelations.WAR_WAIT_ROUNDS;
     /** Equipment a disbanded colonist returns, in warehouse goods order. */
     private static final List<GoodsType> DISBANDABLE_EQUIPMENT = List
-            .of(GoodsType.MUSKET, GoodsType.HORSE, GoodsType.TOOLS);
+            .of(GoodsType.WEAPONS, GoodsType.HORSE, GoodsType.TOOLS);
 
     /**
      * The value of the saved random stream that follows a saved state. Pure: it
@@ -713,7 +713,7 @@ public class Model {
         final Colony col = draftColony(player, location,
                 ColonyNames.normalize(name));
         final List<ColonyField> fields = col
-                .getEmptyFieldsWithMaxCornProduction();
+                .getEmptyFieldsWithMaxGrainProduction();
         final List<Location> land = foundingLand(location, fields);
         Preconditions.checkArgument(
                 expectedLand == null || expectedLand.equals(land),
@@ -729,9 +729,9 @@ public class Model {
         if (unit instanceof UnitFreeColonist) {
             final UnitFreeColonist colonist = (UnitFreeColonist) unit;
             final Map<GoodsType, Integer> returnedEquipment = ImmutableMap.of(
-                    GoodsType.MUSKET,
-                    colonist.isHoldingGuns()
-                            ? UnitFreeColonist.REQUIRED_MUSKETS_FOR_ARMED_UNIT
+                    GoodsType.WEAPONS,
+                    colonist.isHoldingWeapons()
+                            ? UnitFreeColonist.REQUIRED_WEAPONS_FOR_ARMED_UNIT
                             : 0,
                     GoodsType.HORSE,
                     colonist.isMounted()
@@ -758,7 +758,7 @@ public class Model {
         if (fields.isEmpty()) {
             unit.placeToColonyStructureSlot(indoorWork);
         } else {
-            unit.placeToColonyField(fields.get(0), GoodsType.CORN);
+            unit.placeToColonyField(fields.get(0), GoodsType.GRAIN);
         }
         recordNativeLandUse(player, location);
         refreshObservations();
@@ -783,7 +783,7 @@ public class Model {
         final Location location = founder.getLocation();
         return foundingLand(location,
                 draftColony(founder.getOwner(), location, "")
-                        .getEmptyFieldsWithMaxCornProduction());
+                        .getEmptyFieldsWithMaxGrainProduction());
     }
 
     /**
@@ -1723,14 +1723,14 @@ public class Model {
      *
      * @param owner prospective colony owner
      * @param site  prospective colony position
-     * @return valid, unworked fields that can produce corn
+     * @return valid, unworked fields that can produce grain
      */
     public List<Location> getAvailableColonyFoodFields(final Player owner,
             final Location site) {
         Preconditions.checkNotNull(site);
         return site.getNeighbors().stream()
                 .filter(at -> isColonyFieldAvailable(owner, at))
-                .filter(at -> map.getTerrainAt(at).canProduce(GoodsType.CORN))
+                .filter(at -> map.getTerrainAt(at).canProduce(GoodsType.GRAIN))
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -2240,7 +2240,7 @@ public class Model {
                 new UnitActionNoAction());
         if (out instanceof UnitFreeColonist) {
             final UnitFreeColonist soldier = (UnitFreeColonist) out;
-            soldier.setHoldingGuns(true);
+            soldier.setHoldingWeapons(true);
             soldier.setMounted(family == RoyalRoster.Family.CAVALRY);
             soldier.assignRoyalRole();
         }
@@ -2549,7 +2549,7 @@ public class Model {
                 MovementPoints.ofPoints(UnitType.COLONIST.getSpeed()),
                 new UnitActionNoAction());
         final UnitFreeColonist soldier = (UnitFreeColonist) created;
-        soldier.setHoldingGuns(true);
+        soldier.setHoldingWeapons(true);
         soldier.setMounted(cavalry);
         soldier.assignMilitaryRole(MilitaryRole.CONTINENTAL);
         soldier.markInterventionDelivered();
@@ -2787,7 +2787,7 @@ public class Model {
                             MovementPoints.ofPoints(owner.getEffectiveSpeed(
                                     UnitType.VETERAN_SOLDIER)),
                             new UnitActionNoAction());
-            ((UnitFreeColonist) created).setHoldingGuns(true);
+            ((UnitFreeColonist) created).setHoldingWeapons(true);
             owner.revealMapForUnit(created);
         }
     }
@@ -3449,7 +3449,7 @@ public class Model {
                         && unit instanceof UnitFreeColonist
                         && unit.isAtPlaceLocation())
                 .filter(unit -> unit.getType() == UnitType.SEASONED_SCOUT
-                        || ((UnitFreeColonist) unit).isHoldingGuns()
+                        || ((UnitFreeColonist) unit).isHoldingWeapons()
                         || ((UnitFreeColonist) unit).isMounted())
                 .filter(unit -> hasVisiblePeaceContact(unit, rival))
                 .sorted(Comparator.comparingInt(Unit::getId))
@@ -4112,10 +4112,10 @@ public class Model {
     }
 
     /**
-     * Religion report of a colonial nation (R-0199): the cross output of each
-     * colony at the next update, the national total, the accumulated crosses
+     * Religion report of a colonial nation (R-0199): the torch output of each
+     * colony at the next update, the national total, the accumulated torches
      * and the next immigrant threshold. It is rebuilt from the live state on
-     * every call and changes no colony, cross, recruitment or unit.
+     * every call and changes no colony, torch, recruitment or unit.
      *
      * @param owner required colonial nation of this model; the report reads
      *              only its own colonies and rejects a player of another model
@@ -4527,7 +4527,7 @@ public class Model {
                 && unit.isAtPlaceLocation()
                 && map.getTerrainTypeAt(unit.getLocation()).isLand()
                 && (unit instanceof UnitArtillery
-                        || ((UnitFreeColonist) unit).isHoldingGuns())
+                        || ((UnitFreeColonist) unit).isHoldingWeapons())
                 && unit.getMovementThirds() > 0
                 && unit.getAction().getType() == UnitActionType.noAction
                 && !hasGoToOrder(unit);
@@ -5166,7 +5166,7 @@ public class Model {
         final Optional<Colony> receiving = receivingColony(unit);
         final Map<GoodsType, Integer> carried = unit instanceof UnitFreeColonist
                 ? ((UnitFreeColonist) unit).getCarriedEquipment()
-                : ImmutableMap.of(GoodsType.MUSKET, 0, GoodsType.HORSE, 0,
+                : ImmutableMap.of(GoodsType.WEAPONS, 0, GoodsType.HORSE, 0,
                         GoodsType.TOOLS, 0);
         final Map<GoodsType, Integer> retained = new HashMap<>();
         final Map<GoodsType, Integer> lost = new HashMap<>();
@@ -5876,7 +5876,7 @@ public class Model {
      * the expedition began right after the village received it from an earlier
      * carrier (R-0159). Only the goods the village buys from the player are
      * meant: the offered stock the player buys (R-0161) is not involved.
-     * Muskets are never refused. Pure read.
+     * Weapons are never refused. Pure read.
      *
      * @param carrier    required unit
      * @param settlement required native settlement
@@ -6089,7 +6089,7 @@ public class Model {
     /**
      * Give carried goods to a native settlement without gold (R-0160). The same
      * preflight as a sale applies, but the treasury is not checked, and the
-     * outcome is the proportional gift reduction. Muskets and horses given away
+     * outcome is the proportional gift reduction. Weapons and horses given away
      * are not sold, so they add no arms tribal anger.
      *
      * @param carrier    required wagon or ship beside the settlement
@@ -6131,7 +6131,7 @@ public class Model {
                         offered.getQuantity())
                 : NativeRelationOutcome.trade(tradeId, settlement);
         final boolean arms = !offered.isGift()
-                && (goods.equals(GoodsType.MUSKET)
+                && (goods.equals(GoodsType.WEAPONS)
                         || goods.equals(GoodsType.HORSE));
         final NativeRelationOutcome armsSale = arms
                 ? NativeRelationOutcome.armsSale(tradeId + 1,
@@ -7626,7 +7626,7 @@ public class Model {
         }
         return attacker instanceof UnitFreeColonist
                 && (((UnitFreeColonist) attacker).isScout()
-                        || ((UnitFreeColonist) attacker).isHoldingGuns());
+                        || ((UnitFreeColonist) attacker).isHoldingWeapons());
     }
 
     /** Same turn-state gate as an ordinary attack: points, action and order. */
@@ -9715,7 +9715,7 @@ public class Model {
 
     /** Goods that quick loading never moves, even when they are in stock. */
     private static final List<GoodsType> QUICK_LOAD_EXCLUDED = ImmutableList
-            .of(GoodsType.HORSE, GoodsType.TOOLS, GoodsType.MUSKET);
+            .of(GoodsType.HORSE, GoodsType.TOOLS, GoodsType.WEAPONS);
 
     /**
      * Choose the one quick load or unload for a carrier at its own colony. Only

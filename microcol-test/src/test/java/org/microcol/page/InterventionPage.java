@@ -20,7 +20,7 @@ import org.testfx.util.WaitForAsyncUtils;
 /**
  * Foreign-intervention target as the first rebel update announces it and as a
  * later update reports its earning (R-0189), and the delivery of the earned
- * forces to the port (R-0190). Reading the bells that an update will produce
+ * forces to the port (R-0190). Reading the owls that an update will produce
  * changes nothing.
  */
 public final class InterventionPage extends AbstractScreen {
@@ -34,13 +34,13 @@ public final class InterventionPage extends AbstractScreen {
     }
 
     /**
-     * Bells the colonies of the current nation produce in its next update, read
+     * Owls the colonies of the current nation produce in its next update, read
      * before the turn ends.
      */
-    public int plannedBells() {
+    public int plannedOwls() {
         return getModel().getColonies(getModel().getCurrentPlayer()).stream()
                 .mapToInt(colony -> Math.max(0, colony.getGoodsStats()
-                        .getStatsByType(GoodsType.BELL).getRowProduction()))
+                        .getStatsByType(GoodsType.OWLS).getRowProduction()))
                 .sum();
     }
 
@@ -48,7 +48,7 @@ public final class InterventionPage extends AbstractScreen {
     public void verifyAnnouncement(final ScreenTurnReport report,
             final int target) {
         report.verifyThatAtLeastOneEventMessageContains(
-                "Foreign intervention target: " + target + " bells.");
+                "Foreign intervention target: " + target + " owls.");
     }
 
     /** The update that reaches the target reports the earning. */
@@ -58,7 +58,7 @@ public final class InterventionPage extends AbstractScreen {
                 "The earning update must show a turn report");
         report.get().verifyThatAtLeastOneEventMessageContains(
                 "Foreign intervention is earned: the target of " + target
-                        + " bells is reached.");
+                        + " owls is reached.");
     }
 
     /** A later update has no second earning notice. */
@@ -108,7 +108,7 @@ public final class InterventionPage extends AbstractScreen {
                 soldiers.stream().filter(UnitFreeColonist::isMounted).count());
         assertTrue(soldiers.stream().allMatch(
                 soldier -> soldier.getMilitaryRole() == MilitaryRole.CONTINENTAL
-                        && soldier.isHoldingGuns()));
+                        && soldier.isHoldingWeapons()));
     }
 
     /** The delivered ships and soldiers of the current nation, by identity. */

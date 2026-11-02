@@ -96,7 +96,7 @@ public class TC_111_F102_coronado_reveal_test extends AbstractMicroColTest {
         fog.verifyRevealedPixels(WEST_NEIGHBOR);
         congress.open();
         congress.verifyProgress(0, 200,
-                "Choose the next founder. Bells wait until a choice is made.",
+                "Choose the next founder. Owls wait until a choice is made.",
                 "Francisco de Coronado");
         congress.close();
     }

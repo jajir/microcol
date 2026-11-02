@@ -52,7 +52,7 @@ class UnitRoleLedgerTest {
         assertTrue(UnitType.ARTILLERY.canAttack());
         assertTrue(UnitType.VETERAN_SOLDIER.canAttack());
         assertTrue(UnitType.SEASONED_SCOUT.canAttack());
-        // Instance eligibility still needs muskets; see ColonistEquipmentTest
+        // Instance eligibility still needs weapons; see ColonistEquipmentTest
         // and AttackRoleTest.
         assertTrue(UnitType.COLONIST.canAttack());
         assertFalse(UnitType.WAGON.canAttack());

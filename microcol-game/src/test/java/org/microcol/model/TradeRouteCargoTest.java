@@ -53,8 +53,8 @@ class TradeRouteCargoTest {
         final Model model = fixtureModel();
         final Player owner = owner(model);
         final TradeRoute route = seaRoute(model, owner);
-        final List<GoodsType> six = List.of(GoodsType.CORN, GoodsType.SUGAR,
-                GoodsType.TOBACCO, GoodsType.COTTON, GoodsType.FUR,
+        final List<GoodsType> six = List.of(GoodsType.GRAIN, GoodsType.OLIVES,
+                GoodsType.GRAPES, GoodsType.WOOL, GoodsType.CLAY,
                 GoodsType.LUMBER);
         final TradeRoute configured = model.configureTradeRouteStopCargo(owner,
                 route, 0, six, List.of());
@@ -71,15 +71,15 @@ class TradeRouteCargoTest {
         final Model model = fixtureModel();
         final Player owner = owner(model);
         final TradeRoute route = seaRoute(model, owner);
-        final List<GoodsType> seven = List.of(GoodsType.CORN, GoodsType.SUGAR,
-                GoodsType.TOBACCO, GoodsType.COTTON, GoodsType.FUR,
+        final List<GoodsType> seven = List.of(GoodsType.GRAIN, GoodsType.OLIVES,
+                GoodsType.GRAPES, GoodsType.WOOL, GoodsType.CLAY,
                 GoodsType.LUMBER, GoodsType.ORE);
         assertThrows(IllegalArgumentException.class,
                 () -> model.configureTradeRouteStopCargo(owner, route, 0, seven,
                         List.of()));
         assertThrows(IllegalArgumentException.class,
                 () -> model.configureTradeRouteStopCargo(owner, route, 0,
-                        List.of(GoodsType.CORN, GoodsType.CORN), List.of()));
+                        List.of(GoodsType.GRAIN, GoodsType.GRAIN), List.of()));
         assertThrows(IllegalArgumentException.class,
                 () -> model.configureTradeRouteStopCargo(owner, route, 0,
                         List.of(GoodsType.HAMMERS), List.of()));
@@ -97,12 +97,12 @@ class TradeRouteCargoTest {
         final Player owner = owner(model);
         final TradeRoute route = seaRoute(model, owner);
         model.configureTradeRouteStopCargo(owner, route, 1,
-                List.of(GoodsType.ORE, GoodsType.CORN),
+                List.of(GoodsType.ORE, GoodsType.GRAIN),
                 List.of(GoodsType.TOOLS));
         final Model restored = load(model.save());
         final TradeRoute saved = restored.getTradeRoutes(owner(restored))
                 .get(0);
-        assertEquals(List.of(GoodsType.ORE, GoodsType.CORN),
+        assertEquals(List.of(GoodsType.ORE, GoodsType.GRAIN),
                 saved.getStops().get(1).getUnloadGoods());
         assertEquals(List.of(GoodsType.TOOLS),
                 saved.getStops().get(1).getLoadGoods());

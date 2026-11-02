@@ -10,7 +10,7 @@ public enum Europe implements MessageKeyResource {
     buyUnitDialog_unavailable, goodsPanelTitle, recruitUnitDialogTitle,
     recruitUnitDialogButton, statusBarEuropeDock, statusBarShipsToNewWorld,
     statusBarShipsToEurope, statusBarPier, goodsToSell, buttonClose,
-    buttonBuyUnit, equipmentOpen, buyMuskets, sellMuskets, buyHorses,
+    buttonBuyUnit, equipmentOpen, buyWeapons, sellWeapons, buyHorses,
     sellHorses, buyTools, sellTools, equipmentConfirm, equipmentCancel,
     equipmentChanged, equipmentQuote, equipmentUNIT_UNAVAILABLE,
     equipmentALREADY_SET, equipmentINCOMPATIBLE_EQUIPMENT,

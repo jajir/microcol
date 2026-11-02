@@ -52,7 +52,7 @@ class JettisonTest {
     }
 
     /**
-     * Same crossing, with Brewster and enough crosses that the second owner
+     * Same crossing, with Brewster and enough torches that the second owner
      * update pauses for an earned immigrant choice.
      */
     private void loadPendingImmigration() {
@@ -62,7 +62,7 @@ class JettisonTest {
                 .findFirst().orElseThrow();
         dutch.getCongress().setMembers(List.of(Founder.WILLIAM_BREWSTER));
         dutch.getCongress().setSelected(null);
-        dutch.getRecruitment().setCrosses(230);
+        dutch.getRecruitment().setTorches(230);
         make();
     }
 

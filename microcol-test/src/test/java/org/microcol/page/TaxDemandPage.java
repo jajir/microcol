@@ -48,7 +48,7 @@ public final class TaxDemandPage extends AbstractScreen {
         private boolean independence;
         private boolean expandedWarehouse;
         private Integer gold;
-        private Integer congressBells;
+        private Integer congressOwls;
         private List<Founder> congressOffers;
 
         public Fixture(final File source, final String name) {
@@ -99,11 +99,11 @@ public final class TaxDemandPage extends AbstractScreen {
         }
 
         /**
-         * The Dutch Congress holds these bells and offers these founders, with
+         * The Dutch Congress holds these owls and offers these founders, with
          * no choice made yet.
          */
-        public Fixture congress(final int bells, final List<Founder> offers) {
-            congressBells = bells;
+        public Fixture congress(final int owls, final List<Founder> offers) {
+            congressOwls = owls;
             congressOffers = List.copyOf(offers);
             return this;
         }
@@ -145,9 +145,9 @@ public final class TaxDemandPage extends AbstractScreen {
         if (fixture.gold != null) {
             player.addProperty("gold", fixture.gold);
         }
-        if (fixture.congressBells != null) {
+        if (fixture.congressOwls != null) {
             final JsonObject congress = player.getAsJsonObject("congress");
-            congress.addProperty("bells", fixture.congressBells);
+            congress.addProperty("owls", fixture.congressOwls);
             final JsonArray offers = new JsonArray();
             fixture.congressOffers
                     .forEach(founder -> offers.add(founder.name()));
@@ -372,7 +372,7 @@ public final class TaxDemandPage extends AbstractScreen {
         assertEquals(rate, dutch().getTaxRate());
         assertEquals(libertyBefore, colony().getLiberty());
         assertEquals(0,
-                colony().getWarehouse().getGoods(GoodsType.BELL).getAmount());
+                colony().getWarehouse().getGoods(GoodsType.OWLS).getAmount());
         assertEquals(1, dutch().save().getTax().getIssued());
     }
 
@@ -412,25 +412,24 @@ public final class TaxDemandPage extends AbstractScreen {
     }
 
     /**
-     * The colony holds the given protest liberty plus the bells its resumed
-     * update produced, and the Congress gained only those produced bells.
+     * The colony holds the given protest liberty plus the owls its resumed
+     * update produced, and the Congress gained only those produced owls.
      */
     public void verifyResumed(final long protestLiberty,
-            final int congressBellsBefore) {
+            final int congressOwlsBefore) {
         assertTrue(getModel().isGameRunning());
         assertFalse(getModel().isAwaitingTaxDecision());
-        final int produced = colony().getWarehouse().getGoods(GoodsType.BELL)
+        final int produced = colony().getWarehouse().getGoods(GoodsType.OWLS)
                 .getAmount();
         assertEquals(protestLiberty + produced, colony().getLiberty());
-        assertEquals(congressBellsBefore + produced,
-                dutch().getCongressBells());
+        assertEquals(congressOwlsBefore + produced, dutch().getCongressOwls());
     }
 
-    /** Earned arrivals and cross progress before and after the demand. */
-    public void verifyEarnedArrivals(final int earned, final int crosses) {
+    /** Earned arrivals and torch progress before and after the demand. */
+    public void verifyEarnedArrivals(final int earned, final int torches) {
         assertEquals(earned,
                 dutch().save().getRecruitment().getEarnedImmigrants());
-        assertEquals(crosses, dutch().save().getRecruitment().getCrosses());
+        assertEquals(torches, dutch().save().getRecruitment().getTorches());
     }
 
     /**

@@ -406,7 +406,7 @@ public class WorldMap {
 
     /**
      * Remove the forest at a square for good. The square keeps its bare terrain
-     * yields except that it never again produces lumber or fur.
+     * yields except that it never again produces lumber or clay.
      *
      * @param at forested square
      */

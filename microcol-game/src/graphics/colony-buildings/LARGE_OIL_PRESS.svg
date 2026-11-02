@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="160" viewBox="0 0 320 160" role="img" aria-labelledby="title description">
-<title id="title">Cigar Factory — Lehký nadhled</title>
-<desc id="description">Tabák; level 3. Editable flat vector drawing after selected proposal 8, R-0361. Transparent background, simple hand-drawn contours and a narrow side view.</desc>
+<title id="title">Large Oil Press — Lehký nadhled</title>
+<desc id="description">Lisovna oleje; level 3. Editable flat vector drawing after selected proposal 8, R-0361. Transparent background, simple hand-drawn contours and a narrow side view.</desc>
 <g id="pen-outline" stroke="#3e3b31" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round">
 <g id="building">
 <g id="building-structure">
@@ -20,13 +20,8 @@
 </g>
 </g>
 <g id="profession-equipment">
-<g id="tobacco-leaf-8" transform="translate(201 87) scale(0.85)">
-<path id="shape-009" d="M9 35 C-8 24 -2 9 20 0 Q33 22 9 35 Z" fill="#82934e"/>
-<path id="shape-010" d="M8 36 Q14.45 20.67 20 5" fill="none"/>
-</g>
-<path id="shape-011" d="M244 119 Q255.49 119.63 267 119.3 Q267.15 130.66 266.6 142 Q255.45 141.42 244.3 141.8 Q243.80 130.40 244 119 Z" fill="#bd8e50"/>
-<path id="shape-012" d="M248 123 Q255.16 130.84 263 138" fill="none"/>
-<path id="shape-013" d="M263 123 Q255.16 130.16 248 138" fill="none"/>
+<path id="shape-009" d="M220 115 L220 107 Q227 99 234 107 L234 115 Q253 127 236 141 L218 141 Q204 125 220 115 Z" fill="#b5754c"/>
+<path id="shape-010" d="M227 104 C225 85 240 89 250 101 L256 105 L253 109 Q238 94 234 100 L233 106 Z" fill="#b5754c"/>
 </g>
 </g>
 </g>

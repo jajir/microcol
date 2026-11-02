@@ -61,10 +61,10 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
         // forecast.
         layout.moveSelection(KeyCode.ENTER);
         layout.verifyOutputFocused(GoodsType.LUMBER);
-        layout.chooseOutput(GoodsType.CORN);
-        layout.verifyOutput(GoodsType.CORN, 2);
+        layout.chooseOutput(GoodsType.GRAIN);
+        layout.verifyOutput(GoodsType.GRAIN, 2);
         jobs.verifyFieldJob(0, Location.of(23, 16),
-                org.microcol.model.Goods.of(GoodsType.CORN, 2));
+                org.microcol.model.Goods.of(GoodsType.GRAIN, 2));
         layout.verifyLayout("New Amsterdam", 7);
         layout.verifyCompactBuildings(46, 22, 32, 12);
         layout.selectTile(2, 0);
@@ -244,10 +244,10 @@ public class TC_195_F227_colony_layout_test extends AbstractMicroColTest {
         layout.selectTile(0, 1);
         layout.moveSelection(KeyCode.SPACE);
         layout.verifyOutputFocused(GoodsType.LUMBER);
-        layout.chooseOutputWithKeyboard(GoodsType.CORN);
-        layout.verifyOutput(GoodsType.CORN, 2);
+        layout.chooseOutputWithKeyboard(GoodsType.GRAIN);
+        layout.verifyOutput(GoodsType.GRAIN, 2);
         jobs.verifyFieldJob(0, Location.of(23, 16),
-                org.microcol.model.Goods.of(GoodsType.CORN, 2));
+                org.microcol.model.Goods.of(GoodsType.GRAIN, 2));
 
         // A source job changed after rendering invalidates the captured offer.
         layout.changeSourceCropWithoutRefresh(GoodsType.LUMBER);

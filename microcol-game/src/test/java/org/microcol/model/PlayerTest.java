@@ -25,12 +25,12 @@ public class PlayerTest {
     public void test_buyGoods() throws Exception {
         player.setGold(1540);
         when(model.getEurope()).thenReturn(europe);
-        when(europe.getGoodsTradeForType(GoodsType.TOBACCO,
+        when(europe.getGoodsTradeForType(GoodsType.GRAPES,
                 EuropeanNation.DUTCH))
-                .thenReturn(new GoodsTrade(GoodsType.TOBACCO, 10, 14));
+                .thenReturn(new GoodsTrade(GoodsType.GRAPES, 10, 14));
         when(model.getKingsTaxForPlayer(player)).thenReturn(10);
 
-        player.buyGoods(Goods.of(GoodsType.TOBACCO, 100));
+        player.buyGoods(Goods.of(GoodsType.GRAPES, 100));
 
         assertEquals(0, player.getGold());
     }
@@ -44,25 +44,25 @@ public class PlayerTest {
     public void test_buyGoods_notEnoughtGold() throws Exception {
         player.setGold(100);
         when(model.getEurope()).thenReturn(europe);
-        when(europe.getGoodsTradeForType(GoodsType.TOBACCO,
+        when(europe.getGoodsTradeForType(GoodsType.GRAPES,
                 EuropeanNation.DUTCH))
-                .thenReturn(new GoodsTrade(GoodsType.TOBACCO, 10, 14));
+                .thenReturn(new GoodsTrade(GoodsType.GRAPES, 10, 14));
         when(model.getKingsTaxForPlayer(player)).thenReturn(10);
 
         assertThrows(NotEnoughtGoldException.class,
-                () -> player.buyGoods(Goods.of(GoodsType.TOBACCO, 100)));
+                () -> player.buyGoods(Goods.of(GoodsType.GRAPES, 100)));
     }
 
     @Test
     public void test_sellGoods() throws Exception {
         player.setGold(0);
         when(model.getEurope()).thenReturn(europe);
-        when(europe.getGoodsTradeForType(GoodsType.TOBACCO,
+        when(europe.getGoodsTradeForType(GoodsType.GRAPES,
                 EuropeanNation.DUTCH))
-                .thenReturn(new GoodsTrade(GoodsType.TOBACCO, 10, 14));
+                .thenReturn(new GoodsTrade(GoodsType.GRAPES, 10, 14));
         when(model.getKingsTaxForPlayer(player)).thenReturn(10);
 
-        player.sellGoods(Goods.of(GoodsType.TOBACCO, 100));
+        player.sellGoods(Goods.of(GoodsType.GRAPES, 100));
 
         assertEquals(900, player.getGold());
     }
@@ -82,72 +82,72 @@ public class PlayerTest {
     @Test
     void quotedPricesUseBidAskAndFractionalTaxWithoutMutatingGold() {
         when(model.getEurope()).thenReturn(europe);
-        when(europe.getGoodsTradeForType(GoodsType.MUSKET,
+        when(europe.getGoodsTradeForType(GoodsType.WEAPONS,
                 EuropeanNation.DUTCH))
-                .thenReturn(new GoodsTrade(GoodsType.MUSKET, 2, 3));
+                .thenReturn(new GoodsTrade(GoodsType.WEAPONS, 2, 3));
         when(model.getKingsTaxForPlayer(player)).thenReturn(17);
         player.setGold(175);
 
         assertEquals(175,
-                player.quoteEuropeTrade(Goods.of(GoodsType.MUSKET, 50), true)
+                player.quoteEuropeTrade(Goods.of(GoodsType.WEAPONS, 50), true)
                         .getTotal());
         assertEquals(83,
-                player.quoteEuropeTrade(Goods.of(GoodsType.MUSKET, 50), false)
+                player.quoteEuropeTrade(Goods.of(GoodsType.WEAPONS, 50), false)
                         .getTotal());
         assertEquals(175, player.getGold());
-        player.buyGoods(Goods.of(GoodsType.MUSKET, 50));
+        player.buyGoods(Goods.of(GoodsType.WEAPONS, 50));
         assertEquals(0, player.getGold());
-        player.sellGoods(Goods.of(GoodsType.MUSKET, 50));
+        player.sellGoods(Goods.of(GoodsType.WEAPONS, 50));
         assertEquals(83, player.getGold());
     }
 
     @Test
     void taxedAffordabilityRejectsOneGoldShortWithoutMutation() {
         when(model.getEurope()).thenReturn(europe);
-        when(europe.getGoodsTradeForType(GoodsType.MUSKET,
+        when(europe.getGoodsTradeForType(GoodsType.WEAPONS,
                 EuropeanNation.DUTCH))
-                .thenReturn(new GoodsTrade(GoodsType.MUSKET, 2, 3));
+                .thenReturn(new GoodsTrade(GoodsType.WEAPONS, 2, 3));
         when(model.getKingsTaxForPlayer(player)).thenReturn(17);
         player.setGold(174);
 
         assertEquals(49,
-                player.getMaxBuyableGoods(GoodsType.MUSKET).getAmount());
+                player.getMaxBuyableGoods(GoodsType.WEAPONS).getAmount());
         assertThrows(NotEnoughtGoldException.class,
-                () -> player.buyGoods(Goods.of(GoodsType.MUSKET, 50)));
+                () -> player.buyGoods(Goods.of(GoodsType.WEAPONS, 50)));
         assertEquals(174, player.getGold());
         player.setGold(175);
         assertEquals(50,
-                player.getMaxBuyableGoods(GoodsType.MUSKET).getAmount());
+                player.getMaxBuyableGoods(GoodsType.WEAPONS).getAmount());
     }
 
     @Test
     void affordabilityHandlesZeroPricesAndIntegerTreasuryBoundary() {
         when(model.getEurope()).thenReturn(europe);
-        final GoodsTrade trade = new GoodsTrade(GoodsType.MUSKET, 2, 0);
-        when(europe.getGoodsTradeForType(GoodsType.MUSKET,
+        final GoodsTrade trade = new GoodsTrade(GoodsType.WEAPONS, 2, 0);
+        when(europe.getGoodsTradeForType(GoodsType.WEAPONS,
                 EuropeanNation.DUTCH)).thenReturn(trade);
         player.setGold(0);
         assertEquals(100,
-                player.getMaxBuyableGoods(GoodsType.MUSKET).getAmount());
+                player.getMaxBuyableGoods(GoodsType.WEAPONS).getAmount());
         trade.setBuyPrice(Integer.MAX_VALUE);
         player.setGold(Integer.MAX_VALUE);
         assertEquals(1,
-                player.getMaxBuyableGoods(GoodsType.MUSKET).getAmount());
+                player.getMaxBuyableGoods(GoodsType.WEAPONS).getAmount());
         when(model.getKingsTaxForPlayer(player)).thenReturn(1);
         assertEquals(0,
-                player.getMaxBuyableGoods(GoodsType.MUSKET).getAmount());
+                player.getMaxBuyableGoods(GoodsType.WEAPONS).getAmount());
     }
 
     @Test
     void saleOverflowDoesNotAlterTreasury() {
         when(model.getEurope()).thenReturn(europe);
-        when(europe.getGoodsTradeForType(GoodsType.MUSKET,
+        when(europe.getGoodsTradeForType(GoodsType.WEAPONS,
                 EuropeanNation.DUTCH))
-                .thenReturn(new GoodsTrade(GoodsType.MUSKET, 2, 3));
+                .thenReturn(new GoodsTrade(GoodsType.WEAPONS, 2, 3));
         player.setGold(Integer.MAX_VALUE);
 
         assertThrows(ArithmeticException.class,
-                () -> player.sellGoods(Goods.of(GoodsType.MUSKET, 1)));
+                () -> player.sellGoods(Goods.of(GoodsType.WEAPONS, 1)));
         assertEquals(Integer.MAX_VALUE, player.getGold());
     }
 
@@ -156,15 +156,15 @@ public class PlayerTest {
         player = new PlayerHuman("Dutch", false, 100, model, true,
                 new HashMap<>(), new HashSet<>());
         when(model.getEurope()).thenReturn(europe);
-        when(europe.getGoodsTradeForType(GoodsType.MUSKET,
+        when(europe.getGoodsTradeForType(GoodsType.WEAPONS,
                 EuropeanNation.DUTCH))
-                .thenReturn(new GoodsTrade(GoodsType.MUSKET, 2, 3));
+                .thenReturn(new GoodsTrade(GoodsType.WEAPONS, 2, 3));
         assertEquals(0,
-                player.getMaxBuyableGoods(GoodsType.MUSKET).getAmount());
+                player.getMaxBuyableGoods(GoodsType.WEAPONS).getAmount());
         assertThrows(IllegalStateException.class,
-                () -> player.buyGoods(Goods.of(GoodsType.MUSKET, 1)));
+                () -> player.buyGoods(Goods.of(GoodsType.WEAPONS, 1)));
         assertThrows(IllegalStateException.class,
-                () -> player.sellGoods(Goods.of(GoodsType.MUSKET, 1)));
+                () -> player.sellGoods(Goods.of(GoodsType.WEAPONS, 1)));
         assertEquals(100, player.getGold());
     }
 

@@ -35,8 +35,9 @@ public class TC_57_F48_founder_construction_test extends AbstractMicroColTest {
         ConstructionPage construction = new ConstructionPage(getContext());
         colony.rememberWorld();
         construction.open();
-        for (String project : List.of("IRON_WORKS", "CIGAR_FACTORY",
-                "TEXTILE_MILL", "RUM_FACTORY", "FUR_FACTORY", "ARSENAL")) {
+        for (String project : List.of("IRON_WORKS", "LARGE_WINERY",
+                "TEXTILE_MILL", "LARGE_OIL_PRESS", "LARGE_POTTERY",
+                "ARSENAL")) {
             construction.select(project);
             construction.verifyOffer(false, "Requires founder: Adam Smith.",
                     project.equals("IRON_WORKS") || project.equals("ARSENAL")
@@ -49,7 +50,7 @@ public class TC_57_F48_founder_construction_test extends AbstractMicroColTest {
         construction.cancel();
         colony.verifyWorldUnchanged();
         game = colony.close();
-        // Choose the founder and earn the final bell through an ordinary turn.
+        // Choose the founder and earn the final owl through an ordinary turn.
         CongressPage congress = new CongressPage(getContext());
         congress.open();
         congress.select(Founder.ADAM_SMITH);
@@ -59,8 +60,9 @@ public class TC_57_F48_founder_construction_test extends AbstractMicroColTest {
         founder.verifyMember(Founder.ADAM_SMITH);
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         construction.open();
-        for (String project : List.of("IRON_WORKS", "CIGAR_FACTORY",
-                "TEXTILE_MILL", "RUM_FACTORY", "FUR_FACTORY", "ARSENAL")) {
+        for (String project : List.of("IRON_WORKS", "LARGE_WINERY",
+                "TEXTILE_MILL", "LARGE_OIL_PRESS", "LARGE_POTTERY",
+                "ARSENAL")) {
             construction.select(project);
             construction.verifyOffer(true, "Available.",
                     project.equals("IRON_WORKS") || project.equals("ARSENAL")
@@ -107,7 +109,7 @@ public class TC_57_F48_founder_construction_test extends AbstractMicroColTest {
                 160, 50);
         construction.cancel();
         game = colony.close();
-        // Choose the founder and earn the final bell through an ordinary turn.
+        // Choose the founder and earn the final owl through an ordinary turn.
         CongressPage congress = new CongressPage(getContext());
         congress.open();
         congress.select(Founder.PETER_STUYVESANT);

@@ -111,16 +111,16 @@ class TeProcessorNoticeTextTest {
     @Test
     void thrownAwayGoodsNameColonyGoodsAndQuantityInBothLanguages() {
         final TeItemSimple english = new TeProcessorGoodsWasThrownAway(
-                i18n(Locale.ROOT)).apply(thrownAway(GoodsType.TOBACCO, 4));
+                i18n(Locale.ROOT)).apply(thrownAway(GoodsType.GRAPES, 4));
         assertEquals(
-                "Colony Delft: not enough warehouse space, 4 units of Tobacco were thrown away.",
+                "Colony Delft: not enough warehouse space, 4 units of Grapes were thrown away.",
                 english.getMessage());
         verifyOpensColony(english);
 
         final TeItemSimple czech = new TeProcessorGoodsWasThrownAway(
-                i18n(CZECH)).apply(thrownAway(GoodsType.TOBACCO, 4));
+                i18n(CZECH)).apply(thrownAway(GoodsType.GRAPES, 4));
         assertEquals(
-                "V kolonii Delft došlo místo, proto se muselo 4 kusů tabáku vyhodit.",
+                "V kolonii Delft došlo místo, proto se muselo 4 kusů hroznů vyhodit.",
                 czech.getMessage());
         verifyOpensColony(czech);
     }
@@ -128,8 +128,8 @@ class TeProcessorNoticeTextTest {
     @Test
     void oneThrownAwayUnitReadsTheSameForEveryGrammaticalGender() {
         final I18n english = i18n(Locale.ROOT);
-        for (final GoodsType type : new GoodsType[] { GoodsType.TOBACCO,
-                GoodsType.ORE, GoodsType.CORN }) {
+        for (final GoodsType type : new GoodsType[] { GoodsType.GRAPES,
+                GoodsType.ORE, GoodsType.GRAIN }) {
             final String goods = english
                     .get(org.microcol.gui.GoodsTypeName.getKey(type, 2, false));
             assertEquals(
@@ -146,7 +146,7 @@ class TeProcessorNoticeTextTest {
         po.setType(TurnEventTradeRouteTransfer.class.getSimpleName());
         po.setPlayerName("Dutch");
         po.setTradeRouteId(2);
-        po.setTradeRouteName("Rum Run");
+        po.setTradeRouteName("Oil Run");
         po.setTradeRouteCarrierId(3);
         po.setTradeRouteCarrierType(UnitType.GALLEON);
         po.setTradeRouteStopIndex(europe ? 0 : 1);
@@ -173,16 +173,16 @@ class TeProcessorNoticeTextTest {
         final TurnEvent loaded = routeTransfer(false, false,
                 Goods.of(GoodsType.HORSE, 20), 0);
         assertEquals(
-                "Trade route Rum Run, Galleon #3, stop 2 (Delft): unloaded 30 Ore.",
+                "Trade route Oil Run, Galleon #3, stop 2 (Delft): unloaded 30 Ore.",
                 routeText(Locale.ROOT, unloaded));
         assertEquals(
-                "Trade route Rum Run, Galleon #3, stop 2 (Delft): loaded 20 Horse.",
+                "Trade route Oil Run, Galleon #3, stop 2 (Delft): loaded 20 Horse.",
                 routeText(Locale.ROOT, loaded));
         assertEquals(
-                "Obchodní trasa Rum Run, galeona č. 3, zastávka 2 (Delft): vyloženo 30 × Železná ruda.",
+                "Obchodní trasa Oil Run, galeona č. 3, zastávka 2 (Delft): vyloženo 30 × Železná ruda.",
                 routeText(CZECH, unloaded));
         assertEquals(
-                "Obchodní trasa Rum Run, galeona č. 3, zastávka 2 (Delft): naloženo 20 × Koně.",
+                "Obchodní trasa Oil Run, galeona č. 3, zastávka 2 (Delft): naloženo 20 × Koně.",
                 routeText(CZECH, loaded));
     }
 
@@ -191,18 +191,18 @@ class TeProcessorNoticeTextTest {
         final TurnEvent sold = routeTransfer(true, true,
                 Goods.of(GoodsType.ORE, 60), 120);
         final TurnEvent bought = routeTransfer(true, false,
-                Goods.of(GoodsType.MUSKET, 40), -50);
+                Goods.of(GoodsType.WEAPONS, 40), -50);
         assertEquals(
-                "Trade route Rum Run, Galleon #3, stop 1 (Europe): sold 60 Ore, +120 gold.",
+                "Trade route Oil Run, Galleon #3, stop 1 (Europe): sold 60 Ore, +120 gold.",
                 routeText(Locale.ROOT, sold));
         assertEquals(
-                "Trade route Rum Run, Galleon #3, stop 1 (Europe): bought 40 Musket, -50 gold.",
+                "Trade route Oil Run, Galleon #3, stop 1 (Europe): bought 40 Weapons, -50 gold.",
                 routeText(Locale.ROOT, bought));
         assertEquals(
-                "Obchodní trasa Rum Run, galeona č. 3, zastávka 1 (Evropa): prodáno 60 × Železná ruda, +120 zlata.",
+                "Obchodní trasa Oil Run, galeona č. 3, zastávka 1 (Evropa): prodáno 60 × Železná ruda, +120 zlata.",
                 routeText(CZECH, sold));
         assertEquals(
-                "Obchodní trasa Rum Run, galeona č. 3, zastávka 1 (Evropa): nakoupeno 40 × Muškety, -50 zlata.",
+                "Obchodní trasa Oil Run, galeona č. 3, zastávka 1 (Evropa): nakoupeno 40 × Zbraně, -50 zlata.",
                 routeText(CZECH, bought));
         assertNull(new TeProcessorTradeRouteTransfer(i18n(Locale.ROOT))
                 .apply(thrownAway(GoodsType.ORE, 3)));

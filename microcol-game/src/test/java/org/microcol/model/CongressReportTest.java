@@ -34,10 +34,10 @@ class CongressReportTest {
             Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH, Founder.WILLIAM_PENN,
             Founder.FERDINAND_MAGELLAN);
 
-    private static CongressPo active(final int bells, final Founder selected) {
+    private static CongressPo active(final int owls, final Founder selected) {
         final CongressPo po = Congress.initial();
         po.setActivated(true);
-        po.setBells(bells);
+        po.setOwls(owls);
         po.setCandidates(OFFER);
         po.setSelected(selected);
         po.setGeneration(1);
@@ -149,11 +149,11 @@ class CongressReportTest {
     }
 
     @Test
-    void selectedFounderShowsBellsTowardTheTargetAndWaitsUnjoined() {
+    void selectedFounderShowsOwlsTowardTheTargetAndWaitsUnjoined() {
         final Model model = make(campaign(active(99, Founder.JOHN_PAUL_JONES)));
         final Player owner = dutch(model);
         final CongressReport report = model.getCongressReport(owner);
-        assertEquals(99, report.getBells());
+        assertEquals(99, report.getOwls());
         // Conquistador factor 100 with no member: the first objective costs
         // 100.
         assertEquals(100, report.getTarget());
@@ -165,15 +165,15 @@ class CongressReportTest {
     }
 
     @Test
-    void reportKeepsItsOwnBellsWhileALaterReportSeesNewBells() {
+    void reportKeepsItsOwnOwlsWhileALaterReportSeesNewOwls() {
         final Model model = make(campaign(active(10, Founder.JOHN_PAUL_JONES)));
         final Player owner = dutch(model);
         final CongressReport before = model.getCongressReport(owner);
-        // Five bells stay far below the target of 100, so no founder joins.
-        owner.creditProducedBells(5);
+        // Five owls stay far below the target of 100, so no founder joins.
+        owner.creditProducedOwls(5);
         final CongressReport after = model.getCongressReport(owner);
-        assertEquals(10, before.getBells());
-        assertEquals(15, after.getBells());
+        assertEquals(10, before.getOwls());
+        assertEquals(15, after.getOwls());
         assertEquals(before.getTarget(), after.getTarget());
         assertEquals(List.of(), after.getMembers());
     }
@@ -204,9 +204,9 @@ class CongressReportTest {
         assertEquals(0, seen.getCount(Family.INFANTRY, State.CAPTURED));
         assertEquals(4, seen.getCount(Family.CAVALRY, State.RESERVE));
         // Growth at the Conquistador threshold of 500 adds one infantry, the
-        // first unit of the growth cycle, and keeps the 7 bells beyond it. Its
+        // first unit of the growth cycle, and keeps the 7 owls beyond it. Its
         // 13 ground members exceed six per ship, so one man-of-war joins.
-        assertEquals(500, crown.getBellThreshold());
+        assertEquals(500, crown.getOwlThreshold());
         crown.credit(500 + 7);
         final RoyalRoster grown = model.getCongressReport(owner)
                 .getCrownRoster().orElseThrow();
@@ -216,7 +216,7 @@ class CongressReportTest {
         assertEquals(1, grown.getCount(Family.INFANTRY, State.DESTROYED));
         assertEquals(4, grown.getCount(Family.CAVALRY, State.RESERVE));
         assertEquals(3, grown.getTotal(Family.MAN_OF_WAR));
-        assertEquals(7, grown.getBellRemainder());
+        assertEquals(7, grown.getOwlRemainder());
         assertEquals(grown.getTotal(Family.INFANTRY),
                 grown.getCount(Family.INFANTRY, State.RESERVE)
                         + grown.getCount(Family.INFANTRY, State.SHIPPED)
@@ -259,9 +259,9 @@ class CongressReportTest {
         // Growing the French Crown changes its own report and no Dutch figure.
         final int dutchBefore = totalMembers(dutchCrown);
         final int franceBefore = totalMembers(franceCrown);
-        // A bell threshold adds at least one ground member, possibly with a
+        // An owl threshold adds at least one ground member, possibly with a
         // ship.
-        franceCrown.credit(franceCrown.getBellThreshold());
+        franceCrown.credit(franceCrown.getOwlThreshold());
         assertTrue(totalMembers(franceCrown) > franceBefore);
         assertEquals(totalMembers(franceCrown), totalMembers(model
                 .getCongressReport(france).getCrownRoster().orElseThrow()));
@@ -298,7 +298,7 @@ class CongressReportTest {
         final CongressReport second = model.getCongressReport(owner);
         assertEquals(before, json(model));
         assertEquals(first.getNationalSupport(), second.getNationalSupport());
-        assertEquals(first.getBells(), second.getBells());
+        assertEquals(first.getOwls(), second.getOwls());
         assertEquals(first.getTarget(), second.getTarget());
         assertEquals(first.getSelectedFounder(), second.getSelectedFounder());
         // Save the live state to disk and load it again: the same figures.
@@ -312,12 +312,12 @@ class CongressReportTest {
         final CongressReport again = reloaded
                 .getCongressReport(dutch(reloaded));
         assertEquals(first.getNationalSupport(), again.getNationalSupport());
-        assertEquals(first.getBells(), again.getBells());
+        assertEquals(first.getOwls(), again.getOwls());
         assertEquals(first.getTarget(), again.getTarget());
         assertEquals(first.getSelectedFounder(), again.getSelectedFounder());
         assertEquals(first.getMembers(), again.getMembers());
-        assertEquals(first.getCrownRoster().orElseThrow().getBellThreshold(),
-                again.getCrownRoster().orElseThrow().getBellThreshold());
+        assertEquals(first.getCrownRoster().orElseThrow().getOwlThreshold(),
+                again.getCrownRoster().orElseThrow().getOwlThreshold());
         assertEquals(
                 first.getCrownRoster().orElseThrow().getTotal(Family.INFANTRY),
                 again.getCrownRoster().orElseThrow().getTotal(Family.INFANTRY));

@@ -58,7 +58,7 @@ public class ConstructionSlot {
      * 0.
      * <p>
      * Production modifier is optional bonus to base production. For example
-     * skilled expert rum distiller distill more rum per turn than free
+     * skilled master oil maker presses more olive oil per turn than a free
      * colonist. some specific skills.
      * </p>
      *

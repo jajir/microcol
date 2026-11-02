@@ -213,7 +213,7 @@ class HallOfFameTest {
         po.setGold(0L);
         po.setSupportPercent(0);
         po.setDestroyedSettlements(0);
-        po.setBellsBeyondTarget(0L);
+        po.setOwlsBeyondTarget(0L);
         po.setTotal(total);
         return po;
     }

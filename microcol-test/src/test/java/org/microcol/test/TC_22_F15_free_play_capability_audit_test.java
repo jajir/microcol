@@ -39,12 +39,12 @@ public class TC_22_F15_free_play_capability_audit_test
         // Both primary and context click expose the same equipment choices.
         EuropeEquipmentPage equipment = new EuropeEquipmentPage(getContext());
         audit.clickPierColonist(MouseButton.PRIMARY);
-        equipment.verifyMenu("Buy 50 muskets", "Buy 50 horses", "Buy 100 tools",
+        equipment.verifyMenu("Buy 50 weapons", "Buy 50 horses", "Buy 100 tools",
                 "Ordain as missionary…", "Sentry");
         equipment.escape();
         audit.verifyPierEquipmentBaseline(1, 0);
         audit.clickPierColonist(MouseButton.SECONDARY);
-        equipment.verifyMenu("Buy 50 muskets", "Buy 50 horses", "Buy 100 tools",
+        equipment.verifyMenu("Buy 50 weapons", "Buy 50 horses", "Buy 100 tools",
                 "Ordain as missionary…", "Sentry");
         equipment.escape();
         audit.verifyPierEquipmentBaseline(1, 0);
@@ -64,10 +64,10 @@ public class TC_22_F15_free_play_capability_audit_test
         audit.verifyPurchaseOffers(java.util.List.of("Free Colonist",
                 "Artillery", "Frigate", "Galleon", "Caravel", "Merchantman",
                 "Privateer", "Expert Farmer", "Expert Fisherman",
-                "Expert Fur Trapper", "Expert Silver Miner",
+                "Expert Clay Digger", "Expert Silver Miner",
                 "Expert Lumberjack", "Expert Ore Miner", "Master Carpenter",
-                "Master Distiller", "Master Weaver", "Master Tobacconist",
-                "Master Fur Trader", "Master Blacksmith", "Master Gunsmith",
+                "Master Oil Maker", "Master Weaver", "Master Winemaker",
+                "Master Potter", "Master Blacksmith", "Master Weaponsmith",
                 "Firebrand Preacher", "Elder Statesman", "Seasoned Scout",
                 "Hardy Pioneer", "Veteran Soldier", "Jesuit Missionary"));
         // Cancel the offer list without spending money.

@@ -32,8 +32,8 @@ class ReligiousProductionTest {
                 MissionImpl.getPredefinedGameOverEvaluators());
     }
 
-    private int crosses(final Colony colony) {
-        return colony.getGoodsStats().getStatsByType(GoodsType.CROSS)
+    private int torches(final Colony colony) {
+        return colony.getGoodsStats().getStatsByType(GoodsType.TORCHES)
                 .getRowProduction();
     }
 
@@ -114,18 +114,18 @@ class ReligiousProductionTest {
         setup(data, tier, worker, penn);
         final Model model = load(data);
         final Colony colony = model.getColonyById(0).orElseThrow();
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CROSS, 0));
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
-        assertEquals(expected, crosses(colony));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.TORCHES, 0));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
+        assertEquals(expected, torches(colony));
         colony.startTurn();
         assertEquals(expected,
-                colony.getWarehouse().getGoods(GoodsType.CROSS).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.TORCHES).getAmount());
         final Model restored = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         final Colony resumed = restored.getColonyById(0).orElseThrow();
         assertEquals(expected,
-                resumed.getWarehouse().getGoods(GoodsType.CROSS).getAmount());
-        assertEquals(expected, crosses(resumed));
+                resumed.getWarehouse().getGoods(GoodsType.TORCHES).getAmount());
+        assertEquals(expected, torches(resumed));
     }
 
     @Test
@@ -136,14 +136,14 @@ class ReligiousProductionTest {
         final Colony colony = model.getColonyById(0).orElseThrow();
         final Construction church = colony
                 .getConstructionByType(ConstructionType.CHURCH);
-        assertEquals(7, crosses(colony));
+        assertEquals(7, torches(colony));
         final Unit second = model.addUnitOutSideColony(colony);
         second.placeToColonyStructureSlot(church.getSlotAt(1));
-        assertEquals(12, crosses(colony));
+        assertEquals(12, torches(colony));
         second.placeToColonyStructureSlot(
                 colony.getConstructionByType(ConstructionType.TOWN_HALL)
                         .getSlotAt(0));
-        assertEquals(7, crosses(colony));
+        assertEquals(7, torches(colony));
     }
 
     @Test
@@ -159,24 +159,24 @@ class ReligiousProductionTest {
         final Colony first = model.getColonyById(0).orElseThrow();
         final Colony second = model.getColonyById(1).orElseThrow();
         assertEquals(first.getOwner(), second.getOwner());
-        first.getWarehouse().setGoods(Goods.of(GoodsType.CROSS, 0));
-        second.getWarehouse().setGoods(Goods.of(GoodsType.CROSS, 0));
-        first.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
-        second.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
-        assertEquals(3, crosses(first));
-        assertEquals(3, crosses(second));
+        first.getWarehouse().setGoods(Goods.of(GoodsType.TORCHES, 0));
+        second.getWarehouse().setGoods(Goods.of(GoodsType.TORCHES, 0));
+        first.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
+        second.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
+        assertEquals(3, torches(first));
+        assertEquals(3, torches(second));
         first.startTurn();
         second.startTurn();
         assertEquals(3,
-                first.getWarehouse().getGoods(GoodsType.CROSS).getAmount());
+                first.getWarehouse().getGoods(GoodsType.TORCHES).getAmount());
         assertEquals(3,
-                second.getWarehouse().getGoods(GoodsType.CROSS).getAmount());
+                second.getWarehouse().getGoods(GoodsType.TORCHES).getAmount());
         final Model resumed = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         assertEquals(3, resumed.getColonyById(0).orElseThrow().getWarehouse()
-                .getGoods(GoodsType.CROSS).getAmount());
+                .getGoods(GoodsType.TORCHES).getAmount());
         assertEquals(3, resumed.getColonyById(1).orElseThrow().getWarehouse()
-                .getGoods(GoodsType.CROSS).getAmount());
+                .getGoods(GoodsType.TORCHES).getAmount());
     }
 
     @Test
@@ -187,19 +187,19 @@ class ReligiousProductionTest {
                 Founder.WILLIAM_PENN);
         final Model model = load(data);
         final Colony colony = model.getColonyById(0).orElseThrow();
-        assertEquals(2, crosses(colony));
+        assertEquals(2, torches(colony));
 
         RealFounderJoin.joinThroughOwnerUpdate(model, Founder.WILLIAM_PENN);
-        assertEquals(3, crosses(colony));
+        assertEquals(3, torches(colony));
 
         final Model restored = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
-        assertEquals(3, crosses(restored.getColonyById(0).orElseThrow()));
+        assertEquals(3, torches(restored.getColonyById(0).orElseThrow()));
     }
 
     /**
      * Free play: France owns Quebec and Montreal, the Dutch own no colony. Both
-     * French chapels become unattended churches, whose base is 2 crosses
+     * French chapels become unattended churches, whose base is 2 torches
      * (unattended output takes no political change), and Penn floors 150 % of
      * it to 3. Membership comes from a valid saved Congress of the named
      * nation, or none.
@@ -218,7 +218,7 @@ class ReligiousProductionTest {
                     .findFirst().orElseThrow().getCongress();
             congress.setActivated(true);
             congress.setGeneration(2);
-            congress.setBells(0);
+            congress.setOwls(0);
             congress.setSelected(null);
             congress.setJonesDeliveryPending(false);
             congress.setMembers(List.of(Founder.WILLIAM_PENN));
@@ -242,25 +242,25 @@ class ReligiousProductionTest {
     @Test
     void pennRaisesOnlyTheMembersOwnColoniesAndNeverAForeignOne() {
         final Model none = freePlayChurches(null);
-        assertEquals(2, crosses(none.getColonyByName("Quebec").orElseThrow()));
+        assertEquals(2, torches(none.getColonyByName("Quebec").orElseThrow()));
         assertEquals(2,
-                crosses(none.getColonyByName("Montreal").orElseThrow()));
+                torches(none.getColonyByName("Montreal").orElseThrow()));
 
         // The Dutch hold Penn: the French colonies stay at the ordinary 2.
         final Model foreign = freePlayChurches("Dutch");
         assertEquals(2,
-                crosses(foreign.getColonyByName("Quebec").orElseThrow()));
+                torches(foreign.getColonyByName("Quebec").orElseThrow()));
         assertEquals(2,
-                crosses(foreign.getColonyByName("Montreal").orElseThrow()));
+                torches(foreign.getColonyByName("Montreal").orElseThrow()));
 
         // The owner holds Penn: every French colony gains 2 * 150 % = 3.
         final Model own = freePlayChurches("France");
-        assertEquals(3, crosses(own.getColonyByName("Quebec").orElseThrow()));
-        assertEquals(3, crosses(own.getColonyByName("Montreal").orElseThrow()));
+        assertEquals(3, torches(own.getColonyByName("Quebec").orElseThrow()));
+        assertEquals(3, torches(own.getColonyByName("Montreal").orElseThrow()));
         final Model resumed = Model.make(own.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         assertEquals(3,
-                crosses(resumed.getColonyByName("Quebec").orElseThrow()));
+                torches(resumed.getColonyByName("Quebec").orElseThrow()));
     }
 
     @Test
@@ -275,18 +275,18 @@ class ReligiousProductionTest {
         saved.setBuildingQueue(List.of(project));
         final Model model = load(data);
         final Colony colony = model.getColonyById(0).orElseThrow();
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CROSS, 0));
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.TORCHES, 0));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
         colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 52));
-        assertEquals(1, crosses(colony));
+        assertEquals(1, torches(colony));
         colony.startTurn();
         assertEquals(ConstructionType.CHURCH, colony
                 .getConstructionByType(ConstructionType.CHURCH).getType());
         assertEquals(1,
-                colony.getWarehouse().getGoods(GoodsType.CROSS).getAmount());
-        assertEquals(2, crosses(colony));
+                colony.getWarehouse().getGoods(GoodsType.TORCHES).getAmount());
+        assertEquals(2, torches(colony));
         colony.startTurn();
         assertEquals(3,
-                colony.getWarehouse().getGoods(GoodsType.CROSS).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.TORCHES).getAmount());
     }
 }

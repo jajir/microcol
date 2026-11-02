@@ -43,13 +43,13 @@ public class UnitImageProvider {
             }
             final UnitFreeColonist colonist = (UnitFreeColonist) unit;
             if (colonist.isMounted()) {
-                return imageCache.getImage(colonist.isHoldingGuns()
-                        ? ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_MOUNTED_MUSKETS
+                return imageCache.getImage(colonist.isHoldingWeapons()
+                        ? ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_MOUNTED_WEAPONS
                         : ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_MOUNTED);
             }
-            if (colonist.isHoldingGuns()) {
+            if (colonist.isHoldingWeapons()) {
                 return imageCache.getImage(
-                        ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_MUSKETS);
+                        ImageLoaderUnit.IMG_UNIT_FREE_COLONIST_WEAPONS);
             }
             if (colonist.isHoldingTools()) {
                 return imageCache

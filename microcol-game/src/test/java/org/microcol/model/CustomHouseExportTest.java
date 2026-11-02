@@ -37,15 +37,16 @@ class CustomHouseExportTest {
         return colony;
     }
 
-    private void setCornAfterConsumption(final Colony colony,
+    private void setGrainAfterConsumption(final Colony colony,
             final int wanted) {
-        final int current = colony.getWarehouse().getGoods(GoodsType.CORN)
+        final int current = colony.getWarehouse().getGoods(GoodsType.GRAIN)
                 .getAmount();
-        final int net = colony.getRawGoodsStats().getStatsByType(GoodsType.CORN)
-                .getInWarehouseAfter() - current;
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, wanted - net));
+        final int net = colony.getRawGoodsStats()
+                .getStatsByType(GoodsType.GRAIN).getInWarehouseAfter()
+                - current;
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, wanted - net));
         assertEquals(wanted, colony.getRawGoodsStats()
-                .getStatsByType(GoodsType.CORN).getInWarehouseAfter());
+                .getStatsByType(GoodsType.GRAIN).getInWarehouseAfter());
     }
 
     @Test
@@ -66,7 +67,7 @@ class CustomHouseExportTest {
                         MissionImpl.getPredefinedGameOverEvaluators()));
         final GameModelPo duplicate = data();
         duplicate.getModel().getColonies().get(0)
-                .setExportGoods(List.of(GoodsType.CORN, GoodsType.CORN));
+                .setExportGoods(List.of(GoodsType.GRAIN, GoodsType.GRAIN));
         assertThrows(IllegalArgumentException.class,
                 () -> Model.make(duplicate.getModel(),
                         MissionImpl.getPredefinedGameOverEvaluators()));
@@ -84,48 +85,48 @@ class CustomHouseExportTest {
         assertThrows(IllegalStateException.class,
                 () -> model.getColonyByName("New Amsterdam").orElseThrow()
                         .configureExportGoods(Set.of(),
-                                Set.of(GoodsType.CORN)));
+                                Set.of(GoodsType.GRAIN)));
         assertThrows(IllegalArgumentException.class, () -> colony
                 .configureExportGoods(Set.of(), Set.of(GoodsType.HAMMERS)));
         assertEquals(before, new Gson().toJson(model.save()));
-        colony.configureExportGoods(Set.of(), Set.of(GoodsType.CORN));
+        colony.configureExportGoods(Set.of(), Set.of(GoodsType.GRAIN));
         final String selected = new Gson().toJson(model.save());
         assertThrows(IllegalStateException.class, () -> colony
                 .configureExportGoods(Set.of(), Set.of(GoodsType.LUMBER)));
         assertEquals(selected, new Gson().toJson(model.save()));
-        assertEquals(Set.of(GoodsType.CORN), colony.getExportGoods());
-        assertEquals(List.of(GoodsType.CORN), colony.save().getExportGoods());
+        assertEquals(Set.of(GoodsType.GRAIN), colony.getExportGoods());
+        assertEquals(List.of(GoodsType.GRAIN), colony.save().getExportGoods());
         final Model restored = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
-        assertEquals(Set.of(GoodsType.CORN), restored.getColonyByName("Delft")
+        assertEquals(Set.of(GoodsType.GRAIN), restored.getColonyByName("Delft")
                 .orElseThrow().getExportGoods());
     }
 
     @Test
-    void cornSurplusUsesTaxedMarketPriceAndPersistsOneEvent() {
+    void grainSurplusUsesTaxedMarketPriceAndPersistsOneEvent() {
         final Model model = model();
         final Colony colony = equipped(model);
-        colony.configureExportGoods(Set.of(), Set.of(GoodsType.CORN));
-        setCornAfterConsumption(colony, 101);
+        colony.configureExportGoods(Set.of(), Set.of(GoodsType.GRAIN));
+        setGrainAfterConsumption(colony, 101);
         model.getEurope()
-                .getGoodsTradeForType(GoodsType.CORN, EuropeanNation.DUTCH)
+                .getGoodsTradeForType(GoodsType.GRAIN, EuropeanNation.DUTCH)
                 .setSellPrice(7);
         model.getPlayerStore().getKingForPlayer(colony.getOwner()).orElseThrow()
                 .setKingsTaxPercentage(10);
         final int afterFood = colony.getRawGoodsStats()
-                .getStatsByType(GoodsType.CORN).getInWarehouseAfter();
+                .getStatsByType(GoodsType.GRAIN).getInWarehouseAfter();
         final int sold = Math.max(0, afterFood - 100);
         assertTrue(sold > 0);
         final Player owner = colony.getOwner();
         final int beforeGold = owner.getGold();
         final int income = owner
-                .quoteEuropeTrade(Goods.of(GoodsType.CORN, sold), false)
+                .quoteEuropeTrade(Goods.of(GoodsType.GRAIN, sold), false)
                 .getTotal();
         assertEquals(1, sold);
         assertEquals(6, income);
         colony.startTurn();
         assertEquals(100,
-                colony.getWarehouse().getGoods(GoodsType.CORN).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.GRAIN).getAmount());
         assertEquals(beforeGold + income, owner.getGold());
         final List<TurnEventCustomHouseExport> exports = new ArrayList<>();
         model.getTurnEventStore().getForPlayer(owner).stream()
@@ -135,7 +136,8 @@ class CustomHouseExportTest {
         assertEquals(1, exports.size());
         assertEquals(colony.getId(), exports.get(0).getColonyId());
         assertEquals(colony.getName(), exports.get(0).getColonyName());
-        assertEquals(Goods.of(GoodsType.CORN, sold), exports.get(0).getGoods());
+        assertEquals(Goods.of(GoodsType.GRAIN, sold),
+                exports.get(0).getGoods());
         assertEquals(income, exports.get(0).getIncome());
         final String saved = new Gson().toJson(model.save());
         final Model restored = Model.make(model.save(),
@@ -143,28 +145,28 @@ class CustomHouseExportTest {
         assertEquals(saved, new Gson().toJson(restored.save()));
     }
 
-    private GoodsTrade corn(final Model model, final EuropeanNation nation) {
-        return model.getEurope().getGoodsTradeForType(GoodsType.CORN, nation);
+    private GoodsTrade grain(final Model model, final EuropeanNation nation) {
+        return model.getEurope().getGoodsTradeForType(GoodsType.GRAIN, nation);
     }
 
     @Test
     void exportMovesEveryNationalMarketByTheFullQuantityAfterSettlement() {
         final Model model = model();
         final Colony colony = equipped(model);
-        colony.configureExportGoods(Set.of(), Set.of(GoodsType.CORN));
-        setCornAfterConsumption(colony, 101);
+        colony.configureExportGoods(Set.of(), Set.of(GoodsType.GRAIN));
+        setGrainAfterConsumption(colony, 101);
         model.getEurope()
-                .getGoodsTradeForType(GoodsType.CORN, EuropeanNation.DUTCH)
+                .getGoodsTradeForType(GoodsType.GRAIN, EuropeanNation.DUTCH)
                 .setSellPrice(7);
         final Player owner = colony.getOwner();
         final int sold = colony.getRawGoodsStats()
-                .getStatsByType(GoodsType.CORN).getInWarehouseAfter() - 100;
+                .getStatsByType(GoodsType.GRAIN).getInWarehouseAfter() - 100;
         assertEquals(1, sold);
         // The preview quote only reads the market.
         final int income = owner
-                .quoteEuropeTrade(Goods.of(GoodsType.CORN, sold), false)
+                .quoteEuropeTrade(Goods.of(GoodsType.GRAIN, sold), false)
                 .getTotal();
-        assertEquals(0, corn(model, EuropeanNation.DUTCH).getPressure());
+        assertEquals(0, grain(model, EuropeanNation.DUTCH).getPressure());
         final int goldBefore = owner.getGold();
 
         colony.startTurn();
@@ -172,20 +174,20 @@ class CustomHouseExportTest {
         // Paid at the pre-trade bid 7; then +4 own (half of 8) and +2 cross
         // eighths for the other nations.
         assertEquals(goldBefore + income, owner.getGold());
-        assertEquals(7, corn(model, EuropeanNation.DUTCH).getSellPrice());
-        assertEquals(4, corn(model, EuropeanNation.DUTCH).getPressure());
+        assertEquals(7, grain(model, EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(4, grain(model, EuropeanNation.DUTCH).getPressure());
         for (final EuropeanNation other : new EuropeanNation[] {
                 EuropeanNation.FRENCH, EuropeanNation.ENGLISH,
                 EuropeanNation.SPANISH }) {
-            assertEquals(2, corn(model, other).getPressure());
-            assertTrue(corn(model, other).isTradedSinceUpdate());
+            assertEquals(2, grain(model, other).getPressure());
+            assertTrue(grain(model, other).isTradedSinceUpdate());
         }
         // Continue keeps the market and does not export or press again.
         final String saved = new Gson().toJson(model.save());
         final Model restored = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         assertEquals(saved, new Gson().toJson(restored.save()));
-        assertEquals(4, corn(restored, EuropeanNation.DUTCH).getPressure());
+        assertEquals(4, grain(restored, EuropeanNation.DUTCH).getPressure());
     }
 
     @Test
@@ -198,25 +200,25 @@ class CustomHouseExportTest {
         final Model model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         final Colony colony = equipped(model);
-        colony.configureExportGoods(Set.of(), Set.of(GoodsType.CORN));
-        setCornAfterConsumption(colony, 101);
+        colony.configureExportGoods(Set.of(), Set.of(GoodsType.GRAIN));
+        setGrainAfterConsumption(colony, 101);
 
         colony.startTurn();
 
-        assertEquals(4, corn(model, EuropeanNation.DUTCH).getPressure());
-        assertEquals(2, corn(model, EuropeanNation.FRENCH).getPressure());
+        assertEquals(4, grain(model, EuropeanNation.DUTCH).getPressure());
+        assertEquals(2, grain(model, EuropeanNation.FRENCH).getPressure());
     }
 
     @Test
     void unselectedExportsMovePressureNowhere() {
         final Model model = model();
         final Colony colony = equipped(model);
-        // Corn above the threshold but not selected for export.
-        setCornAfterConsumption(colony, 150);
+        // Grain above the threshold but not selected for export.
+        setGrainAfterConsumption(colony, 150);
         colony.startTurn();
         for (final EuropeanNation nation : EuropeanNation.values()) {
-            assertEquals(0, corn(model, nation).getPressure());
-            assertFalse(corn(model, nation).isTradedSinceUpdate());
+            assertEquals(0, grain(model, nation).getPressure());
+            assertFalse(grain(model, nation).isTradedSinceUpdate());
         }
     }
 
@@ -230,20 +232,20 @@ class CustomHouseExportTest {
         final Model model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         final Colony colony = equipped(model);
-        colony.configureExportGoods(Set.of(), Set.of(GoodsType.CORN));
-        setCornAfterConsumption(colony, 101);
+        colony.configureExportGoods(Set.of(), Set.of(GoodsType.GRAIN));
+        setGrainAfterConsumption(colony, 101);
         model.getEurope()
-                .getGoodsTradeForType(GoodsType.CORN, EuropeanNation.DUTCH)
+                .getGoodsTradeForType(GoodsType.GRAIN, EuropeanNation.DUTCH)
                 .setSellPrice(7);
         model.getPlayerStore().getKingForPlayer(colony.getOwner()).orElseThrow()
                 .setKingsTaxPercentage(10);
         final int sold = colony.getRawGoodsStats()
-                .getStatsByType(GoodsType.CORN).getInWarehouseAfter() - 100;
+                .getStatsByType(GoodsType.GRAIN).getInWarehouseAfter() - 100;
         assertTrue(sold > 0);
         final Player owner = colony.getOwner();
         assertFalse(owner.canTradeInEurope());
         final int income = owner
-                .quoteEuropeTrade(Goods.of(GoodsType.CORN, sold), false)
+                .quoteEuropeTrade(Goods.of(GoodsType.GRAIN, sold), false)
                 .getTotal() / 2;
         assertEquals(1, sold);
         assertEquals(3, income);
@@ -420,21 +422,21 @@ class CustomHouseExportTest {
     void normalExportIsCountedOnceAsOrdinarySale() {
         final Model model = model();
         final Colony colony = equipped(model);
-        colony.configureExportGoods(Set.of(), Set.of(GoodsType.CORN));
-        setCornAfterConsumption(colony, 101);
+        colony.configureExportGoods(Set.of(), Set.of(GoodsType.GRAIN));
+        setGrainAfterConsumption(colony, 101);
         model.getEurope()
-                .getGoodsTradeForType(GoodsType.CORN, EuropeanNation.DUTCH)
+                .getGoodsTradeForType(GoodsType.GRAIN, EuropeanNation.DUTCH)
                 .setSellPrice(7);
         final int sold = colony.getRawGoodsStats()
-                .getStatsByType(GoodsType.CORN).getInWarehouseAfter() - 100;
+                .getStatsByType(GoodsType.GRAIN).getInWarehouseAfter() - 100;
         final int income = colony.getOwner()
-                .quoteEuropeTrade(Goods.of(GoodsType.CORN, sold), false)
+                .quoteEuropeTrade(Goods.of(GoodsType.GRAIN, sold), false)
                 .getTotal();
 
         colony.startTurn();
 
         final EuropeTradeAccount account = model.getEurope()
-                .getTradeAccount(EuropeanNation.DUTCH, GoodsType.CORN);
+                .getTradeAccount(EuropeanNation.DUTCH, GoodsType.GRAIN);
         assertEquals(0, account.getBoughtQuantity());
         assertEquals(sold, account.getSoldQuantity());
         assertEquals(income, account.getSoldGold());
@@ -452,19 +454,19 @@ class CustomHouseExportTest {
         final Model model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         final Colony colony = equipped(model);
-        colony.configureExportGoods(Set.of(), Set.of(GoodsType.CORN));
-        setCornAfterConsumption(colony, 101);
+        colony.configureExportGoods(Set.of(), Set.of(GoodsType.GRAIN));
+        setGrainAfterConsumption(colony, 101);
         final int sold = colony.getRawGoodsStats()
-                .getStatsByType(GoodsType.CORN).getInWarehouseAfter() - 100;
+                .getStatsByType(GoodsType.GRAIN).getInWarehouseAfter() - 100;
         final int income = colony.getOwner()
-                .quoteEuropeTrade(Goods.of(GoodsType.CORN, sold), false)
+                .quoteEuropeTrade(Goods.of(GoodsType.GRAIN, sold), false)
                 .getTotal() / 2;
 
         colony.startTurn();
 
         // The revolutionary export is part of the sales, not an extra sale.
         final EuropeTradeAccount account = model.getEurope()
-                .getTradeAccount(EuropeanNation.DUTCH, GoodsType.CORN);
+                .getTradeAccount(EuropeanNation.DUTCH, GoodsType.GRAIN);
         assertEquals(sold, account.getSoldQuantity());
         assertEquals(income, account.getSoldGold());
         assertEquals(sold, account.getRevolutionaryQuantity());

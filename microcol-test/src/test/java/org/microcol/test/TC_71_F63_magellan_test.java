@@ -28,7 +28,7 @@ public class TC_71_F63_magellan_test extends AbstractMicroColTest {
         CongressPage congress = new CongressPage(getContext());
         AtlanticAuditPage voyage = new AtlanticAuditPage(getContext());
         voyage.verifyMovement(6);
-        // Recruit through the actual Congress and one ordinary bell update.
+        // Recruit through the actual Congress and one ordinary owl update.
         congress.open();
         congress.select(Founder.FERDINAND_MAGELLAN);
         congress.choose();

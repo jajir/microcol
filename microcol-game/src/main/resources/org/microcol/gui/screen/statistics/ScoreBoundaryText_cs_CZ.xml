@@ -4,7 +4,7 @@
   <entry key="title">Jaro 1800: tvůj výsledek je zmrazen</entry>
   <entry key="summary">Zmrazený výsledek tvého národa je %s bodů. Je zapsán nyní a pozdější hra jej nemůže změnit.</entry>
   <entry key="parts">Obyvatelé %s, otcové zakladatelé %s, zlato %s, podpora národa %s: základ %s bodů.</entry>
-  <entry key="adjustments">Zničená domorodá sídla -%s, zvony nad cíl intervence %s, bonus za nezávislost %s %%, časná deklarace %s, koeficient obtížnosti %s %%.</entry>
+  <entry key="adjustments">Zničená domorodá sídla -%s, sovy nad cíl intervence %s, bonus za nezávislost %s %%, časná deklarace %s, koeficient obtížnosti %s %%.</entry>
   <entry key="unscored">Můžeš pokračovat bez bodování až do jara 1850. Pokračování tento zmrazený výsledek nikdy nezmění a nezávislost už nelze vyhlásit.</entry>
   <entry key="continueUnscored">Pokračovat bez bodování</entry>
   <entry key="decideLater">Rozhodnout později</entry>

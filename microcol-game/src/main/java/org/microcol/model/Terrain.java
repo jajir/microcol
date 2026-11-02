@@ -18,15 +18,15 @@ public class Terrain {
     private static final int PLOW_BONUS = 1;
 
     private static final List<GoodsType> PLOW_CROPS = ImmutableList.of(
-            GoodsType.CORN, GoodsType.SUGAR, GoodsType.COTTON,
-            GoodsType.TOBACCO);
+            GoodsType.GRAIN, GoodsType.OLIVES, GoodsType.WOOL,
+            GoodsType.GRAPES);
 
     /** Added to an already positive output on a road, once per square. */
     private static final int ROAD_BONUS = 1;
 
     /** Outputs that a road improves on any land square. */
     private static final List<GoodsType> ROAD_GOODS = ImmutableList
-            .of(GoodsType.ORE, GoodsType.FUR, GoodsType.LUMBER);
+            .of(GoodsType.ORE, GoodsType.CLAY, GoodsType.LUMBER);
 
     private final Location location;
 
@@ -74,7 +74,7 @@ public class Terrain {
      * output too, so it gains the road only with an explicit silver deposit.
      *
      * @param prod positive production of one square
-     * @return {@code true} for ore, fur and lumber, and for silver on a
+     * @return {@code true} for ore, clay and lumber, and for silver on a
      *         mountain with a silver deposit
      */
     private static boolean isRoadBonusOutput(final TerrainProduction prod) {
@@ -197,8 +197,8 @@ public class Terrain {
             final GoodsType producedGoodsType, final boolean withDeposit) {
         if (riverSize != RiverSize.NONE) {
             final int output;
-            if (producedGoodsType == GoodsType.CORN) {
-                output = terrainType.getBaseProduction(GoodsType.CORN)
+            if (producedGoodsType == GoodsType.GRAIN) {
+                output = terrainType.getBaseProduction(GoodsType.GRAIN)
                         .filter(production -> production.getBase() > 0)
                         .map(production -> riverSize.getFoodProduction())
                         .orElse(0);
@@ -444,7 +444,7 @@ public class Terrain {
      * Provide information if a pioneer permanently cleared a forest here.
      *
      * @return <code>true</code> when the square uses its bare output, which
-     *         never includes lumber or fur
+     *         never includes lumber or clay
      */
     public boolean isCleared() {
         return cleared;

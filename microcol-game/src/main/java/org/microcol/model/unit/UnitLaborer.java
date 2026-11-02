@@ -18,10 +18,10 @@ public final class UnitLaborer extends UnitFreeColonist {
     public UnitLaborer(final Model model, final Integer id,
             final Function<Unit, Place> placeBuilder, final Player owner,
             final int availableMoves, final UnitAction action, final int tools,
-            final boolean holdingGuns, final boolean mounted,
+            final boolean holdingWeapons, final boolean mounted,
             final UnitType type) {
         super(model, id, placeBuilder, owner, availableMoves, action, tools,
-                holdingGuns, mounted);
+                holdingWeapons, mounted);
         Preconditions.checkArgument(type == UnitType.INDENTURED_SERVANT
                 || type == UnitType.PETTY_CRIMINAL);
         this.type = type;

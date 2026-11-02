@@ -10,8 +10,8 @@ final class Default_0_goals extends MissionGoals {
         Preconditions.checkNotNull(data);
         getGoals().add(new GoalProvider.GoalFindNewWorld(data));
         getGoals().add(new GoalProvider.GoalFoundColony(data));
-        getGoals().add(new GoalProvider.GoalProduceCigars(data));
-        getGoals().add(new GoalProvider.GoalSellCigars(data));
+        getGoals().add(new GoalProvider.GoalProduceWine(data));
+        getGoals().add(new GoalProvider.GoalSellWine(data));
     }
 
     GoalProvider.GoalFindNewWorld getGoalFindNewWorld() {
@@ -22,12 +22,12 @@ final class Default_0_goals extends MissionGoals {
         return getByClass(GoalProvider.GoalFoundColony.class);
     }
 
-    GoalProvider.GoalProduceCigars getGoalProduceCigars() {
-        return getByClass(GoalProvider.GoalProduceCigars.class);
+    GoalProvider.GoalProduceWine getGoalProduceWine() {
+        return getByClass(GoalProvider.GoalProduceWine.class);
     }
 
-    GoalProvider.GoalSellCigars getGoalSellCigars() {
-        return getByClass(GoalProvider.GoalSellCigars.class);
+    GoalProvider.GoalSellWine getGoalSellWine() {
+        return getByClass(GoalProvider.GoalSellWine.class);
     }
 
 }

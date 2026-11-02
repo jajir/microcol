@@ -268,9 +268,9 @@ public final class ColonyField {
         final Goods worked = ordinary.multiply(worker.getType()
                 .getFieldProductionModifier(goodsType, getTerrain()));
         final Goods production = political.apply(base, worked);
-        if (goodsType == GoodsType.FUR && colony.getOwner().getCongressMembers()
-                .contains(Founder.HENRY_HUDSON)) {
-            // Zero yield stays zero, so doubling never creates furs.
+        if (goodsType == GoodsType.CLAY && colony.getOwner()
+                .getCongressMembers().contains(Founder.HENRY_HUDSON)) {
+            // Zero yield stays zero, so doubling never creates clay.
             return production
                     .setAmount(Math.multiplyExact(production.getAmount(), 2));
         }

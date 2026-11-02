@@ -208,7 +208,7 @@ class RivalLandMilitaryCycleTest {
         } else {
             unit.setWorkUpdates(0);
             unit.setMissionary(false);
-            unit.setHoldingGuns(armed);
+            unit.setHoldingWeapons(armed);
         }
         final List<UnitPo> units = new ArrayList<>(data.getModel().getUnits());
         units.add(unit);
@@ -259,7 +259,7 @@ class RivalLandMilitaryCycleTest {
             final boolean mountedRival) {
         rival = model.getUnitById(RIVAL_ID);
         rival.placeToLocation(rivalAt);
-        ((UnitFreeColonist) rival).setHoldingGuns(true);
+        ((UnitFreeColonist) rival).setHoldingWeapons(true);
         ((UnitFreeColonist) rival).setMounted(mountedRival);
         placeHuman(humanAt);
         rival.getOwner().revealMapForUnit(rival);
@@ -269,7 +269,7 @@ class RivalLandMilitaryCycleTest {
     private void placeHuman(final Location at) {
         human = model.getUnitById(HUMAN_ID);
         human.placeToLocation(at);
-        ((UnitFreeColonist) human).setHoldingGuns(true);
+        ((UnitFreeColonist) human).setHoldingWeapons(true);
     }
 
     // ------------------------------------------------------------ helpers
@@ -305,9 +305,9 @@ class RivalLandMilitaryCycleTest {
                                 .append(colony.getUnitsInsideColony().stream()
                                         .map(Unit::getId).sorted()
                                         .collect(Collectors.toList()))
-                                .append(" corn=")
+                                .append(" grain=")
                                 .append(colony.getWarehouse()
-                                        .getGoods(GoodsType.CORN).getAmount())
+                                        .getGoods(GoodsType.GRAIN).getAmount())
                                 .append(';'));
         return out.append(france().getGold()).append('/')
                 .append(dutch().getGold()).append('/').append(combatState())
@@ -460,7 +460,7 @@ class RivalLandMilitaryCycleTest {
         keepOnlyTrees(data);
         revealAll(data);
         // The saved rival would garrison Quebec on its own, so disarm it.
-        unitPo(data, RIVAL_ID).setHoldingGuns(false);
+        unitPo(data, RIVAL_ID).setHoldingWeapons(false);
         addFrench(data, FIRST_NEW_ID, UnitType.COLONIST, true,
                 Location.of(17, 18));
         addFrench(data, SECOND_NEW_ID, UnitType.COLONIST, true,
@@ -519,14 +519,14 @@ class RivalLandMilitaryCycleTest {
         paint(data, TerrainType.GRASSLAND, 16, 10, 18, 21);
         keepOnlyTrees(data);
         revealAll(data);
-        unitPo(data, RIVAL_ID).setHoldingGuns(false);
+        unitPo(data, RIVAL_ID).setHoldingWeapons(false);
         addFrench(data, FIRST_NEW_ID, UnitType.COLONIST, true,
                 Location.of(17, 18));
         start(data);
         placeHuman(HUMAN_START);
         final Unit beside = model.getUnitById(SECOND_DUTCH_ID);
         beside.placeToLocation(Location.of(18, 19));
-        ((UnitFreeColonist) beside).setHoldingGuns(true);
+        ((UnitFreeColonist) beside).setHoldingWeapons(true);
         model.declareHostilities(france(), dutch());
         final Unit spare = model.getUnitById(FIRST_NEW_ID);
         assertEquals(0.6, attackProbability(spare, Location.of(18, 19)),
@@ -641,7 +641,7 @@ class RivalLandMilitaryCycleTest {
         assertTrue(quebec.getUnitsInsideColony()
                 .contains(model.getUnitById(QUEBEC_WORKER_ID)));
         assertEquals(QUEBEC, rival.getLocation());
-        assertTrue(((UnitFreeColonist) rival).isHoldingGuns());
+        assertTrue(((UnitFreeColonist) rival).isHoldingWeapons());
     }
 
     /**
@@ -696,12 +696,12 @@ class RivalLandMilitaryCycleTest {
         start(data);
         rival = model.getUnitById(RIVAL_ID);
         rival.placeToLocation(Location.of(17, 13));
-        ((UnitFreeColonist) rival).setHoldingGuns(true);
+        ((UnitFreeColonist) rival).setHoldingWeapons(true);
         ((UnitFreeColonist) rival).setMounted(true);
         placeHuman(Location.of(16, 15));
         final Unit plain = model.getUnitById(SECOND_DUTCH_ID);
         plain.placeToLocation(Location.of(18, 15));
-        ((UnitFreeColonist) plain).setHoldingGuns(true);
+        ((UnitFreeColonist) plain).setHoldingWeapons(true);
         model.declareHostilities(france(), dutch());
         assertEquals(0.6,
                 quote(rival, Location.of(17, 14), Location.of(16, 15)),
@@ -726,11 +726,11 @@ class RivalLandMilitaryCycleTest {
         start(data);
         rival = model.getUnitById(RIVAL_ID);
         rival.placeToLocation(Location.of(17, 13));
-        ((UnitFreeColonist) rival).setHoldingGuns(true);
+        ((UnitFreeColonist) rival).setHoldingWeapons(true);
         ((UnitFreeColonist) rival).setMounted(true);
         final Unit target = model.getUnitById(SECOND_DUTCH_ID);
         target.placeToLocation(Location.of(18, 15));
-        ((UnitFreeColonist) target).setHoldingGuns(true);
+        ((UnitFreeColonist) target).setHoldingWeapons(true);
         model.declareHostilities(france(), dutch());
         startFrenchTurn();
         assertEquals(Location.of(17, 14), rival.getLocation());
@@ -753,11 +753,11 @@ class RivalLandMilitaryCycleTest {
         start(data);
         rival = model.getUnitById(RIVAL_ID);
         rival.placeToLocation(Location.of(17, 13));
-        ((UnitFreeColonist) rival).setHoldingGuns(true);
+        ((UnitFreeColonist) rival).setHoldingWeapons(true);
         ((UnitFreeColonist) rival).setMounted(true);
         final Unit target = model.getUnitById(SECOND_DUTCH_ID);
         target.placeToLocation(Location.of(18, 15));
-        ((UnitFreeColonist) target).setHoldingGuns(true);
+        ((UnitFreeColonist) target).setHoldingWeapons(true);
         model.declareHostilities(france(), dutch());
         startFrenchTurn();
         assertEquals(Location.of(17, 14), rival.getLocation());
@@ -834,7 +834,7 @@ class RivalLandMilitaryCycleTest {
             placeArmed(Location.of(18, 14), swap ? east : west, false);
             final Unit other = model.getUnitById(SECOND_DUTCH_ID);
             other.placeToLocation(swap ? west : east);
-            ((UnitFreeColonist) other).setHoldingGuns(true);
+            ((UnitFreeColonist) other).setHoldingWeapons(true);
             ((UnitFreeColonist) other).setMounted(false);
             model.declareHostilities(france(), dutch());
             assertEquals(0.6, attackProbability(rival, human.getLocation()),
@@ -842,8 +842,8 @@ class RivalLandMilitaryCycleTest {
             assertEquals(0.6, attackProbability(rival, other.getLocation()),
                     EPSILON);
             startFrenchTurn();
-            assertFalse(((UnitFreeColonist) human).isHoldingGuns());
-            assertTrue(((UnitFreeColonist) other).isHoldingGuns());
+            assertFalse(((UnitFreeColonist) human).isHoldingWeapons());
+            assertTrue(((UnitFreeColonist) other).isHoldingWeapons());
         }
     }
 
@@ -964,7 +964,7 @@ class RivalLandMilitaryCycleTest {
         final ConstructionPo stockade = new ConstructionPo();
         stockade.setType(ConstructionType.STOCKADE);
         colonyPo(data, QUEBEC_ID).getConstructions().add(stockade);
-        unitPo(data, RIVAL_ID).setHoldingGuns(false);
+        unitPo(data, RIVAL_ID).setHoldingWeapons(false);
         moveRival(data, Location.of(19, 9));
         revealAll(data);
         addFrench(data, FIRST_NEW_ID, UnitType.ARTILLERY, true, QUEBEC);
@@ -973,7 +973,7 @@ class RivalLandMilitaryCycleTest {
         start(data);
         final Unit dutchTarget = model.getUnitById(SECOND_DUTCH_ID);
         dutchTarget.placeToLocation(target);
-        ((UnitFreeColonist) dutchTarget).setHoldingGuns(true);
+        ((UnitFreeColonist) dutchTarget).setHoldingWeapons(true);
         model.declareHostilities(france(), dutch());
         return model.getUnitById(FIRST_NEW_ID);
     }

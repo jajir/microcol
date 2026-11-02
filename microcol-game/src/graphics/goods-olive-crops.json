@@ -6,7 +6,7 @@
   "fit": "alpha below 16 removed; crop bounds; preserve aspect; center; Lanczos",
   "cells": [
     {
-      "goods": "corn",
+      "goods": "grain",
       "sourceCrop": [
         0,
         0,
@@ -15,7 +15,7 @@
       ]
     },
     {
-      "goods": "sugar",
+      "goods": "olives",
       "sourceCrop": [
         310,
         0,
@@ -24,7 +24,7 @@
       ]
     },
     {
-      "goods": "tobacco",
+      "goods": "grapes",
       "sourceCrop": [
         583,
         0,
@@ -33,7 +33,7 @@
       ]
     },
     {
-      "goods": "cotton",
+      "goods": "wool",
       "sourceCrop": [
         886,
         0,
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "goods": "fur",
+      "goods": "clay",
       "sourceCrop": [
         0,
         320,
@@ -87,7 +87,7 @@
       ]
     },
     {
-      "goods": "rum",
+      "goods": "olive_oil",
       "sourceCrop": [
         326,
         611,
@@ -96,7 +96,7 @@
       ]
     },
     {
-      "goods": "cigars",
+      "goods": "wine",
       "sourceCrop": [
         585,
         611,
@@ -105,7 +105,7 @@
       ]
     },
     {
-      "goods": "silk",
+      "goods": "cloth",
       "sourceCrop": [
         891,
         611,
@@ -114,7 +114,7 @@
       ]
     },
     {
-      "goods": "coat",
+      "goods": "amphorae",
       "sourceCrop": [
         0,
         896,
@@ -141,7 +141,7 @@
       ]
     },
     {
-      "goods": "musket",
+      "goods": "weapons",
       "sourceCrop": [
         914,
         896,

@@ -41,8 +41,8 @@ class ColonyFamineTest {
         final Model model = model(TerrainType.TUNDRA);
         final Colony colony = model.getColonyById(0).orElseThrow();
         retainTwoResidents(model, colony);
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 0));
-        assertEquals(-1, colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 0));
+        assertEquals(-1, colony.getGoodsStats().getStatsByType(GoodsType.GRAIN)
                 .getInWarehouseAfter());
         assertTrue(colony.getColonyFieldInDirection(Direction.southWest)
                 .getProduction().orElseThrow().getAmount() > 0);
@@ -53,7 +53,7 @@ class ColonyFamineTest {
         assertEquals(1, colony.getUnitsInsideColony().size());
         assertEquals(0, colony.getUnitsInsideColony().get(0).getId());
         assertEquals(1,
-                colony.getWarehouse().getGoods(GoodsType.CORN).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.GRAIN).getAmount());
         final List<TurnEventFaminePlagueColony> losses = model
                 .getTurnEventStore().getForPlayer(colony.getOwner()).stream()
                 .filter(TurnEventFaminePlagueColony.class::isInstance)
@@ -61,17 +61,15 @@ class ColonyFamineTest {
                 .collect(Collectors.toList());
         assertEquals(1, losses.size());
         assertEquals(1, losses.get(0).getVictimId());
-        assertEquals(1,
-                losses.get(0).getStocks().stream()
-                        .filter(goods -> goods.getType().equals(GoodsType.CORN))
-                        .findFirst().orElseThrow().getAmount());
+        assertEquals(1, losses.get(0).getStocks().stream()
+                .filter(goods -> goods.getType().equals(GoodsType.GRAIN))
+                .findFirst().orElseThrow().getAmount());
         assertEquals(1, model.save().getTurnEvents().stream()
                 .filter(event -> event.getFamineVictim() != null).count());
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 20));
-        assertEquals(1,
-                losses.get(0).getStocks().stream()
-                        .filter(goods -> goods.getType().equals(GoodsType.CORN))
-                        .findFirst().orElseThrow().getAmount());
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 20));
+        assertEquals(1, losses.get(0).getStocks().stream()
+                .filter(goods -> goods.getType().equals(GoodsType.GRAIN))
+                .findFirst().orElseThrow().getAmount());
         final Model restored = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         assertEquals(1, restored.getTurnEventStore()
@@ -86,13 +84,13 @@ class ColonyFamineTest {
         final Model model = model(TerrainType.TUNDRA);
         final Colony colony = model.getColonyById(0).orElseThrow();
         retainTwoResidents(model, colony);
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 0));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 0));
         chooseVictim(colony, model.getUnitById(0));
         colony.startTurn();
         assertEquals(1, colony.getUnitsInsideColony().size());
         assertEquals(1, colony.getUnitsInsideColony().get(0).getId());
         assertEquals(0,
-                colony.getWarehouse().getGoods(GoodsType.CORN).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.GRAIN).getAmount());
     }
 
     @Test
@@ -100,21 +98,21 @@ class ColonyFamineTest {
         final Model model = model(TerrainType.TUNDRA);
         final Colony colony = model.getColonyById(0).orElseThrow();
         retainResidents(model, colony, 0, 5);
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 0));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 0));
         chooseVictim(colony, model.getUnitById(5));
-        final int cigarsBefore = colony.getWarehouse()
-                .getGoods(GoodsType.CIGARS).getAmount();
-        final int tobaccoBefore = colony.getWarehouse()
-                .getGoods(GoodsType.TOBACCO).getAmount();
+        final int wineBefore = colony.getWarehouse().getGoods(GoodsType.WINE)
+                .getAmount();
+        final int grapesBefore = colony.getWarehouse()
+                .getGoods(GoodsType.GRAPES).getAmount();
         colony.startTurn();
         assertEquals(1, colony.getUnitsInsideColony().size());
         assertEquals(0, colony.getUnitsInsideColony().get(0).getId());
-        assertEquals(cigarsBefore,
-                colony.getWarehouse().getGoods(GoodsType.CIGARS).getAmount());
-        assertEquals(tobaccoBefore,
-                colony.getWarehouse().getGoods(GoodsType.TOBACCO).getAmount());
+        assertEquals(wineBefore,
+                colony.getWarehouse().getGoods(GoodsType.WINE).getAmount());
+        assertEquals(grapesBefore,
+                colony.getWarehouse().getGoods(GoodsType.GRAPES).getAmount());
         assertEquals(1,
-                colony.getWarehouse().getGoods(GoodsType.CORN).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.GRAIN).getAmount());
     }
 
     @Test
@@ -123,19 +121,19 @@ class ColonyFamineTest {
         final Model model = model(TerrainType.TUNDRA);
         final Colony colony = model.getColonyById(0).orElseThrow();
         retainResidents(model, colony, 0, 1, 5);
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 0));
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.TOBACCO, 2));
-        final int cigarsBefore = colony.getWarehouse()
-                .getGoods(GoodsType.CIGARS).getAmount();
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 0));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAPES, 2));
+        final int wineBefore = colony.getWarehouse().getGoods(GoodsType.WINE)
+                .getAmount();
         chooseVictim(colony, model.getUnitById(1));
 
         colony.startTurn();
 
         assertEquals(2, colony.getUnitsInsideColony().size());
         assertEquals(0,
-                colony.getWarehouse().getGoods(GoodsType.TOBACCO).getAmount());
-        assertEquals(cigarsBefore + 2,
-                colony.getWarehouse().getGoods(GoodsType.CIGARS).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.GRAPES).getAmount());
+        assertEquals(wineBefore + 2,
+                colony.getWarehouse().getGoods(GoodsType.WINE).getAmount());
         for (final GoodsType type : GoodsType.GOOD_TYPES) {
             assertTrue(colony.getWarehouse().getGoods(type).getAmount() >= 0);
         }
@@ -168,8 +166,8 @@ class ColonyFamineTest {
                 .map(slot -> slot.getUnit().get().getId())
                 .collect(Collectors.toList());
         assertFalse(passengerIds.isEmpty());
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 0));
-        assertTrue(colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 0));
+        assertTrue(colony.getGoodsStats().getStatsByType(GoodsType.GRAIN)
                 .getInWarehouseAfter() < 0);
         colony.startTurn();
         assertTrue(colony.getUnitsOutSideColony().contains(visitor));
@@ -193,7 +191,7 @@ class ColonyFamineTest {
     void completedNationalBoundaryDoesNotReplayFamine() {
         final Model model = model(TerrainType.TUNDRA);
         final Colony colony = model.getColonyById(0).orElseThrow();
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 0));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 0));
         model.endTurn();
         model.endTurn();
         final long losses = model.getTurnEventStore()
@@ -216,8 +214,8 @@ class ColonyFamineTest {
         final Model model = model(TerrainType.GRASSLAND);
         final Colony colony = model.getColonyById(0).orElseThrow();
         retainTwoResidents(model, colony);
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 0));
-        assertEquals(0, colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 0));
+        assertEquals(0, colony.getGoodsStats().getStatsByType(GoodsType.GRAIN)
                 .getInWarehouseAfter());
         colony.startTurn();
         assertEquals(2, colony.getUnitsInsideColony().size());
@@ -234,7 +232,7 @@ class ColonyFamineTest {
         final Unit foodWorker = model.getUnitById(0);
         foodWorker.getPlace().destroy();
         model.destroyUnit(foodWorker);
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 0));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 0));
 
         colony.startTurn();
 

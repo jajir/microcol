@@ -75,27 +75,27 @@ public class ColonyWarehouseTest {
     }
 
     @Test
-    void test_addGoodsWithThrowingAway_add_10_cigars() throws Exception {
+    void test_addGoodsWithThrowingAway_add_10_wine() throws Exception {
         final Goods ret = warehouse
-                .addGoodsWithThrowingAway(Goods.of(GoodsType.CIGARS, 10), null);
+                .addGoodsWithThrowingAway(Goods.of(GoodsType.WINE, 10), null);
 
         assertNotNull(ret);
-        assertEquals(GoodsType.CIGARS, ret.getType());
+        assertEquals(GoodsType.WINE, ret.getType());
         assertEquals(10, ret.getAmount());
     }
 
     @Test
-    void test_add_24_corn() throws Exception {
-        warehouse.addGoods(Goods.of(GoodsType.CORN, 24));
+    void test_add_24_grain() throws Exception {
+        warehouse.addGoods(Goods.of(GoodsType.GRAIN, 24));
 
-        assertEquals(24, warehouse.getGoods(GoodsType.CORN).getAmount());
+        assertEquals(24, warehouse.getGoods(GoodsType.GRAIN).getAmount());
     }
 
     @Test
-    void test_add_140_cotton() throws Exception {
-        warehouse.addGoods(Goods.of(GoodsType.COTTON, 140));
+    void test_add_140_wool() throws Exception {
+        warehouse.addGoods(Goods.of(GoodsType.WOOL, 140));
 
-        assertEquals(290, warehouse.getGoods(GoodsType.COTTON).getAmount());
+        assertEquals(290, warehouse.getGoods(GoodsType.WOOL).getAmount());
     }
 
     @Test
@@ -111,50 +111,50 @@ public class ColonyWarehouseTest {
     }
 
     @Test
-    void test_remove_10_cotton() throws Exception {
-        warehouse.removeGoods(Goods.of(GoodsType.COTTON, 10));
+    void test_remove_10_wool() throws Exception {
+        warehouse.removeGoods(Goods.of(GoodsType.WOOL, 10));
 
-        assertEquals(140, warehouse.getGoods(GoodsType.COTTON).getAmount());
+        assertEquals(140, warehouse.getGoods(GoodsType.WOOL).getAmount());
     }
 
     @Test
-    void test_remove_150_cotton() throws Exception {
-        warehouse.removeGoods(Goods.of(GoodsType.COTTON, 150));
+    void test_remove_150_wool() throws Exception {
+        warehouse.removeGoods(Goods.of(GoodsType.WOOL, 150));
 
-        assertEquals(0, warehouse.getGoods(GoodsType.COTTON).getAmount());
+        assertEquals(0, warehouse.getGoods(GoodsType.WOOL).getAmount());
     }
 
     @Test
-    void test_remove_0_corn() throws Exception {
-        warehouse.removeGoods(Goods.of(GoodsType.CORN, 0));
+    void test_remove_0_grain() throws Exception {
+        warehouse.removeGoods(Goods.of(GoodsType.GRAIN, 0));
 
-        assertEquals(0, warehouse.getGoods(GoodsType.CORN).getAmount());
+        assertEquals(0, warehouse.getGoods(GoodsType.GRAIN).getAmount());
     }
 
     @Test
-    void test_remove_200_cotton() throws Exception {
+    void test_remove_200_wool() throws Exception {
         final IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> warehouse.removeGoods(Goods.of(GoodsType.COTTON, 200)));
+                () -> warehouse.removeGoods(Goods.of(GoodsType.WOOL, 200)));
 
         assertEquals(
-                "Can't remove 200 of GoodsType{name=COTTON}, because in warehouse is currently just 150 of GoodsType{name=COTTON}",
+                "Can't remove 200 of GoodsType{name=WOOL}, because in warehouse is currently just 150 of GoodsType{name=WOOL}",
                 exception.getMessage());
-        assertEquals(150, warehouse.getGoods(GoodsType.COTTON).getAmount());
+        assertEquals(150, warehouse.getGoods(GoodsType.WOOL).getAmount());
     }
 
     @Test
-    void test_setGoodsToZero_corn() throws Exception {
-        warehouse.setGoodsToZero(GoodsType.CORN);
+    void test_setGoodsToZero_grain() throws Exception {
+        warehouse.setGoodsToZero(GoodsType.GRAIN);
 
-        assertEquals(0, warehouse.getGoods(GoodsType.CORN).getAmount());
+        assertEquals(0, warehouse.getGoods(GoodsType.GRAIN).getAmount());
     }
 
     @Test
-    void test_setGoodsToZero_cotton() throws Exception {
-        warehouse.setGoodsToZero(GoodsType.COTTON);
+    void test_setGoodsToZero_wool() throws Exception {
+        warehouse.setGoodsToZero(GoodsType.WOOL);
 
-        assertEquals(0, warehouse.getGoods(GoodsType.COTTON).getAmount());
+        assertEquals(0, warehouse.getGoods(GoodsType.WOOL).getAmount());
     }
 
     @Test
@@ -166,26 +166,26 @@ public class ColonyWarehouseTest {
     @SuppressWarnings("unused")
     private static Stream<Arguments> dataStorageLimit() {
         return Stream.of(
-                arguments(GoodsType.BELL, Integer.MAX_VALUE,
+                arguments(GoodsType.OWLS, Integer.MAX_VALUE,
                         ConstructionType.WAREHOUSE_BASIC),
-                arguments(GoodsType.BELL, Integer.MAX_VALUE,
+                arguments(GoodsType.OWLS, Integer.MAX_VALUE,
                         ConstructionType.WAREHOUSE_EXPANSION),
-                arguments(GoodsType.CORN, Integer.MAX_VALUE,
+                arguments(GoodsType.GRAIN, Integer.MAX_VALUE,
                         ConstructionType.WAREHOUSE_BASIC),
-                arguments(GoodsType.CORN, Integer.MAX_VALUE,
+                arguments(GoodsType.GRAIN, Integer.MAX_VALUE,
                         ConstructionType.WAREHOUSE),
-                arguments(GoodsType.CORN, Integer.MAX_VALUE,
+                arguments(GoodsType.GRAIN, Integer.MAX_VALUE,
                         ConstructionType.WAREHOUSE_EXPANSION),
-                arguments(GoodsType.COTTON, 100,
+                arguments(GoodsType.WOOL, 100,
                         ConstructionType.WAREHOUSE_BASIC),
-                arguments(GoodsType.COTTON, 200, ConstructionType.WAREHOUSE),
-                arguments(GoodsType.COTTON, 300,
+                arguments(GoodsType.WOOL, 200, ConstructionType.WAREHOUSE),
+                arguments(GoodsType.WOOL, 300,
                         ConstructionType.WAREHOUSE_EXPANSION),
                 arguments(GoodsType.ORE, 100, ConstructionType.WAREHOUSE_BASIC),
                 arguments(GoodsType.ORE, 200, ConstructionType.WAREHOUSE),
                 arguments(GoodsType.ORE, 300,
                         ConstructionType.WAREHOUSE_EXPANSION),
-                arguments(GoodsType.CROSS, Integer.MAX_VALUE,
+                arguments(GoodsType.TORCHES, Integer.MAX_VALUE,
                         ConstructionType.WAREHOUSE_BASIC));
     }
 
@@ -202,12 +202,12 @@ public class ColonyWarehouseTest {
 
     @SuppressWarnings("unused")
     private static Stream<Arguments> dataTransgerableGoods() {
-        return Stream.of(arguments(GoodsType.BELL, Integer.MAX_VALUE, 0),
-                arguments(GoodsType.CORN, 200, 0),
-                arguments(GoodsType.CORN, 0, 0),
-                arguments(GoodsType.COTTON, 200, 150),
-                arguments(GoodsType.COTTON, 0, 0),
-                arguments(GoodsType.COTTON, 12, 12));
+        return Stream.of(arguments(GoodsType.OWLS, Integer.MAX_VALUE, 0),
+                arguments(GoodsType.GRAIN, 200, 0),
+                arguments(GoodsType.GRAIN, 0, 0),
+                arguments(GoodsType.WOOL, 200, 150),
+                arguments(GoodsType.WOOL, 0, 0),
+                arguments(GoodsType.WOOL, 12, 12));
     }
 
     @ParameterizedTest(name = "{index}: Transferable for goods {0} with limit {1} is {2}")
@@ -223,9 +223,9 @@ public class ColonyWarehouseTest {
     @BeforeEach
     private void beforeEach() {
         initialGoods = new HashMap<>();
-        initialGoods.put(GoodsType.COTTON.name(), 150);
+        initialGoods.put(GoodsType.WOOL.name(), 150);
         initialGoods.put(GoodsType.ORE.name(), 297);
-        initialGoods.put(GoodsType.CIGARS.name(), 300);
+        initialGoods.put(GoodsType.WINE.name(), 300);
         when(colony.getWarehouseType())
                 .thenReturn(ConstructionType.WAREHOUSE_EXPANSION);
         warehouse = new ColonyWarehouse(colony, initialGoods);

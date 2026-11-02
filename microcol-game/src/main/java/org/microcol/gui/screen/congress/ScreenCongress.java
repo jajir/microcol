@@ -33,7 +33,7 @@ public final class ScreenCongress implements GameScreen {
     private final Label royalCavalry = label("congressRoyalCavalry");
     private final Label royalArtillery = label("congressRoyalArtillery");
     private final Label royalMenOfWar = label("congressRoyalMenOfWar");
-    private final Label royalBells = label("congressRoyalBells");
+    private final Label royalOwls = label("congressRoyalOwls");
     private final Label royalStopped = label("congressRoyalStopped");
     private final Label intervention = label("congressIntervention");
     private final Label interventionForces = label(
@@ -43,7 +43,7 @@ public final class ScreenCongress implements GameScreen {
     private final TilePane candidates = new TilePane(12, 12);
     private final ToggleGroup selection = new ToggleGroup();
     private final Label founderName = label("congressFounderName");
-    private final ProgressBar bellProgress = new ProgressBar();
+    private final ProgressBar owlProgress = new ProgressBar();
     private final Label royalSummary = label("congressRoyalSummary");
     private final TitledPane royalDetails = new TitledPane();
     private final Button choose = ActionButtons.button(ButtonIcon.CONFIRM);
@@ -88,13 +88,13 @@ public final class ScreenCongress implements GameScreen {
         close.setOnAction(
                 event -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
         close.setCancelButton(true);
-        bellProgress.setId("congressBellProgress");
-        bellProgress.setMaxWidth(Double.MAX_VALUE);
-        bellProgress.setMinHeight(Region.USE_PREF_SIZE);
-        final VBox bells = new VBox(10, progress, bellProgress);
-        final HBox metrics = new HBox(24, bells, support, members);
+        owlProgress.setId("congressOwlProgress");
+        owlProgress.setMaxWidth(Double.MAX_VALUE);
+        owlProgress.setMinHeight(Region.USE_PREF_SIZE);
+        final VBox owls = new VBox(10, progress, owlProgress);
+        final HBox metrics = new HBox(24, owls, support, members);
         metrics.getStyleClass().add("congress-metrics");
-        for (Region metric : new Region[] { bells, support, members }) {
+        for (Region metric : new Region[] { owls, support, members }) {
             metric.setMinWidth(0);
             metric.setMaxWidth(Double.MAX_VALUE);
             HBox.setHgrow(metric, Priority.ALWAYS);
@@ -114,7 +114,7 @@ public final class ScreenCongress implements GameScreen {
         royalDetails.setExpanded(false);
         royalDetails.setContent(new VBox(8, royalInfantry, royalCavalry,
                 royalArtillery, royalMenOfWar));
-        final VBox royal = new VBox(8, royalSummary, royalDetails, royalBells,
+        final VBox royal = new VBox(8, royalSummary, royalDetails, royalOwls,
                 royalStopped, intervention, interventionForces);
         royal.getStyleClass().add("congress-royal");
         final VBox root = new VBox(18, metrics, objective, candidates, decision,
@@ -258,7 +258,7 @@ public final class ScreenCongress implements GameScreen {
         refreshRoyal(report);
         refreshIntervention();
         refreshInterventionForces();
-        progress.setText(i18n.get(CongressText.progress, report.getBells(),
+        progress.setText(i18n.get(CongressText.progress, report.getOwls(),
                 report.getTarget()));
         objective.setText(report.getSelectedFounder()
                 .map(founder -> i18n.get(CongressText.objective,
@@ -276,8 +276,8 @@ public final class ScreenCongress implements GameScreen {
                 .map(founder -> CongressText.name(i18n, founder)).orElse(""));
         detail.setText(report.getSelectedFounder()
                 .map(founder -> CongressText.effect(i18n, founder)).orElse(""));
-        bellProgress.setProgress(report.getTarget() == 0 ? 0
-                : Math.min(1, (double) report.getBells() / report.getTarget()));
+        owlProgress.setProgress(report.getTarget() == 0 ? 0
+                : Math.min(1, (double) report.getOwls() / report.getTarget()));
         choose.setDisable(true);
         members.setText(i18n.get(CongressText.members,
                 report.getMembers().isEmpty() ? i18n.get(CongressText.none)
@@ -328,9 +328,9 @@ public final class ScreenCongress implements GameScreen {
         royalMenOfWar.setText(crown == null ? ""
                 : familyLine(CongressText.royalMenOfWar, crown,
                         RoyalRoster.Family.MAN_OF_WAR));
-        royalBells.setText(crown == null ? ""
-                : i18n.get(CongressText.royalBells, crown.getBellRemainder(),
-                        crown.getBellThreshold()));
+        royalOwls.setText(crown == null ? ""
+                : i18n.get(CongressText.royalOwls, crown.getOwlRemainder(),
+                        crown.getOwlThreshold()));
         royalStopped.setText(player.isDeclaredIndependence()
                 ? i18n.get(CongressText.royalStopped)
                 : "");
@@ -346,7 +346,7 @@ public final class ScreenCongress implements GameScreen {
                         ? i18n.get(CongressText.interventionEarned,
                                 state.getTarget())
                         : i18n.get(CongressText.interventionProgress,
-                                state.getBells(), state.getTarget()))
+                                state.getOwls(), state.getTarget()))
                 .orElseGet(() -> player.isDeclaredIndependence()
                         ? i18n.get(CongressText.interventionAwaiting)
                         : ""));

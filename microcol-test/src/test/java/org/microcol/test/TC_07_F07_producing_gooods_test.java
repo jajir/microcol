@@ -30,44 +30,44 @@ public class TC_07_F07_producing_gooods_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
-    void TC_07_unstaffed_crosses_survive_reopening_and_continue()
+    void TC_07_unstaffed_torches_survive_reopening_and_continue()
             throws Exception {
         // Load two established colonies with unstaffed chapels.
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(Location.of(22, 12), "Delft");
-        colony.verifyCrossProduction(1);
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CROSS, 0));
+        colony.verifyTorchProduction(1);
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.TORCHES, 0));
 
         // Reopening the colony previews production without collecting it.
         game = colony.close();
         colony = game.openColonyAt(Location.of(22, 12), "Delft");
-        colony.verifyCrossProduction(1);
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CROSS, 0));
+        colony.verifyTorchProduction(1);
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.TORCHES, 0));
         game = colony.close();
 
-        // One complete round credits exactly one cross to each colony.
+        // One complete round credits exactly one torch to each colony.
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(Location.of(22, 12), "Delft");
-        colony.verifyCrossProduction(1);
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CROSS, 1));
+        colony.verifyTorchProduction(1);
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.TORCHES, 1));
         game = colony.close();
         colony = game.openColonyAt(Location.of(25, 14), "New Amsterdam");
-        colony.verifyCrossProduction(1);
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CROSS, 1));
+        colony.verifyTorchProduction(1);
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.TORCHES, 1));
         game = colony.close();
 
         // Menu recovery and Continue preserve the already collected amount.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         colony = game.openColonyAt(Location.of(22, 12), "Delft");
-        colony.verifyCrossProduction(1);
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CROSS, 1));
+        colony.verifyTorchProduction(1);
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.TORCHES, 1));
         game = colony.close();
 
         // The next round adds one more, without replaying the previous round.
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(Location.of(22, 12), "Delft");
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CROSS, 2));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.TORCHES, 2));
     }
 
     @Test
@@ -80,10 +80,10 @@ public class TC_07_F07_producing_gooods_test extends AbstractMicroColTest {
         ColonyScreen colonyScreen = gamePage.openColonyAt(Location.of(22, 12),
                 "Delft");
 
-        // Verify number of corn is 167.
+        // Verify number of grain is 167.
         colonyScreen.verifyNumberOfGoodsInWrehouse(0, 167);
 
-        // Verify number of tobacco 54.
+        // Verify number of grapes 54.
         colonyScreen.verifyNumberOfGoodsInWrehouse(2, 54);
 
         // Close colony screen.
@@ -95,10 +95,10 @@ public class TC_07_F07_producing_gooods_test extends AbstractMicroColTest {
         // Open colony Delft at [22,12].
         colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
 
-        // Verify number of corn is 170.
+        // Verify number of grain is 170.
         colonyScreen.verifyNumberOfGoodsInWrehouse(0, 170);
 
-        // Verify number of corn is 63.
+        // Verify number of grain is 63.
         colonyScreen.verifyNumberOfGoodsInWrehouse(2, 63);
 
         // Close colony screen.
@@ -110,10 +110,10 @@ public class TC_07_F07_producing_gooods_test extends AbstractMicroColTest {
         // Open colony Delft at [22,12].
         colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
 
-        // Verify number of corn is 173.
+        // Verify number of grain is 173.
         colonyScreen.verifyNumberOfGoodsInWrehouse(0, 173);
 
-        // Verify number of corn is 72.
+        // Verify number of grain is 72.
         colonyScreen.verifyNumberOfGoodsInWrehouse(2, 72);
     }
 

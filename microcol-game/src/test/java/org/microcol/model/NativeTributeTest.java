@@ -53,10 +53,10 @@ class NativeTributeTest {
     private static final Location TARGET_AT = NativeTurnScene.at(0, 0);
 
     private static final Consumer<UnitPo> SOLDIER = unit -> unit
-            .setHoldingGuns(true);
+            .setHoldingWeapons(true);
 
     private static final Consumer<UnitPo> DRAGOON = unit -> {
-        unit.setHoldingGuns(true);
+        unit.setHoldingWeapons(true);
         unit.setMounted(true);
     };
 

@@ -32,7 +32,7 @@ class EuropePurchaseLimitTest {
 
     private static final Location COLONY = Location.of(22, 12);
     private static final int WAGON_ID = 5000;
-    private static final GoodsType CORN = GoodsType.CORN;
+    private static final GoodsType GRAIN = GoodsType.GRAIN;
 
     private GameModelPo data(final Consumer<PlayerPo> dutchSetup) {
         final GameModelPo data = new GameModelPoDao().loadFromClassPath(
@@ -86,7 +86,7 @@ class EuropePurchaseLimitTest {
     }
 
     private static int total(final Model model, final int amount) {
-        return dutch(model).quoteEuropeTrade(Goods.of(CORN, amount), true)
+        return dutch(model).quoteEuropeTrade(Goods.of(GRAIN, amount), true)
                 .getTotal();
     }
 
@@ -101,16 +101,16 @@ class EuropePurchaseLimitTest {
         dutch(model).setGold(total(model, 45));
 
         final EuropePurchaseLimit limit = slot(model, 0)
-                .getEuropePurchaseLimit(CORN);
+                .getEuropePurchaseLimit(GRAIN);
 
         assertFalse(limit.isBlocked());
-        assertEquals(Goods.of(CORN, 45), limit.getMaximum());
+        assertEquals(Goods.of(GRAIN, 45), limit.getMaximum());
         assertEquals(100, limit.getRoom());
         assertTrue(limit.isLimitedByGold());
         assertFalse(limit.isLimitedByRoom());
         // The snapshot quote equals the live model quote and spends all gold.
         final EuropeTradeQuote live = dutch(model)
-                .quoteEuropeTrade(Goods.of(CORN, 45), true);
+                .quoteEuropeTrade(Goods.of(GRAIN, 45), true);
         assertEquals(live, limit.quote(45));
         assertEquals(live.getTotal(), limit.quote(45).getTotal());
         assertEquals(live.getTax(), limit.quote(45).getTax());
@@ -125,12 +125,12 @@ class EuropePurchaseLimitTest {
     @Test
     void theHoldRoomLimitsTheChoiceWhenGoldIsAmple() {
         final Model model = model();
-        slot(model, 0).addGoods(Goods.of(CORN, 55));
+        slot(model, 0).addGoods(Goods.of(GRAIN, 55));
 
         final EuropePurchaseLimit limit = slot(model, 0)
-                .getEuropePurchaseLimit(CORN);
+                .getEuropePurchaseLimit(GRAIN);
 
-        assertEquals(Goods.of(CORN, 45), limit.getMaximum());
+        assertEquals(Goods.of(GRAIN, 45), limit.getMaximum());
         assertEquals(45, limit.getRoom());
         assertTrue(limit.isLimitedByRoom());
         assertFalse(limit.isLimitedByGold());
@@ -139,18 +139,18 @@ class EuropePurchaseLimitTest {
     @Test
     void aTieReportsBothLimitsAndOneMorePaidPieceOnlyTheRoom() {
         final Model model = model();
-        slot(model, 0).addGoods(Goods.of(CORN, 55));
+        slot(model, 0).addGoods(Goods.of(GRAIN, 55));
 
         dutch(model).setGold(total(model, 45));
         final EuropePurchaseLimit tie = slot(model, 0)
-                .getEuropePurchaseLimit(CORN);
+                .getEuropePurchaseLimit(GRAIN);
         assertEquals(45, tie.getMaximum().getAmount());
         assertTrue(tie.isLimitedByGold());
         assertTrue(tie.isLimitedByRoom());
 
         dutch(model).setGold(total(model, 46));
         final EuropePurchaseLimit room = slot(model, 0)
-                .getEuropePurchaseLimit(CORN);
+                .getEuropePurchaseLimit(GRAIN);
         assertEquals(45, room.getMaximum().getAmount());
         assertFalse(room.isLimitedByGold());
         assertTrue(room.isLimitedByRoom());
@@ -161,28 +161,28 @@ class EuropePurchaseLimitTest {
         final Model model = model();
         final CargoSlot full = slot(model, 0);
         final CargoSlot other = slot(model, 1);
-        full.addGoods(Goods.of(CORN, 100));
+        full.addGoods(Goods.of(GRAIN, 100));
         other.addGoods(Goods.of(GoodsType.ORE, 10));
 
-        assertBlocked(full.getEuropePurchaseLimit(CORN),
+        assertBlocked(full.getEuropePurchaseLimit(GRAIN),
                 EuropePurchaseLimit.Blocker.HOLD_FULL);
-        assertBlocked(other.getEuropePurchaseLimit(CORN),
+        assertBlocked(other.getEuropePurchaseLimit(GRAIN),
                 EuropePurchaseLimit.Blocker.HOLD_UNAVAILABLE);
 
         final Model poor = model();
         dutch(poor).setGold(total(poor, 1) - 1);
-        assertBlocked(slot(poor, 0).getEuropePurchaseLimit(CORN),
+        assertBlocked(slot(poor, 0).getEuropePurchaseLimit(GRAIN),
                 EuropePurchaseLimit.Blocker.NOT_ENOUGH_GOLD);
         dutch(poor).setGold(total(poor, 1));
-        assertEquals(1, slot(poor, 0).getEuropePurchaseLimit(CORN).getMaximum()
+        assertEquals(1, slot(poor, 0).getEuropePurchaseLimit(GRAIN).getMaximum()
                 .getAmount());
 
         final Model boycotted = model(dutch -> {
             final TaxPo tax = TaxState.initial();
-            tax.getArrears().put(CORN.name(), 150);
+            tax.getArrears().put(GRAIN.name(), 150);
             dutch.setTax(tax);
         });
-        assertBlocked(slot(boycotted, 0).getEuropePurchaseLimit(CORN),
+        assertBlocked(slot(boycotted, 0).getEuropePurchaseLimit(GRAIN),
                 EuropePurchaseLimit.Blocker.BOYCOTTED);
         assertFalse(slot(boycotted, 0).getEuropePurchaseLimit(GoodsType.ORE)
                 .isBlocked());
@@ -199,7 +199,7 @@ class EuropePurchaseLimitTest {
         final Model model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
 
-        assertBlocked(slot(model, 0).getEuropePurchaseLimit(CORN),
+        assertBlocked(slot(model, 0).getEuropePurchaseLimit(GRAIN),
                 EuropePurchaseLimit.Blocker.TRADE_UNAVAILABLE);
     }
 
@@ -218,13 +218,13 @@ class EuropePurchaseLimitTest {
         dutch(model).setTaxRate(10);
         dutch(model).setGold(total(model, 45));
         final CargoSlot target = slot(model, 0);
-        final EuropePurchaseLimit limit = target.getEuropePurchaseLimit(CORN);
+        final EuropePurchaseLimit limit = target.getEuropePurchaseLimit(GRAIN);
         final int shownTotal = limit.quote(30).getTotal();
 
         final Goods bought = target.buyFromEuropePort(limit, 30);
 
-        assertEquals(Goods.of(CORN, 30), bought);
-        assertEquals(Goods.of(CORN, 30), target.getGoods().orElseThrow());
+        assertEquals(Goods.of(GRAIN, 30), bought);
+        assertEquals(Goods.of(GRAIN, 30), target.getGoods().orElseThrow());
         assertEquals(limit.getGoldAfter(30), dutch(model).getGold());
         assertEquals(total(model, 45) - shownTotal, dutch(model).getGold());
     }
@@ -233,9 +233,9 @@ class EuropePurchaseLimitTest {
     void zeroMoreThanTheMaximumOrABlockedChoiceChangeNothing() {
         final Model model = model();
         final CargoSlot target = slot(model, 0);
-        final EuropePurchaseLimit limit = target.getEuropePurchaseLimit(CORN);
-        target.addGoods(Goods.of(CORN, 100));
-        final EuropePurchaseLimit full = target.getEuropePurchaseLimit(CORN);
+        final EuropePurchaseLimit limit = target.getEuropePurchaseLimit(GRAIN);
+        target.addGoods(Goods.of(GRAIN, 100));
+        final EuropePurchaseLimit full = target.getEuropePurchaseLimit(GRAIN);
         final String before = snapshot(model);
 
         assertThrows(IllegalArgumentException.class,
@@ -251,7 +251,7 @@ class EuropePurchaseLimitTest {
     @Test
     void aChangedHoldRejectsTheStaleChoiceBeforeAnyMutation() {
         assertStale(EuropePurchaseChangedException.Reason.HOLD,
-                model -> slot(model, 0).addGoods(Goods.of(CORN, 50)));
+                model -> slot(model, 0).addGoods(Goods.of(GRAIN, 50)));
         assertStale(EuropePurchaseChangedException.Reason.HOLD,
                 model -> slot(model, 0).addGoods(Goods.of(GoodsType.ORE, 5)));
     }
@@ -262,15 +262,15 @@ class EuropePurchaseLimitTest {
                 model -> dutch(model).setTaxRate(10));
         assertStale(EuropePurchaseChangedException.Reason.PRICE, model -> {
             final int ask = dutch(model)
-                    .quoteEuropeTrade(Goods.of(CORN, 1), true).getUnitPrice();
+                    .quoteEuropeTrade(Goods.of(GRAIN, 1), true).getUnitPrice();
             for (int step = 0; step < 100 && ask == dutch(model)
-                    .quoteEuropeTrade(Goods.of(CORN, 1), true)
+                    .quoteEuropeTrade(Goods.of(GRAIN, 1), true)
                     .getUnitPrice(); step++) {
                 model.getEurope().applyTrade(dutch(model).getEuropeanNation(),
-                        CORN, -100);
+                        GRAIN, -100);
             }
             assertNotEquals(ask, dutch(model)
-                    .quoteEuropeTrade(Goods.of(CORN, 1), true).getUnitPrice());
+                    .quoteEuropeTrade(Goods.of(GRAIN, 1), true).getUnitPrice());
         });
     }
 
@@ -286,14 +286,14 @@ class EuropePurchaseLimitTest {
     @Test
     void aBoycottThatBeginsAfterTheChoiceRejectsItBeforeAnyMutation() {
         assertStale(EuropePurchaseChangedException.Reason.TRADE,
-                model -> dutch(model).addTaxArrears(CORN, 100));
+                model -> dutch(model).addTaxArrears(GRAIN, 100));
     }
 
     private void assertStale(final EuropePurchaseChangedException.Reason reason,
             final Consumer<Model> change) {
         final Model model = model();
         final CargoSlot target = slot(model, 0);
-        final EuropePurchaseLimit shown = target.getEuropePurchaseLimit(CORN);
+        final EuropePurchaseLimit shown = target.getEuropePurchaseLimit(GRAIN);
         change.accept(model);
         final String before = snapshot(model);
 
@@ -305,7 +305,8 @@ class EuropePurchaseLimitTest {
         assertEquals(before, snapshot(model));
         // A new snapshot of the current state is a valid choice again unless
         // it is blocked.
-        final EuropePurchaseLimit current = target.getEuropePurchaseLimit(CORN);
+        final EuropePurchaseLimit current = target
+                .getEuropePurchaseLimit(GRAIN);
         if (!current.isBlocked()) {
             final int gold = dutch(model).getGold();
             target.buyFromEuropePort(current, 1);

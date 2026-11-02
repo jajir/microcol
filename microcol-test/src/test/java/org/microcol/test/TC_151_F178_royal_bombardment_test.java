@@ -123,7 +123,7 @@ public class TC_151_F178_royal_bombardment_test extends AbstractMicroColTest {
         attack.verifyGameplayUnchanged();
 
         // A saved draw makes the rebel win: the regular is destroyed with its
-        // equipment and the winner keeps its muskets.
+        // equipment and the winner keeps its weapons.
         role.chooseOutcome(0, COUNTRYSIDE, true);
         attack.chooseAttack(SOLDIER, COUNTRYSIDE);
         attack.confirm();

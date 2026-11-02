@@ -66,7 +66,7 @@ public final class NativeRelations {
     /** Multiplier of settlement raises and peaceful reductions at a capital. */
     private static final double CAPITAL_MULTIPLIER = 2;
 
-    /** Muskets and horses sold per tribal anger step. */
+    /** Weapons and horses sold per tribal anger step. */
     private static final int ARMS_STEP = 50;
 
     /** Tribal anger of each complete arms step. */
@@ -88,7 +88,7 @@ public final class NativeRelations {
      */
     private final Map<Integer, Map<EuropeanNation, Double>> previousLocalAlarm;
 
-    /** Muskets and horses sold below the next step, per pair; 0..49. */
+    /** Weapons and horses sold below the next step, per pair; 0..49. */
     private final Map<EuropeanNation, Map<NativeNation, Integer>> armsRemainders;
 
     /** Origin action IDs already applied; never applied again. */
@@ -640,7 +640,7 @@ public final class NativeRelations {
     }
 
     /**
-     * Sold muskets and horses join the retained remainder; each complete step
+     * Sold weapons and horses join the retained remainder; each complete step
      * adds tribal anger and the new remainder is kept below the step.
      */
     private void sellArms(final NativeNation nation,

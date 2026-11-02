@@ -121,7 +121,7 @@ public final class NativeMarketRules {
 
     /**
      * Whether a village refuses to buy a good again on the next expedition: the
-     * same good the previous expedition bought. Muskets are the stated
+     * same good the previous expedition bought. Weapons are the stated
      * exception, and no other class has this restriction.
      *
      * @param settlementClass required class of the settlement
@@ -133,7 +133,7 @@ public final class NativeMarketRules {
             final NativeSettlementClass settlementClass,
             final GoodsType previous, final GoodsType goods) {
         return settlementClass == NativeSettlementClass.VILLAGE
-                && goods.equals(previous) && !GoodsType.MUSKET.equals(goods);
+                && goods.equals(previous) && !GoodsType.WEAPONS.equals(goods);
     }
 
     /**

@@ -113,7 +113,7 @@ class FirstColonyJourneyTest {
             assertSame(game.model.getPlayerByName("France"), colony.getOwner());
             assertEquals(List.of(founder), colony.getUnitsInsideColony());
             assertEquals(6, game.model.getAllUnits().size());
-            assertTrue(colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+            assertTrue(colony.getGoodsStats().getStatsByType(GoodsType.GRAIN)
                     .getNetProduction() >= 0);
             assertEquals(humanBefore, humanUnits(game.model));
             final int id = colony.getId();
@@ -214,7 +214,7 @@ class FirstColonyJourneyTest {
                     .anyMatch(at -> game.model.getMap().getTerrainTypeAt(at)
                             .isSea()));
             assertEquals(List.of(founder), colony.getUnitsInsideColony());
-            assertTrue(colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+            assertTrue(colony.getGoodsStats().getStatsByType(GoodsType.GRAIN)
                     .getNetProduction() >= 0);
             assertEquals(humanBefore, humanUnits(game.model));
         }
@@ -263,7 +263,7 @@ class FirstColonyJourneyTest {
             final int amount) {
         final java.util.Map<String, Integer> stock = new java.util.HashMap<>(
                 colonyPo(data).getColonyWarehouse());
-        stock.put("CORN", amount);
+        stock.put("GRAIN", amount);
         colonyPo(data).setColonyWarehouse(stock);
     }
 
@@ -377,9 +377,9 @@ class FirstColonyJourneyTest {
         try (Game game = new Game(load(expedition()))) {
             final Colony colony = reachColony(game);
             final Unit founder = game.model.getUnitById(4);
-            final int foodBefore = stock(colony, GoodsType.CORN);
+            final int foodBefore = stock(colony, GoodsType.GRAIN);
             final int netBefore = colony.getGoodsStats()
-                    .getStatsByType(GoodsType.CORN).getNetProduction();
+                    .getStatsByType(GoodsType.GRAIN).getNetProduction();
 
             // Ten more real robot turns settle only what the resident makes.
             for (int turn = 0; turn < 10; turn++) {
@@ -388,9 +388,9 @@ class FirstColonyJourneyTest {
             assertSame(colony,
                     game.model.getColonyById(colony.getId()).orElseThrow());
             assertEquals(List.of(founder), colony.getUnitsInsideColony());
-            assertTrue(stock(colony, GoodsType.CORN) >= foodBefore);
+            assertTrue(stock(colony, GoodsType.GRAIN) >= foodBefore);
             if (netBefore > 0) {
-                assertTrue(stock(colony, GoodsType.CORN) > foodBefore);
+                assertTrue(stock(colony, GoodsType.GRAIN) > foodBefore);
             }
             assertEquals(0, stock(colony, GoodsType.LUMBER));
         }
@@ -418,7 +418,7 @@ class FirstColonyJourneyTest {
             for (int turn = 0; turn < 5; turn++) {
                 game.nextTurn();
             }
-            foodMidway = stock(colony, GoodsType.CORN);
+            foodMidway = stock(colony, GoodsType.GRAIN);
             lumberMidway = stock(colony, GoodsType.LUMBER);
             franceMidway = franceUnits(game.model);
             restored.setModel(game.model.save());
@@ -433,7 +433,7 @@ class FirstColonyJourneyTest {
         try (Game game = new Game(load(reloaded))) {
             final Colony colony = game.model.getColonyById(0).orElseThrow();
             assertEquals(franceMidway, franceUnits(game.model));
-            assertEquals(foodMidway, stock(colony, GoodsType.CORN));
+            assertEquals(foodMidway, stock(colony, GoodsType.GRAIN));
             assertEquals(lumberMidway, stock(colony, GoodsType.LUMBER));
             for (int turn = 0; turn < 5; turn++) {
                 game.nextTurn();
@@ -443,9 +443,9 @@ class FirstColonyJourneyTest {
                     .containsAll(List.of(game.model.getUnitById(4),
                             game.model.getUnitById(6),
                             game.model.getUnitById(7))));
-            assertTrue(stock(colony, GoodsType.CORN) > 0);
+            assertTrue(stock(colony, GoodsType.GRAIN) > 0);
             assertTrue(stock(colony, GoodsType.LUMBER) > 0);
-            assertTrue(colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+            assertTrue(colony.getGoodsStats().getStatsByType(GoodsType.GRAIN)
                     .getNetProduction() >= 0);
             assertEquals(humanBefore, humanUnits(game.model));
         }
@@ -478,8 +478,8 @@ class FirstColonyJourneyTest {
                 "better.microcol", saved -> {
                     // The owner update settles food before the AI can reassign.
                     setStartingFood(saved, 20);
-                    // Founder: poor tundra corn. Spare: lumber on tundra. Free
-                    // grassland offers more corn than the founder makes.
+                    // Founder: poor tundra grain. Spare: lumber on tundra. Free
+                    // grassland offers more grain than the founder makes.
                     final List<ColonyFieldPo> land = landFields(saved);
                     setTerrain(saved, tile(land.get(0)), TerrainType.TUNDRA);
                     setTerrain(saved, tile(land.get(1)), TerrainType.TUNDRA);
@@ -495,14 +495,14 @@ class FirstColonyJourneyTest {
                         }
                     });
                     land.get(0).setWorkerId(4);
-                    land.get(0).setProducedGoodsType(GoodsType.CORN);
+                    land.get(0).setProducedGoodsType(GoodsType.GRAIN);
                     workSpareAt(saved, 6, land.get(1), GoodsType.LUMBER);
                 });
         try (Game game = new Game(load(data))) {
             final Colony colony = game.model.getColonyById(0).orElseThrow();
             final Unit founder = game.model.getUnitById(4);
             assertNotEquals(better[0], fieldOf(colony, founder));
-            assertTrue(colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+            assertTrue(colony.getGoodsStats().getStatsByType(GoodsType.GRAIN)
                     .getNetProduction() < 0);
 
             game.nextTurn();
@@ -528,7 +528,7 @@ class FirstColonyJourneyTest {
 
             game.nextTurn();
             assertTrue(founder.isAtPlaceColonyField());
-            assertEquals(GoodsType.CORN,
+            assertEquals(GoodsType.GRAIN,
                     founder.getPlaceColonyField().getProducedGoodsType());
             assertSame(colony, fieldOwner(game.model, founder));
         }
@@ -574,13 +574,13 @@ class FirstColonyJourneyTest {
         try (Game game = new Game(load(barren))) {
             final String humanBefore = humanUnits(game.model);
             final Colony colony = game.model.getColonyById(0).orElseThrow();
-            final int foodBefore = stock(colony, GoodsType.CORN);
+            final int foodBefore = stock(colony, GoodsType.GRAIN);
             assertNull(fieldOf(colony, game.model.getUnitById(4)));
 
             // Each real turn returns control; no stock or unit appears.
             for (int turn = 0; turn < 10; turn++) {
                 game.nextTurn();
-                assertTrue(stock(colony, GoodsType.CORN) <= foodBefore);
+                assertTrue(stock(colony, GoodsType.GRAIN) <= foodBefore);
                 assertEquals(0, stock(colony, GoodsType.LUMBER));
                 // Founder, two spares and the galleon; nothing is added.
                 assertTrue(game.model.getPlayerByName("France").getAllUnits()

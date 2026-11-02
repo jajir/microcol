@@ -321,8 +321,8 @@ class ScoreBoundaryTest {
         assertEquals(GameResult.Status.AWAITING_CONTINUATION,
                 after.getStatus());
         assertEquals(before.getScore().getTotal(), after.getScore().getTotal());
-        assertEquals(before.getScore().getBellsAfterTarget(),
-                after.getScore().getBellsAfterTarget());
+        assertEquals(before.getScore().getOwlsAfterTarget(),
+                after.getScore().getOwlsAfterTarget());
         // Loading and starting wrote nothing: the frozen result is unchanged.
         assertEquals(frozenJson(model), frozenJson(reloaded));
     }

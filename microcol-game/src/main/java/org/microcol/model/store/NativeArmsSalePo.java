@@ -4,7 +4,7 @@ import org.microcol.model.EuropeanNation;
 import org.microcol.model.NativeNation;
 
 /**
- * Muskets and horses sold to one native nation by one European, kept below the
+ * Weapons and horses sold to one native nation by one European, kept below the
  * 50-unit step that gives tribal anger. Only nonzero remainders are saved; an
  * absent entry means none is retained.
  */

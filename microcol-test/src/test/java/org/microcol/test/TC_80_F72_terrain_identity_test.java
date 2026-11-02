@@ -204,7 +204,7 @@ public class TC_80_F72_terrain_identity_test extends AbstractMicroColTest {
         colony.dragFieldWorkerTo(0, Direction.east);
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.verifyFieldJob(0, LAKE_NEXT_TO_COLONY,
-                Goods.of(GoodsType.CORN, 3));
+                Goods.of(GoodsType.GRAIN, 3));
 
         // An actual turn stores the food the colony quoted, fish included.
         gamePage = colony.close();
@@ -219,7 +219,7 @@ public class TC_80_F72_terrain_identity_test extends AbstractMicroColTest {
         terrain.verifyTerrain(LAKE_NEXT_TO_COLONY, TerrainType.LAKE, false);
         building.verifyBuilding(ConstructionType.DOCK, 1);
         jobs.verifyFieldJob(0, LAKE_NEXT_TO_COLONY,
-                Goods.of(GoodsType.CORN, 3));
+                Goods.of(GoodsType.GRAIN, 3));
     }
 
     @Test

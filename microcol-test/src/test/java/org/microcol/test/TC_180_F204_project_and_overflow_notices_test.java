@@ -120,21 +120,20 @@ public class TC_180_F204_project_and_overflow_notices_test
     @Tag("local")
     void TC_03_full_stock_notice_names_colony_goods_and_quantity()
             throws Exception {
-        // A full tobacco stock throws away what the tobacco worker produces.
+        // A full grapes stock throws away what the grapes worker produces.
         OverflowFixture.prepare(getContext(), FIXTURE, "overflow-f204.microcol",
-                COLONY_NAME, GoodsType.TOBACCO, 100);
+                COLONY_NAME, GoodsType.GRAPES, 100);
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(COLONY, COLONY_NAME);
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.TOBACCO, 100));
-        colony.verifyNetProductionAtLeast(GoodsType.TOBACCO, 2);
-        final int thrownAway = colony.getNetProduction(GoodsType.TOBACCO);
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAPES, 100));
+        colony.verifyNetProductionAtLeast(GoodsType.GRAPES, 2);
+        final int thrownAway = colony.getNetProduction(GoodsType.GRAPES);
         game = colony.close();
 
         // The update fills nothing more: the report names colony, goods and the
         // quantity the colony screen had promised, and offers Open colony.
         final String notice = "Colony New Amsterdam: not enough warehouse "
-                + "space, " + thrownAway
-                + " units of Tobacco were thrown away.";
+                + "space, " + thrownAway + " units of Grapes were thrown away.";
         final Optional<ScreenTurnReport> report = game.nextTurn();
         game.verifyTurnReportPresent(report);
         report.get().verifyEventMessageCount(notice, 1);
@@ -142,7 +141,7 @@ public class TC_180_F204_project_and_overflow_notices_test
 
         // Open colony leaves the stock at its capacity.
         colony = report.get().openColonyWithMouse(COLONY_ID, COLONY_NAME);
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.TOBACCO, 100));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAPES, 100));
         game = colony.close();
 
         // Reopening and Continue keep exactly one notice.

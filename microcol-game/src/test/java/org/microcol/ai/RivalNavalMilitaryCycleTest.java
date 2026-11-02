@@ -194,7 +194,7 @@ class RivalNavalMilitaryCycleTest {
     private static GameModelPo seaPort() {
         final GameModelPo data = freePlay();
         paintOcean(data, openSea());
-        unitPo(data, RIVAL_ID).setHoldingGuns(false);
+        unitPo(data, RIVAL_ID).setHoldingWeapons(false);
         revealAll(data);
         return data;
     }
@@ -207,7 +207,7 @@ class RivalNavalMilitaryCycleTest {
     private static GameModelPo tinyPort() {
         final GameModelPo data = freePlay();
         shape(data, Set.of(WARSHIP_START, PATROL_SEA, Location.of(19, 9)));
-        unitPo(data, RIVAL_ID).setHoldingGuns(false);
+        unitPo(data, RIVAL_ID).setHoldingWeapons(false);
         revealAll(data);
         return data;
     }
@@ -231,7 +231,7 @@ class RivalNavalMilitaryCycleTest {
             sea.add(APPROACH);
         }
         shape(data, sea);
-        unitPo(data, RIVAL_ID).setHoldingGuns(false);
+        unitPo(data, RIVAL_ID).setHoldingWeapons(false);
         revealAll(data);
         return data;
     }
@@ -1038,7 +1038,7 @@ class RivalNavalMilitaryCycleTest {
     void loadedWarshipBelowSixtyPercentNeitherAttacksNorMovesItsCargo() {
         final GameModelPo data = tinyPort();
         addShip(data, FIRST_NEW_ID, UnitType.FRIGATE, "France", WARSHIP_START);
-        load(data, FIRST_NEW_ID, goodsSlot(GoodsType.CORN, 2),
+        load(data, FIRST_NEW_ID, goodsSlot(GoodsType.GRAIN, 2),
                 new CargoSlotPo());
         addShip(data, SECOND_NEW_ID, UnitType.MAN_OF_WAR, "Dutch",
                 Location.of(19, 9));
@@ -1048,7 +1048,7 @@ class RivalNavalMilitaryCycleTest {
         seeFrom(FIRST_NEW_ID);
         final Ship frigate = (Ship) model.getUnitById(FIRST_NEW_ID);
         assertEquals(0, model.getCalendar().getNumberOfPlayedTurns());
-        assertEquals(2, goodsOf(frigate, GoodsType.CORN));
+        assertEquals(2, goodsOf(frigate, GoodsType.GRAIN));
         final long pinned = combatState();
         final int dutchThirds = model.getUnitById(SECOND_NEW_ID)
                 .getMovementThirds();
@@ -1061,7 +1061,7 @@ class RivalNavalMilitaryCycleTest {
         assertEquals(dutchThirds,
                 model.getUnitById(SECOND_NEW_ID).getMovementThirds());
         assertEquals(PATROL_SEA, frigate.getLocation());
-        assertEquals(2, goodsOf(frigate, GoodsType.CORN));
+        assertEquals(2, goodsOf(frigate, GoodsType.GRAIN));
     }
 
     /**
@@ -1073,11 +1073,11 @@ class RivalNavalMilitaryCycleTest {
     void loadedWarshipWinsALootingBattleAtTheSharedQuote() {
         final GameModelPo data = seaPort();
         addShip(data, FIRST_NEW_ID, UnitType.FRIGATE, "France", WARSHIP_START);
-        load(data, FIRST_NEW_ID, goodsSlot(GoodsType.CORN, 2),
+        load(data, FIRST_NEW_ID, goodsSlot(GoodsType.GRAIN, 2),
                 new CargoSlotPo());
         addShip(data, THIRD_NEW_ID, UnitType.MERCHANTMAN, "Dutch",
                 Location.of(19, 9));
-        load(data, THIRD_NEW_ID, goodsSlot(GoodsType.CORN, 4));
+        load(data, THIRD_NEW_ID, goodsSlot(GoodsType.GRAIN, 4));
         start(data);
         model.declareHostilities(france(), dutch());
         pinBattle(FIRST_NEW_ID, WARSHIP_START, Location.of(19, 9), true);
@@ -1088,7 +1088,7 @@ class RivalNavalMilitaryCycleTest {
         final Ship frigate = (Ship) model.getUnitById(FIRST_NEW_ID);
         playFrenchTurn();
         assertTrue(isSunk(THIRD_NEW_ID));
-        assertEquals(2 + loot, goodsOf(frigate, GoodsType.CORN));
+        assertEquals(2 + loot, goodsOf(frigate, GoodsType.GRAIN));
     }
 
     /**
@@ -1101,11 +1101,11 @@ class RivalNavalMilitaryCycleTest {
     void loadedLoserThatIsOnlyDamagedStillYieldsThePlannedLoot() {
         final GameModelPo data = seaPort();
         addShip(data, FIRST_NEW_ID, UnitType.FRIGATE, "France", WARSHIP_START);
-        load(data, FIRST_NEW_ID, goodsSlot(GoodsType.CORN, 2),
+        load(data, FIRST_NEW_ID, goodsSlot(GoodsType.GRAIN, 2),
                 new CargoSlotPo());
         addShip(data, THIRD_NEW_ID, UnitType.MERCHANTMAN, "Dutch",
                 Location.of(19, 9));
-        load(data, THIRD_NEW_ID, goodsSlot(GoodsType.CORN, 4));
+        load(data, THIRD_NEW_ID, goodsSlot(GoodsType.GRAIN, 4));
         start(data);
         model.declareHostilities(france(), dutch());
         pinBattle(FIRST_NEW_ID, WARSHIP_START, Location.of(19, 9), false);
@@ -1115,7 +1115,7 @@ class RivalNavalMilitaryCycleTest {
         playFrenchTurn();
         assertFalse(isSunk(THIRD_NEW_ID));
         assertTrue(isDamaged(THIRD_NEW_ID));
-        assertEquals(2 + loot, goodsOf(frigate, GoodsType.CORN));
+        assertEquals(2 + loot, goodsOf(frigate, GoodsType.GRAIN));
     }
 
     /**

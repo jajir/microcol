@@ -66,34 +66,34 @@ public class TC_50_F41_industrial_production_test extends AbstractMicroColTest {
     @Test
     @Tag("local")
     void TC_02_factory_rounds_shortage_once_for_all_workers() throws Exception {
-        // Two servants share eleven tobacco: sixteen cigars, not fifteen.
+        // Two servants share eleven grapes: sixteen wine, not fifteen.
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
         IndustrialProductionPage industry = new IndustrialProductionPage(
                 getContext());
-        industry.verifyForecast(GoodsType.TOBACCO, 11, -11);
-        industry.verifyForecast(GoodsType.CIGARS, 0, 16);
+        industry.verifyForecast(GoodsType.GRAPES, 11, -11);
+        industry.verifyForecast(GoodsType.WINE, 0, 16);
         game = colony.close();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        industry.verifyForecast(GoodsType.CIGARS, 0, 16);
+        industry.verifyForecast(GoodsType.WINE, 0, 16);
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.TOBACCO, 0));
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.CIGARS, 16));
-        industry.verifyForecast(GoodsType.CIGARS, 16, 0);
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAPES, 0));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.WINE, 16));
+        industry.verifyForecast(GoodsType.WINE, 16, 0);
         game = colony.close();
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame().openColonyAt(COLONY,
                 "New Amsterdam");
-        industry.verifyForecast(GoodsType.CIGARS, 16, 0);
+        industry.verifyForecast(GoodsType.WINE, 16, 0);
     }
 
     @Test
     @Tag("local")
     void TC_03_ironworks_feed_arsenal_once_in_same_turn() throws Exception {
         // Assign real workers: five ore yields seven tools, three feed six
-        // muskets.
+        // weapons.
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
         IndustrialProductionPage industry = new IndustrialProductionPage(
@@ -102,19 +102,19 @@ public class TC_50_F41_industrial_production_test extends AbstractMicroColTest {
         industry.assignWorker(201, "id_armory");
         industry.verifyForecast(GoodsType.ORE, 5, -5);
         industry.verifyForecast(GoodsType.TOOLS, 0, 4);
-        industry.verifyForecast(GoodsType.MUSKET, 0, 6);
+        industry.verifyForecast(GoodsType.WEAPONS, 0, 6);
         industry.captureDialog("id_armory", "r79-industrial-production.png");
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         colony.verifyWarehouseGoods(Goods.of(GoodsType.ORE, 0));
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 4));
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.MUSKET, 6));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.WEAPONS, 6));
         game = colony.close();
         game.exitToMenu();
         colony = new FreePlayAuditPage(getContext()).continueGame()
                 .openColonyAt(COLONY, "New Amsterdam");
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 4));
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.MUSKET, 6));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.WEAPONS, 6));
     }
 }

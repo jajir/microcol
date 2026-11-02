@@ -27,7 +27,7 @@ import javafx.stage.Stage;
 /**
  * Verify the authored river course of Delft: small and large squares are drawn
  * with their own width, a connected step costs one third in either direction
- * and survives Continue, and the small river adds exactly one to the sugar of
+ * and survives Continue, and the small river adds exactly one to the olives of
  * the field that the job preview quotes and the next turn stores.
  */
 @ExtendWith(ApplicationExtension.class)
@@ -135,41 +135,42 @@ public class TC_90_F81_river_effects_test extends AbstractMicroColTest {
 
         // Fishing replaces crops. An expert fisherman gets six before the Tory
         // penalty.
-        river.verifyOutput(SMALL_LOCATION, GoodsType.CORN, 3);
-        river.verifyOutput(LARGE_LOCATION, GoodsType.CORN, 4);
-        river.verifyOutput(SMALL_LOCATION, GoodsType.SUGAR, 0);
-        river.verifyOutput(LARGE_LOCATION, GoodsType.FUR, 0);
+        river.verifyOutput(SMALL_LOCATION, GoodsType.GRAIN, 3);
+        river.verifyOutput(LARGE_LOCATION, GoodsType.GRAIN, 4);
+        river.verifyOutput(SMALL_LOCATION, GoodsType.OLIVES, 0);
+        river.verifyOutput(LARGE_LOCATION, GoodsType.CLAY, 0);
         river.verifyDockRequired(DELFT_ID, SMALL_LOCATION, false);
         final ColonyScreen colony = gamePage.openColonyAt(COLONY_LOCATION,
                 "Delft");
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.CORN);
+        jobs.select(Kind.BEST_FIELD, GoodsType.GRAIN);
         jobs.verifyDetails("Field coordinates: 23, 11", true);
-        jobs.verifyDetails("Best eligible field: 5 Corn per turn", true);
+        jobs.verifyDetails("Best eligible field: 5 Grain per turn", true);
         jobs.cancel();
         jobs.verifyClosed();
-        production.verifyWarehouseGoods(DELFT_ID, Goods.of(GoodsType.CORN, 50));
+        production.verifyWarehouseGoods(DELFT_ID,
+                Goods.of(GoodsType.GRAIN, 50));
         // Confirm fishing and compare the colony's displayed net output with
         // the next stock.
         jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.CORN);
+        jobs.select(Kind.BEST_FIELD, GoodsType.GRAIN);
         jobs.confirm();
         jobs.verifyClosed();
         production.verifyFieldJob(DELFT_ID, WORKER_ID, SMALL_LOCATION,
-                Goods.of(GoodsType.CORN, 5));
-        final int expectedFood = 50 + colony.getNetProduction(GoodsType.CORN);
+                Goods.of(GoodsType.GRAIN, 5));
+        final int expectedFood = 50 + colony.getNetProduction(GoodsType.GRAIN);
         colony.close();
         gamePage.nextTurnAndCloseDialogs();
         production.verifyWarehouseGoods(DELFT_ID,
-                Goods.of(GoodsType.CORN, expectedFood));
+                Goods.of(GoodsType.GRAIN, expectedFood));
         // Continue preserves fishing and does not grant food again.
         gamePage.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
         production.verifyWarehouseGoods(DELFT_ID,
-                Goods.of(GoodsType.CORN, expectedFood));
+                Goods.of(GoodsType.GRAIN, expectedFood));
         production.verifyFieldJob(DELFT_ID, WORKER_ID, SMALL_LOCATION,
-                Goods.of(GoodsType.CORN, 5));
+                Goods.of(GoodsType.GRAIN, 5));
     }
 
     @Test

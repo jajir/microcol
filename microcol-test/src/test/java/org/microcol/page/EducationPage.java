@@ -112,7 +112,7 @@ public final class EducationPage extends AbstractScreen {
         assertEquals(role, unit.getType());
         assertEquals(veteran, unit.isVeteran());
         assertEquals(tools, unit.getTools());
-        assertFalse(unit.isHoldingGuns());
+        assertFalse(unit.isHoldingWeapons());
         assertFalse(unit.isMounted());
         assertTrue(unit.isAtPlaceLocation());
         assertEquals(at, unit.getLocation());

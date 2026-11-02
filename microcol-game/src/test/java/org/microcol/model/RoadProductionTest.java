@@ -14,7 +14,7 @@ import org.microcol.model.campaign.po.GameModelPoDao;
 import org.microcol.model.store.UnitPo;
 
 /**
- * Road output: a road adds {@link #ROAD_BONUS} once to a positive ore, fur or
+ * Road output: a road adds {@link #ROAD_BONUS} once to a positive ore, clay or
  * lumber output, and to mountain silver only with a silver deposit. It is one
  * flat terrain addition, applied before the river modifier and before expert
  * doubling.
@@ -38,8 +38,8 @@ class RoadProductionTest {
     }
 
     @Test
-    void roadAddsOnceToPositiveOreFurAndLumber() {
-        // Hill ore 4, bare grassland trapping fur 0 + 2, forested prime timber
+    void roadAddsOnceToPositiveOreClayAndLumber() {
+        // Hill ore 4, bare grassland clay pit clay 0 + 2, forested prime timber
         // lumber 6 + 2 and mountain ore 3 each gain exactly one from the road.
         assertEquals(4 + ROAD_BONUS,
                 output(terrain(TerrainType.HILL, ResourceOverlay.NONE, true),
@@ -48,8 +48,8 @@ class RoadProductionTest {
                 terrain(TerrainType.MOUNTAIN, ResourceOverlay.NONE, true),
                 GoodsType.ORE));
         assertEquals(2 + ROAD_BONUS, output(
-                terrain(TerrainType.GRASSLAND, ResourceOverlay.TRAPPING, true),
-                GoodsType.FUR));
+                terrain(TerrainType.GRASSLAND, ResourceOverlay.CLAY_PIT, true),
+                GoodsType.CLAY));
         final Terrain forest = terrain(TerrainType.GRASSLAND,
                 ResourceOverlay.PRIME_TIMBER, true);
         forest.setHasTrees(true);
@@ -57,8 +57,8 @@ class RoadProductionTest {
                 output(forest, GoodsType.LUMBER));
         // Without the road the same squares keep their output.
         assertEquals(2, output(
-                terrain(TerrainType.GRASSLAND, ResourceOverlay.TRAPPING, false),
-                GoodsType.FUR));
+                terrain(TerrainType.GRASSLAND, ResourceOverlay.CLAY_PIT, false),
+                GoodsType.CLAY));
     }
 
     @Test
@@ -83,22 +83,22 @@ class RoadProductionTest {
 
     @Test
     void zeroBaseAndUnrelatedOutputsGetNoRoadBonus() {
-        // Bare grassland has no ore, fur or lumber, so a road cannot create
+        // Bare grassland has no ore, clay or lumber, so a road cannot create
         // any.
         final Terrain grass = terrain(TerrainType.GRASSLAND,
                 ResourceOverlay.NONE, true);
-        assertEquals(0, output(grass, GoodsType.FUR));
+        assertEquals(0, output(grass, GoodsType.CLAY));
         assertEquals(0, output(grass, GoodsType.ORE));
         assertEquals(0, output(grass, GoodsType.LUMBER));
-        // Corn and sugar are outside the road list, even with a road.
-        assertEquals(4, output(grass, GoodsType.CORN));
-        assertEquals(1, output(grass, GoodsType.SUGAR));
-        // A prime sugar field gets its overlay and plow bonus, never the road.
-        final Terrain sugarField = terrain(TerrainType.GRASSLAND,
-                ResourceOverlay.PRIME_SUGAR, true);
-        sugarField.setHasField(true);
+        // Grain and olives are outside the road list, even with a road.
+        assertEquals(4, output(grass, GoodsType.GRAIN));
+        assertEquals(1, output(grass, GoodsType.OLIVES));
+        // A prime olives field gets its overlay and plow bonus, never the road.
+        final Terrain olivesField = terrain(TerrainType.GRASSLAND,
+                ResourceOverlay.PRIME_OLIVES, true);
+        olivesField.setHasField(true);
         assertEquals(1 + ResourceOverlay.BONUS + 1,
-                output(sugarField, GoodsType.SUGAR));
+                output(olivesField, GoodsType.OLIVES));
     }
 
     @Test
@@ -134,7 +134,7 @@ class RoadProductionTest {
 
     /**
      * Yield of the field west of the colony, worked by the given unit type, on
-     * bare grassland with a trapping resource and an optional road.
+     * bare grassland with a clay pit resource and an optional road.
      */
     private static int fieldYield(final UnitType type, final boolean road) {
         final GameModelPo data = scenario();
@@ -144,7 +144,7 @@ class RoadProductionTest {
                 .filter(field -> field.getDirection()
                         .equals(Direction.west.getVector()))
                 .findFirst().orElseThrow();
-        west.setProducedGoodsType(GoodsType.FUR);
+        west.setProducedGoodsType(GoodsType.CLAY);
         final Location westSquare = savedColony.getLocation()
                 .add(Direction.west.getVector());
         final Map<Location, TerrainType> map = data.getModel().getMap()
@@ -154,7 +154,7 @@ class RoadProductionTest {
         data.getModel().getMap().setTrees(Collections.emptySet());
         data.getModel().getMap().setFields(Collections.emptySet());
         data.getModel().getMap()
-                .setResources(Map.of(westSquare, ResourceOverlay.TRAPPING));
+                .setResources(Map.of(westSquare, ResourceOverlay.CLAY_PIT));
         data.getModel().getMap()
                 .setRoads(road ? Set.of(westSquare) : Collections.emptySet());
         final Model model = Model.make(data.getModel(),
@@ -173,6 +173,6 @@ class RoadProductionTest {
         final int ordinary = fieldYield(UnitType.COLONIST, true);
         assertTrue(ordinary > ordinaryWithoutRoad);
         assertEquals(ordinary * 2,
-                fieldYield(UnitType.EXPERT_FUR_TRAPPER, true));
+                fieldYield(UnitType.EXPERT_CLAY_DIGGER, true));
     }
 }

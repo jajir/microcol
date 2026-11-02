@@ -44,8 +44,8 @@ class NationalMarketUpdateTest {
         assertEquals("Dutch", model.getCurrentPlayer().getName());
     }
 
-    private GoodsTrade corn(final Model model, final EuropeanNation nation) {
-        return model.getEurope().getGoodsTradeForType(GoodsType.CORN, nation);
+    private GoodsTrade grain(final Model model, final EuropeanNation nation) {
+        return model.getEurope().getGoodsTradeForType(GoodsType.GRAIN, nation);
     }
 
     @Test
@@ -53,60 +53,63 @@ class NationalMarketUpdateTest {
         final Model model = make(fixture());
         final Player dutch = model.getPlayerByName("Dutch");
         // 200 Dutch units press 800 eighths: one step from bid 2 to 1.
-        dutch.sellGoods(Goods.of(GoodsType.CORN, 200));
-        assertEquals(1, corn(model, EuropeanNation.DUTCH).getSellPrice());
-        assertTrue(corn(model, EuropeanNation.DUTCH).isTradedSinceUpdate());
+        dutch.sellGoods(Goods.of(GoodsType.GRAIN, 200));
+        assertEquals(1, grain(model, EuropeanNation.DUTCH).getSellPrice());
+        assertTrue(grain(model, EuropeanNation.DUTCH).isTradedSinceUpdate());
 
         // The first update only consumes the trade flag.
         nextOwnerTurn(model);
-        assertEquals(1, corn(model, EuropeanNation.DUTCH).getSellPrice());
-        assertFalse(corn(model, EuropeanNation.DUTCH).isTradedSinceUpdate());
+        assertEquals(1, grain(model, EuropeanNation.DUTCH).getSellPrice());
+        assertFalse(grain(model, EuropeanNation.DUTCH).isTradedSinceUpdate());
 
         // A quiet update moves one step back; the next one stays at the start.
         nextOwnerTurn(model);
-        assertEquals(2, corn(model, EuropeanNation.DUTCH).getSellPrice());
-        assertEquals(4, corn(model, EuropeanNation.DUTCH).getBuyPrice());
+        assertEquals(2, grain(model, EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(4, grain(model, EuropeanNation.DUTCH).getBuyPrice());
         nextOwnerTurn(model);
-        assertEquals(2, corn(model, EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(2, grain(model, EuropeanNation.DUTCH).getSellPrice());
     }
 
     @Test
     void anotherNationsTradeCountsAsAffectingTheOwnersUpdate() {
         final Model model = make(fixture());
-        model.getPlayerByName("Dutch").sellGoods(Goods.of(GoodsType.CORN, 200));
+        model.getPlayerByName("Dutch")
+                .sellGoods(Goods.of(GoodsType.GRAIN, 200));
         nextOwnerTurn(model);
-        assertEquals(1, corn(model, EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(1, grain(model, EuropeanNation.DUTCH).getSellPrice());
 
         // A single French purchase is an eighth of a unit to the Dutch market
         // (-1 eighth, half of the ordinary quarter-unit -2), inward at the bid
         // floor so it is kept. It still affects the Dutch market and suppresses
         // this update's recovery.
-        model.getEurope().applyTrade(EuropeanNation.FRENCH, GoodsType.CORN, -1);
-        assertEquals(-1, corn(model, EuropeanNation.DUTCH).getPressure());
-        assertTrue(corn(model, EuropeanNation.DUTCH).isTradedSinceUpdate());
+        model.getEurope().applyTrade(EuropeanNation.FRENCH, GoodsType.GRAIN,
+                -1);
+        assertEquals(-1, grain(model, EuropeanNation.DUTCH).getPressure());
+        assertTrue(grain(model, EuropeanNation.DUTCH).isTradedSinceUpdate());
         nextOwnerTurn(model);
-        assertEquals(1, corn(model, EuropeanNation.DUTCH).getSellPrice());
-        assertEquals(-1, corn(model, EuropeanNation.DUTCH).getPressure());
+        assertEquals(1, grain(model, EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(-1, grain(model, EuropeanNation.DUTCH).getPressure());
 
         // With no further trade the following update recovers one step.
         nextOwnerTurn(model);
-        assertEquals(2, corn(model, EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(2, grain(model, EuropeanNation.DUTCH).getSellPrice());
     }
 
     @Test
     void openingAndSavingNeverAdvanceRecovery() {
         final Model model = make(fixture());
-        model.getPlayerByName("Dutch").sellGoods(Goods.of(GoodsType.CORN, 200));
+        model.getPlayerByName("Dutch")
+                .sellGoods(Goods.of(GoodsType.GRAIN, 200));
         nextOwnerTurn(model);
-        assertEquals(1, corn(model, EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(1, grain(model, EuropeanNation.DUTCH).getSellPrice());
         // Reading prices, quoting and saving are not updates.
         model.getPlayerByName("Dutch")
-                .quoteEuropeTrade(Goods.of(GoodsType.CORN, 5), true);
+                .quoteEuropeTrade(Goods.of(GoodsType.GRAIN, 5), true);
         model.save();
         model.save();
-        assertEquals(1, corn(model, EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(1, grain(model, EuropeanNation.DUTCH).getSellPrice());
         nextOwnerTurn(model);
-        assertEquals(2, corn(model, EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(2, grain(model, EuropeanNation.DUTCH).getSellPrice());
     }
 
     @Test
@@ -114,42 +117,43 @@ class NationalMarketUpdateTest {
         final GameModelPo data = fixture();
         final Model model = make(data);
         // 37 Dutch own units press 37 x 4 = 148 eighths, below one step.
-        model.getPlayerByName("Dutch").sellGoods(Goods.of(GoodsType.CORN, 37));
-        // Five English sugar units press the English market by 5 x 8 = -40 and
-        // the Dutch sugar market by 5 x 1 = -5, a cross-market eighth per unit.
-        model.getEurope().applyTrade(EuropeanNation.ENGLISH, GoodsType.SUGAR,
+        model.getPlayerByName("Dutch").sellGoods(Goods.of(GoodsType.GRAIN, 37));
+        // Five English olives units press the English market by 5 x 8 = -40 and
+        // the Dutch olives market by 5 x 1 = -5, a cross-market eighth per
+        // unit.
+        model.getEurope().applyTrade(EuropeanNation.ENGLISH, GoodsType.OLIVES,
                 -5);
         data.setModel(model.save());
         final Path file = directory.resolve("market.microcol");
         dao.saveToFile(file.toString(), data);
 
         final Model restored = make(dao.loadFromFile(file.toFile()));
-        final GoodsTrade savedCorn = corn(restored, EuropeanNation.DUTCH);
-        assertEquals(2, savedCorn.getSellPrice());
-        assertEquals(148, savedCorn.getPressure());
-        assertTrue(savedCorn.isTradedSinceUpdate());
+        final GoodsTrade savedGrain = grain(restored, EuropeanNation.DUTCH);
+        assertEquals(2, savedGrain.getSellPrice());
+        assertEquals(148, savedGrain.getPressure());
+        assertTrue(savedGrain.isTradedSinceUpdate());
         // Each French unit of the Dutch sale is a quarter unit: 37 x 2 = 74.
-        assertEquals(74, corn(restored, EuropeanNation.FRENCH).getPressure());
+        assertEquals(74, grain(restored, EuropeanNation.FRENCH).getPressure());
         assertEquals(-40, restored.getEurope()
-                .getGoodsTradeForType(GoodsType.SUGAR, EuropeanNation.ENGLISH)
+                .getGoodsTradeForType(GoodsType.OLIVES, EuropeanNation.ENGLISH)
                 .getPressure());
         assertEquals(-5, restored.getEurope()
-                .getGoodsTradeForType(GoodsType.SUGAR, EuropeanNation.DUTCH)
+                .getGoodsTradeForType(GoodsType.OLIVES, EuropeanNation.DUTCH)
                 .getPressure());
 
         // Continue resumes without recovery, export or any other replay.
         final JsonElement saved = new Gson().toJsonTree(restored.save());
         restored.startGame();
         assertEquals(saved, new Gson().toJsonTree(restored.save()));
-        assertTrue(corn(restored, EuropeanNation.DUTCH).isTradedSinceUpdate());
+        assertTrue(grain(restored, EuropeanNation.DUTCH).isTradedSinceUpdate());
 
         // The restored remainder continues exactly: 148 + 4 x 163 = 800
         // eighths,
         // so 163 more Dutch units finish the step that 37 units started.
         restored.getPlayerByName("Dutch")
-                .sellGoods(Goods.of(GoodsType.CORN, 163));
-        assertEquals(1, corn(restored, EuropeanNation.DUTCH).getSellPrice());
-        assertEquals(0, corn(restored, EuropeanNation.DUTCH).getPressure());
+                .sellGoods(Goods.of(GoodsType.GRAIN, 163));
+        assertEquals(1, grain(restored, EuropeanNation.DUTCH).getSellPrice());
+        assertEquals(0, grain(restored, EuropeanNation.DUTCH).getPressure());
     }
 
     @Test
@@ -159,7 +163,7 @@ class NationalMarketUpdateTest {
         assertThrows(IllegalArgumentException.class, () -> make(missing));
 
         final GameModelPo overflow = fixture();
-        overflow.getModel().getEurope().getMarkets().get("DUTCH").put("CORN",
+        overflow.getModel().getEurope().getMarkets().get("DUTCH").put("GRAIN",
                 new int[] { 2, Integer.MIN_VALUE, 0 });
         assertThrows(IllegalArgumentException.class, () -> make(overflow));
 
@@ -170,7 +174,7 @@ class NationalMarketUpdateTest {
 
         // A rejected candidate leaves the shared fixture usable.
         assertEquals(2,
-                corn(make(fixture()), EuropeanNation.DUTCH).getSellPrice());
+                grain(make(fixture()), EuropeanNation.DUTCH).getSellPrice());
     }
 
 }

@@ -373,9 +373,9 @@ class NativeTeachingTest {
         // The accepted card list, written out so the test does not read the
         // implementation's own list back.
         final List<UnitType> cardSkills = List.of(UnitType.EXPERT_FARMER,
-                UnitType.EXPERT_FISHERMAN, UnitType.EXPERT_FUR_TRAPPER,
-                UnitType.EXPERT_SILVER_MINER, UnitType.MASTER_SUGAR_PLANTER,
-                UnitType.MASTER_COTTON_PLANTER, UnitType.MASTER_TOBACCO_PLANTER,
+                UnitType.EXPERT_FISHERMAN, UnitType.EXPERT_CLAY_DIGGER,
+                UnitType.EXPERT_SILVER_MINER, UnitType.MASTER_OLIVE_GROWER,
+                UnitType.MASTER_SHEPHERD, UnitType.MASTER_GRAPE_GROWER,
                 UnitType.SEASONED_SCOUT);
         assertEquals(8, cardSkills.size());
         for (final UnitType skill : cardSkills) {

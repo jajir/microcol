@@ -168,8 +168,8 @@ public final class DialogEuropeEquipment extends AbstractMessageWindow {
     }
 
     public static Europe actionKey(GoodsType type, boolean buy) {
-        if (type == GoodsType.MUSKET) {
-            return buy ? Europe.buyMuskets : Europe.sellMuskets;
+        if (type == GoodsType.WEAPONS) {
+            return buy ? Europe.buyWeapons : Europe.sellWeapons;
         } else if (type == GoodsType.HORSE) {
             return buy ? Europe.buyHorses : Europe.sellHorses;
         } else if (type == GoodsType.TOOLS) {

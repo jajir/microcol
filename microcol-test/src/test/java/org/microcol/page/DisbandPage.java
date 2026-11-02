@@ -94,13 +94,13 @@ public final class DisbandPage extends AbstractScreen {
     }
 
     public void verifyEquipmentLines(final String expectedTools,
-            final String expectedHorses, final String expectedMuskets) {
+            final String expectedHorses, final String expectedWeapons) {
         assertEquals(expectedTools, getNodeFinder().lookup("#disbandToolsLine")
                 .queryAs(Label.class).getText());
         assertEquals(expectedHorses, getNodeFinder()
                 .lookup("#disbandHorsesLine").queryAs(Label.class).getText());
-        assertEquals(expectedMuskets, getNodeFinder()
-                .lookup("#disbandMusketsLine").queryAs(Label.class).getText());
+        assertEquals(expectedWeapons, getNodeFinder()
+                .lookup("#disbandWeaponsLine").queryAs(Label.class).getText());
     }
 
     public void verifyOverflowAcknowledgement(final boolean expectedShown) {
@@ -129,14 +129,15 @@ public final class DisbandPage extends AbstractScreen {
 
     /** Equipment is checked on a unit that is still in the game. */
     public void verifyEquipment(final int id, final int expectedTools,
-            final boolean expectedMounted, final boolean expectedHoldingGuns) {
+            final boolean expectedMounted,
+            final boolean expectedHoldingWeapons) {
         final UnitFreeColonist unit = colonist(getModel().getUnitById(id));
         assertEquals(expectedTools, unit.getTools(),
                 "Unexpected tools of unit " + id);
         assertEquals(expectedMounted, unit.isMounted(),
                 "Unexpected horses of unit " + id);
-        assertEquals(expectedHoldingGuns, unit.isHoldingGuns(),
-                "Unexpected muskets of unit " + id);
+        assertEquals(expectedHoldingWeapons, unit.isHoldingWeapons(),
+                "Unexpected weapons of unit " + id);
     }
 
     public void verifyPassengerAboard(final int passengerId,

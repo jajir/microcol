@@ -136,25 +136,25 @@ class WagonWarehouseTest {
     }
 
     @Test
-    void wagonFoodImportCrossesGrowthThresholdAndSurvivesSave() {
+    void wagonFoodImportTorchesGrowthThresholdAndSurvivesSave() {
         source.empty();
-        source.addGoods(Goods.of(GoodsType.CORN, 30));
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 190));
+        source.addGoods(Goods.of(GoodsType.GRAIN, 30));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 190));
         final String before = snapshot();
-        assertEquals(Goods.of(GoodsType.CORN, 30), colony.getWarehouse()
-                .getUnloadableGoods(Goods.of(GoodsType.CORN, 30), source));
+        assertEquals(Goods.of(GoodsType.GRAIN, 30), colony.getWarehouse()
+                .getUnloadableGoods(Goods.of(GoodsType.GRAIN, 30), source));
         assertEquals(before, snapshot());
 
-        colony.getWarehouse().moveToWarehouse(Goods.of(GoodsType.CORN, 30),
+        colony.getWarehouse().moveToWarehouse(Goods.of(GoodsType.GRAIN, 30),
                 source);
         assertEquals(220,
-                colony.getWarehouse().getGoods(GoodsType.CORN).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.GRAIN).getAmount());
         assertTrue(source.isEmpty());
         data.setModel(model.save());
         final Model resumed = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         assertEquals(220, resumed.getColonyByName("Delft").orElseThrow()
-                .getWarehouse().getGoods(GoodsType.CORN).getAmount());
+                .getWarehouse().getGoods(GoodsType.GRAIN).getAmount());
         assertTrue(((UnitWithCargo) resumed.getUnitById(WAGON_ID)).getCargo()
                 .getSlotByIndex(0).isEmpty());
     }

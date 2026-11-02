@@ -789,7 +789,7 @@ class ClearForestTest {
         assertThrows(IllegalArgumentException.class,
                 () -> TurnEventForestLumberLost.tryLoad(nothingLost));
         final TurnEventPo wrongGoods = withColony.save();
-        wrongGoods.setGoods(Goods.of(GoodsType.FUR, 3));
+        wrongGoods.setGoods(Goods.of(GoodsType.CLAY, 3));
         assertThrows(IllegalArgumentException.class,
                 () -> TurnEventForestLumberLost.tryLoad(wrongGoods));
         final TurnEventPo halfColony = withColony.save();
@@ -801,13 +801,13 @@ class ClearForestTest {
     // ---- Terrain output -----------------------------------------------------
 
     @Test
-    void clearedSquareKeepsBareYieldsButNeverProducesLumberOrFurAgain() {
+    void clearedSquareKeepsBareYieldsButNeverProducesLumberOrClayAgain() {
         final GameModelPo data = data(TARGET);
         Model model = make(data);
         final Terrain forest = model.getMap().getTerrainAt(TARGET);
         assertEquals(6, forest.canProduceAmmount(GoodsType.LUMBER));
-        assertEquals(2, forest.canProduceAmmount(GoodsType.FUR));
-        assertEquals(3, forest.canProduceAmmount(GoodsType.CORN));
+        assertEquals(2, forest.canProduceAmmount(GoodsType.CLAY));
+        assertEquals(3, forest.canProduceAmmount(GoodsType.GRAIN));
         final UnitFreeColonist pioneer = pioneer(model, 100, TARGET);
         start(model, pioneer);
         completeNow(model, pioneer);
@@ -817,30 +817,30 @@ class ClearForestTest {
         assertTrue(cleared.isCleared());
         assertFalse(cleared.isHasTrees());
         assertEquals(0, cleared.canProduceAmmount(GoodsType.LUMBER));
-        assertEquals(0, cleared.canProduceAmmount(GoodsType.FUR));
+        assertEquals(0, cleared.canProduceAmmount(GoodsType.CLAY));
         // Existing bare agricultural yields of grassland.
-        assertEquals(4, cleared.canProduceAmmount(GoodsType.CORN));
-        assertEquals(1, cleared.canProduceAmmount(GoodsType.SUGAR));
-        assertEquals(3, cleared.canProduceAmmount(GoodsType.TOBACCO));
-        assertEquals(2, cleared.canProduceAmmount(GoodsType.COTTON));
+        assertEquals(4, cleared.canProduceAmmount(GoodsType.GRAIN));
+        assertEquals(1, cleared.canProduceAmmount(GoodsType.OLIVES));
+        assertEquals(3, cleared.canProduceAmmount(GoodsType.GRAPES));
+        assertEquals(2, cleared.canProduceAmmount(GoodsType.WOOL));
         // Unrelated natural bare grassland keeps its aid-card output, which has
-        // no lumber or fur.
+        // no lumber or clay.
         final Terrain natural = model.getMap().getTerrainAt(TIE);
         assertFalse(natural.isCleared());
         assertEquals(0, natural.canProduceAmmount(GoodsType.LUMBER));
-        assertEquals(0, natural.canProduceAmmount(GoodsType.FUR));
-        assertEquals(4, natural.canProduceAmmount(GoodsType.CORN));
+        assertEquals(0, natural.canProduceAmmount(GoodsType.CLAY));
+        assertEquals(4, natural.canProduceAmmount(GoodsType.GRAIN));
         // The output change is permanent, also across Continue and next update.
         model = reload(data, model);
         nextOwnerTurn(model);
         final Terrain later = model.getMap().getTerrainAt(TARGET);
         assertTrue(later.isCleared());
         assertEquals(0, later.canProduceAmmount(GoodsType.LUMBER));
-        assertEquals(0, later.canProduceAmmount(GoodsType.FUR));
-        assertEquals(4, later.canProduceAmmount(GoodsType.CORN));
+        assertEquals(0, later.canProduceAmmount(GoodsType.CLAY));
+        assertEquals(4, later.canProduceAmmount(GoodsType.GRAIN));
         assertTrue(later.getProduction().stream().noneMatch(
                 production -> production.getGoodsType() == GoodsType.LUMBER
-                        || production.getGoodsType() == GoodsType.FUR));
+                        || production.getGoodsType() == GoodsType.CLAY));
     }
 
     @Test
@@ -852,9 +852,9 @@ class ClearForestTest {
         assertTrue(model.getMap().getTerrainAt(TARGET).isCleared());
         model.getMap().plowFiled(TARGET);
         final Terrain plowed = model.getMap().getTerrainAt(TARGET);
-        assertEquals(5, plowed.canProduceAmmount(GoodsType.CORN));
+        assertEquals(5, plowed.canProduceAmmount(GoodsType.GRAIN));
         assertEquals(0, plowed.canProduceAmmount(GoodsType.LUMBER));
-        assertEquals(0, plowed.canProduceAmmount(GoodsType.FUR));
+        assertEquals(0, plowed.canProduceAmmount(GoodsType.CLAY));
     }
 
     @Test

@@ -48,19 +48,20 @@ final class NativeRelationsScene {
 
     static final Consumer<UnitPo> UNARMED = unit -> {
     };
-    static final Consumer<UnitPo> SOLDIER = unit -> unit.setHoldingGuns(true);
+    static final Consumer<UnitPo> SOLDIER = unit -> unit
+            .setHoldingWeapons(true);
     static final Consumer<UnitPo> DRAGOON = unit -> {
-        unit.setHoldingGuns(true);
+        unit.setHoldingWeapons(true);
         unit.setMounted(true);
     };
     static final Consumer<UnitPo> VETERAN = unit -> {
-        unit.setHoldingGuns(true);
+        unit.setHoldingWeapons(true);
         unit.setVeteran(true);
     };
-    /** Veteran rank without muskets is not armed. */
+    /** Veteran rank without weapons is not armed. */
     static final Consumer<UnitPo> UNARMED_VETERAN = unit -> unit
             .setVeteran(true);
-    /** Horses without muskets is not armed. */
+    /** Horses without weapons is not armed. */
     static final Consumer<UnitPo> SCOUT = unit -> unit.setMounted(true);
     static final Consumer<UnitPo> PIONEER = unit -> unit.setTools(80);
 
@@ -355,7 +356,7 @@ final class NativeRelationsScene {
     NativeRelationsScene minuitMember(final String owner) {
         final CongressPo congress = player(owner).getCongress();
         congress.setActivated(true);
-        congress.setBells(0);
+        congress.setOwls(0);
         congress.setMembers(List.of(Founder.PETER_MINUIT));
         congress.setCandidates(List.of(Founder.JOHN_PAUL_JONES,
                 Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
@@ -372,7 +373,7 @@ final class NativeRelationsScene {
     NativeRelationsScene brebeufMember(final String owner) {
         final CongressPo congress = player(owner).getCongress();
         congress.setActivated(true);
-        congress.setBells(0);
+        congress.setOwls(0);
         congress.setMembers(List.of(Founder.JEAN_DE_BREBEUF));
         congress.setCandidates(List.of(Founder.JOHN_PAUL_JONES,
                 Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
@@ -387,7 +388,7 @@ final class NativeRelationsScene {
     NativeRelationsScene pocahontasMember(final String owner) {
         final CongressPo congress = player(owner).getCongress();
         congress.setActivated(true);
-        congress.setBells(0);
+        congress.setOwls(0);
         congress.setMembers(List.of(Founder.POCAHONTAS));
         congress.setCandidates(List.of(Founder.JOHN_PAUL_JONES,
                 Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
@@ -399,15 +400,15 @@ final class NativeRelationsScene {
     }
 
     /**
-     * Give the Dutch Congress an open objective list and enough bells. The
-     * offer keeps the rule of one candidate per category: the founder takes the
-     * place of the default candidate of its own category, so Pocahontas gives
-     * Jones, Pocahontas, Smith, Penn and Magellan.
+     * Give the Dutch Congress an open objective list and enough owls. The offer
+     * keeps the rule of one candidate per category: the founder takes the place
+     * of the default candidate of its own category, so Pocahontas gives Jones,
+     * Pocahontas, Smith, Penn and Magellan.
      */
     NativeRelationsScene dutchCongressReadyFor(final Founder founder) {
         final CongressPo congress = player(DUTCH).getCongress();
         congress.setActivated(true);
-        congress.setBells(100);
+        congress.setOwls(100);
         congress.setMembers(List.of());
         final List<Founder> candidates = new ArrayList<>();
         for (final Founder fallback : List.of(Founder.JOHN_PAUL_JONES,

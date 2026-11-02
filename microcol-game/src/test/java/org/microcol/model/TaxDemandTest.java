@@ -51,7 +51,7 @@ class TaxDemandTest {
         data.getModel().setDifficulty(difficulty);
         CrownRosterFixtures.freshCrownRosters(data.getModel());
         final PlayerPo dutch = player(data.getModel(), "Dutch");
-        dutch.getRecruitment().setCrosses(0);
+        dutch.getRecruitment().setTorches(0);
         final TaxPo tax = TaxState.initial();
         tax.setRate(rate);
         tax.setActivated(true);
@@ -60,14 +60,14 @@ class TaxDemandTest {
         return data;
     }
 
-    /** Only the named tradable stock remains; corn and bells are untouched. */
+    /** Only the named tradable stock remains; grain and owls are untouched. */
     private static void stock(final GameModelPo data, final int colonyId,
             final Map<GoodsType, Integer> goods) {
         final ColonyPo colony = data.getModel().getColonies().stream()
                 .filter(candidate -> candidate.getId() == colonyId).findFirst()
                 .orElseThrow();
         GoodsType.BUYABLE_GOOD_TYPES.stream()
-                .filter(type -> !type.equals(GoodsType.CORN))
+                .filter(type -> !type.equals(GoodsType.GRAIN))
                 .forEach(type -> colony.getColonyWarehouse().put(type.name(),
                         0));
         goods.forEach((type, amount) -> colony.getColonyWarehouse()
@@ -88,8 +88,8 @@ class TaxDemandTest {
     /** Colony 0 and 1 tie on value and goods order; colony 0 must win. */
     private GameModelPo tieData() {
         final GameModelPo data = data(Difficulty.CONQUISTADOR, 0, 1);
-        stock(data, 0, Map.of(GoodsType.RUM, 60, GoodsType.SILK, 60));
-        stock(data, 1, Map.of(GoodsType.RUM, 60));
+        stock(data, 0, Map.of(GoodsType.OLIVE_OIL, 60, GoodsType.CLOTH, 60));
+        stock(data, 1, Map.of(GoodsType.OLIVE_OIL, 60));
         stock(data, 2, Map.of());
         return data;
     }
@@ -166,7 +166,7 @@ class TaxDemandTest {
         final Model model = load(tieData().getModel());
         final Player dutch = model.getPlayerByName("Dutch");
         final Map<String, Integer> stocksBefore = stocks(model);
-        final int bellsBefore = dutch.getCongressBells();
+        final int owlsBefore = dutch.getCongressOwls();
         final int goldBefore = dutch.getGold();
         final int unitsBefore = model.getAllUnits().size();
         nextDutchTurn(model);
@@ -178,11 +178,11 @@ class TaxDemandTest {
         assertEquals(2, demand.getProposedRate());
         assertEquals(1, demand.getSerial());
         assertEquals(stocksBefore, stocks(model));
-        assertEquals(bellsBefore, dutch.getCongressBells());
+        assertEquals(owlsBefore, dutch.getCongressOwls());
         assertEquals(unitsBefore, model.getAllUnits().size());
         assertThrows(IllegalStateException.class, model::endTurn);
         assertThrows(TurnPreparationException.class,
-                () -> dutch.buyGoods(Goods.of(GoodsType.TOBACCO, 1)));
+                () -> dutch.buyGoods(Goods.of(GoodsType.GRAPES, 1)));
         assertEquals(goldBefore, dutch.getGold());
 
         final Model restored = load(model.save());
@@ -194,7 +194,7 @@ class TaxDemandTest {
         assertEquals(2, reopened.getProposedRate());
         assertEquals(1, reopened.getSerial());
         assertEquals(stocksBefore, stocks(restored));
-        assertEquals(bellsBefore, owner.getCongressBells());
+        assertEquals(owlsBefore, owner.getCongressOwls());
         assertEquals(unitsBefore, restored.getAllUnits().size());
 
         final Model control = pending(tieData());
@@ -204,15 +204,15 @@ class TaxDemandTest {
         assertFalse(restored.isAwaitingTaxDecision());
         assertEquals(2, owner.getTaxRate());
         assertEquals(stocks(control), stocks(restored));
-        assertEquals(control.getPlayerByName("Dutch").getCongressBells(),
-                owner.getCongressBells());
+        assertEquals(control.getPlayerByName("Dutch").getCongressOwls(),
+                owner.getCongressOwls());
         assertEquals(control.getPlayerByName("Dutch").getGold(),
                 owner.getGold());
         assertEquals(control.getAllUnits().size(),
                 restored.getAllUnits().size());
-        assertEquals(control.getPlayerByName("Dutch").getImmigrationCrosses(),
-                owner.getImmigrationCrosses());
-        assertTrue(owner.getCongressBells() > bellsBefore);
+        assertEquals(control.getPlayerByName("Dutch").getImmigrationTorches(),
+                owner.getImmigrationTorches());
+        assertTrue(owner.getCongressOwls() > owlsBefore);
 
         final Map<String, Integer> afterAnswer = stocks(restored);
         assertThrows(IllegalStateException.class,
@@ -242,8 +242,9 @@ class TaxDemandTest {
         final Player dutch = model.getPlayerByName("Dutch");
         final TaxDemand demand = dutch.getTaxDemand().orElseThrow();
         final TaxProtest protest = demand.getProtest().orElseThrow();
-        // Equal value 660 for RUM in colonies 0 and 1 and SILK in colony 0.
-        assertEquals(GoodsType.RUM, protest.getGoods());
+        // Equal value 660 for OLIVE_OIL in colonies 0 and 1 and CLOTH in colony
+        // 0.
+        assertEquals(GoodsType.OLIVE_OIL, protest.getGoods());
         assertEquals(0, protest.getColonyId());
         assertEquals("New Amsterdam", protest.getColonyName());
         assertEquals(60, protest.getStock());
@@ -260,15 +261,15 @@ class TaxDemandTest {
                 protest.getLibertyGain());
         assertTrue(model.isGameRunning());
         assertEquals(0, dutch.getTaxRate());
-        assertEquals(Map.of(GoodsType.RUM, 1320), dutch.getTaxArrears());
-        assertTrue(dutch.isBoycotted(GoodsType.RUM));
-        assertFalse(dutch.isBoycotted(GoodsType.SILK));
+        assertEquals(Map.of(GoodsType.OLIVE_OIL, 1320), dutch.getTaxArrears());
+        assertTrue(dutch.isBoycotted(GoodsType.OLIVE_OIL));
+        assertFalse(dutch.isBoycotted(GoodsType.CLOTH));
         final Map<String, Integer> expected = new TreeMap<>(stocks(control));
-        expected.merge("0:RUM", -60, Integer::sum);
+        expected.merge("0:OLIVE_OIL", -60, Integer::sum);
         assertEquals(expected, stocks(model));
         assertEquals(liberty(control), liberty(model));
-        assertEquals(control.getPlayerByName("Dutch").getCongressBells(),
-                dutch.getCongressBells());
+        assertEquals(control.getPlayerByName("Dutch").getCongressOwls(),
+                dutch.getCongressOwls());
         assertEquals(control.getPlayerByName("Dutch").getGold(),
                 dutch.getGold());
 
@@ -276,18 +277,18 @@ class TaxDemandTest {
         assertThrows(IllegalStateException.class,
                 () -> dutch.protestTaxDemand(demand));
         assertEquals(afterwards, stocks(model));
-        assertEquals(Map.of(GoodsType.RUM, 1320), dutch.getTaxArrears());
+        assertEquals(Map.of(GoodsType.OLIVE_OIL, 1320), dutch.getTaxArrears());
 
         // A later price never changes the recorded arrears.
         model.getEurope()
-                .getGoodsTradeForType(GoodsType.RUM, EuropeanNation.DUTCH)
+                .getGoodsTradeForType(GoodsType.OLIVE_OIL, EuropeanNation.DUTCH)
                 .setSellPrice(3);
-        assertEquals(Map.of(GoodsType.RUM, 1320), dutch.getTaxArrears());
+        assertEquals(Map.of(GoodsType.OLIVE_OIL, 1320), dutch.getTaxArrears());
 
         final Model reloaded = load(model.save());
         reloaded.startGame();
         assertTrue(reloaded.isGameRunning());
-        assertEquals(Map.of(GoodsType.RUM, 1320),
+        assertEquals(Map.of(GoodsType.OLIVE_OIL, 1320),
                 reloaded.getPlayerByName("Dutch").getTaxArrears());
         assertEquals(afterwards, stocks(reloaded));
     }
@@ -296,8 +297,8 @@ class TaxDemandTest {
     private GameModelPo largeStockData() {
         final GameModelPo data = data(Difficulty.CONQUISTADOR, 0, 1);
         expandWarehouse(data, 1);
-        stock(data, 0, Map.of(GoodsType.RUM, 100));
-        stock(data, 1, Map.of(GoodsType.COAT, 150));
+        stock(data, 0, Map.of(GoodsType.OLIVE_OIL, 100));
+        stock(data, 1, Map.of(GoodsType.AMPHORAE, 150));
         stock(data, 2, Map.of());
         return data;
     }
@@ -308,7 +309,7 @@ class TaxDemandTest {
         final Player dutch = model.getPlayerByName("Dutch");
         final TaxProtest protest = dutch.getTaxDemand().orElseThrow()
                 .getProtest().orElseThrow();
-        assertEquals(GoodsType.COAT, protest.getGoods());
+        assertEquals(GoodsType.AMPHORAE, protest.getGoods());
         assertEquals(1, protest.getColonyId());
         assertEquals(150, protest.getStock());
         assertEquals(100, protest.getQuantity());
@@ -321,44 +322,45 @@ class TaxDemandTest {
         final Model control = acceptedWithLiberty(this::largeStockData, 1,
                 protest.getLibertyGain());
         final Map<String, Integer> expected = new TreeMap<>(stocks(control));
-        expected.merge("1:COAT", -100, Integer::sum);
+        expected.merge("1:AMPHORAE", -100, Integer::sum);
         assertEquals(expected, stocks(model));
         assertEquals(liberty(control), liberty(model));
-        assertEquals(Map.of(GoodsType.COAT, 1800), dutch.getTaxArrears());
+        assertEquals(Map.of(GoodsType.AMPHORAE, 1800), dutch.getTaxArrears());
     }
 
     @Test
     void saleValueIsTheGrossFullStockTimesBidNotTheTaxedNet() {
-        // Gross 40 * 11 = 440 (RUM) and 49 * 9 = 441 (COAT). At 50% tax both
+        // Gross 40 * 11 = 440 (OLIVE_OIL) and 49 * 9 = 441 (AMPHORAE). At 50%
+        // tax both
         // would sell for 220, but the rule compares the untaxed full-stock
-        // value, so COAT wins although it is later in the goods order.
+        // value, so AMPHORAE wins although it is later in the goods order.
         final GameModelPo data = data(Difficulty.CONQUISTADOR, 50, 1);
-        stock(data, 0, Map.of(GoodsType.COAT, 49, GoodsType.RUM, 40));
+        stock(data, 0, Map.of(GoodsType.AMPHORAE, 49, GoodsType.OLIVE_OIL, 40));
         stock(data, 1, Map.of());
         stock(data, 2, Map.of());
         final Model model = pending(data);
         final Player dutch = model.getPlayerByName("Dutch");
         assertEquals(220,
-                dutch.quoteEuropeTrade(Goods.of(GoodsType.RUM, 40), false)
+                dutch.quoteEuropeTrade(Goods.of(GoodsType.OLIVE_OIL, 40), false)
                         .getTotal());
         assertEquals(220,
-                dutch.quoteEuropeTrade(Goods.of(GoodsType.COAT, 49), false)
+                dutch.quoteEuropeTrade(Goods.of(GoodsType.AMPHORAE, 49), false)
                         .getTotal());
         final TaxProtest protest = dutch.getTaxDemand().orElseThrow()
                 .getProtest().orElseThrow();
-        assertEquals(GoodsType.COAT, protest.getGoods());
+        assertEquals(GoodsType.AMPHORAE, protest.getGoods());
         assertEquals(52, dutch.getTaxDemand().orElseThrow().getProposedRate());
     }
 
     /**
-     * Corn has no storage limit, so a huge stock with a huge bid is possible.
+     * Grain has no storage limit, so a huge stock with a huge bid is possible.
      */
-    private Model pendingWithCorn(final int stock, final int bid) {
+    private Model pendingWithGrain(final int stock, final int bid) {
         final GameModelPo data = tieData();
-        colonyPo(data, 0).getColonyWarehouse().put("CORN", stock);
+        colonyPo(data, 0).getColonyWarehouse().put("GRAIN", stock);
         final Model model = load(data.getModel());
         model.getEurope()
-                .getGoodsTradeForType(GoodsType.CORN, EuropeanNation.DUTCH)
+                .getGoodsTradeForType(GoodsType.GRAIN, EuropeanNation.DUTCH)
                 .setSellPrice(bid);
         nextDutchTurn(model);
         assertTrue(model.isAwaitingTaxDecision());
@@ -368,27 +370,27 @@ class TaxDemandTest {
     @Test
     void aFullStockValueBeyondTheIntRangeStillWinsWithRepresentableArrears() {
         // 250 * 10,000,000 exceeds an int, but 2 * 100 * 10,000,000 does not.
-        final Model model = pendingWithCorn(250, 10_000_000);
+        final Model model = pendingWithGrain(250, 10_000_000);
         final Player dutch = model.getPlayerByName("Dutch");
         final TaxProtest protest = dutch.getTaxDemand().orElseThrow()
                 .getProtest().orElseThrow();
-        assertEquals(GoodsType.CORN, protest.getGoods());
+        assertEquals(GoodsType.GRAIN, protest.getGoods());
         assertEquals(0, protest.getColonyId());
         assertEquals(250, protest.getStock());
         assertEquals(100, protest.getQuantity());
         assertEquals(10_000_000, protest.getBid());
         assertEquals(2_000_000_000, protest.getArrears());
         dutch.protestTaxDemand(dutch.getTaxDemand().orElseThrow());
-        assertEquals(Map.of(GoodsType.CORN, 2_000_000_000),
+        assertEquals(Map.of(GoodsType.GRAIN, 2_000_000_000),
                 dutch.getTaxArrears());
         assertEquals(0, dutch.getTaxRate());
     }
 
     @Test
     void unrepresentableArrearsOfTheWinnerNeverProtestAnotherCommodity() {
-        // The corn stock is worth the most; its arrears 4,000,000,000 do not
-        // fit, so there is no protest at all and the rum stays untouched.
-        final Model model = pendingWithCorn(250, 20_000_000);
+        // The grain stock is worth the most; its arrears 4,000,000,000 do not
+        // fit, so there is no protest at all and the olive oil stays untouched.
+        final Model model = pendingWithGrain(250, 20_000_000);
         final Player dutch = model.getPlayerByName("Dutch");
         final TaxDemand demand = dutch.getTaxDemand().orElseThrow();
         assertTrue(demand.getProtest().isEmpty());
@@ -398,7 +400,7 @@ class TaxDemandTest {
                 () -> dutch.protestTaxDemand(demand));
         assertStillPending(model, before);
         assertEquals(60, model.getColonyById(0).orElseThrow().getWarehouse()
-                .getGoods(GoodsType.RUM).getAmount());
+                .getGoods(GoodsType.OLIVE_OIL).getAmount());
         dutch.acceptTaxDemand(demand);
         assertEquals(2, dutch.getTaxRate());
         assertTrue(dutch.getTaxArrears().isEmpty());
@@ -407,29 +409,30 @@ class TaxDemandTest {
     @Test
     void anAlreadyBoycottedCommodityIsNotOfferedAndItsArrearsSurvive() {
         final GameModelPo data = tieData();
-        player(data.getModel(), "Dutch").getTax().getArrears().put("RUM", 200);
+        player(data.getModel(), "Dutch").getTax().getArrears().put("OLIVE_OIL",
+                200);
         final Model model = pending(data);
         final Player dutch = model.getPlayerByName("Dutch");
         final TaxProtest protest = dutch.getTaxDemand().orElseThrow()
                 .getProtest().orElseThrow();
-        // RUM would win both colonies, but it is already boycotted.
-        assertEquals(GoodsType.SILK, protest.getGoods());
+        // OLIVE_OIL would win both colonies, but it is already boycotted.
+        assertEquals(GoodsType.CLOTH, protest.getGoods());
         assertEquals(0, protest.getColonyId());
         dutch.protestTaxDemand(dutch.getTaxDemand().orElseThrow());
-        assertEquals(Map.of(GoodsType.RUM, 200, GoodsType.SILK, 1320),
+        assertEquals(Map.of(GoodsType.OLIVE_OIL, 200, GoodsType.CLOTH, 1320),
                 dutch.getTaxArrears());
         assertEquals(60, model.getColonyById(0).orElseThrow().getWarehouse()
-                .getGoods(GoodsType.RUM).getAmount());
+                .getGoods(GoodsType.OLIVE_OIL).getAmount());
     }
 
     @Test
     void successiveProtestsBoycottDifferentCommoditiesAndKeepEarlierArrears() {
         final Model first = pending(tieData());
         final Player dutch = first.getPlayerByName("Dutch");
-        assertEquals(GoodsType.RUM, dutch.getTaxDemand().orElseThrow()
+        assertEquals(GoodsType.OLIVE_OIL, dutch.getTaxDemand().orElseThrow()
                 .getProtest().orElseThrow().getGoods());
         dutch.protestTaxDemand(dutch.getTaxDemand().orElseThrow());
-        assertEquals(Map.of(GoodsType.RUM, 1320), dutch.getTaxArrears());
+        assertEquals(Map.of(GoodsType.OLIVE_OIL, 1320), dutch.getTaxArrears());
 
         final ModelPo saved = first.save();
         player(saved, "Dutch").getTax()
@@ -442,12 +445,12 @@ class TaxDemandTest {
         final TaxDemand demand = owner.getTaxDemand().orElseThrow();
         assertEquals(2, demand.getSerial());
         assertEquals(0, demand.getCurrentRate());
-        assertNotEquals(GoodsType.RUM,
+        assertNotEquals(GoodsType.OLIVE_OIL,
                 demand.getProtest().orElseThrow().getGoods());
         final GoodsType again = demand.getProtest().orElseThrow().getGoods();
         owner.protestTaxDemand(demand);
         assertEquals(2, owner.getTaxArrears().size());
-        assertEquals(1320, owner.getTaxArrears().get(GoodsType.RUM));
+        assertEquals(1320, owner.getTaxArrears().get(GoodsType.OLIVE_OIL));
         assertTrue(owner.isBoycotted(again));
         assertEquals(0, owner.getTaxRate());
     }
@@ -539,7 +542,7 @@ class TaxDemandTest {
         final Player dutch = model.getPlayerByName("Dutch");
         final TaxDemand demand = dutch.getTaxDemand().orElseThrow();
         model.getColonyByName("New Amsterdam").orElseThrow().getWarehouse()
-                .removeGoods(Goods.of(GoodsType.RUM, 1));
+                .removeGoods(Goods.of(GoodsType.OLIVE_OIL, 1));
         final Map<String, Integer> before = stocks(model);
         assertFalse(dutch.canProtestTaxDemand(demand));
         assertTrue(dutch.canAcceptTaxDemand(demand));
@@ -557,7 +560,7 @@ class TaxDemandTest {
         final Player dutch = model.getPlayerByName("Dutch");
         final TaxDemand demand = dutch.getTaxDemand().orElseThrow();
         model.getEurope()
-                .getGoodsTradeForType(GoodsType.RUM, EuropeanNation.DUTCH)
+                .getGoodsTradeForType(GoodsType.OLIVE_OIL, EuropeanNation.DUTCH)
                 .setSellPrice(12);
         final Map<String, Integer> before = stocks(model);
         assertFalse(dutch.canProtestTaxDemand(demand));
@@ -697,7 +700,7 @@ class TaxDemandTest {
         final CongressPo congress = dutchPo.getCongress();
         congress.setMembers(List.of(Founder.WILLIAM_BREWSTER));
         congress.setSelected(null);
-        dutchPo.getRecruitment().setCrosses(230);
+        dutchPo.getRecruitment().setTorches(230);
         dutchPo.getRecruitment().getCandidates().forEach(candidate -> {
             if (candidate.getType() == UnitType.INDENTURED_SERVANT
                     || candidate.getType() == UnitType.PETTY_CRIMINAL) {
@@ -707,7 +710,7 @@ class TaxDemandTest {
         final Model model = load(data.getModel());
         final Player dutch = model.getPlayerByName("Dutch");
         final int pierBefore = peopleAtPier(dutch);
-        final int bellsBefore = dutch.getCongressBells();
+        final int owlsBefore = dutch.getCongressOwls();
         final Map<String, Integer> stocksBefore = stocks(model);
         nextDutchTurn(model);
         assertTrue(model.isAwaitingImmigrationChoice());
@@ -720,7 +723,7 @@ class TaxDemandTest {
         assertTrue(between.isAwaitingImmigrationChoice());
         assertFalse(between.isAwaitingTaxDecision());
         assertEquals(230,
-                between.getPlayerByName("Dutch").getImmigrationCrosses());
+                between.getPlayerByName("Dutch").getImmigrationTorches());
         assertEquals(0,
                 between.getPlayerByName("Dutch").save().getTax().getUpdates()
                         - (TaxState.interval(Difficulty.CONQUISTADOR) - 1));
@@ -733,8 +736,8 @@ class TaxDemandTest {
         assertTrue(model.isAwaitingTaxDecision());
         assertFalse(model.isGameRunning());
         assertEquals(pierBefore + 2, peopleAtPier(dutch));
-        assertEquals(5, dutch.getImmigrationCrosses());
-        assertEquals(bellsBefore, dutch.getCongressBells());
+        assertEquals(5, dutch.getImmigrationTorches());
+        assertEquals(owlsBefore, dutch.getCongressOwls());
         assertEquals(stocksBefore, stocks(model));
         assertEquals(2, dutch.save().getRecruitment().getEarnedImmigrants());
 
@@ -744,40 +747,40 @@ class TaxDemandTest {
         assertTrue(restored.isAwaitingTaxDecision());
         assertFalse(restored.isAwaitingImmigrationChoice());
         assertEquals(pierBefore + 2, peopleAtPier(owner));
-        assertEquals(5, owner.getImmigrationCrosses());
+        assertEquals(5, owner.getImmigrationTorches());
         assertEquals(2, owner.save().getRecruitment().getEarnedImmigrants());
         owner.acceptTaxDemand(owner.getTaxDemand().orElseThrow());
         assertTrue(restored.isGameRunning());
         assertEquals(2, owner.getTaxRate());
         assertEquals(pierBefore + 2, peopleAtPier(owner));
         assertEquals(2, owner.save().getRecruitment().getEarnedImmigrants());
-        assertTrue(owner.getCongressBells() > bellsBefore);
-        assertTrue(owner.getImmigrationCrosses() >= 5);
+        assertTrue(owner.getCongressOwls() > owlsBefore);
+        assertTrue(owner.getImmigrationTorches() >= 5);
     }
 
     /**
-     * Dutch at a 17% rate owe rum and tobacco, and Congress holds {@code bells}
-     * toward Fugger's objective with {@code selected} chosen, if any. The
-     * Fugger objective is reached at the next update only when both the choice
-     * and the bells are present.
+     * Dutch at a 17% rate owe olive oil and grapes, and Congress holds
+     * {@code owls} toward Fugger's objective with {@code selected} chosen, if
+     * any. The Fugger objective is reached at the next update only when both
+     * the choice and the owls are present.
      */
-    private GameModelPo fuggerData(final Founder selected, final int bells) {
+    private GameModelPo fuggerData(final Founder selected, final int owls) {
         final GameModelPo data = data(Difficulty.CONQUISTADOR, 17, 5);
         final PlayerPo dutchPo = player(data.getModel(), "Dutch");
-        dutchPo.getTax().getArrears().put("RUM", 200);
-        dutchPo.getTax().getArrears().put("TOBACCO", 100);
-        fuggerCongress(dutchPo, selected, bells);
+        dutchPo.getTax().getArrears().put("OLIVE_OIL", 200);
+        dutchPo.getTax().getArrears().put("GRAPES", 100);
+        fuggerCongress(dutchPo, selected, owls);
         return data;
     }
 
     /**
-     * Congress holds {@code bells} with Fugger offered and {@code selected}.
+     * Congress holds {@code owls} with Fugger offered and {@code selected}.
      */
     private static void fuggerCongress(final PlayerPo dutchPo,
-            final Founder selected, final int bells) {
+            final Founder selected, final int owls) {
         final CongressPo congress = Congress.initial();
         congress.setActivated(true);
-        congress.setBells(bells);
+        congress.setOwls(owls);
         congress.setMembers(List.of());
         congress.setCandidates(List.of(Founder.HERNAN_CORTES,
                 Founder.THOMAS_JEFFERSON, Founder.JAKOB_FUGGER,
@@ -788,11 +791,12 @@ class TaxDemandTest {
     }
 
     /** The smallest debt a saved ledger accepts, so France's is valid. */
-    private static final int FRANCE_RUM_ARREARS = TaxProtest.MIN_ARREARS;
+    private static final int FRANCE_OLIVE_OIL_ARREARS = TaxProtest.MIN_ARREARS;
 
     /**
-     * The free-play rival expedition: Dutch owe rum and tobacco at 17%, France
-     * owes its own rum, and Dutch's Congress is set as in {@link #fuggerData}.
+     * The free-play rival expedition: Dutch owe olive oil and grapes at 17%,
+     * France owes its own olive oil, and Dutch's Congress is set as in
+     * {@link #fuggerData}.
      */
     private GameModelPo rivalData(final Founder selected) {
         final GameModelPo data = new GameModelPoDao()
@@ -805,10 +809,10 @@ class TaxDemandTest {
         tax.setRate(17);
         tax.setActivated(true);
         tax.setUpdates(TaxState.interval(Difficulty.CONQUISTADOR) - 5);
-        tax.getArrears().put("RUM", 200);
-        tax.getArrears().put("TOBACCO", 100);
-        player(data.getModel(), "France").getTax().getArrears().put("RUM",
-                FRANCE_RUM_ARREARS);
+        tax.getArrears().put("OLIVE_OIL", 200);
+        tax.getArrears().put("GRAPES", 100);
+        player(data.getModel(), "France").getTax().getArrears().put("OLIVE_OIL",
+                FRANCE_OLIVE_OIL_ARREARS);
         fuggerCongress(dutchPo, selected, 100);
         return data;
     }
@@ -836,8 +840,8 @@ class TaxDemandTest {
         final Model model = load(
                 fuggerData(Founder.JAKOB_FUGGER, 100).getModel());
         final Player dutch = model.getPlayerByName("Dutch");
-        assertTrue(dutch.isBoycotted(GoodsType.RUM));
-        assertTrue(dutch.isBoycotted(GoodsType.TOBACCO));
+        assertTrue(dutch.isBoycotted(GoodsType.OLIVE_OIL));
+        assertTrue(dutch.isBoycotted(GoodsType.GRAPES));
         // The same position without the choice isolates what the arrival does.
         final Model control = load(fuggerData(null, 100).getModel());
         nextDutchTurn(control);
@@ -845,8 +849,8 @@ class TaxDemandTest {
         assertTrue(model.isGameRunning());
         assertTrue(dutch.getCongressMembers().contains(Founder.JAKOB_FUGGER));
         assertTrue(dutch.getTaxArrears().isEmpty());
-        assertFalse(dutch.isBoycotted(GoodsType.RUM));
-        assertFalse(dutch.isBoycotted(GoodsType.TOBACCO));
+        assertFalse(dutch.isBoycotted(GoodsType.OLIVE_OIL));
+        assertFalse(dutch.isBoycotted(GoodsType.GRAPES));
         // No payment is taken, and the rate and every stock, including the
         // cleared commodities, match the position where Fugger did not arrive.
         final Player unchanged = control.getPlayerByName("Dutch");
@@ -879,7 +883,7 @@ class TaxDemandTest {
     }
 
     /**
-     * A choice that is never confirmed, or one still short of the bells, joins
+     * A choice that is never confirmed, or one still short of the owls, joins
      * no father at the update and clears nothing.
      */
     @Test
@@ -893,25 +897,25 @@ class TaxDemandTest {
         final Player dutch = model.getPlayerByName("Dutch");
         nextDutchTurn(model);
         assertFalse(dutch.getCongressMembers().contains(Founder.JAKOB_FUGGER));
-        assertEquals(Map.of(GoodsType.RUM, 200, GoodsType.TOBACCO, 100),
+        assertEquals(Map.of(GoodsType.OLIVE_OIL, 200, GoodsType.GRAPES, 100),
                 dutch.getTaxArrears());
-        assertTrue(dutch.isBoycotted(GoodsType.RUM));
-        assertTrue(dutch.isBoycotted(GoodsType.TOBACCO));
+        assertTrue(dutch.isBoycotted(GoodsType.OLIVE_OIL));
+        assertTrue(dutch.isBoycotted(GoodsType.GRAPES));
     }
 
     /**
-     * Dutch's arrival forgives only Dutch's own arrears. France keeps its rum
-     * debt, its gold and its ledger through the arrival and a save and load,
-     * and every stock and unit matches the position without the choice.
+     * Dutch's arrival forgives only Dutch's own arrears. France keeps its olive
+     * oil debt, its gold and its ledger through the arrival and a save and
+     * load, and every stock and unit matches the position without the choice.
      */
     @Test
     void fuggerArrivalLeavesAForeignNationsArrearsUntouched() {
         final Model model = load(rivalData(Founder.JAKOB_FUGGER).getModel());
         final Player dutch = model.getPlayerByName("Dutch");
         final Player france = model.getPlayerByName("France");
-        assertEquals(Map.of(GoodsType.RUM, FRANCE_RUM_ARREARS),
+        assertEquals(Map.of(GoodsType.OLIVE_OIL, FRANCE_OLIVE_OIL_ARREARS),
                 france.getTaxArrears());
-        assertTrue(dutch.isBoycotted(GoodsType.RUM));
+        assertTrue(dutch.isBoycotted(GoodsType.OLIVE_OIL));
         final Model control = load(rivalData(null).getModel());
         nextDutchTurnAfterOthers(control);
         nextDutchTurnAfterOthers(model);
@@ -919,7 +923,7 @@ class TaxDemandTest {
         final Player unchangedFrance = control.getPlayerByName("France");
         assertTrue(dutch.getCongressMembers().contains(Founder.JAKOB_FUGGER));
         assertTrue(dutch.getTaxArrears().isEmpty());
-        assertEquals(Map.of(GoodsType.RUM, FRANCE_RUM_ARREARS),
+        assertEquals(Map.of(GoodsType.OLIVE_OIL, FRANCE_OLIVE_OIL_ARREARS),
                 france.getTaxArrears());
         assertEquals(unchangedFrance.getGold(), france.getGold());
         assertEquals(unchangedDutch.getGold(), dutch.getGold());
@@ -930,7 +934,7 @@ class TaxDemandTest {
 
         final Model restored = load(model.save());
         restored.startGame();
-        assertEquals(Map.of(GoodsType.RUM, FRANCE_RUM_ARREARS),
+        assertEquals(Map.of(GoodsType.OLIVE_OIL, FRANCE_OLIVE_OIL_ARREARS),
                 restored.getPlayerByName("France").getTaxArrears());
         assertTrue(restored.getPlayerByName("Dutch").getTaxArrears().isEmpty());
         assertTrue(restored.getPlayerByName("Dutch").getCongressMembers()
@@ -986,7 +990,7 @@ class TaxDemandTest {
 
         // An already boycotted commodity is never offered.
         saved = savedPending();
-        player(saved, "Dutch").getTax().getArrears().put("RUM", 200);
+        player(saved, "Dutch").getTax().getArrears().put("OLIVE_OIL", 200);
         assertRejected(saved);
 
         saved = savedPending();
@@ -1010,7 +1014,7 @@ class TaxDemandTest {
         assertRejected(saved);
 
         saved = savedPending();
-        player(saved, "Dutch").getTax().getArrears().put("RUM", 99);
+        player(saved, "Dutch").getTax().getArrears().put("OLIVE_OIL", 99);
         assertRejected(saved);
 
         saved = savedPending();

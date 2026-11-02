@@ -48,13 +48,13 @@ public class TC_109_F100_town_commons_test extends AbstractMicroColTest {
     /** A goods panel narrower than this is squeezed out of its row. */
     private static final double MINIMUM_GOODS_WIDTH = 30;
 
-    private static final String EN_NEW_AMSTERDAM = "Corn: 6, Tobacco: 3";
+    private static final String EN_NEW_AMSTERDAM = "Grain: 6, Grapes: 3";
 
-    private static final String EN_DELFT = "Corn: 2, Ore: 4";
+    private static final String EN_DELFT = "Grain: 2, Ore: 4";
 
-    private static final String EN_HAARLEM = "Corn: 3, Lumber: 6";
+    private static final String EN_HAARLEM = "Grain: 3, Lumber: 6";
 
-    private static final String CS_NEW_AMSTERDAM = "Jídlo: 6, Tabák: 3";
+    private static final String CS_NEW_AMSTERDAM = "Obilí: 6, Hrozny: 3";
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -76,11 +76,11 @@ public class TC_109_F100_town_commons_test extends AbstractMicroColTest {
         data.getModel().getMap().setTerrainType(terrain);
         addForest(data, HAARLEM);
         // Identity follows the derived center: hill ore, forested lumber, and
-        // the grassland tobacco of New Amsterdam unchanged.
+        // the grassland grapes of New Amsterdam unchanged.
         colonyNamed(data, "Delft").setTownCommonsGoods("ORE");
         final ColonyPo haarlem = colonyNamed(data, "Haarlem");
         haarlem.setTownCommonsGoods("LUMBER");
-        // Haarlem keeps only its three tobacconists indoors: its surrounding
+        // Haarlem keeps only its three winemakers indoors: its surrounding
         // fields have no worker, so the center is the only food and lumber.
         final java.util.Set<Integer> fieldWorkers = new java.util.HashSet<>();
         haarlem.getColonyFields().forEach(field -> {
@@ -204,13 +204,13 @@ public class TC_109_F100_town_commons_test extends AbstractMicroColTest {
                 "New Amsterdam");
         newAmsterdam.verifyTownCommons(EN_NEW_AMSTERDAM);
         newAmsterdam.verifyTownCommonsNotEllipsized(EN_NEW_AMSTERDAM);
-        final int tobaccoBefore = newAmsterdam.stockOf(GoodsType.TOBACCO);
+        final int grapesBefore = newAmsterdam.stockOf(GoodsType.GRAPES);
 
         // Escape leaves the colony; opening it again by keys changes nothing.
         game = newAmsterdam.closeWithEscape();
         newAmsterdam = game.openColonyWithKeyboard(0, "New Amsterdam");
         newAmsterdam.verifyTownCommons(EN_NEW_AMSTERDAM);
-        newAmsterdam.verifyWarehouseStock(GoodsType.TOBACCO, tobaccoBefore);
+        newAmsterdam.verifyWarehouseStock(GoodsType.GRAPES, grapesBefore);
         newAmsterdam.closeWithEscape();
     }
 
@@ -228,9 +228,9 @@ public class TC_109_F100_town_commons_test extends AbstractMicroColTest {
         haarlem.verifyNumberOfUnitsOnFields(0);
         haarlem.verifyTownCommons(EN_HAARLEM);
         haarlem.verifyFoodAccounting(3, 6);
-        haarlem.verifyThatProductionIs(GoodsType.CORN, -3);
+        haarlem.verifyThatProductionIs(GoodsType.GRAIN, -3);
         haarlem.verifyThatProductionIs(GoodsType.LUMBER, 6);
-        haarlem.verifyWarehouseStock(GoodsType.CORN, 134);
+        haarlem.verifyWarehouseStock(GoodsType.GRAIN, 134);
         haarlem.verifyWarehouseStock(GoodsType.LUMBER, 0);
         game = haarlem.close();
 
@@ -239,7 +239,7 @@ public class TC_109_F100_town_commons_test extends AbstractMicroColTest {
         game.nextTurnAndCloseDialogs();
         game.panToTile(HAARLEM);
         haarlem = game.openColonyAt(HAARLEM, "Haarlem");
-        haarlem.verifyWarehouseStock(GoodsType.CORN, 131);
+        haarlem.verifyWarehouseStock(GoodsType.GRAIN, 131);
         haarlem.verifyWarehouseStock(GoodsType.LUMBER, 6);
         haarlem.verifyNumberOfUnitsOnFields(0);
         game = haarlem.close();
@@ -249,7 +249,7 @@ public class TC_109_F100_town_commons_test extends AbstractMicroColTest {
         game = new FreePlayAuditPage(getContext()).continueGame();
         game.panToTile(HAARLEM);
         haarlem = game.openColonyAt(HAARLEM, "Haarlem");
-        haarlem.verifyWarehouseStock(GoodsType.CORN, 131);
+        haarlem.verifyWarehouseStock(GoodsType.GRAIN, 131);
         haarlem.verifyWarehouseStock(GoodsType.LUMBER, 6);
         haarlem.verifyTownCommons(EN_HAARLEM);
         haarlem.close();

@@ -75,7 +75,7 @@ class QuickCargoTest {
     private static List<GoodsType> candidates() {
         return GoodsType.BUYABLE_GOOD_TYPES.stream()
                 .filter(type -> type != GoodsType.HORSE
-                        && type != GoodsType.TOOLS && type != GoodsType.MUSKET)
+                        && type != GoodsType.TOOLS && type != GoodsType.WEAPONS)
                 .collect(Collectors.toList());
     }
 
@@ -155,12 +155,12 @@ class QuickCargoTest {
     }
 
     @Test
-    void horsesToolsAndMusketsAreNeverQuickLoaded() {
+    void horsesToolsAndWeaponsAreNeverQuickLoaded() {
         final Model model = fixture();
         final UnitWithCargo ship = galleonInPort(model);
         onlyStock(model, GoodsType.HORSE, 100);
         stock(model, GoodsType.TOOLS, 100);
-        stock(model, GoodsType.MUSKET, 100);
+        stock(model, GoodsType.WEAPONS, 100);
 
         assertEquals(QuickCargoProblem.NO_STOCK,
                 choice(model, ship, QuickCargoAction.LOAD).getProblem()
@@ -206,8 +206,8 @@ class QuickCargoTest {
         final Model model = fixture();
         final UnitWithCargo ship = galleonInPort(model);
         onlyStock(model, GoodsType.ORE, 10);
-        ship.getCargo().getSlots().forEach(
-                slot -> slot.addGoods(Goods.of(GoodsType.CIGARS, 100)));
+        ship.getCargo().getSlots()
+                .forEach(slot -> slot.addGoods(Goods.of(GoodsType.WINE, 100)));
 
         assertEquals(QuickCargoProblem.NO_FREE_HOLD,
                 choice(model, ship, QuickCargoAction.LOAD).getProblem()
@@ -223,8 +223,7 @@ class QuickCargoTest {
         ship.getCargo().getSlotByIndex(0).store(passenger);
         onlyStock(model, GoodsType.ORE, 90);
         ship.getCargo().getSlotByIndex(1).addGoods(Goods.of(GoodsType.ORE, 30));
-        ship.getCargo().getSlotByIndex(2)
-                .addGoods(Goods.of(GoodsType.CIGARS, 5));
+        ship.getCargo().getSlotByIndex(2).addGoods(Goods.of(GoodsType.WINE, 5));
         final int gold = dutch.getGold();
 
         // Only the free ten units fit; the passenger hold is not touched.
@@ -236,12 +235,12 @@ class QuickCargoTest {
         assertEquals(100, warehouse(model, GoodsType.ORE));
         assertEquals(Goods.of(GoodsType.ORE, 20), hold(ship, 1));
 
-        // The first hold cannot unload, so cigars that would fit are not used.
+        // The first hold cannot unload, so wine that would fit are not used.
         assertEquals(QuickCargoProblem.WAREHOUSE_FULL,
                 choice(model, ship, QuickCargoAction.UNLOAD).getProblem()
                         .orElseThrow());
         assertEquals(Goods.of(GoodsType.ORE, 20), hold(ship, 1));
-        assertEquals(Goods.of(GoodsType.CIGARS, 5), hold(ship, 2));
+        assertEquals(Goods.of(GoodsType.WINE, 5), hold(ship, 2));
         assertTrue(ship.getCargo().getSlotByIndex(0).getUnit().isPresent());
         assertEquals(gold, dutch.getGold());
     }
@@ -254,15 +253,14 @@ class QuickCargoTest {
         ship.getCargo().getSlotByIndex(0).store(passenger);
         onlyStock(model, GoodsType.ORE, 0);
         ship.getCargo().getSlotByIndex(1).addGoods(Goods.of(GoodsType.ORE, 30));
-        ship.getCargo().getSlotByIndex(2)
-                .addGoods(Goods.of(GoodsType.CIGARS, 5));
+        ship.getCargo().getSlotByIndex(2).addGoods(Goods.of(GoodsType.WINE, 5));
 
         model.confirmQuickCargo(offer(model, ship, QuickCargoAction.UNLOAD));
         assertEquals(30, warehouse(model, GoodsType.ORE));
         assertTrue(ship.getCargo().getSlotByIndex(1).isEmpty());
 
         model.confirmQuickCargo(offer(model, ship, QuickCargoAction.UNLOAD));
-        assertEquals(5, warehouse(model, GoodsType.CIGARS));
+        assertEquals(5, warehouse(model, GoodsType.WINE));
         assertTrue(ship.getCargo().getSlotByIndex(2).isEmpty());
 
         assertEquals(QuickCargoProblem.NO_GOODS,

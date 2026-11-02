@@ -57,10 +57,10 @@ import javafx.stage.Stage;
  * <li>Turn 10: ore 36, tools 24; the shop is built once: hammers 64 to 0, tools
  * 24 to 4, house 0, shop 1.</li>
  * </ul>
- * Unrelated goods never change: muskets 50 in both colonies, no horses, and the
- * galleon's rum, sugar, tobacco and cotton 100 each. Residents stay 5 and 1.
- * The first test saves and continues mid-leg in cycle 1 and again between the
- * two complete cycles; the second runs without leaving the game, and both
+ * Unrelated goods never change: weapons 50 in both colonies, no horses, and the
+ * galleon's olive oil, olives, grapes and wool 100 each. Residents stay 5 and
+ * 1. The first test saves and continues mid-leg in cycle 1 and again between
+ * the two complete cycles; the second runs without leaving the game, and both
  * expect the same balances.
  */
 @ExtendWith(ApplicationExtension.class)
@@ -114,10 +114,10 @@ public class TC_185_F218_connected_production_network_test
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.ORE, 0);
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.TOOLS, 0);
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.HAMMERS, 64);
-        ledger.verifyStock(NEW_AMSTERDAM, GoodsType.MUSKET, 50);
+        ledger.verifyStock(NEW_AMSTERDAM, GoodsType.WEAPONS, 50);
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.HORSE, 0);
         ledger.verifyStock(DELFT, GoodsType.ORE, 0);
-        ledger.verifyStock(DELFT, GoodsType.MUSKET, 50);
+        ledger.verifyStock(DELFT, GoodsType.WEAPONS, 50);
         ledger.verifyResidents(NEW_AMSTERDAM, 5);
         ledger.verifyResidents(DELFT, 1);
         ledger.verifyBuilding(NEW_AMSTERDAM, ConstructionType.BLACKSMITHS_HOUSE,
@@ -127,10 +127,10 @@ public class TC_185_F218_connected_production_network_test
         ledger.verifyUnitType(STUDENT, UnitType.COLONIST);
         cargo.verifyUnitAt(WAGON, DELFT_LOCATION);
         cargo.verifyHold(GALLEON, 0, Goods.of(GoodsType.ORE, 60));
-        cargo.verifyHold(GALLEON, 1, Goods.of(GoodsType.RUM, 100));
-        cargo.verifyHold(GALLEON, 3, Goods.of(GoodsType.SUGAR, 100));
-        cargo.verifyHold(GALLEON, 4, Goods.of(GoodsType.TOBACCO, 100));
-        cargo.verifyHold(GALLEON, 5, Goods.of(GoodsType.COTTON, 100));
+        cargo.verifyHold(GALLEON, 1, Goods.of(GoodsType.OLIVE_OIL, 100));
+        cargo.verifyHold(GALLEON, 3, Goods.of(GoodsType.OLIVES, 100));
+        cargo.verifyHold(GALLEON, 4, Goods.of(GoodsType.GRAPES, 100));
+        cargo.verifyHold(GALLEON, 5, Goods.of(GoodsType.WOOL, 100));
 
         // New Amsterdam teaches the student and queues the shop upgrade.
         ColonyScreen colony = game.openColonyAt(NEW_AMSTERDAM_LOCATION,
@@ -205,9 +205,9 @@ public class TC_185_F218_connected_production_network_test
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.ORE, 0);
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.TOOLS, 0);
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.HAMMERS, 64);
-        ledger.verifyStock(NEW_AMSTERDAM, GoodsType.MUSKET, 50);
+        ledger.verifyStock(NEW_AMSTERDAM, GoodsType.WEAPONS, 50);
         ledger.verifyStock(DELFT, GoodsType.ORE, 0);
-        ledger.verifyStock(DELFT, GoodsType.MUSKET, 50);
+        ledger.verifyStock(DELFT, GoodsType.WEAPONS, 50);
         ledger.verifyCourse(NEW_AMSTERDAM, TEACHER, STUDENT,
                 UnitType.MASTER_CARPENTER, 2, 4);
         colony = game.openColonyAt(NEW_AMSTERDAM_LOCATION, "New Amsterdam");
@@ -317,7 +317,7 @@ public class TC_185_F218_connected_production_network_test
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.ORE, 48);
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.TOOLS, 12);
         ledger.verifyStock(DELFT, GoodsType.ORE, 0);
-        ledger.verifyStock(DELFT, GoodsType.MUSKET, 50);
+        ledger.verifyStock(DELFT, GoodsType.WEAPONS, 50);
         ledger.verifyQueue(NEW_AMSTERDAM, "BLACKSMITHS_SHOP");
 
         // Turn 9: two tools are still missing.
@@ -341,14 +341,14 @@ public class TC_185_F218_connected_production_network_test
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.HAMMERS, 0);
 
         // The end state: unrelated goods, workers and food are untouched.
-        ledger.verifyStock(NEW_AMSTERDAM, GoodsType.MUSKET, 50);
+        ledger.verifyStock(NEW_AMSTERDAM, GoodsType.WEAPONS, 50);
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.HORSE, 0);
-        ledger.verifyStock(DELFT, GoodsType.MUSKET, 50);
+        ledger.verifyStock(DELFT, GoodsType.WEAPONS, 50);
         ledger.verifyStock(DELFT, GoodsType.HORSE, 0);
-        cargo.verifyHold(GALLEON, 1, Goods.of(GoodsType.RUM, 100));
-        cargo.verifyHold(GALLEON, 3, Goods.of(GoodsType.SUGAR, 100));
-        cargo.verifyHold(GALLEON, 4, Goods.of(GoodsType.TOBACCO, 100));
-        cargo.verifyHold(GALLEON, 5, Goods.of(GoodsType.COTTON, 100));
+        cargo.verifyHold(GALLEON, 1, Goods.of(GoodsType.OLIVE_OIL, 100));
+        cargo.verifyHold(GALLEON, 3, Goods.of(GoodsType.OLIVES, 100));
+        cargo.verifyHold(GALLEON, 4, Goods.of(GoodsType.GRAPES, 100));
+        cargo.verifyHold(GALLEON, 5, Goods.of(GoodsType.WOOL, 100));
         ledger.verifyResidents(NEW_AMSTERDAM, 5);
         ledger.verifyResidents(DELFT, 1);
         ledger.verifyResident(NEW_AMSTERDAM, STUDENT);
@@ -476,13 +476,13 @@ public class TC_185_F218_connected_production_network_test
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.ORE, 36);
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.TOOLS, 4);
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.HAMMERS, 0);
-        ledger.verifyStock(NEW_AMSTERDAM, GoodsType.MUSKET, 50);
-        ledger.verifyStock(DELFT, GoodsType.MUSKET, 50);
+        ledger.verifyStock(NEW_AMSTERDAM, GoodsType.WEAPONS, 50);
+        ledger.verifyStock(DELFT, GoodsType.WEAPONS, 50);
         ledger.verifyStock(DELFT, GoodsType.ORE, 0);
-        cargo.verifyHold(GALLEON, 1, Goods.of(GoodsType.RUM, 100));
-        cargo.verifyHold(GALLEON, 3, Goods.of(GoodsType.SUGAR, 100));
-        cargo.verifyHold(GALLEON, 4, Goods.of(GoodsType.TOBACCO, 100));
-        cargo.verifyHold(GALLEON, 5, Goods.of(GoodsType.COTTON, 100));
+        cargo.verifyHold(GALLEON, 1, Goods.of(GoodsType.OLIVE_OIL, 100));
+        cargo.verifyHold(GALLEON, 3, Goods.of(GoodsType.OLIVES, 100));
+        cargo.verifyHold(GALLEON, 4, Goods.of(GoodsType.GRAPES, 100));
+        cargo.verifyHold(GALLEON, 5, Goods.of(GoodsType.WOOL, 100));
         ledger.verifyResidents(NEW_AMSTERDAM, 5);
         ledger.verifyResidents(DELFT, 1);
         ledger.verifyColonyFed(NEW_AMSTERDAM);

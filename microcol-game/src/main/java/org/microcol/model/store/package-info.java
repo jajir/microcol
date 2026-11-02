@@ -21,7 +21,7 @@
  * purchase history uses a sparse type-name/count map, independent of
  * recruitment; the model rejects unsupported types and invalid counts.
  *
- * Congress stores the frozen offer, selected objective, separate bell account,
+ * Congress stores the frozen offer, selected objective, separate owl account,
  * membership and pending Jones delivery. Colonial state is required; loading
  * restores it without rerolling candidates or dispatching an arrival.
  *

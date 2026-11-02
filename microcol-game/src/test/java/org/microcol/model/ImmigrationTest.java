@@ -45,10 +45,10 @@ class ImmigrationTest {
                 .count();
     }
 
-    private int crossProduction(final Player player) {
+    private int torchProduction(final Player player) {
         return player.getColonies().stream()
                 .mapToInt(colony -> colony.getGoodsStats()
-                        .getStatsByType(GoodsType.CROSS).getRowProduction())
+                        .getStatsByType(GoodsType.TORCHES).getRowProduction())
                 .sum();
     }
 
@@ -67,33 +67,33 @@ class ImmigrationTest {
     @Test
     void thresholdMinusOneWaitsUntilNextTurnAndProductionCreditsOnce() {
         final GameModelPo data = scenario();
-        savedDutchPool(data).setCrosses(99);
+        savedDutchPool(data).setTorches(99);
         final Model model = load(data);
         final Player dutch = model.getPlayerByName("Dutch");
-        final int produced = crossProduction(dutch);
+        final int produced = torchProduction(dutch);
         final long pierBefore = pierPeople(dutch);
         final List<Integer> candidates = candidateIds(dutch);
         assertTrue(produced > 0);
         assertFalse(dutch.hasPendingImmigrant());
         advanceToNextDutchTurn(model);
-        assertEquals(99 + produced, dutch.getImmigrationCrosses());
+        assertEquals(99 + produced, dutch.getImmigrationTorches());
         assertTrue(dutch.hasPendingImmigrant());
         assertEquals(pierBefore, pierPeople(dutch));
         assertEquals(candidates, candidateIds(dutch));
         advanceToNextDutchTurn(model);
         assertEquals(pierBefore + 1, pierPeople(dutch));
         assertEquals(1, dutch.save().getRecruitment().getEarnedImmigrants());
-        assertEquals(99 + produced * 2 - 100, dutch.getImmigrationCrosses());
+        assertEquals(99 + produced * 2 - 100, dutch.getImmigrationTorches());
     }
 
     @Test
     void exactAndSurplusThresholdsMaterializeOneChosenCandidate() {
-        for (final int initialCrosses : new int[] { 100, 101 }) {
+        for (final int initialTorches : new int[] { 100, 101 }) {
             final GameModelPo data = scenario();
-            savedDutchPool(data).setCrosses(initialCrosses);
+            savedDutchPool(data).setTorches(initialTorches);
             final Model model = load(data);
             final Player dutch = model.getPlayerByName("Dutch");
-            final int produced = crossProduction(dutch);
+            final int produced = torchProduction(dutch);
             final int gold = dutch.getGold();
             final long pierBefore = pierPeople(dutch);
             final List<Integer> ids = candidateIds(dutch);
@@ -119,8 +119,8 @@ class ImmigrationTest {
             }
             assertTrue(changedSlot >= 0);
             assertSame(types.get(changedSlot), immigrant.getType());
-            assertEquals(initialCrosses - 100 + produced,
-                    dutch.getImmigrationCrosses());
+            assertEquals(initialTorches - 100 + produced,
+                    dutch.getImmigrationTorches());
             assertEquals(125, dutch.getImmigrationTarget());
             assertEquals(1,
                     dutch.save().getRecruitment().getEarnedImmigrants());
@@ -132,15 +132,15 @@ class ImmigrationTest {
     @Test
     void twoEarnedArrivalsConsumeIncreasingTargetsAndResumeDoesNotReplay() {
         final GameModelPo data = scenario();
-        savedDutchPool(data).setCrosses(230);
+        savedDutchPool(data).setTorches(230);
         final Model model = load(data);
         final Player dutch = model.getPlayerByName("Dutch");
-        final int produced = crossProduction(dutch);
+        final int produced = torchProduction(dutch);
         final int gold = dutch.getGold();
         final long pierBefore = pierPeople(dutch);
         advanceToNextDutchTurn(model);
         assertEquals(pierBefore + 2, pierPeople(dutch));
-        assertEquals(5 + produced, dutch.getImmigrationCrosses());
+        assertEquals(5 + produced, dutch.getImmigrationTorches());
         assertEquals(150, dutch.getImmigrationTarget());
         assertEquals(2, dutch.save().getRecruitment().getEarnedImmigrants());
         assertEquals(0, dutch.save().getRecruitment().getPaidPassages());
@@ -151,11 +151,11 @@ class ImmigrationTest {
                 MissionImpl.getPredefinedGameOverEvaluators());
         final Player reloaded = resumed.getPlayerByName("Dutch");
         final long savedPier = pierPeople(reloaded);
-        final int savedCrosses = reloaded.getImmigrationCrosses();
+        final int savedTorches = reloaded.getImmigrationTorches();
         final List<Integer> savedCandidates = candidateIds(reloaded);
         resumed.startGame();
         assertEquals(savedPier, pierPeople(reloaded));
-        assertEquals(savedCrosses, reloaded.getImmigrationCrosses());
+        assertEquals(savedTorches, reloaded.getImmigrationTorches());
         assertEquals(savedCandidates, candidateIds(reloaded));
         assertEquals(2, reloaded.save().getRecruitment().getEarnedImmigrants());
     }
@@ -166,20 +166,20 @@ class ImmigrationTest {
         final Player dutch = model.getPlayerByName("Dutch");
         final Colony first = model.getColonyById(0).orElseThrow();
         final Colony second = model.getColonyById(1).orElseThrow();
-        first.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
-        second.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
+        first.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
+        second.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
         final int firstProduced = first.getGoodsStats()
-                .getStatsByType(GoodsType.CROSS).getRowProduction();
+                .getStatsByType(GoodsType.TORCHES).getRowProduction();
         final int secondProduced = second.getGoodsStats()
-                .getStatsByType(GoodsType.CROSS).getRowProduction();
-        final int before = dutch.getImmigrationCrosses();
+                .getStatsByType(GoodsType.TORCHES).getRowProduction();
+        final int before = dutch.getImmigrationTorches();
         assertTrue(firstProduced > 0);
         assertTrue(secondProduced > 0);
         first.startTurn();
-        assertEquals(before + firstProduced, dutch.getImmigrationCrosses());
+        assertEquals(before + firstProduced, dutch.getImmigrationTorches());
         second.startTurn();
         assertEquals(before + firstProduced + secondProduced,
-                dutch.getImmigrationCrosses());
+                dutch.getImmigrationTorches());
     }
 
     @Test
@@ -190,14 +190,14 @@ class ImmigrationTest {
                 EuropeanNation.ENGLISH, Difficulty.CONQUISTADOR));
         source.getModel().getGameManager().getPlayers().stream()
                 .filter(player -> "England".equals(player.getName()))
-                .findFirst().orElseThrow().getRecruitment().setCrosses(67);
+                .findFirst().orElseThrow().getRecruitment().setTorches(67);
         final Model model = load(source);
         final Player england = model.getPlayerByName("England");
         assertEquals(67, england.getImmigrationTarget());
         assertTrue(england.hasPendingImmigrant());
         model.startGame();
         assertEquals(1, pierPeople(england));
-        assertEquals(0, england.getImmigrationCrosses());
+        assertEquals(0, england.getImmigrationTorches());
         assertEquals(84, england.getImmigrationTarget());
         assertEquals(1, england.save().getRecruitment().getEarnedImmigrants());
     }
@@ -218,17 +218,17 @@ class ImmigrationTest {
     @Test
     void overflowingProductionAndExhaustedCandidateTokensDoNotPartiallyApply() {
         final GameModelPo overflow = scenario();
-        savedDutchPool(overflow).setCrosses(Integer.MAX_VALUE);
+        savedDutchPool(overflow).setTorches(Integer.MAX_VALUE);
         final Model producing = load(overflow);
         final Player dutch = producing.getPlayerByName("Dutch");
         final Colony colony = producing.getColonyById(0).orElseThrow();
         final String before = new Gson().toJson(producing.save());
         assertThrows(ArithmeticException.class, colony::startTurn);
         assertEquals(before, new Gson().toJson(producing.save()));
-        assertEquals(Integer.MAX_VALUE, dutch.getImmigrationCrosses());
+        assertEquals(Integer.MAX_VALUE, dutch.getImmigrationTorches());
 
         final GameModelPo exhausted = scenario();
-        savedDutchPool(exhausted).setCrosses(100);
+        savedDutchPool(exhausted).setTorches(100);
         savedDutchPool(exhausted).setNextCandidateId(Integer.MAX_VALUE);
         final Model blocked = load(exhausted);
         final Player blockedDutch = blocked.getPlayerByName("Dutch");
@@ -244,7 +244,7 @@ class ImmigrationTest {
     @Test
     void exhaustedUnitIdsAndProspectiveTargetOverflowLeaveEarnedStateUntouched() {
         final GameModelPo noUnitIds = scenario();
-        savedDutchPool(noUnitIds).setCrosses(100);
+        savedDutchPool(noUnitIds).setTorches(100);
         final UnitPo finalId = new UnitPo();
         finalId.setId(Integer.MAX_VALUE - 1);
         finalId.setOwnerId("Dutch");
@@ -267,7 +267,7 @@ class ImmigrationTest {
 
         final GameModelPo noNextTarget = scenario();
         savedDutchPool(noNextTarget).setEarnedImmigrants(85_899_341);
-        savedDutchPool(noNextTarget).setCrosses(2_147_483_625);
+        savedDutchPool(noNextTarget).setTorches(2_147_483_625);
         final Model threshold = load(noNextTarget);
         final Player thresholdDutch = threshold.getPlayerByName("Dutch");
         final long thresholdPier = pierPeople(thresholdDutch);
@@ -280,9 +280,9 @@ class ImmigrationTest {
     }
 
     @Test
-    void twoHundredThirtyCrossesSettleTwiceLeavingFiveWithoutProduction() {
+    void twoHundredThirtyTorchesSettleTwiceLeavingFiveWithoutProduction() {
         final RecruitmentPo initial = savedDutchPool(scenario());
-        initial.setCrosses(230);
+        initial.setTorches(230);
         final RecruitmentPool pool = new RecruitmentPool(initial);
         final int first = pool.checkCanSettleEarned(Difficulty.CONQUISTADOR,
                 "Dutch");
@@ -292,7 +292,7 @@ class ImmigrationTest {
                 "Dutch");
         assertEquals(125, second);
         pool.settleEarned(pool.chooseEarnedSlot(), second, false);
-        assertEquals(5, pool.getCrosses());
+        assertEquals(5, pool.getTorches());
         assertEquals(150, pool.getTarget(Difficulty.CONQUISTADOR, "Dutch"));
         assertFalse(pool.hasReachedTarget(Difficulty.CONQUISTADOR, "Dutch"));
         assertEquals(2, pool.save().getEarnedImmigrants());
@@ -309,7 +309,7 @@ class ImmigrationTest {
                             EuropeanNation.ENGLISH, Difficulty.CONQUISTADOR));
             source.getModel().getGameManager().getPlayers().stream()
                     .filter(player -> "Dutch".equals(player.getName()))
-                    .findFirst().orElseThrow().getRecruitment().setCrosses(100);
+                    .findFirst().orElseThrow().getRecruitment().setTorches(100);
             RebellionFixtures.set(source.getModel(),
                     source.getModel().getGameManager().getPlayers().stream()
                             .filter(player -> "Dutch".equals(player.getName()))
@@ -324,7 +324,7 @@ class ImmigrationTest {
             }
             assertEquals(independent ? 0 : 1, pierPeople(computer));
             assertEquals(independent ? 100 : 0,
-                    computer.getImmigrationCrosses());
+                    computer.getImmigrationTorches());
             assertEquals(independent ? 0 : 1,
                     computer.save().getRecruitment().getEarnedImmigrants());
         }

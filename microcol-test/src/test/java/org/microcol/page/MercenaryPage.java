@@ -227,7 +227,7 @@ public final class MercenaryPage extends AbstractScreen {
         for (final UnitFreeColonist soldier : veterans) {
             assertEquals(dutch(), soldier.getOwner());
             assertTrue(soldier.isVeteran());
-            assertTrue(soldier.isHoldingGuns());
+            assertTrue(soldier.isHoldingWeapons());
             assertEquals(MilitaryRole.COLONIAL, soldier.getMilitaryRole());
             assertFalse(soldier.isInterventionDelivered());
             assertEquals(port, soldier.getLocation());

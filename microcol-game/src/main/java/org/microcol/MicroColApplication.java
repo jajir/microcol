@@ -35,6 +35,12 @@ public final class MicroColApplication extends Application {
 
     private Injector injector;
 
+    /**
+     * Stops the development style sheet reloading started by this application.
+     */
+    private Runnable stopStyleSheetReloading = () -> {
+    };
+
     public MicroColApplication() {
         this(new ClassesForMocking());
     }
@@ -56,7 +62,13 @@ public final class MicroColApplication extends Application {
                 .getInstance(GamePreferences.class);
         if (gamePreferences.isDevelopment()) {
             logger.info("Appliaction started in development mode.");
-            CSSFX.start();
+            // CSSFX 11 retains global window listeners even after its stopper
+            // runs.
+            // Automated UI tests reload whole applications, not stylesheet
+            // files.
+            if (!Boolean.getBoolean("microcol.test.disableCssReload")) {
+                stopStyleSheetReloading = CSSFX.start();
+            }
         } else {
             logger.info("Appliaction started in production mode.");
         }
@@ -121,13 +133,21 @@ public final class MicroColApplication extends Application {
                 "MicroCol diagnostic log: " + diagnosticLog.getActiveFile());
     }
 
+    /**
+     * Stops what this application started. The primary stage may outlive it, so
+     * listeners added to that stage are removed as well.
+     */
     @Override
     public void stop() {
+        stopStyleSheetReloading.run();
+        stopStyleSheetReloading = () -> {
+        };
         if (injector != null) {
             injector.getInstance(SuccessCuePlayer.class).stop();
             injector.getInstance(MusicController.class).stop();
             injector.getInstance(
                     org.microcol.gui.screen.MainPanelPresenter.class).stop();
+            injector.getInstance(MainStageBuilder.class).releasePrimaryStage();
         }
     }
 

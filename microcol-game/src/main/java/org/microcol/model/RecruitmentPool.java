@@ -25,7 +25,7 @@ public final class RecruitmentPool {
 
     private int paidPassages;
 
-    private int crosses;
+    private int torches;
 
     private int earnedImmigrants;
 
@@ -38,8 +38,8 @@ public final class RecruitmentPool {
                 "Recruitment requires three candidates");
         Preconditions.checkArgument(po.getNextCandidateId() != null
                 && po.getNextCandidateId() > 0 && po.getPaidPassages() != null
-                && po.getPaidPassages() >= 0 && po.getCrosses() != null
-                && po.getCrosses() >= 0 && po.getEarnedImmigrants() != null
+                && po.getPaidPassages() >= 0 && po.getTorches() != null
+                && po.getTorches() >= 0 && po.getEarnedImmigrants() != null
                 && po.getEarnedImmigrants() >= 0
                 && po.getPendingEarnedChoice() != null,
                 "Invalid recruitment counters");
@@ -60,7 +60,7 @@ public final class RecruitmentPool {
                 .add(candidate(candidate.getId(), candidate.getType())));
         nextCandidateId = po.getNextCandidateId();
         paidPassages = po.getPaidPassages();
-        crosses = po.getCrosses();
+        torches = po.getTorches();
         earnedImmigrants = po.getEarnedImmigrants();
         pendingEarnedChoice = po.getPendingEarnedChoice();
     }
@@ -72,7 +72,7 @@ public final class RecruitmentPool {
                 candidate(2, draw(random)), candidate(3, draw(random))));
         po.setNextCandidateId(4);
         po.setPaidPassages(0);
-        po.setCrosses(0);
+        po.setTorches(0);
         po.setEarnedImmigrants(0);
         po.setPendingEarnedChoice(false);
         return po;
@@ -170,7 +170,7 @@ public final class RecruitmentPool {
 
     private int priceAt(final Difficulty difficulty, final String nation,
             final int passages) {
-        return priceAt(difficulty, nation, passages, earnedImmigrants, crosses);
+        return priceAt(difficulty, nation, passages, earnedImmigrants, torches);
     }
 
     private int priceAt(final Difficulty difficulty, final String nation,
@@ -186,7 +186,7 @@ public final class RecruitmentPool {
     }
 
     boolean hasReachedTarget(final Difficulty difficulty, final String nation) {
-        return crosses >= target(difficulty, nation, earnedImmigrants);
+        return torches >= target(difficulty, nation, earnedImmigrants);
     }
 
     boolean isPendingEarnedChoice() {
@@ -232,29 +232,29 @@ public final class RecruitmentPool {
         }
     }
 
-    int getCrosses() {
-        return crosses;
+    int getTorches() {
+        return torches;
     }
 
     int getTarget(final Difficulty difficulty, final String nation) {
         return target(difficulty, nation, earnedImmigrants);
     }
 
-    void checkCanCreditCrosses(final int produced) {
+    void checkCanCreditTorches(final int produced) {
         Preconditions.checkArgument(produced >= 0,
-                "Cross production cannot be negative");
-        Math.addExact(crosses, produced);
+                "Torch production cannot be negative");
+        Math.addExact(torches, produced);
     }
 
-    void creditCrosses(final int produced) {
-        checkCanCreditCrosses(produced);
-        crosses += produced;
+    void creditTorches(final int produced) {
+        checkCanCreditTorches(produced);
+        torches += produced;
     }
 
     /** Validate the next persistent state before materializing a unit. */
     int checkCanSettleEarned(final Difficulty difficulty, final String nation) {
         final int currentTarget = getTarget(difficulty, nation);
-        Preconditions.checkState(crosses >= currentTarget,
+        Preconditions.checkState(torches >= currentTarget,
                 "No earned immigrant is pending");
         Preconditions.checkState(
                 nextCandidateId < Integer.MAX_VALUE
@@ -263,7 +263,7 @@ public final class RecruitmentPool {
         try {
             final int followingTarget = target(difficulty, nation,
                     earnedImmigrants + 1);
-            final int remaining = crosses - currentTarget;
+            final int remaining = torches - currentTarget;
             priceAt(difficulty, nation, paidPassages, earnedImmigrants + 1,
                     remaining);
             Preconditions.checkState(followingTarget > 0);
@@ -293,7 +293,7 @@ public final class RecruitmentPool {
         for (int slot = 0; slot < candidates.size(); slot++) {
             final RecruitmentCandidatePo candidate = candidates.get(slot);
             out.add(new EarnedImmigrationOffer(this, player, slot,
-                    candidate.getId(), candidate.getType(), threshold, crosses,
+                    candidate.getId(), candidate.getType(), threshold, torches,
                     earnedImmigrants));
         }
         return List.copyOf(out);
@@ -305,7 +305,7 @@ public final class RecruitmentPool {
         if (!pendingEarnedChoice || offer == null || offer.getPool() != this
                 || offer.getPlayer() != player || offer.getSlot() < 0
                 || offer.getSlot() >= candidates.size()
-                || offer.getCrosses() != crosses
+                || offer.getTorches() != torches
                 || offer.getEarnedImmigrants() != earnedImmigrants
                 || offer.getThreshold() != getTarget(difficulty, nation)
                 || !hasReachedTarget(difficulty, nation)) {
@@ -319,7 +319,7 @@ public final class RecruitmentPool {
 
     void settleEarned(final int slot, final int currentTarget,
             final boolean brewster) {
-        crosses -= currentTarget;
+        torches -= currentTarget;
         earnedImmigrants++;
         candidates.set(slot,
                 candidate(nextCandidateId++, draw(random, brewster)));
@@ -333,7 +333,7 @@ public final class RecruitmentPool {
         for (int slot = 0; slot < 3; slot++) {
             final RecruitmentCandidatePo candidate = candidates.get(slot);
             offers.add(new RecruitmentOffer(this, slot, candidate.getId(),
-                    candidate.getType(), price, paidPassages, crosses,
+                    candidate.getType(), price, paidPassages, torches,
                     earnedImmigrants));
         }
         return List.copyOf(offers);
@@ -344,7 +344,7 @@ public final class RecruitmentPool {
         if (offer == null || offer.getPool() != this || offer.getSlot() < 0
                 || offer.getSlot() >= 3 || hasReachedTarget(difficulty, nation)
                 || offer.getPaidPassages() != paidPassages
-                || offer.getCrosses() != crosses
+                || offer.getTorches() != torches
                 || offer.getEarnedImmigrants() != earnedImmigrants) {
             return false;
         }
@@ -381,7 +381,7 @@ public final class RecruitmentPool {
         po.setCandidates(saved);
         po.setNextCandidateId(nextCandidateId);
         po.setPaidPassages(paidPassages);
-        po.setCrosses(crosses);
+        po.setTorches(torches);
         po.setEarnedImmigrants(earnedImmigrants);
         po.setPendingEarnedChoice(pendingEarnedChoice);
         return po;

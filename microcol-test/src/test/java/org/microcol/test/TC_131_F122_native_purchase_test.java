@@ -37,14 +37,14 @@ public class TC_131_F122_native_purchase_test extends AbstractMicroColTest {
     private static final File FIXTURE = new File(
             "src/test/scenarios/F106-native-turns.microcol");
 
-    /** The Aztec capital, with corn and tobacco on offer. */
+    /** The Aztec capital, with grain and grapes on offer. */
     private static final Location CAPITAL = Location.of(23, 15);
 
     /** Ordinary scout, land square west of the capital. */
     private static final int SCOUT_ID = 300;
     private static final Location SCOUT_AT = Location.of(22, 15);
 
-    /** Loaded wagon of fifty corn, land square north of the capital. */
+    /** Loaded wagon of fifty grain, land square north of the capital. */
     private static final int WAGON_ID = 301;
     private static final Location WAGON_AT = Location.of(23, 14);
 
@@ -52,7 +52,7 @@ public class TC_131_F122_native_purchase_test extends AbstractMicroColTest {
     private static final int SHIP_ID = 302;
     private static final Location SHIP_AT = Location.of(24, 16);
 
-    private static final GoodsType CORN = GoodsType.CORN;
+    private static final GoodsType GRAIN = GoodsType.GRAIN;
 
     /** The whole load of the wagon. */
     private static final int LOAD = 50;
@@ -88,11 +88,11 @@ public class TC_131_F122_native_purchase_test extends AbstractMicroColTest {
         market.verifyPurchaseShown(false);
 
         // Selling the whole load empties the wagon and opens the second stage.
-        market.verifySaleOffered(WAGON_ID, CAPITAL, CORN, LOAD);
+        market.verifySaleOffered(WAGON_ID, CAPITAL, GRAIN, LOAD);
         market.sell();
         market.confirmDeal();
-        market.verifyHeld(WAGON_ID, CORN, 0);
-        market.verifyReceived(CAPITAL, CORN, LOAD);
+        market.verifyHeld(WAGON_ID, GRAIN, 0);
+        market.verifyReceived(CAPITAL, GRAIN, LOAD);
         market.verifyPurchaseShown(true);
         market.verifyPurchaseOffers(WAGON_ID, CAPITAL);
 
@@ -164,11 +164,11 @@ public class TC_131_F122_native_purchase_test extends AbstractMicroColTest {
         market.openMarket();
         market.chooseSalePieces(30);
         market.verifySaleQuantity(30);
-        market.verifySaleOffered(WAGON_ID, CAPITAL, CORN, 30);
+        market.verifySaleOffered(WAGON_ID, CAPITAL, GRAIN, 30);
         market.sell();
         market.confirmDeal();
-        market.verifyHeld(WAGON_ID, CORN, LOAD - 30);
-        market.verifyReceived(CAPITAL, CORN, 30);
+        market.verifyHeld(WAGON_ID, GRAIN, LOAD - 30);
+        market.verifyReceived(CAPITAL, GRAIN, 30);
         market.verifyPurchaseShown(true);
 
         // Four pieces are chosen with the keyboard, then the one request is
@@ -244,8 +244,8 @@ public class TC_131_F122_native_purchase_test extends AbstractMicroColTest {
         market.verifySaleQuantity(30);
         market.sell();
         market.confirmDeal();
-        market.verifyHeld(WAGON_ID, CORN, LOAD - 30);
-        market.verifyReceived(CAPITAL, CORN, 30);
+        market.verifyHeld(WAGON_ID, GRAIN, LOAD - 30);
+        market.verifyReceived(CAPITAL, GRAIN, 30);
         market.verifyPurchaseShown(true);
 
         final GoodsType bought = market.purchaseGoods();
@@ -264,7 +264,7 @@ public class TC_131_F122_native_purchase_test extends AbstractMicroColTest {
         market.verifyGold(gold);
         market.verifyStock(CAPITAL, bought, stock);
         market.verifyTreasury(CAPITAL, treasury);
-        market.verifyReceived(CAPITAL, CORN, 30);
+        market.verifyReceived(CAPITAL, GRAIN, 30);
         visit.escape();
         visit.verifyChooserClosed();
 

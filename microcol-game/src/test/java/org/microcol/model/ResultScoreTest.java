@@ -14,10 +14,10 @@ import org.junit.jupiter.params.provider.CsvSource;
 class ResultScoreTest {
 
     private static ResultScore score(final int base, final int destroyed,
-            final Difficulty difficulty, final long bells, final Integer order,
+            final Difficulty difficulty, final long owls, final Integer order,
             final Integer year) {
         return ResultScore.of(BaseScore.of(0, 0, 0, 0, 0L, base), destroyed,
-                difficulty, bells, order, year);
+                difficulty, owls, order, year);
     }
 
     @Test
@@ -40,7 +40,7 @@ class ResultScoreTest {
     void eachDifficultyDeductsItsSettlementPointsAndFloorsItsFactorOnce(
             final Difficulty difficulty, final long pointsPerSettlement,
             final long clampedBase, final long total) {
-        // Base 40 with 10 bells, two destroyed settlements, the first order
+        // Base 40 with 10 owls, two destroyed settlements, the first order
         // and the declaration in 1770: 40 + 10 - 2 x points, then the bonus
         // and early points, then the factor, floored once.
         final ResultScore result = score(40, 2, difficulty, 10, 1, 1770);
@@ -123,10 +123,10 @@ class ResultScoreTest {
     }
 
     @Test
-    void postTargetBellsAddToTheBaseAndAreNotCountedTwice() {
+    void postTargetOwlsAddToTheBaseAndAreNotCountedTwice() {
         final ResultScore result = score(10, 0, Difficulty.CONQUISTADOR, 25,
                 null, null);
-        assertEquals(25, result.getBellsAfterTarget());
+        assertEquals(25, result.getOwlsAfterTarget());
         assertEquals(35, result.getClampedBase());
         assertEquals(35, result.getTotal());
     }

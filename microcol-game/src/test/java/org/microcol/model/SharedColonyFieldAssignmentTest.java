@@ -33,7 +33,7 @@ class SharedColonyFieldAssignmentTest {
             final boolean shared = field.getDirection()
                     .equals(Direction.west.getVector());
             field.setWorkerId(shared ? 6 : null);
-            field.setProducedGoodsType(shared ? GoodsType.CORN : null);
+            field.setProducedGoodsType(shared ? GoodsType.GRAIN : null);
         }
         final Map<Location, TerrainType> terrain = data.getModel().getMap()
                 .getTerrainMap();
@@ -66,9 +66,9 @@ class SharedColonyFieldAssignmentTest {
 
         assertTrue(target.isEmpty());
         assertTrue(target.isWorkedByAnotherColony());
-        assertFalse(target.canAccept(worker, GoodsType.CORN));
+        assertFalse(target.canAccept(worker, GoodsType.GRAIN));
         assertThrows(IllegalStateException.class,
-                () -> worker.placeToColonyField(target, GoodsType.CORN));
+                () -> worker.placeToColonyField(target, GoodsType.GRAIN));
 
         assertSame(original, worker.getPlaceColonyField());
         assertEquals(before, snapshot(model));
@@ -81,7 +81,7 @@ class SharedColonyFieldAssignmentTest {
         final Unit neighborWorker = model.getUnitById(6);
         neighborWorker.placeToColonyField(
                 neighbor.getColonyFieldInDirection(Direction.east),
-                GoodsType.CORN);
+                GoodsType.GRAIN);
         assertSame(neighbor, model.getColonyById(1).orElseThrow());
         assertEquals(1, neighbor.getUnitsInsideColony().size());
 
@@ -89,11 +89,11 @@ class SharedColonyFieldAssignmentTest {
                 .getColonyFieldInDirection(Direction.east);
         final Unit worker = model.getUnitById(0);
         assertFalse(target.isWorkedByAnotherColony());
-        assertTrue(target.canAccept(worker, GoodsType.CORN));
-        worker.placeToColonyField(target, GoodsType.CORN);
-        target.setProducedGoodsType(worker, GoodsType.TOBACCO);
+        assertTrue(target.canAccept(worker, GoodsType.GRAIN));
+        worker.placeToColonyField(target, GoodsType.GRAIN);
+        target.setProducedGoodsType(worker, GoodsType.GRAPES);
         assertSame(worker, target.getUnit().orElseThrow());
-        assertEquals(GoodsType.TOBACCO,
+        assertEquals(GoodsType.GRAPES,
                 target.getProduction().orElseThrow().getType());
         assertEquals(3, target.getProduction().orElseThrow().getAmount());
         assertTrue(
@@ -101,7 +101,7 @@ class SharedColonyFieldAssignmentTest {
 
         final String before = snapshot(model);
         assertThrows(IllegalStateException.class, () -> target
-                .setProducedGoodsType(neighborWorker, GoodsType.CORN));
+                .setProducedGoodsType(neighborWorker, GoodsType.GRAIN));
         assertEquals(before, snapshot(model));
     }
 
@@ -114,17 +114,17 @@ class SharedColonyFieldAssignmentTest {
         final Unit expected = model.getUnitById(0);
         expected.placeToColonyField(
                 colony.getColonyFieldInDirection(Direction.north),
-                GoodsType.CORN);
+                GoodsType.GRAIN);
         final Unit replacement = model.getUnitById(4);
-        replacement.placeToColonyField(original, GoodsType.CORN);
+        replacement.placeToColonyField(original, GoodsType.GRAIN);
         final String before = snapshot(model);
 
         assertThrows(IllegalStateException.class, () -> original
-                .setProducedGoodsType(expected, GoodsType.TOBACCO));
+                .setProducedGoodsType(expected, GoodsType.GRAPES));
 
         assertEquals(before, snapshot(model));
         assertSame(replacement, original.getUnit().orElseThrow());
-        assertEquals(GoodsType.CORN,
+        assertEquals(GoodsType.GRAIN,
                 original.getProduction().orElseThrow().getType());
     }
 
@@ -137,9 +137,9 @@ class SharedColonyFieldAssignmentTest {
         final Unit worker = model.getUnitById(0);
         model.destroyColony(colony);
         final String before = snapshot(model);
-        assertFalse(target.canAccept(worker, GoodsType.CORN));
+        assertFalse(target.canAccept(worker, GoodsType.GRAIN));
         assertThrows(IllegalStateException.class,
-                () -> worker.placeToColonyField(target, GoodsType.CORN));
+                () -> worker.placeToColonyField(target, GoodsType.GRAIN));
         assertEquals(before, snapshot(model));
 
         final Model other = fixture();
@@ -149,9 +149,9 @@ class SharedColonyFieldAssignmentTest {
         final ColonyField available = other.getColonyById(0).orElseThrow()
                 .getColonyFieldInDirection(Direction.north);
         final String withoutWorker = snapshot(other);
-        assertFalse(available.canAccept(removed, GoodsType.CORN));
+        assertFalse(available.canAccept(removed, GoodsType.GRAIN));
         assertThrows(IllegalStateException.class,
-                () -> removed.placeToColonyField(available, GoodsType.CORN));
+                () -> removed.placeToColonyField(available, GoodsType.GRAIN));
         assertEquals(withoutWorker, snapshot(other));
     }
 
@@ -163,21 +163,21 @@ class SharedColonyFieldAssignmentTest {
         final ColonyField free = colony
                 .getColonyFieldInDirection(Direction.north);
         final String before = snapshot(model);
-        assertFalse(free.canAccept(worker, GoodsType.MUSKET));
+        assertFalse(free.canAccept(worker, GoodsType.WEAPONS));
         assertThrows(IllegalArgumentException.class,
-                () -> worker.placeToColonyField(free, GoodsType.MUSKET));
-        assertFalse(free.canAccept(null, GoodsType.CORN));
+                () -> worker.placeToColonyField(free, GoodsType.WEAPONS));
+        assertFalse(free.canAccept(null, GoodsType.GRAIN));
         assertFalse(free.canAccept(worker, null));
         final ColonyField occupied = colony
                 .getColonyFieldInDirection(Direction.south);
-        assertFalse(occupied.canAccept(worker, GoodsType.CORN));
+        assertFalse(occupied.canAccept(worker, GoodsType.GRAIN));
         assertThrows(IllegalStateException.class,
-                () -> worker.placeToColonyField(occupied, GoodsType.CORN));
+                () -> worker.placeToColonyField(occupied, GoodsType.GRAIN));
         final ColonyField stale = new ColonyField(model, Direction.north,
                 colony);
-        assertFalse(stale.canAccept(worker, GoodsType.CORN));
+        assertFalse(stale.canAccept(worker, GoodsType.GRAIN));
         assertThrows(IllegalStateException.class,
-                () -> worker.placeToColonyField(stale, GoodsType.CORN));
+                () -> worker.placeToColonyField(stale, GoodsType.GRAIN));
         assertEquals(before, snapshot(model));
     }
 
@@ -198,8 +198,8 @@ class SharedColonyFieldAssignmentTest {
         assertEquals(1, colony.getUnitsInsideColony().size());
         final ColonyField field = colony
                 .getColonyFieldInDirection(Direction.east);
-        assertTrue(field.canAccept(worker, GoodsType.CORN));
-        worker.placeToColonyField(field, GoodsType.CORN);
+        assertTrue(field.canAccept(worker, GoodsType.GRAIN));
+        worker.placeToColonyField(field, GoodsType.GRAIN);
 
         assertSame(colony, model.getColonyById(1).orElseThrow());
         assertTrue(slot.isEmpty());

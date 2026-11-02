@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 /**
  * UC-078: colonies keep liberty, the political report shows own national and
  * local rebel support, a completed resident exit applies the population cap and
- * one update credits its bells exactly once.
+ * one update credits its owls exactly once.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_75_F67_rebel_support_test extends AbstractMicroColTest {
@@ -76,7 +76,7 @@ public class TC_75_F67_rebel_support_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
-    void TC_02_one_update_credits_bells_once_and_continue_adds_nothing()
+    void TC_02_one_update_credits_owls_once_and_continue_adds_nothing()
             throws Exception {
         // 100 of 600 liberty is 16 percent after rounding down.
         RebelSupportPage support = new RebelSupportPage(getContext());
@@ -88,14 +88,14 @@ public class TC_75_F67_rebel_support_test extends AbstractMicroColTest {
         support.verifyNationalSupport(16, 3);
         support.verifyColonyRow(COLONY_NAME, 3, 100, 16);
         game = relations.close();
-        // The next update adds the planned town hall bells to liberty once.
-        support.rememberLibertyAndPlannedBells();
+        // The next update adds the planned town hall owls to liberty once.
+        support.rememberLibertyAndPlannedOwls();
         game.nextTurnAndCloseDialogs();
         support.verifyLibertyCreditedOnce();
         relations.open();
         support.verifyReportMatchesModel();
-        // Reopening the report and Continue do not create more bells.
-        support.rememberLibertyAndPlannedBells();
+        // Reopening the report and Continue do not create more owls.
+        support.rememberLibertyAndPlannedOwls();
         relations.close().exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
         support.verifyLibertyUnchanged();

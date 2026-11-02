@@ -60,11 +60,11 @@ class ColonyBreedingTest {
     private Colony withFoodAfterResidents(final Model model, final int food) {
         final Colony colony = model.getColonyById(0).orElseThrow();
         final GoodsProductionStats raw = colony.getRawGoodsStats()
-                .getStatsByType(GoodsType.CORN);
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN,
+                .getStatsByType(GoodsType.GRAIN);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN,
                 Math.subtractExact(food, raw.getNetProduction())));
         assertEquals(food, colony.getRawGoodsStats()
-                .getStatsByType(GoodsType.CORN).getInWarehouseAfter());
+                .getStatsByType(GoodsType.GRAIN).getInWarehouseAfter());
         return colony;
     }
 
@@ -135,8 +135,8 @@ class ColonyBreedingTest {
         final Model model = model(4, ConstructionType.STABLES,
                 ConstructionType.WAREHOUSE_BASIC, false);
         final Colony colony = model.getColonyById(0).orElseThrow();
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 0));
-        assertTrue(colony.getRawGoodsStats().getStatsByType(GoodsType.CORN)
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 0));
+        assertTrue(colony.getRawGoodsStats().getStatsByType(GoodsType.GRAIN)
                 .getInWarehouseAfter() < 0);
         assertEquals(0, colony.getGoodsStats().getStatsByType(GoodsType.HORSE)
                 .getRowProduction());
@@ -156,8 +156,8 @@ class ColonyBreedingTest {
                 model.destroyUnit(resident);
             }
         }
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 0));
-        assertTrue(colony.getRawGoodsStats().getStatsByType(GoodsType.CORN)
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 0));
+        assertTrue(colony.getRawGoodsStats().getStatsByType(GoodsType.GRAIN)
                 .getInWarehouseAfter() < 0);
         assertEquals(0, colony.getGoodsStats().getStatsByType(GoodsType.HORSE)
                 .getRowProduction());
@@ -192,11 +192,11 @@ class ColonyBreedingTest {
         assertEquals(horses + born,
                 preview.getStatsByType(GoodsType.HORSE).getInWarehouseAfter());
         assertEquals(foodAfter,
-                preview.getStatsByType(GoodsType.CORN).getInWarehouseAfter());
+                preview.getStatsByType(GoodsType.GRAIN).getInWarehouseAfter());
         colony.startTurn();
         assertEquals(horses + born,
                 colony.getWarehouse().getGoods(GoodsType.HORSE).getAmount());
         assertEquals(foodAfter,
-                colony.getWarehouse().getGoods(GoodsType.CORN).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.GRAIN).getAmount());
     }
 }

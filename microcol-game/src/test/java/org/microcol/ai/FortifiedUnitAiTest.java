@@ -17,7 +17,7 @@ class FortifiedUnitAiTest {
                 "/maps/default-campaign-mission-2-thrive.microcol");
         final var savedSoldier = data.getModel().getUnits().stream()
                 .filter(unit -> unit.getId() == 16).findFirst().orElseThrow();
-        savedSoldier.setHoldingGuns(true);
+        savedSoldier.setHoldingWeapons(true);
         savedSoldier.setTools(0);
         savedSoldier.setAvailableMoves(1);
         final var terrain = data.getModel().getMap().getTerrainMap();

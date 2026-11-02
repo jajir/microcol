@@ -46,10 +46,10 @@ class ColonyDestructionTest {
         first.getCargo().getEmptyCargoSlot().orElseThrow().store(passenger);
         assertEquals(1, first.getCargo().getSlots().stream()
                 .filter(CargoSlot::isLoadedUnit).count());
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.SILK, 5));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.CLOTH, 5));
         first.getCargo().getSlots().get(1)
-                .storeFromColonyWarehouse(Goods.of(GoodsType.SILK, 5), colony);
-        assertEquals(Goods.of(GoodsType.SILK, 5),
+                .storeFromColonyWarehouse(Goods.of(GoodsType.CLOTH, 5), colony);
+        assertEquals(Goods.of(GoodsType.CLOTH, 5),
                 first.getCargo().getSlots().get(1).getGoods().orElseThrow());
         final Unit outside = model.addUnitOutSideColony(colony);
         final int moves = first.getActionPoints();
@@ -67,7 +67,7 @@ class ColonyDestructionTest {
         assertEquals(moves, first.getActionPoints());
         assertSame(passenger,
                 first.getCargo().getSlots().get(0).getUnit().orElseThrow());
-        assertEquals(Goods.of(GoodsType.SILK, 5),
+        assertEquals(Goods.of(GoodsType.CLOTH, 5),
                 first.getCargo().getSlots().get(1).getGoods().orElseThrow());
         assertTrue(model.getAllUnits().contains(outside));
         assertEquals(1, model.getTurnEventStore().getForPlayer(owner).stream()
@@ -78,7 +78,7 @@ class ColonyDestructionTest {
                 .filter(Unit::isShip).count());
         assertEquals(1, ((Ship) restored.getUnitById(first.getId())).getCargo()
                 .getSlots().stream().filter(CargoSlot::isLoadedUnit).count());
-        assertEquals(Goods.of(GoodsType.SILK, 5),
+        assertEquals(Goods.of(GoodsType.CLOTH, 5),
                 ((Ship) restored.getUnitById(first.getId())).getCargo()
                         .getSlots().get(1).getGoods().orElseThrow());
         restored.startGame();
@@ -96,9 +96,9 @@ class ColonyDestructionTest {
                 .addUnitOutSideColony(preparedColony);
         preparedShip.getCargo().getEmptyCargoSlot().orElseThrow()
                 .store(preparedPassenger);
-        preparedColony.getWarehouse().setGoods(Goods.of(GoodsType.SILK, 5));
+        preparedColony.getWarehouse().setGoods(Goods.of(GoodsType.CLOTH, 5));
         preparedShip.getCargo().getSlots().get(1).storeFromColonyWarehouse(
-                Goods.of(GoodsType.SILK, 5), preparedColony);
+                Goods.of(GoodsType.CLOTH, 5), preparedColony);
         final ModelPo data = prepared.save();
         final Location port = Location.of(22, 12);
         final Map<Location, TerrainType> terrain = data.getMap()
@@ -110,7 +110,7 @@ class ColonyDestructionTest {
         final Colony colony = model.getColonyByName("Delft").orElseThrow();
         final Ship ship = (Ship) model.getUnitById(preparedShip.getId());
         final Unit passenger = model.getUnitById(preparedPassenger.getId());
-        assertEquals(Goods.of(GoodsType.SILK, 5),
+        assertEquals(Goods.of(GoodsType.CLOTH, 5),
                 ship.getCargo().getSlots().get(1).getGoods().orElseThrow());
         colony.getUnitsInsideColony()
                 .forEach(worker -> worker.placeToLocation(Location.of(19, 11)));

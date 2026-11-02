@@ -32,8 +32,8 @@ public class TC_54_F45_shared_hammers_test extends AbstractMicroColTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
         // Approved icons appear beside real production before queue actions.
-        colony.verifyProductionArtwork("id_town_hall", "good-bell.png");
-        colony.verifyProductionArtwork("id_church", "good-cross.png");
+        colony.verifyProductionArtwork("id_town_hall", "good-owls.png");
+        colony.verifyProductionArtwork("id_church", "good-torches.png");
         colony.verifyProductionArtwork("id_carpenter", "good-hammer.png");
         ConstructionPage building = new ConstructionPage(getContext());
         building.open();

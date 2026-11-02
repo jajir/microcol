@@ -116,7 +116,7 @@ public final class AtlanticAuditPage extends AbstractScreen {
                 passenger.getPlaceCargoSlot().getCargoSlot());
         assertEquals(3, passenger.getPlaceCargoSlot().getOwnerUnit().getId());
         assertEquals(80, passenger.getTools());
-        assertFalse(passenger.isHoldingGuns());
+        assertFalse(passenger.isHoldingWeapons());
     }
 
     public void verifyInEurope() {

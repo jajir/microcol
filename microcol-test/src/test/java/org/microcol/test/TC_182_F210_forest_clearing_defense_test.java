@@ -49,7 +49,7 @@ public class TC_182_F210_forest_clearing_defense_test
     /** Grassland square under the forest and the defender of the scenario. */
     private final static Location FOREST = Location.of(17, 11);
 
-    /** Dutch colonist with muskets that attacks the defender. */
+    /** Dutch colonist with weapons that attacks the defender. */
     private final static Location SOLDIER = Location.of(18, 10);
 
     /** Unarmed Dutch colonist that clears the forest, then steps back out. */

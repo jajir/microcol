@@ -74,7 +74,7 @@ public final class PanelColonyGood implements JavaFxComponent {
         labelAmount.setWrapText(true);
         labelAmount.getStyleClass().add("amount");
         labelDiff = new Label();
-        if (GoodsType.CORN.equals(goodsType)) {
+        if (GoodsType.GRAIN.equals(goodsType)) {
             labelDiff.setId(FAMINE_FORECAST_ID);
         }
         labelDiff.getStyleClass().add("diff");
@@ -159,7 +159,7 @@ public final class PanelColonyGood implements JavaFxComponent {
             labelDiff.getStyleClass().clear();
             labelDiff.setText("");
         }
-        if (GoodsType.CORN.equals(goodsType)
+        if (GoodsType.GRAIN.equals(goodsType)
                 && goodsStats.getInWarehouseAfter() < 0) {
             labelDiff.setText(labelDiff.getText() + " ⚠");
             final String warning = i18n.get(ColonyMsg.faminePreview);

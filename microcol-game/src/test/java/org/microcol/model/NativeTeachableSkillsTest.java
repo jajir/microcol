@@ -25,25 +25,25 @@ class NativeTeachableSkillsTest {
     @Test
     void acceptedListIsTheSkillsCardTeachableSet() {
         assertEquals(Set.of(UnitType.EXPERT_FARMER, UnitType.EXPERT_FISHERMAN,
-                UnitType.EXPERT_FUR_TRAPPER, UnitType.EXPERT_SILVER_MINER,
-                UnitType.MASTER_SUGAR_PLANTER, UnitType.MASTER_COTTON_PLANTER,
-                UnitType.MASTER_TOBACCO_PLANTER, UnitType.SEASONED_SCOUT),
+                UnitType.EXPERT_CLAY_DIGGER, UnitType.EXPERT_SILVER_MINER,
+                UnitType.MASTER_OLIVE_GROWER, UnitType.MASTER_SHEPHERD,
+                UnitType.MASTER_GRAPE_GROWER, UnitType.SEASONED_SCOUT),
                 Set.copyOf(UnitType.NATIVE_TEACHABLE_SKILLS));
         assertEquals(8, UnitType.NATIVE_TEACHABLE_SKILLS.size());
     }
 
     @Test
     void expertGoodsMatchTheirProduction() {
-        assertEquals(GoodsType.CORN,
+        assertEquals(GoodsType.GRAIN,
                 UnitType.EXPERT_FARMER.getExpertInProducing());
-        assertEquals(GoodsType.SUGAR,
-                UnitType.MASTER_SUGAR_PLANTER.getExpertInProducing());
+        assertEquals(GoodsType.OLIVES,
+                UnitType.MASTER_OLIVE_GROWER.getExpertInProducing());
         assertNull(UnitType.SEASONED_SCOUT.getExpertInProducing());
     }
 
     @Test
     void naturalOutputIsTheTerrainBaseline() {
-        assertEquals(4, GRASSLAND.get(0).getNaturalOutput(GoodsType.CORN));
+        assertEquals(4, GRASSLAND.get(0).getNaturalOutput(GoodsType.GRAIN));
         assertEquals(0, GRASSLAND.get(0).getNaturalOutput(GoodsType.SILVER));
     }
 
@@ -54,9 +54,10 @@ class NativeTeachableSkillsTest {
         for (int i = 0; i < 500; i++) {
             seen.add(NativeTeachableSkills.choose(GRASSLAND, random));
         }
-        assertEquals(Set.of(UnitType.EXPERT_FARMER,
-                UnitType.MASTER_SUGAR_PLANTER, UnitType.MASTER_COTTON_PLANTER,
-                UnitType.MASTER_TOBACCO_PLANTER), seen);
+        assertEquals(
+                Set.of(UnitType.EXPERT_FARMER, UnitType.MASTER_OLIVE_GROWER,
+                        UnitType.MASTER_SHEPHERD, UnitType.MASTER_GRAPE_GROWER),
+                seen);
     }
 
     @Test

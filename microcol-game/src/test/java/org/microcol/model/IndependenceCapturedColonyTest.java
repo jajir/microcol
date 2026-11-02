@@ -71,7 +71,7 @@ class IndependenceCapturedColonyTest {
         final CongressPo congress = player.getCongress();
         congress.setActivated(true);
         congress.setGeneration(1);
-        congress.setBells(0);
+        congress.setOwls(0);
         congress.setSelected(null);
         congress.setJonesDeliveryPending(false);
         congress.setMembers(List.of(Founder.SIMON_BOLIVAR));
@@ -94,7 +94,7 @@ class IndependenceCapturedColonyTest {
         for (int index = 0; index < count; index++) {
             final UnitFreeColonist veteran = (UnitFreeColonist) model
                     .addUnitOutSideColony(colony);
-            veteran.setHoldingGuns(true);
+            veteran.setHoldingWeapons(true);
             veteran.completeEducation(UnitType.VETERAN_SOLDIER);
             assertSame(colony.getOwner(), veteran.getOwner());
         }
@@ -166,7 +166,7 @@ class IndependenceCapturedColonyTest {
         model.getUnitsAt(QUEBEC).stream()
                 .filter(UnitFreeColonist.class::isInstance)
                 .map(UnitFreeColonist.class::cast)
-                .filter(unit -> unit.isVeteran() && unit.isHoldingGuns())
+                .filter(unit -> unit.isVeteran() && unit.isHoldingWeapons())
                 .map(Unit::getId).sorted().limit(expectedMustered)
                 .forEach(expected::add);
         assertEquals(expectedMustered, expected.size());

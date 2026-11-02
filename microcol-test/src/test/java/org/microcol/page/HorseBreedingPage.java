@@ -19,7 +19,7 @@ public final class HorseBreedingPage extends AbstractScreen {
     }
 
     public int forecastFood() {
-        return colony().getGoodsStats().getStatsByType(GoodsType.CORN)
+        return colony().getGoodsStats().getStatsByType(GoodsType.GRAIN)
                 .getInWarehouseAfter();
     }
 
@@ -30,15 +30,15 @@ public final class HorseBreedingPage extends AbstractScreen {
     public void prepareStocks(int horses, int foodAfterResidents) {
         getRobot().interact(() -> {
             Colony colony = colony();
-            int produced = colony.getGoodsStats().getStatsByType(GoodsType.CORN)
-                    .getRowProduction();
+            int produced = colony.getGoodsStats()
+                    .getStatsByType(GoodsType.GRAIN).getRowProduction();
             int required = colony.getRequiredFoodPerTurn();
             colony.getWarehouse().removeGoods(
                     colony.getWarehouse().getGoods(GoodsType.HORSE));
             colony.getWarehouse().addGoods(Goods.of(GoodsType.HORSE, horses));
             colony.getWarehouse().removeGoods(
-                    colony.getWarehouse().getGoods(GoodsType.CORN));
-            colony.getWarehouse().addGoods(Goods.of(GoodsType.CORN,
+                    colony.getWarehouse().getGoods(GoodsType.GRAIN));
+            colony.getWarehouse().addGoods(Goods.of(GoodsType.GRAIN,
                     foodAfterResidents - produced + required));
         });
     }
@@ -59,7 +59,7 @@ public final class HorseBreedingPage extends AbstractScreen {
         assertEquals(horses,
                 colony().getWarehouse().getGoods(GoodsType.HORSE).getAmount());
         assertEquals(food,
-                colony().getWarehouse().getGoods(GoodsType.CORN).getAmount());
+                colony().getWarehouse().getGoods(GoodsType.GRAIN).getAmount());
     }
 
     public void verifyBornOutside(int beforeInside, int expectedOutside) {

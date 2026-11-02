@@ -20,10 +20,10 @@ public final class UnitSpecialist extends UnitFreeColonist {
     public UnitSpecialist(final Model model, final Integer id,
             final Function<Unit, Place> placeBuilder, final Player owner,
             final int availableMoves, final UnitAction action, final int tools,
-            final boolean holdingGuns, final boolean mounted,
+            final boolean holdingWeapons, final boolean mounted,
             final UnitType type) {
         super(model, id, placeBuilder, owner, availableMoves, action, tools,
-                holdingGuns, mounted);
+                holdingWeapons, mounted);
         Preconditions.checkArgument(UnitType.EUROPEAN_SPECIALISTS.contains(type)
                 && type != UnitType.MASTER_BLACKSMITH
                 || UnitType.SCHOOL_ONLY_SPECIALISTS.contains(type));

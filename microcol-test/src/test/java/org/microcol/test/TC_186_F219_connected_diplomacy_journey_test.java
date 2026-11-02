@@ -13,7 +13,7 @@ import static org.microcol.test.DiplomacyJourneyFixture.FRENCH_TARGET;
 import static org.microcol.test.DiplomacyJourneyFixture.FRENCH_TARGET_AT;
 import static org.microcol.test.DiplomacyJourneyFixture.FRIGATE;
 import static org.microcol.test.DiplomacyJourneyFixture.FRIGATE_AT;
-import static org.microcol.test.DiplomacyJourneyFixture.FRIGATE_SUGAR;
+import static org.microcol.test.DiplomacyJourneyFixture.FRIGATE_OLIVES;
 import static org.microcol.test.DiplomacyJourneyFixture.GALLEON_AT;
 import static org.microcol.test.DiplomacyJourneyFixture.HIDDEN_QUEBEC;
 import static org.microcol.test.DiplomacyJourneyFixture.HIDDEN_QUEBEC_AT;
@@ -34,7 +34,7 @@ import static org.microcol.test.DiplomacyJourneyFixture.SOLDIER_AT;
 import static org.microcol.test.DiplomacyJourneyFixture.UNEASY_ANGER;
 import static org.microcol.test.DiplomacyJourneyFixture.WAGON;
 import static org.microcol.test.DiplomacyJourneyFixture.WAGON_AT;
-import static org.microcol.test.DiplomacyJourneyFixture.WAGON_CORN;
+import static org.microcol.test.DiplomacyJourneyFixture.WAGON_GRAIN;
 
 import java.io.File;
 
@@ -82,15 +82,15 @@ import javafx.stage.Stage;
  * <p>
  * Independent milestone ledger, every value derived from the initial data and
  * the accepted rules, not read from the game. The saved Europe market bids 2
- * for corn and 3 for sugar to every nation. The Aztecs do not want corn, so
- * they pay max(1, 2 * 3 / 4) = 1 a piece: 50 corn bring 50 gold from their
+ * for grain and 3 for olives to every nation. The Aztecs do not want grain, so
+ * they pay max(1, 2 * 3 / 4) = 1 a piece: 50 grain bring 50 gold from their
  * treasury. A completed trade at a capital lowers its local alarm and the
  * tribe's anger by 2 * 2, so the anger toward the Dutch falls from 30 to 26 and
  * the incitement costs ceil(50 * (100 + 26) / (10 + 0)) = 630. A foreign colony
- * pays its own Europe bid: 2 sugar bring 6 gold. Peace costs ceil(200 * max(1,
+ * pays its own Europe bid: 2 olives bring 6 gold. Peace costs ceil(200 * max(1,
  * French armed strength / Dutch)) = 200, since France has no armed land unit. A
  * capture moves no gold, and no owner turn of this world pays or charges
- * anyone: there is no tax, no Europe trade and no French purchase. Sugar is
+ * anyone: there is no tax, no Europe trade and no French purchase. Olives is
  * neither produced nor consumed in Hidden Quebec.
  * </p>
  * <ul>
@@ -98,21 +98,21 @@ import javafx.stage.Stage;
  * declaration of war, which is cancelled. Land: Dutch 2,000 to 1,800, Aztec
  * treasury 2,000 to 2,200, paid squares 8 to 9. The scout makes contact and
  * starts learning Expert Farmer for 4 owner updates. Native sale: Dutch 1,850,
- * treasury 2,150, anger 26. French sale of 2 sugar: Dutch 1,856, France 994,
- * Quebec sugar 2, frigate sugar 2. Incitement 630: Dutch 1,226, order 20, anger
- * toward France 100. Checkpoint A keeps all of it.</li>
+ * treasury 2,150, anger 26. French sale of 2 olives: Dutch 1,856, France 994,
+ * Quebec olives 2, frigate olives 2. Incitement 630: Dutch 1,226, order 20,
+ * anger toward France 100. Checkpoint A keeps all of it.</li>
  * <li>Turn 1: the brave is 2 squares from the French colonist, order 19, course
  * 1 of 4. Turn 2: beside it, order 18, course 2; the attack on Fort Orleans is
  * offered only as a declaration of war and cancelled.</li>
  * <li>Turn 3: the brave has destroyed the French colonist, order 17, course 3.
  * War is declared; the attack on the galleon is now ordinary. The soldier takes
- * Fort Orleans with its worker and its stock of 50 muskets and 50 tools; France
+ * Fort Orleans with its worker and its stock of 50 weapons and 50 tools; France
  * keeps Hidden Quebec and its route still names the lost stop. Purses
  * unchanged. Checkpoint B keeps all of it.</li>
  * <li>Turn 4: the skill is granted once, order 16. Peace for 200: Dutch 1,026,
  * France 1,194; the attack on the galleon again needs a declaration. Resumed
- * trade of 2 sugar: Dutch 1,032, France 1,188, Quebec sugar 4, frigate sugar 0.
- * Checkpoint C keeps all of it, and the uninterrupted reference reaches the
+ * trade of 2 olives: Dutch 1,032, France 1,188, Quebec olives 4, frigate olives
+ * 0. Checkpoint C keeps all of it, and the uninterrupted reference reaches the
  * same literal end state.</li>
  * </ul>
  * The route operations on the lost stop are exercised by
@@ -127,7 +127,7 @@ public class TC_186_F219_connected_diplomacy_journey_test
     private static final String PREPARED = "diplomacy-journey-prepared.microcol";
 
     private static final int PEACE_PRICE = 200;
-    private static final int SOLD_SUGAR = 2;
+    private static final int SOLD_OLIVES = 2;
 
     /** Ledger milestones of the Dutch purse; see the class comment. */
     private static final int DUTCH_AFTER_LAND = 1800;
@@ -152,14 +152,14 @@ public class TC_186_F219_connected_diplomacy_journey_test
     private static final double ANGER_AFTER_SALE = 26;
 
     /** Stock of Fort Orleans that changes hands with the colony. */
-    private static final int FORT_MUSKETS = 50;
+    private static final int FORT_WEAPONS = 50;
     private static final int FORT_TOOLS = 50;
 
     private static final String CLAIMANT = "This square is claimed by: Aztec city, capital.";
     private static final String CONSEQUENCE = "If you use it without paying, the settlement's alarm toward you rises by 5 once at the first use and by 2 each turn while the square stays in use.";
     private static final String CONFIRMATION_EN = "A Free Colonist learns Expert Farmer after 4 owner updates. Meanwhile the colonist stays with the natives and cannot move, work or fight.";
     private static final String REPORT_EN = "A colonist learned Expert Farmer from the natives.";
-    private static final String GIVE_TWO_SUGAR = "You give: 2 Sugar cane.";
+    private static final String GIVE_TWO_OLIVES = "You give: 2 Olives.";
     private static final String RECEIVE_NOTHING = "You receive no goods back.";
     private static final String INCITEMENT_TERMS = "Price: 630 gold, paid once whether the attempt succeeds or fails.";
     private static final String INCITEMENT_RESULT = "Paid 630 gold; you now have 1226. The tribe has turned against France and will pursue it for up to 20 native turns, ending sooner if its anger fades.";
@@ -222,10 +222,11 @@ public class TC_186_F219_connected_diplomacy_journey_test
         journey.verifyColonyListed(FRANCE, FORT_ORLEANS, true);
         journey.verifyColonyListed(DUTCH, FORT_ORLEANS, false);
         journey.verifyRouteStops(FRANCE, ROUTE, FORT_ORLEANS, HIDDEN_QUEBEC);
-        journey.verifyColonyStock(HIDDEN_QUEBEC, GoodsType.SUGAR, 0);
-        journey.verifyColonyStock(FORT_ORLEANS, GoodsType.MUSKET, FORT_MUSKETS);
+        journey.verifyColonyStock(HIDDEN_QUEBEC, GoodsType.OLIVES, 0);
+        journey.verifyColonyStock(FORT_ORLEANS, GoodsType.WEAPONS,
+                FORT_WEAPONS);
         journey.verifyColonyStock(FORT_ORLEANS, GoodsType.TOOLS, FORT_TOOLS);
-        trade.verifyCarried(FRIGATE, GoodsType.SUGAR, FRIGATE_SUGAR);
+        trade.verifyCarried(FRIGATE, GoodsType.OLIVES, FRIGATE_OLIVES);
 
         // In peace the frigate's attack on the French galleon is offered only
         // as a declaration of war; cancelling it changes nothing.
@@ -270,37 +271,37 @@ public class TC_186_F219_connected_diplomacy_journey_test
         visit.verifyCourseStarted(SCOUT, AZTEC_CAPITAL);
 
         // Turn 0, native trade: the uneasy Aztecs admit the wagon and buy all
-        // 50 corn for 50 gold from their treasury; the trade calms the tribe.
+        // 50 grain for 50 gold from their treasury; the trade calms the tribe.
         visit.enterSettlement(WAGON_AT, AZTEC_CAPITAL);
         market.openMarket();
-        market.verifySaleOffered(WAGON, AZTEC_CAPITAL, GoodsType.CORN,
-                WAGON_CORN);
+        market.verifySaleOffered(WAGON, AZTEC_CAPITAL, GoodsType.GRAIN,
+                WAGON_GRAIN);
         market.sell();
-        market.verifySaleConfirmation(WAGON, AZTEC_CAPITAL, GoodsType.CORN,
-                WAGON_CORN);
+        market.verifySaleConfirmation(WAGON, AZTEC_CAPITAL, GoodsType.GRAIN,
+                WAGON_GRAIN);
         market.confirmDeal();
-        market.verifyHeld(WAGON, GoodsType.CORN, 0);
-        market.verifyReceived(AZTEC_CAPITAL, GoodsType.CORN, WAGON_CORN);
+        market.verifyHeld(WAGON, GoodsType.GRAIN, 0);
+        market.verifyReceived(AZTEC_CAPITAL, GoodsType.GRAIN, WAGON_GRAIN);
         visit.escape();
         visit.verifyChooserClosed();
         journey.verifyDutchGold(DUTCH_AFTER_NATIVE_SALE);
         land.verifyClaimantTreasury(AZTEC_CAPITAL, TREASURY_AFTER_SALE);
         incite.verifyTribalAnger(DUTCH, ANGER_AFTER_SALE);
 
-        // Turn 0, trade with France in peace: the frigate sells two sugar to
+        // Turn 0, trade with France in peace: the frigate sells two olives to
         // Hidden Quebec at the colony's bid of 3 a piece.
         trade.openShipTrade();
         trade.verifyDialogOpen(true);
-        trade.chooseGive(GoodsType.SUGAR);
-        trade.setGiveAmount(SOLD_SUGAR);
-        trade.verifyLines(GIVE_TWO_SUGAR, RECEIVE_NOTHING,
+        trade.chooseGive(GoodsType.OLIVES);
+        trade.setGiveAmount(SOLD_OLIVES);
+        trade.verifyLines(GIVE_TWO_OLIVES, RECEIVE_NOTHING,
                 ForeignColonyTradePage.netEnglish(6));
         trade.confirm();
         trade.verifyDialogOpen(false);
         journey.verifyDutchGold(DUTCH_AFTER_FIRST_TRADE);
         journey.verifyFrenchGold(FRENCH_AFTER_FIRST_TRADE);
-        trade.verifyCarried(FRIGATE, GoodsType.SUGAR, 2);
-        journey.verifyColonyStock(HIDDEN_QUEBEC, GoodsType.SUGAR, 2);
+        trade.verifyCarried(FRIGATE, GoodsType.OLIVES, 2);
+        journey.verifyColonyStock(HIDDEN_QUEBEC, GoodsType.OLIVES, 2);
         trade.verifyColonyOwner(FRANCE);
         journey.verifyTreatyKept();
 
@@ -337,13 +338,13 @@ public class TC_186_F219_connected_diplomacy_journey_test
         teaching.openSettlements();
         teaching.verifyProgress(progressEn(0));
         teaching.closeSettlements();
-        market.verifyReceived(AZTEC_CAPITAL, GoodsType.CORN, WAGON_CORN);
+        market.verifyReceived(AZTEC_CAPITAL, GoodsType.GRAIN, WAGON_GRAIN);
         land.verifyClaimantTreasury(AZTEC_CAPITAL, TREASURY_AFTER_SALE);
         incite.verifyOrder(EuropeanNation.FRENCH, 20);
         incite.verifyTribalAnger(DUTCH, ANGER_AFTER_SALE);
         incite.verifyBraveDistanceTo(AZTEC_BRAVE, FRENCH_TARGET_AT, 3);
-        journey.verifyColonyStock(HIDDEN_QUEBEC, GoodsType.SUGAR, 2);
-        trade.verifyCarried(FRIGATE, GoodsType.SUGAR, 2);
+        journey.verifyColonyStock(HIDDEN_QUEBEC, GoodsType.OLIVES, 2);
+        trade.verifyCarried(FRIGATE, GoodsType.OLIVES, 2);
         land.verifyLandStatus(PIONEER_AT, NativeLandStatus.PAID);
         land.verifyPaidSquares(9);
 
@@ -409,7 +410,8 @@ public class TC_186_F219_connected_diplomacy_journey_test
         attack.confirm();
         defense.closeCapturedColonyMessage();
         journey.verifyColonyCaptured(FORT_ORLEANS, DUTCH, 1, SOLDIER, FORT_AT);
-        journey.verifyColonyStock(FORT_ORLEANS, GoodsType.MUSKET, FORT_MUSKETS);
+        journey.verifyColonyStock(FORT_ORLEANS, GoodsType.WEAPONS,
+                FORT_WEAPONS);
         journey.verifyColonyStock(FORT_ORLEANS, GoodsType.TOOLS, FORT_TOOLS);
         journey.verifyColonyOwner(HIDDEN_QUEBEC, FRANCE);
         journey.verifyColonyListed(DUTCH, FORT_ORLEANS, true);
@@ -425,7 +427,8 @@ public class TC_186_F219_connected_diplomacy_journey_test
         journey.verifyRelation(EuropeanRelationState.WAR);
         journey.verifyColonyOwner(FORT_ORLEANS, DUTCH);
         journey.verifyColonyResidents(FORT_ORLEANS, 1);
-        journey.verifyColonyStock(FORT_ORLEANS, GoodsType.MUSKET, FORT_MUSKETS);
+        journey.verifyColonyStock(FORT_ORLEANS, GoodsType.WEAPONS,
+                FORT_WEAPONS);
         journey.verifyColonyListed(DUTCH, FORT_ORLEANS, true);
         journey.verifyColonyListed(FRANCE, FORT_ORLEANS, false);
         journey.verifyRouteStopLost(FRANCE, ROUTE, FORT_ORLEANS, DUTCH);
@@ -472,19 +475,19 @@ public class TC_186_F219_connected_diplomacy_journey_test
         journey.verifyTreatyKept();
 
         // Turn 4, resumed trade: with peace restored the frigate sells its
-        // last two sugar to Hidden Quebec again.
+        // last two olives to Hidden Quebec again.
         trade.openShipTrade();
         trade.verifyDialogOpen(true);
-        trade.chooseGive(GoodsType.SUGAR);
-        trade.setGiveAmount(SOLD_SUGAR);
-        trade.verifyLines(GIVE_TWO_SUGAR, RECEIVE_NOTHING,
+        trade.chooseGive(GoodsType.OLIVES);
+        trade.setGiveAmount(SOLD_OLIVES);
+        trade.verifyLines(GIVE_TWO_OLIVES, RECEIVE_NOTHING,
                 ForeignColonyTradePage.netEnglish(6));
         trade.confirm();
         trade.verifyDialogOpen(false);
         journey.verifyDutchGold(DUTCH_FINAL);
         journey.verifyFrenchGold(FRENCH_FINAL);
-        trade.verifyCarried(FRIGATE, GoodsType.SUGAR, 0);
-        journey.verifyColonyStock(HIDDEN_QUEBEC, GoodsType.SUGAR, 4);
+        trade.verifyCarried(FRIGATE, GoodsType.OLIVES, 0);
+        journey.verifyColonyStock(HIDDEN_QUEBEC, GoodsType.OLIVES, 4);
         journey.verifyColonyOwner(HIDDEN_QUEBEC, FRANCE);
 
         // Checkpoint C, Save and Continue: treaty, ownership, purses and
@@ -495,12 +498,13 @@ public class TC_186_F219_connected_diplomacy_journey_test
         journey.verifyDutchGold(DUTCH_FINAL);
         journey.verifyFrenchGold(FRENCH_FINAL);
         journey.verifyColonyOwner(FORT_ORLEANS, DUTCH);
-        journey.verifyColonyStock(FORT_ORLEANS, GoodsType.MUSKET, FORT_MUSKETS);
+        journey.verifyColonyStock(FORT_ORLEANS, GoodsType.WEAPONS,
+                FORT_WEAPONS);
         journey.verifyColonyStock(FORT_ORLEANS, GoodsType.TOOLS, FORT_TOOLS);
         journey.verifyColonyListed(FRANCE, FORT_ORLEANS, false);
         journey.verifyRouteStopLost(FRANCE, ROUTE, FORT_ORLEANS, DUTCH);
-        journey.verifyColonyStock(HIDDEN_QUEBEC, GoodsType.SUGAR, 4);
-        trade.verifyCarried(FRIGATE, GoodsType.SUGAR, 0);
+        journey.verifyColonyStock(HIDDEN_QUEBEC, GoodsType.OLIVES, 4);
+        trade.verifyCarried(FRIGATE, GoodsType.OLIVES, 0);
         teaching.verifyLearnedAndReleased(SCOUT, AZTEC_CAPITAL, true);
         incite.verifyOrder(EuropeanNation.FRENCH, 16);
     }
@@ -553,8 +557,8 @@ public class TC_186_F219_connected_diplomacy_journey_test
         journey.verifyDutchGold(DUTCH_AFTER_NATIVE_SALE);
         incite.verifyTribalAnger(DUTCH, ANGER_AFTER_SALE);
         trade.openShipTrade();
-        trade.chooseGive(GoodsType.SUGAR);
-        trade.setGiveAmount(SOLD_SUGAR);
+        trade.chooseGive(GoodsType.OLIVES);
+        trade.setGiveAmount(SOLD_OLIVES);
         trade.confirm();
         trade.verifyDialogOpen(false);
         journey.verifyDutchGold(DUTCH_AFTER_FIRST_TRADE);
@@ -613,8 +617,8 @@ public class TC_186_F219_connected_diplomacy_journey_test
         attack.cancel();
         attack.verifyReviewClosed();
         trade.openShipTrade();
-        trade.chooseGive(GoodsType.SUGAR);
-        trade.setGiveAmount(SOLD_SUGAR);
+        trade.chooseGive(GoodsType.OLIVES);
+        trade.setGiveAmount(SOLD_OLIVES);
         trade.confirm();
         trade.verifyDialogOpen(false);
 
@@ -623,12 +627,13 @@ public class TC_186_F219_connected_diplomacy_journey_test
         journey.verifyDutchGold(DUTCH_FINAL);
         journey.verifyFrenchGold(FRENCH_FINAL);
         journey.verifyColonyOwner(FORT_ORLEANS, DUTCH);
-        journey.verifyColonyStock(FORT_ORLEANS, GoodsType.MUSKET, FORT_MUSKETS);
+        journey.verifyColonyStock(FORT_ORLEANS, GoodsType.WEAPONS,
+                FORT_WEAPONS);
         journey.verifyColonyStock(FORT_ORLEANS, GoodsType.TOOLS, FORT_TOOLS);
         journey.verifyColonyListed(FRANCE, FORT_ORLEANS, false);
         journey.verifyRouteStopLost(FRANCE, ROUTE, FORT_ORLEANS, DUTCH);
-        journey.verifyColonyStock(HIDDEN_QUEBEC, GoodsType.SUGAR, 4);
-        trade.verifyCarried(FRIGATE, GoodsType.SUGAR, 0);
+        journey.verifyColonyStock(HIDDEN_QUEBEC, GoodsType.OLIVES, 4);
+        trade.verifyCarried(FRIGATE, GoodsType.OLIVES, 0);
         teaching.verifyLearnedAndReleased(SCOUT, AZTEC_CAPITAL, true);
         incite.verifyOrder(EuropeanNation.FRENCH, 16);
     }
@@ -657,16 +662,16 @@ public class TC_186_F219_connected_diplomacy_journey_test
         journey.verifyTreatyKept();
 
         // The hostile brave raids the soldier on the native turn, which loses
-        // its muskets but stays where it stood.
+        // its weapons but stays where it stood.
         game.nextTurnAndCloseDialogs();
-        raid.verifySoldierLostMusketsToRaid(RAID_SOLDIER, RAID_SOLDIER_AT,
+        raid.verifySoldierLostWeaponsToRaid(RAID_SOLDIER, RAID_SOLDIER_AT,
                 AZTEC_BRAVE, BRAVE_AT);
         journey.verifyTreatyKept();
 
         // Save and Continue keep the raided soldier without a new raid.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        raid.verifySoldierLostMusketsToRaid(RAID_SOLDIER, RAID_SOLDIER_AT,
+        raid.verifySoldierLostWeaponsToRaid(RAID_SOLDIER, RAID_SOLDIER_AT,
                 AZTEC_BRAVE, BRAVE_AT);
         journey.verifyTreatyKept();
     }

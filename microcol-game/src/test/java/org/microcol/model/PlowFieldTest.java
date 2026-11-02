@@ -604,10 +604,10 @@ class PlowFieldTest {
         pioneer.setActionType(UnitActionType.plowField);
         ((UnitActionPlowField) pioneer.getAction()).setRemainingTurns(1);
         final Terrain before = model.getMap().getTerrainAt(TARGET);
-        final int cornBefore = before.canProduceAmmount(GoodsType.CORN);
+        final int grainBefore = before.canProduceAmmount(GoodsType.GRAIN);
         nextOwnerTurn(model);
         final Terrain after = model.getMap().getTerrainAt(TARGET);
-        assertEquals(cornBefore + 1, after.canProduceAmmount(GoodsType.CORN));
+        assertEquals(grainBefore + 1, after.canProduceAmmount(GoodsType.GRAIN));
         assertEquals(before.canProduceAmmount(GoodsType.LUMBER),
                 after.canProduceAmmount(GoodsType.LUMBER));
     }

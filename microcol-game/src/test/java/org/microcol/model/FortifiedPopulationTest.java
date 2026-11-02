@@ -88,7 +88,7 @@ class FortifiedPopulationTest {
         assertSame(worker, hall.getUnit());
         worker.placeToColonyField(
                 colony.getColonyFieldInDirection(Direction.west),
-                GoodsType.CORN);
+                GoodsType.GRAIN);
         assertEquals(3, colony.getUnitsInsideColony().size());
         assertFalse(worker.canLeaveColony());
     }
@@ -168,8 +168,8 @@ class FortifiedPopulationTest {
                 MissionImpl.getPredefinedGameOverEvaluators());
         retainResidents(model, 3);
         final Colony colony = model.getColonyById(0).orElseThrow();
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 0));
-        assertTrue(colony.getRawGoodsStats().getStatsByType(GoodsType.CORN)
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 0));
+        assertTrue(colony.getRawGoodsStats().getStatsByType(GoodsType.GRAIN)
                 .getInWarehouseAfter() < 0);
         colony.startTurn();
         assertEquals(2, colony.getUnitsInsideColony().size());

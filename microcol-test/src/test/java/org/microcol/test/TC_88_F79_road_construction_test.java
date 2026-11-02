@@ -29,9 +29,9 @@ import javafx.stage.Stage;
  * the unit panel shows the owner updates left, that the work takes two owner
  * updates (one for a hardy pioneer), spends 20 tools once and records the road,
  * that cancelling leaves no road and no charge, and that a pioneer with 19
- * tools is told why it cannot start. A road on trapping land adds one fur to
- * the tile output, the job preview and the next turn's stored fur, and survives
- * Continue.
+ * tools is told why it cannot start. A road on clay pit land adds one clay to
+ * the tile output, the job preview and the next turn's stored clay, and
+ * survives Continue.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_88_F79_road_construction_test extends AbstractMicroColTest {
@@ -206,23 +206,24 @@ public class TC_88_F79_road_construction_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
-    void TC_05_trapping_road_adds_one_fur_to_preview_and_production()
+    void TC_05_clay_pit_road_adds_one_clay_to_preview_and_production()
             throws Exception {
-        // Load a copy with trapping land under the road square; the field
+        // Load a copy with clay pit land under the road square; the field
         // worker stands in the colony centre.
-        RoadFixture.prepareTrapping(getContext(), testFileName,
-                "road-f79-trapping.microcol", 100, WORKER_ID, ROAD_LOCATION);
+        RoadFixture.prepareClayPit(getContext(), testFileName,
+                "road-f79-clay-pit.microcol", 100, WORKER_ID, ROAD_LOCATION);
         GamePage gamePage = WelcomePage.of(getContext()).loadGame();
         final RoadPage road = new RoadPage(getContext());
         final ResourcePage resource = new ResourcePage(getContext());
         final TerrainProductionPage production = new TerrainProductionPage(
                 getContext());
 
-        // Before any unit stands on the square, its trapping marker is painted;
-        // a unit sprite would cover the marker. The square yields fur 2 with no
+        // Before any unit stands on the square, its clay pit marker is painted;
+        // a unit sprite would cover the marker. The square yields clay 2 with
+        // no
         // road.
-        resource.verifyMarkerPainted(ROAD_LOCATION, ResourceOverlay.TRAPPING);
-        resource.verifyOutput(ROAD_LOCATION, GoodsType.FUR, 2);
+        resource.verifyMarkerPainted(ROAD_LOCATION, ResourceOverlay.CLAY_PIT);
+        resource.verifyOutput(ROAD_LOCATION, GoodsType.CLAY, 2);
         road.verifyRoadAt(ROAD_LOCATION, false);
 
         // A tooled colonist moves onto the square and is captured there.
@@ -237,42 +238,42 @@ public class TC_88_F79_road_construction_test extends AbstractMicroColTest {
         gamePage.selectTile(ROAD_LOCATION);
         road.verifyRoadAt(ROAD_LOCATION, true);
 
-        // The road adds exactly one fur to the tile output.
-        resource.verifyOutput(ROAD_LOCATION, GoodsType.FUR, 3);
+        // The road adds exactly one clay to the tile output.
+        resource.verifyOutput(ROAD_LOCATION, GoodsType.CLAY, 3);
 
-        // Preview the fur job of the freed worker; cancel it.
-        // The fur 3 minus the Tory penalty of -1 at zero liberty is 2.
+        // Preview the clay job of the freed worker; cancel it.
+        // The clay 3 minus the Tory penalty of -1 at zero liberty is 2.
         ColonyScreen colony = gamePage.openColonyAt(COLONY_LOCATION, "Delft");
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.FUR);
+        jobs.select(Kind.BEST_FIELD, GoodsType.CLAY);
         jobs.verifyDetails("Field coordinates: 23, 12", true);
-        jobs.verifyDetails("Best eligible field: 2 Fur per turn", true);
+        jobs.verifyDetails("Best eligible field: 2 Clay per turn", true);
         jobs.cancel();
         jobs.verifyClosed();
-        production.verifyWarehouseGoods(DELFT_ID, Goods.of(GoodsType.FUR, 0));
+        production.verifyWarehouseGoods(DELFT_ID, Goods.of(GoodsType.CLAY, 0));
 
         // Confirm the same job; the field is worked, but nothing is stored yet.
         jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.FUR);
+        jobs.select(Kind.BEST_FIELD, GoodsType.CLAY);
         jobs.confirm();
         jobs.verifyClosed();
         production.verifyFieldJob(DELFT_ID, WORKER_ID, ROAD_LOCATION,
-                Goods.of(GoodsType.FUR, 2));
-        production.verifyWarehouseGoods(DELFT_ID, Goods.of(GoodsType.FUR, 0));
+                Goods.of(GoodsType.CLAY, 2));
+        production.verifyWarehouseGoods(DELFT_ID, Goods.of(GoodsType.CLAY, 0));
 
-        // The next normal turn stores exactly the previewed fur.
+        // The next normal turn stores exactly the previewed clay.
         gamePage = colony.close();
         gamePage.nextTurnAndCloseDialogs();
-        production.verifyWarehouseGoods(DELFT_ID, Goods.of(GoodsType.FUR, 2));
+        production.verifyWarehouseGoods(DELFT_ID, Goods.of(GoodsType.CLAY, 2));
 
-        // Save and Continue keep the road, the output and the stored fur, and
-        // add no fur on load.
+        // Save and Continue keep the road, the output and the stored clay, and
+        // add no clay on load.
         gamePage.exitToMenu();
         gamePage = new FreePlayAuditPage(getContext()).continueGame();
-        production.verifyWarehouseGoods(DELFT_ID, Goods.of(GoodsType.FUR, 2));
+        production.verifyWarehouseGoods(DELFT_ID, Goods.of(GoodsType.CLAY, 2));
         gamePage.selectTile(ROAD_LOCATION);
         road.verifyRoadAt(ROAD_LOCATION, true);
-        resource.verifyOutput(ROAD_LOCATION, GoodsType.FUR, 3);
+        resource.verifyOutput(ROAD_LOCATION, GoodsType.CLAY, 3);
     }
 }

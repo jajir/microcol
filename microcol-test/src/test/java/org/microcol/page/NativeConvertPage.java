@@ -137,7 +137,7 @@ public final class NativeConvertPage extends AbstractScreen {
 
     /**
      * Load the scenario with one Dutch convert standing on the map, the Dutch
-     * Congress offering Las Casas with enough bells for the next turn, and an
+     * Congress offering Las Casas with enough owls for the next turn, and an
      * ordinary missionary beside the Aztec capital for a later mission. The
      * saved randomness is the given state.
      */
@@ -160,7 +160,7 @@ public final class NativeConvertPage extends AbstractScreen {
 
     /**
      * The Dutch Congress offers Las Casas beside four other founders, one of
-     * each category, with enough bells for one join at the next turn.
+     * each category, with enough owls for one join at the next turn.
      */
     private static void offerLasCasas(final JsonObject model) {
         final List<Founder> offer = List.of(Founder.JOHN_PAUL_JONES,
@@ -171,7 +171,7 @@ public final class NativeConvertPage extends AbstractScreen {
             final JsonObject player = element.getAsJsonObject();
             if (DUTCH.equals(player.get("name").getAsString())) {
                 final JsonObject congress = player.getAsJsonObject("congress");
-                congress.addProperty("bells", 1000);
+                congress.addProperty("owls", 1000);
                 final JsonArray candidates = new JsonArray();
                 for (final Founder founder : offer) {
                     candidates.add(founder.name());
@@ -239,7 +239,7 @@ public final class NativeConvertPage extends AbstractScreen {
         unit.add("action", action);
         unit.addProperty("movementThirds", 3);
         unit.addProperty("tools", 0);
-        unit.addProperty("holdingGuns", false);
+        unit.addProperty("holdingWeapons", false);
         unit.addProperty("mounted", false);
         unit.addProperty("workUpdates", 0);
         unit.addProperty("missionary", missionary);
@@ -404,7 +404,7 @@ public final class NativeConvertPage extends AbstractScreen {
 
     /**
      * Load the colony scenario with one Dutch convert at the given colony
-     * square, unassigned, and the Dutch Congress offering Las Casas with bells
+     * square, unassigned, and the Dutch Congress offering Las Casas with owls
      * for the next turn. The convert is then assigned through the job picker.
      */
     public void loadConvertFounderFixture(final File source, final Location at,

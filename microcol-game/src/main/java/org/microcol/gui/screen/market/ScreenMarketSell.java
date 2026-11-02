@@ -33,7 +33,7 @@ public class ScreenMarketSell extends AbstractScreenMarket {
     @Override
     public void updateLanguage(final I18n i18n) {
         marketSellPanel.updateLanguage(i18n);
-        updateTitle(GoodsType.CORN);
+        updateTitle(GoodsType.GRAIN);
     }
 
     private void updateTitle(final GoodsType goodsType) {

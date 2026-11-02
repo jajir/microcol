@@ -85,7 +85,7 @@ public final class EuropeEquipmentPage extends AbstractScreen {
         getRobot().clickOn("#europe-pier-unit-" + unitId);
         WaitForAsyncUtils.waitForFxEvents();
         List<MenuItem> items = showingMenuItems();
-        for (String id : List.of("europe-equipment-MUSKET",
+        for (String id : List.of("europe-equipment-WEAPONS",
                 "europe-equipment-HORSE", "europe-equipment-TOOLS",
                 "europe-ordain-" + unitId)) {
             assertTrue(item(items, id).isDisable(), "Disabled entry " + id);
@@ -139,7 +139,7 @@ public final class EuropeEquipmentPage extends AbstractScreen {
         assertSame(getModel().getPlayerByName("Dutch"), unit.getOwner());
         assertEquals(UnitType.COLONIST, unit.getType());
         assertEquals(gold, unit.getOwner().getGold());
-        assertEquals(guns, unit.isHoldingGuns());
+        assertEquals(guns, unit.isHoldingWeapons());
         assertEquals(horses, unit.isMounted());
         assertEquals(tools, unit.getTools());
         assertTrue(placeType.isInstance(unit.getPlace()),

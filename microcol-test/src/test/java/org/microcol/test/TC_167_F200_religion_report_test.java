@@ -22,13 +22,13 @@ import javafx.stage.Stage;
 
 /**
  * The religion report (R-0199) of the Dutch nation on the F58 fixture. The
- * fixture starts with 74 saved crosses, one short of the Discoverer threshold
- * of 75, and an unattended chapel that gives one cross. The player moves the
- * existing town-hall worker to the cross job, which staffs the chapel and gives
- * two crosses (chapel with one colonist, as in ReligiousProductionTest). The
+ * fixture starts with 74 saved torches, one short of the Discoverer threshold
+ * of 75, and an unattended chapel that gives one torch. The player moves the
+ * existing town-hall worker to the torch job, which staffs the chapel and gives
+ * two torches (chapel with one colonist, as in ReligiousProductionTest). The
  * next update credits both, so the threshold is reached and the earned
  * immigrant waits until the next turn starts. That turn settles the arrival
- * before production: 76 - 75 + 2 = 3 crosses, and the next threshold rises to
+ * before production: 76 - 75 + 2 = 3 torches, and the next threshold rises to
  * 94. This is an ordinary arrival, not a frozen human choice. Save and Continue
  * keep the pending arrival, and the report only reads the figures.
  */
@@ -65,11 +65,11 @@ public class TC_167_F200_religion_report_test extends AbstractMicroColTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         final ReligionReportPage religion = new ReligionReportPage(
                 getContext());
-        religion.loadCrossFixture(74);
+        religion.loadTorchFixture(74);
         game = GamePage.of(getContext());
 
         // The report opens from the statistics with the current output of one
-        // cross and 74 accumulated crosses toward the threshold of 75.
+        // torch and 74 accumulated torches toward the threshold of 75.
         religion.open();
         religion.verifyTabSelected();
         religion.verifyNationalOutput(1);
@@ -80,12 +80,12 @@ public class TC_167_F200_religion_report_test extends AbstractMicroColTest {
         religion.captureDialog("religionTab", "religion-report-english.png");
         game = religion.closeWithEscape();
 
-        // The town-hall worker takes the cross job; the chapel is staffed at
+        // The town-hall worker takes the torch job; the chapel is staffed at
         // once and the displayed output changes, while the progress does not.
         final ColonyScreen colony = game.openColonyAt(COLONY, COLONY_NAME);
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromIndoor("id_town_hall", 0);
-        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.CROSS);
+        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.TORCHES);
         jobs.confirm();
         game = colony.close();
         religion.open();
@@ -95,7 +95,7 @@ public class TC_167_F200_religion_report_test extends AbstractMicroColTest {
         religion.verifyTarget(75, 1);
         game = religion.closeWithEscape();
 
-        // The next update credits both crosses and reaches the threshold; the
+        // The next update credits both torches and reaches the threshold; the
         // immigrant is pending until the following turn starts.
         game.nextTurnAndCloseDialogs();
         religion.open();
@@ -110,7 +110,7 @@ public class TC_167_F200_religion_report_test extends AbstractMicroColTest {
         religion.verifyTabSelectedAndFocused();
         game = religion.closeWithEscape();
 
-        // Save and Continue keep the same crosses and the same pending arrival.
+        // Save and Continue keep the same torches and the same pending arrival.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         religion.open();
@@ -119,7 +119,7 @@ public class TC_167_F200_religion_report_test extends AbstractMicroColTest {
         religion.verifyImmigration(ARRIVES);
         game = religion.closeWithEscape();
 
-        // The arrival is settled before production: 76 - 75 + 2 = 3 crosses,
+        // The arrival is settled before production: 76 - 75 + 2 = 3 torches,
         // and
         // the next threshold rises to 94 for the following immigrant.
         game.nextTurnAndCloseDialogs();
@@ -140,7 +140,7 @@ public class TC_167_F200_religion_report_test extends AbstractMicroColTest {
         settings.goBack().loadGame();
         final ReligionReportPage religion = new ReligionReportPage(
                 getContext());
-        religion.loadCrossFixture(74);
+        religion.loadTorchFixture(74);
         GamePage game = GamePage.of(getContext());
 
         // The Czech labels show the same figures as the English ones.
@@ -153,7 +153,7 @@ public class TC_167_F200_religion_report_test extends AbstractMicroColTest {
         final ColonyScreen colony = game.openColonyAt(COLONY, COLONY_NAME);
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromIndoor("id_town_hall", 0);
-        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.CROSS);
+        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.TORCHES);
         jobs.confirm();
         game = colony.close();
         game.nextTurnAndCloseDialogs();

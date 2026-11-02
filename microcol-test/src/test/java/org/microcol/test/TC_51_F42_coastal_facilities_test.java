@@ -58,14 +58,14 @@ public class TC_51_F42_coastal_facilities_test extends AbstractMicroColTest {
         colony.dragFieldWorkerTo(0, Direction.east);
         ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.verifyFieldJob(0, Location.of(25, 16),
-                Goods.of(GoodsType.CORN, 3));
+                Goods.of(GoodsType.GRAIN, 3));
         game = colony.close();
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame().openColonyAt(COLONY,
                 "New Amsterdam");
         building.verifyBuilding(ConstructionType.DOCK, 1);
         jobs.verifyFieldJob(0, Location.of(25, 16),
-                Goods.of(GoodsType.CORN, 3));
+                Goods.of(GoodsType.GRAIN, 3));
     }
 
     @Test
@@ -122,7 +122,7 @@ public class TC_51_F42_coastal_facilities_test extends AbstractMicroColTest {
         building.verifyBuilding(ConstructionType.SHIPYARD, 1);
         ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.verifyFieldJob(0, Location.of(25, 16),
-                Goods.of(GoodsType.CORN, 3));
+                Goods.of(GoodsType.GRAIN, 3));
         // Cancel leaves the world intact, then real construction creates each
         // ship once.
         colony.rememberWorld();
@@ -160,6 +160,6 @@ public class TC_51_F42_coastal_facilities_test extends AbstractMicroColTest {
         coast.verifyShips(UnitType.FRIGATE, 1);
         building.verifyBuilding(ConstructionType.SHIPYARD, 1);
         jobs.verifyFieldJob(0, Location.of(25, 16),
-                Goods.of(GoodsType.CORN, 3));
+                Goods.of(GoodsType.GRAIN, 3));
     }
 }

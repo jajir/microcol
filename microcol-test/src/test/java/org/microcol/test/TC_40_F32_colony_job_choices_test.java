@@ -39,8 +39,8 @@ public class TC_40_F32_colony_job_choices_test extends AbstractMicroColTest {
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.rememberWorld();
         jobs.openFromField(0);
-        // Forested desert has no tobacco, but forested grassland nearby does.
-        jobs.select(Kind.CURRENT_FIELD, GoodsType.TOBACCO);
+        // Forested desert has no grapes, but forested grassland nearby does.
+        jobs.select(Kind.CURRENT_FIELD, GoodsType.GRAPES);
         jobs.verifyDetails("This crop cannot be produced on the current field",
                 false);
         jobs.select(Kind.CURRENT_FIELD, GoodsType.LUMBER);
@@ -54,11 +54,11 @@ public class TC_40_F32_colony_job_choices_test extends AbstractMicroColTest {
 
         // A crop choice keeps the original field.
         jobs.openFromField(0);
-        jobs.select(Kind.CURRENT_FIELD, GoodsType.CORN);
+        jobs.select(Kind.CURRENT_FIELD, GoodsType.GRAIN);
         jobs.confirm();
         jobs.verifyClosed();
         jobs.verifyFieldJob(0, Location.of(23, 16),
-                Goods.of(GoodsType.CORN, 2));
+                Goods.of(GoodsType.GRAIN, 2));
 
         // Moving to the shown best field is a separate confirmed action.
         jobs.openFromField(0);
@@ -167,13 +167,13 @@ public class TC_40_F32_colony_job_choices_test extends AbstractMicroColTest {
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromField(0);
         jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
-        jobs.changeSourceCropWhileOpen(GoodsType.CORN);
+        jobs.changeSourceCropWhileOpen(GoodsType.GRAIN);
         jobs.confirm();
         jobs.verifyMessage("Nothing was assigned");
         jobs.verifyWorldUnchanged();
         jobs.cancel();
         jobs.verifyFieldJob(0, Location.of(23, 16),
-                Goods.of(GoodsType.CORN, 2));
+                Goods.of(GoodsType.GRAIN, 2));
     }
 
     @Test
@@ -317,7 +317,7 @@ public class TC_40_F32_colony_job_choices_test extends AbstractMicroColTest {
                 "New Amsterdam");
         final org.microcol.page.EquipmentPage equipment = new org.microcol.page.EquipmentPage(
                 getContext());
-        equipment.open("Equip with muskets");
+        equipment.open("Equip with weapons");
         equipment.confirm();
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
 
@@ -338,7 +338,7 @@ public class TC_40_F32_colony_job_choices_test extends AbstractMicroColTest {
                 "New Amsterdam");
         final org.microcol.page.EquipmentPage equipment = new org.microcol.page.EquipmentPage(
                 getContext());
-        equipment.open("Equip with muskets");
+        equipment.open("Equip with weapons");
         equipment.confirm();
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
 

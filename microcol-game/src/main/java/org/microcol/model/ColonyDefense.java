@@ -27,7 +27,7 @@ public final class ColonyDefense {
         /** No armed unit exists; the inhabitants defend once as a group. */
         CIVILIANS,
         /**
-         * Paul Revere arms one worker from stored muskets because no armed
+         * Paul Revere arms one worker from stored weapons because no armed
          * defender exists.
          */
         REVERE,
@@ -44,13 +44,13 @@ public final class ColonyDefense {
     private final Unit defender;
     private final List<Unit> roster;
     private final Map<Unit, Location> escapes;
-    private final int revereMuskets;
+    private final int revereWeapons;
     private final boolean revereExits;
     private final String inputs;
 
     ColonyDefense(final Colony colony, final Location battlefield,
             final Kind kind, final Unit defender, final List<Unit> roster,
-            final Map<Unit, Location> escapes, final int revereMuskets,
+            final Map<Unit, Location> escapes, final int revereWeapons,
             final boolean revereExits, final String inputs) {
         this.colony = Preconditions.checkNotNull(colony);
         this.battlefield = Preconditions.checkNotNull(battlefield);
@@ -58,7 +58,7 @@ public final class ColonyDefense {
         this.defender = Preconditions.checkNotNull(defender);
         this.roster = ImmutableList.copyOf(roster);
         this.escapes = new LinkedHashMap<>(escapes);
-        this.revereMuskets = revereMuskets;
+        this.revereWeapons = revereWeapons;
         this.revereExits = revereExits;
         this.inputs = Preconditions.checkNotNull(inputs);
     }
@@ -101,11 +101,11 @@ public final class ColonyDefense {
     }
 
     /**
-     * @return the stored muskets a confirmed battle consumes; zero unless Paul
+     * @return the stored weapons a confirmed battle consumes; zero unless Paul
      *         Revere arms a worker
      */
-    public int getRevereMuskets() {
-        return revereMuskets;
+    public int getRevereWeapons() {
+        return revereWeapons;
     }
 
     /**
@@ -133,7 +133,7 @@ public final class ColonyDefense {
         return colony == that.colony && battlefield.equals(that.battlefield)
                 && kind == that.kind && defender == that.defender
                 && roster.equals(that.roster) && escapes.equals(that.escapes)
-                && revereMuskets == that.revereMuskets
+                && revereWeapons == that.revereWeapons
                 && revereExits == that.revereExits
                 && inputs.equals(that.inputs);
     }

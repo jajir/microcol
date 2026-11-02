@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * Saved Crown roster: every member with its stable identity, the number of
- * growth units already added and the bell remainder toward the next one.
+ * growth units already added and the owl remainder toward the next one.
  */
 public final class RoyalRosterPo {
 
@@ -29,7 +29,7 @@ public final class RoyalRosterPo {
     }
 
     /**
-     * @return number of ground units added by bell growth
+     * @return number of ground units added by owl growth
      */
     public Integer getGrowthCount() {
         return growthCount;
@@ -40,7 +40,7 @@ public final class RoyalRosterPo {
     }
 
     /**
-     * @return produced bells not yet converted into a unit
+     * @return produced owls not yet converted into a unit
      */
     public Integer getRemainder() {
         return remainder;

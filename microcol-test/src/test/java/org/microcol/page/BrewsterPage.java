@@ -99,12 +99,12 @@ public final class BrewsterPage extends AbstractScreen {
                 new Gson().toJson(player().save().getRecruitment()));
     }
 
-    public void verifyWaiting(final int crosses, final int earned,
+    public void verifyWaiting(final int torches, final int earned,
             final List<Integer> ids, final String buttonText) {
         assertTrue(getModel().isAwaitingImmigrationChoice());
         assertFalse(getModel().isGameRunning());
         final var pool = player().save().getRecruitment();
-        assertEquals(crosses, pool.getCrosses());
+        assertEquals(torches, pool.getTorches());
         assertEquals(earned, pool.getEarnedImmigrants());
         assertEquals(0, pool.getPaidPassages());
         assertEquals(10000, player().getGold());
@@ -128,17 +128,17 @@ public final class BrewsterPage extends AbstractScreen {
         assertFalse(getButtonById("exit").isDisabled());
     }
 
-    public void verifyCompleted(final int crosses, final int earned,
-            final int bells, final UnitType first, final UnitType second) {
+    public void verifyCompleted(final int torches, final int earned,
+            final int owls, final UnitType first, final UnitType second) {
         assertTrue(getModel().isGameRunning());
         assertFalse(getModel().isAwaitingImmigrationChoice());
         final var pool = player().save().getRecruitment();
-        assertEquals(crosses, pool.getCrosses());
+        assertEquals(torches, pool.getTorches());
         assertEquals(earned, pool.getEarnedImmigrants());
         assertEquals(0, pool.getPaidPassages());
         assertEquals(10000, player().getGold());
-        assertEquals(bells, getModel().getColonyById(0).orElseThrow()
-                .getWarehouse().getGoods(GoodsType.BELL).getAmount());
+        assertEquals(owls, getModel().getColonyById(0).orElseThrow()
+                .getWarehouse().getGoods(GoodsType.OWLS).getAmount());
         assertEquals(first, getModel().getUnitById(201).getType());
         assertEquals(second, getModel().getUnitById(202).getType());
         assertTrue(getModel().getUnitById(201).isAtEuropePier());

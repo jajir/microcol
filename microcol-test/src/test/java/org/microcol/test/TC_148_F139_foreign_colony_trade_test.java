@@ -28,22 +28,22 @@ public class TC_148_F139_foreign_colony_trade_test
         extends AbstractMicroColTest {
     private static final File FIXTURE = ForeignColonyTradePage.SOURCE;
     private static final String FRENCH = "France";
-    private static final String GIVE_TWO_CORN = "You give: 2 Corn.";
-    private static final String GIVE_TWO_SUGAR = "You give: 2 Sugar cane.";
+    private static final String GIVE_TWO_GRAIN = "You give: 2 Grain.";
+    private static final String GIVE_TWO_OLIVES = "You give: 2 Olives.";
     private static final String RECEIVE_NOTHING = "You receive no goods back.";
-    private static final String RECEIVE_TOBACCO = "You receive: 1 Tobacco.";
+    private static final String RECEIVE_GRAPES = "You receive: 1 Grapes.";
     private static final String NO_NET = "";
     private static final String NO_FOUNDER = "Jan de Witt must be in your Congress to trade with a foreign colony.";
     private static final String FRENCH_CANNOT_PAY = "The colony's nation cannot pay this much gold.";
-    private static final String GIVE_TWO_CORN_CZ = "Dáte: 2 Jídlo.";
+    private static final String GIVE_TWO_GRAIN_CZ = "Dáte: 2 Obilí.";
     private static final String RECEIVE_NOTHING_CZ = "Zpět nedostanete žádné zboží.";
     private static final int GOLD = ForeignColonyTradePage.START_GOLD;
     private static final int WAGON = ForeignColonyTradePage.WAGON_ID;
     private static final int SHIP = ForeignColonyTradePage.SHIP_ID;
-    private static final int WAGON_CORN = 4;
-    private static final int SHIP_CORN = 2;
-    private static final int COLONY_CORN = 20;
-    private static final int COLONY_TOBACCO = 30;
+    private static final int WAGON_GRAIN = 4;
+    private static final int SHIP_GRAIN = 2;
+    private static final int COLONY_GRAIN = 20;
+    private static final int COLONY_GRAPES = 30;
     private static final int FULL_HOLD = 100;
 
     @Start
@@ -63,10 +63,10 @@ public class TC_148_F139_foreign_colony_trade_test
         trade.openWagonTrade();
         trade.verifyDialogOpen(true);
         trade.verifyReceiveControlsEnabled(false);
-        trade.chooseGive(GoodsType.CORN);
+        trade.chooseGive(GoodsType.GRAIN);
         trade.setGiveAmount(2);
-        int gold = trade.expectedSale(GoodsType.CORN, 2);
-        trade.verifyLines(GIVE_TWO_CORN, RECEIVE_NOTHING,
+        int gold = trade.expectedSale(GoodsType.GRAIN, 2);
+        trade.verifyLines(GIVE_TWO_GRAIN, RECEIVE_NOTHING,
                 ForeignColonyTradePage.netEnglish(gold));
         trade.verifyConfirmEnabled(true);
         // Cancelling changes neither side and does not move or capture.
@@ -74,28 +74,28 @@ public class TC_148_F139_foreign_colony_trade_test
         trade.verifyDialogOpen(false);
         trade.verifyGold("Dutch", GOLD);
         trade.verifyGold(FRENCH, GOLD);
-        trade.verifyCarried(WAGON, GoodsType.CORN, WAGON_CORN);
-        trade.verifyColonyStock(GoodsType.CORN, COLONY_CORN);
+        trade.verifyCarried(WAGON, GoodsType.GRAIN, WAGON_GRAIN);
+        trade.verifyColonyStock(GoodsType.GRAIN, COLONY_GRAIN);
         trade.verifyVisitorsUnmoved();
         trade.verifyColonyOwner(FRENCH);
-        // Confirming pays the exact bid once and moves the corn to the colony.
+        // Confirming pays the exact bid once and moves the grain to the colony.
         trade.openWagonTrade();
-        trade.chooseGive(GoodsType.CORN);
+        trade.chooseGive(GoodsType.GRAIN);
         trade.setGiveAmount(2);
         trade.confirm();
         trade.verifyDialogOpen(false);
         trade.verifyGold("Dutch", GOLD + gold);
         trade.verifyGold(FRENCH, GOLD - gold);
-        trade.verifyCarried(WAGON, GoodsType.CORN, WAGON_CORN - 2);
-        trade.verifyColonyStock(GoodsType.CORN, COLONY_CORN + 2);
+        trade.verifyCarried(WAGON, GoodsType.GRAIN, WAGON_GRAIN - 2);
+        trade.verifyColonyStock(GoodsType.GRAIN, COLONY_GRAIN + 2);
         trade.verifyVisitorsUnmoved();
         trade.verifyColonyOwner(FRENCH);
         // Continue keeps the one result; the sale is not repeated.
         trade.exitAndContinue();
         trade.verifyGold("Dutch", GOLD + gold);
         trade.verifyGold(FRENCH, GOLD - gold);
-        trade.verifyCarried(WAGON, GoodsType.CORN, WAGON_CORN - 2);
-        trade.verifyColonyStock(GoodsType.CORN, COLONY_CORN + 2);
+        trade.verifyCarried(WAGON, GoodsType.GRAIN, WAGON_GRAIN - 2);
+        trade.verifyColonyStock(GoodsType.GRAIN, COLONY_GRAIN + 2);
     }
 
     @Test
@@ -108,15 +108,15 @@ public class TC_148_F139_foreign_colony_trade_test
         trade.rememberVisitors();
         // Ticking the barter box enables the goods received.
         trade.openWagonTrade();
-        trade.chooseGive(GoodsType.CORN);
+        trade.chooseGive(GoodsType.GRAIN);
         trade.setGiveAmount(2);
         trade.setBarter(true);
         trade.verifyReceiveControlsEnabled(true);
-        trade.chooseReceive(GoodsType.TOBACCO);
+        trade.chooseReceive(GoodsType.GRAPES);
         trade.setReceiveAmount(1);
-        int net = trade.expectedBarterNet(GoodsType.CORN, 2, GoodsType.TOBACCO,
+        int net = trade.expectedBarterNet(GoodsType.GRAIN, 2, GoodsType.GRAPES,
                 1);
-        trade.verifyLines(GIVE_TWO_CORN, RECEIVE_TOBACCO,
+        trade.verifyLines(GIVE_TWO_GRAIN, RECEIVE_GRAPES,
                 ForeignColonyTradePage.netEnglish(net));
         trade.verifyConfirmEnabled(true);
         // Confirming moves goods both ways and settles only the difference.
@@ -124,18 +124,18 @@ public class TC_148_F139_foreign_colony_trade_test
         trade.verifyDialogOpen(false);
         trade.verifyGold("Dutch", GOLD + net);
         trade.verifyGold(FRENCH, GOLD - net);
-        trade.verifyCarried(WAGON, GoodsType.CORN, WAGON_CORN - 2);
-        trade.verifyCarried(WAGON, GoodsType.TOBACCO, 1);
-        trade.verifyColonyStock(GoodsType.CORN, COLONY_CORN + 2);
-        trade.verifyColonyStock(GoodsType.TOBACCO, COLONY_TOBACCO - 1);
+        trade.verifyCarried(WAGON, GoodsType.GRAIN, WAGON_GRAIN - 2);
+        trade.verifyCarried(WAGON, GoodsType.GRAPES, 1);
+        trade.verifyColonyStock(GoodsType.GRAIN, COLONY_GRAIN + 2);
+        trade.verifyColonyStock(GoodsType.GRAPES, COLONY_GRAPES - 1);
         trade.verifyVisitorsUnmoved();
         trade.verifyColonyOwner(FRENCH);
         // Continue keeps the exchange exactly once.
         trade.exitAndContinue();
         trade.verifyGold("Dutch", GOLD + net);
         trade.verifyGold(FRENCH, GOLD - net);
-        trade.verifyCarried(WAGON, GoodsType.TOBACCO, 1);
-        trade.verifyColonyStock(GoodsType.TOBACCO, COLONY_TOBACCO - 1);
+        trade.verifyCarried(WAGON, GoodsType.GRAPES, 1);
+        trade.verifyColonyStock(GoodsType.GRAPES, COLONY_GRAPES - 1);
     }
 
     @Test
@@ -147,17 +147,17 @@ public class TC_148_F139_foreign_colony_trade_test
         trade.rememberVisitors();
         trade.openShipTrade();
         trade.verifyDialogOpen(true);
-        trade.chooseGive(GoodsType.CORN);
+        trade.chooseGive(GoodsType.GRAIN);
         trade.setGiveAmount(2);
-        int gold = trade.expectedSale(GoodsType.CORN, 2);
-        trade.verifyLines(GIVE_TWO_CORN, RECEIVE_NOTHING,
+        int gold = trade.expectedSale(GoodsType.GRAIN, 2);
+        trade.verifyLines(GIVE_TWO_GRAIN, RECEIVE_NOTHING,
                 ForeignColonyTradePage.netEnglish(gold));
         trade.confirm();
         trade.verifyDialogOpen(false);
         trade.verifyGold("Dutch", GOLD + gold);
         trade.verifyGold(FRENCH, GOLD - gold);
-        trade.verifyCarried(SHIP, GoodsType.CORN, SHIP_CORN - 2);
-        trade.verifyColonyStock(GoodsType.CORN, COLONY_CORN + 2);
+        trade.verifyCarried(SHIP, GoodsType.GRAIN, SHIP_GRAIN - 2);
+        trade.verifyColonyStock(GoodsType.GRAIN, COLONY_GRAIN + 2);
         trade.verifyVisitorsUnmoved();
         trade.verifyColonyOwner(FRENCH);
     }
@@ -179,8 +179,8 @@ public class TC_148_F139_foreign_colony_trade_test
         trade.verifyDialogOpen(false);
         trade.verifyGold("Dutch", GOLD);
         trade.verifyGold(FRENCH, GOLD);
-        trade.verifyCarried(WAGON, GoodsType.CORN, WAGON_CORN);
-        trade.verifyColonyStock(GoodsType.CORN, COLONY_CORN);
+        trade.verifyCarried(WAGON, GoodsType.GRAIN, WAGON_GRAIN);
+        trade.verifyColonyStock(GoodsType.GRAIN, COLONY_GRAIN);
         trade.verifyVisitorsUnmoved();
         trade.verifyColonyOwner(FRENCH);
     }
@@ -194,21 +194,21 @@ public class TC_148_F139_foreign_colony_trade_test
         WelcomePage.of(getContext()).loadGame();
         trade.rememberVisitors();
         trade.openWagonTrade();
-        trade.chooseGive(GoodsType.CORN);
+        trade.chooseGive(GoodsType.GRAIN);
         trade.setGiveAmount(2);
-        int gold = trade.expectedSale(GoodsType.CORN, 2);
+        int gold = trade.expectedSale(GoodsType.GRAIN, 2);
         trade.verifyConfirmEnabled(true);
         trade.confirm();
         trade.verifyDialogOpen(false);
         trade.verifyGold("Dutch", GOLD + gold);
         trade.verifyGold(FRENCH, GOLD - gold);
-        trade.verifyCarried(WAGON, GoodsType.CORN, WAGON_CORN - 2);
-        trade.verifyColonyStock(GoodsType.CORN, COLONY_CORN + 2);
+        trade.verifyCarried(WAGON, GoodsType.GRAIN, WAGON_GRAIN - 2);
+        trade.verifyColonyStock(GoodsType.GRAIN, COLONY_GRAIN + 2);
         trade.verifyVisitorsUnmoved();
         // Continue keeps the rebel trade exactly once.
         trade.exitAndContinue();
         trade.verifyGold("Dutch", GOLD + gold);
-        trade.verifyCarried(WAGON, GoodsType.CORN, WAGON_CORN - 2);
+        trade.verifyCarried(WAGON, GoodsType.GRAIN, WAGON_GRAIN - 2);
     }
 
     @Test
@@ -220,14 +220,14 @@ public class TC_148_F139_foreign_colony_trade_test
         settings.setCzechLanguage();
         settings.goBack().loadGame();
         trade.openWagonTrade();
-        trade.chooseGive(GoodsType.CORN);
+        trade.chooseGive(GoodsType.GRAIN);
         trade.setGiveAmount(2);
-        int gold = trade.expectedSale(GoodsType.CORN, 2);
-        trade.verifyLines(GIVE_TWO_CORN_CZ, RECEIVE_NOTHING_CZ,
+        int gold = trade.expectedSale(GoodsType.GRAIN, 2);
+        trade.verifyLines(GIVE_TWO_GRAIN_CZ, RECEIVE_NOTHING_CZ,
                 ForeignColonyTradePage.netCzech(gold));
         trade.cancel();
         trade.verifyGold("Dutch", GOLD);
-        trade.verifyCarried(WAGON, GoodsType.CORN, WAGON_CORN);
+        trade.verifyCarried(WAGON, GoodsType.GRAIN, WAGON_GRAIN);
     }
 
     @Test
@@ -238,29 +238,29 @@ public class TC_148_F139_foreign_colony_trade_test
         trade.prepareFullWagon("f148-full-wagon");
         WelcomePage.of(getContext()).loadGame();
         trade.rememberVisitors();
-        // Both holds are taken, yet the barter is offered: the two sugar canes
-        // leave their hold completely, so the tobacco has room.
+        // Both holds are taken, yet the barter is offered: the two olives canes
+        // leave their hold completely, so the grapes has room.
         trade.openWagonTrade();
-        trade.chooseGive(GoodsType.SUGAR);
+        trade.chooseGive(GoodsType.OLIVES);
         trade.setGiveAmount(2);
         trade.setBarter(true);
-        trade.chooseReceive(GoodsType.TOBACCO);
-        trade.verifyReceiveMaximum(COLONY_TOBACCO);
+        trade.chooseReceive(GoodsType.GRAPES);
+        trade.verifyReceiveMaximum(COLONY_GRAPES);
         trade.setReceiveAmount(1);
-        int net = trade.expectedBarterNet(GoodsType.SUGAR, 2, GoodsType.TOBACCO,
+        int net = trade.expectedBarterNet(GoodsType.OLIVES, 2, GoodsType.GRAPES,
                 1);
-        trade.verifyLines(GIVE_TWO_SUGAR, RECEIVE_TOBACCO,
+        trade.verifyLines(GIVE_TWO_OLIVES, RECEIVE_GRAPES,
                 ForeignColonyTradePage.netEnglish(net));
         trade.verifyConfirmEnabled(true);
         trade.confirm();
         trade.verifyDialogOpen(false);
-        // Goods and gold are conserved: the freed hold now holds one tobacco.
+        // Goods and gold are conserved: the freed hold now holds one grapes.
         trade.verifyGold("Dutch", GOLD + net);
         trade.verifyGold(FRENCH, GOLD - net);
-        trade.verifyCarried(WAGON, GoodsType.SUGAR, 0);
-        trade.verifyCarried(WAGON, GoodsType.TOBACCO, FULL_HOLD + 1);
-        trade.verifyColonyStock(GoodsType.SUGAR, 2);
-        trade.verifyColonyStock(GoodsType.TOBACCO, COLONY_TOBACCO - 1);
+        trade.verifyCarried(WAGON, GoodsType.OLIVES, 0);
+        trade.verifyCarried(WAGON, GoodsType.GRAPES, FULL_HOLD + 1);
+        trade.verifyColonyStock(GoodsType.OLIVES, 2);
+        trade.verifyColonyStock(GoodsType.GRAPES, COLONY_GRAPES - 1);
         trade.verifyVisitorsUnmoved();
     }
 
@@ -273,19 +273,19 @@ public class TC_148_F139_foreign_colony_trade_test
         WelcomePage.of(getContext()).loadGame();
         trade.rememberVisitors();
         trade.openWagonTrade();
-        trade.chooseGive(GoodsType.CORN);
+        trade.chooseGive(GoodsType.GRAIN);
         trade.setGiveAmount(2);
         // The colony's nation cannot pay: the choice is shown but cannot be
         // confirmed, and no balance is promised.
-        trade.verifyLines(GIVE_TWO_CORN, RECEIVE_NOTHING, NO_NET);
+        trade.verifyLines(GIVE_TWO_GRAIN, RECEIVE_NOTHING, NO_NET);
         trade.verifyFeedback(FRENCH_CANNOT_PAY);
         trade.verifyConfirmEnabled(false);
         trade.cancel();
         trade.verifyDialogOpen(false);
         trade.verifyGold("Dutch", GOLD);
         trade.verifyGold(FRENCH, 0);
-        trade.verifyCarried(WAGON, GoodsType.CORN, WAGON_CORN);
-        trade.verifyColonyStock(GoodsType.CORN, COLONY_CORN);
+        trade.verifyCarried(WAGON, GoodsType.GRAIN, WAGON_GRAIN);
+        trade.verifyColonyStock(GoodsType.GRAIN, COLONY_GRAIN);
         trade.verifyVisitorsUnmoved();
     }
 }

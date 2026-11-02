@@ -51,8 +51,8 @@ public class TC_02_F02_founding_colony_test extends AbstractMicroColTest {
         naming.verifyDraft("Leiden");
         naming.save();
         final ColonyScreen opened = ColonyScreen.of(getContext(), "Leiden");
-        // The new colony produces its base cross without a preacher.
-        opened.verifyCrossProduction(1);
+        // The new colony produces its base torch without a preacher.
+        opened.verifyTorchProduction(1);
         gamePage = opened.close();
 
         // verify that option build colony is not here
@@ -69,21 +69,22 @@ public class TC_02_F02_founding_colony_test extends AbstractMicroColTest {
         // verify that on filed is exactly one unit, the one that founded colony
         colonyScreen.verifyNumberOfUnitsOnFields(1);
 
-        // The grassland center adds its unattended commons, food 4 and tobacco
+        // The grassland center adds its unattended commons, food 4 and grapes
         // 3 with no worker, to the founder's field: net food is the earlier 2
         // plus the 4 from the commons.
-        colonyScreen.verifyTownCommons("Corn: 4, Tobacco: 3");
-        colonyScreen.verifyThatProductionIs(GoodsType.CORN, 6);
+        colonyScreen.verifyTownCommons("Grain: 4, Grapes: 3");
+        colonyScreen.verifyThatProductionIs(GoodsType.GRAIN, 6);
 
         colonyScreen.verifyNumberOfUnitsAtPier(1);
 
-        int cornProduction = colonyScreen.moveUnitFromPietToEmptyField(0);
+        int grainProduction = colonyScreen.moveUnitFromPietToEmptyField(0);
 
-        // The second unit lands on a random free corn field. The returned value
+        // The second unit lands on a random free grain field. The returned
+        // value
         // is the colony's net food, not the worker's yield: it was 3 or 4
         // before the town commons, and the same 4 commons food now raises it
         // to 7 or 8.
-        colonyScreen.verifyProductionInRange(cornProduction, 7, 8);
+        colonyScreen.verifyProductionInRange(grainProduction, 7, 8);
     }
 
 }

@@ -167,7 +167,7 @@ public final class RivalColonyPage extends AbstractScreen {
                 .filter(getModel().getMap()::isValid).anyMatch(at -> getModel()
                         .getMap().getTerrainTypeAt(at).isSea()));
         assertTrue(colony.getGoodsStats()
-                .getStatsByType(org.microcol.model.GoodsType.CORN)
+                .getStatsByType(org.microcol.model.GoodsType.GRAIN)
                 .getNetProduction() >= 0);
         assertEquals(6, getModel().getAllUnits().size());
         assertTrue(getNodeFinder().lookup("#nextTurn").tryQuery().isPresent(),
@@ -178,7 +178,7 @@ public final class RivalColonyPage extends AbstractScreen {
 
     public int readRivalFood(final int colonyId) {
         return getModel().getColonyById(colonyId).orElseThrow().getWarehouse()
-                .getGoods(org.microcol.model.GoodsType.CORN).getAmount();
+                .getGoods(org.microcol.model.GoodsType.GRAIN).getAmount();
     }
 
     public void verifyRivalColonyKeepsProducing(final int expectedRound,
@@ -197,7 +197,7 @@ public final class RivalColonyPage extends AbstractScreen {
         assertEquals(0, colony.getWarehouse()
                 .getGoods(org.microcol.model.GoodsType.LUMBER).getAmount());
         assertTrue(colony.getGoodsStats()
-                .getStatsByType(org.microcol.model.GoodsType.CORN)
+                .getStatsByType(org.microcol.model.GoodsType.GRAIN)
                 .getNetProduction() >= 0);
         assertSame(getModel().getPlayerByName("Dutch"),
                 getModel().getCurrentPlayer());
@@ -251,7 +251,7 @@ public final class RivalColonyPage extends AbstractScreen {
             assertTrue(worker.isAtPlaceColonyField());
             final org.microcol.model.GoodsType goods = worker
                     .getPlaceColonyField().getProducedGoodsType();
-            food += goods == org.microcol.model.GoodsType.CORN ? 1 : 0;
+            food += goods == org.microcol.model.GoodsType.GRAIN ? 1 : 0;
             lumber += goods == org.microcol.model.GoodsType.LUMBER ? 1 : 0;
         }
         assertTrue(food >= 1, "Food comes first");
@@ -259,7 +259,7 @@ public final class RivalColonyPage extends AbstractScreen {
         assertTrue(readRivalFood(expectedColonyId) >= expectedMinimumFood);
         assertTrue(readRivalLumber(expectedColonyId) >= expectedMinimumLumber);
         assertTrue(colony.getGoodsStats()
-                .getStatsByType(org.microcol.model.GoodsType.CORN)
+                .getStatsByType(org.microcol.model.GoodsType.GRAIN)
                 .getNetProduction() >= 0);
         assertSame(getModel().getPlayerByName("Dutch"),
                 getModel().getCurrentPlayer());
@@ -798,7 +798,7 @@ public final class RivalColonyPage extends AbstractScreen {
                 "Food covers five turns of the remaining residents");
         assertTrue(
                 colony.getGoodsStats()
-                        .getStatsByType(org.microcol.model.GoodsType.CORN)
+                        .getStatsByType(org.microcol.model.GoodsType.GRAIN)
                         .getNetProduction() >= 0,
                 "The food balance is not negative");
     }

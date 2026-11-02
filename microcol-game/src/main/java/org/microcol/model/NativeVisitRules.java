@@ -179,7 +179,7 @@ final class NativeVisitRules {
     /** Soldiers and dragoons: colonists that hold guns, or are mounted. */
     private static boolean isArmedOrMounted(final Unit unit) {
         return unit instanceof UnitFreeColonist
-                && (((UnitFreeColonist) unit).isHoldingGuns()
+                && (((UnitFreeColonist) unit).isHoldingWeapons()
                         || ((UnitFreeColonist) unit).isMounted());
     }
 

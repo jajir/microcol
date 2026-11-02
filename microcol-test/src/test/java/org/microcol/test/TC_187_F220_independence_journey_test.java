@@ -50,38 +50,38 @@ import javafx.stage.Stage;
  * the accepted rules, not read from the game. Each colony has eight residents;
  * the armed veterans and the other colonists on the colony squares are not
  * residents, so the national capacity is 4 x 1,600 = 6,400 liberty points. A
- * town hall makes 1 unattended bell plus 3 per worker; at 50 percent support
+ * town hall makes 1 unattended owl plus 3 per worker; at 50 percent support
  * every worker makes one more, and five Tories stay below the Discoverer
- * threshold of 10. Bells become liberty one for one. The calendar counts years
+ * threshold of 10. Owls become liberty one for one. The calendar counts years
  * until 1600 (turn 110) and then four turns a year: turns 698 to 701 are 1747.
  * </p>
  * <ul>
  * <li>Turn 698: 1,500 gold; 4 x 762 = 3,048 of 6,400 (47 percent), so no
  * declaration is offered; 40 + 12 = 52 Dutch colonists; 160 ore; the Discoverer
  * force of 4 infantry, 2 cavalry, 2 artillery and 2 men-of-war in reserve.</li>
- * <li>Turn 699, after one update of 4 x 2 x (1 + 3 x 6) = 152 bells: 3,200 of
+ * <li>Turn 699, after one update of 4 x 2 x (1 + 3 x 6) = 152 owls: 3,200 of
  * 6,400, exactly 50 percent. The declaration in 1747 musters floor(4 x 1/2) = 2
  * veterans per garrisoned colony, the two lowest identities: 500, 501, 504,
  * 505, 508 and 509. Home Europe closes, and the player selects the export of
  * ore. Nothing is sold before the update.</li>
  * <li>Turn 700, after the first update since the declaration: the target of 375
- * bells starts with 4 x 2 x (1 + 3 x 7) = 176 bells; liberty is 3,376; the
- * custom house sells 160 - 100 = 60 ore at the bid of 4 and no tax, and the
- * closed home market halves the 240 to 120, so the Dutch hold 1,620 gold and
- * 100 ore. The first royal turn put all eight ground units on the two
- * men-of-war: six on the first and two on the second.</li>
+ * owls starts with 4 x 2 x (1 + 3 x 7) = 176 owls; liberty is 3,376; the custom
+ * house sells 160 - 100 = 60 ore at the bid of 4 and no tax, and the closed
+ * home market halves the 240 to 120, so the Dutch hold 1,620 gold and 100 ore.
+ * The first royal turn put all eight ground units on the two men-of-war: six on
+ * the first and two on the second.</li>
  * <li>Victory: one Dutch completion first (+100 percent), 1780 - 1747 = 33
  * early points, Discoverer 50 percent, no destroyed settlement, no father, and
- * the bells after the target are the counted bells less 375. The result is the
+ * the owls after the target are the counted owls less 375. The result is the
  * only, first entry of a Hall of Fame that was empty.</li>
  * </ul>
  * <p>
  * The course of the war is not part of the literal ledger. Each royal crossing
  * lasts 2 + weather turns, and the weather is drawn from an unseeded random
  * source when the Crown dispatches its ships, so the landing turn, the
- * occupation, the bells counted until the intervention and the victory turn
- * vary from run to run. Those cells are checked by their rules, not by
- * literals; see the R-0220 evidence.
+ * occupation, the owls counted until the intervention and the victory turn vary
+ * from run to run. Those cells are checked by their rules, not by literals; see
+ * the R-0220 evidence.
  * </p>
  */
 @ExtendWith(ApplicationExtension.class)
@@ -103,7 +103,7 @@ public class TC_187_F220_independence_journey_test
     private static final int LIBERTY_AFTER_FIRST_UPDATE = 3376;
     private static final int CAPACITY = 6400;
     private static final int START_COLONISTS = 52;
-    private static final int FIRST_UPDATE_BELLS = 176;
+    private static final int FIRST_UPDATE_OWLS = 176;
     private static final int GOLD_AFTER_EXPORT = 1620;
     private static final int ORE_AFTER_EXPORT = 100;
     private static final int ROSTER_MEMBERS = 10;
@@ -202,13 +202,13 @@ public class TC_187_F220_independence_journey_test
         congress.verifyInterventionAwaiting();
         congress.close();
 
-        // First update since the declaration: 176 bells count toward the
+        // First update since the declaration: 176 owls count toward the
         // target,
         // the export sells 60 ore for half of 240, and the first royal turn
         // shipped the whole force.
         game.nextTurnAndCloseDialogs();
         journey.verifyTurn(START_TURN + 2, YEAR);
-        journey.verifyInterventionBells(FIRST_UPDATE_BELLS);
+        journey.verifyInterventionOwls(FIRST_UPDATE_OWLS);
         journey.verifyDutchGold(GOLD_AFTER_EXPORT);
         journey.verifyColonyStock(NEW_AMSTERDAM, GoodsType.ORE,
                 ORE_AFTER_EXPORT);
@@ -222,13 +222,13 @@ public class TC_187_F220_independence_journey_test
         journey.verifyRosterCount(Family.INFANTRY, State.RESERVE, 0);
         journey.verifyInterventionDelivered(false);
 
-        // Checkpoint A, Save and Continue: the bells, the purse, the export
+        // Checkpoint A, Save and Continue: the owls, the purse, the export
         // choice and the crossing royal force all survive, and nothing is
         // replayed.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         journey.verifyTurn(START_TURN + 2, YEAR);
-        journey.verifyInterventionBells(FIRST_UPDATE_BELLS);
+        journey.verifyInterventionOwls(FIRST_UPDATE_OWLS);
         journey.verifyDutchGold(GOLD_AFTER_EXPORT);
         journey.verifyColonyStock(NEW_AMSTERDAM, GoodsType.ORE,
                 ORE_AFTER_EXPORT);
@@ -352,7 +352,7 @@ public class TC_187_F220_independence_journey_test
 
         // The same literal state as at Checkpoint A, without a reload.
         journey.verifyTurn(START_TURN + 2, YEAR);
-        journey.verifyInterventionBells(FIRST_UPDATE_BELLS);
+        journey.verifyInterventionOwls(FIRST_UPDATE_OWLS);
         journey.verifyDutchGold(GOLD_AFTER_EXPORT);
         journey.verifyColonyStock(NEW_AMSTERDAM, GoodsType.ORE,
                 ORE_AFTER_EXPORT);

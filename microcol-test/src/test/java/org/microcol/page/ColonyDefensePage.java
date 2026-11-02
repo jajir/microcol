@@ -242,18 +242,18 @@ public final class ColonyDefensePage extends AbstractScreen {
 
     /** The colony stays French and the losing attacker is unarmed. */
     public void verifyColonyHeld(final int residents, final long liberty,
-            final int musketsInWarehouse, final Location soldierAt,
+            final int weaponsInWarehouse, final Location soldierAt,
             final String feedback) throws Exception {
         waitForBattle();
         final Colony colony = colony();
         assertEquals("France", colony.getOwner().getName());
         assertEquals(residents, colony.getUnitsInsideColony().size());
         assertEquals(liberty, colony.getLiberty());
-        assertEquals(musketsInWarehouse,
-                colony.getWarehouse().getGoods(GoodsType.MUSKET).getAmount());
+        assertEquals(weaponsInWarehouse,
+                colony.getWarehouse().getGoods(GoodsType.WEAPONS).getAmount());
         final UnitFreeColonist soldier = (UnitFreeColonist) getModel()
                 .getUnitById(SOLDIER);
-        assertFalse(soldier.isHoldingGuns());
+        assertFalse(soldier.isHoldingWeapons());
         assertEquals(soldierAt, soldier.getLocation());
         if (feedback != null) {
             waitForFeedback(feedback);
@@ -262,13 +262,13 @@ public final class ColonyDefensePage extends AbstractScreen {
     }
 
     /**
-     * The emergency militiaman kept its muskets and stands either on the colony
+     * The emergency militiaman kept its weapons and stands either on the colony
      * tile or in its job.
      */
     public void verifyMilitia(final int unitId, final boolean outside) {
         final UnitFreeColonist militia = (UnitFreeColonist) getModel()
                 .getUnitById(unitId);
-        assertTrue(militia.isHoldingGuns());
+        assertTrue(militia.isHoldingWeapons());
         assertEquals("France", militia.getOwner().getName());
         assertEquals(outside, militia.isAtPlaceLocation());
         assertEquals(!outside, militia.isAtPlaceColonyField()
@@ -314,8 +314,8 @@ public final class ColonyDefensePage extends AbstractScreen {
         assertFalse(getModel().getUnitById(unitId).canLeaveColony());
     }
 
-    public void verifyStoredMuskets(final int expected) {
-        assertEquals(expected,
-                colony().getWarehouse().getGoods(GoodsType.MUSKET).getAmount());
+    public void verifyStoredWeapons(final int expected) {
+        assertEquals(expected, colony().getWarehouse()
+                .getGoods(GoodsType.WEAPONS).getAmount());
     }
 }

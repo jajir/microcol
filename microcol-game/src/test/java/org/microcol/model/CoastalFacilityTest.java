@@ -47,21 +47,21 @@ class CoastalFacilityTest {
                 .getColonyFieldInDirection(Direction.east);
         assertTrue(water.getTerrainType().isSea());
         assertTrue(water.isMissingDock());
-        assertFalse(water.canProduce(GoodsType.CORN));
-        assertEquals(0, water.getGoodsTypeProduction(GoodsType.CORN));
+        assertFalse(water.canProduce(GoodsType.GRAIN));
+        assertEquals(0, water.getGoodsTypeProduction(GoodsType.GRAIN));
         final UnitFreeColonist worker = (UnitFreeColonist) model
                 .addUnitOutSideColony(colony);
         colony.getWarehouse().setGoods(Goods.of(GoodsType.TOOLS, 0));
         worker.setTools(80);
         final String before = new Gson().toJson(model.save());
-        assertFalse(water.canAccept(worker, GoodsType.CORN));
+        assertFalse(water.canAccept(worker, GoodsType.GRAIN));
         assertThrows(IllegalArgumentException.class,
-                () -> worker.placeToColonyField(water, GoodsType.CORN));
+                () -> worker.placeToColonyField(water, GoodsType.GRAIN));
         assertTrue(worker.isAtPlaceLocation());
         assertEquals(80, worker.getTools());
         assertEquals(before, new Gson().toJson(model.save()));
         assertTrue(colony.getColonyFieldInDirection(Direction.west)
-                .canProduce(GoodsType.CORN));
+                .canProduce(GoodsType.GRAIN));
     }
 
     @Test
@@ -76,10 +76,10 @@ class CoastalFacilityTest {
             final ColonyField water = colony
                     .getColonyFieldInDirection(Direction.east);
             assertFalse(water.isMissingDock());
-            assertTrue(water.canProduce(GoodsType.CORN));
+            assertTrue(water.canProduce(GoodsType.GRAIN));
             final Unit worker = model.addUnitOutSideColony(colony);
-            assertTrue(water.canAccept(worker, GoodsType.CORN));
-            worker.placeToColonyField(water, GoodsType.CORN);
+            assertTrue(water.canAccept(worker, GoodsType.GRAIN));
+            worker.placeToColonyField(water, GoodsType.GRAIN);
             assertTrue(water.getProduction().orElseThrow().getAmount() > 0);
             final Model restored = Model.make(model.save(),
                     MissionImpl.getPredefinedGameOverEvaluators());
@@ -107,12 +107,12 @@ class CoastalFacilityTest {
         final ColonyField field = withoutDock.getColonyById(1).orElseThrow()
                 .getColonyFieldInDirection(Direction.north);
         assertTrue(field.isMissingDock());
-        assertFalse(field.canProduce(GoodsType.CORN));
+        assertFalse(field.canProduce(GoodsType.GRAIN));
         complete(colony, ConstructionType.DOCK);
         final Model withDock = load(data);
         assertTrue(withDock.getColonyById(1).orElseThrow()
                 .getColonyFieldInDirection(Direction.north)
-                .canProduce(GoodsType.CORN));
+                .canProduce(GoodsType.GRAIN));
         final GameModelPo invalid = scenario();
         final ColonyPo invalidColony = savedColony(invalid, 0);
         final var occupied = invalidColony.getColonyFields().stream().filter(
@@ -122,7 +122,7 @@ class CoastalFacilityTest {
                 f -> f.getDirection().equals(Direction.east.getVector()))
                 .findFirst().orElseThrow();
         east.setWorkerId(occupied.getWorkerId());
-        east.setProducedGoodsType(GoodsType.CORN);
+        east.setProducedGoodsType(GoodsType.GRAIN);
         occupied.setWorkerId(null);
         occupied.setProducedGoodsType(null);
         assertThrows(IllegalArgumentException.class, () -> load(invalid));
@@ -160,14 +160,14 @@ class CoastalFacilityTest {
         assertEquals(firstWater.getLocation(), secondWater.getLocation());
         final Unit firstWorker = model
                 .addUnitOutSideColony(model.getColonyById(0).orElseThrow());
-        firstWorker.placeToColonyField(firstWater, GoodsType.CORN);
-        assertTrue(secondWater.canProduce(GoodsType.CORN));
+        firstWorker.placeToColonyField(firstWater, GoodsType.GRAIN);
+        assertTrue(secondWater.canProduce(GoodsType.GRAIN));
         assertTrue(secondWater.isWorkedByAnotherColony());
         assertFalse(
-                secondWater.canAccept(model.getUnitById(6), GoodsType.CORN));
+                secondWater.canAccept(model.getUnitById(6), GoodsType.GRAIN));
         final String before = new Gson().toJson(model.save());
         assertThrows(IllegalStateException.class, () -> model.getUnitById(6)
-                .placeToColonyField(secondWater, GoodsType.CORN));
+                .placeToColonyField(secondWater, GoodsType.GRAIN));
         assertEquals(before, new Gson().toJson(model.save()));
     }
 

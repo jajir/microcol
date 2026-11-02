@@ -196,7 +196,7 @@ final class FirstColonyPlanner {
                 .stream()
                 .filter(at -> model.getMap().getTerrainTypeAt(at).isLand())
                 .mapToInt(at -> model.getMap().getTerrainAt(at)
-                        .canProduceAmmount(GoodsType.CORN))
+                        .canProduceAmmount(GoodsType.GRAIN))
                 .max().orElse(-1);
         return yield >= founder.getType().getAteFoodPerTurn() ? yield : -1;
     }

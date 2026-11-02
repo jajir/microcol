@@ -8,12 +8,12 @@ public final class EarnedImmigrationOffer {
     private final int candidateId;
     private final UnitType type;
     private final int threshold;
-    private final int crosses;
+    private final int torches;
     private final int earnedImmigrants;
 
     EarnedImmigrationOffer(final RecruitmentPool pool, final Player player,
             final int slot, final int candidateId, final UnitType type,
-            final int threshold, final int crosses,
+            final int threshold, final int torches,
             final int earnedImmigrants) {
         this.pool = pool;
         this.player = player;
@@ -21,7 +21,7 @@ public final class EarnedImmigrationOffer {
         this.candidateId = candidateId;
         this.type = type;
         this.threshold = threshold;
-        this.crosses = crosses;
+        this.torches = torches;
         this.earnedImmigrants = earnedImmigrants;
     }
 
@@ -33,8 +33,8 @@ public final class EarnedImmigrationOffer {
         return player;
     }
 
-    int getCrosses() {
-        return crosses;
+    int getTorches() {
+        return torches;
     }
 
     int getEarnedImmigrants() {

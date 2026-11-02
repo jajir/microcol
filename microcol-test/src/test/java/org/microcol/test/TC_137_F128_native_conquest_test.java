@@ -30,7 +30,7 @@ import javafx.stage.Stage;
  * from the known settlements, moves the soldier onto its square, rehomes the
  * outside brave as homeless, raises the tribe's anger once and records the
  * conquest once. Losing the first battle leaves the settlement and both
- * defenders and costs the soldier its muskets. An unarmed colonist is refused,
+ * defenders and costs the soldier its weapons. An unarmed colonist is refused,
  * backing out changes nothing, and Save and Continue never repeat an outcome. A
  * saved notice of a pupil lost with a conquered settlement is shown in the turn
  * report, kept once by Continue and retired at the end of the turn. The role

@@ -31,8 +31,8 @@
 
     <entry key="nameCannotFound">Vyberte kolonistu se zbývajícím pohybem na volné pevnině mimo hory a sousedství kolonií.</entry>
     <entry key="equipmentOpen">Vybavení kolonisty: pravé tlačítko nebo Shift+F10</entry>
-    <entry key="equipMuskets">Vybavit mušketami</entry>
-    <entry key="unequipMuskets">Vrátit muškety</entry>
+    <entry key="equipWeapons">Vybavit zbraněmi</entry>
+    <entry key="unequipWeapons">Vrátit zbraně</entry>
     <entry key="equipHorses">Osedlat koně</entry>
     <entry key="unequipHorses">Vrátit koně</entry>
     <entry key="equipTools">Vybavit nářadím</entry>
@@ -76,7 +76,7 @@
     <entry key="jobNoChoices">Pro tohoto kolonistu zde není dostupná žádná práce.</entry>
     <entry key="jobDropRejected">Tento pracovník nyní nemůže přijmout danou práci. Zkontrolujte tah, dostupnost místa a prostor pro vybavení ve skladu.</entry>
     <entry key="fieldMissingDock">Před přidělením rybolovu postavte dok.</entry>
-    <entry key="jobBellContribution">Příspěvek pracovníka před bonusy kolonie: %s %s za tah</entry>
+    <entry key="jobOwlContribution">Příspěvek pracovníka před bonusy kolonie: %s %s za tah</entry>
     <entry key="clearOpen">Zrušit specializaci…</entry>
     <entry key="clearSummary">Zrušit specializaci? %s (jednotka %s) se stane: %s. Stejná osoba si ponechá identitu, vybavení, vojenskou hodnost i současnou práci. Odbornost a postup výcviku se ztratí.</entry>
     <entry key="clearConfirm">Zrušit specializaci</entry>

@@ -107,7 +107,7 @@ public final class GameResult {
                 && po.getFathers() != null && po.getGold() != null
                 && po.getSupportPercent() != null
                 && po.getDestroyedSettlements() != null
-                && po.getBellsBeyondTarget() != null && po.getTotal() != null,
+                && po.getOwlsBeyondTarget() != null && po.getTotal() != null,
                 "Frozen result misses a component");
         final Status savedStatus = parseStatus(po.getStatus());
         final BaseScore savedBase = BaseScore.of(po.getServants(),
@@ -115,7 +115,7 @@ public final class GameResult {
                 po.getGold(), po.getSupportPercent());
         final ResultScore savedScore = ResultScore.of(savedBase,
                 po.getDestroyedSettlements(), difficulty,
-                po.getBellsBeyondTarget(), po.getVictoryOrder(),
+                po.getOwlsBeyondTarget(), po.getVictoryOrder(),
                 po.getDeclarationYear());
         Preconditions.checkArgument(savedScore.getTotal() == po.getTotal(),
                 "Frozen result total does not match its components");
@@ -161,7 +161,7 @@ public final class GameResult {
                     !owner.isDeclaredIndependence()
                             && po.getVictoryOrder() == null
                             && po.getDeclarationYear() == null
-                            && po.getBellsBeyondTarget() == 0L,
+                            && po.getOwlsBeyondTarget() == 0L,
                     "An unscored or colony-loss result needs an undeclared nation");
         }
     }
@@ -238,7 +238,7 @@ public final class GameResult {
         out.setGold(base.getGold());
         out.setSupportPercent(base.getSupportPercent());
         out.setDestroyedSettlements(score.getDestroyedSettlements());
-        out.setBellsBeyondTarget(score.getBellsAfterTarget());
+        out.setOwlsBeyondTarget(score.getOwlsAfterTarget());
         out.setVictoryOrder(victoryOrder);
         out.setDeclarationYear(declarationYear);
         out.setTotal(score.getTotal());

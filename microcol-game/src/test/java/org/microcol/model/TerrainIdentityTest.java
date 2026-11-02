@@ -258,18 +258,18 @@ class TerrainIdentityTest {
         assertEquals(water, field.getTerrainType());
         if (!withDock) {
             assertTrue(field.isMissingDock());
-            assertFalse(field.canProduce(GoodsType.CORN));
+            assertFalse(field.canProduce(GoodsType.GRAIN));
             return new int[] { 0, 0 };
         }
         assertFalse(field.isMissingDock());
-        assertTrue(field.canProduce(GoodsType.CORN));
+        assertTrue(field.canProduce(GoodsType.GRAIN));
         final Unit worker = model.addUnitOutSideColony(loaded);
-        worker.placeToColonyField(field, GoodsType.CORN);
+        worker.placeToColonyField(field, GoodsType.GRAIN);
         final int quote = field.getProduction().orElseThrow().getAmount();
-        loaded.getWarehouse().setGoods(Goods.of(GoodsType.CORN, FOOD_BEFORE));
+        loaded.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, FOOD_BEFORE));
         loaded.startTurn();
         return new int[] { quote,
-                loaded.getWarehouse().getGoods(GoodsType.CORN).getAmount() };
+                loaded.getWarehouse().getGoods(GoodsType.GRAIN).getAmount() };
     }
 
     @Test
@@ -313,9 +313,9 @@ class TerrainIdentityTest {
         dock.setType(ConstructionType.DOCK);
         colony.getConstructions().add(dock);
         final Colony loaded = load(data).getColonyById(1).orElseThrow();
-        loaded.getWarehouse().setGoods(Goods.of(GoodsType.CORN, FOOD_BEFORE));
+        loaded.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, FOOD_BEFORE));
         loaded.startTurn();
-        return loaded.getWarehouse().getGoods(GoodsType.CORN).getAmount();
+        return loaded.getWarehouse().getGoods(GoodsType.GRAIN).getAmount();
     }
 
 }

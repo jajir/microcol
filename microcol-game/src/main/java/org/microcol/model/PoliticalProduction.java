@@ -7,7 +7,7 @@ import com.google.common.base.Preconditions;
  * Per-job political production change of one colony: a rebel support bonus and
  * a Tory penalty, both derived from exact integers. An instance is an immutable
  * snapshot; the colony captures one at the start of a production update and
- * passes it to every calculation of that update, so bells credited during the
+ * passes it to every calculation of that update, so owls credited during the
  * update affect the next snapshot only.
  */
 public final class PoliticalProduction {

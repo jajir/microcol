@@ -112,6 +112,6 @@ public final class MilitaryRolePage extends AbstractScreen {
     public void verifyArmed(final int unitId, final boolean expectedArmed) {
         assertEquals(expectedArmed,
                 ((UnitFreeColonist) getModel().getUnitById(unitId))
-                        .isHoldingGuns());
+                        .isHoldingWeapons());
     }
 }

@@ -137,7 +137,7 @@ class ColonyDefenseTest {
         final CongressPo congress = player.getCongress();
         congress.setActivated(true);
         congress.setGeneration(1);
-        congress.setBells(0);
+        congress.setOwls(0);
         congress.setSelected(null);
         congress.setJonesDeliveryPending(false);
         congress.setMembers(members);
@@ -198,7 +198,7 @@ class ColonyDefenseTest {
         for (final ColonyFieldPo field : colonyPo.getColonyFields()) {
             if (field.getWorkerId() == null && placed < spec.fieldWorkers) {
                 field.setWorkerId(nextId);
-                field.setProducedGoodsType(GoodsType.CORN);
+                field.setProducedGoodsType(GoodsType.GRAIN);
                 data.getUnits().add(resident(nextId++, true));
                 placed++;
             }
@@ -239,7 +239,7 @@ class ColonyDefenseTest {
         quebec = model.getColonyById(0).orElseThrow();
         attacker = (UnitFreeColonist) model.getUnitById(0);
         attacker.placeToLocation(ORIGIN);
-        attacker.setHoldingGuns(true);
+        attacker.setHoldingWeapons(true);
         attacker.getOwner().revealMapForUnit(attacker);
         if (!peace) {
             model.declareHostilities(dutch, france);
@@ -317,7 +317,7 @@ class ColonyDefenseTest {
     private UnitFreeColonist armedOnColonyTile() {
         final UnitFreeColonist soldier = (UnitFreeColonist) model
                 .addUnitOutSideColony(quebec);
-        soldier.setHoldingGuns(true);
+        soldier.setHoldingWeapons(true);
         return soldier;
     }
 
@@ -339,7 +339,7 @@ class ColonyDefenseTest {
         assertSame(model.getUnitById(4), order.getDefender());
         assertEquals(List.of(model.getUnitById(4)), defense.getRoster());
         assertTrue(defense.capturesColony());
-        assertEquals(0, defense.getRevereMuskets());
+        assertEquals(0, defense.getRevereWeapons());
         final CombatStrength defending = order.getCombatStrengths()
                 .orElseThrow().getDefender();
         assertEquals(1.0, defending.getBase());
@@ -386,7 +386,7 @@ class ColonyDefenseTest {
         final Spec withFields = civilians(1, 0).withGarrison();
         final ModelPo data = data(withFields);
         data.getUnits().stream().filter(unit -> unit.getId() == 100).findFirst()
-                .orElseThrow().setHoldingGuns(true);
+                .orElseThrow().setHoldingWeapons(true);
         build(data);
         final ColonyDefense defense = quote().getColonyDefense().orElseThrow();
         assertEquals(ColonyDefense.Kind.ARMED, defense.getKind());
@@ -436,7 +436,7 @@ class ColonyDefenseTest {
         assertTrue(attacker.isAtPlaceLocation());
         assertEquals(COLONY, attacker.getLocation());
         assertEquals(0, attacker.getActionPoints());
-        assertTrue(attacker.isHoldingGuns());
+        assertTrue(attacker.isHoldingWeapons());
         // R-0100: liberty is kept and the conqueror becomes the affiliation.
         assertEquals(150L, quebec.getLiberty());
         assertSame(dutch, quebec.getLastColonialAffiliation());
@@ -458,7 +458,7 @@ class ColonyDefenseTest {
     }
 
     @Test
-    void civilianDefeatCostsTheAttackerItsMusketsAndChangesNoOwner()
+    void civilianDefeatCostsTheAttackerItsWeaponsAndChangesNoOwner()
             throws ReflectiveOperationException {
         build(civilians(2, 1));
         final List<Unit> residents = new ArrayList<>(
@@ -466,7 +466,7 @@ class ColonyDefenseTest {
         fight(false);
         assertSame(france, quebec.getOwner());
         assertEquals(residents, quebec.getUnitsInsideColony());
-        assertFalse(attacker.isHoldingGuns());
+        assertFalse(attacker.isHoldingWeapons());
         assertEquals(ORIGIN, attacker.getLocation());
         assertEquals(0, attacker.getActionPoints());
         assertEquals(0, model.getUnitById(4).getActionPoints());
@@ -483,7 +483,7 @@ class ColonyDefenseTest {
         final UnitFreeColonist garrison = (UnitFreeColonist) model
                 .getUnitById(6);
         fight(true);
-        assertFalse(garrison.isHoldingGuns());
+        assertFalse(garrison.isHoldingWeapons());
         assertSame(france, quebec.getOwner());
         assertEquals(ORIGIN, attacker.getLocation());
         assertTrue(captures.isEmpty());
@@ -501,30 +501,32 @@ class ColonyDefenseTest {
     // -------------------------------------------------------------- Revere
 
     @Test
-    void revereArmsOneWorkerOnlyWithoutAnArmedDefenderAndCostsFiftyMuskets()
+    void revereArmsOneWorkerOnlyWithoutAnArmedDefenderAndCostsFiftyWeapons()
             throws ReflectiveOperationException {
         build(civilians(1, 0).withRevere());
         final String before = snapshot();
         final AttackOrder order = quote();
         final ColonyDefense defense = order.getColonyDefense().orElseThrow();
         assertEquals(ColonyDefense.Kind.REVERE, defense.getKind());
-        assertEquals(50, defense.getRevereMuskets());
+        assertEquals(50, defense.getRevereWeapons());
         assertSame(model.getUnitById(4), defense.getDefender());
         // Preview and cancel are read-only.
         assertEquals(before, snapshot());
         assertEquals(50,
-                quebec.getWarehouse().getGoods(GoodsType.MUSKET).getAmount());
-        assertFalse(((UnitFreeColonist) model.getUnitById(4)).isHoldingGuns());
+                quebec.getWarehouse().getGoods(GoodsType.WEAPONS).getAmount());
+        assertFalse(
+                ((UnitFreeColonist) model.getUnitById(4)).isHoldingWeapons());
         setState(stateFor(order, true));
         order.execute();
-        // A confirmed battle consumed exactly the stored muskets; the
+        // A confirmed battle consumed exactly the stored weapons; the
         // defeated militiaman keeps none, and the colony is captured anyway.
         assertEquals(0,
-                quebec.getWarehouse().getGoods(GoodsType.MUSKET).getAmount());
-        assertFalse(((UnitFreeColonist) model.getUnitById(4)).isHoldingGuns());
+                quebec.getWarehouse().getGoods(GoodsType.WEAPONS).getAmount());
+        assertFalse(
+                ((UnitFreeColonist) model.getUnitById(4)).isHoldingWeapons());
         assertSame(dutch, quebec.getOwner());
         assertSame(dutch, model.getUnitById(4).getOwner());
-        // The same confirmation cannot consume muskets or draw a second time.
+        // The same confirmation cannot consume weapons or draw a second time.
         final String after = snapshot();
         assertThrows(IllegalStateException.class, order::execute);
         assertEquals(after, snapshot());
@@ -550,7 +552,7 @@ class ColonyDefenseTest {
 
         final ColonyDefense defense = quote().getColonyDefense().orElseThrow();
         assertEquals(ColonyDefense.Kind.REVERE, defense.getKind());
-        assertEquals(50, defense.getRevereMuskets());
+        assertEquals(50, defense.getRevereWeapons());
 
         final Model resumed = reloaded();
         assertTrue(resumed.getPlayerByName("France").getCongressMembers()
@@ -559,32 +561,33 @@ class ColonyDefenseTest {
                 .getUnitById(0)).prepareAttack(COLONY, false).orElseThrow()
                 .getColonyDefense().orElseThrow();
         assertEquals(ColonyDefense.Kind.REVERE, restored.getKind());
-        assertEquals(50, restored.getRevereMuskets());
+        assertEquals(50, restored.getRevereWeapons());
     }
 
     @Test
-    void revereNeedsFiftyMusketsAndNoExistingArmedDefender() {
+    void revereNeedsFiftyWeaponsAndNoExistingArmedDefender() {
         build(civilians(1, 0).withRevere());
-        quebec.getWarehouse().removeGoods(Goods.of(GoodsType.MUSKET, 1));
+        quebec.getWarehouse().removeGoods(Goods.of(GoodsType.WEAPONS, 1));
         assertEquals(ColonyDefense.Kind.CIVILIANS,
                 quote().getColonyDefense().orElseThrow().getKind());
-        quebec.getWarehouse().addGoods(Goods.of(GoodsType.MUSKET, 1));
+        quebec.getWarehouse().addGoods(Goods.of(GoodsType.WEAPONS, 1));
         assertEquals(ColonyDefense.Kind.REVERE,
                 quote().getColonyDefense().orElseThrow().getKind());
         armedOnColonyTile();
         final ColonyDefense armed = quote().getColonyDefense().orElseThrow();
         assertEquals(ColonyDefense.Kind.ARMED, armed.getKind());
-        assertEquals(0, armed.getRevereMuskets());
+        assertEquals(0, armed.getRevereWeapons());
     }
 
     @Test
-    void existingArmedDefenderNeverConsumesTheStoredMuskets()
+    void existingArmedDefenderNeverConsumesTheStoredWeapons()
             throws ReflectiveOperationException {
         build(civilians(1, 0).withRevere().withGarrison());
         fight(false);
         assertEquals(50,
-                quebec.getWarehouse().getGoods(GoodsType.MUSKET).getAmount());
-        assertFalse(((UnitFreeColonist) model.getUnitById(4)).isHoldingGuns());
+                quebec.getWarehouse().getGoods(GoodsType.WEAPONS).getAmount());
+        assertFalse(
+                ((UnitFreeColonist) model.getUnitById(4)).isHoldingWeapons());
     }
 
     @Test
@@ -605,7 +608,7 @@ class ColonyDefenseTest {
     }
 
     @Test
-    void victoriousMilitiaKeepsMusketsAndJoinsTheGarrisonWhenAnotherResidentRemains()
+    void victoriousMilitiaKeepsWeaponsAndJoinsTheGarrisonWhenAnotherResidentRemains()
             throws ReflectiveOperationException {
         final Spec two = civilians(1, 0).withRevere();
         two.liberty = 300L;
@@ -615,7 +618,7 @@ class ColonyDefenseTest {
         assertTrue(quote().getColonyDefense().orElseThrow().isRevereExit());
         fight(false);
         assertSame(france, quebec.getOwner());
-        assertTrue(((UnitFreeColonist) militia).isHoldingGuns());
+        assertTrue(((UnitFreeColonist) militia).isHoldingWeapons());
         assertTrue(militia.isAtPlaceLocation());
         assertEquals(COLONY, militia.getLocation());
         assertEquals(1, quebec.getPopulation());
@@ -623,9 +626,9 @@ class ColonyDefenseTest {
         assertEquals(200L, quebec.getLiberty());
         assertTrue(attacks.get(0).getColonyOutcome().orElseThrow()
                 .isMilitiaExited());
-        assertFalse(attacker.isHoldingGuns());
+        assertFalse(attacker.isHoldingWeapons());
         assertEquals(0,
-                quebec.getWarehouse().getGoods(GoodsType.MUSKET).getAmount());
+                quebec.getWarehouse().getGoods(GoodsType.WEAPONS).getAmount());
     }
 
     @Test
@@ -639,7 +642,7 @@ class ColonyDefenseTest {
         assertFalse(quote().getColonyDefense().orElseThrow().isRevereExit());
         fight(false);
         assertSame(france, quebec.getOwner());
-        assertTrue(((UnitFreeColonist) militia).isHoldingGuns());
+        assertTrue(((UnitFreeColonist) militia).isHoldingWeapons());
         assertTrue(militia.isAtPlaceColonyField());
         assertEquals(1, quebec.getPopulation());
         assertEquals(150L, quebec.getLiberty());
@@ -649,7 +652,7 @@ class ColonyDefenseTest {
         final Colony restored = reloaded().getColonyById(0).orElseThrow();
         assertEquals(1, restored.getPopulation());
         assertTrue(((UnitFreeColonist) restored.getUnitsInsideColony().get(0))
-                .isHoldingGuns());
+                .isHoldingWeapons());
     }
 
     // ------------------------------------------------- stale and blocked
@@ -658,11 +661,11 @@ class ColonyDefenseTest {
     void staleQuoteRejectsWithoutChangingAnythingNotEvenTheRandomState() {
         build(civilians(1, 0).withRevere());
         final AttackOrder revere = quote();
-        quebec.getWarehouse().removeGoods(Goods.of(GoodsType.MUSKET, 1));
+        quebec.getWarehouse().removeGoods(Goods.of(GoodsType.WEAPONS, 1));
         final String changed = snapshot();
         assertThrows(IllegalStateException.class, revere::execute);
         assertEquals(changed, snapshot());
-        quebec.getWarehouse().addGoods(Goods.of(GoodsType.MUSKET, 1));
+        quebec.getWarehouse().addGoods(Goods.of(GoodsType.WEAPONS, 1));
         final AttackOrder roster = quote();
         armedOnColonyTile();
         final String armed = snapshot();
@@ -866,7 +869,7 @@ class ColonyDefenseTest {
             throws ReflectiveOperationException {
         build(civilians(1, 1));
         fightAt(FIELD, false);
-        assertFalse(attacker.isHoldingGuns());
+        assertFalse(attacker.isHoldingWeapons());
         assertSame(france, model.getUnitById(100).getOwner());
         assertTrue(model.getUnitById(100).isAtPlaceColonyField());
         assertEquals(3, quebec.getPopulation());
@@ -894,7 +897,7 @@ class ColonyDefenseTest {
             throws ReflectiveOperationException {
         final ModelPo data = data(civilians(1, 1));
         data.getUnits().stream().filter(unit -> unit.getId() == 100).findFirst()
-                .orElseThrow().setHoldingGuns(true);
+                .orElseThrow().setHoldingWeapons(true);
         build(data);
         final AttackOrder order = attacker.prepareAttack(FIELD, false)
                 .orElseThrow();
@@ -904,7 +907,7 @@ class ColonyDefenseTest {
         order.execute();
         final UnitFreeColonist worker = (UnitFreeColonist) model
                 .getUnitById(100);
-        assertFalse(worker.isHoldingGuns());
+        assertFalse(worker.isHoldingWeapons());
         assertSame(france, worker.getOwner());
         assertTrue(worker.isAtPlaceColonyField());
         assertEquals(ColonyBattleOutcome.Result.DEFENDER_EQUIPMENT_LOST,
@@ -942,9 +945,9 @@ class ColonyDefenseTest {
                 .getUnitById(4);
         assertTrue(militia.isVeteran());
         assertTrue(attacks.get(0).getPromotion().isPresent());
-        // The last resident stays inside with its muskets and its new rank.
+        // The last resident stays inside with its weapons and its new rank.
         assertTrue(militia.isAtPlaceColonyField());
-        assertTrue(militia.isHoldingGuns());
+        assertTrue(militia.isHoldingWeapons());
     }
 
     @Test
@@ -1005,7 +1008,7 @@ class ColonyDefenseTest {
         // The battle result is a forced exit: only the last resident stays.
         assertTrue(militia.isAtPlaceLocation());
         assertEquals(COLONY, militia.getLocation());
-        assertTrue(((UnitFreeColonist) militia).isHoldingGuns());
+        assertTrue(((UnitFreeColonist) militia).isHoldingWeapons());
         assertEquals(2, quebec.getPopulation());
         assertEquals(400L, quebec.getLiberty());
         assertTrue(quebec.wasConstructionBuilded(ConstructionType.STOCKADE));
@@ -1039,22 +1042,22 @@ class ColonyDefenseTest {
         build(data);
         final UnitFreeColonist continental = (UnitFreeColonist) model
                 .getUnitById(6);
-        assertTrue(continental.isHoldingGuns());
+        assertTrue(continental.isHoldingWeapons());
         assertEquals(4.0, quote().getCombatStrengths().orElseThrow()
                 .getDefender().getBase());
         final int people = model.getAllUnits().size();
-        final int muskets = quebec.getWarehouse().getGoods(GoodsType.MUSKET)
+        final int weapons = quebec.getWarehouse().getGoods(GoodsType.WEAPONS)
                 .getAmount();
         fight(true);
         // Neither a downgraded colonist nor dropped gear remains.
         assertTrue(model.getAllUnits().stream()
                 .noneMatch(unit -> unit.getId() == 6));
         assertEquals(people - 1, model.getAllUnits().size());
-        assertEquals(muskets,
-                quebec.getWarehouse().getGoods(GoodsType.MUSKET).getAmount());
+        assertEquals(weapons,
+                quebec.getWarehouse().getGoods(GoodsType.WEAPONS).getAmount());
         assertSame(france, quebec.getOwner());
         assertTrue(captures.isEmpty());
-        assertTrue(attacker.isHoldingGuns());
+        assertTrue(attacker.isHoldingWeapons());
         assertEquals(1, attacks.size());
         assertTrue(attacks.get(0).wasDestroyed());
         assertSame(continental, attacks.get(0).getDestroyed());
@@ -1076,14 +1079,14 @@ class ColonyDefenseTest {
         final List<Unit> residents = new ArrayList<>(
                 quebec.getUnitsInsideColony());
         final int people = model.getAllUnits().size();
-        final int muskets = quebec.getWarehouse().getGoods(GoodsType.MUSKET)
+        final int weapons = quebec.getWarehouse().getGoods(GoodsType.WEAPONS)
                 .getAmount();
         fight(false);
         assertTrue(model.getAllUnits().stream()
                 .noneMatch(unit -> unit.getId() == 0));
         assertEquals(people - 1, model.getAllUnits().size());
-        assertEquals(muskets,
-                quebec.getWarehouse().getGoods(GoodsType.MUSKET).getAmount());
+        assertEquals(weapons,
+                quebec.getWarehouse().getGoods(GoodsType.WEAPONS).getAmount());
         assertSame(france, quebec.getOwner());
         assertEquals(residents, quebec.getUnitsInsideColony());
         assertEquals(1, attacks.size());

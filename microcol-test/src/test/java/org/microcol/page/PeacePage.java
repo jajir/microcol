@@ -35,7 +35,7 @@ public final class PeacePage extends AbstractScreen {
         for (var element : model.getAsJsonArray("units")) {
             var unit = element.getAsJsonObject();
             if (unit.get("id").getAsInt() == 6)
-                unit.addProperty("holdingGuns", false);
+                unit.addProperty("holdingWeapons", false);
         }
         java.io.File file = new java.io.File(System.getProperty("user.home"),
                 "franklin-peace.microcol");

@@ -11,8 +11,8 @@ import com.google.common.base.Preconditions;
  */
 enum ResourceOverlayNames implements MessageKeyResource {
 
-    SILVER_name, ORE_name, MIXED_MINERALS_name, TRAPPING_name, GAME_name,
-    OASIS_name, PRIME_COTTON_name, PRIME_TOBACCO_name, PRIME_SUGAR_name,
+    SILVER_name, ORE_name, MIXED_MINERALS_name, CLAY_PIT_name, GAME_name,
+    OASIS_name, PRIME_WOOL_name, PRIME_GRAPES_name, PRIME_OLIVES_name,
     PRIME_TIMBER_name, PRIME_FOOD_name, FISHERY_name;
 
     private static final String NAME_SUFFIX = "_name";

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="160" viewBox="0 0 320 160" role="img" aria-labelledby="title description">
-<title id="title">Tobacconists House — Lehký nadhled</title>
-<desc id="description">Tabák; level 1. Editable flat vector drawing after selected proposal 8, R-0361. Transparent background, simple hand-drawn contours and a narrow side view.</desc>
+<title id="title">Small Winery — Lehký nadhled</title>
+<desc id="description">Víno (R-0394 symbol from the approved R-0384 grapes vector); level 1. Editable flat vector drawing after selected proposal 8, R-0361. Transparent background, simple hand-drawn contours and a narrow side view.</desc>
 <g id="pen-outline" stroke="#3e3b31" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round">
 <g id="building">
 <g id="open-shelter">
@@ -10,9 +10,9 @@
 <path id="shape-004" d="M79 74 Q135.10 61.97 191 49 Q208.12 54.67 225 61 Q167.89 73.53 111 87 Q94.87 80.82 79 74 Z" fill="#b5754c"/>
 </g>
 <g id="profession-equipment">
-<g id="tobacco-leaf-4" transform="translate(139 95) scale(1)">
-<path id="shape-005" d="M9 35 C-8 24 -2 9 20 0 Q33 22 9 35 Z" fill="#82934e"/>
-<path id="shape-006" d="M8 36 Q14.45 20.67 20 5" fill="none"/>
+<g id="grapes-symbol" transform="translate(132.19 95.19) scale(0.5566)" stroke-width="5.57">
+<g id="leaf"><path d="M31 19 L34 8 Q44 4 47 10 L56 12 L48 19 L52 27 Q39 28 34 19" fill="#87934c"/></g>
+<g id="grapes"><path d="M9 24 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M26 25 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M40 36 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M17 39 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M32 49 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M18 54 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/></g>
 </g>
 <path id="shape-007" d="M170 134 Q171.96 134.63 174 134.3 Q174.15 141.66 173.6 149 Q171.98 148.42 170.3 148.8 Q169.80 141.41 170 134 Z" fill="#bd8e50"/>
 <path id="shape-008" d="M196 134 Q197.96 134.63 200 134.3 Q200.15 141.66 199.6 149 Q197.98 148.42 196.3 148.8 Q195.80 141.41 196 134 Z" fill="#bd8e50"/>

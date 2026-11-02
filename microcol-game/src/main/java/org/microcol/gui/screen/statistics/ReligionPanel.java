@@ -11,10 +11,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
 /**
- * Religion report (R-0199): the cross output of each colony at the next update,
- * the accumulated crosses toward the next immigrant and the state of the earned
+ * Religion report (R-0199): the torch output of each colony at the next update,
+ * the accumulated torches toward the next immigrant and the state of the earned
  * immigrant. Every showing rebuilds the figures from the live model; the panel
- * keeps no figure of its own and offers no action that spends crosses.
+ * keeps no figure of its own and offers no action that spends torches.
  */
 final class ReligionPanel extends VBox {
     private final GameModelController game;
@@ -57,7 +57,7 @@ final class ReligionPanel extends VBox {
             rows.getChildren()
                     .add(label("religionColony-" + colony.getColonyId(),
                             i18n.get(ReligionText.colonyRow, colony.getName(),
-                                    colony.getCrosses())));
+                                    colony.getTorches())));
         }
         rows.getChildren().add(label("religionNational", i18n
                 .get(ReligionText.nationalRow, report.getNationalOutput())));

@@ -72,8 +72,8 @@ public final class ForeignColonyTradePage extends AbstractScreen {
     private static final String FRANCE = "France";
     /** Most spinner clicks one amount may take before the page gives up. */
     private static final int MOST_CLICKS = 120;
-    private static final int QUEBEC_CORN = 20;
-    private static final int QUEBEC_TOBACCO = 30;
+    private static final int QUEBEC_GRAIN = 20;
+    private static final int QUEBEC_GRAPES = 30;
     private static final String GIVE_GOODS = "#foreignTradeGiveGoods";
     private static final String RECEIVE_GOODS = "#foreignTradeReceiveGoods";
     private static final String GIVE_AMOUNT = "#foreignTradeGiveAmount";
@@ -93,8 +93,8 @@ public final class ForeignColonyTradePage extends AbstractScreen {
 
     /**
      * Write the derived scenario and make it the next game to load. The wagon
-     * carries four corn and the frigate two corn; Quebec holds twenty corn,
-     * thirty tobacco and no sugar cane; both nations have 1000 gold.
+     * carries four grain and the frigate two grain; Quebec holds twenty grain,
+     * thirty grapes and no olives; both nations have 1000 gold.
      *
      * @param name      file name of the derived scenario
      * @param deWitt    whether the Dutch Congress holds Jan de Witt
@@ -102,18 +102,18 @@ public final class ForeignColonyTradePage extends AbstractScreen {
      */
     public void prepare(final String name, final boolean deWitt,
             final boolean rebellion) throws Exception {
-        build(name, deWitt, rebellion, List.of(Goods.of(GoodsType.CORN, 4)),
+        build(name, deWitt, rebellion, List.of(Goods.of(GoodsType.GRAIN, 4)),
                 START_GOLD);
     }
 
     /**
      * As {@link #prepare(String, boolean, boolean)} with Jan de Witt, but the
-     * wagon is full: two sugar cane in its first hold and a full hold of
-     * tobacco in its second, so only giving the sugar cane frees room.
+     * wagon is full: two olives in its first hold and a full hold of grapes in
+     * its second, so only giving the olives frees room.
      */
     public void prepareFullWagon(final String name) throws Exception {
-        build(name, true, false, List.of(Goods.of(GoodsType.SUGAR, 2),
-                Goods.of(GoodsType.TOBACCO, 100)), START_GOLD);
+        build(name, true, false, List.of(Goods.of(GoodsType.OLIVES, 2),
+                Goods.of(GoodsType.GRAPES, 100)), START_GOLD);
     }
 
     /**
@@ -121,7 +121,7 @@ public final class ForeignColonyTradePage extends AbstractScreen {
      * French treasury is empty.
      */
     public void prepareEmptyFrenchTreasury(final String name) throws Exception {
-        build(name, true, false, List.of(Goods.of(GoodsType.CORN, 4)), 0);
+        build(name, true, false, List.of(Goods.of(GoodsType.GRAIN, 4)), 0);
     }
 
     /**
@@ -150,9 +150,9 @@ public final class ForeignColonyTradePage extends AbstractScreen {
         // Keep every saved goods entry and change only the three that matter.
         final Map<String, Integer> stock = new HashMap<>(
                 quebec.getColonyWarehouse());
-        stock.put(GoodsType.CORN.name(), QUEBEC_CORN);
-        stock.put(GoodsType.TOBACCO.name(), QUEBEC_TOBACCO);
-        stock.put(GoodsType.SUGAR.name(), 0);
+        stock.put(GoodsType.GRAIN.name(), QUEBEC_GRAIN);
+        stock.put(GoodsType.GRAPES.name(), QUEBEC_GRAPES);
+        stock.put(GoodsType.OLIVES.name(), 0);
         quebec.setColonyWarehouse(stock);
         final List<Location> sites = freeSites(model, quebec);
         if (sites.size() < 2) {
@@ -165,7 +165,7 @@ public final class ForeignColonyTradePage extends AbstractScreen {
         model.getUnits()
                 .add(carrier(WAGON_ID, UnitType.WAGON, wagonAt, wagonHolds));
         model.getUnits().add(carrier(SHIP_ID, UnitType.FRIGATE, seaAt,
-                List.of(Goods.of(GoodsType.CORN, 2))));
+                List.of(Goods.of(GoodsType.GRAIN, 2))));
         for (final PlayerPo player : model.getGameManager().getPlayers()) {
             if (player.getName().equals(DUTCH)) {
                 player.setCongress(congress(deWitt));
@@ -252,7 +252,7 @@ public final class ForeignColonyTradePage extends AbstractScreen {
     private static CongressPo congress(final boolean deWitt) {
         final CongressPo congress = new CongressPo();
         congress.setActivated(true);
-        congress.setBells(0);
+        congress.setOwls(0);
         congress.setGeneration(1);
         if (deWitt) {
             congress.setMembers(List.of(Founder.JAN_DE_WITT));

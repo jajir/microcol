@@ -43,7 +43,7 @@ public class TC_176_F203_congress_support_test extends AbstractMicroColTest {
     @Tag("local")
     void TC_01_cancel_changes_nothing_and_a_turn_refreshes_support_and_crown()
             throws Exception {
-        // No colony has support yet; the Crown holds 499 bells toward its next
+        // No colony has support yet; the Crown holds 499 owls toward its next
         // unit.
         IndependenceFixture.prepareWithCrownRemainder(getContext(),
                 INDEPENDENCE, "congress-support-zero.microcol", YEAR_1747,
@@ -59,10 +59,10 @@ public class TC_176_F203_congress_support_test extends AbstractMicroColTest {
         congress.verifyFillsGameWindow("Back to game");
         congress.close();
         congress.verifyWorldUnchanged();
-        // The turn produces bells, and the reopened report shows them.
-        congress.rememberBells();
+        // The turn produces owls, and the reopened report shows them.
+        congress.rememberOwls();
         game.nextTurnAndCloseDialogs();
-        congress.verifyBellsProducedSinceRemembered();
+        congress.verifyOwlsProducedSinceRemembered();
         congress.open();
         congress.verifyRoyalForceMatchesModel();
         congress.verifySupport("National rebel support: 0% (32 residents)", 0);

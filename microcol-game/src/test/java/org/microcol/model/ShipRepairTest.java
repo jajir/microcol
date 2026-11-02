@@ -340,7 +340,7 @@ class ShipRepairTest {
                         ship.getCargo().getSlotByIndex(4)));
         assertThrows(IllegalStateException.class,
                 () -> ship.getCargo().getSlotByIndex(1)
-                        .storeFromColonyWarehouse(Goods.of(GoodsType.CORN, 1),
+                        .storeFromColonyWarehouse(Goods.of(GoodsType.GRAIN, 1),
                                 model.getColonyById(0).orElseThrow()));
         assertFalse(passenger.canEmbark(ship.getCargo().getSlotByIndex(1)));
         assertEquals(before, new com.google.gson.Gson().toJson(model.save()));

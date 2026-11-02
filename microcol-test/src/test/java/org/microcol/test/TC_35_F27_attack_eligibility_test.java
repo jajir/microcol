@@ -229,7 +229,7 @@ public class TC_35_F27_attack_eligibility_test extends AbstractMicroColTest {
         attack.chooseExistingOutcome(2, false);
         attack.chooseAttack(Location.of(18, 12), DEFENDER);
         attack.confirm();
-        // Defeat preserves this specialist and his muskets on the original
+        // Defeat preserves this specialist and his weapons on the original
         // tile.
         attack.verifyEquipmentOutcome(2, 2, true, false, Location.of(18, 12),
                 "lost its horses");

@@ -189,10 +189,10 @@ final class RivalExpansionCycle {
     boolean hasNewColonyReserves(final Colony colony) {
         final int consumption = colony.getUnitsInsideColony().stream()
                 .mapToInt(unit -> unit.getType().getAteFoodPerTurn()).sum();
-        final int net = colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+        final int net = colony.getGoodsStats().getStatsByType(GoodsType.GRAIN)
                 .getNetProduction();
         return net >= 0
-                && colony.getWarehouse().getGoods(GoodsType.CORN)
+                && colony.getWarehouse().getGoods(GoodsType.GRAIN)
                         .getAmount() >= FOOD_TURNS * consumption
                 && rivalTrade.isToolSupplyMet(colony);
     }
@@ -294,7 +294,7 @@ final class RivalExpansionCycle {
                 .filter(unit -> unit instanceof UnitFreeColonist
                         && unit.getOwner() == player()
                         && unit.getAction().isNoAction()
-                        && !((UnitFreeColonist) unit).isHoldingGuns()
+                        && !((UnitFreeColonist) unit).isHoldingWeapons()
                         && !((UnitFreeColonist) unit).isMounted()
                         && !teaching.contains(unit.getId())
                         && unit.getType().canBuildColony())
@@ -306,7 +306,7 @@ final class RivalExpansionCycle {
 
     private static boolean producesFood(final Unit unit) {
         return unit.isAtPlaceColonyField() && unit.getPlaceColonyField()
-                .getProducedGoodsType() == GoodsType.CORN;
+                .getProducedGoodsType() == GoodsType.GRAIN;
     }
 
     /**
@@ -320,17 +320,17 @@ final class RivalExpansionCycle {
                 || !founder.canLeaveColony()) {
             return false;
         }
-        // The offers list a current-field corn choice for any field that could
-        // grow corn, so only a founder that grows corn takes food away.
+        // The offers list a current-field grain choice for any field that could
+        // grow grain, so only a founder that grows grain takes food away.
         final int produced = !producesFood(founder) ? 0
                 : colony.getJobChoices(founder).stream()
                         .filter(choice -> choice
                                 .getKind() == ColonyJobChoice.Kind.CURRENT_FIELD
-                                && choice.getGoodsType() == GoodsType.CORN)
+                                && choice.getGoodsType() == GoodsType.GRAIN)
                         .mapToInt(choice -> choice.getPotential()
                                 .map(Goods::getAmount).orElse(0))
                         .sum();
-        final int net = colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+        final int net = colony.getGoodsStats().getStatsByType(GoodsType.GRAIN)
                 .getNetProduction();
         if (net - produced + founder.getType().getAteFoodPerTurn() < 0) {
             return false;
@@ -338,7 +338,7 @@ final class RivalExpansionCycle {
         final int remainingFood = residents.stream()
                 .filter(unit -> unit != founder)
                 .mapToInt(unit -> unit.getType().getAteFoodPerTurn()).sum();
-        return colony.getWarehouse().getGoods(GoodsType.CORN)
+        return colony.getWarehouse().getGoods(GoodsType.GRAIN)
                 .getAmount() >= FOOD_TURNS * remainingFood;
     }
 

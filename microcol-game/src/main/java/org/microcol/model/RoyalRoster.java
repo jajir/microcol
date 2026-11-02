@@ -13,15 +13,15 @@ import com.google.common.base.Preconditions;
 
 /**
  * Prewar regular force owned by one Crown. Members keep their identity for the
- * whole game. Bell growth adds members and never recreates a destroyed one;
+ * whole game. Owl growth adds members and never recreates a destroyed one;
  * destroyed members stay in the roster, so ship capacity never falls back. A
  * shipped member is bound to the actual unit that carries it (R-0186); the
  * binding is the only link, so a unit is never counted twice.
  */
 public final class RoyalRoster {
 
-    /** Bell base of the Crown growth rule, before the difficulty factor. */
-    private static final int GROWTH_BELLS = 500;
+    /** Owl base of the Crown growth rule, before the difficulty factor. */
+    private static final int GROWTH_OWLS = 500;
 
     /** Each ship covers this many ground units. */
     private static final int GROUND_PER_SHIP = 6;
@@ -196,11 +196,11 @@ public final class RoyalRoster {
 
     /**
      * @param difficulty selected difficulty
-     * @return produced bells per ground unit, {@code ceil(500 / k)}
+     * @return produced owls per ground unit, {@code ceil(500 / k)}
      */
-    public static int bellThreshold(final Difficulty difficulty) {
+    public static int owlThreshold(final Difficulty difficulty) {
         final int factor = RecruitmentPool.factor(difficulty);
-        return (GROWTH_BELLS * 100 + factor - 1) / factor;
+        return (GROWTH_OWLS * 100 + factor - 1) / factor;
     }
 
     RoyalRoster(final RoyalRosterPo po, final Difficulty difficulty) {
@@ -210,10 +210,10 @@ public final class RoyalRoster {
                 po.getGrowthCount() != null && po.getGrowthCount() >= 0
                         && po.getRemainder() != null && po.getMembers() != null,
                 "Incomplete Crown roster");
-        this.threshold = bellThreshold(difficulty);
+        this.threshold = owlThreshold(difficulty);
         Preconditions.checkArgument(
                 po.getRemainder() >= 0 && po.getRemainder() < threshold,
-                "Invalid Crown bell remainder");
+                "Invalid Crown owl remainder");
         growthCount = po.getGrowthCount();
         remainder = po.getRemainder();
         // An absent cycle is the start of the cycle: no passenger has sailed.
@@ -339,16 +339,16 @@ public final class RoyalRoster {
     }
 
     /**
-     * @return produced bells not yet converted into a ground unit
+     * @return produced owls not yet converted into a ground unit
      */
-    public int getBellRemainder() {
+    public int getOwlRemainder() {
         return remainder;
     }
 
     /**
-     * @return produced bells needed for the next ground unit
+     * @return produced owls needed for the next ground unit
      */
-    public int getBellThreshold() {
+    public int getOwlThreshold() {
         return threshold;
     }
 
@@ -416,17 +416,17 @@ public final class RoyalRoster {
     /**
      * Check growth without changing the roster.
      *
-     * @param produced bells the colonial nation actually produced
+     * @param produced owls the colonial nation actually produced
      */
     void checkCredit(final int produced) {
         planGrowth(produced);
     }
 
     /**
-     * Convert produced bells into ground units; the remainder carries over.
+     * Convert produced owls into ground units; the remainder carries over.
      * Either the whole update is applied or nothing changes.
      *
-     * @param produced bells the colonial nation actually produced
+     * @param produced owls the colonial nation actually produced
      */
     void credit(final int produced) {
         final GrowthPlan plan = planGrowth(produced);
@@ -437,7 +437,7 @@ public final class RoyalRoster {
 
     private GrowthPlan planGrowth(final int produced) {
         Preconditions.checkArgument(produced >= 0,
-                "Produced bells must be nonnegative");
+                "Produced owls must be nonnegative");
         final long total = (long) remainder + produced;
         final long units = total / threshold;
         Preconditions.checkState(units <= Integer.MAX_VALUE - growthCount,

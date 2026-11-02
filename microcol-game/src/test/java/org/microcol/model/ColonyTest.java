@@ -67,38 +67,39 @@ public class ColonyTest {
         final ColonyField colonyField = colony.getColonyFields().get(0);
         mockFileds();
 
-        assertEquals(3, colonyField.getGoodsTypeProduction(GoodsType.CORN));
+        assertEquals(3, colonyField.getGoodsTypeProduction(GoodsType.GRAIN));
         assertEquals(TerrainType.OCEAN, colonyField.getTerrainType());
     }
 
     @Test
-    public void test_that_unit_placed_at_filed_produce_corn() throws Exception {
+    public void test_that_unit_placed_at_filed_produce_grain()
+            throws Exception {
         final Unit unit = mock(Unit.class);
         final Colony colony = makeDefaultColony();
         mockFileds();
         final ColonyField colonyField = colony
                 .getColonyFieldInDirection(Direction.north);
 
-        verifyCornProduction(colony, 0, 0);
+        verifyGrainProduction(colony, 0, 0);
 
         // place unit at ocean field, and define unit type
         when(unit.getType()).thenReturn(UnitType.COLONIST);
         PlaceColonyField place = new PlaceColonyField(unit, colonyField,
-                GoodsType.CORN);
+                GoodsType.GRAIN);
         colonyField.setPlaceColonyField(place);
 
         assertFalse(colonyField.isEmpty());
-        verifyCornProduction(colony, 3, 2);
+        verifyGrainProduction(colony, 3, 2);
     }
 
     @Test
-    public void test_getEmptyFieldsWithMaxCornProduction_noUnits()
+    public void test_getEmptyFieldsWithMaxGrainProduction_noUnits()
             throws Exception {
         final Colony colony = makeDefaultColony();
         mockFileds();
 
         final List<ColonyField> out = colony
-                .getEmptyFieldsWithMaxCornProduction();
+                .getEmptyFieldsWithMaxGrainProduction();
 
         assertEquals(2, out.size());
         assertEquals(TerrainType.GRASSLAND, out.get(0).getTerrainType());
@@ -106,7 +107,7 @@ public class ColonyTest {
     }
 
     @Test
-    public void test_getEmptyFieldsWithMaxCornProduction_oneUnitAtGrassLand()
+    public void test_getEmptyFieldsWithMaxGrainProduction_oneUnitAtGrassLand()
             throws Exception {
         final Unit unit = mock(Unit.class);
         final Colony colony = makeDefaultColony();
@@ -118,18 +119,18 @@ public class ColonyTest {
         // place unit at ocean field, and define unit type
         when(unit.getType()).thenReturn(UnitType.COLONIST);
         PlaceColonyField place = new PlaceColonyField(unit, colonyField,
-                GoodsType.CORN);
+                GoodsType.GRAIN);
         colonyField.setPlaceColonyField(place);
 
         final List<ColonyField> out = colony
-                .getEmptyFieldsWithMaxCornProduction();
+                .getEmptyFieldsWithMaxGrainProduction();
 
         assertEquals(1, out.size());
         assertEquals(TerrainType.GRASSLAND, out.get(0).getTerrainType());
     }
 
     @Test
-    public void test_getEmptyFieldsWithMaxCornProduction_twoUnitAtGrassLand()
+    public void test_getEmptyFieldsWithMaxGrainProduction_twoUnitAtGrassLand()
             throws Exception {
         final Unit unit = mock(Unit.class);
         final Colony colony = makeDefaultColony();
@@ -143,12 +144,12 @@ public class ColonyTest {
         // place unit at ocean field, and define unit type
         when(unit.getType()).thenReturn(UnitType.COLONIST);
         PlaceColonyField place = new PlaceColonyField(unit, colonyFieldEast,
-                GoodsType.CORN);
+                GoodsType.GRAIN);
         colonyFieldEast.setPlaceColonyField(place);
         colonyFieldWest.setPlaceColonyField(place);
 
         final List<ColonyField> out = colony
-                .getEmptyFieldsWithMaxCornProduction();
+                .getEmptyFieldsWithMaxGrainProduction();
 
         assertEquals(3, out.size());
         assertEquals(TerrainType.OCEAN, out.get(0).getTerrainType());
@@ -157,7 +158,7 @@ public class ColonyTest {
     }
 
     @Test
-    public void test_getEmptyFieldsWithMaxCornProduction_allFieldsAreOccupied()
+    public void test_getEmptyFieldsWithMaxGrainProduction_allFieldsAreOccupied()
             throws Exception {
         final Unit unit = mock(Unit.class);
         final Colony colony = makeDefaultColony();
@@ -169,13 +170,13 @@ public class ColonyTest {
             final ColonyField field = colony
                     .getColonyFieldInDirection(direction);
             PlaceColonyField place = new PlaceColonyField(unit, field,
-                    GoodsType.CORN);
+                    GoodsType.GRAIN);
             field.setPlaceColonyField(place);
             assertFalse(field.isEmpty());
         });
 
         final List<ColonyField> out = colony
-                .getEmptyFieldsWithMaxCornProduction();
+                .getEmptyFieldsWithMaxGrainProduction();
 
         assertEquals(0, out.size(), "There should not be any field.");
     }
@@ -202,7 +203,7 @@ public class ColonyTest {
         recordTerranAtPlace(Location.of(26, 35), TerrainType.GRASSLAND);
 
         // The town center itself is arctic: its unattended commons yield
-        // nothing, so the field-only corn expectations hold.
+        // nothing, so the field-only grain expectations hold.
         when(map.getTerrainAt(Location.of(25, 35))).thenReturn(
                 new Terrain(Location.of(25, 35), TerrainType.ARCTIC));
 
@@ -220,18 +221,18 @@ public class ColonyTest {
         when(map.getTerrainTypeAt(loc)).thenReturn(terrainType);
     }
 
-    private void verifyCornProduction(final Colony colony,
+    private void verifyGrainProduction(final Colony colony,
             final int expectedRowProduction, final int expectedConsumed) {
-        final GoodsProductionStats cornStats = colony.getGoodsStats()
-                .getStatsByType(GoodsType.CORN);
-        logger.debug("Corn stats: " + cornStats);
-        assertEquals(expectedRowProduction, cornStats.getRowProduction(),
+        final GoodsProductionStats grainStats = colony.getGoodsStats()
+                .getStatsByType(GoodsType.GRAIN);
+        logger.debug("Grain stats: " + grainStats);
+        assertEquals(expectedRowProduction, grainStats.getRowProduction(),
                 String.format(
-                        "Corn row production was expected '%s' but is '%s'.",
-                        expectedRowProduction, cornStats.getRowProduction()));
-        assertEquals(expectedConsumed, cornStats.getConsumed(),
-                String.format("Corn consumed was expected '%s' but is '%s'.",
-                        expectedConsumed, cornStats.getConsumed()));
+                        "Grain row production was expected '%s' but is '%s'.",
+                        expectedRowProduction, grainStats.getRowProduction()));
+        assertEquals(expectedConsumed, grainStats.getConsumed(),
+                String.format("Grain consumed was expected '%s' but is '%s'.",
+                        expectedConsumed, grainStats.getConsumed()));
     }
 
     @BeforeEach
@@ -264,6 +265,6 @@ public class ColonyTest {
             final Function<Colony, List<Construction>> constructionsBuilder) {
         return new Colony(model, 0, "Prague", owner, Location.of(25, 35),
                 constructionsBuilder, new HashMap<String, Integer>(),
-                new ArrayList<>(), 0L, owner, Optional.of(GoodsType.TOBACCO));
+                new ArrayList<>(), 0L, owner, Optional.of(GoodsType.GRAPES));
     }
 }

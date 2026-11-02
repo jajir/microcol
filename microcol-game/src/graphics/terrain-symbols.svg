@@ -322,8 +322,10 @@
 <g id="resource-MIXED_MINERALS" transform="translate(107 46) scale(.135)" stroke="#292824" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
 <path d="M9 135 L26 83 L67 48 L101 59 L122 109 L98 151 L54 164Z" fill="#b0b4b4"/><path d="M27 88 L60 109 L101 65 L68 58Z" fill="#dedfdd" stroke="none"/><path d="M95 161 L110 117 L154 87 L180 104 L192 149 L172 176 L129 181Z" fill="#ae673d"/><path d="M142 141 L151 124 L168 137" fill="none"/>
 </g>
-<g id="resource-TRAPPING" transform="translate(152 46) scale(.135)" stroke="#292824" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
-<path d="M86 30 Q89 19 108 24 L116 41 Q125 52 146 45 Q169 44 158 62 L139 85 Q133 103 147 119 L162 136 Q168 153 146 148 Q125 143 117 162 L110 180 Q99 190 87 177 L82 162 Q73 147 51 154 Q31 155 42 135 L58 115 Q65 101 53 85 L39 68 Q28 49 50 50 Q72 56 80 42Z" fill="#d1b07a"/>
+<g id="resource-CLAY_PIT" transform="translate(152 46) scale(.135)" stroke="#292824" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+<g id="resource-CLAY_PIT-art" transform="translate(6.25 6.25) scale(2.9297)" stroke-width="4.10">
+<g id="clay-lumps"><path d="M24 37 Q26 23 36 11 Q43 7 47 16 L59 40 Q61 47 53 48 L31 47 Z" fill="#c77f50"/><path d="M5 47 Q8 35 17 30 Q22 26 28 32 Q35 40 37 50 Q37 54 29 54 L10 54 Q3 54 5 47 Z" fill="#c77f50"/></g>
+</g>
 </g>
 <g id="resource-GAME" transform="translate(197 46) scale(.135)" stroke="#292824" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
 <path d="M80 91 Q52 78 49 43 M63 78 Q39 70 31 51 M54 59 Q68 55 71 38 M125 90 Q151 72 153 42 M141 72 Q166 62 170 44 M151 57 Q138 50 136 31" fill="none"/><path d="M76 98 Q55 80 38 88 Q46 113 76 115 L87 164 Q102 184 117 162 L131 113 Q156 111 166 90 Q145 81 125 99 Q101 90 76 98Z" fill="#b88355"/><ellipse cx="88" cy="125" rx="3" ry="4" fill="#292824" stroke="none"/><ellipse cx="116" cy="125" rx="3" ry="4" fill="#292824" stroke="none"/><ellipse cx="102" cy="155" rx="6" ry="5" fill="#292824" stroke="none"/>
@@ -331,14 +333,24 @@
 <g id="resource-OASIS" transform="translate(242 46) scale(.135)" stroke="#292824" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
 <path d="M62 160 Q77 105 99 61 L110 65 Q91 114 88 163Z" fill="#b18050"/><path d="M96 64 Q72 51 44 76 Q42 52 67 43 Q50 36 28 39 Q42 15 73 32 Q74 13 96 18 L111 36 Q124 9 147 20 L128 43 Q158 28 174 61 Q141 48 121 65 Q145 70 145 98 Q119 86 108 66 Q98 87 82 103 Q79 83 96 64Z" fill="#738b43"/><path d="M115 159 Q147 143 180 157 Q194 168 178 178 Q140 190 112 176 Q103 167 115 159Z" fill="#3d9fa5"/>
 </g>
-<g id="resource-PRIME_COTTON" transform="translate(287 46) scale(.135)" stroke="#292824" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
-<path d="M74 123 Q46 124 40 105 Q31 85 48 72 Q47 48 69 44 Q88 23 106 40 Q129 32 142 53 Q168 57 162 84 Q180 109 151 126 L113 143 L87 139Z" fill="#fff9ec"/><path d="M102 162 L99 135 M99 139 Q71 141 61 112 Q85 116 96 132 Q92 106 103 94 Q116 113 110 136 Q126 119 143 116 Q137 138 110 144Z" fill="#718644"/>
+<g id="resource-PRIME_WOOL" transform="translate(287 46) scale(.135)" stroke="#292824" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+<g id="resource-PRIME_WOOL-art" transform="translate(6.25 6.25) scale(2.9297)" stroke-width="4.10">
+<g id="legs"><path d="M16 43 L15 56 M26 44 L26 57 M40 43 L40 56 M49 41 L49 54" fill="none"/></g>
+<g id="wool"><path d="M13 42 C3 41 4 30 9 27 C3 18 12 11 20 14 C22 5 33 7 36 13 C44 6 53 13 50 20 C60 21 60 32 54 36 C59 44 49 50 42 45 C36 53 26 48 24 45 C18 50 11 47 13 42 Z" fill="#fff5da"/></g>
+<g id="head"><path d="M13 20 Q5 23 5 32 Q5 42 16 39 L24 28 Q23 22 18 21 L14 26" fill="#c2b9a0"/><path d="M11 31 a1 1 0 1 0 2 0 a1 1 0 1 0 -2 0" fill="#41413b"/></g>
 </g>
-<g id="resource-PRIME_TOBACCO" transform="translate(332 46) scale(.135)" stroke="#292824" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
-<path d="M50 173 Q41 140 58 105 Q80 67 143 34 Q158 90 139 131 Q116 167 62 177 L43 186Z" fill="#91a35a"/><path d="M59 167 L126 69 M76 142 L75 117 M94 118 L119 112 M96 117 L98 91" fill="none"/>
 </g>
-<g id="resource-PRIME_SUGAR" transform="translate(377 46) scale(.135)" stroke="#292824" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
-<path d="M44 175 L68 31 Q77 21 94 28 L69 177Z" fill="#9faf63"/><path d="M106 174 L125 62 Q138 51 152 60 L132 179Z" fill="#9faf63"/><path d="M64 61 L88 64 M57 101 L80 105 M50 141 L73 145 M121 90 L145 94 M114 130 L138 134" fill="none"/><path d="M52 126 Q27 103 26 80 Q49 91 58 111 M135 135 Q157 111 177 109 Q168 134 132 151Z" fill="#8ea65c"/>
+<g id="resource-PRIME_GRAPES" transform="translate(332 46) scale(.135)" stroke="#292824" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+<g id="resource-PRIME_GRAPES-art" transform="translate(6.25 6.25) scale(2.9297)" stroke-width="4.10">
+<g id="leaf"><path d="M31 19 L34 8 Q44 4 47 10 L56 12 L48 19 L52 27 Q39 28 34 19" fill="#87934c"/></g>
+<g id="grapes"><path d="M9 24 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M26 25 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M40 36 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M17 39 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M32 49 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/><path d="M18 54 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="#8e6b91"/></g>
+</g>
+</g>
+<g id="resource-PRIME_OLIVES" transform="translate(377 46) scale(.135)" stroke="#292824" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+<g id="resource-PRIME_OLIVES-art" transform="translate(6.25 6.25) scale(2.9297)" stroke-width="4.10">
+<g id="stem-and-leaf"><path d="M22 30 Q30 16 34 10 M43 31 Q40 21 34 10" fill="none"/><path d="M33 13 Q42 2 56 6 Q50 19 33 13 Z" fill="#87934c"/></g>
+<g id="olives"><path d="M23 24 C9 19 4 48 15 53 C29 60 36 28 23 24 Z" fill="#87934c"/><path d="M42 26 C30 25 29 49 42 53 C58 55 58 29 42 26 Z" fill="#87934c"/></g>
+</g>
 </g>
 <g id="resource-PRIME_TIMBER" transform="translate(422 46) scale(.135)" stroke="#292824" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
 <path d="M79 166 L81 187 L98 187 L97 161Z" fill="#ac8050"/><path d="M86 20 L45 75 L62 76 L31 117 L51 119 L22 164 Q58 181 88 164 Q119 177 143 161 L117 123 L134 122 L106 80 L121 80Z" fill="#3d765c"/><path d="M101 159 L166 124 Q180 122 185 142 L183 164 L117 190 Q101 186 101 159Z" fill="#b48452"/><ellipse cx="111" cy="175" rx="15" ry="20" fill="#d3ae70"/><ellipse cx="111" cy="175" rx="4" ry="8" fill="#292824" stroke="none"/><path d="M139 149 L169 138 M146 169 L169 160" fill="none"/>

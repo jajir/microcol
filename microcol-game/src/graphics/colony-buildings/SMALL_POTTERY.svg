@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="160" viewBox="0 0 320 160" role="img" aria-labelledby="title description">
+<title id="title">Small Pottery — Lehký nadhled</title>
+<desc id="description">Amfory (R-0394 symbol from the approved R-0384 amphorae vector); level 1. Editable flat vector drawing after selected proposal 8, R-0361. Transparent background, simple hand-drawn contours and a narrow side view.</desc>
+<g id="pen-outline" stroke="#3e3b31" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round">
+<g id="building">
+<g id="open-shelter">
+<path id="shape-001" d="M88 77 Q90.98 77.63 94 77.3 Q94.15 109.65 93.6 142 Q90.97 141.42 88.3 141.8 Q87.80 109.40 88 77 Z" fill="#bd8e50"/>
+<path id="shape-002" d="M211 64 Q213.98 64.63 217 64.3 Q217.15 99.65 216.6 135 Q213.97 134.42 211.3 134.8 Q210.80 99.40 211 64 Z" fill="#bd8e50"/>
+<path id="shape-003" d="M110 82 Q112.98 82.63 116 82.3 Q116.15 114.65 115.6 147 Q112.97 146.42 110.3 146.8 Q109.80 114.40 110 82 Z" fill="#bd8e50"/>
+<path id="shape-004" d="M79 74 Q135.10 61.97 191 49 Q208.12 54.67 225 61 Q167.89 73.53 111 87 Q94.87 80.82 79 74 Z" fill="#b5754c"/>
+</g>
+<g id="profession-equipment">
+<g id="amphorae-symbol" transform="translate(137.88 103.88) scale(0.6445)" stroke-width="4.81">
+<g id="amphora-3" transform="translate(3 3) scale(1)"><path d="M16 17 C0 10 2 34 16 36 L17 29 C7 27 8 17 17 23 Z" fill="#c77f50"/><path d="M32 17 C48 11 47 34 32 36 L32 29 C43 25 40 17 32 23 Z" fill="#c77f50"/><path d="M15 7 Q25 5 34 7 L31 20 Q40 29 34 42 L28 54 L20 54 L13 42 Q7 28 18 20 Z" fill="#c77f50"/></g>
+<g id="amphora-29" transform="translate(29 18) scale(0.75)"><path d="M16 17 C0 10 2 34 16 36 L17 29 C7 27 8 17 17 23 Z" fill="#c77f50"/><path d="M32 17 C48 11 47 34 32 36 L32 29 C43 25 40 17 32 23 Z" fill="#c77f50"/><path d="M15 7 Q25 5 34 7 L31 20 Q40 29 34 42 L28 54 L20 54 L13 42 Q7 28 18 20 Z" fill="#c77f50"/></g>
+</g>
+</g>
+</g>
+</g>
+</svg>

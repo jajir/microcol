@@ -30,7 +30,7 @@ public final class FleetReportPage extends AbstractScreen {
      * Words that would reveal the cargo, passengers or route of a foreign ship.
      */
     private static final String[] HIDDEN_FOREIGN_WORDS = { "Passengers",
-            "goods", "Sailing", "turns", "Ore", "Silver", "Fur", "Colonist" };
+            "goods", "Sailing", "turns", "Ore", "Silver", "Clay", "Colonist" };
 
     public FleetReportPage(final TestContext context) {
         super(context);

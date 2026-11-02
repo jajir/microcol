@@ -34,8 +34,8 @@ class CoronadoRevealTest {
 
     private final Gson gson = new Gson();
 
-    /** Free play where Dutch is the founder and holds the given bells. */
-    private static ModelPo dutchCoronadoSave(final int bells) {
+    /** Free play where Dutch is the founder and holds the given owls. */
+    private static ModelPo dutchCoronadoSave(final int owls) {
         final GameModelPo data = new GameModelPoDao()
                 .loadFromClassPath("/maps/free-play.microcol");
         for (final PlayerPo player : data.getModel().getGameManager()
@@ -43,7 +43,7 @@ class CoronadoRevealTest {
             if ("Dutch".equals(player.getName())) {
                 final CongressPo congress = Congress.initial();
                 congress.setActivated(true);
-                congress.setBells(bells);
+                congress.setOwls(owls);
                 congress.setGeneration(1);
                 congress.setCandidates(List.of(Founder.JOHN_PAUL_JONES,
                         Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
@@ -55,8 +55,8 @@ class CoronadoRevealTest {
         return data.getModel();
     }
 
-    private static Model load(final int bells) {
-        return Model.make(dutchCoronadoSave(bells),
+    private static Model load(final int owls) {
+        return Model.make(dutchCoronadoSave(owls),
                 MissionImpl.getPredefinedGameOverEvaluators());
     }
 
@@ -234,8 +234,7 @@ class CoronadoRevealTest {
                 gson.toJson(restoredDutch.save().getColonySightings()));
         assertEquals(List.of(Founder.FRANCISCO_DE_CORONADO),
                 restoredDutch.getCongressMembers());
-        assertEquals(dutch.getCongressBells(),
-                restoredDutch.getCongressBells());
+        assertEquals(dutch.getCongressOwls(), restoredDutch.getCongressOwls());
         for (final Colony colony : foreignColonies(restored, restoredDutch)) {
             assertEquals(colony.getName(),
                     restoredDutch.getKnownColonyAt(colony.getLocation())

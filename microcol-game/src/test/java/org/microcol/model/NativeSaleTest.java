@@ -31,7 +31,7 @@ import com.google.gson.Gson;
 class NativeSaleTest {
 
     /** Wanted goods of the scene; each is tradable and never offered. */
-    private static final List<GoodsType> WANTED = List.of(GoodsType.MUSKET,
+    private static final List<GoodsType> WANTED = List.of(GoodsType.WEAPONS,
             GoodsType.TOOLS, GoodsType.HORSE);
 
     private static final int WAGON = 200;
@@ -47,7 +47,7 @@ class NativeSaleTest {
         };
     }
 
-    /** A contacted tribe, a capital of 2000 gold, and a wagon with 50 corn. */
+    /** A contacted tribe, a capital of 2000 gold, and a wagon with 50 grain. */
     private static NativeRelationsScene wagonScene(final double anger) {
         return wagonScene(NativeNation.AZTEC, anger);
     }
@@ -56,20 +56,20 @@ class NativeSaleTest {
     private static NativeRelationsScene wagonScene(final NativeNation nation,
             final double anger) {
         return island(nation).contact(EuropeanNation.DUTCH, nation)
-                .market(100, List.of(GoodsType.CORN), WANTED)
+                .market(100, List.of(GoodsType.GRAIN), WANTED)
                 .tribal(nation, EuropeanNation.DUTCH, anger).unit(DUTCH,
                         UnitType.WAGON, at(-1, 0),
-                        carrying(GoodsType.CORN, 50));
+                        carrying(GoodsType.GRAIN, 50));
     }
 
-    /** Same tribe with a wagon holding fifty muskets. */
-    private static NativeRelationsScene musketScene() {
+    /** Same tribe with a wagon holding fifty weapons. */
+    private static NativeRelationsScene weaponScene() {
         return island(NativeNation.AZTEC)
                 .contact(EuropeanNation.DUTCH, NativeNation.AZTEC)
-                .market(100, List.of(GoodsType.CORN), WANTED)
+                .market(100, List.of(GoodsType.GRAIN), WANTED)
                 .tribal(NativeNation.AZTEC, EuropeanNation.DUTCH, 10)
                 .unit(DUTCH, UnitType.WAGON, at(-1, 0),
-                        carrying(GoodsType.MUSKET, 50));
+                        carrying(GoodsType.WEAPONS, 50));
     }
 
     private static Unit wagon(final Model model) {
@@ -164,22 +164,22 @@ class NativeSaleTest {
         final Model model = wagonScene(10).toModel();
         final NativeSettlement village = settlement(model);
         assertTrue(model.getNativeSaleQuote(wagon(model), village,
-                GoodsType.CORN, 50, false).isEmpty());
+                GoodsType.GRAIN, 50, false).isEmpty());
         model.enterNativeMarket(wagon(model), village);
         final NativeMarketView.Market market = model
                 .getNativeMarketView(wagon(model), village).orElseThrow()
                 .getMarket().orElseThrow();
-        assertEquals(List.of(GoodsType.CORN),
+        assertEquals(List.of(GoodsType.GRAIN),
                 market.getCarried().stream()
                         .map(NativeMarketView.Carried::getGoods)
                         .collect(Collectors.toList()));
         assertEquals(50, market.getCarried().get(0).getAmount());
         assertTrue(model.getNativeSaleQuote(wagon(model), village,
-                GoodsType.CORN, 51, false).isEmpty());
+                GoodsType.GRAIN, 51, false).isEmpty());
         assertTrue(model.getNativeSaleQuote(wagon(model), village,
-                GoodsType.CORN, 0, false).isEmpty());
+                GoodsType.GRAIN, 0, false).isEmpty());
         assertTrue(model.getNativeSaleQuote(wagon(model), village,
-                GoodsType.TOBACCO, 1, false).isEmpty());
+                GoodsType.GRAPES, 1, false).isEmpty());
     }
 
     @Test
@@ -187,7 +187,7 @@ class NativeSaleTest {
         final Model model = wagonScene(10).toModel();
         final NativeSettlement village = settlement(model);
         model.enterNativeMarket(wagon(model), village);
-        final NativeSaleQuote sale = quote(model, GoodsType.CORN, 50, false);
+        final NativeSaleQuote sale = quote(model, GoodsType.GRAIN, 50, false);
         assertEquals(NativeSaleQuote.Haggle.OFFERED, sale.getHaggle());
         assertEquals(NativeMarketRules.saleTotal(50, sale.getEuropeBid(), false,
                 false, false), sale.getGold());
@@ -198,9 +198,9 @@ class NativeSaleTest {
 
         assertEquals(gold + sale.getGold(), gold(model));
         assertEquals(treasury - sale.getGold(), village.getTreasury());
-        assertEquals(0, held(model, GoodsType.CORN));
-        assertEquals(50, village.getReceivedStock().get(GoodsType.CORN));
-        assertEquals(Optional.of(GoodsType.CORN),
+        assertEquals(0, held(model, GoodsType.GRAIN));
+        assertEquals(50, village.getReceivedStock().get(GoodsType.GRAIN));
+        assertEquals(Optional.of(GoodsType.GRAIN),
                 village.findTrade(EuropeanNation.DUTCH).orElseThrow()
                         .getLastReceived());
         assertEquals(1, model.save().getNativeRelationOutcomeIds().size());
@@ -211,9 +211,9 @@ class NativeSaleTest {
         final Model model = wagonScene(10).toModel();
         final NativeSettlement village = settlement(model);
         model.enterNativeMarket(wagon(model), village);
-        final NativeSaleQuote wholeLot = quote(model, GoodsType.CORN, 50,
+        final NativeSaleQuote wholeLot = quote(model, GoodsType.GRAIN, 50,
                 false);
-        final NativeSaleQuote part = quote(model, GoodsType.CORN, 20, false);
+        final NativeSaleQuote part = quote(model, GoodsType.GRAIN, 20, false);
         model.sellToNative(wagon(model), village, part);
         final int gold = gold(model);
         final int treasury = village.getTreasury();
@@ -225,8 +225,8 @@ class NativeSaleTest {
 
         assertEquals(gold, gold(model));
         assertEquals(treasury, village.getTreasury());
-        assertEquals(30, held(model, GoodsType.CORN));
-        assertEquals(20, village.getReceivedStock().get(GoodsType.CORN));
+        assertEquals(30, held(model, GoodsType.GRAIN));
+        assertEquals(20, village.getReceivedStock().get(GoodsType.GRAIN));
         assertEquals(1, model.save().getNativeRelationOutcomeIds().size());
     }
 
@@ -236,13 +236,13 @@ class NativeSaleTest {
                 .toModel();
         final NativeSettlement village = settlement(model);
         model.enterNativeMarket(wagon(model), village);
-        final NativeSaleQuote sale = quote(model, GoodsType.CORN, 50, false);
+        final NativeSaleQuote sale = quote(model, GoodsType.GRAIN, 50, false);
         final int treasury = village.getTreasury();
 
         assertThrows(IllegalStateException.class,
                 () -> model.sellToNative(wagon(model), village, sale));
 
-        assertEquals(50, held(model, GoodsType.CORN));
+        assertEquals(50, held(model, GoodsType.GRAIN));
         assertEquals(treasury, village.getTreasury());
         assertTrue(village.getReceivedStock().isEmpty());
         assertEquals(Integer.MAX_VALUE, gold(model));
@@ -254,17 +254,17 @@ class NativeSaleTest {
         final NativeSettlement village = settlement(model);
         model.enterNativeMarket(wagon(model), village);
         final int bid = model.getEurope()
-                .getGoodsTradeForType(GoodsType.CORN, EuropeanNation.DUTCH)
+                .getGoodsTradeForType(GoodsType.GRAIN, EuropeanNation.DUTCH)
                 .getSellPrice();
         final int most = NativeMarketRules.maxSaleQuantity(50, 10, bid, false,
                 false, false);
         assertEquals(most, model.getNativeMaxSaleQuantity(wagon(model), village,
-                GoodsType.CORN, false));
+                GoodsType.GRAIN, false));
         assertTrue(model.getNativeSaleQuote(wagon(model), village,
-                GoodsType.CORN, most + 1, false).isEmpty());
+                GoodsType.GRAIN, most + 1, false).isEmpty());
 
         model.sellToNative(wagon(model), village,
-                quote(model, GoodsType.CORN, most, false));
+                quote(model, GoodsType.GRAIN, most, false));
 
         assertEquals(10
                 - NativeMarketRules.saleTotal(most, bid, false, false, false),
@@ -278,7 +278,7 @@ class NativeSaleTest {
                 .toModel();
         final NativeSettlement village = settlement(model);
         model.enterNativeMarket(wagon(model), village);
-        final NativeSaleQuote gift = quote(model, GoodsType.CORN, 50, true);
+        final NativeSaleQuote gift = quote(model, GoodsType.GRAIN, 50, true);
         assertEquals(0, gift.getGold());
         assertEquals(NativeSaleQuote.Haggle.UNAVAILABLE, gift.getHaggle());
         final int gold = gold(model);
@@ -290,8 +290,8 @@ class NativeSaleTest {
 
         assertEquals(gold, gold(model));
         assertEquals(treasury, village.getTreasury());
-        assertEquals(0, held(model, GoodsType.CORN));
-        assertEquals(50, village.getReceivedStock().get(GoodsType.CORN));
+        assertEquals(0, held(model, GoodsType.GRAIN));
+        assertEquals(50, village.getReceivedStock().get(GoodsType.GRAIN));
         // Fifty pieces reduce by 5×50/100 = 2.5, doubled at a capital.
         assertEquals(5.0, localAlarm(model));
         assertEquals(5.0, tribalAnger(model));
@@ -305,8 +305,8 @@ class NativeSaleTest {
         model.enterNativeMarket(wagon(model), village);
         // Thirty-three pieces lower by 5×33/100 = 1.65, doubled at the capital.
         model.giftToNative(wagon(model), village,
-                quote(model, GoodsType.CORN, 33, true));
-        assertEquals(17, held(model, GoodsType.CORN));
+                quote(model, GoodsType.GRAIN, 33, true));
+        assertEquals(17, held(model, GoodsType.GRAIN));
         assertEquals(10 - 3.3, localAlarm(model), 1e-9);
         assertEquals(10 - 3.3, tribalAnger(model), 1e-9);
     }
@@ -320,8 +320,8 @@ class NativeSaleTest {
     }
 
     @Test
-    void soldMusketsCountTowardFiftyWhileGiftedMusketsAddNoArmsAnger() {
-        final Model model = musketScene().toModel();
+    void soldWeaponsCountTowardFiftyWhileGiftedWeaponsAddNoArmsAnger() {
+        final Model model = weaponScene().toModel();
         final NativeSettlement village = settlement(model);
         model.enterNativeMarket(wagon(model), village);
 
@@ -329,22 +329,22 @@ class NativeSaleTest {
         // the local alarm and the tribal anger by 2 doubled = 4. The arms rise
         // of +5 per complete 50 pieces comes on top, after that trade.
         model.sellToNative(wagon(model), village,
-                quote(model, GoodsType.MUSKET, 49, false));
+                quote(model, GoodsType.WEAPONS, 49, false));
         assertEquals(6.0, tribalAnger(model),
                 "10 - 4 for the trade; 49 pieces are no complete step yet");
         assertEquals(49, armsRemainder(model));
         model.sellToNative(wagon(model), village,
-                quote(model, GoodsType.MUSKET, 1, false));
+                quote(model, GoodsType.WEAPONS, 1, false));
         assertEquals(7.0, tribalAnger(model),
                 "6 - 4 for the trade + 5 for the fiftieth piece");
         assertEquals(0, armsRemainder(model));
-        assertEquals(0, held(model, GoodsType.MUSKET));
+        assertEquals(0, held(model, GoodsType.WEAPONS));
 
-        final Model given = musketScene().toModel();
+        final Model given = weaponScene().toModel();
         final NativeSettlement giftVillage = settlement(given);
         given.enterNativeMarket(wagon(given), giftVillage);
         given.giftToNative(wagon(given), giftVillage,
-                quote(given, GoodsType.MUSKET, 50, true));
+                quote(given, GoodsType.WEAPONS, 50, true));
         // Only the capital's gift reduction of 5 per 50 pieces doubled
         // applies, never the arms rise or a remainder.
         assertEquals(5.0, tribalAnger(given));
@@ -360,14 +360,14 @@ class NativeSaleTest {
             final Model model = scene.toModel();
             final NativeSettlement village = settlement(model);
             model.enterNativeMarket(wagon(model), village);
-            final NativeSaleQuote offered = quote(model, GoodsType.CORN, 50,
+            final NativeSaleQuote offered = quote(model, GoodsType.GRAIN, 50,
                     false);
             final boolean won = model.haggleNativeSale(wagon(model), village,
                     offered);
             if (won) {
                 accepted++;
             }
-            final NativeSaleQuote sale = quote(model, GoodsType.CORN, 50,
+            final NativeSaleQuote sale = quote(model, GoodsType.GRAIN, 50,
                     false);
             assertEquals(won ? NativeSaleQuote.Haggle.ACCEPTED
                     : NativeSaleQuote.Haggle.REFUSED, sale.getHaggle());
@@ -388,7 +388,8 @@ class NativeSaleTest {
         scene.toPo().setCombatRandomState(3L);
         final Model model = scene.toModel();
         model.enterNativeMarket(wagon(model), settlement(model));
-        final NativeSaleQuote offered = quote(model, GoodsType.CORN, 50, false);
+        final NativeSaleQuote offered = quote(model, GoodsType.GRAIN, 50,
+                false);
         final boolean won = model.haggleNativeSale(wagon(model),
                 settlement(model), offered);
 
@@ -398,7 +399,7 @@ class NativeSaleTest {
         assertEquals(
                 won ? NativeSaleQuote.Haggle.ACCEPTED
                         : NativeSaleQuote.Haggle.REFUSED,
-                quote(restored, GoodsType.CORN, 50, false).getHaggle());
+                quote(restored, GoodsType.GRAIN, 50, false).getHaggle());
         assertThrows(NativeTermsChangedException.class,
                 () -> restored.haggleNativeSale(wagon(restored),
                         settlement(restored), offered));
@@ -417,7 +418,7 @@ class NativeSaleTest {
         assertEquals(0, before.getHaggledQuantity());
 
         model.haggleNativeSale(wagon(model), settlement(model),
-                quote(model, GoodsType.CORN, 30, false));
+                quote(model, GoodsType.GRAIN, 30, false));
 
         final Model restored = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
@@ -425,7 +426,7 @@ class NativeSaleTest {
             final NativeMarketView.Market market = shown
                     .getNativeMarketView(wagon(shown), settlement(shown))
                     .orElseThrow().getMarket().orElseThrow();
-            assertEquals(GoodsType.CORN,
+            assertEquals(GoodsType.GRAIN,
                     market.getHaggledGoods().orElseThrow());
             assertEquals(30, market.getHaggledQuantity());
         }
@@ -440,7 +441,7 @@ class NativeSaleTest {
         final Model model = scene.toModel();
         model.enterNativeMarket(wagon(model), settlement(model));
         model.haggleNativeSale(wagon(model), settlement(model),
-                quote(model, GoodsType.CORN, 30, false));
+                quote(model, GoodsType.GRAIN, 30, false));
 
         final ModelPo zero = model.save();
         tradePo(zero).getExpeditions().get(0).setHaggledQuantity(0);
@@ -461,15 +462,15 @@ class NativeSaleTest {
         final NativeSettlement village = settlement(model);
         model.enterNativeMarket(wagon(model), village);
         final boolean won = model.haggleNativeSale(wagon(model), village,
-                quote(model, GoodsType.CORN, 50, false));
-        final NativeSaleQuote sale = quote(model, GoodsType.CORN, 50, false);
+                quote(model, GoodsType.GRAIN, 50, false));
+        final NativeSaleQuote sale = quote(model, GoodsType.GRAIN, 50, false);
         final int gold = gold(model);
 
         model.sellToNative(wagon(model), village, sale);
 
         assertEquals(gold + NativeMarketRules.saleTotal(50, sale.getEuropeBid(),
                 false, false, won), gold(model));
-        assertEquals(0, held(model, GoodsType.CORN));
+        assertEquals(0, held(model, GoodsType.GRAIN));
     }
 
     /** Whole saved state as JSON, so any changed field shows up. */
@@ -480,36 +481,36 @@ class NativeSaleTest {
     @Test
     void theVillageRoomLimitsSaleAndGiftAndAnOverflowChangesNothing() {
         final NativeSaleQuote sale = quote(
-                enteredWagon(wagonScene(10).toModel()), GoodsType.CORN, 10,
+                enteredWagon(wagonScene(10).toModel()), GoodsType.GRAIN, 10,
                 false);
         final NativeSaleQuote gift = quote(
-                enteredWagon(wagonScene(10).toModel()), GoodsType.CORN, 10,
+                enteredWagon(wagonScene(10).toModel()), GoodsType.GRAIN, 10,
                 true);
 
         // Room of exactly ten pieces: ten is legal, eleven is not, and the
         // settlement's stock stops at the largest storable amount.
         final Model tight = enteredWagon(wagonScene(10)
-                .receivedOfFirst(GoodsType.CORN, Integer.MAX_VALUE - 10)
+                .receivedOfFirst(GoodsType.GRAIN, Integer.MAX_VALUE - 10)
                 .toModel());
         assertEquals(10, tight.getNativeMaxSaleQuantity(wagon(tight),
-                settlement(tight), GoodsType.CORN, false));
+                settlement(tight), GoodsType.GRAIN, false));
         assertEquals(10, tight.getNativeMaxSaleQuantity(wagon(tight),
-                settlement(tight), GoodsType.CORN, true));
+                settlement(tight), GoodsType.GRAIN, true));
         assertTrue(tight.getNativeSaleQuote(wagon(tight), settlement(tight),
-                GoodsType.CORN, 11, false).isEmpty());
+                GoodsType.GRAIN, 11, false).isEmpty());
         tight.sellToNative(wagon(tight), settlement(tight),
-                quote(tight, GoodsType.CORN, 10, false));
+                quote(tight, GoodsType.GRAIN, 10, false));
         assertEquals(Integer.MAX_VALUE,
-                settlement(tight).getReceivedStock().get(GoodsType.CORN));
+                settlement(tight).getReceivedStock().get(GoodsType.GRAIN));
 
         // A full village refuses both at once, and a stale offer changes
         // nothing.
         final Model full = enteredWagon(wagonScene(10)
-                .receivedOfFirst(GoodsType.CORN, Integer.MAX_VALUE).toModel());
+                .receivedOfFirst(GoodsType.GRAIN, Integer.MAX_VALUE).toModel());
         assertEquals(0, full.getNativeMaxSaleQuantity(wagon(full),
-                settlement(full), GoodsType.CORN, false));
+                settlement(full), GoodsType.GRAIN, false));
         assertEquals(0, full.getNativeMaxSaleQuantity(wagon(full),
-                settlement(full), GoodsType.CORN, true));
+                settlement(full), GoodsType.GRAIN, true));
         final String before = snapshot(full);
         assertThrows(NativeTermsChangedException.class,
                 () -> full.sellToNative(wagon(full), settlement(full), sale));
@@ -518,7 +519,7 @@ class NativeSaleTest {
         assertEquals(before, snapshot(full));
         // Even the direct bookkeeping refuses to pass the largest amount.
         assertThrows(ArithmeticException.class,
-                () -> settlement(full).addReceived(GoodsType.CORN, 1));
+                () -> settlement(full).addReceived(GoodsType.GRAIN, 1));
         assertEquals(before, snapshot(full));
     }
 
@@ -526,7 +527,7 @@ class NativeSaleTest {
     void aRefusedHaggleDrawsNothingAndChangesNothing() {
         // The mood turns uneasy after the offer was shown: the offer is stale.
         final Model mood = enteredWagon(wagonScene(10).toModel());
-        final NativeSaleQuote shown = quote(mood, GoodsType.CORN, 50, false);
+        final NativeSaleQuote shown = quote(mood, GoodsType.GRAIN, 50, false);
         mood.addNativeTribalAnger(NativeNation.AZTEC,
                 mood.getPlayerByName(DUTCH), 20);
         final String moodBefore = snapshot(mood);
@@ -534,16 +535,16 @@ class NativeSaleTest {
                 .haggleNativeSale(wagon(mood), settlement(mood), shown));
         assertEquals(moodBefore, snapshot(mood));
         // The fresh uneasy offer is still open, and its haggle is available.
-        final NativeSaleQuote uneasy = quote(mood, GoodsType.CORN, 50, false);
+        final NativeSaleQuote uneasy = quote(mood, GoodsType.GRAIN, 50, false);
         assertEquals(NativeHostility.UNEASY, uneasy.getHostility());
         mood.haggleNativeSale(wagon(mood), settlement(mood), uneasy);
 
         // A sale changes the cargo: the earlier offer for fifty pieces is
         // stale.
         final Model cargo = enteredWagon(wagonScene(10).toModel());
-        final NativeSaleQuote whole = quote(cargo, GoodsType.CORN, 50, false);
+        final NativeSaleQuote whole = quote(cargo, GoodsType.GRAIN, 50, false);
         cargo.sellToNative(wagon(cargo), settlement(cargo),
-                quote(cargo, GoodsType.CORN, 20, false));
+                quote(cargo, GoodsType.GRAIN, 20, false));
         final String cargoBefore = snapshot(cargo);
         assertThrows(NativeTermsChangedException.class, () -> cargo
                 .haggleNativeSale(wagon(cargo), settlement(cargo), whole));
@@ -551,7 +552,8 @@ class NativeSaleTest {
 
         // The treasury changes before the haggle: the offer is stale.
         final Model treasury = enteredWagon(wagonScene(10).toModel());
-        final NativeSaleQuote paid = quote(treasury, GoodsType.CORN, 50, false);
+        final NativeSaleQuote paid = quote(treasury, GoodsType.GRAIN, 50,
+                false);
         settlement(treasury).setTreasury(5);
         final String treasuryBefore = snapshot(treasury);
         assertThrows(NativeTermsChangedException.class, () -> treasury
@@ -561,13 +563,13 @@ class NativeSaleTest {
         // The natives can pay the plain price but not the raised one: the
         // haggle is refused before any draw.
         final int bid = enteredWagon(wagonScene(10).toModel()).getEurope()
-                .getGoodsTradeForType(GoodsType.CORN, EuropeanNation.DUTCH)
+                .getGoodsTradeForType(GoodsType.GRAIN, EuropeanNation.DUTCH)
                 .getSellPrice();
         final int plain = NativeMarketRules.saleTotal(50, bid, false, false,
                 false);
         final Model poor = enteredWagon(
                 wagonScene(10).treasuryOfFirst(plain).toModel());
-        final NativeSaleQuote affordable = quote(poor, GoodsType.CORN, 50,
+        final NativeSaleQuote affordable = quote(poor, GoodsType.GRAIN, 50,
                 false);
         final String poorBefore = snapshot(poor);
         assertThrows(IllegalStateException.class, () -> poor
@@ -578,9 +580,11 @@ class NativeSaleTest {
     @Test
     void aHaggleIsOnceOnlyAndAGiftCannotBeHaggled() {
         final Model model = enteredWagon(wagonScene(10).toModel());
-        final NativeSaleQuote offered = quote(model, GoodsType.CORN, 50, false);
+        final NativeSaleQuote offered = quote(model, GoodsType.GRAIN, 50,
+                false);
         model.haggleNativeSale(wagon(model), settlement(model), offered);
-        final NativeSaleQuote settled = quote(model, GoodsType.CORN, 50, false);
+        final NativeSaleQuote settled = quote(model, GoodsType.GRAIN, 50,
+                false);
         assertNotEquals(NativeSaleQuote.Haggle.OFFERED, settled.getHaggle());
         final String before = snapshot(model);
         assertThrows(IllegalStateException.class, () -> model
@@ -589,7 +593,7 @@ class NativeSaleTest {
                 .haggleNativeSale(wagon(model), settlement(model), offered));
         assertThrows(IllegalArgumentException.class,
                 () -> model.haggleNativeSale(wagon(model), settlement(model),
-                        quote(model, GoodsType.CORN, 50, true)));
+                        quote(model, GoodsType.GRAIN, 50, true)));
         assertEquals(before, snapshot(model));
     }
 
@@ -598,7 +602,7 @@ class NativeSaleTest {
         // Cherokee settlements are villages, the only class that refuses the
         // same goods on consecutive expeditions.
         final Model model = wagonScene(NativeNation.CHEROKEE, 10).unit(DUTCH,
-                UnitType.WAGON, at(1, 0), carrying(GoodsType.CORN, 50))
+                UnitType.WAGON, at(1, 0), carrying(GoodsType.GRAIN, 50))
                 .toModel();
         assertEquals(NativeSettlementClass.VILLAGE,
                 settlement(model).getSettlementClass());
@@ -607,24 +611,24 @@ class NativeSaleTest {
         final Unit second = model.getUnitById(WAGON + 1);
         model.enterNativeMarket(first, village);
         final NativeSaleQuote earlierSale = model
-                .getNativeSaleQuote(first, village, GoodsType.CORN, 50, false)
+                .getNativeSaleQuote(first, village, GoodsType.GRAIN, 50, false)
                 .orElseThrow();
         final NativeSaleQuote earlierGift = model
-                .getNativeSaleQuote(first, village, GoodsType.CORN, 50, true)
+                .getNativeSaleQuote(first, village, GoodsType.GRAIN, 50, true)
                 .orElseThrow();
         model.sellToNative(first, village, earlierSale);
-        // The second expedition starts after corn was received: corn is
+        // The second expedition starts after grain was received: grain is
         // refused, for sale and gift alike, and no offer exists.
         model.enterNativeMarket(second, village);
         assertEquals(0, model.getNativeMaxSaleQuantity(second, village,
-                GoodsType.CORN, false));
+                GoodsType.GRAIN, false));
         assertEquals(0, model.getNativeMaxSaleQuantity(second, village,
-                GoodsType.CORN, true));
+                GoodsType.GRAIN, true));
         assertTrue(model
-                .getNativeSaleQuote(second, village, GoodsType.CORN, 1, false)
+                .getNativeSaleQuote(second, village, GoodsType.GRAIN, 1, false)
                 .isEmpty());
         assertTrue(model
-                .getNativeSaleQuote(second, village, GoodsType.CORN, 1, true)
+                .getNativeSaleQuote(second, village, GoodsType.GRAIN, 1, true)
                 .isEmpty());
         final String before = snapshot(model);
         assertThrows(NativeTermsChangedException.class,
@@ -636,18 +640,18 @@ class NativeSaleTest {
         assertEquals(before, snapshot(model));
 
         // A city does not refuse: the same two-wagon sequence leaves the
-        // second wagon's corn sellable.
+        // second wagon's grain sellable.
         final Model city = wagonScene(10).unit(DUTCH, UnitType.WAGON, at(1, 0),
-                carrying(GoodsType.CORN, 50)).toModel();
+                carrying(GoodsType.GRAIN, 50)).toModel();
         city.enterNativeMarket(city.getUnitById(WAGON), settlement(city));
         city.sellToNative(city.getUnitById(WAGON), settlement(city),
                 city.getNativeSaleQuote(city.getUnitById(WAGON),
-                        settlement(city), GoodsType.CORN, 50, false)
+                        settlement(city), GoodsType.GRAIN, 50, false)
                         .orElseThrow());
         city.enterNativeMarket(city.getUnitById(WAGON + 1), settlement(city));
         assertEquals(50,
                 city.getNativeMaxSaleQuantity(city.getUnitById(WAGON + 1),
-                        settlement(city), GoodsType.CORN, true));
+                        settlement(city), GoodsType.GRAIN, true));
     }
 
     /** Saved trade of the only settlement toward the Dutch. */
@@ -663,7 +667,7 @@ class NativeSaleTest {
     @Test
     void anOldOfferStaysDeadWhenEveryValueIsRestoredButTheRevisionAdvanced() {
         final Model model = enteredWagon(wagonScene(10).toModel());
-        final NativeSaleQuote old = quote(model, GoodsType.CORN, 20, false);
+        final NativeSaleQuote old = quote(model, GoodsType.GRAIN, 20, false);
         final ModelPo original = model.save();
         model.sellToNative(wagon(model), settlement(model), old);
 
@@ -686,7 +690,7 @@ class NativeSaleTest {
         });
         final Model replayed = Model.make(po,
                 MissionImpl.getPredefinedGameOverEvaluators());
-        final NativeSaleQuote fresh = quote(replayed, GoodsType.CORN, 20,
+        final NativeSaleQuote fresh = quote(replayed, GoodsType.GRAIN, 20,
                 false);
         // Every term but the revision reads as in the old offer.
         assertEquals(old.getGold(), fresh.getGold());
@@ -706,13 +710,13 @@ class NativeSaleTest {
         assertEquals(before, snapshot(replayed));
         // The fresh offer of the same values is still usable once.
         replayed.sellToNative(wagon(replayed), settlement(replayed), fresh);
-        assertEquals(30, held(replayed, GoodsType.CORN));
+        assertEquals(30, held(replayed, GoodsType.GRAIN));
     }
 
     @Test
     void aNewExpeditionWithTheSameValuesCannotReviveAnOldOffer() {
         final Model model = enteredWagon(wagonScene(10).toModel());
-        final NativeSaleQuote old = quote(model, GoodsType.CORN, 50, false);
+        final NativeSaleQuote old = quote(model, GoodsType.GRAIN, 50, false);
 
         // The carrier leaves and returns: the saved expedition is gone and the
         // market is entered again, with cargo, treasury and mood unchanged.
@@ -721,7 +725,7 @@ class NativeSaleTest {
         final Model returned = Model.make(po,
                 MissionImpl.getPredefinedGameOverEvaluators());
         returned.enterNativeMarket(wagon(returned), settlement(returned));
-        final NativeSaleQuote fresh = quote(returned, GoodsType.CORN, 50,
+        final NativeSaleQuote fresh = quote(returned, GoodsType.GRAIN, 50,
                 false);
         assertEquals(old.getGold(), fresh.getGold());
         assertEquals(old.getHeld(), fresh.getHeld());
@@ -744,15 +748,15 @@ class NativeSaleTest {
         tradePo(po).setRevision(Integer.MAX_VALUE);
         final Model maxed = Model.make(po,
                 MissionImpl.getPredefinedGameOverEvaluators());
-        final NativeSaleQuote shown = quote(model, GoodsType.CORN, 50, false);
+        final NativeSaleQuote shown = quote(model, GoodsType.GRAIN, 50, false);
 
         // The open expedition offers nothing, and nothing can be confirmed.
         assertEquals(0, maxed.getNativeMaxSaleQuantity(wagon(maxed),
-                settlement(maxed), GoodsType.CORN, false));
+                settlement(maxed), GoodsType.GRAIN, false));
         assertEquals(0, maxed.getNativeMaxSaleQuantity(wagon(maxed),
-                settlement(maxed), GoodsType.CORN, true));
+                settlement(maxed), GoodsType.GRAIN, true));
         assertTrue(maxed.getNativeSaleQuote(wagon(maxed), settlement(maxed),
-                GoodsType.CORN, 50, false).isEmpty());
+                GoodsType.GRAIN, 50, false).isEmpty());
         final String before = snapshot(maxed);
         assertThrows(NativeTermsChangedException.class, () -> maxed
                 .sellToNative(wagon(maxed), settlement(maxed), shown));
@@ -775,15 +779,15 @@ class NativeSaleTest {
     @Test
     void everyCompletedTransactionRaisesTheRevisionSoOldOffersStayDead() {
         final Model model = enteredWagon(wagonScene(10).toModel());
-        final NativeSaleQuote before = quote(model, GoodsType.CORN, 20, false);
+        final NativeSaleQuote before = quote(model, GoodsType.GRAIN, 20, false);
         model.sellToNative(wagon(model), settlement(model), before);
-        final NativeSaleQuote after = quote(model, GoodsType.CORN, 30, false);
+        final NativeSaleQuote after = quote(model, GoodsType.GRAIN, 30, false);
         assertTrue(after.getRevision() > before.getRevision());
         // Saved and continued, the revision and the open offers come back.
         final Model restored = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
-        assertEquals(after, quote(restored, GoodsType.CORN, 30, false));
-        assertNotEquals(before, quote(restored, GoodsType.CORN, 20, false));
+        assertEquals(after, quote(restored, GoodsType.GRAIN, 30, false));
+        assertNotEquals(before, quote(restored, GoodsType.GRAIN, 20, false));
     }
 
     /**
@@ -802,16 +806,16 @@ class NativeSaleTest {
         final NativeSettlement village = settlement(model);
         model.enterNativeMarket(wagon(model), village);
         model.haggleNativeSale(wagon(model), village,
-                quote(model, GoodsType.CORN, 50, false));
+                quote(model, GoodsType.GRAIN, 50, false));
         model.sellToNative(wagon(model), village,
-                quote(model, GoodsType.CORN, 20, false));
+                quote(model, GoodsType.GRAIN, 20, false));
 
         final Model restored = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         final NativeSettlement restoredVillage = settlement(restored);
         assertEquals(20,
-                restoredVillage.getReceivedStock().get(GoodsType.CORN));
-        assertEquals(30, held(restored, GoodsType.CORN));
+                restoredVillage.getReceivedStock().get(GoodsType.GRAIN));
+        assertEquals(30, held(restored, GoodsType.GRAIN));
         assertEquals(restoredVillage.getTreasury(), village.getTreasury());
     }
 

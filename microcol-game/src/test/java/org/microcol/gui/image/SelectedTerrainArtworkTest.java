@@ -51,7 +51,7 @@ class SelectedTerrainArtworkTest {
             }
             previousInk = hasInk;
         }
-        assertEquals(6, crossings, "A diameter crosses three open rings twice");
+        assertEquals(6, crossings, "A diameter torches three open rings twice");
         assertEquals(0,
                 threeRings.getPixelReader().getColor(25, 19).getOpacity(),
                 "The ring centres remain transparent");

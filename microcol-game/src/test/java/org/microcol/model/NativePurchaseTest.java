@@ -31,33 +31,33 @@ import com.google.gson.Gson;
 class NativePurchaseTest {
 
     /**
-     * Wanted goods of the scene; none is offered, so none competes with corn.
+     * Wanted goods of the scene; none is offered, so none competes with grain.
      */
-    private static final List<GoodsType> WANTED = List.of(GoodsType.MUSKET,
+    private static final List<GoodsType> WANTED = List.of(GoodsType.WEAPONS,
             GoodsType.TOOLS, GoodsType.HORSE);
 
     private static final int WAGON = 200;
 
-    /** Goods slot holding one amount of corn. */
-    private static Consumer<UnitPo> carryingCorn(final int amount) {
+    /** Goods slot holding one amount of grain. */
+    private static Consumer<UnitPo> carryingGrain(final int amount) {
         return unit -> {
             final CargoSlotPo slot = new CargoSlotPo();
-            slot.setGoodsType(GoodsType.CORN);
+            slot.setGoodsType(GoodsType.GRAIN);
             slot.setAmount(amount);
             unit.getCargo().getSlots().add(slot);
         };
     }
 
     /**
-     * A contacted capital that offers corn at stock 100, and a wagon with fifty
-     * corn beside it.
+     * A contacted capital that offers grain at stock 100, and a wagon with
+     * fifty grain beside it.
      */
     private static NativeRelationsScene wagonScene() {
         return island(NativeNation.AZTEC)
                 .contact(EuropeanNation.DUTCH, NativeNation.AZTEC)
-                .market(100, List.of(GoodsType.CORN), WANTED)
+                .market(100, List.of(GoodsType.GRAIN), WANTED)
                 .tribal(NativeNation.AZTEC, EuropeanNation.DUTCH, 10)
-                .unit(DUTCH, UnitType.WAGON, at(-1, 0), carryingCorn(50));
+                .unit(DUTCH, UnitType.WAGON, at(-1, 0), carryingGrain(50));
     }
 
     private static Unit wagon(final Model model) {
@@ -68,32 +68,32 @@ class NativePurchaseTest {
         return model.getPlayerByName(DUTCH).getGold();
     }
 
-    /** Europe ask of one piece of corn: the price the natives charge. */
+    /** Europe ask of one piece of grain: the price the natives charge. */
     private static int ask(final Model model) {
         return model.getEurope()
-                .getGoodsTradeForType(GoodsType.CORN, EuropeanNation.DUTCH)
+                .getGoodsTradeForType(GoodsType.GRAIN, EuropeanNation.DUTCH)
                 .getBuyPrice();
     }
 
-    /** Pieces of corn that the wagon holds now. */
+    /** Pieces of grain that the wagon holds now. */
     private static int held(final Model model) {
         return ((UnitWithCargo) wagon(model)).getCargo().getSlots().stream()
                 .flatMap(slot -> slot.getGoods()
                         .filter(carried -> carried.getType()
-                                .equals(GoodsType.CORN))
+                                .equals(GoodsType.GRAIN))
                         .stream())
                 .mapToInt(Goods::getAmount).sum();
     }
 
     private static NativeSaleQuote sale(final Model model, final int quantity) {
         return model.getNativeSaleQuote(wagon(model), settlement(model),
-                GoodsType.CORN, quantity, false).orElseThrow();
+                GoodsType.GRAIN, quantity, false).orElseThrow();
     }
 
     private static NativePurchaseQuote purchase(final Model model,
             final int quantity) {
         return model.getNativePurchaseQuote(wagon(model), settlement(model),
-                GoodsType.CORN, quantity).orElseThrow();
+                GoodsType.GRAIN, quantity).orElseThrow();
     }
 
     private static NativeMarketView.Purchase stage(final Model model) {
@@ -124,8 +124,10 @@ class NativePurchaseTest {
         return model;
     }
 
-    /** Open the market, then sell the given pieces of corn: the stage opens. */
-    private static Model soldCorn(final int quantity) {
+    /**
+     * Open the market, then sell the given pieces of grain: the stage opens.
+     */
+    private static Model soldGrain(final int quantity) {
         final Model model = enteredWagon(wagonScene().toModel());
         model.sellToNative(wagon(model), settlement(model),
                 sale(model, quantity));
@@ -161,9 +163,9 @@ class NativePurchaseTest {
         final Model model = enteredWagon(wagonScene().toModel());
         assertTrue(noStage(model));
         assertTrue(model.getNativePurchaseQuote(wagon(model), settlement(model),
-                GoodsType.CORN, 5).isEmpty());
+                GoodsType.GRAIN, 5).isEmpty());
         assertEquals(0, model.getNativeMaxPurchaseQuantity(wagon(model),
-                settlement(model), GoodsType.CORN));
+                settlement(model), GoodsType.GRAIN));
 
         model.sellToNative(wagon(model), settlement(model), sale(model, 20));
         assertTrue(stage(model).isOpen());
@@ -172,7 +174,7 @@ class NativePurchaseTest {
         final Model given = enteredWagon(wagonScene().toModel());
         given.giftToNative(wagon(given), settlement(given),
                 given.getNativeSaleQuote(wagon(given), settlement(given),
-                        GoodsType.CORN, 20, true).orElseThrow());
+                        GoodsType.GRAIN, 20, true).orElseThrow());
         assertTrue(stage(given).isOpen());
     }
 
@@ -200,14 +202,14 @@ class NativePurchaseTest {
 
         // The second empty wagon has no expedition and no stage: refused.
         assertTrue(model.getNativePurchaseQuote(second, settlement(model),
-                GoodsType.CORN, 1).isEmpty());
+                GoodsType.GRAIN, 1).isEmpty());
         assertEquals(0, model.getNativeMaxPurchaseQuantity(second,
-                settlement(model), GoodsType.CORN));
+                settlement(model), GoodsType.GRAIN));
     }
 
     @Test
     void buyingMovesTheStockGoldAndCargoExactlyOnceAndClosesTheStage() {
-        final Model model = soldCorn(20);
+        final Model model = soldGrain(20);
         final int gold = gold(model);
         final int treasury = settlement(model).getTreasury();
         final NativePurchaseQuote shown = purchase(model, 5);
@@ -219,22 +221,22 @@ class NativePurchaseTest {
         assertEquals(gold - shown.getGold(), gold(model));
         assertEquals(treasury + shown.getGold(),
                 settlement(model).getTreasury());
-        assertEquals(95, settlement(model).getStock(GoodsType.CORN));
+        assertEquals(95, settlement(model).getStock(GoodsType.GRAIN));
         // Fifty pieces, twenty sold, five bought.
         assertEquals(35, held(model));
         // Bought stock never enters what the village received from the player.
         assertEquals(20,
-                settlement(model).getReceivedStock().get(GoodsType.CORN));
+                settlement(model).getReceivedStock().get(GoodsType.GRAIN));
         assertTrue(noStage(model));
         assertTrue(model.getNativePurchaseQuote(wagon(model), settlement(model),
-                GoodsType.CORN, 5).isEmpty());
+                GoodsType.GRAIN, 5).isEmpty());
         assertThrows(NativeTermsChangedException.class, () -> model
                 .buyFromNative(wagon(model), settlement(model), shown));
     }
 
     @Test
     void aStaleOrReplayedPurchaseChangesNothing() {
-        final Model model = soldCorn(20);
+        final Model model = soldGrain(20);
         final NativePurchaseQuote whole = purchase(model, 5);
         final NativePurchaseQuote part = purchase(model, 2);
         model.buyFromNative(wagon(model), settlement(model), part);
@@ -247,7 +249,7 @@ class NativePurchaseTest {
         assertEquals(before, snapshot(model));
 
         // A treasury that moved since the quote makes it stale too.
-        final Model moved = soldCorn(20);
+        final Model moved = soldGrain(20);
         final NativePurchaseQuote shown = purchase(moved, 5);
         settlement(moved).setTreasury(settlement(moved).getTreasury() + 1);
         final String movedBefore = snapshot(moved);
@@ -258,28 +260,28 @@ class NativePurchaseTest {
 
     @Test
     void stockGoldAndNativeTreasuryRoomBoundThePurchase() {
-        final Model model = soldCorn(20);
+        final Model model = soldGrain(20);
         final int ask = ask(model);
         model.getPlayerByName(DUTCH).setGold(3 * ask);
         assertEquals(3, model.getNativeMaxPurchaseQuantity(wagon(model),
-                settlement(model), GoodsType.CORN));
+                settlement(model), GoodsType.GRAIN));
         assertTrue(model.getNativePurchaseQuote(wagon(model), settlement(model),
-                GoodsType.CORN, 4).isEmpty());
+                GoodsType.GRAIN, 4).isEmpty());
 
         // The village can take only one more piece's gold before its integer
         // treasury overflows.
         settlement(model).setTreasury(Integer.MAX_VALUE - ask);
         model.getPlayerByName(DUTCH).setGold(100 * ask);
         assertEquals(1, model.getNativeMaxPurchaseQuantity(wagon(model),
-                settlement(model), GoodsType.CORN));
+                settlement(model), GoodsType.GRAIN));
 
         // Stock limits the purchase once the treasury has room again.
         settlement(model).setTreasury(0);
-        settlement(model).setStock(GoodsType.CORN, 2);
+        settlement(model).setStock(GoodsType.GRAIN, 2);
         assertEquals(2, model.getNativeMaxPurchaseQuantity(wagon(model),
-                settlement(model), GoodsType.CORN));
+                settlement(model), GoodsType.GRAIN));
         assertTrue(model.getNativePurchaseQuote(wagon(model), settlement(model),
-                GoodsType.CORN, 3).isEmpty());
+                GoodsType.GRAIN, 3).isEmpty());
     }
 
     @Test
@@ -339,11 +341,11 @@ class NativePurchaseTest {
 
     @Test
     void declineEndsTheStageAndOnlyANewRealSaleOpensAnother() {
-        final Model model = soldCorn(20);
+        final Model model = soldGrain(20);
         model.rejectNativePurchase(wagon(model), settlement(model));
         assertTrue(noStage(model));
         assertTrue(model.getNativePurchaseQuote(wagon(model), settlement(model),
-                GoodsType.CORN, 5).isEmpty());
+                GoodsType.GRAIN, 5).isEmpty());
         assertThrows(IllegalStateException.class, () -> model
                 .rejectNativePurchase(wagon(model), settlement(model)));
 
@@ -358,14 +360,14 @@ class NativePurchaseTest {
 
     @Test
     void aTenseMarketKeepsThePendingStageDeclinableButNotBuyable() {
-        final Model model = soldCorn(20);
+        final Model model = soldGrain(20);
         model.addNativeTribalAnger(NativeNation.AZTEC,
                 model.getPlayerByName(DUTCH), 80);
         assertFalse(stage(model).isOpen());
         assertTrue(model.getNativePurchaseQuote(wagon(model), settlement(model),
-                GoodsType.CORN, 5).isEmpty());
+                GoodsType.GRAIN, 5).isEmpty());
         assertEquals(0, model.getNativeMaxPurchaseQuantity(wagon(model),
-                settlement(model), GoodsType.CORN));
+                settlement(model), GoodsType.GRAIN));
 
         model.rejectNativePurchase(wagon(model), settlement(model));
         assertTrue(noStage(model));
@@ -373,7 +375,7 @@ class NativePurchaseTest {
 
     @Test
     void theStageEndsWhenTheCarrierLeavesItsExpedition() {
-        final Model model = soldCorn(20);
+        final Model model = soldGrain(20);
         final ModelPo po = model.save();
         tradePo(po).setExpeditions(new ArrayList<>());
         final Model departed = Model.make(po,
@@ -390,55 +392,55 @@ class NativePurchaseTest {
     void theStageShowsUpToThreeOfferedGoodsWithStockAndAskAndCountsTheRestUnavailable() {
         // One offered good leaves two slots unavailable, and its ask is the
         // Europe price with no tax.
-        final Model one = soldCorn(20);
+        final Model one = soldGrain(20);
         final NativeMarketView.Purchase single = stage(one);
         assertEquals(1, single.getOffers().size());
         assertEquals(2, single.getUnavailableSlots());
-        assertEquals(GoodsType.CORN, single.getOffers().get(0).getGoods());
+        assertEquals(GoodsType.GRAIN, single.getOffers().get(0).getGoods());
         assertEquals(100, single.getOffers().get(0).getStock());
         assertEquals(ask(one), single.getOffers().get(0).getAskPrice());
         // Goods the settlement does not offer have no stock to buy.
         assertTrue(one.getNativePurchaseQuote(wagon(one), settlement(one),
-                GoodsType.TOBACCO, 1).isEmpty());
+                GoodsType.GRAPES, 1).isEmpty());
         assertEquals(0, one.getNativeMaxPurchaseQuantity(wagon(one),
-                settlement(one), GoodsType.TOBACCO));
+                settlement(one), GoodsType.GRAPES));
 
         // Three offered goods fill every slot.
         final Model three = enteredWagon(island(NativeNation.AZTEC)
                 .contact(EuropeanNation.DUTCH, NativeNation.AZTEC)
                 .market(100,
-                        List.of(GoodsType.CORN, GoodsType.TOBACCO,
-                                GoodsType.MUSKET),
+                        List.of(GoodsType.GRAIN, GoodsType.GRAPES,
+                                GoodsType.WEAPONS),
                         WANTED)
                 .tribal(NativeNation.AZTEC, EuropeanNation.DUTCH, 10)
-                .unit(DUTCH, UnitType.WAGON, at(-1, 0), carryingCorn(50))
+                .unit(DUTCH, UnitType.WAGON, at(-1, 0), carryingGrain(50))
                 .toModel());
         three.sellToNative(wagon(three), settlement(three), sale(three, 20));
         final NativeMarketView.Purchase full = stage(three);
         assertEquals(3, full.getOffers().size());
         assertEquals(0, full.getUnavailableSlots());
         assertEquals(
-                List.of(GoodsType.CORN, GoodsType.TOBACCO, GoodsType.MUSKET),
+                List.of(GoodsType.GRAIN, GoodsType.GRAPES, GoodsType.WEAPONS),
                 full.getOffers().stream()
                         .map(NativeMarketView.PurchaseOffer::getGoods)
                         .collect(Collectors.toList()));
     }
 
     /**
-     * Same tribe with a wagon whose two holds are fifty corn and a full hold of
-     * muskets; the wagon holds two slots in total.
+     * Same tribe with a wagon whose two holds are fifty grain and a full hold
+     * of weapons; the wagon holds two slots in total.
      */
     private static NativeRelationsScene fullWagonScene() {
         return island(NativeNation.AZTEC)
                 .contact(EuropeanNation.DUTCH, NativeNation.AZTEC)
-                .market(100, List.of(GoodsType.CORN), WANTED)
+                .market(100, List.of(GoodsType.GRAIN), WANTED)
                 .tribal(NativeNation.AZTEC, EuropeanNation.DUTCH, 10)
                 .unit(DUTCH, UnitType.WAGON, at(-1, 0), unit -> {
-                    carryingCorn(50).accept(unit);
-                    final CargoSlotPo muskets = new CargoSlotPo();
-                    muskets.setGoodsType(GoodsType.MUSKET);
-                    muskets.setAmount(CargoSlot.MAX_CARGO_SLOT_CAPACITY);
-                    unit.getCargo().getSlots().add(muskets);
+                    carryingGrain(50).accept(unit);
+                    final CargoSlotPo weapons = new CargoSlotPo();
+                    weapons.setGoodsType(GoodsType.WEAPONS);
+                    weapons.setAmount(CargoSlot.MAX_CARGO_SLOT_CAPACITY);
+                    unit.getCargo().getSlots().add(weapons);
                 });
     }
 
@@ -447,15 +449,15 @@ class NativePurchaseTest {
         final Model model = enteredWagon(fullWagonScene().toModel());
         model.sellToNative(wagon(model), settlement(model), sale(model, 20));
         final NativePurchaseQuote shown = purchase(model, 5);
-        // The corn hold fills to its limit and the muskets hold stays full, so
-        // no hold can take another piece of corn.
+        // The grain hold fills to its limit and the weapons hold stays full, so
+        // no hold can take another piece of grain.
         ((UnitWithCargo) wagon(model)).getCargo().getSlots().get(0)
-                .addGoods(Goods.of(GoodsType.CORN, 70));
+                .addGoods(Goods.of(GoodsType.GRAIN, 70));
 
         assertEquals(0, model.getNativeMaxPurchaseQuantity(wagon(model),
-                settlement(model), GoodsType.CORN));
+                settlement(model), GoodsType.GRAIN));
         assertTrue(model.getNativePurchaseQuote(wagon(model), settlement(model),
-                GoodsType.CORN, 1).isEmpty());
+                GoodsType.GRAIN, 1).isEmpty());
         // The stage stays pending: only its room is gone.
         assertTrue(stage(model).isOpen());
 
@@ -465,16 +467,16 @@ class NativePurchaseTest {
                 .buyFromNative(wagon(model), settlement(model), shown));
         assertEquals(before, snapshot(model));
         assertEquals(gold, gold(model));
-        assertEquals(100, settlement(model).getStock(GoodsType.CORN));
+        assertEquals(100, settlement(model).getStock(GoodsType.GRAIN));
         assertEquals(100, held(model));
     }
 
     @Test
     void aPurchasePartlyFillsTheCarrierSlotOfThatGoodsBeforeAnEmptyOne() {
-        final Model model = soldCorn(20);
+        final Model model = soldGrain(20);
         model.buyFromNative(wagon(model), settlement(model),
                 purchase(model, 5));
-        // The corn slot holds the thirty kept pieces and the five bought: one
+        // The grain slot holds the thirty kept pieces and the five bought: one
         // merged slot, not a second one.
         final CargoSlot first = ((UnitWithCargo) wagon(model)).getCargo()
                 .getSlots().get(0);
@@ -483,7 +485,7 @@ class NativePurchaseTest {
 
     @Test
     void anExhaustedRevisionOffersNoPurchaseAndChangesNothing() {
-        final Model model = soldCorn(20);
+        final Model model = soldGrain(20);
         final NativePurchaseQuote shown = purchase(model, 5);
         final ModelPo po = model.save();
         tradePo(po).setRevision(Integer.MAX_VALUE);
@@ -491,9 +493,9 @@ class NativePurchaseTest {
                 MissionImpl.getPredefinedGameOverEvaluators());
 
         assertEquals(0, maxed.getNativeMaxPurchaseQuantity(wagon(maxed),
-                settlement(maxed), GoodsType.CORN));
+                settlement(maxed), GoodsType.GRAIN));
         assertTrue(maxed.getNativePurchaseQuote(wagon(maxed), settlement(maxed),
-                GoodsType.CORN, 5).isEmpty());
+                GoodsType.GRAIN, 5).isEmpty());
         final String before = snapshot(maxed);
         assertThrows(NativeTermsChangedException.class, () -> maxed
                 .buyFromNative(wagon(maxed), settlement(maxed), shown));
@@ -504,14 +506,14 @@ class NativePurchaseTest {
 
     @Test
     void theRequestKeepsTheOfferItWasMadeForThroughSaveAndReopening() {
-        final Model model = soldCorn(20);
+        final Model model = soldGrain(20);
         // Before the request no offer is kept: the chooser starts afresh.
         assertTrue(stage(model).getSelectedGoods().isEmpty());
         assertEquals(0, stage(model).getSelectedQuantity());
 
         model.haggleNativePurchase(wagon(model), settlement(model),
                 purchase(model, 4));
-        assertEquals(GoodsType.CORN,
+        assertEquals(GoodsType.GRAIN,
                 stage(model).getSelectedGoods().orElseThrow());
         assertEquals(4, stage(model).getSelectedQuantity());
         // Looking at another quantity draws and records nothing.
@@ -519,11 +521,11 @@ class NativePurchaseTest {
         assertEquals(4, stage(model).getSelectedQuantity());
 
         final ModelPo saved = model.save();
-        assertEquals("CORN", expeditionPo(saved).getPurchaseGoods());
+        assertEquals("GRAIN", expeditionPo(saved).getPurchaseGoods());
         assertEquals(4, expeditionPo(saved).getPurchaseQuantity());
         final Model restored = Model.make(saved,
                 MissionImpl.getPredefinedGameOverEvaluators());
-        assertEquals(GoodsType.CORN,
+        assertEquals(GoodsType.GRAIN,
                 stage(restored).getSelectedGoods().orElseThrow());
         assertEquals(4, stage(restored).getSelectedQuantity());
         restored.enterNativeMarket(wagon(restored), settlement(restored));
@@ -533,7 +535,7 @@ class NativePurchaseTest {
 
     @Test
     void aBoughtOrDeclinedStageForgetsItsOfferAndANewStageStartsAfresh() {
-        final Model bought = soldCorn(20);
+        final Model bought = soldGrain(20);
         bought.haggleNativePurchase(wagon(bought), settlement(bought),
                 purchase(bought, 4));
         bought.buyFromNative(wagon(bought), settlement(bought),
@@ -545,7 +547,7 @@ class NativePurchaseTest {
         assertEquals(0, stage(bought).getSelectedQuantity());
         assertEquals(NativeSaleQuote.Haggle.OFFERED, stage(bought).getHaggle());
 
-        final Model declined = soldCorn(20);
+        final Model declined = soldGrain(20);
         declined.haggleNativePurchase(wagon(declined), settlement(declined),
                 purchase(declined, 4));
         declined.rejectNativePurchase(wagon(declined), settlement(declined));
@@ -557,7 +559,7 @@ class NativePurchaseTest {
 
     @Test
     void aMalformedSavedOfferIsRefusedNotGuessed() {
-        final Model model = soldCorn(20);
+        final Model model = soldGrain(20);
         model.haggleNativePurchase(wagon(model), settlement(model),
                 purchase(model, 4));
 
@@ -576,15 +578,15 @@ class NativePurchaseTest {
         assertThrows(IllegalArgumentException.class, () -> Model.make(zero,
                 MissionImpl.getPredefinedGameOverEvaluators()));
 
-        // The settlement does not sell tobacco in this scene.
+        // The settlement does not sell grapes in this scene.
         final ModelPo notSold = model.save();
-        expeditionPo(notSold).setPurchaseGoods("TOBACCO");
+        expeditionPo(notSold).setPurchaseGoods("GRAPES");
         assertThrows(IllegalArgumentException.class, () -> Model.make(notSold,
                 MissionImpl.getPredefinedGameOverEvaluators()));
 
         // An offer before any request would be a phantom request.
-        final ModelPo phantom = soldCorn(20).save();
-        expeditionPo(phantom).setPurchaseGoods("CORN");
+        final ModelPo phantom = soldGrain(20).save();
+        expeditionPo(phantom).setPurchaseGoods("GRAIN");
         expeditionPo(phantom).setPurchaseQuantity(4);
         assertThrows(IllegalArgumentException.class, () -> Model.make(phantom,
                 MissionImpl.getPredefinedGameOverEvaluators()));
@@ -592,7 +594,7 @@ class NativePurchaseTest {
 
     @Test
     void aMalformedSavedStageIsRefusedNotGuessed() {
-        final Model model = soldCorn(20);
+        final Model model = soldGrain(20);
         final int revision = tradePo(model.save()).getRevision();
 
         final ModelPo unavailable = model.save();

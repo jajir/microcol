@@ -19,9 +19,9 @@ import org.microcol.model.campaign.po.GameModelPoDao;
  */
 class SkillsCardMatrixTest {
 
-    private static final Set<UnitType> PLANTERS = Set.of(
-            UnitType.MASTER_SUGAR_PLANTER, UnitType.MASTER_COTTON_PLANTER,
-            UnitType.MASTER_TOBACCO_PLANTER);
+    private static final Set<UnitType> GROWERS = Set.of(
+            UnitType.MASTER_OLIVE_GROWER, UnitType.MASTER_SHEPHERD,
+            UnitType.MASTER_GRAPE_GROWER);
 
     private Model scenario() {
         final GameModelPo data = new GameModelPoDao().loadFromClassPath(
@@ -36,17 +36,16 @@ class SkillsCardMatrixTest {
      */
     @ParameterizedTest
     @CsvSource({ "EXPERT_FARMER,1,true,1000", "EXPERT_FISHERMAN,1,true,1000",
-            "EXPERT_FUR_TRAPPER,1,true,1000", "EXPERT_SILVER_MINER,1,true,1000",
+            "EXPERT_CLAY_DIGGER,1,true,1000", "EXPERT_SILVER_MINER,1,true,1000",
             "EXPERT_LUMBERJACK,1,false,1000", "EXPERT_ORE_MINER,1,false,1000",
-            "MASTER_SUGAR_PLANTER,2,true,0", "MASTER_COTTON_PLANTER,2,true,0",
-            "MASTER_TOBACCO_PLANTER,2,true,0",
-            "FIREBRAND_PREACHER,3,false,3000", "ELDER_STATESMAN,3,false,3000",
-            "MASTER_CARPENTER,1,false,1000", "MASTER_DISTILLER,2,false,2000",
-            "MASTER_WEAVER,2,false,2000", "MASTER_TOBACCONIST,2,false,2000",
-            "MASTER_FUR_TRADER,2,false,2000", "MASTER_BLACKSMITH,2,false,2200",
-            "MASTER_GUNSMITH,2,false,2000", "SEASONED_SCOUT,1,true,1000",
-            "HARDY_PIONEER,1,false,1000", "VETERAN_SOLDIER,2,false,2000",
-            "JESUIT_MISSIONARY,3,false,3000" })
+            "MASTER_OLIVE_GROWER,2,true,0", "MASTER_SHEPHERD,2,true,0",
+            "MASTER_GRAPE_GROWER,2,true,0", "FIREBRAND_PREACHER,3,false,3000",
+            "ELDER_STATESMAN,3,false,3000", "MASTER_CARPENTER,1,false,1000",
+            "MASTER_OIL_MAKER,2,false,2000", "MASTER_WEAVER,2,false,2000",
+            "MASTER_WINEMAKER,2,false,2000", "MASTER_POTTER,2,false,2000",
+            "MASTER_BLACKSMITH,2,false,2200", "MASTER_WEAPONSMITH,2,false,2000",
+            "SEASONED_SCOUT,1,true,1000", "HARDY_PIONEER,1,false,1000",
+            "VETERAN_SOLDIER,2,false,2000", "JESUIT_MISSIONARY,3,false,3000" })
     void cardRowAgreesWithTierNativeTeachingAndEuropeanOffer(final String name,
             final int tier, final boolean nativeTeachable, final int price) {
         final UnitType skill = UnitType.valueOf(name);
@@ -64,14 +63,14 @@ class SkillsCardMatrixTest {
      */
     @ParameterizedTest
     @CsvSource({ "EXPERT_FARMER,1000", "EXPERT_FISHERMAN,1000",
-            "EXPERT_FUR_TRAPPER,1000", "EXPERT_SILVER_MINER,1000",
+            "EXPERT_CLAY_DIGGER,1000", "EXPERT_SILVER_MINER,1000",
             "EXPERT_LUMBERJACK,1000", "EXPERT_ORE_MINER,1000",
             "MASTER_CARPENTER,1000", "FIREBRAND_PREACHER,3000",
-            "ELDER_STATESMAN,3000", "MASTER_DISTILLER,2000",
-            "MASTER_WEAVER,2000", "MASTER_TOBACCONIST,2000",
-            "MASTER_FUR_TRADER,2000", "MASTER_BLACKSMITH,2200",
-            "MASTER_GUNSMITH,2000", "SEASONED_SCOUT,1000", "HARDY_PIONEER,1000",
-            "VETERAN_SOLDIER,2000", "JESUIT_MISSIONARY,3000" })
+            "ELDER_STATESMAN,3000", "MASTER_OIL_MAKER,2000",
+            "MASTER_WEAVER,2000", "MASTER_WINEMAKER,2000", "MASTER_POTTER,2000",
+            "MASTER_BLACKSMITH,2200", "MASTER_WEAPONSMITH,2000",
+            "SEASONED_SCOUT,1000", "HARDY_PIONEER,1000", "VETERAN_SOLDIER,2000",
+            "JESUIT_MISSIONARY,3000" })
     void europeanPurchaseChargesTheCardPriceOnceAndRefusesOneGoldLess(
             final String name, final int price) {
         final UnitType skill = UnitType.valueOf(name);
@@ -89,18 +88,18 @@ class SkillsCardMatrixTest {
     }
 
     /**
-     * Unsupported combination: the planters are school and native skills only,
+     * Unsupported combination: the growers are school and native skills only,
      * so Europe refuses them even with ample gold.
      */
     @ParameterizedTest
-    @ValueSource(strings = { "MASTER_SUGAR_PLANTER", "MASTER_COTTON_PLANTER",
-            "MASTER_TOBACCO_PLANTER" })
-    void plantersAreRefusedInEuropeEvenWithAmpleGold(final String name) {
-        final UnitType planter = UnitType.valueOf(name);
+    @ValueSource(strings = { "MASTER_OLIVE_GROWER", "MASTER_SHEPHERD",
+            "MASTER_GRAPE_GROWER" })
+    void growersAreRefusedInEuropeEvenWithAmpleGold(final String name) {
+        final UnitType grower = UnitType.valueOf(name);
         final Player buyer = scenario().getPlayerByName("Dutch");
         buyer.setGold(10_000);
-        assertFalse(buyer.canBuyUnit(planter));
-        assertThrows(IllegalArgumentException.class, () -> buyer.buy(planter));
+        assertFalse(buyer.canBuyUnit(grower));
+        assertThrows(IllegalArgumentException.class, () -> buyer.buy(grower));
         assertEquals(10_000, buyer.getGold());
     }
 
@@ -109,15 +108,15 @@ class SkillsCardMatrixTest {
      * the nineteen offered specialists, in both the paid and Brewster paths.
      */
     @Test
-    void recruitmentDrawsNeverProduceAPlanter() {
+    void recruitmentDrawsNeverProduceAGrower() {
         assertEquals(19, UnitType.EUROPEAN_SPECIALISTS.size());
         for (int index = 0; index < 19; index++) {
             final UnitType drawn = RecruitmentPool.draw(90, index);
             final UnitType brewster = RecruitmentPool.draw(90, index, true);
             assertTrue(UnitType.EUROPEAN_SPECIALISTS.contains(drawn));
             assertTrue(UnitType.EUROPEAN_SPECIALISTS.contains(brewster));
-            assertFalse(PLANTERS.contains(drawn));
-            assertFalse(PLANTERS.contains(brewster));
+            assertFalse(GROWERS.contains(drawn));
+            assertFalse(GROWERS.contains(brewster));
         }
     }
 }

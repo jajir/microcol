@@ -63,7 +63,7 @@ public final class ScoreBoundaryPage extends AbstractScreen {
                 String.valueOf(base.getGold()),
                 String.valueOf(base.getSupportPercent()),
                 String.valueOf(score.getDestroyedSettlements()),
-                String.valueOf(score.getBellsAfterTarget()),
+                String.valueOf(score.getOwlsAfterTarget()),
                 String.valueOf(score.getTotal()));
     }
 

@@ -253,7 +253,7 @@ public final class DialogFight extends AbstractMessageWindow {
             return i18n.get(Dialog.fight_colonyArmed, colony);
         case REVERE:
             return i18n.get(Dialog.fight_colonyRevere, colony,
-                    defense.getRevereMuskets());
+                    defense.getRevereWeapons());
         case FIELD:
             return i18n.get(Dialog.fight_colonyField, colony);
         default:
@@ -279,7 +279,7 @@ public final class DialogFight extends AbstractMessageWindow {
 
     /**
      * An armed-defender battle of a colony where a Continental or royal soldier
-     * fights: the loser is destroyed, not stripped of horses or muskets.
+     * fights: the loser is destroyed, not stripped of horses or weapons.
      */
     private static boolean isArmedRoleBattle(final AttackOrder order) {
         final ColonyDefense defense = order.getColonyDefense().orElseThrow();

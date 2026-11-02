@@ -31,8 +31,8 @@
 
     <entry key="nameCannotFound">Select a colonist with movement remaining on unoccupied land outside mountains, away from existing colonies.</entry>
     <entry key="equipmentOpen">Colonist equipment: right-click or Shift+F10</entry>
-    <entry key="equipMuskets">Equip with muskets</entry>
-    <entry key="unequipMuskets">Return muskets</entry>
+    <entry key="equipWeapons">Equip with weapons</entry>
+    <entry key="unequipWeapons">Return weapons</entry>
     <entry key="equipHorses">Mount horses</entry>
     <entry key="unequipHorses">Return horses</entry>
     <entry key="equipTools">Equip with tools</entry>
@@ -76,7 +76,7 @@
     <entry key="jobNoChoices">No jobs are available for this colonist here.</entry>
     <entry key="jobDropRejected">This worker cannot take that job now. Check the turn, job availability and equipment storage.</entry>
     <entry key="fieldMissingDock">Build a dock before assigning fishing work.</entry>
-    <entry key="jobBellContribution">Worker contribution before colony bonuses: %s %s per turn</entry>
+    <entry key="jobOwlContribution">Worker contribution before colony bonuses: %s %s per turn</entry>
     <entry key="clearOpen">Clear specialty…</entry>
     <entry key="clearSummary">Clear specialty? %s (unit %s) will become %s. The same person keeps identity, equipment, military rank and current work. The expertise and its training progress are lost.</entry>
     <entry key="clearConfirm">Clear specialty</entry>

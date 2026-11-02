@@ -338,7 +338,7 @@ public final class ColonyJobPage extends AbstractScreen {
             throws Exception {
         dragWithInterveningChange(workerId, buildingId, buildingBody,
                 () -> colony().getWarehouse()
-                        .addGoods(Goods.of(GoodsType.MUSKET, 51)));
+                        .addGoods(Goods.of(GoodsType.WEAPONS, 51)));
     }
 
     public void dragAfterSlotIsTaken(final int workerId,
@@ -429,9 +429,9 @@ public final class ColonyJobPage extends AbstractScreen {
         final org.microcol.model.unit.UnitFreeColonist worker = (org.microcol.model.unit.UnitFreeColonist) getModel()
                 .getUnitById(workerId);
         assertTrue(worker.isAtPlaceLocation());
-        assertTrue(worker.isHoldingGuns());
-        assertEquals(Goods.of(GoodsType.MUSKET, 51),
-                colony().getWarehouse().getGoods(GoodsType.MUSKET));
+        assertTrue(worker.isHoldingWeapons());
+        assertEquals(Goods.of(GoodsType.WEAPONS, 51),
+                colony().getWarehouse().getGoods(GoodsType.WEAPONS));
     }
 
     public void dragCenterToBuilding(final int workerId,

@@ -147,7 +147,7 @@ final class LostCityRumorFixture {
         return new Fixture(file.toFile(), treasury, gold);
     }
 
-    /** The ordinary scout: a mounted colonist without muskets. */
+    /** The ordinary scout: a mounted colonist without weapons. */
     private static UnitPo scout() {
         final UnitPo unit = new UnitPo();
         unit.setId(SCOUT_ID);

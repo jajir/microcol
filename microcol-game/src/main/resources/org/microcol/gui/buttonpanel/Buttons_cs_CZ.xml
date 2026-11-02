@@ -62,7 +62,7 @@
     <entry key="disbandNoColony">Na tomto poli není vaše kolonie, proto se veškeré vybavení ztratí.</entry>
     <entry key="disbandToolsLine">Nářadí: %s uloženo, %s ztraceno.</entry>
     <entry key="disbandHorsesLine">Koně: %s uloženo, %s ztraceno.</entry>
-    <entry key="disbandMusketsLine">Muškety: %s uloženo, %s ztraceno.</entry>
+    <entry key="disbandWeaponsLine">Zbraně: %s uloženo, %s ztraceno.</entry>
     <entry key="disbandOverflowAcknowledge">Souhlasím se ztrátou přebytku nad limit skladu.</entry>
     <entry key="disbandConfirm">Rozpustit</entry>
     <entry key="disbandCancel">Zrušit</entry>

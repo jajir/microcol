@@ -39,7 +39,7 @@ class SharedColonyFieldBoundaryTest {
         data.getModel().getMap().setTerrainType(terrain);
         data.getModel().getMap().setTrees(Collections.emptySet());
         data.getModel().getMap().setFields(Collections.emptySet());
-        colony.getColonyWarehouse().put("MUSKET", 50);
+        colony.getColonyWarehouse().put("WEAPONS", 50);
         colony.getColonyWarehouse().put("HORSE", 50);
         colony.getColonyWarehouse().put("TOOLS", 20);
         return data;
@@ -66,30 +66,30 @@ class SharedColonyFieldBoundaryTest {
 
     private void rejected(Model model, Unit worker, ColonyField target) {
         String before = snapshot(model);
-        assertFalse(target.canAccept(worker, GoodsType.CORN));
+        assertFalse(target.canAccept(worker, GoodsType.GRAIN));
         assertThrows(IllegalStateException.class,
-                () -> worker.placeToColonyField(target, GoodsType.CORN));
+                () -> worker.placeToColonyField(target, GoodsType.GRAIN));
         assertEquals(before, snapshot(model));
     }
 
     @Test
-    void allEightDirectionsAdmitOneWorkerAndProduceCorn() {
+    void allEightDirectionsAdmitOneWorkerAndProduceGrain() {
         for (Direction dir : Direction.values()) {
             Model model = load(fixture());
             Unit actor = model.getUnitById(0);
             ColonyField target = model.getColonyById(0).orElseThrow()
                     .getColonyFieldInDirection(dir);
             String beforeQuery = snapshot(model);
-            assertTrue(target.canAccept(actor, GoodsType.CORN));
+            assertTrue(target.canAccept(actor, GoodsType.GRAIN));
             assertEquals(beforeQuery, snapshot(model));
-            actor.placeToColonyField(target, GoodsType.CORN);
+            actor.placeToColonyField(target, GoodsType.GRAIN);
             assertSame(actor, target.getUnit().orElseThrow());
             Colony colony0 = model.getColonyById(0).orElseThrow();
             long occupied = colony0.getColonyFields().stream()
                     .filter(f -> f.getUnit().isPresent()).count();
             assertEquals(1L, occupied);
             Goods output = target.getProduction().orElseThrow();
-            assertEquals(GoodsType.CORN, output.getType());
+            assertEquals(GoodsType.GRAIN, output.getType());
             assertEquals(4, output.getAmount());
             assertSame(colony0, target.getColony());
         }
@@ -156,7 +156,7 @@ class SharedColonyFieldBoundaryTest {
     @Test
     void gunAndHorseReturnsAreAtomicAtCapacity() {
         GameModelPo data1 = fixture();
-        savedUnit(data1, 0).setHoldingGuns(true);
+        savedUnit(data1, 0).setHoldingWeapons(true);
         savedUnit(data1, 0).setMounted(true);
         data1.getModel().getColonies().get(0).getColonyWarehouse().put("HORSE",
                 51);
@@ -169,14 +169,14 @@ class SharedColonyFieldBoundaryTest {
         Model accepted = load(data2);
         UnitFreeColonist actor = (UnitFreeColonist) accepted.getUnitById(0);
         ColonyField target = east(accepted);
-        assertTrue(actor.isHoldingGuns());
+        assertTrue(actor.isHoldingWeapons());
         assertTrue(actor.isMounted());
-        assertTrue(target.canAccept(actor, GoodsType.CORN));
-        actor.placeToColonyField(target, GoodsType.CORN);
-        assertFalse(actor.isHoldingGuns());
+        assertTrue(target.canAccept(actor, GoodsType.GRAIN));
+        actor.placeToColonyField(target, GoodsType.GRAIN);
+        assertFalse(actor.isHoldingWeapons());
         assertFalse(actor.isMounted());
         Goods musk = accepted.getColonyById(0).orElseThrow().getWarehouse()
-                .getGoods(GoodsType.MUSKET);
+                .getGoods(GoodsType.WEAPONS);
         Goods horse = accepted.getColonyById(0).orElseThrow().getWarehouse()
                 .getGoods(GoodsType.HORSE);
         assertEquals(100, musk.getAmount());
@@ -202,8 +202,8 @@ class SharedColonyFieldBoundaryTest {
         ColonyPo neighborBefore = accepted.save().getColonies().get(1);
         String neighborJsonBefore = new Gson().toJson(neighborBefore);
         ColonyField target = east(accepted);
-        assertTrue(target.canAccept(actor, GoodsType.CORN));
-        actor.placeToColonyField(target, GoodsType.CORN);
+        assertTrue(target.canAccept(actor, GoodsType.GRAIN));
+        actor.placeToColonyField(target, GoodsType.GRAIN);
         assertEquals(0, actor.getTools());
         Goods tools = accepted.getColonyById(0).orElseThrow().getWarehouse()
                 .getGoods(GoodsType.TOOLS);

@@ -61,7 +61,7 @@ public class UnitPo {
 
     private int tools;
 
-    private boolean holdingGuns;
+    private boolean holdingWeapons;
 
     private boolean mounted;
 
@@ -645,17 +645,17 @@ public class UnitPo {
     }
 
     /**
-     * @return the holdingGuns
+     * @return the holdingWeapons
      */
-    public boolean isHoldingGuns() {
-        return holdingGuns;
+    public boolean isHoldingWeapons() {
+        return holdingWeapons;
     }
 
     /**
-     * @param holdingGuns the holdingGuns to set
+     * @param holdingWeapons the holdingWeapons to set
      */
-    public void setHoldingGuns(boolean holdingGuns) {
-        this.holdingGuns = holdingGuns;
+    public void setHoldingWeapons(boolean holdingWeapons) {
+        this.holdingWeapons = holdingWeapons;
     }
 
     /**

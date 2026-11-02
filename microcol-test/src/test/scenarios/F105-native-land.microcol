@@ -32,7 +32,7 @@
         },
         "movementThirds": 12,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -50,7 +50,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -68,7 +68,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -92,7 +92,7 @@
         },
         "movementThirds": 3,
         "tools": 80,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -116,7 +116,7 @@
         },
         "movementThirds": 3,
         "tools": 80,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -132,7 +132,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "id": 100,
         "placeEuropePort": {
@@ -156,7 +156,7 @@
         },
         "movementThirds": 18,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "id": 102,
         "placeEuropePort": {
@@ -178,7 +178,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -206,7 +206,7 @@
         },
         "movementThirds": 18,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       }
     ],
@@ -225,7 +225,7 @@
         "teachableSkill": "EXPERT_FARMER",
         "settlementClass": "CITY",
         "capital": true,
-        "treasury": 2000, "offeredGoods": [{"goods": "CORN", "stock": 100}, {"goods": "TOBACCO", "stock": 100}], "wantedGoods": ["MUSKET", "TOOLS", "HORSE"], "trade": [],
+        "treasury": 2000, "offeredGoods": [{"goods": "GRAIN", "stock": 100}, {"goods": "GRAPES", "stock": 100}], "wantedGoods": ["WEAPONS", "TOOLS", "HORSE"], "trade": [],
         "location": {
           "x": 23,
           "y": 15
@@ -234,10 +234,10 @@
       {
         "id": 1,
         "nation": "CHEROKEE",
-        "teachableSkill": "EXPERT_FUR_TRAPPER",
+        "teachableSkill": "EXPERT_CLAY_DIGGER",
         "settlementClass": "VILLAGE",
         "capital": true,
-        "treasury": 2000, "offeredGoods": [{"goods": "CORN", "stock": 100}, {"goods": "TOBACCO", "stock": 100}], "wantedGoods": ["MUSKET", "TOOLS", "HORSE"], "trade": [],
+        "treasury": 2000, "offeredGoods": [{"goods": "GRAIN", "stock": 100}, {"goods": "GRAPES", "stock": 100}], "wantedGoods": ["WEAPONS", "TOOLS", "HORSE"], "trade": [],
         "location": {
           "x": 30,
           "y": 18
@@ -249,7 +249,7 @@
         "teachableSkill": "SEASONED_SCOUT",
         "settlementClass": "VILLAGE",
         "capital": false,
-        "treasury": 1000, "offeredGoods": [{"goods": "CORN", "stock": 100}, {"goods": "TOBACCO", "stock": 100}], "wantedGoods": ["MUSKET", "TOOLS", "HORSE"], "trade": [],
+        "treasury": 1000, "offeredGoods": [{"goods": "GRAIN", "stock": 100}, {"goods": "GRAPES", "stock": 100}], "wantedGoods": ["WEAPONS", "TOOLS", "HORSE"], "trade": [],
         "location": {
           "x": 30,
           "y": 19
@@ -261,7 +261,7 @@
         "teachableSkill": "EXPERT_SILVER_MINER",
         "settlementClass": "CITY",
         "capital": true,
-        "treasury": 2000, "offeredGoods": [{"goods": "CORN", "stock": 100}, {"goods": "TOBACCO", "stock": 100}], "wantedGoods": ["MUSKET", "TOOLS", "HORSE"], "trade": [],
+        "treasury": 2000, "offeredGoods": [{"goods": "GRAIN", "stock": 100}, {"goods": "GRAPES", "stock": 100}], "wantedGoods": ["WEAPONS", "TOOLS", "HORSE"], "trade": [],
         "location": {
           "x": 15,
           "y": 22
@@ -276,7 +276,7 @@
         "ownerName": "Dutch",
         "liberty": 0,
         "lastColonialAffiliation": "Dutch",
-      "townCommonsGoods": "TOBACCO",
+      "townCommonsGoods": "GRAPES",
         "location": {
           "x": 24,
           "y": 16
@@ -318,7 +318,7 @@
               "y": 1
             },
             "workerId": 1,
-            "producedGoodsType": "CORN"
+            "producedGoodsType": "GRAIN"
           },
           {
             "direction": {
@@ -332,7 +332,7 @@
               "y": -1
             },
             "workerId": 0,
-            "producedGoodsType": "TOBACCO"
+            "producedGoodsType": "GRAPES"
           }
         ],
         "constructions": [
@@ -361,7 +361,7 @@
             ]
           },
           {
-            "type": "TOBACCONISTS_HOUSE",
+            "type": "SMALL_WINERY",
             "slots": [
               {},
               {},
@@ -377,7 +377,7 @@
             ]
           },
           {
-            "type": "RUM_DISTILLERS_HOUSE",
+            "type": "SMALL_OIL_PRESS",
             "slots": [
               {},
               {},
@@ -385,7 +385,7 @@
             ]
           },
           {
-            "type": "FUR_TRADERS_HOUSE",
+            "type": "SMALL_POTTERY",
             "slots": [
               {},
               {},
@@ -408,24 +408,24 @@
         "exportGoods": [],
         "buildingQueue": [],
         "colonyWarehouse": {
-          "COAT": 0,
+          "AMPHORAE": 0,
           "HAMMERS": 0,
-          "FUR": 0,
+          "CLAY": 0,
           "ORE": 90,
           "HORSE": 0,
           "SILVER": 0,
           "LUMBER": 0,
-          "RUM": 0,
-          "SUGAR": 0,
-          "TOBACCO": 42,
-          "SILK": 0,
-          "MUSKET": 0,
-          "CROSS": 0,
-          "CORN": 100,
-          "CIGARS": 0,
+          "OLIVE_OIL": 0,
+          "OLIVES": 0,
+          "GRAPES": 42,
+          "CLOTH": 0,
+          "WEAPONS": 0,
+          "TORCHES": 0,
+          "GRAIN": 100,
+          "WINE": 0,
           "GOODS": 0,
-          "BELL": 0,
-          "COTTON": 0,
+          "OWLS": 0,
+          "WOOL": 0,
           "TOOLS": 0
         }
       },
@@ -436,7 +436,7 @@
         "ownerName": "France",
         "liberty": 0,
         "lastColonialAffiliation": "France",
-      "townCommonsGoods": "TOBACCO",
+      "townCommonsGoods": "GRAPES",
         "location": {
           "x": 28,
           "y": 17
@@ -484,7 +484,7 @@
               "y": 0
             },
             "workerId": 104,
-            "producedGoodsType": "CORN"
+            "producedGoodsType": "GRAIN"
           },
           {
             "direction": {
@@ -519,7 +519,7 @@
             ]
           },
           {
-            "type": "TOBACCONISTS_HOUSE",
+            "type": "SMALL_WINERY",
             "slots": [
               {},
               {},
@@ -535,7 +535,7 @@
             ]
           },
           {
-            "type": "RUM_DISTILLERS_HOUSE",
+            "type": "SMALL_OIL_PRESS",
             "slots": [
               {},
               {},
@@ -543,7 +543,7 @@
             ]
           },
           {
-            "type": "FUR_TRADERS_HOUSE",
+            "type": "SMALL_POTTERY",
             "slots": [
               {},
               {},
@@ -566,24 +566,24 @@
         "exportGoods": [],
         "buildingQueue": [],
         "colonyWarehouse": {
-          "COAT": 0,
+          "AMPHORAE": 0,
           "HAMMERS": 0,
-          "FUR": 0,
+          "CLAY": 0,
           "ORE": 0,
           "HORSE": 0,
           "SILVER": 0,
           "LUMBER": 50,
-          "RUM": 0,
-          "SUGAR": 0,
-          "TOBACCO": 0,
-          "SILK": 0,
-          "MUSKET": 50,
-          "CROSS": 0,
-          "CORN": 100,
-          "CIGARS": 0,
+          "OLIVE_OIL": 0,
+          "OLIVES": 0,
+          "GRAPES": 0,
+          "CLOTH": 0,
+          "WEAPONS": 50,
+          "TORCHES": 0,
+          "GRAIN": 100,
+          "WINE": 0,
           "GOODS": 0,
-          "BELL": 0,
-          "COTTON": 0,
+          "OWLS": 0,
+          "WOOL": 0,
           "TOOLS": 50
         }
       }
@@ -694,7 +694,7 @@
       "maxY": 30,
       "seed": 134
     },
-    "europe": {"markets": {"DUTCH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "FRENCH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "ENGLISH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "SPANISH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}}},
+    "europe": {"markets": {"DUTCH": {"GRAIN": [2,0,0], "OLIVES": [3,0,0], "GRAPES": [3,0,0], "WOOL": [3,0,0], "CLAY": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "OLIVE_OIL": [11,0,0], "WINE": [11,0,0], "CLOTH": [11,0,0], "AMPHORAE": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "WEAPONS": [2,0,0]}, "FRENCH": {"GRAIN": [2,0,0], "OLIVES": [3,0,0], "GRAPES": [3,0,0], "WOOL": [3,0,0], "CLAY": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "OLIVE_OIL": [11,0,0], "WINE": [11,0,0], "CLOTH": [11,0,0], "AMPHORAE": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "WEAPONS": [2,0,0]}, "ENGLISH": {"GRAIN": [2,0,0], "OLIVES": [3,0,0], "GRAPES": [3,0,0], "WOOL": [3,0,0], "CLAY": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "OLIVE_OIL": [11,0,0], "WINE": [11,0,0], "CLOTH": [11,0,0], "AMPHORAE": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "WEAPONS": [2,0,0]}, "SPANISH": {"GRAIN": [2,0,0], "OLIVES": [3,0,0], "GRAPES": [3,0,0], "WOOL": [3,0,0], "CLAY": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "OLIVE_OIL": [11,0,0], "WINE": [11,0,0], "CLOTH": [11,0,0], "AMPHORAE": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "WEAPONS": [2,0,0]}}},
     "focusedField": {
       "x": 25,
       "y": 16
@@ -1026,7 +1026,7 @@
           },
           "congress": {
             "activated": true,
-            "bells": 100,
+            "owls": 100,
             "members": [],
             "candidates": [
               "JOHN_PAUL_JONES",
@@ -1038,7 +1038,7 @@
             "generation": 1,
             "jonesDeliveryPending": false
           },
-          "recruitment": {"pendingEarnedChoice": false,"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"crosses":0,"earnedImmigrants":0},
+          "recruitment": {"pendingEarnedChoice": false,"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"torches":0,"earnedImmigrants":0},
           "name": "Dutch",
           "computer": false,
           "gold": 300,
@@ -1134,7 +1134,7 @@
           },
           "congress": {
             "activated": true,
-            "bells": 0,
+            "owls": 0,
             "members": [],
             "candidates": [
               "JOHN_PAUL_JONES",
@@ -1146,7 +1146,7 @@
             "generation": 1,
             "jonesDeliveryPending": false
           },
-          "recruitment": {"pendingEarnedChoice": false,"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"crosses":0,"earnedImmigrants":0},
+          "recruitment": {"pendingEarnedChoice": false,"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"torches":0,"earnedImmigrants":0},
           "name": "France",
           "computer": true,
           "gold": 2000,

@@ -154,7 +154,7 @@ public final class NativeVisitPage extends AbstractScreen {
         unit.add("action", action);
         unit.addProperty("movementThirds", 3);
         unit.addProperty("tools", 0);
-        unit.addProperty("holdingGuns", false);
+        unit.addProperty("holdingWeapons", false);
         unit.addProperty("mounted", false);
         return unit;
     }
@@ -164,7 +164,7 @@ public final class NativeVisitPage extends AbstractScreen {
         final JsonObject unit = unit(id, "COLONIST", at);
         unit.addProperty("workUpdates", 0);
         unit.addProperty("missionary", false);
-        unit.addProperty("holdingGuns", guns);
+        unit.addProperty("holdingWeapons", guns);
         unit.addProperty("mounted", mounted);
         return unit;
     }

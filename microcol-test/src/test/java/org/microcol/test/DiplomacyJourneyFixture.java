@@ -24,7 +24,7 @@ import com.google.gson.JsonObject;
  * The one initial world of the connected diplomacy journey (R-0219, UC-117),
  * derived before the game loads from the native turns scenario F106 and never
  * touched again. F106 already holds the Dutch colony New Amsterdam (24, 16),
- * the Aztec capital (23, 15) teaching Expert Farmer and buying muskets, tools
+ * the Aztec capital (23, 15) teaching Expert Farmer and buying weapons, tools
  * and horses, the Aztec brave 200 on its hill, the French colony Hidden Quebec
  * on the two-square islet (27..28, 17), the French galleon 106 and the native
  * players that make the natives act.
@@ -35,16 +35,16 @@ import com.google.gson.JsonObject;
  * Witt, France 1,000; the Dutch hold the F105 paid rights on the colony
  * squares, so the plow square (22, 16) is still unpaid; the Aztecs are uneasy
  * toward the Dutch (anger 30, never hostile enough to refuse a wagon) and at
- * 100 toward France; Hidden Quebec holds 20 corn, 30 tobacco and no sugar, and
- * nothing there produces or consumes sugar; a second French colony, Fort
+ * 100 toward France; Hidden Quebec holds 20 grain, 30 grapes and no olives, and
+ * nothing there produces or consumes olives; a second French colony, Fort
  * Orleans (22, 21), stands on the main island with one field worker and a
  * French sea route Hidden Quebec, Fort Orleans; the saved combat random state
  * is chosen so that its first eight draws are below 0.2 and every battle of the
  * journey is won by its attacker. Added Dutch units: a pioneer, an ordinary
  * scout, a loaded wagon and an ordinary missionary beside the capital, an armed
  * soldier beside Fort Orleans, an unarmed observer on the islet beside Hidden
- * Quebec and a frigate with 4 sugar at sea beside it. Added Aztec lookout and a
- * sentried French colonist make the paid pursuit possible. Every French unit
+ * Quebec and a frigate with 4 olives at sea beside it. Added Aztec lookout and
+ * a sentried French colonist make the paid pursuit possible. Every French unit
  * outside a colony is sentried and France owns no armed land unit.
  * </p>
  *
@@ -103,10 +103,10 @@ final class DiplomacyJourneyFixture {
 
     static final int DUTCH_GOLD = 2000;
     static final int FRENCH_GOLD = 1000;
-    static final int WAGON_CORN = 50;
-    static final int FRIGATE_SUGAR = 4;
-    static final int QUEBEC_CORN = 20;
-    static final int QUEBEC_TOBACCO = 30;
+    static final int WAGON_GRAIN = 50;
+    static final int FRIGATE_OLIVES = 4;
+    static final int QUEBEC_GRAIN = 20;
+    static final int QUEBEC_GRAPES = 30;
 
     /** Tribal anger of the Aztecs toward the Dutch in the journey. */
     static final double UNEASY_ANGER = 30;
@@ -179,7 +179,7 @@ final class DiplomacyJourneyFixture {
             if ("Dutch".equals(name)) {
                 player.addProperty("gold", DUTCH_GOLD);
                 player.add("congress",
-                        gson.fromJson("{\"activated\": true, \"bells\": 0, "
+                        gson.fromJson("{\"activated\": true, \"owls\": 0, "
                                 + "\"members\": [\"JAN_DE_WITT\"], "
                                 + "\"candidates\": [\"JOHN_PAUL_JONES\", "
                                 + "\"THOMAS_JEFFERSON\", \"ADAM_SMITH\", "
@@ -252,9 +252,9 @@ final class DiplomacyJourneyFixture {
             }
         }
         final JsonObject stock = hidden.getAsJsonObject("colonyWarehouse");
-        stock.addProperty("CORN", QUEBEC_CORN);
-        stock.addProperty("TOBACCO", QUEBEC_TOBACCO);
-        stock.addProperty("SUGAR", 0);
+        stock.addProperty("GRAIN", QUEBEC_GRAIN);
+        stock.addProperty("GRAPES", QUEBEC_GRAPES);
+        stock.addProperty("OLIVES", 0);
         final JsonObject fort = hidden.deepCopy();
         fort.addProperty("id", FORT_ORLEANS);
         fort.addProperty("name", "Fort Orleans");
@@ -271,7 +271,7 @@ final class DiplomacyJourneyFixture {
             if (direction.get("x").getAsInt() == -1
                     && direction.get("y").getAsInt() == 0) {
                 field.addProperty("workerId", worker);
-                field.addProperty("producedGoodsType", "CORN");
+                field.addProperty("producedGoodsType", "GRAIN");
             }
         }
         colonies.add(fort);
@@ -317,13 +317,13 @@ final class DiplomacyJourneyFixture {
         units.add(colonist(MISSIONARY, "Dutch", MISSIONARY_AT, false, false,
                 true));
         final JsonObject wagon = unit(WAGON, "WAGON", "Dutch", WAGON_AT);
-        wagon.add("cargo", cargo(UnitType.WAGON, "CORN", WAGON_CORN));
+        wagon.add("cargo", cargo(UnitType.WAGON, "GRAIN", WAGON_GRAIN));
         units.add(wagon);
         units.add(colonist(SOLDIER, "Dutch", SOLDIER_AT, true, false, false));
         units.add(
                 colonist(OBSERVER, "Dutch", OBSERVER_AT, false, false, false));
         final JsonObject frigate = ship(FRIGATE, "FRIGATE", FRIGATE_AT);
-        frigate.add("cargo", cargo(UnitType.FRIGATE, "SUGAR", FRIGATE_SUGAR));
+        frigate.add("cargo", cargo(UnitType.FRIGATE, "OLIVES", FRIGATE_OLIVES));
         units.add(frigate);
     }
 
@@ -354,7 +354,7 @@ final class DiplomacyJourneyFixture {
         unit.add("action", action);
         unit.addProperty("movementThirds", 3);
         unit.addProperty("tools", 0);
-        unit.addProperty("holdingGuns", false);
+        unit.addProperty("holdingWeapons", false);
         unit.addProperty("mounted", false);
         return unit;
     }
@@ -367,7 +367,7 @@ final class DiplomacyJourneyFixture {
                 at == null ? Location.of(1, 1) : at);
         unit.addProperty("workUpdates", 0);
         unit.addProperty("missionary", missionary);
-        unit.addProperty("holdingGuns", guns);
+        unit.addProperty("holdingWeapons", guns);
         unit.addProperty("mounted", mounted);
         return unit;
     }

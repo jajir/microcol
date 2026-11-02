@@ -27,8 +27,8 @@ import javafx.stage.Stage;
  * hammers, 25 tools and a blacksmith's shop, which needs 64 hammers and 20
  * tools. The shop therefore completes at the next update whatever the
  * production, and the report shows the 64 hammers and 20 tools it takes. The
- * town-hall worker then takes the cross job, as in TC167, so the chapel gives
- * two crosses in the report. The stock the report projects before the update is
+ * town-hall worker then takes the torch job, as in TC167, so the chapel gives
+ * two torches in the report. The stock the report projects before the update is
  * the stock the next turn shows. Save and Continue keep the same figures, and
  * Open leads to the colony screen.
  */
@@ -66,7 +66,7 @@ public class TC_168_F200_colony_advisor_test extends AbstractMicroColTest {
         game = GamePage.of(getContext());
 
         // The report shows the residents, the shop that completes at the next
-        // update with the cost it takes, and one cross from the chapel.
+        // update with the cost it takes, and one torch from the chapel.
         advisor.open();
         advisor.verifyTabSelected();
         advisor.verifyColonyHeader(COLONY_ID, COLONY_NAME, POPULATION);
@@ -74,7 +74,7 @@ public class TC_168_F200_colony_advisor_test extends AbstractMicroColTest {
         advisor.verifyNoUncertainty(COLONY_ID);
         advisor.verifySpent(COLONY_ID, GoodsType.HAMMERS, "-64");
         advisor.verifySpent(COLONY_ID, GoodsType.TOOLS, "-20");
-        advisor.verifyOutput(COLONY_ID, GoodsType.CROSS, 1);
+        advisor.verifyOutput(COLONY_ID, GoodsType.TORCHES, 1);
         // The report fits the window: sentences wrap in view, headings keep
         // their width, and Open stands beside the colony name.
         advisor.verifyReportInsideWindow();
@@ -89,22 +89,22 @@ public class TC_168_F200_colony_advisor_test extends AbstractMicroColTest {
         advisor.verifyTabSelectedAndFocused();
         game = advisor.closeWithEscape();
 
-        // The town-hall worker takes the cross job: the chapel is staffed and
-        // the report shows two crosses at once.
+        // The town-hall worker takes the torch job: the chapel is staffed and
+        // the report shows two torches at once.
         final ColonyScreen colony = game.openColonyAt(COLONY, COLONY_NAME);
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromIndoor("id_town_hall", 0);
-        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.CROSS);
+        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.TORCHES);
         jobs.confirm();
         game = colony.close();
         advisor.open();
-        advisor.verifyOutput(COLONY_ID, GoodsType.CROSS, 2);
+        advisor.verifyOutput(COLONY_ID, GoodsType.TORCHES, 2);
         advisor.verifyProjectCompletes(COLONY_ID);
         // The next stock shown now is what the next update is expected to
         // leave.
         advisor.rememberNext(COLONY_ID, GoodsType.HAMMERS);
         advisor.rememberNext(COLONY_ID, GoodsType.TOOLS);
-        advisor.rememberNext(COLONY_ID, GoodsType.CORN);
+        advisor.rememberNext(COLONY_ID, GoodsType.GRAIN);
         game = advisor.closeWithEscape();
 
         // Save and Continue keep the queued shop and the same projected stock.
@@ -114,7 +114,7 @@ public class TC_168_F200_colony_advisor_test extends AbstractMicroColTest {
         advisor.verifyProjectCompletes(COLONY_ID);
         advisor.verifyNextIsRemembered(COLONY_ID, GoodsType.HAMMERS);
         advisor.verifyNextIsRemembered(COLONY_ID, GoodsType.TOOLS);
-        advisor.verifyNextIsRemembered(COLONY_ID, GoodsType.CORN);
+        advisor.verifyNextIsRemembered(COLONY_ID, GoodsType.GRAIN);
         game = advisor.closeWithEscape();
 
         // Open leaves the report for the colony screen, and Escape there
@@ -131,7 +131,7 @@ public class TC_168_F200_colony_advisor_test extends AbstractMicroColTest {
         advisor.open();
         advisor.verifyStockIsRememberedNext(COLONY_ID, GoodsType.HAMMERS);
         advisor.verifyStockIsRememberedNext(COLONY_ID, GoodsType.TOOLS);
-        advisor.verifyStockIsRememberedNext(COLONY_ID, GoodsType.CORN);
+        advisor.verifyStockIsRememberedNext(COLONY_ID, GoodsType.GRAIN);
         advisor.verifyNoProject(COLONY_ID);
         game = advisor.closeWithEscape();
     }
@@ -169,18 +169,18 @@ public class TC_168_F200_colony_advisor_test extends AbstractMicroColTest {
         advisor.loadFamineFixture();
         game = GamePage.of(getContext());
 
-        // The eight indoor residents eat 16 and no corn is stored: the report
+        // The eight indoor residents eat 16 and no grain is stored: the report
         // warns of the shortage and shows question marks where the amounts
         // depend on which colonist is lost.
         advisor.open();
         advisor.verifyColonyHeader(COLONY_ID, COLONY_NAME, POPULATION);
         advisor.verifyFamineWarning(COLONY_ID);
         advisor.verifyUncertaintyExplained(COLONY_ID);
-        advisor.verifyUnknownProjection(COLONY_ID, GoodsType.CORN);
+        advisor.verifyUnknownProjection(COLONY_ID, GoodsType.GRAIN);
         advisor.verifyUnknownProjection(COLONY_ID, GoodsType.HAMMERS);
         advisor.verifyProjectUncertain(COLONY_ID);
         // The stock now stays an exact number.
-        advisor.verifyStock(COLONY_ID, GoodsType.CORN, 0);
+        advisor.verifyStock(COLONY_ID, GoodsType.GRAIN, 0);
         advisor.verifyStock(COLONY_ID, GoodsType.HAMMERS, 70);
         advisor.verifyStock(COLONY_ID, GoodsType.TOOLS, 25);
         // The long uncertainty sentence wraps inside the visible report.
@@ -197,7 +197,7 @@ public class TC_168_F200_colony_advisor_test extends AbstractMicroColTest {
         advisor.verifyColonyHeader(COLONY_ID, COLONY_NAME, POPULATION - 1);
         advisor.verifyFamineWarning(COLONY_ID);
         advisor.verifyNoProject(COLONY_ID);
-        advisor.verifyStock(COLONY_ID, GoodsType.CORN, 0);
+        advisor.verifyStock(COLONY_ID, GoodsType.GRAIN, 0);
         game = advisor.closeWithEscape();
     }
 
@@ -217,10 +217,10 @@ public class TC_168_F200_colony_advisor_test extends AbstractMicroColTest {
         advisor.verifyCzechColonyHeader(COLONY_ID, COLONY_NAME, POPULATION);
         advisor.verifyCzechFamineWarning(COLONY_ID);
         advisor.verifyCzechUncertaintyExplained(COLONY_ID);
-        advisor.verifyUnknownProjection(COLONY_ID, GoodsType.CORN);
+        advisor.verifyUnknownProjection(COLONY_ID, GoodsType.GRAIN);
         advisor.verifyUnknownProjection(COLONY_ID, GoodsType.HAMMERS);
         advisor.verifyCzechProjectUncertain(COLONY_ID);
-        advisor.verifyStock(COLONY_ID, GoodsType.CORN, 0);
+        advisor.verifyStock(COLONY_ID, GoodsType.GRAIN, 0);
         advisor.verifyStock(COLONY_ID, GoodsType.HAMMERS, 70);
         advisor.verifyStock(COLONY_ID, GoodsType.TOOLS, 25);
         advisor.verifyReportInsideWindow();

@@ -19,9 +19,10 @@ import com.google.gson.Gson;
 class FounderConstructionTest {
     private static Stream<ConstructionType> gatedProjects() {
         return Stream.of(ConstructionType.IRON_WORKS,
-                ConstructionType.CIGAR_FACTORY, ConstructionType.TEXTILE_MILL,
-                ConstructionType.RUM_FACTORY, ConstructionType.FUR_FACTORY,
-                ConstructionType.ARSENAL, ConstructionType.CUSTOM_HOUSE);
+                ConstructionType.LARGE_WINERY, ConstructionType.TEXTILE_MILL,
+                ConstructionType.LARGE_OIL_PRESS,
+                ConstructionType.LARGE_POTTERY, ConstructionType.ARSENAL,
+                ConstructionType.CUSTOM_HOUSE);
     }
 
     private GameModelPo fixture() {
@@ -51,7 +52,7 @@ class FounderConstructionTest {
         final var congress = data.getModel().getGameManager().getPlayers()
                 .stream().filter(player -> player.getName().equals("Dutch"))
                 .findFirst().orElseThrow().getCongress();
-        congress.setBells(100);
+        congress.setOwls(100);
         final Model model = load(data);
         final Player owner = model.getCurrentPlayer();
         final Colony colony = model.getColonyByName("Delft").orElseThrow();

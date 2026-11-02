@@ -245,7 +245,7 @@ final class RivalLandMilitaryCycle {
      */
     private static boolean isArmed(final Unit unit) {
         return unit instanceof UnitArtillery || unit instanceof UnitFreeColonist
-                && ((UnitFreeColonist) unit).isHoldingGuns();
+                && ((UnitFreeColonist) unit).isHoldingWeapons();
     }
 
     /** Armed land units standing on the map, in identity order. */

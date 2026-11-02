@@ -29,7 +29,7 @@ public final class MilitaryPromotionPage extends AbstractScreen {
                 JsonObject congress = player.getAsJsonObject("congress");
                 congress.addProperty("activated", true);
                 congress.addProperty("generation", 2);
-                congress.addProperty("bells", 0);
+                congress.addProperty("owls", 0);
                 JsonArray members = new JsonArray();
                 members.add("GEORGE_WASHINGTON");
                 congress.add("members", members);
@@ -54,7 +54,8 @@ public final class MilitaryPromotionPage extends AbstractScreen {
         getRobot().interact(() -> {
             ((UnitFreeColonist) getModel().getUnitById(winner))
                     .setActionPoints(1);
-            ((UnitFreeColonist) getModel().getUnitById(6)).setHoldingGuns(true);
+            ((UnitFreeColonist) getModel().getUnitById(6))
+                    .setHoldingWeapons(true);
         });
     }
 
@@ -68,7 +69,7 @@ public final class MilitaryPromotionPage extends AbstractScreen {
         assertEquals(specialty, unit.getType());
         assertEquals(veteran, unit.isVeteran());
         assertEquals(mounted, unit.isMounted());
-        assertTrue(unit.isHoldingGuns());
+        assertTrue(unit.isHoldingWeapons());
         assertEquals("Dutch", unit.getOwner().getName());
         assertEquals(0, unit.getActionPoints());
     }

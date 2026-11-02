@@ -104,9 +104,9 @@ class MineralDepositProductionTest {
 
     @Test
     void nonFiniteOutputIsNeverLimited() {
-        // Trapping furs come from the animals, not from a reserve.
+        // Clay pit clay come from the animals, not from a reserve.
         assertEquals(ResourceOverlay.BONUS, output(
-                terrain(TerrainType.GRASSLAND, ResourceOverlay.TRAPPING, 0, 0),
-                GoodsType.FUR));
+                terrain(TerrainType.GRASSLAND, ResourceOverlay.CLAY_PIT, 0, 0),
+                GoodsType.CLAY));
     }
 }

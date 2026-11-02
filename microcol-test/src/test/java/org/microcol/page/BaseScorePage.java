@@ -30,7 +30,7 @@ public final class BaseScorePage extends AbstractScreen {
 
     private static final String RESULT_TITLE = "resultTitle";
     private static final String RESULT_DEDUCTION = "resultDeduction";
-    private static final String RESULT_BELLS = "resultBells";
+    private static final String RESULT_OWLS = "resultOwls";
     private static final String RESULT_CLAMPED = "resultClampedBase";
     private static final String RESULT_BONUS = "resultBonus";
     private static final String RESULT_DIFFICULTY = "resultDifficulty";
@@ -144,7 +144,7 @@ public final class BaseScorePage extends AbstractScreen {
     }
 
     /**
-     * The clamped base is the subtotal less the deductions plus the bells, and
+     * The clamped base is the subtotal less the deductions plus the owls, and
      * the total is the floor of the calculated result from the shown factors.
      */
     public void verifyCalculatedResultFromComponents() {
@@ -152,7 +152,7 @@ public final class BaseScorePage extends AbstractScreen {
         assertEquals(
                 Math.max(0,
                         points(SUBTOTAL) - points(RESULT_DEDUCTION)
-                                + points(RESULT_BELLS)),
+                                + points(RESULT_OWLS)),
                 clamped, "Clamped base");
         final long bonus = number(RESULT_BONUS, BONUS_PERCENT);
         final long early = number(RESULT_BONUS, EARLY_POINTS);

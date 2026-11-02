@@ -76,7 +76,7 @@ public final class RoyalBattlePage extends AbstractScreen {
             final Player king = model.getPlayerByName("Dutch's King");
             force.takeOver(king);
             if (force instanceof UnitFreeColonist) {
-                ((UnitFreeColonist) force).setHoldingGuns(true);
+                ((UnitFreeColonist) force).setHoldingWeapons(true);
             }
             final Location from = colonyAt.getNeighbors().stream()
                     .filter(model.getMap()::isValid)

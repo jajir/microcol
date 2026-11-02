@@ -29,7 +29,7 @@ public final class GameResultPo {
 
     private Integer destroyedSettlements;
 
-    private Long bellsBeyondTarget;
+    private Long owlsBeyondTarget;
 
     private Integer victoryOrder;
 
@@ -178,17 +178,17 @@ public final class GameResultPo {
     }
 
     /**
-     * @return the bellsBeyondTarget
+     * @return the owlsBeyondTarget
      */
-    public Long getBellsBeyondTarget() {
-        return bellsBeyondTarget;
+    public Long getOwlsBeyondTarget() {
+        return owlsBeyondTarget;
     }
 
     /**
-     * @param bellsBeyondTarget the bellsBeyondTarget to set
+     * @param owlsBeyondTarget the owlsBeyondTarget to set
      */
-    public void setBellsBeyondTarget(final Long bellsBeyondTarget) {
-        this.bellsBeyondTarget = bellsBeyondTarget;
+    public void setOwlsBeyondTarget(final Long owlsBeyondTarget) {
+        this.owlsBeyondTarget = owlsBeyondTarget;
     }
 
     /**

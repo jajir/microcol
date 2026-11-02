@@ -35,15 +35,15 @@ import javafx.stage.Stage;
 
 /**
  * R-0212: an Expert Farmer hired in Europe sails to the colony and works bare
- * grassland, where the expert doubles the ordinary corn of 4 to 8. Switched to
- * tobacco, which is not its specialty, it yields the ordinary 3. The ordinary
- * workers on bare grassland are the references: corn 4 and tobacco 3.
+ * grassland, where the expert doubles the ordinary grain of 4 to 8. Switched to
+ * grapes, which is not its specialty, it yields the ordinary 3. The ordinary
+ * workers on bare grassland are the references: grain 4 and grapes 3.
  *
  * <p>
  * Fixture: the shared expert-purchase scenario with the single tree on
  * {@code (24,15)} removed, so that square is bare grassland and the best free
- * corn square. The other free square {@code (25,15)} keeps its tree and yields
- * only the forest corn 3, doubled to 6, so the choice needs no tie rule. The
+ * grain square. The other free square {@code (25,15)} keeps its tree and yields
+ * only the forest grain 3, doubled to 6, so the choice needs no tie rule. The
  * scenario holds no road, river, resource, cleared or field overlay.
  * </p>
  */
@@ -53,14 +53,16 @@ public class TC_184_F212_expert_farmer_field_test extends AbstractMicroColTest {
 
     private static final Location COLONY = Location.of(24, 16);
 
-    /** Bare grassland, free in the fixture, best corn square for the expert. */
+    /**
+     * Bare grassland, free in the fixture, best grain square for the expert.
+     */
     private static final Location FARM_SQUARE = Location.of(24, 15);
 
-    /** Bare grassland worked by ordinary worker 1, the corn reference. */
-    private static final Location ORDINARY_CORN_SQUARE = Location.of(23, 17);
+    /** Bare grassland worked by ordinary worker 1, the grain reference. */
+    private static final Location ORDINARY_GRAIN_SQUARE = Location.of(23, 17);
 
-    /** Bare grassland worked by ordinary worker 0, the tobacco reference. */
-    private static final Location ORDINARY_TOBACCO_SQUARE = Location.of(23, 15);
+    /** Bare grassland worked by ordinary worker 0, the grapes reference. */
+    private static final Location ORDINARY_GRAPES_SQUARE = Location.of(23, 15);
 
     @Start
     private void start(Stage stage) throws Exception {
@@ -169,17 +171,18 @@ public class TC_184_F212_expert_farmer_field_test extends AbstractMicroColTest {
         purchase.verifySpecialistState(103, UnitType.EXPERT_FARMER, 3400,
                 PlaceLocation.class);
 
-        // Send the expert to the best corn field through the job menu. It takes
-        // the bare square and doubles the ordinary corn of the worker beside
+        // Send the expert to the best grain field through the job menu. It
+        // takes
+        // the bare square and doubles the ordinary grain of the worker beside
         // it.
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromCenter(103);
-        jobs.select(ColonyJobChoice.Kind.BEST_FIELD, GoodsType.CORN);
+        jobs.select(ColonyJobChoice.Kind.BEST_FIELD, GoodsType.GRAIN);
         jobs.confirm();
-        jobs.verifyFieldJob(103, FARM_SQUARE, Goods.of(GoodsType.CORN, 8));
-        jobs.verifyFieldJob(1, ORDINARY_CORN_SQUARE,
-                Goods.of(GoodsType.CORN, 4));
+        jobs.verifyFieldJob(103, FARM_SQUARE, Goods.of(GoodsType.GRAIN, 8));
+        jobs.verifyFieldJob(1, ORDINARY_GRAIN_SQUARE,
+                Goods.of(GoodsType.GRAIN, 4));
         purchase.verifySpecialistState(103, UnitType.EXPERT_FARMER, 3400,
                 PlaceColonyField.class);
 
@@ -189,20 +192,20 @@ public class TC_184_F212_expert_farmer_field_test extends AbstractMicroColTest {
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        jobs.verifyFieldJob(103, FARM_SQUARE, Goods.of(GoodsType.CORN, 8));
-        jobs.verifyFieldJob(1, ORDINARY_CORN_SQUARE,
-                Goods.of(GoodsType.CORN, 4));
+        jobs.verifyFieldJob(103, FARM_SQUARE, Goods.of(GoodsType.GRAIN, 8));
+        jobs.verifyFieldJob(1, ORDINARY_GRAIN_SQUARE,
+                Goods.of(GoodsType.GRAIN, 4));
         purchase.verifySpecialistState(103, UnitType.EXPERT_FARMER, 3400,
                 PlaceColonyField.class);
 
         // Off its specialty the same expert on the same square yields the
-        // ordinary tobacco, equal to the ordinary tobacco worker beside it.
+        // ordinary grapes, equal to the ordinary grapes worker beside it.
         jobs.openFromField(103);
-        jobs.select(ColonyJobChoice.Kind.CURRENT_FIELD, GoodsType.TOBACCO);
+        jobs.select(ColonyJobChoice.Kind.CURRENT_FIELD, GoodsType.GRAPES);
         jobs.confirm();
-        jobs.verifyFieldJob(103, FARM_SQUARE, Goods.of(GoodsType.TOBACCO, 3));
-        jobs.verifyFieldJob(0, ORDINARY_TOBACCO_SQUARE,
-                Goods.of(GoodsType.TOBACCO, 3));
+        jobs.verifyFieldJob(103, FARM_SQUARE, Goods.of(GoodsType.GRAPES, 3));
+        jobs.verifyFieldJob(0, ORDINARY_GRAPES_SQUARE,
+                Goods.of(GoodsType.GRAPES, 3));
         purchase.verifySpecialistState(103, UnitType.EXPERT_FARMER, 3400,
                 PlaceColonyField.class);
 
@@ -211,9 +214,9 @@ public class TC_184_F212_expert_farmer_field_test extends AbstractMicroColTest {
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        jobs.verifyFieldJob(103, FARM_SQUARE, Goods.of(GoodsType.TOBACCO, 3));
-        jobs.verifyFieldJob(0, ORDINARY_TOBACCO_SQUARE,
-                Goods.of(GoodsType.TOBACCO, 3));
+        jobs.verifyFieldJob(103, FARM_SQUARE, Goods.of(GoodsType.GRAPES, 3));
+        jobs.verifyFieldJob(0, ORDINARY_GRAPES_SQUARE,
+                Goods.of(GoodsType.GRAPES, 3));
         purchase.verifySpecialistState(103, UnitType.EXPERT_FARMER, 3400,
                 PlaceColonyField.class);
         colony.close();

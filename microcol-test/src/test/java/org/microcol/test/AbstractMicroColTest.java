@@ -108,7 +108,13 @@ public abstract class AbstractMicroColTest {
                                     && window != getPrimaryStage()
                                     && window.isShowing())
                             .forEach(window -> ((Stage) window).close()));
-            context.getRobot().interact(() -> getMicroCol().stop());
+            try {
+                context.getRobot().interact(() -> getMicroCol().stop());
+            } finally {
+                // JUnit/TestFX may retain the test instance after its method
+                // ends.
+                context = null;
+            }
         }
     }
 
@@ -155,6 +161,8 @@ public abstract class AbstractMicroColTest {
     protected void initialize(final Stage primaryStage, final Class<?> clazz,
             final Module overridenModule) throws Exception {
         logger.info("Starting MicroCol UI test " + clazz.getName());
+        // Tests use loaded styles, not development-time file watching.
+        System.setProperty("microcol.test.disableCssReload", "true");
         System.setProperty(GamePreferences.SYSTEM_PROPERTY_DEVELOPMENT,
                 Boolean.TRUE.toString());
         // Fixtures stub the bound chooser; the game sees what it chooses as a

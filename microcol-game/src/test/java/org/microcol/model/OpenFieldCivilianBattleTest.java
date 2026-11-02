@@ -18,7 +18,7 @@ import org.microcol.model.unit.UnitFreeColonist;
 /**
  * An armed soldier attacks an unarmed civilian or a wagon standing in the open
  * (R-0211). The civilian base 1 comes from the aid card; the odds, the loss of
- * the attacker's muskets and the destruction of the civilian follow the shared
+ * the attacker's weapons and the destruction of the civilian follow the shared
  * battle rule. Expected values are literals: the attacker is an ordinary
  * soldier, 2 x 1.5 = 3, and the defender is 1 x (1 + terrain defense).
  */
@@ -67,7 +67,7 @@ class OpenFieldCivilianBattleTest {
                 .filter(unit -> unit.getId() == DEFENDER_ID).findFirst()
                 .orElseThrow();
         defender.setType(defenderType);
-        defender.setHoldingGuns(false);
+        defender.setHoldingWeapons(false);
         defender.setMounted(false);
         defender.setVeteran(false);
         defender.setTools(0);
@@ -96,7 +96,7 @@ class OpenFieldCivilianBattleTest {
         final UnitFreeColonist attacker = (UnitFreeColonist) model
                 .getUnitById(ATTACKER_ID);
         attacker.placeToLocation(ORIGIN);
-        attacker.setHoldingGuns(true);
+        attacker.setHoldingWeapons(true);
         attacker.getOwner().revealMapForUnit(attacker);
         return model;
     }
@@ -171,7 +171,7 @@ class OpenFieldCivilianBattleTest {
             assertEquals(SEED, rng(model), type.name());
             assertEquals(ORIGIN, attacker.getLocation(), type.name());
             assertEquals(moves, attacker.getActionPoints(), type.name());
-            assertTrue(((UnitFreeColonist) attacker).isHoldingGuns(),
+            assertTrue(((UnitFreeColonist) attacker).isHoldingWeapons(),
                     type.name());
             assertSame(defender, model.getUnitById(DEFENDER_ID), type.name());
             assertSame(type, defender.getType(), type.name());
@@ -185,7 +185,7 @@ class OpenFieldCivilianBattleTest {
             final Model model = open(type, SEED);
             final AttackOrder order = order(model);
             ((UnitFreeColonist) model.getUnitById(ATTACKER_ID))
-                    .setHoldingGuns(false);
+                    .setHoldingWeapons(false);
             assertThrows(IllegalStateException.class, order::execute,
                     type.name());
             assertEquals(SEED, rng(model), type.name());
@@ -196,7 +196,7 @@ class OpenFieldCivilianBattleTest {
     }
 
     @Test
-    void soldierLosingKeepsItsLifeLosesOnlyItsMusketsAndConsumesOneDraw() {
+    void soldierLosingKeepsItsLifeLosesOnlyItsWeaponsAndConsumesOneDraw() {
         for (final UnitType type : CIVILIANS) {
             final long state = CombatDraws.stateFor(OPEN_ODDS, false);
             final Model model = open(type, state);
@@ -209,7 +209,7 @@ class OpenFieldCivilianBattleTest {
             assertSame(attacker, model.getUnitById(ATTACKER_ID), type.name());
             assertSame(attackerType, attacker.getType(), type.name());
             assertSame(attackerOwner, attacker.getOwner(), type.name());
-            assertFalse(attacker.isHoldingGuns(), type.name());
+            assertFalse(attacker.isHoldingWeapons(), type.name());
             assertFalse(attacker.isVeteran(), type.name());
             assertEquals(ORIGIN, attacker.getLocation(), type.name());
             assertEquals(0, attacker.getActionPoints(), type.name());
@@ -220,7 +220,7 @@ class OpenFieldCivilianBattleTest {
             assertEquals(state + GAMMA, rng(model), type.name());
             final Model continued = reload(model);
             assertFalse(((UnitFreeColonist) continued.getUnitById(ATTACKER_ID))
-                    .isHoldingGuns(), type.name());
+                    .isHoldingWeapons(), type.name());
             assertSame(type, continued.getUnitById(DEFENDER_ID).getType(),
                     type.name());
             assertEquals(state + GAMMA, rng(continued), type.name());
@@ -228,7 +228,7 @@ class OpenFieldCivilianBattleTest {
     }
 
     @Test
-    void soldierWinningDestroysTheCivilianKeepsItsMusketsAndConsumesTwoDraws() {
+    void soldierWinningDestroysTheCivilianKeepsItsWeaponsAndConsumesTwoDraws() {
         for (final UnitType type : CIVILIANS) {
             final long state = CombatDraws.stateFor(OPEN_ODDS, true);
             final Model model = open(type, state);
@@ -237,7 +237,7 @@ class OpenFieldCivilianBattleTest {
             order(model).execute();
             assertFalse(alive(model, DEFENDER_ID), type.name());
             assertSame(attacker, model.getUnitById(ATTACKER_ID), type.name());
-            assertTrue(attacker.isHoldingGuns(), type.name());
+            assertTrue(attacker.isHoldingWeapons(), type.name());
             assertFalse(attacker.isVeteran(), type.name());
             assertEquals(0, attacker.getActionPoints(), type.name());
             // The winner's ordinary promotion roll is the second draw.
@@ -245,7 +245,7 @@ class OpenFieldCivilianBattleTest {
             final Model continued = reload(model);
             assertFalse(alive(continued, DEFENDER_ID), type.name());
             assertTrue(((UnitFreeColonist) continued.getUnitById(ATTACKER_ID))
-                    .isHoldingGuns(), type.name());
+                    .isHoldingWeapons(), type.name());
             assertEquals(state + 2 * GAMMA, rng(continued), type.name());
         }
     }
@@ -261,7 +261,7 @@ class OpenFieldCivilianBattleTest {
             assertFalse(alive(model, DEFENDER_ID), type.name());
             assertSame(attacker, model.getUnitById(ATTACKER_ID), type.name());
             assertTrue(attacker.isVeteran(), type.name());
-            assertTrue(attacker.isHoldingGuns(), type.name());
+            assertTrue(attacker.isHoldingWeapons(), type.name());
             assertTrue(
                     ((UnitFreeColonist) reload(model).getUnitById(ATTACKER_ID))
                             .isVeteran(),

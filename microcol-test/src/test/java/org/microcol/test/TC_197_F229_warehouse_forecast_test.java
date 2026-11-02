@@ -33,7 +33,7 @@ public class TC_197_F229_warehouse_forecast_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
-    void TC_01_worker_consumes_tobacco_until_empty_and_shows_signed_changes()
+    void TC_01_worker_consumes_grapes_until_empty_and_shows_signed_changes()
             throws Exception {
         // Three residents eat six food; the unattended center provides four.
         final GamePage game = WelcomePage.of(getContext()).loadGame();
@@ -41,47 +41,47 @@ public class TC_197_F229_warehouse_forecast_test extends AbstractMicroColTest {
         new GameBarWidthPage(getContext()).resizeContent(1440, 1000);
         final IndustrialProductionPage industry = new IndustrialProductionPage(
                 getContext());
-        industry.verifyForecast(GoodsType.CORN, 50, -2);
-        industry.verifyForecast(GoodsType.TOBACCO, 4, 0);
-        industry.verifyForecast(GoodsType.CIGARS, 0, 0);
+        industry.verifyForecast(GoodsType.GRAIN, 50, -2);
+        industry.verifyForecast(GoodsType.GRAPES, 4, 0);
+        industry.verifyForecast(GoodsType.WINE, 0, 0);
 
-        // Assign a fourth resident: refresh red deficits and green cigars now.
-        industry.assignWorker(4, "id_tobacco");
+        // Assign a fourth resident: refresh red deficits and green wine now.
+        industry.assignWorker(4, "id_winery");
         new ColonyJobPage(getContext()).verifyIndoorJob(4,
-                ConstructionType.TOBACCONISTS_HOUSE, 1);
-        industry.verifyForecast(GoodsType.CORN, 50, -4);
-        industry.verifyForecast(GoodsType.TOBACCO, 4, -3);
-        industry.verifyForecast(GoodsType.CIGARS, 0, 3);
+                ConstructionType.SMALL_WINERY, 1);
+        industry.verifyForecast(GoodsType.GRAIN, 50, -4);
+        industry.verifyForecast(GoodsType.GRAPES, 4, -3);
+        industry.verifyForecast(GoodsType.WINE, 0, 3);
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0359-tobacco-consumption.png");
+                .saveEvidence("r0359-grapes-consumption.png");
         colony.close();
 
         // One real turn consumes three leaves; the last leaf limits the next.
         game.nextTurnAndCloseDialogs();
         game.openColonyAt(COLONY, "New Amsterdam");
-        industry.verifyForecast(GoodsType.CORN, 46, -4);
-        industry.verifyForecast(GoodsType.TOBACCO, 1, -1);
-        industry.verifyForecast(GoodsType.CIGARS, 3, 1);
+        industry.verifyForecast(GoodsType.GRAIN, 46, -4);
+        industry.verifyForecast(GoodsType.GRAPES, 1, -1);
+        industry.verifyForecast(GoodsType.WINE, 3, 1);
         colony.close();
 
         // The next turn uses only that leaf and clears both production deltas.
         game.nextTurnAndCloseDialogs();
         game.openColonyAt(COLONY, "New Amsterdam");
         new GameBarWidthPage(getContext()).resizeContent(1000, 925);
-        industry.verifyForecast(GoodsType.CORN, 42, -4);
-        industry.verifyForecast(GoodsType.TOBACCO, 0, 0);
-        industry.verifyForecast(GoodsType.CIGARS, 4, 0);
+        industry.verifyForecast(GoodsType.GRAIN, 42, -4);
+        industry.verifyForecast(GoodsType.GRAPES, 0, 0);
+        industry.verifyForecast(GoodsType.WINE, 4, 0);
         new InGameLayoutPage(getContext())
-                .saveEvidence("r0359-tobacco-empty.png");
+                .saveEvidence("r0359-grapes-empty.png");
         colony.close();
 
-        // With the worker still assigned, an empty input produces no cigars.
+        // With the worker still assigned, an empty input produces no wine.
         game.nextTurnAndCloseDialogs();
         game.openColonyAt(COLONY, "New Amsterdam");
-        industry.verifyForecast(GoodsType.CORN, 38, -4);
-        industry.verifyForecast(GoodsType.TOBACCO, 0, 0);
-        industry.verifyForecast(GoodsType.CIGARS, 4, 0);
+        industry.verifyForecast(GoodsType.GRAIN, 38, -4);
+        industry.verifyForecast(GoodsType.GRAPES, 0, 0);
+        industry.verifyForecast(GoodsType.WINE, 4, 0);
         new ColonyJobPage(getContext()).verifyIndoorJob(4,
-                ConstructionType.TOBACCONISTS_HOUSE, 1);
+                ConstructionType.SMALL_WINERY, 1);
     }
 }

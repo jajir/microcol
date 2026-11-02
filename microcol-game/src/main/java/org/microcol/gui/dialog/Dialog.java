@@ -17,7 +17,7 @@ public enum Dialog implements MessageKeyResource {
     fight_drakeBonus, fight_artilleryDamaged, fight_artilleryDestroyed,
     fight_navalLoss, fight_navalTitle, fight_navalSunk, fight_navalDamaged,
     fight_navalCaptured, fight_navalLost, fight_navalPreserved, fight_none,
-    fight_damagedName, fight_lostHorses, fight_lostMuskets, fight_colonyArmed,
+    fight_damagedName, fight_lostHorses, fight_lostWeapons, fight_colonyArmed,
     fight_colonyCivilians, fight_colonyRevere, fight_colonistsName,
     fight_revereName, fight_colonyCaptured, fight_revereExit, fight_colonyField,
     fight_workerName, fight_workerCaptured, fight_ambushBonus,

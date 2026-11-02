@@ -118,13 +118,13 @@ public final class ClearForestPage extends AbstractScreen {
     }
 
     public void verifyTerrainOutput(final Location location,
-            final int expectedLumber, final int expectedFur) {
+            final int expectedLumber, final int expectedClay) {
         final Terrain terrain = getModel().getMap().getTerrainAt(location);
         assertEquals(expectedLumber,
                 terrain.canProduceAmmount(GoodsType.LUMBER),
                 "Unexpected lumber output at " + location);
-        assertEquals(expectedFur, terrain.canProduceAmmount(GoodsType.FUR),
-                "Unexpected fur output at " + location);
+        assertEquals(expectedClay, terrain.canProduceAmmount(GoodsType.CLAY),
+                "Unexpected clay output at " + location);
     }
 
     public void verifyColonyLumber(final int colonyId,

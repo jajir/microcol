@@ -25,13 +25,13 @@ public class TC_47_F38_immigration_test extends AbstractMicroColTest {
     @Tag("local")
     void TC_01_production_pending_continue_arrival_and_continue()
             throws Exception {
-        // Opening Europe reads the saved 99 crosses without producing or
+        // Opening Europe reads the saved 99 torches without producing or
         // arriving.
         EuropePortScreen europe = WelcomePage.of(getContext()).loadGame()
                 .openEuroperPort();
         ImmigrationPage immigration = new ImmigrationPage(getContext());
         RecruitmentPage recruit = new RecruitmentPage(getContext());
-        immigration.verifyProgress("Immigration: 99 / 100 crosses", 99, 100,
+        immigration.verifyProgress("Immigration: 99 / 100 torches", 99, 100,
                 false);
         String before = recruit.poolSnapshot();
         europe.close().openEuroperPort();
@@ -41,7 +41,7 @@ public class TC_47_F38_immigration_test extends AbstractMicroColTest {
         GamePage game = europe.close();
         game.nextTurnAndCloseDialogs();
         europe = game.openEuroperPort();
-        immigration.verifyProgress("Immigration: 100 / 100 crosses\n" + PENDING,
+        immigration.verifyProgress("Immigration: 100 / 100 torches\n" + PENDING,
                 100, 100, true);
         immigration.captureDialog("immigration-progress",
                 "immigration-pending-english.png");
@@ -55,18 +55,18 @@ public class TC_47_F38_immigration_test extends AbstractMicroColTest {
         europe.close().exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         europe = game.openEuroperPort();
-        immigration.verifyProgress("Immigration: 100 / 100 crosses\n" + PENDING,
+        immigration.verifyProgress("Immigration: 100 / 100 torches\n" + PENDING,
                 100, 100, true);
         recruit.verifyPool(pending, 500);
         // Next turn brings one saved candidate free of charge, then produces
-        // one cross.
+        // one torch.
         game = europe.close();
         ScreenTurnReport report = game.nextTurn().orElseThrow();
         report.verifyThatAtLeastOneEventMessageContains(
                 "Religious production attracted an immigrant");
         report.close();
         europe = game.openEuroperPort();
-        immigration.verifyProgress("Immigration: 1 / 125 crosses", 1, 125,
+        immigration.verifyProgress("Immigration: 1 / 125 torches", 1, 125,
                 false);
         immigration.verifyArrival(103, 500, 1, 0, 5);
         String arrived = recruit.poolSnapshot();
@@ -79,7 +79,7 @@ public class TC_47_F38_immigration_test extends AbstractMicroColTest {
         new FreePlayAuditPage(getContext()).continueGame().openEuroperPort();
         immigration.verifyArrival(103, 500, 1, 0, 5);
         recruit.verifyPool(arrived, 500);
-        immigration.verifyProgress("Immigration: 1 / 125 crosses", 1, 125,
+        immigration.verifyProgress("Immigration: 1 / 125 torches", 1, 125,
                 false);
     }
 
@@ -92,8 +92,8 @@ public class TC_47_F38_immigration_test extends AbstractMicroColTest {
         settings.setCzechLanguage();
         settings.goBack().loadGame().openEuroperPort("Evropa");
         ImmigrationPage immigration = new ImmigrationPage(getContext());
-        immigration.verifyProgress("Přistěhovalectví: 99 / 100 křížů", 99, 100,
-                false);
+        immigration.verifyProgress("Přistěhovalectví: 99 / 100 pochodní", 99,
+                100, false);
         immigration.captureDialog("immigration-progress",
                 "immigration-czech.png");
     }

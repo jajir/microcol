@@ -23,12 +23,12 @@ import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
 /**
- * A loaded wagon sells or gives its corn to the Aztec capital (R-0160). The
+ * A loaded wagon sells or gives its grain to the Aztec capital (R-0160). The
  * market shows the exact pieces and gold of the model's terms before any
  * confirmation. One haggle draws its result once and keeps it: cancelling the
  * deal, reopening the chooser and Save/Continue never reroll it. Cancelling a
  * sale or a gift changes no goods or gold; a confirmed sale moves the goods and
- * the gold once, and the tribe records the corn it bought. A confirmed gift
+ * the gold once, and the tribe records the grain it bought. A confirmed gift
  * moves the goods without any gold. The model rules for the price floor, the
  * caps, the stale terms and the gift reductions are checked in the model tests.
  */
@@ -39,14 +39,14 @@ public class TC_130_F121_native_sale_test extends AbstractMicroColTest {
     private static final File FIXTURE = new File(
             "src/test/scenarios/F106-native-turns.microcol");
 
-    /** The Aztec capital, with corn and tobacco on offer. */
+    /** The Aztec capital, with grain and grapes on offer. */
     private static final Location CAPITAL = Location.of(23, 15);
 
     /** Ordinary scout, land square west of the capital. */
     private static final int SCOUT_ID = 300;
     private static final Location SCOUT_AT = Location.of(22, 15);
 
-    /** Loaded wagon of fifty corn, land square north of the capital. */
+    /** Loaded wagon of fifty grain, land square north of the capital. */
     private static final int WAGON_ID = 301;
     private static final Location WAGON_AT = Location.of(23, 14);
 
@@ -54,7 +54,7 @@ public class TC_130_F121_native_sale_test extends AbstractMicroColTest {
     private static final int SHIP_ID = 302;
     private static final Location SHIP_AT = Location.of(24, 16);
 
-    private static final GoodsType CORN = GoodsType.CORN;
+    private static final GoodsType GRAIN = GoodsType.GRAIN;
 
     /** Pieces the chooser offers first: the whole load the natives can pay. */
     private static final int LOAD = 50;
@@ -88,36 +88,36 @@ public class TC_130_F121_native_sale_test extends AbstractMicroColTest {
         visit.escape();
         visit.verifyChooserClosed();
 
-        // The open market shows the whole load of corn as the exact offer.
+        // The open market shows the whole load of grain as the exact offer.
         visit.enterSettlement(WAGON_AT, CAPITAL);
         market.openMarket();
-        market.verifySaleOffered(WAGON_ID, CAPITAL, CORN, LOAD);
+        market.verifySaleOffered(WAGON_ID, CAPITAL, GRAIN, LOAD);
         final int gold = market.gold();
 
         // One haggle draws the result; the chooser shows it and the haggle is
         // spent, while the offer carries the terms the model keeps.
         market.haggle();
-        market.verifyHaggleResultShown(WAGON_ID, CAPITAL, CORN, LOAD);
-        market.verifySaleOffered(WAGON_ID, CAPITAL, CORN, LOAD);
+        market.verifyHaggleResultShown(WAGON_ID, CAPITAL, GRAIN, LOAD);
+        market.verifySaleOffered(WAGON_ID, CAPITAL, GRAIN, LOAD);
         visit.verifyChooserFits(900, 750);
         market.captureChooser("native-sale-en.png");
 
         // Cancelling the confirmation keeps the goods and the gold.
         market.sell();
-        market.verifySaleConfirmation(WAGON_ID, CAPITAL, CORN, LOAD);
+        market.verifySaleConfirmation(WAGON_ID, CAPITAL, GRAIN, LOAD);
         market.backFromDeal();
-        market.verifyHeld(WAGON_ID, CORN, LOAD);
+        market.verifyHeld(WAGON_ID, GRAIN, LOAD);
         market.verifyGold(gold);
-        market.verifyReceived(CAPITAL, CORN, 0);
-        market.verifyHaggleResultShown(WAGON_ID, CAPITAL, CORN, LOAD);
+        market.verifyReceived(CAPITAL, GRAIN, 0);
+        market.verifyHaggleResultShown(WAGON_ID, CAPITAL, GRAIN, LOAD);
 
         // Confirmed, the sale moves the goods and the gold exactly once.
-        final int price = market.quotedGold(WAGON_ID, CAPITAL, CORN, LOAD);
+        final int price = market.quotedGold(WAGON_ID, CAPITAL, GRAIN, LOAD);
         market.sell();
         market.confirmDeal();
-        market.verifyHeld(WAGON_ID, CORN, 0);
+        market.verifyHeld(WAGON_ID, GRAIN, 0);
         market.verifyGold(gold + price);
-        market.verifyReceived(CAPITAL, CORN, LOAD);
+        market.verifyReceived(CAPITAL, GRAIN, LOAD);
         // The emptied wagon is refused for lack of goods, so no sale controls
         // remain; its confirmed sale only opens the second stage (R-0161).
         market.verifyAdmission(NO_GOODS_EN);
@@ -128,8 +128,8 @@ public class TC_130_F121_native_sale_test extends AbstractMicroColTest {
         // Save and Continue keep the sale: no second sale is possible.
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
-        market.verifyReceived(CAPITAL, CORN, LOAD);
-        market.verifyHeld(WAGON_ID, CORN, 0);
+        market.verifyReceived(CAPITAL, GRAIN, LOAD);
+        market.verifyHeld(WAGON_ID, GRAIN, 0);
         market.verifyGold(gold + price);
         visit.enterSettlement(WAGON_AT, CAPITAL);
         market.verifyAdmission(NO_GOODS_EN);
@@ -137,7 +137,7 @@ public class TC_130_F121_native_sale_test extends AbstractMicroColTest {
         visit.escape();
         visit.verifyChooserClosed();
         teaching.nextTurn();
-        market.verifyReceived(CAPITAL, CORN, LOAD);
+        market.verifyReceived(CAPITAL, GRAIN, LOAD);
     }
 
     @Test
@@ -160,29 +160,29 @@ public class TC_130_F121_native_sale_test extends AbstractMicroColTest {
         visit.enterSettlement(WAGON_AT, CAPITAL);
         market.openMarket();
         final int gold = market.gold();
-        market.verifyGiftOffered(WAGON_ID, CAPITAL, CORN, LOAD);
+        market.verifyGiftOffered(WAGON_ID, CAPITAL, GRAIN, LOAD);
 
         // Backing out of the gift confirmation changes nothing.
         market.gift();
-        market.verifyGiftConfirmation(CORN, LOAD);
+        market.verifyGiftConfirmation(GRAIN, LOAD);
         market.backFromDeal();
-        market.verifyHeld(WAGON_ID, CORN, LOAD);
+        market.verifyHeld(WAGON_ID, GRAIN, LOAD);
         market.verifyGold(gold);
-        market.verifyReceived(CAPITAL, CORN, 0);
+        market.verifyReceived(CAPITAL, GRAIN, 0);
 
-        // The confirmed gift moves the corn, and no gold changes hands.
+        // The confirmed gift moves the grain, and no gold changes hands.
         market.gift();
         market.confirmDeal();
-        market.verifyHeld(WAGON_ID, CORN, 0);
+        market.verifyHeld(WAGON_ID, GRAIN, 0);
         market.verifyGold(gold);
-        market.verifyReceived(CAPITAL, CORN, LOAD);
+        market.verifyReceived(CAPITAL, GRAIN, LOAD);
         visit.escape();
         visit.verifyChooserClosed();
 
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
-        market.verifyReceived(CAPITAL, CORN, LOAD);
-        market.verifyHeld(WAGON_ID, CORN, 0);
+        market.verifyReceived(CAPITAL, GRAIN, LOAD);
+        market.verifyHeld(WAGON_ID, GRAIN, 0);
         market.verifyGold(gold);
     }
 
@@ -206,7 +206,7 @@ public class TC_130_F121_native_sale_test extends AbstractMicroColTest {
 
         visit.enterSettlement(WAGON_AT, CAPITAL);
         market.openMarket();
-        market.verifyCzechOffered(WAGON_ID, CAPITAL, CORN, LOAD);
+        market.verifyCzechOffered(WAGON_ID, CAPITAL, GRAIN, LOAD);
         visit.verifyChooserFits(900, 750);
         market.captureChooser("native-sale-cs.png");
         visit.escape();
@@ -236,16 +236,16 @@ public class TC_130_F121_native_sale_test extends AbstractMicroColTest {
         market.openMarket();
         market.chooseSalePieces(12);
         market.verifySaleQuantity(12);
-        market.verifySaleOffered(WAGON_ID, CAPITAL, CORN, 12);
+        market.verifySaleOffered(WAGON_ID, CAPITAL, GRAIN, 12);
         market.chooseSalePieces(40);
         market.verifySaleQuantity(40);
-        market.verifySaleOffered(WAGON_ID, CAPITAL, CORN, 40);
+        market.verifySaleOffered(WAGON_ID, CAPITAL, GRAIN, 40);
 
         // Leaving the chooser without confirming sells nothing.
         visit.escape();
         visit.verifyChooserClosed();
-        market.verifyHeld(WAGON_ID, CORN, LOAD);
-        market.verifyReceived(CAPITAL, CORN, 0);
+        market.verifyHeld(WAGON_ID, GRAIN, LOAD);
+        market.verifyReceived(CAPITAL, GRAIN, 0);
     }
 
 }

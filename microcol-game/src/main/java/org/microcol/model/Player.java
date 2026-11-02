@@ -880,29 +880,29 @@ public abstract class Player {
     }
 
     private void finishTurnPreparation(final boolean hadFranklin) {
-        // Before colony production, so the bells of this update count.
+        // Before colony production, so the owls of this update count.
         startIntervention();
         if (congress != null && !getColonies().isEmpty()) {
             congress.activate();
         }
         if (congress != null && congress.isActivated()) {
-            int projectedBells = 0;
+            int projectedOwls = 0;
             for (final Colony colony : getColonies()) {
-                projectedBells = Math.addExact(projectedBells,
+                projectedOwls = Math.addExact(projectedOwls,
                         Math.max(0,
                                 colony.getGoodsStats()
-                                        .getStatsByType(GoodsType.BELL)
+                                        .getStatsByType(GoodsType.OWLS)
                                         .getRowProduction()));
             }
-            congress.checkCredit(projectedBells);
+            congress.checkCredit(projectedOwls);
             if (congress.selected().orElse(null) == Founder.JOHN_PAUL_JONES
-                    && congress.willJoinAfter(projectedBells,
+                    && congress.willJoinAfter(projectedOwls,
                             model.getDifficulty())) {
                 Preconditions.checkState(model.canAddUnitInEurope(),
                         "No unit IDs remain for Jones's frigate");
             }
             if (congress.selected().orElse(null) == Founder.WILLIAM_BREWSTER
-                    && congress.willJoinAfter(projectedBells,
+                    && congress.willJoinAfter(projectedOwls,
                             model.getDifficulty())) {
                 recruitment.checkBrewsterJoin();
             }
@@ -994,22 +994,22 @@ public abstract class Player {
 
     /**
      * Calculated result of this colonial nation (R-0196): the base score with
-     * the destroyed native settlements, the bells beyond the earned
-     * intervention target, the independence bonus and the difficulty factor.
-     * Read-only; it neither changes the nation nor records a finished result.
+     * the destroyed native settlements, the owls beyond the earned intervention
+     * target, the independence bonus and the difficulty factor. Read-only; it
+     * neither changes the nation nor records a finished result.
      *
      * @return immutable calculated result of the current state
      */
     public ResultScore getResultScore() {
-        final long bells = intervention == null ? 0L
-                : intervention.getBellsBeyondTarget();
+        final long owls = intervention == null ? 0L
+                : intervention.getOwlsBeyondTarget();
         return ResultScore.of(BaseScore.calculate(this),
-                nativeSettlementsDestroyed, model.getDifficulty(), bells,
+                nativeSettlementsDestroyed, model.getDifficulty(), owls,
                 rebellionVictoryOrder, declarationYear);
     }
 
-    public int getCongressBells() {
-        return congress == null ? 0 : congress.bells();
+    public int getCongressOwls() {
+        return congress == null ? 0 : congress.owls();
     }
 
     public int getCongressTarget() {
@@ -1443,7 +1443,7 @@ public abstract class Player {
                 po -> mercenaryDeliveries.add(new MercenaryDelivery(po)));
     }
 
-    void checkCanCreditProducedBells(final int produced) {
+    void checkCanCreditProducedOwls(final int produced) {
         if (congress != null) {
             congress.checkCredit(produced);
         }
@@ -1455,7 +1455,7 @@ public abstract class Player {
         }
     }
 
-    void creditProducedBells(final int produced) {
+    void creditProducedOwls(final int produced) {
         if (congress != null) {
             congress.credit(produced);
         }
@@ -1464,7 +1464,7 @@ public abstract class Player {
             model.addTurnEvent(TurnEventProvider.getIntervention(this,
                     intervention.getTarget(), true));
         }
-        // Bell growth stops for good at the declaration.
+        // Owl growth stops for good at the declaration.
         if (!declaredIndependence) {
             getCrownRoster().ifPresent(roster -> roster.credit(produced));
         }
@@ -1628,10 +1628,10 @@ public abstract class Player {
         }
     }
 
-    public int getImmigrationCrosses() {
+    public int getImmigrationTorches() {
         Preconditions.checkState(recruitment != null,
                 "Kings have no immigration pool");
-        return recruitment.getCrosses();
+        return recruitment.getTorches();
     }
 
     public int getImmigrationTarget() {
@@ -1645,15 +1645,15 @@ public abstract class Player {
                 && recruitment.hasReachedTarget(model.getDifficulty(), name);
     }
 
-    void checkCanCreditProducedCrosses(final int produced) {
+    void checkCanCreditProducedTorches(final int produced) {
         if (recruitment != null) {
-            recruitment.checkCanCreditCrosses(produced);
+            recruitment.checkCanCreditTorches(produced);
         }
     }
 
-    void creditProducedCrosses(final int produced) {
+    void creditProducedTorches(final int produced) {
         if (recruitment != null) {
-            recruitment.creditCrosses(produced);
+            recruitment.creditTorches(produced);
         }
     }
 
@@ -2633,7 +2633,7 @@ public abstract class Player {
                     .filter(unit -> unit.getOwner() == this
                             && unit instanceof UnitFreeColonist)
                     .map(UnitFreeColonist.class::cast)
-                    .filter(unit -> unit.isHoldingGuns() && unit.isVeteran()
+                    .filter(unit -> unit.isHoldingWeapons() && unit.isVeteran()
                             && unit.getMilitaryRole() == MilitaryRole.COLONIAL)
                     .sorted(Comparator.comparingInt(Unit::getId))
                     .collect(Collectors.toList());

@@ -12,13 +12,13 @@ import org.microcol.model.store.CongressPo;
 
 import com.google.common.base.Preconditions;
 
-/** Persistent national bell account, membership, and frozen founder offer. */
+/** Persistent national owl account, membership, and frozen founder offer. */
 public final class Congress {
     private final Random random = new Random();
     private final List<Founder> members;
     private final List<Founder> candidates;
     private boolean activated;
-    private int bells;
+    private int owls;
     private Founder selected;
     private int generation;
     private boolean jonesDeliveryPending;
@@ -26,14 +26,14 @@ public final class Congress {
     Congress(final CongressPo po, final Difficulty difficulty) {
         Preconditions.checkArgument(po != null, "Missing colonial Congress");
         Preconditions.checkArgument(
-                po.getActivated() != null && po.getBells() != null
-                        && po.getBells() >= 0 && po.getMembers() != null
+                po.getActivated() != null && po.getOwls() != null
+                        && po.getOwls() >= 0 && po.getMembers() != null
                         && po.getCandidates() != null
                         && po.getGeneration() != null && po.getGeneration() >= 0
                         && po.getJonesDeliveryPending() != null,
                 "Incomplete Congress state");
         activated = po.getActivated();
-        bells = po.getBells();
+        owls = po.getOwls();
         generation = po.getGeneration();
         jonesDeliveryPending = po.getJonesDeliveryPending();
         selected = po.getSelected();
@@ -66,7 +66,7 @@ public final class Congress {
                                 && (members.size() == Founder.values().length
                                         || generation < Integer.MAX_VALUE)
                                 && candidates.size() == remainingCategories()
-                        : generation == 0 && bells == 0 && members.isEmpty()
+                        : generation == 0 && owls == 0 && members.isEmpty()
                                 && candidates.isEmpty() && selected == null
                                 && !jonesDeliveryPending,
                 "Invalid Congress activation or category offer");
@@ -78,12 +78,12 @@ public final class Congress {
     /**
      * Create the strict saved state for a nation before its first colony.
      *
-     * @return inactive Congress with no bells or offers
+     * @return inactive Congress with no owls or offers
      */
     public static CongressPo initial() {
         final CongressPo po = new CongressPo();
         po.setActivated(false);
-        po.setBells(0);
+        po.setOwls(0);
         po.setMembers(List.of());
         po.setCandidates(List.of());
         po.setSelected(null);
@@ -95,7 +95,7 @@ public final class Congress {
     CongressPo save() {
         final CongressPo po = new CongressPo();
         po.setActivated(activated);
-        po.setBells(bells);
+        po.setOwls(owls);
         po.setMembers(List.copyOf(members));
         po.setCandidates(List.copyOf(candidates));
         po.setSelected(selected);
@@ -173,8 +173,8 @@ public final class Congress {
         selected = offer.getFounder();
     }
 
-    int bells() {
-        return bells;
+    int owls() {
+        return owls;
     }
 
     int target(final Difficulty difficulty) {
@@ -190,25 +190,24 @@ public final class Congress {
 
     void checkCredit(final int produced) {
         Preconditions.checkArgument(produced >= 0,
-                "Produced bells must be nonnegative");
-        Math.addExact(bells, produced);
+                "Produced owls must be nonnegative");
+        Math.addExact(owls, produced);
     }
 
     void credit(final int produced) {
         checkCredit(produced);
         if (activated) {
-            bells += produced;
+            owls += produced;
         }
     }
 
     boolean canJoin(final Difficulty difficulty) {
-        return selected != null && bells >= target(difficulty);
+        return selected != null && owls >= target(difficulty);
     }
 
     boolean willJoinAfter(final int produced, final Difficulty difficulty) {
         checkCredit(produced);
-        return selected != null
-                && (long) bells + produced >= target(difficulty);
+        return selected != null && (long) owls + produced >= target(difficulty);
     }
 
     Founder join(final Difficulty difficulty) {
@@ -223,7 +222,7 @@ public final class Congress {
         }
         final int cost = target(difficulty);
         final Founder joined = selected;
-        bells -= cost;
+        owls -= cost;
         members.add(joined);
         selected = null;
         if (joined == Founder.JOHN_PAUL_JONES) {

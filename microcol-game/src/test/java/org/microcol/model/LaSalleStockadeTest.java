@@ -34,11 +34,10 @@ class LaSalleStockadeTest {
             ConstructionType.FORTRESS);
 
     private CongressPo congress(final List<Founder> members,
-            final List<Founder> offer, final Founder selected,
-            final int bells) {
+            final List<Founder> offer, final Founder selected, final int owls) {
         final CongressPo po = Congress.initial();
         po.setActivated(true);
-        po.setBells(bells);
+        po.setOwls(owls);
         po.setMembers(members);
         po.setCandidates(offer);
         po.setSelected(selected);
@@ -120,9 +119,9 @@ class LaSalleStockadeTest {
 
     private Unit enterField(final Model model, final Colony colony) {
         final Unit worker = model.addUnitOutSideColony(colony);
-        final ColonyField field = colony.getEmptyFieldsWithMaxCornProduction()
+        final ColonyField field = colony.getEmptyFieldsWithMaxGrainProduction()
                 .stream().findFirst().orElseThrow();
-        worker.placeToColonyField(field, GoodsType.CORN);
+        worker.placeToColonyField(field, GoodsType.GRAIN);
         return worker;
     }
 

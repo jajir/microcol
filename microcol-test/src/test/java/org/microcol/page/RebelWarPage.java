@@ -253,7 +253,7 @@ public final class RebelWarPage extends AbstractScreen {
     }
 
     /**
-     * The attacker lost the colony battle: it survived without its muskets and
+     * The attacker lost the colony battle: it survived without its weapons and
      * the Crown still holds Quebec with its one resident.
      */
     public void verifyLostColonyBattle(final int attackerId) throws Exception {
@@ -263,7 +263,7 @@ public final class RebelWarPage extends AbstractScreen {
         assertTrue(getModel().tryGetUnitById(attackerId).isPresent(),
                 "Unit " + attackerId + " must survive the lost battle");
         assertFalse(((UnitFreeColonist) getModel().getUnitById(attackerId))
-                .isHoldingGuns());
+                .isHoldingWeapons());
         verifyColonyHeldBy(CROWN, 1);
     }
 }

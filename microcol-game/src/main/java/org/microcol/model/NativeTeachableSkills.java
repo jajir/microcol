@@ -51,16 +51,16 @@ public final class NativeTeachableSkills {
 
     /**
      * Farmers take food from land and fishermen from water, so both can share
-     * corn without matching each other's source. Other skills take any square.
+     * grain without matching each other's source. Other skills take any square.
      */
     private static boolean isSource(final UnitType skill,
             final Terrain terrain) {
         if (skill == UnitType.EXPERT_FISHERMAN) {
-            return skill.getFieldProductionModifier(GoodsType.CORN,
+            return skill.getFieldProductionModifier(GoodsType.GRAIN,
                     terrain) > 1;
         }
         if (skill == UnitType.EXPERT_FARMER) {
-            return skill.getFieldProductionModifier(GoodsType.CORN,
+            return skill.getFieldProductionModifier(GoodsType.GRAIN,
                     terrain) > 1;
         }
         return true;

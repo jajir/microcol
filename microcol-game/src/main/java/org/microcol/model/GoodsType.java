@@ -10,19 +10,19 @@ import com.google.common.collect.ImmutableList;
 
 public final class GoodsType {
 
-    public final static GoodsType CORN = GoodsTypeBuilder.make().setName("CORN")
+    public final static GoodsType GRAIN = GoodsTypeBuilder.make()
+            .setName("GRAIN").setCanBeBought(true).build();
+
+    public final static GoodsType OLIVES = GoodsTypeBuilder.make()
+            .setName("OLIVES").setCanBeBought(true).build();
+
+    public final static GoodsType GRAPES = GoodsTypeBuilder.make()
+            .setName("GRAPES").setCanBeBought(true).build();
+
+    public final static GoodsType WOOL = GoodsTypeBuilder.make().setName("WOOL")
             .setCanBeBought(true).build();
 
-    public final static GoodsType SUGAR = GoodsTypeBuilder.make()
-            .setName("SUGAR").setCanBeBought(true).build();
-
-    public final static GoodsType TOBACCO = GoodsTypeBuilder.make()
-            .setName("TOBACCO").setCanBeBought(true).build();
-
-    public final static GoodsType COTTON = GoodsTypeBuilder.make()
-            .setName("COTTON").setCanBeBought(true).build();
-
-    public final static GoodsType FUR = GoodsTypeBuilder.make().setName("FUR")
+    public final static GoodsType CLAY = GoodsTypeBuilder.make().setName("CLAY")
             .setCanBeBought(true).build();
 
     public final static GoodsType LUMBER = GoodsTypeBuilder.make()
@@ -37,17 +37,17 @@ public final class GoodsType {
     public final static GoodsType HORSE = GoodsTypeBuilder.make()
             .setName("HORSE").setCanBeBought(true).build();
 
-    public final static GoodsType RUM = GoodsTypeBuilder.make().setName("RUM")
+    public final static GoodsType OLIVE_OIL = GoodsTypeBuilder.make()
+            .setName("OLIVE_OIL").setCanBeBought(true).build();
+
+    public final static GoodsType WINE = GoodsTypeBuilder.make().setName("WINE")
             .setCanBeBought(true).build();
 
-    public final static GoodsType CIGARS = GoodsTypeBuilder.make()
-            .setName("CIGARS").setCanBeBought(true).build();
+    public final static GoodsType CLOTH = GoodsTypeBuilder.make()
+            .setName("CLOTH").setCanBeBought(true).build();
 
-    public final static GoodsType SILK = GoodsTypeBuilder.make().setName("SILK")
-            .setCanBeBought(true).build();
-
-    public final static GoodsType COAT = GoodsTypeBuilder.make().setName("COAT")
-            .setCanBeBought(true).build();
+    public final static GoodsType AMPHORAE = GoodsTypeBuilder.make()
+            .setName("AMPHORAE").setCanBeBought(true).build();
 
     public final static GoodsType GOODS = GoodsTypeBuilder.make()
             .setName("GOODS").setCanBeBought(true).build();
@@ -55,22 +55,22 @@ public final class GoodsType {
     public final static GoodsType TOOLS = GoodsTypeBuilder.make()
             .setName("TOOLS").setCanBeBought(true).build();
 
-    public final static GoodsType MUSKET = GoodsTypeBuilder.make()
-            .setName("MUSKET").setCanBeBought(true).build();
+    public final static GoodsType WEAPONS = GoodsTypeBuilder.make()
+            .setName("WEAPONS").setCanBeBought(true).build();
 
     public final static GoodsType HAMMERS = GoodsTypeBuilder.make()
             .setName("HAMMERS").setCanBeBought(false).build();
 
-    public final static GoodsType CROSS = GoodsTypeBuilder.make()
-            .setName("CROSS").setCanBeBought(false).build();
+    public final static GoodsType TORCHES = GoodsTypeBuilder.make()
+            .setName("TORCHES").setCanBeBought(false).build();
 
-    public final static GoodsType BELL = GoodsTypeBuilder.make().setName("BELL")
+    public final static GoodsType OWLS = GoodsTypeBuilder.make().setName("OWLS")
             .setCanBeBought(false).build();
 
     public final static List<GoodsType> GOOD_TYPES = ImmutableList
-            .<GoodsType>of(CORN, SUGAR, TOBACCO, COTTON, FUR, LUMBER, ORE,
-                    SILVER, HORSE, RUM, CIGARS, SILK, COAT, GOODS, TOOLS,
-                    MUSKET, HAMMERS, CROSS, BELL);
+            .<GoodsType>of(GRAIN, OLIVES, GRAPES, WOOL, CLAY, LUMBER, ORE,
+                    SILVER, HORSE, OLIVE_OIL, WINE, CLOTH, AMPHORAE, GOODS,
+                    TOOLS, WEAPONS, HAMMERS, TORCHES, OWLS);
 
     public final static List<GoodsType> BUYABLE_GOOD_TYPES = GOOD_TYPES.stream()
             .filter(goodsType -> goodsType.isCanBeBought())

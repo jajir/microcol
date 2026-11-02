@@ -9,7 +9,7 @@ public enum CongressText implements MessageKeyResource {
     title, choose, back, support, allMembers, jonesEffect, progress, objective,
     chooseObjective, members, none, jonesPending, jonesDelivered, firstColony,
     chosen, changed, founderJoined, royalInfantry, royalCavalry, royalArtillery,
-    royalMenOfWar, royalFamily, royalBells, royalStopped, interventionAnnounced,
+    royalMenOfWar, royalFamily, royalOwls, royalStopped, interventionAnnounced,
     interventionEarned, interventionProgress, interventionAwaiting,
     interventionDelivered, interventionPending, MILITARY, POLITICAL, TRADE,
     RELIGIOUS, EXPLORATION, HERNAN_CORTES, FRANCIS_DRAKE, JOHN_PAUL_JONES,

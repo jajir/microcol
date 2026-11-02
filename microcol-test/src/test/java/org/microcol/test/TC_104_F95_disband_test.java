@@ -58,7 +58,7 @@ public class TC_104_F95_disband_test extends AbstractMicroColTest {
         disband.verifyConfirmation("Disband unit", QUESTION,
                 "No colony of yours is on this square, so all equipment is lost.");
         disband.verifyEquipmentLines("Tools: 0 kept, 30 lost.",
-                "Horses: 0 kept, 50 lost.", "Muskets: 0 kept, 0 lost.");
+                "Horses: 0 kept, 50 lost.", "Weapons: 0 kept, 0 lost.");
         disband.verifyOverflowAcknowledgement(false);
         disband.verifyConfirmEnabled(true);
         // Cancel changes nothing: the colonist, its equipment and selection
@@ -136,7 +136,7 @@ public class TC_104_F95_disband_test extends AbstractMicroColTest {
         disband.verifyConfirmation("Disband unit", QUESTION,
                 "Kept equipment goes to New Amsterdam. The unit's orders end without any work being done.");
         disband.verifyEquipmentLines("Tools: 35 kept, 0 lost.",
-                "Horses: 50 kept, 0 lost.", "Muskets: 0 kept, 0 lost.");
+                "Horses: 50 kept, 0 lost.", "Weapons: 0 kept, 0 lost.");
         disband.verifyOverflowAcknowledgement(false);
         // Confirming moves the kept horses and tools into the warehouse.
         disband.confirm();
@@ -169,7 +169,7 @@ public class TC_104_F95_disband_test extends AbstractMicroColTest {
         // Twenty horses fit the warehouse; thirty would be lost.
         disband.useControl();
         disband.verifyEquipmentLines("Tools: 0 kept, 0 lost.",
-                "Horses: 20 kept, 30 lost.", "Muskets: 0 kept, 0 lost.");
+                "Horses: 20 kept, 30 lost.", "Weapons: 0 kept, 0 lost.");
         disband.verifyOverflowAcknowledgement(true);
         disband.verifyConfirmEnabled(false);
         // Cancel keeps the unit and the warehouse exactly as they were.

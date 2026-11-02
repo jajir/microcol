@@ -112,7 +112,7 @@ class EuropeanSpecialistTest {
                 .filter(unit -> unit.getType() == UnitType.EXPERT_ORE_MINER)
                 .findFirst().orElseThrow();
         assertFalse(miner.canAttack());
-        miner.setHoldingGuns(true);
+        miner.setHoldingWeapons(true);
         assertTrue(miner.canAttack());
         assertSame(UnitType.EXPERT_ORE_MINER, miner.getType());
         assertTrue(miner.getType().getAttackableUnitType()
@@ -132,7 +132,7 @@ class EuropeanSpecialistTest {
                 .filter(unit -> unit.getType() == UnitType.SEASONED_SCOUT)
                 .findFirst().orElseThrow();
         assertEquals(2, scout.getSightRadius());
-        scout.setHoldingGuns(true);
+        scout.setHoldingWeapons(true);
         assertEquals(2, scout.getSightRadius());
         assertSame(UnitType.SEASONED_SCOUT, scout.getType());
     }
@@ -199,7 +199,7 @@ class EuropeanSpecialistTest {
         final ColonyJobChoice offer = colony.getJobChoices(expert).stream()
                 .filter(choice -> choice
                         .getKind() == ColonyJobChoice.Kind.BEST_FIELD
-                        && choice.getGoodsType() == GoodsType.CORN
+                        && choice.getGoodsType() == GoodsType.GRAIN
                         && choice.getUnavailableReason().isEmpty())
                 .findFirst().orElseThrow();
         assertTrue(offer.isSpecialty());
@@ -238,7 +238,7 @@ class EuropeanSpecialistTest {
                 .filter(unit -> unit.getType() == UnitType.EXPERT_FARMER)
                 .findFirst().orElseThrow();
         final int id = farmer.getId();
-        farmer.setHoldingGuns(true);
+        farmer.setHoldingWeapons(true);
         final double civilianStrength = CombatStrengths.armedLandBase(farmer);
         assertFalse(farmer.isVeteran());
         farmer.completeEducation(UnitType.VETERAN_SOLDIER);

@@ -33,8 +33,8 @@ public class TC_53_F44_fortified_population_test extends AbstractMicroColTest {
         FortifiedPopulationPage people = new FortifiedPopulationPage(
                 getContext());
         people.verifyPopulation(3);
-        people.verifyFortDoesNotOverlap("id_tobacco", "id_rum", "id_carpenter",
-                "id_fur");
+        people.verifyFortDoesNotOverlap("id_winery", "id_oil_press",
+                "id_carpenter", "id_pottery");
         people.captureDialog("id_fort", "r82-fortified-colony.png");
         colony.rememberWorld();
         // A rejected drag leaves the full saved world unchanged and explains
@@ -47,7 +47,7 @@ public class TC_53_F44_fortified_population_test extends AbstractMicroColTest {
         // Internal reassignment keeps all three residents.
         ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromIndoor("id_carpenter", 0);
-        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.CROSS);
+        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.TORCHES);
         jobs.confirm();
         people.verifyWorker(200, ConstructionType.CHAPEL, false);
         people.verifyPopulation(3);
@@ -79,10 +79,10 @@ public class TC_53_F44_fortified_population_test extends AbstractMicroColTest {
         // Remove food-producing jobs, then expose the colony to an actual
         // update.
         jobs.openFromField(0);
-        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.CROSS);
+        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.TORCHES);
         jobs.confirm();
         jobs.openFromField(1);
-        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.BELL);
+        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.OWLS);
         jobs.confirm();
         FortifiedPopulationPage people = new FortifiedPopulationPage(
                 getContext());

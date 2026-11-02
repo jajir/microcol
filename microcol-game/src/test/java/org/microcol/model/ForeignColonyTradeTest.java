@@ -62,19 +62,19 @@ class ForeignColonyTradeTest {
     void sale_moves_goods_into_the_colony_and_pays_the_bid_without_home_tax() {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
-        load(wagon, GoodsType.CORN, 5);
+        load(wagon, GoodsType.GRAIN, 5);
         final Colony quebec = quebec(model);
         final Player dutch = model.getPlayerByName("Dutch");
         final Player france = model.getPlayerByName("France");
-        final int bid = bid(model, GoodsType.CORN);
+        final int bid = bid(model, GoodsType.GRAIN);
         final int dutchGold = dutch.getGold();
         final int franceGold = france.getGold();
-        final int stock = stock(quebec, GoodsType.CORN);
+        final int stock = stock(quebec, GoodsType.GRAIN);
         final Location where = wagon.getLocation();
         final int moves = wagon.getMovementThirds();
 
         final ForeignColonyTradeQuote quote = model.quoteForeignColonySale(
-                wagon, quebec, Goods.of(GoodsType.CORN, 5));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, 5));
         assertTrue(quote.isLegal());
         assertTrue(quote.isSale());
         assertEquals(WAGON_ID, quote.getVisitorId());
@@ -85,8 +85,8 @@ class ForeignColonyTradeTest {
 
         assertEquals(dutchGold + 5 * bid, dutch.getGold());
         assertEquals(franceGold - 5 * bid, france.getGold());
-        assertEquals(0, carried(wagon, GoodsType.CORN));
-        assertEquals(stock + 5, stock(quebec, GoodsType.CORN));
+        assertEquals(0, carried(wagon, GoodsType.GRAIN));
+        assertEquals(stock + 5, stock(quebec, GoodsType.GRAIN));
         // The visit is no movement, attack or capture.
         assertEquals(where, wagon.getLocation());
         assertEquals(moves, wagon.getMovementThirds());
@@ -100,13 +100,13 @@ class ForeignColonyTradeTest {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
         final Colony quebec = quebec(model);
-        final int bid = bid(model, GoodsType.CORN);
-        final int ask = ask(model, GoodsType.TOBACCO);
-        // Enough corn that its bid total exceeds one piece of tobacco's ask.
+        final int bid = bid(model, GoodsType.GRAIN);
+        final int ask = ask(model, GoodsType.GRAPES);
+        // Enough grain that its bid total exceeds one piece of grapes's ask.
         final int incoming = ask / bid + 1;
-        load(wagon, GoodsType.CORN, incoming);
-        stockUp(quebec, GoodsType.TOBACCO, 4);
-        final int tobacco = stock(quebec, GoodsType.TOBACCO);
+        load(wagon, GoodsType.GRAIN, incoming);
+        stockUp(quebec, GoodsType.GRAPES, 4);
+        final int grapes = stock(quebec, GoodsType.GRAPES);
         final Player dutch = model.getPlayerByName("Dutch");
         final Player france = model.getPlayerByName("France");
         final int dutchGold = dutch.getGold();
@@ -114,8 +114,8 @@ class ForeignColonyTradeTest {
         final int net = incoming * bid - ask;
 
         final ForeignColonyTradeQuote quote = model.quoteForeignColonyBarter(
-                wagon, quebec, Goods.of(GoodsType.CORN, incoming),
-                Goods.of(GoodsType.TOBACCO, 1));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, incoming),
+                Goods.of(GoodsType.GRAPES, 1));
         assertTrue(quote.isLegal());
         assertTrue(net > 0);
         assertEquals(net, quote.getNetGold());
@@ -125,9 +125,9 @@ class ForeignColonyTradeTest {
         assertEquals(franceGold - net, france.getGold());
         assertEquals(dutchGold + franceGold,
                 dutch.getGold() + france.getGold());
-        assertEquals(0, carried(wagon, GoodsType.CORN));
-        assertEquals(1, carried(wagon, GoodsType.TOBACCO));
-        assertEquals(tobacco - 1, stock(quebec, GoodsType.TOBACCO));
+        assertEquals(0, carried(wagon, GoodsType.GRAIN));
+        assertEquals(1, carried(wagon, GoodsType.GRAPES));
+        assertEquals(grapes - 1, stock(quebec, GoodsType.GRAPES));
         assertRejectedWithoutEffects(model, wagon, quebec, quote);
     }
 
@@ -136,11 +136,11 @@ class ForeignColonyTradeTest {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
         final Colony quebec = quebec(model);
-        final int bid = bid(model, GoodsType.CORN);
-        final int ask = ask(model, GoodsType.TOBACCO);
+        final int bid = bid(model, GoodsType.GRAIN);
+        final int ask = ask(model, GoodsType.GRAPES);
         final int outgoing = bid / ask + 1;
-        load(wagon, GoodsType.CORN, 1);
-        stockUp(quebec, GoodsType.TOBACCO, outgoing + 3);
+        load(wagon, GoodsType.GRAIN, 1);
+        stockUp(quebec, GoodsType.GRAPES, outgoing + 3);
         final Player dutch = model.getPlayerByName("Dutch");
         final Player france = model.getPlayerByName("France");
         final int dutchGold = dutch.getGold();
@@ -148,8 +148,8 @@ class ForeignColonyTradeTest {
         final int net = bid - outgoing * ask;
 
         final ForeignColonyTradeQuote quote = model.quoteForeignColonyBarter(
-                wagon, quebec, Goods.of(GoodsType.CORN, 1),
-                Goods.of(GoodsType.TOBACCO, outgoing));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, 1),
+                Goods.of(GoodsType.GRAPES, outgoing));
         assertTrue(quote.isLegal());
         assertTrue(net < 0);
         assertEquals(net, quote.getNetGold());
@@ -157,7 +157,7 @@ class ForeignColonyTradeTest {
 
         assertEquals(dutchGold + net, dutch.getGold());
         assertEquals(franceGold - net, france.getGold());
-        assertEquals(outgoing, carried(wagon, GoodsType.TOBACCO));
+        assertEquals(outgoing, carried(wagon, GoodsType.GRAPES));
         assertRejectedWithoutEffects(model, wagon, quebec, quote);
     }
 
@@ -165,17 +165,17 @@ class ForeignColonyTradeTest {
     void founder_absent_refuses_the_trade_without_effects() {
         final Model model = setup(false, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
-        load(wagon, GoodsType.CORN, 3);
+        load(wagon, GoodsType.GRAIN, 3);
         final Colony quebec = quebec(model);
 
         final ForeignColonyTradeQuote quote = model.quoteForeignColonySale(
-                wagon, quebec, Goods.of(GoodsType.CORN, 3));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, 3));
         assertEquals(ForeignColonyTradeProblem.FOUNDER_ABSENT,
                 quote.getProblem());
         assertEquals(ForeignColonyTradeProblem.FOUNDER_ABSENT,
                 model.getForeignColonyTradeAccess(wagon, quebec));
         assertEquals(0, model.getForeignColonyTradeLimit(wagon, quebec,
-                GoodsType.CORN, true));
+                GoodsType.GRAIN, true));
         assertRejectedWithoutEffects(model, wagon, quebec, quote);
     }
 
@@ -189,7 +189,7 @@ class ForeignColonyTradeTest {
                 MissionImpl.getPredefinedGameOverEvaluators());
         model.startGame();
         final Unit wagon = model.getUnitById(WAGON_ID);
-        load(wagon, GoodsType.CORN, 3);
+        load(wagon, GoodsType.GRAIN, 3);
         final Colony quebec = quebec(model);
         assertEquals(ForeignColonyTradeProblem.FOUNDER_ABSENT,
                 model.getForeignColonyTradeAccess(wagon, quebec));
@@ -197,44 +197,44 @@ class ForeignColonyTradeTest {
         RealFounderJoin.joinThroughOwnerUpdate(model, Founder.JAN_DE_WITT);
         assertEquals(ForeignColonyTradeProblem.NONE,
                 model.getForeignColonyTradeAccess(wagon, quebec));
-        final int bid = bid(model, GoodsType.CORN);
+        final int bid = bid(model, GoodsType.GRAIN);
         final Player dutch = model.getPlayerByName("Dutch");
         final int dutchGold = dutch.getGold();
         final ForeignColonyTradeQuote quote = model.quoteForeignColonySale(
-                wagon, quebec, Goods.of(GoodsType.CORN, 3));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, 3));
         assertTrue(quote.isLegal());
         model.tradeWithForeignColony(wagon, quebec, quote);
         assertEquals(dutchGold + 3 * bid, dutch.getGold());
-        assertEquals(0, carried(wagon, GoodsType.CORN));
+        assertEquals(0, carried(wagon, GoodsType.GRAIN));
     }
 
     @Test
     void war_refuses_the_trade_and_alliance_permits_it() {
         final Model war = setup(true, EuropeanRelationState.WAR, false);
         final Unit warWagon = war.getUnitById(WAGON_ID);
-        load(warWagon, GoodsType.CORN, 2);
+        load(warWagon, GoodsType.GRAIN, 2);
         final ForeignColonyTradeQuote refused = war.quoteForeignColonySale(
-                warWagon, quebec(war), Goods.of(GoodsType.CORN, 2));
+                warWagon, quebec(war), Goods.of(GoodsType.GRAIN, 2));
         assertEquals(ForeignColonyTradeProblem.AT_WAR, refused.getProblem());
         assertRejectedWithoutEffects(war, warWagon, quebec(war), refused);
 
         final Model allied = setup(true, EuropeanRelationState.ALLIANCE, false);
         final Unit allyWagon = allied.getUnitById(WAGON_ID);
-        load(allyWagon, GoodsType.CORN, 2);
+        load(allyWagon, GoodsType.GRAIN, 2);
         assertTrue(allied.quoteForeignColonySale(allyWagon, quebec(allied),
-                Goods.of(GoodsType.CORN, 2)).isLegal());
+                Goods.of(GoodsType.GRAIN, 2)).isLegal());
     }
 
     @Test
     void loaded_ship_at_sea_trades_like_a_wagon() {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit ship = model.getUnitById(SHIP_ID);
-        load(ship, GoodsType.CORN, 2);
+        load(ship, GoodsType.GRAIN, 2);
         final ForeignColonyTradeQuote quote = model.quoteForeignColonySale(ship,
-                quebec(model), Goods.of(GoodsType.CORN, 2));
+                quebec(model), Goods.of(GoodsType.GRAIN, 2));
         assertTrue(quote.isLegal());
         model.tradeWithForeignColony(ship, quebec(model), quote);
-        assertEquals(0, carried(ship, GoodsType.CORN));
+        assertEquals(0, carried(ship, GoodsType.GRAIN));
     }
 
     @Test
@@ -243,24 +243,24 @@ class ForeignColonyTradeTest {
         final Player dutch = model.getPlayerByName("Dutch");
         assertFalse(dutch.canTradeInEurope());
         final Unit wagon = model.getUnitById(WAGON_ID);
-        load(wagon, GoodsType.CORN, 3);
+        load(wagon, GoodsType.GRAIN, 3);
         final Colony quebec = quebec(model);
         final int dutchGold = dutch.getGold();
-        final int bid = bid(model, GoodsType.CORN);
+        final int bid = bid(model, GoodsType.GRAIN);
 
         final ForeignColonyTradeQuote quote = model.quoteForeignColonySale(
-                wagon, quebec, Goods.of(GoodsType.CORN, 3));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, 3));
         assertTrue(quote.isLegal());
         model.tradeWithForeignColony(wagon, quebec, quote);
         assertEquals(dutchGold + 3 * bid, dutch.getGold());
-        assertEquals(0, carried(wagon, GoodsType.CORN));
+        assertEquals(0, carried(wagon, GoodsType.GRAIN));
         // The foreign trade is its own permission; Europe stays closed.
         assertFalse(dutch.canTradeInEurope());
         // The same founder and relation checks still apply under rebellion.
         final Model withoutFounder = setup(false, EuropeanRelationState.PEACE,
                 true);
         final Unit other = withoutFounder.getUnitById(WAGON_ID);
-        load(other, GoodsType.CORN, 3);
+        load(other, GoodsType.GRAIN, 3);
         assertEquals(ForeignColonyTradeProblem.FOUNDER_ABSENT, withoutFounder
                 .getForeignColonyTradeAccess(other, quebec(withoutFounder)));
     }
@@ -271,33 +271,32 @@ class ForeignColonyTradeTest {
         final Unit empty = model.getUnitById(WAGON_ID);
         assertEquals(ForeignColonyTradeProblem.EMPTY_CARGO,
                 model.quoteForeignColonySale(empty, quebec(model),
-                        Goods.of(GoodsType.CORN, 1)).getProblem());
+                        Goods.of(GoodsType.GRAIN, 1)).getProblem());
 
         final Unit far = model.getUnitById(FAR_WAGON_ID);
-        load(far, GoodsType.CORN, 2);
+        load(far, GoodsType.GRAIN, 2);
         assertEquals(ForeignColonyTradeProblem.NO_ACCESS,
                 model.getForeignColonyTradeAccess(far, quebec(model)));
         assertFalse(model.quoteForeignColonySale(far, quebec(model),
-                Goods.of(GoodsType.CORN, 2)).isLegal());
+                Goods.of(GoodsType.GRAIN, 2)).isLegal());
     }
 
     @Test
     void full_colony_warehouse_refuses_incoming_goods() {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
-        load(wagon, GoodsType.TOBACCO, 1);
+        load(wagon, GoodsType.GRAPES, 1);
         final Colony quebec = quebec(model);
-        // Tobacco has a real storage limit; fill the warehouse exactly to it.
-        stockUp(quebec, GoodsType.TOBACCO, quebec.getWarehouse()
-                .getStorageCapacity(GoodsType.TOBACCO).getAmount());
-        assertEquals(0,
-                quebec.getWarehouse().getFreeStorage(GoodsType.TOBACCO));
+        // Grapes has a real storage limit; fill the warehouse exactly to it.
+        stockUp(quebec, GoodsType.GRAPES, quebec.getWarehouse()
+                .getStorageCapacity(GoodsType.GRAPES).getAmount());
+        assertEquals(0, quebec.getWarehouse().getFreeStorage(GoodsType.GRAPES));
         final ForeignColonyTradeQuote quote = model.quoteForeignColonySale(
-                wagon, quebec, Goods.of(GoodsType.TOBACCO, 1));
+                wagon, quebec, Goods.of(GoodsType.GRAPES, 1));
         assertEquals(ForeignColonyTradeProblem.HOST_CAPACITY,
                 quote.getProblem());
         assertEquals(0, model.getForeignColonyTradeLimit(wagon, quebec,
-                GoodsType.TOBACCO, true));
+                GoodsType.GRAPES, true));
         assertRejectedWithoutEffects(model, wagon, quebec, quote);
     }
 
@@ -305,15 +304,15 @@ class ForeignColonyTradeTest {
     void short_colony_stock_refuses_the_barter() {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
-        load(wagon, GoodsType.CORN, 1);
+        load(wagon, GoodsType.GRAIN, 1);
         final Colony quebec = quebec(model);
-        final int tobacco = stock(quebec, GoodsType.TOBACCO);
+        final int grapes = stock(quebec, GoodsType.GRAPES);
         final ForeignColonyTradeQuote quote = model.quoteForeignColonyBarter(
-                wagon, quebec, Goods.of(GoodsType.CORN, 1),
-                Goods.of(GoodsType.TOBACCO, tobacco + 1));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, 1),
+                Goods.of(GoodsType.GRAPES, grapes + 1));
         assertEquals(ForeignColonyTradeProblem.HOST_STOCK, quote.getProblem());
-        assertEquals(tobacco,
-                model.getForeignColonyStock(quebec, GoodsType.TOBACCO));
+        assertEquals(grapes,
+                model.getForeignColonyStock(quebec, GoodsType.GRAPES));
         assertRejectedWithoutEffects(model, wagon, quebec, quote);
     }
 
@@ -323,22 +322,22 @@ class ForeignColonyTradeTest {
         final Unit wagon = model.getUnitById(WAGON_ID);
         final Colony quebec = quebec(model);
         richTreasuries(model);
-        fillWithSugar(wagon);
-        clear(quebec, GoodsType.SUGAR);
-        stockUp(quebec, GoodsType.CORN, 1000);
+        fillWithOlives(wagon);
+        clear(quebec, GoodsType.OLIVES);
+        stockUp(quebec, GoodsType.GRAIN, 1000);
 
-        // Half of the first hold leaves: it still holds sugar, so no room.
+        // Half of the first hold leaves: it still holds olives, so no room.
         assertEquals(0, model.getForeignColonyReceiveLimit(wagon, quebec,
-                Goods.of(GoodsType.SUGAR, HOLD / 2), GoodsType.CORN));
+                Goods.of(GoodsType.OLIVES, HOLD / 2), GoodsType.GRAIN));
         final ForeignColonyTradeQuote partial = model.quoteForeignColonyBarter(
-                wagon, quebec, Goods.of(GoodsType.SUGAR, HOLD / 2),
-                Goods.of(GoodsType.CORN, 1));
+                wagon, quebec, Goods.of(GoodsType.OLIVES, HOLD / 2),
+                Goods.of(GoodsType.GRAIN, 1));
         assertEquals(ForeignColonyTradeProblem.CARRIER_CAPACITY,
                 partial.getProblem());
         assertRejectedWithoutEffects(model, wagon, quebec, partial);
         // A sale needs no room back, so the same partial hold may be sold.
         assertTrue(model.quoteForeignColonySale(wagon, quebec,
-                Goods.of(GoodsType.SUGAR, HOLD / 2)).isLegal());
+                Goods.of(GoodsType.OLIVES, HOLD / 2)).isLegal());
     }
 
     @Test
@@ -349,32 +348,33 @@ class ForeignColonyTradeTest {
         final Player dutch = model.getPlayerByName("Dutch");
         final Player france = model.getPlayerByName("France");
         richTreasuries(model);
-        fillWithSugar(wagon);
-        clear(quebec, GoodsType.SUGAR);
-        stockUp(quebec, GoodsType.CORN, 1000);
-        final int corn = stock(quebec, GoodsType.CORN);
+        fillWithOlives(wagon);
+        clear(quebec, GoodsType.OLIVES);
+        stockUp(quebec, GoodsType.GRAIN, 1000);
+        final int grain = stock(quebec, GoodsType.GRAIN);
         final int totalGold = dutch.getGold() + france.getGold();
 
         assertEquals(HOLD, model.getForeignColonyReceiveLimit(wagon, quebec,
-                Goods.of(GoodsType.SUGAR, HOLD), GoodsType.CORN));
+                Goods.of(GoodsType.OLIVES, HOLD), GoodsType.GRAIN));
         final ForeignColonyTradeQuote tooMuch = model.quoteForeignColonyBarter(
-                wagon, quebec, Goods.of(GoodsType.SUGAR, HOLD),
-                Goods.of(GoodsType.CORN, HOLD + 1));
+                wagon, quebec, Goods.of(GoodsType.OLIVES, HOLD),
+                Goods.of(GoodsType.GRAIN, HOLD + 1));
         assertEquals(ForeignColonyTradeProblem.CARRIER_CAPACITY,
                 tooMuch.getProblem());
         assertRejectedWithoutEffects(model, wagon, quebec, tooMuch);
 
         final ForeignColonyTradeQuote full = model.quoteForeignColonyBarter(
-                wagon, quebec, Goods.of(GoodsType.SUGAR, HOLD),
-                Goods.of(GoodsType.CORN, HOLD));
+                wagon, quebec, Goods.of(GoodsType.OLIVES, HOLD),
+                Goods.of(GoodsType.GRAIN, HOLD));
         assertTrue(full.isLegal());
         model.tradeWithForeignColony(wagon, quebec, full);
 
         // Goods and gold are conserved between the two sides.
-        assertEquals((WAGON_HOLDS - 1) * HOLD, carried(wagon, GoodsType.SUGAR));
-        assertEquals(HOLD, carried(wagon, GoodsType.CORN));
-        assertEquals(HOLD, stock(quebec, GoodsType.SUGAR));
-        assertEquals(corn - HOLD, stock(quebec, GoodsType.CORN));
+        assertEquals((WAGON_HOLDS - 1) * HOLD,
+                carried(wagon, GoodsType.OLIVES));
+        assertEquals(HOLD, carried(wagon, GoodsType.GRAIN));
+        assertEquals(HOLD, stock(quebec, GoodsType.OLIVES));
+        assertEquals(grain - HOLD, stock(quebec, GoodsType.GRAIN));
         assertEquals(totalGold, dutch.getGold() + france.getGold());
         assertRejectedWithoutEffects(model, wagon, quebec, full);
     }
@@ -387,26 +387,27 @@ class ForeignColonyTradeTest {
         richTreasuries(model);
         final List<CargoSlot> holds = ((UnitWithCargo) wagon).getCargo()
                 .getSlots();
-        holds.get(0).addGoods(Goods.of(GoodsType.CORN, 60));
-        holds.get(1).addGoods(Goods.of(GoodsType.SUGAR, HOLD));
-        clear(quebec, GoodsType.SUGAR);
-        stockUp(quebec, GoodsType.CORN, 1000);
+        holds.get(0).addGoods(Goods.of(GoodsType.GRAIN, 60));
+        holds.get(1).addGoods(Goods.of(GoodsType.OLIVES, HOLD));
+        clear(quebec, GoodsType.OLIVES);
+        stockUp(quebec, GoodsType.GRAIN, 1000);
 
-        // 40 free in the corn hold plus the whole hold that the sugar empties.
+        // 40 free in the grain hold plus the whole hold that the olives
+        // empties.
         final int room = HOLD - 60 + HOLD;
         assertEquals(room, model.getForeignColonyReceiveLimit(wagon, quebec,
-                Goods.of(GoodsType.SUGAR, HOLD), GoodsType.CORN));
+                Goods.of(GoodsType.OLIVES, HOLD), GoodsType.GRAIN));
         assertEquals(ForeignColonyTradeProblem.CARRIER_CAPACITY,
                 model.quoteForeignColonyBarter(wagon, quebec,
-                        Goods.of(GoodsType.SUGAR, HOLD),
-                        Goods.of(GoodsType.CORN, room + 1)).getProblem());
+                        Goods.of(GoodsType.OLIVES, HOLD),
+                        Goods.of(GoodsType.GRAIN, room + 1)).getProblem());
         final ForeignColonyTradeQuote fits = model.quoteForeignColonyBarter(
-                wagon, quebec, Goods.of(GoodsType.SUGAR, HOLD),
-                Goods.of(GoodsType.CORN, room));
+                wagon, quebec, Goods.of(GoodsType.OLIVES, HOLD),
+                Goods.of(GoodsType.GRAIN, room));
         assertTrue(fits.isLegal());
         model.tradeWithForeignColony(wagon, quebec, fits);
-        assertEquals(60 + room, carried(wagon, GoodsType.CORN));
-        assertEquals(0, carried(wagon, GoodsType.SUGAR));
+        assertEquals(60 + room, carried(wagon, GoodsType.GRAIN));
+        assertEquals(0, carried(wagon, GoodsType.OLIVES));
     }
 
     @Test
@@ -427,10 +428,10 @@ class ForeignColonyTradeTest {
         assertEquals(ForeignColonyTradeProblem.EMPTY_CARGO,
                 model.getForeignColonyTradeAccess(galleon, quebec));
         final ForeignColonyTradeQuote sale = model.quoteForeignColonySale(
-                galleon, quebec, Goods.of(GoodsType.CORN, 1));
+                galleon, quebec, Goods.of(GoodsType.GRAIN, 1));
         assertEquals(ForeignColonyTradeProblem.EMPTY_CARGO, sale.getProblem());
         assertEquals(0, model.getForeignColonyReceiveLimit(galleon, quebec,
-                Goods.of(GoodsType.CORN, 1), GoodsType.TOBACCO));
+                Goods.of(GoodsType.GRAIN, 1), GoodsType.GRAPES));
         assertRejectedWithoutEffects(model, galleon, quebec, sale);
         assertEquals(before, snapshot(model, galleon, quebec));
         assertEquals(1, holds.stream().filter(CargoSlot::isLoadedUnit).count());
@@ -444,38 +445,39 @@ class ForeignColonyTradeTest {
                 UnitType.GALLEON, false);
         final Unit galleon = model.getUnitById(SHIP_ID);
         final Colony quebec = quebec(model);
-        load(galleon, GoodsType.SUGAR, 1);
-        clear(quebec, GoodsType.SUGAR);
-        stockUp(quebec, GoodsType.CORN, GALLEON_HOLDS * HOLD);
-        // Giving the single sugar empties the first hold; all six holds fit.
-        assertEquals(GALLEON_HOLDS * HOLD, model.getForeignColonyReceiveLimit(
-                galleon, quebec, Goods.of(GoodsType.SUGAR, 1), GoodsType.CORN));
+        load(galleon, GoodsType.OLIVES, 1);
+        clear(quebec, GoodsType.OLIVES);
+        stockUp(quebec, GoodsType.GRAIN, GALLEON_HOLDS * HOLD);
+        // Giving the single olives empties the first hold; all six holds fit.
+        assertEquals(GALLEON_HOLDS * HOLD,
+                model.getForeignColonyReceiveLimit(galleon, quebec,
+                        Goods.of(GoodsType.OLIVES, 1), GoodsType.GRAIN));
     }
 
     @Test
     void short_treasury_on_either_side_refuses_without_effects() {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
-        load(wagon, GoodsType.CORN, 1);
+        load(wagon, GoodsType.GRAIN, 1);
         final Colony quebec = quebec(model);
         final Player dutch = model.getPlayerByName("Dutch");
         final Player france = model.getPlayerByName("France");
         france.setGold(0);
         final ForeignColonyTradeQuote hostShort = model.quoteForeignColonySale(
-                wagon, quebec, Goods.of(GoodsType.CORN, 1));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, 1));
         assertEquals(ForeignColonyTradeProblem.HOST_GOLD,
                 hostShort.getProblem());
         assertRejectedWithoutEffects(model, wagon, quebec, hostShort);
 
         france.setGold(START_GOLD);
         dutch.setGold(0);
-        stockUp(quebec, GoodsType.TOBACCO, 100);
-        final int outgoing = bid(model, GoodsType.CORN)
-                / ask(model, GoodsType.TOBACCO) + 1;
+        stockUp(quebec, GoodsType.GRAPES, 100);
+        final int outgoing = bid(model, GoodsType.GRAIN)
+                / ask(model, GoodsType.GRAPES) + 1;
         final ForeignColonyTradeQuote visitorShort = model
                 .quoteForeignColonyBarter(wagon, quebec,
-                        Goods.of(GoodsType.CORN, 1),
-                        Goods.of(GoodsType.TOBACCO, outgoing));
+                        Goods.of(GoodsType.GRAIN, 1),
+                        Goods.of(GoodsType.GRAPES, outgoing));
         assertEquals(ForeignColonyTradeProblem.VISITOR_GOLD,
                 visitorShort.getProblem());
         assertRejectedWithoutEffects(model, wagon, quebec, visitorShort);
@@ -487,7 +489,7 @@ class ForeignColonyTradeTest {
     void gold_overflow_of_either_treasury_is_refused() {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
-        load(wagon, GoodsType.CORN, 1);
+        load(wagon, GoodsType.GRAIN, 1);
         final Colony quebec = quebec(model);
         final Player dutch = model.getPlayerByName("Dutch");
         final Player france = model.getPlayerByName("France");
@@ -495,7 +497,7 @@ class ForeignColonyTradeTest {
         dutch.setGold(Integer.MAX_VALUE);
         final ForeignColonyTradeQuote visitorFull = model
                 .quoteForeignColonySale(wagon, quebec,
-                        Goods.of(GoodsType.CORN, 1));
+                        Goods.of(GoodsType.GRAIN, 1));
         assertEquals(ForeignColonyTradeProblem.VISITOR_GOLD,
                 visitorFull.getProblem());
         assertRejectedWithoutEffects(model, wagon, quebec, visitorFull);
@@ -503,12 +505,12 @@ class ForeignColonyTradeTest {
         // The colony owner would receive gold beyond the limit.
         dutch.setGold(START_GOLD);
         france.setGold(Integer.MAX_VALUE);
-        stockUp(quebec, GoodsType.TOBACCO, 100);
-        final int outgoing = bid(model, GoodsType.CORN)
-                / ask(model, GoodsType.TOBACCO) + 1;
+        stockUp(quebec, GoodsType.GRAPES, 100);
+        final int outgoing = bid(model, GoodsType.GRAIN)
+                / ask(model, GoodsType.GRAPES) + 1;
         final ForeignColonyTradeQuote hostFull = model.quoteForeignColonyBarter(
-                wagon, quebec, Goods.of(GoodsType.CORN, 1),
-                Goods.of(GoodsType.TOBACCO, outgoing));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, 1),
+                Goods.of(GoodsType.GRAPES, outgoing));
         assertEquals(ForeignColonyTradeProblem.HOST_GOLD,
                 hostFull.getProblem());
         assertRejectedWithoutEffects(model, wagon, quebec, hostFull);
@@ -518,20 +520,20 @@ class ForeignColonyTradeTest {
     void invalid_quantities_and_same_goods_are_refused() {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
-        load(wagon, GoodsType.CORN, 2);
+        load(wagon, GoodsType.GRAIN, 2);
         final Colony quebec = quebec(model);
         assertEquals(ForeignColonyTradeProblem.INVALID_QUANTITY,
                 model.quoteForeignColonySale(wagon, quebec,
-                        Goods.of(GoodsType.CORN, 0)).getProblem());
+                        Goods.of(GoodsType.GRAIN, 0)).getProblem());
         assertEquals(ForeignColonyTradeProblem.INVALID_QUANTITY,
                 model.quoteForeignColonySale(wagon, quebec,
-                        Goods.of(GoodsType.CORN, 3)).getProblem());
+                        Goods.of(GoodsType.GRAIN, 3)).getProblem());
         assertEquals(ForeignColonyTradeProblem.SAME_GOODS,
                 model.quoteForeignColonyBarter(wagon, quebec,
-                        Goods.of(GoodsType.CORN, 1),
-                        Goods.of(GoodsType.CORN, 1)).getProblem());
+                        Goods.of(GoodsType.GRAIN, 1),
+                        Goods.of(GoodsType.GRAIN, 1)).getProblem());
         assertEquals(2, model.getForeignColonyTradeLimit(wagon, quebec,
-                GoodsType.CORN, true));
+                GoodsType.GRAIN, true));
     }
 
     @Test
@@ -539,43 +541,43 @@ class ForeignColonyTradeTest {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
         final Unit ship = model.getUnitById(SHIP_ID);
-        load(wagon, GoodsType.CORN, 2);
-        load(ship, GoodsType.CORN, 2);
+        load(wagon, GoodsType.GRAIN, 2);
+        load(ship, GoodsType.GRAIN, 2);
         final Colony quebec = quebec(model);
         final ForeignColonyTradeQuote fromWagon = model.quoteForeignColonySale(
-                wagon, quebec, Goods.of(GoodsType.CORN, 2));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, 2));
         assertRejectedWithoutEffects(model, ship, quebec, fromWagon);
-        assertEquals(2, carried(wagon, GoodsType.CORN));
+        assertEquals(2, carried(wagon, GoodsType.GRAIN));
     }
 
     @Test
     void offer_of_another_colony_is_refused_before_any_change() {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
-        load(wagon, GoodsType.CORN, 2);
+        load(wagon, GoodsType.GRAIN, 2);
         final Colony quebec = quebec(model);
         final Colony other = model.getColonies(model.getPlayerByName("France"))
                 .stream().filter(colony -> colony != quebec).findFirst()
                 .orElseThrow();
         final ForeignColonyTradeQuote quote = model.quoteForeignColonySale(
-                wagon, quebec, Goods.of(GoodsType.CORN, 2));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, 2));
         assertNotEquals(quote.getColonyId(), other.getId());
         assertRejectedWithoutEffects(model, wagon, other, quote);
-        assertEquals(2, carried(wagon, GoodsType.CORN));
+        assertEquals(2, carried(wagon, GoodsType.GRAIN));
     }
 
     @Test
     void changed_colony_stock_rejects_the_confirmation() {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
-        load(wagon, GoodsType.CORN, 2);
+        load(wagon, GoodsType.GRAIN, 2);
         final Colony quebec = quebec(model);
-        stockUp(quebec, GoodsType.TOBACCO, 4);
+        stockUp(quebec, GoodsType.GRAPES, 4);
         final ForeignColonyTradeQuote quote = model.quoteForeignColonyBarter(
-                wagon, quebec, Goods.of(GoodsType.CORN, 2),
-                Goods.of(GoodsType.TOBACCO, 1));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, 2),
+                Goods.of(GoodsType.GRAPES, 1));
         assertTrue(quote.isLegal());
-        quebec.getWarehouse().removeGoods(Goods.of(GoodsType.TOBACCO, 1));
+        quebec.getWarehouse().removeGoods(Goods.of(GoodsType.GRAPES, 1));
         assertRejectedWithoutEffects(model, wagon, quebec, quote);
     }
 
@@ -583,12 +585,12 @@ class ForeignColonyTradeTest {
     void changed_europe_price_rejects_the_confirmation() {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
-        load(wagon, GoodsType.CORN, 2);
+        load(wagon, GoodsType.GRAIN, 2);
         final Colony quebec = quebec(model);
         final ForeignColonyTradeQuote quote = model.quoteForeignColonySale(
-                wagon, quebec, Goods.of(GoodsType.CORN, 2));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, 2));
         final GoodsTrade trade = model.getEurope()
-                .getGoodsTradeForType(GoodsType.CORN, EuropeanNation.FRENCH);
+                .getGoodsTradeForType(GoodsType.GRAIN, EuropeanNation.FRENCH);
         trade.setSellPrice(trade.getSellPrice() + 1);
         assertRejectedWithoutEffects(model, wagon, quebec, quote);
     }
@@ -597,17 +599,17 @@ class ForeignColonyTradeTest {
     void changed_cargo_or_treasury_rejects_the_confirmation() {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
-        load(wagon, GoodsType.CORN, 2);
+        load(wagon, GoodsType.GRAIN, 2);
         final Colony quebec = quebec(model);
         final ForeignColonyTradeQuote quote = model.quoteForeignColonySale(
-                wagon, quebec, Goods.of(GoodsType.CORN, 2));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, 2));
         // More of the same goods came aboard: the shown terms are stale.
         ((UnitWithCargo) wagon).getCargo().getSlots().get(1)
-                .addGoods(Goods.of(GoodsType.CORN, 1));
+                .addGoods(Goods.of(GoodsType.GRAIN, 1));
         assertRejectedWithoutEffects(model, wagon, quebec, quote);
 
         final ForeignColonyTradeQuote fresh = model.quoteForeignColonySale(
-                wagon, quebec, Goods.of(GoodsType.CORN, 2));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, 2));
         model.getPlayerByName("France").setGold(START_GOLD - 1);
         assertRejectedWithoutEffects(model, wagon, quebec, fresh);
     }
@@ -616,10 +618,10 @@ class ForeignColonyTradeTest {
     void war_declared_after_quoting_rejects_the_confirmation() {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
-        load(wagon, GoodsType.CORN, 2);
+        load(wagon, GoodsType.GRAIN, 2);
         final Colony quebec = quebec(model);
         final ForeignColonyTradeQuote quote = model.quoteForeignColonySale(
-                wagon, quebec, Goods.of(GoodsType.CORN, 2));
+                wagon, quebec, Goods.of(GoodsType.GRAIN, 2));
         model.declareHostilities(model.getPlayerByName("Dutch"),
                 model.getPlayerByName("France"));
         assertRejectedWithoutEffects(model, wagon, quebec, quote);
@@ -629,22 +631,22 @@ class ForeignColonyTradeTest {
     void completed_trade_is_saved_once_and_survives_reload() {
         final Model model = setup(true, EuropeanRelationState.PEACE, false);
         final Unit wagon = model.getUnitById(WAGON_ID);
-        load(wagon, GoodsType.CORN, 4);
+        load(wagon, GoodsType.GRAIN, 4);
         final Colony quebec = quebec(model);
-        final int stock = stock(quebec, GoodsType.CORN);
+        final int stock = stock(quebec, GoodsType.GRAIN);
         model.tradeWithForeignColony(wagon, quebec,
                 model.quoteForeignColonySale(wagon, quebec,
-                        Goods.of(GoodsType.CORN, 4)));
+                        Goods.of(GoodsType.GRAIN, 4)));
         final int dutchGold = model.getPlayerByName("Dutch").getGold();
         final int franceGold = model.getPlayerByName("France").getGold();
 
         final Model reloaded = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         assertEquals(0,
-                carried(reloaded.getUnitById(WAGON_ID), GoodsType.CORN));
+                carried(reloaded.getUnitById(WAGON_ID), GoodsType.GRAIN));
         assertEquals(dutchGold, reloaded.getPlayerByName("Dutch").getGold());
         assertEquals(franceGold, reloaded.getPlayerByName("France").getGold());
-        assertEquals(stock + 4, stock(quebec(reloaded), GoodsType.CORN));
+        assertEquals(stock + 4, stock(quebec(reloaded), GoodsType.GRAIN));
     }
 
     /**
@@ -714,7 +716,7 @@ class ForeignColonyTradeTest {
             if (deWitt) {
                 final CongressPo congress = new CongressPo();
                 congress.setActivated(true);
-                congress.setBells(0);
+                congress.setOwls(0);
                 congress.setGeneration(1);
                 congress.setMembers(List.of(Founder.JAN_DE_WITT));
                 congress.setCandidates(List.of(Founder.JOHN_PAUL_JONES,
@@ -861,11 +863,11 @@ class ForeignColonyTradeTest {
         model.getPlayerByName("France").setGold(RICH);
     }
 
-    /** Every hold of the carrier holds a full load of sugar. */
-    private static void fillWithSugar(final Unit carrier) {
+    /** Every hold of the carrier holds a full load of olives. */
+    private static void fillWithOlives(final Unit carrier) {
         for (final CargoSlot slot : ((UnitWithCargo) carrier).getCargo()
                 .getSlots()) {
-            slot.addGoods(Goods.of(GoodsType.SUGAR, HOLD));
+            slot.addGoods(Goods.of(GoodsType.OLIVES, HOLD));
         }
     }
 

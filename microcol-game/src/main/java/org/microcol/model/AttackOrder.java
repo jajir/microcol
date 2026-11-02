@@ -169,7 +169,7 @@ public final class AttackOrder {
         }
         final UnitFreeColonist colonist = (UnitFreeColonist) unit;
         return unit.getType().name() + ':' + colonist.isVeteran() + ':'
-                + colonist.getMilitaryRole() + ':' + colonist.isHoldingGuns()
+                + colonist.getMilitaryRole() + ':' + colonist.isHoldingWeapons()
                 + ':' + colonist.isMounted() + ':'
                 + unit.getOwner().getCongressMembers()
                         .contains(Founder.GEORGE_WASHINGTON);

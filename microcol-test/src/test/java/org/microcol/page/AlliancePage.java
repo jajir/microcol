@@ -55,7 +55,7 @@ public final class AlliancePage extends AbstractScreen {
     /**
      * A multi-round fixture in which the Dutch own a living colony, so the game
      * continues through rounds 19, 20 and 21 without the no-colonies end.
-     * Montreal and its corn worker change owner together, keeping saved food.
+     * Montreal and its grain worker change owner together, keeping saved food.
      */
     public void prepareLongGameFixture(final String dutchFrance,
             final String dutchSpain, final String franceSpain,

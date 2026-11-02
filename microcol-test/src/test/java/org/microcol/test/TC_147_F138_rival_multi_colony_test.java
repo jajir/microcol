@@ -87,11 +87,11 @@ public class TC_147_F138_rival_multi_colony_test extends AbstractMicroColTest {
      * Land beside the Dutch ship's former place, so the human keeps a colony.
      */
     private static final Location DUTCH_SITE = Location.of(31, 15);
-    /** Land beside Rouen: five corn fields. */
+    /** Land beside Rouen: five grain fields. */
     private static final List<Location> FIELDS_A = List.of(Location.of(22, 1),
             Location.of(22, 2), Location.of(22, 3), Location.of(21, 3),
             Location.of(20, 3));
-    /** Land beside Lyon: five corn fields. */
+    /** Land beside Lyon: five grain fields. */
     private static final List<Location> FIELDS_B = List.of(Location.of(14, 2),
             Location.of(14, 3), Location.of(14, 4), Location.of(15, 4),
             Location.of(16, 4));
@@ -270,11 +270,11 @@ public class TC_147_F138_rival_multi_colony_test extends AbstractMicroColTest {
                 .collect(Collectors.toSet());
     }
 
-    /** Corn and the tool target in a colony warehouse, through the model. */
+    /** Grain and the tool target in a colony warehouse, through the model. */
     private static void stock(final Model model, final int colonyId,
-            final int corn) {
+            final int grain) {
         final Colony colony = model.getColonyById(colonyId).orElseThrow();
-        colony.getWarehouse().addGoods(Goods.of(GoodsType.CORN, corn));
+        colony.getWarehouse().addGoods(Goods.of(GoodsType.GRAIN, grain));
         colony.getWarehouse().addGoods(Goods.of(GoodsType.TOOLS, TOOLS));
     }
 

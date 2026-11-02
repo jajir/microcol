@@ -33,7 +33,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -57,7 +57,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "nativeHomeless": true,
         "nativeRole": "BRAVE"
@@ -81,7 +81,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -105,7 +105,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -129,7 +129,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -153,7 +153,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -177,14 +177,14 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
       },
       {
         "id": 1007,
-        "type": "EXPERT_FUR_TRAPPER",
+        "type": "EXPERT_CLAY_DIGGER",
         "ownerId": "Dutch",
         "placeMap": {
           "location": {
@@ -201,7 +201,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -225,7 +225,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -249,14 +249,14 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
       },
       {
         "id": 1010,
-        "type": "MASTER_SUGAR_PLANTER",
+        "type": "MASTER_OLIVE_GROWER",
         "ownerId": "Dutch",
         "placeMap": {
           "location": {
@@ -273,14 +273,14 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
       },
       {
         "id": 1011,
-        "type": "MASTER_COTTON_PLANTER",
+        "type": "MASTER_SHEPHERD",
         "ownerId": "Dutch",
         "placeMap": {
           "location": {
@@ -297,14 +297,14 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
       },
       {
         "id": 1012,
-        "type": "MASTER_TOBACCO_PLANTER",
+        "type": "MASTER_GRAPE_GROWER",
         "ownerId": "Dutch",
         "placeMap": {
           "location": {
@@ -321,7 +321,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -345,14 +345,14 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
       },
       {
         "id": 1014,
-        "type": "MASTER_DISTILLER",
+        "type": "MASTER_OIL_MAKER",
         "ownerId": "Dutch",
         "placeMap": {
           "location": {
@@ -369,7 +369,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -393,14 +393,14 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
       },
       {
         "id": 1016,
-        "type": "MASTER_TOBACCONIST",
+        "type": "MASTER_WINEMAKER",
         "ownerId": "Dutch",
         "placeMap": {
           "location": {
@@ -417,14 +417,14 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
       },
       {
         "id": 1017,
-        "type": "MASTER_FUR_TRADER",
+        "type": "MASTER_POTTER",
         "ownerId": "Dutch",
         "placeMap": {
           "location": {
@@ -441,14 +441,14 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
       },
       {
         "id": 1018,
-        "type": "MASTER_GUNSMITH",
+        "type": "MASTER_WEAPONSMITH",
         "ownerId": "Dutch",
         "placeMap": {
           "location": {
@@ -465,7 +465,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -489,7 +489,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -513,7 +513,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -537,7 +537,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -561,7 +561,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -585,7 +585,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -609,7 +609,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -636,7 +636,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -658,7 +658,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "treasureValue": 1000
       },
@@ -681,7 +681,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "artilleryDamaged": false
       },
@@ -704,7 +704,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -733,7 +733,7 @@
         },
         "movementThirds": 12,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -762,7 +762,7 @@
         },
         "movementThirds": 12,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -787,7 +787,7 @@
         },
         "movementThirds": 12,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -814,7 +814,7 @@
         },
         "movementThirds": 12,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -839,7 +839,7 @@
         },
         "movementThirds": 12,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -868,7 +868,7 @@
         },
         "movementThirds": 12,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false
       },
       {
@@ -890,7 +890,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": true,
         "workUpdates": 0,
         "missionary": false
@@ -914,7 +914,7 @@
         },
         "movementThirds": 3,
         "tools": 100,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -938,7 +938,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": true,
+        "holdingWeapons": true,
         "mounted": false,
         "workUpdates": 0,
         "missionary": false
@@ -962,7 +962,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": true,
+        "holdingWeapons": true,
         "mounted": true,
         "workUpdates": 0,
         "missionary": false
@@ -986,7 +986,7 @@
         },
         "movementThirds": 3,
         "tools": 0,
-        "holdingGuns": false,
+        "holdingWeapons": false,
         "mounted": false,
         "artilleryDamaged": true
       }
@@ -1271,27 +1271,27 @@
     "europe": {
       "markets": {
         "DUTCH": {
-          "CORN": [
+          "GRAIN": [
             2,
             0,
             0
           ],
-          "SUGAR": [
+          "OLIVES": [
             3,
             0,
             0
           ],
-          "TOBACCO": [
+          "GRAPES": [
             3,
             0,
             0
           ],
-          "COTTON": [
+          "WOOL": [
             3,
             0,
             0
           ],
-          "FUR": [
+          "CLAY": [
             4,
             0,
             0
@@ -1316,22 +1316,22 @@
             0,
             0
           ],
-          "RUM": [
+          "OLIVE_OIL": [
             11,
             0,
             0
           ],
-          "CIGARS": [
+          "WINE": [
             11,
             0,
             0
           ],
-          "SILK": [
+          "CLOTH": [
             11,
             0,
             0
           ],
-          "COAT": [
+          "AMPHORAE": [
             9,
             0,
             0
@@ -1346,34 +1346,34 @@
             0,
             0
           ],
-          "MUSKET": [
+          "WEAPONS": [
             2,
             0,
             0
           ]
         },
         "FRENCH": {
-          "CORN": [
+          "GRAIN": [
             2,
             0,
             0
           ],
-          "SUGAR": [
+          "OLIVES": [
             3,
             0,
             0
           ],
-          "TOBACCO": [
+          "GRAPES": [
             3,
             0,
             0
           ],
-          "COTTON": [
+          "WOOL": [
             3,
             0,
             0
           ],
-          "FUR": [
+          "CLAY": [
             4,
             0,
             0
@@ -1398,22 +1398,22 @@
             0,
             0
           ],
-          "RUM": [
+          "OLIVE_OIL": [
             11,
             0,
             0
           ],
-          "CIGARS": [
+          "WINE": [
             11,
             0,
             0
           ],
-          "SILK": [
+          "CLOTH": [
             11,
             0,
             0
           ],
-          "COAT": [
+          "AMPHORAE": [
             9,
             0,
             0
@@ -1428,34 +1428,34 @@
             0,
             0
           ],
-          "MUSKET": [
+          "WEAPONS": [
             2,
             0,
             0
           ]
         },
         "ENGLISH": {
-          "CORN": [
+          "GRAIN": [
             2,
             0,
             0
           ],
-          "SUGAR": [
+          "OLIVES": [
             3,
             0,
             0
           ],
-          "TOBACCO": [
+          "GRAPES": [
             3,
             0,
             0
           ],
-          "COTTON": [
+          "WOOL": [
             3,
             0,
             0
           ],
-          "FUR": [
+          "CLAY": [
             4,
             0,
             0
@@ -1480,22 +1480,22 @@
             0,
             0
           ],
-          "RUM": [
+          "OLIVE_OIL": [
             11,
             0,
             0
           ],
-          "CIGARS": [
+          "WINE": [
             11,
             0,
             0
           ],
-          "SILK": [
+          "CLOTH": [
             11,
             0,
             0
           ],
-          "COAT": [
+          "AMPHORAE": [
             9,
             0,
             0
@@ -1510,34 +1510,34 @@
             0,
             0
           ],
-          "MUSKET": [
+          "WEAPONS": [
             2,
             0,
             0
           ]
         },
         "SPANISH": {
-          "CORN": [
+          "GRAIN": [
             2,
             0,
             0
           ],
-          "SUGAR": [
+          "OLIVES": [
             3,
             0,
             0
           ],
-          "TOBACCO": [
+          "GRAPES": [
             3,
             0,
             0
           ],
-          "COTTON": [
+          "WOOL": [
             3,
             0,
             0
           ],
-          "FUR": [
+          "CLAY": [
             4,
             0,
             0
@@ -1562,22 +1562,22 @@
             0,
             0
           ],
-          "RUM": [
+          "OLIVE_OIL": [
             11,
             0,
             0
           ],
-          "CIGARS": [
+          "WINE": [
             11,
             0,
             0
           ],
-          "SILK": [
+          "CLOTH": [
             11,
             0,
             0
           ],
-          "COAT": [
+          "AMPHORAE": [
             9,
             0,
             0
@@ -1592,7 +1592,7 @@
             0,
             0
           ],
-          "MUSKET": [
+          "WEAPONS": [
             2,
             0,
             0
@@ -4802,7 +4802,7 @@
           },
           "congress": {
             "activated": true,
-            "bells": 0,
+            "owls": 0,
             "members": [],
             "candidates": [
               "JOHN_PAUL_JONES",
@@ -4832,7 +4832,7 @@
             ],
             "nextCandidateId": 4,
             "paidPassages": 0,
-            "crosses": 0,
+            "torches": 0,
             "earnedImmigrants": 0
           },
           "name": "Dutch",
@@ -4886,7 +4886,7 @@
           },
           "congress": {
             "activated": false,
-            "bells": 0,
+            "owls": 0,
             "members": [],
             "candidates": [],
             "generation": 0,
@@ -4910,7 +4910,7 @@
             ],
             "nextCandidateId": 4,
             "paidPassages": 0,
-            "crosses": 0,
+            "torches": 0,
             "earnedImmigrants": 0
           },
           "name": "Dutch's King",

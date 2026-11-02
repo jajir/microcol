@@ -71,7 +71,7 @@ final class IndependenceFixture {
             unit.add("cargo", cargo);
             unit.add("action", action);
             unit.addProperty("movementThirds", MovementPoints.ofPoints(1));
-            unit.addProperty("holdingGuns", armed);
+            unit.addProperty("holdingWeapons", armed);
             unit.addProperty("mounted", mounted);
             unit.addProperty("veteran", veteran);
             return unit;
@@ -191,19 +191,19 @@ final class IndependenceFixture {
     }
 
     /** Saved intervention of the Dutch nation; see R-0189. */
-    static JsonObject intervention(final int target, final long bells,
+    static JsonObject intervention(final int target, final long owls,
             final boolean earned) {
-        return intervention(target, bells, earned, false);
+        return intervention(target, owls, earned, false);
     }
 
     /**
      * Saved intervention of the Dutch nation with its delivered flag (R-0190).
      */
-    static JsonObject intervention(final int target, final long bells,
+    static JsonObject intervention(final int target, final long owls,
             final boolean earned, final boolean delivered) {
         final JsonObject saved = new JsonObject();
         saved.addProperty("target", target);
-        saved.addProperty("bells", bells);
+        saved.addProperty("owls", owls);
         saved.addProperty("earned", earned);
         saved.addProperty("delivered", delivered);
         return saved;
@@ -227,7 +227,7 @@ final class IndependenceFixture {
     /**
      * Like {@link #prepare}, with the home Europe of the Dutch populated: an
      * inbound merchantman carrying 7 ore and a passenger, a galleon in the port
-     * with 40 muskets and a passenger, a colonist on the pier, and an outbound
+     * with 40 weapons and a passenger, a colonist on the pier, and an outbound
      * galleon. The voyage factors are those of the voyage reversal scenario, so
      * the saved durations are consistent: merchantman, weather 1, westward to
      * Europe, four updates; galleon, weather 0, outward, two updates.
@@ -240,7 +240,7 @@ final class IndependenceFixture {
     }
 
     /**
-     * Like {@link #prepare}, with every Crown holding this many produced bells
+     * Like {@link #prepare}, with every Crown holding this many produced owls
      * toward its next ground unit.
      */
     static void prepareWithCrownRemainder(final TestContext context,
@@ -294,7 +294,7 @@ final class IndependenceFixture {
         person.add("cargo", cargo());
         person.addProperty("movementThirds", MovementPoints.ofPoints(1));
         person.addProperty("tools", 0);
-        person.addProperty("holdingGuns", false);
+        person.addProperty("holdingWeapons", false);
         person.addProperty("mounted", false);
         return person;
     }
@@ -337,7 +337,7 @@ final class IndependenceFixture {
 
         final JsonObject docked = unit(PORT_SHIP, "GALLEON");
         docked.add("cargo",
-                cargo(slotOfUnit(PORT_PASSENGER), slotOfGoods("MUSKET", 40),
+                cargo(slotOfUnit(PORT_PASSENGER), slotOfGoods("WEAPONS", 40),
                         new JsonObject(), new JsonObject(), new JsonObject()));
         docked.addProperty("movementThirds", MovementPoints.ofPoints(6));
         docked.add("placeEuropePort", new JsonObject());

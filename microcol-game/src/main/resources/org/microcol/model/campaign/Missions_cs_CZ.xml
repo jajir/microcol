@@ -7,20 +7,20 @@
 
 	<entry key="default_m0_g1">Najdi nový svět. Jeď lodí doleva, tam asi bude země.</entry>
 	<entry key="default_m0_g2">Vyloď se a zolož kolonii.</entry>
-	<entry key="default_m0_g3">Vyprodukuj 30 doutníků.</entry>
-	<entry key="default_m0_g4">Prodej doutníky v Evropě.</entry>
+	<entry key="default_m0_g3">Vyprodukuj 30 vína.</entry>
+	<entry key="default_m0_g4">Prodej víno v Evropě.</entry>
 	<entry key="default_m0_start">Buď zdráv, určitě si na mě moc nepamatuješ, ale jsem tvůj strýc jmenuju se Petr. S tvým otcem jsme prošli mnoha boji. Teď jsem tu, aby ti pomohl na tvojí cestě. První, co tě čeká je najít novou zemi, kde by jis mohl založit kolonie. To na co se koukáš je mapa, kde je tvoje loď. Protože plujem do Ameriky, tak Evropa a tvůj domovský přístav je v pravo a Amerika v levo. Tak se vydej do leva.</entry>
 	<entry key="default_m0_cantMoveToHighSeas">Nemůžeš se vrátit do Evropy odkuď jsi přijel. Přijeli jsme se. abychom založili nevé kolonie a něco vydělali. Zkus najít vhodné míst pro kolonii, pravděpodobně bude ležet na západě.</entry>
 	<entry key="default_m0_pressNextTurn">Tento tah už neni monžné s lodí dál hýbat. Loď nemá dost bodů na pohyb. Stav bodů je vidět v panelu naprvo, kde jsou detaily lodě. Pro další tah stiskni 'Další tah'</entry>
 	<entry key="default_m0_moveUnitBeforeEndTurn">Nejprve táhni lodí, zkus najít nový svět.</entry>
 	<entry key="default_m0_continentInSight">Nový Svět už je na dohled. Priraž s loďí a vyloď jednotky. Založ novou kolonii.</entry>
 	<entry key="default_m0_firstColonyWasFounded">Výborně. Podařilo se ti založit novou kolonii. Teď je na tobě, jak bude dál rozkvétat.</entry>
-	<entry key="default_m0_produce100cigars">Otevři kliknutím detail kolonie a začni pěstovat tabák a vyrábět z něj doutníky.
-Jednoho osadníka myší umísti na pole aby pěstoval tabák.
-Dalšího pošli do města vyrábět z tabáku cigarety. Pozor na množství jídla ve městě,
-jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</entry>
-	<entry key="default_m0_sellCigarsInEuropePort">Konečně. Už máš potřebné množství doutníků. Vezmi je na loď, odvez do Evropy a prodej.</entry>
-	<entry key="default_m0_cigarsWasSold">Výborně. Podařilo se ti prodat těžce získané doutníky.</entry>
+	<entry key="default_m0_produce100wine">Otevři kliknutím detail kolonie a začni pěstovat hrozny a vyrábět z nich víno.
+Jednoho osadníka myší umísti na pole aby pěstoval hrozny.
+Dalšího pošli do města vyrábět z hroznů víno. Pozor na množství jídla ve městě,
+jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 vína.</entry>
+	<entry key="default_m0_sellWineInEuropePort">Konečně. Už máš potřebné množství vína. Vezmi ho na loď, odvez do Evropy a prodej.</entry>
+	<entry key="default_m0_wineWasSold">Výborně. Podařilo se ti prodat těžce získané víno.</entry>
 	<entry key="default_m0_gameOver">Gratuluji. Podařilo se ti splnit první misi.</entry>
 	<entry key="default_m0_cantDeclareIndependence">Ještě nemůžeš vyhlásit nezávislost. Vyhlášení nezávislosti hodně pozlobí krále. Jakmile se o tom krále dozví, pokusí se získat kolonie silou zpět. Ještě nemáš dost síly se ubránit.</entry>
 	<entry key="default_m1_g1">Založ tři kolonie.</entry>

@@ -42,7 +42,7 @@ public class TC_156_F190_intervention_delivery_test
     /** Full liberty in the four colonies of the scenario, as in TC_155. */
     private final static long FULL = 1600L;
 
-    /** The scenario is Conquistador, so the target is 500 bells. */
+    /** The scenario is Conquistador, so the target is 500 owls. */
     private final static int TARGET = 500;
 
     /** Lowest-ID owned coastal colony of the scenario, the arrival port. */
@@ -91,7 +91,7 @@ public class TC_156_F190_intervention_delivery_test
     @Tag("local")
     void TC_01_real_update_earns_and_delivers_the_forces_once_and_the_player_moves_one()
             throws Exception {
-        // Saved progress stands one bell short of the target, so the next real
+        // Saved progress stands one owl short of the target, so the next real
         // update of the colonies earns it and delivers the forces in the same
         // update.
         IndependenceFixture.prepareDeclared(getContext(), testFileName,

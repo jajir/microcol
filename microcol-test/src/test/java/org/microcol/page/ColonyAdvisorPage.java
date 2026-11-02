@@ -139,7 +139,7 @@ public final class ColonyAdvisorPage extends AbstractScreen {
     }
 
     /**
-     * The project fixture with no corn stored. The eight residents of New
+     * The project fixture with no grain stored. The eight residents of New
      * Amsterdam work in buildings and eat 16 a turn, and no field feeds them,
      * so the next update is a real food shortage without any change of the
      * rules.
@@ -148,7 +148,7 @@ public final class ColonyAdvisorPage extends AbstractScreen {
         loadFixture(0);
     }
 
-    private void loadFixture(final Integer corn) throws Exception {
+    private void loadFixture(final Integer grain) throws Exception {
         final Gson gson = new Gson();
         final JsonObject game = gson
                 .fromJson(Files.readString(Path.of(FIXTURE)), JsonObject.class);
@@ -160,9 +160,9 @@ public final class ColonyAdvisorPage extends AbstractScreen {
                         70);
                 colony.getAsJsonObject("colonyWarehouse").addProperty("TOOLS",
                         25);
-                if (corn != null) {
+                if (grain != null) {
                     colony.getAsJsonObject("colonyWarehouse")
-                            .addProperty("CORN", corn);
+                            .addProperty("GRAIN", grain);
                 }
                 final JsonObject project = new JsonObject();
                 project.addProperty("id", 0);

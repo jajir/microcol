@@ -38,7 +38,7 @@ class ArtilleryTest {
         defender.setMissionary(null);
         defender.setWorkSkill(null);
         defender.setArtilleryDamaged(damaged);
-        defender.setHoldingGuns(false);
+        defender.setHoldingWeapons(false);
         defender.setMounted(false);
         defender.setTools(0);
         defender.getPlaceMap().setLocation(TARGET);
@@ -59,7 +59,7 @@ class ArtilleryTest {
                 MissionImpl.getPredefinedGameOverEvaluators());
         UnitFreeColonist attacker = (UnitFreeColonist) model.getUnitById(0);
         attacker.placeToLocation(ORIGIN);
-        attacker.setHoldingGuns(true);
+        attacker.setHoldingWeapons(true);
         attacker.getOwner().revealMapForUnit(attacker);
         return model;
     }
@@ -118,7 +118,7 @@ class ArtilleryTest {
             soldier.prepareAttack(TARGET, true).orElseThrow().execute();
             assertSame(soldier, battle.getUnitById(0));
             assertTrue(soldier.isVeteran());
-            assertTrue(soldier.isHoldingGuns());
+            assertTrue(soldier.isHoldingWeapons());
             assertEquals(0, soldier.getActionPoints());
             assertEquals(7L + 2 * 0x9E3779B97F4A7C15L,
                     battle.save().getCombatRandomState());
@@ -293,12 +293,12 @@ class ArtilleryTest {
             attacking.setMissionary(null);
             attacking.setWorkSkill(null);
             attacking.setArtilleryDamaged(damaged);
-            attacking.setHoldingGuns(false);
+            attacking.setHoldingWeapons(false);
             defending.setType(UnitType.COLONIST);
             defending.setWorkUpdates(0);
             defending.setMissionary(false);
             defending.setArtilleryDamaged(null);
-            defending.setHoldingGuns(true);
+            defending.setHoldingWeapons(true);
             Model battle = Model.make(data,
                     MissionImpl.getPredefinedGameOverEvaluators());
             UnitArtillery gun = (UnitArtillery) battle.getUnitById(0);
@@ -340,12 +340,12 @@ class ArtilleryTest {
         attacking.setMissionary(null);
         attacking.setWorkSkill(null);
         attacking.setArtilleryDamaged(false);
-        attacking.setHoldingGuns(false);
+        attacking.setHoldingWeapons(false);
         defending.setType(UnitType.COLONIST);
         defending.setWorkUpdates(0);
         defending.setMissionary(false);
         defending.setArtilleryDamaged(null);
-        defending.setHoldingGuns(false);
+        defending.setHoldingWeapons(false);
         Model battle = Model.make(data,
                 MissionImpl.getPredefinedGameOverEvaluators());
         UnitArtillery gun = (UnitArtillery) battle.getUnitById(0);
@@ -379,7 +379,7 @@ class ArtilleryTest {
                 MissionImpl.getPredefinedGameOverEvaluators());
         UnitFreeColonist attacker = (UnitFreeColonist) model.getUnitById(0);
         attacker.placeToLocation(ORIGIN);
-        attacker.setHoldingGuns(true);
+        attacker.setHoldingWeapons(true);
         attacker.getOwner().revealMapForUnit(attacker);
         CombatStrength defense = attacker.prepareAttack(TARGET, true)
                 .orElseThrow().getCombatStrengths().orElseThrow().getDefender();
@@ -396,7 +396,7 @@ class ArtilleryTest {
                 MissionImpl.getPredefinedGameOverEvaluators());
         UnitFreeColonist attacker = (UnitFreeColonist) model.getUnitById(0);
         attacker.placeToLocation(ORIGIN);
-        attacker.setHoldingGuns(true);
+        attacker.setHoldingWeapons(true);
         attacker.getOwner().revealMapForUnit(attacker);
         AttackOrder offer = attacker.prepareAttack(Location.of(17, 10), true)
                 .orElseThrow();

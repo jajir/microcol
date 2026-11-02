@@ -15,45 +15,43 @@ public class ConstructionTypeConstantTest {
         assertEquals(GoodsType.GOOD_TYPES.size(),
                 SOURCE_1.size() + SOURCE_2.size() + SOURCE_3.size());
 
-        assertTrue(SOURCE_1.contains(GoodsType.BELL));
-        assertTrue(SOURCE_1.contains(GoodsType.CROSS));
+        assertTrue(SOURCE_1.contains(GoodsType.OWLS));
+        assertTrue(SOURCE_1.contains(GoodsType.TORCHES));
 
         assertTrue(SOURCE_2.contains(GoodsType.TOOLS));
-        assertTrue(SOURCE_2.contains(GoodsType.RUM));
+        assertTrue(SOURCE_2.contains(GoodsType.OLIVE_OIL));
 
-        assertTrue(SOURCE_3.contains(GoodsType.MUSKET));
+        assertTrue(SOURCE_3.contains(GoodsType.WEAPONS));
     }
 
     @Test
-    public void test_requiredFrom_isCorrect_FUR_FACTORY() throws Exception {
-        final Optional<ConstructionType> oType = FUR_FACTORY.getUpgradeFrom();
+    public void test_requiredFrom_isCorrect_LARGE_POTTERY() throws Exception {
+        final Optional<ConstructionType> oType = LARGE_POTTERY.getUpgradeFrom();
         assertTrue(oType.isPresent());
-        assertEquals(FUR_TRADING_POST, oType.get());
+        assertEquals(POTTERY, oType.get());
     }
 
     @Test
-    public void test_requiredFrom_isCorrect_FUR_TRADERS_HOUSE()
-            throws Exception {
-        final Optional<ConstructionType> oType = FUR_TRADERS_HOUSE
-                .getUpgradeFrom();
+    public void test_requiredFrom_isCorrect_SMALL_POTTERY() throws Exception {
+        final Optional<ConstructionType> oType = SMALL_POTTERY.getUpgradeFrom();
         assertFalse(oType.isPresent());
     }
 
     @Test
-    public void test_getUpgradeChain_FUR_TRADING_POST() {
-        final List<ConstructionType> list = FUR_TRADING_POST.getUpgradeChain();
-        assertTrue(list.contains(FUR_TRADING_POST));
-        assertFalse(list.contains(FUR_TRADERS_HOUSE));
-        assertTrue(list.contains(FUR_FACTORY));
+    public void test_getUpgradeChain_POTTERY() {
+        final List<ConstructionType> list = POTTERY.getUpgradeChain();
+        assertTrue(list.contains(POTTERY));
+        assertFalse(list.contains(SMALL_POTTERY));
+        assertTrue(list.contains(LARGE_POTTERY));
         assertEquals(2, list.size());
     }
 
     @Test
-    public void test_getUpgradeChain_FUR_TRADERS_HOUSE() {
-        final List<ConstructionType> list = FUR_TRADERS_HOUSE.getUpgradeChain();
-        assertTrue(list.contains(FUR_TRADERS_HOUSE));
-        assertTrue(list.contains(FUR_TRADING_POST));
-        assertTrue(list.contains(FUR_FACTORY));
+    public void test_getUpgradeChain_SMALL_POTTERY() {
+        final List<ConstructionType> list = SMALL_POTTERY.getUpgradeChain();
+        assertTrue(list.contains(SMALL_POTTERY));
+        assertTrue(list.contains(POTTERY));
+        assertTrue(list.contains(LARGE_POTTERY));
         assertEquals(3, list.size());
     }
 
@@ -94,7 +92,7 @@ public class ConstructionTypeConstantTest {
         assertEquals(1, CHURCH.getProductionRatio());
 
         final Goods production = CHURCH.getProductionPerTurn().get();
-        assertEquals(GoodsType.CROSS, production.getType());
+        assertEquals(GoodsType.TORCHES, production.getType());
         assertEquals(3, production.getAmount());
     }
 

@@ -46,7 +46,7 @@
 
 ## Produkce kolonie ve spodním řádku — 31. října 2026
 
-1. Dohoda [R-0372](requirements/done/R-0372.md): hráč najde kladiva, kříže a zvony mezi položkami spodního přehledu zboží. Ukazují produkci za tah, nikoli skladovou zásobu. Celý horní souhrn i věta o obecních zdrojích nad zbožím se na přání uživatele odstraní; detail vybraného středu města dál ukazuje automatickou produkci.
+1. Dohoda [R-0372](requirements/done/R-0372.md): hráč najde kladiva, pochodně a sovy mezi položkami spodního přehledu zboží. Ukazují produkci za tah, nikoli skladovou zásobu. Celý horní souhrn i věta o obecních zdrojích nad zbožím se na přání uživatele odstraní; detail vybraného středu města dál ukazuje automatickou produkci.
 2. Tyto tři položky pouze informují. Nepřetahují se do lodě; najetí ve stavové liště vysvětlí, že jde o nepřepravitelnou produkci kolonie. Běžné zboží nadále ukazuje zásobu a čistou změnu a zachovává přesuny.
 3. Delší názvy se zalamují. Pravidla výroby, přidělování pracovníků a lodního nákladu se nemění. UI i smoke ověření uživatel pro tuto iteraci výslovně vynechal; skutečné výsledky patří do [funkční evidence](functional-tests.md).
 
@@ -131,7 +131,7 @@ nejsou pozorováním nezávislého hráče.
 5. Příkazy plující lodi se otevírají pravým tlačítkem nebo klávesou nabídky / Shift+F10; tooltip tuto cestu vysvětluje. Otevření vybere správnou loď. Escape zavře nabídku beze změny, potvrzení či zrušení operace zůstává v původním dialogu. Velká tlačítka pod plavbami se nezobrazují.
 6. [R-0335](requirements/done/R-0335.md) vlastní původní implementaci, [R-0336](requirements/done/R-0336.md) její následné vizuální upřesnění a nabídku příkazů. Zde je zaznamenaná přijatá specifikace; nejde o novou studii ani pozorování skutečného hráče.
 
-7. [R-0343](requirements/done/R-0343.md) přebírá uživatelem vybranou teplou paletu 7. Přistěhovalecký údaj je přímo na nebi bez světlého pásu; aktuální kříže, práh a případná čekající volba zůstávají čitelné v obou jazycích. Jde o vizuální úpravu existující cesty, bez nové akce či potvrzování. Skutečné kontroly jsou oddělené v [evidenci](functional-tests.md#r-0343-warm-harbor-2026-10-29).
+7. [R-0343](requirements/done/R-0343.md) přebírá uživatelem vybranou teplou paletu 7. Přistěhovalecký údaj je přímo na nebi bez světlého pásu; aktuální pochodně, práh a případná čekající volba zůstávají čitelné v obou jazycích. Jde o vizuální úpravu existující cesty, bez nové akce či potvrzování. Skutečné kontroly jsou oddělené v [evidenci](functional-tests.md#r-0343-warm-harbor-2026-10-29).
 
 ## Kongres v hlavním okně — 28. října 2026
 
@@ -155,11 +155,11 @@ nejsou pozorováním nezávislého hráče.
 
 1. [R-0331](requirements/done/R-0331.md) používá vybraný návrh **Karty**. Hráč otevře
    Kongres z mapy a porovná přínosy nabízených zakladatelů. Označení karty
-   pouze zobrazí detail; samostatné tlačítko vedle detailu potvrzuje cíl zvonů.
+   pouze zobrazí detail; samostatné tlačítko vedle detailu potvrzuje cíl sov.
 2. Karty se podle šířky zalamují. Detail a potvrzení lze posunout do záběru;
    tlačítko návratu zůstává v horní liště. Escape zavírá bez potvrzení výběru.
    Odmítnutí zastaralé nabídky nadále vysvětlí potřebu znovu otevřít Kongres.
-3. Národní podpora, zvony a členové jsou nahoře. Královské síly mají součty
+3. Národní podpora, sovy a členové jsou nahoře. Královské síly mají součty
    a rozbalitelné podrobnosti; Jonesova odměna a intervence zachovávají
    dosavadní zprávy. Před první kolonií a po získání všech zakladatelů
    zůstává příslušné vysvětlení místo nabídky.
@@ -392,14 +392,14 @@ ve [funkční evidenci](functional-tests.md#r-0310-initial-free-play-movement-re
 
 ### Náboženský přehled — R-0199
 
-1. Cíl hráče: zjistit, kolik křížů dává každá kolonie v příštím tahu, kolik
+1. Cíl hráče: zjistit, kolik pochodní dává každá kolonie v příštím tahu, kolik
    jich národ už nasbíral a kolik chybí do dalšího přistěhovalce. Přehled je
    v **Statistiky → Náboženství**.
 2. Aktuální výstup, nasbíraný postup a stav získaného přistěhovalce mají vlastní
    nadpisy. Kolonisté v kapli nebo kostele se projeví okamžitě, bez posunu tahu;
-   nasbírané kříže se tím nemění.
+   nasbírané pochodně se tím nemění.
 3. Přistěhovalec, který dorazí na začátku příštího tahu, čeká na výběr v Evropě,
-   nebo se u národa, který vyhlásil nezávislost, nepřipíše. Kříže v posledním
+   nebo se u národa, který vyhlásil nezávislost, nepřipíše. Pochodně v posledním
    případě zůstávají uložené a přehled to říká textem. Otevření, zavření ani
    opětovné otevření přehledu nic nestojí.
 4. Záložka přibyla do postranní lišty statistik, která má nyní deset položek.
@@ -717,11 +717,11 @@ Výsledky a závislosti vede [evidence R-0075](functional-tests.md#r-0075-persis
 
 ### Národní postup přistěhovalectví (R-0076)
 
-Evropa ukazuje národní počet křížů a další práh. Po dosažení prahu vysvětlí,
+Evropa ukazuje národní počet pochodní a další práh. Po dosažení prahu vysvětlí,
 že přistěhovalec dorazí na začátku příštího tahu; stejnou zprávu ukáže pokus
 zaplatit cestu před tímto příchodem. Výroba v koloniích probíhá až po fázi
 příchodů. Příchod oznamuje běžný přehled tahu a člověk je dostupný na molu.
-Otevření Evropy ani Pokračovat nevyrábí kříže a nevytváří další přistěhovalce.
+Otevření Evropy ani Pokračovat nevyrábí pochodně a nevytváří další přistěhovalce.
 Aktuální stav přejímky vede [R-0076](requirements/done/R-0076.md).
 
 ### Cena opakovaného nákupu (R-0077)
@@ -765,7 +765,7 @@ Přejímku hráčských cest a jejich výsledky vede [R-0080](requirements/done/
 ### Tisk a příspěvek státníka (R-0081)
 
 Hráč vybírá tiskárnu a noviny ve stávající stavební nabídce; zrušení výběru
-nemění frontu. Radnice ukazuje společný výstup včetně základního zvonu
+nemění frontu. Radnice ukazuje společný výstup včetně základní sovy
 a tiskového bonusu. Výběr práce označuje jednotlivý příspěvek státníka
 jako hodnotu před bonusy kolonie, aby jej hráč nezaměňoval za celý výstup.
 Dokončená stavba zvyšuje další produkci bez přesunu pracovníků.
@@ -800,7 +800,7 @@ a vyžádá novou cenu. Po zaplacení se fronta a kolonie překreslí.
 
 ### Kongres — R-0104
 
-1. Z mapy otevřít Kongres, prohlédnout národní zvony, cíl, kandidáty podle
+1. Z mapy otevřít Kongres, prohlédnout národní sovy, cíl, kandidáty podle
    kategorií a členy. Před první kolonií okno vysvětlí podmínku.
 2. Označení kandidáta ještě nic nemění; volbu provede samostatné tlačítko.
    Zavření či Escape bez potvrzení ponechá nabídku i svět beze změny.
@@ -814,7 +814,7 @@ a vyžádá novou cenu. Po zaplacení se fronta a kolonie překreslí.
 
 1. Nabídka staveb při splněné populaci a předchůdci jmenuje chybějícího
    otce: Smitha pro továrny, Stuyvesanta pro celnici. Hráč jej získá
-   obvyklým výběrem a výrobou zvonů v Kongresu.
+   obvyklým výběrem a výrobou sov v Kongresu.
 2. Členství zpřístupní pouze jinak dovolený projekt. Zařazení vyžaduje
    samostatné potvrzení; zavření nabídky nic nezařadí.
 3. Rozpracovaná stavba bez potřebného členství zobrazí stejný důvod
@@ -905,7 +905,7 @@ a vyžádá novou cenu. Po zaplacení se fronta a kolonie překreslí.
 1. Dialog při přetažení ozbrojené jednotky na protivníka ukáže
    skutečně vybraného obránce, základ a nenulové bonusy obou stran, výsledné
    síly a odpovídající šanci útočníka. Zaokrouhlení je jen pro zobrazení.
-2. Potvrzení předem vysvětlí, že poražený ztratí koně nebo muškety, oba
+2. Potvrzení předem vysvětlí, že poražený ztratí koně nebo zbraně, oba
    účastníci spotřebují pohyb a přeživší zůstanou na původních místech.
    Změněné vybavení během dialogu původní nabídku zneplatní bez boje.
 3. Zrušení, Escape a zavření okna svět ani náhodný stav nemění. Po boji
@@ -996,7 +996,7 @@ a materiál; zrušení nemění frontu. Po dokončení vidí vyšší výrobu u 
 Přes nabídku práce přidělí běžného nebo odborného kazatele; odebrání pracovníka
 ponechá základ budovy. Penn upraví společný součet a zobrazený přírůstek
 odpovídá příštímu skutečnému tahu i národnímu imigračnímu fondu. Continue
-nevytvoří další kříže. Návrh ověřuje TC67; výsledky jsou v
+nevytvoří další pochodně. Návrh ověřuje TC67; výsledky jsou v
 [evidenci testů](functional-tests.md#r-0110-religious-production-2026-10-17).
 
 ### Školní výuka a odborná praxe — R-0107
@@ -1018,7 +1018,7 @@ TC68 jsou odděleny v [evidenci](functional-tests.md#r-0107-education-work-2026-
 ### Čekající výběr přistěhovalce (R-0075/R-0076)
 
 Brewsterova získaná imigrace nabízí tři konkrétní lidi s tlačítkem „Vybrat
-zdarma“. Vysvětlení ukazuje kříže a další hranici, odlišuje výběr od placeného
+zdarma“. Vysvětlení ukazuje pochodně a další hranici, odlišuje výběr od placeného
 náboru a říká, že zavření pouze odkládá rozhodnutí. Přes Evropu lze nabídku
 znovu otevřít. Během čekání nelze obchodovat ani pokračovat dalším tahem;
 uložení a návrat do nabídky zůstávají dostupné. Po poslední volbě hra dokončí
@@ -1059,7 +1059,7 @@ Při zalomení stavového textu nebo svislé změně velikosti okna zůstává h
    vlastním tahu. Mimo tento případ tlačítko není vidět. Při čekání na volbu jara
    1800, v misi a po konci hry se nenabízí.
 3. Potvrzení ukáže přesný výsledek, který model právě spočítal, a složky základu,
-   odečtení, zvony a obtížnost. Vysvětlí důsledek: živé ukončení zapíše nový
+   odečtení, sovy a obtížnost. Vysvětlí důsledek: živé ukončení zapíše nový
    výsledek do síně slávy; pokračování bez bodování zachová dosavadní zapsaný
    výsledek a nic nepřidá. **Ponechat hru** nebo Escape nic nezmění.
 4. Po potvrzení hra skončí, zobrazí se výsledek se složkami a místem v síni slávy
@@ -1153,7 +1153,7 @@ Automatizované kontroly a vizuální přejímku eviduje
 ## Jednotky v pohybu — návrh a ověření R-0285
 
 1. Uživatel vybral 25. října 2026 sadu 09 — Lehký pohyb a požadoval čitelný tah. Hráč má na mapě poznat typ jednotky a aktuální výbavu; profesní rekvizita sama nepřidává žádnou herní schopnost. Obrázky sdílí mapa a existující panely i nápověda; pojmenování a modelové podmínky akcí zůstávají autoritativní.
-2. Cesta zůstává stejná: hráč jednotku vybere na mapě nebo v panelu, použije stávající příkaz či gesto a uvidí výsledek v mapě a stavových údajích. Změna obrázku nepřidává potvrzení ani nový způsob rušení. Skutečné koně, muškety, nástroje a poškození mají při výběru obrázku přednost před profesí.
+2. Cesta zůstává stejná: hráč jednotku vybere na mapě nebo v panelu, použije stávající příkaz či gesto a uvidí výsledek v mapě a stavových údajích. Změna obrázku nepřidává potvrzení ani nový způsob rušení. Skutečné koně, zbraně, nástroje a poškození mají při výběru obrázku přednost před profesí.
 3. Zřetelný tmavý obrys, průhledný okraj a vlastní siluety jsou návrhová volba. [Funkční evidence](functional-tests.md#r-0285-walking-unit-artwork-2026-10-25) zaznamenává technické kontroly a skutečný snímek hry; nejde o uživatelskou studii ani měření úspěšnosti rozpoznávání profesí.
 
 

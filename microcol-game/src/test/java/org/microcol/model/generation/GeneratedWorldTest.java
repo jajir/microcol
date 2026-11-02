@@ -327,7 +327,7 @@ class GeneratedWorldTest {
                                 || type == TerrainType.MOUNTAIN);
                         break;
                     case PRIME_TIMBER:
-                    case TRAPPING:
+                    case CLAY_PIT:
                     case GAME:
                         // Forest-only families are the only ones on trees.
                         break;
@@ -344,7 +344,7 @@ class GeneratedWorldTest {
                                 || type == TerrainType.PLAINS);
                     }
                     if (overlay == ResourceOverlay.PRIME_TIMBER
-                            || overlay == ResourceOverlay.TRAPPING
+                            || overlay == ResourceOverlay.CLAY_PIT
                             || overlay == ResourceOverlay.GAME) {
                         assertTrue(trees.contains(at));
                     }

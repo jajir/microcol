@@ -144,7 +144,7 @@ public class Construction {
     /**
      * Same as {@link #getProduction()} for the political snapshot of one
      * update. Only staffed slots receive the political change; unattended base
-     * bells and crosses do not.
+     * owls and torches do not.
      *
      * @param political support bonus and Tory penalty to apply per job
      * @return construction production statistics per turn
@@ -159,9 +159,9 @@ public class Construction {
                 !getType().getConsumptionPerTurn().isPresent(),
                 "This construction consume something. Construction: %s", this);
         ConstructionTurnProduction out = getType().getProductionPerTurn().get()
-                .getType() == GoodsType.CROSS
+                .getType() == GoodsType.TORCHES
                 || getType().getProductionPerTurn().get()
-                        .getType() == GoodsType.BELL
+                        .getType() == GoodsType.OWLS
                                 ? new ConstructionTurnProduction(null, Goods.of(
                                         getType().getProductionPerTurn().get()
                                                 .getType(),
@@ -176,34 +176,35 @@ public class Construction {
         if (getType() == ConstructionType.TOWN_HALL
                 && out.getProducedGoods().isPresent()) {
             return new ConstructionTurnProduction(null,
-                    Goods.of(GoodsType.BELL,
-                            getTownHallBells(
+                    Goods.of(GoodsType.OWLS,
+                            getTownHallOwls(
                                     out.getProducedGoods().get().getAmount())),
                     null);
         }
         if (out.getProducedGoods().isPresent()
-                && out.getProducedGoods().get().getType() == GoodsType.CROSS
+                && out.getProducedGoods().get().getType() == GoodsType.TORCHES
                 && colony.getOwner().getCongressMembers()
                         .contains(Founder.WILLIAM_PENN)) {
             final int base = out.getProducedGoods().get().getAmount();
-            return new ConstructionTurnProduction(null, Goods
-                    .of(GoodsType.CROSS, Math.toIntExact((long) base * 3 / 2)),
+            return new ConstructionTurnProduction(null,
+                    Goods.of(GoodsType.TORCHES,
+                            Math.toIntExact((long) base * 3 / 2)),
                     null);
         }
         return out;
     }
 
     /**
-     * Town-hall bells after the printing and founder percentages. The
-     * unattended base receives printing and Paine; staffed bells also receive
-     * Jefferson. Both portions are summed in wide arithmetic and floored once.
+     * Town-hall owls after the printing and founder percentages. The unattended
+     * base receives printing and Paine; staffed owls also receive Jefferson.
+     * Both portions are summed in wide arithmetic and floored once.
      *
-     * @param totalBells bells after profession and political changes
-     * @return bells credited to the town hall for this update
+     * @param totalOwls owls after profession and political changes
+     * @return owls credited to the town hall for this update
      */
-    private int getTownHallBells(final int totalBells) {
+    private int getTownHallOwls(final int totalOwls) {
         final int unattended = getType().getBaseProductionPerTurn();
-        final int staffed = totalBells - unattended;
+        final int staffed = totalOwls - unattended;
         final Player owner = colony.getOwner();
         final List<Founder> members = owner.getCongressMembers();
         final int printing = colony

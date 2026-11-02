@@ -67,7 +67,7 @@ class ExpertPurchaseTest {
         assertEquals(2.0F,
                 expert.getType().getProductionModifier(GoodsType.TOOLS));
         assertEquals(1.0F,
-                expert.getType().getProductionModifier(GoodsType.CORN));
+                expert.getType().getProductionModifier(GoodsType.GRAIN));
         int id = expert.getId();
         reload();
         assertEquals(1, experts().size());
@@ -181,14 +181,14 @@ class ExpertPurchaseTest {
         UnitPo saved = data.getModel().getUnits().stream()
                 .filter(unit -> unit.getId() == id).findFirst().orElseThrow();
         saved.setMounted(true);
-        saved.setHoldingGuns(true);
+        saved.setHoldingWeapons(true);
         model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         reload();
         UnitFreeColonist expert = (UnitFreeColonist) model.getUnitById(id);
         assertSame(UnitType.MASTER_BLACKSMITH, expert.getType());
         assertTrue(expert.isMounted());
-        assertTrue(expert.isHoldingGuns());
+        assertTrue(expert.isHoldingWeapons());
         assertEquals(2.0F,
                 expert.getType().getProductionModifier(GoodsType.TOOLS));
     }

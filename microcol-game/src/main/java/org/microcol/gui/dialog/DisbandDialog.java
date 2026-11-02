@@ -68,8 +68,8 @@ public final class DisbandDialog extends AbstractMessageWindow {
                 Buttons.disbandToolsLine, offer, GoodsType.TOOLS);
         final Label horses = equipmentLine("disbandHorsesLine",
                 Buttons.disbandHorsesLine, offer, GoodsType.HORSE);
-        final Label muskets = equipmentLine("disbandMusketsLine",
-                Buttons.disbandMusketsLine, offer, GoodsType.MUSKET);
+        final Label weapons = equipmentLine("disbandWeaponsLine",
+                Buttons.disbandWeaponsLine, offer, GoodsType.WEAPONS);
         final CheckBox overflow = new CheckBox(
                 i18n.get(Buttons.disbandOverflowAcknowledge));
         overflow.setId("disbandOverflowAcknowledge");
@@ -91,7 +91,7 @@ public final class DisbandDialog extends AbstractMessageWindow {
         });
         buttons.getButtonNo().setOnAction(event -> onCancelDialog());
         root.getChildren().addAll(title, question, destination, tools, horses,
-                muskets, overflow, buttons.getContent());
+                weapons, overflow, buttons.getContent());
         init(root);
         setTitle(i18n.get(Buttons.disbandTitle));
         showAndWait();

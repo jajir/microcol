@@ -108,13 +108,13 @@ public class TC_68_F59_education_test extends AbstractMicroColTest {
                 "pracovník #303 získal praxí odbornost");
         learning.close();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        education.verifyUnitType(303, UnitType.MASTER_FUR_TRADER);
+        education.verifyUnitType(303, UnitType.MASTER_POTTER);
         education.verifyUnitType(0, UnitType.COLONIST);
         game = colony.close();
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame().openColonyAt(COLONY,
                 "New Amsterdam");
-        education.verifyUnitType(303, UnitType.MASTER_FUR_TRADER);
+        education.verifyUnitType(303, UnitType.MASTER_POTTER);
     }
 
     @Test

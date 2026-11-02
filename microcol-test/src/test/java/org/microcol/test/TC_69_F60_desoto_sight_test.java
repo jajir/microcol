@@ -55,7 +55,7 @@ public class TC_69_F60_desoto_sight_test extends AbstractMicroColTest {
         game = new FreePlayAuditPage(getContext()).continueGame();
         fog.verifyExplored(SECOND_RING, false);
 
-        // One actual town-hall bell completes recruitment during the next turn.
+        // One actual town-hall owl completes recruitment during the next turn.
         var report = game.nextTurn();
         game.verifyTurnReportPresent(report);
         report.orElseThrow().verifyThatAtLeastOneEventMessageContains(
@@ -83,7 +83,7 @@ public class TC_69_F60_desoto_sight_test extends AbstractMicroColTest {
         fog.verifyRevealedPixels(SECOND_RING);
         congress.open();
         congress.verifyProgress(0, 200,
-                "Choose the next founder. Bells wait until a choice is made.",
+                "Choose the next founder. Owls wait until a choice is made.",
                 "Hernando de Soto");
         congress.close();
     }

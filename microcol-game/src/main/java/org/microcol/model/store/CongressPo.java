@@ -7,7 +7,7 @@ import org.microcol.model.Founder;
 /** Required saved Congress state for a colonial player. */
 public final class CongressPo {
     private Boolean activated;
-    private Integer bells;
+    private Integer owls;
     private List<Founder> members;
     private List<Founder> candidates;
     private Founder selected;
@@ -22,12 +22,12 @@ public final class CongressPo {
         activated = value;
     }
 
-    public Integer getBells() {
-        return bells;
+    public Integer getOwls() {
+        return owls;
     }
 
-    public void setBells(final Integer value) {
-        bells = value;
+    public void setOwls(final Integer value) {
+        owls = value;
     }
 
     public List<Founder> getMembers() {

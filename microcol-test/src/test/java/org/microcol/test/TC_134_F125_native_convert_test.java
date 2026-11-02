@@ -220,7 +220,7 @@ public class TC_134_F125_native_convert_test extends AbstractMicroColTest {
 
         // A brief building job keeps the work non-manufacturing: the town hall.
         jobs.openFromField(WORKER_ID);
-        jobs.select(Kind.INDOOR, GoodsType.BELL);
+        jobs.select(Kind.INDOOR, GoodsType.OWLS);
         jobs.confirm();
         jobs.verifyIndoorJob(WORKER_ID, ConstructionType.TOWN_HALL, 1);
         final GamePage game = ColonyScreen.of(getContext(), COLONY_NAME)

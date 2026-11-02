@@ -39,7 +39,7 @@
       },
       "movementThirds": 18,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -57,7 +57,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -75,7 +75,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -93,7 +93,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -111,7 +111,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -129,7 +129,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -147,7 +147,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -165,7 +165,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -183,7 +183,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -201,7 +201,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -219,7 +219,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -237,7 +237,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -255,7 +255,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -273,7 +273,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -291,7 +291,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -309,7 +309,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -327,7 +327,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -345,7 +345,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -369,7 +369,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -393,7 +393,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     },
     {
@@ -417,7 +417,7 @@
       },
       "movementThirds": 3,
       "tools": 0,
-      "holdingGuns": false,
+      "holdingWeapons": false,
       "mounted": false
     }
   ],
@@ -450,7 +450,7 @@
             "y": -1
           },
           "workerId": 0,
-          "producedGoodsType": "TOBACCO"
+          "producedGoodsType": "GRAPES"
         },
         {
           "direction": {
@@ -470,7 +470,7 @@
             "y": 1
           },
           "workerId": 2,
-          "producedGoodsType": "TOBACCO"
+          "producedGoodsType": "GRAPES"
         },
         {
           "direction": {
@@ -478,7 +478,7 @@
             "y": 1
           },
           "workerId": 13,
-          "producedGoodsType": "TOBACCO"
+          "producedGoodsType": "GRAPES"
         },
         {
           "direction": {
@@ -486,7 +486,7 @@
             "y": 1
           },
           "workerId": 1,
-          "producedGoodsType": "CORN"
+          "producedGoodsType": "GRAIN"
         },
         {
           "direction": {
@@ -494,7 +494,7 @@
             "y": 0
           },
           "workerId": 16,
-          "producedGoodsType": "CORN"
+          "producedGoodsType": "GRAIN"
         },
         {
           "direction": {
@@ -529,7 +529,7 @@
           ]
         },
         {
-          "type": "TOBACCONISTS_HOUSE",
+          "type": "SMALL_WINERY",
           "slots": [
             {
               "workerId": 5
@@ -551,7 +551,7 @@
           ]
         },
         {
-          "type": "RUM_DISTILLERS_HOUSE",
+          "type": "SMALL_OIL_PRESS",
           "slots": [
             {},
             {},
@@ -559,7 +559,7 @@
           ]
         },
         {
-          "type": "FUR_TRADERS_HOUSE",
+          "type": "SMALL_POTTERY",
           "slots": [
             {},
             {},
@@ -574,24 +574,24 @@
       "exportGoods": [],
       "buildingQueue": [],
       "colonyWarehouse": {
-        "COAT": 0,
+        "AMPHORAE": 0,
         "HAMMERS": 0,
-        "FUR": 0,
+        "CLAY": 0,
         "ORE": 0,
         "HORSE": 0,
         "SILVER": 0,
         "LUMBER": 0,
-        "RUM": 0,
-        "SUGAR": 0,
-        "TOBACCO": 60,
-        "SILK": 0,
-        "MUSKET": 0,
-        "CROSS": 0,
-        "CORN": 46,
-        "CIGARS": 98,
+        "OLIVE_OIL": 0,
+        "OLIVES": 0,
+        "GRAPES": 60,
+        "CLOTH": 0,
+        "WEAPONS": 0,
+        "TORCHES": 0,
+        "GRAIN": 46,
+        "WINE": 98,
         "GOODS": 0,
-        "BELL": 193,
-        "COTTON": 0,
+        "OWLS": 193,
+        "WOOL": 0,
         "TOOLS": 0
       }
     },
@@ -685,7 +685,7 @@
           ]
         },
         {
-          "type": "TOBACCONISTS_HOUSE",
+          "type": "SMALL_WINERY",
           "slots": [
             {},
             {},
@@ -701,7 +701,7 @@
           ]
         },
         {
-          "type": "RUM_DISTILLERS_HOUSE",
+          "type": "SMALL_OIL_PRESS",
           "slots": [
             {},
             {},
@@ -709,7 +709,7 @@
           ]
         },
         {
-          "type": "FUR_TRADERS_HOUSE",
+          "type": "SMALL_POTTERY",
           "slots": [
             {},
             {},
@@ -724,24 +724,24 @@
       "exportGoods": [],
       "buildingQueue": [],
       "colonyWarehouse": {
-        "COAT": 0,
+        "AMPHORAE": 0,
         "HAMMERS": 0,
-        "FUR": 0,
+        "CLAY": 0,
         "ORE": 0,
         "HORSE": 0,
         "SILVER": 0,
         "LUMBER": 0,
-        "RUM": 0,
-        "SUGAR": 0,
-        "TOBACCO": 96,
-        "SILK": 0,
-        "MUSKET": 0,
-        "CROSS": 0,
-        "CORN": 2,
-        "CIGARS": 100,
+        "OLIVE_OIL": 0,
+        "OLIVES": 0,
+        "GRAPES": 96,
+        "CLOTH": 0,
+        "WEAPONS": 0,
+        "TORCHES": 0,
+        "GRAIN": 2,
+        "WINE": 100,
         "GOODS": 0,
-        "BELL": 151,
-        "COTTON": 0,
+        "OWLS": 151,
+        "WOOL": 0,
         "TOOLS": 0
       }
     },
@@ -764,7 +764,7 @@
             "y": -1
           },
           "workerId": 11,
-          "producedGoodsType": "TOBACCO"
+          "producedGoodsType": "GRAPES"
         },
         {
           "direction": {
@@ -772,7 +772,7 @@
             "y": -1
           },
           "workerId": 15,
-          "producedGoodsType": "TOBACCO"
+          "producedGoodsType": "GRAPES"
         },
         {
           "direction": {
@@ -798,7 +798,7 @@
             "y": 1
           },
           "workerId": 10,
-          "producedGoodsType": "CORN"
+          "producedGoodsType": "GRAIN"
         },
         {
           "direction": {
@@ -806,7 +806,7 @@
             "y": 0
           },
           "workerId": 7,
-          "producedGoodsType": "CORN"
+          "producedGoodsType": "GRAIN"
         },
         {
           "direction": {
@@ -814,7 +814,7 @@
             "y": -1
           },
           "workerId": 9,
-          "producedGoodsType": "TOBACCO"
+          "producedGoodsType": "GRAPES"
         }
       ],
       "constructions": [
@@ -843,7 +843,7 @@
           ]
         },
         {
-          "type": "TOBACCONISTS_HOUSE",
+          "type": "SMALL_WINERY",
           "slots": [
             {
               "workerId": 12
@@ -865,7 +865,7 @@
           ]
         },
         {
-          "type": "RUM_DISTILLERS_HOUSE",
+          "type": "SMALL_OIL_PRESS",
           "slots": [
             {},
             {},
@@ -873,7 +873,7 @@
           ]
         },
         {
-          "type": "FUR_TRADERS_HOUSE",
+          "type": "SMALL_POTTERY",
           "slots": [
             {},
             {},
@@ -888,24 +888,24 @@
       "exportGoods": [],
       "buildingQueue": [],
       "colonyWarehouse": {
-        "COAT": 0,
+        "AMPHORAE": 0,
         "HAMMERS": 0,
-        "FUR": 0,
+        "CLAY": 0,
         "ORE": 0,
         "HORSE": 0,
         "SILVER": 0,
         "LUMBER": 0,
-        "RUM": 0,
-        "SUGAR": 0,
-        "TOBACCO": 30,
-        "SILK": 0,
-        "MUSKET": 0,
-        "CROSS": 0,
-        "CORN": 134,
-        "CIGARS": 100,
+        "OLIVE_OIL": 0,
+        "OLIVES": 0,
+        "GRAPES": 30,
+        "CLOTH": 0,
+        "WEAPONS": 0,
+        "TORCHES": 0,
+        "GRAIN": 134,
+        "WINE": 100,
         "GOODS": 0,
-        "BELL": 132,
-        "COTTON": 0,
+        "OWLS": 132,
+        "WOOL": 0,
         "TOOLS": 0
       }
     }
@@ -915,7 +915,7 @@
       "playerName": "Dutch",
       "type": "TurnEventGoodsWasThrownAway",
       "goods": {
-        "type": "CIGARS",
+        "type": "WINE",
         "amount": 3
       },
       "colonyId": 1,
@@ -925,7 +925,7 @@
       "playerName": "Dutch",
       "type": "TurnEventGoodsWasThrownAway",
       "goods": {
-        "type": "CIGARS",
+        "type": "WINE",
         "amount": 9
       },
       "colonyId": 2,
@@ -1037,7 +1037,7 @@
     "maxY": 30,
     "seed": 134
   },
-  "europe": {"markets": {"DUTCH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "FRENCH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "ENGLISH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}, "SPANISH": {"CORN": [2,0,0], "SUGAR": [3,0,0], "TOBACCO": [3,0,0], "COTTON": [3,0,0], "FUR": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "RUM": [11,0,0], "CIGARS": [11,0,0], "SILK": [11,0,0], "COAT": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "MUSKET": [2,0,0]}}},
+  "europe": {"markets": {"DUTCH": {"GRAIN": [2,0,0], "OLIVES": [3,0,0], "GRAPES": [3,0,0], "WOOL": [3,0,0], "CLAY": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "OLIVE_OIL": [11,0,0], "WINE": [11,0,0], "CLOTH": [11,0,0], "AMPHORAE": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "WEAPONS": [2,0,0]}, "FRENCH": {"GRAIN": [2,0,0], "OLIVES": [3,0,0], "GRAPES": [3,0,0], "WOOL": [3,0,0], "CLAY": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "OLIVE_OIL": [11,0,0], "WINE": [11,0,0], "CLOTH": [11,0,0], "AMPHORAE": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "WEAPONS": [2,0,0]}, "ENGLISH": {"GRAIN": [2,0,0], "OLIVES": [3,0,0], "GRAPES": [3,0,0], "WOOL": [3,0,0], "CLAY": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "OLIVE_OIL": [11,0,0], "WINE": [11,0,0], "CLOTH": [11,0,0], "AMPHORAE": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "WEAPONS": [2,0,0]}, "SPANISH": {"GRAIN": [2,0,0], "OLIVES": [3,0,0], "GRAPES": [3,0,0], "WOOL": [3,0,0], "CLAY": [4,0,0], "LUMBER": [3,0,0], "ORE": [4,0,0], "SILVER": [3,0,0], "HORSE": [2,0,0], "OLIVE_OIL": [11,0,0], "WINE": [11,0,0], "CLOTH": [11,0,0], "AMPHORAE": [9,0,0], "GOODS": [2,0,0], "TOOLS": [1,0,0], "WEAPONS": [2,0,0]}}},
   "campaign": {
     "name": "default",
     "mission": "thrive",
@@ -4321,7 +4321,7 @@
         },
         "congress": {
           "activated": true,
-          "bells": 0,
+          "owls": 0,
           "members": [],
           "candidates": [
             "JOHN_PAUL_JONES",
@@ -4333,7 +4333,7 @@
           "generation": 1,
           "jonesDeliveryPending": false
         },
-        "recruitment": {"pendingEarnedChoice": false,"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"crosses":0,"earnedImmigrants":0},
+        "recruitment": {"pendingEarnedChoice": false,"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"torches":0,"earnedImmigrants":0},
         "name": "Dutch",
         "computer": false,
         "gold": 484,
@@ -4385,13 +4385,13 @@
         },
         "congress": {
           "activated": false,
-          "bells": 0,
+          "owls": 0,
           "members": [],
           "candidates": [],
           "generation": 0,
           "jonesDeliveryPending": false
         },
-        "recruitment": {"pendingEarnedChoice": false,"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"crosses":0,"earnedImmigrants":0},
+        "recruitment": {"pendingEarnedChoice": false,"candidates":[{"id":1,"type":"COLONIST"},{"id":2,"type":"COLONIST"},{"id":3,"type":"COLONIST"}],"nextCandidateId":4,"paidPassages":0,"torches":0,"earnedImmigrants":0},
         "name": "Dutch\u0027s King",
         "computer": true,
         "gold": 1108,

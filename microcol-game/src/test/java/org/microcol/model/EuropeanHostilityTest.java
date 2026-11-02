@@ -55,7 +55,7 @@ class EuropeanHostilityTest {
         }
         attacker = model.getUnitById(0);
         attacker.placeToLocation(Location.of(18, 10));
-        ((UnitFreeColonist) attacker).setHoldingGuns(true);
+        ((UnitFreeColonist) attacker).setHoldingWeapons(true);
         defender = model.getUnitById(6);
         defender.placeToLocation(Location.of(17, 11));
         attacker.getOwner().revealMapForUnit(attacker);
@@ -199,8 +199,8 @@ class EuropeanHostilityTest {
         assertSame(defender, model.getUnitById(defender.getId()));
         assertEquals(0, attacker.getActionPoints());
         assertEquals(0, defender.getActionPoints());
-        assertTrue(!((UnitFreeColonist) attacker).isHoldingGuns()
-                || !((UnitFreeColonist) defender).isHoldingGuns());
+        assertTrue(!((UnitFreeColonist) attacker).isHoldingWeapons()
+                || !((UnitFreeColonist) defender).isHoldingWeapons());
         assertEquals(EuropeanRelationState.WAR,
                 model.getEuropeanRelation(player("Dutch"), player("France")));
     }
@@ -229,7 +229,7 @@ class EuropeanHostilityTest {
                 () -> attacker.attack(colony.getLocation()));
         // The armed third party prevents an atomic colony capture. Reviewing
         // a declaration against France cannot bypass that defender.
-        assertTrue(((UnitFreeColonist) defender).isHoldingGuns());
+        assertTrue(((UnitFreeColonist) defender).isHoldingWeapons());
         assertTrue(
                 attacker.prepareAttack(colony.getLocation(), true).isEmpty());
         assertEquals(before, snapshot());
@@ -254,7 +254,7 @@ class EuropeanHostilityTest {
         final Unit hostile = model.getUnitById(2);
         hostile.takeOver(player("Spain"));
         hostile.placeToLocation(defender.getLocation());
-        ((UnitFreeColonist) hostile).setHoldingGuns(true);
+        ((UnitFreeColonist) hostile).setHoldingWeapons(true);
         model.declareHostilities(player("Dutch"), player("Spain"));
         final String peacefulUnit = gson.toJson(defender.save());
         assertTrue(attacker.isPossibleToAttackAt(defender.getLocation()));
@@ -344,7 +344,7 @@ class EuropeanHostilityTest {
                 List.of(WEST_WATER, EAST_WATER).contains(vessel.getLocation()));
         assertEquals(cargo, gson.toJson(vessel.save().getCargo()));
         assertEquals(colony.getLocation(), attacker.getLocation());
-        assertTrue(((UnitFreeColonist) attacker).isHoldingGuns());
+        assertTrue(((UnitFreeColonist) attacker).isHoldingWeapons());
     }
 
     @Test

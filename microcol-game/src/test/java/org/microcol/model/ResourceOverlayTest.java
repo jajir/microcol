@@ -48,9 +48,9 @@ class ResourceOverlayTest {
                 ResourceOverlay.SILVER.getOutputs());
         assertEquals(List.of(GoodsType.ORE, GoodsType.SILVER),
                 ResourceOverlay.MIXED_MINERALS.getOutputs());
-        assertEquals(List.of(GoodsType.CORN),
+        assertEquals(List.of(GoodsType.GRAIN),
                 ResourceOverlay.GAME.getOutputs());
-        assertEquals(List.of(GoodsType.CORN),
+        assertEquals(List.of(GoodsType.GRAIN),
                 ResourceOverlay.FISHERY.getOutputs());
         assertEquals(List.of(GoodsType.LUMBER),
                 ResourceOverlay.PRIME_TIMBER.getOutputs());
@@ -65,8 +65,8 @@ class ResourceOverlayTest {
         assertEquals(ResourceOverlay.BONUS,
                 ResourceOverlay.MIXED_MINERALS.getBonusFor(GoodsType.SILVER));
         assertEquals(0,
-                ResourceOverlay.MIXED_MINERALS.getBonusFor(GoodsType.FUR));
-        assertEquals(0, ResourceOverlay.NONE.getBonusFor(GoodsType.CORN));
+                ResourceOverlay.MIXED_MINERALS.getBonusFor(GoodsType.CLAY));
+        assertEquals(0, ResourceOverlay.NONE.getBonusFor(GoodsType.GRAIN));
     }
 
     @Test

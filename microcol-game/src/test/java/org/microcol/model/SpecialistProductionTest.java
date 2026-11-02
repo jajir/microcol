@@ -37,11 +37,11 @@ class SpecialistProductionTest {
 
     private static Stream<Arguments> outdoorJobs() {
         return Stream.of(
-                Arguments.of(UnitType.EXPERT_FARMER, GoodsType.CORN,
+                Arguments.of(UnitType.EXPERT_FARMER, GoodsType.GRAIN,
                         TerrainType.GRASSLAND),
-                Arguments.of(UnitType.EXPERT_FISHERMAN, GoodsType.CORN,
+                Arguments.of(UnitType.EXPERT_FISHERMAN, GoodsType.GRAIN,
                         TerrainType.OCEAN),
-                Arguments.of(UnitType.EXPERT_FUR_TRAPPER, GoodsType.FUR,
+                Arguments.of(UnitType.EXPERT_CLAY_DIGGER, GoodsType.CLAY,
                         TerrainType.GRASSLAND),
                 Arguments.of(UnitType.EXPERT_SILVER_MINER, GoodsType.SILVER,
                         TerrainType.MOUNTAIN),
@@ -49,11 +49,11 @@ class SpecialistProductionTest {
                         TerrainType.GRASSLAND),
                 Arguments.of(UnitType.EXPERT_ORE_MINER, GoodsType.ORE,
                         TerrainType.HILL),
-                Arguments.of(UnitType.MASTER_SUGAR_PLANTER, GoodsType.SUGAR,
+                Arguments.of(UnitType.MASTER_OLIVE_GROWER, GoodsType.OLIVES,
                         TerrainType.SAVANNAH),
-                Arguments.of(UnitType.MASTER_COTTON_PLANTER, GoodsType.COTTON,
+                Arguments.of(UnitType.MASTER_SHEPHERD, GoodsType.WOOL,
                         TerrainType.PRAIRIE),
-                Arguments.of(UnitType.MASTER_TOBACCO_PLANTER, GoodsType.TOBACCO,
+                Arguments.of(UnitType.MASTER_GRAPE_GROWER, GoodsType.GRAPES,
                         TerrainType.GRASSLAND));
     }
 
@@ -78,9 +78,9 @@ class SpecialistProductionTest {
                 .getTerrainMap();
         map.put(westSquare, terrain);
         data.getModel().getMap().setTerrainType(map);
-        // Fur and lumber exist only on a forested square, so plant one there.
+        // Clay and lumber exist only on a forested square, so plant one there.
         data.getModel().getMap()
-                .setTrees(goods == GoodsType.FUR || goods == GoodsType.LUMBER
+                .setTrees(goods == GoodsType.CLAY || goods == GoodsType.LUMBER
                         ? Set.of(westSquare)
                         : Collections.emptySet());
         data.getModel().getMap().setFields(Collections.emptySet());
@@ -102,8 +102,8 @@ class SpecialistProductionTest {
                 ? TerrainType.OCEAN
                 : TerrainType.GRASSLAND;
         assertEquals(
-                fieldYield(UnitType.COLONIST, GoodsType.CORN, wrongTerrain),
-                fieldYield(type, GoodsType.CORN, wrongTerrain));
+                fieldYield(UnitType.COLONIST, GoodsType.GRAIN, wrongTerrain),
+                fieldYield(type, GoodsType.GRAIN, wrongTerrain));
     }
 
     @ParameterizedTest
@@ -130,17 +130,18 @@ class SpecialistProductionTest {
         return Stream.of(
                 Arguments.of(UnitType.MASTER_CARPENTER,
                         ConstructionType.LUMBER_MILL),
-                Arguments.of(UnitType.MASTER_DISTILLER,
-                        ConstructionType.RUM_DISTILLERS_HOUSE),
+                Arguments.of(UnitType.MASTER_OIL_MAKER,
+                        ConstructionType.SMALL_OIL_PRESS),
                 Arguments.of(UnitType.MASTER_WEAVER,
                         ConstructionType.WEAVERS_HOUSE),
-                Arguments.of(UnitType.MASTER_TOBACCONIST,
-                        ConstructionType.TOBACCONISTS_HOUSE),
-                Arguments.of(UnitType.MASTER_FUR_TRADER,
-                        ConstructionType.FUR_TRADERS_HOUSE),
+                Arguments.of(UnitType.MASTER_WINEMAKER,
+                        ConstructionType.SMALL_WINERY),
+                Arguments.of(UnitType.MASTER_POTTER,
+                        ConstructionType.SMALL_POTTERY),
                 Arguments.of(UnitType.MASTER_BLACKSMITH,
                         ConstructionType.BLACKSMITHS_HOUSE),
-                Arguments.of(UnitType.MASTER_GUNSMITH, ConstructionType.ARMORY),
+                Arguments.of(UnitType.MASTER_WEAPONSMITH,
+                        ConstructionType.ARMORY),
                 Arguments.of(UnitType.FIREBRAND_PREACHER,
                         ConstructionType.CHAPEL),
                 Arguments.of(UnitType.ELDER_STATESMAN,

@@ -4,66 +4,66 @@
 <properties>
 	<comment>Define keys for Europe dialog</comment>
 
-	<entry key="corn">Jídlo</entry>
-	<entry key="sugar">Cukrová třtina</entry>
-	<entry key="tobacco">Tabák</entry>
-	<entry key="cotton">Bavlna</entry>
-	<entry key="fur">Kožešiny</entry>
+	<entry key="grain">Obilí</entry>
+	<entry key="olives">Olivy</entry>
+	<entry key="grapes">Hrozny</entry>
+	<entry key="wool">Vlna</entry>
+	<entry key="clay">Hlína</entry>
 	<entry key="lumber">Dříví</entry>
 	<entry key="ore">Železná ruda</entry>
 	<entry key="silver">Stříbro</entry>
 	<entry key="horse">Koně</entry>
-	<entry key="rum">Rum</entry>
-	<entry key="cigars">Doutníky</entry>
-	<entry key="silk">Hedvábí</entry>
-	<entry key="coat">Kabáty</entry>
+	<entry key="olive_oil">Olivový olej</entry>
+	<entry key="wine">Víno</entry>
+	<entry key="cloth">Látka</entry>
+	<entry key="amphorae">Amfory</entry>
 	<entry key="goods">Tretky</entry>
 	<entry key="tools">Nářadí</entry>
-	<entry key="musket">Muškety</entry>
+	<entry key="weapons">Zbraně</entry>
 	<entry key="hammers">Kladiva</entry>
-	<entry key="cross">Kříže</entry>
-	<entry key="bell">Zvony svobody</entry>
+	<entry key="torches">Pochodně</entry>
+	<entry key="owls">Sovy</entry>
 
 	<!-- Declension - 2 case - genitiv - plurar -->
-	<entry key="corn_dc2_pl">jídla</entry>
-	<entry key="sugar_dc2_pl">cukrová třtiny</entry>
-	<entry key="tobacco_dc2_pl">tabáku</entry>
-	<entry key="cotton_dc2_pl">bavlny</entry>
-	<entry key="fur_dc2_pl">kožešin</entry>
+	<entry key="grain_dc2_pl">obilí</entry>
+	<entry key="olives_dc2_pl">oliv</entry>
+	<entry key="grapes_dc2_pl">hroznů</entry>
+	<entry key="wool_dc2_pl">vlny</entry>
+	<entry key="clay_dc2_pl">hlíny</entry>
 	<entry key="lumber_dc2_pl">dříví</entry>
 	<entry key="ore_dc2_pl">železné rudy</entry>
 	<entry key="silver_dc2_pl">stříbra</entry>
 	<entry key="horse_dc2_pl">koní</entry>
-	<entry key="rum_dc2_pl">rumu</entry>
-	<entry key="cigars_dc2_pl">doutníků</entry>
-	<entry key="silk_dc2_pl">hedvábí</entry>
-	<entry key="coat_dc2_pl">kabátů</entry>
+	<entry key="olive_oil_dc2_pl">olivového oleje</entry>
+	<entry key="wine_dc2_pl">vína</entry>
+	<entry key="cloth_dc2_pl">látky</entry>
+	<entry key="amphorae_dc2_pl">amfor</entry>
 	<entry key="goods_dc2_pl">tretek</entry>
 	<entry key="tools_dc2_pl">nářadí</entry>
-	<entry key="musket_dc2_pl">mušket</entry>
+	<entry key="weapons_dc2_pl">zbraní</entry>
 	<entry key="hammers_dc2_pl">kladiv</entry>
-	<entry key="cross_dc2_pl">náboženské svobody</entry>
-	<entry key="bell_dc2_pl">zvonů svobody</entry>
+	<entry key="torches_dc2_pl">pochodní</entry>
+	<entry key="owls_dc2_pl">sov</entry>
 
 	<!-- Declension - 7 case - instrumental - plurar -->
-	<entry key="corn_dc7_pl">jídlem</entry>
-	<entry key="sugar_dc7_pl">cukrovou třtinou</entry>
-	<entry key="tobacco_dc7_pl">tabákem</entry>
-	<entry key="cotton_dc7_pl">bavlnou</entry>
-	<entry key="fur_dc7_pl">kožešinama</entry>
+	<entry key="grain_dc7_pl">obilím</entry>
+	<entry key="olives_dc7_pl">olivami</entry>
+	<entry key="grapes_dc7_pl">hrozny</entry>
+	<entry key="wool_dc7_pl">vlnou</entry>
+	<entry key="clay_dc7_pl">hlínou</entry>
 	<entry key="lumber_dc7_pl">Dřevem</entry>
 	<entry key="ore_dc7_pl">železnou rudou</entry>
 	<entry key="silver_dc7_pl">střibrem</entry>
 	<entry key="horse_dc7_pl">koňmi</entry>
-	<entry key="rum_dc7_pl">rumem</entry>
-	<entry key="cigars_dc7_pl">doutníky</entry>
-	<entry key="silk_dc7_pl">hedvábím</entry>
-	<entry key="coat_dc7_pl">kabáty</entry>
+	<entry key="olive_oil_dc7_pl">olivovým olejem</entry>
+	<entry key="wine_dc7_pl">vínem</entry>
+	<entry key="cloth_dc7_pl">látkou</entry>
+	<entry key="amphorae_dc7_pl">amforami</entry>
 	<entry key="goods_dc7_pl">tretkama</entry>
 	<entry key="tools_dc7_pl">nářsdím</entry>
-	<entry key="musket_dc7_pl">mušketama</entry>
+	<entry key="weapons_dc7_pl">zbraněmi</entry>
 	<entry key="hammers_dc7_pl">kladivama</entry>
-	<entry key="cross_dc7_pl">náboženskou svobodou ???</entry>
-	<entry key="bell_dc7_pl">zvonami svobody ???</entry>
+	<entry key="torches_dc7_pl">pochodněmi</entry>
+	<entry key="owls_dc7_pl">sovami</entry>
 
 </properties>

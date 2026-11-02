@@ -57,8 +57,8 @@ class NationalTurnPreparationTest {
         final Colony colony = model.getColonyById(1).orElseThrow();
         for (int index = 0; index < 2; index++) {
             model.addUnitOutSideColony(colony).placeToColonyField(
-                    colony.getEmptyFieldsWithMaxCornProduction().get(0),
-                    GoodsType.CORN);
+                    colony.getEmptyFieldsWithMaxGrainProduction().get(0),
+                    GoodsType.GRAIN);
         }
         model.addUnitOutSideColony(colony);
         model.addUnitOutSideColony(colony);
@@ -75,27 +75,27 @@ class NationalTurnPreparationTest {
         final int highestId = model.save().getUnits().stream()
                 .mapToInt(UnitPo::getId).max().orElseThrow();
         final int productionDiff = colony.getRawGoodsStats()
-                .getStatsByType(GoodsType.CORN).getDiff();
+                .getStatsByType(GoodsType.GRAIN).getDiff();
         final var savedColony = data.getModel().getColonies().get(1);
         final var warehouse = new HashMap<>(savedColony.getColonyWarehouse());
-        warehouse.put("CORN", effectiveFood - productionDiff);
+        warehouse.put("GRAIN", effectiveFood - productionDiff);
         savedColony.setColonyWarehouse(warehouse);
         final Model prepared = make(data);
         assertEquals(effectiveFood,
                 prepared.getColonyById(1).orElseThrow().getRawGoodsStats()
-                        .getStatsByType(GoodsType.CORN).getInWarehouseAfter());
+                        .getStatsByType(GoodsType.GRAIN).getInWarehouseAfter());
         assertEquals(consumed, colony.getRequiredFoodPerTurn());
 
         data.setModel(prepared.save());
         final Model before = make(data);
         assertEquals(effectiveFood,
                 before.getColonyById(1).orElseThrow().getRawGoodsStats()
-                        .getStatsByType(GoodsType.CORN).getInWarehouseAfter());
+                        .getStatsByType(GoodsType.GRAIN).getInWarehouseAfter());
         nextOwnerTurn(before);
         final Colony updated = before.getColonyById(1).orElseThrow();
         final Player updatedOwner = updated.getOwner();
         assertEquals(remainingFood,
-                updated.getWarehouse().getGoods(GoodsType.CORN).getAmount());
+                updated.getWarehouse().getGoods(GoodsType.GRAIN).getAmount());
         assertEquals(initialUnits + births, updatedOwner.getAllUnits().size());
         assertEquals(initialOutside + births,
                 updated.getUnitsOutSideColony().size());
@@ -129,13 +129,13 @@ class NationalTurnPreparationTest {
         data.getModel().getCalendar().setNumberOfPlayedTurns(10);
         data.getModel().getGameManager().getPlayers().stream()
                 .filter(player -> "Dutch".equals(player.getName())).findFirst()
-                .orElseThrow().getRecruitment().setCrosses(100);
+                .orElseThrow().getRecruitment().setTorches(100);
         final UnitPo shipData = data.getModel().getUnits().stream()
                 .filter(unit -> unit.getId() == 3).findFirst().orElseThrow();
         shipData.getPlaceHighSeas().setRemainigTurns(1);
         shipData.getPlaceHighSeas().setPosition(2);
         shipData.setAvailableMoves(0);
-        data.getModel().getColonies().get(1).getColonyWarehouse().put("CORN",
+        data.getModel().getColonies().get(1).getColonyWarehouse().put("GRAIN",
                 200);
         final Model model = make(data);
         final Colony colony = model.getColonyById(1).orElseThrow();
@@ -143,8 +143,8 @@ class NationalTurnPreparationTest {
         final Player human = model.getCurrentPlayer();
         final long immigrants = human.getAllUnits().stream()
                 .filter(Unit::isAtEuropePier).count();
-        final int expectedCorn = colony.getGoodsStats()
-                .getStatsByType(GoodsType.CORN).getInWarehouseAfter();
+        final int expectedGrain = colony.getGoodsStats()
+                .getStatsByType(GoodsType.GRAIN).getInWarehouseAfter();
         final List<String> stages = new ArrayList<>();
         model.addListener(new ModelListenerAdapter() {
             @Override
@@ -152,8 +152,8 @@ class NationalTurnPreparationTest {
                     final UnitArrivedToColoniesEvent event) {
                 stages.add("arrival");
                 assertSame(ship, event.getShip());
-                assertEquals(200, colony.getWarehouse().getGoods(GoodsType.CORN)
-                        .getAmount());
+                assertEquals(200, colony.getWarehouse()
+                        .getGoods(GoodsType.GRAIN).getAmount());
                 assertEquals(0, ship.getActionPoints());
             }
 
@@ -168,8 +168,8 @@ class NationalTurnPreparationTest {
         });
         nextOwnerTurn(model);
         assertEquals(List.of("arrival", "birth"), stages);
-        assertEquals(expectedCorn,
-                colony.getWarehouse().getGoods(GoodsType.CORN).getAmount());
+        assertEquals(expectedGrain,
+                colony.getWarehouse().getGoods(GoodsType.GRAIN).getAmount());
         assertEquals(ship.getSpeed(), ship.getActionPoints());
         data.setModel(model.save());
         final Path file = directory.resolve("prepared.microcol");
@@ -200,23 +200,23 @@ class NationalTurnPreparationTest {
         pioneer.setActionType(UnitActionType.plowField);
         ((UnitActionPlowField) pioneer.getAction()).setRemainingTurns(1);
         final int firstStock = colony.getGoodsStats()
-                .getStatsByType(GoodsType.CORN).getInWarehouseAfter();
+                .getStatsByType(GoodsType.GRAIN).getInWarehouseAfter();
         final int firstProduction = colony
                 .getColonyFieldInDirection(Direction.west).getProduction()
                 .orElseThrow().getAmount();
         nextOwnerTurn(model);
         assertEquals(firstStock,
-                colony.getWarehouse().getGoods(GoodsType.CORN).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.GRAIN).getAmount());
         assertTrue(model.getMap().getTerrainAt(field).isHasField());
         assertEquals(UnitActionType.noAction, pioneer.getAction().getType());
         assertEquals(0, pioneer.getActionPoints());
         assertTrue(colony.getColonyFieldInDirection(Direction.west)
                 .getProduction().orElseThrow().getAmount() > firstProduction);
         final int secondStock = colony.getGoodsStats()
-                .getStatsByType(GoodsType.CORN).getInWarehouseAfter();
+                .getStatsByType(GoodsType.GRAIN).getInWarehouseAfter();
         nextOwnerTurn(model);
         assertEquals(secondStock,
-                colony.getWarehouse().getGoods(GoodsType.CORN).getAmount());
+                colony.getWarehouse().getGoods(GoodsType.GRAIN).getAmount());
         assertEquals(pioneer.getSpeed(), pioneer.getActionPoints());
     }
 }

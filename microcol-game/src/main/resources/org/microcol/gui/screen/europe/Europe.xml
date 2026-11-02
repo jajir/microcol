@@ -33,8 +33,8 @@
 	<entry key="buttonBuyUnit">Buy units</entry>
 
     <entry key="equipmentOpen">Equipment: click, right-click or press Enter to buy or sell</entry>
-    <entry key="buyMuskets">Buy 50 muskets</entry>
-    <entry key="sellMuskets">Sell muskets</entry>
+    <entry key="buyWeapons">Buy 50 weapons</entry>
+    <entry key="sellWeapons">Sell weapons</entry>
     <entry key="buyHorses">Buy 50 horses</entry>
     <entry key="sellHorses">Sell horses</entry>
     <entry key="buyTools">Buy 100 tools</entry>
@@ -48,7 +48,7 @@ Tax: %s%% (%s gold)
 Total: %s gold</entry>
     <entry key="equipmentUNIT_UNAVAILABLE">This colonist is no longer available on your European pier during your turn. Nothing was changed. Cancel and select the colonist again.</entry>
     <entry key="equipmentALREADY_SET">The equipment has already changed. Nothing was changed. Cancel and choose again.</entry>
-    <entry key="equipmentINCOMPATIBLE_EQUIPMENT">Sell the incompatible equipment first. Horses and muskets can be combined; tools require an unequipped colonist.</entry>
+    <entry key="equipmentINCOMPATIBLE_EQUIPMENT">Sell the incompatible equipment first. Horses and weapons can be combined; tools require an unequipped colonist.</entry>
     <entry key="equipmentNOT_ENOUGH_GOLD">Not enough gold. Nothing was changed. Cancel and obtain the required gold.</entry>
     <entry key="equipmentTRADE_RESTRICTED">Trade with your European port is unavailable. Nothing was changed.</entry>
     <entry key="equipmentGOLD_LIMIT">This trade exceeds the treasury limit. Nothing was changed.</entry>
@@ -61,7 +61,7 @@ Total: %s gold</entry>
 	<entry key="recruitOpen">Recruit</entry>
 	<entry key="recruitChanged">The candidate or passage price changed. Reopen recruitment.</entry>
 	<entry key="recruitUnavailable">Recruitment is not available on this turn.</entry>
-    <entry key="immigrationProgress">Immigration: %s / %s crosses</entry>
+    <entry key="immigrationProgress">Immigration: %s / %s torches</entry>
     <entry key="immigrationPending">An earned immigrant arrives at the start of your next turn. Paid passage is unavailable until then.</entry>
     <entry key="repairsOpen">Ship repairs</entry>
     <entry key="repairsEmpty">No ships are being repaired.</entry>
@@ -87,7 +87,7 @@ Total: %s gold</entry>
     <entry key="immigrantBoardingUnavailable">This passenger's boarding order changed. Nothing was changed.</entry>
     <entry key="goToCANCELLED_NOT_FRIENDLY">%s #%s go-to order canceled: %s is no longer friendly.</entry>
   <entry key="earnedTitle">Choose an earned immigrant</entry>
-  <entry key="earnedExplanation">Crosses: %s / %s. Choose one immigrant for free. The turn continues after all earned arrivals are chosen. Closing this window postpones your choice.</entry>
+  <entry key="earnedExplanation">Torches: %s / %s. Choose one immigrant for free. The turn continues after all earned arrivals are chosen. Closing this window postpones your choice.</entry>
   <entry key="earnedChoose">Choose for free</entry>
   <entry key="earnedOpen">Choose immigrant</entry>
   <entry key="earnedPending">An earned immigrant is waiting for your choice. Open recruitment to continue the turn.</entry>

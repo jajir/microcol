@@ -6,13 +6,13 @@ import java.util.Optional;
 /**
  * Congress report (R-0203) of one colonial nation. It composes the national
  * rebel support (R-0100), the recruited founders with the selected one and the
- * bells toward it (R-0104), and the Crown roster of the same nation (R-0185).
+ * owls toward it (R-0104), and the Crown roster of the same nation (R-0185).
  * Every figure is read through the owner's getter that the rules use, so the
  * report neither recruits, advances, grows nor consumes anything. It belongs to
  * one viewer; no other nation's Crown is ever part of it.
  *
  * <p>
- * The report's own figures (support, founders, bells, target and the Jones
+ * The report's own figures (support, founders, owls, target and the Jones
  * state) are fixed when it is built. The Crown roster is not copied: it is the
  * owner's live roster, read through its public getters, which change nothing.
  * Build a new report to see changes made after this one.
@@ -23,20 +23,20 @@ public final class CongressReport {
     private final RebelSupport nationalSupport;
     private final List<Founder> members;
     private final Optional<Founder> selectedFounder;
-    private final int bells;
+    private final int owls;
     private final int target;
     private final boolean jonesDeliveryPending;
     private final Optional<RoyalRoster> crownRoster;
 
     private CongressReport(final RebelSupport nationalSupport,
             final List<Founder> members,
-            final Optional<Founder> selectedFounder, final int bells,
+            final Optional<Founder> selectedFounder, final int owls,
             final int target, final boolean jonesDeliveryPending,
             final Optional<RoyalRoster> crownRoster) {
         this.nationalSupport = nationalSupport;
         this.members = members;
         this.selectedFounder = selectedFounder;
-        this.bells = bells;
+        this.owls = owls;
         this.target = target;
         this.jonesDeliveryPending = jonesDeliveryPending;
         this.crownRoster = crownRoster;
@@ -51,7 +51,7 @@ public final class CongressReport {
     static CongressReport calculate(final Player viewer) {
         return new CongressReport(viewer.getNationalRebelSupport(),
                 List.copyOf(viewer.getCongressMembers()),
-                viewer.getSelectedFounder(), viewer.getCongressBells(),
+                viewer.getSelectedFounder(), viewer.getCongressOwls(),
                 viewer.getCongressTarget(), viewer.isJonesDeliveryPending(),
                 viewer.getCrownRoster());
     }
@@ -78,14 +78,14 @@ public final class CongressReport {
     }
 
     /**
-     * @return Congress bells banked toward the next objective
+     * @return Congress owls banked toward the next objective
      */
-    public int getBells() {
-        return bells;
+    public int getOwls() {
+        return owls;
     }
 
     /**
-     * @return Congress bells needed for the next objective; zero when none is
+     * @return Congress owls needed for the next objective; zero when none is
      *         open
      */
     public int getTarget() {

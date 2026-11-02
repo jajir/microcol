@@ -56,7 +56,7 @@
 	<entry key="renewable">Does not deplete.</entry>
 
 <entry key="topic_units_title">Units</entry>
-<entry key="topic_units_body">Compare every unit type below. Values are base properties. Equipment can change movement and combat: horses increase movement, muskets allow colonists to attack. Soldiers, pioneers and other roles modify these types. Final combat strength also depends on role, damage and bonuses; see Combat. A goods hold carries up to 100 goods. Europe prices are starting prices; ships and artillery can become more expensive. Pioneer work needs tools.</entry>
+<entry key="topic_units_body">Compare every unit type below. Values are base properties. Equipment can change movement and combat: horses increase movement, weapons allow colonists to attack. Soldiers, pioneers and other roles modify these types. Final combat strength also depends on role, damage and bonuses; see Combat. A goods hold carries up to 100 goods. Europe prices are starting prices; ships and artillery can become more expensive. Pioneer work needs tools.</entry>
 <entry key="unitMovement">Movement: %s; base points per turn: %d</entry>
 <entry key="unitCargo">Cargo holds: %d</entry>
 <entry key="unitPassenger">Transport by ship: %d hold(s)</entry>
@@ -68,7 +68,7 @@
 <entry key="unitFisherman">The food bonus applies to water fields only.</entry>
 <entry key="unitPioneer">With tools — plow: %s; roads: %s; clear forest: %s</entry>
 <entry key="unitCombat">Can initiate combat: %s</entry>
-<entry key="unitArmedRoles">with muskets</entry>
+<entry key="unitArmedRoles">with weapons</entry>
 <entry key="unitScout">Scouting specialist: explores rumors and visits native settlements; wider sight even without a horse.</entry>
 <entry key="unitHardyPioneer">Expert pioneer: completes improvements faster and gains more lumber from clearing forest.</entry>
 <entry key="unitVeteran">Veteran: stronger than an ordinary soldier when armed; horses give the mounted combat role.</entry>
@@ -76,7 +76,7 @@
 <entry key="unitServant">Indoor production penalty; can advance through education and learn skills from natives.</entry>
 <entry key="unitCriminal">Larger indoor production penalty; education first advances this worker to indentured servant. Cannot learn directly from natives.</entry>
 <entry key="unitTreasure">Carries its own treasure value. It needs six free ship holds together and cannot work or found a colony.</entry>
-<entry key="unitBrave">Native combatant. Muskets and horses distinguish armed braves, mounted braves and mounted warriors.</entry>
+<entry key="unitBrave">Native combatant. Weapons and horses distinguish armed braves, mounted braves and mounted warriors.</entry>
 <entry key="unitArtillery">Artillery has different attack and defense strength. Damage weakens it; fighting outside a fortified friendly colony carries a penalty.</entry>
 	<entry key="topic_buildings_title">Buildings</entry>
 	<entry key="topic_buildings_body">Explore each building and its upgrades, grouped from the first level to the last. Costs are the full hammers and tools needed for that level, not the difference between levels. Gold for rushing construction is quoted separately in the construction dialog. Production below is the base amount per free colonist per turn; workers, supplies and bonuses affect the actual result. Unattended output is listed separately. This is a reference: available projects depend on your colony.</entry>
@@ -89,7 +89,7 @@
 	<entry key="buildingOutput">Base output per worker per turn: %s %s</entry>
 	<entry key="buildingInput">Base input per worker per turn: %s %s</entry>
 	<entry key="buildingBaseOutput">Additional output without workers per turn: %s %s</entry>
-	<entry key="building_TOWN_HALL">The heart of colonial government. Liberty bells build rebel support and bring new members to Congress.</entry>
+	<entry key="building_TOWN_HALL">The heart of colonial government. Owls build rebel support and bring new members to Congress.</entry>
 	<entry key="building_CARPENTERS_STAND">A modest workshop turns lumber into the hammers needed for construction.</entry>
 	<entry key="building_LUMBER_MILL">A larger workshop doubles the base timber throughput of each carpenter, speeding up construction.</entry>
 	<entry key="building_BLACKSMITHS_HOUSE">A small forge turns ore into tools for building, equipment and pioneering.</entry>
@@ -98,21 +98,21 @@
 	<entry key="building_STOCKADE">A first defensive wall adds a 100%% fortification bonus to colony defense. Only the highest completed fortification counts.</entry>
 	<entry key="building_FORT">Stronger walls raise the fortification bonus to 150%%, replacing the stockade bonus.</entry>
 	<entry key="building_FORTRESS">The strongest walls raise the fortification bonus to 200%%, replacing the fort bonus.</entry>
-	<entry key="building_TOBACCONISTS_HOUSE">Careful hands turn local tobacco into valuable cigars.</entry>
-	<entry key="building_TOBACCONISTS_SHOP">A larger workshop doubles the base tobacco processed by each worker.</entry>
-	<entry key="building_CIGAR_FACTORY">Factory production yields more cigars from the same tobacco input as the previous level.</entry>
-	<entry key="building_WEAVERS_HOUSE">A small loom turns cotton into cloth for trade.</entry>
-	<entry key="building_WEAVERS_SHOP">More capable looms double the base cotton processed by each weaver.</entry>
-	<entry key="building_TEXTILE_MILL">The mill makes more cloth from the same cotton input as the previous level.</entry>
-	<entry key="building_RUM_DISTILLERS_HOUSE">A small still turns sugar into rum for export.</entry>
-	<entry key="building_RUM_DISTILLERY">Larger stills double the base sugar processed by each distiller.</entry>
-	<entry key="building_RUM_FACTORY">Factory stills produce more rum from the same sugar input as the previous level.</entry>
-	<entry key="building_FUR_TRADERS_HOUSE">A small fur workshop turns pelts into coats.</entry>
-	<entry key="building_FUR_TRADING_POST">A larger workshop doubles the base furs processed by each worker.</entry>
-	<entry key="building_FUR_FACTORY">Factory production makes more coats from the same fur input as the previous level.</entry>
-	<entry key="building_ARMORY">Gunsmiths turn tools into muskets. An armory or its upgrades also permits artillery construction.</entry>
-	<entry key="building_MAGAZINE">A larger arms workshop doubles the base tools processed by each gunsmith and retains artillery construction.</entry>
-	<entry key="building_ARSENAL">An industrial arsenal matches the magazine musket output with half the tool input, and retains artillery construction.</entry>
+	<entry key="building_SMALL_WINERY">Careful hands turn local grapes into valuable wine.</entry>
+	<entry key="building_WINERY">A larger workshop doubles the base grapes processed by each worker.</entry>
+	<entry key="building_LARGE_WINERY">Factory production yields more wine from the same grape input as the previous level.</entry>
+	<entry key="building_WEAVERS_HOUSE">A small loom turns wool into cloth for trade.</entry>
+	<entry key="building_WEAVERS_SHOP">More capable looms double the base wool processed by each weaver.</entry>
+	<entry key="building_TEXTILE_MILL">The mill makes more cloth from the same wool input as the previous level.</entry>
+	<entry key="building_SMALL_OIL_PRESS">A small press turns olives into olive oil for export.</entry>
+	<entry key="building_OIL_PRESS">Larger presses double the base olives processed by each oil maker.</entry>
+	<entry key="building_LARGE_OIL_PRESS">Large presses produce more olive oil from the same olive input as the previous level.</entry>
+	<entry key="building_SMALL_POTTERY">A small potter’s workshop turns clay into amphorae.</entry>
+	<entry key="building_POTTERY">A larger workshop doubles the base clay processed by each worker.</entry>
+	<entry key="building_LARGE_POTTERY">Factory production makes more amphorae from the same clay input as the previous level.</entry>
+	<entry key="building_ARMORY">Weaponsmiths turn tools into weapons. An armory or its upgrades also permits artillery construction.</entry>
+	<entry key="building_MAGAZINE">A larger arms workshop doubles the base tools processed by each weaponsmith and retains artillery construction.</entry>
+	<entry key="building_ARSENAL">An industrial arsenal matches the magazine weapon output with half the tool input, and retains artillery construction.</entry>
 	<entry key="building_DOCK">Opens nearby water fields to colony workers for fishing. Construction requires a coastal colony connected to the ocean.</entry>
 	<entry key="building_DRYDOCK">Keeps fishing access and repairs damaged ships in three turns. Requires an ocean-connected coastal colony.</entry>
 	<entry key="building_SHIPYARD">Keeps fishing access, repairs ships in two turns and enables galleon and frigate construction. Requires an ocean-connected coastal colony.</entry>
@@ -124,11 +124,11 @@
 	<entry key="building_WAREHOUSE_EXPANSION">Raises storage to 300 of each non-food trade good. Food remains unlimited.</entry>
 	<entry key="building_STABLES">Doubles the natural horse breeding rate. Breeding needs at least two horses, surplus food and free storage.</entry>
 	<entry key="building_LARGE_STABLES">Retains the same doubled horse breeding rate as ordinary stables. This upgrade currently adds no further breeding bonus.</entry>
-	<entry key="building_CHAPEL">A modest place of worship produces crosses, bringing immigrants closer to the New World.</entry>
-	<entry key="building_CHURCH">A larger congregation increases both worker-produced crosses and the unattended religious output.</entry>
-	<entry key="building_CATHEDRAL">The grandest place of worship further increases crosses from workers and unattended output.</entry>
-	<entry key="building_PRINTING_PRESS">Spreads the call for liberty with a 50%% building bonus to bell production, without extra workers.</entry>
-	<entry key="building_NEWSPAPER">Replaces the printing press bonus with a 100%% building bonus to bell production; the two bonuses do not stack.</entry>
+	<entry key="building_CHAPEL">A modest place of worship produces torches, bringing immigrants closer to the New World.</entry>
+	<entry key="building_CHURCH">A larger congregation increases both worker-produced torches and the unattended religious output.</entry>
+	<entry key="building_CATHEDRAL">The grandest place of worship further increases torches from workers and unattended output.</entry>
+	<entry key="building_PRINTING_PRESS">Spreads the call for liberty with a 50%% building bonus to owl production, without extra workers.</entry>
+	<entry key="building_NEWSPAPER">Replaces the printing press bonus with a 100%% building bonus to owl production; the two bonuses do not stack.</entry>
 	<entry key="building_CUSTOM_HOUSE">Sells eligible surplus goods automatically according to your export settings. Keep a reserve for the colony; boycotts and current trade rules still apply.</entry>
 
 </properties>

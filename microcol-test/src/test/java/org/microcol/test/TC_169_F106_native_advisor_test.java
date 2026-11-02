@@ -54,7 +54,7 @@ public class TC_169_F106_native_advisor_test extends AbstractMicroColTest {
 
     private static final String NOT_TOLD_EN = "The chief has not told you about this settlement yet.";
 
-    private static final String FACTS_EN = "Chief information: goods for sale: Corn, Tobacco. Goods wanted: Musket, Tools, Horse. Teachable skill: Expert Farmer.";
+    private static final String FACTS_EN = "Chief information: goods for sale: Grain, Grapes. Goods wanted: Weapons, Tools, Horse. Teachable skill: Expert Farmer.";
 
     private static final String NOT_TOLD_CS = "Náčelník vám o této osadě zatím nic neřekl.";
 

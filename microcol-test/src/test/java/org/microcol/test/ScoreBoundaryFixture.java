@@ -153,7 +153,7 @@ final class ScoreBoundaryFixture {
         frozen.addProperty("supportPercent", base.getSupportPercent());
         frozen.addProperty("destroyedSettlements",
                 result.getDestroyedSettlements());
-        frozen.addProperty("bellsBeyondTarget", result.getBellsAfterTarget());
+        frozen.addProperty("owlsBeyondTarget", result.getOwlsAfterTarget());
         frozen.addProperty("total", result.getTotal());
         return frozen;
     }

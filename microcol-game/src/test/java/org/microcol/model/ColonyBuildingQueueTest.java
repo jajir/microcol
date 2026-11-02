@@ -29,8 +29,9 @@ public class ColonyBuildingQueueTest {
     @Test
     public void test_that_getBuildigItemsConstruction_is_builded_correctly()
             throws Exception {
-        when(colony.isContainsConstructionByType(
-                ConstructionType.FUR_TRADERS_HOUSE)).thenReturn(true);
+        when(colony
+                .isContainsConstructionByType(ConstructionType.SMALL_POTTERY))
+                .thenReturn(true);
         final Player owner = mock(Player.class);
         when(colony.isValid()).thenReturn(true);
         when(colony.getOwner()).thenReturn(owner);
@@ -39,18 +40,16 @@ public class ColonyBuildingQueueTest {
         when(colony.getUnitsInsideColony())
                 .thenReturn(java.util.Collections.nCopies(8, mock(Unit.class)));
         final Construction house = mock(Construction.class);
-        when(house.getType()).thenReturn(ConstructionType.FUR_TRADERS_HOUSE);
+        when(house.getType()).thenReturn(ConstructionType.SMALL_POTTERY);
         when(colony.getConstructions()).thenReturn(List.of(house));
 
         final List<ColonyBuildingItemConstruction> list = queue
                 .getBuildigItemsConstruction();
-        assertFalse(
-                getByType(list, ConstructionType.FUR_TRADERS_HOUSE).isPresent(),
+        assertFalse(getByType(list, ConstructionType.SMALL_POTTERY).isPresent(),
                 "Building should not be in list because is already builded.");
-        assertTrue(
-                getByType(list, ConstructionType.FUR_TRADING_POST).isPresent(),
+        assertTrue(getByType(list, ConstructionType.POTTERY).isPresent(),
                 "Upgrade should be offered because its predecessor is built.");
-        assertFalse(getByType(list, ConstructionType.FUR_FACTORY).isPresent(),
+        assertFalse(getByType(list, ConstructionType.LARGE_POTTERY).isPresent(),
                 "Building should not be in list because required building is not builded.");
     }
 

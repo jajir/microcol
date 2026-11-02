@@ -63,9 +63,9 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         colony.selectUnitFromPort(0);
         colony.verifyUnitInPortSelected(0, true);
 
-        // Try unloading 100 tobacco into a warehouse with room for one.
+        // Try unloading 100 grapes into a warehouse with room for one.
         colony.verifyNumberOfGoodsInWrehouse(2, 99);
-        ship().verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 100));
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 100));
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
         final DialogChooseGoodsAmount dialog = DialogChooseGoodsAmount
                 .of(getContext());
@@ -76,14 +76,14 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         // Confirm only the offered unit; the other 99 remain aboard.
         dialog.clickOnOk();
         colony.verifyNumberOfGoodsInWrehouse(2, 100);
-        ship().verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 99));
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 99));
 
         // A repeated attempt cannot unload into the now full warehouse.
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 2);
         colony.verifyWarehouseWarning(FULL);
         colony.captureDialog("warehouseTransferMessage", "full.png");
         colony.closeWarehouseWarning();
-        ship().verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 99));
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 99));
         colony.verifyNumberOfGoodsInWrehouse(2, 100);
 
         // Save, return to the menu and load the saved balances.
@@ -95,7 +95,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         reloaded.selectUnitFromPort(0);
         reloaded.verifyUnitInPortSelected(0, true);
         reloaded.verifyNumberOfGoodsInWrehouse(2, 100);
-        ship().verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 99));
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 99));
     }
 
     @Test
@@ -116,7 +116,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
 
         // No goods left the ship or entered the warehouse.
         colony.verifyNumberOfGoodsInWrehouse(2, 99);
-        ship().verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 100));
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 100));
     }
 
     @Test
@@ -137,39 +137,39 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
 
         // Escape has the same safe outcome as the Cancel button.
         colony.verifyNumberOfGoodsInWrehouse(2, 99);
-        ship().verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 100));
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 100));
     }
 
     @Test
     @Tag("local")
     void TC_04_full_warehouse_explains_rejection() throws Exception {
-        // Load a warehouse already holding 100 cigars.
+        // Load a warehouse already holding 100 wine.
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
         colony.verifyUnitInPortSelected(0, true);
         colony.verifyNumberOfGoodsInWrehouse(10, 100);
 
-        // Attempt to unload cigars and acknowledge the explanation.
+        // Attempt to unload wine and acknowledge the explanation.
         colony.dragGoodsFromShipCargoSlotToWarehouse(1, 10);
         colony.verifyWarehouseWarning(FULL);
         colony.closeWarehouseWarning();
 
         // Both inventories remain full, with no discarded cargo.
         colony.verifyNumberOfGoodsInWrehouse(10, 100);
-        ship().verifyCargoGoods(1, Goods.of(GoodsType.CIGARS, 100));
+        ship().verifyCargoGoods(1, Goods.of(GoodsType.WINE, 100));
     }
 
     @Test
     @Tag("local")
     void TC_05_all_cargo_fits_without_a_dialog() throws Exception {
-        // Load 20 cotton aboard and 50 in the colony warehouse.
+        // Load 20 wool aboard and 50 in the colony warehouse.
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
         colony.verifyUnitInPortSelected(0, true);
         colony.verifyNumberOfGoodsInWrehouse(3, 50);
-        ship().verifyCargoGoods(2, Goods.of(GoodsType.COTTON, 20));
+        ship().verifyCargoGoods(2, Goods.of(GoodsType.WOOL, 20));
 
         // Unload the whole cargo directly.
         colony.dragGoodsFromShipCargoSlotToWarehouse(2, 3);
@@ -177,7 +177,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         // Every unit is stored; adjacent cargo is unchanged.
         colony.verifyNumberOfGoodsInWrehouse(3, 70);
         ship().verifyCargoSlotEmpty(2);
-        ship().verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 100));
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 100));
     }
 
     @Test
@@ -208,13 +208,13 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
 
         // Only the valid amount was transferred.
         colony.verifyNumberOfGoodsInWrehouse(2, 100);
-        ship().verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 99));
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 99));
     }
 
     @Test
     @Tag("local")
     void TC_07_player_can_choose_a_smaller_partial_transfer() throws Exception {
-        // Explicitly request a partial cotton transfer.
+        // Explicitly request a partial wool transfer.
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
@@ -232,7 +232,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
                 "reopened-limited.png");
         dialog.cancel();
         colony.verifyNumberOfGoodsInWrehouse(2, 99);
-        ship().verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 100));
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 100));
 
         // Reopen without an explanation, select 17 using the keyboard and
         // confirm.
@@ -247,7 +247,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
 
         // The chosen quantity is exact on both sides.
         colony.verifyNumberOfGoodsInWrehouse(3, 67);
-        ship().verifyCargoGoods(2, Goods.of(GoodsType.COTTON, 3));
+        ship().verifyCargoGoods(2, Goods.of(GoodsType.WOOL, 3));
     }
 
     @Test
@@ -266,8 +266,9 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
 
         // Simulate competing production on the FX thread while the modal is
         // open.
-        WaitForAsyncUtils.asyncFx(() -> getModel().getColonyByName("Delft")
-                .get().getWarehouse().addGoods(Goods.of(GoodsType.TOBACCO, 1)))
+        WaitForAsyncUtils
+                .asyncFx(() -> getModel().getColonyByName("Delft").get()
+                        .getWarehouse().addGoods(Goods.of(GoodsType.GRAPES, 1)))
                 .get(5, TimeUnit.SECONDS);
 
         // Confirm the stale proposal through the UI and acknowledge its
@@ -277,7 +278,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         colony.captureDialog("warehouseTransferMessage", "changed.png");
         colony.closeWarehouseWarning();
         colony.verifyNumberOfGoodsInWrehouse(2, 100);
-        ship().verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 100));
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 100));
     }
 
     @Test
@@ -296,7 +297,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
 
         // Simulate a competing action consuming the source cargo.
         WaitForAsyncUtils.asyncFx(
-                () -> cargo(0).removeCargo(Goods.of(GoodsType.TOBACCO, 100)))
+                () -> cargo(0).removeCargo(Goods.of(GoodsType.GRAPES, 100)))
                 .get(5, TimeUnit.SECONDS);
 
         // Stale confirmation cannot create goods from an empty source.
@@ -333,7 +334,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         colony.closeWarehouseWarning();
         colony.verifyNumberOfGoodsInWrehouse(2, 99);
         ship().verifyLocation(Location.of(23, 12));
-        ship().verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 100));
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 100));
     }
 
     @Test
@@ -363,7 +364,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         colony.closeWarehouseWarning();
         colony.verifyNumberOfGoodsInWrehouse(2, 99);
         ship().verifyCargoOwner(0, getModel().getPlayerByName("Dutch's King"));
-        ship().verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 100));
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 100));
     }
 
     @Test
@@ -380,10 +381,10 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
                 .of(getContext());
         dialog.verifyOfferedAmount(1);
 
-        // Simulate a competing transfer replacing tobacco with cotton.
+        // Simulate a competing transfer replacing grapes with wool.
         WaitForAsyncUtils.asyncFx(() -> {
-            cargo(0).removeCargo(Goods.of(GoodsType.TOBACCO, 100));
-            cargo(0).storeFromColonyWarehouse(Goods.of(GoodsType.COTTON, 1),
+            cargo(0).removeCargo(Goods.of(GoodsType.GRAPES, 100));
+            cargo(0).storeFromColonyWarehouse(Goods.of(GoodsType.WOOL, 1),
                     getModel().getColonyByName("Delft").get());
         }).get(5, TimeUnit.SECONDS);
 
@@ -393,7 +394,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         colony.verifyWarehouseWarning(CHANGED);
         colony.closeWarehouseWarning();
         colony.verifyNumberOfGoodsInWrehouse(2, 99);
-        ship().verifyCargoGoods(0, Goods.of(GoodsType.COTTON, 1));
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.WOOL, 1));
         colony.verifyNumberOfGoodsInWrehouse(3, 49);
     }
 
@@ -401,7 +402,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
     @Tag("local")
     void TC_13_insufficient_cargo_during_confirmation_is_rejected()
             throws Exception {
-        // Open a partial cotton transfer offering all 20 units aboard.
+        // Open a partial wool transfer offering all 20 units aboard.
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
@@ -412,8 +413,9 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
 
         // Simulate another action consuming one unit while the proposal is
         // open.
-        WaitForAsyncUtils.asyncFx(
-                () -> cargo(2).removeCargo(Goods.of(GoodsType.COTTON, 1)))
+        WaitForAsyncUtils
+                .asyncFx(
+                        () -> cargo(2).removeCargo(Goods.of(GoodsType.WOOL, 1)))
                 .get(5, TimeUnit.SECONDS);
 
         // Confirmation must reject the original quantity, not silently reduce
@@ -424,7 +426,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         dialog.verifyOfferedAmount(19);
         dialog.cancel();
         colony.verifyNumberOfGoodsInWrehouse(3, 50);
-        ship().verifyCargoGoods(2, Goods.of(GoodsType.COTTON, 19));
+        ship().verifyCargoGoods(2, Goods.of(GoodsType.WOOL, 19));
     }
 
     @Test
@@ -460,8 +462,8 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         colony.verifyWarehouseWarning(CHANGED);
         colony.closeWarehouseWarning();
         colony.verifyColonyPresent("Delft", false);
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.TOBACCO, 99));
-        ship().verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 100));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAPES, 99));
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 100));
         GamePage.of(getContext());
     }
 
@@ -493,7 +495,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         colony.closeWarehouseWarning();
         colony.verifyNumberOfGoodsInWrehouse(2, 99);
         new ShipWrapper((UnitWithCargo) removedSource.getOwnerUnit())
-                .verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 100));
+                .verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 100));
     }
 
     @Test
@@ -523,21 +525,21 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         colony.verifyWarehouseWarning(CHANGED);
         colony.closeWarehouseWarning();
         colony.verifyNumberOfGoodsInWrehouse(2, 99);
-        ship().verifyCargoGoods(0, Goods.of(GoodsType.TOBACCO, 100));
+        ship().verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 100));
     }
 
     @Test
     @Tag("local")
     void TC_17_drop_outside_window_keeps_cargo_and_allows_next_transfer()
             throws Exception {
-        // Drop cotton outside the application; no target accepts the cargo.
+        // Drop wool outside the application; no target accepts the cargo.
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");
         colony.selectUnitFromPort(0);
         colony.verifyUnitInPortSelected(0, true);
         colony.dragGoodsOutsideWindow(2);
         colony.verifyNumberOfGoodsInWrehouse(3, 50);
-        ship().verifyCargoGoods(2, Goods.of(GoodsType.COTTON, 20));
+        ship().verifyCargoGoods(2, Goods.of(GoodsType.WOOL, 20));
 
         // The next ordinary transfer must still receive mouse input.
         colony.dragGoodsFromShipCargoSlotToWarehouse(2, 3);
@@ -556,8 +558,9 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         final DialogChooseGoodsAmount dialog = colony
                 .dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(2, 3);
         dialog.verifyOfferedAmount(20);
-        WaitForAsyncUtils.asyncFx(
-                () -> cargo(2).removeCargo(Goods.of(GoodsType.COTTON, 1)))
+        WaitForAsyncUtils
+                .asyncFx(
+                        () -> cargo(2).removeCargo(Goods.of(GoodsType.WOOL, 1)))
                 .get(5, TimeUnit.SECONDS);
 
         // The stale confirmation explains the change and offers a new amount.
@@ -566,7 +569,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractMicroColTest {
         colony.closeWarehouseWarning();
         dialog.verifyOfferedAmount(19);
         colony.verifyNumberOfGoodsInWrehouse(3, 50);
-        ship().verifyCargoGoods(2, Goods.of(GoodsType.COTTON, 19));
+        ship().verifyCargoGoods(2, Goods.of(GoodsType.WOOL, 19));
 
         // Only this fresh confirmation transfers the newly offered cargo.
         dialog.clickOnOk();

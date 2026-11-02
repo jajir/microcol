@@ -301,7 +301,7 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
         return unit instanceof UnitFreeColonist
                 && unit.getOwner() == getPlayer()
                 && unit.getAction().isNoAction()
-                && !((UnitFreeColonist) unit).isHoldingGuns()
+                && !((UnitFreeColonist) unit).isHoldingWeapons()
                 && !((UnitFreeColonist) unit).isMounted();
     }
 
@@ -309,7 +309,7 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
             final boolean foodOnly) {
         final boolean resident = colony.getUnitsInsideColony().contains(worker);
         if (foodOnly && (!resident || colony.getGoodsStats()
-                .getStatsByType(GoodsType.CORN).getNetProduction() >= 0)) {
+                .getStatsByType(GoodsType.GRAIN).getNetProduction() >= 0)) {
             // Newcomers and colonies without a deficit wait for the last pass.
             return;
         }
@@ -324,22 +324,22 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
                         && choice.getKind() != ColonyJobChoice.Kind.INDOOR)
                 .collect(Collectors.toList());
         final Optional<ColonyJobChoice> food = bestChoice(choices,
-                GoodsType.CORN);
+                GoodsType.GRAIN);
         final Optional<ColonyJobChoice> lumber = bestChoice(choices,
                 GoodsType.LUMBER);
-        final int net = colony.getGoodsStats().getStatsByType(GoodsType.CORN)
+        final int net = colony.getGoodsStats().getStatsByType(GoodsType.GRAIN)
                 .getNetProduction();
         final int eaten = resident ? 0 : worker.getType().getAteFoodPerTurn();
-        final int produced = current == GoodsType.CORN
+        final int produced = current == GoodsType.GRAIN
                 ? choices.stream()
                         .filter(choice -> choice
                                 .getKind() == ColonyJobChoice.Kind.CURRENT_FIELD
-                                && choice.getGoodsType() == GoodsType.CORN)
+                                && choice.getGoodsType() == GoodsType.GRAIN)
                         .mapToInt(choice -> choice.getPotential().get()
                                 .getAmount())
                         .findFirst().orElse(0)
                 : 0;
-        if (current == GoodsType.CORN) {
+        if (current == GoodsType.GRAIN) {
             if (net < 0) {
                 // Short of food: move only to a strictly better legal field.
                 if (food.isPresent() && food.get().getPotential().get()

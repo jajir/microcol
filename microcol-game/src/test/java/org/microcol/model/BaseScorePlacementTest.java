@@ -152,9 +152,10 @@ class BaseScorePlacementTest {
     private static Unit addFieldWorker(final Model model) {
         final Colony montreal = model.getColonyById(1).orElseThrow();
         final Unit worker = model.addUnitOutSideColony(montreal);
-        final ColonyField field = montreal.getEmptyFieldsWithMaxCornProduction()
-                .stream().findFirst().orElseThrow();
-        worker.placeToColonyField(field, GoodsType.CORN);
+        final ColonyField field = montreal
+                .getEmptyFieldsWithMaxGrainProduction().stream().findFirst()
+                .orElseThrow();
+        worker.placeToColonyField(field, GoodsType.GRAIN);
         return worker;
     }
 

@@ -52,11 +52,11 @@ public class ColonyFieldTest {
     @Test
     void test_countTurnProduction_all_production_could_be_stored()
             throws Exception {
-        mockTurnProduction(GoodsType.CORN, 5);
-        when(warehouse.getGoods(GoodsType.CORN))
-                .thenReturn(Goods.of(GoodsType.CORN, 0));
-        when(warehouse.getStorageCapacity(GoodsType.CORN))
-                .thenReturn(Goods.of(GoodsType.CORN, 100));
+        mockTurnProduction(GoodsType.GRAIN, 5);
+        when(warehouse.getGoods(GoodsType.GRAIN))
+                .thenReturn(Goods.of(GoodsType.GRAIN, 0));
+        when(warehouse.getStorageCapacity(GoodsType.GRAIN))
+                .thenReturn(Goods.of(GoodsType.GRAIN, 100));
 
         field.countTurnProduction(warehouse);
 
@@ -66,7 +66,7 @@ public class ColonyFieldTest {
                 .forClass(Consumer.class);
         verify(warehouse, times(1)).addGoodsWithThrowingAway(acGoods.capture(),
                 acConsumerGoods.capture());
-        assertEquals(Goods.of(GoodsType.CORN, 5), acGoods.getValue());
+        assertEquals(Goods.of(GoodsType.GRAIN, 5), acGoods.getValue());
         verify(model, never()).addTurnEvent(any());
     }
 
@@ -74,11 +74,11 @@ public class ColonyFieldTest {
     @Test
     void test_countTurnProduction_part_of_production_could_be_stored()
             throws Exception {
-        mockTurnProduction(GoodsType.CORN, 5);
-        when(warehouse.getGoods(GoodsType.CORN))
-                .thenReturn(Goods.of(GoodsType.CORN, 98));
-        when(warehouse.getStorageCapacity(GoodsType.CORN))
-                .thenReturn(Goods.of(GoodsType.CORN, 100));
+        mockTurnProduction(GoodsType.GRAIN, 5);
+        when(warehouse.getGoods(GoodsType.GRAIN))
+                .thenReturn(Goods.of(GoodsType.GRAIN, 98));
+        when(warehouse.getStorageCapacity(GoodsType.GRAIN))
+                .thenReturn(Goods.of(GoodsType.GRAIN, 100));
 
         field.countTurnProduction(warehouse);
 
@@ -88,7 +88,7 @@ public class ColonyFieldTest {
                 .forClass(Consumer.class);
         verify(warehouse, times(1)).addGoodsWithThrowingAway(acGoods.capture(),
                 acConsumerGoods.capture());
-        assertEquals(Goods.of(GoodsType.CORN, 5), acGoods.getValue());
+        assertEquals(Goods.of(GoodsType.GRAIN, 5), acGoods.getValue());
 
         final ArgumentCaptor<TurnEvent> acTurnEvent = ArgumentCaptor
                 .forClass(TurnEvent.class);
@@ -102,11 +102,11 @@ public class ColonyFieldTest {
     @Test
     void test_countTurnProduction_produce_nothing_couldBeStored()
             throws Exception {
-        mockTurnProduction_old(GoodsType.CORN, 5);
-        when(warehouse.getGoods(GoodsType.CORN))
-                .thenReturn(Goods.of(GoodsType.CORN, 100));
-        when(warehouse.getStorageCapacity(GoodsType.CORN))
-                .thenReturn(Goods.of(GoodsType.CORN, 100));
+        mockTurnProduction_old(GoodsType.GRAIN, 5);
+        when(warehouse.getGoods(GoodsType.GRAIN))
+                .thenReturn(Goods.of(GoodsType.GRAIN, 100));
+        when(warehouse.getStorageCapacity(GoodsType.GRAIN))
+                .thenReturn(Goods.of(GoodsType.GRAIN, 100));
         when(colony.getOwner()).thenReturn(player);
         when(colony.getName()).thenReturn("Prague");
 
@@ -117,11 +117,11 @@ public class ColonyFieldTest {
 
     @Test
     void test_countTurnProduction_warehouse_is_overloded() throws Exception {
-        mockTurnProduction_old(GoodsType.CORN, 5);
-        when(warehouse.getGoods(GoodsType.CORN))
-                .thenReturn(Goods.of(GoodsType.CORN, 150));
-        when(warehouse.getStorageCapacity(GoodsType.CORN))
-                .thenReturn(Goods.of(GoodsType.CORN, 100));
+        mockTurnProduction_old(GoodsType.GRAIN, 5);
+        when(warehouse.getGoods(GoodsType.GRAIN))
+                .thenReturn(Goods.of(GoodsType.GRAIN, 150));
+        when(warehouse.getStorageCapacity(GoodsType.GRAIN))
+                .thenReturn(Goods.of(GoodsType.GRAIN, 100));
         when(colony.getOwner()).thenReturn(player);
         when(colony.getName()).thenReturn("Prague");
 
@@ -132,12 +132,12 @@ public class ColonyFieldTest {
 
     @Test
     void test_getProduction() throws Exception {
-        mockTurnProduction(GoodsType.COTTON, 10);
+        mockTurnProduction(GoodsType.WOOL, 10);
         Optional<Goods> ret = field.getProduction();
 
         assertNotNull(ret);
         assertTrue(ret.isPresent());
-        assertEquals(GoodsType.COTTON, ret.get().getType());
+        assertEquals(GoodsType.WOOL, ret.get().getType());
         assertEquals(10, ret.get().getAmount());
     }
 

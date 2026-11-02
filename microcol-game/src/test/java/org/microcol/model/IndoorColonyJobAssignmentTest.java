@@ -39,7 +39,7 @@ class IndoorColonyJobAssignmentTest {
         data.getModel().getMap().setTerrainType(terrain);
         data.getModel().getMap().setTrees(Collections.emptySet());
         data.getModel().getMap().setFields(Collections.emptySet());
-        colony.getColonyWarehouse().put("MUSKET", 50);
+        colony.getColonyWarehouse().put("WEAPONS", 50);
         colony.getColonyWarehouse().put("HORSE", 50);
         colony.getColonyWarehouse().put("TOOLS", 20);
         return data;
@@ -205,7 +205,7 @@ class IndoorColonyJobAssignmentTest {
     @Test
     void gunsAndHorsesReturnAtomicallyAtWarehouseCapacity() {
         final GameModelPo rejectedData = fixture();
-        savedUnit(rejectedData, 0).setHoldingGuns(true);
+        savedUnit(rejectedData, 0).setHoldingWeapons(true);
         savedUnit(rejectedData, 0).setMounted(true);
         rejectedData.getModel().getColonies().get(0).getColonyWarehouse()
                 .put("HORSE", 51);
@@ -213,25 +213,25 @@ class IndoorColonyJobAssignmentTest {
         rejected(tooFull, tooFull.getUnitById(0), slot(tooFull));
 
         final GameModelPo acceptedData = fixture();
-        savedUnit(acceptedData, 0).setHoldingGuns(true);
+        savedUnit(acceptedData, 0).setHoldingWeapons(true);
         savedUnit(acceptedData, 0).setMounted(true);
         final Model accepted = load(acceptedData);
         final UnitFreeColonist worker = (UnitFreeColonist) accepted
                 .getUnitById(0);
         final ConstructionSlot target = slot(accepted);
         final String before = snapshot(accepted);
-        assertTrue(worker.isHoldingGuns());
+        assertTrue(worker.isHoldingWeapons());
         assertTrue(worker.isMounted());
         assertTrue(target.canAccept(worker));
         assertEquals(before, snapshot(accepted));
         worker.placeToColonyStructureSlot(target);
         assertSame(worker, target.getUnit());
-        assertFalse(worker.isHoldingGuns());
+        assertFalse(worker.isHoldingWeapons());
         assertFalse(worker.isMounted());
         final ColonyWarehouse warehouse = accepted.getColonyById(0)
                 .orElseThrow().getWarehouse();
-        assertEquals(Goods.of(GoodsType.MUSKET, 100),
-                warehouse.getGoods(GoodsType.MUSKET));
+        assertEquals(Goods.of(GoodsType.WEAPONS, 100),
+                warehouse.getGoods(GoodsType.WEAPONS));
         assertEquals(Goods.of(GoodsType.HORSE, 100),
                 warehouse.getGoods(GoodsType.HORSE));
     }

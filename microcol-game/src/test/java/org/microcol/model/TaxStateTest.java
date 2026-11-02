@@ -24,7 +24,7 @@ class TaxStateTest {
         po.setUpdates(0);
         po.setIssued(2);
         final TaxProtestPo protest = new TaxProtestPo();
-        protest.setGoods(GoodsType.RUM);
+        protest.setGoods(GoodsType.OLIVE_OIL);
         protest.setColonyId(1);
         protest.setQuantity(60);
         protest.setBid(11);
@@ -33,7 +33,7 @@ class TaxStateTest {
         demand.setProtest(protest);
         po.setPending(demand);
         final Map<String, Integer> arrears = new LinkedHashMap<>();
-        arrears.put("TOBACCO", 150);
+        arrears.put("GRAPES", 150);
         po.setArrears(arrears);
         return po;
     }
@@ -92,11 +92,12 @@ class TaxStateTest {
         assertEquals(0, saved.getUpdates());
         assertEquals(2, saved.getIssued());
         assertEquals(6, saved.getPending().getProposedRate());
-        assertEquals(GoodsType.RUM, saved.getPending().getProtest().getGoods());
+        assertEquals(GoodsType.OLIVE_OIL,
+                saved.getPending().getProtest().getGoods());
         assertEquals(1, saved.getPending().getProtest().getColonyId());
         assertEquals(60, saved.getPending().getProtest().getQuantity());
         assertEquals(11, saved.getPending().getProtest().getBid());
-        assertEquals(Map.of("TOBACCO", 150), saved.getArrears());
+        assertEquals(Map.of("GRAPES", 150), saved.getArrears());
     }
 
     @Test
@@ -174,7 +175,7 @@ class TaxStateTest {
         assertThrows(IllegalArgumentException.class,
                 () -> new TaxState(midInterval, difficulty));
         final TaxPo alreadyBoycotted = pendingState();
-        alreadyBoycotted.getArrears().put("RUM", 200);
+        alreadyBoycotted.getArrears().put("OLIVE_OIL", 200);
         assertThrows(IllegalArgumentException.class,
                 () -> new TaxState(alreadyBoycotted, difficulty));
         final TaxPo inactive = pendingState();
@@ -212,7 +213,7 @@ class TaxStateTest {
     void arrearsMustNameATradableCommodityAndOweAtLeastOneHundred() {
         final Difficulty difficulty = Difficulty.CONQUISTADOR;
         final TaxPo small = TaxState.initial();
-        small.getArrears().put("RUM", 99);
+        small.getArrears().put("OLIVE_OIL", 99);
         assertThrows(IllegalArgumentException.class,
                 () -> new TaxState(small, difficulty));
         final TaxPo unknown = TaxState.initial();
@@ -224,12 +225,13 @@ class TaxStateTest {
         assertThrows(IllegalArgumentException.class,
                 () -> new TaxState(untradable, difficulty));
         final TaxPo nullOwed = TaxState.initial();
-        nullOwed.getArrears().put("RUM", null);
+        nullOwed.getArrears().put("OLIVE_OIL", null);
         assertThrows(IllegalArgumentException.class,
                 () -> new TaxState(nullOwed, difficulty));
         final TaxPo valid = TaxState.initial();
-        valid.getArrears().put("RUM", 100);
-        assertTrue(new TaxState(valid, difficulty).isBoycotted(GoodsType.RUM));
+        valid.getArrears().put("OLIVE_OIL", 100);
+        assertTrue(new TaxState(valid, difficulty)
+                .isBoycotted(GoodsType.OLIVE_OIL));
     }
 
     @Test

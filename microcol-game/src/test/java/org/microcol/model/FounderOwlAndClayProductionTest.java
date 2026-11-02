@@ -22,14 +22,13 @@ import org.microcol.model.store.UnitPo;
 import com.google.gson.Gson;
 
 /**
- * Jefferson, Paine and Hudson on real colonies. Town-hall bells use the
- * accepted composition: the unattended base receives printing and Paine,
- * staffed bells also receive Jefferson, and one floor closes the hall total.
- * Hudson doubles positive fur only in the shared field calculation. Colony 0
- * has five residents, so 500 liberty gives one political point and 1000 gives
- * two.
+ * Jefferson, Paine and Hudson on real colonies. Town-hall owls use the accepted
+ * composition: the unattended base receives printing and Paine, staffed owls
+ * also receive Jefferson, and one floor closes the hall total. Hudson doubles
+ * positive clay only in the shared field calculation. Colony 0 has five
+ * residents, so 500 liberty gives one political point and 1000 gives two.
  */
-class FounderBellAndFurProductionTest {
+class FounderOwlAndClayProductionTest {
 
     private GameModelPo data(final long liberty) {
         final GameModelPo data = new GameModelPoDao().loadFromClassPath(
@@ -63,7 +62,7 @@ class FounderBellAndFurProductionTest {
                 .orElseThrow().getCongress();
         congress.setActivated(true);
         congress.setGeneration(1);
-        congress.setBells(0);
+        congress.setOwls(0);
         congress.setSelected(null);
         congress.setJonesDeliveryPending(false);
         congress.setMembers(members);
@@ -132,21 +131,21 @@ class FounderBellAndFurProductionTest {
         moveToTownHall(data, 0, 0, UnitType.ELDER_STATESMAN);
         final Model without = load(data);
         // Unattended 1 plus expert 6 gives 7 without the father.
-        assertEquals(7, planned(colony(without), GoodsType.BELL));
+        assertEquals(7, planned(colony(without), GoodsType.OWLS));
         final GameModelPo withFather = data(0);
         giveMembers(withFather, List.of(Founder.THOMAS_JEFFERSON));
         moveToTownHall(withFather, 0, 0, UnitType.ELDER_STATESMAN);
         // (1 * 100 + 6 * 150) / 100 = 10: only the staffed 6 gains 50%.
-        assertEquals(10, planned(colony(load(withFather)), GoodsType.BELL));
+        assertEquals(10, planned(colony(load(withFather)), GoodsType.OWLS));
     }
 
     @Test
-    void jeffersonDoesNotChangeUnattendedTownHallBell() {
+    void jeffersonDoesNotChangeUnattendedTownHallOwl() {
         final GameModelPo data = data(1000);
         giveMembers(data, List.of(Founder.THOMAS_JEFFERSON));
         final Colony colony = colony(load(data));
         // Empty hall: the unattended base stays 1 and gains nothing.
-        assertEquals(1, planned(colony, GoodsType.BELL));
+        assertEquals(1, planned(colony, GoodsType.OWLS));
     }
 
     @Test
@@ -155,49 +154,49 @@ class FounderBellAndFurProductionTest {
         giveMembers(colonist, List.of(Founder.THOMAS_JEFFERSON));
         moveToTownHall(colonist, 0, 0, UnitType.COLONIST);
         // (100 + 3 * 150) / 100 = 5.
-        assertEquals(5, planned(colony(load(colonist)), GoodsType.BELL));
+        assertEquals(5, planned(colony(load(colonist)), GoodsType.OWLS));
 
         final GameModelPo servant = data(0);
         giveMembers(servant, List.of(Founder.THOMAS_JEFFERSON));
         moveToTownHall(servant, 0, 0, UnitType.INDENTURED_SERVANT);
         // The servant's indoor reduction first gives 2; then (100 + 2 * 150) /
         // 100 = 4.
-        assertEquals(4, planned(colony(load(servant)), GoodsType.BELL));
+        assertEquals(4, planned(colony(load(servant)), GoodsType.OWLS));
 
         final GameModelPo criminal = data(0);
         giveMembers(criminal, List.of(Founder.THOMAS_JEFFERSON));
         moveToTownHall(criminal, 0, 0, UnitType.PETTY_CRIMINAL);
         // Criminal gives 1; (100 + 1 * 150) / 100 = 2 after the floor.
-        assertEquals(2, planned(colony(load(criminal)), GoodsType.BELL));
+        assertEquals(2, planned(colony(load(criminal)), GoodsType.OWLS));
     }
 
     @Test
-    void paineAddsCurrentTaxToUnattendedAndStaffedBells() {
+    void paineAddsCurrentTaxToUnattendedAndStaffedOwls() {
         final GameModelPo data = data(0);
         giveMembers(data, List.of(Founder.THOMAS_PAINE));
         moveToTownHall(data, 0, 0, UnitType.ELDER_STATESMAN);
         final Colony colony = colony(load(data));
         colony.getOwner().setTaxRate(0);
-        assertEquals(7, planned(colony, GoodsType.BELL));
+        assertEquals(7, planned(colony, GoodsType.OWLS));
         colony.getOwner().setTaxRate(20);
         // (1 * 120 + 6 * 120) / 100 = 8.4, floored once to 8.
-        assertEquals(8, planned(colony, GoodsType.BELL));
+        assertEquals(8, planned(colony, GoodsType.OWLS));
         colony.getOwner().setTaxRate(50);
         // (1 * 150 + 6 * 150) / 100 = 10.5, floored once to 10.
-        assertEquals(10, planned(colony, GoodsType.BELL));
+        assertEquals(10, planned(colony, GoodsType.OWLS));
     }
 
     @Test
-    void paineUnattendedBellIsFlooredWithoutCreatingExtraBells() {
+    void paineUnattendedOwlIsFlooredWithoutCreatingExtraOwls() {
         final GameModelPo data = data(0);
         giveMembers(data, List.of(Founder.THOMAS_PAINE));
         final Colony colony = colony(load(data));
         colony.getOwner().setTaxRate(20);
-        // Only the unattended 1 bell: 1 * 1.2 floors to 1.
-        assertEquals(1, planned(colony, GoodsType.BELL));
+        // Only the unattended 1 owl: 1 * 1.2 floors to 1.
+        assertEquals(1, planned(colony, GoodsType.OWLS));
         colony.getOwner().setTaxRate(75);
-        // 1 * 1.75 floors to 1; Paine never adds a bell from zero output.
-        assertEquals(1, planned(colony, GoodsType.BELL));
+        // 1 * 1.75 floors to 1; Paine never adds an owl from zero output.
+        assertEquals(1, planned(colony, GoodsType.OWLS));
     }
 
     @Test
@@ -208,14 +207,14 @@ class FounderBellAndFurProductionTest {
         final Model model = load(data);
         final Colony colony = colony(model);
         colony.getOwner().setTaxRate(20);
-        assertEquals(8, planned(colony, GoodsType.BELL));
-        final int before = stored(colony, GoodsType.BELL);
+        assertEquals(8, planned(colony, GoodsType.OWLS));
+        final int before = stored(colony, GoodsType.OWLS);
         colony.startTurn();
-        assertEquals(before + 8, stored(colony, GoodsType.BELL));
+        assertEquals(before + 8, stored(colony, GoodsType.OWLS));
         colony.getOwner().setTaxRate(50);
-        assertEquals(10, planned(colony, GoodsType.BELL));
+        assertEquals(10, planned(colony, GoodsType.OWLS));
         colony.startTurn();
-        assertEquals(before + 18, stored(colony, GoodsType.BELL));
+        assertEquals(before + 18, stored(colony, GoodsType.OWLS));
     }
 
     @Test
@@ -228,9 +227,9 @@ class FounderBellAndFurProductionTest {
         final Colony pressColony = colony(load(press));
         pressColony.getOwner().setTaxRate(20);
         // Staffed 7 at 220%, unattended 1 at 170%, floored once to 17.
-        assertEquals(17, planned(pressColony, GoodsType.BELL));
-        // Penn is absent, so the unattended chapel cross is unchanged.
-        assertEquals(1, planned(pressColony, GoodsType.CROSS));
+        assertEquals(17, planned(pressColony, GoodsType.OWLS));
+        // Penn is absent, so the unattended chapel torch is unchanged.
+        assertEquals(1, planned(pressColony, GoodsType.TORCHES));
 
         final GameModelPo newspaper = data(500);
         giveMembers(newspaper, List.of(Founder.THOMAS_JEFFERSON,
@@ -240,7 +239,7 @@ class FounderBellAndFurProductionTest {
         final Colony newspaperColony = colony(load(newspaper));
         newspaperColony.getOwner().setTaxRate(20);
         // Newspaper replaces press: staffed 270%, unattended 220%.
-        assertEquals(21, planned(newspaperColony, GoodsType.BELL));
+        assertEquals(21, planned(newspaperColony, GoodsType.OWLS));
     }
 
     /** An ELDER_STATESMAN hall whose owner joins the founder on one update. */
@@ -256,49 +255,49 @@ class FounderBellAndFurProductionTest {
     void jeffersonJoiningThroughOwnerUpdateRaisesTheStaffedHallOnly() {
         final Model model = hallReadyFor(Founder.THOMAS_JEFFERSON);
         // Unattended 1 plus expert 6, as in the control without the father.
-        assertEquals(7, planned(colony(model), GoodsType.BELL));
+        assertEquals(7, planned(colony(model), GoodsType.OWLS));
         RealFounderJoin.joinThroughOwnerUpdate(model, Founder.THOMAS_JEFFERSON);
         // (1 * 100 + 6 * 150) / 100 = 10.
-        assertEquals(10, planned(colony(model), GoodsType.BELL));
+        assertEquals(10, planned(colony(model), GoodsType.OWLS));
         final Model resumed = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
-        assertEquals(10, planned(colony(resumed), GoodsType.BELL));
+        assertEquals(10, planned(colony(resumed), GoodsType.OWLS));
     }
 
     @Test
     void paineJoiningThroughOwnerUpdateAddsTheCurrentTaxToTheHall() {
         final Model model = hallReadyFor(Founder.THOMAS_PAINE);
         colony(model).getOwner().setTaxRate(20);
-        assertEquals(7, planned(colony(model), GoodsType.BELL));
+        assertEquals(7, planned(colony(model), GoodsType.OWLS));
         RealFounderJoin.joinThroughOwnerUpdate(model, Founder.THOMAS_PAINE);
         // (1 * 120 + 6 * 120) / 100 = 8.4, floored once to 8.
-        assertEquals(8, planned(colony(model), GoodsType.BELL));
+        assertEquals(8, planned(colony(model), GoodsType.OWLS));
         // A later tax change moves the bonus: (1 * 150 + 6 * 150) / 100 = 10.
         colony(model).getOwner().setTaxRate(50);
-        assertEquals(10, planned(colony(model), GoodsType.BELL));
+        assertEquals(10, planned(colony(model), GoodsType.OWLS));
     }
 
     @Test
-    void hudsonJoiningThroughOwnerUpdateDoublesEveryPositiveFurField() {
+    void hudsonJoiningThroughOwnerUpdateDoublesEveryPositiveClayField() {
         final Model model = hallReadyFor(Founder.HENRY_HUDSON);
         final Colony colony = colony(model);
         final Unit worker = colony.getUnitsInsideColony().get(0);
         final List<Integer> before = new ArrayList<>();
         for (final ColonyField field : colony.getColonyFields()) {
-            before.add(field.getPotentialProduction(worker, GoodsType.FUR)
+            before.add(field.getPotentialProduction(worker, GoodsType.CLAY)
                     .getAmount());
         }
         RealFounderJoin.joinThroughOwnerUpdate(model, Founder.HENRY_HUDSON);
         int doubled = 0;
         for (int index = 0; index < before.size(); index++) {
             final int after = colony.getColonyFields().get(index)
-                    .getPotentialProduction(worker, GoodsType.FUR).getAmount();
+                    .getPotentialProduction(worker, GoodsType.CLAY).getAmount();
             assertEquals(before.get(index) * 2, after);
             if (before.get(index) > 0) {
                 doubled++;
             }
         }
-        assertTrue(doubled > 0, "The fixture needs a fur-producing field");
+        assertTrue(doubled > 0, "The fixture needs a clay-producing field");
     }
 
     @Test
@@ -311,28 +310,28 @@ class FounderBellAndFurProductionTest {
         final Model model = load(data);
         final Colony colony = colony(model);
         colony.getOwner().setTaxRate(20);
-        final int preview = planned(colony, GoodsType.BELL);
+        final int preview = planned(colony, GoodsType.OWLS);
         assertEquals(17, preview);
-        final int before = stored(colony, GoodsType.BELL);
+        final int before = stored(colony, GoodsType.OWLS);
         // Repeated reads of the preview grant nothing.
-        assertEquals(preview, planned(colony, GoodsType.BELL));
-        assertEquals(before, stored(colony, GoodsType.BELL));
+        assertEquals(preview, planned(colony, GoodsType.OWLS));
+        assertEquals(before, stored(colony, GoodsType.OWLS));
         colony.startTurn();
-        assertEquals(before + preview, stored(colony, GoodsType.BELL));
+        assertEquals(before + preview, stored(colony, GoodsType.OWLS));
         final Model resumed = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         final String saved = new Gson().toJson(resumed.save());
         resumed.startGame();
         assertEquals(saved, new Gson().toJson(resumed.save()));
-        assertEquals(preview, planned(colony(resumed), GoodsType.BELL));
+        assertEquals(preview, planned(colony(resumed), GoodsType.OWLS));
     }
 
     @Test
-    void hudsonDoublesOrdinaryAndExpertFurAndKeepsZeroYield() {
+    void hudsonDoublesOrdinaryAndExpertClayAndKeepsZeroYield() {
         final GameModelPo data = data(0);
         giveMembers(data, List.of(Founder.HENRY_HUDSON));
         data.getModel().getUnits().stream().filter(unit -> unit.getId() == 0)
-                .findFirst().orElseThrow().setType(UnitType.EXPERT_FUR_TRAPPER);
+                .findFirst().orElseThrow().setType(UnitType.EXPERT_CLAY_DIGGER);
         data.getModel().getUnits().stream().filter(unit -> unit.getId() == 1)
                 .findFirst().orElseThrow().setType(UnitType.COLONIST);
         final Colony colony = colony(load(data));
@@ -340,38 +339,39 @@ class FounderBellAndFurProductionTest {
                 .filter(unit -> unit.getId() == 1).findFirst().orElseThrow();
         final Unit expert = colony.getUnitsInsideColony().stream()
                 .filter(unit -> unit.getId() == 0).findFirst().orElseThrow();
-        int furFields = 0;
+        int clayFields = 0;
         for (final ColonyField field : colony.getColonyFields()) {
-            final int base = field.getGoodsTypeProduction(GoodsType.FUR);
+            final int base = field.getGoodsTypeProduction(GoodsType.CLAY);
             if (base == 0) {
-                // Zero yield stays zero, even for an expert trapper.
+                // Zero yield stays zero, even for an expert clay digger.
                 assertEquals(0,
-                        field.getPotentialProduction(expert, GoodsType.FUR)
+                        field.getPotentialProduction(expert, GoodsType.CLAY)
                                 .getAmount());
                 continue;
             }
-            furFields++;
+            clayFields++;
             // Ordinary: base doubled. Expert: base doubled by the profession
             // and again by Hudson.
             assertEquals(base * 2,
-                    field.getPotentialProduction(ordinary, GoodsType.FUR)
+                    field.getPotentialProduction(ordinary, GoodsType.CLAY)
                             .getAmount());
-            assertEquals(base * 4, field
-                    .getPotentialProduction(expert, GoodsType.FUR).getAmount());
+            assertEquals(base * 4,
+                    field.getPotentialProduction(expert, GoodsType.CLAY)
+                            .getAmount());
         }
-        assertTrue(furFields > 0, "The fixture needs a fur-producing field");
+        assertTrue(clayFields > 0, "The fixture needs a clay-producing field");
     }
 
     @Test
-    void hudsonDoesNotCreateCoatsAndRemovedMembershipRestoresFur() {
+    void hudsonDoesNotCreateAmphoraeAndRemovedMembershipRestoresClay() {
         final GameModelPo withHudson = data(0);
         giveMembers(withHudson, List.of(Founder.HENRY_HUDSON));
         final Colony colony = colony(load(withHudson));
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.FUR, 0));
-        // Furs stay an input: no stored furs means no coats, with or without
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.CLAY, 0));
+        // Clay stay an input: no stored clay means no amphorae, with or without
         // Hudson.
-        assertEquals(0, colony.getGoodsStats().getStatsByType(GoodsType.COAT)
-                .getRowProduction());
+        assertEquals(0, colony.getGoodsStats()
+                .getStatsByType(GoodsType.AMPHORAE).getRowProduction());
         final GameModelPo withoutHudson = data(0);
         giveMembers(withoutHudson, List.of());
         final Colony plain = colony(load(withoutHudson));
@@ -381,12 +381,12 @@ class FounderBellAndFurProductionTest {
             final ColonyField plainField = plain.getColonyFields().get(index);
             // Each field doubles against the same field without Hudson.
             assertEquals(
-                    plainField.getPotentialProduction(worker, GoodsType.FUR)
+                    plainField.getPotentialProduction(worker, GoodsType.CLAY)
                             .getAmount() * 2,
-                    field.getPotentialProduction(worker, GoodsType.FUR)
+                    field.getPotentialProduction(worker, GoodsType.CLAY)
                             .getAmount());
         }
-        assertEquals(0, plain.getGoodsStats().getStatsByType(GoodsType.COAT)
+        assertEquals(0, plain.getGoodsStats().getStatsByType(GoodsType.AMPHORAE)
                 .getRowProduction());
     }
 
@@ -406,11 +406,11 @@ class FounderBellAndFurProductionTest {
         return data;
     }
 
-    /** Sum of the preview fur of every field for one worker. */
-    private int furPreview(final Colony colony, final Unit worker) {
+    /** Sum of the preview clay of every field for one worker. */
+    private int clayPreview(final Colony colony, final Unit worker) {
         return colony.getColonyFields().stream()
                 .mapToInt(field -> field
-                        .getPotentialProduction(worker, GoodsType.FUR)
+                        .getPotentialProduction(worker, GoodsType.CLAY)
                         .getAmount())
                 .sum();
     }
@@ -418,22 +418,22 @@ class FounderBellAndFurProductionTest {
     /**
      * Quebec is taken through the real defense battle by a Dutch force. The
      * prior owner keeps its own founders; the new owner's membership and tax
-     * decide the hall and fur output in preview, in the turn and after
+     * decide the hall and clay output in preview, in the turn and after
      * Continue.
      */
     private void captureMovesFoundersWithTheColony(
             final List<Founder> priorMembers, final int priorTax,
-            final int beforeBells, final List<Founder> newMembers,
-            final int newTax, final int afterBells) {
+            final int beforeOwls, final List<Founder> newMembers,
+            final int newTax, final int afterOwls) {
         final GameModelPo data = freePlayData();
-        // Give the capture fixture a positive fur source for the Hudson check.
-        final Location trapping = saved(data).getLocation()
+        // Give the capture fixture a positive clay source for the Hudson check.
+        final Location clayPit = saved(data).getLocation()
                 .add(Direction.north.getVector());
         final var terrain = data.getModel().getMap().getTerrainMap();
-        terrain.put(trapping, TerrainType.GRASSLAND);
+        terrain.put(clayPit, TerrainType.GRASSLAND);
         data.getModel().getMap().setTerrainType(terrain);
         final var resources = data.getModel().getMap().getResourceMap();
-        resources.put(trapping, ResourceOverlay.TRAPPING);
+        resources.put(clayPit, ResourceOverlay.CLAY_PIT);
         data.getModel().getMap().setResources(resources);
         giveMembers(data, "France", priorMembers);
         giveMembers(data, "Dutch", newMembers);
@@ -444,8 +444,8 @@ class FounderBellAndFurProductionTest {
         assertSame(france, quebec.getOwner());
         france.setTaxRate(priorTax);
         dutch.setTaxRate(newTax);
-        quebec.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
-        // A new colonist takes the town hall beside the unattended bell.
+        quebec.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
+        // A new colonist takes the town hall beside the unattended owl.
         final Unit statesman = model.addUnitOutSideColony(quebec);
         statesman.placeToColonyStructureSlot(
                 quebec.getConstructionByType(ConstructionType.TOWN_HALL)
@@ -455,32 +455,33 @@ class FounderBellAndFurProductionTest {
         model.getUnitById(6).placeToLocation(Location.of(18, 10));
         final Unit armed = model.addUnitOutSideColony(quebec);
         armed.takeOver(dutch);
-        assertEquals(beforeBells, planned(quebec, GoodsType.BELL));
-        final int furBefore = furPreview(quebec, statesman);
-        final int bellsBefore = stored(quebec, GoodsType.BELL);
+        assertEquals(beforeOwls, planned(quebec, GoodsType.OWLS));
+        final int clayBefore = clayPreview(quebec, statesman);
+        final int owlsBefore = stored(quebec, GoodsType.OWLS);
         quebec.startTurn();
-        assertEquals(bellsBefore + beforeBells, stored(quebec, GoodsType.BELL));
+        assertEquals(owlsBefore + beforeOwls, stored(quebec, GoodsType.OWLS));
 
         ColonyBattles.capture(model, quebec, armed);
         assertSame(dutch, quebec.getOwner());
-        assertEquals(afterBells, planned(quebec, GoodsType.BELL));
-        final int furAfter = furPreview(quebec, statesman);
+        assertEquals(afterOwls, planned(quebec, GoodsType.OWLS));
+        final int clayAfter = clayPreview(quebec, statesman);
         final boolean hudsonBefore = priorMembers
                 .contains(Founder.HENRY_HUDSON);
         final boolean hudsonAfter = newMembers.contains(Founder.HENRY_HUDSON);
-        final int base = hudsonBefore ? furBefore / 2 : furBefore;
-        assertTrue(base > 0, "The captured colony needs a fur-producing field");
-        assertEquals(hudsonAfter ? base * 2 : base, furAfter);
-        final int bellsAfterCapture = stored(quebec, GoodsType.BELL);
+        final int base = hudsonBefore ? clayBefore / 2 : clayBefore;
+        assertTrue(base > 0,
+                "The captured colony needs a clay-producing field");
+        assertEquals(hudsonAfter ? base * 2 : base, clayAfter);
+        final int owlsAfterCapture = stored(quebec, GoodsType.OWLS);
         quebec.startTurn();
-        assertEquals(bellsAfterCapture + afterBells,
-                stored(quebec, GoodsType.BELL));
+        assertEquals(owlsAfterCapture + afterOwls,
+                stored(quebec, GoodsType.OWLS));
 
         final Model resumed = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         final Colony reloaded = colony(resumed);
         assertEquals("Dutch", reloaded.getOwner().getName());
-        assertEquals(afterBells, planned(reloaded, GoodsType.BELL));
+        assertEquals(afterOwls, planned(reloaded, GoodsType.OWLS));
         assertEquals(priorMembers,
                 resumed.getPlayerByName("France").getCongressMembers());
         assertEquals(newMembers,
@@ -504,60 +505,59 @@ class FounderBellAndFurProductionTest {
     }
 
     /**
-     * Thrive colony 0 with an ordinary colonist in its fur trader's house and
-     * the given stored furs. Hudson is either a member or not.
+     * Thrive colony 0 with an ordinary colonist in its small pottery and the
+     * given stored clay. Hudson is either a member or not.
      */
-    private Colony furTraderColony(final boolean hudson, final int furStock) {
+    private Colony potterColony(final boolean hudson, final int clayStock) {
         final GameModelPo data = data(0);
         giveMembers(data, hudson ? List.of(Founder.HENRY_HUDSON) : List.of());
         data.getModel().getUnits().stream().filter(unit -> unit.getId() == 0)
                 .findFirst().orElseThrow().setType(UnitType.COLONIST);
         final Colony colony = colony(load(data));
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.FUR, furStock));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.CLAY, clayStock));
         final Unit worker = colony.getUnitsInsideColony().stream()
                 .filter(unit -> unit.getId() == 0).findFirst().orElseThrow();
         worker.placeToColonyStructureSlot(
-                colony.getConstructionByType(ConstructionType.FUR_TRADERS_HOUSE)
+                colony.getConstructionByType(ConstructionType.SMALL_POTTERY)
                         .getSlotAt(0));
         return colony;
     }
 
     @ParameterizedTest
     @CsvSource({ "6,3", "2,2", "0,0" })
-    void hudsonDoublesFieldFurButNotFurTraderCoatsOrTheirFurInput(
-            final int furStock, final int coats) {
-        final Colony plain = furTraderColony(false, furStock);
-        final Colony hudson = furTraderColony(true, furStock);
-        // One ordinary worker turns three furs into three coats; with less
+    void hudsonDoublesFieldClayButNotPotterAmphoraeOrTheirClayInput(
+            final int clayStock, final int amphorae) {
+        final Colony plain = potterColony(false, clayStock);
+        final Colony hudson = potterColony(true, clayStock);
+        // One ordinary worker turns three clay into three amphorae; with less
         // stock the real input is the cap.
-        assertEquals(coats, planned(plain, GoodsType.COAT));
-        assertEquals(coats, planned(hudson, GoodsType.COAT));
-        assertEquals(coats, plain.getGoodsStats().getStatsByType(GoodsType.FUR)
-                .getConsumed());
-        assertEquals(coats, hudson.getGoodsStats().getStatsByType(GoodsType.FUR)
-                .getConsumed());
+        assertEquals(amphorae, planned(plain, GoodsType.AMPHORAE));
+        assertEquals(amphorae, planned(hudson, GoodsType.AMPHORAE));
+        assertEquals(amphorae, plain.getGoodsStats()
+                .getStatsByType(GoodsType.CLAY).getConsumed());
+        assertEquals(amphorae, hudson.getGoodsStats()
+                .getStatsByType(GoodsType.CLAY).getConsumed());
         final Unit plainWorker = plain
-                .getConstructionByType(ConstructionType.FUR_TRADERS_HOUSE)
+                .getConstructionByType(ConstructionType.SMALL_POTTERY)
                 .getSlotAt(0).getUnit();
         final Unit hudsonWorker = hudson
-                .getConstructionByType(ConstructionType.FUR_TRADERS_HOUSE)
+                .getConstructionByType(ConstructionType.SMALL_POTTERY)
                 .getSlotAt(0).getUnit();
         for (int index = 0; index < plain.getColonyFields().size(); index++) {
-            // Fields double; the coat house has no field inputs of its own.
+            // Fields double; the amphora house has no field inputs of its own.
             assertEquals(
                     plain.getColonyFields().get(index)
-                            .getPotentialProduction(plainWorker, GoodsType.FUR)
+                            .getPotentialProduction(plainWorker, GoodsType.CLAY)
                             .getAmount() * 2,
-                    hudson.getColonyFields().get(index)
-                            .getPotentialProduction(hudsonWorker, GoodsType.FUR)
-                            .getAmount());
+                    hudson.getColonyFields().get(index).getPotentialProduction(
+                            hudsonWorker, GoodsType.CLAY).getAmount());
         }
         plain.startTurn();
         hudson.startTurn();
-        assertEquals(coats, stored(plain, GoodsType.COAT));
-        assertEquals(coats, stored(hudson, GoodsType.COAT));
-        assertEquals(furStock - coats, stored(plain, GoodsType.FUR));
-        assertEquals(furStock - coats, stored(hudson, GoodsType.FUR));
+        assertEquals(amphorae, stored(plain, GoodsType.AMPHORAE));
+        assertEquals(amphorae, stored(hudson, GoodsType.AMPHORAE));
+        assertEquals(clayStock - amphorae, stored(plain, GoodsType.CLAY));
+        assertEquals(clayStock - amphorae, stored(hudson, GoodsType.CLAY));
     }
 }

@@ -312,7 +312,7 @@ public final class NativeConquestPage extends AbstractScreen {
         unit.add("placeMap", place);
         unit.addProperty("movementThirds", 3);
         unit.addProperty("tools", 0);
-        unit.addProperty("holdingGuns", false);
+        unit.addProperty("holdingWeapons", false);
         unit.addProperty("mounted", false);
         return unit;
     }
@@ -322,7 +322,7 @@ public final class NativeConquestPage extends AbstractScreen {
         final JsonObject unit = unit(id, "COLONIST", DUTCH, at);
         unit.addProperty("workUpdates", 0);
         unit.addProperty("missionary", false);
-        unit.addProperty("holdingGuns", guns);
+        unit.addProperty("holdingWeapons", guns);
         return unit;
     }
 
@@ -346,7 +346,7 @@ public final class NativeConquestPage extends AbstractScreen {
             if (DUTCH.equals(player.get("name").getAsString())) {
                 final JsonObject congress = new JsonObject();
                 congress.addProperty("activated", true);
-                congress.addProperty("bells", 0);
+                congress.addProperty("owls", 0);
                 congress.add("members", strings("HERNAN_CORTES"));
                 congress.add("candidates",
                         strings("FRANCIS_DRAKE", "SIMON_BOLIVAR", "ADAM_SMITH",
@@ -601,7 +601,7 @@ public final class NativeConquestPage extends AbstractScreen {
      */
     public void verifyDisarmed(final int unitId) {
         assertFalse(((UnitFreeColonist) getModel().getUnitById(unitId))
-                .isHoldingGuns());
+                .isHoldingWeapons());
     }
 
     /**

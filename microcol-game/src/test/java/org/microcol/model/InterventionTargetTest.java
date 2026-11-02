@@ -21,7 +21,7 @@ import org.microcol.model.turnevent.TurnEventIntervention;
 
 /**
  * R-0189: the target is fixed at the first owner update after declaration and
- * announced once; only bells of that update onward count; the earning happens
+ * announced once; only owls of that update onward count; the earning happens
  * once with its exact overflow; a saved state is validated before it is used.
  */
 class InterventionTargetTest {
@@ -58,11 +58,11 @@ class InterventionTargetTest {
                 .orElseThrow();
     }
 
-    private static InterventionPo po(final Integer target, final Long bells,
+    private static InterventionPo po(final Integer target, final Long owls,
             final Boolean earned) {
         final InterventionPo po = new InterventionPo();
         po.setTarget(target);
-        po.setBells(bells);
+        po.setOwls(owls);
         po.setEarned(earned);
         po.setDelivered(false);
         return po;
@@ -85,11 +85,11 @@ class InterventionTargetTest {
                 .filter(TurnEventIntervention::isEarned).count();
     }
 
-    /** Bells the colonies of this nation would produce in its next update. */
-    private static int plannedBells(final Model model, final Player player) {
+    /** Owls the colonies of this nation would produce in its next update. */
+    private static int plannedOwls(final Model model, final Player player) {
         return model.getColonies(player).stream()
                 .mapToInt(colony -> Math.max(0, colony.getGoodsStats()
-                        .getStatsByType(GoodsType.BELL).getRowProduction()))
+                        .getStatsByType(GoodsType.OWLS).getRowProduction()))
                 .sum();
     }
 
@@ -118,13 +118,13 @@ class InterventionTargetTest {
     void firstOwnerUpdateFixesTheTargetAndAnnouncesItOnce() {
         final Model model = load(data(true).getModel());
         final Player dutch = dutch(model);
-        final int planned = plannedBells(model, dutch);
+        final int planned = plannedOwls(model, dutch);
         assertTrue(dutch.startTurn());
         final InterventionTarget state = intervention(dutch);
         final int target = InterventionTarget.targetFor(model.getDifficulty());
         assertEquals(target, state.getTarget());
-        // Only this update's bells are counted, and none is earned yet.
-        assertEquals(planned, state.getBells());
+        // Only this update's owls are counted, and none is earned yet.
+        assertEquals(planned, state.getOwls());
         assertFalse(state.isEarned());
         assertEquals(1, notices(model, dutch).size());
         assertFalse(notices(model, dutch).get(0).isEarned());
@@ -141,34 +141,34 @@ class InterventionTargetTest {
         final Player dutch = dutch(model);
         assertTrue(dutch.startTurn());
         final InterventionTarget state = intervention(dutch);
-        final long toTarget = state.getTarget() - state.getBells();
-        // One bell short of the target does not earn.
-        dutch.creditProducedBells(Math.toIntExact(toTarget - 1));
+        final long toTarget = state.getTarget() - state.getOwls();
+        // One owl short of the target does not earn.
+        dutch.creditProducedOwls(Math.toIntExact(toTarget - 1));
         assertFalse(state.isEarned());
         assertEquals(0L, earnedNotices(model, dutch));
         // Exactly the target earns once, with nothing above it yet.
-        dutch.creditProducedBells(1);
+        dutch.creditProducedOwls(1);
         assertTrue(state.isEarned());
-        assertEquals(0L, state.getBellsBeyondTarget());
+        assertEquals(0L, state.getOwlsBeyondTarget());
         assertEquals(1L, earnedNotices(model, dutch));
-        // Bells above the target are the overflow and never earn again.
-        dutch.creditProducedBells(5);
+        // Owls above the target are the overflow and never earn again.
+        dutch.creditProducedOwls(5);
         assertTrue(state.isEarned());
-        assertEquals(5L, state.getBellsBeyondTarget());
+        assertEquals(5L, state.getOwlsBeyondTarget());
         assertEquals(1L, earnedNotices(model, dutch));
     }
 
     @Test
-    void bellsOfSeveralColoniesCountOnceEachAndZeroIsValid() {
+    void owlsOfSeveralColoniesCountOnceEachAndZeroIsValid() {
         final Model model = load(data(true).getModel());
         final Player dutch = dutch(model);
         assertTrue(dutch.startTurn());
         final InterventionTarget state = intervention(dutch);
-        final long before = state.getBells();
-        dutch.creditProducedBells(3);
-        dutch.creditProducedBells(0);
-        dutch.creditProducedBells(4);
-        assertEquals(before + 7, state.getBells());
+        final long before = state.getOwls();
+        dutch.creditProducedOwls(3);
+        dutch.creditProducedOwls(0);
+        dutch.creditProducedOwls(4);
+        assertEquals(before + 7, state.getOwls());
         assertFalse(state.isEarned());
     }
 
@@ -178,13 +178,13 @@ class InterventionTargetTest {
         final Player dutch = dutch(model);
         assertTrue(dutch.startTurn());
         final InterventionTarget state = intervention(dutch);
-        final long before = state.getBells();
+        final long before = state.getOwls();
         assertThrows(IllegalArgumentException.class,
                 () -> state.checkCredit(-1));
         assertThrows(IllegalStateException.class,
                 () -> new InterventionTarget(po(10, Long.MAX_VALUE, true))
                         .checkCredit(1));
-        assertEquals(before, state.getBells());
+        assertEquals(before, state.getOwls());
     }
 
     @Test
@@ -192,13 +192,13 @@ class InterventionTargetTest {
         final Model model = load(data(true).getModel());
         final Player dutch = dutch(model);
         assertTrue(dutch.startTurn());
-        dutch.creditProducedBells(7);
+        dutch.creditProducedOwls(7);
         final InterventionTarget state = intervention(dutch);
         final Model restored = load(model.save());
         final Player restoredDutch = dutch(restored);
         final InterventionTarget copy = intervention(restoredDutch);
         assertEquals(state.getTarget(), copy.getTarget());
-        assertEquals(state.getBells(), copy.getBells());
+        assertEquals(state.getOwls(), copy.getOwls());
         assertEquals(state.isEarned(), copy.isEarned());
         // Loading credits nothing; the next owner update adds no announcement.
         assertEquals(1, notices(restored, restoredDutch).size());
@@ -214,16 +214,16 @@ class InterventionTargetTest {
         final Player dutch = dutch(model);
         assertTrue(dutch.startTurn());
         final InterventionTarget state = intervention(dutch);
-        dutch.creditProducedBells(
-                Math.toIntExact(state.getTarget() - state.getBells()));
+        dutch.creditProducedOwls(
+                Math.toIntExact(state.getTarget() - state.getOwls()));
         assertTrue(state.isEarned());
         final Model restored = load(model.save());
         final Player restoredDutch = dutch(restored);
         assertTrue(intervention(restoredDutch).isEarned());
         assertEquals(1L, earnedNotices(restored, restoredDutch));
-        restoredDutch.creditProducedBells(9);
+        restoredDutch.creditProducedOwls(9);
         assertEquals(1L, earnedNotices(restored, restoredDutch));
-        assertEquals(9L, intervention(restoredDutch).getBellsBeyondTarget());
+        assertEquals(9L, intervention(restoredDutch).getOwlsBeyondTarget());
     }
 
     @Test

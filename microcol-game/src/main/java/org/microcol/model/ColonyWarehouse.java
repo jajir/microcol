@@ -261,7 +261,7 @@ public class ColonyWarehouse {
         Preconditions.checkNotNull(goodsType);
         Preconditions.checkNotNull(constructionType);
         if (GoodsType.BUYABLE_GOOD_TYPES.contains(goodsType)) {
-            if (goodsType == GoodsType.CORN) {
+            if (goodsType == GoodsType.GRAIN) {
                 return Integer.MAX_VALUE;
             }
             if (constructionType.equals(ConstructionType.WAREHOUSE_BASIC)) {

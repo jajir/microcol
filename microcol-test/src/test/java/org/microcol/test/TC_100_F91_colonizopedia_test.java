@@ -271,7 +271,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.verifySelectedTerrainArtwork();
         help.verifyReferenceProperties(
                 "colonizopediaTerrainProperties_GRASSLAND",
-                "Move cost: 1; defense: +0%", "Corn 4", "With forest",
+                "Move cost: 1; defense: +0%", "Grain 4", "With forest",
                 "Move cost: 2; defense: +50%", "Lumber 6", "Fields: yes");
         help.verifyReferenceProperties(
                 "colonizopediaTerrainProperties_MOUNTAIN",
@@ -298,7 +298,8 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
                 "Ore +2, Silver +2", "Ore 200, Silver 200");
         help.verifyReferenceProperties(
                 "colonizopediaResourceProperties_FISHERY",
-                "Allowed terrain: Ocean, Lake", "Corn +2", "Does not deplete.");
+                "Allowed terrain: Ocean, Lake", "Grain +2",
+                "Does not deplete.");
         help.captureDialog("colonizopediaReference", "r0274-bonuses-en.png");
         help.scrollReferenceToEnd();
         help.verifyBodyScrolledToEnd();
@@ -328,7 +329,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.verifySelectedTerrainArtwork();
         help.verifyReferenceProperties(
                 "colonizopediaTerrainProperties_GRASSLAND",
-                "Cena pohybu: 1; obrana: +0%", "Jídlo 4", "S lesem", "Dříví 6",
+                "Cena pohybu: 1; obrana: +0%", "Obilí 4", "S lesem", "Dříví 6",
                 "Pole: ano");
         help.captureDialog("colonizopediaReference", "r0274-terrain-cs.png");
 
@@ -342,7 +343,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
                 "Stříbro +2", "Počáteční zásoba bonusu: Stříbro 100");
         help.verifyReferenceProperties(
                 "colonizopediaResourceProperties_FISHERY",
-                "Povolený terén: Oceán, Jezero", "Jídlo +2", "Nevyčerpává se.");
+                "Povolený terén: Oceán, Jezero", "Obilí +2", "Nevyčerpává se.");
         help.captureDialog("colonizopediaReference", "r0274-bonuses-cs.png");
         help.closeWithEscape();
         help.verifyGameStateUnchanged(before);
@@ -372,7 +373,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.verifyReferenceProperties("colonizopediaUnitProperties_MAN_OF_WAR",
                 "Cargo holds: 6", "Europe purchase: unavailable");
         help.verifyReferenceProperties("colonizopediaUnitProperties_COLONIST",
-                "Transport by ship: 1 hold(s)", "with muskets",
+                "Transport by ship: 1 hold(s)", "with weapons",
                 "plow: yes; roads: yes; clear forest: yes");
         help.verifyReferenceProperties("colonizopediaUnitProperties_BRAVE",
                 "Native combatant", "Transport by ship: unavailable");
@@ -409,8 +410,8 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
         help.scrollReferenceToEnd();
         help.verifyBodyScrolledToEnd();
         help.verifyReferenceProperties(
-                "colonizopediaUnitProperties_MASTER_TOBACCO_PLANTER",
-                "Europe purchase: unavailable", "Tobacco ×2.0");
+                "colonizopediaUnitProperties_MASTER_GRAPE_GROWER",
+                "Europe purchase: unavailable", "Grapes ×2.0");
         help.captureDialog("colonizopediaReference", "r0284-units-end-en.png");
         help.closeWithOk();
         help.verifyDialogClosed();
@@ -479,11 +480,11 @@ public class TC_100_F91_colonizopedia_test extends AbstractMicroColTest {
                 "240 hammers, 100 tools", "Adam Smith", "Tools 9", "Ore 6");
         help.verifyReferenceProperties(
                 "colonizopediaBuildingProperties_CATHEDRAL",
-                "176 hammers, 100 tools", "Crosses 6",
-                "Additional output without workers per turn: Crosses 3");
+                "176 hammers, 100 tools", "Torches 6",
+                "Additional output without workers per turn: Torches 3");
         help.verifyReferenceProperties(
                 "colonizopediaBuildingProperties_ARSENAL",
-                "half the tool input", "Musket 6", "Tools 3");
+                "half the tool input", "Weapons 6", "Tools 3");
         help.verifyReferenceProperties(
                 "colonizopediaBuildingProperties_WAREHOUSE_EXPANSION", "300",
                 "80 hammers, 20 tools");

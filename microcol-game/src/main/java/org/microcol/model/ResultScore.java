@@ -7,11 +7,11 @@ import com.google.common.base.Preconditions;
 /**
  * Calculated result of one colonial nation (R-0196). It takes the base score
  * (R-0195), subtracts each native settlement the nation destroyed, adds the
- * bells produced beyond the earned intervention target, clamps that sum at
- * zero, and only then applies the successful independence bonus and early
- * points. The difficulty factor comes last and the total is floored once. Every
- * term is exact; nothing is rounded before the final floor. Reading the result
- * changes nothing and records no finished game.
+ * owls produced beyond the earned intervention target, clamps that sum at zero,
+ * and only then applies the successful independence bonus and early points. The
+ * difficulty factor comes last and the total is floored once. Every term is
+ * exact; nothing is rounded before the final floor. Reading the result changes
+ * nothing and records no finished game.
  */
 public final class ResultScore {
 
@@ -25,7 +25,7 @@ public final class ResultScore {
     private final int destroyedSettlements;
     private final long pointsPerSettlement;
     private final long destructionDeduction;
-    private final long bellsAfterTarget;
+    private final long owlsAfterTarget;
     private final long clampedBase;
     private final int orderBonusPercent;
     private final long earlyPoints;
@@ -33,7 +33,7 @@ public final class ResultScore {
     private final long total;
 
     private ResultScore(final BaseScore base, final int destroyedSettlements,
-            final long pointsPerSettlement, final long bellsAfterTarget,
+            final long pointsPerSettlement, final long owlsAfterTarget,
             final int orderBonusPercent, final long earlyPoints,
             final int difficultyPercent) {
         baseSubtotal = base.getSubtotal();
@@ -41,10 +41,9 @@ public final class ResultScore {
         this.pointsPerSettlement = pointsPerSettlement;
         destructionDeduction = Math.multiplyExact((long) destroyedSettlements,
                 pointsPerSettlement);
-        this.bellsAfterTarget = bellsAfterTarget;
+        this.owlsAfterTarget = owlsAfterTarget;
         clampedBase = Math.max(0L,
-                Math.subtractExact(
-                        Math.addExact(baseSubtotal, bellsAfterTarget),
+                Math.subtractExact(Math.addExact(baseSubtotal, owlsAfterTarget),
                         destructionDeduction));
         this.orderBonusPercent = orderBonusPercent;
         this.earlyPoints = earlyPoints;
@@ -67,7 +66,7 @@ public final class ResultScore {
      * @param destroyedSettlements native settlements the nation destroyed,
      *                             nonnegative
      * @param difficulty           required selected difficulty
-     * @param bellsBeyondTarget    bells produced after the earned intervention
+     * @param owlsBeyondTarget     owls produced after the earned intervention
      *                             target, nonnegative
      * @param victoryOrder         completion order of a successful
      *                             independence, one or more; null when it did
@@ -77,14 +76,14 @@ public final class ResultScore {
      * @return immutable calculated result
      */
     static ResultScore of(final BaseScore base, final int destroyedSettlements,
-            final Difficulty difficulty, final long bellsBeyondTarget,
+            final Difficulty difficulty, final long owlsBeyondTarget,
             final Integer victoryOrder, final Integer declarationYear) {
         Preconditions.checkNotNull(base, "Base score is required");
         Preconditions.checkNotNull(difficulty, "Difficulty is required");
         Preconditions.checkArgument(destroyedSettlements >= 0,
                 "Negative destroyed settlements");
-        Preconditions.checkArgument(bellsBeyondTarget >= 0,
-                "Negative bells beyond target");
+        Preconditions.checkArgument(owlsBeyondTarget >= 0,
+                "Negative owls beyond target");
         Preconditions.checkArgument(victoryOrder == null || victoryOrder >= 1,
                 "Invalid victory order");
         Preconditions.checkArgument(
@@ -93,7 +92,7 @@ public final class ResultScore {
         final boolean successful = victoryOrder != null;
         final long pointsPerSettlement = difficulty.ordinal() + 1L;
         return new ResultScore(base, destroyedSettlements, pointsPerSettlement,
-                bellsBeyondTarget,
+                owlsBeyondTarget,
                 successful ? orderBonusPercent(victoryOrder) : 0,
                 successful ? earlyPoints(declarationYear) : 0L,
                 difficultyPercent(difficulty));
@@ -158,12 +157,12 @@ public final class ResultScore {
         return destructionDeduction;
     }
 
-    /** @return bells produced beyond the earned intervention target */
-    public long getBellsAfterTarget() {
-        return bellsAfterTarget;
+    /** @return owls produced beyond the earned intervention target */
+    public long getOwlsAfterTarget() {
+        return owlsAfterTarget;
     }
 
-    /** @return base after the deductions and bells, never below zero */
+    /** @return base after the deductions and owls, never below zero */
     public long getClampedBase() {
         return clampedBase;
     }
@@ -192,7 +191,7 @@ public final class ResultScore {
     public String toString() {
         return "ResultScore[base=" + baseSubtotal + ", destroyed="
                 + destroyedSettlements + ", deduction=" + destructionDeduction
-                + ", bells=" + bellsAfterTarget + ", clamped=" + clampedBase
+                + ", owls=" + owlsAfterTarget + ", clamped=" + clampedBase
                 + ", orderBonus=" + orderBonusPercent + "%, early="
                 + earlyPoints + ", difficulty=" + difficultyPercent
                 + "%, total=" + total + "]";

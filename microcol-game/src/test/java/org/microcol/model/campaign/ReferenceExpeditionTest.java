@@ -143,7 +143,7 @@ class ReferenceExpeditionTest {
                             .collect(Collectors.toList());
                     assertEquals(2, passengers.size());
                     assertEquals(1, passengers.stream()
-                            .filter(UnitPo::isHoldingGuns).count());
+                            .filter(UnitPo::isHoldingWeapons).count());
                     assertEquals(1, passengers.stream()
                             .filter(unit -> unit.getTools() == 100).count());
                     assertTrue(
@@ -187,8 +187,10 @@ class ReferenceExpeditionTest {
                             .collect(Collectors.toList());
                     assertEquals(2, people.size());
                     assertTrue(people.stream().allMatch(Unit::isAtCargoSlot));
-                    assertEquals(1, people.stream()
-                            .filter(UnitFreeColonist::isHoldingGuns).count());
+                    assertEquals(1,
+                            people.stream()
+                                    .filter(UnitFreeColonist::isHoldingWeapons)
+                                    .count());
                     assertEquals(1, people.stream()
                             .filter(unit -> unit.getTools() == 100).count());
                     assertTrue(people.stream()
@@ -334,7 +336,7 @@ class ReferenceExpeditionTest {
     }
 
     /**
-     * Rule table in difficulty index order. The factor is k in percent; bells
+     * Rule table in difficulty index order. The factor is k in percent; owls
      * per ground unit are ceil(500 / k) and the intervention target is ceil(500
      * × k). Tax demands come every max(5, 20 − 3d) updates.
      */
@@ -407,7 +409,7 @@ class ReferenceExpeditionTest {
             assertEquals(2, members(roster, RoyalRoster.Family.ARTILLERY));
             assertEquals(2, members(roster, RoyalRoster.Family.MAN_OF_WAR));
             assertEquals(ceilDivide(500 * 100, rule.factor),
-                    roster.getBellThreshold());
+                    roster.getOwlThreshold());
         }
         assertEquals(rule.toryThreshold,
                 PoliticalProduction.getToryThreshold(difficulty));
@@ -437,8 +439,8 @@ class ReferenceExpeditionTest {
                 .collect(Collectors.toList());
         assertEquals(2, people.size());
         assertTrue(people.stream().allMatch(Unit::isAtCargoSlot));
-        assertEquals(1, people.stream().filter(UnitFreeColonist::isHoldingGuns)
-                .count());
+        assertEquals(1, people.stream()
+                .filter(UnitFreeColonist::isHoldingWeapons).count());
         assertEquals(1,
                 people.stream().filter(unit -> unit.getTools() == 100).count());
     }

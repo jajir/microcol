@@ -23,7 +23,7 @@ class FortifyOrderTest {
                 "/maps/default-campaign-mission-2-thrive.microcol");
         final UnitPo soldier = data.getModel().getUnits().stream()
                 .filter(unit -> unit.getId() == 16).findFirst().orElseThrow();
-        soldier.setHoldingGuns(true);
+        soldier.setHoldingWeapons(true);
         soldier.setTools(0);
         soldier.setAvailableMoves(1);
         final java.util.Map<Location, TerrainType> terrain = data.getModel()
@@ -57,8 +57,8 @@ class FortifyOrderTest {
         assertThrows(IllegalStateException.class,
                 () -> soldier.setActionType(UnitActionType.noAction));
         assertThrows(IllegalStateException.class,
-                () -> ((UnitFreeColonist) soldier).setHoldingGuns(false));
-        assertTrue(((UnitFreeColonist) soldier).isHoldingGuns());
+                () -> ((UnitFreeColonist) soldier).setHoldingWeapons(false));
+        assertTrue(((UnitFreeColonist) soldier).isHoldingWeapons());
 
         final Model restored = load(saved(model));
         final Unit waiting = restored.getUnitById(16);
@@ -87,7 +87,7 @@ class FortifyOrderTest {
         assertThrows(IllegalStateException.class,
                 () -> waiting.setActionType(UnitActionType.plowField));
         assertThrows(IllegalStateException.class,
-                () -> waiting.placeToColonyField(null, GoodsType.CORN));
+                () -> waiting.placeToColonyField(null, GoodsType.GRAIN));
         assertEquals(effectiveState, snapshot(restored));
         final Model effective = load(saved(restored));
         final Unit active = effective.getUnitById(16);
@@ -132,7 +132,7 @@ class FortifyOrderTest {
         final Model model = load(data);
         final Unit soldier = model.getUnitById(16);
         soldier.placeToLocation(SHORE);
-        ((UnitFreeColonist) soldier).setHoldingGuns(false);
+        ((UnitFreeColonist) soldier).setHoldingWeapons(false);
         assertFalse(model.canFortify(soldier));
         assertThrows(IllegalStateException.class, () -> model.fortify(soldier));
         assertFalse(model.canFortify(model.getUnitById(3)));
@@ -147,9 +147,9 @@ class FortifyOrderTest {
         saved.setAvailableMoves(1);
         assertThrows(IllegalArgumentException.class, () -> load(savedData));
         saved.setAvailableMoves(0);
-        saved.setHoldingGuns(false);
+        saved.setHoldingWeapons(false);
         assertThrows(IllegalArgumentException.class, () -> load(savedData));
-        saved.setHoldingGuns(true);
+        saved.setHoldingWeapons(true);
         final java.util.Map<Location, TerrainType> terrain = savedData
                 .getModel().getMap().getTerrainMap();
         terrain.put(SHORE, TerrainType.OCEAN);
@@ -232,7 +232,7 @@ class FortifyOrderTest {
         final UnitFreeColonist soldier = (UnitFreeColonist) model
                 .getUnitById(0);
         soldier.placeToLocation(Location.of(18, 10));
-        soldier.setHoldingGuns(true);
+        soldier.setHoldingWeapons(true);
         soldier.setActionPoints(1);
         final Unit rival = model.getUnitById(6);
         rival.placeToLocation(Location.of(17, 11));

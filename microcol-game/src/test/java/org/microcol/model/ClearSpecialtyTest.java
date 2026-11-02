@@ -29,14 +29,14 @@ class ClearSpecialtyTest {
 
     private static Stream<UnitType> civilianSkills() {
         return Stream.of(UnitType.EXPERT_FARMER, UnitType.EXPERT_FISHERMAN,
-                UnitType.EXPERT_FUR_TRAPPER, UnitType.EXPERT_SILVER_MINER,
+                UnitType.EXPERT_CLAY_DIGGER, UnitType.EXPERT_SILVER_MINER,
                 UnitType.EXPERT_LUMBERJACK, UnitType.EXPERT_ORE_MINER,
                 UnitType.MASTER_CARPENTER, UnitType.SEASONED_SCOUT,
-                UnitType.HARDY_PIONEER, UnitType.MASTER_SUGAR_PLANTER,
-                UnitType.MASTER_COTTON_PLANTER, UnitType.MASTER_TOBACCO_PLANTER,
-                UnitType.MASTER_DISTILLER, UnitType.MASTER_WEAVER,
-                UnitType.MASTER_TOBACCONIST, UnitType.MASTER_FUR_TRADER,
-                UnitType.MASTER_BLACKSMITH, UnitType.MASTER_GUNSMITH,
+                UnitType.HARDY_PIONEER, UnitType.MASTER_OLIVE_GROWER,
+                UnitType.MASTER_SHEPHERD, UnitType.MASTER_GRAPE_GROWER,
+                UnitType.MASTER_OIL_MAKER, UnitType.MASTER_WEAVER,
+                UnitType.MASTER_WINEMAKER, UnitType.MASTER_POTTER,
+                UnitType.MASTER_BLACKSMITH, UnitType.MASTER_WEAPONSMITH,
                 UnitType.FIREBRAND_PREACHER, UnitType.ELDER_STATESMAN,
                 UnitType.JESUIT_MISSIONARY);
     }
@@ -181,7 +181,7 @@ class ClearSpecialtyTest {
     void equipmentAndOutsidePlacementStayIdentical() {
         final GameModelPo data = scenario(null);
         setType(data, 0, UnitType.EXPERT_FARMER, false);
-        setType(data, 1, UnitType.MASTER_GUNSMITH, true);
+        setType(data, 1, UnitType.MASTER_WEAPONSMITH, true);
         final Model model = start(data);
         final Colony colony = colony(model);
         final UnitFreeColonist tooled = (UnitFreeColonist) model.getUnitById(0);
@@ -189,10 +189,10 @@ class ClearSpecialtyTest {
         tooled.placeToLocation(colony.getLocation());
         armed.placeToLocation(colony.getLocation());
         tooled.setTools(100);
-        armed.setHoldingGuns(true);
+        armed.setHoldingWeapons(true);
         armed.setMounted(true);
         final Goods tools = colony.getWarehouse().getGoods(GoodsType.TOOLS);
-        final Goods muskets = colony.getWarehouse().getGoods(GoodsType.MUSKET);
+        final Goods weapons = colony.getWarehouse().getGoods(GoodsType.WEAPONS);
         final Goods horses = colony.getWarehouse().getGoods(GoodsType.HORSE);
 
         colony.clearSpecialty(tooled);
@@ -203,8 +203,8 @@ class ClearSpecialtyTest {
         assertEquals(UnitType.COLONIST, tooled.getType());
         assertEquals(UnitType.COLONIST, armed.getType());
         assertEquals(100, tooled.getTools());
-        assertFalse(tooled.isHoldingGuns());
-        assertTrue(armed.isHoldingGuns());
+        assertFalse(tooled.isHoldingWeapons());
+        assertTrue(armed.isHoldingWeapons());
         assertTrue(armed.isMounted());
         assertTrue(armed.isVeteran());
         assertEquals(0, armed.getTools());
@@ -212,7 +212,8 @@ class ClearSpecialtyTest {
         assertEquals(colony.getLocation(), tooled.getLocation());
         assertEquals(colony.getLocation(), armed.getLocation());
         assertEquals(tools, colony.getWarehouse().getGoods(GoodsType.TOOLS));
-        assertEquals(muskets, colony.getWarehouse().getGoods(GoodsType.MUSKET));
+        assertEquals(weapons,
+                colony.getWarehouse().getGoods(GoodsType.WEAPONS));
         assertEquals(horses, colony.getWarehouse().getGoods(GoodsType.HORSE));
     }
 
@@ -352,12 +353,12 @@ class ClearSpecialtyTest {
     }
 
     @Test
-    void savedAndLoadedSchoolOnlyPlanterAtFieldSurvivesContinue()
+    void savedAndLoadedSchoolOnlyGrowerAtFieldSurvivesContinue()
             throws Exception {
         final GameModelPo data = scenario(null);
-        setType(data, 0, UnitType.MASTER_SUGAR_PLANTER, false);
+        setType(data, 0, UnitType.MASTER_OLIVE_GROWER, false);
         final Model model = start(data);
-        final Path file = directory.resolve("planter.microcol");
+        final Path file = directory.resolve("grower.microcol");
         final GameModelPoDao dao = new GameModelPoDao();
         data.setModel(model.save());
         dao.saveToFile(file.toString(), data);
@@ -365,12 +366,12 @@ class ClearSpecialtyTest {
                 dao.loadFromFile(file.toFile()).getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         loaded.startGame();
-        final Unit planter = loaded.getUnitById(0);
-        assertEquals(UnitType.MASTER_SUGAR_PLANTER, planter.getType());
-        assertTrue(planter.isAtPlaceColonyField());
-        colony(loaded).clearSpecialty(planter);
-        assertEquals(UnitType.COLONIST, planter.getType());
-        assertTrue(planter.isAtPlaceColonyField());
+        final Unit grower = loaded.getUnitById(0);
+        assertEquals(UnitType.MASTER_OLIVE_GROWER, grower.getType());
+        assertTrue(grower.isAtPlaceColonyField());
+        colony(loaded).clearSpecialty(grower);
+        assertEquals(UnitType.COLONIST, grower.getType());
+        assertTrue(grower.isAtPlaceColonyField());
     }
 
     @Test
@@ -403,9 +404,9 @@ class ClearSpecialtyTest {
         assertEquals(UnitType.MASTER_CARPENTER, teacher.getType());
 
         // A paused course still names its teacher.
-        teacher.placeToColonyStructureSlot(colony
-                .getConstructionByType(ConstructionType.TOBACCONISTS_HOUSE)
-                .getFirstEmptySlot().orElseThrow());
+        teacher.placeToColonyStructureSlot(
+                colony.getConstructionByType(ConstructionType.SMALL_WINERY)
+                        .getFirstEmptySlot().orElseThrow());
         assertTrue(colony.getEducationCourses().get(0).isPaused());
         assertRejected(model, colony, teacher,
                 ClearSpecialtyProblem.TEACHER_COURSE);
@@ -416,9 +417,9 @@ class ClearSpecialtyTest {
         assertRejected(model, colony, teacher,
                 ClearSpecialtyProblem.SCHOOL_SLOT);
 
-        teacher.placeToColonyStructureSlot(colony
-                .getConstructionByType(ConstructionType.TOBACCONISTS_HOUSE)
-                .getFirstEmptySlot().orElseThrow());
+        teacher.placeToColonyStructureSlot(
+                colony.getConstructionByType(ConstructionType.SMALL_WINERY)
+                        .getFirstEmptySlot().orElseThrow());
         colony.clearSpecialty(teacher);
         assertEquals(UnitType.COLONIST, teacher.getType());
     }
@@ -457,7 +458,7 @@ class ClearSpecialtyTest {
         colony.assignEducation(model.getUnitById(4), person,
                 UnitType.EXPERT_LUMBERJACK);
         for (int update = 0; update < 4; update++) {
-            colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
+            colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
             colony.startTurn();
         }
         assertSame(person, model.getUnitById(0));
@@ -466,7 +467,7 @@ class ClearSpecialtyTest {
         // Work experience teaches a third skill from the same person.
         colony.clearSpecialty(person);
         for (int update = 1; update <= 20; update++) {
-            colony.getWarehouse().setGoods(Goods.of(GoodsType.CORN, 100));
+            colony.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
             colony.startTurn();
         }
         assertSame(person, model.getUnitById(0));

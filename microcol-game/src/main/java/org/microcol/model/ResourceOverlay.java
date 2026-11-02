@@ -25,28 +25,28 @@ public enum ResourceOverlay {
     /** Mineral deposit yielding both ore and silver. */
     MIXED_MINERALS("mm", ImmutableList.of(GoodsType.ORE, GoodsType.SILVER)),
 
-    /** Fur-bearing animals; the fur is the trapping output. */
-    TRAPPING("tr", ImmutableList.of(GoodsType.FUR)),
+    /** Clay-bearing animals; the clay is the clay pit output. */
+    CLAY_PIT("tr", ImmutableList.of(GoodsType.CLAY)),
 
     /** Abundant game, which is food. */
-    GAME("ga", ImmutableList.of(GoodsType.CORN)),
+    GAME("ga", ImmutableList.of(GoodsType.GRAIN)),
 
     /** Fertile water in dry land, which is food. */
-    OASIS("oa", ImmutableList.of(GoodsType.CORN)),
+    OASIS("oa", ImmutableList.of(GoodsType.GRAIN)),
 
-    PRIME_COTTON("pc", ImmutableList.of(GoodsType.COTTON)),
+    PRIME_WOOL("pc", ImmutableList.of(GoodsType.WOOL)),
 
-    PRIME_TOBACCO("pt", ImmutableList.of(GoodsType.TOBACCO)),
+    PRIME_GRAPES("pt", ImmutableList.of(GoodsType.GRAPES)),
 
-    PRIME_SUGAR("ps", ImmutableList.of(GoodsType.SUGAR)),
+    PRIME_OLIVES("ps", ImmutableList.of(GoodsType.OLIVES)),
 
     PRIME_TIMBER("pw", ImmutableList.of(GoodsType.LUMBER)),
 
     /** Prime food land, which is food. */
-    PRIME_FOOD("pf", ImmutableList.of(GoodsType.CORN)),
+    PRIME_FOOD("pf", ImmutableList.of(GoodsType.GRAIN)),
 
     /** Fish is represented by the food good, as ocean output already is. */
-    FISHERY("fi", ImmutableList.of(GoodsType.CORN));
+    FISHERY("fi", ImmutableList.of(GoodsType.GRAIN));
 
     /**
      * Flat addition to each matching output. No printed aid-card resource bonus

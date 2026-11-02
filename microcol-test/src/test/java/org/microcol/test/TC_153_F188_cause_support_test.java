@@ -62,7 +62,7 @@ public class TC_153_F188_cause_support_test extends AbstractMicroColTest {
         attack.verifyGameplayUnchanged();
 
         // A saved draw makes the attacker lose: the soldier keeps its life but
-        // loses its muskets, and the Crown keeps Quebec.
+        // loses its weapons, and the Crown keeps Quebec.
         role.chooseOutcome(0, QUEBEC, false);
         attack.chooseAttack(SOLDIER, QUEBEC);
         attack.confirm();

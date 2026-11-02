@@ -75,7 +75,7 @@ class LostCityRumorTest {
     };
 
     private static final Consumer<UnitPo> FOOT_SOLDIER = unit -> {
-        unit.setHoldingGuns(true);
+        unit.setHoldingWeapons(true);
         unit.setMovementThirds(3);
     };
 
@@ -921,7 +921,7 @@ class LostCityRumorTest {
                 .stream().filter(player -> DUTCH.equals(player.getName()))
                 .findFirst().orElseThrow().getCongress();
         congress.setActivated(true);
-        congress.setBells(0);
+        congress.setOwls(0);
         congress.setMembers(List.of(Founder.HERNANDO_DE_SOTO));
         congress.setCandidates(List.of(Founder.JOHN_PAUL_JONES,
                 Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,

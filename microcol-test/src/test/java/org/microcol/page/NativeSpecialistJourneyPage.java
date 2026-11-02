@@ -163,7 +163,7 @@ public final class NativeSpecialistJourneyPage extends AbstractScreen {
         assertEquals(gold, jesuit.getOwner().getGold());
         assertTrue(jesuit.isMissionary());
         assertTrue(jesuit.hasEffectiveMissionaryExpertise());
-        assertFalse(jesuit.isHoldingGuns());
+        assertFalse(jesuit.isHoldingWeapons());
     }
 
     /**

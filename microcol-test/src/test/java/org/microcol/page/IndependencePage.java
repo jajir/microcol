@@ -157,8 +157,8 @@ public final class IndependencePage extends AbstractScreen {
             final boolean expectedVeteran, final Location expectedLocation) {
         final UnitFreeColonist unit = colonist(unitId);
         assertEquals(expectedType, unit.getType(), "Type of " + unitId);
-        assertEquals(expectedArmed, unit.isHoldingGuns(),
-                "Muskets of " + unitId);
+        assertEquals(expectedArmed, unit.isHoldingWeapons(),
+                "Weapons of " + unitId);
         assertEquals(expectedMounted, unit.isMounted(), "Horses of " + unitId);
         assertEquals(expectedVeteran, unit.isVeteran(), "Rank of " + unitId);
         assertEquals(expectedLocation, unit.getLocation(),

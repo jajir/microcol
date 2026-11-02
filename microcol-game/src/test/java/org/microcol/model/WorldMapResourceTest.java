@@ -194,7 +194,7 @@ class WorldMapResourceTest {
         assertThrows(IllegalArgumentException.class, () -> map.extractMinerals(
                 Map.of(land, Goods.of(GoodsType.SILVER, 201))));
         assertThrows(IllegalArgumentException.class, () -> map
-                .extractMinerals(Map.of(land, Goods.of(GoodsType.FUR, 1))));
+                .extractMinerals(Map.of(land, Goods.of(GoodsType.CLAY, 1))));
         assertEquals(200, map.getMineralRemainingAt(land, GoodsType.SILVER));
         assertEquals(200, map.getMineralRemainingAt(land, GoodsType.ORE));
     }

@@ -184,7 +184,7 @@ class NativeConvertColonyTest {
                 .filter(player -> DUTCH_NAME.equals(player.getName()))
                 .findFirst().orElseThrow().getCongress();
         congress.setActivated(true);
-        congress.setBells(0);
+        congress.setOwls(0);
         congress.setMembers(founders);
         congress.setCandidates(List.of(Founder.JOHN_PAUL_JONES,
                 Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
@@ -548,10 +548,10 @@ class NativeConvertColonyTest {
                 .filter(construction -> construction
                         .getType() == ConstructionType.TOWN_HALL)
                 .findFirst().orElseThrow().getConstructionSlots().get(0);
-        final int ordinaryBell = townHall.getPotentialProduction(ordinary)
+        final int ordinaryOwl = townHall.getPotentialProduction(ordinary)
                 .getAmount();
-        assertTrue(ordinaryBell > 0);
-        assertEquals(ordinaryBell - NativeConversion.INDOOR_PENALTY,
+        assertTrue(ordinaryOwl > 0);
+        assertEquals(ordinaryOwl - NativeConversion.INDOOR_PENALTY,
                 townHall.getPotentialProduction(convert).getAmount());
     }
 
@@ -688,10 +688,10 @@ class NativeConvertColonyTest {
         convert = (UnitFreeColonist) model.getUnitById(id);
         final Unit worker = convert;
         final ColonyField field = haarlem.getColonyFields().stream().filter(
-                candidate -> candidate.canAccept(worker, GoodsType.CORN))
+                candidate -> candidate.canAccept(worker, GoodsType.GRAIN))
                 .findFirst().orElseThrow();
         convert.setActionPoints(convert.getSpeed());
-        convert.placeToColonyField(field, GoodsType.CORN);
+        convert.placeToColonyField(field, GoodsType.GRAIN);
         ownerRound(model);
         model = reload(model);
         ownerRound(model);

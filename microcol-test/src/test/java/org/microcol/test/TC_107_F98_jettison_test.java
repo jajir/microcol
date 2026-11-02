@@ -56,7 +56,7 @@ public class TC_107_F98_jettison_test extends AbstractMicroColTest {
     @Tag("local")
     void TC_01_map_sea_escape_cancel_confirm_stale_and_saved_continue()
             throws Exception {
-        // The galleon at sea carries 12 ore, a passenger and 6 tobacco.
+        // The galleon at sea carries 12 ore, a passenger and 6 grapes.
         JettisonFixture.prepare(getContext(), MAP_SOURCE,
                 "F98-jettison-map.microcol", 12);
         GamePage game = WelcomePage.of(getContext()).loadGame();
@@ -114,7 +114,7 @@ public class TC_107_F98_jettison_test extends AbstractMicroColTest {
         jettison.verifyHold(SHIP, JettisonFixture.ORE_HOLD,
                 Goods.of(GoodsType.ORE, 12));
 
-        // Confirm discards exactly five ore; tobacco, passenger and treasury
+        // Confirm discards exactly five ore; grapes, passenger and treasury
         // stay.
         jettison.useMapControl();
         jettison.chooseHold(1);
@@ -125,7 +125,7 @@ public class TC_107_F98_jettison_test extends AbstractMicroColTest {
         jettison.verifyHold(SHIP, JettisonFixture.ORE_HOLD,
                 Goods.of(GoodsType.ORE, 7));
         jettison.verifyHold(SHIP, JettisonFixture.OTHER_HOLD,
-                Goods.of(GoodsType.TOBACCO, 6));
+                Goods.of(GoodsType.GRAPES, 6));
         jettison.verifyPassengerAboard(JettisonFixture.PASSENGER_ID, SHIP);
         jettison.verifyGold(SHIP, gold);
         jettison.verifyShipAtMapSquare(SHIP, SEA);
@@ -165,7 +165,7 @@ public class TC_107_F98_jettison_test extends AbstractMicroColTest {
         jettison.verifyHold(SHIP, JettisonFixture.ORE_HOLD,
                 Goods.of(GoodsType.ORE, 5));
         jettison.verifyHold(SHIP, JettisonFixture.OTHER_HOLD,
-                Goods.of(GoodsType.TOBACCO, 6));
+                Goods.of(GoodsType.GRAPES, 6));
         jettison.verifyPassengerAboard(JettisonFixture.PASSENGER_ID, SHIP);
         jettison.verifyGold(SHIP, gold);
     }
@@ -175,7 +175,7 @@ public class TC_107_F98_jettison_test extends AbstractMicroColTest {
     void TC_02_atlantic_crossing_keeps_voyage_passenger_and_other_hold()
             throws Exception {
         // The merchantman on its crossing carries 7 ore, a passenger and 6
-        // tobacco.
+        // grapes.
         JettisonFixture.prepare(getContext(), ATLANTIC_SOURCE,
                 "F98-jettison-atlantic.microcol", 7);
         GamePage game = WelcomePage.of(getContext()).loadGame();
@@ -184,7 +184,7 @@ public class TC_107_F98_jettison_test extends AbstractMicroColTest {
         EuropePortScreen europe = game.openEuroperPort();
         jettison.verifyEuropeControl(SHIP, true);
 
-        // Escape at the quantity step of the tobacco hold changes nothing.
+        // Escape at the quantity step of the grapes hold changes nothing.
         jettison.useEuropeControl(SHIP);
         jettison.chooseHold(3);
         jettison.verifyQuantityExplanation(
@@ -192,7 +192,7 @@ public class TC_107_F98_jettison_test extends AbstractMicroColTest {
         jettison.escapeQuantity();
         jettison.verifyDialogsClosed();
         jettison.verifyHold(SHIP, JettisonFixture.OTHER_HOLD,
-                Goods.of(GoodsType.TOBACCO, 6));
+                Goods.of(GoodsType.GRAPES, 6));
 
         // Cancel at the confirmation keeps the ore.
         jettison.useEuropeControl(SHIP);
@@ -217,7 +217,7 @@ public class TC_107_F98_jettison_test extends AbstractMicroColTest {
         jettison.verifyHold(SHIP, JettisonFixture.ORE_HOLD,
                 Goods.of(GoodsType.ORE, 4));
         jettison.verifyHold(SHIP, JettisonFixture.OTHER_HOLD,
-                Goods.of(GoodsType.TOBACCO, 6));
+                Goods.of(GoodsType.GRAPES, 6));
         jettison.verifyPassengerAboard(JettisonFixture.PASSENGER_ID, SHIP);
         jettison.verifyTransit(SHIP, true, 1, 3);
         jettison.verifyGold(SHIP, gold);
@@ -240,7 +240,7 @@ public class TC_107_F98_jettison_test extends AbstractMicroColTest {
         jettison.verifyHold(SHIP, JettisonFixture.ORE_HOLD,
                 Goods.of(GoodsType.ORE, 4));
         jettison.verifyHold(SHIP, JettisonFixture.OTHER_HOLD,
-                Goods.of(GoodsType.TOBACCO, 6));
+                Goods.of(GoodsType.GRAPES, 6));
         jettison.verifyTransit(SHIP, true, 1, 3);
     }
 }

@@ -52,7 +52,7 @@ class MissionaryOrdinationTest {
     private CongressPo congress(final List<Founder> members) {
         final CongressPo po = Congress.initial();
         po.setActivated(true);
-        po.setBells(0);
+        po.setOwls(0);
         po.setMembers(members);
         po.setCandidates(OFFER);
         po.setSelected(null);
@@ -249,7 +249,7 @@ class MissionaryOrdinationTest {
         setReligiousBuilding(data, ConstructionType.CHURCH);
         final Model model = start(data);
         final UnitFreeColonist armed = outside(model, 0);
-        armed.setHoldingGuns(true);
+        armed.setHoldingWeapons(true);
         armed.setMounted(true);
         final UnitFreeColonist carrier = outside(model, 1);
         carrier.setTools(20);
@@ -259,7 +259,7 @@ class MissionaryOrdinationTest {
         assertOrdainedChangingOnlyTheRole(model, armed);
         assertOrdainedChangingOnlyTheRole(model, carrier);
 
-        assertTrue(armed.isHoldingGuns());
+        assertTrue(armed.isHoldingWeapons());
         assertTrue(armed.isMounted());
         assertEquals(armedMovement, armed.getMovementThirds());
         assertEquals(20, carrier.getTools());
@@ -446,7 +446,7 @@ class MissionaryOrdinationTest {
 
         assertSame(UnitType.EXPERT_FARMER, unit.getType());
         assertEquals(2.0F,
-                unit.getType().getProductionModifier(GoodsType.CORN));
+                unit.getType().getProductionModifier(GoodsType.GRAIN));
     }
 
     @Test

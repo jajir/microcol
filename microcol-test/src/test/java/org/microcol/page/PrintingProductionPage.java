@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.microcol.model.*;
 import javafx.scene.control.Labeled;
 
-/** Visible town-hall output and saved bell balances. */
+/** Visible town-hall output and saved owl balances. */
 public final class PrintingProductionPage extends AbstractScreen {
     public PrintingProductionPage(TestContext context) {
         super(context);
@@ -27,16 +27,16 @@ public final class PrintingProductionPage extends AbstractScreen {
         });
     }
 
-    public void verifyBells(int output, int stock, Integer... workerIds) {
+    public void verifyOwls(int output, int stock, Integer... workerIds) {
         Labeled label = getNodeFinder()
                 .lookup("#id_town_hall .production .diffPositive")
                 .queryLabeled();
         assertTrue(label.isVisible());
         assertEquals("+" + output, label.getText());
         assertEquals(output, colony().getGoodsStats()
-                .getStatsByType(GoodsType.BELL).getRowProduction());
+                .getStatsByType(GoodsType.OWLS).getRowProduction());
         assertEquals(stock,
-                colony().getWarehouse().getGoods(GoodsType.BELL).getAmount());
+                colony().getWarehouse().getGoods(GoodsType.OWLS).getAmount());
         Construction hall = colony().getConstructions().stream()
                 .filter(c -> c.getType() == ConstructionType.TOWN_HALL)
                 .findFirst().orElseThrow();

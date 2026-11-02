@@ -20,7 +20,7 @@ import org.testfx.util.WaitForAsyncUtils;
 import javafx.stage.Stage;
 
 /**
- * Dutch corn purchases move the Dutch market one step at 200 units, while a
+ * Dutch grain purchases move the Dutch market one step at 200 units, while a
  * non-Dutch market receiving the same units stays put; Continue keeps both.
  */
 @ExtendWith(ApplicationExtension.class)
@@ -47,8 +47,8 @@ public class TC_95_F86_dutch_market_pressure_test extends AbstractMicroColTest {
         europePort = europePort.openBuyUnitScreen().buyUnitByName("Galleon");
         europePort.verifyNumberOfShipsInPort(1);
 
-        // The untouched Dutch market quotes corn at bid 2 and ask 4.
-        europePort.verifyGoodsBidAndAsk(GoodsType.CORN, "2/4");
+        // The untouched Dutch market quotes grain at bid 2 and ask 4.
+        europePort.verifyGoodsBidAndAsk(GoodsType.GRAIN, "2/4");
 
         // The first 100 units press the Dutch market by 400 eighths, half of
         // the 800 an ordinary own market takes for the same units. No step yet.
@@ -57,9 +57,9 @@ public class TC_95_F86_dutch_market_pressure_test extends AbstractMicroColTest {
         screenMarketBuy.verifySelectedMarketQuantity(100);
         screenMarketBuy.verifyQuotedPrice("4 gold", "400 gold");
         screenMarketBuy.clickOnBuy();
-        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.CORN, 100));
+        europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 100));
         europePort.verifyGold(94600);
-        europePort.verifyGoodsBidAndAsk(GoodsType.CORN, "2/4");
+        europePort.verifyGoodsBidAndAsk(GoodsType.GRAIN, "2/4");
 
         // The second 100 units complete 800 eighths: one Dutch step at 200
         // units. The bid and ask move to 3/5.
@@ -67,13 +67,13 @@ public class TC_95_F86_dutch_market_pressure_test extends AbstractMicroColTest {
                 .buyGoodsAndMoveItToCargoSlotWithPressedControl(0, 1);
         screenMarketBuy.verifyQuotedPrice("4 gold", "400 gold");
         screenMarketBuy.clickOnBuy();
-        europePort.verifyGoodsInShip(1, Goods.of(GoodsType.CORN, 100));
+        europePort.verifyGoodsInShip(1, Goods.of(GoodsType.GRAIN, 100));
         europePort.verifyGold(94200);
-        europePort.verifyGoodsBidAndAsk(GoodsType.CORN, "3/5");
+        europePort.verifyGoodsBidAndAsk(GoodsType.GRAIN, "3/5");
         // A non-Dutch market receives the same 200 units as quarter-strength
         // pressure, 400 eighths, so it stays at 2/4.
         europePort.verifyNationalGoodsBidAndAsk(EuropeanNation.ENGLISH,
-                GoodsType.CORN, "2/4");
+                GoodsType.GRAIN, "2/4");
 
         // Save through the menu and continue; both markets and treasury remain.
         gamePage = europePort.close();
@@ -81,11 +81,11 @@ public class TC_95_F86_dutch_market_pressure_test extends AbstractMicroColTest {
         gamePage = new FreePlayAuditPage(getContext()).continueGame();
         europePort = gamePage.openEuroperPort();
 
-        europePort.verifyGoodsBidAndAsk(GoodsType.CORN, "3/5");
-        europePort.verifyGoodsInShip(1, Goods.of(GoodsType.CORN, 100));
+        europePort.verifyGoodsBidAndAsk(GoodsType.GRAIN, "3/5");
+        europePort.verifyGoodsInShip(1, Goods.of(GoodsType.GRAIN, 100));
         europePort.verifyGold(94200);
         europePort.verifyNationalGoodsBidAndAsk(EuropeanNation.ENGLISH,
-                GoodsType.CORN, "2/4");
+                GoodsType.GRAIN, "2/4");
         gamePage = europePort.close();
     }
 

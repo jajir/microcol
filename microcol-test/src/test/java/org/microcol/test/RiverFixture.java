@@ -97,7 +97,7 @@ final class RiverFixture {
         for (final JsonElement entry : model.getAsJsonArray("colonies")) {
             final JsonObject colony = entry.getAsJsonObject();
             if (colony.get("id").getAsInt() == 1) {
-                colony.getAsJsonObject("colonyWarehouse").addProperty("CORN",
+                colony.getAsJsonObject("colonyWarehouse").addProperty("GRAIN",
                         50);
             }
         }

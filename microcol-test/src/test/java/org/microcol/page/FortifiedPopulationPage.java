@@ -51,8 +51,8 @@ public final class FortifiedPopulationPage extends AbstractScreen {
     }
 
     public void exhaustFood() {
-        getRobot().interact(() -> colony().getWarehouse()
-                .removeGoods(colony().getWarehouse().getGoods(GoodsType.CORN)));
+        getRobot().interact(() -> colony().getWarehouse().removeGoods(
+                colony().getWarehouse().getGoods(GoodsType.GRAIN)));
     }
 
     public void verifyPopulation(int expected) {

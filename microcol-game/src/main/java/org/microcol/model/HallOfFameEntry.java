@@ -87,7 +87,7 @@ public final class HallOfFameEntry {
                 && po.getFathers() != null && po.getGold() != null
                 && po.getSupportPercent() != null
                 && po.getDestroyedSettlements() != null
-                && po.getBellsBeyondTarget() != null && po.getTotal() != null,
+                && po.getOwlsBeyondTarget() != null && po.getTotal() != null,
                 "Hall of Fame entry misses a component");
         final Difficulty difficulty = parseDifficulty(po.getDifficulty());
         final BaseScore base = BaseScore.of(po.getServants(), po.getColonists(),
@@ -95,7 +95,7 @@ public final class HallOfFameEntry {
                 po.getSupportPercent());
         final ResultScore score = ResultScore.of(base,
                 po.getDestroyedSettlements(), difficulty,
-                po.getBellsBeyondTarget(), po.getVictoryOrder(),
+                po.getOwlsBeyondTarget(), po.getVictoryOrder(),
                 po.getDeclarationYear());
         Preconditions.checkArgument(score.getTotal() == po.getTotal(),
                 "Hall of Fame total does not match its components");
@@ -180,7 +180,7 @@ public final class HallOfFameEntry {
         out.setGold(base.getGold());
         out.setSupportPercent(base.getSupportPercent());
         out.setDestroyedSettlements(score.getDestroyedSettlements());
-        out.setBellsBeyondTarget(score.getBellsAfterTarget());
+        out.setOwlsBeyondTarget(score.getOwlsAfterTarget());
         out.setVictoryOrder(victoryOrder);
         out.setDeclarationYear(declarationYear);
         out.setTotal(score.getTotal());

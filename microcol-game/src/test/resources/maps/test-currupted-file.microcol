@@ -813,7 +813,7 @@
             "y": -1
           },
           "workerId": 0,
-          "producedGoodsType": "TOBACCO"
+          "producedGoodsType": "GRAPES"
         },
         {
           "direction": {
@@ -821,7 +821,7 @@
             "y": -1
           },
           "workerId": 28,
-          "producedGoodsType": "CORN"
+          "producedGoodsType": "GRAIN"
         },
         {
           "direction": {
@@ -835,7 +835,7 @@
             "y": 1
           },
           "workerId": 2,
-          "producedGoodsType": "TOBACCO"
+          "producedGoodsType": "GRAPES"
         },
         {
           "direction": {
@@ -843,7 +843,7 @@
             "y": 1
           },
           "workerId": 13,
-          "producedGoodsType": "TOBACCO"
+          "producedGoodsType": "GRAPES"
         },
         {
           "direction": {
@@ -851,7 +851,7 @@
             "y": 1
           },
           "workerId": 1,
-          "producedGoodsType": "CORN"
+          "producedGoodsType": "GRAIN"
         },
         {
           "direction": {
@@ -859,7 +859,7 @@
             "y": 0
           },
           "workerId": 16,
-          "producedGoodsType": "CORN"
+          "producedGoodsType": "GRAIN"
         },
         {
           "direction": {
@@ -894,7 +894,7 @@
           ]
         },
         {
-          "type": "TOBACCONISTS_HOUSE",
+          "type": "SMALL_WINERY",
           "slots": [
             {
               "workerId": 5
@@ -916,7 +916,7 @@
           ]
         },
         {
-          "type": "RUM_DISTILLERS_HOUSE",
+          "type": "SMALL_OIL_PRESS",
           "slots": [
             {},
             {},
@@ -924,7 +924,7 @@
           ]
         },
         {
-          "type": "FUR_TRADERS_HOUSE",
+          "type": "SMALL_POTTERY",
           "slots": [
             {},
             {},
@@ -937,19 +937,19 @@
         }
       ],
       "colonyWarehouse": {
-        "COAT": 0,
+        "AMPHORAE": 0,
         "HAMMERS": 0,
-        "FUR": 0,
+        "CLAY": 0,
         "ORE": 0,
         "LUMBER": 0,
-        "RUM": 0,
-        "SUGAR": 0,
-        "SILK": 0,
-        "TOBACCO": 60,
-        "CORN": 52,
-        "CIGARS": 91,
-        "BELL": 214,
-        "COTTON": 0,
+        "OLIVE_OIL": 0,
+        "OLIVES": 0,
+        "CLOTH": 0,
+        "GRAPES": 60,
+        "GRAIN": 52,
+        "WINE": 91,
+        "OWLS": 214,
+        "WOOL": 0,
         "TOOLS": 0
       }
     },
@@ -979,7 +979,7 @@
             "y": 0
           },
           "workerId": 22,
-          "producedGoodsType": "TOBACCO"
+          "producedGoodsType": "GRAPES"
         },
         {
           "direction": {
@@ -987,7 +987,7 @@
             "y": 1
           },
           "workerId": 21,
-          "producedGoodsType": "TOBACCO"
+          "producedGoodsType": "GRAPES"
         },
         {
           "direction": {
@@ -995,7 +995,7 @@
             "y": 1
           },
           "workerId": 6,
-          "producedGoodsType": "TOBACCO"
+          "producedGoodsType": "GRAPES"
         },
         {
           "direction": {
@@ -1003,7 +1003,7 @@
             "y": 1
           },
           "workerId": 17,
-          "producedGoodsType": "CORN"
+          "producedGoodsType": "GRAIN"
         },
         {
           "direction": {
@@ -1011,7 +1011,7 @@
             "y": 0
           },
           "workerId": 19,
-          "producedGoodsType": "CORN"
+          "producedGoodsType": "GRAIN"
         },
         {
           "direction": {
@@ -1046,7 +1046,7 @@
           ]
         },
         {
-          "type": "TOBACCONISTS_HOUSE",
+          "type": "SMALL_WINERY",
           "slots": [
             {
               "workerId": 20
@@ -1068,7 +1068,7 @@
           ]
         },
         {
-          "type": "RUM_DISTILLERS_HOUSE",
+          "type": "SMALL_OIL_PRESS",
           "slots": [
             {},
             {},
@@ -1076,7 +1076,7 @@
           ]
         },
         {
-          "type": "FUR_TRADERS_HOUSE",
+          "type": "SMALL_POTTERY",
           "slots": [
             {},
             {},
@@ -1089,19 +1089,19 @@
         }
       ],
       "colonyWarehouse": {
-        "COAT": 0,
+        "AMPHORAE": 0,
         "HAMMERS": 0,
-        "FUR": 0,
+        "CLAY": 0,
         "ORE": 0,
         "LUMBER": 0,
-        "RUM": 0,
-        "SUGAR": 0,
-        "SILK": 0,
-        "TOBACCO": 54,
-        "CORN": 196,
-        "CIGARS": 100,
-        "BELL": 170,
-        "COTTON": 0,
+        "OLIVE_OIL": 0,
+        "OLIVES": 0,
+        "CLOTH": 0,
+        "GRAPES": 54,
+        "GRAIN": 196,
+        "WINE": 100,
+        "OWLS": 170,
+        "WOOL": 0,
         "TOOLS": 0
       }
     },
@@ -1119,7 +1119,7 @@
             "y": -1
           },
           "workerId": 11,
-          "producedGoodsType": "TOBACCO"
+          "producedGoodsType": "GRAPES"
         },
         {
           "direction": {
@@ -1127,7 +1127,7 @@
             "y": -1
           },
           "workerId": 15,
-          "producedGoodsType": "TOBACCO"
+          "producedGoodsType": "GRAPES"
         },
         {
           "direction": {
@@ -1153,7 +1153,7 @@
             "y": 1
           },
           "workerId": 10,
-          "producedGoodsType": "CORN"
+          "producedGoodsType": "GRAIN"
         },
         {
           "direction": {
@@ -1161,7 +1161,7 @@
             "y": 0
           },
           "workerId": 7,
-          "producedGoodsType": "CORN"
+          "producedGoodsType": "GRAIN"
         },
         {
           "direction": {
@@ -1169,7 +1169,7 @@
             "y": -1
           },
           "workerId": 9,
-          "producedGoodsType": "TOBACCO"
+          "producedGoodsType": "GRAPES"
         }
       ],
       "constructions": [
@@ -1198,7 +1198,7 @@
           ]
         },
         {
-          "type": "TOBACCONISTS_HOUSE",
+          "type": "SMALL_WINERY",
           "slots": [
             {
               "workerId": 12
@@ -1220,7 +1220,7 @@
           ]
         },
         {
-          "type": "RUM_DISTILLERS_HOUSE",
+          "type": "SMALL_OIL_PRESS",
           "slots": [
             {},
             {},
@@ -1228,7 +1228,7 @@
           ]
         },
         {
-          "type": "FUR_TRADERS_HOUSE",
+          "type": "SMALL_POTTERY",
           "slots": [
             {},
             {},
@@ -1241,19 +1241,19 @@
         }
       ],
       "colonyWarehouse": {
-        "COAT": 0,
+        "AMPHORAE": 0,
         "HAMMERS": 0,
-        "FUR": 0,
+        "CLAY": 0,
         "ORE": 0,
         "LUMBER": 0,
-        "RUM": 0,
-        "SUGAR": 0,
-        "SILK": 0,
-        "TOBACCO": 30,
-        "CORN": 134,
-        "CIGARS": 93,
-        "BELL": 154,
-        "COTTON": 0,
+        "OLIVE_OIL": 0,
+        "OLIVES": 0,
+        "CLOTH": 0,
+        "GRAPES": 30,
+        "GRAIN": 134,
+        "WINE": 93,
+        "OWLS": 154,
+        "WOOL": 0,
         "TOOLS": 0
       }
     }

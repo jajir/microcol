@@ -335,7 +335,7 @@ public final class ColonyAdvisorReport {
             // births and breeding out of it; the goods keep the adjusted
             // figures.
             final int foodAfterResidents = colony.getRawGoodsStats()
-                    .getStatsByType(GoodsType.CORN).getInWarehouseAfter();
+                    .getStatsByType(GoodsType.GRAIN).getInWarehouseAfter();
             final Project project = Project.of(colony, stats);
             final List<GoodsLine> goods = new ArrayList<>();
             for (final GoodsType type : GoodsType.GOOD_TYPES) {

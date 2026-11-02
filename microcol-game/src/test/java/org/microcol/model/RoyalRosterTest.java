@@ -21,7 +21,7 @@ import org.microcol.model.store.RoyalRosterPo;
 import com.google.gson.Gson;
 
 /**
- * Crown prewar roster: starting force, bell growth, ships, freeze and reload.
+ * Crown prewar roster: starting force, owl growth, ships, freeze and reload.
  */
 class RoyalRosterTest {
 
@@ -76,27 +76,27 @@ class RoyalRosterTest {
                         + crown.getCount(Family.CAVALRY, State.RESERVE)
                         + crown.getCount(Family.ARTILLERY, State.RESERVE)
                         + crown.getCount(Family.MAN_OF_WAR, State.RESERVE));
-        assertEquals(threshold, crown.getBellThreshold());
-        assertEquals(0, crown.getBellRemainder());
+        assertEquals(threshold, crown.getOwlThreshold());
+        assertEquals(0, crown.getOwlRemainder());
     }
 
     @ParameterizedTest
     @EnumSource(Difficulty.class)
-    void bellsBelowExactAndMultipleThresholdKeepRemainder(
+    void owlsBelowExactAndMultipleThresholdKeepRemainder(
             final Difficulty difficulty) {
         final RoyalRoster crown = roster(difficulty);
-        final int threshold = crown.getBellThreshold();
+        final int threshold = crown.getOwlThreshold();
         final int start = ground(crown);
         crown.credit(threshold - 1);
         assertEquals(start, ground(crown));
-        assertEquals(threshold - 1, crown.getBellRemainder());
+        assertEquals(threshold - 1, crown.getOwlRemainder());
         crown.credit(1);
         assertEquals(start + 1, ground(crown));
-        assertEquals(0, crown.getBellRemainder());
-        // Two complete units and one leftover bell in a single update.
+        assertEquals(0, crown.getOwlRemainder());
+        // Two complete units and one leftover owl in a single update.
         crown.credit(2 * threshold + 1);
         assertEquals(start + 3, ground(crown));
-        assertEquals(1, crown.getBellRemainder());
+        assertEquals(1, crown.getOwlRemainder());
     }
 
     @Test
@@ -150,14 +150,14 @@ class RoyalRosterTest {
         final RoyalRoster crown = declared.getKingOf(dutch).orElseThrow()
                 .getRoyalRoster();
         final String before = json(crown.save());
-        dutch.checkCanCreditProducedBells(5000);
-        dutch.creditProducedBells(5000);
+        dutch.checkCanCreditProducedOwls(5000);
+        dutch.creditProducedOwls(5000);
         assertEquals(before, json(crown.save()));
-        assertEquals(0, crown.getBellRemainder());
+        assertEquals(0, crown.getOwlRemainder());
     }
 
     @Test
-    void beforeDeclarationTheColonyBellsGrowTheSameCrown() {
+    void beforeDeclarationTheColonyOwlsGrowTheSameCrown() {
         final Model colonial = model(fixture(false));
         final Player dutch = colonial.getPlayers().stream()
                 .filter(player -> player.getName().equals("Dutch")).findFirst()
@@ -166,9 +166,9 @@ class RoyalRosterTest {
         assertSame(crown,
                 colonial.getKingOf(dutch).orElseThrow().getRoyalRoster());
         final int before = ground(crown);
-        dutch.creditProducedBells(500);
+        dutch.creditProducedOwls(500);
         assertEquals(before + 1, ground(crown));
-        assertEquals(0, crown.getBellRemainder());
+        assertEquals(0, crown.getOwlRemainder());
     }
 
     @Test
@@ -203,7 +203,7 @@ class RoyalRosterTest {
         final RoyalRoster reloaded = new RoyalRoster(saved,
                 Difficulty.CONQUISTADOR);
         assertEquals(json(saved), json(reloaded.save()));
-        assertEquals(200, reloaded.getBellRemainder());
+        assertEquals(200, reloaded.getOwlRemainder());
         assertEquals(State.SHIPPED, reloaded.getMembers().get(6).getState());
         assertEquals(State.DESTROYED, reloaded.getMembers().get(1).getState());
         // Reloading never adds a unit at a threshold that was already passed.
@@ -312,7 +312,7 @@ class RoyalRosterTest {
         assertThrows(IllegalStateException.class, () -> crown.credit(500));
         assertThrows(IllegalStateException.class, () -> crown.checkCredit(500));
         assertEquals(before, json(crown.save()));
-        assertEquals(0, crown.getBellRemainder());
+        assertEquals(0, crown.getOwlRemainder());
         assertEquals(6, crown.getTotal(Family.INFANTRY));
     }
 

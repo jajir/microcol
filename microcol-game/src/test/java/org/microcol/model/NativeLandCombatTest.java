@@ -156,7 +156,7 @@ class NativeLandCombatTest {
                     unit.setNativeRole(role.name());
                 }
                 if (unit.getType() == UnitType.COLONIST) {
-                    unit.setHoldingGuns(armed);
+                    unit.setHoldingWeapons(armed);
                 }
                 if (unit.getType() == UnitType.ARTILLERY) {
                     unit.setArtilleryDamaged(damaged);
@@ -260,7 +260,7 @@ class NativeLandCombatTest {
             gun.setMissionary(null);
             gun.setWorkSkill(null);
             gun.setArtilleryDamaged(damaged);
-            gun.setHoldingGuns(false);
+            gun.setHoldingWeapons(false);
             gun.setMounted(false);
             gun.setTools(0);
             gun.getPlaceMap().setLocation(gunAt);
@@ -499,7 +499,7 @@ class NativeLandCombatTest {
                 .dutchMoves();
         final Model model = model(siege.build());
         final UnitFreeColonist dutch = (UnitFreeColonist) model.getUnitById(0);
-        dutch.setHoldingGuns(true);
+        dutch.setHoldingWeapons(true);
         dutch.placeToLocation(siege.spareAt);
         dutch.getOwner().revealMapForUnit(dutch);
         final CombatStrengths strengths = dutch.prepareAttack(COLONY, true)
@@ -574,9 +574,9 @@ class NativeLandCombatTest {
             islandOrder(model).execute();
             assertFalse(alive(model, BRAVE_ID), role.name());
             assertTrue(alive(model, COLONIST_ID), role.name());
-            // The armed winner keeps its muskets and no native unit is left.
+            // The armed winner keeps its weapons and no native unit is left.
             assertTrue(((UnitFreeColonist) model.getUnitById(COLONIST_ID))
-                    .isHoldingGuns());
+                    .isHoldingWeapons());
             assertEquals(0, nativeUnits(model), role.name());
             assertEquals(1, model.save().getNativeRelationOutcomeIds().size());
             final Model continued = NativeTurnScene.make(model.save());
@@ -632,7 +632,7 @@ class NativeLandCombatTest {
         train.setType(UnitType.TREASURE_TRAIN);
         train.setWorkUpdates(null);
         train.setMissionary(null);
-        train.setHoldingGuns(false);
+        train.setHoldingWeapons(false);
         train.setTreasureValue(500);
         return saved;
     }
@@ -697,7 +697,7 @@ class NativeLandCombatTest {
         final UnitFreeColonist colonist = (UnitFreeColonist) model
                 .getUnitById(COLONIST_ID);
         assertEquals("Dutch", colonist.getOwner().getName());
-        assertFalse(colonist.isHoldingGuns());
+        assertFalse(colonist.isHoldingWeapons());
         assertEquals(0, nativeUnits(model));
     }
 
@@ -709,7 +709,7 @@ class NativeLandCombatTest {
         final UnitFreeColonist colonist = (UnitFreeColonist) model
                 .getUnitById(COLONIST_ID);
         assertEquals("Dutch", colonist.getOwner().getName());
-        assertFalse(colonist.isHoldingGuns());
+        assertFalse(colonist.isHoldingWeapons());
         assertTrue(alive(model, BRAVE_ID));
     }
 
@@ -767,7 +767,7 @@ class NativeLandCombatTest {
     void attackerDisarmedAfterPreviewIsRejectedWithoutAnyChange() {
         final Model model = model(Fight.human().build());
         final AttackOrder order = islandOrder(model);
-        ((UnitFreeColonist) unitAt(model, 0)).setHoldingGuns(false);
+        ((UnitFreeColonist) unitAt(model, 0)).setHoldingWeapons(false);
         final String before = snapshot(model);
         assertThrows(IllegalStateException.class, order::execute);
         assertEquals(before, snapshot(model));

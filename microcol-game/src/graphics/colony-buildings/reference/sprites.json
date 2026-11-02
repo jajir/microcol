@@ -200,7 +200,7 @@
     ]
   },
   {
-    "type": "TOBACCONISTS_HOUSE",
+    "type": "SMALL_WINERY",
     "sheet": "basic.png",
     "rect": [
       0,
@@ -210,7 +210,7 @@
     ]
   },
   {
-    "type": "TOBACCONISTS_SHOP",
+    "type": "WINERY",
     "sheet": "middle.png",
     "rect": [
       0,
@@ -220,7 +220,7 @@
     ]
   },
   {
-    "type": "CIGAR_FACTORY",
+    "type": "LARGE_WINERY",
     "sheet": "high.png",
     "rect": [
       0,
@@ -260,7 +260,7 @@
     ]
   },
   {
-    "type": "RUM_DISTILLERS_HOUSE",
+    "type": "SMALL_OIL_PRESS",
     "sheet": "basic.png",
     "rect": [
       620,
@@ -270,7 +270,7 @@
     ]
   },
   {
-    "type": "RUM_DISTILLERY",
+    "type": "OIL_PRESS",
     "sheet": "middle.png",
     "rect": [
       634,
@@ -280,7 +280,7 @@
     ]
   },
   {
-    "type": "RUM_FACTORY",
+    "type": "LARGE_OIL_PRESS",
     "sheet": "high.png",
     "rect": [
       627,
@@ -290,7 +290,7 @@
     ]
   },
   {
-    "type": "FUR_TRADERS_HOUSE",
+    "type": "SMALL_POTTERY",
     "sheet": "basic.png",
     "rect": [
       932,
@@ -300,7 +300,7 @@
     ]
   },
   {
-    "type": "FUR_TRADING_POST",
+    "type": "POTTERY",
     "sheet": "middle.png",
     "rect": [
       951,
@@ -310,7 +310,7 @@
     ]
   },
   {
-    "type": "FUR_FACTORY",
+    "type": "LARGE_POTTERY",
     "sheet": "high.png",
     "rect": [
       947,

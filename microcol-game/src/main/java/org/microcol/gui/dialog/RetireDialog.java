@@ -50,7 +50,7 @@ public final class RetireDialog extends AbstractMessageWindow {
                 "retireSummary");
         final Label parts = wrapped(new Label(i18n.get(RetireText.parts,
                 base.getSubtotal(), score.getDestructionDeduction(),
-                score.getBellsAfterTarget(), score.getDifficultyPercent())),
+                score.getOwlsAfterTarget(), score.getDifficultyPercent())),
                 "retireParts");
         final Label consequence = wrapped(
                 new Label(i18n.get(

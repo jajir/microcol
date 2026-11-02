@@ -29,7 +29,7 @@ final class NativeRelationOutcome {
         TRADE,
         /** Goods given to a settlement. */
         GIFT,
-        /** Muskets and horses sold to a native nation. */
+        /** Weapons and horses sold to a native nation. */
         ARMS_SALE
     }
 
@@ -42,7 +42,7 @@ final class NativeRelationOutcome {
     /** Settlement of the action; null only for a homeless brave's attack. */
     private final NativeSettlement settlement;
 
-    /** Goods of a gift or muskets and horses sold; zero otherwise. */
+    /** Goods of a gift or weapons and horses sold; zero otherwise. */
     private final int quantity;
 
     private NativeRelationOutcome(final long actionId, final Kind kind,
@@ -140,11 +140,11 @@ final class NativeRelationOutcome {
     }
 
     /**
-     * Muskets and horses sold to a native nation, in one completed sale.
+     * Weapons and horses sold to a native nation, in one completed sale.
      *
      * @param actionId required positive origin action ID
      * @param nation   required buying native nation
-     * @param quantity nonnegative muskets plus horses sold
+     * @param quantity nonnegative weapons plus horses sold
      * @return outcome of the sale
      */
     static NativeRelationOutcome armsSale(final long actionId,

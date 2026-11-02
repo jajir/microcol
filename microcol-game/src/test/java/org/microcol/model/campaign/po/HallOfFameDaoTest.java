@@ -159,7 +159,7 @@ class HallOfFameDaoTest {
         po.setGold(0L);
         po.setSupportPercent(0);
         po.setDestroyedSettlements(0);
-        po.setBellsBeyondTarget(0L);
+        po.setOwlsBeyondTarget(0L);
         po.setTotal(total);
         return po;
     }
@@ -171,7 +171,7 @@ class HallOfFameDaoTest {
                 + "\"playerDisplayName\":\"Player\",\"difficulty\":\"CONQUISTADOR\","
                 + "\"servants\":" + servants + ",\"colonists\":0,\"experts\":0,"
                 + "\"fathers\":0,\"gold\":0,\"supportPercent\":0,"
-                + "\"destroyedSettlements\":0,\"bellsBeyondTarget\":0,"
+                + "\"destroyedSettlements\":0,\"owlsBeyondTarget\":0,"
                 + "\"total\":" + servants + "}";
     }
 }

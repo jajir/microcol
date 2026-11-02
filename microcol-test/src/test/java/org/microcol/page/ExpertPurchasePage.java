@@ -77,9 +77,9 @@ public final class ExpertPurchasePage extends AbstractScreen {
                 .contains(button.localToScreen(button.getBoundsInLocal())));
     }
 
-    public void verifyExcludedPlanters() {
-        for (String type : List.of("MASTER_SUGAR_PLANTER",
-                "MASTER_COTTON_PLANTER", "MASTER_TOBACCO_PLANTER")) {
+    public void verifyExcludedGrowers() {
+        for (String type : List.of("MASTER_OLIVE_GROWER", "MASTER_SHEPHERD",
+                "MASTER_GRAPE_GROWER")) {
             assertTrue(getNodeFinder().lookup("#buy-unit-" + type).queryAll()
                     .isEmpty());
         }
@@ -263,7 +263,7 @@ public final class ExpertPurchasePage extends AbstractScreen {
         assertSame(UnitType.MASTER_BLACKSMITH, expert.getType());
         assertSame(getModel().getPlayerByName("Dutch"), expert.getOwner());
         assertEquals(gold, expert.getOwner().getGold());
-        assertEquals(guns, expert.isHoldingGuns());
+        assertEquals(guns, expert.isHoldingWeapons());
         assertFalse(expert.isMounted());
         assertEquals(0, expert.getTools());
         assertTrue(placeType.isInstance(expert.getPlace()));
@@ -306,7 +306,7 @@ public final class ExpertPurchasePage extends AbstractScreen {
         assertEquals(ore, colony.getWarehouse()
                 .getGoods(org.microcol.model.GoodsType.ORE).getAmount());
         assertEquals(50, colony.getWarehouse()
-                .getGoods(org.microcol.model.GoodsType.MUSKET).getAmount());
+                .getGoods(org.microcol.model.GoodsType.WEAPONS).getAmount());
     }
 
     public void verifyInsufficientFundsWarning() {

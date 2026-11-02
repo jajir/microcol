@@ -7,16 +7,16 @@ import java.util.Optional;
 public final class EducationSkills {
     private static final List<UnitType> SCHOOLHOUSE = List.of(
             UnitType.EXPERT_FARMER, UnitType.EXPERT_FISHERMAN,
-            UnitType.EXPERT_FUR_TRAPPER, UnitType.EXPERT_SILVER_MINER,
+            UnitType.EXPERT_CLAY_DIGGER, UnitType.EXPERT_SILVER_MINER,
             UnitType.EXPERT_LUMBERJACK, UnitType.EXPERT_ORE_MINER,
             UnitType.MASTER_CARPENTER, UnitType.SEASONED_SCOUT,
             UnitType.HARDY_PIONEER);
     private static final List<UnitType> COLLEGE = List.of(
-            UnitType.MASTER_SUGAR_PLANTER, UnitType.MASTER_COTTON_PLANTER,
-            UnitType.MASTER_TOBACCO_PLANTER, UnitType.MASTER_DISTILLER,
-            UnitType.MASTER_WEAVER, UnitType.MASTER_TOBACCONIST,
-            UnitType.MASTER_FUR_TRADER, UnitType.MASTER_BLACKSMITH,
-            UnitType.MASTER_GUNSMITH, UnitType.VETERAN_SOLDIER);
+            UnitType.MASTER_OLIVE_GROWER, UnitType.MASTER_SHEPHERD,
+            UnitType.MASTER_GRAPE_GROWER, UnitType.MASTER_OIL_MAKER,
+            UnitType.MASTER_WEAVER, UnitType.MASTER_WINEMAKER,
+            UnitType.MASTER_POTTER, UnitType.MASTER_BLACKSMITH,
+            UnitType.MASTER_WEAPONSMITH, UnitType.VETERAN_SOLDIER);
     private static final List<UnitType> UNIVERSITY = List.of(
             UnitType.FIREBRAND_PREACHER, UnitType.ELDER_STATESMAN,
             UnitType.JESUIT_MISSIONARY);
@@ -66,12 +66,12 @@ public final class EducationSkills {
 
     static Optional<UnitType> forProduction(final GoodsType goods,
             final boolean waterFood) {
-        if (goods == GoodsType.CORN) {
+        if (goods == GoodsType.GRAIN) {
             return Optional.of(waterFood ? UnitType.EXPERT_FISHERMAN
                     : UnitType.EXPERT_FARMER);
         }
-        if (goods == GoodsType.FUR) {
-            return Optional.of(UnitType.EXPERT_FUR_TRAPPER);
+        if (goods == GoodsType.CLAY) {
+            return Optional.of(UnitType.EXPERT_CLAY_DIGGER);
         }
         if (goods == GoodsType.SILVER) {
             return Optional.of(UnitType.EXPERT_SILVER_MINER);
@@ -82,40 +82,40 @@ public final class EducationSkills {
         if (goods == GoodsType.ORE) {
             return Optional.of(UnitType.EXPERT_ORE_MINER);
         }
-        if (goods == GoodsType.SUGAR) {
-            return Optional.of(UnitType.MASTER_SUGAR_PLANTER);
+        if (goods == GoodsType.OLIVES) {
+            return Optional.of(UnitType.MASTER_OLIVE_GROWER);
         }
-        if (goods == GoodsType.COTTON) {
-            return Optional.of(UnitType.MASTER_COTTON_PLANTER);
+        if (goods == GoodsType.WOOL) {
+            return Optional.of(UnitType.MASTER_SHEPHERD);
         }
-        if (goods == GoodsType.TOBACCO) {
-            return Optional.of(UnitType.MASTER_TOBACCO_PLANTER);
+        if (goods == GoodsType.GRAPES) {
+            return Optional.of(UnitType.MASTER_GRAPE_GROWER);
         }
         if (goods == GoodsType.HAMMERS) {
             return Optional.of(UnitType.MASTER_CARPENTER);
         }
-        if (goods == GoodsType.RUM) {
-            return Optional.of(UnitType.MASTER_DISTILLER);
+        if (goods == GoodsType.OLIVE_OIL) {
+            return Optional.of(UnitType.MASTER_OIL_MAKER);
         }
-        if (goods == GoodsType.SILK) {
+        if (goods == GoodsType.CLOTH) {
             return Optional.of(UnitType.MASTER_WEAVER);
         }
-        if (goods == GoodsType.CIGARS) {
-            return Optional.of(UnitType.MASTER_TOBACCONIST);
+        if (goods == GoodsType.WINE) {
+            return Optional.of(UnitType.MASTER_WINEMAKER);
         }
-        if (goods == GoodsType.COAT) {
-            return Optional.of(UnitType.MASTER_FUR_TRADER);
+        if (goods == GoodsType.AMPHORAE) {
+            return Optional.of(UnitType.MASTER_POTTER);
         }
         if (goods == GoodsType.TOOLS) {
             return Optional.of(UnitType.MASTER_BLACKSMITH);
         }
-        if (goods == GoodsType.MUSKET) {
-            return Optional.of(UnitType.MASTER_GUNSMITH);
+        if (goods == GoodsType.WEAPONS) {
+            return Optional.of(UnitType.MASTER_WEAPONSMITH);
         }
-        if (goods == GoodsType.CROSS) {
+        if (goods == GoodsType.TORCHES) {
             return Optional.of(UnitType.FIREBRAND_PREACHER);
         }
-        if (goods == GoodsType.BELL) {
+        if (goods == GoodsType.OWLS) {
             return Optional.of(UnitType.ELDER_STATESMAN);
         }
         return Optional.empty();
@@ -124,20 +124,20 @@ public final class EducationSkills {
     public static boolean isWorkSkill(final UnitType skill) {
         return skill == UnitType.EXPERT_FARMER
                 || skill == UnitType.EXPERT_FISHERMAN
-                || skill == UnitType.EXPERT_FUR_TRAPPER
+                || skill == UnitType.EXPERT_CLAY_DIGGER
                 || skill == UnitType.EXPERT_SILVER_MINER
                 || skill == UnitType.EXPERT_LUMBERJACK
                 || skill == UnitType.EXPERT_ORE_MINER
-                || skill == UnitType.MASTER_SUGAR_PLANTER
-                || skill == UnitType.MASTER_COTTON_PLANTER
-                || skill == UnitType.MASTER_TOBACCO_PLANTER
+                || skill == UnitType.MASTER_OLIVE_GROWER
+                || skill == UnitType.MASTER_SHEPHERD
+                || skill == UnitType.MASTER_GRAPE_GROWER
                 || skill == UnitType.MASTER_CARPENTER
-                || skill == UnitType.MASTER_DISTILLER
+                || skill == UnitType.MASTER_OIL_MAKER
                 || skill == UnitType.MASTER_WEAVER
-                || skill == UnitType.MASTER_TOBACCONIST
-                || skill == UnitType.MASTER_FUR_TRADER
+                || skill == UnitType.MASTER_WINEMAKER
+                || skill == UnitType.MASTER_POTTER
                 || skill == UnitType.MASTER_BLACKSMITH
-                || skill == UnitType.MASTER_GUNSMITH
+                || skill == UnitType.MASTER_WEAPONSMITH
                 || skill == UnitType.FIREBRAND_PREACHER
                 || skill == UnitType.ELDER_STATESMAN;
     }

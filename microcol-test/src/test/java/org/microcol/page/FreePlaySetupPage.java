@@ -398,7 +398,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
                     .collect(java.util.stream.Collectors.toList());
             assertEquals(2, passengers.size());
             assertEquals(1, passengers.stream().filter(
-                    org.microcol.model.unit.UnitFreeColonist::isHoldingGuns)
+                    org.microcol.model.unit.UnitFreeColonist::isHoldingWeapons)
                     .count());
             assertEquals(1, passengers.stream()
                     .filter(unit -> unit.getTools() == 100).count());

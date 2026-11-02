@@ -260,7 +260,7 @@ public class TC_146_F137_rival_naval_military_test
         revealAll(data);
         // The saved armed colonist would fight on land; the warship is the only
         // attacker in these scenarios.
-        unitPo(data, RIVAL_ID).setHoldingGuns(false);
+        unitPo(data, RIVAL_ID).setHoldingWeapons(false);
         addShip(data, WARSHIP_ID, UnitType.MAN_OF_WAR, "France", WARSHIP_START);
         if (withCarrier) {
             addShip(data, CARRIER_ID, UnitType.MERCHANTMAN, "Dutch",

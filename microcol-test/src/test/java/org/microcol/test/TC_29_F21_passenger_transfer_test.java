@@ -250,7 +250,7 @@ public class TC_29_F21_passenger_transfer_test extends AbstractMicroColTest {
                 unit.remove("workUpdates");
                 unit.remove("missionary");
                 unit.remove("workSkill");
-                unit.addProperty("holdingGuns", false);
+                unit.addProperty("holdingWeapons", false);
                 unit.getAsJsonObject("placeMap").getAsJsonObject("location")
                         .addProperty("x", WATER.getX());
                 unit.getAsJsonObject("placeMap").getAsJsonObject("location")
