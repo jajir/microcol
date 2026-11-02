@@ -81,7 +81,7 @@ public class TC_87_F78_terrain_movement_test extends AbstractAkropiaTest {
         // Zero movement cannot pay even the plains step back to the colony.
         game.moveMouseAtLocation(MOUNTAIN);
         // With zero points the drag never enters movement mode.
-        game.dragMouseAtLocationWithFeedback(COLONY, "[23,12]");
+        game.dragMouseAtLocationWithFeedback(COLONY, "x=23, y=12");
         terrain.verifyMovementUnavailable();
         terrain.verifyUnitAt(colonistById(colonistId), MOUNTAIN, 0);
 

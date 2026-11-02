@@ -17,7 +17,7 @@ does not choose the executor or authorize switching between these options.
    `~/.local/bin/headroom` points into that environment. Its native persistent
    service profile is `$HEADROOM_PROFILE`; macOS launchd starts it at login and
    restarts it after exit. The profile was installed on 2026-10-18 under the
-   former product name, before [R-0389](../requirements/R-0389.md); that rename
+   former product name, before [R-0389](../requirements/done/R-0389.md); that rename
    did not reinstall, rename or migrate it. Set `HEADROOM_PROFILE` to the
    installed profile name listed under `~/.headroom/deploy/`. Reinstalling the
    service under `akropia` is a separate host change. No Docker service, cloud

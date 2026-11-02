@@ -331,7 +331,7 @@ public class PersistingService {
      *         return <code>false</code>
      */
     private boolean saveThroughBrowser(final DiagnosticEvent failure) {
-        if (!gameModelController.isHumanTurnReady()) {
+        if (!gameModelController.isHumanSaveReady()) {
             return false;
         }
         // The detail shows the state a new save would store.
@@ -528,8 +528,8 @@ public class PersistingService {
      */
     private boolean saveBeforeLeaving() {
         // An incomplete turn cannot be saved; the game stays and no Save
-        // browser opens.
-        if (!gameModelController.isHumanTurnReady()) {
+        // browser opens. A postponed score choice is saved with the position.
+        if (!gameModelController.isHumanSaveReady()) {
             gameModelController.showTurnPreparationUnavailable();
             return false;
         }

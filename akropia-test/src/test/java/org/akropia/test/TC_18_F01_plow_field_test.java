@@ -24,8 +24,8 @@ import javafx.stage.Stage;
 /**
  * Verify that pressing P starts plowing, consumes movement and hides the
  * action, that plow work can be rejected, canceled and completed, that the unit
- * panel shows its countdown (R-0391) and that the turn report announces the
- * completed field once (R-0393).
+ * panel shows its countdown only for own plowing units (R-0391) and that the
+ * turn report announces the completed field once (R-0393).
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
@@ -43,6 +43,13 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
 
     private final static File testFileName = new File(
             "src/test/scenarios/F01-embark-disembark.akropia");
+
+    /** Scenario with a visible colonist of another nation. */
+    private final static File FOREIGN_FILE = new File(
+            "src/test/scenarios/F27-attack-eligibility.akropia");
+
+    /** Square of the French colonist in F27. */
+    private final static Location FOREIGN_LOCATION = Location.of(17, 11);
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
@@ -420,6 +427,25 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
         plow.verifyNoCompletionReported(report);
         plow.closeReport(report);
         plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 80);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_10_foreign_plowing_unit_shows_no_countdown() throws Exception {
+        // F01 has no other nation; a scoped F27 copy turns the visible French
+        // colonist into a pioneer that is already plowing its square.
+        PlowFixture.prepareForeignPlowing(getContext(), FOREIGN_FILE,
+                "plow-f27-foreign.akropia", 6, 3);
+        GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+        final PlowPage plow = new PlowPage(getContext());
+
+        // The French unit really has an active plowing order.
+        plow.verifyForeignPlowWork(FOREIGN_LOCATION, 0, 3);
+
+        // Select its square: the unit is listed, but without a countdown.
+        gamePage.selectTile(FOREIGN_LOCATION);
+        gamePage.verifyNumberOfUnitInRightPanel(1);
+        plow.verifyPlowProgressHidden();
     }
 
     @Test

@@ -1446,9 +1446,9 @@ public abstract class AbstractUnit implements Unit {
     /**
      * A field or native battle destroys an unarmed loser, such as a colonist, a
      * wagon or a treasure train, instead of taking equipment from it (R-0173).
-     * Armed soldiers and artillery keep their ordinary equipment loss. Capture
-     * of a standalone civilian is not yet specified (R-0211 open question 2);
-     * the colony capture path is separate.
+     * Armed soldiers and artillery keep their ordinary equipment loss. A
+     * standalone civilian defeated by a European in the open is destroyed, not
+     * captured (R-0211, 2026-10-24); the colony capture path is separate.
      */
     private static boolean isDestroyedInFieldBattle(final AbstractUnit loser) {
         return isDestroyedByDefeat(loser)

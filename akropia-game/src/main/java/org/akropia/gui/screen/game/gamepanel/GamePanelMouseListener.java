@@ -130,8 +130,15 @@ public final class GamePanelMouseListener {
                     new org.akropia.gui.screen.game.components.StatusBarMessageEvent(
                             org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source.GAME));
         });
-        gamePanelComponent.getCanvas().setOnMouseEntered(
-                e -> mouseOverTileManager.clearMouseOverTile());
+        gamePanelComponent.getCanvas().setOnMouseEntered(e -> {
+            mouseOverTileManager.clearMouseOverTile();
+            // Back on the map, such as after a report closes, the tile under
+            // the resting pointer is described again without a mouse move.
+            if (gamePanelController.isMouseEnabled()
+                    && !gamePanelController.isUnitMoving()) {
+                onMouseMoved(e);
+            }
+        });
         gamePanelComponent.getCanvas().setOnMouseMoved(e -> {
             if (gamePanelController.isMouseEnabled()
                     && !gamePanelController.isUnitMoving()) {

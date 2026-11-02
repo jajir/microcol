@@ -1,6 +1,7 @@
 package org.akropia.page;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -64,6 +65,20 @@ public final class PlowPage extends AbstractScreen {
                 ((UnitActionPlowField) unitAt(location, index).getAction())
                         .getRemainingTurns(),
                 "Unexpected plow countdown");
+    }
+
+    /**
+     * The unit belongs to another nation and has an active plowing order.
+     *
+     * @param location        square of the unit
+     * @param index           index of the unit on the square
+     * @param expectedUpdates remaining owner updates of the order
+     */
+    public void verifyForeignPlowWork(final Location location, final int index,
+            final int expectedUpdates) {
+        assertFalse(unitAt(location, index).getOwner().isHuman(),
+                "The plowing unit must belong to another nation");
+        verifyRemainingUpdates(location, index, expectedUpdates);
     }
 
     public void verifyFieldAt(final Location location,

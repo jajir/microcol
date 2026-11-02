@@ -12,7 +12,7 @@ keeps the current game download unchanged.
 
 ## R-0389 Akropia rename requirement — 2026-11-01
 
-1. [R-0389](requirements/R-0389.md), status `new`, captures the confirmed
+1. [R-0389](requirements/done/R-0389.md), status `new`, captures the confirmed
    Akropia spelling and complete rename of product text, technical identities,
    file paths and documentation. Necessary references to the unchanged GitHub
    repository remain the sole naming exception. Implementation has not started.
@@ -30,7 +30,7 @@ keeps the current game download unchanged.
 
 ## R-0383 load screen requirement — 2026-10-31
 
-1. [R-0383](requirements/R-0383.md), status `new`, separately owns the approved
+1. [R-0383](requirements/done/R-0383.md), status `new`, separately owns the approved
    left save list and right map preview/details, explicit Load action, empty and
    error states, keyboard access and small-window behavior. R-0382 retains save
    creation, summary meanings and the JSON container; R-0377 retains the frame
@@ -50,7 +50,7 @@ keeps the current game download unchanged.
 
 ## R-0382 save preview requirement — 2026-10-31
 
-1. [R-0382](requirements/R-0382.md), status `new`, captures the approved save/load
+1. [R-0382](requirements/done/R-0382.md), status `new`, captures the approved save/load
    preview and ZIP container proposal. The user explicitly retained the existing
    game state → persistence data model → JSON conversion and its validated reverse.
    Implementation has not been selected or performed.
@@ -77,7 +77,7 @@ keeps the current game download unchanged.
 
 ## R-0378 Europe purchase requirement — 2026-10-31
 
-1. [R-0378](requirements/R-0378.md) captures the requested confirmation and explanation
+1. [R-0378](requirements/done/R-0378.md) captures the requested confirmation and explanation
    of European goods purchases, based on the user's screenshot and source inspection
    at `97f8463ee7b8fbc513fbd842ecdda555ae2dc0c4`. Status remains `new`; implementation
    has not been selected or performed.

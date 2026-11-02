@@ -6,7 +6,7 @@
 
 | Rule | Owners | Boundary |
 | --- | --- | --- |
-| SETUP-001 | [R-0065](done/R-0065.md), [R-0221](R-0221.md), [R-0014](done/R-0014.md) | Generated/customized geography and authored America are distinct outcomes; existing selector retained. |
+| SETUP-001 | [R-0065](done/R-0065.md), [R-0221](done/R-0221.md), [R-0014](done/R-0014.md) | Generated/customized geography and authored America are distinct outcomes; existing selector retained. |
 | SETUP-002 | [R-0064](done/R-0064.md), [R-0208](done/R-0208.md), [R-0209](canceled/R-0209.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | SETUP-003 | [R-0066](done/R-0066.md), [R-0063](done/R-0063.md), [R-0015](done/R-0015.md), [R-0014](done/R-0014.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | SETUP-008 | [R-0066](done/R-0066.md), [R-0051](done/R-0051.md), [R-0014](done/R-0014.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
@@ -35,7 +35,7 @@
 | MOVE-007 | [R-0106](done/R-0106.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | MOVE-008 | [R-0073](done/R-0073.md), [R-0106](done/R-0106.md), [R-0119](done/R-0119.md), [R-0120](done/R-0120.md), [R-0121](done/R-0121.md), [R-0130](done/R-0130.md), [R-0142](done/R-0142.md) | Each continuing-order owner includes activation/cancellation; no universal rewrite. |
 | MOVE-009 | [R-0131](done/R-0131.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| UNIT-001 | [R-0211](R-0211.md) | Existing equipment behavior; full role matrix checks 49/50 quantities and combined equipment. |
+| UNIT-001 | [R-0211](done/R-0211.md) | Existing equipment behavior; full role matrix checks 49/50 quantities and combined equipment. |
 | UNIT-002 | [R-0020](done/R-0020.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | PION-001 | [R-0118](done/R-0118.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | PION-002 | [R-0119](done/R-0119.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
@@ -163,7 +163,7 @@
 | COMBAT-001 | [R-0028](done/R-0028.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-002 | [R-0028](done/R-0028.md), [R-0099](done/R-0099.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-003 | [R-0028](done/R-0028.md), [R-0099](done/R-0099.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
-| COMBAT-004 | [R-0093](done/R-0093.md), [R-0095](done/R-0095.md), [R-0108](done/R-0108.md), [R-0173](done/R-0173.md), [R-0178](done/R-0178.md), [R-0211](R-0211.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
+| COMBAT-004 | [R-0093](done/R-0093.md), [R-0095](done/R-0095.md), [R-0108](done/R-0108.md), [R-0173](done/R-0173.md), [R-0178](done/R-0178.md), [R-0211](done/R-0211.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-005 | [R-0094](done/R-0094.md), [R-0093](done/R-0093.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-006 | [R-0093](done/R-0093.md), [R-0123](done/R-0123.md), [R-0173](done/R-0173.md), [R-0178](done/R-0178.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |
 | COMBAT-007 | [R-0173](done/R-0173.md), [R-0178](done/R-0178.md) | Bounded ownership; full acceptance remains with the rule and linked use-case owners. |

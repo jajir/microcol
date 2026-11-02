@@ -106,19 +106,19 @@
     Together with R-0145 and R-0168, all nine report families have owners.
 14. Nine verification-only captures own the mandatory matrices:
     [profiles](done/R-0208.md), [New Game controls](canceled/R-0209.md),
-    [terrain](done/R-0210.md), [units](R-0211.md), [skills](done/R-0212.md),
+    [terrain](done/R-0210.md), [units](done/R-0211.md), [skills](done/R-0212.md),
     [buildings](done/R-0213.md), [founders](done/R-0214.md),
-    [production/trade](done/R-0215.md) and [endings](R-0216.md).
+    [production/trade](done/R-0215.md) and [endings](done/R-0216.md).
     Four separate integrated acceptance captures [R-0217](done/R-0217.md)–[R-0220](done/R-0220.md)
     own UC-115–118. These are pending verification, not new implementations
     of already delivered behavior or claims that the full matrices have passed.
 15. The setup reconciliation identified a separate missing geographic America
-    map, now captured by [R-0221](R-0221.md). Delivered bundled-map selection
+    map, now captured by [R-0221](done/R-0221.md). Delivered bundled-map selection
     and R-0065's random/customized generation do not establish that geographic
     world. Native identity/placement dependencies are explicit in world setup.
 16. Shared work is captured as [UX audit](canceled/R-0222.md), [player observations](canceled/R-0223.md),
-    [graphics coverage](canceled/R-0224.md), [reproducible export](R-0225.md),
-    [audio service](canceled/R-0226.md), [audio settings](R-0227.md), [first cue](R-0228.md),
+    [graphics coverage](canceled/R-0224.md), [reproducible export](done/R-0225.md),
+    [audio service](canceled/R-0226.md), [audio settings](done/R-0227.md), [first cue](done/R-0228.md),
     [long-game stability](canceled/R-0229.md) and [balance evaluation](canceled/R-0230.md).
 17. Release residuals are [diagnostics](done/R-0231.md), [player guide](R-0232.md),
     [runtime baseline](canceled/R-0233.md), [signed Mac](R-0234.md), [Linux acceptance](R-0235.md),

@@ -916,7 +916,7 @@ between the installed alias's context/output parameters and repository settings.
 The model alias is configurable in the profile; model changes require an explicit
 operator decision and verification. No launch installs or downloads a model.
 
-Since [R-0389](../requirements/R-0389.md) the profiles name `akropia-` aliases.
+Since [R-0389](../requirements/done/R-0389.md) the profiles name `akropia-` aliases.
 The installed host aliases were created under the former project prefix; until
 the operator creates the new alias with the command above and verifies it with
 `/api/show`, the launcher rejects the missing alias. Do not fall back to another

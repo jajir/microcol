@@ -508,8 +508,9 @@ public final class FreePlayAuditPage extends AbstractScreen {
 
     public void prepareInvalidDifficultySave(final String difficulty)
             throws Exception {
-        final File source = getContext().getClassFromGuice(PersistingTool.class)
-                .getAutoSaveFile();
+        // Copy the save Continue opens: the last successful save or load
+        // (R-0387), which need not be the autosave slot.
+        final File source = continueFile();
         // The recovery point is an archive; its game entry is edited as plain
         // scenario JSON.
         final com.google.gson.JsonObject data = new com.google.gson.JsonParser()

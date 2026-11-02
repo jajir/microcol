@@ -62,7 +62,7 @@ jeden pevný obrázek. Její říční pravidlo popisuje
 
 ## Severní Amerika
 
-Šestá volba **North America / Severní Amerika** ([R-0221](requirements/R-0221.md))
+Šestá volba **North America / Severní Amerika** ([R-0221](requirements/done/R-0221.md))
 spouští autorský stylizovaný svět 100 × 80 polí podle
 [pravidla geografické mapy](gap-analysis.md#north-america-reference-map). Jde o
 původní herní mapu, ne o přesná zeměpisná data. Hráč volí národ i obtížnost.

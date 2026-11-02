@@ -53,7 +53,7 @@ an image or exported with results.
    does not guarantee that an individual run fits seven minutes. Serialization itself
    does not change test selection or the acceptance budget; the current limit is
    documented below. No remote regression is watched.
-7. The [R-0389](../requirements/R-0389.md) rename changed the lock path, the
+7. The [R-0389](../requirements/done/R-0389.md) rename changed the lock path, the
    `org.akropia.local-test` container label, the Compose project and the
    completion log root. Tooling from a revision before that rename uses the
    former names, so the two generations neither share the lock nor see each

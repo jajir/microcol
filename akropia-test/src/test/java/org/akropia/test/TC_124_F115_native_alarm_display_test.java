@@ -111,10 +111,12 @@ public class TC_124_F115_native_alarm_display_test extends AbstractAkropiaTest {
 
         // With the pointer resting on the capital, the next real turn adds a
         // quarter; the hover text follows the update without moving the mouse.
+        // A report of that turn is closed with Escape, so the pointer stays.
         game.moveMouseAtLocation(AZTEC_CAPITAL);
         alarm.verifyStatusBarShows("Attitude: content.",
                 "Alarm change -28.75, falling.", UNKNOWN_PROVOKER);
-        alarm.nextTurnKeepingPointer().ifPresent(ScreenTurnReport::close);
+        alarm.nextTurnKeepingPointer()
+                .ifPresent(ScreenTurnReport::closeWithEscape);
         alarm.verifyStatusBarShows("Attitude: content.",
                 "Alarm change +0.25, rising.", UNKNOWN_PROVOKER);
         alarm.openWithNKey();

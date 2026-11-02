@@ -7,7 +7,7 @@
 
 ## Plánování obchodních tras
 
-1. Dohodnuté zadání z 1. listopadu 2026 zachycuje [R-0395](requirements/R-0395.md): přepínač vlevo nahoře přepne mapu do režimu barevných obchodních tras na tmavém podkladu. Najetí ukáže jméno a vlastnosti; výběr otevře popis a editaci konkrétní trasy v místě běžného pravého panelu.
+1. Dohodnuté zadání z 1. listopadu 2026 zachycuje [R-0395](requirements/done/R-0395.md): přepínač vlevo nahoře přepne mapu do režimu barevných obchodních tras na tmavém podkladu. Najetí ukáže jméno a vlastnosti; výběr otevře popis a editaci konkrétní trasy v místě běžného pravého panelu.
 2. Po přepnutí do režimu obchodních tras se nahoře v hlavní herní liště zobrazí tlačítko pro novou trasu. Použije existující podobu tlačítka „Trade route…“ z detailu kolonie, které uživatel přiložil jako referenci. Hráč vybírá zastávky a jejich vlastnosti, cestu mezi městy volí hra podle [pohybových pravidel tras](gap-analysis.md#automated-trade-routes). Zrušení editace nemění uloženou trasu.
 3. Zobrazují se všechny vypočtené cesty, nejen vybraná trasa. Vedou přibližně středy dlaždic jako měkké, ladně zahýbající křivky s viditelnými nepravidelnostmi ruční kresby. Stylizace nemění modelovou cestu ani její cenu. Čitelnost a možnost jednotlivého výběru zůstávají nutné i při překryvu. Jde o dohodnutý návrh, nikoli implementovaný nebo hráčsky ověřený výsledek.
 
@@ -18,7 +18,7 @@
 
 ## Zbývající tahy orání — zadání 1. listopadu 2026
 
-1. Dohodnutý [R-0391](requirements/R-0391.md) zobrazí v panelu vlastní jednotky textový odpočet orání podle skutečného stavu práce, obdobně jako u silnice. Text se aktualizuje při posunu práce, zachová po Continue a zmizí při dokončení či zrušení. Jde o připravené zadání k nálezu UX-20, nikoli implementovaný nebo nově hráčsky ověřený výsledek.
+1. Dohodnutý [R-0391](requirements/done/R-0391.md) zobrazí v panelu vlastní jednotky textový odpočet orání podle skutečného stavu práce, obdobně jako u silnice. Text se aktualizuje při posunu práce, zachová po Continue a zmizí při dokončení či zrušení. Jde o připravené zadání k nálezu UX-20, nikoli implementovaný nebo nově hráčsky ověřený výsledek.
 
 ## Vylodění pasažérů — R-0379
 
@@ -29,13 +29,13 @@
 
 ## Potvrzení nákupu v Evropě — 31. října 2026
 
-1. Implementace [R-0378](requirements/R-0378.md) dává hráči při běžném přetažení z trhu do lodního nákladu potvrzení s předvoleným dostupným maximem. Číselný limit a jeho důvod, celková cena a zbývající zlato vysvětlují výsledek před utracením peněz; Zpět a Escape nic nekoupí, nula nejde potvrdit.
+1. Implementace [R-0378](requirements/done/R-0378.md) dává hráči při běžném přetažení z trhu do lodního nákladu potvrzení s předvoleným dostupným maximem. Číselný limit a jeho důvod, celková cena a zbývající zlato vysvětlují výsledek před utracením peněz; Zpět a Escape nic nekoupí, nula nejde potvrdit.
 2. Viditelná nápověda vysvětluje okamžitý nákup maxima držením Command ⌘ na Macu nebo Ctrl na ostatních systémech při upuštění. Rozhoduje klávesa právě při upuštění. Stavová lišta sdělí skutečné množství a cenu nebo důvod blokace. Prodej a přesuny vlastního nákladu zachovávají dosavadní ovládání; pravidla a odmítnutí zastaralé nabídky vlastní model.
 3. Modelové, cílené Docker a nativní macOS scénáře prošly 1. listopadu 2026; snímky EN/CZ a úzkých/širokých oken byly zkontrolovány. Nejde o uživatelskou studii. Konečný smoke celé vybrané série zůstává podle pokynu uživatele odložen; [aktuální evidence](functional-tests.md#r-0378-implemented-and-verified-2026-11-01). Původní zachycení návrhu bez testů zůstává v [historické evidenci](publishing.md#r-0378-europe-purchase-requirement-2026-10-31).
 
 ## Panely Nastavení a Načíst hru — schválený návrh 31. října 2026
 
-1. Schválený, dosud neimplementovaný [R-0377](requirements/R-0377.md) vkládá obsahové panely do oblasti moře v menu nebo do současného herního rámu podle skutečného místa otevření. Posouvá se jen obsah; nadpis a Zpět / Zpět do hry zůstávají dostupné. Společné volby mají stejné pořadí a návrat obnoví konkrétní původní obrazovku.
+1. Schválený, dosud neimplementovaný [R-0377](requirements/done/R-0377.md) vkládá obsahové panely do oblasti moře v menu nebo do současného herního rámu podle skutečného místa otevření. Posouvá se jen obsah; nadpis a Zpět / Zpět do hry zůstávají dostupné. Společné volby mají stejné pořadí a návrat obnoví konkrétní původní obrazovku.
 2. Dohodnuté zkratky jsou ⌘O / Ctrl+O pro přehled načítání a ⌘S / Ctrl+S pro ukládání. Rozsah dostupnosti, bezpečnost načtení a výjimky při vnořených operacích vlastní požadavek; stávající chování nadále popisuje [ukládání a navigace](save-load-navigation.md). Jde o dohodu, nikoli nové runtime nebo uživatelské ověření.
 
 ## Kontext mapy a návrat po konci hry — 31. října 2026

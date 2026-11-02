@@ -760,6 +760,16 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     }
 
     private void setDisable(final boolean disable) {
+        // Unit moves report start and finish from their own thread; the scene
+        // graph may change only on the FX thread, in the reported order.
+        if (Platform.isFxApplicationThread()) {
+            applyDisable(disable);
+        } else {
+            Platform.runLater(() -> applyDisable(disable));
+        }
+    }
+
+    private void applyDisable(final boolean disable) {
         buttonCongress.setDisable(disable);
         buttonSentry.setDisable(disable);
         buttonFortify.setDisable(disable);

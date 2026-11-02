@@ -263,4 +263,51 @@ public class TC_35_F27_attack_eligibility_test extends AbstractAkropiaTest {
         attack.verifyReviewClosed();
         attack.verifyGameplayUnchanged();
     }
+
+    @Test
+    @Tag("local")
+    void TC_13_soldier_losing_to_an_open_field_civilian_keeps_its_life_and_loses_its_weapons()
+            throws Exception {
+        WelcomePage.of(getContext()).loadGame();
+        final AttackPage attack = new AttackPage(getContext());
+        // The French defender is an unarmed colonist on bare open ground.
+        attack.loadUnarmedDefenderFixture(FIXTURE);
+        // Saved draw 0.883 loses the 75% battle for the attacker.
+        attack.chooseExistingOutcome(0, false);
+        attack.chooseAttack(SOLDIER, DEFENDER);
+        // A soldier 2 x 1.5 = 3 faces the civilian base 1: 3 / (3 + 1).
+        attack.verifyStrengths("Base: 2\nAttack: +50%\nFinal strength: 3",
+                "Base: 1\nFinal strength: 1", "Attacker win chance: 75%");
+        attack.confirm();
+        attack.verifyEquipmentOutcome(0, 0, false, false, SOLDIER, null);
+        attack.verifyPerson(0, org.akropia.model.UnitType.COLONIST, "Dutch");
+        attack.verifyPerson(6, org.akropia.model.UnitType.COLONIST, "France");
+        org.akropia.page.GamePage.of(getContext()).exitToMenu();
+        new org.akropia.page.FreePlayAuditPage(getContext()).continueGame();
+        attack.verifyEquipmentOutcome(0, 0, false, false, SOLDIER, null);
+        attack.verifyPerson(0, org.akropia.model.UnitType.COLONIST, "Dutch");
+        attack.verifyPerson(6, org.akropia.model.UnitType.COLONIST, "France");
+    }
+
+    @Test
+    @Tag("local")
+    void TC_14_soldier_defeating_an_open_field_civilian_destroys_it_and_continue_preserves_it()
+            throws Exception {
+        WelcomePage.of(getContext()).loadGame();
+        final AttackPage attack = new AttackPage(getContext());
+        attack.loadUnarmedDefenderFixture(FIXTURE);
+        // Saved draws 0.113 win the 75% battle and 0.700 give no promotion.
+        attack.chooseExistingOutcome(0, true);
+        attack.chooseAttack(SOLDIER, DEFENDER);
+        attack.verifyStrengths("Base: 2\nAttack: +50%\nFinal strength: 3",
+                "Base: 1\nFinal strength: 1", "Attacker win chance: 75%");
+        attack.confirm();
+        // A civilian defeated by a European in the open field is destroyed.
+        attack.verifyDefenderDestroyed(0, 6);
+        attack.verifyPerson(0, org.akropia.model.UnitType.COLONIST, "Dutch");
+        org.akropia.page.GamePage.of(getContext()).exitToMenu();
+        new org.akropia.page.FreePlayAuditPage(getContext()).continueGame();
+        attack.verifyDefenderDestroyed(0, 6);
+        attack.verifyPerson(0, org.akropia.model.UnitType.COLONIST, "Dutch");
+    }
 }

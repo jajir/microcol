@@ -99,11 +99,15 @@ public class GamePage extends AbstractScreen {
             final Location location) throws Exception {
         verifyThatTileIsVisible(location);
         dragToLocation(location);
-        WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS,
-                () -> WaitForAsyncUtils
-                        .asyncFx(() -> getNodeFinder().lookup("#closeButtonId")
-                                .tryQuery().isPresent())
-                        .get(60, TimeUnit.SECONDS));
+        // The report's Close button is attached with the screen, but its
+        // scrolled event list becomes reachable only after the next layout.
+        WaitForAsyncUtils
+                .waitFor(60, TimeUnit.SECONDS,
+                        () -> WaitForAsyncUtils.asyncFx(() -> getNodeFinder()
+                                .lookup("#closeButtonId").tryQuery().isPresent()
+                                && getNodeFinder().lookup(".turnEventPanel")
+                                        .tryQuery().isPresent())
+                                .get(60, TimeUnit.SECONDS));
         return ScreenTurnReport.of(getContext());
     }
 

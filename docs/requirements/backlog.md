@@ -1,24 +1,31 @@
 # Current requirement backlog
 
+## Completed development batch — 2026-11-02
+
+1. All **19 selected requirements** are implemented and locally accepted: [R-0378](done/R-0378.md), [R-0377](done/R-0377.md), [R-0376](done/R-0376.md), [R-0228](done/R-0228.md), [R-0227](done/R-0227.md), [R-0225](done/R-0225.md), [R-0221](done/R-0221.md), [R-0216](done/R-0216.md), [R-0211](done/R-0211.md), [R-0382](done/R-0382.md), [R-0383](done/R-0383.md), [R-0387](done/R-0387.md), [R-0388](done/R-0388.md), [R-0389](done/R-0389.md), [R-0391](done/R-0391.md), [R-0392](done/R-0392.md), [R-0393](done/R-0393.md), [R-0394](done/R-0394.md), [R-0395](done/R-0395.md). Their status is `done`.
+2. The combined source based on `bbce5985` passed **4,959 model/JUnit tests**, both final integration UI selections (30 and 24 executions), and **21 smoke/support tests** within 420 seconds. Earlier targeted selections and repaired failures are recorded in the [acceptance evidence](../functional-tests.md#zaverecne-overeni-davky-2026-11-02). The FRIGATE baseline exception is no longer needed on the combined source; historical failed runs remain failed. No new published distribution is claimed.
+3. R-0396 and R-0398 remain outside this batch; R-0397 was completed separately. The dated entries below preserve the earlier capture, ordering and provisional states; they do not override this closure.
+
+
 Implemented on 2026-11-02: [R-0397 — ships B5 and caravel K5](done/R-0397.md), A03. Selected vector artwork is integrated; the unchanged ink threshold, 4,955 model tests and six targeted UI/support checks passed. Smoke alone is waived by the user for this delivery.
 
 
 ## Mediterranean goods terminology — 2026-11-01
 
-1. [R-0394](R-0394.md), status `ready for development`, unifies goods, related producers, identifiers, assets and texts across the project. Wool uses the sheep icon; torches and owls preserve the existing cross/bell effects. All production ratios, prices, yields and other rules remain unchanged. Preparation only, no implementation authorized.
+1. [R-0394](done/R-0394.md), status `ready for development`, unifies goods, related producers, identifiers, assets and texts across the project. Wool uses the sheep icon; torches and owls preserve the existing cross/bell effects. All production ratios, prices, yields and other rules remain unchanged. Preparation only, no implementation authorized.
 
 ## Plowing completion in turn report — 2026-11-01
 
-1. [R-0393](R-0393.md), status `new`, captures one owner-visible event when plowing creates a field, identifying the unit and location and explaining that the unit can receive further orders. No open questions; implementation not authorized.
+1. [R-0393](done/R-0393.md), status `new`, captures one owner-visible event when plowing creates a field, identifying the unit and location and explaining that the unit can receive further orders. No open questions; implementation not authorized.
 
 
 ## Automatic trade-route events in the turn report — 2026-11-01
 
-1. [R-0392](R-0392.md) captures per-event reporting of actual automatic route transactions and transfers. Status: `new`; scope clarified by the user to goods and money only, with no open questions. No implementation authorized.
+1. [R-0392](done/R-0392.md) captures per-event reporting of actual automatic route transactions and transfers. Status: `new`; scope clarified by the user to goods and money only, with no open questions. No implementation authorized.
 
 ## Plowing countdown in the unit panel — 2026-11-01
 
-1. [R-0391](R-0391.md), status `ready for development`, prepares the user-selected text countdown for UX-20 under A03, using existing A05 work state and A04 turn/save continuity. Implementation is not started or authorized by this preparation request.
+1. [R-0391](done/R-0391.md), status `ready for development`, prepares the user-selected text countdown for UX-20 under A03, using existing A05 work state and A04 turn/save continuity. Implementation is not started or authorized by this preparation request.
 
 ## Greek sanctuary harbor — 2026-11-01
 
@@ -26,7 +33,7 @@ Implemented on 2026-11-02: [R-0397 — ships B5 and caravel K5](done/R-0397.md),
 
 ## Complete Akropia rename — 2026-11-01
 
-1. [R-0389](R-0389.md), status `ready for development`, records the prepared source inventory and acceptance plan for the confirmed **Akropia / akropia** spelling and the complete rename of product text, Maven modules, Java identities, file paths, tooling, tests and documentation. Primary area A03; A01 startup/navigation and A04 storage/settings are cross-area dependencies.
+1. [R-0389](done/R-0389.md), status `ready for development`, records the prepared source inventory and acceptance plan for the confirmed **Akropia / akropia** spelling and the complete rename of product text, Maven modules, Java identities, file paths, tooling, tests and documentation. Primary area A03; A01 startup/navigation and A04 storage/settings are cross-area dependencies.
 2. Acceptance requires a case-insensitive audit of every tracked file's contents and path. Only necessary references to the unchanged GitHub repository and its existing services may retain the former name. The user will rename that repository separately. This capture does not start implementation or alter the existing development queue.
 
 ## Expanded development batch — 2026-11-01
@@ -51,7 +58,7 @@ R-0378 implementation and requirement-specific verification are complete: 4,814 
 
 1. User stopped further work after host disk exhaustion and Docker failure. No automatic continuation is authorized until a new user instruction.
 2. [R-0381](done/R-0381.md) and [R-0379](done/R-0379.md) are `done`, accepted locally and pushed in commits `7f8d27e7` and `57be46c1` respectively.
-3. [R-0378](R-0378.md) remains `ready for development`: refinement and an implementation candidate exist, but acceptance and integration are incomplete. Changes are preserved in the isolated `claude-ordered-requirements/akropia` worktree. See [paused execution evidence](../functional-tests.md#ordered-development-paused-2026-10-31).
+3. [R-0378](done/R-0378.md) remains `ready for development`: refinement and an implementation candidate exist, but acceptance and integration are incomplete. Changes are preserved in the isolated `claude-ordered-requirements/akropia` worktree. See [paused execution evidence](../functional-tests.md#ordered-development-paused-2026-10-31).
 4. R-0377, R-0376, R-0228, R-0227, R-0225, R-0221, R-0216 and R-0211 were not started in this ordered development session; their existing requirement statuses remain unchanged. Earlier dated capture notes below are historical.
 
 
@@ -64,7 +71,7 @@ Other requirement statuses are unchanged; older dated selections below remain hi
 
 Implemented on 2026-10-31: [R-0380 — discoverable departure from Europe](done/R-0380.md), A03 with existing A06 voyage rules. Shared toolbar-style departure button, plain shared-size travel headings, hand-drawn routes and muted SVG harbor sources are complete under the user's explicit no-tests exception. Java/test compilation succeeded; no tests were executed and no gameplay, local acceptance or distribution result is claimed. [Evidence](../functional-tests.md#r-0380-discoverable-europe-departure-2026-10-31).
 
-Captured on 2026-10-31: [R-0378 — explain and confirm European goods purchases](R-0378.md),
+Captured on 2026-10-31: [R-0378 — explain and confirm European goods purchases](done/R-0378.md),
 primary area A03 with existing A06 trade limits. Status: `new`. Ordinary dragging
 opens a purchase with the available maximum, its limiting reason, total price and
 remaining gold; Command on macOS / Ctrl elsewhere buys the maximum immediately.
@@ -330,7 +337,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0239](R-0239.md) | Upload runnable Steam depots and launch options | New capture | P32 SteamPipe technical scope |
 | [R-0240](R-0240.md) | Verify Steam install, offline play and update recovery | New capture | P32 Steam-installed customer paths |
 | [R-0241](R-0241.md) | Review, launch and support the Steam release | New capture | P32 publisher operations and initial support |
-| [R-0376](R-0376.md) | Remove duplicate Recovery points main-menu entry; retain Load recovery filter | Ready for development; implemented, final batch smoke pending | Targeted checks passed; baseline artwork exception, 2026-11-01 |
+| [R-0376](done/R-0376.md) | Remove duplicate Recovery points main-menu entry; retain Load recovery filter | Ready for development; implemented, final batch smoke pending | Targeted checks passed; baseline artwork exception, 2026-11-01 |
 
 ## A02
 
@@ -345,7 +352,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0208](done/R-0208.md) | Verify four nations across five game profiles | Verification | UC-119 reference Hra matrix; setup effects retain feature owners |
 | [R-0209](canceled/R-0209.md) | Verify the separate New Game UI and map-choice matrix | Canceled 2026-10-31 | UC-119 Nastavení matrix; generator R-0065 |
 | [R-0217](done/R-0217.md) | Verify an expedition reaches a self-sustaining trade loop | Verification | UC-115 integrated Hra journey |
-| [R-0221](R-0221.md) | Start a playable geographic America world | Ready for development; provisionally integrated, final batch checks pending | 31 focused checks passed; authored North America 100 × 80 |
+| [R-0221](done/R-0221.md) | Start a playable geographic America world | Ready for development; provisionally integrated, final batch checks pending | 31 focused checks passed; authored North America 100 × 80 |
 | [R-0263](done/R-0263.md) | Make Original World a varied fixed map with every natural terrain feature | New capture | User request and fixed-map/polar decisions, 2026-10-24; northern tundra, southern ice and discoverable rivers |
 
 | [R-0287](done/R-0287.md) | Enrich Original World and preserve connected freshwater lakes | Selected implementation | User request, 2026-10-25; follows R-0263 |
@@ -356,7 +363,7 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 
 | Requirement | Outcome | Kind | Origin |
 | --- | --- | --- | --- |
-| [R-0377](R-0377.md) | Embed Settings and Load game in menu/game pages with scrolling content, origin-aware returns and platform shortcuts | Ready for development; implemented, final batch smoke pending | Targeted checks passed; explicit baseline artwork exception, 2026-11-01 |
+| [R-0377](done/R-0377.md) | Embed Settings and Load game in menu/game pages with scrolling content, origin-aware returns and platform shortcuts | Ready for development; implemented, final batch smoke pending | Targeted checks passed; explicit baseline artwork exception, 2026-11-01 |
 | [R-0379](done/R-0379.md) | Land one eligible passenger directly; select several with initially unchecked checkboxes | Done 2026-10-31 | User agreement, 2026-10-31; [R-0022](done/R-0022.md) passenger rules |
 | [R-0381](done/R-0381.md) | Lower both Europe voyage groups slightly and use the compact heading-to-ship spacing of selected variant C | Done 2026-10-31 | User-selected visual reference, 2026-10-31; [R-0380](done/R-0380.md) layout |
 | [R-0112](done/R-0112.md) | Stabilize TC27 and TC30 map interactions with evidence-backed diagnosis | New request | User request, 2026-10-15 |
@@ -384,13 +391,13 @@ The migration capture contains **12 remainders, 3 acceptance gaps and 46 follow-
 | [R-0222](canceled/R-0222.md) | Audit shared game controls for access and recovery | Canceled 2026-10-31 | P28 shared UX residual; feature owners retained |
 | [R-0223](canceled/R-0223.md) | Observe real players completing core game tasks | Canceled 2026-10-31 | P28/P31 real-player evidence, not automation |
 | [R-0224](canceled/R-0224.md) | Complete and inspect runtime graphics coverage | Canceled 2026-10-31 | P29 visual coverage and readability |
-| [R-0225](R-0225.md) | Reproduce the source-to-runtime graphics export | Ready for development; implemented, final batch smoke pending | 62 matching exports; 13 tooling tests passed; legacy exclusions documented |
+| [R-0225](done/R-0225.md) | Reproduce the source-to-runtime graphics export | Ready for development; implemented, final batch smoke pending | 62 matching exports; 13 tooling tests passed; legacy exclusions documented |
 | [R-0226](canceled/R-0226.md) | Play event effects without disrupting music or gameplay | Canceled 2026-10-31 | P30 event audio service; existing music credited |
-| [R-0227](R-0227.md) | Independent persisted music and effects volume | Ready for development; implemented, final batch smoke pending | 26 targeted checks passed; baseline artwork exception |
-| [R-0228](R-0228.md) | Mission-victory cue with visual equivalent | Ready for development; implemented, final batch smoke pending | Preview approved; 19 targeted checks passed; baseline artwork exception |
+| [R-0227](done/R-0227.md) | Independent persisted music and effects volume | Ready for development; implemented, final batch smoke pending | 26 targeted checks passed; baseline artwork exception |
+| [R-0228](done/R-0228.md) | Mission-victory cue with visual equivalent | Ready for development; implemented, final batch smoke pending | Preview approved; 19 targeted checks passed; baseline artwork exception |
 | [R-0238](R-0238.md) | Produce honest Steam store media from the release game | New capture | P32 store artwork/screens/trailer; P29 in-game art separate |
 | [R-0297](done/R-0297.md) | Apply the selected compact opening-menu composition | Done; local acceptance passed | User-selected single-column proposal, 2026-10-26 |
-| [R-0383](R-0383.md) | Select saved games in a left list and inspect the map preview and summary on the right | New capture; approved design | User request, 2026-10-31; R-0377 frame and R-0382 saved data |
+| [R-0383](done/R-0383.md) | Select saved games in a left list and inspect the map preview and summary on the right | New capture; approved design | User request, 2026-10-31; R-0377 frame and R-0382 saved data |
 
 ## A04
 
@@ -408,9 +415,9 @@ manual/quick saves, recovery and protected exits. Local acceptance is recorded i
 | [R-0068](done/R-0068.md) | Offer separate turn and decade recovery points | Follow-up | [R-0018](done/R-0018.md) |
 | [R-0229](canceled/R-0229.md) | Verify long-game stability and responsiveness | Canceled 2026-10-31 | P31 measured whole-game acceptance |
 | [R-0231](done/R-0231.md) | Preserve local diagnostics for recoverable failures | Done | P32 diagnostics beyond delivered save/turn recovery |
-| [R-0382](R-0382.md) | Save games with a map preview and summary while preserving data-model/JSON serialization | New capture; approved design | User request, 2026-10-31; R-0298 save management; load-screen content is owned by R-0383 |
-| [R-0387](R-0387.md) | Prompt only for unsaved gameplay and clarify save destinations and timing | New proposal | User request, 2026-11-01; R-0298 protected exits |
-| [R-0388](R-0388.md) | Keep a rolling history of turn autosaves per playthrough | New capture; five-save retention/failure/replay rules approved 2026-11-01 | User request, 2026-11-01; R-0068 checkpoints and R-0387 save policy |
+| [R-0382](done/R-0382.md) | Save games with a map preview and summary while preserving data-model/JSON serialization | New capture; approved design | User request, 2026-10-31; R-0298 save management; load-screen content is owned by R-0383 |
+| [R-0387](done/R-0387.md) | Prompt only for unsaved gameplay and clarify save destinations and timing | New proposal | User request, 2026-11-01; R-0298 protected exits |
+| [R-0388](done/R-0388.md) | Keep a rolling history of turn autosaves per playthrough | New capture; five-save retention/failure/replay rules approved 2026-11-01 | User request, 2026-11-01; R-0068 checkpoints and R-0387 save policy |
 
 ## A05
 
@@ -439,7 +446,7 @@ manual/quick saves, recovery and protected exits. Local acceptance is recorded i
 | [R-0130](done/R-0130.md) | Continue and cancel a long-range go-to order | New capture | [MOVE-004/008](../gap-analysis.md#movement-and-persistent-orders), UC-013/016 |
 | [R-0131](done/R-0131.md) | Disband a selected empty unit safely | New capture | [MOVE-009](../gap-analysis.md#movement-and-persistent-orders), UC-016 |
 | [R-0210](done/R-0210.md) | Verify every terrain and overlay reference row | Verification | UC-119 terrain matrix; individual A05 rules remain owners |
-| [R-0211](R-0211.md) | Verify unit roles and six ship classes | Verification | UC-119 role/ship matrix; individual A05/A09 rules remain owners |
+| [R-0211](done/R-0211.md) | Verify unit roles and six ship classes | Verification | UC-119 role/ship matrix; individual A05/A09 rules remain owners |
 
 The five A05/P07 analyses above were captured on **2026-10-17** as preparation
 only. Earlier authorization to implement the migrated R-0051–R-0113 set does
@@ -666,7 +673,7 @@ statuses. Native raid AI remains R-0156; royal deployment remains A10.
 | [R-0196](done/R-0196.md) | Apply war, independence and difficulty score components | Remainder | SCORE-005/006/007/008; R-0195 base separate |
 | [R-0197](done/R-0197.md) | Keep and display the top ten Hall-of-Fame results | Remainder | SCORE-009; score arithmetic R-0195/0196 separate |
 | [R-0214](done/R-0214.md) | Verify all 25 founder effects | Verification | UC-119 founder matrix; existing per-effect owners credited |
-| [R-0216](R-0216.md) | Verify every ending and scoring branch | Verification | UC-119 ending matrix; R-0191–0197 remain feature owners |
+| [R-0216](done/R-0216.md) | Verify every ending and scoring branch | Verification | UC-119 ending matrix; R-0191–0197 remain feature owners |
 | [R-0220](done/R-0220.md) | Verify independence reaches a real final score | Verification | UC-118 integrated Hra journey |
 | [R-0230](canceled/R-0230.md) | Evaluate balance and pace across full campaigns | Canceled 2026-10-31 | P31 observed whole-game balancing |
 
@@ -1111,7 +1118,7 @@ remain owned by their current requirements; acceptance is recorded in the
 
 ## Mapové plánování obchodních tras — 2026-11-01
 
-1. [R-0395](R-0395.md), primární oblast A06, související A03/A01/A05/A04. Status: new. Zachycuje mapový režim tras, detail v pravém panelu, zakládací tlačítko z detailu kolonie v hlavní herní liště režimu tras a automatickou nejrychlejší cestu podle pohybové ceny (vůz po pevnině, lodě po moři). Všechny vypočtené cesty zobrazí ručně působící křivky přibližně středy dlaždic. Doplněn šedý náhled dostupné pozemní i námořní varianty bez dopravce, stabilní výběr jedné optimální cesty a Evropa jako zastávka v high seas. Otevřené otázky jsou zodpovězené; implementace není zahájena a technická příprava zbývá.
+1. [R-0395](done/R-0395.md), primární oblast A06, související A03/A01/A05/A04. Status: new. Zachycuje mapový režim tras, detail v pravém panelu, zakládací tlačítko z detailu kolonie v hlavní herní liště režimu tras a automatickou nejrychlejší cestu podle pohybové ceny (vůz po pevnině, lodě po moři). Všechny vypočtené cesty zobrazí ručně působící křivky přibližně středy dlaždic. Doplněn šedý náhled dostupné pozemní i námořní varianty bez dopravce, stabilní výběr jedné optimální cesty a Evropa jako zastávka v high seas. Otevřené otázky jsou zodpovězené; implementace není zahájena a technická příprava zbývá.
 
 ## Jednorázová plavba Go to — 2026-11-02
 

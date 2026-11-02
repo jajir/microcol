@@ -6,7 +6,7 @@
 
 | UC | Category | Player outcome | Owners |
 | --- | --- | --- | --- |
-| UC-001 | Nastavení | Nastavit mapu nové partie | [R-0065](done/R-0065.md), [R-0221](R-0221.md), [R-0014](done/R-0014.md), [R-0209](canceled/R-0209.md) |
+| UC-001 | Nastavení | Nastavit mapu nové partie | [R-0065](done/R-0065.md), [R-0221](done/R-0221.md), [R-0014](done/R-0014.md), [R-0209](canceled/R-0209.md) |
 | UC-002 | Nastavení | Zvolit národ a obtížnost | [R-0063](done/R-0063.md), [R-0064](done/R-0064.md), [R-0066](done/R-0066.md), [R-0209](canceled/R-0209.md) |
 | UC-003 | Hra | Uplatnit národní výhodu | [R-0076](done/R-0076.md), [R-0153](done/R-0153.md), [R-0174](done/R-0174.md), [R-0144](done/R-0144.md), [R-0208](done/R-0208.md) |
 | UC-004 | Hra | Zachovat herní profil a postupovat kalendářem | [R-0051](done/R-0051.md), [R-0063](done/R-0063.md), [R-0064](done/R-0064.md), [R-0066](done/R-0066.md), [R-0208](done/R-0208.md) |
@@ -22,14 +22,14 @@
 | UC-014 | Hra | Počkat nebo vynechat pohyb | [R-0053](done/R-0053.md) |
 | UC-015 | Hra | Držet hlídku a opevnit jednotku | [R-0073](done/R-0073.md), [R-0106](done/R-0106.md) |
 | UC-016 | Hra | Zrušit práci nebo rozpustit jednotku | [R-0073](done/R-0073.md), [R-0106](done/R-0106.md), [R-0119](done/R-0119.md), [R-0120](done/R-0120.md), [R-0121](done/R-0121.md), [R-0130](done/R-0130.md), [R-0131](done/R-0131.md), [R-0142](done/R-0142.md) |
-| UC-017 | Hra | Vybavit kolonistu v kolonii | [R-0118](done/R-0118.md), [R-0211](R-0211.md) |
+| UC-017 | Hra | Vybavit kolonistu v kolonii | [R-0118](done/R-0118.md), [R-0211](done/R-0211.md) |
 | UC-018 | Hra | Změnit vybavení na evropském molu | [R-0020](done/R-0020.md) |
 | UC-019 | Hra | Dokončit orbu | [R-0119](done/R-0119.md) |
 | UC-020 | Hra | Vykácet les | [R-0120](done/R-0120.md) |
 | UC-021 | Hra | Postavit silnici a využít zkušeného pionýra | [R-0121](done/R-0121.md), [R-0122](done/R-0122.md), [R-0119](done/R-0119.md), [R-0120](done/R-0120.md) |
-| UC-022 | Hra | Provozovat všech šest lodí | [R-0108](done/R-0108.md), [R-0211](R-0211.md) |
+| UC-022 | Hra | Provozovat všech šest lodí | [R-0108](done/R-0108.md), [R-0211](done/R-0211.md) |
 | UC-023 | Hra | Přesunout celé i částečné zboží | [R-0022](done/R-0022.md), [R-0024](done/R-0024.md), [R-0132](done/R-0132.md) |
-| UC-024 | Hra | Naložit jednotky a poklad | [R-0022](done/R-0022.md), [R-0133](done/R-0133.md), [R-0134](done/R-0134.md), [R-0175](done/R-0175.md), [R-0211](R-0211.md) |
+| UC-024 | Hra | Naložit jednotky a poklad | [R-0022](done/R-0022.md), [R-0133](done/R-0133.md), [R-0134](done/R-0134.md), [R-0175](done/R-0175.md), [R-0211](done/R-0211.md) |
 | UC-025 | Hra | Automaticky nalodit a selektivně vylodit | [R-0135](done/R-0135.md), [R-0136](done/R-0136.md) |
 | UC-026 | Hra | Rychle naložit, vyložit a odhodit náklad | [R-0137](done/R-0137.md), [R-0138](done/R-0138.md) |
 | UC-027 | Hra | Přeplout Atlantik a vrátit se | [R-0021](done/R-0021.md), [R-0071](done/R-0071.md) |
@@ -78,7 +78,7 @@
 | UC-070 | Hra | Přijmout žoldnéře | [R-0169](done/R-0169.md) |
 | UC-071 | Hra | Obchodovat s rivaly a porovnat mocnosti | [R-0167](done/R-0167.md), [R-0168](done/R-0168.md) |
 | UC-072 | Hra | Zahájit povolený útok | [R-0028](done/R-0028.md), [R-0099](done/R-0099.md) |
-| UC-073 | Hra | Spočítat skutečnou bojovou sílu | [R-0093](done/R-0093.md), [R-0094](done/R-0094.md), [R-0095](done/R-0095.md), [R-0173](done/R-0173.md), [R-0178](done/R-0178.md), [R-0188](done/R-0188.md), [R-0211](R-0211.md) |
+| UC-073 | Hra | Spočítat skutečnou bojovou sílu | [R-0093](done/R-0093.md), [R-0094](done/R-0094.md), [R-0095](done/R-0095.md), [R-0173](done/R-0173.md), [R-0178](done/R-0178.md), [R-0188](done/R-0188.md), [R-0211](done/R-0211.md) |
 | UC-074 | Hra | Povýšit vojáka a poškodit dělo | [R-0111](done/R-0111.md), [R-0095](done/R-0095.md) |
 | UC-075 | Hra | Dobýt celou kolonii | [R-0096](done/R-0096.md) |
 | UC-076 | Hra | Vybojovat námořní střet a blokádu | [R-0097](done/R-0097.md), [R-0176](done/R-0176.md) |

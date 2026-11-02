@@ -13,7 +13,7 @@ Toto je výchozí pracovní zadání pro nové zvuky. Podrobný hudební styl, n
 - **Výsledek má působit příjemně a přiměřeně.** Běžné potvrzení má být krátké a nenápadné, významný úspěch může mít výraznější motiv. Zvuky nemají rušit při dlouhé hře ani přehlušovat důležitější upozornění. Konkrétní estetické řešení lze zvolit vlastním úsudkem v rámci tohoto zadání.
 - **Přehrávat skutečný výsledek ve správný okamžik.** Úspěch oznamovat až po provedení akce. Samotné stisknutí tlačítka ani obecný konec mise neprokazují úspěch. U animovaných dějů určit, zda efekt patří k zahájení, zásahu nebo dokončení.
 - **Hlídání opakování je součást návrhu.** Jedna událost nemá znít několikrát kvůli překreslení obrazovky či otevření stejného reportu. U častých událostí určit slučování, minimální odstup a případné varianty; u jednorázového úspěchu obvykle stačí jeden zvuk.
-- **Zvuk respektuje hráčův pohled a nastavení.** Neprozrazovat dění, které hráč nevidí nebo o něm zatím nemá vědět. Nové efekty musejí respektovat vypnutí zvuku a od [R-0227](requirements/R-0227.md) samostatnou [hlasitost efektů](#hlasitost-a-vypnuti-zvuku); hudba má vlastní hlasitost.
+- **Zvuk respektuje hráčův pohled a nastavení.** Neprozrazovat dění, které hráč nevidí nebo o něm zatím nemá vědět. Nové efekty musejí respektovat vypnutí zvuku a od [R-0227](requirements/done/R-0227.md) samostatnou [hlasitost efektů](#hlasitost-a-vypnuti-zvuku); hudba má vlastní hlasitost.
 - **Chyba zvuku nesmí zablokovat herní akci.** Při rozšíření zajistit dokončení herní akce i bez dostupného audiozařízení či konkrétního efektu. Hudba i zvuk vítězství při chybě jen ztichnou a uvolní prostředky (R-0227, R-0228).
 
 ## Co je nyní uloženo v projektu
@@ -60,7 +60,7 @@ Zvuk používá **Java Sound z `javax.sound.sampled`**, nikoli JavaFX `MediaPlay
 
 ### Hlasitost a vypnutí zvuku
 
-Od [R-0227](requirements/R-0227.md) má hudba a efekty každá vlastní hlasitost.
+Od [R-0227](requirements/done/R-0227.md) má hudba a efekty každá vlastní hlasitost.
 
 | Nastavení | Současná implementace |
 | --- | --- |
@@ -135,10 +135,10 @@ První implementace musí bezpečně obsloužit vlastní prostředky, respektova
 
 ## První efekt schválený 1. listopadu 2026
 
-1. Uživatel pro [R-0228](requirements/R-0228.md) vybral krátké potvrzení vítězství v misi a pouze podporu přehrávání nezbytnou pro tento efekt. [R-0226](requirements/canceled/R-0226.md) zůstává zrušen; jeho obecný rozsah se tím neobnovuje.
+1. Uživatel pro [R-0228](requirements/done/R-0228.md) vybral krátké potvrzení vítězství v misi a pouze podporu přehrávání nezbytnou pro tento efekt. [R-0226](requirements/canceled/R-0226.md) zůstává zrušen; jeho obecný rozsah se tím neobnovuje.
 2. Efekt doplní první zobrazení potvrzeného úspěšného dokončení lidské mise (splněné cíle nebo potvrzené vítězství nezávislosti). Prohra, časový limit, odchod do důchodu, běžné kalendářní ukončení, znovuotevření zprávy a načtení dokončené hry jej nespustí. Stávající text a výsledek nesou úplnou informaci i bez zvuku.
 3. Jedna dokončená partie má nejvýše jeden zvuk; nevzniká fronta ani překryv. Nově rozehraná partie může mít vlastní vítězství. Do R-0227 platí současná hlasitost a nulová hodnota znamená ticho; `soundEnabled=false` má vždy přednost. Hudba běží nezávisle. Chyba zařízení nebo souboru nesmí ovlivnit hru ani zdržet UI.
-4. Implementace je popsána v [katalogu](#mission-success-01-zvuk-vitezstvi-v-misi), včetně zdroje, exportu, práv a stavu ověření. Uživatel schválil poslech náhledu 1. listopadu 2026; mix na všech platformách není ověřen. [R-0227](requirements/R-0227.md) následně přidá samostatné ovládání kategorií.
+4. Implementace je popsána v [katalogu](#mission-success-01-zvuk-vitezstvi-v-misi), včetně zdroje, exportu, práv a stavu ověření. Uživatel schválil poslech náhledu 1. listopadu 2026; mix na všech platformách není ověřen. [R-0227](requirements/done/R-0227.md) následně přidá samostatné ovládání kategorií.
 
 ## Katalog a šablona nového zvuku
 
@@ -162,7 +162,7 @@ Současný katalog tvoří [jedna skladba popsaná výše](#co-je-nyni-ulozeno-v
 
 | Položka | Hodnota |
 | --- | --- |
-| Identifikátor a stav | `mission-success-01`; **zapojeno v kódu** ([R-0228](requirements/R-0228.md), 1. listopadu 2026). Export, automatické ověření a schválení poslechu náhledu jsou dokončeny; podrobnosti níže. |
+| Identifikátor a stav | `mission-success-01`; **zapojeno v kódu** ([R-0228](requirements/done/R-0228.md), 1. listopadu 2026). Export, automatické ověření a schválení poslechu náhledu jsou dokončeny; podrobnosti níže. |
 | Význam | Úspěch: hráč dokončil misi nebo vyhrál povstání. |
 | Spouštěč | `EventFinishMission` s `isVictory()`; [MissionEventListener](../akropia-game/src/main/java/org/akropia/gui/event/model/MissionEventListener.java) předá výsledek a identitu partie (`GameModel.getPlaythroughId()`) do [MissionVictoryCue](../akropia-game/src/main/java/org/akropia/gui/event/model/MissionVictoryCue.java). Konec mise vzniká jen z mise lidského hráče; roboti ani skryté dění jej nevyvolají. |
 | Okamžik | Na JavaFX vlákně těsně před zobrazením první zprávy o vítězství. |

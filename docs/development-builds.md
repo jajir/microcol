@@ -24,7 +24,7 @@ Mac mini.
 - [Build progress and failures](https://github.com/jajir/microcol/actions/workflows/dev-builds.yml)
 
 The two Akropia launcher links name assets that the next verified publication
-after [R-0389](requirements/R-0389.md) creates; until that publication is
+after [R-0389](requirements/done/R-0389.md) creates; until that publication is
 verified they do not resolve. Builds and launchers published before the rename
 remain in the development channel under the former product name; an installed
 launcher from that time does not look for the Akropia assets, so install the new

@@ -165,6 +165,32 @@ public final class AttackPage extends AbstractScreen {
         }
     }
 
+    /**
+     * Load the same position with the French defender as an unarmed colonist
+     * standing in the open, before the game starts (R-0211).
+     */
+    public void loadUnarmedDefenderFixture(final java.io.File source)
+            throws Exception {
+        final com.google.gson.JsonObject game = gson.fromJson(
+                java.nio.file.Files.readString(source.toPath()),
+                com.google.gson.JsonObject.class);
+        for (final JsonElement element : game.getAsJsonObject("model")
+                .getAsJsonArray("units")) {
+            final com.google.gson.JsonObject unit = element.getAsJsonObject();
+            if (unit.get("id").getAsInt() == 6) {
+                unit.addProperty("holdingWeapons", false);
+            }
+        }
+        final java.nio.file.Path fixture = java.nio.file.Files
+                .createTempFile("combat-civilian-", ".akropia");
+        try {
+            java.nio.file.Files.writeString(fixture, gson.toJson(game));
+            replaceGame(fixture.toFile());
+        } finally {
+            java.nio.file.Files.deleteIfExists(fixture);
+        }
+    }
+
     public void simulateMountedDefender() {
         getRobot().interact(
                 () -> ((org.akropia.model.unit.UnitFreeColonist) getModel()
@@ -214,6 +240,30 @@ public final class AttackPage extends AbstractScreen {
                     .map(node -> ((javafx.scene.control.Label) node).getText())
                     .anyMatch(text -> text.contains(feedback)));
         }
+    }
+
+    /**
+     * The defeated defender no longer exists; the armed winner keeps its
+     * weapons, spent its movement and was not promoted.
+     */
+    public void verifyDefenderDestroyed(final int attackerId,
+            final int defenderId) throws Exception {
+        WaitForAsyncUtils.waitFor(10, java.util.concurrent.TimeUnit.SECONDS,
+                () -> getModel().getUnitById(attackerId)
+                        .getActionPoints() == 0);
+        GamePage.of(getContext()).waitWhileMoving();
+        assertTrue(getModel().getAllUnits().stream()
+                .noneMatch(unit -> unit.getId() == defenderId));
+        final org.akropia.model.unit.UnitFreeColonist attacker = (org.akropia.model.unit.UnitFreeColonist) getModel()
+                .getUnitById(attackerId);
+        assertTrue(attacker.isHoldingWeapons());
+        assertFalse(attacker.isMounted());
+        assertFalse(attacker.isVeteran());
+        assertEquals(0, attacker.getActionPoints());
+        assertEquals(org.akropia.model.EuropeanRelationState.WAR,
+                getModel().getEuropeanRelation(
+                        getModel().getPlayerByName("Dutch"),
+                        getModel().getPlayerByName("France")));
     }
 
     public void verifyPerson(final int unitId,

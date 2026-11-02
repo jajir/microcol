@@ -7,13 +7,13 @@ Níže je smlouva implementovaného chování. Výsledky testů patří do
 návrhových diagramů zůstává v [publikační evidenci](publishing.md#r-0298-save-load-navigation-2026-10-26).
 
 **Implementováno 1. listopadu 2026; závěrečný smoke série čeká:**
-[R-0376](requirements/R-0376.md) odstraňuje samostatnou položku Body obnovy
+[R-0376](requirements/done/R-0376.md) odstraňuje samostatnou položku Body obnovy
 z hlavní nabídky. Obnova je dostupná přes Načíst hru a stávající filtr Body
 obnovy; ukládání bodů, nastavení autosave a Pokračovat se nemění. Navigace
 níže už tuto položku neobsahuje.
 
 **Implementováno 1. listopadu 2026; závěrečný smoke série čeká:**
-[R-0377](requirements/R-0377.md) vkládá Nastavení a Načíst hru do hlavního
+[R-0377](requirements/done/R-0377.md) vkládá Nastavení a Načíst hru do hlavního
 okna. Obrazovka, která je otevřela, určuje hostitele (mořská oblast menu nebo
 herní rám) i návrat tlačítkem Zpět a klávesou Esc. Načíst otevírá také ⌘O na
 macOS a Ctrl+O jinde; ⌘S / Ctrl+S na mapě otevírá dosavadní dialog Uložit.
@@ -26,7 +26,7 @@ Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověře
 
 ## Pravidla ukládání schválená 1. listopadu 2026
 
-1. Uživatel přijal návrh [R-0387](requirements/R-0387.md): při opuštění nebo
+1. Uživatel přijal návrh [R-0387](requirements/done/R-0387.md): při opuštění nebo
    nahrazení partie se ptát jen tehdy, kdy by se ztratil neuložený herní stav.
    Úspěšné ruční, rychlé i automatické uložení aktuálního stavu odstraní potřebu
    výzvy až do další herní změny. Neúspěšný zápis ani zrušení ji neodstraní.
@@ -46,7 +46,7 @@ Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověře
    Nejde o každý pohyb jednotky. Pokud nová partie dosud nemá uloženou kopii
    (autosave vypnuto nebo selhalo), odchod nabídne její zachování i bez prvního
    herního kroku. Po načtení nezměněné uložené hry se výzva neukáže.
-5. Uživatel 1. listopadu 2026 schválil [R-0388](requirements/R-0388.md):
+5. Uživatel 1. listopadu 2026 schválil [R-0388](requirements/done/R-0388.md):
    při zapnutém autosave uchovat pět posledních úspěšných snímků tahu každé
    partie včetně počátečního bezpečného stavu. Desetiletý bod, quick save,
    ruční uložení a poslední záchranné uložení při odchodu jsou mimo tento limit.
@@ -106,12 +106,12 @@ samotná implementace jím není.
    upravitelný název a zvlášť vybraný cíl přepsání. Potvrzení přepsání
    i smazání uvádí název a čas cílové pozice.
 
-7. [R-0383](requirements/R-0383.md), stav `ready for development`, vlastní schválený seznam
+7. [R-0383](requirements/done/R-0383.md), stav `ready for development`, vlastní schválený seznam
    uložených pozic vlevo a náhled mapy se souhrnem vpravo. Výběr pouze zobrazí
    detail; teprve Načíst hru ověří a aktivuje pozici. Souhrn obsahuje národ,
    zlato, rok, podporu nezávislosti a počty vlastních osob, kolonií a lodí.
    Náhled respektuje znalost mapy v uloženém okamžiku.
-8. [R-0382](requirements/R-0382.md), stav `ready for development`, vlastní ukládání a formát souboru.
+8. [R-0382](requirements/done/R-0382.md), stav `ready for development`, vlastní ukládání a formát souboru.
    Výslovně zachovat osvědčený postup: herní stav se převede na perzistenční
    datový model a ten do JSONu; načtení provede opačný převod s modelovou
    validací. Nový `.akropia` je pouze ZIP obálka pro `metadata.json`, dosavadní
@@ -271,6 +271,6 @@ target/graphics-venv/bin/python scripts/graphics/svg-font.py docs/diagrams/save-
    uložením či načtením (viz pravidlo 6 výše); pohyb kamery, výběr ani nastavení
    stav nemění. Do závěrečné akceptace jde o neověřený kandidát.
 5. Cloud a grafické seskupování podle rozehrané hry nejsou součástí této
-   implementace. Rotaci snímků tahů popisuje [R-0388](requirements/R-0388.md).
+   implementace. Rotaci snímků tahů popisuje [R-0388](requirements/done/R-0388.md).
    Náhledy a souhrny popisuje
    [oddíl R-0382/R-0383](#nahledy-a-soubor-ulozene-hry-schvaleno-31-rijna-2026).

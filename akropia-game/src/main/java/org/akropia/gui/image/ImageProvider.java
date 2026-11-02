@@ -130,8 +130,10 @@ public final class ImageProvider {
      */
     public static Image getRawImage(final String rawPath) {
         final String path = BASE_PACKAGE + "/" + rawPath;
-        ClassLoader cl = ImageProvider.class.getClassLoader();
-        try (InputStream input = cl.getResourceAsStream(path)) {
+        // The packaged module treats "images" as an unopened package, so a
+        // class-loader lookup returns null there; a same-module lookup works.
+        try (InputStream input = ImageProvider.class
+                .getResourceAsStream("/" + path)) {
             if (input == null) {
                 throw new AkropiaException(
                         "Unable to load file '" + path + "'.");

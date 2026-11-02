@@ -40,6 +40,15 @@ public class ScreenTurnReport extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    /**
+     * Close the report with Escape; unlike a click, the pointer stays where it
+     * rested on the map.
+     */
+    public void closeWithEscape() {
+        getRobot().push(KeyCode.ESCAPE);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public Button getButtonOk() {
         return getNodeFinder().lookup("#closeButtonId").queryAs(Button.class);
     }

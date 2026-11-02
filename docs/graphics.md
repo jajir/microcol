@@ -44,13 +44,13 @@
 
 ## Středomořské názvosloví zboží — R-0394, 2. listopadu 2026
 
-1. [R-0394](requirements/R-0394.md) přejmenovává zdroje i runtime obrázky podle závazného mapování: `production-goods/good-grain.svg`, `good-olives`, `good-grapes`, `good-wool` (ovce), `good-clay`, `good-olive-oil`, `good-wine`, `good-cloth`, `good-amphorae`, `good-weapons`, `good-torches` a `good-owls`; samostatné runtime soubory jsou `good-torches.png` a `good-owls.png`. Budovy mají soubory `SMALL_WINERY`/`WINERY`/`LARGE_WINERY`, `SMALL_OIL_PRESS`/`OIL_PRESS`/`LARGE_OIL_PRESS` a `SMALL_POTTERY`/`POTTERY`/`LARGE_POTTERY`. Přesunuté soubory mají bajtově shodný obsah; [manifest exportu](../akropia-game/src/graphics/export-manifest.json) zachovává 62 položek.
+1. [R-0394](requirements/done/R-0394.md) přejmenovává zdroje i runtime obrázky podle závazného mapování: `production-goods/good-grain.svg`, `good-olives`, `good-grapes`, `good-wool` (ovce), `good-clay`, `good-olive-oil`, `good-wine`, `good-cloth`, `good-amphorae`, `good-weapons`, `good-torches` a `good-owls`; samostatné runtime soubory jsou `good-torches.png` a `good-owls.png`. Budovy mají soubory `SMALL_WINERY`/`WINERY`/`LARGE_WINERY`, `SMALL_OIL_PRESS`/`OIL_PRESS`/`LARGE_OIL_PRESS` a `SMALL_POTTERY`/`POTTERY`/`LARGE_POTTERY`. Přesunuté soubory mají bajtově shodný obsah; [manifest exportu](../akropia-game/src/graphics/export-manifest.json) zachovává 62 položek.
 2. Výrobní symboly, které stále ukazovaly nahrazené zboží, nahradily beze změny cest schválené vektory R-0384: hrozny místo tabákového listu u tří vinařských dílen, amfora místo napnuté kůže u tří hrnčířských dílen, džbán olivového oleje místo destilačního kotle u malé lisovny a v `terrain-symbols.svg` hlína, ovce, hrozny a olivy místo kůže, bavlny, tabáku a cukrové třtiny. Sudy obou větších lisoven zůstávají. Přesunuté, ale nezměněné SVG si ponechávají původní text `title`/`desc`; změněné soubory mají nové názvy.
 3. Stav: zdroje upraveny, **runtime PNG sedmi budov a `terrain-symbols.png` ještě nejsou znovu exportované** a vzhled ve hře v 45/22 px není ověřen. Evidence patří do [funkčních testů](functional-tests.md#r-0394-mediterranean-goods-terminology-2026-11-02).
 
 ## Řecké zboží — výrazná linka, 1. listopadu 2026
 
-Navazující [R-0394](requirements/R-0394.md) připravuje sjednocení názvů napříč projektem. Uživatel 1. listopadu 2026 potvrdil **vlnu s ikonou ovce**; pochodně a sovy zachovají dosavadní účinky křížů a zvonů. Níže je evidence původní grafické dodávky, nikoli implementace nového názvosloví.
+Navazující [R-0394](requirements/done/R-0394.md) připravuje sjednocení názvů napříč projektem. Uživatel 1. listopadu 2026 potvrdil **vlnu s ikonou ovce**; pochodně a sovy zachovají dosavadní účinky křížů a zvonů. Níže je evidence původní grafické dodávky, nikoli implementace nového názvosloví.
 
 1. Uživatel vybral **návrh 15 — Výrazná linka**: stručné, roztomilé ruční obrysy a jednobarevné výplně podle herní mapy. [R-0384](requirements/done/R-0384.md) vlastní tuto výměnu všech 19 obrázků. [Vybraná rastrová předloha](assets/greek-goods-15-2026-11-01/selected-reference.png) je pouze výtvarná reference; následující přehled vznikl ze skutečných SVG.
 2. Každý obrázek má ručně nakreslené vektorové cesty, pojmenované skupiny, plátno 64 × 64 a průhledné okolí. Bez rastrových vložek, přechodů, textur a externích odkazů. Přehled porovnává zvětšení a skutečné velikosti **45 a 22 px**; jde o kontrolní list, nikoli screenshot hry.
@@ -1597,7 +1597,7 @@ na vyplněný obrys jde o geometrii, kterou `non-scaling-stroke` neochrání.
    základní i HiDPI měřítko, relevantní velikosti okna, světlé/tmavé pozadí,
    fokus a nedostupnost. Posoudit souvislost čáry, čitelnost a neslévání detailů;
    samotná kontrola atributu v XML nestačí.
-5. Opakovatelnost exportu a evidence rozměrů patří do [R-0225](requirements/R-0225.md),
+5. Opakovatelnost exportu a evidence rozměrů patří do [R-0225](requirements/done/R-0225.md),
    kontrola viditelného výsledku do [R-0224](requirements/canceled/R-0224.md) a kontrola
    ovládání do [R-0222](requirements/canceled/R-0222.md). Tato dohoda je nezahajuje.
    V nynějším zápisu nebyly přegenerovány herní obrázky ani ověřen runtime.
@@ -1984,7 +1984,7 @@ Tytéž obrázky se používají na mapě, v přístavu, v docích, v nákladov�
 
 ### Zboží a produkce
 
-Názvy aliasů a obsah odpovídají středomořskému názvosloví [R-0394](requirements/R-0394.md); souřadnice buněk jsou původní pozice v dlaždicovém atlasu před R-0384. Všech 19 aliasů zavádí [ImageLoaderGoods](../akropia-game/src/main/java/org/akropia/gui/image/ImageLoaderGoods.java); [GoodsImageProvider](../akropia-game/src/main/java/org/akropia/gui/image/GoodsImageProvider.java) je přiřazuje k `GoodsType`.
+Názvy aliasů a obsah odpovídají středomořskému názvosloví [R-0394](requirements/done/R-0394.md); souřadnice buněk jsou původní pozice v dlaždicovém atlasu před R-0384. Všech 19 aliasů zavádí [ImageLoaderGoods](../akropia-game/src/main/java/org/akropia/gui/image/ImageLoaderGoods.java); [GoodsImageProvider](../akropia-game/src/main/java/org/akropia/gui/image/GoodsImageProvider.java) je přiřazuje k `GoodsType`.
 
 | Buňka | Alias | Obsah |
 | --- | --- | --- |

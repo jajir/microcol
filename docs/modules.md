@@ -11,7 +11,7 @@ records actual build and launch evidence. The linked POMs remain the source of
 truth, and [Building macOS and Linux distributions](distribution.md) owns the
 build commands and release limitations.
 
-Since [R-0389](requirements/R-0389.md) every module directory and artifact uses the
+Since [R-0389](requirements/done/R-0389.md) every module directory and artifact uses the
 `akropia-` prefix, the parent is `org.akropia:akropia-root`, Java packages start
 with `org.akropia` and the Java module is `akropia.game`. Only links that address
 the unrenamed GitHub repository and its Pages site keep the former name.

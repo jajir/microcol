@@ -679,6 +679,29 @@ public class GameModelController {
                 && getRealCurrentPlayer().isHuman();
     }
 
+    /**
+     * Whether the human may save the current position. Besides a ready turn, a
+     * postponed spring-1800 score choice is a save boundary: the model saves
+     * the pending choice and asks it again on Continue (R-0193), while gameplay
+     * stays blocked until the player decides.
+     *
+     * @return <code>true</code> when a manual save may be offered
+     */
+    public boolean isHumanSaveReady() {
+        return isGameModelReady() && isHumanSaveBoundary(getModel());
+    }
+
+    /**
+     * @param model required current model
+     * @return whether the current human stands at a ready turn or a postponed
+     *         score choice; other pauses and turn preparation are no save
+     *         boundary
+     */
+    static boolean isHumanSaveBoundary(final Model model) {
+        return (model.isGameRunning() || model.isAwaitingScoreChoice())
+                && model.getCurrentPlayer().isHuman();
+    }
+
     public void showInvalidSavedGame() {
         final DialogMessage message = passengerMessage.get();
         message.setTitle(i18n.get(Dialog.loadGame_title));

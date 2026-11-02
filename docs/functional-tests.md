@@ -12,6 +12,28 @@
 
 
 
+
+## Závěrečné ověření dávky — 2026-11-02
+
+1. Kombinovaný kandidát vychází z `00d27f28` a zahrnuje R-0216, R-0211 a doplněné ověření R-0391. Modelový běh `20261102T025752Z-ea148add0828` (`run-5_2utxsn`) provedl **4 958 testů, 1 selhání, 0 chyb a přeskočení**. Jediné selhání je uživatelem povolená výjimka FRIGATE; report zůstává neúspěšný. Kombinovaný UI běh `20261102T030401Z-c2f60eb78055` (`run-kW2ZOD`) prošel **64 testy bez selhání, chyb a přeskočení**. Smoke `20261102T032808Z-10e2c3f93ce1` (`run-3no7uk95`) prošel **21 testy** za 218,486 s. Tyto výsledky předcházejí níže uvedeným opravám a samy neuzavírají aktuální kandidát.
+2. Linuxové balení `20261102T033725Z-fc9e1ab6f1f5` selhalo. Diagnostika `20261102T034415Z-1a7bd627ca39` prokázala chybějící přístup k přítomnému prostředku `images/status-gold.png` v pojmenovaném modulu. Oprava používá načítání přes vlastní třídu místo class loaderu. Oddělené chyby publikačních testů vyžadují opakování bez globálního `JAVA_TOOL_OPTIONS`, který přidával text do výstupu pomocných procesů. Ověření opravy `20261102T035319Z-bf819ce3077c` prošlo: **4 957 modelových testů** (jediný schválený test FRIGATE výslovně vyřazen z výběru) a **39 spuštění kontrol balíčků, 0 selhání, chyb a přeskočení**. Dva integrační testy byly spuštěny v Surefire i Failsafe, tedy jde o 37 unikátních kontrol balíčků. Nativní ověření potvrdilo skutečné herní okno z rozbaleného linuxového balíčku i cestu řízené chyby při startu. Zdrojový snapshot předchází následující opravě vlákna tlačítek; výsledek neprokazuje publikaci ani přijetí novějšího kódu. Dřívější úspěšná macOS kontrola `20261102T033347Z-33b924f3bf64` ověřila strukturu archivu, oprávnění, kontrolní součet a runtime; neověřila spuštění herního okna.
+3. Skupina B `20261102T034743Z-20f245fb62a1` skončila dvěma chybami ze 145 testů. TC24 TC08 kopíroval neexistující autosave místo skutečného souboru pro Pokračovat. TC88 TC03 zachytil změnu JavaFX tlačítek z vlákna pohybu jednotky. Oprava workeru `20261102T043333Z-22bcbd279fc9` zachovává kontroly testů, používá existující výběr souboru pro Pokračovat a přesouvá hromadné změny tlačítek na FX vlákno. Rodič změny zkontroloval a použil sdílený Java formatter. Nové modelové ověření `20261102T043607Z-77f9c03ac176` (`run-_frk803t`) dokončilo **4 958 testů, 1 schválené selhání FRIGATE, 0 chyb a přeskočení**. Opakovaná skupina B rozšířená o TC35, `20261102T044014Z-cb3cd97856b0` (`run-o6E5lu`), prošla **159 testy bez selhání, chyb a přeskočení** za 2 786,789 s. Zahrnuje všech 12 scénářů TC24, všech 5 TC88 a všech 14 TC35; obě dřívější chyby jsou v tomto běhu opravené. Skupina A pro obchod, vybavení a produkci, `20261102T052712Z-481c6b7dd6d6` (`run-JdQFsC`), prošla **83 testy bez selhání, chyb a přeskočení** za 1 205,396 s. Skupina C pro trasy, role a lodě, `20261102T054743Z-9f645666f077` (`run-9cZBQZ`), prošla **63 testy bez selhání, chyb a přeskočení** za 1 153,629 s. Skupina D (`run-yQDUaG`) dokončila 114 testů s 9 selháními a 1 chybou. Cílená oprava čekání na seznam zpráv, aktuálního formátu souřadnic a návratu na mapu bez pohybu myši prošla v `20261102T070019Z-2723cbbcf78a` (`run-SHWjhX`): **36 testů bez selhání, chyb a přeskočení** za 498,599 s. Předcházející opravný běh `run-UL7JFV` zůstává neúspěšný (20 testů, 1 selhání). Poslední modelový běh před integrací `run-73dhjgoi` měl 4 958 testů a pouze schválené selhání FRIGATE. Smoke `20261102T070859Z-a2ad7bf6f75a` (`run-lss013jm`) prošel **21 testy bez selhání, chyb a přeskočení** za 220,519 s. Následné sloučení novějšího `main` na `bbce5985` zachovává samostatnou změnu grafiky lodí a nové požadavky; modelové ověření společného stavu `20261102T071310Z-471d31083dc5` (`run-mntd1gx4`) prošlo **4 959 testy bez selhání, chyb a přeskočení** za 143,418 s. Na tomto stavu již není potřeba výjimka FRIGATE. Cílené UI ověření společného stavu prošlo: `run-k7KVWH` (30 testů, 316,062 s; grafika, orání, souboj, vztahy domorodců) a `run-SC7t2t` (24 testů, 941,717 s; menu, skóre, síň slávy a cesta k nezávislosti), obojí bez selhání, chyb a přeskočení. První výběr obsahoval neexistující název TC191; skutečná třída byla výslovně ověřena druhým během. Smoke společného stavu `20261102T073729Z-48ceefddcd9d` (`run-t7ltoni4`) prošel **21 testy bez selhání, chyb a přeskočení** za 217,633 s, v limitu 420 s. Lokální přijetí dávky je dokončeno na `bbce5985` s popsanými opravami. Novější modelová a cílená ověření nahrazují dotčené výsledky, ostatní nezměněné výběry zůstávají použité; žádný historický neúspěšný report není změněn na úspěšný. Všech 19 požadavků dávky je `done`; ověření publikace zůstává samostatné.
+4. Poslední vzdálený běh při vyžádaném auditu, [41377462495](https://github.com/jajir/microcol/actions/runs/41377462495) na `4cf07149`, skončil stejným selháním FRIGATE: **4 954 modelových testů, 1 selhání, 0 chyb a přeskočení**. UI se nespustilo a balení ani publikace neproběhly. Tento historický výsledek zůstává neúspěšný; nová distribuce není doložena.
+
+
+## R-0391 foreign-unit countdown verification — 2026-11-02
+
+1. The final acceptance audit found no check for [R-0391](requirements/done/R-0391.md) behavior 2.4: a unit of another nation never shows the plowing countdown. The F01 fixture has no other nation, so new `TC_18_F01_plow_field_test` `TC_10_foreign_plowing_unit_shows_no_countdown` loads a scoped copy of F27. In that copy, the visible French colonist 6 at (17, 11) becomes a legal pioneer with 20 tools, no weapons and an active plowing order with 3 updates left. The square is clear grassland with no field. The production loader validates the copy. The scenario verifies that the order really exists and that the unit is foreign. It then selects the square, verifies that one unit is listed and that no countdown row appears. Production code, the existing TC18 scenarios and their assertions are unchanged.
+2. Docker completion `20261102T034743Z-20f245fb62a1`, `target/docker-ui/run-QkG8BQ`, ran all ten TC18 scenarios and `PageVerificationContractTest` successfully. The complete group B selection ran **145 tests, 0 failures, 2 errors, 0 skips** in 2,671.956 seconds; TC24 TC08 and TC88 TC03 remain failed in that report. Final combined acceptance remains pending after their repair.
+
+
+## R-0211 current focused acceptance — 2026-11-02
+
+1. Candidate based on `00d27f28`, authored in Claude completion `20261102T023605Z-1f0c8903856f` (365.810 s), reviewed and formatted with the shared Java profile. The coverage audit found one missing player path: an armed attack against an unarmed civilian in the open. TC35 now covers both deterministic outcomes and Save/Continue. Production behavior is unchanged; the AbstractUnit edit corrects an outdated comment to the already accepted destruction rule.
+2. Docker completion `20261102T024317Z-09db646b60b9`, `target/docker-ui/run-nv00cy`, passed **72 tests, zero failures/errors/skips**, in 515.796 execution seconds after 523.380 s waiting for the shared Docker lock. Model selection: AttackRoleTest (11), OpenFieldCivilianBattleTest (11), ShipRosterTest (7), UnitTypeTest (3). UI/support selection: TC35 (14), TC29 (9), TC30 (12), TC183 (2), PageVerificationContractTest (3).
+3. TC35 TC13 verifies the losing soldier survives without weapons while the civilian survives. TC14 verifies the defeated civilian is destroyed and the unpromoted winner retains its weapons, spends movement and remains at war. Both compare the literal 3-versus-1 review and 75 percent chance, then preserve identity/outcome through manual save and Continue. TC183 retains the scout-to-dragoon path; TC29/30 retain passenger and roster/purchase checks. Other owner paths listed in the current unit ledger remain part of final combined acceptance.
+4. Fourteen documentation consistency checks and strict MkDocs passed. This result predates the separate R-0216 save-boundary repair; affected leave/save callers must be checked on the combined source before final acceptance. Requirement status remains ready for development, and no publication is claimed.
+
 ## R-0389 Akropia project rename — 2026-11-02
 
 1. Candidate based on `4cf07149`, implemented by Claude completion `20261102T014414Z-04fc3d7a9953` (737.824 s), followed by bounded tooling/evidence completion `20261102T015959Z-4cdd9cb24efe` (379.962 s). Parent reviewed the rename, applied the shared formatter to 1,919 Java files and regenerated branded graphics. All ten modules remain, including the reference-only `akropia-site`. Existing player data and external host directories were not moved or rewritten. New model alias configuration is not proof that those aliases are installed.
@@ -25,7 +47,7 @@
 
 ## R-0394 Mediterranean goods terminology — 2026-11-02
 
-1. [R-0394](requirements/R-0394.md) is implemented provisionally; final combined batch acceptance remains pending. Goods, professions, building tiers, resource overlays, localization keys, assets, equipment save fields and test identifiers follow the agreed one-to-one mapping. Stable scenario IDs and gameplay quantities remain unchanged. Historical evidence below retains the terminology and test names applicable to its tested revision.
+1. [R-0394](requirements/done/R-0394.md) is implemented provisionally; final combined batch acceptance remains pending. Goods, professions, building tiers, resource overlays, localization keys, assets, equipment save fields and test identifiers follow the agreed one-to-one mapping. Stable scenario IDs and gameplay quantities remain unchanged. Historical evidence below retains the terminology and test names applicable to its tested revision.
 2. Initial focused run `20261102T001545Z-cbf90aabbd57` (`run-52cItt`) completed 718 tests without assertions failing, but TC40 lost its JVM: this was an incomplete, failed run. Isolated and diagnostic retries `003915Z-404d5e667b9e`, `004802Z-81bc62541f3e`, `005501Z-34c24b787873` and `010029Z-26a0d3b90919` on 2026-11-02 also failed. Diagnostics identified retained application graphs across TestFX starts, reaching 1,990 MiB of a 2,048 MiB heap. Removing primary-stage listeners and disabling development CSS hot reload in automated tests stopped associated resource/thread retention but did not alone resolve heap growth. Clearing the stopped test application's context in `finally` resolved the retained graphs. Normal CSS rendering remains enabled. Temporary diagnostic logging and forced GC were removed.
 3. Diagnostic confirmation `20261102T010505Z-58a30aff78f5` passed all 20 selected tests, including all 15 TC40 scenarios; observed final retained heap was 287 MiB. Final focused run after diagnostic cleanup `20261102T010907Z-77a26c2d519b`, `target/docker-ui/run-NljOUk`, passed **737 tests, zero failures/errors/skips**, in 1,342.154 supervised seconds. Selection covers the 16 goods/production/trade/equipment/name model classes, lifecycle tests, TC05, TC06, TC25, TC27, TC40, TC43, TC47, TC50, TC67, TC68, TC77, TC81, TC86, TC117, TC118 and PageVerificationContractTest; exact Maven selection is retained in the completion request.
 4. The final identifier audit additionally renamed `holdingGuns` to `holdingWeapons` throughout code and save fixtures, without a legacy alias, and corrected oil-press SVG metadata. Follow-up `20261102T013240Z-df2a8f06b30e`, `target/docker-ui/run-OabLCw`, passed **114 tests, zero failures/errors/skips**, in 368.434 supervised seconds: GoodsTypeNameTest, ColonistEquipmentTest, EuropeEquipmentTest, GameModelPoDaoTest, GameLoadRejectionTest, TC25, TC27, TC43 and PageVerificationContractTest. The broader 737-test result predates this final naming correction; combined final acceptance will cover the complete integrated source.
@@ -87,7 +109,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 
 ## Europe purchase confirmation — R-0378 (2026-10-31)
 
-1. [R-0378](requirements/R-0378.md), UC-056/057, introduces a model-owned purchase limit and immutable displayed terms. Ordinary market-to-hold drops open the purchase choice at the affordable/capacity maximum; the platform quick-buy key held at the drop buys that maximum immediately. Changes to price, tax, treasury, trade access or the hold reject a stale confirmation before mutation. Implementation and acceptance are in progress.
+1. [R-0378](requirements/done/R-0378.md), UC-056/057, introduces a model-owned purchase limit and immutable displayed terms. Ordinary market-to-hold drops open the purchase choice at the affordable/capacity maximum; the platform quick-buy key held at the drop buys that maximum immediately. Changes to price, tax, treasury, trade access or the hold reject a stale confirmation before mutation. Implementation and acceptance are in progress.
 2. Claude Code first attempt `20261031T143024Z-d72e27f328ff` completed in **1,552.532 s** on base `57be46c1`. Caller reviewed the model snapshot, confirmation path, drop dispatch and test coverage, then applied the shared Eclipse formatter to all **25 changed Java files**, including new files. Source hashes and worker evidence are retained under `$PRE_R0389_LOGS/claude/2026-10-31-ordered/R-0378/`.
 3. Model/JUnit run `target/verification/run-uej15yhr`, completion `20261031T145912Z-a6fc20710fc6`, passed **4,814 checks in 356 fresh XML reports**, zero failures/errors/skips, in **148.005 s** including preparation and cleanup. All 29 changed executable/test/resource file hashes match the tested source snapshot. New checks comprise 11 `EuropePurchaseLimitTest` and two `QuickBuyShortcutTest` checks; shortcut unit tests do not establish native macOS behavior.
 4. Targeted Docker/Xvfb selection: `TC_06_F06_buy_and_sell_goods_test,TC_194_F226_europe_harbor_test,TC_94_F85_national_market_pressure_test,TC_95_F86_dutch_market_pressure_test,TC_108_F99_trade_accounts_test,TC_79_F71_back_tax_payment_test,TC_110_F101_fugger_boycott_test,TC_27_F19_europe_equipment_test,PageVerificationContractTest`. Dispatch `20261031T150201Z-54c038e79740`, PID `66346`, timeout 3,600 s; results pending. Native macOS Command-at-drop verification, screenshot review, fixed smoke/support, documentation validation and final acceptance remain pending.
@@ -2396,6 +2418,103 @@ JUnit tests. 3. Docker/Xvfb UI: `TC_185`, `TC_116`, `TC_118`, `TC_68`, `TC_32`
 MkDocs build. 5. The two final workers after R-0219. Attempt 4 needs this
 rerun for the turn-4 checkpoint; results are added after the run.
 
+## R-0216 current coverage ledger 2026-11-02
+
+**Status: candidate, not yet rerun on `00d27f28`.** This is the current ledger.
+The [2026-10-24 ledger](#r-0216-verification-matrix-ledger-2026-10-24) below
+is history. Its expanded targeted run (`run-Lh4ZaL`, 4,717 model/JUnit and 27
+UI/support tests, zero failures, errors or skips) already contained the
+attempt-3 cells marked "written, not run" there, including `TC_162` TC_04.
+That run was on the pre-R-0389 source, so nothing here is claimed as a pass on
+the current revision. Every name below was checked against the current source
+on 2026-11-02. The R-0394 terminology renamed the post-target bell term to owls
+(`ResultScoreTest.postTargetOwlsAddToTheBaseAndAreNotCountedTwice`). This
+reconciliation adds no production code and no tests.
+
+**Current dependency.** [R-0220](requirements/done/R-0220.md) is `done`. It was
+locally accepted on 2026-10-24 ([evidence](#r-0220-paired-journey-verified-2026-10-24)),
+which supersedes the "`new`, unverified" lines in the history below. `TC_187`
+is the integrated earned-victory path: real support, declaration, intervention,
+war, the score and the Hall of Fame, with a Continue checkpoint compared against
+an uninterrupted reference. It complements the controlled branches and does not
+replace them.
+
+| Cell | Expected fixed facts | Owner model test | Player path |
+| --- | --- | --- | --- |
+| Revolution victory | 3 living Crown ground units: no victory; 2: victory. Ships alone, carried and captured units, a Crown-held or destroyed member, and a computer rebel are all handled. | `RebellionVictoryTest.threeLivingGroundUnitsDoNotWinAndTwoDo` and the six cells of the history row | Controlled: `TC_158` TC_01–04. Integrated: `TC_187` TC_01/02 |
+| Distinct losses | `NO_COLONIES`, `ALL_COLONIES_CROWN`, `COASTAL_CROWN`, `RESIDENTS_CROWN` (89 % vs 90 %, exact integer comparison) and `UNRESOLVED` at spring 1850. Each reason has its own message. | `RebellionLossTest` (five cells of the history row), `ScoreBoundaryTest.unresolvedRebellionIsLostAndFrozenAtSpring1850`, `MissionEventsTest.eachRebellionLossReasonEmitsItsOwnMessage` | `TC_157` TC_01–03 (`ALL_COLONIES_CROWN`) and `TC_162` TC_04 (non-rebellion `NO_COLONIES`). See note 1. |
+| Loss before victory | At the same boundary, a coastal loss wins over the victory. | `RebellionVictoryTest.aLossWinsOverAVictoryJudgedAtTheSameBoundary` | Model only; the precedence is not player-visible. |
+| 1600 | Turn 109: an empty human stays open. Turn 110: `NO_COLONIES`, one `FINAL` result, play stops. | `ScoreBoundaryTest.zeroColoniesDoNotEndPlayBeforeSpring1600`, `zeroColoniesEndPlayAtSpring1600WithOneFinalResult` (`isGameRunning` false, reload unchanged), `zeroColoniesAtSpring1800EndPlayInsteadOfTheScoreChoice` | `TC_162` TC_04 |
+| 1780 | Declared in 1779: 201. 1780: 200. 1781: 200. | `ResultScoreTest.earlyPointsStopAtTheBoundaryYear` | `TC_161` TC_02 shows the early points of a 1747 declaration; the 1779/1780/1781 boundary itself is model only. |
+| 1800 | Turn 909: no freeze. 910: freeze and choice. 911: one unscored round, same result. | `ScoreBoundaryTest.winter1799HasNoScoreBoundary`, `springOf1800FreezesTheScoreOnceAndWaitsForTheChoice`, `continuingWithoutScoringKeepsTheFrozenResultAndStartsOneRound` | `TC_162` TC_01/02 |
+| 1850 | Turn 1109: open. 1110: `FREE_PLAY_ENDED`, `endTurn` refused. A mission deadline uses its own reason and records no result. | `ScoreBoundaryTest.winter1849IsStillOpenAndSpring1850EndsAllFreePlay`, `missionDeadlineEndsWithItsOwnReasonAndNoResult` | `TC_162` TC_03 |
+| Exit / Retire / cancel | Exit records nothing. Cancel or a stale preview changes nothing. Confirmation freezes one `FINAL` result. A declared rebellion retires without the bonus. | `RetirementTest` (seven cells of the history rows) | `TC_164` TC_01–03, `TC_163` TC_03 |
+| Unscored Continue, frozen score | Later changes never replace the frozen components. | `RetirementTest.unscoredRetirementKeepsTheFrozenResultAndAddsNoSecondOne`, `ScoreBoundaryTest.laterUnscoredChangesNeverReplaceTheFrozenComponents`, `colonyLossAfterTheContinuationKeepsTheEarlierResult` | `TC_162` TC_01/03, `TC_164` TC_02 |
+| Save/Continue does not re-judge or duplicate the Hall | The saved reason and orders reload without a new event or a second entry. | `RebellionVictoryTest.aWonRebellionIsAnnouncedOnceAndReloadsFinishedWithoutAnotherEvent`, `savedOrdersAreKeptAndNeverAssignedAgainOnContinue`; `RebellionLossTest.theSavedReasonSurvivesReloadWithoutANewEvent`; `HallOfFameDaoTest.recordedResultIsSavedOnceAndReadBackUnchanged` | `TC_157` TC_02, `TC_158` TC_02/03, `TC_162` TC_02/04, `TC_163` TC_02, `TC_187` TC_01 |
+| Base terms | Servant/criminal 1, free colonist and native convert 2, expert 4. Each father 5. Floor(gold / 1000). Whole support percent. Each counted place once; Crown-seized people excluded. | `BaseScoreTest` (including `aNativeConvertCountsAsAColonistWithTwoPoints`), `BaseScorePlacementTest` | `TC_160` TC_01, `TC_163` TC_01 (breakdown), `TC_187` |
+| War terms | Destroyed settlements deduct difficulty + 1 each. Post-target owls are added once. | `ResultScoreTest.destroyedSettlementsDeductDifficultyPlusOneEach`, `postTargetOwlsAddToTheBaseAndAreNotCountedTwice` | `TC_161` TC_01/02, `TC_187` |
+| Independence order | Bonus 100/50/25/0/0 %. Second order, 1770, Conquistador: 160. Two nations in one game get orders 1 and 2. | `ResultScoreTest.eachOrderGetsItsBonusAndLaterOrdersGetNone`, `secondIndependenceDeclaredIn1770AtConquistadorGives160`, `aLossOrDeclarationAloneGivesNoSuccessBonus`; `RebellionVictoryTest.theFirstCompletionTakesOrderOneAndTheOtherNationTakesOrderTwo` | `TC_161` TC_02 (first-order bonus), `TC_187` (order 1); orders 2–5 are model only. |
+| Five difficulties | Base 100: 50/75/100/125/150. Combined row: 53/76/98/117/135. | `ResultScoreTest.allFiveDifficultiesMultiplyTheBaseWithoutAVictory`, `eachDifficultyDeductsItsSettlementPointsAndFloorsItsFactorOnce` | Model only (literal arithmetic) |
+| Floor, negative clamp | 2.25 floors to 2 and 1.5 to 1. −15 is clamped to 0 before the bonus, giving 120. | `ResultScoreTest.floorHappensOnceAfterTheDifficultyFactor`, `negativeBaseIsClampedBeforeTheBonus`, `overflowOfAnyTermIsReportedNotWrapped` | Model only |
+| Hall top ten and ties | The earlier record wins a tie. A result equal to tenth place is not admitted; a higher one displaces it. 15 results keep the 10 highest. Duplicate identity and restart keep the order. | `HallOfFameTest` (six cells of the history row) | `TC_163` TC_01/02/05–07, `TC_179` TC_01 |
+
+The expected literals are hand-computed from the accepted formula in
+[end dates and scoring](gap-analysis.md#end-dates-and-scoring), not produced by
+the tested method. Example for Governor: (40 + 10 − 2 × 4) × 2 + 10 = 94, and
+94 × 1.25 = 117.5, which floors to 117.
+
+1. **Loss reasons without their own UI journey.** `COASTAL_CROWN`,
+   `RESIDENTS_CROWN`, `UNRESOLVED` and a rebellion's `NO_COLONIES` are each
+   exercised independently in controlled model scenes. Their visible text is
+   pinned per reason by `MissionEventsTest`, and they use the same
+   `MissionEventListener.onFinishMission` path that `TC_157` journeys.
+   Building a separate UI scene for each would need an AI-driven Crown round
+   that ends in exactly that reason, which cannot be shown deterministic
+   without running it. None is added. This is complete under R-0216 2.1–2.3,
+   which do not require a separate UI scenario per reason, but it is not
+   per-reason UI evidence.
+
+**Focused rerun selection (parent).** Model/JUnit: `RebellionVictoryTest`,
+`RebellionLossTest`, `ScoreBoundaryTest`, `ResultScoreTest`, `RetirementTest`,
+`BaseScoreTest`, `BaseScorePlacementTest`, `HallOfFameTest`,
+`HallOfFameDaoTest`, `MissionEventsTest`. Docker/Xvfb UI: `TC_157`, `TC_158`,
+`TC_162`, `TC_163`, `TC_164` (21 declared methods). Optional for independent
+breakdown display: `TC_160`, `TC_161`, `TC_179` (4 methods). `TC_187` (2
+methods, about 957 s in its accepted 2026-10-24 run) is the R-0220
+integrated-path recheck. No counts or durations have been measured on the
+current revision.
+
+**Focused run 1 failed (2026-11-02).** Callback
+`20261102T023459Z-519b8752ae7b`, `target/docker-ui/run-4iqDhO`, 1,021.202 s:
+30 tests, 0 failures, 3 errors, 0 skips. Both `TC_187` journeys passed. The
+errors were `TC_162` TC_02 (line 147), `TC_163` TC_01 (line 106) and `TC_163`
+TC_02 (line 146). Each one is an `EmptyNodeQueryException` for `#saveNew` in
+`GamePage.exitToMenu`, with a `ModalFrame` shown in its place.
+
+- **Root cause (production, R-0387 leave-save).** All three tests leave the game
+  right after "decide later" at spring 1800. The postponed score choice makes
+  `Model.isGameRunning()` false, so `GameModelController.isHumanTurnReady()` is
+  false. As a result, `PersistingService.saveBeforeLeaving` showed the "turn
+  unavailable" message in a `ModalFrame` instead of opening the manual Save
+  browser, and the player stayed in the game.
+- **Why the model is not at fault.** The model allows this save:
+  `GameManager.checkSaveBoundary` rejects only turn preparation, and
+  `ScoreBoundaryTest.reloadAtTheBoundaryShowsTheSameChoiceAndResult` /
+  `awaitingChoiceRejectsGameplayAndLeavesTheWorldUnchanged` save that state.
+  R-0193 requires that a saved pending choice is asked again on Continue. The
+  page helper's click sequence was correct.
+- **Repair (written, not run).** A new `GameModelController.isHumanSaveReady()`
+  (`isHumanSaveBoundary(Model)`) accepts a ready human turn or the human's
+  postponed score choice. `PersistingService.saveBeforeLeaving` and
+  `saveThroughBrowser` use it. Turn preparation, the immigrant and tax pauses,
+  and computer turns still get no Save browser.
+  - Leave → Save still opens the regular browser for a new name or a confirmed
+    overwrite; nothing is autosaved instead.
+  - The menu Save, quick save/load, the shortcut and `isProgressSaved` are
+    unchanged. A paused position therefore still asks before leaving.
+  - No score, Hall or test assertion changed.
+- **New test:** `HumanSaveBoundaryTest` (4 cells).
+
 ## R-0216 verification matrix ledger 2026-10-24
 
 **Expanded targeted verification passed (2026-10-24).** Callback
@@ -2433,7 +2552,7 @@ failures until main reruns them; the repair below is not verified.
 
 **Attempt 3 is written, not run.** This attempt had no shell, so nothing was
 compiled or run here. No matrix pass, batch acceptance, commit or publication is
-claimed. [R-0216](requirements/R-0216.md) stays `ready for development`; main
+claimed. [R-0216](requirements/done/R-0216.md) stays `ready for development`; main
 formats the changed Java files and runs all model tests and the five UI
 classes. Production code is unchanged. [R-0220](requirements/done/R-0220.md)
 (integrated earned victory) is `new`, has no evidence, and is outside this
@@ -3362,7 +3481,7 @@ Status values: **covered** = an existing assertion in the named owner matches th
 card or an accepted rule; **added** = a check written for R-0211, unverified until
 the main run; **accepted absence** = an accepted requirement decided that the
 card row has no such cell in Akropia; **open Qn** = the rule is not decided, see
-[R-0211](requirements/R-0211.md#4-open-questions). A player path is named only
+[R-0211](requirements/done/R-0211.md#4-open-questions). A player path is named only
 where the row cites a TC scenario.
 
 **Land**
@@ -3494,6 +3613,75 @@ where the row cites a TC scenario.
   `PageVerificationContractTest`, and the candidate families TC27, TC62, TC63,
   TC64, TC66, TC140, TC149, TC150, TC151 and TC152; then the full batch. R-0211
   stays `ready for development` until that run and the Q2 answer.
+
+### Current coverage audit 2026-11-02
+
+**Status: written, not verified (2026-11-02).** This audit read the current
+source at base `00d27f28` (after the R-0389 rename and the R-0394 goods terms).
+The author ran no build, JUnit, Docker/Xvfb or formatter. The historical runs above
+stay as they are; this section records only what later evidence supersedes and
+what this pass adds.
+
+1. **Owner checks still present.** Every ledger row's owner check still exists
+   in the current test source. R-0394 renamed six of them from "muskets" to
+   "weapons": `OpenFieldCivilianBattleTest.soldierLosingKeepsItsLifeLosesOnlyItsWeaponsAndConsumesOneDraw`,
+   `soldierWinningDestroysTheCivilianKeepsItsWeaponsAndConsumesTwoDraws`,
+   `AttackRoleTest.weaponsPermitLandAttackForColonistsAndSpecialists`,
+   `removingWeaponsClosesAnEarlierLegalAttackWithoutEffects`,
+   `seasonedScoutAttacksOnlyWithWeaponsAndThenFightsAsAnOrdinaryDragoon` and
+   `ColonistEquipmentTest.scoutBecomesDragoonByWeaponsWithOneStockDebitEach`.
+   The assertions and expected values are the same.
+2. **Superseded statuses.** The "added" rows were part of the targeted run
+   `run-VNoE55` (2026-10-23) and the eighth-batch full run `run-u2fg1l20`
+   (2026-10-24), both with zero failures. The row "Wagon train, defeat by
+   European, open Q2" and the Q2 gap are superseded by the user's decision of
+   2026-10-24: a standalone civilian or wagon defeated by a European in the open
+   is destroyed ([R-0211](requirements/done/R-0211.md#2-behavior) item 5). The existing
+   model assertion `soldierWinningDestroysTheCivilian…` is now the check for that
+   rule. The `AbstractUnit.isDestroyedInFieldBattle` comment that still called it
+   open question 2 is corrected; only the comment changes.
+3. **Missing cell found and added: the open-field civilian player path.** Before
+   this pass the open-field civilian fight was checked only in the model:
+   `TC_35` `TC_03` checks only that a civilian cannot start a fight, and no
+   scenario attacked one. Two scenarios are added to
+   `TC_35_F27_attack_eligibility_test` on the existing F27 fixture. A new action,
+   `AttackPage.loadUnarmedDefenderFixture`, makes French unit 6 at (17,11) an
+   unarmed colonist before loading the game.
+   - `TC_13`: the review shows `Base: 2 / Attack: +50% / Final strength: 3`
+     against `Base: 1 / Final strength: 1`, with a 75% chance (3 / (3 + 1); bare
+     square, as in `TC_10`). Saved state 0 draws 0.883 ≥ 0.75, so the attacker
+     loses. Soldier 0 stays alive on (18,10) as the same Dutch colonist, without
+     weapons, and the French civilian survives. After Continue the outcome is
+     the same.
+   - `TC_14`: on the same quote, saved state 3 draws 0.113 < 0.75 (win) and
+     then 0.700 ≥ 0.25 (no promotion). The civilian no longer exists; the winner
+     keeps its weapons, is not mounted, is not a veteran, has 0 moves left and
+     the two nations are at war. After Continue the outcome is the same. The
+     expected draws come from a separate SplitMix64 calculation, not from the
+     code under test. The new `AttackPage.verifyDefenderDestroyed` checks the
+     result. The scenario does not check the winner's square: the code
+     moves the winner onto the emptied square, but no accepted rule states this.
+4. **Cells that remain model-only, by decision.**
+   - Wagon as an open-field defender: the six `quoteUses…` rows and the outcome
+     tests cover both colonist and wagon. The player path uses the colonist
+     because both go through the same quote and destruction rule.
+   - Horses refused at 49: `ColonistEquipmentTest.missingGoodsAreRejected…`.
+     The player paths cover the weapons refusal at 49 (TC25 `TC_01`, TC183
+     `TC_01`) and the tools refusal at 19 (TC25 `TC_06`) through the same
+     equipment control. Horses at 50 have a player path (TC183, TC25 `TC_01`).
+   - Land movement: the aid card prints no values (unchanged).
+5. **Player paths for the other role-changing and transport outcomes**, unchanged:
+   soldier→dragoon TC25 `TC_01`; scout→dragoon TC183; defeated soldier/dragoon
+   TC35 `TC_09`/`TC_11`; promotion TC66; artillery damage TC62; naval damage and
+   repair TC64/TC63; six ships TC29/TC30; treasure holds TC140; wagon not a
+   passenger TC31 `TC_07`. All of them passed in the full runs of 2026-10-24.
+   Running the current source again is the parent's task.
+6. **Proposed focused selection for this change:**
+   `TC_35_F27_attack_eligibility_test` (14 starts, including the new
+   `TC_13`/`TC_14`), `PageVerificationContractTest`, `OpenFieldCivilianBattleTest`
+   and `AttackRoleTest`, plus the shared formatter on `AttackPage.java`,
+   `TC_35_F27_attack_eligibility_test.java` and `AbstractUnit.java`. None of
+   these results exist yet.
 
 ## R-0208 profile matrix — 2026-10-23
 
@@ -4459,7 +4647,7 @@ Targeted verification passed on 2026-10-23: completion `20261023T134700Z-3e5fe36
    Crown-seized exclusion, viewpoint isolation, a foreign-model owner rejected, live
    placement change and save/reload. Written, not run.
 4. UI scenario: `TC_166_F199_labor_report_test` (`TC_01`) uses the existing
-   [F22 fixture](../akropia-test/src/test/scenarios/F22-expert-purchase.akropia)
+   [F22 fixture](../akropia-test/src/test/scenarios//F22-expert-purchase.akropia)
    and `LaborReportPage`. It checks five free colonists in one type row, each
    placement text, Show for a colony, the galleon tile and Europe, keyboard
    arrival with Escape close, and movement unchanged by opening and closing. A
@@ -4947,7 +5135,7 @@ nad stejným výchozím stavem vést ke stejnému hernímu výsledku.
     completion `20261019T000902Z-5d2333283b08` není jediným podkladem závěru.
 
 Pracovní pravidla platí od **11. října 2026**. Vzorem čitelné struktury je
-[TC_18_F01_plow_field_test](../akropia-test/src/test/java/org/akropia/test/TC_18_F01_plow_field_test.java).
+[TC_18_F01_plow_field_test](../akropia-test/src/test/java/org/akropia/test//TC_18_F01_plow_field_test.java).
 Testy chrání konkrétní ověřené cesty; nejsou důkazem úplnosti pravidel podle
 manuálu ani zárukou, že ve hře nemůže být jiná chyba. Chybějící pravidla nadále
 eviduje [analýza rozdílů](gap-analysis.md).
@@ -5000,7 +5188,7 @@ Zachovat současný JUnit 5 a TestFX a členění následujících souborů:
 | [`org.akropia.test`](../akropia-test/src/test/java/org/akropia/test/) | Čitelný příběh hráče: příprava, kroky a explicitní volání `verify…` s očekávanými výsledky. |
 | [`org.akropia.page`](../akropia-test/src/test/java/org/akropia/page/) | Vyhledání prvků, akce a čekání; oddělené pojmenované metody `verify…` pro ověření výsledků. |
 | [`src/test/scenarios`](../akropia-test/src/test/scenarios/) | Reprodukovatelné uložené hry a testové nastavení. |
-| [`AbstractAkropiaTest`](../akropia-test/src/test/java/org/akropia/test/AbstractAkropiaTest.java) | Společné spuštění aplikace a přístup k testovému kontextu a modelu. |
+| [`AbstractAkropiaTest`](../akropia-test/src/test/java/org/akropia/test//AbstractAkropiaTest.java) | Společné spuštění aplikace a přístup k testovému kontextu a modelu. |
 
 **Aktuální pravidlo od 12. října 2026:** aserce v balíčku `page` patří pouze
 do metod začínajících `verify`, dále pojmenovaných podle ověřované věci.
@@ -5026,7 +5214,7 @@ Kontroly identity obrazovek zůstávají v pojmenovaných `verify…` metodách;
 stávající navigace je může volat při přechodu. Přímá herní očekávání scénáře
 zůstávají explicitní, například výběr lodi a stav zásob.
 
-[PageVerificationContractTest](../akropia-test/src/test/java/org/akropia/test/PageVerificationContractTest.java)
+[PageVerificationContractTest](../akropia-test/src/test/java/org/akropia/test//PageVerificationContractTest.java)
 při běžném Maven testu parsuje zdroje pomocí JDK compiler API: odmítne aserce
 v `TC_...` a aserce mimo `verify…` v `page`. Zahrnuje i Java `assert`, lambdy
 a kvalifikovaná volání; vlastní negativní příklad chrání funkčnost této
@@ -5075,7 +5263,7 @@ a klávesu P. Před příkazem kontroluje dostupnou akci, jeden bod pohybu a sta
 polohu téže jednotky a skrytí již probíhající akce.
 
 Samotné zmizení ikony by nestačilo: chyba by mohla ikonu skrýt, aniž by
-jednotka začala pracovat. [TC15](../akropia-test/src/test/java/org/akropia/test/TC_15_F05_plow_field_test.java)
+jednotka začala pracovat. [TC15](../akropia-test/src/test/java/org/akropia/test//TC_15_F05_plow_field_test.java)
 navíc ověřuje zobrazení nulového pohybu v pravém panelu. Tyto scénáře samy
 neověřují délku orby, spotřebu nástrojů ani konečné výnosy pole; změna těchto
 pravidel musí doplnit příslušné kroky a modelové testy.
@@ -5451,8 +5639,8 @@ výjimkou před změnou inventářů. UI používá stejný náhled při přeta�
 návratu z dialogu. Automaticky se nic nezahazuje ani nezmenšuje již potvrzený
 požadavek.
 
-[TC19 / F14](../akropia-test/src/test/java/org/akropia/test/TC_19_F14_warehouse_unloading_test.java)
-má vlastní [fixture](../akropia-test/src/test/scenarios/F14-warehouse-unloading.akropia);
+[TC19 / F14](../akropia-test/src/test/java/org/akropia/test//TC_19_F14_warehouse_unloading_test.java)
+má vlastní [fixture](../akropia-test/src/test/scenarios//F14-warehouse-unloading.akropia);
 F05 sdílená s TC15 se nemění. Metody jsou samostatné lineární příběhy podle
 TC18, s `@Start`, komentovanými anglickými kroky, page objects a explicitními
 inventárními asercemi.
@@ -7030,7 +7218,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
    [CI pro f96b5710](https://github.com/jajir/microcol/actions/runs/38551980402)
    mělo stejný počet případů a jediné selhání TC30/04 na textu `24`.
 4. Oba scénáře používají společné mapové pomůcky. Zdroj
-   [GamePage](../akropia-test/src/test/java/org/akropia/page/GamePage.java)
+   [GamePage](../akropia-test/src/test/java/org/akropia/page//GamePage.java)
    po přesunu kurzoru ihned kontroluje text bez explicitního čekání na jeho
    aktualizaci; to je podezřelé místo, nikoli doložená příčina. Starší
    [oprava návratu na stejné pole](#wagon-unloading-implementation-2026-10-13)
@@ -8382,7 +8570,7 @@ obsahuje staré očekávání spotřeby rudy; oprava výroby R-0061 tím není o
 6. Suggested UI classes for the main agent's pass, around five: the new
    `TC_165_F198_purchased_jesuit_mission_test`, TC30 (unchanged, rerun to
    classify the item 8 error), TC133, TC96 and
-   [TC123](../akropia-test/src/test/java/org/akropia/test/TC_123_F114_lost_city_rumor_test.java).
+   [TC123](../akropia-test/src/test/java/org/akropia/test//TC_123_F114_lost_city_rumor_test.java).
    TC96, TC123, TC132 and TC135 are unchanged and still start from fixture
    units; they are listed for regression only.
 7. Main run on 2026-10-23 (completion `20261023T113236Z-93044f45eec7`, revision

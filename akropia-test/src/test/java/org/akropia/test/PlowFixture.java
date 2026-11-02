@@ -60,6 +60,43 @@ final class PlowFixture {
             clear(map.getAsJsonArray("trees"), location);
             clear(map.getAsJsonArray("fields"), location);
         }
+        use(context, saved, name);
+    }
+
+    /**
+     * Turn one unit of another nation into a pioneer that is already plowing
+     * its clear, unplowed square, and make the next Load game use the prepared
+     * copy. The game validates the copy as it does any loaded scenario.
+     *
+     * @param context        running application context
+     * @param source         shared scenario
+     * @param name           file name of the prepared copy
+     * @param unitId         colonist of another nation, standing on the map
+     * @param remainingTurns remaining owner updates of its plowing order
+     */
+    static void prepareForeignPlowing(final TestContext context,
+            final File source, final String name, final int unitId,
+            final int remainingTurns) throws IOException {
+        final JsonObject saved = new Gson()
+                .fromJson(Files.readString(source.toPath()), JsonObject.class);
+        saved.getAsJsonObject("model").getAsJsonArray("units")
+                .forEach(value -> {
+                    final JsonObject unit = value.getAsJsonObject();
+                    if (unit.get("id").getAsInt() == unitId) {
+                        // A pioneer carries the required tools, no weapons.
+                        unit.addProperty("tools", 20);
+                        unit.addProperty("holdingWeapons", false);
+                        final JsonObject action = new JsonObject();
+                        action.addProperty("type", "plowField");
+                        action.addProperty("remainingTurns", remainingTurns);
+                        unit.add("action", action);
+                    }
+                });
+        use(context, saved, name);
+    }
+
+    private static void use(final TestContext context, final JsonObject saved,
+            final String name) throws IOException {
         final File prepared = new File(System.getProperty("user.home"), name);
         Files.writeString(prepared.toPath(), saved.toString());
         when(context.getClassFromGuice(FileSelectingService.class)

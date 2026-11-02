@@ -11,7 +11,7 @@
 
 ## R-0228
 
-[Authoritative questions](R-0228.md#4-open-questions).
+[Authoritative questions](done/R-0228.md#4-open-questions).
 
 1. Which existing visual outcome should receive the first cue, and what exact audible meaning/priority should it convey? The audio page lists examples, not an agreed first asset.
 
