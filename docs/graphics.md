@@ -2376,7 +2376,7 @@ rsvg-convert --zoom 2 -o akropia-game/src/main/resources/images/game-toolbar-fra
 
 ## Titulkový pruh macOS — 2026-10-25
 
-[R-0281](requirements/R-0281.md) připravuje sjednocení systémového titulku hlavního okna s papírovou barvou `#FFF9EC`. Zachovává systémový název, ovládací tlačítka a změnu velikosti okna. Jde o titulek okna, nikoli horní lištu nabídek celého macOS. Kontrola na odemčeném Macu dne 27. října 2026 neprošla: uživatel potvrdil jinou barvu titulku. Nastavení scény a stylu JavaFX samo o sobě požadovaný vzhled nedokazuje; R-0281 zůstává otevřený. Viz [aktuální funkční evidence](functional-tests.md#requirement-closure-2026-10-27).
+[R-0281](requirements/done/R-0281.md) připravuje sjednocení systémového titulku hlavního okna s papírovou barvou `#FFF9EC`. Zachovává systémový název, ovládací tlačítka a změnu velikosti okna. Jde o titulek okna, nikoli horní lištu nabídek celého macOS. Kontrola na odemčeném Macu dne 27. října 2026 neprošla: uživatel potvrdil jinou barvu titulku. Nastavení scény a stylu JavaFX samo o sobě požadovaný vzhled nedokazuje; R-0281 byl na pokyn uživatele 2. listopadu 2026 zrušen a přesunut do `done/`; nejde o potvrzení úspěšné vizuální přejímky. Viz [aktuální funkční evidence](functional-tests.md#requirement-closure-2026-10-27).
 
 ## Kompaktní kolonie a počet domků — R-0280
 

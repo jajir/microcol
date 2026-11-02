@@ -1144,7 +1144,7 @@ UC-006 a UC-114/119 přebírají [R-0277](requirements/done/R-0277.md): barvy a 
 
 ### UC-114/115/119: titulek okna macOS — 2026-10-25
 
-[R-0281](requirements/R-0281.md) sjednocuje barvu nativního titulku s herním pozadím. TC188/F221 ověřuje konfiguraci okna při přechodu mezi úvodním menu, nastavením, hrou a Continue. Vzhled a systémové ovládání vyžadují samostatnou kontrolu na macOS; [evidence](functional-tests.md#r-0281-macos-title-bar-2026-10-25) zatím nepotvrzuje přejímku.
+[R-0281](requirements/done/R-0281.md), zrušený uživatelem 2. listopadu 2026, navrhoval sjednotit barvu nativního titulku s herním pozadím. TC188/F221 ověřuje konfiguraci okna při přechodu mezi úvodním menu, nastavením, hrou a Continue. Vzhled a systémové ovládání vyžadují samostatnou kontrolu na macOS; [evidence](functional-tests.md#r-0281-macos-title-bar-2026-10-25) zatím nepotvrzuje přejímku.
 
 ### UC-006/119: stationary unknown-map marks — 2026-10-25
 

@@ -1690,7 +1690,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 1. Scope: the user canceled [R-0253](requirements/canceled/R-0253.md),
    confirmed [R-0259](requirements/done/R-0259.md) and
    [R-0309](requirements/done/R-0309.md) as done, and requested work on
-   [R-0281](requirements/R-0281.md), [R-0305](requirements/done/R-0305.md)
+   [R-0281](requirements/done/R-0281.md), [R-0305](requirements/done/R-0305.md)
    and [R-0306](requirements/done/R-0306.md). This task changes documentation only;
    the wave and question-mark implementations were already present.
 2. Checked executable source: `69841d85af08eadc2dc37ddcb011d477a2637501`.
@@ -12408,7 +12408,7 @@ remote CI and publication were not checked.
 
 ## R-0281 macOS title bar (2026-10-25)
 
-1. [R-0281](requirements/R-0281.md), UC-114/115/119: the primary scene now requests the existing paper fill `#FFF9EC` and JavaFX `UNIFIED` window style. Native controls remain managed by JavaFX/macOS; unsupported platforms use decorated windows according to the [JavaFX 17 contract](https://openjfx.io/javadoc/17/javafx.graphics/javafx/stage/StageStyle.html#UNIFIED).
+1. [R-0281](requirements/done/R-0281.md), UC-114/115/119: the primary scene now requests the existing paper fill `#FFF9EC` and JavaFX `UNIFIED` window style. Native controls remain managed by JavaFX/macOS; unsupported platforms use decorated windows according to the [JavaFX 17 contract](https://openjfx.io/javadoc/17/javafx.graphics/javafx/stage/StageStyle.html#UNIFIED).
 2. TC188/F221 retains its toolbar, seasonal, localization, colony and gameplay assertions. Its dedicated page verification additionally checks scene fill, style, title, resizing availability and visibility across welcome menu, settings, game and Continue. These assertions check configuration, not the pixels of macOS decorations.
 3. The shared Eclipse formatter checked all three changed Java files: exact code tokens and idempotence passed. Targeted Docker/Xvfb run `20261025T142706Z-9965309d8558` (PID `32168`, timeout 600 seconds; `target/docker-ui/run-fhayCE`) failed after 52.745 seconds: the second scenario reused a previously shown stage, and calling `initStyle` again raised `IllegalStateException` in `MainStageBuilder`. The process exited before a complete TC188 report, so this run is not accepted. The repair avoids reinitializing an already unified stage; it changes no assertions or selection. Formatting passed again. The same `TC_188_F221_game_toolbar_test,PageVerificationContractTest` selection passed in `20261025T142930Z-8fcd43a3dddc` (PID `32580`, timeout 600 seconds; `target/docker-ui/run-AGLnhQ`): six tests in two complete XML reports, zero failures/errors/skips, 61.489 seconds including runner overhead, successful cleanup and queued notification. This verifies the stage-reuse repair.
 4. Native inspection on 2026-10-25 could not access the desktop: the computer-use tool reported that the Mac was locked. The temporary comparison probe used the project's JavaFX 17.0.20 and default/unified stages with the same cream scene fill; it is exploratory only, not visual acceptance evidence. Actual title color and native window actions remain unverified until the desktop is available.

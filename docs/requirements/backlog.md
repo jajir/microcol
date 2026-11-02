@@ -1,5 +1,8 @@
 # Current requirement backlog
 
+Canceled on 2026-11-02: [R-0281 — cream macOS title bar](done/R-0281.md). The user explicitly requested cancellation and placement in `done/`; this one-off location exception does not claim implementation or successful visual acceptance. Historical failures remain unchanged.
+
+
 ## R-0396 / R-0398 — current implementation checkpoint (2026-11-02)
 
 1. Both requirements are selected for development directly in Codex. Their authoritative analyses are [R-0396](done/R-0396.md) and [R-0398](done/R-0398.md), both `done`. Local acceptance is complete; earlier capture entries below are historical.
@@ -831,7 +834,7 @@ preserving native input, values and persistence. Other screens remain outside th
 
 ## macOS title bar — 2026-10-25
 
-1. [R-0281](R-0281.md) aligns the native window title bar with the cream game background under A03, retaining native controls. The user rejected the native title-bar color on 2026-10-27. The JavaFX configuration checks pass, but the visible outcome is still incorrect; see the [current evidence](../functional-tests.md#requirement-closure-2026-10-27).
+1. [R-0281](done/R-0281.md) aligns the native window title bar with the cream game background under A03, retaining native controls. The user rejected the native title-bar color on 2026-10-27. The JavaFX configuration checks passed, but the visible outcome was incorrect. The user canceled this requirement on 2026-11-02; see the [current evidence](../functional-tests.md#requirement-closure-2026-10-27).
 
 [R-0282](done/R-0282.md) — stationary question marks on unexplored map; implemented and locally accepted on 2026-10-25. See the [verification evidence](../functional-tests.md#r-0282-unknown-question-marks-2026-10-25).
 
