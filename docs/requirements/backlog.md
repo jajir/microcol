@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Zásoby a změna za kolo v liště města — 2026-11-02
+1. [R-0400](R-0400.md), status `new`, oblast A03: místní zásoba a samostatná změna za kolo, zelený přírůstek a červený úbytek. Pouze pochodně a sovy zobrazují jen místní příspěvek za kolo; kladiva ukazují i nahromaděný stav. Zachycení požadavku, implementace nezahájena.
+
+
 Canceled on 2026-11-02: [R-0281 — cream macOS title bar](done/R-0281.md). The user explicitly requested cancellation and placement in `done/`; this one-off location exception does not claim implementation or successful visual acceptance. Historical failures remain unchanged.
 
 
