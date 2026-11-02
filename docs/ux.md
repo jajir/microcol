@@ -2,7 +2,7 @@
 
 ## Jednorázová plavba Go to
 
-1. Dohoda z 2. listopadu 2026 v [R-0396](requirements/R-0396.md) přejmenovává Goals na Objectives (O), česky Cíle. G otevírá Go to… / Plout do… pro vybranou vlastní loď. Dosavadní nabídka kolonií přechází z O na P jako Polis, bez Shiftu a shodně v obou jazycích. P nesmí současně spouštět Plow field (orání); náhradní zkratka orání zbývá rozhodnout před implementací.
+1. Dohoda z 2. listopadu 2026 v [R-0396](requirements/R-0396.md) přejmenovává Goals na Objectives (O), česky Cíle. G otevírá Go to… / Plout do… pro vybranou vlastní loď. Dosavadní nabídka kolonií přechází z O na I, bez Shiftu a shodně v obou jazycích. I je výslovně dohodnutá výjimka z odvozování zkratky podle názvu. P zůstává pro Plow field (orání).
 2. Nabídka zpřístupní Evropu a vlastní přístavy. Zrušení nic nezmění; po potvrzení loď zobrazuje cíl a umožní změnu či zrušení rozkazu. Výsledek nebo nemožnost pokračovat vysvětlí jednorázová zpráva Turn reportu se jménem lodi, cílem a případným důvodem. [Pravidla plavby](gap-analysis.md#r-0396-ship-destinations) vlastní model. Jde o dohodnutý návrh, nikoli pozorování hráčů nebo ověřenou implementaci.
 
 ## Plánování obchodních tras
