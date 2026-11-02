@@ -12,7 +12,10 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
-/** Real founder filtering and sequential, saveable earned arrivals. */
+/**
+ * Real founder filtering and sequential earned arrivals and discarded
+ * unfinished choices.
+ */
 @ExtendWith(ApplicationExtension.class)
 public class TC_70_F61_brewster_test extends AbstractAkropiaTest {
     @Start
@@ -53,6 +56,10 @@ public class TC_70_F61_brewster_test extends AbstractAkropiaTest {
         RecruitmentPage recruitment = new RecruitmentPage(getContext());
         brewster.loadChoiceFixture();
         brewster.rememberColony();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        saves.openSave();
+        saves.saveName("Before earned choices");
+        saves.rememberGame();
         // Arrival preparation pauses before food, production and replenishment.
         brewster.startArrival();
         brewster.verifyWaiting(230, 0, List.of(1, 2, 3), "Choose for free");
@@ -65,8 +72,14 @@ public class TC_70_F61_brewster_test extends AbstractAkropiaTest {
         brewster.deferChoice();
         brewster.returnToMap();
         brewster.verifyTurnCommandsUnavailable();
-        game.exitToMenu();
-        brewster.continuePending();
+        // Discard the unfinished turn; Continue returns to the saved position.
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.verifyLeaveConfirmation(true);
+        saves.action("saveDiscard");
+        new FreePlayAuditPage(getContext()).continueGame();
+        saves.verifyRestoredGame();
+        brewster.startArrival();
         brewster.verifyWaiting(230, 0, List.of(1, 2, 3), "Choose for free");
         brewster.verifyPoolUnchanged();
         // One choice uses 100 torches and only replaces the selected slot.
@@ -75,10 +88,17 @@ public class TC_70_F61_brewster_test extends AbstractAkropiaTest {
         brewster.rememberPool();
         brewster.deferChoice();
         brewster.returnToMap();
-        game.exitToMenu();
-        brewster.continuePending();
+        // The first choice was not saved either: restore and replay it.
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.verifyLeaveConfirmation(true);
+        saves.action("saveDiscard");
+        new FreePlayAuditPage(getContext()).continueGame();
+        saves.verifyRestoredGame();
+        brewster.startArrival();
+        brewster.verifyWaiting(230, 0, List.of(1, 2, 3), "Choose for free");
+        recruitment.confirm(1);
         brewster.verifyWaiting(130, 1, List.of(1, 4, 3), "Choose for free");
-        brewster.verifyPoolUnchanged();
         // The second choice uses 125; only now do the chapel produces one
         // torch.
         recruitment.confirm(2);
@@ -104,6 +124,10 @@ public class TC_70_F61_brewster_test extends AbstractAkropiaTest {
         BrewsterPage brewster = new BrewsterPage(getContext());
         RecruitmentPage recruitment = new RecruitmentPage(getContext());
         brewster.rememberColony();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        saves.openSave();
+        saves.saveName("Before earned choices");
+        saves.rememberGame();
         brewster.startArrival();
         brewster.verifyWaiting(230, 0, List.of(1, 2, 3), "Choose for free");
         recruitment.confirm(1);
@@ -113,11 +137,20 @@ public class TC_70_F61_brewster_test extends AbstractAkropiaTest {
         taxes.waitForDemand();
         taxes.verifyEarnedArrivals(2, 5);
         taxes.verifyPaused(0, 0);
-        // Continue restores the demand without repeating the two arrivals.
+        // Discarding the unfinished turn also discards both earned choices.
         taxes.defer();
         taxes.returnToMap();
-        game.exitToMenu();
-        taxes.continuePending();
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.verifyLeaveConfirmation(true);
+        saves.action("saveDiscard");
+        new FreePlayAuditPage(getContext()).continueGame();
+        saves.verifyRestoredGame();
+        brewster.startArrival();
+        brewster.verifyWaiting(230, 0, List.of(1, 2, 3), "Choose for free");
+        recruitment.confirm(1);
+        recruitment.confirm(2);
+        taxes.waitForDemand();
         taxes.verifyEarnedArrivals(2, 5);
         taxes.verifyPaused(0, 0);
         taxes.accept();

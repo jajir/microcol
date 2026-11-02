@@ -13,6 +13,21 @@ import javafx.scene.shape.SVGPath;
 class ModalFrameTest {
 
     @Test
+    void preferredSizeKeepsContentAtItsRequestedSizeAfterLayout() {
+        final Pane content = new Pane();
+        content.setPrefSize(500, 300);
+        final ModalFrame frame = new ModalFrame(content);
+        final double width = frame.prefWidth(-1);
+        final double height = frame.prefHeight(width);
+        frame.resize(width, height);
+        frame.layout();
+        assertTrue(content.getWidth() >= 500);
+        assertTrue(content.getHeight() >= 300);
+        assertEquals(width, frame.prefWidth(-1));
+        assertEquals(height, frame.prefHeight(width));
+    }
+
+    @Test
     void outlineAndClipFollowSmallLargeAndRepeatedLayouts() {
         final Pane content = new Pane();
         final ModalFrame frame = new ModalFrame(content);

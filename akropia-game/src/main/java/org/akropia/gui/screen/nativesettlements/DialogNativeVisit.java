@@ -30,7 +30,6 @@ import org.akropia.model.NativeVisitChoice;
 import org.akropia.model.UnitType;
 
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -569,7 +568,7 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
         treasury.setVisible(admitted);
         treasury.setManaged(admitted);
         final VBox saleBox = buildSaleBox(admitted);
-        final VBox list = new VBox(6);
+        final VBox list = new VBox(2);
         list.getChildren().addAll(choiceLabels);
         // The left column holds the visit and the market status, the right one
         // the offered goods and the sale and purchase controls; split this way
@@ -589,7 +588,7 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
                 || attackButton.isManaged();
         armedCommands.setVisible(armedShown);
         armedCommands.setManaged(armedShown);
-        final VBox visitBox = new VBox(10, skill, list, visitCommands,
+        final VBox visitBox = new VBox(6, skill, list, visitCommands,
                 missionButton, contestButton, incitementButton, armedCommands,
                 statusBox);
         visitBox.setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
@@ -602,10 +601,12 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
         marketBox.setMinWidth(450);
         marketBox.setPrefWidth(450);
         final HBox columns = new HBox(16, visitBox, marketBox);
-        final VBox root = new VBox(10, intro, columns, buttonBar.getContent());
+        buttonBar.getContent().setStyle("-fx-padding: 0;");
+        final VBox root = new VBox(6, intro, columns, buttonBar.getContent());
         root.setPrefWidth(846);
         root.setId(CONTENT_ID);
-        root.setPadding(new Insets(10));
+        // Override the shared modal padding so the two columns fit 900x750.
+        root.setStyle("-fx-padding: 10;");
         // Handle Escape before the focused button consumes it.
         root.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ESCAPE) {

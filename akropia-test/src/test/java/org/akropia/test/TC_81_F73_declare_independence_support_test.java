@@ -184,8 +184,10 @@ public class TC_81_F73_declare_independence_support_test
         final MainScreenLayoutPage layout = new MainScreenLayoutPage(
                 getContext());
         final GameToolbarPage toolbar = new GameToolbarPage(getContext());
+        // The 1440px content cap keeps the extra declaration command iconic.
         layout.resize(1600, 900);
-        toolbar.verifyControls(false, false);
+        layout.saveEvidence("r0399-independence-toolbar-wide.png");
+        toolbar.verifyControls(false, true);
         layout.resize(900, 900);
         toolbar.verifyControls(false, true);
         final IndependencePage independence = new IndependencePage(

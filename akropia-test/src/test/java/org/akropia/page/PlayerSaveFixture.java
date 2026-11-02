@@ -154,6 +154,9 @@ public final class PlayerSaveFixture {
     private static void save(final File scenario, final File target) {
         final GameModel game = games().loadScenarioFromFile(scenario,
                 new EventBus());
+        if (!game.getModel().isGameStarted()) {
+            game.startGame();
+        }
         games().saveGame(target, game, SavedGames.Kind.MANUAL, null, null);
     }
 

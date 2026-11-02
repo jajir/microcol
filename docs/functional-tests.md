@@ -1,4 +1,69 @@
-# Funkční testy a ochrana chování při změnách vzhledu
+## R-0399 full regression repair — 2026-11-02
+
+1. [R-0399](requirements/done/R-0399.md) repairs all 46 failing scenarios from
+   [run 41426295614](https://github.com/jajir/microcol/actions/runs/41426295614)
+   on `d0e71ff7e2cbdacdc88c9f48ea8e8fd15b9a6e4a`: **5,771 tests,
+   37 failures, nine errors and no skips**. The downloaded reports remain
+   under `target/ci-41426295614/`; that historical run remains failed.
+2. Runtime changes correct proportional modal preferred sizing, fit the
+   native visit chooser within 900×750, and retain stale forest-clearing
+   rejection feedback until the player moves the pointer. Test repairs use
+   started reference fixtures, the current save archive and Continue file,
+   shared end-turn warning handling and JavaFX-thread scene queries. TC70
+   and TC78 implement the user's decision in the [save rules](save-load-navigation.md):
+   discard an unfinished turn, restore the last save and replay the choices.
+   TC81 follows the existing 1,440px toolbar content cap; TC112 checks visible
+   gold frame edges because rounded fog can cover the edge next to unknown land.
+3. Final candidate model verification `20261102T140257Z-318fb6d05df8`
+   passed **4,968 tests in 375 XML reports, zero failures/errors/skips** in
+   **149.043 seconds**. Reports: `target/verification/run-slcofee3/`.
+   All 2,558 non-document source/configuration hashes matched the candidate,
+   including 1,924 Java files. The earlier candidate also passed 4,968 model
+   tests in `target/verification/run-yfg98j24/`; it preceded the native layout
+   adjustment and is not the final model acceptance.
+4. First targeted run `20261102T133730Z-35cf40ac4676` completed **128 tests,
+   13 failures, one error and no skips** in **1,894.911 seconds**. It selected
+   all 22 originally failing classes plus TC29, TC83, TC188 and the page
+   verification contract. It passed 33 original failures, including both
+   complete independence journeys (620.178 seconds). Its remaining errors
+   were native chooser width, toolbar expectations and the fog-covered frame
+   pixel. Failed evidence remains in `target/docker-ui/run-ZjC5X0/`.
+5. Follow-up `20261102T141340Z-d2ef7f120045` passed **48 tests, zero
+   failures/errors/skips**, in **506.474 seconds**. It covers all nine still
+   failing classes, TC139 using the revised native dialog, and the page
+   verification contract. Reports: `target/docker-ui/run-HC5s2o/`.
+   Comparing individual scenario names across both targeted runs confirms
+   **all 46 original failures now pass**; the local ledger is
+   `target/r0399/failure-ledger.json`. Previously passing unrelated paths
+   retain their evidence: subsequent source changes concern only native
+   layout and the two revised test expectations.
+6. Additional full trade-column coverage passed **14 tests, zero failures,
+   errors or skips**, in **358.139 seconds**: TC129 native market, TC130
+   sale, TC131 purchase and the page verification contract. Completion:
+   `20261102T141858Z-6f56673d3138`; reports: `target/docker-ui/run-fBKu8Q/`.
+   The Czech sale screenshot confirms both columns and all controls fit.
+   Final smoke `20261102T142957Z-e690d5e29d43` passed **21 tests in 12
+   reports, zero failures/errors/skips**, in **222.071 seconds** including
+   cleanup, within the 420-second budget. Reports:
+   `target/verification/run-sr83q544/`. The verifier confirmed the complete
+   fixed selection, and non-document hashes match the current candidate.
+7. Visual review confirmed unclipped English chief/treasure messages, the
+   complete Czech chooser and one-row independence toolbar. TC112's map
+   screenshot confirms visible gold top/right/bottom edges while fog masks
+   the left edge. Screenshots accompany the targeted reports; review copies
+   are in `target/r0399/visual/`. Shared Java formatting passed. Fourteen
+   documentation checks, the zero-occurrence name audit and strict MkDocs
+   passed during preparation and are rerun on the completed documentation
+   before commit.
+8. The user explicitly authorized isolated parallel execution. Task-specific
+   image/project, lock and cleanup owner `501-r0399` preserve the unrelated
+   UX run. Completed jobs reported no cleanup errors. Earlier serialized
+   model attempts and one superseded isolated model attempt were canceled
+   during lock wait before tests started; their completion records remain
+   saved. No skipped test, incomplete run or host compilation is counted as
+   acceptance. Local acceptance covers the repaired scenarios and affected
+   paths on the candidate based on `edfdceab`; no new full-regression run or
+   game-distribution publication is claimed.
 
 ## R-0397 ships B5 and caravel K5 — 2026-11-02
 

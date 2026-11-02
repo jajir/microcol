@@ -390,8 +390,7 @@ public final class FogPage extends AbstractScreen {
 
     /**
      * The drawn settlement has its nation fill at the centre of its square, and
-     * a capital also has the gold frame on its left edge; an ordinary one does
-     * not.
+     * a capital also has a visible gold frame; an ordinary one does not.
      */
     public void verifyNativeSettlementPixels(final Location location,
             final Color fill, final boolean capital) throws Exception {
@@ -406,17 +405,19 @@ public final class FogPage extends AbstractScreen {
                 center.getY());
         assertTrue(closeTo(fill, body), () -> "Settlement fill at " + location
                 + ": expected " + fill + " but was " + body);
-        final Color frame = actual.getPixelReader().getColor(point.getX() + 2,
-                center.getY());
-        if (capital) {
-            assertTrue(closeTo(CAPITAL_FRAME, frame),
-                    () -> "Capital frame at " + location + ": expected "
-                            + CAPITAL_FRAME + " but was " + frame);
-        } else {
-            assertFalse(closeTo(CAPITAL_FRAME, frame),
-                    "Ordinary settlement must not have the capital frame at "
-                            + location);
+        // Rounded fog can cover the edge next to an unexplored neighbour.
+        final int farEdge = Tile.TILE_WIDTH_IN_PX - 3;
+        final Point[] edges = { point.add(Point.of(2, Tile.TILE_CENTER.getY())),
+                point.add(Point.of(farEdge, Tile.TILE_CENTER.getY())),
+                point.add(Point.of(Tile.TILE_CENTER.getX(), 2)),
+                point.add(Point.of(Tile.TILE_CENTER.getX(), farEdge)) };
+        boolean goldFrame = false;
+        for (final Point edge : edges) {
+            goldFrame |= closeTo(CAPITAL_FRAME,
+                    actual.getPixelReader().getColor(edge.getX(), edge.getY()));
         }
+        assertEquals(capital, goldFrame,
+                "Visible capital frame at " + location);
     }
 
     /**

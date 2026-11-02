@@ -366,6 +366,7 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractAkropiaTest {
         final org.akropia.page.GoToPage movement = new org.akropia.page.GoToPage(
                 getContext());
         final Location sea = Location.of(22, 11);
+        game.selectMapUnit(3);
         game.dragMouseAtLocation(sea);
         movement.verifyLocation(3, sea);
         movement.verifyMovement(3, 6);
@@ -409,6 +410,7 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractAkropiaTest {
         final org.akropia.page.GoToPage movement = new org.akropia.page.GoToPage(
                 getContext());
         final Location sea = Location.of(22, 11);
+        game.selectMapUnit(3);
         game.dragMouseAtLocation(sea);
         movement.verifyLocation(3, sea);
         movement.verifyMovement(3, 6);

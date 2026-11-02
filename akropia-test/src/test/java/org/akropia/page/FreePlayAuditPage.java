@@ -479,9 +479,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 .loadFromClassPath(
                         "/maps/default-campaign-mission-2-thrive.akropia");
         data.getModel().getColonies().get(1).setLocation(Location.of(24, 13));
-        invalidSave = autosave
-                ? getContext().getClassFromGuice(PersistingTool.class)
-                        .getAutoSaveFile()
+        invalidSave = autosave ? continueFile()
                 : Files.createTempFile("invalid-game-", ".akropia").toFile();
         // A player save with valid metadata whose game data are invalid.
         PlayerSaveFixture.writeInvalidGame(invalidSave, data,

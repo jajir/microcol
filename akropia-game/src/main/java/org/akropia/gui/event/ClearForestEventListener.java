@@ -140,7 +140,7 @@ public final class ClearForestEventListener {
             model.clearForest(unit, offer.get());
         } catch (IllegalStateException | IllegalArgumentException rejected) {
             // State changed between the offer and the confirmation.
-            eventBus.post(new StatusBarMessageEvent(
+            eventBus.post(StatusBarMessageEvent.outcome(
                     nativeLand.rejection(land,
                             i18n.get(Buttons.clearForestChanged)),
                     StatusBarMessageEvent.Source.GAME));

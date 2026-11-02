@@ -217,6 +217,12 @@ target/graphics-venv/bin/python scripts/graphics/svg-font.py docs/diagrams/save-
 6. Ukládání a rychlé akce jsou běžně dostupné během připraveného lidského
    tahu. Model stále odmítá neúplnou přípravu tahu. Potvrzený zápis zobrazí
    zprávu ve stavovém řádku; zápisy jsou synchronní a dialog brání opakované akci.
+7. **Potvrzeno 2. listopadu 2026:** čekající volbu přistěhovalce ani daně nelze
+   ručně uložit. Při odchodu bez uložení se **Pokračovat** vrátí k poslednímu
+   úspěšně uloženému stavu; nepotvrzené ani již provedené volby v neuloženém
+   rozpracovaném tahu se nepřenášejí. Výjimka pro odloženou volbu skóre zůstává.
+   [R-0399](requirements/done/R-0399.md) upravuje starší regresní scénáře podle
+   tohoto rozhodnutí.
 
 ## 4. Načíst a pokračovat
 

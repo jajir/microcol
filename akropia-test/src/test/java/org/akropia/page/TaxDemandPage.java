@@ -186,8 +186,9 @@ public final class TaxDemandPage extends AbstractScreen {
      */
     public void prepareRevolutionFrom(final File snapshot, final String name)
             throws Exception {
-        final JsonObject saved = new Gson().fromJson(
-                Files.readString(snapshot.toPath()), JsonObject.class);
+        final JsonObject saved = new Gson()
+                .fromJson(new org.akropia.model.campaign.po.GameModelPoDao()
+                        .loadGameJson(snapshot), JsonObject.class);
         RebellionJson.declare(saved.getAsJsonObject("model"),
                 saved.getAsJsonObject("model").getAsJsonObject("gameManager")
                         .getAsJsonArray("players").get(0).getAsJsonObject());

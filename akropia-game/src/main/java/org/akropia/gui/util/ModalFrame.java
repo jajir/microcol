@@ -48,6 +48,28 @@ final class ModalFrame extends StackPane {
     }
 
     @Override
+    protected double computePrefWidth(final double height) {
+        final double horizontal = getInsets().getLeft()
+                + getInsets().getRight();
+        final double vertical = getInsets().getTop() + getInsets().getBottom();
+        final double available = height < 0 ? height
+                : height - Math.max(12, height * 0.08) + vertical;
+        final double content = super.computePrefWidth(available) - horizontal;
+        return Math.ceil(Math.max(content + 12, content / 0.95));
+    }
+
+    @Override
+    protected double computePrefHeight(final double width) {
+        final double horizontal = getInsets().getLeft()
+                + getInsets().getRight();
+        final double vertical = getInsets().getTop() + getInsets().getBottom();
+        final double available = width < 0 ? width
+                : width - Math.max(12, width * 0.05) + horizontal;
+        final double content = super.computePrefHeight(available) - vertical;
+        return Math.ceil(Math.max(content + 12, content / 0.92));
+    }
+
+    @Override
     protected void layoutChildren() {
         // Reserve the contour's inward waves even on tall, full-page dialogs.
         final Insets padding = new Insets(Math.max(6, getHeight() * 0.04),

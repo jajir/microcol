@@ -64,6 +64,7 @@ public class TC_112_F103_native_settlement_identity_test
         fog.verifyNativeSettlementKnown(AZTEC_CAPITAL, NativeNation.AZTEC,
                 true);
         fog.verifyStatusBarContains("Native capital: Aztec, city.");
+        fog.saveMapEvidence("TC_112-capital.png");
         fog.verifyNativeSettlementPixels(AZTEC_CAPITAL, AZTEC_FILL, true);
 
         // The Cherokee sites are beyond sight: nothing about them is known.

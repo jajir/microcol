@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.akropia.model.GoodsType;
 import org.akropia.page.FreePlayAuditPage;
 import org.akropia.page.GamePage;
+import org.akropia.page.SavedGamesPage;
 import org.akropia.page.TaxDemandPage;
 import org.akropia.page.TaxDemandPage.Fixture;
 import org.akropia.page.WelcomePage;
@@ -49,6 +50,10 @@ public class TC_78_F70_tax_demand_test extends AbstractAkropiaTest {
         TaxDemandPage taxes = new TaxDemandPage(getContext());
         taxes.prepare(fixture());
         GamePage game = WelcomePage.of(getContext()).loadGame();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        saves.openSave();
+        saves.saveName("Before tax demand");
+        saves.rememberGame();
         // The update falls due: the demand shows its exact consequences and
         // nothing has been produced yet.
         taxes.startUpdate();
@@ -70,9 +75,15 @@ public class TC_78_F70_tax_demand_test extends AbstractAkropiaTest {
         taxes.verifyPaused(0, 0);
         taxes.returnToMap();
         taxes.verifyTurnCommandsUnavailable();
-        // Continue restores the same unanswered demand without any update.
-        game.exitToMenu();
-        taxes.continuePending();
+        // Discard the pending demand and return to the last saved position.
+        saves.openMenu();
+        saves.chooseMenu("menuMain");
+        saves.verifyLeaveConfirmation(true);
+        saves.action("saveDiscard");
+        new FreePlayAuditPage(getContext()).continueGame();
+        saves.verifyRestoredGame();
+        // Begin the turn again; the demand must be offered before production.
+        taxes.startUpdate();
         taxes.verifyPaused(0, 0);
         taxes.verifyDemandDialog(RATES, ACCEPT, PROTEST, true);
         // Accepting raises the rate once and resumes the remaining update.

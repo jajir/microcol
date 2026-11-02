@@ -723,3 +723,7 @@ Návrhy budov z 30. října 2026 řeší [R-0357](requirements/done/R-0357.md), 
 ## Mediterranean goods terminology follow-up
 
 1. [R-0394](requirements/done/R-0394.md) prepares the project-wide Mediterranean goods and producer terminology, reusing existing Greek artwork and preserving every economic and gameplay rule. Status: ready for development; no implementation started. The authoritative [agreed naming rules](gap-analysis.md#mediterranean-goods-naming) distinguish this change from new mechanics.
+
+## Full UI regression repair — 2026-11-02
+
+1. [R-0399](requirements/done/R-0399.md) owns repair and verification of failed scenarios from run 41426295614 under P31.

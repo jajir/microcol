@@ -218,7 +218,10 @@ public abstract class AbstractScreen {
     }
 
     protected void closeUnitActions() {
-        if (getNodeFinder().lookup("#waitUnit").tryQuery().isPresent()) {
+        final boolean[] open = new boolean[1];
+        getRobot().interact(() -> open[0] = getNodeFinder().lookup("#waitUnit")
+                .tryQuery().isPresent());
+        if (open[0]) {
             getRobot().push(KeyCode.ESCAPE);
             WaitForAsyncUtils.waitForFxEvents();
         }
