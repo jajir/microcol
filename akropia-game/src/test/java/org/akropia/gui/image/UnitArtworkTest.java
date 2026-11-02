@@ -76,6 +76,37 @@ class UnitArtworkTest {
     }
 
     @Test
+    void shipSailsUseTheHeightOfTheMapTile() {
+        for (final UnitType type : List.of(UnitType.FRIGATE, UnitType.GALLEON,
+                UnitType.CARAVEL, UnitType.MERCHANTMAN, UnitType.PRIVATEER,
+                UnitType.MAN_OF_WAR)) {
+            final Image image = images.getUnitImage(type);
+            int highest = 45;
+            int lowest = -1;
+            int sail = 0;
+            for (int y = 0; y < 45; y++) {
+                for (int x = 0; x < 45; x++) {
+                    final Color color = image.getPixelReader().getColor(x, y);
+                    if (color.getOpacity() > .86) {
+                        highest = Math.min(highest, y);
+                        lowest = Math.max(lowest, y);
+                        if (color.getRed() > .8 && color.getGreen() > .8
+                                && color.getBlue() > .6) {
+                            sail++;
+                        }
+                    }
+                }
+            }
+            assertTrue(highest <= 4 && lowest >= 39,
+                    type.name() + " uses the tile height");
+            if (type != UnitType.PRIVATEER) {
+                assertTrue(sail >= (type == UnitType.MAN_OF_WAR ? 45 : 130),
+                        type.name() + " retains a substantial cream sail");
+            }
+        }
+    }
+
+    @Test
     void actualEquipmentOverridesProfessionAndRemovalRestoresIt() {
         final UnitFreeColonist unit = mock(UnitFreeColonist.class);
         when(unit.getType()).thenReturn(UnitType.EXPERT_FARMER);

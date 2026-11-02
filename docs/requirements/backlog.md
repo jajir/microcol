@@ -1,5 +1,8 @@
 # Current requirement backlog
 
+Implemented on 2026-11-02: [R-0397 — ships B5 and caravel K5](done/R-0397.md), A03. Selected vector artwork is integrated; the unchanged ink threshold, 4,955 model tests and six targeted UI/support checks passed. Smoke alone is waived by the user for this delivery.
+
+
 ## Mediterranean goods terminology — 2026-11-01
 
 1. [R-0394](R-0394.md), status `ready for development`, unifies goods, related producers, identifiers, assets and texts across the project. Wool uses the sheep icon; torches and owls preserve the existing cross/bell effects. All production ratios, prices, yields and other rules remain unchanged. Preparation only, no implementation authorized.

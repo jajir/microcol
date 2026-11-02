@@ -1,5 +1,17 @@
 # Funkční testy a ochrana chování při změnách vzhledu
 
+## R-0397 ships B5 and caravel K5 — 2026-11-02
+
+1. [R-0397](requirements/done/R-0397.md) changes only six ship sprites and adds a height/sail-area assertion to `UnitArtworkTest`; the existing 100-pixel ink threshold and transparent margins remain unchanged. `TC_190_F223_unit_artwork_test` checks the full map roster, movement and Continue with the updated ships; `TC_100_F91_colonizopedia_test` covers shared artwork in help.
+2. Repaired model/JUnit phase passed: `target/verification/run-bipjl6tn`, completion `20261102T061013Z-909948739bf4`, 4,955 tests, zero failures/errors/skips, 143.487 seconds for the model phase. The four `UnitArtworkTest` cases passed. The current SVG, PNG and changed Java tests match the verified source snapshot. Targeted Docker/Xvfb UI acceptance passed. Smoke is explicitly waived by the user for this task; no remote CI or distribution publication verification is requested.
+3. Vector source and repeatable `units` export are verified locally; [runtime preview](graphics-assets/ships-2026-11-02/runtime-preview.png) shows 45px sprites and enlarged crops, not a game screenshot.
+4. First model attempt: `target/verification/run-rjeaijqv`, completion `20261102T060038Z-6edf36bff3f2`, 4,955 tests, one failure, zero errors/skips. The original opaque-ink test passed; the new height assertion failed because 1.5px vertical masts on integer x coordinates had only 75% alpha on their upper pixels. Moving the masts to half-pixel coordinates makes their centers opaque without lowering any assertion. This failed run remains failed. The repaired source passed the fresh model run recorded above.
+5. Targeted Docker/Xvfb run `target/docker-ui/run-qXHeMn`, completion `20261102T064305Z-881d70ac7b98`: six tests, zero failures/errors/skips, 86.26 seconds including execution/cleanup. Selection: `PageVerificationContractTest` (three), `TC_190_F223_unit_artwork_test` (one), `TC_100_F91_colonizopedia_test#TC_08_units_reference_lists_types_and_base_properties+TC_09_czech_units_search_and_escape` (two). The [actual map screenshot](graphics-assets/ships-2026-11-02/implemented-map.png) was reviewed alongside the 45px runtime export.
+6. Scope review confirmed genuine vector shapes without embedded rasters, byte-identical exports on repeat and unchanged SVG groups/PNG cells for all other 34 unit states. Shared Java formatting was applied to the two changed test files. Fourteen documentation consistency tests, the former-name audit and strict MkDocs passed. Main advanced from model base `2458e1a5` to UI base `d890cc59` only through unrelated documentation changes; tested executable source is unchanged between the passing phases and delivery. Remote CI, Pages and game distribution publication are not verified.
+
+
+
+
 ## R-0389 Akropia project rename — 2026-11-02
 
 1. Candidate based on `4cf07149`, implemented by Claude completion `20261102T014414Z-04fc3d7a9953` (737.824 s), followed by bounded tooling/evidence completion `20261102T015959Z-4cdd9cb24efe` (379.962 s). Parent reviewed the rename, applied the shared formatter to 1,919 Java files and regenerated branded graphics. All ten modules remain, including the reference-only `akropia-site`. Existing player data and external host directories were not moved or rewritten. New model alias configuration is not proof that those aliases are installed.

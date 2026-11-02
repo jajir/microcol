@@ -1,5 +1,15 @@
 # Grafické podklady a jejich použití v Akropia
 
+## Lodě B5 a karavela K5 — 2026-11-02
+
+1. Uživatel vybral [B5](graphics-assets/ships-2026-11-02/selected-b5.png) pro všech šest lodí, s karavelou nahrazenou variantou [K5](graphics-assets/ships-2026-11-02/selected-caravel-k5.png). Výběr a přejímku vlastní [R-0397](requirements/done/R-0397.md). PNG návrhy jsou vizuální předlohy, nikoli produkční zdroje.
+2. Produkční [units.svg](../akropia-game/src/graphics/units.svg) má samostatně editovatelné tvary ve skupinách U30–U35. Pět otevřených plachet je velkých, karavela má jednu trojúhelníkovou plachtu K5; válečná loď má svinutou plachtu na vysokém ráhně. Tmavé obrysy mají 1,5 logického px a omezenou vnitřní kresbu. Ostatní jednotky a jejich vybavení zůstávají beze změny.
+3. Obnovit PNG příkazem `python3 scripts/graphics/export-graphics.py units --install`; shodu ověřit `python3 scripts/graphics/export-graphics.py units --check`. Atlas stále měří 360 × 225 px, jednotlivé obrázky 45 × 45 px s průhledným okrajem 2 px. Zrcadlení dopravních lodí zůstává v existujícím loaderu.
+4. Přímý přepočet runtime exportu dal pro frigatu/galeonu/karavelu/obchodní loď/korzára/válečnou loď 261/280/222/219/268/332 tmavých neprůhledných pixelů podle prahu `UnitArtworkTest` (nejméně 100). To je kontrola assetu; skutečné modelové a UI výsledky uvádí [funkční evidence](functional-tests.md#r-0397-ships-b5-and-caravel-k5-2026-11-02).
+
+![Runtime lodě: původní velikost a zvětšený výřez](graphics-assets/ships-2026-11-02/runtime-preview.png)
+
+
 ## R-0390 — Řecký přístav s chrámem
 
 1. **Vybráno 1. listopadu 2026:** uživatel schválil variantu 7 z přehledu návrhů — malý chrám na návrší, olivovníky a nízké řecké domy. [R-0390](requirements/done/R-0390.md) vlastní tuto úpravu ilustrace; názvy a herní pravidla se nemění.
