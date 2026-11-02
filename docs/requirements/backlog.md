@@ -1112,4 +1112,4 @@ remain owned by their current requirements; acceptance is recorded in the
 
 ## Jednorázová plavba Go to — 2026-11-02
 
-1. [R-0396](R-0396.md), primární oblast A05, závislosti A03/A01/A04/A06. Status: new. Objectives (O) uvolní G pro výběr Evropy nebo vlastního přístavu, trvalou plavbu a jednorázové zprávy Turn reportu o příjezdu či přerušení. Otevřená je náhradní zkratka nabídky kolonií; implementace nezahájena.
+1. [R-0396](R-0396.md), primární oblast A05, závislosti A03/A01/A04/A06. Status: new. Objectives (O) uvolní G pro výběr Evropy nebo vlastního přístavu, trvalou plavbu a jednorázové zprávy Turn reportu o příjezdu či přerušení. Nabídka kolonií přejde na P jako Polis bez Shiftu. Otevřená je náhradní zkratka orání, které nyní používá P; implementace nezahájena.
