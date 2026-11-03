@@ -1,5 +1,11 @@
 # Writing and publishing documentation
 
+## R-0403 accepted banner answers — 2026-11-03
+
+1. On base `6708d10a`, incorporated the user's approval into [R-0403](requirements/R-0403.md), the [shared graphics rule](graphics.md#vybrane-vlajky-03), R-0402/R-0405, gap analysis and backlog. Starting dimensions remain subject to visual validation; `g/t/w`, retained-task letters during waiting/pause/blocking and trade-route precedence are accepted behavior. Chapter 4 now contains None; status remains `new` and implementation is not started.
+2. Documentation-only acceptance: 14 consistency tests passed with zero failures/errors/skips; naming audit found zero unexplained occurrences; strict MkDocs passed. Reviewed chapter/list structure and removed answered-question references. No executable code or runtime assets changed; model/JUnit, Docker UI and smoke are exempt. No remote CI/publication checks or actual-size graphical acceptance were performed.
+
+
 ## R-0405 final gameplay answers — 2026-11-03
 
 1. On base `5f3bd836`, recorded the final two gameplay answers in [R-0405](requirements/R-0405.md), the shared worker rules/UX and backlog. An eligible own combat ship on the same square defends the fisherman first. Another colony’s worked square is completely covered by a gray tile in the town preview, with no terrain, worker, yield or town label; world-map presentation remains distinct. Removed resolved questions and their active references. Chapter 4 is now “None”; status remains `waiting for refinement` pending detailed implementation and named acceptance-scenario preparation.

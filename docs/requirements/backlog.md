@@ -14,6 +14,8 @@
 1. [R-0403](R-0403.md), status `new`, A03 s návazností na A02 a R-0402: nahrazení velkých i malých vlajek čtyř mocností variantou 03; nad každou jednotkou vpravo nahoře svislý banner, bez instrukce prázdný, jinak s písmenem skutečné činnosti. Zachycení nezahajuje implementaci.
 
 
+2. Schváleno 2026-11-03: výchozí rozměry 120 × 80 / 30 × 20 / 16 × 20 px k vizuálnímu ověření, doplnění `g/t/w` a zachování písmene při čekání, pozastavení a blokování úkolu podle [společného pravidla](../graphics.md#vybrane-vlajky-03). Otevřené otázky R-0403 uzavřeny; stav zůstává `new`, implementace nezahájena.
+
 ## Řecké městské státy a místní národy — 2026-11-02
 
 1. [R-0402](R-0402.md), status `new`, oblast A03 s návaznostmi A02/A08/A06/A10: schváleny Athény, Korint, Milét a Fókaia, jejich příběhy a výchozí motivy vlajek i osm místních národů. Pro čtyři mocnosti je nyní vybraná varianta 03; nahrazení vlajek a bannery vlastní R-0403. Návrh identity místních národů zůstává otevřený. Zachycení nemění pravidla a nezahajuje implementaci.
