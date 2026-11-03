@@ -11,11 +11,11 @@
 	<entry key="buttonHelp">Nápověda - Colonizopedie. (H)</entry>
 	<entry key="buttonExit">Otevřít herní nabídku (Esc)</entry>
 	<entry key="buttonNextTurn">Další tah</entry>
-	<entry key="buttonEurope">Evropský přístav. (E)</entry>
+	<entry key="buttonEurope">Domovský přístav. (E)</entry>
 	<entry key="buttonMove">Hýbnout jednotkou. (M)</entry>
 	<entry key="buttonPlowField">Zůrodnit pole a vybudovat pole. (P)</entry>
 	<entry key="buttonBuildColony">Vybudovat novou kolonii. (B)</entry>
-	<entry key="buttonDeclareIndependence">Vyhlásit nezávislost na králi.</entry>
+	<entry key="buttonDeclareIndependence">Vyhlásit samostatnou polis.</entry>
 	
     <entry key="buttonColonies">Kolonie (I)</entry>
     <entry key="noColonies">Zatím nemáte žádnou kolonii</entry>
@@ -39,7 +39,7 @@
     <entry key="goToStatusActive">Přesun do %s</entry>
     <entry key="goToStatusPaused">Pozastaveno, k cíli %s nevede cesta</entry>
     <entry key="buttonGoToColony">Plout do… (G)</entry>
-    <entry key="goToColonyExplanation">Vyberte dostupný cíl. Lodě mohou do Evropy nebo vlastních přístavů; rozkaz pokračuje v dalších vlastních tazích.</entry>
+    <entry key="goToColonyExplanation">Vyberte dostupný cíl. Lodě mohou do domovského přístavu nebo vlastních přístavů; rozkaz pokračuje v dalších vlastních tazích.</entry>
     <entry key="goToColonyTitle">Cíl přesunu</entry>
     <entry key="goToColonyCaption">Vyberte dostupný cíl vybrané jednotky:</entry>
     <entry key="goToColonyConfirm">Vyrazit</entry>
@@ -110,7 +110,7 @@
     <entry key="buildRoadProblemNoMoves">Tato jednotka nemá pohyb na zahájení stavby silnice.</entry>
     <entry key="buildRoadProblemSea">Silnici nelze postavit na vodě.</entry>
     <entry key="buildRoadProblemAlreadyRoad">Toto pole už má silnici.</entry>
-    <entry key="moveEuropeClosed">Po vyhlášení nezávislosti je domovská Evropa uzavřená. Loď zůstává na mapě.</entry>
+    <entry key="moveEuropeClosed">Po vyhlášení samostatné polis je domovská Domovský přístav uzavřená. Loď zůstává na mapě.</entry>
     <entry key="moveChanged">Přesun již není dostupný. Zvolte jej znovu.</entry>
     <entry key="buttonRetire">Ukončit s výsledkem</entry>
     <entry key="retireExplanation">Ukončení skončí hru s tvým výsledkem. Jen bodovaná volná hra, na tvém tahu.</entry>
@@ -122,7 +122,7 @@
     <entry key="cancelRoadLabel">Zrušit stavbu silnice</entry>
     <entry key="waitUnavailable">V tomto tahu není dostupná žádná jednotka k výběru.</entry>
     <entry key="skipUnavailable">Vyžaduje váš tah a jednotku na mapě se zbývajícím pohybem a bez aktivního rozkazu.</entry>
-    <entry key="sentryUnavailable">Vyžaduje váš tah a jednotku bez jiného rozkazu na mapě nebo na vhodném evropském molu.</entry>
+    <entry key="sentryUnavailable">Vyžaduje váš tah a jednotku bez jiného rozkazu na mapě nebo na vhodném molu domovského přístavu.</entry>
     <entry key="fortifyUnavailable">Vyžaduje váš tah a ozbrojenou pozemní jednotku na pevnině, se zbývajícím pohybem a bez jiného rozkazu.</entry>
     <entry key="goToColonyUnavailable">Pro tuto jednotku nyní není dostupný cíl cesty.</entry>
     <entry key="toolbarColonies">Kolonie</entry>
@@ -132,7 +132,7 @@
     <entry key="toolbarTurnReport">Hlášení</entry>
     <entry key="toolbarGoals">Cíle</entry>
     <entry key="toolbarHelp">Nápověda</entry>
-    <entry key="toolbarEurope">Evropa</entry>
+    <entry key="toolbarEurope">Domovský přístav</entry>
     <entry key="toolbarNextTurn">Další tah</entry>
     <entry key="toolbarRetire">Ukončit</entry>
     <entry key="toolbarExit">Nabídka</entry>
@@ -142,7 +142,7 @@
     <entry key="nextTurnExplanation">Dokončit tento tah a zahájit další.</entry>
     <entry key="plowProblemRiver">Na říčním políčku nelze zorat pole.</entry>
     <entry key="mapHeadingExplanation">Mappa Mundi je latinsky „mapa světa“. Latina se tehdy běžně používala.</entry>
-    <entry key="goToEurope">Evropa</entry>
+    <entry key="goToEurope">Domovský přístav</entry>
     <entry key="endTurnWarningTitle">Před koncem tahu</entry>
     <entry key="endTurnWarningCaption">V těchto koloniích čekají kolonisté bez práce. Otevřete kolonii a přidělte jim práci, vraťte se do hry, nebo přesto ukončete tento tah.</entry>
     <entry key="endTurnProceed">Přesto ukončit tah</entry>

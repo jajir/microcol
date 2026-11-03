@@ -83,7 +83,14 @@ public final class RiverPage extends AbstractScreen {
                     // Compare the coastal opening away from animated waves.
                     int riverPixels = 0;
                     int maxColourDifference = 0;
-                    for (int y = (sea ? 14 : 3) * scale; y < (sea ? 32 : 42)
+                    // A city below the square paints its flag above its tile.
+                    // The terrain-only preview deliberately excludes that
+                    // overlay.
+                    final boolean cityBelow = getModel()
+                            .getColonyAt(Location.of(at.getX(), at.getY() + 1))
+                            .isPresent();
+                    final int bottom = sea ? 32 : cityBelow ? 34 : 42;
+                    for (int y = (sea ? 14 : 3) * scale; y < bottom
                             * scale; y++) {
                         for (int x = 3 * scale; x < (sea ? 8 : 42)
                                 * scale; x++) {

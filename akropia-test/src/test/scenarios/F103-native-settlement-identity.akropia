@@ -43,7 +43,7 @@
         "id": 0,
         "type": "COLONIST",
         "ownerId": "Dutch",
-        "placeColonyField": {},
+        "placeConstructionSlot": {},
         "cargo": {
           "slots": []
         },
@@ -298,16 +298,14 @@
             "direction": {
               "x": -1,
               "y": -1
-            },
-            "workerId": 0,
-            "producedGoodsType": "GRAPES"
+            }
           }
         ],
         "constructions": [
           {
             "type": "TOWN_HALL",
             "slots": [
-              {},
+              {"workerId": 0},
               {},
               {}
             ]

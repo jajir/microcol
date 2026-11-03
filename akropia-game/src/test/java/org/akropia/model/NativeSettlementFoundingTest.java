@@ -137,7 +137,7 @@ class NativeSettlementFoundingTest {
         final int colonies = model.getColonies().size();
         final int settlements = model.getNativeSettlements().size();
         assertThrows(IllegalArgumentException.class,
-                () -> model.buildColony(france, founder, "Native Square"));
+                () -> model.buildColony(france, founder, "Local Square"));
         assertEquals(colonies, model.getColonies().size());
         assertEquals(settlements, model.getNativeSettlements().size());
         assertEquals(site, founder.getLocation());

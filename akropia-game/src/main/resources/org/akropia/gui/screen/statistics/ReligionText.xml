@@ -12,6 +12,6 @@
   <entry key="targetRow">Next immigrant at %s torches; %s more needed</entry>
   <entry key="stateNone">No earned immigrant is waiting.</entry>
   <entry key="stateArrives">An earned immigrant arrives at the start of your next turn.</entry>
-  <entry key="stateChoice">An earned immigrant waits for your choice in Europe (%s candidates). Closing the window only postpones it.</entry>
-  <entry key="stateBlocked">The threshold is reached, but a nation that declared independence receives no immigrants from Europe. The torches stay saved.</entry>
+  <entry key="stateChoice">An earned immigrant waits for your choice in Home port (%s candidates). Closing the window only postpones it.</entry>
+  <entry key="stateBlocked">The threshold is reached, but a nation that declared independence receives no immigrants from Home port. The torches stay saved.</entry>
 </properties>

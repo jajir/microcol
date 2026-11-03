@@ -11,11 +11,11 @@
 	<entry key="buttonHelp">Colonizopedia - guide. (H)</entry>
 	<entry key="buttonExit">Open game menu (Esc)</entry>
 	<entry key="buttonNextTurn">Next turn</entry>
-	<entry key="buttonEurope">Europe port. (E)</entry>
+	<entry key="buttonEurope">Home port port. (E)</entry>
 	<entry key="buttonMove">Move unit. (M)</entry>
 	<entry key="buttonPlowField">Plow field. (P)</entry>
 	<entry key="buttonBuildColony">Build new colony. (B)</entry>
-	<entry key="buttonDeclareIndependence">Declare independence.</entry>
+	<entry key="buttonDeclareIndependence">Declare an independent polis.</entry>
 
     <entry key="buttonColonies">Colonies (I)</entry>
     <entry key="noColonies">No colonies yet</entry>
@@ -39,7 +39,7 @@
     <entry key="goToStatusActive">Going to %s</entry>
     <entry key="goToStatusPaused">Paused, no route to %s</entry>
     <entry key="buttonGoToColony">Go to… (G)</entry>
-    <entry key="goToColonyExplanation">Choose a reachable destination. Ships can sail to Europe or your own ports; the order continues on your later turns.</entry>
+    <entry key="goToColonyExplanation">Choose a reachable destination. Ships can sail to Home port or your own ports; the order continues on your later turns.</entry>
     <entry key="goToColonyTitle">Go to… (G)</entry>
     <entry key="goToColonyCaption">Choose a destination the selected unit can reach:</entry>
     <entry key="goToColonyConfirm">Go</entry>
@@ -110,7 +110,7 @@
     <entry key="buildRoadProblemNoMoves">This unit has no movement left to start building a road.</entry>
     <entry key="buildRoadProblemSea">A road cannot be built on water.</entry>
     <entry key="buildRoadProblemAlreadyRoad">This square already has a road.</entry>
-    <entry key="moveEuropeClosed">Home Europe is closed after independence. Your ship remains on the map.</entry>
+    <entry key="moveEuropeClosed">Home Home port is closed after independence. Your ship remains on the map.</entry>
     <entry key="moveChanged">The move is no longer available. Choose it again.</entry>
     <entry key="buttonRetire">Retire</entry>
     <entry key="retireExplanation">Retire ends the game with your score. Scored play only, on your turn.</entry>
@@ -122,7 +122,7 @@
     <entry key="cancelRoadLabel">Cancel road building</entry>
     <entry key="waitUnavailable">No unit is available for selection during the current turn.</entry>
     <entry key="skipUnavailable">Requires your turn and a unit on the map with movement remaining and no active order.</entry>
-    <entry key="sentryUnavailable">Requires your turn and a unit without another order, on the map or an eligible European pier.</entry>
+    <entry key="sentryUnavailable">Requires your turn and a unit without another order, on the map or an eligible home pier.</entry>
     <entry key="fortifyUnavailable">Requires your turn and an armed land unit on land, with movement remaining and no other order.</entry>
     <entry key="goToColonyUnavailable">No reachable destination is available for this unit in its current state.</entry>
     <entry key="toolbarColonies">Colonies</entry>
@@ -132,7 +132,7 @@
     <entry key="toolbarTurnReport">Report</entry>
     <entry key="toolbarGoals">Objectives</entry>
     <entry key="toolbarHelp">Help</entry>
-    <entry key="toolbarEurope">Europe</entry>
+    <entry key="toolbarEurope">Home port</entry>
     <entry key="toolbarNextTurn">Next turn</entry>
     <entry key="toolbarRetire">Retire</entry>
     <entry key="toolbarExit">Menu</entry>
@@ -142,7 +142,7 @@
     <entry key="nextTurnExplanation">Finish this turn and start the next one.</entry>
     <entry key="plowProblemRiver">River squares cannot be plowed.</entry>
     <entry key="mapHeadingExplanation">Mappa Mundi is Latin for “map of the world”. Latin was widely used at the time.</entry>
-    <entry key="goToEurope">Europe</entry>
+    <entry key="goToEurope">Home port</entry>
     <entry key="endTurnWarningTitle">Before ending the turn</entry>
     <entry key="endTurnWarningCaption">Colonists without work are waiting in these colonies. Open a colony to assign work, go back, or end this turn anyway.</entry>
     <entry key="endTurnProceed">End turn anyway</entry>

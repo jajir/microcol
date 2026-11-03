@@ -4,32 +4,32 @@
 <properties>
 	<comment>Define keys for Europe dialog</comment>
 
-	<entry key="title">Europe</entry>
+	<entry key="title">Home port</entry>
 	<entry key="harborDock">In port</entry>
 	<entry key="harborPier">People on the quay</entry>
 	<entry key="voyageTurns">Turns remaining: %s</entry>
 	<entry key="voyageWaiting">Waiting: the arrival square is occupied.</entry>
-	<entry key="voyageUnavailable">This ship cannot depart. It must be in your European port during your turn, with an available sea-lane destination.</entry>
+	<entry key="voyageUnavailable">This ship cannot depart. It must be in your home port during your turn, with an available sea-lane destination.</entry>
 	<entry key="voyageReverse">Reverse course</entry>
 	<entry key="voyageReverseTitle">Reverse course</entry>
 	<entry key="voyageReverseQuestion">Send this ship to %s? Turns remaining: %s.</entry>
-	<entry key="voyageDestinationEurope">Europe</entry>
-	<entry key="voyageDestinationNewWorld">New World</entry>
+	<entry key="voyageDestinationEurope">Home port</entry>
+	<entry key="voyageDestinationNewWorld">new coast</entry>
 	<entry key="voyageReverseStale">This voyage changed. Review the ship and try again.</entry>
 	<entry key="voyageJettison">Jettison goods</entry>
-	<entry key="shipsTravelingToNewWorld">Sailing to New World</entry>
-	<entry key="shipsTravelingToEurope">Sailing to Europe</entry>
+	<entry key="shipsTravelingToNewWorld">Sailing to new coast</entry>
+	<entry key="shipsTravelingToEurope">Sailing to Home port</entry>
 	<entry key="buyUnitDialog_title">Buy unit</entry>
 	<entry key="buyUnitDialog_buttonBuyUnit">Buy for</entry>
 	<entry key="goodsPanelTitle">Goods · sell / buy</entry>
-	<entry key="recruitUnitDialogTitle">Recruit from Europe</entry>
+	<entry key="recruitUnitDialogTitle">Recruit from Home port</entry>
 	<entry key="recruitUnitDialogButton">Pay passage:</entry>
-	<entry key="statusBarEuropeDock">Europe dock, ships could be loaded with goods and units.</entry>
-	<entry key="statusBarShipsToNewWorld">Ships heading to New World</entry>
-	<entry key="statusBarShipsToEurope">Ships heading to Europe</entry>
-	<entry key="statusBarPier">Pier, there will be units waiting for travel to New World.</entry>
+	<entry key="statusBarEuropeDock">Home port dock, ships could be loaded with goods and units.</entry>
+	<entry key="statusBarShipsToNewWorld">Ships heading to new coast</entry>
+	<entry key="statusBarShipsToEurope">Ships heading to Home port</entry>
+	<entry key="statusBarPier">Pier, there will be units waiting for travel to new coast.</entry>
 	<entry key="goodsToSell">Sell %s for %s gold or buy it for %s gold.</entry>
-	<entry key="buttonClose">Close Europe port. Return back to main world view.</entry>
+	<entry key="buttonClose">Close Home port port. Return back to main world view.</entry>
 	<entry key="buttonBuyUnit">Buy units</entry>
 
     <entry key="equipmentOpen">Equipment: click, right-click or press Enter to buy or sell</entry>
@@ -46,16 +46,16 @@
 Unit price: %s gold
 Tax: %s%% (%s gold)
 Total: %s gold</entry>
-    <entry key="equipmentUNIT_UNAVAILABLE">This colonist is no longer available on your European pier during your turn. Nothing was changed. Cancel and select the colonist again.</entry>
+    <entry key="equipmentUNIT_UNAVAILABLE">This colonist is no longer available on your home pier during your turn. Nothing was changed. Cancel and select the colonist again.</entry>
     <entry key="equipmentALREADY_SET">The equipment has already changed. Nothing was changed. Cancel and choose again.</entry>
     <entry key="equipmentINCOMPATIBLE_EQUIPMENT">Sell the incompatible equipment first. Horses and weapons can be combined; tools require an unequipped colonist.</entry>
     <entry key="equipmentNOT_ENOUGH_GOLD">Not enough gold. Nothing was changed. Cancel and obtain the required gold.</entry>
-    <entry key="equipmentTRADE_RESTRICTED">Trade with your European port is unavailable. Nothing was changed.</entry>
+    <entry key="equipmentTRADE_RESTRICTED">Trade with your home port is unavailable. Nothing was changed.</entry>
     <entry key="equipmentGOLD_LIMIT">This trade exceeds the treasury limit. Nothing was changed.</entry>
 
 	<entry key="buyUnitDialog_buttonHire">Hire specialist for</entry>
 	<entry key="buyUnitDialog_notEnoughGold">Not enough gold.</entry>
-	<entry key="buyUnitDialog_unavailable">This purchase is no longer available. Reopen the offer on your turn while you have access to Europe.</entry>
+	<entry key="buyUnitDialog_unavailable">This purchase is no longer available. Reopen the offer on your turn while you have access to Home port.</entry>
 
     <entry key="pierOrders">Passenger orders and equipment</entry>
 	<entry key="recruitOpen">Recruit</entry>
@@ -91,15 +91,15 @@ Total: %s gold</entry>
   <entry key="earnedChoose">Choose for free</entry>
   <entry key="earnedOpen">Choose immigrant</entry>
   <entry key="earnedPending">An earned immigrant is waiting for your choice. Open recruitment to continue the turn.</entry>
-  <entry key="equipmentBOYCOTTED">This commodity is boycotted by the Crown. Nothing was changed.</entry>
+  <entry key="equipmentBOYCOTTED">This commodity is boycotted by the mother city. Nothing was changed.</entry>
   <entry key="goodsBoycottedMark">boycotted</entry>
   <entry key="goodsBoycotted">%s is boycotted. It can neither be bought nor sold.</entry>
   <entry key="taxOpen">Tax demand</entry>
-  <entry key="taxPending">The Crown's tax demand is waiting for your answer. Open it to continue the turn.</entry>
+  <entry key="taxPending">The mother city's tax demand is waiting for your answer. Open it to continue the turn.</entry>
   <entry key="backTaxOpen">Back taxes</entry>
   <entry key="voyageOrders">Orders: right-click or Shift+F10</entry>
-	<entry key="sailToNewWorld">Sail to New World</entry>
+	<entry key="sailToNewWorld">Sail to new coast</entry>
     <entry key="goToARRIVED">%s #%s arrived at port %s.</entry>
-    <entry key="goToARRIVED_EUROPE">%s #%s arrived in Europe.</entry>
+    <entry key="goToARRIVED_EUROPE">%s #%s arrived in Home port.</entry>
     <entry key="goToCANCELLED_BLOCKED">%s #%s stopped sailing to %s: no legal route remains.</entry>
 </properties>

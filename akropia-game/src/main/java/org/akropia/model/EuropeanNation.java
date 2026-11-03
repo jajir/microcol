@@ -4,12 +4,19 @@ import java.util.Optional;
 
 /** Stable identities of the four colonizing participants. */
 public enum EuropeanNation {
-    DUTCH("Dutch"), FRENCH("France"), ENGLISH("England"), SPANISH("Spain");
+    DUTCH("Dutch", "Corinth"), FRENCH("France", "Phocaea"),
+    ENGLISH("England", "Athens"), SPANISH("Spain", "Miletus");
 
     private final String playerName;
+    private final String displayName;
 
-    EuropeanNation(final String playerName) {
+    EuropeanNation(final String playerName, final String displayName) {
         this.playerName = playerName;
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 
     public String getPlayerName() {

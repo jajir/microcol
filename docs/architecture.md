@@ -1208,3 +1208,20 @@ jsou autoritativní pro vzhled a přijetí.
 
 1. [akropia-ux-test](../akropia-ux-test/pom.xml) je samostatné vývojové nářadí podle [R-0334](requirements/done/R-0334.md). Ovládá skutečnou obrazovku přes X11 a nevolá herní model, AI ani testovací page objects. Nemění odpovědnosti Java balíčků.
 2. [Provoz a evidence](ux-playtesting.md) rozlišují technické ověření nástroje, hráčská pozorování AI a běžnou regresní přejímku.
+
+### Pracovní pole a místní rybolov — rozpracovaná integrace R-0405
+
+1. Pracovní přiřazení nadále vlastní model. `PlaceColonyField` obsahuje jediného
+   člověka, pole a vyráběné zboží; jako mapové umístění poskytuje skutečnou polohu.
+   Dotazy na příslušnost ke kolonii musí rozpoznat pracovní přiřazení před obecným
+   mapovým umístěním. AI nepovažuje platně pracujícího člověka za volnou jednotku.
+2. `AbstractUnit` počítá cenu přesunu mezi pracemi společnými terénními pravidly;
+   přiřazení na témže poli stojí nula. Místní rybolov používá schválený jeden bod.
+   `ColonyJobChoice` váže mapovou nabídku na konkrétní práci a přijímající kolonii.
+   GUI nabídku pouze zobrazuje a znovu vyhodnocený příkaz provádí model.
+3. `PlaceFishingGround` uchovává místní člun po zrušení práce bez přesunu. Ukládá
+   příslušnou kolonii, ale neposkytuje produkci ani pracovní stravování. Ztrátu
+   zázemí řeší model deterministicky podle vzdálenosti, poté souřadnic a ID osob.
+   `TurnEventFishermanLost` ukládá konkrétní důvod ztráty pro následné textové oznámení.
+4. Jde o popis rozpracovaného zdroje z 2026-11-03, nikoli potvrzenou přejímku.
+   Výsledky vlastní [funkční evidence](functional-tests.md#r-0402r-0403r-0405-local-acceptance-2026-11-03).

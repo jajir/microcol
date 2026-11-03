@@ -256,7 +256,8 @@ class EuropeanRelationAiTest {
         model.declareHostilities(france(), dutch());
         behavior.tryToFight(rival);
         assertSame(france(), colony.getOwner());
-        assertSame(france(), model.getUnitById(4).getOwner());
+        assertSame(dutch(), model.getUnitById(4).getOwner());
+        assertTrue(model.getUnitById(4).getWorkingColony().isEmpty());
         assertSame(rival, model.getUnitById(6));
         assertTrue(((UnitFreeColonist) rival).isHoldingWeapons());
         assertTrue(rival.isAtPlaceLocation());

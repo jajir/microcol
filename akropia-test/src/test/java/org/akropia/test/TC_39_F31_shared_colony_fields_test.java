@@ -54,6 +54,7 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractAkropiaTest {
         colony = game.openColonyAt(Location.of(24, 16), "New Amsterdam");
         colony.dragFieldWorkerTo(0, Direction.east);
         colony.verifyFieldWorker(0, Location.of(25, 16), 4);
+        colony.verifyFieldPreview(Direction.east, false);
         colony.verifyColonyPresent("New Amsterdam", true);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 100));
     }

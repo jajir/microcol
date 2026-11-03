@@ -1,13 +1,10 @@
 package org.akropia.model.unit;
 
 import java.util.Optional;
-import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 
 import org.akropia.model.CargoSlot;
 import org.akropia.model.Colony;
-import org.akropia.model.ColonyField;
-import org.akropia.model.ConstructionSlot;
 import org.akropia.model.Goods;
 import org.akropia.model.EuropeTradeQuote;
 import org.akropia.model.EducationSkills;
@@ -473,46 +470,10 @@ public class UnitFreeColonist extends CanMount {
     }
 
     @Override
-    public void placeToColonyField(final ColonyField colonyField,
-            final GoodsType producedGoodsType) {
-        validateColonyField(colonyField, producedGoodsType);
+    protected void prepareForColonyJob() {
         unequipAll();
-        becomeCivilianWhile(
-                () -> super.placeToColonyField(colonyField, producedGoodsType),
-                this::isAtPlaceColonyField);
-    }
-
-    /**
-     * A resident worker is a civilian again. The role is cleared before the
-     * placement can announce itself, so a listener never sees a special role in
-     * a job; if the placement itself fails before the unit moved, the role
-     * returns.
-     */
-    private void becomeCivilianWhile(final Runnable placement,
-            final BooleanSupplier placed) {
-        final MilitaryRole previous = militaryRole;
-        final boolean previousDelivered = interventionDelivered;
         militaryRole = MilitaryRole.COLONIAL;
         interventionDelivered = false;
-        try {
-            placement.run();
-        } catch (final RuntimeException | Error failure) {
-            if (!placed.getAsBoolean()) {
-                militaryRole = previous;
-                interventionDelivered = previousDelivered;
-            }
-            throw failure;
-        }
-    }
-
-    @Override
-    public void placeToColonyStructureSlot(
-            final ConstructionSlot structureSlot) {
-        validateColonyStructureSlot(structureSlot);
-        unequipAll();
-        becomeCivilianWhile(
-                () -> super.placeToColonyStructureSlot(structureSlot),
-                this::isAtPlaceConstructionSlot);
     }
 
     @Override
@@ -672,7 +633,7 @@ public class UnitFreeColonist extends CanMount {
 
     @Override
     public boolean canAttack() {
-        return isHoldingWeapons();
+        return !isFishing() && isHoldingWeapons();
     }
 
     @Override

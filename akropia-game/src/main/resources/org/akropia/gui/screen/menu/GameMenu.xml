@@ -21,7 +21,7 @@
 	<entry key="settingShowGrid">Show Grid</entry>
 	<entry key="settingAutosave">Save turn recovery points automatically</entry>
 	<entry key="settingTurnSummary">Show routine turn summary at turn start</entry>
-	<entry key="settingOpenEuropeOnArrival">Open Europe automatically when a ship arrives</entry>
+	<entry key="settingOpenEuropeOnArrival">Open Home port automatically when a ship arrives</entry>
 	<entry key="recoveryTitle">Choose a recovery point</entry>
 	<entry key="recoveryLatestPosition">Latest position</entry>
 	<entry key="recoveryLatestTurn">Latest turn</entry>
@@ -32,7 +32,7 @@
 	<entry key="settingVersion">Version: </entry>
 	
 	<entry key="campaignPanelButtonBack">Back</entry>
-	<entry key="campaignPanel_default_findNewWorld">New World</entry>
+	<entry key="campaignPanel_default_findNewWorld">new coast</entry>
 	<entry key="campaignPanel_default_buildArmy">Build an army</entry>
 	<entry key="campaignPanel_default_thrive">Thrive</entry>
 	
@@ -44,17 +44,17 @@
     <entry key="setupMapTwoIslands">Two islands</entry>
     <entry key="setupMapRivalExpedition">Rival expedition</entry>
     <entry key="setupNation">Nation</entry>
-    <entry key="setupNationDutch">Netherlands</entry>
-    <entry key="setupNationFrench">France</entry>
-    <entry key="setupNationEnglish">England</entry>
-    <entry key="setupNationSpanish">Spain</entry>
-    <entry key="setupNationNote">This scenario is fixed to the Netherlands.</entry>
+    <entry key="setupNationDutch">Corinth</entry>
+    <entry key="setupNationFrench">Phocaea</entry>
+    <entry key="setupNationEnglish">Athens</entry>
+    <entry key="setupNationSpanish">Miletus</entry>
+    <entry key="setupNationNote">This scenario is fixed to Corinth.</entry>
     <entry key="setupNationReferenceNote">Choose the nation you will play.</entry>
     <entry key="setupPlayerName">Player name</entry>
     <entry key="setupNameError">Enter 1–64 characters without control characters.</entry>
     <entry key="setupStart">Start game</entry>
     <entry key="setupMapReference">Reference expedition (four nations)</entry>
-    <entry key="setupMapGenerated">Generated new world</entry>
+    <entry key="setupMapGenerated">Generated new coast</entry>
     <entry key="setupMapNorthAmerica">North America</entry>
     <entry key="setupGeneratedClimate">Climate</entry>
     <entry key="setupGeneratedLand">Land share</entry>
@@ -67,7 +67,7 @@
     <entry key="setupLandHigh">High (55 %%)</entry>
     <entry key="setupGeneratedPreview">Preview: map %1$d × %2$d squares, %3$s climate, land %4$d %%, seed %5$s.</entry>
     <entry key="setupGeneratedSeedError">Enter a whole seed from 0 to 999999999.</entry>
-    <entry key="setupGeneratedFailed">The new world could not be generated. The current game was not changed.</entry>
+    <entry key="setupGeneratedFailed">The new coast could not be generated. The current game was not changed.</entry>
     <entry key="settingDeveloperHeading">Developer</entry>
     <entry key="settingDeveloperMode">Developer mode (F3)</entry>
     <entry key="settingDeveloperDescription">Show map coordinates and diagnostic information.</entry>

@@ -9,7 +9,8 @@ import org.akropia.model.Calendar.Season;
  */
 public enum Loc implements MessageKeyResource {
 
-    ok, backToGame, gameTitle, selectedShipCargo, selectShipCargo,
+    mapWork, cancelWork, returnToColony, workUnavailable, workingFor,
+    fishermanOf, ok, backToGame, gameTitle, selectedShipCargo, selectShipCargo,
     selectedCarrierCargo, selectCarrierCargo, statusBar_tile_notExplored,
     statusBar_tile_start, statusBar_tile_withUnit, statusBar_tile_unitCount,
     statusBar_era, statusBar_era_description, statusBar_gold,

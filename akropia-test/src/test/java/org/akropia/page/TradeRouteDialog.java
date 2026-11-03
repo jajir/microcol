@@ -112,7 +112,7 @@ public final class TradeRouteDialog extends AbstractScreen {
     }
 
     private String label(final TradeRouteStop stop) {
-        return stop.isEurope() ? "Europe"
+        return stop.isEurope() ? "Home port"
                 : getModel().getColonyById(stop.getColonyId()).orElseThrow()
                         .getName();
     }

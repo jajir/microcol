@@ -21,7 +21,7 @@
 
 	<entry key="mainMenu.view">Zobrazení</entry>
 	<entry key="mainMenu.view.center">Na aktivní jednotku</entry>
-	<entry key="mainMenu.view.europe">Evropský přístav</entry>
+	<entry key="mainMenu.view.europe">Domovský přístav</entry>
 	<entry key="mainMenu.view.turnReport">Turn report</entry>
 	<entry key="mainMenu.view.statistics">Statistiky</entry>
 	<entry key="mainMenu.view.menuItemGoals">Cíle mise</entry>
@@ -56,7 +56,7 @@
 	<entry key="chooseGoodAmount.everything">Všechno</entry>
 	<entry key="chooseGoodAmount.selectedAmount">Vybráno: </entry>
 
-	<entry key="europeDialog.caption">Evropský přístav</entry>
+	<entry key="europeDialog.caption">Domovský přístav</entry>
 	
 	<entry key="buyUnitDialog.title">Koupit jednotku</entry>
 	<entry key="buyUnitDialog.buttonBuyUnit">Koupit za</entry>
@@ -69,9 +69,9 @@
 	<entry key="newGameDialog.cancel">Zpět</entry>
 	<entry key="newGameDialog.startGame">Hrát</entry>
 
-	<entry key="europe.title">Evropa</entry>
-	<entry key="europe.shipsTravelingToNewWorld">Lodě plující do nového světa</entry>
-	<entry key="europe.shipsTravelingToEurope">Lodě plující do Evropy</entry>
+	<entry key="europe.title">Domovský přístav</entry>
+	<entry key="europe.shipsTravelingToNewWorld">Lodě plující do nového pobřeží</entry>
+	<entry key="europe.shipsTravelingToEurope">Lodě plující domů</entry>
 	<entry key="europe.pier">Molo</entry>
 	<entry key="europe.recruit">Najmout</entry>
 	<entry key="europe.buy">Koupit</entry>

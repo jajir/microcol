@@ -277,7 +277,7 @@ public class TC_30_F22_expert_purchase_test extends AbstractAkropiaTest {
                 .openSetting();
         settings.setCzechLanguage();
         EuropePortScreen europe = settings.goBack().loadGame()
-                .openEuroperPort("Evropa");
+                .openEuroperPort("Domovský přístav");
         europe.openBuyUnitScreen();
         ExpertPurchasePage purchase = new ExpertPurchasePage(getContext());
         purchase.verifyCzechOffer();
@@ -439,7 +439,7 @@ public class TC_30_F22_expert_purchase_test extends AbstractAkropiaTest {
                 .openSetting();
         settings.setCzechLanguage();
         EuropePortScreen europe = settings.goBack().loadGame()
-                .openEuroperPort("Evropa");
+                .openEuroperPort("Domovský přístav");
         org.akropia.page.BuyUnitScreen offer = europe.openBuyUnitScreen();
         offer.verifyShipOffer(org.akropia.model.UnitType.CARAVEL, "karavela",
                 1000, true);
@@ -544,7 +544,7 @@ public class TC_30_F22_expert_purchase_test extends AbstractAkropiaTest {
                 .openSetting();
         settings.setCzechLanguage();
         EuropePortScreen europe = settings.goBack().loadGame()
-                .openEuroperPort("Evropa");
+                .openEuroperPort("Domovský přístav");
         ExpertPurchasePage purchase = new ExpertPurchasePage(getContext());
         europe.openBuyUnitScreen();
         purchase.revealSpecialist("EXPERT_FARMER");

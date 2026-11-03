@@ -193,16 +193,16 @@ class TeProcessorNoticeTextTest {
         final TurnEvent bought = routeTransfer(true, false,
                 Goods.of(GoodsType.WEAPONS, 40), -50);
         assertEquals(
-                "Trade route Oil Run, Galleon #3, stop 1 (Europe): sold 60 Ore, +120 gold.",
+                "Trade route Oil Run, Galleon #3, stop 1 (Home port): sold 60 Ore, +120 gold.",
                 routeText(Locale.ROOT, sold));
         assertEquals(
-                "Trade route Oil Run, Galleon #3, stop 1 (Europe): bought 40 Weapons, -50 gold.",
+                "Trade route Oil Run, Galleon #3, stop 1 (Home port): bought 40 Weapons, -50 gold.",
                 routeText(Locale.ROOT, bought));
         assertEquals(
-                "Obchodní trasa Oil Run, galeona č. 3, zastávka 1 (Evropa): prodáno 60 × Železná ruda, +120 zlata.",
+                "Obchodní trasa Oil Run, galeona č. 3, zastávka 1 (Domovský přístav): prodáno 60 × Železná ruda, +120 zlata.",
                 routeText(CZECH, sold));
         assertEquals(
-                "Obchodní trasa Oil Run, galeona č. 3, zastávka 1 (Evropa): nakoupeno 40 × Zbraně, -50 zlata.",
+                "Obchodní trasa Oil Run, galeona č. 3, zastávka 1 (Domovský přístav): nakoupeno 40 × Zbraně, -50 zlata.",
                 routeText(CZECH, bought));
         assertNull(new TeProcessorTradeRouteTransfer(i18n(Locale.ROOT))
                 .apply(thrownAway(GoodsType.ORE, 3)));

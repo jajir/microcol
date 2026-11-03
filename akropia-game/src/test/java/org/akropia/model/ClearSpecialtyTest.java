@@ -292,7 +292,7 @@ class ClearSpecialtyTest {
         foreign.setPlaceColonyField(null);
         final PlaceMapPo place = new PlaceMapPo();
         place.setLocation(
-                colonyPo.getLocation().add(workedField.getDirection()));
+                colonyPo.getLocation().add(Direction.north.getVector()));
         place.setOrientation(Direction.west);
         foreign.setPlaceMap(place);
         data.getModel().getUnits().add(foreign);

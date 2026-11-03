@@ -21,7 +21,9 @@ public class ImageLoaderImpl {
             new HiddenCoastImageLoader(), new ImageLoaderGoods(),
             new ImageLoaderBuilding(), new ImageLoaderButtons(),
             new ImageLoaderGameToolbar(), new ImageLoaderColonies(),
-            new ImageLoaderExtra(), new ImageLoaderUnit());
+            new ImageLoaderNationalFlags(false),
+            new ImageLoaderNationalFlags(true), new ImageLoaderExtra(),
+            new ImageLoaderUnit());
 
     @Inject
     ImageLoaderImpl(final ImageCache imageCache) {

@@ -566,7 +566,7 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 .stream().filter(route -> route.getName().equals(routeName))
                 .findFirst().orElseThrow().getStops().get(stopIndex);
         assertEquals(expected,
-                stop.isEurope() ? "Europe"
+                stop.isEurope() ? "Home port"
                         : getModel().getColonyById(stop.getColonyId())
                                 .map(colony -> colony.getName())
                                 .orElse("lost " + stop.getColonyId()));
@@ -579,7 +579,7 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 .getTradeRouteAssignment(carrier(unitId)).orElseThrow()
                 .getStops().get(stopIndex);
         assertEquals(expected,
-                stop.isEurope() ? "Europe"
+                stop.isEurope() ? "Home port"
                         : getModel().getColonyById(stop.getColonyId())
                                 .map(colony -> colony.getName())
                                 .orElse("lost " + stop.getColonyId()));

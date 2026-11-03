@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.akropia.model.campaign.MissionImpl;
 
 /**
- * Native advisor report (R-0201): the nations and learned settlements of one
+ * Local advisor report (R-0201): the nations and learned settlements of one
  * viewer, chief facts only after the chief has told them, isolation between
  * European viewers, relation refresh, pure reads and reload.
  */

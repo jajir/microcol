@@ -25,7 +25,7 @@ import org.akropia.model.store.UnitPo;
 import com.google.gson.Gson;
 
 /**
- * Native market of a settlement (R-0159): the offer and demand rules, the
+ * Local market of a settlement (R-0159): the offer and demand rules, the
  * treasury and restock bounds of owner updates, the admission gates with their
  * reasons, the land introduction, the carrier's expedition from its square to
  * its departure, the village exception for repeated goods, and the saved form.

@@ -4,7 +4,7 @@
     <entry key="title">Pay back taxes</entry>
     <entry key="commodity">Boycotted commodity</entry>
     <entry key="arrears">Arrears to pay: %s gold.</entry>
-    <entry key="restore">Paying lifts the boycott: buying and selling %s in Europe will be allowed again. Other boycotts stay.</entry>
+    <entry key="restore">Paying lifts the boycott: buying and selling %s in Home port will be allowed again. Other boycotts stay.</entry>
     <entry key="treasury">Treasury: %s gold. Payment: %s gold.</entry>
     <entry key="insufficient">Not enough gold. This payment needs %s gold.</entry>
     <entry key="pay">Pay</entry>

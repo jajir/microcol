@@ -34,7 +34,7 @@ public class EuropePortScreen extends AbstractScreen {
     private final PageComponentPanelDock pageComponentPanelDock;
 
     public static EuropePortScreen of(final TestContext context) {
-        return of(context, "Europe");
+        return of(context, "Home port");
     }
 
     public static EuropePortScreen of(final TestContext context,

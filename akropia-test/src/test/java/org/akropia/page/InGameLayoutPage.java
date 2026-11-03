@@ -331,7 +331,8 @@ public final class InGameLayoutPage extends AbstractScreen {
 
     public void saveEvidence(final String name) throws Exception {
         final javafx.scene.image.WritableImage image = WaitForAsyncUtils
-                .asyncFx(() -> snapshotScene(page().getScene()))
+                .asyncFx(() -> snapshotScene(
+                        getContext().getPrimaryStage().getScene()))
                 .get(10, TimeUnit.SECONDS);
         final File file = new File("target/warehouse-qa", name);
         file.getParentFile().mkdirs();

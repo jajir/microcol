@@ -8,6 +8,40 @@
   "sourceRoot": "akropia-game/src/graphics",
   "runtimeRoot": "akropia-game/src/main/resources/images",
   "groups": {
+    "national-flags": {
+  "family": "Twelve identities, R-0402/R-0403",
+  "outputs": [
+      {"output":"fishing-boat.png","source":"fishing-boat.svg","render":"zoom","zoom":2,"size":[88,36],"transparent":true,"consumer":"PaintService outdoor fishermen","display":"44 x 18 logical px","stroke":"2 logical px black ballpoint, flat fill"},
+    {
+      "output": "national-flags.png",
+      "source": "national-flags.svg",
+      "render": "zoom",
+      "zoom": 2,
+      "size": [
+        2880,
+        240
+      ],
+      "transparent": true,
+      "consumer": "ImageLoaderNationalFlags",
+      "display": "120 x 80",
+      "stroke": "2 logical pixels, flat fills and irregular vector contours"
+    },
+    {
+      "output": "national-flags-small.png",
+      "source": "national-flags-small.svg",
+      "render": "zoom",
+      "zoom": 2,
+      "size": [
+        720,
+        60
+      ],
+      "transparent": true,
+      "consumer": "ImageLoaderNationalFlags",
+      "display": "30 x 20",
+      "stroke": "2 logical pixels, flat fills and irregular vector contours"
+    }
+  ]
+},
     "buildings": {
       "family": "41 colony buildings, R-0352/R-0361",
       "outputs": [

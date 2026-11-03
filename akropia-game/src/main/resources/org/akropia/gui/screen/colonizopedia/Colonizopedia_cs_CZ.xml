@@ -21,19 +21,19 @@
 	<entry key="topic_production_body">Terén určuje, co obdělané pole vyrobí. Stavební projekty používají kladiva a nástroje. Když je práce s kladivy hotová, ale chybějí nástroje, projekt čeká a hlášení tahu ho uvede. Změna současného projektu zachová už nashromážděná kladiva. Dokončení současného projektu lze zaplatit zlatem; cena se ukáže před potvrzením. Vylepšení kostela a katedrály mění skutečnou náboženskou produkci, nejen zobrazená čísla.</entry>
 
 	<entry key="topic_trade_title">Obchod, daně a bojkot</entry>
-	<entry key="topic_trade_body">V Evropě kupujete a prodáváte zboží za tržní ceny. Velký prodej nebo nákup posune ceny daného národa a klidné zboží se pozvolna vrací k výchozím cenám. Cena lodí a dělostřelectva po každém vašem nákupu vzroste. Celnice každý tah automaticky vyváží vybrané zboží. Daňový požadavek Koruny může zboží uvalit do bojkotu: nákup, prodej a dovoz nástrojů pro něj se odmítají, dokud nesplatíte dlužnou daň. Odmítnutý obchod ukáže důvod a nic nezmění.</entry>
+	<entry key="topic_trade_body">V domovském přístavu kupujete a prodáváte zboží za tržní ceny. Velký prodej nebo nákup posune ceny daného národa a klidné zboží se pozvolna vrací k výchozím cenám. Cena lodí a dělostřelectva po každém vašem nákupu vzroste. Celnice každý tah automaticky vyváží vybrané zboží. Daňový požadavek mateřského města může zboží uvalit do bojkotu: nákup, prodej a dovoz nástrojů pro něj se odmítají, dokud nesplatíte dlužnou daň. Odmítnutý obchod ukáže důvod a nic nezmění.</entry>
 
 	<entry key="topic_diplomacy_title">Diplomacie</entry>
-	<entry key="topic_diplomacy_body">Každá dvojice evropských národů je ve míru nebo ve válce a vztah sdílejí obě strany. Mír se vyjednává za zlato a jeho cenu hra ukáže dřív, než se rozhodnete; přijetí uzavře mír, odmítnutí nebo zrušení nechá válku v platnosti. V kontaktu s evropským soupeřem můžete přes způsobilého vyslance požádat o tribut. Žádost a výsledek se ukážou před potvrzením a přijatý tribut převede dohodnutou částku jednou. Spojenectví se nabízí v kontaktu, před přijetím ukáže své povinnosti a výslovně se ukončuje.</entry>
+	<entry key="topic_diplomacy_body">Každá dvojice městských států je ve míru nebo ve válce a vztah sdílejí obě strany. Mír se vyjednává za zlato a jeho cenu hra ukáže dřív, než se rozhodnete; přijetí uzavře mír, odmítnutí nebo zrušení nechá válku v platnosti. V kontaktu s ostatním soupeřem můžete přes způsobilého vyslance požádat o tribut. Žádost a výsledek se ukážou před potvrzením a přijatý tribut převede dohodnutou částku jednou. Spojenectví se nabízí v kontaktu, před přijetím ukáže své povinnosti a výslovně se ukončuje.</entry>
 
 	<entry key="topic_combat_title">Boj</entry>
 	<entry key="topic_combat_body">Útok vede ze sousedního pole a musí být potvrzen; potvrzení uvádí vybraného obránce. Útok na soupeře ve míru nejdřív vyžaduje výslovné vyhlášení války. Pozemní bitvy používají konečnou sílu obou stran a ta určuje šanci na výhru. Námořní bitva může loď poškodit nebo potopit; pro cestující a zboží platí pravidla ztráty. Kolonie padne až po porážce ozbrojených obránců. Zůstanou-li jen civilisté, musí se porazit i jejich skupinová obrana, a pak celá kolonie s pracovníky přejde na útočníka. Přijatý útok spotřebuje pohyb obou stran; přeživší jej obnoví v dalším tahu.</entry>
 
 	<entry key="topic_independence_title">Nezávislost</entry>
-	<entry key="topic_independence_body">Vyhlášení nezávislosti je samostatné potvrzení. Vyžaduje dost podpory národa a alespoň jednu vlastní pobřežní kolonii. Potvrzení nejdřív ukáže důsledky a zrušení nic nezmění. Po vyhlášení se kolonie, kde je místní podpora alespoň poloviční, mobilizují: část ozbrojených veteránů na svém poli přejde na nový národ. Podpora povstalců se ukazuje u každé kolonie i jako národní hodnota.</entry>
+	<entry key="topic_independence_body">Vyhlášení samostatné polis je samostatné potvrzení. Vyžaduje dost podpory národa a alespoň jednu vlastní pobřežní kolonii. Potvrzení nejdřív ukáže důsledky a zrušení nic nezmění. Po vyhlášení se kolonie, kde je místní podpora alespoň poloviční, mobilizují: část ozbrojených veteránů na svém poli přejde na nový národ. Podpora povstalců se ukazuje u každé kolonie i jako národní hodnota.</entry>
 
 	<entry key="topic_scoring_title">Statistiky a skóre</entry>
-	<entry key="topic_scoring_body">Klávesou R otevřete statistiky. Ukazují čárové grafy zaznamenaných tahů této hry: Zlato (pokladna), Vojenská síla, Bohatství (hospodářská hodnota zboží), Score a evropské vztahy. Score se za každý tah zaznamenává jako Bohatství plus Vojenská síla plus Zlato; jde o záznam tahu, ne o váš konečný výsledek. Zatím není dostupné: konečné skóre na konci hry, části skóre za obyvatele a Kongres, úprava podle obtížnosti a síň slávy nejlepších výsledků. Odchod ze hry skóre nezapisuje. Konec hry výhrou či prohrou v revoluci také zatím není úplný.</entry>
+	<entry key="topic_scoring_body">Klávesou R otevřete statistiky. Ukazují čárové grafy zaznamenaných tahů této hry: Zlato (pokladna), Vojenská síla, Bohatství (hospodářská hodnota zboží), Score a městské vztahy. Score se za každý tah zaznamenává jako Bohatství plus Vojenská síla plus Zlato; jde o záznam tahu, ne o váš konečný výsledek. Zatím není dostupné: konečné skóre na konci hry, části skóre za obyvatele a Kongres, úprava podle obtížnosti a síň slávy nejlepších výsledků. Odchod ze hry skóre nezapisuje. Konec hry výhrou či prohrou v revoluci také zatím není úplný.</entry>
 
 
 	<entry key="topic_terrain_title">Terén</entry>
@@ -56,27 +56,27 @@
 	<entry key="renewable">Nevyčerpává se.</entry>
 
 <entry key="topic_units_title">Jednotky</entry>
-<entry key="topic_units_body">Porovnejte všechny typy jednotek níže. Údaje jsou základní vlastnosti. Výstroj může měnit pohyb a boj: koně zrychlí pohyb, zbraně umožní kolonistům útočit. Vojáci, pionýři a další role upravují tyto typy. Konečnou bojovou sílu ovlivňuje i role, poškození a bonusy; viz Boj. Oddíl pojme až 100 kusů zboží. Ceny v Evropě jsou počáteční; lodě a děla mohou zdražovat. Pionýrské práce vyžadují nástroje.</entry>
+<entry key="topic_units_body">Porovnejte všechny typy jednotek níže. Údaje jsou základní vlastnosti. Výstroj může měnit pohyb a boj: koně zrychlí pohyb, zbraně umožní kolonistům útočit. Vojáci, pionýři a další role upravují tyto typy. Konečnou bojovou sílu ovlivňuje i role, poškození a bonusy; viz Boj. Oddíl pojme až 100 kusů zboží. Ceny v domovském přístavu jsou počáteční; lodě a děla mohou zdražovat. Pionýrské práce vyžadují nástroje.</entry>
 <entry key="unitMovement">Pohyb: %s; základní body za tah: %d</entry>
 <entry key="unitCargo">Nákladové oddíly: %d</entry>
 <entry key="unitPassenger">Přeprava lodí — počet oddílů: %d</entry>
 <entry key="unitNotPassenger">Přeprava lodí: nelze</entry>
-<entry key="unitPrice">Počáteční cena v Evropě: %d zlata</entry>
-<entry key="unitNotForSale">Nákup v Evropě: nelze</entry>
+<entry key="unitPrice">Počáteční cena v domovském přístavu: %d zlata</entry>
+<entry key="unitNotForSale">Nákup v domovském přístavu: nelze</entry>
 <entry key="unitExpertise">Výrobní odbornost: %s ×%s</entry>
 <entry key="unitFarmer">Bonus k jídlu platí pouze na souši.</entry>
 <entry key="unitFisherman">Bonus k jídlu platí pouze na vodě.</entry>
 <entry key="unitPioneer">S nástroji — orba: %s; cesty: %s; kácení: %s</entry>
 <entry key="unitCombat">Může zahájit boj: %s</entry>
 <entry key="unitArmedRoles">se zbraněmi</entry>
-<entry key="unitScout">Odborník na průzkum: zkoumá zvěsti a navštěvuje domorodé osady; širší rozhled i bez koně.</entry>
+<entry key="unitScout">Odborník na průzkum: zkoumá zvěsti a navštěvuje místní osady; širší rozhled i bez koně.</entry>
 <entry key="unitHardyPioneer">Odborný pionýr: dokončuje úpravy rychleji a získává více dřeva při kácení.</entry>
 <entry key="unitVeteran">Veterán: s výzbrojí je silnější než běžný voják; koně umožní jízdní bojovou roli.</entry>
-<entry key="unitMissionary">Odborný misionář: může zakládat a přebírat domorodé misie.</entry>
-<entry key="unitServant">Postih výroby v budovách; může postoupit vzděláním a učit se od domorodců.</entry>
-<entry key="unitCriminal">Větší postih výroby v budovách; vzděláním nejprve postoupí na smluvního služebníka. Nemůže se přímo učit od domorodců.</entry>
+<entry key="unitMissionary">Odborný misionář: může zakládat a přebírat místní misie.</entry>
+<entry key="unitServant">Postih výroby v budovách; může postoupit vzděláním a učit se od místních obyvatel.</entry>
+<entry key="unitCriminal">Větší postih výroby v budovách; vzděláním nejprve postoupí na smluvního služebníka. Nemůže se přímo učit od místních obyvatel.</entry>
 <entry key="unitTreasure">Převáží vlastní hodnotu pokladu. Potřebuje šest volných lodních oddílů současně a nemůže pracovat ani zakládat kolonii.</entry>
-<entry key="unitBrave">Domorodý bojovník. Zbraně a koně rozlišují ozbrojené bojovníky, jízdní bojovníky a ozbrojené jezdce.</entry>
+<entry key="unitBrave">Místní bojovník. Zbraně a koně rozlišují ozbrojené bojovníky, jízdní bojovníky a ozbrojené jezdce.</entry>
 <entry key="unitArtillery">Dělostřelectvo má odlišnou sílu útoku a obrany. Poškození je oslabuje; boj mimo vlastní opevněnou kolonii je znevýhodněn.</entry>
 	<entry key="topic_buildings_title">Budovy</entry>
 	<entry key="topic_buildings_body">Prohlédněte si budovy a jejich vylepšení, seskupená od první úrovně po poslední. Cena udává všechna kladiva a nářadí potřebná pro danou úroveň, nikoli rozdíl mezi úrovněmi. Cenu ve zlatě za urychlení ukazuje samostatně dialog výstavby. Uvedený výkon je základ na jednoho svobodného kolonistu za tah; skutečný výsledek ovlivňují pracovníci, zásoby a bonusy. Výnos bez pracovníků je uveden zvlášť. Jde o přehled: dostupné stavby závisejí na vaší kolonii.</entry>
@@ -131,4 +131,18 @@
 	<entry key="building_NEWSPAPER">Nahrazuje bonus tiskařského stroje bonusem budovy 100 %% k produkci sov; oba bonusy se nesčítají.</entry>
 	<entry key="building_CUSTOM_HOUSE">Automaticky prodává způsobilé přebytky podle nastavení vývozu. Ponechte kolonii rezervu; nadále platí bojkoty a aktuální obchodní pravidla.</entry>
 
+<entry key="topic_identities_title">Městské státy a místní národy</entry>
+<entry key="topic_identities_body">Volně historická středomořská výprava s atmosférou kolem roku 600 př. n. l. Mateřské město výpravu financuje a chrání; požaduje odvody a poslušnost. Rostoucí osada může vyhlásit samostatnou polis. Jde o herní stylizaci; dosavadní zobrazovaný kalendář zůstává beze změny. Vlajky jsou herní symboly, nikoli rekonstrukce historických státních vlajek. Tábor, osada a město označují konkrétní místo, nikoli úroveň celého národa.</entry>
+<entry key="identity0">Korint — Obchodníci financují nový přístav. Očekávají prosperitu, osadníci chtějí vlastní polis. Zachovaný herní profil má mírnější změny tržních cen a lepší počáteční obchodní loď.</entry>
+<entry key="identity1">Fókaia — Výprava pluje daleko na západ a spoléhá na zásoby, přístavy a dohody s místními. Zachovaný profil půlí přírůstek místního znepokojení.</entry>
+<entry key="identity2">Athény — Výprava hledá obilí a bezpečné přístavy pro rostoucí město. Vůdce potřebuje důvěru osadníků i podporu domova. Zachovaný profil snižuje práh přistěhovalectví.</entry>
+<entry key="identity3">Milét — Zkušení mořeplavci hledají pobřeží a obchodní spojení; kontakty mají proměnit v trvalé sousedství. Zachovaný herní profil přidává 50 %% při útoku na místní sídla; nejde o historické tvrzení.</entry>
+<entry key="identity4">Féničané — Přístavní města a námořní obchod: prostředníci, partneři i obchodní soupeři. Jejich osady jsou přístavní obchodní stanice.</entry>
+<entry key="identity5">Egypťané — Říční města a zemědělská krajina. Výprava jedná s místními představiteli o přístupech do přístavů a obchodu.</entry>
+<entry key="identity6">Etruskové — Italská města s různými zájmy a vztahy k řeckým osadníkům.</entry>
+<entry key="identity7">Libyjci — Pobřežní i vnitrozemské komunity západně od Egypta a jejich soužití s příchozími.</entry>
+<entry key="identity8">Thrákové — Severní Egeida a vnitrozemí; jednání o půdě, cestách a sousedství.</entry>
+<entry key="identity9">Ilyrové — Jadranské pobřeží a hornaté zázemí; zátoky, průchody a pobřežní osady.</entry>
+<entry key="identity10">Skythové — Severní Černomoří a step; kontakty pobřežních měst s komunitami ve vnitrozemí.</entry>
+<entry key="identity11">Arabové — Arabské a přilehlé pouštní oblasti; oázy, karavanní spojení a přístup k vodě.</entry>
 </properties>

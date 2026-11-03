@@ -33,6 +33,9 @@ import javafx.scene.Node;
 import javafx.scene.AccessibleAction;
 import java.util.function.Consumer;
 import org.akropia.model.Unit;
+import org.akropia.model.ColonyJobChoice;
+import org.akropia.gui.Loc;
+import org.akropia.gui.GoodsTypeName;
 import org.akropia.gui.UnitTypes;
 import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
@@ -499,6 +502,24 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         card.getChildren().add(route);
     }
 
+    private void addMapJob(final String text, final String id,
+            final Runnable command, final boolean disabled) {
+        final MenuItem item = new MenuItem(text);
+        item.setUserData("mapJob");
+        item.setId(id);
+        item.setDisable(disabled);
+        item.setOnAction(event -> {
+            try {
+                command.run();
+            } catch (IllegalArgumentException
+                    | IllegalStateException rejected) {
+                toolbarEvents.post(StatusBarMessageEvent.outcome(
+                        currentI18n.get(Loc.workUnavailable), Source.GAME));
+            }
+        });
+        unitActions.getItems().add(item);
+    }
+
     public void showUnitActions(final Node owner, final double screenX,
             final double screenY, final List<Unit> units, final Unit selected,
             final Consumer<Unit> selectUnit) {
@@ -516,6 +537,25 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
             choice.setSelected(unit.equals(selected));
             choice.setOnAction(event -> selectUnit.accept(unit));
             unitChoices.getItems().add(choice);
+        }
+        unitActions.getItems()
+                .removeIf(item -> "mapJob".equals(item.getUserData()));
+        for (final ColonyJobChoice job : selected.getMapJobChoices()) {
+            addMapJob(
+                    currentI18n.get(Loc.mapWork,
+                            currentI18n.get(GoodsTypeName
+                                    .getNameForGoodsType(job.getGoodsType())),
+                            job.getColony().getName()),
+                    "mapJob-" + job.getColony().getId() + "-"
+                            + job.getGoodsType().name(),
+                    job::execute, false);
+        }
+        if (selected.getWorkingColony().isPresent() && !selected.isFishing()) {
+            addMapJob(currentI18n.get(Loc.cancelWork), "cancelColonyWork",
+                    selected::cancelColonyWork, !selected.canLeaveColony());
+            addMapJob(currentI18n.get(Loc.returnToColony), "returnToColony",
+                    selected::returnToWorkingColony,
+                    !selected.canReturnToWorkingColony());
         }
         unitActions.show(owner, screenX, screenY);
         unitActions.getScene().getStylesheets().setAll(

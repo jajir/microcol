@@ -315,6 +315,10 @@ public final class GamePanelMouseListener {
         }
         final Unit selected = selectedUnitManager.getSelectedUnit()
                 .filter(units::contains).orElse(units.get(0));
+        if (selected.isFishing()) {
+            gamePanelPresenter.tryToOpenColonyDetail(location);
+            return;
+        }
         selectedUnitManager.setSelectedUnit(selected);
         // Selection refreshes button availability and the information panel
         // first.

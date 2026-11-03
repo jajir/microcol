@@ -124,6 +124,7 @@ class IndependenceCapturedColonyTest {
         final Player france = model.getPlayerByName("France");
         final Colony quebec = model.getColonyById(0).orElseThrow();
         final Colony montreal = model.getColonyById(1).orElseThrow();
+        ColonyBattles.houseFieldWorkers(model, quebec);
         assertEquals(1, quebec.getPopulation());
         model.declareHostilities(france, dutch);
         // The armed French colonist guarding the square would block capture.

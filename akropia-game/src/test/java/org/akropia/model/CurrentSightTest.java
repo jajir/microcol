@@ -45,6 +45,8 @@ class CurrentSightTest {
                 .loadFromClassPath("/maps/free-play.akropia").getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         model.startGame();
+        ColonyBattles.houseFieldWorkers(model,
+                model.getColonyAt(MONTREAL).orElseThrow());
         dutch = model.getPlayerByName("Dutch");
         france = model.getPlayerByName("France");
         king = model.getPlayerByName("France's King");

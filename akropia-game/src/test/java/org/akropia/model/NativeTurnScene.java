@@ -92,7 +92,7 @@ final class NativeTurnScene {
         return this;
     }
 
-    /** Native settlement of a nation, at an island offset. */
+    /** Local settlement of a nation, at an island offset. */
     NativeTurnScene settlement(final int id, final NativeNation nation,
             final boolean capital, final int dx, final int dy) {
         final NativeSettlementPo settlement = new NativeSettlementPo();

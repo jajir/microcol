@@ -21,7 +21,7 @@ import org.akropia.model.store.UnitPo;
 import org.akropia.model.unit.UnitFreeColonist;
 
 /**
- * Native course of an offered skill (R-0148): the admitted and refused pupils,
+ * Local course of an offered skill (R-0148): the admitted and refused pupils,
  * the single course per settlement, the stale offer and the current actor, the
  * exact fourth owner update with one grant, the safe waiting when no square is
  * free, the hostility cancel, the manual leave, and the saved stages. Owner

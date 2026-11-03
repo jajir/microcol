@@ -15,6 +15,6 @@
 	<entry key="ordainALREADY_MISSIONARY">This colonist is already a missionary. Nothing was changed.</entry>
 	<entry key="ordainASSIGNED_WORKER">This colonist works in a field or building. Leave that job first, then ordain.</entry>
 	<entry key="ordainACTIVE_ORDER">This colonist has an active order, such as sentry, fortification or pioneer work. Cancel that order first.</entry>
-	<entry key="ordainNOT_IN_EUROPE_OR_COLONY">Ordination needs this colonist on the European pier or standing outside the fields and buildings of your colony.</entry>
+	<entry key="ordainNOT_IN_EUROPE_OR_COLONY">Ordination needs this colonist on the home pier or standing outside the fields and buildings of your colony.</entry>
 	<entry key="ordainNO_CHURCH">This colony needs a church or cathedral. A chapel alone is not enough.</entry>
 </properties>

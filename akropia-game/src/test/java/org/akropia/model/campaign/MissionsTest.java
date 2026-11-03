@@ -29,8 +29,8 @@ public class MissionsTest {
                 : "You didn't reach freedom before year 1800. You failed to reach freedom.",
                 i18n.get(Missions.gameOver_timeIsUp));
         assertEquals(czech
-                ? "Vyhlásil jsi nezávislot. Nýní se připrav na útok královské armády."
-                : "You declared independence. Now get ready for Royal army.",
+                ? "Vyhlásil jsi samostatnou polis. Připrav se na útok vojska mateřského města."
+                : "You declared an independent polis. Prepare for the army of the mother city.",
                 i18n.get(Missions.independenceWasDeclared_caption));
     }
 

@@ -83,6 +83,33 @@ public final class ColonyJobChoice {
                         field.getTerrain()) > 1;
     }
 
+    static List<ColonyJobChoice> forMapWorker(final Model model,
+            final Unit worker) {
+        if (!worker.isAtPlaceLocation() || worker.isFishing()) {
+            return List.of();
+        }
+        final List<ColonyJobChoice> choices = new ArrayList<>();
+        for (final Colony colony : model.getColonies()) {
+            for (final ColonyField field : colony.getColonyFields()) {
+                if (!field.getLocation().equals(worker.getLocation())) {
+                    continue;
+                }
+                for (final GoodsType goods : GoodsType.GOOD_TYPES) {
+                    if (canUseField(colony, worker, field, goods)) {
+                        choices.add(new ColonyJobChoice(model, colony, worker,
+                                Kind.CURRENT_FIELD, goods, field, field, field,
+                                null, null, null));
+                    }
+                }
+            }
+        }
+        return List.copyOf(choices);
+    }
+
+    public Colony getColony() {
+        return colony;
+    }
+
     static List<ColonyJobChoice> forWorker(final Model model,
             final Colony colony, final Unit worker) {
         if (worker == null) {
@@ -90,8 +117,11 @@ public final class ColonyJobChoice {
         }
         final List<ColonyJobChoice> choices = new ArrayList<>();
         final ColonyField current = colony.getColonyFields().stream()
-                .filter(field -> field.isWorkedBy(worker)).findFirst()
-                .orElse(null);
+                .filter(field -> field.isWorkedBy(worker)
+                        || field.isEmpty() && worker.isAtPlaceLocation()
+                                && field.getLocation()
+                                        .equals(worker.getLocation()))
+                .findFirst().orElse(null);
         final boolean actorAvailable = colony.canWorkerActHere(worker);
         final boolean canMove = colony.canAcceptWorker(worker);
         for (final GoodsType goods : GoodsType.GOOD_TYPES) {

@@ -713,7 +713,10 @@ public class Model {
         final Colony col = draftColony(player, location,
                 ColonyNames.normalize(name));
         final List<ColonyField> fields = col
-                .getEmptyFieldsWithMaxGrainProduction();
+                .getEmptyFieldsWithMaxGrainProduction().stream()
+                .filter(field -> ((AbstractUnit) unit).colonyTransferCost(col,
+                        field.getLocation()) >= 0)
+                .collect(java.util.stream.Collectors.toList());
         final List<Location> land = foundingLand(location, fields);
         Preconditions.checkArgument(
                 expectedLand == null || expectedLand.equals(land),
@@ -781,9 +784,12 @@ public class Model {
             return List.of();
         }
         final Location location = founder.getLocation();
-        return foundingLand(location,
-                draftColony(founder.getOwner(), location, "")
-                        .getEmptyFieldsWithMaxGrainProduction());
+        final Colony draft = draftColony(founder.getOwner(), location, "");
+        return foundingLand(location, draft
+                .getEmptyFieldsWithMaxGrainProduction().stream()
+                .filter(field -> ((AbstractUnit) founder)
+                        .colonyTransferCost(draft, field.getLocation()) >= 0)
+                .collect(java.util.stream.Collectors.toList()));
     }
 
     /**
@@ -4360,7 +4366,7 @@ public class Model {
         return unit != null && isGameRunning() && !endingTurn
                 && getCurrentPlayer() == unit.getOwner()
                 && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
-                && !unit.isCrownSeized()
+                && !unit.isCrownSeized() && !unit.isFishing()
                 && (unit.isAtPlaceLocation()
                         || unit.isAtEuropePier() && unit.isStorable())
                 && unit.getAction().getType() == from && !hasGoToOrder(unit);
@@ -4562,7 +4568,8 @@ public class Model {
         return unit instanceof AbstractUnit && isGameRunning() && !endingTurn
                 && getCurrentPlayer() == unit.getOwner()
                 && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
-                && unit.isAtPlaceLocation() && unit.getAction().isNoAction()
+                && unit.isAtPlaceLocation() && !unit.isFishing()
+                && unit.getAction().isNoAction()
                 && (!hasGoToOrder(unit) || unit.isShip())
                 && ((AbstractUnit) unit).getTradeRouteAssignment().isEmpty()
                 && (!(unit instanceof org.akropia.model.unit.Ship)
@@ -5245,6 +5252,9 @@ public class Model {
      */
     private Optional<Colony> receivingColony(final Unit unit) {
         final Place place = unit.getPlace();
+        if (residenceOf(place).isPresent()) {
+            return residenceOf(place);
+        }
         if (place instanceof PlaceLocation) {
             return getColonyAt(unit.getLocation())
                     .filter(colony -> colony.getOwner() == unit.getOwner()
@@ -9343,6 +9353,9 @@ public class Model {
 
     private Optional<Location> nativeResidentSquare(final Unit unit,
             final Player owner) {
+        if (unit.getWorkingColony().isPresent()) {
+            return unit.getWorkingColony().map(Colony::getLocation);
+        }
         if (unit.isAtPlaceLocation()) {
             return Optional.of(unit.getLocation());
         }
@@ -10050,11 +10063,50 @@ public class Model {
         return playerStore;
     }
 
+    void releaseOutdoorWorkers(final Colony colony, final boolean lostColony) {
+        final List<Unit> affected = unitStorage.getUnits().stream()
+                .filter(unit -> unit.isAtPlaceColonyField()
+                        && unit.getWorkingColony().orElse(null) == colony
+                        || unit.isFishing() && unit.getFishingColony()
+                                .orElse(null) == colony)
+                .filter(unit -> lostColony
+                        || unit.isFishing() && colony.getColonyFields().stream()
+                                .noneMatch(field -> field.getLocation().equals(
+                                        unit.getLocation()) && field.isValid()
+                                        && field.canProduce(GoodsType.GRAIN)))
+                .sorted(java.util.Comparator.comparingInt(Unit::getId))
+                .collect(java.util.stream.Collectors.toList());
+        for (final Unit unit : affected) {
+            Location safe = null;
+            if (unit.isFishing()) {
+                final List<Location> candidates = new ArrayList<>();
+                for (int y = 0; y <= map.getMaxLocationY(); y++) {
+                    for (int x = 0; x <= map.getMaxLocationX(); x++) {
+                        final Location at = Location.of(x, y);
+                        if (map.isValid(at) && map.getTerrainTypeAt(at).isLand()
+                                && unit.isPossibleToMoveAt(at)
+                                && getColonyAt(at).isEmpty()
+                                && getUnitsAt(at).isEmpty()) {
+                            candidates.add(at);
+                        }
+                    }
+                }
+                safe = candidates.stream().min(java.util.Comparator
+                        .comparingInt((Location at) -> at
+                                .getDistanceChebyshev(unit.getLocation()))
+                        .thenComparingInt(Location::getY)
+                        .thenComparingInt(Location::getX)).orElse(null);
+            }
+            ((AbstractUnit) unit).releaseOutdoorWork(colony, safe);
+        }
+    }
+
     void destroyColony(final Colony colony) {
         Preconditions.checkNotNull(colony);
         if (!colonies.contains(colony)) {
             return;
         }
+        releaseOutdoorWorkers(colony, true);
         int lostShips = 0;
         for (final Unit unit : new ArrayList<>(
                 getUnitsAt(colony.getLocation()))) {

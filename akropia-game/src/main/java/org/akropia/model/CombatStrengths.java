@@ -407,6 +407,17 @@ public final class CombatStrengths {
     static Optional<CombatStrengths> forColonyBattleFrom(final Model model,
             final Unit attacker, final Location attackerSquare,
             final ColonyDefense defense) {
+        if (attacker.isShip() && attacker.isAtPlaceLocation()
+                && defense.getDefender().isFishing()
+                && defense.getKind() == ColonyDefense.Kind.FIELD) {
+            return Optional.of(new CombatStrengths(
+                    new CombatStrength(
+                            shipBase(attacker.getType()), 50, 0, 0, 0),
+                    new CombatStrength(1, 0, 0, 0, 0),
+                    "FISHING:" + state(attacker) + ':'
+                            + state(defense.getDefender()) + ':'
+                            + defense.getInputs()));
+        }
         if (!isArmedLand(attacker) || !attacker.isAtPlaceLocation()) {
             return Optional.empty();
         }

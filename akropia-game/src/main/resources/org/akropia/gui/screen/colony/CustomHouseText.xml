@@ -3,7 +3,7 @@
 <properties>
   <entry key="open">Custom-house exports…</entry>
   <entry key="title">Custom house — %s</entry>
-  <entry key="rule">Select goods to sell automatically after production and construction. Keep 100 of each selected good; sell the excess at the current European price after tax.</entry>
+  <entry key="rule">Select goods to sell automatically after production and construction. Keep 100 of each selected good; sell the excess at the current Home portan price after tax.</entry>
   <entry key="revolution">During revolution the custom house receives half the normal net income.</entry>
   <entry key="confirm">Save export choices</entry>
   <entry key="cancel">Cancel</entry>

@@ -21,10 +21,10 @@
 	<entry key="topic_production_body">Terrain decides what a worked field produces. Construction projects use hammers and tools. When a project's hammer work is complete but tools are missing, the project waits, and the turn report lists it. Changing the current project keeps the hammers already collected. You can also pay gold to finish the current project; the price is shown before you confirm. Church and cathedral upgrades change the real religious output, not only the numbers shown.</entry>
 
 	<entry key="topic_trade_title">Trade, taxes and boycotts</entry>
-	<entry key="topic_trade_body">In Europe you buy and sell goods at market prices. Heavy sales or purchases move a nation's prices, and quiet goods slowly return toward their starting prices. Ships and artillery become more expensive after each of your purchases. A custom house exports its selected goods automatically each turn. A Crown tax demand can put a commodity under boycott: buying, selling and importing tools for it are refused until the back tax is paid. A refused trade shows its reason and changes nothing.</entry>
+	<entry key="topic_trade_body">In Home port you buy and sell goods at market prices. Heavy sales or purchases move a nation's prices, and quiet goods slowly return toward their starting prices. Ships and artillery become more expensive after each of your purchases. A custom house exports its selected goods automatically each turn. A Tribute demand from the mother city can put a commodity under boycott: buying, selling and importing tools for it are refused until the back tax is paid. A refused trade shows its reason and changes nothing.</entry>
 
 	<entry key="topic_diplomacy_title">Diplomacy</entry>
-	<entry key="topic_diplomacy_body">Each pair of European nations is either at peace or at war, and both sides share that relation. Peace is negotiated for a price in gold that the game shows before you decide; accepting makes peace, while rejecting or cancelling leaves the war in force. During contact you can ask a rival for tribute through an eligible visitor. The request and its outcome are shown before you commit, and accepted tribute moves the agreed amount once. An alliance is offered through contact, shows its obligations before acceptance, and is ended explicitly.</entry>
+	<entry key="topic_diplomacy_body">Each pair of city states is either at peace or at war, and both sides share that relation. Peace is negotiated for a price in gold that the game shows before you decide; accepting makes peace, while rejecting or cancelling leaves the war in force. During contact you can ask a rival for tribute through an eligible visitor. The request and its outcome are shown before you commit, and accepted tribute moves the agreed amount once. An alliance is offered through contact, shows its obligations before acceptance, and is ended explicitly.</entry>
 
 	<entry key="topic_combat_title">Combat</entry>
 	<entry key="topic_combat_body">Attacks come from an adjacent square and must be confirmed; the confirmation names the defender you selected. Attacking a rival at peace first needs an explicit declaration of war. Land battles use the final strengths of both sides, and those strengths set the chance of winning. A naval battle can damage or sink a ship, and passengers and goods follow the loss rules. A colony falls only after its armed defenders are beaten. If only civilians remain, their group defence must be beaten too, and then the whole colony with its workers passes to the attacker. An accepted attack uses the movement of both sides; survivors regain it on their next turn.</entry>
@@ -33,11 +33,11 @@
 	<entry key="topic_independence_body">Declaring independence is a separate confirmation. It needs enough national support and at least one owned coastal colony. The confirmation shows the consequences first, and cancelling it changes nothing. After a declaration, colonies whose local support is at least half mobilize some of their armed veterans on their square for the new nation. Rebel support is shown for each colony and as a national value.</entry>
 
 	<entry key="topic_scoring_title">Statistics and score</entry>
-	<entry key="topic_scoring_body">Press R to open Statistics. It shows line graphs of the recorded turns of this game: Gold (the treasury), Military (military strength), Wealth (the economy value of goods), Score and European relations. Score is recorded for each turn as Wealth plus Military plus Gold. It is a turn record, not your final result. Not available yet: a final score at the end of a game, the population and Congress parts of the score, the difficulty adjustment, and the Hall of Fame of best results. Leaving a game does not record a score. Revolution victory and loss at game end are also not complete yet.</entry>
+	<entry key="topic_scoring_body">Press R to open Statistics. It shows line graphs of the recorded turns of this game: Gold (the treasury), Military (military strength), Wealth (the economy value of goods), Score and Home portan relations. Score is recorded for each turn as Wealth plus Military plus Gold. It is a turn record, not your final result. Not available yet: a final score at the end of a game, the population and Congress parts of the score, the difficulty adjustment, and the Hall of Fame of best results. Leaving a game does not record a score. Revolution victory and loss at game end are also not complete yet.</entry>
 
 
 	<entry key="topic_terrain_title">Terrain</entry>
-	<entry key="topic_terrain_body">Compare all terrain types below. Pictures show the open square on the left and its forest on the right, where supported. Each terrain type has its own hand-drawn symbol. Production is the base output per worker and turn, before resources, improvements, expertise and other modifiers. Movement is the cost to enter a square, before connected roads or rivers. Sea lanes connect to Europe; lakes are ordinary water for sailing and fishing. River squares stay open: no forests, plowed fields or colonies. A neighboring colony can assign a worker to fish without docks: small rivers yield 3 food and large rivers 4 where the bare terrain supports food; expert fishermen double it. River deposits offer 2 silver or 1 ore before expertise, until depleted. Roads allow travel and crossings, not extra river production. Ships cannot sail on land rivers.</entry>
+	<entry key="topic_terrain_body">Compare all terrain types below. Pictures show the open square on the left and its forest on the right, where supported. Each terrain type has its own hand-drawn symbol. Production is the base output per worker and turn, before resources, improvements, expertise and other modifiers. Movement is the cost to enter a square, before connected roads or rivers. Sea lanes connect to Home port; lakes are ordinary water for sailing and fishing. River squares stay open: no forests, plowed fields or colonies. A neighboring colony can assign a worker to fish without docks: small rivers yield 3 food and large rivers 4 where the bare terrain supports food; expert fishermen double it. River deposits offer 2 silver or 1 ore before expertise, until depleted. Roads allow travel and crossings, not extra river production. Ships cannot sail on land rivers.</entry>
 	<entry key="topic_resources_title">Terrain bonuses</entry>
 	<entry key="topic_resources_body">Special resources use the same hand-drawn pictures shown on the map. The table lists every resource and the terrain where the game permits it. The bonus increases the matching base output before worker modifiers and can introduce output on a square with no ordinary yield. Mineral reserves limit extra production: when exhausted, ordinary production remains. The two reserves in a mixed deposit are independent. Other resources do not deplete. Colony commons are different: a resource helps only an existing base output, and Prime timber does not help commons.</entry>
 	<entry key="properties">Properties</entry>
@@ -56,13 +56,13 @@
 	<entry key="renewable">Does not deplete.</entry>
 
 <entry key="topic_units_title">Units</entry>
-<entry key="topic_units_body">Compare every unit type below. Values are base properties. Equipment can change movement and combat: horses increase movement, weapons allow colonists to attack. Soldiers, pioneers and other roles modify these types. Final combat strength also depends on role, damage and bonuses; see Combat. A goods hold carries up to 100 goods. Europe prices are starting prices; ships and artillery can become more expensive. Pioneer work needs tools.</entry>
+<entry key="topic_units_body">Compare every unit type below. Values are base properties. Equipment can change movement and combat: horses increase movement, weapons allow colonists to attack. Soldiers, pioneers and other roles modify these types. Final combat strength also depends on role, damage and bonuses; see Combat. A goods hold carries up to 100 goods. Home port prices are starting prices; ships and artillery can become more expensive. Pioneer work needs tools.</entry>
 <entry key="unitMovement">Movement: %s; base points per turn: %d</entry>
 <entry key="unitCargo">Cargo holds: %d</entry>
 <entry key="unitPassenger">Transport by ship: %d hold(s)</entry>
 <entry key="unitNotPassenger">Transport by ship: unavailable</entry>
-<entry key="unitPrice">Starting Europe price: %d gold</entry>
-<entry key="unitNotForSale">Europe purchase: unavailable</entry>
+<entry key="unitPrice">Starting Home port price: %d gold</entry>
+<entry key="unitNotForSale">Home port purchase: unavailable</entry>
 <entry key="unitExpertise">Production expertise: %s ×%s</entry>
 <entry key="unitFarmer">The food bonus applies to land fields only.</entry>
 <entry key="unitFisherman">The food bonus applies to water fields only.</entry>
@@ -73,10 +73,10 @@
 <entry key="unitHardyPioneer">Expert pioneer: completes improvements faster and gains more lumber from clearing forest.</entry>
 <entry key="unitVeteran">Veteran: stronger than an ordinary soldier when armed; horses give the mounted combat role.</entry>
 <entry key="unitMissionary">Expert missionary: can establish and contest native missions.</entry>
-<entry key="unitServant">Indoor production penalty; can advance through education and learn skills from natives.</entry>
-<entry key="unitCriminal">Larger indoor production penalty; education first advances this worker to indentured servant. Cannot learn directly from natives.</entry>
+<entry key="unitServant">Indoor production penalty; can advance through education and learn skills from local peoples.</entry>
+<entry key="unitCriminal">Larger indoor production penalty; education first advances this worker to indentured servant. Cannot learn directly from local peoples.</entry>
 <entry key="unitTreasure">Carries its own treasure value. It needs six free ship holds together and cannot work or found a colony.</entry>
-<entry key="unitBrave">Native combatant. Weapons and horses distinguish armed braves, mounted braves and mounted warriors.</entry>
+<entry key="unitBrave">Local combatant. Weapons and horses distinguish armed braves, mounted braves and mounted warriors.</entry>
 <entry key="unitArtillery">Artillery has different attack and defense strength. Damage weakens it; fighting outside a fortified friendly colony carries a penalty.</entry>
 	<entry key="topic_buildings_title">Buildings</entry>
 	<entry key="topic_buildings_body">Explore each building and its upgrades, grouped from the first level to the last. Costs are the full hammers and tools needed for that level, not the difference between levels. Gold for rushing construction is quoted separately in the construction dialog. Production below is the base amount per free colonist per turn; workers, supplies and bonuses affect the actual result. Unattended output is listed separately. This is a reference: available projects depend on your colony.</entry>
@@ -124,11 +124,25 @@
 	<entry key="building_WAREHOUSE_EXPANSION">Raises storage to 300 of each non-food trade good. Food remains unlimited.</entry>
 	<entry key="building_STABLES">Doubles the natural horse breeding rate. Breeding needs at least two horses, surplus food and free storage.</entry>
 	<entry key="building_LARGE_STABLES">Retains the same doubled horse breeding rate as ordinary stables. This upgrade currently adds no further breeding bonus.</entry>
-	<entry key="building_CHAPEL">A modest place of worship produces torches, bringing immigrants closer to the New World.</entry>
+	<entry key="building_CHAPEL">A modest place of worship produces torches, bringing immigrants closer to the new coast.</entry>
 	<entry key="building_CHURCH">A larger congregation increases both worker-produced torches and the unattended religious output.</entry>
 	<entry key="building_CATHEDRAL">The grandest place of worship further increases torches from workers and unattended output.</entry>
 	<entry key="building_PRINTING_PRESS">Spreads the call for liberty with a 50%% building bonus to owl production, without extra workers.</entry>
 	<entry key="building_NEWSPAPER">Replaces the printing press bonus with a 100%% building bonus to owl production; the two bonuses do not stack.</entry>
 	<entry key="building_CUSTOM_HOUSE">Sells eligible surplus goods automatically according to your export settings. Keep a reserve for the colony; boycotts and current trade rules still apply.</entry>
 
+<entry key="topic_identities_title">City states and local peoples</entry>
+<entry key="topic_identities_body">A loosely historical Mediterranean expedition with an atmosphere around 600 BC. The mother city finances and protects the expedition, demanding tribute and obedience. The growing settlement may declare an independent polis. This is a game fiction; the existing displayed calendar remains unchanged. Flags are game symbols, not reconstructions of historical state flags. Camp, settlement and city describe an individual place, not the level of a whole people.</entry>
+<entry key="identity0">Corinth — Merchants finance a new port. They expect prosperity, while settlers want their own polis. The inherited profile keeps gentler market price changes and a better starting trade ship.</entry>
+<entry key="identity1">Phocaea — The expedition sails far west, relying on supplies, safe ports and agreements with local peoples. Its inherited profile halves the growth of local alarm.</entry>
+<entry key="identity2">Athens — The expedition seeks grain and safe ports for a growing city. Its leader needs the trust of settlers and support from home. The inherited profile lowers the immigration threshold.</entry>
+<entry key="identity3">Miletus — Experienced sailors seek new coasts and trade connections, turning contact into lasting neighbourly relations. The inherited game profile adds 50%% when attacking local settlements; this is not a historical claim.</entry>
+<entry key="identity4">Phoenicians — Port cities and maritime trade: intermediaries, partners and commercial rivals. Their settlements are coastal trading stations.</entry>
+<entry key="identity5">Egyptians — River cities and farmland. Expeditions negotiate with local representatives for port access and trade.</entry>
+<entry key="identity6">Etruscans — Italian cities whose communities have different interests and relations with Greek settlers.</entry>
+<entry key="identity7">Libyans — Coastal and inland communities west of Egypt; stories of coexistence with new arrivals.</entry>
+<entry key="identity8">Thracians — The northern Aegean and its hinterland; agreements about land, roads and neighbouring communities.</entry>
+<entry key="identity9">Illyrians — Adriatic coasts and mountain hinterlands, with bays, passes and coastal settlements.</entry>
+<entry key="identity10">Scythians — The northern Black Sea and steppe; contacts between coastal cities and inland communities.</entry>
+<entry key="identity11">Arabs — Arabian and neighbouring desert regions; oases, caravan connections and access to water.</entry>
 </properties>

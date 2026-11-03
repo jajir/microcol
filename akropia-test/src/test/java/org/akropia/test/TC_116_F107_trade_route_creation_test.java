@@ -134,18 +134,18 @@ public class TC_116_F107_trade_route_creation_test extends AbstractAkropiaTest {
         route.open();
         route.verifyOpenedFor("Delft");
         route.chooseKind(TradeRouteKind.SEA);
-        route.verifyStopOptions(0, "Europe");
+        route.verifyStopOptions(0, "Home port");
         route.enterName("Ocean Run");
         route.chooseStop(0, EUROPE);
         route.verifyStopOptions(1, "Delft");
         route.chooseStop(1, DELFT);
-        route.verifyStopOptions(2, "Europe");
+        route.verifyStopOptions(2, "Home port");
         route.chooseStop(2, EUROPE);
         route.verifyCreateEnabled(true);
         route.create();
         route.verifyDialogClosed();
-        route.verifyStoredRoute("Ocean Run", TradeRouteKind.SEA, "Europe",
-                "Delft", "Europe");
+        route.verifyStoredRoute("Ocean Run", TradeRouteKind.SEA, "Home port",
+                "Delft", "Home port");
         colony.close();
     }
 

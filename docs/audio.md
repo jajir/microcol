@@ -196,3 +196,13 @@ Dokumentace prošla téhož dne sestavením `target/docs-venv/bin/python -m mkdo
 **R-0227, 1. listopadu 2026 (implementace):** [MusicPlayerTest](../akropia-game/src/test/java/org/akropia/gui/MusicPlayerTest.java) a rozšířený [JavaSoundSuccessCuePlayerTest](../akropia-game/src/test/java/org/akropia/gui/JavaSoundSuccessCuePlayerTest.java) kontrolují skutečně zapsané vzorky přes testovací linku: násobení hlasitostí bez `MASTER_GAIN`, změnu během přehrávání, nulu jako nulové vzorky, oddělení kategorií, `soundEnabled=false`, nedostupné zařízení, nepodporovaný formát a zavření prostředků. [GamePreferencesVolumeTest](../akropia-game/src/test/java/org/akropia/gui/preferences/GamePreferencesVolumeTest.java) pokrývá výchozí hodnoty, převzetí hudby u starého nastavení, nezávislé uložení, restart a neplatné hodnoty; `TC_84_F75_framed_settings_test.TC_09` ovládání v nabídce i ve hře. Výsledky běhů zapisuje [funkční evidence](functional-tests.md); poslech mixu hudby a efektu ani test na skutečném zařízení v rámci R-0227 neproběhl.
 
 Pro budoucí rozšíření ještě zůstává rozhodnout konkrétní zvukový charakter a obsazení, výběr efektů pro první herní situace, případné nové skladby a jejich opakování. Technicky zbývá zavést obecnou obsluhu dalších efektů a ověřit poslech i chování zařízení na podporovaných platformách; oddělená nastavení hudby a efektů doplnila R-0227. Žádná z těchto položek neznamená, že musí vzniknout předem celá rozsáhlá zvuková sada; doplňovat je spolu s konkrétními funkcemi.
+
+
+## R-0405: ztráta rybáře — implementace a lokální přejímka 2026-11-03
+
+1. Model vytvoří právě jednu uloženou událost `TurnEventFishermanLost`, když
+   vítězná loď nemá místo pro zajatce nebo po ztrátě zásobujícího města není
+   volná přípustná pevnina. Zpráva obsahuje důvod, rybáře, jeho pole a město.
+2. Přehled událostí zobrazí text v EN/CS i po načtení. Nový zvuk ani zvukový
+   soubor se nepřidává; výsledek je plně srozumitelný bez zvuku.
+3. Skutečnou přejímku sleduje [společná evidence](functional-tests.md#r-0402r-0403r-0405-local-acceptance-2026-11-03).

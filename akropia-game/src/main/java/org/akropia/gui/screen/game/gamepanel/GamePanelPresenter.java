@@ -217,6 +217,20 @@ public final class GamePanelPresenter {
 
     void tryToOpenColonyDetail(final Location currentLocation) {
         Preconditions.checkNotNull(currentLocation);
+        final Optional<Unit> fisherman = gameModelController.getModel()
+                .getUnitsAt(currentLocation).stream()
+                .filter(unit -> unit.getOwner() == gameModelController
+                        .getHumanPlayer() && unit.isFishing())
+                .findFirst();
+        if (fisherman.isPresent()) {
+            final Unit worker = fisherman.get();
+            eventBus.post(new ShowScreenEvent(Screen.COLONY,
+                    worker.getFishingColony().orElseThrow()));
+            eventBus.post(
+                    new org.akropia.gui.screen.colony.SelectColonyWorkerEvent(
+                            worker));
+            return;
+        }
         final Optional<Colony> oColony = gameModelController.getHumanPlayer()
                 .getColoniesAt(currentLocation);
         if (oColony.isPresent()) {

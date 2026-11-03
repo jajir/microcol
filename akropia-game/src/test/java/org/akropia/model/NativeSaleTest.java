@@ -23,7 +23,7 @@ import org.akropia.model.unit.UnitWithCargo;
 import com.google.gson.Gson;
 
 /**
- * Native sale and gift of carried goods (R-0160): the exact price rule with its
+ * Local sale and gift of carried goods (R-0160): the exact price rule with its
  * floor and factors, the cargo and treasury caps, the atomic commit with its
  * stale-terms refusal, the once-only haggle drawn from the saved random state,
  * the gift reductions and the arms remainder, and the saved form.

@@ -135,7 +135,7 @@ public class TC_24_F15_free_play_setup_test extends AbstractAkropiaTest {
         audit.verifyColonyMenu("No colonies yet");
         audit.press(javafx.scene.input.KeyCode.ESCAPE);
         GamePage.of(getContext());
-        new FreePlaySetupPage(getContext()).verifyWorld(134, 17, "Dutch");
+        new FreePlaySetupPage(getContext()).verifyWorld(134, 17, "Corinth");
     }
 
     @Test
@@ -151,7 +151,7 @@ public class TC_24_F15_free_play_setup_test extends AbstractAkropiaTest {
                 .openFreePlaySetup();
         setup.selectMap(1);
         setup.verifySetupLanguage("Začít hru",
-                "V tomto scénáři hrajete za Nizozemsko.");
+                "V tomto scénáři hrajete za Korint.");
         setup.verifyDifficultySelection(Difficulty.CONQUISTADOR, "Dobyvatel");
         setup.captureDialog("freePlaySetup", "free-play-czech.png");
         setup.escape().verifyMainScreen();
@@ -406,6 +406,13 @@ public class TC_24_F15_free_play_setup_test extends AbstractAkropiaTest {
         naming.enterName("River Haven");
         naming.save();
         org.akropia.page.ColonyScreen.of(getContext(), "River Haven").close();
+        // Bring the field workers indoors before comparing the bare river
+        // terrain.
+        game.nextTurnAndCloseDialogs();
+        final org.akropia.page.ColonyScreen riverCity = game.openColonyAt(land,
+                "River Haven");
+        riverCity.assignOutdoorWorkersToTownHall();
+        riverCity.close();
 
         // Continue restores both authored features and the player's new colony.
         game.exitToMenu();

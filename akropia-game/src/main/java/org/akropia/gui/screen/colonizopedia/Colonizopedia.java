@@ -3,6 +3,9 @@ package org.akropia.gui.screen.colonizopedia;
 import org.akropia.i18n.MessageKeyResource;
 
 enum Colonizopedia implements MessageKeyResource {
+    topic_identities_title, topic_identities_body, identity0, identity1,
+    identity2, identity3, identity4, identity5, identity6, identity7, identity8,
+    identity9, identity10, identity11,
 
     topic_buildings_title, topic_buildings_body, buildingCost, buildingFounded,
     buildingPopulation, buildingPredecessor, buildingFounder, buildingWorkers,

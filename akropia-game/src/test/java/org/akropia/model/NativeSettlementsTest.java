@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.akropia.model.store.NativeSettlementPo;
 
 /**
- * Native settlement identity: the agreed nation classes, the capital bonus and
+ * Local settlement identity: the agreed nation classes, the capital bonus and
  * treasury, and the saved identity that is rejected when it is not valid.
  */
 class NativeSettlementsTest {

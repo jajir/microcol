@@ -350,7 +350,12 @@ final class EuropeanRelationsPanel extends VBox {
     }
 
     private static String label(final String display, final String key) {
-        return display.equals(key) ? display : display + " (" + key + ")";
+        final String identity = org.akropia.model.EuropeanNation
+                .findByPlayerName(key)
+                .map(org.akropia.model.EuropeanNation::getDisplayName)
+                .orElse(key);
+        return display.equals(identity) ? display
+                : display + " (" + identity + ")";
     }
 
     private boolean isCurrent(final Model original, final Player actor,

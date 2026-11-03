@@ -11,7 +11,7 @@
 	<entry key="pricePerPiece">Price per piece is ...</entry>
 	<entry key="selected">You are buying %s pieces for ...</entry>
 	<entry key="selectedSell">You are selling %s pieces for ...</entry>
-	<entry key="tax">King tax is %s%%. It's totally ...</entry>
+	<entry key="tax">Tribute to the mother city is %s%%. It's totally ...</entry>
 	<entry key="total">Total is ...</entry>
 	<entry key="totalSell">Total is ...</entry>
 	<entry key="price">%s gold</entry>

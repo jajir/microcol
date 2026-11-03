@@ -113,6 +113,9 @@ final class RoadFixture {
         final JsonObject saved = new Gson()
                 .fromJson(Files.readString(source.toPath()), JsonObject.class);
         final JsonObject model = saved.getAsJsonObject("model");
+        if (freedWorkerId == null) {
+            PlowFixture.houseWorkersAt(model, bareAt);
+        }
         model.getAsJsonArray("units").forEach(value -> {
             final JsonObject unit = value.getAsJsonObject();
             if (COLONIST_TYPE.equals(unit.get("type").getAsString())) {

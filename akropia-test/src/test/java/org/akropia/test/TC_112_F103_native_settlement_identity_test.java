@@ -41,8 +41,8 @@ public class TC_112_F103_native_settlement_identity_test
     /** Three squares from the Cherokee sites: outside the frigate's sight. */
     private static final Location FRIGATE_OFFSHORE = Location.of(27, 18);
 
-    private static final Color AZTEC_FILL = Color.web("#2A9D8F");
-    private static final Color CHEROKEE_FILL = Color.web("#588157");
+    private static final Color AZTEC_FILL = Color.web("#285B43");
+    private static final Color CHEROKEE_FILL = Color.web("#713B50");
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -63,7 +63,7 @@ public class TC_112_F103_native_settlement_identity_test
         fog.verifyNativeSettlementCurrentlyVisible(AZTEC_CAPITAL, true);
         fog.verifyNativeSettlementKnown(AZTEC_CAPITAL, NativeNation.AZTEC,
                 true);
-        fog.verifyStatusBarContains("Native capital: Aztec, city.");
+        fog.verifyStatusBarContains("Local capital: Egyptians, city.");
         fog.saveMapEvidence("TC_112-capital.png");
         fog.verifyNativeSettlementPixels(AZTEC_CAPITAL, AZTEC_FILL, true);
 
@@ -83,12 +83,12 @@ public class TC_112_F103_native_settlement_identity_test
         fog.hover(CHEROKEE_CAPITAL);
         fog.verifyNativeSettlementKnown(CHEROKEE_CAPITAL, NativeNation.CHEROKEE,
                 true);
-        fog.verifyStatusBarContains("Native capital: Cherokee, village.");
+        fog.verifyStatusBarContains("Local capital: Thracians, settlement.");
         fog.verifyNativeSettlementPixels(CHEROKEE_CAPITAL, CHEROKEE_FILL, true);
         fog.hover(CHEROKEE_VILLAGE);
         fog.verifyNativeSettlementKnown(CHEROKEE_VILLAGE, NativeNation.CHEROKEE,
                 false);
-        fog.verifyStatusBarContains("Native settlement: Cherokee, village.");
+        fog.verifyStatusBarContains("Local settlement: Thracians, settlement.");
         fog.verifyNativeSettlementPixels(CHEROKEE_VILLAGE, CHEROKEE_FILL,
                 false);
         fog.verifyNoNativeSettlementKnown(INCA_CAPITAL);
@@ -101,7 +101,7 @@ public class TC_112_F103_native_settlement_identity_test
         fog.hover(CHEROKEE_CAPITAL);
         fog.verifyNativeSettlementKnown(CHEROKEE_CAPITAL, NativeNation.CHEROKEE,
                 true);
-        fog.verifyStatusBarContains("Native capital: Cherokee, village.");
+        fog.verifyStatusBarContains("Local capital: Thracians, settlement.");
 
         // Continue from disk keeps the learned identities and hides the Inca.
         game.exitToMenu();
@@ -111,11 +111,11 @@ public class TC_112_F103_native_settlement_identity_test
         fog.hover(CHEROKEE_CAPITAL);
         fog.verifyNativeSettlementKnown(CHEROKEE_CAPITAL, NativeNation.CHEROKEE,
                 true);
-        fog.verifyStatusBarContains("Native capital: Cherokee, village.");
+        fog.verifyStatusBarContains("Local capital: Thracians, settlement.");
         fog.hover(CHEROKEE_VILLAGE);
         fog.verifyNativeSettlementKnown(CHEROKEE_VILLAGE, NativeNation.CHEROKEE,
                 false);
-        fog.verifyStatusBarContains("Native settlement: Cherokee, village.");
+        fog.verifyStatusBarContains("Local settlement: Thracians, settlement.");
         fog.hover(INCA_CAPITAL);
         fog.verifyNoNativeSettlementKnown(INCA_CAPITAL);
         fog.verifyStatusBarOmits("Inca");

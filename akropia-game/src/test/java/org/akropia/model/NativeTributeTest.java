@@ -17,7 +17,7 @@ import org.akropia.model.store.PlaceCargoSlotPo;
 import org.akropia.model.store.UnitPo;
 
 /**
- * Native tribute demand (R-0162): the role matrix, the force against the
+ * Local tribute demand (R-0162): the role matrix, the force against the
  * defenders' strength with equality paying, the own adjacent force counted once
  * with foreign, distant, artillery and carried units excluded, the caps of an
  * ordinary settlement, a capital and an empty treasury, the gold and relation

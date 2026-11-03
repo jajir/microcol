@@ -214,6 +214,20 @@ public class ColonyScreen extends AbstractScreen {
                         + label.getText());
     }
 
+    public void assignOutdoorWorkersToTownHall() {
+        final java.util.List<Integer> workers = colony.getUnitsInsideColony()
+                .stream().filter(unit -> unit.isAtPlaceColonyField())
+                .map(unit -> unit.getId())
+                .collect(java.util.stream.Collectors.toList());
+        for (final int id : workers) {
+            final ColonyJobPage jobs = new ColonyJobPage(getContext());
+            jobs.openFromField(colony.getName(), id);
+            jobs.select(org.akropia.model.ColonyJobChoice.Kind.INDOOR,
+                    GoodsType.OWLS);
+            jobs.confirm();
+        }
+    }
+
     public GamePage close() {
         final Button buttonNextTurn = getButtonById(
                 ColonyButtonsPanel.CLOSE_BUTTON_ID);
@@ -571,6 +585,7 @@ public class ColonyScreen extends AbstractScreen {
             final org.akropia.model.Direction target)
             throws InterruptedException {
         dragFieldWorkerTo(unitId, target, false, () -> {
+            getModel().getUnitById(1).startTurn();
             getModel().getUnitById(1).placeToColonyField(
                     getModel().getColonyById(1).orElseThrow()
                             .getColonyFieldInDirection(
@@ -699,7 +714,11 @@ public class ColonyScreen extends AbstractScreen {
 
     public void openCropMenu(final int unitId) {
         final ColonyField field = colony.getColonyFields().stream()
-                .filter(f -> f.getUnit().map(Unit::getId).orElse(-1) == unitId)
+                .filter(f -> f.getUnit().map(Unit::getId).orElse(-1) == unitId
+                        || getModel().getUnitsAt(f.getLocation()).stream()
+                                .anyMatch(unit -> unit.getId() == unitId
+                                        && unit.getFishingColony()
+                                                .orElse(null) == colony))
                 .findFirst().orElseThrow();
         getRobot().clickOn(findPlaceOfField(field), MouseButton.SECONDARY);
         WaitForAsyncUtils.waitForFxEvents();
@@ -784,4 +803,41 @@ public class ColonyScreen extends AbstractScreen {
         return this;
     }
 
+    public void verifyFieldPreview(final org.akropia.model.Direction direction,
+            final boolean blocked) {
+        final ColonyField field = colony.getColonyFieldInDirection(direction);
+        getRobot().clickOn(findPlaceOfField(field));
+        WaitForAsyncUtils.waitForFxEvents();
+        final javafx.scene.canvas.Canvas preview = getRobot()
+                .lookup("#colony-field-preview")
+                .queryAs(javafx.scene.canvas.Canvas.class);
+        final java.util.concurrent.atomic.AtomicReference<javafx.scene.image.WritableImage> image = new java.util.concurrent.atomic.AtomicReference<>();
+        getRobot().interact(() -> image.set(preview.snapshot(null, null)));
+        boolean allGrey = true;
+        final var pixels = image.get().getPixelReader();
+        for (int y = 0; y < image.get().getHeight(); y++) {
+            for (int x = 0; x < image.get().getWidth(); x++) {
+                final javafx.scene.paint.Color color = pixels.getColor(x, y);
+                allGrey &= Math
+                        .abs(color.getRed()
+                                - javafx.scene.paint.Color.GRAY.getRed()) < 0.01
+                        && Math.abs(
+                                color.getGreen() - javafx.scene.paint.Color.GRAY
+                                        .getGreen()) < 0.01
+                        && Math.abs(
+                                color.getBlue() - javafx.scene.paint.Color.GRAY
+                                        .getBlue()) < 0.01;
+            }
+        }
+        assertEquals(blocked, allGrey);
+        if (blocked) {
+            assertEquals("", getRobot().lookup("#colony-field-name")
+                    .queryAs(javafx.scene.control.Label.class).getText());
+            assertEquals("", getRobot().lookup("#colony-field-worker")
+                    .queryAs(javafx.scene.control.Label.class).getText());
+            assertTrue(getRobot().lookup("#colony-field-output")
+                    .queryAs(javafx.scene.layout.VBox.class).getChildren()
+                    .isEmpty());
+        }
+    }
 }

@@ -17,6 +17,8 @@ import org.akropia.i18n.I18n;
  * the owning model and the rule documents decide the behavior.
  */
 public enum ColonizopediaTopic {
+    IDENTITIES(Colonizopedia.topic_identities_title,
+            Colonizopedia.topic_identities_body),
 
     MOVEMENT(Colonizopedia.topic_movement_title,
             Colonizopedia.topic_movement_body),

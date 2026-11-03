@@ -78,13 +78,13 @@ public class TC_64_F55_naval_combat_test extends AbstractAkropiaTest {
         naval.chooseSavedSeed(22);
         attack.chooseAttack(ATTACKER, DEFENDER);
         attack.confirm();
-        naval.verifyOutcomeText("poškozena", "Evropa", "95",
+        naval.verifyOutcomeText("poškozena", "Domovský přístav", "95",
                 "Pasažéři na palubě: 1.");
         naval.captureDialog("navalBattleOutcome", "naval-damage-czech.png");
         naval.closeOutcome();
         naval.verifyAttackerDamaged();
         EuropePortScreen europe = GamePage.of(getContext())
-                .openEuroperPort("Evropa");
+                .openEuroperPort("Domovský přístav");
         ShipRepairPage repairs = new ShipRepairPage(getContext());
         repairs.open();
         naval.verifyRepairOverview(

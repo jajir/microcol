@@ -4,32 +4,32 @@
 <properties>
 	<comment>Define keys for Europe dialog</comment>
 
-	<entry key="title">Evropa</entry>
+	<entry key="title">Domovský přístav</entry>
 	<entry key="harborDock">V přístavu</entry>
 	<entry key="harborPier">Lidé na molu</entry>
 	<entry key="voyageTurns">Zbývající tahy: %s</entry>
 	<entry key="voyageWaiting">Čekání: místo příjezdu je obsazené.</entry>
-	<entry key="voyageUnavailable">Loď nemůže vyplout. Musí být ve vašem evropském přístavu během vašeho tahu a mít dostupné cílové pole námořní cesty.</entry>
+	<entry key="voyageUnavailable">Loď nemůže vyplout. Musí být ve vašem domovském přístavu během vašeho tahu a mít dostupné cílové pole námořní cesty.</entry>
 	<entry key="voyageReverse">Obrátit směr</entry>
 	<entry key="voyageReverseTitle">Obrátit směr</entry>
 	<entry key="voyageReverseQuestion">Poslat tuto loď do: %s? Zbývající tahy: %s.</entry>
-	<entry key="voyageDestinationEurope">Evropa</entry>
-	<entry key="voyageDestinationNewWorld">Nový svět</entry>
+	<entry key="voyageDestinationEurope">Domovský přístav</entry>
+	<entry key="voyageDestinationNewWorld">Nové pobřeží</entry>
 	<entry key="voyageReverseStale">Cesta lodi se změnila. Zkontrolujte ji a zkuste to znovu.</entry>
 	<entry key="voyageJettison">Vyhodit náklad</entry>
-	<entry key="shipsTravelingToNewWorld">Plavba do Nového světa</entry>
-	<entry key="shipsTravelingToEurope">Plavba do Evropy</entry>
+	<entry key="shipsTravelingToNewWorld">Plavba do Nového pobřeží</entry>
+	<entry key="shipsTravelingToEurope">Plavba do domovského přístavu</entry>
 	<entry key="buyUnitDialog_title">Koupit jednotku</entry>
 	<entry key="buyUnitDialog_buttonBuyUnit">Koupit za</entry>
 	<entry key="goodsPanelTitle">Zboží · prodej / nákup</entry>
-	<entry key="recruitUnitDialogTitle">Nábor v Evropě</entry>
+	<entry key="recruitUnitDialogTitle">Nábor v domovském přístavu</entry>
 	<entry key="recruitUnitDialogButton">Zaplatit cestu:</entry>
-	<entry key="statusBarEuropeDock">Evropský přístav, zde mohou být lodě nakládány a vykládány</entry>
-	<entry key="statusBarShipsToNewWorld">Plavba do Nového světa</entry>
-	<entry key="statusBarShipsToEurope">Plavba do Evropy</entry>
-	<entry key="statusBarPier">Přístavní molo, zde budou jednotky čekající na cesty do Nového světa</entry>
+	<entry key="statusBarEuropeDock">Domovský přístav, zde mohou být lodě nakládány a vykládány</entry>
+	<entry key="statusBarShipsToNewWorld">Plavba do Nového pobřeží</entry>
+	<entry key="statusBarShipsToEurope">Plavba do domovského přístavu</entry>
+	<entry key="statusBarPier">Přístavní molo, zde budou jednotky čekající na cesty do Nového pobřeží</entry>
 	<entry key="goodsToSell">Prodej zboží %s za %s zlata nebo za %s zlata nakup.</entry>
-	<entry key="buttonClose">Zavřít evropský přístav a vrátit se zpět na hlavní mapu.</entry>
+	<entry key="buttonClose">Zavřít domovský přístav a vrátit se zpět na hlavní mapu.</entry>
 	<entry key="buttonBuyUnit">Koupit jednotky</entry>
 
     <entry key="equipmentOpen">Výbava: kliknutím, pravým tlačítkem nebo Enter nakoupíte či prodáte</entry>
@@ -46,16 +46,16 @@
 Cena za kus: %s zlatých
 Daň: %s%% (%s zlatých)
 Celkem: %s zlatých</entry>
-    <entry key="equipmentUNIT_UNAVAILABLE">Tento kolonista už není dostupný na vašem evropském molu ve vašem tahu. Nic se nezměnilo. Zrušte nabídku a vyberte kolonistu znovu.</entry>
+    <entry key="equipmentUNIT_UNAVAILABLE">Tento kolonista už není dostupný na vašem molu domovského přístavu ve vašem tahu. Nic se nezměnilo. Zrušte nabídku a vyberte kolonistu znovu.</entry>
     <entry key="equipmentALREADY_SET">Výbava se už změnila. Nic se neprovedlo. Zrušte nabídku a vyberte znovu.</entry>
     <entry key="equipmentINCOMPATIBLE_EQUIPMENT">Nejprve prodejte neslučitelnou výbavu. Koně a zbraně lze kombinovat; nástroje vyžadují kolonistu bez jiné výbavy.</entry>
     <entry key="equipmentNOT_ENOUGH_GOLD">Nemáte dost zlata. Nic se nezměnilo. Zrušte nabídku a zajistěte potřebné zlato.</entry>
-    <entry key="equipmentTRADE_RESTRICTED">Obchod s vaším evropským přístavem není dostupný. Nic se nezměnilo.</entry>
+    <entry key="equipmentTRADE_RESTRICTED">Obchod s vaším domovským přístavem není dostupný. Nic se nezměnilo.</entry>
     <entry key="equipmentGOLD_LIMIT">Tento obchod překračuje limit pokladny. Nic se nezměnilo.</entry>
 
 	<entry key="buyUnitDialog_buttonHire">Najmout odborníka za</entry>
 	<entry key="buyUnitDialog_notEnoughGold">Nedostatek zlata.</entry>
-	<entry key="buyUnitDialog_unavailable">Tento nákup už není dostupný. Otevřete nabídku znovu ve svém tahu, dokud máte přístup do Evropy.</entry>
+	<entry key="buyUnitDialog_unavailable">Tento nákup už není dostupný. Otevřete nabídku znovu ve svém tahu, dokud máte přístup do domovského přístavu.</entry>
 
     <entry key="pierOrders">Rozkazy a vybavení cestujícího</entry>
 	<entry key="recruitOpen">Nábor</entry>
@@ -91,15 +91,15 @@ Celkem: %s zlatých</entry>
   <entry key="earnedChoose">Vybrat zdarma</entry>
   <entry key="earnedOpen">Vybrat přistěhovalce</entry>
   <entry key="earnedPending">Získaný přistěhovalec čeká na váš výběr. Pokračujte v tahu přes nábor.</entry>
-  <entry key="equipmentBOYCOTTED">Koruna tuto komoditu bojkotuje. Nic se nezměnilo.</entry>
+  <entry key="equipmentBOYCOTTED">Rada mateřského města tuto komoditu bojkotuje. Nic se nezměnilo.</entry>
   <entry key="goodsBoycottedMark">bojkot</entry>
   <entry key="goodsBoycotted">Komodita %s je bojkotována. Nelze ji kupovat ani prodávat.</entry>
   <entry key="taxOpen">Požadavek na daň</entry>
-  <entry key="taxPending">Požadavek Koruny na daň čeká na vaši odpověď. Otevřete jej a pokračujte v tahu.</entry>
+  <entry key="taxPending">Požadavek mateřského města na daň čeká na vaši odpověď. Otevřete jej a pokračujte v tahu.</entry>
   <entry key="backTaxOpen">Dlužné daně</entry>
   <entry key="voyageOrders">Příkazy: pravé tlačítko nebo Shift+F10</entry>
-	<entry key="sailToNewWorld">Odplout do Nového světa</entry>
+	<entry key="sailToNewWorld">Odplout do Nového pobřeží</entry>
     <entry key="goToARRIVED">%s #%s dorazila do přístavu %s.</entry>
-    <entry key="goToARRIVED_EUROPE">%s #%s dorazila do Evropy.</entry>
+    <entry key="goToARRIVED_EUROPE">%s #%s dorazila do domovského přístavu.</entry>
     <entry key="goToCANCELLED_BLOCKED">%s #%s přerušila plavbu do %s: nezbývá žádná legální cesta.</entry>
 </properties>

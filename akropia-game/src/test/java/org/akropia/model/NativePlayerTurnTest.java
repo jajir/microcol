@@ -21,7 +21,7 @@ import org.akropia.model.store.UnitPo;
 import org.akropia.model.unit.UnitNativeBrave;
 
 /**
- * Native nations as real turn participants and braves as real units, loaded
+ * Local nations as real turn participants and braves as real units, loaded
  * through the ordinary save path onto a valid island. Every negative case
  * starts from a valid baseline and asserts the validation that rejects it, so a
  * rejection for an unrelated reason cannot pass.

@@ -47,7 +47,7 @@ class PlayerDisplayNameTest {
     @Test
     void rejectedChangePreservesDisplayNameAndNationIdentity() {
         final Player player = player();
-        assertEquals("Dutch", player.getDisplayName());
+        assertEquals("Corinth", player.getDisplayName());
         player.setDisplayName("Jan");
         assertThrows(IllegalArgumentException.class,
                 () -> player.setDisplayName(" "));

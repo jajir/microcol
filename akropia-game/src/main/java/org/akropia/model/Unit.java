@@ -15,6 +15,23 @@ public interface Unit {
 
     boolean isShip();
 
+    /** Sign of the retained task, independent of remaining movement. */
+    String getTaskSign();
+
+    boolean isFishing();
+
+    Optional<Colony> getFishingColony();
+
+    Optional<Colony> getWorkingColony();
+
+    List<ColonyJobChoice> getMapJobChoices();
+
+    void cancelColonyWork();
+
+    boolean canReturnToWorkingColony();
+
+    void returnToWorkingColony();
+
     /**
      * Get owner of unit.
      *

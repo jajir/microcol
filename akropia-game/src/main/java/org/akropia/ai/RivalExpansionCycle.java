@@ -262,10 +262,10 @@ final class RivalExpansionCycle {
                 founder.placeToMap(colony.getLocation());
             } catch (IllegalArgumentException | IllegalStateException
                     | AkropiaException refused) {
-                // The shared rules refused the release; nothing changed.
+                // A field worker may need another turn to pay the return.
                 LoggerFactory.getLogger(RivalExpansionCycle.class)
                         .debug("Rival founder release was refused", refused);
-                return false;
+                continue;
             }
             player().setRivalExpansionObjective(new RivalExpansionObjective(
                     colony.getId(), founder.getId(),

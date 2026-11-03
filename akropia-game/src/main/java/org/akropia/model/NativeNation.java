@@ -21,6 +21,12 @@ public enum NativeNation {
     /**
      * @return the only settlement class this nation builds
      */
+    public String getDisplayName() {
+        return new String[] { "Phoenicians", "Egyptians", "Etruscans",
+                "Libyans", "Thracians", "Illyrians", "Scythians",
+                "Arabs" }[ordinal()];
+    }
+
     public NativeSettlementClass getSettlementClass() {
         return settlementClass;
     }

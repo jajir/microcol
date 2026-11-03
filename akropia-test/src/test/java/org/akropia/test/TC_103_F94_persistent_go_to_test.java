@@ -61,7 +61,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         // Inspecting another unit and coming back does not cancel the order.
         game.selectTile(Location.of(25, 15));
         goTo.verifyNoStatus();
-        game.selectTile(Location.of(23, 15));
+        game.selectMapUnit(COLONIST);
         goTo.verifyDestination(COLONIST, GoToFixture.WEST, false);
         goTo.verifyStatus("Going to 20, 15");
         // Each owner turn walks one more square toward the same target.
@@ -186,7 +186,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         goTo.verifyMovement(COLONIST, 0);
         goTo.verifyDestination(COLONIST, GoToFixture.WEST, false);
         game.panToTile(GoToFixture.WEST);
-        game.selectTile(Location.of(23, 15));
+        game.selectMapUnit(COLONIST);
         goTo.verifyStatus("Going to 20, 15");
         goTo.verifyButton("Cancel go-to", true);
         // The order is still followed on the next owner turn.
@@ -242,7 +242,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         goTo.verifyDestination(COLONIST, GoToFixture.ISLET, true);
         goTo.verifyLocation(COLONIST, GoToFixture.EAST);
         // The player cancels the paused order and takes the colonist back.
-        game.selectTile(Location.of(23, 15));
+        game.selectMapUnit(COLONIST);
         game.selectTile(GoToFixture.EAST);
         goTo.cancelOrder();
         goTo.verifyNoDestination(COLONIST);
@@ -311,7 +311,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         game = new FreePlayAuditPage(getContext()).continueGame();
         goTo.verifyEuropeVoyage(3);
         ScreenTurnReport report = game.openTurnReport();
-        report.verifyEventMessageCount("arrived in Europe", 0);
+        report.verifyEventMessageCount("arrived in Home port", 0);
         report.close();
         // Only the actual arrival completes the order and emits its notice.
         final int remainingTurns = goTo.remainingVoyageTurns(3);
@@ -320,7 +320,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         }
         goTo.verifyArrivedInEurope(3);
         report = game.openTurnReport();
-        report.verifyEventMessageCount("arrived in Europe", 1);
+        report.verifyEventMessageCount("arrived in Home port", 1);
         report.close();
     }
 

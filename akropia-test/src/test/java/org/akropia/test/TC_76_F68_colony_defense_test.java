@@ -53,7 +53,7 @@ public class TC_76_F68_colony_defense_test extends AbstractAkropiaTest {
         // The colonists defend together with base strength 1.
         attack.chooseAttack(SOLDIER, QUEBEC);
         colony.verifyColonyReview("Colonists of Quebec", "Base: 1",
-                "captures the whole colony");
+                "captures the colony and its indoor workers");
         // Cancelling the review changes nothing.
         attack.cancel();
         attack.verifyReviewClosed();
@@ -63,12 +63,12 @@ public class TC_76_F68_colony_defense_test extends AbstractAkropiaTest {
         attack.chooseAttack(SOLDIER, QUEBEC);
         attack.confirm();
         colony.closeCapturedColonyMessage();
-        colony.verifyColonyCaptured("Dutch", 2, 150, QUEBEC,
+        colony.verifyColonyCaptured("Dutch", 1, 150, QUEBEC,
                 "captured with all its workers");
         // Continue shows the same captured colony.
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
-        colony.verifyColonyCaptured("Dutch", 2, 150, QUEBEC, null);
+        colony.verifyColonyCaptured("Dutch", 1, 150, QUEBEC, null);
     }
 
     @Test
@@ -184,13 +184,13 @@ public class TC_76_F68_colony_defense_test extends AbstractAkropiaTest {
         attack.chooseAttack(SOLDIER, QUEBEC);
         attack.confirm();
         colony.closeCapturedColonyMessage();
-        colony.verifyColonyCaptured("Dutch", 2, 0, QUEBEC,
+        colony.verifyColonyCaptured("Dutch", 1, 0, QUEBEC,
                 "captured with all its workers");
         // The spent weapons are gone and nobody is armed for free.
         colony.verifyStoredWeapons(0);
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
-        colony.verifyColonyCaptured("Dutch", 2, 0, QUEBEC, null);
+        colony.verifyColonyCaptured("Dutch", 1, 0, QUEBEC, null);
         colony.verifyStoredWeapons(0);
     }
 
@@ -219,7 +219,7 @@ public class TC_76_F68_colony_defense_test extends AbstractAkropiaTest {
         attack.chooseAttack(SOLDIER, QUEBEC);
         attack.confirm();
         colony.closeCapturedColonyMessage();
-        colony.verifyColonyCaptured("Dutch", 1, 0, QUEBEC,
+        colony.verifyColonyCaptured("Dutch", 0, 0, QUEBEC,
                 "captured with all its workers");
         colony.verifyWarDeclared(true);
     }

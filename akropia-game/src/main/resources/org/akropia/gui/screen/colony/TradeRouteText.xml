@@ -3,14 +3,14 @@
 <properties>
   <entry key="open">Trade route…</entry>
   <entry key="title">Trade route from %s</entry>
-  <entry key="rule">Name the route, choose land or sea transport, then pick up to four reachable stops in order. Land routes use colonies only; sea routes need a coastal port and may include Europe. Creating a route moves no unit and transfers no goods.</entry>
+  <entry key="rule">Name the route, choose land or sea transport, then pick up to four reachable stops in order. Land routes use colonies only; sea routes need a coastal port and may include Home port. Creating a route moves no unit and transfers no goods.</entry>
   <entry key="nameLabel">Route name</entry>
   <entry key="kindLabel">Transport</entry>
   <entry key="land">Land (wagon)</entry>
   <entry key="sea">Sea (ship)</entry>
   <entry key="startLabel">Starting colony: %s</entry>
   <entry key="stopLabel">Stop %s</entry>
-  <entry key="europe">Europe</entry>
+  <entry key="europe">Home port</entry>
   <entry key="existing">Your routes: %s</entry>
   <entry key="noRoutes">You have no trade routes yet.</entry>
   <entry key="create">Create route</entry>
@@ -25,7 +25,7 @@
   <entry key="startUnavailable">The starting colony is no longer yours.</entry>
   <entry key="startNotPort">A sea route must start at a coastal port.</entry>
   <entry key="stopUnavailable">One stop is no longer available.</entry>
-  <entry key="europeByLand">A land route cannot visit Europe.</entry>
+  <entry key="europeByLand">A land route cannot visit Home port.</entry>
   <entry key="sameStop">Each stop must differ from the stop before it.</entry>
   <entry key="stopNotReachable">That stop cannot be reached from the previous stop.</entry>
   <entry key="cargoOpen">Route cargo…</entry>
@@ -70,8 +70,8 @@
   <entry key="reasonHOLD_FULL">nothing moved: no hold has room</entry>
   <entry key="reasonSOURCE_EMPTY">nothing moved: the warehouse has none</entry>
   <entry key="reasonINSUFFICIENT_FUNDS">nothing bought: not enough money</entry>
-  <entry key="reasonEUROPE_CLOSED">nothing moved: you can no longer trade in Europe</entry>
-  <entry key="reasonBOYCOTTED">nothing moved: this goods is boycotted in Europe</entry>
+  <entry key="reasonEUROPE_CLOSED">nothing moved: you can no longer trade in Home port</entry>
+  <entry key="reasonBOYCOTTED">nothing moved: this goods is boycotted in Home port</entry>
   <entry key="reasonREJECTED">refused by a game rule (the amount shown was already settled)</entry>
   <entry key="reasonNOT_ATTEMPTED">not attempted after an earlier refusal</entry>
   <entry key="assignRule">Choose a ship or wagon at this stop and the stop it heads to first. It then repeats the route on your following turns, using its normal movement.</entry>
@@ -92,7 +92,7 @@
   <entry key="pauseNO_ROUTE">The route no longer fits this unit.</entry>
   <entry key="pauseSTOP_UNREACHABLE">The stop cannot be reached now; it tries again next turn.</entry>
   <entry key="pauseSTOP_LOST">The stop colony is lost or no longer yours.</entry>
-  <entry key="pauseEUROPE_CLOSED">You can no longer trade in Europe.</entry>
+  <entry key="pauseEUROPE_CLOSED">You can no longer trade in Home port.</entry>
   <entry key="pauseCARRIER_DAMAGED">The ship is damaged and is being repaired.</entry>
   <entry key="cancelAssignment">Stop following route</entry>
   <entry key="cancelAssignmentDone">%s is back on manual orders. Nothing else changed.</entry>
@@ -116,7 +116,7 @@
   <entry key="editProblemNOT_OWNER">The route is not yours, or it is not your turn.</entry>
   <entry key="editProblemROUTE_UNAVAILABLE">The route changed. Choose it again.</entry>
   <entry key="editProblemSTOP_UNAVAILABLE">This stop or colony is not available.</entry>
-  <entry key="editProblemEUROPE_BY_LAND">A land route cannot visit Europe.</entry>
+  <entry key="editProblemEUROPE_BY_LAND">A land route cannot visit Home port.</entry>
   <entry key="editProblemSAME_STOP">The stop would repeat its neighbour.</entry>
   <entry key="editProblemSTOP_NOT_REACHABLE">A leg next to this stop cannot be reached by known squares.</entry>
   <entry key="editProblemTURN_BUSY">The turn is still being prepared. Try again in a moment.</entry>

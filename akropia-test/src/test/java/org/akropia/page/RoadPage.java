@@ -63,7 +63,8 @@ public final class RoadPage extends AbstractScreen {
     public void captureUnit(final Location location) {
         capturedUnitId = getModel().getUnitsAt(location).stream()
                 .filter(unit -> unit instanceof UnitFreeColonist
-                        && unit.getOwner().isHuman())
+                        && unit.getOwner().isHuman()
+                        && unit.getWorkingColony().isEmpty())
                 .findFirst().orElseThrow().getId();
     }
 

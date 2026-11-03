@@ -17,7 +17,7 @@ import org.akropia.model.store.UnitPo;
 import org.akropia.model.unit.UnitNativeBrave;
 
 /**
- * Native braves raiding on real native turns (R-0156). Each scene is the island
+ * Local braves raiding on real native turns (R-0156). Each scene is the island
  * with explicit parties. The robots take their turns on their own threads, so
  * the helpers wait for the natives to hand the round back to a European. Each
  * committed battle is one attack event; Dutch units are prepared again for

@@ -378,6 +378,7 @@ class ColonyLibertyTest {
         savedColony(data, 0).setLiberty(400L);
         final Model model = load(data);
         final Colony colony = model.getColonyById(0).orElseThrow();
+        ColonyBattles.houseFieldWorkers(model, colony);
         final Player dutch = colony.getOwner();
         final Player king = model.getPlayerByName("Dutch's King");
         colony.getUnitsInsideColony().get(0).placeToColonyStructureSlot(
@@ -463,6 +464,7 @@ class ColonyLibertyTest {
         final Player france = model.getPlayerByName("France");
         final Player king = model.getPlayerByName("Dutch's King");
         final Colony quebec = model.getColonyById(0).orElseThrow();
+        ColonyBattles.houseFieldWorkers(model, quebec);
         final Colony montreal = model.getColonyById(1).orElseThrow();
         assertSame(france, quebec.getOwner());
         assertEquals(2, quebec.getPopulation());
@@ -571,6 +573,7 @@ class ColonyLibertyTest {
         final Player dutch = model.getPlayerByName("Dutch");
         final Player king = model.getPlayerByName("Dutch's King");
         final Colony quebec = model.getColonyById(0).orElseThrow();
+        ColonyBattles.houseFieldWorkers(model, quebec);
         verifyProductionFollowsSupport(quebec, beforeBonus);
         final Unit invader = armedForce(model, quebec, dutch);
         ColonyBattles.capture(model, quebec, invader);

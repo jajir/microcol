@@ -13875,3 +13875,216 @@ Combined-revision acceptance update for `0e752b7b`: model 4,814/356 reports pass
 15. R-0396 and R-0398 are locally accepted. Earlier failing attempts above retain their original results. Full regression, native macOS manual checks and delivery publication were not run for this task; a push alone will not establish a new verified distribution. The pre-existing end-game animation diagnostic is not claimed fixed. The README's full-regression revision/counts remain unchanged.
 
 16. Final documentation validation: 14 tests passed, naming audit found zero unexplained occurrences, and strict MkDocs passed after moving both requirements to `done/` and repairing references. A byte comparison found no differences between all 24 changed game files and the final model snapshot, or all 40 changed game/test files and the final smoke snapshot. Integration uses this checked source; full regression and distribution publication remain separate.
+
+## R-0402/R-0403/R-0405 — local acceptance (2026-11-03)
+
+**Accepted locally on 2026-11-03:** R-0402, R-0403 and R-0405 are implemented.
+4,998 model/JUnit tests, 126 targeted Docker/Xvfb UI tests and 21 fixed
+smoke/support tests passed with zero failures, errors or skips. Smoke took
+226 seconds against the 420-second limit. Targeted totals combine 107 unchanged
+cases from `run-rxTn63`, 14 repaired TC74 cases from `run-fbeXaV`, and five TC101
+cases from `run-7aTYiH`. Model: `run-2ja5hd8r`; smoke: `run-nbqr1j4x`.
+Source comparison and the diagnostic history below explain reuse.
+Shared Java formatting, SVG export verification, 17 graphics tooling tests,
+visual review, 14 documentation consistency tests, naming audit and strict
+MkDocs passed. The current base is `9abfa0afe8ca5471cdea69f31185608b1d71a3e4`;
+only separately captured documentation requirements advanced the base during work.
+No remote CI, Pages or game distribution was inspected or claimed as published.
+
+The numbered entries below are chronological evidence, including failed attempts.
+
+
+1. The authorized batch covers Greek city-state/local-people identities, task banners,
+   and outdoor colony workers. `main` base is `11190f53c31ebfdbb7a967fa8d46c04967d0a9f8`.
+   This section records incomplete local work, not accepted gameplay or a published build.
+2. New model coverage is `GreekIdentityTest`, `UnitTaskSignTest` and `WorldWorkersTest`.
+   Targeted player paths include `TC_200_F232_unit_task_banners_test`,
+   `TC_201_F233_world_workers_test`, `TC_39_F31_shared_colony_fields_test`,
+   `TC_40_F32_colony_job_choices_test`, `TC_76_F68_colony_defense_test` and
+   `TC_101_F92_four_nation_expedition_loop_test`. Existing order, production and
+   calendar assertions remain required.
+3. Model attempt `20261103T183123Z-7d30071ee475` failed in preparation because
+   Docker was stopped; no checks ran. The existing Docker application was started.
+   Attempt `20261103T183529Z-36b97968dc01`, reports `target/verification/run-xmalluk6`,
+   completed 4,977 checks: 57 failures, 19 errors, zero skips. These are failed
+   diagnostic results. Repairs address AI treatment of workers, resident queries,
+   movement preconditions, capture population and updated visible text.
+4. Required final model, targeted Docker/Xvfb, visual review and smoke acceptance
+   remain pending. Per the user's instruction, smoke runs only after all three
+   requirements have been implemented. No remote CI or publication inspection was requested.
+
+7. Further model diagnostics: `20261103T184512Z-e039b014b3bf` produced
+   4,986 tests / 42 failures / 10 errors / 0 skips. The next attempt
+   `20261103T185709Z-9d3c42f94bea` stopped at test compilation (package-private
+   fixture accessor); the accessor was corrected. `20261103T185934Z-e35dcd1a6a18`
+   produced 4,989 / 11 / 7 / 0. `20261103T190923Z-94248b7c162b`, report
+   `target/verification/run-8ga_m6s0/model`, produced 4,992 / 0 / 1 / 0;
+   its last error was a fixture removing the last resident before capture.
+   These failed runs remain failed; later source also adds boat escorts and
+   atomic equipment/movement coverage and requires fresh acceptance.
+8. The added local-fishing UI journey is `TC_202_F234_local_fishing_test`.
+   TC39/TC40 fixtures now explicitly contain connected roads for their existing
+   cross-field reassignment journeys; movement is paid rather than waived.
+   Targeted UI and smoke remain pending. Smoke has not been started.
+
+9. `20261103T191915Z-f2075d850696`, reports in
+   `target/verification/run-cpsqpyhd/model`, passed **4,996 model/JUnit tests,
+   zero failures/errors/skips**. Subsequent final review changed display labels,
+   completed the mission framing and enforced the fortified population minimum
+   for fishing cancellation. The next run,
+   `20261103T192459Z-de4c278b1b6e`, failed one assertion in
+   `NativePlayerTurnTest`: a display-text replacement had also changed the
+   expected internal validation message. The expectation was restored; fresh
+   model acceptance is running as `20261103T193048Z-0aad3b2aaf0e`
+   (supervisor PID 10777). The earlier pass does not establish acceptance of
+   this later source.
+10. The shared formatter checked 111 task Java files with exact-token and
+    idempotence checks. SVG export verification passed. Graphics tooling first
+    lacked `fontTools` in the host Python; the documented version 4.60.2 was
+    installed in an isolated task virtual environment, then **17 tooling tests
+    passed**. Documentation consistency tests (**14**), the name audit
+    (**zero unexplained occurrences**) and strict MkDocs passed at this stage.
+
+11. `20261103T193048Z-0aad3b2aaf0e` failed on a second internal-message
+    expectation in the same `NativePlayerTurnTest` method. Both remaining
+    altered internal-message expectations were restored. The complete focused
+    `NativePlayerTurnTest` then passed **22 tests, zero failures/errors/skips**.
+    Fresh full model acceptance: `20261103T193345Z-0d6bb2885312`, supervisor
+    PID 11963. Targeted UI and smoke remain pending.
+
+12. `20261103T193345Z-0d6bb2885312` passed **4,997 model/JUnit tests,
+    zero failures/errors/skips**, in 142 seconds; complete reports are in
+    `target/verification/run-qfgljkf0/model`. Targeted Docker UI acceptance
+    started as `20261103T193622Z-21552c6ad90f` (PID 12721), selecting
+    TC200/201/202, TC24/39/40/61/76/11/112/33/103/45/118/88/73/18.
+    Smoke has not started.
+
+13. Targeted Docker run `20261103T193622Z-21552c6ad90f` failed during
+    application startup: unescaped percent signs in the new identity help
+    caused `UnknownFormatConversionException`. Reports/logs are preserved in
+    `target/docker-ui/run-RDCC8b` and the completion directory. Both language
+    resources were repaired; `IdentityHelpTextTest` passed, checking formatting
+    of all twelve descriptions in English and Czech. The colony-capture
+    explanation was also corrected to distinguish indoor and outdoor workers.
+    The formatter checked 112 Java files. Fresh model acceptance is running as
+    `20261103T193939Z-9c4ad1e44e46` (PID 12995); targeted UI must be repeated.
+    Smoke remains unstarted.
+
+14. `20261103T193939Z-9c4ad1e44e46` passed **4,998 model/JUnit tests,
+    zero failures/errors/skips**, in 145 seconds. Reports:
+    `target/verification/run-qxi9x28b/model`. The complete targeted selection
+    from item 12 is running again as `20261103T194219Z-c9b76ff674aa`
+    (PID 13366).
+
+15. Targeted run `20261103T194219Z-c9b76ff674aa`, reports
+    `target/docker-ui/run-BHONCG`, completed **107 tests / 22 failures /
+    10 errors / 0 skips** in 1,373 seconds. Unlike the earlier startup failure,
+    this run exercised the player journeys. Repairs distinguish outdoor workers
+    from pioneers sharing a square, select the specific go-to unit, retain
+    occupied-field behavior in context tests, update identity/capture text,
+    account for the road bonus in the job fixtures, and capture map evidence
+    from the primary scene. The native-identity fixture now houses its resident
+    indoors instead of on the settlement being inspected. The river journey
+    brings workers indoors through job controls before comparing bare terrain.
+    TC74 is added to the next selection because it shares the capture/pass-through
+    verification helper. UI source compilation and the formatter (123 Java files)
+    passed. Fresh model acceptance: `20261103T201045Z-5bd3a963a6ec`, PID 14859.
+    Targeted UI, visual acceptance and smoke remain pending.
+
+16. `20261103T201045Z-5bd3a963a6ec` passed **4,998 model/JUnit tests,
+    zero failures/errors/skips**, in 148 seconds; reports:
+    `target/verification/run-ie6_jjiw/model`. The targeted selection plus TC74
+    is running as `20261103T201328Z-1f7e376607c2` (PID 15329).
+
+17. Targeted run `20261103T201328Z-1f7e376607c2`, reports
+    `target/docker-ui/run-VXgPc5`, completed **121 tests / 12 failures /
+    2 errors / 0 skips** in 1,636 seconds. The map-job menu used the goods
+    debug description in its ID; it now uses the stable goods name. Remaining
+    scenario repairs cover exact road yields, alliance report labels, an indoor
+    fixture slot, free terrain for construction pixel checks, and excluding a
+    neighbouring city flag from terrain-only preview comparisons. Captured
+    images confirm the full gray field mask and local fishing boat. They also
+    exposed overlapping recipient labels: the user explicitly approved showing
+    that text only for the selected worker, while retaining every `w` banner.
+    The rule and R-0405 now record this decision; fresh UI review remains required.
+18. Model run `20261103T204523Z-be6382a9f634` (PID 19489) covers the repairs
+    before that label change. Fresh acceptance for the selected-worker label is
+    queued/running as `20261103T204659Z-d53456fe8789` (PID 19803). UI compilation
+    passed; the shared formatter checked 127 changed Java files. Targeted UI
+    and smoke remain pending.
+
+19. `20261103T204523Z-be6382a9f634` passed **4,998 model/JUnit tests,
+    zero failures/errors/skips**, in 148 seconds; reports:
+    `target/verification/run-ej_7ayv2/model`. This precedes the selected-worker
+    label change; the newer model run remains authoritative for that source.
+    During this task, separate documentation-only commits captured R-0406 and
+    R-0407; the current base is `cd38e4e3b99dcca7ef85137f1e63184ff9377863`.
+    Those requirement captures are preserved and do not authorize their implementation.
+
+20. `20261103T204659Z-d53456fe8789` passed **4,998 model/JUnit tests,
+    zero failures/errors/skips**, in 150 seconds (52 seconds waiting for the
+    serialized slot); reports: `target/verification/run-eeup_s03/model`.
+    This covers the selected-worker label change. The complete targeted
+    selection is running as `20261103T205039Z-eb1bef927f46` (PID 20600).
+    Documentation consistency, naming audit and strict MkDocs also passed.
+
+21. `20261103T205039Z-eb1bef927f46`, reports `target/docker-ui/run-JaQdtq`,
+    completed **121 tests / 4 failures / 0 errors / 0 skips** in 1,679 seconds.
+    All four failures were TC74 report expectations for the remaining nation
+    pairs; those now include the same Greek identity suffixes as the displayed
+    report. Other selected scenarios passed. Visual review of the new screenshots
+    confirms readable selected-worker text, retained `w` banners, the gray
+    preview, local fishing boat and illustrated identity help. Historical failures
+    remain failed. Fresh model run: `20261103T211917Z-679aede6baa5`, PID 22397.
+    Targeted acceptance and smoke remain pending.
+
+22. `20261103T211917Z-679aede6baa5` passed **4,998 model/JUnit tests,
+    zero failures/errors/skips**, in 144 seconds; reports:
+    `target/verification/run-2ja5hd8r/model`. The full targeted selection is
+    running as `20261103T212200Z-fca182d4130d` (PID 22875).
+
+23. `20261103T212200Z-fca182d4130d`, reports `target/docker-ui/run-rxTn63`,
+    completed **121 tests / 3 failures / 0 errors / 0 skips** in 1,693 seconds.
+    The three remaining failures are TC74 feedback expectations after the Greek
+    identity suffix change; all other **107 scenarios** passed. The remaining
+    feedback expectations are corrected. A byte comparison against the passing
+    model source snapshot confirms that **only TC74** differs among executable
+    source, tests, resources and configuration (recorded in
+    `target/r0402-0405/model-source-reuse.txt`). Therefore the 4,998 passing
+    model results and 107 unchanged UI results are reused. The complete TC74
+    class is running as `20261103T215056Z-16a7a902351f` (PID 26118), with a
+    900-second timeout. Failed historical reports remain unchanged; smoke has
+    not started.
+
+24. TC74 rerun `20261103T215056Z-16a7a902351f`, reports
+    `target/docker-ui/run-fbeXaV`, passed **14 tests / 0 failures / 0 errors /
+    0 skips** in 168 seconds. Together with the unchanged 107 passing cases
+    from item 23, targeted acceptance covers **121 UI tests**. The fixed
+    smoke/support phase started only now, after all three requirements and
+    targeted acceptance: `20261103T215359Z-34858ea57288`, PID 26687, local
+    acceptance limit 420 seconds (outer runner timeout 480 seconds).
+
+25. Smoke `20261103T215359Z-34858ea57288`, reports
+    `target/verification/run-dioc32x7`, failed **21 tests / 1 failure /
+    0 errors / 0 skips** in 204 seconds. F06 contained a royal field worker
+    sharing a square with hostile map units; real outdoor positions now reject
+    that invalid fixture. The worker is housed in a free town-hall slot,
+    preserving the harbor trading journey. A scan of all scenario fixtures
+    found no remaining field/map enemy overlaps. No production code changed.
+    The fixed smoke/support selection is running again as
+    `20261103T215821Z-e900fcdeba7a` (PID 27431), with the same 420-second
+    local acceptance budget.
+
+26. Smoke `20261103T215821Z-e900fcdeba7a`, reports
+    `target/verification/run-nbqr1j4x`, passed **21 tests / 0 failures /
+    0 errors / 0 skips** in **226 seconds**, below the 420-second budget.
+    Final plan review identified TC101, named in R-0402, as an additional
+    outstanding targeted journey. It is running without any source changes as
+    `20261103T220245Z-1c1b06ef38a4` (PID 27860). Accepted source and the fixed
+    smoke selection remain unchanged; smoke is reusable. Requirement closure,
+    final documentation checks and integration await this last planned scenario.
+
+27. TC101 run `20261103T220245Z-1c1b06ef38a4`, reports
+    `target/docker-ui/run-7aTYiH`, passed **5 tests / 0 failures / 0 errors /
+    0 skips** in 925 seconds. This completes the named implementation-plan
+    selection. No executable source changed after the passing smoke.

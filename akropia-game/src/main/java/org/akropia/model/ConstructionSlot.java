@@ -239,6 +239,8 @@ public class ConstructionSlot {
                 && getColony().getConstructions().contains(construction)
                 && construction.getConstructionSlots().contains(this)
                 && isEmpty() && getColony().canAcceptWorker(unit)
+                && ((AbstractUnit) unit).colonyTransferCost(getColony(),
+                        getColony().getLocation()) >= 0
                 && getColony().canAcceptSchoolTeacher(this, unit)
                 && isWorkAllowed(unit, getConstructionType());
     }

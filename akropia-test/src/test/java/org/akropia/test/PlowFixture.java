@@ -42,6 +42,7 @@ final class PlowFixture {
         final JsonObject saved = new Gson()
                 .fromJson(Files.readString(source.toPath()), JsonObject.class);
         final JsonObject model = saved.getAsJsonObject("model");
+        houseWorkersAt(model, clearAt);
         model.getAsJsonArray("units").forEach(value -> {
             final JsonObject unit = value.getAsJsonObject();
             if ("COLONIST".equals(unit.get("type").getAsString())) {
@@ -111,4 +112,56 @@ final class PlowFixture {
         rows.set(location.getY(), new JsonPrimitive(
                 row.substring(0, colon + 1) + String.join(",", cells)));
     }
+
+    /** Keep a construction-test square free of unrelated field workers. */
+    static void houseWorkersAt(final JsonObject model,
+            final Location... locations) {
+        for (final com.google.gson.JsonElement entry : model
+                .getAsJsonArray("colonies")) {
+            final JsonObject colony = entry.getAsJsonObject();
+            final JsonObject center = colony.getAsJsonObject("location");
+            for (final com.google.gson.JsonElement fieldEntry : colony
+                    .getAsJsonArray("colonyFields")) {
+                final JsonObject field = fieldEntry.getAsJsonObject();
+                if (!field.has("workerId")) {
+                    continue;
+                }
+                final JsonObject direction = field.getAsJsonObject("direction");
+                final Location at = Location.of(
+                        center.get("x").getAsInt()
+                                + direction.get("x").getAsInt(),
+                        center.get("y").getAsInt()
+                                + direction.get("y").getAsInt());
+                if (!java.util.Arrays.asList(locations).contains(at)) {
+                    continue;
+                }
+                final int id = field.get("workerId").getAsInt();
+                final JsonObject hall = java.util.stream.StreamSupport
+                        .stream(colony.getAsJsonArray("constructions")
+                                .spliterator(), false)
+                        .map(value -> value.getAsJsonObject())
+                        .filter(value -> "TOWN_HALL"
+                                .equals(value.get("type").getAsString()))
+                        .findFirst().orElseThrow();
+                final JsonObject slot = java.util.stream.StreamSupport
+                        .stream(hall.getAsJsonArray("slots").spliterator(),
+                                false)
+                        .map(value -> value.getAsJsonObject())
+                        .filter(value -> !value.has("workerId")).findFirst()
+                        .orElseThrow();
+                slot.addProperty("workerId", id);
+                field.remove("workerId");
+                field.remove("producedGoodsType");
+                for (final com.google.gson.JsonElement unitEntry : model
+                        .getAsJsonArray("units")) {
+                    final JsonObject unit = unitEntry.getAsJsonObject();
+                    if (unit.get("id").getAsInt() == id) {
+                        unit.remove("placeColonyField");
+                        unit.add("placeConstructionSlot", new JsonObject());
+                    }
+                }
+            }
+        }
+    }
+
 }

@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="note">Read-only. Every ship you own with its place, voyage or repair, its passengers, goods and holds. Foreign ships appear only while you see them, with their occupied holds only. Show opens the map tile or Europe; opening and leaving spend no move.</entry>
+  <entry key="note">Read-only. Every ship you own with its place, voyage or repair, its passengers, goods and holds. Foreign ships appear only while you see them, with their occupied holds only. Show opens the map tile or Home port; opening and leaving spend no move.</entry>
   <entry key="unavailable">The fleet report appears when a game is running.</entry>
   <entry key="total">Ships of your nation: %s</entry>
   <entry key="empty">Your nation owns no ships in this game.</entry>
   <entry key="shipTitle">%s, ID %s</entry>
   <entry key="placeMap">Map tile %s, %s</entry>
-  <entry key="placeEurope">European port or pier</entry>
+  <entry key="placeEurope">home port or pier</entry>
   <entry key="placeSea">On the high seas</entry>
   <entry key="placeRepair">Ship under repair</entry>
   <entry key="placeOther">Place without an accessible destination</entry>
-  <entry key="voyageEurope">Sailing to Europe, turns left: %s</entry>
+  <entry key="voyageEurope">Sailing to Home port, turns left: %s</entry>
   <entry key="voyageColonies">Sailing back to the colonies, turns left: %s</entry>
   <entry key="voyageWaiting">Waiting at sea for a free square in the colonies</entry>
   <entry key="reversed">%s, turned around</entry>
   <entry key="repair">Under repair, updates left: %s, destination: %s</entry>
-  <entry key="repairToEurope">Europe</entry>
+  <entry key="repairToEurope">Home port</entry>
   <entry key="repairToColony">colony %s</entry>
   <entry key="repairToLost">a colony you no longer own</entry>
   <entry key="cargo">Passengers: %s; goods: %s</entry>

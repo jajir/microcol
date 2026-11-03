@@ -12,6 +12,6 @@
   <entry key="targetRow">Další přistěhovalec při %s pochodních; zbývá %s</entry>
   <entry key="stateNone">Žádný získaný přistěhovalec nečeká.</entry>
   <entry key="stateArrives">Získaný přistěhovalec dorazí na začátku vašeho příštího tahu.</entry>
-  <entry key="stateChoice">Získaný přistěhovalec čeká na váš výběr v Evropě (%s kandidátů). Zavření okna výběr pouze odloží.</entry>
-  <entry key="stateBlocked">Práh je dosažen, ale národ, který vyhlásil nezávislost, nedostává přistěhovalce z Evropy. Pochodně zůstávají uložené.</entry>
+  <entry key="stateChoice">Získaný přistěhovalec čeká na váš výběr v domovském přístavu (%s kandidátů). Zavření okna výběr pouze odloží.</entry>
+  <entry key="stateBlocked">Práh je dosažen, ale národ, který vyhlásil samostatnou polis, nedostává přistěhovalce z domovského přístavu. Pochodně zůstávají uložené.</entry>
 </properties>

@@ -217,7 +217,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         hosted.pressShortcut(KeyCode.O);
         hosted.verifyInGameHosted("Load game");
         hosted.press(KeyCode.ESCAPE);
-        europe.verifyEuropePortName("Europe");
+        europe.verifyEuropePortName("Home port");
         saves.verifyGameUnchanged();
         europe.close();
         layout.open("statistics");

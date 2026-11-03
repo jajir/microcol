@@ -14,7 +14,7 @@ import org.akropia.model.store.NativeSettlementKnowledgePo;
 import org.akropia.model.store.NativeSettlementPo;
 
 /**
- * Native settlement relation view: the rate boundaries, the alarm change kept
+ * Local settlement relation view: the rate boundaries, the alarm change kept
  * from the last peaceful update and from committed outcomes, pair isolation,
  * the learned gate, rival provocation only from visible sources, and a pure
  * read that survives save and load.

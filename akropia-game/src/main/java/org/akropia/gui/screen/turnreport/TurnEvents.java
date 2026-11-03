@@ -7,6 +7,7 @@ import org.akropia.i18n.MessageKeyResource;
  * be here.
  */
 public enum TurnEvents implements MessageKeyResource {
+    fishermanLostCargo, fishermanLostLand,
 
     /*
      * Turn events texts.

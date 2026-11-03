@@ -716,8 +716,14 @@ public class Colony {
      * @return whether a resident of this colony works the field on that square
      */
     boolean hasWorkerAt(final Location at) {
-        return colonyFields.stream().anyMatch(
-                field -> field.isNotEmpty() && field.getLocation().equals(at));
+        return outdoorWorkerAt(at).isPresent();
+    }
+
+    private Optional<Unit> outdoorWorkerAt(final Location at) {
+        return model.getUnitsAt(at).stream()
+                .filter(unit -> unit.getWorkingColony().orElse(null) == this
+                        || unit.getFishingColony().orElse(null) == this)
+                .findFirst();
     }
 
     /**
@@ -730,16 +736,14 @@ public class Colony {
      */
     Optional<ColonyDefense> planFieldDefense(final Unit attacker,
             final Location target) {
-        if (!isValid() || attacker.getOwner() == owner || attacker.isShip()) {
+        if (!isValid() || attacker.getOwner() == owner) {
             return Optional.empty();
         }
-        final Optional<Unit> worker = colonyFields.stream()
-                .filter(field -> field.isNotEmpty()
-                        && field.getLocation().equals(target))
-                .map(field -> field.getUnit().get()).findFirst();
+        final Optional<Unit> worker = outdoorWorkerAt(target);
         if (worker.isEmpty() || !(worker.get() instanceof UnitFreeColonist)
-                || !attacker.getType().getAttackableUnitType()
-                        .contains(worker.get().getType())) {
+                || !(attacker.isShip() && worker.get().isFishing())
+                        && !attacker.getType().getAttackableUnitType()
+                                .contains(worker.get().getType())) {
             return Optional.empty();
         }
         final List<Unit> roster = List.of(worker.get());
@@ -762,7 +766,7 @@ public class Colony {
      */
     Optional<ColonyDefense> planDefense(final Unit attacker,
             final List<Unit> candidates) {
-        if (!isValid() || attacker.getOwner() == owner || attacker.isShip()) {
+        if (!isValid() || attacker.getOwner() == owner) {
             return Optional.empty();
         }
         final List<Unit> armed = new ArrayList<>();
@@ -989,8 +993,8 @@ public class Colony {
         model.getEnemyUnitsAt(player, location).stream()
                 .filter(unit -> !unit.getType().isShip())
                 .forEach(unit -> unit.takeOver(player));
-        colonyFields.stream().filter(field -> !field.isEmpty())
-                .forEach(field -> field.getUnit().get().takeOver(player));
+        model.releaseOutdoorWorkers(this, true);
+        capLibertyToPopulation();
         constructions.forEach(construction -> construction
                 .getConstructionSlots().stream().filter(slot -> !slot.isEmpty())
                 .forEach(slot -> slot.getUnit().takeOver(player)));
@@ -1075,6 +1079,7 @@ public class Colony {
      * </ul>
      */
     public void startTurn() {
+        model.releaseOutdoorWorkers(this, false);
         // One snapshot for food, births, famine and post-famine output; owls
         // credited below affect the next update only.
         final PoliticalProduction political = getPoliticalProduction();
@@ -1653,9 +1658,13 @@ public class Colony {
                 || model.tryGetUnitById(unit.getId()).orElse(null) != unit) {
             return false;
         }
+        if (unit.isFishing() && unit.getFishingColony().orElse(null) != this) {
+            return false;
+        }
         if (unit.isAtPlaceColonyField()) {
-            return getColonyFields().stream()
-                    .anyMatch(field -> field.isWorkedBy(unit));
+            return unit.getPlaceColonyField().getColony().getOwner() == owner
+                    && getColonyFields().stream().anyMatch(field -> field
+                            .getLocation().equals(unit.getLocation()));
         }
         if (unit.isAtPlaceConstructionSlot()) {
             final ConstructionSlot slot = unit.getPlaceConstruction()
@@ -1667,7 +1676,9 @@ public class Colony {
                             .anyMatch(candidate -> candidate == slot);
         }
         return unit.isAtPlaceLocation()
-                && unit.getLocation().equals(getLocation());
+                && (unit.getLocation().equals(getLocation())
+                        || getColonyFields().stream().anyMatch(field -> field
+                                .getLocation().equals(unit.getLocation())));
     }
 
     boolean canAcceptWorker(final Unit unit) {

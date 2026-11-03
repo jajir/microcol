@@ -11,7 +11,7 @@
 	<entry key="pricePerPiece">Cena za jeden kus ...</entry>
 	<entry key="selected">Chceš koupit %s kusů, za  ...</entry>
 	<entry key="selectedSell">Chceš prodat %s kusů, za  ...</entry>
-	<entry key="tax">Královská daň je %s%%. To je ...</entry>
+	<entry key="tax">Odvod mateřskému městu je %s%%. To je ...</entry>
 	<entry key="total">Celkem to bude ...</entry>
 	<entry key="totalSell">Celkem dostaneš ...</entry>
 	<entry key="price">%s zlatých</entry>

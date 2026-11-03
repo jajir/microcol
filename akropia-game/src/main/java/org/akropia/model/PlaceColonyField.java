@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
 /**
  * Unit is placed at field to work outside of colony.
  */
-public class PlaceColonyField extends AbstractPlace {
+public class PlaceColonyField extends PlaceLocation {
 
     private final ColonyField colonyField;
 
@@ -21,7 +21,8 @@ public class PlaceColonyField extends AbstractPlace {
 
     public PlaceColonyField(final Unit unit, final ColonyField colonyField,
             final GoodsType producedGoodsType) {
-        super(unit);
+        super(unit, Preconditions.checkNotNull(colonyField).getLocation(),
+                Direction.east);
         Preconditions.checkNotNull(colonyField,
                 "Colonu field is null, for unit id %s", unit.getId());
         Preconditions.checkNotNull(producedGoodsType,
@@ -54,7 +55,7 @@ public class PlaceColonyField extends AbstractPlace {
                 .add("colonyName", colonyField.getColonyName()).toString();
     }
 
-    Colony getColony() {
+    public Colony getColony() {
         return colonyField.getColony();
     }
 

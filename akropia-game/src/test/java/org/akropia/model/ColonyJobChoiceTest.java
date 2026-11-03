@@ -300,6 +300,7 @@ class ColonyJobChoiceTest {
                 GoodsType.LUMBER);
         assertEquals(field(model, Direction.north).getLocation(),
                 offer.getTargetLocation().orElseThrow());
+        model.getUnitById(4).startTurn();
         model.getUnitById(4).placeToMap(colony(model).getLocation());
         offer.execute();
         assertSame(model.getUnitById(0),

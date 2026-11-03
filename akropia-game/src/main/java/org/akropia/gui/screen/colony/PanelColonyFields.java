@@ -122,6 +122,7 @@ public final class PanelColonyFields implements JavaFxComponent {
                 .checkNotNull(gameModelController);
         this.paintService = Preconditions.checkNotNull(paintService);
         this.eventBus = Preconditions.checkNotNull(eventBus);
+        eventBus.register(this);
         final int size = 3 * TILE_WIDTH_IN_PX;
 
         canvas = new Canvas(size, size);
@@ -189,19 +190,30 @@ public final class PanelColonyFields implements JavaFxComponent {
         mainPanel.getStyleClass().add("colony-fields");
     }
 
+    private Optional<Unit> fieldWorker(final ColonyField field) {
+        if (field.isWorkedByAnotherColony()) {
+            return Optional.empty();
+        }
+        return field.getUnit().or(() -> gameModelController.getModel()
+                .getUnitsAt(field.getLocation()).stream()
+                .filter(unit -> unit.getFishingColony().orElse(null) == colony)
+                .findFirst());
+    }
+
     private void onContextMenuRequested(final ContextMenuEvent event) {
         clickableArea.getDirection(fieldPoint(event.getX(), event.getY()))
                 .map(loc -> colony.getColonyFieldInDirection(loc))
-                .filter(ColonyField::isNotEmpty).ifPresent(
+                .filter(field -> fieldWorker(field).isPresent()).ifPresent(
                         colonyField -> showContextMenuAtColonyField(colonyField,
                                 event));
     }
 
     private void showContextMenuAtColonyField(final ColonyField colonyField,
             final ContextMenuEvent event) {
-        final Unit expectedWorker = colonyField.getUnit().orElseThrow();
+        final Unit expectedWorker = fieldWorker(colonyField).orElseThrow();
         contextMenu.getItems().clear();
         colonyField.getTerrain().getProduction().stream()
+                .filter(production -> expectedWorker.isAtPlaceColonyField())
                 .forEach(production -> {
                     final MenuItem item = new MenuItem(
                             production.getGoodsType().name() + "   "
@@ -223,6 +235,34 @@ public final class PanelColonyFields implements JavaFxComponent {
         work.setOnAction(action -> eventBus
                 .post(new ShowColonyJobChoicesEvent(expectedWorker)));
         contextMenu.getItems().add(work);
+        final MenuItem cancel = new MenuItem(
+                i18n.get(org.akropia.gui.Loc.cancelWork));
+        cancel.setId("cancelColonyWork");
+        cancel.setDisable(!expectedWorker.isAtPlaceColonyField()
+                || !expectedWorker.canLeaveColony());
+        cancel.setOnAction(action -> {
+            try {
+                expectedWorker.cancelColonyWork();
+                eventBus.post(new RepaintColonyEvent());
+            } catch (IllegalArgumentException
+                    | IllegalStateException rejected) {
+                showFieldProblem(ColonyMsg.fieldChanged);
+            }
+        });
+        final MenuItem returnHome = new MenuItem(
+                i18n.get(org.akropia.gui.Loc.returnToColony));
+        returnHome.setId("returnToColony");
+        returnHome.setDisable(!expectedWorker.canReturnToWorkingColony());
+        returnHome.setOnAction(action -> {
+            try {
+                expectedWorker.returnToWorkingColony();
+                eventBus.post(new RepaintColonyEvent());
+            } catch (IllegalArgumentException
+                    | IllegalStateException rejected) {
+                showFieldProblem(ColonyMsg.fieldChanged);
+            }
+        });
+        contextMenu.getItems().addAll(cancel, returnHome);
         contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
     }
 
@@ -245,7 +285,8 @@ public final class PanelColonyFields implements JavaFxComponent {
         final Optional<Direction> oLoc = clickableArea
                 .getDirection(fieldPoint(event.getX(), event.getY()));
         oLoc.map(loc -> colony.getColonyFieldInDirection(loc))
-                .filter(ColonyField::isNotEmpty).ifPresent(colonyField -> {
+                .filter(field -> fieldWorker(field).isPresent())
+                .ifPresent(colonyField -> {
                     dragStartedAtColonyField(colonyField, oLoc.get());
                     event.consume();
                 });
@@ -253,7 +294,7 @@ public final class PanelColonyFields implements JavaFxComponent {
 
     private void dragStartedAtColonyField(final ColonyField colonyField,
             final Direction direction) {
-        final Unit unit = colonyField.getUnit().get();
+        final Unit unit = fieldWorker(colonyField).orElseThrow();
         final Image image = imageProvider.getUnitImage(unit);
         final Dragboard db = canvas.startDragAndDrop(TransferMode.MOVE);
         ClipboardWritter.make(db).addImage(image)
@@ -365,6 +406,20 @@ public final class PanelColonyFields implements JavaFxComponent {
                 new StatusBarMessageEvent(i18n.get(message), Source.COLONY));
     }
 
+    @com.google.common.eventbus.Subscribe
+    public void selectWorker(final SelectColonyWorkerEvent event) {
+        final Unit worker = event.getWorker();
+        if (worker.getFishingColony().orElse(null) == colony
+                && worker.isAtPlaceLocation()) {
+            selectedX = worker.getLocation().getX()
+                    - colony.getLocation().getX() + 1;
+            selectedY = worker.getLocation().getY()
+                    - colony.getLocation().getY() + 1;
+            paint(canvas.getGraphicsContext2D());
+            refreshDetail();
+        }
+    }
+
     public void setColony(final Colony colony) {
         contextMenu.hide();
         if (this.colony != colony) {
@@ -412,11 +467,21 @@ public final class PanelColonyFields implements JavaFxComponent {
         final ColonyFieldTile colonyFieldTile = ColonyFieldTile
                 .ofDirection(colonyField.getDirection());
         final Point point = colonyFieldTile.getTopLeftCorner();
+        if (colonyField.isWorkedByAnotherColony()) {
+            gc.setFill(Color.GRAY);
+            gc.fillRect(point.getX(), point.getY(), TILE_WIDTH_IN_PX,
+                    TILE_WIDTH_IN_PX);
+            return;
+        }
         paintService.paintTerrainOnTile(gc, point, colonyField.getLocation(),
                 terrain, false, 0);
+        if (colonyField.isEmpty()) {
+            fieldWorker(colonyField).ifPresent(
+                    unit -> paintService.paintUnitWithoutFlag(gc, point, unit));
+        }
         if (!colonyField.isEmpty()) {
             final Goods production = colonyField.getProduction().get();
-            final Unit unit = colonyField.getUnit().get();
+            final Unit unit = fieldWorker(colonyField).orElseThrow();
             paintService.paintUnitWithoutFlag(gc, point, unit);
             gc.drawImage(imageProvider.getGoodsTypeImage(production.getType()),
                     point.getX(), point.getY(), 25, 25);
@@ -463,6 +528,13 @@ public final class PanelColonyFields implements JavaFxComponent {
             tileName.setText(i18n.get(ColonyMsg.fieldChanged));
             return;
         }
+        if (!center && field.isWorkedByAnotherColony()) {
+            tileName.setText("");
+            workerName.setText("");
+            gc.setFill(Color.GRAY);
+            gc.fillRect(0, 0, preview.getWidth(), preview.getHeight());
+            return;
+        }
         final Terrain terrain = gameModelController.getModel().getMap()
                 .getTerrainAt(location);
         gc.save();
@@ -480,16 +552,17 @@ public final class PanelColonyFields implements JavaFxComponent {
         } else {
             tileName.setText(new LocalizationHelper(i18n)
                     .getTerrainName(field.getTerrainType()));
-            field.getUnit().ifPresent(unit -> {
+            fieldWorker(field).ifPresent(unit -> {
                 paintService.paintUnitWithoutFlag(gc, Point.of(0, 0), unit);
                 workerName.setText(
                         i18n.get(UnitTypes.getUnitName(unit.getType())));
                 final ToggleGroup group = new ToggleGroup();
-                final GoodsType current = unit.getPlaceColonyField()
-                        .getProducedGoodsType();
+                final GoodsType current = unit.isAtPlaceColonyField()
+                        ? unit.getPlaceColonyField().getProducedGoodsType()
+                        : null;
                 colony.getJobChoices(unit).stream()
-                        .filter(choice -> choice
-                                .getKind() == ColonyJobChoice.Kind.CURRENT_FIELD
+                        .filter(choice -> choice.getTargetLocation()
+                                .filter(field.getLocation()::equals).isPresent()
                                 && choice.getUnavailableReason().isEmpty())
                         .forEach(choice -> addOutputChoice(choice, current,
                                 group));

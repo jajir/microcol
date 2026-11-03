@@ -350,6 +350,7 @@ class RivalExpansionCycleTest {
             model = Model.make(saved,
                     MissionImpl.getPredefinedGameOverEvaluators());
         }
+        model.getUnitById(FOUNDER_ID).startTurn();
         setGrain(s.food);
         if (s.second) {
             foundIslandColony(s);
@@ -371,6 +372,11 @@ class RivalExpansionCycleTest {
         final Colony island = model.buildColony(france(), islandFounder,
                 "Lyon");
         if (s.secondDeficit) {
+            islandFounder.startTurn();
+            islandFounder.placeToColonyStructureSlot(
+                    island.getConstructionByType(ConstructionType.TOWN_HALL)
+                            .getConstructionSlots().get(0));
+            islandFounder.startTurn();
             employ(island, islandFounder, GoodsType.LUMBER);
             for (final int id : ISLAND_CREW) {
                 employ(island, model.getUnitById(id), GoodsType.LUMBER);
@@ -438,6 +444,8 @@ class RivalExpansionCycleTest {
                 .findFirst().orElseThrow(() -> new IllegalStateException(
                         "No free " + goods + " job for " + worker));
         choice.execute();
+        // The fixture prepares an established job before the tested owner turn.
+        worker.startTurn();
     }
 
     /** Save and load: the game and the robot continue from the saved state. */

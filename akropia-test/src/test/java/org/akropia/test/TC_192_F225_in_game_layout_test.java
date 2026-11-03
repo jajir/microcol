@@ -215,7 +215,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         game.openColonyWithKeyboard(0, "New Amsterdam");
         page.verifyBackToGame("closeButtonId", "Zpět do hry");
         page.closeWithEscape();
-        game.openEuroperPort("Evropa");
+        game.openEuroperPort("Domovský přístav");
         page.verifyBackToGame("closeButtonId", "Zpět do hry");
         page.open("closeButtonId");
         game.openTurnReport();

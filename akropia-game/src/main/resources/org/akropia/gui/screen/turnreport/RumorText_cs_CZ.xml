@@ -5,7 +5,7 @@
   <entry key="gold">Průzkumníci v ztraceném městě našli poklad: %s zlatých.</entry>
   <entry key="recruit">K výpravě se připojil ztracený kolonista: na prozkoumaném políčku stojí jeden svobodný kolonista.</entry>
   <entry key="explorerLost">Výprava se ztratila: průzkumník se nevrátil.</entry>
-  <entry key="burial">Průzkumníci narušili pohřebiště domorodého národa: nejbližší domorodý národ se rozhněval.</entry>
-  <entry key="burialNoNation">Průzkumníci narušili pohřebiště, ale není tu žádná domorodá osada, která by se mohla rozhněvat.</entry>
+  <entry key="burial">Průzkumníci narušili pohřebiště místního národa: nejbližší místní národ se rozhněval.</entry>
+  <entry key="burialNoNation">Průzkumníci narušili pohřebiště, ale není tu žádná místní osada, která by se mohla rozhněvat.</entry>
   <entry key="deSotoAverted">Přítomnost de Sota v kongresu odvrátila nebezpečí: průzkumníci nic nenašli.</entry>
 </properties>

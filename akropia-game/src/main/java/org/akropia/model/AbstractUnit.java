@@ -131,6 +131,162 @@ public abstract class AbstractUnit implements Unit {
         return owner;
     }
 
+    /**
+     * Whether this worker is confined to its colony's local fishing grounds.
+     */
+    public boolean isFishing() {
+        return place instanceof PlaceFishingGround || isAtPlaceColonyField()
+                && !model.getMap().getTerrainTypeAt(getLocation()).isLand();
+    }
+
+    @Override
+    public Optional<Colony> getFishingColony() {
+        if (place instanceof PlaceFishingGround) {
+            return Optional.of(((PlaceFishingGround) place).getColony());
+        }
+        return isFishing() ? getColony() : Optional.empty();
+    }
+
+    @Override
+    public Optional<Colony> getWorkingColony() {
+        return getColony();
+    }
+
+    @Override
+    public List<ColonyJobChoice> getMapJobChoices() {
+        return ColonyJobChoice.forMapWorker(model, this);
+    }
+
+    @Override
+    public void cancelColonyWork() {
+        model.checkTurnPreparationComplete();
+        Preconditions
+                .checkState(
+                        isAtPlaceColonyField()
+                                && getPlaceColonyField().getColony()
+                                        .canWorkerActHere(this)
+                                && canLeaveColony(),
+                        "No available outdoor job");
+        if (isFishing()) {
+            final Colony colony = getWorkingColony().orElseThrow();
+            final Place replacement = new PlaceFishingGround(this, colony,
+                    getLocation());
+            place.destroySimple();
+            place = replacement;
+            colony.verifyNumberOfUnitsOptionallyDestroyColony();
+        } else {
+            placeToLocation(getLocation());
+        }
+        model.fireUnitMovedToLocation(this);
+    }
+
+    @Override
+    public boolean canReturnToWorkingColony() {
+        return getWorkingColony().or(this::getFishingColony)
+                .filter(colony -> colony.canWorkerActHere(this)
+                        && colonyTransferCost(colony, colony.getLocation()) >= 0
+                        && canLeaveColony())
+                .isPresent();
+    }
+
+    @Override
+    public void returnToWorkingColony() {
+        Preconditions.checkState(canReturnToWorkingColony(),
+                "Worker cannot return");
+        placeToMap(getWorkingColony().or(this::getFishingColony).orElseThrow()
+                .getLocation());
+    }
+
+    /**
+     * Forced loss of the supplying city preserves ownership, never voluntary
+     * movement.
+     */
+    void releaseOutdoorWork(final Colony colony, final Location safeLand) {
+        final boolean fisherman = isFishing();
+        final Location original = getLocation();
+        if (fisherman && safeLand == null) {
+            model.addTurnEvent(
+                    new org.akropia.model.turnevent.TurnEventFishermanLost(this,
+                            colony,
+                            org.akropia.model.turnevent.TurnEventFishermanLost.Reason.NO_SAFE_LAND));
+        }
+        place.destroySimple();
+        if (fisherman && safeLand == null) {
+            model.destroyUnit(this);
+            return;
+        }
+        place = new PlaceLocation(this, fisherman ? safeLand : original,
+                getDefaultOrintation());
+        if (fisherman) {
+            movementThirds = 0;
+        }
+        owner.revealMapForUnit(this);
+        model.fireUnitMovedToLocation(this);
+    }
+
+    /** Cost of a job transfer, or -1 when ordinary movement cannot reach it. */
+    int colonyTransferCost(final Colony colony, final Location target) {
+        final Location origin = isAtPlaceConstructionSlot()
+                ? getPlaceConstruction().getColony().getLocation()
+                : isAtPlaceLocation() ? getLocation() : null;
+        if (origin == null) {
+            return -1;
+        }
+        if (origin.equals(target)) {
+            return 0;
+        }
+        if (!model.getMap().getTerrainTypeAt(target).isLand() || isFishing()) {
+            final boolean fishingGround = colony.getColonyFields().stream()
+                    .anyMatch(field -> field.getLocation().equals(target)
+                            && field.isValid()
+                            && !field.getTerrainType().isLand()
+                            && field.canProduce(GoodsType.GRAIN));
+            return getActionPoints() > 0
+                    && (target.equals(colony.getLocation()) || fishingGround)
+                    && (origin.equals(colony.getLocation()) || isFishing())
+                            ? MovementPoints.ofPoints(1)
+                            : -1;
+        }
+        if (!isPossibleToMoveAt(target)) {
+            return -1;
+        }
+        final List<Location> route = isAtPlaceLocation()
+                ? new PathFinder(this).find(target, false)
+                : origin.isNeighbor(target) ? List.of(target) : null;
+        if (route == null) {
+            return -1;
+        }
+        int remaining = movementThirds;
+        Location previous = origin;
+        for (int index = 0; index < route.size(); index++) {
+            final Location step = route.get(index);
+            final int cost = getEntryCostThirds(previous, step);
+            if (cost > remaining) {
+                if (index == 0 && route.size() == 1 && hasFullMovement()) {
+                    return movementThirds;
+                }
+                return -1;
+            }
+            remaining -= cost;
+            previous = step;
+        }
+        return movementThirds - remaining;
+    }
+
+    @Override
+    public String getTaskSign() {
+        if (tradeRouteAssignment != null) {
+            return "t";
+        }
+        if (isAtPlaceColonyField() || isAtPlaceConstructionSlot()) {
+            return "w";
+        }
+        if (goTo != null) {
+            return "g";
+        }
+        return unitAction.getType().getSign();
+    }
+
     @Override
     public PlaceLocation getPlaceLocation() {
         verifyThatUnitIsAtMap();
@@ -281,6 +437,9 @@ public abstract class AbstractUnit implements Unit {
      */
     @Override
     public List<Location> getAvailableLocations() {
+        if (isFishing()) {
+            return List.of();
+        }
         Preconditions.checkArgument(isAtPlaceLocation(), "Unit have to at map");
         model.checkGameRunning();
         model.checkCurrentPlayer(owner);
@@ -603,7 +762,7 @@ public abstract class AbstractUnit implements Unit {
 
     @Override
     public boolean canAttack() {
-        return getType().canAttack();
+        return !isFishing() && getType().canAttack();
     }
 
     @Override
@@ -699,8 +858,14 @@ public abstract class AbstractUnit implements Unit {
                 .isAttackRestrained(owner, peacefulColony.get().getOwner()))) {
             return Optional.empty();
         }
+        final boolean fishingTarget = model.getUnitsAt(targetLocation).stream()
+                .anyMatch(unit -> unit.isFishing() && unit.getOwner() != owner);
         final List<Unit> eligible = owner.getEnemyUnitsAt(targetLocation)
                 .stream()
+                .filter(unit -> !unit.isAtPlaceColonyField()
+                        && !unit.isFishing())
+                .filter(unit -> !fishingTarget || !unit.isShip()
+                        || unit.canAttack())
                 .filter(unit -> getType().getAttackableUnitType()
                         .contains(unit.getType()))
                 // A treasure train has no strength of its own, so it is a
@@ -743,7 +908,7 @@ public abstract class AbstractUnit implements Unit {
             return centerColony.get().planDefense(this, eligible)
                     .flatMap(this::colonyBattle);
         }
-        if (fieldColony.isPresent() && !isShip() && !owner.isNative()
+        if (fieldColony.isPresent() && !owner.isNative()
                 && eligible.isEmpty()) {
             return fieldColony.get().planFieldDefense(this, targetLocation)
                     .flatMap(this::colonyBattle);
@@ -843,7 +1008,8 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public boolean canAffordStepTo(final Location location) {
         Preconditions.checkNotNull(location);
-        return isAtPlaceLocation() && model.getMap().isValid(location)
+        return isAtPlaceLocation() && !isFishing()
+                && model.getMap().isValid(location)
                 && getLocation().isNeighbor(location)
                 && canPayEntryCost(getEntryCostThirds(getLocation(), location));
     }
@@ -911,6 +1077,8 @@ public abstract class AbstractUnit implements Unit {
      */
     @Override
     public void moveOneStep(final Location moveTo) {
+        Preconditions.checkState(!isFishing(),
+                "Manage the fisherman in its colony");
         verifyCanMoveOneStep(moveTo);
 
         if (isShip() && model.getHighSea().isDepartureMove(this, moveTo)) {
@@ -1283,6 +1451,35 @@ public abstract class AbstractUnit implements Unit {
             placeToLocation(battlefield);
             model.wakeSentriesForMovement(this, battlefield);
             colony.captureAfterWonBattle(this, defense);
+            return;
+        }
+        if (winnerAttacker && defender.isFishing()) {
+            final CargoSlot slot = ((org.akropia.model.unit.UnitWithCargo) this)
+                    .getCargo().getEmptyCargoSlot().orElse(null);
+            model.fireUnitAttacked(this, defender, defender, slot == null,
+                    promotion,
+                    new ColonyBattleOutcome(colony, battlefield, kind,
+                            slot == null
+                                    ? ColonyBattleOutcome.Result.DEFENDER_DESTROYED
+                                    : ColonyBattleOutcome.Result.WORKER_CAPTURED,
+                            false));
+            if (slot == null) {
+                model.addTurnEvent(
+                        new org.akropia.model.turnevent.TurnEventFishermanLost(
+                                defender, colony,
+                                org.akropia.model.turnevent.TurnEventFishermanLost.Reason.NO_CARGO_SPACE));
+                defender.place.destroySimple();
+                model.destroyUnit(defender);
+            } else {
+                defender.place.destroySimple();
+                defender.takeOver(owner);
+                final PlaceCargoSlot cargoPlace = new PlaceCargoSlot(defender,
+                        slot);
+                defender.place = cargoPlace;
+                slot.store(cargoPlace);
+                model.fireUnitEmbarked(defender, slot);
+            }
+            colony.verifyNumberOfUnitsOptionallyDestroyColony();
             return;
         }
         if (winnerAttacker && kind == ColonyDefense.Kind.FIELD
@@ -1875,10 +2072,21 @@ public abstract class AbstractUnit implements Unit {
         place = new PlaceEuropePier(this);
     }
 
+    /**
+     * Called only after the complete transfer has been validated and priced.
+     */
+    protected void prepareForColonyJob() {
+    }
+
     @Override
     public void placeToColonyStructureSlot(
             final ConstructionSlot structureSlot) {
         validateColonyStructureSlot(structureSlot);
+        final int transferCost = colonyTransferCost(structureSlot.getColony(),
+                structureSlot.getColony().getLocation());
+        Preconditions.checkState(transferCost >= 0,
+                "Worker cannot reach the colony");
+        prepareForColonyJob();
         final boolean leavesColony = isColonyResident()
                 && !isAlreadyInSameColony(structureSlot.getColony());
         if (isAlreadyInSameColony(structureSlot.getColony())) {
@@ -1886,6 +2094,8 @@ public abstract class AbstractUnit implements Unit {
         } else {
             place.destroy();
         }
+        movementThirds = Math.min(movementThirds - transferCost,
+                MovementPoints.ofPoints(getSpeed()));
         place = new PlaceConstructionSlot(this, structureSlot);
         structureSlot.set((PlaceConstructionSlot) place);
         structureSlot.getColony().grantLaSalleStockade();
@@ -1896,6 +2106,11 @@ public abstract class AbstractUnit implements Unit {
     public void placeToColonyField(final ColonyField colonyField,
             final GoodsType producedGoodsType) {
         validateColonyField(colonyField, producedGoodsType);
+        final int transferCost = colonyTransferCost(colonyField.getColony(),
+                colonyField.getLocation());
+        Preconditions.checkState(transferCost >= 0,
+                "Worker cannot reach the field");
+        prepareForColonyJob();
         final boolean leavesColony = isColonyResident()
                 && !isAlreadyInSameColony(colonyField.getColony());
         if (isAlreadyInSameColony(colonyField.getColony())) {
@@ -1903,10 +2118,14 @@ public abstract class AbstractUnit implements Unit {
         } else {
             place.destroy();
         }
+        movementThirds = Math.min(movementThirds - transferCost,
+                MovementPoints.ofPoints(getSpeed()));
         place = new PlaceColonyField(this, colonyField, producedGoodsType);
         colonyField.setPlaceColonyField((PlaceColonyField) place);
         colonyField.getColony().grantLaSalleStockade();
         model.recordNativeLandUse(getOwner(), colonyField.getLocation());
+        owner.revealMapForUnit(this);
+        model.fireUnitMovedToLocation(this);
         completeResidentExit(leavesColony);
     }
 
@@ -2016,7 +2235,15 @@ public abstract class AbstractUnit implements Unit {
                 "Unit '%s' can't be placed at '%s' because can't move on terrain '%s'",
                 this, location, model.getMap().getTerrainTypeAt(location));
 
+        final int transferCost = isColonyResident() || isFishing()
+                ? colonyTransferCost(
+                        getColony().or(this::getFishingColony).orElseThrow(),
+                        location)
+                : 0;
+        Preconditions.checkState(transferCost >= 0,
+                "Worker cannot reach the destination");
         placeToLocation(location, getDefaultOrintation());
+        movementThirds -= transferCost;
     }
 
     @Override
@@ -2180,12 +2407,19 @@ public abstract class AbstractUnit implements Unit {
      */
 
     private void setAction(final UnitAction unitAction) {
-        this.unitAction = Preconditions.checkNotNull(unitAction,
-                "Unit action is null");
+        Preconditions.checkNotNull(unitAction, "Unit action is null");
         Preconditions.checkState(
                 getSupportedActions().contains(unitAction.getType()),
-                "Unsupported type '%s' for this unit '%s", unitAction.getType(),
+                "Unsupported type '%s' for unit '%s", unitAction.getType(),
                 this);
+        Preconditions.checkState(
+                !isFishing() || unitAction.getType() == UnitActionType.noAction,
+                "Fishing boats are managed through their colony");
+        if (unitAction.getType() != UnitActionType.noAction
+                && isAtPlaceColonyField()) {
+            cancelColonyWork();
+        }
+        this.unitAction = unitAction;
     }
 
     void setWaitingOrder(final UnitActionType actionType) {
@@ -2403,7 +2637,11 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(
                 tradeRouteAssignment == null && (goTo == null || isShip()),
                 "Unit %s has a standing order", this);
-        goTo = Preconditions.checkNotNull(order);
+        Preconditions.checkNotNull(order);
+        if (isAtPlaceColonyField()) {
+            cancelColonyWork();
+        }
+        goTo = order;
     }
 
     /**

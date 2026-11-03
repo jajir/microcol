@@ -611,7 +611,7 @@ public class GamePage extends AbstractScreen {
     }
 
     public EuropePortScreen openEuroperPort() {
-        return openEuroperPort("Europe");
+        return openEuroperPort("Home port");
     }
 
     public EuropePortScreen openEuroperPort(final String expectedName) {

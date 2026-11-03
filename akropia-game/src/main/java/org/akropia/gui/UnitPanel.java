@@ -161,7 +161,7 @@ class UnitPanel {
             });
         }
         final Label labelOwner = new Label(i18n.get(Loc.unitsPanel_owner) + " "
-                + unit.getOwner().getName());
+                + unit.getOwner().getDisplayName());
         labelOwner.getStyleClass().add("unitOwner");
         box.getChildren().add(labelOwner);
         return box;

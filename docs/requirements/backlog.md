@@ -1,5 +1,11 @@
 # Current requirement backlog
 
+## Dokončeno R-0402, R-0403 a R-0405 — 2026-11-03
+
+1. [R-0402](done/R-0402.md), [R-0403](done/R-0403.md) a [R-0405](done/R-0405.md) mají status `done`: řecké identity, vektorové vlajky a bannery, pracovníci na skutečných polích a místní rybolov jsou implementované. Popisek příjemce je po schválené vizuální úpravě jen u vybraného pracovníka; `w` zůstává u všech.
+2. [Lokální přejímka](../functional-tests.md#r-0402r-0403r-0405-local-acceptance-2026-11-03) prošla: 4 998 model/JUnit, 126 cílených Docker UI a 21 smoke/support testů, vše bez selhání, chyb a přeskočení. Smoke trval 226 sekund. Záznamy přípravy níže jsou historické; publikace sestavení nebyla ověřována.
+
+
 ## Založení kolonie bez pohybu — 2026-11-03
 
 1. [R-0409](R-0409.md), status `new`, A03 s návaznostmi A05/A07: příkaz zůstává viditelný a neaktivní s trvalým vysvětlením; stisk B zobrazí modalní informaci o chybějících pohybových bodech. Po jejich obnovení se dostupnost znovu vyhodnotí. Otevřené otázky nejsou; zachycení nezahajuje implementaci.
@@ -20,7 +26,7 @@
 
 ## Pracovníci kolonie na mapě světa — 2026-11-03
 
-1. [R-0405](R-0405.md), status `waiting for refinement`, A07 s návaznostmi A03/A05/A04/A09/A08: viditelní venkovní pracovníci, běžné náklady pohybu bez zvláštního zákazu po návratu, explicitní přijímající město, výnos při Next turn a jídlo jen za práci. Odpovědi o vnitřní posádce, obraně a dobytí jsou zapracované do společných pravidel. Rybolov vyžaduje molo přijímající kolonie, má místní dosah a ovládá se přes kolonii otevřenou kliknutím na rybáře. Přesun rybáře stojí jeden bod; napadají jej jen lodě, poražený je zajat do nákladu nebo se bez kapacity utopí. Ztráta kolonie vyvolá nouzový přesun na nejbližší volnou pevninu mimo město s nulou bodů, jinak utopení; obě utopení oznámí zpráva. Mapový popisek „Pracuje pro Utrecht“ je schválený. Vlastní bojeschopná loď na stejném poli brání rybáře jako první. Pole využívané jinou kolonií je v náhledu města celé zakryté šedě, bez obsahu a možnosti dalšího přiřazení. Kapitola 4 již nemá otevřené otázky; status zůstává `waiting for refinement`, dokud nebude dokončena konkrétní implementační a přejímací příprava. Tato dokumentační aktualizace nespouští implementaci.
+1. [R-0405](done/R-0405.md), status `waiting for refinement`, A07 s návaznostmi A03/A05/A04/A09/A08: viditelní venkovní pracovníci, běžné náklady pohybu bez zvláštního zákazu po návratu, explicitní přijímající město, výnos při Next turn a jídlo jen za práci. Odpovědi o vnitřní posádce, obraně a dobytí jsou zapracované do společných pravidel. Rybolov vyžaduje molo přijímající kolonie, má místní dosah a ovládá se přes kolonii otevřenou kliknutím na rybáře. Přesun rybáře stojí jeden bod; napadají jej jen lodě, poražený je zajat do nákladu nebo se bez kapacity utopí. Ztráta kolonie vyvolá nouzový přesun na nejbližší volnou pevninu mimo město s nulou bodů, jinak utopení; obě utopení oznámí zpráva. Mapový popisek „Pracuje pro Utrecht“ je schválený. Vlastní bojeschopná loď na stejném poli brání rybáře jako první. Pole využívané jinou kolonií je v náhledu města celé zakryté šedě, bez obsahu a možnosti dalšího přiřazení. Kapitola 4 již nemá otevřené otázky; status zůstává `waiting for refinement`, dokud nebude dokončena konkrétní implementační a přejímací příprava. Tato dokumentační aktualizace nespouští implementaci.
 
 ## Nenápadná zkratka Continue — 2026-11-03
 
@@ -29,14 +35,14 @@
 
 ## Vlajky 03 a bannery činností — 2026-11-03
 
-1. [R-0403](R-0403.md), status `new`, A03 s návazností na A02 a R-0402: nahrazení velkých i malých vlajek čtyř mocností variantou 03; nad každou jednotkou vpravo nahoře svislý banner, bez instrukce prázdný, jinak s písmenem skutečné činnosti. Zachycení nezahajuje implementaci.
+1. [R-0403](done/R-0403.md), status `new`, A03 s návazností na A02 a R-0402: nahrazení velkých i malých vlajek čtyř mocností variantou 03; nad každou jednotkou vpravo nahoře svislý banner, bez instrukce prázdný, jinak s písmenem skutečné činnosti. Zachycení nezahajuje implementaci.
 
 
 2. Schváleno 2026-11-03: výchozí rozměry 120 × 80 / 30 × 20 / 16 × 20 px k vizuálnímu ověření, doplnění `g/t/w` a zachování písmene při čekání, pozastavení a blokování úkolu podle [společného pravidla](../graphics.md#vybrane-vlajky-03). Otevřené otázky R-0403 uzavřeny; stav zůstává `new`, implementace nezahájena.
 
 ## Řecké městské státy a místní národy — 2026-11-02
 
-1. [R-0402](R-0402.md), status `new`, oblast A03 s návaznostmi A02/A08/A06/A10: schváleny Athény, Korint, Milét a Fókaia, jejich příběhy a výchozí motivy vlajek i osm místních národů. Pro čtyři mocnosti je nyní vybraná varianta 03; nahrazení vlajek a bannery vlastní R-0403. Motivy a barevné směry místních národů, mapování identit a příběhové názvosloví jsou schválené; přesná paleta čeká na vizuální ověření. Zachycení nemění pravidla a nezahajuje implementaci.
+1. [R-0402](done/R-0402.md), status `new`, oblast A03 s návaznostmi A02/A08/A06/A10: schváleny Athény, Korint, Milét a Fókaia, jejich příběhy a výchozí motivy vlajek i osm místních národů. Pro čtyři mocnosti je nyní vybraná varianta 03; nahrazení vlajek a bannery vlastní R-0403. Motivy a barevné směry místních národů, mapování identit a příběhové názvosloví jsou schválené; přesná paleta čeká na vizuální ověření. Zachycení nemění pravidla a nezahajuje implementaci.
 2. Upřesnění 2026-11-03: vybrán směr B1, velká a malá kresba, stejně světlá celá zvířata a tmavší okrový Milét. [Pět návrhových sad](../graphics.md#vlajky-b1-a-ukazky-jednotek-3-listopadu-2026) přidává loď, sluhu a jezdce se svislou stavovou vlaječkou vpravo nahoře. Černé ručně nepravidelné pero přibližně 2 px a jednobarevné výplně jsou trvalým pravidlem v grafickém zadání a `AGENTS.md`. Implementace nezahájena.
 
 3. Schváleno 2026-11-03: všechny odpovědi v R-0402 2.13–17 včetně převzetí dosavadních bonusů a tříd sídel. Výjimka: kalendář se nijak nemění, ani jeho zobrazení; antická atmosféra jej nepřepisuje. Kapitola 4 obsahuje None; status zůstává `new`, implementace nezahájena.

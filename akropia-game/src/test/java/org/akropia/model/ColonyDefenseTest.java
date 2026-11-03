@@ -413,23 +413,37 @@ class ColonyDefenseTest {
     // ------------------------------------------------------ capture result
 
     @Test
-    void civilianVictoryTransfersTheWholeColonyWithEveryJobExactlyOnce()
+    void civilianVictoryTransfersIndoorJobsAndReleasesOutdoorWorkers()
             throws ReflectiveOperationException {
         final Spec big = civilians(7, 3);
         big.liberty = 150L;
         build(big);
         final List<Unit> residents = new ArrayList<>(
                 quebec.getUnitsInsideColony());
+        final List<Unit> indoor = residents.stream()
+                .filter(Unit::isAtPlaceConstructionSlot)
+                .collect(java.util.stream.Collectors.toList());
+        final List<Unit> outdoor = residents.stream()
+                .filter(Unit::isAtPlaceColonyField)
+                .collect(java.util.stream.Collectors.toList());
+        final Map<Integer, Location> positions = outdoor.stream()
+                .collect(java.util.stream.Collectors.toMap(Unit::getId,
+                        Unit::getLocation));
         final int units = model.getAllUnits().size();
         final String stores = gson.toJson(quebec.save().getColonyWarehouse());
         fight(true);
         assertSame(dutch, quebec.getOwner());
         assertEquals(0, quebec.getId());
         assertEquals("Quebec", quebec.getName());
-        assertEquals(residents, quebec.getUnitsInsideColony());
-        residents.forEach(worker -> assertSame(dutch, worker.getOwner()));
-        quebec.getColonyFields().forEach(field -> assertSame(dutch,
-                field.getUnit().orElseThrow().getOwner()));
+        assertEquals(indoor, quebec.getUnitsInsideColony());
+        indoor.forEach(worker -> assertSame(dutch, worker.getOwner()));
+        outdoor.forEach(worker -> {
+            assertSame(france, worker.getOwner());
+            assertEquals(positions.get(worker.getId()), worker.getLocation());
+            assertTrue(worker.getWorkingColony().isEmpty());
+        });
+        assertTrue(quebec.getColonyFields().stream()
+                .allMatch(ColonyField::isEmpty));
         assertEquals(units, model.getAllUnits().size());
         assertEquals(stores, gson.toJson(quebec.save().getColonyWarehouse()));
         // The capturer stands on the colony tile, outside every job.
@@ -453,7 +467,7 @@ class ColonyDefenseTest {
         final Colony reloadedColony = restored.getColonyById(0).orElseThrow();
         assertSame(restored.getPlayerByName("Dutch"),
                 reloadedColony.getOwner());
-        assertEquals(11, reloadedColony.getPopulation());
+        assertEquals(indoor.size(), reloadedColony.getPopulation());
         assertEquals(gson.toJson(model.save()), gson.toJson(restored.save()));
     }
 
@@ -525,7 +539,8 @@ class ColonyDefenseTest {
         assertFalse(
                 ((UnitFreeColonist) model.getUnitById(4)).isHoldingWeapons());
         assertSame(dutch, quebec.getOwner());
-        assertSame(dutch, model.getUnitById(4).getOwner());
+        assertSame(france, model.getUnitById(4).getOwner());
+        assertTrue(model.getUnitById(4).getWorkingColony().isEmpty());
         // The same confirmation cannot consume weapons or draw a second time.
         final String after = snapshot();
         assertThrows(IllegalStateException.class, order::execute);
@@ -745,12 +760,8 @@ class ColonyDefenseTest {
         build(civilians(1, 1));
         fight(true);
         assertSame(dutch, quebec.getOwner());
-        // A worker still owned by the former owner contradicts the colony.
-        final ModelPo field = model.save();
-        field.getUnits().stream().filter(unit -> unit.getId() == 100)
-                .findFirst().orElseThrow().setOwnerId("France");
-        assertThrows(IllegalArgumentException.class, () -> Model.make(field,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        // An indoor resident owned by the former owner contradicts the captured
+        // city.
         final ModelPo building = model.save();
         building.getUnits().stream().filter(unit -> unit.getId() == 101)
                 .findFirst().orElseThrow().setOwnerId("France");
@@ -814,7 +825,8 @@ class ColonyDefenseTest {
     void independentAttackOnAFieldWorkerQuotesOnlyThatWorkerOnItsFieldTile() {
         build(civilians(1, 1));
         final String before = snapshot();
-        assertTrue(model.getEnemyUnitsAt(dutch, FIELD).isEmpty());
+        assertEquals(List.of(model.getUnitById(100)),
+                model.getEnemyUnitsAt(dutch, FIELD));
         assertTrue(attacker.isPossibleToAttackAt(FIELD));
         final AttackOrder order = attacker.prepareAttack(FIELD, false)
                 .orElseThrow();

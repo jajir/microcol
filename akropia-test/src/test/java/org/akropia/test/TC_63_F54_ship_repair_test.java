@@ -89,7 +89,7 @@ public class TC_63_F54_ship_repair_test extends AbstractAkropiaTest {
         ShipRepairPage repairs = new ShipRepairPage(getContext());
         repairs.loadDrydockFixture();
         GamePage game = GamePage.of(getContext());
-        EuropePortScreen europe = game.openEuroperPort("Evropa");
+        EuropePortScreen europe = game.openEuroperPort("Domovský přístav");
         repairs.open();
         repairs.verifyProgress("TRANSFER", 4,
                 "galeona #3 — New Amsterdam\nPřeprava; do zprovoznění zbývá tahů vlastníka: 4");
@@ -99,7 +99,7 @@ public class TC_63_F54_ship_repair_test extends AbstractAkropiaTest {
         // One transfer update precedes all three drydock updates.
         game.nextTurnAndCloseDialogs();
         for (int remaining = 3; remaining > 0; remaining--) {
-            europe = game.openEuroperPort("Evropa");
+            europe = game.openEuroperPort("Domovský přístav");
             repairs.open();
             repairs.verifyProgress("REPAIR", remaining,
                     "galeona #3 — New Amsterdam\nOprava; do zprovoznění zbývá tahů vlastníka: "
@@ -108,7 +108,7 @@ public class TC_63_F54_ship_repair_test extends AbstractAkropiaTest {
             game = europe.close();
             game.nextTurnAndCloseDialogs();
         }
-        game.openEuroperPort("Evropa");
+        game.openEuroperPort("Domovský přístav");
         repairs.open();
         repairs.verifyComplete(false, "Žádné lodě se neopravují.");
         repairs.close();

@@ -21,7 +21,7 @@
 
 	<entry key="mainMenu.view">View</entry>
 	<entry key="mainMenu.view.center">Center</entry>
-	<entry key="mainMenu.view.europe">Evrope</entry>
+	<entry key="mainMenu.view.europe">Home port</entry>
 	<entry key="mainMenu.view.turnReport">Turn report</entry>
 	<entry key="mainMenu.view.statistics">Statistics</entry>
 	<entry key="mainMenu.view.menuItemGoals">Mission Goals</entry>
@@ -56,7 +56,7 @@
 	<entry key="chooseGoodAmount.everything">Everything</entry>
 	<entry key="chooseGoodAmount.selectedAmount">Selected amount: </entry>
 
-	<entry key="europeDialog.caption">European Port</entry>
+	<entry key="europeDialog.caption">Home port</entry>
 	
 	<entry key="buyUnitDialog.title">Buy unit</entry>
 	<entry key="buyUnitDialog.buttonBuyUnit">Buy for</entry>
@@ -69,9 +69,9 @@
 	<entry key="newGameDialog.cancel">Cancel</entry>
 	<entry key="newGameDialog.startGame">Start play</entry>
 
-	<entry key="europe.title">Europe</entry>
-	<entry key="europe.shipsTravelingToNewWorld">Ships traveling to New World</entry>
-	<entry key="europe.shipsTravelingToEurope">Ships traveling to Europe</entry>
+	<entry key="europe.title">Home port</entry>
+	<entry key="europe.shipsTravelingToNewWorld">Ships traveling to new coast</entry>
+	<entry key="europe.shipsTravelingToEurope">Ships sailing home</entry>
 	<entry key="europe.pier">Pier</entry>
 	<entry key="europe.recruit">Recruit</entry>
 	<entry key="europe.buy">Buy</entry>

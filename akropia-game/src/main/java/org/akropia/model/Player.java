@@ -647,7 +647,14 @@ public abstract class Player {
 
     public String getDisplayName() {
         if (!extraData.containsKey("displayName")) {
-            return name;
+            if (isNative()) {
+                return ((PlayerNative) this).getNativeNation().getDisplayName();
+            }
+            if (isKing()) {
+                return "Council of " + getEuropeanNation().getDisplayName();
+            }
+            return EuropeanNation.findByPlayerName(name)
+                    .map(EuropeanNation::getDisplayName).orElse(name);
         }
         Object value = extraData.get("displayName");
         Preconditions.checkArgument(value instanceof String,

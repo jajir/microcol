@@ -79,6 +79,10 @@ class SharedColonyFieldAssignmentTest {
         final Model model = fixture();
         final Colony neighbor = model.getColonyById(1).orElseThrow();
         final Unit neighborWorker = model.getUnitById(6);
+        neighborWorker.placeToColonyStructureSlot(
+                neighbor.getConstructionByType(ConstructionType.TOWN_HALL)
+                        .getSlotAt(0));
+        neighborWorker.startTurn();
         neighborWorker.placeToColonyField(
                 neighbor.getColonyFieldInDirection(Direction.east),
                 GoodsType.GRAIN);
@@ -89,6 +93,10 @@ class SharedColonyFieldAssignmentTest {
                 .getColonyFieldInDirection(Direction.east);
         final Unit worker = model.getUnitById(0);
         assertFalse(target.isWorkedByAnotherColony());
+        worker.placeToColonyStructureSlot(model.getColonyById(0).orElseThrow()
+                .getConstructionByType(ConstructionType.TOWN_HALL)
+                .getSlotAt(0));
+        worker.startTurn();
         assertTrue(target.canAccept(worker, GoodsType.GRAIN));
         worker.placeToColonyField(target, GoodsType.GRAIN);
         target.setProducedGoodsType(worker, GoodsType.GRAPES);
@@ -198,6 +206,7 @@ class SharedColonyFieldAssignmentTest {
         assertEquals(1, colony.getUnitsInsideColony().size());
         final ColonyField field = colony
                 .getColonyFieldInDirection(Direction.east);
+        worker.startTurn();
         assertTrue(field.canAccept(worker, GoodsType.GRAIN));
         worker.placeToColonyField(field, GoodsType.GRAIN);
 

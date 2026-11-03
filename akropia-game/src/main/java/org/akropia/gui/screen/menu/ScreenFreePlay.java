@@ -208,7 +208,7 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         nameLabel = new Label();
         nameLabel.setLabelFor(nameField = new TextField());
         nameField.setId(ID_PLAYER_NAME);
-        nameField.setText("Dutch");
+        nameField.setText(i18n.get(GameMenu.setupNationDutch));
         nameField.textProperty()
                 .addListener((obs, old, val) -> validateInput());
 

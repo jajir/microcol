@@ -145,7 +145,7 @@
       "id": 5,
       "type": "COLONIST",
       "ownerId": "Dutch\u0027s King",
-      "placeColonyField": {},
+      "placeConstructionSlot": {},
       "cargo": {
         "slots": []
       },
@@ -764,9 +764,7 @@
           "direction": {
             "x": -1,
             "y": 0
-          },
-          "workerId": 5,
-          "producedGoodsType": "GRAIN"
+          }
         },
         {
           "direction": {
@@ -780,7 +778,7 @@
         {
           "type": "TOWN_HALL",
           "slots": [
-            {},
+            {"workerId": 5},
             {},
             {}
           ]

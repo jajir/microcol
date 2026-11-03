@@ -27,6 +27,13 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                 final UnitPo unitPo = context.getUnitPo();
                 final Unit unit = context.getUnit();
                 if (unitPo.getPlaceMap() != null) {
+                    if (unitPo.getPlaceMap().getFishingColonyId() != null) {
+                        return new PlaceFishingGround(unit, context.getModel()
+                                .getColonyById(unitPo.getPlaceMap()
+                                        .getFishingColonyId())
+                                .orElseThrow(),
+                                unitPo.getPlaceMap().getLocation());
+                    }
                     return new PlaceLocation(unit,
                             unitPo.getPlaceMap().getLocation(),
                             unitPo.getPlaceMap().getOrientation());

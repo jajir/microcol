@@ -3,7 +3,7 @@
 <properties>
   <entry key="open">Vývoz celnicí…</entry>
   <entry key="title">Celnice — %s</entry>
-  <entry key="rule">Vyberte zboží k automatickému prodeji po výrobě a stavbě. Z každého vybraného druhu zůstane 100 kusů; přebytek se prodá za aktuální evropskou cenu po zdanění.</entry>
+  <entry key="rule">Vyberte zboží k automatickému prodeji po výrobě a stavbě. Z každého vybraného druhu zůstane 100 kusů; přebytek se prodá za aktuální cenu v domovském přístavu po zdanění.</entry>
   <entry key="revolution">Během revoluce celnice získá polovinu běžného čistého příjmu.</entry>
   <entry key="confirm">Uložit výběr vývozu</entry>
   <entry key="cancel">Zrušit</entry>

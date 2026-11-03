@@ -59,7 +59,8 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
 
     @Override
     void moveUnit(final Unit unit) {
-        if (!unit.getAction().isNoAction()) {
+        if (!unit.getAction().isNoAction()
+                || unit.getWorkingColony().isPresent() || unit.isFishing()) {
             return;
         }
         if (rivalTrade.isCarrier(unit) || rivalTrade.isParked(unit)) {

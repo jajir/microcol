@@ -66,7 +66,8 @@ public final class ColonyField {
                         getLocation())) {
             return false;
         }
-        return colony.canAcceptWorker(unit);
+        return colony.canAcceptWorker(unit) && ((AbstractUnit) unit)
+                .colonyTransferCost(colony, getLocation()) >= 0;
     }
 
     private boolean canWorkerActHere(final Unit unit) {

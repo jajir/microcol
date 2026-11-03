@@ -158,6 +158,12 @@
  * home to a square, by the same known-square sea rule as trade routes, and the
  * owner retires an objective whose colony or carrier is gone or not its own.
  *
+ * Outdoor jobs retain the worker's actual map position and a single receiving
+ * colony. Job changes pay shared movement costs before mutation; idle local
+ * fishermen retain their supplying colony until return, capture or
+ * deterministic rescue. Forced colony loss releases outdoor jobs without
+ * changing their owner.
+ *
  * @see <a href="https://jajir.github.io/microcol/architecture.html">Package
  *      responsibilities</a> Foreign power comparisons are viewpoint-filtered
  *      model snapshots. Player remembers European contact earned through

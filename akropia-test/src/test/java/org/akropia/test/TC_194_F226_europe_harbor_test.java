@@ -169,7 +169,7 @@ public class TC_194_F226_europe_harbor_test extends AbstractAkropiaTest {
         settings.verifyLanguageOptionsShown();
         settings.setCzechLanguage();
         final EuropePortScreen port = settings.goBack().loadGame()
-                .openEuroperPort("Evropa");
+                .openEuroperPort("Domovský přístav");
         final EuropeHarborPage harbor = new EuropeHarborPage(getContext());
         harbor.resize(1280, 900);
         harbor.verifyGroups(43);

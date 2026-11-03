@@ -18,9 +18,9 @@
 	
 	<entry key="notEnoughGold_caption">You don't have enough gold.</entry>
 	<entry key="goodsTransfer_changed">The cargo hold changed and the purchase was not made. Nothing was charged.</entry>
-	<entry key="europePrice_changed">The European price changed and the trade was not made. Nothing was charged or moved.</entry>
+	<entry key="europePrice_changed">The Home portan price changed and the trade was not made. Nothing was charged or moved.</entry>
 	<entry key="europeGold_changed">Your gold changed and the purchase was not made. Nothing was charged.</entry>
-	<entry key="europeTrade_changed">These goods can no longer be bought in Europe, so the purchase was not made. Nothing was charged.</entry>
+	<entry key="europeTrade_changed">These goods can no longer be bought in Home port, so the purchase was not made. Nothing was charged.</entry>
 	
 
 	<entry key="unitCantMoveHere_caption">I't not possible to move unit here.</entry>
@@ -85,25 +85,25 @@
     <entry key="fight_veteranName">%s (veteran)</entry>
     <entry key="fight_veteranStatus">veteran</entry>
     <entry key="fight_continentalName">%s (Continental)</entry>
-    <entry key="fight_royalName">%s (royal)</entry>
-    <entry key="fight_roleDestroyed">%s: a Continental or royal soldier was destroyed together with its equipment.</entry>
-    <entry key="fight_roleLoss">A defeated Continental or royal soldier is destroyed together with its equipment. An ordinary defeated soldier loses equipment as usual. The winner keeps its equipment. Both participants spend their remaining movement.</entry>
+    <entry key="fight_royalName">%s (mother city)</entry>
+    <entry key="fight_roleDestroyed">%s: a Continental or soldier of the mother city was destroyed together with its equipment.</entry>
+    <entry key="fight_roleLoss">A defeated Continental or soldier of the mother city is destroyed together with its equipment. An ordinary defeated soldier loses equipment as usual. The winner keeps its equipment. Both participants spend their remaining movement.</entry>
     <entry key="fight_promoted">%s: unit #%s was promoted to %s.</entry>
     <entry key="fight_colonyArmed">Armed defenders of %s fight first, strongest first. Winning does not capture the colony while other defenders remain. The loser loses horses if mounted, otherwise weapons.</entry>
-    <entry key="fight_colonyCivilians">No armed defender is left, so all colonists of %s defend together with base strength 1. Winning captures the whole colony with every worker in the fields and buildings. Losing costs the attacker its horses or weapons.</entry>
+    <entry key="fight_colonyCivilians">No armed defender is left, so all colonists of %s defend together with base strength 1. Winning captures the colony and its indoor workers. Outdoor workers keep their owner and lose their colony job. Losing costs the attacker its horses or weapons.</entry>
     <entry key="fight_colonyRevere">No armed defender is left, so Paul Revere arms one worker of %s from the stored weapons (%s weapons are used up). Winning still captures the whole colony. If the worker wins, it keeps the weapons and joins the garrison outside, unless it is the last resident.</entry>
-    <entry key="fight_ambushBonus">Native ambush: +%s%%</entry>
-    <entry key="fight_artilleryRaidBonus">Artillery defending its fortified colony against natives: +%s%%</entry>
+    <entry key="fight_ambushBonus">Local ambush: +%s%%</entry>
+    <entry key="fight_artilleryRaidBonus">Artillery defending its fortified colony against local peoples: +%s%%</entry>
     <entry key="fight_bombardmentBonus">Colony bombardment: +%s%%</entry>
     <entry key="fight_rebelAmbushBonus">Rebel ambush: +%s%%</entry>
     <entry key="fight_causeSupportBonus">Cause support: +%s%%</entry>
-    <entry key="fight_nativeLoss">A defeated native brave is destroyed together with its equipment. A defeated unarmed colonist dies and is not captured. An armed European loses horses or weapons; artillery is damaged first. Both participants spend their remaining movement.</entry>
+    <entry key="fight_nativeLoss">A defeated native brave is destroyed together with its equipment. A defeated unarmed colonist dies and is not captured. An armed Home portan loses horses or weapons; artillery is damaged first. Both participants spend their remaining movement.</entry>
     <entry key="fight_nativeAnger">Attacking a native brave raises the anger of its nation toward you, whoever wins.</entry>
     <entry key="fight_nativeArmedBrave">Armed native brave</entry>
     <entry key="fight_nativeMountedBrave">Mounted native brave</entry>
     <entry key="fight_nativeMountedWarrior">Mounted native warrior</entry>
     <entry key="fight_nativeDestroyed">%s: a native brave was destroyed together with its equipment.</entry>
-    <entry key="fight_settlerKilled">%s: an unarmed colonist was killed in battle with natives.</entry>
+    <entry key="fight_settlerKilled">%s: an unarmed colonist was killed in battle with local peoples.</entry>
     <entry key="fight_colonistsName">Colonists of %s</entry>
     <entry key="fight_revereName">%s (armed by Paul Revere)</entry>
     <entry key="fight_colonyCaptured">%s: colony %s was captured with all its workers.</entry>

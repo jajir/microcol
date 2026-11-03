@@ -416,7 +416,7 @@ public final class EuropeanRelationsPage extends AbstractScreen {
     }
 
     public void verifyColonyAndForce(final String owner, final Location forceAt,
-            final int movement) {
+            final int movement, final int residents) {
         final Colony colony = getModel().getColonyById(0).orElseThrow();
         assertEquals(owner, colony.getOwner().getName());
         assertEquals("Quebec", colony.getName());
@@ -427,7 +427,8 @@ public final class EuropeanRelationsPage extends AbstractScreen {
         assertTrue(force.isHoldingWeapons());
         assertEquals(movement, force.getActionPoints());
         assertEquals(colonyStores, stocks());
-        assertEquals(List.of(owner),
+        assertEquals(residents, colony.getUnitsInsideColony().size());
+        assertEquals(residents == 0 ? List.of() : List.of(owner),
                 colony.getUnitsInsideColony().stream()
                         .map(unit -> unit.getOwner().getName()).distinct()
                         .collect(Collectors.toList()));

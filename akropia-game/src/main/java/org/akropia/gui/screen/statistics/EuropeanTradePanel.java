@@ -109,7 +109,8 @@ final class EuropeanTradePanel extends VBox {
 
     private String displayName(final Player player) {
         final String display = player.getDisplayName();
-        return display.equals(player.getName()) ? display
-                : display + " (" + player.getName() + ")";
+        final String identity = player.getEuropeanNation().getDisplayName();
+        return display.equals(identity) ? display
+                : display + " (" + identity + ")";
     }
 }

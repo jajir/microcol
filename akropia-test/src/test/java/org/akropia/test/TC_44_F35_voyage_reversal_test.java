@@ -134,7 +134,7 @@ public class TC_44_F35_voyage_reversal_test extends AbstractAkropiaTest {
         setting.setCzechLanguage();
         setting.goBack();
         final GamePage game = WelcomePage.of(getContext()).loadGame();
-        game.openEuroperPort("Evropa");
+        game.openEuroperPort("Domovský přístav");
         final VoyageReversalPage voyage = new VoyageReversalPage(getContext());
         voyage.verifyReverseAction("Obrátit směr");
         voyage.openReverse();

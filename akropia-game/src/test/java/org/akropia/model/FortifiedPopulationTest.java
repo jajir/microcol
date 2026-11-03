@@ -86,6 +86,7 @@ class FortifiedPopulationTest {
         worker.placeToColonyStructureSlot(hall);
         assertEquals(3, colony.getUnitsInsideColony().size());
         assertSame(worker, hall.getUnit());
+        worker.startTurn();
         worker.placeToColonyField(
                 colony.getColonyFieldInDirection(Direction.west),
                 GoodsType.GRAIN);
@@ -182,6 +183,7 @@ class FortifiedPopulationTest {
         final Model model = model(ConstructionType.FORT);
         retainResidents(model, 2);
         final Colony colony = model.getColonyById(0).orElseThrow();
+        ColonyBattles.houseFieldWorkers(model, colony);
         final Unit capturing = model.addUnitOutSideColony(colony);
         final Player king = model.getPlayerByName("Dutch's King");
         capturing.takeOver(king);

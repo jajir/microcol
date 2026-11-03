@@ -9,6 +9,24 @@ import org.akropia.model.UnitType;
 import org.akropia.model.Founder;
 
 public final class TurnEventPo {
+    private String fishermanLossReason;
+    private Integer fishermanUnitId;
+
+    public String getFishermanLossReason() {
+        return fishermanLossReason;
+    }
+
+    public void setFishermanLossReason(final String value) {
+        fishermanLossReason = value;
+    }
+
+    public Integer getFishermanUnitId() {
+        return fishermanUnitId;
+    }
+
+    public void setFishermanUnitId(final Integer value) {
+        fishermanUnitId = value;
+    }
 
     private String repairKind;
     private Integer repairShipId;

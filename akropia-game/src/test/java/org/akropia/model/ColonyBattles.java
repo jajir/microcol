@@ -15,6 +15,65 @@ final class ColonyBattles {
     }
 
     /**
+     * Fixture-only placement before loading, without recruitment side effects.
+     */
+    static Model withIndoorWorkers(final Model original, final int colonyId) {
+        final var saved = original.save();
+        final var colony = saved.getColonies().stream()
+                .filter(c -> c.getId() == colonyId).findFirst().orElseThrow();
+        for (final var field : colony.getColonyFields()) {
+            if (field.getWorkerId() == null) {
+                continue;
+            }
+            final var slot = colony.getConstructions().stream()
+                    .filter(c -> c.getType() != ConstructionType.TOWN_HALL)
+                    .flatMap(c -> c.getSlots().stream())
+                    .filter(s -> s.getWorkerId() == null).findFirst()
+                    .orElseThrow();
+            final var worker = saved.getUnits().stream()
+                    .filter(u -> u.getId() == field.getWorkerId()).findFirst()
+                    .orElseThrow();
+            slot.setWorkerId(worker.getId());
+            worker.setPlaceColonyField(null);
+            worker.setPlaceConstructionSlot(
+                    new org.akropia.model.store.PlaceConstructionSlotPo());
+            field.setWorkerId(null);
+            field.setProducedGoodsType(null);
+        }
+        return Model.make(saved, org.akropia.model.campaign.MissionImpl
+                .getPredefinedGameOverEvaluators());
+    }
+
+    /**
+     * Prepare indoor residents when a test exercises city capture, not outdoor
+     * jobs.
+     */
+    static void houseFieldWorkers(final Model model, final Colony colony) {
+        final Player previous = model.getCurrentPlayer();
+        setCurrentPlayer(model, colony.getOwner());
+        try {
+            for (final Unit unit : java.util.List
+                    .copyOf(colony.getUnitsInsideColony())) {
+                if (unit.isAtPlaceColonyField()) {
+                    unit.startTurn();
+                    final ConstructionSlot slot = colony.getConstructions()
+                            .stream()
+                            .filter(construction -> construction
+                                    .getType() != ConstructionType.TOWN_HALL)
+                            .flatMap(construction -> construction
+                                    .getConstructionSlots().stream())
+                            .filter(candidate -> candidate.isEmpty()
+                                    && candidate.canAccept(unit))
+                            .findFirst().orElseThrow();
+                    unit.placeToColonyStructureSlot(slot);
+                }
+            }
+        } finally {
+            setCurrentPlayer(model, previous);
+        }
+    }
+
+    /**
      * Make the force an armed attacker next to the colony, win the defense
      * battle with a controlled draw, and restore the current player.
      *

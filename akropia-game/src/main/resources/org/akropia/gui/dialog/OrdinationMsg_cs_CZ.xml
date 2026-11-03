@@ -15,6 +15,6 @@
 	<entry key="ordainALREADY_MISSIONARY">Tento kolonista je už misionář. Nic se nezměnilo.</entry>
 	<entry key="ordainASSIGNED_WORKER">Tento kolonista pracuje na poli nebo v budově. Nejdříve ho z této práce uvolněte, potom jej lze vysvětit.</entry>
 	<entry key="ordainACTIVE_ORDER">Tento kolonista má aktivní rozkaz, například hlídku, opevnění nebo práci pionýra. Nejdříve jej zrušte.</entry>
-	<entry key="ordainNOT_IN_EUROPE_OR_COLONY">Vysvěcení vyžaduje, aby byl kolonista na evropském molu nebo venku mimo pole a budovy vaší kolonie.</entry>
+	<entry key="ordainNOT_IN_EUROPE_OR_COLONY">Vysvěcení vyžaduje, aby byl kolonista na molu domovského přístavu nebo venku mimo pole a budovy vaší kolonie.</entry>
 	<entry key="ordainNO_CHURCH">Tato kolonie potřebuje kostel nebo katedrálu. Samotná kaple nestačí.</entry>
 </properties>

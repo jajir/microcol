@@ -27,7 +27,7 @@ public class BuyUnitScreen extends AbstractScreen {
     }
 
     public EuropePortScreen buyUnitByName(final String unitNameToBuy) {
-        return buyUnitByName(unitNameToBuy, "Europe");
+        return buyUnitByName(unitNameToBuy, "Home port");
     }
 
     /**

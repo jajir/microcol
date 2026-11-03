@@ -54,7 +54,20 @@ final class ColonizopediaTables {
         table.add(cell(topic.getTitle(i18n)), 0, 0);
         table.add(cell(i18n.get(Colonizopedia.properties)), 1, 0);
         int row = 1;
-        if (topic == ColonizopediaTopic.BUILDINGS) {
+        if (topic == ColonizopediaTopic.IDENTITIES) {
+            for (int index = 0; index < 12; index++) {
+                final ImageView flag = new ImageView(
+                        images.getImage("nation_" + index + "_0"));
+                flag.setFitWidth(120);
+                flag.setFitHeight(120);
+                flag.setId("identityFlag-" + index);
+                table.add(flag, 0, row);
+                table.add(
+                        cell(i18n.get(
+                                Colonizopedia.valueOf("identity" + index))),
+                        1, row++);
+            }
+        } else if (topic == ColonizopediaTopic.BUILDINGS) {
             for (final ConstructionType root : ConstructionType.ALL) {
                 if (root.getUpgradeFrom().isPresent()) {
                     continue;

@@ -353,7 +353,7 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractAkropiaTest {
         game.panFromTile(COLONY_LOCATION);
         orders.verifyMapPanned(COLONY_LOCATION, before);
         orders.verifyMovement(3, 1, 1, 197);
-        game.openUnitContextAt(Location.of(21, 12));
+        game.openUnitContextAt(Location.of(20, 12));
         orders.verifyNoUnitActions();
         orders.verifyMovement(3, 1, 1, 197);
     }
@@ -430,7 +430,7 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractAkropiaTest {
         turns.verifyUnitAndMoveMode(3, ship, false);
 
         // An empty square offers no commands and cannot consume movement.
-        game.controlClickUnitAt(Location.of(21, 12), false);
+        game.controlClickUnitAt(Location.of(20, 12), false);
         orders.verifyNoUnitActions();
         movement.verifyLocation(3, sea);
         movement.verifyMovement(3, 6);

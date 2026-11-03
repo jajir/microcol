@@ -107,7 +107,7 @@ public class TC_46_F37_recruitment_test extends AbstractAkropiaTest {
         SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();
         EuropePortScreen europe = settings.goBack().loadGame()
-                .openEuroperPort("Evropa");
+                .openEuroperPort("Domovský přístav");
         RecruitmentPage recruit = new RecruitmentPage(getContext());
         recruit.open();
         recruit.verifyOffer(List.of("svobodný kolonista", "smluvní služebník",

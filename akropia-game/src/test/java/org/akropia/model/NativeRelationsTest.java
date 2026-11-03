@@ -13,7 +13,7 @@ import org.akropia.model.store.NativeSettlementPo;
 import org.akropia.model.store.NativeTribalAngerPo;
 
 /**
- * Native relations toward each European: fresh zeros, the peaceful update
+ * Local relations toward each European: fresh zeros, the peaceful update
  * formula, national and founder multipliers, the once-only arrival clear, and
  * the saved tables that are rejected when they are incomplete or invalid.
  */

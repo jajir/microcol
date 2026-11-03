@@ -686,11 +686,11 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         final SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();
         EuropePortScreen europePort = settings.goBack().loadGame()
-                .openEuroperPort("Evropa");
+                .openEuroperPort("Domovský přístav");
 
         // Buy a ship; the Crown taxes 10% and the treasury holds 200 gold.
         europePort = europePort.openBuyUnitScreen().buyUnitByName("galeona",
-                "Evropa");
+                "Domovský přístav");
         europePort.changeCrownTax(10);
         europePort.changeTreasury(200);
 

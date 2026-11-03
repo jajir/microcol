@@ -1,5 +1,18 @@
 ## UC-011/114/119: výběr jednotky, zásoby a Continue — 2026-11-03
 
+## UC-032/114/119: identity, činnost a venkovní práce — ověřeno 2026-11-03
+
+[R-0402](requirements/done/R-0402.md), [R-0403](requirements/done/R-0403.md) a
+[R-0405](requirements/done/R-0405.md) propojují řecké identity, národní vlajky,
+jednotkové bannery a skutečnou mapovou polohu pracovníků. Nové scénáře
+`TC_200_F232_unit_task_banners_test`, `TC_201_F233_world_workers_test` a
+`TC_202_F234_local_fishing_test` pokrývají nápovědu, přidání a zrušení instrukce,
+práci při nule bodů, šedé zakrytí pole jiného města a správu rybáře přes kolonii.
+Navazují TC24, TC39, TC40, TC61, TC76, TC112 a stávající scénáře instrukcí.
+Lokální přejímka je dokončená; výběr, skutečné výsledky a historické diagnostické běhy uvádí
+[evidence integrace](functional-tests.md#r-0402r-0403r-0405-local-acceptance-2026-11-03).
+
+
 1. [R-0400](requirements/done/R-0400.md): TC106/03 kontroluje zásobu kladiv, nulové hodnoty, lokální pochodně/sovy, EN/CS a dvě velikosti; TC109/04 ověřuje záporný i kladný výhled a aktualizaci po kole a Continue.
 2. [R-0401](requirements/done/R-0401.md): TC11/07 a TC11/12 ověřují konkrétní jednotku vybranou z pravého panelu, zvýraznění, zrušení náhledu, klávesový příkaz a vyčerpanou jednotku. TC11/08–09 zachovávají explicitní cíl mapového menu.
 3. [R-0404](requirements/done/R-0404.md): TC191/09 ověřuje samotné C, nedostupnost, modifikátory, dialog a EN/CS proti cestě tlačítkem. Výsledky patří do [funkční evidence](functional-tests.md); toto mapování samo není důkaz přejímky ani publikace.

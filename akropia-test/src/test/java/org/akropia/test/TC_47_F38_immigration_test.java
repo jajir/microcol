@@ -90,7 +90,7 @@ public class TC_47_F38_immigration_test extends AbstractAkropiaTest {
         // accounting.
         SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();
-        settings.goBack().loadGame().openEuroperPort("Evropa");
+        settings.goBack().loadGame().openEuroperPort("Domovský přístav");
         ImmigrationPage immigration = new ImmigrationPage(getContext());
         immigration.verifyProgress("Přistěhovalectví: 99 / 100 pochodní", 99,
                 100, false);

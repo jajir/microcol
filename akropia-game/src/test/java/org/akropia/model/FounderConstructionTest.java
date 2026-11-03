@@ -223,6 +223,7 @@ class FounderConstructionTest {
         giveFounder(eligible, Founder.PETER_STUYVESANT);
         final Model model = load(eligible);
         final Colony colony = model.getColonyByName("Delft").orElseThrow();
+        ColonyBattles.houseFieldWorkers(model, colony);
         final ColonyBuildingQueue queue = colony.getColonyBuildingQueue();
         queue.addAtEnd(ConstructionType.CUSTOM_HOUSE);
         colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 159));

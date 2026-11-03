@@ -741,7 +741,7 @@ class RebelWarCombatTest {
         final Player france = model.getPlayerByName(REBEL);
         assertSame(france, quebec.getOwner());
         assertSame(france, quebec.getLastColonialAffiliation());
-        assertEquals(1, quebec.getPopulation());
+        assertEquals(0, quebec.getPopulation());
         quebec.getUnitsInsideColony()
                 .forEach(resident -> assertSame(france, resident.getOwner()));
         assertSame(france, model.getUnitById(GARRISON).getOwner());

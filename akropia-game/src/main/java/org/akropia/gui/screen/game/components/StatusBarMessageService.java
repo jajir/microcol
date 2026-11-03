@@ -130,6 +130,19 @@ public class StatusBarMessageService {
                 }
             }
             buff.append(".");
+            if (current) {
+                for (final Unit unit : units) {
+                    if (unit.isFishing()) {
+                        buff.append(" ").append(i18n.get(Loc.fishermanOf, unit
+                                .getFishingColony().orElseThrow().getName()));
+                    } else {
+                        unit.getWorkingColony()
+                                .ifPresent(colony -> buff.append(" ")
+                                        .append(i18n.get(Loc.workingFor,
+                                                colony.getName())));
+                    }
+                }
+            }
             // A learned settlement stays named under fog, as a remembered
             // colony.
             oNativeSettlement.ifPresent(settlement -> buff.append(" ")

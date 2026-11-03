@@ -301,7 +301,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
         verifyGeneratedControlsHidden();
         assertEquals(expectedMapIndex,
                 map.getSelectionModel().getSelectedIndex());
-        assertEquals("This scenario is fixed to the Netherlands.",
+        assertEquals("This scenario is fixed to Corinth.",
                 getLabeledById("freePlayNationNote").getText());
         verifyNationSelection(EuropeanNation.DUTCH, false);
     }

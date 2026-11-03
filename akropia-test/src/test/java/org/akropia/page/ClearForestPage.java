@@ -65,7 +65,9 @@ public final class ClearForestPage extends AbstractScreen {
     }
 
     private Unit unitAt(final Location location, final int index) {
-        return getModel().getUnitsAt(location).get(index);
+        return getModel().getUnitsAt(location).stream()
+                .filter(unit -> unit.getWorkingColony().isEmpty())
+                .collect(java.util.stream.Collectors.toList()).get(index);
     }
 
     public void verifyConfirmation(final String expectedTitle,

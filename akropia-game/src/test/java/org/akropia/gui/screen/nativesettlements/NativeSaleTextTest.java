@@ -59,11 +59,12 @@ class NativeSaleTextTest {
         assertEquals("Haggle once (+10%)",
                 i18n(Locale.ROOT).get(Loc.nativeSaleHaggleButton));
         assertEquals(
-                "Haggle: the natives accepted, so the price includes the +10%.",
+                "Haggle: the local peoples accepted, so the price includes the +10%.",
                 i18n(Locale.ROOT).get(Loc.nativeSaleHaggleAccepted));
         assertEquals("Smlouvat jednou (+10 %)",
                 i18n(new Locale("cs", "CZ")).get(Loc.nativeSaleHaggleButton));
-        assertEquals("Smlouvání: domorodci souhlasili, cena včetně +10 %.",
+        assertEquals(
+                "Smlouvání: místní obyvatelé souhlasili, cena včetně +10 %.",
                 i18n(new Locale("cs", "CZ")).get(Loc.nativeSaleHaggleAccepted));
     }
 
@@ -72,12 +73,13 @@ class NativeSaleTextTest {
         assertEquals("Ask for 10% off (once)",
                 i18n(Locale.ROOT).get(Loc.nativePurchaseHaggleButton));
         assertEquals(
-                "Discount: the natives accepted, so the price is 10% lower.",
+                "Discount: the local peoples accepted, so the price is 10% lower.",
                 i18n(Locale.ROOT).get(Loc.nativePurchaseHaggleAccepted));
         assertEquals("Požádat o slevu 10 % (jednou)",
                 i18n(new Locale("cs", "CZ"))
                         .get(Loc.nativePurchaseHaggleButton));
-        assertEquals("Sleva: domorodci souhlasili, cena je o 10 % nižší.",
+        assertEquals(
+                "Sleva: místní obyvatelé souhlasili, cena je o 10 % nižší.",
                 i18n(new Locale("cs", "CZ"))
                         .get(Loc.nativePurchaseHaggleAccepted));
     }

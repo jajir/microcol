@@ -63,7 +63,7 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         route.chooseStop(0, EUROPE);
         route.chooseStop(1, DELFT);
         route.create();
-        route.verifyStoredRoute("Oil Run", TradeRouteKind.SEA, "Europe",
+        route.verifyStoredRoute("Oil Run", TradeRouteKind.SEA, "Home port",
                 "Delft");
 
         // Choose the Delft stop; the galleon in port is the only carrier.
@@ -282,7 +282,7 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         route.chooseStop(0, EUROPE);
         route.chooseStop(1, DELFT);
         route.create();
-        route.verifyStoredRoute("Oil Run", TradeRouteKind.SEA, "Europe",
+        route.verifyStoredRoute("Oil Run", TradeRouteKind.SEA, "Home port",
                 "Delft");
 
         // Without a carrier only a ship can reach Europe, so each leg shows

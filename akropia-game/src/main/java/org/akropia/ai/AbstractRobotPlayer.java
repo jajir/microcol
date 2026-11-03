@@ -72,7 +72,10 @@ public abstract class AbstractRobotPlayer {
             return;
         }
         turnStarted();
-        player.getUnits().stream().filter(unit -> unit.isAtPlaceLocation())
+        player.getUnits().stream()
+                .filter(unit -> unit.isAtPlaceLocation()
+                        && unit.getWorkingColony().isEmpty()
+                        && !unit.isFishing())
                 .forEach(unit -> move(unit));
         waitForAnimations();
     }

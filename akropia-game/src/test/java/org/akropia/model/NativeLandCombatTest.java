@@ -22,11 +22,11 @@ import org.akropia.model.unit.UnitFreeColonist;
 import org.akropia.model.unit.UnitNativeBrave;
 
 /**
- * Native land combat through the shared model operations (R-0173): roles,
- * native ambush on the defender's tile in both directions, guns inside and
- * outside a fortified colony, loser fates, cancellation and the once-only
- * native relation effect. Battle results are chosen through the saved combat
- * random state, never by weakening a precondition.
+ * Local land combat through the shared model operations (R-0173): roles, native
+ * ambush on the defender's tile in both directions, guns inside and outside a
+ * fortified colony, loser fates, cancellation and the once-only native relation
+ * effect. Battle results are chosen through the saved combat random state,
+ * never by weakening a precondition.
  */
 class NativeLandCombatTest {
 

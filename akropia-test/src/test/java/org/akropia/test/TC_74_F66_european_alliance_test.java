@@ -31,8 +31,10 @@ import javafx.stage.Stage;
 public class TC_74_F66_european_alliance_test extends AbstractAkropiaTest {
     private static final File FIXTURE = new File(
             "src/test/scenarios/F50-peace-negotiation.akropia");
-    private static final List<String> NAMES = List.of("Dutch — France",
-            "Dutch — Spain", "France — Spain");
+    private static final List<String> NAMES = List.of(
+            "Dutch (Corinth) — France (Phocaea)",
+            "Dutch (Corinth) — Spain (Miletus)",
+            "France (Phocaea) — Spain (Miletus)");
     private static final Location SOLDIER = Location.of(18, 10);
     private static final Location DEFENDER = Location.of(17, 11);
     private static final Location COLONY = Location.of(17, 10);
@@ -94,7 +96,8 @@ public class TC_74_F66_european_alliance_test extends AbstractAkropiaTest {
         alliance.verifyState(300, 1200, ALLIANCE, false);
         relations.verifyPairs(ALLIANCE, PEACE, PEACE);
         relations.verifyReport(NAMES, List.of("Alliance", "Peace", "Peace"), 1);
-        relations.verifyFeedback("Dutch and France are now allied");
+        relations.verifyFeedback(
+                "Dutch (Corinth) and France (Phocaea) are now allied");
         relations.close().exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
         relations.open();
@@ -233,8 +236,9 @@ public class TC_74_F66_european_alliance_test extends AbstractAkropiaTest {
         alliance.confirmEnd();
         alliance.verifyEndReviewClosed();
         alliance.verifyWait(5);
-        relations.verifyFeedback("The alliance between Dutch and France has "
-                + "ended. War cannot be declared for 5 rounds.");
+        relations.verifyFeedback(
+                "The alliance between Dutch (Corinth) and France (Phocaea) has "
+                        + "ended. War cannot be declared for 5 rounds.");
         relations.close().exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
         relations.open();
@@ -257,7 +261,7 @@ public class TC_74_F66_european_alliance_test extends AbstractAkropiaTest {
         game.waitForNumberOfUnitsAt(COLONY, 1);
         alliance.verifyNoMessage();
         alliance.verifyPassageOnly(COLONY);
-        relations.verifyColonyAndForce("France", COLONY, 0);
+        relations.verifyColonyAndForce("France", COLONY, 0, 1);
     }
 
     @Test
@@ -355,7 +359,7 @@ public class TC_74_F66_european_alliance_test extends AbstractAkropiaTest {
         alliance.verifyCrownProcessed(null);
         var report = game.nextTurn().orElseThrow();
         report.verifyThatAtLeastOneEventMessageContains(
-                "The Crown forced a war with France.");
+                "The mother city forced a war with France.");
         alliance.verifyCrownRound(20, 1);
         alliance.verifyCrownProcessed(20);
         alliance.verifyPairStates(WAR, WAR, WAR);
@@ -395,6 +399,7 @@ public class TC_74_F66_european_alliance_test extends AbstractAkropiaTest {
         alliance.review();
         alliance.confirm();
         relations.verifyReport(NAMES, List.of("Spojenectví", "Mír", "Mír"), 1);
-        relations.verifyFeedback("Dutch a France jsou nyní spojenci");
+        relations.verifyFeedback(
+                "Dutch (Corinth) a France (Phocaea) jsou nyní spojenci");
     }
 }

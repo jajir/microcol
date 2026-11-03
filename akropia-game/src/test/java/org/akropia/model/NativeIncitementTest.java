@@ -30,7 +30,7 @@ class NativeIncitementTest {
     /** Dutch missionary beside the settlement: the first unit of the scene. */
     private static final int VISITOR_ID = 200;
 
-    /** Native turns of an order after a success, as the rules state. */
+    /** Local turns of an order after a success, as the rules state. */
     private static final int ORDER_TURNS = 20;
 
     private static final double EPSILON = 1e-9;

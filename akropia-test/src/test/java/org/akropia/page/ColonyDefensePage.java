@@ -270,7 +270,8 @@ public final class ColonyDefensePage extends AbstractScreen {
                 .getUnitById(unitId);
         assertTrue(militia.isHoldingWeapons());
         assertEquals("France", militia.getOwner().getName());
-        assertEquals(outside, militia.isAtPlaceLocation());
+        assertEquals(outside, militia.isAtPlaceLocation()
+                && militia.getWorkingColony().isEmpty());
         assertEquals(!outside, militia.isAtPlaceColonyField()
                 || militia.isAtPlaceConstructionSlot());
         if (outside) {

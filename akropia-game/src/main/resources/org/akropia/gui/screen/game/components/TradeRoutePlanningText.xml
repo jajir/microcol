@@ -25,7 +25,7 @@
   <entry key="legSEA">%s → %s: by sea, %s steps, %s</entry>
   <entry key="legProblemSTOP_LOST">%s → %s: not shown, a stop is no longer your colony.</entry>
   <entry key="legProblemNOT_PORT">%s → %s: not shown, a ship needs a coastal port.</entry>
-  <entry key="legProblemEUROPE_BY_LAND">%s → %s: not shown, a wagon cannot travel to Europe.</entry>
+  <entry key="legProblemEUROPE_BY_LAND">%s → %s: not shown, a wagon cannot travel to Home port.</entry>
   <entry key="legProblemNO_PATH">%s → %s: unreachable over the explored map.</entry>
   <entry key="points">%s %s/3 movement points</entry>
   <entry key="pointsWhole">%s movement points</entry>

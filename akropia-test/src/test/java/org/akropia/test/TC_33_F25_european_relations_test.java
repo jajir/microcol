@@ -28,9 +28,9 @@ import javafx.stage.Stage;
 public class TC_33_F25_european_relations_test extends AbstractAkropiaTest {
     private static final File FIXTURE = new File(
             "src/test/scenarios/F25-european-relations.akropia");
-    private static final String HUMAN = "Žluťoučký kapitán 🌊 (Dutch)";
-    private static final String FRANCE = "Nová Francie (France)";
-    private static final String SPAIN = "Nová Francie (Spain)";
+    private static final String HUMAN = "Žluťoučký kapitán 🌊 (Corinth)";
+    private static final String FRANCE = "Nová Francie (Phocaea)";
+    private static final String SPAIN = "Nová Francie (Miletus)";
     private static final List<String> NAMES = List.of(HUMAN + " — " + FRANCE,
             HUMAN + " — " + SPAIN, FRANCE + " — " + SPAIN);
     private static final Location START = Location.of(18, 10);
@@ -103,7 +103,7 @@ public class TC_33_F25_european_relations_test extends AbstractAkropiaTest {
         attack.verifyReviewClosed();
         relations.verifyWorldUnchanged();
         relations.verifyPairs(PEACE, PEACE, PEACE);
-        relations.verifyColonyAndForce("France", START, 1);
+        relations.verifyColonyAndForce("France", START, 1, 1);
 
         // An explicit declaration does not make the entry a plain move: the
         // colonists defend, so the same gesture opens the attack review and a
@@ -119,7 +119,7 @@ public class TC_33_F25_european_relations_test extends AbstractAkropiaTest {
         relations.verifyCaptureFeedback("You captured colony 'Quebec'.");
         relations.closeMapMessage();
         relations.verifyPairs(WAR, PEACE, PEACE);
-        relations.verifyColonyAndForce("Dutch", COLONY, 0);
+        relations.verifyColonyAndForce("Dutch", COLONY, 0, 0);
     }
 
     @Test
@@ -219,7 +219,7 @@ public class TC_33_F25_european_relations_test extends AbstractAkropiaTest {
         relations.verifyPairs(PEACE, PEACE, PEACE);
         relations.verifyFeedback("Nothing was declared");
         relations.review("0-1");
-        relations.verifyReview(HUMAN, longName + " (France)", "ends peace");
+        relations.verifyReview(HUMAN, longName + " (Phocaea)", "ends peace");
         relations.captureDialog("declarationReview",
                 "declaration-long-name.png");
         relations.cancel();

@@ -342,6 +342,7 @@ class LaSalleStockadeTest {
     void grantedStockadeKeepsTheFortifiedPopulationRestriction() {
         final Model model = member();
         final Colony colony = colony(model, 0);
+        ColonyBattles.houseFieldWorkers(model, colony);
         retain(model, colony, 2);
         final Unit third = enterBuilding(model, colony);
         assertDefenseOnly(colony, ConstructionType.STOCKADE);
@@ -353,6 +354,7 @@ class LaSalleStockadeTest {
         // Only a fourth resident may leave; three stay protected.
         final Unit fourth = enterField(model, colony);
         assertTrue(fourth.canLeaveColony());
+        fourth.startTurn();
         fourth.placeToMap(colony.getLocation());
         assertEquals(3, colony.getUnitsInsideColony().size());
         assertFalse(third.canLeaveColony());
@@ -361,7 +363,7 @@ class LaSalleStockadeTest {
 
     @Test
     void captureGrantsOnlyForNewOwnerWithLaSalleAndNeverDuplicates() {
-        final Model model = member();
+        final Model model = ColonyBattles.withIndoorWorkers(member(), 0);
         final Colony colony = colony(model, 0);
         final Player dutch = colony.getOwner();
         final Player king = model.getPlayerByName("Dutch's King");
@@ -395,6 +397,7 @@ class LaSalleStockadeTest {
         final Player king = model.getPlayerByName("Dutch's King");
         for (final int id : new int[] { 1, 2 }) {
             final Colony colony = colony(model, id);
+            ColonyBattles.houseFieldWorkers(model, colony);
             final Unit force = model.addUnitOutSideColony(colony);
             force.takeOver(king);
             ColonyBattles.capture(model, colony, force);

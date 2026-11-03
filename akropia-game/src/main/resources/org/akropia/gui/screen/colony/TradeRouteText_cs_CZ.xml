@@ -3,14 +3,14 @@
 <properties>
   <entry key="open">Obchodní trasa…</entry>
   <entry key="title">Obchodní trasa z kolonie %s</entry>
-  <entry key="rule">Pojmenujte trasu, zvolte pozemní nebo námořní dopravu a vyberte až čtyři dosažitelné zastávky v pořadí. Pozemní trasa jen mezi koloniemi; námořní trasa potřebuje přístav u moře a může zahrnovat Evropu. Vytvoření trasy nepřesune žádnou jednotku a nepřevede žádné zboží.</entry>
+  <entry key="rule">Pojmenujte trasu, zvolte pozemní nebo námořní dopravu a vyberte až čtyři dosažitelné zastávky v pořadí. Pozemní trasa jen mezi koloniemi; námořní trasa potřebuje přístav u moře a může zahrnovat Domovský přístav. Vytvoření trasy nepřesune žádnou jednotku a nepřevede žádné zboží.</entry>
   <entry key="nameLabel">Název trasy</entry>
   <entry key="kindLabel">Doprava</entry>
   <entry key="land">Pozemní (vůz)</entry>
   <entry key="sea">Námořní (loď)</entry>
   <entry key="startLabel">Výchozí kolonie: %s</entry>
   <entry key="stopLabel">Zastávka %s</entry>
-  <entry key="europe">Evropa</entry>
+  <entry key="europe">Domovský přístav</entry>
   <entry key="existing">Vaše trasy: %s</entry>
   <entry key="noRoutes">Zatím nemáte žádné obchodní trasy.</entry>
   <entry key="create">Vytvořit trasu</entry>
@@ -25,7 +25,7 @@
   <entry key="startUnavailable">Výchozí kolonie už není vaše.</entry>
   <entry key="startNotPort">Námořní trasa musí začínat v přístavu u moře.</entry>
   <entry key="stopUnavailable">Jedna zastávka už není dostupná.</entry>
-  <entry key="europeByLand">Pozemní trasa nemůže navštívit Evropu.</entry>
+  <entry key="europeByLand">Pozemní trasa nemůže navštívit Domovský přístav.</entry>
   <entry key="sameStop">Každá zastávka se musí lišit od předchozí.</entry>
   <entry key="stopNotReachable">Tuto zastávku nelze z předchozí dosáhnout.</entry>
   <entry key="cargoOpen">Náklad trasy…</entry>
@@ -70,8 +70,8 @@
   <entry key="reasonHOLD_FULL">nic nepřesunuto: žádné místo nemá volno</entry>
   <entry key="reasonSOURCE_EMPTY">nic nepřesunuto: ve skladu nic není</entry>
   <entry key="reasonINSUFFICIENT_FUNDS">nic nekoupeno: nedostatek peněz</entry>
-  <entry key="reasonEUROPE_CLOSED">nic nepřesunuto: v Evropě už nemůžete obchodovat</entry>
-  <entry key="reasonBOYCOTTED">nic nepřesunuto: toto zboží je v Evropě bojkotováno</entry>
+  <entry key="reasonEUROPE_CLOSED">nic nepřesunuto: v domovském přístavu už nemůžete obchodovat</entry>
+  <entry key="reasonBOYCOTTED">nic nepřesunuto: toto zboží je v domovském přístavu bojkotováno</entry>
   <entry key="reasonREJECTED">odmítnuto pravidlem hry (uvedené množství už bylo vypořádáno)</entry>
   <entry key="reasonNOT_ATTEMPTED">nezkoušeno po dřívějším odmítnutí</entry>
   <entry key="assignRule">Vyberte loď nebo vůz na této zastávce a zastávku, kam má jet nejdřív. Pak bude trasu opakovat v dalších vašich tazích s běžným pohybem.</entry>
@@ -92,7 +92,7 @@
   <entry key="pauseNO_ROUTE">Trasa už této jednotce nevyhovuje.</entry>
   <entry key="pauseSTOP_UNREACHABLE">Zastávku teď nelze dosáhnout, příští tah to zkusí znovu.</entry>
   <entry key="pauseSTOP_LOST">Kolonie zastávky je ztracena nebo už není vaše.</entry>
-  <entry key="pauseEUROPE_CLOSED">V Evropě už nemůžete obchodovat.</entry>
+  <entry key="pauseEUROPE_CLOSED">V domovském přístavu už nemůžete obchodovat.</entry>
   <entry key="pauseCARRIER_DAMAGED">Loď je poškozená a opravuje se.</entry>
   <entry key="cancelAssignment">Přestat jet podle trasy</entry>
   <entry key="cancelAssignmentDone">%s je zpět na ručních příkazech. Nic dalšího se nezměnilo.</entry>
@@ -116,7 +116,7 @@
   <entry key="editProblemNOT_OWNER">Trasa není vaše, nebo teď není váš tah.</entry>
   <entry key="editProblemROUTE_UNAVAILABLE">Trasa se změnila. Vyberte ji znovu.</entry>
   <entry key="editProblemSTOP_UNAVAILABLE">Tato zastávka nebo kolonie není dostupná.</entry>
-  <entry key="editProblemEUROPE_BY_LAND">Pozemní trasa nemůže navštívit Evropu.</entry>
+  <entry key="editProblemEUROPE_BY_LAND">Pozemní trasa nemůže navštívit Domovský přístav.</entry>
   <entry key="editProblemSAME_STOP">Zastávka by opakovala sousední zastávku.</entry>
   <entry key="editProblemSTOP_NOT_REACHABLE">Spoj k této zastávce nelze známými poli dosáhnout.</entry>
   <entry key="editProblemTURN_BUSY">Tah se ještě připravuje. Zkuste to za chvíli.</entry>

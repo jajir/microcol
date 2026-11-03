@@ -7,6 +7,16 @@ import com.google.common.base.MoreObjects;
 
 public final class PlaceMapPo extends PlacePo {
 
+    private Integer fishingColonyId;
+
+    public Integer getFishingColonyId() {
+        return fishingColonyId;
+    }
+
+    public void setFishingColonyId(final Integer fishingColonyId) {
+        this.fishingColonyId = fishingColonyId;
+    }
+
     private Location location;
 
     private Direction orientation;

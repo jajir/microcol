@@ -25,7 +25,7 @@
   <entry key="legSEA">%s → %s: po moři, %s kroků, %s</entry>
   <entry key="legProblemSTOP_LOST">%s → %s: nezobrazeno, zastávka už není vaše kolonie.</entry>
   <entry key="legProblemNOT_PORT">%s → %s: nezobrazeno, loď potřebuje přístav u moře.</entry>
-  <entry key="legProblemEUROPE_BY_LAND">%s → %s: nezobrazeno, vůz nemůže do Evropy.</entry>
+  <entry key="legProblemEUROPE_BY_LAND">%s → %s: nezobrazeno, vůz nemůže do domovského přístavu.</entry>
   <entry key="legProblemNO_PATH">%s → %s: po prozkoumané mapě nedosažitelné.</entry>
   <entry key="points">%s %s/3 bodu pohybu</entry>
   <entry key="pointsWhole">%s b. pohybu</entry>

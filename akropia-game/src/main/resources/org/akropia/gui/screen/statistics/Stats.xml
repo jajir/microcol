@@ -13,10 +13,10 @@
 
 	<entry key="statistics_year">Year</entry>
 
-	<entry key="titleRelations">European relations</entry>
+	<entry key="titleRelations">Home portan relations</entry>
 	<entry key="relationPeace">Peace</entry>
 	<entry key="relationWar">War</entry>
-	<entry key="relationsEmpty">No European rivals.</entry>
+	<entry key="relationsEmpty">No Home portan rivals.</entry>
 	<entry key="relationsUnavailable">No game is open. Return to the menu to load a game.</entry>
 	<entry key="relationsReadOnly">Declarations are available during your turn in an ongoing game.</entry>
 	<entry key="declarationReview">Declare war…</entry>
@@ -56,14 +56,14 @@ Your treasury when quoted: %s gold.</entry>
 	<entry key="allianceEndConfirm">End alliance</entry>
 	<entry key="allianceEnded">The alliance between %s and %s has ended. War cannot be declared for %s rounds.</entry>
 	<entry key="allianceEndStale">The game or alliance changed. Nothing was ended. Review the updated relations.</entry>
-	<entry key="turnCrownWar">The Crown forced a war with %s.</entry>
-	<entry key="turnCrownWarAlliance">The Crown ended your alliance and forced a war with %s.</entry>
+	<entry key="turnCrownWar">The mother city forced a war with %s.</entry>
+	<entry key="turnCrownWarAlliance">The mother city ended your alliance and forced a war with %s.</entry>
 	<entry key="supportNational">National rebel support: %s%% (%s residents)</entry>
 	<entry key="supportNone">You have no colonies with rebel support yet.</entry>
 	<entry key="supportColonyRow">%s — population %s, stored liberty %s, local support %s%%</entry>
 	<entry key="turnAllyDefense">Your alliance with %2$s obliged you to go to war against %1$s, who attacked your ally.</entry>
-	<entry key="titleTrade">European trade</entry>
-	<entry key="tradeEmpty">No European trade has been settled yet.</entry>
+	<entry key="titleTrade">Home portan trade</entry>
+	<entry key="tradeEmpty">No Home portan trade has been settled yet.</entry>
 	<entry key="tradeUnavailable">No game is open. Return to the menu to load a game.</entry>
 	<entry key="tradeBought">Bought: %s units</entry>
 	<entry key="tradeSpent">Gold spent: %s</entry>

@@ -155,7 +155,7 @@ class NativeMissionContestTest {
         assertEquals(RESIDENT_ID, terms.getResidentId());
         assertEquals(settlement(model).getId(), terms.getSettlementId());
         assertEquals(EuropeanNation.FRENCH, terms.getResidentOwner());
-        assertEquals(FRANCE, terms.getResidentOwnerName());
+        assertEquals("Phocaea", terms.getResidentOwnerName());
         assertFalse(terms.isVisitorExpert());
         assertFalse(terms.isResidentExpert());
     }

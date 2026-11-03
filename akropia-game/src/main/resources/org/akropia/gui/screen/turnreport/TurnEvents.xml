@@ -4,14 +4,14 @@
 <properties>
 	<comment>Define keys for turn events.</comment>
 	
-	<entry key="shipComeToEuropePort">Ship come to European port.</entry>
-	<entry key="shipComeToHighSeas">Ship arrived from Europe and waiting for next command.</entry>
+	<entry key="shipComeToEuropePort">Ship come to home port.</entry>
+	<entry key="shipComeToHighSeas">Ship arrived from Home port and waiting for next command.</entry>
 	<entry key="faminePlagueColonyDestroyed">Famine in colony %s killed one %s. The colony was destroyed; no stocks remain.</entry>
 	<entry key="faminePlagueColony">Famine in colony %s killed one %s. Final stocks: %s.</entry>
 	<entry key="famineWillPlagueColony">Famine is coming in colony %s. In next turn colonist will die.</entry>
 	<entry key="colonyWasDestroyed">Colony %s was destroyed.</entry>
 	<entry key="shipsLostWithColony">%s ship(s) and their cargo were lost with the colony.</entry>
-	<entry key="newUnitIsInEurope">Religious production attracted an immigrant, now waiting on the European pier.</entry>
+	<entry key="newUnitIsInEurope">Religious production attracted an immigrant, now waiting on the home pier.</entry>
 	<entry key="newUnitIsInColony">There is a new unit in colony %s.</entry>
 	<entry key="interventionArrived">Foreign intervention arrived at %s: two men-of-war, four Continental infantry and two Continental cavalry.</entry>
 	<entry key="mercenaryArrived">The paid veteran soldiers have landed at %s.</entry>
@@ -23,15 +23,17 @@
 	<entry key="constructionWaitingForTools">Colony %s: %s has enough hammers but is waiting for tools (%s missing).</entry>
 	<entry key="openColony">Open colony</entry>
 	<entry key="projectCompleted">Colony %s finished %s.</entry>
-	<entry key="openEurope">Open Europe</entry>
+	<entry key="openEurope">Open Home port</entry>
 	<entry key="forestLumberLostFull">Forest cleared at (%s, %s): lumber lost: %s. The warehouse of colony %s is full.</entry>
 	<entry key="forestLumberLostNoColony">Forest cleared at (%s, %s): lumber lost: %s. No colony of yours is within two squares.</entry>
 	<entry key="fieldPlowed">%s #%s at (%s, %s): Work on the new field is complete. The unit can receive new orders.</entry>
 	<entry key="tradeRouteUnloaded">Trade route %s, %s #%s, stop %s (%s): unloaded %s %s.</entry>
 	<entry key="tradeRouteLoaded">Trade route %s, %s #%s, stop %s (%s): loaded %s %s.</entry>
-	<entry key="tradeRouteSold">Trade route %s, %s #%s, stop %s (Europe): sold %s %s, %s gold.</entry>
-	<entry key="tradeRouteBought">Trade route %s, %s #%s, stop %s (Europe): bought %s %s, %s gold.</entry>
+	<entry key="tradeRouteSold">Trade route %s, %s #%s, stop %s (Home port): sold %s %s, %s gold.</entry>
+	<entry key="tradeRouteBought">Trade route %s, %s #%s, stop %s (Home port): bought %s %s, %s gold.</entry>
 	
 	<entry key="buttonBack">Back</entry>
 
+<entry key="fishermanLostCargo">Fisherman #%s of %s drowned at (%s, %s): the victorious ship had no room for him.</entry>
+<entry key="fishermanLostLand">Fisherman #%s of %s drowned at (%s, %s): fishing support was lost and no free land was available.</entry>
 </properties>

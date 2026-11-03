@@ -11,6 +11,7 @@ import org.akropia.gui.Point;
 import org.akropia.gui.Tile;
 import org.akropia.gui.image.ImageLoaderTerrain;
 import org.akropia.gui.image.ImageLoaderColonies;
+import org.akropia.gui.image.ImageLoaderNationalFlags;
 import org.akropia.model.ColonySighting;
 import org.akropia.gui.image.ImageProvider;
 import org.akropia.gui.screen.game.gamepanel.MapManager;
@@ -54,17 +55,17 @@ public final class PaintService {
     /**
      * Unit's flag width.
      */
-    private static final int FLAG_WIDTH = 7;
+    private static final int FLAG_WIDTH = 16;
 
     /**
      * Unit's flag height.
      */
-    private static final int FLAG_HEIGHT = 12;
+    private static final int FLAG_HEIGHT = 20;
 
     /**
      * Position of unit flag from top left tile corner.
      */
-    private final Point OWNERS_FLAG_POSITION = Point.of(1, 5);
+    private final Point OWNERS_FLAG_POSITION = Point.of(27, 2);
 
     /**
      * Position of unit image from top left tile corner.
@@ -106,13 +107,16 @@ public final class PaintService {
     private final MapManager mapManager;
 
     private final Font colonyFont;
+    private final org.akropia.i18n.I18n i18n;
 
     @Inject
     public PaintService(final ImageProvider imageProvider,
-            final MapManager mapManager, final FontService fontService) {
+            final MapManager mapManager, final FontService fontService,
+            final org.akropia.i18n.I18n i18n) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.mapManager = Preconditions.checkNotNull(mapManager);
         this.colonyFont = fontService.getDefault(14);
+        this.i18n = Preconditions.checkNotNull(i18n);
     }
 
     /** Shared unknown-terrain background for the map and tile preview. */
@@ -391,6 +395,31 @@ public final class PaintService {
         painFlagWithAction(graphics, point.add(OWNERS_FLAG_POSITION), unit);
     }
 
+    /**
+     * Show the recipient for the selected outdoor worker without label
+     * collisions.
+     */
+    public void paintWorkerRecipient(final GraphicsContext graphics,
+            final Point point, final Unit unit) {
+        unit.getWorkingColony().ifPresent(colony -> {
+            final String label = i18n.get(org.akropia.gui.Loc.workingFor,
+                    colony.getName());
+            final javafx.scene.text.Text measure = new javafx.scene.text.Text(
+                    label);
+            measure.setFont(colonyFont);
+            final double width = measure.getLayoutBounds().getWidth();
+            graphics.setFill(Color.web("#FFF1CA"));
+            graphics.fillRect(point.getX() + 22 - width / 2 - 3,
+                    point.getY() + 42, width + 6,
+                    measure.getLayoutBounds().getHeight() + 4);
+            graphics.setFont(colonyFont);
+            graphics.setTextAlign(TextAlignment.CENTER);
+            graphics.setTextBaseline(VPos.TOP);
+            graphics.setFill(Color.BLACK);
+            graphics.fillText(label, point.getX() + 22, point.getY() + 43);
+        });
+    }
+
     public void paintUnitWithoutFlag(final GraphicsContext graphics,
             final Point point, final Unit unit) {
         paintUnitWithoutFlag(graphics, point, unit,
@@ -402,6 +431,10 @@ public final class PaintService {
         final Point p = point.add(UNIT_IMAGE_POSITION);
         graphics.drawImage(imageProvider.getUnitImage(unit, orientation),
                 p.getX(), p.getY());
+        if (unit.isFishing()) {
+            graphics.drawImage(imageProvider.getImage("fishing-boat.png"),
+                    p.getX(), p.getY() + 27, 44, 18);
+        }
     }
 
     public void paintColony(final GraphicsContext graphics, final Point point,
@@ -427,8 +460,8 @@ public final class PaintService {
                 point.getX() - 10, point.getY() - 10, 64, 64);
         graphics.drawImage(
                 imageProvider.getImage(
-                        ImageLoaderColonies.flagKey(owner.getEuropeanNation())),
-                point.getX() - 10, point.getY() - 10, 64, 64);
+                        ImageLoaderNationalFlags.flagKey(owner, true)),
+                point.getX() + 15, point.getY() - 8, 30, 30);
         if (drawColonyName) {
             graphics.setFont(colonyFont);
             graphics.setTextAlign(TextAlignment.CENTER);
@@ -500,6 +533,10 @@ public final class PaintService {
             graphics.strokeRect(point.getX() + 2, point.getY() + 2,
                     Tile.TILE_WIDTH_IN_PX - 4, Tile.TILE_WIDTH_IN_PX - 4);
         }
+        graphics.drawImage(
+                imageProvider.getImage("nation-small_"
+                        + (4 + settlement.getNation().ordinal()) + "_0"),
+                point.getX() + 14, point.getY() - 10, 30, 30);
         relation.ifPresent(view -> paintAttitude(graphics, point, view));
         graphics.setFill(previousFill);
         graphics.setStroke(previousStroke);
@@ -572,21 +609,21 @@ public final class PaintService {
     private static Color nativeNationColor(final NativeNation nation) {
         switch (nation) {
         case ARAWAK:
-            return Color.web("#B56576");
+            return Color.web("#286A72");
         case AZTEC:
-            return Color.web("#2A9D8F");
+            return Color.web("#285B43");
         case INCA:
-            return Color.web("#6D597A");
+            return Color.web("#A2533D");
         case TUPI:
-            return Color.web("#E76F51");
+            return Color.web("#636A38");
         case CHEROKEE:
-            return Color.web("#588157");
+            return Color.web("#713B50");
         case IROQUOIS:
-            return Color.web("#3D5A80");
+            return Color.web("#53616C");
         case SIOUX:
-            return Color.web("#BC6C25");
+            return Color.web("#704635");
         case APACHE:
-            return Color.web("#8D99AE");
+            return Color.web("#80613E");
         default:
             throw new IllegalArgumentException(
                     "No colour for nation " + nation);
@@ -596,13 +633,13 @@ public final class PaintService {
     private void painFlagWithAction(final GraphicsContext graphics,
             final Point point, final Unit unit) {
         paintOwnersFlag(graphics, point, unit.getOwner());
-        final String sign = unit.getAction().getType().getSign();
+        final String sign = unit.getTaskSign();
         if (!Strings.isNullOrEmpty(sign)) {
             graphics.setFont(colonyFont);
             graphics.setTextAlign(TextAlignment.CENTER);
             graphics.setTextBaseline(VPos.CENTER);
-            graphics.setFill(Color.BLACK);
-            graphics.fillText(sign, point.getX() + 2, point.getY() + 5);
+            graphics.setFill(Color.web("#FFF1CA"));
+            graphics.fillText(sign, point.getX() + 8, point.getY() + 10);
         }
     }
 
@@ -615,38 +652,20 @@ public final class PaintService {
      */
     public void paintOwnersFlag(final GraphicsContext graphics,
             final Point point, final Player player) {
-        graphics.setStroke(Color.LIGHTGREY);
-        graphics.setLineWidth(1.5F);
-        graphics.strokeRect(point.getX(), point.getY(), FLAG_WIDTH,
-                FLAG_HEIGHT);
-        // TODO move colors to player's object
-        if (player.isNative()) {
-            // Same nation fill as the settlements of that nation.
-            graphics.setFill(nativeNationColor(
-                    ((PlayerNative) player).getNativeNation()));
-        } else if (player.isHuman()) {
-            graphics.setFill(Color.YELLOW);
-        } else {
-            switch (player.getName().hashCode() % 4) {
-            case 0:
-                graphics.setFill(Color.RED);
-                break;
-            case 1:
-                graphics.setFill(Color.GREEN);
-                break;
-            case 2:
-                graphics.setFill(Color.MAGENTA);
-                break;
-            case 3:
-                graphics.setFill(Color.BLUE);
-                break;
-            default:
-                graphics.setFill(Color.GRAY);
-                break;
-            }
-        }
-        graphics.fillRect(point.getX() + 1, point.getY() + 1, FLAG_WIDTH - 2,
-                FLAG_HEIGHT - 2);
+        graphics.setFill(player.isNative()
+                ? nativeNationColor(((PlayerNative) player).getNativeNation())
+                : Color.web(new String[] { "#9A4236", "#704A69", "#315670",
+                        "#9A701F" }[player.getEuropeanNation().ordinal()]));
+        final double x = point.getX();
+        final double y = point.getY();
+        final double[] xs = { x, x + FLAG_WIDTH, x + FLAG_WIDTH - 0.5,
+                x + 0.4 };
+        final double[] ys = { y + 0.5, y, y + FLAG_HEIGHT,
+                y + FLAG_HEIGHT - 0.8 };
+        graphics.fillPolygon(xs, ys, 4);
+        graphics.setStroke(Color.BLACK);
+        graphics.setLineWidth(2);
+        graphics.strokePolygon(xs, ys, 4);
     }
 
     /**

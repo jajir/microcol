@@ -908,6 +908,14 @@ class RivalTradeCycleTest {
         moveShipToColony();
         setLumber(100);
         objective(Stage.TO_EUROPE);
+        // An outdoor worker returns before the invading force approaches.
+        final Unit worker = colony().getUnitsInsideColony().stream()
+                .filter(Unit::isAtPlaceColonyField).findFirst().orElseThrow();
+        worker.startTurn();
+        worker.placeToColonyStructureSlot(colony().getConstructions().stream()
+                .flatMap(building -> building.getConstructionSlots().stream())
+                .filter(slot -> slot.isEmpty() && slot.canAccept(worker))
+                .findFirst().orElseThrow());
         RivalTradeFixtures.captureColony(model, colony(),
                 model.getUnitById(DUTCH_FORCE_ID));
         assertNotSame(france(),

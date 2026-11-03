@@ -13,10 +13,10 @@
 
 	<entry key="statistics_year">Rok</entry>
 
-	<entry key="titleRelations">Evropské vztahy</entry>
+	<entry key="titleRelations">Vztahy městských států</entry>
 	<entry key="relationPeace">Mír</entry>
 	<entry key="relationWar">Válka</entry>
-	<entry key="relationsEmpty">Žádní evropští soupeři.</entry>
+	<entry key="relationsEmpty">Žádní soupeřící městské státy.</entry>
 	<entry key="relationsUnavailable">Není otevřena hra. Vraťte se do menu a načtěte hru.</entry>
 	<entry key="relationsReadOnly">Válku lze vyhlásit během vašeho tahu v probíhající hře.</entry>
 	<entry key="declarationReview">Vyhlásit válku…</entry>
@@ -56,14 +56,14 @@ Vaše pokladna při nabídce: %s zlatých.</entry>
 	<entry key="allianceEndConfirm">Ukončit spojenectví</entry>
 	<entry key="allianceEnded">Spojenectví mezi %s a %s skončilo. Válku nelze vyhlásit ještě %s kol.</entry>
 	<entry key="allianceEndStale">Hra nebo spojenectví se změnily. Nic nebylo ukončeno. Zkontrolujte aktuální vztahy.</entry>
-	<entry key="turnCrownWar">Koruna vynutila válku s hráčem %s.</entry>
-	<entry key="turnCrownWarAlliance">Koruna ukončila vaše spojenectví a vynutila válku s hráčem %s.</entry>
+	<entry key="turnCrownWar">Rada mateřského města vynutila válku s hráčem %s.</entry>
+	<entry key="turnCrownWarAlliance">Rada mateřského města ukončila vaše spojenectví a vynutila válku s hráčem %s.</entry>
 	<entry key="supportNational">Celostátní podpora povstání: %s %% (%s obyvatel)</entry>
 	<entry key="supportNone">Zatím nemáte žádné kolonie s podporou povstání.</entry>
 	<entry key="supportColonyRow">%s — obyvatelé %s, nashromážděná svoboda %s, místní podpora %s %%</entry>
 	<entry key="turnAllyDefense">Spojenectví s hráčem %2$s vás zavázalo vstoupit do války proti hráči %1$s, který napadl vašeho spojence.</entry>
-	<entry key="titleTrade">Evropský obchod</entry>
-	<entry key="tradeEmpty">Zatím nebyl uzavřen žádný evropský obchod.</entry>
+	<entry key="titleTrade">Obchod městských států</entry>
+	<entry key="tradeEmpty">Zatím nebyl uzavřen žádný obchod s městskými státy.</entry>
 	<entry key="tradeUnavailable">Není otevřena žádná hra. Vraťte se do menu a načtěte hru.</entry>
 	<entry key="tradeBought">Nakoupeno: %s ks</entry>
 	<entry key="tradeSpent">Utraceno zlata: %s</entry>
@@ -92,7 +92,7 @@ Vaše pokladna při nabídce: %s zlatých.</entry>
 	<entry key="baseScoreSubtotal">Základní mezisoučet: %s bodů</entry>
 	<entry key="resultTitle">Náhled vypočteného výsledku, nezapsáno</entry>
 	<entry key="resultNote">Pouze pro čtení. Na základní mezisoučet se použijí válečné a obtížnostní složky. Nic se nezapisuje a žádné pořadí se nezobrazuje.</entry>
-	<entry key="resultDeduction">Zničená domorodá sídla: %s po %s bodech, odpočet -%s bodů</entry>
+	<entry key="resultDeduction">Zničená místní sídla: %s po %s bodech, odpočet -%s bodů</entry>
 	<entry key="resultOwls">Sovy po cíli intervence: +%s bodů</entry>
 	<entry key="resultClampedBase">Základ nejníže nula: %s bodů</entry>
 	<entry key="resultBonus">Úspěšná nezávislost: bonus za pořadí +%s %%, body za včasné vyhlášení: %s</entry>
