@@ -2015,3 +2015,12 @@ The selected [R-0405](requirements/R-0405.md) changes outdoor entry to actual mo
 
 1. [R-0396](requirements/done/R-0396.md) captures a single Go to voyage to Europe or an owned port, continued across owner turns and save/load. Arrival ends the order and adds one persisted Turn report entry identifying ship and destination. Loading never advances travel or duplicates events. Implementation and targeted checks are recorded in the [R-0396/R-0398 evidence](functional-tests.md#r-0396-and-r-0398-destinations-and-end-turn-warnings-2026-11-02); final acceptance is tracked there separately.
 2. If no legal alternative path exists, or the destination port disappears or ceases to be owned, end this ship order and wait for a new player order. Report ship, destination and specific reason once. For this named ship journey this supersedes R-0130's automatic retry after a temporary blockage; other go-to variants retain their existing rules. Exhausted movement points are normal turn waiting, not a failed voyage. No automatic combat, trade, unloading or return journey is introduced.
+
+
+<a id="ship-voyage-notifications"></a>
+### Ship voyage notifications — agreed 2026-11-03
+
+1. [R-0406](requirements/R-0406.md) refines the notification contract: a single ordered voyage reports actual arrival at its chosen destination once, identifying ship and destination. Passing through another port produces no arrival notification.
+2. Automatic-route arrivals, including scheduled stops, produce no player-facing arrival notification. Internal arrival events may remain and are ignored by the notification presentation.
+3. Inability to reach the selected destination remains visible for both single voyages and automatic routes, with ship, destination and a specific reason, including loss of destination ownership where existing access rules forbid arrival. Normal movement exhaustion is not failure; the same unresolved obstruction must not repeat the same warning every turn.
+4. Evaluate the actual outcome after relevant state transitions; a transient idle state must not imply that an automatically continuing ship needs orders. Cancellation or replacement is not a failed voyage. Loading must not duplicate processed notifications. This is agreed behavior awaiting R-0406 implementation and acceptance, not new runtime evidence.
