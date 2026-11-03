@@ -15,7 +15,6 @@ import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -45,16 +44,16 @@ public final class IndustrialProductionPage extends AbstractScreen {
     public void verifyForecast(GoodsType type, int stock, int change) {
         List<VBox> panels = getListOfNodes(".warehouseGoods");
         VBox panel = panels.get(GoodsType.BUYABLE_GOOD_TYPES.indexOf(type));
-        HBox values = (HBox) panel.getChildren().stream()
-                .filter(node -> node instanceof HBox).findFirst().orElseThrow();
         revealGameContent(panel);
         WaitForAsyncUtils.waitForFxEvents();
         getRobot().interact(() -> {
-            Label amount = (Label) values.getChildren().get(0);
-            Label difference = (Label) values.getChildren().get(1);
+            Label amount = (Label) panel.lookup(".amount");
+            Label difference = (Label) panel.lookup(".diff");
             assertEquals(String.valueOf(stock), amount.getText(), type.name());
-            assertEquals(change == 0 ? "" : (change > 0 ? "+" : "") + change,
-                    difference.getText(), type.name());
+            assertEquals("("
+                    + (change > 0 ? "+" + change
+                            : change < 0 ? "−" + Math.abs(change) : "0")
+                    + " /turn)", difference.getText(), type.name());
             assertEquals(stock, getModel().getColonyById(0).orElseThrow()
                     .getWarehouse().getGoods(type).getAmount());
             if (change != 0) {

@@ -204,6 +204,19 @@ public class WelcomePage extends AbstractMenuScreen {
         return owner != null && id.equals(owner.getId());
     }
 
+    public void verifyHallOfFameOpen() {
+        assertTrue(isCssIdShown("hallOfFameDialog"));
+    }
+
+    public void verifyContinueAvailable(final boolean expected) {
+        assertEquals(expected, !getButtonById("buttonContinue").isDisabled());
+    }
+
+    public void pressKeys(final KeyCode... keys) {
+        getRobot().push(keys);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public SettingPage openSetting() {
         verifyMainScreen();
         clickOnButtonWithId(ButtonsPanelView.BUTTON_SETTING_ID);

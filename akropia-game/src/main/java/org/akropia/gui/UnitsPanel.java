@@ -17,6 +17,7 @@ import com.google.inject.Provider;
 import org.akropia.gui.screen.game.components.ButtonsGamePanel;
 
 import javafx.scene.Node;
+import javafx.scene.input.MouseButton;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
@@ -70,6 +71,15 @@ public final class UnitsPanel {
                     && selectedUnitManager.getSelectedUnit().get().equals(unit);
             final UnitPanel unitPanel = new UnitPanel(imageProvider, i18n,
                     localizationHelper, humanPlayer, unit, selected);
+            if (unit.getOwner().equals(humanPlayer)) {
+                unitPanel.getBox().setOnMouseClicked(event -> {
+                    if (event.getButton() == MouseButton.PRIMARY
+                            && !event.isControlDown()) {
+                        selectedUnitManager.selectFromPanel(unit);
+                        event.consume();
+                    }
+                });
+            }
             if (selected && unit.getOwner().isHuman()) {
                 gameButtons.get().addUnitStatus(unitPanel.getBox());
             }

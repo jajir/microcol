@@ -231,6 +231,8 @@ public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
         haarlem.verifyThatProductionIs(GoodsType.GRAIN, -3);
         haarlem.verifyThatProductionIs(GoodsType.LUMBER, 6);
         haarlem.verifyWarehouseStock(GoodsType.GRAIN, 134);
+        haarlem.verifyGoodsForecast(GoodsType.GRAIN, 134, -3, "turn");
+        haarlem.verifyGoodsForecast(GoodsType.LUMBER, 0, 6, "turn");
         haarlem.verifyWarehouseStock(GoodsType.LUMBER, 0);
         game = haarlem.close();
 
@@ -240,6 +242,8 @@ public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
         game.panToTile(HAARLEM);
         haarlem = game.openColonyAt(HAARLEM, "Haarlem");
         haarlem.verifyWarehouseStock(GoodsType.GRAIN, 131);
+        haarlem.verifyGoodsForecast(GoodsType.GRAIN, 131, -3, "turn");
+        haarlem.verifyGoodsForecast(GoodsType.LUMBER, 6, 6, "turn");
         haarlem.verifyWarehouseStock(GoodsType.LUMBER, 6);
         haarlem.verifyNumberOfUnitsOnFields(0);
         game = haarlem.close();
@@ -250,6 +254,8 @@ public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
         game.panToTile(HAARLEM);
         haarlem = game.openColonyAt(HAARLEM, "Haarlem");
         haarlem.verifyWarehouseStock(GoodsType.GRAIN, 131);
+        haarlem.verifyGoodsForecast(GoodsType.GRAIN, 131, -3, "turn");
+        haarlem.verifyGoodsForecast(GoodsType.LUMBER, 6, 6, "turn");
         haarlem.verifyWarehouseStock(GoodsType.LUMBER, 6);
         haarlem.verifyTownCommons(EN_HAARLEM);
         haarlem.close();

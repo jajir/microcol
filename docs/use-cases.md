@@ -1,3 +1,9 @@
+## UC-011/114/119: výběr jednotky, zásoby a Continue — 2026-11-03
+
+1. [R-0400](requirements/done/R-0400.md): TC106/03 kontroluje zásobu kladiv, nulové hodnoty, lokální pochodně/sovy, EN/CS a dvě velikosti; TC109/04 ověřuje záporný i kladný výhled a aktualizaci po kole a Continue.
+2. [R-0401](requirements/done/R-0401.md): TC11/07 a TC11/12 ověřují konkrétní jednotku vybranou z pravého panelu, zvýraznění, zrušení náhledu, klávesový příkaz a vyčerpanou jednotku. TC11/08–09 zachovávají explicitní cíl mapového menu.
+3. [R-0404](requirements/done/R-0404.md): TC191/09 ověřuje samotné C, nedostupnost, modifikátory, dialog a EN/CS proti cestě tlačítkem. Výsledky patří do [funkční evidence](functional-tests.md); toto mapování samo není důkaz přejímky ani publikace.
+
 # Use cases a přejímka pravidel hry
 
 ## UC-114/119 a návazné UC-085: ověření koloniálních cest — 2026-10-31
@@ -1116,7 +1122,7 @@ Tato vizuální změna nemění stav úplné přejímky pravidel uvedených UC.
 
 ### UC-011/114/119: unit context on the map — 2026-10-25
 
-Agreed follow-up on 2026-11-02: [R-0401](requirements/R-0401.md) requests selecting
+Agreed follow-up on 2026-11-02: [R-0401](requirements/done/R-0401.md) requests selecting
 a specific own unit by clicking its right-panel card, with subsequent commands
 targeting that unit. This supersedes the read-only-card expectation below once
 implemented; capture only, with no new implementation or verification claimed.

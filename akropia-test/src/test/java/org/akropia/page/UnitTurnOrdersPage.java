@@ -233,6 +233,21 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void clickInformationIcon(final int unitId) {
+        final javafx.scene.Node description = getNodeFinder()
+                .lookup("#unitPanel-" + unitId).query();
+        getRobot().clickOn(description.getParent().lookup(".image-view"));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyInformationCardSelected(final int unitId,
+            final boolean selected) {
+        final javafx.scene.Node description = getNodeFinder()
+                .lookup("#unitPanel-" + unitId).query();
+        assertEquals(selected, description.getParent().getParent()
+                .getStyleClass().contains("selected"));
+    }
+
     public void verifyInformationOnly() {
         assertFalse(isCssIdShown("unitActions"));
         assertTrue(getNodeFinder().lookup(".unitPanel .button").queryAll()

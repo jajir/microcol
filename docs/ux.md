@@ -58,9 +58,10 @@
 
 ## Produkce kolonie ve spodním řádku — 31. října 2026
 
-1. Dohoda [R-0372](requirements/done/R-0372.md): hráč najde kladiva, pochodně a sovy mezi položkami spodního přehledu zboží. Ukazují produkci za tah, nikoli skladovou zásobu. Celý horní souhrn i věta o obecních zdrojích nad zbožím se na přání uživatele odstraní; detail vybraného středu města dál ukazuje automatickou produkci.
-2. Tyto tři položky pouze informují. Nepřetahují se do lodě; najetí ve stavové liště vysvětlí, že jde o nepřepravitelnou produkci kolonie. Běžné zboží nadále ukazuje zásobu a čistou změnu a zachovává přesuny.
-3. Delší názvy se zalamují. Pravidla výroby, přidělování pracovníků a lodního nákladu se nemění. UI i smoke ověření uživatel pro tuto iteraci výslovně vynechal; skutečné výsledky patří do [funkční evidence](functional-tests.md).
+1. [R-0372](requirements/done/R-0372.md) umístil kladiva, pochodně a sovy do spodního přehledu zboží a odstranil horní souhrn i větu o obecních zdrojích. [R-0400](requirements/done/R-0400.md), vybraný k implementaci 3. listopadu 2026, rozlišuje zásobu města a čistou změnu za kolo i u kladiv; pouze pochodně a sovy ukazují samotný místní příspěvek.
+2. Zásoba je neutrální, změna má vlastní údaj v závorkách s `/kolo` (EN `/turn`), kladné znaménko a zelenou barvu nebo záporné znaménko a červenou barvu. Nula zůstává viditelná v neutrální barvě. V úzkém sloupci jsou hodnoty pod sebou a text se zalamuje. Varování před hladem zůstává zachované.
+3. Kladiva, pochodně a sovy se nepřetahují do lodě; najetí ve stavové liště vysvětlí nepřepravitelnost. Běžné zboží zachovává přesuny. Údaje se obnovují ze stavu otevřeného města po práci, přepravě i novém kole; zobrazení samo nic nevyrábí.
+4. Pravidla výroby a nákladu se nemění. Skutečné testy a vizuální kontrolu zaznamenává [funkční evidence](functional-tests.md); historické vynechání testů R-0372 není přejímkou R-0400.
 
 ## Názvy a nápověda akcí města — 30. října 2026
 
@@ -1105,19 +1106,8 @@ ani vysvětlení nedostupných akcí. Viz [R-0279](requirements/done/R-0279.md).
 
 
 ### Příkazy jednotky přímo na mapě — R-0272
-Nové dohodnuté zadání z 2. listopadu 2026: [R-0401](requirements/R-0401.md)
-mění níže uvedené omezení informačního panelu. Kliknutí na kartu vlastní
-jednotky v pravém panelu ji má vybrat pro následné příkazy, se shodným
-zvýrazněním a skutečným cílem akcí. Výběr sám neprovede pohyb ani nezruší
-stávající rozkaz; nezpřístupní jinak nepovolené akce. Jde o zachycený
-požadavek, nikoli ověřenou implementaci; následující body popisují dosavadní kontrakt.
-
-
-1. Upřesnění uživatele z 25. října 2026 v [R-0272](requirements/done/R-0272.md)
-   nahrazuje ovládání přes kartu jednotky z R-0270. Horní lišta obsahuje
-   přehledy, navigaci, ukončení tahu a celopartijní akce. Pravý panel je pouze
-   informační: ukazuje jednotky, pohyb, náklad a stav cesty; neobsahuje tlačítko
-   Akce ani výběr jednotky kliknutím na kartu.
+1. [R-0401](requirements/done/R-0401.md), vybraný k implementaci 3. listopadu 2026, rozšiřuje R-0272: levé kliknutí na ikonu či text vlastní jednotky v pravém panelu ji vybere pro další příkazy. Panel ji zvýrazní a kontext klávesových příkazů odpovídá přesně této jednotce. Název, pohyb, náklad i stav cesty zůstávají viditelné, tlačítko Akce se nevrací.
+   Výběr sám neprovede pohyb ani nezruší dlouhodobý rozkaz; při přepnutí jednotky zruší nepotvrzený náhled. Vyčerpanou jednotku lze vybrat bez zpřístupnění nepovolených akcí. Cizí či odstraněná jednotka, tah AI, probíhající animace pohybu a plánování obchodní trasy nesmějí získat ovládání tímto kliknutím. Opětovné kliknutí na vybranou jednotku je bez změny.
 2. Pravé kliknutí nebo Ctrl + levé kliknutí na vlastní jednotku v mapě
    otevře její příkazy u místa kliknutí. Pokud je na políčku více vlastních
    jednotek, jejich výběr je součástí této nabídky. Prázdné políčko ani cizí jednotka vlastní příkazy
@@ -1268,3 +1258,9 @@ skutečného hráče; výsledky patří do [funkční evidence](functional-tests
 4. Jde o dohodnutý návrh navazující na uživatelovo pozorování UX-24, nikoli důkaz implementace nebo úspěšný hráčský test. Podrobné přijetí a nevyřešená hranice nečinnosti jsou v R-0398.
 
 7. Dohoda 2026-11-02: pozastavený nebo skutečně zablokovaný rozkaz nevyřadí jinak nepracujícího kolonistu z upozornění. Běžné čekání na obnovení pohybových bodů není nečinnost.
+
+## Continue jediným C — R-0404
+
+1. Na aktivní úvodní obrazovce samotné C bez modifikátorů provede stejnou akci jako dostupné tlačítko Continue. Tlačítko nemusí mít fokus; jeho text ani vzhled se nemění a nevzniká oznámení o zkratce.
+2. Nedostupné Continue, jiná obrazovka, modální dialog a psaní do textového pole se zkratkou neobcházejí. Chyby samotného načtení se zobrazují stejně jako po kliknutí. Chování je stejné v EN/CS.
+3. Implementaci požaduje [R-0404](requirements/done/R-0404.md); skutečné ověření uvádí [funkční evidence](functional-tests.md). Nejde o pozorování hráčů.

@@ -37,6 +37,9 @@
 .panel-colony-goods-column { -fx-min-width: 720; }
 .panel-colony-goods { -fx-alignment: top-center; }
 .warehouseGoods { -fx-min-width: 45; -fx-alignment: top-center; }
+.warehouseGoods .diff { -fx-font-size: 11; -fx-text-fill: #25231f; }
+.warehouseGoods .diffPositive { -fx-text-fill: #316b2f; }
+.warehouseGoods .diffNegative { -fx-text-fill: #b13224; }
 .goods-name { -fx-font-size: 14; }
 .constructionPaneCarpenter .label { -fx-font-size: 14; }
 .unitInPort:focused, .colony-fields .canvas:focused { -fx-border-color: #445b36; -fx-border-width: 2; }

@@ -28,7 +28,8 @@ class SelectedUnitManagerTest {
     private final GameModelController game = mock(GameModelController.class);
     private final SelectedTileManager tiles = new SelectedTileManager(events);
     private final SelectedUnitManager selection = new SelectedUnitManager(game,
-            tiles, events, new GamePanelController(game), mock(I18n.class));
+            tiles, events, new GamePanelController(game), mock(I18n.class),
+            new TradeRoutePlanning(game));
     private Model model;
 
     @BeforeEach
@@ -72,4 +73,23 @@ class SelectedUnitManagerTest {
         assertTrue(selection.getSelectedUnit().isEmpty());
         assertEquals(EMPTY, tiles.getSelectedTile().orElseThrow());
     }
+
+    @Test
+    void panelSelectionRequiresReadyTurnAndKeepsTheExactUnit() {
+        final Unit ship = model.getUnitById(3);
+        final int movement = ship.getMovementThirds();
+        selection.selectFromPanel(ship);
+        assertTrue(selection.getSelectedUnit().isEmpty());
+        when(game.isHumanTurnReady()).thenReturn(true);
+        selection.selectFromPanel(ship);
+        assertSame(ship, selection.getSelectedUnit().orElseThrow());
+        assertEquals(ship.getLocation(), tiles.getSelectedTile().orElseThrow());
+        assertEquals(movement, ship.getMovementThirds());
+        final Unit foreign = model.getAllUnits().stream()
+                .filter(unit -> !unit.getOwner().equals(ship.getOwner()))
+                .findFirst().orElseThrow();
+        selection.selectFromPanel(foreign);
+        assertSame(ship, selection.getSelectedUnit().orElseThrow());
+    }
+
 }

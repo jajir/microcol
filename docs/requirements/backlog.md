@@ -6,7 +6,7 @@
 
 ## Nenápadná zkratka Continue — 2026-11-03
 
-1. [R-0404](R-0404.md), status `new`, A01 s návazností na A03/A04: samotné `c` na úvodní obrazovce provede dostupné Continue stejně jako kliknutí, bez zobrazení zkratky či nového oznámení. Zachycení nezahajuje implementaci.
+1. [R-0404](done/R-0404.md), status `done`, A01 s návazností na A03/A04: samotné `c` na úvodní obrazovce provede dostupné Continue stejně jako kliknutí, bez zobrazení zkratky či nového oznámení. Implementováno a lokálně přijato 3. listopadu 2026.
 
 
 ## Vlajky 03 a bannery činností — 2026-11-03
@@ -20,10 +20,10 @@
 2. Upřesnění 2026-11-03: vybrán směr B1, velká a malá kresba, stejně světlá celá zvířata a tmavší okrový Milét. [Pět návrhových sad](../graphics.md#vlajky-b1-a-ukazky-jednotek-3-listopadu-2026) přidává loď, sluhu a jezdce se svislou stavovou vlaječkou vpravo nahoře. Černé ručně nepravidelné pero přibližně 2 px a jednobarevné výplně jsou trvalým pravidlem v grafickém zadání a `AGENTS.md`. Implementace nezahájena.
 
 ## Výběr jednotky z pravého panelu mapy — 2026-11-02
-1. [R-0401](R-0401.md), status `new`, oblast A03 se závislostí A05: kliknutí na kartu vlastní jednotky ji vybere a následné příkazy ovládají právě ji. Nahrazuje omezení informačního panelu z R-0272; zachycení požadavku, implementace nezahájena.
+1. [R-0401](done/R-0401.md), status `done`, oblast A03 se závislostí A05: kliknutí na kartu vlastní jednotky ji vybere a následné příkazy ovládají právě ji. Nahrazuje omezení informačního panelu z R-0272; implementováno a lokálně přijato 3. listopadu 2026.
 
 ## Zásoby a změna za kolo v liště města — 2026-11-02
-1. [R-0400](R-0400.md), status `new`, oblast A03: místní zásoba a samostatná změna za kolo, zelený přírůstek a červený úbytek. Pouze pochodně a sovy zobrazují jen místní příspěvek za kolo; kladiva ukazují i nahromaděný stav. Zachycení požadavku, implementace nezahájena.
+1. [R-0400](done/R-0400.md), status `done`, oblast A03: místní zásoba a samostatná změna za kolo, zelený přírůstek a červený úbytek. Pouze pochodně a sovy zobrazují jen místní příspěvek za kolo; kladiva ukazují i nahromaděný stav. Implementováno a lokálně přijato 3. listopadu 2026.
 
 
 Canceled on 2026-11-02: [R-0281 — cream macOS title bar](done/R-0281.md). The user explicitly requested cancellation and placement in `done/`; this one-off location exception does not claim implementation or successful visual acceptance. Historical failures remain unchanged.

@@ -50,13 +50,18 @@ public final class SelectedUnitManager {
 
     private Unit selectedUnit;
     private final GamePanelController gamePanelController;
+
+    private final TradeRoutePlanning tradeRoutePlanning;
     private final I18n i18n;
 
     @Inject
     public SelectedUnitManager(final GameModelController gameModelController,
             final SelectedTileManager selectedTileManager,
             final EventBus eventBus,
-            final GamePanelController gamePanelController, final I18n i18n) {
+            final GamePanelController gamePanelController, final I18n i18n,
+            final TradeRoutePlanning tradeRoutePlanning) {
+        this.tradeRoutePlanning = Preconditions
+                .checkNotNull(tradeRoutePlanning);
         this.gamePanelController = Preconditions
                 .checkNotNull(gamePanelController);
         this.i18n = Preconditions.checkNotNull(i18n);
@@ -156,6 +161,21 @@ public final class SelectedUnitManager {
                 }
             }
         }
+    }
+
+    /** Select a live own map unit without issuing or clearing any order. */
+    public void selectFromPanel(final Unit unit) {
+        if (!gameModelController.isHumanTurnReady()
+                || gamePanelController.isUnitMoving()
+                || tradeRoutePlanning.isActive()
+                || !gameModelController.getModel().getAllUnits().contains(unit)
+                || !unit.getOwner().equals(gameModelController.getHumanPlayer())
+                || !unit.isAtPlaceLocation()) {
+            return;
+        }
+        setSelectedUnit(unit);
+        selectedTileManager.setSelectedTile(unit.getLocation(),
+                ScrollToFocusedTile.skip);
     }
 
     public void setSelectedUnit(final Unit unit) {

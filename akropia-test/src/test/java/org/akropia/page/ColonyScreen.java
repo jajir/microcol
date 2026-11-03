@@ -134,18 +134,49 @@ public class ColonyScreen extends AbstractScreen {
         return colony.getWarehouse().getGoods(goodsType).getAmount();
     }
 
+    public void verifyGoodsForecast(final GoodsType type, final int stock,
+            final int change, final String perTurn) {
+        getRobot().interact(() -> {
+            final VBox panel = getNodeFinder()
+                    .lookup("#colony-good-" + type.name()).queryAs(VBox.class);
+            final Label amount = (Label) panel.lookup(".amount");
+            final Label diff = (Label) panel.lookup(".diff");
+            assertEquals(String.valueOf(stock), amount.getText());
+            final String signed = change > 0 ? "+" + change
+                    : change < 0 ? "−" + Math.abs(change) : "0";
+            assertEquals("(" + signed + " /" + perTurn + ")", diff.getText());
+            assertEquals(
+                    javafx.scene.paint.Color.web(change > 0 ? "#316b2f"
+                            : change < 0 ? "#b13224" : "#25231f"),
+                    diff.getTextFill());
+            for (final Label label : List.of(amount, diff)) {
+                final Text rendered = (Text) label.lookup(".text");
+                assertEquals(label.getText(), rendered.getText(),
+                        "Goods value must not be ellipsized");
+                assertTrue(
+                        panel.localToScene(panel.getBoundsInLocal())
+                                .contains(rendered.localToScene(
+                                        rendered.getBoundsInLocal())),
+                        "Goods value must fit its own column");
+            }
+        });
+    }
+
     public void verifyLocalProduction(final GoodsType type,
-            final String expectedName, final String expectedProduction) {
+            final String expectedName, final String expectedStock,
+            final String expectedProduction) {
         getRobot().interact(() -> {
             final VBox panel = getNodeFinder()
                     .lookup("#colony-good-" + type.name()).queryAs(VBox.class);
             final Label name = (Label) panel.lookup(".goods-name");
             final Label amount = (Label) panel.lookup(".amount");
             assertEquals(expectedName, name.getText());
-            assertEquals(expectedProduction, amount.getText());
+            final Label diff = (Label) panel.lookup(".diff");
+            assertEquals(expectedStock, amount.getText());
+            assertEquals(expectedProduction, diff.getText());
             assertNull(panel.lookup(".imageGoods").getOnDragDetected(),
                     "Colony production cannot initiate cargo transport");
-            for (final Label label : List.of(name, amount)) {
+            for (final Label label : List.of(name, diff)) {
                 final Text text = (Text) label.lookup(".text");
                 assertEquals(label.getText(), text.getText());
                 final Bounds bounds = text

@@ -5,7 +5,6 @@ import org.akropia.model.Colony;
 import org.akropia.model.Goods;
 import org.akropia.model.GoodsType;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /** Warehouse forecasts and food-limited breeding observations. */
@@ -47,10 +46,10 @@ public final class HorseBreedingPage extends AbstractScreen {
         final VBox panel = getNodeFinder().lookup("#colony-good-HORSE")
                 .queryAs(VBox.class);
         final Label amount = (Label) panel.lookup(".amount");
-        final HBox values = (HBox) amount.getParent();
+        final Label diff = (Label) panel.lookup(".diff");
         assertEquals(String.valueOf(horseStock), amount.getText());
-        assertEquals(horseIncrease == 0 ? "" : "+" + horseIncrease,
-                ((Label) values.getChildren().get(1)).getText());
+        assertEquals("(" + (horseIncrease == 0 ? "0" : "+" + horseIncrease)
+                + " /turn)", diff.getText());
         assertEquals(horseIncrease, colony().getGoodsStats()
                 .getStatsByType(GoodsType.HORSE).getRowProduction());
     }

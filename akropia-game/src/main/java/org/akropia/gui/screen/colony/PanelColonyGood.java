@@ -24,7 +24,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -78,7 +77,11 @@ public final class PanelColonyGood implements JavaFxComponent {
             labelDiff.setId(FAMINE_FORECAST_ID);
         }
         labelDiff.getStyleClass().add("diff");
-        final HBox hlabels = new HBox(labelAmount, labelDiff);
+        labelDiff.setWrapText(true);
+        labelDiff.setMinWidth(0);
+        labelDiff.setMaxWidth(Double.MAX_VALUE);
+        labelDiff.setAlignment(Pos.CENTER);
+        final VBox hlabels = new VBox(2, labelAmount, labelDiff);
         hlabels.setAlignment(Pos.CENTER);
         mainPanel = new VBox();
         mainPanel.setId("colony-good-" + goodsType.name());
@@ -134,31 +137,22 @@ public final class PanelColonyGood implements JavaFxComponent {
         name.setText(i18n.get(GoodsTypeName.getNameForGoodsType(goodsType)));
         final ColonyProductionStats stats = colony.getGoodsStats();
         final GoodsProductionStats goodsStats = stats.getStatsByType(goodsType);
-        if (!goodsType.isCanBeBought()) {
-            labelAmount.setText(i18n.get(ColonyMsg.productionPerTurn,
-                    goodsStats.getRowProduction()));
-            labelDiff.setText("");
-            return;
-        }
-
-        String txt = String.valueOf(goodsStats.getInWarehouseBefore());
-        labelAmount.setText(txt);
-
+        final boolean shared = GoodsType.TORCHES.equals(goodsType)
+                || GoodsType.OWLS.equals(goodsType);
+        labelAmount.setText(shared ? ""
+                : String.valueOf(goodsStats.getInWarehouseBefore()));
+        labelAmount.setManaged(!shared);
+        labelAmount.setVisible(!shared);
         final int diff = goodsStats.getDiff();
-        if (diff > 0) {
-            txt = "+" + diff;
-            labelDiff.getStyleClass().clear();
-            labelDiff.getStyleClass().add("diffPositive");
-            labelDiff.setText(txt);
-        } else if (diff < 0) {
-            txt = String.valueOf(diff);
-            labelDiff.getStyleClass().clear();
-            labelDiff.getStyleClass().add("diffNegative");
-            labelDiff.setText(txt);
-        } else {
-            labelDiff.getStyleClass().clear();
-            labelDiff.setText("");
+        final String signed = diff > 0 ? "+" + diff
+                : diff < 0 ? "−" + Math.abs((long) diff) : "0";
+        labelDiff.getStyleClass().setAll("diff");
+        if (diff != 0) {
+            labelDiff.getStyleClass()
+                    .add(diff > 0 ? "diffPositive" : "diffNegative");
         }
+        final String change = i18n.get(ColonyMsg.productionPerTurn, signed);
+        labelDiff.setText(shared ? change : "(" + change + ")");
         if (GoodsType.GRAIN.equals(goodsType)
                 && goodsStats.getInWarehouseAfter() < 0) {
             labelDiff.setText(labelDiff.getText() + " ⚠");

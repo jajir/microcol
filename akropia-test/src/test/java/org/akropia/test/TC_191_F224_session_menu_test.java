@@ -635,4 +635,68 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         WelcomePage.of(getContext()).verifyMainScreen();
         audit.verifyTurnSnapshotCount(0);
     }
+
+    @Test
+    @Tag("local")
+    void TC_09_plain_c_continues_only_from_the_available_welcome_screen()
+            throws Exception {
+        // A fresh profile has no Continue target; C leaves the menu unchanged.
+        final WelcomePage welcome = WelcomePage.of(getContext());
+        welcome.verifyContinueAvailable(false);
+        welcome.pressKeys(KeyCode.C);
+        welcome.verifyMainScreen();
+        final SettingPage settings = welcome.openSetting();
+        settings.setAutosaveEnabled(false);
+        final GamePage game = settings.goBack().loadGame();
+        game.waitWhileMoving();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        saves.quickSave();
+        saves.rememberGame();
+
+        // C does not reload the live map or dismiss its modal menu.
+        welcome.pressKeys(KeyCode.C);
+        saves.verifyGameUnchanged();
+        saves.openMenu();
+        welcome.pressKeys(KeyCode.C);
+        saves.verifyMenu();
+        saves.verifyGameUnchanged();
+        saves.chooseMenu("menuMain");
+        welcome.verifyMainScreen();
+        welcome.verifyContinueAvailable(true);
+
+        // A modal opened from Welcome owns the key; Continue stays behind it.
+        saves.action("buttonHallOfFame");
+        welcome.pressKeys(KeyCode.C);
+        welcome.verifyHallOfFameOpen();
+        saves.action("hallOfFameClose");
+        welcome.verifyMainScreen();
+
+        // Modified C remains inert, even when Continue is available.
+        welcome.pressKeys(KeyCode.CONTROL, KeyCode.C);
+        welcome.pressKeys(KeyCode.ALT, KeyCode.C);
+        welcome.pressKeys(KeyCode.SHIFT, KeyCode.C);
+        welcome.verifyMainScreen();
+        welcome.tabToMenuButton("buttonSetting");
+        welcome.pressKeys(KeyCode.C);
+        GamePage.of(getContext()).verifyGameInFront();
+        saves.verifyRestoredGame();
+
+        // The mouse path restores the same snapshot as the keyboard path.
+        GamePage.of(getContext()).exitToMenu();
+        audit.continueGame();
+        saves.verifyRestoredGame();
+        GamePage.of(getContext()).exitToMenu();
+
+        // Settings do not inherit C, and the Czech welcome screen still uses C.
+        final SettingPage czech = welcome.openSetting();
+        czech.setCzechLanguage();
+        welcome.pressKeys(KeyCode.C);
+        czech.goBack();
+        welcome.verifyContinueAvailable(true);
+        welcome.pressKeys(KeyCode.C);
+        GamePage.of(getContext()).verifyGameInFront();
+        saves.verifyRestoredGame();
+    }
+
 }

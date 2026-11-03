@@ -308,12 +308,14 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractAkropiaTest {
         orders.captureDialog("waitUnit", "r0272-port-menu.png");
         orders.dismissActions();
 
-        // Neither mouse button turns information cards into unit selectors.
+        // A card selects its exact unit; secondary click leaves it selected.
         orders.clickInformationCard(24, javafx.scene.input.MouseButton.PRIMARY);
-        orders.verifySelectedUnit(3);
+        orders.verifySelectedUnit(24);
+        orders.verifyInformationCardSelected(24, true);
+        orders.verifyInformationCardSelected(3, false);
         orders.clickInformationCard(24,
                 javafx.scene.input.MouseButton.SECONDARY);
-        orders.verifySelectedUnit(3);
+        orders.verifySelectedUnit(24);
         orders.verifyMenuVisible(false);
 
         // The map menu selects another unit on the same square, then the ship
@@ -432,6 +434,43 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractAkropiaTest {
         orders.verifyNoUnitActions();
         movement.verifyLocation(3, sea);
         movement.verifyMovement(3, 6);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_12_panel_selection_cancels_preview_and_targets_keyboard_order()
+            throws Exception {
+        // The ship preview must never become a move when another card is
+        // clicked.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final UnitTurnOrdersPage orders = new UnitTurnOrdersPage(getContext());
+        final FreePlayAuditPage keys = new FreePlayAuditPage(getContext());
+        final NationalTurnPage turns = new NationalTurnPage(getContext());
+        game.selectMapUnit(3);
+        final com.google.gson.JsonElement ship = turns.readUnitState(3);
+        keys.press(KeyCode.M);
+        turns.verifyUnitAndMoveMode(3, ship, true);
+        orders.clickInformationIcon(24);
+        orders.verifySelectedUnit(24);
+        orders.verifyInformationCardSelected(24, true);
+        turns.verifyUnitAndMoveMode(3, ship, false);
+
+        // Clicking again is inert; Space spends only the selected unit's turn.
+        orders.clickInformationCard(24, javafx.scene.input.MouseButton.PRIMARY);
+        orders.verifySelectedUnit(24);
+        orders.verifyMovement(3, 1, 1, 197);
+        keys.press(KeyCode.SPACE);
+        orders.verifyMovement(3, 0, 1, 197);
+        turns.verifyUnitAndMoveMode(3, ship, false);
+
+        // An exhausted unit can still be selected and inspected.
+        orders.clickInformationCard(24, javafx.scene.input.MouseButton.PRIMARY);
+        orders.verifySelectedUnit(24);
+        orders.verifyInformationCardSelected(24, true);
+        // Wait can select another ready unit; Skip cannot spend this turn
+        // again.
+        orders.verifyOrdersAvailable(true, false);
+        orders.verifyMovement(3, 0, 1, 197);
     }
 
 }
