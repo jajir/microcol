@@ -2,10 +2,11 @@
 
 ## Pracovníci kolonie na mapě světa
 
-1. **Dohodnutý směr z 3. listopadu 2026, zatím neimplementovaný:** [R-0405](requirements/R-0405.md) zpřístupní výběr pracovníka a přiřazení práce přímo na hlavní mapě. Hráč přesune člověka na pracovní pole a zadá mu práci; nemá potřebovat znalost skryté vazby na pravý panel kolonie. Přesná podoba zaměstnanců budov je otevřená.
-2. Přiřazení práce zachová zbývající pohyb a první výnos patří následujícímu Next turn. Návrat po zrušení práce je dostupný z mapy i města, stojí jeden bod a v témže tahu nedovolí jiné pracovní pole. [Herní kontrakt](gap-analysis.md#workers-on-world-map) rozlišuje přijaté body a otevřené hranice; rozhraní je nesmí obcházet.
-3. Návrh pro refinement: u člověka zobrazit příslušnou kolonii, práci, očekávaný výnos a dostupný návrat; před potvrzením vysvětlit nedostupnost a příjemce produkce společného pole. Trvalá práce nemá každý tah vyžadovat nové zadání. Doporučení ještě nejsou přijatou podobou ovládání.
-4. Uživatel hlásí opakované nepochopení neviditelných pracovníků, sekce Outside town a vzdálené volby činnosti. Toto je záznam jeho zpětné vazby, nikoli nově provedená studie. R-0405 obsahuje otevřené otázky; zlepšení srozumitelnosti a bojové důsledky musí ověřit budoucí přejímka.
+1. **Dohodnuté budoucí chování z 3. listopadu 2026, zatím neimplementované:** [R-0405](requirements/R-0405.md) zpřístupní venkovního pracovníka na jeho skutečném poli a zadání práce přímo z hlavní mapy. Pracovníci budov a vnitřní posádka zůstanou uvnitř města; pouze skutečně venkovní jednotky se zobrazí na mapě/Outside colony.
+2. Pohyb na pole i návrat se řídí terénem a zbývajícími body. Neexistuje zvláštní zákaz dalšího pole po návratu ani pevná cena návratu jeden bod. Práci na již dosaženém poli lze zadat i bez pohybu; zadání zbývající body nespotřebuje. Vnitřní přeřazení je zdarma. Zrušení práce člověka nepřenese a nemožný návrat ho ponechá na poli. [Herní kontrakt](gap-analysis.md#workers-on-world-map) je společný pro mapu i město.
+3. Zevnitř města práce zásobuje toto město. Mapa nabízí každou činnost samostatně pro každou způsobilou vlastní kolonii v dosahu, s jejím jménem v položce. První výnos patří následujícímu Next turn; potraviny platí příjemce pouze za své aktuálně pracující lidi. Nečinné jednotky spotřebu nevytvářejí. Zrušená nabídka nemění stav.
+4. Návrh zpětné vazby: u vybraného člověka zobrazit práci, přijímající město, očekávaný výnos a důvod nedostupného pohybu/práce. Způsob potlačení polí využívaných jinou kolonií v detailu města zůstává otázkou R-0405 4.11; rybolov otázkou 4.8. Návrhy nejsou schváleným vzhledem.
+5. Uživatel hlásí opakované nepochopení neviditelných pracovníků, odchodu přes Outside colony a výběru práce ve vzdáleném pravém panelu. Jde o hlášené pozorování; přínos nového návrhu ještě nebyl ověřen hráčským testem.
 
 ## Jednorázová plavba Go to
 
