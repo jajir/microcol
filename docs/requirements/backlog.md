@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Pohybové údaje na mapě — 2026-11-03
+
+1. [R-0408](R-0408.md), status `new`, A03 s návazností A05: zbývající třetiny bez úvodní nuly a skutečná cena sousedního kroku pro vybranou jednotku, včetně vysvětlení říčního zvýhodnění. Bez konkrétního kroku se základní cena terénu výslovně odliší. Otevřené otázky nejsou; požadavek je zařazený k budoucímu výběru a technickému upřesnění.
+
 ## Správa obchodní trasy — Pracovní stůl — 2026-11-03
 
 1. [R-0407](R-0407.md), status `new`, A03 s návaznostmi A06/A01: schválená první varianta využije celou herní plochu, zastávky vlevo, zboží uprostřed a dopravce vpravo. Zachovává všechny operace a návrat do místa otevření. Otevřené otázky nejsou; technické upřesnění a implementace nejsou tímto zachycením autorizované.

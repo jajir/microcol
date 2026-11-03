@@ -1277,3 +1277,11 @@ skutečného hráče; výsledky patří do [funkční evidence](functional-tests
 1. Uživatel vybral první návrh „Pracovní stůl“, zachycený v [R-0407](requirements/R-0407.md): samostatná obrazovka uvnitř herního okna se zastávkami vlevo, zbožím pro vybranou zastávku uprostřed a dopravci vpravo. Návrat a kontext trasy mají zůstat dostupné při práci s obsahem.
 2. Uložení pokynů ke zboží, automatické přiřazení dopravce a jednorázové odbavení jsou různé činnosti a jejich popisky musí vysvětlit rozdíl. Přehled přiřazených dopravců a odstranění trasy mají vlastní rozbalovací části. Stávající pravidla a potvrzovací kroky se nemění.
 3. Zpět a Escape vedou do místa otevření, včetně plánovače tras nebo kolonie. Úzké okno nesmí znepřístupnit ovládání. Jde o schválený návrh prezentace, nikoli ověřený herní výsledek nebo závěr hráčské studie; implementační přejímka zbývá.
+
+
+<a id="movement-cost-presentation"></a>
+## Cena kroku a zbývající pohyb — 2026-11-03
+
+1. [R-0408](requirements/R-0408.md) zachycuje schválenou opravu prezentace: nenulový zlomek zbývajícího bodu nemá nulovou celou část (`⅔`, nikoli `0 2/3`); skutečně vyčerpaný pohyb zůstává `0` a hodnoty nad jedním bodem mohou být smíšené, například `1 ⅔`.
+2. U vybrané jednotky a sousedního cíle zobrazit modelovou cenu konkrétního kroku a vysvětlit zvýhodnění, například pohyb podél propojené řeky. Samotná přítomnost řeky na cílovém poli neurčuje cenu každého příchodu. Základní cena terénu musí mít odlišný popisek, zejména pokud konkrétní krok není určený. Nedostupnost přesunu nesmí být zakrytá číselnou cenou.
+3. Pravidla pohybu a dosavadní ovládání se nemění. Jde o schválené zadání bez nové implementační přejímky; screenshoty samy neprokazují chybu odečítání bodů. Podrobnou akceptaci vlastní R-0408.
