@@ -1,5 +1,12 @@
 # Writing and publishing documentation
 
+## R-0402 accepted identities and unchanged calendar — 2026-11-03
+
+1. On base `5356b7f7`, recorded the accepted answers in [R-0402](requirements/R-0402.md): eight local animal/color directions, the complete four-power/eight-people identity mapping with existing profiles and settlement mechanics preserved, and the homeland narrative and terminology. The user explicitly kept the calendar unchanged, including displayed dates, progression, seasons and scoring/end boundaries; expedition-year numbering was not accepted. Updated the graphics contract, R-0403 mapping, gap analysis and backlog. R-0402 chapter 4 now contains None; status remains `new`.
+2. After a power interruption, reviewed the surviving uncommitted documentation and completed local acceptance: all 14 consistency tests passed with zero failures/errors/skips, name audit found zero unexplained occurrences, and strict MkDocs passed. Checked requirement structure, rendered tables and the explicit calendar exception; `git diff --check` passed. No source code, runtime assets or configuration changed.
+3. This is a documentation-only refinement. Model/JUnit, Docker UI and smoke are exempt; implementation, artwork acceptance and remote CI/Pages/distribution verification were not started.
+
+
 ## R-0403 accepted banner answers — 2026-11-03
 
 1. On base `6708d10a`, incorporated the user's approval into [R-0403](requirements/R-0403.md), the [shared graphics rule](graphics.md#vybrane-vlajky-03), R-0402/R-0405, gap analysis and backlog. Starting dimensions remain subject to visual validation; `g/t/w`, retained-task letters during waiting/pause/blocking and trade-route precedence are accepted behavior. Chapter 4 now contains None; status remains `new` and implementation is not started.

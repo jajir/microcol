@@ -4,9 +4,16 @@
 
 ## Vlajky městských států a místních národů — dohoda 2026-11-02
 
-1. [R-0402](requirements/R-0402.md) zachycuje schválené čtyři městské státy, osm místních národů a jejich příběhy. Pro městské státy je vybrána [varianta 03 v obou velikostech](#vybrane-vlajky-03); produkční provedení vlastní R-0403. Kresba a značky osmi místních národů čekají na návrh.
+1. [R-0402](requirements/R-0402.md) zachycuje schválené čtyři městské státy, osm místních národů a jejich příběhy. Pro městské státy je vybrána [varianta 03 v obou velikostech](#vybrane-vlajky-03); produkční provedení vlastní R-0403. Motivy a barevné směry osmi místních národů jsou [schválené níže](#mistni-narody-symboly); produkční kresba a přesné odstíny čekají na vizuální ověření.
 2. Vlastnictví vyjadřuje vlajka s barevnou plochou, jednoduchým kontrastním symbolem a výraznou konturou. Symbol musí fungovat i bez rozlišení barev. Identita je společná pro jednotky, sídla a přehledy a oddělená od výběru jednotky, činnosti a diplomatického vztahu.
-3. Jde o herní stylizaci inspirovanou mincovními motivy, nikoli historicky doložené státní vlajky. Platí společný SVG kontrakt. Konkrétní rozměry a čitelnost se ověří při návrhu v herní velikosti; nyní nejsou dodány nové runtime obrázky ani výsledky hráčského ověření.
+3. Řecké motivy jsou herní stylizací inspirovanou mincemi; motivy místních národů jsou autorské herní symboly. Nejde o historicky doložené státní vlajky. Platí společný SVG kontrakt. Konkrétní rozměry a čitelnost se ověří při návrhu v herní velikosti; nyní nejsou dodány nové runtime obrázky ani výsledky hráčského ověření.
+
+<a id="mistni-narody-symboly"></a>
+### Symboly místních národů — schváleno 3. listopadu 2026
+
+1. Použít schválenou [tabulku osmi motivů a barevných směrů v R-0402, bod 2.13](requirements/R-0402.md#2-chovani). Každý národ má celé světlé zvíře na barevném podkladu, černé pero přibližně 2 logické px, jemnou ruční nepravidelnost geometrie a čisté jednobarevné plochy. Jde o autorské herní symboly, nikoli historicky doložené státní vlajky.
+2. Přesné odstíny a čitelnost se ověří na společném listu všech dvanácti stran a ve skutečné herní velikosti. Symboly musí rozlišovat vlastníky i bez barvy. Doladění palety je úkol vizuálního návrhu, nikoli znovuotevření schválených národů a motivů. Produkční kresba vyžaduje skutečné SVG podle společného kontraktu; žádné nové runtime obrázky tímto zápisem nevznikají.
+3. Vzhled místních sídel navazuje na [přiřazení v R-0402, bod 2.15](requirements/R-0402.md#2-chovani): město, osada a tábor zachovají své současné herní parametry. Fénická osada je výtvarně přístavní obchodní stanice; typ sídla nepředstavuje hodnocení celého národa.
 
 <a id="vybrane-vlajky-03"></a>
 ### Vybrané vlajky 03 a banner instrukce — 3. listopadu 2026
