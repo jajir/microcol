@@ -4,15 +4,22 @@
 
 ## Vlajky městských států a místních národů — dohoda 2026-11-02
 
-1. [R-0402](requirements/R-0402.md) zachycuje schválené čtyři městské státy, osm místních národů a jejich příběhy. Pro městské státy jsou přijaty výchozí motivy a barevné směry z kapitoly 2; finální paleta, kresba a značky osmi místních národů čekají na následující návrh.
+1. [R-0402](requirements/R-0402.md) zachycuje schválené čtyři městské státy, osm místních národů a jejich příběhy. Pro městské státy je vybrána [varianta 03 v obou velikostech](#vybrane-vlajky-03); produkční provedení vlastní R-0403. Kresba a značky osmi místních národů čekají na návrh.
 2. Vlastnictví vyjadřuje vlajka s barevnou plochou, jednoduchým kontrastním symbolem a výraznou konturou. Symbol musí fungovat i bez rozlišení barev. Identita je společná pro jednotky, sídla a přehledy a oddělená od výběru jednotky, činnosti a diplomatického vztahu.
 3. Jde o herní stylizaci inspirovanou mincovními motivy, nikoli historicky doložené státní vlajky. Platí společný SVG kontrakt. Konkrétní rozměry a čitelnost se ověří při návrhu v herní velikosti; nyní nejsou dodány nové runtime obrázky ani výsledky hráčského ověření.
+
+<a id="vybrane-vlajky-03"></a>
+### Vybrané vlajky 03 a banner instrukce — 3. listopadu 2026
+
+1. Pro velké i malé vlajky čtyř mocností je **vybraná varianta 03 — Antická geometrie** z [uložené předlohy](graphics-assets/flags-2026-11-03/03-anticka-geometrie.png). Jejich nahrazení ve všech stávajících použitích vlastní [R-0403](requirements/R-0403.md); názvy a identity nadále vlastní [R-0402](requirements/R-0402.md). Výběr předlohy není hotovou implementací.
+2. Nad pravou horní částí každé jednotky na mapě bude svislý banner podle ukázky v barvě vlastníka. **Bez instrukce zůstává viditelný a prázdný; s instrukcí obsahuje právě jedno písmeno její činnosti**, stejné světlé barvy jako zvířata. Písmeno odráží skutečný stav a existující význam značek. Náhodná písmena v návrhových listech nejsou herním pravidlem.
+3. Všechna čtyři zvířata jsou celá a mají shodnou světlou výplň; Milét má tmavší okrový podklad. Závazný je [styl černého pera a plochých výplní](#soucasne-zadani-vzhledu), nikoli případné tónování generované předlohy. Produkční SVG, přesné rozměry, kontrast a čitelnost v cílové velikosti teprve projdou přejímkou. Symboly osmi místních národů tento výběr neurčuje.
 
 ### Vlajky B1 a ukázky jednotek — 3. listopadu 2026
 
 1. Uživatel vybral obdélníkový směr B1, celé zvíře a dvě samostatné kresby: velkou pro nápovědu a zjednodušenou malou pro mapu. Všechna zvířata jsou stejně světlá; Milét má nově tmavší okrový podklad a světlého lva. Rozhodnutí i hranice vlastní [R-0402](requirements/R-0402.md); platí [trvalé černé pero a ploché výplně](#soucasne-zadani-vzhledu).
 2. Pět následujících listů porovnává čtyři státy. Vedle malé zvířecí vlajky jsou loď, sluha a jezdec; každý má vpravo nahoře svislý stavový praporek s jedním světlým malým písmenem z `f`, `g`, `w`, `s`, `p`, `c`. Písmena jsou pouze vzorky kresby, nemění význam ani přidělování herních stavů. Všechny ukázky jsou zvětšené návrhy, nikoli snímky implementované hry.
-3. Použit vestavěný ImageGen. [Úplná zadání a reference](graphics-assets/flags-2026-11-03/prompts.json) uchovávají parametry návrhu. PNG jsou výtvarné předlohy; neprokazují skutečný SVG zdroj, přesné ploché výplně, šířku tahu ani čitelnost v cílových pixelech. Vybraná sada potřebuje vektorové zpracování a přejímku v herní velikosti. Žádná z pěti sad zatím není vybraná.
+3. Použit vestavěný ImageGen. [Úplná zadání a reference](graphics-assets/flags-2026-11-03/prompts.json) uchovávají parametry návrhu. PNG jsou výtvarné předlohy; neprokazují skutečný SVG zdroj, přesné ploché výplně, šířku tahu ani čitelnost v cílových pixelech. Vybraná sada potřebuje vektorové zpracování a přejímku v herní velikosti. Uživatel následně vybral variantu 03 pro obě velikosti; viz [aktuální rozhodnutí](#vybrane-vlajky-03).
 
 #### 01 — Jemná linka
 

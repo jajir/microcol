@@ -1,8 +1,13 @@
 # Current requirement backlog
 
+## Vlajky 03 a bannery činností — 2026-11-03
+
+1. [R-0403](R-0403.md), status `new`, A03 s návazností na A02 a R-0402: nahrazení velkých i malých vlajek čtyř mocností variantou 03; nad každou jednotkou vpravo nahoře svislý banner, bez instrukce prázdný, jinak s písmenem skutečné činnosti. Zachycení nezahajuje implementaci.
+
+
 ## Řecké městské státy a místní národy — 2026-11-02
 
-1. [R-0402](R-0402.md), status `new`, oblast A03 s návaznostmi A02/A08/A06/A10: schváleny Athény, Korint, Milét a Fókaia, jejich příběhy a výchozí motivy vlajek i osm místních národů. Další krok je návrh vlajek a barev. Zachycení nemění pravidla a nezahajuje implementaci.
+1. [R-0402](R-0402.md), status `new`, oblast A03 s návaznostmi A02/A08/A06/A10: schváleny Athény, Korint, Milét a Fókaia, jejich příběhy a výchozí motivy vlajek i osm místních národů. Pro čtyři mocnosti je nyní vybraná varianta 03; nahrazení vlajek a bannery vlastní R-0403. Návrh identity místních národů zůstává otevřený. Zachycení nemění pravidla a nezahajuje implementaci.
 2. Upřesnění 2026-11-03: vybrán směr B1, velká a malá kresba, stejně světlá celá zvířata a tmavší okrový Milét. [Pět návrhových sad](../graphics.md#vlajky-b1-a-ukazky-jednotek-3-listopadu-2026) přidává loď, sluhu a jezdce se svislou stavovou vlaječkou vpravo nahoře. Černé ručně nepravidelné pero přibližně 2 px a jednobarevné výplně jsou trvalým pravidlem v grafickém zadání a `AGENTS.md`. Implementace nezahájena.
 
 ## Výběr jednotky z pravého panelu mapy — 2026-11-02

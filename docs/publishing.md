@@ -1,5 +1,10 @@
 # Writing and publishing documentation
 
+## R-0403 flag selection and instruction banners — 2026-11-03
+
+1. Captured [R-0403](requirements/R-0403.md), status `new`, on base `e9da757f`: replace large and small four-power flags using variant 03; every map unit gets an upper-right vertical banner, empty without an instruction and bearing the existing activity letter otherwise. Updated R-0402, the graphical contract, gap analysis and backlog to remove the superseded open selection. No runtime source or assets changed.
+2. Documentation-only acceptance: all 14 consistency tests passed with zero failures/errors/skips; name audit found zero unexplained occurrences; strict MkDocs passed. Game/model/UI/smoke and remote publication checks are outside this documentation-only capture. Production SVG and actual-size visual acceptance remain future work.
+
 ## R-0402 standing pen style and flag proposals — 2026-11-03
 
 1. The user reaffirmed a permanent project-wide style: black ballpoint lines around 2 logical UI pixels, hand-irregular geometry and solid flat fills. `AGENTS.md` now requires carrying this rule into every graphics prompt and handoff; the authoritative detail remains in [the visual brief](graphics.md#soucasne-zadani-vzhledu).
