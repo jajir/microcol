@@ -1,5 +1,10 @@
 # Current requirement backlog
 
+## Nenápadná zkratka Continue — 2026-11-03
+
+1. [R-0404](R-0404.md), status `new`, A01 s návazností na A03/A04: samotné `c` na úvodní obrazovce provede dostupné Continue stejně jako kliknutí, bez zobrazení zkratky či nového oznámení. Zachycení nezahajuje implementaci.
+
+
 ## Vlajky 03 a bannery činností — 2026-11-03
 
 1. [R-0403](R-0403.md), status `new`, A03 s návazností na A02 a R-0402: nahrazení velkých i malých vlajek čtyř mocností variantou 03; nad každou jednotkou vpravo nahoře svislý banner, bez instrukce prázdný, jinak s písmenem skutečné činnosti. Zachycení nezahajuje implementaci.

@@ -1,5 +1,12 @@
 # Writing and publishing documentation
 
+## R-0404 Continue shortcut capture — 2026-11-03
+
+1. Captured [R-0404](requirements/R-0404.md), status `new`, on base `a13a5a4a`: plain `c` on the opening screen invokes available Continue without a visible shortcut label or extra notification. Requirement and backlog only describe future behavior; no game implementation was started.
+2. Documentation-only acceptance passed all 14 consistency tests with zero failures/errors/skips, the name audit with zero unexplained occurrences, and strict MkDocs. Logs: `target/r0404/docs-tests.log` and `target/r0404/mkdocs.log`. Final scope review covers the requirement, backlog and this evidence.
+3. Model/JUnit, Docker UI and smoke are exempt for this documentation-only change. Remote CI, Pages publication and game distributions were not checked.
+
+
 ## R-0403 flag selection and instruction banners — 2026-11-03
 
 1. Captured [R-0403](requirements/R-0403.md), status `new`, on base `e9da757f`: replace large and small four-power flags using variant 03; every map unit gets an upper-right vertical banner, empty without an instruction and bearing the existing activity letter otherwise. Updated R-0402, the graphical contract, gap analysis and backlog to remove the superseded open selection. No runtime source or assets changed.
