@@ -1,5 +1,11 @@
 # Writing and publishing documentation
 
+## R-0405 final gameplay answers — 2026-11-03
+
+1. On base `5f3bd836`, recorded the final two gameplay answers in [R-0405](requirements/R-0405.md), the shared worker rules/UX and backlog. An eligible own combat ship on the same square defends the fisherman first. Another colony’s worked square is completely covered by a gray tile in the town preview, with no terrain, worker, yield or town label; world-map presentation remains distinct. Removed resolved questions and their active references. Chapter 4 is now “None”; status remains `waiting for refinement` pending detailed implementation and named acceptance-scenario preparation.
+2. Documentation-only acceptance: all 14 documentation consistency tests passed with zero failures/errors/skips, the naming audit found zero unexplained occurrences, and strict MkDocs passed. Reviewed the five-file documentation scope and ran `git diff --check`. Logs: `target/r0405-final-answers/`. Archived evidence is preserved; no gameplay implementation is claimed.
+3. No code, tests, fixtures or runtime assets changed. Model/JUnit, Docker UI and smoke are exempt; remote CI, Pages and distributions are not checked.
+
 ## R-0405 fishing outcomes — 2026-11-03
 
 1. On base `8c062dbb`, recorded accepted answers in [R-0405](requirements/R-0405.md), shared rules/UX, backlog and active R-0403: colony-only controls for fishermen, one-point voluntary transfers, ship-only attacks, capture into attacker cargo or drowning when full, emergency relocation to free land outside towns with zero movement, and drowning notifications. Recorded the approved receiving-colony label on the world map; kept only unanswered escort defense and the separate town-detail presentation question. This does not start gameplay implementation or mark the requirement ready.
