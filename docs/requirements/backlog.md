@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Správa obchodní trasy — Pracovní stůl — 2026-11-03
+
+1. [R-0407](R-0407.md), status `new`, A03 s návaznostmi A06/A01: schválená první varianta využije celou herní plochu, zastávky vlevo, zboží uprostřed a dopravce vpravo. Zachovává všechny operace a návrat do místa otevření. Otevřené otázky nejsou; technické upřesnění a implementace nejsou tímto zachycením autorizované.
+
 ## Oznámení o výsledku plavby — 2026-11-03
 
 1. [R-0406](R-0406.md), status `new`, A03 s návaznostmi A05/A06/A04: jednorázová plavba oznámí pouze dosažení zadaného cíle, průjezd přístavem a příjezdy automatické trasy jsou tiché. Nemožnost doplutí se oznámí s důvodem i u automatické trasy. Otevřené otázky nejsou; technické upřesnění před vývojem zbývá.

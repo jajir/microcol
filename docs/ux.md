@@ -1269,3 +1269,11 @@ skutečného hráče; výsledky patří do [funkční evidence](functional-tests
 1. Na aktivní úvodní obrazovce samotné C bez modifikátorů provede stejnou akci jako dostupné tlačítko Continue. Tlačítko nemusí mít fokus; jeho text ani vzhled se nemění a nevzniká oznámení o zkratce.
 2. Nedostupné Continue, jiná obrazovka, modální dialog a psaní do textového pole se zkratkou neobcházejí. Chyby samotného načtení se zobrazují stejně jako po kliknutí. Chování je stejné v EN/CS.
 3. Implementaci požaduje [R-0404](requirements/done/R-0404.md); skutečné ověření uvádí [funkční evidence](functional-tests.md). Nejde o pozorování hráčů.
+
+
+<a id="trade-route-workbench"></a>
+## Správa obchodní trasy jako pracovní stůl — 2026-11-03
+
+1. Uživatel vybral první návrh „Pracovní stůl“, zachycený v [R-0407](requirements/R-0407.md): samostatná obrazovka uvnitř herního okna se zastávkami vlevo, zbožím pro vybranou zastávku uprostřed a dopravci vpravo. Návrat a kontext trasy mají zůstat dostupné při práci s obsahem.
+2. Uložení pokynů ke zboží, automatické přiřazení dopravce a jednorázové odbavení jsou různé činnosti a jejich popisky musí vysvětlit rozdíl. Přehled přiřazených dopravců a odstranění trasy mají vlastní rozbalovací části. Stávající pravidla a potvrzovací kroky se nemění.
+3. Zpět a Escape vedou do místa otevření, včetně plánovače tras nebo kolonie. Úzké okno nesmí znepřístupnit ovládání. Jde o schválený návrh prezentace, nikoli ověřený herní výsledek nebo závěr hráčské studie; implementační přejímka zbývá.
