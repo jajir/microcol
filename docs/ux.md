@@ -1285,3 +1285,11 @@ skutečného hráče; výsledky patří do [funkční evidence](functional-tests
 1. [R-0408](requirements/R-0408.md) zachycuje schválenou opravu prezentace: nenulový zlomek zbývajícího bodu nemá nulovou celou část (`⅔`, nikoli `0 2/3`); skutečně vyčerpaný pohyb zůstává `0` a hodnoty nad jedním bodem mohou být smíšené, například `1 ⅔`.
 2. U vybrané jednotky a sousedního cíle zobrazit modelovou cenu konkrétního kroku a vysvětlit zvýhodnění, například pohyb podél propojené řeky. Samotná přítomnost řeky na cílovém poli neurčuje cenu každého příchodu. Základní cena terénu musí mít odlišný popisek, zejména pokud konkrétní krok není určený. Nedostupnost přesunu nesmí být zakrytá číselnou cenou.
 3. Pravidla pohybu a dosavadní ovládání se nemění. Jde o schválené zadání bez nové implementační přejímky; screenshoty samy neprokazují chybu odečítání bodů. Podrobnou akceptaci vlastní R-0408.
+
+
+<a id="founding-without-movement"></a>
+## Založení kolonie bez pohybových bodů — 2026-11-03
+
+1. Schválené chování v [R-0409](requirements/R-0409.md): pokud vhodné jednotce na povoleném místě chybí pohyb pro založení kolonie, příkaz zůstává v nabídce šedý, včetně B. Důvod a dostupnost po obnovení pohybu vysvětluje trvalý text pod položkou, čitelný také bez myši.
+2. Stisk B přesto vyvolá jediný modalní informační dialog s konkrétním důvodem a tlačítkem OK. OK, Enter i Escape vracejí ovládání mapě a zachovávají vybranou jednotku. Odmítnutí nespotřebuje prostředky, nezaloží kolonii ani budoucí rozkaz. Otevření nabídky samo dialog nevyvolává.
+3. Obě cesty čtou aktuální modelové podmínky. Po obnovení pohybu se příkaz zpřístupní pouze při splnění ostatních pravidel; jiné překážky se nevydávají za nedostatek pohybu. Jde o schválené zadání, nikoli implementované nebo hráčsky ověřené chování.

@@ -1,5 +1,10 @@
 # Current requirement backlog
 
+## Založení kolonie bez pohybu — 2026-11-03
+
+1. [R-0409](R-0409.md), status `new`, A03 s návaznostmi A05/A07: příkaz zůstává viditelný a neaktivní s trvalým vysvětlením; stisk B zobrazí modalní informaci o chybějících pohybových bodech. Po jejich obnovení se dostupnost znovu vyhodnotí. Otevřené otázky nejsou; zachycení nezahajuje implementaci.
+
+
 ## Pohybové údaje na mapě — 2026-11-03
 
 1. [R-0408](R-0408.md), status `new`, A03 s návazností A05: zbývající třetiny bez úvodní nuly a skutečná cena sousedního kroku pro vybranou jednotku, včetně vysvětlení říčního zvýhodnění. Bez konkrétního kroku se základní cena terénu výslovně odliší. Otevřené otázky nejsou; požadavek je zařazený k budoucímu výběru a technickému upřesnění.
