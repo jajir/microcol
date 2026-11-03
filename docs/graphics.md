@@ -8,6 +8,33 @@
 2. Vlastnictví vyjadřuje vlajka s barevnou plochou, jednoduchým kontrastním symbolem a výraznou konturou. Symbol musí fungovat i bez rozlišení barev. Identita je společná pro jednotky, sídla a přehledy a oddělená od výběru jednotky, činnosti a diplomatického vztahu.
 3. Jde o herní stylizaci inspirovanou mincovními motivy, nikoli historicky doložené státní vlajky. Platí společný SVG kontrakt. Konkrétní rozměry a čitelnost se ověří při návrhu v herní velikosti; nyní nejsou dodány nové runtime obrázky ani výsledky hráčského ověření.
 
+### Vlajky B1 a ukázky jednotek — 3. listopadu 2026
+
+1. Uživatel vybral obdélníkový směr B1, celé zvíře a dvě samostatné kresby: velkou pro nápovědu a zjednodušenou malou pro mapu. Všechna zvířata jsou stejně světlá; Milét má nově tmavší okrový podklad a světlého lva. Rozhodnutí i hranice vlastní [R-0402](requirements/R-0402.md); platí [trvalé černé pero a ploché výplně](#soucasne-zadani-vzhledu).
+2. Pět následujících listů porovnává čtyři státy. Vedle malé zvířecí vlajky jsou loď, sluha a jezdec; každý má vpravo nahoře svislý stavový praporek s jedním světlým malým písmenem z `f`, `g`, `w`, `s`, `p`, `c`. Písmena jsou pouze vzorky kresby, nemění význam ani přidělování herních stavů. Všechny ukázky jsou zvětšené návrhy, nikoli snímky implementované hry.
+3. Použit vestavěný ImageGen. [Úplná zadání a reference](graphics-assets/flags-2026-11-03/prompts.json) uchovávají parametry návrhu. PNG jsou výtvarné předlohy; neprokazují skutečný SVG zdroj, přesné ploché výplně, šířku tahu ani čitelnost v cílových pixelech. Vybraná sada potřebuje vektorové zpracování a přejímku v herní velikosti. Žádná z pěti sad zatím není vybraná.
+
+#### 01 — Jemná linka
+
+![01 — Jemná linka, čtyři státy ve dvou velikostech a ukázky jednotek](graphics-assets/flags-2026-11-03/01-jemna-linka.png)
+
+#### 02 — Jednoduché siluety
+
+![02 — Jednoduché siluety, čtyři státy ve dvou velikostech a ukázky jednotek](graphics-assets/flags-2026-11-03/02-jednoduche-siluety.png)
+
+#### 03 — Antická geometrie
+
+![03 — Antická geometrie, čtyři státy ve dvou velikostech a ukázky jednotek](graphics-assets/flags-2026-11-03/03-anticka-geometrie.png)
+
+#### 04 — Oblé a klidné
+
+![04 — Oblé a klidné, čtyři státy ve dvou velikostech a ukázky jednotek](graphics-assets/flags-2026-11-03/04-oble-a-klidne.png)
+
+#### 05 — Lehký pohyb
+
+![05 — Lehký pohyb, čtyři státy ve dvou velikostech a ukázky jednotek](graphics-assets/flags-2026-11-03/05-lehky-pohyb.png)
+
+
 ## Lodě B5 a karavela K5 — 2026-11-02
 
 1. Uživatel vybral [B5](graphics-assets/ships-2026-11-02/selected-b5.png) pro všech šest lodí, s karavelou nahrazenou variantou [K5](graphics-assets/ships-2026-11-02/selected-caravel-k5.png). Výběr a přejímku vlastní [R-0397](requirements/done/R-0397.md). PNG návrhy jsou vizuální předlohy, nikoli produkční zdroje.
@@ -1044,6 +1071,12 @@ Výchozí stav technického inventáře k **11. říjnu 2026**, větev `develop`
 
 ## Současné zadání vzhledu
 
+1. **Trvalé zadání potvrzené 3. listopadu 2026:** veškerá herní grafika, včetně návrhů, ikon, jednotek, budov, vlajek a rámečků, má vypadat jako kresba **černým kuličkovým perem (`#000000`), přibližně 2 logické pixely ve výsledném UI**, s jednobarevně vyplněnými plochami. Toto konkrétní zadání zpřesňuje starší obecné formulace níže; není pouze návrhem palety.
+2. Ruční nepravidelnost patří do mírně nerovných křivek a drobné asymetrie, nikoli do proměnlivé šířky štětce. Obrys i vnitřní kresba používají opticky stejné pero; velké a malé varianty nemění jeho sílu jen kvůli své velikosti. U malé varianty ubírat detaily a zachovat rozpoznatelnou siluetu.
+3. Výplň každé plochy je jediná barva: bez gradientů, stínování, světelných odlesků, šrafování, zrna a simulace textury papíru či látky. Náhledový list nemá přidávat efekty, které do hry nepatří. Přirozené vyhlazení hran není stínování ploch.
+4. Pravidlo je také přímo v `AGENTS.md`. Použít ho při každém grafickém zadání, promptu a předání práce a výsledek podle něj zkontrolovat. Uživatel je nemusí znovu připomínat; starší odlišná kresba není výjimka. Přejímka produkčního zdroje nadále vyžaduje skutečné SVG, opakovatelný export a kontrolu ve výsledné velikosti.
+
+
 Pro budovy uživatel 30. října 2026 výslovně potvrdil jednoduchost hlavní herní mapy: minimum tvarů a atributů, ručně kreslené obrysy a jednobarevné plochy. Detailní stínované ilustrace předchozí série tomuto cíli neodpovídají. Z [nových návrhů](#budovy-pet-jednodussich-navrhu-podle-hlavni-mapy-30-rijna-2026) vybral **8 — Lehký nadhled**; její [produkční SVG](#budovy-lehky-nadhled-produkce-30-rijna-2026) vlastní R-0361.
 
 Od 27. října 2026 platí pro všechna aplikační akční tlačítka
@@ -1560,7 +1593,7 @@ i informačně hustém dialogu; tento zápis samotný vzorník ani jeho přejím
    převodu a použít ho konzistentně. Starší pracovní stupnice detail 1,5 / obrys
    2 / zvýraznění 3 px už není výchozím zadáním. Malé ikoně raději ubrat detail
    než ji bezdůvodně kreslit jiným perem. Následující číselné příklady vysvětlují
-   technické škálování; nepředepisují schválenou tloušťku nové kresby.
+   technické škálování; od 3. listopadu 2026 je výchozím zadáním černý tah přibližně 2 logické px podle [současného zadání](#soucasne-zadani-vzhledu).
 4. Běžný tah se škáluje spolu s obrázkem: zmenšení 100 → 50 při tahu 2
    vytvoří tah 1. Další zmenšení může čáru zesvětlit, rozmazat nebo potlačit;
    naopak ponechaný silný tah může ve velmi malé ikoně slít sousední detaily.

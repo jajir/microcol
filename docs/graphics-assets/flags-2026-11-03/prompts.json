@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-03",
+  "tool": "built-in image_gen",
+  "purpose": "Design references only; not production assets or runtime evidence",
+  "references": [
+    "screenshot-reference.png",
+    "unit-atlas-reference.png"
+  ],
+  "prompts": [
+    {
+      "id": "01",
+      "title": "01 / JEMNA LINKA"
+    },
+    {
+      "id": "02",
+      "title": "02 / JEDNODUCHE SILUETY"
+    },
+    {
+      "id": "03",
+      "title": "03 / ANTICKA GEOMETRIE"
+    },
+    {
+      "id": "04",
+      "title": "04 / OBLE A KLIDNE"
+    },
+    {
+      "id": "05",
+      "title": "05 / LEHKY POHYB"
+    }
+  ]
+}

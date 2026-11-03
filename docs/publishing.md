@@ -1,5 +1,12 @@
 # Writing and publishing documentation
 
+## R-0402 standing pen style and flag proposals — 2026-11-03
+
+1. The user reaffirmed a permanent project-wide style: black ballpoint lines around 2 logical UI pixels, hand-irregular geometry and solid flat fills. `AGENTS.md` now requires carrying this rule into every graphics prompt and handoff; the authoritative detail remains in [the visual brief](graphics.md#soucasne-zadani-vzhledu).
+2. [R-0402](requirements/R-0402.md) remains `new`. It records B1, separate large/small drawings, a light lion matching all other animals on darker ochre, and upper-right vertical letter flags in the ship/servant/rider proposals. [Five sheets and their complete prompts](graphics.md#vlajky-b1-a-ukazky-jednotek-3-listopadu-2026) are saved as design references. The images were generated with the built-in ImageGen tool; no game assets were replaced.
+3. Visual inspection confirmed four nation rows, two animal-flag sizes and three units with right-side letter tags in each of five sheets. These are enlarged raster proposals; residual generated tonal variation and optical stroke differences are not accepted as production style. Exact solid fills, black 2-pixel lines, SVG paths and actual map-size readability still require production verification after selection.
+4. Documentation-only acceptance on base `5c4ed315`: 14 documentation consistency tests passed with zero failures/errors/skips; name audit found zero unexplained occurrences; strict MkDocs passed. Rendered-page review verified the five linked images, prompt archive and updated requirement. No model/JUnit, Docker UI or smoke is required for this scope; no remote CI, Pages publication or game distribution was inspected.
+
 ## R-0402 Greek identities requirement — 2026-11-02
 
 1. [R-0402](requirements/R-0402.md), status `new`, captures the user's accepted four Greek city-states, eight local peoples, narrative characteristics and initial Greek flag directions. Final artwork and palette remain the next design step; gameplay implementation is not started.

@@ -189,12 +189,20 @@ Before acceptance, verify the vector source, repeatable export and displayed res
 passing gameplay tests alone is insufficient. Raster screenshots and design references
 are allowed; exceptions for production sources require explicit user authorization.
 
-Follow [the current visual brief](docs/graphics.md#soucasne-zadani-vzhledu) for
-graphics changes. Keep artwork broadly consistent with the existing game,
-prioritize high contrast and readability, and use your own aesthetic judgment
-to make it appealing. Detailed styling is intentionally deferred; do not block
-functional work on a detailed style guide or request approval for routine
-visual choices within this brief.
+Follow [the current visual brief](docs/graphics.md#soucasne-zadani-vzhledu)
+for every graphics task, including prompts, concept sheets and production assets.
+**Standing visual rule, reaffirmed 2026-11-03:** all game graphics look drawn
+by hand with a **black ballpoint pen (#000000), approximately 2 logical UI
+pixels wide**, with gently irregular contours and **flat, single-color fills**.
+Keep the same apparent pen width across assets and large/small versions.
+Hand-drawn means irregular path geometry, not variable-width brush strokes,
+shading, gradients, hatching, grain, material texture or lighting effects.
+Simplify details for small variants instead of merely shrinking a large raster.
+Include this rule in every graphics handoff and image-generation prompt, and
+review outputs against it before presenting them. Existing inconsistent art is
+not an exception or a style reference that overrides this rule. Do not ask the
+user to repeat it; changes require an explicit new user instruction. The SVG
+source contract above still applies; concept approval is not runtime acceptance.
 
 # Sound and feedback
 
