@@ -2,7 +2,7 @@
 
 ## Pracovníci kolonie na mapě světa — 2026-11-03
 
-1. [R-0405](R-0405.md), status `waiting for refinement`, A07 s návaznostmi A03/A05/A04/A09/A08: viditelní venkovní pracovníci, běžné náklady pohybu bez zvláštního zákazu po návratu, explicitní přijímající město, výnos při Next turn a jídlo jen za práci. Odpovědi o vnitřní posádce, obraně a dobytí jsou zapracované do společných pravidel. Kapitola 4 ponechává rybolov (4.8) a konkrétní zobrazení okolí využívaného jinou kolonií (4.11); implementace čeká na dokončení přípravy.
+1. [R-0405](R-0405.md), status `waiting for refinement`, A07 s návaznostmi A03/A05/A04/A09/A08: viditelní venkovní pracovníci, běžné náklady pohybu bez zvláštního zákazu po návratu, explicitní přijímající město, výnos při Next turn a jídlo jen za práci. Odpovědi o vnitřní posádce, obraně a dobytí jsou zapracované do společných pravidel. Rybolov vyžaduje molo přijímající kolonie, má místní dosah a ovládá se přes kolonii otevřenou kliknutím na rybáře. Kapitola 4 ponechává náklady/boj/záchranu rybáře (4.8), zobrazení okolí využívaného jinou kolonií (4.11) a rozsah omezení mapových příkazů (4.12); implementace čeká na dokončení přípravy.
 
 ## Nenápadná zkratka Continue — 2026-11-03
 

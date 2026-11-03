@@ -1,5 +1,11 @@
 # Writing and publishing documentation
 
+## R-0405 dock fishing refinement — 2026-11-03
+
+1. On base `dae85e17`, recorded the accepted Dock-gated local fishing interaction in [R-0405](requirements/R-0405.md), shared rules/UX, backlog and active R-0403. Map clicks open the receiving colony and select the same worker; job commands stay in the colony. Narrowed fishing questions to movement costs, combat and recovery after loss of colony/access. Kept overlap presentation and the unanswered scope of colony-only control open; land-worker map commands are not silently removed.
+2. Documentation-only acceptance: all 14 documentation consistency tests passed with zero failures/errors/skips, the naming audit found zero unexplained occurrences, and strict MkDocs passed. Reviewed the six-file documentation diff and ran `git diff --check`. Logs: `target/r0405-fishing/`. Status remains `waiting for refinement`; no gameplay implementation or runtime assets changed.
+3. Model/JUnit, Docker UI and smoke are exempt for this documentation-only refinement. Remote CI, Pages and distributions are not checked.
+
 ## R-0405 accepted answers — 2026-11-03
 
 1. On base `8e517318`, refined [R-0405](requirements/R-0405.md) and its shared rules/UX, backlog and active R-0403 dependency. Normal terrain/movement costs replace the mistaken fixed return cost and same-turn field lock. Recorded explicit receiving-city selection, work-only food consumption, indoor visibility, defense and outdoor ownership after conquest. Fishing and the exact presentation of another colony's working squares remain open; status stays `waiting for refinement`.
