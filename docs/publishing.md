@@ -1,5 +1,11 @@
 # Writing and publishing documentation
 
+## R-0405 workers on map refinement — 2026-11-03
+
+1. On base `aeaad5d3`, captured [R-0405](requirements/R-0405.md) as `waiting for refinement`: world-map workers, first yield on Next turn, preserved movement on assignment, one-point return and no other working square that turn. Chapter 4 owns ten unanswered questions; receiving-city, residence, combat and water-worker recommendations are proposals, not accepted rules.
+2. Updated the authoritative rule/UX topics and active R-0400/R-0401/R-0403 dependencies. The historical single-field and job-picker contracts identify the future superseding behavior without rewriting past evidence. No gameplay code, tests, runtime data or assets changed.
+3. Documentation acceptance passed all 14 consistency tests with zero failures/errors/skips, the name audit with zero unexplained occurrences, and strict MkDocs. Four-chapter structure and sequential numbered items were checked for all four affected requirements. Logs are retained in `target/r0405/`. Model/JUnit, Docker UI and smoke are exempt for this documentation-only refinement; runtime behavior, remote CI, Pages and distributions are not verified.
+
 ## R-0404 Continue shortcut capture — 2026-11-03
 
 1. Captured [R-0404](requirements/R-0404.md), status `new`, on base `a13a5a4a`: plain `c` on the opening screen invokes available Continue without a visible shortcut label or extra notification. Requirement and backlog only describe future behavior; no game implementation was started.

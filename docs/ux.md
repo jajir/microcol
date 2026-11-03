@@ -1,5 +1,12 @@
 # UX a pravidla ovládání Akropia
 
+## Pracovníci kolonie na mapě světa
+
+1. **Dohodnutý směr z 3. listopadu 2026, zatím neimplementovaný:** [R-0405](requirements/R-0405.md) zpřístupní výběr pracovníka a přiřazení práce přímo na hlavní mapě. Hráč přesune člověka na pracovní pole a zadá mu práci; nemá potřebovat znalost skryté vazby na pravý panel kolonie. Přesná podoba zaměstnanců budov je otevřená.
+2. Přiřazení práce zachová zbývající pohyb a první výnos patří následujícímu Next turn. Návrat po zrušení práce je dostupný z mapy i města, stojí jeden bod a v témže tahu nedovolí jiné pracovní pole. [Herní kontrakt](gap-analysis.md#workers-on-world-map) rozlišuje přijaté body a otevřené hranice; rozhraní je nesmí obcházet.
+3. Návrh pro refinement: u člověka zobrazit příslušnou kolonii, práci, očekávaný výnos a dostupný návrat; před potvrzením vysvětlit nedostupnost a příjemce produkce společného pole. Trvalá práce nemá každý tah vyžadovat nové zadání. Doporučení ještě nejsou přijatou podobou ovládání.
+4. Uživatel hlásí opakované nepochopení neviditelných pracovníků, sekce Outside town a vzdálené volby činnosti. Toto je záznam jeho zpětné vazby, nikoli nově provedená studie. R-0405 obsahuje otevřené otázky; zlepšení srozumitelnosti a bojové důsledky musí ověřit budoucí přejímka.
+
 ## Jednorázová plavba Go to
 
 1. Dohoda z 2. listopadu 2026 v [R-0396](requirements/done/R-0396.md) přejmenovává Goals na Objectives (O), česky Cíle. G otevírá Go to… / Plout do… pro vybranou vlastní loď. Dosavadní nabídka kolonií přechází z O na I, bez Shiftu a shodně v obou jazycích. I je výslovně dohodnutá výjimka z odvozování zkratky podle názvu. P zůstává pro Plow field (orání).

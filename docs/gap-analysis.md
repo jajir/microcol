@@ -1957,7 +1957,19 @@ A rule becomes behaviorally verified only when its cited acceptance scenario has
    by [R-0054](requirements/done/R-0054.md), separately from this rule description.
 
 
+<a id="workers-on-world-map"></a>
+## Colony workers on the world map
+
+1. **Agreed future behavior, 2026-11-03:** [R-0405](requirements/R-0405.md) is selected for refinement. Colony workers become visible/selectable from the world map with work commands there; the presentation of indoor residents is not yet decided. This is not a claim of implementation or acceptance.
+2. The player moves a worker onto the actual working square, then assigns work. The first yield is settled at the next Next turn, not when assigning. Assignment itself preserves remaining movement points; it does not refund the movement onto the square. Eligibility at zero remaining movement is still open.
+3. After canceling work, returning the worker to town is available from either map or colony UI and costs one movement point. After that return the player cannot put the worker onto another working square during the same turn even if movement remains. The exact distinction between physical movement and employment, same-square restart, cancellation without return, and blocked/zero-point returns remains in R-0405 chapter 4.
+4. The baseline remains one outdoor worker and one receiving colony per world square; overlapping colony reach does not duplicate output. The receiving-colony choice from the world map and the relationship between residence, food consumption and canceled work remain undecided. The proposed settlement interpretation is one yield from the still-valid job at turn settlement, with no deferred yield from canceled jobs.
+5. Existing [R-0096](requirements/done/R-0096.md) already includes independent field-worker combat/capture; visibility does not automatically extend it to all attacker types or decide water-worker behavior. R-0405 owns the unanswered consequences. Existing yields, manufacturing ratios, storage and diplomatic rules remain baseline except where the agreed change explicitly supersedes them; assistant recommendations are not adopted rules.
+
 ## Shared colony working squares
+
+For the selected future change [R-0405](requirements/R-0405.md), see [workers on the world map](#workers-on-world-map). Its agreed on-tile assignment replaces the old center/job-only entry condition after implementation; selecting the receiving colony remains open. The single producing colony per world square remains the baseline. Existing implementation and historical evidence below are not rewritten as results of R-0405.
+
 
 1. Agreed for [R-0055](requirements/done/R-0055.md) on 2026-10-16: each world square may supply outdoor production to at most one colony, regardless of owner. The eight local field slots do not grant separate rights to the same square. Releasing a worker makes that square available again, subject to the existing founding availability rules (valid map square, no colony center and no foreign map unit).
 2. Assignment requires a registered colonist of the colony’s owner during that owner’s prepared turn, already working inside that colony or standing at its center. No remote transfer between colonies is allowed. Validate the target, crop and every equipment return before changing the old job or either warehouse. Reject stale or invalid actions without partial changes. Moving the last resident between jobs inside the same colony preserves it; canceling a drag changes nothing.
@@ -1966,6 +1978,9 @@ A rule becomes behaviorally verified only when its cited acceptance scenario has
 5. These are agreed rules and the resolved persistence policy, not a claim of verified implementation. Current acceptance belongs to R-0055 and its linked evidence; manufacturing capacity and fortified-colony resident limits remain separately tracked.
 
 ## Colony job choices and yield previews
+
+The selected [R-0405](requirements/R-0405.md) changes outdoor entry to movement onto the actual field followed by work assignment. The earlier automatic best-field placement below describes the existing flow; it must not bypass the new movement/return rules. Indoor behavior and same-field crop changes are being refined in R-0405.
+
 
 1. Agreed for [R-0056](requirements/done/R-0056.md) on 2026-10-16 under the user’s authorization to choose reasonable defaults: a worker’s job choice includes outdoor commodities supported by the colony’s surrounding terrain and producing indoor jobs in buildings already present. Show unavailable destinations with a reason; warehouses, fortifications, building projects and teaching are not commodity jobs. This flow includes ordinary colonists and the currently supported master blacksmith; additional specialist types remain [R-0074](requirements/done/R-0074.md).
 2. Outdoor previews use the selected worker’s production rule. A worker already on a field sees the yield there and the best eligible yield in that colony. An indoor worker or a colonist at the colony center sees the best eligible yield. Exclude other workers’ fields, globally occupied shared squares and otherwise invalid destinations; the selected worker’s own field remains a candidate. Ties use the existing stable field order. An unavailable job shows no invented numeric yield.

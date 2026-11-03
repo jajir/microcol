@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Pracovníci kolonie na mapě světa — 2026-11-03
+
+1. [R-0405](R-0405.md), status `waiting for refinement`, A07 s konkrétními návaznostmi A03/A05/A04/A09/A08: viditelní a ovladatelní pracovníci, první výnos při Next turn, přiřazení práce bez ztráty zbývajícího pohybu, návrat do města za jeden bod a zákaz jiného pracovního pole v témže tahu. Deset otevřených otázek vlastní kapitola 4; implementace čeká na dokončení přípravy.
+
 ## Nenápadná zkratka Continue — 2026-11-03
 
 1. [R-0404](R-0404.md), status `new`, A01 s návazností na A03/A04: samotné `c` na úvodní obrazovce provede dostupné Continue stejně jako kliknutí, bez zobrazení zkratky či nového oznámení. Zachycení nezahajuje implementaci.
