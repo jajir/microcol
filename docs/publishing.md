@@ -1,5 +1,11 @@
 # Writing and publishing documentation
 
+## R-0405 fishing outcomes — 2026-11-03
+
+1. On base `8c062dbb`, recorded accepted answers in [R-0405](requirements/R-0405.md), shared rules/UX, backlog and active R-0403: colony-only controls for fishermen, one-point voluntary transfers, ship-only attacks, capture into attacker cargo or drowning when full, emergency relocation to free land outside towns with zero movement, and drowning notifications. Recorded the approved receiving-colony label on the world map; kept only unanswered escort defense and the separate town-detail presentation question. This does not start gameplay implementation or mark the requirement ready.
+2. Documentation-only acceptance: all 14 documentation consistency tests passed with zero failures/errors/skips, naming audit found zero unexplained occurrences, and strict MkDocs passed. Reviewed the six-file documentation scope and ran `git diff --check`. Logs: `target/r0405-fishing-outcomes/`. Historical evidence is preserved.
+3. No executable code, tests, fixtures or runtime assets changed. Model/JUnit, Docker UI and smoke are exempt; remote CI, Pages publication and distributions are not checked.
+
 ## R-0405 dock fishing refinement — 2026-11-03
 
 1. On base `dae85e17`, recorded the accepted Dock-gated local fishing interaction in [R-0405](requirements/R-0405.md), shared rules/UX, backlog and active R-0403. Map clicks open the receiving colony and select the same worker; job commands stay in the colony. Narrowed fishing questions to movement costs, combat and recovery after loss of colony/access. Kept overlap presentation and the unanswered scope of colony-only control open; land-worker map commands are not silently removed.

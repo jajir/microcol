@@ -2,7 +2,7 @@
 
 ## Pracovníci kolonie na mapě světa — 2026-11-03
 
-1. [R-0405](R-0405.md), status `waiting for refinement`, A07 s návaznostmi A03/A05/A04/A09/A08: viditelní venkovní pracovníci, běžné náklady pohybu bez zvláštního zákazu po návratu, explicitní přijímající město, výnos při Next turn a jídlo jen za práci. Odpovědi o vnitřní posádce, obraně a dobytí jsou zapracované do společných pravidel. Rybolov vyžaduje molo přijímající kolonie, má místní dosah a ovládá se přes kolonii otevřenou kliknutím na rybáře. Kapitola 4 ponechává náklady/boj/záchranu rybáře (4.8), zobrazení okolí využívaného jinou kolonií (4.11) a rozsah omezení mapových příkazů (4.12); implementace čeká na dokončení přípravy.
+1. [R-0405](R-0405.md), status `waiting for refinement`, A07 s návaznostmi A03/A05/A04/A09/A08: viditelní venkovní pracovníci, běžné náklady pohybu bez zvláštního zákazu po návratu, explicitní přijímající město, výnos při Next turn a jídlo jen za práci. Odpovědi o vnitřní posádce, obraně a dobytí jsou zapracované do společných pravidel. Rybolov vyžaduje molo přijímající kolonie, má místní dosah a ovládá se přes kolonii otevřenou kliknutím na rybáře. Přesun rybáře stojí jeden bod; napadají jej jen lodě, poražený je zajat do nákladu nebo se bez kapacity utopí. Ztráta kolonie vyvolá nouzový přesun na nejbližší volnou pevninu mimo město s nulou bodů, jinak utopení; obě utopení oznámí zpráva. Mapový popisek „Pracuje pro Utrecht“ je schválený. Kapitola 4 ponechává pouze ochranu rybáře vlastní lodí (4.8) a podobu obsazeného okolí uvnitř detailu města (4.11); implementace čeká na dokončení přípravy.
 
 ## Nenápadná zkratka Continue — 2026-11-03
 
