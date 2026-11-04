@@ -230,8 +230,25 @@ class FoundingPreconditionsTest {
         assertTrue(exhausted.canFoundColonyAt(exhausted.getUnitById(4), SITE));
         assertFalse(exhausted.canUnitBuildColony(exhausted.getUnitById(4)));
         final String exhaustedBefore = snapshot(exhausted);
+        assertTrue(exhausted
+                .isColonyFoundingWaitingForMovement(exhausted.getUnitById(4)));
+        assertFalse(otherTurn
+                .isColonyFoundingWaitingForMovement(otherTurn.getUnitById(4)));
+        assertFalse(initial
+                .isColonyFoundingWaitingForMovement(initial.getUnitById(4)));
         assertThrows(IllegalArgumentException.class, () -> found(exhausted));
         assertEquals(exhaustedBefore, snapshot(exhausted));
+    }
+
+    @Test
+    void invalidSiteDoesNotClaimMovementIsTheOnlyObstacle() {
+        final Model model = prepare(SITE, TerrainType.MOUNTAIN,
+                TerrainType.GRASSLAND);
+        final AbstractUnit founder = (AbstractUnit) model.getUnitById(4);
+        founder.setMovementThirds(0);
+        final String before = snapshot(model);
+        assertFalse(model.isColonyFoundingWaitingForMovement(founder));
+        assertEquals(before, snapshot(model));
     }
 
     @Test

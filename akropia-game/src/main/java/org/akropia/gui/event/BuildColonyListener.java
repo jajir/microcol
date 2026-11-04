@@ -8,6 +8,8 @@ import org.akropia.gui.screen.Screen;
 import org.akropia.gui.screen.ShowScreenEvent;
 import org.akropia.gui.screen.colony.ColonyMsg;
 import org.akropia.gui.dialog.NativeLandGuard;
+import org.akropia.gui.dialog.DialogMessage;
+import org.akropia.gui.buttonpanel.Buttons;
 import org.akropia.gui.screen.colony.DialogColonyName;
 import org.akropia.gui.screen.game.components.StatusBarMessageEvent;
 import org.akropia.gui.screen.game.gamepanel.SelectedUnitManager;
@@ -36,12 +38,25 @@ public final class BuildColonyListener {
     private final NativeLandGuard nativeLand;
     private final EventBus eventBus;
     private final I18n i18n;
+    private final DialogMessage movementMessage;
+    private boolean movementMessageOpen;
 
     @Inject
     public BuildColonyListener(final GameModelController gameModelController,
             final SelectedUnitManager selectedUnitManager,
             final DialogColonyName dialog, final EventBus eventBus,
-            final I18n i18n, final NativeLandGuard nativeLand) {
+            final I18n i18n, final NativeLandGuard nativeLand,
+            final DialogMessage movementMessage) {
+        this.movementMessage = movementMessage;
+        movementMessage.getScene().addEventFilter(
+                javafx.scene.input.KeyEvent.KEY_PRESSED, eventKey -> {
+                    if (eventKey
+                            .getCode() == javafx.scene.input.KeyCode.ENTER) {
+                        movementMessage.close();
+                        eventKey.consume();
+                    }
+                });
+
         this.nativeLand = nativeLand;
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
@@ -58,6 +73,20 @@ public final class BuildColonyListener {
         final Player player = gameModelController.getHumanPlayer();
         final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
         final Model model = gameModelController.getModel();
+        if (model.isColonyFoundingWaitingForMovement(unit)) {
+            if (movementMessageOpen) {
+                return;
+            }
+            movementMessageOpen = true;
+            try {
+                movementMessage.setText(i18n.get(Buttons.buttonBuildColony),
+                        i18n.get(Buttons.buildColonyWaitingForMovement));
+                movementMessage.showAndWait();
+            } finally {
+                movementMessageOpen = false;
+            }
+            return;
+        }
         if (model.canUnitBuildColony(unit)) {
             // The model names every square the founding would use, the colony
             // square and the founder's first field. Known unpaid claims are

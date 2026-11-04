@@ -10,6 +10,7 @@ import org.akropia.gui.screen.editor.ScreenEditor;
 import org.akropia.gui.screen.europe.ScreenEurope;
 import org.akropia.gui.screen.game.ScreenGame;
 import org.akropia.gui.screen.goals.ScreenGoals;
+import org.akropia.gui.screen.colony.DialogTradeRouteCargo;
 import org.akropia.gui.screen.load.ScreenLoad;
 import org.akropia.gui.screen.colonizopedia.ScreenColonizopedia;
 import org.akropia.gui.screen.congress.ScreenCongress;
@@ -56,6 +57,7 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
             final ScreenTurnReport screenTurnReport,
             final ScreenGoals screenGoals, final ScreenEditor screenEditor,
             final ScreenColonizopedia screenHelp,
+            final DialogTradeRouteCargo tradeRouteCargo,
             final ScreenCongress screenCongress, final I18n i18n) {
         mainBox = new VBox();
         mainBox.setMinHeight(0);
@@ -73,6 +75,7 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
         screens.add(Preconditions.checkNotNull(screenStatistics));
         screens.add(Preconditions.checkNotNull(screenTurnReport));
         screens.add(Preconditions.checkNotNull(screenGoals));
+        screens.add(tradeRouteCargo);
         screens.add(Preconditions.checkNotNull(screenHelp));
         screens.add(Preconditions.checkNotNull(screenCongress));
         screens.add(Preconditions.checkNotNull(screenEditor));

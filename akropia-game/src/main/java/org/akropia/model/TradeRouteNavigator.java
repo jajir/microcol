@@ -48,6 +48,9 @@ final class TradeRouteNavigator {
         if (carrier.getTradeRouteAssignment().isEmpty()) {
             return;
         }
+        final Optional<TradeRoutePause> previousPause = carrier
+                .getTradeRouteAssignment()
+                .flatMap(TradeRouteAssignment::getPause);
         final boolean wasPaused = isPaused(carrier);
         final List<Location> walked = new ArrayList<>();
         int idle = 0;
@@ -60,6 +63,27 @@ final class TradeRouteNavigator {
         }
         if (!walked.isEmpty()) {
             model.fireUnitMovedFinished(carrier, Path.of(walked));
+        }
+        final Optional<TradeRouteAssignment> finalAssignment = carrier
+                .getTradeRouteAssignment();
+        final Optional<TradeRoutePause> finalPause = finalAssignment
+                .flatMap(TradeRouteAssignment::getPause);
+        if (carrier.isShip() && finalPause.isPresent()
+                && !finalPause.equals(previousPause)) {
+            final TradeRouteAssignment assignment = finalAssignment
+                    .orElseThrow();
+            final TradeRouteStop target = assignment.getStops()
+                    .get(assignment.getStopIndex());
+            final String destination = target.isEurope() ? "Home port"
+                    : model.getColonyById(target.getColonyId())
+                            .map(Colony::getName)
+                            .orElse("#" + target.getColonyId());
+            model.addTurnEvent(org.akropia.model.turnevent.TurnEventProvider
+                    .getGoToOrder(carrier.getOwner(),
+                            org.akropia.model.turnevent.TurnEventGoTo.Kind
+                                    .valueOf("ROUTE_"
+                                            + finalPause.orElseThrow().name()),
+                            carrier.getId(), carrier.getType(), destination));
         }
         if (wasPaused != isPaused(carrier)) {
             model.fireActionWasStarted(carrier);

@@ -1131,6 +1131,17 @@ public abstract class AbstractUnit implements Unit {
         }
     }
 
+    @Override
+    public boolean canMoveStepTo(final Location location) {
+        Preconditions.checkNotNull(location);
+        try {
+            verifyCanMoveOneStep(location);
+            return true;
+        } catch (IllegalArgumentException | IllegalStateException rejected) {
+            return false;
+        }
+    }
+
     private void verifyCanMoveOneStep(final Location moveTo) {
         verifyThatUnitIsAtMap();
 

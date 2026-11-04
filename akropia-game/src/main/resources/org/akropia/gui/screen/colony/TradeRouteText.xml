@@ -29,8 +29,8 @@
   <entry key="sameStop">Each stop must differ from the stop before it.</entry>
   <entry key="stopNotReachable">That stop cannot be reached from the previous stop.</entry>
   <entry key="cargoOpen">Route cargo…</entry>
-  <entry key="cargoTitle">Cargo at route stops</entry>
-  <entry key="cargoRule">Choose a route and one of its stops, then list up to six goods to unload and up to six to load. Goods are handled from the top of each list down, and unloading comes before loading. When hold space, warehouse room or money runs short, the goods higher in a list get it first, so use Move up and Move down to set the priority. Opening this window or loading a saved game moves no goods; goods move only when you process a ship or wagon that stands at the stop.</entry>
+  <entry key="cargoTitle">Trade route management</entry>
+  <entry key="cargoRule">Unload first, then load. Goods at the top have priority. Save stores these instructions; it neither transfers goods nor assigns a carrier.</entry>
   <entry key="cargoRouteLabel">Route</entry>
   <entry key="cargoStopLabel">Stop</entry>
   <entry key="cargoStopItem">%s. %s</entry>
@@ -41,7 +41,7 @@
   <entry key="moveUp">Move up</entry>
   <entry key="moveDown">Move down</entry>
   <entry key="saveCargo">Save cargo</entry>
-  <entry key="closeCargo">Close</entry>
+  <entry key="closeCargo">Back</entry>
   <entry key="cargoNoRoutes">You have no trade routes. Create one with the route editor first.</entry>
   <entry key="cargoSaved">Cargo saved. It applies the next time a ship or wagon is processed at this stop.</entry>
   <entry key="cargoUnsaved">Save the cargo changes before processing the stop.</entry>
@@ -120,4 +120,8 @@
   <entry key="editProblemSAME_STOP">The stop would repeat its neighbour.</entry>
   <entry key="editProblemSTOP_NOT_REACHABLE">A leg next to this stop cannot be reached by known squares.</entry>
   <entry key="editProblemTURN_BUSY">The turn is still being prepared. Try again in a moment.</entry>
+    <entry key="goodsSection">Goods</entry>
+    <entry key="carriersSection">Carriers</entry>
+    <entry key="processRule">Process this stop once. This does not assign the carrier to the route.</entry>
+    <entry key="routeSummary">%s route · %s stops</entry>
 </properties>

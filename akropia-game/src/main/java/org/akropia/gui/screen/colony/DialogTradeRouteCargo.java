@@ -10,8 +10,15 @@ import java.util.stream.Collectors;
 import org.akropia.gui.GoodsTypeName;
 import org.akropia.gui.UnitTypes;
 import org.akropia.gui.event.model.GameModelController;
-import org.akropia.gui.util.AbstractMessageWindow;
-import org.akropia.gui.util.ViewUtil;
+import org.akropia.gui.util.InGamePage;
+import org.akropia.gui.screen.GameScreen;
+import org.akropia.gui.screen.Screen;
+import org.akropia.gui.screen.ShowScreenEvent;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Region;
+import javafx.scene.control.TitledPane;
+import javafx.scene.input.KeyCode;
+import com.google.inject.Singleton;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Colony;
 import org.akropia.model.Model;
@@ -33,10 +40,9 @@ import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Screen;
+
 import javafx.util.StringConverter;
 
 /**
@@ -47,7 +53,8 @@ import javafx.util.StringConverter;
  * Every rule, quantity and price comes from the model, whose result lists each
  * configured entry with its reason.
  */
-public final class DialogTradeRouteCargo extends AbstractMessageWindow {
+@Singleton
+public final class DialogTradeRouteCargo implements GameScreen {
 
     private final GameModelController game;
     private final I18n i18n;
@@ -85,8 +92,17 @@ public final class DialogTradeRouteCargo extends AbstractMessageWindow {
     /** Every carrier that follows the route, wherever it is now. */
     private final ComboBox<UnitWithCargo> assignedBox = new ComboBox<>();
     private final Label deleteInfo = new Label();
-    private final VBox content;
-    private final ScrollPane scroll = new ScrollPane();
+    private final InGamePage page;
+    private final org.akropia.gui.screen.game.gamepanel.TradeRoutePlanning planning;
+    private Colony originColony;
+    private final Label stopSummary = new Label();
+    private final Label routeSummary = new Label();
+    private final Label goodsStop = new Label();
+    private final Label goodsHeading = new Label();
+    private final Label carriersHeading = new Label();
+    private final Label processRule = new Label();
+    private final TitledPane assignedPane = new TitledPane();
+    private final TitledPane deletePane = new TitledPane();
     /** Route whose deletion was asked for and awaits the second press. */
     private Integer deleteAskedFor;
     private final Label resultHeading = new Label();
@@ -98,9 +114,12 @@ public final class DialogTradeRouteCargo extends AbstractMessageWindow {
     private boolean refreshing;
 
     @Inject
-    public DialogTradeRouteCargo(final ViewUtil viewUtil, final I18n i18n,
-            final GameModelController game, final EventBus eventBus) {
-        super(viewUtil, i18n);
+    public DialogTradeRouteCargo(final I18n i18n,
+            final GameModelController game, final EventBus eventBus,
+            final InGamePage page,
+            final org.akropia.gui.screen.game.gamepanel.TradeRoutePlanning planning) {
+        this.planning = planning;
+        this.page = page;
         this.i18n = i18n;
         this.game = game;
         this.eventBus = eventBus;
@@ -264,38 +283,81 @@ public final class DialogTradeRouteCargo extends AbstractMessageWindow {
         close.setId("tradeRouteCargoClose");
         close.setCancelButton(true);
         close.setOnAction(event -> close());
-        final VBox root = new VBox(10, caption, rule,
-                new HBox(12, routeLabel, routeBox, stopLabel, stopBox),
-                new HBox(20, unload.getNode(), load.getNode()),
-                new HBox(12, save, message),
-                new HBox(12, carrierLabel, carrierBox), carrierStatus,
-                new HBox(12, process, close), resultHeading, result, assignRule,
-                new HBox(12, firstStopLabel, firstStopBox, assign),
-                assignStatus, assignedHeading, assigned,
-                new HBox(12, assignedPickLabel, assignedBox, cancelAssignment),
-                new HBox(12, replaceStopLabel, replaceBox, replaceButton),
-                replaceStatus, new HBox(12, deleteRoute), deleteInfo);
+        final VBox stops = new VBox(10, stopLabel, stopSummary, stopBox,
+                replaceStopLabel, replaceBox, replaceButton, replaceStatus);
+        stops.setId("tradeRouteStopsColumn");
+        final VBox goods = new VBox(10, goodsHeading, goodsStop, rule,
+                unload.getNode(), load.getNode(), save, message);
+        goods.setId("tradeRouteGoodsColumn");
+        assignedPane.setContent(new VBox(10, assigned, assignedPickLabel,
+                assignedBox, cancelAssignment));
+        assignedPane.setId("tradeRouteAssignedPane");
+        assignedPane.setAnimated(false);
+        assignedPane.setExpanded(false);
+        deletePane.setContent(new VBox(10, deleteRoute, deleteInfo));
+        deletePane.setId("tradeRouteDeletePane");
+        deletePane.setAnimated(false);
+        deletePane.setExpanded(false);
+        final VBox carriers = new VBox(10, carriersHeading, carrierLabel,
+                carrierBox, carrierStatus, assignRule, firstStopLabel,
+                firstStopBox, assign, assignStatus, assignedPane, processRule,
+                process, resultHeading, result, deletePane);
+        carriers.setId("tradeRouteCarriersColumn");
+        for (final VBox column : List.of(stops, goods, carriers)) {
+            column.setPrefWidth(340);
+            column.setMinWidth(280);
+            column.getStyleClass().add("trade-route-column");
+        }
+        final FlowPane columns = new FlowPane(20, 20, stops, goods, carriers);
+        final VBox root = new VBox(12, columns);
         root.setId("tradeRouteCargoDialog");
-        root.setPrefWidth(760);
-        content = root;
-        // The expanded dialog may be taller than a small screen; it scrolls
-        // instead of pushing the buttons out of reach.
-        scroll.setId("tradeRouteCargoScroll");
-        scroll.setContent(root);
-        scroll.setFitToWidth(true);
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        init(scroll);
+        stopSummary.setWrapText(true);
+        stopSummary.setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
+        routeSummary.setWrapText(true);
+        processRule.setWrapText(true);
+        page.setTitle(caption);
+        caption.setWrapText(true);
+        page.setToolbar(
+                new VBox(4, new FlowPane(12, 6, close, routeLabel, routeBox),
+                        routeSummary));
+        page.setContent(root);
+        page.getContent().lookupAll(".screen-scroll")
+                .forEach(node -> node.setId("tradeRouteCargoScroll"));
+        page.getContent().setId("tradeRouteCargoPage");
+        page.getContent().getStylesheets().add(getClass()
+                .getResource("/gui/TradeRouteCargo.css").toExternalForm());
+        page.getContent().setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                close();
+                event.consume();
+            }
+        });
     }
 
-    /** Fits the visible part to the screen; the rest scrolls. */
-    private void fitToScreen() {
-        final double available = Screen.getPrimary().getVisualBounds()
-                .getHeight() - 140;
-        final double wanted = content.prefHeight(content.getPrefWidth()) + 24;
-        scroll.setPrefViewportWidth(content.getPrefWidth() + 20);
-        scroll.setPrefViewportHeight(
-                Math.max(320, Math.min(wanted, available)));
-        scroll.setVvalue(0);
+    public void close() {
+        planning.invalidate();
+        eventBus.post(originColony == null ? new ShowScreenEvent(Screen.GAME)
+                : new ShowScreenEvent(Screen.COLONY, originColony));
+    }
+
+    @Override
+    public Region getContent() {
+        return page.getContent();
+    }
+
+    @Override
+    public void beforeShow() {
+        page.beforeShow();
+    }
+
+    @Override
+    public void beforeHide() {
+    }
+
+    @Override
+    public void updateLanguage(final I18n texts) {
+        page.updateLanguage(texts);
+        translate();
     }
 
     private String carrierName(final UnitWithCargo carrier) {
@@ -323,7 +385,11 @@ public final class DialogTradeRouteCargo extends AbstractMessageWindow {
 
     /** Sets the fixed texts in the language current when the dialog opens. */
     private void translate() {
-        setTitle(i18n.get(TradeRouteText.cargoTitle));
+        goodsHeading.setText(i18n.get(TradeRouteText.goodsSection));
+        carriersHeading.setText(i18n.get(TradeRouteText.carriersSection));
+        processRule.setText(i18n.get(TradeRouteText.processRule));
+        assignedPane.setText(i18n.get(TradeRouteText.assignedHeading));
+        deletePane.setText(i18n.get(TradeRouteText.deleteRoute));
         caption.setText(i18n.get(TradeRouteText.cargoTitle));
         rule.setText(i18n.get(TradeRouteText.cargoRule));
         routeLabel.setText(i18n.get(TradeRouteText.cargoRouteLabel));
@@ -359,6 +425,7 @@ public final class DialogTradeRouteCargo extends AbstractMessageWindow {
      * @param opened required colony screen the dialog was opened from
      */
     public void showFor(final Colony opened) {
+        originColony = opened;
         open(Optional.empty());
     }
 
@@ -370,6 +437,7 @@ public final class DialogTradeRouteCargo extends AbstractMessageWindow {
      * @param route required route chosen in the planner
      */
     public void showForRoute(final TradeRoute route) {
+        originColony = null;
         open(Optional.of(route.getId()));
     }
 
@@ -392,9 +460,9 @@ public final class DialogTradeRouteCargo extends AbstractMessageWindow {
             refreshing = false;
         }
         reloadRoutes(routeId, 0);
-        fitToScreen();
+        eventBus.post(new ShowScreenEvent(Screen.TRADE_ROUTE_CARGO));
         Platform.runLater(() -> routeBox.requestFocus());
-        showAndWait();
+
     }
 
     /** Rebuilds the route list from the model, keeping the chosen route. */
@@ -441,6 +509,17 @@ public final class DialogTradeRouteCargo extends AbstractMessageWindow {
 
     /** Shows the stored cargo of the chosen stop and its carriers. */
     private void loadStop() {
+        final TradeRoute selectedRoute = routeBox.getValue();
+        routeSummary.setText(selectedRoute == null ? ""
+                : i18n.get(TradeRouteText.routeSummary, i18n.get(selectedRoute
+                        .getKind() == org.akropia.model.TradeRouteKind.SEA
+                                ? TradeRouteText.sea
+                                : TradeRouteText.land),
+                        selectedRoute.getStops().size()));
+        stopSummary.setText(stopBox.getItems().stream().map(this::stopText)
+                .collect(Collectors.joining("\n")));
+        goodsStop.setText(
+                stopBox.getValue() == null ? "" : stopText(stopBox.getValue()));
         refreshing = true;
         try {
             final Optional<TradeRouteStop> stop = chosenStop();

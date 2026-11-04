@@ -76,9 +76,11 @@ public class TC_87_F78_terrain_movement_test extends AbstractAkropiaTest {
         // Movement rebuilds the panel; inspect the unit at its new square.
         map.inspect(MOUNTAIN);
         game.verifyThatSelectedTileIs(MOUNTAIN);
-        game.getRightPanelUnit(0).verifyFreeActionPoints(0);
+        game.verifyUnitMovementText(colonistId, "0");
 
         // Zero movement cannot pay even the plains step back to the colony.
+        // Inspecting the stack may select its outdoor worker; choose the mover.
+        game.selectMapUnit(colonistId);
         game.moveMouseAtLocation(MOUNTAIN);
         // With zero points the drag never enters movement mode.
         game.dragMouseAtLocationWithFeedback(COLONY, "x=23, y=12");
@@ -134,10 +136,39 @@ public class TC_87_F78_terrain_movement_test extends AbstractAkropiaTest {
                 getContext());
         final int colonistId = getModel().getUnitsAt(COLONY).get(2).getId();
         terrain.verifyUnitAt(colonistById(colonistId), COLONY, 4);
+        game.verifyUnitMovementText(colonistId, "1 ⅓");
 
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
         terrain.verifyUnitAt(colonistById(colonistId), COLONY, 4);
+        game.verifyUnitMovementText(colonistId, "1 ⅓");
+    }
+
+    @Test
+    @Tag("local")
+    void TC_04_czech_road_price_and_unavailable_step_are_read_only()
+            throws Exception {
+        // A road connects an exhausted unit to an empty neighboring tile.
+        useVariant(0, false, true);
+        final org.akropia.page.SettingPage settings = WelcomePage
+                .of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        final GamePage game = settings.goBack().loadGame();
+        final int unitId = getModel().getUnitsAt(BEYOND).get(0).getId();
+        game.selectMapUnit(unitId);
+        final TerrainMovementPage terrain = new TerrainMovementPage(
+                getContext());
+        final org.akropia.page.RiverPage panel = new org.akropia.page.RiverPage(
+                getContext());
+        game.selectTile(Location.of(25, 12));
+        panel.verifyStepDescription("Cena kroku: ⅓", "Po navazující cestě");
+        panel.verifyStepDescription("Krok není dostupný",
+                "Nedostatek zbývajícího pohybu");
+        terrain.verifyUnitAt(colonistById(unitId), BEYOND, 0);
+        game.selectTile(Location.of(26, 12));
+        panel.verifyStepDescription("Základní cena terénu:",
+                "Základní cena terénu:");
+        terrain.verifyUnitAt(colonistById(unitId), BEYOND, 0);
     }
 
     private Unit colonistById(final int unitId) {
@@ -152,6 +183,11 @@ public class TC_87_F78_terrain_movement_test extends AbstractAkropiaTest {
      */
     private void useVariant(final int movementThirds, final boolean mounted)
             throws Exception {
+        useVariant(movementThirds, mounted, false);
+    }
+
+    private void useVariant(final int movementThirds, final boolean mounted,
+            final boolean roadPreview) throws Exception {
         final GameModelPoDao dao = new GameModelPoDao();
         final GameModelPo data = dao.loadFromFile(FIXTURE);
         final Map<Location, TerrainType> terrain = data.getModel().getMap()
@@ -173,6 +209,18 @@ public class TC_87_F78_terrain_movement_test extends AbstractAkropiaTest {
                 unit.setMovementThirds(movementThirds);
                 unit.setMounted(mounted);
             }
+        }
+        if (roadPreview) {
+            terrain.put(Location.of(25, 12), TerrainType.GRASSLAND);
+            terrain.put(Location.of(26, 12), TerrainType.GRASSLAND);
+            data.getModel().getMap().setTerrainType(terrain);
+            data.getModel().getMap()
+                    .setRoads(java.util.Set.of(BEYOND, Location.of(25, 12)));
+            data.getModel().getUnits().stream()
+                    .filter(unit -> unit.getType() == UnitType.COLONIST
+                            && unit.getPlaceMap() != null
+                            && COLONY.equals(unit.getPlaceMap().getLocation()))
+                    .forEach(unit -> unit.getPlaceMap().setLocation(BEYOND));
         }
         final File file = new File(System.getProperty("user.home"),
                 "terrain-movement.akropia");

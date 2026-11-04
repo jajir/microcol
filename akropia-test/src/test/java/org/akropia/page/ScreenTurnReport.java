@@ -53,6 +53,18 @@ public class ScreenTurnReport extends AbstractScreen {
         return getNodeFinder().lookup("#closeButtonId").queryAs(Button.class);
     }
 
+    public void verifyCompletedHomeVoyage(final int shipId,
+            final boolean automatic) {
+        final org.akropia.model.Unit ship = getModel().getUnitById(shipId);
+        assertTrue(
+                ship.isAtEuropePort() || ship.isAtHighSea()
+                        && !((org.akropia.model.PlaceHighSea) ship.getPlace())
+                                .isTravelToEurope(),
+                "The home voyage must have finished before checking its notice");
+        assertEquals(automatic,
+                getModel().getTradeRouteAssignment(ship).isPresent());
+    }
+
     public void verifyNumberOfEvents(final int expectedNumberOfEvents) {
         assertEquals(expectedNumberOfEvents, getEventPanels().size(),
                 String.format(

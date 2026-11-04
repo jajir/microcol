@@ -116,6 +116,20 @@ class RiverMovementTest {
     // ---- Entry cost -------------------------------------------------------
 
     @Test
+    void stepAvailabilitySharesExecutionChecksWithoutChangingState() {
+        final Model model = riverChain();
+        final UnitFreeColonist pioneer = pioneerAt(model, west, 1);
+        final String before = new com.google.gson.Gson().toJson(model.save());
+        assertTrue(pioneer.canMoveStepTo(middle));
+        assertFalse(pioneer.canMoveStepTo(east));
+        assertEquals(before, new com.google.gson.Gson().toJson(model.save()));
+        model.setSentry(pioneer);
+        final String sentry = new com.google.gson.Gson().toJson(model.save());
+        assertFalse(pioneer.canMoveStepTo(middle));
+        assertEquals(sentry, new com.google.gson.Gson().toJson(model.save()));
+    }
+
+    @Test
     void connectedRiverStepCostsOneThirdInEitherDirection() {
         final Model model = riverChain();
         final UnitFreeColonist pioneer = pioneerAt(model, west, 3);
@@ -173,6 +187,7 @@ class RiverMovementTest {
         model.moveUnit(pioneer, Path.of(List.of(middle)));
         assertEquals(middle, pioneer.getLocation());
         assertEquals(0, pioneer.getMovementThirds());
+        assertFalse(pioneer.canMoveStepTo(west));
         // Entering grassland without a segment from the same river square costs
         // the full three thirds, so one third is not enough.
         final GameModelPo data = data();

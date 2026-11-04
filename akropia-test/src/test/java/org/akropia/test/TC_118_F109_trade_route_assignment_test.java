@@ -300,7 +300,7 @@ public class TC_118_F109_trade_route_assignment_test
         final TradeRouteCargoDialog cargo = new TradeRouteCargoDialog(
                 getContext());
         cargo.open();
-        cargo.verifyTitle("Náklad na zastávkách trasy");
+        cargo.verifyTitle("Správa obchodní trasy");
         cargo.chooseRoute("Idle cart");
         cargo.verifyAssignmentHeading("Jede podle této trasy");
         cargo.verifyAssigned(

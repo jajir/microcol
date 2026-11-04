@@ -18,6 +18,15 @@ public final class DialogMessage extends AbstractWarningDialog {
         super(viewUtil, i18n, Dialog.gameOver_caption);
     }
 
+    public void setText(final String title, final String text) {
+        setTitle(title);
+        setText(text);
+        final Label heading = new Label(title);
+        heading.getStyleClass().add("label-title");
+        heading.setWrapText(true);
+        getContext().getChildren().add(0, heading);
+    }
+
     public void setText(final String text) {
         getContext().getChildren().clear();
         final Label message = new Label(text);

@@ -306,4 +306,10 @@
   <entry key="workUnavailable">Práce už není dostupná. Obnovte výběr.</entry>
   <entry key="workingFor">Pracuje pro %s</entry>
   <entry key="fishermanOf">Rybář kolonie %s. Práci spravujete v kolonii.</entry>
+    <entry key="baseTerrainCost">Základní cena terénu: %s</entry>
+    <entry key="stepCost">Cena kroku: %s</entry>
+    <entry key="stepUnavailable">Krok není dostupný</entry>
+    <entry key="stepAlongRoad">Po navazující cestě</entry>
+    <entry key="stepAlongRiver">Podél řeky</entry>
+    <entry key="stepInsufficientMovement">Nedostatek zbývajícího pohybu</entry>
 </properties>

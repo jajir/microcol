@@ -8,7 +8,7 @@ import org.akropia.gui.util.Listener;
 import org.akropia.model.Model;
 import org.akropia.model.event.TurnStartedEvent;
 import org.akropia.model.turnevent.TurnEventCriticality;
-import org.akropia.model.turnevent.TurnEventShipComeToEuropePort;
+import org.akropia.model.turnevent.TurnEventGoTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,8 +88,10 @@ public final class ShowTurnEvensOnTurnStartedEvent {
      */
     private boolean isReportDue() {
         final Model model = gameModelController.getModel();
-        if (model.isTurnEventsMessagesEmpty(
-                gameModelController.getHumanPlayer())) {
+        if (model
+                .getTurnEventsLocalizedMessages(
+                        gameModelController.getHumanPlayer())
+                .stream().noneMatch(TeService::isVisibleNotice)) {
             return false;
         }
         if (gamePreferences.isShowTurnSummary()) {
@@ -105,7 +107,8 @@ public final class ShowTurnEvensOnTurnStartedEvent {
         return gameModelController.getModel()
                 .getTurnEventsLocalizedMessages(
                         gameModelController.getHumanPlayer())
-                .stream()
-                .anyMatch(TurnEventShipComeToEuropePort.class::isInstance);
+                .stream().filter(TurnEventGoTo.class::isInstance)
+                .map(TurnEventGoTo.class::cast).anyMatch(event -> event
+                        .getKind() == TurnEventGoTo.Kind.ARRIVED_EUROPE);
     }
 }

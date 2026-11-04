@@ -17,7 +17,9 @@ public final class TurnEventGoTo extends AbstractTurnEvent {
         /** The named colony is no longer friendly; the order is canceled. */
         CANCELLED_NOT_FRIENDLY,
         /** The ship was damaged and cannot sail; the order is canceled. */
-        CANCELLED_DAMAGED, ARRIVED, ARRIVED_EUROPE, CANCELLED_BLOCKED
+        CANCELLED_DAMAGED, ARRIVED, ARRIVED_EUROPE, ARRIVED_MAP, RETURN_BLOCKED,
+        CANCELLED_BLOCKED, ROUTE_NO_ROUTE, ROUTE_STOP_UNREACHABLE,
+        ROUTE_STOP_LOST, ROUTE_EUROPE_CLOSED, ROUTE_CARRIER_DAMAGED
     }
 
     private final Kind kind;

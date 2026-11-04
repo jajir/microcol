@@ -19,6 +19,8 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TitledPane;
+import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Screen;
 import javafx.stage.Window;
@@ -147,6 +149,7 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
      * @param index zero-based position in the list of assigned carriers
      */
     public void chooseAssignedCarrier(final int index) {
+        expandSection("tradeRouteAssignedPane");
         choose(getNodeFinder().lookup("#tradeRouteAssignedCarrier")
                 .queryComboBox(), index);
     }
@@ -220,6 +223,12 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
     }
 
     private void pressWithKeyboard(final String buttonId) {
+        if (buttonId.equals("tradeRouteDelete")) {
+            expandSection("tradeRouteDeletePane");
+        }
+        if (buttonId.equals("tradeRouteCancelAssignment")) {
+            expandSection("tradeRouteAssignedPane");
+        }
         final javafx.scene.control.Button button = getButtonById(buttonId);
         reveal(button);
         getRobot().interact(button::requestFocus);
@@ -254,12 +263,37 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
      * taller than a small screen is operated the same way a player would.
      */
     private void press(final String buttonId) {
+        if (buttonId.equals("tradeRouteDelete")) {
+            expandSection("tradeRouteDeletePane");
+        }
+        if (buttonId.equals("tradeRouteCancelAssignment")) {
+            expandSection("tradeRouteAssignedPane");
+        }
         reveal(getButtonById(buttonId));
         clickOnButtonWithId(buttonId);
     }
 
     /** Scrolls the dialog, when it has a scroll bar, until the node shows. */
+    private void expandSection(final String id) {
+        final TitledPane section = getNodeFinder().lookup("#" + id)
+                .queryAs(TitledPane.class);
+        if (!section.isExpanded()) {
+            reveal(section);
+            getRobot().clickOn(section.lookup(".title"));
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+    }
+
     private void reveal(final Node node) {
+        for (Parent parent = node.getParent(); parent != null; parent = parent
+                .getParent()) {
+            if (parent instanceof TitledPane
+                    && !((TitledPane) parent).isExpanded()) {
+                final TitledPane section = (TitledPane) parent;
+                getRobot().clickOn(section.lookup(".title"));
+                WaitForAsyncUtils.waitForFxEvents();
+            }
+        }
         getNodeFinder().lookup("#tradeRouteCargoScroll").tryQuery()
                 .ifPresent(found -> {
                     final ScrollPane scroll = (ScrollPane) found;
@@ -326,7 +360,74 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 .findFirst().orElseThrow();
     }
 
+    public void verifyWorkbenchLayout(final String screenshot)
+            throws Exception {
+        final javafx.stage.Stage stage = getContext().getPrimaryStage();
+        final double width = stage.getWidth();
+        final double height = stage.getHeight();
+        final double x = stage.getX();
+        final double y = stage.getY();
+        try {
+            getRobot().interact(() -> {
+                stage.setX(0);
+                stage.setY(0);
+                stage.setWidth(1200);
+                stage.setHeight(900);
+            });
+            WaitForAsyncUtils.waitForFxEvents();
+            getRobot().interact(() -> {
+                stage.getScene().getRoot().applyCss();
+                stage.getScene().getRoot().layout();
+            });
+            final Node stops = getNodeFinder().lookup("#tradeRouteStopsColumn")
+                    .query();
+            final javafx.scene.control.Label summary = (javafx.scene.control.Label) ((javafx.scene.layout.VBox) stops)
+                    .getChildren().get(1);
+            assertTrue(
+                    summary.getHeight() >= summary
+                            .prefHeight(summary.getWidth()) - 1,
+                    "The ordered stop summary must display its complete text");
+            final Node goods = getNodeFinder().lookup("#tradeRouteGoodsColumn")
+                    .query();
+            final Node carriers = getNodeFinder()
+                    .lookup("#tradeRouteCarriersColumn").query();
+            final Bounds left = stops.localToScene(stops.getBoundsInLocal());
+            final Bounds middle = goods.localToScene(goods.getBoundsInLocal());
+            final Bounds right = carriers
+                    .localToScene(carriers.getBoundsInLocal());
+            assertEquals(left.getMinY(), middle.getMinY(), 1);
+            assertEquals(left.getMinY(), right.getMinY(), 1);
+            assertTrue(left.getMaxX() <= middle.getMinX());
+            assertTrue(middle.getMaxX() <= right.getMinX());
+            captureDialog("tradeRouteCargoPage", screenshot);
+            getRobot().interact(() -> stage.setWidth(900));
+            WaitForAsyncUtils.waitForFxEvents();
+            final Node back = getButtonById("tradeRouteCargoClose");
+            final Bounds backBounds = back
+                    .localToScene(back.getBoundsInLocal());
+            assertTrue(backBounds.getMinY() >= 0
+                    && backBounds.getMaxY() <= stage.getScene().getHeight());
+            assertTrue(backBounds.getMinX() >= 0
+                    && backBounds.getMaxX() <= stage.getScene().getWidth());
+        } finally {
+            getRobot().interact(() -> {
+                stage.setWidth(width);
+                stage.setHeight(height);
+                stage.setX(x);
+                stage.setY(y);
+            });
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+    }
+
     public void verifyOpened() {
+        assertTrue(getNodeFinder().lookup("#tradeRouteCargoPage").tryQuery()
+                .isPresent());
+        for (final String column : List.of("tradeRouteStopsColumn",
+                "tradeRouteGoodsColumn", "tradeRouteCarriersColumn")) {
+            assertTrue(getNodeFinder().lookup("#" + column).tryQuery()
+                    .isPresent());
+        }
         assertTrue(getNodeFinder().lookup("#tradeRouteCargoDialog").tryQuery()
                 .isPresent());
     }
@@ -445,13 +546,14 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
 
     /** @param expected the list of assigned carriers, one line per carrier */
     public void verifyAssigned(final String... expected) {
+        expandSection("tradeRouteAssignedPane");
         assertEquals(String.join("\n", expected),
                 getLabeledById("tradeRouteAssigned").getText());
     }
 
     public void verifyAssignmentHeading(final String expected) {
-        assertEquals(expected,
-                getLabeledById("tradeRouteAssignedHeading").getText());
+        assertEquals(expected, getNodeFinder().lookup("#tradeRouteAssignedPane")
+                .queryAs(TitledPane.class).getText());
     }
 
     public void verifyAssignButtonText(final String expected) {

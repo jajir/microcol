@@ -1225,3 +1225,23 @@ jsou autoritativní pro vzhled a přijetí.
    `TurnEventFishermanLost` ukládá konkrétní důvod ztráty pro následné textové oznámení.
 4. Jde o popis rozpracovaného zdroje z 2026-11-03, nikoli potvrzenou přejímku.
    Výsledky vlastní [funkční evidence](functional-tests.md#r-0402r-0403r-0405-local-acceptance-2026-11-03).
+
+
+### Změny R-0406–R-0409 — lokálně ověřeno 2026-11-04
+
+1. Výsledek plavby nadále vlastní model: `Ship` zaznamenává skutečný konec
+   jednorázové plavby. `PlaceHighSea` uchovává, zda už oznámil zablokovaný
+   návrat, aby Continue nebo další čekající tah nevydal duplicitu.
+   `TradeRouteNavigator` oznamuje změnu konečného důvodu
+   pozastavení. `TeService` a spouštění přehledu ignorují interní přechody mezi
+   mapou a mořem; neodvozují dostupnost cíle.
+2. `DialogTradeRouteCargo` používá `GameScreen` a `InGamePage`; zachovává
+   modelové příkazy a uchovává místo návratu. Odpovědnosti balíčků se nemění.
+3. Přesné třetiny formátuje GUI. Cena, povolení a spotřeba
+   pohybu zůstávají v modelových dotazech jednotky. `canMoveStepTo` čte stejné
+   podmínky jako provedení jednotlivého kroku, bez mutace. Prohlédnutí
+   sousedního pole ponechává vybranou jednotku pro náhled kroku.
+4. `Model.isColonyFoundingWaitingForMovement` sdílí všechny ostatní podmínky
+   skutečného založení; GUI podle něj nabízí pouze vysvětlení. Nový uložený
+   příznak nevzniká. [Přejímka](functional-tests.md#r-0406-r-0409-local-acceptance-2026-11-03)
+   byla dokončena 2026-11-04.

@@ -1,27 +1,14 @@
 # Current requirement backlog
 
+## Dokončeno R-0406–R-0409 — 2026-11-04
+
+1. [R-0406](done/R-0406.md), [R-0407](done/R-0407.md), [R-0408](done/R-0408.md) a [R-0409](done/R-0409.md) mají status `done`: zprávy o doplutí, celostránková správa tras, přesné pohybové údaje a vysvětlení založení bez pohybu jsou implementované.
+2. [Lokální přejímka](../functional-tests.md#r-0406-r-0409-local-acceptance-2026-11-03): 5 011 model/JUnit, 46 cílených UI a 21 smoke/support testů; bez selhání, chyb či přeskočení. Nejde o potvrzení nové distribuce ani úplné regrese.
+
 ## Dokončeno R-0402, R-0403 a R-0405 — 2026-11-03
 
 1. [R-0402](done/R-0402.md), [R-0403](done/R-0403.md) a [R-0405](done/R-0405.md) mají status `done`: řecké identity, vektorové vlajky a bannery, pracovníci na skutečných polích a místní rybolov jsou implementované. Popisek příjemce je po schválené vizuální úpravě jen u vybraného pracovníka; `w` zůstává u všech.
 2. [Lokální přejímka](../functional-tests.md#r-0402r-0403r-0405-local-acceptance-2026-11-03) prošla: 4 998 model/JUnit, 126 cílených Docker UI a 21 smoke/support testů, vše bez selhání, chyb a přeskočení. Smoke trval 226 sekund. Záznamy přípravy níže jsou historické; publikace sestavení nebyla ověřována.
-
-
-## Založení kolonie bez pohybu — 2026-11-03
-
-1. [R-0409](R-0409.md), status `new`, A03 s návaznostmi A05/A07: příkaz zůstává viditelný a neaktivní s trvalým vysvětlením; stisk B zobrazí modalní informaci o chybějících pohybových bodech. Po jejich obnovení se dostupnost znovu vyhodnotí. Otevřené otázky nejsou; zachycení nezahajuje implementaci.
-
-
-## Pohybové údaje na mapě — 2026-11-03
-
-1. [R-0408](R-0408.md), status `new`, A03 s návazností A05: zbývající třetiny bez úvodní nuly a skutečná cena sousedního kroku pro vybranou jednotku, včetně vysvětlení říčního zvýhodnění. Bez konkrétního kroku se základní cena terénu výslovně odliší. Otevřené otázky nejsou; požadavek je zařazený k budoucímu výběru a technickému upřesnění.
-
-## Správa obchodní trasy — Pracovní stůl — 2026-11-03
-
-1. [R-0407](R-0407.md), status `new`, A03 s návaznostmi A06/A01: schválená první varianta využije celou herní plochu, zastávky vlevo, zboží uprostřed a dopravce vpravo. Zachovává všechny operace a návrat do místa otevření. Otevřené otázky nejsou; technické upřesnění a implementace nejsou tímto zachycením autorizované.
-
-## Oznámení o výsledku plavby — 2026-11-03
-
-1. [R-0406](R-0406.md), status `new`, A03 s návaznostmi A05/A06/A04: jednorázová plavba oznámí pouze dosažení zadaného cíle, průjezd přístavem a příjezdy automatické trasy jsou tiché. Nemožnost doplutí se oznámí s důvodem i u automatické trasy. Otevřené otázky nejsou; technické upřesnění před vývojem zbývá.
 
 
 ## Pracovníci kolonie na mapě světa — 2026-11-03

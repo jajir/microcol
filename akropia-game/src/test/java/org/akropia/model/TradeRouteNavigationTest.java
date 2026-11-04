@@ -410,6 +410,30 @@ class TradeRouteNavigationTest {
         assertTrue(closed.ship.isAtEuropePort());
         assertTrue(closed.ship.isCrownSeized());
         assertEquals(0, closed.departures);
+        assertEquals(1, voyageNoticeCount(closed));
+        closed.ownerUpdate();
+        assertEquals(1, voyageNoticeCount(closed));
+        final World restored = closed.saveAndContinue();
+        restored.ownerUpdate();
+        assertEquals(1, voyageNoticeCount(restored));
+    }
+
+    @Test
+    void ordinaryTravelDoesNotProduceVoyageNotices() {
+        final World w = new World();
+        final TradeRoute route = w.seaRoute(List.of(), List.of(), List.of());
+        w.model.assignTradeRoute(w.ship, route, 0);
+        w.ownerUpdate();
+        assertEquals(0, voyageNoticeCount(w));
+        w.ownerUpdate();
+        assertEquals(0, voyageNoticeCount(w));
+    }
+
+    private static long voyageNoticeCount(final World world) {
+        return world.model.getTurnEventStore().getForPlayer(world.dutch)
+                .stream()
+                .filter(org.akropia.model.turnevent.TurnEventGoTo.class::isInstance)
+                .count();
     }
 
     @Test
@@ -675,6 +699,9 @@ class TradeRouteNavigationTest {
 
         w.ownerUpdate();
         assertEquals(Optional.of(TradeRoutePause.CARRIER_DAMAGED), w.pause());
+        assertEquals(1, voyageNoticeCount(w));
+        w.ownerUpdate();
+        assertEquals(1, voyageNoticeCount(w));
 
         final World restored = w.saveAndContinue();
         assertTrue(((Ship) restored.ship).isDamaged());

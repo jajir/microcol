@@ -306,4 +306,10 @@
   <entry key="workUnavailable">Work is no longer available. Refresh the selection.</entry>
   <entry key="workingFor">Works for %s</entry>
   <entry key="fishermanOf">Fisherman of %s. Manage work in the colony.</entry>
+    <entry key="baseTerrainCost">Base terrain cost: %s</entry>
+    <entry key="stepCost">Step cost: %s</entry>
+    <entry key="stepUnavailable">Step unavailable</entry>
+    <entry key="stepAlongRoad">Along a connected road</entry>
+    <entry key="stepAlongRiver">Along the river</entry>
+    <entry key="stepInsufficientMovement">Not enough movement remaining</entry>
 </properties>

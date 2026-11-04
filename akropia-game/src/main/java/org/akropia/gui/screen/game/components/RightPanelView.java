@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.akropia.gui.Loc;
+import org.akropia.gui.MovementText;
+import org.akropia.gui.screen.game.gamepanel.SelectedUnitManager;
 import org.akropia.gui.LocalizationHelper;
 import org.akropia.gui.MainStageBuilder;
 import org.akropia.gui.UnitsPanel;
@@ -40,6 +42,7 @@ public final class RightPanelView implements JavaFxComponent {
     private final I18n i18n;
 
     private final TilePainter tilePainter;
+    private final SelectedUnitManager selectedUnitManager;
 
     private final Label labelOnMove;
 
@@ -61,7 +64,9 @@ public final class RightPanelView implements JavaFxComponent {
     public RightPanelView(final I18n i18n, final UnitsPanel unitsPanel,
             final LocalizationHelper localizationHelper,
             final GameModelController gameModelController,
-            final TilePainter tilePainter, final WorldMinimap minimap) {
+            final TilePainter tilePainter, final WorldMinimap minimap,
+            final SelectedUnitManager selectedUnitManager) {
+        this.selectedUnitManager = selectedUnitManager;
         this.i18n = Preconditions.checkNotNull(i18n);
         this.unitsPanel = Preconditions.checkNotNull(unitsPanel);
         this.localizationHelper = Preconditions
@@ -133,7 +138,7 @@ public final class RightPanelView implements JavaFxComponent {
                         .getTerrainName(terrain.getTerrainType()));
                 sb.append("");
                 sb.append("\n");
-                sb.append(i18n.get(Loc.moveCost) + terrain.getMoveCost());
+                sb.append(movementDescription(location, terrain));
                 // Only a discovered square names its special resource.
                 if (terrain.getResourceOverlay() != ResourceOverlay.NONE) {
                     sb.append("\n");
@@ -172,6 +177,40 @@ public final class RightPanelView implements JavaFxComponent {
             }
             tileName.setText(sb.toString());
         });
+    }
+
+    private String movementDescription(final Location location,
+            final Terrain terrain) {
+        final Optional<Unit> selected = selectedUnitManager.getSelectedUnit();
+        if (selected.isEmpty()
+                || selected.get().getOwner() != gameModelController
+                        .getHumanPlayer()
+                || !selected.get().isAtPlaceLocation()
+                || !selected.get().getLocation().isNeighbor(location)) {
+            return i18n.get(Loc.baseTerrainCost, terrain.getMoveCost());
+        }
+        final Unit unit = selected.get();
+        if (!unit.isPossibleToMoveAt(location) || unit.isFishing()) {
+            return i18n.get(Loc.stepUnavailable);
+        }
+        final int cost = unit.getEntryCostThirds(unit.getLocation(), location);
+        String text = i18n.get(Loc.stepCost, MovementText.format(cost));
+        if (!unit.isShip() && cost == 1) {
+            if (getModel().getMap().hasRoadAt(unit.getLocation())
+                    && getModel().getMap().hasRoadAt(location)) {
+                text += "\n" + i18n.get(Loc.stepAlongRoad);
+            } else if (getModel().getMap().hasRiverSegment(unit.getLocation(),
+                    location)) {
+                text += "\n" + i18n.get(Loc.stepAlongRiver);
+            }
+        }
+        if (!unit.canMoveStepTo(location)) {
+            text += "\n" + i18n.get(Loc.stepUnavailable);
+            if (!unit.canAffordStepTo(location)) {
+                text += "\n" + i18n.get(Loc.stepInsufficientMovement);
+            }
+        }
+        return text;
     }
 
     public void setOnMovePlayer(final Player player) {

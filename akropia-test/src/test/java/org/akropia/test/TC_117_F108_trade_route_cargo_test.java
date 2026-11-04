@@ -70,6 +70,7 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         final TradeRouteCargoDialog cargo = new TradeRouteCargoDialog(
                 getContext());
         cargo.open();
+        cargo.verifyWorkbenchLayout("trade-route-workbench-en.png");
         cargo.verifyOpened();
         cargo.chooseRoute("Oil Run");
         cargo.chooseStop(DELFT_STOP);
@@ -234,7 +235,8 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         final TradeRouteCargoDialog cargo = new TradeRouteCargoDialog(
                 getContext());
         cargo.open();
-        cargo.verifyTitle("Náklad na zastávkách trasy");
+        cargo.verifyWorkbenchLayout("trade-route-workbench-cs.png");
+        cargo.verifyTitle("Správa obchodní trasy");
         cargo.chooseRoute("Olejová cesta");
         cargo.chooseStop(DELFT_STOP);
 
@@ -290,8 +292,8 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         planner.verifySelectedRoute("Oil Run");
         planner.verifyKind("Sea route");
         planner.verifyCarriers("No carrier assigned");
-        planner.verifyLegsContain("Delft → Europe: by sea");
-        planner.verifyLegsContain("Europe → Delft: by sea");
+        planner.verifyLegsContain("Delft → Home port: by sea");
+        planner.verifyLegsContain("Home port → Delft: by sea");
         planner.verifyRouteDrawnOver("Oil Run", DELFT_LOCATION);
         planner.captureScreen("trade-route-planner-europe.png");
 
@@ -304,7 +306,7 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         cargo.addUnload(GoodsType.ORE);
         cargo.close();
         cargo.verifyDialogClosed();
-        planner.verifyStops("1. Europe — unload: nothing; load: nothing\n"
+        planner.verifyStops("1. Home port — unload: nothing; load: nothing\n"
                 + "2. Delft — unload: nothing; load: nothing");
 
         // Saved goods and the assigned galleon appear in the panel.
@@ -319,12 +321,12 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         cargo.assign();
         cargo.verifyMessage("Assigned. The unit starts on your next turn.");
         cargo.close();
-        planner.verifyStops("1. Europe — unload: nothing; load: nothing\n"
+        planner.verifyStops("1. Home port — unload: nothing; load: nothing\n"
                 + "2. Delft — unload: Ore; load: nothing");
         planner.verifyCarriers("Carriers: Galleon #3");
         planner.verifyPreviewNote(
                 "Paths are shown for Galleon #3. Other carriers of the route use their own movement costs.");
-        planner.verifyLegsContain("Delft → Europe: by sea");
+        planner.verifyLegsContain("Delft → Home port: by sea");
         planner.captureScreen("trade-route-planner-detail.png");
 
         // Viewing, editing and assigning moved and transferred nothing.
@@ -343,7 +345,7 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         planner.open();
         planner.chooseRoute("Oil Run");
         planner.verifyCarriers("Carriers: Galleon #3");
-        planner.verifyStops("1. Europe — unload: nothing; load: nothing\n"
+        planner.verifyStops("1. Home port — unload: nothing; load: nothing\n"
                 + "2. Delft — unload: Ore; load: nothing");
         planner.close();
         planner.verifyPlannerShown(false);

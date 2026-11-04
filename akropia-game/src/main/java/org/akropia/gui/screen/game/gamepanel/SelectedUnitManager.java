@@ -236,10 +236,16 @@ public final class SelectedUnitManager {
                  * nothing
                  */
                 if (!selectedUnit.getLocation().equals(location)) {
-                    selectedUnit(gameModelController.getModel()
+                    final Optional<Unit> atTarget = gameModelController
+                            .getModel()
                             .getFirstSelectableUnitAtOwnedBy(location,
-                                    gameModelController.getHumanPlayer())
-                            .orElse(null));
+                                    gameModelController.getHumanPlayer());
+                    // Inspecting a neighboring step keeps its moving unit
+                    // selected.
+                    selectedUnit(atTarget.orElse(
+                            selectedUnit.getLocation().isNeighbor(location)
+                                    ? selectedUnit
+                                    : null));
                 }
             } else {
                 selectedUnit(gameModelController.getModel()

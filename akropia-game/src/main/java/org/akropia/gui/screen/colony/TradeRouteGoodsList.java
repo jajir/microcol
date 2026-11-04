@@ -17,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
@@ -91,7 +92,7 @@ final class TradeRouteGoodsList {
         up.setOnAction(event -> moveSelected(-1));
         down.setOnAction(event -> moveSelected(1));
         box = new VBox(6, heading, list, new HBox(6, choice, add),
-                new HBox(6, up, down, remove));
+                new FlowPane(6, 6, up, down, remove));
         refreshChoices();
         updateButtons();
     }

@@ -147,4 +147,5 @@
     <entry key="endTurnWarningCaption">Colonists without work are waiting in these colonies. Open a colony to assign work, go back, or end this turn anyway.</entry>
     <entry key="endTurnProceed">End turn anyway</entry>
     <entry key="endTurnBack">Back</entry>
+    <entry key="buildColonyWaitingForMovement">This unit has no movement remaining. Build the colony after its movement is restored next turn.</entry>
 </properties>

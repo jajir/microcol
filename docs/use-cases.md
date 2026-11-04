@@ -1,5 +1,7 @@
 ## UC-011/114/119: výběr jednotky, zásoby a Continue — 2026-11-03
 
+R-0406–R-0409 jsou lokálně ověřené 2026-11-04 pro dotčené cesty UC-013/016/029 a obnovu UC-113. [Evidence přejímky](functional-tests.md#r-0406-r-0409-local-acceptance-2026-11-03) obsahuje modelové testy, 46 cílených UI a 21 smoke/support kontrol. `TC_203_F235_ship_voyage_notices_test` porovnává automatický a jednorázový příjezd; TC02 a TC87 doplňují české vysvětlení, obnovení dostupnosti a cenu kroků.
+
 ## UC-032/114/119: identity, činnost a venkovní práce — ověřeno 2026-11-03
 
 [R-0402](requirements/done/R-0402.md), [R-0403](requirements/done/R-0403.md) a

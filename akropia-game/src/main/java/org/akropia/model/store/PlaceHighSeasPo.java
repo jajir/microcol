@@ -11,6 +11,15 @@ public final class PlaceHighSeasPo extends PlacePo {
     private Integer position;
 
     private int remainigTurns;
+    private boolean blockedArrivalReported;
+
+    public boolean isBlockedArrivalReported() {
+        return blockedArrivalReported;
+    }
+
+    public void setBlockedArrivalReported(final boolean reported) {
+        blockedArrivalReported = reported;
+    }
 
     private Integer weather;
 

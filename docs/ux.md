@@ -1274,22 +1274,24 @@ skutečného hráče; výsledky patří do [funkční evidence](functional-tests
 <a id="trade-route-workbench"></a>
 ## Správa obchodní trasy jako pracovní stůl — 2026-11-03
 
-1. Uživatel vybral první návrh „Pracovní stůl“, zachycený v [R-0407](requirements/R-0407.md): samostatná obrazovka uvnitř herního okna se zastávkami vlevo, zbožím pro vybranou zastávku uprostřed a dopravci vpravo. Návrat a kontext trasy mají zůstat dostupné při práci s obsahem.
+1. Uživatel vybral první návrh „Pracovní stůl“, zachycený v [R-0407](requirements/done/R-0407.md): samostatná obrazovka uvnitř herního okna se zastávkami vlevo, zbožím pro vybranou zastávku uprostřed a dopravci vpravo. Návrat a kontext trasy mají zůstat dostupné při práci s obsahem.
 2. Uložení pokynů ke zboží, automatické přiřazení dopravce a jednorázové odbavení jsou různé činnosti a jejich popisky musí vysvětlit rozdíl. Přehled přiřazených dopravců a odstranění trasy mají vlastní rozbalovací části. Stávající pravidla a potvrzovací kroky se nemění.
-3. Zpět a Escape vedou do místa otevření, včetně plánovače tras nebo kolonie. Úzké okno nesmí znepřístupnit ovládání. Jde o schválený návrh prezentace, nikoli ověřený herní výsledek nebo závěr hráčské studie; implementační přejímka zbývá.
+3. Zpět a Escape vedou do místa otevření, včetně plánovače tras nebo kolonie. Úzké okno nesmí znepřístupnit ovládání. Implementace byla lokálně ověřena 2026-11-04 v EN/CS, včetně tří sloupců a dostupného návratu při menší šířce. Nejde o závěr hráčské studie; [evidence](functional-tests.md#r-0406-r-0409-local-acceptance-2026-11-03) uvádí provedené kontroly.
 
 
 <a id="movement-cost-presentation"></a>
 ## Cena kroku a zbývající pohyb — 2026-11-03
 
-1. [R-0408](requirements/R-0408.md) zachycuje schválenou opravu prezentace: nenulový zlomek zbývajícího bodu nemá nulovou celou část (`⅔`, nikoli `0 2/3`); skutečně vyčerpaný pohyb zůstává `0` a hodnoty nad jedním bodem mohou být smíšené, například `1 ⅔`.
+1. [R-0408](requirements/done/R-0408.md) zachycuje schválenou opravu prezentace: nenulový zlomek zbývajícího bodu nemá nulovou celou část (`⅔`, nikoli `0 2/3`); skutečně vyčerpaný pohyb zůstává `0` a hodnoty nad jedním bodem mohou být smíšené, například `1 ⅔`.
 2. U vybrané jednotky a sousedního cíle zobrazit modelovou cenu konkrétního kroku a vysvětlit zvýhodnění, například pohyb podél propojené řeky. Samotná přítomnost řeky na cílovém poli neurčuje cenu každého příchodu. Základní cena terénu musí mít odlišný popisek, zejména pokud konkrétní krok není určený. Nedostupnost přesunu nesmí být zakrytá číselnou cenou.
-3. Pravidla pohybu a dosavadní ovládání se nemění. Jde o schválené zadání bez nové implementační přejímky; screenshoty samy neprokazují chybu odečítání bodů. Podrobnou akceptaci vlastní R-0408.
+3. Pravidla pohybu a dosavadní ovládání se nemění. Implementace prošla lokální přejímkou 2026-11-04; screenshoty původního nálezu samy neprokazují chybu odečítání bodů. Podrobnou akceptaci vlastní R-0408.
 
 
 <a id="founding-without-movement"></a>
 ## Založení kolonie bez pohybových bodů — 2026-11-03
 
-1. Schválené chování v [R-0409](requirements/R-0409.md): pokud vhodné jednotce na povoleném místě chybí pohyb pro založení kolonie, příkaz zůstává v nabídce šedý, včetně B. Důvod a dostupnost po obnovení pohybu vysvětluje trvalý text pod položkou, čitelný také bez myši.
+1. Schválené chování v [R-0409](requirements/done/R-0409.md): pokud vhodné jednotce na povoleném místě chybí pohyb pro založení kolonie, příkaz zůstává v nabídce šedý, včetně B. Důvod a dostupnost po obnovení pohybu vysvětluje trvalý text pod položkou, čitelný také bez myši.
 2. Stisk B přesto vyvolá jediný modalní informační dialog s konkrétním důvodem a tlačítkem OK. OK, Enter i Escape vracejí ovládání mapě a zachovávají vybranou jednotku. Odmítnutí nespotřebuje prostředky, nezaloží kolonii ani budoucí rozkaz. Otevření nabídky samo dialog nevyvolává.
-3. Obě cesty čtou aktuální modelové podmínky. Po obnovení pohybu se příkaz zpřístupní pouze při splnění ostatních pravidel; jiné překážky se nevydávají za nedostatek pohybu. Jde o schválené zadání, nikoli implementované nebo hráčsky ověřené chování.
+3. Obě cesty čtou aktuální modelové podmínky. Po obnovení pohybu se příkaz zpřístupní pouze při splnění ostatních pravidel; jiné překážky se nevydávají za nedostatek pohybu. Implementace byla lokálně ověřena 2026-11-04; nejde o výsledek hráčské studie.
+
+Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na mapě, OK/Enter/Escape, nezměněný svět, Continue a obnovení dostupnosti po dalším tahu; viz [evidence](functional-tests.md#r-0406-r-0409-local-acceptance-2026-11-03).

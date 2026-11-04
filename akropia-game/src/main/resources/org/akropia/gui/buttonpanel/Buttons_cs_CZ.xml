@@ -147,4 +147,5 @@
     <entry key="endTurnWarningCaption">V těchto koloniích čekají kolonisté bez práce. Otevřete kolonii a přidělte jim práci, vraťte se do hry, nebo přesto ukončete tento tah.</entry>
     <entry key="endTurnProceed">Přesto ukončit tah</entry>
     <entry key="endTurnBack">Zpět</entry>
+    <entry key="buildColonyWaitingForMovement">Jednotka nemá zbývající pohyb. Kolonii lze založit po obnovení pohybu v příštím tahu.</entry>
 </properties>

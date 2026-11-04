@@ -81,6 +81,9 @@ public interface Unit {
      */
     boolean canAffordStepTo(Location location);
 
+    /** Reads the same live preconditions as an actual single-step move. */
+    boolean canMoveStepTo(Location location);
+
     /**
      * Verifies, without changing anything, that every step of the path is legal
      * for this unit when walked in order from its current place. It does not

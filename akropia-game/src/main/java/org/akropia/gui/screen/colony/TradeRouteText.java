@@ -10,9 +10,10 @@ public enum TradeRouteText implements MessageKeyResource {
     startUnavailable, startNotPort, stopUnavailable, europeByLand, sameStop,
     stopNotReachable,
     // Cargo at route stops: configuration, priority and processing.
-    cargoOpen, cargoTitle, cargoRule, cargoRouteLabel, cargoStopLabel,
-    cargoStopItem, unloadHeading, loadHeading, addGoods, removeGoods, moveUp,
-    moveDown, saveCargo, closeCargo, cargoNoRoutes, cargoSaved, cargoUnsaved,
+    goodsSection, carriersSection, processRule, routeSummary, cargoOpen,
+    cargoTitle, cargoRule, cargoRouteLabel, cargoStopLabel, cargoStopItem,
+    unloadHeading, loadHeading, addGoods, removeGoods, moveUp, moveDown,
+    saveCargo, closeCargo, cargoNoRoutes, cargoSaved, cargoUnsaved,
     carrierLabel, noCarrier, carrierReady, carrierItem, processNow,
     resultHeading, verbUnload, verbLoad, entryLine, entryGold, noEntries,
     problemCARRIER_UNAVAILABLE, problemROUTE_UNAVAILABLE,

@@ -218,8 +218,11 @@ class AtlanticVoyageTest {
         assertTrue(ship().isAtHighSea());
         assertEquals(0, ((PlaceHighSea) ship().getPlace()).getRemainigTurns());
         assertCargo();
+        assertEquals(1, blockedReturnNotices());
         reload();
+        assertEquals(1, blockedReturnNotices());
         nextOwnerTurn();
+        assertEquals(0, blockedReturnNotices());
         assertEquals(0, ((PlaceHighSea) ship().getPlace()).getRemainigTurns());
         assertCargo();
         model.destroyUnit(model.getUnitById(100));
@@ -407,4 +410,15 @@ class AtlanticVoyageTest {
                 .createCargoShipForKing(model.getPlayerByName("Dutch's King")));
         assertEquals(before, model.getAllUnits().size());
     }
+
+    private long blockedReturnNotices() {
+        return model.getTurnEventStore().getForPlayer(ship().getOwner())
+                .stream()
+                .filter(org.akropia.model.turnevent.TurnEventGoTo.class::isInstance)
+                .map(org.akropia.model.turnevent.TurnEventGoTo.class::cast)
+                .filter(notice -> notice
+                        .getKind() == org.akropia.model.turnevent.TurnEventGoTo.Kind.RETURN_BLOCKED)
+                .count();
+    }
+
 }

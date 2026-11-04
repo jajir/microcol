@@ -64,14 +64,17 @@ class SelectedUnitManagerTest {
     }
 
     @Test
-    void leavesAnEmptyFocusedTileWithoutASelectedUnit() {
+    void keepsTheUnitForAdjacentInspectionButClearsItForADistantEmptyTile() {
         tiles.setSelectedTile(FOCUS, ScrollToFocusedTile.skip);
-        assertTrue(selection.getSelectedUnit().isPresent());
-
+        final Unit selected = selection.getSelectedUnit().orElseThrow();
+        final int movement = selected.getMovementThirds();
         tiles.setSelectedTile(EMPTY, ScrollToFocusedTile.skip);
-
-        assertTrue(selection.getSelectedUnit().isEmpty());
+        assertSame(selected, selection.getSelectedUnit().orElseThrow());
         assertEquals(EMPTY, tiles.getSelectedTile().orElseThrow());
+        assertEquals(FOCUS, selected.getLocation());
+        assertEquals(movement, selected.getMovementThirds());
+        tiles.setSelectedTile(Location.of(45, 12), ScrollToFocusedTile.skip);
+        assertTrue(selection.getSelectedUnit().isEmpty());
     }
 
     @Test

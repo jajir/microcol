@@ -13,6 +13,7 @@ import org.akropia.gui.screen.editor.ScreenEditor;
 import org.akropia.gui.screen.europe.ScreenEurope;
 import org.akropia.gui.screen.game.ScreenGame;
 import org.akropia.gui.screen.goals.ScreenGoals;
+import org.akropia.gui.screen.colony.DialogTradeRouteCargo;
 import org.akropia.gui.screen.load.ScreenLoad;
 import org.akropia.gui.screen.colonizopedia.ScreenColonizopedia;
 import org.akropia.gui.screen.congress.ScreenCongress;
@@ -87,6 +88,7 @@ public final class MainPanelPresenter {
             final ScreenTurnReport screenTurnReport,
             final ScreenEditor screenEditor, final ScreenGoals screenGoals,
             final ScreenColonizopedia screenHelp,
+            final DialogTradeRouteCargo tradeRouteCargo,
             final ScreenCongress screenCongress,
             final PersistingService persistingService,
             final GameModelController gameModelController) {
@@ -172,6 +174,9 @@ public final class MainPanelPresenter {
                     }
                     return null;
                 }, event -> {
+                    if (Screen.TRADE_ROUTE_CARGO == event.getScreen()) {
+                        return tradeRouteCargo;
+                    }
                     if (Screen.GOALS == event.getScreen()) {
                         return screenGoals;
                     }

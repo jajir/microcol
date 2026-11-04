@@ -113,9 +113,16 @@ public abstract class Ship extends UnitWithCargo {
         final PlaceHighSea place = (PlaceHighSea) getPlace();
         Preconditions.checkState(place.getRemainigTurns() == 0,
                 "The ship has not reached its destination");
+        final boolean manualVoyage = model.getTradeRouteAssignment(this)
+                .isEmpty() && model.getGoToDestinationName(this).isEmpty();
         if (place.isTravelToEurope()) {
             model.getEurope().getPort().placeShipToPort(this);
             completeEuropeGoTo();
+            if (manualVoyage) {
+                model.addTurnEvent(TurnEventProvider.getGoToOrder(getOwner(),
+                        org.akropia.model.turnevent.TurnEventGoTo.Kind.ARRIVED_EUROPE,
+                        getId(), getType(), "Home port"));
+            }
             model.getTurnEventStore()
                     .add(TurnEventProvider.getShipComeEuropePort(getOwner()));
         } else if (isPossibleToMoveAt(departureLocation)) {
@@ -126,7 +133,31 @@ public abstract class Ship extends UnitWithCargo {
             getOwner().revealMapForUnit(this);
             model.getTurnEventStore()
                     .add(TurnEventProvider.getShipComeToHighSeas(getOwner()));
+            if (manualVoyage) {
+                model.addTurnEvent(TurnEventProvider.getGoToOrder(getOwner(),
+                        org.akropia.model.turnevent.TurnEventGoTo.Kind.ARRIVED_MAP,
+                        getId(), getType(), departureLocation.getX() + ", "
+                                + departureLocation.getY()));
+            }
             model.fireUnitArrivedToColonies(this);
+        } else if (place.recordBlockedArrival()) {
+            final String target = model.getGoToDestinationName(this)
+                    .orElseGet(() -> model.getTradeRouteAssignment(this)
+                            .map(assignment -> {
+                                final org.akropia.model.TradeRouteStop stop = assignment
+                                        .getStops()
+                                        .get(assignment.getStopIndex());
+                                return stop.isEurope() ? "Home port"
+                                        : model.getColonyById(
+                                                stop.getColonyId())
+                                                .map(org.akropia.model.Colony::getName)
+                                                .orElse("#"
+                                                        + stop.getColonyId());
+                            }).orElse(departureLocation.getX() + ", "
+                                    + departureLocation.getY()));
+            model.addTurnEvent(TurnEventProvider.getGoToOrder(getOwner(),
+                    org.akropia.model.turnevent.TurnEventGoTo.Kind.RETURN_BLOCKED,
+                    getId(), getType(), target));
         }
         // An occupied map square leaves the ship at zero for a later retry.
     }

@@ -477,7 +477,7 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         // The waiting wagon and its reason are readable in Czech, and the
         // whole dialog fits the screen.
         cargo.open();
-        cargo.verifyTitle("Náklad na zastávkách trasy");
+        cargo.verifyTitle("Správa obchodní trasy");
         cargo.verifyDialogFitsScreen();
         cargo.chooseRoute("Lost cart");
         cargo.verifyAssigned(
@@ -571,8 +571,8 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         planner.verifyCarriers("Carriers: Galleon #7");
         planner.verifyPreviewNote(
                 "Paths are shown for Galleon #7. Other carriers of the route use their own movement costs.");
-        planner.verifyLegsContain("Delft → Europe: by sea");
-        planner.verifyLegsContain("Europe → Delft: by sea");
+        planner.verifyLegsContain("Delft → Home port: by sea");
+        planner.verifyLegsContain("Home port → Delft: by sea");
         planner.verifyRouteDrawnOver("Atlantic run", DELFT_LOCATION);
         planner.captureScreen("trade-route-planner-atlantic.png");
         planner.close();

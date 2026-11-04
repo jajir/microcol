@@ -17,6 +17,7 @@ import org.akropia.model.Model;
 import org.akropia.model.Player;
 import org.akropia.model.event.TurnStartedEvent;
 import org.akropia.model.turnevent.TurnEvent;
+import org.akropia.model.turnevent.TurnEventGoTo;
 import org.akropia.model.turnevent.TurnEventColonyWasLost;
 import org.akropia.model.turnevent.TurnEventShipComeToEuropePort;
 import org.akropia.model.turnevent.TurnEventShipComeToHighSeas;
@@ -180,12 +181,25 @@ public class ShowTurnEvensOnTurnStartedEventTest {
         assertEquals(Screen.GAME, europeOpeningRequest.takeScreenAfterReport());
     }
 
+    @Test
+    public void internalArrivalsDoNotOpenAnEmptyReportOrHomePort() {
+        when(gamePreferences.isShowTurnSummary()).thenReturn(true);
+        when(gamePreferences.isOpenEuropeOnArrival()).thenReturn(true);
+        givenSavedNotices(mock(TurnEventShipComeToEuropePort.class),
+                mock(TurnEventShipComeToHighSeas.class));
+        startTurn(true);
+        verifyReportOpened(false);
+        verifyEuropeOpened(false);
+    }
+
     private TurnEvent routineNotice() {
-        return mock(TurnEventShipComeToHighSeas.class);
+        return new TurnEventGoTo("Dutch", TurnEventGoTo.Kind.ARRIVED, 3,
+                org.akropia.model.UnitType.GALLEON, "Delft");
     }
 
     private TurnEvent arrivalNotice() {
-        return mock(TurnEventShipComeToEuropePort.class);
+        return new TurnEventGoTo("Dutch", TurnEventGoTo.Kind.ARRIVED_EUROPE, 3,
+                org.akropia.model.UnitType.GALLEON, "Home port");
     }
 
     private void givenSavedNotices(final TurnEvent... notices) {

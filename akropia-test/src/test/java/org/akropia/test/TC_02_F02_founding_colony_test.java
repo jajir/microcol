@@ -87,4 +87,70 @@ public class TC_02_F02_founding_colony_test extends AbstractAkropiaTest {
         colonyScreen.verifyProductionInRange(grainProduction, 7, 8);
     }
 
+    @Test
+    @Tag("local")
+    void TC_02_exhausted_founder_explains_without_changing_the_world()
+            throws Exception {
+        // Load the same founding site with the movement already spent.
+        FoundingMovementFixture.exhaust(getContext(), testFileName);
+        WelcomePage.of(getContext()).loadGame();
+        final org.akropia.page.FoundingMovementPage founding = new org.akropia.page.FoundingMovementPage(
+                getContext());
+        founding.rememberWorld();
+        // The disabled action retains a visible explanation; B works in its
+        // menu.
+        founding.verifyWaitingAction();
+        founding.pressFoundingShortcut();
+        founding.verifyInformation();
+        founding.dismiss(javafx.scene.input.KeyCode.ENTER);
+        founding.verifyInformationClosed();
+        founding.verifyWorldUnchanged();
+        // The same shortcut on the map opens a single dismissible notice.
+        founding.pressFoundingShortcut();
+        founding.verifyInformation();
+        founding.dismiss(javafx.scene.input.KeyCode.ESCAPE);
+        founding.verifyInformationClosed();
+        founding.verifyWorldUnchanged();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_03_czech_exhausted_founder_recovers_after_continue_and_next_turn()
+            throws Exception {
+        // The Czech player sees the same reason and dismisses it with OK.
+        FoundingMovementFixture.exhaust(getContext(), testFileName);
+        final org.akropia.page.SettingPage settings = WelcomePage
+                .of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        final GamePage game = settings.goBack().loadGame();
+        final int founderId = getModel().getUnitsAt(Location.of(19, 11)).get(0)
+                .getId();
+        game.selectMapUnit(founderId);
+        final org.akropia.page.FoundingMovementPage founding = new org.akropia.page.FoundingMovementPage(
+                getContext());
+        founding.rememberWorld();
+        founding.verifyWaitingAction("nemá zbývající pohyb");
+        founding.pressFoundingShortcut();
+        founding.verifyInformation("nemá zbývající pohyb");
+        founding.dismissWithOk();
+        founding.verifyInformationClosed();
+        founding.verifyWorldUnchanged();
+
+        // Continue derives availability from the saved exhausted unit.
+        game.exitToMenu();
+        new org.akropia.page.FreePlayAuditPage(getContext()).continueGame();
+        game.selectMapUnit(founderId);
+        founding.verifyWaitingAction("nemá zbývající pohyb");
+        founding.dismiss(javafx.scene.input.KeyCode.ESCAPE);
+
+        // Restored movement enables the normal naming flow, which can cancel.
+        game.nextTurnAndCloseDialogs();
+        game.selectMapUnit(founderId);
+        founding.verifyFoundingAvailable();
+        founding.pressFoundingShortcut();
+        final ColonyNameDialog naming = new ColonyNameDialog(getContext());
+        naming.verifyDraft("Leiden");
+        naming.cancel();
+    }
+
 }

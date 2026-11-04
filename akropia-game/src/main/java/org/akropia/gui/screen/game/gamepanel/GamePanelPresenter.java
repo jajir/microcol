@@ -248,6 +248,10 @@ public final class GamePanelPresenter {
         Preconditions.checkState(!units.isEmpty(),
                 "There is no moveable unit or other entity to interact with.");
         final Unit unit = selectedUnitManager.getSelectedUnit().get();
+        // Another unit in the stack cannot supply this unit's movement.
+        if (!goToPicking && unit.getMovementThirds() == 0) {
+            return;
+        }
         if (gameModelController.getModel().getGoToDestination(unit)
                 .isPresent()) {
             // An ordered unit is not moved by hand; cancel the order first.

@@ -107,9 +107,14 @@ public class TeService {
         final List<TurnEvent> turnEvents = getModel()
                 .getTurnEventsLocalizedMessages(
                         gameModelController.getHumanPlayer());
-        return turnEvents.stream()
+        return turnEvents.stream().filter(TeService::isVisibleNotice)
                 .map(turnEvent -> turnEventResolver.apply(turnEvent))
                 .collect(ImmutableList.toImmutableList());
+    }
+
+    static boolean isVisibleNotice(final TurnEvent event) {
+        return !(event instanceof org.akropia.model.turnevent.TurnEventShipComeToEuropePort)
+                && !(event instanceof org.akropia.model.turnevent.TurnEventShipComeToHighSeas);
     }
 
 }

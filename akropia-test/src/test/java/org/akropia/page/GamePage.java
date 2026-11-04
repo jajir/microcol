@@ -79,11 +79,15 @@ public class GamePage extends AbstractScreen {
         verifyThatTileIsVisible(location);
         dragToLocation(location);
         waitWhileMoving();
-        WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
-                () -> WaitForAsyncUtils.asyncFx(
-                        () -> getLabeledById(StatusBarView.STATUS_BAR_LABEL_ID)
-                                .getText().contains(expectedFeedback))
-                        .get());
+        try {
+            WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
+                    () -> WaitForAsyncUtils.asyncFx(() -> getLabeledById(
+                            StatusBarView.STATUS_BAR_LABEL_ID).getText()
+                            .contains(expectedFeedback)).get());
+        } catch (java.util.concurrent.TimeoutException timeout) {
+            verifyThatStatusBarContains(expectedFeedback);
+            throw timeout;
+        }
         verifyThatStatusBarContains(expectedFeedback);
     }
 
@@ -410,10 +414,22 @@ public class GamePage extends AbstractScreen {
         return WelcomePage.of(getContext());
     }
 
+    public void verifyUnitMovementText(final int unitId,
+            final String expected) {
+        final javafx.scene.Node card = getNodeFinder()
+                .lookup("#unitPanel-" + unitId).query();
+        final javafx.scene.control.Label movement = getNodeFinder().from(card)
+                .lookup(".unitMoves").queryAs(javafx.scene.control.Label.class);
+        org.junit.jupiter.api.Assertions.assertEquals("Moves: " + expected,
+                movement.getText());
+    }
+
     public Optional<ScreenTurnReport> nextTurn() throws Exception {
         endTurnAndAwaitPreparation();
-        if (!getModel()
-                .isTurnEventsMessagesEmpty(getModel().getCurrentPlayer())) {
+        if (!getContext()
+                .getClassFromGuice(
+                        org.akropia.gui.screen.turnreport.TeService.class)
+                .getMessages().isEmpty()) {
             WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS,
                     () -> WaitForAsyncUtils.asyncFx(this::isButtonBackVisible)
                             .get(60, TimeUnit.SECONDS));

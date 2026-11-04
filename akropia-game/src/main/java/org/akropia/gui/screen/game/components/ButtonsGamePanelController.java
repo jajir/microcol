@@ -538,9 +538,12 @@ public class ButtonsGamePanelController {
     }
 
     private void evaluateBuildColony(final Unit unit) {
+        final boolean waiting = getModel()
+                .isColonyFoundingWaitingForMovement(unit);
+        view.setBuildColonyWaitingForMovement(waiting);
         view.setVisibleButtonBuildColony(unit.getAction()
                 .getType() != UnitActionType.sentry
-                && (getModel().canUnitBuildColony(unit) || (unit
+                && (waiting || getModel().canUnitBuildColony(unit) || (unit
                         .isAtPlaceLocation() && unit.getType().canBuildColony()
                         && getModel().getMap().getRiverSizeAt(unit
                                 .getLocation()) != org.akropia.model.RiverSize.NONE)));

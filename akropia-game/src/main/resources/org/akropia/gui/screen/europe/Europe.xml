@@ -102,4 +102,11 @@ Total: %s gold</entry>
     <entry key="goToARRIVED">%s #%s arrived at port %s.</entry>
     <entry key="goToARRIVED_EUROPE">%s #%s arrived in Home port.</entry>
     <entry key="goToCANCELLED_BLOCKED">%s #%s stopped sailing to %s: no legal route remains.</entry>
+    <entry key="goToARRIVED_MAP">%s #%s arrived at %s.</entry>
+    <entry key="goToROUTE_NO_ROUTE">%s #%s cannot continue to %s: its trade route is no longer available.</entry>
+    <entry key="goToROUTE_STOP_UNREACHABLE">%s #%s cannot reach %s: no permitted path is available.</entry>
+    <entry key="goToROUTE_STOP_LOST">%s #%s cannot reach %s: the destination no longer exists or is no longer yours.</entry>
+    <entry key="goToROUTE_EUROPE_CLOSED">%s #%s cannot complete its voyage to %s: access to the home port is closed.</entry>
+    <entry key="goToROUTE_CARRIER_DAMAGED">%s #%s cannot continue to %s: the ship needs repair.</entry>
+    <entry key="goToRETURN_BLOCKED">%s #%s cannot continue to %s: the return square is blocked. The ship will retry.</entry>
 </properties>

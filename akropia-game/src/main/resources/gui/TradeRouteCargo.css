@@ -1,0 +1,13 @@
+.trade-route-column {
+    -fx-padding: 12;
+    -fx-background-color: #FFF9EC;
+    -fx-border-color: #000000;
+    -fx-border-width: 2;
+}
+.trade-route-column .label { -fx-wrap-text: true; }
+
+#tradeRouteCargoPage .screen-toolbar {
+    -fx-min-height: 100;
+    -fx-pref-height: -1;
+    -fx-max-height: 10000;
+}

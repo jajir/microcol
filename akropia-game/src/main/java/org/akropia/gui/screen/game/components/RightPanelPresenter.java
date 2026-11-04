@@ -47,7 +47,7 @@ public final class RightPanelPresenter {
     @SuppressWarnings("unused")
     @Subscribe
     private void onRefreshRightPanelEvent(final RefreshRightPanelEvent event) {
-        display.refreshView(lastFocusedTileEvent.getLocation());
+        display.refreshView(lastFocusedTileEvent);
     }
 
     @Subscribe
@@ -61,13 +61,19 @@ public final class RightPanelPresenter {
                 display.cleanView();
             }
         } else {
-            display.refreshView(lastFocusedTileEvent.getLocation());
+            display.refreshView(lastFocusedTileEvent);
         }
     }
 
     @Subscribe
     private void onUnitAttacked(
             final org.akropia.model.event.UnitAttackedEvent event) {
+        display.refreshView(lastFocusedTileEvent);
+    }
+
+    @Subscribe
+    private void onUnitMoved(
+            final org.akropia.model.event.UnitMovedStepFinishedEvent event) {
         display.refreshView(lastFocusedTileEvent);
     }
 

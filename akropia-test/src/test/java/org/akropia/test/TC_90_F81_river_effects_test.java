@@ -78,11 +78,17 @@ public class TC_90_F81_river_effects_test extends AbstractAkropiaTest {
         // third is spent, so two remain.
         gamePage.selectTile(SOURCE_LOCATION);
         gamePage.getRightPanelUnit(0).selectUnit();
+        // Inspect the adjacent step without spending movement or issuing an
+        // order.
+        gamePage.selectTile(SMALL_LOCATION);
+        river.verifyStepDescription("Step cost: ⅓", "Along the river");
+        gamePage.selectTile(SOURCE_LOCATION);
         gamePage.moveMouseAtLocation(SOURCE_LOCATION);
         gamePage.dragMouseAtLocation(SMALL_LOCATION);
         river.captureUnit(SMALL_LOCATION);
         river.verifyCapturedUnitAt(SMALL_LOCATION);
         river.verifyUnitMovement(2);
+        river.verifyMovementLabel("⅔");
         // River founding and plowing explain rejection without spending tools
         // or movement.
         river.useControl("plowField");
@@ -100,6 +106,7 @@ public class TC_90_F81_river_effects_test extends AbstractAkropiaTest {
         gamePage.dragMouseAtLocation(LARGE_LOCATION);
         river.verifyCapturedUnitAt(LARGE_LOCATION);
         river.verifyUnitMovement(1);
+        river.verifyMovementLabel("⅓");
         river.verifyMoveControlVisible(true);
 
         // The step back along the same course spends the last third.
@@ -107,6 +114,7 @@ public class TC_90_F81_river_effects_test extends AbstractAkropiaTest {
         gamePage.dragMouseAtLocation(SMALL_LOCATION);
         river.verifyCapturedUnitAt(SMALL_LOCATION);
         river.verifyUnitMovement(0);
+        river.verifyMovementLabel("0");
 
         // Continue keeps the same pioneer with no movement left, and the empty
         // large square still shows its river.
@@ -249,6 +257,12 @@ public class TC_90_F81_river_effects_test extends AbstractAkropiaTest {
         new FreePlayAuditPage(getContext()).continueGame();
         production.verifyWarehouseGoods(DELFT_ID, Goods.of(goods, output));
         river.verifyRemainingDeposit(SMALL_LOCATION, goods, reserve - output);
+        // The outdoor worker covers the deposit picture. Move him aside before
+        // checking the unchanged resource artwork and reserve on the map.
+        game.selectMapUnit(WORKER_ID);
+        game.moveMouseAtLocation(SMALL_LOCATION);
+        game.dragMouseAtLocation(SOURCE_LOCATION);
+        river.verifyRemainingDeposit(SMALL_LOCATION, goods, reserve - output);
         new ResourcePage(getContext()).verifyMarkerPainted(SMALL_LOCATION,
                 deposit);
     }
@@ -301,6 +315,12 @@ public class TC_90_F81_river_effects_test extends AbstractAkropiaTest {
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
         production.verifyWarehouseGoods(DELFT_ID, Goods.of(goods, output));
+        river.verifyRemainingDeposit(SMALL_LOCATION, goods, reserve - output);
+        // The outdoor worker covers the deposit picture. Move him aside before
+        // checking the unchanged resource artwork and reserve on the map.
+        game.selectMapUnit(WORKER_ID);
+        game.moveMouseAtLocation(SMALL_LOCATION);
+        game.dragMouseAtLocation(SOURCE_LOCATION);
         river.verifyRemainingDeposit(SMALL_LOCATION, goods, reserve - output);
         new ResourcePage(getContext()).verifyMarkerPainted(SMALL_LOCATION,
                 deposit);

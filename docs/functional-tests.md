@@ -14088,3 +14088,205 @@ The numbered entries below are chronological evidence, including failed attempts
     `target/docker-ui/run-7aTYiH`, passed **5 tests / 0 failures / 0 errors /
     0 skips** in 925 seconds. This completes the named implementation-plan
     selection. No executable source changed after the passing smoke.
+
+
+<a id="r-0406-r-0409-local-acceptance-2026-11-03"></a>
+## R-0406–R-0409 local acceptance — completed 2026-11-04
+
+1. This batch changes ship-voyage notices, the trade-route management screen,
+   exact movement presentation and the exhausted founder's explanation.
+   Implementation and acceptance remain in progress; no smoke or publication
+   result is claimed.
+2. Model attempt `20261103T223628Z-083b423b78dc` completed 5,010 tests with
+   zero assertion failures, nine errors and zero skips. All nine errors were
+   the new notice test's attempt to mock final `TurnEventGoTo` with the existing
+   Mockito setup. The test now constructs real events. Evidence remains failed
+   in `target/verification/run-lud_2gy6`; a replacement full model run is pending.
+3. Planned targeted player selection: `TC_02_F02_founding_colony_test`,
+   `TC_20_F02_colony_names_test`, `TC_87_F78_terrain_movement_test`,
+   `TC_90_F81_river_effects_test`, `TC_103_F94_persistent_go_to_test`,
+   `TC_117_F108_trade_route_cargo_test`, `TC_118_F109_trade_route_assignment_test`,
+   `TC_119_F110_trade_route_edit_test`, `TC_185_F218_connected_production_network_test`
+   and `TC_203_F235_ship_voyage_notices_test`.
+4. F235 derives its voyage state from the current F108 cargo fixture. Its named
+   scenarios compare automatic and manual arrivals through actual turn updates
+   and the visible turn report. F02 adds the disabled founding action and B from
+   its menu and the map, Enter/Escape dismissal and unchanged saved model state.
+   F81 retains movement and production assertions and checks the rendered thirds
+   and model-priced river step. Trade-route scenarios retain their gameplay
+   assertions and use the new screen and expandable sections.
+5. Complete model acceptance, targeted Docker/Xvfb results, visual review,
+   documentation checks and the fixed smoke selection remain required before
+   integration. The smoke budget is 420 seconds and smoke starts only after all
+   four requirements are implemented.
+
+6. Model attempt `20261103T224309Z-41d80579ad73` completed 5,010 tests with
+   one failure, zero errors and zero skips. `SelectedUnitManagerTest` still
+   expected adjacent empty-tile inspection to clear the selected unit. Its
+   replacement verifies retained identity, position and movement at the adjacent
+   tile, and clearing at a distant empty tile. The failed evidence remains in
+   `target/verification/run-zympi98e`.
+7. Focused diagnosis after that correction: `AtlanticVoyageTest` (14),
+   `RiverMovementTest` (9), `SelectedUnitManagerTest` (3) and
+   `TradeRouteNavigationTest` (18) passed, 44 total, with zero failures, errors
+   or skips. These checks include blocked map-return notification across save,
+   no repeated notice while the obstruction remains, and read-only movement
+   availability under the actual single-step validation. This focused result
+   does not replace the pending full model and UI phases.
+
+8. Full model acceptance: completion `20261103T224932Z-6f239ea0a619`,
+   `target/verification/run-6u_ubovy`, passed **5,011 tests, zero failures,
+   errors or skips**. Execution took 149.525 seconds including supervision;
+   the model group took 145.788 seconds. Source files in the accepted snapshot
+   matched the working implementation before targeted UI dispatch.
+9. Targeted Docker/Xvfb run `20261103T225230Z-ad6997f3d11c` was dispatched with
+   the ten scenario classes listed above and `PageVerificationContractTest`,
+   a 3,600-second limit, and supervisor PID 31576. Its result, visual review and
+   subsequent smoke acceptance remain pending.
+
+10. Targeted attempt `20261103T225230Z-ad6997f3d11c` failed: **44 tests,
+    seven failures, two errors, zero skips**, 997.024 seconds. All ten selected
+    scenario classes and the three source-contract checks ran. Evidence is
+    retained at `target/docker-ui/run-VWuw6h`; it is not local acceptance.
+11. Diagnosis and repair on 2026-11-04: returning from the non-modal route screen
+    must invalidate the planner after editing. The turn helper must wait for
+    visible notices rather than internal sea-arrival events. Terrain-panel checks
+    now identify the moved unit rather than assuming the first card is that unit;
+    deposit-art checks move the outdoor worker aside after preserving production
+    and reserve assertions. The route destination expectation uses Home port.
+    Expandable route sections no longer animate during layout changes. A captured
+    Czech screen exposed clipped header context; its height now fits its content.
+    EN/CS layout checks cover three columns at 1,200 pixels and reachable Back at
+    900 pixels. These repairs await a fresh model and full targeted run.
+
+12. After the UI repairs, full model run `20261103T231236Z-a037084ae57f`
+    passed **5,011 tests with zero failures, errors or skips** in
+    `target/verification/run-4r8g8n9r` (140.236 seconds for the group,
+    144.253 seconds overall). Its executable source matched the working tree
+    before the same full targeted selection was dispatched again as
+    `20261103T231528Z-cb54171b3a98`, PID 32555, limit 3,600 seconds.
+    Targeted acceptance, visual review and smoke remain pending.
+
+13. Full targeted retry `20261103T231528Z-cb54171b3a98` completed 44 tests:
+    two failures, one error, zero skips (907.938 seconds), retained in
+    `target/docker-ui/run-m9YGfz`. Planner refresh, route deletion, repair,
+    automatic arrival, founding feedback and resource checks now passed.
+    Remaining failures were old Europe display-name expectations in TC117/119;
+    TC87 timed out after inspection selected the outdoor worker instead of its
+    exhausted mover. Expectations now use Home port and the drag explicitly
+    selects the exhausted mover without changing the movement assertions.
+14. Runtime/model sources still match the accepted full model snapshot. Only
+    those three UI classes changed; they and `PageVerificationContractTest` are
+    rerunning as `20261103T233143Z-988cebe9575a` (PID 33014, 1,800 seconds).
+    Passing unchanged classes from the full targeted retry remain reusable.
+    EN/CS workbench screenshots are retained in that retry's `warehouse-qa`.
+    Smoke and integration still await final targeted acceptance and review.
+
+15. Repair run `20261103T233143Z-988cebe9575a` completed 16 tests with
+    zero failures, one error and zero skips (374.841 seconds); reports remain
+    in `target/docker-ui/run-nqzktf`. TC117 and TC119 passed. TC87 still
+    timed out waiting for source coordinates in the status bar after a drag
+    with zero movement. The explicit unit selection did not resolve it;
+    the helper now reports the actual status text and map state on timeout.
+    Diagnostic TC87 plus source-contract run `20261103T234037Z-4adaf53803e2`
+    was dispatched with PID 33174 and a 900-second limit. No runtime or
+    model source changed; smoke and acceptance remain pending.
+
+16. Diagnostic run `20261103T234037Z-4adaf53803e2` completed six tests with
+    one failure, zero errors and zero skips (84.311 seconds). Its assertion
+    records hover at `(22,12)`, selected tile `(23,12)`, enabled map input
+    and no movement in progress: the status describes the destination under
+    the pointer. TC87 now expects those destination coordinates and retains
+    the unavailable-movement, position and zero-point checks. Visual review
+    of the previous EN/CS screenshots also found intermittent clipping of
+    the ordered stop summary. Its minimum height now uses the full preferred
+    text height, with a layout assertion. Because this changes runtime UI
+    source, a fresh full model run `20261103T234237Z-00fe891c5b50` was
+    dispatched (PID 33269, 600-second limit); targeted UI and smoke follow
+    only after that phase passes.
+
+17. Fresh model run `20261103T234237Z-00fe891c5b50` passed **5,011 tests,
+    zero failures, errors or skips**, with reports in
+    `target/verification/run-ib5kups8` (143.212 seconds model group,
+    146.288 seconds supervised run). The complete targeted selection from
+    item 12 was dispatched as `20261103T234532Z-25178218284e`, PID 33858,
+    with a 3,600-second limit. UI acceptance, final review and smoke remain
+    pending; this is not a full-regression or publication result.
+
+18. Targeted run `20261103T234532Z-25178218284e` completed 44 tests with
+    one failure, zero errors and zero skips (912.962 seconds); retained
+    reports are in `target/docker-ui/run-jlncdk`. TC87 progressed past the
+    status text and exposed movement mode enabled for an exhausted selected
+    unit when another unit at the same location still had movement. The
+    presenter now guards normal move-mode entry using the selected unit's
+    remaining movement; go-to destination picking retains its own behavior.
+    The zero-movement assertion remains intact.
+19. Coverage was extended with Czech exhausted-founder feedback, OK,
+    Save/Continue and availability after the next turn (TC02), plus Czech
+    road-step price, unavailable movement and base-terrain fallback (TC87).
+    The mixed movement label is also checked before and after Continue.
+    Shared formatting passed for all four touched Java files, with unchanged
+    code tokens and idempotent output; reactor test compilation passed.
+    Fresh model run `20261104T000258Z-0bf35cfbb3f4` was dispatched with
+    PID 34557 and a 600-second limit. UI acceptance and smoke remain pending.
+
+20. Model run `20261104T000258Z-0bf35cfbb3f4` passed **5,011 tests with
+    zero failures, errors or skips**, reports
+    `target/verification/run-rz0jnjf8` (146.282 seconds model phase,
+    150.181 seconds supervised run). All game and UI test sources matched
+    its captured source before the next dispatch. The expanded targeted
+    selection, now 46 tests, runs as `20261104T000547Z-1ffe9c78758c`,
+    PID 34827, limit 3,600 seconds. This includes the new Czech road and
+    founding recovery scenarios; smoke and final acceptance remain pending.
+
+21. Expanded targeted run `20261104T000547Z-1ffe9c78758c` completed
+    46 tests with one failure, zero errors and zero skips (958.953 seconds).
+    Reports are retained in `target/docker-ui/run-EfwYGR`. All new Czech
+    founding recovery and road-preview scenarios passed. TC87's exhausted
+    drag now correctly stays outside movement mode, so the drag handler
+    retains the source hover `(23,12)` instead of updating it to `(22,12)`.
+    The old destination expectation from diagnostic item 16 is therefore
+    restored to the source coordinates. Gameplay assertions remain intact.
+    Only this UI test expectation changed; runtime and model sources remain
+    those accepted by the latest model run. TC87 plus the source contract
+    were dispatched as `20261104T002209Z-3ed45ca5ad4d`, PID 36360,
+    with a 900-second limit. The other unchanged classes' passing reports
+    remain reusable; final smoke and acceptance are still pending.
+
+22. Targeted repair run `20261104T002209Z-3ed45ca5ad4d` passed all seven
+    selected checks (four TC87 scenarios plus three source-contract checks),
+    with zero failures, errors or skips in 87.622 seconds; reports are in
+    `target/docker-ui/run-KAnYFF`. Together with the unchanged classes in
+    `run-EfwYGR`, the accepted targeted selection contains **46 unique tests,
+    zero failures, errors or skips**. The prior failed runs remain failed.
+    Runtime/model sources still match the accepted model snapshot.
+23. After completion of the implementation and targeted checks, fixed smoke
+    was dispatched as `20261104T002350Z-2ab0ec01f731`, PID 36429, using
+    `verify -- --smoke`, its 420-second phase budget and a 480-second
+    supervisor timeout. Final local acceptance, requirement closure and
+    integration remain pending its result.
+
+24. Fixed smoke `20261104T002350Z-2ab0ec01f731` passed **21 tests with
+    zero failures, errors or skips** in `target/verification/run-1vsj3q28`.
+    Phase time was 218.465 seconds; supervised time 221.515 seconds, within
+    the 420-second smoke budget. The captured executable source matches the
+    accepted implementation. The accepted selections total 5,011 model/JUnit,
+    46 unique targeted UI and 21 smoke/support checks (overlap is intentional).
+25. Final review covered shared model preconditions, notice deduplication and
+    save state, screen return paths, selected-unit movement and the exhausted
+    founder's read-only explanation. The English workbench capture in
+    `target/docker-ui/run-EfwYGR/akropia-test/warehouse-qa/` and Czech capture
+    in `target/docker-ui/run-jlncdk/akropia-test/warehouse-qa/` show all three
+    columns and both stops (the workbench source is unchanged between them); layout assertions cover full summary height and
+    the reachable Back control at 900 pixels. No production artwork changed.
+    Local acceptance closes R-0406–R-0409. Historical failures above remain
+    failures. Full regression and game distribution publication were not run
+    or claimed; ordinary integration uses main without watching remote CI.
+
+26. Final integration checks on 2026-11-04: all 51 changed Java files
+    passed the shared formatter's token-preservation and idempotence checks
+    without further edits. Game and UI test sources exactly matched the
+    successful smoke snapshot. Documentation checks passed 14 tests, the
+    naming audit found zero unexplained occurrences, and strict MkDocs
+    completed successfully. Requirements were moved to `done` with links
+    updated; no generated site output is committed.

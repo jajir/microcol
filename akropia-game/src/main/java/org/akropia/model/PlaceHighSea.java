@@ -25,6 +25,21 @@ public class PlaceHighSea extends AbstractPlace {
     private int position;
 
     private int revision;
+    private boolean blockedArrivalReported;
+
+    /** Returns true only for the first notification of this blocked return. */
+    public boolean recordBlockedArrival() {
+        final boolean first = !blockedArrivalReported;
+        blockedArrivalReported = true;
+        return first;
+    }
+
+    void restoreBlockedArrivalNotice(final boolean reported) {
+        com.google.common.base.Preconditions.checkArgument(
+                !reported || !isTravelToEurope && getRemainigTurns() == 0,
+                "Blocked arrival notice requires a completed map return");
+        blockedArrivalReported = reported;
+    }
 
     private final boolean originalToEurope;
 
@@ -96,6 +111,7 @@ public class PlaceHighSea extends AbstractPlace {
     }
 
     void reverse() {
+        blockedArrivalReported = false;
         isTravelToEurope = !isTravelToEurope;
         revision++;
     }
@@ -126,6 +142,7 @@ public class PlaceHighSea extends AbstractPlace {
     public PlacePo save(final UnitPo unitPo) {
         final PlaceHighSeasPo out = new PlaceHighSeasPo();
         out.setTravelToEurope(isTravelToEurope);
+        out.setBlockedArrivalReported(blockedArrivalReported);
         out.setOriginalToEurope(originalToEurope);
         out.setPosition(position);
         out.setWeather(weather);

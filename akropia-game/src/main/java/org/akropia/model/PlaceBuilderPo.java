@@ -85,9 +85,13 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                                                     unitPo.getType().getSpeed(),
                                                     true),
                             "Saved voyage duration disagrees with its factors");
-                    return new PlaceHighSea(unit, voyage.isOriginalToEurope(),
+                    final PlaceHighSea place = new PlaceHighSea(unit,
+                            voyage.isOriginalToEurope(),
                             voyage.isTravelToEurope(), voyage.getWeather(),
                             voyage.getOriginalTurns(), voyage.getPosition());
+                    place.restoreBlockedArrivalNotice(
+                            voyage.isBlockedArrivalReported());
+                    return place;
                 }
                 return null;
             }, (context) -> {

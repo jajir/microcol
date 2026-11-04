@@ -166,6 +166,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private final Button buttonBuildRoad;
     private final Button buttonCancelBuildRoad;
     private final Button buttonBuildColony;
+    private boolean foundingWaitingForMovement;
+    private boolean controlsDisabled;
 
     private final TradeRoutePlanningPanel tradeRoutePlanningPanel;
 
@@ -292,6 +294,12 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         // Act on release so Space cannot also reach the map's skip-turn
         // handler.
         unitActions.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.B) {
+                unitActions.hide();
+                eventBus.post(new BuildColonyEvent());
+                event.consume();
+                return;
+            }
             if (event.getCode() == KeyCode.SPACE) {
                 event.consume();
             }
@@ -799,6 +807,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     }
 
     private void setDisable(final boolean disable) {
+        controlsDisabled = disable;
         // Unit moves report start and finish from their own thread; the scene
         // graph may change only on the FX thread, in the reported order.
         if (Platform.isFxApplicationThread()) {
@@ -836,7 +845,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonCancelClearForest.setDisable(disable);
         buttonBuildRoad.setDisable(disable);
         buttonCancelBuildRoad.setDisable(disable);
-        buttonBuildColony.setDisable(disable);
+        buttonBuildColony.setDisable(disable || foundingWaitingForMovement);
         buttonDeclareIndependence.setDisable(disable);
         tradeRoutePlanningPanel.setControlsDisabled(disable);
     }
@@ -879,6 +888,16 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     public void setVisibleButtonCancelBuildRoad(final boolean isVisible) {
         setVisibleNode(buttonCancelBuildRoad, isVisible);
+    }
+
+    public void setBuildColonyWaitingForMovement(final boolean waiting) {
+        Platform.runLater(() -> {
+            foundingWaitingForMovement = waiting;
+            buttonBuildColony.setDisable(waiting || controlsDisabled);
+            buttonBuildColony.setAccessibleHelp(waiting
+                    ? currentI18n.get(Buttons.buildColonyWaitingForMovement)
+                    : "");
+        });
     }
 
     public void setVisibleButtonBuildColony(final boolean isVisible) {

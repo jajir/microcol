@@ -102,4 +102,11 @@ Celkem: %s zlatých</entry>
     <entry key="goToARRIVED">%s #%s dorazila do přístavu %s.</entry>
     <entry key="goToARRIVED_EUROPE">%s #%s dorazila do domovského přístavu.</entry>
     <entry key="goToCANCELLED_BLOCKED">%s #%s přerušila plavbu do %s: nezbývá žádná legální cesta.</entry>
+    <entry key="goToARRIVED_MAP">%s #%s dorazila na %s.</entry>
+    <entry key="goToROUTE_NO_ROUTE">%s #%s nemůže pokračovat do %s: obchodní trasa již není dostupná.</entry>
+    <entry key="goToROUTE_STOP_UNREACHABLE">%s #%s nemůže doplout do %s: není dostupná přípustná cesta.</entry>
+    <entry key="goToROUTE_STOP_LOST">%s #%s nemůže doplout do %s: cíl již neexistuje nebo vám nepatří.</entry>
+    <entry key="goToROUTE_EUROPE_CLOSED">%s #%s nemůže dokončit plavbu do %s: přístup do domovského přístavu je uzavřen.</entry>
+    <entry key="goToROUTE_CARRIER_DAMAGED">%s #%s nemůže pokračovat do %s: loď potřebuje opravu.</entry>
+    <entry key="goToRETURN_BLOCKED">%s #%s nemůže pokračovat k cíli %s: návratové pole je zablokované. Loď to zkusí znovu.</entry>
 </properties>

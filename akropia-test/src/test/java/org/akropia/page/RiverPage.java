@@ -233,6 +233,21 @@ public final class RiverPage extends AbstractScreen {
                 "Unexpected movement in thirds of the captured pioneer");
     }
 
+    public void verifyStepDescription(final String expectedPrice,
+            final String expectedContext) {
+        final String description = getLabeledById("tileName").getText();
+        assertTrue(description.contains(expectedPrice), description);
+        assertTrue(description.contains(expectedContext), description);
+    }
+
+    public void verifyMovementLabel(final String expected) {
+        final javafx.scene.Node card = getNodeFinder()
+                .lookup("#unitPanel-" + unit().getId()).query();
+        final javafx.scene.control.Label movement = getNodeFinder().from(card)
+                .lookup(".unitMoves").queryAs(javafx.scene.control.Label.class);
+        assertEquals("Moves: " + expected, movement.getText());
+    }
+
     public void verifyMoveControlVisible(final boolean expectedVisible) {
         assertEquals(expectedVisible, isCssIdVisible(MOVE_CONTROL_ID),
                 "Unexpected move control visibility");

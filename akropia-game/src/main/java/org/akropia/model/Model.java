@@ -1699,6 +1699,17 @@ public class Model {
      * @return whether the current player can found with this unit now
      */
     public boolean canUnitBuildColony(final Unit unit) {
+        return canUnitBuildColony(unit, false);
+    }
+
+    /** Whether restoring movement alone would permit this founder and site. */
+    public boolean isColonyFoundingWaitingForMovement(final Unit unit) {
+        return unit != null && unit.getActionPoints() <= 0
+                && canUnitBuildColony(unit, true);
+    }
+
+    private boolean canUnitBuildColony(final Unit unit,
+            final boolean ignoreMovement) {
         if (unit == null)
             return false;
         // A native convert never founds a colony (R-0149).
@@ -1714,7 +1725,7 @@ public class Model {
         final Location loc = unit.getLocation();
         if (loc == null || !map.isValid(loc))
             return false;
-        if (unit.getActionPoints() <= 0)
+        if (!ignoreMovement && unit.getActionPoints() <= 0)
             return false;
         // An ordered unit first needs its go-to order canceled.
         if (hasGoToOrder(unit))
