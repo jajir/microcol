@@ -1,5 +1,13 @@
 # Grafické podklady a jejich použití v Akropia
 
+<a id="menu-hamburger-2026-11-04"></a>
+## Ikona herního Menu — výběr 2026-11-04
+
+1. Uživatel z pěti návrhů vybral **01 — hamburger**, tři černé vodorovné linky. Nahradí dveře se šipkou v pravém krajním tlačítku herní lišty; název Menu a jeho funkce zůstávají. Rozsah a budoucí přejímku vlastní [R-0411](requirements/R-0411.md), status `new`.
+2. [Vektorový podklad](graphics-assets/menu-icon-2026-11-04/hamburger.svg) obsahuje pouze cesty, černou linku 2 px v návrhovém plátně 48 × 48 a jemně nepravidelnou geometrii. Platí [trvalý vizuální brief](#soucasne-zadani-vzhledu) a [SVG kontrakt](#zdrojovy-format-herni-grafiky). Výběr návrhu není přijetím runtime assetu; měřítko, export a zobrazení ve hře čekají na implementaci.
+3. [Původní porovnání pěti návrhů](graphics-assets/menu-icon-2026-11-04/proposals.png) a [orientační vizualizace v liště](graphics-assets/menu-icon-2026-11-04/toolbar-mockup.png) uchovávají podklad výběru. Vizualizace vznikla pomocí ImageGen a není přesným screenshotem hry; okolní ikony ani její rozložení nejsou zadáním dalších změn.
+
+
 <a id="greek-player-flags"></a>
 
 ## Vlajky městských států a místních národů — dohoda 2026-11-02

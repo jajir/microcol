@@ -1,5 +1,12 @@
 # Writing and publishing documentation
 
+## R-0411 menu icon capture — 2026-11-04
+
+1. On base `8785df30`, captured [R-0411](requirements/R-0411.md), status `new`: replace the in-game Menu door/exit glyph with selected variant 01, a black three-line hamburger. Recorded the accepted direction in the graphics catalogue and retained the vector proposal and two comparison references. Implementation has not started; the generated toolbar mockup is illustrative, not a runtime screenshot or a redesign of adjacent controls.
+2. Documentation-only acceptance: all 14 consistency tests passed with zero failures/errors/skips, name audit found zero unexplained occurrences, and strict MkDocs passed. Reviewed the requirement structure, links, SVG source and documentation-only diff; `git diff --check` passed. Logs: `target/r0411/`.
+3. Model/JUnit, Docker UI and smoke are exempt for this documentation-only capture. Production export, runtime visual acceptance and gameplay checks remain future implementation work. Remote CI, Pages and distribution publication are not inspected or claimed verified.
+
+
 ## R-0410 main-map interaction inventory — 2026-11-04
 
 1. Inspected source revision `953992ffa0fcd50e07a09f267fe73cf099bc983d` and added the [main-map inventory](map-controls.md): current gestures, unit and city operations, all 35 declared unit types, state-dependent colony access, and sourced FreeCol/Civilization VI/Old World comparisons. [R-0410](requirements/R-0410.md) remains `new`; proposed input mappings are not accepted implementation. The user's exact blocked-colony save was not reproduced.

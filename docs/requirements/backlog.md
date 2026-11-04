@@ -1,5 +1,10 @@
 # Current requirement backlog
 
+## Ikona herního Menu — 2026-11-04
+
+1. [R-0411](R-0411.md), status `new`, A03 s návazností na A01: nahradit dveře se šipkou schváleným hamburger menu, při zachování názvu, umístění a funkce tlačítka. Výběr varianty 01 je zaznamenaný; implementace nebyla zahájena.
+
+
 ## Ovládání hlavní mapy — 2026-11-04
 
 1. [R-0410](R-0410.md), status `new`, A03 s konkrétními návaznostmi A05/A06/A07/A09: město a jednotky na stejném poli zůstávají dosažitelné, alternativní vstupy stejné akce mají stejné následky. [Inventura akcí, vstupů a srovnatelných her](../map-controls.md) je dokončený analytický podklad; konkrétní mapování gest a implementace čekají na společný výběr.
