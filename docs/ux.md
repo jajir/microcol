@@ -10,7 +10,7 @@
 ## Pracovníci kolonie na mapě světa
 
 1. **Dohodnuté budoucí chování z 3. listopadu 2026, zatím neimplementované:** [R-0405](requirements/done/R-0405.md) zpřístupní venkovního pracovníka na jeho skutečném poli a zadání práce přímo z hlavní mapy. Pracovníci budov a vnitřní posádka zůstanou uvnitř města; pouze skutečně venkovní jednotky se zobrazí na mapě/Outside colony.
-2. Pohyb na pole i návrat se řídí terénem a zbývajícími body. Neexistuje zvláštní zákaz dalšího pole po návratu ani pevná cena návratu jeden bod. Práci na již dosaženém poli lze zadat i bez pohybu; zadání zbývající body nespotřebuje. Vnitřní přeřazení je zdarma. Zrušení práce člověka nepřenese a nemožný návrat ho ponechá na poli. [Herní kontrakt](gap-analysis.md#workers-on-world-map) je společný pro mapu i město.
+2. Pohyb na pole i návrat se řídí terénem a zbývajícími body. Neexistuje zvláštní zákaz dalšího pole po návratu ani pevná cena návratu jeden bod. Práci na již dosaženém poli lze zadat i bez pohybu; zadání zbývající body nespotřebuje. Vnitřní přeřazení je zdarma. Zrušení práce pozemního pracovníka člověka nepřenese a nemožný návrat ho ponechá na poli. Pro rybáře platí [placený návrat při zrušení práce](#map-selection-and-work). [Herní kontrakt](gap-analysis.md#workers-on-world-map) je společný pro mapu i město.
 3. Zevnitř města práce zásobuje toto město. U pozemní práce mapa nabízí každou činnost samostatně pro každou způsobilou vlastní kolonii v dosahu, s jejím jménem v položce. První výnos patří následujícímu Next turn; potraviny platí příjemce pouze za své aktuálně pracující lidi. Nečinné jednotky spotřebu nevytvářejí. Zrušená nabídka nemění stav.
 4. **Schválený popisek na hlavní mapě:** u pracovníka uvést například „Pracuje pro Utrecht“, vždy podle aktuálního příjemce produkce; po zrušení práce nesmí tvrdit původní zaměstnání. Návrhem zůstává doplnění očekávaného výnosu a důvodu nedostupného příkazu. V náhledu okolí jiného města se pole využívané jinou kolonií celé zakryje šedým políčkem bez terénu, pracovníka, výnosu nebo názvu města. Přidělení práce na obsazené pole je nedostupné; po jeho uvolnění se obnoví aktuální běžný náhled. Hlavní mapa pracovníka ani schválený popisek tímto zakrytím neskrývá.
 5. Uživatel hlásí opakované nepochopení neviditelných pracovníků, odchodu přes Outside colony a výběru práce ve vzdáleném pravém panelu. Jde o hlášené pozorování; přínos nového návrhu ještě nebyl ověřen hráčským testem.
@@ -1311,3 +1311,11 @@ skutečného hráče; výsledky patří do [funkční evidence](functional-tests
 3. Obě cesty čtou aktuální modelové podmínky. Po obnovení pohybu se příkaz zpřístupní pouze při splnění ostatních pravidel; jiné překážky se nevydávají za nedostatek pohybu. Implementace byla lokálně ověřena 2026-11-04; nejde o výsledek hráčské studie.
 
 Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na mapě, OK/Enter/Escape, nezměněný svět, Continue a obnovení dostupnosti po dalším tahu; viz [evidence](functional-tests.md#r-0406-r-0409-local-acceptance-2026-11-03).
+
+<a id="map-selection-and-work"></a>
+
+## Výběr mapy a zrušení práce — zadání 2026-11-04
+
+1. [R-0414](requirements/done/R-0414.md): jednoduchý klik vybírá pole a vlastní jednotku, dvojklik otevírá vlastní město i přes jednotku. Město zůstává dostupné také přes nabídku měst a její klávesové ovládání. První klik dvojkliku nesmí zahájit přesun ani zrušit práci; plánovač tras zachovává svůj oddělený režim.
+2. Zaměstnaná jednotka je dostupná pro prohlížení; výběr, tažení nebo klávesa pohybu její práci neruší. Před ručním pohybem musí hráč v kontextové nabídce výslovně zrušit práci/rozkaz. Zrušení neobnovuje pohybové body. Pozemní pracovník zůstává na poli. Loď s rozkazem nejprve výslovně zruší původní rozkaz a teprve potom může dostat jiný cíl.
+3. Rybář při zrušení práce zaplatí existující jeden pohybový bod a vrátí se do svého města; bez dostupného návratu zůstane rybolov i poloha zachována. Jednoduchý klik rybáře vybírá, dvojklik otevírá jeho město. Jde o schválené chování; skutečné ověření vlastní funkční evidence.

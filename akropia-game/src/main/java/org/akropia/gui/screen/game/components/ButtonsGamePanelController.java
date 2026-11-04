@@ -301,7 +301,7 @@ public class ButtonsGamePanelController {
 
     private void evaluateMoveButton(final Unit unit) {
         view.setVisibleButtonMove(
-                unit.getMovementThirds() > 0 && unit.getAction().isNoAction()
+                unit.getMovementThirds() > 0 && !unit.hasAssignedWork()
                         && getModel().getGoToDestination(unit).isEmpty());
     }
 

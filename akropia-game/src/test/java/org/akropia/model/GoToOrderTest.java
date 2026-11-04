@@ -643,19 +643,24 @@ class GoToOrderTest {
     }
 
     @Test
-    void shipCanReplaceItsOrderButInvalidReplacementPreservesIt() {
+    void shipMustCancelItsOrderBeforeChoosingAnotherDestination() {
         final Model model = load(shipScenario());
         final Ship ship = (Ship) model.getUnitById(3);
         ship.setMovementThirds(0);
         model.issueGoToColony(ship, model.getColonyById(0).orElseThrow());
         assertEquals(Optional.of(COLONY), model.getGoToDestination(ship));
         final Location target = Location.of(44, 14);
-        model.issueGoTo(ship, target);
-        assertEquals(Optional.of(target), model.getGoToDestination(ship));
         final String before = snapshot(model);
+        assertFalse(model.canStartGoTo(ship));
+        assertThrows(IllegalStateException.class,
+                () -> model.issueGoTo(ship, target));
         assertThrows(IllegalStateException.class,
                 () -> model.issueGoTo(ship, ship.getLocation()));
         assertEquals(before, snapshot(model));
+        model.cancelGoTo(ship);
+        assertEquals(0, ship.getMovementThirds());
+        model.issueGoTo(ship, target);
+        assertEquals(Optional.of(target), model.getGoToDestination(ship));
         assertEquals(0, ship.getMovementThirds());
     }
 

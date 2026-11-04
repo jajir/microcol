@@ -238,8 +238,7 @@ public final class PanelColonyFields implements JavaFxComponent {
         final MenuItem cancel = new MenuItem(
                 i18n.get(org.akropia.gui.Loc.cancelWork));
         cancel.setId("cancelColonyWork");
-        cancel.setDisable(!expectedWorker.isAtPlaceColonyField()
-                || !expectedWorker.canLeaveColony());
+        cancel.setDisable(!expectedWorker.canCancelColonyWork());
         cancel.setOnAction(action -> {
             try {
                 expectedWorker.cancelColonyWork();

@@ -25,11 +25,11 @@
     <entry key="skipUnitTurnExplanation">Spend all remaining movement for this unit until its next turn.</entry>
     <entry key="unitOrderUnavailable">This unit cannot skip now. Select an available unit.</entry>
     <entry key="buttonSentry">Sentry</entry>
-    <entry key="buttonActivateSentry">Activate</entry>
+    <entry key="buttonActivateSentry">Cancel work</entry>
     <entry key="sentryExplanation">Wait on sentry; eligible passengers board a departing ship.</entry>
     <entry key="activateSentryExplanation">End sentry and keep remaining movement.</entry>
     <entry key="buttonGoTo">Go to</entry>
-    <entry key="buttonCancelGoTo">Cancel go-to</entry>
+    <entry key="buttonCancelGoTo">Cancel work</entry>
     <entry key="goToExplanation">Choose a map square or a friendly colony. The unit walks there over your later turns.</entry>
     <entry key="goToPickingHint">Click the destination on the map. Escape leaves the unit unchanged.</entry>
     <entry key="goToActiveExplanation">Going to %s; the unit continues on each of your turns.</entry>
@@ -70,8 +70,8 @@
     <entry key="buttonJettison">Jettison goods</entry>
     <entry key="jettisonExplanation">Discard part of one goods hold of this ship at sea. The ship keeps its place and receives no gold.</entry>
     <entry key="buttonFortify">Fortify</entry>
-    <entry key="buttonCancelFortifying">Cancel fortifying</entry>
-    <entry key="buttonCancelFortified">Cancel fortification</entry>
+    <entry key="buttonCancelFortifying">Cancel work</entry>
+    <entry key="buttonCancelFortified">Cancel work</entry>
     <entry key="fortifyExplanation">Spend remaining movement; defense becomes fortified next owner turn.</entry>
     <entry key="fortifyingExplanation">Fortifying: no defense bonus yet. Cancel without restoring spent movement.</entry>
     <entry key="fortifiedExplanation">Fortified: cancel to move or attack. No spent movement is restored.</entry>
@@ -117,9 +117,9 @@
     <entry key="retireUnavailable">Retiring is not available now. Retire is offered on your own turn in scored free play.</entry>
     <entry key="retireChanged">The situation changed, so the game was not ended. Open Retire again to see the current result.</entry>
     <entry key="chooseUnit">Select unit</entry>
-    <entry key="cancelPlowingLabel">Cancel plowing</entry>
-    <entry key="cancelClearingLabel">Cancel forest clearing</entry>
-    <entry key="cancelRoadLabel">Cancel road building</entry>
+    <entry key="cancelPlowingLabel">Cancel work</entry>
+    <entry key="cancelClearingLabel">Cancel work</entry>
+    <entry key="cancelRoadLabel">Cancel work</entry>
     <entry key="waitUnavailable">No unit is available for selection during the current turn.</entry>
     <entry key="skipUnavailable">Requires your turn and a unit on the map with movement remaining and no active order.</entry>
     <entry key="sentryUnavailable">Requires your turn and a unit without another order, on the map or an eligible home pier.</entry>

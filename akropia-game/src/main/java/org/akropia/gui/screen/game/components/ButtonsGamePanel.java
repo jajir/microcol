@@ -531,7 +531,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     public void showUnitActions(final Node owner, final double screenX,
             final double screenY, final List<Unit> units, final Unit selected,
-            final Consumer<Unit> selectUnit) {
+            final Consumer<Unit> selectUnit,
+            final org.akropia.model.Model model) {
         unitContextTitle.setText(
                 currentI18n.get(UnitTypes.getUnitName(selected.getType())));
         unitChoices.setText(currentI18n.get(Buttons.chooseUnit));
@@ -559,12 +560,18 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
                             + job.getGoodsType().name(),
                     job::execute, false);
         }
-        if (selected.getWorkingColony().isPresent() && !selected.isFishing()) {
+        if (selected.getWorkingColony().isPresent() || selected.isFishing()) {
             addMapJob(currentI18n.get(Loc.cancelWork), "cancelColonyWork",
-                    selected::cancelColonyWork, !selected.canLeaveColony());
+                    selected::cancelColonyWork,
+                    !selected.canCancelColonyWork());
             addMapJob(currentI18n.get(Loc.returnToColony), "returnToColony",
                     selected::returnToWorkingColony,
                     !selected.canReturnToWorkingColony());
+        }
+        if (model.getTradeRouteAssignment(selected).isPresent()) {
+            addMapJob(currentI18n.get(Loc.cancelWork), "cancelTradeRouteWork",
+                    () -> model.cancelTradeRouteAssignment(selected),
+                    model.getTradeRouteCancelProblem(selected).isPresent());
         }
         unitActions.show(owner, screenX, screenY);
         unitActions.getScene().getStylesheets().setAll(

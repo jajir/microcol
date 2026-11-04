@@ -161,17 +161,10 @@ public final class GamePanelMouseListener {
                         .divide(DEFAULT_SCROLL_SPEED_DIVIDER));
     }
 
-    private boolean tryToSwitchToMoveMode(final Location currentLocation) {
-        Preconditions.checkNotNull(currentLocation);
-        final List<Unit> availableUnits = gameModelController.getModel()
-                .getMoveableUnitAtOwnedBy(currentLocation,
-                        gameModelController.getHumanPlayer());
-        if (availableUnits.isEmpty()) {
-            return false;
-        } else {
-            eventBus.post(new StartMoveEvent());
-            return true;
-        }
+    private void tryToSwitchToMoveMode(final Location location) {
+        selectedUnitManager.getSelectedUnit()
+                .filter(unit -> unit.getLocation().equals(location))
+                .ifPresent(unit -> eventBus.post(new StartMoveEvent()));
     }
 
     private void onMousePressed(final MouseEvent e) {
@@ -206,6 +199,12 @@ public final class GamePanelMouseListener {
                 if (e.isPrimaryButtonDown()) {
                     tradeRoutePlanning.selectAt(location);
                 }
+            } else if (e.getButton() == MouseButton.PRIMARY
+                    && e.getClickCount() == 2) {
+                gamePanelPresenter.quitFromMoveMode();
+                selectedTileManager.setSelectedTile(location,
+                        ScrollToFocusedTile.no);
+                gamePanelPresenter.tryToOpenColonyDetail(location);
             } else if (modeController.isMoveMode()) {
                 gamePanelPresenter.switchToNormalMode(location);
             } else {
@@ -217,9 +216,7 @@ public final class GamePanelMouseListener {
                         selectedTileManager.setSelectedTile(location,
                                 ScrollToFocusedTile.no);
                     }
-                    if (!tryToSwitchToMoveMode(location)) {
-                        gamePanelPresenter.tryToOpenColonyDetail(location);
-                    }
+                    tryToSwitchToMoveMode(location);
                 }
             }
         } else {
@@ -315,10 +312,6 @@ public final class GamePanelMouseListener {
         }
         final Unit selected = selectedUnitManager.getSelectedUnit()
                 .filter(units::contains).orElse(units.get(0));
-        if (selected.isFishing()) {
-            gamePanelPresenter.tryToOpenColonyDetail(location);
-            return;
-        }
         selectedUnitManager.setSelectedUnit(selected);
         // Selection refreshes button availability and the information panel
         // first.
@@ -332,7 +325,7 @@ public final class GamePanelMouseListener {
                         units, selected, unit -> {
                             selectedUnitManager.setSelectedUnit(unit);
                             showUnitContext(location, screenX, screenY);
-                        });
+                        }, gameModelController.getModel());
             }
         });
     }

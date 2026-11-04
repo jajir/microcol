@@ -72,7 +72,7 @@ public class TC_45_F36_sentry_boarding_test extends AbstractAkropiaTest {
         sentry.verifyMapAction("Sentry");
         sentry.changeMapOrder();
         sentry.verifyOrder(104, true, 1);
-        sentry.verifyMapAction("Activate");
+        sentry.verifyMapAction("Cancel work");
         // Dragging does not silently cancel a persistent order.
         game.moveMouseAtLocation(Location.of(24, 15));
         game.dragMouseAtLocationWithFeedback(Location.of(24, 14),
@@ -106,7 +106,7 @@ public class TC_45_F36_sentry_boarding_test extends AbstractAkropiaTest {
         game.selectTile(Location.of(24, 15));
         sentry.verifyMapAction("Hlídka");
         sentry.changeMapOrderWithKeyboard();
-        sentry.verifyMapAction("Aktivovat");
+        sentry.verifyMapAction("Zrušit práci");
         sentry.captureDialog("sentryUnit", "sentry-map-czech.png");
         sentry.verifyOrder(104, true, 1);
     }

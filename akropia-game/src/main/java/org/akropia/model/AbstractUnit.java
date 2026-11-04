@@ -158,26 +158,35 @@ public abstract class AbstractUnit implements Unit {
     }
 
     @Override
+    public boolean hasAssignedWork() {
+        return !unitAction.isNoAction() || hasStandingOrder()
+                || getWorkingColony().isPresent() || isFishing();
+    }
+
+    @Override
+    public boolean canCancelColonyWork() {
+        return model.isTurnPreparationComplete()
+                && getWorkingColony().or(this::getFishingColony)
+                        .filter(colony -> colony.canWorkerActHere(this)
+                                && canLeaveColony())
+                        .isPresent()
+                && (isFishing() ? canReturnToWorkingColony()
+                        : isAtPlaceColonyField());
+    }
+
+    @Override
     public void cancelColonyWork() {
         model.checkTurnPreparationComplete();
-        Preconditions
-                .checkState(
-                        isAtPlaceColonyField()
-                                && getPlaceColonyField().getColony()
-                                        .canWorkerActHere(this)
-                                && canLeaveColony(),
-                        "No available outdoor job");
+        Preconditions.checkState(canCancelColonyWork(),
+                "Worker cannot cancel its job");
         if (isFishing()) {
-            final Colony colony = getWorkingColony().orElseThrow();
-            final Place replacement = new PlaceFishingGround(this, colony,
-                    getLocation());
-            place.destroySimple();
-            place = replacement;
-            colony.verifyNumberOfUnitsOptionallyDestroyColony();
+            // Cancellation is a paid return, never an idle boat on the water.
+            returnToWorkingColony();
         } else {
             placeToLocation(getLocation());
         }
         model.fireUnitMovedToLocation(this);
+        model.fireActionWasStarted(this);
     }
 
     @Override
@@ -437,7 +446,8 @@ public abstract class AbstractUnit implements Unit {
      */
     @Override
     public List<Location> getAvailableLocations() {
-        if (isFishing()) {
+        if (!unitAction.isNoAction() || getWorkingColony().isPresent()
+                || isFishing()) {
             return List.of();
         }
         Preconditions.checkArgument(isAtPlaceLocation(), "Unit have to at map");
@@ -827,8 +837,8 @@ public abstract class AbstractUnit implements Unit {
         if (!model.isGameRunning() || model.getCurrentPlayer() != owner
                 || !isLiveOwnedUnit(this) || !isAtPlaceLocation()
                 || !canAttack() || (!preview && getActionPoints() <= 0)
-                || (!preview
-                        && (!getAction().isNoAction() || hasStandingOrder()))
+                || (!preview && (!getAction().isNoAction() || hasStandingOrder()
+                        || getWorkingColony().isPresent()))
                 || targetLocation == null
                 || !model.getMap().isValid(targetLocation)
                 || (!preview && !getLocation().isNeighbor(targetLocation))
@@ -1144,6 +1154,8 @@ public abstract class AbstractUnit implements Unit {
 
     private void verifyCanMoveOneStep(final Location moveTo) {
         verifyThatUnitIsAtMap();
+        Preconditions.checkState(getWorkingColony().isEmpty(),
+                "Cancel colony work before moving");
 
         model.checkGameRunning();
         model.checkCurrentPlayer(owner);
@@ -2649,9 +2661,8 @@ public abstract class AbstractUnit implements Unit {
                 tradeRouteAssignment == null && (goTo == null || isShip()),
                 "Unit %s has a standing order", this);
         Preconditions.checkNotNull(order);
-        if (isAtPlaceColonyField()) {
-            cancelColonyWork();
-        }
+        Preconditions.checkState(getWorkingColony().isEmpty(),
+                "Cancel colony work before issuing a go-to order");
         goTo = order;
     }
 

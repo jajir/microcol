@@ -1219,10 +1219,13 @@ jsou autoritativní pro vzhled a přijetí.
    přiřazení na témže poli stojí nula. Místní rybolov používá schválený jeden bod.
    `ColonyJobChoice` váže mapovou nabídku na konkrétní práci a přijímající kolonii.
    GUI nabídku pouze zobrazuje a znovu vyhodnocený příkaz provádí model.
-3. `PlaceFishingGround` uchovává místní člun po zrušení práce bez přesunu. Ukládá
-   příslušnou kolonii, ale neposkytuje produkci ani pracovní stravování. Ztrátu
-   zázemí řeší model deterministicky podle vzdálenosti, poté souřadnic a ID osob.
-   `TurnEventFishermanLost` ukládá konkrétní důvod ztráty pro následné textové oznámení.
+3. Podle [R-0414](requirements/done/R-0414.md) `AbstractUnit.canCancelColonyWork`
+   předem ověří návrat rybáře. `cancelColonyWork` u něj provede placený návrat
+   přes `returnToWorkingColony`; bez bodu nebo legálního návratu zachová práci
+   i umístění. Zrušení už nevytváří nepracující `PlaceFishingGround` na vodě.
+   Pozemní pracovník zůstává na místě. `hasAssignedWork` sdílí s GUI stav práce
+   a rozkazů; přímý krok a nový rozkaz go-to nesmějí automaticky zrušit práci.
+
 4. Jde o popis rozpracovaného zdroje z 2026-11-03, nikoli potvrzenou přejímku.
    Výsledky vlastní [funkční evidence](functional-tests.md#r-0402r-0403r-0405-local-acceptance-2026-11-03).
 

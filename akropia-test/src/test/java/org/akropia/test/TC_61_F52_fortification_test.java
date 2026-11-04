@@ -29,7 +29,7 @@ public class TC_61_F52_fortification_test extends AbstractAkropiaTest {
         fortify.verifyAction("Fortify", true);
         fortify.changeOrderWithKeyboard();
         fortify.verifyOrder(104, true, false, 0);
-        fortify.verifyAction("Cancel fortifying", true);
+        fortify.verifyAction("Cancel work", true);
         // Inspecting another unit and returning preserves the pending order.
         game.selectTile(Location.of(25, 15));
         fortify.verifyAction("Fortify", false);
@@ -56,7 +56,7 @@ public class TC_61_F52_fortification_test extends AbstractAkropiaTest {
         game.nextTurnAndCloseDialogs();
         game.selectTile(Location.of(24, 15));
         fortify.verifyOrder(104, true, true, 1);
-        fortify.verifyAction("Cancel fortification", true);
+        fortify.verifyAction("Cancel work", true);
         fortify.captureDialog("fortifyUnit", "r106-fortified-order.png");
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();

@@ -55,7 +55,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         goTo.verifyDestination(COLONIST, GoToFixture.WEST, false);
         goTo.verifyMovement(COLONIST, 0);
         goTo.verifyStatus("Going to 20, 15");
-        goTo.verifyButton("Cancel go-to", true);
+        goTo.verifyButton("Cancel work", true);
         goTo.verifyColonyButton(false, false);
         goTo.verifyMoveButtonShown(false);
         // Inspecting another unit and coming back does not cancel the order.
@@ -188,7 +188,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         game.panToTile(GoToFixture.WEST);
         game.selectMapUnit(COLONIST);
         goTo.verifyStatus("Going to 20, 15");
-        goTo.verifyButton("Cancel go-to", true);
+        goTo.verifyButton("Cancel work", true);
         // The order is still followed on the next owner turn.
         game.nextTurnAndCloseDialogs();
         goTo.verifyLocation(COLONIST, Location.of(22, 15));
@@ -227,7 +227,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         goTo.verifyLocation(COLONIST, GoToFixture.EAST);
         goTo.verifyDestination(COLONIST, GoToFixture.ISLET, true);
         goTo.verifyStatus("Paused, no route to 26, 15");
-        goTo.verifyButton("Cancel go-to", true);
+        goTo.verifyButton("Cancel work", true);
         // Continue keeps the paused order.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();

@@ -84,7 +84,7 @@ class WorldWorkersTest {
     }
 
     @Test
-    void ordinaryMovementEndsTheJobAndPaysTerrainCost() {
+    void ordinaryMovementNeedsExplicitCancellationAndPaysTerrainCost() {
         final Model model = fixture(false);
         final Unit worker = model.getUnitById(0);
         final Colony colony = worker.getWorkingColony().orElseThrow();
@@ -93,6 +93,19 @@ class WorldWorkersTest {
         final int cost = worker.getEntryCostThirds(worker.getLocation(),
                 target);
         ((AbstractUnit) worker).setActionPoints(1);
+        final String before = new Gson().toJson(model.save());
+        assertTrue(worker.hasAssignedWork());
+        assertFalse(worker.canMoveStepTo(target));
+        assertFalse(model.canStartGoTo(worker));
+        assertTrue(worker.getAvailableLocations().isEmpty());
+        assertThrows(IllegalStateException.class,
+                () -> worker.moveOneStep(target));
+        assertThrows(IllegalStateException.class,
+                () -> model.issueGoTo(worker, target));
+        assertEquals(before, new Gson().toJson(model.save()));
+        worker.cancelColonyWork();
+        assertFalse(worker.hasAssignedWork());
+        assertEquals(3, worker.getMovementThirds());
         worker.moveOneStep(target);
         assertEquals(target, worker.getLocation());
         assertEquals(3 - cost, worker.getMovementThirds());
@@ -136,22 +149,38 @@ class WorldWorkersTest {
     }
 
     @Test
-    void cancelledFishingStaysAtSeaAndSurvivesSaveLoad() {
+    void cancellationReturnsFishermanForOnePointAndSurvivesSaveLoad() {
         final Model model = fixture(true);
         final Unit worker = model.getUnitById(0);
-        final Location at = worker.getLocation();
-        ((AbstractUnit) worker).setActionPoints(0);
+        final Location home = worker.getWorkingColony().orElseThrow()
+                .getLocation();
+        ((AbstractUnit) worker).setActionPoints(1);
+        assertTrue(worker.canCancelColonyWork());
         worker.cancelColonyWork();
-        assertEquals(at, worker.getLocation());
-        assertTrue(worker.isFishing());
-        assertEquals("", worker.getTaskSign());
+        assertEquals(home, worker.getLocation());
+        assertFalse(worker.hasAssignedWork());
+        assertFalse(worker.isFishing());
+        assertEquals(0, worker.getMovementThirds());
         final Unit loaded = Model
                 .make(model.save(),
                         MissionImpl.getPredefinedGameOverEvaluators())
                 .getUnitById(0);
-        assertTrue(loaded.isFishing());
-        assertEquals(at, loaded.getLocation());
+        assertFalse(loaded.isFishing());
+        assertEquals(home, loaded.getLocation());
         assertEquals(0, loaded.getMovementThirds());
+    }
+
+    @Test
+    void cancellationWithoutReturnMovementPreservesFishingAndSave() {
+        final Model model = fixture(true);
+        final Unit worker = model.getUnitById(0);
+        ((AbstractUnit) worker).setMovementThirds(2);
+        final String before = new Gson().toJson(model.save());
+        assertFalse(worker.canCancelColonyWork());
+        assertThrows(IllegalStateException.class, worker::cancelColonyWork);
+        assertEquals(before, new Gson().toJson(model.save()));
+        assertTrue(worker.isFishing());
+        assertTrue(worker.hasAssignedWork());
     }
 
     @Test
@@ -266,11 +295,12 @@ class WorldWorkersTest {
     }
 
     @Test
-    void canceledFishermanCanBeAttackedAndCannotStartAnOrder() {
+    void fishermanWithRefusedCancellationCanBeAttackedAndCannotStartAnOrder() {
         final Model model = fishingBattle(false);
         final Unit fisherman = model.getUnitById(0);
         ColonyBattles.setCurrentPlayer(model, fisherman.getOwner());
-        fisherman.cancelColonyWork();
+        ((AbstractUnit) fisherman).setActionPoints(0);
+        assertThrows(IllegalStateException.class, fisherman::cancelColonyWork);
         final String before = new Gson().toJson(model.save());
         assertThrows(IllegalStateException.class,
                 () -> ((AbstractUnit) fisherman).setWaitingOrder(

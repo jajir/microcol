@@ -1,5 +1,12 @@
 # Hlavní mapa: akce, vstupy a srovnání ovládání
 
+Aktualizace 2026-11-04: vybrané změny této inventury implementuje
+[R-0414](requirements/done/R-0414.md). Jednoduchý klik vybírá, dvojklik otevírá
+vlastní město; zaměstnání se před ručním pohybem ruší výslovně v kontextové
+nabídce. Rybář při zrušení zaplatí návrat do města. Pro tyto vstupy má přednost
+[aktuální UX pravidlo](ux.md#map-selection-and-work) před historickým popisem níže.
+
+
 Mapa potřebuje zpřístupnit město i každou jednotku na stejném políčku bez toho,
 aby pouhý výběr vydal rozkaz. Dnešní Akropia má více vstupů, ale jejich význam
 závisí na stavu jednotky a režimu mapy. Nejvýraznější je kolize otevření města

@@ -312,4 +312,5 @@
     <entry key="stepAlongRoad">Along a connected road</entry>
     <entry key="stepAlongRiver">Along the river</entry>
     <entry key="stepInsufficientMovement">Not enough movement remaining</entry>
+    <entry key="cancelWorkBeforeMoving">Cancel work in the context menu before moving this unit.</entry>
 </properties>

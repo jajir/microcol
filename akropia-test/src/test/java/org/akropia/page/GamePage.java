@@ -594,7 +594,7 @@ public class GamePage extends AbstractScreen {
     public ColonyScreen openColonyAt(final Location colonyLocation,
             final String expectedNamePart) {
         moveMouseAtLocation(colonyLocation);
-        getRobot().clickOn(MouseButton.PRIMARY);
+        getRobot().doubleClickOn(MouseButton.PRIMARY);
         WaitForAsyncUtils.waitForFxEvents();
         return ColonyScreen.of(getContext(), expectedNamePart);
     }

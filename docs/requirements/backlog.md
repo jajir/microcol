@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Dvojklik a zrušení práce — 2026-11-04
+
+1. [R-0414](done/R-0414.md), status `done`, A03 s vazbami A05/A07/A06: dvojklik otevírá město, výběr zachovává práci a zrušení práce rybáře provádí placený návrat. Vybraná část [R-0410](R-0410.md); lokální model/UI/smoke přejímka dokončena 2026-11-04, viz [evidence](../functional-tests.md#r-0414-map-selection-and-work-cancellation-2026-11-04).
+
 ## Odstranění rámečku světa — 2026-11-04
 
 1. [R-0413](done/R-0413.md), status `done`, A03: odstraněn obrys skutečného světa v hlavní mapě a plánování tras. Na výslovnou žádost uživatele bez testů; [záznam změny](../functional-tests.md#r-0413-world-outline-removal-2026-11-04).

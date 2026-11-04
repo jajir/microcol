@@ -25,11 +25,11 @@
     <entry key="skipUnitTurnExplanation">Vyčerpat zbývající pohyb této jednotky do jejího příštího tahu.</entry>
     <entry key="unitOrderUnavailable">Tato jednotka nyní nemůže vynechat tah. Vyberte dostupnou jednotku.</entry>
     <entry key="buttonSentry">Hlídka</entry>
-    <entry key="buttonActivateSentry">Aktivovat</entry>
+    <entry key="buttonActivateSentry">Zrušit práci</entry>
     <entry key="sentryExplanation">Čekat na hlídce; vhodní cestující nastoupí na odplouvající loď.</entry>
     <entry key="activateSentryExplanation">Ukončit hlídku a zachovat zbývající pohyb.</entry>
     <entry key="buttonGoTo">Přesun do</entry>
-    <entry key="buttonCancelGoTo">Zrušit přesun</entry>
+    <entry key="buttonCancelGoTo">Zrušit práci</entry>
     <entry key="goToExplanation">Vyberte pole na mapě nebo přátelskou kolonii. Jednotka tam dojde během vašich dalších tahů.</entry>
     <entry key="goToPickingHint">Klikněte na cíl na mapě. Escape ponechá jednotku beze změny.</entry>
     <entry key="goToActiveExplanation">Přesun do %s; jednotka pokračuje v každém vašem tahu.</entry>
@@ -70,8 +70,8 @@
     <entry key="buttonJettison">Vyhodit náklad</entry>
     <entry key="jettisonExplanation">Vyhodit část jednoho nákladového prostoru této lodi na moři. Loď zůstane na místě a nedostane zlato.</entry>
     <entry key="buttonFortify">Opevnit</entry>
-    <entry key="buttonCancelFortifying">Zrušit opevňování</entry>
-    <entry key="buttonCancelFortified">Zrušit opevnění</entry>
+    <entry key="buttonCancelFortifying">Zrušit práci</entry>
+    <entry key="buttonCancelFortified">Zrušit práci</entry>
     <entry key="buttonCancelPlowField">Zrušit orání. Postup se ztratí; pohyb ani nářadí se nevrací.</entry>
     <entry key="plowProblemUnavailable">Tato jednotka nyní nemůže orat. Vyberte dostupnou jednotku ve svém tahu.</entry>
     <entry key="plowProblemNotPioneer">Orat může jen průkopník.</entry>
@@ -117,9 +117,9 @@
     <entry key="retireUnavailable">Ukončení teď není dostupné. Nabízí se na tvém tahu v bodované volné hře.</entry>
     <entry key="retireChanged">Situace se změnila, hra proto nebyla ukončena. Otevři ukončení znovu a uvidíš aktuální výsledek.</entry>
     <entry key="chooseUnit">Vybrat jednotku</entry>
-    <entry key="cancelPlowingLabel">Zrušit orání</entry>
-    <entry key="cancelClearingLabel">Zrušit kácení lesa</entry>
-    <entry key="cancelRoadLabel">Zrušit stavbu silnice</entry>
+    <entry key="cancelPlowingLabel">Zrušit práci</entry>
+    <entry key="cancelClearingLabel">Zrušit práci</entry>
+    <entry key="cancelRoadLabel">Zrušit práci</entry>
     <entry key="waitUnavailable">V tomto tahu není dostupná žádná jednotka k výběru.</entry>
     <entry key="skipUnavailable">Vyžaduje váš tah a jednotku na mapě se zbývajícím pohybem a bez aktivního rozkazu.</entry>
     <entry key="sentryUnavailable">Vyžaduje váš tah a jednotku bez jiného rozkazu na mapě nebo na vhodném molu domovského přístavu.</entry>

@@ -4579,10 +4579,7 @@ public class Model {
         return unit instanceof AbstractUnit && isGameRunning() && !endingTurn
                 && getCurrentPlayer() == unit.getOwner()
                 && unitStorage.tryGetUnitById(unit.getId()).orElse(null) == unit
-                && unit.isAtPlaceLocation() && !unit.isFishing()
-                && unit.getAction().isNoAction()
-                && (!hasGoToOrder(unit) || unit.isShip())
-                && ((AbstractUnit) unit).getTradeRouteAssignment().isEmpty()
+                && unit.isAtPlaceLocation() && !unit.hasAssignedWork()
                 && (!(unit instanceof org.akropia.model.unit.Ship)
                         || !((org.akropia.model.unit.Ship) unit).isDamaged());
     }
@@ -9635,7 +9632,7 @@ public class Model {
     }
 
     /** @return whether the owner's turn preparation has finished for reads */
-    private boolean isTurnPreparationComplete() {
+    boolean isTurnPreparationComplete() {
         try {
             checkTurnPreparationComplete();
             return true;

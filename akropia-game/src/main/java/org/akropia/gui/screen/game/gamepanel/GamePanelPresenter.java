@@ -282,6 +282,12 @@ public final class GamePanelPresenter {
                             org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source.GAME));
             return;
         }
+        if (unit.hasAssignedWork()) {
+            eventBus.post(new StatusBarMessageEvent(
+                    i18n.get(org.akropia.gui.Loc.cancelWorkBeforeMoving),
+                    StatusBarMessageEvent.Source.GAME));
+            return;
+        }
         oneTurnMoveHighlighter.setLocations(unit.getAvailableLocations());
         logger.debug("Switching '" + unit + "' to go mode.");
         moveModeController.setMoveModeOn();
@@ -332,7 +338,6 @@ public final class GamePanelPresenter {
         if (moveFromLocation.equals(moveToLocation)) {
             disableMoveMode(movingUnit);
             // it's a click? is there a colony?
-            tryToOpenColonyDetail(moveToLocation);
             return;
         }
 

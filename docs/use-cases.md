@@ -1317,3 +1317,8 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 
 1. UC-013/016 and UC-113: persistent ship destinations and saved arrival notices map to `GoToOrderTest` and `TC_103_F94_persistent_go_to_test`; O/I/G navigation also uses TC188/191/192. This extends existing coverage without closing unrelated order cases.
 2. UC-005/015/038: pre-turn idle-colonist review maps to the model warning tests in `GoToOrderTest` and `TC_199_F52_end_turn_warnings_test`. Model, targeted UI and final smoke passed; exact selections and limits are in the [shared evidence](functional-tests.md#r-0396-and-r-0398-destinations-and-end-turn-warnings-2026-11-02).
+
+## R-0414 — výběr města a zachování práce
+
+1. UC-011–029, UC-032 a UC-114/119: [R-0414](requirements/done/R-0414.md) mění otevření vlastního města na dvojklik a zachovává zaměstnání při výběru i pokusu o ruční pohyb. Rybář se při výslovném zrušení práce vrací za pohybový bod.
+2. Cílené scénáře: `TC_204_F236_map_selection_work_test` TC01–03, `TC_202_F234_local_fishing_test` TC01–03; související pracovní/rozkazové scénáře si zachovávají identifikátory. Stav přejímky vlastní [funkční evidence](functional-tests.md#r-0414-map-selection-and-work-cancellation-2026-11-04).

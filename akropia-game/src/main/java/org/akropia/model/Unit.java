@@ -26,6 +26,11 @@ public interface Unit {
 
     List<ColonyJobChoice> getMapJobChoices();
 
+    /** Whether a task must be explicitly canceled before manual movement. */
+    boolean hasAssignedWork();
+
+    boolean canCancelColonyWork();
+
     void cancelColonyWork();
 
     boolean canReturnToWorkingColony();

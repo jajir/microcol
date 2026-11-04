@@ -418,4 +418,28 @@ public class TC_118_F109_trade_route_assignment_test
         planner.back();
         planner.verifyPlannerShown(false);
     }
+
+    @Test
+    @Tag("local")
+    void TC_05_map_context_cancels_assigned_work_without_moving_the_carrier() {
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final org.akropia.page.WorldWorkersPage work = new org.akropia.page.WorldWorkersPage(
+                getContext());
+
+        // Selecting a paused carrier and requesting movement retains its route.
+        game.selectTile(NEW_AMSTERDAM_LOCATION);
+        game.selectMapUnit(IDLE_WAGON_ID);
+        work.pressMovementShortcut();
+        work.verifyMapSelection(IDLE_WAGON_ID, NEW_AMSTERDAM_LOCATION, "t",
+                null, 3);
+
+        // Explicit cancellation in the map context preserves cargo and
+        // movement.
+        game.openUnitContextAt(NEW_AMSTERDAM_LOCATION);
+        work.verifyMenuAction("cancelTradeRouteWork", "Cancel work", false);
+        work.choose("cancelTradeRouteWork");
+        work.verifyMapSelection(IDLE_WAGON_ID, NEW_AMSTERDAM_LOCATION, "", null,
+                3);
+    }
+
 }
