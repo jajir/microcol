@@ -16,6 +16,16 @@ class CanvasArea {
      */
     private Point topLeft = Point.ZERO;
 
+    private final boolean overscroll;
+
+    CanvasArea() {
+        this(false);
+    }
+
+    CanvasArea(final boolean overscroll) {
+        this.overscroll = overscroll;
+    }
+
     /**
      * Define canvas size
      */
@@ -119,6 +129,12 @@ class CanvasArea {
     private int getNewCanvasPositionWhenSizeChange(final int newCanvasSize,
             final int currentCanvasSize, final int currentCanvasPosition,
             final int maxMapSize) {
+        if (overscroll) {
+            final int center = currentCanvasSize < 0 ? newCanvasSize / 2
+                    : currentCanvasPosition + currentCanvasSize / 2;
+            return moveCanvas(center - newCanvasSize / 2, newCanvasSize,
+                    maxMapSize);
+        }
         if (newCanvasSize >= maxMapSize) {
             /**
              * Canvas is bigger than map.
@@ -151,6 +167,9 @@ class CanvasArea {
      */
     private int getNewCanvasPositionKeepingStart(final int newCanvasSize,
             final int currentCanvasPosition, final int maxMapSize) {
+        if (overscroll) {
+            return moveCanvas(currentCanvasPosition, newCanvasSize, maxMapSize);
+        }
         if (newCanvasSize >= maxMapSize) {
             return (maxMapSize - newCanvasSize) / 2;
         }
@@ -178,6 +197,11 @@ class CanvasArea {
 
     private int moveCanvas(final int newCanvasPosition, final int canvasSize,
             final int maxMapSize) {
+        if (overscroll) {
+            final int half = canvasSize / 2;
+            return Math.max(-half,
+                    Math.min(newCanvasPosition, maxMapSize - half));
+        }
         if (canvasSize >= maxMapSize) {
             return (maxMapSize - canvasSize) / 2;
         }

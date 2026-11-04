@@ -2,7 +2,7 @@
 
 ## R-0412 camera overscroll decisions — 2026-11-04
 
-1. On base `cd8816dc`, updated [R-0412](requirements/R-0412.md), the shared UX contract and backlog with the user's answers: half the main map viewport width/height beyond each corresponding world edge, rendered as unexplored territory with a mysterious appearance and understandable inaccessibility. The blank-paper proposal is rejected. Minimap extent and camera-center targeting remain unchanged. The answered question is removed; status remains `new` and implementation is not authorized.
+1. On base `cd8816dc`, updated [R-0412](requirements/done/R-0412.md), the shared UX contract and backlog with the user's answers: half the main map viewport width/height beyond each corresponding world edge, rendered as unexplored territory with a mysterious appearance and understandable inaccessibility. The blank-paper proposal is rejected. Minimap extent and camera-center targeting remain unchanged. The answered question is removed; status remains `new` and implementation is not authorized.
 2. Documentation-only acceptance: all 14 consistency tests passed with zero failures/errors/skips, name audit found zero unexplained occurrences, and strict MkDocs passed. Reviewed the four-file scope, accepted values, unchanged minimap contract, removed question and preserved `new` status; `git diff --check` passed. Logs: `target/r0412-decisions/`.
 3. This documentation-only update is exempt from model/JUnit, Docker UI and smoke. Runtime appearance, gameplay and remote CI/Pages/distribution publication are not verified; historical evidence is preserved.
 
@@ -14,13 +14,13 @@
 
 ## R-0412 camera overscroll capture — 2026-11-04
 
-1. On base `4e0b7fdc`, captured [R-0412](requirements/R-0412.md), status `new`, and the shared UX contract: overscroll belongs only to the main view; minimap gestures continue to target the camera center within the actual world. The minimap gains no padding, and its viewport outline is clipped to the world. Exact overscroll dimensions and appearance remain proposals for later refinement. No implementation was authorized or performed.
+1. On base `4e0b7fdc`, captured [R-0412](requirements/done/R-0412.md), status `new`, and the shared UX contract: overscroll belongs only to the main view; minimap gestures continue to target the camera center within the actual world. The minimap gains no padding, and its viewport outline is clipped to the world. Exact overscroll dimensions and appearance remain proposals for later refinement. No implementation was authorized or performed.
 2. Documentation-only acceptance: all 14 consistency tests passed with zero failures/errors/skips, name audit found zero unexplained occurrences, and strict MkDocs passed. Reviewed the four-file documentation scope, four requirement chapters, links and distinction between agreed minimap behavior and proposed overscroll parameters; `git diff --check` passed. Logs: `target/r0412/`.
 3. This documentation-only change is exempt from model/JUnit, Docker UI and smoke tests. Runtime behavior, remote CI, Pages and game distribution publication are not verified.
 
 ## R-0411 menu icon capture — 2026-11-04
 
-1. On base `8785df30`, captured [R-0411](requirements/R-0411.md), status `new`: replace the in-game Menu door/exit glyph with selected variant 01, a black three-line hamburger. Recorded the accepted direction in the graphics catalogue and retained the vector proposal and two comparison references. Implementation has not started; the generated toolbar mockup is illustrative, not a runtime screenshot or a redesign of adjacent controls.
+1. On base `8785df30`, captured [R-0411](requirements/done/R-0411.md), status `new`: replace the in-game Menu door/exit glyph with selected variant 01, a black three-line hamburger. Recorded the accepted direction in the graphics catalogue and retained the vector proposal and two comparison references. Implementation has not started; the generated toolbar mockup is illustrative, not a runtime screenshot or a redesign of adjacent controls.
 2. Documentation-only acceptance: all 14 consistency tests passed with zero failures/errors/skips, name audit found zero unexplained occurrences, and strict MkDocs passed. Reviewed the requirement structure, links, SVG source and documentation-only diff; `git diff --check` passed. Logs: `target/r0411/`.
 3. Model/JUnit, Docker UI and smoke are exempt for this documentation-only capture. Production export, runtime visual acceptance and gameplay checks remain future implementation work. Remote CI, Pages and distribution publication are not inspected or claimed verified.
 

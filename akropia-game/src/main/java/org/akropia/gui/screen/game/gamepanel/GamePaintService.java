@@ -79,6 +79,10 @@ final class GamePaintService {
      */
     public void paintTerrain(final GraphicsContext graphics, final Area area,
             final CanvasInMapCoordinates coord, final long gameTick) {
+        // The unknown-colored margin is outside the playable world.
+        graphics.setFill(javafx.scene.paint.Color.web("#9B9486"));
+        graphics.fillRect(0, 0, graphics.getCanvas().getWidth(),
+                graphics.getCanvas().getHeight());
         final Player player = gameModelController.getHumanPlayer();
         for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight()
                 .getX(); i++) {

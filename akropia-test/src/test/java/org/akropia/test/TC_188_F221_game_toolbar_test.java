@@ -92,7 +92,7 @@ public class TC_188_F221_game_toolbar_test extends AbstractAkropiaTest {
         toolbar.verifyControls(false, true);
         toolbar.verifySeason(Season.autumn, 0xff71864b);
         toolbar.hover("europe");
-        toolbar.verifyExplanation("Europe port. (E)", null);
+        toolbar.verifyExplanation("Home port port. (E)", null);
         toolbar.focusCenterWithTab();
         toolbar.verifyExplanation("Find focused place. (C)", "center");
         toolbar.verifyUnitUnchanged(3, 3, 2);

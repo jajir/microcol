@@ -18,12 +18,15 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
 import javafx.geometry.Rectangle2D;
+import javafx.geometry.Point2D;
+import javafx.event.EventHandler;
 import javafx.scene.AccessibleRole;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -96,17 +99,33 @@ public final class WorldMinimap extends VBox {
                 event.consume();
             }
         });
-        map.setOnMouseDragged(event -> {
-            if (dragging && event.isPrimaryButtonDown()) {
-                scrolling
-                        .centerOn(projection.toMap(event.getX(), event.getY()));
-                event.consume();
+        // Continue the gesture after the pointer leaves the minimap panel.
+        final EventHandler<MouseEvent> drag = event -> {
+            if (!dragging) {
+                return;
             }
-        });
-        map.setOnMouseReleased(event -> {
-            if (dragging && event.getButton() == MouseButton.PRIMARY) {
+            if (event.getEventType() == MouseEvent.MOUSE_DRAGGED
+                    && event.isPrimaryButtonDown()) {
+                final Point2D point = map.screenToLocal(event.getScreenX(),
+                        event.getScreenY());
+                scrolling
+                        .centerOn(projection.toMap(point.getX(), point.getY()));
+                event.consume();
+            } else if (event.getEventType() == MouseEvent.MOUSE_RELEASED
+                    && event.getButton() == MouseButton.PRIMARY) {
                 dragging = false;
                 event.consume();
+            }
+        };
+        map.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            dragging = false;
+            if (oldScene != null) {
+                oldScene.removeEventFilter(MouseEvent.MOUSE_DRAGGED, drag);
+                oldScene.removeEventFilter(MouseEvent.MOUSE_RELEASED, drag);
+            }
+            if (newScene != null) {
+                newScene.addEventFilter(MouseEvent.MOUSE_DRAGGED, drag);
+                newScene.addEventFilter(MouseEvent.MOUSE_RELEASED, drag);
             }
         });
         map.setOnKeyPressed(this::pan);

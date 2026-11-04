@@ -61,7 +61,15 @@ public class VisibleAreaService {
      * Holds information about canvas size and position relative to world map in
      * points.
      */
-    private final CanvasArea canvasArea = new CanvasArea();
+    private final CanvasArea canvasArea;
+
+    public VisibleAreaService() {
+        this(false);
+    }
+
+    public VisibleAreaService(final boolean overscroll) {
+        canvasArea = new CanvasArea(overscroll);
+    }
 
     /**
      * Define map size.

@@ -275,12 +275,19 @@ public final class GameToolbarPage extends AbstractScreen {
                 for (int y = 0; y < 96; y++) {
                     for (int x = 0; x < 96; x++) {
                         final int pixel = icon.getPixelReader().getArgb(x, y);
-                        inkPixels += pixel == 0xff302d27 ? 1 : 0;
+                        inkPixels += pixel == (id.equals("exit") ? 0xff000000
+                                : 0xff302d27) ? 1 : 0;
                         accentPixels += pixel == accent ? 1 : 0;
                     }
                 }
                 assertTrue(inkPixels > 0, id + " retains ink");
-                assertTrue(accentPixels > 0, id + " has the current accent");
+                if (id.equals("exit")) {
+                    assertEquals(0, accentPixels,
+                            "Menu keeps black pen in both seasons");
+                } else {
+                    assertTrue(accentPixels > 0,
+                            id + " has the current accent");
+                }
                 assertEquals(0, icon.getPixelReader().getArgb(0, 0));
             }
         });

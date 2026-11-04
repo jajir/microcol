@@ -2,11 +2,11 @@
 
 ## Přesah kamery hlavní mapy — 2026-11-04
 
-1. [R-0412](R-0412.md), status `new`, A03 s vazbami A05/A06: prostor pro kameru za hranicemi hlavního pohledu. Minimapě zůstává skutečný svět bez přidaných okrajů a tažení určuje střed kamery. Uživatel potvrdil přesah o polovinu šířky/výšky hlavního mapového výřezu a vzhled neobjeveného území se srozumitelnou nepřístupností. Otevřená otázka je zodpovězená; technické zpřesnění a implementace nejsou zahájeny.
+1. [R-0412](done/R-0412.md), status `done`, A03 s vazbami A05/A06: poloviční přesah hlavního pohledu ve vzhledu neobjeveného území s vyznačenou hranicí světa. Minimapa zachovává rozsah světa a určuje střed kamery i při tažení mimo svůj panel. Rohy, resize, nehratelný okraj a lokální model/UI/smoke přejímka ověřeny 2026-11-04; [evidence](../functional-tests.md#r-0411-r-0412-menu-and-camera-2026-11-04).
 
 ## Ikona herního Menu — 2026-11-04
 
-1. [R-0411](R-0411.md), status `new`, A03 s návazností na A01: nahradit dveře se šipkou schváleným hamburger menu, při zachování názvu, umístění a funkce tlačítka. Výběr varianty 01 je zaznamenaný; implementace nebyla zahájena.
+1. [R-0411](done/R-0411.md), status `done`, A03 s návazností na A01: Menu používá schválený černý hamburger při zachování názvu, umístění a funkce tlačítka. SVG, opakovatelný export, runtime snímek a lokální model/UI/smoke přejímka ověřeny 2026-11-04; [evidence](../functional-tests.md#r-0411-r-0412-menu-and-camera-2026-11-04).
 
 
 ## Ovládání hlavní mapy — 2026-11-04

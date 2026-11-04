@@ -174,6 +174,7 @@ public final class GamePanelPainter {
         gamePaintService.paintSelectedTile(g, area,
                 selectedTileManager.getSelectedTile());
         animationClouds.paint(g);
+        paintWorldBoundary(g);
         if (gameModelController.getRealCurrentPlayer().isComputer()) {
             /**
              * If move computer that make game field darker.
@@ -199,12 +200,34 @@ public final class GamePanelPainter {
         gamePaintService.paintUnits(g, gameModelController.getModel(), area,
                 excludePainting, selectedUnitManager.getSelectedUnit());
         paintAnimation(g, area);
+        paintWorldBoundary(g);
         tradeRoutePlanningPainter.darken(g,
                 visibleAreaService.getCanvasSize().getX(),
                 visibleAreaService.getCanvasSize().getY());
         gamePaintService.paintColonies(g, gameModelController.getModel(), area);
         tradeRoutePlanningPainter.paintRoutes(g, area);
         gamePaintService.paintFog(g, area, coordinates);
+    }
+
+    /**
+     * A pen outline distinguishes the inaccessible margin from unexplored land.
+     */
+    private void paintWorldBoundary(final GraphicsContext g) {
+        final Point start = visibleAreaService.getTopLeft();
+        final Point world = visibleAreaService.getMapSize();
+        final double x = -start.getX(), y = -start.getY();
+        final double right = x + world.getX(), bottom = y + world.getY();
+        g.save();
+        g.setStroke(Color.BLACK);
+        g.setLineWidth(2);
+        g.beginPath();
+        g.moveTo(x, y);
+        g.quadraticCurveTo((x + right) / 2, y + .6, right, y);
+        g.quadraticCurveTo(right - .6, (y + bottom) / 2, right, bottom);
+        g.quadraticCurveTo((x + right) / 2, bottom - .6, x, bottom);
+        g.quadraticCurveTo(x + .6, (y + bottom) / 2, x, y);
+        g.stroke();
+        g.restore();
     }
 
     private void paintAnimation(final GraphicsContext graphics,

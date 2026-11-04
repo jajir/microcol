@@ -30,6 +30,7 @@ import javafx.scene.shape.Rectangle;
 public final class WorldMinimapPage extends AbstractScreen {
     private String savedState;
     private Point savedView;
+    private java.util.Optional<Location> savedSelection;
 
     public WorldMinimapPage(final TestContext context) {
         super(context);
@@ -67,6 +68,9 @@ public final class WorldMinimapPage extends AbstractScreen {
         getRobot().interact(() -> {
             savedState = new Gson().toJson(getModel().save());
             savedView = view().getTopLeft();
+            savedSelection = getContext().getClassFromGuice(
+                    org.akropia.gui.screen.game.gamepanel.SelectedTileManager.class)
+                    .getSelectedTile();
         });
     }
 
@@ -99,17 +103,38 @@ public final class WorldMinimapPage extends AbstractScreen {
                 "Camera navigation does not mutate units, selection, turn, gold or exploration"));
     }
 
-    public void verifyCentered(final double xFraction, final double yFraction) {
+    public void verifySelectionUnchanged() {
+        getRobot().interact(() -> assertEquals(savedSelection,
+                getContext().getClassFromGuice(
+                        org.akropia.gui.screen.game.gamepanel.SelectedTileManager.class)
+                        .getSelectedTile()));
+    }
+
+    public void verifyCentered(final double xFraction, final double yFraction)
+            throws Exception {
+        // Native motion events can arrive after the JavaFX queue was drained.
+        WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
+                () -> WaitForAsyncUtils.asyncFx(() -> {
+                    final Point size = view().getCanvasSize();
+                    final Point start = view().getTopLeft();
+                    final double x = Math.max(0, Math.min(1, xFraction))
+                            * getModel().getMap().getMaxLocationX() * 45;
+                    final double y = Math.max(0, Math.min(1, yFraction))
+                            * getModel().getMap().getMaxLocationY() * 45;
+                    return Math
+                            .abs(start.getX() + size.getX() / 2
+                                    - x) <= 1 / scale() + 1
+                            && Math.abs(start.getY() + size.getY() / 2 - y) <= 1
+                                    / scale() + 1;
+                }).get());
         getRobot().interact(() -> {
             final Point size = view().getCanvasSize();
             final int width = getModel().getMap().getMaxLocationX() * 45;
             final int height = getModel().getMap().getMaxLocationY() * 45;
-            final double x = size.getX() >= width ? (width - size.getX()) / 2
-                    : Math.max(0, Math.min(width - size.getX(),
-                            width * xFraction - size.getX() / 2));
-            final double y = size.getY() >= height ? (height - size.getY()) / 2
-                    : Math.max(0, Math.min(height - size.getY(),
-                            height * yFraction - size.getY() / 2));
+            final double x = Math.max(0, Math.min(1, xFraction)) * width
+                    - size.getX() / 2;
+            final double y = Math.max(0, Math.min(1, yFraction)) * height
+                    - size.getY() / 2;
             // Native pointer coordinates round to a minimap pixel.
             assertEquals(x, view().getTopLeft().getX(), 1 / scale() + 1);
             assertEquals(y, view().getTopLeft().getY(), 1 / scale() + 1);
@@ -131,8 +156,10 @@ public final class WorldMinimapPage extends AbstractScreen {
                     return Math
                             .abs(frame.getX() - origin.getX()
                                     - Math.max(0, start.getX()) * scale()) < .01
-                            && Math.abs(frame.getWidth() - Math.min(size.getX(),
+                            && Math.abs(frame.getWidth() - (Math.min(
+                                    start.getX() + size.getX(),
                                     getModel().getMap().getMaxLocationX() * 45)
+                                    - Math.max(0, start.getX()))
                                     * scale()) < .01;
                 }).get());
         getRobot().interact(() -> {
@@ -142,11 +169,58 @@ public final class WorldMinimapPage extends AbstractScreen {
                     origin.getY()
                             + Math.max(0, view().getTopLeft().getY()) * scale(),
                     frame.getY(), .01);
-            assertEquals(Math.min(view().getCanvasSize().getY(),
-                    getModel().getMap().getMaxLocationY() * 45) * scale(),
+            assertEquals(
+                    (Math.min(
+                            view().getTopLeft().getY()
+                                    + view().getCanvasSize().getY(),
+                            getModel().getMap().getMaxLocationY() * 45)
+                            - Math.max(0, view().getTopLeft().getY()))
+                            * scale(),
                     frame.getHeight(), .01);
             assertEquals(Color.web("#fff9ec"), frame.getStroke());
             assertEquals(2, frame.getStrokeWidth());
+        });
+    }
+
+    public void clickOutsideWorld() {
+        final Canvas canvas = getContext().getClassFromGuice(
+                org.akropia.gui.screen.game.gamepanel.GamePanelComponent.class)
+                .getCanvas();
+        // One pixel beyond the west edge must not round into the first tile.
+        getRobot().clickOn(canvas.localToScreen(-view().getTopLeft().getX() - 1,
+                canvas.getHeight() / 2));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyUnknownMargin() {
+        getRobot().interact(() -> {
+            final Canvas canvas = getContext().getClassFromGuice(
+                    org.akropia.gui.screen.game.gamepanel.GamePanelComponent.class)
+                    .getCanvas();
+            final Point2D origin = canvas.localToScene(0, 0);
+            final WritableImage image = snapshotScene(canvas.getScene());
+            assertEquals(Color.web("#9B9486"), image.getPixelReader().getColor(
+                    (int) origin.getX() + 10, (int) origin.getY() + 10));
+            assertTrue(view().getTopLeft().getX() < 0,
+                    "West margin: " + view().getTopLeft());
+            assertTrue(view().getTopLeft().getY() < 0,
+                    "North margin: " + view().getTopLeft());
+        });
+    }
+
+    public void verifyHamburgerMenu() {
+        getRobot().interact(() -> {
+            final javafx.scene.control.Button menu = (javafx.scene.control.Button) node(
+                    "exit");
+            final javafx.scene.image.ImageView icon = (javafx.scene.image.ImageView) menu
+                    .getGraphic();
+            assertTrue(
+                    icon.getImage().getUrl().endsWith("/menu-hamburger.png"));
+            assertEquals(32, icon.getFitWidth());
+            assertEquals(32, icon.getFitHeight());
+            assertEquals("Menu", menu.getText());
+            assertFalse(menu.isDisabled());
+            assertTrue(menu.isFocusTraversable());
         });
     }
 

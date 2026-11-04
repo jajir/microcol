@@ -3,8 +3,8 @@
 <a id="menu-hamburger-2026-11-04"></a>
 ## Ikona herního Menu — výběr 2026-11-04
 
-1. Uživatel z pěti návrhů vybral **01 — hamburger**, tři černé vodorovné linky. Nahradí dveře se šipkou v pravém krajním tlačítku herní lišty; název Menu a jeho funkce zůstávají. Rozsah a budoucí přejímku vlastní [R-0411](requirements/R-0411.md), status `new`.
-2. [Vektorový podklad](graphics-assets/menu-icon-2026-11-04/hamburger.svg) obsahuje pouze cesty, černou linku 2 px v návrhovém plátně 48 × 48 a jemně nepravidelnou geometrii. Platí [trvalý vizuální brief](#soucasne-zadani-vzhledu) a [SVG kontrakt](#zdrojovy-format-herni-grafiky). Výběr návrhu není přijetím runtime assetu; měřítko, export a zobrazení ve hře čekají na implementaci.
+1. Uživatel z pěti návrhů vybral **01 — hamburger**, tři černé vodorovné linky. Nahradí dveře se šipkou v pravém krajním tlačítku herní lišty; název Menu a jeho funkce zůstávají. Rozsah a přejímku vlastní [R-0411](requirements/done/R-0411.md).
+2. [Vektorový podklad](graphics-assets/menu-icon-2026-11-04/hamburger.svg) obsahuje pouze cesty, černou linku 2 px v návrhovém plátně 48 × 48 a jemně nepravidelnou geometrii. Platí [trvalý vizuální brief](#soucasne-zadani-vzhledu) a [SVG kontrakt](#zdrojovy-format-herni-grafiky). Výběr návrhu sám nebyl přijetím runtime assetu. Implementace používá samostatný `menu-hamburger.svg`, export `menu-hamburger.png` a `ButtonIcon.MENU`; sdílené ikony odchodu se nemění. Zdrojová linka 3 px na plátně 48 × 48 dává při zobrazení 32 × 32 linku 2 logické pixely. Export a kontrola: `python3 scripts/graphics/export-graphics.py controls --install`, poté `--check`. Skutečnou přejímku a snímky vlastní [funkční evidence](functional-tests.md#r-0411-r-0412-menu-and-camera-2026-11-04).
 3. [Původní porovnání pěti návrhů](graphics-assets/menu-icon-2026-11-04/proposals.png) a [orientační vizualizace v liště](graphics-assets/menu-icon-2026-11-04/toolbar-mockup.png) uchovávají podklad výběru. Vizualizace vznikla pomocí ImageGen a není přesným screenshotem hry; okolní ikony ani její rozložení nejsou zadáním dalších změn.
 
 

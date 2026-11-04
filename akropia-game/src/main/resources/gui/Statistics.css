@@ -18,7 +18,7 @@
 }
 .statistics-atlas .atlas-index { -fx-spacing: 4; }
 .statistics-atlas .indexTitle { -fx-padding: 0 0 12 3; }
-.statistics-atlas .atlas-tab { -fx-alignment: center-left; }
+.statistics-atlas .atlas-tab { -fx-alignment: center-left; -fx-wrap-text: true; }
 .statistics-atlas .atlas-tab:selected { -fx-background-color: #DCC49A; }
 .statistics-atlas .atlas-detail { -fx-pref-width: 640; }
 

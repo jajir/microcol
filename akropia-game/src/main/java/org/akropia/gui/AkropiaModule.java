@@ -264,7 +264,7 @@ public final class AkropiaModule extends AbstractModule {
          */
         bind(ScreenGamePresenter.class).asEagerSingleton();
         bind(VisibleAreaService.class).annotatedWith(Names.named("game"))
-                .toInstance(new VisibleAreaService());
+                .toInstance(new VisibleAreaService(true));
         bind(GamePanelPresenter.class).asEagerSingleton();
         bind(GamePanelMouseListener.class).asEagerSingleton();
         bind(SelectedTileManager.class).in(Singleton.class);

@@ -1245,3 +1245,8 @@ jsou autoritativní pro vzhled a přijetí.
    skutečného založení; GUI podle něj nabízí pouze vysvětlení. Nový uložený
    příznak nevzniká. [Přejímka](functional-tests.md#r-0406-r-0409-local-acceptance-2026-11-03)
    byla dokončena 2026-11-04.
+
+
+### Kamera hlavního pohledu (R-0412)
+
+1. `gui.screen.game.gamepanel.VisibleAreaService` a `CanvasArea` omezují herní kameru jejím středem na hranice světa; editor zachovává původní omezení celého výřezu. `Area` převádí i záporné pixely bez výběru krajního pole. `MinimapProjection` zobrazuje průnik výřezu se světem. Modelová velikost světa, pohyb, průzkum a uložená data se nemění. [Přejímka](functional-tests.md#r-0411-r-0412-menu-and-camera-2026-11-04).

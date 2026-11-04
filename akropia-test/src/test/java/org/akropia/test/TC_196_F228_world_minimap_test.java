@@ -51,10 +51,10 @@ public class TC_196_F228_world_minimap_test extends AbstractAkropiaTest {
         map.verifyMapFocus(true);
         window.saveEvidence("r0356-minimap-focused.png");
         map.clickWorld(.99, .99);
-        map.verifyCentered(1, 1);
+        map.verifyCentered(.99, .99);
         map.verifyViewport();
         map.clickWorld(.01, .01);
-        map.verifyCentered(0, 0);
+        map.verifyCentered(.01, .01);
         map.verifyViewport();
         map.verifyGameUnchanged();
         // Arrow keys pan one tile; Tab leaves focus without cycling a unit.
@@ -118,7 +118,7 @@ public class TC_196_F228_world_minimap_test extends AbstractAkropiaTest {
         map.verifyCentered(.6, .6);
         map.verifyViewport();
         map.movePointer(.01, .01);
-        map.verifyCentered(0, 0);
+        map.verifyCentered(.01, .01);
         map.verifyViewport();
         // The native grab continues outside the minimap and stops on release
         // there.
@@ -141,4 +141,75 @@ public class TC_196_F228_world_minimap_test extends AbstractAkropiaTest {
         map.verifyPan(0, 0);
         map.verifyGameUnchanged();
     }
+
+    @Test
+    @Tag("local")
+    void TC_04_world_edges_and_inaccessible_margin_survive_resize()
+            throws Exception {
+        // Open the world and keep a full snapshot of gameplay state.
+        WelcomePage.of(getContext()).loadGame();
+        final WorldMinimapPage map = new WorldMinimapPage(getContext());
+        final MainScreenLayoutPage window = new MainScreenLayoutPage(
+                getContext());
+        window.resize(1280, 900);
+        map.rememberGameAndView();
+
+        // Drag past all corners; the camera center stops at the world edge.
+        map.beginDrag(.5, .5, MouseButton.PRIMARY);
+        map.movePointer(-.1, -.1);
+        map.verifyCentered(0, 0);
+        map.verifyViewport();
+        map.movePointer(1.1, -.1);
+        map.verifyCentered(1, 0);
+        map.verifyViewport();
+        map.movePointer(1.1, 1.1);
+        map.verifyCentered(1, 1);
+        map.verifyViewport();
+        map.movePointer(-.1, 1.1);
+        map.verifyCentered(0, 1);
+        map.verifyViewport();
+        map.movePointer(-.1, -.1);
+        map.verifyCentered(0, 0);
+        map.verifyViewport();
+        map.endDrag(MouseButton.PRIMARY);
+        map.verifyCentered(0, 0);
+        map.verifyUnknownMargin();
+        window.saveEvidence("r0412-northwest-margin.png");
+
+        // The margin cannot select or move a unit, including a pixel at the
+        // edge.
+        map.clickOutsideWorld();
+        map.verifyGameUnchanged();
+        map.verifySelectionUnchanged();
+        window.resize(900, 700);
+        map.verifyViewport();
+        map.verifyUnknownMargin();
+        window.resize(1440, 1000);
+        map.verifyViewport();
+        map.verifyGameUnchanged();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_hamburger_opens_menu_and_resume_preserves_game()
+            throws Exception {
+        // The visible Menu button uses the approved icon in its existing
+        // footprint.
+        WelcomePage.of(getContext()).loadGame();
+        final WorldMinimapPage map = new WorldMinimapPage(getContext());
+        final org.akropia.page.SavedGamesPage menu = new org.akropia.page.SavedGamesPage(
+                getContext());
+        map.rememberGameAndView();
+        map.verifyHamburgerMenu();
+        new MainScreenLayoutPage(getContext())
+                .saveEvidence("r0411-hamburger.png");
+
+        // Open the existing menu, then resume the same game without mutation.
+        menu.openMenu();
+        menu.verifyMenu();
+        menu.chooseMenu("menuResume");
+        map.verifyHamburgerMenu();
+        map.verifyGameUnchanged();
+    }
+
 }

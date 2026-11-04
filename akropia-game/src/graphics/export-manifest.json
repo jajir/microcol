@@ -193,6 +193,15 @@
       "family": "toolbar, shared action icons, frame and status coin, R-0278/R-0316/R-0327",
       "outputs": [
         {
+          "output": "menu-hamburger.png",
+          "source": "menu-hamburger.svg",
+          "render": "zoom", "zoom": 2, "size": [96, 96],
+          "transparent": true,
+          "consumer": "ButtonsGamePanel via ButtonIcon.MENU",
+          "display": "32 x 32 logical",
+          "stroke": "3 source units, 2 logical px"
+        },
+        {
           "output": "game-toolbar.png",
           "source": "game-toolbar.svg",
           "render": "zoom",

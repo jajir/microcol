@@ -408,8 +408,9 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     void updateToolbarSeason(final boolean winter) {
         for (final Labeled control : toolbarLabels.keySet()) {
-            ((ImageView) control.getGraphic()).setImage(
-                    toolbarImages.getImage("gameToolbar_" + control.getId()
+            ((ImageView) control.getGraphic()).setImage(control == buttonExit
+                    ? ButtonIcon.MENU.createView().getImage()
+                    : toolbarImages.getImage("gameToolbar_" + control.getId()
                             + (winter ? "_winter" : "_summer")));
         }
     }

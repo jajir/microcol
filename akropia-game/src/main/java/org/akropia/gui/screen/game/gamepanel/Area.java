@@ -62,7 +62,12 @@ public class Area {
      * @return return map location
      */
     public Location convertToLocation(final Point point) {
-        return Tile.of(point.add(visibleArea.getTopLeft())).toLocation();
+        final Point mapPoint = point.add(visibleArea.getTopLeft());
+        return Location.of(
+                Math.floorDiv(mapPoint.getX(), Tile.TILE_WIDTH_IN_PX)
+                        + Location.MAP_MIN_X,
+                Math.floorDiv(mapPoint.getY(), Tile.TILE_WIDTH_IN_PX)
+                        + Location.MAP_MIN_Y);
     }
 
     // Could be removed
