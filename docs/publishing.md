@@ -1,5 +1,11 @@
 # Writing and publishing documentation
 
+## R-0410 edge cases and cross-platform shortcuts — 2026-11-04
+
+1. On base `93dc47f5`, extended the [map-control inventory](map-controls.md) with FreeCol source inspection (v0.11.6 and development revision `85f3eb9a20fa`), Civilization III / Civilization IV: Colonization manuals, Freeciv21 shortcut documentation and the Wesnoth project wiki. Distinguished selection, activation and order cancellation; the remembered FreeCol double-click activation was not confirmed in the inspected map handlers. The older manual is explicitly separated from current development behavior.
+2. Added recommendations for macOS/Linux/Windows using Apple, Microsoft, GNOME and KDE references: simple map keys, one ordinary modifier, visible alternatives, configurable shortcuts, focus boundaries and system/input-layout conflicts. Updated R-0410 and the UX entry point; status remains `new`. No new gesture or gameplay rule was approved or implemented.
+3. Documentation-only acceptance: 14 documentation consistency tests passed with zero failures/errors/skips, the naming audit found zero unexplained occurrences, and strict MkDocs passed. Reviewed the four-file documentation diff and rendered comparison tables; `git diff --check` passed. Logs: `target/r0410-edge-cases/`. No executable source, assets, tests or configuration changed; model/JUnit, Docker UI and smoke are exempt. No live cross-platform gameplay test or remote CI/Pages/distribution verification was performed.
+
 ## R-0412 camera overscroll capture — 2026-11-04
 
 1. On base `4e0b7fdc`, captured [R-0412](requirements/R-0412.md), status `new`, and the shared UX contract: overscroll belongs only to the main view; minimap gestures continue to target the camera center within the actual world. The minimap gains no padding, and its viewport outline is clipped to the world. Exact overscroll dimensions and appearance remain proposals for later refinement. No implementation was authorized or performed.

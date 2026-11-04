@@ -169,6 +169,115 @@ Zdroje:
 2. [Civilization VI, oficiální manuál](https://downloads.2kgames.com/civilization/vi/manuals/eu/CIV_VI_25TH_ONLINE_MANUAL_ENG.pdf), kapitoly Movement a The City Banner / The City Screen, přečtené dostupné indexované pasáže 4. listopadu 2026. Úplné PDF přes webový nástroj překročilo velikostní limit.
 3. [Old World, oficiální manuál v1.65](https://shared.steamstatic.com/store_item_assets/steam/apps/597180/manuals/bdd2ff370f17bfe9ecb09483be0b8b22f5e62efe/Old_World-Official_User_Manual.pdf), pasáž semi-automated workers, přečteno 4. listopadu 2026.
 
+## Okrajové scénáře v jiných hrách — doplnění 4. listopadu 2026
+
+Uživatel připomněl probuzení opevněné jednotky dvojklikem ve FreeCol. Následující
+průzkum rozlišuje **výběr pro zobrazení**, **aktivaci/probuzení**, **zrušení rozkazu**
+a **ztrátu obranného účinku**. Nejsou to automaticky stejné operace. Jde o čtení
+primárních zdrojů, nikoli o nově odehrané testy cizích her.
+
+### FreeCol: vzpomínka na dvojklik a rozdíly verzí
+
+1. **Vzpomínku se nepodařilo potvrdit jako obecné pravidlo mapy.** Ve verzi
+   0.11.6 obsluha dvojkliku otevírá kolonii; nemá zvláštní větev „opevněná
+   jednotka → aktivní“. To nevylučuje jinou verzi, fork nebo jiný panel.
+   [Zdroj v0.11.6, CanvasMouseListener](https://github.com/FreeCol/freecol/blob/2410226fe6240387dc1ac39e36fd196243d369e0/src/net/sf/freecol/client/gui/CanvasMouseListener.java).
+2. **Dnešní prohlédnutý vývojový kód se liší od starého manuálu.** Na revizi
+   `85f3eb9a20fa` má v běžné klikací větvi sídlo přednost před jednotkou.
+   Mimo sídlo opakované kliknutí na vlastní skupinu přepíná jednotky.
+   Výběr nastavuje jednotku v UI, sám nenastavuje herní stav `ACTIVE`.
+   [SwingGUI.clickAt/changeView](https://github.com/FreeCol/freecol/blob/85f3eb9a20fa2cfb070601e268382fc2acf0ad70/src/net/sf/freecol/client/gui/SwingGUI.java)
+   a [MapViewerState.setActiveUnit](https://github.com/FreeCol/freecol/blob/85f3eb9a20fa2cfb070601e268382fc2acf0ad70/src/net/sf/freecol/client/gui/mapviewer/MapViewerState.java).
+3. Kontextová nabídka obsahuje explicitní aktivaci, zrušení cesty, kolonii
+   a seznam jednotek. **Aktivovat všechny** volá zrušení rozkazů pro jednotky
+   na poli; nejde jen o jejich prohlédnutí. Přerušení rozpracovaného vylepšení
+   má potvrzení. [TilePopup](https://github.com/FreeCol/freecol/blob/85f3eb9a20fa2cfb070601e268382fc2acf0ad70/src/net/sf/freecol/client/gui/TilePopup.java)
+   a [InGameController.clearOrders](https://github.com/FreeCol/freecol/blob/85f3eb9a20fa2cfb070601e268382fc2acf0ad70/src/net/sf/freecol/client/control/InGameController.java).
+4. Pro Akropii z toho vyplývá potřeba jednoznačného označení aktivace a jejího
+   rozsahu. Manuál v předchozí tabulce zůstává historickým dokladem, nikoli
+   popisem všech vydání FreeCol. Probuzení dvojklikem ponecháváme jako možný
+   návrh; nenahrazuje přijaté pravidlo bezpečného výběru v pravém panelu.
+
+### Doložené vzory dalších her
+
+| Hra / situace | Doložený postup | Poučení pro Akropii, zatím návrh |
+| --- | --- | --- |
+| **Civilization III: opevněná jednotka sama, ve skupině, ve městě** | Samostatná se aktivuje klikem. U skupiny pravý klik otevře seznam a hráč vybere jednotku. Posádka města je dostupná přes pravou nabídku města nebo jeho obrazovku | Přístup ke každé jednotce nesmí záviset na tom, která je nakreslená navrchu |
+| **Civilization III: čekání a přerušená cesta** | W/Tab odloží jednotku na konec fronty; mezerník ji podrží tento tah. Útok nebo překážka na go-to cestě jednotku znovu aktivuje | Odlišit dočasné odložení, konec činnosti v tahu a návrat jednotky, která potřebuje rozhodnutí |
+| **Civilization IV: Colonization: jednotka mimo automatickou frontu** | Automatický výběr přeskakuje opevněné, spící, přepravované a jednotky provádějící dřívější rozkazy. Klikem lze vybrat i jednotku s předchozím rozkazem | Automatická fronta nemůže být jediným přístupem k jednotkám |
+| **Civilization IV: Colonization: skupinové rozkazy a hlídka** | Panel má samostatné přesuny všech jednotek na poli a všech stejného typu. Sentry reaguje na nepřítele v sousedství; sleep čeká na aktivaci | Hromadný rozsah označit příkazem; z dvojkliku na jednoho vojáka nesmí nenápadně vzniknout rozkaz celé posádce |
+| **Freeciv21: hlídky a výběr ve skupině** | Manuál zkratek uvádí Ctrl+prostřední tlačítko pro probuzení hlídek, Ctrl+Shift+D pro všechny hlídky na poli a Ctrl+Space pro výběr jednotky ze skupiny pod kurzorem | Tyto akce mají smysl, ale uvedené kombinace nejsou vhodný univerzální základ pro tři platformy |
+| **Freeciv21: nákup bez otevření města** | Tlačítko Back na myši je uvedeno pro okamžité urychlení nákupu výroby | Vedlejší tlačítko s okamžitým utracením prostředků bychom neměli kopírovat jako výchozí ovládání |
+| **Battle for Wesnoth: přerušený pohyb a trvalé držení pozice** | Projektová wiki rozlišuje T pro pokračování přerušeného pohybu, Space pro konec tahu jednotky a Shift+Space pro trvalé držení pozice; N/Shift+N pro další/předchozí jednotku | Užitečné jsou odlišné příkazy pro pokračování, čekání a trvalý stav, ne jeden neurčitý „aktivní mód“ |
+| **Battle for Wesnoth: oprava omylu a zkratky** | Wiki uvádí vrácení pouze deterministických pohybů a možnost většinu zkratek přenastavit/vypnout; pro Mac dokumentuje odlišnosti | Nenabízet obecné Undo tam, kde už pohyb odkryl nové informace nebo spustil náhodný výsledek; zkratky mají mít nastavení |
+
+Primární podklady, přečtené 4. listopadu 2026:
+
+1. [Civilization III, dodaný manuál](https://cdn.akamai.steamstatic.com/steam/apps/3910/manuals/manual.pdf), části Fortified Units, GoTo Orders, Hold, Sentry a Wait Orders. Historický desktopový vzor, ne tvrzení o jiné generaci Civilization.
+2. [Civilization IV: Colonization, dodaný manuál](https://cdn.akamai.steamstatic.com/steam/apps/16810/manuals/manual_english.pdf), části Selecting Units a Unit Orders. Nezaměňovat s FreeCol ani původní Colonization.
+3. [Freeciv21, Game Shortcut Options](https://longturn.readthedocs.io/en/stable/Manuals/Game/shortcut-options.html). Jde o klient Freeciv21, nikoli závazný popis všech klientů Freeciv.
+4. [Battle for Wesnoth, projektová wiki HotKeysSystem](https://wiki.wesnoth.org/HotKeysSystem). Stránka nefixuje verzi sestavení; její seznam je doklad návrhových vzorů, ne příslib shodných výchozích kláves v každé aktuální instalaci.
+
+## Jak složité zkratky používat na macOS, Linuxu a Windows
+
+**Doporučení pro Akropii:** základní hra musí být dosažitelná viditelnými prvky
+a běžným klikáním. Časté mapové akce mají jednu klávesu; rozšíření nejvýše jeden
+modifikátor. Složitější kombinace ponechat jen jako volitelnou zkratku zkušeného
+hráče. Nejde o nově přijaté mapování ani o již implementované nastavení zkratek.
+
+| Úroveň | Doporučené použití | Příklad / hranice |
+| --- | --- | --- |
+| Běžný vstup | Klik, pravý klik, viditelná nabídka; samostatná klávesa při fokusu mapy | Zachovat M/B/P/F/G/I podle dosavadních významů. Neaktivovat herní příkazy při psaní názvu nebo v dialogu |
+| Jedna rozšiřující klávesa | Shift + klávesa nebo zřetelně vysvětlené Shift + klik | Např. předchozí místo dalšího, nebo přidání do výběru. Konkrétní přiřazení se teprve vybírá |
+| Standardní aplikační zkratka | Command na macOS, Ctrl na Windows/Linuxu | Uložit / otevřít přes ⌘S/⌘O a Ctrl+S/Ctrl+O. Není to pokyn mechanicky zaměnit každý Ctrl v herních gestech za Command |
+| Dva modifikátory | Jen výjimečně, s viditelnou alternativou a možností změny | Nepoužívat jako základní cestu k městu, jednotce nebo probuzení. Standardní aplikační konvence mohou být výjimkou |
+| Tři modifikátory, složitá tlačítka myši, načasovaná kombinace | Ne jako výchozí herní ovládání | Žádné povinné Ctrl+Alt+Shift+klik, trojklik nebo prostřední tlačítko. Dvojklik a tažení mohou být pohodlné alternativy, nikdy jediná cesta |
+
+### Konkrétní konflikty platforem
+
+| Prostředí | Co respektovat | Důsledek pro návrh |
+| --- | --- | --- |
+| macOS: myš a trackpad | Control+klik znamená kontextovou nabídku; sekundární klik lze dělat trackpadem | Nepoužít Ctrl+levý klik pro jinou zásadní akci, např. okamžitý útok či přidání do skupiny. Nabídnout i klávesovou/viditelnou cestu k příkazům |
+| macOS: systém a aplikace | ⌘Tab přepíná aplikace, ⌘Space vyvolává systémovou funkci; Control+Space může přepínat vstupní zdroj. ⌘Q/⌘W/⌘H/⌘M mají běžné aplikační významy | Nezabírat tyto kombinace herními příkazy. Zejména nepřebírat Ctrl+Space z jiné hry jako univerzální výběr skupiny |
+| MacBook a další notebooky | F1–F12 mohou vyžadovat Fn nebo změnu nastavení; numerický blok a samostatná klávesa Menu nemusí být přítomné | F-klávesy, Shift+F10 i numerický pohyb jen jako alternativy; důležitá akce má další dostupný vstup |
+| Linux / GNOME a KDE | GNOME používá Super+tažení pro okno; KDE umožňuje Meta nebo Alt jako modifikátor okenních akcí | Alt/Meta+tažení není spolehlivá herní zkratka napříč desktopy. Nevyžadovat změnu správce oken |
+| Windows | Alt+Tab, Alt+F4, Alt+Space a kombinace Win mají systémový význam; Shift+F10 je konvence kontextové nabídky | Zachovat systémové ovládání a kontextovou nabídku. Windows klávesu nevolit jako výchozí herní modifikátor |
+| Mezinárodní klávesnice | Ctrl+Alt může ve Windows znamenat AltGr a tvorbu znaku; rozložení mění dostupnost interpunkce i čísel | Vyhnout se Ctrl+Alt+znak a povinné US interpunkci. Ověřit CZ QWERTZ i US QWERTY; zachovat psaní Unicode a kompozici textu |
+
+Podklady k systémovým faktům:
+
+1. [Apple: sekundární klik](https://support.apple.com/en-gb/guide/mac-help/mh35853/mac), dostupná indexovaná pasáž; úplná stránka při průzkumu vracela HTTP 429. [Apple: klávesové zkratky](https://support.apple.com/en-us/102650) dokládá Command, vstupní zdroje a chování F-kláves.
+2. [GNOME: přesun oken](https://help.gnome.org/gnome-help/shell-windows-states.html) a [KDE: Window Behavior](https://docs.kde.org/trunk_kf6/en/kwin/kcontrol/windowbehaviour/index.html), nastavitelný modifikátor Meta/Alt. Linux není jediné pevné mapování kláves.
+3. [Microsoft: Windows keyboard shortcuts](https://support.microsoft.com/en-us/accessibility/windows/keyboard-shortcuts-in-windows) a [Microsoft: proč nepoužívat Ctrl+Alt jako aplikační zkratku](https://devblogs.microsoft.com/oldnewthing/20040329-00/?p=40003), vysvětlení AltGr.
+
+### Navržený kontrakt aktivace a ověření
+
+1. **Klik pouze vybere.** U opevněné jednotky zůstane vidět stav a samostatný
+   příkaz „Ukončit opevnění“, u hlídky „Aktivovat“, u cesty „Zrušit přesun“.
+   Název musí odpovídat konkrétnímu následku. Hromadné zrušení rozkazů není
+   totéž co probuzení jedné jednotky.
+2. **Dvojklik na probuzení zatím nedoporučuji jako výchozí pravidlo celého
+   políčka.** Koliduje s městem a skupinou. Pokud jej vybereme jako doplněk,
+   musí cílit na jednoznačný symbol/řádek jednotky, mít stejnou viditelnou akci
+   v menu a nikdy současně otevřít město, pohnout nebo probudit všechny.
+3. Aktivace nesmí doplnit pohybové body. Zda a kdy končí obranný bonus, je
+   otázka herního pravidla, ne vedlejší efekt volby tlačítka. Průzkum jiných
+   her sám nemění současný modelový kontrakt Akropie.
+4. Zobrazovat skutečnou zkratku v nabídce, umožnit její změnu/vypnutí a obnovu
+   výchozího nastavení. Kontrolovat kolize ve stejném kontextu a přesnou sadu
+   modifikátorů: například ⌘M nebo Ctrl+M nesmí nechtěně projít jako prosté M.
+   Konflikty zachycené správcem oken nelze vyřešit jen interní kontrolou hry.
+5. Testovací matice: jedna jednotka / skupina / město; volná / vyčerpaná /
+   hlídka / opevnění / cesta / práce; myš / trackpad / klávesnice; fokus
+   mapy / panelu / nabídky / textového pole; CZ/US rozložení. Ověřit první i
+   druhé kliknutí, toleranci tažení, držení klávesy, ztrátu fokusu a uvolnění
+   modifikátoru během gesta. Jedno gesto vykoná nejvýše jeden příkaz.
+6. Při budoucí implementaci zachovat běžné model/JUnit a Docker/Linux UI
+   ověření podle [funkčního kontraktu](functional-tests.md). Logiku volby
+   platformy a modifikátorů pokrýt modelovými/JUnit testy; nativní macOS
+   zůstává pouze výslovně vyžádanou manuální kontrolou. Doporučení pro tři
+   platformy není prohlášením, že bylo nyní na třech systémech otestováno.
+
 ## Doporučení k dalšímu návrhu, zatím neschválené
 
 1. **Nejprve definovat akci a objekt, potom gesta.** Jeden příkaz má jedinou

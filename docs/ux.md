@@ -4,6 +4,7 @@
 
 1. [Akce, vstupy a srovnání ovládání](map-controls.md) zachycují zdrojový stav revize `953992ffa0fc`, kolizi města s jednotkou, přístup ke skupinám a pracovníkům a doložené vzory FreeCol, Civilization VI a Old World. Nejde o nový hráčský test ani změnu přijatých pravidel.
 2. [R-0410](requirements/R-0410.md), status `new`, vlastní následný požadavek na jednoznačný přístup k městu a jednotkám. Doporučené nové mapování gest je podkladem k výběru; samotná inventura neautorizuje implementaci.
+3. Doplnění stejného dne zkoumá okrajové scénáře aktivace, opevnění, skupin a přerušených rozkazů ve FreeCol a dalších hrách. [Doporučení pro macOS, Linux a Windows](map-controls.md#jak-slozite-zkratky-pouzivat-na-macos-linuxu-a-windows) preferuje jednoduché klávesy, nejvýše jeden běžný modifikátor a viditelné alternativy. Jde o návrh k projití, nikoli změnu zavedených zkratek nebo herních pravidel.
 
 
 ## Pracovníci kolonie na mapě světa
