@@ -1,5 +1,11 @@
 # Writing and publishing documentation
 
+## R-0412 camera overscroll capture — 2026-11-04
+
+1. On base `4e0b7fdc`, captured [R-0412](requirements/R-0412.md), status `new`, and the shared UX contract: overscroll belongs only to the main view; minimap gestures continue to target the camera center within the actual world. The minimap gains no padding, and its viewport outline is clipped to the world. Exact overscroll dimensions and appearance remain proposals for later refinement. No implementation was authorized or performed.
+2. Documentation-only acceptance: all 14 consistency tests passed with zero failures/errors/skips, name audit found zero unexplained occurrences, and strict MkDocs passed. Reviewed the four-file documentation scope, four requirement chapters, links and distinction between agreed minimap behavior and proposed overscroll parameters; `git diff --check` passed. Logs: `target/r0412/`.
+3. This documentation-only change is exempt from model/JUnit, Docker UI and smoke tests. Runtime behavior, remote CI, Pages and game distribution publication are not verified.
+
 ## R-0411 menu icon capture — 2026-11-04
 
 1. On base `8785df30`, captured [R-0411](requirements/R-0411.md), status `new`: replace the in-game Menu door/exit glyph with selected variant 01, a black three-line hamburger. Recorded the accepted direction in the graphics catalogue and retained the vector proposal and two comparison references. Implementation has not started; the generated toolbar mockup is illustrative, not a runtime screenshot or a redesign of adjacent controls.

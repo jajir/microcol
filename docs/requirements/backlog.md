@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Přesah kamery hlavní mapy — 2026-11-04
+
+1. [R-0412](R-0412.md), status `new`, A03 s vazbami A05/A06: prostor pro kameru za hranicemi hlavního pohledu. Minimapě zůstává skutečný svět bez přidaných okrajů a tažení určuje střed kamery. Zachycení rozsahu; návrhové parametry a vzhled čekají na zpřesnění, implementace není zahájena.
+
 ## Ikona herního Menu — 2026-11-04
 
 1. [R-0411](R-0411.md), status `new`, A03 s návazností na A01: nahradit dveře se šipkou schváleným hamburger menu, při zachování názvu, umístění a funkce tlačítka. Výběr varianty 01 je zaznamenaný; implementace nebyla zahájena.

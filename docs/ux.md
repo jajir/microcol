@@ -98,6 +98,15 @@
 1. [R-0371](requirements/done/R-0371.md) navazuje na uživatelův výběr **Trochu těsnější**. Při otevření kolonie hráč vidí obrázek, název a pracovní místa vlevo a skutečnou produkci hned vedle obrázku. Menší mezery zachovávají čitelnost názvů i rozlišení volných a obsazených míst; delší překlad se zalamuje.
 2. Přiřazení a přesun práce se dál provádí přetažením nebo existující nabídkou pracovníka. Modelové podmínky, zrušení a odmítnutí zastaralé akce se nemění. Automatické a vizuální ověření se eviduje odděleně od tohoto návrhového rozhodnutí.
 
+<a id="presah-kamery-2026-11-04"></a>
+
+## Přesah kamery hlavní mapy — zadání 2026-11-04
+
+1. [R-0412](requirements/R-0412.md) zachycuje požadavek přisunout krajní políčka včetně High Seas do vnitřní části hlavního pohledu pomocí nehratelného prostoru za hranicemi mapy. Jde o zamýšlené chování, nikoli ověřenou implementaci.
+2. Uživatel výslovně požaduje zachovat význam kliknutí a tažení na minimapě: světový bod pod kurzorem určuje **střed kamery**. Minimapě se nepřidávají okraje, zobrazuje pouze skutečný svět a jeho dosavadní průzkum. Přesah hlavního pohledu nesmí svět na minimapě zmenšit.
+3. Rámeček se ořízne na skutečnou mapu; u hranice jeho viditelný geometrický střed nemusí ležet pod kurzorem. Tažení stále míří středem kamery na zvolený světový bod. Zachovat dosavadní ukončení a ignorovaná gesta podle R-0355.
+4. Přesná velikost přesahu a jeho vzhled jsou zatím návrhy pro zpřesnění v R-0412. Prostor za světem není hratelný, neposkytuje cíl rozkazů a neodhaluje území. Nový popisek High Seas ani změna pravidel plavby do tohoto kroku nepatří.
+
 ## Minimapa světa — 2026-10-30
 
 1. [R-0350](requirements/done/R-0350.md) dává hráči trvalý přehled celého světa nahoře v pravém panelu. Známé oblasti používají terénní barvy, neprůhledné neznámo nic dalšího neprozrazuje a kontrastní rámeček odpovídá hlavnímu pohledu.
