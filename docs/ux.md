@@ -106,7 +106,7 @@
 1. [R-0412](requirements/R-0412.md) zachycuje požadavek přisunout krajní políčka včetně High Seas do vnitřní části hlavního pohledu pomocí nehratelného prostoru za hranicemi mapy. Jde o zamýšlené chování, nikoli ověřenou implementaci.
 2. Uživatel výslovně požaduje zachovat význam kliknutí a tažení na minimapě: světový bod pod kurzorem určuje **střed kamery**. Minimapě se nepřidávají okraje, zobrazuje pouze skutečný svět a jeho dosavadní průzkum. Přesah hlavního pohledu nesmí svět na minimapě zmenšit.
 3. Rámeček se ořízne na skutečnou mapu; u hranice jeho viditelný geometrický střed nemusí ležet pod kurzorem. Tažení stále míří středem kamery na zvolený světový bod. Zachovat dosavadní ukončení a ignorovaná gesta podle R-0355.
-4. Přesná velikost přesahu a jeho vzhled jsou zatím návrhy pro zpřesnění v R-0412. Prostor za světem není hratelný, neposkytuje cíl rozkazů a neodhaluje území. Nový popisek High Seas ani změna pravidel plavby do tohoto kroku nepatří.
+4. Uživatel 2026-11-04 potvrdil přesah až o polovinu šířky hlavního mapového výřezu vlevo i vpravo a polovinu jeho výšky nahoře i dole, včetně rohů; rozměry nezahrnují lišty ani boční panel a přepočítávají se při resize. Pro přesah zvolil vzhled neobjeveného území, který má působit tajuplně a současně srozumitelně nepřístupně; návrh prázdného papíru se nepoužije. Prostor není hratelný, neposkytuje cíl rozkazů a nelze jej prozkoumat. Nový popisek High Seas ani změna pravidel plavby do tohoto kroku nepatří. Jde o přijaté zadání, nikoli ověřený vizuální nebo herní výsledek.
 
 ## Minimapa světa — 2026-10-30
 

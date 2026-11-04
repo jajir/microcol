@@ -2,7 +2,7 @@
 
 ## Přesah kamery hlavní mapy — 2026-11-04
 
-1. [R-0412](R-0412.md), status `new`, A03 s vazbami A05/A06: prostor pro kameru za hranicemi hlavního pohledu. Minimapě zůstává skutečný svět bez přidaných okrajů a tažení určuje střed kamery. Zachycení rozsahu; návrhové parametry a vzhled čekají na zpřesnění, implementace není zahájena.
+1. [R-0412](R-0412.md), status `new`, A03 s vazbami A05/A06: prostor pro kameru za hranicemi hlavního pohledu. Minimapě zůstává skutečný svět bez přidaných okrajů a tažení určuje střed kamery. Uživatel potvrdil přesah o polovinu šířky/výšky hlavního mapového výřezu a vzhled neobjeveného území se srozumitelnou nepřístupností. Otevřená otázka je zodpovězená; technické zpřesnění a implementace nejsou zahájeny.
 
 ## Ikona herního Menu — 2026-11-04
 

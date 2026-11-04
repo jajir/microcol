@@ -1,5 +1,11 @@
 # Writing and publishing documentation
 
+## R-0412 camera overscroll decisions — 2026-11-04
+
+1. On base `cd8816dc`, updated [R-0412](requirements/R-0412.md), the shared UX contract and backlog with the user's answers: half the main map viewport width/height beyond each corresponding world edge, rendered as unexplored territory with a mysterious appearance and understandable inaccessibility. The blank-paper proposal is rejected. Minimap extent and camera-center targeting remain unchanged. The answered question is removed; status remains `new` and implementation is not authorized.
+2. Documentation-only acceptance: all 14 consistency tests passed with zero failures/errors/skips, name audit found zero unexplained occurrences, and strict MkDocs passed. Reviewed the four-file scope, accepted values, unchanged minimap contract, removed question and preserved `new` status; `git diff --check` passed. Logs: `target/r0412-decisions/`.
+3. This documentation-only update is exempt from model/JUnit, Docker UI and smoke. Runtime appearance, gameplay and remote CI/Pages/distribution publication are not verified; historical evidence is preserved.
+
 ## R-0410 edge cases and cross-platform shortcuts — 2026-11-04
 
 1. On base `93dc47f5`, extended the [map-control inventory](map-controls.md) with FreeCol source inspection (v0.11.6 and development revision `85f3eb9a20fa`), Civilization III / Civilization IV: Colonization manuals, Freeciv21 shortcut documentation and the Wesnoth project wiki. Distinguished selection, activation and order cancellation; the remembered FreeCol double-click activation was not confirmed in the inspected map handlers. The older manual is explicitly separated from current development behavior.
