@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Odstranění rámečku světa — 2026-11-04
+
+1. [R-0413](done/R-0413.md), status `done`, A03: odstraněn obrys skutečného světa v hlavní mapě a plánování tras. Na výslovnou žádost uživatele bez testů; [záznam změny](../functional-tests.md#r-0413-world-outline-removal-2026-11-04).
+
 ## Přesah kamery hlavní mapy — 2026-11-04
 
 1. [R-0412](done/R-0412.md), status `done`, A03 s vazbami A05/A06: poloviční přesah hlavního pohledu ve vzhledu neobjeveného území s vyznačenou hranicí světa. Minimapa zachovává rozsah světa a určuje střed kamery i při tažení mimo svůj panel. Rohy, resize, nehratelný okraj a lokální model/UI/smoke přejímka ověřeny 2026-11-04; [evidence](../functional-tests.md#r-0411-r-0412-menu-and-camera-2026-11-04).
