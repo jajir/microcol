@@ -1,5 +1,11 @@
 # Writing and publishing documentation
 
+## R-0410 main-map interaction inventory — 2026-11-04
+
+1. Inspected source revision `953992ffa0fcd50e07a09f267fe73cf099bc983d` and added the [main-map inventory](map-controls.md): current gestures, unit and city operations, all 35 declared unit types, state-dependent colony access, and sourced FreeCol/Civilization VI/Old World comparisons. [R-0410](requirements/R-0410.md) remains `new`; proposed input mappings are not accepted implementation. The user's exact blocked-colony save was not reproduced.
+2. Documentation-only acceptance: all 14 documentation consistency tests passed with zero failures/errors/skips, naming audit found zero unexplained occurrences, and strict MkDocs passed. Reviewed the five-file documentation scope, requirement structure, operation/type tables and source references; `git diff --check` passed. Logs: `target/r0410/`.
+3. No executable source, tests, runtime assets or build configuration changed. Model/JUnit, Docker UI and smoke are exempt for this documentation-only task. Remote CI, Pages and game distributions were not inspected; this record does not establish publication or a new gameplay test pass.
+
 ## R-0402 accepted identities and unchanged calendar — 2026-11-03
 
 1. On base `5356b7f7`, recorded the accepted answers in [R-0402](requirements/done/R-0402.md): eight local animal/color directions, the complete four-power/eight-people identity mapping with existing profiles and settlement mechanics preserved, and the homeland narrative and terminology. The user explicitly kept the calendar unchanged, including displayed dates, progression, seasons and scoring/end boundaries; expedition-year numbering was not accepted. Updated the graphics contract, R-0403 mapping, gap analysis and backlog. R-0402 chapter 4 now contains None; status remains `new`.

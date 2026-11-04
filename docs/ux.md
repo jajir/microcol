@@ -1,5 +1,11 @@
 # UX a pravidla ovládání Akropia
 
+## Inventura hlavní mapy — 4. listopadu 2026
+
+1. [Akce, vstupy a srovnání ovládání](map-controls.md) zachycují zdrojový stav revize `953992ffa0fc`, kolizi města s jednotkou, přístup ke skupinám a pracovníkům a doložené vzory FreeCol, Civilization VI a Old World. Nejde o nový hráčský test ani změnu přijatých pravidel.
+2. [R-0410](requirements/R-0410.md), status `new`, vlastní následný požadavek na jednoznačný přístup k městu a jednotkám. Doporučené nové mapování gest je podkladem k výběru; samotná inventura neautorizuje implementaci.
+
+
 ## Pracovníci kolonie na mapě světa
 
 1. **Dohodnuté budoucí chování z 3. listopadu 2026, zatím neimplementované:** [R-0405](requirements/done/R-0405.md) zpřístupní venkovního pracovníka na jeho skutečném poli a zadání práce přímo z hlavní mapy. Pracovníci budov a vnitřní posádka zůstanou uvnitř města; pouze skutečně venkovní jednotky se zobrazí na mapě/Outside colony.

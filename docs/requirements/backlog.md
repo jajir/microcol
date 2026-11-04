@@ -1,5 +1,10 @@
 # Current requirement backlog
 
+## Ovládání hlavní mapy — 2026-11-04
+
+1. [R-0410](R-0410.md), status `new`, A03 s konkrétními návaznostmi A05/A06/A07/A09: město a jednotky na stejném poli zůstávají dosažitelné, alternativní vstupy stejné akce mají stejné následky. [Inventura akcí, vstupů a srovnatelných her](../map-controls.md) je dokončený analytický podklad; konkrétní mapování gest a implementace čekají na společný výběr.
+
+
 ## Dokončeno R-0406–R-0409 — 2026-11-04
 
 1. [R-0406](done/R-0406.md), [R-0407](done/R-0407.md), [R-0408](done/R-0408.md) a [R-0409](done/R-0409.md) mají status `done`: zprávy o doplutí, celostránková správa tras, přesné pohybové údaje a vysvětlení založení bez pohybu jsou implementované.
