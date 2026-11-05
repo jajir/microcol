@@ -2,7 +2,7 @@
 
 ## Přiřazení obchodní trasy u dopravce — 2026-11-05
 
-1. [R-0415](R-0415.md), status `new`, A06 s vazbami A03/A05/A04: návrh zobrazení přiřazené trasy v panelu vozu/lodi a společného dialogu změny z panelu i kontextu. Otevřené jsou počáteční zastávka a změna za atlantické plavby. Pouze analýza, implementace nezadána.
+1. [R-0415](R-0415.md), status `new`, A06 s vazbami A03/A05/A04: návrh zobrazení přiřazené trasy v panelu vozu/lodi a společného dialogu změny z panelu i kontextu. Rozhodnuto: automaticky nejbližší dosažitelná zastávka bez ruční volby; během přechodu Atlantiku změna zakázaná. Pouze analýza, implementace nezadána.
 
 ## Dvojklik a zrušení práce — 2026-11-04
 

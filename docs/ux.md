@@ -1319,3 +1319,10 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 1. [R-0414](requirements/done/R-0414.md): jednoduchý klik vybírá pole a vlastní jednotku, dvojklik otevírá vlastní město i přes jednotku. Město zůstává dostupné také přes nabídku měst a její klávesové ovládání. První klik dvojkliku nesmí zahájit přesun ani zrušit práci; plánovač tras zachovává svůj oddělený režim.
 2. Zaměstnaná jednotka je dostupná pro prohlížení; výběr, tažení nebo klávesa pohybu její práci neruší. Před ručním pohybem musí hráč v kontextové nabídce výslovně zrušit práci/rozkaz. Zrušení neobnovuje pohybové body. Pozemní pracovník zůstává na poli. Loď s rozkazem nejprve výslovně zruší původní rozkaz a teprve potom může dostat jiný cíl.
 3. Rybář při zrušení práce zaplatí existující jeden pohybový bod a vrátí se do svého města; bez dostupného návratu zůstane rybolov i poloha zachována. Jednoduchý klik rybáře vybírá, dvojklik otevírá jeho město. Jde o schválené chování; skutečné ověření vlastní funkční evidence.
+
+
+## Přiřazení trasy dopravci — rozhodnutí 2026-11-05
+
+1. [R-0415](requirements/R-0415.md) připravuje změnu přiřazení z panelu vybraného dopravce i jeho kontextu. Hráč vybere jen trasu; počáteční zastávku neřeší, dopravce použije nejbližší dosažitelnou podle [sdíleného pravidla](gap-analysis.md#carrier-route-assignment).
+2. Za probíhajícího přechodu Atlantiku musí být současné přiřazení stále čitelné. Změna je nedostupná s vysvětlením, že loď nejprve musí dokončit plavbu; potvrzení nesmí starý úkol zrušit ani zařadit nové přiřazení do fronty. Po příjezdu se dostupnost přepočítá podle aktuálního stavu.
+3. Jde o schválené budoucí chování, nikoli o implementaci nebo nové herní ověření. Běžná plavba po mapě není sama o sobě tímto zákazem; výměna přiřazení zůstává výslovnou akcí.
