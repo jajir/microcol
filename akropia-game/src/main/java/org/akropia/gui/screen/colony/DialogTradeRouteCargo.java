@@ -74,8 +74,6 @@ public final class DialogTradeRouteCargo implements GameScreen {
     private final Label carrierStatus = new Label();
     private final Button process = ActionButtons.button(ButtonIcon.PLAY);
     private final Label assignRule = new Label();
-    private final Label firstStopLabel = new Label();
-    private final ComboBox<Integer> firstStopBox = new ComboBox<>();
     private final Button assign = ActionButtons.button(ButtonIcon.CONFIRM);
     private final Label assignStatus = new Label();
     private final Label assignedHeading = new Label();
@@ -203,23 +201,6 @@ public final class DialogTradeRouteCargo implements GameScreen {
         assignRule.setId("tradeRouteAssignRule");
         assignRule.setWrapText(true);
         assignRule.setMaxWidth(740);
-        firstStopBox.setId("tradeRouteAssignFirstStop");
-        firstStopBox.setConverter(new StringConverter<Integer>() {
-            @Override
-            public String toString(final Integer index) {
-                return index == null ? "" : stopText(index);
-            }
-
-            @Override
-            public Integer fromString(final String value) {
-                throw new UnsupportedOperationException();
-            }
-        });
-        firstStopBox.setOnAction(event -> {
-            if (!refreshing) {
-                updateState();
-            }
-        });
         assign.setId("tradeRouteAssign");
         assign.setDisable(true);
         assign.setOnAction(event -> assignCarrier());
@@ -299,9 +280,9 @@ public final class DialogTradeRouteCargo implements GameScreen {
         deletePane.setAnimated(false);
         deletePane.setExpanded(false);
         final VBox carriers = new VBox(10, carriersHeading, carrierLabel,
-                carrierBox, carrierStatus, assignRule, firstStopLabel,
-                firstStopBox, assign, assignStatus, assignedPane, processRule,
-                process, resultHeading, result, deletePane);
+                carrierBox, carrierStatus, assignRule, assign, assignStatus,
+                assignedPane, processRule, process, resultHeading, result,
+                deletePane);
         carriers.setId("tradeRouteCarriersColumn");
         for (final VBox column : List.of(stops, goods, carriers)) {
             column.setPrefWidth(340);
@@ -405,8 +386,6 @@ public final class DialogTradeRouteCargo implements GameScreen {
         resultHeading.setText(i18n.get(TradeRouteText.resultHeading));
         close.setText(i18n.get(TradeRouteText.closeCargo));
         assignRule.setText(i18n.get(TradeRouteText.assignRule));
-        firstStopLabel.setText(i18n.get(TradeRouteText.assignFirstStopLabel));
-        firstStopBox.setAccessibleText(firstStopLabel.getText());
         assign.setText(i18n.get(TradeRouteText.assignCarrier));
         assignedHeading.setText(i18n.get(TradeRouteText.assignedHeading));
         assignedPickLabel.setText(i18n.get(TradeRouteText.assignedPickLabel));
@@ -500,8 +479,6 @@ public final class DialogTradeRouteCargo implements GameScreen {
                     : indexes.get(keep < indexes.size() ? keep : 0));
             // The first stop starts at the chosen stop; the player may change
             // it without touching the stored route.
-            firstStopBox.getItems().setAll(indexes);
-            firstStopBox.setValue(stopBox.getValue());
         } finally {
             refreshing = wasRefreshing;
         }
@@ -744,15 +721,18 @@ public final class DialogTradeRouteCargo implements GameScreen {
      */
     private void updateAssignment(final TradeRoute route,
             final UnitWithCargo carrier) {
-        final Integer first = firstStopBox.getValue();
+        final Integer first = route == null || carrier == null ? null
+                : model.getNearestTradeRouteStop(carrier, route).stream()
+                        .boxed().findFirst().orElse(null);
         Optional<TradeRouteAssignmentProblem> problem = Optional.empty();
-        if (route != null && carrier != null && first != null) {
-            problem = model.getTradeRouteAssignmentProblem(carrier, route,
-                    first);
+        if (route != null && carrier != null) {
+            problem = first == null
+                    ? model.getTradeRouteChangeProblem(carrier, route)
+                    : model.getTradeRouteAssignmentProblem(carrier, route,
+                            first);
         }
         assign.setDisable(route == null || carrier == null || first == null
                 || problem.isPresent());
-        firstStopBox.setDisable(route == null);
         assignStatus.setText(carrier == null ? ""
                 : problem.map(this::assignProblemText).orElse(""));
         assigned.setText(route == null ? "" : assignedText(route));
@@ -824,8 +804,10 @@ public final class DialogTradeRouteCargo implements GameScreen {
 
     private void assignCarrier() {
         final TradeRoute route = routeBox.getValue();
-        final Integer first = firstStopBox.getValue();
         final UnitWithCargo carrier = carrierBox.getValue();
+        final Integer first = route == null || carrier == null ? null
+                : model.getNearestTradeRouteStop(carrier, route).stream()
+                        .boxed().findFirst().orElse(null);
         if (route == null || first == null || carrier == null) {
             return;
         }

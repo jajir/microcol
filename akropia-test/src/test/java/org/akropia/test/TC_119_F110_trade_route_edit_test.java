@@ -93,17 +93,17 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         cargo.verifyDialogClosed();
         cargo.verifyStoredStop("Ore cart", NEW_AMSTERDAM_STOP, "New Amsterdam");
 
-        // Wagon 4 is sent to Delft first, and one turn passes: it takes its
+        // Wagon 4 joins at New Amsterdam, and one turn passes: it takes its
         // first step.
         cargo.open();
         cargo.chooseRoute("Ore cart");
         cargo.chooseStop(NEW_AMSTERDAM_STOP);
         cargo.chooseCarrier(0);
-        cargo.chooseFirstStop(DELFT_STOP);
         cargo.verifyAssignEnabled(true);
         cargo.assign();
         cargo.verifyMessage("Assigned. The unit starts on your next turn.");
-        cargo.verifyAssignment(FIRST_WAGON_ID, "Ore cart", DELFT_STOP, false);
+        cargo.verifyAssignment(FIRST_WAGON_ID, "Ore cart", NEW_AMSTERDAM_STOP,
+                false);
         cargo.close();
         game = colony.close();
         game.nextTurnAndCloseDialogs();
@@ -117,9 +117,9 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         cargo.chooseRoute("Ore cart");
         cargo.chooseStop(NEW_AMSTERDAM_STOP);
         cargo.chooseCarrier(0);
-        cargo.chooseFirstStop(DELFT_STOP);
         cargo.assign();
-        cargo.verifyAssignment(SECOND_WAGON_ID, "Ore cart", DELFT_STOP, false);
+        cargo.verifyAssignment(SECOND_WAGON_ID, "Ore cart", NEW_AMSTERDAM_STOP,
+                false);
         cargo.close();
         game = colony.close();
         game.nextTurnAndCloseDialogs();
@@ -134,10 +134,10 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         cargo.verifyUnitAt(SECOND_WAGON_ID, DELFT_LOCATION);
         cargo.verifyHoldEmpty(SECOND_WAGON_ID, 0);
         cargo.verifyVisitProcessed(SECOND_WAGON_ID, true);
-        cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 90));
+        cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 0));
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID,
                 Goods.of(GoodsType.WEAPONS, 50));
-        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 0));
+        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 90));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 0));
 
         // Both wagons are listed although neither stands in New Amsterdam.
@@ -191,7 +191,7 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         cargo.verifyStoredStop("Ore cart", NEW_AMSTERDAM_STOP, "Haarlem");
         cargo.verifyAcceptedStop(FIRST_WAGON_ID, NEW_AMSTERDAM_STOP,
                 "New Amsterdam");
-        cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 90));
+        cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 0));
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID,
                 Goods.of(GoodsType.WEAPONS, 50));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 0));
@@ -200,7 +200,7 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         // once, WEAPONS off and ORE on. Wagon 6 leaves Delft for Haarlem.
         game.nextTurnAndCloseDialogs();
         cargo.verifyUnitAt(FIRST_WAGON_ID, NEW_AMSTERDAM_LOCATION);
-        cargo.verifyHold(FIRST_WAGON_ID, 0, Goods.of(GoodsType.ORE, 90));
+        cargo.verifyHoldEmpty(FIRST_WAGON_ID, 0);
         cargo.verifyHoldEmpty(FIRST_WAGON_ID, 1);
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID,
                 Goods.of(GoodsType.WEAPONS, 100));
@@ -212,7 +212,7 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         cargo.verifyAssignment(SECOND_WAGON_ID, "Ore cart", NEW_AMSTERDAM_STOP,
                 false);
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 0));
-        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 0));
+        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 90));
 
         // Three more turns: wagon 4 unloads its ORE in Delft, and wagon 6
         // reaches Haarlem and loads the ORE 40 stored there, once.
@@ -240,20 +240,20 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         final TradeRouteCargoDialog cargo = new TradeRouteCargoDialog(
                 getContext());
 
-        // Both free wagons are sent to Delft in the same turn.
+        // Both free wagons join at New Amsterdam before heading to Delft.
         cargo.open();
         cargo.chooseRoute("Ore cart");
         cargo.chooseStop(NEW_AMSTERDAM_STOP);
         cargo.chooseCarrier(0);
-        cargo.chooseFirstStop(DELFT_STOP);
         cargo.assign();
         // Wagon 4 is still at the stop, now with an order, so wagon 6 is the
         // second entry of the list.
         cargo.chooseCarrier(1);
-        cargo.chooseFirstStop(DELFT_STOP);
         cargo.assign();
-        cargo.verifyAssignment(FIRST_WAGON_ID, "Ore cart", DELFT_STOP, false);
-        cargo.verifyAssignment(SECOND_WAGON_ID, "Ore cart", DELFT_STOP, false);
+        cargo.verifyAssignment(FIRST_WAGON_ID, "Ore cart", NEW_AMSTERDAM_STOP,
+                false);
+        cargo.verifyAssignment(SECOND_WAGON_ID, "Ore cart", NEW_AMSTERDAM_STOP,
+                false);
         cargo.close();
         game = colony.close();
         game.nextTurnAndCloseDialogs();
@@ -299,9 +299,9 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         cargo.verifyMovementThirds(FIRST_WAGON_ID, 3);
         cargo.verifyUnitAt(SECOND_WAGON_ID, DELFT_LOCATION);
         cargo.verifyHold(SECOND_WAGON_ID, 0, Goods.of(GoodsType.WEAPONS, 50));
-        cargo.verifyHoldEmpty(FIRST_WAGON_ID, 0);
+        cargo.verifyHold(FIRST_WAGON_ID, 0, Goods.of(GoodsType.ORE, 90));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 0));
-        cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 90));
+        cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 0));
         cargo.verifyAssignment(SECOND_WAGON_ID, "Ore cart", NEW_AMSTERDAM_STOP,
                 false);
         cargo.verifyGold(10000);
@@ -315,7 +315,7 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         cargo.verifyUnitAt(FIRST_WAGON_ID, SOUTH_OF_ROAD_LOCATION);
         cargo.verifyMovementThirds(FIRST_WAGON_ID, 0);
         cargo.verifyNoStandingOrder(FIRST_WAGON_ID);
-        cargo.verifyHoldEmpty(FIRST_WAGON_ID, 0);
+        cargo.verifyHold(FIRST_WAGON_ID, 0, Goods.of(GoodsType.ORE, 90));
         cargo.verifyUnitAt(SECOND_WAGON_ID, DELFT_LOCATION);
     }
 

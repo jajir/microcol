@@ -175,7 +175,6 @@ public class TC_185_F218_connected_production_network_test
         cargo.addLoad(GoodsType.ORE);
         cargo.save();
         cargo.chooseCarrier(0);
-        cargo.chooseFirstStop(AT_DELFT);
         cargo.verifyAssignEnabled(true);
         cargo.assign();
         cargo.verifyAssignment(WAGON, "Ore Line", AT_DELFT, false);
@@ -402,7 +401,6 @@ public class TC_185_F218_connected_production_network_test
         cargo.addLoad(GoodsType.ORE);
         cargo.save();
         cargo.chooseCarrier(0);
-        cargo.chooseFirstStop(AT_DELFT);
         cargo.assign();
         cargo.verifyAssignment(WAGON, "Ore Line", AT_DELFT, false);
         cargo.close();

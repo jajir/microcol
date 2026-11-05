@@ -1323,6 +1323,6 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 
 ## Přiřazení trasy dopravci — rozhodnutí 2026-11-05
 
-1. [R-0415](requirements/R-0415.md) připravuje změnu přiřazení z panelu vybraného dopravce i jeho kontextu. Hráč vybere jen trasu; počáteční zastávku neřeší, dopravce použije nejbližší dosažitelnou podle [sdíleného pravidla](gap-analysis.md#carrier-route-assignment).
+1. [R-0415](requirements/done/R-0415.md) zpřístupňuje změnu přiřazení z panelu vybraného dopravce i jeho kontextu. Hráč vybere jen trasu; počáteční zastávku neřeší, dopravce použije nejbližší dosažitelnou podle [sdíleného pravidla](gap-analysis.md#carrier-route-assignment).
 2. Za probíhajícího přechodu Atlantiku musí být současné přiřazení stále čitelné. Změna je nedostupná s vysvětlením, že loď nejprve musí dokončit plavbu; potvrzení nesmí starý úkol zrušit ani zařadit nové přiřazení do fronty. Po příjezdu se dostupnost přepočítá podle aktuálního stavu.
-3. Jde o schválené budoucí chování, nikoli o implementaci nebo nové herní ověření. Běžná plavba po mapě není sama o sobě tímto zákazem; výměna přiřazení zůstává výslovnou akcí.
+3. Implementace má ověřený model a cílené UI včetně EN/CS dialogu; závěrečnou přejímku vlastní [funkční evidence](functional-tests.md#r-0415-carrier-route-assignment-2026-11-05). Běžná plavba po mapě není sama o sobě tímto zákazem; výměna přiřazení zůstává výslovnou akcí.

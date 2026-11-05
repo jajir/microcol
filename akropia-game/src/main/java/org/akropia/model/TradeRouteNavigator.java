@@ -91,6 +91,56 @@ final class TradeRouteNavigator {
     }
 
     /**
+     * Approach cost uses the same explored paths as route travel, without
+     * moving.
+     */
+    java.util.OptionalInt approachCost(final AbstractUnit carrier,
+            final TradeRouteStop stop) {
+        if (!carrier.isAtPlaceLocation() && !carrier.isAtEuropePort()) {
+            return java.util.OptionalInt.empty();
+        }
+        if (stop.isEurope() && carrier.isAtEuropePort()) {
+            return java.util.OptionalInt.of(0);
+        }
+        final Optional<Location> origin = carrier.isAtEuropePort()
+                ? returnOrigin((Ship) carrier)
+                : Optional.of(carrier.getLocation());
+        if (origin.isEmpty()) {
+            return java.util.OptionalInt.empty();
+        }
+        final MovementProfile profile = MovementProfile.of(carrier);
+        final PathFinder finder = new PathFinder(profile, true,
+                carrier.getOwner()::isVisible);
+        final List<Location> path;
+        if (stop.isEurope()) {
+            if (rules.isDepartureSquare(origin.get())) {
+                return java.util.OptionalInt.of(0);
+            }
+            path = finder.findNearest(origin.get(), rules::isDepartureSquare);
+        } else {
+            final Optional<Colony> colony = model
+                    .getColonyById(stop.getColonyId());
+            if (colony.isEmpty()) {
+                return java.util.OptionalInt.empty();
+            }
+            if (origin.get().equals(colony.get().getLocation())) {
+                return java.util.OptionalInt.of(0);
+            }
+            path = finder.find(origin.get(), colony.get().getLocation(), false);
+        }
+        if (path == null) {
+            return java.util.OptionalInt.empty();
+        }
+        int cost = 0;
+        Location previous = origin.get();
+        for (final Location next : path) {
+            cost += profile.getEntryCostThirds(previous, next);
+            previous = next;
+        }
+        return java.util.OptionalInt.of(cost);
+    }
+
+    /**
      * Whether the carrier, standing on the map or in Europe, can reach one stop
      * with the rules that later movement uses. Reads only.
      *

@@ -125,11 +125,6 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 .queryComboBox(), index);
     }
 
-    /** @param index zero-based stop index of the chosen route */
-    public void chooseFirstStop(final int index) {
-        choose(firstStopBox(), index);
-    }
-
     public void assign() {
         press("tradeRouteAssign");
         WaitForAsyncUtils.waitForFxEvents();
@@ -336,11 +331,6 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
 
     private ComboBox<TradeRouteStop> replacementBox() {
         return getNodeFinder().lookup("#tradeRouteReplaceStop").queryComboBox();
-    }
-
-    private ComboBox<Integer> firstStopBox() {
-        return getNodeFinder().lookup("#tradeRouteAssignFirstStop")
-                .queryComboBox();
     }
 
     @SuppressWarnings("unchecked")

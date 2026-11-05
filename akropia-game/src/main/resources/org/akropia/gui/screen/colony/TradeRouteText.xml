@@ -74,7 +74,7 @@
   <entry key="reasonBOYCOTTED">nothing moved: this goods is boycotted in Home port</entry>
   <entry key="reasonREJECTED">refused by a game rule (the amount shown was already settled)</entry>
   <entry key="reasonNOT_ATTEMPTED">not attempted after an earlier refusal</entry>
-  <entry key="assignRule">Choose a ship or wagon at this stop and the stop it heads to first. It then repeats the route on your following turns, using its normal movement.</entry>
+  <entry key="assignRule">Choose a carrier. It joins the route at its nearest reachable stop and continues on later turns.</entry>
   <entry key="assignFirstStopLabel">First stop</entry>
   <entry key="assignCarrier">Assign to route</entry>
   <entry key="assignDone">Assigned. The unit starts on your next turn.</entry>
@@ -124,4 +124,13 @@
     <entry key="carriersSection">Carriers</entry>
     <entry key="processRule">Process this stop once. This does not assign the carrier to the route.</entry>
     <entry key="routeSummary">%s route · %s stops</entry>
+    <entry key="carrierRouteTitle">Trade route assignment</entry>
+    <entry key="carrierRouteCurrent">%s #%s — Trade route: %s</entry>
+    <entry key="carrierRouteNone">No trade route</entry>
+    <entry key="carrierRouteChange">Change route assignment</entry>
+    <entry key="carrierRouteAssign">Assign trade route</entry>
+    <entry key="carrierRouteEmpty">No matching trade routes are available.</entry>
+    <entry key="carrierRouteNearest">The carrier joins at the nearest reachable stop. Cargo and movement points stay unchanged.</entry>
+    <entry key="carrierRouteVoyage">The ship is crossing the Atlantic. Change its assignment after arrival.</entry>
+    <entry key="assignProblemVOYAGE_IN_PROGRESS">The ship is crossing the Atlantic. Wait until arrival.</entry>
 </properties>

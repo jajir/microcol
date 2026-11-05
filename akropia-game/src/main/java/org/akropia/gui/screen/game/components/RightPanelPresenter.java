@@ -44,6 +44,12 @@ public final class RightPanelPresenter {
 
     }
 
+    @Subscribe
+    private void onAssignmentChanged(
+            final org.akropia.model.event.ActionWasStartedEvent event) {
+        display.refreshView(lastFocusedTileEvent);
+    }
+
     @SuppressWarnings("unused")
     @Subscribe
     private void onRefreshRightPanelEvent(final RefreshRightPanelEvent event) {

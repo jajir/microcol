@@ -317,7 +317,6 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         cargo.verifyStoredCargo("Oil Run", DELFT_STOP, List.of(GoodsType.ORE),
                 List.of());
         cargo.chooseCarrier(0);
-        cargo.chooseFirstStop(0);
         cargo.assign();
         cargo.verifyMessage("Assigned. The unit starts on your next turn.");
         cargo.close();

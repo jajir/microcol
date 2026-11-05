@@ -74,7 +74,7 @@
   <entry key="reasonBOYCOTTED">nic nepřesunuto: toto zboží je v domovském přístavu bojkotováno</entry>
   <entry key="reasonREJECTED">odmítnuto pravidlem hry (uvedené množství už bylo vypořádáno)</entry>
   <entry key="reasonNOT_ATTEMPTED">nezkoušeno po dřívějším odmítnutí</entry>
-  <entry key="assignRule">Vyberte loď nebo vůz na této zastávce a zastávku, kam má jet nejdřív. Pak bude trasu opakovat v dalších vašich tazích s běžným pohybem.</entry>
+  <entry key="assignRule">Vyberte dopravce. Připojí se v nejbližší dosažitelné zastávce a pokračuje v dalších tazích.</entry>
   <entry key="assignFirstStopLabel">První zastávka</entry>
   <entry key="assignCarrier">Přidělit trase</entry>
   <entry key="assignDone">Přiděleno. Jednotka vyrazí ve vašem příštím tahu.</entry>
@@ -124,4 +124,13 @@
     <entry key="carriersSection">Dopravci</entry>
     <entry key="processRule">Jednorázově zpracuje zastávku. Nepřiřadí dopravce k trase.</entry>
     <entry key="routeSummary">Trasa %s · počet zastávek: %s</entry>
+    <entry key="carrierRouteTitle">Přiřazení obchodní trasy</entry>
+    <entry key="carrierRouteCurrent">%s #%s — Obchodní trasa: %s</entry>
+    <entry key="carrierRouteNone">Bez obchodní trasy</entry>
+    <entry key="carrierRouteChange">Upravit přiřazení trasy</entry>
+    <entry key="carrierRouteAssign">Přiřadit obchodní trasu</entry>
+    <entry key="carrierRouteEmpty">Nejsou dostupné odpovídající obchodní trasy.</entry>
+    <entry key="carrierRouteNearest">Dopravce se připojí v nejbližší dosažitelné zastávce. Náklad a pohybové body zůstanou zachovány.</entry>
+    <entry key="carrierRouteVoyage">Loď právě přeplouvá Atlantik. Přiřazení lze změnit až po příjezdu.</entry>
+    <entry key="assignProblemVOYAGE_IN_PROGRESS">Loď právě přeplouvá Atlantik. Počkejte do příjezdu.</entry>
 </properties>

@@ -1253,3 +1253,9 @@ jsou autoritativní pro vzhled a přijetí.
 ### Kamera hlavního pohledu (R-0412)
 
 1. `gui.screen.game.gamepanel.VisibleAreaService` a `CanvasArea` omezují herní kameru jejím středem na hranice světa; editor zachovává původní omezení celého výřezu. `Area` převádí i záporné pixely bez výběru krajního pole. `MinimapProjection` zobrazuje průnik výřezu se světem. Modelová velikost světa, pohyb, průzkum a uložená data se nemění. [Přejímka](functional-tests.md#r-0411-r-0412-menu-and-camera-2026-11-04).
+
+
+### Přiřazení trasy vybranému dopravci — R-0415
+
+1. Implementace přijatá 2026-11-05: `Model.getNearestTradeRouteStop` vybírá legální zastávku přes sdílené ceny `TradeRouteNavigator.approachCost` a `PathFinder`. Stejnou volbu používá nové i původní přiřazovací UI. `Model.changeTradeRoute` ověří původní přiřazení a všechny podmínky před jeho výměnou; nezahajuje pohyb ani převody a odmítá přechod Atlantiku.
+2. `DialogCarrierTradeRoute` drží pouze rozpracovaný výběr. `ButtonsGamePanel` zpřístupní stejnou operaci z karty vybraného dopravce a kontextu; `RightPanelPresenter` obnoví zobrazení po změně rozkazu. Odpovědnosti balíčků se nemění. [R-0415](requirements/done/R-0415.md) vlastní chování, [funkční evidence](functional-tests.md#r-0415-carrier-route-assignment-2026-11-05) přejímku.

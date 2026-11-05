@@ -170,18 +170,25 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private boolean controlsDisabled;
 
     private final TradeRoutePlanningPanel tradeRoutePlanningPanel;
+    private final org.akropia.gui.util.ViewUtil routeView;
+    private final org.akropia.gui.event.model.GameModelController routeGame;
 
     @Inject
     ButtonsGamePanel(final ImageProvider imageProvider, final EventBus eventBus,
             final I18n i18n, final ColoniesMenu coloniesMenu,
             final InGameMenu gameMenu,
             final TradeRoutePlanningPanel tradeRoutePlanningPanel,
-            final TradeRoutePlanning tradeRoutePlanning) {
+            final TradeRoutePlanning tradeRoutePlanning,
+            final org.akropia.gui.util.ViewUtil routeView,
+            final org.akropia.gui.event.model.GameModelController routeGame) {
+
         super(imageProvider, eventBus, Source.GAME, i18n);
         currentI18n = i18n;
         toolbarImages = imageProvider;
         toolbarEvents = eventBus;
         this.tradeRoutePlanningPanel = tradeRoutePlanningPanel;
+        this.routeView = routeView;
+        this.routeGame = routeGame;
 
         buttonCongress.setId("congress");
         buttonCongress.setText(i18n.get(CongressText.title));
@@ -501,7 +508,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     }
 
     /** Keep the selected unit's route visible independently of its menu. */
-    public void addUnitStatus(final VBox card) {
+    public void addUnitStatus(final VBox card, final Unit carrier) {
         final Label route = new Label();
         route.setId("goToStatus");
         route.setWrapText(true);
@@ -509,6 +516,48 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         route.visibleProperty().bind(goToStatus.visibleProperty());
         route.managedProperty().bind(route.visibleProperty());
         card.getChildren().add(route);
+        final org.akropia.model.Model model = routeGame.getModel();
+        if (model.isTradeRouteCarrier(carrier)) {
+            final Label assignment = new Label(
+                    org.akropia.gui.screen.colony.DialogCarrierTradeRoute
+                            .describe(currentI18n, model, carrier));
+            assignment.setId("carrierRouteStatus");
+            assignment.setWrapText(true);
+            assignment.setMaxWidth(230);
+            final Button change = org.akropia.gui.util.ActionButtons
+                    .button(ButtonIcon.TRADE, routeActionText(model, carrier));
+            change.setId("changeCarrierRoute");
+            change.setWrapText(true);
+            change.setMaxWidth(230);
+            change.setDisable(carrier.isAtHighSea());
+            change.setOnAction(event -> showCarrierRoute(model, carrier));
+            change.setOnMouseClicked(javafx.event.Event::consume);
+            card.getChildren().addAll(assignment, change);
+            if (carrier.isAtHighSea()) {
+                final Label reason = new Label(currentI18n.get(
+                        org.akropia.gui.screen.colony.TradeRouteText.carrierRouteVoyage));
+                reason.setWrapText(true);
+                card.getChildren().add(reason);
+            }
+        }
+
+    }
+
+    private String routeActionText(final org.akropia.model.Model model,
+            final Unit carrier) {
+        return currentI18n
+                .get(model.getTradeRouteAssignment(carrier).isPresent()
+                        ? org.akropia.gui.screen.colony.TradeRouteText.carrierRouteChange
+                        : org.akropia.gui.screen.colony.TradeRouteText.carrierRouteAssign);
+    }
+
+    private void showCarrierRoute(final org.akropia.model.Model model,
+            final Unit carrier) {
+        new org.akropia.gui.screen.colony.DialogCarrierTradeRoute(routeView,
+                currentI18n, model, carrier,
+                () -> toolbarEvents.post(
+                        new org.akropia.gui.event.RefreshRightPanelEvent()))
+                .showAndWait();
     }
 
     private void addMapJob(final String text, final String id,
@@ -567,6 +616,12 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
             addMapJob(currentI18n.get(Loc.returnToColony), "returnToColony",
                     selected::returnToWorkingColony,
                     !selected.canReturnToWorkingColony());
+        }
+        if (model.isTradeRouteCarrier(selected)) {
+            addMapJob(routeActionText(model, selected),
+                    "changeCarrierRouteContext",
+                    () -> showCarrierRoute(model, selected),
+                    selected.isAtHighSea());
         }
         if (model.getTradeRouteAssignment(selected).isPresent()) {
             addMapJob(currentI18n.get(Loc.cancelWork), "cancelTradeRouteWork",

@@ -122,11 +122,8 @@ public class TC_118_F109_trade_route_assignment_test
         cargo.chooseCarrier(0);
         cargo.verifyAssignStatus("");
 
-        // Choose the first stop: Delft is a legal choice, but the wagon should
-        // load first, so New Amsterdam is chosen.
-        cargo.chooseFirstStop(DELFT_STOP);
-        cargo.verifyAssignEnabled(true);
-        cargo.chooseFirstStop(NEW_AMSTERDAM_STOP);
+        // Automatic entry picks the current colony, so the wagon loads here
+        // first.
         cargo.verifyAssignEnabled(true);
         cargo.captureDialog("tradeRouteCargoDialog",
                 "trade-route-assignment.png");
@@ -266,7 +263,6 @@ public class TC_118_F109_trade_route_assignment_test
         cargo.chooseRoute("Unused Cart");
         cargo.chooseStop(NEW_AMSTERDAM_STOP);
         cargo.chooseCarrier(0);
-        cargo.chooseFirstStop(DELFT_STOP);
         cargo.verifyAssignEnabled(true);
         cargo.close();
         cargo.verifyDialogClosed();
@@ -309,7 +305,6 @@ public class TC_118_F109_trade_route_assignment_test
         // The free wagon is assigned with the keyboard.
         cargo.chooseRoute("Povozová cesta");
         cargo.chooseStop(NEW_AMSTERDAM_STOP);
-        cargo.chooseFirstStop(NEW_AMSTERDAM_STOP);
         cargo.verifyAssignButtonText("Přidělit trase");
         cargo.verifyAssignEnabled(true);
         cargo.captureDialog("tradeRouteCargoDialog",
@@ -387,16 +382,14 @@ public class TC_118_F109_trade_route_assignment_test
         cargo.verifyChosenRoute("Ore Cart");
         cargo.chooseStop(NEW_AMSTERDAM_STOP);
         cargo.chooseCarrier(0);
-        cargo.chooseFirstStop(DELFT_STOP);
         cargo.close();
         cargo.verifyNotAssigned(WAGON_ID);
         planner.verifyCarriers("No carrier assigned");
         planner.editSelected();
         cargo.chooseStop(NEW_AMSTERDAM_STOP);
         cargo.chooseCarrier(0);
-        cargo.chooseFirstStop(DELFT_STOP);
         cargo.assign();
-        cargo.verifyAssignment(WAGON_ID, "Ore Cart", DELFT_STOP, false);
+        cargo.verifyAssignment(WAGON_ID, "Ore Cart", NEW_AMSTERDAM_STOP, false);
         cargo.close();
         planner.verifyCarriers("Carriers: Wagon #4");
         planner.verifyPreviewNote(
@@ -409,7 +402,7 @@ public class TC_118_F109_trade_route_assignment_test
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         planner.verifyPlannerShown(false);
-        cargo.verifyAssignment(WAGON_ID, "Ore Cart", DELFT_STOP, false);
+        cargo.verifyAssignment(WAGON_ID, "Ore Cart", NEW_AMSTERDAM_STOP, false);
         cargo.verifyUnitAt(WAGON_ID, NEW_AMSTERDAM_LOCATION);
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 90));
         planner.open();

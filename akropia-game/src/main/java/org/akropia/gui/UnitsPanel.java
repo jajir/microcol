@@ -81,7 +81,7 @@ public final class UnitsPanel {
                 });
             }
             if (selected && unit.getOwner().isHuman()) {
-                gameButtons.get().addUnitStatus(unitPanel.getBox());
+                gameButtons.get().addUnitStatus(unitPanel.getBox(), unit);
             }
             box.getChildren().add(unitPanel.getBox());
         }

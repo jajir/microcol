@@ -1310,6 +1310,13 @@ public class Model {
     public Optional<TradeRouteAssignmentProblem> getTradeRouteAssignmentProblem(
             final Unit carrier, final TradeRoute route,
             final int firstStopIndex) {
+        return getTradeRouteAssignmentProblem(carrier, route, firstStopIndex,
+                false);
+    }
+
+    private Optional<TradeRouteAssignmentProblem> getTradeRouteAssignmentProblem(
+            final Unit carrier, final TradeRoute route,
+            final int firstStopIndex, final boolean replacing) {
         Preconditions.checkNotNull(carrier, "Carrier is null");
         Preconditions.checkNotNull(route, "Route is null");
         if (!isGameRunning() || endingTurn) {
@@ -1343,7 +1350,8 @@ public class Model {
                 : !isOwnedColony(carrier.getOwner(), stop.getColonyId())) {
             return Optional.of(TradeRouteAssignmentProblem.STOP_UNAVAILABLE);
         }
-        if (hasGoToOrder(carrier) || !carrier.getAction().isNoAction()
+        if ((replacing ? goToOrderOf(carrier).isPresent()
+                : hasGoToOrder(carrier)) || !carrier.getAction().isNoAction()
                 || !carrier.isAtPlaceLocation() && !carrier.isAtEuropePort()
                 || carrier instanceof Ship && ((Ship) carrier).isDamaged()) {
             return Optional.of(TradeRouteAssignmentProblem.CARRIER_BUSY);
@@ -1355,6 +1363,79 @@ public class Model {
             return Optional.of(TradeRouteAssignmentProblem.STOP_NOT_REACHABLE);
         }
         return Optional.empty();
+    }
+
+    /**
+     * Eligible transport kinds; availability is checked separately for each
+     * route.
+     */
+    public boolean isTradeRouteCarrier(final Unit carrier) {
+        return carrier instanceof UnitWithCargo
+                && (carrier.getType() == UnitType.WAGON || carrier.isShip());
+    }
+
+    /**
+     * Nearest legal stop by actual approach cost; equal costs keep route order.
+     */
+    public java.util.OptionalInt getNearestTradeRouteStop(final Unit carrier,
+            final TradeRoute route) {
+        int best = -1;
+        int cost = Integer.MAX_VALUE;
+        for (int index = 0; index < route.getStops().size(); index++) {
+            if (getTradeRouteAssignmentProblem(carrier, route, index, true)
+                    .isEmpty()) {
+                final java.util.OptionalInt approach = tradeRouteNavigator
+                        .approachCost((AbstractUnit) carrier,
+                                route.getStops().get(index));
+                if (approach.isPresent() && approach.getAsInt() < cost) {
+                    best = index;
+                    cost = approach.getAsInt();
+                }
+            }
+        }
+        return best < 0 ? java.util.OptionalInt.empty()
+                : java.util.OptionalInt.of(best);
+    }
+
+    public Optional<TradeRouteAssignmentProblem> getTradeRouteChangeProblem(
+            final Unit carrier, final TradeRoute route) {
+        if (carrier.isAtHighSea()) {
+            return Optional.of(TradeRouteAssignmentProblem.VOYAGE_IN_PROGRESS);
+        }
+        if (getNearestTradeRouteStop(carrier, route).isPresent()) {
+            return Optional.empty();
+        }
+        return Optional.of(
+                getTradeRouteAssignmentProblem(carrier, route, 0, true).orElse(
+                        TradeRouteAssignmentProblem.STOP_NOT_REACHABLE));
+    }
+
+    /**
+     * Replace one assignment only after validation; a stale dialog changes
+     * nothing.
+     */
+    public void changeTradeRoute(final Unit carrier, final TradeRoute route,
+            final TradeRouteAssignment expected) {
+        Preconditions.checkArgument(
+                getTradeRouteAssignment(carrier).orElse(null) == expected,
+                "Trade route assignment changed");
+        final Optional<TradeRouteAssignmentProblem> problem = getTradeRouteChangeProblem(
+                carrier, route);
+        Preconditions.checkArgument(problem.isEmpty(),
+                "Trade route cannot be changed: %s", problem);
+        if (expected != null && expected.getRouteId() == route.getId()) {
+            return;
+        }
+        final int first = getNearestTradeRouteStop(carrier, route)
+                .orElseThrow();
+        final TradeRouteAssignment replacement = new TradeRouteAssignment(
+                route.getId(), first, null, route.getStops());
+        final AbstractUnit unit = (AbstractUnit) carrier;
+        if (expected != null) {
+            unit.clearTradeRouteAssignment();
+        }
+        unit.startTradeRouteAssignment(replacement);
+        fireActionWasStarted(carrier);
     }
 
     /**

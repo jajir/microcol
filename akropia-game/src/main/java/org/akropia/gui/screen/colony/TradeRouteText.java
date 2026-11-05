@@ -4,6 +4,9 @@ import org.akropia.i18n.MessageKeyResource;
 
 /** Trade route editor labels and the model's rejection reasons. */
 public enum TradeRouteText implements MessageKeyResource {
+    carrierRouteTitle, carrierRouteCurrent, carrierRouteNone,
+    carrierRouteChange, carrierRouteAssign, carrierRouteEmpty,
+    carrierRouteNearest, carrierRouteVoyage, assignProblemVOYAGE_IN_PROGRESS,
     open, title, rule, nameLabel, kindLabel, land, sea, startLabel, stopLabel,
     europe, existing, noRoutes, create, cancel, changed, nameEMPTY,
     nameTOO_LONG, nameINVALID, nameDUPLICATE, notOwner, idExhausted,
