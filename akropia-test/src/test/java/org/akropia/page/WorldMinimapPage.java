@@ -293,15 +293,23 @@ public final class WorldMinimapPage extends AbstractScreen {
     public void verifyMapFocus(final boolean focused) {
         getRobot().interact(() -> {
             assertEquals(focused, node("worldMinimap").isFocused());
-            final Rectangle frame = (Rectangle) node("minimapFocus");
-            assertEquals(focused, frame.isVisible());
-            assertEquals(Color.web("#445b36"), frame.getStroke());
-            assertEquals(2, frame.getStrokeWidth(), .01);
-            assertTrue(frame.getStrokeDashArray().isEmpty(),
-                    "Focus uses a solid frame");
-            final Node map = node("worldMinimap");
-            assertTrue(
-                    map.getLayoutBounds().contains(frame.getBoundsInParent()));
+            // Focus adds no outer frame; only the viewport marker remains.
+            final Region map = (Region) node("worldMinimap");
+            assertTrue(getNodeFinder().lookup("#minimapFocus").tryQuery()
+                    .isEmpty(), "Focus must not add a frame node");
+            assertTrue(map.getBorder() == null || map.getBorder().isEmpty(),
+                    "Focus must not add a border");
+            final Bounds viewport = node("minimapViewport").getBoundsInParent();
+            for (Node child : map.getChildrenUnmodifiable()) {
+                if (child instanceof Rectangle) {
+                    assertEquals(viewport.getCenterX(),
+                            child.getBoundsInParent().getCenterX(), .01,
+                            "Only viewport rectangles are drawn");
+                    assertEquals(viewport.getCenterY(),
+                            child.getBoundsInParent().getCenterY(), .01,
+                            "Only viewport rectangles are drawn");
+                }
+            }
             final Canvas canvas = (Canvas) node("minimapTerrain");
             final SnapshotParameters params = new SnapshotParameters();
             params.setFill(Color.TRANSPARENT);
@@ -309,7 +317,7 @@ public final class WorldMinimapPage extends AbstractScreen {
             for (int x = 0; x < image.getWidth(); x++) {
                 assertEquals(0,
                         image.getPixelReader().getColor(x, 1).getOpacity(),
-                        "Focus must not draw a dashed outer frame");
+                        "Focus must not draw an outer frame");
             }
         });
     }

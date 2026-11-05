@@ -1,5 +1,10 @@
 # Current requirement backlog
 
+## Minimapa bez rámečku zaměření — 2026-11-05
+
+1. [R-0419](done/R-0419.md), status `done`, A03 s vazbou A05: odstraněný rušivý vnější rámeček při zaměření; navigace a značka výřezu zachované. Lokální přejímka dokončena.
+
+
 ## Jediná volba produktu na políčku — 2026-11-05
 
 1. [R-0416](done/R-0416.md), status `done`, A07 s vazbou A03: odstranit duplicitní nabídky stejného produktu v detailu políčka, když se současné a nejlepší pole shodují. Zachovat výnosy, práci na vybraném místě a samostatnou nabídku nejlepšího pole. Implementováno a lokálně ověřeno 2026-11-05.

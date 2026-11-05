@@ -1,3 +1,14 @@
+## R-0419 minimap without focus frame — 2026-11-05
+
+1. [R-0419](requirements/done/R-0419.md) removes the outer focus rectangle at the user's explicit request, preserving the viewport marker, real focus, keyboard navigation and hover help. Claude implementation `20261105T141633Z-d9e59d420aa4` completed in 51.887 seconds; caller reviewed and formatted both Java files. Compilation by the implementer passed; this is not runtime acceptance.
+2. Full model/JUnit dispatched as `20261105T141801Z-41f047a10a2c`, supervisor PID 27965, timeout 600 seconds. Planned targeted selection: TC196 and PageVerificationContractTest, then smoke. Acceptance remains pending; no remote publication checked.
+
+3. Model/JUnit passed **5,022 tests, 0 failures/errors/skips** in 381 complete XML reports, `target/verification/run-mjt0r656`, completion `20261105T141801Z-41f047a10a2c`, 145.058 supervised seconds. Both Java sources match the retained snapshot. Targeted Docker TC196 and PageVerificationContractTest dispatched as `20261105T142053Z-c592eb364b9b`, PID 28323, timeout 1,200 seconds.
+
+4. Targeted Docker passed **8 tests, 0 failures/errors/skips** in two complete XML reports, `target/docker-ui/run-cSk769`, completion `20261105T142053Z-c592eb364b9b`, 83.267 supervised seconds. Focused minimap screenshot inspected: no outer focus rectangle, viewport marker retained. Final smoke dispatched as `20261105T142248Z-1fbd333f0e83`, PID 28504, supervisor timeout480s and phase budget420s.
+
+5. Final smoke passed **21 tests, 0 failures/errors/skips** in 12 complete XML reports, `target/verification/run-smzaq442`, completion `20261105T142248Z-1fbd333f0e83`: 219.359 phase seconds, 222.371 supervised seconds, within 420 seconds. Both changed Java files match the accepted smoke snapshot. R-0419 archived as done; accepted totals: **5,022 model/JUnit, 8 targeted UI and 21 smoke/support tests**. No remote regression or distribution publication inspected.
+
 ## R-0418/R-0417/R-0416 implementation — 2026-11-05
 
 1. Scope: [R-0418](requirements/done/R-0418.md), [R-0417](requirements/done/R-0417.md) and [R-0416](requirements/done/R-0416.md), implemented by Claude in an isolated worktree based on `e7fffec1`. No model rule, yield, save schema or graphics asset changed. Caller review and local acceptance are complete; items below distinguish historical attempts from final passing evidence.

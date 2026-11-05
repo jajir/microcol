@@ -41,7 +41,6 @@ public final class WorldMinimap extends VBox {
     private static final double WIDTH = 220, HEIGHT = 180;
     private static final Color INK = Color.web("#34332b");
     private static final Color PAPER = Color.web("#fff9ec");
-    private static final Color FOCUS = Color.web("#445b36");
     private static final Color[] COLORS = MinimapTiles.COLORS;
 
     private final GameModelController controller;
@@ -52,8 +51,6 @@ public final class WorldMinimap extends VBox {
     private final Pane map = new Pane();
     private final Rectangle viewportOutline = new Rectangle();
     private final Rectangle viewport = new Rectangle();
-    private final Rectangle focusFrame = new Rectangle(1, 1, WIDTH - 2,
-            HEIGHT - 2);
     private MinimapProjection projection;
     private Location worldSize;
     private byte[] painted;
@@ -74,8 +71,8 @@ public final class WorldMinimap extends VBox {
         setMaxWidth(WIDTH);
         terrain.setId("minimapTerrain");
         viewport.setId("minimapViewport");
-        for (Rectangle rectangle : new Rectangle[] { viewportOutline, viewport,
-                focusFrame }) {
+        for (Rectangle rectangle : new Rectangle[] { viewportOutline,
+                viewport }) {
             rectangle.setFill(Color.TRANSPARENT);
             rectangle.setMouseTransparent(true);
         }
@@ -83,19 +80,13 @@ public final class WorldMinimap extends VBox {
         viewportOutline.setStrokeWidth(4);
         viewport.setStroke(PAPER);
         viewport.setStrokeWidth(2);
-        // Without a heading, keyboard focus frames the map with a solid line.
-        focusFrame.setId("minimapFocus");
-        focusFrame.setStroke(FOCUS);
-        focusFrame.setStrokeWidth(2);
-        focusFrame.visibleProperty().bind(map.focusedProperty());
         map.setId("worldMinimap");
         map.setMinSize(WIDTH, HEIGHT);
         map.setPrefSize(WIDTH, HEIGHT);
         map.setMaxSize(WIDTH, HEIGHT);
         map.setFocusTraversable(true);
         map.setAccessibleRole(AccessibleRole.IMAGE_VIEW);
-        map.getChildren().addAll(terrain, viewportOutline, viewport,
-                focusFrame);
+        map.getChildren().addAll(terrain, viewportOutline, viewport);
         map.setOnMouseEntered(event -> eventBus
                 .post(new StatusBarMessageEvent(i18n.get(Loc.minimap_status),
                         StatusBarMessageEvent.Source.GAME)));
