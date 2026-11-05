@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Přiřazení obchodní trasy u dopravce — 2026-11-05
+
+1. [R-0415](R-0415.md), status `new`, A06 s vazbami A03/A05/A04: návrh zobrazení přiřazené trasy v panelu vozu/lodi a společného dialogu změny z panelu i kontextu. Otevřené jsou počáteční zastávka a změna za atlantické plavby. Pouze analýza, implementace nezadána.
+
 ## Dvojklik a zrušení práce — 2026-11-04
 
 1. [R-0414](done/R-0414.md), status `done`, A03 s vazbami A05/A07/A06: dvojklik otevírá město, výběr zachovává práci a zrušení práce rybáře provádí placený návrat. Vybraná část [R-0410](R-0410.md); lokální model/UI/smoke přejímka dokončena 2026-11-04, viz [evidence](../functional-tests.md#r-0414-map-selection-and-work-cancellation-2026-11-04).
