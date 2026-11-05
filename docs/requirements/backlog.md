@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Kompaktní hodnoty zboží v detailu kolonie — 2026-11-05
+
+1. [R-0416](R-0416.md), status `new`, A03 s vazbami A07/A06: pod názvem společný řádek zásoby a změny; přírůstky zeleně se znaménkem `+`, úbytky červeně se znaménkem `-`, bez závorek a `/turn`. Nulová změna se skryje; pochodně a sovy ukazují pouze nenulovou změnu. Zachycení zadání, implementace nezahájena.
+
 ## Přiřazení obchodní trasy u dopravce — 2026-11-05
 
 1. [R-0415](R-0415.md), status `new`, A06 s vazbami A03/A05/A04: návrh zobrazení přiřazené trasy v panelu vozu/lodi a společného dialogu změny z panelu i kontextu. Rozhodnuto: automaticky nejbližší dosažitelná zastávka bez ruční volby; během přechodu Atlantiku změna zakázaná. Pouze analýza, implementace nezadána.
