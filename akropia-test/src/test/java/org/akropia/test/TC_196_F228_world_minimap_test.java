@@ -33,7 +33,8 @@ public class TC_196_F228_world_minimap_test extends AbstractAkropiaTest {
     @Tag("local")
     void TC_01_navigation_preserves_gameplay_and_follows_the_view()
             throws Exception {
-        // Open the partially explored world; all map bounds fit the sidebar.
+        // Open the partially explored world; the headingless map starts the
+        // sidebar and all map bounds fit it.
         WelcomePage.of(getContext()).loadGame();
         final WorldMinimapPage map = new WorldMinimapPage(getContext());
         final MainScreenLayoutPage window = new MainScreenLayoutPage(
@@ -44,6 +45,13 @@ public class TC_196_F228_world_minimap_test extends AbstractAkropiaTest {
         map.verifyTerrain(Location.of(25, 16), "#649b97", true);
         map.verifyTerrain(Location.of(40, 16), "#9c9585", false);
         map.rememberGameAndView();
+        // Hovering explains the minimap in the status bar without any effect.
+        map.hoverMinimap();
+        map.verifyStatusMessage(
+                "Minimap. It never really caught on in ancient Greece. They were waiting for the invention of the monitor.");
+        map.leaveMinimap();
+        map.verifyRightPanelStatus();
+        map.verifyGameUnchanged();
         // Clicking the center and both extreme corners only moves the camera.
         map.clickWorld(.5, .5);
         map.verifyCentered(.5, .5);
@@ -92,6 +100,11 @@ public class TC_196_F228_world_minimap_test extends AbstractAkropiaTest {
         map.verifyLayoutAndLanguage("Minimapa",
                 "Posun: kliknutí, tažení či šipky");
         map.verifyTerrain(Location.of(28, 16), "#9c9585", false);
+        map.hoverMinimap();
+        map.verifyStatusMessage(
+                "Minimapa. Ve starém Řecku se příliš neujala. Čekalo se na vynález monitoru.");
+        map.leaveMinimap();
+        map.verifyRightPanelStatus();
         // A real exploration move reveals the same sea in both map views.
         final FogPage fog = new FogPage(getContext());
         fog.centerFrontier();

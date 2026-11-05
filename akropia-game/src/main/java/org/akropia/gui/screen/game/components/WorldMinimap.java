@@ -13,6 +13,7 @@ import org.akropia.i18n.I18n;
 import org.akropia.model.Location;
 import org.akropia.model.WorldMap;
 
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
@@ -23,12 +24,10 @@ import javafx.event.EventHandler;
 import javafx.scene.AccessibleRole;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -42,6 +41,7 @@ public final class WorldMinimap extends VBox {
     private static final double WIDTH = 220, HEIGHT = 180;
     private static final Color INK = Color.web("#34332b");
     private static final Color PAPER = Color.web("#fff9ec");
+    private static final Color FOCUS = Color.web("#445b36");
     private static final Color[] COLORS = MinimapTiles.COLORS;
 
     private final GameModelController controller;
@@ -52,7 +52,8 @@ public final class WorldMinimap extends VBox {
     private final Pane map = new Pane();
     private final Rectangle viewportOutline = new Rectangle();
     private final Rectangle viewport = new Rectangle();
-    private final Label title = new Label();
+    private final Rectangle focusFrame = new Rectangle(1, 1, WIDTH - 2,
+            HEIGHT - 2);
     private MinimapProjection projection;
     private Location worldSize;
     private byte[] painted;
@@ -61,7 +62,8 @@ public final class WorldMinimap extends VBox {
     @Inject
     public WorldMinimap(final GameModelController controller,
             final @Named("game") VisibleAreaService visibleArea,
-            final ScrollingManager scrolling, final I18n i18n) {
+            final ScrollingManager scrolling, final I18n i18n,
+            final EventBus eventBus) {
         this.controller = controller;
         this.visibleArea = visibleArea;
         this.scrolling = scrolling;
@@ -72,8 +74,8 @@ public final class WorldMinimap extends VBox {
         setMaxWidth(WIDTH);
         terrain.setId("minimapTerrain");
         viewport.setId("minimapViewport");
-        for (Rectangle rectangle : new Rectangle[] { viewportOutline,
-                viewport }) {
+        for (Rectangle rectangle : new Rectangle[] { viewportOutline, viewport,
+                focusFrame }) {
             rectangle.setFill(Color.TRANSPARENT);
             rectangle.setMouseTransparent(true);
         }
@@ -81,13 +83,26 @@ public final class WorldMinimap extends VBox {
         viewportOutline.setStrokeWidth(4);
         viewport.setStroke(PAPER);
         viewport.setStrokeWidth(2);
+        // Without a heading, keyboard focus frames the map with a solid line.
+        focusFrame.setId("minimapFocus");
+        focusFrame.setStroke(FOCUS);
+        focusFrame.setStrokeWidth(2);
+        focusFrame.visibleProperty().bind(map.focusedProperty());
         map.setId("worldMinimap");
         map.setMinSize(WIDTH, HEIGHT);
         map.setPrefSize(WIDTH, HEIGHT);
         map.setMaxSize(WIDTH, HEIGHT);
         map.setFocusTraversable(true);
         map.setAccessibleRole(AccessibleRole.IMAGE_VIEW);
-        map.getChildren().addAll(terrain, viewportOutline, viewport);
+        map.getChildren().addAll(terrain, viewportOutline, viewport,
+                focusFrame);
+        map.setOnMouseEntered(event -> eventBus
+                .post(new StatusBarMessageEvent(i18n.get(Loc.minimap_status),
+                        StatusBarMessageEvent.Source.GAME)));
+        // Leaving returns the status bar to the right panel's own context.
+        map.setOnMouseExited(event -> eventBus.post(
+                new StatusBarMessageEvent(i18n.get(Loc.rightPanel_description),
+                        StatusBarMessageEvent.Source.GAME)));
         map.setOnMousePressed(event -> {
             dragging = event.getButton() == MouseButton.PRIMARY
                     && projection != null && projection.getBounds()
@@ -134,12 +149,7 @@ public final class WorldMinimap extends VBox {
                 event.consume();
             }
         });
-        map.focusedProperty().addListener((observable, oldValue,
-                newValue) -> title.setUnderline(newValue));
-        title.setId("minimapTitle");
-        title.setMaxWidth(WIDTH);
-        title.setMinHeight(Region.USE_PREF_SIZE);
-        getChildren().addAll(title, map);
+        getChildren().add(map);
     }
 
     private void pan(final KeyEvent event) {
@@ -180,10 +190,9 @@ public final class WorldMinimap extends VBox {
             projection = new MinimapProjection(worldSize, WIDTH, HEIGHT);
             painted = null;
         }
-        final String heading = i18n.get(Loc.minimap_title);
-        if (!heading.equals(title.getText())) {
-            title.setText(heading);
-            map.setAccessibleText(heading);
+        final String name = i18n.get(Loc.minimap_title);
+        if (!name.equals(map.getAccessibleText())) {
+            map.setAccessibleText(name);
             map.setAccessibleHelp(i18n.get(Loc.minimap_hint));
         }
         final byte[] tiles = MinimapTiles

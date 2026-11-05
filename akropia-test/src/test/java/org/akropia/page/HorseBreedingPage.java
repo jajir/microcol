@@ -48,8 +48,9 @@ public final class HorseBreedingPage extends AbstractScreen {
         final Label amount = (Label) panel.lookup(".amount");
         final Label diff = (Label) panel.lookup(".diff");
         assertEquals(String.valueOf(horseStock), amount.getText());
-        assertEquals("(" + (horseIncrease == 0 ? "0" : "+" + horseIncrease)
-                + " /turn)", diff.getText());
+        assertEquals(horseIncrease == 0 ? "" : "+" + horseIncrease,
+                diff.getText());
+        assertEquals(horseIncrease != 0, diff.isVisible());
         assertEquals(horseIncrease, colony().getGoodsStats()
                 .getStatsByType(GoodsType.HORSE).getRowProduction());
     }

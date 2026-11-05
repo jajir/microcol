@@ -48,21 +48,21 @@ public class TC_50_F41_industrial_production_test extends AbstractAkropiaTest {
         construction.verifyStocksAndPopulation(0, 0, 3);
         industry.verifyForecast(GoodsType.LUMBER, 97, -6);
         colony.verifyThatProductionIs(GoodsType.HAMMERS, 6);
-        colony.verifyGoodsForecast(GoodsType.HAMMERS, 0, 6, "turn");
+        colony.verifyGoodsForecast(GoodsType.HAMMERS, 0, 6);
         // The same worker now consumes and produces six, including after
         // Continue.
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         construction.verifyStocksAndPopulation(6, 0, 3);
-        colony.verifyGoodsForecast(GoodsType.HAMMERS, 6, 6, "turn");
+        colony.verifyGoodsForecast(GoodsType.HAMMERS, 6, 6);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.LUMBER, 91));
         game = colony.close();
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame().openColonyAt(COLONY,
                 "New Amsterdam");
         construction.verifyStocksAndPopulation(6, 0, 3);
-        colony.verifyGoodsForecast(GoodsType.HAMMERS, 6, 6, "turn");
+        colony.verifyGoodsForecast(GoodsType.HAMMERS, 6, 6);
         industry.verifyForecast(GoodsType.LUMBER, 91, -6);
     }
 

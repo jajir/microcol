@@ -50,10 +50,11 @@ public final class IndustrialProductionPage extends AbstractScreen {
             Label amount = (Label) panel.lookup(".amount");
             Label difference = (Label) panel.lookup(".diff");
             assertEquals(String.valueOf(stock), amount.getText(), type.name());
-            assertEquals("("
-                    + (change > 0 ? "+" + change
-                            : change < 0 ? "−" + Math.abs(change) : "0")
-                    + " /turn)", difference.getText(), type.name());
+            assertEquals(
+                    change > 0 ? "+" + change
+                            : change < 0 ? "-" + Math.abs(change) : "",
+                    difference.getText(), type.name());
+            assertEquals(change != 0, difference.isVisible(), type.name());
             assertEquals(stock, getModel().getColonyById(0).orElseThrow()
                     .getWarehouse().getGoods(type).getAmount());
             if (change != 0) {

@@ -2,15 +2,15 @@
 
 ## Jediná volba produktu na políčku — 2026-11-05
 
-1. [R-0416](R-0416.md), status `new`, A07 s vazbou A03: odstranit duplicitní nabídky stejného produktu v detailu políčka, když se současné a nejlepší pole shodují. Zachovat výnosy, práci na vybraném místě a samostatnou nabídku nejlepšího pole. Pouze zachycení požadavku, bez implementace.
+1. [R-0416](done/R-0416.md), status `done`, A07 s vazbou A03: odstranit duplicitní nabídky stejného produktu v detailu políčka, když se současné a nejlepší pole shodují. Zachovat výnosy, práci na vybraném místě a samostatnou nabídku nejlepšího pole. Implementováno a lokálně ověřeno 2026-11-05.
 
 ## Minimapa nahoře a hláška ve stavovém řádku — 2026-11-05
 
-1. [R-0417](R-0417.md), status `new`, A03 s vazbou A05: odstranit nadpis, posunout minimapu nahoru a po najetí zobrazit schválenou hlášku o starém Řecku a vynálezu monitoru. Pouze zachycení požadavku; bez implementace a na přání uživatele bez testů.
+1. [R-0417](done/R-0417.md), status `done`, A03 s vazbou A05: odstranit nadpis, posunout minimapu nahoru a po najetí zobrazit schválenou hlášku o starém Řecku a vynálezu monitoru. Implementováno a lokálně ověřeno 2026-11-05, se společným závěrečným smoke během.
 
 ## Kompaktní hodnoty zboží v detailu kolonie — 2026-11-05
 
-1. [R-0418](R-0418.md), status `new`, A03 s vazbami A07/A06: pod názvem společný řádek zásoby a změny; přírůstky zeleně se znaménkem `+`, úbytky červeně se znaménkem `-`, bez závorek a `/turn`. Nulová změna se skryje; pochodně a sovy ukazují pouze nenulovou změnu. Zachycení zadání, implementace nezahájena.
+1. [R-0418](done/R-0418.md), status `done`, A03 s vazbami A07/A06: pod názvem společný řádek zásoby a změny; přírůstky zeleně se znaménkem `+`, úbytky červeně se znaménkem `-`, bez závorek a `/turn`. Nulová změna se skryje; pochodně a sovy ukazují pouze nenulovou změnu. Implementováno a lokálně ověřeno 2026-11-05.
 
 ## Přiřazení obchodní trasy u dopravce — 2026-11-05
 

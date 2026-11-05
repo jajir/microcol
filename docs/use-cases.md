@@ -21,6 +21,13 @@ Lokální přejímka je dokončená; výběr, skutečné výsledky a historické
 
 # Use cases a přejímka pravidel hry
 
+## UC-114/119: hodnoty zboží, minimapa a volba produkce pole — 2026-11-05
+
+1. [R-0418](requirements/done/R-0418.md): spodní přehled kolonie ukazuje zásobu a nenulovou změnu na jednom řádku; pochodně a sovy jen nenulovou změnu. TC106/03 ověřuje anglicky/česky a při dvou šířkách nulovou změnu, nulovou zásobu, kladiva, kladnou změnu a zachovanou přepravu; TC195/01–02 záporné a kladné změny, barvy a úzké okno v obou jazycích; TC19/01 skrytou nulovou změnu pochodní a skrytý uložený stav sov. TC49, TC50, TC109 a TC197 zachovávají své výrobní hodnoty v novém zápisu.
+2. [R-0417](requirements/done/R-0417.md): minimapa bez nadpisu začíná pravý panel a po najetí zobrazí lokalizovanou hlášku ve stavové liště. TC196/01–02 ověřují nepřítomnost nadpisu, horní pozici, hlášku a návrat běžné nápovědy v obou jazycích a viditelný fokus; navigace, tažení a průzkum zůstávají. TC192 se spouští jako kontrola rozložení hlavní obrazovky.
+3. [R-0416](requirements/done/R-0416.md): detail obsazeného pole nabízí každou surovinu jednou. TC195/01, 02 a 05 ověřují jedinečnost při shodném i lepším jiném poli, EN/CS, klávesnici a setrvání pracovníka; TC40 a `ColonyJobChoiceTest` zachovávají celkovou nabídku práce včetně přesunu na nejlepší pole.
+4. Stav: implementováno a připraveno k přejímce; výsledky cílených UI scénářů, model/JUnit a smoke zaznamená [funkční evidence](functional-tests.md#r-0418r-0417r-0416-implementation-2026-11-05). Nejde o přijetí celých UC.
+
 ## UC-114/119 a návazné UC-085: ověření koloniálních cest — 2026-10-31
 
 1. [R-0374](requirements/done/R-0374.md) ověřuje změny R-0372/R-0373 a návazné cesty kolonie. TC49 kontroluje zásobu a přírůstek koní přes stabilní prvek nového přehledu; TC34 zachovává popis neprozkoumaného políčka po práci s lištou.

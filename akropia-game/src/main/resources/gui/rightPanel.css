@@ -62,5 +62,5 @@
     -fx-opacity: 1;
 }
 
-#minimapPanel { -fx-padding: 10 0 12 0; }
-#minimapTitle { -fx-text-fill: #34332b; -fx-alignment: center; }
+/* The right panel's own padding is the minimap's top margin. */
+#minimapPanel { -fx-padding: 0 0 12 0; }

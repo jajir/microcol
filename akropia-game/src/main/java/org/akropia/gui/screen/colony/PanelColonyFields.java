@@ -35,8 +35,12 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javafx.application.Platform;
+import javafx.geometry.Bounds;
 import javafx.geometry.VPos;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
@@ -559,9 +563,14 @@ public final class PanelColonyFields implements JavaFxComponent {
                 final GoodsType current = unit.isAtPlaceColonyField()
                         ? unit.getPlaceColonyField().getProducedGoodsType()
                         : null;
+                // Only work on this field; a best-field offer for the same
+                // field would repeat the product.
                 colony.getJobChoices(unit).stream()
-                        .filter(choice -> choice.getTargetLocation()
-                                .filter(field.getLocation()::equals).isPresent()
+                        .filter(choice -> choice
+                                .getKind() == ColonyJobChoice.Kind.CURRENT_FIELD
+                                && choice.getTargetLocation()
+                                        .filter(field.getLocation()::equals)
+                                        .isPresent()
                                 && choice.getUnavailableReason().isEmpty())
                         .forEach(choice -> addOutputChoice(choice, current,
                                 group));
@@ -600,6 +609,12 @@ public final class PanelColonyFields implements JavaFxComponent {
         row.setAccessibleText(name + ", "
                 + i18n.get(ColonyMsg.yieldSummary, goods.getAmount()));
         row.setAccessibleHelp(i18n.get(ColonyMsg.outputHelp));
+        // Runs after the scroll pane's own jump to the focused row.
+        row.focusedProperty().addListener((observable, wasFocused, focused) -> {
+            if (focused) {
+                Platform.runLater(this::revealProduction);
+            }
+        });
         row.selectedProperty()
                 .addListener((observable, wasSelected, selected) -> {
                     if (!selected) {
@@ -620,6 +635,53 @@ public final class PanelColonyFields implements JavaFxComponent {
                             .ifPresent(javafx.scene.Node::requestFocus);
                 });
         output.getChildren().add(row);
+    }
+
+    /**
+     * Scrolls the colony page just enough to show the whole product list, so
+     * keyboard focus never moves to a choice the player cannot read.
+     */
+    private void revealProduction() {
+        Parent parent = production.getParent();
+        while (parent != null && !(parent instanceof ScrollPane)) {
+            parent = parent.getParent();
+        }
+        if (parent == null || production.getScene() == null) {
+            return;
+        }
+        final ScrollPane scroll = (ScrollPane) parent;
+        final Node content = scroll.getContent();
+        final Bounds target = content.sceneToLocal(
+                production.localToScene(production.getLayoutBounds()));
+        final Bounds view = scroll.getViewportBounds();
+        final Bounds all = content.getLayoutBounds();
+        final double width = all.getWidth() - view.getWidth();
+        if (width > 0) {
+            scroll.setHvalue(scrollValue(scroll.getHvalue(), scroll.getHmin(),
+                    scroll.getHmax(), width, target.getMinX(), target.getMaxX(),
+                    view.getWidth()));
+        }
+        final double height = all.getHeight() - view.getHeight();
+        if (height > 0) {
+            scroll.setVvalue(scrollValue(scroll.getVvalue(), scroll.getVmin(),
+                    scroll.getVmax(), height, target.getMinY(),
+                    target.getMaxY(), view.getHeight()));
+        }
+        scroll.layout();
+    }
+
+    private static double scrollValue(final double value, final double min,
+            final double max, final double range, final double start,
+            final double end, final double visible) {
+        double offset = (value - min) / (max - min) * range;
+        if (end > offset + visible) {
+            offset = end - visible;
+        }
+        if (start < offset) {
+            offset = start;
+        }
+        offset = Math.max(0, Math.min(range, offset));
+        return min + offset / range * (max - min);
     }
 
     @Override

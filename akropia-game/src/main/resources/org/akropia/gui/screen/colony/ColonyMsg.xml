@@ -104,7 +104,6 @@
     <entry key="stockSection">Goods and production · stock / net change or production per turn</entry>
     <entry key="surroundingSection">Surrounding area</entry>
     <entry key="selectedSection">Selected tile</entry>
-    <entry key="productionPerTurn">%s /turn</entry>
     <entry key="localProduction"> · colony production per turn; cannot be transported</entry>
     <entry key="outputLabel">Production</entry>
     <entry key="outputYield">Yield / turn</entry>

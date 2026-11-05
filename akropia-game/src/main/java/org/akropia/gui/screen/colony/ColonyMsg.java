@@ -25,10 +25,9 @@ public enum ColonyMsg implements MessageKeyResource {
     quickLoadQuestion, quickUnloadQuestion, quickConfirm, quickCancel,
     quickUNAVAILABLE, quickNO_STOCK, quickNO_HOLD, quickNO_GOODS, quickChanged,
     notBuilt, outsideSection, harborSection, stockSection, surroundingSection,
-    selectedSection, productionPerTurn, localProduction, outputLabel,
-    outputYield, outputHelp, noWorker, yieldSummary, automaticProduction,
-    exportsAction, treasureAction, loadAction, unloadAction, educationHelp,
-    treasureHelp, tradeRouteHelp, routeCargoHelp, loadHelp, unloadHelp,
-    backHelp;
+    selectedSection, localProduction, outputLabel, outputYield, outputHelp,
+    noWorker, yieldSummary, automaticProduction, exportsAction, treasureAction,
+    loadAction, unloadAction, educationHelp, treasureHelp, tradeRouteHelp,
+    routeCargoHelp, loadHelp, unloadHelp, backHelp;
 
 }

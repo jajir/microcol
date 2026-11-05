@@ -104,7 +104,6 @@
     <entry key="stockSection">Zboží a produkce · zásoba / čistá změna nebo produkce za tah</entry>
     <entry key="surroundingSection">Okolí města</entry>
     <entry key="selectedSection">Vybrané políčko</entry>
-    <entry key="productionPerTurn">%s /kolo</entry>
     <entry key="localProduction"> · produkce kolonie za tah; nelze převážet</entry>
     <entry key="outputLabel">Produkce</entry>
     <entry key="outputYield">Výnos / tah</entry>

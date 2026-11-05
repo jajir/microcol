@@ -2,9 +2,9 @@
 
 ## R-0416 duplicate field products capture — 2026-11-05
 
-1. On base `c6732a69`, captured [R-0416](requirements/R-0416.md), status `new`: one row per available product in the selected colony field, including when current-field and best-field job offers share a destination. The user's screenshot and source inspection establish the reported duplication; no runtime reproduction or gameplay fix is claimed.
+1. On base `c6732a69`, captured [R-0416](requirements/done/R-0416.md), status `new`: one row per available product in the selected colony field, including when current-field and best-field job offers share a destination. The user's screenshot and source inspection establish the reported duplication; no runtime reproduction or gameplay fix is claimed.
 2. Documentation-only acceptance passed: all 14 consistency tests, zero failures/errors/skips; name audit with zero unexplained occurrences; strict MkDocs. Review confirmed the four chapters, source diagnosis, linked acceptance scope and documentation-only changes. Logs: `target/r0416/`. The checked source snapshot excludes unrelated trade-route work; model/JUnit, Docker UI and smoke are exempt for this documentation-only capture. Remote CI, Pages and distributions are not inspected.
-3. Concurrent requirement capture reused R-0416: commit `5ae5937a` contains the duplicate-products requirement under a goods-layout commit title and backlog link. Preserve R-0416 for its actual committed content; restore the original goods-layout analysis verbatim from its originating chat as [R-0418](requirements/R-0418.md), changing only the ID, and repair the two backlog links. R-0417 belongs to the independently captured minimap requirement. Final documentation checks cover this reconciliation as well.
+3. Concurrent requirement capture reused R-0416: commit `5ae5937a` contains the duplicate-products requirement under a goods-layout commit title and backlog link. Preserve R-0416 for its actual committed content; restore the original goods-layout analysis verbatim from its originating chat as [R-0418](requirements/done/R-0418.md), changing only the ID, and repair the two backlog links. R-0417 belongs to the independently captured minimap requirement. Final documentation checks cover this reconciliation as well.
 
 ## R-0412 camera overscroll decisions — 2026-11-04
 

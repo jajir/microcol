@@ -23,6 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -247,7 +248,8 @@ public final class WorldMinimapPage extends AbstractScreen {
 
     }
 
-    public void verifyLayoutAndLanguage(final String title, final String hint) {
+    public void verifyLayoutAndLanguage(final String accessibleName,
+            final String hint) {
         getRobot().interact(() -> {
             final Node map = node("worldMinimap");
             final Bounds b = map.localToScene(map.getLayoutBounds());
@@ -266,24 +268,24 @@ public final class WorldMinimapPage extends AbstractScreen {
             final Node difficulty = node("gameDifficulty");
             assertTrue(difficulty.localToScene(difficulty.getLayoutBounds())
                     .getMaxY() <= map.getScene().getHeight());
-            assertEquals(title, map.getAccessibleText());
+            assertEquals(accessibleName, map.getAccessibleText());
             assertEquals(hint, map.getAccessibleHelp());
-            final Label label = (Label) node("minimapTitle");
-            assertEquals(title, label.getText());
-            assertEquals(((Label) node("statusBarLabel")).getFont(),
-                    label.getFont());
-            assertEquals(b.getMinX() + b.getWidth() / 2,
-                    label.localToScene(label.getLayoutBounds()).getCenterX(),
-                    .5);
-            assertTrue(label.localToScene(label.getLayoutBounds())
-                    .getMaxY() <= b.getMinY());
+            assertTrue(getNodeFinder().lookup("#minimapTitle").queryAll()
+                    .isEmpty(), "The minimap has no visible heading");
+            final Node panel = node("rightPanel");
+            assertTrue(
+                    panel.lookupAll(".label").stream()
+                            .noneMatch(label -> accessibleName
+                                    .equals(((Label) label).getText())),
+                    "No heading text remains in the right panel");
+            // The map starts at the right panel's normal 12 px top padding,
+            // with no extra space of its own.
+            assertEquals(12, ((Region) panel).getPadding().getTop(), .01);
+            final Bounds side = panel.localToScene(panel.getLayoutBounds());
+            assertEquals(side.getMinY() + 12, b.getMinY(), .5);
             assertTrue(
                     getNodeFinder().lookup("#minimapHint").queryAll().isEmpty(),
                     "The instruction is accessible help, not a visible footer");
-            assertTrue(
-                    label.getHeight() >= label.prefHeight(label.getWidth())
-                            - .5,
-                    "The minimap heading must remain fully visible");
             assertTrue(map.isFocusTraversable());
         });
     }
@@ -291,7 +293,15 @@ public final class WorldMinimapPage extends AbstractScreen {
     public void verifyMapFocus(final boolean focused) {
         getRobot().interact(() -> {
             assertEquals(focused, node("worldMinimap").isFocused());
-            assertEquals(focused, ((Label) node("minimapTitle")).isUnderline());
+            final Rectangle frame = (Rectangle) node("minimapFocus");
+            assertEquals(focused, frame.isVisible());
+            assertEquals(Color.web("#445b36"), frame.getStroke());
+            assertEquals(2, frame.getStrokeWidth(), .01);
+            assertTrue(frame.getStrokeDashArray().isEmpty(),
+                    "Focus uses a solid frame");
+            final Node map = node("worldMinimap");
+            assertTrue(
+                    map.getLayoutBounds().contains(frame.getBoundsInParent()));
             final Canvas canvas = (Canvas) node("minimapTerrain");
             final SnapshotParameters params = new SnapshotParameters();
             params.setFill(Color.TRANSPARENT);
@@ -302,6 +312,34 @@ public final class WorldMinimapPage extends AbstractScreen {
                         "Focus must not draw a dashed outer frame");
             }
         });
+    }
+
+    public void hoverMinimap() {
+        movePointer(.5, .5);
+    }
+
+    /** Moves the pointer from the minimap to the tile picture below it. */
+    public void leaveMinimap() {
+        getRobot().moveTo(node("tileImage"));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyStatusMessage(final String expected) {
+        getRobot().interact(() -> {
+            final Label status = (Label) node("statusBarLabel");
+            assertEquals(expected, status.getText());
+            final javafx.scene.text.Text text = (javafx.scene.text.Text) status
+                    .lookup(".text");
+            assertEquals(expected, text.getText(),
+                    "Complete status message is rendered");
+        });
+    }
+
+    /** Leaving the minimap restores the right panel's ordinary help. */
+    public void verifyRightPanelStatus() {
+        verifyStatusMessage(
+                getContext().getClassFromGuice(org.akropia.i18n.I18n.class)
+                        .get(org.akropia.gui.Loc.rightPanel_description));
     }
 
     public void verifyFocusLeftMinimap() {

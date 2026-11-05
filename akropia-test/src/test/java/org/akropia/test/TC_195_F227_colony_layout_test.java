@@ -51,20 +51,21 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.verifySelectedTileColor(0, 1,
                 javafx.scene.paint.Color.web("#c99638"));
         layout.verifyOutput(GoodsType.LUMBER, 2);
-        layout.verifyProductionChoices(0);
+        layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.LUMBER);
         layout.verifyPreviewMatchesMap(0, 1);
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0362-production-en.png");
         jobs.verifyWorldUnchanged();
 
         // An explicit crop choice updates this worker, the inspector and
-        // forecast.
+        // forecast; the worker stays here although grain yields more nearby.
         layout.moveSelection(KeyCode.ENTER);
         layout.verifyOutputFocused(GoodsType.LUMBER);
         layout.chooseOutput(GoodsType.GRAIN);
         layout.verifyOutput(GoodsType.GRAIN, 2);
         jobs.verifyFieldJob(0, Location.of(23, 16),
                 org.akropia.model.Goods.of(GoodsType.GRAIN, 2));
+        layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.GRAIN);
         layout.verifyLayout("New Amsterdam", 7);
         layout.verifyCompactBuildings(46, 22, 32, 12);
         layout.selectTile(2, 0);
@@ -80,11 +81,22 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.selectTile(0, 1);
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0362-production-small.png");
-        layout.verifyProductionChoices(0);
+        layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.GRAIN);
         layout.verifyPreviewMatchesMap(0, 1);
         layout.selectTile(1, 1);
         layout.showStock();
         town.verifyWarehouseGoodsLayout(19, 45);
+
+        // Each stock shares one row with its nonzero change; torches and owls
+        // show only their change.
+        town.verifyGoodsForecast(GoodsType.GRAIN, 100, -2);
+        town.verifyGoodsForecast(GoodsType.HORSE, 50, 2);
+        town.verifyGoodsForecast(GoodsType.TOOLS, 0, 1);
+        town.verifyGoodsForecast(GoodsType.LUMBER, 0, 0);
+        town.verifyGoodsForecast(GoodsType.WEAPONS, 50, 0);
+        town.verifyLocalProduction(GoodsType.HAMMERS, "Hammers", "0", "");
+        town.verifyLocalProduction(GoodsType.TORCHES, "Torches", "", "+1");
+        town.verifyLocalProduction(GoodsType.OWLS, "Owls", "", "+4");
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0371-colony-small.png");
         town.close();
@@ -110,7 +122,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.verifyBuildingLevel("id_dock", ConstructionType.SHIPYARD);
         layout.verifyCenter();
         layout.selectTile(0, 1);
-        layout.verifyProductionChoices(1);
+        layout.verifyProductionChoices(1, GoodsType.LUMBER, GoodsType.GRAIN);
         layout.verifyPreviewMatchesMap(0, 1);
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0362-production-cs.png");
@@ -123,6 +135,16 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.verifyCompactBuildings(46, 22, 32, 12);
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0371-colony-czech-small.png");
+
+        // The narrow Czech stock row keeps one value line per product.
+        layout.showStock();
+        town.verifyWarehouseGoodsLayout(19, 45);
+        town.verifyGoodsForecast(GoodsType.GRAIN, 100, -2);
+        town.verifyGoodsForecast(GoodsType.LUMBER, 0, 6);
+        town.verifyGoodsForecast(GoodsType.TOOLS, 50, 0);
+        town.verifyLocalProduction(GoodsType.HAMMERS, "Kladiva", "0", "");
+        town.verifyLocalProduction(GoodsType.TORCHES, "Pochodně", "", "+3");
+        town.verifyLocalProduction(GoodsType.OWLS, "Sovy", "", "+2");
         town.close();
     }
 
@@ -248,6 +270,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.verifyOutput(GoodsType.GRAIN, 2);
         jobs.verifyFieldJob(0, Location.of(23, 16),
                 org.akropia.model.Goods.of(GoodsType.GRAIN, 2));
+        layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.GRAIN);
 
         // A source job changed after rendering invalidates the captured offer.
         layout.changeSourceCropWithoutRefresh(GoodsType.LUMBER);

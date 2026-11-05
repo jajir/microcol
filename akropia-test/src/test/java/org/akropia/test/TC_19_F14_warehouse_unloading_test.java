@@ -63,6 +63,11 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractAkropiaTest {
         colony.selectUnitFromPort(0);
         colony.verifyUnitInPortSelected(0, true);
 
+        // Torches and owls show only a nonzero change, never stored owls.
+        colony.showWarehouse();
+        colony.verifyLocalProduction(GoodsType.TORCHES, "Torches", "", "");
+        colony.verifyLocalProduction(GoodsType.OWLS, "Owls", "", "+1");
+
         // Try unloading 100 grapes into a warehouse with room for one.
         colony.verifyNumberOfGoodsInWrehouse(2, 99);
         ship().verifyCargoGoods(0, Goods.of(GoodsType.GRAPES, 100));

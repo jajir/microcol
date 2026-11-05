@@ -37,6 +37,7 @@
 .panel-colony-goods-column { -fx-min-width: 720; }
 .panel-colony-goods { -fx-alignment: top-center; }
 .warehouseGoods { -fx-min-width: 45; -fx-alignment: top-center; }
+.warehouseGoods .amount { -fx-text-fill: #25231f; }
 .warehouseGoods .diff { -fx-font-size: 11; -fx-text-fill: #25231f; }
 .warehouseGoods .diffPositive { -fx-text-fill: #316b2f; }
 .warehouseGoods .diffNegative { -fx-text-fill: #b13224; }

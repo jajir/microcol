@@ -327,15 +327,37 @@ public final class ColonyLayoutPage extends AbstractScreen {
         });
     }
 
-    public void verifyProductionChoices(final int colonyId) {
+    /**
+     * The west field lists each product once with this field's yield, both for
+     * a product whose best field is this one and for a product yielding more on
+     * another field.
+     */
+    public void verifyProductionChoices(final int colonyId,
+            final GoodsType bestHere, final GoodsType betterElsewhere) {
         getRobot().interact(() -> {
             final Colony colony = getModel().getColonyById(colonyId)
                     .orElseThrow();
-            final List<ColonyJobChoice> expected = colony
-                    .getJobChoices(
-                            colony.getColonyFieldInDirection(Direction.west)
-                                    .getUnit().orElseThrow())
-                    .stream()
+            final org.akropia.model.ColonyField field = colony
+                    .getColonyFieldInDirection(Direction.west);
+            final List<ColonyJobChoice> all = colony
+                    .getJobChoices(field.getUnit().orElseThrow());
+            final ColonyJobChoice here = bestChoice(all, bestHere);
+            assertEquals(field.getLocation(),
+                    here.getTargetLocation().orElseThrow(),
+                    bestHere + " is best on the selected field");
+            final ColonyJobChoice elsewhere = bestChoice(all, betterElsewhere);
+            assertNotEquals(field.getLocation(),
+                    elsewhere.getTargetLocation().orElseThrow(),
+                    betterElsewhere + " is best on another field");
+            assertTrue(elsewhere.getPotential().orElseThrow()
+                    .getAmount() > all.stream().filter(choice -> choice
+                            .getKind() == ColonyJobChoice.Kind.CURRENT_FIELD
+                            && choice.getPotential().map(Goods::getType)
+                                    .orElse(null) == betterElsewhere)
+                            .findFirst().orElseThrow().getPotential()
+                            .orElseThrow().getAmount(),
+                    betterElsewhere + " yields more on another field");
+            final List<ColonyJobChoice> expected = all.stream()
                     .filter(choice -> choice
                             .getKind() == ColonyJobChoice.Kind.CURRENT_FIELD
                             && choice.getUnavailableReason().isEmpty())
@@ -360,10 +382,25 @@ public final class ColonyLayoutPage extends AbstractScreen {
                                 + label.getText());
             }
             assertEquals(expected.size(), output.getChildren().size());
+            assertEquals(expected.size(),
+                    output.getChildren().stream().map(Node::getUserData)
+                            .distinct().count(),
+                    "Each product is offered once");
+            assertTrue(expected.stream().anyMatch(choice -> choice
+                    .getPotential().orElseThrow().getType() == bestHere));
+            assertTrue(
+                    expected.stream().anyMatch(choice -> choice.getPotential()
+                            .orElseThrow().getType() == betterElsewhere));
             assertTrue(expected.size() > 1);
             final I18n texts = getContext().getClassFromGuice(I18n.class);
             for (final ColonyJobChoice choice : expected) {
                 final Goods goods = choice.getPotential().orElseThrow();
+                assertEquals(1,
+                        getNodeFinder()
+                                .lookup("#colony-field-output-"
+                                        + goods.getType().name())
+                                .queryAll().size(),
+                        goods.getType() + " row");
                 final RadioButton option = getNodeFinder()
                         .lookup("#colony-field-output-"
                                 + goods.getType().name())
@@ -393,6 +430,16 @@ public final class ColonyLayoutPage extends AbstractScreen {
             assertEquals(1, output.getChildren().stream()
                     .filter(node -> ((RadioButton) node).isSelected()).count());
         });
+    }
+
+    private ColonyJobChoice bestChoice(final List<ColonyJobChoice> choices,
+            final GoodsType type) {
+        return choices.stream().filter(
+                choice -> choice.getKind() == ColonyJobChoice.Kind.BEST_FIELD
+                        && choice.getUnavailableReason().isEmpty()
+                        && choice.getPotential().map(Goods::getType)
+                                .orElse(null) == type)
+                .findFirst().orElseThrow();
     }
 
     public void verifyOutputFocused(final GoodsType expected) {

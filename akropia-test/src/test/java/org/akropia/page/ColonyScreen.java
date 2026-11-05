@@ -134,34 +134,25 @@ public class ColonyScreen extends AbstractScreen {
         return colony.getWarehouse().getGoods(goodsType).getAmount();
     }
 
+    /**
+     * Stock and the nonzero next-turn change share one row under the name; a
+     * zero change is hidden.
+     */
     public void verifyGoodsForecast(final GoodsType type, final int stock,
-            final int change, final String perTurn) {
+            final int change) {
         getRobot().interact(() -> {
             final VBox panel = getNodeFinder()
                     .lookup("#colony-good-" + type.name()).queryAs(VBox.class);
-            final Label amount = (Label) panel.lookup(".amount");
-            final Label diff = (Label) panel.lookup(".diff");
-            assertEquals(String.valueOf(stock), amount.getText());
-            final String signed = change > 0 ? "+" + change
-                    : change < 0 ? "−" + Math.abs(change) : "0";
-            assertEquals("(" + signed + " /" + perTurn + ")", diff.getText());
-            assertEquals(
-                    javafx.scene.paint.Color.web(change > 0 ? "#316b2f"
-                            : change < 0 ? "#b13224" : "#25231f"),
-                    diff.getTextFill());
-            for (final Label label : List.of(amount, diff)) {
-                final Text rendered = (Text) label.lookup(".text");
-                assertEquals(label.getText(), rendered.getText(),
-                        "Goods value must not be ellipsized");
-                assertTrue(
-                        panel.localToScene(panel.getBoundsInLocal())
-                                .contains(rendered.localToScene(
-                                        rendered.getBoundsInLocal())),
-                        "Goods value must fit its own column");
-            }
+            verifyGoodsValueRow(panel, String.valueOf(stock),
+                    change > 0 ? "+" + change
+                            : change < 0 ? "-" + Math.abs(change) : "");
         });
     }
 
+    /**
+     * Torches and owls show only their nonzero change, never a stored total. An
+     * empty expected value means the value is hidden.
+     */
     public void verifyLocalProduction(final GoodsType type,
             final String expectedName, final String expectedStock,
             final String expectedProduction) {
@@ -169,24 +160,28 @@ public class ColonyScreen extends AbstractScreen {
             final VBox panel = getNodeFinder()
                     .lookup("#colony-good-" + type.name()).queryAs(VBox.class);
             final Label name = (Label) panel.lookup(".goods-name");
-            final Label amount = (Label) panel.lookup(".amount");
             assertEquals(expectedName, name.getText());
-            final Label diff = (Label) panel.lookup(".diff");
-            assertEquals(expectedStock, amount.getText());
-            assertEquals(expectedProduction, diff.getText());
+            verifyGoodsValueRow(panel, expectedStock, expectedProduction);
             assertNull(panel.lookup(".imageGoods").getOnDragDetected(),
                     "Colony production cannot initiate cargo transport");
-            for (final Label label : List.of(name, diff)) {
-                final Text text = (Text) label.lookup(".text");
-                assertEquals(label.getText(), text.getText());
-                final Bounds bounds = text
-                        .localToScene(text.getBoundsInLocal());
-                final Node viewport = panel.getScene()
-                        .lookup(".screen-scroll .viewport");
-                assertTrue(
-                        viewport.localToScene(viewport.getBoundsInLocal())
-                                .contains(bounds),
-                        "Production must fit in the viewport");
+            final Text text = (Text) name.lookup(".text");
+            assertEquals(name.getText(), text.getText());
+            final Node viewport = panel.getScene()
+                    .lookup(".screen-scroll .viewport");
+            final Bounds visible = viewport
+                    .localToScene(viewport.getBoundsInLocal());
+            assertTrue(
+                    visible.contains(
+                            text.localToScene(text.getBoundsInLocal())),
+                    "Production must fit in the viewport");
+            for (final String value : List.of(".amount", ".diff")) {
+                final Node label = panel.lookup(value);
+                if (label.isVisible()) {
+                    assertTrue(
+                            visible.contains(label
+                                    .localToScene(label.getBoundsInLocal())),
+                            "Production must fit in the viewport");
+                }
             }
             assertTrue(getNodeFinder().lookup("#colony-summary").queryAll()
                     .isEmpty());
@@ -438,6 +433,57 @@ public class ColonyScreen extends AbstractScreen {
                 }
             }
         });
+    }
+
+    private void verifyGoodsValueRow(final VBox panel,
+            final String expectedStock, final String expectedChange) {
+        final Label name = (Label) panel.lookup(".goods-name");
+        final Label amount = (Label) panel.lookup(".amount");
+        final Label diff = (Label) panel.lookup(".diff");
+        assertTrue(
+                amount.getParent() == diff.getParent() && amount.getParent()
+                        .getStyleClass().contains("goods-values"),
+                "Stock and change share one row");
+        final Bounds row = amount.getParent()
+                .localToScene(amount.getParent().getLayoutBounds());
+        assertTrue(row.getMinY() + 0.5 >= name
+                .localToScene(name.getLayoutBounds()).getMaxY(),
+                "Values are under the name");
+        assertEquals(!expectedStock.isEmpty(), amount.isVisible());
+        assertEquals(!expectedChange.isEmpty(), diff.isVisible());
+        assertEquals(expectedStock, amount.getText());
+        if (!expectedChange.isEmpty()) {
+            assertEquals(expectedChange, diff.getText());
+            assertEquals(javafx.scene.paint.Color.web(
+                    expectedChange.startsWith("+") ? "#316b2f" : "#b13224"),
+                    diff.getTextFill());
+        }
+        if (!expectedStock.isEmpty()) {
+            assertEquals(javafx.scene.paint.Color.web("#25231f"),
+                    amount.getTextFill(), "Stock keeps the normal color");
+        }
+        final Bounds column = panel.localToScene(panel.getBoundsInLocal());
+        Bounds previous = null;
+        for (final Label label : List.of(amount, diff)) {
+            if (!label.isVisible()) {
+                continue;
+            }
+            final Text rendered = (Text) label.lookup(".text");
+            assertEquals(label.getText(), rendered.getText(),
+                    "Goods value must not be ellipsized");
+            final Bounds shown = rendered
+                    .localToScene(rendered.getBoundsInLocal());
+            assertTrue(column.contains(shown),
+                    "Goods value must fit its own column");
+            if (previous != null) {
+                assertTrue(
+                        shown.getMinX() >= previous.getMaxX()
+                                && shown.getMinY() < previous.getMaxY()
+                                && previous.getMinY() < shown.getMaxY(),
+                        "Change follows the stock on the same line");
+            }
+            previous = shown;
+        }
     }
 
     public void verifyFamineForecast() {

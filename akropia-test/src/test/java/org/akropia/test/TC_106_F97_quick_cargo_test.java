@@ -182,7 +182,7 @@ public class TC_106_F97_quick_cargo_test extends AbstractAkropiaTest {
     @Test
     @Tag("local")
     void TC_03_colony_production_is_visible_but_not_cargo() throws Exception {
-        // Read colony production beside warehouse goods at both window widths.
+        // Read stock and next-turn change on one row at both window widths.
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(COLONY_LOCATION, COLONY_NAME);
         final GameBarWidthPage width = new GameBarWidthPage(getContext());
@@ -191,13 +191,12 @@ public class TC_106_F97_quick_cargo_test extends AbstractAkropiaTest {
         colony.verifyUnitInPortSelected(0, true);
         colony.showWarehouse();
         colony.verifyWarehouseGoodsLayout(19, 45);
-        colony.verifyGoodsForecast(GoodsType.HAMMERS, 46, 0, "turn");
-        colony.verifyGoodsForecast(GoodsType.LUMBER, 0, 0, "turn");
-        colony.verifyLocalProduction(GoodsType.HAMMERS, "Hammers", "46",
-                "(0 /turn)");
-        colony.verifyLocalProduction(GoodsType.TORCHES, "Torches", "",
-                "+1 /turn");
-        colony.verifyLocalProduction(GoodsType.OWLS, "Owls", "", "+1 /turn");
+        colony.verifyGoodsForecast(GoodsType.HAMMERS, 46, 0);
+        colony.verifyGoodsForecast(GoodsType.LUMBER, 0, 0);
+        colony.verifyGoodsForecast(GoodsType.GRAIN, 0, 4);
+        colony.verifyLocalProduction(GoodsType.HAMMERS, "Hammers", "46", "");
+        colony.verifyLocalProduction(GoodsType.TORCHES, "Torches", "", "+1");
+        colony.verifyLocalProduction(GoodsType.OWLS, "Owls", "", "+1");
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0400-production-en.png");
 
@@ -221,13 +220,12 @@ public class TC_106_F97_quick_cargo_test extends AbstractAkropiaTest {
         width.resizeContent(1000, 925);
         colony.showWarehouse();
         colony.verifyWarehouseGoodsLayout(19, 45);
-        colony.verifyGoodsForecast(GoodsType.HAMMERS, 46, 0, "turn");
-        colony.verifyGoodsForecast(GoodsType.LUMBER, 0, 0, "turn");
-        colony.verifyLocalProduction(GoodsType.HAMMERS, "Hammers", "46",
-                "(0 /turn)");
-        colony.verifyLocalProduction(GoodsType.TORCHES, "Torches", "",
-                "+1 /turn");
-        colony.verifyLocalProduction(GoodsType.OWLS, "Owls", "", "+1 /turn");
+        colony.verifyGoodsForecast(GoodsType.HAMMERS, 46, 0);
+        colony.verifyGoodsForecast(GoodsType.LUMBER, 0, 0);
+        colony.verifyGoodsForecast(GoodsType.GRAIN, 0, 4);
+        colony.verifyLocalProduction(GoodsType.HAMMERS, "Hammers", "46", "");
+        colony.verifyLocalProduction(GoodsType.TORCHES, "Torches", "", "+1");
+        colony.verifyLocalProduction(GoodsType.OWLS, "Owls", "", "+1");
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0400-production-small.png");
 
@@ -239,13 +237,12 @@ public class TC_106_F97_quick_cargo_test extends AbstractAkropiaTest {
         width.resizeContent(1000, 925);
         czech.showWarehouse();
         czech.verifyWarehouseGoodsLayout(19, 45);
-        czech.verifyGoodsForecast(GoodsType.HAMMERS, 46, 0, "kolo");
-        czech.verifyGoodsForecast(GoodsType.LUMBER, 0, 0, "kolo");
-        czech.verifyLocalProduction(GoodsType.HAMMERS, "Kladiva", "46",
-                "(0 /kolo)");
-        czech.verifyLocalProduction(GoodsType.TORCHES, "Pochodně", "",
-                "+1 /kolo");
-        czech.verifyLocalProduction(GoodsType.OWLS, "Sovy", "", "+1 /kolo");
+        czech.verifyGoodsForecast(GoodsType.HAMMERS, 46, 0);
+        czech.verifyGoodsForecast(GoodsType.LUMBER, 0, 0);
+        czech.verifyGoodsForecast(GoodsType.GRAIN, 0, 4);
+        czech.verifyLocalProduction(GoodsType.HAMMERS, "Kladiva", "46", "");
+        czech.verifyLocalProduction(GoodsType.TORCHES, "Pochodně", "", "+1");
+        czech.verifyLocalProduction(GoodsType.OWLS, "Sovy", "", "+1");
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0400-production-cs.png");
         czech.close();
