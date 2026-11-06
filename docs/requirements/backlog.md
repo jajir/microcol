@@ -1234,3 +1234,8 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Upozornění před koncem tahu — 2026-11-02
 
 1. [R-0398](done/R-0398.md), primární oblast A04, závislosti A03/A07/A05. Status: new. Společný dialog při každém Next turn shrne aktuální upozornění, umožní návrat či otevření kolonie a vědomé pokračování. První kontrola pokrývá nečinné kolonisty bez práce a zaměstnávajícího rozkazu; vyčerpaný pohyb je nevylučuje, cestující na lodi se nezahrnují. Posouzení pozastavených a zablokovaných rozkazů zbývá otevřené. Implementace není zahájena.
+
+
+## R-0425 — Jediné spojení obchodní trasy
+
+1. [R-0425](done/R-0425.md), primární oblast A06, související A03/A05/A04. Status: done. Rovnocenné cesty tam a zpět sdílejí jedinou kreslenou čáru za druh dopravy; skutečně rozdílné optimální cesty zůstávají pravdivě zobrazené. Lokální přejímku a rozsah vede [funkční evidence](../functional-tests.md#r-0425-single-route-connections-2026-11-06).

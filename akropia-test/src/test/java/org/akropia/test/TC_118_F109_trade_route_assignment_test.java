@@ -41,6 +41,11 @@ public class TC_118_F109_trade_route_assignment_test
 
     private static final Location NEW_AMSTERDAM_LOCATION = Location.of(26, 16);
     private static final Location DELFT_LOCATION = Location.of(28, 16);
+    /**
+     * Grass square straight between the towns. Two diagonal squares beside it
+     * make equally cheap ways.
+     */
+    private static final Location BETWEEN_TOWNS_LOCATION = Location.of(27, 16);
     private static final int NEW_AMSTERDAM_ID = 0;
     private static final int DELFT_ID = 1;
     private static final int WAGON_ID = 4;
@@ -352,6 +357,13 @@ public class TC_118_F109_trade_route_assignment_test
         planner.verifyRouteDrawnOver("Idle cart", DELFT_LOCATION);
         planner.verifyRouteDrawnOver("Ore Cart", DELFT_LOCATION);
 
+        // Without a carrier the way to Delft and back is one land line over
+        // the straight grass square, chosen among equally cheap ways; New
+        // Amsterdam has no port, so no sea line is drawn.
+        planner.verifyDrawnConnection("Ore Cart", TradeRouteKind.LAND,
+                NEW_AMSTERDAM_LOCATION, BETWEEN_TOWNS_LOCATION, DELFT_LOCATION);
+        planner.verifyDrawnConnectionCount("Ore Cart", TradeRouteKind.SEA, 0);
+
         // Hovering the shared town names both routes.
         game.hoverTile(DELFT_LOCATION);
         planner.verifyStatusBar(
@@ -395,7 +407,19 @@ public class TC_118_F109_trade_route_assignment_test
         cargo.verifyUnitAt(WAGON_ID, NEW_AMSTERDAM_LOCATION);
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 90));
 
-        // Save and Continue keep the assignment; nothing moves or transfers.
+        // The wagon's own path there and back is the same single line, and
+        // reopening the planner draws it again unchanged.
+        planner.verifyDrawnConnection("Ore Cart", TradeRouteKind.LAND,
+                NEW_AMSTERDAM_LOCATION, BETWEEN_TOWNS_LOCATION, DELFT_LOCATION);
+        planner.close();
+        planner.open();
+        planner.chooseRoute("Ore Cart");
+        planner.verifyDrawnConnection("Ore Cart", TradeRouteKind.LAND,
+                NEW_AMSTERDAM_LOCATION, BETWEEN_TOWNS_LOCATION, DELFT_LOCATION);
+        planner.verifyDrawnConnectionCount("Ore Cart", TradeRouteKind.SEA, 0);
+
+        // Save and Continue keep the assignment and its single line; nothing
+        // moves or transfers.
         planner.close();
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
@@ -406,6 +430,8 @@ public class TC_118_F109_trade_route_assignment_test
         planner.open();
         planner.chooseRoute("Ore Cart");
         planner.verifyCarriers("Carriers: Wagon #4");
+        planner.verifyDrawnConnection("Ore Cart", TradeRouteKind.LAND,
+                NEW_AMSTERDAM_LOCATION, BETWEEN_TOWNS_LOCATION, DELFT_LOCATION);
         planner.back();
         planner.verifyPlannerShown(false);
     }

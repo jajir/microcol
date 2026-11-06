@@ -11,8 +11,11 @@ import java.util.stream.Collectors;
 import org.akropia.gui.screen.game.components.StatusBarView;
 import org.akropia.gui.screen.game.gamepanel.TradeRoutePlanning;
 import org.akropia.model.Location;
+import org.akropia.model.TradeRouteKind;
 import org.akropia.model.TradeRoutePreview;
 import org.testfx.util.WaitForAsyncUtils;
+
+import com.google.common.collect.Lists;
 
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
@@ -254,6 +257,71 @@ public final class TradeRoutePlanningPage extends AbstractScreen {
                         .anyMatch(preview -> preview.getRoute().getName()
                                 .equals(routeName)),
                 () -> routeName + " is not drawn over " + square);
+    }
+
+    /** @return the planner's preview of the named route */
+    private TradeRoutePreview previewOf(final String routeName) {
+        return planning().getPreviews().stream().filter(
+                preview -> preview.getRoute().getName().equals(routeName))
+                .findFirst().orElseThrow(() -> new IllegalStateException(
+                        "Route is not planned: " + routeName));
+    }
+
+    private List<TradeRoutePreview.LegPath> drawnConnections(
+            final String routeName, final TradeRouteKind kind) {
+        return previewOf(routeName).getConnections().stream()
+                .filter(path -> path.getKind() == kind)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * The map draws the route's connections of one transport as this many
+     * lines.
+     *
+     * @param routeName required route name
+     * @param kind      required transport
+     * @param expected  number of drawn lines
+     */
+    public void verifyDrawnConnectionCount(final String routeName,
+            final TradeRouteKind kind, final int expected) {
+        assertEquals(expected, drawnConnections(routeName, kind).size(),
+                () -> routeName + " " + kind + " lines: "
+                        + drawnConnections(routeName, kind).stream()
+                                .map(TradeRoutePreview.LegPath::getSquares)
+                                .collect(Collectors.toList()));
+    }
+
+    /**
+     * The map draws one line of the transport over exactly these squares, and
+     * every leg of the route uses that same line in one direction or the other.
+     *
+     * @param routeName       required route name
+     * @param kind            required transport
+     * @param expectedSquares squares of the line from one end to the other
+     */
+    public void verifyDrawnConnection(final String routeName,
+            final TradeRouteKind kind, final Location... expectedSquares) {
+        final List<TradeRoutePreview.LegPath> lines = drawnConnections(
+                routeName, kind);
+        assertEquals(1, lines.size(),
+                () -> routeName + " " + kind + " lines: "
+                        + lines.stream()
+                                .map(TradeRoutePreview.LegPath::getSquares)
+                                .collect(Collectors.toList()));
+        final List<Location> drawn = lines.get(0).getSquares();
+        final List<Location> expected = List.of(expectedSquares);
+        assertTrue(
+                drawn.equals(expected) || Lists.reverse(drawn).equals(expected),
+                () -> routeName + " is drawn over " + drawn + ", expected "
+                        + expected);
+        for (final TradeRoutePreview.Leg leg : previewOf(routeName).getLegs()) {
+            leg.getPaths().stream().filter(path -> path.getKind() == kind)
+                    .forEach(path -> assertTrue(
+                            path.isSameConnection(lines.get(0)),
+                            () -> "Leg " + leg.getFrom() + " to " + leg.getTo()
+                                    + " leaves the drawn line: "
+                                    + path.getSquares()));
+        }
     }
 
     /** @param expected full text the status bar shows for the hovered square */

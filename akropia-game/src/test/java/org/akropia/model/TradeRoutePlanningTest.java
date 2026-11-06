@@ -19,6 +19,8 @@ import org.akropia.model.event.UnitMovedStepFinishedEvent;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.PlayerPo;
 import org.akropia.model.store.UnitPo;
+
+import com.google.common.collect.Lists;
 import org.akropia.model.unit.Ship;
 import org.akropia.model.unit.UnitWithCargo;
 
@@ -213,20 +215,43 @@ class TradeRoutePlanningTest {
         assertEquals(ROAD.subList(1, ROAD.size()), walked);
     }
 
+    private static int cost(final Model model, final List<Location> squares) {
+        int total = 0;
+        for (int index = 1; index < squares.size(); index++) {
+            total += MovementProfile.entryCostThirds(model, false,
+                    squares.get(index - 1), squares.get(index));
+        }
+        return total;
+    }
+
     /**
      * A trade route leg walks explored squares only. Where the way and the
-     * squares around it are explored, it is exactly the ordinary go-to route,
-     * including the choice among equal grassland routes.
+     * squares around it are explored, it costs exactly as much as the ordinary
+     * go-to route. Among the equal grassland routes it takes the one with the
+     * fewest diagonal steps (R-0425), while go-to keeps its own choice.
      */
     @Test
-    void exploredLegEqualsTheOrdinaryGoToRouteOverExploredLand() {
+    void exploredLegCostsTheSameAsTheOrdinaryGoToRouteOverExploredLand() {
         final Model model = load(
                 fixture(TradeRoutePlanningTest::colonistToWagon).getModel());
         final AbstractUnit wagon = (AbstractUnit) unitOf(model, WAGON_ID);
         final List<Location> goTo = wagon.findGoToRoute(DELFT_AT).orElseThrow();
-        assertEquals(goTo, wagon.findKnownGoToRoute(DELFT_AT).orElseThrow());
+        final List<Location> leg = wagon.findKnownGoToRoute(DELFT_AT)
+                .orElseThrow();
         assertEquals(4, goTo.size());
-        assertTrue(goTo.stream().allMatch(dutch(model)::isVisible));
+        assertEquals(4, leg.size());
+        final List<Location> goToSquares = new ArrayList<>(
+                List.of(NEW_AMSTERDAM_AT));
+        goToSquares.addAll(goTo);
+        final List<Location> legSquares = new ArrayList<>(
+                List.of(NEW_AMSTERDAM_AT));
+        legSquares.addAll(leg);
+        assertEquals(12, cost(model, goToSquares));
+        assertEquals(12, cost(model, legSquares));
+        assertNotEquals(goTo, leg);
+        assertEquals(List.of(Location.of(25, 15), Location.of(26, 15),
+                Location.of(27, 15), DELFT_AT), leg);
+        assertTrue(leg.stream().allMatch(dutch(model)::isVisible));
     }
 
     /**
@@ -515,6 +540,247 @@ class TradeRoutePlanningTest {
                 .get(0);
         assertEquals(route.getId(), again.getId());
         assertEquals(first, squares(preview(restored, again)));
+    }
+
+    private static TradeRoute loop(final Model model) {
+        final TradeRoute route = model.createTradeRoute(dutch(model), "Loop",
+                TradeRouteKind.LAND, NEW_AMSTERDAM,
+                List.of(TradeRouteStop.ofColony(DELFT),
+                        TradeRouteStop.ofColony(NEW_AMSTERDAM)));
+        return model.configureTradeRouteStopCargo(dutch(model), route, 0,
+                List.of(GoodsType.ORE), List.of());
+    }
+
+    private static TradeRoutePreview.LegPath path(
+            final TradeRoutePreview.Leg leg, final TradeRouteKind kind) {
+        return leg.getPaths().stream().filter(path -> path.getKind() == kind)
+                .findFirst().orElseThrow();
+    }
+
+    /**
+     * Several grassland ways from New Amsterdam to Delft cost the same. The way
+     * there and the way back pick the same squares for each transport, so the
+     * map draws one land and one sea connection. Each direction still costs its
+     * own cheapest amount, and the choice survives repaints and Continue.
+     */
+    @Test
+    void wayBackOverTheSameSquaresIsOneConnectionPerTransport() {
+        // A channel makes New Amsterdam a port that ships reach from Delft.
+        final GameModelPo data = fixture(po -> {
+            colonistToWagon(po);
+            ocean(po, Location.of(25, 17), Location.of(26, 17),
+                    Location.of(27, 17));
+        });
+        final Model model = load(data.getModel());
+        final TradeRoute route = loop(model);
+
+        final TradeRoutePreview preview = preview(model, route);
+        assertTrue(preview.getCarrier().isEmpty());
+        assertEquals(2, preview.getLegs().size());
+        final TradeRoutePreview.Leg there = preview.getLegs().get(0);
+        final TradeRoutePreview.Leg back = preview.getLegs().get(1);
+        assertEquals(TradeRouteStop.ofColony(DELFT), there.getTo());
+        assertEquals(TradeRouteStop.ofColony(NEW_AMSTERDAM), back.getTo());
+        for (final TradeRouteKind kind : List.of(TradeRouteKind.LAND,
+                TradeRouteKind.SEA)) {
+            assertEquals(Lists.reverse(path(there, kind).getSquares()),
+                    path(back, kind).getSquares(), kind.name());
+        }
+        // Land enters grassland Delft one way and arctic New Amsterdam back.
+        assertEquals(12, path(there, TradeRouteKind.LAND).getCostThirds());
+        assertEquals(15, path(back, TradeRouteKind.LAND).getCostThirds());
+
+        // The ordinary go-to of the wagon is an equally cheap other way.
+        final AbstractUnit wagon = (AbstractUnit) unitOf(model, WAGON_ID);
+        final List<Location> goTo = new ArrayList<>(List.of(NEW_AMSTERDAM_AT));
+        goTo.addAll(wagon.findGoToRoute(DELFT_AT).orElseThrow());
+        assertNotEquals(path(there, TradeRouteKind.LAND).getSquares(), goTo);
+        assertEquals(12, cost(model, goTo));
+
+        // One connection per transport, the same on every repaint.
+        final List<TradeRoutePreview.LegPath> connections = preview
+                .getConnections();
+        assertEquals(List.of(TradeRouteKind.LAND, TradeRouteKind.SEA),
+                connections.stream().map(TradeRoutePreview.LegPath::getKind)
+                        .collect(Collectors.toList()));
+        assertEquals(path(there, TradeRouteKind.LAND).getSquares(),
+                connections.get(0).getSquares());
+        assertEquals(path(there, TradeRouteKind.SEA).getSquares(),
+                connections.get(1).getSquares());
+        final List<List<Location>> drawn = connections.stream()
+                .map(TradeRoutePreview.LegPath::getSquares)
+                .collect(Collectors.toList());
+        assertEquals(drawn,
+                preview(model, route).getConnections().stream()
+                        .map(TradeRoutePreview.LegPath::getSquares)
+                        .collect(Collectors.toList()));
+
+        data.setModel(model.save());
+        final Model restored = load(data.getModel());
+        final TradeRoute again = restored.getTradeRoutes(dutch(restored))
+                .get(0);
+        assertEquals(drawn,
+                preview(restored, again).getConnections().stream()
+                        .map(TradeRoutePreview.LegPath::getSquares)
+                        .collect(Collectors.toList()));
+    }
+
+    /**
+     * The assigned wagon's preview is one land connection, and the wagon really
+     * walks it to Delft and back over the same squares.
+     */
+    @Test
+    void assignedWagonWalksTheOneConnectionThereAndBack() {
+        final Model model = load(
+                fixture(TradeRoutePlanningTest::colonistToWagon).getModel());
+        final TradeRoute route = loop(model);
+        final Unit wagon = unitOf(model, WAGON_ID);
+        model.assignTradeRoute(wagon, route, 0);
+
+        final List<TradeRoutePreview.LegPath> connections = preview(model,
+                route).getConnections();
+        assertEquals(1, connections.size());
+        assertEquals(TradeRouteKind.LAND, connections.get(0).getKind());
+        final List<Location> squares = connections.get(0).getSquares();
+        assertEquals(NEW_AMSTERDAM_AT, squares.get(0));
+        assertEquals(DELFT_AT, squares.get(squares.size() - 1));
+
+        final List<Location> walked = new ArrayList<>();
+        model.addListener(new ModelListenerAdapter() {
+            @Override
+            public void onUnitMovedStepFinished(
+                    final UnitMovedStepFinishedEvent event) {
+                if (event.getUnit() == wagon) {
+                    walked.add(event.getEnd());
+                }
+            }
+        });
+        for (int round = 0; round < MAX_ROUNDS && !(walked.contains(DELFT_AT)
+                && NEW_AMSTERDAM_AT.equals(wagon.getLocation())); round++) {
+            playRound(model);
+        }
+        final List<Location> expected = new ArrayList<>(
+                squares.subList(1, squares.size()));
+        expected.addAll(Lists.reverse(squares).subList(1, squares.size()));
+        assertEquals(expected, walked);
+    }
+
+    /**
+     * A road into New Amsterdam makes the way back cheaper over other squares
+     * than the way there: each stays its own connection, at its own lowest
+     * cost, instead of one direction taking the other's dearer squares.
+     */
+    @Test
+    void cheaperWayBackOverOtherSquaresStaysItsOwnConnection() {
+        final Model model = load(fixture(po -> {
+        }).getModel());
+        roadIntoNewAmsterdam(model);
+        final TradeRoute route = loop(model);
+
+        final TradeRoutePreview preview = preview(model, route);
+        final TradeRoutePreview.LegPath there = path(preview.getLegs().get(0),
+                TradeRouteKind.LAND);
+        final TradeRoutePreview.LegPath back = path(preview.getLegs().get(1),
+                TradeRouteKind.LAND);
+        assertEquals(12, there.getCostThirds());
+        assertEquals(13, back.getCostThirds());
+        assertEquals(List.of(ROAD_TO_TOWN, NEW_AMSTERDAM_AT),
+                back.getSquares().subList(back.getSquares().size() - 2,
+                        back.getSquares().size()));
+        // Either way taken in the other direction would cost more.
+        assertEquals(15, cost(model, Lists.reverse(there.getSquares())));
+        assertEquals(13, cost(model, Lists.reverse(back.getSquares())));
+        assertFalse(there.isSameConnection(back));
+        assertEquals(List.of(there, back), preview.getConnections());
+    }
+
+    /** Two grass squares in the open sea east of Delft. */
+    private static final List<Location> ISLAND = List.of(Location.of(32, 14),
+            Location.of(32, 15));
+
+    private static void island(final ModelPo po) {
+        for (final Location at : ISLAND) {
+            setCode(po.getMap().getTiles(), at, "g");
+        }
+    }
+
+    private static List<Location> route(final PathFinder finder,
+            final Location from, final Location to) {
+        final List<Location> squares = new ArrayList<>(List.of(from));
+        squares.addAll(finder.find(from, to, false));
+        return squares;
+    }
+
+    /**
+     * North and south of the island lie equally cheap sea routes that are
+     * mirror images of each other, so the diagonal steps cannot tell them
+     * apart. The fixed order of steps chooses the western one both ways, and a
+     * ship that searches again from a square on the way keeps to it.
+     */
+    @Test
+    void equalSeaRoutesAroundAnIslandAreChosenAlikeBothWaysAndOnTheWay() {
+        final Model model = load(
+                fixture(TradeRoutePlanningTest::island).getModel());
+        final PathFinder finder = new PathFinder(
+                MovementProfile.of(model, UnitType.GALLEON, dutch(model)), true,
+                dutch(model)::isVisible);
+        final Location north = Location.of(32, 13);
+        final Location south = Location.of(32, 16);
+
+        final List<Location> down = route(finder, north, south);
+        final List<Location> west = List.of(north, Location.of(31, 14),
+                Location.of(31, 15), south);
+        assertEquals(west, down);
+        // The eastern mirror is just as legal and cheap.
+        final List<Location> east = List.of(north, Location.of(33, 14),
+                Location.of(33, 15), south);
+        assertTrue(east.stream().allMatch(at -> model.getMap()
+                .getTerrainTypeAt(at).equals(TerrainType.OCEAN)));
+        assertEquals(Lists.reverse(down), route(finder, south, north));
+        assertEquals(down.subList(1, down.size()),
+                route(finder, down.get(1), south));
+        assertEquals(Lists.reverse(down).subList(1, down.size()),
+                route(finder, down.get(2), north));
+    }
+
+    /**
+     * Every sea route between squares of the open sea around the island is the
+     * way back of the route in the other direction, and from each of its
+     * squares a new search takes the rest of it unchanged.
+     */
+    @Test
+    void everySeaRouteNearTheIslandIsItsOwnWayBackAndKeepsItsRest() {
+        final Model model = load(
+                fixture(TradeRoutePlanningTest::island).getModel());
+        final PathFinder finder = new PathFinder(
+                MovementProfile.of(model, UnitType.GALLEON, dutch(model)), true,
+                dutch(model)::isVisible);
+        final List<Location> sea = new ArrayList<>();
+        for (int x = 30; x <= 34; x++) {
+            for (int y = 11; y <= 18; y++) {
+                final Location at = Location.of(x, y);
+                if (!ISLAND.contains(at)) {
+                    assertEquals(TerrainType.OCEAN,
+                            model.getMap().getTerrainTypeAt(at), at::toString);
+                    sea.add(at);
+                }
+            }
+        }
+        for (final Location from : sea) {
+            for (final Location to : sea) {
+                if (from.equals(to)) {
+                    continue;
+                }
+                final List<Location> there = route(finder, from, to);
+                assertEquals(Lists.reverse(there), route(finder, to, from),
+                        from + " to " + to);
+                for (int index = 1; index + 1 < there.size(); index++) {
+                    assertEquals(there.subList(index, there.size()),
+                            route(finder, there.get(index), to),
+                            from + " to " + to + " from " + there.get(index));
+                }
+            }
+        }
     }
 
     @Test

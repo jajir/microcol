@@ -1,5 +1,6 @@
 package org.akropia.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,7 @@ import org.akropia.model.unit.UnitWithCargo;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 /**
  * Immutable map preview of one saved trade route, computed by the model from
@@ -45,6 +47,28 @@ public final class TradeRoutePreview {
     /** @return legs in travel order */
     public List<Leg> getLegs() {
         return legs;
+    }
+
+    /**
+     * The map connections to draw: every shown path once, in travel order. A
+     * leg back over the same squares of the same transport, such as the way
+     * back between two colonies, is the same connection and is not repeated. A
+     * way back over other squares stays a connection of its own.
+     *
+     * @return immutable distinct paths of the route, each in the direction of
+     *         the first leg that travels it
+     */
+    public List<LegPath> getConnections() {
+        final List<LegPath> connections = new ArrayList<>();
+        for (final Leg leg : legs) {
+            for (final LegPath path : leg.getPaths()) {
+                if (connections.stream()
+                        .noneMatch(known -> known.isSameConnection(path))) {
+                    connections.add(path);
+                }
+            }
+        }
+        return ImmutableList.copyOf(connections);
     }
 
     /**
@@ -126,6 +150,16 @@ public final class TradeRoutePreview {
         /** @return total entry cost of the steps, in thirds of a point */
         public int getCostThirds() {
             return costThirds;
+        }
+
+        /**
+         * @param other required path
+         * @return whether the other path has the same transport and the same
+         *         squares in either direction
+         */
+        public boolean isSameConnection(final LegPath other) {
+            return kind == other.kind && (squares.equals(other.squares)
+                    || squares.equals(Lists.reverse(other.squares)));
         }
     }
 }

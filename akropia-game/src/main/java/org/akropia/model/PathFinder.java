@@ -23,9 +23,18 @@ import com.google.common.base.Preconditions;
  * unit, and one for trade route travel ({@link #cheapestOverall}), has no turn
  * preference and always returns the cheapest route at all. The search is
  * deterministic: unchanged squares, costs and start give the same route,
- * including the choice among routes of equal cost.
+ * including the choice among routes of equal cost. Such a finder orders
+ * equal-cost routes between two squares by their undirected steps, so the
+ * choice does not depend on the direction (R-0425): fewer diagonal steps first,
+ * then {@link #compareRoutes}. The way back then takes the same squares
+ * whenever they cost the least that way too, and a carrier that searches again
+ * from a square on the way keeps to the same route.
  */
 final class PathFinder {
+    /** Squares by column, then row; a step is ordered by its two squares. */
+    private static final Comparator<Location> SQUARE_ORDER = Comparator
+            .comparingInt(Location::getX).thenComparingInt(Location::getY);
+
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /** Moving unit, or {@code null} for a preview without a unit. */
@@ -163,7 +172,7 @@ final class PathFinder {
         final Predicate<Location> isTarget = location -> excludeDestination
                 && location.isNeighbor(destination)
                 || location.equals(destination);
-        final Optional<Node> found = cheapest(start, isTarget);
+        final Optional<Node> found = cheapest(start, isTarget, !preferThisTurn);
         logger.debug("Path finding finished in {} ms.",
                 System.currentTimeMillis() - startTime);
         return found.map(this::createList).orElse(null);
@@ -184,7 +193,8 @@ final class PathFinder {
         Preconditions.checkNotNull(isGoal);
         final Predicate<Location> isTarget = location -> !location.equals(start)
                 && isGoal.test(location);
-        return cheapest(start, isTarget).map(this::createList).orElse(null);
+        return cheapest(start, isTarget, false).map(this::createList)
+                .orElse(null);
     }
 
     /**
@@ -197,7 +207,7 @@ final class PathFinder {
         Preconditions.checkState(unit != null, "A preview has no unit");
         final Set<Location> reached = new HashSet<>();
         search(unit.getLocation(), unit.getMovementThirds(),
-                unit.hasFullMovement(), location -> false, reached);
+                unit.hasFullMovement(), location -> false, reached, false);
         return reached;
     }
 
@@ -207,17 +217,17 @@ final class PathFinder {
      * route at once.
      */
     private Optional<Node> cheapest(final Location start,
-            final Predicate<Location> isTarget) {
+            final Predicate<Location> isTarget, final boolean symmetricTies) {
         if (unit != null && preferThisTurn) {
             final Optional<Node> affordable = search(start,
                     unit.getMovementThirds(), unit.hasFullMovement(), isTarget,
-                    new HashSet<>());
+                    new HashSet<>(), false);
             if (affordable.isPresent()) {
                 return affordable;
             }
         }
         return search(start, Integer.MAX_VALUE, false, isTarget,
-                new HashSet<>());
+                new HashSet<>(), symmetricTies);
     }
 
     /**
@@ -231,13 +241,20 @@ final class PathFinder {
      * @param isTarget      stops the search at the first matching square
      * @param reached       receives every square the search settled, except the
      *                      start
+     * @param symmetricTies whether routes of equal cost are ordered by their
+     *                      diagonal steps and then by {@link #compareRoutes}
      * @return the target node, or empty when no target was settled
      */
     private Optional<Node> search(final Location start, final int allowance,
             final boolean fullAllowance, final Predicate<Location> isTarget,
-            final Set<Location> reached) {
+            final Set<Location> reached, final boolean symmetricTies) {
+        final Comparator<Node> byCost = Comparator
+                .comparingInt(node -> node.cost);
         final PriorityQueue<Node> open = new PriorityQueue<>(
-                Comparator.comparingInt(node -> node.cost));
+                symmetricTies
+                        ? byCost.thenComparingInt(node -> node.diagonals)
+                                .thenComparing(PathFinder::compareRoutes)
+                        : byCost);
         final Set<Location> closed = new HashSet<>();
         open.add(new Node(start, 0, null, false));
         while (!open.isEmpty()) {
@@ -276,6 +293,77 @@ final class PathFinder {
         return Optional.empty();
     }
 
+    /**
+     * Orders two routes of one search by their undirected steps: the route that
+     * alone takes the greatest step, in the order of {@link #compareSteps}, is
+     * the worse one. This is an exact order of the sets of steps, as if each
+     * step weighed more than all smaller steps together, so equal routes never
+     * collide, adding the same step to both keeps their order and every part of
+     * the chosen route is itself the chosen route between its squares.
+     */
+    private static int compareRoutes(final Node first, final Node second) {
+        // Both routes share the steps up to their last common square.
+        final List<Node> oneSteps = new ArrayList<>();
+        final List<Node> otherSteps = new ArrayList<>();
+        Node one = first;
+        Node other = second;
+        while (one != other) {
+            if (one.depth >= other.depth) {
+                oneSteps.add(one);
+                one = one.parent;
+            } else {
+                otherSteps.add(other);
+                other = other.parent;
+            }
+        }
+        final Node worstOne = worstStep(oneSteps, otherSteps);
+        final Node worstOther = worstStep(otherSteps, oneSteps);
+        if (worstOne == null || worstOther == null) {
+            return worstOne == worstOther ? 0 : worstOne == null ? -1 : 1;
+        }
+        return compareSteps(worstOne, worstOther);
+    }
+
+    /**
+     * @return the greatest step of the route that the other route does not also
+     *         take, in either direction, or {@code null} when there is none
+     */
+    private static Node worstStep(final List<Node> steps,
+            final List<Node> others) {
+        Node worst = null;
+        for (final Node step : steps) {
+            if (others.stream()
+                    .noneMatch(taken -> compareSteps(taken, step) == 0)
+                    && (worst == null || compareSteps(step, worst) > 0)) {
+                worst = step;
+            }
+        }
+        return worst;
+    }
+
+    /**
+     * Fixed order of undirected steps, each given by the node it enters: by the
+     * lower of its two squares, then by the higher one.
+     */
+    private static int compareSteps(final Node one, final Node other) {
+        final int lower = SQUARE_ORDER.compare(lowerSquare(one),
+                lowerSquare(other));
+        return lower != 0 ? lower
+                : SQUARE_ORDER.compare(higherSquare(one), higherSquare(other));
+    }
+
+    private static Location lowerSquare(final Node step) {
+        return SQUARE_ORDER.compare(step.location, step.parent.location) <= 0
+                ? step.location
+                : step.parent.location;
+    }
+
+    private static Location higherSquare(final Node step) {
+        return SQUARE_ORDER.compare(step.location, step.parent.location) <= 0
+                ? step.parent.location
+                : step.location;
+    }
+
     private List<Location> createList(final Node node) {
         final List<Location> list = new ArrayList<>();
         Node current = node;
@@ -291,6 +379,10 @@ final class PathFinder {
     private static final class Node {
         private final Location location;
         private final int cost;
+        /** Diagonal steps of the route, deciding only between equal costs. */
+        private final int diagonals;
+        /** Steps from the start. */
+        private final int depth;
         private final Node parent;
         /** Terminal nodes end the route, as a full allowance may spend. */
         private final boolean terminal;
@@ -300,6 +392,13 @@ final class PathFinder {
             this.location = location;
             this.cost = cost;
             this.parent = parent;
+            this.depth = parent == null ? 0 : parent.depth + 1;
+            this.diagonals = parent == null ? 0
+                    : parent.diagonals
+                            + (parent.location.getX() != location.getX()
+                                    && parent.location.getY() != location.getY()
+                                            ? 1
+                                            : 0);
             this.terminal = terminal;
         }
     }

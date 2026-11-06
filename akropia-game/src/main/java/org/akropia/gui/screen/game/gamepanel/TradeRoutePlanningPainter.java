@@ -1,5 +1,6 @@
 package org.akropia.gui.screen.game.gamepanel;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import org.akropia.model.TradeRouteKind;
 import org.akropia.model.TradeRoutePreview;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 import javafx.geometry.VPos;
@@ -27,10 +29,11 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 /**
- * Draws the planner's darkened map and every shown route path as a soft,
- * slightly irregular pen line through the tile centers of the model's path. The
- * bends and wobble come from the route, leg and square identity, so a repaint
- * draws the same line; they never change which squares the path uses.
+ * Draws the planner's darkened map and every shown route connection as one
+ * soft, slightly irregular pen line through the tile centers of the model's
+ * path. The bends and wobble come from the connection's transport and squares,
+ * so a repaint draws the same line; they never change which squares the path
+ * uses.
  */
 final class TradeRoutePlanningPainter {
 
@@ -108,41 +111,67 @@ final class TradeRoutePlanningPainter {
         final Color ink = TradeRouteColors.colorOf(preview);
         // Routes sharing squares run side by side, three lanes apart at most.
         final double offset = (Math.floorMod(lane, 5) - 2) * LANE;
-        final List<TradeRoutePreview.Leg> legs = preview.getLegs();
-        for (int legIndex = 0; legIndex < legs.size(); legIndex++) {
-            final TradeRoutePreview.Leg leg = legs.get(legIndex);
-            for (final TradeRoutePreview.LegPath path : leg.getPaths()) {
-                final int seed = preview.getRoute().getId() * 7919
-                        + legIndex * 131 + path.getKind().ordinal() * 17;
-                final double[][] line = curve(area, path.getSquares(), seed,
-                        offset);
-                if (leg.getTo().isEurope()) {
-                    europe.add(path.getSquares()
-                            .get(path.getSquares().size() - 1));
-                }
-                if (line[0].length < 2) {
-                    continue;
-                }
-                // Without a carrier the sea possibility is dashed, so the
-                // two grey variants stay distinguishable.
-                final boolean dashed = preview.getCarrier().isEmpty()
-                        && path.getKind() == TradeRouteKind.SEA;
-                graphics.setLineDashes(dashed ? new double[] { 11, 7 } : null);
-                graphics.setStroke(UNDERLINE);
-                graphics.setLineWidth(width + 3);
-                stroke(graphics, line);
-                graphics.setStroke(ink);
-                graphics.setLineWidth(width);
-                stroke(graphics, line);
-                // A second, thinner pen pass beside the first gives the line
-                // its drawn-by-hand edge.
-                graphics.setLineDashes(null);
-                graphics.setStroke(ink.deriveColor(0, 1, 1.15, 0.5));
-                graphics.setLineWidth(1.2);
-                stroke(graphics, curve(area, path.getSquares(), seed + 1,
-                        offset + width / 2));
+        for (final TradeRoutePreview.Leg leg : preview.getLegs()) {
+            if (leg.getTo().isEurope()) {
+                leg.getPaths().forEach(path -> europe.add(
+                        path.getSquares().get(path.getSquares().size() - 1)));
             }
         }
+        final List<TradeRoutePreview.LegPath> connections = preview
+                .getConnections();
+        final List<double[][]> lines = lines(preview, area, offset);
+        for (int index = 0; index < connections.size(); index++) {
+            final double[][] line = lines.get(index);
+            if (line[0].length < 2) {
+                continue;
+            }
+            // Without a carrier the sea possibility is dashed, so the two grey
+            // variants stay distinguishable.
+            final boolean dashed = preview.getCarrier().isEmpty()
+                    && connections.get(index).getKind() == TradeRouteKind.SEA;
+            graphics.setLineDashes(dashed ? new double[] { 11, 7 } : null);
+            graphics.setStroke(UNDERLINE);
+            graphics.setLineWidth(width + 3);
+            stroke(graphics, line);
+            graphics.setStroke(ink);
+            graphics.setLineWidth(width);
+            stroke(graphics, line);
+        }
+        graphics.setLineDashes(null);
+    }
+
+    /**
+     * The drawn line of each of the route's connections, in the order of
+     * {@link TradeRoutePreview#getConnections()}. A connection that carriers
+     * travel both ways is one line. Its bends come from its transport and its
+     * squares taken from the end that comes first by column and row, so neither
+     * the order of the legs nor their direction changes the line.
+     *
+     * @param preview required route preview
+     * @param area    required visible area
+     * @param offset  shift of the route's lane in pixels
+     * @return x and y coordinates of each line
+     */
+    static List<double[][]> lines(final TradeRoutePreview preview,
+            final Area area, final double offset) {
+        final List<double[][]> lines = new ArrayList<>();
+        for (final TradeRoutePreview.LegPath connection : preview
+                .getConnections()) {
+            final List<Location> squares = canonical(connection.getSquares());
+            final int seed = squares.hashCode() * 31
+                    + connection.getKind().ordinal();
+            lines.add(curve(area, squares, seed, offset));
+        }
+        return lines;
+    }
+
+    /** The squares from the end that is first by column, then row. */
+    private static List<Location> canonical(final List<Location> squares) {
+        final Location first = squares.get(0);
+        final Location last = squares.get(squares.size() - 1);
+        final boolean forward = first.getX() < last.getX()
+                || first.getX() == last.getX() && first.getY() <= last.getY();
+        return forward ? squares : Lists.reverse(squares);
     }
 
     /**

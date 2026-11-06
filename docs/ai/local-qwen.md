@@ -1,5 +1,25 @@
 # Codex, Claude Code and the local development worker
 
+## R-0425 Claude single route connection — 2026-11-06
+
+1. User selected Claude to fix duplicate land/sea paths between two colonies. Parent prepared [R-0425](../requirements/done/R-0425.md); base `3d79b929`, isolated worktree `claude-route-single-path`. Existing Claude model/effort settings preserved; no further delegation. Handoff: `~/Library/Logs/Akropia/claude/2026-11-06-route-single-path/handoff.txt`.
+2. Initial implementation dispatched with timeout 3,600 seconds, originating chat `01a1b130-53a1-7950-8267-c5eddb54fe22`. Completion directory: `~/Library/Logs/Akropia/completions/20261106T161420Z-029d60e8fd83/`; supervisor PID `92587`. Completion is not acceptance: parent review, formatter, model/JUnit, selected Docker/Xvfb UI, smoke within 420 seconds and documentation validation remain pending. No remote CI/publication verification requested.
+
+
+3. Initial attempt exited 0 after 770.502 seconds; session `b7794d59-e630-433e-a651-f2f7cfad5eab`. Worker reported 476 focused model cases and 3 page-contract cases passing, but parent review found hash-based tie ordering could collide and UI regression covered land only, with no renderer-specific duplicate-draw check. These are incomplete acceptance, not verified completion.
+4. Targeted repair 1 uses the same session and checkout: replace probabilistic ordering with a deterministic collision-free rule preserving optimal subpaths; add both-mode/ship UI and renderer coverage. Completion directory `~/Library/Logs/Akropia/completions/20261106T162827Z-65e9ec5ad145/`, supervisor PID `94026`, timeout 3,600 seconds. Required final gates remain pending. Genuine direction-dependent cheapest paths must remain honest rather than forcing slower or illegal reverse travel.
+
+5. Repair 1 exited 0 after 606.070 seconds. Parent reviewed exact direction-independent tie ordering, shared rendering geometry and the new two-port TC209/F240 scenario. Worker reported 480 focused model cases and 3 page-contract checks; required acceptance is separate. Parent applied JDT 3.47 with the shared profile to all eight changed Java files: no changes and idempotence passed. Initial system Java invocation was unavailable; the existing VS Code bundled JDK resolved setup without installation. Documentation consistency (14 tests), name audit and strict MkDocs passed.
+6. Required model/JUnit gate dispatched: `~/Library/Logs/Akropia/completions/20261106T163922Z-e877d318c26f/`, supervisor PID `94879`, timeout 600 seconds. Source remained unchanged by formatting. Targeted Docker/Xvfb and smoke remain pending; no integration or push yet.
+
+7. Model attempt `20261106T163922Z-e877d318c26f` timed out during preparation: labelled-container query exceeded 20 seconds; no test command started. Failed evidence is retained. Subsequent bounded probes returned Docker server 29.8.2 and no labelled containers successfully; no restart or cleanup was needed. Same-source model retry: `~/Library/Logs/Akropia/completions/20261106T164029Z-ea5e98c816f7/`, PID `94952`, timeout 600 seconds.
+
+8. Model retry passed in 148.547 supervised seconds: independent XML recount found 385 reports, 5,059 tests, zero failures/errors/skips (`target/verification/run-hzm1krgo/`). Targeted Docker/Xvfb selection covers complete TC116–119, TC185, TC205, TC209 and PageVerificationContractTest. Dispatch: `~/Library/Logs/Akropia/completions/20261106T164320Z-9a518482ad52/`, PID `95047`, timeout 3,600 seconds. Targeted results, screenshots and fixed smoke remain pending.
+
+9. Targeted Docker/Xvfb passed all 35 selected UI/support checks, zero failures/errors/skips, in 819.016 supervised seconds (`target/docker-ui/run-cvSZQ7/`, eight XML reports independently recounted). Parent inspected TC209 screenshots: one solid land and one dashed sea connection without a carrier, one sea connection with Galleon #3. Final fixed smoke dispatched: `~/Library/Logs/Akropia/completions/20261106T165721Z-902d99330de8/`, PID `95325`, outer timeout 480 seconds and acceptance budget 420 seconds. Integration remains pending.
+
+10. Final smoke passed 21 tests with zero failures/errors/skips in 221.950 seconds, within 420 seconds (`target/verification/run-0_piyqi1/`). Parent independently recounted XML and compared executable/config sources with model/smoke snapshots: unchanged. R-0425 is done; local acceptance totals are 5,059 model/JUnit, 35 targeted UI/support and 21 smoke/support. Final documentation validation and integration follow; no remote publication claim.
+
 ## R-0424 Claude home-port diagnosis — 2026-11-06
 
 1. The user selected Claude for the missing home-port choice under G. Source `4409acfa` already contains Europe selection; a bounded diagnosis precedes implementation to identify the actual missing case. Existing Claude settings are preserved. Worktree: `claude-home-port`; handoff: `~/Library/Logs/Akropia/claude/2026-11-06-home-port/`.
