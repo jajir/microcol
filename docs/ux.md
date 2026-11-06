@@ -9,7 +9,7 @@
 ## Návrh editoru přepravní cesty — 6. listopadu 2026
 
 1. [R-0421](requirements/R-0421.md) zachycuje návrh tří záložek se společnou identitou trasy a rozpracovanou editací. Stejné pořadí stanic propojuje plán cesty a matici zboží; řádek dopravce ukazuje ID, cíl, náklad a důvod čekání. Symboly `+`/`−` a prázdná buňka doplňují barvu. Ikony bez popisků mají dostupné názvy v nápovědě a pro asistivní technologie.
-2. Uživatel potvrdil společný režim celé trasy a nakládání podle pořadí ikon. Přesný kontrakt a neuzavřené otázky vlastní [pravidlo](gap-analysis.md#route-editor-2026-11-06) a analýza. Náhled je návrhová demonstrace, nikoli pozorování hráče nebo přejímka hry.
+2. Uživatel potvrdil společný režim celé trasy, nakládání i vykládání podle pořadí ikon a použití tabulky také pro domovský přístav (`+` nákup, `−` prodej). Stav dopravce rozlišuje čekání na zásoby, místo ve skladu nebo peníze. Přesný dohodnutý kontrakt vlastní [pravidlo](gap-analysis.md#route-editor-2026-11-06) a analýza. Náhled je návrhová demonstrace, nikoli pozorování hráče nebo přejímka hry.
 
 ## Inventura hlavní mapy — 4. listopadu 2026
 

@@ -6,7 +6,7 @@
 
 ## Záložky přepravní cesty — 2026-11-06
 
-1. [R-0421](R-0421.md), status `new`, A06 s vazbami A03/A05/A07/A04: návrh záložek Stanice, Přeprava a Zboží; řazení měst, dopravci s ID/cílem/nákladem, matice `+`/`−` a společný režim čekání. Pevné pořadí nakládání, zrušení obou početních limitů a absence jednorázového odjezdu potvrzeny; otevřené otázky jsou v analýze. Jde o návrh, nikoli implementaci.
+1. [R-0421](R-0421.md), status `new`, A06 s vazbami A03/A05/A07/A04: návrh záložek Stanice, Přeprava a Zboží; řazení měst, dopravci s ID/cílem/nákladem, matice `+`/`−` a společný režim čekání. Potvrzeny pevné pořadí nakládání i vykládání, doplňování částečných boxů, zachování ignorovaného nákladu, odjezd po čistém vyložení, domovský přístav s nákupem/prodejem a čekáním na peníze, zrušení obou početních limitů i absence jednorázového odjezdu. Otevřené otázky jsou uzavřené; status zůstává `new` do výběru k vývoji. Jde o návrh, nikoli implementaci.
 
 ## Příjemce práce v pravém panelu — 2026-11-06
 
