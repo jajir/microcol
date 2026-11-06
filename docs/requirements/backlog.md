@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Záložky přepravní cesty — 2026-11-06
+
+1. [R-0421](R-0421.md), status `new`, A06 s vazbami A03/A05/A07/A04: návrh záložek Stanice, Přeprava a Zboží; řazení měst, dopravci s ID/cílem/nákladem, matice `+`/`−` a společný režim čekání. Pevné pořadí nakládání, zrušení obou početních limitů a absence jednorázového odjezdu potvrzeny; otevřené otázky jsou v analýze. Jde o návrh, nikoli implementaci.
+
 ## Příjemce práce v pravém panelu — 2026-11-06
 
 1. [R-0420](done/R-0420.md), status `done`, A03 s vazbami A07/A05: informace „Pracuje pro…“ přesunuta z mapy do popisu pracovníka v pravém panelu; aktualizace výběru a zrušení práce ověřené v EN/CS. Lokální přejímka dokončena.

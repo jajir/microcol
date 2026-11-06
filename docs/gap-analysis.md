@@ -2031,3 +2031,14 @@ The selected [R-0405](requirements/done/R-0405.md) changes outdoor entry to actu
 2. Automatic-route arrivals, including scheduled stops, produce no player-facing arrival notification. Internal arrival events may remain and are ignored by the notification presentation.
 3. Inability to reach the selected destination remains visible for both single voyages and automatic routes, with ship, destination and a specific reason, including loss of destination ownership where existing access rules forbid arrival. Normal movement exhaustion is not failure; the same unresolved obstruction must not repeat the same warning every turn.
 4. Evaluate the actual outcome after relevant state transitions; a transient idle state must not imply that an automatically continuing ship needs orders. Cancellation or replacement is not a failed voyage. Loading must not duplicate processed notifications. This is agreed behavior awaiting R-0406 implementation and acceptance, not new runtime evidence.
+
+<a id="route-editor-2026-11-06"></a>
+
+### Route editor proposal — agreed details, 2026-11-06
+
+1. [R-0421](requirements/R-0421.md) captures the requested Stations / Carriers / Goods editor and its unresolved boundaries. This is specification for future development, not implemented or verified runtime behavior; archived R-0139–R-0142 evidence remains historical.
+2. Confirmed by the user on 2026-11-06: the touch-and-go versus wait-until-unloaded/loaded mode applies to the whole route, not separately to each stop. Waiting must respect warehouse capacity and available stocks; a mixed stop requires completion of both unloading and loading.
+3. Confirmed by the user on 2026-11-06: loading follows the colony goods icon order until the carrier is full, without per-good quotas or equal allocation. This supersedes freely reordered loading priority for the proposed editor. Unload-before-load remains; the unloading priority and exact completion boundaries are unresolved in R-0421.
+4. Requested cells cycle ignore → load (`+`) → unload (`−`) → ignore for each destination and transportable good. The matrix therefore has one instruction per good at a stop. The non-colony sea destination remains open.
+5. Confirmed by the user on 2026-11-06: remove both the four-stop limit and the six-goods-per-direction limit. Keep legal destinations, carrier capacity and one instruction per commodity; these decisions do not create unlimited cargo capacity.
+6. Confirmed by the user on 2026-11-06: do not add a one-off Continue now command. The player can change the route mode or remove the carrier from the route. Loading priority was additionally confirmed as fixed colony icon order.

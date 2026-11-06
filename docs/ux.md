@@ -1,5 +1,10 @@
 # UX a pravidla ovládání Akropia
 
+## Návrh editoru přepravní cesty — 6. listopadu 2026
+
+1. [R-0421](requirements/R-0421.md) zachycuje návrh tří záložek se společnou identitou trasy a rozpracovanou editací. Stejné pořadí stanic propojuje plán cesty a matici zboží; řádek dopravce ukazuje ID, cíl, náklad a důvod čekání. Symboly `+`/`−` a prázdná buňka doplňují barvu. Ikony bez popisků mají dostupné názvy v nápovědě a pro asistivní technologie.
+2. Uživatel potvrdil společný režim celé trasy a nakládání podle pořadí ikon. Přesný kontrakt a neuzavřené otázky vlastní [pravidlo](gap-analysis.md#route-editor-2026-11-06) a analýza. Náhled je návrhová demonstrace, nikoli pozorování hráče nebo přejímka hry.
+
 ## Inventura hlavní mapy — 4. listopadu 2026
 
 1. [Akce, vstupy a srovnání ovládání](map-controls.md) zachycují zdrojový stav revize `953992ffa0fc`, kolizi města s jednotkou, přístup ke skupinám a pracovníkům a doložené vzory FreeCol, Civilization VI a Old World. Nejde o nový hráčský test ani změnu přijatých pravidel.
