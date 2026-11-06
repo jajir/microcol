@@ -9,11 +9,13 @@ import org.akropia.model.Goods;
 import org.akropia.model.GoodsType;
 import org.akropia.model.Location;
 import org.akropia.model.TradeRoutePause;
+import org.akropia.model.TradeRouteStop;
 import org.akropia.page.ColonyScreen;
 import org.akropia.page.FreePlayAuditPage;
 import org.akropia.page.GamePage;
 import org.akropia.page.SettingPage;
 import org.akropia.page.TradeRouteCargoDialog;
+import org.akropia.page.TradeRouteDialog;
 import org.akropia.page.TradeRoutePlanningPage;
 import org.akropia.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
@@ -59,6 +61,8 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
     private static final int NEW_AMSTERDAM_STOP = 1;
     /** Index of the lost stop in the Lost cart route. */
     private static final int LOST_STOP = 1;
+    /** Route name at the 64-character limit for player-entered text. */
+    private static final String LONG_ROUTE_NAME = "Northern Ore and Weapons Supply Line from Delft to New Amsterdam";
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -78,10 +82,14 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
 
         // The player prepares replacing the New Amsterdam stop of the Ore cart
         // route with Haarlem, then abandons the dialog with Escape. Nothing is
-        // stored, and the whole dialog fits the screen.
+        // stored, and the whole dialog fits the screen. The heading is on the
+        // left; the route menu and Back are on the right, Back last.
         cargo.open();
         cargo.verifyOpened();
         cargo.verifyDialogFitsScreen();
+        cargo.verifyHeaderLayout();
+        cargo.verifyHeaderControls("Back");
+        cargo.verifyRouteChoices("Ore cart", "Lost cart", "Atlantic run");
         cargo.chooseRoute("Ore cart");
         cargo.verifyAssigned("No ship or wagon follows this route.");
         cargo.chooseStop(NEW_AMSTERDAM_STOP);
@@ -479,7 +487,13 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         cargo.open();
         cargo.verifyTitle("Správa obchodní trasy");
         cargo.verifyDialogFitsScreen();
-        cargo.chooseRoute("Lost cart");
+        cargo.verifyHeaderLayout();
+        cargo.verifyHeaderControls("Zpět");
+        cargo.captureDialog("tradeRouteCargoPage",
+                "trade-route-header-czech.png");
+        cargo.chooseRouteWithKeyboard("Lost cart");
+        cargo.verifyChosenRoute("Lost cart");
+        cargo.verifyRouteSummary("Trasa Pozemní (vůz) · počet zastávek: 2");
         cargo.verifyAssigned(
                 "Povoz č. 8: čeká, další zastávka ztracená kolonie. Kolonie zastávky je ztracena nebo už není vaše.");
 
@@ -522,6 +536,63 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         // Escape closes the dialog; the colony screen is back.
         cargo.closeWithEscape();
         cargo.verifyDialogClosed();
+        colony.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_08_long_route_name_keeps_the_header_usable_in_a_small_window()
+            throws Exception {
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final ColonyScreen colony = game.openColonyAt(NEW_AMSTERDAM_LOCATION,
+                "New Amsterdam");
+        final TradeRouteDialog route = new TradeRouteDialog(getContext());
+        final TradeRouteCargoDialog cargo = new TradeRouteCargoDialog(
+                getContext());
+
+        // The player creates a land route whose name uses the whole
+        // 64-character limit.
+        route.open();
+        route.enterName(LONG_ROUTE_NAME);
+        route.chooseStop(0, TradeRouteStop.ofColony(DELFT_ID));
+        route.chooseStop(1, TradeRouteStop.ofColony(NEW_AMSTERDAM_ID));
+        route.create();
+        route.verifyDialogClosed();
+
+        // In the smallest supported window, the route menu has the focus and
+        // offers every route; the long route is chosen with the keyboard.
+        cargo.resizeWindow(1024, 768);
+        cargo.open();
+        cargo.verifyRouteMenuFocused();
+        cargo.verifyRouteChoices("Ore cart", "Lost cart", "Atlantic run",
+                LONG_ROUTE_NAME);
+        cargo.chooseRouteWithKeyboard(LONG_ROUTE_NAME);
+        cargo.verifyChosenRoute(LONG_ROUTE_NAME);
+        cargo.verifyChosenRouteLength(64);
+        cargo.verifyRouteSummary("Land (wagon) route · 2 stops");
+        cargo.verifyStopChoices("1. Delft", "2. New Amsterdam");
+
+        // The shortened name leaves the heading, the menu and Back side by
+        // side, Back last and fully inside the window.
+        cargo.verifyHeaderLayout();
+        cargo.verifyHeaderControls("Back");
+        cargo.captureDialog("tradeRouteCargoPage",
+                "trade-route-header-long-name.png");
+
+        // Switching with the mouse shows the other route's stops.
+        cargo.chooseRoute("Lost cart");
+        cargo.verifyChosenRoute("Lost cart");
+        cargo.verifyStopChoices("1. Delft", "2. lost colony");
+        cargo.verifyHeaderLayout();
+
+        // Back with the keyboard returns to the colony; Escape does the same
+        // after the dialog is opened again.
+        cargo.closeWithKeyboard();
+        cargo.verifyDialogClosed();
+        cargo.open();
+        cargo.closeWithEscape();
+        cargo.verifyDialogClosed();
+        cargo.verifyRouteStored(LONG_ROUTE_NAME, true);
         colony.close();
     }
 

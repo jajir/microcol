@@ -40,6 +40,8 @@ import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -61,9 +63,10 @@ public final class DialogTradeRouteCargo implements GameScreen {
     private final EventBus eventBus;
     private final Label caption = new Label();
     private final Label rule = new Label();
-    private final Label routeLabel = new Label();
     private final Label stopLabel = new Label();
-    private final ComboBox<TradeRoute> routeBox = new ComboBox<>();
+    private final MenuButton routeMenu = ActionButtons.menu(ButtonIcon.TRADE);
+    /** Route whose stops and cargo the dialog shows, if any. */
+    private TradeRoute selectedRoute;
     private final ComboBox<Integer> stopBox = new ComboBox<>();
     private final TradeRouteGoodsList unload;
     private final TradeRouteGoodsList load;
@@ -105,7 +108,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
     private Integer deleteAskedFor;
     private final Label resultHeading = new Label();
     private final Label result = new Label();
-    private final Button close = ActionButtons.button(ButtonIcon.CANCEL);
+    private final Button close = ActionButtons.button(ButtonIcon.BACK);
     private Model model;
     private Player player;
     /** Set while controls are rebuilt, so their own events do not recurse. */
@@ -122,29 +125,14 @@ public final class DialogTradeRouteCargo implements GameScreen {
         this.game = game;
         this.eventBus = eventBus;
         caption.setId("tradeRouteCargoTitle");
-        caption.setWrapText(true);
         rule.setId("tradeRouteCargoRule");
         rule.setWrapText(true);
         rule.setMaxWidth(740);
-        routeBox.setId("tradeRouteCargoRoute");
-        routeBox.setConverter(new StringConverter<TradeRoute>() {
-            @Override
-            public String toString(final TradeRoute route) {
-                return route == null ? "" : route.getName();
-            }
-
-            @Override
-            public TradeRoute fromString(final String value) {
-                throw new UnsupportedOperationException();
-            }
-        });
-        routeBox.setOnAction(event -> {
-            if (!refreshing) {
-                deleteAskedFor = null;
-                fillStops(0);
-                loadStop();
-            }
-        });
+        routeMenu.setId("tradeRouteCargoRoute");
+        routeMenu.getStyleClass().add("toolbar-menu");
+        routeMenu.setMnemonicParsing(false);
+        // Long route names shorten so Back stays reachable in narrow windows.
+        routeMenu.setMaxWidth(320);
         stopBox.setId("tradeRouteCargoStop");
         stopBox.setConverter(new StringConverter<Integer>() {
             @Override
@@ -262,6 +250,8 @@ public final class DialogTradeRouteCargo implements GameScreen {
         result.setWrapText(true);
         result.setMaxWidth(740);
         close.setId("tradeRouteCargoClose");
+        close.getStyleClass().add("toolbar-action");
+        close.setMinWidth(Region.USE_PREF_SIZE);
         close.setCancelButton(true);
         close.setOnAction(event -> close());
         final VBox stops = new VBox(10, stopLabel, stopSummary, stopBox,
@@ -290,17 +280,17 @@ public final class DialogTradeRouteCargo implements GameScreen {
             column.getStyleClass().add("trade-route-column");
         }
         final FlowPane columns = new FlowPane(20, 20, stops, goods, carriers);
-        final VBox root = new VBox(12, columns);
+        routeSummary.setId("tradeRouteCargoSummary");
+        final VBox root = new VBox(12, routeSummary, columns);
         root.setId("tradeRouteCargoDialog");
         stopSummary.setWrapText(true);
         stopSummary.setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
         routeSummary.setWrapText(true);
         processRule.setWrapText(true);
         page.setTitle(caption);
-        caption.setWrapText(true);
-        page.setToolbar(
-                new VBox(4, new FlowPane(12, 6, close, routeLabel, routeBox),
-                        routeSummary));
+        final HBox actions = new HBox(3, routeMenu, close);
+        actions.setId("tradeRouteCargoActions");
+        page.setToolbar(actions);
         page.setContent(root);
         page.getContent().lookupAll(".screen-scroll")
                 .forEach(node -> node.setId("tradeRouteCargoScroll"));
@@ -348,7 +338,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
     }
 
     private String stopText(final int index) {
-        final TradeRoute route = routeBox.getValue();
+        final TradeRoute route = selectedRoute;
         if (route == null || index < 0 || index >= route.getStops().size()) {
             return "";
         }
@@ -373,9 +363,8 @@ public final class DialogTradeRouteCargo implements GameScreen {
         deletePane.setText(i18n.get(TradeRouteText.deleteRoute));
         caption.setText(i18n.get(TradeRouteText.cargoTitle));
         rule.setText(i18n.get(TradeRouteText.cargoRule));
-        routeLabel.setText(i18n.get(TradeRouteText.cargoRouteLabel));
         stopLabel.setText(i18n.get(TradeRouteText.cargoStopLabel));
-        routeBox.setAccessibleText(routeLabel.getText());
+        showRouteChoice();
         stopBox.setAccessibleText(stopLabel.getText());
         unload.translate(i18n.get(TradeRouteText.unloadHeading));
         load.translate(i18n.get(TradeRouteText.loadHeading));
@@ -440,7 +429,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
         }
         reloadRoutes(routeId, 0);
         eventBus.post(new ShowScreenEvent(Screen.TRADE_ROUTE_CARGO));
-        Platform.runLater(() -> routeBox.requestFocus());
+        Platform.runLater(() -> routeMenu.requestFocus());
 
     }
 
@@ -450,12 +439,26 @@ public final class DialogTradeRouteCargo implements GameScreen {
         refreshing = true;
         try {
             final List<TradeRoute> routes = model.getTradeRoutes(player);
-            routeBox.getItems().setAll(routes);
-            routeBox.setValue(routes.stream()
+            routeMenu.getItems().clear();
+            routes.forEach(route -> {
+                final MenuItem item = new MenuItem(route.getName());
+                item.setId("tradeRouteChoice-" + route.getId());
+                item.setMnemonicParsing(false);
+                item.setOnAction(event -> chooseRoute(route.getId()));
+                routeMenu.getItems().add(item);
+            });
+            if (routes.isEmpty()) {
+                final MenuItem placeholder = new MenuItem(
+                        i18n.get(TradeRouteText.noRoutes));
+                placeholder.setDisable(true);
+                routeMenu.getItems().add(placeholder);
+            }
+            selectedRoute = routes.stream()
                     .filter(route -> keepRouteId.isPresent()
                             && route.getId() == keepRouteId.get())
                     .findFirst()
-                    .orElse(routes.isEmpty() ? null : routes.get(0)));
+                    .orElse(routes.isEmpty() ? null : routes.get(0));
+            showRouteChoice();
             fillStops(keepStop);
         } finally {
             refreshing = false;
@@ -463,11 +466,41 @@ public final class DialogTradeRouteCargo implements GameScreen {
         loadStop();
     }
 
+    /**
+     * Shows another route of the player, as stored now. A route deleted
+     * meanwhile is not shown; the list is rebuilt instead.
+     */
+    private void chooseRoute(final int routeId) {
+        if (refreshing || (selectedRoute != null
+                && selectedRoute.getId() == routeId)) {
+            return;
+        }
+        deleteAskedFor = null;
+        final Optional<TradeRoute> route = model.getTradeRoutes(player).stream()
+                .filter(stored -> stored.getId() == routeId).findFirst();
+        if (route.isEmpty()) {
+            reloadRoutes(Optional.empty(), 0);
+            return;
+        }
+        selectedRoute = route.get();
+        showRouteChoice();
+        fillStops(0);
+        loadStop();
+    }
+
+    private void showRouteChoice() {
+        final String label = i18n.get(TradeRouteText.cargoRouteLabel);
+        routeMenu.setText(
+                selectedRoute == null ? label : selectedRoute.getName());
+        routeMenu.setAccessibleText(selectedRoute == null ? label
+                : label + ": " + selectedRoute.getName());
+    }
+
     private void fillStops(final int keep) {
         final boolean wasRefreshing = refreshing;
         refreshing = true;
         try {
-            final TradeRoute route = routeBox.getValue();
+            final TradeRoute route = selectedRoute;
             final List<Integer> indexes = new ArrayList<>();
             if (route != null) {
                 for (int index = 0; index < route.getStops().size(); index++) {
@@ -486,7 +519,6 @@ public final class DialogTradeRouteCargo implements GameScreen {
 
     /** Shows the stored cargo of the chosen stop and its carriers. */
     private void loadStop() {
-        final TradeRoute selectedRoute = routeBox.getValue();
         routeSummary.setText(selectedRoute == null ? ""
                 : i18n.get(TradeRouteText.routeSummary, i18n.get(selectedRoute
                         .getKind() == org.akropia.model.TradeRouteKind.SEA
@@ -516,7 +548,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
     }
 
     private Optional<TradeRouteStop> chosenStop() {
-        final TradeRoute route = routeBox.getValue();
+        final TradeRoute route = selectedRoute;
         final Integer index = stopBox.getValue();
         if (route == null || index == null) {
             return Optional.empty();
@@ -525,7 +557,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
     }
 
     private void refreshCarriers() {
-        final TradeRoute route = routeBox.getValue();
+        final TradeRoute route = selectedRoute;
         final Integer index = stopBox.getValue();
         final UnitWithCargo previous = carrierBox.getValue();
         final List<UnitWithCargo> carriers = route == null || index == null
@@ -550,7 +582,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
         }
         final boolean dirty = isDirty();
         save.setDisable(!dirty);
-        final TradeRoute route = routeBox.getValue();
+        final TradeRoute route = selectedRoute;
         final Integer index = stopBox.getValue();
         final UnitWithCargo carrier = carrierBox.getValue();
         String status = "";
@@ -666,7 +698,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
      * they stand; the message says how many were released.
      */
     private void deleteRoute() {
-        final TradeRoute route = routeBox.getValue();
+        final TradeRoute route = selectedRoute;
         if (route == null) {
             return;
         }
@@ -696,7 +728,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
      * it; they take the change at their next stop.
      */
     private void replaceStop() {
-        final TradeRoute route = routeBox.getValue();
+        final TradeRoute route = selectedRoute;
         final Integer index = stopBox.getValue();
         final TradeRouteStop choice = replaceBox.getValue();
         if (route == null || index == null || choice == null) {
@@ -803,7 +835,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
     }
 
     private void assignCarrier() {
-        final TradeRoute route = routeBox.getValue();
+        final TradeRoute route = selectedRoute;
         final UnitWithCargo carrier = carrierBox.getValue();
         final Integer first = route == null || carrier == null ? null
                 : model.getNearestTradeRouteStop(carrier, route).stream()
@@ -828,7 +860,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
     }
 
     private void saveCargo() {
-        final TradeRoute route = routeBox.getValue();
+        final TradeRoute route = selectedRoute;
         final Integer index = stopBox.getValue();
         if (route == null || index == null || !isDirty()) {
             return;
@@ -847,7 +879,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
     }
 
     private void processStop() {
-        final TradeRoute route = routeBox.getValue();
+        final TradeRoute route = selectedRoute;
         final Integer index = stopBox.getValue();
         final UnitWithCargo carrier = carrierBox.getValue();
         if (route == null || index == null || carrier == null || isDirty()) {

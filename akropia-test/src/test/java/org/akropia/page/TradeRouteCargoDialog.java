@@ -18,6 +18,8 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.Parent;
@@ -44,18 +46,59 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    /** Picks the route from the header menu with the mouse. */
     public void chooseRoute(final String name) {
-        final ComboBox<TradeRoute> combo = routeBox();
-        int index = -1;
-        for (int i = 0; i < combo.getItems().size(); i++) {
-            if (combo.getItems().get(i).getName().equals(name)) {
-                index = i;
-            }
+        final int index = routeIndex(name);
+        getRobot().clickOn(routeMenu());
+        WaitForAsyncUtils.waitForFxEvents();
+        final Node item = getNodeFinder()
+                .lookup("#" + routeMenu().getItems().get(index).getId())
+                .query();
+        getRobot().clickOn(item);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /**
+     * Picks the route from the header menu with the keyboard: Down opens the
+     * menu without focusing an entry, further Down presses walk the entries
+     * until the wanted one owns the popup focus, and Enter takes it.
+     */
+    public void chooseRouteWithKeyboard(final String name) {
+        final String itemId = routeMenu().getItems().get(routeIndex(name))
+                .getId();
+        getRobot().interact(() -> routeMenu().requestFocus());
+        getRobot().push(KeyCode.DOWN);
+        WaitForAsyncUtils.waitForFxEvents();
+        for (int i = 0; i <= routeMenu().getItems().size()
+                && !isPopupItemFocused(itemId); i++) {
+            getRobot().push(KeyCode.DOWN);
+            WaitForAsyncUtils.waitForFxEvents();
         }
-        if (index < 0) {
-            throw new IllegalStateException("Route is not offered: " + name);
-        }
-        choose(combo, index);
+        getRobot().push(KeyCode.ENTER);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /** The popup entry shown for the menu item has keyboard focus. */
+    private boolean isPopupItemFocused(final String itemId) {
+        return getNodeFinder().lookup("#" + itemId).queryAll().stream()
+                .anyMatch(node -> node.getScene() != null
+                        && node.getScene().getFocusOwner() == node);
+    }
+
+    /** Presses Back with the keyboard. */
+    public void closeWithKeyboard() {
+        getRobot().interact(
+                () -> getButtonById("tradeRouteCargoClose").requestFocus());
+        getRobot().push(KeyCode.SPACE);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void resizeWindow(final double width, final double height) {
+        getRobot().interact(() -> {
+            getPrimaryStage().setWidth(width);
+            getPrimaryStage().setHeight(height);
+        });
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     /** @param index zero-based stop index of the chosen route */
@@ -321,8 +364,24 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    private ComboBox<TradeRoute> routeBox() {
-        return getNodeFinder().lookup("#tradeRouteCargoRoute").queryComboBox();
+    private MenuButton routeMenu() {
+        return getNodeFinder().lookup("#tradeRouteCargoRoute")
+                .queryAs(MenuButton.class);
+    }
+
+    private int routeIndex(final String name) {
+        final List<MenuItem> items = routeMenu().getItems();
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getText().equals(name)
+                    && !items.get(i).isDisable()) {
+                return i;
+            }
+        }
+        throw new IllegalStateException("Route is not offered: " + name);
+    }
+
+    private Bounds sceneBounds(final Node node) {
+        return node.localToScene(node.getBoundsInLocal());
     }
 
     private ComboBox<Integer> stopBox() {
@@ -429,7 +488,108 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
 
     /** @param expectedName route shown as chosen when the dialog opened */
     public void verifyChosenRoute(final String expectedName) {
-        assertEquals(expectedName, routeBox().getValue().getName());
+        assertEquals(expectedName, routeMenu().getText());
+    }
+
+    /** @param expected Unicode code points of the name shown in the menu */
+    public void verifyChosenRouteLength(final int expected) {
+        final String text = routeMenu().getText();
+        assertEquals(expected, text.codePointCount(0, text.length()));
+    }
+
+    /** @param expected type and stop count shown above the columns */
+    public void verifyRouteSummary(final String expected) {
+        assertEquals(expected,
+                getLabeledById("tradeRouteCargoSummary").getText());
+    }
+
+    /**
+     * The heading is on the left; the route menu and Back follow on the right
+     * in this order, Back last, inside the window and without overlapping.
+     */
+    public void verifyHeaderLayout() {
+        getRobot().interact(() -> {
+            getPrimaryStage().getScene().getRoot().applyCss();
+            getPrimaryStage().getScene().getRoot().layout();
+        });
+        final Node title = getNodeFinder().lookup("#tradeRouteCargoTitle")
+                .query();
+        final MenuButton menu = routeMenu();
+        final javafx.scene.control.Button back = getButtonById(
+                "tradeRouteCargoClose");
+        final Parent actions = getNodeFinder().lookup("#tradeRouteCargoActions")
+                .queryAs(Parent.class);
+        assertEquals(List.of(menu, back), actions.getChildrenUnmodifiable(),
+                "Header actions must be the route menu, then Back");
+        assertTrue(title.getParent() == actions.getParent(),
+                "Heading and actions must share the header row");
+        final Bounds titleBounds = sceneBounds(title);
+        final Bounds menuBounds = sceneBounds(menu);
+        final Bounds backBounds = sceneBounds(back);
+        final double sceneWidth = getPrimaryStage().getScene().getWidth();
+        assertTrue(titleBounds.getMinX() < sceneWidth / 2,
+                "The heading must be on the left: " + titleBounds);
+        assertTrue(titleBounds.getMaxX() <= menuBounds.getMinX(),
+                "The heading overlaps the route menu");
+        assertTrue(menuBounds.getMaxX() <= backBounds.getMinX(),
+                "The route menu overlaps Back");
+        assertTrue(menuBounds.getWidth() >= menu.minWidth(-1) - 1,
+                "The route menu is cut below its minimum");
+        assertTrue(backBounds.getWidth() >= back.prefWidth(-1) - 1,
+                "Back must keep its full width");
+        assertTrue(
+                backBounds.getMinX() >= 0 && backBounds.getMaxX() <= sceneWidth,
+                "Back must be inside the window: " + backBounds);
+        assertTrue(backBounds.getMinY() >= 0 && backBounds
+                .getMaxY() <= getPrimaryStage().getScene().getHeight());
+        assertTrue(sceneWidth - backBounds.getMaxX() < 40,
+                "Back must be at the right edge: " + backBounds);
+    }
+
+    /**
+     * The route menu has the paper face and arrow of the map's colony menu,
+     * with the trade icon; Back has the standard return icon and text.
+     */
+    public void verifyHeaderControls(final String expectedBackText) {
+        final MenuButton menu = routeMenu();
+        assertTrue(menu.getStyleClass().contains("toolbar-menu"));
+        assertTrue(menu.getHeight() >= 57 - 1,
+                "Route menu is lower than the colony menu: "
+                        + menu.getHeight());
+        verifyIcon(menu.getGraphic(), org.akropia.gui.image.ButtonIcon.TRADE);
+        final javafx.scene.control.Button back = getButtonById(
+                "tradeRouteCargoClose");
+        assertEquals(expectedBackText, back.getText());
+        assertTrue(back.isCancelButton());
+        assertTrue(back.getStyleClass().contains("toolbar-action"));
+        verifyIcon(back.getGraphic(), org.akropia.gui.image.ButtonIcon.BACK);
+    }
+
+    private void verifyIcon(final Node graphic,
+            final org.akropia.gui.image.ButtonIcon expected) {
+        final javafx.scene.image.ImageView view = (javafx.scene.image.ImageView) graphic;
+        final javafx.scene.image.ImageView reference = expected.createView();
+        assertSame(reference.getImage(), view.getImage());
+        assertEquals(reference.getViewport(), view.getViewport());
+    }
+
+    /** @param expected route names in the header menu, in order */
+    public void verifyRouteChoices(final String... expected) {
+        assertEquals(List.of(expected), routeMenu().getItems().stream()
+                .map(MenuItem::getText).collect(Collectors.toList()));
+    }
+
+    /** @param expected stop entries offered for the chosen route, in order */
+    public void verifyStopChoices(final String... expected) {
+        final ComboBox<Integer> combo = stopBox();
+        assertEquals(List.of(expected),
+                combo.getItems().stream().map(combo.getConverter()::toString)
+                        .collect(Collectors.toList()));
+    }
+
+    /** The route menu takes the keyboard focus when the dialog opens. */
+    public void verifyRouteMenuFocused() {
+        assertSame(routeMenu(), getPrimaryStage().getScene().getFocusOwner());
     }
 
     public void verifyTitle(final String expected) {
@@ -635,8 +795,8 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
     }
 
     public void verifyRouteOffered(final String name, final boolean expected) {
-        assertEquals(expected, routeBox().getItems().stream()
-                .anyMatch(route -> route.getName().equals(name)));
+        assertEquals(expected, routeMenu().getItems().stream().anyMatch(
+                item -> item.getText().equals(name) && !item.isDisable()));
     }
 
     public void verifyRouteStored(final String name, final boolean expected) {

@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## R-0422 — Horní lišta správy obchodní trasy
+
+1. Uživatel 2026-11-06 vybral [R-0422](done/R-0422.md) k implementaci přes Claude Code: nadpis vlevo, vpravo společný výběr trasy a standardní Zpět. Implementováno a lokálně ověřeno 2026-11-06; ostatní části obrazovky nejsou součástí prvního kroku.
+
 ## Záložky přepravní cesty — 2026-11-06
 
 1. [R-0421](R-0421.md), status `new`, A06 s vazbami A03/A05/A07/A04: návrh záložek Stanice, Přeprava a Zboží; řazení měst, dopravci s ID/cílem/nákladem, matice `+`/`−` a společný režim čekání. Pevné pořadí nakládání, zrušení obou početních limitů a absence jednorázového odjezdu potvrzeny; otevřené otázky jsou v analýze. Jde o návrh, nikoli implementaci.

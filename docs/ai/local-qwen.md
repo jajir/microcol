@@ -1,5 +1,12 @@
 # Codex, Claude Code and the local development worker
 
+## R-0422 Claude header implementation — 2026-11-06
+
+1. The user selected Claude Code for the trade-route header. Existing model/effort settings were preserved. Handoff: `~/Library/Logs/Akropia/claude/2026-11-06-r0421/`; isolated worktree `claude-r0421`, baseline `48fa9bea45f3aa7dbdb35229623ae65fc0dff7f7`.
+2. Completion `20261106T062936Z-d2fa68a9d606` exited 0 in 331.642 seconds. Claude changed one screen, two style sheets, its page object and TC119; compilation succeeded. The caller reviewed the changes and applied the shared formatter. This is implementation evidence, not runtime acceptance or measured token savings. [Functional evidence](../functional-tests.md#r-0422-trade-route-header-2026-11-06) owns acceptance results.
+3. Initial targeted acceptance found two keyboard-helper failures: opening the menu with Down did not establish the assumed first-entry focus, so selection landed one entry early. Repair 1 resumes the same Claude session with exact TC119 failures and preserves expectations; it also explicitly verifies the existing 64-code-point name. Full reports remain under `target/docker-ui/run-bMCAih`.
+4. Repair 1 (`20261106T064955Z-281c500f587a`, 50.093 seconds, exit 0) reused the existing popup-focus keyboard pattern. No runtime source changed and no gameplay assertions were removed; caller review and formatter completed before acceptance retry.
+
 ## Execution choice — 2026-10-18
 
 [R-0245](../requirements/done/R-0245.md) records the current user decision:

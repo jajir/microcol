@@ -1335,3 +1335,7 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 
 1. UC-029/030 a UC-016: [R-0415](requirements/done/R-0415.md) přidává přístup z panelu dopravce a kontextu, společný dialog výběru trasy, automatickou nejbližší dosažitelnou vstupní zastávku a zákaz změny během přechodu Atlantiku. `TC_205_F237_carrier_route_change_test` pokrývá vůz/loď, panel/kontext, přerušené přiřazení, Escape, stejnou trasu, EN/CS, klávesnici a Continue. Dosavadní TC117/118/119/185 nadále ověřují náklad, pokračování a změny plánů.
 2. Implementace má dokončenou lokální přejímku; [evidence](functional-tests.md#r-0415-carrier-route-assignment-2026-11-05) rozlišuje modelovou přejímku, cílené UI, smoke a vizuální kontrolu. Tento záznam sám nepotvrzuje celou UC ani zveřejnění nové distribuce.
+
+## Hlavička správy obchodní trasy — R-0422
+
+1. UC-029/030: [R-0422](requirements/done/R-0422.md) sjednocuje hlavičku správy trasy. TC119/01 ověřuje anglické rozložení a nabídku, TC119/05 české ovládání a výběr klávesnicí, TC119/08 dlouhý název v menším okně, přepínání tras a návrat. Stávající TC117/118/119 zachovávají herní aserce. [Výsledky](functional-tests.md#r-0422-trade-route-header-2026-11-06) určují skutečně ověřený rozsah.

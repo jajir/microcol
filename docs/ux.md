@@ -1,5 +1,11 @@
 # UX a pravidla ovládání Akropia
 
+## Horní lišta správy obchodní trasy
+
+1. [R-0422](requirements/done/R-0422.md), zadání 2026-11-06: hráč pozná obrazovku podle nadpisu vlevo. Vpravo vybírá trasu společnou papírovou nabídkou a úplně vpravo se vrací standardním tlačítkem Zpět s ikonou návratu. Nabídka ukazuje aktuální trasu; dlouhý název nesmí vytlačit návrat mimo okno.
+2. Nabídka obsahuje dostupné vlastní trasy. Změna výběru obnoví zastávky a náklad; jejich pravidla a dosavadní zacházení s neuloženými úpravami zůstávají zachované. Typ trasy a počet zastávek patří nad obsah. Myš, klávesnice, Zpět i Escape zachovávají běžnou cestu do původní obrazovky.
+3. Jde o dohodnuté rozložení, ne nezávislé hráčské pozorování. [Funkční evidence](functional-tests.md#r-0422-trade-route-header-2026-11-06) rozlišuje implementaci a skutečné ověření.
+
 ## Návrh editoru přepravní cesty — 6. listopadu 2026
 
 1. [R-0421](requirements/R-0421.md) zachycuje návrh tří záložek se společnou identitou trasy a rozpracovanou editací. Stejné pořadí stanic propojuje plán cesty a matici zboží; řádek dopravce ukazuje ID, cíl, náklad a důvod čekání. Symboly `+`/`−` a prázdná buňka doplňují barvu. Ikony bez popisků mají dostupné názvy v nápovědě a pro asistivní technologie.
