@@ -1,5 +1,11 @@
 # Grafické podklady a jejich použití v Akropia
 
+## Rámeček záložek přepravní cesty — 6. listopadu 2026
+
+1. R-0421 používá pro nové záložky a rozbalovací sekce vlastní `akropia-game/src/graphics/trade-route-frame.svg`: skutečná vektorová nepravidelná kontura s černou linkou `#000000`, šířkou 2 jednotky na plátně 96 × 48, bez bitmap. Sdílený starší rámeček ostatních obrazovek se nemění.
+2. Recept ve skupině `controls` v exportním manifestu vytváří `trade-route-frame.png` 192 × 96. Opakovatelná kontrola `python3 scripts/graphics/export-graphics.py controls --check` prošla pro všech šest exportů. CSS používá stejnou velikost rohů a devítidílné vykreslení jako existující ovládací prvky.
+3. Nový export je zkontrolovaný ve zdrojích i na skutečných Docker/Xvfb snímcích všech tří záložek; vykreslení a konečnou přejímku zachycuje [funkční evidence](functional-tests.md#r-0421-tabbed-trade-route-editor-2026-11-06). Kontrola všech šesti exportů a cílená UI přejímka prošly.
+
 <a id="menu-hamburger-2026-11-04"></a>
 ## Ikona herního Menu — výběr 2026-11-04
 

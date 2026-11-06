@@ -228,6 +228,17 @@
           "stroke": "2 source units, about 2 logical px"
         },
         {
+          "output": "trade-route-frame.png",
+          "source": "trade-route-frame.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [192, 96],
+          "transparent": true,
+          "consumer": "CSS border-image of the trade route tabs and collapsible sections in TradeRouteCargo",
+          "display": "12 px slice shown 6 logical px wide",
+          "stroke": "2 source units, about 2 logical px, black #000000"
+        },
+        {
           "output": "action-icons.png",
           "source": "action-icons.svg",
           "render": "size",

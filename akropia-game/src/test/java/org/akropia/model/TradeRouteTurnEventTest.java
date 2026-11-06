@@ -87,9 +87,10 @@ class TradeRouteTurnEventTest {
             assertEquals(Optional.empty(),
                     model.getTradeRouteStopProblem(ship, route, stop));
             final TradeRouteStop target = route.getStops().get(stop);
-            return new TradeRouteStopProcessor(model, ship, route, target,
-                    new TradeRouteVisit(route.getId(), stop,
-                            target.isEurope() ? null : ship.getLocation()),
+            return new TradeRouteStopProcessor(model, ship, route, stop, target,
+                    new TradeRouteVisit(route.getId(),
+                            target.isEurope() ? null : ship.getLocation(),
+                            model.getCalendar().getNumberOfPlayedTurns()),
                     true).run();
         }
 
@@ -160,7 +161,9 @@ class TradeRouteTurnEventTest {
 
         w.arrive(route, DELFT_STOP);
 
-        // Wine are not on board and grain finds no third free hold: no row.
+        // Both directions follow the fixed goods order. Wine is not on
+        // board, and grain and the horse fill the two freed holds, so the
+        // weapon finds none: no row for either.
         final List<TurnEventTradeRouteTransfer> notices = w.notices();
         assertEquals(4, notices.size());
         verifyNotice(notices.get(0), route, DELFT_STOP, true,
@@ -168,9 +171,9 @@ class TradeRouteTurnEventTest {
         verifyNotice(notices.get(1), route, DELFT_STOP, true,
                 Goods.of(GoodsType.OLIVE_OIL, 100), 0);
         verifyNotice(notices.get(2), route, DELFT_STOP, false,
-                Goods.of(GoodsType.HORSE, 50), 0);
+                Goods.of(GoodsType.GRAIN, 100), 0);
         verifyNotice(notices.get(3), route, DELFT_STOP, false,
-                Goods.of(GoodsType.WEAPONS, 50), 0);
+                Goods.of(GoodsType.HORSE, 50), 0);
         notices.forEach(TradeRouteTurnEventTest::verifyDelft);
         assertEquals(gold, w.dutch.getGold());
         // Only the owner of the carrier receives the notices.
@@ -236,18 +239,19 @@ class TradeRouteTurnEventTest {
         w.slot(1).removeCargo(Goods.of(GoodsType.OLIVE_OIL, 100));
         final TradeRoute route = w.route("Arms", EUROPE_STOP, List.of(),
                 List.of(GoodsType.WEAPONS, GoodsType.HORSE));
+        // The horse precedes the weapon in the fixed goods order.
         final int money = w.dutch
-                .quoteEuropeTrade(Goods.of(GoodsType.WEAPONS, 40), true)
+                .quoteEuropeTrade(Goods.of(GoodsType.HORSE, 40), true)
                 .getTotal();
         w.dutch.setGold(money);
 
         w.arrive(route, EUROPE_STOP);
 
-        // The horse that could not be afforded is not a transaction.
+        // The weapon that could not be afforded is not a transaction.
         final List<TurnEventTradeRouteTransfer> notices = w.notices();
         assertEquals(1, notices.size());
         verifyNotice(notices.get(0), route, EUROPE_STOP, false,
-                Goods.of(GoodsType.WEAPONS, 40), -money);
+                Goods.of(GoodsType.HORSE, 40), -money);
         assertEquals(0, w.dutch.getGold());
     }
 
@@ -258,7 +262,7 @@ class TradeRouteTurnEventTest {
         w.slot(1).removeCargo(Goods.of(GoodsType.OLIVE_OIL, 100));
         w.slot(1).addGoods(Goods.of(GoodsType.ORE, 100));
         final TradeRoute route = w.route("Ore Run", EUROPE_STOP,
-                List.of(GoodsType.ORE, GoodsType.OLIVES),
+                List.of(GoodsType.ORE, GoodsType.WINE),
                 List.of(GoodsType.WEAPONS));
         // The first hold's sale fills the treasury to the largest int; the
         // second hold's sale would overflow it and is refused unchanged.

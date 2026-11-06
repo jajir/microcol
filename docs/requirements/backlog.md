@@ -6,7 +6,7 @@
 
 ## Záložky přepravní cesty — 2026-11-06
 
-1. [R-0421](R-0421.md), status `new`, A06 s vazbami A03/A05/A07/A04: návrh záložek Stanice, Přeprava a Zboží; řazení měst, dopravci s ID/cílem/nákladem, matice `+`/`−` a společný režim čekání. Potvrzeny pevné pořadí nakládání i vykládání, doplňování částečných boxů, zachování ignorovaného nákladu, odjezd po čistém vyložení, domovský přístav s nákupem/prodejem a čekáním na peníze, zrušení obou početních limitů i absence jednorázového odjezdu. Otevřené otázky jsou uzavřené; status zůstává `new` do výběru k vývoji. Jde o návrh, nikoli implementaci.
+1. [R-0421](done/R-0421.md), status `done`, A06 s vazbami A03/A05/A07/A04: editor se záložkami Stanice, Přeprava a Zboží; řazení měst, dopravci s ID/cílem/nákladem, matice `+`/`−` a společný režim čekání. Potvrzeny pevné pořadí nakládání i vykládání, doplňování částečných boxů, zachování ignorovaného nákladu, odjezd po čistém vyložení, domovský přístav s nákupem/prodejem a čekáním na peníze, zrušení obou početních limitů i absence jednorázového odjezdu. Otevřené otázky jsou uzavřené; uživatel vybral implementaci pomocí Claude Code. Implementace a místní přejímka dokončeny: 5 046 modelových, 37 cílených UI a 21 smoke testů bez chyb a přeskočení; [evidence](../functional-tests.md#r-0421-tabbed-trade-route-editor-2026-11-06).
 
 ## Příjemce práce v pravém panelu — 2026-11-06
 

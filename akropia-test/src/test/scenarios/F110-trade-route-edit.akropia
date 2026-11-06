@@ -239,6 +239,7 @@
         "ownerName": "Dutch",
         "name": "Ore cart",
         "kind": "LAND",
+        "mode": "TOUCH_AND_GO",
         "startColonyId": 0,
         "stops": [
           {
@@ -268,6 +269,7 @@
         "ownerName": "Dutch",
         "name": "Lost cart",
         "kind": "LAND",
+        "mode": "TOUCH_AND_GO",
         "startColonyId": 0,
         "stops": [
           {
@@ -289,6 +291,7 @@
         "ownerName": "Dutch",
         "name": "Atlantic run",
         "kind": "SEA",
+        "mode": "TOUCH_AND_GO",
         "startColonyId": 1,
         "stops": [
           {

@@ -66,28 +66,42 @@ class TradeRouteTest {
     }
 
     @Test
-    void routesHoldOneToFourStopsAndRejectFiveOrNone() {
+    void routesHaveNoStopLimitButNeedAtLeastOneStop() {
         final Model model = load(fixture().getModel());
         final Player owner = owner(model);
-        final List<TradeRouteStop> four = List.of(europe(), colony(DELFT),
-                europe(), colony(DELFT));
-        assertEquals(Optional.empty(), model.getTradeRouteProblem(owner, "Four",
-                TradeRouteKind.SEA, DELFT, four));
-        final TradeRoute route = model.createTradeRoute(owner, "Four",
-                TradeRouteKind.SEA, DELFT, four);
-        assertEquals(four, route.getStops());
-        final List<TradeRouteStop> five = List.of(europe(), colony(DELFT),
-                europe(), colony(DELFT), europe());
-        assertEquals(Optional.of(TradeRouteProblem.STOP_COUNT),
-                model.getTradeRouteProblem(owner, "Five", TradeRouteKind.SEA,
-                        DELFT, five));
+        // The former four-stop limit is gone (R-0421): six alternating stops
+        // are a legal sea route.
+        final List<TradeRouteStop> six = List.of(europe(), colony(DELFT),
+                europe(), colony(DELFT), europe(), colony(DELFT));
+        assertEquals(Optional.empty(), model.getTradeRouteProblem(owner, "Six",
+                TradeRouteKind.SEA, DELFT, six));
+        final TradeRoute route = model.createTradeRoute(owner, "Six",
+                TradeRouteKind.SEA, DELFT, six);
+        assertEquals(six, route.getStops());
+        assertEquals(TradeRouteMode.TOUCH_AND_GO, route.getMode());
         assertEquals(Optional.of(TradeRouteProblem.STOP_COUNT),
                 model.getTradeRouteProblem(owner, "None", TradeRouteKind.SEA,
                         DELFT, List.of()));
         assertThrows(IllegalArgumentException.class,
-                () -> model.createTradeRoute(owner, "Five", TradeRouteKind.SEA,
-                        DELFT, five));
+                () -> model.createTradeRoute(owner, "None", TradeRouteKind.SEA,
+                        DELFT, List.of()));
         assertEquals(1, model.getTradeRoutes(owner).size());
+        // The saved six stops and the mode reload exactly.
+        final Model reloaded = load(model.save());
+        final TradeRoute restored = reloaded.getTradeRoutes(owner(reloaded))
+                .get(0);
+        assertEquals(six, restored.getStops());
+        assertEquals(TradeRouteMode.TOUCH_AND_GO, restored.getMode());
+    }
+
+    @Test
+    void savedRouteWithoutModeIsRejected() {
+        final Model model = load(fixture().getModel());
+        model.createTradeRoute(owner(model), "Mode", TradeRouteKind.SEA, DELFT,
+                List.of(europe(), colony(DELFT)));
+        final ModelPo saved = model.save();
+        saved.getTradeRoutes().get(0).setMode(null);
+        assertThrows(IllegalArgumentException.class, () -> load(saved));
     }
 
     @Test
@@ -244,6 +258,7 @@ class TradeRouteTest {
         po.setOwnerName(owner);
         po.setName(name);
         po.setKind(TradeRouteKind.LAND);
+        po.setMode(TradeRouteMode.TOUCH_AND_GO);
         po.setStartColonyId(0);
         po.setStops(List.of(stop));
         return po;
@@ -294,6 +309,7 @@ class TradeRouteTest {
         route.setOwnerName("Dutch");
         route.setName("Broken");
         route.setKind(TradeRouteKind.SEA);
+        route.setMode(TradeRouteMode.TOUCH_AND_GO);
         route.setStartColonyId(DELFT);
         final TradeRouteStopPo stop = new TradeRouteStopPo();
         stop.setEurope(true);

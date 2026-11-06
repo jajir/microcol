@@ -7,7 +7,8 @@ import org.akropia.model.GoodsType;
 /**
  * Saved stop of a trade route. Exactly one of {@code europe} or
  * {@code colonyId} is present; the model rejects any other combination. Both
- * goods lists are required, possibly empty, and keep their saved order.
+ * goods lists are required and possibly empty; they never share a goods type
+ * and are processed in the fixed goods order.
  */
 public final class TradeRouteStopPo {
 

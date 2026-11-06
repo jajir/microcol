@@ -162,7 +162,8 @@ class TradeRouteAssignmentTest {
         final UnitWithCargo ship = ship(model);
         final TradeRoute landRoute = new TradeRoute(42, dutch, "Land",
                 TradeRouteKind.LAND, DELFT,
-                List.of(TradeRouteStop.ofColony(DELFT)));
+                List.of(TradeRouteStop.ofColony(DELFT)),
+                TradeRouteMode.TOUCH_AND_GO);
 
         assertEquals(Optional.of(TradeRouteAssignmentProblem.NOT_CARRIER),
                 model.getTradeRouteAssignmentProblem(ship, landRoute, 0));
@@ -201,8 +202,10 @@ class TradeRouteAssignmentTest {
         assertEquals(2, model.getPlayers().size());
         final UnitWithCargo ship = ship(model);
         final TradeRoute foreign = new TradeRoute(42, other, "Foreign",
-                TradeRouteKind.SEA, DELFT, List.of(TradeRouteStop.europe(),
-                        TradeRouteStop.ofColony(DELFT)));
+                TradeRouteKind.SEA, DELFT,
+                List.of(TradeRouteStop.europe(),
+                        TradeRouteStop.ofColony(DELFT)),
+                TradeRouteMode.TOUCH_AND_GO);
         final Location before = ship.getLocation();
         final int movement = ship.getMovementThirds();
 

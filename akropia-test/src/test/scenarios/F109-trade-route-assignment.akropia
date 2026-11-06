@@ -199,6 +199,7 @@
         "ownerName": "Dutch",
         "name": "Idle cart",
         "kind": "LAND",
+        "mode": "TOUCH_AND_GO",
         "startColonyId": 0,
         "stops": [
           {

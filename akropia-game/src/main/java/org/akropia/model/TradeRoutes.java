@@ -20,8 +20,6 @@ import com.google.common.base.Preconditions;
  */
 final class TradeRoutes {
 
-    static final int MAX_STOPS = 4;
-
     private final List<TradeRoute> routes = new ArrayList<>();
     private int nextId;
     /** First colony ID not yet allocated; saved stops must stay below it. */
@@ -60,12 +58,11 @@ final class TradeRoutes {
 
     private static TradeRoute restore(final Model model,
             final Integer nextColonyId, final TradeRoutePo po) {
-        Preconditions.checkArgument(
-                po != null && po.getId() != null && po.getId() >= 0
-                        && po.getOwnerName() != null && po.getName() != null
-                        && po.getKind() != null && po.getStartColonyId() != null
-                        && po.getStops() != null && po.getStops().size() >= 1
-                        && po.getStops().size() <= MAX_STOPS,
+        Preconditions.checkArgument(po != null && po.getId() != null
+                && po.getId() >= 0 && po.getOwnerName() != null
+                && po.getName() != null && po.getKind() != null
+                && po.getStartColonyId() != null && po.getMode() != null
+                && po.getStops() != null && po.getStops().size() >= 1,
                 "Invalid trade route");
         Preconditions.checkArgument(
                 po.getStartColonyId() >= 0
@@ -101,7 +98,7 @@ final class TradeRoutes {
                     .withCargo(stopPo.getUnloadGoods(), stopPo.getLoadGoods()));
         }
         return new TradeRoute(po.getId(), owner, po.getName(), po.getKind(),
-                po.getStartColonyId(), stops);
+                po.getStartColonyId(), stops, po.getMode());
     }
 
     List<TradeRoute> getRoutes(final Player owner) {
@@ -145,17 +142,34 @@ final class TradeRoutes {
                 route.getId());
         final List<TradeRouteStop> stops = new ArrayList<>(route.getStops());
         stops.set(stopIndex, stop);
+        return replace(route, stops, route.getMode());
+    }
+
+    /**
+     * Replaces the stops and mode of a stored route. The ID, name, owner, kind
+     * and start stay the same; the caller has already validated the change.
+     *
+     * @param route required stored route, by identity
+     * @param stops required stops in travel order
+     * @param mode  required route-wide mode
+     * @return the stored replacement route
+     */
+    TradeRoute replace(final TradeRoute route, final List<TradeRouteStop> stops,
+            final TradeRouteMode mode) {
+        final int at = routes.indexOf(route);
+        Preconditions.checkState(at >= 0, "Trade route %s is not stored",
+                route.getId());
         final TradeRoute updated = new TradeRoute(route.getId(),
                 route.getOwner(), route.getName(), route.getKind(),
-                route.getStartColonyId(), stops);
+                route.getStartColonyId(), stops, mode);
         routes.set(at, updated);
         return updated;
     }
 
     /**
-     * Checks a restored processed-visit mark against the saved route it names
-     * and, while the stop's colony still exists, against its square. A bad
-     * reference rejects the save instead of being dropped silently.
+     * Checks a restored processed-visit receipt against the saved route it
+     * names and the saved calendar. A bad reference rejects the save instead of
+     * being dropped silently.
      *
      * @param model required model with every unit and colony restored
      * @param unit  required restored unit
@@ -165,31 +179,21 @@ final class TradeRoutes {
             final TradeRoute route = find(visit.getRouteId())
                     .orElseThrow(() -> new IllegalArgumentException(
                             "Processed trade route visit names a missing route"));
-            Preconditions.checkArgument(
-                    route.getOwner() == unit.getOwner()
-                            && visit.getStopIndex() < route.getStops().size(),
+            Preconditions.checkArgument(route.getOwner() == unit.getOwner(),
                     "Invalid processed trade route visit");
-            // A carrier that still follows the route may have taken a later
-            // plan after processing; its visit is a receipt of the place, not
-            // a promise about the current stop, so only the range is checked.
-            if (unit instanceof AbstractUnit
-                    && ((AbstractUnit) unit).getTradeRouteAssignment()
-                            .filter(assignment -> assignment
-                                    .getRouteId() == visit.getRouteId())
-                            .isPresent()) {
-                return;
-            }
-            final TradeRouteStop stop = route.getStops()
-                    .get(visit.getStopIndex());
+            // The receipt names its place, not a list position, so a later
+            // edit of the stops never makes it stale. The place itself was
+            // matched to the carrier when the unit was restored.
             Preconditions.checkArgument(
-                    stop.isEurope() == visit.getLocation().isEmpty(),
-                    "Processed trade route visit does not match its stop");
-            if (!stop.isEurope()) {
-                model.getColonyById(stop.getColonyId())
-                        .ifPresent(colony -> Preconditions.checkArgument(
-                                visit.isAt(colony.getLocation()),
-                                "Processed trade route visit is not at its colony"));
-            }
+                    visit.getLocation().isPresent()
+                            || route.getKind() == TradeRouteKind.SEA,
+                    "Processed trade route visit in Europe on a land route");
+            // A receipt from a later turn than the saved calendar would keep a
+            // waiting carrier from ever processing its stop again.
+            Preconditions.checkArgument(
+                    visit.getTurn() <= model.getCalendar()
+                            .getNumberOfPlayedTurns(),
+                    "Processed trade route visit is from a future turn");
         });
     }
 
@@ -214,14 +218,12 @@ final class TradeRoutes {
                             route.getOwner() == unit.getOwner()
                                     && Model.isTradeRouteCarrierKind(unit,
                                             route.getKind())
-                                    && assignment.getStopIndex() < route
-                                            .getStops().size()
-                                    && assignment.getStops().size() == route
+                                    && assignment.getStopIndex() < assignment
                                             .getStops().size(),
                             "Invalid trade route assignment");
-                    // The accepted stops may differ from the saved route only
-                    // by a pending edit, but each must still be a legal stop
-                    // of this kind whose colony ID was allocated.
+                    // The accepted stops may differ from the saved route by a
+                    // pending edit, even in count, but each must still be a
+                    // legal stop of this kind whose colony ID was allocated.
                     for (final TradeRouteStop accepted : assignment
                             .getStops()) {
                         Preconditions.checkArgument(
@@ -272,10 +274,10 @@ final class TradeRoutes {
      */
     TradeRoute add(final Player owner, final String name,
             final TradeRouteKind kind, final int startColonyId,
-            final List<TradeRouteStop> stops) {
+            final List<TradeRouteStop> stops, final TradeRouteMode mode) {
         Preconditions.checkState(hasIdCapacity(), "No trade route id left");
         final TradeRoute route = new TradeRoute(nextId, owner,
-                ColonyNames.normalize(name), kind, startColonyId, stops);
+                ColonyNames.normalize(name), kind, startColonyId, stops, mode);
         routes.add(route);
         nextId++;
         return route;
@@ -294,6 +296,7 @@ final class TradeRoutes {
         po.setName(route.getName());
         po.setKind(route.getKind());
         po.setStartColonyId(route.getStartColonyId());
+        po.setMode(route.getMode());
         po.setStops(route.getStops().stream().map(TradeRoutes::savePoStop)
                 .collect(Collectors.toList()));
         return po;

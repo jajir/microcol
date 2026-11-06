@@ -39,7 +39,11 @@ import javafx.util.StringConverter;
  */
 public final class DialogTradeRoute extends AbstractMessageWindow {
 
-    /** Stops offered by the editor; the model accepts up to four. */
+    /**
+     * Stop rows shown when the editor opens. The model has no stop limit, so a
+     * further row appears whenever every row is chosen and another legal stop
+     * remains.
+     */
     private static final int STOP_ROWS = 4;
 
     private final GameModelController game;
@@ -61,6 +65,7 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
     private final Label nameLabel = new Label();
     private final Label kindLabel = new Label();
     private final List<Label> stopLabels = new ArrayList<>();
+    private final VBox stopRows = new VBox(10);
     private Model model;
     private Player player;
     private Colony colony;
@@ -138,11 +143,9 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
         final VBox root = new VBox(10, caption, rule, start, startPick,
                 existing, nameLabel, name, kindLabel, kind);
         for (int index = 0; index < STOP_ROWS; index++) {
-            stops.add(makeStopBox(index));
-            final Label label = new Label();
-            stopLabels.add(label);
-            root.getChildren().add(new HBox(12, label, stops.get(index)));
+            addStopRow();
         }
+        root.getChildren().add(stopRows);
         cancel.setId("tradeRouteCancel");
         cancel.setCancelButton(true);
         cancel.setOnAction(event -> close());
@@ -153,6 +156,23 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
         root.setId("tradeRouteDialog");
         root.setPrefWidth(500);
         init(root);
+    }
+
+    private void addStopRow() {
+        final int index = stops.size();
+        stops.add(makeStopBox(index));
+        final Label label = new Label();
+        stopLabels.add(label);
+        if (model != null) {
+            final String text = i18n.get(TradeRouteText.stopLabel, index + 1);
+            label.setText(text);
+            stops.get(index).setAccessibleText(text);
+        }
+        stopRows.getChildren().add(new HBox(12, label, stops.get(index)));
+        // A grown list keeps the dialog large enough for its last row.
+        if (getScene() != null && getScene().getWindow() != null) {
+            getScene().getWindow().sizeToScene();
+        }
     }
 
     private ComboBox<TradeRouteStop> makeStopBox(final int index) {
@@ -268,6 +288,12 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
         try {
             name.setText("");
             kind.setValue(TradeRouteKind.LAND);
+            while (stops.size() > STOP_ROWS) {
+                stops.remove(stops.size() - 1);
+                stopLabels.remove(stopLabels.size() - 1);
+                stopRows.getChildren()
+                        .remove(stopRows.getChildren().size() - 1);
+            }
             for (final ComboBox<TradeRouteStop> box : stops) {
                 box.setValue(null);
                 box.getItems().clear();
@@ -314,6 +340,16 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
                 } else {
                     chain.add(box.getValue());
                 }
+            }
+            // Every row is chosen: offer one more while a legal stop remains.
+            if (open && colony != null
+                    && !model.getTradeRouteStopOptions(player, kind.getValue(),
+                            colony.getId(), chain).isEmpty()) {
+                addStopRow();
+                final ComboBox<TradeRouteStop> next = stops
+                        .get(stops.size() - 1);
+                next.getItems().setAll(model.getTradeRouteStopOptions(player,
+                        kind.getValue(), colony.getId(), chain));
             }
         } finally {
             refreshing = false;

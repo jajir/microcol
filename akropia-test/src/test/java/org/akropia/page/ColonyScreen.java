@@ -248,6 +248,24 @@ public class ColonyScreen extends AbstractScreen {
         return this;
     }
 
+    /**
+     * Selects the ship with this unit ID in the port, so its holds take the
+     * dragged goods.
+     */
+    public ColonyScreen selectShipInPort(final int unitId) {
+        final java.util.List<javafx.scene.control.ToggleButton> ships = pageComponentPanelDock
+                .getUnitsInPort();
+        for (int index = 0; index < ships.size(); index++) {
+            final Object ship = ships.get(index).getUserData();
+            if (ship instanceof org.akropia.model.Unit
+                    && ((org.akropia.model.Unit) ship).getId() == unitId) {
+                pageComponentPanelDock.selectUnitFromPort(index);
+                return this;
+            }
+        }
+        throw new IllegalStateException("Ship is not in port: " + unitId);
+    }
+
     public void verifyUnitInPortSelected(final int unitIndex,
             final boolean expectedSelected) {
         pageComponentPanelDock.verifyUnitInPortSelected(unitIndex,

@@ -524,17 +524,16 @@ public class UnitFactory {
         // A saved processed stop is restored only; loading processes nothing.
         if (unitPo.getTradeRouteVisitRouteId() == null) {
             Preconditions.checkArgument(
-                    unitPo.getTradeRouteVisitStopIndex() == null
-                            && unitPo.getTradeRouteVisitLocation() == null,
+                    unitPo.getTradeRouteVisitLocation() == null
+                            && unitPo.getTradeRouteVisitTurn() == null,
                     "Incomplete saved trade route visit");
         } else {
-            Preconditions.checkArgument(
-                    unitPo.getTradeRouteVisitStopIndex() != null,
+            Preconditions.checkArgument(unitPo.getTradeRouteVisitTurn() != null,
                     "Incomplete saved trade route visit");
             ((AbstractUnit) unit).restoreProcessedTradeRouteVisit(
                     unitPo.getTradeRouteVisitRouteId(),
-                    unitPo.getTradeRouteVisitStopIndex(),
-                    unitPo.getTradeRouteVisitLocation());
+                    unitPo.getTradeRouteVisitLocation(),
+                    unitPo.getTradeRouteVisitTurn());
         }
         return unit;
     }

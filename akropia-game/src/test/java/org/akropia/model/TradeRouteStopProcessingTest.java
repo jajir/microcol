@@ -179,32 +179,26 @@ class TradeRouteStopProcessingTest {
     }
 
     @Test
-    void listOrderDecidesWhoGetsTheOnlyFreeHold() {
-        final World weaponFirst = new World();
-        final TradeRoute first = weaponFirst.route(1, List.of(GoodsType.ORE),
-                List.of(GoodsType.WEAPONS, GoodsType.HORSE));
-        final TradeRouteStopResult a = weaponFirst.process(first, 1);
-        assertProcessed(a, 3);
-        assertTransfer(a.getTransfers().get(1), false, GoodsType.WEAPONS, 50,
-                TradeRouteTransferReason.MOVED);
-        assertTransfer(a.getTransfers().get(2), false, GoodsType.HORSE, 0,
-                TradeRouteTransferReason.HOLD_FULL);
-        assertEquals(Goods.of(GoodsType.WEAPONS, 50),
-                weaponFirst.held(0).orElseThrow());
-        assertEquals(50, weaponFirst.stock(GoodsType.HORSE));
-
-        final World horseFirst = new World();
-        final TradeRoute second = horseFirst.route(1, List.of(GoodsType.ORE),
-                List.of(GoodsType.HORSE, GoodsType.WEAPONS));
-        final TradeRouteStopResult b = horseFirst.process(second, 1);
-        assertProcessed(b, 3);
-        assertTransfer(b.getTransfers().get(1), false, GoodsType.HORSE, 50,
-                TradeRouteTransferReason.MOVED);
-        assertTransfer(b.getTransfers().get(2), false, GoodsType.WEAPONS, 0,
-                TradeRouteTransferReason.HOLD_FULL);
-        assertEquals(Goods.of(GoodsType.HORSE, 50),
-                horseFirst.held(0).orElseThrow());
-        assertEquals(50, horseFirst.stock(GoodsType.WEAPONS));
+    void fixedIconOrderDecidesWhoGetsTheOnlyFreeHoldWhateverTheListOrder() {
+        // The horse comes before the weapon in the colony goods order, so it
+        // takes the only free hold however the instructions were listed.
+        for (final List<GoodsType> listed : List.of(
+                List.of(GoodsType.WEAPONS, GoodsType.HORSE),
+                List.of(GoodsType.HORSE, GoodsType.WEAPONS))) {
+            final World w = new World();
+            final TradeRoute route = w.route(1, List.of(GoodsType.ORE), listed);
+            assertEquals(List.of(GoodsType.HORSE, GoodsType.WEAPONS),
+                    route.getStops().get(1).getLoadGoods());
+            final TradeRouteStopResult result = w.process(route, 1);
+            assertProcessed(result, 3);
+            assertTransfer(result.getTransfers().get(1), false, GoodsType.HORSE,
+                    50, TradeRouteTransferReason.MOVED);
+            assertTransfer(result.getTransfers().get(2), false,
+                    GoodsType.WEAPONS, 0, TradeRouteTransferReason.HOLD_FULL);
+            assertEquals(Goods.of(GoodsType.HORSE, 50),
+                    w.held(0).orElseThrow());
+            assertEquals(50, w.stock(GoodsType.WEAPONS));
+        }
     }
 
     @Test
@@ -214,10 +208,11 @@ class TradeRouteStopProcessingTest {
         final TradeRouteStopResult first = absent.process(absent.route(1,
                 List.of(GoodsType.WINE, GoodsType.OLIVE_OIL), List.of()), 1);
         assertProcessed(first, 2);
-        assertTransfer(first.getTransfers().get(0), true, GoodsType.WINE, 0,
-                TradeRouteTransferReason.NOTHING_ON_BOARD);
-        assertTransfer(first.getTransfers().get(1), true, GoodsType.OLIVE_OIL,
+        // Olive oil precedes wine in the fixed goods order.
+        assertTransfer(first.getTransfers().get(0), true, GoodsType.OLIVE_OIL,
                 100, TradeRouteTransferReason.MOVED);
+        assertTransfer(first.getTransfers().get(1), true, GoodsType.WINE, 0,
+                TradeRouteTransferReason.NOTHING_ON_BOARD);
         assertTrue(absent.held(1).isEmpty());
 
         // Warehouse without any room: nothing moves and the hold keeps it.
@@ -311,7 +306,6 @@ class TradeRouteStopProcessingTest {
         final TradeRouteVisit visit = restored.ship
                 .getProcessedTradeRouteVisit().orElseThrow();
         assertEquals(route.getId(), visit.getRouteId());
-        assertEquals(1, visit.getStopIndex());
         assertEquals(Optional.of(PORT), visit.getLocation());
         // Loading performed no transfer: the saved state is reproduced exactly.
         assertEquals(settled, restored.snapshot("restored.json"));
@@ -330,8 +324,8 @@ class TradeRouteStopProcessingTest {
             po.getUnits().stream().filter(unit -> unit.getId() == SHIP_ID)
                     .forEach(unit -> {
                         unit.setTradeRouteVisitRouteId(7);
-                        unit.setTradeRouteVisitStopIndex(0);
                         unit.setTradeRouteVisitLocation(PORT);
+                        unit.setTradeRouteVisitTurn(0);
                     });
         }));
         // A saved visit at another square than the ship stands on is refused.
@@ -339,14 +333,14 @@ class TradeRouteStopProcessingTest {
             po.getUnits().stream().filter(unit -> unit.getId() == SHIP_ID)
                     .forEach(unit -> {
                         unit.setTradeRouteVisitRouteId(0);
-                        unit.setTradeRouteVisitStopIndex(1);
                         unit.setTradeRouteVisitLocation(SEA);
+                        unit.setTradeRouteVisitTurn(0);
                     });
         }));
         // An incomplete saved visit is refused rather than dropped.
         assertThrows(IllegalArgumentException.class, () -> new World(po -> {
             po.getUnits().stream().filter(unit -> unit.getId() == SHIP_ID)
-                    .forEach(unit -> unit.setTradeRouteVisitStopIndex(1));
+                    .forEach(unit -> unit.setTradeRouteVisitTurn(0));
         }));
     }
 
@@ -487,16 +481,17 @@ class TradeRouteStopProcessingTest {
     }
 
     @Test
-    void scarceFundsGoToTheGoodsListedFirst() {
-        for (final GoodsType[] order : new GoodsType[][] {
-                { GoodsType.WEAPONS, GoodsType.HORSE },
-                { GoodsType.HORSE, GoodsType.WEAPONS } }) {
+    void scarceFundsGoToTheEarlierGoodsIconWhateverTheListOrder() {
+        // The horse precedes the weapon in the fixed goods order.
+        final GoodsType[] order = { GoodsType.HORSE, GoodsType.WEAPONS };
+        for (final List<GoodsType> listed : List.of(
+                List.of(GoodsType.WEAPONS, GoodsType.HORSE),
+                List.of(GoodsType.HORSE, GoodsType.WEAPONS))) {
             final World w = new World();
             w.putShipInEurope();
             w.slot(0).removeCargo(Goods.of(GoodsType.ORE, 60));
             w.slot(1).removeCargo(Goods.of(GoodsType.OLIVE_OIL, 100));
-            final TradeRoute route = w.route(0, List.of(),
-                    List.of(order[0], order[1]));
+            final TradeRoute route = w.route(0, List.of(), listed);
             // Exactly enough for forty units of the first, nothing for more.
             final int money = w.dutch
                     .quoteEuropeTrade(Goods.of(order[0], 40), true).getTotal();
@@ -546,29 +541,29 @@ class TradeRouteStopProcessingTest {
         final TradeRoute route = w.route(0,
                 List.of(GoodsType.OLIVE_OIL, GoodsType.ORE),
                 List.of(GoodsType.WEAPONS));
-        // The olive oil sale brings the treasury exactly to the largest int;
-        // the ore
-        // sale would overflow it, which the sale refuses before changing
-        // anything.
-        final int oliveOil = w.dutch
-                .quoteEuropeTrade(Goods.of(GoodsType.OLIVE_OIL, 100), false)
+        // Ore precedes olive oil in the fixed goods order. The ore sale brings
+        // the treasury exactly to the largest int; the olive oil sale would
+        // overflow it, which the sale refuses before changing anything.
+        final int ore = w.dutch
+                .quoteEuropeTrade(Goods.of(GoodsType.ORE, 60), false)
                 .getTotal();
-        w.dutch.setGold(Integer.MAX_VALUE - oliveOil);
+        w.dutch.setGold(Integer.MAX_VALUE - ore);
 
         final TradeRouteStopResult result = w.process(route, 0);
 
         assertProcessed(result, 3);
-        assertTransfer(result.getTransfers().get(0), true, GoodsType.OLIVE_OIL,
-                100, TradeRouteTransferReason.MOVED);
-        assertEquals(oliveOil, result.getTransfers().get(0).getGoldChange());
-        assertTransfer(result.getTransfers().get(1), true, GoodsType.ORE, 0,
-                TradeRouteTransferReason.REJECTED);
+        assertTransfer(result.getTransfers().get(0), true, GoodsType.ORE, 60,
+                TradeRouteTransferReason.MOVED);
+        assertEquals(ore, result.getTransfers().get(0).getGoldChange());
+        assertTransfer(result.getTransfers().get(1), true, GoodsType.OLIVE_OIL,
+                0, TradeRouteTransferReason.REJECTED);
         assertTrue(result.getTransfers().get(1).getDetail().isPresent());
         assertTransfer(result.getTransfers().get(2), false, GoodsType.WEAPONS,
                 0, TradeRouteTransferReason.NOT_ATTEMPTED);
         assertEquals(Integer.MAX_VALUE, w.dutch.getGold());
-        assertTrue(w.held(1).isEmpty());
-        assertEquals(Goods.of(GoodsType.ORE, 60), w.held(0).orElseThrow());
+        assertTrue(w.held(0).isEmpty());
+        assertEquals(Goods.of(GoodsType.OLIVE_OIL, 100),
+                w.held(1).orElseThrow());
         // The settled sale cannot be repeated by a retry.
         assertEquals(Optional.of(TradeRouteStopProblem.VISIT_ALREADY_PROCESSED),
                 w.process(route, 0).getProblem());

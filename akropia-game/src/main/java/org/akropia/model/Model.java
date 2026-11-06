@@ -943,7 +943,7 @@ public class Model {
      * @param kind          required transport kind
      * @param startColonyId starting colony ID
      * @param chosen        required stops already chosen, in order
-     * @return legal next stops; empty when none or the route is full
+     * @return legal next stops; empty when none
      */
     public List<TradeRouteStop> getTradeRouteStopOptions(final Player owner,
             final TradeRouteKind kind, final int startColonyId,
@@ -953,7 +953,6 @@ public class Model {
         Preconditions.checkNotNull(chosen);
         final List<TradeRouteStop> options = new ArrayList<>();
         if (owner != getCurrentPlayer() || !owner.isColonialNation()
-                || chosen.size() >= TradeRoutes.MAX_STOPS
                 || !isOwnedColony(owner, startColonyId)) {
             return options;
         }
@@ -975,6 +974,29 @@ public class Model {
             options.add(europe);
         }
         return options;
+    }
+
+    /**
+     * Destinations the route editor may append to an edited stop list: the
+     * legal next stops of {@link #getTradeRouteStopOptions} that the list does
+     * not contain yet. Reads only.
+     *
+     * @param owner required route owner
+     * @param route required route as currently saved
+     * @param stops required edited stops, in order
+     * @return stops that may be added; empty when none
+     */
+    public List<TradeRouteStop> getTradeRouteAddableStops(final Player owner,
+            final TradeRoute route, final List<TradeRouteStop> stops) {
+        Preconditions.checkNotNull(route, "Route is null");
+        Preconditions.checkNotNull(stops, "Stops are null");
+        if (route.getOwner() != owner) {
+            return List.of();
+        }
+        return getTradeRouteStopOptions(owner, route.getKind(),
+                route.getStartColonyId(), stops).stream()
+                .filter(stop -> !stops.contains(stop))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -1025,7 +1047,7 @@ public class Model {
                 && !isOwnedCoastalPort(owner, start.getLocation())) {
             return Optional.of(TradeRouteProblem.START_NOT_PORT);
         }
-        if (stops.isEmpty() || stops.size() > TradeRoutes.MAX_STOPS) {
+        if (stops.isEmpty()) {
             return Optional.of(TradeRouteProblem.STOP_COUNT);
         }
         TradeRouteStop from = TradeRouteStop.ofColony(startColonyId);
@@ -1051,6 +1073,128 @@ public class Model {
     }
 
     /**
+     * Checks a whole edited configuration of a saved route without changing
+     * anything: its ordered stops with their goods instructions and the
+     * route-wide mode. Every stop is a live owned colony or, for a sea route,
+     * Europe; no stop follows the same stop; each leg from the starting colony
+     * on is legal. A stop whose colony was lost may stay where it already is,
+     * so a route is repaired one stop at a time; legs next to it are not
+     * judged.
+     *
+     * @param owner required route owner
+     * @param route required route as currently saved
+     * @param stops required stops in travel order, with their goods
+     * @param mode  required route-wide mode
+     * @return the first problem, or empty when the route may be updated
+     */
+    public Optional<TradeRouteProblem> getTradeRouteUpdateProblem(
+            final Player owner, final TradeRoute route,
+            final List<TradeRouteStop> stops, final TradeRouteMode mode) {
+        Preconditions.checkNotNull(owner, "Owner is null");
+        Preconditions.checkNotNull(route, "Route is null");
+        Preconditions.checkNotNull(stops, "Stops are null");
+        Preconditions.checkNotNull(mode, "Mode is null");
+        if (!isGameRunning() || endingTurn || !isTurnPreparationComplete()) {
+            return Optional.of(TradeRouteProblem.TURN_BUSY);
+        }
+        if (owner != getCurrentPlayer() || route.getOwner() != owner) {
+            return Optional.of(TradeRouteProblem.NOT_OWNER);
+        }
+        if (tradeRoutes.find(route.getId()).filter(stored -> stored == route)
+                .isEmpty()) {
+            return Optional.of(TradeRouteProblem.ROUTE_UNAVAILABLE);
+        }
+        if (stops.isEmpty()) {
+            return Optional.of(TradeRouteProblem.STOP_COUNT);
+        }
+        for (int index = 0; index < stops.size(); index++) {
+            final TradeRouteStop stop = stops.get(index);
+            if (stop == null) {
+                return Optional.of(TradeRouteProblem.STOP_UNAVAILABLE);
+            }
+            if (stop.isEurope() && route.getKind() == TradeRouteKind.LAND) {
+                return Optional.of(TradeRouteProblem.EUROPE_BY_LAND);
+            }
+            if (isLostTradeRouteStop(owner, stop)
+                    && !(index < route.getStops().size()
+                            && route.getStops().get(index).equals(stop))) {
+                return Optional.of(TradeRouteProblem.STOP_UNAVAILABLE);
+            }
+            if (index > 0 && stop.equals(stops.get(index - 1))) {
+                return Optional.of(TradeRouteProblem.SAME_STOP);
+            }
+        }
+        TradeRouteStop from = TradeRouteStop.ofColony(route.getStartColonyId());
+        for (final TradeRouteStop to : stops) {
+            if (!to.equals(from) && !isLostTradeRouteStop(owner, from)
+                    && !isLostTradeRouteStop(owner, to) && !tradeRouteRules
+                            .isLegalLeg(owner, route.getKind(), from, to)) {
+                return Optional.of(TradeRouteProblem.STOP_NOT_REACHABLE);
+            }
+            from = to;
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Stores a whole edited configuration of a saved route after every check of
+     * {@link #getTradeRouteUpdateProblem} passes; nothing changes when one
+     * fails. The route keeps its ID, name, owner, kind and start. A carrier on
+     * its way keeps the leg it accepted and a carrier waiting at a stop keeps
+     * the instructions of that visit; both take the change at their next stop.
+     * The mode applies to waiting carriers in their next owner turn, so
+     * switching to touch and go releases them without repeating a settled
+     * transfer.
+     *
+     * @return the stored replacement route
+     * @throws IllegalArgumentException when a rule rejects the update
+     */
+    public TradeRoute updateTradeRoute(final Player owner,
+            final TradeRoute route, final List<TradeRouteStop> stops,
+            final TradeRouteMode mode) {
+        final Optional<TradeRouteProblem> problem = getTradeRouteUpdateProblem(
+                owner, route, stops, mode);
+        if (problem.isPresent()) {
+            throw new IllegalArgumentException(
+                    "Trade route cannot be updated: " + problem.get());
+        }
+        final TradeRoute stored = tradeRoutes.replace(route, stops, mode);
+        // Receipts name the place where a stop was processed, so they stay
+        // true through the edit and still keep that visit from repeating.
+        return stored;
+    }
+
+    /**
+     * Carriers of the owner that the route screen may add to a route now: each
+     * passes {@link #getTradeRouteChangeProblem} and does not follow this route
+     * already. Reads only.
+     *
+     * @param owner required route owner
+     * @param route required route as currently saved
+     * @return the eligible carriers ordered by unit ID
+     */
+    public List<UnitWithCargo> getTradeRouteEligibleCarriers(final Player owner,
+            final TradeRoute route) {
+        Preconditions.checkNotNull(owner, "Owner is null");
+        Preconditions.checkNotNull(route, "Route is null");
+        if (route.getOwner() != owner) {
+            return ImmutableList.of();
+        }
+        return unitStorage.getUnits().stream()
+                .filter(unit -> unit.getOwner() == owner
+                        && isTradeRouteCarrier(unit)
+                        && isTradeRouteCarrierKind(unit, route.getKind()))
+                .filter(unit -> getTradeRouteAssignment(unit).filter(
+                        assignment -> assignment.getRouteId() == route.getId())
+                        .isEmpty())
+                .filter(unit -> getTradeRouteChangeProblem(unit, route)
+                        .isEmpty())
+                .sorted(Comparator.comparingInt(Unit::getId))
+                .map(unit -> (UnitWithCargo) unit)
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    /**
      * Creates a named route after every check of {@link #getTradeRouteProblem}
      * passes. Nothing is changed when it fails.
      *
@@ -1068,24 +1212,26 @@ public class Model {
             throw new IllegalArgumentException(
                     "Trade route cannot be created: " + problem.get());
         }
-        // A new route starts with a blank cargo policy at every stop.
+        // A new route starts with a blank cargo policy at every stop and
+        // touches each stop without waiting.
         return tradeRoutes.add(owner, name, kind, startColonyId,
                 stops.stream()
                         .map(stop -> stop.isEurope() ? TradeRouteStop.europe()
                                 : TradeRouteStop.ofColony(stop.getColonyId()))
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList()),
+                TradeRouteMode.TOUCH_AND_GO);
     }
 
     /**
-     * Sets the ordered unload and load goods of one stop of a saved route. The
-     * route keeps its ID, name, owner, kind and stop order. Both lists are
-     * validated before the route is replaced.
+     * Sets the unload and load goods of one stop of a saved route. The route
+     * keeps its ID, name, owner, kind and stop order. Both lists are validated
+     * before the route is replaced; they are kept in the fixed goods order.
      *
      * @param owner     required route owner
      * @param route     required route as currently saved
      * @param stopIndex index of the stop to configure
-     * @param unload    required goods to unload, in priority order
-     * @param load      required goods to load, in priority order
+     * @param unload    required goods to unload, in any order
+     * @param load      required goods to load, in any order
      * @return the stored replacement route
      * @throws IllegalArgumentException when the route or a list is invalid
      */
@@ -1109,17 +1255,17 @@ public class Model {
 
     /**
      * Processes the configured goods of one stop for a carrier that is there
-     * now. Unload lists run before load lists, and each list runs top to
-     * bottom. Every transfer uses the existing atomic cargo, warehouse and
-     * European trade operations, so it moves only the stock, free space and
-     * funds that exist at that moment, with the live quote of each hold. All
-     * rules that do not depend on earlier transfers are checked before the
-     * first one. The result lists every configured entry with the quantity and
-     * reason; an empty source, full hold or unaffordable good is a reported
-     * no-op. An entry refused part-way keeps its settled quantity in the result
-     * and stops the later entries, which are reported as not attempted. The
-     * carrier's visit is marked when the first quantity settles, so the same
-     * visit cannot be processed again.
+     * now. Unloading runs before loading, each in the fixed goods order. Every
+     * transfer uses the existing atomic cargo, warehouse and European trade
+     * operations, so it moves only the stock, free space and funds that exist
+     * at that moment, with the live quote of each hold. All rules that do not
+     * depend on earlier transfers are checked before the first one. The result
+     * lists every configured entry with the quantity and reason; an empty
+     * source, full hold or unaffordable good is a reported no-op. An entry
+     * refused part-way keeps its settled quantity in the result and stops the
+     * later entries, which are reported as not attempted. The carrier's visit
+     * is marked when the first quantity settles, so the same visit cannot be
+     * processed again.
      *
      * @param carrier   required carrier, owned by the current player
      * @param route     required route as currently saved
@@ -1137,10 +1283,11 @@ public class Model {
         }
         final TradeRouteStop stop = route.getStops().get(stopIndex);
         final TradeRouteVisit visit = new TradeRouteVisit(route.getId(),
-                stopIndex, stop.isEurope() ? null : carrier.getLocation());
+                stop.isEurope() ? null : carrier.getLocation(),
+                calendar.getNumberOfPlayedTurns());
         // The dialog shows this explicit result; only automatic visits report.
         return new TradeRouteStopProcessor(this, (UnitWithCargo) carrier, route,
-                stop, visit, false).run();
+                stopIndex, stop, visit, false).run();
     }
 
     /**
@@ -1263,13 +1410,8 @@ public class Model {
         Preconditions.checkNotNull(carrier, "Carrier is null");
         return getTradeRouteAssignment(carrier)
                 .flatMap(assignment -> findTradeRoute(assignment.getRouteId())
-                        .filter(route -> assignment.getStopIndex() < route
-                                .getStops().size())
-                        .map(route -> (TradeRouteNavigator.takesLatestPlan(
-                                (AbstractUnit) carrier, assignment)
-                                        ? route.getStops()
-                                        : assignment.getStops())
-                                .get(assignment.getStopIndex())));
+                        .map(route -> TradeRouteNavigator.headingStop(
+                                (AbstractUnit) carrier, assignment, route)));
     }
 
     /**
@@ -1550,18 +1692,8 @@ public class Model {
                 .withCargo(current.getUnloadGoods(), current.getLoadGoods());
         final TradeRoute stored = tradeRoutes.replaceStop(route, stopIndex,
                 replacement);
-        // A carrier that no longer follows the route and stands where the old
-        // stop was keeps no receipt for a stop that is no longer there. A
-        // following carrier keeps its receipt, so it cannot repeat the stop.
-        for (final Unit unit : new ArrayList<>(owner.getAllUnits())) {
-            if (unit instanceof AbstractUnit && getTradeRouteAssignment(unit)
-                    .filter(assignment -> assignment.getRouteId() == route
-                            .getId())
-                    .isEmpty()) {
-                ((AbstractUnit) unit).forgetProcessedTradeRouteVisitOf(
-                        route.getId(), stopIndex);
-            }
-        }
+        // Receipts name the place where a stop was processed; a carrier at the
+        // old stop keeps its receipt until it leaves, so nothing repeats.
         return stored;
     }
 

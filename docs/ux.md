@@ -8,7 +8,7 @@
 
 ## Návrh editoru přepravní cesty — 6. listopadu 2026
 
-1. [R-0421](requirements/R-0421.md) zachycuje návrh tří záložek se společnou identitou trasy a rozpracovanou editací. Stejné pořadí stanic propojuje plán cesty a matici zboží; řádek dopravce ukazuje ID, cíl, náklad a důvod čekání. Symboly `+`/`−` a prázdná buňka doplňují barvu. Ikony bez popisků mají dostupné názvy v nápovědě a pro asistivní technologie.
+1. [R-0421](requirements/done/R-0421.md) zachycuje návrh tří záložek se společnou identitou trasy a rozpracovanou editací. Stejné pořadí stanic propojuje plán cesty a matici zboží; řádek dopravce ukazuje ID, cíl, náklad a důvod čekání. Symboly `+`/`−` a prázdná buňka doplňují barvu. Ikony bez popisků mají dostupné názvy v nápovědě a pro asistivní technologie.
 2. Uživatel potvrdil společný režim celé trasy, nakládání i vykládání podle pořadí ikon a použití tabulky také pro domovský přístav (`+` nákup, `−` prodej). Stav dopravce rozlišuje čekání na zásoby, místo ve skladu nebo peníze. Přesný dohodnutý kontrakt vlastní [pravidlo](gap-analysis.md#route-editor-2026-11-06) a analýza. Náhled je návrhová demonstrace, nikoli pozorování hráče nebo přejímka hry.
 
 ## Inventura hlavní mapy — 4. listopadu 2026
@@ -1337,3 +1337,9 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 1. [R-0415](requirements/done/R-0415.md) zpřístupňuje změnu přiřazení z panelu vybraného dopravce i jeho kontextu. Hráč vybere jen trasu; počáteční zastávku neřeší, dopravce použije nejbližší dosažitelnou podle [sdíleného pravidla](gap-analysis.md#carrier-route-assignment).
 2. Za probíhajícího přechodu Atlantiku musí být současné přiřazení stále čitelné. Změna je nedostupná s vysvětlením, že loď nejprve musí dokončit plavbu; potvrzení nesmí starý úkol zrušit ani zařadit nové přiřazení do fronty. Po příjezdu se dostupnost přepočítá podle aktuálního stavu.
 3. Implementace má ověřený model a cílené UI včetně EN/CS dialogu; závěrečnou přejímku vlastní [funkční evidence](functional-tests.md#r-0415-carrier-route-assignment-2026-11-05). Běžná plavba po mapě není sama o sobě tímto zákazem; výměna přiřazení zůstává výslovnou akcí.
+
+## Ověření editoru přepravní cesty — 6. listopadu 2026
+
+1. R-0421 zachovává společný rozpracovaný plán mezi záložkami; Uložit/Zrušit pracuje s celou trasou. Přidávání stanic nabízí pouze dosud nevybrané legální cíle, odebrání dopravce ponechá jeho polohu a náklad. Při odchodu s rozpracovanou editací hra nejprve upozorní.
+2. Stavový řádek vysvětluje ikonový sloupec a stav buňky při ukázání i zaměření klávesnicí. Symboly a důvod čekání doplňují barvy; režim celé trasy je pod tabulkou.
+3. Docker/Xvfb scénáře ověřily EN/CS, klávesnici, pět různých stanic, všechny druhy zboží a šest nákladových boxů při šířce 1024. Oprava dynamické výšky umožňuje posunout dlouhou záložku i rozbalené mazání; skutečné snímky a výsledky vlastní [funkční evidence](functional-tests.md#r-0421-tabbed-trade-route-editor-2026-11-06). Jde o automatické ověření a kontrolu snímků, nikoli studii hráčů.

@@ -373,15 +373,24 @@ public class UnitPo {
     }
 
     /**
-     * Route and stop index of the stop this carrier already processed; both
-     * absent when no stop is processed.
+     * Route of the stop this carrier already processed, with its place and turn
+     * below; all absent when no stop is processed.
      */
     private Integer tradeRouteVisitRouteId;
 
-    private Integer tradeRouteVisitStopIndex;
-
     /** Map square of the processed stop; absent for a stop in Europe. */
     private Location tradeRouteVisitLocation;
+
+    /** Played-turn number of the last processing; required with a visit. */
+    private Integer tradeRouteVisitTurn;
+
+    public Integer getTradeRouteVisitTurn() {
+        return tradeRouteVisitTurn;
+    }
+
+    public void setTradeRouteVisitTurn(final Integer tradeRouteVisitTurn) {
+        this.tradeRouteVisitTurn = tradeRouteVisitTurn;
+    }
 
     public Location getTradeRouteVisitLocation() {
         return tradeRouteVisitLocation;
@@ -399,15 +408,6 @@ public class UnitPo {
     public void setTradeRouteVisitRouteId(
             final Integer tradeRouteVisitRouteId) {
         this.tradeRouteVisitRouteId = tradeRouteVisitRouteId;
-    }
-
-    public Integer getTradeRouteVisitStopIndex() {
-        return tradeRouteVisitStopIndex;
-    }
-
-    public void setTradeRouteVisitStopIndex(
-            final Integer tradeRouteVisitStopIndex) {
-        this.tradeRouteVisitStopIndex = tradeRouteVisitStopIndex;
     }
 
     /**

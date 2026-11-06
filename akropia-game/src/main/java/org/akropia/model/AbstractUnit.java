@@ -1895,16 +1895,34 @@ public abstract class AbstractUnit implements Unit {
     }
 
     /**
+     * Records that a waiting carrier processed the same visit again in a later
+     * turn. The place, route and stop stay the same.
+     *
+     * @param visit required renewal of the current visit
+     */
+    void renewProcessedTradeRouteVisit(final TradeRouteVisit visit) {
+        Preconditions.checkNotNull(visit, "Visit is null");
+        Preconditions.checkState(
+                processedTradeRouteVisit != null
+                        && processedTradeRouteVisit.getRouteId() == visit
+                                .getRouteId()
+                        && processedTradeRouteVisit.getLocation()
+                                .equals(visit.getLocation())
+                        && processedTradeRouteVisit.getTurn() < visit.getTurn(),
+                "Trade route visit of %s cannot be renewed", this);
+        processedTradeRouteVisit = visit;
+    }
+
+    /**
      * Restores a saved processed-stop mark. Loading moves nothing and processes
      * nothing; the mark only keeps the saved visit from repeating.
      *
-     * @param routeId   saved route ID, validated against routes later
-     * @param stopIndex saved stop index
-     * @param at        saved map square of the visit, or {@code null} for
-     *                  Europe
+     * @param routeId saved route ID, validated against routes later
+     * @param at      saved map square of the visit, or {@code null} for Europe
+     * @param turn    saved played-turn number of its last processing
      */
     public void restoreProcessedTradeRouteVisit(final int routeId,
-            final int stopIndex, final Location at) {
+            final Location at, final int turn) {
         // A ship in repair has no place to compare; its return re-checks.
         Preconditions.checkArgument(
                 place instanceof PlaceShipRepair
@@ -1913,7 +1931,7 @@ public abstract class AbstractUnit implements Unit {
                                         && getLocation().equals(at)),
                 "Processed trade route stop does not match the place of %s",
                 this);
-        processedTradeRouteVisit = new TradeRouteVisit(routeId, stopIndex, at);
+        processedTradeRouteVisit = new TradeRouteVisit(routeId, at, turn);
     }
 
     /**
@@ -2374,10 +2392,9 @@ public abstract class AbstractUnit implements Unit {
         if (processedTradeRouteVisit != null) {
             unitPo.setTradeRouteVisitRouteId(
                     processedTradeRouteVisit.getRouteId());
-            unitPo.setTradeRouteVisitStopIndex(
-                    processedTradeRouteVisit.getStopIndex());
             unitPo.setTradeRouteVisitLocation(
                     processedTradeRouteVisit.getLocation().orElse(null));
+            unitPo.setTradeRouteVisitTurn(processedTradeRouteVisit.getTurn());
         }
         place.save(unitPo);
         return unitPo;
@@ -2738,22 +2755,6 @@ public abstract class AbstractUnit implements Unit {
     void forgetProcessedTradeRouteVisitOf(final int routeId) {
         if (processedTradeRouteVisit != null
                 && processedTradeRouteVisit.getRouteId() == routeId) {
-            processedTradeRouteVisit = null;
-        }
-    }
-
-    /**
-     * Forgets a processed stop receipt for one stop of a route whose identity
-     * was replaced, so a saved receipt never disagrees with its stop.
-     *
-     * @param routeId   ID of the edited route
-     * @param stopIndex index of the replaced stop
-     */
-    void forgetProcessedTradeRouteVisitOf(final int routeId,
-            final int stopIndex) {
-        if (processedTradeRouteVisit != null
-                && processedTradeRouteVisit.getRouteId() == routeId
-                && processedTradeRouteVisit.getStopIndex() == stopIndex) {
             processedTradeRouteVisit = null;
         }
     }

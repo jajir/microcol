@@ -91,15 +91,17 @@ public class TC_118_F109_trade_route_assignment_test
         cargo.open();
         cargo.verifyOpened();
         cargo.chooseRoute("Idle cart");
-        cargo.verifyAssignmentHeading("Following this route");
-        cargo.verifyAssigned(
-                "Wagon #6: waiting, next stop Delft. The stop cannot be reached now; it tries again next turn.");
+        cargo.verifyTabs("Stations", "Carriers", "Goods");
+        cargo.openCarriersTab();
+        cargo.verifyCarrierRows(IDLE_WAGON_ID);
+        cargo.verifyCarrierRow(IDLE_WAGON_ID, "Wagon #6", "\u2192 Delft",
+                "The stop cannot be reached now; it tries again next turn.");
         cargo.verifyAssignment(IDLE_WAGON_ID, "Idle cart", 0, true);
 
         // The new route has no carrier yet. Its cargo: Delft takes the ore off
         // and puts the weapon on, New Amsterdam does the opposite.
         cargo.chooseRoute("Ore Cart");
-        cargo.verifyAssigned("No ship or wagon follows this route.");
+        cargo.verifyNoCarrierRow("No ship or wagon follows this route.");
         cargo.chooseStop(DELFT_STOP);
         cargo.addUnload(GoodsType.ORE);
         cargo.addLoad(GoodsType.WEAPONS);
@@ -113,24 +115,19 @@ public class TC_118_F109_trade_route_assignment_test
         cargo.verifyStoredCargo("Ore Cart", NEW_AMSTERDAM_STOP,
                 List.of(GoodsType.WEAPONS), List.of(GoodsType.ORE));
 
-        // Both wagons stand at this stop. The one that already has an order
-        // is refused with its reason; the free one can be assigned.
-        cargo.chooseCarrier(1);
-        cargo.verifyAssignEnabled(false);
-        cargo.verifyAssignStatus(
-                "The unit already has an order, is damaged or is not free to move.");
-        cargo.chooseCarrier(0);
-        cargo.verifyAssignStatus("");
-
-        // Automatic entry picks the current colony, so the wagon loads here
-        // first.
-        cargo.verifyAssignEnabled(true);
+        // Add carrier lists the free wagon by its ID. Automatic entry picks
+        // the current colony, so the wagon loads here first.
+        cargo.openCarriersTab();
+        cargo.openAddCarrierList();
+        cargo.verifyAddCarrierOffered("Wagon #4", true);
         cargo.captureDialog("tradeRouteCargoDialog",
                 "trade-route-assignment.png");
-        cargo.assign();
-        cargo.verifyMessage("Assigned. The unit starts on your next turn.");
+        cargo.chooseOfferedCarrier(WAGON_ID);
+        cargo.verifyMessage(
+                "Wagon #4 now follows this route, starting at New Amsterdam.");
         cargo.verifyAssignment(WAGON_ID, "Ore Cart", NEW_AMSTERDAM_STOP, false);
-        cargo.verifyAssigned("Wagon #4: heading to New Amsterdam.");
+        cargo.verifyCarrierRow(WAGON_ID, "Wagon #4", "\u2192 New Amsterdam",
+                "On the way.");
 
         // Assigning moved nothing and processed nothing, and a second
         // assignment is refused.
@@ -138,9 +135,9 @@ public class TC_118_F109_trade_route_assignment_test
         cargo.verifyHoldEmpty(WAGON_ID, 0);
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 90));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 0));
-        cargo.verifyAssignEnabled(false);
-        cargo.verifyAssignStatus(
-                "The unit already has an order, is damaged or is not free to move.");
+        cargo.openAddCarrierList();
+        cargo.verifyAddCarrierOffered("Wagon #4", false);
+        cargo.dismissAddCarrierList();
         cargo.close();
         cargo.verifyDialogClosed();
         game = colony.close();
@@ -261,9 +258,10 @@ public class TC_118_F109_trade_route_assignment_test
                 getContext());
         cargo.open();
         cargo.chooseRoute("Unused Cart");
-        cargo.chooseStop(NEW_AMSTERDAM_STOP);
-        cargo.chooseCarrier(0);
-        cargo.verifyAssignEnabled(true);
+        cargo.openCarriersTab();
+        cargo.openAddCarrierList();
+        cargo.verifyAddCarrierOffered("Wagon #4", true);
+        cargo.dismissAddCarrierList();
         cargo.close();
         cargo.verifyDialogClosed();
         cargo.verifyNotAssigned(WAGON_ID);
@@ -298,23 +296,24 @@ public class TC_118_F109_trade_route_assignment_test
         cargo.open();
         cargo.verifyTitle("Správa obchodní trasy");
         cargo.chooseRoute("Idle cart");
-        cargo.verifyAssignmentHeading("Jede podle této trasy");
-        cargo.verifyAssigned(
-                "Povoz č. 6: čeká, další zastávka Delft. Zastávku teď nelze dosáhnout, příští tah to zkusí znovu.");
+        cargo.verifyTabs("Stanice", "Přeprava", "Zboží");
+        cargo.openCarriersTab();
+        cargo.verifyCarrierRow(IDLE_WAGON_ID, "Povoz č. 6", "\u2192 Delft",
+                "Zastávku teď nelze dosáhnout, příští tah to zkusí znovu.");
 
         // The free wagon is assigned with the keyboard.
         cargo.chooseRoute("Povozová cesta");
-        cargo.chooseStop(NEW_AMSTERDAM_STOP);
-        cargo.verifyAssignButtonText("Přidělit trase");
-        cargo.verifyAssignEnabled(true);
+        cargo.openCarriersTab();
+        cargo.verifyAddCarrierText("Přidat další");
         cargo.captureDialog("tradeRouteCargoDialog",
                 "trade-route-assignment-czech.png");
-        cargo.assignWithKeyboard();
+        cargo.addCarrierWithKeyboard(WAGON_ID);
         cargo.verifyMessage(
-                "Přiděleno. Jednotka vyrazí ve vašem příštím tahu.");
+                "Povoz č. 4 nyní jezdí po této trase, začíná zastávkou New Amsterdam.");
         cargo.verifyAssignment(WAGON_ID, "Povozová cesta", NEW_AMSTERDAM_STOP,
                 false);
-        cargo.verifyAssigned("Povoz č. 4: míří na New Amsterdam.");
+        cargo.verifyCarrierRow(WAGON_ID, "Povoz č. 4", "\u2192 New Amsterdam",
+                "Na cestě.");
         cargo.close();
         colony.close();
     }
@@ -380,15 +379,14 @@ public class TC_118_F109_trade_route_assignment_test
         // nothing; assigning in it gives the route its wagon.
         planner.editSelected();
         cargo.verifyChosenRoute("Ore Cart");
-        cargo.chooseStop(NEW_AMSTERDAM_STOP);
-        cargo.chooseCarrier(0);
+        cargo.openCarriersTab();
+        cargo.openAddCarrierList();
+        cargo.dismissAddCarrierList();
         cargo.close();
         cargo.verifyNotAssigned(WAGON_ID);
         planner.verifyCarriers("No carrier assigned");
         planner.editSelected();
-        cargo.chooseStop(NEW_AMSTERDAM_STOP);
-        cargo.chooseCarrier(0);
-        cargo.assign();
+        cargo.addCarrier(WAGON_ID);
         cargo.verifyAssignment(WAGON_ID, "Ore Cart", NEW_AMSTERDAM_STOP, false);
         cargo.close();
         planner.verifyCarriers("Carriers: Wagon #4");

@@ -360,4 +360,33 @@ public class TC_116_F107_trade_route_creation_test extends AbstractAkropiaTest {
         planner.back();
         planner.verifyPlannerShown(false);
     }
+
+    @Test
+    @Tag("local")
+    void TC_07_a_route_may_have_more_than_four_stops() throws Exception {
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final ColonyScreen colony = game.openColonyAt(Location.of(28, 16),
+                "Delft");
+        final TradeRouteDialog route = new TradeRouteDialog(getContext());
+        route.open();
+        route.verifyOpenedFor("Delft");
+        route.enterName("Long Ocean Run");
+        route.chooseKind(TradeRouteKind.SEA);
+
+        // After four chosen stops a fifth row appears with the legal next
+        // stop; the former four-stop limit is gone.
+        route.chooseStop(0, EUROPE);
+        route.chooseStop(1, DELFT);
+        route.chooseStop(2, EUROPE);
+        route.chooseStop(3, DELFT);
+        route.verifyStopOptions(4, "Home port");
+        route.chooseStop(4, EUROPE);
+        route.verifyStopOptions(5, "Delft");
+        route.verifyCreateEnabled(true);
+        route.create();
+        route.verifyDialogClosed();
+        route.verifyStoredRoute("Long Ocean Run", TradeRouteKind.SEA,
+                "Home port", "Delft", "Home port", "Delft", "Home port");
+        colony.close();
+    }
 }

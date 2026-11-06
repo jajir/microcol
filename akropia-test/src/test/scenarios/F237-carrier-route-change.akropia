@@ -200,6 +200,7 @@
         "ownerName": "Dutch",
         "name": "Idle cart",
         "kind": "LAND",
+        "mode": "TOUCH_AND_GO",
         "startColonyId": 0,
         "stops": [
           {
@@ -215,6 +216,7 @@
         "ownerName": "Dutch",
         "name": "Supply circuit",
         "kind": "LAND",
+        "mode": "TOUCH_AND_GO",
         "startColonyId": 0,
         "stops": [
           {
@@ -236,6 +238,7 @@
         "ownerName": "Dutch",
         "name": "Ocean circuit",
         "kind": "SEA",
+        "mode": "TOUCH_AND_GO",
         "startColonyId": 1,
         "stops": [
           {

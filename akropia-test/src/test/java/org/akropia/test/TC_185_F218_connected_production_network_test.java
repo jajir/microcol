@@ -174,9 +174,7 @@ public class TC_185_F218_connected_production_network_test
         cargo.chooseStop(AT_DELFT);
         cargo.addLoad(GoodsType.ORE);
         cargo.save();
-        cargo.chooseCarrier(0);
-        cargo.verifyAssignEnabled(true);
-        cargo.assign();
+        cargo.addCarrier(WAGON);
         cargo.verifyAssignment(WAGON, "Ore Line", AT_DELFT, false);
         cargo.verifyHoldEmpty(WAGON, 0);
         cargo.close();
@@ -400,8 +398,7 @@ public class TC_185_F218_connected_production_network_test
         cargo.chooseStop(AT_DELFT);
         cargo.addLoad(GoodsType.ORE);
         cargo.save();
-        cargo.chooseCarrier(0);
-        cargo.assign();
+        cargo.addCarrier(WAGON);
         cargo.verifyAssignment(WAGON, "Ore Line", AT_DELFT, false);
         cargo.close();
         game = colony.close();

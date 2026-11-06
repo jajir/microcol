@@ -206,7 +206,7 @@ class TradeRouteEditTimingTest {
                 unit.getProcessedTradeRouteVisit()
                         .ifPresent(visit -> out.append(" visit=")
                                 .append(visit.getRouteId()).append('/')
-                                .append(visit.getStopIndex()).append('@')
+                                .append(visit.getTurn()).append('@')
                                 .append(visit.getLocation()));
                 out.append('\n');
             }
@@ -434,7 +434,7 @@ class TradeRouteEditTimingTest {
         final TradeRouteVisit visit = w.carrier(LOST_WAGON)
                 .getProcessedTradeRouteVisit().orElseThrow();
         assertEquals(LOST_CART_ID, visit.getRouteId());
-        assertEquals(1, visit.getStopIndex());
+        assertEquals(Optional.of(HAARLEM_AT), visit.getLocation());
         assertEquals(0, w.assignment(LOST_WAGON).getStopIndex());
     }
 
@@ -699,8 +699,9 @@ class TradeRouteEditTimingTest {
 
     @Test
     void restoreRejectsBadAcceptedStopsInsteadOfRepairingThem() {
-        assertRejected(po -> po.setTradeRouteAssignmentStops(
-                List.of(po.getTradeRouteAssignmentStops().get(0))));
+        // A copy may differ from the saved route in count after a stop edit,
+        // but it must still contain the carrier's current stop.
+        assertRejected(po -> po.setTradeRouteAssignmentStops(List.of()));
         assertRejected(
                 po -> po.getTradeRouteAssignmentStops().get(1).setColonyId(99));
         assertRejected(po -> {

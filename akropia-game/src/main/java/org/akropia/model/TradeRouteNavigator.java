@@ -53,8 +53,15 @@ final class TradeRouteNavigator {
                 .flatMap(TradeRouteAssignment::getPause);
         final boolean wasPaused = isPaused(carrier);
         final List<Location> walked = new ArrayList<>();
+        // A full lap over the longer of the accepted and the saved stops.
+        final int lap = Math.max(
+                carrier.getTradeRouteAssignment().orElseThrow().getStops()
+                        .size(),
+                model.findTradeRoute(carrier.getTradeRouteAssignment()
+                        .orElseThrow().getRouteId())
+                        .map(route -> route.getStops().size()).orElse(0));
         int idle = 0;
-        while (idle <= TradeRoutes.MAX_STOPS) {
+        while (idle <= lap) {
             final Progress progress = advanceOnce(carrier, walked);
             if (progress == Progress.STOPPED) {
                 break;
@@ -68,7 +75,10 @@ final class TradeRouteNavigator {
                 .getTradeRouteAssignment();
         final Optional<TradeRoutePause> finalPause = finalAssignment
                 .flatMap(TradeRouteAssignment::getPause);
+        // Waiting for goods is the route's own plan, shown on the route
+        // screen, not a problem reported as a turn notice.
         if (carrier.isShip() && finalPause.isPresent()
+                && !finalPause.get().isWaiting()
                 && !finalPause.equals(previousPause)) {
             final TradeRouteAssignment assignment = finalAssignment
                     .orElseThrow();
@@ -169,9 +179,11 @@ final class TradeRouteNavigator {
 
     /**
      * Whether the carrier has not started the leg to its current stop: it waits
-     * with a reason, so a repair applies, or it still stands where it processed
-     * its last stop of this route. Once it has moved on, its visit receipt is
-     * gone and the leg it accepted is kept to the next stop.
+     * with a problem, so a repair applies, or it still stands where it
+     * processed its last stop of this route. Once it has moved on, its visit
+     * receipt is gone and the leg it accepted is kept to the next stop. A
+     * carrier that waits for goods at its stop keeps the instructions of that
+     * visit; the edit reaches it at its next stop.
      *
      * @param carrier    required assigned carrier
      * @param assignment required assignment of that carrier
@@ -179,6 +191,10 @@ final class TradeRouteNavigator {
      */
     static boolean takesLatestPlan(final AbstractUnit carrier,
             final TradeRouteAssignment assignment) {
+        if (assignment.getPause().filter(TradeRoutePause::isWaiting)
+                .isPresent()) {
+            return false;
+        }
         return assignment.getPause().isPresent() || carrier
                 .getProcessedTradeRouteVisit()
                 .filter(visit -> visit.getRouteId() == assignment.getRouteId())
@@ -215,14 +231,16 @@ final class TradeRouteNavigator {
                 .findTradeRoute(assignment.get().getRouteId());
         if (route.isEmpty() || route.get().getOwner() != carrier.getOwner()
                 || !Model.isTradeRouteCarrierKind(carrier,
-                        route.get().getKind())
-                || assignment.get().getStopIndex() >= route.get().getStops()
-                        .size()) {
+                        route.get().getKind())) {
             return pause(assignment.get(), TradeRoutePause.NO_ROUTE);
         }
         // A carrier that has not started its leg takes the saved route as it
         // now stands; one already on its way keeps the leg it accepted.
         if (takesLatestPlan(carrier, assignment.get())) {
+            assignment.get()
+                    .setStopIndex(remapTarget(assignment.get().getStops(),
+                            assignment.get().getStopIndex(),
+                            route.get().getStops()));
             assignment.get().setStops(route.get().getStops());
         }
         final TradeRouteStop stop = legStop(route.get(), assignment.get());
@@ -262,19 +280,61 @@ final class TradeRouteNavigator {
     /**
      * Processes the stop once for this place and moves the assignment to the
      * next ordered stop. A visit already marked here, possibly for a coincident
-     * stop, is not repeated.
+     * stop, is not repeated. In waiting mode an unfinished stop keeps the
+     * carrier there with its reason and the instructions of this visit; it is
+     * processed again at most once in each later owner turn, from the cargo,
+     * stock and treasury that remain.
      */
     private Progress reach(final AbstractUnit carrier, final TradeRoute route,
             final TradeRouteStop stop, final TradeRouteAssignment assignment) {
         final int index = assignment.getStopIndex();
-        if (carrier.getProcessedTradeRouteVisit().isEmpty()) {
-            new TradeRouteStopProcessor(model, (UnitWithCargo) carrier, route,
-                    stop,
-                    new TradeRouteVisit(route.getId(), index,
-                            stop.isEurope() ? null : carrier.getLocation()),
-                    true).run();
+        final int turn = model.getCalendar().getNumberOfPlayedTurns();
+        final Optional<TradeRouteVisit> visit = carrier
+                .getProcessedTradeRouteVisit();
+        final boolean waiting = assignment.getPause()
+                .filter(TradeRoutePause::isWaiting).isPresent();
+        List<TradeRouteTransfer> transfers = null;
+        if (visit.isEmpty()) {
+            transfers = new TradeRouteStopProcessor(model,
+                    (UnitWithCargo) carrier, route, index, stop,
+                    new TradeRouteVisit(route.getId(),
+                            stop.isEurope() ? null : carrier.getLocation(),
+                            turn),
+                    true).run().getTransfers();
+        } else if (waiting && visit.get().getRouteId() == route.getId()
+                && visit.get().isKindOf(stop) && visit.get().getTurn() < turn) {
+            // The waiting carrier stands at the place of its receipt; the
+            // receipt is renewed for this turn before anything is transferred.
+            final TradeRouteVisit renewed = visit.get().renewedIn(turn);
+            carrier.renewProcessedTradeRouteVisit(renewed);
+            transfers = new TradeRouteStopProcessor(model,
+                    (UnitWithCargo) carrier, route, index, stop, renewed, true)
+                    .run().getTransfers();
         }
-        assignment.setStopIndex((index + 1) % route.getStops().size());
+        // A place passed under an earlier receipt, for example after a
+        // reassignment, is not processed now and so is not waited at either.
+        if (route.getMode() == TradeRouteMode.WAIT_FOR_COMPLETION
+                && (transfers != null || waiting)) {
+            final Optional<TradeRoutePause> reason = TradeRouteStopProcessor
+                    .getWaitingReason((UnitWithCargo) carrier, stop,
+                            transfers == null ? List.of() : transfers);
+            if (reason.isPresent()) {
+                // Without processing in this turn, the reason found at the
+                // last processing still says what the carrier waits for.
+                if (transfers == null && waiting) {
+                    return Progress.STOPPED;
+                }
+                // The visit keeps its instructions while the carrier waits.
+                final List<TradeRouteStop> snapshot = new ArrayList<>(
+                        assignment.getStops());
+                snapshot.set(index, stop);
+                assignment.setStops(snapshot);
+                assignment.setPause(reason.get());
+                return Progress.STOPPED;
+            }
+        }
+        assignment.setStopIndex(
+                nextIndex(assignment.getStops(), index, route.getStops()));
         // The next leg starts at this boundary, so it takes the route as saved
         // now, including edits made while this carrier was on the way.
         assignment.setStops(route.getStops());
@@ -283,18 +343,94 @@ final class TradeRouteNavigator {
     }
 
     /**
+     * Index in the saved stops of the stop that follows a processed one. A
+     * processed stop replaced since is followed by the stop after its
+     * replacement; one removed since is followed by the stop now at its place.
+     *
+     * @param accepted required stops the carrier accepted
+     * @param index    index of the processed stop in {@code accepted}
+     * @param saved    required stops as saved now
+     * @return index in {@code saved}
+     */
+    static int nextIndex(final List<TradeRouteStop> accepted, final int index,
+            final List<TradeRouteStop> saved) {
+        if (accepted.equals(saved)) {
+            return (index + 1) % saved.size();
+        }
+        final int at = index < saved.size()
+                && saved.get(index).equals(accepted.get(index)) ? index
+                        : saved.indexOf(accepted.get(index));
+        if (at >= 0) {
+            return (at + 1) % saved.size();
+        }
+        if (accepted.size() == saved.size()) {
+            return (index + 1) % saved.size();
+        }
+        return Math.min(index, saved.size() - 1);
+    }
+
+    /**
+     * Index in the saved stops of the stop a carrier that has not started its
+     * leg heads to: the stop after the one it came from when that one is still
+     * saved, otherwise the same stop, otherwise the stop now at the same place
+     * in the order.
+     *
+     * @param accepted required stops the carrier accepted
+     * @param index    index of its current stop in {@code accepted}
+     * @param saved    required stops as saved now
+     * @return index in {@code saved}
+     */
+    static int remapTarget(final List<TradeRouteStop> accepted, final int index,
+            final List<TradeRouteStop> saved) {
+        if (accepted.equals(saved)) {
+            return index;
+        }
+        final TradeRouteStop target = accepted.get(index);
+        final TradeRouteStop previous = accepted
+                .get((index + accepted.size() - 1) % accepted.size());
+        final int from = saved.indexOf(previous);
+        if (from >= 0 && !previous.equals(target)) {
+            return (from + 1) % saved.size();
+        }
+        final int same = saved.indexOf(target);
+        return same >= 0 ? same : Math.min(index, saved.size() - 1);
+    }
+
+    /**
+     * The stop an assigned carrier is heading to or standing at, without
+     * changing its assignment.
+     */
+    static TradeRouteStop headingStop(final AbstractUnit carrier,
+            final TradeRouteAssignment assignment, final TradeRoute route) {
+        if (takesLatestPlan(carrier, assignment)) {
+            return route.getStops().get(remapTarget(assignment.getStops(),
+                    assignment.getStopIndex(), route.getStops()));
+        }
+        return legStop(route, assignment);
+    }
+
+    /**
      * The stop the current leg targets. Its identity is the one the carrier
      * accepted at its last boundary, so an edit never redirects a leg in
      * progress. Its cargo policy is the saved route's while the identity is
-     * unchanged, so a cargo edit applies when the carrier reaches the stop.
+     * still saved, so a cargo edit applies when the carrier reaches the stop. A
+     * carrier waiting for goods keeps the instructions of its visit.
      */
     private static TradeRouteStop legStop(final TradeRoute route,
             final TradeRouteAssignment assignment) {
         final TradeRouteStop accepted = assignment.getStops()
                 .get(assignment.getStopIndex());
-        final TradeRouteStop current = route.getStops()
-                .get(assignment.getStopIndex());
-        return accepted.equals(current) ? current : accepted;
+        if (assignment.getPause().filter(TradeRoutePause::isWaiting)
+                .isPresent()) {
+            return accepted;
+        }
+        final int index = assignment.getStopIndex();
+        if (index < route.getStops().size()
+                && route.getStops().get(index).equals(accepted)) {
+            return route.getStops().get(index);
+        }
+        final int saved = route.getStops().indexOf(accepted);
+        return saved >= 0 ? route.getStops().get(saved) : accepted;
     }
 
     private Progress travelToEurope(final AbstractUnit ship,

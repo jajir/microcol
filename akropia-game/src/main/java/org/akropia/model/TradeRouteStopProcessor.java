@@ -2,6 +2,7 @@ package org.akropia.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.akropia.model.turnevent.TurnEventProvider;
 import org.akropia.model.unit.UnitWithCargo;
@@ -10,14 +11,17 @@ import com.google.common.base.Preconditions;
 
 /**
  * One processing of a route stop for a carrier that {@link Model} has already
- * validated. Entries run unload first, then load, each list in its saved order.
- * Every transfer is a call to the existing atomic cargo, warehouse or European
- * trade operation, so a refused call changes nothing by itself. The carrier's
- * visit is marked as soon as the first quantity is settled, so no later failure
- * can let the stop repeat a transfer that was already paid. In an automatic
- * visit, every entry that settled a quantity, including one rejected part-way,
- * adds one turn notice for the carrier's owner in processing order (R-0392); a
- * stop the player processes explicitly shows its result directly instead.
+ * validated. Entries run unload first, then load, each in the fixed goods
+ * order. A carrier of a route in waiting mode loads only once every goods
+ * marked for unloading is off board, so loading never takes the place of an
+ * unfinished unloading. Every transfer is a call to the existing atomic cargo,
+ * warehouse or European trade operation, so a refused call changes nothing by
+ * itself. The carrier's visit is marked as soon as the first quantity is
+ * settled, so no later failure can let the stop repeat a transfer that was
+ * already paid. In an automatic visit, every entry that settled a quantity,
+ * including one rejected part-way, adds one turn notice for the carrier's owner
+ * in processing order (R-0392); a stop the player processes explicitly shows
+ * its result directly instead.
  */
 final class TradeRouteStopProcessor {
 
@@ -33,17 +37,21 @@ final class TradeRouteStopProcessor {
     /** Whether the route navigator, not the player, runs this visit. */
     private final boolean automatic;
     private final TradeRouteStop stop;
+    /** Position of the stop in the itinerary, as reported to the owner. */
+    private final int stopIndex;
     private final TradeRouteVisit visit;
     private final List<TradeRouteTransfer> transfers = new ArrayList<>();
 
     TradeRouteStopProcessor(final Model model, final UnitWithCargo carrier,
-            final TradeRoute route, final TradeRouteStop stop,
-            final TradeRouteVisit visit, final boolean automatic) {
+            final TradeRoute route, final int stopIndex,
+            final TradeRouteStop stop, final TradeRouteVisit visit,
+            final boolean automatic) {
         this.model = Preconditions.checkNotNull(model);
         this.carrier = Preconditions.checkNotNull(carrier);
         this.route = Preconditions.checkNotNull(route);
         this.automatic = automatic;
         this.stop = Preconditions.checkNotNull(stop);
+        this.stopIndex = stopIndex;
         this.visit = Preconditions.checkNotNull(visit);
     }
 
@@ -52,8 +60,13 @@ final class TradeRouteStopProcessor {
         for (final GoodsType type : stop.getUnloadGoods()) {
             halted = step(true, type, halted);
         }
-        for (final GoodsType type : stop.getLoadGoods()) {
-            halted = step(false, type, halted);
+        final boolean loadNow = !automatic
+                || route.getMode() == TradeRouteMode.TOUCH_AND_GO
+                || isUnloadComplete(carrier, stop);
+        if (loadNow) {
+            for (final GoodsType type : stop.getLoadGoods()) {
+                halted = step(false, type, halted);
+            }
         }
         // A processing that moved nothing is still a finite, reported visit.
         markVisit();
@@ -97,7 +110,7 @@ final class TradeRouteStopProcessor {
         transfers.add(transfer);
         if (automatic && transfer.getAmount() > 0) {
             model.addTurnEvent(TurnEventProvider.getTradeRouteTransfer(route,
-                    visit.getStopIndex(), carrier,
+                    stopIndex, carrier,
                     stop.isEurope() ? null
                             : model.getColonyById(stop.getColonyId())
                                     .orElseThrow(),
@@ -124,6 +137,44 @@ final class TradeRouteStopProcessor {
                 .orElseThrow();
         return unload ? unloadToWarehouse(colony, type, tally)
                 : loadFromWarehouse(colony, type, tally);
+    }
+
+    /**
+     * Why a carrier in waiting mode must stay at its stop after processing, or
+     * empty when the stop is complete. Unloading is complete when no goods
+     * marked for unloading is on board; loading when no hold has room for any
+     * goods marked for loading. Ignored goods and passengers keep their holds.
+     *
+     * @param carrier   required carrier at the stop
+     * @param stop      required stop with the instructions of this visit
+     * @param transfers results of the latest processing, to tell missing funds
+     *                  from missing stock
+     * @return the waiting reason, or empty when the carrier may continue
+     */
+    static Optional<TradeRoutePause> getWaitingReason(
+            final UnitWithCargo carrier, final TradeRouteStop stop,
+            final List<TradeRouteTransfer> transfers) {
+        if (!isUnloadComplete(carrier, stop)) {
+            return Optional.of(TradeRoutePause.WAITING_UNLOAD);
+        }
+        final boolean loadComplete = stop.getLoadGoods().stream()
+                .allMatch(type -> room(Model.roomForGoods(carrier, type)) == 0);
+        if (loadComplete) {
+            return Optional.empty();
+        }
+        final boolean funds = stop.isEurope() && transfers.stream()
+                .anyMatch(transfer -> !transfer.isUnload() && (transfer
+                        .getReason() == TradeRouteTransferReason.INSUFFICIENT_FUNDS
+                        || transfer
+                                .getReason() == TradeRouteTransferReason.PARTIAL_FUNDS));
+        return Optional.of(funds ? TradeRoutePause.WAITING_FUNDS
+                : TradeRoutePause.WAITING_LOAD);
+    }
+
+    private static boolean isUnloadComplete(final UnitWithCargo carrier,
+            final TradeRouteStop stop) {
+        return stop.getUnloadGoods().stream()
+                .allMatch(type -> Model.holdingGoods(carrier, type).isEmpty());
     }
 
     private static TradeRouteTransfer entry(final boolean unload,

@@ -2,6 +2,7 @@ package org.akropia.page;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,32 +11,43 @@ import org.akropia.model.GoodsType;
 import org.akropia.model.Location;
 import org.akropia.model.TradeRoute;
 import org.akropia.model.TradeRouteAssignment;
+import org.akropia.model.TradeRouteMode;
 import org.akropia.model.TradeRouteStop;
 import org.akropia.model.Unit;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
-import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Window;
 
 /**
- * Cargo dialog of trade route stops, opened from the colony screen. Choices are
- * made through the visible combo boxes, lists and buttons as a player would;
- * the model is only read to verify the outcome.
+ * Trade route management with the tabs Stations, Carriers and Goods. Choices
+ * are made through the visible tabs, rows, matrix cells, menus and buttons as a
+ * player would; a control in another tab is reached by first clicking that tab.
+ * The model is only read to verify the outcome.
  */
 public final class TradeRouteCargoDialog extends AbstractScreen {
 
-    private static final String UNLOAD = "tradeRouteUnload";
-    private static final String LOAD = "tradeRouteLoad";
+    private static final String STATIONS_TAB = "tradeRouteStationsTab";
+    private static final String CARRIERS_TAB = "tradeRouteCarriersTab";
+    private static final String GOODS_TAB = "tradeRouteGoodsTab";
+
+    /** Row of the goods matrix that the add/verify goods methods address. */
+    private int chosenStop;
 
     public TradeRouteCargoDialog(final TestContext context) {
         super(context);
@@ -101,49 +113,94 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    /** @param index zero-based stop index of the chosen route */
+    public void openStationsTab() {
+        clickTab(STATIONS_TAB);
+    }
+
+    public void openCarriersTab() {
+        clickTab(CARRIERS_TAB);
+    }
+
+    public void openGoodsTab() {
+        clickTab(GOODS_TAB);
+    }
+
+    /**
+     * Moves to the next tab with the keyboard: the focus goes to the tab row
+     * and the Right arrow selects the following tab.
+     */
+    public void openNextTabWithKeyboard() {
+        getRobot().interact(() -> tabs().requestFocus());
+        getRobot().push(KeyCode.RIGHT);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /**
+     * Addresses one stop row of the goods matrix and shows the Goods tab.
+     *
+     * @param index zero-based stop index of the chosen route
+     */
     public void chooseStop(final int index) {
-        choose(stopBox(), index);
+        chosenStop = index;
+        openGoodsTab();
     }
 
+    /** Clicks the cell of the chosen stop until it unloads the goods. */
     public void addUnload(final GoodsType type) {
-        addGoods(UNLOAD, type);
+        setCell(chosenStop, type, "−");
     }
 
+    /** Clicks the cell of the chosen stop until it loads the goods. */
     public void addLoad(final GoodsType type) {
-        addGoods(LOAD, type);
+        setCell(chosenStop, type, "+");
     }
 
-    public void selectUnload(final int index) {
-        select(UNLOAD, index);
+    /** Clicks the cell of the chosen stop until it ignores the goods. */
+    public void ignoreGoods(final GoodsType type) {
+        setCell(chosenStop, type, "");
     }
 
-    public void selectLoad(final int index) {
-        select(LOAD, index);
-    }
-
-    public void moveUnloadUp() {
-        press(UNLOAD + "Up");
+    /** One mouse click on a matrix cell. */
+    public void clickCell(final int stop, final GoodsType type) {
+        final Button cell = cell(stop, type);
+        showTabOf(cell);
+        reveal(cell);
+        getRobot().clickOn(cell);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void moveUnloadDown() {
-        press(UNLOAD + "Down");
+    /** Focuses a matrix cell and activates it with the Space key. */
+    public void cycleCellWithKeyboard(final int stop, final GoodsType type) {
+        final Button cell = cell(stop, type);
+        showTabOf(cell);
+        reveal(cell);
+        getRobot().interact(cell::requestFocus);
+        getRobot().push(KeyCode.SPACE);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void moveLoadUp() {
-        press(LOAD + "Up");
-        WaitForAsyncUtils.waitForFxEvents();
+    private void setCell(final int stop, final GoodsType type,
+            final String sign) {
+        for (int i = 0; i < 3
+                && !cell(stop, type).getText().equals(sign); i++) {
+            clickCell(stop, type);
+        }
     }
 
-    public void moveLoadDown() {
-        press(LOAD + "Down");
-        WaitForAsyncUtils.waitForFxEvents();
+    public void chooseWaitForCompletion() {
+        clickRadio("tradeRouteModeWait");
     }
 
-    public void removeLoad() {
-        press(LOAD + "Remove");
+    public void chooseTouchAndGo() {
+        clickRadio("tradeRouteModeTouch");
+    }
+
+    private void clickRadio(final String id) {
+        final RadioButton radio = getNodeFinder().lookup("#" + id)
+                .queryAs(RadioButton.class);
+        showTabOf(radio);
+        reveal(radio);
+        getRobot().clickOn(radio);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -152,49 +209,57 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void saveWithKeyboard() {
+        pressWithKeyboard("tradeRouteCargoSave");
+    }
+
+    public void discardChanges() {
+        press("tradeRouteCargoDiscard");
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public void process() {
         press("tradeRouteCargoProcess");
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    /** Presses Back once; unsaved changes need a second press. */
     public void close() {
         press("tradeRouteCargoClose");
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    /** @param index zero-based position in the list of carriers at the stop */
+    /** @param index zero-based position among the carriers at the stops */
     public void chooseCarrier(final int index) {
-        choose(getNodeFinder().lookup("#tradeRouteCargoCarrier")
-                .queryComboBox(), index);
+        final ComboBox<?> combo = getNodeFinder()
+                .lookup("#tradeRouteCargoCarrier").queryComboBox();
+        showTabOf(combo);
+        expandSectionOf(combo);
+        choose(combo, index);
     }
 
-    public void assign() {
-        press("tradeRouteAssign");
-        WaitForAsyncUtils.waitForFxEvents();
+    // Stations
+
+    public void moveStationUp(final int index) {
+        press("tradeRouteStationUp-" + index);
     }
 
-    /**
-     * Moves the focus to the assign button and presses it with the Space key.
-     */
-    public void assignWithKeyboard() {
-        pressWithKeyboard("tradeRouteAssign");
+    public void moveStationDown(final int index) {
+        press("tradeRouteStationDown-" + index);
     }
 
-    /**
-     * Picks the carrier to release among every carrier that follows the chosen
-     * route, wherever it is, not only among those at the stop.
-     *
-     * @param index zero-based position in the list of assigned carriers
-     */
-    public void chooseAssignedCarrier(final int index) {
-        expandSection("tradeRouteAssignedPane");
-        choose(getNodeFinder().lookup("#tradeRouteAssignedCarrier")
-                .queryComboBox(), index);
+    public void moveStationUpWithKeyboard(final int index) {
+        pressWithKeyboard("tradeRouteStationUp-" + index);
     }
 
-    /** @param name the colony name, or the text of Europe, as listed */
-    public void chooseReplacement(final String name) {
-        final ComboBox<TradeRouteStop> combo = replacementBox();
+    public void removeStation(final int index) {
+        press("tradeRouteStationRemove-" + index);
+    }
+
+    /** @param name the colony name, or the text of Home port, as offered */
+    public void addStation(final String name) {
+        final ComboBox<TradeRouteStop> combo = addStationBox();
+        showTabOf(combo);
         int index = -1;
         for (int i = 0; i < combo.getItems().size(); i++) {
             if (combo.getConverter().toString(combo.getItems().get(i))
@@ -206,36 +271,105 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
             throw new IllegalStateException("Stop is not offered: " + name);
         }
         choose(combo, index);
+        press("tradeRouteAddStationButton");
     }
 
-    public void replaceStop() {
-        press("tradeRouteReplaceButton");
+    /**
+     * Replaces the stop at {@code index} as a player does in the Stations tab:
+     * remove it, add the new destination at the end and move it up to the same
+     * place. The change is staged until Save.
+     */
+    public void replaceStation(final int index, final String name) {
+        removeStation(index);
+        addStation(name);
+        for (int at = stationCount() - 1; at > index; at--) {
+            moveStationUp(at);
+        }
+    }
+
+    private int stationCount() {
+        int count = 0;
+        while (getNodeFinder().lookup("#tradeRouteStation-" + count).tryQuery()
+                .isPresent()) {
+            count++;
+        }
+        return count;
+    }
+
+    // Carriers
+
+    /** Opens Add carrier and picks the unit by its ID. */
+    public void addCarrier(final int unitId) {
+        openAddCarrierList();
+        chooseOfferedCarrier(unitId);
+    }
+
+    /** Opens the Add carrier list and leaves it open. */
+    public void openAddCarrierList() {
+        openAddCarrierMenu();
+    }
+
+    /** Picks a unit by its ID in the open Add carrier list. */
+    public void chooseOfferedCarrier(final int unitId) {
+        final Node item = getNodeFinder()
+                .lookup("#tradeRouteAddCarrier-" + unitId).query();
+        getRobot().clickOn(item);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void replaceStopWithKeyboard() {
-        pressWithKeyboard("tradeRouteReplaceButton");
-    }
-
-    public void cancelAssignment() {
-        press("tradeRouteCancelAssignment");
+    /** Closes the open Add carrier list without a choice. */
+    public void dismissAddCarrierList() {
+        getRobot().push(KeyCode.ESCAPE);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void cancelAssignmentWithKeyboard() {
-        pressWithKeyboard("tradeRouteCancelAssignment");
+    /**
+     * Opens Add carrier with the keyboard, walks the entries with Down until
+     * the unit has the popup focus and takes it with Enter.
+     */
+    public void addCarrierWithKeyboard(final int unitId) {
+        final MenuButton menu = addCarrierMenu();
+        showTabOf(menu);
+        reveal(menu);
+        getRobot().interact(menu::requestFocus);
+        getRobot().push(KeyCode.DOWN);
+        WaitForAsyncUtils.waitForFxEvents();
+        final String itemId = "tradeRouteAddCarrier-" + unitId;
+        for (int i = 0; i <= menu.getItems().size()
+                && !isPopupItemFocused(itemId); i++) {
+            getRobot().push(KeyCode.DOWN);
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+        getRobot().push(KeyCode.ENTER);
+        WaitForAsyncUtils.waitForFxEvents();
     }
+
+    private void openAddCarrierMenu() {
+        final MenuButton menu = addCarrierMenu();
+        showTabOf(menu);
+        reveal(menu);
+        getRobot().clickOn(menu);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void removeCarrier(final int unitId) {
+        press("tradeRouteCarrierRemove-" + unitId);
+    }
+
+    public void removeCarrierWithKeyboard(final int unitId) {
+        pressWithKeyboard("tradeRouteCarrierRemove-" + unitId);
+    }
+
+    // Delete
 
     /** First press: names the affected carriers, deletes nothing yet. */
     public void askToDeleteRoute() {
         press("tradeRouteDelete");
-        WaitForAsyncUtils.waitForFxEvents();
     }
 
     /** Second press on the same route: now the route is deleted. */
     public void confirmDeleteRoute() {
         press("tradeRouteDelete");
-        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void askToDeleteRouteWithKeyboard() {
@@ -247,91 +381,117 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
     }
 
     /**
-     * Closes the dialog with the Escape key, as a player abandoning it. The
-     * focus is first moved off the last used choice box to the Close button,
-     * because an open or focused choice box may take Escape for itself.
+     * Closes the screen with the Escape key, as a player abandoning it. The
+     * focus is first moved to Back, because a focused choice box may take
+     * Escape for itself.
      */
     public void closeWithEscape() {
-        final javafx.scene.control.Button button = getButtonById(
-                "tradeRouteCargoClose");
-        reveal(button);
+        final Button button = getButtonById("tradeRouteCargoClose");
         getRobot().interact(button::requestFocus);
         getRobot().push(KeyCode.ESCAPE);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     private void pressWithKeyboard(final String buttonId) {
-        if (buttonId.equals("tradeRouteDelete")) {
-            expandSection("tradeRouteDeletePane");
-        }
-        if (buttonId.equals("tradeRouteCancelAssignment")) {
-            expandSection("tradeRouteAssignedPane");
-        }
-        final javafx.scene.control.Button button = getButtonById(buttonId);
+        final Button button = getButtonById(buttonId);
+        showTabOf(button);
+        expandSectionOf(button);
         reveal(button);
         getRobot().interact(button::requestFocus);
         getRobot().push(KeyCode.SPACE);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    private void addGoods(final String prefix, final GoodsType type) {
-        final ComboBox<GoodsType> combo = getNodeFinder()
-                .lookup("#" + prefix + "Choice").queryComboBox();
-        final int index = combo.getItems().indexOf(type);
-        if (index < 0) {
-            throw new IllegalStateException("Goods is not offered: " + type);
-        }
-        choose(combo, index);
-        press(prefix + "Add");
-        WaitForAsyncUtils.waitForFxEvents();
-    }
-
-    /** Focuses the list, goes to its top entry and steps down to the index. */
-    private void select(final String prefix, final int index) {
-        reveal(list(prefix));
-        getRobot().clickOn(list(prefix)).push(KeyCode.HOME);
-        for (int i = 0; i < index; i++) {
-            getRobot().push(KeyCode.DOWN);
-        }
+    /**
+     * Presses a button after showing its tab and scrolling it into view, so a
+     * screen taller than a small window is operated as a player would.
+     */
+    private void press(final String buttonId) {
+        final Button button = getButtonById(buttonId);
+        showTabOf(button);
+        expandSectionOf(button);
+        reveal(button);
+        requireShown(button);
+        clickOnButtonWithId(buttonId);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     /**
-     * Presses a button of the dialog after scrolling it into view, so a dialog
-     * taller than a small screen is operated the same way a player would.
+     * Stops the scenario before a click that would land on another control: the
+     * node must be shown and lie inside the window after revealing it.
      */
-    private void press(final String buttonId) {
-        if (buttonId.equals("tradeRouteDelete")) {
-            expandSection("tradeRouteDeletePane");
+    private void requireShown(final Node node) {
+        final Bounds bounds = sceneBounds(node);
+        final double width = getPrimaryStage().getScene().getWidth();
+        final double height = getPrimaryStage().getScene().getHeight();
+        if (!node.isVisible() || bounds.getMinX() < 0
+                || bounds.getMaxX() > width || bounds.getMinY() < 0
+                || bounds.getMaxY() > height) {
+            throw new IllegalStateException(
+                    "Control is not shown in the window: " + node.getId() + " "
+                            + bounds);
         }
-        if (buttonId.equals("tradeRouteCancelAssignment")) {
-            expandSection("tradeRouteAssignedPane");
+        // A control in a tab or in the scrolled page must also lie inside
+        // the area that shows it, not in a clipped part.
+        for (final String clip : List.of("#tradeRouteTabs",
+                "#tradeRouteCargoScroll")) {
+            getNodeFinder().lookup(clip).tryQuery()
+                    .filter(area -> isInside(node, area)).ifPresent(area -> {
+                        final Bounds shown = sceneBounds(area);
+                        if (bounds.getMinY() < shown.getMinY() - 1
+                                || bounds.getMaxY() > shown.getMaxY() + 1) {
+                            throw new IllegalStateException(
+                                    "Control is clipped: " + node.getId() + " "
+                                            + bounds + " in " + shown);
+                        }
+                    });
         }
-        reveal(getButtonById(buttonId));
-        clickOnButtonWithId(buttonId);
     }
 
-    /** Scrolls the dialog, when it has a scroll bar, until the node shows. */
-    private void expandSection(final String id) {
-        final TitledPane section = getNodeFinder().lookup("#" + id)
-                .queryAs(TitledPane.class);
-        if (!section.isExpanded()) {
-            reveal(section);
-            getRobot().clickOn(section.lookup(".title"));
+    private void clickTab(final String tabId) {
+        final Tab tab = tab(tabId);
+        if (!tab.isSelected()) {
+            final Node header = getNodeFinder().lookup("#" + tabId).query();
+            getRobot().clickOn(header);
             WaitForAsyncUtils.waitForFxEvents();
         }
     }
 
-    private void reveal(final Node node) {
+    /** Clicks the tab whose content holds the node, when not shown yet. */
+    private void showTabOf(final Node node) {
+        getNodeFinder().lookup("#tradeRouteTabs").tryQuery()
+                .ifPresent(found -> {
+                    for (final Tab tab : ((TabPane) found).getTabs()) {
+                        if (isInside(node, tab.getContent())) {
+                            clickTab(tab.getId());
+                        }
+                    }
+                });
+    }
+
+    private static boolean isInside(final Node node, final Node ancestor) {
+        for (Node at = node; at != null; at = at.getParent()) {
+            if (at == ancestor) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void expandSectionOf(final Node node) {
         for (Parent parent = node.getParent(); parent != null; parent = parent
                 .getParent()) {
             if (parent instanceof TitledPane
                     && !((TitledPane) parent).isExpanded()) {
-                final TitledPane section = (TitledPane) parent;
-                getRobot().clickOn(section.lookup(".title"));
+                reveal(parent);
+                getRobot().clickOn(parent.lookup(".title"));
                 WaitForAsyncUtils.waitForFxEvents();
             }
         }
+    }
+
+    /** Scrolls the screen, when it has a scroll bar, until the node shows. */
+    private void reveal(final Node node) {
         getNodeFinder().lookup("#tradeRouteCargoScroll").tryQuery()
                 .ifPresent(found -> {
                     final ScrollPane scroll = (ScrollPane) found;
@@ -369,6 +529,28 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 .queryAs(MenuButton.class);
     }
 
+    private MenuButton addCarrierMenu() {
+        return getNodeFinder().lookup("#tradeRouteAddCarrier")
+                .queryAs(MenuButton.class);
+    }
+
+    private TabPane tabs() {
+        return getNodeFinder().lookup("#tradeRouteTabs").queryAs(TabPane.class);
+    }
+
+    private Tab tab(final String id) {
+        return tabs().getTabs().stream().filter(tab -> id.equals(tab.getId()))
+                .findFirst().orElseThrow();
+    }
+
+    private Button cell(final int stop, final GoodsType type) {
+        return getButtonById("tradeRouteCell-" + stop + "-" + type.name());
+    }
+
+    private ComboBox<TradeRouteStop> addStationBox() {
+        return getNodeFinder().lookup("#tradeRouteAddStation").queryComboBox();
+    }
+
     private int routeIndex(final String name) {
         final List<MenuItem> items = routeMenu().getItems();
         for (int i = 0; i < items.size(); i++) {
@@ -384,24 +566,6 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
         return node.localToScene(node.getBoundsInLocal());
     }
 
-    private ComboBox<Integer> stopBox() {
-        return getNodeFinder().lookup("#tradeRouteCargoStop").queryComboBox();
-    }
-
-    private ComboBox<TradeRouteStop> replacementBox() {
-        return getNodeFinder().lookup("#tradeRouteReplaceStop").queryComboBox();
-    }
-
-    @SuppressWarnings("unchecked")
-    private ListView<GoodsType> list(final String prefix) {
-        return getNodeFinder().lookup("#" + prefix + "List")
-                .queryAs(ListView.class);
-    }
-
-    private ComboBox<GoodsType> choice(final String prefix) {
-        return getNodeFinder().lookup("#" + prefix + "Choice").queryComboBox();
-    }
-
     private Unit carrier(final int unitId) {
         // A ship on the Atlantic is not on the map, so every unit is searched.
         return getModel().getColonyById(0).orElseThrow().getOwner()
@@ -409,6 +573,29 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 .findFirst().orElseThrow();
     }
 
+    private List<TradeRoute> storedRoutes(final String routeName) {
+        return getModel()
+                .getTradeRoutes(
+                        getModel().getColonyById(0).orElseThrow().getOwner())
+                .stream().filter(route -> route.getName().equals(routeName))
+                .collect(Collectors.toList());
+    }
+
+    /** Signs of the chosen stop's row, as the matrix shows them now. */
+    private List<GoodsType> rowGoods(final String sign) {
+        final List<GoodsType> goods = new ArrayList<>();
+        for (final GoodsType type : TradeRouteStop.TRANSPORTABLE_GOODS) {
+            if (cell(chosenStop, type).getText().equals(sign)) {
+                goods.add(type);
+            }
+        }
+        return goods;
+    }
+
+    /**
+     * Tabs fill the width under the header; the header keeps Back at the right
+     * edge also in a narrow window.
+     */
     public void verifyWorkbenchLayout(final String screenshot)
             throws Exception {
         final javafx.stage.Stage stage = getContext().getPrimaryStage();
@@ -428,26 +615,16 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 stage.getScene().getRoot().applyCss();
                 stage.getScene().getRoot().layout();
             });
-            final Node stops = getNodeFinder().lookup("#tradeRouteStopsColumn")
-                    .query();
-            final javafx.scene.control.Label summary = (javafx.scene.control.Label) ((javafx.scene.layout.VBox) stops)
-                    .getChildren().get(1);
-            assertTrue(
-                    summary.getHeight() >= summary
-                            .prefHeight(summary.getWidth()) - 1,
-                    "The ordered stop summary must display its complete text");
-            final Node goods = getNodeFinder().lookup("#tradeRouteGoodsColumn")
-                    .query();
-            final Node carriers = getNodeFinder()
-                    .lookup("#tradeRouteCarriersColumn").query();
-            final Bounds left = stops.localToScene(stops.getBoundsInLocal());
-            final Bounds middle = goods.localToScene(goods.getBoundsInLocal());
-            final Bounds right = carriers
-                    .localToScene(carriers.getBoundsInLocal());
-            assertEquals(left.getMinY(), middle.getMinY(), 1);
-            assertEquals(left.getMinY(), right.getMinY(), 1);
-            assertTrue(left.getMaxX() <= middle.getMinX());
-            assertTrue(middle.getMaxX() <= right.getMinX());
+            final Bounds summary = sceneBounds(
+                    getNodeFinder().lookup("#tradeRouteCargoSummary").query());
+            final Bounds tabBounds = sceneBounds(tabs());
+            final Bounds actions = sceneBounds(
+                    getNodeFinder().lookup("#tradeRouteDraftActions").query());
+            assertTrue(summary.getMaxY() <= tabBounds.getMinY() + 1,
+                    "The route kind and stop count are above the tabs");
+            assertTrue(tabBounds.getMaxY() <= actions.getMinY() + 1,
+                    "Save and Cancel changes follow the tabs");
+            assertEquals(3, tabs().getTabs().size());
             captureDialog("tradeRouteCargoPage", screenshot);
             getRobot().interact(() -> stage.setWidth(900));
             WaitForAsyncUtils.waitForFxEvents();
@@ -486,7 +663,19 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 .isEmpty());
     }
 
-    /** @param expectedName route shown as chosen when the dialog opened */
+    /** @param expected tab titles, Stations, Carriers and Goods, in order */
+    public void verifyTabs(final String... expected) {
+        assertEquals(List.of(expected), tabs().getTabs().stream()
+                .map(Tab::getText).collect(Collectors.toList()));
+    }
+
+    /** @param expected title of the tab shown now */
+    public void verifySelectedTab(final String expected) {
+        assertEquals(expected,
+                tabs().getSelectionModel().getSelectedItem().getText());
+    }
+
+    /** @param expectedName route shown as chosen when the screen opened */
     public void verifyChosenRoute(final String expectedName) {
         assertEquals(expectedName, routeMenu().getText());
     }
@@ -497,7 +686,7 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
         assertEquals(expected, text.codePointCount(0, text.length()));
     }
 
-    /** @param expected type and stop count shown above the columns */
+    /** @param expected type and stop count shown above the tabs */
     public void verifyRouteSummary(final String expected) {
         assertEquals(expected,
                 getLabeledById("tradeRouteCargoSummary").getText());
@@ -515,8 +704,7 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
         final Node title = getNodeFinder().lookup("#tradeRouteCargoTitle")
                 .query();
         final MenuButton menu = routeMenu();
-        final javafx.scene.control.Button back = getButtonById(
-                "tradeRouteCargoClose");
+        final Button back = getButtonById("tradeRouteCargoClose");
         final Parent actions = getNodeFinder().lookup("#tradeRouteCargoActions")
                 .queryAs(Parent.class);
         assertEquals(List.of(menu, back), actions.getChildrenUnmodifiable(),
@@ -557,8 +745,7 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 "Route menu is lower than the colony menu: "
                         + menu.getHeight());
         verifyIcon(menu.getGraphic(), org.akropia.gui.image.ButtonIcon.TRADE);
-        final javafx.scene.control.Button back = getButtonById(
-                "tradeRouteCargoClose");
+        final Button back = getButtonById("tradeRouteCargoClose");
         assertEquals(expectedBackText, back.getText());
         assertTrue(back.isCancelButton());
         assertTrue(back.getStyleClass().contains("toolbar-action"));
@@ -579,15 +766,68 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 .map(MenuItem::getText).collect(Collectors.toList()));
     }
 
-    /** @param expected stop entries offered for the chosen route, in order */
+    /** @param expected numbered station rows of the draft, in order */
     public void verifyStopChoices(final String... expected) {
-        final ComboBox<Integer> combo = stopBox();
-        assertEquals(List.of(expected),
-                combo.getItems().stream().map(combo.getConverter()::toString)
-                        .collect(Collectors.toList()));
+        final Pane rows = getNodeFinder().lookup("#tradeRouteStationRows")
+                .queryAs(Pane.class);
+        final List<String> shown = new ArrayList<>();
+        for (int i = 0; i < rows.getChildren().size(); i++) {
+            getNodeFinder().lookup("#tradeRouteStationName-" + i).tryQuery()
+                    .ifPresent(node -> shown.add(((Label) node).getText()));
+        }
+        assertEquals(List.of(expected), shown);
     }
 
-    /** The route menu takes the keyboard focus when the dialog opens. */
+    /** @param expected numbered stop rows of the goods matrix, in order */
+    public void verifyGoodsRows(final String... expected) {
+        final List<String> shown = new ArrayList<>();
+        for (int i = 0; getNodeFinder().lookup("#tradeRouteGoodsStop-" + i)
+                .tryQuery().isPresent(); i++) {
+            shown.add(getLabeledById("tradeRouteGoodsStop-" + i).getText());
+        }
+        assertEquals(List.of(expected), shown);
+    }
+
+    /**
+     * Column headers show only icons, in the fixed colony goods order, and name
+     * each goods for assistive technology.
+     */
+    public void verifyGoodsColumns(final List<GoodsType> expectedOrder,
+            final List<String> expectedNames) {
+        final List<GoodsType> shown = new ArrayList<>();
+        final List<String> names = new ArrayList<>();
+        for (final GoodsType type : GoodsType.GOOD_TYPES) {
+            getNodeFinder().lookup("#tradeRouteGoodsHeader-" + type.name())
+                    .tryQuery().ifPresent(node -> {
+                        final Label header = (Label) node;
+                        assertEquals("", header.getText());
+                        assertNotNull(header.getGraphic());
+                        shown.add(type);
+                        names.add(header.getAccessibleText());
+                    });
+        }
+        assertEquals(expectedOrder, shown);
+        assertEquals(expectedNames, names);
+    }
+
+    /**
+     * @param expectedSign       {@code +}, {@code −} or empty
+     * @param expectedAccessible the text assistive technology reads
+     */
+    public void verifyCell(final int stop, final GoodsType type,
+            final String expectedSign, final String expectedAccessible) {
+        final Button cell = cell(stop, type);
+        assertEquals(expectedSign, cell.getText());
+        assertEquals(expectedAccessible, cell.getAccessibleText());
+    }
+
+    /** @param expected the cell with keyboard focus */
+    public void verifyCellFocused(final int stop, final GoodsType type) {
+        assertSame(cell(stop, type),
+                getPrimaryStage().getScene().getFocusOwner());
+    }
+
+    /** The route menu takes the keyboard focus when the screen opens. */
     public void verifyRouteMenuFocused() {
         assertSame(routeMenu(), getPrimaryStage().getScene().getFocusOwner());
     }
@@ -597,26 +837,27 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 getLabeledById("tradeRouteCargoTitle").getText());
     }
 
+    /** @param expected goods the chosen stop unloads, in fixed goods order */
     public void verifyUnloadOrder(final GoodsType... expected) {
-        assertEquals(List.of(expected), list(UNLOAD).getItems());
+        assertEquals(List.of(expected), rowGoods("−"));
     }
 
+    /** @param expected goods the chosen stop loads, in fixed goods order */
     public void verifyLoadOrder(final GoodsType... expected) {
-        assertEquals(List.of(expected), list(LOAD).getItems());
+        assertEquals(List.of(expected), rowGoods("+"));
     }
 
-    public void verifyUnloadAddEnabled(final boolean expected) {
-        assertEquals(expected, !getButtonById(UNLOAD + "Add").isDisabled());
-    }
-
-    public void verifyLoadAddEnabled(final boolean expected) {
-        assertEquals(expected, !getButtonById(LOAD + "Add").isDisabled());
-    }
-
-    /** A goods already in the list is no longer offered, so no duplicate. */
-    public void verifyUnloadChoiceOffers(final GoodsType type,
-            final boolean expected) {
-        assertEquals(expected, choice(UNLOAD).getItems().contains(type));
+    /** @param expectedWait whether the route waits at every stop */
+    public void verifyModeChoice(final boolean expectedWait,
+            final String expectedTouchText, final String expectedWaitText) {
+        final RadioButton touch = getNodeFinder().lookup("#tradeRouteModeTouch")
+                .queryAs(RadioButton.class);
+        final RadioButton wait = getNodeFinder().lookup("#tradeRouteModeWait")
+                .queryAs(RadioButton.class);
+        assertEquals(expectedWait, wait.isSelected());
+        assertEquals(!expectedWait, touch.isSelected());
+        assertEquals(expectedTouchText, touch.getText());
+        assertEquals(expectedWaitText, wait.getText());
     }
 
     public void verifySaveEnabled(final boolean expected) {
@@ -645,19 +886,256 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 getLabeledById("tradeRouteCargoResult").getText());
     }
 
+    /** @param expected the model's refusal of the draft, or a pending note */
+    public void verifyStationStatus(final String expected) {
+        assertEquals(expected,
+                getLabeledById("tradeRouteStationStatus").getText());
+    }
+
+    /** Which row actions a station offers, so the order stays legal. */
+    public void verifyStationButtons(final int index, final boolean expectedUp,
+            final boolean expectedDown, final boolean expectedRemove) {
+        assertEquals(expectedUp,
+                !getButtonById("tradeRouteStationUp-" + index).isDisabled());
+        assertEquals(expectedDown,
+                !getButtonById("tradeRouteStationDown-" + index).isDisabled());
+        assertEquals(expectedRemove,
+                !getButtonById("tradeRouteStationRemove-" + index)
+                        .isDisabled());
+    }
+
+    /** @param expected the destinations Add offers, in order */
+    public void verifyAddStationOffers(final String... expected) {
+        final ComboBox<TradeRouteStop> combo = addStationBox();
+        assertEquals(List.of(expected),
+                combo.getItems().stream().map(combo.getConverter()::toString)
+                        .collect(Collectors.toList()));
+    }
+
+    /**
+     * One carrier row: type and ID, the stop it heads to or stands at, and its
+     * state with the reason it waits.
+     */
+    public void verifyCarrierRow(final int unitId, final String expectedName,
+            final String expectedDestination, final String expectedState) {
+        assertEquals(expectedName,
+                getLabeledById("tradeRouteCarrierName-" + unitId).getText());
+        assertEquals(expectedDestination,
+                getLabeledById("tradeRouteCarrierDestination-" + unitId)
+                        .getText());
+        assertEquals(expectedState,
+                getLabeledById("tradeRouteCarrierState-" + unitId).getText());
+    }
+
+    /** @param expected unit IDs of the carrier rows, in order */
+    public void verifyCarrierRows(final Integer... expected) {
+        final Pane rows = getNodeFinder().lookup("#tradeRouteCarrierRows")
+                .queryAs(Pane.class);
+        assertEquals(List.of(expected),
+                rows.getChildren().stream().map(Node::getId)
+                        .filter(id -> id != null
+                                && id.startsWith("tradeRouteCarrierRow-"))
+                        .map(id -> Integer.valueOf(
+                                id.substring("tradeRouteCarrierRow-".length())))
+                        .collect(Collectors.toList()));
+    }
+
+    /** @param expected the sentence shown when no carrier follows the route */
+    public void verifyNoCarrierRow(final String expected) {
+        assertEquals(expected,
+                getLabeledById("tradeRouteCarrierNone").getText());
+    }
+
+    /**
+     * One hold of a carrier row: its shown amount and the name read by
+     * assistive technology.
+     */
+    public void verifyCarrierSlot(final int unitId, final int slot,
+            final String expectedText, final String expectedAccessible) {
+        final Label box = (Label) getLabeledById(
+                "tradeRouteCarrierSlot-" + unitId + "-" + slot);
+        assertEquals(expectedText, box.getText());
+        assertEquals(expectedAccessible, box.getAccessibleText());
+    }
+
+    /** @param expected carriers the open Add carrier list offers, in order */
+    public void verifyAddCarrierOffers(final String... expected) {
+        assertEquals(List.of(expected), addCarrierMenu().getItems().stream()
+                .map(MenuItem::getText).collect(Collectors.toList()));
+    }
+
+    /** @param name carrier type and ID as the open Add carrier list shows */
+    public void verifyAddCarrierOffered(final String name,
+            final boolean expected) {
+        assertEquals(expected, addCarrierMenu().getItems().stream().anyMatch(
+                item -> item.getText().equals(name) && !item.isDisable()));
+    }
+
+    public void verifyCarrierRemoveText(final int unitId,
+            final String expected) {
+        assertEquals(expected,
+                getButtonById("tradeRouteCarrierRemove-" + unitId).getText());
+    }
+
+    public void verifyAddCarrierText(final String expected) {
+        assertEquals(expected, addCarrierMenu().getText());
+    }
+
+    /** @param expected the status bar of the route screen, as shown now */
+    public void verifyStatusBar(final String expected) {
+        final Parent page = getNodeFinder().lookup("#tradeRouteCargoPage")
+                .queryAs(Parent.class);
+        final Label label = (Label) page.lookup("#"
+                + org.akropia.gui.screen.game.components.StatusBarView.STATUS_BAR_LABEL_ID);
+        assertEquals(expected, label.getText());
+    }
+
+    /**
+     * Every column of the goods matrix and the mode choice are inside the
+     * window width, so no cell needs horizontal scrolling.
+     */
+    public void verifyGoodsMatrixFits() {
+        layout();
+        final double width = getPrimaryStage().getScene().getWidth();
+        for (final GoodsType type : TradeRouteStop.TRANSPORTABLE_GOODS) {
+            final Bounds header = sceneBounds(getNodeFinder()
+                    .lookup("#tradeRouteGoodsHeader-" + type.name()).query());
+            assertTrue(header.getMinX() >= 0 && header.getMaxX() <= width,
+                    "Goods column outside the window: " + type + " " + header);
+        }
+        final Bounds wait = sceneBounds(
+                getNodeFinder().lookup("#tradeRouteModeWait").query());
+        assertTrue(wait.getMaxX() <= width, "Mode choice cut: " + wait);
+    }
+
+    /**
+     * The carrier row shows Remove and every hold inside the window width.
+     *
+     * @param expectedHolds number of hold boxes the carrier shows
+     */
+    public void verifyCarrierRowFits(final int unitId,
+            final int expectedHolds) {
+        layout();
+        final double width = getPrimaryStage().getScene().getWidth();
+        final Pane cargo = getNodeFinder()
+                .lookup("#tradeRouteCarrierCargo-" + unitId)
+                .queryAs(Pane.class);
+        assertEquals(expectedHolds, cargo.getChildren().size());
+        for (final Node box : cargo.getChildren()) {
+            assertTrue(sceneBounds(box).getMaxX() <= width,
+                    "Hold outside the window: " + sceneBounds(box));
+        }
+        final Bounds remove = sceneBounds(
+                getButtonById("tradeRouteCarrierRemove-" + unitId));
+        assertTrue(remove.getMinX() >= 0 && remove.getMaxX() <= width,
+                "Remove outside the window: " + remove);
+    }
+
+    /** Up, Down and Remove of a station row are inside the window width. */
+    public void verifyStationRowFits(final int index) {
+        layout();
+        final double width = getPrimaryStage().getScene().getWidth();
+        for (final String action : List.of("Up", "Down", "Remove")) {
+            final Bounds button = sceneBounds(
+                    getButtonById("tradeRouteStation" + action + "-" + index));
+            assertTrue(button.getMinX() >= 0 && button.getMaxX() <= width,
+                    action + " outside the window: " + button);
+        }
+    }
+
+    private void layout() {
+        getRobot().interact(() -> {
+            getPrimaryStage().getScene().getRoot().applyCss();
+            getPrimaryStage().getScene().getRoot().layout();
+        });
+    }
+
+    private Integer rememberedGold;
+    private String rememberedCargo;
+
+    /** Keeps the treasury and the carrier's holds for a later comparison. */
+    public void rememberGoldAndCargo(final int unitId) {
+        rememberedGold = getModel().getColonyById(0).orElseThrow().getOwner()
+                .getGold();
+        rememberedCargo = cargoText(unitId);
+    }
+
+    private String cargoText(final int unitId) {
+        return ((org.akropia.model.unit.UnitWithCargo) carrier(unitId))
+                .getCargo().getSlots().stream()
+                .map(slot -> slot.getGoods().map(Goods::toString)
+                        .orElse(slot.getUnit().isPresent() ? "unit" : "-"))
+                .collect(Collectors.joining(","));
+    }
+
+    /** Nothing was sold or bought again since the remembered state. */
+    public void verifyGoldAndCargoUnchanged(final int unitId) {
+        assertNotNull(rememberedGold, "Nothing was remembered");
+        assertEquals(rememberedGold.intValue(),
+                getModel().getColonyById(0).orElseThrow().getOwner().getGold());
+        assertEquals(rememberedCargo, cargoText(unitId));
+    }
+
+    /** The treasury holds more than when it was remembered. */
+    public void verifyGoldIncreased() {
+        assertNotNull(rememberedGold, "Nothing was remembered");
+        assertTrue(getModel().getColonyById(0).orElseThrow().getOwner()
+                .getGold() > rememberedGold);
+    }
+
+    /**
+     * The hold contains some, but not a full hold, of the goods.
+     */
+    public void verifyHoldPartlyFilled(final int unitId, final int slotIndex,
+            final GoodsType expectedType) {
+        final org.akropia.model.CargoSlot slot = ((org.akropia.model.unit.UnitWithCargo) carrier(
+                unitId)).getCargo().getSlotByIndex(slotIndex);
+        final Goods goods = slot.getGoods().orElseThrow();
+        assertEquals(expectedType, goods.getType());
+        assertTrue(goods.getAmount() > 0 && slot.getAvailableCapacity() > 0,
+                "Not a partly filled hold: " + goods);
+    }
+
+    /** The treasury cannot pay for even one more unit of the goods. */
+    public void verifyGoldBelowPriceOf(final GoodsType expectedType) {
+        final org.akropia.model.Player owner = getModel().getColonyById(0)
+                .orElseThrow().getOwner();
+        assertTrue(owner.getGold() < owner
+                .quoteEuropeTrade(Goods.of(expectedType, 1), true).getTotal(),
+                "Gold " + owner.getGold() + " still buys " + expectedType);
+    }
+
     public void verifyStoredCargo(final String routeName, final int stopIndex,
             final List<GoodsType> expectedUnload,
             final List<GoodsType> expectedLoad) {
-        final List<TradeRoute> matching = getModel()
-                .getTradeRoutes(
-                        getModel().getColonyById(0).orElseThrow().getOwner())
-                .stream().filter(route -> route.getName().equals(routeName))
-                .collect(Collectors.toList());
+        final List<TradeRoute> matching = storedRoutes(routeName);
         assertEquals(1, matching.size());
+        final TradeRoute route = matching.get(0);
         assertEquals(expectedUnload,
-                matching.get(0).getStops().get(stopIndex).getUnloadGoods());
+                route.getStops().get(stopIndex).getUnloadGoods());
         assertEquals(expectedLoad,
-                matching.get(0).getStops().get(stopIndex).getLoadGoods());
+                route.getStops().get(stopIndex).getLoadGoods());
+    }
+
+    public void verifyStoredMode(final String routeName,
+            final TradeRouteMode expected) {
+        final List<TradeRoute> matching = storedRoutes(routeName);
+        assertEquals(1, matching.size());
+        assertEquals(expected, matching.get(0).getMode());
+    }
+
+    /** @param expected colony names or {@code Home port}, in order */
+    public void verifyStoredStops(final String routeName,
+            final String... expected) {
+        final List<TradeRoute> matching = storedRoutes(routeName);
+        assertEquals(1, matching.size());
+        assertEquals(List.of(expected),
+                matching.get(0).getStops().stream()
+                        .map(stop -> stop.isEurope() ? "Home port"
+                                : getModel().getColonyById(stop.getColonyId())
+                                        .map(colony -> colony.getName())
+                                        .orElse("lost " + stop.getColonyId()))
+                        .collect(Collectors.toList()));
     }
 
     public void verifyHold(final int unitId, final int slotIndex,
@@ -684,32 +1162,6 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 carrier(unitId).getProcessedTradeRouteVisit().isPresent());
     }
 
-    public void verifyAssignEnabled(final boolean expected) {
-        assertEquals(expected, !getButtonById("tradeRouteAssign").isDisabled());
-    }
-
-    /** @param expected the model's refusal text, or empty when accepted */
-    public void verifyAssignStatus(final String expected) {
-        assertEquals(expected,
-                getLabeledById("tradeRouteAssignStatus").getText());
-    }
-
-    /** @param expected the list of assigned carriers, one line per carrier */
-    public void verifyAssigned(final String... expected) {
-        expandSection("tradeRouteAssignedPane");
-        assertEquals(String.join("\n", expected),
-                getLabeledById("tradeRouteAssigned").getText());
-    }
-
-    public void verifyAssignmentHeading(final String expected) {
-        assertEquals(expected, getNodeFinder().lookup("#tradeRouteAssignedPane")
-                .queryAs(TitledPane.class).getText());
-    }
-
-    public void verifyAssignButtonText(final String expected) {
-        assertEquals(expected, getButtonById("tradeRouteAssign").getText());
-    }
-
     /**
      * Reads the saved assignment of a carrier: its route, the stop it heads to
      * and whether it waits.
@@ -733,22 +1185,6 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 getModel().getTradeRouteAssignment(carrier(unitId)).isEmpty());
     }
 
-    public void verifyReplaceEnabled(final boolean expected) {
-        assertEquals(expected,
-                !getButtonById("tradeRouteReplaceButton").isDisabled());
-    }
-
-    /** @param expected the model's refusal, or the carriers it will reach */
-    public void verifyReplaceStatus(final String expected) {
-        assertEquals(expected,
-                getLabeledById("tradeRouteReplaceStatus").getText());
-    }
-
-    public void verifyCancelAssignmentEnabled(final boolean expected) {
-        assertEquals(expected,
-                !getButtonById("tradeRouteCancelAssignment").isDisabled());
-    }
-
     public void verifyDeleteEnabled(final boolean expected) {
         assertEquals(expected, !getButtonById("tradeRouteDelete").isDisabled());
     }
@@ -762,36 +1198,6 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
     public void verifyDeleteInfo(final String expected) {
         assertEquals(expected,
                 getLabeledById("tradeRouteDeleteInfo").getText());
-    }
-
-    public void verifyCancelAssignmentButtonText(final String expected) {
-        assertEquals(expected,
-                getButtonById("tradeRouteCancelAssignment").getText());
-    }
-
-    public void verifyReplaceButtonText(final String expected) {
-        assertEquals(expected,
-                getButtonById("tradeRouteReplaceButton").getText());
-    }
-
-    /**
-     * @param expected the carriers offered for release, as the combo box shows
-     *                 them, wherever those carriers are
-     */
-    public void verifyAssignedChoices(final String... expected) {
-        final ComboBox<org.akropia.model.unit.UnitWithCargo> combo = getNodeFinder()
-                .lookup("#tradeRouteAssignedCarrier").queryComboBox();
-        assertEquals(List.of(expected),
-                combo.getItems().stream()
-                        .map(item -> combo.getConverter().toString(item))
-                        .collect(Collectors.toList()));
-    }
-
-    /** @param expected the name as shown, empty when nothing is picked */
-    public void verifyAssignedChoice(final String expected) {
-        final ComboBox<org.akropia.model.unit.UnitWithCargo> combo = getNodeFinder()
-                .lookup("#tradeRouteAssignedCarrier").queryComboBox();
-        assertEquals(expected, combo.getConverter().toString(combo.getValue()));
     }
 
     public void verifyRouteOffered(final String name, final boolean expected) {
@@ -896,6 +1302,13 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 "Dialog starts above the screen: " + window.getY());
         assertTrue(window.getY() + window.getHeight() <= screen.getMaxY() + 1,
                 "Dialog ends below the screen: " + window.getY());
+    }
+
+    /** The unit is no longer on the square it left. */
+    public void verifyUnitLeft(final int unitId, final Location left) {
+        final Unit unit = carrier(unitId);
+        assertFalse(unit.isAtPlaceLocation() && left.equals(unit.getLocation()),
+                "Unit is still at " + left);
     }
 
     public void verifyUnitAt(final int unitId, final Location expected) {

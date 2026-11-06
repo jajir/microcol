@@ -3,6 +3,7 @@ package org.akropia.model.store;
 import java.util.List;
 
 import org.akropia.model.TradeRouteKind;
+import org.akropia.model.TradeRouteMode;
 
 /**
  * Saved named trade route. Owner is stored by player name; the model validates
@@ -16,6 +17,15 @@ public final class TradeRoutePo {
     private TradeRouteKind kind;
     private Integer startColonyId;
     private List<TradeRouteStopPo> stops;
+    private TradeRouteMode mode;
+
+    public TradeRouteMode getMode() {
+        return mode;
+    }
+
+    public void setMode(final TradeRouteMode mode) {
+        this.mode = mode;
+    }
 
     public Integer getId() {
         return id;
