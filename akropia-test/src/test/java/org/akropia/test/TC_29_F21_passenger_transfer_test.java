@@ -33,32 +33,32 @@ public class TC_29_F21_passenger_transfer_test extends AbstractAkropiaTest {
     @Test
     @Tag("local")
     void TC_01_select_passengers_cancel_and_continue() throws Exception {
-        // Open the landing choice; both passengers start unchecked.
+        // Open the landing choice; both passengers start checked.
         GamePage game = WelcomePage.of(getContext()).loadGame();
         PassengerTransferPage passengers = new PassengerTransferPage(
                 getContext());
         game.moveMouseAtLocation(WATER);
         game.dragMouseAtLocation(SHORE);
         passengers.verifyChoiceCount(2);
-        passengers.verifyChoice(4, false);
-        passengers.verifyChoice(5, false);
-        passengers.verifyConfirmEnabled(false);
+        passengers.verifyChoice(4, true);
+        passengers.verifyChoice(5, true);
+        passengers.verifyConfirmEnabled(true);
         passengers.verifyDialogText("Select passengers to disembark",
                 "Disembark selected", "Cancel");
         passengers.captureDialog("passenger-confirm",
                 "passenger-selection.png");
 
-        // Checking enables confirmation; clearing the last check disables it.
-        passengers.choose(4);
-        passengers.verifyChoice(4, true);
-        passengers.verifyConfirmEnabled(true);
-        passengers.verifyAboard(4, 1, 1, 80);
+        // Clearing every check disables confirmation; checking one enables it.
         passengers.choose(4);
         passengers.verifyChoice(4, false);
+        passengers.verifyConfirmEnabled(true);
+        passengers.verifyAboard(4, 1, 1, 80);
+        passengers.choose(5);
+        passengers.verifyChoice(5, false);
         passengers.verifyConfirmEnabled(false);
-
         // Cancel lands nobody even after a passenger was checked.
         passengers.choose(5);
+        passengers.verifyConfirmEnabled(true);
         passengers.cancel();
         passengers.verifyAboard(4, 1, 1, 80);
         passengers.verifyAboard(5, 2, 5, 0);
@@ -73,9 +73,9 @@ public class TC_29_F21_passenger_transfer_test extends AbstractAkropiaTest {
         passengers.verifyAboard(5, 2, 5, 0);
         game.moveMouseAtLocation(WATER);
         game.dragMouseAtLocation(SHORE);
-        passengers.verifyChoice(4, false);
-        passengers.verifyChoice(5, false);
-        passengers.choose(5);
+        passengers.verifyChoice(4, true);
+        passengers.verifyChoice(5, true);
+        passengers.choose(4);
         passengers.confirm();
         game.waitForNumberOfUnitsAt(SHORE, 1);
         passengers.verifyAshore(5, SHORE, 4, 0);
@@ -98,7 +98,7 @@ public class TC_29_F21_passenger_transfer_test extends AbstractAkropiaTest {
         // Land the equipped pioneer separately and retain tools after Continue.
         game.moveMouseAtLocation(WATER);
         game.dragMouseAtLocation(SHORE);
-        passengers.choose(4);
+        passengers.choose(5);
         passengers.confirm();
         game.waitForNumberOfUnitsAt(SHORE, 1);
         passengers.verifyAshore(4, SHORE, 0, 80);
@@ -128,8 +128,6 @@ public class TC_29_F21_passenger_transfer_test extends AbstractAkropiaTest {
                 getContext());
         game.moveMouseAtLocation(WATER);
         game.dragMouseAtLocation(SHORE);
-        passengers.choose(4);
-        passengers.choose(5);
         WaitForAsyncUtils.asyncFx(
                 () -> getModel().getUnitById(1000).placeToLocation(SHORE))
                 .get();
@@ -344,14 +342,13 @@ public class TC_29_F21_passenger_transfer_test extends AbstractAkropiaTest {
         game.moveMouseAtLocation(WATER);
         game.dragMouseAtLocation(SHORE);
         passengers.verifyChoiceCount(3);
-        passengers.verifyChoice(4, false);
-        passengers.verifyChoice(5, false);
-        passengers.verifyChoice(6, false);
-        passengers.verifyConfirmEnabled(false);
+        passengers.verifyChoice(4, true);
+        passengers.verifyChoice(5, true);
+        passengers.verifyChoice(6, true);
+        passengers.verifyConfirmEnabled(true);
 
-        // Check the first and third with Tab and Space, then confirm.
-        passengers.chooseWithKeyboard(4);
-        passengers.chooseWithKeyboard(6);
+        // Uncheck the second with Tab and Space, then confirm.
+        passengers.chooseWithKeyboard(5);
         passengers.verifyChoice(4, true);
         passengers.verifyChoice(5, false);
         passengers.verifyChoice(6, true);
@@ -391,13 +388,13 @@ public class TC_29_F21_passenger_transfer_test extends AbstractAkropiaTest {
         game.dragMouseAtLocation(SHORE);
         passengers.verifyDialogText("Vyberte pasažéry k vylodění",
                 "Vylodit vybrané", "Zrušit");
-        passengers.verifyConfirmEnabled(false);
+        passengers.verifyChoice(4, true);
+        passengers.verifyChoice(5, true);
+        passengers.verifyConfirmEnabled(true);
         passengers.captureDialog("passenger-confirm",
                 "passenger-selection-cs.png");
 
-        // Checking everyone lands both and keeps the goods hold.
-        passengers.choose(4);
-        passengers.choose(5);
+        // Confirming the default selection lands both and keeps the goods hold.
         passengers.confirm();
         game.waitForNumberOfUnitsAt(SHORE, 2);
         passengers.verifyAshore(4, SHORE, 0, 80);

@@ -79,7 +79,7 @@ public class TC_01_F01_embark_disembark_test extends AbstractAkropiaTest {
         // Select and confirm the first passenger of two.
         PassengerTransferPage passengers = new PassengerTransferPage(
                 getContext());
-        passengers.choose(24);
+        passengers.chooseOnly(24);
         passengers.confirm();
         gamePage.waitForNumberOfUnitsAt(SHORE_LAND_LOCATION, 1);
 

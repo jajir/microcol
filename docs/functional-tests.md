@@ -1,3 +1,46 @@
+## R-0423 passenger default selection — 2026-11-06
+
+1. [R-0423](requirements/done/R-0423.md) changes the landing chooser to select all
+   eligible passengers on every opening. The existing model still owns
+   eligibility and confirmation validation. TC29 retains cancellation,
+   Escape, partial landing, empty selection, keyboard, Czech text, stale-target
+   rejection and Continue checks; TC29/08 now confirms all default choices.
+   TC01, TC24/12 and expedition page callers explicitly keep only their intended
+   passenger selected, preserving their existing gameplay expectations.
+2. Model preparation `20261106T104705Z-0096e25b986b` (PID 78575) timed out
+   before tests started: Docker container discovery exceeded 20 seconds.
+   Docker Desktop's host log records VM wake-up around 10:47 UTC and readiness
+   at 10:47:36; a subsequent server-version probe passed. This failed attempt
+   remains failed; diagnostic excerpts are in `target/r0423/docker-wake.log`.
+3. Model retry `20261106T104817Z-0e95abd76096` (PID 78864, timeout 600 seconds)
+   passed **5,046 model/JUnit checks in 383 XML reports**, zero failures,
+   errors or skips, in **146.321 seconds**. Reports are in
+   `target/verification/run-sxix5644/`; all six changed Java files match its
+   source snapshot, based on `b71c83a3`.
+4. Shared Eclipse formatter checked six changed Java files with identical code
+   tokens and idempotent output. Fourteen documentation consistency tests and
+   the naming audit passed. Initial strict MkDocs rejected an incorrect new
+   heading fragment; the repaired link passed strict build. Final documentation
+   acceptance passed 14 consistency checks, the naming audit and strict MkDocs
+   (`target/r0423/final-*.log`). Remote CI and
+   publication verification are outside this task.
+5. Targeted Docker/Xvfb run `20261106T105110Z-26cf4d0835e6` (PID 79231,
+   timeout 1,800 seconds) selects all TC01, TC29 and TC101 methods,
+   TC24/12, TC198/01 and `PageVerificationContractTest`. All **20 checks**
+   passed in six complete XML reports, zero failures/errors/skips, in
+   **1,232.035 seconds**. Reports: `target/docker-ui/run-aKcpqN/`.
+   The Czech dialog screenshot confirms both passengers initially checked and
+   readable labels/action; actual UI scenarios verify the landing outcomes.
+6. Final smoke dispatched as `20261106T111217Z-022231dc67a7` (PID 79708,
+   outer timeout 480 seconds, unchanged 420-second acceptance budget).
+   All six changed Java sources still match the passing model snapshot.
+   Smoke passed **21 checks in 12 complete XML reports**, zero failures,
+   errors or skips, in **221.068 seconds** including preparation and cleanup,
+   within the 420-second budget. Reports: `target/verification/run-jxzjcjmv/`.
+   All six changed Java files match that source snapshot; retained hashes and
+   counts are in `target/r0423/acceptance.json`. Local acceptance is complete;
+   no full regression, remote CI or new distribution is claimed.
+
 ## R-0422 trade-route header — 2026-11-06
 
 1. Integration allocation note: this isolated task initially used provisional R-0421. Concurrent main-checkout work allocated R-0421 to the full editor proposal before integration; the header is recorded as R-0422. Original worker/completion directories retain their identifiers. The separate proposal, committed concurrently as `986bb951`, and unrelated working-tree changes are preserved. That intervening commit changes documentation only; the executable source still matches all accepted snapshots.

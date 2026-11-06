@@ -164,7 +164,7 @@ public final class ExpeditionLoopPage extends AbstractScreen {
         game.dragMouseAtLocation(land);
         final PassengerTransferPage passengers = new PassengerTransferPage(
                 getContext());
-        passengers.choose(passengerId);
+        passengers.chooseOnly(passengerId);
         passengers.confirm();
         game.waitForNumberOfUnitsAt(land, expectedUnitsAtLand);
     }

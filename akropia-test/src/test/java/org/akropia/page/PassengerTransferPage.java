@@ -36,6 +36,23 @@ public final class PassengerTransferPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    /** Leaves only the requested passenger checked using ordinary controls. */
+    public void chooseOnly(int unitId) {
+        for (Node node : getNodeFinder()
+                .lookup(candidate -> candidate instanceof CheckBox
+                        && candidate.getId() != null
+                        && candidate.getId().startsWith("passenger-choice-"))
+                .queryAll()) {
+            CheckBox choice = (CheckBox) node;
+            boolean selected = choice.getId()
+                    .equals("passenger-choice-" + unitId);
+            if (choice.isSelected() != selected) {
+                getRobot().clickOn(choice);
+                WaitForAsyncUtils.waitForFxEvents();
+            }
+        }
+    }
+
     /** Toggles the passenger's check box with Tab and Space. */
     public void chooseWithKeyboard(int unitId) {
         pressWithKeyboard(getNodeFinder().lookup("#passenger-choice-" + unitId)

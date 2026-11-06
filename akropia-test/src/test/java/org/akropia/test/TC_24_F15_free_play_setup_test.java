@@ -371,7 +371,7 @@ public class TC_24_F15_free_play_setup_test extends AbstractAkropiaTest {
         game.dragMouseAtLocation(land);
         org.akropia.page.PassengerTransferPage passengers = new org.akropia.page.PassengerTransferPage(
                 getContext());
-        passengers.choose(0);
+        passengers.chooseOnly(0);
         passengers.confirm();
         game.waitForNumberOfUnitsAt(land, 1);
 

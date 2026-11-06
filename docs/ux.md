@@ -53,7 +53,9 @@
 ## Vylodění pasažérů — R-0379
 
 1. Implementováno a lokálně přijato 31. října 2026: při vylodění z lodi na vybrané sousední pole rozhoduje počet pasažérů způsobilých vystoupit právě tam, nikoli celkový počet lidí na palubě. Jediný způsobilý pasažér vystoupí přímo bez dialogu; při více způsobilých se otevře výběr. Rozsah a příklady vlastní [R-0379](requirements/done/R-0379.md).
-2. Výběr používá checkboxy, při každém otevření všechny nezaškrtnuté. Hráč může označit jednoho, několik nebo všechny pasažéry. Nadpis „Vyberte pasažéry k vylodění“ mluví o více pasažérech a tlačítko „Vylodit vybrané“ je neaktivní, dokud není někdo označený. Potvrzení vylodí pouze označené; Zrušit a Escape nevylodí nikoho. Ovládání zůstává dostupné klávesnicí (Tab a mezerník).
+2. Výběr používá checkboxy, při každém otevření všechny zaškrtnuté podle
+   [R-0423](requirements/done/R-0423.md), dohodnuto 2026-11-06. Hráč může
+   odškrtnout libovolné pasažéry. Nadpis „Vyberte pasažéry k vylodění“ mluví o více pasažérech a tlačítko „Vylodit vybrané“ je neaktivní, dokud není někdo označený. Potvrzení vylodí pouze označené; Zrušit a Escape nevylodí nikoho. Ovládání zůstává dostupné klávesnicí (Tab a mezerník).
 3. Přímé vylodění jediného pasažéra nemá dodatečný krok zrušení. Zachovávají se pravidla způsobilosti, pohybu a odmítnutí neplatného převodu; změna se netýká přístavního příjezdu ani jiných operací s nákladem. Historické [R-0022](requirements/done/R-0022.md) a jeho výsledky zůstávají záznamem původního chování.
 
 

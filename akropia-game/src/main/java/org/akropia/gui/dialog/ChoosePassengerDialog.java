@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  *
  * <p>
  * The dialog displays a caption describing the destination, an independent
- * check box for each eligible passenger, all unchecked on every opening, and a
+ * check box for each eligible passenger, all checked on every opening, and a
  * {@link ButtonsBarYesNo} for confirmation or cancellation. Confirmation is
  * disabled while nothing is checked. The dialog returns the checked passengers
  * after the user closes the window; cancel and Escape return none.
@@ -80,6 +80,7 @@ public final class ChoosePassengerDialog extends AbstractMessageWindow {
         final List<CheckBox> choices = new ArrayList<>();
         for (Unit unit : passengers) {
             CheckBox cb = new CheckBox();
+            cb.setSelected(true);
             cb.setUserData(unit);
             cb.setId("passenger-choice-" + unit.getId());
 
