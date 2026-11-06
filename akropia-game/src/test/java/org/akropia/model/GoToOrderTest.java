@@ -749,6 +749,45 @@ class GoToOrderTest {
                 TurnEventGoTo.Kind.ARRIVED_EUROPE));
     }
 
+    /**
+     * R-0424: a new Original World expedition, saved and loaded with the Dutch
+     * to move. Its galleon (unit 3) at (45, 15) has never seen the sea lane at
+     * x 48-50 but remembers the route it sailed from Europe.
+     */
+    @Test
+    void newExpeditionShipWithoutMovementTakesEuropeAndSailsNextTurn() {
+        final Model created = StartingArrivalRouteTest.newGame(
+                org.akropia.model.campaign.FreePlayMap.ORIGINAL,
+                EuropeanNation.DUTCH);
+        created.startGame();
+        final org.akropia.model.store.ModelPo saved = created.save();
+        saved.getGameManager().setCurrentPlayer("Dutch");
+        final Model model = Model.make(saved,
+                MissionImpl.getPredefinedGameOverEvaluators());
+        final Ship ship = (Ship) model.getUnitById(3);
+        final Location start = Location.of(45, 15);
+        assertEquals(start, ship.getLocation());
+        ship.setMovementThirds(0);
+        assertTrue(model.canIssueGoToEurope(ship));
+        model.issueGoToEurope(ship);
+        // Without movement the order waits on the square.
+        assertEquals(start, ship.getLocation());
+        assertTrue(model.isGoToEurope(ship));
+        // The next owner turn follows the remembered route and departs.
+        ship.setMovementThirds(
+                ship.getType().getSpeed() * MovementPoints.THIRDS_PER_POINT);
+        ((AbstractUnit) ship).advanceGoTo();
+        assertTrue(ship.isAtHighSea());
+        assertTrue(model.isGoToEurope(ship));
+        for (int turn = 0; turn < 12 && ship.isAtHighSea(); turn++) {
+            ship.advanceVoyage();
+        }
+        assertTrue(ship.isAtEuropePort());
+        assertFalse(model.isGoToEurope(ship));
+        assertEquals(1,
+                notices(model, ship, TurnEventGoTo.Kind.ARRIVED_EUROPE));
+    }
+
     // ---- Ships
     // -----------------------------------------------------------------
 

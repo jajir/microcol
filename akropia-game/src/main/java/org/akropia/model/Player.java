@@ -511,6 +511,20 @@ public abstract class Player {
         visibility.reveal(area);
     }
 
+    /**
+     * Remember the squares of the sea route the player's expedition sailed from
+     * Europe (R-0424). Only the accumulated exploration grows: present sight,
+     * foreign units and colonies are not granted.
+     *
+     * @param route required valid map squares
+     */
+    void rememberArrivalRoute(final List<Location> route) {
+        Preconditions.checkNotNull(route);
+        Preconditions.checkArgument(route.stream().allMatch(model::isValid),
+                "Arrival route leaves the map");
+        visibility.reveal(route);
+    }
+
     /** Colony tile and its eight neighbors, clipped to the map. */
     private List<Location> colonyArea(final Colony colony) {
         final List<Location> around = new java.util.ArrayList<>(

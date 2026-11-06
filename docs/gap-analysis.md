@@ -1496,8 +1496,14 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
    supplies present sight over its own tile and all eight neighboring tiles
    even when every resident is inside and no unit stands on the map. Colony
    sight belongs to its current owner; explored terrain remains remembered
-   after that sight is lost. Reveal only
-   the initial expedition's surroundings. Retain explored terrain; current
+   after that sight is lost. Reveal the initial expedition's surroundings.
+   User decision (2026-11-06; [R-0424](requirements/done/R-0424.md)): a new free-play
+   expedition also remembers its continuous legal sea arrival route from the
+   eastern European departure area to its starting ship, so G can offer the
+   return immediately. Reveal only this route as remembered terrain, without
+   extending current sight or exposing foreign units or live colony information.
+   Apply this during new-game creation, never by repairing a loaded save;
+   automatic travel still requires explored terrain. Retain explored terrain; current
    foreign units are visible only within present sight, no hidden updates to
    remembered intelligence. Remember a discovered colony location and last-seen
    owner/date, labeled stale outside sight; do not retain actionable ghost units

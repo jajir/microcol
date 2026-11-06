@@ -1347,3 +1347,7 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 1. UC-029/030: tři záložky nahrazují souběžné sloupce; platí [dohodnutý kontrakt](gap-analysis.md#route-editor-2026-11-06) bez limitů čtyř stanic a šesti druhů. Pořadí ikon určuje vykládání i nakládání, jeden režim čekání platí pro celou trasu. Domovský přístav používá stejnou matici pro nákup a prodej.
 2. TC116–119 a TC205 ověřují vytvoření, editaci, přiřazení, změny za jízdy a pokračování po uložení. TC206 přidává pět různých stanic a pořadí matice; TC207 nákup/prodej a čekání na peníze; TC208 plný sklad, uvolnění místa běžným ovládáním a následný odjezd. Modelové TradeRoute testy ověřují kapacitu, čekání, pořadí, validaci a neopakování převodů.
 3. UC-116: TC185 zachovává ověření propojené výrobní sítě s novým ovládáním. Skutečné počty, výběry, snímky a stav místní přejímky jsou v [jediné funkční evidenci](functional-tests.md#r-0421-tabbed-trade-route-editor-2026-11-06).
+
+### R-0424 home-port arrival route (2026-11-06)
+
+1. UC-013/016: TC_103 TC_09 covers sending a new expedition home through G after spending all movement, waiting until the next turn, departure and arrival. `StartingArrivalRouteTest` and `GoToOrderTest` cover remembered terrain, current-sight limits, all free-play map families and unchanged save loading. TC_101 and TC_122 preserve the surrounding new-game journeys. Detailed results and the current acceptance boundary are in [functional evidence](functional-tests.md#r-0424-home-port-arrival-route-2026-11-06); this does not close unrelated UC variants.

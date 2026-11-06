@@ -18,7 +18,8 @@ import javafx.stage.Stage;
  * reason, and Save/Continue in the middle of a journey. The colonist walks
  * along row 15 between the east end (24, 15) next to New Amsterdam and the west
  * end (20, 15); the fixture prepares the squares and the colonist before
- * loading.
+ * loading. A new Original World expedition sends its galleon to Europe over the
+ * remembered arrival route (R-0424).
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
@@ -346,5 +347,46 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         goTo.openDestinationWithG();
         goTo.verifyEuropeOffered();
         goTo.cancelPickWithEscape();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_09_new_expedition_without_movement_returns_to_europe()
+            throws Exception {
+        // A new Original World game: the galleon at (45, 15) has not seen the
+        // sea lane at x 48-50 but remembers the route it sailed from Europe.
+        final FreePlaySetupPage setup = WelcomePage.of(getContext())
+                .openFreePlaySetup();
+        setup.selectMap(0);
+        final GamePage game = setup.start();
+        final GoToPage goTo = new GoToPage(getContext());
+        final Location start = Location.of(45, 15);
+        final Location west = Location.of(39, 15);
+        // The player sails six squares west and has no movement left.
+        game.panToTile(start);
+        game.selectTile(start);
+        game.panToTile(west);
+        game.moveMouseAtLocation(start);
+        game.dragMouseAtLocation(west);
+        goTo.verifyLocation(3, west);
+        goTo.verifyMovement(3, 0);
+        // G still offers Europe; the confirmed order waits on the square.
+        game.selectTile(west);
+        goTo.openDestinationWithG();
+        goTo.verifyEuropeOffered();
+        goTo.chooseEurope();
+        goTo.confirmColonyChoice();
+        goTo.verifyEuropeOrderWaiting(3, west);
+        // Two owner turns follow the remembered route onto the high sea.
+        game.nextTurnAndCloseDialogs();
+        game.nextTurnAndCloseDialogs();
+        goTo.waitForHighSea(3);
+        goTo.verifyEuropeVoyage(3);
+        // The ordinary voyage ends in Europe and completes the order.
+        final int remainingTurns = goTo.remainingVoyageTurns(3);
+        for (int turn = 0; turn < remainingTurns; turn++) {
+            game.nextTurnAndCloseDialogs();
+        }
+        goTo.verifyArrivedInEurope(3);
     }
 }

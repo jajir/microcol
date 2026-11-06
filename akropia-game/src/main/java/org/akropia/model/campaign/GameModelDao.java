@@ -155,6 +155,9 @@ public final class GameModelDao {
     private GameModel finishFreePlay(final GameModelPo source,
             final String name, final EventBus eventBus) {
         final GameModel game = makeFromModelPo(source, eventBus);
+        // Only a new free-play game learns its sea route from Europe; loaded
+        // saves and campaign missions keep their exploration (R-0424).
+        game.getModel().rememberStartingArrivalRoutes();
         game.getModel().getPlayers().stream().filter(Player::isHuman)
                 .findFirst().orElseThrow().setDisplayName(name);
         return game;

@@ -3,6 +3,7 @@ package org.akropia.model;
 import java.util.ArrayList;
 import java.util.ArrayDeque;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -436,6 +437,50 @@ public class Model {
     private void assureDefaultVisibility() {
         unitStorage.getUnits().stream().filter(Unit::isAtPlaceLocation)
                 .forEach(unit -> unit.getOwner().revealMapForUnit(unit));
+    }
+
+    /**
+     * A new expedition remembers the sea route it sailed from Europe (R-0424):
+     * for every ship of a colonial nation on the map, the cheapest legal ship
+     * route to the nearest eastern sea-lane square that allows a departure.
+     * Only these squares become explored terrain of the ship's owner; present
+     * sight, foreign units and colonies stay as they are. Go-to orders still
+     * route over explored squares only. Every route is found before any is
+     * remembered, and a game that has started is rejected unchanged; a loaded
+     * game never calls it.
+     */
+    public void rememberStartingArrivalRoutes() {
+        Preconditions.checkState(!isGameStarted(),
+                "Arrival routes belong to a new game");
+        final Map<Player, List<Location>> routes = new LinkedHashMap<>();
+        unitStorage.getUnits().stream()
+                .filter(unit -> unit.isShip() && unit.isAtPlaceLocation()
+                        && unit.getOwner().isColonialNation())
+                .forEach(ship -> routes
+                        .computeIfAbsent(ship.getOwner(),
+                                owner -> new ArrayList<>())
+                        .addAll(findArrivalRoute((AbstractUnit) ship)));
+        routes.forEach(Player::rememberArrivalRoute);
+    }
+
+    /**
+     * Route over all terrain, by the shared finder and step rules, from the
+     * ship to the nearest eastern departure square, without the ship's own
+     * square. A ship already on such a square, or with none in reach, needs
+     * nothing.
+     */
+    private List<Location> findArrivalRoute(final AbstractUnit ship) {
+        final Predicate<Location> isEasternDeparture = at -> tradeRouteRules
+                .isDepartureSquare(at)
+                && getHighSea().getDepartureDirection(at) == Direction.east;
+        final Location start = ship.getLocation();
+        if (isEasternDeparture.test(start)) {
+            return List.of();
+        }
+        final List<Location> route = PathFinder
+                .cheapestOverall(ship, true, location -> true)
+                .findNearest(start, isEasternDeparture);
+        return route == null ? List.of() : route;
     }
 
     public static Model make(final ModelPo modelPo,

@@ -165,7 +165,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
 
     public void verifyGeneratedSetup(final String expectedPreview) {
         assertTrue(isCssIdVisible("freePlayGenerated"));
-        verifySelectedMap(4, "Generated new world");
+        verifySelectedMap(4, "Generated new coast");
         verifyNationSelection(EuropeanNation.DUTCH, true);
         assertEquals("Choose the nation you will play.",
                 getLabeledById("freePlayNationNote").getText());

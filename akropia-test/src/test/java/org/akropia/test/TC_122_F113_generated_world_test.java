@@ -135,7 +135,7 @@ public class TC_122_F113_generated_world_test extends AbstractAkropiaTest {
 
         // The choice, the preview and the seed error follow the language.
         WelcomePage.of(getContext()).openFreePlaySetup();
-        setup.verifySelectedMap(4, "Vygenerovaný nový svět");
+        setup.verifySelectedMap(4, "Vygenerované nové pobřeží");
         setup.verifyPreview(
                 "Náhled: mapa 50 × 30 polí, podnebí Mírné, pevnina 40 %, semínko 1.");
         setup.enterSeed("x");

@@ -81,6 +81,14 @@ public final class GoToPage extends AbstractScreen {
         assertTrue(getModel().isGoToEurope(getModel().getUnitById(id)));
     }
 
+    /** A Europe order that waits on its map square for movement. */
+    public void verifyEuropeOrderWaiting(final int id,
+            final Location location) {
+        final Unit unit = getModel().getUnitById(id);
+        assertEquals(location, unit.getLocation());
+        assertTrue(getModel().isGoToEurope(unit));
+    }
+
     public int remainingVoyageTurns(final int id) {
         return ((org.akropia.model.PlaceHighSea) getModel().getUnitById(id)
                 .getPlace()).getRemainigTurns();

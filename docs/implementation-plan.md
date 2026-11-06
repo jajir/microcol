@@ -329,7 +329,7 @@ jeho prostor je zejména technická příprava a zapojení podkladů.
 | P03 Tahy | Jedna fáze či přechod, ukládaný stav a testy pořadí. | Kalendář, pořadí událostí a rozhraní průchodu tahem. |
 | P04 Mapa | Terénní data, výnos/cena pole, generátorový krok a testy. | Model mapy, přijatá pravidla a reprodukovatelné příklady. |
 | P05 Jednotky | Jeden typ nebo změna výstroje, továrna, persistence a testy. | Rozlišení identity, odbornosti a výstroje, povolené přechody. |
-| P06 Rozkazy | Jednotlivý příkaz, cena kroku, přerušení a regresní testy. | Smlouva příkazu, hraniční pohyb a způsob ovládání. |
+| P06 Rozkazy | Jednotlivý příkaz, cena kroku, přerušení a regresní testy. | Smlouva příkazu, hraniční pohyb a způsob ovládání.  [R-0424](requirements/done/R-0424.md): známá příjezdová cesta nové výpravy. |
 | P07 Pionýři | Jeden druh práce, spotřeba nástrojů a testy dokončení. | Délka a přerušení práce, přesný okamžik účtování. |
 | P08 Náklad | Jedna transakce, kontrola kapacity, dílčí dialog a testy. | Pravidla přenosu, zachování stavu při chybě a návrh dialogu. |
 | P09 Atlantik | Přechod plavby, návratové místo a testy načtení. | Doby cesty, směry a rozhraní stavu plavby. |

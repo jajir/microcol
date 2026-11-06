@@ -1,5 +1,8 @@
 # Mapy volné hry
 
+Nová výprava zná také svou příjezdovou námořní cestu z Evropy; vlastní loď proto může zadat návrat pomocí **G** i po vyčerpání pohybu. Jde o zapamatovaný terén, nikoli rozšířený dohled. Existující uložené hry se při načítání neupravují. Rozsah a stav přejímky vede [R-0424](requirements/done/R-0424.md).
+
+
 Čtyři pevné mapy v nabídce **New free game / Nová volná hra**, v pořadí nabídky.
 Náhledy z 26. října 2026 jsou vykreslené přímo z dat šablon: ukazují celý terén,
 řeky, lesy, ložiska, bonusy, pověsti a kolonie. Lodě a posádky závisejí na zvolené
@@ -54,7 +57,7 @@ Značky K ukazují kolonie obsažené v základní šabloně.
 
 ![Výpravy čtyř národů](graphics-assets/free-play-maps-2026-10-26/free-play.png)
 
-## Vygenerovaný nový svět
+## Vygenerované nové pobřeží
 
 Pátá volba vytváří mapu podle semínka, klimatu a množství pevniny, takže nemá
 jeden pevný obrázek. Její říční pravidlo popisuje
