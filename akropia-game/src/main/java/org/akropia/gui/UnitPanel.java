@@ -164,6 +164,18 @@ class UnitPanel {
                 + unit.getOwner().getDisplayName());
         labelOwner.getStyleClass().add("unitOwner");
         box.getChildren().add(labelOwner);
+        // The receiving colony of the own worker, beside its image instead of
+        // over the map (R-0420).
+        if (isUnitOwnedBy(unit, humanPlayer)) {
+            unit.getWorkingColony().ifPresent(colony -> {
+                final Label workingFor = new Label(
+                        i18n.get(Loc.workingFor, colony.getName()));
+                workingFor.setId("unitWorkingFor-" + unit.getId());
+                workingFor.setWrapText(true);
+                workingFor.setMinHeight(Region.USE_PREF_SIZE);
+                box.getChildren().add(workingFor);
+            });
+        }
         return box;
     }
 

@@ -395,31 +395,6 @@ public final class PaintService {
         painFlagWithAction(graphics, point.add(OWNERS_FLAG_POSITION), unit);
     }
 
-    /**
-     * Show the recipient for the selected outdoor worker without label
-     * collisions.
-     */
-    public void paintWorkerRecipient(final GraphicsContext graphics,
-            final Point point, final Unit unit) {
-        unit.getWorkingColony().ifPresent(colony -> {
-            final String label = i18n.get(org.akropia.gui.Loc.workingFor,
-                    colony.getName());
-            final javafx.scene.text.Text measure = new javafx.scene.text.Text(
-                    label);
-            measure.setFont(colonyFont);
-            final double width = measure.getLayoutBounds().getWidth();
-            graphics.setFill(Color.web("#FFF1CA"));
-            graphics.fillRect(point.getX() + 22 - width / 2 - 3,
-                    point.getY() + 42, width + 6,
-                    measure.getLayoutBounds().getHeight() + 4);
-            graphics.setFont(colonyFont);
-            graphics.setTextAlign(TextAlignment.CENTER);
-            graphics.setTextBaseline(VPos.TOP);
-            graphics.setFill(Color.BLACK);
-            graphics.fillText(label, point.getX() + 22, point.getY() + 43);
-        });
-    }
-
     public void paintUnitWithoutFlag(final GraphicsContext graphics,
             final Point point, final Unit unit) {
         paintUnitWithoutFlag(graphics, point, unit,

@@ -1,3 +1,16 @@
+## R-0420 worker recipient in right panel — 2026-11-06
+
+1. [R-0420](requirements/done/R-0420.md) removes the yellow map recipient label and displays localized receiving-colony text beside the own worker image in the right panel. Work badges, flags, map selection, status-bar description and gameplay remain unchanged. Claude completion `20261106T060828Z-0724404d4a2c` succeeded in 203.436 seconds; caller reviewed all changes and applied the shared formatter to seven Java files. Worker compiled modules without tests; acceptance is pending.
+2. Full model/JUnit dispatched as `20261106T061237Z-afc210ad50c8`, PID 49971, timeout600s. Targeted selection will cover TC201 (EN/CS, selection, cancellation), TC202 (fishing), TC204 (map selection/work), and PageVerificationContractTest; then smoke. Screenshots from TC201 will verify the map and panel. No remote CI or publication requested.
+
+3. Initial model dispatch `20261106T061237Z-afc210ad50c8` timed out during preparation: Docker managed-container query exceeded 20 seconds; no test command started (22.088 supervised seconds). Evidence retained. Follow-up read-only diagnostics succeeded: Docker Engine 29.8.2 responded in 0.64s and managed-container query in 0.02s with no containers. No restart or cleanup needed. Retry on unchanged source dispatched as `20261106T061342Z-f233f2495de2`, PID 50437, timeout600s.
+
+4. Model/JUnit retry passed **5,022 tests, 0 failures/errors/skips** in 381 complete XML reports, `target/verification/run-q25l36ix`, completion `20261106T061342Z-f233f2495de2`, 143.936 supervised seconds. All seven changed Java files match its retained snapshot. Targeted Docker selection from item2 dispatched as `20261106T061631Z-b9df2c9f5c52`, PID 50916, timeout1,200s.
+
+5. Targeted Docker passed **11 tests, 0 failures/errors/skips** in four complete XML reports, `target/docker-ui/run-Y6PCts`, completion `20261106T061631Z-b9df2c9f5c52`, 117.263 supervised seconds. EN/CS screenshots inspected: receiving-colony text wraps inside the right unit panel, with no yellow map label. Selection, cancellation/reassignment, fisherman and ordinary work journeys passed. Final smoke dispatched as `20261106T061857Z-75477ccc08c5`, PID 51270, supervisor timeout480s and phase budget420s.
+
+6. Final smoke passed **21 tests, 0 failures/errors/skips** in 12 complete XML reports, `target/verification/run-1jkwqdpm`, completion `20261106T061857Z-75477ccc08c5`: 219.301 phase seconds, 222.496 supervised seconds, within 420 seconds. Final formatter applied to seven Java files; all match the accepted smoke snapshot byte for byte. R-0420 archived as done; accepted totals: **5,022 model/JUnit, 11 targeted UI and 21 smoke/support tests**. Earlier preparation timeout remains recorded. No remote regression or distribution publication inspected.
+
 ## R-0419 minimap without focus frame — 2026-11-05
 
 1. [R-0419](requirements/done/R-0419.md) removes the outer focus rectangle at the user's explicit request, preserving the viewport marker, real focus, keyboard navigation and hover help. Claude implementation `20261105T141633Z-d9e59d420aa4` completed in 51.887 seconds; caller reviewed and formatted both Java files. Compilation by the implementer passed; this is not runtime acceptance.

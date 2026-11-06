@@ -51,6 +51,7 @@ public class TC_202_F234_local_fishing_test extends AbstractAkropiaTest {
         // Selecting the fisherman never opens the city or releases its job.
         game.selectTile(water);
         work.verifyMapSelection(0, water, "w", 0, 3);
+        work.verifyRecipientInPanel(0, "Works for New Amsterdam");
         work.pressMovementShortcut();
         game.hoverTile(water);
         game.dragToLocation(Location.of(24, 16));

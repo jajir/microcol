@@ -187,12 +187,6 @@ final class GamePaintService {
         units.forEach((location, list) -> paintUnits(graphics,
                 area.convertToCanvasPoint(location),
                 sortBySelecedUnit(list, oSelectedUnit), excludePainting));
-        oSelectedUnit
-                .filter(unit -> unit.isAtPlaceColonyField()
-                        && units.containsKey(unit.getLocation())
-                        && excludePainting.isUnitIncluded(unit))
-                .ifPresent(unit -> paintService.paintWorkerRecipient(graphics,
-                        area.convertToCanvasPoint(unit.getLocation()), unit));
     }
 
     /**

@@ -1,5 +1,10 @@
 # Current requirement backlog
 
+## Příjemce práce v pravém panelu — 2026-11-06
+
+1. [R-0420](done/R-0420.md), status `done`, A03 s vazbami A07/A05: informace „Pracuje pro…“ přesunuta z mapy do popisu pracovníka v pravém panelu; aktualizace výběru a zrušení práce ověřené v EN/CS. Lokální přejímka dokončena.
+
+
 ## Minimapa bez rámečku zaměření — 2026-11-05
 
 1. [R-0419](done/R-0419.md), status `done`, A03 s vazbou A05: odstraněný rušivý vnější rámeček při zaměření; navigace a značka výřezu zachované. Lokální přejímka dokončena.

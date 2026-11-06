@@ -55,6 +55,7 @@ public class TC_204_F236_map_selection_work_test extends AbstractAkropiaTest {
         // Selecting and dragging a working farmer must preserve the job.
         game.selectTile(field);
         work.verifyMapSelection(0, field, "w", 0, 3);
+        work.verifyRecipientInPanel(0, "Works for New Amsterdam");
         game.dragToLocation(target);
         work.verifyMapSelection(0, field, "w", 0, 3);
 
@@ -69,6 +70,7 @@ public class TC_204_F236_map_selection_work_test extends AbstractAkropiaTest {
         work.verifyMenuAction("cancelColonyWork", "Cancel work", false);
         work.choose("cancelColonyWork");
         work.verifyWorker(0, field, "", null, 3);
+        work.verifyRecipientNotInPanel(0, true);
 
         // The same ordinary drag now moves the farmer and pays terrain cost.
         game.hoverTile(field);

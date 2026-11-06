@@ -120,4 +120,41 @@ public final class WorldWorkersPage extends AbstractScreen {
     public void verifyTask(final int unitId, final String task) {
         assertEquals(task, getModel().getUnitById(unitId).getTaskSign());
     }
+
+    /**
+     * The worker's receiving colony is described beside its image in the right
+     * panel, wrapped inside the panel.
+     */
+    public void verifyRecipientInPanel(final int unitId,
+            final String expectedText) {
+        WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(isCssIdShown("unitPanel-" + unitId));
+        final javafx.scene.control.Label label = getNodeFinder()
+                .lookup("#unitWorkingFor-" + unitId)
+                .queryAs(javafx.scene.control.Label.class);
+        assertEquals(expectedText, label.getText());
+        assertTrue(label.isWrapText());
+        final javafx.scene.Node panel = getNodeFinder().lookup("#rightPanel")
+                .query();
+        assertTrue(
+                label.localToScene(label.getBoundsInLocal()).getMaxX() <= panel
+                        .localToScene(panel.getBoundsInLocal()).getMaxX());
+    }
+
+    /**
+     * No receiving colony is described for the unit; when listed, its panel is
+     * the current one without the stale description.
+     */
+    public void verifyRecipientNotInPanel(final int unitId,
+            final boolean listed) {
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals(listed, isCssIdShown("unitPanel-" + unitId));
+        assertTrue(getNodeFinder().lookup("#unitWorkingFor-" + unitId)
+                .tryQuery().isEmpty());
+    }
+
+    public void captureMapAndRightPanel(final String fileName)
+            throws java.io.IOException {
+        captureDialog("rightPanel", fileName);
+    }
 }
