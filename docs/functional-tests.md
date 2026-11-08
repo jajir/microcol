@@ -14640,3 +14640,74 @@ The numbered entries below are chronological evidence, including failed attempts
 9. Final expanded targeted run passed **65 tests, zero failures/errors/skips**, 848.590 s, reports `target/docker-ui/run-G2cLWN/`, completion `20261108T194623Z-23ec3be5e7a4`. Includes corrected restart and all EN/CS/editor/session/contextual action checks. Smoke is running as `20261108T200053Z-0af0df5321db` (PID `38824`, timeout 420 s). Requirement renamed R-0433 to avoid concurrent allocation on main; historical r0432 screenshot/log names remain evidence identifiers.
 
 10. Final smoke passed **21 tests, zero failures/errors/skips**, **231.066 s** within 420 s, reports `target/verification/run-88zeet7q/`, completion `20261108T200053Z-0af0df5321db`. Final totals: **5,091 model/JUnit, 65 targeted UI/support, 21 smoke/support**, all clean on unchanged executable sources. Caller applied shared formatter to 49 changed Java files, reviewed final Czech editor screenshot, and passed 14 documentation consistency checks and name audit. Strict MkDocs passed on integrated main sources; staged executable files were verified byte-for-byte against the accepted worktree. Unrelated unstaged save implementation and backlog reordering remain outside the commit. Full regression and remote publication are not verified.
+
+
+## R-0432 circular save files — 2026-11-08
+
+1. Scope: [R-0432](requirements/done/R-0432.md), ten shared circular autosave slots,
+   readable manual filenames, explicit collision confirmation, a shared quick
+   save and removal of the extra automatic recovery copies. Existing files are
+   preserved. [Save policy](save-load-navigation.md#nazvy-a-adresare-schvalene-8-listopadu-2026)
+   owns behavior; this record owns execution evidence.
+2. Initial model attempt `20261108T200701Z-3ef43bce132e` failed compilation:
+   `SavedGamesTest` still called the old two-argument target API. The test was
+   updated for the shared quick slot and readable manual targets. This failed
+   evidence remains in the completion directory; it is not accepted as passing.
+3. Intermediate model verification `target/verification/run-pb_k4p3t` passed
+   5,088 tests with zero failures/errors/skips. After final ordering, validation
+   feedback and boundary-test changes, `target/verification/run-01bizte_` passed
+   **5,090 model/JUnit tests**, zero failures/errors/skips, in the required model
+   phase. Completion `20261108T201202Z-05b74475eecf` took 149.430 seconds with
+   no cleanup errors. A byte comparison confirmed that all changed game source,
+   tests and resources matched that snapshot when targeted UI was dispatched.
+4. Targeted Docker/Xvfb selection: `TC_37_F29_calendar_boundaries_test`,
+   `TC_42_F34_load_recovery_test`, `TC_43_F34_recovery_points_test`,
+   `TC_191_F224_session_menu_test`, `PageVerificationContractTest`.
+   Completion `20261108T201442Z-67ce159d1927`, supervisor PID 41197, failed:
+   32 tests, zero assertion failures, two errors, zero skips, 465.368 seconds.
+   Reports: `target/docker-ui/run-6M9kw4`. TC191/08 expected the established
+   generic file-operation error but target-resolution failure had been routed
+   to a different dialog. The original outer error handler is restored.
+   TC191/07 then encountered a remaining modal before setup; its shared-history
+   assertions also needed to retain the previous game's one autosave when a
+   new game disables autosave. These are repaired, with rerun pending.
+   At that point the fixed smoke phase was still pending; the failed attempt is not acceptance.
+5. Changed Java files were formatted using the shared Eclipse profile/JDT 3.47;
+   formatter log is `target/r0432/format.log`. Documentation consistency passed
+   14 tests, the name audit found zero unexplained occurrences, and strict
+   MkDocs passed before final acceptance updates. Remote CI, Pages and game
+   distribution publication are outside this task's verification scope.
+
+6. Review also removed directory creation from catalogue kind detection and
+   made exhausted persisted write order a reported save failure, preserving the
+   existing archive. A model test covers that metadata boundary. A partial
+   edit script failed to match formatted code before applying all repairs;
+   prematurely dispatched model attempt `20261108T202354Z-52091ea2d7f9` was
+   explicitly canceled through its own supervisor (PID 41597), preserving
+   evidence and allowing normal cleanup. Corrected model attempt
+   `20261108T202433Z-8033df7b79af` (PID 41826) passed **5,091
+   model/JUnit tests**, zero failures/errors/skips, in 150.214 seconds with
+   no cleanup errors (`target/verification/run-jumz55yt`). Changed game
+   source, resources and model tests match the accepted snapshot byte for byte.
+   The full targeted selection in point 4 is rerunning as
+   `20261108T202722Z-95febde90edf`, PID 42052, passed **32 tests**, zero
+   failures/errors/skips, in 475.063 seconds, with no cleanup errors. Reports:
+   `target/docker-ui/run-aHJwCk`; all five selected classes produced complete
+   reports (TC37: 7, TC42: 5, TC43: 7, TC191: 10, source contract: 3).
+7. Fixed smoke selection completed as `20261108T203532Z-7f494daf3440`,
+   PID 42473, with the 420-second total local acceptance budget. It passed **21 tests**, zero failures/errors/skips, in 231.543
+   seconds (completion elapsed 231.710 seconds, including cleanup), within the
+   420-second total local budget. Reports: `target/verification/run-ky_75zs8`.
+   Cleanup had no errors. Byte comparison confirms all changed executable
+   source/resources and UI tests match the smoke snapshot. Final formatter reapplication is byte-idempotent; the
+   compiled game source remains unchanged from the passing model snapshot. No other jobs or
+   containers were canceled.
+
+8. Final review confirmed ten shared circular slots, atomic successful-write
+   ordering, no automatic manual/quick overwrite, no extra recovery copies,
+   Unicode/portable filename checks and explicit manual collision confirmation.
+   Existing saves are preserved without migration. The unrelated backlog edit
+   is excluded. Final documentation acceptance: 14 consistency tests, zero
+   failures/errors/skips; name audit with zero unexplained occurrences; strict
+   MkDocs and `git diff --check`. Local acceptance covers the committed source;
+   no remote CI, Pages publication or new distribution is claimed.

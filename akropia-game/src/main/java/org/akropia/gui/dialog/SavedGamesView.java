@@ -21,7 +21,6 @@ import org.akropia.i18n.I18n;
 import org.akropia.model.Calendar;
 import org.akropia.model.Difficulty;
 import org.akropia.model.EuropeanNation;
-import org.akropia.model.Player;
 import org.akropia.model.campaign.CampaignNames;
 import org.akropia.model.campaign.po.SaveArchiveException;
 import org.akropia.model.campaign.po.SaveSummaryPo;
@@ -183,8 +182,8 @@ public final class SavedGamesView {
                         try {
                             choose(new SavedGamesDialog.Choice(
                                     SavedGamesDialog.Action.SAVE, null,
-                                    Player.normalizeDisplayName(
-                                            name.getText())));
+                                    org.akropia.model.campaign.po.SavedGames
+                                            .manualName(name.getText())));
                         } catch (IllegalArgumentException invalid) {
                             error.setText(texts.get(SavedGameText.invalidName));
                         }

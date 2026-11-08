@@ -70,6 +70,16 @@ public class PersistingTool {
         return out;
     }
 
+    /** Shared player-save directory; settings remain in the parent. */
+    public File getSaveDirectory() {
+        final File out = getRootSaveDirectory().toPath().resolve("saves")
+                .toFile();
+        if (!out.isDirectory() && !out.mkdirs()) {
+            throw new AkropiaException("Cannot create save directory");
+        }
+        return out;
+    }
+
     public File getAutoSaveFile() {
         return getRecoveryFile(RecoverySlot.LATEST_POSITION);
     }
@@ -97,7 +107,12 @@ public class PersistingTool {
      */
     public String getSuggestedSaveFileName(final Model model) {
         Preconditions.checkNotNull(model);
-        return prepareFileName(model.getCurrentPlayer().getName(),
+        return prepareFileName(
+                org.akropia.model.EuropeanNation
+                        .findByPlayerName(model.getCurrentPlayer().getName())
+                        .map(nation -> nation.name()
+                                .toLowerCase(java.util.Locale.ROOT))
+                        .orElse(model.getCurrentPlayer().getName()),
                 model.getCalendar());
     }
 

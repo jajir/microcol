@@ -132,7 +132,7 @@ public class PersistingService {
         busy = true;
         try {
             saveFile = fileSelectingService.saveFile(
-                    persistingTool.getRootSaveDirectory(),
+                    persistingTool.getSaveDirectory(),
                     persistingTool.getSuggestedSaveFileName(model));
         } catch (AkropiaException unavailable) {
             diagnosticLog.record(DiagnosticEvent.SAVE_FAILED, unavailable);
@@ -167,7 +167,7 @@ public class PersistingService {
         busy = true;
         try {
             saveFile = fileSelectingService
-                    .loadFile(persistingTool.getRootSaveDirectory());
+                    .loadFile(persistingTool.getSaveDirectory());
         } catch (AkropiaException unavailable) {
             diagnosticLog.record(DiagnosticEvent.LOAD_FAILED, unavailable);
             gameModelController.showSaveFolderUnavailable();
@@ -369,13 +369,7 @@ public class PersistingService {
     }
 
     private String suggestedName(final SaveSummaryPo current) {
-        String out = current.getPlayerName() + " " + current.getYear();
-        if (current.getSeason() != null) {
-            out += " " + texts.get(org.akropia.gui.Loc
-                    .getTerrainDescription(org.akropia.model.Calendar.Season
-                            .valueOf(current.getSeason())));
-        }
-        return out;
+        return org.akropia.model.campaign.GameModelDao.defaultName(current);
     }
 
     private String describeTarget(final SavedGames.Entry entry) {
@@ -407,10 +401,23 @@ public class PersistingService {
         try {
             switch (choice.action) {
             case SAVE:
-                return saveNamed(
-                        savedGames.target(gameModelController.getGameModel()
-                                .getPlaythroughId(), false),
-                        choice.name, SavedGames.Kind.MANUAL);
+                try {
+                    final String name = SavedGames.manualName(choice.name);
+                    final File target = savedGames.target(name);
+                    if (target.exists()
+                            && !confirm(texts.get(SavedGameText.overwrite)
+                                    + "\n" + target.getName())) {
+                        return false;
+                    }
+                    return saveNamed(target, name, SavedGames.Kind.MANUAL);
+                } catch (IllegalArgumentException invalid) {
+                    final DialogMessage message = new DialogMessage(view,
+                            texts);
+                    message.setText(texts.get(SavedGameText.invalidName));
+                    message.showAndWait();
+                    return false;
+
+                }
             case LOAD:
                 if (choice.entry.metadata == null) {
                     return false;
@@ -447,7 +454,7 @@ public class PersistingService {
                 return saveModel(gameModelController.getModel());
             case FOLDER:
                 java.awt.Desktop.getDesktop()
-                        .open(persistingTool.getRootSaveDirectory());
+                        .open(persistingTool.getSaveDirectory());
                 return false;
             default:
                 throw new IllegalStateException("Unknown saved-game action");
@@ -553,10 +560,8 @@ public class PersistingService {
             return;
         }
         try {
-            saveNamed(
-                    savedGames.target(gameModelController.getGameModel()
-                            .getPlaythroughId(), true),
-                    texts.get(SavedGameText.quick), SavedGames.Kind.QUICK);
+            saveNamed(savedGames.quickFile(), texts.get(SavedGameText.quick),
+                    SavedGames.Kind.QUICK);
         } catch (AkropiaException failed) {
             gameModelController.showRecoverySaveFailure();
         }
@@ -567,8 +572,7 @@ public class PersistingService {
             return;
         }
         try {
-            final File file = savedGames.quickFile(
-                    gameModelController.getGameModel().getPlaythroughId());
+            final File file = savedGames.quickFile();
             if (!file.isFile()) {
                 feedback(SavedGameText.noQuick);
                 return;
@@ -618,10 +622,9 @@ public class PersistingService {
 
     /**
      * Save a prepared human turn as the next turn snapshot of its playthrough
-     * and copy it into the selected recovery slots (R-0388). The new snapshot
-     * is complete before Continue, the baseline or cleanup change; a repeated
-     * notification of the same boundary writes nothing. Called on the model
-     * thread.
+     * in the shared circular history (R-0432). The new snapshot is complete
+     * before Continue, the baseline or cleanup change; a repeated notification
+     * of the same boundary writes nothing. Called on the model thread.
      *
      * @param model required model whose turn is ready
      * @param slots required recovery slots; none means no snapshot
@@ -640,8 +643,7 @@ public class PersistingService {
         }
         final TurnSnapshot snapshot;
         try {
-            snapshot = gameController.writeTurnSnapshot(savedGames,
-                    persistingTool, slots);
+            snapshot = gameController.writeTurnSnapshot(savedGames);
         } catch (TurnPreparationException rejected) {
             diagnosticLog.record(DiagnosticEvent.TURN_PREPARATION_REJECTED,
                     rejected);
@@ -659,17 +661,8 @@ public class PersistingService {
         remember(snapshot.getFile(), snapshot::getState);
         preferences.setGameInProgressSaveFile(
                 snapshot.getFile().getAbsolutePath());
-        if (snapshot.getSlotFailure().isPresent()) {
-            diagnosticLog.record(DiagnosticEvent.RECOVERY_SAVE_FAILED,
-                    snapshot.getSlotFailure().get());
-            onFxThread(gameModelController::showRecoverySaveFailure);
-            return;
-        }
-        final String saved = texts.get(SavedGameText.autosaved,
+        final String message = texts.get(SavedGameText.autosaved,
                 model.getCalendar().getCurrentYear());
-        // Extra snapshots stay until a later successful autosave removes them.
-        final String message = snapshot.isPruned() ? saved
-                : saved + " " + texts.get(SavedGameText.autosaveCleanup);
         onFxThread(() -> feedback(message));
     }
 

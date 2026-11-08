@@ -21,6 +21,7 @@ public class SaveMetadataPo {
     private int formatVersion;
     private String createdWith;
     private String saveName;
+    private long autosaveSequence;
     private Kind kind;
     private String savedAt;
     private String playthroughId;
@@ -86,6 +87,10 @@ public class SaveMetadataPo {
                 "Invalid playthrough identity");
         Preconditions.checkArgument(summary != null, "Summary is required");
         summary.validate();
+        Preconditions.checkArgument(
+                autosaveSequence >= 0
+                        && (autosaveSequence == 0 || kind == Kind.AUTOMATIC),
+                "Invalid autosave sequence");
     }
 
     /**
@@ -137,6 +142,18 @@ public class SaveMetadataPo {
      */
     public Instant getSavedAt() {
         return Instant.parse(savedAt);
+    }
+
+    /** Positive successful-write order for managed circular autosaves. */
+    public SaveMetadataPo withAutosaveSequence(final long sequence) {
+        Preconditions.checkArgument(kind == Kind.AUTOMATIC && sequence > 0,
+                "Invalid autosave sequence");
+        autosaveSequence = sequence;
+        return this;
+    }
+
+    public long getAutosaveSequence() {
+        return autosaveSequence;
     }
 
     public String getPlaythroughId() {

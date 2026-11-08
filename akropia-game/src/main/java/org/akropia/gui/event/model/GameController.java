@@ -18,8 +18,6 @@ import org.akropia.model.campaign.GameModelDao;
 import org.akropia.model.campaign.FreePlayMap;
 import org.akropia.model.campaign.MissionName;
 import org.akropia.model.Player;
-import org.akropia.model.campaign.po.PersistingTool;
-import org.akropia.model.campaign.po.RecoverySlot;
 import org.akropia.model.campaign.po.SavedGames;
 import org.akropia.model.campaign.po.TurnSnapshot;
 import org.akropia.model.generation.GeneratedWorldSettings;
@@ -105,10 +103,9 @@ public final class GameController {
      *
      * @return the written snapshot
      */
-    public TurnSnapshot writeTurnSnapshot(final SavedGames saves,
-            final PersistingTool paths, final List<RecoverySlot> slots) {
+    public TurnSnapshot writeTurnSnapshot(final SavedGames saves) {
         final GameModel game = gameModelController.getGameModel();
-        return gameModelDao.saveTurnSnapshot(game, saves, paths, slots,
+        return gameModelDao.saveTurnSnapshot(game, saves,
                 SavePreview.render(game.getModel()));
     }
 

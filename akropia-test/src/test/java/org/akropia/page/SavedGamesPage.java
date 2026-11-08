@@ -138,9 +138,19 @@ public final class SavedGamesPage extends AbstractScreen {
                         .filter(entry -> name.equals(entry.getName())).count());
     }
 
+    public void verifySavedFilename(final String name, final String filename) {
+        final var entry = entry(name);
+        assertEquals(filename, entry.file.getName());
+        assertEquals(
+                getContext().getClassFromGuice(
+                        org.akropia.model.campaign.po.PersistingTool.class)
+                        .getRootSaveDirectory().toPath().resolve("saves"),
+                entry.file.toPath().getParent());
+    }
+
     public void verifyQuickSave() {
-        assertTrue(getContext().getClassFromGuice(SavedGames.class)
-                .quickFile(game().getPlaythroughId()).isFile());
+        assertTrue(getContext().getClassFromGuice(SavedGames.class).quickFile()
+                .isFile());
     }
 
     public void verifyRestoredGame() {

@@ -35,6 +35,16 @@ class SaveSummaryPoTest {
     }
 
     @Test
+    void defaultFilenameUsesNationInsteadOfThePlayersDisplayName() {
+        final Model model = freePlay();
+        model.getPlayers().stream().filter(Player::isHuman).findFirst()
+                .orElseThrow().setDisplayName("Žluťoučký hráč");
+        assertEquals("dutch-" + model.getCalendar().getCurrentYear(),
+                org.akropia.model.campaign.GameModelDao.defaultName(
+                        SaveSummaryPo.describe(model, "freePlay", "freePlay")));
+    }
+
+    @Test
     void summaryCountsEachOwnPersonOnceAndOnlyShipsAsShips() {
         final Model model = freePlay();
         final Player human = model.getPlayers().stream().filter(Player::isHuman)

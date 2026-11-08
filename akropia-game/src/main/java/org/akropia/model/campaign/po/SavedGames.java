@@ -7,8 +7,9 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.regex.Matcher;
+import java.text.Normalizer;
+import java.util.Locale;
+import org.akropia.model.Player;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -65,47 +66,45 @@ public final class SavedGames {
         }
     }
 
-    /** Number of the most recent turn snapshots kept per playthrough. */
-    public static final int TURN_HISTORY = 5;
-
-    /**
-     * A managed turn snapshot names its write sequence, which orders the
-     * history independently of the game date and the clock (R-0388).
-     */
+    /** Number of shared circular turn-save slots. */
+    public static final int TURN_HISTORY = 10;
     private static final Pattern TURN_SNAPSHOT = Pattern
-            .compile("turn-(\\d{10})\\.akropia");
-
-    @FunctionalInterface
-    interface Removal {
-        void delete(Path file) throws IOException;
-    }
-
+            .compile("autosave-00[0-9]\\.akropia");
     private final PersistingTool paths;
     private final GameModelPoDao reader;
-    private final Removal removal;
 
     @Inject
     public SavedGames(final PersistingTool paths, final GameModelPoDao reader) {
-        this(paths, reader, Files::deleteIfExists);
-    }
-
-    SavedGames(final PersistingTool paths, final GameModelPoDao reader,
-            final Removal removal) {
         this.paths = paths;
         this.reader = reader;
-        this.removal = removal;
     }
 
     public List<Entry> list() {
         final Path root = paths.getRootSaveDirectory().toPath();
         try (Stream<Path> files = Files.walk(root, 3)) {
-            return files.filter(Files::isRegularFile)
+            final List<Entry> entries = files.filter(Files::isRegularFile)
                     .filter(path -> path.toString().endsWith(".akropia"))
                     .map(path -> read(path.toFile()))
                     .sorted(Comparator
                             .comparingLong((Entry entry) -> entry.modified)
                             .reversed())
                     .collect(Collectors.toList());
+            // Wall-clock changes must not reverse the circular history in the
+            // browser.
+            final var ordered = entries.stream()
+                    .filter(entry -> isManagedSnapshot(entry)).sorted(
+                            Comparator
+                                    .comparingLong(
+                                            (Entry entry) -> entry.metadata
+                                                    .getAutosaveSequence())
+                                    .reversed())
+                    .iterator();
+            for (int i = 0; i < entries.size(); i++) {
+                if (isManagedSnapshot(entries.get(i))) {
+                    entries.set(i, ordered.next());
+                }
+            }
+            return entries;
         } catch (IOException | java.io.UncheckedIOException failed) {
             throw new AkropiaException("Cannot list saved games", failed);
         }
@@ -128,8 +127,7 @@ public final class SavedGames {
                 kind = Kind.AUTOMATIC;
             }
         }
-        if (file.getName().equals("quick.akropia")
-                && !file.getParentFile().equals(paths.getRootSaveDirectory())) {
+        if (file.toPath().equals(directory().resolve("quick.akropia"))) {
             kind = Kind.QUICK;
         }
         if (isTurnSnapshot(file)) {
@@ -145,108 +143,107 @@ public final class SavedGames {
         }
     }
 
-    public File target(final String playthroughId, final boolean quick) {
-        final Path directory = createDirectory(playthroughId);
-        return directory.resolve(
-                quick ? "quick.akropia" : UUID.randomUUID() + ".akropia")
+    /** Resolve a portable manual name, including case/Unicode collisions. */
+    public File target(final String name) {
+        final String filename = manualName(name) + PersistingTool.EXTENSION;
+        final Path directory = paths.getSaveDirectory().toPath();
+        try (Stream<Path> files = Files.list(directory)) {
+            final List<Path> matches = files
+                    .filter(path -> key(path.getFileName().toString())
+                            .equals(key(filename)))
+                    .collect(Collectors.toList());
+            Preconditions.checkArgument(matches.size() <= 1,
+                    "Ambiguous save filename");
+            return matches.isEmpty() ? directory.resolve(filename).toFile()
+                    : matches.get(0).toFile();
+        } catch (IOException failed) {
+            throw new AkropiaException("Cannot resolve save filename", failed);
+        }
+    }
+
+    /** The name stored in metadata matches the user-visible filename stem. */
+    public static String manualName(final String input) {
+        String name = Player.normalizeDisplayName(input);
+        if (name.toLowerCase(Locale.ROOT).endsWith(PersistingTool.EXTENSION)) {
+            name = Player.normalizeDisplayName(name.substring(0,
+                    name.length() - PersistingTool.EXTENSION.length()));
+        }
+        Preconditions.checkArgument(
+                !name.matches(".*[\\\\/:*?\"<>|\\p{Cntrl}].*")
+                        && !name.endsWith(".") && !name.endsWith(" ")
+                        && !name.equals(".") && !name.equals(".."),
+                "Invalid filename");
+        final String stem = name.split("\\.", 2)[0].toLowerCase(Locale.ROOT);
+        Preconditions.checkArgument(!stem
+                .matches("con|prn|aux|nul|com[1-9]|lpt[1-9]")
+                && !name.toLowerCase(Locale.ROOT).matches(
+                        "autosave(?:-[0-9]+)?|quick|latest-turn|previous-decade"),
+                "Reserved filename");
+        return name;
+    }
+
+    private static String key(final String name) {
+        return Normalizer.normalize(name, Normalizer.Form.NFC)
+                .toLowerCase(Locale.ROOT);
+    }
+
+    /** Quick saving is an explicit player action, outside automatic history. */
+    public File quickFile() {
+        return paths.getSaveDirectory().toPath().resolve("quick.akropia")
                 .toFile();
     }
 
-    public File quickFile(final String playthroughId) {
-        return directory(playthroughId).resolve("quick.akropia").toFile();
-    }
-
     /**
-     * @param playthroughId required playthrough identity
-     * @return a file for the next turn snapshot of the playthrough, after its
-     *         newest one; it never names an existing file
+     * Successful ordering travels atomically with the archive, not a sidecar.
      */
-    public File nextTurnSnapshot(final String playthroughId) {
-        final Path directory = createDirectory(playthroughId);
-        final long next = turnSnapshots(playthroughId).stream()
-                .mapToLong(SavedGames::sequence).max().orElse(0) + 1;
-        final File out = directory
-                .resolve(String.format("turn-%010d.akropia", next)).toFile();
-        if (out.exists()) {
-            throw new AkropiaException("Turn snapshot already exists");
+    public long nextSequence() {
+        try {
+            return Math.addExact(turnSnapshots().stream().mapToLong(
+                    file -> reader.loadMetadata(file).getAutosaveSequence())
+                    .max().orElse(0), 1);
+        } catch (ArithmeticException exhausted) {
+            throw new AkropiaException("Autosave sequence exhausted",
+                    exhausted);
         }
-        return out;
     }
 
-    /**
-     * Only the managed snapshot names of the playthrough's own directory are
-     * listed; other save categories and imported files never are.
-     *
-     * @param playthroughId required playthrough identity
-     * @return turn snapshots of the playthrough, oldest write first
-     */
-    public List<File> turnSnapshots(final String playthroughId) {
-        final Path directory = directory(playthroughId);
-        if (!Files.isDirectory(directory)) {
+    public File nextTurnSnapshot(final long sequence) {
+        Preconditions.checkArgument(sequence > 0, "Invalid autosave sequence");
+        return paths
+                .getSaveDirectory().toPath().resolve(String.format(Locale.ROOT,
+                        "autosave-%03d.akropia", (sequence - 1) % TURN_HISTORY))
+                .toFile();
+    }
+
+    /** Valid managed archives, oldest successful write first. */
+    public List<File> turnSnapshots() {
+        if (!Files.isDirectory(directory())) {
             return List.of();
         }
-        try (Stream<Path> files = Files.list(directory)) {
+        try (Stream<Path> files = Files.list(directory())) {
             return files.filter(Files::isRegularFile).map(Path::toFile)
-                    .filter(SavedGames::isTurnSnapshotName)
-                    .sorted(Comparator.comparingLong(SavedGames::sequence))
-                    .collect(Collectors.toList());
-        } catch (IOException | java.io.UncheckedIOException failed) {
+                    .filter(this::isTurnSnapshot).map(this::read)
+                    .filter(this::isManagedSnapshot)
+                    .sorted(Comparator.comparingLong(
+                            entry -> entry.metadata.getAutosaveSequence()))
+                    .map(entry -> entry.file).collect(Collectors.toList());
+        } catch (IOException failed) {
             throw new AkropiaException("Cannot list turn snapshots", failed);
         }
     }
 
-    /**
-     * Remove the oldest turn snapshots beyond {@link #TURN_HISTORY}. A file
-     * that cannot be removed stays and is retried by a later cleanup; no other
-     * snapshot is removed in its place.
-     *
-     * @param playthroughId required playthrough identity
-     * @return <code>true</code> when the history is within the limit
-     */
-    public boolean pruneTurnSnapshots(final String playthroughId) {
-        final List<File> snapshots = turnSnapshots(playthroughId);
-        boolean complete = true;
-        for (final File old : snapshots.subList(0,
-                Math.max(0, snapshots.size() - TURN_HISTORY))) {
-            try {
-                removal.delete(old.toPath());
-            } catch (IOException | SecurityException failed) {
-                complete = false;
-            }
-        }
-        return complete;
+    private boolean isManagedSnapshot(final Entry entry) {
+        return isTurnSnapshot(entry.file) && entry.metadata != null
+                && entry.metadata.getKind() == Kind.AUTOMATIC
+                && entry.metadata.getAutosaveSequence() > 0;
     }
 
     private boolean isTurnSnapshot(final File file) {
-        final File parent = file.getParentFile();
-        return isTurnSnapshotName(file) && parent != null
-                && parent.getParentFile() != null
-                && parent.getParentFile().toPath().equals(
-                        paths.getRootSaveDirectory().toPath().resolve("saves"));
+        return file.getParentFile().toPath().equals(directory())
+                && TURN_SNAPSHOT.matcher(file.getName()).matches();
     }
 
-    private static boolean isTurnSnapshotName(final File file) {
-        return TURN_SNAPSHOT.matcher(file.getName()).matches();
-    }
-
-    private static long sequence(final File file) {
-        final Matcher matcher = TURN_SNAPSHOT.matcher(file.getName());
-        Preconditions.checkArgument(matcher.matches());
-        return Long.parseLong(matcher.group(1));
-    }
-
-    private Path directory(final String playthroughId) {
-        return paths.getRootSaveDirectory().toPath().resolve("saves")
-                .resolve(UUID.fromString(playthroughId).toString());
-    }
-
-    private Path createDirectory(final String playthroughId) {
-        final Path directory = directory(playthroughId);
-        try {
-            Files.createDirectories(directory);
-        } catch (IOException failed) {
-            throw new AkropiaException("Cannot create save directory", failed);
-        }
-        return directory;
+    private Path directory() {
+        return paths.getRootSaveDirectory().toPath().resolve("saves");
     }
 }

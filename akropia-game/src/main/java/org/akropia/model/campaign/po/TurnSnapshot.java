@@ -1,62 +1,24 @@
 package org.akropia.model.campaign.po;
 
 import java.io.File;
-import java.util.Optional;
-
-import org.akropia.model.AkropiaException;
-
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 
-/**
- * Outcome of one successfully written turn snapshot (R-0388). The snapshot
- * itself is complete; copying it into recovery slots or removing old snapshots
- * may still have failed.
- */
+/** A complete atomically written circular autosave. */
 public final class TurnSnapshot {
-
     private final File file;
-
     private final JsonElement state;
 
-    private final AkropiaException slotFailure;
-
-    private final boolean pruned;
-
-    public TurnSnapshot(final File file, final JsonElement state,
-            final AkropiaException slotFailure, final boolean pruned) {
+    public TurnSnapshot(final File file, final JsonElement state) {
         this.file = Preconditions.checkNotNull(file);
         this.state = Preconditions.checkNotNull(state);
-        this.slotFailure = slotFailure;
-        this.pruned = pruned;
     }
 
-    /**
-     * @return the new snapshot file
-     */
     public File getFile() {
         return file;
     }
 
-    /**
-     * @return the gameplay state the snapshot holds
-     */
     public JsonElement getState() {
         return state;
-    }
-
-    /**
-     * @return why a recovery slot was not replaced, if it was not
-     */
-    public Optional<AkropiaException> getSlotFailure() {
-        return Optional.ofNullable(slotFailure);
-    }
-
-    /**
-     * @return <code>false</code> when older snapshots beyond the limit remain
-     *         for a later cleanup
-     */
-    public boolean isPruned() {
-        return pruned;
     }
 }

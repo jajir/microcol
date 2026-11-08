@@ -17,18 +17,16 @@ class RecoveryCheckpointPolicyTest {
     }
 
     @Test
-    void firstTurnAndDecadeCrossingsChooseSeparateSlots() {
+    void firstTurnAndDecadeCrossingsUseOnlyTheRing() {
         assertEquals(List.of(RecoverySlot.LATEST_TURN),
                 slots(0, true, true, true));
         assertEquals(List.of(RecoverySlot.LATEST_TURN),
                 slots(9, true, true, true));
-        assertEquals(
-                List.of(RecoverySlot.LATEST_TURN, RecoverySlot.PREVIOUS_DECADE),
+        assertEquals(List.of(RecoverySlot.LATEST_TURN),
                 slots(10, true, true, true));
         assertEquals(List.of(RecoverySlot.LATEST_TURN),
                 slots(11, true, true, true));
-        assertEquals(
-                List.of(RecoverySlot.LATEST_TURN, RecoverySlot.PREVIOUS_DECADE),
+        assertEquals(List.of(RecoverySlot.LATEST_TURN),
                 slots(20, true, true, true));
     }
 
@@ -36,8 +34,7 @@ class RecoveryCheckpointPolicyTest {
     void seasonalDecadeCrossingWritesOnce() {
         assertEquals(List.of(RecoverySlot.LATEST_TURN),
                 slots(149, true, true, true));
-        assertEquals(
-                List.of(RecoverySlot.LATEST_TURN, RecoverySlot.PREVIOUS_DECADE),
+        assertEquals(List.of(RecoverySlot.LATEST_TURN),
                 slots(150, true, true, true));
         for (int turn = 151; turn <= 153; turn++) {
             assertEquals(List.of(RecoverySlot.LATEST_TURN),

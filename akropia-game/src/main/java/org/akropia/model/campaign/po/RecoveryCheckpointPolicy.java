@@ -19,13 +19,6 @@ public final class RecoveryCheckpointPolicy {
         if (!fresh || !human || !autosaveEnabled) {
             return List.of();
         }
-        final int turn = calendar.getNumberOfPlayedTurns();
-        final int year = calendar.getCurrentYear();
-        if (turn > 0 && year >= 1500 && year % 10 == 0
-                && calendar.getYearForTurnNo(turn - 1) < year) {
-            return List.of(RecoverySlot.LATEST_TURN,
-                    RecoverySlot.PREVIOUS_DECADE);
-        }
         return List.of(RecoverySlot.LATEST_TURN);
     }
 

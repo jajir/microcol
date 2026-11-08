@@ -17,7 +17,7 @@
     <entry key="automatic">Recovery points</entry>
     <entry key="empty">No saved games in this view.</entry>
     <entry key="name">Name of the new save</entry>
-    <entry key="invalidName">Enter a name of 1–64 characters without control characters.</entry>
+    <entry key="invalidName">Use a filename of 1–64 characters without / \ : * ? " &lt; &gt; | or control characters. Do not end with a dot or use a reserved name (autosave, quick, CON).</entry>
     <entry key="overwrite">Overwrite selected save</entry>
     <entry key="delete">Delete selected save</entry>
     <entry key="importFile">Import file…</entry>
@@ -48,5 +48,4 @@
     <entry key="targetNone">No existing save is selected; Save game creates a new one.</entry>
     <entry key="leaveNew">This game has never been saved, so leaving it now loses the starting world. Save it before leaving? Choose Cancel to stay. Save and continue opens Save game, where you name a new save or choose one to overwrite.</entry>
     <entry key="autosaved">Turn saved automatically: %s.</entry>
-    <entry key="autosaveCleanup">An older automatic save could not be removed; it will be retried.</entry>
 </properties>

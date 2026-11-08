@@ -24,15 +24,14 @@ class SavedGamesTest {
     }
 
     @Test
-    void quickSavesAreScopedAndManualNamesNeverBecomePaths() throws Exception {
+    void sharedQuickSlotAndReadableManualNames() {
         final SavedGames saves = library();
-        final String first = UUID.randomUUID().toString();
-        final String second = UUID.randomUUID().toString();
-        assertEquals(saves.target(first, true), saves.target(first, true));
-        assertNotEquals(saves.target(first, true), saves.target(second, true));
-        assertNotEquals(saves.target(first, false), saves.target(first, false));
+        assertEquals(directory.resolve("saves/quick.akropia"),
+                saves.quickFile().toPath());
+        assertEquals(directory.resolve("saves/dutch-1600.akropia"),
+                saves.target("dutch-1600").toPath());
         assertThrows(IllegalArgumentException.class,
-                () -> saves.target("../../outside", true));
+                () -> saves.target("../../outside"));
         assertTrue(saves.list().isEmpty());
     }
 
@@ -43,8 +42,7 @@ class SavedGamesTest {
         Files.writeString(manual, "broken JSON");
         final Path recovery = directory.resolve("autosave.akropia");
         Files.writeString(recovery, "{}");
-        final Path quick = saves.target(UUID.randomUUID().toString(), true)
-                .toPath();
+        final Path quick = saves.quickFile().toPath();
         final GameModelPo snapshot = new GameModelPoDao()
                 .loadFromClassPath(MAP);
         // The stored kind is manual; the catalogue location makes it quick.

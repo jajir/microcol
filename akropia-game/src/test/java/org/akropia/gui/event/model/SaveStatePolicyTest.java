@@ -112,7 +112,7 @@ class SaveStatePolicyTest {
     }
 
     private List<File> snapshots() {
-        return saves.turnSnapshots(game.getPlaythroughId());
+        return saves.turnSnapshots();
     }
 
     private Player human() {

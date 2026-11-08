@@ -1,8 +1,9 @@
 # Ukládání, načítání a herní nabídka
 
-Návrh čitelných názvů souborů a upřesnění organizace adresářů z 8. listopadu
-2026 sleduje [R-0432](requirements/R-0432.md). Jde o analýzu před rozhodnutím
-o implementaci; současná pravidla níže zůstávají platná.
+Čitelné názvy souborů a deset společných kruhových autosavů z 8. listopadu
+2026 vlastní [R-0432](requirements/done/R-0432.md). Nová pravidla jsou v kapitole
+[Názvy a adresáře](#nazvy-a-adresare-schvalene-8-listopadu-2026); aktuální stav
+přejímky je v požadavku a jeho funkční evidenci.
 
 **Implementováno a lokálně ověřeno 26. října 2026.**
 [R-0298](requirements/done/R-0298.md) navazuje na původní návrh z tohoto dne.
@@ -30,30 +31,35 @@ Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověře
 
 ## Názvy a adresáře schválené 8. listopadu 2026
 
-1. Nejnovější rozhodnutí v [R-0432](requirements/R-0432.md), zatím bez
-   implementace, nahrazuje předchozí návrh pěti souborů seřazených podle stáří:
-   hra automaticky ukládá každý tah do deseti kruhových slotů 000–009.
-   Po 009 následuje přepsání 000, potom 001 a dále bez potvrzení.
-   Číslo 000 tedy neoznačuje vždy nejnovější pozici.
-2. Všechny nové pozice sdílejí jeden adresář bez podsložek partií.
-   Ruční uložení jsou nezávislá a hráč je může pojmenovat. Výchozí název
-   vychází z hrané národnosti a roku, například `duch-1600.akropia`,
-   nikoli ze jména hráče. Vlastní zadaný název má přednost.
-3. Uživatel napsal `autosave-000.akripis` a `./akropia/saves/`.
-   Přípona a relativní versus domovská cesta ještě vyžadují upřesnění;
-   dosavadní přípona je `.akropia` a navrhované stabilní umístění
-   `~/.akropia/saves/`. Tyto rozdíly se nepovažují automaticky za překlepy.
-4. Doporučené doplnění, zatím návrh: ukládat na bezpečném začátku lidského
-   tahu včetně počátečního stavu, po restartu pokračovat dalším slotem,
-   nezávisle evidovat pořadí úspěšných zápisů a zobrazovat nejnovější skutečný
-   stav v Pokračovat. Nová partie kruh neresetuje; postupně nahrazuje autosavy
-   předchozí partie. Trvalé zachování řeší ruční pozice mimo kruh.
-5. Doporučené doplnění, zatím návrh: samostatné kopie posledního tahu a
-   desetiletí už nezapisovat. Osud příkazu rychlého uložení, kolize ručních
-   názvů a neplatné názvy zůstávají v R-0432 k upřesnění. Bezpečný atomický
-   zápis musí zachovat předchozí platnou pozici při chybě; čtení existujících
-   souborů je nemění. Níže uvedený stav zdrojů je současná implementace,
-   nikoli doklad provedení tohoto návrhu.
+1. Schválený cíl [R-0432](requirements/done/R-0432.md): hra automaticky ukládá
+   připravený začátek lidského tahu včetně nové partie do deseti společných
+   kruhových slotů `autosave-000.akropia` až `autosave-009.akropia`.
+   Po 009 následuje bezpečné přepsání 000, potom 001 a dále bez potvrzení.
+   Číslo 000 neoznačuje vždy nejnovější pozici. Nastavení autosave zůstává účinné.
+2. Všechny nové spravované pozice jsou v `~/.akropia/saves/`, bez podsložek
+   partií. Uživatel potvrdil příponu `.akropia`, přijal návrh a autorizoval
+   implementaci 8. listopadu 2026. Nastavení zůstává v nadřazeném `~/.akropia`.
+3. Ruční uložení jsou nezávislá. Výchozí název je národnost a rok
+   (například `dutch-1600.akropia`); vlastní jméno má přednost, například
+   `Před útokem.akropia`. Zachovat Unicode a vnitřní mezery, oříznout okolní
+   Unicode mezery, dodržet limit 64 kódových bodů. Nepovolené či rezervované
+   názvy odmítnout s vysvětlením. Existující ruční jméno vyžaduje potvrzení
+   přepsání, také při shodě bez ohledu na velikost písmen a normalizaci Unicode.
+4. Kruh pokračuje po restartu dalším slotem a nesmí se vracet podle herního
+   roku. Nová partie ho neresetuje; postupně nahrazuje autosavy předchozí.
+   Načtení, prohlížení nebo opakované oznámení stejného tahu nic nezapisuje.
+   Trvalé zachování řeší ruční pozice mimo kruh.
+5. Samostatné kopie `latest-turn.akropia` a `previous-decade.akropia` se
+   nově nezapisují. Rychlé uložení zůstává výslovným příkazem hráče do
+   společného `quick.akropia`, mimo automatickou historii. Automatika nikdy
+   nepřepisuje ruční ani rychlé pozice. Staré soubory se automaticky nemažou.
+6. Pořadí úspěšných automatických zápisů je součástí metadat stejného archivu;
+   není potřeba pomocný soubor ani adresář. Atomické nahrazení při chybě
+   zachová původní pozici, další slot a Pokračovat. Pokračovat nadále vede
+   na poslední úspěšně uloženou nebo načtenou pozici, ne na nejnižší číslo.
+7. Implementace a lokální přejímka jsou vedené v R-0432 a jeho funkční evidenci.
+   Následující kontrola zdrojů i starší pravidla popisují předchozí řešení;
+   pro nový formát organizace mají přednost body výše.
 
 ## Současné automatické zápisy — kontrola zdrojů 8. listopadu 2026
 
@@ -253,21 +259,24 @@ target/graphics-venv/bin/python scripts/graphics/svg-font.py docs/diagrams/save-
 [Zdroj PlantUML](diagrams/save-load/save.puml)
 
 1. **Uložit / ⌘S na macOS, Ctrl+S jinde** otevře přehled s názvem nového uložení. Potvrzení
-   vytvoří nový soubor; shodný název sám o sobě nic nepřepíše. Okrajové
+   vytvoří pojmenovaný soubor; shodný název vyžaduje potvrzení přepsání. Okrajové
    Unicode mezery se oříznou, vnitřní mezery, diakritika a interpunkce zůstanou.
-   Název musí mít 1–64 Unicode znaků bez řídicích znaků. Název není cesta.
+   Název musí mít 1–64 Unicode znaků a být platným názvem souboru. Cesty,
+rezervované názvy automatických/rychlých souborů a neplatné znaky se odmítnou.
 2. Vybrané ruční uložení lze výslovně přepsat nebo smazat. Obě operace mají
    potvrzení s názvem a časem cíle. Rychlé a automatické pozice takto přepsat ani
    smazat nelze. Chyba zápisu ponechá starý soubor a nabídne další pokus.
-3. **F5 / Rychle uložit** zapíše jeden rychlý bod dané rozehrané hry. Nová
+3. **F5 / Rychle uložit** přepíše společný rychlý bod `quick.akropia`,
+mimo deset automatických slotů. Nová
    hra dostane vlastní identitu; načtení uložené hry ji zachová. Jména a
    identita přehledu jsou metadata obálky, nikoli náhrada povinných identit
    hráčů, kolonií či jednotek. Autorské scénáře je nemusejí mít.
-4. Spravované soubory jsou v `~/.akropia/saves/<identita-hry>/`;
-   rychlý soubor se jmenuje `quick.akropia`, ruční názvy souborů generuje
-   hra. Starší ruční soubory a body obnovy v `~/.akropia` jsou viditelné
-   ve stejném přehledu. Export umožní zvolit vlastní soubor.
-5. **Otevřít složku uložení** otevře `~/.akropia` systémovým správcem souborů.
+4. Nové spravované soubory jsou v `~/.akropia/saves/`, bez podsložek partií.
+   Ruční názvy odpovídají zadaným jménům; předvyplněný název tvoří národnost
+   a rok. Automatické sloty 000–009 se kruhově přepisují. Starší ruční soubory
+   a body obnovy zůstávají dostupné v katalogu, nic je automaticky nemaže
+   ani nepřesouvá.
+5. **Otevřít složku uložení** otevře `~/.akropia/saves/` systémovým správcem souborů.
    Pokud to prostředí nepodporuje, hra oznámí chybu a zachová přehled.
 6. Ukládání a rychlé akce jsou běžně dostupné během připraveného lidského
    tahu. Model stále odmítá neúplnou přípravu tahu. Potvrzený zápis zobrazí

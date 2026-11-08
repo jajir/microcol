@@ -180,34 +180,40 @@ public final class FreePlayAuditPage extends AbstractScreen {
         assertEquals(cancel, getLabeledById("savedGamesCancel").getText());
     }
 
-    private java.util.Map<RecoverySlot, byte[]> recoveryBytes;
+    private java.util.Map<File, byte[]> recoveryBytes;
+
+    private File recoveryFile(final RecoverySlot slot) {
+        final List<File> snapshots = turnSnapshots();
+        if (slot == RecoverySlot.LATEST_TURN && !snapshots.isEmpty()) {
+            return snapshots.get(snapshots.size() - 1);
+        }
+        return getContext().getClassFromGuice(PersistingTool.class)
+                .getRecoveryFile(slot);
+    }
 
     public void rememberRecoveryBytes() throws Exception {
-        recoveryBytes = new java.util.EnumMap<>(RecoverySlot.class);
-        for (RecoverySlot slot : RecoverySlot.values()) {
-            final File file = getContext()
-                    .getClassFromGuice(PersistingTool.class)
-                    .getRecoveryFile(slot);
+        recoveryBytes = new java.util.HashMap<>();
+        for (final File file : turnSnapshots()) {
+            recoveryBytes.put(file, Files.readAllBytes(file.toPath()));
+        }
+        for (final RecoverySlot slot : RecoverySlot.values()) {
+            final File file = recoveryFile(slot);
             if (file.isFile()) {
-                recoveryBytes.put(slot, Files.readAllBytes(file.toPath()));
+                recoveryBytes.put(file, Files.readAllBytes(file.toPath()));
             }
         }
     }
 
     public void verifyRecoveryBytesUnchanged() throws Exception {
-        for (var entry : recoveryBytes.entrySet()) {
-            final File file = getContext()
-                    .getClassFromGuice(PersistingTool.class)
-                    .getRecoveryFile(entry.getKey());
+        for (final var entry : recoveryBytes.entrySet()) {
             assertArrayEquals(entry.getValue(),
-                    Files.readAllBytes(file.toPath()));
+                    Files.readAllBytes(entry.getKey().toPath()));
         }
     }
 
     public void verifyRecoveryOption(final RecoverySlot slot,
             final boolean available, final String date) {
-        final java.io.File file = getContext()
-                .getClassFromGuice(PersistingTool.class).getRecoveryFile(slot);
+        final java.io.File file = recoveryFile(slot);
         final javafx.scene.control.ListView<org.akropia.model.campaign.po.SavedGames.Entry> list = savedList();
         final var entry = list.getItems().stream()
                 .filter(value -> value.file.equals(file)).findFirst();
@@ -251,8 +257,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
     }
 
     public void chooseRecovery(final RecoverySlot slot) {
-        final java.io.File file = getContext()
-                .getClassFromGuice(PersistingTool.class).getRecoveryFile(slot);
+        final java.io.File file = recoveryFile(slot);
         final var list = savedList();
         final var entry = list.getItems().stream()
                 .filter(value -> value.file.equals(file)).findFirst()
@@ -263,8 +268,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
 
     /** Select a recovery point with the keyboard without loading it. */
     public void selectRecovery(final RecoverySlot slot) {
-        final java.io.File file = getContext()
-                .getClassFromGuice(PersistingTool.class).getRecoveryFile(slot);
+        final java.io.File file = recoveryFile(slot);
         final var list = savedList();
         final int index = java.util.stream.IntStream
                 .range(0, list.getItems().size())
@@ -283,8 +287,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
 
     public void verifyRecoveryTurn(final RecoverySlot slot,
             final int expectedTurn) {
-        final java.io.File file = getContext()
-                .getClassFromGuice(PersistingTool.class).getRecoveryFile(slot);
+        final java.io.File file = recoveryFile(slot);
         final org.akropia.model.campaign.po.GameModelPo saved = new org.akropia.model.campaign.po.GameModelPoDao()
                 .loadPlayerGame(file);
         assertEquals(expectedTurn,
@@ -293,8 +296,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
 
     public void verifyLoadedRecoveryMatchesSlot(final RecoverySlot slot)
             throws Exception {
-        final File source = getContext().getClassFromGuice(PersistingTool.class)
-                .getRecoveryFile(slot);
+        final File source = recoveryFile(slot);
         final var files = new org.akropia.model.campaign.po.GameModelPoDao();
         final var expected = files.loadPlayerGame(source);
         final java.nio.file.Path actualFile = Files
@@ -326,10 +328,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
     }
 
     public void corruptRecovery(final RecoverySlot slot) throws Exception {
-        java.nio.file.Files.writeString(
-                getContext().getClassFromGuice(PersistingTool.class)
-                        .getRecoveryFile(slot).toPath(),
-                "{");
+        java.nio.file.Files.writeString(recoveryFile(slot).toPath(), "{");
     }
 
     /**
@@ -684,7 +683,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
         return getContext()
                 .getClassFromGuice(
                         org.akropia.model.campaign.po.SavedGames.class)
-                .turnSnapshots(playthroughId);
+                .turnSnapshots();
     }
 
     /**
@@ -698,6 +697,18 @@ public final class FreePlayAuditPage extends AbstractScreen {
                         .map(file -> files.loadPlayerGame(file).getModel()
                                 .getCalendar().getNumberOfPlayedTurns())
                         .collect(Collectors.toList()));
+    }
+
+    public void verifyCircularFilenames(final String newest) {
+        final List<File> files = turnSnapshots();
+        assertEquals(10, files.size());
+        assertEquals(newest, files.get(files.size() - 1).getName());
+        final var root = getContext().getClassFromGuice(PersistingTool.class)
+                .getRootSaveDirectory().toPath().resolve("saves");
+        for (final File file : files) {
+            assertEquals(root, file.toPath().getParent());
+            assertTrue(file.getName().matches("autosave-00[0-9]\\.akropia"));
+        }
     }
 
     public void verifyTurnSnapshotCount(final int expected) {
@@ -762,11 +773,20 @@ public final class FreePlayAuditPage extends AbstractScreen {
 
     /** Make the managed save folder unusable by placing a file there. */
     public void obstructManagedSaves() throws Exception {
+        if (Files.isDirectory(managedSaves())) {
+            Files.move(managedSaves(),
+                    managedSaves().resolveSibling("saves-before-failure"));
+        }
         Files.writeString(managedSaves(), "not a folder");
     }
 
     public void removeManagedSavesObstruction() throws Exception {
         Files.delete(managedSaves());
+        final var backup = managedSaves()
+                .resolveSibling("saves-before-failure");
+        if (Files.exists(backup)) {
+            Files.move(backup, managedSaves());
+        }
     }
 
     private java.nio.file.Path managedSaves() {

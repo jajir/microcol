@@ -155,8 +155,7 @@ class GameplayStateTest {
                 assertThrows(TurnPreparationException.class,
                         () -> games.gameplayState(game));
                 assertThrows(TurnPreparationException.class,
-                        () -> games.saveTurnSnapshot(game, saves, paths,
-                                List.of(RecoverySlot.LATEST_TURN), null));
+                        () -> games.saveTurnSnapshot(game, saves, null));
                 checked[0] = true;
             }
         });
@@ -164,7 +163,7 @@ class GameplayStateTest {
         game.startGame();
 
         assertTrue(checked[0]);
-        assertEquals(List.of(), saves.turnSnapshots(game.getPlaythroughId()));
+        assertEquals(List.of(), saves.turnSnapshots());
         assertFalse(paths.getRecoveryFile(RecoverySlot.LATEST_TURN).exists());
         game.stop();
     }

@@ -63,200 +63,139 @@ class TurnHistoryTest {
     }
 
     private TurnSnapshot snapshot(final GameModel game) {
-        return games.saveTurnSnapshot(game, saves, paths,
-                List.of(RecoverySlot.LATEST_TURN), null);
-    }
-
-    private List<String> names(final String playthroughId) {
-        return saves.turnSnapshots(playthroughId).stream().map(File::getName)
-                .collect(Collectors.toList());
-    }
-
-    private static String name(final int sequence) {
-        return String.format("turn-%010d.akropia", sequence);
+        return games.saveTurnSnapshot(game, saves, null);
     }
 
     @Test
-    void historyKeepsTheFiveNewestWritesAndCopiesTheLatestTurn()
-            throws Exception {
-        final GameModel game = game();
-        final String id = game.getPlaythroughId();
-        assertEquals(List.of(), names(id));
-
-        final TurnSnapshot first = snapshot(game);
-        assertEquals(List.of(name(1)), names(id));
-        assertTrue(first.isPruned());
-        assertTrue(first.getSlotFailure().isEmpty());
-        assertArrayEquals(Files.readAllBytes(first.getFile().toPath()),
-                Files.readAllBytes(paths
-                        .getRecoveryFile(RecoverySlot.LATEST_TURN).toPath()));
-        assertEquals(SavedGames.Kind.AUTOMATIC,
-                new GameModelPoDao().loadMetadata(first.getFile()).getKind());
-
-        for (int i = 2; i <= 5; i++) {
-            snapshot(game);
+    void tenSharedSlotsWrapAndResumeAfterRestartAndReplay() throws Exception {
+        final GameModel first = game();
+        final GameModel second = game();
+        assertTrue(saves.turnSnapshots().isEmpty());
+        for (int sequence = 1; sequence <= 21; sequence++) {
+            final TurnSnapshot saved = snapshot(
+                    sequence % 2 == 0 ? second : first);
+            assertEquals(
+                    String.format("autosave-%03d.akropia", (sequence - 1) % 10),
+                    saved.getFile().getName());
+            assertEquals(directory.resolve("saves"),
+                    saved.getFile().getParentFile().toPath());
+            assertEquals(Math.min(sequence, 10), saves.turnSnapshots().size());
+            assertEquals(sequence, new GameModelPoDao()
+                    .loadMetadata(saved.getFile()).getAutosaveSequence());
+            saves = new SavedGames(paths, new GameModelPoDao());
+            assertEquals(sequence + 1, saves.nextSequence());
         }
-        assertEquals(List.of(name(1), name(2), name(3), name(4), name(5)),
-                names(id));
-
-        // The sixth successful write removes only the oldest one.
-        snapshot(game);
-        assertEquals(List.of(name(2), name(3), name(4), name(5), name(6)),
-                names(id));
+        final GameModel replay = games
+                .loadFromFile(saves.turnSnapshots().get(0), new EventBus());
+        assertEquals("autosave-001.akropia",
+                snapshot(replay).getFile().getName());
+        for (final RecoverySlot slot : RecoverySlot.values()) {
+            assertFalse(paths.getRecoveryFile(slot).exists());
+        }
+        assertTrue(saves.list().stream()
+                .allMatch(entry -> entry.kind == SavedGames.Kind.AUTOMATIC));
     }
 
     @Test
-    void sequenceSurvivesRestartAndReplayAppendsAfterTheNewest()
-            throws Exception {
+    void failedReplacementKeepsEverySlotAndTheNextSequence() throws Exception {
         final GameModel game = game();
-        final String id = game.getPlaythroughId();
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 0; i < 10; i++) {
             snapshot(game);
         }
-        // A later session continues the sequence from the files, not from
-        // the game date or the clock.
-        saves = new SavedGames(paths, new GameModelPoDao());
-        final File oldest = saves.turnSnapshots(id).get(0);
-        final GameModel replayed = games.loadFromFile(oldest, new EventBus());
-        assertEquals(id, replayed.getPlaythroughId());
-
-        final TurnSnapshot appended = snapshot(replayed);
-
-        assertEquals(name(6), appended.getFile().getName());
-        assertEquals(List.of(name(2), name(3), name(4), name(5), name(6)),
-                names(id));
-        assertEquals(games.gameplayState(replayed), appended.getState());
-    }
-
-    @Test
-    void otherCategoriesAndPlaythroughsStayOutsideTheRotation()
-            throws Exception {
-        final GameModel game = game();
-        final String id = game.getPlaythroughId();
-        final Path own = directory.resolve("saves").resolve(id);
-        Files.createDirectories(own);
-        final Path other = directory.resolve("saves")
-                .resolve(UUID.randomUUID().toString());
-        Files.createDirectories(other);
-        final Path quick = own.resolve("quick.akropia");
-        final Path manual = own.resolve(UUID.randomUUID() + ".akropia");
-        final Path similar = own.resolve("turn-1.akropia");
-        final Path imported = directory.resolve(name(1));
-        for (final Path kept : List.of(quick, manual, similar, imported)) {
-            Files.writeString(kept, "kept");
+        final java.util.Map<Path, byte[]> before = new java.util.HashMap<>();
+        for (final File file : saves.turnSnapshots()) {
+            before.put(file.toPath(), Files.readAllBytes(file.toPath()));
         }
-        for (int i = 1; i <= 7; i++) {
-            Files.writeString(other.resolve(name(i)), "other playthrough");
-        }
-        Files.writeString(
-                paths.getRecoveryFile(RecoverySlot.PREVIOUS_DECADE).toPath(),
-                "decade");
-        Files.writeString(
-                paths.getRecoveryFile(RecoverySlot.LATEST_POSITION).toPath(),
-                "latest position");
-
-        for (int i = 1; i <= 6; i++) {
-            snapshot(game);
-        }
-
-        assertEquals(5, names(id).size());
-        for (final Path kept : List.of(quick, manual, similar, imported)) {
-            assertEquals("kept", Files.readString(kept));
-        }
-        try (var files = Files.list(other)) {
-            assertEquals(7, files.count());
-        }
-        assertEquals("decade", Files.readString(
-                paths.getRecoveryFile(RecoverySlot.PREVIOUS_DECADE).toPath()));
-        assertEquals("latest position", Files.readString(
-                paths.getRecoveryFile(RecoverySlot.LATEST_POSITION).toPath()));
-        // Only the managed name in a playthrough folder is a recovery point.
-        final var kinds = saves.list().stream().collect(Collectors
-                .toMap(entry -> entry.file.toPath(), entry -> entry.kind));
-        assertEquals(SavedGames.Kind.MANUAL, kinds.get(imported));
-        assertEquals(SavedGames.Kind.MANUAL, kinds.get(similar));
-        assertEquals(SavedGames.Kind.AUTOMATIC,
-                kinds.get(own.resolve(name(6))));
-    }
-
-    @Test
-    void failedWriteKeepsTheHistoryAndExposesNoPartialSave() throws Exception {
-        final GameModel game = game();
-        final String id = game.getPlaythroughId();
-        for (int i = 1; i <= 5; i++) {
-            snapshot(game);
-        }
-        final byte[] latest = Files.readAllBytes(
-                paths.getRecoveryFile(RecoverySlot.LATEST_TURN).toPath());
         final GameModelDao failing = games(
                 new GameModelPoDao((source, target) -> {
-                    throw new IOException("Interrupted write");
+                    throw new IOException("Interrupted atomic replacement");
                 }));
-
         assertThrows(AkropiaException.class,
-                () -> failing.saveTurnSnapshot(game, saves, paths,
-                        List.of(RecoverySlot.LATEST_TURN), null));
-
-        assertEquals(List.of(name(1), name(2), name(3), name(4), name(5)),
-                names(id));
-        assertArrayEquals(latest, Files.readAllBytes(
-                paths.getRecoveryFile(RecoverySlot.LATEST_TURN).toPath()));
-        try (var files = Files.list(directory.resolve("saves").resolve(id))) {
-            assertEquals(5, files.count(), "No temporary file remains");
+                () -> failing.saveTurnSnapshot(game, saves, null));
+        assertEquals(11, saves.nextSequence());
+        for (final var entry : before.entrySet()) {
+            assertArrayEquals(entry.getValue(),
+                    Files.readAllBytes(entry.getKey()));
         }
+        try (var files = Files.list(directory.resolve("saves"))) {
+            assertEquals(10, files.count());
+        }
+        assertEquals("autosave-000.akropia",
+                snapshot(game).getFile().getName());
     }
 
     @Test
-    void failedCleanupKeepsExtraSnapshotsUntilALaterAutosave()
+    void clockRollbackDoesNotReorderTheBrowserOrReuseTheNewestSlot()
             throws Exception {
         final GameModel game = game();
-        final String id = game.getPlaythroughId();
-        saves = new SavedGames(paths, new GameModelPoDao(), file -> {
-            throw new IOException("Locked");
-        });
-        for (int i = 1; i <= 5; i++) {
-            assertTrue(snapshot(game).isPruned());
-        }
-
-        final TurnSnapshot sixth = snapshot(game);
-
-        assertFalse(sixth.isPruned());
-        assertEquals(6, names(id).size());
-        assertTrue(sixth.getFile().isFile());
-
-        // The retry of a later successful autosave removes the extras.
-        saves = new SavedGames(paths, new GameModelPoDao());
-        assertTrue(snapshot(game).isPruned());
-        assertEquals(List.of(name(3), name(4), name(5), name(6), name(7)),
-                names(id));
+        final File first = snapshot(game).getFile();
+        final File second = snapshot(game).getFile();
+        final var archive = SaveArchives.read(second.toPath());
+        final var metadata = com.google.gson.JsonParser
+                .parseString(new String(archive.get("metadata.json"),
+                        java.nio.charset.StandardCharsets.UTF_8))
+                .getAsJsonObject();
+        metadata.addProperty("savedAt", "2000-01-01T00:00:00Z");
+        SaveArchives.replace(second.toPath(), "metadata.json",
+                metadata.toString());
+        assertEquals(List.of(second, first), saves.list().stream()
+                .map(entry -> entry.file).collect(Collectors.toList()));
+        assertEquals(3, saves.nextSequence());
+        assertEquals("autosave-002.akropia",
+                snapshot(game).getFile().getName());
     }
 
     @Test
-    void failedSlotCopyStillKeepsTheCompleteSnapshot() throws Exception {
+    void exhaustedMetadataSequenceReportsASaveFailureWithoutChangingTheArchive()
+            throws Exception {
+        final File file = snapshot(game()).getFile();
+        final var metadata = com.google.gson.JsonParser
+                .parseString(new String(
+                        SaveArchives.read(file.toPath()).get("metadata.json"),
+                        java.nio.charset.StandardCharsets.UTF_8))
+                .getAsJsonObject();
+        metadata.addProperty("autosaveSequence", Long.MAX_VALUE);
+        SaveArchives.replace(file.toPath(), "metadata.json",
+                metadata.toString());
+        final byte[] before = Files.readAllBytes(file.toPath());
+        assertThrows(AkropiaException.class, () -> snapshot(game()));
+        assertArrayEquals(before, Files.readAllBytes(file.toPath()));
+    }
+
+    @Test
+    void manualAndQuickFilesStayOutsideTheRing() throws Exception {
         final GameModel game = game();
-        // A folder where the recovery slot belongs cannot be replaced.
-        final Path slot = paths.getRecoveryFile(RecoverySlot.LATEST_TURN)
-                .toPath();
-        Files.createDirectories(slot);
-        Files.writeString(slot.resolve("content"), "kept");
-
-        final TurnSnapshot snapshot = snapshot(game);
-
-        assertTrue(snapshot.getSlotFailure().isPresent());
-        assertEquals(List.of(name(1)), names(game.getPlaythroughId()));
-        assertEquals(game.getPlaythroughId(), new GameModelPoDao()
-                .loadPlayerGame(snapshot.getFile()).getPlaythroughId());
+        final File manual = saves.target("  Před útokem  ");
+        assertEquals("Před útokem.akropia", manual.getName());
+        games.saveNamedGame(manual, game, "Před útokem");
+        games.saveGame(saves.quickFile(), game, SavedGames.Kind.QUICK,
+                "Quick save", null);
+        final byte[] named = Files.readAllBytes(manual.toPath());
+        final byte[] quick = Files.readAllBytes(saves.quickFile().toPath());
+        for (int i = 0; i < 21; i++) {
+            snapshot(game);
+        }
+        assertArrayEquals(named, Files.readAllBytes(manual.toPath()));
+        assertArrayEquals(quick,
+                Files.readAllBytes(saves.quickFile().toPath()));
+        assertEquals(manual, saves.target("PŘED ÚTOKEM.akropia"));
+        assertEquals(manual, saves.target(java.text.Normalizer
+                .normalize("Před útokem", java.text.Normalizer.Form.NFD)));
+        assertEquals(12, saves.list().size());
     }
 
     @Test
-    void nextSnapshotNeverNamesAnExistingFile() throws Exception {
-        final String id = UUID.randomUUID().toString();
-        final File next = saves.nextTurnSnapshot(id);
-        assertEquals(name(1), next.getName());
-        assertFalse(next.exists());
-        Files.writeString(next.toPath(), "written");
-        assertEquals(name(2), saves.nextTurnSnapshot(id).getName());
+    void invalidOrReservedManualNamesCannotEscapeOrEnterManagedSlots() {
+        for (final String name : List.of("../escape", "a/b", "a\\b", "a:b",
+                "CON", "NUL.txt", "end.", "autosave-000",
+                "AUTOSAVE-009.akropia", "quick", "latest-turn",
+                "previous-decade")) {
+            assertThrows(IllegalArgumentException.class,
+                    () -> saves.target(name), name);
+        }
+        assertEquals("Žluťoučký kůň",
+                SavedGames.manualName("\u2003Žluťoučký kůň.akropia\u2003"));
         assertThrows(IllegalArgumentException.class,
-                () -> saves.nextTurnSnapshot("../outside"));
+                () -> saves.target("x".repeat(65)));
     }
 }

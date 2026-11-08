@@ -41,7 +41,8 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
-    void TC_01_decade_checkpoint_keeps_first_crossing() throws Exception {
+    void TC_01_decade_crossing_keeps_only_circular_snapshots()
+            throws Exception {
         // Enable turn checkpoints and load the 1508 fixture.
         final SettingPage setting = WelcomePage.of(getContext()).openSetting();
         setting.setAutosaveEnabled(true);
@@ -57,7 +58,7 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         game.nextTurnAndCloseDialogs();
         audit.verifyCurrentTurn(21);
         audit.verifyRecoveryTurn(RecoverySlot.LATEST_TURN, 21);
-        audit.verifyRecoveryTurn(RecoverySlot.PREVIOUS_DECADE, 20);
+        audit.verifyRecoveryAbsent(RecoverySlot.PREVIOUS_DECADE);
         audit.verifyTurnSnapshots(19, 20, 21);
 
         // The saved turn is left without a prompt, so no Latest position is
@@ -69,15 +70,15 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         audit.verifyRecoveryOption(RecoverySlot.LATEST_POSITION, false,
                 "Unavailable");
         audit.verifyRecoveryOption(RecoverySlot.LATEST_TURN, true, "1511");
-        audit.verifyRecoveryOption(RecoverySlot.PREVIOUS_DECADE, true, "1510");
+        audit.verifyRecoveryOption(RecoverySlot.PREVIOUS_DECADE, false,
+                "Not available");
         audit.cancelRecovery();
         audit.verifyRecoveryBytesUnchanged();
 
         // Choosing the older decade resumes that exact position.
         audit.openRecoveryChooser();
-        audit.chooseRecovery(RecoverySlot.PREVIOUS_DECADE);
-        audit.verifyCurrentTurn(20);
-        audit.verifyLoadedRecoveryMatchesSlot(RecoverySlot.PREVIOUS_DECADE);
+        audit.chooseOldestTurnSnapshot();
+        audit.verifyCurrentTurn(19);
         audit.verifyRecoveryBytesUnchanged();
         audit.verifyTurnSnapshots(19, 20, 21);
 
@@ -229,7 +230,6 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         game.nextTurnAndCloseDialogs();
         audit.verifyCurrentTurn(19);
         // Its readable metadata hide the damaged game until it is loaded.
-        audit.corruptRecoveryGame(RecoverySlot.LATEST_TURN);
         // The damaged turn snapshot no longer protects the live game.
         audit.corruptNewestTurnSnapshotGame();
         saves.rememberGame();
@@ -329,7 +329,7 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
-    void TC_07_rolling_history_keeps_the_five_newest_turn_snapshots()
+    void TC_07_rolling_history_keeps_the_ten_newest_turn_snapshots()
             throws Exception {
         // Enable turn autosaves and load the 1508 fixture; loading writes none.
         final SettingPage setting = WelcomePage.of(getContext()).openSetting();
@@ -340,15 +340,22 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         audit.verifyCurrentTurn(18);
         audit.verifyTurnSnapshots();
 
-        // Six prepared turns keep the five newest snapshots, 1510 to 1514.
+        // Eleven prepared turns wrap slot 000 and retain ten snapshots.
         game.nextTurnAndCloseDialogs();
         game.nextTurnAndCloseDialogs();
         game.nextTurnAndCloseDialogs();
         game.nextTurnAndCloseDialogs();
         game.nextTurnAndCloseDialogs();
         game.nextTurnAndCloseDialogs();
-        audit.verifyCurrentTurn(24);
-        audit.verifyTurnSnapshots(20, 21, 22, 23, 24);
+        game.nextTurnAndCloseDialogs();
+        game.nextTurnAndCloseDialogs();
+        game.nextTurnAndCloseDialogs();
+        game.nextTurnAndCloseDialogs();
+        game.nextTurnAndCloseDialogs();
+
+        audit.verifyCircularFilenames("autosave-000.akropia");
+        audit.verifyCurrentTurn(29);
+        audit.verifyTurnSnapshots(20, 21, 22, 23, 24, 25, 26, 27, 28, 29);
         audit.verifyContinueOpensNewestTurnSnapshot();
 
         // The saved turn is left without a prompt; Load lists the history
@@ -356,17 +363,18 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         game.exitToMenu().verifyMainScreen();
         audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
         audit.openRecoveryChooser();
-        audit.verifyTurnSnapshotOptions("1514", "1513", "1512", "1511", "1510");
+        audit.verifyTurnSnapshotOptions("1519", "1518", "1517", "1516", "1515",
+                "1514", "1513", "1512", "1511", "1510");
 
         // Loading the oldest snapshot rewrites and rotates nothing.
         audit.chooseOldestTurnSnapshot();
         audit.verifyCurrentTurn(20);
-        audit.verifyTurnSnapshots(20, 21, 22, 23, 24);
+        audit.verifyTurnSnapshots(20, 21, 22, 23, 24, 25, 26, 27, 28, 29);
 
         // Its next turn is a new write: it is appended and the oldest goes.
         GamePage.of(getContext()).nextTurnAndCloseDialogs();
         audit.verifyCurrentTurn(21);
-        audit.verifyTurnSnapshots(21, 22, 23, 24, 21);
+        audit.verifyTurnSnapshots(21, 22, 23, 24, 25, 26, 27, 28, 29, 21);
         audit.verifyContinueOpensNewestTurnSnapshot();
 
         // With autosave off a played turn adds and removes no snapshot.
@@ -376,7 +384,7 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         off.goBack().verifyMainScreen();
         audit.continueGame().nextTurnAndCloseDialogs();
         audit.verifyCurrentTurn(22);
-        audit.verifyTurnSnapshots(21, 22, 23, 24, 21);
+        audit.verifyTurnSnapshots(21, 22, 23, 24, 25, 26, 27, 28, 29, 21);
 
         // Enabling it again resumes at the next turn start without backfill.
         GamePage.of(getContext()).exitToMenu().verifyMainScreen();
@@ -385,13 +393,13 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         on.setAutosaveEnabled(true);
         on.goBack().verifyMainScreen();
         audit.continueGame();
-        audit.verifyTurnSnapshots(21, 22, 23, 24, 21);
+        audit.verifyTurnSnapshots(21, 22, 23, 24, 25, 26, 27, 28, 29, 21);
         GamePage.of(getContext()).nextTurnAndCloseDialogs();
         audit.verifyCurrentTurn(23);
-        audit.verifyTurnSnapshots(22, 23, 24, 21, 23);
+        audit.verifyTurnSnapshots(22, 23, 24, 25, 26, 27, 28, 29, 21, 23);
 
         // A repeated notice of the same turn start writes nothing new.
         audit.deliverTurnStartedNotification(true, true);
-        audit.verifyTurnSnapshots(22, 23, 24, 21, 23);
+        audit.verifyTurnSnapshots(22, 23, 24, 25, 26, 27, 28, 29, 21, 23);
     }
 }

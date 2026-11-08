@@ -66,8 +66,20 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.saveName("");
         saves.verifyInvalidName();
         saves.captureDialog("savedGamesList", "r0298-saved-games.png");
-        saves.saveName("  Přístav / před bitvou  ");
-        saves.verifySavedName("Přístav / před bitvou", 1);
+        saves.saveName("../outside");
+        saves.verifyInvalidName();
+        saves.saveName("autosave-000");
+        saves.verifyInvalidName();
+        saves.saveName("  Přístav – před bitvou  ");
+        saves.verifySavedName("Přístav – před bitvou", 1);
+        saves.verifySavedFilename("Přístav – před bitvou",
+                "Přístav – před bitvou.akropia");
+        // A same-name new save asks before replacing the existing file.
+        saves.openSave();
+        saves.saveName("Přístav – před bitvou.akropia");
+        saves.action("saveCancel");
+        saves.cancelBrowser();
+        saves.verifySavedName("Přístav – před bitvou", 1);
 
         // Play one turn, so the named save no longer holds the live game.
         game.nextTurnAndCloseDialogs();
@@ -75,7 +87,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
 
         // Cancelling overwrite and load keeps both the save and the live game.
         saves.openSave();
-        saves.select("Přístav / před bitvou");
+        saves.select("Přístav – před bitvou");
         saves.action("overwriteSave");
         new org.akropia.page.PaperButtonsPage(getContext())
                 .verifyModalFrame("saveCancel");
@@ -83,7 +95,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.cancelBrowser();
         saves.verifyGameUnchanged();
         saves.openLoad();
-        saves.select("Přístav / před bitvou");
+        saves.select("Přístav – před bitvou");
         saves.verifySelectedDetails("Corinth", "1508", "Conquistador");
         saves.captureDialog("savedGamesList", "r0298-saved-games-filled.png");
         saves.action("loadSelected");
@@ -129,14 +141,14 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         // Manual deletion requires explicit confirmation and refreshes the
         // list.
         saves.openLoad();
-        saves.select("Přístav / před bitvou");
+        saves.select("Přístav – před bitvou");
         saves.action("deleteSave");
         saves.action("saveCancel");
-        saves.verifySavedName("Přístav / před bitvou", 1);
-        saves.select("Přístav / před bitvou");
+        saves.verifySavedName("Přístav – před bitvou", 1);
+        saves.select("Přístav – před bitvou");
         saves.action("deleteSave");
         saves.action("saveConfirm");
-        saves.verifySavedName("Přístav / před bitvou", 0);
+        saves.verifySavedName("Přístav – před bitvou", 0);
         saves.cancelBrowser();
     }
 
@@ -614,12 +626,13 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.verifyLeaveConfirmation(false);
         WelcomePage.of(getContext()).verifyMainScreen();
 
-        // With autosave off, a new world has never been saved.
+        // With autosave off, a new world is unsaved and keeps the previous
+        // game’s slot.
         final SettingPage setting = WelcomePage.of(getContext()).openSetting();
         setting.setAutosaveEnabled(false);
         setting.goBack().startFreeGame();
         audit.rememberPlaythrough();
-        audit.verifyTurnSnapshotCount(0);
+        audit.verifyTurnSnapshotCount(1);
 
         // Leaving says the starting world would be lost; Cancel stays.
         saves.rememberGame();
@@ -635,7 +648,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.chooseMenu("menuMain");
         saves.action("saveDiscard");
         WelcomePage.of(getContext()).verifyMainScreen();
-        audit.verifyTurnSnapshotCount(0);
+        audit.verifyTurnSnapshotCount(1);
     }
 
     @Test

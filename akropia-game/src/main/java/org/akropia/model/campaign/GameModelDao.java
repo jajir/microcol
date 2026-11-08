@@ -17,8 +17,6 @@ import org.akropia.model.Congress;
 import org.akropia.model.TaxState;
 import org.akropia.model.campaign.po.GameModelPo;
 import org.akropia.model.campaign.po.GameModelPoDao;
-import org.akropia.model.campaign.po.PersistingTool;
-import org.akropia.model.campaign.po.RecoverySlot;
 import org.akropia.model.campaign.po.SaveMetadataPo;
 import org.akropia.model.campaign.po.SaveSummaryPo;
 import org.akropia.model.campaign.po.SavedGames;
@@ -289,46 +287,23 @@ public final class GameModelDao {
                 .gameplayState(Preconditions.checkNotNull(game).getModelPo());
     }
 
-    /**
-     * Save the prepared turn as the next turn snapshot of its playthrough
-     * (R-0388). The new snapshot is written completely first; only then is it
-     * copied into the recovery slots and are the oldest snapshots beyond
-     * {@link SavedGames#TURN_HISTORY} removed. A failed write changes no file.
-     *
-     * @param game    required game at a prepared human turn
-     * @param saves   required save catalogue
-     * @param paths   required save locations
-     * @param slots   required recovery slots receiving the same snapshot
-     * @param preview optional PNG preview of the same state
-     * @return the written snapshot with its slot and cleanup outcome
-     * @throws AkropiaException when the snapshot cannot be written
-     */
+    /** Atomically replace the next shared circular slot. */
     public TurnSnapshot saveTurnSnapshot(final GameModel game,
-            final SavedGames saves, final PersistingTool paths,
-            final List<RecoverySlot> slots, final byte[] preview) {
-        Preconditions.checkNotNull(game);
-        Preconditions.checkNotNull(saves);
-        Preconditions.checkNotNull(paths);
-        Preconditions.checkNotNull(slots);
-        final File file = saves.nextTurnSnapshot(game.getPlaythroughId());
-        final JsonElement state = saveGame(file, game,
-                SavedGames.Kind.AUTOMATIC, null, preview);
-        AkropiaException slotFailure = null;
-        try {
-            for (final RecoverySlot slot : slots) {
-                gameModelPoDao.copyPlayerGame(file,
-                        paths.getRecoveryFile(slot));
-            }
-        } catch (AkropiaException failed) {
-            slotFailure = failed;
+            final SavedGames saves, final byte[] preview) {
+        synchronized (saves) {
+            final long sequence = saves.nextSequence();
+            final File file = saves.nextTurnSnapshot(sequence);
+            final GameModelPo snapshot = game.getModelPo();
+            final SaveSummaryPo summary = summary(game, snapshot);
+            snapshot.setSaveName(defaultName(summary));
+            final SaveMetadataPo metadata = metadata(snapshot,
+                    SavedGames.Kind.AUTOMATIC, summary)
+                    .withAutosaveSequence(sequence);
+            gameModelPoDao.savePlayerGame(file.getAbsolutePath(), snapshot,
+                    metadata, preview);
+            return new TurnSnapshot(file,
+                    gameModelPoDao.gameplayState(snapshot));
         }
-        boolean pruned;
-        try {
-            pruned = saves.pruneTurnSnapshots(game.getPlaythroughId());
-        } catch (AkropiaException unavailable) {
-            pruned = false;
-        }
-        return new TurnSnapshot(file, state, slotFailure, pruned);
     }
 
     private static SaveSummaryPo summary(final GameModel game,
@@ -344,20 +319,12 @@ public final class GameModelDao {
     }
 
     /**
-     * @return the player's name and the game date within the 64-code-point name
-     *         limit
+     * @return the played nationality and game year within the 64-code-point
+     *         name limit
      */
-    static String defaultName(final SaveSummaryPo summary) {
-        final String date = " " + summary.getYear()
-                + (summary.getSeason() == null ? ""
-                        : " " + summary.getSeason());
-        String player = summary.getPlayerName();
-        // The 64-code-point limit of Player.normalizeDisplayName.
-        final int room = 64 - date.length();
-        if (player.codePointCount(0, player.length()) > room) {
-            player = player.substring(0, player.offsetByCodePoints(0, room));
-        }
-        return Player.normalizeDisplayName(player + date);
+    public static String defaultName(final SaveSummaryPo summary) {
+        return summary.getNation().toLowerCase(java.util.Locale.ROOT) + "-"
+                + summary.getYear();
     }
 
 }
