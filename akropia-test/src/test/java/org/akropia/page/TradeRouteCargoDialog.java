@@ -381,13 +381,9 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
     }
 
     /**
-     * Closes the screen with the Escape key, as a player abandoning it. The
-     * focus is first moved to Back, because a focused choice box may take
-     * Escape for itself.
+     * Presses Escape with the player's current focus, without moving to Back.
      */
     public void closeWithEscape() {
-        final Button button = getButtonById("tradeRouteCargoClose");
-        getRobot().interact(button::requestFocus);
         getRobot().push(KeyCode.ESCAPE);
         WaitForAsyncUtils.waitForFxEvents();
     }

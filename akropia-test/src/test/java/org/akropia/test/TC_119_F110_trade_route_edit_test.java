@@ -700,6 +700,23 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         planner.doubleClickMap(ROAD_LOCATION);
         cargo.verifyChosenRoute("Ore cart");
         cargo.verifyStopChoices("1. Delft", "2. New Amsterdam");
+        // Escape works with the initial route-menu focus, without focusing
+        // Back.
+        cargo.verifyRouteMenuFocused();
+        cargo.closeWithEscape();
+        cargo.verifyDialogClosed();
+        planner.verifyPlannerShown(true);
+        planner.verifySelectedRoute("Ore cart");
+
+        // Each tab keeps the same Escape return path with its own focus.
+        planner.doubleClickMap(ROAD_LOCATION);
+        cargo.openCarriersTab();
+        cargo.closeWithEscape();
+        cargo.verifyDialogClosed();
+        planner.verifyPlannerShown(true);
+        planner.verifySelectedRoute("Lost cart");
+        planner.doubleClickMap(ROAD_LOCATION);
+        cargo.openGoodsTab();
         cargo.closeWithEscape();
         cargo.verifyDialogClosed();
         planner.verifyPlannerShown(true);

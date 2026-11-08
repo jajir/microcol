@@ -2,6 +2,8 @@
 
 ## Horní lišta správy obchodní trasy
 
+Esc v detailu otevřeném z mapového plánovače vrací mapu obchodních tras se zachovaným výběrem, také při fokusu na nabídce trasy nebo uvnitř karet. Stávající dvojí potvrzení odchodu s neuloženými změnami zůstává zachované; viz [R-0428](requirements/done/R-0428.md).
+
 1. [R-0422](requirements/done/R-0422.md), zadání 2026-11-06: hráč pozná obrazovku podle nadpisu vlevo. Vpravo vybírá trasu společnou papírovou nabídkou a úplně vpravo se vrací standardním tlačítkem Zpět s ikonou návratu. Nabídka ukazuje aktuální trasu; dlouhý název nesmí vytlačit návrat mimo okno.
 2. Nabídka obsahuje dostupné vlastní trasy. Změna výběru obnoví zastávky a náklad; jejich pravidla a dosavadní zacházení s neuloženými úpravami zůstávají zachované. Typ trasy a počet zastávek patří nad obsah. Myš, klávesnice, Zpět i Escape zachovávají běžnou cestu do původní obrazovky.
 3. Jde o dohodnuté rozložení, ne nezávislé hráčské pozorování. [Funkční evidence](functional-tests.md#r-0422-trade-route-header-2026-11-06) rozlišuje implementaci a skutečné ověření.

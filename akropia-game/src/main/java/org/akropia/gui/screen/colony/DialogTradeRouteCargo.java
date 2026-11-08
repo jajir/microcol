@@ -58,6 +58,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -215,7 +216,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
         page.getContent().setId("tradeRouteCargoPage");
         page.getContent().getStylesheets().add(getClass()
                 .getResource("/gui/TradeRouteCargo.css").toExternalForm());
-        page.getContent().setOnKeyPressed(event -> {
+        page.getContent().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 close();
                 event.consume();
