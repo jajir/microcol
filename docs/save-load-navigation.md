@@ -28,6 +28,49 @@ otevřeném dialogu, nabídce či výběru souboru ani během souborové operace
 
 Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověření má pouze známé selhání kontrastu FRIGATE, pro které uživatel schválil [výjimku pro tuto sérii](publishing.md#local-acceptance-policy). Nativní macOS ověření je pouze volitelné ruční ověření. Přesné výsledky vlastní [funkční evidence](functional-tests.md). Historické snímky a diagramy z 26. října zachycují předchozí dialogový přehled.
 
+## Názvy a adresáře schválené 8. listopadu 2026
+
+1. Schválený cíl [R-0432](requirements/R-0432.md), zatím bez implementace:
+   všechna nová uložení jsou v jednom společném adresáři, bez podsložek pro
+   jednotlivé partie. Návrh umístění je dosavadní `~/.akropia/saves/`;
+   nastavení zůstává samostatně v `~/.akropia`.
+2. Pět automatických souborů se jmenuje `autosave-001.akropia` až
+   `autosave-005.akropia`. Číslo 001 vždy označuje nejnovější stav.
+   Spravované autosave soubory se při rotaci přepisují bez potvrzení.
+   Důsledek společného adresáře: historie je společná pro všechny partie;
+   nová partie postupně vytlačí automatické pozice předchozí partie.
+   Trvale zachovaný stav si hráč uloží ručně pod vlastním názvem.
+3. Výchozí název ruční pozice vychází z národnosti, za kterou uživatel hraje,
+   a herního roku, například `duch-1600.akropia`; nejde o jméno hráče.
+   Zadaný vlastní název má přednost a použije se v názvu souboru.
+4. Přepisování při shodě bylo potvrzeno pro autosave. Kolize ručních názvů,
+   nepovolené názvy a osud samostatných bodů obnovy i rychlého slotu
+   zůstávají k rozhodnutí v R-0432. Stávající soubory se touto analýzou nemění.
+
+## Současné automatické zápisy — kontrola zdrojů 8. listopadu 2026
+
+1. Kontrola zdrojů revize `596540bc`, nikoli nový běhový test:
+   `RecoveryCheckpointPolicy`, `TurnStartedListener`, `PersistingService`
+   a `GameModelDao` ukládají při zapnutém autosave připravený začátek nové
+   hry a každý další čerstvě připravený lidský tah po zpracování světa/AI,
+   před akcemi hráče. Opakované oznámení téhož tahu další kopii nevytvoří.
+2. V každém takovém bodě nyní vzniká snímek v historii dané partie
+   (`saves/<UUID>/turn-NNNNNNNNNN.akropia`, posledních pět úspěšných zápisů)
+   a jeho kopie `~/.akropia/latest-turn.akropia`.
+3. Při přechodu do roku dělitelného deseti od roku 1500 se navíc obnoví
+   `~/.akropia/previous-decade.akropia`. Je to stav na začátku právě
+   dosaženého desetiletí, ne snímek vytvořený zpětně o deset let dříve.
+   Pouhé zahájení nové hry tento druhý soubor nevytváří.
+4. Načtení, prohlížení seznamu, pohyby jednotek a plynutí skutečného času
+   samy neukládají. S vypnutým autosave nevznikají ani uvedené body obnovy.
+   Odchod do menu, zavření okna či nahrazení partie neukládají potichu:
+   při neuložených změnách volba Uložit a pokračovat otevře ruční ukládání.
+5. Rychlé uložení zapisuje `quick.akropia` pouze na příkaz hráče; ruční
+   uložení a export také vyžadují jeho akci. `autosave.akropia` je dosavadní
+   označení starého slotu poslední pozice a záložní cesta pro starou hodnotu
+   Pokračovat; současný tok uvedený výše ho automaticky nezapisuje.
+   Předvolby nejsou herní pozice a ukládají se samostatně.
+
 ## Pravidla ukládání schválená 1. listopadu 2026
 
 1. Uživatel přijal návrh [R-0387](requirements/done/R-0387.md): při opuštění nebo
