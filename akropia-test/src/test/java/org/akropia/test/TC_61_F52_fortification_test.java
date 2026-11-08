@@ -26,18 +26,18 @@ public class TC_61_F52_fortification_test extends AbstractAkropiaTest {
         FortifyPage fortify = new FortifyPage(getContext());
         // Issuing the order consumes this turn, without granting defense yet.
         game.selectTile(Location.of(24, 15));
-        fortify.verifyAction("Fortify", true);
+        fortify.verifyAction("Fortify (Shift+F)", true);
         fortify.changeOrderWithKeyboard();
         fortify.verifyOrder(104, true, false, 0);
-        fortify.verifyAction("Cancel work", true);
+        fortify.verifyAction("Cancel work (Shift+F)", true);
         // Inspecting another unit and returning preserves the pending order.
         game.selectTile(Location.of(25, 15));
-        fortify.verifyAction("Fortify", false);
+        fortify.verifyAction("Fortify (Shift+F)", false);
         game.selectTile(Location.of(24, 15));
         fortify.verifyOrder(104, true, false, 0);
         fortify.changeOrder();
         fortify.verifyOrder(104, false, false, 0);
-        fortify.verifyAction("Fortify", false);
+        fortify.verifyAction("Fortify (Shift+F)", false);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class TC_61_F52_fortification_test extends AbstractAkropiaTest {
         game.nextTurnAndCloseDialogs();
         game.selectTile(Location.of(24, 15));
         fortify.verifyOrder(104, true, true, 1);
-        fortify.verifyAction("Cancel work", true);
+        fortify.verifyAction("Cancel work (Shift+F)", true);
         fortify.captureDialog("fortifyUnit", "r106-fortified-order.png");
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
@@ -74,6 +74,6 @@ public class TC_61_F52_fortification_test extends AbstractAkropiaTest {
         // this turn.
         fortify.changeOrderWithKeyboard();
         fortify.verifyOrder(104, false, false, 1);
-        fortify.verifyAction("Fortify", true);
+        fortify.verifyAction("Fortify (Shift+F)", true);
     }
 }

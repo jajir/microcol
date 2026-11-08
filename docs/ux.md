@@ -1,5 +1,12 @@
 # UX a pravidla ovládání Akropia
 
+## Klávesové zkratky — kontrakt R-0433, 8. listopadu 2026
+
+1. Každá herní klávesová akce i posun mapy je v jediné [inventuře zkratek](keyboard-shortcuts.md) s kontextem a platformními výchozími kombinacemi. Obsluhy kláves i zobrazené zkratky čtou tutéž účinnou konfiguraci; nová obsluha nepřidává pevně zapsaný `KeyCode` ani text „(X)“ do překladu.
+2. Kombinace platí s přesnými modifikátory. Akce může mít více kombinací nebo žádnou; popisek ukazuje první z nich jako `text (zkratka)` a nepřiřazená akce závorku vynechá.
+3. Escape, Tab, Enter, Space a šipky zůstávají ovládáním zaměřeného prvku, formulářů a dialogů; myší modifikátory se nenastavují. Psaní, otevřený dialog a nedostupná akce dál zkratku blokují.
+4. Hráč najde editor v Nastavení. Cíl, zachytávání s Escape, konflikty, Obnovit výchozí, Zrušit a Uložit a zpět popisuje [kapitola editoru](keyboard-shortcuts.md#6-editor-v-nastaveni). Jde o implementovaný návrh; Docker ověření a hráčské pozorování zatím chybí.
+
 ## Horní lišta správy obchodní trasy
 
 Esc v detailu otevřeném z mapového plánovače vrací mapu obchodních tras se zachovaným výběrem, také při fokusu na nabídce trasy nebo uvnitř karet. Stávající dvojí potvrzení odchodu s neuloženými změnami zůstává zachované; viz [R-0428](requirements/done/R-0428.md).

@@ -9,9 +9,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.akropia.model.GoodsType;
 import org.akropia.model.Location;
 import org.akropia.page.*;
+import org.akropia.gui.shortcut.ShortcutAction;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
+import javafx.scene.input.KeyCode;
 
 /**
  * Player disbanding (UC-016, MOVE-009): the Disband control on a selected own
@@ -188,4 +190,54 @@ public class TC_104_F95_disband_test extends AbstractAkropiaTest {
                 100);
         disband.verifySelectedUnit(Optional.empty());
     }
+
+    @Test
+    @Tag("local")
+    void TC_05_disband_shortcut_confirms_like_the_control_and_can_be_remapped()
+            throws Exception {
+        DisbandFixture.prepare(getContext(), SOURCE,
+                "F95-disband-shortcut.akropia", DisbandFixture.WEST, 30, true,
+                0);
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final DisbandPage disband = new DisbandPage(getContext());
+        final KeyboardShortcutsPage shortcuts = new KeyboardShortcutsPage(
+                getContext());
+        game.panToTile(DisbandFixture.WEST);
+        game.selectTile(DisbandFixture.WEST);
+        disband.verifySelectedUnit(Optional.of(COLONIST));
+        // Shift+J asks a colonist on land for nothing: Jettison is not
+        // offered.
+        shortcuts.pressKeys(KeyCode.SHIFT, KeyCode.J);
+        shortcuts.verifyOnlyMainWindowShowing();
+        disband.verifyUnitPresent(COLONIST, true);
+        // Shift+D opens the same confirmation; Cancel changes nothing.
+        shortcuts.pressKeys(KeyCode.SHIFT, KeyCode.D);
+        disband.verifyConfirmation("Disband unit", QUESTION,
+                "No colony of yours is on this square, so all equipment is lost.");
+        disband.cancel();
+        disband.verifyDialogClosed();
+        disband.verifyUnitPresent(COLONIST, true);
+        disband.verifySelectedUnit(Optional.of(COLONIST));
+        // Remap Disband to Shift+U in the in-game Settings.
+        new DeveloperModePage(getContext()).openGameSettings();
+        shortcuts.open();
+        shortcuts.verifyBindings(ShortcutAction.DISBAND, "Shift+D");
+        shortcuts.startChange(ShortcutAction.DISBAND, 0);
+        shortcuts.pressKeys(KeyCode.SHIFT, KeyCode.U);
+        shortcuts.verifyBindings(ShortcutAction.DISBAND, "Shift+U");
+        shortcuts.saveAndBack();
+        new DeveloperModePage(getContext()).backToGame();
+        game.selectTile(DisbandFixture.WEST);
+        disband.verifySelectedUnit(Optional.of(COLONIST));
+        // The old key does nothing; the new key asks before removing.
+        shortcuts.pressKeys(KeyCode.SHIFT, KeyCode.D);
+        shortcuts.verifyOnlyMainWindowShowing();
+        shortcuts.pressKeys(KeyCode.SHIFT, KeyCode.U);
+        disband.verifyConfirmation("Disband unit", QUESTION,
+                "No colony of yours is on this square, so all equipment is lost.");
+        disband.cancel();
+        disband.verifyDialogClosed();
+        disband.verifyUnitPresent(COLONIST, true);
+    }
+
 }

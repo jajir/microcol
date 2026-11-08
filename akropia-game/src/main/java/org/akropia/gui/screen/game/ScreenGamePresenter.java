@@ -1,5 +1,7 @@
 package org.akropia.gui.screen.game;
 
+import java.util.Optional;
+
 import org.akropia.gui.WasdController;
 import org.akropia.gui.dialog.PersistingService;
 import org.akropia.gui.event.ShowHelpEvent;
@@ -20,6 +22,11 @@ import org.akropia.gui.screen.game.gamepanel.ModeController;
 import org.akropia.gui.screen.game.gamepanel.MouseOverTileManager;
 import org.akropia.gui.screen.game.gamepanel.SelectedUnitManager;
 import org.akropia.gui.screen.game.gamepanel.TradeRoutePlanning;
+import org.akropia.gui.screen.game.components.ButtonsGamePanel;
+import org.akropia.gui.shortcut.KeyboardShortcuts;
+import org.akropia.gui.shortcut.ShortcutAction;
+import org.akropia.gui.shortcut.ShortcutContext;
+import org.akropia.gui.shortcut.ShortcutInput;
 import org.akropia.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +64,8 @@ public class ScreenGamePresenter {
     private final ColoniesMenu coloniesMenu;
     private final org.akropia.gui.screen.game.components.InGameMenu gameMenu;
     private final TradeRoutePlanning tradeRoutePlanning;
+    private final KeyboardShortcuts shortcuts;
+    private final ButtonsGamePanel buttonsGamePanel;
 
     @Inject
     ScreenGamePresenter(final ScreenGame screenGame, final EventBus eventBus,
@@ -69,8 +78,12 @@ public class ScreenGamePresenter {
             final WasdController wasdController,
             final ColoniesMenu coloniesMenu,
             final org.akropia.gui.screen.game.components.InGameMenu gameMenu,
-            final TradeRoutePlanning tradeRoutePlanning) {
+            final TradeRoutePlanning tradeRoutePlanning,
+            final KeyboardShortcuts shortcuts,
+            final ButtonsGamePanel buttonsGamePanel) {
         this.gameMenu = gameMenu;
+        this.shortcuts = Preconditions.checkNotNull(shortcuts);
+        this.buttonsGamePanel = Preconditions.checkNotNull(buttonsGamePanel);
         this.tradeRoutePlanning = Preconditions
                 .checkNotNull(tradeRoutePlanning);
         this.eventBus = Preconditions.checkNotNull(eventBus);
@@ -88,8 +101,8 @@ public class ScreenGamePresenter {
         this.coloniesMenu = Preconditions.checkNotNull(coloniesMenu);
         screenGame.setOnKeyPressed(this::onKeyPressed);
         screenGame.setOnKeyReleased(this::onKeyReleased);
-        screenGame.setOnUnitOrder(event -> {
-            if (event.getCode() == KeyCode.TAB) {
+        screenGame.setOnUnitOrder(shortcuts, action -> {
+            if (action == ShortcutAction.NEXT_UNIT) {
                 eventBus.post(new SelectNextUnitEvent());
             } else {
                 eventBus.post(new SkipUnitTurnEvent());
@@ -116,80 +129,20 @@ public class ScreenGamePresenter {
         if (!gameModelController.isHumanTurnReady()) {
             return;
         }
-        if (tradeRoutePlanning.isActive() && isUnitKey(event.getCode())) {
-            // The route planner gives no unit orders.
+        if (event.getTarget() instanceof javafx.scene.Node && ShortcutInput
+                .isOwnedByText(((javafx.scene.Node) event.getTarget())
+                        .getScene().getFocusOwner(), event)) {
+            // A focused text field keeps its typing keys.
             return;
         }
-        if (event.getCode() == KeyCode.F5) {
-            persistingService.quickSave();
-            event.consume();
+        if (shortcuts.find(event, ShortcutContext.SESSION).isPresent()
+                || shortcuts.find(event, ShortcutContext.GLOBAL).isPresent()) {
+            // The main window's shortcut owner handles it; never scroll.
             return;
         }
-        if (event.getCode() == KeyCode.F9) {
-            persistingService.quickLoad();
-            event.consume();
-            return;
-        }
-        /**
-         * Enter
-         */
-        if (KeyCode.ENTER == event.getCode()) {
-            onKeyPressed_enter();
-            return;
-        }
-
-        if (KeyCode.R == event.getCode()) {
-            eventBus.post(new ShowScreenEvent(Screen.STATISTICS));
-        }
-        if (KeyCode.C == event.getCode()) {
-            eventBus.post(new CenterViewEvent());
-        }
-        if (KeyCode.T == event.getCode()) {
-            eventBus.post(new ShowScreenEvent(Screen.TURN_REPORT));
-        }
-        if (KeyCode.O == event.getCode() && !event.isShortcutDown()) {
-            eventBus.post(new ShowScreenEvent(Screen.GOALS));
-        }
-        if (KeyCode.G == event.getCode() && !event.isShortcutDown()) {
-            eventBus.post(
-                    new org.akropia.gui.event.ChooseGoToDestinationEvent());
-            event.consume();
-            return;
-        }
-        if (KeyCode.H == event.getCode()) {
-            eventBus.post(new ShowHelpEvent());
-        }
-        if (KeyCode.K == event.getCode()) {
-            eventBus.post(new ShowScreenEvent(Screen.CONGRESS));
-        }
-        if (KeyCode.N == event.getCode()) {
-            eventBus.post(new ShowNativeSettlementsEvent());
-        }
-        if (KeyCode.E == event.getCode()) {
-            eventBus.post(new ShowScreenEvent(Screen.EUROPE));
-        }
-        if (KeyCode.I == event.getCode() && !event.isShortcutDown()) {
-            coloniesMenu.show();
-            event.consume();
-            return;
-        }
-        if (KeyCode.M == event.getCode()) {
-            onKeyMWasPressed();
-            return;
-        }
-        if (KeyCode.P == event.getCode()) {
-            onKeyPWasPressed();
-            return;
-        }
-        if (KeyCode.F == event.getCode()) {
-            onKeyFWasPressed();
-            return;
-        }
-        if (KeyCode.B == event.getCode()) {
-            eventBus.post(new BuildColonyEvent());
-        }
-        if (KeyCode.S == event.getCode() && event.isShortcutDown()) {
-            // The main window's shortcut owner opens saving; never scroll.
+        final Optional<ShortcutAction> found = shortcuts.find(event,
+                ShortcutContext.MAP);
+        if (found.isPresent() && onMapAction(found.get(), event)) {
             return;
         }
 
@@ -202,9 +155,103 @@ public class ScreenGamePresenter {
                 + event.getCode().isModifierKey() + "'");
     }
 
-    private static boolean isUnitKey(final KeyCode code) {
-        return code == KeyCode.G || code == KeyCode.ENTER || code == KeyCode.M
-                || code == KeyCode.P || code == KeyCode.F || code == KeyCode.B;
+    /**
+     * @return <code>true</code> when the key is fully handled; otherwise it
+     *         also leaves movement mode, as any other key does
+     */
+    private boolean onMapAction(final ShortcutAction action,
+            final KeyEvent event) {
+        if (action == ShortcutAction.NEXT_UNIT
+                || action == ShortcutAction.SKIP_UNIT) {
+            // The screen's unit-order filter owns them.
+            return true;
+        }
+        if (tradeRoutePlanning.isActive() && action.isUnitOrder()) {
+            // The route planner gives no unit orders.
+            return true;
+        }
+        switch (action) {
+        case QUICK_SAVE:
+            persistingService.quickSave();
+            event.consume();
+            return true;
+        case QUICK_LOAD:
+            persistingService.quickLoad();
+            event.consume();
+            return true;
+        case CONFIRM_MOVE:
+            onKeyPressed_enter();
+            return true;
+        case STATISTICS:
+            eventBus.post(new ShowScreenEvent(Screen.STATISTICS));
+            return false;
+        case CENTER_VIEW:
+            eventBus.post(new CenterViewEvent());
+            return false;
+        case TURN_REPORT:
+            eventBus.post(new ShowScreenEvent(Screen.TURN_REPORT));
+            return false;
+        case GOALS:
+            eventBus.post(new ShowScreenEvent(Screen.GOALS));
+            return false;
+        case GO_TO:
+            eventBus.post(
+                    new org.akropia.gui.event.ChooseGoToDestinationEvent());
+            event.consume();
+            return true;
+        case HELP:
+            eventBus.post(new ShowHelpEvent());
+            return false;
+        case CONGRESS:
+            eventBus.post(new ShowScreenEvent(Screen.CONGRESS));
+            return false;
+        case NATIVE_SETTLEMENTS:
+            eventBus.post(new ShowNativeSettlementsEvent());
+            return false;
+        case EUROPE:
+            eventBus.post(new ShowScreenEvent(Screen.EUROPE));
+            return false;
+        case COLONIES:
+            coloniesMenu.show();
+            event.consume();
+            return true;
+        case MOVE:
+            onKeyMWasPressed();
+            return true;
+        case PLOW:
+            onKeyPWasPressed();
+            return true;
+        case CLEAR_FOREST:
+            onKeyFWasPressed();
+            return true;
+        case BUILD_COLONY:
+            eventBus.post(new BuildColonyEvent());
+            return false;
+        case END_TURN:
+        case BUILD_ROAD:
+        case FORTIFY:
+        case SENTRY:
+        case GO_TO_TILE:
+        case TRADE_ROUTES:
+        case NEW_TRADE_ROUTE:
+        case DISBAND:
+        case JETTISON:
+        case DECLARE_INDEPENDENCE:
+        case RETIRE:
+            // The command's own control keeps its availability guards.
+            buttonsGamePanel.fireShortcut(action);
+            event.consume();
+            return true;
+        case EXIT_TO_MAIN_MENU:
+        case RESTART_MISSION:
+            // The session menu's own command and confirmation.
+            gameMenu.run(action);
+            event.consume();
+            return true;
+        default:
+            // Held scroll keys continue with the scroll controller.
+            return false;
+        }
     }
 
     private void onKeyMWasPressed() {
@@ -218,15 +265,21 @@ public class ScreenGamePresenter {
 
     private void onKeyPWasPressed() {
         if (selectedUnitManager.getSelectedUnit().isPresent()) {
-            // The listener explains why an eligible unit cannot start.
-            eventBus.post(new PlowFieldEvent());
+            // A plowing unit offers Cancel instead; otherwise the listener
+            // explains why an eligible unit cannot start.
+            if (!buttonsGamePanel.fireShortcut(ShortcutAction.PLOW)) {
+                eventBus.post(new PlowFieldEvent());
+            }
         }
     }
 
     private void onKeyFWasPressed() {
         if (selectedUnitManager.getSelectedUnit().isPresent()) {
-            // The listener explains why an eligible unit cannot start.
-            eventBus.post(new ClearForestEvent());
+            // A clearing unit offers Cancel instead; otherwise the listener
+            // explains why an eligible unit cannot start.
+            if (!buttonsGamePanel.fireShortcut(ShortcutAction.CLEAR_FOREST)) {
+                eventBus.post(new ClearForestEvent());
+            }
         }
     }
 

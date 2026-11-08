@@ -1,5 +1,7 @@
 # Hlavní mapa: akce, vstupy a srovnání ovládání
 
+Aktualizace 2026-11-08: klávesové vstupy níže jsou nyní nastavitelné; aktuální výchozí kombinace, kontexty a pevné klávesy vede [inventura klávesových zkratek](keyboard-shortcuts.md) podle [R-0433](requirements/done/R-0433.md).
+
 Aktualizace 2026-11-04: vybrané změny této inventury implementuje
 [R-0414](requirements/done/R-0414.md). Jednoduchý klik vybírá, dvojklik otevírá
 vlastní město; zaměstnání se před ručním pohybem ruší výslovně v kontextové

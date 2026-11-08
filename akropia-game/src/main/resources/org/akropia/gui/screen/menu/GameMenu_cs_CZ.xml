@@ -6,7 +6,7 @@
 
 	<entry key="mainMenu">Akropia</entry>
 	<entry key="buttonContinue">Pokračovat</entry>
-	<entry key="buttonLoadSave">Nahrát hru (%s)</entry>
+	<entry key="buttonLoadSave">Nahrát hru</entry>
 	<entry key="buttonPlayCampaign">Spustit kampaň</entry>
 	<entry key="buttonFreeGame">Nová neomezená hra</entry>
 	<entry key="buttonHallOfFame">Síň slávy</entry>
@@ -68,6 +68,6 @@
     <entry key="setupGeneratedSeedError">Zadejte celé semínko od 0 do 999999999.</entry>
     <entry key="setupGeneratedFailed">Nové pobřeží se nepodařilo vygenerovat. Aktuální hra nebyla změněna.</entry>
     <entry key="settingDeveloperHeading">Vývojář</entry>
-    <entry key="settingDeveloperMode">Režim vývojáře (F3)</entry>
+    <entry key="settingDeveloperMode">Režim vývojáře</entry>
     <entry key="settingDeveloperDescription">Zobrazí souřadnice mapy a diagnostické informace.</entry>
 </properties>

@@ -10,6 +10,11 @@ import org.akropia.model.PlaceEuropePier;
 import org.akropia.page.*;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
+import javafx.scene.input.KeyCode;
+import org.akropia.gui.shortcut.ShortcutAction;
+import org.akropia.page.KeyboardShortcutsPage;
+import org.akropia.page.DeveloperModePage;
+import org.akropia.page.GamePage;
 import javafx.stage.Stage;
 
 /**
@@ -177,4 +182,43 @@ public class TC_46_F37_recruitment_test extends AbstractAkropiaTest {
                 "Petty Criminal"), 200, true, "Pay passage: ", "");
         recruit.cancel();
     }
+
+    @Test
+    @Tag("local")
+    void TC_07_europe_recruit_shortcut_opens_the_offer_and_follows_remapping()
+            throws Exception {
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final KeyboardShortcutsPage shortcuts = new KeyboardShortcutsPage(
+                getContext());
+        final RecruitmentPage recruit = new RecruitmentPage(getContext());
+        EuropePortScreen europe = game.openEuroperPort();
+        final String before = recruit.poolSnapshot();
+        // R in the Europe port opens the same offer as the Recruit button.
+        shortcuts.pressKeys(KeyCode.R);
+        recruit.verifyOffer(List.of("Free Colonist", "Indentured Servant",
+                "Petty Criminal"), 200, true, "Pay passage: ", "");
+        recruit.cancel();
+        recruit.verifyPool(before, 500);
+        europe.close();
+        // Remap Recruit to Y; the map's own R stays Statistics.
+        new DeveloperModePage(getContext()).openGameSettings();
+        shortcuts.open();
+        shortcuts.verifyBindings(ShortcutAction.EUROPE_RECRUIT, "R");
+        shortcuts.startChange(ShortcutAction.EUROPE_RECRUIT, 0);
+        shortcuts.pressKeys(KeyCode.Y);
+        shortcuts.verifyBindings(ShortcutAction.EUROPE_RECRUIT, "Y");
+        shortcuts.verifyBindings(ShortcutAction.STATISTICS, "R");
+        shortcuts.saveAndBack();
+        new DeveloperModePage(getContext()).backToGame();
+        europe = game.openEuroperPort();
+        shortcuts.pressKeys(KeyCode.R);
+        shortcuts.verifyOnlyMainWindowShowing();
+        shortcuts.pressKeys(KeyCode.Y);
+        recruit.verifyOffer(List.of("Free Colonist", "Indentured Servant",
+                "Petty Criminal"), 200, true, "Pay passage: ", "");
+        recruit.cancel();
+        recruit.verifyPool(before, 500);
+        europe.close();
+    }
+
 }

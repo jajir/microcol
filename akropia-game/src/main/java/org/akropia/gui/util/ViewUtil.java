@@ -5,6 +5,8 @@ import org.akropia.gui.preferences.DeveloperMode;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import org.akropia.gui.shortcut.KeyboardShortcuts;
+
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 
@@ -19,16 +21,18 @@ public final class ViewUtil {
      */
     private final Stage parentFrame;
     private final DeveloperMode developerMode;
+    private final KeyboardShortcuts shortcuts;
 
     @Inject
-    public ViewUtil(final Stage parentFrame,
-            final DeveloperMode developerMode) {
+    public ViewUtil(final Stage parentFrame, final DeveloperMode developerMode,
+            final KeyboardShortcuts shortcuts) {
+        this.shortcuts = Preconditions.checkNotNull(shortcuts);
         this.parentFrame = Preconditions.checkNotNull(parentFrame);
         this.developerMode = Preconditions.checkNotNull(developerMode);
     }
 
     public void installSceneShortcuts(final Scene scene) {
-        DeveloperModeShortcut.install(scene, developerMode);
+        DeveloperModeShortcut.install(scene, developerMode, shortcuts);
     }
 
     public Stage getPrimaryStage() {

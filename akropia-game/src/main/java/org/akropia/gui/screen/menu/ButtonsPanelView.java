@@ -1,5 +1,9 @@
 package org.akropia.gui.screen.menu;
 
+import org.akropia.gui.shortcut.KeyboardShortcuts;
+import org.akropia.gui.shortcut.ShortcutAction;
+import org.akropia.gui.shortcut.ShortcutButtons;
+
 import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.image.ImageProvider;
@@ -14,9 +18,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.text.Text;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -68,8 +69,26 @@ public final class ButtonsPanelView
 
     private final VBox buttonsBox = new VBox();
 
+    private final KeyboardShortcuts shortcuts;
+
+    private I18n currentI18n;
+
     @Inject
-    ButtonsPanelView(final ImageProvider images) {
+    ButtonsPanelView(final ImageProvider images,
+            final KeyboardShortcuts shortcuts) {
+        this.shortcuts = shortcuts;
+        // Saved shortcut changes rename the Load button at once.
+        shortcuts.addListener(() -> {
+            if (currentI18n != null) {
+                updateLanguage(currentI18n);
+            }
+        });
+        final java.util.Map<ShortcutAction, java.util.function.Supplier<? extends Button>> commands = new java.util.EnumMap<>(
+                ShortcutAction.class);
+        commands.put(ShortcutAction.NEW_FREE_GAME, () -> buttonStartFreeGame);
+        commands.put(ShortcutAction.PLAY_CAMPAIGN, () -> buttonPlayCampaign);
+        commands.put(ShortcutAction.HALL_OF_FAME, () -> buttonHallOfFame);
+        ShortcutButtons.install(buttonsBox, shortcuts, commands);
         buttonContinue.setId(BUTTON_CONTINUE_ID);
         buttonLoad.setId(BUTTON_LOAD_ID);
         buttonPlayCampaign.setId(BUTTON_PLAY_CAMPAIGN_ID);
@@ -132,16 +151,27 @@ public final class ButtonsPanelView
 
     @Override
     public void updateLanguage(final I18n i18n) {
+        currentI18n = i18n;
         buttonContinue.setText(i18n.get(GameMenu.buttonContinue));
-        // Name the platform shortcut: Command-O on macOS, Ctrl+O elsewhere.
-        buttonLoad.setText(i18n.get(GameMenu.buttonLoadSave,
-                new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN)
-                        .getDisplayText()));
+        buttonLoad.setText(shortcuts.withHint(i18n.get(GameMenu.buttonLoadSave),
+                ShortcutAction.LOAD_GAME));
         buttonPlayCampaign.setText(i18n.get(GameMenu.buttonPlayCampaign));
         buttonStartFreeGame.setText(i18n.get(GameMenu.buttonFreeGame));
         buttonHallOfFame.setText(i18n.get(GameMenu.buttonHallOfFame));
         buttonSetting.setText(i18n.get(GameMenu.buttonSetting));
         buttonExitAkropia.setText(i18n.get(GameMenu.buttonExitAkropia));
+        // The menu has no status line and no floating tooltips; the visible
+        // labels stay compact and assistive technology names the key.
+        buttonStartFreeGame.setAccessibleHelp(shortcuts.withHint(
+                buttonStartFreeGame.getText(), ShortcutAction.NEW_FREE_GAME));
+        buttonPlayCampaign.setAccessibleHelp(shortcuts.withHint(
+                buttonPlayCampaign.getText(), ShortcutAction.PLAY_CAMPAIGN));
+        buttonHallOfFame.setAccessibleHelp(shortcuts.withHint(
+                buttonHallOfFame.getText(), ShortcutAction.HALL_OF_FAME));
+        buttonSetting.setAccessibleHelp(shortcuts.withHint(
+                buttonSetting.getText(), ShortcutAction.OPEN_SETTINGS));
+        buttonExitAkropia.setAccessibleHelp(shortcuts.withHint(
+                buttonExitAkropia.getText(), ShortcutAction.QUIT_GAME));
     }
 
     public Button getButtonStartFreeGame() {

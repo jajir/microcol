@@ -185,7 +185,7 @@ public class TC_21_F15_free_play_screen_navigation_test
         game.verifyThatStatusBarContains("New Amsterdam");
         audit.hoverNextTurnDirectly();
         game.verifyThatStatusBarContains(
-                "Finish this turn and start the next one.");
+                "Finish this turn and start the next one. (Ctrl+Enter)");
 
         // Returning directly to the same tile must restore its map description.
         audit.hoverTileDirectly(COLONY);
@@ -209,7 +209,7 @@ public class TC_21_F15_free_play_screen_navigation_test
         // mouse input.
         audit.hoverNextTurnDirectly();
         game.verifyThatStatusBarContains(
-                "Finish this turn and start the next one.");
+                "Finish this turn and start the next one. (Ctrl+Enter)");
         game.moveMouseAtLocation(COLONY);
         game.verifyThatStatusBarContains("New Amsterdam");
         game.openColonyAt(COLONY, "New Amsterdam").close();

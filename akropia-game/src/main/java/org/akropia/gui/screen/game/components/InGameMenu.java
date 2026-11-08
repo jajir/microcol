@@ -7,6 +7,8 @@ import org.akropia.gui.event.QuitGameEvent;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.screen.Screen;
 import org.akropia.gui.screen.ShowScreenEvent;
+import org.akropia.gui.shortcut.KeyboardShortcuts;
+import org.akropia.gui.shortcut.ShortcutAction;
 import org.akropia.i18n.I18n;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
@@ -16,9 +18,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 
 /**
  * Session actions use the same JavaFX popup controls as the colony selector.
@@ -30,11 +29,14 @@ public final class InGameMenu {
     private final PersistingService saves;
     private final GameModelController game;
     private final EventBus events;
+    private final KeyboardShortcuts shortcuts;
     private Node anchor;
 
     @Inject
     InGameMenu(final I18n texts, final PersistingService saves,
-            final GameModelController game, final EventBus events) {
+            final GameModelController game, final EventBus events,
+            final KeyboardShortcuts shortcuts) {
+        this.shortcuts = shortcuts;
         this.texts = texts;
         this.saves = saves;
         this.game = game;
@@ -54,40 +56,56 @@ public final class InGameMenu {
         item(SavedGameText.resume, "menuResume", () -> {
         });
         menu.getItems().add(new SeparatorMenuItem());
-        item(SavedGameText.saveMenu, "menuSave",
-                () -> saves.browse(true, false), KeyCode.S)
-                .setDisable(!game.isHumanTurnReady());
-        item(SavedGameText.loadMenu, "menuLoad",
-                () -> saves.browse(false, false), KeyCode.O);
-        item(SavedGameText.quickSave, "menuQuickSave", saves::quickSave)
-                .setDisable(!game.isHumanTurnReady());
-        item(SavedGameText.quickLoad, "menuQuickLoad", saves::quickLoad)
-                .setDisable(!game.isHumanTurnReady());
+        item(SavedGameText.save, "menuSave", () -> saves.browse(true, false),
+                ShortcutAction.SAVE_GAME).setDisable(!game.isHumanTurnReady());
+        item(SavedGameText.load, "menuLoad", () -> saves.browse(false, false),
+                ShortcutAction.LOAD_GAME);
+        item(SavedGameText.quickSave, "menuQuickSave", saves::quickSave,
+                ShortcutAction.QUICK_SAVE).setDisable(!game.isHumanTurnReady());
+        item(SavedGameText.quickLoad, "menuQuickLoad", saves::quickLoad,
+                ShortcutAction.QUICK_LOAD).setDisable(!game.isHumanTurnReady());
         if (game.isGameModelReady()
                 && game.getGameModel().isCampaignMission()) {
-            item(SavedGameText.restart, "menuRestart", saves::restartMission);
+            item(SavedGameText.restart, "menuRestart", saves::restartMission,
+                    ShortcutAction.RESTART_MISSION);
         }
         menu.getItems().add(new SeparatorMenuItem());
         item(SavedGameText.settings, "menuSettings",
-                () -> events.post(new ShowScreenEvent(Screen.SETTING)));
+                () -> events.post(new ShowScreenEvent(Screen.SETTING)),
+                ShortcutAction.OPEN_SETTINGS);
         item(SavedGameText.mainMenu, "menuMain",
-                () -> events.post(new ExitGameEvent()));
+                () -> events.post(new ExitGameEvent()),
+                ShortcutAction.EXIT_TO_MAIN_MENU);
         item(SavedGameText.quit, "menuQuit",
-                () -> events.post(new QuitGameEvent()));
+                () -> events.post(new QuitGameEvent()),
+                ShortcutAction.QUIT_GAME);
         menu.show(anchor, Side.BOTTOM, 0, 0);
     }
 
     /**
-     * Show the platform shortcut (Command on macOS, Ctrl elsewhere) in the
-     * label; the main window's shortcut owner handles the key itself.
+     * Run a session menu command from its shortcut, with the same action and
+     * availability as its menu item.
+     *
+     * @param action {@link ShortcutAction#EXIT_TO_MAIN_MENU} or
+     *               {@link ShortcutAction#RESTART_MISSION}
+     */
+    public void run(final ShortcutAction action) {
+        if (action == ShortcutAction.EXIT_TO_MAIN_MENU) {
+            events.post(new ExitGameEvent());
+        } else if (action == ShortcutAction.RESTART_MISSION
+                && game.isGameModelReady()
+                && game.getGameModel().isCampaignMission()) {
+            saves.restartMission();
+        }
+    }
+
+    /**
+     * Show the action's current shortcut in the label; its key handler owns the
+     * key itself.
      */
     private MenuItem item(final SavedGameText text, final String id,
-            final Runnable action, final KeyCode shortcut) {
-        return item(
-                texts.get(text,
-                        new KeyCodeCombination(shortcut,
-                                KeyCombination.SHORTCUT_DOWN).getDisplayText()),
-                id, action);
+            final Runnable action, final ShortcutAction shortcut) {
+        return item(shortcuts.withHint(texts.get(text), shortcut), id, action);
     }
 
     private MenuItem item(final SavedGameText text, final String id,

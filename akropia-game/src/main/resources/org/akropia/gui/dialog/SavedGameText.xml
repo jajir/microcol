@@ -4,10 +4,8 @@
     <entry key="resume">Back to game</entry>
     <entry key="save">Save game</entry>
     <entry key="load">Load game</entry>
-    <entry key="saveMenu">Save game (%s)</entry>
-    <entry key="loadMenu">Load game (%s)</entry>
-    <entry key="quickSave">Quick save (F5)</entry>
-    <entry key="quickLoad">Quick load (F9)</entry>
+    <entry key="quickSave">Quick save</entry>
+    <entry key="quickLoad">Quick load</entry>
     <entry key="restart">Restart mission</entry>
     <entry key="settings">Settings</entry>
     <entry key="mainMenu">Main menu</entry>

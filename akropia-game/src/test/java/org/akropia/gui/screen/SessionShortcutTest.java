@@ -2,61 +2,75 @@ package org.akropia.gui.screen;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
 import org.akropia.gui.screen.SessionShortcut.Action;
+import org.akropia.gui.shortcut.ShortcutController;
+import org.akropia.gui.shortcut.ShortcutControllerTest;
+import org.akropia.gui.shortcut.ShortcutPlatform;
+import org.junit.jupiter.api.Test;
 
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 class SessionShortcutTest {
+
+    private static Action resolve(final ShortcutPlatform platform,
+            final KeyEvent event, final boolean blocked, final boolean canLoad,
+            final boolean canSave) {
+        final ShortcutController shortcuts = ShortcutControllerTest
+                .controller(platform);
+        return SessionShortcut.resolve(shortcuts, event, blocked, canLoad,
+                canSave);
+    }
+
+    private static KeyEvent key(final KeyCode code, final boolean control,
+            final boolean meta, final boolean shift) {
+        return new KeyEvent(KeyEvent.KEY_PRESSED, "", "", code, shift, control,
+                false, meta);
+    }
+
     @Test
     void controlOpensLoadAndSaveOutsideMacOs() {
-        assertEquals(Action.LOAD, SessionShortcut.resolve(false, KeyCode.O,
-                false, true, false, false, true, true));
-        assertEquals(Action.SAVE, SessionShortcut.resolve(false, KeyCode.S,
-                false, true, false, false, true, true));
-        assertEquals(Action.NONE, SessionShortcut.resolve(false, KeyCode.O,
-                true, false, false, false, true, true));
-        assertEquals(Action.NONE, SessionShortcut.resolve(false, KeyCode.O,
-                true, true, false, false, true, true));
+        for (final ShortcutPlatform platform : new ShortcutPlatform[] {
+                ShortcutPlatform.WINDOWS, ShortcutPlatform.LINUX }) {
+            assertEquals(Action.LOAD, resolve(platform,
+                    key(KeyCode.O, true, false, false), false, true, true));
+            assertEquals(Action.SAVE, resolve(platform,
+                    key(KeyCode.S, true, false, false), false, true, true));
+            assertEquals(Action.NONE, resolve(platform,
+                    key(KeyCode.O, false, true, false), false, true, true));
+        }
     }
 
     @Test
     void macOsRequiresCommandInsteadOfControl() {
-        assertEquals(Action.LOAD, SessionShortcut.resolve(true, KeyCode.O, true,
-                false, false, false, true, true));
-        assertEquals(Action.SAVE, SessionShortcut.resolve(true, KeyCode.S, true,
-                false, false, false, true, true));
-        assertEquals(Action.NONE, SessionShortcut.resolve(true, KeyCode.O,
-                false, true, false, false, true, true));
-        assertEquals(Action.NONE, SessionShortcut.resolve(true, KeyCode.S, true,
-                true, false, false, true, true));
+        assertEquals(Action.LOAD, resolve(ShortcutPlatform.MACOS,
+                key(KeyCode.O, false, true, false), false, true, true));
+        assertEquals(Action.SAVE, resolve(ShortcutPlatform.MACOS,
+                key(KeyCode.S, false, true, false), false, true, true));
+        assertEquals(Action.NONE, resolve(ShortcutPlatform.MACOS,
+                key(KeyCode.O, true, false, false), false, true, true));
     }
 
     @Test
     void plainKeysAndExtraModifiersKeepTheirOwners() {
-        assertEquals(Action.NONE, SessionShortcut.resolve(false, KeyCode.O,
-                false, false, false, false, true, true));
-        assertEquals(Action.NONE, SessionShortcut.resolve(false, KeyCode.S,
-                false, false, false, false, true, true));
-        assertEquals(Action.NONE, SessionShortcut.resolve(false, KeyCode.O,
-                false, true, true, false, true, true));
-        assertEquals(Action.NONE, SessionShortcut.resolve(false, KeyCode.F5,
-                false, true, false, false, true, true));
-        assertEquals(Action.NONE, SessionShortcut.resolve(false, KeyCode.F9,
-                false, true, false, false, true, true));
+        assertEquals(Action.NONE, resolve(ShortcutPlatform.LINUX,
+                key(KeyCode.O, false, false, false), false, true, true));
+        assertEquals(Action.NONE, resolve(ShortcutPlatform.LINUX,
+                key(KeyCode.O, true, false, true), false, true, true));
+        assertEquals(Action.NONE, resolve(ShortcutPlatform.LINUX,
+                key(KeyCode.F5, true, false, false), false, true, true));
     }
 
     @Test
     void typingModalsFileOperationsAndUnavailableScreensBlock() {
-        assertEquals(Action.NONE, SessionShortcut.resolve(false, KeyCode.O,
-                false, true, false, true, true, true));
-        assertEquals(Action.NONE, SessionShortcut.resolve(true, KeyCode.S, true,
-                false, false, true, true, true));
-        assertEquals(Action.NONE, SessionShortcut.resolve(false, KeyCode.O,
-                false, true, false, false, false, true));
-        assertEquals(Action.NONE, SessionShortcut.resolve(false, KeyCode.S,
-                false, true, false, false, true, false));
-        assertEquals(Action.LOAD, SessionShortcut.resolve(false, KeyCode.O,
-                false, true, false, false, true, false));
+        assertEquals(Action.NONE, resolve(ShortcutPlatform.LINUX,
+                key(KeyCode.O, true, false, false), true, true, true));
+        assertEquals(Action.NONE, resolve(ShortcutPlatform.LINUX,
+                key(KeyCode.O, true, false, false), false, false, true));
+        assertEquals(Action.NONE, resolve(ShortcutPlatform.LINUX,
+                key(KeyCode.S, true, false, false), false, true, false));
+        assertEquals(Action.LOAD, resolve(ShortcutPlatform.LINUX,
+                key(KeyCode.O, true, false, false), false, true, false));
     }
+
 }

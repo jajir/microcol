@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.akropia.gui.buttonpanel.Buttons;
+import org.akropia.gui.shortcut.KeyboardShortcuts;
+import org.akropia.gui.shortcut.ShortcutAction;
 import org.akropia.gui.util.AbstractMessageWindow;
 import org.akropia.gui.util.ButtonsBarYesNo;
 import org.akropia.gui.util.ViewUtil;
@@ -31,10 +33,14 @@ public final class GoToColonyDialog extends AbstractMessageWindow {
 
     private Optional<TradeRouteStop> result = Optional.empty();
 
+    private final KeyboardShortcuts shortcuts;
+
     @Inject
-    GoToColonyDialog(final ViewUtil viewUtil, final I18n i18n) {
+    GoToColonyDialog(final ViewUtil viewUtil, final I18n i18n,
+            final KeyboardShortcuts shortcuts) {
         super(viewUtil, i18n);
         this.i18n = i18n;
+        this.shortcuts = shortcuts;
     }
 
     /**
@@ -89,7 +95,8 @@ public final class GoToColonyDialog extends AbstractMessageWindow {
         buttons.getButtonNo().setOnAction(event -> onCancelDialog());
         root.getChildren().add(buttons.getContent());
         init(root);
-        setTitle(i18n.get(Buttons.goToColonyTitle));
+        setTitle(shortcuts.withHint(i18n.get(Buttons.goToColonyTitle),
+                ShortcutAction.GO_TO));
         showAndWait();
         return result;
     }

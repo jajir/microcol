@@ -1,11 +1,16 @@
 package org.akropia.test;
 
 import java.io.File;
+import java.util.Map;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.akropia.gui.screen.setting.KeyboardShortcutsDialog;
+import org.akropia.gui.shortcut.ShortcutAction;
 import org.akropia.page.FramedSettingsPage;
+import org.akropia.page.GameToolbarPage;
+import org.akropia.page.KeyboardShortcutsPage;
 import org.akropia.page.DeveloperModePage;
 import org.akropia.page.GamePage;
 import org.akropia.page.HostedPanelPage;
@@ -30,7 +35,8 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
                     "autosaveEnabled", "settingTurnSummary",
                     "settingOpenEuropeOnArrival", "settingVolume",
                     "settingEffectsVolume", "settingAnimationSpeed",
-                    "settingMapScrollSpeed", "settingDeveloperMode");
+                    "settingMapScrollSpeed", "settingKeyboardShortcuts",
+                    "settingDeveloperMode");
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -454,6 +460,291 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         developer.openGameSettings();
         reloadedPage.verifyVolumes(10, 10, "10 %", "10 %");
         developer.backToGame();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_10_keyboard_shortcuts_capture_conflict_and_apply_after_save()
+            throws Exception {
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        game.waitWhileMoving();
+        final DeveloperModePage developer = new DeveloperModePage(getContext());
+        final KeyboardShortcutsPage shortcuts = new KeyboardShortcutsPage(
+                getContext());
+        final ColonizopediaPage help = ColonizopediaPage.of(getContext());
+        // In-game Settings opens the editor with the current bindings.
+        developer.openGameSettings();
+        developer.setModeInSettings(false);
+        shortcuts.open();
+        shortcuts.verifyEditorOpen(true);
+        shortcuts.verifyBindings(ShortcutAction.HELP, "H");
+        shortcuts.verifyStatus("Changes take effect after Save and back.");
+        // Escape cancels a capture without closing the editor.
+        shortcuts.startAdd(ShortcutAction.HELP);
+        shortcuts.verifyStatus(
+                "Press the new combination for Colonizopedia. Escape cancels.");
+        shortcuts.verifySaveEnabled(false);
+        shortcuts.pressKeys(KeyCode.ESCAPE);
+        shortcuts.verifyEditorOpen(true);
+        shortcuts.verifyStatus("No combination was changed.");
+        shortcuts.verifyFocused(ShortcutAction.HELP, "add");
+        shortcuts.verifyBindings(ShortcutAction.HELP, "H");
+        // Capturing F3 changes the draft but does not run Developer mode.
+        developer.rememberGame();
+        shortcuts.startChange(ShortcutAction.HELP, 0);
+        shortcuts.pressKeys(KeyCode.F3);
+        developer.verifyState(false);
+        // F3 is already the global Developer mode key, so saving is blocked.
+        shortcuts.verifyBindings(ShortcutAction.HELP, "F3");
+        shortcuts.verifyStatus("F3 is used by both Developer mode and"
+                + " Colonizopedia. Change one of them before saving.");
+        shortcuts.verifySaveEnabled(false);
+        // Map actions conflict with each other too.
+        shortcuts.startChange(ShortcutAction.HELP, 0);
+        shortcuts.pressKeys(KeyCode.K);
+        shortcuts.verifyStatus("K is used by both Congress and Colonizopedia."
+                + " Change one of them before saving.");
+        shortcuts.verifySaveEnabled(false);
+        // A free key resolves the conflict; a second binding is kept beside
+        // it.
+        shortcuts.startChange(ShortcutAction.HELP, 0);
+        shortcuts.pressKeys(KeyCode.Y);
+        shortcuts.verifyFocused(ShortcutAction.HELP, "binding-0");
+        shortcuts.startAdd(ShortcutAction.HELP);
+        shortcuts.pressKeys(KeyCode.SHIFT, KeyCode.Y);
+        shortcuts.verifyBindings(ShortcutAction.HELP, "Y", "Shift+Y");
+        shortcuts.verifyStatus("Changes take effect after Save and back.");
+        shortcuts.verifySaveEnabled(true);
+        shortcuts.captureDialog(KeyboardShortcutsDialog.STATUS_ID,
+                "r0432-shortcuts-editor-en.png");
+        // Save and back stores only the deviation and closes the editor.
+        shortcuts.saveAndBack();
+        shortcuts.verifyEditorOpen(false);
+        shortcuts.verifySavedDeviations(Map.of("map.help", "Y, Shift+Y"));
+        developer.verifyGameUnchanged();
+        developer.backToGame();
+        // The toolbar hint and the map keys change without a restart.
+        final GameToolbarPage toolbar = new GameToolbarPage(getContext());
+        toolbar.hover("help");
+        toolbar.verifyExplanation("Colonizopedia - guide. (Y)", null);
+        new FreePlayAuditPage(getContext()).press(KeyCode.H);
+        help.verifyDialogClosed();
+        new FreePlayAuditPage(getContext()).press(KeyCode.Y);
+        help.verifyDialogOpen();
+        help.closeWithEscape();
+        help.verifyDialogClosed();
+        shortcuts.pressKeys(KeyCode.SHIFT, KeyCode.Y);
+        help.verifyDialogOpen();
+        help.closeWithEscape();
+        help.verifyDialogClosed();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_11_keyboard_shortcuts_cancel_reset_unbound_and_restart()
+            throws Exception {
+        SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        final DeveloperModePage developer = new DeveloperModePage(getContext());
+        final KeyboardShortcutsPage shortcuts = new KeyboardShortcutsPage(
+                getContext());
+        developer.setModeInSettings(false);
+        // Cancel discards a removed binding.
+        shortcuts.open();
+        shortcuts.verifyBindings(ShortcutAction.DEVELOPER_MODE, "F3");
+        shortcuts.remove(ShortcutAction.DEVELOPER_MODE, 0);
+        shortcuts.verifyBindings(ShortcutAction.DEVELOPER_MODE);
+        shortcuts.verifyFocused(ShortcutAction.DEVELOPER_MODE, "add");
+        shortcuts.cancel();
+        shortcuts.verifyEditorOpen(false);
+        developer.verifySettings(false, "Developer mode (F3)");
+        shortcuts.verifySavedDeviations(Map.of());
+        // Escape also cancels the whole draft.
+        shortcuts.open();
+        shortcuts.verifyBindings(ShortcutAction.DEVELOPER_MODE, "F3");
+        shortcuts.remove(ShortcutAction.DEVELOPER_MODE, 0);
+        shortcuts.pressKeys(KeyCode.ESCAPE);
+        shortcuts.verifyEditorOpen(false);
+        // Restore defaults changes only the draft.
+        shortcuts.open();
+        shortcuts.verifyBindings(ShortcutAction.DEVELOPER_MODE, "F3");
+        shortcuts.remove(ShortcutAction.DEVELOPER_MODE, 0);
+        shortcuts.restoreDefaults();
+        shortcuts.verifyBindings(ShortcutAction.DEVELOPER_MODE, "F3");
+        // An explicitly unbound action is saved and its label updates at
+        // once.
+        shortcuts.remove(ShortcutAction.DEVELOPER_MODE, 0);
+        shortcuts.saveAndBack();
+        shortcuts.verifyEditorOpen(false);
+        shortcuts.verifySavedDeviations(Map.of("global.developerMode", ""));
+        developer.verifySettings(false, "Developer mode");
+        developer.pressF3();
+        developer.verifyState(false);
+        settings.goBack();
+        // Recreate the application/injector against the same persisted test
+        // profile.
+        final Stage restarted = getContext().getPrimaryStage();
+        final org.testfx.api.FxRobot robot = getContext().getRobot();
+        robot.interact(() -> {
+            getAkropia().stop();
+            restarted.hide();
+        });
+        initialize(restarted, getClass(),
+                new File("src/test/scenarios/F15-free-play-audit.akropia"));
+        getContext().setRobot(robot);
+        org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
+        robot.interact(() -> {
+            restarted.toFront();
+            restarted.requestFocus();
+        });
+        // The restart replaced the test context; use pages of the new
+        // application, not the stopped one.
+        final DeveloperModePage restartedDeveloper = new DeveloperModePage(
+                getContext());
+        final KeyboardShortcutsPage restartedShortcuts = new KeyboardShortcutsPage(
+                getContext());
+        settings = WelcomePage.of(getContext()).openSetting();
+        restartedShortcuts
+                .verifySavedDeviations(Map.of("global.developerMode", ""));
+        restartedDeveloper.verifySettings(false, "Developer mode");
+        restartedDeveloper.pressF3();
+        restartedDeveloper.verifyState(false);
+        restartedShortcuts.open();
+        restartedShortcuts.verifyBindings(ShortcutAction.DEVELOPER_MODE);
+        // Restoring and saving the defaults removes every saved deviation.
+        restartedShortcuts.restoreDefaults();
+        restartedShortcuts.saveAndBack();
+        restartedShortcuts.verifySavedDeviations(Map.of());
+        restartedDeveloper.verifySettings(false, "Developer mode (F3)");
+        restartedDeveloper.pressF3();
+        restartedDeveloper.verifyState(true);
+        settings.goBack().verifyMainScreen();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_12_keyboard_shortcuts_editor_is_complete_in_english_and_czech()
+            throws Exception {
+        SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        final KeyboardShortcutsPage shortcuts = new KeyboardShortcutsPage(
+                getContext());
+        // A small supported main window keeps the whole editor readable.
+        new FramedSettingsPage(getContext()).resizeWindow(1000, 700);
+        shortcuts.open();
+        shortcuts.verifyEditorTexts("Keyboard shortcuts", "Defaults for Linux",
+                "Restore defaults", "Cancel", "Save and back");
+        shortcuts.verifyActionTexts(ShortcutAction.HELP, "Colonizopedia",
+                "Add");
+        shortcuts.verifyBindings(ShortcutAction.SKIP_UNIT, "Space");
+        shortcuts.verifyCompleteLayout();
+        shortcuts.captureDialog(KeyboardShortcutsDialog.STATUS_ID,
+                "r0432-shortcuts-editor-layout-en.png");
+        shortcuts.cancel();
+        // Czech names every action, key and button in full.
+        settings.setCzechLanguage();
+        shortcuts.open();
+        shortcuts.verifyEditorTexts("Klávesové zkratky",
+                "Výchozí hodnoty pro Linux", "Obnovit výchozí", "Zrušit",
+                "Uložit a zpět");
+        shortcuts.verifyActionTexts(ShortcutAction.HELP, "Colonizopedie",
+                "Přidat");
+        shortcuts.verifyActionTexts(ShortcutAction.SECRET_OPTION,
+                "Podržet pro vývojářské načtení", "Přidat");
+        shortcuts.verifyBindings(ShortcutAction.SKIP_UNIT, "Mezerník");
+        shortcuts.verifyStatus("Změny začnou platit po Uložit a zpět.");
+        shortcuts.verifyCompleteLayout();
+        shortcuts.captureDialog(KeyboardShortcutsDialog.STATUS_ID,
+                "r0432-shortcuts-editor-layout-cs.png");
+        // Capture and conflict feedback are Czech too.
+        shortcuts.startChange(ShortcutAction.HELP, 0);
+        shortcuts.verifyStatus(
+                "Stiskněte novou kombinaci pro Colonizopedie. Escape zruší.");
+        shortcuts.pressKeys(KeyCode.K);
+        shortcuts.verifyStatus("K používá Kongres i Colonizopedie."
+                + " Před uložením jednu z nich změňte.");
+        shortcuts.verifyCompleteLayout();
+        shortcuts.captureDialog(KeyboardShortcutsDialog.STATUS_ID,
+                "r0432-shortcuts-conflict-cs.png");
+        shortcuts.cancel();
+        shortcuts.verifySavedDeviations(Map.of());
+        settings.setEnglishLanguage();
+        settings.goBack().verifyMainScreen();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_13_remapped_developer_letter_leaves_typing_to_text_fields()
+            throws Exception {
+        SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        final DeveloperModePage developer = new DeveloperModePage(getContext());
+        final KeyboardShortcutsPage shortcuts = new KeyboardShortcutsPage(
+                getContext());
+        developer.setModeInSettings(false);
+        // Give Developer mode the plain letter Y.
+        shortcuts.open();
+        shortcuts.startChange(ShortcutAction.DEVELOPER_MODE, 0);
+        shortcuts.pressKeys(KeyCode.Y);
+        shortcuts.verifyBindings(ShortcutAction.DEVELOPER_MODE, "Y");
+        developer.verifyState(false);
+        shortcuts.saveAndBack();
+        developer.verifySettings(false, "Developer mode (Y)");
+        // Typing Y into a name keeps the letter and leaves the mode alone.
+        final WelcomePage welcome = settings.goBack();
+        final org.akropia.page.FreePlaySetupPage setup = welcome
+                .openFreePlaySetup();
+        setup.enterName("Ka");
+        shortcuts.pressKeysIn("freePlayPlayerName", KeyCode.Y);
+        shortcuts.pressKeysIn("freePlayPlayerName", KeyCode.SHIFT, KeyCode.Y);
+        developer.verifyText("freePlayPlayerName", "KayY");
+        developer.verifyState(false);
+        // Outside the text field the same key switches the mode once.
+        setup.back().verifyMainScreen();
+        shortcuts.pressKeys(KeyCode.Y);
+        developer.verifyState(true);
+        // F3 is no longer bound, so it does nothing.
+        developer.pressF3();
+        developer.verifyState(true);
+        // Restore the packaged default for later scenarios.
+        settings = welcome.openSetting();
+        shortcuts.open();
+        shortcuts.restoreDefaults();
+        shortcuts.saveAndBack();
+        shortcuts.verifySavedDeviations(Map.of());
+        developer.verifySettings(true, "Developer mode (F3)");
+        settings.goBack().verifyMainScreen();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_14_failed_shortcut_save_keeps_draft_and_active_shortcuts()
+            throws Exception {
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        final KeyboardShortcutsPage shortcuts = new KeyboardShortcutsPage(
+                getContext());
+        shortcuts.open();
+        shortcuts.startChange(ShortcutAction.HELP, 0);
+        shortcuts.pressKeys(KeyCode.Y);
+        // The settings file cannot be written now.
+        shortcuts.breakSettingsStorage();
+        try {
+            shortcuts.saveAndBack();
+            shortcuts.verifyEditorOpen(true);
+            shortcuts.verifyStatus("Shortcuts could not be saved; your changes"
+                    + " are still here and the previous shortcuts stay active."
+                    + " Check that the settings folder can be written.");
+            shortcuts.verifyBindings(ShortcutAction.HELP, "Y");
+            shortcuts.verifyActiveBinding(ShortcutAction.HELP, "H");
+            shortcuts.captureDialog(KeyboardShortcutsDialog.STATUS_ID,
+                    "r0432-shortcuts-save-failed-en.png");
+        } finally {
+            // A failed check must not leave broken storage behind.
+            shortcuts.restoreSettingsStorage();
+        }
+        // Once storage works again, the kept draft is saved and applied.
+        shortcuts.saveAndBack();
+        shortcuts.verifyEditorOpen(false);
+        shortcuts.verifyActiveBinding(ShortcutAction.HELP, "Y");
+        shortcuts.verifySavedDeviations(Map.of("map.help", "Y"));
+        settings.goBack().verifyMainScreen();
     }
 
 }

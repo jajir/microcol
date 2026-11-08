@@ -4,23 +4,23 @@
 <properties>
 	<comment>Define keys for Europe dialog</comment>
 
-	<entry key="buttonStatistics">Statistics. (R)</entry>
-	<entry key="buttonCenter">Find focused place. (C)</entry>
-	<entry key="buttonTurnReport">Turn report. Some important events from previous turn. (T)</entry>
-	<entry key="buttonGoals">Objectives. (O)</entry>
-	<entry key="buttonHelp">Colonizopedia - guide. (H)</entry>
+	<entry key="buttonStatistics">Statistics.</entry>
+	<entry key="buttonCenter">Find focused place.</entry>
+	<entry key="buttonTurnReport">Turn report. Some important events from previous turn.</entry>
+	<entry key="buttonGoals">Objectives.</entry>
+	<entry key="buttonHelp">Colonizopedia - guide.</entry>
 	<entry key="buttonExit">Open game menu (Esc)</entry>
 	<entry key="buttonNextTurn">Next turn</entry>
-	<entry key="buttonEurope">Home port port. (E)</entry>
-	<entry key="buttonMove">Move unit. (M)</entry>
-	<entry key="buttonPlowField">Plow field. (P)</entry>
-	<entry key="buttonBuildColony">Build new colony. (B)</entry>
+	<entry key="buttonEurope">Home port port.</entry>
+	<entry key="buttonMove">Move unit.</entry>
+	<entry key="buttonPlowField">Plow field.</entry>
+	<entry key="buttonBuildColony">Build new colony.</entry>
 	<entry key="buttonDeclareIndependence">Declare an independent polis.</entry>
 
-    <entry key="buttonColonies">Colonies (I)</entry>
+    <entry key="buttonColonies">Colonies</entry>
     <entry key="noColonies">No colonies yet</entry>
-    <entry key="buttonWait">Wait&#10;(Tab)</entry>
-    <entry key="buttonSkipUnitTurn">Skip unit turn (Space)</entry>
+    <entry key="buttonWait">Wait</entry>
+    <entry key="buttonSkipUnitTurn">Skip unit turn</entry>
     <entry key="waitExplanation">Select the next available unit without spending movement.</entry>
     <entry key="skipUnitTurnExplanation">Spend all remaining movement for this unit until its next turn.</entry>
     <entry key="unitOrderUnavailable">This unit cannot skip now. Select an available unit.</entry>
@@ -38,9 +38,9 @@
     <entry key="goToChanged">The go-to destination changed. Choose it again.</entry>
     <entry key="goToStatusActive">Going to %s</entry>
     <entry key="goToStatusPaused">Paused, no route to %s</entry>
-    <entry key="buttonGoToColony">Go to… (G)</entry>
+    <entry key="buttonGoToColony">Go to…</entry>
     <entry key="goToColonyExplanation">Choose a reachable destination. Ships can sail to Home port or your own ports; the order continues on your later turns.</entry>
-    <entry key="goToColonyTitle">Go to… (G)</entry>
+    <entry key="goToColonyTitle">Go to…</entry>
     <entry key="goToColonyCaption">Choose a destination the selected unit can reach:</entry>
     <entry key="goToColonyConfirm">Go</entry>
     <entry key="goToColonyCancel">Cancel</entry>
@@ -85,7 +85,7 @@
     <entry key="plowProblemUnsuitableTerrain">This terrain cannot be plowed. Use grassland, prairie or savannah.</entry>
     <entry key="plowProblemForest">Clear the forest before plowing.</entry>
     <entry key="plowProblemAlreadyPlowed">This square is already plowed.</entry>
-    <entry key="buttonClearForest">Clear forest. (F)</entry>
+    <entry key="buttonClearForest">Clear forest.</entry>
     <entry key="buttonCancelClearForest">Cancel forest clearing. Progress is lost; no movement or tools are restored.</entry>
     <entry key="clearForestProblemUnavailable">This unit cannot clear a forest now. Select an available unit on your turn.</entry>
     <entry key="clearForestProblemNotPioneer">Only a pioneer can clear a forest.</entry>
@@ -137,8 +137,8 @@
     <entry key="toolbarRetire">Retire</entry>
     <entry key="toolbarExit">Menu</entry>
     <entry key="toolbarIndependence">Independence</entry>
-    <entry key="coloniesExplanation">Choose a colony to open. (I)</entry>
-    <entry key="congressExplanation">Open Congress and choose a Founding Father. (K)</entry>
+    <entry key="coloniesExplanation">Choose a colony to open.</entry>
+    <entry key="congressExplanation">Open Congress and choose a Founding Father.</entry>
     <entry key="nextTurnExplanation">Finish this turn and start the next one.</entry>
     <entry key="plowProblemRiver">River squares cannot be plowed.</entry>
     <entry key="mapHeadingExplanation">Mappa Mundi is Latin for “map of the world”. Latin was widely used at the time.</entry>

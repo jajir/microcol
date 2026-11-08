@@ -1,5 +1,12 @@
 package org.akropia.gui.screen.colony;
 
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.function.Supplier;
+
+import org.akropia.gui.shortcut.KeyboardShortcuts;
+import org.akropia.gui.shortcut.ShortcutAction;
+import org.akropia.gui.shortcut.ShortcutButtons;
 import org.akropia.gui.Loc;
 
 import org.akropia.gui.util.ActionButtons;
@@ -38,6 +45,8 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
     private final I18n i18n;
     private final GameModelController game;
     private org.akropia.model.Colony colony;
+    private KeyboardShortcuts shortcuts;
+    private final Map<Button, ShortcutAction> hintActions = new java.util.HashMap<>();
 
     @Inject
     ColonyButtonsPanel(final ImageProvider imageProvider,
@@ -45,7 +54,8 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
             final GameModelController game, final DialogCustomHouse customHouse,
             final DialogEducation school, final DialogTradeRoute routes,
             final DialogTradeRouteCargo routeCargo,
-            final org.akropia.gui.dialog.TreasureDialog treasureDialog) {
+            final org.akropia.gui.dialog.TreasureDialog treasureDialog,
+            final KeyboardShortcuts shortcuts) {
         super(imageProvider, eventBus, Source.COLONY, i18n);
 
         this.i18n = i18n;
@@ -71,6 +81,25 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
                 evnt -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
 
         getButtonPanel().getChildren().addAll(exports, education, buttonClose);
+        final Map<ShortcutAction, Supplier<? extends Button>> commands = new EnumMap<>(
+                ShortcutAction.class);
+        // The queue button is recreated with each repaint of the colony.
+        commands.put(ShortcutAction.COLONY_CONSTRUCTION,
+                () -> buttonClose.getScene() == null ? null
+                        : (Button) buttonClose.getScene()
+                                .lookup("#constructionOpen"));
+        commands.put(ShortcutAction.COLONY_EDUCATION, () -> education);
+        commands.put(ShortcutAction.COLONY_CUSTOM_HOUSE, () -> exports);
+        commands.put(ShortcutAction.COLONY_TRADE_ROUTE, () -> tradeRoute);
+        commands.put(ShortcutAction.COLONY_ROUTE_CARGO, () -> tradeRouteCargo);
+        commands.put(ShortcutAction.COLONY_TREASURE, () -> treasure);
+        ShortcutButtons.install(buttonClose, shortcuts, commands);
+        this.shortcuts = shortcuts;
+        hintActions.put(education, ShortcutAction.COLONY_EDUCATION);
+        hintActions.put(exports, ShortcutAction.COLONY_CUSTOM_HOUSE);
+        hintActions.put(tradeRoute, ShortcutAction.COLONY_TRADE_ROUTE);
+        hintActions.put(tradeRouteCargo, ShortcutAction.COLONY_ROUTE_CARGO);
+        hintActions.put(treasure, ShortcutAction.COLONY_TREASURE);
         // Disabled buttons do not receive mouse events; their parent does.
         getButtonPanel().addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
             final Button hovered = getButtonPanel().getChildren().stream()
@@ -81,14 +110,24 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
             if (hovered != hintedButton) {
                 hintedButton = hovered;
                 eventBus.post(new StatusBarMessageEvent(
-                        hovered == null ? "" : hovered.getAccessibleHelp(),
-                        Source.COLONY));
+                        hovered == null ? "" : hint(hovered), Source.COLONY));
             }
         });
         getButtonPanel().addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
             hintedButton = null;
             eventBus.post(new StatusBarMessageEvent(Source.COLONY));
         });
+    }
+
+    /**
+     * The hovered button's explanation followed by its current shortcut.
+     */
+    private String hint(final Button button) {
+        final ShortcutAction action = hintActions.get(button);
+        final String help = button.getAccessibleHelp() == null
+                || button.getAccessibleHelp().isEmpty() ? button.getText()
+                        : button.getAccessibleHelp();
+        return action == null ? help : shortcuts.withHint(help, action);
     }
 
     void setColony(org.akropia.model.Colony colony) {

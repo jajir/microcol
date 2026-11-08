@@ -1,7 +1,9 @@
 package org.akropia.gui.preferences;
 
 import java.awt.Rectangle;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
@@ -10,6 +12,8 @@ import org.akropia.gui.util.Language;
 import org.akropia.gui.util.PathPlanningService;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.inject.Inject;
 
 /**
@@ -263,6 +267,59 @@ public class GamePreferences {
 
     public boolean isOpenEuropeOnArrival() {
         return settingService.load().isOpenEuropeOnArrival();
+    }
+
+    /**
+     * Read the player's shortcut deviations of one platform. Entries that are
+     * not text are skipped; reading never changes the stored setting.
+     *
+     * @param platform platform identifier
+     * @return action keys and written bindings; empty value means unbound
+     */
+    public Map<String, String> getShortcutOverrides(final String platform) {
+        final Map<String, String> out = new LinkedHashMap<>();
+        final JsonElement all = settingService.load().getKeyboardShortcuts();
+        if (all == null || !all.isJsonObject()) {
+            return out;
+        }
+        final JsonElement saved = all.getAsJsonObject().get(platform);
+        if (saved == null || !saved.isJsonObject()) {
+            return out;
+        }
+        for (final Map.Entry<String, JsonElement> entry : saved
+                .getAsJsonObject().entrySet()) {
+            if (entry.getValue().isJsonPrimitive()
+                    && entry.getValue().getAsJsonPrimitive().isString()) {
+                out.put(entry.getKey(), entry.getValue().getAsString());
+            }
+        }
+        return out;
+    }
+
+    /**
+     * Replace the shortcut deviations of one platform; other platforms and
+     * preferences stay unchanged.
+     *
+     * @param platform  platform identifier
+     * @param overrides action keys and written bindings
+     */
+    public void setShortcutOverrides(final String platform,
+            final Map<String, String> overrides) {
+        Preconditions.checkNotNull(platform);
+        settingService.update(setting -> {
+            final JsonElement saved = setting.getKeyboardShortcuts();
+            final JsonObject all = saved != null && saved.isJsonObject()
+                    ? saved.getAsJsonObject().deepCopy()
+                    : new JsonObject();
+            if (overrides.isEmpty()) {
+                all.remove(platform);
+            } else {
+                final JsonObject values = new JsonObject();
+                overrides.forEach(values::addProperty);
+                all.add(platform, values);
+            }
+            setting.setKeyboardShortcuts(all.size() == 0 ? null : all);
+        });
     }
 
     public void setGameInProgressSaveFile(final String gameInProgressSaveFile) {

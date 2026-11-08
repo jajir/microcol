@@ -12,9 +12,9 @@ import org.akropia.i18n.I18n;
 
 /**
  * Every menu text is formatted by I18n, so text without arguments must be a
- * valid format with none, and the generated-world preview and the Load button
- * with its platform shortcut must accept their arguments. The setup screen
- * builds these texts while the application starts.
+ * valid format with none, and the generated-world preview must accept its
+ * arguments. The shortcut controller adds the Load button's shortcut. The setup
+ * screen builds these texts while the application starts.
  */
 class GameMenuTextTest {
 
@@ -31,8 +31,7 @@ class GameMenuTextTest {
                 new Locale("cs", "CZ") }) {
             final I18n i18n = i18n(locale);
             for (final GameMenu key : GameMenu.values()) {
-                if (key != GameMenu.setupGeneratedPreview
-                        && key != GameMenu.buttonLoadSave) {
+                if (key != GameMenu.setupGeneratedPreview) {
                     final String text = assertDoesNotThrow(() -> i18n.get(key),
                             () -> locale + " " + key);
                     assertFalse(text.isBlank(), () -> locale + " " + key);
@@ -62,11 +61,11 @@ class GameMenuTextTest {
     }
 
     @Test
-    void loadButtonNamesThePlatformShortcutInBothLanguages() {
-        assertEquals("Load saved game (Ctrl+O)",
-                i18n(Locale.ROOT).get(GameMenu.buttonLoadSave, "Ctrl+O"));
-        assertEquals("Nahrát hru (⌘O)", i18n(new Locale("cs", "CZ"))
-                .get(GameMenu.buttonLoadSave, "⌘O"));
+    void loadButtonLeavesItsShortcutToTheShortcutController() {
+        assertEquals("Load saved game",
+                i18n(Locale.ROOT).get(GameMenu.buttonLoadSave));
+        assertEquals("Nahrát hru",
+                i18n(new Locale("cs", "CZ")).get(GameMenu.buttonLoadSave));
     }
 
 }

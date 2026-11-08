@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.google.gson.JsonElement;
 
 /**
  * Object representing Akropia setting.
@@ -50,6 +51,13 @@ public class Setting {
     private String gameInProgressSaveFile;
 
     /**
+     * Player's keyboard shortcut deviations by platform and action. Kept as raw
+     * JSON, so an unreadable entry never discards the other settings; see
+     * {@link GamePreferences#getShortcutOverrides(String)}.
+     */
+    private JsonElement keyboardShortcuts;
+
+    /**
      * Independent copy, so a remembered setting cannot be changed by callers.
      *
      * @return copy with the same values
@@ -72,6 +80,8 @@ public class Setting {
         out.openEuropeOnArrival = openEuropeOnArrival;
         out.version = version;
         out.gameInProgressSaveFile = gameInProgressSaveFile;
+        out.keyboardShortcuts = keyboardShortcuts == null ? null
+                : keyboardShortcuts.deepCopy();
         return out;
     }
 
@@ -81,7 +91,7 @@ public class Setting {
                 volume, effectsVolume, animationSpeed, mapScrollSpeed, showGrid,
                 developerMode, showFightAdvisor, version,
                 gameInProgressSaveFile, autosaveEnabled, turnSummaryEnabled,
-                openEuropeOnArrival);
+                openEuropeOnArrival, keyboardShortcuts);
     }
 
     @Override
@@ -110,7 +120,9 @@ public class Setting {
                         other.openEuropeOnArrival)
                 && Objects.equal(this.version, other.version)
                 && Objects.equal(this.gameInProgressSaveFile,
-                        other.gameInProgressSaveFile);
+                        other.gameInProgressSaveFile)
+                && Objects.equal(this.keyboardShortcuts,
+                        other.keyboardShortcuts);
 
     }
 
@@ -128,7 +140,7 @@ public class Setting {
                 .add("openEuropeOnArrival", openEuropeOnArrival)
                 .add("version", version)
                 .add("gameInProgressSaveFile", gameInProgressSaveFile)
-                .toString();
+                .add("keyboardShortcuts", keyboardShortcuts).toString();
     }
 
     public Rectangle getMainFramePosition() {
@@ -258,6 +270,14 @@ public class Setting {
 
     public void setGameInProgressSaveFile(String gameInProgressSaveFile) {
         this.gameInProgressSaveFile = gameInProgressSaveFile;
+    }
+
+    public JsonElement getKeyboardShortcuts() {
+        return keyboardShortcuts;
+    }
+
+    public void setKeyboardShortcuts(final JsonElement keyboardShortcuts) {
+        this.keyboardShortcuts = keyboardShortcuts;
     }
 
     public String getVersion() {

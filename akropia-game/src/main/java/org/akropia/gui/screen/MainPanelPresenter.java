@@ -34,6 +34,9 @@ import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import org.akropia.gui.shortcut.KeyboardShortcuts;
+import org.akropia.gui.shortcut.ShortcutAction;
+
 import javafx.scene.Scene;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyEvent;
@@ -75,6 +78,10 @@ public final class MainPanelPresenter {
     private final PersistingService persistingService;
     private final GameModelController gameModelController;
 
+    private final KeyboardShortcuts shortcuts;
+
+    private final com.google.common.eventbus.EventBus eventBus;
+
     @Inject
     public MainPanelPresenter(final MainPanelView view, final I18n i18n,
             final ScreenGame screenGame, final ScreenMenu screenMenu,
@@ -91,7 +98,11 @@ public final class MainPanelPresenter {
             final DialogTradeRouteCargo tradeRouteCargo,
             final ScreenCongress screenCongress,
             final PersistingService persistingService,
-            final GameModelController gameModelController) {
+            final GameModelController gameModelController,
+            final KeyboardShortcuts shortcuts,
+            final com.google.common.eventbus.EventBus eventBus) {
+        this.shortcuts = Preconditions.checkNotNull(shortcuts);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         this.view = Preconditions.checkNotNull(view);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.screenGame = Preconditions.checkNotNull(screenGame);
@@ -232,7 +243,7 @@ public final class MainPanelPresenter {
     }
 
     /**
-     * Install the platform shortcut+O and shortcut+S keys of the main window.
+     * Install the configurable Load and Save keys of the main window.
      *
      * @param scene required main window scene
      */
@@ -242,8 +253,9 @@ public final class MainPanelPresenter {
                     .getFocusOwner() instanceof TextInputControl
                     || isOtherWindowShowing(scene.getWindow())
                     || persistingService.isBusy();
-            final SessionShortcut.Action action = SessionShortcut.resolve(event,
-                    blocked, shownScreen != null && shownScreen != screenEditor,
+            final SessionShortcut.Action action = SessionShortcut.resolve(
+                    shortcuts, event, blocked,
+                    shownScreen != null && shownScreen != screenEditor,
                     shownScreen == screenGame
                             && gameModelController.isHumanTurnReady());
             if (action == SessionShortcut.Action.LOAD) {
@@ -252,8 +264,27 @@ public final class MainPanelPresenter {
             } else if (action == SessionShortcut.Action.SAVE) {
                 event.consume();
                 persistingService.browse(true, false);
+            } else if (!blocked && isSessionMenuScreen()) {
+                // The same commands as the menu's and the map's Settings and
+                // Quit, including the existing unsaved-game protection.
+                if (shortcuts.matches(ShortcutAction.OPEN_SETTINGS, event)) {
+                    event.consume();
+                    eventBus.post(new ShowScreenEvent(Screen.SETTING));
+                } else if (shortcuts.matches(ShortcutAction.QUIT_GAME, event)) {
+                    event.consume();
+                    eventBus.post(new org.akropia.gui.event.QuitGameEvent());
+                }
             }
         });
+    }
+
+    /**
+     * Settings and Quit are offered by the main menu and the map's session
+     * menu.
+     */
+    private boolean isSessionMenuScreen() {
+        return shownScreen == screenMenu || shownScreen == screenGame
+                && gameModelController.isHumanTurnReady();
     }
 
     /**

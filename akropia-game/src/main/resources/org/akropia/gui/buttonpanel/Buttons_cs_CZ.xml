@@ -4,23 +4,23 @@
 <properties>
 	<comment>Define keys for Europe dialog</comment>
 	
-	<entry key="buttonStatistics">Statistiky - jak se daří. (R)</entry>
-	<entry key="buttonCenter">Najít místo jehož detaily jsou v pravém panelu. (C)</entry>
-	<entry key="buttonTurnReport">Upozornění na důležité události. (T)</entry>
-	<entry key="buttonGoals">Cíle ve hře. (O)</entry>
-	<entry key="buttonHelp">Nápověda - Colonizopedie. (H)</entry>
+	<entry key="buttonStatistics">Statistiky - jak se daří.</entry>
+	<entry key="buttonCenter">Najít místo jehož detaily jsou v pravém panelu.</entry>
+	<entry key="buttonTurnReport">Upozornění na důležité události.</entry>
+	<entry key="buttonGoals">Cíle ve hře.</entry>
+	<entry key="buttonHelp">Nápověda - Colonizopedie.</entry>
 	<entry key="buttonExit">Otevřít herní nabídku (Esc)</entry>
 	<entry key="buttonNextTurn">Další tah</entry>
-	<entry key="buttonEurope">Domovský přístav. (E)</entry>
-	<entry key="buttonMove">Hýbnout jednotkou. (M)</entry>
-	<entry key="buttonPlowField">Zůrodnit pole a vybudovat pole. (P)</entry>
-	<entry key="buttonBuildColony">Vybudovat novou kolonii. (B)</entry>
+	<entry key="buttonEurope">Domovský přístav.</entry>
+	<entry key="buttonMove">Hýbnout jednotkou.</entry>
+	<entry key="buttonPlowField">Zůrodnit pole a vybudovat pole.</entry>
+	<entry key="buttonBuildColony">Vybudovat novou kolonii.</entry>
 	<entry key="buttonDeclareIndependence">Vyhlásit samostatnou polis.</entry>
 	
-    <entry key="buttonColonies">Kolonie (I)</entry>
+    <entry key="buttonColonies">Kolonie</entry>
     <entry key="noColonies">Zatím nemáte žádnou kolonii</entry>
-    <entry key="buttonWait">Čekat&#10;(Tab)</entry>
-    <entry key="buttonSkipUnitTurn">Vynechat tah jednotky (Mezerník)</entry>
+    <entry key="buttonWait">Čekat</entry>
+    <entry key="buttonSkipUnitTurn">Vynechat tah jednotky</entry>
     <entry key="waitExplanation">Vybrat další dostupnou jednotku bez spotřeby pohybu.</entry>
     <entry key="skipUnitTurnExplanation">Vyčerpat zbývající pohyb této jednotky do jejího příštího tahu.</entry>
     <entry key="unitOrderUnavailable">Tato jednotka nyní nemůže vynechat tah. Vyberte dostupnou jednotku.</entry>
@@ -38,7 +38,7 @@
     <entry key="goToChanged">Cíl přesunu se změnil. Vyberte jej znovu.</entry>
     <entry key="goToStatusActive">Přesun do %s</entry>
     <entry key="goToStatusPaused">Pozastaveno, k cíli %s nevede cesta</entry>
-    <entry key="buttonGoToColony">Plout do… (G)</entry>
+    <entry key="buttonGoToColony">Plout do…</entry>
     <entry key="goToColonyExplanation">Vyberte dostupný cíl. Lodě mohou do domovského přístavu nebo vlastních přístavů; rozkaz pokračuje v dalších vlastních tazích.</entry>
     <entry key="goToColonyTitle">Cíl přesunu</entry>
     <entry key="goToColonyCaption">Vyberte dostupný cíl vybrané jednotky:</entry>
@@ -82,7 +82,7 @@
     <entry key="plowProblemUnsuitableTerrain">Tento terén nelze orat. Použijte louku, prérii nebo savanu.</entry>
     <entry key="plowProblemForest">Před oráním je nutné vykácet les.</entry>
     <entry key="plowProblemAlreadyPlowed">Toto pole je již zorané.</entry>
-    <entry key="buttonClearForest">Vykácet les. (F)</entry>
+    <entry key="buttonClearForest">Vykácet les.</entry>
     <entry key="buttonCancelClearForest">Zrušit kácení lesa. Postup se ztratí; pohyb ani nářadí se nevrací.</entry>
     <entry key="clearForestProblemUnavailable">Tato jednotka nyní nemůže kácet les. Vyberte dostupnou jednotku ve svém tahu.</entry>
     <entry key="clearForestProblemNotPioneer">Les může kácet jen průkopník.</entry>
@@ -137,8 +137,8 @@
     <entry key="toolbarRetire">Ukončit</entry>
     <entry key="toolbarExit">Nabídka</entry>
     <entry key="toolbarIndependence">Nezávislost</entry>
-    <entry key="coloniesExplanation">Vyberte kolonii, kterou chcete otevřít. (I)</entry>
-    <entry key="congressExplanation">Otevřít Kongres a vybrat Otce zakladatele. (K)</entry>
+    <entry key="coloniesExplanation">Vyberte kolonii, kterou chcete otevřít.</entry>
+    <entry key="congressExplanation">Otevřít Kongres a vybrat Otce zakladatele.</entry>
     <entry key="nextTurnExplanation">Dokončit tento tah a zahájit další.</entry>
     <entry key="plowProblemRiver">Na říčním políčku nelze zorat pole.</entry>
     <entry key="mapHeadingExplanation">Mappa Mundi je latinsky „mapa světa“. Latina se tehdy běžně používala.</entry>

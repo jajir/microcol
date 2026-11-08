@@ -1,5 +1,12 @@
 package org.akropia.gui.screen.europe;
 
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.function.Supplier;
+
+import org.akropia.gui.shortcut.KeyboardShortcuts;
+import org.akropia.gui.shortcut.ShortcutAction;
+import org.akropia.gui.shortcut.ShortcutButtons;
 import org.akropia.gui.Loc;
 
 import org.akropia.gui.util.ActionButtons;
@@ -8,6 +15,7 @@ import org.akropia.gui.buttonpanel.AbstractButtonsPanel;
 import org.akropia.gui.image.ImageProvider;
 import org.akropia.gui.screen.Screen;
 import org.akropia.gui.screen.ShowScreenEvent;
+import org.akropia.gui.screen.game.components.StatusBarMessageEvent;
 import org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.akropia.i18n.I18n;
 
@@ -39,7 +47,8 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
     EuropeButtonsPanel(final ImageProvider imageProvider,
             final EventBus eventBus, final I18n i18n,
             final ShipRepairDialog repairDialog,
-            final org.akropia.gui.dialog.TreasureDialog treasureDialog) {
+            final org.akropia.gui.dialog.TreasureDialog treasureDialog,
+            final KeyboardShortcuts shortcuts) {
         super(imageProvider, eventBus, Source.EUROPE, i18n);
 
         buttonClose = makeButton(ButtonIcon.BACK, Loc.backToGame);
@@ -69,6 +78,22 @@ public class EuropeButtonsPanel extends AbstractButtonsPanel {
         getButtonPanel().getChildren().add(buttonRepairs);
         getButtonPanel().getChildren().add(treasure);
         getButtonPanel().getChildren().add(buttonClose);
+        final Map<ShortcutAction, Supplier<? extends Button>> commands = new EnumMap<>(
+                ShortcutAction.class);
+        commands.put(ShortcutAction.EUROPE_RECRUIT, () -> buttonRecruit);
+        commands.put(ShortcutAction.EUROPE_BUY_UNIT, () -> buttonBuyUnit);
+        commands.put(ShortcutAction.EUROPE_REPAIRS, () -> buttonRepairs);
+        commands.put(ShortcutAction.EUROPE_TREASURE, () -> treasure);
+        commands.put(ShortcutAction.EUROPE_TAX, () -> buttonTax);
+        commands.put(ShortcutAction.EUROPE_BACK_TAX, () -> buttonBackTax);
+        ShortcutButtons.install(buttonClose, shortcuts, commands);
+        final Map<ShortcutAction, Button> hinted = new EnumMap<>(
+                ShortcutAction.class);
+        commands.forEach((action, button) -> hinted.put(action, button.get()));
+        ShortcutButtons.statusHints(shortcuts, hinted,
+                text -> eventBus
+                        .post(new StatusBarMessageEvent(text, Source.EUROPE)),
+                () -> eventBus.post(new StatusBarMessageEvent(Source.EUROPE)));
     }
 
     /** Update the text of the recruitment action. */

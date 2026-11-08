@@ -44,7 +44,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         // The colonist stands at the east end with a full allowance and no
         // order.
         game.selectTile(GoToFixture.EAST);
-        goTo.verifyButton("Go to", true);
+        goTo.verifyButton("Go to (Shift+G)", true);
         goTo.verifyColonyButton(true, true);
         goTo.verifyNoStatus();
         goTo.verifyMoveButtonShown(true);
@@ -56,7 +56,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         goTo.verifyDestination(COLONIST, GoToFixture.WEST, false);
         goTo.verifyMovement(COLONIST, 0);
         goTo.verifyStatus("Going to 20, 15");
-        goTo.verifyButton("Cancel work", true);
+        goTo.verifyButton("Cancel work (Shift+G)", true);
         goTo.verifyColonyButton(false, false);
         goTo.verifyMoveButtonShown(false);
         // Inspecting another unit and coming back does not cancel the order.
@@ -81,7 +81,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         game.selectTile(Location.of(21, 15));
         game.selectTile(GoToFixture.WEST);
         goTo.verifyNoStatus();
-        goTo.verifyButton("Go to", true);
+        goTo.verifyButton("Go to (Shift+G)", true);
         // The following owner turn leaves the colonist where it arrived.
         game.nextTurnAndCloseDialogs();
         goTo.verifyLocation(COLONIST, GoToFixture.WEST);
@@ -98,7 +98,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         GoToPage goTo = new GoToPage(getContext());
         game.panToTile(GoToFixture.WEST);
         game.selectTile(GoToFixture.EAST);
-        goTo.verifyButton("Go to", true);
+        goTo.verifyButton("Go to (Shift+G)", true);
         // Choosing Go to and pressing Escape leaves the colonist unchanged.
         goTo.startOrder();
         goTo.cancelPickWithEscape();
@@ -106,7 +106,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         goTo.verifyNoDestination(COLONIST);
         goTo.verifyMovement(COLONIST, 3);
         goTo.verifyNoStatus();
-        goTo.verifyButton("Go to", true);
+        goTo.verifyButton("Go to (Shift+G)", true);
         // Choose a destination, then cancel the order by hand.
         goTo.startOrder();
         game.selectTile(GoToFixture.WEST);
@@ -119,7 +119,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         goTo.verifyLocation(COLONIST, Location.of(23, 15));
         goTo.verifyMovement(COLONIST, 0);
         goTo.verifyNoStatus();
-        goTo.verifyButton("Go to", true);
+        goTo.verifyButton("Go to (Shift+G)", true);
         // With no order left the next owner turn does not move the colonist.
         game.nextTurnAndCloseDialogs();
         goTo.verifyLocation(COLONIST, Location.of(23, 15));
@@ -189,7 +189,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         game.panToTile(GoToFixture.WEST);
         game.selectMapUnit(COLONIST);
         goTo.verifyStatus("Going to 20, 15");
-        goTo.verifyButton("Cancel work", true);
+        goTo.verifyButton("Cancel work (Shift+G)", true);
         // The order is still followed on the next owner turn.
         game.nextTurnAndCloseDialogs();
         goTo.verifyLocation(COLONIST, Location.of(22, 15));
@@ -228,7 +228,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         goTo.verifyLocation(COLONIST, GoToFixture.EAST);
         goTo.verifyDestination(COLONIST, GoToFixture.ISLET, true);
         goTo.verifyStatus("Paused, no route to 26, 15");
-        goTo.verifyButton("Cancel work", true);
+        goTo.verifyButton("Cancel work (Shift+G)", true);
         // Continue keeps the paused order.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
@@ -248,7 +248,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         goTo.cancelOrder();
         goTo.verifyNoDestination(COLONIST);
         goTo.verifyNoStatus();
-        goTo.verifyButton("Go to", true);
+        goTo.verifyButton("Go to (Shift+G)", true);
         goTo.verifyMoveButtonShown(true);
     }
 

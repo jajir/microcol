@@ -12,6 +12,10 @@ import org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.akropia.gui.screen.game.components.TradeRoutePlanningPanel;
 import org.akropia.gui.screen.game.gamepanel.GamePanelComponent;
 import org.akropia.gui.screen.game.gamepanel.TradeRoutePlanning;
+import org.akropia.gui.shortcut.KeyboardShortcuts;
+import org.akropia.gui.shortcut.ReleaseGesture;
+import org.akropia.gui.shortcut.ShortcutAction;
+import org.akropia.gui.shortcut.ShortcutInput;
 import org.akropia.i18n.I18n;
 
 import com.google.common.base.Preconditions;
@@ -119,33 +123,48 @@ public class ScreenGame implements GameScreen {
     }
 
     /**
-     * Handles unit shortcuts before focused controls can consume them. Space
-     * acts on release, so holding it does not skip multiple units. The route
-     * planner gives no unit orders, so Tab and Space keep their ordinary
-     * keyboard meaning there.
+     * Handles unit shortcuts before focused controls can consume them. Skip
+     * acts once on release of its accepted press, so holding it does not skip
+     * multiple units. The route planner gives no unit orders, so Tab and Space
+     * keep their ordinary keyboard meaning there; a focused text field keeps
+     * its typing keys.
      *
-     * @param handler required unit-order handler
+     * @param shortcuts effective shortcuts
+     * @param handler   required unit-order handler receiving
+     *                  {@link ShortcutAction#NEXT_UNIT} or
+     *                  {@link ShortcutAction#SKIP_UNIT}
      */
-    void setOnUnitOrder(final Consumer<KeyEvent> handler) {
+    void setOnUnitOrder(final KeyboardShortcuts shortcuts,
+            final Consumer<ShortcutAction> handler) {
+        final ReleaseGesture skip = new ReleaseGesture(shortcuts,
+                ShortcutAction.SKIP_UNIT);
+        // Moving focus or entering the planner forgets an accepted press.
+        tradeRoutePlanning.addListener(skip::cancel);
+        mainPanel.sceneProperty().addListener((property, before, after) -> {
+            if (after != null) {
+                after.focusOwnerProperty()
+                        .addListener((owner, old, focused) -> skip.cancel());
+            }
+        });
         mainPanel.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.isControlDown() || event.isAltDown() || event.isMetaDown()
-                    || event.isShiftDown() || isNavigationControlFocused()
-                    || tradeRoutePlanning.isActive())
+            if (isNavigationControlFocused() || tradeRoutePlanning.isActive()
+                    || ShortcutInput.isOwnedByText(
+                            mainPanel.getScene().getFocusOwner(), event))
                 return;
-            if (KeyCode.TAB == event.getCode()) {
-                handler.accept(event);
+            if (shortcuts.matches(ShortcutAction.NEXT_UNIT, event)) {
+                handler.accept(ShortcutAction.NEXT_UNIT);
                 event.consume();
-            } else if (KeyCode.SPACE == event.getCode()) {
+            } else if (skip.onPressed(event)) {
                 event.consume();
             }
         });
         mainPanel.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
-            if (KeyCode.SPACE == event.getCode() && !event.isControlDown()
-                    && !event.isAltDown() && !event.isMetaDown()
-                    && !event.isShiftDown() && !isNavigationControlFocused()
-                    && !tradeRoutePlanning.isActive()) {
-                handler.accept(event);
+            if (skip.onReleased(event)) {
                 event.consume();
+                if (!isNavigationControlFocused()
+                        && !tradeRoutePlanning.isActive()) {
+                    handler.accept(ShortcutAction.SKIP_UNIT);
+                }
             }
         });
     }

@@ -1,5 +1,10 @@
 # Current requirement backlog
 
+
+## Konfigurovatelné klávesové zkratky — 2026-11-08
+
+1. [R-0433](done/R-0433.md), status `done`, A03 s vazbami A01/A04/A05: 67 akcí, tři platformní properties profily, uložené uživatelské odchylky a editor v Nastavení. Lokálně ověřeno: 5 091 modelových, 65 cílených UI a 21 smoke testů bez chyb a přeskočení.
+
 ## R-0422 — Horní lišta správy obchodní trasy
 
 1. Uživatel 2026-11-06 vybral [R-0422](done/R-0422.md) k implementaci přes Claude Code: nadpis vlevo, vpravo společný výběr trasy a standardní Zpět. Implementováno a lokálně ověřeno 2026-11-06; ostatní části obrazovky nejsou součástí prvního kroku.

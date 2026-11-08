@@ -5,6 +5,9 @@ import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.buttonpanel.AbstractButtonsPanel;
 import org.akropia.gui.screen.congress.CongressText;
 import org.akropia.gui.buttonpanel.Buttons;
+import org.akropia.gui.shortcut.KeyboardShortcuts;
+import org.akropia.gui.shortcut.ShortcutAction;
+import org.akropia.gui.shortcut.ShortcutButtons;
 import org.akropia.gui.buttonpanel.RequestNextTurnEvent;
 import org.akropia.gui.event.ShowHelpEvent;
 import org.akropia.gui.event.BuildColonyEvent;
@@ -63,6 +66,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.image.ImageView;
+import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -169,6 +173,42 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private boolean foundingWaitingForMovement;
     private boolean controlsDisabled;
 
+    /**
+     * Texts followed by the current shortcut of their action.
+     */
+    private static final Map<Buttons, ShortcutAction> HINTS = new EnumMap<>(
+            Buttons.class);
+
+    static {
+        HINTS.put(Buttons.coloniesExplanation, ShortcutAction.COLONIES);
+        HINTS.put(Buttons.congressExplanation, ShortcutAction.CONGRESS);
+        HINTS.put(Buttons.buttonCenter, ShortcutAction.CENTER_VIEW);
+        HINTS.put(Buttons.buttonStatistics, ShortcutAction.STATISTICS);
+        HINTS.put(Buttons.buttonTurnReport, ShortcutAction.TURN_REPORT);
+        HINTS.put(Buttons.buttonGoals, ShortcutAction.GOALS);
+        HINTS.put(Buttons.buttonHelp, ShortcutAction.HELP);
+        HINTS.put(Buttons.buttonEurope, ShortcutAction.EUROPE);
+        HINTS.put(Buttons.nextTurnExplanation, ShortcutAction.END_TURN);
+        HINTS.put(Buttons.buttonMove, ShortcutAction.MOVE);
+        HINTS.put(Buttons.buttonGoToColony, ShortcutAction.GO_TO);
+        HINTS.put(Buttons.buttonGoTo, ShortcutAction.GO_TO_TILE);
+        HINTS.put(Buttons.buttonCancelGoTo, ShortcutAction.GO_TO_TILE);
+        HINTS.put(Buttons.buttonWait, ShortcutAction.NEXT_UNIT);
+        HINTS.put(Buttons.buttonSkipUnitTurn, ShortcutAction.SKIP_UNIT);
+        HINTS.put(Buttons.buttonBuildColony, ShortcutAction.BUILD_COLONY);
+        HINTS.put(Buttons.buttonPlowField, ShortcutAction.PLOW);
+        HINTS.put(Buttons.buttonClearForest, ShortcutAction.CLEAR_FOREST);
+        HINTS.put(Buttons.buttonBuildRoad, ShortcutAction.BUILD_ROAD);
+        HINTS.put(Buttons.buttonFortify, ShortcutAction.FORTIFY);
+        HINTS.put(Buttons.buttonCancelFortified, ShortcutAction.FORTIFY);
+        HINTS.put(Buttons.buttonCancelFortifying, ShortcutAction.FORTIFY);
+        HINTS.put(Buttons.buttonSentry, ShortcutAction.SENTRY);
+        HINTS.put(Buttons.buttonActivateSentry, ShortcutAction.SENTRY);
+    }
+
+    private final KeyboardShortcuts shortcuts;
+    private final Map<ShortcutAction, List<Button>> shortcutButtons = new EnumMap<>(
+            ShortcutAction.class);
     private final TradeRoutePlanningPanel tradeRoutePlanningPanel;
     private final org.akropia.gui.util.ViewUtil routeView;
     private final org.akropia.gui.event.model.GameModelController routeGame;
@@ -180,10 +220,12 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
             final TradeRoutePlanningPanel tradeRoutePlanningPanel,
             final TradeRoutePlanning tradeRoutePlanning,
             final org.akropia.gui.util.ViewUtil routeView,
-            final org.akropia.gui.event.model.GameModelController routeGame) {
+            final org.akropia.gui.event.model.GameModelController routeGame,
+            final KeyboardShortcuts shortcuts) {
 
         super(imageProvider, eventBus, Source.GAME, i18n);
         currentI18n = i18n;
+        this.shortcuts = shortcuts;
         toolbarImages = imageProvider;
         toolbarEvents = eventBus;
         this.tradeRoutePlanningPanel = tradeRoutePlanningPanel;
@@ -296,12 +338,36 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
         updateLanguage(i18n);
 
+        // Each command runs its existing control; a work order's start and
+        // cancel controls share one action, whichever is offered now.
+        shortcutButtons.put(ShortcutAction.END_TURN, List.of(buttonNextTurn));
+        shortcutButtons.put(ShortcutAction.PLOW,
+                List.of(buttonCancelPlowField));
+        shortcutButtons.put(ShortcutAction.CLEAR_FOREST,
+                List.of(buttonCancelClearForest));
+        shortcutButtons.put(ShortcutAction.BUILD_ROAD,
+                List.of(buttonBuildRoad, buttonCancelBuildRoad));
+        shortcutButtons.put(ShortcutAction.FORTIFY, List.of(buttonFortify));
+        shortcutButtons.put(ShortcutAction.SENTRY, List.of(buttonSentry));
+        shortcutButtons.put(ShortcutAction.GO_TO_TILE, List.of(buttonGoTo));
+        shortcutButtons.put(ShortcutAction.DISBAND, List.of(buttonDisband));
+        shortcutButtons.put(ShortcutAction.JETTISON, List.of(buttonJettison));
+        shortcutButtons.put(ShortcutAction.DECLARE_INDEPENDENCE,
+                List.of(buttonDeclareIndependence));
+        shortcutButtons.put(ShortcutAction.RETIRE, List.of(buttonRetire));
+        shortcutButtons.put(ShortcutAction.TRADE_ROUTES,
+                List.of(tradeRoutePlanningPanel.getToggle()));
+        shortcutButtons.put(ShortcutAction.NEW_TRADE_ROUTE,
+                List.of(tradeRoutePlanningPanel.getNewRouteButton()));
+        // Saved shortcut changes rename every hint at once.
+        shortcuts.addListener(() -> updateLanguage(currentI18n));
+
         unitActions.setId("unitActionsMenu");
         unitActions.setConsumeAutoHidingEvents(false);
         // Act on release so Space cannot also reach the map's skip-turn
         // handler.
         unitActions.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.B) {
+            if (shortcuts.matches(ShortcutAction.BUILD_COLONY, event)) {
                 unitActions.hide();
                 eventBus.post(new BuildColonyEvent());
                 event.consume();
@@ -427,11 +493,11 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
                 : toolbarLabels.keySet().stream().filter(
                         control -> control.isFocused() && !control.isDisabled())
                         .findFirst().orElse(null);
-        toolbarEvents.post(active == null
-                ? new StatusBarMessageEvent(Source.GAME)
-                : new StatusBarMessageEvent(
-                        currentI18n.get(toolbarExplanations.get(active)),
-                        Source.GAME));
+        toolbarEvents
+                .post(active == null ? new StatusBarMessageEvent(Source.GAME)
+                        : new StatusBarMessageEvent(
+                                text(toolbarExplanations.get(active)),
+                                Source.GAME));
     }
 
     private void addUnitCommand(final Button button, final Buttons labelKey) {
@@ -440,7 +506,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         button.setMaxWidth(Double.MAX_VALUE);
         button.setMinHeight(Region.USE_PREF_SIZE);
         if (labelKey != null) {
-            button.setText(currentI18n.get(labelKey));
+            button.setText(text(labelKey));
             button.getProperties().put("unitLabel", labelKey);
         }
         button.setText(button.getText().replace('\n', ' '));
@@ -680,16 +746,16 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
             final Buttons key = (Buttons) command.getProperties()
                     .get("unitLabel");
             if (key != null) {
-                command.setText(i18n.get(key));
+                command.setText(text(key));
             }
         }
         buttonCongress.setText(i18n.get(CongressText.title));
         updateSentryText();
         updateFortifyText();
         updateGoToText();
-        buttonWait.setText(i18n.get(Buttons.buttonWait).replace('\n', ' '));
-        buttonSkipUnitTurn.setText(
-                i18n.get(Buttons.buttonSkipUnitTurn).replace('\n', ' '));
+        buttonWait.setText(text(Buttons.buttonWait).replace('\n', ' '));
+        buttonSkipUnitTurn
+                .setText(text(Buttons.buttonSkipUnitTurn).replace('\n', ' '));
         buttonWait.setAccessibleHelp(i18n.get(Buttons.waitExplanation));
         buttonSkipUnitTurn
                 .setAccessibleHelp(i18n.get(Buttons.skipUnitTurnExplanation));
@@ -743,9 +809,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     }
 
     private void updateSentryText() {
-        buttonSentry.setText(
-                currentI18n.get(sentryActive ? Buttons.buttonActivateSentry
-                        : Buttons.buttonSentry));
+        buttonSentry.setText(text(sentryActive ? Buttons.buttonActivateSentry
+                : Buttons.buttonSentry));
         buttonSentry.setAccessibleHelp(currentI18n
                 .get(buttonSentry.isDisabled() ? Buttons.sentryUnavailable
                         : sentryActive ? Buttons.activateSentryExplanation
@@ -803,9 +868,9 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
                                         : Buttons.goToStatusActive,
                                 goToDestination)
                         : "");
-        buttonGoTo.setText(currentI18n.get(
+        buttonGoTo.setText(text(
                 goToOrdered ? Buttons.buttonCancelGoTo : Buttons.buttonGoTo));
-        buttonGoToColony.setText(currentI18n.get(Buttons.buttonGoToColony));
+        buttonGoToColony.setText(text(Buttons.buttonGoToColony));
         buttonGoTo.setAccessibleHelp(
                 currentI18n.get(goToOrdered ? Buttons.goToCancelExplanation
                         : Buttons.goToExplanation));
@@ -857,7 +922,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     }
 
     private void updateFortifyText() {
-        buttonFortify.setText(currentI18n.get(fortifying
+        buttonFortify.setText(text(fortifying
                 ? (fortified ? Buttons.buttonCancelFortified
                         : Buttons.buttonCancelFortifying)
                 : Buttons.buttonFortify));
@@ -988,6 +1053,35 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
                 }
             }
         });
+    }
+
+    /**
+     * Run the action's own control, so its visibility and availability guards
+     * stay the only conditions.
+     *
+     * @param action action with its own control
+     * @return <code>true</code> when the control ran
+     */
+    public boolean fireShortcut(final ShortcutAction action) {
+        for (final Button button : shortcutButtons.getOrDefault(action,
+                List.of())) {
+            // Unit commands live in the unit menu, which may be closed.
+            if (unitCommands.contains(button)) {
+                if (button.isVisible() && !button.isDisabled()) {
+                    button.fire();
+                    return true;
+                }
+            } else if (ShortcutButtons.fire(button)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String text(final Buttons key) {
+        final ShortcutAction action = HINTS.get(key);
+        final String text = currentI18n.get(key);
+        return action == null ? text : shortcuts.withHint(text, action);
     }
 
     /**

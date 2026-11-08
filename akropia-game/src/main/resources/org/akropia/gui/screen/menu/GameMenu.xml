@@ -6,7 +6,7 @@
 
 	<entry key="mainMenu">Akropia</entry>
 	<entry key="buttonContinue">Continue</entry>
-	<entry key="buttonLoadSave">Load saved game (%s)</entry>
+	<entry key="buttonLoadSave">Load saved game</entry>
 	<entry key="buttonPlayCampaign">Play campaign</entry>
 	<entry key="buttonFreeGame">New free play game</entry>
 	<entry key="buttonHallOfFame">Hall of Fame</entry>
@@ -69,6 +69,6 @@
     <entry key="setupGeneratedSeedError">Enter a whole seed from 0 to 999999999.</entry>
     <entry key="setupGeneratedFailed">The new coast could not be generated. The current game was not changed.</entry>
     <entry key="settingDeveloperHeading">Developer</entry>
-    <entry key="settingDeveloperMode">Developer mode (F3)</entry>
+    <entry key="settingDeveloperMode">Developer mode</entry>
     <entry key="settingDeveloperDescription">Show map coordinates and diagnostic information.</entry>
 </properties>

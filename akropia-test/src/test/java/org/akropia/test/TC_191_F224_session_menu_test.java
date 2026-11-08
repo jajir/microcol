@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.akropia.model.Location;
 import org.akropia.model.campaign.po.RecoverySlot;
+import org.akropia.gui.shortcut.ShortcutAction;
 import org.akropia.page.ColonyScreen;
+import org.akropia.page.KeyboardShortcutsPage;
 import org.akropia.page.DeveloperModePage;
 import org.akropia.page.EuropePortScreen;
 import org.akropia.page.FreePlayAuditPage;
@@ -82,7 +84,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.verifyGameUnchanged();
         saves.openLoad();
         saves.select("Přístav / před bitvou");
-        saves.verifySelectedDetails("Dutch", "1508", "Conquistador");
+        saves.verifySelectedDetails("Corinth", "1508", "Conquistador");
         saves.captureDialog("savedGamesList", "r0298-saved-games-filled.png");
         saves.action("loadSelected");
         saves.action("saveCancel");
@@ -387,7 +389,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.select("Harbour before the storm");
         saves.verifyDetailName("Harbour before the storm");
         saves.verifyPreview(true);
-        saves.verifySelectedDetails("Dutch", "1508", "Conquistador");
+        saves.verifySelectedDetails("Corinth", "1508", "Conquistador");
         saves.verifyLoadEnabled(true);
         saves.captureDialog("savedGamesList", "r0383-load-detail-en.png");
         saves.verifyGameUnchanged();
@@ -697,6 +699,47 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         welcome.pressKeys(KeyCode.C);
         GamePage.of(getContext()).verifyGameInFront();
         saves.verifyRestoredGame();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_10_configured_load_shortcut_renames_menus_and_replaces_the_old_key()
+            throws Exception {
+        // Change Load to the platform shortcut with L in Settings.
+        final SettingPage setting = WelcomePage.of(getContext()).openSetting();
+        final KeyboardShortcutsPage shortcuts = new KeyboardShortcutsPage(
+                getContext());
+        shortcuts.open();
+        shortcuts.verifyPlatformBinding(ShortcutAction.LOAD_GAME, KeyCode.O);
+        shortcuts.startChange(ShortcutAction.LOAD_GAME, 0);
+        shortcuts.pressPlatformShortcut(KeyCode.L);
+        shortcuts.verifyPlatformBinding(ShortcutAction.LOAD_GAME, KeyCode.L);
+        // The editor is a dialog; Load does not open while it captures keys.
+        final HostedPanelPage hosted = new HostedPanelPage(getContext());
+        hosted.verifyLoadClosed();
+        shortcuts.saveAndBack();
+        shortcuts.verifyEditorOpen(false);
+
+        // The main menu names the new key at once; the old key does nothing.
+        setting.goBack().verifyMainScreen();
+        hosted.verifyMenuShortcut("buttonLoad", "Load saved game", KeyCode.L);
+        hosted.pressShortcut(KeyCode.O);
+        hosted.verifyLoadClosed();
+        WelcomePage.of(getContext()).verifyMainScreen();
+        hosted.pressShortcut(KeyCode.L);
+        hosted.verifyMenuHosted("Load game", "savedGamesCancel", "Back");
+        hosted.press(KeyCode.ESCAPE);
+        WelcomePage.of(getContext()).verifyMainScreen();
+
+        // The in-game session menu uses the same label.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        game.waitWhileMoving();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        saves.openMenu();
+        hosted.verifyMenuShortcut("menuLoad", "Load game", KeyCode.L);
+        hosted.verifyMenuShortcut("menuSave", "Save game", KeyCode.S);
+        saves.chooseMenu("menuResume");
+        game.verifyGameInFront();
     }
 
 }

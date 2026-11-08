@@ -164,7 +164,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
                 "Back to game");
         layout.hoverAction("educationOpen");
         layout.verifyActionExplanation(
-                "Choose a teacher and student, manage their training, or cancel a course.");
+                "Choose a teacher and student, manage their training, or cancel a course. (E)");
         new InGameLayoutPage(getContext()).saveEvidence("r0360-actions-en.png");
         bars.resizeContent(1000, 925);
         layout.verifyActionNames(false, "Exports", "Education…", "Treasure",
@@ -175,19 +175,19 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         // prerequisite.
         layout.hoverAction("customHouseOpen");
         layout.verifyActionExplanation(
-                "Build a custom house to choose automatic exports.");
+                "Build a custom house to choose automatic exports. (X)");
         layout.hoverAction("educationOpen");
         layout.verifyActionExplanation(
-                "Choose a teacher and student, manage their training, or cancel a course.");
+                "Choose a teacher and student, manage their training, or cancel a course. (E)");
         layout.hoverAction("treasureOpen");
         layout.verifyActionExplanation(
-                "Choose a treasure in this colony and review its payout and transport fee before redeeming it.");
+                "Choose a treasure in this colony and review its payout and transport fee before redeeming it. (T)");
         layout.hoverAction("tradeRouteCargoOpen");
         layout.verifyActionExplanation(
-                "Set which goods to unload and load at each trade-route stop, or process a carrier waiting here.");
+                "Set which goods to unload and load at each trade-route stop, or process a carrier waiting here. (C)");
         layout.hoverAction("tradeRouteOpen");
         layout.verifyActionExplanation(
-                "Create or edit a trade route, choose its stops and assign a ship or wagon.");
+                "Create or edit a trade route, choose its stops and assign a ship or wagon. (R)");
         layout.hoverAction("quickLoad");
         layout.verifyActionExplanation(
                 "Propose goods from the warehouse to load onto the selected ship. Review the amount before confirming.");
@@ -230,7 +230,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
                 "Zpět do hry");
         layout.hoverAction("educationOpen");
         layout.verifyActionExplanation(
-                "Vyberte učitele a žáka, spravujte jejich výuku nebo ji zrušte.");
+                "Vyberte učitele a žáka, spravujte jejich výuku nebo ji zrušte. (E)");
         new InGameLayoutPage(getContext()).saveEvidence("r0360-actions-cs.png");
         bars.resizeContent(1000, 925);
         layout.verifyActionNames(false, "Vývoz", "Vzdělávání…", "Poklad",
@@ -238,7 +238,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
                 "Zpět do hry");
         layout.hoverAction("customHouseOpen");
         layout.verifyActionExplanation(
-                "Pro automatický vývoz nejprve postavte celnici.");
+                "Pro automatický vývoz nejprve postavte celnici. (X)");
         layout.hoverAction("quickLoad");
         layout.verifyActionExplanation(
                 "Navrhněte zboží ze skladu k naložení na vybranou loď. Před potvrzením zkontrolujte množství.");
