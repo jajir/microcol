@@ -37,11 +37,6 @@ public class TC_209_F240_trade_route_two_ports_test
     private static final TradeRouteStop NEW_AMSTERDAM = TradeRouteStop
             .ofColony(0);
     private static final TradeRouteStop DELFT = TradeRouteStop.ofColony(1);
-    /** The wagon way around the north of the bay. */
-    private static final Location[] LAND_LINE = { NEW_AMSTERDAM_LOCATION,
-            Location.of(24, 15), Location.of(25, 14), Location.of(26, 14),
-            Location.of(27, 14), Location.of(28, 15), DELFT_LOCATION };
-    /** The sea way along the north row of the bay. */
     private static final Location[] SEA_LINE = { NEW_AMSTERDAM_LOCATION,
             Location.of(25, 15), Location.of(26, 15), Location.of(27, 15),
             DELFT_LOCATION };
@@ -76,34 +71,24 @@ public class TC_209_F240_trade_route_two_ports_test
         route.verifyStoredRoute("Bay Run", TradeRouteKind.SEA, "New Amsterdam",
                 "Delft");
 
-        // Without a carrier each leg has a land and a sea path. Each
-        // direction keeps its own cost: wagons enter arctic New Amsterdam
-        // but grassland Delft.
+        // Without a carrier the sea route still shows only sea paths.
         planner.verifySelectedRoute("Bay Run");
         planner.verifyCarriers("No carrier assigned");
         planner.verifyLegsContain(
-                "Delft → New Amsterdam: by land, 6 steps, 7 movement points");
-        planner.verifyLegsContain(
                 "Delft → New Amsterdam: by sea, 4 steps, 4 movement points");
-        planner.verifyLegsContain(
-                "New Amsterdam → Delft: by land, 6 steps, 6 movement points");
         planner.verifyLegsContain(
                 "New Amsterdam → Delft: by sea, 4 steps, 4 movement points");
 
-        // The way there and back is one land line north around the bay and
-        // one sea line along its north row, each chosen among equally cheap
-        // ways.
-        planner.verifyDrawnConnection("Bay Run", TradeRouteKind.LAND,
-                LAND_LINE);
+        // Both directions share one sea line among equally cheap ways.
+        planner.verifyDrawnConnectionCount("Bay Run", TradeRouteKind.LAND, 0);
         planner.verifyDrawnConnection("Bay Run", TradeRouteKind.SEA, SEA_LINE);
         planner.captureScreen("trade-route-planner-two-ports.png");
 
-        // Reopening the planner draws the same two lines.
+        // Reopening the planner draws the same sea line.
         planner.close();
         planner.open();
         planner.chooseRoute("Bay Run");
-        planner.verifyDrawnConnection("Bay Run", TradeRouteKind.LAND,
-                LAND_LINE);
+        planner.verifyDrawnConnectionCount("Bay Run", TradeRouteKind.LAND, 0);
         planner.verifyDrawnConnection("Bay Run", TradeRouteKind.SEA, SEA_LINE);
 
         // The galleon in Delft joins the route. Its own path there and back

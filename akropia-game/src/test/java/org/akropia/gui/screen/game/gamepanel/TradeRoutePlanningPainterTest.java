@@ -18,7 +18,8 @@ import org.akropia.model.TradeRouteStop;
 import org.akropia.model.campaign.MissionImpl;
 import org.akropia.model.campaign.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 /**
  * The lines {@link TradeRoutePlanningPainter} draws for a route (R-0425), on
@@ -51,12 +52,11 @@ class TradeRoutePlanningPainterTest {
     }
 
     private static TradeRoutePreview loop(final Model model, final int start,
-            final int other) {
+            final int other, final TradeRouteKind kind) {
         final Player dutch = model.getColonyById(DELFT).orElseThrow()
                 .getOwner();
         final TradeRoute route = model.createTradeRoute(dutch, "Loop " + start,
-                TradeRouteKind.LAND, start,
-                List.of(TradeRouteStop.ofColony(other),
+                kind, start, List.of(TradeRouteStop.ofColony(other),
                         TradeRouteStop.ofColony(start)));
         return model.getTradeRoutePreview(dutch, route);
     }
@@ -66,18 +66,20 @@ class TradeRoutePlanningPainterTest {
         return new Area(visibleArea);
     }
 
-    @Test
-    void wayThereAndBackIsOneLinePerTransport() {
+    @ParameterizedTest
+    @EnumSource(TradeRouteKind.class)
+    void wayThereAndBackIsOneLinePerTransport(final TradeRouteKind kind) {
         final Model model = channelModel();
-        final TradeRoutePreview preview = loop(model, NEW_AMSTERDAM, DELFT);
-        // Two legs with a land and a sea path each.
+        final TradeRoutePreview preview = loop(model, NEW_AMSTERDAM, DELFT,
+                kind);
+        // Two legs with one path of the route kind each.
         assertEquals(2, preview.getLegs().size());
-        assertEquals(4, preview.getLegs().stream()
+        assertEquals(2, preview.getLegs().stream()
                 .mapToInt(leg -> leg.getPaths().size()).sum());
 
         final List<double[][]> lines = TradeRoutePlanningPainter.lines(preview,
                 area(), 0);
-        assertEquals(2, lines.size());
+        assertEquals(1, lines.size());
         for (int index = 0; index < lines.size(); index++) {
             final List<Location> squares = preview.getConnections().get(index)
                     .getSquares();
@@ -91,14 +93,16 @@ class TradeRoutePlanningPainterTest {
                 TradeRoutePlanningPainter.lines(preview, area(), 0).toArray());
     }
 
-    @Test
-    void legOrderAndDirectionDoNotChangeTheLine() {
+    @ParameterizedTest
+    @EnumSource(TradeRouteKind.class)
+    void legOrderAndDirectionDoNotChangeTheLine(final TradeRouteKind kind) {
         final Model model = channelModel();
         // One route starts in New Amsterdam, the other in Delft: their legs
         // travel the same connections in the opposite order and direction.
         final TradeRoutePreview fromNewAmsterdam = loop(model, NEW_AMSTERDAM,
-                DELFT);
-        final TradeRoutePreview fromDelft = loop(model, DELFT, NEW_AMSTERDAM);
+                DELFT, kind);
+        final TradeRoutePreview fromDelft = loop(model, DELFT, NEW_AMSTERDAM,
+                kind);
         assertEquals(fromNewAmsterdam.getLegs().get(0).getFrom(),
                 fromDelft.getLegs().get(1).getFrom());
 
@@ -106,8 +110,8 @@ class TradeRoutePlanningPainterTest {
                 .lines(fromNewAmsterdam, area(), 0);
         final List<double[][]> other = TradeRoutePlanningPainter
                 .lines(fromDelft, area(), 0);
-        assertEquals(2, one.size());
-        assertEquals(2, other.size());
+        assertEquals(1, one.size());
+        assertEquals(1, other.size());
         for (int index = 0; index < one.size(); index++) {
             assertArrayEquals(one.get(index)[0], other.get(index)[0]);
             assertArrayEquals(one.get(index)[1], other.get(index)[1]);

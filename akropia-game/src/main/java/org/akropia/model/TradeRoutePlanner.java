@@ -12,8 +12,8 @@ import com.google.common.base.Preconditions;
 /**
  * Computes {@link TradeRoutePreview} paths with the finder, costs and explored
  * squares that {@link TradeRouteNavigator} walks with. Without a carrier the
- * existing wagon and galleon type profiles are tried; no unit is created, moved
- * or numbered, and nothing in the model changes.
+ * route kind selects the wagon or galleon type profile; no unit is created,
+ * moved or numbered, and nothing in the model changes.
  */
 final class TradeRoutePlanner {
 
@@ -59,10 +59,12 @@ final class TradeRoutePlanner {
             transports.add(new Transport(route.getKind(),
                     MovementProfile.of(carrier.get())));
         } else {
-            transports.add(new Transport(TradeRouteKind.LAND,
-                    MovementProfile.of(model, UnitType.WAGON, owner)));
-            transports.add(new Transport(TradeRouteKind.SEA,
-                    MovementProfile.of(model, UnitType.GALLEON, owner)));
+            transports.add(new Transport(route.getKind(),
+                    MovementProfile.of(model,
+                            route.getKind() == TradeRouteKind.SEA
+                                    ? UnitType.GALLEON
+                                    : UnitType.WAGON,
+                            owner)));
         }
         final List<TradeRoutePreview.Leg> legs = new ArrayList<>();
         for (final List<TradeRouteStop> pair : legPairs(route)) {

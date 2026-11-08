@@ -417,24 +417,25 @@ class TradeRoutePlanningTest {
     }
 
     @Test
-    void routeWithoutCarrierShowsBothReachableVariantsAndKeepsItsKind() {
-        // A channel makes New Amsterdam a port that ships reach from Delft.
+    void routeWithoutCarrierShowsOnlyItsKindWhenBothWaysAreReachable() {
         final Model model = load(fixture(po -> ocean(po, Location.of(25, 17),
                 Location.of(26, 17), Location.of(27, 17))).getModel());
-        final TradeRoute route = landRoute(model);
-
-        final TradeRoutePreview preview = preview(model, route);
-        assertTrue(preview.getCarrier().isEmpty());
-        final TradeRoutePreview.Leg leg = preview.getLegs().get(0);
-        assertEquals(List.of(TradeRouteKind.LAND, TradeRouteKind.SEA),
-                kinds(leg));
-        assertTrue(leg.getProblem().isEmpty());
-        assertEquals(
-                List.of(NEW_AMSTERDAM_AT, Location.of(25, 17),
+        for (final TradeRouteKind kind : TradeRouteKind.values()) {
+            final TradeRoute route = model.createTradeRoute(dutch(model),
+                    kind.name(), kind, NEW_AMSTERDAM,
+                    List.of(TradeRouteStop.ofColony(DELFT)));
+            final TradeRoutePreview preview = preview(model, route);
+            assertTrue(preview.getCarrier().isEmpty());
+            final TradeRoutePreview.Leg leg = preview.getLegs().get(0);
+            assertEquals(List.of(kind), kinds(leg));
+            assertTrue(leg.getProblem().isEmpty());
+            assertEquals(kind, route.getKind());
+            if (kind == TradeRouteKind.SEA) {
+                assertEquals(List.of(NEW_AMSTERDAM_AT, Location.of(25, 17),
                         Location.of(26, 17), Location.of(27, 17), DELFT_AT),
-                leg.getPaths().get(1).getSquares());
-        assertEquals(TradeRouteKind.LAND,
-                model.getTradeRoutes(dutch(model)).get(0).getKind());
+                        leg.getPaths().get(0).getSquares());
+            }
+        }
     }
 
     @Test
@@ -581,11 +582,8 @@ class TradeRoutePlanningTest {
         final TradeRoutePreview.Leg back = preview.getLegs().get(1);
         assertEquals(TradeRouteStop.ofColony(DELFT), there.getTo());
         assertEquals(TradeRouteStop.ofColony(NEW_AMSTERDAM), back.getTo());
-        for (final TradeRouteKind kind : List.of(TradeRouteKind.LAND,
-                TradeRouteKind.SEA)) {
-            assertEquals(Lists.reverse(path(there, kind).getSquares()),
-                    path(back, kind).getSquares(), kind.name());
-        }
+        assertEquals(Lists.reverse(path(there, route.getKind()).getSquares()),
+                path(back, route.getKind()).getSquares());
         // Land enters grassland Delft one way and arctic New Amsterdam back.
         assertEquals(12, path(there, TradeRouteKind.LAND).getCostThirds());
         assertEquals(15, path(back, TradeRouteKind.LAND).getCostThirds());
@@ -600,13 +598,11 @@ class TradeRoutePlanningTest {
         // One connection per transport, the same on every repaint.
         final List<TradeRoutePreview.LegPath> connections = preview
                 .getConnections();
-        assertEquals(List.of(TradeRouteKind.LAND, TradeRouteKind.SEA),
+        assertEquals(List.of(TradeRouteKind.LAND),
                 connections.stream().map(TradeRoutePreview.LegPath::getKind)
                         .collect(Collectors.toList()));
         assertEquals(path(there, TradeRouteKind.LAND).getSquares(),
                 connections.get(0).getSquares());
-        assertEquals(path(there, TradeRouteKind.SEA).getSquares(),
-                connections.get(1).getSquares());
         final List<List<Location>> drawn = connections.stream()
                 .map(TradeRoutePreview.LegPath::getSquares)
                 .collect(Collectors.toList());

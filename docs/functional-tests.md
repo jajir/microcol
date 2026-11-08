@@ -14559,3 +14559,54 @@ The numbered entries below are chronological evidence, including failed attempts
 3. Targeted Docker/Xvfb: all seven TC116 scenarios plus three `PageVerificationContractTest` checks, completion `20261108T091122Z-42a078e3b74a`, supervisor 16728, `target/docker-ui/run-eYAvRr`: **10 tests, zero failures/errors/skips**, 173.006 seconds. TC116/01 verifies paper/focus fills, border image and font while retaining creation, cancellation and save/continue assertions. English and Czech `warehouse-qa/trade-route-editor.png` and `trade-route-editor-czech.png` reviewed: readable names, black irregular outline, flat paper, no clipped text.
 4. Fixed smoke/support selection: `bash scripts/ui-tests/verify.sh --smoke`, completion `20261108T091431Z-5b17ae1579c1`, supervisor 17379, `target/verification/run-jy8y1x5h`: **21 tests, zero failures/errors/skips**, 221.980 seconds including cleanup, within 420 seconds. Exact selection remains in its `summary.json`.
 5. Shared Java formatter applied to both changed Java files; token preservation and idempotence passed. Genuine vector SVG contains a single path without bitmap content; manifest export installed then repeated with `--check`, matching the runtime PNG. Documentation checks: 14 passed, name audit zero unexplained occurrences, strict MkDocs passed. Logs: `target/r0429/`. Local acceptance does not establish full-regression or distribution/publication success; remote CI and Pages were not inspected.
+
+
+## R-0430 route-kind preview correction (2026-11-08)
+
+1. [R-0430](requirements/done/R-0430.md) restricts previews without assigned carriers
+   to the saved route kind. Model coverage checks land and sea routes between
+   reachable ports; `TC_209_F240_trade_route_two_ports_test` checks the sea-only
+   line before assignment, after reopening, with a galleon and after Continue.
+   `TC_118_F109_trade_route_assignment_test` retains land-planning coverage.
+2. First model dispatch `20261108T093240Z-c3f28d958c0d` (PID 20165) timed out
+   during preparation: Docker's labelled-container query exceeded 20 seconds,
+   and the server probe exceeded two seconds. No test command started.
+   Evidence remains in `~/Library/Logs/Akropia/completions/` under that run ID.
+   Subsequent bounded probes returned server 29.8.2 and no running containers.
+   Retry `20261108T093340Z-cc4183d02bfb` (PID 20443, 600-second timeout)
+   is pending; targeted UI and smoke follow only after model acceptance.
+3. Initial documentation checks passed 14 consistency tests, the name audit
+   and strict MkDocs; logs are in `target/r0430/`. Final acceptance is pending.
+4. Retry `20261108T093340Z-cc4183d02bfb`, reports
+   `target/verification/run-va_heait/`, executed 5,059 checks: two failures,
+   zero errors/skips. Both painter tests still expected land and sea variants
+   for the same land route. They now parameterize both saved route kinds,
+   preserving reverse-direction, tile-center and repaint assertions while
+   expecting one matching connection. Final-source model retry
+   `20261108T093645Z-58342f159dec` (PID 20810, timeout 600 s) is pending.
+5. Model retry `20261108T093645Z-58342f159dec` passed **5,061 checks** in
+   385 XML reports, zero failures/errors/skips, in 151.697 seconds including
+   preparation and cleanup (`target/verification/run-8559qdzl/`). Only a painter
+   test comment was corrected afterward; executable tokens and selection are
+   unchanged. Targeted Docker/Xvfb dispatch `20261108T093938Z-48c9a1ad8d93`
+   (PID 21400, timeout 900 s) selects the complete TC_209 and TC_118 classes.
+6. Targeted Docker/Xvfb run `20261108T093938Z-48c9a1ad8d93` passed all
+   **6 scenarios** (TC_209: 1, TC_118: 5), zero failures/errors/skips,
+   in 175.880 seconds. Fresh XML and screenshots are retained in
+   `target/docker-ui/run-spmB5G/`. Visual inspection of
+   `akropia-test/warehouse-qa/trade-route-planner-two-ports.png` confirms
+   one sea line and no land line for the unassigned sea route.
+   Smoke dispatch `20261108T094255Z-ad0c596ee280` (PID 21822, outer timeout
+   480 s; unchanged 420-second smoke budget) is pending.
+7. Smoke `20261108T094255Z-ad0c596ee280` passed **21 fixed smoke/support
+   checks** in 12 fresh XML reports, zero failures/errors/skips, in 232.395 s
+   including preparation and cleanup, within the 420-second budget.
+   Evidence: `target/verification/run-19y6g1q0/`. All four changed Java files
+   match that source snapshot; production logic also matches the successful
+   model and targeted UI runs. Java formatting used the shared Eclipse profile.
+8. Final review confirms the route kind selects the default movement profile;
+   assigned-carrier navigation, movement prices and saved data are unchanged.
+   R-0430 is locally accepted on the candidate based on `8c01bdf88ded`.
+   Fourteen documentation consistency tests, name audit and strict MkDocs pass.
+   No remote regression or publication verification was requested; no new
+   distribution is claimed. Unrelated backlog edits are excluded from the commit.
