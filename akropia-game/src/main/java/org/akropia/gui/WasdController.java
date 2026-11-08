@@ -1,6 +1,8 @@
 package org.akropia.gui;
 
 import com.google.inject.Singleton;
+import com.google.inject.Inject;
+import org.akropia.gui.preferences.PreferencesProperties;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -12,7 +14,12 @@ import javafx.scene.input.KeyEvent;
 @Singleton
 public class WasdController {
 
-    private final static int DIFF = 4;
+    private final PreferencesProperties preferences;
+
+    @Inject
+    public WasdController(final PreferencesProperties preferences) {
+        this.preferences = preferences;
+    }
 
     private boolean w;
 
@@ -61,18 +68,19 @@ public class WasdController {
     }
 
     public Point getDiff() {
+        final int diff = preferences.getMapScrollSpeedProperty().get() * 2;
         Point out = Point.ZERO;
         if (w) {
-            out = out.add(0, -DIFF);
+            out = out.add(0, -diff);
         }
         if (a) {
-            out = out.add(-DIFF, 0);
+            out = out.add(-diff, 0);
         }
         if (s) {
-            out = out.add(0, DIFF);
+            out = out.add(0, diff);
         }
         if (d) {
-            out = out.add(DIFF, 0);
+            out = out.add(diff, 0);
         }
         return out;
     }

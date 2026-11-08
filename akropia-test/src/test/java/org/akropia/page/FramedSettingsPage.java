@@ -234,6 +234,28 @@ public final class FramedSettingsPage extends AbstractScreen {
         assertEquals(!czech, ((RadioButton) control("rbEnglish")).isSelected());
     }
 
+    public void verifyMapScrollSpeed(final int expected) {
+        assertEquals(expected,
+                ((Slider) control("settingMapScrollSpeed")).getValue(), .001);
+        assertEquals(expected, getContext()
+                .getClassFromGuice(GamePreferences.class).getMapScrollSpeed());
+        final org.akropia.gui.WasdController wasd = getContext()
+                .getClassFromGuice(org.akropia.gui.WasdController.class);
+        getRobot().interact(
+                () -> wasd.onKeyPressed(new javafx.scene.input.KeyEvent(
+                        javafx.scene.input.KeyEvent.KEY_PRESSED, "", "",
+                        KeyCode.D, false, false, false, false)));
+        try {
+            assertEquals(org.akropia.gui.Point.of(expected * 2, 0),
+                    wasd.getDiff());
+        } finally {
+            getRobot().interact(
+                    () -> wasd.onKeyReleased(new javafx.scene.input.KeyEvent(
+                            javafx.scene.input.KeyEvent.KEY_RELEASED, "", "",
+                            KeyCode.D, false, false, false, false)));
+        }
+    }
+
     public void verifySliders(final int musicVolume, final int speed) {
         final GamePreferences prefs = getContext()
                 .getClassFromGuice(GamePreferences.class);

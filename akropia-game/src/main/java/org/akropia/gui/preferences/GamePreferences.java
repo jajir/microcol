@@ -31,6 +31,9 @@ public class GamePreferences {
      */
     public static final Integer DEFAULT_ANIMATION_SPEED = 1;
 
+    public static final int DEFAULT_MAP_SCROLL_SPEED = 2;
+    public static final int MAX_MAP_SCROLL_SPEED = 9;
+
     /**
      * When there are no value in preferences than this value is used.
      */
@@ -209,6 +212,19 @@ public class GamePreferences {
         PathPlanningService.checkSpeed(animationSpeed);
         settingService
                 .update(setting -> setting.setAnimationSpeed(animationSpeed));
+    }
+
+    public int getMapScrollSpeed() {
+        final Integer speed = settingService.load().getMapScrollSpeed();
+        return speed == null || speed < 1 || speed > MAX_MAP_SCROLL_SPEED
+                ? DEFAULT_MAP_SCROLL_SPEED
+                : speed;
+    }
+
+    public void setMapScrollSpeed(final int speed) {
+        Preconditions.checkArgument(speed >= 1 && speed <= MAX_MAP_SCROLL_SPEED,
+                "Map scroll speed must be between 1 and 9");
+        settingService.update(setting -> setting.setMapScrollSpeed(speed));
     }
 
     public int getAnimationSpeed() {

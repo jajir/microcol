@@ -17,6 +17,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 public class PreferencesProperties {
 
     private final SimpleIntegerProperty animationSpeedProperty;
+    private final SimpleIntegerProperty mapScrollSpeedProperty;
 
     private final SimpleIntegerProperty musicVolumeProperty;
 
@@ -27,6 +28,11 @@ public class PreferencesProperties {
     @Inject
     PreferencesProperties(final GamePreferences gamePreferences,
             final EventBus eventBus) {
+        mapScrollSpeedProperty = new SimpleIntegerProperty(
+                gamePreferences.getMapScrollSpeed());
+        mapScrollSpeedProperty
+                .addListener((object, old, newValue) -> gamePreferences
+                        .setMapScrollSpeed(newValue.intValue()));
         animationSpeedProperty = new SimpleIntegerProperty(
                 gamePreferences.getAnimationSpeed());
         animationSpeedProperty.addListener((object, old, newValue) -> {
@@ -52,6 +58,10 @@ public class PreferencesProperties {
         showFightAdvisorProperty.addListener((object, old, newValue) -> {
             gamePreferences.setShowFightAdvisor(newValue);
         });
+    }
+
+    public SimpleIntegerProperty getMapScrollSpeedProperty() {
+        return mapScrollSpeedProperty;
     }
 
     public SimpleIntegerProperty getAnimationSpeedProperty() {

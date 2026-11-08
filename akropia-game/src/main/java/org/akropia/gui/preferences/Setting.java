@@ -31,6 +31,8 @@ public class Setting {
 
     private Integer animationSpeed;
 
+    private Integer mapScrollSpeed;
+
     private boolean showGrid;
 
     private boolean developerMode;
@@ -61,6 +63,7 @@ public class Setting {
         out.volume = volume;
         out.effectsVolume = effectsVolume;
         out.animationSpeed = animationSpeed;
+        out.mapScrollSpeed = mapScrollSpeed;
         out.showGrid = showGrid;
         out.developerMode = developerMode;
         out.showFightAdvisor = showFightAdvisor;
@@ -75,9 +78,10 @@ public class Setting {
     @Override
     public int hashCode() {
         return Objects.hashCode(mainFramePosition, mainFrameState, locale,
-                volume, effectsVolume, animationSpeed, showGrid, developerMode,
-                showFightAdvisor, version, gameInProgressSaveFile,
-                autosaveEnabled, turnSummaryEnabled, openEuropeOnArrival);
+                volume, effectsVolume, animationSpeed, mapScrollSpeed, showGrid,
+                developerMode, showFightAdvisor, version,
+                gameInProgressSaveFile, autosaveEnabled, turnSummaryEnabled,
+                openEuropeOnArrival);
     }
 
     @Override
@@ -95,6 +99,7 @@ public class Setting {
                 && Objects.equal(this.volume, other.volume)
                 && Objects.equal(this.effectsVolume, other.effectsVolume)
                 && Objects.equal(this.animationSpeed, other.animationSpeed)
+                && Objects.equal(this.mapScrollSpeed, other.mapScrollSpeed)
                 && Objects.equal(this.showGrid, other.showGrid)
                 && this.developerMode == other.developerMode
                 && Objects.equal(this.showFightAdvisor, other.showFightAdvisor)
@@ -170,6 +175,14 @@ public class Setting {
 
     public void setEffectsVolume(Integer effectsVolume) {
         this.effectsVolume = effectsVolume;
+    }
+
+    public Integer getMapScrollSpeed() {
+        return mapScrollSpeed;
+    }
+
+    public void setMapScrollSpeed(final Integer speed) {
+        mapScrollSpeed = speed;
     }
 
     public Integer getAnimationSpeed() {

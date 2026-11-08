@@ -37,6 +37,27 @@ public class SettingServicePersistingTest {
         assertNotNull(settingService.load().getLocale());
     }
 
+    @Test
+    public void mapScrollSpeedPersistsAndRejectsInvalidValues() {
+        when(persistingTool.getRootSaveDirectory())
+                .thenReturn(temporaryDirectory);
+        final GamePreferences preferences = new GamePreferences(settingService);
+        assertEquals(2, preferences.getMapScrollSpeed());
+        for (int speed : new int[] { 1, 2, 9 }) {
+            preferences.setMapScrollSpeed(speed);
+            final GamePreferences reloaded = new GamePreferences(
+                    new SettingService(new SettingDao(), persistingTool));
+            assertEquals(speed, reloaded.getMapScrollSpeed());
+        }
+        assertThrows(IllegalArgumentException.class,
+                () -> preferences.setMapScrollSpeed(0));
+        assertThrows(IllegalArgumentException.class,
+                () -> preferences.setMapScrollSpeed(10));
+        assertEquals(9, preferences.getMapScrollSpeed());
+        settingService.update(setting -> setting.setMapScrollSpeed(100));
+        assertEquals(2, preferences.getMapScrollSpeed());
+    }
+
     @BeforeEach
     public void setup() {
         settingDao = new SettingDao();

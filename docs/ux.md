@@ -1350,3 +1350,8 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 1. R-0421 zachovává společný rozpracovaný plán mezi záložkami; Uložit/Zrušit pracuje s celou trasou. Přidávání stanic nabízí pouze dosud nevybrané legální cíle, odebrání dopravce ponechá jeho polohu a náklad. Při odchodu s rozpracovanou editací hra nejprve upozorní.
 2. Stavový řádek vysvětluje ikonový sloupec a stav buňky při ukázání i zaměření klávesnicí. Symboly a důvod čekání doplňují barvy; režim celé trasy je pod tabulkou.
 3. Docker/Xvfb scénáře ověřily EN/CS, klávesnici, pět různých stanic, všechny druhy zboží a šest nákladových boxů při šířce 1024. Oprava dynamické výšky umožňuje posunout dlouhou záložku i rozbalené mazání; skutečné snímky a výsledky vlastní [funkční evidence](functional-tests.md#r-0421-tabbed-trade-route-editor-2026-11-06). Jde o automatické ověření a kontrolu snímků, nikoli studii hráčů.
+
+## Rychlost posunu mapy WASD — 2026-11-08
+
+1. [R-0431](requirements/done/R-0431.md) přidává do nastavení společný posuvník s devíti polohami. Hráč jej mění myší nebo klávesami; Home/End nastaví meze, šipky jednu polohu. Výchozí 2 zachovává dosavadní rychlost, 1 je poloviční a 9 je 4,5násobná. Jde o počáteční škálu určenou k pozdějšímu doladění.
+2. Nastavení se ukládá okamžitě. Návrat nevrací předchozí hodnotu; hráč ji může obnovit polohou 2. Výsledek pozná při posunu mapy WASD. Není potřebný zvuk ani restart partie. Přijímací výsledky vlastní [funkční evidence](functional-tests.md).

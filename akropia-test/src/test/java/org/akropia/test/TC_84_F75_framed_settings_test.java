@@ -30,7 +30,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
                     "autosaveEnabled", "settingTurnSummary",
                     "settingOpenEuropeOnArrival", "settingVolume",
                     "settingEffectsVolume", "settingAnimationSpeed",
-                    "settingDeveloperMode");
+                    "settingMapScrollSpeed", "settingDeveloperMode");
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -90,6 +90,19 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
             throws Exception {
         final SettingPage settings = WelcomePage.of(getContext()).openSetting();
         final FramedSettingsPage page = new FramedSettingsPage(getContext());
+        // WASD speed keeps its default, endpoints, keyboard steps and saved
+        // value.
+        page.verifyMapScrollSpeed(2);
+        page.press("settingMapScrollSpeed", KeyCode.END);
+        page.verifyMapScrollSpeed(9);
+        page.press("settingMapScrollSpeed", KeyCode.HOME);
+        page.verifyMapScrollSpeed(1);
+        page.press("settingMapScrollSpeed", KeyCode.RIGHT);
+        page.verifyMapScrollSpeed(2);
+        page.dragSlider("settingMapScrollSpeed", 1);
+        page.verifyMapScrollSpeed(9);
+        settings.goBack().openSetting();
+        page.verifyMapScrollSpeed(9);
         // End and Home keep the actual application ranges and stored values.
         page.press("settingVolume", KeyCode.END);
         page.press("settingAnimationSpeed", KeyCode.END);

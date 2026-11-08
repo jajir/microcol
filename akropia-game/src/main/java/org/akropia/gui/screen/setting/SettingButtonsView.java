@@ -36,6 +36,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
     private final SettingShowFightAdvisorView settingShowFightAdvisorView;
     private final SettingVolumeView settingVolumeView;
     private final SettingAnimationSpeedView settingAnimationSpeedView;
+    private final SettingMapScrollSpeedView settingMapScrollSpeedView;
     private final SettingVersionView settingVersionView;
     private final CheckBox autosaveCheckBox;
     private final CheckBox turnSummaryCheckBox;
@@ -50,9 +51,11 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
             final SettingShowFightAdvisorView settingShowFightAdvisorView,
             final SettingVolumeView settingVolumeView,
             final SettingAnimationSpeedView settingAnimationSpeedView,
+            final SettingMapScrollSpeedView settingMapScrollSpeedView,
             final SettingVersionView settingVersionView,
             final GamePreferences gamePreferences, final I18n i18n,
             final org.akropia.gui.preferences.DeveloperMode developerMode) {
+        this.settingMapScrollSpeedView = settingMapScrollSpeedView;
         this.settingLanguageView = Preconditions
                 .checkNotNull(settingLanguageView);
         this.settingShowGridView = Preconditions
@@ -111,6 +114,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         buttonsBox.getChildren().add(openEuropeCheckBox);
         buttonsBox.getChildren().add(settingVolumeView.getContent());
         buttonsBox.getChildren().add(settingAnimationSpeedView.getContent());
+        buttonsBox.getChildren().add(settingMapScrollSpeedView.getContent());
         buttonsBox.getChildren().add(developerSection);
         buttonsBox.getChildren().add(settingVersionView.getContent());
 
@@ -139,6 +143,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
                 .setText(i18n.get(GameMenu.settingOpenEuropeOnArrival));
         this.settingVolumeView.updateLanguage(i18n);
         this.settingAnimationSpeedView.updateLanguage(i18n);
+        this.settingMapScrollSpeedView.updateLanguage(i18n);
         this.settingVersionView.updateLanguage(i18n);
     }
 

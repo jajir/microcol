@@ -14,4 +14,5 @@
 	<entry key="animationSpeed_fast">Fast</entry>
 	<entry key="animationSpeed_slow">Slow</entry>
 
+    <entry key="mapScrollSpeed_caption">Map scroll speed (WASD)</entry>
 </properties>

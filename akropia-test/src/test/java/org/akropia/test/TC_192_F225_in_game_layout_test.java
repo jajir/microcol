@@ -442,7 +442,8 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
                 "settingGrid", "settingFightAdvisor", "autosaveEnabled",
                 "settingTurnSummary", "settingOpenEuropeOnArrival",
                 "settingVolume", "settingEffectsVolume",
-                "settingAnimationSpeed", "settingDeveloperMode"));
+                "settingAnimationSpeed", "settingMapScrollSpeed",
+                "settingDeveloperMode"));
         hosted.verifyScrollBarFollowsOverflow();
         hosted.verifyCompleteTexts();
         hosted.rememberFonts();

@@ -1239,3 +1239,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## R-0425 — Jediné spojení obchodní trasy
 
 1. [R-0425](done/R-0425.md), primární oblast A06, související A03/A05/A04. Status: done. Rovnocenné cesty tam a zpět sdílejí jedinou kreslenou čáru za druh dopravy; skutečně rozdílné optimální cesty zůstávají pravdivě zobrazené. Lokální přejímku a rozsah vede [funkční evidence](../functional-tests.md#r-0425-single-route-connections-2026-11-06).
+
+## Rychlost posunu mapy WASD — 2026-11-08
+
+1. [R-0431](done/R-0431.md), A03 se závislostmi A02/A01, přidává uložený posuvník rychlosti WASD; devět poloh, výchozí 2 zachovává dosavadní rychlost. Stav a přejímku vlastní požadavek a funkční evidence.
