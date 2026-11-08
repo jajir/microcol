@@ -670,4 +670,41 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         planner.close();
         planner.verifyPlannerShown(false);
     }
+
+    @Test
+    @Tag("local")
+    void TC_09_planner_double_click_opens_the_clicked_route_details()
+            throws Exception {
+        WelcomePage.of(getContext()).loadGame();
+        final TradeRoutePlanningPage planner = new TradeRoutePlanningPage(
+                getContext());
+        final TradeRouteCargoDialog cargo = new TradeRouteCargoDialog(
+                getContext());
+
+        // Selecting a route only shows its map preview.
+        planner.open();
+        planner.chooseRoute("Ore cart");
+        planner.verifySelectedRoute("Ore cart");
+        cargo.verifyDialogClosed();
+
+        // Double-click another row: its own details open, not the old
+        // selection.
+        planner.doubleClickRoute("Lost cart");
+        cargo.verifyChosenRoute("Lost cart");
+        cargo.verifyStopChoices("1. Delft", "2. lost colony");
+        cargo.closeWithEscape();
+        cargo.verifyDialogClosed();
+        planner.verifyPlannerShown(true);
+        planner.verifySelectedRoute("Lost cart");
+
+        // A selected row also opens; Back leaves the same planner available.
+        planner.doubleClickRoute("Lost cart");
+        cargo.verifyChosenRoute("Lost cart");
+        cargo.close();
+        planner.verifyPlannerShown(true);
+        planner.verifySelectedRoute("Lost cart");
+        cargo.verifyRouteStored("Lost cart", true);
+        planner.close();
+    }
+
 }

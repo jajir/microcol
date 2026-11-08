@@ -21,6 +21,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ListCell;
 import javafx.scene.input.KeyCode;
 
 /**
@@ -92,6 +93,16 @@ public final class TradeRoutePlanningPage extends AbstractScreen {
         for (int i = 0; i < index; i++) {
             getRobot().push(KeyCode.DOWN);
         }
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void doubleClickRoute(final String name) {
+        final Node cell = getNodeFinder()
+                .lookup("#tradeRoutePlanningList .list-cell")
+                .match(node -> node instanceof ListCell<?>
+                        && name.equals(((ListCell<?>) node).getText()))
+                .query();
+        getRobot().doubleClickOn(cell);
         WaitForAsyncUtils.waitForFxEvents();
     }
 

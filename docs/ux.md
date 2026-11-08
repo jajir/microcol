@@ -47,6 +47,8 @@
 7. Mapa je ztmavená, kolonie zůstávají jasné a mlha se kreslí až nad trasami. Přiřazené trasy mají stálou barvu podle ID, nevybrané jsou užší a vybraná je kreslena navrch. Šedá plná čára je cesta vozem, čárkovaná lodí; Evropa je kroužek se jménem na poli odjezdu. Hráčské ověření vzhledu zatím neproběhlo, snímky pořizují scénáře TC116–TC119.
 8. [R-0425](requirements/done/R-0425.md) (implementováno 6. listopadu 2026, přejímka čeká): spojení mezi dvěma zastávkami se kreslí jednou čarou za druh dopravy. Cesta tam a zpět po stejných polích nevytváří druhou čáru a čára nemá druhý tenčí doprovodný tah. Mezi stejně levnými cestami hra stabilně volí tu s nejmenším počtem šikmých kroků. Je-li zpáteční cesta po jiných polích skutečně levnější, zůstává samostatnou čarou, protože po ní dopravce jede. Hráčské ověření vzhledu zatím neproběhlo.
 
+9. Zadání 2026-11-08, [R-0426](requirements/done/R-0426.md): dvojklik levým tlačítkem na trasu v seznamu „Your routes“ otevírá stejnou správu jako „Stops, goods and carriers…“, rovnou pro kliknutou trasu. Jednoduchý klik pouze vybírá náhled; prázdný řádek, jiné tlačítko nebo zakázaná editace správu neotevřou. Zpět/Escape vrací hráče do plánovače. Lokální přejímka prošla; výsledky sleduje [funkční evidence](functional-tests.md#r-0426-planner-double-click-2026-11-08).
+
 ## Zbývající tahy orání — zadání 1. listopadu 2026
 
 1. Dohodnutý [R-0391](requirements/done/R-0391.md) zobrazí v panelu vlastní jednotky textový odpočet orání podle skutečného stavu práce, obdobně jako u silnice. Text se aktualizuje při posunu práce, zachová po Continue a zmizí při dokončení či zrušení. Jde o připravené zadání k nálezu UX-20, nikoli implementovaný nebo nově hráčsky ověřený výsledek.

@@ -39,6 +39,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -134,6 +135,16 @@ public final class TradeRoutePlanningPanel
         list.setMinHeight(90);
         listLabel.setLabelFor(list);
         list.setCellFactory(view -> new ListCell<>() {
+            {
+                setOnMouseClicked(event -> {
+                    if (event.getButton() == MouseButton.PRIMARY
+                            && event.getClickCount() == 2 && !isEmpty()) {
+                        list.getSelectionModel().select(getItem());
+                        edit.fire();
+                    }
+                });
+            }
+
             @Override
             protected void updateItem(final TradeRoutePreview item,
                     final boolean isEmpty) {

@@ -1355,3 +1355,7 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 ### R-0424 home-port arrival route (2026-11-06)
 
 1. UC-013/016: TC_103 TC_09 covers sending a new expedition home through G after spending all movement, waiting until the next turn, departure and arrival. `StartingArrivalRouteTest` and `GoToOrderTest` cover remembered terrain, current-sight limits, all free-play map families and unchanged save loading. TC_101 and TC_122 preserve the surrounding new-game journeys. Detailed results and the current acceptance boundary are in [functional evidence](functional-tests.md#r-0424-home-port-arrival-route-2026-11-06); this does not close unrelated UC variants.
+
+### UC-029/030: Planner route double-click — 2026-11-08
+
+1. [R-0426](requirements/done/R-0426.md) adds direct opening of the clicked route from the planner list. `TC_119_F110_trade_route_edit_test.TC_09_planner_double_click_opens_the_clicked_route_details` checks another/current row, displayed stops, Escape and Back. Existing TC119/07 retains the edit button and stop-repair journey. [Functional evidence](functional-tests.md#r-0426-planner-double-click-2026-11-08) records actual acceptance; no broader UC completion is implied.
