@@ -1,5 +1,9 @@
 # Ukládání, načítání a herní nabídka
 
+Návrh čitelných názvů souborů a upřesnění organizace adresářů z 8. listopadu
+2026 sleduje [R-0432](requirements/R-0432.md). Jde o analýzu před rozhodnutím
+o implementaci; současná pravidla níže zůstávají platná.
+
 **Implementováno a lokálně ověřeno 26. října 2026.**
 [R-0298](requirements/done/R-0298.md) navazuje na původní návrh z tohoto dne.
 Níže je smlouva implementovaného chování. Výsledky testů patří do
