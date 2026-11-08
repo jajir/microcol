@@ -30,22 +30,30 @@ Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověře
 
 ## Názvy a adresáře schválené 8. listopadu 2026
 
-1. Schválený cíl [R-0432](requirements/R-0432.md), zatím bez implementace:
-   všechna nová uložení jsou v jednom společném adresáři, bez podsložek pro
-   jednotlivé partie. Návrh umístění je dosavadní `~/.akropia/saves/`;
-   nastavení zůstává samostatně v `~/.akropia`.
-2. Pět automatických souborů se jmenuje `autosave-001.akropia` až
-   `autosave-005.akropia`. Číslo 001 vždy označuje nejnovější stav.
-   Spravované autosave soubory se při rotaci přepisují bez potvrzení.
-   Důsledek společného adresáře: historie je společná pro všechny partie;
-   nová partie postupně vytlačí automatické pozice předchozí partie.
-   Trvale zachovaný stav si hráč uloží ručně pod vlastním názvem.
-3. Výchozí název ruční pozice vychází z národnosti, za kterou uživatel hraje,
-   a herního roku, například `duch-1600.akropia`; nejde o jméno hráče.
-   Zadaný vlastní název má přednost a použije se v názvu souboru.
-4. Přepisování při shodě bylo potvrzeno pro autosave. Kolize ručních názvů,
-   nepovolené názvy a osud samostatných bodů obnovy i rychlého slotu
-   zůstávají k rozhodnutí v R-0432. Stávající soubory se touto analýzou nemění.
+1. Nejnovější rozhodnutí v [R-0432](requirements/R-0432.md), zatím bez
+   implementace, nahrazuje předchozí návrh pěti souborů seřazených podle stáří:
+   hra automaticky ukládá každý tah do deseti kruhových slotů 000–009.
+   Po 009 následuje přepsání 000, potom 001 a dále bez potvrzení.
+   Číslo 000 tedy neoznačuje vždy nejnovější pozici.
+2. Všechny nové pozice sdílejí jeden adresář bez podsložek partií.
+   Ruční uložení jsou nezávislá a hráč je může pojmenovat. Výchozí název
+   vychází z hrané národnosti a roku, například `duch-1600.akropia`,
+   nikoli ze jména hráče. Vlastní zadaný název má přednost.
+3. Uživatel napsal `autosave-000.akripis` a `./akropia/saves/`.
+   Přípona a relativní versus domovská cesta ještě vyžadují upřesnění;
+   dosavadní přípona je `.akropia` a navrhované stabilní umístění
+   `~/.akropia/saves/`. Tyto rozdíly se nepovažují automaticky za překlepy.
+4. Doporučené doplnění, zatím návrh: ukládat na bezpečném začátku lidského
+   tahu včetně počátečního stavu, po restartu pokračovat dalším slotem,
+   nezávisle evidovat pořadí úspěšných zápisů a zobrazovat nejnovější skutečný
+   stav v Pokračovat. Nová partie kruh neresetuje; postupně nahrazuje autosavy
+   předchozí partie. Trvalé zachování řeší ruční pozice mimo kruh.
+5. Doporučené doplnění, zatím návrh: samostatné kopie posledního tahu a
+   desetiletí už nezapisovat. Osud příkazu rychlého uložení, kolize ručních
+   názvů a neplatné názvy zůstávají v R-0432 k upřesnění. Bezpečný atomický
+   zápis musí zachovat předchozí platnou pozici při chybě; čtení existujících
+   souborů je nemění. Níže uvedený stav zdrojů je současná implementace,
+   nikoli doklad provedení tohoto návrhu.
 
 ## Současné automatické zápisy — kontrola zdrojů 8. listopadu 2026
 
