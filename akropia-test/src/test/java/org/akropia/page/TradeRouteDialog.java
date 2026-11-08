@@ -131,6 +131,18 @@ public final class TradeRouteDialog extends AbstractScreen {
         assertEquals(expected, getLabeledById("tradeRouteTitle").getText());
     }
 
+    public void verifyNameAppearance(final boolean focused) {
+        final TextField input = name();
+        assertEquals(focused, input.isFocused());
+        assertEquals(
+                javafx.scene.paint.Color.web(focused ? "#E7E7D0" : "#FFF9EC"),
+                input.getBackground().getFills().get(0).getFill());
+        assertEquals(1, input.getBorder().getImages().size());
+        assertTrue(input.getBorder().getImages().get(0).getImage().getUrl()
+                .endsWith("/trade-route-name-frame.png"));
+        assertEquals("Playpen Sans", input.getFont().getFamily());
+    }
+
     public void verifyKind(final TradeRouteKind expected) {
         assertEquals(expected, kindBox().getValue());
     }

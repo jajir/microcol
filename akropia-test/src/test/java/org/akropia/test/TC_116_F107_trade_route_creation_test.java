@@ -59,10 +59,12 @@ public class TC_116_F107_trade_route_creation_test extends AbstractAkropiaTest {
 
         // Name and stops are only staged until Create is pressed.
         route.enterName("Wagon Road");
+        route.verifyNameAppearance(true);
         route.chooseStop(0, DELFT);
         route.verifyStopOptions(1, "New Amsterdam");
         route.chooseStop(1, NEW_AMSTERDAM);
         route.verifyCreateEnabled(true);
+        route.verifyNameAppearance(false);
         route.captureDialog("tradeRouteDialog", "trade-route-editor.png");
         route.verifyStoredRoutes(0);
         route.create();

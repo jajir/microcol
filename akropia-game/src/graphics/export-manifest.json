@@ -189,6 +189,18 @@
         }
       ]
     },
+    "trade-route-name": {
+      "family": "Paper route name input, R-0429",
+      "outputs": [{
+        "output": "trade-route-name-frame.png",
+        "source": "trade-route-name-frame.svg",
+        "render": "zoom", "zoom": 2, "size": [192, 96],
+        "transparent": true,
+        "consumer": "dialogs.css route name input",
+        "display": "12 px slice shown 6 logical px wide",
+        "stroke": "2 logical px black ballpoint"
+      }]
+    },
     "controls": {
       "family": "toolbar, shared action icons, frame and status coin, R-0278/R-0316/R-0327",
       "outputs": [
