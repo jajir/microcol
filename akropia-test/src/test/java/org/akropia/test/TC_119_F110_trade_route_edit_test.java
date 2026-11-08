@@ -673,37 +673,50 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
-    void TC_09_planner_double_click_opens_the_clicked_route_details()
+    void TC_09_planner_map_double_click_opens_the_clicked_route_details()
             throws Exception {
-        WelcomePage.of(getContext()).loadGame();
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
         final TradeRoutePlanningPage planner = new TradeRoutePlanningPage(
                 getContext());
         final TradeRouteCargoDialog cargo = new TradeRouteCargoDialog(
                 getContext());
 
-        // Selecting a route only shows its map preview.
+        // A single map click selects the route without opening its editor.
         planner.open();
-        planner.chooseRoute("Ore cart");
+        planner.chooseRoute("Atlantic run");
+        game.clickTile(ROAD_LOCATION);
         planner.verifySelectedRoute("Ore cart");
         cargo.verifyDialogClosed();
 
-        // Double-click another row: its own details open, not the old
-        // selection.
+        // Double-clicking the list only selects, as before R-0426.
         planner.doubleClickRoute("Lost cart");
-        cargo.verifyChosenRoute("Lost cart");
-        cargo.verifyStopChoices("1. Delft", "2. lost colony");
+        planner.verifySelectedRoute("Lost cart");
+        cargo.verifyDialogClosed();
+
+        // These routes overlap: the first click selects Ore cart; the second
+        // opens it instead of cycling again to Lost cart.
+        planner.verifyRouteDrawnOver("Ore cart", ROAD_LOCATION);
+        planner.verifyRouteDrawnOver("Lost cart", ROAD_LOCATION);
+        planner.doubleClickMap(ROAD_LOCATION);
+        cargo.verifyChosenRoute("Ore cart");
+        cargo.verifyStopChoices("1. Delft", "2. New Amsterdam");
         cargo.closeWithEscape();
         cargo.verifyDialogClosed();
         planner.verifyPlannerShown(true);
-        planner.verifySelectedRoute("Lost cart");
+        planner.verifySelectedRoute("Ore cart");
 
-        // A selected row also opens; Back leaves the same planner available.
-        planner.doubleClickRoute("Lost cart");
+        // The next double-click selects and opens the other overlapping route.
+        planner.doubleClickMap(ROAD_LOCATION);
         cargo.verifyChosenRoute("Lost cart");
         cargo.close();
         planner.verifyPlannerShown(true);
         planner.verifySelectedRoute("Lost cart");
         cargo.verifyRouteStored("Lost cart", true);
+
+        // Empty map space must not reopen the previously selected route.
+        planner.doubleClickMap(SOUTH_OF_ROAD_LOCATION);
+        cargo.verifyDialogClosed();
+        planner.verifySelectedRoute("Lost cart");
         planner.close();
     }
 

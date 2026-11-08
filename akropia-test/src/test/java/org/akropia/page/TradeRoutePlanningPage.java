@@ -23,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ListCell;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 
 /**
  * Map trade route planner: the switch in the map's upper-left corner, the New
@@ -93,6 +94,12 @@ public final class TradeRoutePlanningPage extends AbstractScreen {
         for (int i = 0; i < index; i++) {
             getRobot().push(KeyCode.DOWN);
         }
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void doubleClickMap(final Location location) {
+        GamePage.of(getContext()).hoverTile(location);
+        getRobot().doubleClickOn(MouseButton.PRIMARY);
         WaitForAsyncUtils.waitForFxEvents();
     }
 

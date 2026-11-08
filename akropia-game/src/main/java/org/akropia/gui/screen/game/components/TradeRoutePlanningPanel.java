@@ -39,7 +39,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -135,16 +134,6 @@ public final class TradeRoutePlanningPanel
         list.setMinHeight(90);
         listLabel.setLabelFor(list);
         list.setCellFactory(view -> new ListCell<>() {
-            {
-                setOnMouseClicked(event -> {
-                    if (event.getButton() == MouseButton.PRIMARY
-                            && event.getClickCount() == 2 && !isEmpty()) {
-                        list.getSelectionModel().select(getItem());
-                        edit.fire();
-                    }
-                });
-            }
-
             @Override
             protected void updateItem(final TradeRoutePreview item,
                     final boolean isEmpty) {
@@ -440,9 +429,9 @@ public final class TradeRoutePlanningPanel
      * Opens the shared route window with the selected route. Whatever the
      * player saves there is read back into the map and this panel.
      */
-    private void editSelected() {
+    public void editSelected() {
         final Optional<TradeRoutePreview> selected = planning.getSelected();
-        if (selected.isEmpty()) {
+        if (selected.isEmpty() || edit.isDisabled()) {
             return;
         }
         message.setText("");

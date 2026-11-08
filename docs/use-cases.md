@@ -1359,3 +1359,7 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 ### UC-029/030: Planner route double-click — 2026-11-08
 
 1. [R-0426](requirements/done/R-0426.md) adds direct opening of the clicked route from the planner list. `TC_119_F110_trade_route_edit_test.TC_09_planner_double_click_opens_the_clicked_route_details` checks another/current row, displayed stops, Escape and Back. Existing TC119/07 retains the edit button and stop-repair journey. [Functional evidence](functional-tests.md#r-0426-planner-double-click-2026-11-08) records actual acceptance; no broader UC completion is implied.
+
+### UC-029/030: Map route double-click correction — 2026-11-08
+
+1. [R-0427](requirements/done/R-0427.md) supersedes the R-0426 list gesture. TC119/09 now covers double-clicking a map route, keeping the first click's choice at overlapping lines, single-click selection, empty map space, list-only selection and Escape/Back. Current acceptance is in [functional evidence](functional-tests.md#r-0427-map-route-double-click-2026-11-08); R-0426 results remain historical.

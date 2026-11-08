@@ -24,6 +24,7 @@ import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import com.google.inject.Provider;
 import org.akropia.gui.screen.game.components.ButtonsGamePanel;
+import org.akropia.gui.screen.game.components.TradeRoutePlanningPanel;
 import javafx.scene.input.ScrollEvent;
 
 @Singleton
@@ -56,6 +57,7 @@ public final class GamePanelMouseListener {
     private final SelectedUnitManager selectedUnitManager;
     private final Provider<ButtonsGamePanel> gameButtons;
     private final TradeRoutePlanning tradeRoutePlanning;
+    private final Provider<TradeRoutePlanningPanel> tradeRoutePlanningPanel;
     private final Canvas canvas;
     private Point contextPress;
     private boolean contextDragged;
@@ -75,7 +77,10 @@ public final class GamePanelMouseListener {
             final GamePanelPresenter gamePanelPresenter,
             final SelectedUnitManager selectedUnitManager,
             final Provider<ButtonsGamePanel> gameButtons,
-            final TradeRoutePlanning tradeRoutePlanning) {
+            final TradeRoutePlanning tradeRoutePlanning,
+            final Provider<TradeRoutePlanningPanel> tradeRoutePlanningPanel) {
+        this.tradeRoutePlanningPanel = Preconditions
+                .checkNotNull(tradeRoutePlanningPanel);
         this.tradeRoutePlanning = Preconditions
                 .checkNotNull(tradeRoutePlanning);
         this.gameModelController = Preconditions
@@ -190,14 +195,21 @@ public final class GamePanelMouseListener {
             mouseOverTileManager.clearMouseOverTile();
             mouseOverTileManager.setMouseOverTile(location);
             if (tradeRoutePlanning.isActive()) {
-                // The planner only selects routes; a click never selects,
+                // The planner selects or opens routes; a click never selects,
                 // moves or orders a unit and never opens a colony.
                 if (modeController.isMoveMode()) {
                     selectedUnitManager.getSelectedUnit()
                             .ifPresent(gamePanelPresenter::disableMoveMode);
                 }
                 if (e.isPrimaryButtonDown()) {
-                    tradeRoutePlanning.selectAt(location);
+                    if (e.getClickCount() == 2) {
+                        tradeRoutePlanning.getSelected()
+                                .filter(route -> route.passes(location))
+                                .ifPresent(route -> tradeRoutePlanningPanel
+                                        .get().editSelected());
+                    } else {
+                        tradeRoutePlanning.selectAt(location);
+                    }
                 }
             } else if (e.getButton() == MouseButton.PRIMARY
                     && e.getClickCount() == 2) {
