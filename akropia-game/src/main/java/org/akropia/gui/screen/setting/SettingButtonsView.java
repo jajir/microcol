@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 import javafx.scene.control.Button;
@@ -64,12 +63,10 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
             final SettingVersionView settingVersionView,
             final GamePreferences gamePreferences, final I18n i18n,
             final org.akropia.gui.preferences.DeveloperMode developerMode,
-            final KeyboardShortcuts shortcuts,
-            final Provider<KeyboardShortcutsDialog> shortcutsDialog) {
+            final KeyboardShortcuts shortcuts) {
         this.shortcuts = Preconditions.checkNotNull(shortcuts);
         shortcutsButton = ActionButtons.button(ButtonIcon.SETTINGS);
         shortcutsButton.setId(BUTTON_SHORTCUTS_ID);
-        shortcutsButton.setOnAction(event -> shortcutsDialog.get().open());
         // Saved shortcut changes rename the developer shortcut at once.
         shortcuts.addListener(() -> {
             if (currentI18n != null) {
@@ -145,6 +142,10 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         buttonsBox.getChildren().add(settingVersionView.getContent());
 
         updateLanguage(i18n);
+    }
+
+    void onOpenShortcuts(final Runnable open) {
+        shortcutsButton.setOnAction(event -> open.run());
     }
 
     @Override

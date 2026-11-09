@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.akropia.gui.preferences.GamePreferences;
-import org.akropia.gui.screen.setting.KeyboardShortcutsDialog;
+import org.akropia.gui.screen.setting.ScreenKeyboardShortcuts;
 import org.akropia.gui.screen.setting.SettingButtonsView;
 import org.akropia.gui.shortcut.ShortcutAction;
 import org.akropia.gui.shortcut.ShortcutController;
@@ -34,15 +34,15 @@ public class KeyboardShortcutsPage extends AbstractScreen {
     }
 
     public void startAdd(final ShortcutAction action) {
-        clickInDialog(KeyboardShortcutsDialog.id(action) + "-add");
+        clickInEditor(ScreenKeyboardShortcuts.id(action) + "-add");
     }
 
     public void startChange(final ShortcutAction action, final int index) {
-        clickInDialog(KeyboardShortcutsDialog.id(action) + "-binding-" + index);
+        clickInEditor(ScreenKeyboardShortcuts.id(action) + "-binding-" + index);
     }
 
     public void remove(final ShortcutAction action, final int index) {
-        clickInDialog(KeyboardShortcutsDialog.id(action) + "-remove-" + index);
+        clickInEditor(ScreenKeyboardShortcuts.id(action) + "-remove-" + index);
     }
 
     /**
@@ -63,16 +63,16 @@ public class KeyboardShortcutsPage extends AbstractScreen {
     }
 
     public void restoreDefaults() {
-        clickInDialog(KeyboardShortcutsDialog.RESET_ID);
+        clickInEditor(ScreenKeyboardShortcuts.RESET_ID);
     }
 
     public void cancel() throws java.util.concurrent.TimeoutException {
-        clickInDialog(KeyboardShortcutsDialog.CANCEL_ID);
+        clickInEditor(ScreenKeyboardShortcuts.CANCEL_ID);
         waitForMainWindowFocus();
     }
 
     public void saveAndBack() throws java.util.concurrent.TimeoutException {
-        clickInDialog(KeyboardShortcutsDialog.SAVE_ID);
+        clickInEditor(ScreenKeyboardShortcuts.SAVE_ID);
         waitForMainWindowFocus();
     }
 
@@ -85,13 +85,13 @@ public class KeyboardShortcutsPage extends AbstractScreen {
             throws java.util.concurrent.TimeoutException {
         WaitForAsyncUtils.waitFor(10, java.util.concurrent.TimeUnit.SECONDS,
                 () -> getNodeFinder()
-                        .lookup("#" + KeyboardShortcutsDialog.SAVE_ID)
+                        .lookup("#" + ScreenKeyboardShortcuts.SAVE_ID)
                         .tryQuery().isPresent()
                         || getPrimaryStage().isFocused());
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    private void clickInDialog(final String id) {
+    private void clickInEditor(final String id) {
         final Node node = getNodeFinder().lookup("#" + id).query();
         getRobot().interact(() -> {
             // Bring a row below the fold into the editor's viewport.
@@ -129,7 +129,7 @@ public class KeyboardShortcutsPage extends AbstractScreen {
         final List<String> out = new ArrayList<>();
         for (int i = 0;; i++) {
             final Button binding = getNodeFinder()
-                    .lookup("#" + KeyboardShortcutsDialog.id(action)
+                    .lookup("#" + ScreenKeyboardShortcuts.id(action)
                             + "-binding-" + i)
                     .tryQueryAs(Button.class).orElse(null);
             if (binding == null) {
@@ -149,7 +149,7 @@ public class KeyboardShortcutsPage extends AbstractScreen {
         if (expected.length == 0) {
             assertNotNull(
                     getNodeFinder().lookup("#"
-                            + KeyboardShortcutsDialog.id(action) + "-unbound")
+                            + ScreenKeyboardShortcuts.id(action) + "-unbound")
                             .tryQuery().orElse(null),
                     action.getKey() + " shows Unbound");
         }
@@ -167,17 +167,17 @@ public class KeyboardShortcutsPage extends AbstractScreen {
 
     public void verifyStatus(final String expected) {
         assertEquals(expected,
-                getLabeledById(KeyboardShortcutsDialog.STATUS_ID).getText());
+                getLabeledById(ScreenKeyboardShortcuts.STATUS_ID).getText());
     }
 
     public void verifySaveEnabled(final boolean expected) {
         assertEquals(expected,
-                !getButtonById(KeyboardShortcutsDialog.SAVE_ID).isDisabled());
+                !getButtonById(ScreenKeyboardShortcuts.SAVE_ID).isDisabled());
     }
 
     public void verifyEditorOpen(final boolean expected) {
         assertEquals(expected,
-                getNodeFinder().lookup("#" + KeyboardShortcutsDialog.SAVE_ID)
+                getNodeFinder().lookup("#" + ScreenKeyboardShortcuts.SAVE_ID)
                         .tryQuery()
                         .map(node -> node.getScene().getWindow().isShowing())
                         .orElse(false));
@@ -185,7 +185,7 @@ public class KeyboardShortcutsPage extends AbstractScreen {
 
     public void verifyFocused(final ShortcutAction action,
             final String control) {
-        final String id = KeyboardShortcutsDialog.id(action) + "-" + control;
+        final String id = ScreenKeyboardShortcuts.id(action) + "-" + control;
         final Node node = getNodeFinder().lookup("#" + id).query();
         assertTrue(node.isFocused(), id + " keeps the keyboard focus");
     }
@@ -271,11 +271,11 @@ public class KeyboardShortcutsPage extends AbstractScreen {
             final String... buttons) {
         assertEquals(title, getLabeledById("shortcutsTitle").getText());
         assertEquals(platform,
-                getLabeledById(KeyboardShortcutsDialog.PLATFORM_ID).getText());
+                getLabeledById(ScreenKeyboardShortcuts.PLATFORM_ID).getText());
         assertEquals(List.of(buttons), List.of(
-                getButtonById(KeyboardShortcutsDialog.RESET_ID).getText(),
-                getButtonById(KeyboardShortcutsDialog.CANCEL_ID).getText(),
-                getButtonById(KeyboardShortcutsDialog.SAVE_ID).getText()));
+                getButtonById(ScreenKeyboardShortcuts.RESET_ID).getText(),
+                getButtonById(ScreenKeyboardShortcuts.CANCEL_ID).getText(),
+                getButtonById(ScreenKeyboardShortcuts.SAVE_ID).getText()));
     }
 
     /**
@@ -285,20 +285,31 @@ public class KeyboardShortcutsPage extends AbstractScreen {
      */
     public void verifyActionTexts(final ShortcutAction action,
             final String label, final String addLabel) {
-        final String id = KeyboardShortcutsDialog.id(action);
+        final String id = ScreenKeyboardShortcuts.id(action);
         assertEquals(label, getLabeledById(id + "-label").getText());
         assertEquals(addLabel, getButtonById(id + "-add").getText());
     }
 
     /**
-     * Every row, group heading and button shows its whole text inside the
-     * dialog window, without ellipsis, overlap or horizontal scrolling; the
-     * whole dialog fits the screen.
+     * Every row, group heading and button shows its whole text inside the main
+     * window, without ellipsis, overlap or horizontal scrolling; the fixed
+     * header stays above the rows.
      */
     public void verifyCompleteLayout() {
+        verifyOnlyMainWindowShowing();
         getRobot().interact(() -> {
+            final Node editor = getNodeFinder()
+                    .lookup("#keyboardShortcutsScreen").query();
+            final javafx.geometry.Bounds editorBounds = editor
+                    .localToScene(editor.getBoundsInLocal());
+            assertEquals(getPrimaryStage().getScene().getWidth(),
+                    editorBounds.getWidth(), 1,
+                    "Editor uses the main window width");
+            assertEquals(getPrimaryStage().getScene().getHeight(),
+                    editorBounds.getHeight(), 1,
+                    "Editor uses the main window height");
             final Node save = getNodeFinder()
-                    .lookup("#" + KeyboardShortcutsDialog.SAVE_ID).query();
+                    .lookup("#" + ScreenKeyboardShortcuts.SAVE_ID).query();
             final javafx.scene.Scene scene = save.getScene();
             final javafx.stage.Window window = scene.getWindow();
             final javafx.geometry.Rectangle2D screen = javafx.stage.Screen
@@ -334,15 +345,22 @@ public class KeyboardShortcutsPage extends AbstractScreen {
                 assertTrue(
                         bounds.getMinX() >= -0.5
                                 && bounds.getMaxX() <= scene.getWidth() + 0.5,
-                        labeled.getText() + " stays inside the dialog");
+                        labeled.getText() + " stays inside the editor");
             }
+            double previousRight = 0;
             for (final String id : new String[] {
-                    KeyboardShortcutsDialog.RESET_ID,
-                    KeyboardShortcutsDialog.CANCEL_ID,
-                    KeyboardShortcutsDialog.SAVE_ID }) {
+                    ScreenKeyboardShortcuts.RESET_ID,
+                    ScreenKeyboardShortcuts.CANCEL_ID,
+                    ScreenKeyboardShortcuts.SAVE_ID }) {
                 final Node button = getNodeFinder().lookup("#" + id).query();
                 final javafx.geometry.Bounds bounds = button
                         .localToScene(button.getBoundsInLocal());
+                assertTrue(bounds.getMinX() >= previousRight,
+                        "Header actions keep reset, cancel, save order without overlap");
+                previousRight = bounds.getMaxX();
+                assertTrue(bounds.getMaxY() < scroll
+                        .localToScene(scroll.getBoundsInLocal()).getMinY(),
+                        id + " stays above the scrolling rows");
                 assertTrue(
                         bounds.getMaxX() <= scene.getWidth() + 0.5
                                 && bounds.getMaxY() <= scene.getHeight() + 0.5,

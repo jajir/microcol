@@ -203,27 +203,35 @@ Rozhodnutí 8. listopadu 2026:
 ## 6. Editor v Nastavení
 
 1. Tlačítko **Klávesové zkratky…** (`settingKeyboardShortcuts`) leží v Nastavení
-   za rychlostí posunu mapy, v menu i ve hře. Otevře modální dialog.
-2. Dialog zobrazí platformu výchozích hodnot a posuvný seznam akcí po
+   za rychlostí posunu mapy, v menu i ve hře. Otevře samostatnou obrazovku
+   v hlavním okně; návrat vede do původního Nastavení.
+2. Obrazovka zobrazí platformu výchozích hodnot a posuvný seznam akcí po
    kontextech. Každá kombinace je tlačítko pro změnu, vedle něj Odebrat;
    Přidat zachytí další kombinaci. Akce bez kombinace ukáže „Nepřiřazeno“.
 3. Zachytávání pohltí všechny klávesy včetně jejich uvolnění, takže stará
    akce ani F3 neproběhne. Samotný modifikátor čeká na klávesu, Escape
-   zachytávání zruší a dialog nezavře. Fokus se vrací na změněnou kombinaci
+   zachytávání zruší a editor neopustí. Fokus se vrací na změněnou kombinaci
    nebo na Přidat.
 4. Konflikt překrývajících se kontextů pojmenuje kombinaci a obě akce a
    zakáže Uložit a zpět. Stejná kombinace u jedné akce se nepřidá podruhé.
 5. Obnovit výchozí změní jen koncept. Zrušit i Escape zahodí celý koncept
    včetně obnovení. Uložit a zpět nejdřív uloží odchylky a teprve potom novou
-   konfiguraci použije všude; selhání uložení ponechá dialog, koncept i dosavadní
+   konfiguraci použije všude; selhání uložení ponechá editor, koncept i dosavadní
    aktivní zkratky a vyzve ke kontrole zápisu do složky nastavení (technický
    důvod jde do logu).
 6. Popisky se zkratkou (nástrojová lišta a její stavové vysvětlení, nabídka
    jednotky, herní menu, tlačítko Načíst hru, Režim vývojáře, titulek Plout do…)
    se skládají z textu a aktuální první kombinace `text (zkratka)` a po uložení
    se obnoví bez restartu. Nepřiřazená akce popisek bez závorky.
-7. Ovládací prvky dialogu jsou stávající ručně kreslená tlačítka (`ButtonIcon`);
+7. Ovládací prvky editoru jsou stávající ručně kreslená tlačítka (`ButtonIcon`);
    nová grafika nevznikla.
+
+8. Dohodnuto 2026-11-10 v [R-0439](requirements/done/R-0439.md): v pevné horní
+   liště je nadpis a zleva **Obnovit výchozí**, **Zrušit**, **Uložit a zpět**.
+   Obnovení odděluje větší mezera, uložení je zvýrazněné. Posouvají se pouze
+   řádky zkratek; popis, platforma a stav zůstávají viditelné. Escape mimo
+   zachytávání má význam Zrušit; během zachytávání ruší pouze zadávání.
+   Globální zkratka Načíst hru nesmí editor opustit a ztratit rozpracované změny.
 
 ## 7. Kód
 

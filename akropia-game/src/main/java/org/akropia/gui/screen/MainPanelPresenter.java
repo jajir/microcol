@@ -259,6 +259,8 @@ public final class MainPanelPresenter {
         scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             final boolean blocked = scene
                     .getFocusOwner() instanceof TextInputControl
+                    || shownScreen == screenSetting
+                            && screenSetting.isEditingShortcuts()
                     || isOtherWindowShowing(scene.getWindow())
                     || persistingService.isBusy();
             final SessionShortcut.Action action = SessionShortcut.resolve(

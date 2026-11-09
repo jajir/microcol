@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Samostatná obrazovka klávesových zkratek — 2026-11-10
+
+1. [R-0439](done/R-0439.md), status `done`, A03 s vazbou A01: editor přes celou plochu hlavního okna, pevné horní akce Obnovit výchozí / Zrušit / Uložit a zpět a Escape podle rozpracovaného zadávání. Implementováno a lokálně ověřeno 2026-11-10; výsledky vlastní [funkční evidence](../functional-tests.md#r-0439-full-page-shortcut-editor-2026-11-10).
+
 ## Společná osa nastavení — 2026-11-09
 
 1. [R-0438](done/R-0438.md), status `done`, A03 s vazbami A01/A04: schválená varianta A, popisky vpravo zarovnané ke společné ose, ovládání za ní a dlouhé texty zalomené. Implementováno a lokálně ověřeno: 5 116 modelových, 18 cílených UI/kontraktových a 21 smoke testů bez chyb a přeskočení.

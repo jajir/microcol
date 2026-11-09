@@ -729,3 +729,8 @@ Návrhy budov z 30. října 2026 řeší [R-0357](requirements/done/R-0357.md), 
 ## Full UI regression repair — 2026-11-02
 
 1. [R-0399](requirements/done/R-0399.md) owns repair and verification of failed scenarios from run 41426295614 under P31.
+
+
+## Samostatný editor klávesových zkratek — 2026-11-10
+
+1. [R-0439](requirements/done/R-0439.md), A03 s vazbou A01, převádí editor do samostatné obrazovky se stálými horními akcemi a návratem do Nastavení. Pravidla vlastní [kontrakt editoru](keyboard-shortcuts.md#6-editor-v-nastaveni), lokální přejímku [funkční evidence](functional-tests.md#r-0439-full-page-shortcut-editor-2026-11-10).

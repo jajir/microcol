@@ -31,6 +31,7 @@ public class ScreenSetting extends AbstractScreenMenu implements GameScreen {
 
     private final SettingButtonsView settingButtons;
     private final InGamePage page;
+    private final ScreenKeyboardShortcuts shortcuts;
     private final I18n i18n;
     private final StackPane root = new StackPane();
     private final HBox toolbar = new HBox();
@@ -39,14 +40,19 @@ public class ScreenSetting extends AbstractScreenMenu implements GameScreen {
     @Inject
     ScreenSetting(final SettingButtonsView settingButtons,
             final MenuHolderPanel menuHolderPanel, final InGamePage page,
-            final I18n i18n) {
+            final I18n i18n, final ScreenKeyboardShortcuts shortcuts) {
         this.i18n = i18n;
+        this.shortcuts = shortcuts;
         this.page = page;
         page.getContent().getStylesheets().add(STYLE_SHEET_GAME_MENU);
         page.setStatusSource(Source.GAME);
         page.setToolbar(toolbar);
         this.menuHolderPanel = Preconditions.checkNotNull(menuHolderPanel);
         this.settingButtons = Preconditions.checkNotNull(settingButtons);
+        settingButtons.onOpenShortcuts(() -> {
+            root.getChildren().setAll(shortcuts.getContent());
+            shortcuts.open(this::beforeShow);
+        });
         menuHolderPanel.getContent().getStylesheets()
                 .add(STYLE_SHEET_GAME_MENU);
         menuHolderPanel.getContent().getStyleClass().add("settings-screen");
@@ -59,6 +65,10 @@ public class ScreenSetting extends AbstractScreenMenu implements GameScreen {
      */
     public void setMenuHosted(final boolean menuHosted) {
         this.menuHosted = menuHosted;
+    }
+
+    public boolean isEditingShortcuts() {
+        return root.getChildren().contains(shortcuts.getContent());
     }
 
     @Override

@@ -11,9 +11,12 @@ import org.akropia.gui.shortcut.ShortcutConfiguration;
 import org.akropia.gui.shortcut.ShortcutContext;
 import org.akropia.gui.shortcut.ShortcutController;
 import org.akropia.gui.shortcut.ShortcutText;
-import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.JavaFxComponent;
+import org.akropia.gui.util.GameScreenHeader;
 import org.akropia.gui.util.ActionButtons;
-import org.akropia.gui.util.ViewUtil;
+import javafx.scene.layout.BorderPane;
+import javafx.event.EventHandler;
+import javafx.stage.Window;
 import org.akropia.i18n.I18n;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,13 +40,13 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
- * Edits a draft of the keyboard shortcuts. Capturing a combination consumes
- * every key until it ends, so no old command runs; Escape cancels the capture.
- * Save and back activates the draft only after it was saved; Cancel and Escape
- * discard it.
+ * Full-page editor of draft keyboard shortcuts. Capturing a combination
+ * consumes every key until it ends, so no old command runs; Escape cancels the
+ * capture. Save and back activates the draft only after it was saved; Cancel
+ * and Escape discard it.
  */
 @Singleton
-public final class KeyboardShortcutsDialog extends AbstractMessageWindow {
+public final class ScreenKeyboardShortcuts implements JavaFxComponent {
 
     public static final String STATUS_ID = "shortcutStatus";
     public static final String RESET_ID = "shortcutsReset";
@@ -58,8 +61,12 @@ public final class KeyboardShortcutsDialog extends AbstractMessageWindow {
             ShortcutText.contextEditor };
 
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(KeyboardShortcutsDialog.class);
+            .getLogger(ScreenKeyboardShortcuts.class);
 
+    private final BorderPane root = new BorderPane();
+    private final EventHandler<KeyEvent> keyFilter = this::onKey;
+    private Window window;
+    private Runnable returnToSettings;
     private final I18n i18n;
     private final ShortcutController controller;
     private final Label title = new Label();
@@ -79,26 +86,25 @@ public final class KeyboardShortcutsDialog extends AbstractMessageWindow {
     private String focusAfterRefresh;
 
     @Inject
-    KeyboardShortcutsDialog(final ViewUtil viewUtil, final I18n i18n,
+    ScreenKeyboardShortcuts(final I18n i18n,
             final ShortcutController controller) {
-        super(viewUtil, i18n);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.controller = Preconditions.checkNotNull(controller);
-        title.getStyleClass().add("dialog-title");
         title.setId("shortcutsTitle");
         description.setWrapText(true);
-        description.setMaxWidth(600);
+        description.setMaxWidth(Double.MAX_VALUE);
         platform.setId(PLATFORM_ID);
         status.setId(STATUS_ID);
         status.setWrapText(true);
-        status.setMaxWidth(600);
+        status.setMaxWidth(Double.MAX_VALUE);
         status.setMinHeight(Region.USE_PREF_SIZE);
         final ScrollPane scroll = new ScrollPane(rows);
         scroll.setId("shortcutsRows");
         scroll.setFitToWidth(true);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scroll.setPrefViewportWidth(600);
-        scroll.setPrefViewportHeight(380);
+        scroll.setMinHeight(0);
+        scroll.getStyleClass().add("screen-scroll");
+        rows.setPadding(new Insets(24));
         reset.setId(RESET_ID);
         cancel.setId(CANCEL_ID);
         save.setId(SAVE_ID);
@@ -108,32 +114,47 @@ public final class KeyboardShortcutsDialog extends AbstractMessageWindow {
             message = "";
             refresh();
         });
-        cancel.setOnAction(event -> onCancelDialog());
+        cancel.setOnAction(event -> close());
         save.setOnAction(event -> onSave());
-        final HBox buttons = new HBox(10, reset, cancel, save);
+        final HBox commitButtons = new HBox(10, cancel, save);
+        final HBox buttons = new HBox(28, reset, commitButtons);
         buttons.setAlignment(Pos.CENTER_RIGHT);
-        final VBox root = new VBox(10, title, description, platform, scroll,
-                status, buttons);
-        root.setPadding(new Insets(10));
-        init(root);
-        // The window sees keys before the scene's own shortcuts.
-        getScene().getWindow().addEventFilter(KeyEvent.ANY, this::onKey);
+        save.setStyle("-fx-font-weight: bold;");
+        final GameScreenHeader header = new GameScreenHeader();
+        header.setTitle(title);
+        header.setActions(buttons);
+        final VBox information = new VBox(10, description, platform, status);
+        information.setPadding(new Insets(16, 24, 8, 24));
+        root.setTop(new VBox(header, information));
+        root.setCenter(scroll);
+        root.setId("keyboardShortcutsScreen");
+        root.getStyleClass().add("in-game-page");
+        root.getStylesheets().add(
+                getClass().getResource("/gui/InGamePage.css").toExternalForm());
     }
 
-    /**
-     * Edit a draft of the active shortcuts and wait until the dialog closes.
-     */
-    public void open() {
+    public void open(final Runnable returnToSettings) {
+        this.returnToSettings = returnToSettings;
         draft = controller.getActive();
         capturing = null;
+        swallowRelease = null;
         message = "";
         focusAfterRefresh = null;
-        showAndWait();
+        refresh();
+        window = root.getScene().getWindow();
+        window.addEventFilter(KeyEvent.ANY, keyFilter);
+        root.requestFocus();
+    }
+
+    private void close() {
+        window.removeEventFilter(KeyEvent.ANY, keyFilter);
+        capturing = null;
+        returnToSettings.run();
     }
 
     @Override
-    public void updateLanguage(final I18n language) {
-        refresh();
+    public Region getContent() {
+        return root;
     }
 
     private void onSave() {
@@ -163,6 +184,11 @@ public final class KeyboardShortcutsDialog extends AbstractMessageWindow {
             return;
         }
         if (capturing == null) {
+            if (event.getEventType() == KeyEvent.KEY_PRESSED
+                    && event.getCode() == KeyCode.ESCAPE) {
+                event.consume();
+                close();
+            }
             return;
         }
         event.consume();
@@ -224,7 +250,6 @@ public final class KeyboardShortcutsDialog extends AbstractMessageWindow {
             return;
         }
         title.setText(i18n.get(ShortcutText.title));
-        setTitle(title.getText());
         description.setText(i18n.get(ShortcutText.description));
         platform.setText(i18n.get(ShortcutText.platform,
                 i18n.get(controller.getPlatform().getLabel())));

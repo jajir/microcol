@@ -6,7 +6,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.akropia.gui.screen.setting.KeyboardShortcutsDialog;
+import org.akropia.gui.screen.setting.ScreenKeyboardShortcuts;
 import org.akropia.gui.shortcut.ShortcutAction;
 import org.akropia.page.FramedSettingsPage;
 import org.akropia.page.GameToolbarPage;
@@ -481,8 +481,13 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         developer.setModeInSettings(false);
         shortcuts.open();
         shortcuts.verifyEditorOpen(true);
+        shortcuts.verifyCompleteLayout();
         shortcuts.verifyBindings(ShortcutAction.HELP, "H");
         shortcuts.verifyStatus("Changes take effect after Save and back.");
+        // Global Load cannot navigate away from the unsaved editor.
+        shortcuts.pressPlatformShortcut(KeyCode.O);
+        shortcuts.verifyEditorOpen(true);
+        shortcuts.verifyOnlyMainWindowShowing();
         // Escape cancels a capture without closing the editor.
         shortcuts.startAdd(ShortcutAction.HELP);
         shortcuts.verifyStatus(
@@ -519,7 +524,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         shortcuts.verifyBindings(ShortcutAction.HELP, "Y", "Shift+Y");
         shortcuts.verifyStatus("Changes take effect after Save and back.");
         shortcuts.verifySaveEnabled(true);
-        shortcuts.captureDialog(KeyboardShortcutsDialog.STATUS_ID,
+        shortcuts.captureDialog(ScreenKeyboardShortcuts.STATUS_ID,
                 "r0432-shortcuts-editor-en.png");
         // Save and back stores only the deviation and closes the editor.
         shortcuts.saveAndBack();
@@ -640,7 +645,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
                 "Add");
         shortcuts.verifyBindings(ShortcutAction.SKIP_UNIT, "Space");
         shortcuts.verifyCompleteLayout();
-        shortcuts.captureDialog(KeyboardShortcutsDialog.STATUS_ID,
+        shortcuts.captureDialog(ScreenKeyboardShortcuts.STATUS_ID,
                 "r0432-shortcuts-editor-layout-en.png");
         shortcuts.cancel();
         // Czech names every action, key and button in full.
@@ -656,17 +661,18 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         shortcuts.verifyBindings(ShortcutAction.SKIP_UNIT, "Mezerník");
         shortcuts.verifyStatus("Změny začnou platit po Uložit a zpět.");
         shortcuts.verifyCompleteLayout();
-        shortcuts.captureDialog(KeyboardShortcutsDialog.STATUS_ID,
+        shortcuts.captureDialog(ScreenKeyboardShortcuts.STATUS_ID,
                 "r0432-shortcuts-editor-layout-cs.png");
         // Capture and conflict feedback are Czech too.
         shortcuts.startChange(ShortcutAction.HELP, 0);
+        shortcuts.verifyCompleteLayout();
         shortcuts.verifyStatus(
                 "Stiskněte novou kombinaci pro Colonizopedie. Escape zruší.");
         shortcuts.pressKeys(KeyCode.K);
         shortcuts.verifyStatus("K používá Kongres i Colonizopedie."
                 + " Před uložením jednu z nich změňte.");
         shortcuts.verifyCompleteLayout();
-        shortcuts.captureDialog(KeyboardShortcutsDialog.STATUS_ID,
+        shortcuts.captureDialog(ScreenKeyboardShortcuts.STATUS_ID,
                 "r0432-shortcuts-conflict-cs.png");
         shortcuts.cancel();
         shortcuts.verifySavedDeviations(Map.of());
@@ -737,7 +743,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
                     + " Check that the settings folder can be written.");
             shortcuts.verifyBindings(ShortcutAction.HELP, "Y");
             shortcuts.verifyActiveBinding(ShortcutAction.HELP, "H");
-            shortcuts.captureDialog(KeyboardShortcutsDialog.STATUS_ID,
+            shortcuts.captureDialog(ScreenKeyboardShortcuts.STATUS_ID,
                     "r0432-shortcuts-save-failed-en.png");
         } finally {
             // A failed check must not leave broken storage behind.

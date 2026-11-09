@@ -12,7 +12,9 @@
 1. Každá herní klávesová akce i posun mapy je v jediné [inventuře zkratek](keyboard-shortcuts.md) s kontextem a platformními výchozími kombinacemi. Obsluhy kláves i zobrazené zkratky čtou tutéž účinnou konfiguraci; nová obsluha nepřidává pevně zapsaný `KeyCode` ani text „(X)“ do překladu.
 2. Kombinace platí s přesnými modifikátory. Akce může mít více kombinací nebo žádnou; popisek ukazuje první z nich jako `text (zkratka)` a nepřiřazená akce závorku vynechá.
 3. Escape, Tab, Enter, Space a šipky zůstávají ovládáním zaměřeného prvku, formulářů a dialogů; myší modifikátory se nenastavují. Psaní, otevřený dialog a nedostupná akce dál zkratku blokují.
-4. Hráč najde editor v Nastavení. Cíl, zachytávání s Escape, konflikty, Obnovit výchozí, Zrušit a Uložit a zpět popisuje [kapitola editoru](keyboard-shortcuts.md#6-editor-v-nastaveni). Jde o implementovaný návrh; Docker ověření a hráčské pozorování zatím chybí.
+4. Hráč najde editor v Nastavení. Cíl, zachytávání s Escape, konflikty, Obnovit výchozí, Zrušit a Uložit a zpět popisuje [kapitola editoru](keyboard-shortcuts.md#6-editor-v-nastaveni). Lokální Docker ověření uvádí [funkční evidence](functional-tests.md#r-0439-full-page-shortcut-editor-2026-11-10); hráčské pozorování tím není nahrazeno.
+
+5. Schváleno 2026-11-10 v [R-0439](requirements/done/R-0439.md): editor je samostatná obrazovka s pevnou horní lištou a posuvným seznamem. Pořadí akcí a dvoustupňový význam Escape vlastní [kontrakt editoru](keyboard-shortcuts.md#6-editor-v-nastaveni). Návrat vždy vede do Nastavení; nejde o pozorování hráčské studie.
 
 ## Horní lišta správy obchodní trasy
 
