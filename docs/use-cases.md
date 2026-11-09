@@ -1,5 +1,10 @@
 ## UC-011/114/119: výběr jednotky, zásoby a Continue — 2026-11-03
 
+## UC-114/119: seznam souborů uložených her — 2026-11-09
+
+1. [R-0436](requirements/done/R-0436.md) omezuje katalog na přímé soubory složky `saves`, odstraňuje filtr a odděluje názvy souborů vlevo od detailů vybrané hry vpravo. TC191/11 ověřuje rozdílný název souboru a metadat i ignorované kopie; TC42, TC43 a TC191 zachovávají související načítání, obnovu a ochranu postupu. Aktuální výsledky a hranici přejímky vede [funkční evidence](functional-tests.md#r-0436-direct-save-filenames-and-selected-details-2026-11-09).
+
+
 
 ## UC-114/119: nastavitelné klávesové zkratky — 2026-11-08
 

@@ -5,12 +5,10 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.akropia.gui.Loc;
 import org.akropia.gui.LocalizationHelper;
@@ -33,8 +31,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -48,9 +44,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 /**
- * Saved-game list, filter, detail and actions shared by the Save dialog and the
- * Load page (R-0382, R-0383). The narrower left column lists the saves; the
- * wider right column shows the full name, map preview and summary. Every chosen
+ * Saved-game list, detail and actions shared by the Save dialog and the Load
+ * page (R-0382, R-0383). The narrower left column lists the saves; the wider
+ * right column shows the full name, map preview and summary. Every chosen
  * action is passed to its host; persistence stays with
  * {@link PersistingService}.
  */
@@ -58,13 +54,10 @@ public final class SavedGamesView {
 
     private static final double PREVIEW_WIDTH = 480;
     private static final double PREVIEW_HEIGHT = 270;
-    /** Code points of a name shown in its list row. */
-    static final int ROW_NAME_LENGTH = 32;
 
     private final I18n texts;
     private final boolean saving;
     private final ListView<Entry> list = new ListView<>();
-    private final MenuButton filter;
     private final TextField name = new TextField();
     private final Label error = new Label();
     private final Label detailName = new Label();
@@ -76,19 +69,15 @@ public final class SavedGamesView {
     private final VBox content;
     private final Consumer<SavedGamesDialog.Choice> chosen;
     private final Function<Entry, Optional<byte[]>> previews;
-    private List<Entry> entries = new ArrayList<>();
-    private Kind shownKind;
 
     /**
-     * @param texts        localized labels
-     * @param saving       show the new-save name and save actions
-     * @param recoveryOnly start with the recovery-point filter
-     * @param chosen       receives every chosen action
-     * @param cancel       optional cancel action shown with the other actions
-     * @param previews     reads the preview of one selected save
+     * @param texts    localized labels
+     * @param saving   show the new-save name and save actions
+     * @param chosen   receives every chosen action
+     * @param cancel   optional cancel action shown with the other actions
+     * @param previews reads the preview of one selected save
      */
     public SavedGamesView(final I18n texts, final boolean saving,
-            final boolean recoveryOnly,
             final Consumer<SavedGamesDialog.Choice> chosen,
             final Runnable cancel,
             final Function<Entry, Optional<byte[]>> previews) {
@@ -96,7 +85,6 @@ public final class SavedGamesView {
         this.saving = saving;
         this.chosen = chosen;
         this.previews = previews;
-        shownKind = recoveryOnly ? Kind.AUTOMATIC : null;
         list.setId("savedGamesList");
         list.setAccessibleText(texts.get(SavedGameText.title));
         final Label empty = new Label(texts.get(SavedGameText.empty));
@@ -108,8 +96,7 @@ public final class SavedGamesView {
         list.setMinWidth(0);
         list.setCellFactory(ignored -> new ListCell<Entry>() {
             {
-                // One row per save; a narrow list wraps it instead of cutting
-                // the time off.
+                // Wrap the complete filename in a narrow list.
                 setWrapText(true);
                 prefWidthProperty().bind(list.widthProperty().subtract(28));
             }
@@ -117,30 +104,9 @@ public final class SavedGamesView {
             @Override
             protected void updateItem(final Entry entry, final boolean empty) {
                 super.updateItem(entry, empty);
-                setText(empty || entry == null ? null : describe(entry));
+                setText(empty || entry == null ? null : entry.file.getName());
             }
         });
-        filter = ActionButtons.menu(ButtonIcon.FILTER, texts.get(
-                recoveryOnly ? SavedGameText.automatic : SavedGameText.all));
-        filter.setId("savedGamesFilter");
-        filter.getStyleClass().add("game-toolbar-control");
-        final MenuItem all = new MenuItem(texts.get(SavedGameText.all));
-        all.setOnAction(event -> {
-            shownKind = null;
-            showEntries();
-            filter.setText(all.getText());
-        });
-        filter.getItems().add(all);
-        for (final Kind kind : Kind.values()) {
-            final MenuItem item = new MenuItem(texts.get(kindText(kind)));
-            item.setId("saveFilter" + kind.name());
-            item.setOnAction(event -> {
-                shownKind = kind;
-                showEntries();
-                filter.setText(item.getText());
-            });
-            filter.getItems().add(item);
-        }
         name.setId("savedGameName");
         name.setPromptText(texts.get(SavedGameText.name));
         name.setAccessibleText(texts.get(SavedGameText.name));
@@ -224,7 +190,7 @@ public final class SavedGamesView {
             add(actions, SavedGameText.cancel, "savedGamesCancel", cancel);
         }
 
-        final VBox left = new VBox(10, filter, list);
+        final VBox left = new VBox(10, list);
         left.setMinWidth(0);
         VBox.setVgrow(list, Priority.ALWAYS);
         final VBox detail = new VBox(10);
@@ -292,13 +258,12 @@ public final class SavedGamesView {
     }
 
     /**
-     * Replace the listed saves, keeping the filter and the selected file.
+     * Replace the listed saves, keeping the selected file.
      *
      * @param entries current saved games
      */
     public void setEntries(final List<Entry> entries) {
-        this.entries = new ArrayList<>(entries);
-        showEntries();
+        showEntries(entries);
     }
 
     /**
@@ -317,19 +282,16 @@ public final class SavedGamesView {
         list.requestFocus();
     }
 
-    private void showEntries() {
+    private void showEntries(final List<Entry> entries) {
         final Entry selected = list.getSelectionModel().getSelectedItem();
-        list.getItems()
-                .setAll(entries.stream().filter(
-                        entry -> shownKind == null || entry.kind == shownKind)
-                        .collect(Collectors.toList()));
+        list.getItems().setAll(entries);
         if (selected != null) {
             list.getItems().stream()
                     .filter(entry -> entry.file.equals(selected.file))
                     .findFirst()
                     .ifPresent(entry -> list.getSelectionModel().select(entry));
         }
-        // A filtered-out or removed save never keeps its detail.
+        // A removed save never keeps its detail.
         showDetail(list.getSelectionModel().getSelectedItem());
     }
 
@@ -354,7 +316,8 @@ public final class SavedGamesView {
             summary.setText(texts.get(
                     entry.problem == SaveArchiveException.Reason.UNSUPPORTED
                             ? SavedGameText.unsupported
-                            : SavedGameText.corrupt));
+                            : SavedGameText.corrupt)
+                    + savedDetails(entry));
             return;
         }
         // Read synchronously for the current selection only, so the image
@@ -452,29 +415,11 @@ public final class SavedGamesView {
                         .ofEpochMilli(millis).atZone(ZoneId.systemDefault()));
     }
 
-    private String describe(final Entry entry) {
-        return shortened(displayName(entry)) + " · "
-                + texts.get(kindText(entry.kind)) + " · "
-                + formatTime(texts, entry.modified);
-    }
-
-    /** A long name is shortened in its row and complete in the detail. */
-    static String shortened(final String name) {
-        if (name.codePointCount(0, name.length()) <= ROW_NAME_LENGTH) {
-            return name;
-        }
-        return name
-                .substring(0, name.offsetByCodePoints(0, ROW_NAME_LENGTH - 1))
-                .trim() + "…";
-    }
-
     /**
      * Localize the stored summary; the values themselves come from the save.
      */
     private String describe(final SaveSummaryPo value, final Entry entry) {
-        final String saved = entry == null ? ""
-                : "\n" + texts.get(SavedGameText.summarySaved,
-                        formatTime(texts, entry.modified));
+        final String saved = entry == null ? "" : savedDetails(entry);
         if (value == null) {
             return texts.get(SavedGameText.summaryMissing) + saved;
         }
@@ -509,6 +454,14 @@ public final class SavedGamesView {
         } catch (RuntimeException invalid) {
             return texts.get(SavedGameText.summaryMissing) + saved;
         }
+    }
+
+    private String savedDetails(final Entry entry) {
+        return "\n"
+                + texts.get(SavedGameText.summaryType,
+                        texts.get(kindText(entry.kind)))
+                + "\n" + texts.get(SavedGameText.summarySaved,
+                        formatTime(texts, entry.modified));
     }
 
     private String nationName(final String nation) {

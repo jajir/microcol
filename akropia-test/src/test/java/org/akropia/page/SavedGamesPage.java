@@ -122,6 +122,44 @@ public final class SavedGamesPage extends AbstractScreen {
         }
     }
 
+    /** Visible rows contain the full physical filename and no metadata. */
+    public void verifyFilenameList() {
+        WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(getNodeFinder().lookup("#savedGamesFilter").queryAll()
+                .isEmpty());
+        for (final javafx.scene.Node node : list().lookupAll(".list-cell")) {
+            final javafx.scene.control.ListCell<?> cell = (javafx.scene.control.ListCell<?>) node;
+            if (!cell.isEmpty()) {
+                final SavedGames.Entry entry = (SavedGames.Entry) cell
+                        .getItem();
+                assertEquals(entry.file.getName(), cell.getText());
+            }
+        }
+    }
+
+    /**
+     * Prepare filenames that differ from metadata plus ignored legacy copies.
+     */
+    public void prepareFilenameCatalogue(final String name)
+            throws java.io.IOException {
+        final java.nio.file.Path original = entry(name).file.toPath();
+        final java.nio.file.Path visible = original
+                .resolveSibling("Actual file.akropia");
+        java.nio.file.Files.move(original, visible);
+        final java.nio.file.Path nested = java.nio.file.Files
+                .createDirectories(visible.getParent().resolve("hashed-game"));
+        java.nio.file.Files.copy(visible, nested.resolve("Nested.akropia"));
+        java.nio.file.Files.copy(visible,
+                visible.getParent().getParent().resolve("Legacy.akropia"));
+    }
+
+    public void verifyCatalogueFilenames(final String... expected) {
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals(java.util.List.of(expected),
+                list().getItems().stream().map(entry -> entry.file.getName())
+                        .collect(java.util.stream.Collectors.toList()));
+    }
+
     public void verifyInvalidName() {
         assertFalse(getLabeledById("savedGameError").getText().isEmpty());
     }

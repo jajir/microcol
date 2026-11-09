@@ -1256,3 +1256,8 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Developer map editor — 2026-11-09
 
 1. [R-0435](done/R-0435.md), primary A02, related A01/A03/A04/A05/A08. Status: done. Developer-only editor creates ocean worlds, edits terrain and native settlements, configures the national expedition and saves/reopens/plays authored scenarios. Local acceptance passed 5,111 model, 56 targeted UI and 21 smoke/support checks; [evidence](../functional-tests.md#r-0435-final-local-acceptance-2026-11-09).
+
+
+## Přehled uložených her podle souborů — 2026-11-09
+
+1. [R-0436](done/R-0436.md), status `done`, A04 s vazbou A03: katalog čte pouze přímé soubory `saves`, přehled nemá filtr a vlevo ukazuje celé názvy souborů. Podrobnosti vybrané hry jsou vpravo. Lokální modelové, cílené UI a smoke ověření prošlo; [evidence](../functional-tests.md#r-0436-direct-save-filenames-and-selected-details-2026-11-09).

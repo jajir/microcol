@@ -48,4 +48,5 @@
     <entry key="targetNone">Není vybráno žádné uložení; Uložit hru vytvoří nové.</entry>
     <entry key="leaveNew">Tato hra ještě nebyla uložena, odchodem nyní ztratíte vytvořený počáteční svět. Uložit ji před odchodem? Volba Zpět vás vrátí do hry. Uložit a pokračovat otevře Uložit hru, kde pojmenujete nové uložení nebo vyberete uložení k přepsání.</entry>
     <entry key="autosaved">Tah byl automaticky uložen: %s.</entry>
+    <entry key="summaryType">Typ: %s</entry>
 </properties>

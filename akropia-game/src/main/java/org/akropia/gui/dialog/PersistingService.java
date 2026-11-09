@@ -158,7 +158,7 @@ public class PersistingService {
         if (isSecretOptionEnabled) {
             importGame(true);
         } else {
-            browse(false, false);
+            browse(false);
         }
     }
 
@@ -313,9 +313,9 @@ public class PersistingService {
      * Saving uses the modal browser; loading opens the main-window Load page,
      * which returns to the screen that opened it.
      */
-    public void browse(final boolean saving, final boolean recoveryOnly) {
+    public void browse(final boolean saving) {
         if (!saving) {
-            eventBus.post(new ShowScreenEvent(Screen.LOAD, recoveryOnly));
+            eventBus.post(new ShowScreenEvent(Screen.LOAD));
             return;
         }
         saveThroughBrowser(DiagnosticEvent.SAVE_FAILED);
@@ -339,14 +339,19 @@ public class PersistingService {
         final SaveSummaryPo current = game.getSaveSummary();
         final byte[] currentImage = SavePreview.render(game.getModel());
         final String suggestedName = suggestedName(current);
+        List<SavedGames.Entry> entries = null;
         while (true) {
-            final List<SavedGames.Entry> entries;
             try {
                 entries = savedGames.list();
             } catch (AkropiaException unavailable) {
                 diagnosticLog.record(failure, unavailable);
-                gameModelController.showSaveFolderUnavailable();
-                return false;
+                if (entries == null) {
+                    gameModelController.showSaveFolderUnavailable();
+                    return false;
+                }
+                // A failed file action already reports its error. Keep Save
+                // available for retry or cancellation, without stale entries.
+                entries = List.of();
             }
             final SavedGamesDialog.Choice choice = new SavedGamesDialog(view,
                     texts).chooseSave(entries, this::preview, current,

@@ -122,7 +122,7 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         // A corrupt point stays listed with its reason but cannot be
         // confirmed; valid retry works.
         GamePage.of(getContext()).exitToMenu();
-        audit.corruptRecovery(RecoverySlot.LATEST_TURN);
+        audit.prepareCorruptTurnSnapshot();
         audit.openRecoveryChooser();
         audit.verifyRecoveryOption(RecoverySlot.LATEST_TURN, true,
                 "Unavailable or invalid saved-game details");
@@ -146,13 +146,13 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         game.nextTurnAndCloseDialogs();
         audit.verifyCurrentTurn(19);
 
-        // Obstruct the managed save folder.
         audit.rememberActiveGameBeforeSaveFailure();
-        audit.obstructManagedSaves();
 
         // Menu exit opens the manual Save dialog; the failed save is reported
         // and the dialog stays for another choice.
         audit.attemptExitToMenu();
+        // Block writing after the catalogue has been read successfully.
+        audit.obstructManagedSaves();
         saves.saveName("Cannot be written");
         DialogMessagePage.of(getContext()).close();
         saves.verifySaveDialogOpen(true);
@@ -194,7 +194,6 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         setting.goBack().verifyMainScreen();
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         audit.openRecoveryChooser();
-        new HostedPanelPage(getContext()).verifyFilterLabel("Body obnovy");
         audit.verifyRecoveryChooserLabels("Uložené hry", "Načíst hru", "Zpět");
         audit.captureDialog("savedGamesCancel", "recovery-chooser-czech.png");
         audit.cancelRecovery();
@@ -214,13 +213,10 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         final SavedGamesPage saves = new SavedGamesPage(getContext());
         audit.verifyCurrentTurn(18);
 
-        // The embedded page keeps its types; an empty filter explains itself.
+        // The embedded page shows the complete catalogue without a filter.
         hosted.pressShortcut(KeyCode.O);
         hosted.verifyInGameHosted("Load game");
-        hosted.chooseFilter("saveFilterMANUAL");
-        hosted.verifyEmptyListExplained("No saved games in this view.");
-        new InGameLayoutPage(getContext())
-                .saveEvidence("r0377-load-empty-filter-en.png");
+        saves.verifyFilenameList();
         hosted.click("savedGamesCancel");
 
         // Keep a quick save of 1508, then play into 1509 and corrupt its point.
@@ -235,9 +231,8 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         saves.rememberGame();
         audit.rememberRecoveryBytes();
 
-        // Recovery points remain a filter; selecting only shows the details.
+        // Selecting a recovery point only shows its details.
         saves.openLoad();
-        hosted.chooseFilter("saveFilterAUTOMATIC");
         audit.verifyRecoveryOption(RecoverySlot.LATEST_TURN, true, "1509");
         audit.selectRecovery(RecoverySlot.LATEST_TURN);
         saves.verifyGameUnchanged();
@@ -253,7 +248,6 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         audit.verifyRecoveryBytesUnchanged();
 
         // Another save asks before leaving; Back keeps page, choice and game.
-        hosted.chooseFilter("saveFilterQUICK");
         saves.select("Quick save");
         saves.action("loadSelected");
         hosted.verifyConfirmationOpen("saveCancel");
@@ -287,12 +281,8 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         welcome.verifyMenuButtonFocused("buttonLoad");
         hosted.press(KeyCode.SPACE);
         audit.verifyLoadPageOpen();
-        hosted.verifyFilterLabel("All saves");
 
-        // Choose Recovery points with the keyboard; the empty view explains
-        // itself.
-        hosted.chooseFilterWithKeyboard("saveFilterAUTOMATIC");
-        hosted.verifyFilterLabel("Recovery points");
+        // The empty catalogue explains itself without a filter.
         hosted.verifyEmptyListExplained("No saved games in this view.");
 
         // Back returns to the menu without writing any recovery point.
@@ -314,8 +304,6 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         // filter.
         hosted.pressShortcut(KeyCode.O);
         audit.verifyLoadPageOpen();
-        hosted.chooseFilter("saveFilterAUTOMATIC");
-        hosted.verifyFilterLabel("Body obnovy");
         hosted.verifyEmptyListExplained(
                 "V tomto přehledu nejsou žádné uložené hry.");
 

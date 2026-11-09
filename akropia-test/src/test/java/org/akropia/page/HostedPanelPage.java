@@ -72,45 +72,6 @@ public final class HostedPanelPage extends AbstractScreen {
         clickOnButtonWithId(id);
     }
 
-    /** Choose one entry of the saved-games filter menu. */
-    public void chooseFilter(final String itemId) {
-        clickOnButtonWithId("savedGamesFilter");
-        getRobot().clickOn("#" + itemId);
-        WaitForAsyncUtils.waitForFxEvents();
-    }
-
-    /**
-     * Choose one entry of the saved-games filter menu with the keyboard only:
-     * Shift+Tab from the list to the filter, Down opens it, further Down
-     * presses focus the item and Enter chooses it.
-     */
-    public void chooseFilterWithKeyboard(final String itemId) {
-        final javafx.scene.control.MenuButton filter = (javafx.scene.control.MenuButton) scene()
-                .lookup("#savedGamesFilter");
-        for (int i = 0; i < 10 && !filter.isFocused(); i++) {
-            getRobot().push(KeyCode.SHIFT, KeyCode.TAB);
-            WaitForAsyncUtils.waitForFxEvents();
-        }
-        // Down opens the popup without focusing an entry; later Down presses
-        // move through the entries until the wanted one owns the popup focus.
-        getRobot().push(KeyCode.DOWN);
-        WaitForAsyncUtils.waitForFxEvents();
-        for (int i = 0; i <= filter.getItems().size()
-                && !isPopupItemFocused(itemId); i++) {
-            getRobot().push(KeyCode.DOWN);
-            WaitForAsyncUtils.waitForFxEvents();
-        }
-        getRobot().push(KeyCode.ENTER);
-        WaitForAsyncUtils.waitForFxEvents();
-    }
-
-    /** The popup entry shown for the menu item has keyboard focus. */
-    private boolean isPopupItemFocused(final String itemId) {
-        return getNodeFinder().lookup("#" + itemId).queryAll().stream()
-                .anyMatch(node -> node.getScene() != null
-                        && node.getScene().getFocusOwner() == node);
-    }
-
     /**
      * Show the main menu through the shared screen transition while the loaded
      * game stays in memory, the state that used to select the in-game host.
@@ -390,14 +351,7 @@ public final class HostedPanelPage extends AbstractScreen {
         assertNotNull(scene().lookup("#savedGamesList"));
     }
 
-    /** The saved-games filter shows the given view name. */
-    public void verifyFilterLabel(final String label) {
-        WaitForAsyncUtils.waitForFxEvents();
-        assertEquals(label,
-                ((Labeled) scene().lookup("#savedGamesFilter")).getText());
-    }
-
-    /** The filtered list is empty and explains it. */
+    /** The catalogue is empty and explains it. */
     public void verifyEmptyListExplained(final String explanation) {
         WaitForAsyncUtils.waitForFxEvents();
         final javafx.scene.control.ListView<?> list = (javafx.scene.control.ListView<?>) scene()

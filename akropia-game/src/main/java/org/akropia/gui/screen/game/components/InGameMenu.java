@@ -56,9 +56,9 @@ public final class InGameMenu {
         item(SavedGameText.resume, "menuResume", () -> {
         });
         menu.getItems().add(new SeparatorMenuItem());
-        item(SavedGameText.save, "menuSave", () -> saves.browse(true, false),
+        item(SavedGameText.save, "menuSave", () -> saves.browse(true),
                 ShortcutAction.SAVE_GAME).setDisable(!game.isHumanTurnReady());
-        item(SavedGameText.load, "menuLoad", () -> saves.browse(false, false),
+        item(SavedGameText.load, "menuLoad", () -> saves.browse(false),
                 ShortcutAction.LOAD_GAME);
         item(SavedGameText.quickSave, "menuQuickSave", saves::quickSave,
                 ShortcutAction.QUICK_SAVE).setDisable(!game.isHumanTurnReady());

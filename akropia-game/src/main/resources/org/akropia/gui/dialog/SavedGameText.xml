@@ -48,4 +48,5 @@
     <entry key="targetNone">No existing save is selected; Save game creates a new one.</entry>
     <entry key="leaveNew">This game has never been saved, so leaving it now loses the starting world. Save it before leaving? Choose Cancel to stay. Save and continue opens Save game, where you name a new save or choose one to overwrite.</entry>
     <entry key="autosaved">Turn saved automatically: %s.</entry>
+    <entry key="summaryType">Type: %s</entry>
 </properties>

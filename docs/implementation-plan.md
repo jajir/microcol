@@ -1,5 +1,7 @@
 # Plán implementace Akropia podle manuálu
 
+Aktuální úprava přehledu uložených her: [R-0436](requirements/done/R-0436.md).
+
 Rozšíření CI rozpočtu a ruční spouštění regrese řeší [R-0375](requirements/done/R-0375.md).
 Konfigurace je v [development delivery](development-builds.md#run-full-tests-manually),
 stav lokální přejímky ve [funkčních testech](functional-tests.md#r-0375-manual-regression-budget-and-durable-reports-2026-10-31).

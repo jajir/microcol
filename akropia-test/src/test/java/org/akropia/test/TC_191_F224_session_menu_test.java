@@ -406,13 +406,9 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.captureDialog("savedGamesList", "r0383-load-detail-en.png");
         saves.verifyGameUnchanged();
 
-        // A filter without the selected save clears its detail and action.
-        hosted.chooseFilter("saveFilterQUICK");
-        saves.verifyNoSelectedDetail(
-                "Select a saved game to see its map and summary.");
-        hosted.chooseFilter("saveFilterMANUAL");
-        saves.verifyNoSelectedDetail(
-                "Select a saved game to see its map and summary.");
+        // The filename-only list needs no filter; details retain type and time.
+        saves.verifyFilenameList();
+        saves.verifySummaryLines("Manual", "Saved:");
         hosted.click("savedGamesCancel");
 
         // An unsupported save names the reason and cannot be confirmed.
@@ -591,9 +587,10 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
 
         // A failed manual save is reported, keeps the Save dialog and, after
         // Cancel, the window and the game; nothing is written instead.
-        audit.obstructManagedSaves();
         saves.closeWindow();
         saves.action("saveConfirm");
+        // Block writing after the catalogue has been read successfully.
+        audit.obstructManagedSaves();
         saves.saveName("Cannot be written");
         DialogMessagePage.of(getContext())
                 .verifyDialogTextContains("The file operation failed.");
@@ -755,4 +752,39 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         game.verifyGameInFront();
     }
 
+    @Test
+    @Tag("local")
+    void TC_11_load_lists_only_direct_filenames_and_shows_selected_details()
+            throws Exception {
+        // Create a named save without automatic snapshots.
+        final SettingPage setting = WelcomePage.of(getContext()).openSetting();
+        setting.setAutosaveEnabled(false);
+        final GamePage game = setting.goBack().loadGame();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        saves.openSave();
+        saves.saveName("Metadata title");
+        saves.rememberGame();
+        saves.prepareFilenameCatalogue("Metadata title");
+
+        // Only the direct filename appears; opening does not select or load it.
+        saves.openLoad();
+        saves.verifyCatalogueFilenames("Actual file.akropia");
+        saves.verifyFilenameList();
+        saves.verifyNoSelectedDetail(
+                "Select a saved game to see its map and summary.");
+
+        // Selection exposes the stored title, preview, game summary, type and
+        // time.
+        saves.select("Metadata title");
+        saves.verifyDetailName("Metadata title");
+        saves.verifyPreview(true);
+        saves.verifySelectedDetails("Corinth", "1508", "Conquistador");
+        saves.verifySummaryLines("Manual", "Saved:");
+        saves.verifyLoadEnabled(true);
+        saves.captureDialog("savedGamesList", "r0436-load-filenames.png");
+        saves.verifyGameUnchanged();
+        saves.cancelBrowser();
+        game.verifyGameInFront();
+        saves.verifyGameUnchanged();
+    }
 }

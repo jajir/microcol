@@ -58,11 +58,10 @@ public final class SavedGamesDialog extends AbstractMessageWindow {
             final SaveSummaryPo current, final byte[] currentImage,
             final String suggestedName) {
         result = null;
-        final SavedGamesView view = new SavedGamesView(texts, true, false,
-                choice -> {
-                    result = choice;
-                    close();
-                }, this::close, previews);
+        final SavedGamesView view = new SavedGamesView(texts, true, choice -> {
+            result = choice;
+            close();
+        }, this::close, previews);
         view.setEntries(entries);
         view.setCurrentGame(current, currentImage, suggestedName);
         final Region content = view.getContent();

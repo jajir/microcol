@@ -231,8 +231,6 @@ public final class MainPanelPresenter {
                 screenSetting.setMenuHosted(menuHosted);
             } else {
                 screenLoad.setMenuHosted(menuHosted);
-                screenLoad.setRecoveryOnly(
-                        Boolean.TRUE.equals(event.getContext()));
             }
         }
         show(screen);
@@ -270,10 +268,10 @@ public final class MainPanelPresenter {
                             && gameModelController.isHumanTurnReady());
             if (action == SessionShortcut.Action.LOAD) {
                 event.consume();
-                persistingService.browse(false, false);
+                persistingService.browse(false);
             } else if (action == SessionShortcut.Action.SAVE) {
                 event.consume();
-                persistingService.browse(true, false);
+                persistingService.browse(true);
             } else if (!blocked && isSessionMenuScreen()) {
                 // The same commands as the menu's and the map's Settings and
                 // Quit, including the existing unsaved-game protection.

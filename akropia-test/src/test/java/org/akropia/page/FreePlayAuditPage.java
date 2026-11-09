@@ -164,11 +164,9 @@ public final class FreePlayAuditPage extends AbstractScreen {
         return GamePage.of(getContext());
     }
 
-    /** Open Load game from the main menu and show only recovery points. */
+    /** Open Load game from the main menu to select a recovery point. */
     public void openRecoveryChooser() {
         clickOnButtonWithId("buttonLoad");
-        clickOnButtonWithId("savedGamesFilter");
-        getRobot().clickOn("#saveFilterAUTOMATIC");
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -182,7 +180,12 @@ public final class FreePlayAuditPage extends AbstractScreen {
 
     private java.util.Map<File, byte[]> recoveryBytes;
 
+    private File corruptedTurnSnapshot;
+
     private File recoveryFile(final RecoverySlot slot) {
+        if (slot == RecoverySlot.LATEST_TURN && corruptedTurnSnapshot != null) {
+            return corruptedTurnSnapshot;
+        }
         final List<File> snapshots = turnSnapshots();
         if (slot == RecoverySlot.LATEST_TURN && !snapshots.isEmpty()) {
             return snapshots.get(snapshots.size() - 1);
@@ -225,8 +228,8 @@ public final class FreePlayAuditPage extends AbstractScreen {
                     .queryAllAs(javafx.scene.control.ListCell.class).stream()
                     .filter(value -> value.getItem() == entry.get()).findFirst()
                     .orElseThrow();
-            // The row shows the real time of the save; the game year and any
-            // problem belong to the detail of the selected row.
+            // The row contains only its filename; time, game year and problems
+            // belong to the selected detail.
             final String modified = java.time.format.DateTimeFormatter
                     .ofLocalizedDateTime(java.time.format.FormatStyle.SHORT)
                     .withLocale(getContext()
@@ -234,12 +237,13 @@ public final class FreePlayAuditPage extends AbstractScreen {
                             .getCurrentLocale())
                     .format(java.time.Instant.ofEpochMilli(entry.get().modified)
                             .atZone(java.time.ZoneId.systemDefault()));
-            assertTrue(cell.getText().contains(modified), cell.getText());
+            assertEquals(file.getName(), cell.getText());
             getRobot().interact(
                     () -> list.getSelectionModel().select(entry.get()));
             org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
             final String detail = getLabeledById("savedGameSummary").getText();
             assertTrue(detail.contains(date), detail);
+            assertTrue(detail.contains(modified), detail);
         }
     }
 
@@ -247,7 +251,8 @@ public final class FreePlayAuditPage extends AbstractScreen {
     public void verifyLoadDisabled(final String reason) {
         org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
         assertTrue(getButtonById("loadSelected").isDisabled());
-        assertEquals(reason, getLabeledById("savedGameSummary").getText());
+        assertEquals(reason, getLabeledById("savedGameSummary").getText()
+                .lines().findFirst().orElse(""));
     }
 
     @SuppressWarnings("unchecked")
@@ -327,8 +332,12 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 getModel().getCalendar().getNumberOfPlayedTurns());
     }
 
-    public void corruptRecovery(final RecoverySlot slot) throws Exception {
-        java.nio.file.Files.writeString(recoveryFile(slot).toPath(), "{");
+    public void prepareCorruptTurnSnapshot() throws Exception {
+        corruptedTurnSnapshot = getContext()
+                .getClassFromGuice(
+                        org.akropia.model.campaign.po.SavedGames.class)
+                .nextTurnSnapshot(1);
+        Files.writeString(corruptedTurnSnapshot.toPath(), "{");
     }
 
     /**

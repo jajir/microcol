@@ -80,8 +80,8 @@ public final class SavedGames {
     }
 
     public List<Entry> list() {
-        final Path root = paths.getRootSaveDirectory().toPath();
-        try (Stream<Path> files = Files.walk(root, 3)) {
+        final Path root = paths.getSaveDirectory().toPath();
+        try (Stream<Path> files = Files.list(root)) {
             final List<Entry> entries = files.filter(Files::isRegularFile)
                     .filter(path -> path.toString().endsWith(".akropia"))
                     .map(path -> read(path.toFile()))

@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
-import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -38,9 +37,9 @@ class SavedGamesTest {
     @Test
     void listingClassifiesCorruptionWithoutChangingAnyFile() throws Exception {
         final SavedGames saves = library();
-        final Path manual = directory.resolve("old.akropia");
+        final Path manual = saves.target("old").toPath();
         Files.writeString(manual, "broken JSON");
-        final Path recovery = directory.resolve("autosave.akropia");
+        final Path recovery = directory.resolve("saves/autosave-000.akropia");
         Files.writeString(recovery, "{}");
         final Path quick = saves.quickFile().toPath();
         final GameModelPo snapshot = new GameModelPoDao()
@@ -76,8 +75,8 @@ class SavedGamesTest {
     void listingReadsMetadataOnlyAndSortsByTheStoredTime() throws Exception {
         final SavedGames saves = library();
         final GameModelPoDao dao = new GameModelPoDao();
-        final Path older = directory.resolve("older.akropia");
-        final Path newer = directory.resolve("newer.akropia");
+        final Path older = saves.target("older").toPath();
+        final Path newer = saves.target("newer").toPath();
         final GameModelPo data = dao.loadFromClassPath(MAP);
         final SaveSummaryPo summary = SaveArchives.metadata(data, "Newer")
                 .getSummary();
@@ -111,7 +110,7 @@ class SavedGamesTest {
     @Test
     void unsupportedSavesAreListedWithTheirReason() throws Exception {
         final SavedGames saves = library();
-        final Path file = directory.resolve("future.akropia");
+        final Path file = saves.target("future").toPath();
         SaveArchives.playerSave(file,
                 new GameModelPoDao().loadFromClassPath(MAP));
         final String metadata = new String(
@@ -125,5 +124,28 @@ class SavedGamesTest {
         assertEquals(SaveArchiveException.Reason.UNSUPPORTED, entry.problem);
         assertNull(entry.metadata);
         assertFalse(saves.preview(entry).isPresent());
+    }
+
+    @Test
+    void listingIgnoresParentAndNestedFilesWithoutChangingThem()
+            throws Exception {
+        final SavedGames saves = library();
+        final Path visible = saves.target("Visible").toPath();
+        Files.writeString(visible, "invalid but visible");
+        final Path nested = Files
+                .createDirectories(directory.resolve("saves/hashed-game"))
+                .resolve("hidden.akropia");
+        final Path parent = directory.resolve("legacy.akropia");
+        Files.writeString(nested, "nested bytes");
+        Files.writeString(parent, "parent bytes");
+        Files.writeString(directory.resolve("saves/notes.txt"), "not a save");
+        Files.createDirectory(directory.resolve("saves/directory.akropia"));
+
+        assertEquals(java.util.List.of(visible),
+                saves.list().stream().map(entry -> entry.file.toPath())
+                        .collect(java.util.stream.Collectors.toList()));
+        assertEquals("nested bytes", Files.readString(nested));
+        assertEquals("parent bytes", Files.readString(parent));
+        assertEquals("invalid but visible", Files.readString(visible));
     }
 }

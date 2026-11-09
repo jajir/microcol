@@ -60,7 +60,6 @@ public final class ScreenLoad extends AbstractScreenMenu implements GameScreen {
     private final Button back = ActionButtons.button(ButtonIcon.BACK);
     private SavedGamesView view;
     private boolean menuHosted = true;
-    private boolean recoveryOnly;
     private boolean shown;
 
     @Inject
@@ -98,13 +97,6 @@ public final class ScreenLoad extends AbstractScreenMenu implements GameScreen {
         this.menuHosted = menuHosted;
     }
 
-    /**
-     * @param recoveryOnly start with the recovery-point filter
-     */
-    public void setRecoveryOnly(final boolean recoveryOnly) {
-        this.recoveryOnly = recoveryOnly;
-    }
-
     @Override
     public Region getContent() {
         return root;
@@ -123,8 +115,8 @@ public final class ScreenLoad extends AbstractScreenMenu implements GameScreen {
     public void beforeShow() {
         shown = true;
         updateLanguage(i18n);
-        view = new SavedGamesView(i18n, false, recoveryOnly, this::perform,
-                null, saves::preview);
+        view = new SavedGamesView(i18n, false, this::perform, null,
+                saves::preview);
         refresh();
         if (menuHosted) {
             toolbar.getChildren().clear();

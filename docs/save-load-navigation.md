@@ -13,8 +13,9 @@ návrhových diagramů zůstává v [publikační evidenci](publishing.md#r-0298
 
 **Implementováno 1. listopadu 2026; závěrečný smoke série čeká:**
 [R-0376](requirements/done/R-0376.md) odstraňuje samostatnou položku Body obnovy
-z hlavní nabídky. Obnova je dostupná přes Načíst hru a stávající filtr Body
-obnovy; ukládání bodů, nastavení autosave a Pokračovat se nemění. Navigace
+z hlavní nabídky. Obnova je dostupná přes Načíst hru; změna R-0436 ze
+9. listopadu 2026 odstraňuje filtr typů. Ukládání bodů, nastavení autosave
+a Pokračovat se nemění. Navigace
 níže už tuto položku neobsahuje.
 
 **Implementováno 1. listopadu 2026; závěrečný smoke série čeká:**
@@ -39,6 +40,8 @@ Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověře
 2. Všechny nové spravované pozice jsou v `~/.akropia/saves/`, bez podsložek
    partií. Uživatel potvrdil příponu `.akropia`, přijal návrh a autorizoval
    implementaci 8. listopadu 2026. Nastavení zůstává v nadřazeném `~/.akropia`.
+   Upřesnění 9. listopadu ([R-0436](requirements/done/R-0436.md)): katalog
+   čte pouze přímé soubory této složky a nepoužívá filtr typů.
 3. Ruční uložení jsou nezávislá. Výchozí název je národnost a rok
    (například `dutch-1600.akropia`); vlastní jméno má přednost, například
    `Před útokem.akropia`. Zachovat Unicode a vnitřní mezery, oříznout okolní
@@ -159,9 +162,10 @@ samotná implementace jím není.
    v barvách minimapy; jednotky, kolonie ani dialogy neobsahuje. Souhrn
    a náhled vznikají ze stejného stavu jako `game.json`.
 5. Načíst hru má seznam vlevo a detail vpravo v poměru přibližně 1 : 2.
-   Řádek ukazuje název (dlouhý zkrácený), druh a čas uložení; detail celý
-   název, náhled nebo „Náhled není k dispozici“ a souhrn. Bez výběru vyzve
-   k volbě a Načíst hru je neaktivní; změna filtru či zmizení pozice detail
+   Řádek ukazuje celý název souboru včetně přípony, bez dalších údajů; dlouhý
+   název se zalomí. Detail ukáže uložený název, typ, čas, náhled nebo „Náhled
+   není k dispozici“ a souhrn. Bez výběru vyzve k volbě a Načíst hru je
+   neaktivní; zmizení pozice detail
    vymaže. Nečitelná či nepodporovaná pozice ukáže důvod a nelze ji potvrdit.
 6. Uložit ukazuje stav nového uložení se souhrnem a náhledem, předvyplněný
    upravitelný název a zvlášť vybraný cíl přepsání. Potvrzení přepsání
@@ -222,7 +226,7 @@ target/graphics-venv/bin/python scripts/graphics/svg-font.py docs/diagrams/save-
 
 1. Hlavní nabídka zachovává Pokračovat, Načíst, Novou neomezenou hru, Kampaň,
    Síň slávy, Nastavení a Ukončit. Samostatná položka Body obnovy již
-   není (R-0376); body obnovy ukáže filtr Body obnovy na stránce Načíst.
+   není (R-0376); body obnovy jsou součástí společného seznamu na stránce Načíst.
 2. Herní nabídka obsahuje Zpět do hry, Uložit, Načíst, Rychle uložit, Rychle
    načíst, Nastavení, Hlavní nabídku a Ukončit. V kampani navíc nabízí
    **Začít misi znovu**, která po potvrzení otevře původní scénář mise.
@@ -273,9 +277,9 @@ mimo deset automatických slotů. Nová
    hráčů, kolonií či jednotek. Autorské scénáře je nemusejí mít.
 4. Nové spravované soubory jsou v `~/.akropia/saves/`, bez podsložek partií.
    Ruční názvy odpovídají zadaným jménům; předvyplněný název tvoří národnost
-   a rok. Automatické sloty 000–009 se kruhově přepisují. Starší ruční soubory
-   a body obnovy zůstávají dostupné v katalogu, nic je automaticky nemaže
-   ani nepřesouvá.
+   a rok. Automatické sloty 000–009 se kruhově přepisují. Katalog čte jen soubory přímo v této složce. Starší soubory mimo ni
+   ani v podsložkách nevypisuje, nic automaticky nemaže ani nepřesouvá.
+   Nadále je lze výslovně importovat.
 5. **Otevřít složku uložení** otevře `~/.akropia/saves/` systémovým správcem souborů.
    Pokud to prostředí nepodporuje, hra oznámí chybu a zachová přehled.
 6. Ukládání a rychlé akce jsou běžně dostupné během připraveného lidského
@@ -294,11 +298,11 @@ mimo deset automatických slotů. Nová
 
 [Zdroj PlantUML](diagrams/save-load/load.puml)
 
-1. Jeden seznam nabízí filtr Všechna uložení / Ruční / Rychlé / Body obnovy.
-   Řádky jsou od nejnovějšího a ukazují název, typ a skutečný čas uložení;
-   misi, rok, obtížnost, jméno hráče, národ a další souhrn ukazuje detail
-   vybrané pozice (R-0383).
-   Chybějící soubory se nevypisují; prázdný filtr má vlastní vysvětlení.
+1. Podle [R-0436](requirements/done/R-0436.md), schváleného 9. listopadu 2026,
+   seznam nemá filtr a čte jen soubory přímo v `~/.akropia/saves/`.
+   Řádky zachovávají dosavadní pořadí katalogu a zobrazují celý název souboru
+   včetně přípony. Uložený název, typ, skutečný čas, náhled a herní souhrn
+   ukazuje detail vybrané pozice. Prázdný seznam má vlastní vysvětlení.
 2. Poškozené údaje nezablokují prohlížení ostatních řádků. Výběr souboru
    je pouze čtení. Nečitelnou nebo nepodporovanou pozici nelze potvrdit.
    Až Načíst rekonstruuje a ověří celý kandidátní stav;
