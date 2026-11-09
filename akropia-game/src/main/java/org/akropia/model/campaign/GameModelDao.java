@@ -151,6 +151,16 @@ public final class GameModelDao {
         return finishFreePlay(source, name, eventBus);
     }
 
+    public GameModel createGeneratedFreePlay(
+            final org.akropia.model.store.ModelPo world,
+            final String playerName, final EventBus eventBus) {
+        final String name = Player.normalizeDisplayName(playerName);
+        final GameModelPo source = gameModelPoDao
+                .loadFromClassPath(FreePlayMap.REFERENCE.getResource());
+        source.setModel(world);
+        return finishFreePlay(source, name, eventBus);
+    }
+
     /**
      * Create a new game from an authored scenario exactly as authored (R-0435).
      * Playability is checked first, so a rejected scenario leaves the caller's

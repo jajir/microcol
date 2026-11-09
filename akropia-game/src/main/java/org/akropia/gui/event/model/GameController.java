@@ -173,6 +173,13 @@ public final class GameController {
         return true;
     }
 
+    public void startGeneratedFreePlay(
+            final org.akropia.model.store.ModelPo world,
+            final String playerName) {
+        startMission(gameModelDao.createGeneratedFreePlay(world, playerName,
+                eventBus));
+    }
+
     /**
      * Start a new game from an authored scenario. The active game is replaced
      * only after the new one exists.

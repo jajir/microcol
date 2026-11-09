@@ -16,8 +16,11 @@ final class LatticeNoise {
     private final double[][] values;
 
     LatticeNoise(final Random random) {
-        values = new double[GeneratedWorld.WIDTH / CELL
-                + 2][GeneratedWorld.HEIGHT / CELL + 2];
+        this(random, GeneratedWorld.WIDTH, GeneratedWorld.HEIGHT);
+    }
+
+    LatticeNoise(final Random random, final int width, final int height) {
+        values = new double[width / CELL + 2][height / CELL + 2];
         for (int x = 0; x < values.length; x++) {
             for (int y = 0; y < values[x].length; y++) {
                 values[x][y] = random.nextDouble();

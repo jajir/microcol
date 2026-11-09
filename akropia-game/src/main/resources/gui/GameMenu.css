@@ -86,3 +86,12 @@
     -fx-background-color: #FFF9EC;
     -fx-padding: 16;
 }
+
+/* The wizard title and fields share normal layout in both steps. */
+.free-play-screen .main-title, .free-play-screen .titled-content {
+    -fx-translate-x: 0;
+    -fx-translate-y: 0;
+    -fx-min-width: 0;
+}
+.free-play-screen .main-title { -fx-min-height: 60; }
+.free-play-screen .titled-content { -fx-min-height: 0; }

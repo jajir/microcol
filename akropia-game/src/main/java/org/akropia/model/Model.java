@@ -184,6 +184,13 @@ public class Model {
                         .getGeneratedWorld().getSeed().equals(map.getSeed())),
                 "Unsupported save: incomplete or mismatched generated world settings");
         generatedWorld = modelPo.getGeneratedWorld();
+        Preconditions.checkArgument(generatedWorld == null
+                || generatedWorld.getSize() == null
+                || (generatedWorld.getSize().getWidth() == modelPo.getMap()
+                        .getMaxX()
+                        && generatedWorld.getSize().getHeight() == modelPo
+                                .getMap().getMaxY()),
+                "Generated world dimensions disagree with settings");
         Preconditions.checkArgument(
                 modelPo.getNextColonyId() != null
                         && modelPo.getNextColonyId() >= 0,

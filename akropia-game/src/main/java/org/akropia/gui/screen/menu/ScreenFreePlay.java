@@ -1,38 +1,36 @@
 package org.akropia.gui.screen.menu;
 
-import org.akropia.gui.util.ActionButtons;
-import org.akropia.gui.image.ButtonIcon;
 import static org.akropia.gui.screen.AbstractScreenMenu.STYLE_SHEET_GAME_MENU;
-
-import java.util.ArrayList;
 import java.util.List;
-
+import java.util.UUID;
 import org.akropia.gui.Loc;
 import org.akropia.gui.LocalizationHelper;
 import org.akropia.gui.dialog.ApplicationController;
+import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.screen.AbstractScreenMenu;
 import org.akropia.gui.screen.GameScreen;
 import org.akropia.gui.screen.Screen;
 import org.akropia.gui.screen.ShowScreenEvent;
+import org.akropia.gui.util.ActionButtons;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Difficulty;
 import org.akropia.model.EuropeanNation;
 import org.akropia.model.Player;
 import org.akropia.model.campaign.FreePlayMap;
-import org.akropia.model.generation.GeneratedClimate;
-import org.akropia.model.generation.GeneratedLandShare;
+import org.akropia.model.generation.GeneratedLandLayout;
+import org.akropia.model.generation.GeneratedMapSize;
 import org.akropia.model.generation.GeneratedWorld;
 import org.akropia.model.generation.GeneratedWorldSettings;
-
+import org.akropia.model.store.ModelPo;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-
-import javafx.geometry.Insets;
+import javafx.concurrent.Task;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -41,67 +39,49 @@ import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
 /**
- * Menu setup for authored maps, selectable reference expeditions, generated New
- * Worlds and the North America world. The generated choices are shown only for
- * the generated map.
+ * Two-step setup; only a completed, validated world replaces the active game.
  */
 @Singleton
 public final class ScreenFreePlay extends AbstractScreenMenu
         implements GameScreen {
-
-    private static final String ID_MAP = "freePlayMap";
-    private static final String ID_GENERATED = "freePlayGenerated";
-    private static final String ID_CLIMATE = "freePlayClimate";
-    private static final String ID_LAND_SHARE = "freePlayLandShare";
-    private static final String ID_SEED = "freePlaySeed";
-    private static final String ID_PREVIEW = "freePlayGeneratedPreview";
-    private static final String ID_DIFFICULTY = "freePlayDifficulty";
-    private static final String ID_NATION = "freePlayNation";
-    private static final String ID_NATION_NOTE = "freePlayNationNote";
-    private static final String ID_PLAYER_NAME = "freePlayPlayerName";
-    private static final String ID_PLAYER_ERROR = "freePlayNameError";
-    private static final String ID_START = "freePlayStart";
-    private static final String ID_BACK = "freePlayBack";
-    private static final String ID_FORM = "freePlaySetup";
-
-    /** Index of the generated choice, after the small bundled maps. */
-    private static final int GENERATED_INDEX = FreePlayMap.NORTH_AMERICA
-            .ordinal();
-
-    /** Index of the North America choice, after the generated one. */
+    static final String ID_MAP = "freePlayMap";
+    static final int GENERATED_INDEX = FreePlayMap.NORTH_AMERICA.ordinal();
     private static final int NORTH_AMERICA_INDEX = GENERATED_INDEX + 1;
-
-    private static final String DEFAULT_SEED = "1";
-
     private final MenuHolderPanel holder;
     private final ApplicationController applicationController;
     private final EventBus eventBus;
     private final I18n i18n;
     private final LocalizationHelper localizationHelper;
-
-    private final VBox form;
-    private final Label mapLabel;
-    private final ChoiceBox<String> mapChoiceBox;
-    private final VBox generatedBox;
-    private final Label climateLabel;
-    private final ChoiceBox<GeneratedClimate> climateChoiceBox;
-    private final Label landShareLabel;
-    private final ChoiceBox<GeneratedLandShare> landShareChoiceBox;
-    private final Label seedLabel;
-    private final TextField seedField;
-    private final Label previewLabel;
-    private final Label difficultyLabel;
-    private final ChoiceBox<Difficulty> difficultyChoiceBox;
-    private final Label nameLabel;
-    private final Label nationLabel;
-    private final ChoiceBox<String> nationChoiceBox;
-    private final Label nationNoteLabel;
-    private final TextField nameField;
-    private final Label errorLabel;
-    private final Button startButton;
-    private final Button backButton;
-
-    private boolean starting = false;
+    private final VBox form = new VBox(12);
+    private final VBox world = new VBox(12);
+    private final VBox player = new VBox(12);
+    private final VBox generated = new VBox(12);
+    private final ChoiceBox<String> maps = new ChoiceBox<>();
+    private final ChoiceBox<GeneratedMapSize> sizes = new ChoiceBox<>();
+    private final ChoiceBox<GeneratedLandLayout> layouts = new ChoiceBox<>();
+    private final ChoiceBox<Difficulty> difficulties = new ChoiceBox<>();
+    private final ChoiceBox<String> nations = new ChoiceBox<>();
+    private final TextField seed = new TextField();
+    private final TextField name = new TextField();
+    private final Label steps = new Label();
+    private final Label summary = new Label();
+    private final Label error = new Label();
+    private final Label nationNote = new Label();
+    private final Button next = ActionButtons.button(ButtonIcon.PLAY);
+    private final Button start = ActionButtons.button(ButtonIcon.PLAY);
+    private final Button back = ActionButtons.button(ButtonIcon.BACK);
+    private final Button newSeed = ActionButtons.button(ButtonIcon.REPLACE);
+    private final ProgressIndicator progress = new ProgressIndicator();
+    private final Label mapLabel = new Label();
+    private final Label sizeLabel = new Label();
+    private final Label layoutLabel = new Label();
+    private final Label seedLabel = new Label();
+    private final Label difficultyLabel = new Label();
+    private final Label nationLabel = new Label();
+    private final Label nameLabel = new Label();
+    private boolean secondStep;
+    private boolean starting;
+    private Task<ModelPo> generation;
 
     @Inject
     public ScreenFreePlay(MenuHolderPanel holder,
@@ -112,159 +92,94 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         this.eventBus = eventBus;
         this.i18n = i18n;
         this.localizationHelper = localizationHelper;
-
-        form = new VBox(10);
-        form.setId(ID_FORM);
+        form.setId("freePlaySetup");
         form.getStyleClass().add("game-menu-inner");
-        form.setPrefWidth(500);
-        form.setPadding(new Insets(10));
-
-        mapLabel = new Label();
-        mapLabel.setLabelFor(mapChoiceBox = new ChoiceBox<>());
-        mapChoiceBox.setId(ID_MAP);
-        mapChoiceBox.getItems().addAll(mapNames(i18n));
-        mapChoiceBox.getSelectionModel().selectFirst();
-
-        climateLabel = new Label();
-        climateLabel.setLabelFor(climateChoiceBox = new ChoiceBox<>());
-        climateChoiceBox.setId(ID_CLIMATE);
-        climateChoiceBox.getItems().addAll(GeneratedClimate.values());
-        climateChoiceBox.getSelectionModel().select(GeneratedClimate.TEMPERATE);
-        climateChoiceBox.setConverter(new StringConverter<GeneratedClimate>() {
-            @Override
-            public String toString(final GeneratedClimate value) {
-                return value == null ? "" : climateName(value);
-            }
-
-            @Override
-            public GeneratedClimate fromString(final String text) {
-                throw new UnsupportedOperationException();
-            }
-        });
-
-        landShareLabel = new Label();
-        landShareLabel.setLabelFor(landShareChoiceBox = new ChoiceBox<>());
-        landShareChoiceBox.setId(ID_LAND_SHARE);
-        landShareChoiceBox.getItems().addAll(GeneratedLandShare.values());
-        landShareChoiceBox.getSelectionModel()
-                .select(GeneratedLandShare.MEDIUM);
-        landShareChoiceBox
-                .setConverter(new StringConverter<GeneratedLandShare>() {
-                    @Override
-                    public String toString(final GeneratedLandShare value) {
-                        return value == null ? "" : landShareName(value);
-                    }
-
-                    @Override
-                    public GeneratedLandShare fromString(final String text) {
-                        throw new UnsupportedOperationException();
-                    }
-                });
-
-        seedLabel = new Label();
-        seedLabel.setLabelFor(seedField = new TextField(DEFAULT_SEED));
-        seedField.setId(ID_SEED);
-
-        previewLabel = new Label();
-        previewLabel.setId(ID_PREVIEW);
-        previewLabel.setWrapText(true);
-
-        generatedBox = new VBox(6, fieldRow(climateLabel, climateChoiceBox),
-                fieldRow(landShareLabel, landShareChoiceBox),
-                fieldRow(seedLabel, seedField), previewLabel);
-        generatedBox.setId(ID_GENERATED);
-
-        difficultyLabel = new Label();
-        difficultyLabel.setLabelFor(difficultyChoiceBox = new ChoiceBox<>());
-        difficultyChoiceBox.setId(ID_DIFFICULTY);
-        difficultyChoiceBox.getItems().addAll(Difficulty.values());
-        difficultyChoiceBox.getSelectionModel().select(Difficulty.CONQUISTADOR);
-        difficultyChoiceBox.setConverter(new StringConverter<Difficulty>() {
-            @Override
-            public String toString(final Difficulty value) {
-                return value == null ? ""
-                        : localizationHelper.getDifficultyName(value);
-            }
-
-            @Override
-            public Difficulty fromString(final String text) {
-                throw new UnsupportedOperationException();
+        form.setPrefWidth(600);
+        maps.setId(ID_MAP);
+        maps.getItems().setAll(mapNames(i18n));
+        maps.getSelectionModel().select(GENERATED_INDEX);
+        sizes.setId("freePlaySize");
+        sizes.getItems().setAll(GeneratedMapSize.values());
+        sizes.setValue(GeneratedMapSize.SMALL);
+        layouts.setId("freePlayLayout");
+        layouts.getItems().setAll(GeneratedLandLayout.values());
+        layouts.setValue(GeneratedLandLayout.BIG_ISLANDS);
+        seed.setId("freePlaySeed");
+        newSeed.setId("freePlayNewSeed");
+        newSeed.setOnAction(e -> seed.setText(randomSeed()));
+        generated.setId("freePlayGenerated");
+        generated.getChildren().addAll(row(sizeLabel, sizes),
+                row(layoutLabel, layouts),
+                row(seedLabel, new HBox(8, seed, newSeed)));
+        world.getChildren().addAll(row(mapLabel, maps), generated);
+        difficulties.setId("freePlayDifficulty");
+        difficulties.getItems().setAll(Difficulty.values());
+        difficulties.setValue(Difficulty.CONQUISTADOR);
+        nations.setId("freePlayNation");
+        nations.getItems().setAll(nationNames());
+        nations.getSelectionModel().selectFirst();
+        nationNote.setId("freePlayNationNote");
+        nationNote.setWrapText(true);
+        name.setId("freePlayPlayerName");
+        summary.setId("freePlayGeneratedPreview");
+        summary.setWrapText(true);
+        player.getChildren().addAll(summary, row(difficultyLabel, difficulties),
+                row(nationLabel, nations), nationNote, row(nameLabel, name));
+        error.setId("freePlayNameError");
+        error.setWrapText(true);
+        next.setId("freePlayNext");
+        next.setOnAction(e -> {
+            if (validWorld()) {
+                secondStep = true;
+                refresh();
+                name.requestFocus();
             }
         });
-
-        nationLabel = new Label();
-        nationLabel.setLabelFor(nationChoiceBox = new ChoiceBox<>());
-        nationChoiceBox.setId(ID_NATION);
-        nationChoiceBox.getItems().addAll(i18n.get(GameMenu.setupNationDutch),
-                i18n.get(GameMenu.setupNationFrench),
-                i18n.get(GameMenu.setupNationEnglish),
-                i18n.get(GameMenu.setupNationSpanish));
-        nationChoiceBox.getSelectionModel().selectFirst();
-
-        nationNoteLabel = new Label();
-        nationNoteLabel.setId(ID_NATION_NOTE);
-        nationNoteLabel.setWrapText(true);
-
-        nameLabel = new Label();
-        nameLabel.setLabelFor(nameField = new TextField());
-        nameField.setId(ID_PLAYER_NAME);
-        nameField.setText(i18n.get(GameMenu.setupNationDutch));
-        nameField.textProperty()
-                .addListener((obs, old, val) -> validateInput());
-
-        errorLabel = new Label();
-        errorLabel.setId(ID_PLAYER_ERROR);
-        errorLabel.setWrapText(true);
-        errorLabel.setMinHeight(40);
-
-        startButton = ActionButtons.button(ButtonIcon.PLAY);
-        startButton.setId(ID_START);
-        startButton.setDefaultButton(true);
-        startButton.setDisable(true);
-        startButton.setOnAction(e -> onStart());
-
-        backButton = ActionButtons.button(ButtonIcon.BACK);
-        backButton.setId(ID_BACK);
-        backButton.setCancelButton(true);
-        backButton.setOnAction(e -> onBack());
-
-        HBox buttonBox = new HBox(10, startButton, backButton);
-        buttonBox.setPadding(new Insets(10, 0, 0, 0));
-
-        form.getChildren().addAll(fieldRow(mapLabel, mapChoiceBox),
-                generatedBox, fieldRow(difficultyLabel, difficultyChoiceBox),
-                fieldRow(nationLabel, nationChoiceBox), nationNoteLabel,
-                fieldRow(nameLabel, nameField), errorLabel, buttonBox);
-
-        mapChoiceBox.getSelectionModel().selectedIndexProperty()
-                .addListener((obs, old, value) -> onMapChanged());
-        seedField.textProperty()
-                .addListener((obs, old, value) -> validateInput());
-        climateChoiceBox.getSelectionModel().selectedItemProperty()
-                .addListener((obs, old, value) -> updatePreview());
-        landShareChoiceBox.getSelectionModel().selectedItemProperty()
-                .addListener((obs, old, value) -> updatePreview());
-
+        start.setId("freePlayStart");
+        start.setOnAction(e -> startGame());
+        back.setId("freePlayBack");
+        back.setCancelButton(true);
+        back.setOnAction(e -> goBack());
+        progress.setMaxSize(28, 28);
+        form.getChildren().addAll(steps, world, player, error, progress,
+                new HBox(12, back, next, start));
+        maps.valueProperty().addListener((o, a, b) -> {
+            updateNation();
+            refresh();
+        });
+        sizes.valueProperty().addListener((o, a, b) -> refresh());
+        layouts.valueProperty().addListener((o, a, b) -> refresh());
+        seed.textProperty().addListener((o, a, b) -> refresh());
+        name.textProperty().addListener((o, a, b) -> refresh());
         form.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ESCAPE) {
-                eventBus.post(new ShowScreenEvent(Screen.MENU));
+                goBack();
                 e.consume();
             }
         });
-
-        // Bundled maps are the default, so the generated controls start hidden.
-        updateGeneratedControls();
         updateLanguage(i18n);
-
+        updateNation();
         holder.setMenuPanel(() -> form);
+        holder.stackTitleAboveContent();
+        holder.getContent().getStyleClass().add("free-play-screen");
         holder.getContent().getStylesheets().add(STYLE_SHEET_GAME_MENU);
     }
 
-    private static HBox fieldRow(final Label label, final Region control) {
-        label.setMinWidth(180);
-        final HBox row = new HBox(10, label, control);
+    private static HBox row(Label label, Region control) {
+        label.setMinWidth(170);
+        label.setLabelFor(control);
+        final HBox row = new HBox(12, label, control);
         row.setAlignment(Pos.CENTER_LEFT);
         return row;
+    }
+
+    private static void show(Region node, boolean visible) {
+        node.setVisible(visible);
+        node.setManaged(visible);
+    }
+
+    private static String randomSeed() {
+        return UUID.randomUUID().toString().substring(0, 18);
     }
 
     @Override
@@ -275,214 +190,223 @@ public final class ScreenFreePlay extends AbstractScreenMenu
     @Override
     public void beforeShow() {
         starting = false;
-        validateInput();
+        secondStep = false;
+        seed.setText(randomSeed());
+        refresh();
         holder.beforeShow();
     }
 
     @Override
     public void beforeHide() {
+        if (generation != null && generation.isRunning()) {
+            generation.cancel();
+        }
         holder.beforeHide();
     }
 
-    @Override
-    public void updateLanguage(I18n i18n) {
-        int mapIndex = mapChoiceBox.getSelectionModel().getSelectedIndex();
-        int nationIndex = nationChoiceBox.getSelectionModel()
-                .getSelectedIndex();
-
-        holder.setTitle(i18n.get(GameMenu.setupTitle));
-        mapLabel.setText(i18n.get(GameMenu.setupMap));
-        climateLabel.setText(i18n.get(GameMenu.setupGeneratedClimate));
-        landShareLabel.setText(i18n.get(GameMenu.setupGeneratedLand));
-        seedLabel.setText(i18n.get(GameMenu.setupGeneratedSeed));
-        nationLabel.setText(i18n.get(GameMenu.setupNation));
-        difficultyLabel.setText(i18n.get(Loc.difficulty));
-        final Difficulty selectedDifficulty = difficultyChoiceBox.getValue();
-        difficultyChoiceBox.getSelectionModel().clearSelection();
-        difficultyChoiceBox.getSelectionModel().select(selectedDifficulty);
-        nameLabel.setText(i18n.get(GameMenu.setupPlayerName));
-        startButton.setText(i18n.get(GameMenu.setupStart));
-        backButton.setText(i18n.get(GameMenu.buttonBack));
-
-        mapChoiceBox.getItems().setAll(mapNames(i18n));
-        nationChoiceBox.getItems().setAll(i18n.get(GameMenu.setupNationDutch),
-                i18n.get(GameMenu.setupNationFrench),
-                i18n.get(GameMenu.setupNationEnglish),
-                i18n.get(GameMenu.setupNationSpanish));
-
-        mapChoiceBox.getSelectionModel().select(Math.max(0,
-                Math.min(mapIndex, mapChoiceBox.getItems().size() - 1)));
-        nationChoiceBox.getSelectionModel().select(Math.max(0,
-                Math.min(nationIndex, nationChoiceBox.getItems().size() - 1)));
-        // Re-select so the converted labels follow the new language.
-        final GeneratedClimate climate = climateChoiceBox.getValue();
-        climateChoiceBox.getSelectionModel().clearSelection();
-        climateChoiceBox.getSelectionModel().select(climate);
-        final GeneratedLandShare landShare = landShareChoiceBox.getValue();
-        landShareChoiceBox.getSelectionModel().clearSelection();
-        landShareChoiceBox.getSelectionModel().select(landShare);
-        updateNationAvailability();
-        updatePreview();
-        validateInput();
+    private boolean isGenerated() {
+        return maps.getSelectionModel().getSelectedIndex() == GENERATED_INDEX;
     }
 
-    private List<String> mapNames(final I18n i18n) {
-        final List<String> names = new ArrayList<>();
-        names.add(i18n.get(GameMenu.setupMapOriginal));
-        names.add(i18n.get(GameMenu.setupMapTwoIslands));
-        names.add(i18n.get(GameMenu.setupMapRivalExpedition));
-        names.add(i18n.get(GameMenu.setupMapReference));
-        names.add(i18n.get(GameMenu.setupMapGenerated));
-        names.add(i18n.get(GameMenu.setupMapNorthAmerica));
-        return names;
-    }
-
-    /**
-     * @return bundled world of the selected choice, or null for the generated
-     *         choice and while the list is being refilled
-     */
     private FreePlayMap selectedMap() {
-        final int index = mapChoiceBox.getSelectionModel().getSelectedIndex();
-        if (index == NORTH_AMERICA_INDEX) {
-            return FreePlayMap.NORTH_AMERICA;
+        final int index = maps.getSelectionModel().getSelectedIndex();
+        return index == NORTH_AMERICA_INDEX ? FreePlayMap.NORTH_AMERICA
+                : FreePlayMap.values()[Math.max(0,
+                        Math.min(index, GENERATED_INDEX - 1))];
+    }
+
+    private void updateNation() {
+        final boolean selectable = isGenerated()
+                || selectedMap().isNationSelectable();
+        nations.setDisable(!selectable);
+        if (!selectable) {
+            nations.getSelectionModel().selectFirst();
         }
-        return index >= 0 && index < GENERATED_INDEX
-                ? FreePlayMap.values()[index]
-                : null;
-    }
-
-    private void onMapChanged() {
-        updateNationAvailability();
-        updateGeneratedControls();
-        validateInput();
-    }
-
-    private boolean isGeneratedSelected() {
-        return mapChoiceBox.getSelectionModel()
-                .getSelectedIndex() == GENERATED_INDEX;
-    }
-
-    private void updateGeneratedControls() {
-        final boolean generated = isGeneratedSelected();
-        generatedBox.setVisible(generated);
-        generatedBox.setManaged(generated);
-        updatePreview();
-    }
-
-    private void updateNationAvailability() {
-        // Generated worlds use the same four expeditions as the reference one.
-        final FreePlayMap map = selectedMap();
-        final boolean reference = isGeneratedSelected()
-                || map != null && map.isNationSelectable();
-        nationChoiceBox.setDisable(!reference);
-        if (!reference) {
-            nationChoiceBox.getSelectionModel().selectFirst();
-        }
-        nationNoteLabel
-                .setText(i18n.get(reference ? GameMenu.setupNationReferenceNote
+        nationNote
+                .setText(i18n.get(selectable ? GameMenu.setupNationReferenceNote
                         : GameMenu.setupNationNote));
     }
 
-    private void updatePreview() {
-        final GeneratedLandShare landShare = landShareChoiceBox.getValue();
-        final Integer seed = parseSeed();
-        // I18n formats the message itself, so the values are its arguments.
-        previewLabel.setText(i18n.get(GameMenu.setupGeneratedPreview,
-                GeneratedWorld.WIDTH, GeneratedWorld.HEIGHT,
-                climateName(climateChoiceBox.getValue()),
-                landShare == null ? 0 : landShare.getPercent(),
-                seed == null ? "" : String.valueOf(seed)));
+    private GeneratedWorldSettings settings() {
+        return new GeneratedWorldSettings(seed.getText(), sizes.getValue(),
+                layouts.getValue());
     }
 
-    /**
-     * @return seed typed in the field, or null when the text is not a valid
-     *         seed
-     */
-    private Integer parseSeed() {
+    private boolean validWorld() {
         try {
-            return GeneratedWorldSettings.parseSeed(seedField.getText());
-        } catch (IllegalArgumentException invalid) {
-            return null;
-        }
-    }
-
-    private String climateName(final GeneratedClimate climate) {
-        if (climate == GeneratedClimate.COLD) {
-            return i18n.get(GameMenu.setupClimateCold);
-        }
-        if (climate == GeneratedClimate.WARM) {
-            return i18n.get(GameMenu.setupClimateWarm);
-        }
-        return i18n.get(GameMenu.setupClimateTemperate);
-    }
-
-    private String landShareName(final GeneratedLandShare landShare) {
-        if (landShare == GeneratedLandShare.LOW) {
-            return i18n.get(GameMenu.setupLandLow);
-        }
-        if (landShare == GeneratedLandShare.HIGH) {
-            return i18n.get(GameMenu.setupLandHigh);
-        }
-        return i18n.get(GameMenu.setupLandMedium);
-    }
-
-    private boolean validateName() {
-        String text = nameField.getText();
-        try {
-            Player.normalizeDisplayName(text);
-            errorLabel.setText("");
-            startButton.setDisable(starting);
-            return true;
-        } catch (IllegalArgumentException ex) {
-            errorLabel.setText(i18n.get(GameMenu.setupNameError));
-            startButton.setDisable(true);
-            return false;
-        }
-    }
-
-    /**
-     * Checks the player name and, for the generated map, the seed. Start stays
-     * disabled until every visible field is valid.
-     */
-    private boolean validateInput() {
-        final boolean nameValid = validateName();
-        if (!nameValid || !isGeneratedSelected()) {
-            return nameValid;
-        }
-        updatePreview();
-        if (parseSeed() == null) {
-            errorLabel.setText(i18n.get(GameMenu.setupGeneratedSeedError));
-            startButton.setDisable(true);
-            return false;
-        }
-        return true;
-    }
-
-    private void onStart() {
-        if (starting || !validateInput())
-            return;
-        starting = true;
-        startButton.setDisable(true);
-        final EuropeanNation nation = EuropeanNation.values()[nationChoiceBox
-                .getSelectionModel().getSelectedIndex()];
-        if (isGeneratedSelected()) {
-            final GeneratedWorldSettings settings = new GeneratedWorldSettings(
-                    parseSeed(), climateChoiceBox.getValue(),
-                    landShareChoiceBox.getValue());
-            if (!applicationController.startNewGeneratedGame(settings,
-                    nameField.getText(), difficultyChoiceBox.getValue(),
-                    nation)) {
-                starting = false;
-                errorLabel.setText(i18n.get(GameMenu.setupGeneratedFailed));
-                startButton.setDisable(false);
+            if (isGenerated()) {
+                settings();
             }
-            return;
+            return true;
+        } catch (IllegalArgumentException invalid) {
+            return false;
         }
-        applicationController.startNewFreeGame(selectedMap(),
-                nameField.getText(), difficultyChoiceBox.getValue(), nation);
     }
 
-    private void onBack() {
-        eventBus.post(new ShowScreenEvent(Screen.MENU));
+    private boolean validName() {
+        try {
+            Player.normalizeDisplayName(name.getText());
+            return true;
+        } catch (IllegalArgumentException invalid) {
+            return false;
+        }
+    }
+
+    private void refresh() {
+        show(world, !secondStep);
+        show(player, secondStep);
+        show(generated, isGenerated());
+        show(next, !secondStep);
+        show(start, secondStep);
+        show(progress, starting);
+        steps.setText(i18n.get(secondStep ? GameMenu.setupPlayerStep
+                : GameMenu.setupWorldStep));
+        summary.setText(isGenerated() ? i18n.get(GameMenu.setupSummary,
+                sizeName(sizes.getValue()), layoutName(layouts.getValue()))
+                : maps.getValue());
+        world.setDisable(starting);
+        player.setDisable(starting);
+        back.setDisable(starting);
+        next.setDefaultButton(!secondStep);
+        start.setDefaultButton(secondStep);
+        next.setDisable(starting || !validWorld());
+        start.setDisable(starting || !validWorld() || !validName());
+        error.setText(starting ? i18n.get(GameMenu.setupGenerating)
+                : !validWorld() ? i18n.get(GameMenu.setupGeneratedSeedError)
+                        : secondStep && !validName()
+                                ? i18n.get(GameMenu.setupNameError)
+                                : "");
+    }
+
+    private void goBack() {
+        if (starting) {
+            return;
+        }
+        if (secondStep) {
+            secondStep = false;
+            refresh();
+        } else {
+            eventBus.post(new ShowScreenEvent(Screen.MENU));
+        }
+    }
+
+    private void startGame() {
+        if (starting || !secondStep || !validWorld() || !validName()) {
+            return;
+        }
+        final String playerName = Player.normalizeDisplayName(name.getText());
+        final EuropeanNation nation = EuropeanNation.values()[nations
+                .getSelectionModel().getSelectedIndex()];
+        final Difficulty difficulty = difficulties.getValue();
+        if (!isGenerated()) {
+            applicationController.startNewFreeGame(selectedMap(), playerName,
+                    difficulty, nation);
+            return;
+        }
+        final GeneratedWorldSettings settings = settings();
+        starting = true;
+        refresh();
+        generation = new Task<ModelPo>() {
+            @Override
+            protected ModelPo call() {
+                return GeneratedWorld.create(settings, nation, difficulty);
+            }
+        };
+        generation.setOnSucceeded(e -> {
+            try {
+                applicationController.startNewGeneratedGame(
+                        generation.getValue(), playerName);
+            } catch (IllegalArgumentException | IllegalStateException failure) {
+                generationFailed();
+            }
+        });
+        generation.setOnFailed(e -> generationFailed());
+        final Thread thread = new Thread(generation, "world-generation");
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    private void generationFailed() {
+        starting = false;
+        refresh();
+        error.setText(i18n.get(GameMenu.setupGeneratedFailed));
+    }
+
+    static List<String> mapNames(I18n i18n) {
+        return List.of(i18n.get(GameMenu.setupMapOriginal),
+                i18n.get(GameMenu.setupMapTwoIslands),
+                i18n.get(GameMenu.setupMapRivalExpedition),
+                i18n.get(GameMenu.setupMapReference),
+                i18n.get(GameMenu.setupMapGenerated),
+                i18n.get(GameMenu.setupMapNorthAmerica));
+    }
+
+    private List<String> nationNames() {
+        return List.of(i18n.get(GameMenu.setupNationDutch),
+                i18n.get(GameMenu.setupNationFrench),
+                i18n.get(GameMenu.setupNationEnglish),
+                i18n.get(GameMenu.setupNationSpanish));
+    }
+
+    private String sizeName(GeneratedMapSize size) {
+        if (size == null) {
+            return "";
+        }
+        return i18n
+                .get(new GameMenu[] { GameMenu.setupSmall, GameMenu.setupMedium,
+                        GameMenu.setupLarge, GameMenu.setupHuge }[size
+                                .ordinal()])
+                + " · " + size.getWidth() + " × " + size.getHeight();
+    }
+
+    private String layoutName(GeneratedLandLayout layout) {
+        return layout == null ? ""
+                : i18n.get(new GameMenu[] { GameMenu.setupOneLand,
+                        GameMenu.setupBigIslands,
+                        GameMenu.setupArchipelago }[layout.ordinal()]);
+    }
+
+    private static <T> StringConverter<T> converter(
+            java.util.function.Function<T, String> label) {
+        return new StringConverter<T>() {
+            @Override
+            public String toString(T value) {
+                return value == null ? "" : label.apply(value);
+            }
+
+            @Override
+            public T fromString(String value) {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
+    @Override
+    public void updateLanguage(I18n language) {
+        final int mapIndex = maps.getSelectionModel().getSelectedIndex();
+        final int nationIndex = nations.getSelectionModel().getSelectedIndex();
+        maps.getItems().setAll(mapNames(language));
+        maps.getSelectionModel().select(Math.max(0, mapIndex));
+        nations.getItems().setAll(nationNames());
+        nations.getSelectionModel().select(Math.max(0, nationIndex));
+        holder.setTitle(language.get(GameMenu.setupTitle));
+        mapLabel.setText(language.get(GameMenu.setupMap));
+        sizeLabel.setText(language.get(GameMenu.setupSize));
+        layoutLabel.setText(language.get(GameMenu.setupLayout));
+        seedLabel.setText(language.get(GameMenu.setupGeneratedSeed));
+        difficultyLabel.setText(language.get(Loc.difficulty));
+        nationLabel.setText(language.get(GameMenu.setupNation));
+        nameLabel.setText(language.get(GameMenu.setupPlayerName));
+        name.setPromptText(language.get(GameMenu.setupNamePrompt));
+        next.setText(language.get(GameMenu.setupNext));
+        start.setText(language.get(GameMenu.setupStart));
+        back.setText(language.get(GameMenu.buttonBack));
+        newSeed.setText(language.get(GameMenu.setupNewSeed));
+        sizes.setConverter(converter(this::sizeName));
+        layouts.setConverter(converter(this::layoutName));
+        difficulties
+                .setConverter(converter(localizationHelper::getDifficultyName));
+        updateNation();
+        refresh();
     }
 }

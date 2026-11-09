@@ -101,7 +101,8 @@ final class GeneratedNatives {
      */
     static void place(final ModelPo model, final Random random) {
         final GeneratedGrid grid = new GeneratedGrid(
-                model.getMap().getTerrainMap());
+                model.getMap().getTerrainMap(), model.getMap().getMaxX(),
+                model.getMap().getMaxY());
         final List<Location> sites = grid.squaresWith(
                 terrain -> !terrain.isSea() && terrain != TerrainType.MOUNTAIN
                         && terrain != TerrainType.ARCTIC);
@@ -116,7 +117,11 @@ final class GeneratedNatives {
         for (final NativeNation nation : nations.subList(0, count)) {
             settlements.add(settlement(settlements.size(), nation, true,
                     site(sites, taken)));
-            if (random.nextBoolean()) {
+            final int extra = (model.getGeneratedWorld() == null
+                    || model.getGeneratedWorld().getSize() == null)
+                            ? (random.nextBoolean() ? 1 : 0)
+                            : Math.max(1, sites.size() / (count * 180));
+            for (int ordinary = 0; ordinary < extra; ordinary++) {
                 settlements.add(settlement(settlements.size(), nation, false,
                         site(sites, taken)));
             }

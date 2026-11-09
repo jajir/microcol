@@ -32,8 +32,122 @@ public final class FreePlaySetupPage extends AbstractScreen {
         super(context);
     }
 
+    public int selectedMapIndex() {
+        return getNodeFinder().lookup("#freePlayMap").queryAs(ChoiceBox.class)
+                .getSelectionModel().getSelectedIndex();
+    }
+
+    public String playerNameText() {
+        return getNodeFinder().lookup("#freePlayPlayerName")
+                .queryAs(TextField.class).getText();
+    }
+
     public void selectMap(final int index) {
+        worldStep();
         select("freePlayMap", index);
+        nextStep();
+    }
+
+    public void worldStep() {
+        if (getButtonById("freePlayStart").isVisible()) {
+            clickOnButtonWithId("freePlayBack");
+        }
+    }
+
+    public void nextStep() {
+        if (getButtonById("freePlayNext").isVisible()) {
+            clickOnButtonWithId("freePlayNext");
+        }
+    }
+
+    public void selectSize(
+            final org.akropia.model.generation.GeneratedMapSize value) {
+        worldStep();
+        select("freePlaySize", value.ordinal());
+    }
+
+    public void selectLayout(
+            final org.akropia.model.generation.GeneratedLandLayout value) {
+        worldStep();
+        select("freePlayLayout", value.ordinal());
+    }
+
+    public void newSeed() {
+        worldStep();
+        clickOnButtonWithId("freePlayNewSeed");
+    }
+
+    public String seedText() {
+        return getNodeFinder().lookup("#freePlaySeed").queryAs(TextField.class)
+                .getText();
+    }
+
+    public void verifyWizardStep(final boolean playerStep) {
+        final javafx.scene.control.Label title = getNodeFinder()
+                .lookup(".main-title")
+                .queryAs(javafx.scene.control.Label.class);
+        final javafx.geometry.Bounds bounds = title
+                .localToScene(title.getBoundsInLocal());
+        assertFalse(title.getText().isBlank());
+        assertTrue(bounds.getMinY() >= 0
+                && bounds.getMaxY() <= title.getScene().getHeight());
+
+        assertEquals(playerStep, getButtonById("freePlayStart").isVisible());
+        assertEquals(!playerStep, getButtonById("freePlayNext").isVisible());
+        assertEquals(playerStep, getNodeFinder().lookup("#freePlayPlayerName")
+                .queryAs(TextField.class).getParent().getParent().isVisible());
+    }
+
+    public void verifySeed(final String expected) {
+        assertEquals(expected, seedText());
+    }
+
+    public void verifyFreshSeed(final String previous) {
+        assertFalse(seedText().isBlank());
+        assertNotEquals(previous, seedText());
+    }
+
+    public void verifyPlayerName(final String expected) {
+        assertEquals(expected, getNodeFinder().lookup("#freePlayPlayerName")
+                .queryAs(TextField.class).getText());
+    }
+
+    public void verifyWizardChoices() {
+        assertEquals(4, getNodeFinder().lookup("#freePlaySize")
+                .queryAs(ChoiceBox.class).getItems().size());
+        assertEquals(3, getNodeFinder().lookup("#freePlayLayout")
+                .queryAs(ChoiceBox.class).getItems().size());
+        assertFalse(seedText().isBlank());
+        verifySelectedMap(4, "Generated new coast");
+    }
+
+    public void verifyWizardWorld(final String seed,
+            final org.akropia.model.generation.GeneratedMapSize size,
+            final org.akropia.model.generation.GeneratedLandLayout layout,
+            final String playerName) throws Exception {
+        WaitForAsyncUtils.waitFor(60, java.util.concurrent.TimeUnit.SECONDS,
+                () -> getModel().isGameStarted());
+        final ModelPo saved = getModel().save();
+        assertEquals(seed, saved.getGeneratedWorld().getTextSeed());
+        assertEquals(size, saved.getGeneratedWorld().getSize());
+        assertEquals(layout, saved.getGeneratedWorld().getLayout());
+        assertEquals(size.getWidth(), saved.getMap().getMaxX());
+        assertEquals(size.getHeight(), saved.getMap().getMaxY());
+        assertEquals(playerName,
+                getModel().getPlayers().stream().filter(Player::isHuman)
+                        .findFirst().orElseThrow().getDisplayName());
+        assertFalse(saved.getMap().getRiverMap().isEmpty());
+        assertFalse(saved.getMap().getResourceMap().isEmpty());
+        assertTrue(saved.getNativeSettlements().size() >= 3);
+    }
+
+    public void verifySavedWizardSeed(final String expected) {
+        final GameModelPo data = new GameModelPoDao()
+                .loadPlayerGame(continueFile());
+        assertEquals(expected,
+                data.getModel().getGeneratedWorld().getTextSeed());
+        assertArrayEquals(getModel().save().getMap().getTiles(),
+                data.getModel().getMap().getTiles());
     }
 
     public void verifyOriginalWorldLandscape() {
@@ -82,10 +196,12 @@ public final class FreePlaySetupPage extends AbstractScreen {
     }
 
     public void selectNation(final EuropeanNation nation) {
+        nextStep();
         select("freePlayNation", nation.ordinal());
     }
 
     public void selectDifficulty(final Difficulty difficulty) {
+        nextStep();
         final String name = getContext()
                 .getClassFromGuice(org.akropia.gui.LocalizationHelper.class)
                 .getDifficultyName(difficulty);
@@ -147,29 +263,13 @@ public final class FreePlaySetupPage extends AbstractScreen {
         assertEquals(expected, data.getModel().getDifficulty());
     }
 
-    public void selectClimate(final GeneratedClimate climate) {
-        select("freePlayClimate", climate.ordinal());
-    }
-
-    public void selectLandShare(final GeneratedLandShare landShare) {
-        select("freePlayLandShare", landShare.ordinal());
-    }
-
     public void enterSeed(final String value) {
+        worldStep();
         final TextField input = getNodeFinder().lookup("#freePlaySeed")
                 .queryAs(TextField.class);
         getRobot().clickOn(input).push(KeyCode.END)
                 .eraseText(input.getText().length()).write(value);
         WaitForAsyncUtils.waitForFxEvents();
-    }
-
-    public void verifyGeneratedSetup(final String expectedPreview) {
-        assertTrue(isCssIdVisible("freePlayGenerated"));
-        verifySelectedMap(4, "Generated new coast");
-        verifyNationSelection(EuropeanNation.DUTCH, true);
-        assertEquals("Choose the nation you will play.",
-                getLabeledById("freePlayNationNote").getText());
-        verifyPreview(expectedPreview);
     }
 
     public void verifyPreview(final String expectedPreview) {
@@ -185,28 +285,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
     public void verifySeedRejected(final String expectedError) {
         assertEquals(expectedError,
                 getLabeledById("freePlayNameError").getText());
-        assertTrue(getButtonById("freePlayStart").isDisabled());
-    }
-
-    public void verifyGeneratedWorld(final int expectedSeed,
-            final GeneratedClimate expectedClimate,
-            final GeneratedLandShare expectedLandShare,
-            final String expectedPlayerName) throws Exception {
-        WaitForAsyncUtils.waitFor(15, java.util.concurrent.TimeUnit.SECONDS,
-                () -> getModel().isGameRunning());
-        final ModelPo saved = getModel().save();
-        assertEquals(expectedSeed,
-                saved.getGeneratedWorld().getSeed().intValue());
-        assertEquals(expectedClimate, saved.getGeneratedWorld().getClimate());
-        assertEquals(expectedLandShare,
-                saved.getGeneratedWorld().getLandShare());
-        assertEquals(GeneratedWorld.WIDTH,
-                getModel().getMap().getMaxLocationX());
-        assertEquals(GeneratedWorld.HEIGHT,
-                getModel().getMap().getMaxLocationY());
-        assertEquals(expectedPlayerName,
-                getModel().getPlayerByName("Dutch").getDisplayName());
-        assertTrue(saved.getNativeSettlements().size() >= 3);
+        assertTrue(getButtonById("freePlayNext").isDisabled());
     }
 
     public void verifyGeneratedRiversAvoidCoastAndUplands() {
@@ -225,16 +304,6 @@ public final class FreePlaySetupPage extends AbstractScreen {
                 }
             }
         }
-    }
-
-    public void verifySavedGeneratedWorld(final int expectedSeed)
-            throws Exception {
-        final java.io.File file = continueFile();
-        final GameModelPo data = new GameModelPoDao().loadPlayerGame(file);
-        assertEquals(expectedSeed,
-                data.getModel().getGeneratedWorld().getSeed().intValue());
-        assertArrayEquals(getModel().save().getMap().getTiles(),
-                data.getModel().getMap().getTiles());
     }
 
     private void select(final String id, final int index) {
@@ -264,6 +333,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
     }
 
     public void enterName(final String value) {
+        nextStep();
         final TextField input = getNodeFinder().lookup("#freePlayPlayerName")
                 .queryAs(TextField.class);
         getRobot().clickOn(input).push(KeyCode.END)
@@ -272,22 +342,37 @@ public final class FreePlaySetupPage extends AbstractScreen {
     }
 
     public GamePage start() {
+        nextStep();
         clickOnButtonWithId("freePlayStart");
         return GamePage.of(getContext());
     }
 
     public GamePage startWithEnter() {
+        nextStep();
         getRobot().clickOn("#freePlayPlayerName").push(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
+        awaitStartedWorld();
         return GamePage.of(getContext());
     }
 
+    private void awaitStartedWorld() {
+        try {
+            WaitForAsyncUtils.waitFor(90, java.util.concurrent.TimeUnit.SECONDS,
+                    () -> getNodeFinder().lookup("#freePlaySetup").queryAll()
+                            .isEmpty());
+        } catch (Exception failure) {
+            throw new IllegalStateException("World did not start", failure);
+        }
+    }
+
     public WelcomePage back() {
+        worldStep();
         clickOnButtonWithId("freePlayBack");
         return WelcomePage.of(getContext());
     }
 
     public WelcomePage escape() {
+        worldStep();
         getRobot().push(KeyCode.ESCAPE);
         WaitForAsyncUtils.waitForFxEvents();
         return WelcomePage.of(getContext());

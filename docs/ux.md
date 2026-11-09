@@ -1362,3 +1362,8 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 
 1. [R-0431](requirements/done/R-0431.md) přidává do nastavení společný posuvník s devíti polohami. Hráč jej mění myší nebo klávesami; Home/End nastaví meze, šipky jednu polohu. Výchozí 2 zachovává dosavadní rychlost, 1 je poloviční a 9 je 4,5násobná. Jde o počáteční škálu určenou k pozdějšímu doladění.
 2. Nastavení se ukládá okamžitě. Návrat nevrací předchozí hodnotu; hráč ji může obnovit polohou 2. Výsledek pozná při posunu mapy WASD. Není potřebný zvuk ani restart partie. Přijímací výsledky vlastní [funkční evidence](functional-tests.md).
+
+## Průvodce novým světem — 2026-11-09
+1. [R-0437](requirements/done/R-0437.md) rozděluje přípravu na svět a hráče. První krok obsahuje rozměry, rozložení pevniny a kopírovatelný textový seed; druhý obtížnost, národ a samostatné jméno hráče. Shrnutí neodhaluje mapu.
+2. Návrat mezi kroky zachová vstupy; návrat z prvního kroku opustí přípravu. Nový seed vznikne při novém otevření nebo na výslovný stisk tlačítka. Změna národa nepřepisuje jméno.
+3. Generování ukazuje stav práce a blokuje opakované spuštění. Chyba zachová nastavení a umožní opravu nebo opakování. Jde o schválené chování, nikoli záznam pozorování hráčů.

@@ -31,7 +31,8 @@ class GameMenuTextTest {
                 new Locale("cs", "CZ") }) {
             final I18n i18n = i18n(locale);
             for (final GameMenu key : GameMenu.values()) {
-                if (key != GameMenu.setupGeneratedPreview) {
+                if (key != GameMenu.setupGeneratedPreview
+                        && key != GameMenu.setupSummary) {
                     final String text = assertDoesNotThrow(() -> i18n.get(key),
                             () -> locale + " " + key);
                     assertFalse(text.isBlank(), () -> locale + " " + key);
@@ -68,4 +69,12 @@ class GameMenuTextTest {
                 i18n(new Locale("cs", "CZ")).get(GameMenu.buttonLoadSave));
     }
 
+    @Test
+    void wizardSummaryAcceptsLocalizedLabels() {
+        assertEquals("Small · 90 × 60 · Big islands", i18n(Locale.ROOT)
+                .get(GameMenu.setupSummary, "Small · 90 × 60", "Big islands"));
+        assertEquals("Malá · 90 × 60 · Velké ostrovy",
+                i18n(new Locale("cs", "CZ")).get(GameMenu.setupSummary,
+                        "Malá · 90 × 60", "Velké ostrovy"));
+    }
 }

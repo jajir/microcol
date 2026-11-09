@@ -1329,6 +1329,12 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
    Save/Continue preserves the objective and actual cargo without replaying
    sales. This is agreed AI policy, not verified implementation.
 
+### Generated-world wizard — 2026-11-09
+
+1. [R-0437](requirements/done/R-0437.md) supersedes the first-version setup controls for interactive new worlds: four sizes (width × height) 90 × 60, 120 × 80, 150 × 100 and 180 × 120; one landmass, big islands or archipelago; editable random text seed of 1–64 Unicode code points. Climate is temperate and land share is 40%. Existing river and resource rules remain in force.
+2. World choices precede player difficulty, nation and independent player name. Back retains drafts; cancel creates nothing. The saved seed, world settings and generator version identify the reproducible geography; player name and difficulty do not change it. Fixed scenarios remain separately selectable.
+3. Native settlement density scales with suitable land, subject to existing spacing, valid terrain and founding-access checks. Exact generation algorithms remain implementation choices. The preceding numeric reference profile remains available to direct model callers; its historical acceptance does not verify the new wizard.
+
 ### Generated-world first version
 
 1. On 2026-10-19 the user approved preparing R-0065 with the reference map's

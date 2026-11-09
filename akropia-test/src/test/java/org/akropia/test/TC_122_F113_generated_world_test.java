@@ -39,122 +39,158 @@ public class TC_122_F113_generated_world_test extends AbstractAkropiaTest {
     @Tag("local")
     void TC_01_generated_world_is_previewed_started_and_continued_from_disk()
             throws Exception {
-        // Choose the generated world and set every visible parameter.
+        // Configure the default generated world and inspect both wizard steps.
         final FreePlaySetupPage setup = WelcomePage.of(getContext())
-                .openFreePlaySetup();
-        setup.selectMap(4);
-        setup.verifyGeneratedSetup(
-                "Preview: map 50 × 30 squares, Temperate climate, land 40 %, seed 1.");
-        setup.selectClimate(GeneratedClimate.COLD);
-        setup.selectLandShare(GeneratedLandShare.HIGH);
-        setup.enterSeed("2024");
-        setup.verifyPreview(
-                "Preview: map 50 × 30 squares, Cold climate, land 55 %, seed 2024.");
+                .openGeneratedWorldSetup();
+        setup.verifyWizardStep(false);
+        setup.verifyWizardChoices();
+        setup.selectSize(org.akropia.model.generation.GeneratedMapSize.MEDIUM);
+        setup.selectLayout(
+                org.akropia.model.generation.GeneratedLandLayout.ARCHIPELAGO);
+        setup.enterSeed("Nový svět 2024!");
+        setup.captureDialog("freePlaySetup", "wizard-world.png");
+        setup.nextStep();
+        setup.verifyWizardStep(true);
+        setup.verifyPlayerName("");
+        setup.verifyPreview("Medium · 120 × 80 · Archipelago");
         setup.enterName("Anna");
-        setup.captureDialog("freePlaySetup", "generated-world-setup.png");
-
-        // Start with the keyboard; the new world becomes the active game.
+        setup.selectNation(org.akropia.model.EuropeanNation.ENGLISH);
+        setup.verifyPlayerName("Anna");
+        // Returning to the world retains the exact seed and player draft.
+        setup.worldStep();
+        setup.verifyWizardStep(false);
+        setup.verifySeed("Nový svět 2024!");
+        setup.nextStep();
+        setup.verifyPlayerName("Anna");
+        setup.captureDialog("freePlaySetup", "wizard-player.png");
+        // Start with the keyboard and load the same saved world through
+        // Continue.
         final GamePage game = setup.startWithEnter();
-        setup.verifyGeneratedWorld(2024, GeneratedClimate.COLD,
-                GeneratedLandShare.HIGH, "Anna");
+        setup.verifyWizardWorld("Nový svět 2024!",
+                org.akropia.model.generation.GeneratedMapSize.MEDIUM,
+                org.akropia.model.generation.GeneratedLandLayout.ARCHIPELAGO,
+                "Anna");
         setup.verifyGeneratedRiversAvoidCoastAndUplands();
-
-        // Continue loads the saved world; it is not generated again.
         game.exitToMenu().verifyMainScreen();
         new FreePlayAuditPage(getContext()).continueGame();
-        setup.verifyGeneratedWorld(2024, GeneratedClimate.COLD,
-                GeneratedLandShare.HIGH, "Anna");
-        setup.verifyGeneratedRiversAvoidCoastAndUplands();
-        setup.verifySavedGeneratedWorld(2024);
+        setup.verifyWizardWorld("Nový svět 2024!",
+                org.akropia.model.generation.GeneratedMapSize.MEDIUM,
+                org.akropia.model.generation.GeneratedLandLayout.ARCHIPELAGO,
+                "Anna");
+        setup.verifySavedWizardSeed("Nový svět 2024!");
     }
 
     @Test
     @Tag("local")
     void TC_02_invalid_seed_and_cancel_start_no_generated_game()
             throws Exception {
+        // Blank and overlong seeds cannot advance; text seeds and a fresh
+        // random seed can.
         final FreePlaySetupPage setup = WelcomePage.of(getContext())
-                .openFreePlaySetup();
-        setup.selectMap(4);
-        setup.enterSeed("1000000000");
-        setup.verifySeedRejected("Enter a whole seed from 0 to 999999999.");
-        setup.enterSeed("12x");
-        setup.verifySeedRejected("Enter a whole seed from 0 to 999999999.");
-        setup.enterSeed("42");
-        setup.verifyPreview(
-                "Preview: map 50 × 30 squares, Temperate climate, land 40 %, seed 42.");
-
-        // Back cancels the setup; no generated game becomes active.
+                .openGeneratedWorldSetup();
+        setup.enterSeed("");
+        setup.verifySeedRejected("Enter a seed of 1–64 characters.");
+        setup.enterSeed("x".repeat(65));
+        setup.verifySeedRejected("Enter a seed of 1–64 characters.");
+        setup.enterSeed("x".repeat(64));
+        setup.nextStep();
+        setup.verifyWizardStep(true);
+        setup.worldStep();
+        setup.newSeed();
+        setup.verifyFreshSeed("x".repeat(64));
         setup.back().verifyMainScreen();
         setup.verifyNoActiveGame();
     }
 
     @Test
     @Tag("local")
-    void TC_04_cancelled_and_invalid_setup_keep_continue_on_the_same_world()
-            throws Exception {
-        // Start a generated world, then leave it through the menu.
-        final FreePlaySetupPage setup = WelcomePage.of(getContext())
-                .openFreePlaySetup();
-        setup.selectMap(4);
-        setup.selectClimate(GeneratedClimate.WARM);
-        setup.selectLandShare(GeneratedLandShare.LOW);
-        setup.enterSeed("7");
-        setup.enterName("Eva");
-        final GamePage game = setup.startWithEnter();
-        setup.verifyGeneratedWorld(7, GeneratedClimate.WARM,
-                GeneratedLandShare.LOW, "Eva");
-        setup.verifyGeneratedRiversAvoidCoastAndUplands();
-        game.exitToMenu().verifyMainScreen();
-
-        // A rejected seed and Back start nothing and replace nothing.
-        WelcomePage.of(getContext()).openFreePlaySetup();
-        setup.selectMap(4);
-        setup.enterSeed("99999999999");
-        setup.verifySeedRejected("Enter a whole seed from 0 to 999999999.");
-        setup.back().verifyMainScreen();
-
-        // Continue still loads the world that was saved earlier.
-        new FreePlayAuditPage(getContext()).continueGame();
-        setup.verifyGeneratedWorld(7, GeneratedClimate.WARM,
-                GeneratedLandShare.LOW, "Eva");
-        setup.verifyGeneratedRiversAvoidCoastAndUplands();
-        setup.verifySavedGeneratedWorld(7);
-    }
-
-    @Test
-    @Tag("local")
-    void TC_05_generated_setup_is_localized_in_czech() throws Exception {
-        // Select the generated world, cancel and switch the language.
-        final FreePlaySetupPage setup = WelcomePage.of(getContext())
-                .openFreePlaySetup();
-        setup.selectMap(4);
-        setup.back().verifyMainScreen();
-        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
-        settings.setCzechLanguage();
-        settings.goBack();
-
-        // The choice, the preview and the seed error follow the language.
-        WelcomePage.of(getContext()).openFreePlaySetup();
-        setup.verifySelectedMap(4, "Vygenerované nové pobřeží");
-        setup.verifyPreview(
-                "Náhled: mapa 50 × 30 polí, podnebí Mírné, pevnina 40 %, semínko 1.");
-        setup.enterSeed("x");
-        setup.verifySeedRejected("Zadejte celé semínko od 0 do 999999999.");
-        setup.captureDialog("freePlaySetup", "generated-world-czech.png");
-        setup.back().verifyMainScreen();
-    }
-
-    @Test
-    @Tag("local")
     void TC_03_bundled_setup_hides_generated_controls_and_keeps_name_rules()
             throws Exception {
+        // Authored scenarios keep their nation restrictions and independent
+        // name validation.
         final FreePlaySetupPage setup = WelcomePage.of(getContext())
                 .openFreePlaySetup();
-        setup.selectMap(0);
         setup.verifySetup(0);
+        setup.verifyGeneratedControlsHidden();
         setup.enterName("");
         setup.verifyNameAccepted(false);
         setup.back().verifyMainScreen();
     }
 
+    @Test
+    @Tag("local")
+    void TC_04_cancelled_and_invalid_setup_keep_continue_on_the_same_world()
+            throws Exception {
+        // Generate a single landmass, then abandon an invalid replacement.
+        final FreePlaySetupPage setup = WelcomePage.of(getContext())
+                .openGeneratedWorldSetup();
+        setup.selectLayout(
+                org.akropia.model.generation.GeneratedLandLayout.ONE_LANDMASS);
+        setup.enterSeed("7");
+        setup.enterName("Eva");
+        final GamePage game = setup.startWithEnter();
+        setup.verifyWizardWorld("7",
+                org.akropia.model.generation.GeneratedMapSize.SMALL,
+                org.akropia.model.generation.GeneratedLandLayout.ONE_LANDMASS,
+                "Eva");
+        game.exitToMenu().verifyMainScreen();
+        WelcomePage.of(getContext()).openGeneratedWorldSetup();
+        setup.verifyFreshSeed("7");
+        setup.enterSeed("");
+        setup.verifySeedRejected("Enter a seed of 1–64 characters.");
+        setup.back().verifyMainScreen();
+        new FreePlayAuditPage(getContext()).continueGame();
+        setup.verifyWizardWorld("7",
+                org.akropia.model.generation.GeneratedMapSize.SMALL,
+                org.akropia.model.generation.GeneratedLandLayout.ONE_LANDMASS,
+                "Eva");
+        setup.verifySavedWizardSeed("7");
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_generated_setup_is_localized_in_czech() throws Exception {
+        // The world and player steps use the selected language.
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        settings.goBack();
+        final FreePlaySetupPage setup = WelcomePage.of(getContext())
+                .openGeneratedWorldSetup();
+        setup.verifySelectedMap(4, "Vygenerované nové pobřeží");
+        setup.enterSeed("");
+        setup.verifySeedRejected("Zadejte seed o délce 1–64 znaků.");
+        setup.enterSeed("svět");
+        setup.nextStep();
+        setup.verifyPreview("Malá · 90 × 60 · Velké ostrovy");
+        setup.captureDialog("freePlaySetup", "wizard-czech.png");
+        setup.back().verifyMainScreen();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_huge_island_world_starts_and_completes_a_turn()
+            throws Exception {
+        // The largest selectable map must support real play, including computer
+        // turns.
+        final FreePlaySetupPage setup = WelcomePage.of(getContext())
+                .openGeneratedWorldSetup();
+        setup.selectSize(org.akropia.model.generation.GeneratedMapSize.HUGE);
+        setup.selectLayout(
+                org.akropia.model.generation.GeneratedLandLayout.BIG_ISLANDS);
+        setup.enterSeed("Huge islands");
+        setup.enterName("Alex");
+        final GamePage game = setup.startWithEnter();
+        setup.verifyWizardWorld("Huge islands",
+                org.akropia.model.generation.GeneratedMapSize.HUGE,
+                org.akropia.model.generation.GeneratedLandLayout.BIG_ISLANDS,
+                "Alex");
+        game.nextTurnAndCloseDialogs();
+        new FreePlayAuditPage(getContext()).verifyCurrentPlayerIsHuman();
+        game.exitToMenu().verifyMainScreen();
+        new FreePlayAuditPage(getContext()).continueGame();
+        setup.verifyWizardWorld("Huge islands",
+                org.akropia.model.generation.GeneratedMapSize.HUGE,
+                org.akropia.model.generation.GeneratedLandLayout.BIG_ISLANDS,
+                "Alex");
+    }
 }

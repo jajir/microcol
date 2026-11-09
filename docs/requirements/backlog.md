@@ -1261,3 +1261,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Přehled uložených her podle souborů — 2026-11-09
 
 1. [R-0436](done/R-0436.md), status `done`, A04 s vazbou A03: katalog čte pouze přímé soubory `saves`, přehled nemá filtr a vlevo ukazuje celé názvy souborů. Podrobnosti vybrané hry jsou vpravo. Lokální modelové, cílené UI a smoke ověření prošlo; [evidence](../functional-tests.md#r-0436-direct-save-filenames-and-selected-details-2026-11-09).
+
+## Průvodce generovaným světem — 2026-11-09
+
+1. [R-0437](done/R-0437.md), status `done`, A02 s vazbami A01/A03/A04: schválený dvoukrokový průvodce, čtyři velikosti, tři rozložení pevniny a textový seed. Implementováno a lokálně ověřeno 2026-11-09; výsledky vlastní funkční evidence.

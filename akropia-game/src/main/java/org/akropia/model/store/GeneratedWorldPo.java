@@ -11,6 +11,43 @@ import org.akropia.model.generation.GeneratedLandShare;
 public final class GeneratedWorldPo {
 
     private Integer seed;
+    private String textSeed;
+    private org.akropia.model.generation.GeneratedMapSize size;
+    private org.akropia.model.generation.GeneratedLandLayout layout;
+    private Integer version;
+
+    public String getTextSeed() {
+        return textSeed;
+    }
+
+    public void setTextSeed(String value) {
+        textSeed = value;
+    }
+
+    public org.akropia.model.generation.GeneratedMapSize getSize() {
+        return size;
+    }
+
+    public void setSize(org.akropia.model.generation.GeneratedMapSize value) {
+        size = value;
+    }
+
+    public org.akropia.model.generation.GeneratedLandLayout getLayout() {
+        return layout;
+    }
+
+    public void setLayout(
+            org.akropia.model.generation.GeneratedLandLayout value) {
+        layout = value;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer value) {
+        version = value;
+    }
 
     private GeneratedClimate climate;
 
@@ -45,7 +82,23 @@ public final class GeneratedWorldPo {
      *         present
      */
     public boolean isComplete() {
-        return seed != null && climate != null && landShare != null;
+        if (seed == null || climate == null || landShare == null
+                || version == null) {
+            return false;
+        }
+        if (version == 1) {
+            return textSeed == null && size == null && layout == null;
+        }
+        if (version != 2 || textSeed == null || size == null
+                || layout == null) {
+            return false;
+        }
+        try {
+            return seed == org.akropia.model.generation.GeneratedWorldSettings
+                    .seedNumber(textSeed);
+        } catch (IllegalArgumentException invalid) {
+            return false;
+        }
     }
 
 }

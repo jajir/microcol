@@ -1270,3 +1270,8 @@ jsou autoritativní pro vzhled a přijetí.
 
 1. Implementace přijatá 2026-11-05: `Model.getNearestTradeRouteStop` vybírá legální zastávku přes sdílené ceny `TradeRouteNavigator.approachCost` a `PathFinder`. Stejnou volbu používá nové i původní přiřazovací UI. `Model.changeTradeRoute` ověří původní přiřazení a všechny podmínky před jeho výměnou; nezahajuje pohyb ani převody a odmítá přechod Atlantiku.
 2. `DialogCarrierTradeRoute` drží pouze rozpracovaný výběr. `ButtonsGamePanel` zpřístupní stejnou operaci z karty vybraného dopravce a kontextu; `RightPanelPresenter` obnoví zobrazení po změně rozkazu. Odpovědnosti balíčků se nemění. [R-0415](requirements/done/R-0415.md) vlastní chování, [funkční evidence](functional-tests.md#r-0415-carrier-route-assignment-2026-11-05) přejímku.
+
+## Nastavení generovaného světa (R-0437)
+1. `model.generation` vlastní rozměry, rozložení pevniny a stabilní převod textového seedu. Verze 2 používá nastavitelný svět; existující numerický referenční profil zůstává verzí 1 pro přímé modelové volání. Nejde o migraci uložených her.
+2. `GeneratedWorldPo` uchovává původní seed, velikost, rozložení a verzi; `Model` kontroluje úplnost a shodu s uloženou mapou. Načtení nic negeneruje.
+3. `ScreenFreePlay` vlastní pouze vstupy a kroky. Generování terénu běží na pozadí, vytvoření herní instance a její aktivace přes existující kontroléry probíhá na JavaFX vlákně. [R-0437](requirements/done/R-0437.md) určuje přejímku.

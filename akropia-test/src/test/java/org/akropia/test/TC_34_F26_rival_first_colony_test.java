@@ -173,7 +173,7 @@ public class TC_34_F26_rival_first_colony_test extends AbstractAkropiaTest {
         WelcomePage.of(getContext()).openFreePlaySetup();
         setup.verifySelectedMap(2, "Soupeřova výprava");
         setup.verifySetupLanguage("Začít hru",
-                "V tomto scénáři hrajete za Nizozemsko.");
+                "V tomto scénáři hrajete za Korint.");
         setup.enterName("Jiří");
         setup.captureDialog("freePlaySetup", "rival-expedition-czech.png");
         setup.startWithEnter();
@@ -194,7 +194,7 @@ public class TC_34_F26_rival_first_colony_test extends AbstractAkropiaTest {
         final org.akropia.page.ColonyNameDialog name = game.foundColony();
         name.enterName("Edge harbour");
         name.confirmWithEnter();
-        final org.akropia.page.ColonyScreen colony = org.akropia.page.ColonyScreen
+        org.akropia.page.ColonyScreen colony = org.akropia.page.ColonyScreen
                 .of(getContext(), "Edge harbour");
         final RivalColonyPage page = new RivalColonyPage(getContext());
         page.verifyFoundedResident(0, 0, "Edge harbour", Location.of(1, 15),
@@ -205,6 +205,13 @@ public class TC_34_F26_rival_first_colony_test extends AbstractAkropiaTest {
         colony.verifyFieldWorker(0, Location.of(1, 14), 4);
         colony.dragFieldWorkerTo(0, org.akropia.model.Direction.west);
         colony.verifyFieldWorker(0, Location.of(1, 14), 4);
+        // Founding spent the movement: even a valid target must wait for the
+        // next turn.
+        colony.dragFieldWorkerTo(0, org.akropia.model.Direction.east);
+        colony.verifyFieldWorker(0, Location.of(1, 14), 4);
+        colony.close();
+        game.nextTurnAndCloseDialogs();
+        colony = game.openColonyAt(Location.of(1, 15), "Edge harbour");
         colony.dragFieldWorkerTo(0, org.akropia.model.Direction.east);
         colony.verifyFieldWorker(0, Location.of(2, 15), 4);
 
@@ -237,6 +244,7 @@ public class TC_34_F26_rival_first_colony_test extends AbstractAkropiaTest {
     void TC_05_unproductive_land_uses_an_indoor_workplace() throws Exception {
         // Food quality guides the rival, but does not ban a human settlement.
         final GamePage game = WelcomePage.of(getContext()).loadGame();
+        game.panToTile(Location.of(8, 15));
         game.selectTile(Location.of(8, 15));
         game.getRightPanelUnit(0).selectUnit();
         final org.akropia.page.ColonyNameDialog name = game.foundColony();

@@ -61,16 +61,20 @@ public final class GeneratedWorld {
         Preconditions.checkNotNull(difficulty, "Difficulty is null");
         RuntimeException last = null;
         for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+            if (Thread.currentThread().isInterrupted()) {
+                throw new IllegalStateException("Generation cancelled");
+            }
             final Random random = new Random(
-                    settings.getSeed() * 1_000_003L + attempt);
+                    settings.getGenerationSeed() * 1_000_003L + attempt);
             try {
                 final WorldMapPo terrain = GeneratedWorldLayout
                         .generate(settings, random);
                 final ModelPo model = ReferenceExpedition.create(terrain,
                         nation, difficulty);
+                model.setGeneratedWorld(saved(settings));
                 GeneratedNatives.place(model, random);
-                GeneratedRumors.place(model,
-                        new Random((settings.getSeed() * 1_000_003L + attempt)
+                GeneratedRumors.place(model, new Random(
+                        (settings.getGenerationSeed() * 1_000_003L + attempt)
                                 ^ RUMOR_STREAM));
                 requireLegalStarts(model);
                 model.setGeneratedWorld(saved(settings));
@@ -88,6 +92,10 @@ public final class GeneratedWorld {
             final GeneratedWorldSettings settings) {
         final GeneratedWorldPo out = new GeneratedWorldPo();
         out.setSeed(settings.getSeed());
+        out.setTextSeed(settings.getTextSeed());
+        out.setSize(settings.getSize());
+        out.setLayout(settings.getLayout());
+        out.setVersion(settings.getSize() == null ? 1 : 2);
         out.setClimate(settings.getClimate());
         out.setLandShare(settings.getLandShare());
         return out;

@@ -135,7 +135,7 @@ public class TC_24_F15_free_play_setup_test extends AbstractAkropiaTest {
         audit.verifyColonyMenu("No colonies yet");
         audit.press(javafx.scene.input.KeyCode.ESCAPE);
         GamePage.of(getContext());
-        new FreePlaySetupPage(getContext()).verifyWorld(134, 17, "Corinth");
+        new FreePlaySetupPage(getContext()).verifyWorld(134, 17, "Player");
     }
 
     @Test

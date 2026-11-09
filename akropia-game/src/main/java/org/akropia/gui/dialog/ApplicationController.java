@@ -78,4 +78,11 @@ public final class ApplicationController {
         return true;
     }
 
+    public void startNewGeneratedGame(
+            final org.akropia.model.store.ModelPo world,
+            final String playerName) {
+        gameController.startGeneratedFreePlay(world, playerName);
+        eventBus.post(new ShowScreenEvent(Screen.GAME));
+        persistingService.checkpointNewGame();
+    }
 }

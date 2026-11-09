@@ -58,7 +58,7 @@
     <entry key="setupMapNorthAmerica">Severní Amerika</entry>
     <entry key="setupGeneratedClimate">Podnebí</entry>
     <entry key="setupGeneratedLand">Podíl pevniny</entry>
-    <entry key="setupGeneratedSeed">Semínko (0 až 999999999)</entry>
+    <entry key="setupGeneratedSeed">Seed</entry>
     <entry key="setupClimateCold">Chladné</entry>
     <entry key="setupClimateTemperate">Mírné</entry>
     <entry key="setupClimateWarm">Teplé</entry>
@@ -66,9 +66,25 @@
     <entry key="setupLandMedium">Střední (40 %%)</entry>
     <entry key="setupLandHigh">Hodně (55 %%)</entry>
     <entry key="setupGeneratedPreview">Náhled: mapa %1$d × %2$d polí, podnebí %3$s, pevnina %4$d %%, semínko %5$s.</entry>
-    <entry key="setupGeneratedSeedError">Zadejte celé semínko od 0 do 999999999.</entry>
+    <entry key="setupGeneratedSeedError">Zadejte seed o délce 1–64 znaků.</entry>
     <entry key="setupGeneratedFailed">Nové pobřeží se nepodařilo vygenerovat. Aktuální hra nebyla změněna.</entry>
     <entry key="settingDeveloperHeading">Vývojář</entry>
     <entry key="settingDeveloperMode">Režim vývojáře</entry>
     <entry key="settingDeveloperDescription">Zobrazí souřadnice mapy a diagnostické informace.</entry>
+    <entry key="setupWorldStep">1 Svět → 2 Hráč</entry>
+    <entry key="setupPlayerStep">1 Svět → 2 Hráč · Krok 2</entry>
+    <entry key="setupNext">Pokračovat</entry>
+    <entry key="setupSize">Velikost mapy</entry>
+    <entry key="setupLayout">Rozložení pevniny</entry>
+    <entry key="setupSmall">Malá</entry>
+    <entry key="setupMedium">Střední</entry>
+    <entry key="setupLarge">Velká</entry>
+    <entry key="setupHuge">Obrovská</entry>
+    <entry key="setupOneLand">Jedna pevnina</entry>
+    <entry key="setupBigIslands">Velké ostrovy</entry>
+    <entry key="setupArchipelago">Souostroví</entry>
+    <entry key="setupNewSeed">Nový seed</entry>
+    <entry key="setupGenerating">Vytvářím svět…</entry>
+    <entry key="setupNamePrompt">Zadejte své jméno</entry>
+    <entry key="setupSummary">%1$s · %2$s</entry>
 </properties>

@@ -258,10 +258,26 @@ public class WelcomePage extends AbstractMenuScreen {
     }
 
     public GamePage startFreeGame() {
-        return openFreePlaySetup().start();
+        final FreePlaySetupPage setup = openFreePlaySetup();
+        setup.enterName("Player");
+        return setup.start();
     }
 
     public FreePlaySetupPage openFreePlaySetup() {
+        final FreePlaySetupPage setup = openGeneratedWorldSetup();
+        if (setup.selectedMapIndex() == 4) {
+            setup.selectMap(0);
+        } else {
+            setup.nextStep();
+        }
+        if (setup.playerNameText().isEmpty()) {
+            setup.enterName("Player");
+        }
+        return setup;
+    }
+
+    /** Open the default wizard without choosing an authored test scenario. */
+    public FreePlaySetupPage openGeneratedWorldSetup() {
         clickOnButtonWithId(ButtonsPanelView.BUTTON_START_FREE_GAME_ID);
         return new FreePlaySetupPage(getContext());
     }

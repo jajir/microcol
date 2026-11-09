@@ -14,6 +14,55 @@ public final class GeneratedWorldSettings {
     private static final int MAX_SEED_DIGITS = 9;
 
     private final int seed;
+    private String textSeed;
+    private GeneratedMapSize size;
+    private GeneratedLandLayout layout;
+
+    public GeneratedWorldSettings(final String seed,
+            final GeneratedMapSize size, final GeneratedLandLayout layout) {
+        this(seedNumber(seed), GeneratedClimate.TEMPERATE,
+                GeneratedLandShare.MEDIUM);
+        this.textSeed = org.akropia.model.Player.normalizeDisplayName(seed);
+        this.size = Preconditions.checkNotNull(size, "Map size is null");
+        this.layout = Preconditions.checkNotNull(layout, "Land layout is null");
+    }
+
+    /** Stable UTF-8 digest; independent of platform and JVM random state. */
+    public static int seedNumber(final String text) {
+        final String normalized = org.akropia.model.Player
+                .normalizeDisplayName(text);
+        return Math.floorMod(com.google.common.hash.Hashing.sha256()
+                .hashString(normalized, java.nio.charset.StandardCharsets.UTF_8)
+                .asInt(), MAX_SEED + 1);
+    }
+
+    public long getGenerationSeed() {
+        return textSeed == null ? seed
+                : com.google.common.hash.Hashing.sha256()
+                        .hashString(textSeed,
+                                java.nio.charset.StandardCharsets.UTF_8)
+                        .asLong();
+    }
+
+    public String getTextSeed() {
+        return textSeed;
+    }
+
+    public GeneratedMapSize getSize() {
+        return size;
+    }
+
+    public GeneratedLandLayout getLayout() {
+        return layout;
+    }
+
+    public int getWidth() {
+        return size == null ? GeneratedWorld.WIDTH : size.getWidth();
+    }
+
+    public int getHeight() {
+        return size == null ? GeneratedWorld.HEIGHT : size.getHeight();
+    }
 
     private final GeneratedClimate climate;
 

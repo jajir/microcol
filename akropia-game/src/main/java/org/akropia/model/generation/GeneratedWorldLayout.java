@@ -31,10 +31,9 @@ final class GeneratedWorldLayout {
     /** Land stays off the map edge and off the high-sea lane. */
     private static final int LAND_MIN = 2;
 
-    private static final int LAND_MAX_X = GeneratedWorld.WIDTH - SEA_LANE_WIDTH
-            - 2;
+    private final int LAND_MAX_X;
 
-    private static final int LAND_MAX_Y = GeneratedWorld.HEIGHT - 1;
+    private final int LAND_MAX_Y;
 
     /** Share of the land that forms islands; the rest forms the main masses. */
     private static final double ISLAND_SHARE = 0.20;
@@ -72,7 +71,7 @@ final class GeneratedWorldLayout {
 
     private final Map<Location, TerrainType> types = new HashMap<>();
 
-    private final GeneratedGrid grid = new GeneratedGrid(types);
+    private final GeneratedGrid grid;
 
     private LatticeNoise elevation;
 
@@ -82,6 +81,10 @@ final class GeneratedWorldLayout {
             final Random random) {
         this.settings = settings;
         this.random = random;
+        LAND_MAX_X = settings.getWidth() - SEA_LANE_WIDTH - 2;
+        LAND_MAX_Y = settings.getHeight() - 1;
+        grid = new GeneratedGrid(types, settings.getWidth(),
+                settings.getHeight());
     }
 
     /**
@@ -98,17 +101,23 @@ final class GeneratedWorldLayout {
 
     private WorldMapPo build() {
         final int landTarget = settings.getLandShare()
-                .landSquares(GeneratedWorld.WIDTH * GeneratedWorld.HEIGHT);
+                .landSquares(settings.getWidth() * settings.getHeight());
         final int islandTarget = (int) Math.round(landTarget * ISLAND_SHARE);
         final Set<Location> land = new HashSet<>();
-        growMainMasses(landTarget - islandTarget, land);
-        placeIslands(islandTarget, land);
-        elevation = new LatticeNoise(random);
-        moisture = new LatticeNoise(random);
+        if (settings.getLayout() == null) {
+            growMainMasses(landTarget - islandTarget, land);
+            placeIslands(islandTarget, land);
+        } else {
+            growSeparatedMasses(landTarget, land);
+        }
+        elevation = new LatticeNoise(random, settings.getWidth(),
+                settings.getHeight());
+        moisture = new LatticeNoise(random, settings.getWidth(),
+                settings.getHeight());
         assignTerrain(land);
-        for (int x = GeneratedWorld.WIDTH - SEA_LANE_WIDTH
-                + 1; x <= GeneratedWorld.WIDTH; x++) {
-            for (int y = 1; y <= GeneratedWorld.HEIGHT; y++) {
+        for (int x = settings.getWidth() - SEA_LANE_WIDTH + 1; x <= settings
+                .getWidth(); x++) {
+            for (int y = 1; y <= settings.getHeight(); y++) {
                 types.put(Location.of(x, y), TerrainType.HIGH_SEA);
             }
         }
@@ -121,6 +130,59 @@ final class GeneratedWorldLayout {
         final Map<Location, ResourceOverlay> resources = GeneratedWorldResources
                 .assign(grid, trees, riverSquares, random);
         return toMap(trees, rivers, resources);
+    }
+
+    /**
+     * Grow bounded connected groups; two water squares separate neighbouring
+     * regions.
+     */
+    private void growSeparatedMasses(final int target,
+            final Set<Location> land) {
+        int columns = 1;
+        int rows = 1;
+        if (settings.getLayout() == GeneratedLandLayout.BIG_ISLANDS) {
+            columns = 2;
+            rows = 2;
+        } else if (settings.getLayout() == GeneratedLandLayout.ARCHIPELAGO) {
+            columns = Math.max(3, settings.getWidth() / 24);
+            rows = Math.max(2, settings.getHeight() / 24);
+        }
+        final int count = columns * rows;
+        final int width = LAND_MAX_X - LAND_MIN + 1;
+        final int height = LAND_MAX_Y - LAND_MIN + 1;
+        for (int index = 0; index < count; index++) {
+            final int column = index % columns;
+            final int row = index / columns;
+            final int left = LAND_MIN + column * width / columns;
+            final int right = LAND_MIN + (column + 1) * width / columns - 3;
+            final int top = LAND_MIN + row * height / rows;
+            final int bottom = LAND_MIN + (row + 1) * height / rows - 3;
+            final int quota = target / count + (index < target % count ? 1 : 0);
+            final List<Location> frontier = new ArrayList<>();
+            final Set<Location> queued = new HashSet<>();
+            frontier.add(Location.of((left + right) / 2 + random.nextInt(3) - 1,
+                    (top + bottom) / 2 + random.nextInt(3) - 1));
+            queued.addAll(frontier);
+            for (int placed = 0; placed < quota; placed++) {
+                if (frontier.isEmpty()) {
+                    throw new IllegalStateException("Land region exhausted");
+                }
+                final int chosen = random.nextInt(frontier.size());
+                final Location at = frontier.get(chosen);
+                frontier.set(chosen, frontier.get(frontier.size() - 1));
+                frontier.remove(frontier.size() - 1);
+                land.add(at);
+                for (final int[] step : GeneratedGrid.STEPS) {
+                    final Location next = Location.of(at.getX() + step[0],
+                            at.getY() + step[1]);
+                    if (next.getX() >= left && next.getX() <= right
+                            && next.getY() >= top && next.getY() <= bottom
+                            && queued.add(next)) {
+                        frontier.add(next);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -239,7 +301,7 @@ final class GeneratedWorldLayout {
         return true;
     }
 
-    private static boolean isLandArea(final Location at) {
+    private boolean isLandArea(final Location at) {
         return at.getX() >= LAND_MIN && at.getX() <= LAND_MAX_X
                 && at.getY() >= LAND_MIN && at.getY() <= LAND_MAX_Y;
     }
@@ -273,8 +335,8 @@ final class GeneratedWorldLayout {
      */
     private double coldness(final Location at) {
         final double latitude = Math
-                .abs(at.getY() - (GeneratedWorld.HEIGHT + 1) / 2.0)
-                / ((GeneratedWorld.HEIGHT - 1) / 2.0);
+                .abs(at.getY() - (settings.getHeight() + 1) / 2.0)
+                / ((settings.getHeight() - 1) / 2.0);
         return Math.min(1,
                 Math.max(0, latitude + settings.getClimate().getColdShift()));
     }
@@ -349,8 +411,8 @@ final class GeneratedWorldLayout {
             }
         });
         final WorldMapPo map = new WorldMapPo();
-        map.setMaxX(GeneratedWorld.WIDTH);
-        map.setMaxY(GeneratedWorld.HEIGHT);
+        map.setMaxX(settings.getWidth());
+        map.setMaxY(settings.getHeight());
         map.setSeed(settings.getSeed());
         map.setTerrainType(types);
         map.setTrees(trees);
