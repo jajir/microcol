@@ -1248,3 +1248,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Rychlost posunu mapy WASD — 2026-11-08
 
 1. [R-0431](done/R-0431.md), A03 se závislostmi A02/A01, přidává uložený posuvník rychlosti WASD; devět poloh, výchozí 2 zachovává dosavadní rychlost. Stav a přejímku vlastní požadavek a funkční evidence.
+
+## Souhlas vrstev při scrollování mapy — 2026-11-09
+
+1. [R-0434](R-0434.md), A03 se závislostí A05, zachycuje analýzu posunu kamery mezi vykreslením terénu a mlhy. Status: new; zdrojová příčina nalezena, obrazová reprodukce a implementace zbývají.
