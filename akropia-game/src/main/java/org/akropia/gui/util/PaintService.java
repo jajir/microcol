@@ -22,6 +22,7 @@ import org.akropia.model.NativeHostility;
 import org.akropia.model.NativeNation;
 import org.akropia.model.NativeRelationView;
 import org.akropia.model.NativeSettlement;
+import org.akropia.model.NativeSettlementClass;
 import org.akropia.model.Place;
 import org.akropia.model.PlaceLocation;
 import org.akropia.model.Player;
@@ -86,6 +87,40 @@ public final class PaintService {
     private static final Color MARKER_INK = Color.web("#292824");
 
     private static final double RIVER_BANK_WIDTH = 1.6;
+
+    /** Existing ink of the map's rivers and markers. */
+    public static final Ink MAP_INK = new Ink(MARKER_INK, RIVER_BANK_WIDTH);
+
+    /** Existing contour of the map's native settlement markers. */
+    private static final Ink SETTLEMENT_INK = new Ink(MARKER_INK, 1.5);
+
+    /** Black ballpoint pen, about two logical pixels wide. */
+    public static final Ink PEN = new Ink(Color.BLACK, 2);
+
+    /**
+     * Contour of code-drawn map marks: colour and visible width in logical
+     * pixels. The map keeps its existing ink; the map editor draws with the
+     * black ballpoint pen of the visual brief (R-0435).
+     */
+    public static final class Ink {
+
+        private final Color color;
+
+        private final double width;
+
+        private Ink(final Color color, final double width) {
+            this.color = color;
+            this.width = width;
+        }
+
+        public Color getColor() {
+            return color;
+        }
+
+        public double getWidth() {
+            return width;
+        }
+    }
 
     /** Share of a square's width used by a lost-city rumor marker. */
     private static final double RESOURCE_MARKER_SHARE = 0.28;
@@ -215,6 +250,18 @@ public final class PaintService {
             final Player player, final Location topLeft,
             final Location bottomRight,
             final Function<Location, Point> toPoint) {
+        paintRivers(graphics, map, player::isVisible, topLeft, bottomRight,
+                toPoint, MAP_INK);
+    }
+
+    /**
+     * Draw the river courses, mouths and bridges of the squares the predicate
+     * shows, with the given bank ink.
+     */
+    public void paintRivers(final GraphicsContext graphics, final WorldMap map,
+            final java.util.function.Predicate<Location> visible,
+            final Location topLeft, final Location bottomRight,
+            final Function<Location, Point> toPoint, final Ink ink) {
         final Map<Location, RiverShape> courses = new LinkedHashMap<>();
         final Map<Location, Direction> mouths = new LinkedHashMap<>();
         // Include mouths extending from just outside the viewport.
@@ -225,10 +272,10 @@ public final class PaintService {
                             bottomRight.getY() + 1); j++) {
                 final Location location = Location.of(i, j);
                 final RiverSize size = map.getRiverSizeAt(location);
-                if (size != RiverSize.NONE && player.isVisible(location)) {
+                if (size != RiverSize.NONE && visible.test(location)) {
                     final Map<Location, RiverSize> joined = map
                             .getRiverLinksAt(location).stream()
-                            .filter(player::isVisible)
+                            .filter(visible::test)
                             .collect(Collectors.toMap(neighbour -> neighbour,
                                     map::getRiverSizeAt));
                     final RiverShape river = new RiverShape(location, size,
@@ -237,7 +284,7 @@ public final class PaintService {
                     if (joined.size() == 1) {
                         final Map<Location, TerrainType> knownTerrain = location
                                 .getNeighbors().stream().filter(map::isValid)
-                                .filter(player::isVisible).collect(
+                                .filter(visible::test).collect(
                                         Collectors.toMap(neighbour -> neighbour,
                                                 map::getTerrainTypeAt));
                         final Direction mouth = RiverShape.mouthDirection(
@@ -251,12 +298,13 @@ public final class PaintService {
         }
         // Fill every connected band after all outlines, hiding internal seams.
         courses.forEach((location, river) -> paintRiver(graphics,
-                toPoint.apply(location), river, true));
+                toPoint.apply(location), river, true, ink));
         courses.forEach((location, river) -> paintRiver(graphics,
-                toPoint.apply(location), river, false));
+                toPoint.apply(location), river, false, ink));
         mouths.forEach((location, direction) -> paintRiverMouth(graphics,
                 toPoint.apply(location), courses.get(location), direction,
-                map.getTerrainTypeAt(location.add(direction.getVector()))));
+                map.getTerrainTypeAt(location.add(direction.getVector())),
+                ink));
         courses.forEach((location, river) -> {
             if (map.getTerrainAt(location).isHasRoad()) {
                 paintRiverBridge(graphics, toPoint.apply(location), river);
@@ -288,7 +336,7 @@ public final class PaintService {
     /** Join a narrow river to the coast without a transverse end cap. */
     private void paintRiverMouth(final GraphicsContext graphics,
             final Point point, final RiverShape river,
-            final Direction direction, final TerrainType water) {
+            final Direction direction, final TerrainType water, final Ink ink) {
         final double half = Tile.TILE_WIDTH_IN_PX / 2.0;
         // The coast artwork extends five pixels into the neighbouring sea tile.
         final double shore = half + 4.5;
@@ -330,11 +378,11 @@ public final class PaintService {
             graphics.fill();
         }
         graphics.restore();
-        graphics.setStroke(MARKER_INK);
-        graphics.setLineWidth(RIVER_BANK_WIDTH);
+        graphics.setStroke(ink.getColor());
+        graphics.setLineWidth(ink.getWidth());
         graphics.setLineCap(StrokeLineCap.ROUND);
         for (final int side : new int[] { -1, 1 }) {
-            final double bank = side * (radius + RIVER_BANK_WIDTH / 2);
+            final double bank = side * (radius + ink.getWidth() / 2);
             graphics.beginPath();
             graphics.moveTo(0, bank);
             graphics.lineTo(shore - corner, bank);
@@ -346,12 +394,12 @@ public final class PaintService {
 
     /** Draw one pass of the connected river silhouette in tile coordinates. */
     private void paintRiver(final GraphicsContext graphics, final Point point,
-            final RiverShape river, final boolean outline) {
+            final RiverShape river, final boolean outline, final Ink ink) {
         graphics.save();
         graphics.translate(point.getX(), point.getY());
         graphics.setFill(RIVER_COLOR);
-        graphics.setStroke(MARKER_INK);
-        graphics.setLineWidth(2 * RIVER_BANK_WIDTH);
+        graphics.setStroke(ink.getColor());
+        graphics.setLineWidth(2 * ink.getWidth());
         graphics.setLineJoin(StrokeLineJoin.ROUND);
         for (final RiverShape.Band band : river.bands) {
             if (outline) {
@@ -448,39 +496,46 @@ public final class PaintService {
     }
 
     /**
-     * Draw a native settlement on its square. The silhouette carries the class,
-     * the fill carries the nation and a gold frame marks a capital, so no
-     * single colour decides what the settlement is.
-     *
-     * The attitude badge and the provoked tint come from the model's view, so
-     * the badge shape carries the attitude band and the tint marks a visible
-     * rival, without colour alone.
-     *
-     * @param graphics   required canvas
-     * @param point      required top-left corner of the tile
-     * @param settlement required settlement already known to the player
-     * @param relation   required view of the settlement, empty when the player
-     *                   has no view
+     * Capital mark drawn with the pen: a flat gold band around the square
+     * between two pen contours, without a coloured stroke.
+     */
+    private static void paintCapitalBand(final GraphicsContext graphics,
+            final Point point, final Ink ink) {
+        final double outer = 2;
+        final double band = 4;
+        final double side = Tile.TILE_WIDTH_IN_PX - 2 * outer;
+        final double x = point.getX() + outer;
+        final double y = point.getY() + outer;
+        graphics.setFill(CAPITAL_FRAME_COLOR);
+        graphics.fillRect(x, y, side, band);
+        graphics.fillRect(x, y + side - band, side, band);
+        graphics.fillRect(x, y, band, side);
+        graphics.fillRect(x + side - band, y, band, side);
+        graphics.setStroke(ink.getColor());
+        graphics.setLineWidth(ink.getWidth());
+        graphics.strokeRect(x, y, side, side);
+        graphics.strokeRect(x + band, y + band, side - 2 * band,
+                side - 2 * band);
+    }
+
+    /**
+     * Settlement shape of its class in the nation's colour, the capital frame
+     * and the nation's flag; shared by the map and the map editor.
      */
     public void paintNativeSettlement(final GraphicsContext graphics,
-            final Point point, final NativeSettlement settlement,
-            final Optional<NativeRelationView> relation) {
+            final Point point, final NativeNation nation,
+            final NativeSettlementClass settlementClass, final boolean capital,
+            final Ink ink) {
         final double size = Tile.TILE_WIDTH_IN_PX * NATIVE_SETTLEMENT_SHARE;
         final double left = point.getX() + (Tile.TILE_WIDTH_IN_PX - size) / 2;
         final double top = point.getY() + Tile.TILE_WIDTH_IN_PX * 0.3;
         final Paint previousFill = graphics.getFill();
         final Paint previousStroke = graphics.getStroke();
         final double previousWidth = graphics.getLineWidth();
-        if (relation.isPresent()
-                && relation.get().getProvokingRival().isPresent()) {
-            graphics.setFill(PROVOKED_BACKGROUND);
-            graphics.fillRect(point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX,
-                    Tile.TILE_WIDTH_IN_PX);
-        }
-        graphics.setFill(nativeNationColor(settlement.getNation()));
-        graphics.setStroke(MARKER_INK);
-        graphics.setLineWidth(1.5);
-        switch (settlement.getSettlementClass()) {
+        graphics.setFill(nativeNationColor(nation));
+        graphics.setStroke(ink.getColor());
+        graphics.setLineWidth(ink.getWidth());
+        switch (settlementClass) {
         case CAMP:
             final double[] tentX = { left, left + size, left + size / 2 };
             final double[] tentY = { top + size, top + size, top };
@@ -502,16 +557,53 @@ public final class PaintService {
         default:
             break;
         }
-        if (settlement.isCapital()) {
+        if (capital && ink == PEN) {
+            paintCapitalBand(graphics, point, ink);
+        } else if (capital) {
             graphics.setStroke(CAPITAL_FRAME_COLOR);
             graphics.setLineWidth(3);
             graphics.strokeRect(point.getX() + 2, point.getY() + 2,
                     Tile.TILE_WIDTH_IN_PX - 4, Tile.TILE_WIDTH_IN_PX - 4);
         }
         graphics.drawImage(
-                imageProvider.getImage("nation-small_"
-                        + (4 + settlement.getNation().ordinal()) + "_0"),
+                imageProvider.getImage(
+                        "nation-small_" + (4 + nation.ordinal()) + "_0"),
                 point.getX() + 14, point.getY() - 10, 30, 30);
+        graphics.setFill(previousFill);
+        graphics.setStroke(previousStroke);
+        graphics.setLineWidth(previousWidth);
+    }
+
+    /**
+     * Draw a native settlement on its square. The silhouette carries the class,
+     * the fill carries the nation and a gold frame marks a capital, so no
+     * single colour decides what the settlement is.
+     *
+     * The attitude badge and the provoked tint come from the model's view, so
+     * the badge shape carries the attitude band and the tint marks a visible
+     * rival, without colour alone.
+     *
+     * @param graphics   required canvas
+     * @param point      required top-left corner of the tile
+     * @param settlement required settlement already known to the player
+     * @param relation   required view of the settlement, empty when the player
+     *                   has no view
+     */
+    public void paintNativeSettlement(final GraphicsContext graphics,
+            final Point point, final NativeSettlement settlement,
+            final Optional<NativeRelationView> relation) {
+        final Paint previousFill = graphics.getFill();
+        final Paint previousStroke = graphics.getStroke();
+        final double previousWidth = graphics.getLineWidth();
+        if (relation.isPresent()
+                && relation.get().getProvokingRival().isPresent()) {
+            graphics.setFill(PROVOKED_BACKGROUND);
+            graphics.fillRect(point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX,
+                    Tile.TILE_WIDTH_IN_PX);
+        }
+        paintNativeSettlement(graphics, point, settlement.getNation(),
+                settlement.getSettlementClass(), settlement.isCapital(),
+                SETTLEMENT_INK);
         relation.ifPresent(view -> paintAttitude(graphics, point, view));
         graphics.setFill(previousFill);
         graphics.setStroke(previousStroke);

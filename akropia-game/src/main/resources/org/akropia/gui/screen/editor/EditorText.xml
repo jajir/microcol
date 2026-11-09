@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+	<comment>Developer map editor (R-0435)</comment>
+
+	<entry key="topNew">New map</entry>
+	<entry key="topOpen">Open map</entry>
+	<entry key="topSave">Save</entry>
+	<entry key="topPlay">Play</entry>
+	<entry key="topBack">Back to menu</entry>
+	<entry key="untitled">Unsaved scenario</entry>
+	<entry key="titleSaved">%1$s, %2$s × %3$s squares</entry>
+	<entry key="titleModified">%1$s, %2$s × %3$s squares, unsaved changes</entry>
+	<entry key="nation">Your nation</entry>
+	<entry key="tools">Tools</entry>
+	<entry key="toolSelect">Select</entry>
+	<entry key="toolTerrain">Terrain</entry>
+	<entry key="toolForest">Forest</entry>
+	<entry key="toolField">Plowed field</entry>
+	<entry key="toolRiver">River</entry>
+	<entry key="riverSmall">Small river</entry>
+	<entry key="riverLarge">Large river</entry>
+	<entry key="toolBonus">Bonus</entry>
+	<entry key="toolSettlement">Native settlement</entry>
+	<entry key="toolUnit">Unit</entry>
+	<entry key="capital">Capital</entry>
+	<entry key="tile">Square [%1$s, %2$s]: %3$s</entry>
+	<entry key="tileNone">Select a square on the map.</entry>
+	<entry key="remove">Remove</entry>
+	<entry key="settlement">Native settlement</entry>
+	<entry key="tribe">Tribe</entry>
+	<entry key="skill">Teaches</entry>
+	<entry key="apply">Apply</entry>
+	<entry key="units">Units</entry>
+	<entry key="unitLabel">%1$s #%2$s</entry>
+	<entry key="passengers">Passengers of %1$s #%2$s</entry>
+	<entry key="addPassenger">Add passenger</entry>
+	<entry key="newTitle">New map</entry>
+	<entry key="newWidth">Width</entry>
+	<entry key="newHeight">Height</entry>
+	<entry key="newBounds">Width and height are whole numbers from %1$s to %2$s squares.</entry>
+	<entry key="newConfirm">Create</entry>
+	<entry key="newCancel">Cancel</entry>
+	<entry key="unsaved">The map has unsaved changes.</entry>
+	<entry key="openTitle">Open map</entry>
+	<entry key="saveTitle">Save map</entry>
+	<entry key="created">New ocean map %1$s × %2$s squares created.</entry>
+	<entry key="opened">Opened %1$s.</entry>
+	<entry key="saved">Saved %1$s.</entry>
+	<entry key="saveCanceled">Saving was canceled; the map was not saved.</entry>
+	<entry key="openCanceled">Opening was canceled; the current map stays open.</entry>
+	<entry key="openFailed">%1$s could not be opened; the current map stays open. %2$s</entry>
+	<entry key="saveFailed">Saving to %1$s failed; the previous file is kept and the map stays unsaved.</entry>
+	<entry key="changed">Square [%1$s, %2$s] changed.</entry>
+	<entry key="rejected">Nothing was changed. %1$s</entry>
+	<entry key="playRejected">The scenario cannot be played yet. %1$s</entry>
+	<entry key="playFailed">The game could not start the scenario. %1$s</entry>
+	<entry key="problemAt">%1$s [%2$s, %3$s]</entry>
+	<entry key="problemDetail">%1$s (%2$s)</entry>
+	<entry key="reason_DIMENSION_NOT_NUMBER">Width and height must be whole numbers.</entry>
+	<entry key="reason_DIMENSION_OUT_OF_RANGE">Width and height must be from %1$s to %2$s squares.</entry>
+	<entry key="reason_STRUCTURE">The file is not a valid scenario.</entry>
+	<entry key="reason_OUTSIDE_MAP">The square is outside the map.</entry>
+	<entry key="reason_NEEDS_LAND">Only a land square can carry this.</entry>
+	<entry key="reason_GEOGRAPHY">The terrain rules do not allow this.</entry>
+	<entry key="reason_OCCUPIED">A settlement or unit on this square does not allow this.</entry>
+	<entry key="reason_SETTLEMENT_SITE">A native settlement needs land without mountains, arctic or a river.</entry>
+	<entry key="reason_SECOND_CAPITAL">This tribe already has a capital.</entry>
+	<entry key="reason_UNIT_TERRAIN">This unit cannot stand on this terrain.</entry>
+	<entry key="reason_UNIT_TYPE">This unit type cannot be used here.</entry>
+	<entry key="reason_NOT_A_SHIP">Only a ship carries passengers.</entry>
+	<entry key="reason_SHIP_FULL">The ship has no free hold.</entry>
+	<entry key="reason_NATION_TAKEN">Another participant already plays this nation.</entry>
+	<entry key="reason_NATION_FIXED">Colonies or another colonial nation in this scenario keep its nation.</entry>
+	<entry key="reason_NO_EXPEDITION">Place at least one unit of your expedition.</entry>
+	<entry key="reason_NO_CAPITAL">A tribe with settlements needs a capital.</entry>
+	<entry key="reason_GAME_REJECTED">The game refuses the scenario.</entry>
+</properties>

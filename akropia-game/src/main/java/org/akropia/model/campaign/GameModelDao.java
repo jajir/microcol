@@ -24,6 +24,7 @@ import org.akropia.model.campaign.po.TurnSnapshot;
 import org.akropia.model.generation.GeneratedWorld;
 import org.akropia.model.generation.GeneratedWorldSettings;
 import org.akropia.model.generation.NorthAmericaWorld;
+import org.akropia.model.generation.ScenarioDraft;
 import org.akropia.model.store.ModelPo;
 
 import com.google.common.base.Preconditions;
@@ -148,6 +149,25 @@ public final class GameModelDao {
                 .loadFromClassPath(FreePlayMap.REFERENCE.getResource());
         source.setModel(GeneratedWorld.create(settings, nation, difficulty));
         return finishFreePlay(source, name, eventBus);
+    }
+
+    /**
+     * Create a new game from an authored scenario exactly as authored (R-0435).
+     * Playability is checked first, so a rejected scenario leaves the caller's
+     * active game as it was.
+     *
+     * @param scenario required authored scenario
+     * @param eventBus required event bus of the new game
+     * @return new game in its start state
+     * @throws org.akropia.model.generation.ScenarioDraftException when the game
+     *                                                             cannot start
+     *                                                             it
+     */
+    public GameModel createAuthoredScenario(final GameModelPo scenario,
+            final EventBus eventBus) {
+        Preconditions.checkNotNull(eventBus, "Event bus is null");
+        return makeFromModelPo(ScenarioDraft.of(scenario).playableScenario(),
+                eventBus);
     }
 
     private GameModel finishFreePlay(final GameModelPo source,

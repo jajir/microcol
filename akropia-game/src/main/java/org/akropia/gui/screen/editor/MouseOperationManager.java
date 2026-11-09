@@ -2,11 +2,13 @@ package org.akropia.gui.screen.editor;
 
 import java.util.Optional;
 
-import org.akropia.model.TerrainType;
-
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+/**
+ * Holds the tool chosen in the right panel; without one, a click only selects
+ * the square.
+ */
 @Singleton
 class MouseOperationManager {
 
@@ -16,16 +18,8 @@ class MouseOperationManager {
     MouseOperationManager() {
     }
 
-    void setTreeOperation() {
-        currentMouseOperation = new MouseOperationTree();
-    }
-
-    void setFieldOperation() {
-        currentMouseOperation = new MouseOperationField();
-    }
-
-    void setterrainOperation(final TerrainType terrainType) {
-        currentMouseOperation = new MouseOperationTerrain(terrainType);
+    void setOperation(final MouseOperation operation) {
+        currentMouseOperation = operation;
     }
 
     Optional<MouseOperation> getMouseOperation() {

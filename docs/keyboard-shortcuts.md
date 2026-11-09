@@ -138,6 +138,8 @@ jsou označeny.
 | `colony.treasure` | Poklad kolonie | Kolonie | T | T | **nová**; jen vlastní kolonie |
 | `editor.save` | Uložit upravenou mapu | Editor map | Ctrl+S | Meta+S, Ctrl+S | macOS zachovává dřívější Control |
 
+V editoru map (R-0435) dále pevně platí: Escape odchází přes ochranu neuložených změn; po kliknutí do mapy šipky posouvají vybrané pole a Enter či mezerník na ně použije zvolený nástroj. Tyto klávesy nejsou konfigurovatelné akce.
+
 Rozhodnutí 8. listopadu 2026:
 
 1. Nové akce dostaly volné kombinace (včetně `Shift+G` a `Shift+T` doplněných po revizi) s jedním běžným modifikátorem, aby

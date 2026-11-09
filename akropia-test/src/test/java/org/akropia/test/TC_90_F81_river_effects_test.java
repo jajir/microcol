@@ -19,6 +19,7 @@ import org.akropia.page.RiverPage;
 import org.akropia.page.ResourcePage;
 import org.akropia.page.TerrainProductionPage;
 import org.akropia.page.WelcomePage;
+import org.akropia.page.WorldWorkersPage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
@@ -257,9 +258,14 @@ public class TC_90_F81_river_effects_test extends AbstractAkropiaTest {
         new FreePlayAuditPage(getContext()).continueGame();
         production.verifyWarehouseGoods(DELFT_ID, Goods.of(goods, output));
         river.verifyRemainingDeposit(SMALL_LOCATION, goods, reserve - output);
-        // The outdoor worker covers the deposit picture. Move him aside before
-        // checking the unchanged resource artwork and reserve on the map.
+        // The outdoor worker covers the deposit picture. His field work is
+        // cancelled in the context menu, then he moves aside before the
+        // unchanged resource artwork and reserve are checked on the map.
+        final WorldWorkersPage work = new WorldWorkersPage(getContext());
         game.selectMapUnit(WORKER_ID);
+        game.openUnitContextAt(SMALL_LOCATION);
+        work.verifyMenuAction("cancelColonyWork", "Cancel work", false);
+        work.choose("cancelColonyWork");
         game.moveMouseAtLocation(SMALL_LOCATION);
         game.dragMouseAtLocation(SOURCE_LOCATION);
         river.verifyRemainingDeposit(SMALL_LOCATION, goods, reserve - output);
@@ -316,9 +322,14 @@ public class TC_90_F81_river_effects_test extends AbstractAkropiaTest {
         new FreePlayAuditPage(getContext()).continueGame();
         production.verifyWarehouseGoods(DELFT_ID, Goods.of(goods, output));
         river.verifyRemainingDeposit(SMALL_LOCATION, goods, reserve - output);
-        // The outdoor worker covers the deposit picture. Move him aside before
-        // checking the unchanged resource artwork and reserve on the map.
+        // The outdoor worker covers the deposit picture. His field work is
+        // cancelled in the context menu, then he moves aside before the
+        // unchanged resource artwork and reserve are checked on the map.
+        final WorldWorkersPage work = new WorldWorkersPage(getContext());
         game.selectMapUnit(WORKER_ID);
+        game.openUnitContextAt(SMALL_LOCATION);
+        work.verifyMenuAction("cancelColonyWork", "Cancel work", false);
+        work.choose("cancelColonyWork");
         game.moveMouseAtLocation(SMALL_LOCATION);
         game.dragMouseAtLocation(SOURCE_LOCATION);
         river.verifyRemainingDeposit(SMALL_LOCATION, goods, reserve - output);

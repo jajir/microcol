@@ -136,16 +136,10 @@ final class GeneratedNatives {
      */
     static void placeAt(final ModelPo model, final List<NativeSite> sites,
             final Random random) {
-        final GeneratedGrid grid = gridOf(model);
-        final Set<Location> rivers = model.getMap().getRiverMap().keySet();
         final List<NativeSettlementPo> settlements = new ArrayList<>();
         final Set<Location> taken = new HashSet<>();
         for (final NativeSite site : sites) {
-            final TerrainType terrain = grid.terrainAt(site.getLocation());
-            if (!grid.isLand(site.getLocation())
-                    || terrain == TerrainType.MOUNTAIN
-                    || terrain == TerrainType.ARCTIC
-                    || rivers.contains(site.getLocation())
+            if (!isSettlementSite(model.getMap(), site.getLocation())
                     || !taken.add(site.getLocation())) {
                 throw new IllegalStateException(
                         "Illegal native settlement at " + site.getLocation());
@@ -165,6 +159,23 @@ final class GeneratedNatives {
             }
         }
         populate(model, settlements, random);
+    }
+
+    /**
+     * @param map      required map with terrain and rivers
+     * @param location required square
+     * @return whether a native settlement may stand there: walkable land that
+     *         is no mountain, arctic or river square
+     */
+    static boolean isSettlementSite(final WorldMapPo map,
+            final Location location) {
+        final GeneratedGrid grid = new GeneratedGrid(map.getTerrainMap(),
+                map.getMaxX(), map.getMaxY());
+        final TerrainType terrain = grid.terrainAt(location);
+        return grid.contains(location) && grid.isLand(location)
+                && terrain != TerrainType.MOUNTAIN
+                && terrain != TerrainType.ARCTIC
+                && !map.getRiverMap().containsKey(location);
     }
 
     private static GeneratedGrid gridOf(final ModelPo model) {
@@ -218,15 +229,8 @@ final class GeneratedNatives {
         // Drawn after the layout, so the braves of a seed never move. The
         // market
         // draws nothing, so the teaching skill of a seed is the same as before.
-        final WorldMapPo map = model.getMap();
         for (final NativeSettlementPo settlement : settlements) {
-            final List<Terrain> around = surroundings(map, grid,
-                    settlement.getLocation());
-            settlement.setTeachableSkill(
-                    NativeTeachableSkills.choose(around, random).name());
-            settlement.setOfferedGoods(offeredStock(around));
-            settlement.setWantedGoods(wantedGoods(around));
-            settlement.setTrade(new ArrayList<>());
+            furnish(model.getMap(), settlement, random);
         }
         model.getGameManager().getPlayers().addAll(players);
         model.setNativeSettlements(settlements);
@@ -234,6 +238,27 @@ final class GeneratedNatives {
         model.setNativeContacts(new ArrayList<>());
         model.setNativeLocalAlarm(NativeRelations.freshLocalAlarm(settlements));
         model.getUnits().addAll(braves);
+    }
+
+    /**
+     * Give a placed settlement its teaching skill and market from its
+     * surroundings.
+     *
+     * @param map        required map with terrain, trees, rivers and resources
+     * @param settlement required settlement with its square
+     * @param random     required generator of the skill
+     */
+    static void furnish(final WorldMapPo map,
+            final NativeSettlementPo settlement, final Random random) {
+        final GeneratedGrid grid = new GeneratedGrid(map.getTerrainMap(),
+                map.getMaxX(), map.getMaxY());
+        final List<Terrain> around = surroundings(map, grid,
+                settlement.getLocation());
+        settlement.setTeachableSkill(
+                NativeTeachableSkills.choose(around, random).name());
+        settlement.setOfferedGoods(offeredStock(around));
+        settlement.setWantedGoods(wantedGoods(around));
+        settlement.setTrade(new ArrayList<>());
     }
 
     /**
@@ -310,7 +335,7 @@ final class GeneratedNatives {
         return out;
     }
 
-    private static NativeSettlementPo settlement(final int id,
+    static NativeSettlementPo settlement(final int id,
             final NativeNation nation, final boolean capital,
             final Location at) {
         final NativeSettlementPo out = new NativeSettlementPo();
@@ -323,7 +348,7 @@ final class GeneratedNatives {
         return out;
     }
 
-    private static PlayerPo player(final NativeNation nation, final int maxX,
+    static PlayerPo player(final NativeNation nation, final int maxX,
             final int maxY) {
         final PlayerPo player = new PlayerPo();
         player.setName(nation.name());

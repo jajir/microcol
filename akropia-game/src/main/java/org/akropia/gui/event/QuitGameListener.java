@@ -25,10 +25,14 @@ public final class QuitGameListener {
 
     private final SuccessCuePlayer successCuePlayer;
 
+    private final org.akropia.gui.screen.editor.EditorActions editor;
+
     @Inject
     public QuitGameListener(final MusicController musicController,
             final org.akropia.gui.dialog.PersistingService saves,
-            final SuccessCuePlayer successCuePlayer) {
+            final SuccessCuePlayer successCuePlayer,
+            final org.akropia.gui.screen.editor.EditorActions editor) {
+        this.editor = Preconditions.checkNotNull(editor);
         this.saves = saves;
         this.musicController = Preconditions.checkNotNull(musicController);
         this.successCuePlayer = Preconditions.checkNotNull(successCuePlayer);
@@ -37,7 +41,8 @@ public final class QuitGameListener {
     @Subscribe
     private void onQuitGame(
             @SuppressWarnings("unused") final QuitGameEvent event) {
-        if (!saves.confirmLeave()) {
+        // An unsaved map draft and an unsaved game are both protected.
+        if (!editor.confirmLeave() || !saves.confirmLeave()) {
             return;
         }
         logger.info("Shutting down Akropia");

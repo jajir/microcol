@@ -12,16 +12,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /** Escape and window closure always cancel the pending action. */
-final class SaveConfirmation extends AbstractMessageWindow {
+public final class SaveConfirmation extends AbstractMessageWindow {
     private int result;
     private final I18n texts;
 
-    SaveConfirmation(final ViewUtil view, final I18n texts) {
+    public SaveConfirmation(final ViewUtil view, final I18n texts) {
         super(view, texts);
         this.texts = texts;
     }
 
-    int choose(final String message, final boolean leaving) {
+    public int choose(final String message, final boolean leaving) {
         result = 0;
         final Label label = new Label(message);
         label.setWrapText(true);

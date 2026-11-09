@@ -1,5 +1,29 @@
 # Mapy volné hry
 
+## Editor map
+
+1. Schválené zadání z 9. listopadu 2026, implementace a místní přejímka dokončené: [R-0435](requirements/done/R-0435.md). Samostatný editor je dostupný tlačítkem **Map editor** napravo od **Settings** pouze v developer mode; používá mapový pohled a pravý panel nástrojů.
+2. **Nová mapa** v horním menu vyžádá šířku a výšku a vytvoří svět vyplněný oceánem. Nástroje mění terén a podporované atributy polí, včetně hor, řek, bonusů a domorodých osad. První verze nezakládá evropské kolonie.
+3. Autor vybírá národ hráče, počáteční jednotky, jejich pozice a nalodění posádky. Domorodým osadám vybírá kmen a vlastnosti podporované stávající hrou. Platí současná pravidla terénu, kapacity, identity a názvů; editor nezavádí jiné herní účinky.
+4. **Uložit** uchovává i nehotový návrh jako scénář; **Otevřít mapu** jej znovu zpřístupní k úpravám. Spuštění nové hry samostatně kontroluje hratelnost, vypíše konkrétní chyby a neplatný scénář nespustí. Platný scénář zachová autorem určený svět a výpravu. Scénář se samotným spuštěním nepřepíše a není uloženou rozehranou pozicí.
+5. Nová mapa, otevření jiné mapy a odchod chrání neuložené změny volbami uložit, zahodit nebo zrušit. Zrušení a selhání načtení či uložení zachovávají rozpracovaný návrh. Ovládání používá společné mapové konvence a anglické i české texty.
+
+### Implementační volby editoru (R-0435, 9. listopadu 2026, místní přejímka dokončená)
+
+1. Rozměry: šířka i výška jsou celá čísla od 10 do 100 polí (`ScenarioDraft.MIN_SIDE`/`MAX_SIDE`). Horní mez odpovídá největšímu dodávanému světu 100 × 80; mimo rozsah se svět nevytváří. Nový návrh je oceán pro nizozemský národ bez osad a jednotek; editor bez otevřeného souboru ukazuje oceán 40 × 30.
+2. Úpravy: každá změna se provede na kopii a ověří pravidly `WorldMap`; odmítnutí vypíše důvod a pole a nic nezmění. Malování oceánu odstraní les, pole, cestu, zvěst, řeku a bonus, které moře nenese; osada či jednotka, která by na novém terénu nemohla stát, změnu odmítne. Nová řeka se spojí se sousedními říčními poli.
+3. Domorodé osady přebírají výchozí hodnoty generátoru (třída kmene, poklad, trh a vyučovaná dovednost podle okolí); formulář mění kmen, hlavní město a dovednost. Účastník kmene vzniká a zaniká s jeho osadami; editor nepřidává bojovníky. Kmen s osadami potřebuje právě jedno hlavní město, druhé se odmítne hned, chybějící až při spuštění.
+4. Výprava: jednotky lze umístit jen na terén, po kterém se mohou pohybovat, a ne do osady; na loď se přidávají noví cestující podle počtu nákladových míst. Odebraná loď odebere i cestující. Změna národa přejmenuje hráče, korunu a vlastníky jednotek.
+5. Uložení zapíše scénář atomicky do zvoleného souboru přes `GameModelPoDao.saveScenarioToFile`; zrušení nebo chyba zachová návrh i předchozí soubor. Otevření ověřuje jen strukturu, takže lze otevřít i nehratelný návrh; běžné načítání her a uložených pozic se nemění.
+6. **Hrát** nejprve vypíše všechny problémy hratelnosti s poli (bez výpravy, kmen bez hlavního města, odmítnutí modelem) a označí první pole. Platný návrh spustí `GameModelDao.createAuthoredScenario` přesně tak, jak je: bez generované výpravy, dalších národů a bojovníků; zdrojový soubor se nezmění. **Zahodit** v ochraně změn zahazuje neuložené úpravy až při odchodu z editoru nebo spuštění hry.
+7. Vývojářská cesta držené **S** při načtení otevírá vybraný scénář v editoru jen v developer mode, a to přes stejnou strukturální kontrolu.
+8. Otevřený scénář s existujícím stavem: pole kolonie nepřijme změnu terénu, osadu ani jednotku. Národ hráče nelze změnit, pokud scénář obsahuje kolonie nebo jiný koloniální národ (jejich záznamy národ jmenují); jinak se přejmenují hráč, koruna a jednotky a domorodé vztahy se přesunou k novému národu. Úprava osady zachová identitu, trh, poklad, mise a historii a její bojovníci přejdou s ní k novému kmeni; poklad ve výchozí výši sleduje změnu hodnosti. Odebraná osada odebere své bojovníky a záznamy; místní poplach ostatních osad zůstává. Evropská jednotka se nepřidá na pole cizí jednotky.
+9. Nástroj je vždy právě jeden: opětovné klepnutí na aktivní nástroj jej ponechá a otevření nabídky varianty (terén, řeka, bonus, kmen, jednotka) zvolí její nástroj i při ponechání výchozí hodnoty.
+10. Položka **Map editor** stojí vpravo od **Nastavení** mimo rozvržení sloupce menu, takže sedm běžných položek zachovává původní polohu a rozměry; v pořadí fokusu následuje Nastavení.
+11. Rozvržení: horní lišta drží celé popisky příkazů a název mapy na samostatném zalomeném řádku; pravý panel má pevnou šířku 300 px na papírovém podkladu, každý nástroj vlastní řádek se sémantickou ikonou a jeho volbu pod sebou a obsah se posouvá svisle. Při šířce okna 900 a 1000 px se žádný text nezkracuje a mapa zůstává použitelná.
+
+## Dosavadní pevné mapy
+
 Nová výprava zná také svou příjezdovou námořní cestu z Evropy; vlastní loď proto může zadat návrat pomocí **G** i po vyčerpání pohybu. Jde o zapamatovaný terén, nikoli rozšířený dohled. Existující uložené hry se při načítání neupravují. Rozsah a stav přejímky vede [R-0424](requirements/done/R-0424.md).
 
 

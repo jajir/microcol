@@ -13,6 +13,7 @@
 	<entry key="buttonExitAkropia">Quit Akropia</entry>
 	<entry key="settingTitle">Settings</entry>
 	<entry key="buttonSetting">Setting</entry>
+	<entry key="buttonMapEditor">Map editor</entry>
 	<entry key="buttonBack">Back</entry>
 	<entry key="campaignTitle">Akropia -> Campaign</entry>
 	<entry key="settingLanguage">Language: </entry>

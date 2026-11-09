@@ -18,6 +18,7 @@ import org.akropia.model.TerrainType;
 import org.akropia.model.campaign.MissionImpl;
 import org.akropia.model.campaign.po.GameModelPo;
 import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.generation.ScenarioDraft;
 
 /**
  * The map editor edits a loaded save and writes it back through the shared file
@@ -50,12 +51,12 @@ class EditorRumorSerializationTest {
         dao.saveToFile(file.getAbsolutePath(), data);
 
         // The editor loads the file, paints one other square and saves it.
-        final ModelService editor = new ModelService(dao,
-                new VisibleAreaService());
-        editor.load(file);
-        new MouseOperationTerrain(TerrainType.PLAINS)
-                .execute(new MouseOperationContext(editor), PAINTED);
-        editor.save();
+        final ModelService editor = new ModelService(new VisibleAreaService());
+        editor.replace(ScenarioDraft.of(dao.loadScenarioFromFile(file)), file);
+        editor.edit(() -> editor.getDraft().setTerrain(PAINTED,
+                TerrainType.PLAINS));
+        dao.saveScenarioToFile(file.getAbsolutePath(),
+                editor.getDraft().toScenario());
 
         // The saved file holds the painted square and both markers.
         final GameModelPo saved = dao.loadFromFile(file);
@@ -85,10 +86,10 @@ class EditorRumorSerializationTest {
         final File file = dir.resolve("plain.akropia").toFile();
         dao.saveToFile(file.getAbsolutePath(), data);
 
-        final ModelService editor = new ModelService(dao,
-                new VisibleAreaService());
-        editor.load(file);
-        editor.save();
+        final ModelService editor = new ModelService(new VisibleAreaService());
+        editor.replace(ScenarioDraft.of(dao.loadScenarioFromFile(file)), file);
+        dao.saveScenarioToFile(file.getAbsolutePath(),
+                editor.getDraft().toScenario());
 
         assertTrue(dao.loadFromFile(file).getModel().getMap().getRumorSet()
                 .isEmpty());

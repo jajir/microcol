@@ -337,6 +337,17 @@ public final class GameModelPoDao {
     }
 
     /**
+     * @param gameModelPo required persistent model
+     * @return an independent copy in the production JSON form
+     */
+    public GameModelPo copyOf(final GameModelPo gameModelPo) {
+        return gson.fromJson(
+                gson.toJsonTree(Preconditions.checkNotNull(gameModelPo),
+                        GameModelPo.class),
+                GameModelPo.class);
+    }
+
+    /**
      * Copy a complete save to another file through the same temporary file and
      * atomic replacement as a new save. A failure keeps the previous target.
      *

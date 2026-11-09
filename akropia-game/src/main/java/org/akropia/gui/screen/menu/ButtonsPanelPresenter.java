@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.akropia.gui.dialog.PersistingService;
 import org.akropia.gui.event.QuitGameEvent;
+import org.akropia.gui.preferences.DeveloperMode;
 import org.akropia.gui.preferences.GamePreferences;
 import org.akropia.gui.screen.Screen;
 import org.akropia.gui.screen.ShowScreenEvent;
@@ -45,6 +46,8 @@ public final class ButtonsPanelPresenter {
 
     private final LocalizationHelper localization;
 
+    private final DeveloperMode developerMode;
+
     @Inject
     public ButtonsPanelPresenter(final ButtonsPanelView view,
             final PersistingService persistingService,
@@ -52,7 +55,8 @@ public final class ButtonsPanelPresenter {
             final SecretOption secretOption, final EventBus eventBus,
             final ViewUtil viewUtil, final I18n i18n,
             final HallOfFameDao hallOfFameDao,
-            final LocalizationHelper localization) {
+            final LocalizationHelper localization,
+            final DeveloperMode developerMode) {
         this.viewUtil = Preconditions.checkNotNull(viewUtil);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.hallOfFameDao = Preconditions.checkNotNull(hallOfFameDao);
@@ -72,6 +76,11 @@ public final class ButtonsPanelPresenter {
         view.getButtonStartFreeGame().setOnAction(e -> eventBus
                 .post(new ShowScreenEvent(Screen.FREE_PLAY_SETUP)));
         view.getButtonHallOfFame().setOnAction(this::onHallOfFame);
+        this.developerMode = Preconditions.checkNotNull(developerMode);
+        view.getButtonMapEditor().visibleProperty()
+                .bind(developerMode.enabledProperty());
+        view.getButtonMapEditor().setOnAction(
+                event -> eventBus.post(new ShowScreenEvent(Screen.EDITOR)));
         refresh();
     }
 
@@ -83,7 +92,10 @@ public final class ButtonsPanelPresenter {
 
     @SuppressWarnings("unused")
     private void onLoadWasPressed(final ActionEvent event) {
-        persistingService.loadFromSavedGames(secretOption.isEnabled());
+        // The developer load route opens the map editor only in developer
+        // mode.
+        persistingService.loadFromSavedGames(
+                secretOption.isEnabled() && developerMode.isEnabled());
     }
 
     @SuppressWarnings("unused")

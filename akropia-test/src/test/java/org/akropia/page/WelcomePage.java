@@ -13,6 +13,7 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 
 import org.akropia.gui.screen.menu.ButtonsPanelView;
@@ -95,10 +96,12 @@ public class WelcomePage extends AbstractMenuScreen {
             final List<Integer> columns = List.of(0, 2, 3, 4, 5, 6, 7);
             final VBox column = getNodeFinder().lookup(".game-menu-inner")
                     .queryAs(VBox.class);
-            assertEquals(ids.size(), column.getChildren().size());
+            assertEquals(ids.size(), menuEntries(column).size());
             Bounds previous = null;
             for (int i = 0; i < ids.size(); i++) {
-                final Button button = (Button) column.getChildren().get(i);
+                // The developer-only Map editor (R-0435) stands outside the
+                // column layout and has its own verification.
+                final Button button = menuButton(column, i);
                 assertEquals(ids.get(i), button.getId());
                 assertEquals(labels.get(i), button.getText());
                 assertEquals(labels.get(i), button.getAccessibleText());
@@ -149,7 +152,7 @@ public class WelcomePage extends AbstractMenuScreen {
             assertEquals("Akropia", title.getText());
             final Bounds titleBounds = title
                     .localToScene(title.getBoundsInLocal());
-            final Button first = (Button) column.getChildren().get(0);
+            final Button first = menuButton(column, 0);
             assertTrue(
                     titleBounds.getMaxY() < first
                             .localToScene(first.getBoundsInLocal()).getMinY(),
@@ -172,9 +175,9 @@ public class WelcomePage extends AbstractMenuScreen {
         getRobot().interact(() -> {
             final VBox column = getNodeFinder().lookup(".game-menu-inner")
                     .queryAs(VBox.class);
-            assertEquals(MENU_IDS.size(), column.getChildren().size());
+            assertEquals(MENU_IDS.size(), menuEntries(column).size());
             for (int i = 0; i < MENU_IDS.size(); i++) {
-                final Button button = (Button) column.getChildren().get(i);
+                final Button button = menuButton(column, i);
                 assertEquals(MENU_IDS.get(i), button.getId());
                 assertEquals(
                         labels.get(i) + (ButtonsPanelView.BUTTON_LOAD_ID
@@ -184,6 +187,20 @@ public class WelcomePage extends AbstractMenuScreen {
             assertTrue(getNodeFinder().lookup("#buttonRecovery").queryAll()
                     .isEmpty(), "No separate Recovery points entry");
         });
+    }
+
+    /**
+     * @return the entries the column lays out, without the developer-only Map
+     *         editor placed beside Settings
+     */
+    private static java.util.List<Button> menuEntries(final VBox column) {
+        return column.getChildren().stream().filter(Node::isManaged)
+                .map(Button.class::cast)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    private static Button menuButton(final VBox column, final int index) {
+        return menuEntries(column).get(index);
     }
 
     /** Move keyboard focus with Tab until the given menu button has it. */

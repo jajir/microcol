@@ -6,7 +6,25 @@ Define view of game editor.
 	-fx-pref-height: 100000;
 }
 
+/* Shared paper with a black pen edge toward the map. */
+.editor-right,
+.editor-right > .viewport,
 .right {
-	-fx-background-color: gray;
-	-fx-min-width: 70;
+	-fx-background-color: #FFF9EC;
+}
+
+.editor-right {
+	-fx-border-color: #000000;
+	-fx-border-width: 0 0 0 2;
+}
+
+.right {
+	-fx-padding: 8;
+}
+
+.editor-top {
+	-fx-padding: 6;
+	-fx-background-color: #FFF9EC;
+	-fx-border-color: #000000;
+	-fx-border-width: 0 0 2 0;
 }

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+	<comment>Vývojářský editor map (R-0435)</comment>
+
+	<entry key="topNew">Nová mapa</entry>
+	<entry key="topOpen">Otevřít mapu</entry>
+	<entry key="topSave">Uložit</entry>
+	<entry key="topPlay">Hrát</entry>
+	<entry key="topBack">Zpět do menu</entry>
+	<entry key="untitled">Neuložený scénář</entry>
+	<entry key="titleSaved">%1$s, %2$s × %3$s polí</entry>
+	<entry key="titleModified">%1$s, %2$s × %3$s polí, neuložené změny</entry>
+	<entry key="nation">Váš národ</entry>
+	<entry key="tools">Nástroje</entry>
+	<entry key="toolSelect">Výběr</entry>
+	<entry key="toolTerrain">Terén</entry>
+	<entry key="toolForest">Les</entry>
+	<entry key="toolField">Zorané pole</entry>
+	<entry key="toolRiver">Řeka</entry>
+	<entry key="riverSmall">Malá řeka</entry>
+	<entry key="riverLarge">Velká řeka</entry>
+	<entry key="toolBonus">Bonus</entry>
+	<entry key="toolSettlement">Domorodá osada</entry>
+	<entry key="toolUnit">Jednotka</entry>
+	<entry key="capital">Hlavní město</entry>
+	<entry key="tile">Pole [%1$s, %2$s]: %3$s</entry>
+	<entry key="tileNone">Vyberte pole na mapě.</entry>
+	<entry key="remove">Odebrat</entry>
+	<entry key="settlement">Domorodá osada</entry>
+	<entry key="tribe">Kmen</entry>
+	<entry key="skill">Učí</entry>
+	<entry key="apply">Použít</entry>
+	<entry key="units">Jednotky</entry>
+	<entry key="unitLabel">%1$s č. %2$s</entry>
+	<entry key="passengers">Posádka lodi %1$s č. %2$s</entry>
+	<entry key="addPassenger">Přidat na palubu</entry>
+	<entry key="newTitle">Nová mapa</entry>
+	<entry key="newWidth">Šířka</entry>
+	<entry key="newHeight">Výška</entry>
+	<entry key="newBounds">Šířka a výška jsou celá čísla od %1$s do %2$s polí.</entry>
+	<entry key="newConfirm">Vytvořit</entry>
+	<entry key="newCancel">Zrušit</entry>
+	<entry key="unsaved">Mapa má neuložené změny.</entry>
+	<entry key="openTitle">Otevřít mapu</entry>
+	<entry key="saveTitle">Uložit mapu</entry>
+	<entry key="created">Vytvořena nová oceánská mapa %1$s × %2$s polí.</entry>
+	<entry key="opened">Otevřeno %1$s.</entry>
+	<entry key="saved">Uloženo %1$s.</entry>
+	<entry key="saveCanceled">Ukládání bylo zrušeno; mapa nebyla uložena.</entry>
+	<entry key="openCanceled">Otevírání bylo zrušeno; současná mapa zůstává otevřená.</entry>
+	<entry key="openFailed">Soubor %1$s nelze otevřít; současná mapa zůstává otevřená. %2$s</entry>
+	<entry key="saveFailed">Uložení do %1$s selhalo; předchozí soubor zůstává a mapa není uložená.</entry>
+	<entry key="changed">Pole [%1$s, %2$s] změněno.</entry>
+	<entry key="rejected">Nic se nezměnilo. %1$s</entry>
+	<entry key="playRejected">Scénář zatím nelze hrát. %1$s</entry>
+	<entry key="playFailed">Hra nemohla scénář spustit. %1$s</entry>
+	<entry key="problemAt">%1$s [%2$s, %3$s]</entry>
+	<entry key="problemDetail">%1$s (%2$s)</entry>
+	<entry key="reason_DIMENSION_NOT_NUMBER">Šířka a výška musí být celá čísla.</entry>
+	<entry key="reason_DIMENSION_OUT_OF_RANGE">Šířka a výška musí být od %1$s do %2$s polí.</entry>
+	<entry key="reason_STRUCTURE">Soubor není platný scénář.</entry>
+	<entry key="reason_OUTSIDE_MAP">Pole leží mimo mapu.</entry>
+	<entry key="reason_NEEDS_LAND">To může nést jen pevnina.</entry>
+	<entry key="reason_GEOGRAPHY">Pravidla terénu to nedovolují.</entry>
+	<entry key="reason_OCCUPIED">Osada nebo jednotka na tomto poli to nedovoluje.</entry>
+	<entry key="reason_SETTLEMENT_SITE">Domorodá osada potřebuje pevninu bez hor, arktidy a řeky.</entry>
+	<entry key="reason_SECOND_CAPITAL">Tento kmen už hlavní město má.</entry>
+	<entry key="reason_UNIT_TERRAIN">Tato jednotka nemůže stát na tomto terénu.</entry>
+	<entry key="reason_UNIT_TYPE">Tento druh jednotky zde nelze použít.</entry>
+	<entry key="reason_NOT_A_SHIP">Posádku nese jen loď.</entry>
+	<entry key="reason_SHIP_FULL">Loď nemá volné místo.</entry>
+	<entry key="reason_NATION_TAKEN">Tento národ už hraje jiný účastník.</entry>
+	<entry key="reason_NATION_FIXED">Kolonie nebo jiný koloniální národ v tomto scénáři jeho národ nemění.</entry>
+	<entry key="reason_NO_EXPEDITION">Umístěte aspoň jednu jednotku své výpravy.</entry>
+	<entry key="reason_NO_CAPITAL">Kmen s osadami potřebuje hlavní město.</entry>
+	<entry key="reason_GAME_REJECTED">Hra scénář odmítá.</entry>
+</properties>

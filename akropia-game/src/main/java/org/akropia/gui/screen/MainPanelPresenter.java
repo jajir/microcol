@@ -80,6 +80,8 @@ public final class MainPanelPresenter {
 
     private final KeyboardShortcuts shortcuts;
 
+    private final org.akropia.gui.preferences.DeveloperMode developerMode;
+
     private final com.google.common.eventbus.EventBus eventBus;
 
     @Inject
@@ -100,7 +102,9 @@ public final class MainPanelPresenter {
             final PersistingService persistingService,
             final GameModelController gameModelController,
             final KeyboardShortcuts shortcuts,
-            final com.google.common.eventbus.EventBus eventBus) {
+            final com.google.common.eventbus.EventBus eventBus,
+            final org.akropia.gui.preferences.DeveloperMode developerMode) {
+        this.developerMode = Preconditions.checkNotNull(developerMode);
         this.shortcuts = Preconditions.checkNotNull(shortcuts);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.view = Preconditions.checkNotNull(view);
@@ -200,7 +204,9 @@ public final class MainPanelPresenter {
                     return null;
                 }, event -> {
                     if (Screen.EDITOR == event.getScreen()) {
-                        screenEditor.loadFile(event.getContext());
+                        if (event.getContext() != null) {
+                            screenEditor.loadFile(event.getContext());
+                        }
                         return screenEditor;
                     }
                     return null;
@@ -209,6 +215,10 @@ public final class MainPanelPresenter {
 
     @Subscribe
     private void onShowScreen(final ShowScreenEvent event) {
+        if (Screen.EDITOR == event.getScreen() && !developerMode.isEnabled()) {
+            // The map editor exists only in developer mode (R-0435).
+            return;
+        }
         final GameScreen screen = screenResolver.apply(event);
         if (isOriginTracked(screen)) {
             if (screen == shownScreen) {

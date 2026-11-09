@@ -42,6 +42,11 @@ public final class ButtonsPanelView
 
     public static final String BUTTON_HALL_OF_FAME_ID = "buttonHallOfFame";
 
+    public static final String BUTTON_MAP_EDITOR_ID = "buttonMapEditor";
+
+    /** Horizontal gap between Settings and the Map editor entry. */
+    private static final double MAP_EDITOR_GAP = 8;
+
     /**
      * Columns of menu-icons.png in button order; column 1 holds the recovery
      * artwork, which no longer has a main-menu entry (R-0376).
@@ -66,6 +71,10 @@ public final class ButtonsPanelView
 
     private final Button buttonExitAkropia = ActionButtons
             .button(ButtonIcon.EXIT);
+
+    /** Developer-only entry beside Settings (R-0435). */
+    private final Button buttonMapEditor = ActionButtons
+            .button(ButtonIcon.LAND);
 
     private final VBox buttonsBox = new VBox();
 
@@ -96,17 +105,36 @@ public final class ButtonsPanelView
         buttonHallOfFame.setId(BUTTON_HALL_OF_FAME_ID);
         buttonSetting.setId(BUTTON_SETTING_ID);
         buttonExitAkropia.setId(BUTTON_EXIT_ID);
+        buttonMapEditor.setId(BUTTON_MAP_EDITOR_ID);
         buttonsBox.getStyleClass().add("game-menu-inner");
+        buttonMapEditor.getStyleClass().add("game-toolbar-control");
+        buttonMapEditor.setMinWidth(0);
+        buttonMapEditor.setMaxWidth(Region.USE_PREF_SIZE);
+        buttonMapEditor.accessibleTextProperty()
+                .bind(buttonMapEditor.textProperty());
+        // The column lays out only its seven entries; the developer-only
+        // entry follows Settings in focus order and stands right of it.
+        buttonMapEditor.setManaged(false);
+        buttonSetting.boundsInParentProperty()
+                .addListener(observable -> placeMapEditor());
+        buttonMapEditor.textProperty()
+                .addListener(observable -> placeMapEditor());
+        buttonMapEditor.fontProperty()
+                .addListener(observable -> placeMapEditor());
         buttonsBox.getChildren().add(buttonContinue);
         buttonsBox.getChildren().add(buttonLoad);
         buttonsBox.getChildren().add(buttonPlayCampaign);
         buttonsBox.getChildren().add(buttonStartFreeGame);
         buttonsBox.getChildren().add(buttonHallOfFame);
         buttonsBox.getChildren().add(buttonSetting);
+        buttonsBox.getChildren().add(buttonMapEditor);
         buttonsBox.getChildren().add(buttonExitAkropia);
         final Image icons = images.getImage("menu-icons.png");
-        for (int index = 0; index < buttonsBox.getChildren().size(); index++) {
-            final Button button = (Button) buttonsBox.getChildren().get(index);
+        final Button[] buttons = { buttonContinue, buttonLoad,
+                buttonPlayCampaign, buttonStartFreeGame, buttonHallOfFame,
+                buttonSetting, buttonExitAkropia };
+        for (int index = 0; index < buttons.length; index++) {
+            final Button button = buttons[index];
             button.getStyleClass().add("game-toolbar-control");
             button.setMinWidth(0);
             button.setMaxWidth(Region.USE_PREF_SIZE);
@@ -127,6 +155,14 @@ public final class ButtonsPanelView
             button.textProperty()
                     .addListener(observable -> updateLabel(button));
         }
+    }
+
+    private void placeMapEditor() {
+        final javafx.geometry.Bounds setting = buttonSetting
+                .getBoundsInParent();
+        buttonMapEditor.autosize();
+        buttonMapEditor.relocate(setting.getMaxX() + MAP_EDITOR_GAP,
+                buttonSetting.getLayoutY());
     }
 
     private void updateLabel(final Button button) {
@@ -159,6 +195,7 @@ public final class ButtonsPanelView
         buttonStartFreeGame.setText(i18n.get(GameMenu.buttonFreeGame));
         buttonHallOfFame.setText(i18n.get(GameMenu.buttonHallOfFame));
         buttonSetting.setText(i18n.get(GameMenu.buttonSetting));
+        buttonMapEditor.setText(i18n.get(GameMenu.buttonMapEditor));
         buttonExitAkropia.setText(i18n.get(GameMenu.buttonExitAkropia));
         // The menu has no status line and no floating tooltips; the visible
         // labels stay compact and assistive technology names the key.
@@ -216,6 +253,13 @@ public final class ButtonsPanelView
      */
     public Button getButtonExitAkropia() {
         return buttonExitAkropia;
+    }
+
+    /**
+     * @return the developer-only Map editor button
+     */
+    public Button getButtonMapEditor() {
+        return buttonMapEditor;
     }
 
     /**

@@ -2092,6 +2092,8 @@ Les a pole tedy mají být samostatné překryvy. Pokud by nový les obsahoval n
 
 [EditorPaintingService](../akropia-game/src/main/java/org/akropia/gui/screen/editor/EditorPaintingService.java) používá jednodušší náhled: pevnou výchozí variantu terénu, vždy `tree-1.png` a překryv pole. Nevybírá náhodné varianty hlavní mapy ani generované pobřeží. Mapovou kolonii kreslí přímo do levého horního rohu políčka, bez herního posunu `(2,4)`. Náhled v editoru proto není úplnou kontrolou výsledného vzhledu ve hře.
 
+Editor map R-0435 (9. listopadu 2026, přejímka nedokončená): řeky kreslí sdílený mapový renderer `PaintService.paintRivers` a osady sdílená značka `paintNativeSettlement`, oba s parametrem `PaintService.Ink`. Hlavní mapa dál používá stávající `MAP_INK` (`#292824`, řeky 1,6 a značky osad 1,5 logického px) beze změny vzhledu; editor používá `PEN`, černou `#000000` o šířce 2 logické px. Hlavní město má v editoru plochý zlatý pás mezi dvěma černými konturami místo žluté čáry; výběr pole je černý rámeček 2 px. Editor nepřidává žádnou novou ilustraci. Převzaté rastry mají vektorové zdroje: terén, les, pole a kolonie ve výřezech `background.svg`, jednotky v `units.svg`, vlajky v `national-flags-small.svg`, bonusy v `terrain-symbols.svg` a ikony nástrojů (výběr, terén, les, pole, řeka, bonus, osada, jednotka) i tlačítka menu v atlasech `action-icons.svg` a `game-toolbar.svg`. Panely editoru používají sdílený papír `#FFF9EC` s černým okrajem 2 px. Sjednocení inkoustu hlavní mapy s pravidlem z 3. listopadu není součástí R-0435.
+
 ## Atlas budov
 
 ![Výřezy atlasu budov se souřadnicemi](graphics-assets/buildings-grid.png)

@@ -18,6 +18,7 @@ import org.akropia.model.campaign.GameModelDao;
 import org.akropia.model.campaign.FreePlayMap;
 import org.akropia.model.campaign.MissionName;
 import org.akropia.model.Player;
+import org.akropia.model.campaign.po.GameModelPo;
 import org.akropia.model.campaign.po.SavedGames;
 import org.akropia.model.campaign.po.TurnSnapshot;
 import org.akropia.model.generation.GeneratedWorldSettings;
@@ -170,6 +171,19 @@ public final class GameController {
         }
         startMission(generated);
         return true;
+    }
+
+    /**
+     * Start a new game from an authored scenario. The active game is replaced
+     * only after the new one exists.
+     *
+     * @param scenario required authored scenario
+     * @throws org.akropia.model.generation.ScenarioDraftException when the game
+     *                                                             cannot start
+     *                                                             it
+     */
+    public void startAuthoredScenario(final GameModelPo scenario) {
+        startMission(gameModelDao.createAuthoredScenario(scenario, eventBus));
     }
 
     public void startCampaignMission(final CampaignName campaignName,

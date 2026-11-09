@@ -9,41 +9,59 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 
+/**
+ * Developer map editor (R-0435): top menu, map view and right editing panel.
+ */
 @Singleton
 public class ScreenEditor implements GameScreen {
 
     public static final String STYLE_SHEET_EDITOR = ScreenEditor.class
             .getResource("/gui/Editor.css").toExternalForm();
 
-    private final HBox mainPanel = new HBox();
+    private final BorderPane mainPanel = new BorderPane();
 
     private final EditorPanel editorPanel;
 
-    private final ModelService modelService;
+    private final EditorRightPanel rightPanel;
+
+    private final EditorTopBar topBar;
+
+    private final EditorActions actions;
 
     @Inject
-    ScreenEditor(final EditorRightPanel rightPanel,
-            final ModelService modelService, final EditorPanel editorPanel) {
+    ScreenEditor(final EditorRightPanel rightPanel, final EditorTopBar topBar,
+            final EditorPanel editorPanel, final EditorActions actions) {
         this.editorPanel = Preconditions.checkNotNull(editorPanel);
-        this.modelService = Preconditions.checkNotNull(modelService);
+        this.rightPanel = Preconditions.checkNotNull(rightPanel);
+        this.topBar = Preconditions.checkNotNull(topBar);
+        this.actions = Preconditions.checkNotNull(actions);
 
+        mainPanel.setId("mapEditor");
         mainPanel.getStylesheets().add(STYLE_SHEET_EDITOR);
-        mainPanel.getChildren().add(editorPanel.getContent());
-        mainPanel.getChildren().add(rightPanel.getContent());
+        mainPanel.setTop(topBar.getContent());
+        mainPanel.setCenter(editorPanel.getContent());
+        mainPanel.setRight(rightPanel.getContent());
         mainPanel.setFocusTraversable(true);
     }
 
+    /**
+     * Open an authored scenario chosen by the developer load route; a rejected
+     * file keeps the current draft.
+     *
+     * @param file required scenario file
+     */
     public void loadFile(final File file) {
         Preconditions.checkNotNull(file);
-        modelService.load(file);
+        actions.openFile(file);
     }
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        // Do nothing.
+        topBar.updateLanguage();
+        rightPanel.updateLanguage();
     }
 
     @Override

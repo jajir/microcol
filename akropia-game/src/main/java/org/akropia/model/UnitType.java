@@ -680,6 +680,17 @@ public final class UnitType {
     }
 
     /**
+     * @return whether a unit of this type is a colonist with a work history: a
+     *         free colonist, laborer, specialist or master blacksmith
+     */
+    public boolean isColonist() {
+        return this == COLONIST || this == INDENTURED_SERVANT
+                || this == PETTY_CRIMINAL || this == MASTER_BLACKSMITH
+                || EUROPEAN_SPECIALISTS.contains(this)
+                || SCHOOL_ONLY_SPECIALISTS.contains(this);
+    }
+
+    /**
      * Get list of terrain types on which unit could move.
      *
      * @return List of unit type.

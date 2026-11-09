@@ -18,6 +18,7 @@ import org.akropia.page.GamePage;
 import org.akropia.page.ResourcePage;
 import org.akropia.page.TerrainProductionPage;
 import org.akropia.page.WelcomePage;
+import org.akropia.page.WorldWorkersPage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
@@ -163,6 +164,17 @@ public class TC_91_F82_resource_overlays_test extends AbstractAkropiaTest {
                 ResourceOverlay.PRIME_OLIVES);
         resource.verifyOutput(ResourceFixture.OLIVES_LOCATION, GoodsType.OLIVES,
                 3);
+
+        // The outdoor worker covers the olives picture. His field work is
+        // cancelled in the context menu, then he steps onto the neighbouring
+        // game square before the unchanged artwork is checked.
+        final WorldWorkersPage work = new WorldWorkersPage(getContext());
+        gamePage.selectMapUnit(WORKER_ID);
+        gamePage.openUnitContextAt(ResourceFixture.OLIVES_LOCATION);
+        work.verifyMenuAction("cancelColonyWork", "Cancel work", false);
+        work.choose("cancelColonyWork");
+        gamePage.moveMouseAtLocation(ResourceFixture.OLIVES_LOCATION);
+        gamePage.dragMouseAtLocation(ResourceFixture.GAME_LOCATION);
         resource.verifyMarkerPainted(ResourceFixture.OLIVES_LOCATION,
                 ResourceOverlay.PRIME_OLIVES);
     }

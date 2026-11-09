@@ -13,6 +13,10 @@ import com.google.inject.name.Named;
 
 import javafx.scene.input.MouseEvent;
 
+/**
+ * Primary click selects a square and applies the chosen tool; dragging paints
+ * with a painting tool. Secondary drag moves the view.
+ */
 @Singleton
 @Listener
 public class EditorMouseListener {
@@ -24,6 +28,8 @@ public class EditorMouseListener {
     private final ModelService modelService;
 
     private Point previousPosition = Point.ZERO;
+
+    private Location painted;
 
     @Inject
     EditorMouseListener(final EditorPanel editorPanel,
@@ -40,7 +46,7 @@ public class EditorMouseListener {
         editorPanel.getCanvas().setOnMousePressed(this::onMousePressed);
     }
 
-    private final void onMouseDragged(final MouseEvent event) {
+    private void onMouseDragged(final MouseEvent event) {
         if (event.isSecondaryButtonDown()) {
             if (previousPosition != null) {
                 final Point currentPosition = Point.of(event.getX(),
@@ -48,25 +54,43 @@ public class EditorMouseListener {
                 final Point delta = previousPosition.substract(currentPosition);
                 visibleAreaService.addDeltaToTopLeftPoint(delta);
             }
+        } else if (event.isPrimaryButtonDown()) {
+            final Location location = toLocation(event);
+            if (!location.equals(painted)) {
+                mouseOperationManager.getMouseOperation()
+                        .filter(MouseOperation::isPainting)
+                        .ifPresent(operation -> apply(operation, location));
+            }
         }
         previousPosition = Point.of(event.getX(), event.getY());
     }
 
-    private final void onMouseMoved(final MouseEvent event) {
+    private void onMouseMoved(final MouseEvent event) {
         previousPosition = Point.of(event.getX(), event.getY());
     }
 
-    private final void onMousePressed(final MouseEvent event) {
+    private void onMousePressed(final MouseEvent event) {
+        // Keyboard editing continues from the clicked map.
+        ((javafx.scene.Node) event.getSource()).requestFocus();
         if (event.isPrimaryButtonDown()) {
-            final Point pressedAt = Point.of(event.getX(), event.getY());
-            final Area area = new Area(visibleAreaService);
-            final Location location = area.convertToLocation(pressedAt);
-            final MouseOperationContext context = new MouseOperationContext(
-                    modelService);
-            mouseOperationManager.getMouseOperation().ifPresent(
-                    operation -> operation.execute(context, location));
-            modelService.initCache();
+            final Location location = toLocation(event);
+            modelService.select(location);
+            mouseOperationManager.getMouseOperation()
+                    .ifPresent(operation -> apply(operation, location));
         }
+    }
+
+    private void apply(final MouseOperation operation,
+            final Location location) {
+        painted = location;
+        if (modelService.getDraft().contains(location)) {
+            operation.execute(location);
+        }
+    }
+
+    private Location toLocation(final MouseEvent event) {
+        return new Area(visibleAreaService)
+                .convertToLocation(Point.of(event.getX(), event.getY()));
     }
 
 }

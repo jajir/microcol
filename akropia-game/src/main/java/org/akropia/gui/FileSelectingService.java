@@ -36,10 +36,40 @@ public class FileSelectingService extends AbstractMessageWindow {
         return fileChooser.showOpenDialog(getViewUtil().getPrimaryStage());
     }
 
+    /**
+     * @param directory required initial directory
+     * @param title     required window title
+     * @return chosen authored scenario to open, or <code>null</code> when
+     *         canceled
+     */
+    public File openScenario(final File directory, final String title) {
+        final FileChooser fileChooser = prepareFileChooser(directory, title);
+        return fileChooser.showOpenDialog(getViewUtil().getPrimaryStage());
+    }
+
+    /**
+     * @param directory required initial directory
+     * @param fileName  required initial file name
+     * @param title     required window title
+     * @return chosen file to write the authored scenario to, or
+     *         <code>null</code> when canceled
+     */
+    public File saveScenario(final File directory, final String fileName,
+            final String title) {
+        final FileChooser fileChooser = prepareFileChooser(directory, title);
+        fileChooser.setInitialFileName(fileName);
+        return fileChooser.showSaveDialog(getViewUtil().getPrimaryStage());
+    }
+
     private FileChooser prepareFileChooser(final File saveDirectory,
             final Dialog caption) {
+        return prepareFileChooser(saveDirectory, i18n.get(caption));
+    }
+
+    private FileChooser prepareFileChooser(final File saveDirectory,
+            final String title) {
         final FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(i18n.get(caption));
+        fileChooser.setTitle(title);
         fileChooser.setInitialDirectory(saveDirectory);
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
                 "Akropia data files", "*.akropia"));

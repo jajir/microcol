@@ -1252,3 +1252,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Souhlas vrstev při scrollování mapy — 2026-11-09
 
 1. [R-0434](R-0434.md), A03 se závislostí A05, zachycuje analýzu posunu kamery mezi vykreslením terénu a mlhy. Status: new; zdrojová příčina nalezena, obrazová reprodukce a implementace zbývají.
+
+## Developer map editor — 2026-11-09
+
+1. [R-0435](done/R-0435.md), primary A02, related A01/A03/A04/A05/A08. Status: done. Developer-only editor creates ocean worlds, edits terrain and native settlements, configures the national expedition and saves/reopens/plays authored scenarios. Local acceptance passed 5,111 model, 56 targeted UI and 21 smoke/support checks; [evidence](../functional-tests.md#r-0435-final-local-acceptance-2026-11-09).

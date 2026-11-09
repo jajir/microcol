@@ -131,17 +131,17 @@ public final class ReferenceExpedition {
             final EuropeanNation nation = nations[i];
             final String owner = nation.getPlayerName();
             model.getGameManager().getPlayers()
-                    .add(player(owner, nation != humanNation,
+                    .add(newPlayer(owner, nation != humanNation,
                             1000 - 250 * difficulty.ordinal(), null, maxX,
                             maxY));
-            final PlayerPo crown = player(owner + "'s King", true, 0, owner,
+            final PlayerPo crown = newPlayer(owner + "'s King", true, 0, owner,
                     maxX, maxY);
             crown.setRoyalRoster(RoyalRoster.initial(difficulty));
             model.getGameManager().getPlayers().add(crown);
             final UnitType shipType = nation == EuropeanNation.DUTCH
                     ? UnitType.MERCHANTMAN
                     : UnitType.CARAVEL;
-            final UnitPo ship = unit(id++, owner, shipType);
+            final UnitPo ship = newUnit(id++, owner, shipType);
             final PlaceMapPo position = new PlaceMapPo();
             position.setLocation(
                     candidates.get(i * (candidates.size() - 1) / 3));
@@ -151,9 +151,9 @@ public final class ReferenceExpedition {
                 model.setFocusedField(position.getLocation());
             }
             model.getUnits().add(ship);
-            final UnitPo soldier = unit(id++, owner, UnitType.COLONIST);
+            final UnitPo soldier = newUnit(id++, owner, UnitType.COLONIST);
             soldier.setHoldingWeapons(true);
-            final UnitPo pioneer = unit(id++, owner, UnitType.COLONIST);
+            final UnitPo pioneer = newUnit(id++, owner, UnitType.COLONIST);
             pioneer.setTools(100);
             for (final UnitPo passenger : List.of(soldier, pioneer)) {
                 passenger.setPlaceCargoSlot(new PlaceCargoSlotPo());
@@ -177,7 +177,11 @@ public final class ReferenceExpedition {
         return model;
     }
 
-    private static PlayerPo player(final String name, final boolean computer,
+    /**
+     * @return a new European participant, or with {@code crownOf} its Crown,
+     *         with the initial European state and an unexplored map
+     */
+    public static PlayerPo newPlayer(final String name, final boolean computer,
             final int gold, final String crownOf, final int maxX,
             final int maxY) {
         final PlayerPo player = new PlayerPo();
@@ -196,15 +200,21 @@ public final class ReferenceExpedition {
         return player;
     }
 
-    private static UnitPo unit(final int id, final String owner,
+    /**
+     * @return a new unit without a place, at full movement and without action
+     */
+    public static UnitPo newUnit(final int id, final String owner,
             final UnitType type) {
         final UnitPo unit = new UnitPo();
         unit.setId(id);
         unit.setOwnerId(owner);
         unit.setType(type);
-        if (type == UnitType.COLONIST) {
+        if (type.isColonist()) {
             unit.setWorkUpdates(0);
             unit.setMissionary(false);
+        }
+        if (type == UnitType.ARTILLERY) {
+            unit.setArtilleryDamaged(false);
         }
         unit.setAction(new UnitActionNoActionPo());
         unit.setMovementThirds(MovementPoints.ofPoints(type.getSpeed()));
