@@ -151,6 +151,8 @@ public final class GamePanelPainter {
      *                        already done. It allows to time animations.
      */
     void paint(final GraphicsContext g, final long currentGameTick) {
+        // Every layer and its tile bounds must use the updated camera.
+        scrollingManager.paint();
         final Area area = getArea();
         final CanvasInMapCoordinates canvasInMapCoordinates = CanvasInMapCoordinates
                 .make(visibleAreaService, gameModelController.getMapSize());
@@ -212,7 +214,6 @@ public final class GamePanelPainter {
         if (animationManager.hasNextStep(area)) {
             animationManager.paint(graphics, area);
         }
-        scrollingManager.paint();
     }
 
     /**

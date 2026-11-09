@@ -1377,3 +1377,7 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 ## Nastavitelná rychlost WASD — 2026-11-08
 
 1. [R-0431](requirements/done/R-0431.md) rozšiřuje ovládání UC-114 (Hra) a regresi UC-119: TC_84/02 ověřuje výchozí rychlost, meze, ovládání klávesnicí a myší, zachování po návratu a použití ve WASD. TC_84/01 a TC_192/07 zachovávají pořadí a čitelnost nastavení v obou jazycích a velikostech. Přijímací výsledky vlastní [funkční evidence](functional-tests.md).
+
+## UC-114/119: souhlas vrstev při scrollování — 2026-11-09
+
+1. [R-0434](requirements/done/R-0434.md) opravuje společnou polohu terénu a mlhy během posunu. TC196/06 porovnává pohybující a stojící obraz při téže poloze kamery, ve čtyřech směrech WASD a rychlostech 2 a 9; zachovává herní stav. Výsledky vlastní [funkční evidence](functional-tests.md#r-0434-scroll-frame-consistency-2026-11-09).

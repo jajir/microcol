@@ -1251,7 +1251,7 @@ remain owned by their current requirements; acceptance is recorded in the
 
 ## Souhlas vrstev při scrollování mapy — 2026-11-09
 
-1. [R-0434](R-0434.md), A03 se závislostí A05, zachycuje analýzu posunu kamery mezi vykreslením terénu a mlhy. Status: new; zdrojová příčina nalezena, obrazová reprodukce a implementace zbývají.
+1. [R-0434](done/R-0434.md), A03 se závislostí A05, opravuje posun kamery mezi vykreslením terénu a mlhy. Status: done; model/JUnit, cílené Docker UI a smoke prošly. [Přejímka](../functional-tests.md#r-0434-scroll-frame-consistency-2026-11-09).
 
 ## Developer map editor — 2026-11-09
 

@@ -225,4 +225,29 @@ public class TC_196_F228_world_minimap_test extends AbstractAkropiaTest {
         map.verifyGameUnchanged();
     }
 
+    @Test
+    @Tag("local")
+    void TC_06_scrolling_keeps_terrain_and_fog_aligned() throws Exception {
+        // Open the known coast beside unexplored ocean and keep game state.
+        WelcomePage.of(getContext()).loadGame();
+        new MainScreenLayoutPage(getContext()).resize(1280, 900);
+        final WorldMinimapPage map = new WorldMinimapPage(getContext());
+        final FogPage fog = new FogPage(getContext());
+        fog.centerFrontier();
+        map.rememberGameAndView();
+
+        // Capture while each WASD direction is held, at default and maximum
+        // speed. A settled screenshot alone would miss a one-frame mismatch.
+        for (final int speed : new int[] { 2, 9 }) {
+            map.captureScrollingFrame(KeyCode.D, speed, Location.of(26, 15));
+            map.verifyScrollingFrame(speed * 2, 0);
+            map.captureScrollingFrame(KeyCode.A, speed, Location.of(26, 15));
+            map.verifyScrollingFrame(-speed * 2, 0);
+            map.captureScrollingFrame(KeyCode.S, speed, Location.of(26, 15));
+            map.verifyScrollingFrame(0, speed * 2);
+            map.captureScrollingFrame(KeyCode.W, speed, Location.of(26, 15));
+            map.verifyScrollingFrame(0, -speed * 2);
+        }
+        map.verifyGameUnchanged();
+    }
 }

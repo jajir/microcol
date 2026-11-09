@@ -354,4 +354,54 @@ public final class WorldMinimapPage extends AbstractScreen {
         getRobot()
                 .interact(() -> assertFalse(node("worldMinimap").isFocused()));
     }
+
+    private final org.akropia.gui.screen.game.gamepanel.ScrollingFrameProbe scrollProbe = new org.akropia.gui.screen.game.gamepanel.ScrollingFrameProbe();
+    private Point scrollSample;
+
+    public void captureScrollingFrame(final KeyCode direction, final int speed,
+            final Location sample) {
+        getRobot().interact(() -> {
+            getContext().getClassFromGuice(
+                    org.akropia.gui.preferences.PreferencesProperties.class)
+                    .getMapScrollSpeedProperty().set(speed);
+            getContext().getClassFromGuice(
+                    org.akropia.gui.screen.game.gamepanel.GamePanelComponent.class)
+                    .getCanvas().requestFocus();
+        });
+        getRobot().press(direction);
+        try {
+            getRobot().interact(() -> {
+                scrollProbe.capture(getContext(), direction);
+                scrollSample = getContext().getArea()
+                        .convertToCanvasPoint(sample);
+            });
+        } finally {
+            getRobot().release(direction);
+        }
+    }
+
+    public void verifyScrollingFrame(final int dx, final int dy) {
+        assertEquals(scrollProbe.before.add(Point.of(dx, dy)),
+                scrollProbe.after,
+                "The captured frame must include an actual scroll step");
+        // The frontier crop includes both explored and unknown squares, but
+        // excludes units and the independently moving cloud near the south.
+        final int width = 4 * org.akropia.gui.Tile.TILE_WIDTH_IN_PX;
+        final int height = org.akropia.gui.Tile.TILE_WIDTH_IN_PX;
+        assertTrue(scrollSample.getX() >= 0 && scrollSample.getY() >= 0);
+        assertTrue(scrollSample.getX() + width < scrollProbe.moving.getWidth());
+        assertTrue(
+                scrollSample.getY() + height < scrollProbe.moving.getHeight());
+        for (int y = scrollSample.getY(); y < scrollSample.getY()
+                + height; y++) {
+            for (int x = scrollSample.getX(); x < scrollSample.getX()
+                    + width; x++) {
+                assertEquals(
+                        scrollProbe.stationary.getPixelReader().getArgb(x, y),
+                        scrollProbe.moving.getPixelReader().getArgb(x, y),
+                        "Moving terrain and fog must match the stationary frame at "
+                                + x + "," + y);
+            }
+        }
+    }
 }

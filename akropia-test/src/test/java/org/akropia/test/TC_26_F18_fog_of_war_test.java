@@ -30,7 +30,7 @@ public class TC_26_F18_fog_of_war_test extends AbstractAkropiaTest {
     /** Sees the galleon at the enemy tile but not the colony tile below. */
     private static final Location HALF_SIGHT = Location.of(26, 14);
     private static final Location FAR_SEA = Location.of(40, 16);
-    private static final String LAST_SEEN = "Last seen: colony Hidden Quebec of France";
+    private static final String LAST_SEEN = "Last seen: colony Hidden Quebec of Phocaea";
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -235,6 +235,10 @@ public class TC_26_F18_fog_of_war_test extends AbstractAkropiaTest {
         // The king takes the colony: its sight ends, the terrain stays known.
         fog.placeUnit(106, SHORE);
         fog.captureColonyByKing(OWN_COLONY, 4);
+        // Former outdoor workers survive capture on the map. Move them away
+        // so their own sight cannot mask the loss of the colony's sight.
+        fog.placeUnit(0, Location.of(13, 16));
+        fog.placeUnit(1, Location.of(13, 16));
         fog.verifyCurrentSight(SHORE, false);
         fog.verifyObservedUnits(SHORE, 0);
         fog.verifyExplored(SHORE, true);
@@ -410,12 +414,12 @@ public class TC_26_F18_fog_of_war_test extends AbstractAkropiaTest {
         fog.inspect(marked);
         fog.verifyUnknownMark(marked, false);
         fog.verifyRevealedPixels(marked);
-        fog.verifyRightPanelContains("Move cost");
+        fog.verifyRightPanelContains("Base terrain cost:");
         fog.move(south, START, 3);
         fog.inspect(marked);
         fog.verifyCurrentSight(marked, false);
         fog.verifyRevealedPixels(marked);
-        fog.verifyRightPanelContains("Move cost");
+        fog.verifyRightPanelContains("Base terrain cost:");
         fog.verifyUnitLocation(3, START);
     }
 }
