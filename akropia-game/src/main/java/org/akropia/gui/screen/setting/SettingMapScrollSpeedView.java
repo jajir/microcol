@@ -35,6 +35,7 @@ final class SettingMapScrollSpeedView
         slider.valueProperty()
                 .bindBidirectional(preferences.getMapScrollSpeedProperty());
         panel = new HBox(label, slider);
+        SettingRow.align(panel, label);
         updateLanguage(i18n);
     }
 

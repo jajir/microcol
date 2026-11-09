@@ -82,6 +82,8 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         page.setDisabled("settingGrid", true);
         page.click("settingGrid");
         page.verifyChecks(true, false, false);
+        page.click("settingGridCaption");
+        page.verifyChecks(true, false, false);
         page.captureDialog("autosaveEnabled", "framed-settings-disabled.png");
         page.setDisabled("settingGrid", false);
         settings = settings.goBack().openSetting();
@@ -364,6 +366,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         hosted.verifySettingsOrder(SETTINGS_ORDER);
         // A small window scrolls only the content; title and Back stay.
         new FramedSettingsPage(getContext()).resizeWindow(900, 700);
+        new FramedSettingsPage(getContext()).verifyCommonAxis();
         hosted.verifyMenuHosted("Settings", "buttonBack", "Back");
         hosted.verifyScrollBarFollowsOverflow();
         hosted.verifyCompleteTexts();
@@ -374,6 +377,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         // Czech keeps the same order, full labels and menu return.
         settings.setCzechLanguage();
         hosted.verifyMenuHosted("Nastavení", "buttonBack", "Zpět");
+        new FramedSettingsPage(getContext()).verifyCommonAxis();
         hosted.verifySettingsOrder(SETTINGS_ORDER);
         hosted.verifyCompleteTexts();
         hosted.captureDialog("buttonBack", "r0377-settings-menu-cs.png");
@@ -745,6 +749,35 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         shortcuts.verifyActiveBinding(ShortcutAction.HELP, "Y");
         shortcuts.verifySavedDeviations(Map.of("map.help", "Y"));
         settings.goBack().verifyMainScreen();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_15_common_axis_keeps_wrapped_captions_and_game_settings_usable()
+            throws Exception {
+        // Open Settings inside a live game at a small supported window size.
+        WelcomePage.of(getContext()).loadGame().waitWhileMoving();
+        final DeveloperModePage developer = new DeveloperModePage(getContext());
+        developer.openGameSettings();
+        final FramedSettingsPage page = new FramedSettingsPage(getContext());
+        page.resizeWindow(900, 700);
+        page.verifyAppearance();
+        page.captureDialog("rbCzech", "r0438-settings-game-en.png");
+
+        // The separate caption still toggles its checkbox; keyboard undoes it.
+        page.click("settingGridCaption");
+        page.verifyChecks(true, true, true);
+        page.press("settingGrid", KeyCode.SPACE);
+        page.verifyChecks(false, true, true);
+
+        // Translated long captions wrap on the same axis without changing
+        // values.
+        page.click("rbCzech");
+        page.verifyAppearance();
+        page.verifyChecks(false, true, true);
+        page.captureDialog("rbCzech", "r0438-settings-game-cs.png");
+        page.click("rbEnglish");
+        developer.backToGame();
     }
 
 }

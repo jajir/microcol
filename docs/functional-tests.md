@@ -1,5 +1,15 @@
 ## R-0423 passenger default selection — 2026-11-06
 
+## R-0438 Settings common axis — 2026-11-09
+
+1. [R-0438](requirements/done/R-0438.md), UC-119/SUPPORT-001: common right-aligned caption column, wrapping English/Czech text and aligned native inputs in both Settings hosts. No new artwork; existing checkbox, radio and ruler rendering is reused.
+2. Shared Java formatter applied to ten changed Java files. Model/JUnit dispatched through completion runner `20261109T203657Z-ce80d0599345`, PID 89116, timeout 600 seconds. Acceptance is pending; targeted selection is full `TC_84_F75_framed_settings_test` plus `PageVerificationContractTest`, followed by fixed smoke/support.
+3. TC84/15 covers a 900 × 700 in-game window, caption click, keyboard undo and both languages; existing appearance checks verify input/caption axes, wrapping and unclipped captions. TC84/08 checks the menu host at 900 × 700 in both languages. Existing input, persistence and shortcut scenarios remain selected.
+4. Model/JUnit passed **5,116 tests, 0 failures/errors/skips**, 394 complete XML reports in `target/verification/run-hr4p1u07`, 162.425 supervised seconds. Game source matches the retained snapshot. Targeted Docker/Xvfb run `20261109T203957Z-777e4aa8c361`, PID 89734, timeout 1,800 seconds, uses the full selection above.
+5. Initial documentation checks passed 14 consistency tests, naming audit with zero unexplained occurrences and strict MkDocs. Logs: `target/r0438/docs-tests.log`, `name-audit.log`, `mkdocs.log`. Final evidence and archive links will be checked after local acceptance.
+
+
+
 1. [R-0423](requirements/done/R-0423.md) changes the landing chooser to select all
    eligible passengers on every opening. The existing model still owns
    eligibility and confirmation validation. TC29 retains cancellation,
@@ -40,6 +50,24 @@
    All six changed Java files match that source snapshot; retained hashes and
    counts are in `target/r0423/acceptance.json`. Local acceptance is complete;
    no full regression, remote CI or new distribution is claimed.
+
+6. Initial targeted run failed: **18 tests, 0 failures, 6 errors, 0 skips**, `target/docker-ui/run-sTi2Ax`, 203.961 supervised seconds. New geometry checks incorrectly used visual bounds, including handwriting glyph overhang and slider endpoint labels, instead of layout bounds. Existing non-geometry scenarios passed. The page check now measures layout axes and separately verifies complete caption text and its visual separation from the input; no tolerance or gameplay assertion was weakened. Disabled-caption interaction is also covered. Production source is unchanged; acceptance is repeated for the revised test source.
+
+7. Revised-source model/JUnit dispatch: `20261109T204404Z-f5209eef3ef6`, PID 90163, timeout 600 seconds. Both changed test files were reformatted with the shared Eclipse profile.
+
+8. Revised-source model/JUnit passed **5,116 tests, 0 failures/errors/skips**, 394 XML reports in `target/verification/run-eh1ih5lz`, 158.774 supervised seconds. All changed Java/CSS files match its source snapshot. Full targeted selection repeated as `20261109T204709Z-0b91bd65a226`, PID 90560, timeout 1,800 seconds.
+
+9. Second targeted run: **18 tests, 0 failures, 1 error, 0 skips**, `target/docker-ui/run-xigLJY`, 227.183 supervised seconds. All original TC84 scenarios and source-contract checks passed; new TC84/15 incorrectly searched only for the menu heading class. The page check now handles the existing in-game heading too. Screenshot review also found wrapped captions overflowing fixed minimum row heights into the next row. Production rows now retain their computed preferred height, and the geometry check explicitly requires caption and input to fit their row. Failed evidence remains preserved; no acceptance claimed.
+
+10. Row-height repair model/JUnit dispatch: `20261109T205203Z-e8233e6b850b`, PID 90711, timeout 600 seconds; changed Java files reformatted with the shared profile.
+
+11. Row-height repair model/JUnit passed **5,116 tests, 0 failures/errors/skips**, 394 XML reports in `target/verification/run-6q3ovhnm`, 172.966 supervised seconds. All changed executable files match the snapshot. Full targeted selection dispatched as `20261109T205520Z-8464c216f989`, PID 91033, timeout 1,800 seconds.
+
+12. Repaired targeted run passed **18 tests, 0 failures/errors/skips**, two complete XML reports in `target/docker-ui/run-nCZRad`, 240.022 supervised seconds. Caller inspected `r0438-settings-game-en.png`, `r0438-settings-game-cs.png`, `framed-settings-english.png`, `r0377-settings-menu-scrolled-en.png` and `r0377-settings-menu-cs.png`: both languages and hosts retain the caption/input axis, long captions fit without overlapping the next row, and bottom settings/Back remain accessible through content scrolling. These are automated screenshots, not a player study.
+13. Fixed smoke/support dispatched as `20261109T205945Z-b44991f70929`, PID 91329, supervisor timeout 480 seconds with the unchanged 420-second phase budget. Required local acceptance is pending this result.
+
+14. Final smoke/support passed **21 tests, 0 failures/errors/skips**, 12 complete XML reports in `target/verification/run-s0oxztva`, 231.146 phase seconds and 234.483 supervised seconds, within the 420-second acceptance budget. All changed Java/CSS files match its retained source snapshot. Local acceptance totals: **5,116 model/JUnit, 18 targeted UI/source-contract, 21 smoke/support**, all passing. Earlier failed attempts remain failed. R-0438 is archived as done; no remote CI, full regression or distribution publication was inspected.
+15. Final review preserves unrelated backlog reordering and changes no game rule, package responsibility, build output or artwork. Final staged-source checks passed **14 documentation consistency tests**, naming audit with **zero unexplained occurrences**, and **strict MkDocs**, excluding the unrelated edit. Logs: `target/r0438/docs-tests-final.log`, `name-audit-final.log`, `mkdocs-final.log`.
 
 ## R-0422 trade-route header — 2026-11-06
 

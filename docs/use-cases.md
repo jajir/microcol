@@ -1381,3 +1381,8 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 ## UC-114/119: souhlas vrstev při scrollování — 2026-11-09
 
 1. [R-0434](requirements/done/R-0434.md) opravuje společnou polohu terénu a mlhy během posunu. TC196/06 porovnává pohybující a stojící obraz při téže poloze kamery, ve čtyřech směrech WASD a rychlostech 2 a 9; zachovává herní stav. Výsledky vlastní [funkční evidence](functional-tests.md#r-0434-scroll-frame-consistency-2026-11-09).
+
+
+## R-0438 — společná osa nastavení
+
+1. UC-119 (Regrese), SUPPORT-001: [R-0438](requirements/done/R-0438.md) sjednocuje zarovnání popisků a ovládání v obou hostitelích Nastavení. `TC_84_F75_framed_settings_test` zachovává volby, ukládání, jazyky a klávesnici; TC84/08 ověřuje malé menu a TC84/15 malé herní okno, kliknutí na popisek a zalomení bez překryvů. Výsledky vlastní [funkční evidence](functional-tests.md#r-0438-settings-common-axis-2026-11-09).

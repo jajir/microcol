@@ -1,5 +1,10 @@
 # Current requirement backlog
 
+## Společná osa nastavení — 2026-11-09
+
+1. [R-0438](done/R-0438.md), status `done`, A03 s vazbami A01/A04: schválená varianta A, popisky vpravo zarovnané ke společné ose, ovládání za ní a dlouhé texty zalomené. Implementováno a lokálně ověřeno: 5 116 modelových, 18 cílených UI/kontraktových a 21 smoke testů bez chyb a přeskočení.
+
+
 
 ## Konfigurovatelné klávesové zkratky — 2026-11-08
 

@@ -116,10 +116,63 @@ public final class FramedSettingsPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void verifyAppearance() {
+    public void verifyCommonAxis() {
         getRobot().interact(() -> {
-            final javafx.scene.Node heading = getNodeFinder()
-                    .lookup(".main-title").query();
+            final double axis = control("rbCzech")
+                    .localToScene(control("rbCzech").getLayoutBounds())
+                    .getMinX();
+            for (final String id : new String[] { "settingGrid",
+                    "settingFightAdvisor", "autosaveEnabled",
+                    "settingTurnSummary", "settingOpenEuropeOnArrival",
+                    "settingVolume", "settingEffectsVolume",
+                    "settingAnimationSpeed", "settingMapScrollSpeed",
+                    "settingKeyboardShortcuts", "settingDeveloperMode" }) {
+                final Control input = control(id);
+                final javafx.scene.control.Label caption = (javafx.scene.control.Label) ((javafx.scene.layout.HBox) input
+                        .getParent()).getChildren().get(0);
+                final Bounds bounds = input
+                        .localToScene(input.getLayoutBounds());
+                final Bounds labelBounds = caption
+                        .localToScene(caption.getLayoutBounds());
+                assertEquals(axis, bounds.getMinX(), 1, id + " input axis");
+                assertEquals(axis - 12, labelBounds.getMaxX(), 1,
+                        id + " caption axis");
+                assertTrue(
+                        caption.localToScene(caption.getBoundsInLocal())
+                                .getMaxX() < axis,
+                        id + " text stays before the input");
+                if (!caption.getText().isEmpty()) {
+                    assertEquals(caption.getText(),
+                            ((Text) caption.lookup(".text")).getText(),
+                            id + " caption is not truncated");
+                }
+                final Bounds rowBounds = input.getParent()
+                        .localToScene(input.getParent().getLayoutBounds());
+                assertTrue(labelBounds.getMaxY() <= rowBounds.getMaxY() + 1,
+                        id + " wrapped caption fits its row");
+                assertTrue(bounds.getMaxY() <= rowBounds.getMaxY() + 1,
+                        id + " input fits its row");
+                assertTrue(caption.isWrapText(), id);
+                assertEquals(javafx.geometry.Pos.TOP_RIGHT,
+                        caption.getAlignment(), id);
+                assertTrue(bounds.getMaxX() <= input.getScene().getWidth(), id);
+                assertTrue(
+                        caption.getHeight() >= caption
+                                .prefHeight(caption.getWidth()) - 1,
+                        id + " caption is not clipped");
+            }
+        });
+    }
+
+    public void verifyAppearance() {
+        verifyCommonAxis();
+        getRobot().interact(() -> {
+            final javafx.scene.Node heading = java.util.Optional
+                    .ofNullable(
+                            control("rbCzech").getScene().lookup(".main-title"))
+                    .orElse(control("rbCzech").getScene()
+                            .lookup(".screen-title"));
+            assertNotNull(heading, "Settings heading in either host");
             final Control first = control("rbCzech");
             final javafx.scene.control.ScrollPane contentScroll = scrollOf(
                     first);
@@ -154,8 +207,15 @@ public final class FramedSettingsPage extends AbstractScreen {
                 if (c instanceof Labeled) {
                     final Labeled label = (Labeled) c;
                     assertEquals("Playpen Sans", label.getFont().getFamily());
-                    assertEquals(label.getText(),
-                            ((Text) c.lookup(".text")).getText(), id);
+                    if (c instanceof CheckBox) {
+                        final javafx.scene.control.Label caption = (javafx.scene.control.Label) control(
+                                id + "Caption");
+                        assertEquals(label.getText(), caption.getText(), id);
+                        assertEquals(c, caption.getLabelFor(), id);
+                    } else {
+                        assertEquals(label.getText(),
+                                ((Text) c.lookup(".text")).getText(), id);
+                    }
                 }
                 final Bounds b = c.localToScene(c.getBoundsInLocal());
                 assertTrue(

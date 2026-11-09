@@ -113,6 +113,7 @@ public class SettingVolumeView implements JavaFxComponent, UpdatableLanguage {
 
             row = new HBox();
             row.getChildren().addAll(label, slider, value);
+            SettingRow.align(row, label);
             HBox.setMargin(value, new Insets(0, 0, 0, 8));
         }
 

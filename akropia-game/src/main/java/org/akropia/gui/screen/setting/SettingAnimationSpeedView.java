@@ -43,6 +43,7 @@ class SettingAnimationSpeedView implements JavaFxComponent, UpdatableLanguage {
         mainPanel = new HBox();
         mainPanel.getChildren().add(label);
         mainPanel.getChildren().add(slider);
+        SettingRow.align(mainPanel, label);
 
         updateLanguage(i18n);
     }

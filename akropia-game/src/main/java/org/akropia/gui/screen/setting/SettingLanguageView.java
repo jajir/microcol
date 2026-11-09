@@ -54,6 +54,7 @@ public class SettingLanguageView implements JavaFxComponent, UpdatableLanguage {
         mainPanel.getChildren().add(label);
         mainPanel.getChildren().add(rbCzech);
         mainPanel.getChildren().add(rbEnglish);
+        SettingRow.align(mainPanel, label);
 
         updateLanguage(i18n);
     }

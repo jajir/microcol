@@ -40,3 +40,21 @@
     -fx-effect: null;
 }
 
+
+/* Variant A: captions end at one axis; all inputs begin after one gap. */
+.settings-controls .setting-row {
+    -fx-alignment: top-left;
+    -fx-spacing: 12;
+}
+.settings-controls .setting-row > .setting-caption {
+    -fx-min-width: 180;
+    -fx-pref-width: 180;
+    -fx-max-width: 180;
+    -fx-padding: 5 0 0 0;
+    -fx-alignment: top-right;
+    -fx-text-alignment: right;
+}
+.settings-controls .setting-row > .slider {
+    -fx-min-width: 200;
+    -fx-max-width: 200;
+}

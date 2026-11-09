@@ -119,7 +119,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         developerDescription.setWrapText(true);
         developerDescription.setMaxWidth(440);
         final VBox developerSection = new VBox(4, developerHeading,
-                developerCheckBox, developerDescription);
+                SettingRow.check(developerCheckBox), developerDescription);
         developerSection.setId("developerSettings");
         buttonBack = ActionButtons.button(ButtonIcon.BACK);
         buttonBack.setId(BUTTON_BACK_ID);
@@ -130,13 +130,17 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         buttonsBox.getChildren().add(settingLanguageView.getContent());
         buttonsBox.getChildren().add(settingShowGridView.getContent());
         buttonsBox.getChildren().add(settingShowFightAdvisorView.getContent());
-        buttonsBox.getChildren().add(autosaveCheckBox);
-        buttonsBox.getChildren().add(turnSummaryCheckBox);
-        buttonsBox.getChildren().add(openEuropeCheckBox);
+        buttonsBox.getChildren().add(SettingRow.check(autosaveCheckBox));
+        buttonsBox.getChildren().add(SettingRow.check(turnSummaryCheckBox));
+        buttonsBox.getChildren().add(SettingRow.check(openEuropeCheckBox));
         buttonsBox.getChildren().add(settingVolumeView.getContent());
         buttonsBox.getChildren().add(settingAnimationSpeedView.getContent());
         buttonsBox.getChildren().add(settingMapScrollSpeedView.getContent());
-        buttonsBox.getChildren().add(shortcutsButton);
+        final javafx.scene.layout.HBox shortcutsRow = new javafx.scene.layout.HBox(
+                new javafx.scene.control.Label(), shortcutsButton);
+        SettingRow.align(shortcutsRow,
+                (javafx.scene.control.Label) shortcutsRow.getChildren().get(0));
+        buttonsBox.getChildren().add(shortcutsRow);
         buttonsBox.getChildren().add(developerSection);
         buttonsBox.getChildren().add(settingVersionView.getContent());
 

@@ -1,5 +1,12 @@
 # UX a pravidla ovládání Akropia
 
+## Společná osa nastavení — R-0438, 9. listopadu 2026
+
+1. Schválená varianta A sjednocuje všechny řádky nastavení: popisky jsou zarovnané doprava, ovládací prvky začínají za společnou mezerou. Dlouhé popisky se zalamují; vodicí čára se nekreslí.
+2. Stejné rozložení platí pro vstup z hlavního menu i ze hry, v češtině i angličtině. Menší okno posouvá obsah. Popisek checkboxu zůstává klikací, klávesnice a okamžité ukládání voleb se nemění; Zpět a Escape zachovávají původní cíl.
+3. Návrh a přejímka: [R-0438](requirements/done/R-0438.md). Změna zachovává existující grafické prvky; nejde o nový grafický styl ani hráčskou studii.
+
+
 ## Klávesové zkratky — kontrakt R-0433, 8. listopadu 2026
 
 1. Každá herní klávesová akce i posun mapy je v jediné [inventuře zkratek](keyboard-shortcuts.md) s kontextem a platformními výchozími kombinacemi. Obsluhy kláves i zobrazené zkratky čtou tutéž účinnou konfiguraci; nová obsluha nepřidává pevně zapsaný `KeyCode` ani text „(X)“ do překladu.

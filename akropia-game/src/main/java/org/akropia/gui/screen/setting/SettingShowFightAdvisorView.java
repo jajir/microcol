@@ -33,8 +33,7 @@ public class SettingShowFightAdvisorView
         preferencesProperties.getShowFightAdvisorProperty()
                 .bindBidirectional(checkBox.selectedProperty());
 
-        mainPanel = new HBox();
-        mainPanel.getChildren().add(checkBox);
+        mainPanel = SettingRow.check(checkBox);
 
         updateLanguage(i18n);
     }
