@@ -1,25 +1,18 @@
-/* The selected frame/ruler appearance belongs only to Settings. */
+/* Settings-specific checkbox, slider and row layout. */
 .settings-controls .check-box,
-.settings-controls .radio-button,
 .settings-controls .slider,
 .settings-controls .label-slider {
 }
 .settings-controls .check-box {
     -fx-skin: "org.akropia.gui.util.FramedCheckBoxSkin";
 }
-.settings-controls .radio-button {
-    -fx-skin: "org.akropia.gui.util.FramedRadioButtonSkin";
-}
-.settings-controls .check-box,
-.settings-controls .radio-button { -fx-padding: 3 4; }
-.settings-controls .check-box > .box,
-.settings-controls .radio-button > .radio {
+.settings-controls .check-box { -fx-padding: 3 4; }
+.settings-controls .check-box > .box {
     -fx-padding: 8;
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
-.settings-controls .check-box > .box > .mark,
-.settings-controls .radio-button > .radio > .dot {
+.settings-controls .check-box > .box > .mark {
     -fx-padding: 8;
     -fx-background-color: transparent;
 }

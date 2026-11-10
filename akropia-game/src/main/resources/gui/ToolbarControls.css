@@ -31,3 +31,18 @@
     -fx-opacity: 0.45;
 }
 .toggle-button:selected { -fx-underline: true; }
+
+/* Shared radio appearance, including modal dialogs. */
+.radio-button {
+    -fx-skin: "org.akropia.gui.util.FramedRadioButtonSkin";
+    -fx-padding: 3 4;
+}
+.radio-button > .radio {
+    -fx-padding: 8;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.radio-button > .radio > .dot {
+    -fx-padding: 8;
+    -fx-background-color: transparent;
+}

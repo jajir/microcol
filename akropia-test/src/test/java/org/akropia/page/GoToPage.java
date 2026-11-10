@@ -224,6 +224,13 @@ public final class GoToPage extends AbstractScreen {
 
     /** The chooser lists exactly the colonies the model offers, by name. */
     public void verifyColonyChoices(final String... names) {
+        for (final RadioButton choice : getListOfNodes(".radio-button").stream()
+                .map(RadioButton.class::cast).collect(Collectors.toList())) {
+            assertTrue(choice
+                    .getSkin() instanceof org.akropia.gui.util.FramedRadioButtonSkin,
+                    "Destination choices use the shared settings appearance");
+        }
+
         final List<String> shown = this
                 .<RadioButton>getListOfNodes(".radio-button").stream()
                 .filter(choice -> choice.getId() != null

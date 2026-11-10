@@ -1287,3 +1287,7 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Samostatné zelené značky potvrzení a zrušení — 2026-11-10
 
 1. [R-0445](done/R-0445.md), status `done`, A03 s vazbou A05/A06: implementovány a lokálně ověřeny právě dvě značky z varianty „1 — Soft corners“, bez papírového podkladu a bez textů vložených do náhledu; zachovat existující popisky a akce tlačítek.
+
+## Společné radiobuttony — 2026-11-10
+
+1. [R-0450](done/R-0450.md), status `done`, A03 s vazbou A02: výchozí vzhled všech radiobuttonů odpovídá Nastavení, včetně nabídky Goto otevřené klávesou G. Implementováno a lokálně ověřeno; výsledky vlastní funkční evidence.

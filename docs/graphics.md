@@ -2631,3 +2631,14 @@ přístupným názvem; po rozšíření se text obnoví. Stav ověření vede
 
 1. [R-0429](requirements/done/R-0429.md) používá pro pole názvu trasy papír `#FFF9EC`, při fokusu ploché zvýraznění `#E7E7D0` a černý tah `#000000` přibližně 2 logické pixely. Písmo zůstává Playpen Sans. Lehce nepravidelná geometrie vychází ze společného rámečku tlačítek; bez stínů, textur a gradientů.
 2. Editovatelný zdroj je `akropia-game/src/graphics/trade-route-name-frame.svg`; export v manifestu má skupinu `trade-route-name`. Příkaz `python3 scripts/graphics/export-graphics.py trade-route-name --install` obnoví runtime PNG, `--check` ověří shodu. Devítidílný okraj používá výřez 12 rasterových pixelů zobrazený v pásu 6 logických pixelů.
+
+### Společné radiobuttony v celé hře — 2026-11-10
+
+1. [R-0450](requirements/done/R-0450.md) rozšiřuje vzhled radiobuttonů z Nastavení
+   na všechny herní obrazovky a dialogy včetně Goto. Jediný společný styl
+   používá stávající kreslený rámeček, světlý střed a černou tečku výběru.
+   Platí černá linka přibližně 2 logické px a ploché jednobarevné výplně.
+2. Obrazovky nepřidávají vlastní varianty stylu. Nativní ovládání klávesnicí,
+   výlučný výběr, fokus a odezva na stav zůstávají zachované. Rozšíření se
+   týká radiobuttonů; původní dohoda o ostatních prvcích Nastavení se nemění.
+3. Přejímku dokládá [funkční evidence](functional-tests.md#r-0450-shared-radio-buttons-2026-11-10).

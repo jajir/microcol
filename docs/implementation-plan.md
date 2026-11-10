@@ -738,3 +738,5 @@ Návrhy budov z 30. října 2026 řeší [R-0357](requirements/done/R-0357.md), 
 ## Zjednodušení popisků Nastavení — 2026-11-10
 
 1. [R-0441](requirements/done/R-0441.md), UC-119/SUPPORT-001: odstranit vedlejší hodnotu Efektů, samostatný nadpis Developer a vysvětlení diagnostiky; rychlost posunu mapy označit pouze krajními lokalizovanými popisky. Rozsah a aktuální stav vlastní požadavek; přejímku vede funkční evidence.
+
+Společný vzhled radiobuttonů včetně Goto: [R-0450](requirements/done/R-0450.md); přejímka ve [funkční evidenci](functional-tests.md#r-0450-shared-radio-buttons-2026-11-10).
