@@ -1,4 +1,4 @@
-FROM maven:3.9.12-eclipse-temurin-17-noble@sha256:22e5056a4cd1e09d0373044e1a8f5f47711878cb5803b11c97729b856571a52e
+FROM maven:3.9.12-eclipse-temurin-25-noble@sha256:4f82a03a7d6679281952d628131299b1be88d7030a49c6a2b7d2ba2642e44e3e
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \

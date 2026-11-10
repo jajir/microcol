@@ -24,7 +24,7 @@ a development reference; it is excluded from website publication.
 See [modules and build outputs](docs/modules.md) and
 [writing and publishing documentation](docs/publishing.md).
 
-Build self-contained macOS and Linux packages with Maven and JDK 17; see
+Build self-contained macOS and Linux packages with Maven and JDK 25; see
 [distribution build commands and outputs](docs/distribution.md).
 
 For everyday testing, install [Akropia Dev](docs/development-builds.md) once.

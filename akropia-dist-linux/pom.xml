@@ -62,8 +62,8 @@
                                 <message>Unsupported native platform; use a supported host JDK architecture.</message>
                             </requireProperty>
                             <requireJavaVersion>
-                                <version>[17,18)</version>
-                                <message>Use JDK 17 (set JAVA_HOME) for native distribution builds.</message>
+                                <version>[25,26)</version>
+                                <message>Use JDK 25 (set JAVA_HOME) for native distribution builds.</message>
                             </requireJavaVersion>
                         </rules></configuration>
                     </execution>

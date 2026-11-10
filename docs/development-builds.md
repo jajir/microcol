@@ -87,7 +87,7 @@ command is normally `~/.local/share/akropia-dev/launcher/akropia-dev`.
    [latest test report](test-results.md). Ordinary development does not wait for
    or inspect remote CI results.
 2. GitHub Actions checks the launcher and publication logic and runs the
-   [functional player scenarios](functional-tests.md), then uses JDK 17 and
+   [functional player scenarios](functional-tests.md), then uses JDK 25 and
    Maven to build the macOS ARM64, macOS Intel and Linux x86-64 packages from the
    same source commit. Failed builds do not become the current development build.
 3. Successful outputs are uploaded to a separate prerelease identified by
@@ -248,7 +248,7 @@ paths, real game test counts, the bundled JVM, and Linux startup under Xvfb.
 The workflow calls `mvn verify` so these checks must pass before upload.
 
 A separate required `functional` job runs `akropia-test` and its game dependency
-inside the same Docker image used for local UI tests, on JDK 17 with TestFX
+inside the same Docker image used for local UI tests, on JDK 25 with TestFX
 and native Glass under Xvfb with Openbox. It includes all numbered player
 scenarios, uploads
 fresh Surefire reports as `tests-functional-<attempt>` even on failure, and gates the

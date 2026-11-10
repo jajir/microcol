@@ -16,7 +16,7 @@
 		<splash-creen-image>images/splash-screen.png</splash-creen-image>
 		<github.global.server>github</github.global.server>
 		<github.global.oauth2Token>${env.GITHUB_OAUTH_TOKEN}</github.global.oauth2Token>
-		<!-- Instrument tests on the JDK 17 used for native distribution builds. -->
+		<!-- Instrument tests on the JDK 25 used for native distribution builds. -->
 		<jacoco.version>0.8.15</jacoco.version>
 		<log4j.version>2.25.5</log4j.version>
 		<javadoc.plugin.version>3.1.1</javadoc.plugin.version>
@@ -169,6 +169,7 @@
 				<version>0.0.3</version>
 				<configuration>
 					<mainClass>org.akropia.Akropia</mainClass>
+					<executable>${java.home}/bin/java</executable>
 				</configuration>
 			</plugin>
 			<plugin>

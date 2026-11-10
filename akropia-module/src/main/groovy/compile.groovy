@@ -5,7 +5,7 @@ def artifactFile = new File(targetDir,
         "akropia-game-${project.version}-jar-with-dependencies.jar")
 def moduleFile = new File(basedir, 'src/main/java/module-info.java')
 def compiler = new File(System.getProperty('java.home'), 'bin/javac')
-def release = project.properties.getProperty('maven.compiler.release', '11')
+def release = project.properties.getProperty('maven.compiler.release', '25')
 
 if (!artifactFile.isFile()) {
     throw new IllegalStateException("Missing game artifact: ${artifactFile}")

@@ -43,5 +43,7 @@ reports are outdated. It is excluded from publication. The project website at
 [https://jajir.github.io/microcol/](https://jajir.github.io/microcol/) publishes only `docs/`.
 
 ```bash
-mvn -pl akropia-game compile javafx:run
+bash scripts/run-game.sh
 ```
+
+Local launch uses JDK 25; see [Java selection and build commands](distribution.md#build-commands).

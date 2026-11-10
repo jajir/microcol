@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Shared Java baseline — 2026-11-10
+
+1. [R-0446](done/R-0446.md), status `done`, A03: use JDK 25 for local launch, compilation, Docker/CI and packaged runtimes; JavaFX stays at 17.0.20. Local acceptance passed: 5,117 model/JUnit, 3 targeted UI and 21 smoke/support checks plus macOS packaging; [evidence](../functional-tests.md#r-0446-java-25-baseline-2026-11-10).
+
 ## Samostatná obrazovka klávesových zkratek — 2026-11-10
 
 1. [R-0439](done/R-0439.md), status `done`, A03 s vazbou A01: editor přes celou plochu hlavního okna, pevné horní akce Obnovit výchozí / Zrušit / Uložit a zpět a Escape podle rozpracovaného zadávání. Implementováno a lokálně ověřeno 2026-11-10; výsledky vlastní [funkční evidence](../functional-tests.md#r-0439-full-page-shortcut-editor-2026-11-10).

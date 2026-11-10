@@ -69,6 +69,8 @@
                             <argument>--add-modules</argument><argument>akropia.game,java.naming</argument>
                             <argument>--launcher</argument><argument>launcher=akropia.game/org.akropia.Akropia</argument>
                             <argument>--strip-debug</argument>
+                            <!-- Updater archives require regular files, including license notices. -->
+                            <argument>--disable-plugin</argument><argument>dedup-legal-notices</argument>
                             <argument>--no-header-files</argument>
                             <argument>--no-man-pages</argument>
                             <argument>--output</argument><argument>${project.build.directory}/dist</argument>

@@ -99,7 +99,7 @@ not enabled in a normal build.
 The test module's `local` (default) and `ci` profiles both select the `ci` and
 `local` test tags. Surefire includes all `TC_...` scenario classes and fails
 when no tests are selected. The complete TestFX suite uses native Glass under
-Xvfb/Openbox on Linux/JDK 17 in the shared Docker environment, locally and in
+Xvfb/Openbox on Linux/JDK 25 in the shared Docker environment, locally and in
 CI. Each container run exports logs and reports into a separate
 `target/docker-ui/run-XXXXXX/` directory; module Surefire reports are under
 `akropia-game/surefire-reports/` and `akropia-test/surefire-reports/` there.
@@ -118,7 +118,7 @@ The module project copies the game JAR with dependencies during
 `generate-resources`. During `process-resources`,
 [compile.groovy](../akropia-module/src/main/groovy/compile.groovy) compiles
 [module-info.java](../akropia-module/src/main/java/module-info.java) against
-that JAR using Maven's JDK and the shared Java release setting, currently 11.
+that JAR using Maven's JDK and the shared Java release setting, currently 25.
 The script passes arguments without shell splitting and stops on compiler errors.
 The Shade Plugin inserts the compiled descriptor into the final JAR during
 `package`, replacing dependency descriptors.
@@ -128,7 +128,7 @@ The combined descriptor retains Log4j's runtime service consumers and providers
 services). Their original descriptors are removed by shading; omitting these
 declarations prevents the upgraded logger from starting as a named module.
 Both the assembled game JAR and the module JAR declare `Multi-Release: true`
-to retain the bundled libraries' versioned classes and support JDK 17 linking.
+to retain the bundled libraries' versioned classes and support JDK 25 linking.
 
 The JAR plugin recreates the input before each shading run, so repeated packaging
 does not reuse the previous shaded output. The
@@ -155,7 +155,7 @@ application image and then for the DMG or DEB, reusing the linked runtime.
 Both modules use Maven Assembly to create updater archives, retaining executable
 launchers and runtime helpers. Maven also prepares release filenames and SHA-256
 sidecars under each module's `target/dev-assets/`. The modules check the host OS, require
-JDK 17, and clear previous application/installer output before creating it again.
+JDK 25, and clear previous application/installer output before creating it again.
 
 Linux installer versions use the numeric Maven version without the snapshot
 qualifier. macOS adds one to the major version because `jpackage` rejects a zero
@@ -220,8 +220,11 @@ aggregate results remain in `target/verification/run-*/`; `scope` distinguishes
 `model`, `precommit` and `full`. These are verification outputs, not distributable
 artifacts. See the [smoke contract](functional-tests.md#pre-commit-smoke).
 
-Application sources and the module descriptor target Java 11, while native
-packaging uses JDK 17 and JavaFX 17.0.20. Packages are specific to the build OS and
+The linked runtime disables license-notice deduplication so updater archives
+contain regular license files rather than symlinks, retaining all notices.
+
+Application sources and the module descriptor target Java 25; local launch,
+Docker/CI and native packaging use JDK 25 with JavaFX 17.0.20. Packages are specific to the build OS and
 CPU architecture. A configured package format is not proof of compatibility with
 all machines running that OS; see the
 [distribution scope and remaining release work](distribution.md#distribution-scope-and-remaining-release-work)

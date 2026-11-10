@@ -18,8 +18,8 @@
 		<github.global.server>github</github.global.server>
 		<github.global.oauth2Token>${env.GITHUB_OAUTH_TOKEN}</github.global.oauth2Token>
 		<junit.jupiter.version>5.5.2</junit.jupiter.version>
-		<maven.compiler.release>11</maven.compiler.release>
-		<!-- JavaFX 17 supplies native Apple Silicon libraries while retaining Java 11 compatibility. -->
+		<maven.compiler.release>25</maven.compiler.release>
+		<!-- Keep JavaFX unchanged while standardizing the JDK baseline. -->
 		<javafx.version>17.0.20</javafx.version>
 		<!-- CI supplies its immutable build tag; local builds keep the plain game version. -->
 		<akropia.build.id>local</akropia.build.id>
@@ -99,6 +99,21 @@
 	</dependencyManagement>
 
 	<build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions><execution>
+                    <id>java-baseline</id><phase>validate</phase>
+                    <goals><goal>enforce</goal></goals>
+                    <configuration><rules><requireJavaVersion>
+                        <version>[25,26)</version>
+                        <message>Use JDK 25 for Akropia: set JAVA_HOME and PATH, or launch with bash scripts/run-game.sh.</message>
+                    </requireJavaVersion></rules></configuration>
+                </execution></executions>
+            </plugin>
+        </plugins>
 		<pluginManagement>
 			<plugins>
 				<!-- just disable maven site deploy -->

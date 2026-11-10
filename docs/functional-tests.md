@@ -1,3 +1,20 @@
+## R-0446 Java 25 baseline — 2026-11-10
+
+1. Standardize compilation, local JavaFX launch, Docker/CI and packaged runtimes on JDK 25, retaining JavaFX 17.0.20. Requirement: [R-0446](requirements/done/R-0446.md). Local acceptance passed; no crash fix or publication is claimed.
+2. Local Homebrew JDK 25.0.2 compiled Java 25 bytecode (class major 69), built the modular game and linked a runtime reporting 25.0.2. Build-tool verification passed 36 checks with zero failures/errors/skips. Launch selection passed 3 checks; CI tooling 27; UI tooling 37; documentation consistency 14, naming audit zero unexplained occurrences and strict MkDocs passed. Logs: `target/r0446/`. The final native packaging and Docker results are recorded below.
+3. Model dispatch `20261110T030458Z-55b004156868` (PID 21534) timed out during preparation: Docker's labelled-container inventory did not respond within 20 seconds. The test command never started; this is not a model result. Saved result/diagnostics are under `~/Library/Logs/Akropia/completions/20261110T030458Z-55b004156868/`. Docker subsequently responded normally to both daemon info and container inventory, with no containers present; retry is authorized without changing acceptance timeouts.
+4. Model retry `20261110T030745Z-2e9f480092e1` (PID 25990) passed **5,117 checks, zero failures/errors/skips**, in 419.454 supervised seconds including cold image preparation; model phase 153.178 seconds. Complete reports and frozen source: `target/verification/run-podybese/`. The only subsequent game-POM difference is the explanatory JDK-version comment; executable model/game source and configuration match.
+5. The first native macOS package run built the application and DMG but failed the updater safety gate because the runtime contained license-notice symlinks (`target/r0446/native-package-symlink-failure.log`). Disable `jlink`'s `dedup-legal-notices` plugin to retain regular copies of all notices; keep archive rejection unchanged. The successful retry is recorded below. This distribution-only adjustment does not change the model source or test selection.
+6. Targeted Docker run `20261110T031539Z-c1a460f5f38b` (PID 28150, timeout 1,800 s) selects TC12 startup, TC01 embark/disembark/map movement, and TC06/TC06 moving goods. It covers application startup, native cursor/drag paths and transfers on Linux/JDK 25. The completed targeted and smoke results are recorded below; this does not reproduce the macOS CoreGraphics failure.
+
+
+7. Targeted Docker run passed **3 scenarios in 3 complete XML reports, zero failures/errors/skips**, in 127.947 supervised seconds. Exact method selection verified in `target/docker-ui/run-vKqGIS/`: TC12/TC01 start free game, TC01/TC01 embark/disembark and TC06/TC06 moving goods. The game/test executable sources are unchanged from the accepted model phase.
+8. Fixed smoke/support dispatched as `20261110T031814Z-3f1f25623331` (PID 28910, outer timeout 480 s, total acceptance budget 420 s). Its accepted result is recorded below; publication remains unverified.
+
+9. Fixed smoke/support passed **21 checks, zero failures/errors/skips**, in **257.905 supervised seconds**, below the 420-second budget. Complete reports, selected methods and source manifest: `target/verification/run-omw0j65k/`. Final executable/configuration files match that snapshot; subsequent edits are documentation only. All 5,117 model checks and the 3 targeted player scenarios remain applicable.
+10. Native macOS packaging retry passed on Homebrew JDK 25.0.2 (`target/r0446/native-package.log`): application, DMG, updater ZIP and checksum sidecars. Both sidecars match; DMG signature and ZIP file types/modes passed inspection. The extracted ZIP's runtime reports 25.0.2, and its license-notice bytes match the linked runtime (`target/r0446/artifact-checks.log`). No license files were removed. The real local launch script passed validation/compilation with JavaFX execution explicitly skipped (`local-launch-selection.log`); the host game GUI was not opened.
+11. Accepted local scope: 5,117 model/JUnit, 3 targeted Docker UI, 21 fixed smoke/support, 36 build/launcher, 3 launch-selection, 27 CI-tooling and 37 UI-tooling checks, all zero failures/errors/skips. Final staged-snapshot validation passed all 14 documentation consistency checks, naming audit with zero unexplained occurrences and strict MkDocs (`target/r0446/final-docs-tests.log`, `final-name-audit.log`, `final-mkdocs.log`). No Java source changed, so Java formatting is not applicable. Preserve unrelated backlog reordering. Native Linux installer generation, native macOS gameplay/crash reproduction and remote CI/publication were not verified.
+
 ## R-0423 passenger default selection — 2026-11-06
 
 ## R-0443 shortcut footer and scrolling — 2026-11-10
@@ -5603,7 +5620,7 @@ python3 scripts/ui-tests/local_slot.py -- \
 ```
 
 [Compose](../compose.ui-tests.yml) sestaví [testovací obraz](../scripts/ui-tests/Dockerfile)
-s Maven 3.9.12, JDK 17, Linuxem amd64, knihovnami JavaFX, Xvfb a Openbox.
+s Maven 3.9.12, JDK 25, Linuxem amd64, knihovnami JavaFX, Xvfb a Openbox.
 Apple Silicon používá emulaci amd64, aby lokální prostředí odpovídalo CI.
 Kontejner má limit 4 GiB; testovací JVM používá explicitní heap 2 GiB
 a Maven 768 MiB. Výchozí JVM heap 1 GiB při tomto limitu nestačil pro TC19.

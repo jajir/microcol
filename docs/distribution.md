@@ -12,11 +12,13 @@ for the status of actual builds and application launches.
 
 ## Requirements and target platform
 
-Use **JDK 17** to run Maven for native packaging. The platform modules enforce
-this requirement, and `javac`, `jlink`, and `jpackage` use Maven's JDK. The source
-and module descriptor still target **Java 11** through `--release 11`; this does
-not mean that the packaged runtime is Java 11. The runtime comes from the JDK 17
-used to build the distribution.
+Use **JDK 25** for local launch, Maven builds, tests and native packaging.
+The parent build rejects other Java major versions. Sources and the module
+descriptor target Java 25 through `--release 25`; `javac`, `jlink`, `jpackage`
+and the JavaFX Maven launch use Maven's JDK. Packaged runtimes therefore use
+Java 25 and do not depend on the player's installed Java. License notices remain
+regular files (`jlink --disable-plugin dedup-legal-notices`) because updater
+archives reject symbolic links; no license content is removed.
 
 JavaFX is pinned to **17.0.20**. Its platform-specific dependencies include native
 Apple Silicon libraries; the older JavaFX 13 configuration did not provide those
@@ -29,32 +31,40 @@ Mac application. Linux x86-64 builds use an x86-64 JDK and libraries. Use separa
 checkouts or build directories for different hosts and architectures, and rebuild
 the complete pipeline instead of transferring a Mac runtime into a Linux package.
 There is no cross-platform installer generation in
-[JDK 17 jpackage](https://docs.oracle.com/en/java/javase/17/docs/specs/man/jpackage.html).
+[JDK 25 jpackage](https://docs.oracle.com/en/java/javase/25/docs/specs/man/jpackage.html).
 
 For Linux DEB creation, the host needs Debian packaging tools, including
 `dpkg-deb` and `fakeroot`. On Debian/Ubuntu the relevant packages are `dpkg-dev`
 and `fakeroot`. The DEB explicitly depends on `libgtk-3-0`, because JavaFX loads
 GTK dynamically and the automatic dependency scanner does not detect it inside
 the linked Java module. Native packaging also requires the platform tools documented in
-[Oracle's packaging prerequisites](https://docs.oracle.com/en/java/javase/17/jpackage/packaging-overview.html).
+[Oracle's packaging prerequisites](https://docs.oracle.com/en/java/javase/25/jpackage/packaging-overview.html).
 
 ## Build commands
 
-Run from the repository root. Set `JAVA_HOME` to the installed JDK 17 directory,
+Run from the repository root. Set `JAVA_HOME` to the installed JDK 25 directory,
 then check that Maven reports that same JDK:
 
 ```sh
-export JAVA_HOME=/absolute/path/to/jdk-17
+export JAVA_HOME=/absolute/path/to/jdk-25
 export PATH="$JAVA_HOME/bin:$PATH"
 mvn -version
 ```
 
-For a Homebrew JDK 17 installation on macOS, the corresponding setting is:
+For a Homebrew JDK 25 installation on macOS, the corresponding setting is:
 
 ```sh
-export JAVA_HOME="$(brew --prefix openjdk@17)/libexec/openjdk.jdk/Contents/Home"
+export JAVA_HOME="$(brew --prefix openjdk@25)/libexec/openjdk.jdk/Contents/Home"
 export PATH="$JAVA_HOME/bin:$PATH"
 ```
+
+For local development, `bash scripts/run-game.sh` launches the game from any
+working directory. With no explicit `JAVA_HOME`, it selects Homebrew `openjdk@25`
+on macOS (or the registered JDK 25); elsewhere it uses the configured Java.
+An explicit `JAVA_HOME` is respected and Maven rejects it if it is not Java 25.
+The script does not modify global jenv or shell settings. `mvn -version` must
+report Java 25 when using Maven directly. JavaFX remains 17.0.20 to isolate
+this runtime change; it is not evidence that the reported macOS crash is fixed.
 
 Build the macOS application and DMG:
 
@@ -197,7 +207,7 @@ therefore works on a locked Mac or CI host. The historical
 the same Maven command instead of maintaining a separate packaging procedure.
 
 The compiler/shade tooling supports this JDK and preserves repeatable module
-assembly. JaCoCo is pinned to 0.8.15 so the normal test run can instrument JDK 17
+assembly. JaCoCo is pinned to 0.8.15 so the normal test run can instrument JDK 25
 classes; the former 0.8.5 emitted instrumentation exceptions despite green tests.
 See [JaCoCo's compatibility history](https://www.jacoco.org/jacoco/trunk/doc/changes.html).
 
