@@ -7,6 +7,43 @@ not install a daemon or change a model. The independent UX player mounts host
 authentication only for its container session; credentials are never baked into
 an image or exported with results.
 
+## Test progress messages
+
+Agreed on **2026-11-10**, [R-0449](../requirements/done/R-0449.md).
+
+1. Base chat updates on the saved `command.log`, `result.json` and available
+   test reports. Name the last evidenced phase: waiting for the local test lock,
+   Docker admission/recovery, image/container preparation, compilation,
+   model/JUnit tests, UI tests, or cleanup/report validation. Starting a runner
+   or container does not establish that tests have started. If evidence is
+   missing or stale, say that the current phase or test-start status is unknown.
+2. For a delay or failure, give the run ID or log path, the concrete operation
+   (for example the labelled-container `docker ps` query), observed elapsed
+   time and configured timeout when available. Keep lock waiting separate from
+   execution time and retain the existing acceptance budgets. Never invent a
+   duration; explicitly say when it was not recorded.
+3. State whether tests had started, and distinguish a command timeout from a
+   failed test. A timed-out Docker command proves that this command did not
+   complete in time; it does not alone prove that the Docker service stopped,
+   froze or has recovered. A running Docker Desktop window is insufficient
+   evidence of service health. Identify any successful later probe precisely.
+4. On retry, retain the failed attempt's evidence and identify the new attempt
+   and its last evidenced phase. Say “retrying startup” if the first attempt
+   never reached tests. Reserve “tests are running again” for actual test
+   execution evidenced in both attempts. A later successful probe or test run
+   does not establish the original cause or a permanent fix.
+5. Example with **illustrative, not measured values**: “Attempt A: the Docker
+   container-list query timed out after 20 s (limit 20 s); the test command
+   never started. Attempt B: the same query completed in 0.4 s; compilation
+   has started, test execution is not yet confirmed. Cause of the first timeout
+   is unknown. Evidence: <run directory>/command.log.” Explain model/JUnit as
+   game-logic tests when needed; it does not mean an AI model run.
+6. When the same delay recurs, compare saved phase timings and failure output
+   before attributing a cause or repeating a recovery claim. Report what is
+   known, what remains unknown and the next bounded diagnostic step. Preserve
+   other jobs and the completion-callback workflow; do not replace it with
+   repeated polling. This reporting policy changes no runner behavior.
+
 ## Local Docker test lock
 
 1. [R-0292](../requirements/done/R-0292.md), agreed on 2026-10-26, serializes local
@@ -500,3 +537,15 @@ separately; this probe does not prove the later integration.
     all passing without skips. Nine documentation consistency checks and strict
     MkDocs passed at closure. R-0317 is done. Historical failures remain failed;
     no remote CI, publication or Docker configuration changes were requested.
+
+## R-0449 reporting policy acceptance — 2026-11-10
+
+1. Documentation-only change: evidence-based chat reporting rules and their
+   AGENTS.md link. Reviewed against existing local-slot phase, command, timeout
+   and elapsed-time events; examples explicitly use illustrative values.
+2. All 14 documentation consistency checks passed; name audit reported zero
+   unexplained occurrences; strict MkDocs and scoped diff checks passed.
+   No executable source, tests or runtime configuration changed. Model/JUnit
+   and smoke runs are exempt for this scope.
+3. This acceptance verifies documentation, not Docker recovery or actual future
+   chat compliance. No remote CI or publication verification was performed.

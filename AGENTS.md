@@ -257,6 +257,12 @@ blocker, not a verified change. Use the contract's completion checklist.
 
 # Completion callbacks
 
+For test progress and failure messages, follow the
+[evidence-based reporting rules](docs/ai/completion-callbacks.md#test-progress-messages).
+Name the actual phase, operation, elapsed time/limit and whether tests started;
+distinguish lock waiting and Docker preparation from test execution. A retry or
+running Docker Desktop is not proof of recovery or a diagnosed root cause.
+
 Local Docker test jobs are serialized by default. An explicit user request such
 as "run this in parallel", "pusť to paralelně" or "use a separate Docker image"
 authorizes an isolated concurrent run for that task without further confirmation
