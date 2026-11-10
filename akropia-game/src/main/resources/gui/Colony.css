@@ -61,3 +61,20 @@
 }
 .colony-harbor .harbor-unit:focused { -fx-border-color: #253a41; -fx-border-style: dashed; }
 .colony-harbor .cargo-amount { -fx-background-color: #c99638; -fx-text-fill: #25231f; }
+
+/* Flat pen-drawn meters: a fixed two-pixel outline, no theme gradients. */
+.construction-progress { -fx-padding: 0; -fx-pref-height: 22; -fx-max-height: 22; }
+.construction-progress > .track {
+    -fx-background-color: #fff9ec;
+    -fx-background-insets: 0;
+    -fx-border-color: #000000;
+    -fx-border-width: 2;
+    -fx-shape: "M 5 1 Q 75 0 120 1 Q 185 0 235 1 Q 240 1 239 7 L 240 16 Q 240 21 234 21 Q 160 22 115 21 L 6 22 Q 0 22 1 16 L 0 6 Q 0 1 5 1 Z";
+}
+.construction-progress > .bar {
+    -fx-background-color: #8fa34f;
+    -fx-background-insets: 2;
+    -fx-background-radius: 3;
+    -fx-padding: 0;
+}
+.construction-progress.construction-shortage > .bar { -fx-background-color: #d8b852; }

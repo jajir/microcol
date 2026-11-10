@@ -1,5 +1,13 @@
 # UX a pravidla ovládání Akropia
 
+## Průběh stavby ve městě — 10. listopadu 2026
+
+1. Hráč přímo pod tlačítkem Construction vidí aktuální projekt a dva zarovnané řádky: práci tesařů a nástroje. Každý potřebný zdroj má ikonu, pruh se zásobou / požadavkem, čistý přírůstek za tah a odhad tahů nebo chybějící množství. Obrázek budované stavby se nezobrazuje.
+2. Nulový požadavek zůstává ztlumený s textem „Není potřeba“, bez nesmyslného poměru zásoby k nule. Pruh je omezený na 0–100 %, číselná zásoba zůstává skutečná i při přebytku. Splněný požadavek má označení „Připraveno“.
+3. Celkový odhad používá existující modelový výpočet při současné čisté produkci; nulový nebo záporný přírůstek chybějícího zdroje znamená neznámé dokončení. Chybějící předpoklad stavby má přednost před časovým odhadem. Dostatek zdrojů znamená připravenost pro příští stavební fázi, nikoli okamžitou dostavbu.
+4. Nedostatek nástrojů je popsán textem i okrovým pruhem; práce má olivovou výplň. Prázdná fronta zobrazuje výzvu a tlačítko bez pruhů. Construction nadále otevře stávající výběr, jeho zrušení nic nespotřebuje. Jde o schválený třetí vizuální návrh a implementaci, nikoli nové hráčské pozorování. Ověření vede [evidence](functional-tests.md#construction-progress-panel-2026-11-10).
+
+
 ## Odmítnuté přetažení pracovníka — R-0448, 10. listopadu 2026
 1. Při přetahování na nepřípustné okolní pole stavový řádek vysvětluje odmítnutí. Po puštění následuje modální zpráva s tlačítkem OK; původní práce a herní stav se zachovají. Samotné zrušení gesta dialog neotevírá.
 2. Důvod vychází z podmínek pole a pracovníka. Tundra sama není zákaz práce; počáteční přiřazení přetažením potřebuje produkci potravin. Platí také obsazenost, přístup k vodě a pohybová pravidla.

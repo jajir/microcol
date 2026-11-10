@@ -1,3 +1,8 @@
+
+## UC-043/114/119: průběh stavby — 10. listopadu 2026
+
+1. Změna zobrazení podle [UX kontraktu](ux.md#prubeh-stavby-ve-meste-10-listopadu-2026) zachovává pravidla projektu, společná kladiva i spotřebu nástrojů. `TC_54_F45_shared_hammers_test` TC02 ověřuje dva pruhy, nepotřebné nástroje, čistou produkci, zaokrouhlené tahy, nedostatek nástrojů a odstranění projektu. TC03 ověřuje nulovou produkci; původní TC01 zachovává dokončení, přebytky a Continue. TC32 zachovává cestu s čekáním a dodáním nástrojů. Stav přejímky: [evidence](functional-tests.md#construction-progress-panel-2026-11-10).
+
 ## UC-114: označení konfliktních zkratek — 10. listopadu 2026
 
 1. Editor označí všechny konfliktní akce výstražným trojúhelníkem a při najetí vysvětlí kolizi ve stavovém řádku podle [pravidel zkratek](keyboard-shortcuts.md).

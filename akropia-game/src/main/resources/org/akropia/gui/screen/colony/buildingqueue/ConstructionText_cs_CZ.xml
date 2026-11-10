@@ -43,4 +43,15 @@ Pokladnice po nákupu: %s zlata.</entry>
 <entry key="rushCompleted">Aktuální projekt byl dokončen a jednou zaplacen.</entry>
 <entry key="missingFounder">Vyžaduje otce zakladatele: %s.</entry>
 	<entry key="missingArmory">Vyžaduje zbrojnici nebo vyšší vojenskou výrobnu.</entry>
+    <entry key="work">Práce</entry>
+    <entry key="toolsLabel">Nástroje</entry>
+    <entry key="notRequired">Není potřeba</entry>
+    <entry key="resourceAmount">%s / %s</entry>
+    <entry key="resourceRate">%s/tah</entry>
+    <entry key="resourceTurns">Tahů: %s</entry>
+    <entry key="resourceMissing">Chybí %s</entry>
+    <entry key="availableNow">Připraveno</entry>
+    <entry key="finishEstimate">Odhad tahů: %s (při současné produkci).</entry>
+    <entry key="finishUnknown">Při současné produkci nelze určit dokončení.</entry>
+    <entry key="workInProgress">Stavba pokračuje.</entry>
 </properties>

@@ -8,6 +8,13 @@
   "sourceRoot": "akropia-game/src/graphics",
   "runtimeRoot": "akropia-game/src/main/resources/images",
   "groups": {
+    "construction-panel": {
+      "family": "Construction resource icons, 22 logical pixels",
+      "outputs": [
+        {"output": "construction-hammer.png", "source": "construction/hammer.svg", "render": "size", "size": [44, 44], "transparent": true, "consumer": "PanelColonyConstruction", "display": "22 x 22 logical px", "stroke": "2 logical px black pen"},
+        {"output": "construction-tools.png", "source": "construction/tools.svg", "render": "size", "size": [44, 44], "transparent": true, "consumer": "PanelColonyConstruction", "display": "22 x 22 logical px", "stroke": "2 logical px black pen"}
+      ]
+    },
     "national-flags": {
   "family": "Twelve identities, R-0402/R-0403",
   "outputs": [

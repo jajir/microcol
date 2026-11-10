@@ -14,6 +14,7 @@ import org.akropia.page.ColonyScreen;
 import org.akropia.page.ConstructionPage;
 import org.akropia.page.FreePlayAuditPage;
 import org.akropia.page.GamePage;
+import org.akropia.page.InGameLayoutPage;
 import org.akropia.page.ScreenTurnReport;
 import org.akropia.page.SettingPage;
 import org.akropia.page.WelcomePage;
@@ -58,6 +59,7 @@ public class TC_32_F24_construction_eligibility_test
                 "construction-unavailable.png");
         construction.escape();
         construction.verifyPickerClosed();
+
         construction.verifyQueue(List.of(), List.of(), 58);
         construction.verifyStocksAndPopulation(58, 19, 3);
 
@@ -174,7 +176,7 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_HOUSE, 0);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 1);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 0));
-        construction.verifyStatus("Waiting for hammers.");
+        construction.verifyStatus("Construction in progress.");
         game = colony.close();
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
@@ -274,6 +276,11 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyQueue(List.of("LUMBER_MILL"), List.of(0), 58);
         construction.escape();
         construction.verifyPickerClosed();
+        construction.verifyResourceProgress("constructionTools", "Není potřeba",
+                "", "", 0, false);
+        construction.verifyForecast("Odhad tahů: 1 (při současné produkci).");
+        new InGameLayoutPage(getContext())
+                .saveEvidence("construction-czech-panel.png");
     }
 
     @Test

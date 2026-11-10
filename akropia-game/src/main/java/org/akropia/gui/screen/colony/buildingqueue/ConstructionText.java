@@ -17,7 +17,9 @@ public enum ConstructionText implements MessageKeyResource {
     remove, cancel, changed, added, empty, hammers, hammerPool, tools,
     waitingTools, waitingHammers, ready, coastalRequired, missingShipyard, rush,
     rushConfirm, rushCancel, rushDetail, rushUnavailable, rushNoGold,
-    rushChanged, rushCompleted, missingFounder, missingArmory;
+    rushChanged, rushCompleted, missingFounder, missingArmory, work, toolsLabel,
+    notRequired, resourceAmount, resourceRate, resourceTurns, resourceMissing,
+    availableNow, finishEstimate, finishUnknown, workInProgress;
 
     public static String name(final I18n i18n, final ColonyBuildingItem item) {
         if (item instanceof ColonyBuildingItemConstruction) {

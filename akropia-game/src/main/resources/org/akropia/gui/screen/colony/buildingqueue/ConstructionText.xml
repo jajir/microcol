@@ -43,4 +43,15 @@ Treasury after purchase: %s gold.</entry>
 <entry key="rushCompleted">The current project was completed and paid once.</entry>
 <entry key="missingFounder">Requires founder: %s.</entry>
 	<entry key="missingArmory">Requires an armory or a higher military production building.</entry>
+    <entry key="work">Work</entry>
+    <entry key="toolsLabel">Tools</entry>
+    <entry key="notRequired">Not required</entry>
+    <entry key="resourceAmount">%s / %s</entry>
+    <entry key="resourceRate">%s/turn</entry>
+    <entry key="resourceTurns">Turns: %s</entry>
+    <entry key="resourceMissing">%s missing</entry>
+    <entry key="availableNow">Ready</entry>
+    <entry key="finishEstimate">Estimated turns: %s (at current production).</entry>
+    <entry key="finishUnknown">Completion unknown at current production.</entry>
+    <entry key="workInProgress">Construction in progress.</entry>
 </properties>

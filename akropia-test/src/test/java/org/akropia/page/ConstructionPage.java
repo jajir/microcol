@@ -198,6 +198,52 @@ public final class ConstructionPage extends AbstractScreen {
                 .filter(c -> c.getType() == type).count());
     }
 
+    public void verifyResourceProgress(final String id, final String amount,
+            final String rate, final String time, final double fraction,
+            final boolean required) {
+        final javafx.scene.control.ProgressBar bar = getNodeFinder()
+                .lookup("#" + id + "Bar")
+                .queryAs(javafx.scene.control.ProgressBar.class);
+        assertEquals(fraction, bar.getProgress(), 0.001);
+        assertEquals(amount, getLabeledById(id + "Amount").getText());
+        assertEquals(rate, getLabeledById(id + "Rate").getText());
+        assertEquals(time, getLabeledById(id + "Time").getText());
+        assertEquals(required ? 1 : 0.5, bar.getParent().getOpacity(), 0.001);
+        assertTrue(bar.isVisible());
+        for (final String suffix : List.of("Name", "Amount", "Rate", "Time")) {
+            final javafx.scene.control.Labeled label = getLabeledById(
+                    id + suffix);
+            final javafx.scene.text.Text rendered = (javafx.scene.text.Text) label
+                    .lookup(".text");
+            assertEquals(label.getText(), rendered.getText(),
+                    id + suffix + " must not be truncated");
+        }
+
+        assertTrue(bar.getWidth() >= 70);
+        assertTrue(bar.getAccessibleText().contains(amount));
+        final javafx.scene.image.ImageView icon = (javafx.scene.image.ImageView) getLabeledById(
+                id + "Name").getGraphic();
+        assertSame(getContext()
+                .getClassFromGuice(org.akropia.gui.image.ImageCache.class)
+                .getImage(id.equals("constructionWork")
+                        ? "construction-hammer.png"
+                        : "construction-tools.png"),
+                icon.getImage());
+    }
+
+    public void verifyForecast(final String expected) {
+        assertEquals(expected,
+                getLabeledById("constructionForecast").getText());
+    }
+
+    public void verifyEmptyProgress() {
+        verifyStatus("No construction selected.");
+        assertTrue(getNodeFinder().lookup("#constructionWorkBar").queryAll()
+                .isEmpty());
+        assertTrue(getNodeFinder().lookup("#constructionToolsBar").queryAll()
+                .isEmpty());
+    }
+
     public void verifyStatus(final String expected) {
         assertEquals(expected, getLabeledById("constructionStatus").getText());
     }

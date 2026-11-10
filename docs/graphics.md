@@ -1,5 +1,12 @@
 # Grafické podklady a jejich použití v Akropia
 
+## Pruhy stavby a malé ikony — 10. listopadu 2026
+
+1. Schválený třetí návrh stavebního panelu používá dva kompaktní pruhy s plnými olivovými/okrovými výplněmi a jemně nepravidelnou černou konturou širokou 2 logické px. Geometrie ovládacího prvku je SVG cesta v `Colony.css`, bez gradientů, stínů a textur; nejde o rastrovou ilustraci.
+2. Malé ikony zachovávají motivy existujícího kladiva a nástrojů. Jejich samostatné skutečné vektorové zdroje [hammer.svg](../akropia-game/src/graphics/construction/hammer.svg) a [tools.svg](../akropia-game/src/graphics/construction/tools.svg) používají černé pero přibližně 2 px při zobrazení 22 × 22. Skupina `construction-panel` ve společném manifestu exportuje 44px PNG pro ostré zobrazení. Původní ikony zboží se nemění.
+3. Opakovatelný export: `python3 scripts/graphics/export-graphics.py construction-panel --install`, kontrola shody `python3 scripts/graphics/export-graphics.py construction-panel --check`. Skutečné zobrazení a přejímka jsou v [evidenci](functional-tests.md#construction-progress-panel-2026-11-10); koncept z ImageGen není runtime zdroj.
+
+
 ## Výstraha duplicitní zkratky — 10. listopadu 2026
 
 1. Zdroj `akropia-game/src/graphics/shortcut-warning.svg` je editovatelná vektorová kresba bez rastrů: mírně nepravidelný trojúhelník, černá linka `#000000` o 2 logických pixelech a jednolitá žlutá výplň; bez stínování a textur.
