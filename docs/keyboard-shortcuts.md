@@ -6,6 +6,13 @@ výchozích kombinací a pevných kláves. Zavádí ji
 evidence. Obecná pravidla ovládání vlastní [UX](ux.md), vstupy hlavní mapy
 [inventura mapy](map-controls.md).
 
+
+## Označení kolizí — 10. listopadu 2026
+
+1. Každá akce v konfliktu má vedle své zkratky ručně kreslený žlutý výstražný trojúhelník. Najetí myší zobrazí ve společném stavovém řádku „Klávesová zkratka je použita už u jiné akce.“ (v angličtině „This keyboard shortcut is already used by another action.“).
+2. Změna či odstranění zkratky a obnovení výchozích hodnot označení znovu vyhodnotí. Uložení zůstává při konfliktu zakázané; Zrušit ponechá aktivní nastavení. Stejné klávesy v nepřekrývajících se kontextech nejsou konfliktem.
+3. Ověření vlastní [funkční evidence](functional-tests.md#shortcut-conflict-warning-2026-11-10).
+
 ## 1. Stav
 
 1. **Implementováno ve zdroji 8. listopadu 2026** (Claude, izolovaný worktree

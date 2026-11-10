@@ -512,6 +512,17 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         shortcuts.verifyStatus("F3 is used by both Developer mode and"
                 + " Colonizopedia. Change one of them before saving.");
         shortcuts.verifySaveEnabled(false);
+        // Both conflicting rows explain the warning in the shared footer.
+        shortcuts.verifyConflict(ShortcutAction.HELP, true);
+        shortcuts.verifyConflict(ShortcutAction.DEVELOPER_MODE, true);
+        shortcuts.hoverConflict(ShortcutAction.HELP);
+        shortcuts.verifyConflictStatus(
+                "This keyboard shortcut is already used by another action.");
+        shortcuts.captureDialog(ScreenKeyboardShortcuts.STATUS_ID,
+                "shortcut-conflict-warning-en.png");
+        shortcuts.hoverConflict(ShortcutAction.DEVELOPER_MODE);
+        shortcuts.verifyConflictStatus(
+                "This keyboard shortcut is already used by another action.");
         // Map actions conflict with each other too.
         shortcuts.startChange(ShortcutAction.HELP, 0);
         shortcuts.pressKeys(KeyCode.K);
@@ -525,6 +536,8 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         shortcuts.verifyFocused(ShortcutAction.HELP, "binding-0");
         shortcuts.startChange(ShortcutAction.HELP, 0);
         shortcuts.pressKeys(KeyCode.SHIFT, KeyCode.Y);
+        shortcuts.verifyConflict(ShortcutAction.HELP, false);
+        shortcuts.verifyConflict(ShortcutAction.DEVELOPER_MODE, false);
         shortcuts.verifyBindings(ShortcutAction.HELP, "Shift+Y");
         shortcuts.verifyKeycaps(ShortcutAction.HELP, "Shift", "Y");
         shortcuts.verifyStatus("Changes take effect after Save and back.");
@@ -691,6 +704,16 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         shortcuts.verifyCompleteLayout();
         shortcuts.captureDialog(ScreenKeyboardShortcuts.STATUS_ID,
                 "r0432-shortcuts-conflict-cs.png");
+        shortcuts.verifyConflict(ShortcutAction.HELP, true);
+        shortcuts.verifyConflict(ShortcutAction.CONGRESS, true);
+        shortcuts.hoverConflict(ShortcutAction.HELP);
+        shortcuts.verifyConflictStatus(
+                "Klávesová zkratka je použita už u jiné akce.");
+        shortcuts.captureDialog(ScreenKeyboardShortcuts.STATUS_ID,
+                "shortcut-conflict-warning-cs.png");
+        shortcuts.restoreDefaults();
+        shortcuts.verifyConflict(ShortcutAction.HELP, false);
+        shortcuts.verifyConflict(ShortcutAction.CONGRESS, false);
         shortcuts.cancel();
         shortcuts.verifySavedDeviations(Map.of());
         settings.setEnglishLanguage();

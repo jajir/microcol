@@ -88,6 +88,11 @@ public class KeyboardShortcutsPage extends AbstractScreen {
     }
 
     private void clickInEditor(final String id) {
+        getRobot().clickOn(scrollInEditor(id));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    private Node scrollInEditor(final String id) {
         final Node node = getNodeFinder().lookup("#" + id).query();
         getRobot().interact(() -> {
             // Bring a row below the fold into the editor's viewport.
@@ -107,8 +112,7 @@ public class KeyboardShortcutsPage extends AbstractScreen {
             }
         });
         WaitForAsyncUtils.waitForFxEvents();
-        getRobot().clickOn(node);
-        WaitForAsyncUtils.waitForFxEvents();
+        return node;
     }
 
     private static boolean isInside(final Node node, final Node parent) {
@@ -159,6 +163,23 @@ public class KeyboardShortcutsPage extends AbstractScreen {
             final KeyCode key) {
         verifyBindings(action, isMacPlatform() ? "⌘" + key.getName()
                 : "Ctrl+" + key.getName());
+    }
+
+    public void hoverConflict(final ShortcutAction action) {
+        getRobot().moveTo(scrollInEditor(
+                ScreenKeyboardShortcuts.id(action) + "-conflict"));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyConflict(final ShortcutAction action,
+            final boolean expected) {
+        assertEquals(expected, getNodeFinder()
+                .lookup("#" + ScreenKeyboardShortcuts.id(action) + "-conflict")
+                .tryQuery().isPresent(), action.getKey());
+    }
+
+    public void verifyConflictStatus(final String expected) {
+        assertEquals(expected, getLabeledById("statusBarLabel").getText());
     }
 
     public void verifyStatus(final String expected) {

@@ -1,3 +1,8 @@
+## UC-114: označení konfliktních zkratek — 10. listopadu 2026
+
+1. Editor označí všechny konfliktní akce výstražným trojúhelníkem a při najetí vysvětlí kolizi ve stavovém řádku podle [pravidel zkratek](keyboard-shortcuts.md).
+2. `TC_84_F75_framed_settings_test` TC10 kontroluje globální kolizi, obě ikony, anglickou zprávu a odstranění označení po opravě. TC12 kontroluje českou zprávu a odstranění označení po obnovení výchozích hodnot. [Evidence](functional-tests.md#shortcut-conflict-warning-2026-11-10).
+
 ## UC-011/114/119: výběr jednotky, zásoby a Continue — 2026-11-03
 
 ## UC-114/119: seznam souborů uložených her — 2026-11-09

@@ -91,4 +91,5 @@
     <entry key="actionColonyTreasure">Poklad kolonie</entry>
     <entry key="contextEurope">Evropa</entry>
     <entry key="contextColony">Kolonie</entry>
+<entry key="conflictHint">Klávesová zkratka je použita už u jiné akce.</entry>
 </properties>

@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+import com.google.common.eventbus.EventBus;
+import org.akropia.gui.screen.game.components.StatusBarMessageEvent;
 import com.google.inject.Singleton;
 
 import javafx.animation.KeyFrame;
@@ -69,6 +71,7 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
             .getLogger(ScreenKeyboardShortcuts.class);
 
     private final StatusBar statusBar;
+    private final EventBus eventBus;
 
     private final BorderPane root = new BorderPane();
     private final EventHandler<KeyEvent> keyFilter = this::onKey;
@@ -94,8 +97,10 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
 
     @Inject
     ScreenKeyboardShortcuts(final I18n i18n,
-            final ShortcutController controller, final StatusBar statusBar) {
+            final ShortcutController controller, final StatusBar statusBar,
+            final EventBus eventBus) {
         this.statusBar = statusBar;
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         statusBar.setShowEventsFromSource(Source.GAME);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.controller = Preconditions.checkNotNull(controller);
@@ -360,6 +365,20 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
             refresh();
         });
         final HBox bindings = new HBox(12, binding, remove);
+        if (draft.findConflicts().stream()
+                .anyMatch(conflict -> conflict.getFirst() == action
+                        || conflict.getSecond() == action)) {
+            final Label warning = new Label();
+            warning.setGraphic(ButtonIcon.WARNING.createView());
+            warning.setId(id + "-conflict");
+            warning.setAccessibleText(i18n.get(ShortcutText.conflictHint));
+            warning.setOnMouseEntered(
+                    event -> eventBus.post(new StatusBarMessageEvent(
+                            i18n.get(ShortcutText.conflictHint), Source.GAME)));
+            warning.setOnMouseExited(event -> eventBus
+                    .post(new StatusBarMessageEvent(Source.GAME)));
+            bindings.getChildren().add(warning);
+        }
         bindings.setId(id + "-bindings");
         bindings.setAlignment(Pos.CENTER_LEFT);
         HBox.setHgrow(bindings, Priority.ALWAYS);

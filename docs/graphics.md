@@ -1,5 +1,11 @@
 # Grafické podklady a jejich použití v Akropia
 
+## Výstraha duplicitní zkratky — 10. listopadu 2026
+
+1. Zdroj `akropia-game/src/graphics/shortcut-warning.svg` je editovatelná vektorová kresba bez rastrů: mírně nepravidelný trojúhelník, černá linka `#000000` o 2 logických pixelech a jednolitá žlutá výplň; bez stínování a textur.
+2. Skupina `controls` exportuje `shortcut-warning.png` 96 × 96 px, který `ButtonIcon.WARNING` zobrazuje při 32 × 32 logických pixelech. Opakování: `python3 scripts/graphics/export-graphics.py controls --install`, kontrola `--check`.
+3. Skutečné zobrazení a přejímku vede [funkční evidence](functional-tests.md#shortcut-conflict-warning-2026-11-10).
+
 ## Rámečky klávesových zkratek — 10. listopadu 2026
 
 1. `shortcut-key-frame.svg` přebírá nepravidelnou geometrii sdíleného papírového rámečku, ale používá černý tah `#000000` o šířce 2 logické pixely. Obsahuje pouze vektorovou cestu; plochou výplň kláves a zvýraznění kreslí CSS. Používají jej jen klávesy a křížky editoru zkratek.

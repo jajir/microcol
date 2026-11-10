@@ -229,6 +229,15 @@
           "stroke": "2.4 units in a 48 unit cell, 1.6 logical px"
         },
         {
+          "output": "shortcut-warning.png",
+          "source": "shortcut-warning.svg",
+          "render": "zoom", "zoom": 2, "size": [96, 96],
+          "transparent": true,
+          "consumer": "Keyboard shortcut conflict indicator via ButtonIcon.WARNING",
+          "display": "32 x 32 logical",
+          "stroke": "3 source units, 2 logical px black ballpoint"
+        },
+        {
           "output": "shortcut-key-frame.png",
           "source": "shortcut-key-frame.svg",
           "render": "zoom",

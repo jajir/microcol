@@ -1,3 +1,11 @@
+## Shortcut conflict warning — 2026-11-10
+
+1. Scope: UC-114 keyboard shortcut editor, shared warning icon and EN/CZ footer feedback. TC84 TC10 and TC12 cover both conflicting rows, real pointer hover, correction and reset. Existing save/cancel and gameplay assertions remain.
+2. Model/JUnit completion `20261110T171718Z-c9979ef7d823` (PID 91091, timeout 600 s) passed **5,122 checks in 394 complete reports**, zero failures/errors/skips, in 160.311 supervised seconds. Reports: `target/verification/run-u9xsgkzs/model/`; game sources/resources match the checked snapshot based on `966ba058`.
+3. Targeted Docker/Xvfb `20261110T172022Z-d77d5baad09d` (PID 91650, timeout 1,800 s) passed **18 checks in two complete reports**, zero failures/errors/skips, in 261.000 supervised seconds: full `TC_84_F75_framed_settings_test` and `PageVerificationContractTest`. Reports and screenshots: `target/docker-ui/run-DtzPd1/`. Reviewed `shortcut-conflict-warning-en.png` and `shortcut-conflict-warning-cs.png`: legible warning beside the binding, matching EN/CZ footer text and disabled save.
+4. Fixed smoke/support `20261110T172510Z-8a8355ff21f1` (PID 92081, outer timeout 480 s) passed **21 checks in 12 complete reports**, zero failures/errors/skips, in 255.632 verifier seconds and 258.540 supervised seconds, below the 420-second acceptance budget. Reports: `target/verification/run-vb_nwel1/`. All ten changed executable/source/resource/test files match the reviewed hashes and smoke snapshot; model-tested game sources remain unchanged.
+5. Graphics export check passed all eight controls; seven graphics-export tooling checks and fourteen documentation consistency checks passed. Name audit found no unexplained occurrences. Initial strict MkDocs rejected a heading anchor; corrected heading passed strict build. No full-regression or distribution-publication claim.
+
 ## UI regression repair from run 42742278071 — 2026-11-10
 
 1. User-requested repair of [the failed nightly run](https://github.com/jajir/microcol/actions/runs/42742278071), revision `79c8ca2126dc7b0ecfccf89ce4e2560f793667cd`. Downloaded evidence is retained under `target/ui-repair-42742278071/`; `failures.json` identifies 176 distinct failed UI scenarios. The historical run remains failed.

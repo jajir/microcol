@@ -91,4 +91,5 @@
     <entry key="actionColonyTreasure">Colony treasure</entry>
     <entry key="contextEurope">Europe</entry>
     <entry key="contextColony">Colony</entry>
+<entry key="conflictHint">This keyboard shortcut is already used by another action.</entry>
 </properties>
