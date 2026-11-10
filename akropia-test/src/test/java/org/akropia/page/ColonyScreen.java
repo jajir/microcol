@@ -1,6 +1,7 @@
 package org.akropia.page;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.akropia.gui.Tile.TILE_CENTER;
@@ -631,6 +632,23 @@ public class ColonyScreen extends AbstractScreen {
                 .getNetProduction();
     }
 
+    public void returnFieldWorkerToColony(final int unitId) {
+        openCropMenu(unitId);
+        getRobot().clickOn("#returnToColony");
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void moveWorkerFromPierToField(final int unitId,
+            final org.akropia.model.Direction direction) {
+        getRobot()
+                .drag(getNodeFinder().lookup("#colonyUnit-" + unitId)
+                        .queryAs(Node.class), MouseButton.PRIMARY)
+                .dropTo(findPlaceOfField(
+                        colony.getColonyFieldInDirection(direction)))
+                .release(MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public void verifyRejectedWorkerDrop(final String expectedMessage)
             throws Exception {
         DialogMessagePage.of(getContext()).verifyReady();
@@ -666,9 +684,45 @@ public class ColonyScreen extends AbstractScreen {
         });
     }
 
+    public void verifyWorkerMovementThirds(final int unitId,
+            final int expectedThirds) {
+        assertEquals(expectedThirds,
+                getModel().getUnitById(unitId).getMovementThirds());
+    }
+
+    public void verifyMovementHintWhileDragging(final int unitId,
+            final org.akropia.model.Direction target, final boolean cancel,
+            final String expectedHint) throws InterruptedException {
+        dragFieldWorkerTo(unitId, target, cancel, () -> {
+        }, () -> {
+            verifyThatStatusBarContains(expectedHint);
+            verifyWorkerDropDialogVisible(false);
+        });
+    }
+
+    public void verifyWorkerDropDialogVisible(final boolean expected) {
+        assertEquals(expected, !getNodeFinder()
+                .lookup("#" + org.akropia.gui.util.ButtonBarOk.BUTTON_OK_ID)
+                .queryAll().isEmpty());
+    }
+
+    public void verifyStatusBarDoesNotContain(final String unexpectedText) {
+        final Labeled label = getLabeledById(
+                org.akropia.gui.screen.game.components.StatusBarView.STATUS_BAR_LABEL_ID);
+        assertFalse(label.getText().contains(unexpectedText), label.getText());
+    }
+
     private void dragFieldWorkerTo(final int unitId,
             final org.akropia.model.Direction target, final boolean cancel,
             final Runnable beforeDrop) throws InterruptedException {
+        dragFieldWorkerTo(unitId, target, cancel, beforeDrop, () -> {
+        });
+    }
+
+    private void dragFieldWorkerTo(final int unitId,
+            final org.akropia.model.Direction target, final boolean cancel,
+            final Runnable beforeDrop, final Runnable whileHovering)
+            throws InterruptedException {
         final ColonyField source = colony.getColonyFields().stream().filter(
                 field -> field.getUnit().map(Unit::getId).orElse(-1) == unitId)
                 .findFirst().orElseThrow();
@@ -728,6 +782,8 @@ public class ColonyScreen extends AbstractScreen {
                 throw new IllegalStateException("The field drag must start");
             }
             getRobot().moveTo(destination);
+            WaitForAsyncUtils.waitForFxEvents();
+            whileHovering.run();
             if (cancel) {
                 getRobot().push(javafx.scene.input.KeyCode.ESCAPE);
             }

@@ -1397,3 +1397,9 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 
 1. [R-0442](requirements/done/R-0442.md): obsah celoobrazovkového Nastavení a Klávesových zkratek používá stejné světlé pozadí jako záhlaví a zápatí.
 2. Ruční přepínač vývojářského režimu ukazuje pouze lokalizovaný název; aktuální klávesová vazba patří do editoru Klávesové zkratky. Změna nemění přepínání ani ukládání předvoleb.
+
+## Odmítnuté přetažení pracovníka bez pohybu — 2026-11-10
+
+1. Schválené chování [R-0451](requirements/done/R-0451.md): hráč při tažení nad jinak dostupným polem předem čte ve stavové liště, že pracovník nemá dostatek pohybových bodů pro přesun. Samotný hover neotevírá dialog.
+2. Puštění otevře stejné vysvětlení v modálním okně s OK a zavřením přes Esc. Odmítnutí nezmění původní práci, umístění ani body. Opuštění cíle nebo ukončení tažení odstraní dočasnou pohybovou hlášku.
+3. Cena a dostupnost přesunu zůstávají pravidlem modelu; jiné příčiny odmítnutí mají vlastní dosavadní texty. [Testová evidence](functional-tests.md#r-0451-worker-movement-feedback-2026-11-10) rozlišuje implementaci a ověření; nejde o hráčskou studii.

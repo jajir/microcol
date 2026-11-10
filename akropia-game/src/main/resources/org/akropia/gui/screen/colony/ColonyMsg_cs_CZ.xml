@@ -124,4 +124,5 @@
     <entry key="backHelp">Zavřete město a vraťte se na mapu světa.</entry>
     <entry key="fieldCannotProduce">Sem nelze pracovníka přesunout: tento terén neposkytuje potraviny potřebné pro počáteční přiřazení práce.</entry>
     <entry key="fieldDropRejected">Sem nelze pracovníka přesunout</entry>
+    <entry key="fieldInsufficientMovement">Pracovník nemá dostatek pohybových bodů pro tento přesun.</entry>
 </properties>

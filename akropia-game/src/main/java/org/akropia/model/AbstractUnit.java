@@ -233,7 +233,9 @@ public abstract class AbstractUnit implements Unit {
         model.fireUnitMovedToLocation(this);
     }
 
-    /** Cost of a job transfer, or -1 when ordinary movement cannot reach it. */
+    static final int COLONY_TRANSFER_INSUFFICIENT_MOVEMENT = -2;
+
+    /** Cost of a job transfer, or a negative value when it cannot be made. */
     int colonyTransferCost(final Colony colony, final Location target) {
         final Location origin = isAtPlaceConstructionSlot()
                 ? getPlaceConstruction().getColony().getLocation()
@@ -250,10 +252,10 @@ public abstract class AbstractUnit implements Unit {
                             && field.isValid()
                             && !field.getTerrainType().isLand()
                             && field.canProduce(GoodsType.GRAIN));
-            return getActionPoints() > 0
-                    && (target.equals(colony.getLocation()) || fishingGround)
+            return (target.equals(colony.getLocation()) || fishingGround)
                     && (origin.equals(colony.getLocation()) || isFishing())
-                            ? MovementPoints.ofPoints(1)
+                            ? getActionPoints() > 0 ? MovementPoints.ofPoints(1)
+                                    : COLONY_TRANSFER_INSUFFICIENT_MOVEMENT
                             : -1;
         }
         if (!isPossibleToMoveAt(target)) {
@@ -274,7 +276,7 @@ public abstract class AbstractUnit implements Unit {
                 if (index == 0 && route.size() == 1 && hasFullMovement()) {
                     return movementThirds;
                 }
-                return -1;
+                return COLONY_TRANSFER_INSUFFICIENT_MOVEMENT;
             }
             remaining -= cost;
             previous = step;

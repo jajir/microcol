@@ -1392,3 +1392,7 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 
 1. [R-0440](requirements/done/R-0440.md) rozšiřuje vývojářský editor o otevření současného archivu uložené hry jako samostatného scénáře; platí [kontrakt importu](save-load-navigation.md#import-ulozene-hry-do-editoru-map-r-0440).
 2. `TC_210_F241_map_editor_lifecycle_test` /06 pokrývá obě vstupní cesty, svět 120 × 80, zachování celého stavu při exportu, úpravu a opětovné otevření scénáře, nezměněné zdrojové bajty a odmítnutí poškozeného archivu. Výsledky patří do [funkční evidence](functional-tests.md).
+
+## UC-031/033/114/119: pohyb pracovníka v kolonii — 2026-11-10
+
+1. [R-0451](requirements/done/R-0451.md) doplňuje důvod odmítnutého přesunu bez dostatku pohybu: předběžný stavový text a po puštění modální okno OK/Esc. Práce a stav pracovníka se při odmítnutí nemění. TC39/10 ověřuje celou cestu; [výsledky](functional-tests.md#r-0451-worker-movement-feedback-2026-11-10) neuzavírají celé UC.

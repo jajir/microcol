@@ -60,14 +60,25 @@ public final class ColonyField {
     }
 
     public boolean canAccept(final Unit unit, final GoodsType goodsType) {
-        if (!isValid() || !colony.getColonyFields().contains(this)
-                || goodsType == null || !isEmpty() || !canProduce(goodsType)
-                || !model.isColonyFieldAvailable(colony.getOwner(),
-                        getLocation())) {
-            return false;
-        }
-        return colony.canAcceptWorker(unit) && ((AbstractUnit) unit)
+        return canAssignWorker(unit, goodsType) && ((AbstractUnit) unit)
                 .colonyTransferCost(colony, getLocation()) >= 0;
+    }
+
+    /** Whether movement alone prevents assigning this worker to this field. */
+    public boolean isWaitingForMovement(final Unit unit,
+            final GoodsType goodsType) {
+        return canAssignWorker(unit, goodsType)
+                && ((AbstractUnit) unit).colonyTransferCost(colony,
+                        getLocation()) == AbstractUnit.COLONY_TRANSFER_INSUFFICIENT_MOVEMENT;
+    }
+
+    private boolean canAssignWorker(final Unit unit,
+            final GoodsType goodsType) {
+        return isValid() && colony.getColonyFields().contains(this)
+                && goodsType != null && isEmpty() && canProduce(goodsType)
+                && model.isColonyFieldAvailable(colony.getOwner(),
+                        getLocation())
+                && colony.canAcceptWorker(unit);
     }
 
     private boolean canWorkerActHere(final Unit unit) {

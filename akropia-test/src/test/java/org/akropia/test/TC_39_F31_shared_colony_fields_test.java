@@ -263,4 +263,49 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractAkropiaTest {
         colony.verifyFieldWorker(0, Location.of(23, 16), 4);
     }
 
+    @Test
+    @Tag("local")
+    void TC_10_exhausted_worker_drop_explains_movement_and_supports_ok_and_escape()
+            throws Exception {
+        // Three road reassignments spend the worker's three movement thirds.
+        final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(Location.of(24, 16), "New Amsterdam");
+        colony.dragFieldWorkerTo(0, Direction.north);
+        colony.verifyWorkerMovementThirds(0, 2);
+        colony.dragFieldWorkerTo(0, Direction.west);
+        colony.verifyWorkerMovementThirds(0, 1);
+        colony.dragFieldWorkerTo(0, Direction.north);
+        colony.verifyWorkerMovementThirds(0, 0);
+        colony.verifyFieldWorker(0, Location.of(24, 15), 4);
+        colony.rememberWorld();
+
+        // Explain the rejected target before release, then show a modal dialog.
+        colony.verifyMovementHintWhileDragging(0, Direction.west, false,
+                "The worker does not have enough movement points for this move.");
+        colony.verifyRejectedWorkerDrop(
+                "The worker does not have enough movement points for this move.");
+        colony.captureDialog(org.akropia.gui.util.ButtonBarOk.BUTTON_OK_ID,
+                "worker-insufficient-movement.png");
+        org.akropia.page.DialogMessagePage.of(getContext()).close();
+        colony.verifyWorkerDropDialogVisible(false);
+        colony.verifyStatusBarDoesNotContain("movement points");
+        colony.verifyWorldUnchanged();
+
+        // Escape closes the same rejection without changing work or movement.
+        colony.dragFieldWorkerTo(0, Direction.west);
+        colony.verifyRejectedWorkerDrop(
+                "The worker does not have enough movement points for this move.");
+        org.akropia.page.DialogMessagePage.of(getContext()).closeWithEscape();
+        colony.verifyWorkerDropDialogVisible(false);
+        colony.verifyWorldUnchanged();
+        colony.verifyFieldWorker(0, Location.of(24, 15), 4);
+
+        // Canceling the drag clears the hint and never opens a dialog.
+        colony.verifyMovementHintWhileDragging(0, Direction.west, true,
+                "The worker does not have enough movement points for this move.");
+        colony.verifyWorkerDropDialogVisible(false);
+        colony.verifyStatusBarDoesNotContain("movement points");
+        colony.verifyWorldUnchanged();
+    }
+
 }

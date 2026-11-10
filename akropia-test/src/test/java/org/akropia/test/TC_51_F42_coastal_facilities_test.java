@@ -37,6 +37,9 @@ public class TC_51_F42_coastal_facilities_test extends AbstractAkropiaTest {
         colony.verifyThatStatusBarContains(
                 "Build a dock before assigning fishing work.");
         colony.verifyWorldUnchanged();
+        colony.verifyRejectedWorkerDrop(
+                "Build a dock before assigning fishing work.");
+        DialogMessagePage.of(getContext()).close();
         ConstructionPage building = new ConstructionPage(getContext());
         building.open();
         building.select("DOCK");
@@ -55,7 +58,13 @@ public class TC_51_F42_coastal_facilities_test extends AbstractAkropiaTest {
         colony.rememberWorld();
         colony.cancelFieldWorkerDrag(0, Direction.east);
         colony.verifyWorldUnchanged();
-        colony.dragFieldWorkerTo(0, Direction.east);
+        // Fishing starts from the colony; returning spends this turn's point.
+        colony.returnFieldWorkerToColony(0);
+        colony.verifyNumberOfUnitsAtPier(2);
+        game = colony.close();
+        game.nextTurnAndCloseDialogs();
+        colony = game.openColonyAt(COLONY, "New Amsterdam");
+        colony.moveWorkerFromPierToField(0, Direction.east);
         ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.verifyFieldJob(0, Location.of(25, 16),
                 Goods.of(GoodsType.GRAIN, 3));
@@ -73,9 +82,12 @@ public class TC_51_F42_coastal_facilities_test extends AbstractAkropiaTest {
     void TC_02_shipyard_retains_fishing_and_completes_both_supported_ships()
             throws Exception {
         GamePage game = WelcomePage.of(getContext()).loadGame();
-        ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
+        ColonyScreen colony = game.openColonyWithKeyboard(0, "New Amsterdam");
         ConstructionPage building = new ConstructionPage(getContext());
         CoastalFacilitiesPage coast = new CoastalFacilitiesPage(getContext());
+        // Return to the colony before taking a fishing job after the next turn.
+        colony.returnFieldWorkerToColony(0);
+        colony.verifyNumberOfUnitsAtPier(2);
         // Neither an absent dock nor the dock itself allows a ship project.
         building.open();
         building.select("GALLEON");
@@ -92,7 +104,9 @@ public class TC_51_F42_coastal_facilities_test extends AbstractAkropiaTest {
         building.verifyOffer(false,
                 "Build a shipyard before constructing ships.", 100, 100);
         building.cancel();
-        colony.dragFieldWorkerTo(0, Direction.east);
+        colony.moveWorkerFromPierToField(0, Direction.east);
+        new ColonyJobPage(getContext()).verifyFieldJob(0, Location.of(25, 16),
+                Goods.of(GoodsType.GRAIN, 3));
         // Arrange sufficient materials; each upgrade is still ordered through
         // the picker.
         coast.prepareProjectStocks(77, 50);

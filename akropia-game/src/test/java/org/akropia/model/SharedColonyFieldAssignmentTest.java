@@ -49,6 +49,30 @@ class SharedColonyFieldAssignmentTest {
                 MissionImpl.getPredefinedGameOverEvaluators());
     }
 
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(ints = { 0, 1 })
+    void insufficientMovementIsExplainedWithoutChangingWork(final int thirds) {
+        final Model model = fixture();
+        final Colony colony = model.getColonyById(0).orElseThrow();
+        final AbstractUnit worker = (AbstractUnit) model.getUnitById(0);
+        worker.setMovementThirds(thirds);
+        final ColonyField target = colony
+                .getColonyFieldInDirection(Direction.north);
+        final String before = snapshot(model);
+        assertTrue(target.isWaitingForMovement(worker, GoodsType.GRAIN));
+        assertFalse(target.canAccept(worker, GoodsType.GRAIN));
+        assertThrows(IllegalStateException.class,
+                () -> worker.placeToColonyField(target, GoodsType.GRAIN));
+        assertEquals(0,
+                worker.colonyTransferCost(colony, worker.getLocation()));
+        assertFalse(colony.getColonyFieldInDirection(Direction.east)
+                .isWaitingForMovement(worker, GoodsType.GRAIN));
+        assertEquals(before, snapshot(model));
+        worker.startTurn();
+        assertFalse(target.isWaitingForMovement(worker, GoodsType.GRAIN));
+        assertTrue(target.canAccept(worker, GoodsType.GRAIN));
+    }
+
     private String snapshot(final Model model) {
         return new Gson().toJson(model.save());
     }

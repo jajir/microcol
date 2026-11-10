@@ -160,6 +160,8 @@ public final class PanelColonyFields implements JavaFxComponent {
         canvas.getGraphicsContext2D().setFont(fontService.getDefault(12));
         canvas.setOnDragOver(this::onDragOver);
         canvas.setOnDragDropped(this::onDragDropped);
+        canvas.setOnDragExited(event -> clearMovementDropHint());
+        canvas.setOnDragDone(event -> clearMovementDropHint());
         canvas.setOnDragDetected(this::onDragDetected);
         canvas.setOnMousePressed(this::onMousePressed);
         canvas.setOnContextMenuRequested(this::onContextMenuRequested);
@@ -308,7 +310,17 @@ public final class PanelColonyFields implements JavaFxComponent {
                 .build();
     }
 
+    private boolean movementDropHint;
+
+    private void clearMovementDropHint() {
+        if (movementDropHint) {
+            movementDropHint = false;
+            eventBus.post(new StatusBarMessageEvent(Source.COLONY));
+        }
+    }
+
     private void onDragOver(final DragEvent event) {
+        clearMovementDropHint();
         final Optional<Unit> unit = ClipboardEval
                 .make(gameModelController.getModel(), event.getDragboard())
                 .getUnit();
@@ -324,9 +336,12 @@ public final class PanelColonyFields implements JavaFxComponent {
             // rejection.
             if (unit.isPresent() && field.isPresent()) {
                 event.acceptTransferModes(TransferMode.MOVE);
+                movementDropHint = field.get().isWaitingForMovement(unit.get(),
+                        GoodsType.GRAIN);
                 eventBus.post(new StatusBarMessageEvent(
                         i18n.get(ColonyMsg.fieldDropRejected) + ". "
-                                + i18n.get(dropProblem(field.get())),
+                                + i18n.get(
+                                        dropProblem(field.get(), unit.get())),
                         Source.COLONY));
             }
         }
@@ -334,6 +349,7 @@ public final class PanelColonyFields implements JavaFxComponent {
     }
 
     private void onDragDropped(final DragEvent event) {
+        clearMovementDropHint();
         event.setDropCompleted(false);
         final Optional<Unit> unit = ClipboardEval
                 .make(gameModelController.getModel(), event.getDragboard())
@@ -344,7 +360,7 @@ public final class PanelColonyFields implements JavaFxComponent {
                         return;
                     }
                     if (!field.canAccept(unit.get(), GoodsType.GRAIN)) {
-                        final String reason = i18n.get(dropProblem(field));
+                        final ColonyMsg reason = dropProblem(field, unit.get());
                         afterDrag(event, () -> showDropMessage(reason));
                         return;
                     }
@@ -362,14 +378,17 @@ public final class PanelColonyFields implements JavaFxComponent {
                             NativeLandDialog.Result.NOT_ASKED)) {
                         event.setDropCompleted(true);
                     } else {
-                        final String reason = i18n.get(dropProblem(field));
+                        final ColonyMsg reason = dropProblem(field, unit.get());
                         afterDrag(event, () -> showDropMessage(reason));
                     }
                 });
         event.consume();
     }
 
-    private ColonyMsg dropProblem(final ColonyField field) {
+    private ColonyMsg dropProblem(final ColonyField field, final Unit unit) {
+        if (field.isWaitingForMovement(unit, GoodsType.GRAIN)) {
+            return ColonyMsg.fieldInsufficientMovement;
+        }
         if (!field.isValid()) {
             return ColonyMsg.fieldChanged;
         }
@@ -396,12 +415,16 @@ public final class PanelColonyFields implements JavaFxComponent {
                 });
     }
 
-    private void showDropMessage(final String reason) {
-        dropMessage.setText(i18n.get(ColonyMsg.fieldDropRejected), reason);
+    private void showDropMessage(final ColonyMsg reason) {
+        dropMessage.setText(i18n.get(ColonyMsg.fieldDropRejected),
+                i18n.get(reason));
         dropMessage.showAndWait();
-        eventBus.post(new StatusBarMessageEvent(
-                i18n.get(ColonyMsg.fieldDropRejected) + ". " + reason,
-                Source.COLONY));
+        if (reason != ColonyMsg.fieldInsufficientMovement) {
+            eventBus.post(new StatusBarMessageEvent(
+                    i18n.get(ColonyMsg.fieldDropRejected) + ". "
+                            + i18n.get(reason),
+                    Source.COLONY));
+        }
     }
 
     private boolean isUnpaidClaim(final ColonyField field) {
@@ -417,7 +440,9 @@ public final class PanelColonyFields implements JavaFxComponent {
                 gameModelController.getModel(),
                 gameModelController.getHumanPlayer(), field.getLocation());
         if (land != NativeLandDialog.Result.CANCELED) {
-            place(unit, field, land);
+            if (!place(unit, field, land)) {
+                showDropMessage(dropProblem(field, unit));
+            }
         }
     }
 
@@ -428,10 +453,7 @@ public final class PanelColonyFields implements JavaFxComponent {
             eventBus.post(new RepaintColonyEvent());
             return true;
         } catch (IllegalArgumentException | IllegalStateException rejected) {
-            final ColonyMsg reason = field.isMissingDock()
-                    ? ColonyMsg.fieldMissingDock
-                    : field.isWorkedByAnotherColony() ? ColonyMsg.fieldWorked
-                            : ColonyMsg.fieldChanged;
+            final ColonyMsg reason = dropProblem(field, unit);
             eventBus.post(new StatusBarMessageEvent(
                     nativeLand.rejection(land, i18n.get(reason)),
                     Source.COLONY));

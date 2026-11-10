@@ -35,6 +35,11 @@ public class DialogMessagePage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void closeWithEscape() {
+        getRobot().push(javafx.scene.input.KeyCode.ESCAPE);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public void verifyDialogTextContains(final String expectedPart)
             throws Exception {
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,

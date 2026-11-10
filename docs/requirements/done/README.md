@@ -13,3 +13,5 @@ One-off user-directed location exception, 2026-11-02: [R-0281](R-0281.md) is arc
 [R-0449](R-0449.md) defines evidence-based reporting of test startup delays.
 
 [R-0448](R-0448.md) explains rejected colony worker drops during dragging and after release.
+
+[R-0451](R-0451.md) explains insufficient movement during colony worker dragging and in the rejected-drop dialog.
