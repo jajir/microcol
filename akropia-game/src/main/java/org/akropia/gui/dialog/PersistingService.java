@@ -350,34 +350,17 @@ public class PersistingService {
         if (!gameModelController.isHumanSaveReady()) {
             return false;
         }
-        // The detail shows the state a new save would store.
         final var game = gameModelController.getGameModel();
         final SaveSummaryPo current = game.getSaveSummary();
         final byte[] currentImage = SavePreview.render(game.getModel());
-        final String suggestedName = suggestedName(current);
-        List<SavedGames.Entry> entries = null;
-        while (true) {
-            try {
-                entries = savedGames.list();
-            } catch (AkropiaException unavailable) {
-                diagnosticLog.record(failure, unavailable);
-                if (entries == null) {
-                    gameModelController.showSaveFolderUnavailable();
-                    return false;
-                }
-                // A failed file action already reports its error. Keep Save
-                // available for retry or cancellation, without stale entries.
-                entries = List.of();
-            }
-            final SavedGamesDialog.Choice choice = saveScreen.get().chooseSave(
-                    entries, this::preview, current, currentImage,
-                    suggestedName);
-            if (choice == null) {
-                return false;
-            }
-            if (perform(choice)) {
-                return true;
-            }
+        try {
+            return saveScreen.get().chooseSave(savedGames.list(), this::preview,
+                    current, currentImage, suggestedName(current),
+                    this::perform, this::listSavedGames) != null;
+        } catch (AkropiaException unavailable) {
+            diagnosticLog.record(failure, unavailable);
+            gameModelController.showSaveFolderUnavailable();
+            return false;
         }
     }
 
@@ -390,7 +373,8 @@ public class PersistingService {
     }
 
     private String suggestedName(final SaveSummaryPo current) {
-        return org.akropia.model.campaign.GameModelDao.defaultName(current);
+        return savedGames.unusedName(
+                org.akropia.model.campaign.GameModelDao.defaultName(current));
     }
 
     private String describeTarget(final SavedGames.Entry entry) {
@@ -425,9 +409,13 @@ public class PersistingService {
                 try {
                     final String name = SavedGames.manualName(choice.name);
                     final File target = savedGames.target(name);
-                    if (target.exists()
-                            && !confirm(texts.get(SavedGameText.overwrite)
-                                    + "\n" + target.getName())) {
+                    if (target.exists() && !confirm(texts
+                            .get(SavedGameText.overwrite)
+                            + "\n"
+                            + savedGames.list().stream()
+                                    .filter(entry -> entry.file.equals(target))
+                                    .findFirst().map(this::describeTarget)
+                                    .orElse(target.getName()))) {
                         return false;
                     }
                     return saveNamed(target, name, SavedGames.Kind.MANUAL);

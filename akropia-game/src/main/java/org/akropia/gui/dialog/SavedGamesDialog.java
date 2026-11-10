@@ -3,6 +3,8 @@ package org.akropia.gui.dialog;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import org.akropia.gui.Loc;
 import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.screen.GameScreen;
@@ -85,11 +87,17 @@ public final class SavedGamesDialog implements GameScreen {
     public Choice chooseSave(final List<Entry> entries,
             final Function<Entry, Optional<byte[]>> previews,
             final SaveSummaryPo current, final byte[] currentImage,
-            final String suggestedName) {
+            final String suggestedName, final Predicate<Choice> perform,
+            final Supplier<List<Entry>> refresh) {
         result = null;
         view = new SavedGamesView(texts, true, choice -> {
-            result = choice;
-            close();
+            if (perform.test(choice)) {
+                result = choice;
+                close();
+            } else if (choice.action == Action.DELETE) {
+                final List<Entry> updated = refresh.get();
+                view.setEntries(updated == null ? List.of() : updated);
+            }
         }, null, previews);
         view.setEntries(entries);
         view.setCurrentGame(current, currentImage, suggestedName);

@@ -1,5 +1,17 @@
 # UX a pravidla ovládání Akropia
 
+## Jednodušší ukládání — 10. listopadu 2026
+
+1. Hráč ukládá aktuální hru jedinou akcí Uložit hru; soubor vybírá seznamem
+   nebo upravitelným názvem. Výchozí název je nepoužitý, výběr ukáže uložený
+   stav cíle. Dvojklik je zkratkou stejné akce, stále s potvrzením přepsání.
+2. Potvrzení zůstává nad stránkou ukládání; zrušení zachová výběr a název.
+   Koš v řádku má přístupný název a vyžaduje potvrzení. Pravidla,
+   chyby a návrat vlastní [ukládání](save-load-navigation.md#3-ulozit-hru).
+3. Jde o uživatelem schválenou změnu, nikoli pozorování hráčské studie.
+   Skutečné ověření zaznamenává [funkční evidence](functional-tests.md#save-dialog-simplification-2026-11-10).
+
+
 ## Průběh stavby ve městě — 10. listopadu 2026
 
 1. Hráč přímo pod tlačítkem Construction vidí aktuální projekt a dva zarovnané řádky: práci tesařů a nástroje. Každý potřebný zdroj má ikonu, pruh se zásobou / požadavkem, čistý přírůstek za tah a odhad tahů nebo chybějící množství. Obrázek budované stavby se nezobrazuje.

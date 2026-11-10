@@ -69,12 +69,12 @@ public class TC_20_F02_colony_names_test extends AbstractAkropiaTest {
     @Test
     @Tag("local")
     void TC_02_found_unicode_name_and_reload_same_identity() throws Exception {
-        final File savedFile = new File(System.getProperty("user.home"),
-                "colony-name.akropia");
+        final File savedFile = getContext()
+                .getClassFromGuice(
+                        org.akropia.model.campaign.po.SavedGames.class)
+                .target("colony-name.akropia");
         final FileSelectingService files = getContext()
                 .getClassFromGuice(FileSelectingService.class);
-        when(files.saveFile(any(File.class), anyString()))
-                .thenReturn(savedFile);
         when(files.loadFile(any(File.class))).thenReturn(testFileName,
                 savedFile);
         final GamePage game = WelcomePage.of(getContext()).loadGame();
@@ -93,8 +93,9 @@ public class TC_20_F02_colony_names_test extends AbstractAkropiaTest {
         colony.verifyNumberOfUnitsOnFields(1);
 
         // Save and reload preserve the name, ID, owner and assigned founder.
+        colony.captureDialog("closeButtonId", "save-colony-before-close.png");
         final GamePage afterFounding = colony.close();
-        afterFounding.saveGame();
+        afterFounding.saveGame(savedFile);
         afterFounding.verifySavedGame(savedFile);
         final ColonyScreen restored = afterFounding.exitToMenu().loadGame()
                 .openColonyAt(FOUNDING_LOCATION, "Nová Praha 🌊");

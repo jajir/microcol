@@ -173,10 +173,11 @@ samotná implementace jím není.
    není k dispozici“ a souhrn. Bez výběru vyzve k volbě a Načíst hru je
    neaktivní; zmizení pozice detail
    vymaže. Nečitelná či nepodporovaná pozice ukáže důvod a nelze ji potvrdit.
-6. Uložit ukazuje stav nového uložení se souhrnem a náhledem, předvyplněný
-   upravitelný název a zvlášť vybraný cíl přepsání. Potvrzení přepsání
-   i smazání uvádí název a čas cílové pozice.
-
+6. Uložit při otevření ukáže aktuální hru a nepoužitý název. Výběr souboru
+zobrazí jeho uložený náhled a souhrn a přenese název souboru bez přípony do
+pole názvu. Jediné tlačítko Uložit hru i dvojklik na název souboru ukládají
+aktuální hru; existující cíl vždy vyžaduje potvrzení nad otevřenou stránkou.
+Podrobný kontrakt je v [kapitole Uložit hru](#3-ulozit-hru).
 7. [R-0383](requirements/done/R-0383.md), stav `ready for development`, vlastní schválený seznam
    uložených pozic vlevo a náhled mapy se souhrnem vpravo. Výběr pouze zobrazí
    detail; teprve Načíst hru ověří a aktivuje pozici. Souhrn obsahuje národ,
@@ -276,6 +277,18 @@ rezervované názvy automatických/rychlých souborů a neplatné znaky se odmí
 2. Vybrané ruční uložení lze výslovně přepsat nebo smazat. Obě operace mají
    potvrzení s názvem a časem cíle. Rychlé a automatické pozice takto přepsat ani
    smazat nelze. Chyba zápisu ponechá starý soubor a nabídne další pokus.
+   Upřesnění schválené 10. listopadu 2026: stránka nemá pomocný nadpis
+   „Saved games“, samostatné Přepsat ani Exportovat. Pole „Save file name“
+   má viditelný popisek. Jedním kliknutím se vybere soubor, zobrazí jeho
+   uložený náhled a údaje a aktualizuje pole názvu; úprava pole určuje cíl
+   následného Uložit hru. Dvojklik na název vybírá tento soubor a vyvolá
+   stejné uložení s potvrzením přepsání. Potvrzení je modální nad stránkou
+   Uložit hru; zrušení ponechá výběr i název. Po úspěchu se hráč vrátí do hry
+   (nebo pokračuje v dříve vyžádaném odchodu).
+   Každý řádek má vpravo obdélníkové tlačítko s ikonou koše a
+   přístupným názvem; pro automatické a rychlé pozice je neaktivní. Koš
+   vyžaduje potvrzení smazání a nespouští ukládání. Otevřít složku je vpravo
+   od Uložit hru. Chyby a zrušení ponechávají hru i existující soubory.
 3. **F5 / Rychle uložit** přepíše společný rychlý bod `quick.akropia`,
 mimo deset automatických slotů. Nová
    hra dostane vlastní identitu; načtení uložené hry ji zachová. Jména a
@@ -283,7 +296,8 @@ mimo deset automatických slotů. Nová
    hráčů, kolonií či jednotek. Autorské scénáře je nemusejí mít.
 4. Nové spravované soubory jsou v `~/.akropia/saves/`, bez podsložek partií.
    Ruční názvy odpovídají zadaným jménům; předvyplněný název tvoří národnost
-   a rok. Automatické sloty 000–009 se kruhově přepisují. Katalog čte jen soubory přímo v této složce. Starší soubory mimo ni
+   a rok. Při kolizi se doplní první volná přípona `-2`, `-3` atd.;
+   výsledek má nejvýše 64 Unicode znaků. Automatické sloty 000–009 se kruhově přepisují. Katalog čte jen soubory přímo v této složce. Starší soubory mimo ni
    ani v podsložkách nevypisuje, nic automaticky nemaže ani nepřesouvá.
    Nadále je lze výslovně importovat.
 5. **Otevřít složku uložení** otevře `~/.akropia/saves/` systémovým správcem souborů.

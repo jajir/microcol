@@ -87,7 +87,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         // Cancelling overwrite and load keeps both the save and the live game.
         saves.openSave();
         saves.select("Přístav – před bitvou");
-        saves.action("overwriteSave");
+        saves.action("saveNew");
         new org.akropia.page.PaperButtonsPage(getContext())
                 .verifyModalFrame("saveCancel");
         saves.action("saveCancel");
@@ -363,8 +363,8 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         saves.rememberGame();
         saves.openSave();
-        saves.verifySaveTarget("New save of the current game",
-                "No existing save is selected");
+        saves.verifyDetailName("New save of the current game");
+        saves.verifySimplifiedSaveControls();
         saves.verifyPreview(true);
         saves.verifySummaryLines("Year: 1508", "Gold: ", "Rebel support: ",
                 "People: ", "Colonies: ", "Ships: ");
@@ -383,11 +383,29 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         // names it with its time.
         saves.openSave();
         saves.select("Harbour before the storm");
-        saves.verifySaveTarget("New save of the current game",
-                "Selected save to overwrite: Harbour before the storm");
-        saves.action("overwriteSave");
+        saves.verifyDetailName("Harbour before the storm");
+        saves.verifyFilename("Harbour before the storm");
+        saves.captureDialog("savedGamesList", "save-dialog-selected.png");
+        saves.doubleClickFile("Harbour before the storm");
         saves.verifyOverwriteConfirmation("Harbour before the storm");
+        saves.verifyConfirmationOverSaveScreen();
+        saves.captureDialog("saveCancel", "save-dialog-confirmation.png");
         saves.action("saveCancel");
+        saves.verifyFilename("Harbour before the storm");
+        saves.doubleClickFile("Harbour before the storm");
+        saves.action("saveConfirm");
+        saves.verifyStoredSummaryMatchesGame("Harbour before the storm");
+        saves.openSave();
+        saves.saveName("Deleted in save browser");
+        saves.openSave();
+        saves.select("Deleted in save browser");
+        saves.deleteFile("Deleted in save browser");
+        saves.verifyConfirmationOverSaveScreen();
+        saves.action("saveCancel");
+        saves.verifySavedName("Deleted in save browser", 1);
+        saves.deleteFile("Deleted in save browser");
+        saves.action("saveConfirm");
+        saves.verifySavedName("Deleted in save browser", 0);
         saves.cancelBrowser();
         saves.verifyGameUnchanged();
 
@@ -531,7 +549,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.chooseMenu("menuMain");
         saves.action("saveConfirm");
         saves.select("Leaving 1509");
-        saves.action("overwriteSave");
+        saves.action("saveNew");
         saves.verifyOverwriteConfirmation("Leaving 1509");
         saves.action("saveCancel");
         saves.verifySaveDialogOpen(true);
@@ -543,7 +561,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.chooseMenu("menuMain");
         saves.action("saveConfirm");
         saves.select("Leaving 1509");
-        saves.action("overwriteSave");
+        saves.action("saveNew");
         saves.action("saveConfirm");
         WelcomePage.of(getContext()).verifyMainScreen();
         saves.verifySavedName("Leaving 1509", 1);

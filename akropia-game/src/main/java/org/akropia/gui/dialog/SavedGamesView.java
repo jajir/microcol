@@ -32,6 +32,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.HBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -65,7 +67,8 @@ public final class SavedGamesView {
     private final Label previewMissing = new Label();
     private final StackPane previewBox = new StackPane(preview, previewMissing);
     private final Label summary = new Label();
-    private final Label target = new Label();
+    private SaveSummaryPo current;
+    private byte[] currentImage;
     private final VBox content;
     private final Consumer<SavedGamesDialog.Choice> chosen;
     private final Function<Entry, Optional<byte[]>> previews;
@@ -95,16 +98,48 @@ public final class SavedGamesView {
         list.setPlaceholder(empty);
         list.setMinWidth(0);
         list.setCellFactory(ignored -> new ListCell<Entry>() {
+            private final Label filename = new Label();
+            private final Button delete = ActionButtons
+                    .button(ButtonIcon.DELETE);
+            private final HBox row = new HBox(8, filename, delete);
             {
-                // Wrap the complete filename in a narrow list.
-                setWrapText(true);
                 prefWidthProperty().bind(list.widthProperty().subtract(28));
+                filename.setWrapText(true);
+                filename.setMaxWidth(Double.MAX_VALUE);
+                HBox.setHgrow(filename, Priority.ALWAYS);
+                row.setAlignment(Pos.CENTER_LEFT);
+                row.prefWidthProperty().bind(widthProperty().subtract(20));
+                delete.setMinWidth(Region.USE_PREF_SIZE);
+                delete.setId("deleteSaveRow");
+                delete.setAccessibleText(texts.get(SavedGameText.delete));
+                delete.setOnAction(event -> {
+                    choose(new SavedGamesDialog.Choice(
+                            SavedGamesDialog.Action.DELETE, getItem(), null));
+                    event.consume();
+                });
+                delete.setOnMouseClicked(event -> event.consume());
+                setOnMouseClicked(event -> {
+                    if (saving && !isEmpty()
+                            && event.getButton() == MouseButton.PRIMARY
+                            && event.getClickCount() == 2) {
+                        name.setText(filename(getItem()));
+                        save();
+                        event.consume();
+                    }
+                });
             }
 
             @Override
             protected void updateItem(final Entry entry, final boolean empty) {
                 super.updateItem(entry, empty);
-                setText(empty || entry == null ? null : entry.file.getName());
+                setText(!saving && !empty && entry != null
+                        ? entry.file.getName()
+                        : null);
+                setGraphic(saving && !empty && entry != null ? row : null);
+                if (entry != null && !empty) {
+                    filename.setText(entry.file.getName());
+                    delete.setDisable(entry.kind != Kind.MANUAL);
+                }
             }
         });
         name.setId("savedGameName");
@@ -126,12 +161,10 @@ public final class SavedGamesView {
         previewBox.setMinSize(0, 0);
         summary.setId("savedGameSummary");
         summary.setWrapText(true);
-        target.setId("savedGameTarget");
-        target.setWrapText(true);
         // Keep full wrapped text; the hosting scroll pane handles short
         // windows.
         for (final Label label : new Label[] { detailName, previewMissing,
-                summary, target, error }) {
+                summary, error }) {
             label.setMinHeight(Region.USE_PREF_SIZE);
         }
         previewBox.minHeightProperty()
@@ -145,14 +178,7 @@ public final class SavedGamesView {
                 saving ? SavedGameText.save : SavedGameText.load,
                 saving ? "saveNew" : "loadSelected", () -> {
                     if (saving) {
-                        try {
-                            choose(new SavedGamesDialog.Choice(
-                                    SavedGamesDialog.Action.SAVE, null,
-                                    org.akropia.model.campaign.po.SavedGames
-                                            .manualName(name.getText())));
-                        } catch (IllegalArgumentException invalid) {
-                            error.setText(texts.get(SavedGameText.invalidName));
-                        }
+                        save();
                     } else if (isLoadable(
                             list.getSelectionModel().getSelectedItem())) {
                         choose(new SavedGamesDialog.Choice(
@@ -169,22 +195,15 @@ public final class SavedGamesView {
                                     list.getSelectionModel().getSelectedItem()),
                             list.getSelectionModel().selectedItemProperty()));
         }
-        if (saving) {
-            addSelection(primaryActions, SavedGameText.overwrite,
-                    "overwriteSave", SavedGamesDialog.Action.OVERWRITE);
+        if (!saving) {
+            addSelection(actions, SavedGameText.delete, "deleteSave",
+                    SavedGamesDialog.Action.DELETE);
+            add(actions, SavedGameText.importFile, "importSave",
+                    () -> choose(new SavedGamesDialog.Choice(
+                            SavedGamesDialog.Action.IMPORT, null, null)));
         }
-        addSelection(actions, SavedGameText.delete, "deleteSave",
-                SavedGamesDialog.Action.DELETE);
-        add(actions,
-                saving ? SavedGameText.exportFile : SavedGameText.importFile,
-                saving ? "exportSave" : "importSave",
-                () -> choose(
-                        new SavedGamesDialog.Choice(
-                                saving ? SavedGamesDialog.Action.EXPORT
-                                        : SavedGamesDialog.Action.IMPORT,
-                                null, null)));
-        add(actions, SavedGameText.folder, "openSaveFolder",
-                () -> choose(new SavedGamesDialog.Choice(
+        add(saving ? primaryActions : actions, SavedGameText.folder,
+                "openSaveFolder", () -> choose(new SavedGamesDialog.Choice(
                         SavedGamesDialog.Action.FOLDER, null, null)));
         if (cancel != null) {
             add(actions, SavedGameText.cancel, "savedGamesCancel", cancel);
@@ -204,7 +223,9 @@ public final class SavedGamesView {
         preview.setFitHeight(PREVIEW_HEIGHT);
         detail.getChildren().addAll(detailName, previewBox, summary);
         if (saving) {
-            detail.getChildren().addAll(target, name);
+            final Label nameLabel = new Label(texts.get(SavedGameText.name));
+            nameLabel.setLabelFor(name);
+            detail.getChildren().addAll(nameLabel, name);
         }
         final Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
@@ -228,8 +249,15 @@ public final class SavedGamesView {
         columns.add(detail, 1, 0);
         columns.setMinWidth(0);
 
-        content = new VBox(10, new Label(texts.get(SavedGameText.title)),
-                columns, actions);
+        content = new VBox(10);
+        if (!saving) {
+            content.getChildren()
+                    .add(new Label(texts.get(SavedGameText.title)));
+        }
+        content.getChildren().add(columns);
+        if (!actions.getChildren().isEmpty()) {
+            content.getChildren().add(actions);
+        }
         content.getStyleClass().add("saved-games");
         VBox.setVgrow(columns, Priority.ALWAYS);
         list.getSelectionModel().selectedItemProperty().addListener(
@@ -240,8 +268,7 @@ public final class SavedGamesView {
     }
 
     /**
-     * Show the game that a new save would store. Selecting a list row then only
-     * names the overwrite target.
+     * Show the current game initially; selecting a row shows that saved game.
      *
      * @param current       summary of the current game
      * @param currentImage  optional preview of the current game
@@ -249,10 +276,8 @@ public final class SavedGamesView {
      */
     public void setCurrentGame(final SaveSummaryPo current,
             final byte[] currentImage, final String suggestedName) {
-        detailName.setText(texts.get(SavedGameText.currentGame));
-        showPreview(Optional.ofNullable(currentImage),
-                texts.get(SavedGameText.currentGame));
-        summary.setText(describe(current, null));
+        this.current = current;
+        this.currentImage = currentImage;
         name.setText(suggestedName == null ? "" : suggestedName);
         showDetail(list.getSelectionModel().getSelectedItem());
     }
@@ -296,11 +321,15 @@ public final class SavedGamesView {
     }
 
     private void showDetail(final Entry entry) {
-        if (saving) {
-            target.setText(entry == null ? texts.get(SavedGameText.targetNone)
-                    : texts.get(SavedGameText.target, displayName(entry),
-                            formatTime(texts, entry.modified)));
+        if (saving && entry == null) {
+            detailName.setText(texts.get(SavedGameText.currentGame));
+            showPreview(Optional.ofNullable(currentImage),
+                    texts.get(SavedGameText.currentGame));
+            summary.setText(describe(current, null));
             return;
+        }
+        if (saving) {
+            name.setText(filename(entry));
         }
         if (entry == null) {
             detailName.setText(texts.get(SavedGameText.detailPrompt));
@@ -324,6 +353,21 @@ public final class SavedGamesView {
         // and data always belong to the selected save.
         showPreview(previews.apply(entry), displayName(entry));
         summary.setText(describe(entry.metadata.getSummary(), entry));
+    }
+
+    private static String filename(final Entry entry) {
+        final String filename = entry.file.getName();
+        return filename.substring(0, filename.lastIndexOf('.'));
+    }
+
+    private void save() {
+        try {
+            choose(new SavedGamesDialog.Choice(SavedGamesDialog.Action.SAVE,
+                    null, org.akropia.model.campaign.po.SavedGames
+                            .manualName(name.getText())));
+        } catch (IllegalArgumentException invalid) {
+            error.setText(texts.get(SavedGameText.invalidName));
+        }
     }
 
     private void showPreview(final Optional<byte[]> png, final String label) {

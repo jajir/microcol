@@ -23,6 +23,22 @@ class SavedGamesTest {
     }
 
     @Test
+    void unusedNamesRespectCollisionsUnicodeAndLength() throws Exception {
+        final SavedGames saves = library();
+        assertEquals("dutch-1600", saves.unusedName("dutch-1600"));
+        Files.writeString(saves.target("Dutch-1600").toPath(), "existing");
+        Files.writeString(saves.target("dutch-1600-2").toPath(), "existing");
+        assertEquals("dutch-1600-3", saves.unusedName("dutch-1600"));
+        final String longName = "é".repeat(64);
+        Files.writeString(saves.target(longName).toPath(), "existing");
+        assertEquals("é".repeat(62) + "-2", saves.unusedName(longName));
+        assertEquals("existing",
+                Files.readString(saves.target("Dutch-1600").toPath()));
+        assertThrows(IllegalArgumentException.class,
+                () -> saves.unusedName("autosave-000"));
+    }
+
+    @Test
     void sharedQuickSlotAndReadableManualNames() {
         final SavedGames saves = library();
         assertEquals(directory.resolve("saves/quick.akropia"),

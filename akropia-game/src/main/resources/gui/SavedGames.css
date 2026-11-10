@@ -51,3 +51,8 @@
 .in-game-page.saved-games-screen .screen-body {
     -fx-background-color: #FFF9EC;
 }
+
+/* Filename labels remain readable inside selected save rows. */
+.saved-games .list-cell .label {
+    -fx-text-fill: #302D27;
+}

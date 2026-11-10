@@ -176,12 +176,11 @@ final class IndependenceJourneyFixture {
      */
     static File saveCheckpoint(final TestContext context,
             final org.akropia.page.GamePage game) {
-        final File file = new File(System.getProperty("user.home"),
-                "R0220-reference.akropia");
-        when(context.getClassFromGuice(FileSelectingService.class).saveFile(
-                any(File.class), org.mockito.ArgumentMatchers.anyString()))
-                .thenReturn(file);
-        game.saveGame();
+        final File file = context
+                .getClassFromGuice(
+                        org.akropia.model.campaign.po.SavedGames.class)
+                .target("R0220-reference");
+        game.saveGame(file);
         when(context.getClassFromGuice(FileSelectingService.class)
                 .loadFile(any(File.class))).thenReturn(file);
         return file;

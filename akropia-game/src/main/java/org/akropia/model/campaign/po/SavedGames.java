@@ -143,6 +143,20 @@ public final class SavedGames {
         }
     }
 
+    /** Suggest a valid manual filename without replacing an existing file. */
+    public String unusedName(final String suggested) {
+        final String base = manualName(suggested);
+        String candidate = base;
+        for (int suffix = 2; target(candidate).exists(); suffix++) {
+            final String ending = "-" + suffix;
+            final int count = Math.min(base.codePointCount(0, base.length()),
+                    64 - ending.length());
+            candidate = base.substring(0, base.offsetByCodePoints(0, count))
+                    + ending;
+        }
+        return candidate;
+    }
+
     /** Resolve a portable manual name, including case/Unicode collisions. */
     public File target(final String name) {
         final String filename = manualName(name) + PersistingTool.EXTENSION;

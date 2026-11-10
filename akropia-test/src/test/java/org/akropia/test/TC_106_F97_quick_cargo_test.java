@@ -61,12 +61,12 @@ public class TC_106_F97_quick_cargo_test extends AbstractAkropiaTest {
     void TC_01_quick_load_and_unload_with_refusals_and_saved_balances()
             throws Exception {
         // Choose an isolated save file and load the defined game.
-        final File savedFile = new File(System.getProperty("user.home"),
-                "quick-cargo.akropia");
+        final File savedFile = getContext()
+                .getClassFromGuice(
+                        org.akropia.model.campaign.po.SavedGames.class)
+                .target("quick-cargo.akropia");
         final FileSelectingService files = getContext()
                 .getClassFromGuice(FileSelectingService.class);
-        when(files.saveFile(any(File.class), anyString()))
-                .thenReturn(savedFile);
         when(files.loadFile(any(File.class))).thenReturn(testFileName,
                 savedFile);
         final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
@@ -135,7 +135,7 @@ public class TC_106_F97_quick_cargo_test extends AbstractAkropiaTest {
 
         // Save, return to the menu and load the saved balances once.
         final GamePage afterTransfers = colony.close();
-        afterTransfers.saveGame();
+        afterTransfers.saveGame(savedFile);
         afterTransfers.verifySavedGame(savedFile);
         final ColonyScreen reloaded = afterTransfers.exitToMenu().loadGame()
                 .openColonyAt(COLONY_LOCATION, COLONY_NAME);

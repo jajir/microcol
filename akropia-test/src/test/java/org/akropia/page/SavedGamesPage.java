@@ -388,14 +388,60 @@ public final class SavedGamesPage extends AbstractScreen {
     }
 
     /** Save shows the state being saved apart from the overwrite target. */
-    public void verifySaveTarget(final String heading, final String target) {
-        WaitForAsyncUtils.waitForFxEvents();
-        assertEquals(heading, getLabeledById("savedGameDetailName").getText());
-        final String shown = getLabeledById("savedGameTarget").getText();
-        assertTrue(shown.contains(target), shown);
+    public void verifySimplifiedSaveControls() {
+        for (final String id : java.util.List.of("overwriteSave", "exportSave",
+                "deleteSave", "savedGameTarget")) {
+            assertTrue(getNodeFinder().lookup("#" + id).queryAll().isEmpty(),
+                    id);
+        }
+        final javafx.scene.Node save = getNodeFinder().lookup("#saveNew")
+                .query();
+        final javafx.scene.Node folder = getNodeFinder()
+                .lookup("#openSaveFolder").query();
+        assertSame(save.getParent(), folder.getParent());
+        assertTrue(folder.getBoundsInParent().getMinX() > save
+                .getBoundsInParent().getMinX());
     }
 
-    /** The editable name starts with the game's suggestion. */
+    public void verifyFilename(final String expected) {
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals(expected, getNodeFinder().lookup("#savedGameName")
+                .queryAs(javafx.scene.control.TextField.class).getText());
+    }
+
+    public void doubleClickFile(final String name) {
+        select(name);
+        getRobot().doubleClickOn(fileCell(name).lookup(".label"));
+    }
+
+    public void deleteFile(final String name) {
+        select(name);
+        getRobot().clickOn(fileCell(name).lookup("#deleteSaveRow"));
+    }
+
+    private javafx.scene.control.ListCell<?> fileCell(final String name) {
+        return getNodeFinder()
+                .lookup(node -> node instanceof javafx.scene.control.ListCell
+                        && ((javafx.scene.control.ListCell<?>) node)
+                                .getItem() instanceof SavedGames.Entry
+                        && ((SavedGames.Entry) ((javafx.scene.control.ListCell<?>) node)
+                                .getItem()).getName().equals(name))
+                .queryAs(javafx.scene.control.ListCell.class);
+    }
+
+    public void verifyConfirmationOverSaveScreen() {
+        final javafx.scene.Node confirm = getNodeFinder().lookup("#saveCancel")
+                .query();
+        final javafx.stage.Stage modal = (javafx.stage.Stage) confirm.getScene()
+                .getWindow();
+        assertTrue(modal.isShowing());
+        assertEquals(javafx.stage.Modality.WINDOW_MODAL, modal.getModality());
+        final javafx.scene.Scene owner = ((javafx.stage.Stage) modal.getOwner())
+                .getScene();
+        assertNotNull(owner.lookup("#saveNew"));
+        assertTrue(owner.lookup("#savedGamesList").isVisible());
+    }
+
     public void verifySuggestedName(final String expectedPart) {
         WaitForAsyncUtils.waitForFxEvents();
         final String suggested = getNodeFinder().lookup("#savedGameName")

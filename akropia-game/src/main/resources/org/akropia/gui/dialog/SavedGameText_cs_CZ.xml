@@ -16,7 +16,7 @@
     <entry key="quick">Rychlé uložení</entry>
     <entry key="automatic">Body obnovy</entry>
     <entry key="empty">V tomto přehledu nejsou žádné uložené hry.</entry>
-    <entry key="name">Název nového uložení</entry>
+    <entry key="name">Název souboru uložení</entry>
     <entry key="invalidName">Použijte název souboru o délce 1–64 znaků bez / \ : * ? " &lt; &gt; | a řídicích znaků. Název nesmí končit tečkou ani být vyhrazený (autosave, quick, CON).</entry>
     <entry key="overwrite">Přepsat vybrané uložení</entry>
     <entry key="delete">Smazat vybrané uložení</entry>

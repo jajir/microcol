@@ -152,12 +152,12 @@ public class TC_107_F98_jettison_test extends AbstractAkropiaTest {
         // the command is not repeated.
         final FileSelectingService files = getContext()
                 .getClassFromGuice(FileSelectingService.class);
-        final File savedFile = new File(System.getProperty("user.home"),
-                "jettison-map.akropia");
-        when(files.saveFile(any(File.class), anyString()))
-                .thenReturn(savedFile);
+        final File savedFile = getContext()
+                .getClassFromGuice(
+                        org.akropia.model.campaign.po.SavedGames.class)
+                .target("jettison-map.akropia");
         when(files.loadFile(any(File.class))).thenReturn(savedFile);
-        game.saveGame();
+        game.saveGame(savedFile);
         game.verifySavedGame(savedFile);
         game = game.exitToMenu().loadGame();
         game.panToTile(SEA);
@@ -226,13 +226,13 @@ public class TC_107_F98_jettison_test extends AbstractAkropiaTest {
         // remain.
         final FileSelectingService files = getContext()
                 .getClassFromGuice(FileSelectingService.class);
-        final File savedFile = new File(System.getProperty("user.home"),
-                "jettison-atlantic.akropia");
-        when(files.saveFile(any(File.class), anyString()))
-                .thenReturn(savedFile);
+        final File savedFile = getContext()
+                .getClassFromGuice(
+                        org.akropia.model.campaign.po.SavedGames.class)
+                .target("jettison-atlantic.akropia");
         when(files.loadFile(any(File.class))).thenReturn(savedFile);
         game = europe.close();
-        game.saveGame();
+        game.saveGame(savedFile);
         game.verifySavedGame(savedFile);
         game = game.exitToMenu().loadGame();
         europe = game.openEuroperPort();

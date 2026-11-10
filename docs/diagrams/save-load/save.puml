@@ -3,29 +3,27 @@ title S — ukládání a správa souborů
 skinparam shadowing false
 skinparam defaultFontName SansSerif
 state "Rozehraná hra" as Game
-state "Přehled uložení\nfiltr + název nové pozice" as List
+state "Přehled uložení\nseznam + název cílového souboru" as List
 state "Potvrdit přepsání / smazání\nkonkrétní ruční pozice" as Confirm
 state "Atomický zápis" as Write
 state "Chyba / neplatný název" as Error
-state "Systémový export" as Export
 Game --> List : Uložit / Ctrl+S
 List --> Game : Zpět / Esc
 List --> Write : nový název, 1–64 Unicode znaků
 List --> Error : prázdný / příliš dlouhý název
 Error --> List : opravit / zkusit znovu
-List --> Confirm : přepsat / smazat vybrané ruční uložení
+List --> Confirm : Uložit / dvojklik na existující soubor / koš
 Confirm --> List : Zpět / Esc
 Confirm --> List : potvrdit smazání a obnovit seznam
 Confirm --> Write : potvrdit přepsání
 Write --> Error : zápis selhal; původní soubor zůstává
 Write --> Game : úspěch + zpráva ve stavovém řádku
-List --> Export : Exportovat soubor
-Export --> Game : zrušit
-Export --> Write : potvrdit cílový soubor
-Game --> Write : F5: rychlý bod této rozehrané hry
+Game --> Write : F5: společný rychlý bod
 note bottom of List
 Prohlížení nic nepřepisuje.
-Ruční název není cesta; soubor má generované jméno.
+Výběr ukáže uložený náhled a vyplní název souboru.
+Výchozí název je nepoužitý, případně s příponou -2, -3...
+Potvrzení zůstává nad přehledem; zrušení zachová výběr.
 Automatické a rychlé pozice nelze ručně přepsat/smazat.
 Otevřít složku: systémový správce souborů, poté stejný přehled.
 end note

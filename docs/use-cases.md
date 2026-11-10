@@ -1415,3 +1415,11 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 ### UC-029/030: mlha plánovače — 2026-11-10
 
 1. Přepnutí mezi mapou a plánovačem zachovává otazníky na stejných souřadnicích; plánovač sjednocuje neobjevenou plochu a její okraje s tmavým pozadím. [Vzhled](graphics.md#mlha-v-planovaci-tras-10-listopadu-2026) a [přejímka TC116/05](functional-tests.md#planner-fog-2026-11-10) rozlišují implementaci od ověřeného výsledku.
+
+## Jednodušší ukládání — 10. listopadu 2026
+
+1. UC-113/SUPPORT-001: `TC_191_F224_session_menu_test` zachovává validaci,
+   ochranu neuložené hry a načítání; TC05 navíc ověřuje jednoduché ovládání,
+   vybraný soubor a název, dvojklik, potvrzení nad stránkou a koš v řádku.
+   `SavedGamesTest` ověřuje nepoužitý výchozí název a kolize včetně Unicode.
+   Výsledky jsou ve [funkční evidenci](functional-tests.md#save-dialog-simplification-2026-11-10).

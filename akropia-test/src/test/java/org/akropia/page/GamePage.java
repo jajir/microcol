@@ -379,9 +379,9 @@ public class GamePage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void saveGame() {
+    public void saveGame(final File target) {
         getRobot().push(KeyCode.CONTROL, KeyCode.S);
-        clickOnButtonWithId("exportSave");
+        new SavedGamesPage(getContext()).saveName(target.getName());
         WaitForAsyncUtils.waitForFxEvents();
     }
 

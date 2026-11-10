@@ -50,12 +50,12 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractAkropiaTest {
     @Tag("local")
     void TC_01_confirm_one_unit_and_reload() throws Exception {
         // Choose an isolated save file and load the defined game.
-        final File savedFile = new File(System.getProperty("user.home"),
-                "warehouse.akropia");
+        final File savedFile = getContext()
+                .getClassFromGuice(
+                        org.akropia.model.campaign.po.SavedGames.class)
+                .target("warehouse.akropia");
         final FileSelectingService files = getContext()
                 .getClassFromGuice(FileSelectingService.class);
-        when(files.saveFile(any(File.class), anyString()))
-                .thenReturn(savedFile);
         when(files.loadFile(any(File.class))).thenReturn(testFileName,
                 savedFile);
         final GamePage game = WelcomePage.of(getContext()).loadGame();
@@ -93,7 +93,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractAkropiaTest {
 
         // Save, return to the menu and load the saved balances.
         final GamePage afterUnloading = colony.close();
-        afterUnloading.saveGame();
+        afterUnloading.saveGame(savedFile);
         afterUnloading.verifySavedGame(savedFile);
         final ColonyScreen reloaded = afterUnloading.exitToMenu().loadGame()
                 .openColonyAt(COLONY_LOCATION, "Delft");

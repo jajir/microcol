@@ -15106,3 +15106,91 @@ The numbered entries below are chronological evidence, including failed attempts
 7. Repaired targeted selection passed: `20261110T175001Z-c63ba27ed2f3`, `target/docker-ui/run-dHmulS`, **8 tests, zero failures/errors/skips**, 216.796 seconds total. TC116/05 compares actual map pixels across the switch, including both question marks visible after panning. Visual review of the [planner screenshot](graphics-assets/planner-fog-2026-11-10/planner-fog.png) confirms the flat dark fog and retained black marks/contours. The final smoke result follows.
 8. Final fixed smoke/support passed: `20261110T175354Z-b0130a723c46`, verification `run-yczvcb76`, **21 tests, zero failures/errors/skips**, 257.677 seconds including supervisor/cleanup, below the 420-second budget. Changed Java sources match its snapshot except for relocating one existing Javadoc to its method. Production executable source matches the accepted model run; the UI test repair is covered by the successful targeted run and smoke compilation/source-contract checks.
 9. Final review and shared Java formatting passed. Documentation passed 14 consistency tests, naming audit and strict MkDocs. The checked changes are based on `90e3f0b11fbebc709dcd0b75d297a647625348a1`; the unrelated backlog edits are excluded. Remote CI, full regression, Pages and distribution publication were not inspected or claimed.
+
+<a id="save-dialog-simplification-2026-11-10"></a>
+## Save dialog simplification — 2026-11-10
+
+1. User-approved scope: one Save action, selected-file detail/name, unique
+   initial names, double-click overwrite with confirmation over the Save
+   screen, row delete buttons and folder action beside Save. Existing
+   automatic/quick-file protection and load behavior remain covered by TC191.
+2. Initial model dispatch `20261110T194810Z-53f9a12ab507` (PID 7646) failed
+   during compilation after 25.422 supervised seconds; no tests started.
+   `SavedGamesView` referenced a package-private extension constant. Corrected
+   the filename stem helper and applied the shared Java formatter. Original
+   failure: `target/verification/run-zg80mpuk/`.
+3. Local acceptance is complete as recorded below. No remote CI or publication
+   verification requested.
+4. Replacement model run `20261110T194923Z-362993bc9e8b` (PID 8003,
+   165.459 supervised seconds) completed 5,123 tests: one failure, zero
+   errors/skips. `ButtonPresentationContractTest.gameDoesNotCreateHoverTooltips`
+   rejected the newly added row-delete tooltip. Removed that tooltip to
+   preserve the established R-0345 rule; the accessible label and confirmation
+   remain. Failed reports: `target/verification/run-9i1majva/`.
+5. Model/JUnit retry `20261110T195249Z-256f968b7b51` (PID 8841) passed
+   **5,123 tests in 394 reports, zero failures/errors/skips**, in 162.142
+   supervised seconds. Reports: `target/verification/run-7fubrbfe/`.
+   Changed game/model sources match its retained snapshot.
+6. Targeted Docker/Xvfb dispatch `20261110T195550Z-0fdb76dbc7b9` (PID 9280,
+   2,400-second supervisor limit) selects TC191, TC19/01, TC20/02, TC106/01,
+   TC107, TC187/02, TC58/06 and `PageVerificationContractTest`.
+   The extra save/reload paths formerly used Export; their shared helper now
+   enters a managed filename through Save, retaining gameplay assertions.
+   Exact selection: `target/save-dialog/targeted-selection.txt`.
+7. Targeted `run-6IOAYT` completed in 1,214.989 supervised seconds:
+   **21 tests in eight reports, one failure, zero errors/skips**. All 11 TC191
+   scenarios and the other save/reload paths passed. TC20/02 failed in
+   `ColonyScreen.close()` before entering Save because the next-turn control
+   was not visible; the cause is unconfirmed and the scenario remains required.
+   Original failure and reports are retained under `target/docker-ui/run-6IOAYT/`.
+8. Screenshot review confirmed row delete icons, selected-save details and
+   overwrite confirmation. It also exposed inherited white text on selected
+   filename labels and the old “Name of the new save” caption. Set filename
+   text dark and renamed the field “Save file name” (with Czech translation).
+   These runtime resource changes require fresh model and targeted acceptance.
+9. Final-resource model run `20261110T201715Z-758297c55a3b` (PID 10490)
+   passed **5,123 tests in 394 reports, zero failures/errors/skips**, in
+   158.688 supervised seconds. Reports: `target/verification/run-7sfjbqrz/`.
+   All 17 changed game, resource and UI-test files match its source snapshot;
+   hashes: `target/save-dialog/accepted-source.json`.
+10. The identical targeted selection was dispatched as
+    `20261110T202021Z-3dd2a9973786`, PID 10786, timeout 2,400 seconds.
+    TC20/02 remains included; the earlier failure is not reclassified.
+11. Targeted retry `run-xUF23f` completed in 1,157.837 supervised seconds:
+    21 tests in eight reports, one failure, zero errors/skips. The same
+    TC20/02 colony-close check failed before Save; the other 20 checks passed
+    again, including all TC191 cases. Added a screenshot immediately before
+    that click and isolated TC20/02 for diagnosis. Passing scenarios retain
+    their unchanged source and selection; the failing scenario is not omitted.
+12. Isolated TC20/02 plus source contract passed in `run-4yTfaN`:
+    **4 tests in two reports, zero failures/errors/skips**, 69.160 supervised
+    seconds (`20261110T204031Z-dfb4ba7102b0`, PID 12132). The pre-close
+    screenshot shows the newly founded colony and Back to game control.
+    The earlier timing/input failure remains unexplained, not claimed fixed.
+    Current targeted coverage combines this complete passing TC20 report with
+    the seven unchanged passing class reports from `run-xUF23f`: 21 distinct
+    checks, zero failures/errors/skips in the accepted reports. Original
+    aggregate runs retain their failures. Only TC20's diagnostic screenshot
+    step changed after the final model run; game/model/resources are identical.
+13. Visual review of `run-xUF23f/.../save-dialog-selected.png` confirms dark
+    selected filenames, row icons, saved details and “Save file name”. TC191
+    verifies confirmation ownership/modality and the Save screen beneath it.
+    The existing SVG-backed control atlas passed all eight repeatable exports
+    (`target/save-dialog/graphics-check.log`); no new artwork was introduced.
+14. Fixed smoke/support dispatched as `20261110T204226Z-85812d638d2a`,
+    PID 12428, supervisor limit 480 seconds and unchanged acceptance budget
+    420 seconds. Final reports, source comparison and commit/push pending.
+15. Fixed smoke/support passed **21 tests in 12 reports, zero failures,
+    errors or skips**: `target/verification/run-i4qgdzhn/`, 257.283 phase
+    seconds (260.744 supervised), within the 420-second budget. All 17 changed
+    executable/resource/test files match the smoke snapshot; the shared Java
+    formatter reports 14 checked files, zero further changes and identical
+    code tokens. Final review checks filename-driven saving, preserved modal
+    cancellation, protected slots, unchanged atomically written game state,
+    row-delete event isolation and retained save/reload gameplay assertions.
+16. Local acceptance comprises 5,123 model/JUnit checks, 21 distinct targeted
+    checks and 21 smoke/support checks, plus 14 documentation consistency
+    checks, naming audit, strict MkDocs and screenshot review. Earlier failed
+    runs remain failed evidence; the isolated colony-close issue is not claimed
+    diagnosed. Unrelated backlog edits are excluded. Full regression, native
+    desktop inspection, remote CI and publication verification were not run.
