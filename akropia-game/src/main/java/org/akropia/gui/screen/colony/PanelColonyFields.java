@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.akropia.gui.Point;
 import org.akropia.gui.dialog.NativeLandDialog;
+import org.akropia.gui.dialog.DialogMessage;
 import org.akropia.gui.dialog.NativeLandGuard;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.image.ImageProvider;
@@ -94,6 +95,7 @@ public final class PanelColonyFields implements JavaFxComponent {
     private final EventBus eventBus;
 
     private final NativeLandGuard nativeLand;
+    private final DialogMessage dropMessage;
 
     private final HBox mainPanel = new HBox(10);
     private final Label mapTitle = new Label();
@@ -118,7 +120,8 @@ public final class PanelColonyFields implements JavaFxComponent {
             final GameModelController gameModelController,
             final PaintService paintService, final EventBus eventBus,
             final I18n i18n, final FontService fontService,
-            final NativeLandGuard nativeLand) {
+            final NativeLandGuard nativeLand, final DialogMessage dropMessage) {
+        this.dropMessage = Preconditions.checkNotNull(dropMessage);
         this.nativeLand = Preconditions.checkNotNull(nativeLand);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -317,13 +320,14 @@ public final class PanelColonyFields implements JavaFxComponent {
             event.acceptTransferModes(TransferMode.MOVE);
             eventBus.post(new StatusBarMessageEvent(Source.COLONY));
         } else {
-            event.acceptTransferModes(TransferMode.NONE);
+            // Accept the gesture so a refused release can explain the
+            // rejection.
             if (unit.isPresent() && field.isPresent()) {
-                showFieldProblem(
-                        field.get().isMissingDock() ? ColonyMsg.fieldMissingDock
-                                : field.get().isWorkedByAnotherColony()
-                                        ? ColonyMsg.fieldWorked
-                                        : ColonyMsg.fieldChanged);
+                event.acceptTransferModes(TransferMode.MOVE);
+                eventBus.post(new StatusBarMessageEvent(
+                        i18n.get(ColonyMsg.fieldDropRejected) + ". "
+                                + i18n.get(dropProblem(field.get())),
+                        Source.COLONY));
             }
         }
         event.consume();
@@ -339,34 +343,65 @@ public final class PanelColonyFields implements JavaFxComponent {
                     if (unit.isEmpty()) {
                         return;
                     }
+                    if (!field.canAccept(unit.get(), GoodsType.GRAIN)) {
+                        final String reason = i18n.get(dropProblem(field));
+                        afterDrag(event, () -> showDropMessage(reason));
+                        return;
+                    }
                     // The land question comes only for a field the worker may
                     // take; any other drop is refused as before.
-                    if (field.canAccept(unit.get(), GoodsType.GRAIN)
-                            && isUnpaidClaim(field)) {
+                    if (isUnpaidClaim(field)) {
                         // Ask after the drop gesture has finished; canceling
                         // leaves the worker where it was.
                         event.setDropCompleted(true);
-                        final javafx.scene.Node source = (javafx.scene.Node) event
-                                .getGestureSource();
-                        source.addEventHandler(DragEvent.DRAG_DONE,
-                                new javafx.event.EventHandler<DragEvent>() {
-                                    @Override
-                                    public void handle(final DragEvent done) {
-                                        source.removeEventHandler(
-                                                DragEvent.DRAG_DONE, this);
-                                        Platform.runLater(
-                                                () -> placeAfterQuestion(
-                                                        unit.get(), field));
-                                    }
-                                });
+                        afterDrag(event,
+                                () -> placeAfterQuestion(unit.get(), field));
                         return;
                     }
                     if (place(unit.get(), field,
                             NativeLandDialog.Result.NOT_ASKED)) {
                         event.setDropCompleted(true);
+                    } else {
+                        final String reason = i18n.get(dropProblem(field));
+                        afterDrag(event, () -> showDropMessage(reason));
                     }
                 });
         event.consume();
+    }
+
+    private ColonyMsg dropProblem(final ColonyField field) {
+        if (!field.isValid()) {
+            return ColonyMsg.fieldChanged;
+        }
+        if (field.isMissingDock()) {
+            return ColonyMsg.fieldMissingDock;
+        }
+        if (field.isWorkedByAnotherColony()) {
+            return ColonyMsg.fieldWorked;
+        }
+        return !field.canProduce(GoodsType.GRAIN) ? ColonyMsg.fieldCannotProduce
+                : ColonyMsg.fieldChanged;
+    }
+
+    private void afterDrag(final DragEvent event, final Runnable action) {
+        final javafx.scene.Node source = (javafx.scene.Node) event
+                .getGestureSource();
+        source.addEventHandler(DragEvent.DRAG_DONE,
+                new javafx.event.EventHandler<DragEvent>() {
+                    @Override
+                    public void handle(final DragEvent done) {
+                        source.removeEventHandler(DragEvent.DRAG_DONE, this);
+                        Platform.runLater(action);
+                    }
+                });
+    }
+
+    private void showDropMessage(final String reason) {
+        dropMessage.setText(i18n.get(ColonyMsg.fieldDropRejected), reason);
+        dropMessage.showAndWait();
+        eventBus.post(new StatusBarMessageEvent(
+                i18n.get(ColonyMsg.fieldDropRejected) + ". " + reason,
+                Source.COLONY));
     }
 
     private boolean isUnpaidClaim(final ColonyField field) {

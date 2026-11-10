@@ -122,4 +122,6 @@
     <entry key="loadHelp">Navrhněte zboží ze skladu k naložení na vybranou loď. Před potvrzením zkontrolujte množství.</entry>
     <entry key="unloadHelp">Navrhněte náklad z vybrané lodi k vyložení do skladu. Před potvrzením zkontrolujte množství.</entry>
     <entry key="backHelp">Zavřete město a vraťte se na mapu světa.</entry>
+    <entry key="fieldCannotProduce">Sem nelze pracovníka přesunout: tento terén neposkytuje potraviny potřebné pro počáteční přiřazení práce.</entry>
+    <entry key="fieldDropRejected">Sem nelze pracovníka přesunout</entry>
 </properties>

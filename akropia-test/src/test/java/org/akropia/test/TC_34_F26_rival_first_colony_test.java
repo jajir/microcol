@@ -204,10 +204,14 @@ public class TC_34_F26_rival_first_colony_test extends AbstractAkropiaTest {
         // Off-map work is refused; a valid field still accepts the same drag.
         colony.verifyFieldWorker(0, Location.of(1, 14), 4);
         colony.dragFieldWorkerTo(0, org.akropia.model.Direction.west);
+        colony.verifyRejectedWorkerDrop("Cannot move worker here");
+        org.akropia.page.DialogMessagePage.of(getContext()).close();
         colony.verifyFieldWorker(0, Location.of(1, 14), 4);
         // Founding spent the movement: even a valid target must wait for the
         // next turn.
         colony.dragFieldWorkerTo(0, org.akropia.model.Direction.east);
+        colony.verifyRejectedWorkerDrop("Cannot move worker here");
+        org.akropia.page.DialogMessagePage.of(getContext()).close();
         colony.verifyFieldWorker(0, Location.of(1, 14), 4);
         colony.close();
         game.nextTurnAndCloseDialogs();

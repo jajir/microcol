@@ -122,4 +122,6 @@
     <entry key="loadHelp">Propose goods from the warehouse to load onto the selected ship. Review the amount before confirming.</entry>
     <entry key="unloadHelp">Propose cargo from the selected ship to unload into the warehouse. Review the amount before confirming.</entry>
     <entry key="backHelp">Close the colony and return to the world map.</entry>
+    <entry key="fieldCannotProduce">You cannot move this worker here: this terrain cannot produce food for the initial field assignment.</entry>
+    <entry key="fieldDropRejected">Cannot move worker here</entry>
 </properties>

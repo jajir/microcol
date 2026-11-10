@@ -1,5 +1,11 @@
 # UX a pravidla ovládání Akropia
 
+## Odmítnuté přetažení pracovníka — R-0448, 10. listopadu 2026
+1. Při přetahování na nepřípustné okolní pole stavový řádek vysvětluje odmítnutí. Po puštění následuje modální zpráva s tlačítkem OK; původní práce a herní stav se zachovají. Samotné zrušení gesta dialog neotevírá.
+2. Důvod vychází z podmínek pole a pracovníka. Tundra sama není zákaz práce; počáteční přiřazení přetažením potřebuje produkci potravin. Platí také obsazenost, přístup k vodě a pohybová pravidla.
+3. Schválené chování a přejímka jsou v [R-0448](requirements/done/R-0448.md); nejde o nezávislé hráčské pozorování.
+
+
 ## Společná osa nastavení — R-0438, 9. listopadu 2026
 
 1. Schválená varianta A sjednocuje všechny řádky nastavení: popisky jsou zarovnané doprava, ovládací prvky začínají za společnou mezerou. Dlouhé popisky se zalamují; vodicí čára se nekreslí.

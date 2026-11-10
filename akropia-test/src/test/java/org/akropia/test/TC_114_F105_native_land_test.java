@@ -70,14 +70,14 @@ public class TC_114_F105_native_land_test extends AbstractAkropiaTest {
     /** New Amsterdam's worker that stands on the capital's own square. */
     private static final int FIELD_WORKER_ID = 0;
 
-    private static final String CLAIMANT = "This square is claimed by: Aztec city, capital.";
+    private static final String CLAIMANT = "This square is claimed by: Egyptians city, capital.";
 
     private static final String CONSEQUENCE = "If you use it without paying, the settlement's alarm toward you rises by 5 once at the first use and by 2 each turn while the square stays in use.";
 
     private static final String CANNOT_PAY = "The land cannot be paid for now: not enough gold, or the offer has changed.";
 
-    private static final String FOUNDING_LAND = "Colony square: Claimed land of Aztec city, capital: not paid, 200 gold.\n"
-            + "First field: Claimed land of Aztec city, capital: paid.";
+    private static final String FOUNDING_LAND = "Colony square: Claimed land of Egyptians city, capital: not paid, 200 gold.\n"
+            + "First field: Claimed land of Egyptians city, capital: paid.";
 
     private static final String FOUNDING_NOTE = "Nothing is paid now. The price is paid only when you confirm the colony name; canceling then pays nothing.";
 
@@ -101,10 +101,10 @@ public class TC_114_F105_native_land_test extends AbstractAkropiaTest {
         // colony square is paid; the pioneers' squares are not.
         game.moveMouseAtLocation(PLOW_SQUARE);
         game.verifyThatStatusBarContains(
-                "Claimed land of Aztec city, capital: not paid, 200 gold.");
+                "Claimed land of Egyptians city, capital: not paid, 200 gold.");
         game.moveMouseAtLocation(COLONY_SQUARE);
         game.verifyThatStatusBarContains(
-                "Claimed land of Aztec city, capital: paid.");
+                "Claimed land of Egyptians city, capital: paid.");
         land.verifyLandStatus(PLOW_SQUARE, NativeLandStatus.UNPAID);
         land.verifyLandPrice(PLOW_SQUARE, 200);
         land.verifyLandStatus(COLONY_SQUARE, NativeLandStatus.PAID);
@@ -146,7 +146,7 @@ public class TC_114_F105_native_land_test extends AbstractAkropiaTest {
         relations.verifyLocalAlarm(EuropeanNation.DUTCH, AZTEC_CAPITAL, 0);
         game.moveMouseAtLocation(PLOW_SQUARE);
         game.verifyThatStatusBarContains(
-                "Claimed land of Aztec city, capital: paid.");
+                "Claimed land of Egyptians city, capital: paid.");
 
         // Clearing the forest first asks its own question, then the land one.
         // With only 100 gold the 200 cannot be paid: paying is disabled and
@@ -314,7 +314,7 @@ public class TC_114_F105_native_land_test extends AbstractAkropiaTest {
                 0.15);
         game.moveMouseAtLocation(PLOW_SQUARE);
         game.verifyThatStatusBarContains(
-                "Claimed land of Aztec city, capital: payment waived.");
+                "Claimed land of Egyptians city, capital: payment waived.");
 
         // Two more updates add 3.0 each: alarm 5 and 7.
         game.nextTurnAndCloseDialogs();

@@ -631,6 +631,13 @@ public class ColonyScreen extends AbstractScreen {
                 .getNetProduction();
     }
 
+    public void verifyRejectedWorkerDrop(final String expectedMessage)
+            throws Exception {
+        DialogMessagePage.of(getContext()).verifyReady();
+        DialogMessagePage.of(getContext())
+                .verifyDialogTextContains(expectedMessage);
+    }
+
     public void dragFieldWorkerTo(final int unitId,
             final org.akropia.model.Direction target)
             throws InterruptedException {
@@ -667,7 +674,7 @@ public class ColonyScreen extends AbstractScreen {
                 .findFirst().orElseThrow();
         final javafx.scene.Node canvas = getContext()
                 .getClassFromGuice(PanelColonyFields.class).getContent()
-                .lookup("Canvas");
+                .lookup("#colony-field-map");
         final Point2D start = findPlaceOfField(source);
         final Point2D destination = findPlaceOfField(
                 colony.getColonyFieldInDirection(target));

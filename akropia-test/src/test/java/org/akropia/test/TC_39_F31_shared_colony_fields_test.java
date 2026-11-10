@@ -34,6 +34,8 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractAkropiaTest {
         ColonyScreen colony = game.openColonyAt(Location.of(24, 16),
                 "New Amsterdam");
         colony.dragFieldWorkerTo(0, Direction.east);
+        colony.verifyRejectedWorkerDrop("Cannot move worker here");
+        org.akropia.page.DialogMessagePage.of(getContext()).close();
         colony.verifyFieldWorker(0, Location.of(23, 16), 4);
         colony.verifyThatStatusBarContains("Another colony works this square");
         colony.captureDialog("statusBarLabel", "shared-field-rejection.png");
@@ -147,6 +149,8 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractAkropiaTest {
         // Simulate another valid assignment after drag admission, just before
         // the native drop.
         colony.dragFieldWorkerAfterNeighborTakesSquare(0, Direction.east);
+        colony.verifyRejectedWorkerDrop("Cannot move worker here");
+        org.akropia.page.DialogMessagePage.of(getContext()).close();
         colony.verifyWorldUnchanged();
         colony.verifyFieldWorker(0, Location.of(23, 16), 4);
         colony.verifyThatStatusBarContains("Another colony works this square");
@@ -229,6 +233,8 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractAkropiaTest {
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 50));
         colony.rememberWorld();
         colony.moveUnitFromPietToEmptyField(0);
+        colony.verifyRejectedWorkerDrop("Cannot move worker here");
+        org.akropia.page.DialogMessagePage.of(getContext()).close();
 
         // The rejected drag neither unequips nor moves the colonist or changes
         // either colony.
@@ -238,4 +244,23 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractAkropiaTest {
         colony.verifyThatStatusBarContains(
                 "This worker or square is unavailable");
     }
+
+    @Test
+    @Tag("local")
+    void TC_09_arctic_drop_explains_rejection_and_preserves_worker()
+            throws Exception {
+        // Drag onto a field which cannot support the initial food job.
+        final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(Location.of(24, 16), "New Amsterdam");
+        colony.rememberWorld();
+        colony.dragFieldWorkerTo(0, Direction.southWest);
+        colony.verifyRejectedWorkerDrop("this terrain cannot produce food");
+        colony.captureDialog(org.akropia.gui.util.ButtonBarOk.BUTTON_OK_ID,
+                "arctic-worker-drop-rejection.png");
+        colony.verifyThatStatusBarContains("You cannot move this worker here");
+        org.akropia.page.DialogMessagePage.of(getContext()).close();
+        colony.verifyWorldUnchanged();
+        colony.verifyFieldWorker(0, Location.of(23, 16), 4);
+    }
+
 }
