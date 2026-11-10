@@ -1,5 +1,13 @@
 # Small requirement analyses
 
+**Agreed on 2026-11-10:** new requirement documents are optional and are created
+only by explicit agreement with the user. Ordinary changes proceed without a new
+`R-NNNN.md` or a routine question about creating one. Relevant project
+documentation and required acceptance checks still apply. Preserve existing
+requirements and keep affected active ones consistent; work selected from an
+existing requirement follows the workflow below. The template, numbering and
+status rules apply to explicitly agreed new analyses and existing requirements.
+
 Each requirement describes one independently reviewable outcome in `R-NNNN.md`.
 Keep the need and observable behavior separate from the technical design and
 execution evidence. Aim for one or two pages; link detailed records instead of
@@ -100,7 +108,8 @@ There is no separate in-progress, blocked, verified or published status.
    Resume deferred work as `new` if it is
    back in the unselected backlog, or `waiting for refinement` if selected;
    recheck readiness before development. Reopen canceled work only by a new
-   explicit decision. New scope after `done` belongs in a linked new requirement.
+   explicit decision. Do not rewrite a `done` requirement for new scope; if a new
+   analysis is explicitly agreed, link it to the completed requirement.
 
 ## Work through requirements one at a time
 

@@ -85,8 +85,17 @@ module unless the user requests it.
 
 # Requirement analysis
 
-Prepare each new change as a small analysis in `docs/requirements/R-NNNN.md`
-using the [requirement workflow and template](docs/requirements/README.md).
+As agreed on 2026-11-10, do not create requirement documents by default.
+Create a new analysis in `docs/requirements/R-NNNN.md` only when explicitly
+agreed with the user, using the
+[requirement workflow and template](docs/requirements/README.md).
+Ordinary requests, including small changes, proceed without a new R document
+or a routine question about whether to create one. Continue maintaining relevant
+project documentation and performing the required acceptance checks.
+Preserve existing requirements and keep affected active ones consistent; work
+explicitly selected from an existing requirement continues to follow its workflow.
+The following analysis rules apply when creating an explicitly agreed requirement
+or maintaining an existing one.
 Select one [work area](docs/requirements/areas.md), establish the shared
 structure needed by the selected change, and record one primary area plus
 specific cross-area dependencies in each requirement. Area IDs do not replace
