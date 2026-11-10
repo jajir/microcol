@@ -41,6 +41,7 @@ import com.google.inject.Inject;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeLineCap;
@@ -52,6 +53,11 @@ import javafx.scene.text.TextAlignment;
  * Contains methods for painting particular objects.
  */
 public final class PaintService {
+
+    public static final Color UNKNOWN_BACKGROUND = Color.web("#9B9486");
+    public static final Color PLANNING_UNKNOWN_BACKGROUND = Color
+            .web("#464647");
+    private final Map<Image, Image> planningFogImages = new java.util.IdentityHashMap<>();
 
     /**
      * Unit's flag width.
@@ -157,8 +163,13 @@ public final class PaintService {
     /** Shared unknown-terrain background for the map and tile preview. */
     public void paintHiddenTile(final GraphicsContext graphics,
             final Point point) {
+        paintHiddenTile(graphics, point, UNKNOWN_BACKGROUND);
+    }
+
+    public void paintHiddenTile(final GraphicsContext graphics,
+            final Point point, final Color background) {
         graphics.save();
-        graphics.setFill(Color.web("#9B9486"));
+        graphics.setFill(background);
         graphics.fillRect(point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX,
                 Tile.TILE_WIDTH_IN_PX);
         graphics.restore();
@@ -827,10 +838,49 @@ public final class PaintService {
         }
     }
 
+    /**
+     * Recolor the existing vector-exported mask, preserving alpha and pen
+     * contours.
+     */
+    private Image planningFogImage(final Image source) {
+        final WritableImage result = new WritableImage((int) source.getWidth(),
+                (int) source.getHeight());
+        for (int y = 0; y < result.getHeight(); y++) {
+            for (int x = 0; x < result.getWidth(); x++) {
+                final Color color = source.getPixelReader().getColor(x, y);
+                result.getPixelWriter().setColor(x, y, new Color(Math.min(
+                        1,
+                        color.getRed() * PLANNING_UNKNOWN_BACKGROUND.getRed()
+                                / UNKNOWN_BACKGROUND.getRed()),
+                        Math.min(
+                                1,
+                                color.getGreen()
+                                        * PLANNING_UNKNOWN_BACKGROUND.getGreen()
+                                        / UNKNOWN_BACKGROUND.getGreen()),
+                        Math.min(1,
+                                color.getBlue()
+                                        * PLANNING_UNKNOWN_BACKGROUND.getBlue()
+                                        / UNKNOWN_BACKGROUND.getBlue()),
+                        color.getOpacity()));
+            }
+        }
+        return result;
+    }
+
     /** Draw the existing rounded fog edge after map overlays. */
     public void paintHiddenCoast(final GraphicsContext graphics,
             final Point point, final Location location) {
-        final Image hiddenCoast = mapManager.getHiddenImageCoast(location);
+        paintHiddenCoast(graphics, point, location, false);
+    }
+
+    public void paintHiddenCoast(final GraphicsContext graphics,
+            final Point point, final Location location,
+            final boolean planning) {
+        final Image coast = mapManager.getHiddenImageCoast(location);
+        final Image hiddenCoast = planning && coast != null
+                ? planningFogImages.computeIfAbsent(coast,
+                        this::planningFogImage)
+                : coast;
         if (hiddenCoast != null) {
             graphics.drawImage(hiddenCoast, 0, 0, Tile.TILE_WIDTH_IN_PX,
                     Tile.TILE_WIDTH_IN_PX, point.getX(), point.getY(),

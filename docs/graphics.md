@@ -2654,3 +2654,12 @@ přístupným názvem; po rozšíření se text obnoví. Stav ověření vede
    výlučný výběr, fokus a odezva na stav zůstávají zachované. Rozšíření se
    týká radiobuttonů; původní dohoda o ostatních prvcích Nastavení se nemění.
 3. Přejímku dokládá [funkční evidence](functional-tests.md#r-0450-shared-radio-buttons-2026-11-10).
+
+## Mlha v plánovači tras — 10. listopadu 2026
+
+1. Plánovač používá pro neobjevená pole i navazující zaoblené okraje jednolitou tmavě šedou `#464647`, shodnou s pozadím nad mapou podle dodané reference. Běžná mapa zachovává své šedobéžové pozadí.
+2. Otazníky používají společný výběr podle souřadnic a stejnou kresbu černým perem o šířce 2 logické pixely. Přepnutí přes Trade routes a návrat přes Back to map tak zachovává orientační body; průzkum ani herní stav se nemění.
+3. Okraje dál vycházejí z vektorového `background.svg` a opakovatelného exportu skupiny `terrain-fog` v grafickém manifestu. Plánovač mění pouze barvu exportované masky, zachovává průhlednost a obrysy. Nevzniká nový rastrový zdroj.
+4. Ověření UC-029/030 vede [funkční evidence](functional-tests.md#planner-fog-2026-11-10); popis implementace sám není potvrzením přejímky.
+
+![Ověřený plánovač se sjednocenou mlhou a otazníky](graphics-assets/planner-fog-2026-11-10/planner-fog.png)

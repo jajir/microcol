@@ -13,6 +13,7 @@ import org.akropia.model.TradeRouteStop;
 import org.akropia.page.ColonyScreen;
 import org.akropia.page.FreePlayAuditPage;
 import org.akropia.page.GamePage;
+import org.akropia.page.FogPage;
 import org.akropia.page.SettingPage;
 import org.akropia.page.TradeRouteDialog;
 import org.akropia.page.TradeRoutePlanningPage;
@@ -241,7 +242,18 @@ public class TC_116_F107_trade_route_creation_test extends AbstractAkropiaTest {
         planner.verifyToggleInMapCorner();
         planner.verifyNewRouteButton(null);
 
+        // Bring the fixture's unexplored question marks into the viewport.
+        final FogPage fog = new FogPage(getContext());
+        fog.centerOn(Location.of(20, 16));
+        // Switching maps preserves the unknown tiles and their question marks.
+        planner.rememberMapFog();
         // The planner replaces the right panel and explains the empty list.
+        planner.open();
+        planner.verifyPlannerFog();
+        planner.captureScreen("trade-route-planner-fog.png");
+        // Return to the towns before the existing route-creation journey.
+        planner.close();
+        fog.centerOn(Location.of(24, 16));
         planner.open();
         planner.verifyPlannerShown(true);
         planner.verifyToggleText("Back to map");

@@ -1406,3 +1406,7 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 ## UC-114/119: jedna zkratka a samostatné klávesy — 2026-11-10
 
 1. `TC_84_F75_framed_settings_test` TC10–14 zachovávají kontrolu kolizí, ukládání, rušení, restartu a chyby zápisu. TC10 navíc ověřuje blikající zachytávání a nahrazení jediné kombinace; TC11 smazání, prázdné pole a opětovné přiřazení; TC12 pravé zarovnání názvů, oddělené klávesy s plusy, shodný font nadpisů a český/anglický malý layout. Jde o mapování scénářů; skutečnou přejímku vlastní [funkční evidence](functional-tests.md#shortcut-keycaps-2026-11-10).
+
+### UC-029/030: mlha plánovače — 2026-11-10
+
+1. Přepnutí mezi mapou a plánovačem zachovává otazníky na stejných souřadnicích; plánovač sjednocuje neobjevenou plochu a její okraje s tmavým pozadím. [Vzhled](graphics.md#mlha-v-planovaci-tras-10-listopadu-2026) a [přejímka TC116/05](functional-tests.md#planner-fog-2026-11-10) rozlišují implementaci od ověřeného výsledku.

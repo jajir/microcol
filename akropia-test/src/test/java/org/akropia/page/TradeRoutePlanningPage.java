@@ -3,6 +3,14 @@ package org.akropia.page;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.LinkedHashMap;
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
+import org.akropia.gui.Point;
+import org.akropia.gui.screen.game.gamepanel.FogFrameProbe;
+import org.akropia.gui.event.model.GameModelController;
+import org.akropia.model.Player;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -34,6 +42,76 @@ import javafx.scene.input.MouseButton;
 public final class TradeRoutePlanningPage extends AbstractScreen {
 
     private static final String PANEL = "tradeRoutePlanningPanel";
+
+    private final Map<Location, Image> mapFog = new LinkedHashMap<>();
+
+    public void rememberMapFog() {
+        getRobot().interact(() -> {
+            mapFog.clear();
+            final Image frame = FogFrameProbe.captureCanvas(getContext());
+            final Player player = getContext()
+                    .getClassFromGuice(GameModelController.class)
+                    .getHumanPlayer();
+            final Location size = getContext().getModel().getMap().getMapSize();
+            for (int y = 1; y <= size.getY(); y++) {
+                for (int x = 1; x <= size.getX(); x++) {
+                    final Location location = Location.of(x, y);
+                    final Point point = getContext().getArea()
+                            .convertToCanvasPoint(location);
+                    if (!player.isVisible(location) && point.getX() >= 0
+                            && point.getY() >= 60
+                            && point.getX() + 45 <= frame.getWidth()
+                            && point.getY() + 45 <= frame.getHeight()) {
+                        mapFog.put(location,
+                                new WritableImage(frame.getPixelReader(),
+                                        point.getX(), point.getY(), 45, 45));
+                    }
+                }
+            }
+        });
+    }
+
+    public void verifyPlannerFog() {
+        getRobot().interact(() -> {
+            final Image frame = FogFrameProbe.captureCanvas(getContext());
+            int checked = 0;
+            int ink = 0;
+            for (final Map.Entry<Location, Image> entry : mapFog.entrySet()) {
+                final Point point = getContext().getArea()
+                        .convertToCanvasPoint(entry.getKey());
+                if (point.getX() < 0 || point.getY() < 60
+                        || point.getX() + 45 > frame.getWidth()
+                        || point.getY() + 45 > frame.getHeight()) {
+                    continue;
+                }
+                assertEquals(0xFF464647,
+                        frame.getPixelReader().getArgb(point.getX() + 4,
+                                point.getY() + 4),
+                        "Planner fog background at " + entry.getKey());
+                for (int y = 4; y < 41; y++) {
+                    for (int x = 4; x < 41; x++) {
+                        final boolean expectedInk = entry.getValue()
+                                .getPixelReader().getColor(x, y)
+                                .getBrightness() == 0;
+                        final boolean actualInk = frame.getPixelReader()
+                                .getColor(point.getX() + x, point.getY() + y)
+                                .getBrightness() == 0;
+                        assertEquals(expectedInk, actualInk,
+                                "Question mark stays at " + entry.getKey()
+                                        + " pixel " + x + "," + y);
+                        if (expectedInk) {
+                            ink++;
+                        }
+                    }
+                }
+                checked++;
+            }
+            assertTrue(checked > 0,
+                    "Compared visible unexplored tiles across both maps");
+            assertTrue(ink > 0,
+                    "Compared at least one question mark across both maps");
+        });
+    }
 
     public TradeRoutePlanningPage(final TestContext context) {
         super(context);

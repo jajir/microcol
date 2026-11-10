@@ -80,7 +80,7 @@ final class GamePaintService {
     public void paintTerrain(final GraphicsContext graphics, final Area area,
             final CanvasInMapCoordinates coord, final long gameTick) {
         // The unknown-colored margin is outside the playable world.
-        graphics.setFill(javafx.scene.paint.Color.web("#9B9486"));
+        graphics.setFill(PaintService.UNKNOWN_BACKGROUND);
         graphics.fillRect(0, 0, graphics.getCanvas().getWidth(),
                 graphics.getCanvas().getHeight());
         final Player player = gameModelController.getHumanPlayer();
@@ -140,6 +140,11 @@ final class GamePaintService {
     /** Cover overlays which can cross from explored into unknown tiles. */
     public void paintFog(final GraphicsContext graphics, final Area area,
             final CanvasInMapCoordinates coord) {
+        paintFog(graphics, area, coord, false);
+    }
+
+    public void paintFog(final GraphicsContext graphics, final Area area,
+            final CanvasInMapCoordinates coord, final boolean planning) {
         final Player player = gameModelController.getHumanPlayer();
         for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight()
                 .getX(); i++) {
@@ -148,10 +153,13 @@ final class GamePaintService {
                 final Location location = Location.of(i, j);
                 final Point point = area.convertToCanvasPoint(location);
                 if (!player.isVisible(location)) {
-                    paintService.paintHiddenTile(graphics, point);
+                    paintService.paintHiddenTile(graphics, point,
+                            planning ? PaintService.PLANNING_UNKNOWN_BACKGROUND
+                                    : PaintService.UNKNOWN_BACKGROUND);
                     paintService.paintUnknownMark(graphics, point, location);
                 } else {
-                    paintService.paintHiddenCoast(graphics, point, location);
+                    paintService.paintHiddenCoast(graphics, point, location,
+                            planning);
                 }
             }
         }

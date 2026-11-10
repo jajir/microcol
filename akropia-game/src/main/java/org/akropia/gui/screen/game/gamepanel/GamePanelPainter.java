@@ -206,7 +206,7 @@ public final class GamePanelPainter {
                 visibleAreaService.getCanvasSize().getY());
         gamePaintService.paintColonies(g, gameModelController.getModel(), area);
         tradeRoutePlanningPainter.paintRoutes(g, area);
-        gamePaintService.paintFog(g, area, coordinates);
+        gamePaintService.paintFog(g, area, coordinates, true);
     }
 
     private void paintAnimation(final GraphicsContext graphics,
