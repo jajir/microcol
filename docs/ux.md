@@ -16,13 +16,15 @@
 ## Klávesové zkratky — kontrakt R-0433, 8. listopadu 2026
 
 1. Každá herní klávesová akce i posun mapy je v jediné [inventuře zkratek](keyboard-shortcuts.md) s kontextem a platformními výchozími kombinacemi. Obsluhy kláves i zobrazené zkratky čtou tutéž účinnou konfiguraci; nová obsluha nepřidává pevně zapsaný `KeyCode` ani text „(X)“ do překladu.
-2. Kombinace platí s přesnými modifikátory. Akce může mít více kombinací nebo žádnou; popisek ukazuje první z nich jako `text (zkratka)` a nepřiřazená akce závorku vynechá.
+2. Kombinace platí s přesnými modifikátory. Akce má nejvýše jednu kombinaci; popisek ji ukazuje jako `text (zkratka)` a nepřiřazená akce závorku vynechá.
 3. Escape, Tab, Enter, Space a šipky zůstávají ovládáním zaměřeného prvku, formulářů a dialogů; myší modifikátory se nenastavují. Psaní, otevřený dialog a nedostupná akce dál zkratku blokují.
 4. Hráč najde editor v Nastavení. Cíl, zachytávání s Escape, konflikty, Obnovit výchozí, Zrušit a Uložit a zpět popisuje [kapitola editoru](keyboard-shortcuts.md#6-editor-v-nastaveni). Lokální Docker ověření uvádí [funkční evidence](functional-tests.md#r-0439-full-page-shortcut-editor-2026-11-10); hráčské pozorování tím není nahrazeno.
 
 5. Schváleno 2026-11-10 v [R-0439](requirements/done/R-0439.md): editor je samostatná obrazovka s pevnou horní lištou a posuvným seznamem. Pořadí akcí a dvoustupňový význam Escape vlastní [kontrakt editoru](keyboard-shortcuts.md#6-editor-v-nastaveni). Návrat vždy vede do Nastavení; nejde o pozorování hráčské studie.
 
 6. Rozložení editoru doplňuje [R-0443](requirements/done/R-0443.md): pevné společné zápatí, úvod ve stejném posuvném obsahu jako operace a názvy zarovnané doprava ke zkratkám. Přesný kontrakt vlastní [editor](keyboard-shortcuts.md#6-editor-v-nastaveni).
+
+7. Vybraná varianta editoru z 10. listopadu 2026 nabízí jednu kombinaci na akci, klávesy v samostatných rámečcích, prázdné klikatelné pole a sousední křížek. Rámečky kláves a křížek jsou výslovnou výjimkou z akčních ikon; vznikají přes sdílenou továrnu tlačítek. Blikání doprovází textová výzva a instrukce Escape. Jde o schválený návrh a automatizovanou přejímku, nikoli pozorování hráčské studie; detaily vlastní [editor](keyboard-shortcuts.md#6-editor-v-nastaveni).
 
 ## Horní lišta správy obchodní trasy
 

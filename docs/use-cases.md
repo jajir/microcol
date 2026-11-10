@@ -1396,3 +1396,8 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 ## UC-031/033/114/119: pohyb pracovníka v kolonii — 2026-11-10
 
 1. [R-0451](requirements/done/R-0451.md) doplňuje důvod odmítnutého přesunu bez dostatku pohybu: předběžný stavový text a po puštění modální okno OK/Esc. Práce a stav pracovníka se při odmítnutí nemění. TC39/10 ověřuje celou cestu; [výsledky](functional-tests.md#r-0451-worker-movement-feedback-2026-11-10) neuzavírají celé UC.
+
+
+## UC-114/119: jedna zkratka a samostatné klávesy — 2026-11-10
+
+1. `TC_84_F75_framed_settings_test` TC10–14 zachovávají kontrolu kolizí, ukládání, rušení, restartu a chyby zápisu. TC10 navíc ověřuje blikající zachytávání a nahrazení jediné kombinace; TC11 smazání, prázdné pole a opětovné přiřazení; TC12 pravé zarovnání názvů, oddělené klávesy s plusy, shodný font nadpisů a český/anglický malý layout. Jde o mapování scénářů; skutečnou přejímku vlastní [funkční evidence](functional-tests.md#shortcut-keycaps-2026-11-10).

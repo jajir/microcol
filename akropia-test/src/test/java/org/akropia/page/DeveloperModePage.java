@@ -47,8 +47,19 @@ public final class DeveloperModePage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void openGameSettings() {
+    public void openGameSettings()
+            throws java.util.concurrent.TimeoutException {
+        // Loading may return before the map owns the focused window.
+        WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
+                () -> getNodeFinder().lookup("#exit")
+                        .tryQueryAs(javafx.scene.control.Button.class)
+                        .map(button -> !button.isDisabled()
+                                && button.getScene().getWindow().isFocused())
+                        .orElse(false));
+        WaitForAsyncUtils.waitForFxEvents();
         getRobot().push(KeyCode.ESCAPE);
+        WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS, () -> getNodeFinder()
+                .lookup("#menuSettings").tryQuery().isPresent());
         getRobot().clickOn("#menuSettings");
         WaitForAsyncUtils.waitForFxEvents();
     }

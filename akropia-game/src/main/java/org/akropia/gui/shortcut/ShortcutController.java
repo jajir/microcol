@@ -146,8 +146,14 @@ public class ShortcutController implements KeyboardShortcuts {
         return binding.toDisplayText(platform, this::keyName);
     }
 
+    public List<String> displayKeys(final KeyBinding binding) {
+        return binding.toDisplayKeys(platform, this::keyName);
+    }
+
     private String keyName(final KeyCode code) {
         switch (code) {
+        case PLUS:
+            return "+";
         case SPACE:
             return i18n.get(ShortcutText.keySpace);
         case ENTER:

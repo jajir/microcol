@@ -1,5 +1,11 @@
 # Grafické podklady a jejich použití v Akropia
 
+## Rámečky klávesových zkratek — 10. listopadu 2026
+
+1. `shortcut-key-frame.svg` přebírá nepravidelnou geometrii sdíleného papírového rámečku, ale používá černý tah `#000000` o šířce 2 logické pixely. Obsahuje pouze vektorovou cestu; plochou výplň kláves a zvýraznění kreslí CSS. Používají jej jen klávesy a křížky editoru zkratek.
+2. Manifest skupiny `controls` exportuje `shortcut-key-frame.png` v měřítku 2× (192 × 96); CSS používá řezy 12 px v logické šířce 6. Opakování: `python3 scripts/graphics/export-graphics.py controls --install`, ověření `--check`. Zobrazený výsledek a přejímku vlastní [funkční evidence](functional-tests.md#shortcut-keycaps-2026-11-10).
+
+
 ## Zelené značky potvrzení a zrušení — 10. listopadu 2026
 
 1. [R-0445](requirements/done/R-0445.md) přebírá vybraný návrh „1 — Soft corners“: samostatná zelená fajfka a křížek, bez papírových podkladů i bez nápisů přidaných do výtvarného náhledu. Existující lokalizované texty tlačítek zůstávají zachované.

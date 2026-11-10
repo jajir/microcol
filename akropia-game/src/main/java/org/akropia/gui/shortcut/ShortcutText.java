@@ -23,7 +23,7 @@ public enum ShortcutText implements MessageKeyResource {
     contextEurope, contextColony, contextGlobal, contextSession,
     contextMainMenu, contextMap, contextEditor, keySpace, keyEnter, keyTab,
     keyBackSpace, keyDelete, title, open, description, platform,
-    platformWindows, platformLinux, platformMacos, unbound, add, change, remove,
-    capture, captureCanceled, captureDuplicate, conflict, conflictFree, reset,
+    platformWindows, platformLinux, platformMacos, unbound, change, remove,
+    capture, captureKeys, captureCanceled, conflict, conflictFree, reset,
     cancel, save, saveFailed;
 }

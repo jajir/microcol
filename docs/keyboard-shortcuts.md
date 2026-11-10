@@ -14,19 +14,20 @@ evidence. Obecná pravidla ovládání vlastní [UX](ux.md), vstupy hlavní mapy
    hráčskou cestu.
 2. Pevné ovládání formulářů, dialogů a myši se nemění; viz kapitolu 5.
 
-### Čitelnost editoru — R-0452, 10. listopadu 2026
+### Jedna zkratka a samostatné klávesy — 10. listopadu 2026
 
-1. Úprava [R-0452](requirements/done/R-0452.md) používá širší, vlevo zarovnané názvy akcí, písmo 16 bodů a výraznější nadpisy skupin. Kombinace mají kompaktnější tlačítka; společný papírový vzhled i ikony zůstávají.
-2. Kliknutí na kombinaci zahájí změnu, Přidat zadá další a sousední minus odebere kombinaci. Úvod popisuje ovládání a při zalomení zachovává celou výšku.
-3. Rozsah podporovaných akcí, kolize, Escape, obnovení výchozích hodnot a uložení či zrušení konceptu se nemění. Výsledky přejímky patří do [funkční evidence](functional-tests.md).
+1. Vybraná varianta „Názvy doprava“ navazuje na [R-0452](requirements/done/R-0452.md): názvy akcí jsou zarovnané doprava ke společnému sloupci zkratek. Nadpisy i řádky používají běžný řez Playpen Sans; hierarchii zachovává velikost a rozestupy.
+2. Každá akce má nejvýše jednu kombinaci. Jednotlivé klávesy mají vlastní kreslený rámeček, mezi nimi je plus. Na macOS se modifikátory vypisují `control`, `option`, `shift`, `command`; jiné platformy používají `Ctrl`, `Alt`, `Shift`, `Meta`. Interpunkce zůstává samostatnou klávesou, například `[command] + [,]`.
+3. Kliknutí na kombinaci nebo `[none]` (česky `[žádná]`) zahájí zadávání. Pole střídá dvě jednobarevné výplně po 600 ms a obsahuje výzvu ke stisku; stavový text pojmenuje akci a Escape. Křížek smaže jedinou kombinaci a u prázdné akce je zakázaný. Přidávání další kombinace není dostupné.
+4. Kolize, Escape, obnovení výchozích hodnot a transakční uložení či zrušení konceptu zůstávají. Implementace a skutečné výsledky jsou oddělené: přejímku vede [funkční evidence](functional-tests.md#shortcut-keycaps-2026-11-10).
 
 ## 2. Model a uložení
 
 1. Tři úplné profily
    `akropia-game/src/main/resources/shortcuts-windows.properties`,
    `shortcuts-linux.properties` a `shortcuts-macos.properties` uvádějí každou
-   akci právě jednou. Hodnota je seznam kombinací oddělený čárkou, prázdná
-   hodnota akci ponechá nepřiřazenou. Kombinace je `Ctrl`, `Alt`, `Shift`,
+   akci právě jednou. Hodnota je jedna kombinace, prázdná
+   hodnota akci ponechá nepřiřazenou. Více kombinací konfigurace odmítne. Kombinace je `Ctrl`, `Alt`, `Shift`,
    `Meta` (na macOS Command) a jedna klávesa podle názvů JavaFX `KeyCode`,
    například `Ctrl+Shift+O`, `Space`, `F5`. Změna profilu nevyžaduje změnu Javy.
 2. Běžící systém vybere profil (`ShortcutPlatform`, macOS / Windows / jinak
@@ -36,7 +37,7 @@ evidence. Obecná pravidla ovládání vlastní [UX](ux.md), vstupy hlavní mapy
    Prázdná uložená hodnota znamená výslovně nepřiřazenou akci. Neuložené akce
    sledují pozdější změny profilu.
 4. Načtení nastavení nic nepřepisuje. Neznámé akce, ne-textové hodnoty a
-   nečitelné kombinace se zapíšou do logu a ignorují; akce si ponechá výchozí
+   nečitelné kombinace i staré seznamy více kombinací se zapíšou do logu a ignorují; akce si ponechá výchozí
    hodnotu. Odstraní je až další výslovné uložení editoru.
 5. Kolize po změně profilu: kombinaci, kterou si hráč výslovně uložil, ponechá
    jeho akce a z překrývající se výchozí akce zmizí. Mezi dvěma uloženými
@@ -46,7 +47,7 @@ evidence. Obecná pravidla ovládání vlastní [UX](ux.md), vstupy hlavní mapy
    neotevře Statistiky, protože `Shift+R` je Silnice.
 7. Držené akce (posun mapy, vývojářské načtení v menu) sledují každou
    stisknutou klávesu zvlášť. Uvolnění jedné klávesy ukončí jen ji, bez ohledu
-   na modifikátory v té chvíli; jiná držená kombinace stejného směru dál posouvá.
+   na modifikátory v té chvíli; jiná držená směrová akce dál posouvá.
    Uložení nových zkratek zapomene všechny držené klávesy.
 8. Akce spouštěné uvolněním (Režim vývojáře, Vynechat tah jednotky) proběhnou
    jednou za přijatý stisk: stisk musí odpovídat přesně, akce proběhne při
@@ -142,7 +143,7 @@ jsou označeny.
 | `colony.tradeRoute` | Obchodní trasy kolonie | Kolonie | R | R | **nová** |
 | `colony.routeCargo` | Náklad obchodní trasy | Kolonie | C | C | **nová** |
 | `colony.treasure` | Poklad kolonie | Kolonie | T | T | **nová**; jen vlastní kolonie |
-| `editor.save` | Uložit upravenou mapu | Editor map | Ctrl+S | Meta+S, Ctrl+S | macOS zachovává dřívější Control |
+| `editor.save` | Uložit upravenou mapu | Editor map | Ctrl+S | Meta+S | jedna výchozí kombinace |
 
 V editoru map (R-0435) dále pevně platí: Escape odchází přes ochranu neuložených změn; po kliknutí do mapy šipky posouvají vybrané pole a Enter či mezerník na ně použije zvolený nástroj. Tyto klávesy nejsou konfigurovatelné akce.
 
@@ -212,14 +213,13 @@ Rozhodnutí 8. listopadu 2026:
    za rychlostí posunu mapy, v menu i ve hře. Otevře samostatnou obrazovku
    v hlavním okně; návrat vede do původního Nastavení.
 2. Obrazovka zobrazí platformu výchozích hodnot a posuvný seznam akcí po
-   kontextech. Každá kombinace je tlačítko pro změnu, vedle něj Odebrat;
-   Přidat zachytí další kombinaci. Akce bez kombinace ukáže „Nepřiřazeno“.
+   kontextech. Každá akce má jedno klikatelné pole kláves a sousední křížek.
+   Akce bez kombinace ukáže klikatelné „žádná“ (anglicky „none“).
 3. Zachytávání pohltí všechny klávesy včetně jejich uvolnění, takže stará
    akce ani F3 neproběhne. Samotný modifikátor čeká na klávesu, Escape
-   zachytávání zruší a editor neopustí. Fokus se vrací na změněnou kombinaci
-   nebo na Přidat.
+   zachytávání zruší a editor neopustí. Fokus se vrací na pole kombinace, i když je prázdné.
 4. Konflikt překrývajících se kontextů pojmenuje kombinaci a obě akce a
-   zakáže Uložit a zpět. Stejná kombinace u jedné akce se nepřidá podruhé.
+   zakáže Uložit a zpět. Nová kombinace vždy nahrazuje předchozí kombinaci téže akce.
 5. Obnovit výchozí změní jen koncept. Zrušit i Escape zahodí celý koncept
    včetně obnovení. Uložit a zpět nejdřív uloží odchylky a teprve potom novou
    konfiguraci použije všude; selhání uložení ponechá editor, koncept i dosavadní
@@ -227,15 +227,15 @@ Rozhodnutí 8. listopadu 2026:
    důvod jde do logu).
 6. Popisky se zkratkou (nástrojová lišta a její stavové vysvětlení, nabídka
    jednotky, herní menu, tlačítko Načíst hru, Režim vývojáře, titulek Plout do…)
-   se skládají z textu a aktuální první kombinace `text (zkratka)` a po uložení
+   se skládají z textu a aktuální kombinace `text (zkratka)` a po uložení
    se obnoví bez restartu. Nepřiřazená akce popisek bez závorky.
-7. Ovládací prvky editoru jsou stávající ručně kreslená tlačítka (`ButtonIcon`);
-   nová grafika nevznikla.
+7. Horní tlačítka používají sdílené `ButtonIcon`. Klávesy a křížky používají
+   černou variantu kresleného vektorového rámečku `shortcut-key-frame.svg`;
+   PNG je opakovatelný export podle [grafického kontraktu](graphics.md#zdrojovy-format-herni-grafiky).
 
 8. Dohodnuto 2026-11-10 v [R-0439](requirements/done/R-0439.md): v pevné horní
    liště je nadpis a zleva **Obnovit výchozí**, **Zrušit**, **Uložit a zpět**.
-   Obnovení odděluje větší mezera, uložení je zvýrazněné. Posouvají se pouze
-   řádky zkratek; popis, platforma a stav zůstávají viditelné. Escape mimo
+   Obnovení odděluje větší mezera, uložení je zvýrazněné. Toto původní chování později upravilo R-0443 níže: úvod se posouvá spolu s řádky. Escape mimo
    zachytávání má význam Zrušit; během zachytávání ruší pouze zadávání.
    Globální zkratka Načíst hru nesmí editor opustit a ztratit rozpracované změny.
 

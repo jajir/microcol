@@ -40,8 +40,10 @@ class KeyBindingTest {
     @Test
     void listsAllowSeveralBindingsOrNone() {
         assertEquals(List.of(), ShortcutConfiguration.parseList(" "));
-        assertEquals(List.of(KeyBinding.parse("R"), KeyBinding.parse("Ctrl+R")),
-                ShortcutConfiguration.parseList("R, Ctrl+R"));
+        assertEquals(List.of(KeyBinding.parse("Ctrl+R")),
+                ShortcutConfiguration.parseList("Ctrl+R"));
+        assertThrows(IllegalArgumentException.class,
+                () -> ShortcutConfiguration.parseList("R, Ctrl+R"));
         assertThrows(IllegalArgumentException.class,
                 () -> ShortcutConfiguration.parseList("R,"));
     }

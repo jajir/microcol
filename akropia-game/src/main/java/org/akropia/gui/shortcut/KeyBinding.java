@@ -1,5 +1,7 @@
 package org.akropia.gui.shortcut;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Optional;
@@ -188,6 +190,38 @@ public final class KeyBinding {
             }
         }
         return out.append(keyName.apply(code)).toString();
+    }
+
+    /**
+     * Separate keycap captions; punctuation is a key, never a separator.
+     */
+    public List<String> toDisplayKeys(final ShortcutPlatform platform,
+            final Function<KeyCode, String> keyName) {
+        final List<String> keys = new ArrayList<>();
+        for (final Modifier modifier : modifiers) {
+            if (platform == ShortcutPlatform.MACOS) {
+                switch (modifier) {
+                case CTRL:
+                    keys.add("control");
+                    break;
+                case ALT:
+                    keys.add("option");
+                    break;
+                case SHIFT:
+                    keys.add("shift");
+                    break;
+                case META:
+                    keys.add("command");
+                    break;
+                default:
+                    throw new IllegalStateException();
+                }
+            } else {
+                keys.add(modifier.text);
+            }
+        }
+        keys.add(keyName.apply(code));
+        return keys;
     }
 
     @Override

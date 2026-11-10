@@ -491,14 +491,16 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         shortcuts.verifyEditorOpen(true);
         shortcuts.verifyOnlyMainWindowShowing();
         // Escape cancels a capture without closing the editor.
-        shortcuts.startAdd(ShortcutAction.HELP);
+        shortcuts.startChange(ShortcutAction.HELP, 0);
         shortcuts.verifyStatus(
                 "Press the new combination for Colonizopedia. Escape cancels.");
         shortcuts.verifySaveEnabled(false);
+        shortcuts.verifyKeycaps(ShortcutAction.HELP, "Press keys…");
+        shortcuts.verifyCaptureBlinks(ShortcutAction.HELP);
         shortcuts.pressKeys(KeyCode.ESCAPE);
         shortcuts.verifyEditorOpen(true);
         shortcuts.verifyStatus("No combination was changed.");
-        shortcuts.verifyFocused(ShortcutAction.HELP, "add");
+        shortcuts.verifyFocused(ShortcutAction.HELP, "binding-0");
         shortcuts.verifyBindings(ShortcutAction.HELP, "H");
         // Capturing F3 changes the draft but does not run Developer mode.
         developer.rememberGame();
@@ -516,14 +518,15 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         shortcuts.verifyStatus("K is used by both Congress and Colonizopedia."
                 + " Change one of them before saving.");
         shortcuts.verifySaveEnabled(false);
-        // A free key resolves the conflict; a second binding is kept beside
-        // it.
+        // A free key resolves the conflict; changing it replaces the only
+        // binding.
         shortcuts.startChange(ShortcutAction.HELP, 0);
         shortcuts.pressKeys(KeyCode.Y);
         shortcuts.verifyFocused(ShortcutAction.HELP, "binding-0");
-        shortcuts.startAdd(ShortcutAction.HELP);
+        shortcuts.startChange(ShortcutAction.HELP, 0);
         shortcuts.pressKeys(KeyCode.SHIFT, KeyCode.Y);
-        shortcuts.verifyBindings(ShortcutAction.HELP, "Y", "Shift+Y");
+        shortcuts.verifyBindings(ShortcutAction.HELP, "Shift+Y");
+        shortcuts.verifyKeycaps(ShortcutAction.HELP, "Shift", "Y");
         shortcuts.verifyStatus("Changes take effect after Save and back.");
         shortcuts.verifySaveEnabled(true);
         shortcuts.captureDialog(ScreenKeyboardShortcuts.STATUS_ID,
@@ -531,18 +534,16 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         // Save and back stores only the deviation and closes the editor.
         shortcuts.saveAndBack();
         shortcuts.verifyEditorOpen(false);
-        shortcuts.verifySavedDeviations(Map.of("map.help", "Y, Shift+Y"));
+        shortcuts.verifySavedDeviations(Map.of("map.help", "Shift+Y"));
         developer.verifyGameUnchanged();
         developer.backToGame();
         // The toolbar hint and the map keys change without a restart.
         final GameToolbarPage toolbar = new GameToolbarPage(getContext());
         toolbar.hover("help");
-        toolbar.verifyExplanation("Colonizopedia - guide. (Y)", null);
+        toolbar.verifyExplanation("Colonizopedia - guide. (Shift+Y)", null);
         new FreePlayAuditPage(getContext()).press(KeyCode.H);
         help.verifyDialogClosed();
         new FreePlayAuditPage(getContext()).press(KeyCode.Y);
-        help.verifyDialogOpen();
-        help.closeWithEscape();
         help.verifyDialogClosed();
         shortcuts.pressKeys(KeyCode.SHIFT, KeyCode.Y);
         help.verifyDialogOpen();
@@ -559,12 +560,24 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         final KeyboardShortcutsPage shortcuts = new KeyboardShortcutsPage(
                 getContext());
         developer.setModeInSettings(false);
+        // An empty shortcut stays editable and cannot be cleared again.
+        shortcuts.open();
+        shortcuts.remove(ShortcutAction.DEVELOPER_MODE, 0);
+        shortcuts.verifyBindings(ShortcutAction.DEVELOPER_MODE);
+        shortcuts.verifyKeycaps(ShortcutAction.DEVELOPER_MODE, "none");
+        shortcuts.startChange(ShortcutAction.DEVELOPER_MODE, 0);
+        shortcuts.pressKeys(KeyCode.ESCAPE);
+        shortcuts.verifyKeycaps(ShortcutAction.DEVELOPER_MODE, "none");
+        shortcuts.startChange(ShortcutAction.DEVELOPER_MODE, 0);
+        shortcuts.pressKeys(KeyCode.Y);
+        shortcuts.verifyKeycaps(ShortcutAction.DEVELOPER_MODE, "Y");
+        shortcuts.cancel();
         // Cancel discards a removed binding.
         shortcuts.open();
         shortcuts.verifyBindings(ShortcutAction.DEVELOPER_MODE, "F3");
         shortcuts.remove(ShortcutAction.DEVELOPER_MODE, 0);
         shortcuts.verifyBindings(ShortcutAction.DEVELOPER_MODE);
-        shortcuts.verifyFocused(ShortcutAction.DEVELOPER_MODE, "add");
+        shortcuts.verifyFocused(ShortcutAction.DEVELOPER_MODE, "binding-0");
         shortcuts.cancel();
         shortcuts.verifyEditorOpen(false);
         developer.verifySettings(false, "Developer mode");
@@ -643,9 +656,9 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         shortcuts.open();
         shortcuts.verifyEditorTexts("Keyboard shortcuts", "Defaults for Linux",
                 "Restore defaults", "Cancel", "Save and back");
-        shortcuts.verifyActionTexts(ShortcutAction.HELP, "Colonizopedia",
-                "Add");
+        shortcuts.verifyActionTexts(ShortcutAction.HELP, "Colonizopedia");
         shortcuts.verifyBindings(ShortcutAction.SKIP_UNIT, "Space");
+        shortcuts.verifyKeycaps(ShortcutAction.OPEN_SETTINGS, "Ctrl", ",");
         shortcuts.verifyScrollingLayout(false);
         shortcuts.verifyCompleteLayout();
         shortcuts.captureDialog(ScreenKeyboardShortcuts.STATUS_ID,
@@ -657,11 +670,11 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         shortcuts.verifyEditorTexts("Klávesové zkratky",
                 "Výchozí hodnoty pro Linux", "Obnovit výchozí", "Zrušit",
                 "Uložit a zpět");
-        shortcuts.verifyActionTexts(ShortcutAction.HELP, "Colonizopedie",
-                "Přidat");
+        shortcuts.verifyActionTexts(ShortcutAction.HELP, "Colonizopedie");
         shortcuts.verifyActionTexts(ShortcutAction.SECRET_OPTION,
-                "Podržet pro vývojářské načtení", "Přidat");
+                "Podržet pro vývojářské načtení");
         shortcuts.verifyBindings(ShortcutAction.SKIP_UNIT, "Mezerník");
+        shortcuts.verifyKeycaps(ShortcutAction.SKIP_UNIT, "Mezerník");
         shortcuts.verifyStatus("Změny začnou platit po Uložit a zpět.");
         shortcuts.verifyScrollingLayout(false);
         shortcuts.verifyCompleteLayout();

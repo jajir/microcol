@@ -229,6 +229,17 @@
           "stroke": "2.4 units in a 48 unit cell, 1.6 logical px"
         },
         {
+          "output": "shortcut-key-frame.png",
+          "source": "shortcut-key-frame.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [192, 96],
+          "transparent": true,
+          "consumer": "Keyboard shortcut keycaps and clear buttons in InGamePage.css",
+          "display": "12 px slice shown 6 logical px wide",
+          "stroke": "2 source units, 2 logical px, black ballpoint contour"
+        },
+        {
           "output": "game-toolbar-frame.png",
           "source": "game-toolbar-frame.svg",
           "render": "zoom",

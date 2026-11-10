@@ -19,8 +19,8 @@ import com.google.common.base.Preconditions;
 import javafx.scene.input.KeyEvent;
 
 /**
- * Immutable bindings of every {@link ShortcutAction}. An action may have
- * several bindings or none.
+ * Immutable bindings of every {@link ShortcutAction}. An action may have one
+ * binding or none.
  */
 public final class ShortcutConfiguration {
 
@@ -64,6 +64,10 @@ public final class ShortcutConfiguration {
         final Map<ShortcutAction, List<KeyBinding>> copy = new EnumMap<>(
                 ShortcutAction.class);
         for (final ShortcutAction action : ShortcutAction.values()) {
+            Preconditions.checkArgument(
+                    bindings.getOrDefault(action, Collections.emptyList())
+                            .size() <= 1,
+                    "Only one shortcut is allowed for '%s'", action.getKey());
             copy.put(action,
                     Collections.unmodifiableList(new ArrayList<>(
                             new LinkedHashSet<>(bindings.getOrDefault(action,
@@ -108,14 +112,13 @@ public final class ShortcutConfiguration {
      * @throws IllegalArgumentException when any binding is invalid
      */
     public static List<KeyBinding> parseList(final String value) {
-        final List<KeyBinding> out = new ArrayList<>();
+        Preconditions.checkNotNull(value);
         if (value.trim().isEmpty()) {
-            return out;
+            return Collections.emptyList();
         }
-        for (final String part : value.split(",", -1)) {
-            out.add(KeyBinding.parse(part.trim()));
-        }
-        return out;
+        Preconditions.checkArgument(!value.contains(","),
+                "Only one shortcut is allowed per action");
+        return List.of(KeyBinding.parse(value.trim()));
     }
 
     static String formatList(final List<KeyBinding> list) {

@@ -14,6 +14,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -71,6 +72,37 @@ public class ShortcutControllerTest {
     }
 
     @Test
+    void keycapsKeepPlatformNamesAndPunctuationSeparate() {
+        assertEquals(List.of("command", ","), controller(ShortcutPlatform.MACOS)
+                .displayKeys(KeyBinding.parse("Meta+Comma")));
+        assertEquals(List.of("shift", "command", "Q"),
+                controller(ShortcutPlatform.MACOS)
+                        .displayKeys(KeyBinding.parse("Meta+Shift+Q")));
+        assertEquals(List.of("Ctrl", "+"), controller(ShortcutPlatform.LINUX)
+                .displayKeys(KeyBinding.parse("Ctrl+Plus")));
+        final ShortcutController czech = new ShortcutController(
+                preferences(Map.of()), i18n(new Locale("cs", "CZ")),
+                ShortcutPlatform.LINUX);
+        assertEquals(List.of("Mezerník"),
+                czech.displayKeys(KeyBinding.parse("Space")));
+    }
+
+    @Test
+    void secondBindingIsRejectedWithoutChangingConfiguration() {
+        final ShortcutConfiguration config = controller(ShortcutPlatform.LINUX)
+                .getActive();
+        assertThrows(IllegalArgumentException.class, () -> config.with(
+                ShortcutAction.HELP,
+                List.of(KeyBinding.parse("Y"), KeyBinding.parse("Ctrl+Y"))));
+        assertEquals(List.of(KeyBinding.parse("H")),
+                config.getBindings(ShortcutAction.HELP));
+        final List<String> problems = new ArrayList<>();
+        assertEquals(config, ShortcutConfiguration.withOverrides(config,
+                Map.of("map.help", "Y, Ctrl+Y"), problems::add));
+        assertEquals(1, problems.size());
+    }
+
+    @Test
     void everyPlatformProfileNamesEveryActionOnceWithoutConflicts()
             throws Exception {
         for (final ShortcutPlatform platform : ShortcutPlatform.values()) {
@@ -110,9 +142,8 @@ public class ShortcutControllerTest {
                 .loadProfile(ShortcutPlatform.MACOS);
         assertEquals(List.of(KeyBinding.parse("Meta+O")),
                 mac.getBindings(ShortcutAction.LOAD_GAME));
-        // The editor keeps its former Control key beside Command.
-        assertEquals(
-                List.of(KeyBinding.parse("Meta+S"), KeyBinding.parse("Ctrl+S")),
+        // Each action has exactly one default, including the macOS editor.
+        assertEquals(List.of(KeyBinding.parse("Meta+S")),
                 mac.getBindings(ShortcutAction.EDITOR_SAVE));
         for (final ShortcutPlatform platform : ShortcutPlatform.values()) {
             final ShortcutConfiguration defaults = ShortcutController
@@ -244,18 +275,17 @@ public class ShortcutControllerTest {
         shortcuts.addListener(notified::incrementAndGet);
         final ShortcutConfiguration draft = shortcuts.getActive()
                 .with(ShortcutAction.STATISTICS,
-                        List.of(KeyBinding.parse("Y"),
-                                KeyBinding.parse("Ctrl+Y")))
+                        List.of(KeyBinding.parse("Ctrl+Y")))
                 .with(ShortcutAction.HELP, List.of());
         shortcuts.save(draft);
         verify(preferences).setShortcutOverrides("linux",
-                Map.of("map.statistics", "Y, Ctrl+Y", "map.help", ""));
+                Map.of("map.statistics", "Ctrl+Y", "map.help", ""));
         assertEquals(1, notified.get());
         assertTrue(shortcuts.matches(ShortcutAction.STATISTICS,
                 key(KeyCode.Y, KeyBinding.Modifier.CTRL)));
         assertFalse(
                 shortcuts.matches(ShortcutAction.STATISTICS, key(KeyCode.R)));
-        assertEquals("Y", shortcuts.label(ShortcutAction.STATISTICS));
+        assertEquals("Ctrl+Y", shortcuts.label(ShortcutAction.STATISTICS));
         assertEquals("Colonizopedia",
                 shortcuts.withHint("Colonizopedia", ShortcutAction.HELP));
         // Restoring the defaults saves no deviation.

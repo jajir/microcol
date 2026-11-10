@@ -43,25 +43,58 @@
     -fx-border-image-insets: 0;
 }
 
-/* Compact padding gives readable key text room alongside shared icons. */
+/* One clickable combination, with a separate paper frame for each key. */
 #keyboardShortcutsScreen .shortcut-row {
-    -fx-padding: 3 0;
+    -fx-padding: 6 0;
     -fx-alignment: center-left;
 }
 #keyboardShortcutsScreen .shortcut-row .label,
 #keyboardShortcutsScreen .shortcut-row .button {
     -fx-font-size: 16;
+    -fx-text-fill: #000000;
 }
 #keyboardShortcutsScreen .shortcut-row .button {
-    -fx-padding: 0 6;
+    -fx-border-image-source: url("../images/shortcut-key-frame.png");
+    -fx-padding: 0 10;
     -fx-min-height: 36;
 }
-#keyboardShortcutsScreen .shortcut-key {
-    -fx-min-width: 72;
-    -fx-font-family: "Playpen Sans SemiBold";
+#keyboardShortcutsScreen .shortcut-row .shortcut-key {
+    -fx-border-image-source: null;
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+#keyboardShortcutsScreen .shortcut-keycap {
+    -fx-font-family: "Playpen Sans";
+    -fx-border-image-source: url("../images/shortcut-key-frame.png");
+    -fx-border-image-slice: 12;
+    -fx-border-image-width: 6;
+    -fx-border-image-repeat: stretch;
+    -fx-background-color: #FFF9EC;
+    -fx-background-insets: 3;
+    -fx-padding: 0 12;
+    -fx-min-height: 36;
+    -fx-min-width: 36;
+    -fx-alignment: center;
+}
+#keyboardShortcutsScreen .shortcut-key:hover .shortcut-keycap,
+#keyboardShortcutsScreen .shortcut-key:focused .shortcut-keycap {
+    -fx-background-color: #E7E7D0;
+}
+#keyboardShortcutsScreen .shortcut-key:focused .shortcut-keycap {
+    -fx-underline: true;
+}
+#keyboardShortcutsScreen .shortcut-capturing .shortcut-keycap {
+    -fx-background-color: #FFF9EC;
+}
+#keyboardShortcutsScreen .shortcut-capturing:capture-on .shortcut-keycap {
+    -fx-background-color: #D9E5B8;
 }
 #keyboardShortcutsScreen .shortcut-group {
     -fx-font-size: 18;
-    -fx-font-family: "Playpen Sans SemiBold";
+    -fx-font-family: "Playpen Sans";
     -fx-padding: 18 0 6 0;
+}
+#keyboardShortcutsScreen #shortcutsTitle {
+    -fx-font-family: "Playpen Sans";
+    -fx-font-weight: normal;
 }

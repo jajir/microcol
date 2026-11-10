@@ -1,6 +1,5 @@
 package org.akropia.gui.screen.setting;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +27,10 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.css.PseudoClass;
+import javafx.util.Duration;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -36,7 +39,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -85,7 +87,7 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
 
     private ShortcutConfiguration draft;
     private ShortcutAction capturing;
-    private int captureIndex;
+    private final Timeline captureBlink = new Timeline();
     private KeyCode swallowRelease;
     private String message = "";
     private String focusAfterRefresh;
@@ -160,6 +162,7 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
     }
 
     private void close() {
+        captureBlink.stop();
         window.removeEventFilter(KeyEvent.ANY, keyFilter);
         capturing = null;
         returnToSettings.run();
@@ -222,43 +225,27 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
             return;
         }
         swallowRelease = event.getCode();
-        final List<KeyBinding> list = new ArrayList<>(
-                draft.getBindings(capturing));
-        final int existing = list.indexOf(binding.get());
-        if (existing >= 0 && existing != captureIndex) {
-            message = i18n.get(ShortcutText.captureDuplicate,
-                    i18n.get(capturing.getLabel()),
-                    controller.displayText(binding.get()));
-            focusAfterRefresh = captureControlId();
-        } else {
-            if (captureIndex < 0) {
-                list.add(binding.get());
-                captureIndex = list.size() - 1;
-            } else {
-                list.set(captureIndex, binding.get());
-            }
-            draft = draft.with(capturing, list);
-            message = "";
-            focusAfterRefresh = id(capturing) + "-binding-" + captureIndex;
-        }
+        draft = draft.with(capturing, List.of(binding.get()));
+        message = "";
+        focusAfterRefresh = captureControlId();
         capturing = null;
         refresh();
     }
 
     private String captureControlId() {
-        return captureIndex < 0 ? id(capturing) + "-add"
-                : id(capturing) + "-binding-" + captureIndex;
+        return id(capturing) + "-binding-0";
     }
 
-    private void startCapture(final ShortcutAction action, final int index) {
+    private void startCapture(final ShortcutAction action) {
         capturing = action;
-        captureIndex = index;
         message = "";
         focusAfterRefresh = captureControlId();
         refresh();
     }
 
     private void refresh() {
+        captureBlink.stop();
+        captureBlink.getKeyFrames().clear();
         if (draft == null) {
             return;
         }
@@ -316,50 +303,67 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
         label.setWrapText(true);
         label.setMinWidth(260);
         label.setPrefWidth(260);
-        label.setAlignment(Pos.CENTER_LEFT);
-        label.setTextAlignment(TextAlignment.LEFT);
-        final FlowPane bindings = new FlowPane(6, 4);
-        bindings.setId(id + "-bindings");
-        HBox.setHgrow(bindings, Priority.ALWAYS);
+        label.setAlignment(Pos.CENTER_RIGHT);
+        label.setTextAlignment(TextAlignment.RIGHT);
         final List<KeyBinding> list = draft.getBindings(action);
-        for (int i = 0; i < list.size(); i++) {
-            final int index = i;
-            final String text = controller.displayText(list.get(i));
-            final Button binding = ActionButtons.button(ButtonIcon.REPLACE,
-                    capturing == action && captureIndex == i ? "…" : text);
-            binding.getStyleClass().add("shortcut-key");
-            binding.setId(id + "-binding-" + i);
-            binding.setUserData(text);
-            binding.setAccessibleText(i18n.get(ShortcutText.change, text));
-            binding.setOnAction(event -> startCapture(action, index));
-            final Button remove = ActionButtons.button(ButtonIcon.REMOVE);
-            remove.setId(id + "-remove-" + i);
-            remove.setAccessibleText(i18n.get(ShortcutText.remove, text));
-            remove.setOnAction(event -> {
-                final List<KeyBinding> changed = new ArrayList<>(
-                        draft.getBindings(action));
-                changed.remove(index);
-                draft = draft.with(action, changed);
-                message = "";
-                focusAfterRefresh = id + "-add";
-                capturing = null;
-                refresh();
-            });
-            bindings.getChildren().add(new HBox(2, binding, remove));
+        final String text = list.isEmpty() ? i18n.get(ShortcutText.unbound)
+                : controller.displayText(list.get(0));
+        final HBox keys = new HBox(8);
+        keys.setAlignment(Pos.CENTER_LEFT);
+        keys.setMouseTransparent(true);
+        final List<String> parts = capturing == action
+                ? List.of(i18n.get(ShortcutText.captureKeys))
+                : list.isEmpty() ? List.of(text)
+                        : controller.displayKeys(list.get(0));
+        for (final String part : parts) {
+            if (!keys.getChildren().isEmpty()) {
+                keys.getChildren().add(new Label("+"));
+            }
+            final Label key = new Label(part);
+            key.getStyleClass().add("shortcut-keycap");
+            if (list.isEmpty() && capturing != action) {
+                key.setId(id + "-unbound");
+            }
+            keys.getChildren().add(key);
         }
-        if (list.isEmpty()) {
-            final Label unbound = new Label(i18n.get(ShortcutText.unbound));
-            unbound.setId(id + "-unbound");
-            bindings.getChildren().add(unbound);
+        final Button binding = ActionButtons.shortcut(keys);
+        binding.getStyleClass().add("shortcut-key");
+        binding.setId(id + "-binding-0");
+        binding.setUserData(list.isEmpty() ? null : text);
+        binding.setAccessibleText(
+                name + ": " + i18n.get(ShortcutText.change, text));
+        binding.setOnAction(event -> startCapture(action));
+        if (capturing == action) {
+            binding.getStyleClass().add("shortcut-capturing");
+            final PseudoClass pulse = PseudoClass.getPseudoClass("capture-on");
+            binding.pseudoClassStateChanged(pulse, true);
+            captureBlink
+                    .getKeyFrames().setAll(
+                            new KeyFrame(Duration.millis(600),
+                                    event -> binding.pseudoClassStateChanged(
+                                            pulse, false)),
+                            new KeyFrame(Duration.millis(1200), event -> binding
+                                    .pseudoClassStateChanged(pulse, true)));
+            captureBlink.setCycleCount(Timeline.INDEFINITE);
+            captureBlink.play();
         }
-        final Button add = ActionButtons.button(ButtonIcon.ADD,
-                capturing == action && captureIndex < 0 ? "…"
-                        : i18n.get(ShortcutText.add));
-        add.setId(id + "-add");
-        add.setAccessibleText(i18n.get(ShortcutText.add) + " " + name);
-        add.setOnAction(event -> startCapture(action, -1));
-        bindings.getChildren().add(add);
-        final HBox row = new HBox(10, label, bindings);
+        final Button remove = ActionButtons.clearShortcut();
+        remove.setId(id + "-remove-0");
+        remove.setAccessibleText(
+                name + ": " + i18n.get(ShortcutText.remove, text));
+        remove.setDisable(list.isEmpty());
+        remove.setOnAction(event -> {
+            draft = draft.with(action, List.of());
+            message = "";
+            focusAfterRefresh = id + "-binding-0";
+            capturing = null;
+            refresh();
+        });
+        final HBox bindings = new HBox(12, binding, remove);
+        bindings.setId(id + "-bindings");
+        bindings.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(bindings, Priority.ALWAYS);
+        final HBox row = new HBox(24, label, bindings);
         row.getStyleClass().add("shortcut-row");
         row.setId(id);
         row.setAlignment(Pos.CENTER_LEFT);

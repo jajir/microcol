@@ -2,6 +2,7 @@ package org.akropia.gui.util;
 
 import java.util.Objects;
 import org.akropia.gui.image.ButtonIcon;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.ToggleButton;
@@ -17,6 +18,19 @@ public final class ActionButtons {
 
     public static Button button(final ButtonIcon icon, final String text) {
         return new Button(text, Objects.requireNonNull(icon).createView());
+    }
+
+    /**
+     * Keycaps are the shortcut editor's explicit visual action, without an
+     * icon.
+     */
+    public static Button shortcut(final Node keys) {
+        return new Button("", Objects.requireNonNull(keys));
+    }
+
+    /** The adjacent cross clears the editor's single shortcut. */
+    public static Button clearShortcut() {
+        return new Button("×");
     }
 
     public static ToggleButton toggle(final ButtonIcon icon) {

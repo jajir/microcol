@@ -33,10 +33,6 @@ public class KeyboardShortcutsPage extends AbstractScreen {
         clickOnButtonWithId(SettingButtonsView.BUTTON_SHORTCUTS_ID);
     }
 
-    public void startAdd(final ShortcutAction action) {
-        clickInEditor(ScreenKeyboardShortcuts.id(action) + "-add");
-    }
-
     public void startChange(final ShortcutAction action, final int index) {
         clickInEditor(ScreenKeyboardShortcuts.id(action) + "-binding-" + index);
     }
@@ -132,7 +128,7 @@ public class KeyboardShortcutsPage extends AbstractScreen {
                     .lookup("#" + ScreenKeyboardShortcuts.id(action)
                             + "-binding-" + i)
                     .tryQueryAs(Button.class).orElse(null);
-            if (binding == null) {
+            if (binding == null || binding.getUserData() == null) {
                 return out;
             }
             out.add((String) binding.getUserData());
@@ -151,7 +147,7 @@ public class KeyboardShortcutsPage extends AbstractScreen {
                     getNodeFinder().lookup("#"
                             + ScreenKeyboardShortcuts.id(action) + "-unbound")
                             .tryQuery().orElse(null),
-                    action.getKey() + " shows Unbound");
+                    action.getKey() + " shows an editable empty keycap");
         }
     }
 
@@ -279,15 +275,55 @@ public class KeyboardShortcutsPage extends AbstractScreen {
     }
 
     /**
-     * @param action   checked action
-     * @param label    its localized name
-     * @param addLabel text of its Add button
+     * @param action checked action
+     * @param label  localized name
      */
     public void verifyActionTexts(final ShortcutAction action,
-            final String label, final String addLabel) {
+            final String label) {
         final String id = ScreenKeyboardShortcuts.id(action);
         assertEquals(label, getLabeledById(id + "-label").getText());
-        assertEquals(addLabel, getButtonById(id + "-add").getText());
+        assertTrue(
+                getNodeFinder().lookup("#" + id + "-add").tryQuery().isEmpty());
+    }
+
+    public void verifyKeycaps(final ShortcutAction action,
+            final String... expected) {
+        final String id = ScreenKeyboardShortcuts.id(action);
+        final Button button = getButtonById(id + "-binding-0");
+        final javafx.scene.layout.HBox keys = (javafx.scene.layout.HBox) button
+                .getGraphic();
+        final List<String> captions = new ArrayList<>();
+        for (final Node node : keys.getChildren()) {
+            if (node.getStyleClass().contains("shortcut-keycap")) {
+                captions.add(((javafx.scene.control.Label) node).getText());
+            } else {
+                assertEquals("+",
+                        ((javafx.scene.control.Label) node).getText());
+            }
+        }
+        assertEquals(List.of(expected), captions);
+        assertEquals(expected.length * 2 - 1, keys.getChildren().size());
+        assertEquals("×", getButtonById(id + "-remove-0").getText());
+        assertEquals(button.getUserData() == null,
+                getButtonById(id + "-remove-0").isDisabled());
+        assertTrue(getNodeFinder().lookup("#" + id + "-binding-1").tryQuery()
+                .isEmpty());
+        assertTrue(
+                getNodeFinder().lookup("#" + id + "-add").tryQuery().isEmpty());
+    }
+
+    public void verifyCaptureBlinks(final ShortcutAction action)
+            throws Exception {
+        final Button button = getButtonById(
+                ScreenKeyboardShortcuts.id(action) + "-binding-0");
+        final javafx.css.PseudoClass pulse = javafx.css.PseudoClass
+                .getPseudoClass("capture-on");
+        assertTrue(button.getStyleClass().contains("shortcut-capturing"));
+        for (final boolean state : new boolean[] { true, false, true }) {
+            WaitForAsyncUtils.waitFor(3, java.util.concurrent.TimeUnit.SECONDS,
+                    () -> button.getPseudoClassStates()
+                            .contains(pulse) == state);
+        }
     }
 
     /**
@@ -325,9 +361,9 @@ public class KeyboardShortcutsPage extends AbstractScreen {
                         .lookup("#" + ScreenKeyboardShortcuts.id(action)
                                 + "-label")
                         .queryAs(javafx.scene.control.Label.class);
-                assertEquals(javafx.geometry.Pos.CENTER_LEFT,
+                assertEquals(javafx.geometry.Pos.CENTER_RIGHT,
                         label.getAlignment());
-                assertEquals(javafx.scene.text.TextAlignment.LEFT,
+                assertEquals(javafx.scene.text.TextAlignment.RIGHT,
                         label.getTextAlignment());
             }
             if (runningGame) {
@@ -364,6 +400,16 @@ public class KeyboardShortcutsPage extends AbstractScreen {
             assertEquals(getPrimaryStage().getScene().getHeight(),
                     editorBounds.getHeight(), 1,
                     "Editor uses the main window height");
+            final javafx.scene.control.Label sample = (javafx.scene.control.Label) getLabeledById(
+                    ScreenKeyboardShortcuts.id(ShortcutAction.HELP) + "-label");
+            assertEquals(sample.getFont().getName(),
+                    ((javafx.scene.control.Label) getLabeledById(
+                            "shortcutsTitle")).getFont().getName());
+            for (final Node heading : editor.lookupAll(".shortcut-group")) {
+                assertEquals(sample.getFont().getName(),
+                        ((javafx.scene.control.Label) heading).getFont()
+                                .getName());
+            }
             final Node save = getNodeFinder()
                     .lookup("#" + ScreenKeyboardShortcuts.SAVE_ID).query();
             final javafx.scene.Scene scene = save.getScene();
@@ -399,10 +445,11 @@ public class KeyboardShortcutsPage extends AbstractScreen {
                         "Action names remain readable");
                 assertTrue(label.getWidth() >= 260,
                         "Action names have a generous aligned column");
-                final Button add = getButtonById(id + "-add");
-                assertTrue(add.getHeight() >= 36 && add.getHeight() <= 44,
+                final Button binding = getButtonById(id + "-binding-0");
+                assertTrue(
+                        binding.getHeight() >= 36 && binding.getHeight() <= 44,
                         "Row controls balance click target and density: "
-                                + add.getHeight());
+                                + binding.getHeight());
 
             }
             final List<javafx.scene.control.Labeled> labels = new ArrayList<>();

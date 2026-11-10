@@ -75,41 +75,31 @@ class WasdControllerTest {
     }
 
     @Test
-    void alternativeKeysOfOneDirectionStopOnlyWhenBothAreReleased() {
+    void remappedDirectionsReleaseIndependentlyAndSavingClearsHeldKeys() {
         final ShortcutController shortcuts = ShortcutControllerTest
                 .controller(ShortcutPlatform.LINUX);
         shortcuts.save(shortcuts.getActive().with(ShortcutAction.SCROLL_UP,
-                List.of(KeyBinding.parse("W"), KeyBinding.parse("Up"))));
-        WasdController controller = controller(shortcuts);
-        final Point up = Point.of(0, -4);
-        // Release W first, then Up.
+                List.of(KeyBinding.parse("Up"))));
+        final WasdController controller = controller(shortcuts);
         controller.onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.W, false));
-        controller.onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.UP, false));
-        controller
-                .onKeyReleased(event(KeyEvent.KEY_RELEASED, KeyCode.W, false));
-        assertEquals(up, controller.getDiff());
-        controller
-                .onKeyReleased(event(KeyEvent.KEY_RELEASED, KeyCode.UP, false));
         assertFalse(controller.isScrolling());
-        // Release Up first, then W; auto-repeat presses add nothing.
         controller.onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.UP, false));
-        controller.onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.W, false));
-        controller.onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.W, false));
+        controller.onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.D, false));
+        assertEquals(Point.of(4, -4), controller.getDiff());
+        // Auto-repeat does not add another held key.
         controller.onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.UP, false));
-        assertEquals(up, controller.getDiff());
         controller
-                .onKeyReleased(event(KeyEvent.KEY_RELEASED, KeyCode.UP, false));
-        assertEquals(up, controller.getDiff());
-        // Shift pressed meanwhile does not keep W held after its release.
-        controller.onKeyReleased(event(KeyEvent.KEY_RELEASED, KeyCode.W, true));
+                .onKeyReleased(event(KeyEvent.KEY_RELEASED, KeyCode.UP, true));
+        assertEquals(Point.of(4, 0), controller.getDiff());
+        controller
+                .onKeyReleased(event(KeyEvent.KEY_RELEASED, KeyCode.D, false));
         assertFalse(controller.isScrolling());
-        // Releasing a key of another direction leaves this one held.
-        controller.onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.W, false));
+        // Release the other direction first as well.
+        controller.onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.UP, false));
         controller.onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.D, false));
         controller
                 .onKeyReleased(event(KeyEvent.KEY_RELEASED, KeyCode.D, false));
-        assertEquals(up, controller.getDiff());
-        // Saving bindings forgets keys whose release may never come.
+        assertEquals(Point.of(0, -4), controller.getDiff());
         shortcuts.save(shortcuts.getActive());
         assertFalse(controller.isScrolling());
     }
