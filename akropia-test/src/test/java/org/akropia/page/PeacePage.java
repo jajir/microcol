@@ -98,7 +98,7 @@ public final class PeacePage extends AbstractScreen {
     }
 
     public void verifyQuote(int price, int gold, int after, boolean enabled) {
-        String expected = "France offers peace for " + price + " gold.\n"
+        String expected = "Phocaea offers peace for " + price + " gold.\n"
                 + (enabled
                         ? "Your treasury: " + gold + " gold.\nAfter payment: "
                                 + after + " gold."

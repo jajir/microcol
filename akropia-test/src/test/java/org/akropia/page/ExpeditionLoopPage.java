@@ -314,7 +314,7 @@ public final class ExpeditionLoopPage extends AbstractScreen {
     public void verifyShipAt(final Location expected) {
         final Ship ship = ship();
         assertTrue(ship.isAtPlaceLocation(),
-                "The ship must be on the map, not at sea or in Europe");
+                "The ship must be on the map, not at sea or in Home port");
         assertEquals(expected, ship.getLocation(), "Unexpected ship square");
     }
 

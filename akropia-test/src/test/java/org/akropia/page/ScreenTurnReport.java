@@ -184,14 +184,16 @@ public class ScreenTurnReport extends AbstractScreen {
         final Button button = getOpenEuropeButton();
         assertEquals(expectedText, button.getText());
         assertTrue(button.isVisible() && !button.isDisabled(),
-                "Open Europe action must be available");
+                "Open Home port action must be available");
         assertTrue(button.getWidth() >= button.prefWidth(-1),
-                "Open Europe label must not be truncated");
+                "Open Home port label must not be truncated");
     }
 
     public void verifyOpenEuropeActionAbsent() {
-        assertTrue(getNodeFinder().lookup("#turnEventOpenEurope").tryQuery()
-                .isEmpty(), "Open Europe action must not be offered");
+        assertTrue(
+                getNodeFinder().lookup("#turnEventOpenEurope").tryQuery()
+                        .isEmpty(),
+                "Open Home port action must not be offered");
     }
 
     /** Activate the report's Open Europe action with the mouse. */

@@ -101,13 +101,27 @@ public abstract class AbstractAkropiaTest {
             // window over the primary stage, which the next scenario reuses.
             // It is closed first, so its waiting caller finishes before the
             // game stops and the next scenario starts unobstructed.
-            context.getRobot()
-                    .interact(() -> new ArrayList<>(Window.getWindows())
-                            .stream()
+            for (int pass = 0; pass < 5; pass++) {
+                final boolean[] closed = { false };
+                context.getRobot().interact(() -> {
+                    final ArrayList<Window> windows = new ArrayList<>(
+                            Window.getWindows());
+                    java.util.Collections.reverse(windows);
+                    windows.stream()
                             .filter(window -> window instanceof Stage
                                     && window != getPrimaryStage()
                                     && window.isShowing())
-                            .forEach(window -> ((Stage) window).close()));
+                            .forEach(window -> {
+                                closed[0] = true;
+                                ((Stage) window).close();
+                            });
+                });
+                // Closing a child dialog may resume a waiting parent dialog.
+                WaitForAsyncUtils.waitForFxEvents();
+                if (!closed[0]) {
+                    break;
+                }
+            }
             try {
                 context.getRobot().interact(() -> getAkropia().stop());
             } finally {

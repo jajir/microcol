@@ -187,7 +187,7 @@ public final class NativeMissionPage extends AbstractScreen {
                 .orElseThrow();
         final String attitude = terms.getHostility().name()
                 .toLowerCase(java.util.Locale.ROOT);
-        verifyMissionConfirmation("The natives are " + attitude + ".");
+        verifyMissionConfirmation("The local peoples are " + attitude + ".");
     }
 
     /**

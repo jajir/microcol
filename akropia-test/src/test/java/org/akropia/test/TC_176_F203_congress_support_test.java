@@ -146,7 +146,7 @@ public class TC_176_F203_congress_support_test extends AbstractAkropiaTest {
         congress.rememberWorld();
         congress.hoverOpenButton();
         game.verifyThatStatusBarContains(
-                "Otevřít Kongres a vybrat Otce zakladatele. (K)");
+                "Otevřít Kongres a vybrat Otce zakladatele.");
         congress.openWithShortcut();
         congress.verifyWorldUnchanged();
         congress.verifySupport(

@@ -327,8 +327,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         screenMarketBuy.verifyMaximumAtSliderEnd("Maximum: 45 pcs");
         screenMarketBuy.verifyPurchaseDetails(
                 "You are buying 45 pieces for ...", "4 gold", "180 gold",
-                "King tax is 10%. It's totally ...", "18 gold", "198 gold",
-                "2 gold");
+                "Tribute to the mother city is 10%. It's totally ...",
+                "18 gold", "198 gold", "2 gold");
         screenMarketBuy.verifyQuickBuyHint(
                 "To buy the maximum amount immediately, hold ⌘ while dragging.",
                 "To buy the maximum amount immediately, hold Ctrl while dragging.",
@@ -351,8 +351,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         screenMarketBuy.verifySelectedMarketQuantity(30);
         screenMarketBuy.verifyPurchaseDetails(
                 "You are buying 30 pieces for ...", "4 gold", "120 gold",
-                "King tax is 10%. It's totally ...", "12 gold", "132 gold",
-                "68 gold");
+                "Tribute to the mother city is 10%. It's totally ...",
+                "12 gold", "132 gold", "68 gold");
         europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
         europePort.verifyGold(200);
 
@@ -404,8 +404,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         screenMarketBuy.verifyMaximumAtSliderEnd("Maximum: 45 pcs");
         screenMarketBuy.verifyPurchaseDetails(
                 "You are buying 45 pieces for ...", "4 gold", "180 gold",
-                "King tax is 0%. It's totally ...", "0 gold", "180 gold",
-                "94600 gold");
+                "Tribute to the mother city is 0%. It's totally ...", "0 gold",
+                "180 gold", "94600 gold");
 
         // Back returns to the harbor without a trade.
         screenMarketBuy.clickOnCancel();
@@ -422,8 +422,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
                 "You can buy at most 45 pieces. You don't have enough gold for more, and this cargo hold has no room for more.");
         screenMarketBuy.verifyPurchaseDetails(
                 "You are buying 45 pieces for ...", "4 gold", "180 gold",
-                "King tax is 10%. It's totally ...", "18 gold", "198 gold",
-                "2 gold");
+                "Tribute to the mother city is 10%. It's totally ...",
+                "18 gold", "198 gold", "2 gold");
         screenMarketBuy.verifyTextShownInFull();
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0378-purchase-both-limits.png");
@@ -454,8 +454,9 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         screenMarketBuy.verifySelectedMarketQuantity(0);
         screenMarketBuy.verifyBuyEnabled(false);
         screenMarketBuy.verifyPurchaseDetails("You are buying 0 pieces for ...",
-                "4 gold", "0 gold", "King tax is 0%. It's totally ...",
-                "0 gold", "0 gold", "95000 gold");
+                "4 gold", "0 gold",
+                "Tribute to the mother city is 0%. It's totally ...", "0 gold",
+                "0 gold", "95000 gold");
         screenMarketBuy.clickOnBuy();
         screenMarketBuy.verifySelectedMarketQuantity(0);
         europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
@@ -470,8 +471,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         screenMarketBuy.verifySelectedMarketQuantity(63);
         screenMarketBuy.verifyPurchaseDetails(
                 "You are buying 63 pieces for ...", "4 gold", "252 gold",
-                "King tax is 0%. It's totally ...", "0 gold", "252 gold",
-                "94748 gold");
+                "Tribute to the mother city is 0%. It's totally ...", "0 gold",
+                "252 gold", "94748 gold");
         screenMarketBuy.buyWithKeyboard();
 
         // Exactly the shown amount was bought for the shown total.
@@ -545,8 +546,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         screenMarketBuy.verifySelectedMarketQuantity(100);
         screenMarketBuy.verifyPurchaseDetails(
                 "You are buying 100 pieces for ...", "4 gold", "400 gold",
-                "King tax is 0%. It's totally ...", "0 gold", "400 gold",
-                "94600 gold");
+                "Tribute to the mother city is 0%. It's totally ...", "0 gold",
+                "400 gold", "94600 gold");
 
         // The Crown raises the tax while the choice is open.
         europePort.changeCrownTax(10);
@@ -554,7 +555,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         // Confirming the stale price is rejected without any charge.
         screenMarketBuy.clickOnBuy();
         europePort.verifyEuropePriceChangedWarning(
-                "The European price changed and the trade was not made. Nothing was charged or moved.");
+                "The home-port price changed and the trade was not made. Nothing was charged or moved.");
         europePort.closeGoodsTransferWarning();
         europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 0));
         europePort.verifyGold(95000);
@@ -563,8 +564,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         screenMarketBuy = europePort.openPurchaseChoice(0, 0);
         screenMarketBuy.verifyPurchaseDetails(
                 "You are buying 100 pieces for ...", "4 gold", "400 gold",
-                "King tax is 10%. It's totally ...", "40 gold", "440 gold",
-                "94560 gold");
+                "Tribute to the mother city is 10%. It's totally ...",
+                "40 gold", "440 gold", "94560 gold");
 
         // The treasury changes while the choice is open, still enough gold.
         europePort.changeTreasury(90000);
@@ -581,8 +582,8 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         screenMarketBuy = europePort.openPurchaseChoice(0, 0);
         screenMarketBuy.verifyPurchaseDetails(
                 "You are buying 100 pieces for ...", "4 gold", "400 gold",
-                "King tax is 10%. It's totally ...", "40 gold", "440 gold",
-                "89560 gold");
+                "Tribute to the mother city is 10%. It's totally ...",
+                "40 gold", "440 gold", "89560 gold");
         screenMarketBuy.clickOnBuy();
         europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 100));
         europePort.verifyGold(89560);
@@ -702,8 +703,9 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
                 "Můžeš koupit nejvýše 45 kusů. Na více nemáš dost zlata.");
         screenMarketBuy.verifyMaximumAtSliderEnd("Maximum: 45 ks");
         screenMarketBuy.verifyPurchaseDetails("Chceš koupit 45 kusů, za  ...",
-                "4 zlatých", "180 zlatých", "Královská daň je 10%. To je ...",
-                "18 zlatých", "198 zlatých", "2 zlatých");
+                "4 zlatých", "180 zlatých",
+                "Odvod mateřskému městu je 10%. To je ...", "18 zlatých",
+                "198 zlatých", "2 zlatých");
         screenMarketBuy.verifyQuickBuyHint(
                 "Pro okamžitý nákup maximálního množství drž při přetahování ⌘.",
                 "Pro okamžitý nákup maximálního množství drž při přetahování Ctrl.",

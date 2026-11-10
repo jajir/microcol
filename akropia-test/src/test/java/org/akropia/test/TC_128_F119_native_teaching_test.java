@@ -55,8 +55,8 @@ public class TC_128_F119_native_teaching_test extends AbstractAkropiaTest {
     private static final int SOLDIER_ID = 302;
     private static final Location SOLDIER_AT = Location.of(23, 14);
 
-    private static final String CONFIRMATION_EN = "A Free Colonist learns Expert Farmer after 4 owner updates. Meanwhile the colonist stays with the natives and cannot move, work or fight.";
-    private static final String CONFIRMATION_CS = "Jednotka svobodný kolonista se naučí: zkušený farmář (po 4 aktualizacích vlastníka). Kolonista mezitím zůstává u domorodců a nemůže se hýbat, pracovat ani bojovat.";
+    private static final String CONFIRMATION_EN = "A Free Colonist learns Expert Farmer after 4 owner updates. Meanwhile the colonist stays with the local peoples and cannot move, work or fight.";
+    private static final String CONFIRMATION_CS = "Jednotka svobodný kolonista se naučí: zkušený farmář (po 4 aktualizacích vlastníka). Kolonista mezitím zůstává u místních obyvatel a nemůže se hýbat, pracovat ani bojovat.";
     private static final String TEACHING_AVAILABLE_EN = "Learn the offered skill: Available now.";
     private static final String OCCUPIED_EN = "Learn the offered skill: Another colonist is already learning here.";
 
@@ -119,7 +119,7 @@ public class TC_128_F119_native_teaching_test extends AbstractAkropiaTest {
         // The report of that turn announces the new skill exactly once.
         final ScreenTurnReport report = teaching.nextTurnWithReport();
         teaching.verifyReportAnnounces(report,
-                "A colonist learned Expert Farmer from the natives.");
+                "A colonist learned Expert Farmer from the local peoples.");
         teaching.captureReport("native-teaching-outcome-en.png");
         teaching.closeReport(report);
         teaching.verifyLearnedAndReleased(SCOUT_ID, CAPITAL, true);

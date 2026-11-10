@@ -112,18 +112,18 @@ public final class NativeMarketPage extends AbstractScreen {
 
     private static final String PURCHASE_CONFIRM_BACK_ID = "nativePurchaseBack";
 
-    private static final String PURCHASE_HAGGLE_ACCEPTED_EN = "Discount: the natives accepted, so the price is 10% lower.";
+    private static final String PURCHASE_HAGGLE_ACCEPTED_EN = "Discount: the local peoples accepted, so the price is 10% lower.";
 
-    private static final String PURCHASE_HAGGLE_REFUSED_EN = "Discount: the natives refused, so the original price stays.";
+    private static final String PURCHASE_HAGGLE_REFUSED_EN = "Discount: the local peoples refused, so the original price stays.";
 
     private static final String UNAVAILABLE_SLOT_EN = "Sale slot unavailable: no more goods grow here.";
 
     /** Enough left-arrow presses to reach the minimum of any piece slider. */
     private static final int SLIDER_TO_MINIMUM_PRESSES = 120;
 
-    private static final String HAGGLE_ACCEPTED_EN = "Haggle: the natives accepted, so the price includes the +10%.";
+    private static final String HAGGLE_ACCEPTED_EN = "Haggle: the local peoples accepted, so the price includes the +10%.";
 
-    private static final String HAGGLE_REFUSED_EN = "Haggle: the natives refused, so the original price stays.";
+    private static final String HAGGLE_REFUSED_EN = "Haggle: the local peoples refused, so the original price stays.";
 
     private final FogPage map;
 

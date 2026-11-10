@@ -69,10 +69,10 @@ public class TC_45_F36_sentry_boarding_test extends AbstractAkropiaTest {
         final SentryPage sentry = new SentryPage(getContext());
         // Toggle an equipped passenger's order without spending movement.
         game.selectTile(Location.of(24, 15));
-        sentry.verifyMapAction("Sentry");
+        sentry.verifyMapAction("Sentry (Shift+S)");
         sentry.changeMapOrder();
         sentry.verifyOrder(104, true, 1);
-        sentry.verifyMapAction("Cancel work");
+        sentry.verifyMapAction("Cancel work (Shift+S)");
         // Dragging does not silently cancel a persistent order.
         game.moveMouseAtLocation(Location.of(24, 15));
         game.dragMouseAtLocationWithFeedback(Location.of(24, 14),
@@ -104,9 +104,9 @@ public class TC_45_F36_sentry_boarding_test extends AbstractAkropiaTest {
         final GamePage game = WelcomePage.of(getContext()).loadGame();
         final SentryPage sentry = new SentryPage(getContext());
         game.selectTile(Location.of(24, 15));
-        sentry.verifyMapAction("Hlídka");
+        sentry.verifyMapAction("Hlídka (Shift+S)");
         sentry.changeMapOrderWithKeyboard();
-        sentry.verifyMapAction("Zrušit práci");
+        sentry.verifyMapAction("Zrušit práci (Shift+S)");
         sentry.captureDialog("sentryUnit", "sentry-map-czech.png");
         sentry.verifyOrder(104, true, 1);
     }

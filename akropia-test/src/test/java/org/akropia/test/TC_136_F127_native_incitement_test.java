@@ -56,13 +56,13 @@ public class TC_136_F127_native_incitement_test extends AbstractAkropiaTest {
     private static final String LIMIT_EN = "Available now.";
 
     /** Terms at anger 50: price 750, ordinary missionary, 25%, gold 1000. */
-    private static final String TERMS_EN = "Price: 750 gold, paid once whether the attempt succeeds or fails. Your missionary is ordinary, and the tribe is angry toward your nation. Your missions in this tribe: 0. Your chance: 25%. Your gold: 1000.";
+    private static final String TERMS_EN = "Price: 750 gold, paid once whether the attempt succeeds or fails. Your missionary is ordinary, and the local people is angry toward your nation. Your missions in this local people: 0. Your chance: 25%. Your gold: 1000.";
 
     private static final String TERMS_CS = "Cena: 750 zlatých";
 
-    private static final String SUCCESS_EN = "Paid 750 gold; you now have 250. The tribe has turned against France and will pursue it for up to 20 native turns, ending sooner if its anger fades.";
+    private static final String SUCCESS_EN = "Paid 750 gold; you now have 250. The local people has turned against Phocaea and will pursue it for up to 20 native turns, ending sooner if its anger fades.";
 
-    private static final String FAILED_EN = "Paid 750 gold; you now have 250. The missionary failed to turn the tribe, so its earlier plans stand.";
+    private static final String FAILED_EN = "Paid 750 gold; you now have 250. The missionary failed to turn the local people, so its earlier plans stand.";
 
     /** Gold left after one payment of the fixture price. */
     private static final int GOLD_AFTER_PAYMENT = 250;
@@ -120,9 +120,9 @@ public class TC_136_F127_native_incitement_test extends AbstractAkropiaTest {
         // shows the exact terms of the chosen one before anything is paid.
         incite.startIncitementChoice();
         visit.verifyChooserClosed();
-        incite.verifyTargetOffered(TARGET);
-        incite.verifyTargetNotOffered(REQUESTER);
-        incite.selectTarget(TARGET);
+        incite.verifyTargetOffered("Phocaea");
+        incite.verifyTargetNotOffered("Corinth");
+        incite.selectTarget("Phocaea");
         incite.verifyTerms(TERMS_EN);
         incite.verifyIncitementFits(900, 750);
         incite.captureIncitement("native-incite-en.png");
@@ -163,7 +163,7 @@ public class TC_136_F127_native_incitement_test extends AbstractAkropiaTest {
         visit.enterSettlement(VISITOR_AT, CAPITAL);
         incite.startIncitementChoice();
         visit.verifyChooserClosed();
-        incite.selectTarget(TARGET);
+        incite.selectTarget("Phocaea");
         incite.confirmIncitement();
         incite.verifyIncitementResultMessage(FAILED_EN);
         incite.closeIncitementResult();
@@ -198,7 +198,7 @@ public class TC_136_F127_native_incitement_test extends AbstractAkropiaTest {
         visit.enterSettlement(VISITOR_AT, CAPITAL);
         incite.startIncitementChoice();
         visit.verifyChooserClosed();
-        incite.selectTarget(TARGET);
+        incite.selectTarget("Phocaea");
         incite.backFromIncitement();
 
         // Back leaves gold, anger, the order and the random state as they were;
@@ -240,9 +240,9 @@ public class TC_136_F127_native_incitement_test extends AbstractAkropiaTest {
         visit.enterSettlement(VISITOR_AT, CAPITAL);
         incite.startIncitementChoice();
         visit.verifyChooserClosed();
-        incite.verifyTargetOffered(TARGET);
-        incite.verifyTargetNotOffered(REQUESTER);
-        incite.selectTarget(TARGET);
+        incite.verifyTargetOffered("Phocaea");
+        incite.verifyTargetNotOffered("Corinth");
+        incite.selectTarget("Phocaea");
         incite.verifyTerms(TERMS_EN);
         incite.confirmIncitement();
         incite.verifyIncitementResultMessage(SUCCESS_EN);
@@ -289,7 +289,7 @@ public class TC_136_F127_native_incitement_test extends AbstractAkropiaTest {
         visit.enterSettlement(VISITOR_AT, CAPITAL);
         visit.verifyChooserFits(900, 750);
         incite.startIncitementChoice();
-        incite.selectTarget(TARGET);
+        incite.selectTarget("Phocaea");
         incite.verifyTerms(TERMS_CS);
         incite.verifyIncitementFits(900, 750);
         incite.captureIncitement("native-incite-cs.png");

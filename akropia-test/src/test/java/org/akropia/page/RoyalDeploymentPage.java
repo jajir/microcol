@@ -176,12 +176,12 @@ public final class RoyalDeploymentPage extends AbstractScreen {
     public void verifyAllReserveSent() {
         final RoyalRoster crown = crown();
         assertEquals(0, crown.getCount(Family.MAN_OF_WAR, State.RESERVE),
-                "A reserve man-of-war stayed in Europe");
+                "A reserve man-of-war stayed in Home port");
         assertEquals(0,
                 crown.getCount(Family.INFANTRY, State.RESERVE)
                         + crown.getCount(Family.CAVALRY, State.RESERVE)
                         + crown.getCount(Family.ARTILLERY, State.RESERVE),
-                "Reserve ground units stayed in Europe");
+                "Reserve ground units stayed in Home port");
         assertEquals(2, crown.getCount(Family.MAN_OF_WAR, State.SHIPPED));
         assertEquals(6, crown.getCount(Family.INFANTRY, State.SHIPPED));
         assertEquals(4, crown.getCount(Family.CAVALRY, State.SHIPPED));
@@ -191,7 +191,8 @@ public final class RoyalDeploymentPage extends AbstractScreen {
     /** Both carriers are on the Atlantic crossing with their passengers. */
     public void verifyVoyageUnderway() {
         final List<Unit> ships = crownShips();
-        assertEquals(2, ships.size(), "The Crown has other than two ships");
+        assertEquals(2, ships.size(),
+                "The mother city has other than two ships");
         assertEquals(2, ships.stream().filter(Unit::isAtHighSea).count(),
                 "The carriers are not on the Atlantic crossing");
         assertEquals(12, aboard().size(), "The passengers are not all aboard");
@@ -221,7 +222,7 @@ public final class RoyalDeploymentPage extends AbstractScreen {
     /** Continue reproduces the roster exactly as it was before the save. */
     public void verifyCrownForceUnchanged(final String expected) {
         assertEquals(expected, crownForce(),
-                "The Crown's force changed by Continue");
+                "The mother city's force changed by Continue");
     }
 
     /** Soldiers first stood on land within the limit of royal turns. */
@@ -251,7 +252,7 @@ public final class RoyalDeploymentPage extends AbstractScreen {
                 "No royal attack within " + limit
                         + " royal turns; attacked at turn " + attackTurn);
         assertTrue(royalAttacks.get() > 0,
-                "The model reported no attack by a Crown unit");
+                "The model reported no attack by a mother city unit");
     }
 
     /**

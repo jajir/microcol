@@ -56,7 +56,7 @@ public class TC_138_F129_native_tribute_test extends AbstractAkropiaTest {
 
     private static final String ROLE_EN = "Demand tribute: Your unit's role cannot do this.";
 
-    private static final String COOLDOWN_EN = "Demand tribute: This European already demanded tribute here within the last ten turns.";
+    private static final String COOLDOWN_EN = "Demand tribute: This city-state visitor already demanded tribute here within the last ten turns.";
 
     private static final String LINE_EN = "with the unit you chose.";
 

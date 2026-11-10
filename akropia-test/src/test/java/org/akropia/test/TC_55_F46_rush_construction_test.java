@@ -85,7 +85,7 @@ public class TC_55_F46_rush_construction_test extends AbstractAkropiaTest {
         // Five tools are missing, so no offer exists and nothing changes.
         rush.open();
         rush.verifyUnavailable(
-                "Completion cannot be bought now. It requires a valid current project and access to home Europe; missing tools cannot be bought while tools are boycotted.");
+                "Completion cannot be bought now. It requires a valid current project and access to home Home port; missing tools cannot be bought while tools are boycotted.");
         rush.cancel();
         colony.verifyWorldUnchanged();
         // With the missing tools already stocked, only hammers are bought.

@@ -59,7 +59,7 @@ public class TC_82_F57_continental_destruction_test
 
         // The Continental is gone and the victory is announced.
         role.verifyDestroyed(6,
-                "a Continental or royal soldier was destroyed together with its equipment");
+                "a Continental or soldier of the mother city was destroyed together with its equipment");
         role.verifyArmed(0, true);
 
         // Continue keeps the loss.

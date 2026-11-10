@@ -5,6 +5,7 @@ import org.akropia.gui.util.Listener;
 import org.akropia.model.event.ColonyWasCapturedEvent;
 import org.akropia.model.event.UnitMoveFinishedEvent;
 import org.akropia.model.event.UnitMovedStepStartedEvent;
+import org.akropia.model.event.UnitMovedStepFinishedEvent;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.Subscribe;
@@ -36,6 +37,13 @@ public final class GamePanelController {
     private void onUnitMovedStepStarted(
             @SuppressWarnings("unused") final UnitMovedStepStartedEvent event) {
         unitIsMoving = true;
+    }
+
+    @Subscribe
+    private void onUnitMovedStepFinished(
+            @SuppressWarnings("unused") final UnitMovedStepFinishedEvent event) {
+        // Escaping a captured colony emits a step pair without a route finish.
+        unitIsMoving = false;
     }
 
     @Subscribe

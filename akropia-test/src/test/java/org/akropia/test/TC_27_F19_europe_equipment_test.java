@@ -29,8 +29,8 @@ public class TC_27_F19_europe_equipment_test extends AbstractAkropiaTest {
     private static final String CHANGED = "The offer changed. Review the updated price and confirm again or cancel.";
     private static final String INCOMPATIBLE = "Sell the incompatible equipment first. Horses and weapons can be combined; tools require an unequipped colonist.";
     private static final String FUNDS = "Not enough gold. Nothing was changed. Cancel and obtain the required gold.";
-    private static final String UNAVAILABLE = "This colonist is no longer available on your European pier during your turn. Nothing was changed. Cancel and select the colonist again.";
-    private static final String RESTRICTED = "Trade with your European port is unavailable. Nothing was changed.";
+    private static final String UNAVAILABLE = "This colonist is no longer available on your home pier during your turn. Nothing was changed. Cancel and select the colonist again.";
+    private static final String RESTRICTED = "Trade with your home port is unavailable. Nothing was changed.";
 
     @Start
     private void start(Stage stage) throws Exception {
@@ -375,7 +375,7 @@ public class TC_27_F19_europe_equipment_test extends AbstractAkropiaTest {
         taxes.verifyBoycottMarked(GoodsType.HORSE, false);
         equipment.open(100, "Buy 50 weapons");
         equipment.verifyChoice("Buy 50 weapons", false,
-                "This commodity is boycotted by the Crown. Nothing was changed.");
+                "This commodity is boycotted by the mother city. Nothing was changed.");
         equipment.cancel();
         equipment.verifyState(100, 1000, false, false, 0,
                 PlaceEuropePier.class);

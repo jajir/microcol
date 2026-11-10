@@ -32,7 +32,7 @@ public class TC_56_F47_congress_test extends AbstractAkropiaTest {
         // Discover the shortcut, open Congress and return without a decision.
         congress.hoverOpenButton();
         game.verifyThatStatusBarContains(
-                "Open Congress and choose a Founding Father. (K)");
+                "Open Congress and choose a Founding Father.");
         congress.openWithShortcut();
         congress.verifyFillsGameWindow("Back to game");
         congress.verifyWorldUnchanged();
@@ -54,7 +54,7 @@ public class TC_56_F47_congress_test extends AbstractAkropiaTest {
         // A card explains the benefit before the separate confirmation.
         congress.select(Founder.FERDINAND_MAGELLAN);
         congress.verifyFounderSelection(Founder.FERDINAND_MAGELLAN,
-                "Ships gain +1 movement. New voyages to Europe from the western edge take half as long, rounded up.");
+                "Ships gain +1 movement. New voyages to Home port from the western edge take half as long, rounded up.");
         congress.select(Founder.JOHN_PAUL_JONES);
         congress.verifyFounderSelection(Founder.JOHN_PAUL_JONES,
                 "John Paul Jones grants one free frigate on joining.");

@@ -140,9 +140,7 @@ public abstract class AbstractScreen {
     protected void revealGameContent(final javafx.scene.Node... targets) {
         javafx.scene.Node ancestor = targets[0];
         while (ancestor != null
-                && !(ancestor instanceof javafx.scene.control.ScrollPane
-                        && ancestor.getStyleClass()
-                                .contains("screen-scroll"))) {
+                && !(ancestor instanceof javafx.scene.control.ScrollPane)) {
             ancestor = ancestor.getParent();
         }
         if (ancestor == null) {

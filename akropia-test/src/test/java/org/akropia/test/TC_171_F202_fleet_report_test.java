@@ -70,7 +70,7 @@ public class TC_171_F202_fleet_report_test extends AbstractAkropiaTest {
                 "Passengers: 1 (Free Colonist: 1); goods: none");
         fleet.verifyHolds(MAP_GALLEON_ID,
                 "Occupied holds: 1 of 6, free holds: 5");
-        fleet.verifyPlace(PORT_GALLEON_ID, "European port or pier");
+        fleet.verifyPlace(PORT_GALLEON_ID, "home port or pier");
         fleet.verifyCargo(PORT_GALLEON_ID, "Passengers: 0; goods: Ore 7");
         fleet.verifyHolds(PORT_GALLEON_ID,
                 "Occupied holds: 1 of 6, free holds: 5");
@@ -162,7 +162,7 @@ public class TC_171_F202_fleet_report_test extends AbstractAkropiaTest {
                 "Pasažéři: 1 (svobodný kolonista: 1); zboží: žádné");
         fleet.verifyHolds(MAP_GALLEON_ID,
                 "Obsazené prostory: 1 z 6, volné prostory: 5");
-        fleet.verifyPlace(PORT_GALLEON_ID, "Evropský přístav nebo molo");
+        fleet.verifyPlace(PORT_GALLEON_ID, "Domovský přístav nebo molo");
         fleet.verifyCargo(PORT_GALLEON_ID,
                 "Pasažéři: 0; zboží: Železná ruda 7");
         fleet.verifyHolds(PORT_GALLEON_ID,

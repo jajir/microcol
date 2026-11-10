@@ -283,7 +283,8 @@ final class DiplomacyJourneyFixture {
         units.add(resident);
         model.add("tradeRoutes", gson.fromJson("[{\"id\": 0, "
                 + "\"ownerName\": \"France\", \"name\": \"" + ROUTE + "\", "
-                + "\"kind\": \"SEA\", \"startColonyId\": " + HIDDEN_QUEBEC
+                + "\"mode\": \"TOUCH_AND_GO\", \"kind\": \"SEA\", \"startColonyId\": "
+                + HIDDEN_QUEBEC
                 + ", \"stops\": [{\"europe\": false, \"colonyId\": "
                 + FORT_ORLEANS + ", \"unloadGoods\": [], \"loadGoods\": []}, "
                 + "{\"europe\": false, \"colonyId\": " + HIDDEN_QUEBEC
@@ -305,6 +306,34 @@ final class DiplomacyJourneyFixture {
         work.addProperty("remainingTurns", 4);
         target.add("action", work);
         units.add(target);
+        // The observer needs the only adjacent land square; keep Quebec's
+        // resident indoors instead of sharing that square across nations.
+        for (final JsonElement element : hidden
+                .getAsJsonArray("colonyFields")) {
+            final JsonObject field = element.getAsJsonObject();
+            if (!field.has("workerId")) {
+                continue;
+            }
+            final int workerId = field.remove("workerId").getAsInt();
+            field.remove("producedGoodsType");
+            for (final JsonElement building : hidden
+                    .getAsJsonArray("constructions")) {
+                final JsonObject construction = building.getAsJsonObject();
+                if ("TOWN_HALL"
+                        .equals(construction.get("type").getAsString())) {
+                    construction.getAsJsonArray("slots").get(0)
+                            .getAsJsonObject()
+                            .addProperty("workerId", workerId);
+                }
+            }
+            for (final JsonElement elementUnit : units) {
+                final JsonObject unit = elementUnit.getAsJsonObject();
+                if (unit.get("id").getAsInt() == workerId) {
+                    unit.remove("placeColonyField");
+                    unit.add("placeConstructionSlot", new JsonObject());
+                }
+            }
+        }
     }
 
     /** The Dutch units of the connected journey. */

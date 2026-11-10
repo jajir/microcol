@@ -104,10 +104,10 @@ public class TC_115_F106_native_turns_test extends AbstractAkropiaTest {
         natives.verifyBraveSeen(AZTEC_BRAVE, AZTEC_BRAVE_ID, true);
         natives.verifyBraveHomeKnown(AZTEC_BRAVE_ID, true);
         fog.verifyStatusBarContains(
-                "Native brave: Aztec, home: city, capital.");
+                "Local warrior: Egyptians, home: city, capital.");
         fog.hover(AZTEC_SURVIVOR);
         natives.verifyBraveSeen(AZTEC_SURVIVOR, AZTEC_SURVIVOR_ID, true);
-        fog.verifyStatusBarContains("Native brave: Aztec, homeless.");
+        fog.verifyStatusBarContains("Local warrior: Egyptians, homeless.");
 
         // The Inca and Cherokee braves are out of sight: nothing about them
         // or their homes is disclosed.
@@ -115,13 +115,13 @@ public class TC_115_F106_native_turns_test extends AbstractAkropiaTest {
         natives.verifyBraveSeen(INCA_BRAVE, INCA_BRAVE_ID, false);
         natives.verifyBraveHomeKnown(INCA_BRAVE_ID, false);
         fog.verifyNoNativeSettlementKnown(INCA_CAPITAL);
-        fog.verifyStatusBarOmits("Native brave");
+        fog.verifyStatusBarOmits("Local warrior");
         fog.verifyStatusBarOmits("Inca");
         fog.hover(CHEROKEE_BRAVE);
         natives.verifyBraveSeen(CHEROKEE_BRAVE, CHEROKEE_BRAVE_ID, false);
         natives.verifyBraveHomeKnown(CHEROKEE_BRAVE_ID, false);
         fog.verifyNoNativeSettlementKnown(CHEROKEE_CAPITAL);
-        fog.verifyStatusBarOmits("Native brave");
+        fog.verifyStatusBarOmits("Local warrior");
         fog.verifyStatusBarOmits("Cherokee");
         fog.saveMapEvidence("TC_115-braves.png");
 
@@ -152,15 +152,15 @@ public class TC_115_F106_native_turns_test extends AbstractAkropiaTest {
         // known. The Inca brave stays hidden on its new square.
         fog.hover(AZTEC_SURVIVOR);
         natives.verifyBraveSeen(AZTEC_SURVIVOR, AZTEC_SURVIVOR_ID, true);
-        fog.verifyStatusBarContains("Native brave: Aztec, homeless.");
+        fog.verifyStatusBarContains("Local warrior: Egyptians, homeless.");
         fog.hover(AZTEC_PATROL);
         natives.verifyBraveSeen(AZTEC_PATROL, AZTEC_BRAVE_ID, false);
         natives.verifyBraveHomeKnown(AZTEC_BRAVE_ID, true);
-        fog.verifyStatusBarOmits("Native brave");
+        fog.verifyStatusBarOmits("Local warrior");
         fog.hover(INCA_PATROL);
         natives.verifyBraveSeen(INCA_PATROL, INCA_BRAVE_ID, false);
         natives.verifyBraveHomeKnown(INCA_BRAVE_ID, false);
-        fog.verifyStatusBarOmits("Native brave");
+        fog.verifyStatusBarOmits("Local warrior");
         fog.verifyStatusBarOmits("Inca");
 
         // Continue from disk restores the prepared position exactly: no
@@ -180,9 +180,9 @@ public class TC_115_F106_native_turns_test extends AbstractAkropiaTest {
         fog.hover(AZTEC_PATROL);
         natives.verifyBraveSeen(AZTEC_PATROL, AZTEC_BRAVE_ID, false);
         natives.verifyBraveHomeKnown(AZTEC_BRAVE_ID, true);
-        fog.verifyStatusBarOmits("Native brave");
+        fog.verifyStatusBarOmits("Local warrior");
         fog.hover(AZTEC_SURVIVOR);
-        fog.verifyStatusBarContains("Native brave: Aztec, homeless.");
+        fog.verifyStatusBarContains("Local warrior: Egyptians, homeless.");
         fog.hover(CHEROKEE_PATROL);
         natives.verifyBraveSeen(CHEROKEE_PATROL, CHEROKEE_BRAVE_ID, false);
         natives.verifyBraveHomeKnown(CHEROKEE_BRAVE_ID, false);

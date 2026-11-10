@@ -45,7 +45,7 @@ public class TC_173_F202_fleet_reversal_test extends AbstractAkropiaTest {
         final FleetReportPage fleet = new FleetReportPage(getContext());
         fleet.open();
         fleet.verifyPlace(SHIP_ID, "On the high seas");
-        fleet.verifyVoyage(SHIP_ID, "Sailing to Europe, turns left: 3");
+        fleet.verifyVoyage(SHIP_ID, "Sailing to Home port, turns left: 3");
         fleet.verifyShowEnabled(SHIP_ID, false);
         game = fleet.closeWithEscape();
 
@@ -56,7 +56,7 @@ public class TC_173_F202_fleet_reversal_test extends AbstractAkropiaTest {
         voyage.verifyTransit(true, 1, 3, "Turns remaining: 3");
         voyage.openReverse();
         voyage.verifyConfirmation("Reverse course",
-                "Send this ship to New World? Turns remaining: 1.");
+                "Send this ship to new coast? Turns remaining: 1.");
         voyage.confirmReverse();
         voyage.verifyTransit(false, 1, 1, "Turns remaining: 1");
         game = europe.close();

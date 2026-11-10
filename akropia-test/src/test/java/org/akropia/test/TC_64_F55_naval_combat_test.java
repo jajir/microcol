@@ -88,7 +88,7 @@ public class TC_64_F55_naval_combat_test extends AbstractAkropiaTest {
         ShipRepairPage repairs = new ShipRepairPage(getContext());
         repairs.open();
         naval.verifyRepairOverview(
-                "frigata #0 — Evropa\nPřeprava; do zprovoznění zbývá tahů vlastníka: 3");
+                "frigata #0 — Domovský přístav\nPřeprava; do zprovoznění zbývá tahů vlastníka: 3");
         repairs.close();
         europe.close();
         GamePage.of(getContext()).exitToMenu();

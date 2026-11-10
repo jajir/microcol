@@ -410,6 +410,9 @@ public class GamePage extends AbstractScreen {
             clickOnButtonWithId("saveConfirm");
             clickOnButtonWithId("saveNew");
             WaitForAsyncUtils.waitForFxEvents();
+            if (!getNodeFinder().lookup("#saveConfirm").queryAll().isEmpty()) {
+                clickOnButtonWithId("saveConfirm");
+            }
         }
         return WelcomePage.of(getContext());
     }

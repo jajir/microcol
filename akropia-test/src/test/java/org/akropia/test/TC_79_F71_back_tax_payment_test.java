@@ -36,7 +36,7 @@ public class TC_79_F71_back_tax_payment_test extends AbstractAkropiaTest {
     private static final int START_GOLD = 1000;
     private static final int TAX_AFTER_PROTEST = 17;
     private static final String WEAPONS_OWED = "Arrears to pay: 400 gold.";
-    private static final String WEAPONS_RESTORE = "Paying lifts the boycott: buying and selling Weapons in Europe will be allowed again. Other boycotts stay.";
+    private static final String WEAPONS_RESTORE = "Paying lifts the boycott: buying and selling Weapons in Home port will be allowed again. Other boycotts stay.";
     private static final String SHORT = "Not enough gold. This payment needs 400 gold.";
     private static final String CHANGED = "The back taxes changed or the payment is no longer possible. Nothing was charged.";
     private static final String NO_SHORTAGE = "";

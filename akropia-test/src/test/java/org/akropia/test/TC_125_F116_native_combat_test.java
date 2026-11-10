@@ -56,10 +56,10 @@ public class TC_125_F116_native_combat_test extends AbstractAkropiaTest {
     /** Soldier 3 against brave 1 with the hill ambush of 100%. */
     private static final double HILL_ODDS = 3.0 / 5.0;
 
-    private static final String LOSS_EN = "A defeated native brave is destroyed together with its equipment. A defeated unarmed colonist dies and is not captured. An armed European loses horses or weapons; artillery is damaged first. Both participants spend their remaining movement.";
+    private static final String LOSS_EN = "A defeated native brave is destroyed together with its equipment. A defeated unarmed colonist dies and is not captured. An armed colonist loses horses or weapons; artillery is damaged first. Both participants spend their remaining movement.";
     private static final String ANGER_EN = "Attacking a native brave raises the anger of its nation toward you, whoever wins.";
-    private static final String LOSS_CS = "Poražený domorodý bojovník je zničen i s výstrojí. Poražený neozbrojený kolonista zahyne a nebude zajat. Ozbrojený Evropan ztratí koně nebo zbraně; dělo se nejprve poškodí. Oba účastníci spotřebují zbývající pohyb.";
-    private static final String ANGER_CS = "Útok na domorodého bojovníka zvýší hněv jeho kmene vůči vám, ať zvítězí kdokoli.";
+    private static final String LOSS_CS = "Poražený místní bojovník je zničen i s výstrojí. Poražený neozbrojený kolonista zahyne a nebude zajat. Ozbrojený kolonista ztratí koně nebo zbraně; dělo se nejprve poškodí. Oba účastníci spotřebují zbývající pohyb.";
+    private static final String ANGER_CS = "Útok na místního bojovníka zvýší hněv jeho národa vůči vám, ať zvítězí kdokoli.";
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -88,10 +88,10 @@ public class TC_125_F116_native_combat_test extends AbstractAkropiaTest {
         // before anything happens.
         attack.rememberWorld();
         attack.chooseAttack(FOREST_SOLDIER, SURVIVOR);
-        combat.verifyReview("Free Colonist", "Native brave", SOLDIER_ID,
+        combat.verifyReview("Free Colonist", "Local warrior", SOLDIER_ID,
                 SURVIVOR_ID);
         attack.verifyStrengths("Base: 2\nAttack: +50%\nFinal strength: 3",
-                "Base: 1\nNative ambush: +50%\nFinal strength: 1.5",
+                "Base: 1\nLocal ambush: +50%\nFinal strength: 1.5",
                 "Attacker win chance: 66.67%");
         combat.verifyNativeNotes(LOSS_EN, ANGER_EN);
         combat.verifyDialogFits(900, 750);
@@ -145,10 +145,10 @@ public class TC_125_F116_native_combat_test extends AbstractAkropiaTest {
         // The Czech review shows the hill ambush of 100% and the loser fates.
         attack.rememberWorld();
         attack.chooseAttack(HILL_SOLDIER, HILL_BRAVE);
-        combat.verifyReview("svobodný kolonista", "Domorodý bojovník",
-                SOLDIER_ID, HILL_BRAVE_ID);
+        combat.verifyReview("svobodný kolonista", "Místní bojovník", SOLDIER_ID,
+                HILL_BRAVE_ID);
         attack.verifyStrengths("Základ: 2\nÚtok: +50%\nVýsledná síla: 3",
-                "Základ: 1\nLéčka domorodců: +100%\nVýsledná síla: 2",
+                "Základ: 1\nLéčka místních obyvatel: +100%\nVýsledná síla: 2",
                 "Šance útočníka na vítězství: 60%");
         combat.verifyNativeNotes(LOSS_CS, ANGER_CS);
         combat.verifyDialogFits(900, 750);
@@ -180,10 +180,10 @@ public class TC_125_F116_native_combat_test extends AbstractAkropiaTest {
 
         // The review shows the hill ambush before the soldier commits.
         attack.chooseAttack(HILL_SOLDIER, HILL_BRAVE);
-        combat.verifyReview("Free Colonist", "Native brave", SOLDIER_ID,
+        combat.verifyReview("Free Colonist", "Local warrior", SOLDIER_ID,
                 HILL_BRAVE_ID);
         attack.verifyStrengths("Base: 2\nAttack: +50%\nFinal strength: 3",
-                "Base: 1\nNative ambush: +100%\nFinal strength: 2",
+                "Base: 1\nLocal ambush: +100%\nFinal strength: 2",
                 "Attacker win chance: 60%");
         attack.confirm();
 

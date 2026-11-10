@@ -72,7 +72,7 @@ public class TC_137_F128_native_conquest_test extends AbstractAkropiaTest {
 
     private static final String NO_SPAIN_EN = "No Spanish attack bonus applies.";
 
-    private static final String RELATIONS_EN = "If the attack is carried out, the tribe's anger and this settlement's alarm toward your nation rise. A conquest raises them further.";
+    private static final String RELATIONS_EN = "If the attack is carried out, the local people's anger and this settlement's alarm toward your nation rise. A conquest raises them further.";
 
     private static final String CONQUERED_EN = "You overcame 2 defender(s) and conquered the settlement.";
 
@@ -88,9 +88,9 @@ public class TC_137_F128_native_conquest_test extends AbstractAkropiaTest {
 
     private static final String DEFENDERS_CS = "Obránců na poli: 2. Obrana sídla: +75 %. První bitva: vaše síla 3 proti";
 
-    private static final String NO_SPAIN_CS = "Španělský bonus k útoku neplatí.";
+    private static final String NO_SPAIN_CS = "Bonus Milétu k útoku neplatí.";
 
-    private static final String RELATIONS_CS = "Pokud se útok provede, vzroste hněv kmene a poplach tohoto sídla vůči vašemu národu. Dobytí je zvýší ještě více.";
+    private static final String RELATIONS_CS = "Pokud se útok provede, vzroste hněv národa a poplach tohoto sídla vůči vašemu národu. Dobytí je zvýší ještě více.";
 
     private static final String CONQUERED_CS = "Přemohli jste 2 obránce(ů) a sídlo jste dobyli.";
 

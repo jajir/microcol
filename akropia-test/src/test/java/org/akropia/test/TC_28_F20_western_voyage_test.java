@@ -159,7 +159,7 @@ public class TC_28_F20_western_voyage_test extends AbstractAkropiaTest {
         AtlanticAuditPage audit = new AtlanticAuditPage(getContext());
         audit.attemptSendShipBack();
         audit.verifyDepartureRejection(
-                "This ship cannot depart. It must be in your European port during your turn, with an available sea-lane destination.");
+                "This ship cannot depart. It must be in your home port during your turn, with an available sea-lane destination.");
         audit.verifyInEurope();
         audit.verifyCargo();
         audit.captureDialog("buttonOk", "voyage-no-destination.png");

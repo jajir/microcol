@@ -27,7 +27,7 @@ public class TC_63_F54_ship_repair_test extends AbstractAkropiaTest {
         europe.verifyNumberOfShipsInPort(0);
         repairs.open();
         repairs.verifyProgress("TRANSFER", 3,
-                "Galleon #3 — Europe\nTransfer; your turns until operational: 3");
+                "Galleon #3 — Home port\nTransfer; your turns until operational: 3");
         repairs.captureDialog("shipRepairRows", "ship-repairs-english.png");
         repairs.escape();
         // Opening and cancelling a report never advances the saved transfer.
@@ -37,12 +37,12 @@ public class TC_63_F54_ship_repair_test extends AbstractAkropiaTest {
         europe = game.openEuroperPort();
         repairs.open();
         repairs.verifyProgress("TRANSFER", 3,
-                "Galleon #3 — Europe\nTransfer; your turns until operational: 3");
+                "Galleon #3 — Home port\nTransfer; your turns until operational: 3");
         repairs.close();
         game = europe.close();
         ScreenTurnReport arrival = game.nextTurn().orElseThrow();
         arrival.verifyThatAtLeastOneEventMessageContains(
-                "arrived for repair at Europe");
+                "arrived for repair at Home port");
         arrival.close();
         // Arrival leaves two whole repair updates; the cargo remains
         // inaccessible.
@@ -50,7 +50,7 @@ public class TC_63_F54_ship_repair_test extends AbstractAkropiaTest {
         europe.verifyNumberOfShipsInPort(0);
         repairs.open();
         repairs.verifyProgress("REPAIR", 2,
-                "Galleon #3 — Europe\nRepair; your turns until operational: 2");
+                "Galleon #3 — Home port\nRepair; your turns until operational: 2");
         repairs.close();
         game = europe.close();
         game.nextTurnAndCloseDialogs();
@@ -59,12 +59,12 @@ public class TC_63_F54_ship_repair_test extends AbstractAkropiaTest {
         europe = game.openEuroperPort();
         repairs.open();
         repairs.verifyProgress("REPAIR", 1,
-                "Galleon #3 — Europe\nRepair; your turns until operational: 1");
+                "Galleon #3 — Home port\nRepair; your turns until operational: 1");
         repairs.close();
         game = europe.close();
         ScreenTurnReport completed = game.nextTurn().orElseThrow();
         completed.verifyThatAtLeastOneEventMessageContains(
-                "at Europe are complete");
+                "at Home port are complete");
         completed.close();
         europe = game.openEuroperPort();
         europe.verifyNumberOfShipsInPort(1);
@@ -128,12 +128,12 @@ public class TC_63_F54_ship_repair_test extends AbstractAkropiaTest {
         game = new FreePlayAuditPage(getContext()).continueGame();
         ScreenTurnReport rerouted = game.nextTurn().orElseThrow();
         rerouted.verifyThatAtLeastOneEventMessageContains(
-                "was rerouted for repair to Europe");
+                "was rerouted for repair to Home port");
         rerouted.close();
         game.openEuroperPort();
         repairs.open();
         repairs.verifyProgress("TRANSFER", 3,
-                "Galleon #3 — Europe\nTransfer; your turns until operational: 3");
+                "Galleon #3 — Home port\nTransfer; your turns until operational: 3");
         repairs.close();
     }
 

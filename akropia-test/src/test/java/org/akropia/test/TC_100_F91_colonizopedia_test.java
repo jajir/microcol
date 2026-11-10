@@ -38,9 +38,10 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
     private static final String COMBAT = "Combat";
     private static final String INDEPENDENCE = "Independence";
     private static final String SCORING = "Statistics and score";
-    private static final String[] TOPICS = { MOVEMENT, CARGO, COLONIES,
-            PRODUCTION, TRADE, DIPLOMACY, COMBAT, INDEPENDENCE, SCORING,
-            "Terrain", "Terrain bonuses", "Units", "Buildings" };
+    private static final String IDENTITIES = "City states and local peoples";
+    private static final String[] TOPICS = { IDENTITIES, MOVEMENT, CARGO,
+            COLONIES, PRODUCTION, TRADE, DIPLOMACY, COMBAT, INDEPENDENCE,
+            SCORING, "Terrain", "Terrain bonuses", "Units", "Buildings" };
     private static final String MOVEMENT_PART = "movement points";
     private static final String COLONIES_PART = "Colony names must be unique";
     private static final String DIPLOMACY_PART = "tribute";
@@ -60,8 +61,9 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
     private static final String MOVEMENT_PART_CZ = "pohybové body";
     private static final String CARGO_ASHORE_CZ = "na břeh";
     private static final String SCORING_NOT_AVAILABLE_CZ = "Zatím není dostupné";
-    private static final String[] TOPICS_CZ = { MOVEMENT_CZ, CARGO_CZ,
-            "Kolonie a práce", PRODUCTION_CZ, "Obchod, daně a bojkot",
+    private static final String IDENTITIES_CZ = "Městské státy a místní národy";
+    private static final String[] TOPICS_CZ = { IDENTITIES_CZ, MOVEMENT_CZ,
+            CARGO_CZ, "Kolonie a práce", PRODUCTION_CZ, "Obchod, daně a bojkot",
             DIPLOMACY_CZ, "Boj", "Nezávislost", "Statistiky a skóre", "Terén",
             "Bonusy terénu", "Jednotky", "Budovy" };
     private static final String NO_RESULTS_CZ = "Žádné téma neodpovídá hledání. Vymažte hledaný text a zobrazíte všechna témata.";
@@ -104,6 +106,8 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
 
         // Every rule family is listed; the first topic is shown at once.
         help.verifyTopicTitles(TOPICS);
+        help.verifySelectedTopic(IDENTITIES, "600 BC");
+        help.pressDownArrow(1);
         help.verifySelectedTopic(MOVEMENT, MOVEMENT_PART);
 
         // Down arrow moves the selection without the mouse.
@@ -131,7 +135,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         // A word found only in the body text finds its topic. Surrounding
         // spaces are trimmed before the search.
         help.typeSearch("  tribute  ");
-        help.verifyTopicTitles(DIPLOMACY);
+        help.verifyTopicTitles(IDENTITIES, TRADE, DIPLOMACY);
         help.verifyNoResultsHidden();
 
         // Another body-only word finds the cargo topic and its passenger text.
@@ -230,6 +234,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
 
         // The Czech headings and the first Czech text are shown.
         help.verifyTopicTitles(TOPICS_CZ);
+        help.pressDownArrow(1);
         help.verifySelectedTopic(MOVEMENT_CZ, MOVEMENT_PART_CZ);
 
         // Czech body text is searched; accents are ignored when typing.
@@ -371,12 +376,12 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         help.verifyReferenceProperties("colonizopediaUnitProperties_CARAVEL",
                 "base points per turn: 4", "Cargo holds: 2", "combat: no");
         help.verifyReferenceProperties("colonizopediaUnitProperties_MAN_OF_WAR",
-                "Cargo holds: 6", "Europe purchase: unavailable");
+                "Cargo holds: 6", "Home port purchase: unavailable");
         help.verifyReferenceProperties("colonizopediaUnitProperties_COLONIST",
                 "Transport by ship: 1 hold(s)", "with weapons",
                 "plow: yes; roads: yes; clear forest: yes");
         help.verifyReferenceProperties("colonizopediaUnitProperties_BRAVE",
-                "Native combatant", "Transport by ship: unavailable");
+                "Local combatant", "Transport by ship: unavailable");
         help.verifyReferenceProperties(
                 "colonizopediaUnitProperties_TREASURE_TRAIN",
                 "Transport by ship: 6 hold(s)",
@@ -411,7 +416,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         help.verifyBodyScrolledToEnd();
         help.verifyReferenceProperties(
                 "colonizopediaUnitProperties_MASTER_GRAPE_GROWER",
-                "Europe purchase: unavailable", "Grapes ×2.0");
+                "Home port purchase: unavailable", "Grapes ×2.0");
         help.captureDialog("colonizopediaReference", "r0284-units-end-en.png");
         help.closeWithOk();
         help.verifyDialogClosed();

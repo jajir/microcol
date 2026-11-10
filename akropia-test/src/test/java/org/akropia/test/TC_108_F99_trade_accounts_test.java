@@ -139,7 +139,7 @@ public class TC_108_F99_trade_accounts_test extends AbstractAkropiaTest {
         final EuropeanTradePage trade = new EuropeanTradePage(getContext());
         trade.openWithKeyboard();
         trade.verifyTradeTabSelectedAndFocused(true);
-        trade.verifyTradeTabLabel("European trade");
+        trade.verifyTradeTabLabel("home-port trade");
         trade.verifyTradeTabInsideWindow();
 
         // The first accounts are shown; the Spanish account is below the fold.
@@ -189,7 +189,7 @@ public class TC_108_F99_trade_accounts_test extends AbstractAkropiaTest {
         // The tab is reached by keyboard and named in Czech.
         trade.openWithKeyboard();
         trade.verifyTradeTabSelectedAndFocused(true);
-        trade.verifyTradeTabLabel("Evropský obchod");
+        trade.verifyTradeTabLabel("Obchod městských států");
         trade.verifyTradeTabInsideWindow();
 
         // All four counters and the revolutionary source are Czech.

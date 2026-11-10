@@ -96,7 +96,7 @@ public class TC_154_F187_home_europe_closure_test extends AbstractAkropiaTest {
                 "National support for independence: 100%.",
                 "No armed veteran will be mustered now. Only veterans standing in colonies with at least 50% local support are mustered.");
         independence.verifyEuropeWarning(
-                "Your home Europe will be closed to you, and the Crown will send a royal expedition against you. Treasure cannot be redeemed in Europe or collected by the King after independence.");
+                "Your home port will be closed to you, and the mother city will send a army of the mother city against you. Treasure cannot be redeemed in Home port or collected by the council of the mother city after independence.");
 
         // Cancel changes nothing: the port and both crossings stay as saved.
         independence.cancel();
@@ -238,7 +238,7 @@ public class TC_154_F187_home_europe_closure_test extends AbstractAkropiaTest {
                 INBOUND_PASSENGER);
         gamePage.selectTile(innerLane);
         gamePage.dragMouseAtLocationWithFeedback(LANE,
-                "Home Europe is closed after independence.");
+                "Home port is closed after independence.");
         home.verifyArrivedAtSource(INBOUND, innerLane, GoodsType.ORE, 7,
                 INBOUND_PASSENGER);
     }

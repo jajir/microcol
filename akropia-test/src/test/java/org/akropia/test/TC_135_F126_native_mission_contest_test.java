@@ -61,15 +61,15 @@ public class TC_135_F126_native_mission_contest_test
 
     private static final String LIMIT_EN = "A rival mission holds this settlement; you may challenge it.";
 
-    private static final String CONFIRMATION_EN = "Rival mission of France: its missionary is ordinary, and the natives are angry toward them. Your missionary is ordinary, and the natives are angry toward you. Your chance: 50%.";
+    private static final String CONFIRMATION_EN = "Rival mission of Phocaea: its missionary is ordinary, and the local peoples are angry toward them. Your missionary is ordinary, and the local peoples are angry toward you. Your chance: 50%.";
 
     private static final String WON_EN = "Your missionary won. The rival missionary died, and yours now holds the mission.";
 
     private static final String LOST_EN = "Your missionary lost and died. The rival mission stays.";
 
-    private static final String WINNER_SUMMARY_EN = "Mission of Dutch: ordinary missionary. The natives are angry. Progress: 0 of 5 updates.";
+    private static final String WINNER_SUMMARY_EN = "Mission of Corinth: ordinary missionary. The local peoples are angry. Progress: 0 of 5 updates.";
 
-    private static final String HELD_SUMMARY_EN = "Mission of France: ordinary missionary. The natives are angry. Progress: 3 of 5 updates.";
+    private static final String HELD_SUMMARY_EN = "Mission of Phocaea: ordinary missionary. The local peoples are angry. Progress: 3 of 5 updates.";
 
     private static final String LIMIT_CS = "Na tomto místě působí misie rivala; můžete ji vyzvat.";
 

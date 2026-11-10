@@ -92,7 +92,7 @@ public final class EuropeEquipmentPage extends AbstractScreen {
         }
         assertFalse(isCssIdVisible("europeEquipmentDialog"));
         assertTrue(getModel().getUnitById(unitId).isCrownSeized(),
-                "Crown seizure of " + unitId);
+                "mother city seizure of " + unitId);
         escape();
     }
 

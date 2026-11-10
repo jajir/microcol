@@ -49,11 +49,11 @@ public class TC_133_F124_native_mission_test extends AbstractAkropiaTest {
     private static final int SECOND_ID = 311;
     private static final Location SECOND_AT = Location.of(23, 14);
 
-    private static final String ORDINARY_CONTENT_EN = "Missionary: ordinary. The natives are content. Progress: 0 of 5 updates.";
+    private static final String ORDINARY_CONTENT_EN = "Missionary: ordinary. The local peoples are content. Progress: 0 of 5 updates.";
 
-    private static final String EXPERT_CONTENT_EN = "Missionary: expert. The natives are content. Progress: 0 of 5 updates.";
+    private static final String EXPERT_CONTENT_EN = "Missionary: expert. The local peoples are content. Progress: 0 of 5 updates.";
 
-    private static final String SUMMARY_EN = "ordinary missionary. The natives are content. Progress: 0 of 5 updates.";
+    private static final String SUMMARY_EN = "ordinary missionary. The local peoples are content. Progress: 0 of 5 updates.";
 
     private static final String PROGRESS_ONE_EN = "Progress: 1 of 5 updates.";
 

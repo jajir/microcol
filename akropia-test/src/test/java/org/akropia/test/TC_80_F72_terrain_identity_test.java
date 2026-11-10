@@ -12,6 +12,7 @@ import org.akropia.model.GoodsType;
 import org.akropia.model.Location;
 import org.akropia.model.TerrainType;
 import org.akropia.page.ColonyJobPage;
+import org.akropia.page.DialogMessagePage;
 import org.akropia.page.ColonyScreen;
 import org.akropia.page.ConstructionPage;
 import org.akropia.page.FreePlayAuditPage;
@@ -190,6 +191,9 @@ public class TC_80_F72_terrain_identity_test extends AbstractAkropiaTest {
         colony.verifyThatStatusBarContains(
                 "Build a dock before assigning fishing work.");
         colony.verifyWorldUnchanged();
+        colony.verifyRejectedWorkerDrop(
+                "Build a dock before assigning fishing work.");
+        DialogMessagePage.of(getContext()).close();
 
         // A completed dock gives the ordinary three food of the ocean.
         final ConstructionPage building = new ConstructionPage(getContext());
@@ -201,7 +205,12 @@ public class TC_80_F72_terrain_identity_test extends AbstractAkropiaTest {
         gamePage.nextTurnAndCloseDialogs();
         colony = gamePage.openColonyAt(COLONY, "New Amsterdam");
         building.verifyBuilding(ConstructionType.DOCK, 1);
-        colony.dragFieldWorkerTo(0, Direction.east);
+        // Field workers must return before taking a water job.
+        colony.returnFieldWorkerToColony(0);
+        gamePage = colony.close();
+        gamePage.nextTurnAndCloseDialogs();
+        colony = gamePage.openColonyAt(COLONY, "New Amsterdam");
+        colony.moveWorkerFromPierToField(0, Direction.east);
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.verifyFieldJob(0, LAKE_NEXT_TO_COLONY,
                 Goods.of(GoodsType.GRAIN, 3));

@@ -138,7 +138,7 @@ public final class ExpertPurchasePage extends AbstractScreen {
 
     public void closeUnavailableWarning() {
         javafx.scene.Parent warning = getNodeFinder().lookup(
-                "This purchase is no longer available. Reopen the offer on your turn while you have access to Europe.")
+                "This purchase is no longer available. Reopen the offer on your turn while you have access to Home port.")
                 .queryLabeled().getScene().getRoot();
         getRobot().clickOn(getNodeFinder().from(warning).lookup("#buttonOk")
                 .queryButton());
@@ -147,7 +147,7 @@ public final class ExpertPurchasePage extends AbstractScreen {
 
     public void verifyUnavailableWarning() {
         assertTrue(getNodeFinder().lookup(
-                "This purchase is no longer available. Reopen the offer on your turn while you have access to Europe.")
+                "This purchase is no longer available. Reopen the offer on your turn while you have access to Home port.")
                 .queryLabeled().isVisible());
     }
 

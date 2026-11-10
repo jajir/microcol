@@ -43,7 +43,7 @@ public class TC_44_F35_voyage_reversal_test extends AbstractAkropiaTest {
         // Cancel and Escape leave the route and cargo untouched.
         voyage.openReverse();
         voyage.verifyConfirmation("Reverse course",
-                "Send this ship to New World? Turns remaining: 1.");
+                "Send this ship to new coast? Turns remaining: 1.");
         voyage.cancelReverse();
         voyage.verifyTransit(true, 1, 3, "Turns remaining: 3");
         voyage.openReverse();
@@ -58,7 +58,7 @@ public class TC_44_F35_voyage_reversal_test extends AbstractAkropiaTest {
         // must not reuse that confirmation or change the route.
         voyage.openReverseWithKeyboard();
         voyage.verifyConfirmation("Reverse course",
-                "Send this ship to Europe? Turns remaining: 3.");
+                "Send this ship to Home port? Turns remaining: 3.");
         voyage.escapeReverse();
         voyage.verifyTransit(false, 1, 1, "Turns remaining: 1");
         voyage.captureDialog("voyage-ship-3", "voyage-reversed.png");
@@ -139,7 +139,7 @@ public class TC_44_F35_voyage_reversal_test extends AbstractAkropiaTest {
         voyage.verifyReverseAction("Obrátit směr");
         voyage.openReverse();
         voyage.verifyConfirmation("Obrátit směr",
-                "Poslat tuto loď do: Nový svět? Zbývající tahy: 1.");
+                "Poslat tuto loď do: Nové pobřeží? Zbývající tahy: 1.");
         voyage.captureDialog("voyageReverseConfirm",
                 "voyage-reversal-czech.png");
         voyage.escapeReverse();

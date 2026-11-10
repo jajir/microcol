@@ -89,23 +89,23 @@ public class TC_134_F125_native_convert_test extends AbstractAkropiaTest {
 
     private static final String ACQUIRED_EN = "A native convert joined your colony";
 
-    private static final String RETURNED_EN = "A native convert returned to the tribe after eight turns";
+    private static final String RETURNED_EN = "A native convert returned to the local people after eight turns";
 
-    private static final String LABEL_0_EN = "Native convert of the Aztec. Unassigned turns: 0 of 8.";
+    private static final String LABEL_0_EN = "Local convert of the Egyptians. Unassigned turns: 0 of 8.";
 
-    private static final String LABEL_7_EN = "Native convert of the Aztec. Unassigned turns: 7 of 8.";
+    private static final String LABEL_7_EN = "Local convert of the Egyptians. Unassigned turns: 7 of 8.";
 
-    private static final String LABEL_1_CS = "Domorodý konvertita: Aztékové. Nepřiřazená kola: 1 z 8.";
+    private static final String LABEL_1_CS = "Místní konvertita: Egypťané. Nepřiřazená kola: 1 z 8.";
 
-    private static final String ACQUIRED_CS = "Domorodý konvertita se připojil ke kolonii";
+    private static final String ACQUIRED_CS = "Místní konvertita se připojil ke kolonii";
 
-    private static final String RETURNED_CS = "Domorodý konvertita se po osmi tazích bez práce vrátil ke svému kmeni";
+    private static final String RETURNED_CS = "Místní konvertita se po osmi tazích bez práce vrátil ke svému národu";
 
-    private static final String BEST_LUMBER_EN = "Best eligible field: 7 Lumber per turn";
+    private static final String BEST_LUMBER_EN = "Best eligible field: 8 Lumber per turn";
 
     private static final String REFUSED_EN = "Unavailable: A native convert cannot work in a manufacturing building.";
 
-    private static final String REFUSED_CS = "Nedostupné: Domorodý konvertita nemůže pracovat ve výrobní budově.";
+    private static final String REFUSED_CS = "Nedostupné: Místní konvertita nemůže pracovat ve výrobní budově.";
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -209,14 +209,14 @@ public class TC_134_F125_native_convert_test extends AbstractAkropiaTest {
         GamePage.of(getContext()).openColonyAt(COLONY, COLONY_NAME);
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
 
-        // The convert takes the best lumber field: one more than the six an
-        // ordinary colonist gets there.
+        // The road gives seven lumber to an ordinary colonist; the convert
+        // produces one more on the same field.
         jobs.openFromCenter(WORKER_ID);
         jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
         jobs.verifyDetails(BEST_LUMBER_EN, true);
         jobs.confirm();
         jobs.verifyFieldJob(WORKER_ID, Location.of(23, 15),
-                Goods.of(GoodsType.LUMBER, 7));
+                Goods.of(GoodsType.LUMBER, 8));
 
         // A brief building job keeps the work non-manufacturing: the town hall.
         jobs.openFromField(WORKER_ID);

@@ -55,15 +55,19 @@ public class TC_178_F204_europe_arrival_test extends AbstractAkropiaTest {
         final int duration = sailWestward(game, audit);
         sailUntilArrivalTurn(game, duration);
 
-        // The arrival turn shows the report; the game stays in front of it.
+        // Routine arrivals are hidden by R-0406; other turn notices stay
+        // available.
         final Optional<ScreenTurnReport> report = game.nextTurn();
         game.verifyTurnReportPresent(report);
-        report.get().verifyEventMessageCount("European port", 1);
-        report.get().verifyOpenEuropeAction("Open Europe");
+        report.get().verifyEventMessageCount("home port", 0);
+        report.get().verifyOpenEuropeActionAbsent();
         final int movement = audit.getMovement();
 
-        // Open Europe from the report spends nothing and keeps ship and cargo.
-        final EuropePortScreen europe = report.get().openEuropeWithMouse();
+        // Open the port from the map without spending movement or changing
+        // cargo.
+        report.get().verifyCompletedHomeVoyage(3, false);
+        report.get().close();
+        final EuropePortScreen europe = game.openEuroperPort();
         audit.verifyInEurope();
         audit.verifyCargo();
         audit.verifyMovement(movement);
@@ -96,15 +100,15 @@ public class TC_178_F204_europe_arrival_test extends AbstractAkropiaTest {
             game.verifyGameInFront();
             final int movement = audit.getMovement();
 
-            // The manual report keeps the arrival and its Open Europe action.
+            // The manual report also hides the routine arrival and its action.
             ScreenTurnReport report = game.openTurnReport();
-            report.verifyEventMessageCount("European port", 1);
-            report.verifyOpenEuropeAction("Open Europe");
+            report.verifyEventMessageCount("home port", 0);
+            report.verifyOpenEuropeActionAbsent();
             report.close();
 
             // Reopening adds no duplicate notice and spends nothing.
             report = game.openTurnReport();
-            report.verifyEventMessageCount("European port", 1);
+            report.verifyEventMessageCount("home port", 0);
             report.close();
             audit.verifyMovement(movement);
 
@@ -142,7 +146,7 @@ public class TC_178_F204_europe_arrival_test extends AbstractAkropiaTest {
             sailUntilArrivalTurn(game, duration);
             final Optional<ScreenTurnReport> report = game.nextTurn();
             game.verifyTurnReportPresent(report);
-            report.get().verifyOpenEuropeAction("Open Europe");
+            report.get().verifyOpenEuropeActionAbsent();
             final int movement = audit.getMovement();
 
             // Closing the report shows Europe once; ship and cargo are
@@ -195,9 +199,9 @@ public class TC_178_F204_europe_arrival_test extends AbstractAkropiaTest {
             game.verifyGameInFront();
             game.verifyTurnReportNotShown();
 
-            // The routine arrival stays in the manual report, once.
+            // The manual report suppresses the routine arrival as well.
             final ScreenTurnReport report = game.openTurnReport();
-            report.verifyEventMessageCount("European port", 1);
+            report.verifyEventMessageCount("home port", 0);
             report.close();
 
             // Continue does not open Europe again and spends nothing.

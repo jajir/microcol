@@ -145,7 +145,8 @@ public class TC_58_F49_custom_house_test extends AbstractAkropiaTest {
         WelcomePage.of(getContext()).loadGame();
         CustomHousePage exports = new CustomHousePage(getContext());
         taxes.startUpdate();
-        taxes.verifyDemandDialog("Current tax: 25%. The Crown demands 27%.",
+        taxes.verifyDemandDialog(
+                "Current tax: 25%. The mother city demands 27%.",
                 "Accepting raises the tax to 27% and destroys nothing.",
                 "Protest destroys 100 Ore in New Amsterdam (stock 300), adds 100 liberty there, boycotts that commodity and records 800 gold of arrears. The tax stays 25%.",
                 true);
@@ -182,7 +183,8 @@ public class TC_58_F49_custom_house_test extends AbstractAkropiaTest {
         WelcomePage.of(getContext()).loadGame();
         CustomHousePage exports = new CustomHousePage(getContext());
         taxes.startUpdate();
-        taxes.verifyDemandDialog("Current tax: 25%. The Crown demands 27%.",
+        taxes.verifyDemandDialog(
+                "Current tax: 25%. The mother city demands 27%.",
                 "Accepting raises the tax to 27% and destroys nothing.",
                 "Protest destroys 100 Ore in New Amsterdam (stock 300), adds 100 liberty there, boycotts that commodity and records 800 gold of arrears. The tax stays 25%.",
                 true);

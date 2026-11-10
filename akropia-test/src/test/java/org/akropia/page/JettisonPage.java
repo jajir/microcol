@@ -128,7 +128,7 @@ public final class JettisonPage extends AbstractScreen {
         assertEquals(expectedEnabled,
                 !new EuropeHarborPage(getContext())
                         .voyageOrder(shipId, "jettison").isDisable(),
-                "Unexpected Europe Jettison goods control state");
+                "Unexpected Home port Jettison goods control state");
     }
 
     public void verifyHoldChoice(final String expectedQuestion) {

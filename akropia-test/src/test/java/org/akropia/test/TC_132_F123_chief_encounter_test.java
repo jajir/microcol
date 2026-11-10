@@ -62,18 +62,19 @@ public class TC_132_F123_chief_encounter_test extends AbstractAkropiaTest {
     /**
      * Land square two from the capital (row 17) that no Dutch unit or colony
      * sees at the start: the scouts see to row 16, the colony and the frigate
-     * start at column 23. It is unexplored until the information reveals it.
+     * and the outdoor worker start at column 22. It is unexplored until the
+     * information reveals it.
      */
-    private static final Location FAR_LAND = Location.of(22, 17);
+    private static final Location FAR_LAND = Location.of(21, 17);
 
     /** Land square three from the capital (row 18): never revealed. */
-    private static final Location UNKNOWN_LAND = Location.of(22, 18);
+    private static final Location UNKNOWN_LAND = Location.of(21, 18);
 
-    private static final String CONTENT_EN = "The natives are content. Chances: information 70.0%, gold 25.0%, death 5.0%.";
+    private static final String CONTENT_EN = "The local peoples are content. Chances: information 70.0%, gold 25.0%, death 5.0%.";
 
-    private static final String REPEAT_EN = "The natives are content. This nation has met their chief before, so you learn the same information again. Nothing is drawn, and no gold or risk applies.";
+    private static final String REPEAT_EN = "The local peoples are content. This nation has met their chief before, so you learn the same information again. Nothing is drawn, and no gold or risk applies.";
 
-    private static final String CONTENT_CS = "Domorodci jsou spokojení. Šance: informace 70.0%, zlato 25.0%, smrt 5.0%.";
+    private static final String CONTENT_CS = "Místní obyvatelé jsou spokojení. Šance: informace 70.0%, zlato 25.0%, smrt 5.0%.";
 
     @Start
     private void start(final Stage stage) throws Exception {

@@ -34,8 +34,8 @@ import javafx.stage.Stage;
 public class TC_144_F135_foreign_power_report_test extends AbstractAkropiaTest {
     private static final String FRANCE = "France";
     private static final String SPAIN = "Spain";
-    private static final String FRANCE_NAME = "Nová Francie (France)";
-    private static final String SPAIN_NAME = "Nová Francie (Spain)";
+    private static final String FRANCE_NAME = "Nová Francie (Phocaea)";
+    private static final String SPAIN_NAME = "Nová Francie (Miletus)";
     private static final String LOCKED = "Locked: recruit Jan de Witt to compare powers.";
     private static final String UNKNOWN = "Unknown: no contact with this power yet.";
     private static final List<String> FRANCE_VALUES = List.of("1", "1", "1",

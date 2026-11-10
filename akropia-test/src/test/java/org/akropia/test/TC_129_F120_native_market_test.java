@@ -77,10 +77,10 @@ public class TC_129_F120_native_market_test extends AbstractAkropiaTest {
     private static final GoodsType GRAPES = GoodsType.GRAPES;
 
     private static final String CONTACT_NONE_EN = "Contact: none yet. A land unit must introduce your nation first.";
-    private static final String CONTACT_KNOWN_EN = "Contact: this tribe knows your nation.";
-    private static final String NO_CONTACT_EN = "Trade: needs a land introduction to this tribe first.";
+    private static final String CONTACT_KNOWN_EN = "Contact: this local people knows your nation.";
+    private static final String NO_CONTACT_EN = "Trade: needs a land introduction to this local people first.";
     private static final String ADMITTED_EN = "Trade: this unit may inspect the market here.";
-    private static final String SHIP_UNEASY_EN = "Trade: uneasy natives refuse ship trade.";
+    private static final String SHIP_UNEASY_EN = "Trade: uneasy local peoples refuse ship trade.";
     private static final String SHIP_INLAND_EN = "Trade: a ship can trade only from the sea beside a coastal settlement.";
     private static final String OFFER_GRAIN_EN = "Sells Grain: 100 in stock.";
     private static final String OFFER_GRAPES_EN = "Sells Grapes: 100 in stock.";
@@ -91,7 +91,7 @@ public class TC_129_F120_native_market_test extends AbstractAkropiaTest {
     private static final String EXPEDITION_OPEN_EN = "This carrier's expedition is open here.";
 
     private static final String CONTACT_NONE_CS = "Kontakt: zatím žádný. Jednotka na souši musí nejprve představit váš národ.";
-    private static final String CONTACT_KNOWN_CS = "Kontakt: tento kmen zná váš národ.";
+    private static final String CONTACT_KNOWN_CS = "Kontakt: tento národ zná váš národ.";
     private static final String ADMITTED_CS = "Obchod: tato jednotka si může trh prohlédnout.";
     private static final String OFFER_GRAIN_CS = "Prodává Obilí: na skladě 100.";
     private static final String OFFER_GRAPES_CS = "Prodává Hrozny: na skladě 100.";

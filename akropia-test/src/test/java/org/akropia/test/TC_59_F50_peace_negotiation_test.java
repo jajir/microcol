@@ -124,7 +124,7 @@ public class TC_59_F50_peace_negotiation_test extends AbstractAkropiaTest {
         // proposal.
         var report = game.nextTurn().orElseThrow();
         report.verifyThatAtLeastOneEventMessageContains(
-                "France offers peace for 100 gold");
+                "Phocaea offers peace for 100 gold");
         peace.verifyAutomaticOffers(1, 100);
         peace.verifyState(500, 1000, EuropeanRelationState.WAR, true);
         report.close();

@@ -631,7 +631,7 @@
           "gold": 500,
           "declaredIndependence": false,
           "extraData": {
-            "displayName": "Dutch"
+            "displayName": "Corinth"
           },
           "visible": {
             "visible": [
@@ -728,7 +728,7 @@
           "gold": 1000,
           "declaredIndependence": false,
           "extraData": {
-            "displayName": "France"
+            "displayName": "Phocaea"
           },
           "visible": {
             "visible": []
@@ -787,7 +787,7 @@
           "gold": 2000,
           "declaredIndependence": false,
           "extraData": {
-            "displayName": "Spain"
+            "displayName": "Miletus"
           },
           "visible": {
             "visible": []

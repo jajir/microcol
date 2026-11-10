@@ -97,7 +97,7 @@
     <entry key="fight_bombardmentBonus">Bombardování kolonie: +%s%%</entry>
     <entry key="fight_rebelAmbushBonus">Léčka povstalců: +%s%%</entry>
     <entry key="fight_causeSupportBonus">Podpora věci: +%s%%</entry>
-    <entry key="fight_nativeLoss">Poražený místní bojovník je zničen i s výstrojí. Poražený neozbrojený kolonista zahyne a nebude zajat. Ozbrojený Domovský přístavn ztratí koně nebo zbraně; dělo se nejprve poškodí. Oba účastníci spotřebují zbývající pohyb.</entry>
+    <entry key="fight_nativeLoss">Poražený místní bojovník je zničen i s výstrojí. Poražený neozbrojený kolonista zahyne a nebude zajat. Ozbrojený kolonista ztratí koně nebo zbraně; dělo se nejprve poškodí. Oba účastníci spotřebují zbývající pohyb.</entry>
     <entry key="fight_nativeAnger">Útok na místního bojovníka zvýší hněv jeho národa vůči vám, ať zvítězí kdokoli.</entry>
     <entry key="fight_nativeArmedBrave">Ozbrojený místní bojovník</entry>
     <entry key="fight_nativeMountedBrave">Jízdní místní bojovník</entry>

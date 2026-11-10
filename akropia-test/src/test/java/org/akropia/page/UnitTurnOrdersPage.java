@@ -229,13 +229,17 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
     public void clickInformationCard(final int unitId,
             final javafx.scene.input.MouseButton button) {
         closeUnitActions();
-        getRobot().clickOn("#unitPanel-" + unitId, button);
+        final javafx.scene.Node card = getNodeFinder()
+                .lookup("#unitPanel-" + unitId).query();
+        revealGameContent(card);
+        getRobot().clickOn(card, button);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void clickInformationIcon(final int unitId) {
         final javafx.scene.Node description = getNodeFinder()
                 .lookup("#unitPanel-" + unitId).query();
+        revealGameContent(description);
         getRobot().clickOn(description.getParent().lookup(".image-view"));
         WaitForAsyncUtils.waitForFxEvents();
     }
@@ -250,8 +254,9 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
 
     public void verifyInformationOnly() {
         assertFalse(isCssIdShown("unitActions"));
-        assertTrue(getNodeFinder().lookup(".unitPanel .button").queryAll()
-                .isEmpty());
+        assertTrue(getNodeFinder().lookup(
+                ".unitPanel #move, .unitPanel #waitUnit, .unitPanel #skipUnitTurn")
+                .queryAll().isEmpty());
         assertNotNull(getContext().getClassFromGuice(
                 org.akropia.gui.screen.game.gamepanel.GamePanelComponent.class)
                 .getCanvas().getScene(),

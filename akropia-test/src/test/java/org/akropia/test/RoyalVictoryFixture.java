@@ -110,6 +110,43 @@ final class RoyalVictoryFixture {
             if (colony.get("id").getAsInt() == crownColonyId) {
                 colony.addProperty("ownerName", CROWN);
                 collectResidents(colony, residents);
+                // Field workers now occupy their square. Put the east-field
+                // resident in the empty town hall before placing the attacker.
+                for (final JsonElement fieldElement : colony
+                        .getAsJsonArray("colonyFields")) {
+                    final JsonObject field = fieldElement.getAsJsonObject();
+                    final JsonObject direction = field
+                            .getAsJsonObject("direction");
+                    final JsonObject location = colony
+                            .getAsJsonObject("location");
+                    if (field.has("workerId")
+                            && location.get("x").getAsInt() + direction.get("x")
+                                    .getAsInt() == attackFrom.getX()
+                            && location.get("y").getAsInt() + direction.get("y")
+                                    .getAsInt() == attackFrom.getY()) {
+                        final int worker = field.remove("workerId").getAsInt();
+                        field.remove("producedGoodsType");
+                        for (final JsonElement construction : colony
+                                .getAsJsonArray("constructions")) {
+                            final JsonObject building = construction
+                                    .getAsJsonObject();
+                            if ("TOWN_HALL".equals(
+                                    building.get("type").getAsString())) {
+                                building.getAsJsonArray("slots").get(0)
+                                        .getAsJsonObject()
+                                        .addProperty("workerId", worker);
+                            }
+                        }
+                        for (final JsonElement resident : units) {
+                            final JsonObject unit = resident.getAsJsonObject();
+                            if (unit.get("id").getAsInt() == worker) {
+                                unit.remove("placeColonyField");
+                                unit.add("placeConstructionSlot",
+                                        new JsonObject());
+                            }
+                        }
+                    }
+                }
             }
         }
         for (final JsonElement element : units) {

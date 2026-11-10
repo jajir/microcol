@@ -61,7 +61,7 @@ public class TC_157_F192_rebellion_loss_test extends AbstractAkropiaTest {
 
     private final static String REASON_CODE = GameOverEvaluator.REASON_REBELLION_ALL_COLONIES_CROWN;
 
-    private final static String REASON_TEXT = "every surviving rebel colony is back under the Crown";
+    private final static String REASON_TEXT = "every surviving rebel colony is back under the mother city";
 
     @Start
     private void start(final Stage primaryStage) throws Exception {

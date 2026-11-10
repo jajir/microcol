@@ -77,7 +77,7 @@ public final class IndependencePage extends AbstractScreen {
                 getLabeledById("declareIndependenceMuster").getText());
         assertFalse(
                 getLabeledById("declareIndependenceEurope").getText().isBlank(),
-                "The Europe closure must be explained");
+                "The Home port closure must be explained");
         assertFalse(getLabeledById("declareIndependenceIrreversible").getText()
                 .isBlank(), "The permanence must be explained");
         assertTrue(isCssIdVisible(DeclareIndependenceDialog.CONFIRM_ID));

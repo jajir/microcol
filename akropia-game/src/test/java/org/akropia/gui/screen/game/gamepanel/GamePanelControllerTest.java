@@ -103,4 +103,20 @@ public class GamePanelControllerTest {
         bus.post(capture);
         assertFalse(controller.isUnitMoving());
     }
+
+    @Test
+    void standaloneEscapeStepReleasesMapInputWithoutRouteFinish() {
+        final org.akropia.model.Unit unit = mock(org.akropia.model.Unit.class);
+        final org.akropia.model.Location from = org.akropia.model.Location.of(1,
+                1);
+        final org.akropia.model.Location to = org.akropia.model.Location.of(2,
+                1);
+        bus.post(new UnitMovedStepStartedEvent(model, unit, from, to,
+                org.akropia.model.Direction.east));
+        assertTrue(controller.isUnitMoving());
+        bus.post(new org.akropia.model.event.UnitMovedStepFinishedEvent(model,
+                unit, from, to));
+        assertFalse(controller.isUnitMoving());
+        assertTrue(controller.isMouseEnabled());
+    }
 }

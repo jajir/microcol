@@ -123,7 +123,7 @@
 	<entry key="nativeVisitLimitContestAvailable">A rival mission holds this settlement; you may challenge it.</entry>
 	<entry key="nativeVisitContestButton">Challenge the rival mission</entry>
 	<entry key="nativeVisitActionIncite">Incite a native attack</entry>
-	<entry key="nativeVisitLimitNoIncitementTarget">No other Home portan power can be chosen as a target.</entry>
+	<entry key="nativeVisitLimitNoIncitementTarget">No other city-state power can be chosen as a target.</entry>
 	<entry key="nativeVisitLimitNoAttackTarget">No defender of this settlement can be attacked from here.</entry>
 	<entry key="nativeAttackTitle">Attack the native settlement</entry>
 	<entry key="nativeAttackLine">Attack the %s settlement with the armed unit you chose. Every native brave on its square must be overcome, one battle at a time, before the settlement is taken. A lost battle ends the attack and the settlement stays.</entry>
@@ -140,7 +140,7 @@
 	<entry key="nativeAttackUnitLost">Your attacking unit lost its battle and was destroyed or left without its weapons.</entry>
 	<entry key="nativeAttackTrappedLost">A colonist or missionary of the settlement had no free square nearby and was lost with it.</entry>
 	<entry key="nativeAttackRejected">The attack cannot be carried out now: the settlement, its defenders or your unit changed. Nothing was changed.</entry>
-	<entry key="nativeVisitLimitTributeCooldown">This Home portan already demanded tribute here within the last ten turns.</entry>
+	<entry key="nativeVisitLimitTributeCooldown">This city-state visitor already demanded tribute here within the last ten turns.</entry>
 	<entry key="nativeVisitLimitNoTributeTarget">Another unit holds this settlement's square, so no tribute can be demanded from here.</entry>
 	<entry key="nativeTributeTitle">Demand tribute</entry>
 	<entry key="nativeTributeLine">Demand tribute from the %s settlement with the unit you chose.</entry>
@@ -159,7 +159,7 @@
 	<entry key="nativeConquestLossPupil">Your %s, who was learning in a conquered settlement of the %s local people, found no free square nearby and died with it.</entry>
 	<entry key="nativeConquestLossMissionary">Your %s, who kept a mission in a conquered settlement of the %s local people, found no free square nearby and died with it.</entry>
 	<entry key="nativeConquestTurnEvent">You conquered a settlement of the %s local people; its defenders were overcome.</entry>
-	<entry key="nativeVisitIncitementButton">Incite the local people against a Home portan power</entry>
+	<entry key="nativeVisitIncitementButton">Incite the local people against a city-state power</entry>
 	<entry key="nativeVisitTeachButton">Start learning</entry>
 	<entry key="nativeMarketTitle">Local market</entry>
 	<entry key="nativeMarketRejected">The native market cannot be opened now. Nothing changed.</entry>
@@ -252,7 +252,7 @@
 	<entry key="nativeContestLost">Your missionary lost and died. The rival mission stays.</entry>
 	<entry key="nativeContestRejected">The contest terms changed, so nothing happened.</entry>
 	<entry key="nativeIncitementTitle">Incite a native attack</entry>
-	<entry key="nativeIncitementLine">Pay to turn the %s local people against the Home portan power you choose. On success the local people pursues that power for a limited time, and stops sooner if its anger toward that power subsides. The price and your chance are shown before you confirm.</entry>
+	<entry key="nativeIncitementLine">Pay to turn the %s local people against the city-state power you choose. On success the local people pursues that power for a limited time, and stops sooner if its anger toward that power subsides. The price and your chance are shown before you confirm.</entry>
 	<entry key="nativeIncitementTarget">Target power:</entry>
 	<entry key="nativeIncitementTerms">Price: %d gold, paid once whether the attempt succeeds or fails. Your missionary is %s, and the local people is %s toward your nation. Your missions in this local people: %d. Your chance: %d%%. Your gold: %d.</entry>
 	<entry key="nativeIncitementNoGold">You do not have enough gold for this price, so the attempt cannot be confirmed.</entry>

@@ -46,9 +46,9 @@ public class TC_169_F106_native_advisor_test extends AbstractAkropiaTest {
     private static final int SEASONED_ID = 303;
     private static final Location SEASONED_AT = Location.of(23, 14);
 
-    private static final String CONTENT_EN = "The natives are content. Chances: information 70.0%, gold 25.0%, death 5.0%.";
+    private static final String CONTENT_EN = "The local peoples are content. Chances: information 70.0%, gold 25.0%, death 5.0%.";
 
-    private static final String NATIONS_EN = "Known nations: Aztec.";
+    private static final String NATIONS_EN = "Known nations: Egyptians.";
 
     private static final String ATTITUDE_EN = "Attitude: content.";
 
@@ -58,7 +58,7 @@ public class TC_169_F106_native_advisor_test extends AbstractAkropiaTest {
 
     private static final String NOT_TOLD_CS = "Náčelník vám o této osadě zatím nic neřekl.";
 
-    private static final String REPEAT_EN = "The natives are content. This nation has met their chief before, so you learn the same information again. Nothing is drawn, and no gold or risk applies.";
+    private static final String REPEAT_EN = "The local peoples are content. This nation has met their chief before, so you learn the same information again. Nothing is drawn, and no gold or risk applies.";
 
     /** The gold cap of a capital, as the model applies it. */
     private static final int CAPITAL_GOLD = 200;

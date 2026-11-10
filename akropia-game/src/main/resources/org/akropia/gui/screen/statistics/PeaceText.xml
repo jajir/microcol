@@ -18,5 +18,5 @@ Your treasury when quoted: %s gold.</entry>
   <entry key="insufficient">You do not have enough gold to accept this offer.</entry>
   <entry key="changed">The contact or offer changed. Cancel this proposal and request a new one.</entry>
   <entry key="accepted">%s and %s are now at peace.</entry>
-  <entry key="turnOffer">%s offers peace for %s gold. Review the proposal in Home portan relations.</entry>
+  <entry key="turnOffer">%s offers peace for %s gold. Review the proposal in city-state relations.</entry>
 </properties>

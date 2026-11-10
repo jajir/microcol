@@ -54,7 +54,7 @@ public class TC_14_F01_founding_colony_close_to_other_test
         gamePage.dragMouseAtLocation(CLOSE_TO_COLOY_LOCATION);
 
         // Verify that free colonist move to next location.
-        gamePage.verifyNumberOfUnitsAt(CLOSE_TO_COLOY_LOCATION, 1);
+        gamePage.verifyNumberOfUnitsAt(CLOSE_TO_COLOY_LOCATION, 2);
 
         // Verify that build colony button is hidden.
         gamePage.verifyThatBuildColonyButtonIsHidden();

@@ -42,6 +42,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.akropia.model.EuropeanNation;
+import org.akropia.model.Location;
 import org.akropia.model.EuropeanRelationState;
 import org.akropia.model.GoodsType;
 import org.akropia.model.NativeLandStatus;
@@ -155,14 +156,14 @@ public class TC_186_F219_connected_diplomacy_journey_test
     private static final int FORT_WEAPONS = 50;
     private static final int FORT_TOOLS = 50;
 
-    private static final String CLAIMANT = "This square is claimed by: Aztec city, capital.";
+    private static final String CLAIMANT = "This square is claimed by: Egyptians city, capital.";
     private static final String CONSEQUENCE = "If you use it without paying, the settlement's alarm toward you rises by 5 once at the first use and by 2 each turn while the square stays in use.";
-    private static final String CONFIRMATION_EN = "A Free Colonist learns Expert Farmer after 4 owner updates. Meanwhile the colonist stays with the natives and cannot move, work or fight.";
-    private static final String REPORT_EN = "A colonist learned Expert Farmer from the natives.";
+    private static final String CONFIRMATION_EN = "A Free Colonist learns Expert Farmer after 4 owner updates. Meanwhile the colonist stays with the local peoples and cannot move, work or fight.";
+    private static final String REPORT_EN = "A colonist learned Expert Farmer from the local peoples.";
     private static final String GIVE_TWO_OLIVES = "You give: 2 Olives.";
     private static final String RECEIVE_NOTHING = "You receive no goods back.";
     private static final String INCITEMENT_TERMS = "Price: 630 gold, paid once whether the attempt succeeds or fails.";
-    private static final String INCITEMENT_RESULT = "Paid 630 gold; you now have 1226. The tribe has turned against France and will pursue it for up to 20 native turns, ending sooner if its anger fades.";
+    private static final String INCITEMENT_RESULT = "Paid 630 gold; you now have 1226. The local people has turned against Phocaea and will pursue it for up to 20 native turns, ending sooner if its anger fades.";
     private static final String DECLARES_WAR = "declares war";
     private static final String FRANCE = "France";
     private static final String DUTCH = "Dutch";
@@ -310,9 +311,9 @@ public class TC_186_F219_connected_diplomacy_journey_test
         visit.enterSettlement(MISSIONARY_AT, AZTEC_CAPITAL);
         incite.startIncitementChoice();
         visit.verifyChooserClosed();
-        incite.verifyTargetOffered(FRANCE);
+        incite.verifyTargetOffered("Phocaea");
         incite.verifyTargetNotOffered(DUTCH);
-        incite.selectTarget(FRANCE);
+        incite.selectTarget("Phocaea");
         incite.verifyTerms(INCITEMENT_TERMS);
         incite.verifyTerms("Your chance: 25%.");
         incite.confirmIncitement();
@@ -400,16 +401,19 @@ public class TC_186_F219_connected_diplomacy_journey_test
         attack.verifyGameplayUnchanged();
 
         // Turn 3, capture: the soldier wins the battle and takes Fort Orleans
-        // with its worker and its stock. France keeps Hidden Quebec, its route
+        // with its stock; the outdoor worker remains French and loses its job.
+        // France keeps Hidden Quebec, its route
         // still names the lost stop, and no gold changes hands.
         game.panToTile(FORT_AT);
         game.panToTile(SOLDIER_AT);
         attack.chooseAttack(SOLDIER_AT, FORT_AT);
         defense.verifyColonyReview("Colonists of Fort Orleans", "Base: 1",
-                "captures the whole colony");
+                "captures the colony and its indoor workers");
         attack.confirm();
         defense.closeCapturedColonyMessage();
-        journey.verifyColonyCaptured(FORT_ORLEANS, DUTCH, 1, SOLDIER, FORT_AT);
+        journey.verifyColonyCaptured(FORT_ORLEANS, DUTCH, 0, SOLDIER, FORT_AT);
+        journey.verifyOutdoorWorkerReleased(FORT_WORKER, FRANCE,
+                Location.of(21, 21));
         journey.verifyColonyStock(FORT_ORLEANS, GoodsType.WEAPONS,
                 FORT_WEAPONS);
         journey.verifyColonyStock(FORT_ORLEANS, GoodsType.TOOLS, FORT_TOOLS);
@@ -426,7 +430,7 @@ public class TC_186_F219_connected_diplomacy_journey_test
         game = new FreePlayAuditPage(getContext()).continueGame();
         journey.verifyRelation(EuropeanRelationState.WAR);
         journey.verifyColonyOwner(FORT_ORLEANS, DUTCH);
-        journey.verifyColonyResidents(FORT_ORLEANS, 1);
+        journey.verifyColonyResidents(FORT_ORLEANS, 0);
         journey.verifyColonyStock(FORT_ORLEANS, GoodsType.WEAPONS,
                 FORT_WEAPONS);
         journey.verifyColonyListed(DUTCH, FORT_ORLEANS, true);
@@ -565,7 +569,7 @@ public class TC_186_F219_connected_diplomacy_journey_test
         journey.verifyFrenchGold(FRENCH_AFTER_FIRST_TRADE);
         visit.enterSettlement(MISSIONARY_AT, AZTEC_CAPITAL);
         incite.startIncitementChoice();
-        incite.selectTarget(FRANCE);
+        incite.selectTarget("Phocaea");
         incite.verifyTerms(INCITEMENT_TERMS);
         incite.confirmIncitement();
         incite.closeIncitementResult();
@@ -594,7 +598,9 @@ public class TC_186_F219_connected_diplomacy_journey_test
         attack.chooseAttack(SOLDIER_AT, FORT_AT);
         attack.confirm();
         defense.closeCapturedColonyMessage();
-        journey.verifyColonyCaptured(FORT_ORLEANS, DUTCH, 1, SOLDIER, FORT_AT);
+        journey.verifyColonyCaptured(FORT_ORLEANS, DUTCH, 0, SOLDIER, FORT_AT);
+        journey.verifyOutdoorWorkerReleased(FORT_WORKER, FRANCE,
+                Location.of(21, 21));
         journey.verifyRouteStopLost(FRANCE, ROUTE, FORT_ORLEANS, DUTCH);
 
         // Turn 4: the skill is granted, peace is bought once and the trade

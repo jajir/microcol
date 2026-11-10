@@ -89,7 +89,7 @@ public class TC_166_F199_labor_report_test extends AbstractAkropiaTest {
                 "Colony New Amsterdam, field producing");
         labor.verifyPlaceContains(GALLEON_PASSENGER_ID,
                 "Aboard Galleon (ID " + GALLEON_ID + "): Map tile 25, 16");
-        labor.verifyPlaceContains(PIER_COLONIST_ID, "European port or pier");
+        labor.verifyPlaceContains(PIER_COLONIST_ID, "home port or pier");
         labor.verifyShowEnabled(FIELD_WORKER_ID, true);
         labor.verifyShowEnabled(GALLEON_PASSENGER_ID, true);
         labor.verifyShowEnabled(PIER_COLONIST_ID, true);
@@ -139,7 +139,7 @@ public class TC_166_F199_labor_report_test extends AbstractAkropiaTest {
         labor.verifyTypeRow("MASTER_BLACKSMITH", "Master Blacksmith: 1");
         labor.selectType("MASTER_BLACKSMITH");
         labor.verifyTypeSelected("MASTER_BLACKSMITH", true);
-        labor.verifyPlaceContains(HIRED_ID, "European port or pier");
+        labor.verifyPlaceContains(HIRED_ID, "home port or pier");
         labor.verifyShowEnabled(HIRED_ID, true);
         game = labor.closeWithEscape();
 
@@ -157,7 +157,7 @@ public class TC_166_F199_labor_report_test extends AbstractAkropiaTest {
         labor.selectType("COLONIST");
         labor.verifyTypeRow("COLONIST", "Free Colonist: 5");
         labor.verifyPlaceContains(PIER_COLONIST_ID, "Aboard Galleon (ID "
-                + EUROPE_SHIP_ID + "): European port or pier");
+                + EUROPE_SHIP_ID + "): home port or pier");
         labor.verifyShowEnabled(PIER_COLONIST_ID, true);
 
         // Show on the boarded colonist opens Europe, where the galleon is.
@@ -172,7 +172,7 @@ public class TC_166_F199_labor_report_test extends AbstractAkropiaTest {
         // when Show is pressed. The list is rebuilt without him, and the nation
         // learns nothing else about him.
         labor.open();
-        labor.verifyPlaceContains(LOST_ID, "European port or pier");
+        labor.verifyPlaceContains(LOST_ID, "home port or pier");
         labor.loseToCrownWhileOpen(LOST_ID);
         labor.show(LOST_ID);
         labor.verifyFeedback(PERSON_UNAVAILABLE);
@@ -190,10 +190,10 @@ public class TC_166_F199_labor_report_test extends AbstractAkropiaTest {
         labor.verifyTypeRow("COLONIST", "Free Colonist: 4");
         labor.verifyTypeRow("MASTER_BLACKSMITH", "Master Blacksmith: 1");
         labor.selectType("MASTER_BLACKSMITH");
-        labor.verifyPlaceContains(HIRED_ID, "European port or pier");
+        labor.verifyPlaceContains(HIRED_ID, "home port or pier");
         labor.selectType("COLONIST");
         labor.verifyPlaceContains(PIER_COLONIST_ID, "Aboard Galleon (ID "
-                + EUROPE_SHIP_ID + "): European port or pier");
+                + EUROPE_SHIP_ID + "): home port or pier");
         labor.verifyPersonRowAbsent(LOST_ID);
         labor.closeWithEscape();
     }

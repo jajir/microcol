@@ -25,7 +25,7 @@ import javafx.stage.Stage;
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_78_F70_tax_demand_test extends AbstractAkropiaTest {
-    private static final String RATES = "Current tax: 0%. The Crown demands 2%.";
+    private static final String RATES = "Current tax: 0%. The mother city demands 2%.";
     private static final String ACCEPT = "Accepting raises the tax to 2% and destroys nothing.";
     private static final String PROTEST = "Protest destroys 60 Olive oil in New Amsterdam (stock 60), adds 100 liberty there, boycotts that commodity and records 1320 gold of arrears. The tax stays 0%.";
     private static final String NO_PROTEST = "No protest consequence is available now, so only acceptance is possible.";

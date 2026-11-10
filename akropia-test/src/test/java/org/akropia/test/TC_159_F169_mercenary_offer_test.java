@@ -95,7 +95,7 @@ public class TC_159_F169_mercenary_offer_test extends AbstractAkropiaTest {
         // and the window states issuer, full price, treasury and port choice.
         final Optional<ScreenTurnReport> report = gamePage.nextTurn();
         mercenary.waitForOffer();
-        mercenary.verifyOfferShown(ISSUER, PRICE, TREASURY);
+        mercenary.verifyOfferShown("Phocaea", PRICE, TREASURY);
         mercenary.verifyPortOffered(PORT_NAME);
         mercenary.verifyPortOffered(DELFT_NAME);
         mercenary.verifySelectedPort(PORT_NAME);
@@ -155,7 +155,7 @@ public class TC_159_F169_mercenary_offer_test extends AbstractAkropiaTest {
         // The tenth rebel update brings the offer; the player decides later.
         final Optional<ScreenTurnReport> report = gamePage.nextTurn();
         mercenary.waitForOffer();
-        mercenary.verifyOfferShown(ISSUER, PRICE, TREASURY);
+        mercenary.verifyOfferShown("Phocaea", PRICE, TREASURY);
         mercenary.decideLater();
         mercenary.verifyDialogShown(false);
         mercenary.closeReport(report);
@@ -167,7 +167,7 @@ public class TC_159_F169_mercenary_offer_test extends AbstractAkropiaTest {
 
         // The relations report opens the same offer again in the same turn.
         mercenary.reviewFromRelations();
-        mercenary.verifyOfferShown(ISSUER, PRICE, TREASURY);
+        mercenary.verifyOfferShown("Phocaea", PRICE, TREASURY);
         mercenary.decideLater();
         mercenary.verifyDialogShown(false);
         mercenary.leaveStatistics();
@@ -179,7 +179,7 @@ public class TC_159_F169_mercenary_offer_test extends AbstractAkropiaTest {
         final GamePage continued = new FreePlayAuditPage(getContext())
                 .continueGame();
         mercenary.waitForOffer();
-        mercenary.verifyOfferShown(ISSUER, PRICE, TREASURY);
+        mercenary.verifyOfferShown("Phocaea", PRICE, TREASURY);
         mercenary.verifyNothingPaid();
 
         // The player declines. Nothing is paid, nothing is placed and the

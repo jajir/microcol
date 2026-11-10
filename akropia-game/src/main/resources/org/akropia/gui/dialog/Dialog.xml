@@ -18,7 +18,7 @@
 	
 	<entry key="notEnoughGold_caption">You don't have enough gold.</entry>
 	<entry key="goodsTransfer_changed">The cargo hold changed and the purchase was not made. Nothing was charged.</entry>
-	<entry key="europePrice_changed">The Home portan price changed and the trade was not made. Nothing was charged or moved.</entry>
+	<entry key="europePrice_changed">The home-port price changed and the trade was not made. Nothing was charged or moved.</entry>
 	<entry key="europeGold_changed">Your gold changed and the purchase was not made. Nothing was charged.</entry>
 	<entry key="europeTrade_changed">These goods can no longer be bought in Home port, so the purchase was not made. Nothing was charged.</entry>
 	
@@ -97,7 +97,7 @@
     <entry key="fight_bombardmentBonus">Colony bombardment: +%s%%</entry>
     <entry key="fight_rebelAmbushBonus">Rebel ambush: +%s%%</entry>
     <entry key="fight_causeSupportBonus">Cause support: +%s%%</entry>
-    <entry key="fight_nativeLoss">A defeated native brave is destroyed together with its equipment. A defeated unarmed colonist dies and is not captured. An armed Home portan loses horses or weapons; artillery is damaged first. Both participants spend their remaining movement.</entry>
+    <entry key="fight_nativeLoss">A defeated native brave is destroyed together with its equipment. A defeated unarmed colonist dies and is not captured. An armed colonist loses horses or weapons; artillery is damaged first. Both participants spend their remaining movement.</entry>
     <entry key="fight_nativeAnger">Attacking a native brave raises the anger of its nation toward you, whoever wins.</entry>
     <entry key="fight_nativeArmedBrave">Armed native brave</entry>
     <entry key="fight_nativeMountedBrave">Mounted native brave</entry>

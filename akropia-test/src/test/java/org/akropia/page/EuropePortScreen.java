@@ -56,7 +56,7 @@ public class EuropePortScreen extends AbstractScreen {
         logger.info("Colony name: " + labeled.getText());
         assertTrue(labeled.getText().contains(expectedNamePart),
                 String.format(
-                        "Text '%s' should appear in Europe port name '%s'",
+                        "Text '%s' should appear in Home port port name '%s'",
                         expectedNamePart, labeled.getText()));
     }
 

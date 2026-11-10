@@ -110,7 +110,7 @@ public class TC_38_F30_coastal_port_movement_test extends AbstractAkropiaTest {
         port.verifyPreviewCanceled();
         game.moveMouseAtLocation(WATER);
         game.dragMouseAtLocation(SHORE);
-        passengers.verifyChoice(4, false);
+        passengers.verifyChoice(4, true);
         passengers.cancel();
         port.verifyWorldUnchanged();
     }

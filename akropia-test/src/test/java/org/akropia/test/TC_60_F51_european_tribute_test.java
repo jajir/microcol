@@ -85,7 +85,7 @@ public class TC_60_F51_european_tribute_test extends AbstractAkropiaTest {
         tribute.verifyQuote(0, 500, 500, "the rival will refuse");
         tribute.confirm();
         tribute.verifyState(500, 1000, EuropeanRelationState.PEACE, false, 10);
-        relations.verifyFeedback("France refused the demand");
+        relations.verifyFeedback("Phocaea refused the demand");
         tribute.verifyCooldown(10);
     }
 
@@ -126,6 +126,6 @@ public class TC_60_F51_european_tribute_test extends AbstractAkropiaTest {
         tribute.verifyQuote(0, 500, 500, "The rival has no gold to pay");
         tribute.confirm();
         tribute.verifyState(500, 0, EuropeanRelationState.WAR, false, 10);
-        relations.verifyFeedback("France had no gold to pay");
+        relations.verifyFeedback("Phocaea had no gold to pay");
     }
 }

@@ -56,20 +56,19 @@ public final class ColonyMarkersPage extends AbstractScreen {
         getRobot().interact(() -> {
             final ImageProvider provider = getContext()
                     .getClassFromGuice(ImageProvider.class);
+            final String[] pigments = { "#9A4236", "#704A69", "#315670",
+                    "#9A701F" };
             for (final EuropeanNation nation : EuropeanNation.values()) {
                 final Image flag = provider
-                        .getImage(ImageLoaderColonies.flagKey(nation));
-                assertEquals(128, flag.getWidth());
-                assertTrue(countColor(flag, 88, 26, 20, 16,
-                        Color.web("#bd5f50")) > 4);
-                assertTrue(countColor(flag, 88, 26, 20, 16,
-                        Color.web(nation == EuropeanNation.SPANISH ? "#dfbd58"
-                                : "#fff9ec")) > 4);
-                if (nation == EuropeanNation.DUTCH
-                        || nation == EuropeanNation.FRENCH) {
-                    assertTrue(countColor(flag, 88, 26, 20, 16,
-                            Color.web("#376aa0")) > 4);
-                }
+                        .getImage("nation-small_" + nation.ordinal() + "_0");
+                assertEquals(60, flag.getWidth());
+                assertEquals(60, flag.getHeight());
+                assertTrue(
+                        countColor(flag, 0, 0, 60, 60,
+                                Color.web(pigments[nation.ordinal()])) > 20,
+                        nation + " emblem pigment");
+                assertTrue(countColor(flag, 0, 0, 60, 60, Color.BLACK) > 20,
+                        nation + " pen outline");
             }
         });
     }
@@ -82,7 +81,7 @@ public final class ColonyMarkersPage extends AbstractScreen {
                 "Distinct roofs at " + point);
         assertTrue(countColor(frame, x, y, 53, 44, Color.web("#fff9ec")) > 20,
                 "Paper house bodies");
-        assertTrue(countColor(frame, x, y, 53, 44, Color.web("#376aa0")) > 2,
+        assertTrue(countColor(frame, x, y, 53, 44, Color.web("#9A4236")) > 2,
                 "Dutch flag on the map");
         if (defense >= 2) {
             assertTrue(

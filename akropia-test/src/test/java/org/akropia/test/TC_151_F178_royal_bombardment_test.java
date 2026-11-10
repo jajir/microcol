@@ -31,7 +31,7 @@ public class TC_151_F178_royal_bombardment_test extends AbstractAkropiaTest {
     private static final Location SOLDIER = Location.of(18, 10);
     private static final Location QUEBEC = Location.of(17, 10);
     private static final Location COUNTRYSIDE = Location.of(17, 11);
-    private static final String DESTROYED = "a Continental or royal soldier was destroyed together with its equipment";
+    private static final String DESTROYED = "a Continental or soldier of the mother city was destroyed together with its equipment";
 
     @Start
     private void start(Stage primaryStage) throws Exception {

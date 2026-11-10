@@ -68,7 +68,7 @@ public class TC_172_F202_fleet_voyage_test extends AbstractAkropiaTest {
         fleet.open();
         fleet.verifyPlace(SHIP_ID, "On the high seas");
         fleet.verifyVoyage(SHIP_ID,
-                "Sailing to Europe, turns left: " + outwardDuration);
+                "Sailing to Home port, turns left: " + outwardDuration);
         fleet.verifyRepairAbsent(SHIP_ID);
         fleet.verifyShowEnabled(SHIP_ID, false);
         game = fleet.closeWithEscape();
@@ -81,7 +81,7 @@ public class TC_172_F202_fleet_voyage_test extends AbstractAkropiaTest {
         game = new FreePlayAuditPage(getContext()).continueGame();
         fleet.open();
         fleet.verifyVoyage(SHIP_ID,
-                "Sailing to Europe, turns left: " + outwardDuration);
+                "Sailing to Home port, turns left: " + outwardDuration);
         game = fleet.closeWithEscape();
 
         // Each turn lowers the turns left, and the last one reaches Europe.
@@ -89,13 +89,13 @@ public class TC_172_F202_fleet_voyage_test extends AbstractAkropiaTest {
             game.nextTurnAndCloseDialogs();
             fleet.open();
             fleet.verifyVoyage(SHIP_ID,
-                    "Sailing to Europe, turns left: " + remaining);
+                    "Sailing to Home port, turns left: " + remaining);
             game = fleet.closeWithEscape();
         }
         game.nextTurnAndCloseDialogs();
         audit.verifyInEurope();
         fleet.open();
-        fleet.verifyPlace(SHIP_ID, "European port or pier");
+        fleet.verifyPlace(SHIP_ID, "home port or pier");
         fleet.verifyVoyageAbsent(SHIP_ID);
         fleet.verifyShowEnabled(SHIP_ID, true);
         game = fleet.closeWithEscape();

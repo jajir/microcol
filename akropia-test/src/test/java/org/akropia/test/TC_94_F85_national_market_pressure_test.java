@@ -73,7 +73,7 @@ public class TC_94_F85_national_market_pressure_test
         // Confirming the stale price charges nothing and moves no goods.
         screenMarketBuy.clickOnBuy();
         europePort.verifyEuropePriceChangedWarning(
-                "The European price changed and the trade was not made. Nothing was charged or moved.");
+                "The home-port price changed and the trade was not made. Nothing was charged or moved.");
         europePort.closeGoodsTransferWarning();
         europePort.verifyCargoSlotEmpty(0, 1);
         // Only the competing purchase of 100 at ask 4 was charged (94600 -

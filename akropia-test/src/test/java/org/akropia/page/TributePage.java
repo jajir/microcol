@@ -59,7 +59,7 @@ public final class TributePage extends AbstractScreen {
     public void verifyQuote(int amount, int gold, int after, String outcome) {
         String text = getLabeledById("tributeDetail").getText();
         assertTrue(text
-                .startsWith("Demand tribute from France.\nExpected payment: "
+                .startsWith("Demand tribute from Phocaea.\nExpected payment: "
                         + amount + " gold.\nYour treasury when quoted: " + gold
                         + " gold.\nAfter payment: " + after + " gold."));
         assertTrue(text.contains(outcome));

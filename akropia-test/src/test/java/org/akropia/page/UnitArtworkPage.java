@@ -40,7 +40,8 @@ public final class UnitArtworkPage extends AbstractScreen {
                                 y);
                         // The separately painted national/action flag covers
                         // this corner.
-                        if (color.getOpacity() > .99 && !(x < 10 && y < 18)) {
+                        if (color.getOpacity() > .99
+                                && !(x >= 26 && y >= 1 && y <= 23)) {
                             expected++;
                             final Color actual = frame.getPixelReader()
                                     .getColor(point.getX() + x,

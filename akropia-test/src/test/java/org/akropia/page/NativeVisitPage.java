@@ -403,7 +403,7 @@ public final class NativeVisitPage extends AbstractScreen {
                     gold);
         }
         if (outcome == NativeChiefOutcome.DEATH) {
-            return "The natives kill your scout. It is lost.";
+            return "The local peoples kill your scout. It is lost.";
         }
         return repeat ? "The chief repeats the same information."
                 : "The chief tells you about this settlement.";

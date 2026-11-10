@@ -74,11 +74,11 @@ public class TC_143_F134_las_casas_converts_test extends AbstractAkropiaTest {
             Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
             Founder.BARTOLOME_DE_LAS_CASAS, Founder.FERDINAND_MAGELLAN);
 
-    private static final String LABEL_0_EN = "Native convert of the Aztec. Unassigned turns: 0 of 8.";
+    private static final String LABEL_0_EN = "Local convert of the Egyptians. Unassigned turns: 0 of 8.";
 
     private static final String FREED_EN = "Las Casas freed your existing native converts";
 
-    private static final String FREED_CS = "Las Casas osvobodil vaše dosavadní domorodé konvertity";
+    private static final String FREED_CS = "Las Casas osvobodil vaše dosavadní místní konvertity";
 
     private static final String ACQUIRED_EN = "A native convert joined your colony";
 
@@ -95,7 +95,7 @@ public class TC_143_F134_las_casas_converts_test extends AbstractAkropiaTest {
 
     private static final Location FIELD_AT = Location.of(23, 15);
 
-    private static final String BEST_LUMBER_EN = "Best eligible field: 7 Lumber per turn";
+    private static final String BEST_LUMBER_EN = "Best eligible field: 8 Lumber per turn";
 
     private static final String REFUSED_EN = "Unavailable: A native convert cannot work in a manufacturing building.";
 
@@ -216,7 +216,7 @@ public class TC_143_F134_las_casas_converts_test extends AbstractAkropiaTest {
         jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
         jobs.verifyDetails(BEST_LUMBER_EN, true);
         jobs.confirm();
-        jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 7));
+        jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 8));
         jobs.openFromField(WORKER_ID);
         jobs.select(Kind.INDOOR, GoodsType.TOOLS);
         jobs.verifyDetails(REFUSED_EN, false);
@@ -230,7 +230,7 @@ public class TC_143_F134_las_casas_converts_test extends AbstractAkropiaTest {
         congress.select(Founder.BARTOLOME_DE_LAS_CASAS);
         congress.choose();
         congress.close();
-        jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 7));
+        jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 8));
 
         // The earned join at the next turn frees the convert; its field job
         // stays the same worker, now at ordinary output. The scenario colony
@@ -242,7 +242,7 @@ public class TC_143_F134_las_casas_converts_test extends AbstractAkropiaTest {
         report.close();
         final ColonyScreen colony = afterColony.openColonyAt(COLONY,
                 COLONY_NAME);
-        jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 6));
+        jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 7));
         convert.verifyNoConvertHeld();
         jobs.openFromField(WORKER_ID);
         jobs.select(Kind.INDOOR, GoodsType.TOOLS);
@@ -256,7 +256,7 @@ public class TC_143_F134_las_casas_converts_test extends AbstractAkropiaTest {
         closed.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame().openColonyAt(COLONY,
                 COLONY_NAME);
-        jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 6));
+        jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 7));
         convert.verifyNoConvertHeld();
     }
 }

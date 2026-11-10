@@ -91,9 +91,13 @@ public final class TypographyPage extends AbstractScreen {
                     ? ((Labeled) node).getFont()
                     : ((TextInputControl) node).getFont();
             assertEquals(expected, font.getSize(), selector);
-            if (node instanceof Labeled) {
-                assertEquals(((Labeled) node).getText(),
-                        ((Text) node.lookup(".text")).getText(), selector);
+            if (node instanceof Labeled && !((Labeled) node).getText().isEmpty()
+                    && ((Labeled) node)
+                            .getContentDisplay() != javafx.scene.control.ContentDisplay.GRAPHIC_ONLY) {
+                final Text caption = (Text) node.lookup(".text");
+                assertNotNull(caption, selector + " rendered caption");
+                assertEquals(((Labeled) node).getText(), caption.getText(),
+                        selector);
             }
         });
     }

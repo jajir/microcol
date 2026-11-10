@@ -38,7 +38,7 @@ public class TC_21_F15_free_play_screen_navigation_test
         europe.verifyGold(10000);
         MainScreenLayoutPage layout = new MainScreenLayoutPage(getContext());
         layout.verifyStatusBar();
-        layout.saveEvidence("R-0267-status-Europe.png");
+        layout.saveEvidence("R-0267-status-Home port.png");
         game = europe.close();
         layout.verifyStatusBar();
         // Repeat using E and Escape; the treasury must not change.

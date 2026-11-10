@@ -233,17 +233,17 @@ public final class CongressPage extends AbstractScreen {
     public void verifyRoyalForce(int infantry, int cavalry, int artillery,
             int menOfWar, int remainder, boolean shipped) {
         assertEquals(
-                "Royal infantry: " + infantry + " total, "
+                "Infantry of the mother city: " + infantry + " total, "
                         + (shipped ? 0 : infantry) + " reserve, "
                         + (shipped ? infantry : 0)
                         + " shipped, 0 destroyed, 0 captured",
                 getLabeledById("congressRoyalInfantry").getText());
-        assertEquals("Royal cavalry: " + cavalry + " total, "
+        assertEquals("Cavalry of the mother city: " + cavalry + " total, "
                 + (shipped ? 0 : cavalry) + " reserve, "
                 + (shipped ? cavalry : 0) + " shipped, 0 destroyed, 0 captured",
                 getLabeledById("congressRoyalCavalry").getText());
         assertEquals(
-                "Royal artillery: " + artillery + " total, "
+                "Artillery of the mother city: " + artillery + " total, "
                         + (shipped ? 0 : artillery) + " reserve, "
                         + (shipped ? artillery : 0)
                         + " shipped, 0 destroyed, 0 captured",
@@ -254,7 +254,9 @@ public final class CongressPage extends AbstractScreen {
                         + (shipped ? menOfWar : 0)
                         + " shipped, 0 destroyed, 0 captured",
                 getLabeledById("congressRoyalMenOfWar").getText());
-        assertEquals("Crown owls toward the next unit: " + remainder + " / 500",
+        assertEquals(
+                "Owls of the mother city toward the next unit: " + remainder
+                        + " / 500",
                 getLabeledById("congressRoyalOwls").getText());
         RoyalRoster crown = player().getCrownRoster().orElseThrow();
         assertEquals(infantry, crown.getTotal(RoyalRoster.Family.INFANTRY));
@@ -282,24 +284,23 @@ public final class CongressPage extends AbstractScreen {
     public void verifyRoyalForceMatchesModel() {
         RoyalRoster crown = player().getCrownRoster().orElseThrow();
         assertEquals(
-                royalFamilyText("Royal infantry", crown,
+                royalFamilyText("Infantry of the mother city", crown,
                         RoyalRoster.Family.INFANTRY),
                 getLabeledById("congressRoyalInfantry").getText());
         assertEquals(
-                royalFamilyText("Royal cavalry", crown,
+                royalFamilyText("Cavalry of the mother city", crown,
                         RoyalRoster.Family.CAVALRY),
                 getLabeledById("congressRoyalCavalry").getText());
         assertEquals(
-                royalFamilyText("Royal artillery", crown,
+                royalFamilyText("Artillery of the mother city", crown,
                         RoyalRoster.Family.ARTILLERY),
                 getLabeledById("congressRoyalArtillery").getText());
         assertEquals(
                 royalFamilyText("Men-of-war", crown,
                         RoyalRoster.Family.MAN_OF_WAR),
                 getLabeledById("congressRoyalMenOfWar").getText());
-        assertEquals(
-                "Crown owls toward the next unit: " + crown.getOwlRemainder()
-                        + " / " + crown.getOwlThreshold(),
+        assertEquals("Owls of the mother city toward the next unit: "
+                + crown.getOwlRemainder() + " / " + crown.getOwlThreshold(),
                 getLabeledById("congressRoyalOwls").getText());
     }
 
@@ -334,7 +335,7 @@ public final class CongressPage extends AbstractScreen {
 
     public void verifyRoyalGrowthStopped() {
         assertTrue(player().isDeclaredIndependence());
-        assertEquals("Crown growth stopped at independence.",
+        assertEquals("Army growth of the mother city stopped at independence.",
                 getLabeledById("congressRoyalStopped").getText());
     }
 

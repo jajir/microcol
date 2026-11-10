@@ -164,6 +164,14 @@ public final class DiplomacyJourneyPage extends AbstractScreen {
                 getModel().getUnitById(unitId).getOwner().getName());
     }
 
+    public void verifyOutdoorWorkerReleased(final int unitId,
+            final String owner, final Location location) {
+        verifyUnitOwner(unitId, owner);
+        verifyUnitAt(unitId, location);
+        assertTrue(getModel().getUnitById(unitId).isAtPlaceLocation(),
+                "The outdoor worker loses its colony job after capture");
+    }
+
     /** The unit spent its movement, for instance in a battle. */
     public void verifyMovementSpent(final int unitId) {
         assertEquals(0, getModel().getUnitById(unitId).getActionPoints());

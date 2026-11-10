@@ -45,7 +45,7 @@ public class TC_174_F202_fleet_repair_test extends AbstractAkropiaTest {
         fleet.open();
         fleet.verifyPlace(SHIP_ID, "Ship under repair");
         fleet.verifyRepair(SHIP_ID,
-                "Under repair, updates left: 3, destination: Europe");
+                "Under repair, updates left: 3, destination: Home port");
         fleet.verifyCargo(SHIP_ID,
                 "Passengers: 1 (Free Colonist: 1); goods: Ore 7");
         fleet.verifyVoyageAbsent(SHIP_ID);
@@ -58,7 +58,7 @@ public class TC_174_F202_fleet_repair_test extends AbstractAkropiaTest {
         game.nextTurnAndCloseDialogs();
         fleet.open();
         fleet.verifyRepair(SHIP_ID,
-                "Under repair, updates left: 2, destination: Europe");
+                "Under repair, updates left: 2, destination: Home port");
         game = fleet.closeWithEscape();
 
         // Save and Continue keep the remaining update; the next turn lowers it
@@ -68,7 +68,7 @@ public class TC_174_F202_fleet_repair_test extends AbstractAkropiaTest {
         game = new FreePlayAuditPage(getContext()).continueGame();
         fleet.open();
         fleet.verifyRepair(SHIP_ID,
-                "Under repair, updates left: 1, destination: Europe");
+                "Under repair, updates left: 1, destination: Home port");
         fleet.verifyCargo(SHIP_ID,
                 "Passengers: 1 (Free Colonist: 1); goods: Ore 7");
         fleet.closeWithEscape();

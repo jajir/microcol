@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 
 /** Confirmed ship prices and persistent purchase history. */
 public final class ShipPurchasePage extends AbstractScreen {
-    private static final String REJECTION = "This purchase is no longer available. Reopen the offer on your turn while you have access to Europe.";
+    private static final String REJECTION = "This purchase is no longer available. Reopen the offer on your turn while you have access to Home port.";
 
     public ShipPurchasePage(TestContext context) {
         super(context);
