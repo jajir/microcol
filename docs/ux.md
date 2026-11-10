@@ -1403,3 +1403,8 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 1. Schválené chování [R-0451](requirements/done/R-0451.md): hráč při tažení nad jinak dostupným polem předem čte ve stavové liště, že pracovník nemá dostatek pohybových bodů pro přesun. Samotný hover neotevírá dialog.
 2. Puštění otevře stejné vysvětlení v modálním okně s OK a zavřením přes Esc. Odmítnutí nezmění původní práci, umístění ani body. Opuštění cíle nebo ukončení tažení odstraní dočasnou pohybovou hlášku.
 3. Cena a dostupnost přesunu zůstávají pravidlem modelu; jiné příčiny odmítnutí mají vlastní dosavadní texty. [Testová evidence](functional-tests.md#r-0451-worker-movement-feedback-2026-11-10) rozlišuje implementaci a ověření; nejde o hráčskou studii.
+
+## Čitelné řádky klávesových zkratek — 10. listopadu 2026
+
+1. [R-0452](requirements/done/R-0452.md) zvýrazňuje názvy akcí a samotné kombinace; menší vnitřní okraje tlačítek zachovávají společné ikony a papírový styl. Levé zarovnání usnadňuje hledání akce, širší sloupec omezuje zalamování.
+2. Nápověda před seznamem vysvětluje změnu, přidání i odebrání. Zachované cesty uložení, zrušení a kolizí popisuje [autoritativní téma](keyboard-shortcuts.md). Jde o implementační úpravu k uživatelskému snímku, nikoli výsledek nové hráčské studie.

@@ -48,7 +48,7 @@
     <entry key="keyDelete">Delete</entry>
     <entry key="title">Keyboard shortcuts</entry>
     <entry key="open">Keyboard shortcuts…</entry>
-    <entry key="description">Actions in the same group, and actions shown everywhere, cannot share a combination. Tab, Enter and Escape keep their usual meaning in forms; mouse gestures do not change.</entry>
+    <entry key="description">Click a key combination to change it, Add to assign another, or − to remove it. Actions in the same group, and actions shown everywhere, cannot share a combination. Tab, Enter and Escape keep their usual meaning in forms; mouse gestures do not change.</entry>
     <entry key="platform">Defaults for %s</entry>
     <entry key="platformWindows">Windows</entry>
     <entry key="platformLinux">Linux</entry>

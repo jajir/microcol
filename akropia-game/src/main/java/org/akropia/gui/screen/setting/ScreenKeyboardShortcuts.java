@@ -98,7 +98,9 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
         this.i18n = Preconditions.checkNotNull(i18n);
         this.controller = Preconditions.checkNotNull(controller);
         title.setId("shortcutsTitle");
+        description.setId("shortcutsDescription");
         description.setWrapText(true);
+        description.setMinHeight(Region.USE_PREF_SIZE);
         description.setMaxWidth(Double.MAX_VALUE);
         platform.setId(PLATFORM_ID);
         status.setId(STATUS_ID);
@@ -131,6 +133,7 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
         header.setTitle(title);
         header.setActions(buttons);
         final VBox information = new VBox(10, description, platform, status);
+        information.setMinHeight(Region.USE_PREF_SIZE);
         information.setPadding(new Insets(16, 24, 8, 24));
         scroll.setContent(new VBox(information, rows));
         root.setTop(header);
@@ -272,7 +275,6 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
                     i18n.get(CONTEXT_LABELS[context.ordinal()]));
             heading.getStyleClass().add("shortcut-group");
             heading.setId("shortcutGroup-" + context.name());
-            heading.setPadding(new Insets(8, 0, 0, 0));
             rows.getChildren().add(heading);
             for (final ShortcutAction action : ShortcutAction.values()) {
                 if (action.getContext() == context) {
@@ -312,10 +314,10 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
         final Label label = new Label(name);
         label.setId(id + "-label");
         label.setWrapText(true);
-        label.setMinWidth(200);
-        label.setPrefWidth(200);
-        label.setAlignment(Pos.CENTER_RIGHT);
-        label.setTextAlignment(TextAlignment.RIGHT);
+        label.setMinWidth(260);
+        label.setPrefWidth(260);
+        label.setAlignment(Pos.CENTER_LEFT);
+        label.setTextAlignment(TextAlignment.LEFT);
         final FlowPane bindings = new FlowPane(6, 4);
         bindings.setId(id + "-bindings");
         HBox.setHgrow(bindings, Priority.ALWAYS);
@@ -325,6 +327,7 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
             final String text = controller.displayText(list.get(i));
             final Button binding = ActionButtons.button(ButtonIcon.REPLACE,
                     capturing == action && captureIndex == i ? "…" : text);
+            binding.getStyleClass().add("shortcut-key");
             binding.setId(id + "-binding-" + i);
             binding.setUserData(text);
             binding.setAccessibleText(i18n.get(ShortcutText.change, text));
@@ -357,6 +360,7 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
         add.setOnAction(event -> startCapture(action, -1));
         bindings.getChildren().add(add);
         final HBox row = new HBox(10, label, bindings);
+        row.getStyleClass().add("shortcut-row");
         row.setId(id);
         row.setAlignment(Pos.CENTER_LEFT);
         return row;

@@ -48,7 +48,7 @@
     <entry key="keyDelete">Delete</entry>
     <entry key="title">Klávesové zkratky</entry>
     <entry key="open">Klávesové zkratky…</entry>
-    <entry key="description">Akce ve stejné skupině a akce platné všude nemohou sdílet kombinaci. Tab, Enter a Escape ve formulářích zachovávají běžný význam; gesta myši se nemění.</entry>
+    <entry key="description">Kliknutím na kombinaci ji změníte, Přidat přiřadí další a − ji odebere. Akce ve stejné skupině a akce platné všude nemohou sdílet kombinaci. Tab, Enter a Escape ve formulářích zachovávají běžný význam; gesta myši se nemění.</entry>
     <entry key="platform">Výchozí hodnoty pro %s</entry>
     <entry key="platformWindows">Windows</entry>
     <entry key="platformLinux">Linux</entry>

@@ -325,9 +325,9 @@ public class KeyboardShortcutsPage extends AbstractScreen {
                         .lookup("#" + ScreenKeyboardShortcuts.id(action)
                                 + "-label")
                         .queryAs(javafx.scene.control.Label.class);
-                assertEquals(javafx.geometry.Pos.CENTER_RIGHT,
+                assertEquals(javafx.geometry.Pos.CENTER_LEFT,
                         label.getAlignment());
-                assertEquals(javafx.scene.text.TextAlignment.RIGHT,
+                assertEquals(javafx.scene.text.TextAlignment.LEFT,
                         label.getTextAlignment());
             }
             if (runningGame) {
@@ -383,6 +383,28 @@ public class KeyboardShortcutsPage extends AbstractScreen {
                     scroll.getContent().getLayoutBounds().getWidth() <= scroll
                             .getViewportBounds().getWidth() + 0.5,
                     "Rows never need horizontal scrolling");
+            final javafx.scene.control.Label introduction = getNodeFinder()
+                    .lookup("#shortcutsDescription")
+                    .queryAs(javafx.scene.control.Label.class);
+            assertTrue(
+                    introduction.getHeight() >= introduction
+                            .prefHeight(introduction.getWidth()) - 0.5,
+                    "Wrapped instructions keep their full height");
+            for (final ShortcutAction action : ShortcutAction.values()) {
+                final String id = ScreenKeyboardShortcuts.id(action);
+                final javafx.scene.control.Label label = getNodeFinder()
+                        .lookup("#" + id + "-label")
+                        .queryAs(javafx.scene.control.Label.class);
+                assertTrue(label.getFont().getSize() >= 16,
+                        "Action names remain readable");
+                assertTrue(label.getWidth() >= 260,
+                        "Action names have a generous aligned column");
+                final Button add = getButtonById(id + "-add");
+                assertTrue(add.getHeight() >= 36 && add.getHeight() <= 44,
+                        "Row controls balance click target and density: "
+                                + add.getHeight());
+
+            }
             final List<javafx.scene.control.Labeled> labels = new ArrayList<>();
             collectLabels(scene.getRoot(), labels);
             assertTrue(labels.size() > ShortcutAction.values().length * 2,

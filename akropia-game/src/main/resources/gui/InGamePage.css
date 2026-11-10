@@ -42,3 +42,26 @@
 #keyboardShortcutsScreen #statusBar {
     -fx-border-image-insets: 0;
 }
+
+/* Compact padding gives readable key text room alongside shared icons. */
+#keyboardShortcutsScreen .shortcut-row {
+    -fx-padding: 3 0;
+    -fx-alignment: center-left;
+}
+#keyboardShortcutsScreen .shortcut-row .label,
+#keyboardShortcutsScreen .shortcut-row .button {
+    -fx-font-size: 16;
+}
+#keyboardShortcutsScreen .shortcut-row .button {
+    -fx-padding: 0 6;
+    -fx-min-height: 36;
+}
+#keyboardShortcutsScreen .shortcut-key {
+    -fx-min-width: 72;
+    -fx-font-family: "Playpen Sans SemiBold";
+}
+#keyboardShortcutsScreen .shortcut-group {
+    -fx-font-size: 18;
+    -fx-font-family: "Playpen Sans SemiBold";
+    -fx-padding: 18 0 6 0;
+}

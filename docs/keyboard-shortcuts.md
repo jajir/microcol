@@ -14,6 +14,12 @@ evidence. Obecná pravidla ovládání vlastní [UX](ux.md), vstupy hlavní mapy
    hráčskou cestu.
 2. Pevné ovládání formulářů, dialogů a myši se nemění; viz kapitolu 5.
 
+### Čitelnost editoru — R-0452, 10. listopadu 2026
+
+1. Úprava [R-0452](requirements/done/R-0452.md) používá širší, vlevo zarovnané názvy akcí, písmo 16 bodů a výraznější nadpisy skupin. Kombinace mají kompaktnější tlačítka; společný papírový vzhled i ikony zůstávají.
+2. Kliknutí na kombinaci zahájí změnu, Přidat zadá další a sousední minus odebere kombinaci. Úvod popisuje ovládání a při zalomení zachovává celou výšku.
+3. Rozsah podporovaných akcí, kolize, Escape, obnovení výchozích hodnot a uložení či zrušení konceptu se nemění. Výsledky přejímky patří do [funkční evidence](functional-tests.md).
+
 ## 2. Model a uložení
 
 1. Tři úplné profily
