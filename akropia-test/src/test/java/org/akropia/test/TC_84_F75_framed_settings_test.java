@@ -403,21 +403,21 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         // Each endpoint changes only its own category.
         page.press("settingEffectsVolume", KeyCode.END);
         page.press("settingVolume", KeyCode.HOME);
-        page.verifyVolumes(0, 100, "Silent", "100 %");
+        page.verifyVolumes(0, 100, "Silent");
         page.press("settingEffectsVolume", KeyCode.LEFT);
         page.verifyFocused("settingEffectsVolume");
-        page.verifyVolumes(0, 90, "Silent", "90 %");
+        page.verifyVolumes(0, 90, "Silent");
         // Raising the silent music does not move the effects.
         page.press("settingVolume", KeyCode.RIGHT);
-        page.verifyVolumes(10, 90, "10 %", "90 %");
+        page.verifyVolumes(10, 90, "10 %");
         page.press("settingEffectsVolume", KeyCode.HOME);
-        page.verifyVolumes(10, 0, "10 %", "Silent");
+        page.verifyVolumes(10, 0, "10 %");
         page.verifyAppearance();
         page.captureDialog("settingEffectsVolume", "r0227-volumes-en.png");
         // Czech names both categories and the silent state.
         settings.setCzechLanguage();
         page.verifyVolumeTexts("Hudba", "Efekty", "Ticho");
-        page.verifyVolumes(10, 0, "10 %", "Ticho");
+        page.verifyVolumes(10, 0, "10 %");
         page.verifyAppearance();
         page.captureDialog("settingEffectsVolume", "r0227-volumes-cs.png");
         settings.setEnglishLanguage();
@@ -427,7 +427,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         hosted.press(KeyCode.ESCAPE);
         WelcomePage.of(getContext()).verifyMainScreen();
         settings = WelcomePage.of(getContext()).openSetting();
-        page.verifyVolumes(10, 0, "10 %", "Silent");
+        page.verifyVolumes(10, 0, "10 %");
         settings.goBack();
         // Recreate the application/injector against the same persisted test
         // profile.
@@ -448,21 +448,21 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         final SettingPage reloaded = WelcomePage.of(getContext()).openSetting();
         final FramedSettingsPage reloadedPage = new FramedSettingsPage(
                 getContext());
-        reloadedPage.verifyVolumes(10, 0, "10 %", "Silent");
+        reloadedPage.verifyVolumes(10, 0, "10 %");
         // In-game Settings shows and changes the same categories.
         reloaded.goBack().loadGame().waitWhileMoving();
         final DeveloperModePage developer = new DeveloperModePage(getContext());
         developer.openGameSettings();
         reloadedPage.verifyVolumeTexts("Music", "Effects", "Silent");
-        reloadedPage.verifyVolumes(10, 0, "10 %", "Silent");
+        reloadedPage.verifyVolumes(10, 0, "10 %");
         reloadedPage.press("settingEffectsVolume", KeyCode.RIGHT);
-        reloadedPage.verifyVolumes(10, 10, "10 %", "10 %");
+        reloadedPage.verifyVolumes(10, 10, "10 %");
         new HostedPanelPage(getContext()).verifyCompleteTexts();
         reloadedPage.captureDialog("settingEffectsVolume",
                 "r0227-volumes-game.png");
         developer.backToGame();
         developer.openGameSettings();
-        reloadedPage.verifyVolumes(10, 10, "10 %", "10 %");
+        reloadedPage.verifyVolumes(10, 10, "10 %");
         developer.backToGame();
     }
 

@@ -50,6 +50,7 @@ public class SettingVolumeView implements JavaFxComponent, UpdatableLanguage {
         music = new VolumeRow(MUSIC_VOLUME_ID, Preferences.volume_caption);
         effects = new VolumeRow(EFFECTS_VOLUME_ID,
                 Preferences.effectsVolume_caption);
+        effects.row.getChildren().remove(effects.value);
         mainPanel = new VBox(4, music.row, effects.row);
 
         updateLanguage(i18n);

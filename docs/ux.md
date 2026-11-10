@@ -1376,3 +1376,7 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 1. [R-0437](requirements/done/R-0437.md) rozděluje přípravu na svět a hráče. První krok obsahuje rozměry, rozložení pevniny a kopírovatelný textový seed; druhý obtížnost, národ a samostatné jméno hráče. Shrnutí neodhaluje mapu.
 2. Návrat mezi kroky zachová vstupy; návrat z prvního kroku opustí přípravu. Nový seed vznikne při novém otevření nebo na výslovný stisk tlačítka. Změna národa nepřepisuje jméno.
 3. Generování ukazuje stav práce a blokuje opakované spuštění. Chyba zachová nastavení a umožní opravu nebo opakování. Jde o schválené chování, nikoli záznam pozorování hráčů.
+
+## Settings — stručné popisky (2026-11-10)
+
+1. [R-0441](requirements/done/R-0441.md): Efekty nemají vedle posuvníku další hodnotu; rychlost posunu mapy má pouze krajní popisky Pomalu/Rychle podle zvoleného jazyka. Vývojářský režim zachovává checkbox s popiskem a zkratkou, bez samostatného nadpisu a vysvětlující věty. Ovládání a okamžité ukládání voleb se nemění; výsledky ověření vlastní funkční evidence.

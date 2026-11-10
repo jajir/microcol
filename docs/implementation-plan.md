@@ -734,3 +734,7 @@ Návrhy budov z 30. října 2026 řeší [R-0357](requirements/done/R-0357.md), 
 ## Samostatný editor klávesových zkratek — 2026-11-10
 
 1. [R-0439](requirements/done/R-0439.md), A03 s vazbou A01, převádí editor do samostatné obrazovky se stálými horními akcemi a návratem do Nastavení. Pravidla vlastní [kontrakt editoru](keyboard-shortcuts.md#6-editor-v-nastaveni), lokální přejímku [funkční evidence](functional-tests.md#r-0439-full-page-shortcut-editor-2026-11-10).
+
+## Zjednodušení popisků Nastavení — 2026-11-10
+
+1. [R-0441](requirements/done/R-0441.md), UC-119/SUPPORT-001: odstranit vedlejší hodnotu Efektů, samostatný nadpis Developer a vysvětlení diagnostiky; rychlost posunu mapy označit pouze krajními lokalizovanými popisky. Rozsah a aktuální stav vlastní požadavek; přejímku vede funkční evidence.

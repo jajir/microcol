@@ -165,6 +165,26 @@ public final class FramedSettingsPage extends AbstractScreen {
     }
 
     public void verifyAppearance() {
+        getRobot().interact(() -> {
+            final Slider scroll = (Slider) control("settingMapScrollSpeed");
+            scroll.getScene().getRoot().layout();
+            final Slider animation = (Slider) control("settingAnimationSpeed");
+            for (double tick = scroll.getMin(); tick <= scroll
+                    .getMax(); tick++) {
+                final String expected = tick == scroll.getMin()
+                        ? animation.getLabelFormatter()
+                                .toString(animation.getMin())
+                        : tick == scroll.getMax()
+                                ? animation.getLabelFormatter().toString(
+                                        animation.getMax())
+                                : null;
+                assertEquals(expected,
+                        scroll.getLabelFormatter().toString(tick));
+            }
+            final javafx.scene.layout.VBox developer = (javafx.scene.layout.VBox) scroll
+                    .getScene().lookup("#developerSettings");
+            assertEquals(1, developer.getChildren().size());
+        });
         verifyCommonAxis();
         getRobot().interact(() -> {
             final javafx.scene.Node heading = java.util.Optional
@@ -332,7 +352,7 @@ public final class FramedSettingsPage extends AbstractScreen {
      * preferences.
      */
     public void verifyVolumes(final int music, final int effects,
-            final String musicValue, final String effectsValue) {
+            final String musicValue) {
         final GamePreferences prefs = getContext()
                 .getClassFromGuice(GamePreferences.class);
         assertEquals(music, ((Slider) control("settingVolume")).getValue(),
@@ -341,8 +361,8 @@ public final class FramedSettingsPage extends AbstractScreen {
                 ((Slider) control("settingEffectsVolume")).getValue(), .001);
         assertEquals(musicValue,
                 ((Labeled) control("settingVolumeValue")).getText());
-        assertEquals(effectsValue,
-                ((Labeled) control("settingEffectsVolumeValue")).getText());
+        assertTrue(control("settingEffectsVolume").getScene().getRoot()
+                .lookupAll("#settingEffectsVolumeValue").isEmpty());
         assertEquals(music, prefs.getMusicVolume());
         assertEquals(effects, prefs.getEffectsVolume());
     }

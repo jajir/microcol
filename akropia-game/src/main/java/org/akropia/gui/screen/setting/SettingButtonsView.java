@@ -50,8 +50,6 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
     private final Button shortcutsButton;
     private final KeyboardShortcuts shortcuts;
     private I18n currentI18n;
-    private final javafx.scene.control.Label developerHeading = new javafx.scene.control.Label();
-    private final javafx.scene.control.Label developerDescription = new javafx.scene.control.Label();
 
     @Inject
     SettingButtonsView(final SettingLanguageView settingLanguageView,
@@ -113,10 +111,8 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         });
         developerMode.enabledProperty().addListener((property, before,
                 after) -> developerCheckBox.setSelected(after));
-        developerDescription.setWrapText(true);
-        developerDescription.setMaxWidth(440);
-        final VBox developerSection = new VBox(4, developerHeading,
-                SettingRow.check(developerCheckBox), developerDescription);
+        final VBox developerSection = new VBox(4,
+                SettingRow.check(developerCheckBox));
         developerSection.setId("developerSettings");
         buttonBack = ActionButtons.button(ButtonIcon.BACK);
         buttonBack.setId(BUTTON_BACK_ID);
@@ -159,12 +155,9 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         currentI18n = i18n;
         shortcutsButton.setText(i18n.get(ShortcutText.open));
         buttonBack.setText(i18n.get(GameMenu.buttonBack));
-        developerHeading.setText(i18n.get(GameMenu.settingDeveloperHeading));
         developerCheckBox.setText(
                 shortcuts.withHint(i18n.get(GameMenu.settingDeveloperMode),
                         ShortcutAction.DEVELOPER_MODE));
-        developerDescription
-                .setText(i18n.get(GameMenu.settingDeveloperDescription));
         this.settingLanguageView.updateLanguage(i18n);
         this.settingShowGridView.updateLanguage(i18n);
         this.settingShowFightAdvisorView.updateLanguage(i18n);

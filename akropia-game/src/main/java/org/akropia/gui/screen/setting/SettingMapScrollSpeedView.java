@@ -12,19 +12,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.util.StringConverter;
 
 @Singleton
 final class SettingMapScrollSpeedView
         implements JavaFxComponent, UpdatableLanguage {
     private final Label label = new Label();
     private final HBox panel;
+    private final Slider slider;
 
     @Inject
     SettingMapScrollSpeedView(final PreferencesProperties preferences,
             final I18n i18n) {
         label.getStyleClass().add("label-slider");
-        final Slider slider = new Slider(1,
-                GamePreferences.MAX_MAP_SCROLL_SPEED,
+        slider = new Slider(1, GamePreferences.MAX_MAP_SCROLL_SPEED,
                 preferences.getMapScrollSpeedProperty().get());
         slider.setId("settingMapScrollSpeed");
         slider.setSnapToTicks(true);
@@ -47,5 +48,23 @@ final class SettingMapScrollSpeedView
     @Override
     public void updateLanguage(final I18n i18n) {
         label.setText(i18n.get(Preferences.mapScrollSpeed_caption));
+        slider.setLabelFormatter(null);
+        slider.setLabelFormatter(new StringConverter<Double>() {
+            @Override
+            public String toString(final Double tick) {
+                if (tick == slider.getMin()) {
+                    return i18n.get(Preferences.animationSpeed_slow);
+                }
+                if (tick == slider.getMax()) {
+                    return i18n.get(Preferences.animationSpeed_fast);
+                }
+                return null;
+            }
+
+            @Override
+            public Double fromString(final String text) {
+                return null;
+            }
+        });
     }
 }
