@@ -16,6 +16,8 @@
 
 5. Schváleno 2026-11-10 v [R-0439](requirements/done/R-0439.md): editor je samostatná obrazovka s pevnou horní lištou a posuvným seznamem. Pořadí akcí a dvoustupňový význam Escape vlastní [kontrakt editoru](keyboard-shortcuts.md#6-editor-v-nastaveni). Návrat vždy vede do Nastavení; nejde o pozorování hráčské studie.
 
+6. Rozložení editoru doplňuje [R-0443](requirements/done/R-0443.md): pevné společné zápatí, úvod ve stejném posuvném obsahu jako operace a názvy zarovnané doprava ke zkratkám. Přesný kontrakt vlastní [editor](keyboard-shortcuts.md#6-editor-v-nastaveni).
+
 ## Horní lišta správy obchodní trasy
 
 Esc v detailu otevřeném z mapového plánovače vrací mapu obchodních tras se zachovaným výběrem, také při fokusu na nabídce trasy nebo uvnitř karet. Stávající dvojí potvrzení odchodu s neuloženými změnami zůstává zachované; viz [R-0428](requirements/done/R-0428.md).

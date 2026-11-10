@@ -291,6 +291,62 @@ public class KeyboardShortcutsPage extends AbstractScreen {
     }
 
     /**
+     * Checks the fixed footer, scrolling introduction and operation alignment.
+     */
+    public void verifyScrollingLayout(final boolean runningGame) {
+        final javafx.scene.control.ScrollPane scroll = getNodeFinder()
+                .lookup("#shortcutsRows")
+                .queryAs(javafx.scene.control.ScrollPane.class);
+        final Node footer = getNodeFinder().lookup("#statusBar").query();
+        final Node information = getNodeFinder()
+                .lookup("#" + ScreenKeyboardShortcuts.PLATFORM_ID).query();
+        getRobot().interact(() -> scroll.setVvalue(0));
+        WaitForAsyncUtils.waitForFxEvents();
+        final double informationY = information.localToScene(0, 0).getY();
+        final double footerY = footer.localToScene(0, 0).getY();
+        getRobot().interact(() -> scroll.setVvalue(1));
+        WaitForAsyncUtils.waitForFxEvents();
+        getRobot().interact(() -> {
+            assertTrue(isInside(information, scroll.getContent()),
+                    "Introduction belongs to scrolling content");
+            assertTrue(information.localToScene(0, 0).getY() < informationY,
+                    "Introduction scrolls with operations");
+            assertEquals(footerY, footer.localToScene(0, 0).getY(), .5,
+                    "Footer remains fixed");
+            assertTrue(
+                    scroll.localToScene(scroll.getBoundsInLocal())
+                            .getMaxY() <= footerY + .5,
+                    "Content stays above footer");
+            assertTrue(footer.localToScene(footer.getBoundsInLocal())
+                    .getMaxY() <= getPrimaryStage().getScene().getHeight() + .5,
+                    "Footer fits window");
+            for (final ShortcutAction action : ShortcutAction.values()) {
+                final javafx.scene.control.Label label = getNodeFinder()
+                        .lookup("#" + ScreenKeyboardShortcuts.id(action)
+                                + "-label")
+                        .queryAs(javafx.scene.control.Label.class);
+                assertEquals(javafx.geometry.Pos.CENTER_RIGHT,
+                        label.getAlignment());
+                assertEquals(javafx.scene.text.TextAlignment.RIGHT,
+                        label.getTextAlignment());
+            }
+            if (runningGame) {
+                final org.akropia.gui.event.model.GameModelController game = getContext()
+                        .getClassFromGuice(
+                                org.akropia.gui.event.model.GameModelController.class);
+                assertEquals(String.valueOf(game.getHumanPlayer().getGold()),
+                        getLabeledById("labelGold").getText().replace("\u00a0",
+                                ""));
+                assertTrue(getLabeledById("labelEra").getText()
+                        .contains(String.valueOf(game.getModel().getCalendar()
+                                .getCurrentYear())));
+            }
+        });
+        getRobot().interact(() -> scroll.setVvalue(0));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /**
      * Every row, group heading and button shows its whole text inside the main
      * window, without ellipsis, overlap or horizontal scrolling; the fixed
      * header stays above the rows.

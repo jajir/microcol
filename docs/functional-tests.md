@@ -1,5 +1,26 @@
 ## R-0423 passenger default selection — 2026-11-06
 
+## R-0443 shortcut footer and scrolling — 2026-11-10
+
+1. [R-0443](requirements/done/R-0443.md), UC-119 SUPPORT-001, source base `c2c463f8`: shared status bar below the editor, introductory information inside the scroll content and right-aligned operation names. No graphics assets or shortcut semantics changed.
+2. Shared Java formatter applied to all three changed Java files. TC_84/10 checks the game footer and scrolling; TC_84/12 checks both languages at 1000×700 from menu Settings. Full TC_84 and PageVerificationContractTest are the targeted selection; model/JUnit and fixed smoke/support remain mandatory. Acceptance pending.
+
+3. Initial model dispatch `20261110T013054Z-bcb00a0a0a8f`, PID 7966, failed during preparation: Docker's container-list probe exceeded 20 seconds; no tests started, cleanup reported no errors and callback was queued. Bounded follow-up probes returned Docker 29.8.2 with no running containers. Retry `20261110T013221Z-9bc4ac91ad7b`, PID 8239, timeout 600 seconds, uses the final formatted test source, including nonbreaking-space normalization when checking footer gold.
+4. Preliminary documentation checks passed: 14 consistency tests, naming audit and strict MkDocs; logs in `target/r0443/`. Runtime acceptance is pending.
+
+5. Final-source model/JUnit retry passed **5,117 tests, zero failures/errors/skips**, 394 XML reports in `target/verification/run-mpp2vgip`, 156.909 supervised seconds. All three changed Java files match the retained source snapshot. Targeted Docker/Xvfb selection dispatched as `20261110T013511Z-702223612661`, PID 8854, timeout 1,800 seconds.
+
+6. Initial targeted dispatch failed at test compilation, before any UI scenario ran: the added page check called nonexistent `isDescendant` instead of the existing `isInside` helper. Corrected the caller and reapplied the shared formatter; no runtime change was needed. Failed evidence remains in completion `20261110T013511Z-702223612661` (32.644 seconds). Required phases are repeated for the final test source.
+
+7. Repaired-source model/JUnit passed **5,117 tests, zero failures/errors/skips**, 394 reports in `target/verification/run-uxwt5ejn`, 157.040 supervised seconds (completion `20261110T013618Z-5a39ba2c7f40`, PID 9217). All three changed Java files match its snapshot. Targeted retry: `20261110T013917Z-cc49828e1f96`, PID 9628, timeout 1,800 seconds, unchanged full TC_84 and page source-contract selection.
+
+8. Targeted retry passed **18 UI/source-contract tests, zero failures/errors/skips**, two reports in `target/docker-ui/run-QNCrH4`, 239.315 supervised seconds. Reviewed EN/CS menu screenshots at 1000×700 and scrolled in-game screenshot: introductory content scrolls away, names align toward shortcuts, footer remains visible and displays current gold/date during play. These are automated screenshots, not a player study.
+9. Fixed smoke/support dispatched as `20261110T014333Z-ab7e19095a57`, PID 10010, supervisor timeout 480 seconds; acceptance budget remains 420 seconds.
+
+10. Final smoke/support passed **21 tests, zero failures/errors/skips**, 12 reports in `target/verification/run-ah30pmoo`, 237.453 phase seconds and 237.623 supervised seconds, within 420 seconds. All three changed Java files match the final model and smoke snapshots. Local acceptance covers 5,117 model/JUnit, 18 targeted UI/source-contract and 21 smoke/support tests. Earlier failed attempts remain failed. Full regression, remote CI and publication were not inspected.
+11. Final scope review preserves unrelated backlog changes and changes no runtime assets. Shared Java formatting and `git diff --check` passed. Final documentation validation passed on the staged task snapshot: **14 consistency tests**, naming audit with zero unexplained occurrences and **strict MkDocs**. Evidence is retained in `target/r0443/`.
+
+
 ## R-0438 Settings common axis — 2026-11-09
 
 1. [R-0438](requirements/done/R-0438.md), UC-119/SUPPORT-001: common right-aligned caption column, wrapping English/Czech text and aligned native inputs in both Settings hosts. No new artwork; existing checkbox, radio and ruler rendering is reused.

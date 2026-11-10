@@ -233,6 +233,8 @@ Rozhodnutí 8. listopadu 2026:
    zachytávání má význam Zrušit; během zachytávání ruší pouze zadávání.
    Globální zkratka Načíst hru nesmí editor opustit a ztratit rozpracované změny.
 
+9. Dohodnuto 2026-11-10 v [R-0443](requirements/done/R-0443.md): společné herní zápatí zůstává viditelné pod posuvným obsahem. Úvodní vysvětlení, platforma a stav editace se posouvají společně se seznamem. Názvy operací včetně zalomených řádků jsou zarovnané doprava ke zkratkám.
+
 ## 7. Kód
 
 1. Balíček [`gui.shortcut`](../akropia-game/src/main/java/org/akropia/gui/shortcut/)

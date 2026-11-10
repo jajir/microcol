@@ -15,6 +15,9 @@ import org.akropia.gui.util.JavaFxComponent;
 import org.akropia.gui.util.GameScreenHeader;
 import org.akropia.gui.util.ActionButtons;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.TextAlignment;
+import org.akropia.gui.screen.game.components.StatusBar;
+import org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source;
 import javafx.event.EventHandler;
 import javafx.stage.Window;
 import org.akropia.i18n.I18n;
@@ -63,6 +66,8 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(ScreenKeyboardShortcuts.class);
 
+    private final StatusBar statusBar;
+
     private final BorderPane root = new BorderPane();
     private final EventHandler<KeyEvent> keyFilter = this::onKey;
     private Window window;
@@ -87,7 +92,9 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
 
     @Inject
     ScreenKeyboardShortcuts(final I18n i18n,
-            final ShortcutController controller) {
+            final ShortcutController controller, final StatusBar statusBar) {
+        this.statusBar = statusBar;
+        statusBar.setShowEventsFromSource(Source.GAME);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.controller = Preconditions.checkNotNull(controller);
         title.setId("shortcutsTitle");
@@ -125,7 +132,9 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
         header.setActions(buttons);
         final VBox information = new VBox(10, description, platform, status);
         information.setPadding(new Insets(16, 24, 8, 24));
-        root.setTop(new VBox(header, information));
+        scroll.setContent(new VBox(information, rows));
+        root.setTop(header);
+        root.setBottom(statusBar.getContent());
         root.setCenter(scroll);
         root.setId("keyboardShortcutsScreen");
         root.getStyleClass().add("in-game-page");
@@ -135,6 +144,7 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
 
     public void open(final Runnable returnToSettings) {
         this.returnToSettings = returnToSettings;
+        statusBar.updateLanguage(i18n);
         draft = controller.getActive();
         capturing = null;
         swallowRelease = null;
@@ -304,6 +314,8 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
         label.setWrapText(true);
         label.setMinWidth(200);
         label.setPrefWidth(200);
+        label.setAlignment(Pos.CENTER_RIGHT);
+        label.setTextAlignment(TextAlignment.RIGHT);
         final FlowPane bindings = new FlowPane(6, 4);
         bindings.setId(id + "-bindings");
         HBox.setHgrow(bindings, Priority.ALWAYS);

@@ -481,6 +481,8 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         developer.setModeInSettings(false);
         shortcuts.open();
         shortcuts.verifyEditorOpen(true);
+        // The game footer stays fixed while the whole editor body scrolls.
+        shortcuts.verifyScrollingLayout(true);
         shortcuts.verifyCompleteLayout();
         shortcuts.verifyBindings(ShortcutAction.HELP, "H");
         shortcuts.verifyStatus("Changes take effect after Save and back.");
@@ -644,6 +646,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         shortcuts.verifyActionTexts(ShortcutAction.HELP, "Colonizopedia",
                 "Add");
         shortcuts.verifyBindings(ShortcutAction.SKIP_UNIT, "Space");
+        shortcuts.verifyScrollingLayout(false);
         shortcuts.verifyCompleteLayout();
         shortcuts.captureDialog(ScreenKeyboardShortcuts.STATUS_ID,
                 "r0432-shortcuts-editor-layout-en.png");
@@ -660,6 +663,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
                 "Podržet pro vývojářské načtení", "Přidat");
         shortcuts.verifyBindings(ShortcutAction.SKIP_UNIT, "Mezerník");
         shortcuts.verifyStatus("Změny začnou platit po Uložit a zpět.");
+        shortcuts.verifyScrollingLayout(false);
         shortcuts.verifyCompleteLayout();
         shortcuts.captureDialog(ScreenKeyboardShortcuts.STATUS_ID,
                 "r0432-shortcuts-editor-layout-cs.png");
