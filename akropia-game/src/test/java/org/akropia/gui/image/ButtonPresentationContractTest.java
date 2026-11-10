@@ -59,15 +59,23 @@ class ButtonPresentationContractTest {
         assertEquals(96, image.getHeight());
         for (int cell = 0; cell < cells; cell++) {
             int ink = 0;
+            int olive = 0;
+            final int expectedInk = cell < 2 ? 0x000000 : 0x302d27;
             for (int x = cell * 96; x < (cell + 1) * 96; x++) {
                 for (int y = 0; y < 96; y++) {
                     final int pixel = image.getRGB(x, y);
-                    if ((pixel >>> 24) == 255 && (pixel & 0xffffff) == 0x302d27)
+                    if ((pixel >>> 24) == 255
+                            && (pixel & 0xffffff) == expectedInk)
                         ink++;
+                    if ((pixel >>> 24) == 255 && (pixel & 0xffffff) == 0x71864b)
+                        olive++;
                 }
             }
             assertTrue(ink > 40,
                     "Empty or missing action icon in cell " + cell);
+            if (cell < 2)
+                assertTrue(olive > 300,
+                        "Confirmation signs must have a flat olive fill");
             assertEquals(0, image.getRGB(cell * 96, 0) >>> 24);
             assertEquals(0, image.getRGB((cell + 1) * 96 - 1, 95) >>> 24);
         }

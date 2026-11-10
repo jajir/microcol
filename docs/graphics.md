@@ -1,5 +1,12 @@
 # Grafické podklady a jejich použití v Akropia
 
+## Zelené značky potvrzení a zrušení — 10. listopadu 2026
+
+1. [R-0445](requirements/done/R-0445.md) přebírá vybraný návrh „1 — Soft corners“: samostatná zelená fajfka a křížek, bez papírových podkladů i bez nápisů přidaných do výtvarného náhledu. Existující lokalizované texty tlačítek zůstávají zachované.
+2. Skutečné vektorové cesty jsou v prvních dvou buňkách [action-icons.svg](../akropia-game/src/graphics/action-icons.svg), černý obrys `#000000` má 3 jednotky na plátně 48, tedy 2 logické px při zobrazení 32 × 32. Výplň je jediná olivová `#71864B`; rohy jsou měkké, geometrie jemně nepravidelná. Žádná textura, stínování ani vložený bitmapový podklad.
+3. Export: `python3 scripts/graphics/export-graphics.py controls --install`, ověření `--check`. Ostatních 42 buněk atlasu se nemění. Skutečnou hráčskou přejímku a snímek vlastní [funkční evidence](functional-tests.md#r-0445-confirmation-signs-2026-11-10).
+
+
 ## Rámeček záložek přepravní cesty — 6. listopadu 2026
 
 1. R-0421 používá pro nové záložky a rozbalovací sekce vlastní `akropia-game/src/graphics/trade-route-frame.svg`: skutečná vektorová nepravidelná kontura s černou linkou `#000000`, šířkou 2 jednotky na plátně 96 × 48, bez bitmap. Sdílený starší rámeček ostatních obrazovek se nemění.

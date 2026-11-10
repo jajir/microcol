@@ -262,7 +262,7 @@
           "transparent": true,
           "consumer": "ButtonIcon via ActionButtons",
           "display": "32 x 32 logical",
-          "stroke": "2.4 units in a 48 unit cell, 1.6 logical px"
+          "stroke": "CONFIRM/CANCEL: 3 black units per 48 unit cell, 2 logical px; other cells: 2.4 units, 1.6 logical px"
         },
         {
           "output": "status-gold.png",

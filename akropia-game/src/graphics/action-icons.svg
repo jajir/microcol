@@ -1,12 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="2112" height="48" viewBox="0 0 2112 48">
   <title>Shared action icons</title>
   <desc>48 px cells; toolbar ink and olive. Export at 2x, display at 32 px.</desc>
-  <g id="confirm" transform="translate(0)" stroke="#302D27" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="#71864B">
-    <path d="M7 24 L19 36 41 10" fill="none" stroke-width="4"/>
+  <g id="confirm" transform="translate(0)" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="#71864B">
+    <path d="M7.5 23.5 Q6.8 22.8 7.5 22 L12.5 17 Q13.2 16.3 14 17 L22 25.2 L35.4 9.7 Q36.1 8.8 37 9.5 L42 13.8 Q42.8 14.5 42 15.4 L23.5 37 Q22.6 38 21.6 37 L7.5 23.5 Z"/>
   </g>
-  <g id="cancel" transform="translate(48)" stroke="#302D27" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="#71864B">
-    <path d="M11 10 L38 38 M37 10 L10 38" fill="none" stroke-width="3.2"/>
+
+  <g id="cancel" transform="translate(48)" stroke="#000000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="#71864B">
+    <path d="M10.4 9.8 Q11.3 9 12.2 9.9 L24 21.1 L35.3 9.9 Q36.2 9 37.1 9.9 L41 13.8 Q41.8 14.7 40.9 15.5 L29.4 26.5 L40.8 37.5 Q41.7 38.4 40.8 39.3 L36.9 43 Q36 43.8 35.1 42.9 L23.9 31.8 L12.5 43 Q11.6 43.8 10.7 42.9 L6.9 39 Q6 38.1 6.9 37.2 L18.4 26.3 L7 15.3 Q6.1 14.4 7 13.5 Z" transform="translate(0 -2)"/>
   </g>
+
   <g id="back" transform="translate(96)" stroke="#302D27" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="#71864B">
     <path d="M24 7 L5 24 24 41 24 31 43 31 43 17 24 17 Z"/>
   </g>

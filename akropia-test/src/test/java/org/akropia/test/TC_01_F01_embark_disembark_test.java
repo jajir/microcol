@@ -79,6 +79,14 @@ public class TC_01_F01_embark_disembark_test extends AbstractAkropiaTest {
         // Select and confirm the first passenger of two.
         PassengerTransferPage passengers = new PassengerTransferPage(
                 getContext());
+        // Shared confirmation signs retain their button layout and action
+        // labels.
+        final org.akropia.page.PaperButtonsPage buttons = new org.akropia.page.PaperButtonsPage(
+                getContext());
+        buttons.verifyPaperButton("passenger-cancel");
+        buttons.verifyPaperButton("passenger-confirm");
+        buttons.captureDialog("passenger-confirm",
+                "r0445-confirmation-signs.png");
         passengers.chooseOnly(24);
         passengers.confirm();
         gamePage.waitForNumberOfUnitsAt(SHORE_LAND_LOCATION, 1);

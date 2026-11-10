@@ -1274,3 +1274,8 @@ remain owned by their current requirements; acceptance is recorded in the
 ## Průvodce generovaným světem — 2026-11-09
 
 1. [R-0437](done/R-0437.md), status `done`, A02 s vazbami A01/A03/A04: schválený dvoukrokový průvodce, čtyři velikosti, tři rozložení pevniny a textový seed. Implementováno a lokálně ověřeno 2026-11-09; výsledky vlastní funkční evidence.
+
+
+## Samostatné zelené značky potvrzení a zrušení — 2026-11-10
+
+1. [R-0445](done/R-0445.md), status `done`, A03 s vazbou A05/A06: implementovány a lokálně ověřeny právě dvě značky z varianty „1 — Soft corners“, bez papírového podkladu a bez textů vložených do náhledu; zachovat existující popisky a akce tlačítek.
