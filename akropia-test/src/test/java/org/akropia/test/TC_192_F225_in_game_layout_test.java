@@ -498,6 +498,17 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         final SavedGamesPage saves = new SavedGamesPage(getContext());
         window.resize(1280, 850);
         final GamePage game = WelcomePage.of(getContext()).loadGame();
+        saves.rememberGame();
+        saves.openSave();
+        saves.verifyFullScreenPaper("Save game");
+        page.verifyFrame(484, 1600);
+        page.verifyBackToGame("savedGamesCancel", "Back to game");
+        page.saveEvidence("r0444-save-screen.png");
+        hosted.press(KeyCode.ESCAPE);
+        page.verifyMapReturned();
+        saves.verifyGameUnchanged();
+
+        // Reopen Save and retain the existing save/load assertions.
         saves.openSave();
         saves.saveName("Small window harbour");
         saves.verifySavedName("Small window harbour", 1);
@@ -506,6 +517,8 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         window.resize(900, 700);
         hosted.pressShortcut(KeyCode.O);
         hosted.verifyInGameHosted("Load game");
+        saves.verifyFullScreenPaper("Load game");
+        page.verifyFrame(484, 1600);
         saves.select("Small window harbour");
         saves.verifyDetailName("Small window harbour");
         saves.verifyPreview(true);

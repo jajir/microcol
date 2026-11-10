@@ -3,21 +3,34 @@ package org.akropia.gui.dialog;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.Loc;
+import org.akropia.gui.image.ButtonIcon;
+import org.akropia.gui.screen.GameScreen;
+import org.akropia.gui.screen.MainPanelPresenter;
+import org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source;
+import org.akropia.gui.util.ActionButtons;
+import org.akropia.gui.util.InGamePage;
 import org.akropia.gui.util.ViewUtil;
+import javafx.event.EventHandler;
+import javafx.stage.WindowEvent;
 import org.akropia.i18n.I18n;
 import org.akropia.model.campaign.po.SaveSummaryPo;
 import org.akropia.model.campaign.po.SavedGames.Entry;
-import javafx.geometry.Insets;
+import com.google.inject.Provider;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import javafx.application.Platform;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
 /**
- * Modal host of the shared saved-games view; used for saving. The detail shows
- * the current game, kept apart from a selected overwrite target.
+ * Full-window Save host, preserving synchronous save-before-leaving decisions.
  */
-public final class SavedGamesDialog extends AbstractMessageWindow {
+@Singleton
+public final class SavedGamesDialog implements GameScreen {
     public enum Action {
         SAVE, LOAD, OVERWRITE, DELETE, IMPORT, EXPORT, FOLDER
     }
@@ -36,54 +49,94 @@ public final class SavedGamesDialog extends AbstractMessageWindow {
 
     private Choice result;
     private final I18n texts;
+    private final InGamePage page;
+    private final Provider<MainPanelPresenter> screens;
+    private final Button back = ActionButtons.button(ButtonIcon.BACK);
+    private SavedGamesView view;
+    private boolean waiting;
+    private final ViewUtil window;
+    private final EventHandler<WindowEvent> closeRequest = event -> {
+        event.consume();
+        close();
+    };
 
-    public SavedGamesDialog(final ViewUtil view, final I18n texts) {
-        super(view, texts);
+    @Inject
+    public SavedGamesDialog(final InGamePage page, final I18n texts,
+            final Provider<MainPanelPresenter> screens, final ViewUtil window) {
+        this.page = page;
         this.texts = texts;
-    }
-
-    /**
-     * Show the Save browser over the main window.
-     *
-     * @param entries       listed saves; a selected manual save is the
-     *                      overwrite target
-     * @param previews      reads the preview of one selected save
-     * @param current       summary of the game being saved
-     * @param currentImage  optional preview of the game being saved
-     * @param suggestedName prefilled editable name
-     * @return chosen action, or <code>null</code> when cancelled
-     */
-    public Choice chooseSave(final List<Entry> entries,
-            final Function<Entry, Optional<byte[]>> previews,
-            final SaveSummaryPo current, final byte[] currentImage,
-            final String suggestedName) {
-        result = null;
-        final SavedGamesView view = new SavedGamesView(texts, true, choice -> {
-            result = choice;
-            close();
-        }, this::close, previews);
-        view.setEntries(entries);
-        view.setCurrentGame(current, currentImage, suggestedName);
-        final Region content = view.getContent();
-        content.setPadding(new Insets(16));
-        content.setPrefSize(
-                Math.min(860, getViewUtil().getPrimaryStage().getWidth() - 40),
-                Math.min(600,
-                        getViewUtil().getPrimaryStage().getHeight() - 40));
-        // Handle Escape before the focused list or name field consumes it; the
-        // filter menu and confirmations are separate windows that handle
-        // their own Escape first.
-        content.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+        this.screens = screens;
+        this.window = window;
+        page.setStatusSource(Source.GAME);
+        page.getContent().getStyleClass().add("saved-games-screen");
+        page.getContent().getStylesheets().add(
+                getClass().getResource("/gui/SavedGames.css").toExternalForm());
+        back.setId("savedGamesCancel");
+        back.setOnAction(event -> close());
+        page.setToolbar(new HBox(back));
+        page.getContent().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 event.consume();
                 close();
             }
         });
-        init(content);
-        getScene().getStylesheets().add(
-                getClass().getResource("/gui/SavedGames.css").toExternalForm());
-        setTitle(texts.get(SavedGameText.title));
-        showAndWait();
+    }
+
+    public Choice chooseSave(final List<Entry> entries,
+            final Function<Entry, Optional<byte[]>> previews,
+            final SaveSummaryPo current, final byte[] currentImage,
+            final String suggestedName) {
+        result = null;
+        view = new SavedGamesView(texts, true, choice -> {
+            result = choice;
+            close();
+        }, null, previews);
+        view.setEntries(entries);
+        view.setCurrentGame(current, currentImage, suggestedName);
+        page.setContent(view.getContent());
+        waiting = true;
+        // Navigate directly: a save-before-leaving EventBus subscriber may
+        // still be on the stack while this synchronous choice is open.
+        screens.get().showSaveScreen();
+        window.getPrimaryStage()
+                .addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, closeRequest);
+        try {
+            Platform.enterNestedEventLoop(this);
+        } finally {
+            window.getPrimaryStage().removeEventFilter(
+                    WindowEvent.WINDOW_CLOSE_REQUEST, closeRequest);
+        }
         return result;
+    }
+
+    private void close() {
+        screens.get().closeSaveScreen();
+    }
+
+    @Override
+    public Region getContent() {
+        return page.getContent();
+    }
+
+    @Override
+    public void updateLanguage(final I18n i18n) {
+        page.setTitle(i18n.get(SavedGameText.save));
+        back.setText(i18n.get(Loc.backToGame));
+        page.updateLanguage(i18n);
+    }
+
+    @Override
+    public void beforeShow() {
+        updateLanguage(texts);
+        page.beforeShow();
+        Platform.runLater(view::requestFocus);
+    }
+
+    @Override
+    public void beforeHide() {
+        if (waiting) {
+            waiting = false;
+            Platform.exitNestedEventLoop(this, null);
+        }
     }
 }

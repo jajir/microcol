@@ -113,6 +113,34 @@ public final class SavedGamesPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void verifyFullScreenPaper(final String title) {
+        getRobot().interact(() -> {
+            final var scene = getContext().getPrimaryStage().getScene();
+            final var frame = (javafx.scene.layout.Region) scene
+                    .lookup(".saved-games-screen");
+            assertNotNull(frame, "Save/Load must be in the primary window");
+            assertTrue(frame.lookupAll(".screen-title").stream()
+                    .anyMatch(node -> node instanceof javafx.scene.control.Label
+                            && title.equals(((javafx.scene.control.Label) node)
+                                    .getText())));
+            final var paper = javafx.scene.paint.Color.web("#FFF9EC");
+            for (final String selector : java.util.List.of(".screen-body",
+                    ".screen-scroll", ".viewport")) {
+                final var region = (javafx.scene.layout.Region) frame
+                        .lookup(selector);
+                assertEquals(paper,
+                        region.getBackground().getFills().get(0).getFill(),
+                        selector);
+            }
+            assertEquals(paper,
+                    frame.getBackground().getFills().get(0).getFill());
+            assertEquals(1,
+                    javafx.stage.Window.getWindows().stream()
+                            .filter(javafx.stage.Window::isShowing).count(),
+                    "Save/Load must not open a modal window");
+        });
+    }
+
     public void verifyMenu() {
         for (final String id : java.util.List.of("menuResume", "menuSave",
                 "menuLoad", "menuQuickSave", "menuQuickLoad", "menuSettings",

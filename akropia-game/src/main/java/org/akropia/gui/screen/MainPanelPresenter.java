@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.akropia.gui.dialog.PersistingService;
+import org.akropia.gui.dialog.SavedGamesDialog;
 import org.akropia.gui.event.ChangeLanguageEvent;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.screen.campaign.ScreenCampaign;
@@ -74,6 +75,7 @@ public final class MainPanelPresenter {
     private final ScreenFreePlay screenFreePlay;
     private final ScreenSetting screenSetting;
     private final ScreenLoad screenLoad;
+    private final SavedGamesDialog screenSave;
     private final ScreenEditor screenEditor;
     private final PersistingService persistingService;
     private final GameModelController gameModelController;
@@ -89,7 +91,8 @@ public final class MainPanelPresenter {
             final ScreenGame screenGame, final ScreenMenu screenMenu,
             final ScreenCampaign screenCampaign,
             final ScreenEurope screenEurope, final ScreenSetting screenSetting,
-            final ScreenLoad screenLoad, final ScreenFreePlay screenFreePlay,
+            final ScreenLoad screenLoad, final SavedGamesDialog screenSave,
+            final ScreenFreePlay screenFreePlay,
             final ScreenColony screenColony,
             final ScreenMarketBuy screenMarketBuy,
             final ScreenMarketSell screenMarketSell,
@@ -115,6 +118,7 @@ public final class MainPanelPresenter {
         this.screenFreePlay = Preconditions.checkNotNull(screenFreePlay);
         this.screenSetting = Preconditions.checkNotNull(screenSetting);
         this.screenLoad = Preconditions.checkNotNull(screenLoad);
+        this.screenSave = Preconditions.checkNotNull(screenSave);
         this.screenEditor = Preconditions.checkNotNull(screenEditor);
         this.persistingService = Preconditions.checkNotNull(persistingService);
         this.gameModelController = Preconditions
@@ -147,6 +151,9 @@ public final class MainPanelPresenter {
                     }
                     return null;
                 }, event -> {
+                    if (Screen.SAVE == event.getScreen()) {
+                        return screenSave;
+                    }
                     if (Screen.LOAD == event.getScreen()) {
                         return screenLoad;
                     }
@@ -213,6 +220,16 @@ public final class MainPanelPresenter {
                 }));
     }
 
+    public void showSaveScreen() {
+        onShowScreen(new ShowScreenEvent(Screen.SAVE));
+    }
+
+    public void closeSaveScreen() {
+        if (shownScreen == screenSave) {
+            onReturnToOrigin(new ReturnToOriginEvent());
+        }
+    }
+
     @Subscribe
     private void onShowScreen(final ShowScreenEvent event) {
         if (Screen.EDITOR == event.getScreen() && !developerMode.isEnabled()) {
@@ -229,7 +246,7 @@ public final class MainPanelPresenter {
             final boolean menuHosted = isMenuScreen(shownScreen);
             if (screen == screenSetting) {
                 screenSetting.setMenuHosted(menuHosted);
-            } else {
+            } else if (screen == screenLoad) {
                 screenLoad.setMenuHosted(menuHosted);
             }
         }
@@ -244,10 +261,22 @@ public final class MainPanelPresenter {
         }
         final GameScreen origin = Optional.ofNullable(origins.get(shownScreen))
                 .orElse(screenMenu);
+        final boolean returningFromSave = shownScreen == screenSave;
         beforeHide(shownScreen);
-        origin.beforeReturn();
-        view.showScreen(origin);
         shownScreen = origin;
+        if (returningFromSave) {
+            // Save-before-leaving may replace the game as soon as its nested
+            // choice returns. Refresh only if that decision kept this screen.
+            javafx.application.Platform.runLater(() -> {
+                if (shownScreen == origin) {
+                    origin.beforeReturn();
+                    view.showScreen(origin);
+                }
+            });
+        } else {
+            origin.beforeReturn();
+            view.showScreen(origin);
+        }
     }
 
     /**
@@ -307,7 +336,8 @@ public final class MainPanelPresenter {
     }
 
     private boolean isOriginTracked(final GameScreen screen) {
-        return screen == screenSetting || screen == screenLoad;
+        return screen == screenSetting || screen == screenLoad
+                || screen == screenSave;
     }
 
     private boolean isMenuScreen(final GameScreen screen) {

@@ -63,6 +63,10 @@ public class PersistingService {
     private final DiagnosticLog diagnosticLog;
 
     private boolean busy;
+    private boolean browsingSave;
+
+    @Inject
+    private com.google.inject.Provider<SavedGamesDialog> saveScreen;
 
     /**
      * The last successfully saved or loaded gameplay state with its file, or
@@ -331,6 +335,18 @@ public class PersistingService {
      *         return <code>false</code>
      */
     private boolean saveThroughBrowser(final DiagnosticEvent failure) {
+        if (browsingSave) {
+            return false;
+        }
+        browsingSave = true;
+        try {
+            return chooseSaveThroughBrowser(failure);
+        } finally {
+            browsingSave = false;
+        }
+    }
+
+    private boolean chooseSaveThroughBrowser(final DiagnosticEvent failure) {
         if (!gameModelController.isHumanSaveReady()) {
             return false;
         }
@@ -353,9 +369,9 @@ public class PersistingService {
                 // available for retry or cancellation, without stale entries.
                 entries = List.of();
             }
-            final SavedGamesDialog.Choice choice = new SavedGamesDialog(view,
-                    texts).chooseSave(entries, this::preview, current,
-                            currentImage, suggestedName);
+            final SavedGamesDialog.Choice choice = saveScreen.get().chooseSave(
+                    entries, this::preview, current, currentImage,
+                    suggestedName);
             if (choice == null) {
                 return false;
             }
@@ -479,7 +495,7 @@ public class PersistingService {
      *         progress
      */
     public boolean isBusy() {
-        return busy;
+        return busy || browsingSave;
     }
 
     private boolean saveNamed(final File file, final String name,

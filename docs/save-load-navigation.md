@@ -30,6 +30,12 @@ otevřeném dialogu, nabídce či výběru souboru ani během souborové operace
 
 Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověření má pouze známé selhání kontrastu FRIGATE, pro které uživatel schválil [výjimku pro tuto sérii](publishing.md#local-acceptance-policy). Nativní macOS ověření je pouze volitelné ruční ověření. Přesné výsledky vlastní [funkční evidence](functional-tests.md). Historické snímky a diagramy z 26. října zachycují předchozí dialogový přehled.
 
+## Jednotný rámec Uložit a Načíst — 10. listopadu 2026
+
+1. [R-0444](requirements/done/R-0444.md) sjednocuje herní Uložit a Načíst jako samostatné obrazovky v hlavním okně: nadpis a návrat nahoře, posuvný obsah uprostřed a společné zápatí se zlatem a rokem dole. Celý podklad používá stejný krémový papír jako záhlaví a zápatí.
+2. Zpět do hry a Escape vracejí původní obrazovku. Uložit a pokračovat stále čeká na úspěšný zápis; zrušení nic neukládá. Načíst z hlavní nabídky zachovává její rámec a místo návratu. Texty přehledu nepoužívají „Please“.
+3. Lokálně ověřeno 10. listopadu 2026; [funkční evidence](functional-tests.md#r-0444-saveload-screen-consistency-2026-11-10) uvádí přesný rozsah a výsledky.
+
 ## Názvy a adresáře schválené 8. listopadu 2026
 
 1. Schválený cíl [R-0432](requirements/done/R-0432.md): hra automaticky ukládá

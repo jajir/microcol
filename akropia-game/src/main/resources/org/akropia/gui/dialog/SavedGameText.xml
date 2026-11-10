@@ -29,7 +29,7 @@
     <entry key="saveContinue">Save and continue</entry>
     <entry key="discard">Leave without saving</entry>
     <entry key="saved">Game saved.</entry>
-    <entry key="failed">The file operation failed. No transition was completed. Please check the save folder and try again.</entry>
+    <entry key="failed">The file operation failed. No transition was completed. Check the save folder and try again.</entry>
     <entry key="corrupt">Unavailable or invalid saved-game details</entry>
     <entry key="noQuick">This playthrough has no quick save yet.</entry>
     <entry key="freePlay">Free play</entry>

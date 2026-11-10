@@ -43,3 +43,11 @@
     -fx-background-color: transparent;
     -fx-padding: 0 7 0 7;
 }
+
+/* Save and Load use the same paper as their header and footer. */
+.in-game-page.saved-games-screen,
+.in-game-page.saved-games-screen .screen-scroll,
+.in-game-page.saved-games-screen .screen-scroll > .viewport,
+.in-game-page.saved-games-screen .screen-body {
+    -fx-background-color: #FFF9EC;
+}

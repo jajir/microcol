@@ -61,8 +61,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         // Empty names fail; Unicode punctuation is preserved independently of
         // filenames.
         saves.openSave();
-        new org.akropia.page.PaperButtonsPage(getContext())
-                .verifyModalFrame("savedGamesList");
+        saves.verifyFullScreenPaper("Save game");
         saves.saveName("");
         saves.verifyInvalidName();
         saves.captureDialog("savedGamesList", "r0298-saved-games.png");
@@ -298,12 +297,11 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         hosted.press(KeyCode.ESCAPE);
         game.verifyGameInFront();
 
-        // Shortcut+S opens the existing Save dialog, which keeps the keys.
+        // Shortcut+S opens the Save screen, which keeps the keys.
         hosted.pressShortcut(KeyCode.S);
-        new org.akropia.page.PaperButtonsPage(getContext())
-                .verifyModalFrame("savedGamesList");
+        saves.verifyFullScreenPaper("Save game");
         hosted.pressShortcut(KeyCode.O);
-        hosted.verifyLoadClosed();
+        saves.verifyFullScreenPaper("Save game");
         saves.cancelBrowser();
         saves.verifyGameUnchanged();
 

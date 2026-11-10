@@ -76,6 +76,7 @@ public final class ScreenLoad extends AbstractScreenMenu implements GameScreen {
         menuHolderPanel.getContent().getStyleClass().add("load-screen");
         page.getContent().getStylesheets().addAll(STYLE_SHEET_GAME_MENU,
                 STYLE_SHEET_SAVED_GAMES);
+        page.getContent().getStyleClass().add("saved-games-screen");
         page.setStatusSource(Source.GAME);
         page.setToolbar(toolbar);
         back.setId(BUTTON_BACK_ID);
