@@ -88,6 +88,10 @@ Esc v detailu otevřeném z mapového plánovače vrací mapu obchodních tras s
 2. Viditelná nápověda vysvětluje okamžitý nákup maxima držením Command ⌘ na Macu nebo Ctrl na ostatních systémech při upuštění. Rozhoduje klávesa právě při upuštění. Stavová lišta sdělí skutečné množství a cenu nebo důvod blokace. Prodej a přesuny vlastního nákladu zachovávají dosavadní ovládání; pravidla a odmítnutí zastaralé nabídky vlastní model.
 3. Modelové, cílené Docker a nativní macOS scénáře prošly 1. listopadu 2026; snímky EN/CZ a úzkých/širokých oken byly zkontrolovány. Nejde o uživatelskou studii. Konečný smoke celé vybrané série zůstává podle pokynu uživatele odložen; [aktuální evidence](functional-tests.md#r-0378-implemented-and-verified-2026-11-01). Původní zachycení návrhu bez testů zůstává v [historické evidenci](publishing.md#r-0378-europe-purchase-requirement-2026-10-31).
 
+## Obrysy posuvného Nastavení — 10. listopadu 2026
+
+1. [R-0447](requirements/done/R-0447.md): v herním Nastavení a editoru klávesových zkratek zůstávají celé oddělovací linky horní a dolní lišty viditelné i při posunu obsahu a změně velikosti okna. Oprava ponechává dosavadní ovládání a návrat do Nastavení; stav ověření vlastní [funkční evidence](functional-tests.md#r-0447-settings-contours-2026-11-10).
+
 ## Panely Nastavení a Načíst hru — schválený návrh 31. října 2026
 
 1. Schválený, dosud neimplementovaný [R-0377](requirements/done/R-0377.md) vkládá obsahové panely do oblasti moře v menu nebo do současného herního rámu podle skutečného místa otevření. Posouvá se jen obsah; nadpis a Zpět / Zpět do hry zůstávají dostupné. Společné volby mají stejné pořadí a návrat obnoví konkrétní původní obrazovku.

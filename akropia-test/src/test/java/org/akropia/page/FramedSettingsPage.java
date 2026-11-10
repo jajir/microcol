@@ -23,6 +23,48 @@ import javafx.scene.text.Text;
 
 /** Player input and visual observations on the real Settings screen. */
 public final class FramedSettingsPage extends AbstractScreen {
+
+    public void scrollPage(final String selector, final double position) {
+        getRobot().interact(() -> {
+            final javafx.scene.control.ScrollPane scroll = (javafx.scene.control.ScrollPane) getNodeFinder()
+                    .lookup(selector).query().lookup(".screen-scroll");
+            scroll.setVvalue(position);
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyPageContours(final String selector) {
+        getRobot().interact(() -> {
+            final Region root = getNodeFinder().lookup(selector)
+                    .queryAs(Region.class);
+            root.applyCss();
+            root.layout();
+            final javafx.scene.image.WritableImage image = snapshotScene(
+                    root.getScene());
+            for (final String barSelector : new String[] { ".screen-toolbar",
+                    "#statusBar" }) {
+                final Region bar = (Region) root.lookup(barSelector);
+                assertEquals(javafx.geometry.Insets.EMPTY,
+                        bar.getBorder().getImages().get(0).getInsets(),
+                        "Contour stays inside its bar instead of under the viewport");
+                final Bounds bounds = bar.localToScene(bar.getLayoutBounds());
+                final int top = (int) Math
+                        .round(barSelector.equals(".screen-toolbar")
+                                ? bounds.getMaxY() - 6
+                                : bounds.getMinY());
+                for (int x = (int) bounds.getMinX() + 16; x < bounds.getMaxX()
+                        - 16; x++) {
+                    boolean ink = false;
+                    for (int y = top; y < top + 6; y++) {
+                        ink |= image.getPixelReader().getColor(x, y)
+                                .getBrightness() < .65;
+                    }
+                    assertTrue(ink, barSelector + " visible contour at x=" + x);
+                }
+            }
+        });
+    }
+
     public void verifyPageBackground(final String selector) {
         getRobot().interact(() -> {
             final Region root = getNodeFinder().lookup(selector)

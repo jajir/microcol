@@ -34,3 +34,11 @@
 #keyboardShortcutsScreen .screen-scroll > .viewport {
     -fx-background-color: #FFF9EC;
 }
+
+/* Keep the contour inside the bars, clear of the opaque scrolling sibling. */
+.settings-screen .screen-toolbar,
+.settings-screen #statusBar,
+#keyboardShortcutsScreen .screen-toolbar,
+#keyboardShortcutsScreen #statusBar {
+    -fx-border-image-insets: 0;
+}

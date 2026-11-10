@@ -1,5 +1,9 @@
 # Current requirement backlog
 
+## Complete Settings contours — 2026-11-10
+
+1. [R-0447](done/R-0447.md), status `done`, A03: preserve complete header/footer contours around Settings and Keyboard shortcuts while scrolling and resizing. Locally accepted: 5,117 model/JUnit, 18 targeted UI/contract and 21 smoke/support checks, all passing; [evidence](../functional-tests.md#r-0447-settings-contours-2026-11-10).
+
 ## Shared Java baseline — 2026-11-10
 
 1. [R-0446](done/R-0446.md), status `done`, A03: use JDK 25 for local launch, compilation, Docker/CI and packaged runtimes; JavaFX stays at 17.0.20. Local acceptance passed: 5,117 model/JUnit, 3 targeted UI and 21 smoke/support checks plus macOS packaging; [evidence](../functional-tests.md#r-0446-java-25-baseline-2026-11-10).

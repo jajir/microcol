@@ -772,13 +772,26 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         final FramedSettingsPage page = new FramedSettingsPage(getContext());
         page.resizeWindow(900, 700);
         page.verifyPageBackground(".in-game-page.settings-screen");
+        page.verifyPageContours(".in-game-page.settings-screen");
         final KeyboardShortcutsPage shortcuts = new KeyboardShortcutsPage(
                 getContext());
         shortcuts.open();
         page.verifyPageBackground("#keyboardShortcutsScreen");
+        page.verifyPageContours("#keyboardShortcutsScreen");
+        // Both contours stay complete when rows scroll and the window grows.
+        page.scrollPage("#keyboardShortcutsScreen", 1);
+        page.verifyPageContours("#keyboardShortcutsScreen");
+        page.resizeWindow(1280, 900);
+        page.verifyPageContours("#keyboardShortcutsScreen");
         page.captureDialog("shortcutsTitle", "r0442-shortcuts-paper.png");
         shortcuts.cancel();
         page.verifyPageBackground(".in-game-page.settings-screen");
+        page.verifyPageContours(".in-game-page.settings-screen");
+        page.resizeWindow(900, 700);
+        page.scrollPage(".in-game-page.settings-screen", 1);
+        page.verifyPageContours(".in-game-page.settings-screen");
+        page.captureDialog("rbCzech", "r0447-settings-contours.png");
+        page.scrollPage(".in-game-page.settings-screen", 0);
         page.verifyAppearance();
         page.captureDialog("rbCzech", "r0438-settings-game-en.png");
 
