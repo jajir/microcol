@@ -348,3 +348,11 @@ mimo deset automatických slotů. Nová
    implementace. Rotaci snímků tahů popisuje [R-0388](requirements/done/R-0388.md).
    Náhledy a souhrny popisuje
    [oddíl R-0382/R-0383](#nahledy-a-soubor-ulozene-hry-schvaleno-31-rijna-2026).
+
+
+## Import uložené hry do editoru map (R-0440)
+
+1. Vývojářský editor přijímá přes Otevřít i vývojářskou cestu Načíst jak autorské scénáře v JSON, tak současné archivy uložené hry. Formát rozpozná podle obsahu, nikoli přípony `.akropia`; archiv projde stejnou kontrolou metadat a identity jako běžné načítání hry.
+2. Archiv se otevře jako samostatný návrh scénáře bez přiřazeného cílového souboru. Uložit nabízí `scenario.akropia` a exportuje JSON scénáře. Otevření ani úpravy nepřepisují původní uloženou hru. Běžné načítání hry nadále vyžaduje archiv.
+3. Editor podporuje rozměry 10 až 120 polí na každé straně, včetně uložené mapy 120 × 80. Neplatný nebo nepodporovaný soubor zachová dosavadní návrh a zobrazí stávající lokalizované vysvětlení.
+4. Rozsah a ověření: [R-0440](requirements/done/R-0440.md), `TC_210_F241_map_editor_lifecycle_test` (včetně dodaného souboru jako fixture `F241-saved-game.akropia`).

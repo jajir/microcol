@@ -184,6 +184,23 @@ public final class GameModelPoDao {
     }
 
     /**
+     * Recognize a player-save ZIP container before choosing an editor reader.
+     * This only detects the format; {@link #loadPlayerGame(File)} validates it.
+     *
+     * @param file required input file
+     * @return whether the file starts with a ZIP local-file header
+     */
+    public boolean isPlayerSaveArchive(final File file) {
+        checkFile(file);
+        try (InputStream input = new FileInputStream(file)) {
+            return Arrays.equals(input.readNBytes(4),
+                    new byte[] { 'P', 'K', 3, 4 });
+        } catch (IOException failed) {
+            throw new AkropiaException(failed.getMessage(), failed);
+        }
+    }
+
+    /**
      * Load an authored scenario stored as plain JSON of the persistent model.
      *
      * @param file required file object

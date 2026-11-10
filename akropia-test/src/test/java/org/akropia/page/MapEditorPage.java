@@ -1,6 +1,7 @@
 package org.akropia.page;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -564,6 +565,34 @@ public final class MapEditorPage extends AbstractScreen {
         assertEquals(tribe, model.getNativeSettlements().stream()
                 .filter(found -> found.getLocation().equals(settlementAt))
                 .findFirst().orElseThrow().getNation());
+    }
+
+    public void openFromDeveloperLoad(final File file) {
+        Mockito.when(chooser().loadFile(ArgumentMatchers.any(File.class)))
+                .thenReturn(file);
+        getRobot().interact(() -> getContext()
+                .getClassFromGuice(
+                        org.akropia.gui.dialog.PersistingService.class)
+                .loadFromSavedGames(true));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifySuggestedSaveName(final String expected) {
+        Mockito.verify(chooser()).saveScenario(ArgumentMatchers.any(File.class),
+                ArgumentMatchers.eq(expected), ArgumentMatchers.anyString());
+    }
+
+    public void verifyFileBytes(final File file, final byte[] expected)
+            throws Exception {
+        assertArrayEquals(expected, Files.readAllBytes(file.toPath()));
+    }
+
+    public void verifyScenarioMatchesArchive(final File scenario,
+            final File archive) {
+        final GameModelPoDao dao = new GameModelPoDao();
+        final com.google.gson.Gson gson = new com.google.gson.Gson();
+        assertEquals(gson.toJsonTree(dao.loadPlayerGame(archive)),
+                gson.toJsonTree(dao.loadScenarioFromFile(scenario)));
     }
 
 }

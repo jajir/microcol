@@ -88,11 +88,11 @@ public class TC_210_F241_map_editor_lifecycle_test extends AbstractAkropiaTest {
         editor.typeDimensions("9", "12");
         editor.confirmDimensions();
         editor.verifyDimensionDialog(
-                "Width and height must be from 10 to 100 squares.");
-        editor.typeDimensions("12", "101");
+                "Width and height must be from 10 to 120 squares.");
+        editor.typeDimensions("12", "121");
         editor.confirmDimensions();
         editor.verifyDimensionDialog(
-                "Width and height must be from 10 to 100 squares.");
+                "Width and height must be from 10 to 120 squares.");
 
         // Cancel keeps the current draft.
         editor.cancelDimensions();
@@ -248,7 +248,7 @@ public class TC_210_F241_map_editor_lifecycle_test extends AbstractAkropiaTest {
         editor.typeDimensions("5", "10");
         editor.confirmDimensions();
         editor.verifyDimensionDialog(
-                "Šířka a výška musí být od 10 do 100 polí.");
+                "Šířka a výška musí být od 10 do 120 polí.");
         editor.typeDimensions("12", "10");
         editor.confirmDimensions();
         editor.verifyMessage("Vytvořena nová oceánská mapa 12 × 10 polí.");
@@ -290,6 +290,60 @@ public class TC_210_F241_map_editor_lifecycle_test extends AbstractAkropiaTest {
         editor.verifySavedTerrain(file, Location.of(2, 3), TerrainType.OCEAN);
         editor.pressEscape();
         editor.verifyEditorShown(false);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_saved_game_import_preserves_world_and_source() throws Exception {
+        final MapEditorPage editor = new MapEditorPage(getContext());
+        final File archive = new File(
+                "src/test/scenarios/F241-saved-game.akropia");
+        final byte[] original = Files.readAllBytes(archive.toPath());
+        final Path dir = scratch();
+        final File exported = dir.resolve("exported.akropia").toFile();
+        final File broken = dir.resolve("broken-save.akropia").toFile();
+        Files.write(broken.toPath(), new byte[] { 'P', 'K', 3, 4, 0 });
+
+        // Open the reported 120 by 80 saved game as an independent draft.
+        editor.openFromMenu();
+        editor.chooseOpenFile(archive);
+        editor.pressOpen();
+        editor.verifyTitle("Unsaved scenario, 120 × 80 squares");
+        editor.verifyMessage("Opened F241-saved-game.akropia.");
+        editor.chooseSaveFile(exported);
+        editor.pressSave();
+        editor.verifySuggestedSaveName("scenario.akropia");
+        editor.verifyScenarioMatchesArchive(exported, archive);
+        editor.verifyFileBytes(archive, original);
+
+        // A damaged archive cannot replace the successfully imported world.
+        editor.chooseOpenFile(broken);
+        editor.pressOpen();
+        editor.verifyMessage(
+                "broken-save.akropia could not be opened; the current"
+                        + " map stays open. The file is not a valid scenario.");
+        editor.verifyTitle("exported.akropia, 120 × 80 squares");
+
+        // Exported plain JSON reopens at the same dimensions and stays
+        // editable.
+        editor.chooseOpenFile(exported);
+        editor.pressOpen();
+        editor.verifyTitle("exported.akropia, 120 × 80 squares");
+        editor.chooseTerrain(TerrainType.GRASSLAND);
+        editor.clickTile(LAND);
+        editor.pressSave();
+        editor.verifySavedTerrain(exported, LAND, TerrainType.GRASSLAND);
+        editor.verifyFileBytes(archive, original);
+        editor.pressBack();
+
+        // The developer Load route uses the same archive import behavior.
+        editor.openFromDeveloperLoad(archive);
+        editor.verifyEditorShown(true);
+        editor.verifyTitle("Unsaved scenario, 120 × 80 squares");
+        editor.chooseSaveFile(exported);
+        editor.pressSave();
+        editor.verifyScenarioMatchesArchive(exported, archive);
+        editor.verifyFileBytes(archive, original);
     }
 
 }

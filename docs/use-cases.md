@@ -1386,3 +1386,9 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 ## R-0438 — společná osa nastavení
 
 1. UC-119 (Regrese), SUPPORT-001: [R-0438](requirements/done/R-0438.md) sjednocuje zarovnání popisků a ovládání v obou hostitelích Nastavení. `TC_84_F75_framed_settings_test` zachovává volby, ukládání, jazyky a klávesnici; TC84/08 ověřuje malé menu a TC84/15 malé herní okno, kliknutí na popisek a zalomení bez překryvů. Výsledky vlastní [funkční evidence](functional-tests.md#r-0438-settings-common-axis-2026-11-09).
+
+
+### UC-001 — import uložené hry do editoru (R-0440)
+
+1. [R-0440](requirements/done/R-0440.md) rozšiřuje vývojářský editor o otevření současného archivu uložené hry jako samostatného scénáře; platí [kontrakt importu](save-load-navigation.md#import-ulozene-hry-do-editoru-map-r-0440).
+2. `TC_210_F241_map_editor_lifecycle_test` /06 pokrývá obě vstupní cesty, svět 120 × 80, zachování celého stavu při exportu, úpravu a opětovné otevření scénáře, nezměněné zdrojové bajty a odmítnutí poškozeného archivu. Výsledky patří do [funkční evidence](functional-tests.md).

@@ -350,4 +350,29 @@ public class GameModelPoDaoTest {
         assertEquals(expected, assertThrows(SaveArchiveException.class,
                 () -> dao.loadMetadata(file.toFile())).getReason());
     }
+
+    @Test
+    void editorRecognizesArchivesByContentWithoutChangingReaders()
+            throws Exception {
+        final Path archive = validSave("archive");
+        final Path renamed = directory.resolve("archive.json");
+        Files.copy(archive, renamed);
+        final Path scenario = directory.resolve("scenario.akropia");
+        dao.saveScenarioToFile(scenario.toString(), dao.loadFromClassPath(MAP));
+        assertTrue(dao.isPlayerSaveArchive(archive.toFile()));
+        assertTrue(dao.isPlayerSaveArchive(renamed.toFile()));
+        assertFalse(dao.isPlayerSaveArchive(scenario.toFile()));
+        assertThrows(JsonSyntaxException.class,
+                () -> dao.loadScenarioFromFile(archive.toFile()));
+        assertThrows(SaveArchiveException.class,
+                () -> dao.loadPlayerGame(scenario.toFile()));
+        final Path broken = directory.resolve("broken.akropia");
+        Files.write(broken, new byte[] { 'P', 'K', 3, 4, 0 });
+        assertTrue(dao.isPlayerSaveArchive(broken.toFile()));
+        assertThrows(SaveArchiveException.class,
+                () -> dao.loadPlayerGame(broken.toFile()));
+        Files.write(broken, new byte[0]);
+        assertFalse(dao.isPlayerSaveArchive(broken.toFile()));
+    }
+
 }

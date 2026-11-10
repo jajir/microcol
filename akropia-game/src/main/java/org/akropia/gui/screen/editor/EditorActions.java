@@ -122,8 +122,11 @@ public class EditorActions {
 
     private void read(final File file) {
         final ScenarioDraft opened;
+        final boolean archive;
         try {
-            opened = ScenarioDraft.of(dao.loadScenarioFromFile(file));
+            archive = dao.isPlayerSaveArchive(file);
+            opened = ScenarioDraft.of(archive ? dao.loadPlayerGame(file)
+                    : dao.loadScenarioFromFile(file));
         } catch (ScenarioDraftException rejected) {
             modelService.showMessage(messages.get(EditorText.openFailed,
                     file.getName(), messages.describe(rejected)));
@@ -134,7 +137,9 @@ public class EditorActions {
                     file.getName(), i18n.get(EditorText.reason_STRUCTURE)));
             return;
         }
-        modelService.replace(opened, file);
+        // Archive imports are independent scenarios, not replacement player
+        // saves.
+        modelService.replace(opened, archive ? null : file);
         modelService
                 .showMessage(messages.get(EditorText.opened, file.getName()));
     }

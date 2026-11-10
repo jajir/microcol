@@ -66,11 +66,10 @@ public final class ScenarioDraft {
     public static final int MIN_SIDE = 10;
 
     /**
-     * Largest supported width and height in squares. The largest bundled world
-     * is 100 × 80 squares; the bound keeps an authored world within the scale
-     * of the game's tested worlds, map views and saves.
+     * Largest supported width and height in squares. The bound includes 120 ×
+     * 80 saved worlds and keeps draft allocations bounded.
      */
-    public static final int MAX_SIDE = 100;
+    public static final int MAX_SIDE = 120;
 
     /** Unit types an authored European expedition may contain. */
     public static final List<UnitType> EXPEDITION_TYPES = UnitType.UNIT_TYPES

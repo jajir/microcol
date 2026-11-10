@@ -71,7 +71,7 @@ class ScenarioDraftTest {
     @Test
     void dimensionsAreWholeNumbersWithinTheSupportedBounds() {
         assertEquals(ScenarioDraft.MIN_SIDE, ScenarioDraft.parseSide(" 10 "));
-        assertEquals(ScenarioDraft.MAX_SIDE, ScenarioDraft.parseSide("100"));
+        assertEquals(ScenarioDraft.MAX_SIDE, ScenarioDraft.parseSide("120"));
         assertEquals(Reason.DIMENSION_NOT_NUMBER,
                 reasonOf(() -> ScenarioDraft.parseSide("12.5")));
         assertEquals(Reason.DIMENSION_NOT_NUMBER,
@@ -85,7 +85,7 @@ class ScenarioDraftTest {
         assertEquals(Reason.DIMENSION_OUT_OF_RANGE,
                 reasonOf(() -> ScenarioDraft.parseSide("9")));
         assertEquals(Reason.DIMENSION_OUT_OF_RANGE,
-                reasonOf(() -> ScenarioDraft.parseSide("101")));
+                reasonOf(() -> ScenarioDraft.parseSide("121")));
         assertEquals(Reason.DIMENSION_OUT_OF_RANGE,
                 reasonOf(() -> ScenarioDraft.ocean(10, 1_000_000)));
     }
