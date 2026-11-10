@@ -1379,4 +1379,9 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 
 ## Settings — stručné popisky (2026-11-10)
 
-1. [R-0441](requirements/done/R-0441.md): Efekty nemají vedle posuvníku další hodnotu; rychlost posunu mapy má pouze krajní popisky Pomalu/Rychle podle zvoleného jazyka. Vývojářský režim zachovává checkbox s popiskem a zkratkou, bez samostatného nadpisu a vysvětlující věty. Ovládání a okamžité ukládání voleb se nemění; výsledky ověření vlastní funkční evidence.
+1. [R-0441](requirements/done/R-0441.md): Efekty nemají vedle posuvníku další hodnotu; rychlost posunu mapy má pouze krajní popisky Pomalu/Rychle podle zvoleného jazyka. Vývojářský režim zachovává checkbox s popiskem, bez samostatného nadpisu a vysvětlující věty; navazující [R-0442](requirements/done/R-0442.md) odstraňuje z popisku zkratku. Ovládání a okamžité ukládání voleb se nemění; výsledky ověření vlastní funkční evidence.
+
+## Nastavení: pozadí a popisek vývojářského režimu (2026-11-10)
+
+1. [R-0442](requirements/done/R-0442.md): obsah celoobrazovkového Nastavení a Klávesových zkratek používá stejné světlé pozadí jako záhlaví a zápatí.
+2. Ruční přepínač vývojářského režimu ukazuje pouze lokalizovaný název; aktuální klávesová vazba patří do editoru Klávesové zkratky. Změna nemění přepínání ani ukládání předvoleb.

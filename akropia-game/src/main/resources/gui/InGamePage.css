@@ -24,3 +24,13 @@
 .illustrated-page .screen-body { -fx-padding: 0; -fx-spacing: 0; }
 
 .illustrated-page .label-title { -fx-font-size: 14; }
+
+/* Settings and its shortcut editor share the header/footer paper. */
+.in-game-page.settings-screen,
+.in-game-page.settings-screen .screen-scroll,
+.in-game-page.settings-screen .screen-scroll > .viewport,
+#keyboardShortcutsScreen,
+#keyboardShortcutsScreen .screen-scroll,
+#keyboardShortcutsScreen .screen-scroll > .viewport {
+    -fx-background-color: #FFF9EC;
+}

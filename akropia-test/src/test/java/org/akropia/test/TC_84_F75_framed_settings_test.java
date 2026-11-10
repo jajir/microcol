@@ -148,23 +148,23 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         // Explicitly turn off the diagnostic preference used by the shared
         // fixtures.
         developer.setModeInSettings(false);
-        developer.verifySettings(false, "Developer mode (F3)");
+        developer.verifySettings(false, "Developer mode");
         developer.pressF3();
-        developer.verifySettings(true, "Developer mode (F3)");
+        developer.verifySettings(true, "Developer mode");
         // A held key toggles exactly once, on release.
         developer.holdF3();
-        developer.verifySettings(true, "Developer mode (F3)");
+        developer.verifySettings(true, "Developer mode");
         developer.releaseF3();
-        developer.verifySettings(false, "Developer mode (F3)");
+        developer.verifySettings(false, "Developer mode");
         settings.setCzechLanguage();
-        developer.verifySettings(false, "Režim vývojáře (F3)");
+        developer.verifySettings(false, "Režim vývojáře");
         new FramedSettingsPage(getContext()).verifyAppearance();
         developer.captureDialog("settingDeveloperMode",
                 "developer-settings-czech.png");
         developer.setModeInSettings(true);
         settings.setEnglishLanguage();
         settings.goBack().openSetting();
-        developer.verifySettings(true, "Developer mode (F3)");
+        developer.verifySettings(true, "Developer mode");
     }
 
     @Test
@@ -196,7 +196,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         developer.verifyGameUnchanged();
         // The in-game Settings checkbox controls the same state.
         developer.openGameSettings();
-        developer.verifySettings(false, "Developer mode (F3)");
+        developer.verifySettings(false, "Developer mode");
         developer.setModeInSettings(true);
         developer.backToGame();
         game.hoverTile(ship);
@@ -273,7 +273,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         });
         final SettingPage reloaded = WelcomePage.of(getContext()).openSetting();
         final DeveloperModePage developer = new DeveloperModePage(getContext());
-        developer.verifySettings(false, "Developer mode (F3)");
+        developer.verifySettings(false, "Developer mode");
         reloaded.goBack().loadGame();
         developer.verifyState(false);
         developer.verifyNoIndicator();
@@ -296,7 +296,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         developer.pressModifiedF3();
         developer.verifyState(false);
         final SettingPage settings = welcome.openSetting();
-        developer.verifySettings(false, "Developer mode (F3)");
+        developer.verifySettings(false, "Developer mode");
         settings.goBack();
         // Primary-scene text fields keep their content while F3 switches modes.
         final org.akropia.page.FreePlaySetupPage setup = welcome
@@ -342,7 +342,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         developer.verifyGameUnchanged();
         europe.close();
         developer.openGameSettings();
-        developer.verifySettings(true, "Developer mode (F3)");
+        developer.verifySettings(true, "Developer mode");
         developer.backToGame();
         developer.verifyNoIndicator();
         developer.verifyGameUnchanged();
@@ -565,7 +565,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         shortcuts.verifyFocused(ShortcutAction.DEVELOPER_MODE, "add");
         shortcuts.cancel();
         shortcuts.verifyEditorOpen(false);
-        developer.verifySettings(false, "Developer mode (F3)");
+        developer.verifySettings(false, "Developer mode");
         shortcuts.verifySavedDeviations(Map.of());
         // Escape also cancels the whole draft.
         shortcuts.open();
@@ -623,7 +623,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         restartedShortcuts.restoreDefaults();
         restartedShortcuts.saveAndBack();
         restartedShortcuts.verifySavedDeviations(Map.of());
-        restartedDeveloper.verifySettings(false, "Developer mode (F3)");
+        restartedDeveloper.verifySettings(false, "Developer mode");
         restartedDeveloper.pressF3();
         restartedDeveloper.verifyState(true);
         settings.goBack().verifyMainScreen();
@@ -696,7 +696,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         shortcuts.verifyBindings(ShortcutAction.DEVELOPER_MODE, "Y");
         developer.verifyState(false);
         shortcuts.saveAndBack();
-        developer.verifySettings(false, "Developer mode (Y)");
+        developer.verifySettings(false, "Developer mode");
         // Typing Y into a name keeps the letter and leaves the mode alone.
         final WelcomePage welcome = settings.goBack();
         final org.akropia.page.FreePlaySetupPage setup = welcome
@@ -719,7 +719,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         shortcuts.restoreDefaults();
         shortcuts.saveAndBack();
         shortcuts.verifySavedDeviations(Map.of());
-        developer.verifySettings(true, "Developer mode (F3)");
+        developer.verifySettings(true, "Developer mode");
         settings.goBack().verifyMainScreen();
     }
 
@@ -767,6 +767,14 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         developer.openGameSettings();
         final FramedSettingsPage page = new FramedSettingsPage(getContext());
         page.resizeWindow(900, 700);
+        page.verifyPageBackground(".in-game-page.settings-screen");
+        final KeyboardShortcutsPage shortcuts = new KeyboardShortcutsPage(
+                getContext());
+        shortcuts.open();
+        page.verifyPageBackground("#keyboardShortcutsScreen");
+        page.captureDialog("shortcutsTitle", "r0442-shortcuts-paper.png");
+        shortcuts.cancel();
+        page.verifyPageBackground(".in-game-page.settings-screen");
         page.verifyAppearance();
         page.captureDialog("rbCzech", "r0438-settings-game-en.png");
 

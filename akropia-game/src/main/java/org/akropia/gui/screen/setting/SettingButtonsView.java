@@ -1,8 +1,6 @@
 package org.akropia.gui.screen.setting;
 
 import org.akropia.gui.util.ActionButtons;
-import org.akropia.gui.shortcut.KeyboardShortcuts;
-import org.akropia.gui.shortcut.ShortcutAction;
 import org.akropia.gui.shortcut.ShortcutText;
 import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.screen.menu.GameMenu;
@@ -48,8 +46,6 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
     private final CheckBox openEuropeCheckBox;
     private final CheckBox developerCheckBox;
     private final Button shortcutsButton;
-    private final KeyboardShortcuts shortcuts;
-    private I18n currentI18n;
 
     @Inject
     SettingButtonsView(final SettingLanguageView settingLanguageView,
@@ -60,17 +56,9 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
             final SettingMapScrollSpeedView settingMapScrollSpeedView,
             final SettingVersionView settingVersionView,
             final GamePreferences gamePreferences, final I18n i18n,
-            final org.akropia.gui.preferences.DeveloperMode developerMode,
-            final KeyboardShortcuts shortcuts) {
-        this.shortcuts = Preconditions.checkNotNull(shortcuts);
+            final org.akropia.gui.preferences.DeveloperMode developerMode) {
         shortcutsButton = ActionButtons.button(ButtonIcon.SETTINGS);
         shortcutsButton.setId(BUTTON_SHORTCUTS_ID);
-        // Saved shortcut changes rename the developer shortcut at once.
-        shortcuts.addListener(() -> {
-            if (currentI18n != null) {
-                updateLanguage(currentI18n);
-            }
-        });
         this.settingMapScrollSpeedView = settingMapScrollSpeedView;
         this.settingLanguageView = Preconditions
                 .checkNotNull(settingLanguageView);
@@ -152,12 +140,9 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
     @Override
     public void updateLanguage(final I18n i18n) {
         logger.debug("Current language is: {}", i18n);
-        currentI18n = i18n;
         shortcutsButton.setText(i18n.get(ShortcutText.open));
         buttonBack.setText(i18n.get(GameMenu.buttonBack));
-        developerCheckBox.setText(
-                shortcuts.withHint(i18n.get(GameMenu.settingDeveloperMode),
-                        ShortcutAction.DEVELOPER_MODE));
+        developerCheckBox.setText(i18n.get(GameMenu.settingDeveloperMode));
         this.settingLanguageView.updateLanguage(i18n);
         this.settingShowGridView.updateLanguage(i18n);
         this.settingShowFightAdvisorView.updateLanguage(i18n);

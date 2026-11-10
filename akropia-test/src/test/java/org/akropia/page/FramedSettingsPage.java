@@ -23,6 +23,20 @@ import javafx.scene.text.Text;
 
 /** Player input and visual observations on the real Settings screen. */
 public final class FramedSettingsPage extends AbstractScreen {
+    public void verifyPageBackground(final String selector) {
+        getRobot().interact(() -> {
+            final Region root = getNodeFinder().lookup(selector)
+                    .queryAs(Region.class);
+            root.applyCss();
+            assertEquals(Color.web("#FFF9EC"),
+                    root.getBackground().getFills().get(0).getFill());
+            final Region viewport = (Region) root
+                    .lookup(".screen-scroll > .viewport");
+            assertEquals(Color.web("#FFF9EC"),
+                    viewport.getBackground().getFills().get(0).getFill());
+        });
+    }
+
     public FramedSettingsPage(final TestContext context) {
         super(context);
     }

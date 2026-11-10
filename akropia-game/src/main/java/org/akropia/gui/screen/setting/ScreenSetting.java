@@ -45,6 +45,7 @@ public class ScreenSetting extends AbstractScreenMenu implements GameScreen {
         this.shortcuts = shortcuts;
         this.page = page;
         page.getContent().getStylesheets().add(STYLE_SHEET_GAME_MENU);
+        page.getContent().getStyleClass().add("settings-screen");
         page.setStatusSource(Source.GAME);
         page.setToolbar(toolbar);
         this.menuHolderPanel = Preconditions.checkNotNull(menuHolderPanel);
