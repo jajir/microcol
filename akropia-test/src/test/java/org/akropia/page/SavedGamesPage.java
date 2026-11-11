@@ -670,6 +670,25 @@ public final class SavedGamesPage extends AbstractScreen {
         assertEquals(expectedRows, visibleRows);
     }
 
+    public void hoverFile(final String name) {
+        getRobot().moveTo(fileCell(name).lookup(".label"));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void leaveFiles() {
+        getRobot().moveTo("#savedGamesCancel");
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyFileUnderline(final String name, final boolean visible,
+            final boolean selected) {
+        final javafx.scene.control.ListCell<?> cell = fileCell(name);
+        assertEquals(visible, cell.lookup(".saved-game-selection").isVisible());
+        assertEquals(selected, cell.isSelected());
+        assertEquals(7, cell.getPadding().getTop(), 0.1);
+        assertEquals(7, cell.getPadding().getBottom(), 0.1);
+    }
+
     public void verifyPaperFileControls() {
         WaitForAsyncUtils.waitForFxEvents();
         final javafx.scene.control.ListCell<?> selected = fileCell(
@@ -691,7 +710,10 @@ public final class SavedGamesPage extends AbstractScreen {
         for (final javafx.scene.Node node : list().lookupAll(".list-cell")) {
             final javafx.scene.control.ListCell<?> cell = (javafx.scene.control.ListCell<?>) node;
             if (!cell.isEmpty()) {
-                assertEquals(cell.isSelected(),
+                assertEquals(
+                        cell.isSelected()
+                                || cell.lookup(".saved-game-selection")
+                                        .getParent().isHover(),
                         cell.lookup(".saved-game-selection").isVisible());
             }
         }

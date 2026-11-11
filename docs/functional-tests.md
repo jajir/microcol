@@ -1,3 +1,22 @@
+## Save browser hover and density — 2026-11-11
+
+1. UC-114/119: Save/Load filenames share their existing selection underline
+   with pointer hover; leaving an unselected filename removes it without
+   changing selection or preview. Vertical row padding is 7 rather than 10
+   logical pixels per side. TC191/12 checks hover, leave, persistent selection
+   and compact spacing in both Save and Load, retaining overwrite/delete/cancel.
+2. Base `2d93b75f` plus task changes: model/JUnit passed **5,123 tests** in
+   394 XML reports, zero failures/errors/skips; supervised elapsed 156.171 s
+   with a 600 s limit. Evidence: `target/verification/run-rd2y1k_j/`;
+   changed Java/CSS files match its source snapshot. Shared Java formatter
+   applied. Fourteen documentation checks, name audit and strict MkDocs passed.
+3. Targeted Docker/Xvfb TC191/12 and `PageVerificationContractTest` passed
+   **4 tests**, zero failures/errors/skips, in 86.916 supervised seconds
+   with a 1,800 s limit (completion `20261111T154803Z-dd80ed889ef2`, PID 66021).
+   Reports and screenshot: `target/docker-ui/run-I5K37H/`.
+   Smoke explicitly omitted at the user's request.
+   No remote CI, publication or full regression verification requested.
+
 ## Save browser paper controls — 2026-11-11
 
 1. UC-114/119: shared Save/Load rows use a pen underline, borderless delete

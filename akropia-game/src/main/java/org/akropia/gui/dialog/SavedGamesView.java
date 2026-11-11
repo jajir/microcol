@@ -111,7 +111,8 @@ public final class SavedGamesView {
                 filename.setMaxWidth(Double.MAX_VALUE);
                 HBox.setHgrow(title, Priority.ALWAYS);
                 underline.getStyleClass().add("saved-game-selection");
-                underline.visibleProperty().bind(selectedProperty());
+                underline.visibleProperty()
+                        .bind(selectedProperty().or(title.hoverProperty()));
                 row.setAlignment(Pos.CENTER_LEFT);
                 row.getStyleClass().add("saved-game-row");
                 row.prefWidthProperty().bind(widthProperty().subtract(20));

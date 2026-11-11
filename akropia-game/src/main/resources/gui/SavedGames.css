@@ -71,7 +71,7 @@
     -fx-border-width: 0;
 }
 .in-game-page.saved-games-screen .list-cell {
-    -fx-padding: 10 0;
+    -fx-padding: 7 0;
 }
 
 .saved-games .saved-game-row {

@@ -1,5 +1,10 @@
 # Ukládání, načítání a herní nabídka
 
+Seznamy Uložit a Načíst podtrhují název také při najetí myší; odjetí
+myší ponechá podtržený pouze vybraný soubor. Najetí nemění výběr ani
+náhled. Od 11. listopadu 2026 mají řádky mírně menší svislé odsazení
+(7 místo 10 logických pixelů nahoře i dole).
+
 Čitelné názvy souborů a deset společných kruhových autosavů z 8. listopadu
 2026 vlastní [R-0432](requirements/done/R-0432.md). Nová pravidla jsou v kapitole
 [Názvy a adresáře](#nazvy-a-adresare-schvalene-8-listopadu-2026); aktuální stav
