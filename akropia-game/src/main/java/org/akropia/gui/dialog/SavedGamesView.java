@@ -105,12 +105,12 @@ public final class SavedGamesView {
             {
                 prefWidthProperty().bind(list.widthProperty().subtract(28));
                 filename.setWrapText(true);
-                title.setFillWidth(false);
                 title.setMinWidth(0);
-                filename.maxWidthProperty().bind(title.widthProperty());
+                // Measure wrapping from the available layout width, not the
+                // title width left over from the previous layout pass.
+                filename.setMaxWidth(Double.MAX_VALUE);
                 HBox.setHgrow(title, Priority.ALWAYS);
                 underline.getStyleClass().add("saved-game-selection");
-                underline.prefWidthProperty().bind(filename.widthProperty());
                 underline.visibleProperty().bind(selectedProperty());
                 row.setAlignment(Pos.CENTER_LEFT);
                 row.getStyleClass().add("saved-game-row");

@@ -62,7 +62,10 @@ Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověře
 3. Vnější panely seznamu a detailu ani náhled světa nemají viditelný rámeček.
    Náhled nemá vlastní barevné pozadí a je zarovnaný vlevo s textem detailu.
    Scrollbar, zvýraznění výběru a rámečky ovládacích prvků zůstávají zachované.
-4. UC-114/119 pokrývá scénář
+4. Při prvním otevření se výška řádků odvozuje od dostupné šířky; krátké
+   názvy nesmějí vytvářet prázdné vysoké řádky a vytlačovat další soubory
+   mimo viditelný seznam. Stejné rozložení používají Uložit i Načíst.
+5. UC-114/119 pokrývá scénář
    `TC_191_F224_session_menu_test.TC_12_save_browser_allows_managed_files_and_uses_borderless_details`;
    stav ověření vlastní [funkční evidence](functional-tests.md#save-browser-file-management-2026-11-11).
 

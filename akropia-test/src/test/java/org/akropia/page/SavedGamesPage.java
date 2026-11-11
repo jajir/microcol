@@ -648,6 +648,28 @@ public final class SavedGamesPage extends AbstractScreen {
                 warning.getText().contains("You may lose this saved position"));
     }
 
+    /** Short filenames must fit on the first display without scrolling. */
+    public void verifyCompactFileRows(final int expectedRows) {
+        WaitForAsyncUtils.waitForFxEvents();
+        int visibleRows = 0;
+        final javafx.geometry.Bounds viewport = list()
+                .localToScene(list().getLayoutBounds());
+        for (final javafx.scene.Node node : list().lookupAll(".list-cell")) {
+            final javafx.scene.control.ListCell<?> cell = (javafx.scene.control.ListCell<?>) node;
+            if (!cell.isEmpty()) {
+                final javafx.geometry.Bounds bounds = cell
+                        .localToScene(cell.getLayoutBounds());
+                assertTrue(cell.getHeight() <= 100,
+                        "Short filename row must not expand: "
+                                + cell.getItem());
+                assertTrue(bounds.getMinY() >= viewport.getMinY());
+                assertTrue(bounds.getMaxY() <= viewport.getMaxY());
+                visibleRows++;
+            }
+        }
+        assertEquals(expectedRows, visibleRows);
+    }
+
     public void verifyPaperFileControls() {
         WaitForAsyncUtils.waitForFxEvents();
         final javafx.scene.control.ListCell<?> selected = fileCell(

@@ -857,6 +857,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.openSave();
         saves.verifyCatalogueFilenames("Alpha.akropia", "autosave-000.akropia",
                 "Zulu.akropia");
+        saves.verifyCompactFileRows(3);
         saves.select("autosave-000");
         saves.verifyManagedWarning();
         saves.verifyBorderlessDetails();
@@ -882,6 +883,9 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.action("saveConfirm");
         saves.verifySavedName("autosave-000", 0);
         saves.verifyCatalogueFilenames("Alpha.akropia", "Zulu.akropia");
+        saves.cancelBrowser();
+        saves.openLoad();
+        saves.verifyCompactFileRows(2);
         saves.cancelBrowser();
         saves.verifyGameUnchanged();
     }

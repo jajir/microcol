@@ -15449,3 +15449,31 @@ The numbered entries below are chronological evidence, including failed attempts
    complete; 14 documentation checks, name audit and strict MkDocs pass.
    Local acceptance is complete: 5,123 model/JUnit, 18 targeted and 21 smoke
    checks. Remote regression and publication were not inspected.
+
+## Save browser initial row layout — 2026-11-11
+
+1. UC-114/119: remove the filename/underline width bindings to previously
+   laid-out nodes in `SavedGamesView`. VBox now distributes the available
+   width to its children, avoiding inflated wrapped-text row heights on
+   first display. TC191/TC12 checks compact rows and visibility before
+   selection in Save (three files) and Load (two files); existing file
+   management and game-state assertions remain.
+2. Initial model dispatch `20261111T091438Z-fe2079a2079f` failed during
+   preparation: the labelled-container `docker ps` query exceeded 20 seconds;
+   total 22.085 seconds, zero lock wait, no test command started. Subsequent
+   Docker info and the same container-list probe succeeded. This does not
+   establish the cause of the first timeout.
+3. Model retry `20261111T091522Z-e2ecd9bf1695` passed all 5,123 checks with
+   zero failures/errors/skips in 152.135 supervised seconds; complete evidence
+   is in `target/verification/run-9utf0_hg/` (source based on `0fc5eace`).
+4. Targeted Docker/Xvfb run `20261111T091814Z-bd20118d1542` selects
+   TC191/TC05+TC11+TC12+TC15 and `PageVerificationContractTest`, supervisor
+   PID 53970 and timeout 900 seconds. All seven checks passed in two complete
+   reports with zero failures/errors/skips, 158.624 supervised seconds;
+   reports and screenshots: `target/docker-ui/run-GAoyMc/`. Reviewed the
+   saved-game screenshot: three compact rows, aligned delete controls and
+   visible selection underline. Shared Java formatting and diff review passed.
+   All 14 documentation checks, naming audit and strict MkDocs passed.
+5. The user explicitly waived smoke for this fix. Full regression, native
+   desktop checks and remote publication verification are not part of this
+   task. The unrelated backlog edit is excluded from the commit.
