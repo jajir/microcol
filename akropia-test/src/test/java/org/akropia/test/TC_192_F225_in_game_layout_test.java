@@ -520,7 +520,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         saves.verifyFullScreenPaper("Load game");
         page.verifyFrame(484, 1600);
         saves.select("Small window harbour");
-        saves.verifyDetailName("Small window harbour");
+        saves.verifyLoadLayout("Small window harbour");
         saves.verifyPreview(true);
         saves.verifySummaryLines("Year: ", "Gold: ", "People: ");
         page.verifyBackToGame("savedGamesCancel", "Back to game");
@@ -539,7 +539,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         hosted.pressShortcut(KeyCode.O);
         hosted.verifyMenuHosted("Načíst hru", "savedGamesCancel", "Zpět");
         saves.select("Small window harbour");
-        saves.verifyDetailName("Small window harbour");
+        saves.verifyLoadLayout("Small window harbour");
         saves.verifyPreview(true);
         saves.verifySummaryLines("Rok: ", "Zlato: ", "Podpora nezávislosti: ",
                 "Osoby: ", "Kolonie: ", "Lodě: ");

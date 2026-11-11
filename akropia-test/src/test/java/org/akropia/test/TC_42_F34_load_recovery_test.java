@@ -80,7 +80,7 @@ public class TC_42_F34_load_recovery_test extends AbstractAkropiaTest {
 
         // Leaving the game and canceling the picker do not change the file.
         game.exitToMenu();
-        audit.cancelLoadChooser();
+        audit.openLoadWithoutSelection();
         audit.verifyRejectedSourceUnchanged();
         audit.verifyLoadPageOpen();
         audit.closeLoadPage();

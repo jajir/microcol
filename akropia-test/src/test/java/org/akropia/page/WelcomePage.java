@@ -249,7 +249,12 @@ public class WelcomePage extends AbstractMenuScreen {
 
     public GamePage loadGame() {
         clickOnButtonWithId(ButtonsPanelView.BUTTON_LOAD_ID);
-        clickOnButtonWithId("importSave");
+        // Fixture setup uses the existing player-save loader; the load page
+        // itself now offers only the catalogue, covered by SavedGamesPage.
+        javafx.application.Platform
+                .runLater(() -> org.akropia.gui.dialog.SavedGameFixtureLoader
+                        .load(getContext().getClassFromGuice(
+                                org.akropia.gui.dialog.PersistingService.class)));
         WaitForAsyncUtils.waitForFxEvents();
         if (!getNodeFinder().lookup("#saveDiscard").queryAll().isEmpty()) {
             clickOnButtonWithId("saveDiscard");

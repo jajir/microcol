@@ -194,7 +194,7 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         setting.goBack().verifyMainScreen();
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         audit.openRecoveryChooser();
-        audit.verifyRecoveryChooserLabels("Uložené hry", "Načíst hru", "Zpět");
+        audit.verifyRecoveryChooserLabels("Načíst hru", "Načíst hru", "Zpět");
         audit.captureDialog("savedGamesCancel", "recovery-chooser-czech.png");
         audit.cancelRecovery();
         WelcomePage.of(getContext()).verifyMainScreen();

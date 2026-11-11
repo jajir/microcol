@@ -173,7 +173,10 @@ public final class FreePlayAuditPage extends AbstractScreen {
     public void verifyRecoveryChooserLabels(final String title,
             final String load, final String cancel) {
         assertEquals(title,
-                getNodeFinder().lookup(title).queryAs(Label.class).getText());
+                getNodeFinder()
+                        .lookup(node -> node instanceof Label
+                                && title.equals(((Label) node).getText()))
+                        .queryAs(Label.class).getText());
         assertEquals(load, getLabeledById("loadSelected").getText());
         assertEquals(cancel, getLabeledById("savedGamesCancel").getText());
     }
@@ -237,7 +240,8 @@ public final class FreePlayAuditPage extends AbstractScreen {
                             .getCurrentLocale())
                     .format(java.time.Instant.ofEpochMilli(entry.get().modified)
                             .atZone(java.time.ZoneId.systemDefault()));
-            assertEquals(file.getName(), cell.getText());
+            assertEquals(file.getName(),
+                    ((Label) cell.lookup(".label")).getText());
             getRobot().interact(
                     () -> list.getSelectionModel().select(entry.get()));
             org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
@@ -508,7 +512,11 @@ public final class FreePlayAuditPage extends AbstractScreen {
     public void attemptInvalidSavedGame(final boolean autosave) {
         clickOnButtonWithId(autosave ? "buttonContinue" : "buttonLoad");
         if (!autosave) {
-            clickOnButtonWithId("importSave");
+            javafx.application.Platform.runLater(
+                    () -> org.akropia.gui.dialog.SavedGameFixtureLoader
+                            .load(getContext().getClassFromGuice(
+                                    org.akropia.gui.dialog.PersistingService.class)));
+            WaitForAsyncUtils.waitForFxEvents();
         }
     }
 
@@ -648,15 +656,8 @@ public final class FreePlayAuditPage extends AbstractScreen {
         assertTrue(getButtonById("savedGamesCancel").isVisible());
     }
 
-    public void cancelLoadChooser() {
-        org.mockito.Mockito
-                .when(getContext()
-                        .getClassFromGuice(
-                                org.akropia.gui.FileSelectingService.class)
-                        .loadFile(org.mockito.Mockito.any(java.io.File.class)))
-                .thenReturn(null);
+    public void openLoadWithoutSelection() {
         clickOnButtonWithId("buttonLoad");
-        clickOnButtonWithId("importSave");
     }
 
     /**

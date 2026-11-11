@@ -1,3 +1,9 @@
+## UC-114/119: jednodušší načítací formulář — 2026-11-11
+1. Koš v řádku s potvrzením, odstranění importu a nadbytečných nadpisů
+   popisuje [UX kontrakt](ux.md#jednodussi-nacitani-11-listopadu-2026).
+2. TC191/TC01, TC05 a TC11 ověřují mazání, náhled a seznam; TC192 ověřuje
+   úzké anglické a české zobrazení. [Výsledky](functional-tests.md#load-form-simplification-2026-11-11).
+
 
 ## UC-114/119: správa autosavů a vzhled seznamu — 2026-11-11
 

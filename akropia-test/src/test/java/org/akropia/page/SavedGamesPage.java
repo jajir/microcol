@@ -160,7 +160,10 @@ public final class SavedGamesPage extends AbstractScreen {
             if (!cell.isEmpty()) {
                 final SavedGames.Entry entry = (SavedGames.Entry) cell
                         .getItem();
-                assertEquals(entry.file.getName(), cell.getText());
+                assertEquals(entry.file.getName(),
+                        ((javafx.scene.control.Label) cell.lookup(".label"))
+                                .getText());
+                assertNotNull(cell.lookup("#deleteSaveRow"));
             }
         }
     }
@@ -351,6 +354,37 @@ public final class SavedGamesPage extends AbstractScreen {
     public void verifyDetailName(final String name) {
         WaitForAsyncUtils.waitForFxEvents();
         assertEquals(name, getLabeledById("savedGameDetailName").getText());
+    }
+
+    /**
+     * Load keeps the filename in its row and starts detail with the preview.
+     */
+    public void verifyLoadLayout(final String name) {
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals(name,
+                list().getSelectionModel().getSelectedItem().getName());
+        final javafx.scene.Node title = getNodeFinder()
+                .lookup("#savedGameDetailName").query();
+        assertFalse(title.isVisible());
+        assertFalse(title.isManaged());
+        for (final String id : java.util.List.of("deleteSave", "importSave")) {
+            assertTrue(getNodeFinder().lookup("#" + id).queryAll().isEmpty());
+        }
+        assertTrue(getNodeFinder()
+                .lookup(node -> node instanceof javafx.scene.control.Label
+                        && "Saved games".equals(
+                                ((javafx.scene.control.Label) node).getText()))
+                .queryAll().isEmpty());
+        final javafx.scene.Node preview = getNodeFinder()
+                .lookup(".saved-game-preview").query();
+        final javafx.scene.layout.Region detail = getNodeFinder()
+                .lookup("#savedGameDetail")
+                .queryAs(javafx.scene.layout.Region.class);
+        assertEquals(
+                detail.localToScene(detail.getBoundsInLocal()).getMinY()
+                        + detail.getInsets().getTop(),
+                preview.localToScene(preview.getBoundsInLocal()).getMinY(), 2);
+        verifyFilenameList();
     }
 
     /**

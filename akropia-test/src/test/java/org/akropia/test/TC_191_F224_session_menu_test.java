@@ -141,11 +141,11 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         // list.
         saves.openLoad();
         saves.select("Přístav – před bitvou");
-        saves.action("deleteSave");
+        saves.deleteFile("Přístav – před bitvou");
         saves.action("saveCancel");
         saves.verifySavedName("Přístav – před bitvou", 1);
         saves.select("Přístav – před bitvou");
-        saves.action("deleteSave");
+        saves.deleteFile("Přístav – před bitvou");
         saves.action("saveConfirm");
         saves.verifySavedName("Přístav – před bitvou", 0);
         saves.cancelBrowser();
@@ -415,7 +415,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.verifyNoSelectedDetail(
                 "Select a saved game to see its map and summary.");
         saves.select("Harbour before the storm");
-        saves.verifyDetailName("Harbour before the storm");
+        saves.verifyLoadLayout("Harbour before the storm");
         saves.verifyPreview(true);
         saves.verifySelectedDetails("Corinth", "1508", "Conquistador");
         saves.verifyLoadEnabled(true);
@@ -789,10 +789,10 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.verifyNoSelectedDetail(
                 "Select a saved game to see its map and summary.");
 
-        // Selection exposes the stored title, preview, game summary, type and
+        // Selection exposes the preview, game summary, type and
         // time.
         saves.select("Metadata title");
-        saves.verifyDetailName("Metadata title");
+        saves.verifyLoadLayout("Metadata title");
         saves.verifyPreview(true);
         saves.verifySelectedDetails("Corinth", "1508", "Conquistador");
         saves.verifySummaryLines("Manual", "Saved:");

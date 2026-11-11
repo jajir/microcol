@@ -1,5 +1,17 @@
 # UX a pravidla ovládání Akropia
 
+## Jednodušší načítání — 11. listopadu 2026
+1. Hráč vybírá soubor vlevo a vidí jeho náhled a souhrn vpravo, bez dalšího
+   nadpisu seznamu a opakování názvu nad náhledem. Načíst hru zůstává
+   výslovným potvrzením výběru; bez platného výběru je neaktivní.
+2. Koš v každém řádku vyžaduje potvrzení, zrušení soubor zachová. Import
+   a samostatné mazací tlačítko nejsou součástí formuláře. Otevřít složku,
+   návrat a prázdné či nečitelné pozice zachovávají stávající cestu.
+3. Jde o schválené zadání, nikoli hráčskou studii. Pravidla vlastní
+   [ukládání a načítání](save-load-navigation.md); ověření uvádí
+   [funkční evidence](functional-tests.md#load-form-simplification-2026-11-11).
+
+
 ## Jednodušší ukládání — 10. listopadu 2026
 
 1. Hráč ukládá aktuální hru jedinou akcí Uložit hru; soubor vybírá seznamem

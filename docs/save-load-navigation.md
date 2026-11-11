@@ -185,8 +185,11 @@ samotná implementace jím není.
    a náhled vznikají ze stejného stavu jako `game.json`.
 5. Načíst hru má seznam vlevo a detail vpravo v poměru přibližně 1 : 2.
    Řádek ukazuje celý název souboru včetně přípony, bez dalších údajů; dlouhý
-   název se zalomí. Detail ukáže uložený název, typ, čas, náhled nebo „Náhled
-   není k dispozici“ a souhrn. Bez výběru vyzve k volbě a Načíst hru je
+   název se zalomí. Každý řádek má koš se stejným potvrzením mazání jako
+   Uložit hru. Nad seznamem není další nadpis. Detail začíná náhledem nebo
+   „Náhled není k dispozici“, pod ním jsou souhrn, typ a čas; název se
+   nad náhledem neopakuje. Import souboru ani samostatné tlačítko mazání
+   se nenabízejí; Otevřít složku zůstává dostupné. Bez výběru vyzve k volbě a Načíst hru je
    neaktivní; zmizení pozice detail
    vymaže. Nečitelná či nepodporovaná pozice ukáže důvod a nelze ji potvrdit.
 6. Uložit při otevření ukáže aktuální hru a nepoužitý název. Výběr souboru
@@ -302,7 +305,7 @@ systémové názvy (například CON nebo NUL) a neplatné znaky se odmítnou.
    Uložit hru; zrušení ponechá výběr i název. Po úspěchu se hráč vrátí do hry
    (nebo pokračuje v dříve vyžádaném odchodu).
    Každý řádek má vpravo obdélníkové tlačítko s ikonou koše a
-   přístupným názvem; pro automatické a rychlé pozice je neaktivní. Koš
+   přístupným názvem, také pro automatické a rychlé pozice. Koš
    vyžaduje potvrzení smazání a nespouští ukládání. Otevřít složku je vpravo
    od Uložit hru. Chyby a zrušení ponechávají hru i existující soubory.
 3. **F5 / Rychle uložit** přepíše společný rychlý bod `quick.akropia`,
@@ -315,7 +318,7 @@ mimo deset automatických slotů. Nová
    a rok. Při kolizi se doplní první volná přípona `-2`, `-3` atd.;
    výsledek má nejvýše 64 Unicode znaků. Automatické sloty 000–009 se kruhově přepisují. Katalog čte jen soubory přímo v této složce. Starší soubory mimo ni
    ani v podsložkách nevypisuje, nic automaticky nemaže ani nepřesouvá.
-   Nadále je lze výslovně importovat.
+   Hráč je může do této složky zkopírovat systémovým správcem souborů.
 5. **Otevřít složku uložení** otevře `~/.akropia/saves/` systémovým správcem souborů.
    Pokud to prostředí nepodporuje, hra oznámí chybu a zachová přehled.
 6. Ukládání a rychlé akce jsou běžně dostupné během připraveného lidského
@@ -337,17 +340,17 @@ mimo deset automatických slotů. Nová
 1. Podle [R-0436](requirements/done/R-0436.md), schváleného 9. listopadu 2026,
    seznam nemá filtr a čte jen soubory přímo v `~/.akropia/saves/`.
    Řádky zachovávají dosavadní pořadí katalogu a zobrazují celý název souboru
-   včetně přípony. Uložený název, typ, skutečný čas, náhled a herní souhrn
-   ukazuje detail vybrané pozice. Prázdný seznam má vlastní vysvětlení.
+   včetně přípony a koš s potvrzením mazání. Seznam nemá nadpis „Saved games“.
+   Detail vybrané pozice začíná náhledem, pod ním ukazuje herní souhrn, typ
+   a skutečný čas; název nad náhledem neopakuje. Prázdný seznam má vlastní vysvětlení.
 2. Poškozené údaje nezablokují prohlížení ostatních řádků. Výběr souboru
    je pouze čtení. Nečitelnou nebo nepodporovanou pozici nelze potvrdit.
    Až Načíst rekonstruuje a ověří celý kandidátní stav;
    chyba se ohlásí nad stránkou Načíst, která zůstane otevřená pro jinou
    volbu, a zachová původní hru i zdroj (R-0377).
-3. **Importovat soubor** otevírá systémový výběr. Zrušení přehledu,
-   systémového výběru či potvrzení nic neaktivuje. U kandidáta R-0377 zrušený
-   výběr i odmítnutý importovaný soubor ponechají stránku Načíst otevřenou;
-   teprve Zpět nebo Esc vrátí hráče na původní obrazovku.
+3. Formulář nenabízí import souboru ani samostatné tlačítko smazání.
+   Otevřít složku zpřístupňuje adresář uložených her. Zrušení potvrzení
+   mazání zachová soubor; Zpět nebo Esc vrátí hráče na původní obrazovku.
 4. **Pokračovat** používá poslední úspěšně uloženou nebo načtenou cestu.
    Po konci hry zůstává tato starší rozehraná pozice dostupná; samotný konec
    ji nepřepíše ukončenou hrou.

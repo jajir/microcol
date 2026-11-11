@@ -1,3 +1,73 @@
+## Load form simplification — 2026-11-11
+1. UC-114/119: load rows reuse the save-page trash action and confirmation;
+   the import button, separate delete button, catalogue heading and selected
+   detail title are removed. Preview starts at the top of the detail panel.
+2. TC191 retains delete cancel/confirm, no-selection, preview, unreadable-save,
+   filenames and load outcomes. TC192 checks the selected layout in narrow
+   English/Czech windows. Fixture setup invokes the existing player-save loader
+   directly because its former import control no longer exists; catalogue
+   interactions remain covered by the explicit save/load scenarios.
+3. Initial model dispatch `20261111T063105Z-d255563e47fd` (PID 37357,
+   timeout 600 seconds) failed during Docker preparation after 22.085 seconds:
+   container discovery exceeded its 20-second deadline; tests never started.
+   Docker backend logs show VM startup from idle at 06:31:05 UTC. Subsequent
+   engine query succeeded. The failed evidence remains unchanged.
+4. Formatted task Java sources with the shared Eclipse profile. Model retry
+   `20261111T063222Z-ec8b58c64a06` (PID 37610, timeout 600 seconds) passed
+   5,123 checks in 394 complete XML reports, zero failures/errors/skips,
+   in 156.033 supervised seconds. Reports: `target/verification/run-aejib5n6/`.
+   The changed game source matches the checked snapshot.
+5. Targeted Docker/Xvfb dispatch `20261111T063519Z-234768db1b35` (PID 38436,
+   timeout 2,400 seconds) selects complete TC191, TC42 and TC43 classes,
+   TC192/TC07+TC08, TC21/TC07 and `PageVerificationContractTest`.
+   Fourteen documentation checks, name audit and strict MkDocs passed before
+   this evidence update. UI and smoke acceptance remain pending; remote CI
+   and publication verification are outside scope.
+
+6. Targeted attempt `20261111T063519Z-234768db1b35` failed after 213.195
+   supervised seconds: 30 checks, 23 failures, one error, zero skips. The
+   changed fixture helper called `loadFromSavedGames(false)`, which opens the
+   catalogue instead of loading the fixture. Consequently 23 journeys lacked
+   the game status bar and another could not find its game control. This was
+   a test setup error, not accepted UI behavior.
+7. Added a test-only package bridge to dispatch the existing import operation
+   for chooser-backed fixture setup; no player control or runtime API was
+   added. The game source and passing model evidence remain unchanged.
+   Same complete targeted selection reruns as `20261111T063939Z-6833d369b947`
+   (PID 39059, timeout 2,400 seconds). UI and smoke results remain pending.
+
+8. Retry `run-3CspPy` completed in 540.791 supervised seconds: 30 checks,
+   three failures, one error, zero skips. All TC191 (12), selected TC192 (2),
+   TC42 (5), TC21 (1) and source-contract (3) checks passed. TC43 retained
+   old assertions on `ListCell.text` and the removed Czech catalogue title;
+   filenames now live in the row label alongside the trash button. Updated
+   only those selectors/title expectations, preserving file, date, recovery,
+   loading and navigation assertions.
+9. TC43 and the source contract rerun as `20261111T064932Z-c6c757142890`
+   (PID 39703, timeout 1,800 seconds). Other passing targeted checks retain
+   unchanged covered behavior. Screenshots from `run-3CspPy` were reviewed:
+   filename plus trash, no catalogue/detail title, preview above summary,
+   and narrow English/Czech layout. Smoke remains pending.
+
+10. TC43/source-contract retry `run-LpI80O` passed all 10 checks in two
+    complete reports, zero failures/errors/skips, in 153.614 supervised seconds.
+    Together with unchanged passing reports from `run-3CspPy`, all 30 selected
+    checks now pass (27 UI scenarios and three source-contract checks).
+    Earlier failed attempts remain failed.
+11. Fixed smoke/support dispatch `20261111T065220Z-56f8b78ac25a` (PID 39902,
+    supervisor timeout 480 seconds, acceptance budget 420 seconds) is pending.
+
+12. Fixed smoke/support `run-icacqz7v` passed 21 checks in 12 complete XML
+    reports, zero failures/errors/skips, in 254.857 supervised seconds, within
+    the 420-second local budget. Every changed Java source, including the
+    test-only fixture bridge, matches its source snapshot.
+13. Local acceptance: 5,123 model/JUnit checks, all 30 distinct targeted checks
+    and 21 smoke/support checks pass. Fourteen documentation consistency
+    checks, the name audit and strict MkDocs pass. Reviewed the scoped diff,
+    shared-formatter output and rendered EN/CS screenshots. Unrelated backlog
+    edits are excluded. No full regression, native desktop check, remote CI
+    watch or distribution/publication verification was performed.
+
 
 ## Save browser file management — 2026-11-11
 

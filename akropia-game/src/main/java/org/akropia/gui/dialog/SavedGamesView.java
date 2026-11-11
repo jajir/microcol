@@ -132,10 +132,8 @@ public final class SavedGamesView {
             @Override
             protected void updateItem(final Entry entry, final boolean empty) {
                 super.updateItem(entry, empty);
-                setText(!saving && !empty && entry != null
-                        ? entry.file.getName()
-                        : null);
-                setGraphic(saving && !empty && entry != null ? row : null);
+                setText(null);
+                setGraphic(!empty && entry != null ? row : null);
                 if (entry != null && !empty) {
                     filename.setText(entry.file.getName());
                 }
@@ -194,13 +192,6 @@ public final class SavedGamesView {
                             () -> !isLoadable(
                                     list.getSelectionModel().getSelectedItem()),
                             list.getSelectionModel().selectedItemProperty()));
-        }
-        if (!saving) {
-            addSelection(actions, SavedGameText.delete, "deleteSave",
-                    SavedGamesDialog.Action.DELETE);
-            add(actions, SavedGameText.importFile, "importSave",
-                    () -> choose(new SavedGamesDialog.Choice(
-                            SavedGamesDialog.Action.IMPORT, null, null)));
         }
         add(saving ? primaryActions : actions, SavedGameText.folder,
                 "openSaveFolder", () -> choose(new SavedGamesDialog.Choice(
@@ -261,10 +252,6 @@ public final class SavedGamesView {
         columns.setMinWidth(0);
 
         content = new VBox(10);
-        if (!saving) {
-            content.getChildren()
-                    .add(new Label(texts.get(SavedGameText.title)));
-        }
         content.getChildren().add(columns);
         if (!actions.getChildren().isEmpty()) {
             content.getChildren().add(actions);
@@ -332,6 +319,8 @@ public final class SavedGamesView {
     }
 
     private void showDetail(final Entry entry) {
+        detailName.setVisible(saving || entry == null);
+        detailName.setManaged(saving || entry == null);
         if (saving && entry == null) {
             detailName.setText(texts.get(SavedGameText.currentGame));
             showPreview(Optional.ofNullable(currentImage),
@@ -408,17 +397,6 @@ public final class SavedGamesView {
     private void choose(final SavedGamesDialog.Choice choice) {
         error.setText("");
         chosen.accept(choice);
-    }
-
-    private void addSelection(final FlowPane actions, final SavedGameText text,
-            final String id, final SavedGamesDialog.Action action) {
-        final Button button = add(actions, text, id,
-                () -> choose(new SavedGamesDialog.Choice(action,
-                        list.getSelectionModel().getSelectedItem(), null)));
-        button.disableProperty().bind(Bindings.createBooleanBinding(() -> {
-            final Entry entry = list.getSelectionModel().getSelectedItem();
-            return entry == null;
-        }, list.getSelectionModel().selectedItemProperty()));
     }
 
     private Button add(final FlowPane pane, final SavedGameText text,
