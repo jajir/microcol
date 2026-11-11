@@ -71,6 +71,16 @@ public final class SavedGamesPage extends AbstractScreen {
     }
 
     public void select(final String name) {
+        // A prior Save action may leave the outer small-window page scrolled.
+        final javafx.scene.control.ScrollPane outer = (javafx.scene.control.ScrollPane) list()
+                .getScene().lookup(".screen-scroll");
+        if (outer != null) {
+            getRobot().moveTo(outer);
+            for (int step = 0; step < 40 && outer.getVvalue() > 0; step++) {
+                getRobot().scroll(3, javafx.geometry.VerticalDirection.UP);
+                WaitForAsyncUtils.waitForFxEvents();
+            }
+        }
         final var list = list();
         final int index = java.util.stream.IntStream
                 .range(0, list.getItems().size())
@@ -327,14 +337,18 @@ public final class SavedGamesPage extends AbstractScreen {
 
     /** The detail beside the list describes the selected save. */
     public void verifySelectedDetails(final String player, final String year,
-            final String difficulty) {
+            final String gameType) {
         WaitForAsyncUtils.waitForFxEvents();
         final String summary = getLabeledById("savedGameSummary").getText();
         assertNotNull(list().getSelectionModel().getSelectedItem());
         assertTrue(summary.contains(player), summary);
         assertTrue(summary.contains(year), summary);
-        assertTrue(summary.contains(difficulty), summary);
+        assertTrue(summary.contains(gameType), summary);
         assertFalse(summary.contains("null"), summary);
+        assertFalse(summary.contains("Type:"), summary);
+        assertFalse(summary.contains("Discoverer"), summary);
+        assertTrue(summary.contains(" AD"), summary);
+        assertTrue(summary.contains("\nRebel support:"), summary);
     }
 
     /**
@@ -432,9 +446,39 @@ public final class SavedGamesPage extends AbstractScreen {
                 .query();
         final javafx.scene.Node folder = getNodeFinder()
                 .lookup("#openSaveFolder").query();
-        assertSame(save.getParent(), folder.getParent());
-        assertTrue(folder.getBoundsInParent().getMinX() > save
-                .getBoundsInParent().getMinX());
+        assertNotSame(save.getParent(), folder.getParent());
+        assertEquals(
+                list().localToScene(list().getLayoutBounds()).getMaxY() + 10,
+                folder.localToScene(folder.getLayoutBounds()).getMinY(), 2);
+    }
+
+    /**
+     * List follows the shared left edge and fills the body above its folder
+     * action.
+     */
+    public void verifyExpandedLayout() {
+        WaitForAsyncUtils.waitForFxEvents();
+        getRobot().interact(() -> {
+            final javafx.scene.Scene scene = list().getScene();
+            scene.getRoot().applyCss();
+            scene.getRoot().layout();
+            final javafx.scene.Node header = scene
+                    .lookup(".screen-toolbar .game-bar-content");
+            final javafx.scene.Node footer = scene.lookup("#statusBar");
+            final javafx.scene.Node folder = scene.lookup("#openSaveFolder");
+            final javafx.geometry.Bounds files = list()
+                    .localToScene(list().getLayoutBounds());
+            final javafx.geometry.Bounds action = folder
+                    .localToScene(folder.getLayoutBounds());
+            assertEquals(
+                    header.localToScene(header.getLayoutBounds()).getMinX(),
+                    files.getMinX(), 2);
+            assertEquals(files.getMinX(), action.getMinX(), 2);
+            assertEquals(files.getMaxY() + 10, action.getMinY(), 2);
+            assertEquals(footer.localToScene(footer.getLayoutBounds()).getMinY()
+                    - 16, action.getMaxY(), 2);
+            assertTrue(files.getHeight() > 200);
+        });
     }
 
     public void verifyFilename(final String expected) {

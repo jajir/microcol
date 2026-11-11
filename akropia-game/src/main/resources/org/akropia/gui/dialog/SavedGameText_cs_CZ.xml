@@ -50,4 +50,6 @@
     <entry key="autosaved">Tah byl automaticky uložen: %s.</entry>
     <entry key="summaryType">Typ: %s</entry>
     <entry key="managedWarning">Tento soubor může nahradit automatické nebo rychlé uložení. O uloženou pozici můžete přijít.</entry>
+    <entry key="summaryGameType">Typ hry: %s</entry>
+    <entry key="campaign">Kampaň</entry>
 </properties>

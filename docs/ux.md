@@ -7,7 +7,10 @@
 2. Koš v každém řádku vyžaduje potvrzení, zrušení soubor zachová. Import
    a samostatné mazací tlačítko nejsou součástí formuláře. Otevřít složku,
    návrat a prázdné či nečitelné pozice zachovávají stávající cestu.
-3. Jde o schválené zadání, nikoli hráčskou studii. Pravidla vlastní
+3. Seznam sdílí levou hranu s nadpisem a status barem, využívá dostupnou
+   výšku a má tlačítko složky pod sebou v Load i Save. Přehled rozlišuje
+   typ hry, odděluje zlato a podporu rebelů a uvádí rok s AD.
+4. Jde o schválené zadání, nikoli hráčskou studii. Pravidla vlastní
    [ukládání a načítání](save-load-navigation.md); ověření uvádí
    [funkční evidence](functional-tests.md#load-form-simplification-2026-11-11).
 

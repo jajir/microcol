@@ -56,3 +56,20 @@
 .saved-games .list-cell .label {
     -fx-text-fill: #302D27;
 }
+
+/* Match the centered header/footer content edge as the window grows. */
+.in-game-page.saved-games-screen .screen-body {
+    -fx-padding: 16;
+    -fx-alignment: top-center;
+}
+.in-game-page.saved-games-screen .saved-games {
+    -fx-max-width: 1440;
+    -fx-padding: 0;
+}
+.in-game-page.saved-games-screen .list-view {
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+.in-game-page.saved-games-screen .list-cell {
+    -fx-padding: 10 0;
+}

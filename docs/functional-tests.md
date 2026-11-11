@@ -15337,3 +15337,59 @@ The numbered entries below are chronological evidence, including failed attempts
     runs remain failed evidence; the isolated colony-close issue is not claimed
     diagnosed. Unrelated backlog edits are excluded. Full regression, native
     desktop inspection, remote CI and publication verification were not run.
+
+
+## Save Load resizing — 2026-11-11
+
+1. UC-114/119: shared left alignment with header/footer, full-height file
+   list with folder action below, explicit game type, separate gold/support
+   lines and AD after year. TC191/TC15 covers growing/shrinking both pages;
+   existing TC01/TC05/TC11 retain save/load and summary checks.
+2. Initial model/JUnit run `20261111T072340Z-865656573101` passed 5,123
+   checks with zero failures/errors/skips in 157.426 supervised seconds,
+   reports `target/verification/run-0qc1l8fx/`. The final Campaign label
+   was refined during that run; final-source model verification is queued
+   as `20261111T072520Z-df15bfb45cca` (PID 42742, limit 600 seconds).
+3. Fourteen documentation checks and name audit pass. Strict MkDocs first
+   rejected two new evidence anchors; corrected anchors pass the rerun.
+   UI and smoke acceptance remain pending. No remote CI or publication
+   verification requested.
+
+4. Final game source matches `target/verification/run-plnsom43/source/`.
+   Model/JUnit `20261111T072520Z-df15bfb45cca` passed 5,123 checks, zero
+   failures/errors/skips, 154.202 supervised seconds after 57.282 seconds
+   waiting for the prior run. Targeted Docker/Xvfb dispatch
+   `20261111T072905Z-096df7a954bd` (PID 43724, limit 1,800 seconds) selects
+   all TC191, TC192/TC07+TC08 and `PageVerificationContractTest`.
+
+5. Targeted attempt `20261111T072905Z-096df7a954bd` failed after 332.885
+   supervised seconds: 17 checks, zero failures, one error, zero skips,
+   reports `target/docker-ui/run-owzd7v/`. TC05 incorrectly reused a
+   full-viewport assertion at a small height where Save scrolls. TC15
+   also lacked the required local tag and was not selected. Corrected
+   only these test mistakes; game source and model evidence are unchanged.
+
+6. Retry `run-teVzto` (`20261111T073552Z-3d1d3e4f891e`) completed
+   18 checks in 366.696 supervised seconds: zero failures, one error,
+   zero skips. TC15 now ran and passed; expanded Save screenshot confirms
+   alignment and bottom folder action. TC05 failed to open the delete
+   confirmation after the outer small-window page remained scrolled.
+   Page-object selection now scrolls the outer page up with the mouse
+   before selecting a file. All delete/confirmation assertions remain.
+
+7. Corrected targeted run `20261111T074308Z-701cb1522633` passed all
+   18 checks in three complete reports, zero failures/errors/skips:
+   TC191 (13), TC192/TC07+TC08 (2), source-contract (3).
+   Reports: `target/docker-ui/run-6dPXs0/`; 407.156 supervised seconds.
+   Reviewed expanded Load/Save and selected-summary screenshots.
+   Earlier failed attempts remain failed. Fixed smoke/support dispatched
+   as `20261111T075015Z-78629eebea36`, PID 45066, supervisor limit 480 seconds
+   with the unchanged 420-second acceptance budget.
+
+8. Fixed smoke/support passed 21 checks in 12 complete reports, zero
+   failures/errors/skips: `target/verification/run-g5ow0_fd/`, 256.526
+   supervised seconds within the 420-second budget. All changed executable
+   files match the smoke source snapshot. Java formatting and diff review
+   complete; 14 documentation checks, name audit and strict MkDocs pass.
+   Local acceptance is complete: 5,123 model/JUnit, 18 targeted and 21 smoke
+   checks. Remote regression and publication were not inspected.

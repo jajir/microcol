@@ -50,4 +50,6 @@
     <entry key="autosaved">Turn saved automatically: %s.</entry>
     <entry key="summaryType">Type: %s</entry>
     <entry key="managedWarning">This file may be replaced by automatic or quick saving. You may lose this saved position.</entry>
+    <entry key="summaryGameType">Game type: %s</entry>
+    <entry key="campaign">Campaign</entry>
 </properties>

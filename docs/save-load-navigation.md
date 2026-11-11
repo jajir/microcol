@@ -187,7 +187,7 @@ samotná implementace jím není.
    Řádek ukazuje celý název souboru včetně přípony, bez dalších údajů; dlouhý
    název se zalomí. Každý řádek má koš se stejným potvrzením mazání jako
    Uložit hru. Nad seznamem není další nadpis. Detail začíná náhledem nebo
-   „Náhled není k dispozici“, pod ním jsou souhrn, typ a čas; název se
+   „Náhled není k dispozici“, pod ním jsou souhrn a čas; název se
    nad náhledem neopakuje. Import souboru ani samostatné tlačítko mazání
    se nenabízejí; Otevřít složku zůstává dostupné. Bez výběru vyzve k volbě a Načíst hru je
    neaktivní; zmizení pozice detail
@@ -306,8 +306,7 @@ systémové názvy (například CON nebo NUL) a neplatné znaky se odmítnou.
    (nebo pokračuje v dříve vyžádaném odchodu).
    Každý řádek má vpravo obdélníkové tlačítko s ikonou koše a
    přístupným názvem, také pro automatické a rychlé pozice. Koš
-   vyžaduje potvrzení smazání a nespouští ukládání. Otevřít složku je vpravo
-   od Uložit hru. Chyby a zrušení ponechávají hru i existující soubory.
+   vyžaduje potvrzení smazání a nespouští ukládání. Otevřít složku je pod seznamem souborů vlevo. Chyby a zrušení ponechávají hru i existující soubory.
 3. **F5 / Rychle uložit** přepíše společný rychlý bod `quick.akropia`,
 mimo deset automatických slotů. Nová
    hra dostane vlastní identitu; načtení uložené hry ji zachová. Jména a
@@ -395,3 +394,19 @@ mimo deset automatických slotů. Nová
 2. Archiv se otevře jako samostatný návrh scénáře bez přiřazeného cílového souboru. Uložit nabízí `scenario.akropia` a exportuje JSON scénáře. Otevření ani úpravy nepřepisují původní uloženou hru. Běžné načítání hry nadále vyžaduje archiv.
 3. Editor podporuje rozměry 10 až 120 polí na každé straně, včetně uložené mapy 120 × 80. Neplatný nebo nepodporovaný soubor zachová dosavadní návrh a zobrazí stávající lokalizované vysvětlení.
 4. Rozsah a ověření: [R-0440](requirements/done/R-0440.md), `TC_210_F241_map_editor_lifecycle_test` (včetně dodaného souboru jako fixture `F241-saved-game.akropia`).
+
+
+## Rozložení a přehled pozice — 11. listopadu 2026
+
+1. Načíst i Uložit zarovnávají levý okraj seznamu ke společnému okraji
+   nadpisu a status baru. Při rozšíření okna obsah zachovává jejich
+   vystředěný limit 1440 logických pixelů.
+2. Seznam vyplňuje dostupnou výšku mezi horním a spodním pruhem.
+   Tlačítko Otevřít složku uložení zůstává pod seznamem vlevo.
+3. Náhled uvádí typ hry jako Free play nebo Campaign (s názvem mise),
+   nikoli název obtížnosti. Řádek typu souboru (například Recovery points)
+   se nezobrazuje. Gold a Rebel support mají samostatné řádky; za rokem
+   je AD. Uložená obtížnost a typ souboru zůstávají v datech beze změny.
+4. Výběr, potvrzení načtení či přepsání, zrušení i chyby zachovávají výše
+   popsané chování. Technické ověření uvádí
+   [funkční evidence](functional-tests.md#save-load-resizing-2026-11-11).

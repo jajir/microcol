@@ -11,13 +11,11 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.akropia.gui.Loc;
-import org.akropia.gui.LocalizationHelper;
 import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.screen.menu.GameMenu;
 import org.akropia.gui.util.ActionButtons;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Calendar;
-import org.akropia.model.Difficulty;
 import org.akropia.model.EuropeanNation;
 import org.akropia.model.campaign.CampaignNames;
 import org.akropia.model.campaign.po.SaveArchiveException;
@@ -193,14 +191,15 @@ public final class SavedGamesView {
                                     list.getSelectionModel().getSelectedItem()),
                             list.getSelectionModel().selectedItemProperty()));
         }
-        add(saving ? primaryActions : actions, SavedGameText.folder,
-                "openSaveFolder", () -> choose(new SavedGamesDialog.Choice(
+        final FlowPane folderActions = new FlowPane();
+        add(folderActions, SavedGameText.folder, "openSaveFolder",
+                () -> choose(new SavedGamesDialog.Choice(
                         SavedGamesDialog.Action.FOLDER, null, null)));
         if (cancel != null) {
             add(actions, SavedGameText.cancel, "savedGamesCancel", cancel);
         }
 
-        final VBox left = new VBox(10, list);
+        final VBox left = new VBox(10, list, folderActions);
         left.setMinWidth(0);
         VBox.setVgrow(list, Priority.ALWAYS);
         final VBox detail = new VBox(10);
@@ -252,6 +251,7 @@ public final class SavedGamesView {
         columns.setMinWidth(0);
 
         content = new VBox(10);
+        VBox.setVgrow(content, Priority.ALWAYS);
         content.getChildren().add(columns);
         if (!actions.getChildren().isEmpty()) {
             content.getChildren().add(actions);
@@ -457,44 +457,39 @@ public final class SavedGamesView {
             return texts.get(SavedGameText.summaryMissing) + saved;
         }
         try {
-            final LocalizationHelper names = new LocalizationHelper(texts);
-            String year = String.valueOf(value.getYear());
+            String year = String.valueOf(value.getYear()) + " AD";
             if (value.getSeason() != null) {
                 year += " " + texts.get(Loc.getTerrainDescription(
                         Calendar.Season.valueOf(value.getSeason())));
             }
             final String mission = CampaignNames.defaultCampaign.toString()
                     .equals(value.getCampaignName())
-                            ? texts.get(
-                                    GameMenu.get(CampaignNames.defaultCampaign,
+                            ? texts.get(SavedGameText.campaign) + " · "
+                                    + texts.get(GameMenu.get(
+                                            CampaignNames.defaultCampaign,
                                             value.getMissionName()))
                             : texts.get(SavedGameText.freePlay);
             return texts.get(SavedGameText.summaryPlayer, value.getPlayerName(),
                     nationName(value.getNation())) + "\n"
                     + texts.get(SavedGameText.summaryYear, year) + "\n"
                     + texts.get(SavedGameText.summaryGold, value.getGold())
-                    + " · "
+                    + "\n"
                     + texts.get(SavedGameText.summarySupport,
                             value.getRebelSupportPercent())
                     + "\n"
                     + texts.get(SavedGameText.summaryCounts,
                             value.getPeopleCount(), value.getColonyCount(),
                             value.getShipCount())
-                    + "\n"
-                    + names.getDifficultyName(
-                            Difficulty.valueOf(value.getDifficulty()))
-                    + " · " + mission + saved;
+                    + "\n" + texts.get(SavedGameText.summaryGameType, mission)
+                    + saved;
         } catch (RuntimeException invalid) {
             return texts.get(SavedGameText.summaryMissing) + saved;
         }
     }
 
     private String savedDetails(final Entry entry) {
-        return "\n"
-                + texts.get(SavedGameText.summaryType,
-                        texts.get(kindText(entry.kind)))
-                + "\n" + texts.get(SavedGameText.summarySaved,
-                        formatTime(texts, entry.modified));
+        return "\n" + texts.get(SavedGameText.summarySaved,
+                formatTime(texts, entry.modified));
     }
 
     private String nationName(final String nation) {

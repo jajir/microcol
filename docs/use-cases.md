@@ -1,3 +1,11 @@
+## UC-114/119: roztažení Load a Save — 11. listopadu 2026
+
+1. [Rozložení a přehled](save-load-navigation.md#rozlozeni-a-prehled-pozice-11-listopadu-2026)
+   ověřuje TC191/TC15 při změně velikosti obou formulářů; TC01/TC05/TC11
+   kontrolují upravený přehled a zachování načítání a ukládání.
+2. [Evidence](functional-tests.md#save-load-resizing-2026-11-11) odlišuje
+   provedené kontroly od čekající přejímky.
+
 ## UC-114/119: jednodušší načítací formulář — 2026-11-11
 1. Koš v řádku s potvrzením, odstranění importu a nadbytečných nadpisů
    popisuje [UX kontrakt](ux.md#jednodussi-nacitani-11-listopadu-2026).

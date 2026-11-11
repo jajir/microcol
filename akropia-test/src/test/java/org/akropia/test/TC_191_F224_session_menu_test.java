@@ -36,6 +36,34 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
+    void TC_15_save_load_expand_between_shared_bars() throws Exception {
+        // Open the current game's Save screen and grow beyond the shared
+        // content cap.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        game.waitWhileMoving();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        final org.akropia.page.GameBarWidthPage window = new org.akropia.page.GameBarWidthPage(
+                getContext());
+        saves.openSave();
+        window.resizeContent(1800, 1100);
+        saves.verifyExpandedLayout();
+        saves.captureDialog("savedGamesList", "save-expanded.png");
+        window.resizeContent(1100, 900);
+        saves.verifyExpandedLayout();
+        saves.cancelBrowser();
+        // Load keeps the same alignment and bottom folder action at both sizes.
+        saves.openLoad();
+        saves.verifyExpandedLayout();
+        window.resizeContent(1800, 1100);
+        saves.verifyExpandedLayout();
+        saves.captureDialog("savedGamesList", "load-expanded.png");
+        saves.cancelBrowser();
+        window.resizeContent(1100, 900);
+        game.verifyGameInFront();
+    }
+
+    @Test
+    @Tag("local")
     void TC_01_named_save_cancellation_quick_restore_and_window_close()
             throws Exception {
         // Turn autosaves off, so played turns stay unsaved progress.
@@ -95,7 +123,8 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.verifyGameUnchanged();
         saves.openLoad();
         saves.select("Přístav – před bitvou");
-        saves.verifySelectedDetails("Corinth", "1508", "Conquistador");
+        saves.verifySelectedDetails("Corinth", "1508 AD",
+                "Game type: Free play");
         saves.captureDialog("savedGamesList", "r0298-saved-games-filled.png");
         saves.action("loadSelected");
         saves.action("saveCancel");
@@ -366,7 +395,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.verifyDetailName("New save of the current game");
         saves.verifySimplifiedSaveControls();
         saves.verifyPreview(true);
-        saves.verifySummaryLines("Year: 1508", "Gold: ", "Rebel support: ",
+        saves.verifySummaryLines("Year: 1508 AD", "Gold: ", "Rebel support: ",
                 "People: ", "Colonies: ", "Ships: ");
         saves.verifySuggestedName("1508");
         saves.captureDialog("savedGamesList", "r0382-save-current-en.png");
@@ -417,14 +446,15 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.select("Harbour before the storm");
         saves.verifyLoadLayout("Harbour before the storm");
         saves.verifyPreview(true);
-        saves.verifySelectedDetails("Corinth", "1508", "Conquistador");
+        saves.verifySelectedDetails("Corinth", "1508 AD",
+                "Game type: Free play");
         saves.verifyLoadEnabled(true);
         saves.captureDialog("savedGamesList", "r0383-load-detail-en.png");
         saves.verifyGameUnchanged();
 
         // The filename-only list needs no filter; details retain type and time.
         saves.verifyFilenameList();
-        saves.verifySummaryLines("Manual", "Saved:");
+        saves.verifySummaryLines("Game type: Free play", "Saved:");
         hosted.click("savedGamesCancel");
 
         // An unsupported save names the reason and cannot be confirmed.
@@ -794,8 +824,9 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.select("Metadata title");
         saves.verifyLoadLayout("Metadata title");
         saves.verifyPreview(true);
-        saves.verifySelectedDetails("Corinth", "1508", "Conquistador");
-        saves.verifySummaryLines("Manual", "Saved:");
+        saves.verifySelectedDetails("Corinth", "1508 AD",
+                "Game type: Free play");
+        saves.verifySummaryLines("Game type: Free play", "Saved:");
         saves.verifyLoadEnabled(true);
         saves.captureDialog("savedGamesList", "r0436-load-filenames.png");
         saves.verifyGameUnchanged();
