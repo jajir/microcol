@@ -50,20 +50,3 @@
 .dialog-with-man .label{
 	-fx-padding: 20 200 20 30
 }
-
-/* Paper input: the same nine-slice geometry as the shared action buttons. */
-#tradeRouteName {
-    -fx-background-color: #FFF9EC;
-    -fx-background-insets: 2;
-    -fx-background-radius: 0;
-    -fx-border-image-source: url("../images/trade-route-name-frame.png");
-    -fx-border-image-slice: 12;
-    -fx-border-image-width: 6;
-    -fx-border-image-repeat: stretch;
-    -fx-padding: 6 8 7 8;
-    -fx-text-fill: #000000;
-    -fx-effect: null;
-}
-#tradeRouteName:focused {
-    -fx-background-color: #E7E7D0;
-}

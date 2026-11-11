@@ -16,7 +16,7 @@
     -fx-padding: 10;
 }
 .saved-games .list-cell:filled:selected {
-    -fx-background-color: #DFBD91;
+    -fx-background-color: #FFF9EC;
     -fx-text-fill: black;
 }
 .saved-games .saved-game-detail {
@@ -72,4 +72,25 @@
 }
 .in-game-page.saved-games-screen .list-cell {
     -fx-padding: 10 0;
+}
+
+.saved-games .saved-game-row {
+    -fx-padding: 0 24 0 0;
+}
+
+/* A single pen stroke marks selection without covering the paper. */
+.saved-games .saved-game-selection {
+    -fx-shape: "M0 1 Q25 0 50 1 T100 1 L100 3 Q75 2 50 3 T0 3 Z";
+    -fx-background-color: #000000;
+    -fx-min-height: 3;
+    -fx-pref-height: 3;
+    -fx-max-height: 3;
+}
+.saved-games #deleteSaveRow {
+    -fx-border-image-source: none;
+    -fx-background-color: transparent;
+}
+.saved-games #deleteSaveRow:hover,
+.saved-games #deleteSaveRow:focused {
+    -fx-background-color: #E7E7D0;
 }

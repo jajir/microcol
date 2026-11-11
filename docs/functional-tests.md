@@ -1,3 +1,59 @@
+## Save browser paper controls — 2026-11-11
+
+1. UC-114/119: shared Save/Load rows use a pen underline, borderless delete
+   buttons and more space around the scrollbar. Save uses the existing
+   SVG-backed paper input frame and hides the title above the preview.
+2. TC191/05 and TC191/12 retain save/overwrite/delete/cancel assertions;
+   TC192/08 checks small EN/CS layouts. Page verification checks the input
+   frame, selection stroke, paper background, delete frame and right margin.
+3. Java formatting applied with the shared Eclipse profile. The existing
+   `trade-route-name-frame.svg` is a genuine vector; repeatable export check
+   passed (`target/save-browser-style/export-check`). Runtime screenshot
+   review is recorded below; final local acceptance awaits smoke.
+4. Model/JUnit completion `20261111T081733Z-6c6e72ce80cc` (PID 49545,
+   timeout 600 seconds) passed **5,123 checks**, zero failures/errors/skips
+   in 394 complete XML reports; 160.853 supervised seconds. Reports:
+   `target/verification/run-t8afqmzi/`. Changed game Java matches the snapshot.
+5. Targeted Docker/Xvfb completion `20261111T082037Z-01c7faac9527`, PID 50266,
+   timeout 1,800 seconds: complete TC191, TC192/08, TC119/08 (shared input
+   frame) and `PageVerificationContractTest`. UI and smoke acceptance pending.
+   No remote CI or publication check requested.
+
+6. Targeted attempt failed after 378.684 supervised seconds: 18 checks,
+   three failures, one error, zero skips in `target/docker-ui/run-7yfEuE`.
+   Three failures exposed insufficient row-right spacing: the cell skin
+   stretches its graphic, so a smaller preferred width alone did not reserve
+   space. Added explicit right padding. TC192 failed because the shared
+   button verifier assumed every action had a border; it now verifies the
+   requested borderless delete button while retaining icon/font/label checks.
+   Screenshot review confirmed the paper input and hidden preview title;
+   selection stroke height was adjusted for a clearer roughly 2 px pen line.
+   Failed evidence is retained; revised-source acceptance remains pending.
+7. Revised model/JUnit `20261111T082819Z-01fc84b27c94` (PID 50688, timeout
+   600 seconds) passed **5,123 checks**, zero failures/errors/skips in 394
+   XML reports, 153.612 supervised seconds. `target/verification/run-ipu4jvn3`
+   contains the exact changed game/test Java and CSS snapshot.
+8. Same full targeted selection retried as `20261111T083117Z-9330b8ecfe05`,
+   PID 51011, timeout 1,800 seconds: **18 checks passed**, zero
+   failures/errors/skips in four complete XML reports, 411.586 supervised
+   seconds. Reports and screenshots: `target/docker-ui/run-jONMrX`.
+9. Reviewed `save-borderless-autosave.png`, `save-expanded.png` and
+   `r0383-load-detail-narrow-cs.png`: paper input, underline-only selection,
+   borderless bins, clear margins and no preview title. Small windows retain
+   scrolling; wide windows retain bottom actions. These are automated UI
+   captures, not native desktop checks or a player study.
+10. Smoke/support dispatch `20261111T083833Z-2313659bc69f`, PID 51293,
+    timeout 480 seconds: **21 checks passed**, zero failures/errors/skips
+    in 12 complete XML reports, `target/verification/run-4wwf8717`.
+    Phase duration 250.305 seconds; supervisor including cleanup 254.552
+    seconds, within the 420-second acceptance budget.
+11. Final changed Java/CSS/test files match both successful model and smoke
+    snapshots. Local acceptance: **5,123 model/JUnit + 18 targeted UI/source
+    contract + 21 smoke/support checks**, all passing. Fourteen documentation
+    consistency checks, name audit and strict MkDocs passed; final evidence
+    rebuild follows. Earlier failed targeted evidence remains failed.
+    Full regression, native desktop and remote publication were not checked.
+
 ## Load form simplification — 2026-11-11
 1. UC-114/119: load rows reuse the save-page trash action and confirmation;
    the import button, separate delete button, catalogue heading and selected

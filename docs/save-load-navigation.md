@@ -30,6 +30,20 @@ otevřeném dialogu, nabídce či výběru souboru ani během souborové operace
 
 Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověření má pouze známé selhání kontrastu FRIGATE, pro které uživatel schválil [výjimku pro tuto sérii](publishing.md#local-acceptance-policy). Nativní macOS ověření je pouze volitelné ruční ověření. Přesné výsledky vlastní [funkční evidence](functional-tests.md). Historické snímky a diagramy z 26. října zachycují předchozí dialogový přehled.
 
+## Ručně kreslené ovládání souborů — 11. listopadu 2026
+
+1. Pole názvu souboru používá společný papírový rám s černou linkou
+   přibližně 2 logické pixely, stejně jako název obchodní trasy.
+2. Vybraný soubor označuje pouze nepravidelné černé podtržení názvu;
+   pozadí řádku zůstává papírové. Koše nemají rámeček, zachovávají
+   přístupný název, zvýraznění při zaměření a potvrzení odstranění.
+3. Mezi koši, posuvníkem a detailem je volné místo. Uložit ani vybraný
+   soubor v Načíst nezobrazuje titulek nad minimapou. Prázdný výběr
+   v Načíst zachovává nápovědu. Psaní názvu, výběr, dvojklik, zrušení
+   a potvrzení přepsání se nemění.
+4. Schválený návrh a implementace nejsou hráčskou studií. Ověření vlastní
+   [funkční evidence](functional-tests.md#save-browser-paper-controls-2026-11-11).
+
 ## Jednotný rámec Uložit a Načíst — 10. listopadu 2026
 
 1. [R-0444](requirements/done/R-0444.md) sjednocuje herní Uložit a Načíst jako samostatné obrazovky v hlavním okně: nadpis a návrat nahoře, posuvný obsah uprostřed a společné zápatí se zlatem a rokem dole. Celý podklad používá stejný krémový papír jako záhlaví a zápatí.

@@ -2650,6 +2650,11 @@ přístupným názvem; po rozšíření se text obnoví. Stav ověření vede
 
 1. [R-0429](requirements/done/R-0429.md) používá pro pole názvu trasy papír `#FFF9EC`, při fokusu ploché zvýraznění `#E7E7D0` a černý tah `#000000` přibližně 2 logické pixely. Písmo zůstává Playpen Sans. Lehce nepravidelná geometrie vychází ze společného rámečku tlačítek; bez stínů, textur a gradientů.
 2. Editovatelný zdroj je `akropia-game/src/graphics/trade-route-name-frame.svg`; export v manifestu má skupinu `trade-route-name`. Příkaz `python3 scripts/graphics/export-graphics.py trade-route-name --install` obnoví runtime PNG, `--check` ověří shodu. Devítidílný okraj používá výřez 12 rasterových pixelů zobrazený v pásu 6 logických pixelů.
+3. Od 11. listopadu 2026 stejný rám sdílí název ukládaného souboru přes
+   `.paper-input` v `ToolbarControls.css`. Seznam souborů používá podtržení
+   kreslené vektorovou geometrií CSS, koše bez rámečků a papírové pozadí.
+   [Pravidla a vzhled](save-load-navigation.md#rucne-kreslene-ovladani-souboru-11-listopadu-2026)
+   a [ověření](functional-tests.md#save-browser-paper-controls-2026-11-11).
 
 ### Společné radiobuttony v celé hře — 2026-11-10
 

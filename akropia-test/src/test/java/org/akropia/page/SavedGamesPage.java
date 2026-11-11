@@ -364,10 +364,12 @@ public final class SavedGamesPage extends AbstractScreen {
         }
     }
 
-    /** The selected save is named in full above its preview. */
-    public void verifyDetailName(final String name) {
+    /** The preview title is hidden while its accessible text is retained. */
+    public void verifyHiddenDetailName(final String name) {
         WaitForAsyncUtils.waitForFxEvents();
         assertEquals(name, getLabeledById("savedGameDetailName").getText());
+        assertFalse(getLabeledById("savedGameDetailName").isVisible());
+        assertFalse(getLabeledById("savedGameDetailName").isManaged());
     }
 
     /**
@@ -399,6 +401,7 @@ public final class SavedGamesPage extends AbstractScreen {
                         + detail.getInsets().getTop(),
                 preview.localToScene(preview.getBoundsInLocal()).getMinY(), 2);
         verifyFilenameList();
+        verifyPaperFileControls();
     }
 
     /**
@@ -643,6 +646,42 @@ public final class SavedGamesPage extends AbstractScreen {
         assertTrue(warning.isVisible());
         assertTrue(
                 warning.getText().contains("You may lose this saved position"));
+    }
+
+    public void verifyPaperFileControls() {
+        WaitForAsyncUtils.waitForFxEvents();
+        final javafx.scene.control.ListCell<?> selected = fileCell(
+                list().getSelectionModel().getSelectedItem().getName());
+        final javafx.scene.layout.Region underline = (javafx.scene.layout.Region) selected
+                .lookup(".saved-game-selection");
+        assertTrue(underline.isVisible());
+        assertEquals(3, underline.getHeight(), 0.1);
+        assertFalse(underline.getShape() == null);
+        assertEquals(javafx.scene.paint.Color.web("#FFF9EC"),
+                selected.getBackground().getFills().get(0).getFill());
+        final javafx.scene.control.Button delete = (javafx.scene.control.Button) selected
+                .lookup("#deleteSaveRow");
+        assertTrue(delete.getBorder() == null
+                || delete.getBorder().getImages().isEmpty());
+        assertTrue(list().localToScene(list().getBoundsInLocal()).getMaxX()
+                - delete.localToScene(delete.getBoundsInLocal())
+                        .getMaxX() >= 24);
+        for (final javafx.scene.Node node : list().lookupAll(".list-cell")) {
+            final javafx.scene.control.ListCell<?> cell = (javafx.scene.control.ListCell<?>) node;
+            if (!cell.isEmpty()) {
+                assertEquals(cell.isSelected(),
+                        cell.lookup(".saved-game-selection").isVisible());
+            }
+        }
+        final javafx.scene.Node field = list().getScene()
+                .lookup("#savedGameName");
+        if (field != null) {
+            final javafx.scene.control.TextField input = (javafx.scene.control.TextField) field;
+            assertEquals(1, input.getBorder().getImages().size());
+            assertTrue(input.getBorder().getImages().get(0).getImage().getUrl()
+                    .endsWith("trade-route-name-frame.png"));
+            assertFalse(getLabeledById("savedGameDetailName").isManaged());
+        }
     }
 
     public void verifyBorderlessDetails() {

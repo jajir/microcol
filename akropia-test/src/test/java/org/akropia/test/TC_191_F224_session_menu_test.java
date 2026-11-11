@@ -392,7 +392,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         saves.rememberGame();
         saves.openSave();
-        saves.verifyDetailName("New save of the current game");
+        saves.verifyHiddenDetailName("New save of the current game");
         saves.verifySimplifiedSaveControls();
         saves.verifyPreview(true);
         saves.verifySummaryLines("Year: 1508 AD", "Gold: ", "Rebel support: ",
@@ -412,7 +412,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         // names it with its time.
         saves.openSave();
         saves.select("Harbour before the storm");
-        saves.verifyDetailName("Harbour before the storm");
+        saves.verifyHiddenDetailName("Harbour before the storm");
         saves.verifyFilename("Harbour before the storm");
         saves.captureDialog("savedGamesList", "save-dialog-selected.png");
         saves.doubleClickFile("Harbour before the storm");
@@ -860,6 +860,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.select("autosave-000");
         saves.verifyManagedWarning();
         saves.verifyBorderlessDetails();
+        saves.verifyPaperFileControls();
         saves.captureDialog("savedGamesList", "save-borderless-autosave.png");
 
         // Cancel preserves the existing slot; explicit confirmation overwrites

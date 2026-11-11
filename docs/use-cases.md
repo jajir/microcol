@@ -1,3 +1,12 @@
+## UC-114/119: papírové ovládání souborů — 11. listopadu 2026
+
+1. Uložení a načtení používá podtržený výběr, koše bez rámečků a odstupy
+   kolem posuvníku; název ukládaného souboru má společný kreslený rám.
+   Nad minimapou ukládání není titulek.
+2. Pravidla vlastní [ukládání a načítání](save-load-navigation.md#rucne-kreslene-ovladani-souboru-11-listopadu-2026).
+   TC191/05, TC191/12 a TC192/08 pokrývají výběr, přepsání, koše a malé
+   okno v obou jazycích. Výsledky vlastní [evidence](functional-tests.md#save-browser-paper-controls-2026-11-11).
+
 ## UC-114/119: roztažení Load a Save — 11. listopadu 2026
 
 1. [Rozložení a přehled](save-load-navigation.md#rozlozeni-a-prehled-pozice-11-listopadu-2026)

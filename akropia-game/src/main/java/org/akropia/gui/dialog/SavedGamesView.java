@@ -99,13 +99,21 @@ public final class SavedGamesView {
             private final Label filename = new Label();
             private final Button delete = ActionButtons
                     .button(ButtonIcon.DELETE);
-            private final HBox row = new HBox(8, filename, delete);
+            private final Region underline = new Region();
+            private final VBox title = new VBox(3, filename, underline);
+            private final HBox row = new HBox(16, title, delete);
             {
                 prefWidthProperty().bind(list.widthProperty().subtract(28));
                 filename.setWrapText(true);
-                filename.setMaxWidth(Double.MAX_VALUE);
-                HBox.setHgrow(filename, Priority.ALWAYS);
+                title.setFillWidth(false);
+                title.setMinWidth(0);
+                filename.maxWidthProperty().bind(title.widthProperty());
+                HBox.setHgrow(title, Priority.ALWAYS);
+                underline.getStyleClass().add("saved-game-selection");
+                underline.prefWidthProperty().bind(filename.widthProperty());
+                underline.visibleProperty().bind(selectedProperty());
                 row.setAlignment(Pos.CENTER_LEFT);
+                row.getStyleClass().add("saved-game-row");
                 row.prefWidthProperty().bind(widthProperty().subtract(20));
                 delete.setMinWidth(Region.USE_PREF_SIZE);
                 delete.setId("deleteSaveRow");
@@ -138,6 +146,7 @@ public final class SavedGamesView {
             }
         });
         name.setId("savedGameName");
+        name.getStyleClass().add("paper-input");
         name.setPromptText(texts.get(SavedGameText.name));
         name.setAccessibleText(texts.get(SavedGameText.name));
         error.setId("savedGameError");
@@ -235,7 +244,7 @@ public final class SavedGamesView {
         // About 1:2 for the list and the detail; both shrink without
         // horizontal overflow.
         final GridPane columns = new GridPane();
-        columns.setHgap(12);
+        columns.setHgap(24);
         final ColumnConstraints listColumn = new ColumnConstraints();
         listColumn.setPercentWidth(100d / 3);
         listColumn.setMinWidth(0);
@@ -319,8 +328,8 @@ public final class SavedGamesView {
     }
 
     private void showDetail(final Entry entry) {
-        detailName.setVisible(saving || entry == null);
-        detailName.setManaged(saving || entry == null);
+        detailName.setVisible(!saving && entry == null);
+        detailName.setManaged(!saving && entry == null);
         if (saving && entry == null) {
             detailName.setText(texts.get(SavedGameText.currentGame));
             showPreview(Optional.ofNullable(currentImage),

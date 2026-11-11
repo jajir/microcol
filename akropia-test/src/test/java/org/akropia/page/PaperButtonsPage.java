@@ -125,9 +125,16 @@ public final class PaperButtonsPage extends AbstractScreen {
                         ? new javafx.geometry.Insets(16)
                         : new javafx.geometry.Insets(6, 3, 7, 3),
                 button.getPadding(), button.getId());
-        assertFalse(button.getBorder().getImages().isEmpty());
-        assertTrue(button.getBorder().getImages().get(0).getImage().getUrl()
-                .endsWith("game-toolbar-frame.png"));
+        if ("deleteSaveRow".equals(button.getId())) {
+            assertTrue(button.getBorder() == null
+                    || (button.getBorder().getImages().isEmpty()
+                            && button.getBorder().getStrokes().isEmpty()));
+        } else {
+            assertNotNull(button.getBorder());
+            assertFalse(button.getBorder().getImages().isEmpty());
+            assertTrue(button.getBorder().getImages().get(0).getImage().getUrl()
+                    .endsWith("game-toolbar-frame.png"));
+        }
         assertNotNull(button.getGraphic(),
                 "Every action button has an icon: " + button.getId());
         assertNull(button.lookup(".wooden-button-drawing"));
