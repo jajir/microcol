@@ -1,3 +1,34 @@
+## Load by double-click — 2026-11-11
+
+1. UC-119: a primary-button double-click on a loadable file uses the same
+   load operation as the Load game button, from the main menu and in-game.
+   Single-click selection, unsaved-progress protection, invalid-file rejection
+   and delete-button event isolation remain in place.
+2. TC191/04 covers selection without loading, canceled and confirmed replacement,
+   and loading from the main menu. TC191/05 covers a file removed behind the
+   open list, while retaining Save double-click/overwrite/cancel checks.
+3. Base `d7a63f17` plus this change: shared Java formatting applied. Model/JUnit
+   passed **5,123 tests** in 394 XML reports, zero failures/errors/skips,
+   151.735 supervised seconds with a 600 s limit. Sources match
+   `target/verification/run-42y73r7u/source/`.
+4. Targeted Docker/Xvfb TC191/04+TC05 and `PageVerificationContractTest`
+   passed **5 tests**, zero failures/errors/skips, in 136.659 supervised
+   seconds with a 1,800 s limit. Reports: `target/docker-ui/run-hdvxsI/`;
+   completion `20261111T160048Z-3ee06be95572`, PID 68336.
+5. Initial model attempt `20261111T155648Z-9dd46aa91fa5` stopped in preparation:
+   the Docker container query exceeded 20 s; no tests started (22.087 s total).
+   A subsequent bounded probe succeeded; the original timeout cause is not
+   established. The successful retry above retains the same source and checks.
+6. Fixed smoke/support selection passed **21 tests** in 12 XML reports,
+   zero failures/errors/skips, 249.785 s inside the 420 s acceptance budget
+   (249.907 supervised seconds, 480 s watchdog). Reports:
+   `target/verification/run-nib26sma/`; completion
+   `20261111T160323Z-83d210b0d26c`, PID 68512. Both changed Java files match
+   the passing model and smoke snapshots. Local acceptance is complete.
+7. Fourteen documentation consistency tests, name audit and strict MkDocs passed.
+   Final review preserves unrelated backlog edits. No remote regression,
+   Pages or game distribution verification was requested or performed.
+
 ## Save browser hover and density — 2026-11-11
 
 1. UC-114/119: Save/Load filenames share their existing selection underline

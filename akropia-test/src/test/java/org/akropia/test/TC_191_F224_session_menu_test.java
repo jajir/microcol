@@ -348,7 +348,8 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         hosted.pressShortcut(KeyCode.O);
         hosted.verifyInGameHosted("Load game");
         saves.select("Shortcut save");
-        saves.action("loadSelected");
+        saves.verifyGameUnchanged();
+        saves.doubleClickFile("Shortcut save");
         hosted.verifyConfirmationOpen("saveCancel");
         hosted.pressShortcut(KeyCode.O);
         hosted.verifyConfirmationOpen("saveCancel");
@@ -356,8 +357,8 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         hosted.verifySelectedSave("Shortcut save");
         saves.verifyGameUnchanged();
 
-        // A completed load shows the loaded game, not the old origin.
-        saves.action("loadSelected");
+        // Double-click uses the same unsaved-progress decision and loads.
+        saves.doubleClickFile("Shortcut save");
         saves.action("saveDiscard");
         game.verifyGameInFront();
         hosted.verifyLoadClosed();
@@ -367,6 +368,14 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         game.exitToMenu().verifyMainScreen();
         hosted.verifyMenuShortcut("buttonLoad", "Load saved game", KeyCode.O);
         hosted.captureDialog("buttonLoad", "r0377-main-menu-shortcut.png");
+
+        // Double-click also loads from the main menu without an active game.
+        hosted.pressShortcut(KeyCode.O);
+        saves.doubleClickFile("Shortcut save");
+        game.verifyGameInFront();
+        hosted.verifyLoadClosed();
+        saves.verifyLoadedSave("Shortcut save");
+        game.exitToMenu().verifyMainScreen();
 
         // Typing in a text field keeps the letter and opens nothing.
         final FreePlaySetupPage setup = WelcomePage.of(getContext())
@@ -468,7 +477,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         // A save removed behind the list fails safely and keeps the game.
         saves.select("Removed later");
         saves.deleteBehindList("Removed later");
-        saves.action("loadSelected");
+        saves.doubleClickFile("Removed later");
         DialogMessagePage.of(getContext()).close();
         audit.verifyLoadPageOpen();
         saves.verifyGameUnchanged();

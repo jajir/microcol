@@ -126,11 +126,14 @@ public final class SavedGamesView {
                 });
                 delete.setOnMouseClicked(event -> event.consume());
                 setOnMouseClicked(event -> {
-                    if (saving && !isEmpty()
-                            && event.getButton() == MouseButton.PRIMARY
+                    if (!isEmpty() && event.getButton() == MouseButton.PRIMARY
                             && event.getClickCount() == 2) {
-                        name.setText(filename(getItem()));
-                        save();
+                        if (saving) {
+                            name.setText(filename(getItem()));
+                            save();
+                        } else {
+                            load(getItem());
+                        }
                         event.consume();
                     }
                 });
@@ -185,12 +188,8 @@ public final class SavedGamesView {
                 saving ? "saveNew" : "loadSelected", () -> {
                     if (saving) {
                         save();
-                    } else if (isLoadable(
-                            list.getSelectionModel().getSelectedItem())) {
-                        choose(new SavedGamesDialog.Choice(
-                                SavedGamesDialog.Action.LOAD,
-                                list.getSelectionModel().getSelectedItem(),
-                                null));
+                    } else {
+                        load(list.getSelectionModel().getSelectedItem());
                     }
                 });
         if (!saving) {
@@ -398,6 +397,13 @@ public final class SavedGamesView {
         previewBox.setAccessibleText(
                 image == null ? texts.get(SavedGameText.previewMissing)
                         : label);
+    }
+
+    private void load(final Entry entry) {
+        if (isLoadable(entry)) {
+            choose(new SavedGamesDialog.Choice(SavedGamesDialog.Action.LOAD,
+                    entry, null));
+        }
     }
 
     private static boolean isLoadable(final Entry entry) {

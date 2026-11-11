@@ -221,7 +221,7 @@ aktuální hru; existující cíl vždy vyžaduje potvrzení nad otevřenou str�
 Podrobný kontrakt je v [kapitole Uložit hru](#3-ulozit-hru).
 7. [R-0383](requirements/done/R-0383.md), stav `ready for development`, vlastní schválený seznam
    uložených pozic vlevo a náhled mapy se souhrnem vpravo. Výběr pouze zobrazí
-   detail; teprve Načíst hru ověří a aktivuje pozici. Souhrn obsahuje národ,
+   detail; Načíst hru nebo dvojklik ověří a aktivuje pozici. Souhrn obsahuje národ,
    zlato, rok, podporu nezávislosti a počty vlastních osob, kolonií a lodí.
    Náhled respektuje znalost mapy v uloženém okamžiku.
 8. [R-0382](requirements/done/R-0382.md), stav `ready for development`, vlastní ukládání a formát souboru.
@@ -366,9 +366,12 @@ mimo deset automatických slotů. Nová
    a skutečný čas; název nad náhledem neopakuje. Prázdný seznam má vlastní vysvětlení.
 2. Poškozené údaje nezablokují prohlížení ostatních řádků. Výběr souboru
    je pouze čtení. Nečitelnou nebo nepodporovanou pozici nelze potvrdit.
-   Až Načíst rekonstruuje a ověří celý kandidátní stav;
+   Tlačítko Načíst i dvojklik levým tlačítkem na soubor rekonstruují a ověří
+   celý kandidátní stav;
    chyba se ohlásí nad stránkou Načíst, která zůstane otevřená pro jinou
-   volbu, a zachová původní hru i zdroj (R-0377).
+   volbu, a zachová původní hru i zdroj (R-0377). Dvojklik funguje z hlavní
+   nabídky i ze hry a zachovává ochranu neuloženého postupu. Jednoduchý
+   klik pouze vybírá; dvojklik na koš ani prázdné místo nenačítá hru.
 3. Formulář nenabízí import souboru ani samostatné tlačítko smazání.
    Otevřít složku zpřístupňuje adresář uložených her. Zrušení potvrzení
    mazání zachová soubor; Zpět nebo Esc vrátí hráče na původní obrazovku.

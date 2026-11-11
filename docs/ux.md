@@ -3,7 +3,9 @@
 ## Jednodušší načítání — 11. listopadu 2026
 1. Hráč vybírá soubor vlevo a vidí jeho náhled a souhrn vpravo, bez dalšího
    nadpisu seznamu a opakování názvu nad náhledem. Načíst hru zůstává
-   výslovným potvrzením výběru; bez platného výběru je neaktivní.
+   výslovným potvrzením výběru; stejnou akci vyvolá dvojklik na soubor.
+   Bez platného výběru je tlačítko neaktivní; nečitelnou či nepodporovanou
+   pozici nenačte ani dvojklik. Ochrana neuloženého postupu zůstává účinná.
 2. Koš v každém řádku vyžaduje potvrzení, zrušení soubor zachová. Import
    a samostatné mazací tlačítko nejsou součástí formuláře. Otevřít složku,
    návrat a prázdné či nečitelné pozice zachovávají stávající cestu.
