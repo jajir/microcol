@@ -557,4 +557,44 @@ public final class SavedGamesPage extends AbstractScreen {
         }
         java.nio.file.Files.write(file.toPath(), out.toByteArray());
     }
+
+    public void verifyManagedWarning() {
+        final javafx.scene.control.Label warning = getNodeFinder()
+                .lookup("#savedGameManagedWarning")
+                .queryAs(javafx.scene.control.Label.class);
+        assertTrue(warning.isVisible());
+        assertTrue(
+                warning.getText().contains("You may lose this saved position"));
+    }
+
+    public void verifyBorderlessDetails() {
+        WaitForAsyncUtils.waitForFxEvents();
+        final javafx.scene.layout.Region detail = getNodeFinder()
+                .lookup("#savedGameDetail")
+                .queryAs(javafx.scene.layout.Region.class);
+        final javafx.scene.layout.Region preview = getNodeFinder()
+                .lookup(".saved-game-preview")
+                .queryAs(javafx.scene.layout.Region.class);
+        for (final javafx.scene.layout.Region region : java.util.List.of(list(),
+                detail, preview)) {
+            assertTrue(region.getBorder().getStrokes().stream()
+                    .allMatch(stroke -> javafx.scene.paint.Color.TRANSPARENT
+                            .equals(stroke.getTopStroke())
+                            && javafx.scene.paint.Color.TRANSPARENT
+                                    .equals(stroke.getRightStroke())
+                            && javafx.scene.paint.Color.TRANSPARENT
+                                    .equals(stroke.getBottomStroke())
+                            && javafx.scene.paint.Color.TRANSPARENT
+                                    .equals(stroke.getLeftStroke())));
+        }
+        assertTrue(preview.getBackground().getFills().stream()
+                .allMatch(fill -> javafx.scene.paint.Color.TRANSPARENT
+                        .equals(fill.getFill())));
+        final javafx.scene.Node image = getNodeFinder()
+                .lookup("#savedGamePreview").query();
+        final javafx.scene.Node summary = getNodeFinder()
+                .lookup("#savedGameSummary").query();
+        assertEquals(summary.localToScene(summary.getBoundsInLocal()).getMinX(),
+                image.localToScene(image.getBoundsInLocal()).getMinX(), 2);
+    }
 }

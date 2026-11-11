@@ -34,8 +34,7 @@ class SavedGamesTest {
         assertEquals("é".repeat(62) + "-2", saves.unusedName(longName));
         assertEquals("existing",
                 Files.readString(saves.target("Dutch-1600").toPath()));
-        assertThrows(IllegalArgumentException.class,
-                () -> saves.unusedName("autosave-000"));
+        assertEquals("autosave-000", saves.unusedName("autosave-000"));
     }
 
     @Test
@@ -88,11 +87,11 @@ class SavedGamesTest {
     }
 
     @Test
-    void listingReadsMetadataOnlyAndSortsByTheStoredTime() throws Exception {
+    void listingReadsMetadataOnlyAndSortsByFilename() throws Exception {
         final SavedGames saves = library();
         final GameModelPoDao dao = new GameModelPoDao();
-        final Path older = saves.target("older").toPath();
-        final Path newer = saves.target("newer").toPath();
+        final Path older = saves.target("Alpha").toPath();
+        final Path newer = saves.target("zebra").toPath();
         final GameModelPo data = dao.loadFromClassPath(MAP);
         final SaveSummaryPo summary = SaveArchives.metadata(data, "Newer")
                 .getSummary();
@@ -112,14 +111,14 @@ class SavedGamesTest {
 
         final var entries = saves.list();
 
-        assertEquals(java.util.List.of("Newer", "Older"),
+        assertEquals(java.util.List.of("Older", "Newer"),
                 entries.stream().map(SavedGames.Entry::getName)
                         .collect(java.util.stream.Collectors.toList()));
-        assertNull(entries.get(0).problem);
+        assertNull(entries.get(1).problem);
         assertEquals(Instant.parse("2026-11-01T12:00:00Z").toEpochMilli(),
-                entries.get(0).modified);
-        assertTrue(saves.preview(entries.get(0)).isPresent());
-        assertFalse(saves.preview(entries.get(1)).isPresent());
+                entries.get(1).modified);
+        assertTrue(saves.preview(entries.get(1)).isPresent());
+        assertFalse(saves.preview(entries.get(0)).isPresent());
         assertArrayEquals(before, Files.readAllBytes(newer));
     }
 

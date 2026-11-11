@@ -6,7 +6,7 @@
 }
 .saved-games .list-view {
     -fx-background-color: #FFF9EC;
-    -fx-border-color: #302D27;
+    -fx-border-color: transparent;
     -fx-border-width: 1.25;
     -fx-padding: 1;
 }
@@ -20,7 +20,7 @@
     -fx-text-fill: black;
 }
 .saved-games .saved-game-detail {
-    -fx-border-color: #302D27;
+    -fx-border-color: transparent;
     -fx-border-width: 1.25;
     -fx-padding: 10;
 }
@@ -29,10 +29,10 @@
     -fx-text-fill: #302D27;
 }
 .saved-games .saved-game-preview {
-    -fx-background-color: #E8E6D5;
-    -fx-border-color: #302D27;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
     -fx-border-width: 1;
-    -fx-padding: 1;
+    -fx-padding: 0;
     -fx-min-height: 60;
 }
 .saved-games .saved-game-preview .label {

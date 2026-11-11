@@ -36,6 +36,22 @@ Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověře
 2. Zpět do hry a Escape vracejí původní obrazovku. Uložit a pokračovat stále čeká na úspěšný zápis; zrušení nic neukládá. Načíst z hlavní nabídky zachovává její rámec a místo návratu. Texty přehledu nepoužívají „Please“.
 3. Lokálně ověřeno 10. listopadu 2026; [funkční evidence](functional-tests.md#r-0444-saveload-screen-consistency-2026-11-10) uvádí přesný rozsah a výsledky.
 
+## Správa souborů a vzhled — 11. listopadu 2026
+
+1. Uložit i Načíst řadí soubory abecedně podle názvu souboru bez rozlišení
+   velikosti písmen, nikoli podle času uložení. Datum zůstává v detailu.
+2. Ruční, automatické i rychlé pozice lze po potvrzení smazat nebo přepsat.
+   Potvrzení přepsání upozorňuje na ztrátu původní pozice. U názvu používaného
+   automatikou nebo rychlým uložením je navíc viditelné upozornění, že další
+   automatické či rychlé uložení může tuto pozici nahradit. Zrušení potvrzení
+   soubor zachová; chyba se oznámí a prohlížeč zůstane otevřený.
+3. Vnější panely seznamu a detailu ani náhled světa nemají viditelný rámeček.
+   Náhled nemá vlastní barevné pozadí a je zarovnaný vlevo s textem detailu.
+   Scrollbar, zvýraznění výběru a rámečky ovládacích prvků zůstávají zachované.
+4. UC-114/119 pokrývá scénář
+   `TC_191_F224_session_menu_test.TC_12_save_browser_allows_managed_files_and_uses_borderless_details`;
+   stav ověření vlastní [funkční evidence](functional-tests.md#save-browser-file-management-2026-11-11).
+
 ## Názvy a adresáře schválené 8. listopadu 2026
 
 1. Schválený cíl [R-0432](requirements/done/R-0432.md): hra automaticky ukládá
@@ -52,7 +68,7 @@ Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověře
    (například `dutch-1600.akropia`); vlastní jméno má přednost, například
    `Před útokem.akropia`. Zachovat Unicode a vnitřní mezery, oříznout okolní
    Unicode mezery, dodržet limit 64 kódových bodů. Nepovolené či rezervované
-   názvy odmítnout s vysvětlením. Existující ruční jméno vyžaduje potvrzení
+   názvy odmítnout s vysvětlením. Existující jméno vyžaduje potvrzení
    přepsání, také při shodě bez ohledu na velikost písmen a normalizaci Unicode.
 4. Kruh pokračuje po restartu dalším slotem a nesmí se vracet podle herního
    roku. Nová partie ho neresetuje; postupně nahrazuje autosavy předchozí.
@@ -273,10 +289,10 @@ target/graphics-venv/bin/python scripts/graphics/svg-font.py docs/diagrams/save-
    vytvoří pojmenovaný soubor; shodný název vyžaduje potvrzení přepsání. Okrajové
    Unicode mezery se oříznou, vnitřní mezery, diakritika a interpunkce zůstanou.
    Název musí mít 1–64 Unicode znaků a být platným názvem souboru. Cesty,
-rezervované názvy automatických/rychlých souborů a neplatné znaky se odmítnou.
-2. Vybrané ruční uložení lze výslovně přepsat nebo smazat. Obě operace mají
-   potvrzení s názvem a časem cíle. Rychlé a automatické pozice takto přepsat ani
-   smazat nelze. Chyba zápisu ponechá starý soubor a nabídne další pokus.
+systémové názvy (například CON nebo NUL) a neplatné znaky se odmítnou.
+2. Vybrané ruční, rychlé i automatické uložení lze výslovně přepsat nebo smazat.
+   Obě operace mají potvrzení s názvem a časem cíle; přepsání upozorní na ztrátu
+   původní pozice. Chyba zápisu ponechá starý soubor a nabídne další pokus.
    Upřesnění schválené 10. listopadu 2026: stránka nemá pomocný nadpis
    „Saved games“, samostatné Přepsat ani Exportovat. Pole „Save file name“
    má viditelný popisek. Jedním kliknutím se vybere soubor, zobrazí jeho

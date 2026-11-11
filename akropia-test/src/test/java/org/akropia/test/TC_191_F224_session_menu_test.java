@@ -67,7 +67,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.captureDialog("savedGamesList", "r0298-saved-games.png");
         saves.saveName("../outside");
         saves.verifyInvalidName();
-        saves.saveName("autosave-000");
+        saves.saveName("CON");
         saves.verifyInvalidName();
         saves.saveName("  Přístav – před bitvou  ");
         saves.verifySavedName("Přístav – před bitvou", 1);
@@ -801,6 +801,56 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.verifyGameUnchanged();
         saves.cancelBrowser();
         game.verifyGameInFront();
+        saves.verifyGameUnchanged();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_12_save_browser_allows_managed_files_and_uses_borderless_details()
+            throws Exception {
+        // Disable automatic writes while testing explicit file actions.
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        settings.setAutosaveEnabled(false);
+        final GamePage game = settings.goBack().loadGame();
+        game.waitWhileMoving();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        saves.rememberGame();
+
+        // Managed filenames can be saved; the list uses alphabetical order.
+        saves.openSave();
+        saves.saveName("Zulu");
+        saves.openSave();
+        saves.saveName("autosave-000");
+        saves.openSave();
+        saves.saveName("Alpha");
+        saves.openSave();
+        saves.verifyCatalogueFilenames("Alpha.akropia", "autosave-000.akropia",
+                "Zulu.akropia");
+        saves.select("autosave-000");
+        saves.verifyManagedWarning();
+        saves.verifyBorderlessDetails();
+        saves.captureDialog("savedGamesList", "save-borderless-autosave.png");
+
+        // Cancel preserves the existing slot; explicit confirmation overwrites
+        // it.
+        saves.action("saveNew");
+        saves.verifyOverwriteConfirmation("autosave-000");
+        saves.action("saveCancel");
+        saves.verifySavedName("autosave-000", 1);
+        saves.action("saveNew");
+        saves.action("saveConfirm");
+        saves.verifyStoredSummaryMatchesGame("autosave-000");
+
+        // The row delete button supports cancellation and confirmed deletion.
+        saves.openSave();
+        saves.deleteFile("autosave-000");
+        saves.action("saveCancel");
+        saves.verifySavedName("autosave-000", 1);
+        saves.deleteFile("autosave-000");
+        saves.action("saveConfirm");
+        saves.verifySavedName("autosave-000", 0);
+        saves.verifyCatalogueFilenames("Alpha.akropia", "Zulu.akropia");
+        saves.cancelBrowser();
         saves.verifyGameUnchanged();
     }
 }

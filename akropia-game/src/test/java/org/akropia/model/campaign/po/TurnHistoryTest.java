@@ -138,7 +138,7 @@ class TurnHistoryTest {
         metadata.addProperty("savedAt", "2000-01-01T00:00:00Z");
         SaveArchives.replace(second.toPath(), "metadata.json",
                 metadata.toString());
-        assertEquals(List.of(second, first), saves.list().stream()
+        assertEquals(List.of(first, second), saves.list().stream()
                 .map(entry -> entry.file).collect(Collectors.toList()));
         assertEquals(3, saves.nextSequence());
         assertEquals("autosave-002.akropia",
@@ -185,13 +185,15 @@ class TurnHistoryTest {
     }
 
     @Test
-    void invalidOrReservedManualNamesCannotEscapeOrEnterManagedSlots() {
+    void invalidOrReservedManualNamesCannotEscapeSaveDirectory() {
         for (final String name : List.of("../escape", "a/b", "a\\b", "a:b",
-                "CON", "NUL.txt", "end.", "autosave-000",
-                "AUTOSAVE-009.akropia", "quick", "latest-turn",
-                "previous-decade")) {
+                "CON", "NUL.txt", "end.")) {
             assertThrows(IllegalArgumentException.class,
                     () -> saves.target(name), name);
+        }
+        for (final String name : List.of("autosave-000", "AUTOSAVE-009",
+                "quick", "latest-turn", "previous-decade")) {
+            assertEquals(name + ".akropia", saves.target(name).getName());
         }
         assertEquals("Žluťoučký kůň",
                 SavedGames.manualName("\u2003Žluťoučký kůň.akropia\u2003"));

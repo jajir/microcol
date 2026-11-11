@@ -737,14 +737,14 @@ public final class FreePlayAuditPage extends AbstractScreen {
      * write first, each with its game year in the detail.
      */
     public void verifyTurnSnapshotOptions(final String... expectedYears) {
-        final List<File> newestFirst = new java.util.ArrayList<>(
+        final List<File> alphabetical = new java.util.ArrayList<>(
                 turnSnapshots());
-        java.util.Collections.reverse(newestFirst);
+        alphabetical.sort(java.util.Comparator.comparing(File::getName));
         final var list = savedList();
         final var listed = list.getItems().stream()
-                .filter(entry -> newestFirst.contains(entry.file))
+                .filter(entry -> alphabetical.contains(entry.file))
                 .collect(Collectors.toList());
-        assertEquals(newestFirst, listed.stream().map(entry -> entry.file)
+        assertEquals(alphabetical, listed.stream().map(entry -> entry.file)
                 .collect(Collectors.toList()));
         assertEquals(expectedYears.length, listed.size());
         for (int i = 0; i < listed.size(); i++) {

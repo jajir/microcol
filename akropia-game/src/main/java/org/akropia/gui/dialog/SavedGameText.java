@@ -10,5 +10,6 @@ public enum SavedGameText implements MessageKeyResource {
     confirm, leave, saveContinue, discard, saved, failed, corrupt, noQuick,
     detailPrompt, previewMissing, unsupported, summaryMissing, summaryPlayer,
     summaryYear, summaryGold, summarySupport, summaryCounts, summarySaved,
-    summaryType, currentGame, target, targetNone, leaveNew, autosaved;
+    summaryType, currentGame, target, targetNone, leaveNew, autosaved,
+    managedWarning;
 }

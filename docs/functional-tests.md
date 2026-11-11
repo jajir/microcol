@@ -1,4 +1,77 @@
 
+## Save browser file management — 2026-11-11
+
+1. UC-114/119: alphabetical filenames, borderless list/detail/preview, left-aligned
+   preview, and explicit overwrite/delete of managed files. TC191/TC12 covers
+   the warning, cancel/confirm paths, ordering and rendered layout; TC191/TC01
+   and TC05 retain named-save and preview journeys. Model coverage updates
+   `SavedGamesTest` and `TurnHistoryTest`.
+2. Model dispatch `20261111T054112Z-245cf1ae16e1` (PID 30560, timeout 600 seconds)
+   passed 5,123 checks in 394 complete XML reports with zero failures, errors or
+   skips, in 158.298 supervised seconds. Reports: `target/verification/run-cxrxreng/`.
+3. Targeted Docker/Xvfb dispatch `20261111T054412Z-862779ea6202` (PID 30958,
+   timeout 2,400 seconds) selects `TC_191_F224_session_menu_test`,
+   `TC_42_F34_load_recovery_test`, `TC_43_F34_recovery_points_test` and
+   `PageVerificationContractTest`. Targeted results and fixed smoke/support
+   remain pending. Remote CI/publication are outside this task.
+4. Targeted `run-rEUUnM` completed in 483.666 supervised seconds: 27 checks,
+   two failures, zero errors/skips. All 12 TC191 scenarios passed, including
+   managed-file overwrite/delete and borderless layout. Screenshot
+   `warehouse-qa/save-borderless-autosave.png` confirms the left-aligned preview
+   without a separate background or panel borders.
+5. TC43 still expected newest-first browser order; its expected filenames/years
+   now follow alphabetical order while retaining circular-history checks. TC42
+   exposed selection loss when canceling Save during Load: `ScreenLoad.beforeShow`
+   rebuilt the view on return. It now preserves the existing view during the
+   pending operation; ordinary page opening still builds a fresh view.
+   Model rerun dispatched as `20261111T055342Z-bd3f757da5dd` (PID 32179,
+   timeout 600 seconds). Complete targeted selection will be rerun before smoke.
+
+6. Model rerun `run-fnj1zhvj` passed 5,123 checks in 394 complete reports,
+   zero failures/errors/skips, in 155.830 supervised seconds. Game and UI test
+   sources match the tested snapshot. Complete targeted rerun dispatched as
+   `20261111T055638Z-adc588a75cb3` (PID 32702, timeout 2,400 seconds), with
+   the same four-class selection. Results and smoke remain pending.
+
+7. Targeted rerun `run-fxSumB` completed in 499.994 supervised seconds:
+   27 checks, one failure, zero errors/skips. TC43, all TC191 scenarios and
+   the source contract passed. TC42/TC05 still lost the selected file.
+   The initial fix did not cover the deferred return: `MainPanelPresenter`
+   schedules `beforeReturn()` after the operation has unwound.
+8. Replaced the temporary operation flag with `ScreenLoad.beforeReturn()`,
+   refreshing the existing view and preserving its selection. A normal
+   `beforeShow()` still creates a fresh view. Model rerun dispatched as
+   `20261111T060539Z-80d7a694d86f` (PID 33743, timeout 600 seconds).
+   This correction remains unverified until model and targeted reports pass.
+
+9. Final-source model `run-r1l559fb` passed 5,123 checks in 394 complete
+   reports, zero failures/errors/skips, in 153.980 supervised seconds.
+   Source comparison found no game/UI-test differences from its snapshot.
+   Full targeted selection rerun dispatched as `20261111T060828Z-537758b8a9ad`
+   (PID 34340, timeout 2,400 seconds); UI and smoke acceptance remain pending.
+
+10. Targeted `run-3dh5hR` passed all 27 checks in four complete XML reports,
+    zero failures/errors/skips, in 507.956 supervised seconds. TC42/TC05 now
+    preserves the selected save on cancellation and completes its subsequent
+    save/load journey. Final screenshot review confirms the requested borderless,
+    left-aligned preview and managed-file warning.
+11. Fixed smoke/support dispatched as `20261111T061716Z-5dfa52291d45`
+    (PID 35414, supervisor timeout 480 seconds, acceptance budget 420 seconds).
+    Review preserves file validation, overwrite/delete confirmations, scrollbar
+    styling and all existing gameplay assertions. The unrelated backlog edit
+    is excluded from this task.
+
+12. Fixed smoke/support `run-lkmnn1z_` passed 21 checks in 12 complete
+    XML reports with zero failures/errors/skips, in 259.109 verifier seconds
+    (259.287 supervised seconds), within the 420-second budget. Final game and
+    UI test sources match both accepted model and smoke snapshots.
+13. Local acceptance is complete on the task changes based on `2d92bff6ccb02`:
+    5,123 model/JUnit checks, 27 targeted UI/support checks and 21 fixed
+    smoke/support checks. Shared Java formatting and diff review passed.
+    Documentation consistency (14 tests), name audit (zero unexplained
+    occurrences) and strict MkDocs are checked before commit. Earlier failed
+    UI reports remain preserved; no full-regression or publication claim is made.
+
 ## Construction progress panel — 2026-11-10
 
 1. Scope: UC-043/114/119, two resource meters in the existing colony construction section, EN/CZ text, conditional production forecast and pen-style controls. Existing shared-hammer and construction-eligibility journeys remain. Targeted selection: full `TC_54_F45_shared_hammers_test`, full `TC_32_F24_construction_eligibility_test`, and `PageVerificationContractTest`.

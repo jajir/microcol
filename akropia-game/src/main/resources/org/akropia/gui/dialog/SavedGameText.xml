@@ -17,8 +17,8 @@
     <entry key="automatic">Recovery points</entry>
     <entry key="empty">No saved games in this view.</entry>
     <entry key="name">Save file name</entry>
-    <entry key="invalidName">Use a filename of 1–64 characters without / \ : * ? " &lt; &gt; | or control characters. Do not end with a dot or use a reserved name (autosave, quick, CON).</entry>
-    <entry key="overwrite">Overwrite selected save</entry>
+    <entry key="invalidName">Use a filename of 1–64 characters without / \ : * ? " &lt; &gt; | or control characters. Do not end with a dot or use a reserved name (CON, NUL).</entry>
+    <entry key="overwrite">Overwrite selected save? The previous saved position will be lost.</entry>
     <entry key="delete">Delete selected save</entry>
     <entry key="importFile">Import file…</entry>
     <entry key="exportFile">Export file…</entry>
@@ -49,4 +49,5 @@
     <entry key="leaveNew">This game has never been saved, so leaving it now loses the starting world. Save it before leaving? Choose Cancel to stay. Save and continue opens Save game, where you name a new save or choose one to overwrite.</entry>
     <entry key="autosaved">Turn saved automatically: %s.</entry>
     <entry key="summaryType">Type: %s</entry>
+    <entry key="managedWarning">This file may be replaced by automatic or quick saving. You may lose this saved position.</entry>
 </properties>

@@ -138,7 +138,6 @@ public final class SavedGamesView {
                 setGraphic(saving && !empty && entry != null ? row : null);
                 if (entry != null && !empty) {
                     filename.setText(entry.file.getName());
-                    delete.setDisable(entry.kind != Kind.MANUAL);
                 }
             }
         });
@@ -159,6 +158,7 @@ public final class SavedGamesView {
         previewMissing.setWrapText(true);
         previewBox.getStyleClass().add("saved-game-preview");
         previewBox.setMinSize(0, 0);
+        previewBox.setAlignment(Pos.CENTER_LEFT);
         summary.setId("savedGameSummary");
         summary.setWrapText(true);
         // Keep full wrapped text; the hosting scroll pane handles short
@@ -225,7 +225,18 @@ public final class SavedGamesView {
         if (saving) {
             final Label nameLabel = new Label(texts.get(SavedGameText.name));
             nameLabel.setLabelFor(name);
-            detail.getChildren().addAll(nameLabel, name);
+            final Label warning = new Label(
+                    texts.get(SavedGameText.managedWarning));
+            warning.setId("savedGameManagedWarning");
+            warning.setWrapText(true);
+            warning.setMinHeight(Region.USE_PREF_SIZE);
+            warning.visibleProperty().bind(Bindings.createBooleanBinding(
+                    () -> name.getText().toLowerCase(java.util.Locale.ROOT)
+                            .matches(
+                                    "(autosave(?:-[0-9]+)?|quick|latest-turn|previous-decade)(\\.akropia)?"),
+                    name.textProperty()));
+            warning.managedProperty().bind(warning.visibleProperty());
+            detail.getChildren().addAll(nameLabel, name, warning);
         }
         final Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
@@ -406,7 +417,7 @@ public final class SavedGamesView {
                         list.getSelectionModel().getSelectedItem(), null)));
         button.disableProperty().bind(Bindings.createBooleanBinding(() -> {
             final Entry entry = list.getSelectionModel().getSelectedItem();
-            return entry == null || entry.kind != Kind.MANUAL;
+            return entry == null;
         }, list.getSelectionModel().selectedItemProperty()));
     }
 

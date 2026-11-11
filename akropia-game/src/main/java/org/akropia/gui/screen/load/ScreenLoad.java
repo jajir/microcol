@@ -136,6 +136,22 @@ public final class ScreenLoad extends AbstractScreenMenu implements GameScreen {
     }
 
     @Override
+    public void beforeReturn() {
+        // Save returns asynchronously after the pending load decision has
+        // ended.
+        // Keep the existing view and selection, but refresh changed files.
+        shown = true;
+        updateLanguage(i18n);
+        refresh();
+        if (menuHosted) {
+            menuHolderPanel.beforeShow();
+        } else {
+            page.beforeShow();
+        }
+        Platform.runLater(view::requestFocus);
+    }
+
+    @Override
     public void beforeHide() {
         shown = false;
         menuHolderPanel.beforeHide();

@@ -29,10 +29,7 @@ public final class SavedGames {
 
     public static final class Entry {
         public final File file;
-        /**
-         * Kind given by the catalogue location. The stored kind of a copied or
-         * imported file never grants overwriting a managed slot.
-         */
+        /** Kind given by the catalogue location. */
         public final Kind kind;
         /** Metadata, or <code>null</code> when the file is not readable. */
         public final SaveMetadataPo metadata;
@@ -82,29 +79,17 @@ public final class SavedGames {
     public List<Entry> list() {
         final Path root = paths.getSaveDirectory().toPath();
         try (Stream<Path> files = Files.list(root)) {
-            final List<Entry> entries = files.filter(Files::isRegularFile)
+            return files.filter(Files::isRegularFile)
                     .filter(path -> path.toString().endsWith(".akropia"))
-                    .map(path -> read(path.toFile()))
-                    .sorted(Comparator
-                            .comparingLong((Entry entry) -> entry.modified)
-                            .reversed())
-                    .collect(Collectors.toList());
-            // Wall-clock changes must not reverse the circular history in the
-            // browser.
-            final var ordered = entries.stream()
-                    .filter(entry -> isManagedSnapshot(entry)).sorted(
+                    .map(path -> read(path.toFile())).sorted(
                             Comparator
-                                    .comparingLong(
-                                            (Entry entry) -> entry.metadata
-                                                    .getAutosaveSequence())
-                                    .reversed())
-                    .iterator();
-            for (int i = 0; i < entries.size(); i++) {
-                if (isManagedSnapshot(entries.get(i))) {
-                    entries.set(i, ordered.next());
-                }
-            }
-            return entries;
+                                    .comparing(
+                                            (Entry entry) -> entry.file
+                                                    .getName(),
+                                            String.CASE_INSENSITIVE_ORDER)
+                                    .thenComparing(
+                                            entry -> entry.file.getName()))
+                    .collect(Collectors.toList());
         } catch (IOException | java.io.UncheckedIOException failed) {
             throw new AkropiaException("Cannot list saved games", failed);
         }
@@ -188,10 +173,8 @@ public final class SavedGames {
                         && !name.equals(".") && !name.equals(".."),
                 "Invalid filename");
         final String stem = name.split("\\.", 2)[0].toLowerCase(Locale.ROOT);
-        Preconditions.checkArgument(!stem
-                .matches("con|prn|aux|nul|com[1-9]|lpt[1-9]")
-                && !name.toLowerCase(Locale.ROOT).matches(
-                        "autosave(?:-[0-9]+)?|quick|latest-turn|previous-decade"),
+        Preconditions.checkArgument(
+                !stem.matches("con|prn|aux|nul|com[1-9]|lpt[1-9]"),
                 "Reserved filename");
         return name;
     }

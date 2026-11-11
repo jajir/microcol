@@ -17,8 +17,8 @@
     <entry key="automatic">Body obnovy</entry>
     <entry key="empty">V tomto přehledu nejsou žádné uložené hry.</entry>
     <entry key="name">Název souboru uložení</entry>
-    <entry key="invalidName">Použijte název souboru o délce 1–64 znaků bez / \ : * ? " &lt; &gt; | a řídicích znaků. Název nesmí končit tečkou ani být vyhrazený (autosave, quick, CON).</entry>
-    <entry key="overwrite">Přepsat vybrané uložení</entry>
+    <entry key="invalidName">Použijte název souboru o délce 1–64 znaků bez / \ : * ? " &lt; &gt; | a řídicích znaků. Název nesmí končit tečkou ani být vyhrazený (CON, NUL).</entry>
+    <entry key="overwrite">Přepsat vybranou pozici? Původní uložená pozice bude ztracena.</entry>
     <entry key="delete">Smazat vybrané uložení</entry>
     <entry key="importFile">Importovat soubor…</entry>
     <entry key="exportFile">Exportovat soubor…</entry>
@@ -49,4 +49,5 @@
     <entry key="leaveNew">Tato hra ještě nebyla uložena, odchodem nyní ztratíte vytvořený počáteční svět. Uložit ji před odchodem? Volba Zpět vás vrátí do hry. Uložit a pokračovat otevře Uložit hru, kde pojmenujete nové uložení nebo vyberete uložení k přepsání.</entry>
     <entry key="autosaved">Tah byl automaticky uložen: %s.</entry>
     <entry key="summaryType">Typ: %s</entry>
+    <entry key="managedWarning">Tento soubor může nahradit automatické nebo rychlé uložení. O uloženou pozici můžete přijít.</entry>
 </properties>

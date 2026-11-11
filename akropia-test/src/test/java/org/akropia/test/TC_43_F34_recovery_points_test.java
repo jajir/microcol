@@ -347,12 +347,12 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         audit.verifyContinueOpensNewestTurnSnapshot();
 
         // The saved turn is left without a prompt; Load lists the history
-        // newest first with actual years.
+        // by filename with actual years.
         game.exitToMenu().verifyMainScreen();
         audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
         audit.openRecoveryChooser();
-        audit.verifyTurnSnapshotOptions("1519", "1518", "1517", "1516", "1515",
-                "1514", "1513", "1512", "1511", "1510");
+        audit.verifyTurnSnapshotOptions("1519", "1510", "1511", "1512", "1513",
+                "1514", "1515", "1516", "1517", "1518");
 
         // Loading the oldest snapshot rewrites and rotates nothing.
         audit.chooseOldestTurnSnapshot();

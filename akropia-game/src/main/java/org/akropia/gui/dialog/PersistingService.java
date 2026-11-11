@@ -437,10 +437,7 @@ public class PersistingService {
                 }
                 return false;
             case OVERWRITE:
-                // Only a catalogued manual save is a target; its stored kind
-                // grants nothing.
-                if (choice.entry == null
-                        || choice.entry.kind != SavedGames.Kind.MANUAL) {
+                if (choice.entry == null) {
                     return false;
                 }
                 return confirm(texts.get(SavedGameText.overwrite) + "\n"
@@ -448,8 +445,7 @@ public class PersistingService {
                         && saveNamed(choice.entry.file, choice.entry.getName(),
                                 SavedGames.Kind.MANUAL);
             case DELETE:
-                if (choice.entry == null
-                        || choice.entry.kind != SavedGames.Kind.MANUAL) {
+                if (choice.entry == null) {
                     return false;
                 }
                 if (confirm(texts.get(SavedGameText.delete) + "\n"

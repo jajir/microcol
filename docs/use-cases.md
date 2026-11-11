@@ -1,4 +1,13 @@
 
+## UC-114/119: správa autosavů a vzhled seznamu — 2026-11-11
+
+1. Abecední seznam, mazání a přepis automatických pozic s upozorněním,
+   zrušení potvrzení a panely bez rámečků popisují
+   [pravidla ukládání](save-load-navigation.md#sprava-souboru-a-vzhled-11-listopadu-2026).
+2. Ověření doplňuje `TC_191_F224_session_menu_test.TC_12_save_browser_allows_managed_files_and_uses_borderless_details`;
+   stávající TC01/TC05 zachovávají ruční pozice a načítání. Výsledky jsou ve
+   [funkční evidenci](functional-tests.md#save-browser-file-management-2026-11-11).
+
 ## UC-043/114/119: průběh stavby — 10. listopadu 2026
 
 1. Změna zobrazení podle [UX kontraktu](ux.md#prubeh-stavby-ve-meste-10-listopadu-2026) zachovává pravidla projektu, společná kladiva i spotřebu nástrojů. `TC_54_F45_shared_hammers_test` TC02 ověřuje dva pruhy, nepotřebné nástroje, čistou produkci, zaokrouhlené tahy, nedostatek nástrojů a odstranění projektu. TC03 ověřuje nulovou produkci; původní TC01 zachovává dokončení, přebytky a Continue. TC32 zachovává cestu s čekáním a dodáním nástrojů. Stav přejímky: [evidence](functional-tests.md#construction-progress-panel-2026-11-10).
