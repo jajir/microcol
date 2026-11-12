@@ -292,6 +292,9 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
                 .openColonyAt(Location.of(24, 16), "New Amsterdam");
         final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
+        new GameBarWidthPage(getContext()).resizeContent(1440, 1000);
+        layout.rememberWorkspaceGeometry();
+        layout.verifyEmptyConstructionMeters();
         jobs.rememberWorld();
         layout.moveSectionRight("area");
         layout.verifySectionOrder("colony-card-construction",
@@ -302,13 +305,17 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         // The existing editors open below all five summaries.
         layout.openSection("construction");
         layout.verifyDetail("constructionAdd");
+        layout.verifyStableWorkspaceGeometry();
         new InGameLayoutPage(getContext())
                 .saveEvidence("colony-five-construction.png");
         layout.openSection("school");
         layout.verifyDetail("educationAssign");
+        layout.verifyStableWorkspaceGeometry();
         layout.openSection("cargo");
+        layout.verifyStableWorkspaceGeometry();
         layout.openSection("area");
         layout.verifyDetail("colony-field-name");
+        layout.verifyStableWorkspaceGeometry();
         jobs.verifyWorldUnchanged();
         new InGameLayoutPage(getContext())
                 .saveEvidence("colony-five-overviews.png");

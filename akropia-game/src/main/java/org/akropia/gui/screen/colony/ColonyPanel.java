@@ -53,6 +53,38 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     private final ImageProvider images;
     private final java.util.Map<String, Button> sections = new java.util.LinkedHashMap<>();
     private String selected = "area";
+    private final java.util.List<Region> detailSizes = new java.util.ArrayList<>();
+    private boolean sizingScheduled;
+
+    void reserveDetailHeight() {
+        if (sizingScheduled || detailSizes.isEmpty())
+            return;
+        sizingScheduled = true;
+        javafx.application.Platform.runLater(() -> {
+            sizingScheduled = false;
+            if (detail.getScene() == null || detail.getWidth() <= 0)
+                return;
+            final double width = Math.max(0,
+                    detail.getWidth() - detail.getInsets().getLeft()
+                            - detail.getInsets().getRight());
+            double height = 0;
+            // Measure the editors in the live stylesheet, without displaying
+            // them
+            // or leaving duplicate control IDs in the scene graph.
+            for (Region editor : detailSizes) {
+                editor.setVisible(false);
+                editor.setManaged(false);
+                detail.getChildren().add(editor);
+                editor.applyCss();
+                height = Math.max(height, Math.max(editor.minHeight(width),
+                        editor.prefHeight(width)));
+                detail.getChildren().remove(editor);
+            }
+            detail.setMinHeight(height + detail.getInsets().getTop()
+                    + detail.getInsets().getBottom());
+        });
+    }
+
     private final Label goodsTitle = new Label();
     private final PanelColonyConstruction construction;
     private final I18n i18n;
@@ -119,6 +151,8 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         dockDetail.getStyleClass().add("colony-harbor");
         overview.setId("colony-overviews");
         detail.setId("colony-detail");
+        detail.widthProperty().addListener(
+                (observable, oldWidth, newWidth) -> reserveDetailHeight());
         detail.getStyleClass().add("colony-detail");
         politics.setId("colony-politics");
         addSection("area", colonyFields.getOverview());
@@ -177,6 +211,11 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         this.colony = Preconditions.checkNotNull(colony);
         panelColonyName.setColony(colony);
         goods.setColony(colony);
+        detailSizes.clear();
+        detailSizes.add(queue.get().embedded(() -> selectSection("area")));
+        detailSizes.add(
+                education.get().embedded(colony, () -> selectSection("area")));
+        reserveDetailHeight();
         repaint();
     }
 

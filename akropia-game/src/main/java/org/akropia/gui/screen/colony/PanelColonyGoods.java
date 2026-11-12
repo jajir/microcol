@@ -66,9 +66,9 @@ public final class PanelColonyGoods implements JavaFxComponent {
         this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
         this.transferWarning = Preconditions.checkNotNull(transferWarning);
         this.i18n = Preconditions.checkNotNull(i18n);
-        for (int index = 0; index < 10; index++) {
+        for (int index = 0; index < GoodsType.GOOD_TYPES.size(); index++) {
             final javafx.scene.layout.ColumnConstraints column = new javafx.scene.layout.ColumnConstraints();
-            column.setPercentWidth(10);
+            column.setPercentWidth(100.0 / GoodsType.GOOD_TYPES.size());
             mainPanel.getColumnConstraints().add(column);
         }
         panelColonyGoods = GoodsType.GOOD_TYPES.stream().map(goodsType -> {
@@ -76,7 +76,7 @@ public final class PanelColonyGoods implements JavaFxComponent {
                     imageProvider.getGoodsTypeImage(goodsType), goodsType,
                     eventBus, i18n);
             final int index = mainPanel.getChildren().size();
-            mainPanel.add(out.getContent(), index % 10, index / 10);
+            mainPanel.add(out.getContent(), index, 0);
             javafx.scene.layout.GridPane.setHgrow(out.getContent(),
                     javafx.scene.layout.Priority.ALWAYS);
             out.getContent().setMaxWidth(Double.MAX_VALUE);

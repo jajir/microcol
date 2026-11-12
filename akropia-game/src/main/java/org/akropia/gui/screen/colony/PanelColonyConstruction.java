@@ -59,6 +59,10 @@ final class PanelColonyConstruction implements JavaFxComponent {
         if (oStats.isEmpty()) {
             mainVbox.getChildren().add(label("constructionStatus",
                     i18n.get(ConstructionText.empty)));
+            addEmptyResource("constructionWork", ConstructionText.work,
+                    "construction-hammer.png");
+            addEmptyResource("constructionTools", ConstructionText.toolsLabel,
+                    "construction-tools.png");
             return;
         }
         final BuildingStatus<ColonyBuildingItem> stats = oStats.get();
@@ -94,6 +98,26 @@ final class PanelColonyConstruction implements JavaFxComponent {
                                 Math.max(1, turns)))
                         .orElse(i18n.get(ConstructionText.finishUnknown));
         mainVbox.getChildren().add(label("constructionForecast", forecast));
+    }
+
+    private void addEmptyResource(final String id, final ConstructionText title,
+            final String image) {
+        final Label name = label(id + "Name", i18n.get(title));
+        final ImageView icon = new ImageView(images.getImage(image));
+        icon.setFitWidth(22);
+        icon.setFitHeight(22);
+        icon.setPreserveRatio(true);
+        name.setGraphic(icon);
+        final ProgressBar progress = new ProgressBar(0);
+        progress.setId(id + "Bar");
+        progress.getStyleClass().add("construction-progress");
+        progress.setMaxWidth(Double.MAX_VALUE);
+        final Label value = label(id + "Amount", "—");
+        value.setMouseTransparent(true);
+        progress.setAccessibleText(
+                i18n.get(title) + ": " + i18n.get(ConstructionText.empty));
+        mainVbox.getChildren()
+                .add(new VBox(2, name, new StackPane(progress, value)));
     }
 
     private void addResource(final GridPane rows, final int row,

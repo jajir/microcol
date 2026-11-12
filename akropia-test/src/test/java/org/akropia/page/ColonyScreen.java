@@ -115,6 +115,10 @@ public class ColonyScreen extends AbstractScreen {
         for (int index = 0; index < panels.size(); index++) {
             final VBox panel = panels.get(index);
             final Bounds bounds = panel.localToScene(panel.getBoundsInLocal());
+            assertEquals(
+                    panels.get(0).localToScene(panels.get(0).getBoundsInLocal())
+                            .getMinY(),
+                    bounds.getMinY(), 0.5, "All warehouse goods share one row");
             assertTrue(bounds.getWidth() >= minimumGoodsWidth);
             assertTrue(bounds.getMinX() >= 0
                     && bounds.getMaxX() <= panel.getScene().getWidth());

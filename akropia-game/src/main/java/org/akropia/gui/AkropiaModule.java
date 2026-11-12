@@ -223,7 +223,7 @@ public final class AkropiaModule extends AbstractModule {
         bind(ColonyDialogCallback.class).to(ScreenColonyPresenter.class)
                 .in(Singleton.class);
         bind(PanelColonyDockBehaviour.class).in(Singleton.class);
-        bind(QueueDialog.class).in(Singleton.class);
+        bind(QueueDialog.class);
         bind(QueueController.class).in(Singleton.class);
         bind(ShowQueueDialogListener.class).asEagerSingleton();
         bind(org.akropia.gui.screen.colony.DialogColonyJobChoices.class)

@@ -69,6 +69,7 @@ public class ScreenColony implements GameScreen {
     @Override
     public void beforeShow() {
         page.beforeShow();
+        colonyPanel.reserveDetailHeight();
     }
 
     @Override

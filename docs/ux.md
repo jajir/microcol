@@ -181,10 +181,11 @@ Esc v detailu otevřeném z mapového plánovače vrací mapu obchodních tras s
 4. Toto jsou implementované ovládací záměry, nikoli závěr uživatelského výzkumu. Skutečné lokální ověření se uvádí ve [funkční evidenci](functional-tests.md).
 ### Pět přehledů kolonie — 12. listopadu 2026
 
-1. Vybraná varianta mění pořadí pracovní plochy: pod trvale viditelným počtem obyvatel a procenty svobody/krále jsou dvě řady po osmi budovách, dvě řady zásob a společný řádek přehledů okolí, výstavby, překladiště, lidí venku a školy. Aktuální úroveň a pracovníci zůstávají u každé budovy. Zásoby uvádějí skutečnou čistou bilanci dalšího tahu.
+1. Vybraná varianta mění pořadí pracovní plochy: pod trvale viditelným počtem obyvatel a procenty svobody/krále jsou dvě řady po osmi budovách, jeden řádek zásob a společný řádek přehledů okolí, výstavby, překladiště, lidí venku a školy. Aktuální úroveň a pracovníci zůstávají u každé budovy. Zásoby uvádějí skutečnou čistou bilanci dalšího tahu.
 2. Hlavička přehledu otevře jeho detail pod společným řádkem. Výstavba a škola používají stejné modelové operace jako dosavadní dialogy; původní tlačítka a zkratky zůstávají dostupné. Kliknutí na dopravce vybere jeho náklad. Výběr mapového políčka zpřístupní jeho nabídku produkce. Přesun hlavičky nebo tlačítka vlevo/vpravo mění pouze pořadí přehledů v otevřené aplikaci, nikoli save ani pravidla.
 3. Škola shrnuje učitele, žáka, odbornost, postup a případné pozastavení; žákovo pracoviště zůstává podle současného pravidla mimo školu. Tato změna nezavádí společné umístění obou jednotek ve škole. Neobsazená škola a prázdné překladiště mají výslovný stav.
-4. Při menším okně zůstává stránka posuvná; nedostupné stavební a učební akce dál vysvětlují modelové podmínky. Zrušení editoru vrací detail okolí. Jde o implementaci vybraného návrhu; důkazy a omezení ověření vlastní [funkční evidence](functional-tests.md#colony-five-overviews-2026-11-12).
+4. Od navazující úpravy 12. listopadu 2026 sklad tvoří jediný řádek. Při otevření se pro detail rezervuje výška nejvyššího editoru podle aktuální šířky a stylu; přepnutí mezi okolím, výstavbou, nákladem, lidmi a školou nemá měnit výšku stránky ani přidávat/ubírat posuvník. Výstavba zobrazuje ukazatele práce a nástrojů i bez vybraného projektu: prázdné ukazatele s pomlčkou neznamenají nulové náklady. U aktivního projektu dál ukazují skutečný postup, produkci a odhad modelu.
+5. Při menším okně zůstává stránka posuvná; nedostupné stavební a učební akce dál vysvětlují modelové podmínky. Zrušení editoru vrací detail okolí. Jde o implementaci vybraného návrhu; důkazy a omezení ověření vlastní [funkční evidence](functional-tests.md#colony-stock-row-and-stable-detail-height-2026-11-12).
 
 ### Menší položky budov — 2026-10-30
 

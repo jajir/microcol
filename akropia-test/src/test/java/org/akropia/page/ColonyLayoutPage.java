@@ -276,6 +276,59 @@ public final class ColonyLayoutPage extends AbstractScreen {
         });
     }
 
+    private double workspaceHeight;
+    private double workspaceWidth;
+    private boolean workspaceScrollbar;
+
+    public void rememberWorkspaceGeometry() {
+        WaitForAsyncUtils.waitForFxEvents();
+        getRobot().interact(() -> {
+            final javafx.scene.control.ScrollPane scroll = getNodeFinder()
+                    .lookup(".screen-scroll")
+                    .queryAs(javafx.scene.control.ScrollPane.class);
+            scroll.applyCss();
+            scroll.layout();
+            workspaceHeight = scroll.getContent().getLayoutBounds().getHeight();
+            workspaceWidth = scroll.getViewportBounds().getWidth();
+            workspaceScrollbar = scroll.lookupAll(".scroll-bar").stream()
+                    .map(node -> (javafx.scene.control.ScrollBar) node)
+                    .anyMatch(bar -> bar
+                            .getOrientation() == javafx.geometry.Orientation.VERTICAL
+                            && bar.isVisible());
+        });
+    }
+
+    public void verifyStableWorkspaceGeometry() {
+        getRobot().interact(() -> {
+            final javafx.scene.control.ScrollPane scroll = getNodeFinder()
+                    .lookup(".screen-scroll")
+                    .queryAs(javafx.scene.control.ScrollPane.class);
+            assertEquals(workspaceHeight,
+                    scroll.getContent().getLayoutBounds().getHeight(), 1,
+                    "Tab changes keep the reserved page height");
+            assertEquals(workspaceWidth, scroll.getViewportBounds().getWidth(),
+                    1, "Tab changes do not shift the viewport width");
+            assertEquals(workspaceScrollbar, scroll.lookupAll(".scroll-bar")
+                    .stream().map(node -> (javafx.scene.control.ScrollBar) node)
+                    .anyMatch(bar -> bar
+                            .getOrientation() == javafx.geometry.Orientation.VERTICAL
+                            && bar.isVisible()));
+        });
+    }
+
+    public void verifyEmptyConstructionMeters() {
+        for (String resource : java.util.List.of("constructionWork",
+                "constructionTools")) {
+            final javafx.scene.control.ProgressBar bar = getNodeFinder()
+                    .lookup("#" + resource + "Bar")
+                    .queryAs(javafx.scene.control.ProgressBar.class);
+            assertTrue(bar.isVisible());
+            assertEquals(0, bar.getProgress());
+            assertEquals("—", getLabeledById(resource + "Amount").getText());
+            assertTrue(bar.getWidth() > 0);
+        }
+    }
+
     public void openSection(final String section) {
         clickOnButtonWithId("colony-section-" + section);
         final Node detail = getNodeFinder().lookup("#colony-detail").query();
