@@ -1468,3 +1468,9 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
    vybraný soubor a název, dvojklik, potvrzení nad stránkou a koš v řádku.
    `SavedGamesTest` ověřuje nepoužitý výchozí název a kolize včetně Unicode.
    Výsledky jsou ve [funkční evidenci](functional-tests.md#save-dialog-simplification-2026-11-10).
+
+
+## Přehledy kolonie — 12. listopadu 2026
+
+1. UC-031/033/042 a nákladové UC-023/024/026 používají rozložení se dvěma řadami budov, dvěma řadami zboží a pěti přehledy. Vybraný detail se otevírá pod nimi; mění se prezentace, nikoli podmínky herních operací. [Pracovní postup](ux.md#pet-prehledu-kolonie-12-listopadu-2026) popisuje výběr, přesuny sekcí a školu.
+2. Rozšíření TC195/06 a inline cesta TC68 doplňují existující kontroly. Přesné výsledky a zatím neověřená omezení vlastní [funkční evidence](functional-tests.md#colony-five-overviews-2026-11-12); tato položka sama neoznačuje celé UC za přijaté.

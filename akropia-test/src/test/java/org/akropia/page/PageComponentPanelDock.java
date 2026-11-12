@@ -22,6 +22,12 @@ public class PageComponentPanelDock extends AbstractPageComponent {
     }
 
     public void selectUnitFromPort(final int unitIndex) {
+        final java.util.Set<javafx.scene.Node> cargoSection = getNodeFinder()
+                .lookup("#colony-section-cargo").queryAll();
+        if (!cargoSection.isEmpty()) {
+            getRobot().clickOn(cargoSection.iterator().next());
+            WaitForAsyncUtils.waitForFxEvents();
+        }
         final ToggleButton ship = getUnitsInPort().get(unitIndex);
         if (!ship.isSelected()) {
             getRobot().clickOn(ship);

@@ -27,6 +27,10 @@ class PanelConstructionBasic extends AbstractPanelConstructionWithSlots {
         name.setMouseTransparent(true);
         name.setMaxWidth(Double.MAX_VALUE);
         name.setWrapText(true);
+        name.minHeightProperty()
+                .bind(javafx.beans.binding.Bindings.createDoubleBinding(
+                        () -> Math.max(22, name.prefHeight(name.getWidth())),
+                        name.widthProperty()));
         final javafx.scene.layout.HBox illustration = new javafx.scene.layout.HBox(
                 12,
                 PanelColonyStructures.buildingImage(imageProvider

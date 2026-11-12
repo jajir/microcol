@@ -53,9 +53,9 @@ final class PanelColonyStructures implements JavaFxComponent {
         this.i18n = i18n;
         mainPanel.getStyleClass().add("colony-structures");
         mainPanel.setMaxHeight(Region.USE_PREF_SIZE);
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 8; i++) {
             final javafx.scene.layout.ColumnConstraints column = new javafx.scene.layout.ColumnConstraints();
-            column.setPercentWidth(25);
+            column.setPercentWidth(12.5);
             column.setHalignment(javafx.geometry.HPos.LEFT);
             mainPanel.getColumnConstraints().add(column);
         }
@@ -78,6 +78,13 @@ final class PanelColonyStructures implements JavaFxComponent {
                         i18n.get(ConstructionTypeName.getNameForType(family)));
                 name.getStyleClass().add("building-name");
                 name.setWrapText(true);
+                name.minHeightProperty()
+                        .bind(javafx.beans.binding.Bindings
+                                .createDoubleBinding(
+                                        () -> Math.max(22,
+                                                name.prefHeight(
+                                                        name.getWidth())),
+                                        name.widthProperty()));
                 name.setMaxWidth(Double.MAX_VALUE);
                 final Label state = new Label(i18n.get(ColonyMsg.notBuilt));
                 state.getStyleClass().add("building-state");
@@ -97,7 +104,7 @@ final class PanelColonyStructures implements JavaFxComponent {
                 panel.paint();
                 content = panel.getContent();
             }
-            mainPanel.add(content, i % 4, i / 4);
+            mainPanel.add(content, i % 8, i / 8);
         }
     }
 

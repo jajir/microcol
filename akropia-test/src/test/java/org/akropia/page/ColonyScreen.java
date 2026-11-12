@@ -112,22 +112,24 @@ public class ColonyScreen extends AbstractScreen {
         final List<VBox> panels = new ArrayList<>(
                 this.<VBox>getListOfNodes(".warehouseGoods"));
         assertEquals(expectedGoodsPanels, panels.size());
-        panels.sort(java.util.Comparator.comparingDouble(panel -> panel
-                .localToScene(panel.getBoundsInLocal()).getMinX()));
-        double previousMaxX = Double.NEGATIVE_INFINITY;
-        for (final VBox panel : panels) {
+        for (int index = 0; index < panels.size(); index++) {
+            final VBox panel = panels.get(index);
             final Bounds bounds = panel.localToScene(panel.getBoundsInLocal());
-            assertTrue(bounds.getWidth() >= minimumGoodsWidth, String.format(
-                    "Goods panel is squeezed to width %s", bounds.getWidth()));
-            assertTrue(bounds.getMinX() + 1 >= previousMaxX,
-                    "Goods panels overlap each other");
-            previousMaxX = bounds.getMaxX();
-            assertTrue(
-                    bounds.getMinX() >= 0
-                            && bounds.getMaxX() <= panel.getScene().getWidth(),
-                    "Goods row must fit inside the window");
+            assertTrue(bounds.getWidth() >= minimumGoodsWidth);
+            assertTrue(bounds.getMinX() >= 0
+                    && bounds.getMaxX() <= panel.getScene().getWidth());
+            for (int other = index + 1; other < panels.size(); other++) {
+                final VBox next = panels.get(other);
+                final Bounds second = next
+                        .localToScene(next.getBoundsInLocal());
+                assertTrue(
+                        bounds.getMaxX() <= second.getMinX() + 1
+                                || second.getMaxX() <= bounds.getMinX() + 1
+                                || bounds.getMaxY() <= second.getMinY() + 1
+                                || second.getMaxY() <= bounds.getMinY() + 1,
+                        "Goods panels do not overlap");
+            }
         }
-
     }
 
     /** @return warehouse amount of the goods now, without asserting */
@@ -338,13 +340,15 @@ public class ColonyScreen extends AbstractScreen {
     public void dragGoodsFromShipCargoSlotToWarehouse(final int cargoSlotIndex,
             final int goodsIndexInWarehouse) throws InterruptedException {
         final StackPane crate = getListOfCrates().get(cargoSlotIndex);
-        revealGameContent(crate,
-                getListOfGoodsImagesInWarehouse().get(goodsIndexInWarehouse));
-        completeDrag(crate,
-                () -> getRobot().drag(crate, MouseButton.PRIMARY)
-                        .dropTo(getListOfGoodsImagesInWarehouse()
-                                .get(goodsIndexInWarehouse))
-                        .release(MouseButton.PRIMARY));
+        final javafx.scene.Node target = getListOfGoodsImagesInWarehouse()
+                .get(goodsIndexInWarehouse);
+        revealGameContent(crate);
+        completeDrag(crate, () -> {
+            getRobot().drag(crate, MouseButton.PRIMARY).moveBy(12, 0);
+            // Cargo and stock can be farther apart than the small viewport.
+            revealGameContent(target);
+            getRobot().dropTo(target).release(MouseButton.PRIMARY);
+        });
     }
 
     public void dragGoodsOutsideWindow(final int cargoSlotIndex)

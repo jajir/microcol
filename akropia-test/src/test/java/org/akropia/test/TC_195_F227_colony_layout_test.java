@@ -284,4 +284,35 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         town.close();
     }
 
+    @Test
+    @Tag("local")
+    void TC_06_overviews_reorder_and_inline_editors() throws Exception {
+        // Move presentation cards without changing the colony or its jobs.
+        final ColonyScreen town = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(Location.of(24, 16), "New Amsterdam");
+        final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
+        final ColonyJobPage jobs = new ColonyJobPage(getContext());
+        jobs.rememberWorld();
+        layout.moveSectionRight("area");
+        layout.verifySectionOrder("colony-card-construction",
+                "colony-card-area", "colony-card-cargo", "colony-card-people",
+                "colony-card-school");
+        jobs.verifyWorldUnchanged();
+
+        // The existing editors open below all five summaries.
+        layout.openSection("construction");
+        layout.verifyDetail("constructionAdd");
+        new InGameLayoutPage(getContext())
+                .saveEvidence("colony-five-construction.png");
+        layout.openSection("school");
+        layout.verifyDetail("educationAssign");
+        layout.openSection("cargo");
+        layout.openSection("area");
+        layout.verifyDetail("colony-field-name");
+        jobs.verifyWorldUnchanged();
+        new InGameLayoutPage(getContext())
+                .saveEvidence("colony-five-overviews.png");
+        town.close();
+    }
+
 }

@@ -125,4 +125,18 @@
     <entry key="fieldCannotProduce">You cannot move this worker here: this terrain cannot produce food for the initial field assignment.</entry>
     <entry key="fieldDropRejected">Cannot move worker here</entry>
     <entry key="fieldInsufficientMovement">The worker does not have enough movement points for this move.</entry>
+  <entry key="moveSectionLeft">Move section left</entry>
+  <entry key="moveSectionRight">Move section right</entry>
+  <entry key="peopleHint">Drag a colonist into a building or onto a field to assign work.</entry>
+  <entry key="overviewPolitics">Population %s · Liberty %s%% · Crown %s%%</entry>
+  <entry key="emptyCargo">Empty hold</entry>
+  <entry key="emptyHarbor">No ships or wagons in port.</entry>
+  <entry key="emptySchool">No active courses. Choose a teacher and student below.</entry>
+  <entry key="buildingSection">Construction</entry>
+  <entry key="schoolSection">School</entry>
+  <entry key="studentField">Field [%s, %s]</entry>
+  <entry key="studentWorkplace">Student works: %s</entry>
+  <entry key="overviewArea">Area</entry>
+  <entry key="overviewCargo">Cargo</entry>
+  <entry key="overviewPeople">People</entry>
 </properties>

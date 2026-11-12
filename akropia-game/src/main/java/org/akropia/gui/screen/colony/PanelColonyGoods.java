@@ -28,7 +28,6 @@ import javafx.scene.Node;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
@@ -44,7 +43,7 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     private final List<PanelColonyGood> panelColonyGoods;
 
-    private final HBox mainPanel = new HBox();
+    private final javafx.scene.layout.GridPane mainPanel = new javafx.scene.layout.GridPane();
 
     private final ChooseGoodsDialog chooseGoods;
 
@@ -67,12 +66,18 @@ public final class PanelColonyGoods implements JavaFxComponent {
         this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
         this.transferWarning = Preconditions.checkNotNull(transferWarning);
         this.i18n = Preconditions.checkNotNull(i18n);
+        for (int index = 0; index < 10; index++) {
+            final javafx.scene.layout.ColumnConstraints column = new javafx.scene.layout.ColumnConstraints();
+            column.setPercentWidth(10);
+            mainPanel.getColumnConstraints().add(column);
+        }
         panelColonyGoods = GoodsType.GOOD_TYPES.stream().map(goodsType -> {
             final PanelColonyGood out = new PanelColonyGood(
                     imageProvider.getGoodsTypeImage(goodsType), goodsType,
                     eventBus, i18n);
-            mainPanel.getChildren().add(out.getContent());
-            HBox.setHgrow(out.getContent(),
+            final int index = mainPanel.getChildren().size();
+            mainPanel.add(out.getContent(), index % 10, index / 10);
+            javafx.scene.layout.GridPane.setHgrow(out.getContent(),
                     javafx.scene.layout.Priority.ALWAYS);
             out.getContent().setMaxWidth(Double.MAX_VALUE);
             return out;

@@ -232,8 +232,8 @@ public final class ColonyLayoutPage extends AbstractScreen {
                     .count());
             for (int i = 0; i < 16; i++) {
                 final Node cell = grid.getChildren().get(i);
-                assertEquals(i % 4, GridPane.getColumnIndex(cell));
-                assertEquals(i / 4, GridPane.getRowIndex(cell));
+                assertEquals(i % 8, GridPane.getColumnIndex(cell));
+                assertEquals(i / 8, GridPane.getRowIndex(cell));
                 for (int j = i + 1; j < 16; j++) {
                     final Bounds a = cell.localToScene(cell.getLayoutBounds());
                     final Node next = grid.getChildren().get(j);
@@ -246,33 +246,67 @@ public final class ColonyLayoutPage extends AbstractScreen {
                             "Buildings overlap");
                 }
             }
-            final Node fields = getNodeFinder().lookup(".colony-fields")
+            final Node stock = getNodeFinder().lookup(".colony-stock").query();
+            final javafx.scene.layout.HBox cards = getNodeFinder()
+                    .lookup("#colony-overviews")
+                    .queryAs(javafx.scene.layout.HBox.class);
+            final Node detail = getNodeFinder().lookup("#colony-detail")
                     .query();
+            assertEquals(5, cards.getChildren().size());
             assertTrue(
-                    grid.localToScene(grid.getLayoutBounds()).getMaxX() < fields
-                            .localToScene(fields.getLayoutBounds()).getMinX());
-            final Node detail = getNodeFinder().lookup(".tile-detail").query();
-            final Node map = getNodeFinder().lookup("#colony-field-map")
-                    .query();
-            assertTrue(
-                    map.localToScene(map.getLayoutBounds()).getMaxX() < detail
-                            .localToScene(detail.getLayoutBounds()).getMinX());
-            final VBox depot = getNodeFinder().lookup(".colony-harbor")
-                    .queryAs(VBox.class);
-            final Node outside = getNodeFinder()
-                    .lookup("#colony-outside-scroll").query();
-            final VBox people = (VBox) outside.getParent();
-            final I18n texts = getContext().getClassFromGuice(I18n.class);
-            assertEquals(texts.get(ColonyMsg.harborSection),
-                    ((Label) depot.getChildren().get(0)).getText());
-            assertEquals(texts.get(ColonyMsg.outsideSection),
-                    ((Label) people.getChildren().get(0)).getText());
-            assertTrue(depot.localToScene(depot.getLayoutBounds())
-                    .getMaxY() <= people.localToScene(people.getLayoutBounds())
+                    grid.localToScene(grid.getLayoutBounds()).getMaxY() <= stock
+                            .localToScene(stock.getLayoutBounds()).getMinY());
+            assertTrue(stock.localToScene(stock.getLayoutBounds())
+                    .getMaxY() <= cards.localToScene(cards.getLayoutBounds())
                             .getMinY());
+            assertTrue(cards.localToScene(cards.getLayoutBounds())
+                    .getMaxY() <= detail.localToScene(detail.getLayoutBounds())
+                            .getMinY());
+            double right = 0;
+            for (Node card : cards.getChildren()) {
+                final Bounds bounds = card.localToScene(card.getLayoutBounds());
+                assertTrue(card.isVisible());
+                assertTrue(bounds.getMinX() >= right);
+                assertTrue(bounds.getMaxX() <= card.getScene().getWidth());
+                right = bounds.getMaxX();
+            }
+            assertTrue(isCssIdVisible("colony-politics"));
             assertFalse(isCssIdVisible("colony-summary"));
             assertFalse(isCssIdVisible("townCommons"));
         });
+    }
+
+    public void openSection(final String section) {
+        clickOnButtonWithId("colony-section-" + section);
+        final Node detail = getNodeFinder().lookup("#colony-detail").query();
+        revealGameContent(detail);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void moveSectionRight(final String section) {
+        final VBox card = getNodeFinder().lookup("#colony-card-" + section)
+                .queryAs(VBox.class);
+        revealGameContent(card);
+        getRobot().clickOn("#colony-move-right-" + section);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifySectionOrder(final String... expected) {
+        final javafx.scene.layout.HBox cards = getNodeFinder()
+                .lookup("#colony-overviews")
+                .queryAs(javafx.scene.layout.HBox.class);
+        assertEquals(java.util.Arrays.asList(expected), cards.getChildren()
+                .stream().map(Node::getId).collect(Collectors.toList()));
+    }
+
+    public void verifyDetail(final String expectedControl) {
+        final Node detail = getNodeFinder().lookup("#colony-detail").query();
+        final Node control = detail.lookup("#" + expectedControl);
+        assertNotNull(control);
+        assertTrue(control.isVisible());
+        assertTrue(control.isManaged());
+        assertEquals(5, getNodeFinder().lookup("#colony-overviews")
+                .queryAs(javafx.scene.layout.HBox.class).getChildren().size());
     }
 
     public void verifyCenter() {

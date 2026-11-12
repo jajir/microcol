@@ -98,6 +98,9 @@ public final class PanelColonyFields implements JavaFxComponent {
     private final DialogMessage dropMessage;
 
     private final HBox mainPanel = new HBox(10);
+    private final VBox overview = new VBox(4);
+    private Runnable onSelect = () -> {
+    };
     private final Label mapTitle = new Label();
     private final Label detailTitle = new Label();
     private final Canvas preview = new Canvas(TILE_WIDTH_IN_PX,
@@ -170,7 +173,16 @@ public final class PanelColonyFields implements JavaFxComponent {
         contextMenu.getStyleClass().add("popup");
         contextMenu.setAutoHide(true);
 
-        final VBox map = new VBox(4, mapTitle, canvas);
+        overview.getChildren().setAll(canvas);
+        canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            onSelect.run();
+            Platform.runLater(this::revealProduction);
+        });
+        canvas.addEventHandler(javafx.scene.input.KeyEvent.KEY_PRESSED,
+                event -> {
+                    onSelect.run();
+                    Platform.runLater(this::revealProduction);
+                });
         final HBox tile = new HBox(8, preview,
                 new VBox(4, tileName, workerName));
         tile.setAlignment(Pos.CENTER_LEFT);
@@ -195,8 +207,16 @@ public final class PanelColonyFields implements JavaFxComponent {
         tileName.setId("colony-field-name");
         workerName.setId("colony-field-worker");
         yield.setId("colony-field-yield");
-        mainPanel.getChildren().addAll(map, detail);
+        mainPanel.getChildren().add(detail);
         mainPanel.getStyleClass().add("colony-fields");
+    }
+
+    Region getOverview() {
+        return overview;
+    }
+
+    void onSelect(final Runnable action) {
+        onSelect = action;
     }
 
     private Optional<Unit> fieldWorker(final ColonyField field) {
@@ -707,6 +727,8 @@ public final class PanelColonyFields implements JavaFxComponent {
             return;
         }
         final ScrollPane scroll = (ScrollPane) parent;
+        scroll.applyCss();
+        scroll.layout();
         final Node content = scroll.getContent();
         final Bounds target = content.sceneToLocal(
                 production.localToScene(production.getLayoutBounds()));

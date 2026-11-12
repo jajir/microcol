@@ -599,6 +599,14 @@ public class GamePage extends AbstractScreen {
         moveMouseAtLocation(colonyLocation);
         getRobot().doubleClickOn(MouseButton.PRIMARY);
         WaitForAsyncUtils.waitForFxEvents();
+        try {
+            WaitForAsyncUtils.waitFor(5, java.util.concurrent.TimeUnit.SECONDS,
+                    () -> getNodeFinder().lookup("#colonyName").tryQuery()
+                            .isPresent());
+        } catch (java.util.concurrent.TimeoutException timeout) {
+            throw new IllegalStateException(
+                    "Colony did not open after the map double-click", timeout);
+        }
         return ColonyScreen.of(getContext(), expectedNamePart);
     }
 

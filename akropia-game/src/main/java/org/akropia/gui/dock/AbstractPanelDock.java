@@ -79,6 +79,10 @@ public abstract class AbstractPanelDock
         view.setHarborAction(action);
     }
 
+    public void selectShip(final UnitWithCargo ship) {
+        view.selectShip(Optional.of(ship));
+    }
+
     public Optional<UnitWithCargo> getSelectedShip() {
         return view.getSelectedShip();
     }

@@ -125,4 +125,18 @@
     <entry key="fieldCannotProduce">Sem nelze pracovníka přesunout: tento terén neposkytuje potraviny potřebné pro počáteční přiřazení práce.</entry>
     <entry key="fieldDropRejected">Sem nelze pracovníka přesunout</entry>
     <entry key="fieldInsufficientMovement">Pracovník nemá dostatek pohybových bodů pro tento přesun.</entry>
+  <entry key="moveSectionLeft">Posunout sekci doleva</entry>
+  <entry key="moveSectionRight">Posunout sekci doprava</entry>
+  <entry key="peopleHint">Přetažením do budovy nebo na políčko přidělíte kolonistovi práci.</entry>
+  <entry key="overviewPolitics">Obyvatelstvo %s · Svoboda %s%% · Král %s%%</entry>
+  <entry key="emptyCargo">Prázdný náklad</entry>
+  <entry key="emptyHarbor">V překladišti nejsou lodě ani povozy.</entry>
+  <entry key="emptySchool">Žádná probíhající výuka. Kliknutím vyberte učitele a žáka.</entry>
+  <entry key="buildingSection">Výstavba</entry>
+  <entry key="schoolSection">Škola</entry>
+  <entry key="studentField">Políčko [%s, %s]</entry>
+  <entry key="studentWorkplace">Žák pracuje: %s</entry>
+  <entry key="overviewArea">Okolí</entry>
+  <entry key="overviewCargo">Náklad</entry>
+  <entry key="overviewPeople">Lidé</entry>
 </properties>

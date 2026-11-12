@@ -50,12 +50,16 @@ public final class ColonyJobPage extends AbstractScreen {
     }
 
     public void openFromCenter(final int unitId) {
+        revealGameContent(
+                getNodeFinder().lookup("#colonyUnit-" + unitId).query());
         getRobot().clickOn("#colonyUnit-" + unitId, MouseButton.SECONDARY)
                 .clickOn("#chooseWork");
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void openFromCenterWithKeyboard(final int unitId) {
+        revealGameContent(
+                getNodeFinder().lookup("#colonyUnit-" + unitId).query());
         getRobot().clickOn("#colonyUnit-" + unitId).push(KeyCode.SHIFT,
                 KeyCode.F10);
         getRobot().push(KeyCode.DOWN).push(KeyCode.DOWN).push(KeyCode.DOWN)
@@ -363,6 +367,7 @@ public final class ColonyJobPage extends AbstractScreen {
         };
         final javafx.scene.Node source = getNodeFinder()
                 .lookup("#colonyUnit-" + workerId).query();
+        revealGameContent(source, building);
         final Point2D start = source.localToScreen(
                 source.getBoundsInLocal().getCenterX(),
                 source.getBoundsInLocal().getCenterY());
@@ -438,6 +443,9 @@ public final class ColonyJobPage extends AbstractScreen {
             final String buildingId) throws Exception {
         final Parent building = getNodeFinder().lookup("#" + buildingId)
                 .queryAs(Parent.class);
+        revealGameContent(
+                getNodeFinder().lookup("#colonyUnit-" + workerId).query(),
+                getNodeFinder().lookup("#" + buildingId).query());
         getRobot().drag("#colonyUnit-" + workerId, MouseButton.PRIMARY)
                 .dropTo(building.lookup(".building-top").localToScreen(25, 23));
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> getModel()
@@ -447,6 +455,9 @@ public final class ColonyJobPage extends AbstractScreen {
 
     public void dragCenterToIndoor(final int workerId, final String buildingId,
             final int slotIndex) throws Exception {
+        revealGameContent(
+                getNodeFinder().lookup("#colonyUnit-" + workerId).query(),
+                getNodeFinder().lookup("#" + buildingId).query());
         getRobot().drag("#colonyUnit-" + workerId, MouseButton.PRIMARY)
                 .dropTo(slotPoint(buildingId, slotIndex));
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> getModel()

@@ -138,51 +138,59 @@ public abstract class AbstractScreen {
 
     /** Reveal targets in the scrollable game body before a mouse gesture. */
     protected void revealGameContent(final javafx.scene.Node... targets) {
-        javafx.scene.Node ancestor = targets[0];
-        while (ancestor != null
-                && !(ancestor instanceof javafx.scene.control.ScrollPane)) {
-            ancestor = ancestor.getParent();
+        final java.util.LinkedHashSet<javafx.scene.control.ScrollPane> ancestors = new java.util.LinkedHashSet<>();
+        for (Node target : targets) {
+            for (Node ancestor = target; ancestor != null; ancestor = ancestor
+                    .getParent()) {
+                if (ancestor instanceof javafx.scene.control.ScrollPane)
+                    ancestors.add((javafx.scene.control.ScrollPane) ancestor);
+            }
         }
-        if (ancestor == null) {
-            return;
+        for (final javafx.scene.control.ScrollPane scroll : ancestors) {
+            getRobot().interact(() -> {
+                final Node viewport = scroll.lookup(".viewport");
+                final javafx.geometry.Bounds visible = viewport
+                        .localToScene(viewport.getBoundsInLocal());
+                double top = Double.POSITIVE_INFINITY;
+                double bottom = Double.NEGATIVE_INFINITY;
+                double left = Double.POSITIVE_INFINITY;
+                double right = Double.NEGATIVE_INFINITY;
+                for (final Node target : targets) {
+                    Node ancestor = target;
+                    while (ancestor != null && ancestor != scroll)
+                        ancestor = ancestor.getParent();
+                    if (ancestor == null)
+                        continue;
+                    final javafx.geometry.Bounds bounds = target
+                            .localToScene(target.getBoundsInLocal());
+                    top = Math.min(top, bounds.getMinY());
+                    bottom = Math.max(bottom, bounds.getMaxY());
+                    left = Math.min(left, bounds.getMinX());
+                    right = Math.max(right, bounds.getMaxX());
+                }
+                final double range = scroll.getContent().getLayoutBounds()
+                        .getHeight() - scroll.getViewportBounds().getHeight();
+                final double delta = bottom > visible.getMaxY()
+                        ? bottom - visible.getMaxY()
+                        : top < visible.getMinY() ? top - visible.getMinY() : 0;
+                if (range > 0) {
+                    scroll.setVvalue(Math.max(0,
+                            Math.min(1, scroll.getVvalue() + delta / range)));
+                }
+                final double horizontalRange = scroll.getContent()
+                        .getLayoutBounds().getWidth()
+                        - scroll.getViewportBounds().getWidth();
+                final double horizontalDelta = right > visible.getMaxX()
+                        ? right - visible.getMaxX()
+                        : left < visible.getMinX() ? left - visible.getMinX()
+                                : 0;
+                if (horizontalRange > 0) {
+                    scroll.setHvalue(Math.max(0, Math.min(1, scroll.getHvalue()
+                            + horizontalDelta / horizontalRange)));
+                }
+            });
+            WaitForAsyncUtils.waitForFxEvents();
         }
-        final javafx.scene.control.ScrollPane scroll = (javafx.scene.control.ScrollPane) ancestor;
-        getRobot().interact(() -> {
-            final Node viewport = scroll.lookup(".viewport");
-            final javafx.geometry.Bounds visible = viewport
-                    .localToScene(viewport.getBoundsInLocal());
-            double top = Double.POSITIVE_INFINITY;
-            double bottom = Double.NEGATIVE_INFINITY;
-            double left = Double.POSITIVE_INFINITY;
-            double right = Double.NEGATIVE_INFINITY;
-            for (final Node target : targets) {
-                final javafx.geometry.Bounds bounds = target
-                        .localToScene(target.getBoundsInLocal());
-                top = Math.min(top, bounds.getMinY());
-                bottom = Math.max(bottom, bounds.getMaxY());
-                left = Math.min(left, bounds.getMinX());
-                right = Math.max(right, bounds.getMaxX());
-            }
-            final double range = scroll.getContent().getLayoutBounds()
-                    .getHeight() - scroll.getViewportBounds().getHeight();
-            final double delta = bottom > visible.getMaxY()
-                    ? bottom - visible.getMaxY()
-                    : top < visible.getMinY() ? top - visible.getMinY() : 0;
-            if (range > 0) {
-                scroll.setVvalue(Math.max(0,
-                        Math.min(1, scroll.getVvalue() + delta / range)));
-            }
-            final double horizontalRange = scroll.getContent().getLayoutBounds()
-                    .getWidth() - scroll.getViewportBounds().getWidth();
-            final double horizontalDelta = right > visible.getMaxX()
-                    ? right - visible.getMaxX()
-                    : left < visible.getMinX() ? left - visible.getMinX() : 0;
-            if (horizontalRange > 0) {
-                scroll.setHvalue(Math.max(0, Math.min(1, scroll.getHvalue()
-                        + horizontalDelta / horizontalRange)));
-            }
-        });
-        WaitForAsyncUtils.waitForFxEvents();
     }
 
     protected Labeled getLabeledById(final String cssId) {

@@ -17,6 +17,16 @@ public final class EducationPage extends AbstractScreen {
         clickOnButtonWithId("educationOpen");
     }
 
+    public void openInline() {
+        clickOnButtonWithId("colony-section-school");
+        revealGameContent(getButtonById("educationAssign"));
+    }
+
+    public void verifyInline() {
+        assertNotNull(getNodeFinder().lookup("#educationDialog").query()
+                .getParent().lookup("#colony-detail"));
+    }
+
     public void close() {
         clickOnButtonWithId("educationClose");
     }

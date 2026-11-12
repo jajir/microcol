@@ -67,17 +67,10 @@ final class PanelColonyConstruction implements JavaFxComponent {
         final GridPane rows = new GridPane();
         rows.setHgap(8);
         rows.setVgap(6);
-        final ColumnConstraints name = new ColumnConstraints();
-        name.setMinWidth(Region.USE_PREF_SIZE);
-        final ColumnConstraints rate = new ColumnConstraints();
-        rate.setMinWidth(Region.USE_PREF_SIZE);
-        final ColumnConstraints time = new ColumnConstraints();
-        time.setMinWidth(Region.USE_PREF_SIZE);
-        final ColumnConstraints bar = new ColumnConstraints();
-        bar.setHgrow(Priority.ALWAYS);
-        bar.setMinWidth(100);
-        bar.setPrefWidth(180);
-        rows.getColumnConstraints().addAll(name, bar, rate, time);
+        final ColumnConstraints column = new ColumnConstraints();
+        column.setHgrow(Priority.ALWAYS);
+        column.setMinWidth(0);
+        rows.getColumnConstraints().add(column);
         addResource(rows, 0, "constructionWork", GoodsType.HAMMERS,
                 ConstructionText.work, stats.getHammers());
         addResource(rows, 1, "constructionTools", GoodsType.TOOLS,
@@ -163,7 +156,10 @@ final class PanelColonyConstruction implements JavaFxComponent {
         final String accessible = i18n.get(title) + ": " + amount + " "
                 + rate.getText() + " " + time.getText();
         progress.setAccessibleText(accessible);
-        rows.addRow(row, name, meter, rate, time);
+        final javafx.scene.layout.HBox heading = new javafx.scene.layout.HBox(4,
+                name, rate);
+        javafx.scene.layout.HBox.setHgrow(rate, Priority.ALWAYS);
+        rows.add(new VBox(2, heading, meter, time), 0, row);
     }
 
     private Label label(final String id, final String text) {

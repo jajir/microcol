@@ -53,6 +53,8 @@ public class QueueDialog extends AbstractMessageWindow {
     private final Button cancel = ActionButtons.button(ButtonIcon.CANCEL);
     private final Button rush = ActionButtons.button(ButtonIcon.GOLD);
     private final ConstructionRushDialog rushDialog;
+    private VBox root;
+    private Runnable embeddedClose;
     private List<?> selectionState = List.of();
 
     @Inject
@@ -134,7 +136,7 @@ public class QueueDialog extends AbstractMessageWindow {
         VBox.setVgrow(projects, Priority.ALWAYS);
         VBox.setVgrow(queue, Priority.ALWAYS);
         final HBox panels = new HBox(16, choices, current);
-        final VBox root = new VBox(12, title, panels, feedback, cancel);
+        root = new VBox(12, title, panels, feedback, cancel);
         root.setPadding(new Insets(18));
         root.setPrefSize(800, 550);
         VBox.setVgrow(panels, Priority.ALWAYS);
@@ -156,6 +158,23 @@ public class QueueDialog extends AbstractMessageWindow {
         refresh();
         feedback.setText("");
         showAndWait();
+    }
+
+    public javafx.scene.layout.Region embedded(final Runnable onClose) {
+        embeddedClose = onClose;
+        ((javafx.scene.layout.Pane) root.getParent()).getChildren()
+                .remove(root);
+        root.getStyleClass().remove("modal-content");
+        root.setPrefSize(javafx.scene.layout.Region.USE_COMPUTED_SIZE, 370);
+        projects.setPrefHeight(150);
+        queue.setPrefHeight(150);
+        add.setDefaultButton(false);
+        cancel.setCancelButton(false);
+        controller.begin();
+        refresh();
+        updateLanguage(i18n);
+        feedback.setText("");
+        return root;
     }
 
     @Override
@@ -260,6 +279,7 @@ public class QueueDialog extends AbstractMessageWindow {
         }
         try {
             controller.addAtEnd(selected);
+            eventBus.post(new RepaintColonyEvent());
             refresh();
             feedback.setText(i18n.get(ConstructionText.added));
         } catch (IllegalArgumentException rejected) {
@@ -284,6 +304,7 @@ public class QueueDialog extends AbstractMessageWindow {
             } else {
                 controller.moveItem(selected, direction);
             }
+            eventBus.post(new RepaintColonyEvent());
             refresh();
             if (direction != 0) {
                 queue.getSelectionModel().select(selected);
@@ -310,7 +331,10 @@ public class QueueDialog extends AbstractMessageWindow {
     @Override
     public void close() {
         projects.getSelectionModel().clearSelection();
-        super.close();
+        if (embeddedClose == null)
+            super.close();
+        else
+            embeddedClose.run();
         eventBus.post(new RepaintColonyEvent());
     }
 }

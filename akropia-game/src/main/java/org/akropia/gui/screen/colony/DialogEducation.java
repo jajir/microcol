@@ -35,6 +35,8 @@ public final class DialogEducation extends AbstractMessageWindow {
     private final Button assign = ActionButtons.button(ButtonIcon.EDUCATION);
     private final Button cancelCourse = ActionButtons.button(ButtonIcon.STOP);
     private final Button closeButton = ActionButtons.button(ButtonIcon.CANCEL);
+    private VBox root;
+    private Runnable embeddedClose;
     private Model boundModel;
     private Colony colony;
     private Player owner;
@@ -110,8 +112,8 @@ public final class DialogEducation extends AbstractMessageWindow {
         students.setPrefWidth(420);
         skills.setPrefWidth(420);
         courses.setPrefHeight(130);
-        VBox root = new VBox(10, title, rule, courses, cancelCourse, grid,
-                preview, feedback, new HBox(12, assign, closeButton));
+        root = new VBox(10, title, rule, courses, cancelCourse, grid, preview,
+                feedback, new HBox(12, assign, closeButton));
         root.setId("educationDialog");
         root.setPadding(new Insets(18));
         root.setPrefWidth(650);
@@ -133,7 +135,26 @@ public final class DialogEducation extends AbstractMessageWindow {
         closeButton.setText(i18n.get(EducationText.close));
         feedback.setText("");
         refresh();
-        showAndWait();
+        if (embeddedClose == null)
+            showAndWait();
+    }
+
+    Region embedded(final Colony selected, final Runnable onClose) {
+        embeddedClose = onClose;
+        ((Pane) root.getParent()).getChildren().remove(root);
+        root.getStyleClass().remove("modal-content");
+        root.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        closeButton.setCancelButton(false);
+        showFor(selected);
+        return root;
+    }
+
+    @Override
+    public void close() {
+        if (embeddedClose == null)
+            super.close();
+        else
+            embeddedClose.run();
     }
 
     private String typeName(UnitType type) {

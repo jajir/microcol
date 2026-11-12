@@ -36,7 +36,8 @@ public class TC_68_F59_education_test extends AbstractAkropiaTest {
         EducationPage education = new EducationPage(getContext());
         education.verifySchoolVisible();
         // Preview and close leave the student in their original job.
-        education.open();
+        education.openInline();
+        education.verifyInline();
         education.chooseTeacher(200);
         education.chooseStudent(0);
         education.verifyPreview("School", 4, "Master Carpenter");
