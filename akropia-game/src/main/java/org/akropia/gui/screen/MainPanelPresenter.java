@@ -262,7 +262,10 @@ public final class MainPanelPresenter {
         final GameScreen origin = Optional.ofNullable(origins.get(shownScreen))
                 .orElse(screenMenu);
         final boolean returningFromSave = shownScreen == screenSave;
-        beforeHide(shownScreen);
+        final GameScreen previous = shownScreen;
+        if (!returningFromSave) {
+            beforeHide(previous);
+        }
         shownScreen = origin;
         if (returningFromSave) {
             // Save-before-leaving may replace the game as soon as its nested
@@ -276,6 +279,10 @@ public final class MainPanelPresenter {
         } else {
             origin.beforeReturn();
             view.showScreen(origin);
+        }
+        if (returningFromSave) {
+            // Register the return before releasing the nested save choice loop.
+            beforeHide(previous);
         }
     }
 

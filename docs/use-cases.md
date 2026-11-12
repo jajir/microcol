@@ -1,3 +1,8 @@
+## UC-114: dokončení uložení — 12. listopadu 2026
+
+1. [Ukládací formulář](save-load-navigation.md#potvrzeni-ulozeni-a-napoveda-12-listopadu-2026) po úspěšném zápisu vrací původní obrazovku a potvrzuje název souboru. Stavová nápověda vysvětluje dvojklik na soubor a úpravu názvu.
+2. `TC_191_F224_session_menu_test.TC_16_edited_save_closes_and_reports_filename_with_hover_help` pokrývá nový název, návrat, potvrzení, nápovědy a zrušené i potvrzené přepsání. [Výsledky](functional-tests.md#save-feedback-2026-11-12).
+
 ## UC-114/119: papírové ovládání souborů — 11. listopadu 2026
 
 1. Uložení a načtení používá podtržený výběr, koše bez rámečků a odstupy

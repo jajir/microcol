@@ -52,4 +52,7 @@
     <entry key="managedWarning">Tento soubor může nahradit automatické nebo rychlé uložení. O uloženou pozici můžete přijít.</entry>
     <entry key="summaryGameType">Typ hry: %s</entry>
     <entry key="campaign">Kampaň</entry>
+    <entry key="savedAs">Hra byla uložena jako %s.</entry>
+    <entry key="saveFileHint">Dvojklikem uložíte hru do tohoto souboru.</entry>
+    <entry key="editNameHint">Zde můžete upravit název ukládaného souboru.</entry>
 </properties>

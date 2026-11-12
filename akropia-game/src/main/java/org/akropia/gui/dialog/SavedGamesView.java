@@ -55,6 +55,8 @@ public final class SavedGamesView {
     private static final double PREVIEW_WIDTH = 480;
     private static final double PREVIEW_HEIGHT = 270;
 
+    private Consumer<String> saveHelp = message -> {
+    };
     private final I18n texts;
     private final boolean saving;
     private final ListView<Entry> list = new ListView<>();
@@ -105,6 +107,13 @@ public final class SavedGamesView {
             {
                 prefWidthProperty().bind(list.widthProperty().subtract(28));
                 filename.setWrapText(true);
+                if (saving) {
+                    filename.setOnMouseEntered(event -> saveHelp
+                            .accept(texts.get(SavedGameText.saveFileHint)));
+                    filename.setOnMouseMoved(event -> saveHelp
+                            .accept(texts.get(SavedGameText.saveFileHint)));
+                    filename.setOnMouseExited(event -> saveHelp.accept(""));
+                }
                 title.setMinWidth(0);
                 // Measure wrapping from the available layout width, not the
                 // title width left over from the previous layout pass.
@@ -150,6 +159,13 @@ public final class SavedGamesView {
             }
         });
         name.setId("savedGameName");
+        if (saving) {
+            name.setOnMouseEntered(event -> saveHelp
+                    .accept(texts.get(SavedGameText.editNameHint)));
+            name.setOnMouseMoved(event -> saveHelp
+                    .accept(texts.get(SavedGameText.editNameHint)));
+            name.setOnMouseExited(event -> saveHelp.accept(""));
+        }
         name.getStyleClass().add("paper-input");
         name.setPromptText(texts.get(SavedGameText.name));
         name.setAccessibleText(texts.get(SavedGameText.name));
@@ -303,6 +319,10 @@ public final class SavedGamesView {
      */
     public void setError(final String message) {
         error.setText(message == null ? "" : message);
+    }
+
+    public void setSaveHelp(final Consumer<String> help) {
+        saveHelp = help;
     }
 
     public Region getContent() {

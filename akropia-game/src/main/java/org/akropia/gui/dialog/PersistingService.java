@@ -354,9 +354,20 @@ public class PersistingService {
         final SaveSummaryPo current = game.getSaveSummary();
         final byte[] currentImage = SavePreview.render(game.getModel());
         try {
-            return saveScreen.get().chooseSave(savedGames.list(), this::preview,
-                    current, currentImage, suggestedName(current),
-                    this::perform, this::listSavedGames) != null;
+            final SavedGamesDialog.Choice choice = saveScreen.get().chooseSave(
+                    savedGames.list(), this::preview, current, currentImage,
+                    suggestedName(current), this::perform,
+                    this::listSavedGames);
+            if (choice != null) {
+                Platform.runLater(() -> eventBus.post(
+                        org.akropia.gui.screen.game.components.StatusBarMessageEvent
+                                .outcome(
+                                        texts.get(SavedGameText.savedAs,
+                                                savedGames.target(choice.name)
+                                                        .getName()),
+                                        org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source.GAME)));
+            }
+            return choice != null;
         } catch (AkropiaException unavailable) {
             diagnosticLog.record(failure, unavailable);
             gameModelController.showSaveFolderUnavailable();

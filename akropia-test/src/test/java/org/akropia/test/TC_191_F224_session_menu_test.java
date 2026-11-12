@@ -36,6 +36,45 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
+    void TC_16_edited_save_closes_and_reports_filename_with_hover_help()
+            throws Exception {
+        // Open Save and discover the editable filename through status help.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        saves.openSave();
+        saves.hoverFilenameField();
+        game.verifyThatStatusBarContains(
+                "You can edit the save file name here.");
+        // Saving an edited name returns to the game and reports the file.
+        saves.saveName("Edited harbour");
+        saves.verifySaveDialogOpen(false);
+        game.verifyGameInFront();
+        game.verifyThatStatusBarContains(
+                "Game saved as Edited harbour.akropia.");
+        saves.verifySavedFilename("Edited harbour", "Edited harbour.akropia");
+        // Double-click help describes the target; cancel keeps Save open.
+        saves.openSave();
+        saves.select("Edited harbour");
+        saves.hoverFile("Edited harbour");
+        saves.captureDialog("savedGamesList", "save-feedback-hover.png");
+        game.verifyThatStatusBarContains(
+                "Double-click to save the game to this file.");
+        saves.doubleClickFile("Edited harbour");
+        saves.verifyOverwriteConfirmation("Edited harbour");
+        saves.action("saveCancel");
+        saves.verifySaveDialogOpen(true);
+        // Confirmed double-click overwrite also returns with a named outcome.
+        saves.doubleClickFile("Edited harbour");
+        saves.action("saveConfirm");
+        saves.verifySaveDialogOpen(false);
+        game.verifyGameInFront();
+        game.verifyThatStatusBarContains(
+                "Game saved as Edited harbour.akropia.");
+        saves.verifySavedName("Edited harbour", 1);
+    }
+
+    @Test
+    @Tag("local")
     void TC_15_save_load_expand_between_shared_bars() throws Exception {
         // Open the current game's Save screen and grow beyond the shared
         // content cap.

@@ -1,3 +1,9 @@
+## Potvrzení uložení a nápověda — 12. listopadu 2026
+
+1. Úspěšné uložení přes Uložit hru po úpravě názvu zavře formulář a vrátí hráče na původní obrazovku. Stavový řádek oznámí „Hra byla uložena jako <název souboru>.“ včetně přípony. Neplatný název, neúspěšný zápis ani zrušené přepsání formulář nezavírají.
+2. Nad názvem souboru v seznamu stavový řádek vysvětluje, že dvojklik uloží hru do tohoto souboru; přepsání nadále vyžaduje potvrzení. Nad textovým polem vysvětluje možnost upravit název ukládaného souboru.
+3. Implementaci pro UC-114 ověřuje `TC_191_F224_session_menu_test.TC_16_edited_save_closes_and_reports_filename_with_hover_help`; skutečné výsledky vlastní [funkční evidence](functional-tests.md#save-feedback-2026-11-12).
+
 # Ukládání, načítání a herní nabídka
 
 Seznamy Uložit a Načíst podtrhují název také při najetí myší; odjetí

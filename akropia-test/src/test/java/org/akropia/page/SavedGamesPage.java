@@ -670,6 +670,11 @@ public final class SavedGamesPage extends AbstractScreen {
         assertEquals(expectedRows, visibleRows);
     }
 
+    public void hoverFilenameField() {
+        getRobot().moveTo("#savedGameName");
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public void hoverFile(final String name) {
         getRobot().moveTo(fileCell(name).lookup(".label"));
         WaitForAsyncUtils.waitForFxEvents();

@@ -1,6 +1,8 @@
 package org.akropia.gui.dialog;
 
 import java.util.List;
+import com.google.common.eventbus.EventBus;
+import org.akropia.gui.screen.game.components.StatusBarMessageEvent;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -49,6 +51,7 @@ public final class SavedGamesDialog implements GameScreen {
         }
     }
 
+    private final EventBus eventBus;
     private Choice result;
     private final I18n texts;
     private final InGamePage page;
@@ -64,7 +67,9 @@ public final class SavedGamesDialog implements GameScreen {
 
     @Inject
     public SavedGamesDialog(final InGamePage page, final I18n texts,
-            final Provider<MainPanelPresenter> screens, final ViewUtil window) {
+            final Provider<MainPanelPresenter> screens, final ViewUtil window,
+            final EventBus eventBus) {
+        this.eventBus = eventBus;
         this.page = page;
         this.texts = texts;
         this.screens = screens;
@@ -99,6 +104,8 @@ public final class SavedGamesDialog implements GameScreen {
                 view.setEntries(updated == null ? List.of() : updated);
             }
         }, null, previews);
+        view.setSaveHelp(message -> eventBus
+                .post(new StatusBarMessageEvent(message, Source.GAME)));
         view.setEntries(entries);
         view.setCurrentGame(current, currentImage, suggestedName);
         page.setContent(view.getContent());
