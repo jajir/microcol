@@ -1,3 +1,39 @@
+## FPS counter — 2026-11-12
+
+1. Source base `0d4852df55b34e9bec702e5236bfb6c8563d7d70`: replaced Swing timer
+   in `FpsCounter` with elapsed monotonic time measured on painted frames.
+   All callers are in `GamePanelComponent`; its existing show/hide/paint
+   lifecycle remains suitable. No scheduler, thread or new requirement added.
+2. Five deterministic `FpsCounterTest` cases cover the one-second boundary,
+   actual elapsed time, subsequent intervals, inactive frames, retained FPS,
+   active reset, pause/restart and nanoTime wraparound without sleeping.
+   TC191/09 adds a second keyboard Continue and verifies restored gameplay;
+   targeted selection also includes `PageVerificationContractTest`.
+3. User-reported freeze evidence describes JavaFX waiting in `FpsCounter.start()`
+   for the Swing timer lock held by TimerQueue during macOS AppKit initialization
+   (OpenJDK 25.0.3, JavaFX 17.0.20). The three supplied `/tmp` files were no longer
+   present when checked on 2026-11-12, so they were not independently reread.
+   Removing this code path is not proof against every possible freeze.
+4. Shared Eclipse formatter applied to all three changed Java files. Model/JUnit
+   passed **5,128 tests** in 395 complete XML reports, zero failures/errors/skips,
+   157.002 supervised seconds (600 s limit), completion
+   `20261112T072757Z-b0e1238e2d05`, reports `target/verification/run-lxvfzhkh/`.
+   All three changed Java files match its source snapshot.
+5. Targeted Docker/Xvfb TC191/09 and `PageVerificationContractTest` passed
+   **4 tests**, zero failures/errors/skips, 71.170 supervised seconds (1,800 s
+   limit), completion `20261112T073105Z-4c336874a094`, reports
+   `target/docker-ui/run-BX53Rp/`. Both XML reports contain the intended selection.
+6. Fixed smoke/support passed **21 tests** in 12 complete XML reports, zero
+   failures/errors/skips, 249.161 phase seconds and 252.061 supervised seconds,
+   within the 420 s budget. Completion `20261112T073248Z-a82eb05a8959`, reports
+   `target/verification/run-nfhzkbla/`; all three changed Java files match its
+   source snapshot. Local acceptance is complete for this source change.
+7. Documentation consistency passed all 14 tests, naming audit found zero
+   unexplained occurrences, strict MkDocs passed; logs in `target/fps-counter/`.
+   Review preserves the unrelated backlog edit and confirms no Swing/AWT import,
+   timer or thread in `FpsCounter`. Remote CI, native macOS UI and publication
+   are not verified in this task.
+
 ## Save feedback — 2026-11-12
 
 1. UC-114: TC191/16 checks an edited filename, return to the game, the named success outcome, filename and input hover help, canceled overwrite and confirmed double-click overwrite. The shared navigation change also requires the existing TC191 session journeys.

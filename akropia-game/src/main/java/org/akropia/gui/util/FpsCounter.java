@@ -1,6 +1,6 @@
 package org.akropia.gui.util;
 
-import javax.swing.Timer;
+import java.util.function.LongSupplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,35 +12,51 @@ public final class FpsCounter {
 
     private final Logger logger = LoggerFactory.getLogger(FpsCounter.class);
 
-    private final Timer timer;
+    private final LongSupplier nanoTime;
+
+    private boolean running;
+
+    private long intervalStart;
 
     private int fps;
 
     private int counter;
 
     public FpsCounter() {
-        timer = new Timer(1000, e -> {
-            fps = counter;
-            counter = 0;
-            logger.debug("Fps is: " + fps);
-        });
+        this(System::nanoTime);
+    }
+
+    FpsCounter(final LongSupplier nanoTime) {
+        this.nanoTime = nanoTime;
     }
 
     public void start() {
         counter = 0;
         fps = 0;
-        timer.start();
+        intervalStart = nanoTime.getAsLong();
+        running = true;
     }
 
     public void stop() {
-        timer.stop();
+        running = false;
     }
 
     /**
      * Should be called when screen was painted.
      */
     public void screenWasPainted() {
+        if (!running) {
+            return;
+        }
         counter++;
+        final long now = nanoTime.getAsLong();
+        final long elapsed = now - intervalStart;
+        if (elapsed >= 1_000_000_000L) {
+            fps = (int) (counter * 1_000_000_000L / elapsed);
+            counter = 0;
+            intervalStart = now;
+            logger.debug("Fps is: " + fps);
+        }
     }
 
     /**

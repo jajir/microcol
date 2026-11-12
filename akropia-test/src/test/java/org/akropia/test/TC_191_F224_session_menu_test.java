@@ -788,6 +788,13 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         GamePage.of(getContext()).verifyGameInFront();
         saves.verifyRestoredGame();
 
+        // Repeat hide/show and painting after keyboard Continue.
+        GamePage.of(getContext()).exitToMenu();
+        welcome.pressKeys(KeyCode.C);
+        GamePage.of(getContext()).verifyGameInFront();
+        GamePage.of(getContext()).waitWhileMoving();
+        saves.verifyRestoredGame();
+
         // The mouse path restores the same snapshot as the keyboard path.
         GamePage.of(getContext()).exitToMenu();
         audit.continueGame();

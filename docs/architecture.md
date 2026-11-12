@@ -1275,3 +1275,20 @@ jsou autoritativní pro vzhled a přijetí.
 1. `model.generation` vlastní rozměry, rozložení pevniny a stabilní převod textového seedu. Verze 2 používá nastavitelný svět; existující numerický referenční profil zůstává verzí 1 pro přímé modelové volání. Nejde o migraci uložených her.
 2. `GeneratedWorldPo` uchovává původní seed, velikost, rozložení a verzi; `Model` kontroluje úplnost a shodu s uloženou mapou. Načtení nic negeneruje.
 3. `ScreenFreePlay` vlastní pouze vstupy a kroky. Generování terénu běží na pozadí, vytvoření herní instance a její aktivace přes existující kontroléry probíhá na JavaFX vlákně. [R-0437](requirements/done/R-0437.md) určuje přejímku.
+
+## Měření FPS na JavaFX vlákně — 12. listopadu 2026
+
+`gui.util.FpsCounter` počítá dokončené snímky z `GamePanelComponent.paintFrame`.
+Veřejný konstruktor používá monotónní `System.nanoTime()`; měření nemá Swing/AWT
+závislost, timer ani vlastní vlákno. Volání zůstávají na JavaFX vlákně.
+`start()` resetuje čas, počet snímků i FPS, `stop()` zakáže další počítání.
+První snímek po uplynutí alespoň sekundy uzavře interval: celočíselné FPS jsou
+počet snímků dělený skutečně uplynulými sekundami (zaokrouhlení dolů).
+Další interval začíná časem tohoto snímku. Bez vykreslování zůstává poslední
+hodnota; nový start nezahrnuje pauzu. `getFps()` zůstává dostupné, současní
+volající jeho hodnotu nezobrazují. Balíčkový konstruktor s `LongSupplier`
+slouží deterministickým testům bez čekání.
+
+Změna odstraňuje zachycenou blokující cestu přes Swing `Timer.start()`
+a inicializaci macOS AppKit. Neprokazuje absenci jiných příčin zamrznutí.
+Lokální ověření popisuje [funkční evidence](functional-tests.md#fps-counter-2026-11-12).
