@@ -296,7 +296,7 @@ public class TC_34_F26_rival_first_colony_test extends AbstractAkropiaTest {
                 Location.of(21, 2));
         game.nextTurnAndCloseDialogs();
         rival.waitForHumanRound(3);
-        rival.verifyRivalColonyViable(3, 0, Location.of(21, 2));
+        rival.verifyRivalColonyViable(3, 0, "Massalia", Location.of(21, 2));
         rival.verifyRivalColonyUndiscovered(Location.of(21, 2));
         game.panToTile(Location.of(21, 2));
         game.captureDialog("nextTurn",
@@ -313,7 +313,7 @@ public class TC_34_F26_rival_first_colony_test extends AbstractAkropiaTest {
         rival.waitForHumanRound(5);
         game.nextTurnAndCloseDialogs();
         rival.waitForHumanRound(6);
-        rival.verifyRivalColonyViable(6, 0, Location.of(21, 2));
+        rival.verifyRivalColonyViable(6, 0, "Massalia", Location.of(21, 2));
         rival.verifyRivalColonyUndiscovered(Location.of(21, 2));
         rival.verifyHumanExpeditionUnchanged(humanFleet, 2108);
     }
@@ -334,7 +334,7 @@ public class TC_34_F26_rival_first_colony_test extends AbstractAkropiaTest {
             game.nextTurnAndCloseDialogs();
             rival.waitForHumanRound(round);
         }
-        rival.verifyRivalColonyViable(3, 0, Location.of(21, 2));
+        rival.verifyRivalColonyViable(3, 0, "Massalia", Location.of(21, 2));
         final String humanFleet = rival.captureHumanExpedition();
         final int foodAtFounding = rival.readRivalFood(0);
 

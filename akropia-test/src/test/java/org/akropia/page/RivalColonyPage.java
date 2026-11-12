@@ -154,11 +154,12 @@ public final class RivalColonyPage extends AbstractScreen {
     }
 
     public void verifyRivalColonyViable(final int expectedRound,
-            final int expectedColonyId, final Location expectedSite) {
+            final int expectedColonyId, final String expectedName,
+            final Location expectedSite) {
         assertEquals(expectedRound,
                 getModel().getCalendar().getNumberOfPlayedTurns());
-        verifyFoundedResident(expectedColonyId, 4, "New Amsterdam",
-                expectedSite, true);
+        verifyFoundedResident(expectedColonyId, 4, expectedName, expectedSite,
+                true);
         final org.akropia.model.Colony colony = getModel()
                 .getColonyById(expectedColonyId).orElseThrow();
         assertSame(getModel().getPlayerByName("France"), colony.getOwner());

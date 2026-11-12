@@ -462,9 +462,12 @@ kolonii). Enter potvrzuje, Escape ruší. Do potvrzení se model nemění.
 - Duplicitní jméno v celé hře bez ohledu na velikost písmen je chyba.
   Pole zčervená, text vysvětlí chybu a potvrzení není dostupné. Vlastní
   nezměněné jméno není duplicita. Kontrolu provádí také model při potvrzení.
-- Generátor projde existující seznam, neopakuje návrhy v témže dialogu ani
-  obsazená jména. Po vyčerpání použije New Amsterdam 2, 3 atd. Návrhy nejsou
-  rezervace a zrušení je nezapisuje do modelu.
+- Generátor používá pevné pořadí 100 historických řeckých názvů v latince
+  (dohoda 12. listopadu 2026), od Massalia přes Emporion a Alalia po Naukratis.
+  Neopakuje návrhy v témže dialogu ani obsazená jména. Po vyčerpání projde
+  celý seznam s příponou 2 (Massalia 2, Emporion 2, …, Naukratis 2), potom
+  s příponou 3 atd. Stejný generátor používá UI i AI. Existující kolonie
+  se nepřejmenovávají. Návrhy nejsou rezervace a zrušení je nezapisuje do modelu.
 - Přejmenovat může pouze vlastník ve svém tahu. Změna vlastníka, zánik
   kolonie nebo změna zakládající jednotky během dialogu nesmí způsobit
   částečnou změnu. Při založení se otevře právě vytvořená kolonie.

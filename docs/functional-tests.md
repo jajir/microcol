@@ -15586,3 +15586,42 @@ The numbered entries below are chronological evidence, including failed attempts
 5. The user explicitly waived smoke for this fix. Full regression, native
    desktop checks and remote publication verification are not part of this
    task. The unrelated backlog edit is excluded from the commit.
+
+## Greek colony names — 2026-11-12
+
+1. UC-031 and the shared UI/AI naming operation now use the agreed ordered
+   catalog of 100 Greek names, including Mylai and Bisanthe. Numbered passes
+   start only after all base names are unavailable and cycle through the whole
+   catalog before incrementing the suffix. The authoritative behavior is
+   [Z02](implementation-plan.md#z02-zalozeni-pojmenovane-kolonie).
+2. Model acceptance passed all **5,129 tests**, with zero failures, errors or
+   skips, on the changed source based on `a7137179`. Evidence:
+   `target/verification/run-09uqvmhs/summary.json`; completion
+   `20261112T121417Z-4e04a90c1a88` (152.517 seconds).
+   `ColonyNamesTest` checks the complete ordered catalog, uniqueness,
+   transitions to suffixes 2 and 3, and normalized occupied/excluded names.
+3. Targeted Docker/Xvfb selection:
+   `TC_20_F02_colony_names_test,TC_02_F02_founding_colony_test,TC_34_F26_rival_first_colony_test,PageVerificationContractTest`.
+   The first run completed 20 checks with four failures, zero errors/skips:
+   two obsolete Leiden expectations in TC02 and two New Amsterdam expectations
+   in the TC34 page object. Evidence remains at
+   `target/docker-ui/run-pWIouO`, completion
+   `20261112T121711Z-f477bd568e5f` (268.777 seconds).
+   Expected names were updated without weakening founding, identity, food,
+   cancellation or save/load assertions. The page verification now accepts
+   the expected colony name explicitly from the scenario.
+4. Corrected targeted acceptance passed all **20 checks**, zero failures,
+   errors or skips: TC02 (3), TC20 (5), TC34 (9), and the page source contract
+   (3). Evidence: `target/docker-ui/run-SmhbYC`, completion
+   `20261112T122254Z-62d367938fba` (294.006 seconds).
+   The model source is unchanged from the passing model phase.
+5. The fixed `verify.sh --smoke` selection passed all **21 checks** with zero
+   failures, errors or skips, within the 420-second budget. Evidence:
+   `target/verification/run-tmo26qkf/summary.json`, completion
+   `20261112T122801Z-f91a89def909` (251.413 seconds including wrapper cleanup).
+   All changed Java sources match the tested snapshot.
+6. Java formatting used the shared Eclipse profile on all six changed Java
+   files. All 14 documentation consistency checks, the former-name audit and
+   strict MkDocs build passed. Logs: `target/greek-colony-names/`.
+   Unrelated backlog edits are excluded. No full regression, remote CI, Pages
+   or game-distribution publication is claimed.

@@ -49,11 +49,11 @@ public class TC_20_F02_colony_names_test extends AbstractAkropiaTest {
 
         // Suggestions and draft edits do not create a colony or consume an ID.
         final ColonyNameDialog dialog = game.foundColony();
-        dialog.verifyDraft("Leiden");
+        dialog.verifyDraft("Massalia");
         dialog.generate();
-        dialog.verifyDraft("Rotterdam");
+        dialog.verifyDraft("Emporion");
         dialog.generate();
-        dialog.verifyDraft("Utrecht");
+        dialog.verifyDraft("Alalia");
         dialog.enterName("Unbuilt town");
         dialog.verifyFoundingUnchanged(founder, FOUNDING_LOCATION, 1, 3, 3);
         dialog.cancel();
@@ -61,7 +61,7 @@ public class TC_20_F02_colony_names_test extends AbstractAkropiaTest {
 
         // Escape has the same cancellation contract, and suggestions restart.
         final ColonyNameDialog reopened = game.foundColony();
-        reopened.verifyDraft("Leiden");
+        reopened.verifyDraft("Massalia");
         reopened.escape();
         reopened.verifyFoundingUnchanged(founder, FOUNDING_LOCATION, 1, 3, 3);
     }
@@ -120,7 +120,7 @@ public class TC_20_F02_colony_names_test extends AbstractAkropiaTest {
         dialog.verifyStoredName(1, "Delft");
         dialog.captureDialog("colonyNameError", "duplicate-name.png");
         dialog.generate();
-        dialog.verifyDraft("Leiden");
+        dialog.verifyDraft("Massalia");
         dialog.verifyValidation("", false);
         dialog.cancel();
         colony.verifyColonyName("Delft");

@@ -48,9 +48,9 @@ public class TC_02_F02_founding_colony_test extends AbstractAkropiaTest {
 
         // found colony by pressing key 'b'
         final ColonyNameDialog naming = gamePage.foundColonyFromActions();
-        naming.verifyDraft("Leiden");
+        naming.verifyDraft("Massalia");
         naming.save();
-        final ColonyScreen opened = ColonyScreen.of(getContext(), "Leiden");
+        final ColonyScreen opened = ColonyScreen.of(getContext(), "Massalia");
         // The new colony produces its base torch without a preacher.
         opened.verifyTorchProduction(1);
         gamePage = opened.close();
@@ -64,7 +64,7 @@ public class TC_02_F02_founding_colony_test extends AbstractAkropiaTest {
 
         // open colony and verify city name
         final ColonyScreen colonyScreen = gamePage
-                .openColonyAt(Location.of(19, 11), "Leiden");
+                .openColonyAt(Location.of(19, 11), "Massalia");
 
         // verify that on filed is exactly one unit, the one that founded colony
         colonyScreen.verifyNumberOfUnitsOnFields(1);
@@ -149,7 +149,7 @@ public class TC_02_F02_founding_colony_test extends AbstractAkropiaTest {
         founding.verifyFoundingAvailable();
         founding.pressFoundingShortcut();
         final ColonyNameDialog naming = new ColonyNameDialog(getContext());
-        naming.verifyDraft("Leiden");
+        naming.verifyDraft("Massalia");
         naming.cancel();
     }
 

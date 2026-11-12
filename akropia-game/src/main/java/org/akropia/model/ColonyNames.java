@@ -8,9 +8,25 @@ import java.util.Set;
 import com.google.common.base.Preconditions;
 
 final class ColonyNames {
-    private static final List<String> NAMES = List.of("New Amsterdam", "Delft",
-            "Haarlem", "Leiden", "Rotterdam", "Utrecht", "Eindhoven", "Tilburg",
-            "Groningen", "Almere Stad", "Breda");
+    private static final List<String> NAMES = List.of("Massalia", "Emporion",
+            "Alalia", "Agathe", "Antipolis", "Nikaia", "Tauroeis", "Rhode",
+            "Neapolis", "Kyme", "Pithekoussai", "Taras", "Sybaris", "Kroton",
+            "Rhegion", "Poseidonia", "Metapontion", "Elea", "Thourioi",
+            "Kaulonia", "Syrakousai", "Naxos", "Zankle", "Selinous", "Akragas",
+            "Himera", "Kamarina", "Leontinoi", "Katane", "Megara Hyblaia",
+            "Akrai", "Kasmenai", "Heloros", "Mylai", "Lipara", "Tauromenion",
+            "Korkyra", "Ambrakia", "Leukas", "Anaktorion", "Epidamnos",
+            "Apollonia", "Issa", "Pharos", "Tragyrion", "Epetion", "Ankon",
+            "Abdera", "Maroneia", "Amphipolis", "Stageira", "Akanthos",
+            "Potidaia", "Mende", "Torone", "Olynthos", "Aphytis", "Sermyle",
+            "Sane", "Argilos", "Eion", "Byzantion", "Kalchedon", "Selymbria",
+            "Perinthos", "Bisanthe", "Kardia", "Abydos", "Lampsakos", "Kyzikos",
+            "Parion", "Kios", "Sinope", "Amisos", "Trapezous", "Kerasous",
+            "Kotyora", "Kytoros", "Tieion", "Herakleia Pontike", "Istros",
+            "Tomis", "Kallatis", "Odessos", "Mesembria", "Olbia", "Tyras",
+            "Borysthenes", "Nikonion", "Pantikapaion", "Theodosia",
+            "Chersonesos", "Nymphaion", "Phanagoria", "Hermonassa", "Kyrene",
+            "Barke", "Euesperides", "Taucheira", "Naukratis");
     private final Model model;
 
     ColonyNames(final Model model) {
@@ -81,9 +97,11 @@ final class ColonyNames {
             }
         }
         for (long suffix = 2; suffix < Long.MAX_VALUE; suffix++) {
-            final String candidate = "New Amsterdam " + suffix;
-            if (available(candidate, excluded)) {
-                return candidate;
+            for (final String name : NAMES) {
+                final String candidate = name + " " + suffix;
+                if (available(candidate, excluded)) {
+                    return candidate;
+                }
             }
         }
         throw new IllegalStateException("No colony names available");
