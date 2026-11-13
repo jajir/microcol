@@ -411,6 +411,12 @@ public final class ColonyLayoutPage extends AbstractScreen {
             assertTrue(dock.getBackground().getFills().stream().allMatch(
                     fill -> Color.TRANSPARENT.equals(fill.getFill())));
             assertTrue(depot.isVisible());
+            assertTrue(depot.getBorder() == null || depot.getBorder()
+                    .getInsets().equals(javafx.geometry.Insets.EMPTY));
+            Node title = getNodeFinder().lookup("#europe-cargo-title").query();
+            Node area = getNodeFinder().lookup("#colony-section-area").query();
+            assertEquals(area.localToScene(area.getBoundsInLocal()).getMinY(),
+                    title.localToScene(title.getBoundsInLocal()).getMinY(), 2);
         });
     }
 
@@ -558,6 +564,10 @@ public final class ColonyLayoutPage extends AbstractScreen {
         javafx.scene.layout.Region production = (javafx.scene.layout.Region) getNodeFinder()
                 .lookup("#colony-field-output").query().getParent();
         assertTrue(production.getWidth() <= 480.1);
+        javafx.scene.layout.Region detail = (javafx.scene.layout.Region) production
+                .getParent();
+        assertTrue(detail.getBorder() == null
+                || detail.getBorder().getInsets().getLeft() == 0);
         assertTrue(production.lookupAll(".label").stream().noneMatch(
                 node -> node instanceof Label && texts.get(ColonyMsg.outputHelp)
                         .equals(((Label) node).getText())));

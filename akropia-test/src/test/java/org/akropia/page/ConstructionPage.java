@@ -86,6 +86,46 @@ public final class ConstructionPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void doubleClickProject(final String type) {
+        ListView<ColonyBuildingItem> list = getNodeFinder()
+                .lookup("#constructionProjects").queryAs(ListView.class);
+        ColonyBuildingItem item = list.getItems().stream()
+                .filter(value -> value.getName().equals(type)).findFirst()
+                .orElseThrow();
+        revealGameContent(list);
+        getRobot().interact(() -> list.scrollTo(item));
+        WaitForAsyncUtils.waitForFxEvents();
+        getRobot().doubleClickOn("#project-" + type);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void doubleClickQueue(final String type) {
+        ListView<ColonyBuildingItemProgress<?>> list = getNodeFinder()
+                .lookup("#constructionQueue").queryAs(ListView.class);
+        ColonyBuildingItemProgress<?> item = list.getItems().stream()
+                .filter(value -> value.getName().equals(type)).findFirst()
+                .orElseThrow();
+        revealGameContent(list);
+        getRobot().interact(() -> list.scrollTo(item));
+        WaitForAsyncUtils.waitForFxEvents();
+        javafx.scene.control.ListCell<?> cell = list.lookupAll(".list-cell")
+                .stream().map(node -> (javafx.scene.control.ListCell<?>) node)
+                .filter(row -> row.getItem() == item).findFirst().orElseThrow();
+        getRobot().doubleClickOn(cell);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyCompactEditor() {
+        assertTrue(getNodeFinder().lookup("#constructionCancel").queryAll()
+                .isEmpty());
+        assertTrue(getNodeFinder().lookup((
+                javafx.scene.Node node) -> node instanceof javafx.scene.control.Label
+                        && ((javafx.scene.control.Label) node).getText() != null
+                        && ((javafx.scene.control.Label) node).getText()
+                                .startsWith("Construction —"))
+                .queryAll().isEmpty());
+    }
+
     public void confirm() {
         clickOnButtonWithId("constructionAdd");
     }
@@ -104,7 +144,7 @@ public final class ConstructionPage extends AbstractScreen {
     }
 
     public void cancel() {
-        clickOnButtonWithId("constructionCancel");
+        escape();
     }
 
     public void escape() {

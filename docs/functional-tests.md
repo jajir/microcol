@@ -11,6 +11,37 @@
 7. Final review checked immediate pending protection, availability recheck, guard release in `finally`, consumed-event handling and unchanged menu/save-before-leaving behavior. Shared Java formatting, 14 documentation consistency tests, naming audit and strict MkDocs passed. Unrelated backlog edits are excluded. Native macOS behavior and remote CI/Pages/game distribution publication were not verified; no captured duplicate native key event is claimed.
 
 
+## Colony controls follow-up — 2026-11-13
+
+1. Construction hides unmet building/founder prerequisites, accepts eligible
+   projects by double click and removes queued items by double click. The redundant
+   title and close button are removed; Escape and switching sections still close
+   the editor. Tile/depot borders are removed, the depot heading aligns with
+   section buttons, school columns stop at 300 logical pixels, and goods transfer
+   uses the existing ruler slider skin.
+2. Target selection: TC32, TC51, TC57, TC62, TC19, TC68, TC195 and the page
+   verification contract. Model/JUnit, Docker/Xvfb and smoke acceptance are pending.
+   No native desktop inspection or remote CI/publication verification is requested.
+
+3. First model attempt stopped before tests at compilation: unit filtering used
+   the construction query instead of `getUnitUnavailableReason`. The caller now
+   uses the existing unit-specific model query. Failed evidence is retained at
+   `target/verification/run-n9zh6tjw/` (26.002 supervised seconds).
+
+4. Corrected model run `20261113T091115Z-a5998c98e2d1` passed 5,129 tests in 395 XML reports, zero failures/errors/skips (155.458 supervised seconds; `target/verification/run-atunkbg_/`). Subsequent targeted Docker run `20261113T091411Z-e8eebcae3a65` failed: 57 tests, 16 failures, 2 errors, zero skips (695.176 supervised seconds). This is not acceptance. The transfer dialog did not import the stylesheet selecting the ruler skin; the construction expectation still offered Iron Works without Adam Smith; a coastal test helper looked for the relocated canvas in its former parent. The new double-click scenario also failed opening the editor before its assertions.
+5. Repairs load the existing slider stylesheet directly in the transfer dialog, keep founder-locked Iron Works hidden in the expectation, and locate the field canvas in the scene. The double-click scenario opens the editor through the existing keyboard page action, retaining all mouse double-click and queue assertions. Fresh model verification dispatched as `20261113T092928Z-bc79cf972821`, supervisor PID 68883, timeout 600 s; targeted UI and smoke remain pending.
+
+6. Fresh model run `20261113T092928Z-bc79cf972821` passed **5,129 tests** in 395 XML reports, zero failures/errors/skips, 153.338 supervised seconds. Reports: `target/verification/run-jwfp4p88/`; changed game sources/resources match the tested snapshot. Full targeted selection from item 2 dispatched as `20261113T093232Z-f94fc8fa3ed2`, supervisor PID 69319, timeout 1,800 s. Targeted UI and smoke acceptance remain pending.
+
+7. Targeted rerun `20261113T093232Z-f94fc8fa3ed2` completed 57 tests with zero assertion failures, one error and zero skips (766.355 supervised seconds; `target/docker-ui/run-LYAcdC/`). TC32/11 still stopped before its double-click assertions because the construction section was not keyboard reachable after keyboard colony entry. All other selected scenarios passed, including transfer slider skin, school width, depot alignment and structural prerequisites. The depot screenshot confirms removal of the outer frame. The new scenario now uses the same map-based colony entry and mouse editor opening as the passing construction scenarios; no double-click assertions were removed.
+8. Full TC32 plus page verification contract dispatched as `20261113T094608Z-afce7e69a3e3`, supervisor PID 69957, timeout 1,800 s. Game source is unchanged from the passing model and remaining targeted scenarios; only TC32 entry setup changed. Smoke acceptance remains pending.
+
+9. TC32/support retry `20261113T094608Z-afce7e69a3e3` completed 14 tests with zero assertion failures, one error and zero skips (185.178 supervised seconds; `target/docker-ui/run-Su5Jc0/`). Editor entry and building double-click assertions passed; TC32/11 then requested Wagon before completing its required Lumber Mill, so the correctly filtered offer was absent. The scenario now verifies double-click building removal, completes the mill through a real turn, then verifies unit addition/removal while preserving another queued project and shared work. Full TC32/support retry dispatched as `20261113T094959Z-80c45bc8f3f3`, supervisor PID 70185, timeout 1,800 s. Production code remains unchanged.
+
+10. Full repaired TC32 and page verification contract passed **14 tests**, zero failures/errors/skips, in `target/docker-ui/run-62Afvy/` (`20261113T094959Z-80c45bc8f3f3`, 194.407 supervised seconds). Combined with unchanged passing TC19/51/57/62/68/195 from `run-LYAcdC`, all **57 distinct targeted/support tests** now have passing results. Earlier failed runs remain failed. Final fixed smoke/support dispatched as `20261113T095332Z-d2b02698ffab`, supervisor PID 70364, watchdog 480 s; acceptance budget remains 420 s. Review confirms double-click reuses existing validated add/remove actions, ignores empty cells and non-primary clicks, and preserves shared work.
+
+11. Final fixed smoke/support passed **21 tests** in 12 XML reports, zero failures/errors/skips, 253.693 supervised seconds within the 420 s acceptance budget (`target/verification/run-t4f4oqbs/`, `20261113T095332Z-d2b02698ffab`). All changed executable sources and resources match its snapshot. Local acceptance comprises 5,129 model/JUnit tests, 57 distinct targeted/support tests and 21 smoke/support tests; final documentation checks comprise 14 tooling tests, name audit and strict MkDocs build. Shared Java formatting and diff review completed. No native macOS or remote CI/publication verification is claimed.
+
 ## Save overwrite return — 2026-11-13
 
 1. UC-114, base `13936027`: the user reports remaining on Save after confirming a double-click overwrite on macOS. Previous Linux acceptance is retained; this report does not establish the native root cause. Successful Save now disables its content and schedules return after the current confirmation event. Named feedback uses the normalized filename stem, preserving internal dots and Unicode, without `.akropia`.

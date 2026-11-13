@@ -15,7 +15,7 @@
 .colony-details { -fx-padding: 0 0 0 16; -fx-border-color: #7c826b; -fx-border-width: 0 0 0 1; }
 .colony-section { -fx-padding: 8 0 0 0; -fx-border-color: #8c9077; -fx-border-width: 1 0 0 0; }
 .colony-fields { -fx-spacing: 10; }
-.tile-detail { -fx-spacing: 5; -fx-padding: 0 0 0 10; -fx-border-color: #8c9077; -fx-border-width: 0 0 0 1; }
+.tile-detail { -fx-spacing: 5; -fx-padding: 0; -fx-border-width: 0; }
 .tile-detail .label { -fx-font-size: 14; }
 .field-output-header { -fx-padding: 4 6; -fx-border-color: #8c9077; -fx-border-width: 1 0; }
 .field-output-choice { -fx-padding: 4 6; -fx-border-color: transparent; -fx-border-radius: 3; -fx-background-radius: 3; }
@@ -107,5 +107,5 @@
 }
 .colony-detail .combo-box .arrow { -fx-background-color: #302D27; }
 
-.colony-depot { -fx-border-color: black; -fx-border-width: 1; -fx-padding: 8; -fx-spacing: 6; }
-.colony-depot .panel-dock { -fx-background-color: transparent; }
+.colony-depot { -fx-border-width: 0; -fx-padding: 7 7 0 7; -fx-spacing: 6; }
+.colony-depot .panel-dock { -fx-background-color: transparent; -fx-padding: 0; }

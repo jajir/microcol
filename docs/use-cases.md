@@ -2,6 +2,15 @@
 
 1. TC191/17 ověřuje [otevření přes ⌘S/Ctrl+S](save-load-navigation.md#otevreni-ukladani-klavesovou-zkratkou-13-listopadu-2026), opakovaný stisk během ukládání, dvojklik a jediné potvrzení s návratem na mapu. Další samostatné uložení zůstává dostupné. [Evidence](functional-tests.md#save-shortcut-return-2026-11-13).
 
+## UC-031/033/042: přímé ovládání fronty a kompaktní panely — 13. listopadu 2026
+
+1. TC32/11 pokrývá přidání stavby a jednotky dvojklikem, odmítnutí nedostupné
+   stavby a odebrání dvojklikem se zachováním kladiv. TC51, TC57 a TC62 ověřují
+   skryté položky bez budovy či člena kongresu a jejich zpřístupnění po splnění.
+2. TC19 ověřuje přesun zboží se sdíleným kresleným posuvníkem; TC68/09 omezenou
+   šířku školních sloupců a TC195 odstraněné čáry a zarovnání Cargo Depot.
+3. Výsledky: [funkční evidence](functional-tests.md#colony-controls-follow-up-2026-11-13).
+
 ## UC-114: potvrzené přepsání a návrat — 13. listopadu 2026
 
 1. [Návrat po přepsání](save-load-navigation.md#navrat-po-potvrzenem-prepsani-13-listopadu-2026) vrací hráče do hry a potvrzuje název bez přípony. TC191/16 zahrnuje přepsání dvojklikem i opakované přepsání tlačítkem; [výsledky](functional-tests.md#save-overwrite-return-2026-11-13).

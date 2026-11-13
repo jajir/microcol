@@ -50,7 +50,6 @@ public class QueueDialog extends AbstractMessageWindow {
     private final Button up = ActionButtons.button(ButtonIcon.UP);
     private final Button down = ActionButtons.button(ButtonIcon.DOWN);
     private final Button remove = ActionButtons.button(ButtonIcon.REMOVE);
-    private final Button cancel = ActionButtons.button(ButtonIcon.CANCEL);
     private final Button rush = ActionButtons.button(ButtonIcon.GOLD);
     private final ConstructionRushDialog rushDialog;
     private VBox root;
@@ -77,7 +76,6 @@ public class QueueDialog extends AbstractMessageWindow {
         up.setId("constructionUp");
         down.setId("constructionDown");
         remove.setId("constructionRemove");
-        cancel.setId("constructionCancel");
         rush.setId("constructionRush");
         rush.setOnAction(event -> {
             boolean purchased = rushDialog.showFor(controller);
@@ -86,6 +84,18 @@ public class QueueDialog extends AbstractMessageWindow {
                 feedback.setText(i18n.get(ConstructionText.rushCompleted));
         });
         projects.setCellFactory(list -> new ListCell<ColonyBuildingItem>() {
+            {
+                setOnMouseClicked(event -> {
+                    if (event
+                            .getButton() == javafx.scene.input.MouseButton.PRIMARY
+                            && event.getClickCount() == 2 && !isEmpty()) {
+                        projects.getSelectionModel().select(getItem());
+                        add.fire();
+                        event.consume();
+                    }
+                });
+            }
+
             @Override
             protected void updateItem(final ColonyBuildingItem item,
                     final boolean empty) {
@@ -102,6 +112,19 @@ public class QueueDialog extends AbstractMessageWindow {
         queue.setItems(controller.getObservableList());
         queue.setCellFactory(
                 list -> new ListCell<ColonyBuildingItemProgress<?>>() {
+                    {
+                        setOnMouseClicked(event -> {
+                            if (event
+                                    .getButton() == javafx.scene.input.MouseButton.PRIMARY
+                                    && event.getClickCount() == 2
+                                    && !isEmpty()) {
+                                queue.getSelectionModel().select(getItem());
+                                remove.fire();
+                                event.consume();
+                            }
+                        });
+                    }
+
                     @Override
                     protected void updateItem(
                             final ColonyBuildingItemProgress<?> item,
@@ -124,8 +147,6 @@ public class QueueDialog extends AbstractMessageWindow {
         up.setOnAction(event -> changeQueue(-1));
         down.setOnAction(event -> changeQueue(1));
         remove.setOnAction(event -> changeQueue(0));
-        cancel.setCancelButton(true);
-        cancel.setOnAction(event -> close());
         detail.setWrapText(true);
         feedback.setWrapText(true);
         detail.setMinHeight(78);
@@ -140,7 +161,7 @@ public class QueueDialog extends AbstractMessageWindow {
         VBox.setVgrow(projects, Priority.ALWAYS);
         VBox.setVgrow(queue, Priority.ALWAYS);
         final HBox panels = new HBox(16, choices, current);
-        root = new VBox(12, title, panels, feedback, cancel);
+        root = new VBox(12, panels, feedback);
         root.setPadding(new Insets(18));
         root.setPrefSize(800, 550);
         VBox.setVgrow(panels, Priority.ALWAYS);
@@ -176,7 +197,6 @@ public class QueueDialog extends AbstractMessageWindow {
         queue.setPrefHeight(200);
         root.setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
         add.setDefaultButton(false);
-        cancel.setCancelButton(false);
         controller.begin();
         refresh();
         updateLanguage(i18n);
@@ -198,7 +218,6 @@ public class QueueDialog extends AbstractMessageWindow {
         up.setText(language.get(ConstructionText.up));
         down.setText(language.get(ConstructionText.down));
         remove.setText(language.get(ConstructionText.remove));
-        cancel.setText(language.get(ConstructionText.cancel));
         rush.setText(language.get(ConstructionText.rush));
         projects.refresh();
         queue.refresh();
@@ -216,9 +235,22 @@ public class QueueDialog extends AbstractMessageWindow {
                         .getColony().getConstructions().stream()
                         .anyMatch(building -> building.getType() == previous))
                         .orElse(true))
+                .filter(type -> type.getRequiredFounder()
+                        .map(founder -> controller.getColony().getOwner()
+                                .getCongressMembers().contains(founder))
+                        .orElse(true))
                 .forEach(type -> offers
                         .add(new ColonyBuildingItemConstruction(type)));
         UnitType.UNIT_TYPES.stream().filter(UnitType::canBeBuildInColony)
+                .filter(type -> controller.getColony().getColonyBuildingQueue()
+                        .getUnitUnavailableReason(type)
+                        .filter(reason -> java.util.List.of(
+                                org.akropia.model.ColonyBuildingQueue.UnavailableReason.MISSING_ARMORY,
+                                org.akropia.model.ColonyBuildingQueue.UnavailableReason.MISSING_SHIPYARD,
+                                org.akropia.model.ColonyBuildingQueue.UnavailableReason.MISSING_PREDECESSOR,
+                                org.akropia.model.ColonyBuildingQueue.UnavailableReason.MISSING_FOUNDER)
+                                .contains(reason))
+                        .isEmpty())
                 .forEach(type -> offers.add(new ColonyBuildingItemUnit(type)));
         projects.getItems().setAll(offers);
         select(null);

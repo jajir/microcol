@@ -51,6 +51,8 @@ public class DialogChooseGoodsAmount extends AbstractScreenMarket {
     public void verifyOfferedAmount(final int expected) {
         final Slider slider = getNodeFinder().lookup(".slider")
                 .queryAs(Slider.class);
+        assertTrue(slider
+                .getSkin() instanceof org.akropia.gui.util.RulerSliderSkin);
         assertEquals(expected, slider.getMax());
         assertEquals(expected, slider.getValue());
     }

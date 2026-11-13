@@ -736,9 +736,8 @@ public class ColonyScreen extends AbstractScreen {
         final ColonyField source = colony.getColonyFields().stream().filter(
                 field -> field.getUnit().map(Unit::getId).orElse(-1) == unitId)
                 .findFirst().orElseThrow();
-        final javafx.scene.Node canvas = getContext()
-                .getClassFromGuice(PanelColonyFields.class).getContent()
-                .lookup("#colony-field-map");
+        final javafx.scene.Node canvas = getNodeFinder()
+                .lookup("#colony-field-map").query();
         final Point2D start = findPlaceOfField(source);
         final Point2D destination = findPlaceOfField(
                 colony.getColonyFieldInDirection(target));

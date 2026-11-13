@@ -90,9 +90,7 @@ public class TC_51_F42_coastal_facilities_test extends AbstractAkropiaTest {
         colony.verifyNumberOfUnitsAtPier(2);
         // Neither an absent dock nor the dock itself allows a ship project.
         building.open();
-        building.select("GALLEON");
-        building.verifyOffer(false,
-                "Build a shipyard before constructing ships.", 100, 100);
+        building.verifyProjectOffered("GALLEON", false);
         building.select("DOCK");
         building.confirm();
         building.cancel();
@@ -100,9 +98,7 @@ public class TC_51_F42_coastal_facilities_test extends AbstractAkropiaTest {
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         building.open();
-        building.select("FRIGATE");
-        building.verifyOffer(false,
-                "Build a shipyard before constructing ships.", 100, 100);
+        building.verifyProjectOffered("FRIGATE", false);
         building.cancel();
         colony.moveWorkerFromPierToField(0, Direction.east);
         new ColonyJobPage(getContext()).verifyFieldJob(0, Location.of(25, 16),
@@ -120,9 +116,7 @@ public class TC_51_F42_coastal_facilities_test extends AbstractAkropiaTest {
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         building.verifyBuilding(ConstructionType.DRYDOCK, 1);
         building.open();
-        building.select("GALLEON");
-        building.verifyOffer(false,
-                "Build a shipyard before constructing ships.", 100, 100);
+        building.verifyProjectOffered("GALLEON", false);
         building.cancel();
         coast.prepareProjectStocks(237, 100);
         building.open();

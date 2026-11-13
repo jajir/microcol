@@ -122,8 +122,7 @@ public class TC_62_F53_artillery_test extends AbstractAkropiaTest {
                 "New Amsterdam");
         ConstructionPage building = new ConstructionPage(getContext());
         building.open();
-        building.select("ARTILLERY");
-        building.verifyOffer(false, "Requires an armory", 200, 100);
+        building.verifyProjectOffered("ARTILLERY", false);
         building.cancel();
         colony.close();
         // With the prerequisite present, the real construction control

@@ -29,6 +29,8 @@ public final class EducationPage extends AbstractScreen {
                     .lookup("#schoolTeacher-" + i)
                     .queryAs(javafx.scene.image.ImageView.class);
             assertEquals(i != 1, teacher.getImage() != null);
+            assertTrue(teacher.getParent().getParent().getLayoutBounds()
+                    .getWidth() <= 300.1);
             for (String prefix : java.util.List.of("schoolStudent-",
                     "schoolSkill-")) {
                 ComboBox<?> box = getNodeFinder().lookup("#" + prefix + i)

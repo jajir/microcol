@@ -4,14 +4,15 @@
 
 1. Pořadí je Surrounding area, Construction, School a společný Cargo Depot.
    Nadpisy nemají číslování. Přetažení záhlaví prvních tří karet zůstává dostupné.
-2. Cargo Depot je trvale viditelný rámeček: přepravci, náklad a pod oddělovačem
+2. Cargo Depot je trvale viditelná oblast bez vnějšího rámečku: přepravci, náklad a pod oddělovačem
    Outside colony. Nemá mořské podbarvení ani přepínací tlačítka Cargo a Outside
-   colony. Výběr přepravce změní nadpis například na Cargo Depot - Wagon #14.
+   colony. Nadpis začíná v úrovni horní hrany sousedních tlačítek. Výběr přepravce změní nadpis například na Cargo Depot - Wagon #14.
    Nakládání, vykládání a přetahování používají dosavadní pravidla.
 3. V horním menu nejsou Education ani Trade route. Dosavadní dialogy zůstávají
    dostupné klávesovými zkratkami E a R; ostatní horní akce zůstávají.
 4. School otevře pod přehledem tři sloupce podle skutečných pracovních míst
-   školy. Učitele představuje portrét pracovníka na daném místě; bez učitele
+   školy. Sloupce mají šířku nejvýše 300 logických pixelů a neroztahují se
+   přes celou širokou obrazovku. Učitele představuje portrét pracovníka na daném místě; bez učitele
    je vidět zpráva a volby studenta a dovednosti jsou skryté. Rozbalovací
    pole nemají zelené podbarvení ani zástupné hodnoty Student a Skill. Výběr
    dovednosti rovnou přiřadí výuku; Bez výuky ji zruší.
@@ -30,11 +31,17 @@
    nadále rozlišitelný. Nabídka skrývá vylepšení bez skutečně dokončené
    předchozí budovy; pouhé zařazení předchůdce do fronty nestačí. Ostatní
    omezení zůstávají vysvětlena u nabídky a model je znovu kontroluje při akci.
+   Nabídka rovněž skrývá jednotky bez požadované zbrojnice nebo loděnice a
+   stavby bez požadovaného člena kongresu. Dvojklik na dostupnou položku ji
+   jednou přidá na konec fronty; dvojklik ve frontě odebere právě tuto položku.
+   Potvrzení, odebrání a řazení zůstávají také tlačítky. Podrobný panel nemá
+   opakovaný nadpis Construction — kolonie ani tlačítko Close / cancel selection;
+   Escape nebo výběr jiné karty jej nadále zavře bez zrušení fronty.
 8. Detail vybraného pole doplňuje základní cenu vstupu v bodech pohybu,
    obranný bonus terénu a přítomný les, zorání, cestu, řeku a zvláštní zdroj.
    Základní cena není počet tahů konkrétní jednotky; propojená cesta cenu
    snižuje na třetinu bodu. Výnosy voleb zahrnují aktuální bonusy i pracovníka.
-   Volby práce mají šířku nejvýše 480 logických pixelů. Nápověda ke změně
+   Detail nemá levou svislou oddělovací čáru. Volby práce mají šířku nejvýše 480 logických pixelů. Nápověda ke změně
    produkce se zobrazuje ve stavovém řádku při přejetí myší přes tuto část.
 
 ## Jednodušší načítání — 11. listopadu 2026
@@ -1492,3 +1499,7 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 
 1. [R-0452](requirements/done/R-0452.md) zvýrazňuje názvy akcí a samotné kombinace; menší vnitřní okraje tlačítek zachovávají společné ikony a papírový styl. Levé zarovnání usnadňuje hledání akce, širší sloupec omezuje zalamování.
 2. Nápověda před seznamem vysvětluje změnu, přidání i odebrání. Zachované cesty uložení, zrušení a kolizí popisuje [autoritativní téma](keyboard-shortcuts.md). Jde o implementační úpravu k uživatelskému snímku, nikoli výsledek nové hráčské studie.
+
+Posuvník množství při přesunu zboží používá sdílený kreslený vzhled pravítka
+ze hry včetně popisků a klávesnicového ovládání; rozsah, zrušení a potvrzení
+přesunu se nemění.

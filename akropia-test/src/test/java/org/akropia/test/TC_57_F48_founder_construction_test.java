@@ -38,12 +38,7 @@ public class TC_57_F48_founder_construction_test extends AbstractAkropiaTest {
         for (String project : List.of("IRON_WORKS", "LARGE_WINERY",
                 "TEXTILE_MILL", "LARGE_OIL_PRESS", "LARGE_POTTERY",
                 "ARSENAL")) {
-            construction.select(project);
-            construction.verifyOffer(false, "Requires founder: Adam Smith.",
-                    project.equals("IRON_WORKS") || project.equals("ARSENAL")
-                            ? 240
-                            : 160,
-                    100);
+            construction.verifyProjectOffered(project, false);
         }
         construction.captureDialog("constructionProjects",
                 "r84-smith-gate.png");
@@ -70,9 +65,7 @@ public class TC_57_F48_founder_construction_test extends AbstractAkropiaTest {
                             : 160,
                     100);
         }
-        construction.select("CUSTOM_HOUSE");
-        construction.verifyOffer(false, "Requires founder: Peter Stuyvesant.",
-                160, 50);
+        construction.verifyProjectOffered("CUSTOM_HOUSE", false);
         construction.select("IRON_WORKS");
         construction.confirm();
         construction.cancel();
@@ -104,9 +97,7 @@ public class TC_57_F48_founder_construction_test extends AbstractAkropiaTest {
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
         construction.open();
-        construction.select("CUSTOM_HOUSE");
-        construction.verifyOffer(false, "Requires founder: Peter Stuyvesant.",
-                160, 50);
+        construction.verifyProjectOffered("CUSTOM_HOUSE", false);
         construction.cancel();
         game = colony.close();
         // Choose the founder and earn the final owl through an ordinary turn.
@@ -119,9 +110,7 @@ public class TC_57_F48_founder_construction_test extends AbstractAkropiaTest {
         founder.verifyMember(Founder.PETER_STUYVESANT);
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         construction.open();
-        construction.select("IRON_WORKS");
-        construction.verifyOffer(false, "Requires founder: Adam Smith.", 240,
-                100);
+        construction.verifyProjectOffered("IRON_WORKS", false);
         construction.select("CUSTOM_HOUSE");
         construction.verifyOffer(true, "Available.", 160, 50);
         construction.confirm();

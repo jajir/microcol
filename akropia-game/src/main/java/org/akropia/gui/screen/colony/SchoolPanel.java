@@ -42,7 +42,7 @@ final class SchoolPanel extends VBox {
             TeachingColumn column = new TeachingColumn(index);
             columns.add(column);
             row.getChildren().add(column);
-            HBox.setHgrow(column, Priority.ALWAYS);
+            column.setMaxWidth(300);
         }
         feedback.setId("schoolFeedback");
         feedback.setWrapText(true);

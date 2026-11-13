@@ -180,7 +180,8 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_HOUSE, 0);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 1);
         construction.open();
-        construction.verifyProjectOffered("IRON_WORKS", true);
+        // Adam Smith is still required even with the predecessor completed.
+        construction.verifyProjectOffered("IRON_WORKS", false);
         construction.escape();
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 0));
         construction.verifyStatus("Construction in progress.");
@@ -473,4 +474,44 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyOwnerAndStocks(getModel(), "Dutch", 58, 19);
         construction.verifyQueue(List.of(), List.of(), 58);
     }
+
+    @Test
+    @Tag("local")
+    void TC_11_double_click_adds_and_removes_available_projects()
+            throws Exception {
+        // Unavailable population still blocks an otherwise visible project.
+        ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(COLONY, "New Amsterdam");
+        ConstructionPage construction = new ConstructionPage(getContext());
+        construction.open();
+        construction.verifyCompactEditor();
+        construction.doubleClickProject("BLACKSMITHS_SHOP");
+        construction.verifyQueue(List.of(), List.of(), 58);
+        // Each double click adds exactly one item without spending shared work.
+        construction.doubleClickProject("LUMBER_MILL");
+        construction.verifyQueue(List.of("LUMBER_MILL"), List.of(0), 58);
+        // Remove the building by double click, then build its prerequisite
+        // before offering the wagon.
+        construction.doubleClickQueue("LUMBER_MILL");
+        construction.verifyQueue(List.of(), List.of(), 58);
+        construction.doubleClickProject("LUMBER_MILL");
+        construction.escape();
+        GamePage game = colony.close();
+        game.nextTurnAndCloseDialogs();
+        game.openColonyAt(COLONY, "New Amsterdam");
+        construction.verifyBuilding(ConstructionType.LUMBER_MILL, 1);
+        construction.open();
+        construction.doubleClickProject("WAGON");
+        construction.doubleClickProject("WAREHOUSE");
+        construction.verifyQueue(List.of("WAGON", "WAREHOUSE"), List.of(0, 1),
+                9);
+        // Removing the unit preserves the other queued project and shared work.
+        construction.doubleClickQueue("WAGON");
+        construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), 9);
+        construction.doubleClickQueue("WAREHOUSE");
+        construction.verifyQueue(List.of(), List.of(), 9);
+        construction.escape();
+        construction.verifyPickerClosed();
+    }
+
 }

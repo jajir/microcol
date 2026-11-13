@@ -59,6 +59,9 @@ public final class ChooseGoodsDialog extends AbstractMessageWindow {
         labelValue.setId("goodsTransferAmount");
         boxActualValue.getChildren().addAll(labelActualValue, labelValue);
 
+        root.getStyleClass().add("settings-controls");
+        root.getStylesheets().add(ChooseGoodsDialog.class
+                .getResource("/gui/SettingsControls.css").toExternalForm());
         slider = new Slider();
         slider.setId("goodsTransferSlider");
         slider.setLabelFormatter(
