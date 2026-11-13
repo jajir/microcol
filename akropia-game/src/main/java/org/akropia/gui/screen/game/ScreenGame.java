@@ -81,7 +81,8 @@ public class ScreenGame implements GameScreen {
         hBox.getChildren().add(rightPanel.getContent());
         // The planner switch sits in the map's upper-left corner; the planner
         // panel takes the place of the normal right panel while it is on.
-        gamePanelComponents.addMapControl(tradeRoutePlanningPanel.getToggle());
+        gamePanelComponents.addMapControl(tradeRoutePlanningPanel.getToggle(),
+                header.getTitle());
         tradeRoutePlanning.addListener(this::showRightPanel);
 
         mainBox = new VBox();

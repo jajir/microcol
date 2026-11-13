@@ -16067,3 +16067,35 @@ The numbered entries below are chronological evidence, including failed attempts
    `target/colony-toolbar-2026-11-13/`. Final review and `git diff --check`
    cover task changes only; the unrelated backlog edit remains excluded.
    Local acceptance does not establish full regression or publication.
+
+
+<a id="map-toggle-alignment-2026-11-13"></a>
+
+## Map toggle alignment — 2026-11-13
+
+1. UC-029/030: `TC_116_F107_trade_route_creation_test#TC_05_map_planner_creates_a_route_from_the_bar_and_returns_to_the_map`
+   checks the toggle against the heading's left edge on both maps and checks
+   the direction-specific status explanation with the current shortcut on hover.
+   Existing route creation, cancellation and fog assertions remain in place.
+2. On source based on `3ac7d9cc8a52f7f1402a99ad2999aa0ca6dd8183`, model/JUnit
+   passed **5,129 tests**, zero failures/errors/skips (`target/verification/run-_ee8n2pp`,
+   completion `20261113T141716Z-51ec0a63c558`, 153.442 s).
+3. Targeted Docker/Xvfb selection: the scenario above plus
+   `PageVerificationContractTest` passed **4 tests**, zero failures/errors/skips
+   (`target/docker-ui/run-3I6CWY`, completion `20261113T142005Z-287b08f6d945`,
+   78.131 s). The saved planner screenshot was inspected: the button follows the
+   heading and status text, and the return hint includes `Shift+T`.
+4. The first smoke run (`target/verification/run-30mvi1k1`, completion
+   `20261113T142135Z-7448a50e1e5a`, 255.056 s) failed: TC_07 did not open
+   Delft by double-click after the next turn, although hover and selection
+   both identified `[22,12]`. The cause is unproven. Failed evidence is retained;
+   the first run remains failed (21 tests, one error, zero failures/skips).
+5. The full unchanged smoke retry passed **21 tests**, zero failures/errors/skips,
+   in 255.771 s overall, within the 420-second budget
+   (`target/verification/run-yz6ld3iy`, completion `20261113T142643Z-dfc318d40dbb`).
+   Current changed source and test files match both passing verification snapshots.
+   This passing retry does not establish the cause of the original failure.
+6. Shared Java formatting, diff review, **14 documentation consistency tests**,
+   name audit and strict MkDocs passed. Documentation logs are in
+   `target/map-toggle-alignment/`. No remote CI or publication was inspected;
+   this is local acceptance, not full-regression or delivery verification.

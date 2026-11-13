@@ -1,5 +1,17 @@
 # UX a pravidla ovládání Akropia
 
+## Přepínač mapy obchodních tras — 13. listopadu 2026
+
+1. Přepínač běžné mapy a plánování obchodních tras sleduje levou hranu
+   nadpisu a obsahu stavového řádku, také při změně šířky okna. V obou
+   režimech zůstává nahoře nad mapou na stejném místě.
+2. Při najetí myší stavový řádek vysvětlí přechod do plánovače, případně
+   návrat na běžnou mapu, a uvede aktuálně nastavenou zkratku přepnutí.
+   Prohlížení tras nezadává rozkazy ani nemění herní stav.
+3. Jde o schválenou úpravu ovládání, nikoli hráčskou studii. Ověření vede
+   [funkční evidence](functional-tests.md#map-toggle-alignment-2026-11-13).
+
+
 ## Odmítnutí změny práce v kolonii — 2026-11-13
 
 1. Pokud se pracovník nebo pole změní mezi otevřením nabídky a potvrzením práce, model akci odmítne bez dalších změn. Vysvětlení ve stavovém řádku se chová jako výsledek akce: samotné zavření nabídky nebo událost opuštění prvku je nesmaže. Další pohyb ukazatele nebo stisk myši opět dovolí běžnou kontextovou nápovědu; hráč může otevřít aktuální nabídku a zvolit platnou práci. Stav ověření vede [evidence opravy regrese](functional-tests.md#ui-regression-repair-43351448127-2026-11-13).

@@ -240,6 +240,9 @@ public class TC_116_F107_trade_route_creation_test extends AbstractAkropiaTest {
         planner.verifyPlannerShown(false);
         planner.verifyToggleText("Trade routes");
         planner.verifyToggleInMapCorner();
+        planner.hoverToggle();
+        planner.verifyToggleHint(
+                "Shows all your trade routes on the darkened map. Viewing routes gives no orders and changes nothing in the game.");
         planner.verifyNewRouteButton(null);
 
         // Bring the fixture's unexplored question marks into the viewport.
@@ -257,6 +260,11 @@ public class TC_116_F107_trade_route_creation_test extends AbstractAkropiaTest {
         planner.open();
         planner.verifyPlannerShown(true);
         planner.verifyToggleText("Back to map");
+        planner.verifyToggleInMapCorner();
+        game.hoverTile(Location.of(24, 16));
+        planner.hoverToggle();
+        planner.verifyToggleHint(
+                "Returns to the normal map. Viewing routes gives no orders and changes nothing in the game.");
         planner.verifyNewRouteButton("New trade route");
         planner.verifyEmpty(
                 "You have no trade routes yet. Use New trade route in the bar above to create one.");

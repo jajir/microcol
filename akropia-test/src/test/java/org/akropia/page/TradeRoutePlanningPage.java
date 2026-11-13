@@ -230,21 +230,33 @@ public final class TradeRoutePlanningPage extends AbstractScreen {
         assertEquals(!expected, isInScene("rightPanel"));
     }
 
+    public void hoverToggle() {
+        getRobot().moveTo(getButtonById("tradeRoutePlanningToggle"));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyToggleHint(final String explanation) {
+        final org.akropia.gui.shortcut.KeyboardShortcuts shortcuts = getContext()
+                .getClassFromGuice(
+                        org.akropia.gui.shortcut.KeyboardShortcuts.class);
+        verifyStatusBar(shortcuts.withHint(explanation,
+                org.akropia.gui.shortcut.ShortcutAction.TRADE_ROUTES));
+    }
+
     public void verifyToggleText(final String expected) {
         assertEquals(expected,
                 getButtonById("tradeRoutePlanningToggle").getText());
     }
 
-    /** The switch stays in the map's upper-left corner. */
+    /** The switch follows the heading while remaining at the top of the map. */
     public void verifyToggleInMapCorner() {
         final Button toggle = getButtonById("tradeRoutePlanningToggle");
         final Node canvas = getNodeFinder().lookup("#canvas").query();
         final Bounds map = canvas.localToScene(canvas.getLayoutBounds());
         final Bounds button = toggle.localToScene(toggle.getLayoutBounds());
-        assertTrue(
-                button.getMinX() >= map.getMinX()
-                        && button.getMinX() < map.getMinX() + 40,
-                button.toString());
+        final Node heading = getNodeFinder().lookup("#mapHeading").query();
+        assertEquals(heading.localToScene(heading.getLayoutBounds()).getMinX(),
+                button.getMinX(), 1, "Toggle aligns with map heading");
         assertTrue(
                 button.getMinY() >= map.getMinY()
                         && button.getMinY() < map.getMinY() + 40,

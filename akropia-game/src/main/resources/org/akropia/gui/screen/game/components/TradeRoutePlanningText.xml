@@ -37,4 +37,5 @@
   <entry key="hoverRoute">%s: %s, stops: %s, %s.</entry>
   <entry key="hoverRoutes">Routes here: %s</entry>
   <entry key="created">Route %s was created.</entry>
+  <entry key="toggleCloseHelp">Returns to the normal map. Viewing routes gives no orders and changes nothing in the game.</entry>
 </properties>

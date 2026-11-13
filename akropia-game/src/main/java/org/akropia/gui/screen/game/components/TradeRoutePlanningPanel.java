@@ -17,6 +17,8 @@ import org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.akropia.gui.screen.game.gamepanel.TradeRouteColors;
 import org.akropia.gui.screen.game.gamepanel.TradeRoutePlanning;
 import org.akropia.gui.util.ActionButtons;
+import org.akropia.gui.shortcut.KeyboardShortcuts;
+import org.akropia.gui.shortcut.ShortcutAction;
 import org.akropia.gui.util.JavaFxComponent;
 import org.akropia.gui.util.UpdatableLanguage;
 import org.akropia.i18n.I18n;
@@ -92,7 +94,7 @@ public final class TradeRoutePlanningPanel
             final TradeRoutePlanning planning,
             final DialogTradeRoute newRouteDialog,
             final DialogTradeRouteCargo routeDialog, final EventBus eventBus,
-            final I18n i18n) {
+            final I18n i18n, final KeyboardShortcuts shortcuts) {
         this.game = Preconditions.checkNotNull(game);
         this.planning = Preconditions.checkNotNull(planning);
         this.newRouteDialog = Preconditions.checkNotNull(newRouteDialog);
@@ -174,7 +176,12 @@ public final class TradeRoutePlanningPanel
         for (final Button button : List.of(toggle, newRoute, edit)) {
             button.setOnMouseEntered(
                     event -> eventBus.post(new StatusBarMessageEvent(
-                            button.getAccessibleHelp(), Source.GAME)));
+                            button == toggle
+                                    ? shortcuts.withHint(
+                                            button.getAccessibleHelp(),
+                                            ShortcutAction.TRADE_ROUTES)
+                                    : button.getAccessibleHelp(),
+                            Source.GAME)));
             button.setOnMouseExited(event -> eventBus
                     .post(new StatusBarMessageEvent(Source.GAME)));
             button.accessibleTextProperty().bind(button.textProperty());
@@ -251,7 +258,6 @@ public final class TradeRoutePlanningPanel
         newRoute.setText(i18n.get(TradeRoutePlanningText.newRoute));
         newRoute.setAccessibleHelp(
                 i18n.get(TradeRoutePlanningText.newRouteHelp));
-        toggle.setAccessibleHelp(i18n.get(TradeRoutePlanningText.toggleHelp));
         refresh();
     }
 
@@ -261,6 +267,9 @@ public final class TradeRoutePlanningPanel
      */
     private void refresh() {
         final boolean active = planning.isActive();
+        toggle.setAccessibleHelp(
+                i18n.get(active ? TradeRoutePlanningText.toggleCloseHelp
+                        : TradeRoutePlanningText.toggleHelp));
         toggle.setText(i18n.get(active ? TradeRoutePlanningText.toggleClose
                 : TradeRoutePlanningText.toggleOpen));
         toggle.setGraphic(

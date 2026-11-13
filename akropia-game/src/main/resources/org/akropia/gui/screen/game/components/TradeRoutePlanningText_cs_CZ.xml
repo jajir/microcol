@@ -37,4 +37,5 @@
   <entry key="hoverRoute">%s: %s, zastávek: %s, %s.</entry>
   <entry key="hoverRoutes">Trasy zde: %s</entry>
   <entry key="created">Trasa %s byla založena.</entry>
+  <entry key="toggleCloseHelp">Vrátí se na běžnou mapu. Prohlížení tras nezadává rozkazy a ve hře nic nemění.</entry>
 </properties>

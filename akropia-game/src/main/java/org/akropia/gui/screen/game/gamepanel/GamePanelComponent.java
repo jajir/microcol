@@ -125,10 +125,21 @@ public final class GamePanelComponent
      * clicks; the rest of the map still reaches the canvas.
      *
      * @param control required control
+     * @param heading heading whose left edge the control follows
      */
-    public void addMapControl(final Node control) {
+    public void addMapControl(final Node control, final Node heading) {
         control.relocate(MAP_CONTROL_MARGIN, MAP_CONTROL_MARGIN);
         canvasComponent.getCanvasPane().getChildren().add(control);
+        control.layoutXProperty()
+                .bind(javafx.beans.binding.Bindings
+                        .createDoubleBinding(
+                                () -> control.getParent()
+                                        .sceneToLocal(
+                                                heading.localToScene(0, 0))
+                                        .getX(),
+                                heading.localToSceneTransformProperty(),
+                                control.getParent()
+                                        .localToSceneTransformProperty()));
     }
 
 }
