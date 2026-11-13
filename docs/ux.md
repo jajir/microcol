@@ -1520,11 +1520,3 @@ souhrnnými kartami a jejich podrobným panelem. Prostorové odsazení,
 výběr karet, pořadí stavby a zavření detailu klávesou Escape zůstávají zachované.
 3. Jde o úpravu prezentace podle uživatelského zadání, nikoli o hráčskou
 studii. Ověření sleduje [funkční evidence](functional-tests.md#page-separators-2026-11-13).
-
-## Kompaktní rozestupy kolonie — 13. listopadu 2026
-
-1. Svislé rozestupy hlavních sekcí detailu kolonie jsou 4 logické pixely.
-Přehled zboží nemá další horní odsazení: mezera pod blokem budov se tím
-zmenšuje z 16 na 4 pixely. Velikost ikon, textu a pracovních míst se nemění.
-2. Změna reaguje na uživatelský snímek; nejde o výsledek hráčské studie.
-Ověření uvádí [funkční evidence](functional-tests.md#compact-colony-spacing-2026-11-13).

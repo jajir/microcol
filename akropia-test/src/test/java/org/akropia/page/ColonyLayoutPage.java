@@ -47,23 +47,6 @@ public final class ColonyLayoutPage extends AbstractScreen {
         });
     }
 
-    public void verifyStockSpacing(final double expectedGap) {
-        getRobot().interact(() -> {
-            final Node buildings = getNodeFinder().lookup(".colony-structures")
-                    .query();
-            final VBox stock = getNodeFinder().lookup(".colony-stock")
-                    .queryAs(VBox.class);
-            final Node heading = stock.getChildren().get(0);
-            assertEquals(expectedGap,
-                    heading.localToScene(heading.getLayoutBounds()).getMinY()
-                            - buildings
-                                    .localToScene(buildings.getLayoutBounds())
-                                    .getMaxY(),
-                    0.1,
-                    "Goods heading follows buildings without extra blank padding");
-        });
-    }
-
     public void verifyCompactBuildings(final double expectedPictureRow,
             final double expectedNameMinimum, final double expectedWorkerSize,
             final double expectedOutputGap) {
