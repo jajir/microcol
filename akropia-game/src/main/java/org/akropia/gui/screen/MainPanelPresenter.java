@@ -63,6 +63,8 @@ public final class MainPanelPresenter {
 
     private GameScreen shownScreen;
 
+    private boolean saveShortcutPending;
+
     /**
      * Screens that opened Settings and Load; <code>null</code> before the first
      * screen.
@@ -293,12 +295,15 @@ public final class MainPanelPresenter {
      */
     public void installShortcuts(final Scene scene) {
         scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.isConsumed()) {
+                return;
+            }
             final boolean blocked = scene
                     .getFocusOwner() instanceof TextInputControl
                     || shownScreen == screenSetting
                             && screenSetting.isEditingShortcuts()
                     || isOtherWindowShowing(scene.getWindow())
-                    || persistingService.isBusy();
+                    || persistingService.isBusy() || saveShortcutPending;
             final SessionShortcut.Action action = SessionShortcut.resolve(
                     shortcuts, event, blocked,
                     shownScreen != null && shownScreen != screenEditor,
@@ -309,7 +314,21 @@ public final class MainPanelPresenter {
                 persistingService.browse(false);
             } else if (action == SessionShortcut.Action.SAVE) {
                 event.consume();
-                persistingService.browse(true);
+                saveShortcutPending = true;
+                // Finish dispatching the key before entering Save's nested
+                // loop.
+                javafx.application.Platform.runLater(() -> {
+                    try {
+                        if (shownScreen == screenGame
+                                && gameModelController.isHumanTurnReady()
+                                && !isOtherWindowShowing(scene.getWindow())
+                                && !persistingService.isBusy()) {
+                            persistingService.browse(true);
+                        }
+                    } finally {
+                        saveShortcutPending = false;
+                    }
+                });
             } else if (!blocked && isSessionMenuScreen()) {
                 // The same commands as the menu's and the map's Settings and
                 // Quit, including the existing unsaved-game protection.

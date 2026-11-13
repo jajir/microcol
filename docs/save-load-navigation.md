@@ -1,3 +1,9 @@
+## Otevření ukládání klávesovou zkratkou — 13. listopadu 2026
+
+1. ⌘S na macOS a Ctrl+S na ostatních platformách nejprve dokončí zpracování klávesy a potom otevřou ukládací stránku. Naplánované a probíhající otevření mají společnou ochranu proti duplicitním požadavkům; před otevřením se znovu ověří dostupnost hry.
+2. Potvrzené přepsání vrací mapu po jediném potvrzení, s názvem bez přípony ve stavovém řádku. Nový samostatný stisk zkratky po dokončení může otevřít další uložení. TC191/17 pokrývá zkratku, opakovaný stisk během prohlížení, dvojklik, přepsání a další uložení.
+3. Opětovné otevření hlášené uživatelem na macOS nebylo nativně reprodukováno. Změna odstraňuje vnoření ukládací smyčky do obsluhy stisku; nepředstavuje doklad zachycené duplicitní nativní události. [Výsledky ověření](functional-tests.md#save-shortcut-return-2026-11-13).
+
 ## Návrat po potvrzeném přepsání — 13. listopadu 2026
 
 1. Po dvojkliku na existující soubor a potvrzení přepsání se po úspěšném zápisu zavře potvrzovací dialog i ukládací stránka. Hráč pokračuje ve hře a stavový řádek oznámí například „Hra byla uložena jako ‚konec2‘.“ Název je bez přípony `.akropia`; tečky uvnitř názvu zůstávají.

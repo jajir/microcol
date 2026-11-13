@@ -1,3 +1,7 @@
+## UC-114: přepsání otevřené klávesovou zkratkou — 13. listopadu 2026
+
+1. TC191/17 ověřuje [otevření přes ⌘S/Ctrl+S](save-load-navigation.md#otevreni-ukladani-klavesovou-zkratkou-13-listopadu-2026), opakovaný stisk během ukládání, dvojklik a jediné potvrzení s návratem na mapu. Další samostatné uložení zůstává dostupné. [Evidence](functional-tests.md#save-shortcut-return-2026-11-13).
+
 ## UC-114: potvrzené přepsání a návrat — 13. listopadu 2026
 
 1. [Návrat po přepsání](save-load-navigation.md#navrat-po-potvrzenem-prepsani-13-listopadu-2026) vrací hráče do hry a potvrzuje název bez přípony. TC191/16 zahrnuje přepsání dvojklikem i opakované přepsání tlačítkem; [výsledky](functional-tests.md#save-overwrite-return-2026-11-13).

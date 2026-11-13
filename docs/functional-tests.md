@@ -1,3 +1,16 @@
+## Save shortcut return — 2026-11-13
+
+1. UC-114: after the user's renewed report, inspection found Save opens synchronously inside the key-pressed filter, entering its nested event loop before key dispatch returns. A duplicate native event was not captured and native macOS reproduction is not claimed. The shortcut now queues opening after dispatch, guards the pending interval and rechecks availability. Consumed events are ignored.
+2. New TC191/17 uses the real platform shortcut, repeats it while Save is open, double-clicks an existing file, confirms once and verifies game return and extension-free named feedback. A second independent shortcut/overwrite checks guard release. Existing TC191/16 retains menu/button/cancel and help coverage. Java formatting applied with the shared profile.
+3. Model run `20261113T081724Z-7cf784d64575`, PID 62615, 600 s limit, is pending; targeted UI and smoke must follow. No remote CI/publication or native desktop check requested.
+4. Model/JUnit passed **5,129 tests** in 395 complete XML reports, zero failures/errors/skips, 161.880 supervised seconds. Reports: `target/verification/run-j9axnf_6/`, base `303dca13`; changed game files match the snapshot. Full TC191 plus `PageVerificationContractTest` dispatched as `20261113T082032Z-cb277e7e7e3a`, PID 63151, 1,800 s limit. Targeted and smoke acceptance remain pending.
+
+5. Full TC191 and page verification contract passed **18 tests**, zero failures/errors/skips, 399.030 supervised seconds. Reports: `target/docker-ui/run-TMnKAF/`. TC191/17 passed the real Linux platform shortcut, repeated-key blocking, single-confirmation overwrite return and a subsequent independent save. This does not establish native macOS reproduction. Final fixed smoke dispatched as `20261113T082732Z-e2498127dd0f`, PID 63348, 480 s watchdog with the unchanged 420 s acceptance budget.
+
+6. Final fixed smoke/support passed **21 tests** in 12 complete XML reports, zero failures/errors/skips, 251.746 supervised seconds within 420 s. Reports: `target/verification/run-f6heliz_/`; changed production and test files match its snapshot. Local acceptance is complete: 5,129 model/JUnit, 18 targeted UI/support and 21 smoke/support checks.
+7. Final review checked immediate pending protection, availability recheck, guard release in `finally`, consumed-event handling and unchanged menu/save-before-leaving behavior. Shared Java formatting, 14 documentation consistency tests, naming audit and strict MkDocs passed. Unrelated backlog edits are excluded. Native macOS behavior and remote CI/Pages/game distribution publication were not verified; no captured duplicate native key event is claimed.
+
+
 ## Save overwrite return — 2026-11-13
 
 1. UC-114, base `13936027`: the user reports remaining on Save after confirming a double-click overwrite on macOS. Previous Linux acceptance is retained; this report does not establish the native root cause. Successful Save now disables its content and schedules return after the current confirmation event. Named feedback uses the normalized filename stem, preserving internal dots and Unicode, without `.akropia`.

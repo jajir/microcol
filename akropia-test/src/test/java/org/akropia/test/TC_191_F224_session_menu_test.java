@@ -36,6 +36,37 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
+    void TC_17_save_shortcut_overwrite_returns_after_one_confirmation()
+            throws Exception {
+        // Prepare an existing file, then enter Save through the real shortcut.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        final HostedPanelPage keys = new HostedPanelPage(getContext());
+        saves.openSave();
+        saves.saveName("Shortcut overwrite");
+        game.verifyGameInFront();
+        keys.pressShortcut(KeyCode.S);
+        saves.verifySaveDialogOpen(true);
+        // A repeated Save key while browsing must not queue another opening.
+        keys.pressShortcut(KeyCode.S);
+        saves.doubleClickFile("Shortcut overwrite");
+        saves.verifyOverwriteConfirmation("Shortcut overwrite");
+        saves.action("saveConfirm");
+        saves.verifySaveDialogOpen(false);
+        game.verifyGameInFront();
+        game.verifyThatStatusBarContains("Game saved as 'Shortcut overwrite'.");
+        saves.verifySavedName("Shortcut overwrite", 1);
+        // The guard releases after completion: a fresh shortcut works again.
+        keys.pressShortcut(KeyCode.S);
+        saves.doubleClickFile("Shortcut overwrite");
+        saves.action("saveConfirm");
+        saves.verifySaveDialogOpen(false);
+        game.verifyGameInFront();
+        game.verifyThatStatusBarContains("Game saved as 'Shortcut overwrite'.");
+    }
+
+    @Test
+    @Tag("local")
     void TC_16_edited_save_closes_and_reports_filename_with_hover_help()
             throws Exception {
         // Open Save and discover the editable filename through status help.
