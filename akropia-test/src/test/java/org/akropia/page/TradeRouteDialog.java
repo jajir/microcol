@@ -26,7 +26,7 @@ public final class TradeRouteDialog extends AbstractScreen {
     }
 
     public void open() {
-        clickOnButtonWithId("tradeRouteOpen");
+        getRobot().push(KeyCode.R);
         WaitForAsyncUtils.waitForFxEvents();
     }
 

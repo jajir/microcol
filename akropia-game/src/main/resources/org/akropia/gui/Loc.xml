@@ -299,8 +299,8 @@
 	<entry key="minimap_title">Minimap</entry>
 	<entry key="minimap_hint">Click, drag or arrow keys to pan</entry>
 	<entry key="minimap_status">Minimap. It never really caught on in ancient Greece. They were waiting for the invention of the monitor.</entry>
-    <entry key="selectedCarrierCargo">Cargo · %s</entry>
-    <entry key="selectCarrierCargo">Select a ship or wagon to see its cargo</entry>
+    <entry key="selectedCarrierCargo">Cargo Depot - %s</entry>
+    <entry key="selectCarrierCargo">Cargo Depot</entry>
   <entry key="mapWork">Produce %s — %s</entry>
   <entry key="cancelWork">Cancel work</entry>
   <entry key="returnToColony">Return to colony</entry>

@@ -144,13 +144,7 @@ public final class DialogEducation extends AbstractMessageWindow {
     }
 
     Region embedded(final Colony selected, final Runnable onClose) {
-        embeddedClose = onClose;
-        ((Pane) root.getParent()).getChildren().remove(root);
-        root.getStyleClass().remove("modal-content");
-        root.setPrefWidth(Region.USE_COMPUTED_SIZE);
-        closeButton.setCancelButton(false);
-        showFor(selected);
-        return root;
+        return new SchoolPanel(selected, game, i18n, events);
     }
 
     @Override

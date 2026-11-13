@@ -20,14 +20,7 @@ import com.google.inject.Inject;
 
 import com.google.inject.Provider;
 import org.akropia.gui.screen.colony.buildingqueue.QueueDialog;
-import org.akropia.gui.image.ImageProvider;
-import org.akropia.gui.UnitTypes;
-import org.akropia.model.Unit;
-import org.akropia.model.unit.UnitWithCargo;
-import org.akropia.model.EducationCourse;
 import javafx.scene.control.Button;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
@@ -45,12 +38,10 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     private final HBox overview = new HBox(8);
     private final VBox detail = new VBox(8);
     private final VBox dockDetail = new VBox();
-    private final VBox cargoSummary = new VBox(4);
     private final VBox schoolSummary = new VBox(4);
     private final Label politics = new Label();
     private final Provider<QueueDialog> queue;
     private final Provider<DialogEducation> education;
-    private final ImageProvider images;
     private final java.util.Map<String, Button> sections = new java.util.LinkedHashMap<>();
     private String selected = "area";
     private final java.util.List<Region> detailSizes = new java.util.ArrayList<>();
@@ -119,11 +110,9 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             final ColonyQuickCargo colonyQuickCargo, final EventBus eventBus,
             final PanelColonyConstruction construction, final I18n i18n,
             final Provider<QueueDialog> queue,
-            final Provider<DialogEducation> education,
-            final ImageProvider images) {
+            final Provider<DialogEducation> education) {
         this.queue = queue;
         this.education = education;
-        this.images = images;
         this.construction = construction;
         this.i18n = i18n;
         this.buttons = colonyButtonsPanel;
@@ -147,7 +136,12 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         outside.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         outside.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         outside.getStyleClass().add("colony-unit-scroll");
-        dockDetail.getChildren().add(panelDock.getContent());
+        final Label outsideTitle = new Label();
+        outsideTitle.setId("colony-outside-title");
+        dockDetail.getChildren().addAll(panelDock.getContent(),
+                new javafx.scene.control.Separator(), outsideTitle, outside);
+        dockDetail.setId("colony-cargo-depot");
+        dockDetail.getStyleClass().add("colony-depot");
         dockDetail.getStyleClass().add("colony-harbor");
         overview.setId("colony-overviews");
         detail.setId("colony-detail");
@@ -158,8 +152,10 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         addSection("area", colonyFields.getOverview());
         addSection("construction", construction.getContent());
         addSection("school", schoolSummary);
-        addSection("cargo", cargoSummary);
-        addSection("people", outside);
+        overview.getChildren().add(dockDetail);
+        HBox.setHgrow(dockDetail, Priority.ALWAYS);
+        dockDetail.setMinWidth(320);
+        dockDetail.setPrefWidth(480);
         colonyFields.onSelect(() -> selectSection("area"));
         final VBox stock = new VBox(2, goodsTitle, goods.getContent());
         stock.getStyleClass().add("colony-stock");
@@ -234,6 +230,8 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             construction.repaint(colony);
             panelOutsideColony.setColony(colony);
             panelOutsideColony.repaint();
+            detail.getChildren().stream().filter(SchoolPanel.class::isInstance)
+                    .map(SchoolPanel.class::cast).forEach(SchoolPanel::refresh);
             refreshOverview();
         }
     }
@@ -302,11 +300,10 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         if (key.equals(selected) && !detail.getChildren().isEmpty())
             return;
         selected = key;
-        detail.getChildren().setAll(colonyFields.getContent(), dockDetail);
+        detail.getChildren().setAll(colonyFields.getContent());
         colonyFields.getContent().setVisible(key.equals("area"));
         colonyFields.getContent().setManaged(key.equals("area"));
-        dockDetail.setVisible(key.equals("cargo"));
-        dockDetail.setManaged(key.equals("cargo"));
+
         sections.forEach((name, button) -> button.pseudoClassStateChanged(
                 javafx.css.PseudoClass.getPseudoClass("selected"),
                 name.equals(key)));
@@ -318,8 +315,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
                 detail.getChildren()
                         .add(queue.get().embedded(() -> selectSection("area")));
             break;
-        case "cargo":
-            break;
         case "school":
             if (colony != null)
                 detail.getChildren().add(education.get().embedded(colony,
@@ -330,102 +325,10 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         }
     }
 
-    private Label summary(final String text) {
-        final Label label = new Label(text);
-        label.setWrapText(true);
-        label.setMaxWidth(Double.MAX_VALUE);
-        return label;
-    }
-
-    private ImageView portrait(final Unit unit) {
-        final ImageView image = new ImageView(images.getUnitImage(unit));
-        image.setFitWidth(28);
-        image.setFitHeight(28);
-        image.setPreserveRatio(true);
-        return image;
-    }
-
     private void refreshOverview() {
         final int support = colony.getRebelSupport().getDisplayPercent();
         politics.setText(i18n.get(ColonyMsg.overviewPolitics,
                 colony.getPopulation(), support, 100 - support));
-        cargoSummary.getChildren().clear();
-        for (UnitWithCargo transport : colony.getUnitsInPort()) {
-            final Button choose = ActionButtons.button(ButtonIcon.CARGO,
-                    i18n.get(UnitTypes.getUnitName(transport.getType())) + " #"
-                            + transport.getId());
-            choose.setGraphic(portrait(transport));
-            choose.setOnAction(event -> {
-                selectSection("cargo");
-                panelDock.selectShip(transport);
-            });
-            cargoSummary.getChildren().add(choose);
-            final String cargo = transport.getCargo().getSlots().stream()
-                    .filter(slot -> !slot.isEmpty())
-                    .map(slot -> slot.getGoods().map(goods -> goods.getAmount()
-                            + " " + i18n.get(org.akropia.gui.GoodsTypeName
-                                    .getNameForGoodsType(goods.getType())))
-                            .orElseGet(() -> slot.getUnit()
-                                    .map(unit -> i18n
-                                            .get(UnitTypes.getUnitName(
-                                                    unit.getType()))
-                                            + " #" + unit.getId())
-                                    .orElse("")))
-                    .collect(java.util.stream.Collectors.joining(" · "));
-            cargoSummary.getChildren().add(summary(
-                    cargo.isEmpty() ? i18n.get(ColonyMsg.emptyCargo) : cargo));
-        }
-        if (cargoSummary.getChildren().isEmpty())
-            cargoSummary.getChildren()
-                    .add(summary(i18n.get(ColonyMsg.emptyHarbor)));
-        schoolSummary.getChildren().clear();
-        for (EducationCourse course : colony.getEducationCourses()) {
-            final Label people = summary(i18n.get(EducationText.course,
-                    course.getTeacherId() == null ? "—" : course.getTeacherId(),
-                    course.getStudentId(),
-                    i18n.get(UnitTypes.getUnitName(course.getSkill())),
-                    course.getCompletedUpdates(), course.getRequiredUpdates(),
-                    i18n.get(course.isPaused() ? EducationText.paused
-                            : EducationText.active)));
-            final HBox portraits = new HBox(4);
-            colony.getUnitsInsideColony().stream()
-                    .filter(unit -> java.util.Objects.equals(unit.getId(),
-                            course.getTeacherId())
-                            || unit.getId() == course.getStudentId())
-                    .forEach(unit -> portraits.getChildren()
-                            .add(portrait(unit)));
-            final ProgressBar progress = new ProgressBar(
-                    (double) course.getCompletedUpdates()
-                            / course.getRequiredUpdates());
-            progress.getStyleClass().add("construction-progress");
-            progress.setMaxWidth(Double.MAX_VALUE);
-            schoolSummary.getChildren().addAll(portraits, people, progress);
-            colony.getUnitsInsideColony().stream()
-                    .filter(unit -> unit.getId() == course.getStudentId())
-                    .findFirst().ifPresent(unit -> {
-                        final String workplace;
-                        if (unit.getPlace() instanceof org.akropia.model.PlaceColonyField) {
-                            final org.akropia.model.PlaceColonyField field = unit
-                                    .getPlaceColonyField();
-                            workplace = i18n.get(ColonyMsg.studentField,
-                                    field.getLocation().getX(),
-                                    field.getLocation().getY());
-                        } else if (unit
-                                .getPlace() instanceof org.akropia.model.PlaceConstructionSlot) {
-                            workplace = i18n.get(ConstructionTypeName
-                                    .getNameForType(unit.getPlaceConstruction()
-                                            .getConstructionSlot()
-                                            .getConstructionType()));
-                        } else {
-                            workplace = i18n.get(ColonyMsg.outsideSection);
-                        }
-                        schoolSummary.getChildren().add(summary(i18n
-                                .get(ColonyMsg.studentWorkplace, workplace)));
-                    });
-        }
-        if (schoolSummary.getChildren().isEmpty())
-            schoolSummary.getChildren()
-                    .add(summary(i18n.get(ColonyMsg.emptySchool)));
     }
 
     public Colony getColony() {
@@ -445,9 +348,10 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         sections.get("area").setText(i18n.get(ColonyMsg.overviewArea));
         sections.get("construction")
                 .setText(i18n.get(ColonyMsg.buildingSection));
-        sections.get("cargo").setText(i18n.get(ColonyMsg.overviewCargo));
-        sections.get("people").setText(i18n.get(ColonyMsg.overviewPeople));
+
         sections.get("school").setText(i18n.get(ColonyMsg.schoolSection));
+        ((Label) dockDetail.lookup("#colony-outside-title"))
+                .setText(i18n.get(ColonyMsg.overviewPeople));
         repaint();
     }
 }

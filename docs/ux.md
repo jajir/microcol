@@ -1,10 +1,26 @@
 # UX a pravidla ovládání Akropia
 
 ## Spodní karty kolonie — 13. listopadu 2026
-1. Přehledové karty nemají vnější rámeček ani šipky pro změnu pořadí. Přetažení záhlaví zůstává dostupné. Výchozí pořadí je Surrounding area, Construction, School, Cargo, Outside colony; nadpisy nemají číslování. Český název první karty zůstává Okolí.
-2. Construction se otevírá záhlavím karty přímo pod přehledem. Duplicitní tlačítko Construction je odstraněné. Seznam nabízených projektů a stavební fronta mají vlastní viditelnou plochu i při prázdné frontě; přidání, změna pořadí, odebrání a urychlení používají dosavadní pravidla.
-3. Construction a School používají společný papírový vzhled vstupů a herní barvy výběru. Zavření stavebního editoru tlačítkem nebo Escape vrátí plochu okolí kolonie bez změny fronty. Escape na School také nejprve zavře editor a ponechá hráče v kolonii.
-4. Jde o schválené zadání, nikoli hráčskou studii. Výsledky kontrol uvádí [funkční evidence](functional-tests.md#colony-cards-2026-11-13).
+
+1. Pořadí je Surrounding area, Construction, School a společný Cargo Depot.
+   Nadpisy nemají číslování. Přetažení záhlaví prvních tří karet zůstává dostupné.
+2. Cargo Depot je trvale viditelný rámeček: přepravci, náklad a pod oddělovačem
+   Outside colony. Nemá mořské podbarvení ani přepínací tlačítka Cargo a Outside
+   colony. Výběr přepravce změní nadpis například na Cargo Depot - Wagon #14.
+   Nakládání, vykládání a přetahování používají dosavadní pravidla.
+3. V horním menu nejsou Education ani Trade route. Dosavadní dialogy zůstávají
+   dostupné klávesovými zkratkami E a R; ostatní horní akce zůstávají.
+4. School otevře pod přehledem tři sloupce, každý s učitelem, studentem a
+   dovedností. Výběr dovednosti rovnou přiřadí výuku; Bez výuky ji zruší.
+   Před zadáním jiného studenta stejnému učiteli je nutné jeho kurz zrušit.
+   Průběh a pozastavení jsou u příslušného sloupce, nikoli v dalším seznamu.
+   Samostatná tlačítka Assign teaching, zrušení a Close nejsou součástí panelu.
+   Escape nebo jiná karta ponechá aktuální výuku a zavře podrobný panel.
+5. Construction se otevírá záhlavím, oba stavební seznamy mají vlastní plochu
+   a vstupy sdílí papírový vzhled. Kliknutí na pracovníka v mapce okolí zachová
+   focus mapky a pozici posuvníku; Enter nadále umožní přejít na volbu produkce.
+6. Jde o schválené zadání, nikoli hráčskou studii. Výsledky kontrol uvádí
+   [funkční evidence](functional-tests.md#combined-depot-and-school-columns-2026-11-13).
 
 
 ## Jednodušší načítání — 11. listopadu 2026

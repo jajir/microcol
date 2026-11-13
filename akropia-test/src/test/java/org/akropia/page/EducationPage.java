@@ -14,17 +14,54 @@ public final class EducationPage extends AbstractScreen {
     }
 
     public void open() {
-        clickOnButtonWithId("educationOpen");
+        getRobot().push(KeyCode.E);
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void openInline() {
         clickOnButtonWithId("colony-section-school");
-        revealGameContent(getButtonById("educationAssign"));
+        revealGameContent(getNodeFinder().lookup("#schoolPanel").query());
     }
 
     public void verifyInline() {
-        assertNotNull(getNodeFinder().lookup("#educationDialog").query()
-                .getParent().lookup("#colony-detail"));
+        for (int i = 0; i < 3; i++) {
+            for (String prefix : java.util.List.of("schoolTeacher-",
+                    "schoolStudent-", "schoolSkill-")) {
+                assertTrue(getNodeFinder().lookup("#" + prefix + i).query()
+                        .isVisible());
+            }
+        }
+        for (String id : java.util.List.of("educationAssign", "educationClose",
+                "educationCourses", "educationCancelCourse")) {
+            assertTrue(getNodeFinder().lookup("#" + id).queryAll().isEmpty());
+        }
+    }
+
+    public void chooseInlineParticipants(int column, int teacher, int student) {
+        selectUnit("schoolTeacher-" + column, teacher);
+        selectUnit("schoolStudent-" + column, student);
+    }
+
+    public void chooseInlineSkill(int column, UnitType type) {
+        ComboBox<UnitType> combo = getNodeFinder()
+                .lookup("#schoolSkill-" + column).queryComboBox();
+        int index = combo.getItems().indexOf(type);
+        if (index < 0)
+            throw new IllegalArgumentException("Missing skill " + type);
+        getRobot().clickOn(combo).push(KeyCode.HOME);
+        for (int i = 0; i < index; i++)
+            getRobot().push(KeyCode.DOWN);
+        getRobot().push(KeyCode.ENTER);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyInlineCourses(int count) {
+        assertEquals(count, getModel().getColonyById(0).orElseThrow()
+                .getEducationCourses().size());
+        for (int i = 0; i < count; i++) {
+            assertFalse(
+                    getLabeledById("schoolProgress-" + i).getText().isEmpty());
+        }
     }
 
     public void close() {

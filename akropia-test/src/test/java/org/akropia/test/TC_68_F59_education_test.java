@@ -36,8 +36,7 @@ public class TC_68_F59_education_test extends AbstractAkropiaTest {
         EducationPage education = new EducationPage(getContext());
         education.verifySchoolVisible();
         // Preview and close leave the student in their original job.
-        education.openInline();
-        education.verifyInline();
+        education.open();
         education.chooseTeacher(200);
         education.chooseStudent(0);
         education.verifyPreview("School", 4, "Master Carpenter");
@@ -240,7 +239,8 @@ public class TC_68_F59_education_test extends AbstractAkropiaTest {
             throws Exception {
         prepareEquippedVeteranExpert();
         GamePage game = WelcomePage.of(getContext()).loadGame();
-        ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
+        // Use the colony menu to enter this equipment fixture reliably.
+        ColonyScreen colony = game.openColonyWithKeyboard(0, "New Amsterdam");
         EducationPage education = new EducationPage(getContext());
         ColonyJobPage jobs = new ColonyJobPage(getContext());
         education.verifyEquippedColonist(4, UnitType.EXPERT_FARMER, true, 100,
@@ -259,7 +259,7 @@ public class TC_68_F59_education_test extends AbstractAkropiaTest {
         game.nextTurnAndCloseDialogs();
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        game.openColonyAt(COLONY, "New Amsterdam");
+        game.openColonyWithKeyboard(0, "New Amsterdam");
         education.verifyEquippedColonist(4, UnitType.COLONIST, true, 100,
                 COLONY);
     }
@@ -331,7 +331,50 @@ public class TC_68_F59_education_test extends AbstractAkropiaTest {
         jobs.verifyIndoorJob(300, ConstructionType.BLACKSMITHS_HOUSE, 0);
     }
 
-    /** Make the outside colonist a veteran farmer carrying tools. */
+    @Test
+    @Tag("local")
+    void TC_09_inline_columns_assign_and_cancel_without_buttons()
+            throws Exception {
+        // Prepare a university with capacity for multiple teachers.
+        final JsonObject saved = new Gson().fromJson(Files.readString(
+                new File("src/test/scenarios/F59-education.akropia").toPath()),
+                JsonObject.class);
+        saved.getAsJsonObject("model").getAsJsonArray("colonies").get(0)
+                .getAsJsonObject().getAsJsonArray("constructions")
+                .forEach(value -> {
+                    JsonObject construction = value.getAsJsonObject();
+                    if (construction.get("type").getAsString()
+                            .equals("SCHOOLHOUSE"))
+                        construction.addProperty("type", "UNIVERSITY");
+                });
+        final File prepared = new File(System.getProperty("user.home"),
+                "school-columns.akropia");
+        Files.writeString(prepared.toPath(), saved.toString());
+        when(getContext().getClassFromGuice(FileSelectingService.class)
+                .loadFile(any(File.class))).thenReturn(prepared);
+        // Every teacher has an independent set of visible choices.
+        WelcomePage.of(getContext()).loadGame().openColonyAt(COLONY,
+                "New Amsterdam");
+        EducationPage education = new EducationPage(getContext());
+        education.openInline();
+        education.verifyInline();
+        education.chooseInlineParticipants(0, 200, 0);
+        education.chooseInlineSkill(0, UnitType.MASTER_CARPENTER);
+        education.verifyInlineCourses(1);
+        education.verifyStudentKeptJob();
+        // A second column keeps the first course and assigns another teacher.
+        education.chooseInlineParticipants(1, 201, 1);
+        education.chooseInlineSkill(1, UnitType.MASTER_CARPENTER);
+        education.verifyInlineCourses(2);
+        education.captureDialog("schoolPanel", "school-three-columns.png");
+        // No teaching cancels only the selected course.
+        education.chooseInlineSkill(1, null);
+        education.verifyInlineCourses(1);
+        education.verifyCourseFor(0, UnitType.MASTER_CARPENTER, 0);
+        education.chooseInlineSkill(0, null);
+        education.verifyInlineCourses(0);
+    }
+
     private void prepareEquippedVeteranExpert() throws Exception {
         final JsonObject saved = new Gson().fromJson(Files.readString(
                 new File("src/test/scenarios/F59-education.akropia").toPath()),

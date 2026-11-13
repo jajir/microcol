@@ -299,8 +299,8 @@
 	<entry key="minimap_title">Minimapa</entry>
 	<entry key="minimap_hint">Posun: kliknutí, tažení či šipky</entry>
 	<entry key="minimap_status">Minimapa. Ve starém Řecku se příliš neujala. Čekalo se na vynález monitoru.</entry>
-    <entry key="selectedCarrierCargo">Náklad · %s</entry>
-    <entry key="selectCarrierCargo">Vyberte loď nebo vůz pro zobrazení nákladu</entry>
+    <entry key="selectedCarrierCargo">Překladiště - %s</entry>
+    <entry key="selectCarrierCargo">Překladiště</entry>
   <entry key="mapWork">Vyrábět %s — %s</entry>
   <entry key="cancelWork">Zrušit práci</entry>
   <entry key="returnToColony">Vrátit do kolonie</entry>

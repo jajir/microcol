@@ -19,4 +19,6 @@
   <entry key="none">Vyberte účastníky s dostupnou výukou. Je nutná odpovídající škola a volné místo učitele.</entry>
   <entry key="graduated">%s: žák #%s dokončil výuku: %s → %s.</entry>
   <entry key="learned">%s: pracovník #%s získal praxí odbornost: %s → %s.</entry>
+  <entry key="inlineRule">V každém sloupci vyberte učitele, studenta a dovednost. Výuka začne výběrem dovednosti. Před změnou studenta zrušte kurz volbou Bez výuky.</entry>
+  <entry key="noTeaching">Bez výuky</entry>
 </properties>

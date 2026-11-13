@@ -51,6 +51,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.verifySelectedTileColor(0, 1,
                 javafx.scene.paint.Color.web("#c99638"));
         layout.verifyOutput(GoodsType.LUMBER, 2);
+        layout.revealProductionChoices();
         layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.LUMBER);
         layout.verifyPreviewMatchesMap(0, 1);
         new InGameLayoutPage(getContext())
@@ -65,6 +66,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.verifyOutput(GoodsType.GRAIN, 2);
         jobs.verifyFieldJob(0, Location.of(23, 16),
                 org.akropia.model.Goods.of(GoodsType.GRAIN, 2));
+        layout.revealProductionChoices();
         layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.GRAIN);
         layout.verifyLayout("New Amsterdam", 7);
         layout.verifyCompactBuildings(46, 22, 32, 12);
@@ -79,8 +81,10 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.verifyCompactBuildings(46, 22, 32, 12);
         layout.verifyMapTileSize(Tile.TILE_WIDTH_IN_PX);
         layout.selectTile(0, 1);
+        layout.verifyTileClickKeepsScroll();
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0362-production-small.png");
+        layout.revealProductionChoices();
         layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.GRAIN);
         layout.verifyPreviewMatchesMap(0, 1);
         layout.selectTile(1, 1);
@@ -122,6 +126,8 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.verifyBuildingLevel("id_dock", ConstructionType.SHIPYARD);
         layout.verifyCenter();
         layout.selectTile(0, 1);
+        layout.verifyTileClickKeepsScroll();
+        layout.revealProductionChoices();
         layout.verifyProductionChoices(1, GoodsType.LUMBER, GoodsType.GRAIN);
         layout.verifyPreviewMatchesMap(0, 1);
         new InGameLayoutPage(getContext())
@@ -159,35 +165,24 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.rememberWorld();
         bars.resizeContent(1600, 1000);
-        layout.verifyActionNames(true, "Exports", "Education…", "Treasure",
-                "Route cargo…", "Trade route…", "Load", "Unload",
-                "Back to game");
-        layout.hoverAction("educationOpen");
-        layout.verifyActionExplanation(
-                "Choose a teacher and student, manage their training, or cancel a course. (E)");
+        layout.verifyActionNames(true, "Exports", "Treasure", "Route cargo…",
+                "Load", "Unload", "Back to game");
         new InGameLayoutPage(getContext()).saveEvidence("r0360-actions-en.png");
         bars.resizeContent(1000, 925);
-        layout.verifyActionNames(false, "Exports", "Education…", "Treasure",
-                "Route cargo…", "Trade route…", "Load", "Unload",
-                "Back to game");
+        layout.verifyActionNames(true, "Exports", "Treasure", "Route cargo…",
+                "Load", "Unload", "Back to game");
 
         // Every icon explains its action; disabled exports explain the
         // prerequisite.
         layout.hoverAction("customHouseOpen");
         layout.verifyActionExplanation(
                 "Build a custom house to choose automatic exports. (X)");
-        layout.hoverAction("educationOpen");
-        layout.verifyActionExplanation(
-                "Choose a teacher and student, manage their training, or cancel a course. (E)");
         layout.hoverAction("treasureOpen");
         layout.verifyActionExplanation(
                 "Choose a treasure in this colony and review its payout and transport fee before redeeming it. (T)");
         layout.hoverAction("tradeRouteCargoOpen");
         layout.verifyActionExplanation(
                 "Set which goods to unload and load at each trade-route stop, or process a carrier waiting here. (C)");
-        layout.hoverAction("tradeRouteOpen");
-        layout.verifyActionExplanation(
-                "Create or edit a trade route, choose its stops and assign a ship or wagon. (R)");
         layout.hoverAction("quickLoad");
         layout.verifyActionExplanation(
                 "Propose goods from the warehouse to load onto the selected ship. Review the amount before confirming.");
@@ -207,9 +202,8 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         // Expanding restores the complete labels and the original return
         // action.
         bars.resizeContent(1600, 1000);
-        layout.verifyActionNames(true, "Exports", "Education…", "Treasure",
-                "Route cargo…", "Trade route…", "Load", "Unload",
-                "Back to game");
+        layout.verifyActionNames(true, "Exports", "Treasure", "Route cargo…",
+                "Load", "Unload", "Back to game");
         town.close();
     }
 
@@ -225,17 +219,12 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
         final GameBarWidthPage bars = new GameBarWidthPage(getContext());
         bars.resizeContent(1600, 1000);
-        layout.verifyActionNames(true, "Vývoz", "Vzdělávání…", "Poklad",
-                "Náklad trasy…", "Obchodní trasa…", "Naložit", "Vyložit",
-                "Zpět do hry");
-        layout.hoverAction("educationOpen");
-        layout.verifyActionExplanation(
-                "Vyberte učitele a žáka, spravujte jejich výuku nebo ji zrušte. (E)");
+        layout.verifyActionNames(true, "Vývoz", "Poklad", "Náklad trasy…",
+                "Naložit", "Vyložit", "Zpět do hry");
         new InGameLayoutPage(getContext()).saveEvidence("r0360-actions-cs.png");
         bars.resizeContent(1000, 925);
-        layout.verifyActionNames(false, "Vývoz", "Vzdělávání…", "Poklad",
-                "Náklad trasy…", "Obchodní trasa…", "Naložit", "Vyložit",
-                "Zpět do hry");
+        layout.verifyActionNames(true, "Vývoz", "Poklad", "Náklad trasy…",
+                "Naložit", "Vyložit", "Zpět do hry");
         layout.hoverAction("customHouseOpen");
         layout.verifyActionExplanation(
                 "Pro automatický vývoz nejprve postavte celnici. (X)");
@@ -248,9 +237,8 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.leaveActions();
         layout.verifyNoActionExplanation();
         bars.resizeContent(1600, 1000);
-        layout.verifyActionNames(true, "Vývoz", "Vzdělávání…", "Poklad",
-                "Náklad trasy…", "Obchodní trasa…", "Naložit", "Vyložit",
-                "Zpět do hry");
+        layout.verifyActionNames(true, "Vývoz", "Poklad", "Náklad trasy…",
+                "Naložit", "Vyložit", "Zpět do hry");
         town.close();
     }
 
@@ -264,12 +252,14 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         layout.selectTile(0, 1);
+        layout.verifyTileClickKeepsScroll();
         layout.moveSelection(KeyCode.SPACE);
         layout.verifyOutputFocused(GoodsType.LUMBER);
         layout.chooseOutputWithKeyboard(GoodsType.GRAIN);
         layout.verifyOutput(GoodsType.GRAIN, 2);
         jobs.verifyFieldJob(0, Location.of(23, 16),
                 org.akropia.model.Goods.of(GoodsType.GRAIN, 2));
+        layout.revealProductionChoices();
         layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.GRAIN);
 
         // A source job changed after rendering invalidates the captured offer.
@@ -299,10 +289,10 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.verifySimplifiedCards();
         layout.verifySectionOrder("colony-card-area",
                 "colony-card-construction", "colony-card-school",
-                "colony-card-cargo", "colony-card-people");
+                "colony-cargo-depot");
         jobs.verifyWorldUnchanged();
 
-        // The existing editors open below all five summaries.
+        // The editors open below three summaries and the always-visible depot.
         layout.openSection("construction");
         layout.verifyDetail("constructionAdd");
         layout.verifyConstructionLists();
@@ -310,21 +300,37 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         new InGameLayoutPage(getContext())
                 .saveEvidence("colony-five-construction.png");
         layout.openSection("school");
-        layout.verifyDetail("educationAssign");
+        layout.verifyDetail("schoolPanel");
         layout.verifySchoolInputs();
         new InGameLayoutPage(getContext())
                 .saveEvidence("colony-five-school.png");
         layout.verifyStableWorkspaceGeometry();
         layout.escapeEditor();
         layout.verifyDetail("colony-field-name");
-        layout.openSection("cargo");
-        layout.verifyStableWorkspaceGeometry();
         layout.openSection("area");
         layout.verifyDetail("colony-field-name");
         layout.verifyStableWorkspaceGeometry();
         jobs.verifyWorldUnchanged();
         new InGameLayoutPage(getContext())
                 .saveEvidence("colony-five-overviews.png");
+        town.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_07_depot_shows_selected_carrier_and_outside_units_together()
+            throws Exception {
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
+        // Prepare a carrier at the colony before opening its overview.
+        layout.placeCarrierAtColony(3, 0);
+        final ColonyScreen town = game.openColonyAt(Location.of(24, 16),
+                "New Amsterdam");
+        layout.verifyDepot("Cargo Depot - Galleon #3");
+        town.selectShipInPort(3);
+        layout.verifyDepot("Cargo Depot - Galleon #3");
+        new InGameLayoutPage(getContext())
+                .saveEvidence("colony-combined-depot.png");
         town.close();
     }
 

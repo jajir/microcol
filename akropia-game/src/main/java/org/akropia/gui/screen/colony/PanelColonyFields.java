@@ -176,7 +176,7 @@ public final class PanelColonyFields implements JavaFxComponent {
         overview.getChildren().setAll(canvas);
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             onSelect.run();
-            Platform.runLater(this::revealProduction);
+            canvas.requestFocus();
         });
         canvas.addEventHandler(javafx.scene.input.KeyEvent.KEY_PRESSED,
                 event -> {

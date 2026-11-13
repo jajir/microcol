@@ -113,7 +113,12 @@ public class PanelDockView implements JavaFxComponent {
         cargoTitle.setId("europe-cargo-title");
         final VBox cargo = new VBox(cargoTitle, crates);
         cargo.getStyleClass().add("harbor-cargo");
-        mainPanel.getChildren().setAll(scroll, cargo);
+        if (includeWagons) {
+            cargo.getChildren().remove(cargoTitle);
+            mainPanel.getChildren().setAll(cargoTitle, scroll, cargo);
+        } else {
+            mainPanel.getChildren().setAll(scroll, cargo);
+        }
     }
 
     void updateLanguage(final I18n i18n) {

@@ -1,3 +1,73 @@
+## Combined depot and school columns — 2026-11-13
+
+1. UC-114/119 and UC-031/033/042: combined always-visible Cargo Depot, carrier
+   name in its heading, no sea fill or separate Cargo/Outside colony buttons.
+   Education and Trade route toolbar buttons are removed; their existing
+   keyboard dialogs remain available. Three inline teacher/student/skill columns
+   assign on skill selection and cancel through No teaching. Mouse selection
+   on the colony map preserves focus and scroll; keyboard production access remains.
+2. Targeted scenarios: TC195 (layout, headings, mouse focus/scroll and depot),
+   TC68 (education including new TC09 independent columns), TC106 (cargo),
+   and PageVerificationContractTest. Final local acceptance is recorded in
+   items 8 and 10–11. Smoke is explicitly waived by the user for this task.
+   No remote CI or publication verification requested.
+3. Initial model/JUnit attempt `20261113T054014Z-bbfd72f9c650` passed 5,129
+   tests in 395 reports, zero failures/errors/skips, in 163.887 supervised
+   seconds. Reports: `target/verification/run-bkp0vjfj/`. Later UI review
+   corrections supersede this source; it is not final-source acceptance.
+4. Reviewed-source model/JUnit `20261113T054520Z-406bf0c7211f` passed **5,129
+   tests** in 395 reports with zero failures/errors/skips, 156.500 supervised
+   seconds plus 37.480 seconds waiting for the local lock. Changed game sources
+   match `target/verification/run-uiyp4awz/source/`. The intermediate model run
+   `20261113T054321Z-ed7f2521fdb5` also passed all 5,129 tests but predates the
+   final review corrections.
+5. Targeted Docker/Xvfb selection dispatched as
+   `20261113T054852Z-e7bbf276b9d4`, supervisor PID 47356, 1,800 s watchdog;
+   its failed result is recorded below.
+6. First targeted attempt completed in 283.201 s with 20 tests: one failure,
+   four errors, no skips (`target/docker-ui/run-toFeZ0/`). TC195 retained old
+   assertions for five cards and compact toolbar labels; the requested layout
+   has four areas and the remaining labels fit at 1,000 px. TC68 and TC106
+   passed. New TC195/07 and TC68/09 lacked the local tag and were not selected;
+   they are not counted as verified. The retry corrects these expectations,
+   includes both new scenarios and supplies university capacity for two teachers.
+7. Retry `20261113T055455Z-4b6588d86e9a` ran all **22 tests**, with four
+   errors, no failures/skips, in 312.068 s (`target/docker-ui/run-guFYAb/`).
+   Depot TC195/07 passed. TC68/09 exposed a JavaFX selection-list exception:
+   immediate course refresh rebuilt ComboBox items during popup key handling.
+   Applying and refreshing is now deferred until after the popup closes.
+   TC195/01+02 still expected automatic scrolling to production; the tests now
+   first verify unchanged map-click scroll, then explicitly reveal production
+   before retaining all product/yield/visibility assertions. TC68/06 timed out
+   opening the colony by double-click before education; its cause is unconfirmed.
+   Its unchanged player path remains in the required full targeted retry.
+8. Popup repair passed model/JUnit **5,129 tests**, zero failures/errors/skips,
+   in 171.984 s (`20261113T060234Z-00e33b5540c5`,
+   `target/verification/run-ueub0__4/`); changed game sources match its snapshot.
+9. Third targeted run `20261113T060550Z-7e2675e10039` completed all 22 tests
+   in 321.285 s, with one error and zero failures/skips
+   (`target/docker-ui/run-nKqHdy/`). All seven TC195, new TC68/09, cargo and
+   source-contract checks passed. TC68/06 alone again failed to open the
+   colony by double-click before its specialty checks; this does not establish
+   a gameplay regression or the click timeout's underlying cause. That scenario
+   now uses the existing player-facing colony menu to enter its equipment
+   fixture; all specialty/equipment/location assertions and other scenarios'
+   mouse entry remain. No runtime code changed after the model pass above.
+10. Final targeted run `20261113T061253Z-02ab5cd375ae` passed **22 tests**
+    in four complete reports, zero failures/errors/skips, in 321.777 supervised
+    seconds (1,800 s watchdog). Reports: `target/docker-ui/run-vBLl0X/`.
+    This includes all seven TC195, all nine TC68, three TC106 and three
+    source-contract checks. Final screenshots of the selected carrier depot
+    and three school columns were reviewed; the empty depot and keyboard/mouse
+    production paths also passed. Earlier failed attempts remain failed.
+11. Final review confirms unchanged shared model rules and Europe dock layout,
+    model-source snapshot identity, localized labels, scoped Java formatting,
+    and preservation of unrelated backlog edits. All 14 documentation checks,
+    naming audit and strict MkDocs passed. Evidence and source hashes:
+    `target/combined-depot-school/`. Smoke was omitted only under the user's
+    explicit instruction. No remote CI or game-distribution publication was
+    inspected or claimed.
+
 ## Colony section order and headings — 2026-11-13
 
 1. UC-114/119: default cards now read Surrounding area, Construction, School,

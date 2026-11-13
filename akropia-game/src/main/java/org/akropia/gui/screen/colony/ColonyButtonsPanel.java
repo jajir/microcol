@@ -80,7 +80,7 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         buttonClose.setOnAction(
                 evnt -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
 
-        getButtonPanel().getChildren().addAll(exports, education, buttonClose);
+        getButtonPanel().getChildren().addAll(exports, buttonClose);
         final Map<ShortcutAction, Supplier<? extends Button>> commands = new EnumMap<>(
                 ShortcutAction.class);
         // The queue button is recreated with each repaint of the colony.
@@ -88,13 +88,43 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
                 () -> buttonClose.getScene() == null ? null
                         : (Button) buttonClose.getScene()
                                 .lookup("#colony-section-construction"));
-        commands.put(ShortcutAction.COLONY_EDUCATION, () -> education);
         commands.put(ShortcutAction.COLONY_CUSTOM_HOUSE, () -> exports);
-        commands.put(ShortcutAction.COLONY_TRADE_ROUTE, () -> tradeRoute);
         commands.put(ShortcutAction.COLONY_ROUTE_CARGO, () -> tradeRouteCargo);
         commands.put(ShortcutAction.COLONY_TREASURE, () -> treasure);
         ShortcutButtons.install(buttonClose, shortcuts, commands);
         this.shortcuts = shortcuts;
+        // Keep the existing dialogs reachable after removing their toolbar
+        // buttons.
+        final boolean[] dialogShortcutsInstalled = { false };
+        buttonClose.sceneProperty().addListener((property, before, scene) -> {
+            if (scene == null || dialogShortcutsInstalled[0])
+                return;
+            dialogShortcutsInstalled[0] = true;
+            scene.addEventHandler(javafx.scene.input.KeyEvent.KEY_PRESSED,
+                    event -> {
+                        if (event.isConsumed()
+                                || buttonClose.getScene() != scene
+                                || org.akropia.gui.shortcut.ShortcutInput
+                                        .isOwnedByText(scene.getFocusOwner(),
+                                                event))
+                            return;
+                        for (javafx.scene.Node node = buttonClose; node != null; node = node
+                                .getParent()) {
+                            if (!node.isVisible())
+                                return;
+                        }
+                        if (shortcuts.matches(ShortcutAction.COLONY_EDUCATION,
+                                event) && !education.isDisabled()) {
+                            education.fire();
+                            event.consume();
+                        } else if (shortcuts.matches(
+                                ShortcutAction.COLONY_TRADE_ROUTE, event)
+                                && !tradeRoute.isDisabled()) {
+                            tradeRoute.fire();
+                            event.consume();
+                        }
+                    });
+        });
         hintActions.put(education, ShortcutAction.COLONY_EDUCATION);
         hintActions.put(exports, ShortcutAction.COLONY_CUSTOM_HOUSE);
         hintActions.put(tradeRoute, ShortcutAction.COLONY_TRADE_ROUTE);
@@ -164,8 +194,7 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
 
     void addQuickCargoButtons(final List<Button> buttons) {
         getButtonPanel().getChildren().remove(buttonClose);
-        getButtonPanel().getChildren().addAll(treasure, tradeRouteCargo,
-                tradeRoute);
+        getButtonPanel().getChildren().addAll(treasure, tradeRouteCargo);
         getButtonPanel().getChildren().addAll(buttons);
         getButtonPanel().getChildren().add(buttonClose);
         getButtonPanel().getChildren().stream().map(Button.class::cast)

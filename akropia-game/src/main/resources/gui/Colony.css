@@ -106,3 +106,6 @@
     -fx-background-color: transparent;
 }
 .colony-detail .combo-box .arrow { -fx-background-color: #302D27; }
+
+.colony-depot { -fx-border-color: black; -fx-border-width: 1; -fx-padding: 8; -fx-spacing: 6; }
+.colony-depot .panel-dock { -fx-background-color: transparent; }

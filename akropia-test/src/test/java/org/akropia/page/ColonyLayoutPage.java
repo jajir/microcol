@@ -95,9 +95,9 @@ public final class ColonyLayoutPage extends AbstractScreen {
 
     public void verifyActionNames(final boolean expanded,
             final String... expected) {
-        final String[] ids = { "customHouseOpen", "educationOpen",
-                "treasureOpen", "tradeRouteCargoOpen", "tradeRouteOpen",
-                "quickLoad", "quickUnload", "closeButtonId" };
+        final String[] ids = { "customHouseOpen", "treasureOpen",
+                "tradeRouteCargoOpen", "quickLoad", "quickUnload",
+                "closeButtonId" };
         getRobot().interact(() -> {
             assertEquals(ids.length, expected.length);
             final Node toolbar = getNodeFinder().lookup(".screen-toolbar")
@@ -174,14 +174,29 @@ public final class ColonyLayoutPage extends AbstractScreen {
         });
     }
 
+    private double scrollBeforeTileClick;
+
     public void selectTile(final int column, final int row) {
         final Canvas canvas = getNodeFinder().lookup("#colony-field-map")
                 .queryAs(Canvas.class);
         revealGameContent(canvas);
+        scrollBeforeTileClick = getNodeFinder().lookup(".screen-scroll")
+                .queryAs(javafx.scene.control.ScrollPane.class).getVvalue();
         getRobot().clickOn(
                 canvas.localToScreen((column + .5) * canvas.getWidth() / 3,
                         (row + .5) * canvas.getHeight() / 3));
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyTileClickKeepsScroll() {
+        getRobot().interact(() -> {
+            assertEquals(scrollBeforeTileClick,
+                    getNodeFinder().lookup(".screen-scroll")
+                            .queryAs(javafx.scene.control.ScrollPane.class)
+                            .getVvalue(),
+                    0.001);
+        });
+        verifyMapFocused();
     }
 
     public void moveSelection(final KeyCode key) {
@@ -252,7 +267,7 @@ public final class ColonyLayoutPage extends AbstractScreen {
                     .queryAs(javafx.scene.layout.HBox.class);
             final Node detail = getNodeFinder().lookup("#colony-detail")
                     .query();
-            assertEquals(5, cards.getChildren().size());
+            assertEquals(4, cards.getChildren().size());
             assertTrue(
                     grid.localToScene(grid.getLayoutBounds()).getMaxY() <= stock
                             .localToScene(stock.getLayoutBounds()).getMinY());
@@ -347,9 +362,14 @@ public final class ColonyLayoutPage extends AbstractScreen {
                 getLabeledById("colony-section-construction").getText());
         assertEquals("School",
                 getLabeledById("colony-section-school").getText());
-        assertEquals("Cargo", getLabeledById("colony-section-cargo").getText());
+        for (String id : java.util.List.of("colony-section-cargo",
+                "colony-section-people", "educationOpen", "tradeRouteOpen")) {
+            assertTrue(getNodeFinder().lookup("#" + id).queryAll().isEmpty());
+        }
+        assertEquals("Cargo Depot",
+                getLabeledById("europe-cargo-title").getText());
         assertEquals("Outside colony",
-                getLabeledById("colony-section-people").getText());
+                getLabeledById("colony-outside-title").getText());
         final VBox card = getNodeFinder().lookup("#colony-card-area")
                 .queryAs(VBox.class);
         assertTrue(card.getBorder() == null
@@ -373,11 +393,38 @@ public final class ColonyLayoutPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void placeCarrierAtColony(int carrier, int colony) {
+        getRobot().interact(
+                () -> getModel().getUnitById(carrier).placeToLocation(getModel()
+                        .getColonyById(colony).orElseThrow().getLocation()));
+    }
+
+    public void verifyDepot(String expectedTitle) {
+        getRobot().interact(() -> {
+            final VBox depot = getNodeFinder().lookup("#colony-cargo-depot")
+                    .queryAs(VBox.class);
+            assertEquals(expectedTitle,
+                    getLabeledById("europe-cargo-title").getText());
+            assertNotNull(depot.lookup("#colony-outside-scroll"));
+            final javafx.scene.layout.Region dock = (javafx.scene.layout.Region) depot
+                    .lookup(".panel-dock");
+            assertTrue(dock.getBackground().getFills().stream().allMatch(
+                    fill -> Color.TRANSPARENT.equals(fill.getFill())));
+            assertTrue(depot.isVisible());
+        });
+    }
+
     public void verifySchoolInputs() {
-        for (String id : java.util.List.of("educationTeacher",
-                "educationStudent", "educationSkill", "educationCourses")) {
-            assertTrue(getNodeFinder().lookup("#" + id).query().getStyleClass()
-                    .contains("paper-input"));
+        for (int column = 0; column < 3; column++) {
+            for (String prefix : java.util.List.of("schoolTeacher-",
+                    "schoolStudent-", "schoolSkill-")) {
+                assertTrue(getNodeFinder().lookup("#" + prefix + column).query()
+                        .getStyleClass().contains("paper-input"));
+            }
+        }
+        for (String id : java.util.List.of("educationAssign", "educationClose",
+                "educationCourses", "educationCancelCourse")) {
+            assertTrue(getNodeFinder().lookup("#" + id).queryAll().isEmpty());
         }
     }
 
@@ -395,7 +442,7 @@ public final class ColonyLayoutPage extends AbstractScreen {
         assertNotNull(control);
         assertTrue(control.isVisible());
         assertTrue(control.isManaged());
-        assertEquals(5, getNodeFinder().lookup("#colony-overviews")
+        assertEquals(4, getNodeFinder().lookup("#colony-overviews")
                 .queryAs(javafx.scene.layout.HBox.class).getChildren().size());
     }
 
@@ -456,6 +503,12 @@ public final class ColonyLayoutPage extends AbstractScreen {
      * a product whose best field is this one and for a product yielding more on
      * another field.
      */
+    public void revealProductionChoices() {
+        revealGameContent(getNodeFinder().lookup("#colony-field-output").query()
+                .getParent());
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public void verifyProductionChoices(final int colonyId,
             final GoodsType bestHere, final GoodsType betterElsewhere) {
         getRobot().interact(() -> {
