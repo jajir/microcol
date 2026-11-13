@@ -314,4 +314,5 @@
     <entry key="stepAlongRiver">Along the river</entry>
     <entry key="stepInsufficientMovement">Not enough movement remaining</entry>
     <entry key="cancelWorkBeforeMoving">Cancel work in the context menu before moving this unit.</entry>
+    <entry key="unitsPanel_tools">Tools: %s</entry>
 </properties>

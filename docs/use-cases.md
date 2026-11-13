@@ -1162,6 +1162,13 @@ bonus mezi náhledem a skutečným tahem. Modelová přejímka a hráčské cest
    rutinní zprávu přehledu tahu o dokončeném poli. TC18_01/03/04/05 a nové
    TC18_08/09 spolu s `PlowFieldTest` jsou napsány, dosud nespuštěny; viz
    [funkční evidence](functional-tests.md#r-0391r-0393-plowing-countdown-and-completion-notice-2026-11-01).
+   Doplnění 13. listopadu 2026: TC18/01/02/06/07/09/10/11 pokrývají
+   počet nástrojů (včetně nuly, češtiny a skrytí cizí výbavy), zakázání
+   nedostupného orání, vysvětlení při najetí a skrytí příkazu u lodě.
+   TC90/01 ověřuje stejnou cestu na řece; TC15 a TC114/01 zachovávají
+   platné zahájení a související herní účinky. Výsledky jsou ve
+   [funkční evidenci](functional-tests.md#plow-availability-and-tools-2026-11-13).
+
 8. UC-020/UC-016: R-0120 má cíleně ověřené kácení: potvrzení 20 dřeva,
    zrušení/Escape, změněný stav, čtyři/dvě aktualizace, zrušení práce, spotřebu
    20 nástrojů a trvalý konec výnosu dřeva/hlíny. TC73/F65 ověřuje také

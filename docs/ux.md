@@ -1,5 +1,24 @@
 # UX a pravidla ovládání Akropia
 
+## Nástroje a dostupnost orání — 13. listopadu 2026
+
+1. Pravý panel vlastní pracovní jednotky ukazuje aktuální počet nástrojů,
+   včetně nuly. U cizích jednotek se množství vybavení neodhaluje; lodě
+   nemají řádek nástrojů pracovníka.
+2. „Plow field“ se nezobrazuje u typů jednotek, které orat neumějí.
+   U pracovníka zůstává viditelné, ale je zakázané, pokud model vrátí
+   překážku: například nedostatek nástrojů, vyčerpaný pohyb, rozpracovaný
+   příkaz nebo nevhodný terén. Najetí myší na zakázanou položku zobrazí
+   konkrétní důvod ve stavovém řádku. Kliknutí nezahájí práci a nic nespotřebuje.
+3. Klávesa P nadále používá společnou kontrolu modelu a při odmítnutí
+   vypíše důvod bez modálního dialogu. Při probíhajícím orání zůstává
+   dostupné jeho zrušení. Povolené zahájení spotřebuje pohyb a panel
+   ukáže zbývající dobu práce; dokončení aktualizuje také počet nástrojů.
+4. Jde o schválené chování, nikoli nové hráčské pozorování ani změnu
+   vhodnosti terénů. Stav ověření vede
+   [funkční evidence](functional-tests.md#plow-availability-and-tools-2026-11-13).
+
+
 ## Přepínač mapy obchodních tras — 13. listopadu 2026
 
 1. Přepínač běžné mapy a plánování obchodních tras sleduje levou hranu

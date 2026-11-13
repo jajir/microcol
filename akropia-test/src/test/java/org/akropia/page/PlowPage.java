@@ -15,6 +15,7 @@ import org.akropia.model.unit.UnitFreeColonist;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 
 /** Real plow controls with explicit model and player-visible observations. */
 public final class PlowPage extends AbstractScreen {
@@ -41,6 +42,47 @@ public final class PlowPage extends AbstractScreen {
     public void useControl() {
         clickOnButtonWithId("plowField");
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /**
+     * Hover the real disabled command, whose surrounding row receives input.
+     */
+    public void hoverControl() {
+        getRobot().moveTo(getButtonById("plowField"));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void clickDisabledControl() {
+        getRobot().clickOn(getButtonById("plowField"));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void dismissMenu() {
+        closeUnitActions();
+    }
+
+    public void verifyControlDisabled(final boolean expected) {
+        final Button button = getButtonById("plowField");
+        assertEquals(expected, button.isDisabled(),
+                "Plow command availability");
+        closeUnitActions();
+    }
+
+    public void verifyToolsShown(final Location location, final int index,
+            final String expectedText) {
+        final Label tools = getNodeFinder()
+                .lookup("#unitTools-" + unitAt(location, index).getId())
+                .queryAs(Label.class);
+        assertEquals(expectedText, tools.getText(), "Visible carried tools");
+    }
+
+    public void verifyToolsHidden() {
+        assertTrue(
+                getNodeFinder()
+                        .lookup(node -> node.getId() != null
+                                && node.getId().startsWith("unitTools-"))
+                        .queryAll().isEmpty(),
+                "No tool count for ships or foreign units");
     }
 
     private Unit unitAt(final Location location, final int index) {

@@ -9,6 +9,7 @@ import org.akropia.model.Player;
 import org.akropia.model.Unit;
 import org.akropia.model.unit.UnitActionBuildRoad;
 import org.akropia.model.unit.UnitActionPlowField;
+import org.akropia.model.unit.UnitFreeColonist;
 import org.akropia.model.unit.UnitTreasure;
 import org.akropia.model.unit.UnitWithCargo;
 
@@ -113,6 +114,15 @@ class UnitPanel {
                             + MovementText.format(unit.getMovementThirds()));
             labelMoves.getStyleClass().add("unitMoves");
             box.getChildren().add(labelMoves);
+        }
+        if (isUnitOwnedBy(unit, humanPlayer)
+                && unit instanceof UnitFreeColonist) {
+            final Label tools = new Label(i18n.get(Loc.unitsPanel_tools,
+                    ((UnitFreeColonist) unit).getTools()));
+            tools.setId("unitTools-" + unit.getId());
+            tools.setWrapText(true);
+            tools.setMinHeight(Region.USE_PREF_SIZE);
+            box.getChildren().add(tools);
         }
         if (unit.getAction() instanceof UnitActionBuildRoad
                 && isUnitOwnedBy(unit, humanPlayer)) {

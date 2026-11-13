@@ -1,3 +1,91 @@
+## Plow availability and tools — 2026-11-13
+
+1. UC-019/016: the own worker panel shows its current tool count, including
+   zero. Unsupported unit types hide Plow field; a worker blocked by the
+   existing model rules keeps a disabled command whose hover explains the
+   rejection in the status bar. No terrain rule, tool cost or modal changes.
+2. Targeted selection: `TC_18_F01_plow_field_test`,
+   `TC_15_F05_plow_field_test`, `TC_90_F81_river_effects_test#TC_01*`,
+   `TC_114_F105_native_land_test#TC_01*` and `PageVerificationContractTest`.
+   TC18/11 covers open Plains with 100 tools, hover, ineffective click,
+   keyboard rejection and hiding the command for a ship. TC18/07 covers
+   19 tools; existing scenarios retain progress, cancellation, completion,
+   Continue, Czech text and foreign-unit privacy checks.
+3. Local model, targeted UI and fixed smoke acceptance is pending. The shared
+   Java formatter was applied to all changed Java files. No remote CI or
+   publication verification was requested.
+4. Initial model attempt `20261113T194133Z-f83a08cd5b4c` (PID 8695) timed
+   out during Docker admission: the labelled-container query exceeded 20 s;
+   tests did not start (22.093 s total, no lock wait). Subsequent server-version
+   and identical container-list probes passed in 0.079 s and 0.018 s; the
+   original cause is unconfirmed. Startup retry `20261113T194219Z-073beb705721`
+   (PID 8784, 600-second limit) passed admission and started the verifier in
+   `target/verification/run-b6ttxskt/`. The failed evidence is preserved.
+5. Documentation validation passed 14 consistency checks, the name audit with
+   zero unexplained occurrences and strict MkDocs. Logs and source hashes are
+   in `target/plow-feedback/`; this is not gameplay acceptance.
+6. Model retry passed **5,132 tests in 395 complete XML reports**, zero
+   failures/errors/skips, in 153.191 supervised seconds. All changed runtime
+   and UI-test sources match its source snapshot and the saved hashes.
+   Targeted UI was dispatched as `20261113T194508Z-efd667b17bbb` (PID 9335,
+   1,800-second limit) with the selection above; UI and smoke remain pending.
+7. First targeted run `target/docker-ui/run-t327Rp/` completed 18 checks:
+   16 passed, two failures, no errors/skips, in 322.529 supervised seconds.
+   TC18/02 and TC90/01 found that the common enable-all path after movement
+   or turn changes overwrote the model rejection's disabled state. Plains,
+   partial tools, hover, disabled clicks and the ship command checks passed.
+   The common enable path now preserves the current plow rejection, and
+   setting that rejection also respects the global controls lock. This runtime
+   correction requires fresh model and targeted acceptance; failed evidence
+   remains preserved.
+8. Fresh model acceptance after the enable-state repair:
+   `20261113T195116Z-5a8fbd83cca4` (PID 9578),
+   `target/verification/run-7og0_wlc/`, **5,132 tests in 395 complete reports**,
+   zero failures/errors/skips, 150.387 supervised seconds. The snapshot matches
+   all changed runtime/test sources and the refreshed source hashes. The
+   right-panel screenshot from the first UI run shows the tool count and
+   countdown fully readable at 900 × 750; this visual check does not replace
+   the pending repeat of the entire targeted selection and fixed smoke.
+9. Second targeted run `20261113T195414Z-1cee5e702017` (PID 9993),
+   `target/docker-ui/run-lCVDW3/`, completed 18 tests in 321.705 supervised
+   seconds: 17 passed, one failure, no errors/skips. All TC18 checks passed.
+   TC90/01 now found the button disabled but its explanation still described
+   the departure terrain rather than the destination river. The legacy
+   end-move-mode event can precede the model's completed movement. Plow
+   availability is now refreshed with the other unit orders after the model
+   movement event, on the FX thread. Fresh model and targeted acceptance are
+   required for this correction; the original river assertion is preserved.
+10. Model acceptance after refreshing destination-state availability:
+    `20261113T200019Z-c3cab4a59ef0` (PID 10128),
+    `target/verification/run-v4jbk18g/`, **5,132 tests in 395 complete reports**,
+    zero failures/errors/skips, 158.535 supervised seconds. All changed
+    runtime/test sources match the snapshot and saved hashes. Targeted UI
+    and fixed smoke acceptance remain pending.
+11. Third targeted run `20261113T200325Z-e293cb948d5e` (PID 10506),
+    `target/docker-ui/run-Sh4kMt/`, passed **all 18 checks in five complete XML
+    reports**, zero failures/errors/skips, in 338.736 supervised seconds.
+    This includes the unchanged river-rejection assertion after moving, all
+    11 TC18 checks, two TC15 checks, TC114/01 and three page-contract checks.
+    Source hashes remain unchanged from the passing model snapshot.
+12. Fixed smoke dispatched as `20261113T200918Z-5ae6c8632847` (PID 10660),
+    480-second supervisor timeout and unchanged 420-second acceptance budget.
+    Commit/push remains pending smoke acceptance and final review.
+13. Final fixed smoke `target/verification/run-j4an0u14/` passed **21 tests
+    in 12 complete XML reports**, zero failures/errors/skips, in 255.101
+    supervised seconds (254.942 verifier seconds), below the 420-second
+    acceptance budget. Its source snapshot matches every changed runtime/test
+    source and the saved hashes; no executable edits followed acceptance.
+14. Local acceptance on base `a8039a45`: **5,132 model/JUnit checks, 18 targeted
+    UI/support checks and 21 fixed smoke/support checks**, all passing without
+    skips. Review covered shared menu dispatch, model rejection reuse, global
+    enable/disable state, destination refresh, localization, own-unit equipment
+    privacy, stable scenario IDs and preserved gameplay assertions. Java
+    formatting was applied with the shared profile. Final documentation checks
+    are 14 consistency tests, zero unexplained name-audit occurrences and strict
+    MkDocs. Unrelated backlog edits are excluded from this task's commit.
+    Earlier failed attempts remain failed evidence. Remote CI, full regression
+    and distribution publication were not inspected or claimed.
+
 ## UI regression repair 43351448127 — 2026-11-13
 
 1. User-requested repair of [the failed nightly run](https://github.com/jajir/microcol/actions/runs/43351448127), revision `f28ea26c1738cb2e425007b6815c75f4bbf25571`. Saved artifacts remain in `target/ci-43351448127/` and `target/ci-43351448127-summary/`. Model: 5,129 passed; UI: 829 passed, 13 failures, 25 errors, zero skips. The historical run remains failed.

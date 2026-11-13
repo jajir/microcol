@@ -315,12 +315,10 @@ public class ButtonsGamePanelController {
     }
 
     private void evaluatePlowField(final Unit unit) {
-        // An equipped idle pioneer keeps the control; a rejected start
-        // explains the reason through the status bar.
         final Optional<PlowProblem> problem = getModel().getPlowProblem(unit);
-        view.setVisibleButtonPlowField(
-                problem.isEmpty() || PlowFieldEventListener
-                        .isExplainedOnControl(problem.get(), unit));
+        view.setVisibleButtonPlowField(unit.getType().isCanPlowField());
+        view.setPlowFieldProblem(
+                problem.map(PlowFieldEventListener::reasonText).orElse(null));
         view.setVisibleButtonCancelPlowField(getModel().canCancelPlow(unit));
     }
 
@@ -555,6 +553,11 @@ public class ButtonsGamePanelController {
                     && !gamePanelController.isUnitMoving();
             final Unit selected = selectedUnitManager.getSelectedUnit()
                     .orElse(null);
+            if (selected != null) {
+                // Recheck at the final location, after the model finishes
+                // moving.
+                evaluatePlowField(selected);
+            }
             final boolean sentry = selected != null
                     && selected.getAction().getType() == UnitActionType.sentry;
             view.setSentryOrder(sentry,

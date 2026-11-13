@@ -92,9 +92,13 @@ public class TC_90_F81_river_effects_test extends AbstractAkropiaTest {
         river.verifyMovementLabel("⅔");
         // River founding and plowing explain rejection without spending tools
         // or movement.
-        river.useControl("plowField");
+        final org.akropia.page.PlowPage plow = new org.akropia.page.PlowPage(
+                getContext());
+        plow.verifyControlDisabled(true);
+        plow.hoverControl();
         gamePage.verifyThatStatusBarContains("River squares cannot be plowed");
         river.verifyRejectedWork(SMALL_LOCATION, 100, 2);
+        plow.dismissMenu();
         river.useControl("buildColony");
         gamePage.verifyThatStatusBarContains(
                 "Found the colony beside the river");

@@ -111,6 +111,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     public final static String BUTTON_DECLARE_INDEPENDENCE_ID = "declareIndependence";
 
+    private Buttons plowFieldProblem;
+
     private final ContextMenu unitActions = new ContextMenu();
     private final MenuItem unitContextTitle = new MenuItem();
     private final Menu unitChoices = new Menu();
@@ -544,7 +546,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         explanation.visibleProperty().bind(button.disabledProperty()
                 .and(explanation.textProperty().isNotEmpty()));
         explanation.managedProperty().bind(explanation.visibleProperty());
-        final VBox row = new VBox(2, button, explanation);
+        final VBox row = button == buttonPlowField ? new VBox(button)
+                : new VBox(2, button, explanation);
         row.setPrefWidth(290);
         // JavaFX custom rows focus themselves but leave sibling submenus open.
         row.setOnMouseEntered(event -> unitChoices.hide());
@@ -555,7 +558,25 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
                 event -> event.consume());
         item.getStyleClass().add("unit-command-item");
         item.setOnAction(event -> button.fire());
-        item.disableProperty().bind(button.disableProperty());
+        if (button == buttonPlowField) {
+            // Disabled buttons do not receive mouse events; their row does.
+            button.mouseTransparentProperty().bind(button.disabledProperty());
+            item.setHideOnClick(false);
+            row.setOnMouseEntered(event -> {
+                unitChoices.hide();
+                if (button.isDisabled()) {
+                    toolbarEvents.post(new StatusBarMessageEvent(
+                            button.getAccessibleHelp(), Source.GAME));
+                }
+            });
+            row.setOnMouseExited(event -> {
+                if (button.isDisabled()) {
+                    toolbarEvents.post(new StatusBarMessageEvent(Source.GAME));
+                }
+            });
+        } else {
+            item.disableProperty().bind(button.disableProperty());
+        }
         item.visibleProperty().bind(button.visibleProperty());
         unitActions.getItems().add(item);
     }
@@ -756,6 +777,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonWait.setText(text(Buttons.buttonWait).replace('\n', ' '));
         buttonSkipUnitTurn
                 .setText(text(Buttons.buttonSkipUnitTurn).replace('\n', ' '));
+        buttonPlowField.setAccessibleHelp(
+                plowFieldProblem == null ? "" : i18n.get(plowFieldProblem));
         buttonWait.setAccessibleHelp(i18n.get(Buttons.waitExplanation));
         buttonSkipUnitTurn
                 .setAccessibleHelp(i18n.get(Buttons.skipUnitTurnExplanation));
@@ -967,7 +990,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         buttonEurope.setDisable(disable);
 
         buttonMove.setDisable(disable);
-        buttonPlowField.setDisable(disable);
+        buttonPlowField.setDisable(disable || plowFieldProblem != null);
         buttonCancelPlowField.setDisable(disable);
         buttonClearForest.setDisable(disable);
         buttonCancelClearForest.setDisable(disable);
@@ -984,6 +1007,13 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     public void setVisibleButtonPlowField(final boolean isVisible) {
         setVisibleNode(buttonPlowField, isVisible);
+    }
+
+    void setPlowFieldProblem(final Buttons problem) {
+        plowFieldProblem = problem;
+        buttonPlowField.setDisable(controlsDisabled || problem != null);
+        buttonPlowField.setAccessibleHelp(
+                problem == null ? "" : currentI18n.get(problem));
     }
 
     void setCancelPlowFieldAction(final Runnable action) {

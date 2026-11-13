@@ -96,6 +96,19 @@ final class PlowFixture {
         use(context, saved, name);
     }
 
+    static void preparePlains(final TestContext context, final String name,
+            final Location location) throws IOException {
+        prepare(context,
+                new File("src/test/scenarios/F01-embark-disembark.akropia"),
+                name, 100, null, location);
+        final File prepared = new File(System.getProperty("user.home"), name);
+        final JsonObject saved = new Gson().fromJson(
+                Files.readString(prepared.toPath()), JsonObject.class);
+        setCell(saved.getAsJsonObject("model").getAsJsonObject("map")
+                .getAsJsonArray("tiles"), location, "l");
+        use(context, saved, name);
+    }
+
     private static void use(final TestContext context, final JsonObject saved,
             final String name) throws IOException {
         final File prepared = new File(System.getProperty("user.home"), name);
@@ -105,10 +118,15 @@ final class PlowFixture {
     }
 
     private static void clear(final JsonArray rows, final Location location) {
+        setCell(rows, location, "-");
+    }
+
+    private static void setCell(final JsonArray rows, final Location location,
+            final String value) {
         final String row = rows.get(location.getY()).getAsString();
         final int colon = row.indexOf(':');
         final String[] cells = row.substring(colon + 1).split(",", -1);
-        cells[location.getX() - 1] = "-";
+        cells[location.getX() - 1] = value;
         rows.set(location.getY(), new JsonPrimitive(
                 row.substring(0, colon + 1) + String.join(",", cells)));
     }

@@ -22,7 +22,7 @@ import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
 /**
- * Verify that pressing P starts plowing, consumes movement and hides the
+ * Verify that pressing P starts plowing, consumes movement and disables the
  * action, that plow work can be rejected, canceled and completed, that the unit
  * panel shows its countdown only for own plowing units (R-0391) and that the
  * turn report announces the completed field once (R-0393).
@@ -98,8 +98,8 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
         // Press 'p' to plow field.
         gamePage.pressP();
 
-        // Verify that icon for plow field is invisible.
-        gamePage.verifyThatPlowFieldButtonIsHidden();
+        // The busy worker retains a disabled plow command.
+        new PlowPage(getContext()).verifyControlDisabled(true);
 
         // Assert the captured unit's action type changed to plowField and AP
         // consumed
@@ -136,6 +136,8 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
         plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 0);
         plow.verifyFieldAt(NEAR_LOCATION, false);
         plow.verifyCancelControlVisible(false);
+        plow.verifyToolsShown(NEAR_LOCATION, 0, "Tools: 0");
+        plow.verifyControlDisabled(true);
     }
 
     @Test
@@ -158,11 +160,16 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
         gamePage.selectTile(NEAR_LOCATION);
         gamePage.verifyThatPlowFieldButtonIsVisible();
 
-        // Using the control explains the shortfall and changes nothing.
-        plow.useControl();
+        // Hovering the disabled control explains the shortfall.
+        plow.verifyToolsShown(NEAR_LOCATION, 0, "Tools: 19");
+        plow.verifyControlDisabled(true);
+        plow.hoverControl();
         gamePage.verifyThatStatusBarContains(
                 "Plowing needs a pioneer with at least 20 tools.");
         plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 19);
+        plow.clickDisabledControl();
+        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 19);
+        plow.dismissMenu();
         plow.verifyFieldAt(NEAR_LOCATION, false);
     }
 
@@ -389,6 +396,7 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
         gamePage.pressP();
         gamePage.selectTile(NEAR_LOCATION);
         plow.verifyPlowProgressShown(NEAR_LOCATION, "Orání — zbývají 2 tahy");
+        plow.verifyToolsShown(NEAR_LOCATION, 0, "Nástroje: 100");
 
         // The last remaining update is announced in Czech in the panel.
         gamePage.nextTurnAndCloseDialogs();
@@ -446,6 +454,7 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
         gamePage.selectTile(FOREIGN_LOCATION);
         gamePage.verifyNumberOfUnitInRightPanel(1);
         plow.verifyPlowProgressHidden();
+        plow.verifyToolsHidden();
     }
 
     @Test
@@ -479,6 +488,44 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
         gamePage.verifyThatStatusBarContains(
                 "Plowing needs a pioneer with at least 20 tools.");
         plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 0);
+        plow.verifyToolsShown(NEAR_LOCATION, 0, "Tools: 0");
+    }
+
+    @Test
+    @Tag("local")
+    void TC_11_plains_rejection_is_explained_on_hover_and_ships_hide_plow()
+            throws Exception {
+        // Put a fully equipped worker beside the colony on open Plains.
+        PlowFixture.preparePlains(getContext(), "plow-f01-plains.akropia",
+                NEAR_LOCATION);
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final PlowPage plow = new PlowPage(getContext());
+        game.getRightPanelUnit(2).selectUnit();
+        game.moveMouseAtLocation(COLONY_LOCATION);
+        game.dragMouseAtLocation(NEAR_LOCATION);
+        game.nextTurnAndCloseDialogs();
+        game.selectTile(NEAR_LOCATION);
+
+        // The visible count and disabled command explain the terrain
+        // restriction.
+        plow.verifyToolsShown(NEAR_LOCATION, 0, "Tools: 100");
+        plow.verifyControlDisabled(true);
+        plow.hoverControl();
+        game.verifyThatStatusBarContains("This terrain cannot be plowed.");
+        plow.clickDisabledControl();
+        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 100);
+        plow.verifyFieldAt(NEAR_LOCATION, false);
+        plow.dismissMenu();
+
+        // The keyboard path also rejects the same terrain without a modal.
+        game.pressP();
+        game.verifyThatStatusBarContains("This terrain cannot be plowed.");
+        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 100);
+
+        // A ship offers no plow command.
+        game.selectTile(COLONY_LOCATION);
+        game.selectMapUnit(3);
+        game.verifyThatPlowFieldButtonIsHidden();
     }
 
 }

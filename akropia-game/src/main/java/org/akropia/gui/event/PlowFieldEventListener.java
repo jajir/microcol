@@ -13,7 +13,6 @@ import org.akropia.i18n.I18n;
 import org.akropia.model.PlowProblem;
 import org.akropia.model.Unit;
 import org.akropia.model.unit.UnitActionType;
-import org.akropia.model.unit.UnitFreeColonist;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
@@ -47,27 +46,8 @@ public final class PlowFieldEventListener {
         this.i18n = Preconditions.checkNotNull(i18n);
     }
 
-    /**
-     * Whether a pioneer that cannot start now still shows the control so the
-     * reason can be explained when the player tries to use it.
-     *
-     * @param problem rejection reason from the model
-     * @param unit    selected unit; a partial tool load keeps the control
-     * @return true when the control stays visible
-     */
-    public static boolean isExplainedOnControl(final PlowProblem problem,
-            final Unit unit) {
-        if (problem == PlowProblem.NOT_ENOUGH_TOOLS) {
-            return unit instanceof UnitFreeColonist
-                    && ((UnitFreeColonist) unit).isHoldingTools();
-        }
-        return problem == PlowProblem.NO_MOVES || problem == PlowProblem.COLONY
-                || problem == PlowProblem.UNSUITABLE_TERRAIN
-                || problem == PlowProblem.FOREST || problem == PlowProblem.RIVER
-                || problem == PlowProblem.ALREADY_PLOWED;
-    }
-
-    private static Buttons reasonText(final PlowProblem problem) {
+    /** @return localized explanation key for a model rejection */
+    public static Buttons reasonText(final PlowProblem problem) {
         switch (problem) {
         case NOT_PIONEER:
             return Buttons.plowProblemNotPioneer;

@@ -75,7 +75,7 @@ každý stav viditelné nebo povolené. Přesné podmínky a náklady patří mo
 | Hlídka / aktivovat hlídku | Nabídka | Hlídka má také návaznost na automatické nalodění způsobilých cestujících |
 | Opevnit / ukončit opevnění | Nabídka | Vlastní stav a omezení; F je vyhrazeno kácení |
 | Založit kolonii | B nebo nabídka | Ověření podmínek, dialog názvu; při nulových bodech má B vlastní vysvětlení odmítnutí |
-| Orat / zrušit orání | P nebo nabídka; zrušení v nabídce | Dlouhodobá práce, podmínky terénu/nástrojů, zobrazený postup |
+| Orat / zrušit orání | P nebo nabídka; zrušení v nabídce | [Dostupnost orání](ux.md#nastroje-a-dostupnost-orani-13-listopadu-2026): nepodporovaný typ skrytý, dočasná překážka zakáže příkaz a najetí ukáže důvod ve stavovém řádku; nástroje a postup v pravém panelu |
 | Vykácet les / zrušit kácení | F nebo nabídka; zrušení v nabídce | Samostatná práce s modelovými pravidly a následky |
 | Postavit silnici / zrušit stavbu | Nabídka | Samostatná práce; R otevírá statistiky, ne silnici |
 | Pracovat pro konkrétní kolonii na poli | Kontextové položky práce s názvem kolonie a produktem | Více přijímajících měst musí být rozlišeno; model určuje platná místa a výnos |
