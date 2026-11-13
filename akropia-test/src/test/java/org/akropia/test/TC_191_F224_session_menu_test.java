@@ -46,31 +46,39 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         game.verifyThatStatusBarContains(
                 "You can edit the save file name here.");
         // Saving an edited name returns to the game and reports the file.
-        saves.saveName("Edited harbour");
+        saves.saveName("Přístav.2");
         saves.verifySaveDialogOpen(false);
         game.verifyGameInFront();
-        game.verifyThatStatusBarContains(
-                "Game saved as Edited harbour.akropia.");
-        saves.verifySavedFilename("Edited harbour", "Edited harbour.akropia");
+        game.verifyThatStatusBarContains("Game saved as 'Přístav.2'.");
+        saves.verifySavedFilename("Přístav.2", "Přístav.2.akropia");
         // Double-click help describes the target; cancel keeps Save open.
         saves.openSave();
-        saves.select("Edited harbour");
-        saves.hoverFile("Edited harbour");
+        saves.select("Přístav.2");
+        saves.hoverFile("Přístav.2");
         saves.captureDialog("savedGamesList", "save-feedback-hover.png");
         game.verifyThatStatusBarContains(
                 "Double-click to save the game to this file.");
-        saves.doubleClickFile("Edited harbour");
-        saves.verifyOverwriteConfirmation("Edited harbour");
+        saves.doubleClickFile("Přístav.2");
+        saves.verifyOverwriteConfirmation("Přístav.2");
         saves.action("saveCancel");
         saves.verifySaveDialogOpen(true);
         // Confirmed double-click overwrite also returns with a named outcome.
-        saves.doubleClickFile("Edited harbour");
+        saves.doubleClickFile("Přístav.2");
         saves.action("saveConfirm");
         saves.verifySaveDialogOpen(false);
         game.verifyGameInFront();
-        game.verifyThatStatusBarContains(
-                "Game saved as Edited harbour.akropia.");
-        saves.verifySavedName("Edited harbour", 1);
+        game.verifyThatStatusBarContains("Game saved as 'Přístav.2'.");
+        saves.verifySavedName("Přístav.2", 1);
+        // A subsequent button overwrite closes both screens as well.
+        saves.openSave();
+        saves.select("Přístav.2");
+        saves.action("saveNew");
+        saves.verifyOverwriteConfirmation("Přístav.2");
+        saves.action("saveConfirm");
+        saves.verifySaveDialogOpen(false);
+        game.verifyGameInFront();
+        game.verifyThatStatusBarContains("Game saved as 'Přístav.2'.");
+        saves.verifySavedName("Přístav.2", 1);
     }
 
     @Test

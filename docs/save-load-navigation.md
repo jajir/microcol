@@ -1,6 +1,12 @@
+## Návrat po potvrzeném přepsání — 13. listopadu 2026
+
+1. Po dvojkliku na existující soubor a potvrzení přepsání se po úspěšném zápisu zavře potvrzovací dialog i ukládací stránka. Hráč pokračuje ve hře a stavový řádek oznámí například „Hra byla uložena jako ‚konec2‘.“ Název je bez přípony `.akropia`; tečky uvnitř názvu zůstávají.
+2. Stejně se dokončí přepsání přes tlačítko Uložit. Zrušení přepsání, neplatný název nebo chyba zápisu ponechají ukládací stránku otevřenou. Po úspěchu se další potvrzení zablokuje a návrat počká na dokončení aktuální obsluhy potvrzovacího dialogu.
+3. Hlášení uživatele z macOS dokládá problém navzdory dřívější Linuxové přejímce; samo neurčuje jeho technickou příčinu. Rozšířený TC191/16 ověřuje nový název s diakritikou a tečkou, dvojklik, zrušení a opakované přepsání tlačítkem. [Funkční evidence](functional-tests.md#save-overwrite-return-2026-11-13) rozlišuje ověření od neprovedené nativní kontroly.
+
 ## Potvrzení uložení a nápověda — 12. listopadu 2026
 
-1. Úspěšné uložení přes Uložit hru po úpravě názvu zavře formulář a vrátí hráče na původní obrazovku. Stavový řádek oznámí „Hra byla uložena jako <název souboru>.“ včetně přípony. Neplatný název, neúspěšný zápis ani zrušené přepsání formulář nezavírají.
+1. Úspěšné uložení přes Uložit hru po úpravě názvu zavře formulář a vrátí hráče na původní obrazovku. Stavový řádek oznámí „Hra byla uložena jako <název souboru>.“ bez přípony `.akropia` (upřesněno 13. listopadu 2026). Neplatný název, neúspěšný zápis ani zrušené přepsání formulář nezavírají.
 2. Nad názvem souboru v seznamu stavový řádek vysvětluje, že dvojklik uloží hru do tohoto souboru; přepsání nadále vyžaduje potvrzení. Nad textovým polem vysvětluje možnost upravit název ukládaného souboru.
 3. Implementaci pro UC-114 ověřuje `TC_191_F224_session_menu_test.TC_16_edited_save_closes_and_reports_filename_with_hover_help`; skutečné výsledky vlastní [funkční evidence](functional-tests.md#save-feedback-2026-11-12).
 

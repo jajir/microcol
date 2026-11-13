@@ -1,3 +1,7 @@
+## UC-114: potvrzené přepsání a návrat — 13. listopadu 2026
+
+1. [Návrat po přepsání](save-load-navigation.md#navrat-po-potvrzenem-prepsani-13-listopadu-2026) vrací hráče do hry a potvrzuje název bez přípony. TC191/16 zahrnuje přepsání dvojklikem i opakované přepsání tlačítkem; [výsledky](functional-tests.md#save-overwrite-return-2026-11-13).
+
 ## UC-114/119: opakované Continue — 12. listopadu 2026
 
 ## UC-114/119, UC-031/033/042: karty kolonie — 13. listopadu 2026

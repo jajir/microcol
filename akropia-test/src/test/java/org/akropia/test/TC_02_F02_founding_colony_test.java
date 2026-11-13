@@ -85,6 +85,8 @@ public class TC_02_F02_founding_colony_test extends AbstractAkropiaTest {
         // before the town commons, and the same 4 commons food now raises it
         // to 7 or 8.
         colonyScreen.verifyProductionInRange(grainProduction, 7, 8);
+        colonyScreen.verifyNumberOfUnitsAtPier(0);
+        colonyScreen.verifyNumberOfUnitsOnFields(2);
     }
 
     @Test

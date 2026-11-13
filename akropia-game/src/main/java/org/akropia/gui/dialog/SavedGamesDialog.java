@@ -98,7 +98,9 @@ public final class SavedGamesDialog implements GameScreen {
         view = new SavedGamesView(texts, true, choice -> {
             if (perform.test(choice)) {
                 result = choice;
-                close();
+                // Finish the confirmation's event before closing its owner.
+                view.getContent().setDisable(true);
+                Platform.runLater(this::close);
             } else if (choice.action == Action.DELETE) {
                 final List<Entry> updated = refresh.get();
                 view.setEntries(updated == null ? List.of() : updated);

@@ -363,8 +363,8 @@ public class PersistingService {
                         org.akropia.gui.screen.game.components.StatusBarMessageEvent
                                 .outcome(
                                         texts.get(SavedGameText.savedAs,
-                                                savedGames.target(choice.name)
-                                                        .getName()),
+                                                SavedGames.manualName(
+                                                        choice.name)),
                                         org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source.GAME)));
             }
             return choice != null;

@@ -630,10 +630,12 @@ public class ColonyScreen extends AbstractScreen {
                 .filter(field -> field.isEmpty()
                         && field.getGoodsTypeProduction(GoodsType.GRAIN) > 0)
                 .findAny().get();
-        getRobot()
-                .drag(getUnitsAtPier().get(indexOfUnitAtPier),
-                        MouseButton.PRIMARY)
-                .dropTo(findPlaceOfField(colonyField))
+        final Pane worker = getUnitsAtPier().get(indexOfUnitAtPier);
+        final Canvas fields = getNodeFinder().lookup("#colony-field-map")
+                .queryAs(Canvas.class);
+        revealGameContent(worker, fields);
+        final Point2D target = findPlaceOfField(colonyField);
+        getRobot().drag(worker, MouseButton.PRIMARY).dropTo(target)
                 .release(MouseButton.PRIMARY);
         WaitForAsyncUtils.waitForFxEvents();
         return colony.getGoodsStats().getStatsByType(GoodsType.GRAIN)

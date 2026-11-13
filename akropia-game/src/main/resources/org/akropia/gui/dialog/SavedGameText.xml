@@ -52,7 +52,7 @@
     <entry key="managedWarning">This file may be replaced by automatic or quick saving. You may lose this saved position.</entry>
     <entry key="summaryGameType">Game type: %s</entry>
     <entry key="campaign">Campaign</entry>
-    <entry key="savedAs">Game saved as %s.</entry>
+    <entry key="savedAs">Game saved as '%s'.</entry>
     <entry key="saveFileHint">Double-click to save the game to this file.</entry>
     <entry key="editNameHint">You can edit the save file name here.</entry>
 </properties>
