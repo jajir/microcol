@@ -93,7 +93,10 @@ final class TradeRouteNavigator {
                             org.akropia.model.turnevent.TurnEventGoTo.Kind
                                     .valueOf("ROUTE_"
                                             + finalPause.orElseThrow().name()),
-                            carrier.getId(), carrier.getType(), destination));
+                            carrier.getId(), carrier.getType(), destination)
+                    .destination(
+                            target.isEurope() ? null : target.getColonyId(),
+                            target.isEurope()));
         }
         if (wasPaused != isPaused(carrier)) {
             model.fireActionWasStarted(carrier);

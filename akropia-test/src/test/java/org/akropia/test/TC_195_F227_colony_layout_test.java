@@ -298,8 +298,14 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         new InGameLayoutPage(getContext())
                 .saveEvidence("colony-five-school.png");
         layout.verifyStableWorkspaceGeometry();
-        layout.escapeEditor();
-        layout.verifyDetail("colony-field-name");
+        final GamePage game = town.closeWithEscape();
+        town.verifyClosed();
+        game.openColonyWithKeyboard(0, "New Amsterdam");
+        layout.openSection("construction");
+        layout.verifyDetail("constructionAdd");
+        town.closeWithEscape();
+        town.verifyClosed();
+        game.openColonyWithKeyboard(0, "New Amsterdam");
         layout.openSection("area");
         layout.verifyDetail("colony-field-name");
         layout.verifyStableWorkspaceGeometry();

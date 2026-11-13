@@ -39,7 +39,12 @@ public final class TeProcessorShipRepair extends AbstractTeProcessor
         String destination = repair.isEuropeDestination()
                 ? getI18n().get(Europe.voyageDestinationEurope)
                 : repair.getDestinationName();
-        return new TeItemSimple(
-                getI18n().get(key, ship, repair.getShipId(), destination));
+        final String message = getI18n().get(key, ship, repair.getShipId(),
+                destination);
+        if (repair.isEuropeDestination()) {
+            return new TeItemEurope(message);
+        }
+        return repair.getColonyId() == null ? new TeItemSimple(message)
+                : new TeItemColony(message, repair.getColonyId());
     }
 }

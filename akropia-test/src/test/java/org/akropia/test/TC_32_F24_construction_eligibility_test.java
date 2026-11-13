@@ -47,9 +47,9 @@ public class TC_32_F24_construction_eligibility_test
             throws Exception {
         // Three residents cannot start a four-resident smithy upgrade.
         ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
-                .openColonyAt(COLONY, "New Amsterdam");
+                .openColonyWithKeyboard(0, "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
-        construction.open();
+        construction.openWithKeyboard();
         construction.select("BLACKSMITHS_SHOP");
         construction.verifyOffer(false, "Requires 4 residents; currently 3.",
                 64, 20);
@@ -61,7 +61,7 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyProjectOffered("LARGE_STABLES", false);
         construction.captureDialog("constructionProjects",
                 "construction-unavailable.png");
-        construction.escape();
+        construction.cancel();
         construction.verifyPickerClosed();
 
         construction.verifyQueue(List.of(), List.of(), 58);
@@ -70,7 +70,7 @@ public class TC_32_F24_construction_eligibility_test
         // Assign the fourth resident through the colony's carpenter workplace.
         construction.assignCarpenter(4);
         colony.verifyThatProductionIs(GoodsType.HAMMERS, 6);
-        construction.open();
+        construction.openWithKeyboard();
         construction.select("BLACKSMITHS_SHOP");
         construction.verifyOffer(true, "Available.", 64, 20);
         construction.cancel();
@@ -80,13 +80,13 @@ public class TC_32_F24_construction_eligibility_test
 
         // Explicit confirmation queues exactly once, without spending
         // resources.
-        construction.open();
+        construction.openWithKeyboard();
         construction.select("BLACKSMITHS_SHOP");
         construction.confirmTwice();
         construction.verifyQueue(List.of("BLACKSMITHS_SHOP"), List.of(0), 58);
         construction.select("BLACKSMITHS_SHOP");
         construction.verifyOffer(false, "already queued", 64, 20);
-        construction.escape();
+        construction.cancel();
         construction.verifyPickerClosed();
         construction.verifyStocksAndPopulation(58, 19, 4);
     }
@@ -98,17 +98,17 @@ public class TC_32_F24_construction_eligibility_test
         // Admit a real project, then let the two carpenters produce six
         // hammers.
         GamePage game = WelcomePage.of(getContext()).loadGame();
-        ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
+        ColonyScreen colony = game.openColonyWithKeyboard(0, "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
         construction.assignCarpenter(4);
-        construction.open();
+        construction.openWithKeyboard();
         construction.select("BLACKSMITHS_SHOP");
         construction.confirm();
         construction.select("WAREHOUSE");
         construction.confirm();
         construction.cancel();
         construction.verifyPickerClosed();
-        game = colony.close();
+        game = colony.closeWithEscape();
         Optional<ScreenTurnReport> report = game.nextTurn();
 
         // The turn report names the colony, project and missing tool, and
@@ -128,22 +128,22 @@ public class TC_32_F24_construction_eligibility_test
                 "construction-waiting.png");
 
         // Reopening and cancelling cannot discard completed hammer work.
-        construction.open();
+        construction.openWithKeyboard();
         construction.select("LUMBER_MILL");
-        construction.escape();
+        construction.cancel();
         construction.verifyPickerClosed();
         construction.verifyQueue(List.of("BLACKSMITHS_SHOP", "WAREHOUSE"),
                 List.of(0, 1), 64);
-        game = colony.close();
+        game = colony.closeWithEscape();
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        colony = game.openColonyAt(COLONY, "New Amsterdam");
+        colony = game.openColonyWithKeyboard(0, "New Amsterdam");
         construction.verifyQueue(List.of("BLACKSMITHS_SHOP", "WAREHOUSE"),
                 List.of(0, 1), 64);
         construction.verifyStatus("Waiting for tools: 1.");
 
         // Continue, opening and rebuilding the report add no reminder.
-        game = colony.close();
+        game = colony.closeWithEscape();
         ScreenTurnReport restoredReport = game.openTurnReport();
         restoredReport.verifyEventMessageCount(WAITING_NOTICE, 1);
         restoredReport.close();
@@ -161,7 +161,7 @@ public class TC_32_F24_construction_eligibility_test
         repeatedReport.verifyOpenColonyAction(COLONY_ID, "Open colony");
         repeatedReport.close();
         game = GamePage.of(getContext());
-        colony = game.openColonyAt(COLONY, "New Amsterdam");
+        colony = game.openColonyWithKeyboard(0, "New Amsterdam");
         construction.verifyQueue(List.of("BLACKSMITHS_SHOP", "WAREHOUSE"),
                 List.of(0, 1), 70);
         construction.verifyStocksAndPopulation(70, 19, 4);
@@ -173,22 +173,22 @@ public class TC_32_F24_construction_eligibility_test
         colony.dragGoodsFromShipCargoSlotToWarehouse(0, 14);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 20));
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 0);
-        game = colony.close();
+        game = colony.closeWithEscape();
         game.nextTurnAndCloseDialogs();
-        colony = game.openColonyAt(COLONY, "New Amsterdam");
+        colony = game.openColonyWithKeyboard(0, "New Amsterdam");
         construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), 12);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_HOUSE, 0);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 1);
-        construction.open();
+        construction.openWithKeyboard();
         // Adam Smith is still required even with the predecessor completed.
         construction.verifyProjectOffered("IRON_WORKS", false);
-        construction.escape();
+        construction.cancel();
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 0));
         construction.verifyStatus("Construction in progress.");
-        game = colony.close();
+        game = colony.closeWithEscape();
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        colony = game.openColonyAt(COLONY, "New Amsterdam");
+        colony = game.openColonyWithKeyboard(0, "New Amsterdam");
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 1);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 0));
         construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), 12);
@@ -200,18 +200,18 @@ public class TC_32_F24_construction_eligibility_test
         // Finish the mill through construction before its wagon offer becomes
         // available.
         ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
-                .openColonyAt(COLONY, "New Amsterdam");
+                .openColonyWithKeyboard(0, "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
-        construction.open();
+        construction.openWithKeyboard();
         construction.select("LUMBER_MILL");
         construction.confirm();
         construction.cancel();
         construction.verifyPickerClosed();
-        GamePage game = colony.close();
+        GamePage game = colony.closeWithEscape();
         game.nextTurnAndCloseDialogs();
-        colony = game.openColonyAt(COLONY, "New Amsterdam");
+        colony = game.openColonyWithKeyboard(0, "New Amsterdam");
         construction.verifyBuilding(ConstructionType.LUMBER_MILL, 1);
-        construction.open();
+        construction.openWithKeyboard();
         construction.select("WAGON");
         construction.confirm();
         construction.select("WAREHOUSE");
@@ -227,13 +227,13 @@ public class TC_32_F24_construction_eligibility_test
                 9);
         construction.cancel();
         construction.verifyPickerClosed();
-        game = colony.close();
+        game = colony.closeWithEscape();
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        colony = game.openColonyAt(COLONY, "New Amsterdam");
+        colony = game.openColonyWithKeyboard(0, "New Amsterdam");
         construction.verifyQueue(List.of("WAGON", "WAREHOUSE"), List.of(0, 1),
                 9);
-        construction.open();
+        construction.openWithKeyboard();
         construction.selectQueue(0);
         construction.remove();
         construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), 9);
@@ -247,10 +247,10 @@ public class TC_32_F24_construction_eligibility_test
     void TC_04_stale_population_requires_a_new_selection() throws Exception {
         // Simulate an external workforce change after the player reviews the
         // offer.
-        WelcomePage.of(getContext()).loadGame().openColonyAt(COLONY,
+        WelcomePage.of(getContext()).loadGame().openColonyWithKeyboard(0,
                 "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
-        construction.open();
+        construction.openWithKeyboard();
         construction.select("LUMBER_MILL");
         construction.verifyOffer(true, "Available.", 52, 0);
         getContext().getRobot().interact(
@@ -282,7 +282,7 @@ public class TC_32_F24_construction_eligibility_test
                 "construction-czech.png");
         construction.confirmWithKeyboard();
         construction.verifyQueue(List.of("LUMBER_MILL"), List.of(0), 58);
-        construction.escape();
+        construction.cancel();
         construction.verifyPickerClosed();
         construction.verifyResourceProgress("constructionTools", "Není potřeba",
                 "", "", 0, false);
@@ -297,10 +297,10 @@ public class TC_32_F24_construction_eligibility_test
             throws Exception {
         // Loading another model while the picker is open invalidates its
         // selection.
-        WelcomePage.of(getContext()).loadGame().openColonyAt(COLONY,
+        WelcomePage.of(getContext()).loadGame().openColonyWithKeyboard(0,
                 "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
-        construction.open();
+        construction.openWithKeyboard();
         construction.select("LUMBER_MILL");
         org.akropia.model.Model previous = getModel();
         final File save = org.akropia.page.PlayerSaveFixture
@@ -312,7 +312,7 @@ public class TC_32_F24_construction_eligibility_test
         construction.confirm();
         construction.verifyChangedOffer();
         construction.verifyReplacedModelUnchanged(previous);
-        construction.escape();
+        construction.cancel();
         construction.verifyPickerClosed();
     }
 
@@ -345,16 +345,16 @@ public class TC_32_F24_construction_eligibility_test
                         .loadFile(org.mockito.ArgumentMatchers.any(File.class)))
                 .thenReturn(paused);
         ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
-                .openColonyAt(COLONY, "New Amsterdam");
+                .openColonyWithKeyboard(0, "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
         construction.verifyStatus("Requires: Blacksmith shop.");
         construction.verifyQueue(List.of("IRON_WORKS"), List.of(9), 240);
         construction.verifyStocksAndPopulation(240, 100, 3);
         // A real turn must preserve progress and tools while reporting the
         // missing shop.
-        GamePage game = colony.close();
+        GamePage game = colony.closeWithEscape();
         game.nextTurnAndCloseDialogs();
-        colony = game.openColonyAt(COLONY, "New Amsterdam");
+        colony = game.openColonyWithKeyboard(0, "New Amsterdam");
         construction.verifyStatus("Requires: Blacksmith shop.");
         construction.verifyQueue(List.of("IRON_WORKS"), List.of(9), 243);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 100));
@@ -369,15 +369,15 @@ public class TC_32_F24_construction_eligibility_test
         SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();
         GamePage game = settings.goBack().loadGame();
-        ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
+        ColonyScreen colony = game.openColonyWithKeyboard(0, "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
         construction.assignCarpenter(4);
-        construction.open();
+        construction.openWithKeyboard();
         construction.select("BLACKSMITHS_SHOP");
         construction.confirm();
         construction.cancel();
         construction.verifyPickerClosed();
-        game = colony.close();
+        game = colony.closeWithEscape();
         Optional<ScreenTurnReport> report = game.nextTurn();
 
         // The Czech report names colony, project and shortage, and the mouse
@@ -402,15 +402,15 @@ public class TC_32_F24_construction_eligibility_test
             throws Exception {
         // Produce the missing-tools report for a waiting shop.
         GamePage game = WelcomePage.of(getContext()).loadGame();
-        ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
+        ColonyScreen colony = game.openColonyWithKeyboard(0, "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
         construction.assignCarpenter(4);
-        construction.open();
+        construction.openWithKeyboard();
         construction.select("BLACKSMITHS_SHOP");
         construction.confirm();
         construction.cancel();
         construction.verifyPickerClosed();
-        game = colony.close();
+        game = colony.closeWithEscape();
         Optional<ScreenTurnReport> report = game.nextTurn();
         game.verifyTurnReportPresent(report);
         ScreenTurnReport turnReport = report.get();
@@ -443,15 +443,15 @@ public class TC_32_F24_construction_eligibility_test
             throws Exception {
         // Produce the missing-tools report for a waiting shop.
         GamePage game = WelcomePage.of(getContext()).loadGame();
-        ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
+        ColonyScreen colony = game.openColonyWithKeyboard(0, "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
         construction.assignCarpenter(4);
-        construction.open();
+        construction.openWithKeyboard();
         construction.select("BLACKSMITHS_SHOP");
         construction.confirm();
         construction.cancel();
         construction.verifyPickerClosed();
-        game = colony.close();
+        game = colony.closeWithEscape();
         Optional<ScreenTurnReport> report = game.nextTurn();
         game.verifyTurnReportPresent(report);
         ScreenTurnReport turnReport = report.get();
@@ -481,9 +481,9 @@ public class TC_32_F24_construction_eligibility_test
             throws Exception {
         // Unavailable population still blocks an otherwise visible project.
         ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
-                .openColonyAt(COLONY, "New Amsterdam");
+                .openColonyWithKeyboard(0, "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
-        construction.open();
+        construction.openWithKeyboard();
         construction.verifyCompactEditor();
         construction.doubleClickProject("BLACKSMITHS_SHOP");
         construction.verifyQueue(List.of(), List.of(), 58);
@@ -495,12 +495,12 @@ public class TC_32_F24_construction_eligibility_test
         construction.doubleClickQueue("LUMBER_MILL");
         construction.verifyQueue(List.of(), List.of(), 58);
         construction.doubleClickProject("LUMBER_MILL");
-        construction.escape();
-        GamePage game = colony.close();
+        construction.cancel();
+        GamePage game = colony.closeWithEscape();
         game.nextTurnAndCloseDialogs();
-        game.openColonyAt(COLONY, "New Amsterdam");
+        game.openColonyWithKeyboard(0, "New Amsterdam");
         construction.verifyBuilding(ConstructionType.LUMBER_MILL, 1);
-        construction.open();
+        construction.openWithKeyboard();
         construction.doubleClickProject("WAGON");
         construction.doubleClickProject("WAREHOUSE");
         construction.verifyQueue(List.of("WAGON", "WAREHOUSE"), List.of(0, 1),
@@ -510,7 +510,7 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), 9);
         construction.doubleClickQueue("WAREHOUSE");
         construction.verifyQueue(List.of(), List.of(), 9);
-        construction.escape();
+        construction.cancel();
         construction.verifyPickerClosed();
     }
 

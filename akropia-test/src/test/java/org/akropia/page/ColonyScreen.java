@@ -238,6 +238,11 @@ public class ColonyScreen extends AbstractScreen {
     }
 
     /** Leave the colony screen with the Escape key, as a player would. */
+    public void verifyClosed() {
+        assertTrue(getNodeFinder().lookup("#colonyName").tryQuery().isEmpty(),
+                "Escape must leave the entire colony screen");
+    }
+
     public GamePage closeWithEscape() {
         getRobot().push(javafx.scene.input.KeyCode.ESCAPE);
         WaitForAsyncUtils.waitForFxEvents();

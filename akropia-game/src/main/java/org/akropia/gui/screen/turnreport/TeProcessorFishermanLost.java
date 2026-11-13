@@ -19,11 +19,12 @@ public final class TeProcessorFishermanLost extends AbstractTeProcessor
             return null;
         }
         final TurnEventFishermanLost lost = (TurnEventFishermanLost) event;
-        return new TeItemSimple(getI18n().get(
+        return new TeItemColony(getI18n().get(
                 lost.getReason() == TurnEventFishermanLost.Reason.NO_CARGO_SPACE
                         ? TurnEvents.fishermanLostCargo
                         : TurnEvents.fishermanLostLand,
                 lost.getUnitId(), lost.getColonyName(),
-                lost.getLocation().getX(), lost.getLocation().getY()));
+                lost.getLocation().getX(), lost.getLocation().getY()),
+                lost.getColonyId());
     }
 }

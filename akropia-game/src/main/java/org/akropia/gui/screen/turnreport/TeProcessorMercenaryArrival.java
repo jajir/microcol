@@ -23,8 +23,8 @@ public final class TeProcessorMercenaryArrival extends AbstractTeProcessor
     public TeItemSimple apply(TurnEvent event) {
         if (event instanceof TurnEventMercenaryArrival) {
             TurnEventMercenaryArrival arrival = (TurnEventMercenaryArrival) event;
-            return new TeItemSimple(getI18n().get(TurnEvents.mercenaryArrived,
-                    arrival.getColonyName()));
+            return new TeItemColony(getI18n().get(TurnEvents.mercenaryArrived,
+                    arrival.getColonyName()), arrival.getColonyId());
         }
         return null;
     }

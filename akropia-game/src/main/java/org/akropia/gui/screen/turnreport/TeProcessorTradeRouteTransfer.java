@@ -35,18 +35,21 @@ public final class TeProcessorTradeRouteTransfer extends AbstractTeProcessor
         final int stop = transfer.getStopIndex() + 1;
         final int amount = transfer.getGoods().getAmount();
         if (transfer.isEurope()) {
-            return new TeItemSimple(getI18n().get(
+            return new TeItemEurope(getI18n().get(
                     transfer.isUnload() ? TurnEvents.tradeRouteSold
                             : TurnEvents.tradeRouteBought,
                     transfer.getRouteName(), carrier, transfer.getCarrierId(),
                     stop, amount, goods,
                     String.format("%+d", transfer.getGoldChange())));
         }
-        return new TeItemSimple(getI18n().get(
-                transfer.isUnload() ? TurnEvents.tradeRouteUnloaded
-                        : TurnEvents.tradeRouteLoaded,
-                transfer.getRouteName(), carrier, transfer.getCarrierId(), stop,
-                transfer.getColonyName().orElseThrow(), amount, goods));
+        return new TeItemColony(
+                getI18n().get(
+                        transfer.isUnload() ? TurnEvents.tradeRouteUnloaded
+                                : TurnEvents.tradeRouteLoaded,
+                        transfer.getRouteName(), carrier,
+                        transfer.getCarrierId(), stop,
+                        transfer.getColonyName().orElseThrow(), amount, goods),
+                transfer.getColonyId().orElseThrow());
     }
 
 }

@@ -21,10 +21,10 @@ public final class TeProcessorDiplomacy extends AbstractTeProcessor
             TurnEventDiplomacy notice = (TurnEventDiplomacy) event;
             switch (notice.getKind()) {
             case CROWN_WAR:
-                return new TeItemSimple(getI18n().get(Stats.turnCrownWar,
+                return new TeItemEurope(getI18n().get(Stats.turnCrownWar,
                         notice.getRivalName()));
             case CROWN_WAR_ALLIANCE_ENDED:
-                return new TeItemSimple(getI18n().get(
+                return new TeItemEurope(getI18n().get(
                         Stats.turnCrownWarAlliance, notice.getRivalName()));
             default:
                 return new TeItemSimple(getI18n().get(Stats.turnAllyDefense,

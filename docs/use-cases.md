@@ -1526,3 +1526,15 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
    dostupná ve své konfiguraci i zkratkou C; TC_118 ověřuje přiřazení dopravce.
 3. Pravidla ovládání vlastní [UX](ux.md#spodni-karty-kolonie-13-listopadu-2026);
    skutečné výsledky patří do [funkční evidence](functional-tests.md).
+
+### Navigation shortcuts — 2026-11-13
+
+1. UC-013/016 destination selection adds double-click confirmation in TC103;
+   TC195/06 checks Escape from both colony sections. TC203 and TC180 cover
+   home-port and colony report navigation. Existing gameplay assertions remain.
+   [Acceptance evidence](functional-tests.md#navigation-shortcuts-2026-11-13)
+   distinguishes implementation from completed checks.
+
+2. TC116/08 checks the map/planner toggle against the common header/footer
+   content edge after resizing to wide and narrow windows. This verifies the
+   requested maximum-width alignment in both modes.

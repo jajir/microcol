@@ -21,12 +21,14 @@ public final class TeProcessorEducation extends AbstractTeProcessor
         if (!(event instanceof TurnEventEducationCompleted))
             return null;
         TurnEventEducationCompleted step = (TurnEventEducationCompleted) event;
-        return new TeItemSimple(getI18n().get(
-                step.isWorkExperience() ? EducationText.learned
-                        : EducationText.graduated,
-                step.getColonyName(), step.getStudentId(),
-                name(step.getBeforeType(), step.wasVeteran()),
-                name(step.getAfterType(), step.isVeteran())));
+        return new TeItemColony(
+                getI18n().get(
+                        step.isWorkExperience() ? EducationText.learned
+                                : EducationText.graduated,
+                        step.getColonyName(), step.getStudentId(),
+                        name(step.getBeforeType(), step.wasVeteran()),
+                        name(step.getAfterType(), step.isVeteran())),
+                step.getColonyId());
     }
 
     private String name(UnitType type, boolean veteran) {

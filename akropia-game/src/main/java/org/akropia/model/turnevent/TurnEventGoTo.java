@@ -26,6 +26,8 @@ public final class TurnEventGoTo extends AbstractTurnEvent {
     private final int unitId;
     private final UnitType unitType;
     private final String destinationName;
+    private Integer colonyId;
+    private boolean europe;
 
     public TurnEventGoTo(final String playerName, final Kind kind,
             final int unitId, final UnitType unitType,
@@ -38,6 +40,24 @@ public final class TurnEventGoTo extends AbstractTurnEvent {
         this.unitId = unitId;
         this.unitType = unitType;
         this.destinationName = destinationName;
+    }
+
+    public TurnEventGoTo destination(final Integer colonyId,
+            final boolean europe) {
+        Preconditions.checkArgument(
+                colonyId == null || colonyId >= 0 && !europe,
+                "Invalid notice destination");
+        this.colonyId = colonyId;
+        this.europe = europe;
+        return this;
+    }
+
+    public Integer getColonyId() {
+        return colonyId;
+    }
+
+    public boolean isEurope() {
+        return europe;
     }
 
     public Kind getKind() {
@@ -65,6 +85,8 @@ public final class TurnEventGoTo extends AbstractTurnEvent {
         po.setGoToUnitId(unitId);
         po.setGoToUnitType(unitType);
         po.setGoToDestinationName(destinationName);
+        po.setColonyId(colonyId);
+        po.setGoToEurope(europe);
         return po;
     }
 
@@ -79,6 +101,7 @@ public final class TurnEventGoTo extends AbstractTurnEvent {
                 "Incomplete go-to event");
         return new TurnEventGoTo(po.getPlayerName(),
                 Kind.valueOf(po.getGoToKind()), po.getGoToUnitId(),
-                po.getGoToUnitType(), po.getGoToDestinationName());
+                po.getGoToUnitType(), po.getGoToDestinationName())
+                .destination(po.getColonyId(), po.isGoToEurope());
     }
 }

@@ -420,11 +420,6 @@ public final class ColonyLayoutPage extends AbstractScreen {
         }
     }
 
-    public void escapeEditor() {
-        getRobot().push(javafx.scene.input.KeyCode.ESCAPE);
-        WaitForAsyncUtils.waitForFxEvents();
-    }
-
     public void placeCarrierAtColony(int carrier, int colony) {
         getRobot().interact(
                 () -> getModel().getUnitById(carrier).placeToLocation(getModel()

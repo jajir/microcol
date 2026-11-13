@@ -46,11 +46,31 @@ public class TC_203_F235_ship_voyage_notices_test extends AbstractAkropiaTest {
         final ScreenTurnReport report = game.openTurnReport();
         report.verifyCompletedHomeVoyage(3, false);
         report.verifyEventMessageCount("#3 arrived", 1);
-        report.close();
+        report.verifyOpenEuropeAction("Open Home port");
+        report.openEuropeWithMouse().close();
         // Opening the report again reads the same result without generating a
         // duplicate.
         final ScreenTurnReport reopened = game.openTurnReport();
         reopened.verifyEventMessageCount("#3 arrived", 1);
         reopened.close();
     }
+
+    @Test
+    @Tag("local")
+    void TC_03_colony_notices_keep_links_after_renaming_and_loading()
+            throws Exception {
+        // Saved arrival, repair and famine notices retain the original colony
+        // identity.
+        ShipVoyageNoticeFixture.prepareColonyNotices(getContext(), SOURCE);
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final ScreenTurnReport report = game.openTurnReport();
+        report.verifyColonyNoticeActions(0, 3);
+        report.verifyOpenColonyAction(0, "Open colony");
+        // The historical name never redirects the action to a different colony.
+        report.openColonyWithMouse(0, "Renamed port").closeWithEscape();
+        final ScreenTurnReport reopened = game.openTurnReport();
+        reopened.verifyColonyNoticeActions(0, 3);
+        reopened.close();
+    }
+
 }

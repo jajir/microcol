@@ -121,7 +121,8 @@ public abstract class Ship extends UnitWithCargo {
             if (manualVoyage) {
                 model.addTurnEvent(TurnEventProvider.getGoToOrder(getOwner(),
                         org.akropia.model.turnevent.TurnEventGoTo.Kind.ARRIVED_EUROPE,
-                        getId(), getType(), "Home port"));
+                        getId(), getType(), "Home port")
+                        .destination(null, true));
             }
             model.getTurnEventStore()
                     .add(TurnEventProvider.getShipComeEuropePort(getOwner()));
@@ -157,7 +158,18 @@ public abstract class Ship extends UnitWithCargo {
                                     + departureLocation.getY()));
             model.addTurnEvent(TurnEventProvider.getGoToOrder(getOwner(),
                     org.akropia.model.turnevent.TurnEventGoTo.Kind.RETURN_BLOCKED,
-                    getId(), getType(), target));
+                    getId(), getType(), target)
+                    .destination(model.getGoToDestination(this)
+                            .flatMap(location -> model.getColoniesAt(location,
+                                    getOwner()))
+                            .map(org.akropia.model.Colony::getId)
+                            .orElseGet(() -> model.getTradeRouteAssignment(this)
+                                    .map(assignment -> assignment.getStops()
+                                            .get(assignment.getStopIndex()))
+                                    .filter(stop -> !stop.isEurope())
+                                    .map(org.akropia.model.TradeRouteStop::getColonyId)
+                                    .orElse(null)),
+                            false));
         }
         // An occupied map square leaves the ship at zero for a later retry.
     }

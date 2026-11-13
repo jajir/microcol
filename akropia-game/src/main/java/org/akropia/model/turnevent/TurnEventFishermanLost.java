@@ -15,28 +15,33 @@ public final class TurnEventFishermanLost extends AbstractTurnEvent {
     private final int unitId;
     private final Location location;
     private final String colonyName;
+    private final int colonyId;
     private final Reason reason;
 
     public TurnEventFishermanLost(final Unit unit, final Colony colony,
             final Reason reason) {
         this(unit.getOwner().getName(), unit.getId(), unit.getLocation(),
-                colony.getName(), reason);
+                colony.getId(), colony.getName(), reason);
     }
 
     private TurnEventFishermanLost(final String owner, final Integer unitId,
-            final Location location, final String colonyName,
-            final Reason reason) {
+            final Location location, final int colonyId,
+            final String colonyName, final Reason reason) {
         super(owner);
-        Preconditions
-                .checkArgument(
-                        unitId != null && unitId >= 0 && location != null
-                                && colonyName != null && !colonyName.isBlank()
-                                && reason != null,
-                        "Invalid fisherman loss notice");
+        Preconditions.checkArgument(
+                unitId != null && unitId >= 0 && colonyId >= 0
+                        && location != null && colonyName != null
+                        && !colonyName.isBlank() && reason != null,
+                "Invalid fisherman loss notice");
         this.unitId = unitId;
         this.location = location;
         this.colonyName = colonyName;
+        this.colonyId = colonyId;
         this.reason = reason;
+    }
+
+    public int getColonyId() {
+        return colonyId;
     }
 
     public int getUnitId() {
@@ -65,6 +70,7 @@ public final class TurnEventFishermanLost extends AbstractTurnEvent {
         out.setClearedX(location.getX());
         out.setClearedY(location.getY());
         out.setColonyName(colonyName);
+        out.setColonyId(colonyId);
         return out;
     }
 
@@ -79,6 +85,8 @@ public final class TurnEventFishermanLost extends AbstractTurnEvent {
         return new TurnEventFishermanLost(po.getPlayerName(),
                 po.getFishermanUnitId(),
                 Location.of(po.getClearedX(), po.getClearedY()),
+                Preconditions.checkNotNull(po.getColonyId(),
+                        "Missing colony id"),
                 po.getColonyName(),
                 Reason.valueOf(po.getFishermanLossReason()));
     }

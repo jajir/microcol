@@ -283,14 +283,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         overview.getChildren().add(card);
     }
 
-    boolean closeEditor() {
-        if ("construction".equals(selected) || "school".equals(selected)) {
-            selectSection("area");
-            return true;
-        }
-        return false;
-    }
-
     private void selectSection(final String key) {
         if (key.equals(selected) && !detail.getChildren().isEmpty())
             return;

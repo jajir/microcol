@@ -118,7 +118,7 @@ public class TC_22_F15_free_play_capability_audit_test
         construction.select("BLACKSMITHS_SHOP");
         construction.verifyOffer(false, "Requires 4 residents; currently 2.",
                 64, 20);
-        construction.escape();
+        construction.cancel();
         construction.verifyPickerClosed();
         colony.close();
     }

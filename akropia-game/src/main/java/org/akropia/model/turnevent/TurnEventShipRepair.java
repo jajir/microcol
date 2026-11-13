@@ -20,6 +20,7 @@ public final class TurnEventShipRepair extends AbstractTurnEvent {
     private final UnitType shipType;
     private final String destinationName;
     private final boolean europeDestination;
+    private Integer colonyId;
     private final int lostPassengers;
     private final List<Goods> lostGoods;
 
@@ -42,6 +43,18 @@ public final class TurnEventShipRepair extends AbstractTurnEvent {
         this.europeDestination = europeDestination;
         this.lostPassengers = lostPassengers;
         this.lostGoods = ImmutableList.copyOf(lostGoods);
+    }
+
+    public TurnEventShipRepair atColony(final Integer colonyId) {
+        Preconditions.checkArgument(
+                colonyId == null || colonyId >= 0 && !europeDestination,
+                "Invalid repair notice destination");
+        this.colonyId = colonyId;
+        return this;
+    }
+
+    public Integer getColonyId() {
+        return colonyId;
     }
 
     public Kind getKind() {
@@ -82,6 +95,7 @@ public final class TurnEventShipRepair extends AbstractTurnEvent {
         po.setRepairShipType(shipType);
         po.setRepairDestinationName(destinationName);
         po.setRepairEuropeDestination(europeDestination);
+        po.setColonyId(colonyId);
         po.setRepairLostPassengers(lostPassengers);
         po.setRepairLostGoods(lostGoods);
         return po;
@@ -101,6 +115,6 @@ public final class TurnEventShipRepair extends AbstractTurnEvent {
                 Kind.valueOf(po.getRepairKind()), po.getRepairShipId(),
                 po.getRepairShipType(), po.getRepairDestinationName(),
                 po.isRepairEuropeDestination(), po.getRepairLostPassengers(),
-                po.getRepairLostGoods());
+                po.getRepairLostGoods()).atColony(po.getColonyId());
     }
 }

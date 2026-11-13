@@ -4,12 +4,14 @@
 
 1. Přepínač běžné mapy a plánování obchodních tras sleduje levou hranu
    nadpisu a obsahu stavového řádku, také při změně šířky okna. V obou
-   režimech zůstává nahoře nad mapou na stejném místě.
+   režimech zůstává nahoře nad mapou na stejném místě. Řídí se společným
+   maximem obsahu lišt 1440 logických pixelů, nikoli levým okrajem celé mapy.
 2. Při najetí myší stavový řádek vysvětlí přechod do plánovače, případně
    návrat na běžnou mapu, a uvede aktuálně nastavenou zkratku přepnutí.
    Prohlížení tras nezadává rozkazy ani nemění herní stav.
 3. Jde o schválenou úpravu ovládání, nikoli hráčskou studii. Ověření vede
-   [funkční evidence](functional-tests.md#map-toggle-alignment-2026-11-13).
+   [původní funkční evidence](functional-tests.md#map-toggle-alignment-2026-11-13)
+   a [kontrola změny šířky okna](functional-tests.md#navigation-shortcuts-2026-11-13).
 
 
 ## Odmítnutí změny práce v kolonii — 2026-11-13
@@ -41,7 +43,8 @@ vždy dostupný. Zobrazení se přepočítá při překreslení i při otevřen�
    Před zadáním jiného studenta stejnému učiteli je nutné jeho kurz zrušit.
    Průběh a pozastavení jsou u příslušného sloupce, nikoli v dalším seznamu.
    Samostatná tlačítka Assign teaching, zrušení a Close nejsou součástí panelu.
-   Escape nebo jiná karta ponechá aktuální výuku a zavře podrobný panel.
+   Jiná karta ponechá aktuální výuku a přepne podrobný panel.
+   Escape zavře celý detail kolonie a vrátí hráče na mapu.
 5. Construction se otevírá záhlavím, oba stavební seznamy mají vlastní plochu
    a vstupy sdílí papírový vzhled. Kliknutí na pracovníka v mapce okolí zachová
    focus mapky a pozici posuvníku; Enter nadále umožní přejít na volbu produkce.
@@ -58,7 +61,8 @@ vždy dostupný. Zobrazení se přepočítá při překreslení i při otevřen�
    jednou přidá na konec fronty; dvojklik ve frontě odebere právě tuto položku.
    Potvrzení, odebrání a řazení zůstávají také tlačítky. Podrobný panel nemá
    opakovaný nadpis Construction — kolonie ani tlačítko Close / cancel selection;
-   Escape nebo výběr jiné karty jej nadále zavře bez zrušení fronty.
+   Výběr jiné karty přepne panel bez zrušení fronty; Escape zavře celý detail
+kolonie. Vnitřní panely Construction a School Escape nezachytávají.
 8. Detail vybraného pole doplňuje základní cenu vstupu v bodech pohybu,
    obranný bonus terénu a přítomný les, zorání, cestu, řeku a zvláštní zdroj.
    Základní cena není počet tahů konkrétní jednotky; propojená cesta cenu
@@ -1536,3 +1540,21 @@ souhrnnými kartami a jejich podrobným panelem. Prostorové odsazení,
 výběr karet, pořadí stavby a zavření detailu klávesou Escape zůstávají zachované.
 3. Jde o úpravu prezentace podle uživatelského zadání, nikoli o hráčskou
 studii. Ověření sleduje [funkční evidence](functional-tests.md#page-separators-2026-11-13).
+
+## Rychlý výběr cíle a navigace z hlášení — 13. listopadu 2026
+
+1. Ve výběru cíle jednotky jedno kliknutí označí kolonii nebo domovský přístav.
+   Dvojklik levým tlačítkem na volbu nebo její popisek ji rovnou potvrdí stejně
+   jako Go. Zrušit a Escape v tomto dialogu stále nic neobjednají.
+2. Hlášení, které uvádí vlastní kolonii nebo domovský přístav, nabízí vedle
+   zprávy tlačítko pro otevření tohoto místa. Platí i pro hlad, výuku,
+   obchod, posily, ztrátu rybáře, plavbu a opravu lodí. Identita kolonie
+   v nových hlášeních o plavbě, opravě a rybáři se ukládá se zprávou.
+3. Otevření místa nic nespotřebuje. Zničená nebo již nevlastněná kolonie
+   nenabízí vstup do soukromého detailu; staré hlášení jiné partie nesmí
+   otevřít kolonii současné partie. Hlášení samotného návratu na souřadnice
+   oceánu nemá cíl kolonie.
+4. Escape z Construction i School zavře celý detail kolonie. Výrobní fronta
+   a výuka zůstávají zachovány. Samostatné modální dialogy si zachovávají
+   vlastní zrušení pomocí Escape.
+5. Stav skutečného ověření uvádí [testová evidence](functional-tests.md#navigation-shortcuts-2026-11-13).

@@ -39,6 +39,7 @@ public final class TurnEventPo {
     private Integer goToUnitId;
     private UnitType goToUnitType;
     private String goToDestinationName;
+    private boolean goToEurope;
 
     public String getRepairKind() {
         return repairKind;
@@ -118,6 +119,14 @@ public final class TurnEventPo {
 
     public void setGoToUnitType(UnitType value) {
         goToUnitType = value;
+    }
+
+    public boolean isGoToEurope() {
+        return goToEurope;
+    }
+
+    public void setGoToEurope(final boolean value) {
+        goToEurope = value;
     }
 
     public String getGoToDestinationName() {

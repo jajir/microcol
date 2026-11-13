@@ -92,6 +92,17 @@ public final class GoToColonyDialog extends AbstractMessageWindow {
                     (TradeRouteStop) group.getSelectedToggle().getUserData());
             close();
         });
+        group.getToggles().forEach(toggle -> {
+            final RadioButton choice = (RadioButton) toggle;
+            choice.setOnMouseClicked(event -> {
+                if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY
+                        && event.getClickCount() == 2) {
+                    choice.setSelected(true);
+                    confirm.fire();
+                    event.consume();
+                }
+            });
+        });
         buttons.getButtonNo().setOnAction(event -> onCancelDialog());
         root.getChildren().add(buttons.getContent());
         init(root);

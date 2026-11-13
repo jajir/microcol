@@ -248,6 +248,24 @@ public final class TradeRoutePlanningPage extends AbstractScreen {
                 getButtonById("tradeRoutePlanningToggle").getText());
     }
 
+    public void verifyToggleSharesContentEdge(final boolean wideWindow) {
+        final Node toggle = getButtonById("tradeRoutePlanningToggle");
+        final Node heading = getNodeFinder().lookup("#mapHeading").query();
+        final Node status = getNodeFinder().lookup("#description").query();
+        final double left = heading.localToScene(heading.getLayoutBounds())
+                .getMinX();
+        assertEquals(left,
+                toggle.localToScene(toggle.getLayoutBounds()).getMinX(), 1,
+                "The map mode switch follows the heading after resizing");
+        assertEquals(left,
+                status.localToScene(status.getLayoutBounds()).getMinX(), 1,
+                "The heading, switch and status content share one left edge");
+        if (wideWindow) {
+            assertTrue(left > 80,
+                    "Wide windows retain the centered maximum content width");
+        }
+    }
+
     /** The switch follows the heading while remaining at the top of the map. */
     public void verifyToggleInMapCorner() {
         final Button toggle = getButtonById("tradeRoutePlanningToggle");

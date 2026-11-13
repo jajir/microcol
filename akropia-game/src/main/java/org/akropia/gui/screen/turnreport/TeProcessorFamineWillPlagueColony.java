@@ -23,7 +23,8 @@ public class TeProcessorFamineWillPlagueColony extends AbstractTeProcessor
     public TeItemSimple apply(final TurnEvent turnEvent) {
         if (turnEvent instanceof TurnEventFamineWillPlagueColony) {
             final TurnEventFamineWillPlagueColony te = (TurnEventFamineWillPlagueColony) turnEvent;
-            return new TeItemSimple(getMessage(te.getColonyName()));
+            return new TeItemColony(getMessage(te.getColonyName()),
+                    te.getColonyId());
         }
         return null;
     }

@@ -272,8 +272,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         // A named port is reached through the ordinary movement rules exactly
         // once.
         goTo.openDestinationWithG();
-        goTo.chooseColony(0);
-        goTo.confirmColonyChoice();
+        goTo.doubleClickDestination("goto-colony-0");
         goTo.waitUntilUnitIsAt(3, GoToFixture.COLONY);
         goTo.verifyNoDestination(3);
         ScreenTurnReport report = game.openTurnReport();
@@ -303,8 +302,7 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         game.panToTile(Location.of(50, 15));
         game.selectTile(Location.of(50, 15));
         goTo.openDestinationWithG();
-        goTo.chooseEurope();
-        goTo.confirmColonyChoice();
+        goTo.doubleClickDestination("goto-europe");
         goTo.waitForHighSea(3);
         goTo.verifyEuropeVoyage(3);
         // Loading at sea retains the order without announcing arrival.

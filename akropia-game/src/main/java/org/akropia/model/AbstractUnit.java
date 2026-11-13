@@ -1833,9 +1833,10 @@ public abstract class AbstractUnit implements Unit {
         setAction(UnitActionType.noAction.make());
         if (goTo != null) {
             // A damaged ship cannot sail; the order ends with a reason.
-            model.addTurnEvent(TurnEventProvider.getGoToOrder(owner,
-                    TurnEventGoTo.Kind.CANCELLED_DAMAGED, id, getType(),
-                    goTo.getDestinationName()));
+            model.addTurnEvent(TurnEventProvider
+                    .getGoToOrder(owner, TurnEventGoTo.Kind.CANCELLED_DAMAGED,
+                            id, getType(), goTo.getDestinationName())
+                    .destination(goTo.getColonyId(), goTo.isEurope()));
             goTo = null;
         }
     }
@@ -2847,9 +2848,10 @@ public abstract class AbstractUnit implements Unit {
             if (!goTo.isEurope()
                     && getLocation().equals(goTo.getDestination())) {
                 if (isShip() && goTo.getColonyId() != null) {
-                    model.addTurnEvent(TurnEventProvider.getGoToOrder(owner,
-                            TurnEventGoTo.Kind.ARRIVED, id, getType(),
-                            goTo.getDestinationName()));
+                    model.addTurnEvent(TurnEventProvider
+                            .getGoToOrder(owner, TurnEventGoTo.Kind.ARRIVED, id,
+                                    getType(), goTo.getDestinationName())
+                            .destination(goTo.getColonyId(), goTo.isEurope()));
                 }
                 goTo = null;
                 break;
@@ -2881,9 +2883,10 @@ public abstract class AbstractUnit implements Unit {
         if (goTo != null) {
             goTo.setPaused(blocked);
             if (blocked && !wasPaused) {
-                model.addTurnEvent(TurnEventProvider.getGoToOrder(owner,
-                        TurnEventGoTo.Kind.PAUSED, id, getType(),
-                        goTo.getDestinationName()));
+                model.addTurnEvent(TurnEventProvider
+                        .getGoToOrder(owner, TurnEventGoTo.Kind.PAUSED, id,
+                                getType(), goTo.getDestinationName())
+                        .destination(goTo.getColonyId(), goTo.isEurope()));
             }
         }
         if (!walked.isEmpty()) {
@@ -3009,8 +3012,10 @@ public abstract class AbstractUnit implements Unit {
     }
 
     private void cancelGoToWithNotice(final TurnEventGoTo.Kind kind) {
-        model.addTurnEvent(TurnEventProvider.getGoToOrder(owner, kind, id,
-                getType(), goTo.getDestinationName()));
+        model.addTurnEvent(TurnEventProvider
+                .getGoToOrder(owner, kind, id, getType(),
+                        goTo.getDestinationName())
+                .destination(goTo.getColonyId(), goTo.isEurope()));
         goTo = null;
     }
 

@@ -104,6 +104,11 @@ public final class GoToPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void doubleClickDestination(final String destinationId) {
+        getRobot().doubleClickOn("#" + destinationId);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public void confirmColonyChoice() {
         clickOnButtonWithId("goto-colony-confirm");
         WaitForAsyncUtils.waitForFxEvents();

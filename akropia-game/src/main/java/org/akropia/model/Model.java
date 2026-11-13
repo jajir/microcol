@@ -3125,7 +3125,9 @@ public class Model {
                 .add(new org.akropia.model.turnevent.TurnEventShipRepair(
                         ship.getOwner().getName(), kind, ship.getId(),
                         ship.getType(), destinationName,
-                        repair.isEuropeDestination(), passengers, goods));
+                        repair.isEuropeDestination(), passengers, goods)
+                        .atColony(repair.isEuropeDestination() ? null
+                                : repair.getDestinationColonyId()));
     }
 
     /**

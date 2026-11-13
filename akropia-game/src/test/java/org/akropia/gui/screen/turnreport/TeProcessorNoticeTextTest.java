@@ -227,4 +227,63 @@ class TeProcessorNoticeTextTest {
         verifyOpensColony(czech);
     }
 
+    @Test
+    void travelAndRepairLinksRetainDestinationIdentityAfterSave() {
+        final I18n language = i18n(Locale.ROOT);
+        final var colonyArrival = new org.akropia.model.turnevent.TurnEventGoTo(
+                "Dutch", org.akropia.model.turnevent.TurnEventGoTo.Kind.ARRIVED,
+                3, UnitType.MERCHANTMAN, "Delft").destination(7, false);
+        verifyOpensColony(new TeProcessorGoTo(language)
+                .apply(org.akropia.model.turnevent.TurnEventGoTo
+                        .tryLoad(colonyArrival.save())));
+        final var homeArrival = new org.akropia.model.turnevent.TurnEventGoTo(
+                "Dutch",
+                org.akropia.model.turnevent.TurnEventGoTo.Kind.ARRIVED_EUROPE,
+                3, UnitType.MERCHANTMAN, "Home port").destination(null, true);
+        assertTrue(new TeProcessorGoTo(language)
+                .apply(org.akropia.model.turnevent.TurnEventGoTo
+                        .tryLoad(homeArrival.save())) instanceof TeItemEurope);
+        final var repair = new org.akropia.model.turnevent.TurnEventShipRepair(
+                "Dutch",
+                org.akropia.model.turnevent.TurnEventShipRepair.Kind.COMPLETED,
+                3, UnitType.MERCHANTMAN, "Delft", false, 0, java.util.List.of())
+                .atColony(7);
+        verifyOpensColony(new TeProcessorShipRepair(language)
+                .apply(org.akropia.model.turnevent.TurnEventShipRepair
+                        .tryLoad(repair.save())));
+    }
+
+    @Test
+    void colonyAndHomePortNoticesOfferTheirDestination() {
+        final I18n language = i18n(Locale.ROOT);
+        final var famine = org.mockito.Mockito.mock(
+                org.akropia.model.turnevent.TurnEventFamineWillPlagueColony.class);
+        org.mockito.Mockito.when(famine.getColonyId()).thenReturn(7);
+        org.mockito.Mockito.when(famine.getColonyName()).thenReturn("Delft");
+        verifyOpensColony(
+                new TeProcessorFamineWillPlagueColony(language).apply(famine));
+        final var mercenary = colonyPo("TurnEventMercenaryArrival");
+        verifyOpensColony(new TeProcessorMercenaryArrival(language)
+                .apply(org.akropia.model.turnevent.TurnEventMercenaryArrival
+                        .tryLoad(mercenary)));
+        final var intervention = colonyPo("TurnEventInterventionArrival");
+        verifyOpensColony(new TeProcessorInterventionArrival(language)
+                .apply(org.akropia.model.turnevent.TurnEventInterventionArrival
+                        .tryLoad(intervention)));
+    }
+
+    @Test
+    void fishermanNoticeRejectsInvalidSavedColonyIdentity() {
+        final TurnEventPo po = colonyPo("TurnEventFishermanLost");
+        po.setFishermanUnitId(3);
+        po.setFishermanLossReason("NO_SAFE_LAND");
+        po.setClearedX(2);
+        po.setClearedY(3);
+        po.setColonyId(-1);
+        org.junit.jupiter.api.Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> org.akropia.model.turnevent.TurnEventFishermanLost
+                        .tryLoad(po));
+    }
+
 }

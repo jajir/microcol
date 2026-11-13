@@ -34,7 +34,7 @@ public final class TurnEventProvider {
     }
 
     /** Report why a go-to order of a unit was paused or canceled. */
-    public static TurnEvent getGoToOrder(final Player owner,
+    public static TurnEventGoTo getGoToOrder(final Player owner,
             final TurnEventGoTo.Kind kind, final int unitId,
             final UnitType unitType, final String destinationName) {
         return new TurnEventGoTo(owner.getName(), kind, unitId, unitType,

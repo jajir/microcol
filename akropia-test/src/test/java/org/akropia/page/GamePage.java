@@ -597,6 +597,16 @@ public class GamePage extends AbstractScreen {
     public ColonyScreen openColonyAt(final Location colonyLocation,
             final String expectedNamePart) {
         moveMouseAtLocation(colonyLocation);
+        final StringBuilder received = new StringBuilder();
+        final javafx.event.EventHandler<javafx.scene.input.MouseEvent> trace = event -> received
+                .append(" [count=").append(event.getClickCount())
+                .append(" target=").append(event.getTarget()).append(" xy=")
+                .append(event.getSceneX()).append(",").append(event.getSceneY())
+                .append("]");
+        final javafx.scene.Scene scene = getContext().getPrimaryStage()
+                .getScene();
+        getRobot().interact(() -> scene.addEventFilter(
+                javafx.scene.input.MouseEvent.MOUSE_PRESSED, trace));
         // Keep the native gesture together: TestFX waits between its clicks,
         // which can exceed the double-click interval while selecting a unit.
         getRobot().interact(() -> {
@@ -614,8 +624,11 @@ public class GamePage extends AbstractScreen {
         } catch (java.util.concurrent.TimeoutException timeout) {
             throw new IllegalStateException(
                     "Colony did not open after the map double-click; "
-                            + mapDiagnostics(),
+                            + mapDiagnostics() + "; received=" + received,
                     timeout);
+        } finally {
+            getRobot().interact(() -> scene.removeEventFilter(
+                    javafx.scene.input.MouseEvent.MOUSE_PRESSED, trace));
         }
         return ColonyScreen.of(getContext(), expectedNamePart);
     }
@@ -636,7 +649,13 @@ public class GamePage extends AbstractScreen {
         for (int index = 0; index <= menuIndex; index++) {
             getRobot().push(KeyCode.DOWN);
         }
-        getRobot().push(KeyCode.ENTER);
+        // Release Enter before colony rendering can block the FX thread and
+        // allow native key-repeat to activate the new screen's rename control.
+        getRobot().interact(() -> {
+            final javafx.scene.robot.Robot keyboard = new javafx.scene.robot.Robot();
+            keyboard.keyPress(KeyCode.ENTER);
+            keyboard.keyRelease(KeyCode.ENTER);
+        });
         WaitForAsyncUtils.waitForFxEvents();
         return ColonyScreen.of(getContext(), expectedNamePart);
     }

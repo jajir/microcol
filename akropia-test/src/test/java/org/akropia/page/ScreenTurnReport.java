@@ -145,6 +145,12 @@ public class ScreenTurnReport extends AbstractScreen {
         return ColonyScreen.of(getContext(), expectedColonyName);
     }
 
+    public void verifyColonyNoticeActions(final int colonyId,
+            final int expectedCount) {
+        assertEquals(expectedCount, getNodeFinder()
+                .lookup("#turnEventOpenColony-" + colonyId).queryAll().size());
+    }
+
     /** Keep the shown action so it can be used after the game changes. */
     public void retainOpenColonyAction(final int colonyId) {
         retainedAction = getOpenColonyButton(colonyId);

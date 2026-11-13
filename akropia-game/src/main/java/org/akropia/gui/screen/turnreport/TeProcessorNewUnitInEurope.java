@@ -22,7 +22,7 @@ public class TeProcessorNewUnitInEurope extends AbstractTeProcessor
     @Override
     public TeItemSimple apply(final TurnEvent turnEvent) {
         if (turnEvent instanceof TurnEventNewUnitInEurope) {
-            return new TeItemSimple(getMessage());
+            return new TeItemEurope(getMessage());
         }
         return null;
     }

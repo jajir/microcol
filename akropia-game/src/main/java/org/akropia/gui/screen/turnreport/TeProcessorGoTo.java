@@ -25,7 +25,12 @@ public final class TeProcessorGoTo extends AbstractTeProcessor
         TurnEventGoTo goTo = (TurnEventGoTo) event;
         String unit = getI18n().get(UnitTypes.getUnitName(goTo.getUnitType()));
         Europe key = Europe.valueOf("goTo" + goTo.getKind().name());
-        return new TeItemSimple(getI18n().get(key, unit, goTo.getUnitId(),
-                goTo.getDestinationName()));
+        final String message = getI18n().get(key, unit, goTo.getUnitId(),
+                goTo.getDestinationName());
+        if (goTo.isEurope()) {
+            return new TeItemEurope(message);
+        }
+        return goTo.getColonyId() == null ? new TeItemSimple(message)
+                : new TeItemColony(message, goTo.getColonyId());
     }
 }

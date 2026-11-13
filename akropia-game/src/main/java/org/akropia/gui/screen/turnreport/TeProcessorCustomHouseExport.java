@@ -20,11 +20,11 @@ public final class TeProcessorCustomHouseExport extends AbstractTeProcessor
     public TeItemSimple apply(TurnEvent event) {
         if (event instanceof TurnEventCustomHouseExport) {
             TurnEventCustomHouseExport sale = (TurnEventCustomHouseExport) event;
-            return new TeItemSimple(getI18n().get(CustomHouseText.exported,
+            return new TeItemColony(getI18n().get(CustomHouseText.exported,
                     sale.getColonyName(), sale.getGoods().getAmount(),
                     getI18n().get(GoodsTypeName
                             .getNameForGoodsType(sale.getGoods().getType())),
-                    sale.getIncome()));
+                    sale.getIncome()), sale.getColonyId());
         }
         return null;
     }

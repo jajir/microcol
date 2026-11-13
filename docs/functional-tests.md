@@ -16099,3 +16099,100 @@ The numbered entries below are chronological evidence, including failed attempts
    name audit and strict MkDocs passed. Documentation logs are in
    `target/map-toggle-alignment/`. No remote CI or publication was inspected;
    this is local acceptance, not full-regression or delivery verification.
+
+## Navigation shortcuts — 2026-11-13
+
+1. Implemented: double-click confirms the destination radio choice; colony and
+   home-port notices provide navigation; Escape leaves the whole colony from
+   Construction and School; the map/planner toggle follows the centered content
+   edge at wide and narrow window sizes. See the [player contract](ux.md#rychly-vyber-cile-a-navigace-z-hlaseni-13-listopadu-2026).
+2. Final game source matches `target/verification/run-5d46hzv8/source/`:
+   **5,132 model/JUnit tests**, 395 complete XML reports, zero failures/errors/skips.
+   Execution took 157.631 seconds against a 600-second limit.
+3. Final targeted Docker/Xvfb selection passed **33 tests**, eight complete XML
+   reports, zero failures/errors/skips, in 506.484 supervised seconds against
+   a 1,800-second limit: TC103 (9), TC195/06 (1), TC203 (3), TC32 (11),
+   TC180 (3), TC22/05 (1), TC116/05 and /08 (2), PageVerificationContractTest (3).
+   Reports: `target/docker-ui/run-bHOicD/`; completion
+   `20261113T184332Z-9eeaf9eab49a`, supervisor PID 5207.
+4. TC116/08 checks 1800 → 1024 → 1800 px in both map modes. The saved
+   `warehouse-qa/map-wide-content-edge.png` and `planner-wide-content-edge.png`
+   show the common left edge. Navigation tests retain stale-target guards,
+   destination identity across save/load and rename, and construction outcomes.
+5. Investigation preserved all failed attempts below. TC116/08 initially
+   reproduced heading X=180 versus toggle X=16; the final binding explicitly
+   reads both observed transforms so later layout changes invalidate it.
+   Subsequent TC32 failures moved between input steps. Window enumeration in
+   `run-FkAofO` identified a focused WINDOW_MODAL **Rename colony** dialog,
+   blocking the primary stage. The keyboard menu helper now releases Enter
+   immediately with its press, before rendering delays can allow key-repeat
+   to activate the new screen's title. TC32 uses keyboard colony/editor entry
+   and Escape exit while retaining project/queue mouse interactions and all
+   gameplay checks. TC195 separately checks section clicks and Escape.
+   Ineffective temporary menu-hide, forced-focus, layout and traversal-limit
+   changes were removed. The final helper passed TC32 twice, then the full
+   targeted selection. The early model run at 18:19:59 preceded the temporary
+   menu edit and was not used to accept that edit.
+6. Final fixed smoke/support selection passed **21 tests**, 12 complete XML
+   reports, zero failures/errors/skips: `20261113T185916Z-769f6bd0010b`, PID
+   5744, reports `target/verification/run-z4hu2kr4/`. Execution was 252.539 s
+   (255.596 s supervised), within the 420-second budget. All changed Java files
+   match its source snapshot. The final mouse diagnostic helper also passed
+   the two affected smoke scenarios and page-object contract separately (5 tests).
+7. Final review retained destination IDs rather than name lookup, stale-target
+   guards, single-click confirmation, and existing gameplay assertions. Shared
+   Java formatting and whitespace checks passed. Documentation consistency
+   checks (14 tests), name audit and strict MkDocs passed. Local acceptance is
+   complete; this does not claim full regression or a published distribution.
+
+Historical attempts remain failed where recorded. Completion JSON, command logs
+and supervisor metadata are retained under
+`~/Library/Logs/Akropia/completions/<run-id>/`. Times below are execution seconds;
+lock waiting is separate (227.367 s for 17:14:34 and 132.866 s for 18:20:21).
+
+| Completion run | Result | Execution seconds | Reports |
+| --- | --- | ---: | --- |
+| `20261113T144127Z-6fbc58f9b7d9` | success | 162.982 | `target/verification/run-h95h0xoe` |
+| `20261113T171028Z-fe4489b7cbbf` | failed | 473.188 | `target/docker-ui/run-NkhprX` |
+| `20261113T171434Z-8d0f4992f154` | success | 153.908 | `target/verification/run-6x6bzbnf` |
+| `20261113T172117Z-03903c4f325d` | failed | 475.230 | `target/docker-ui/run-2x3N8o` |
+| `20261113T173015Z-88f7bb097a1f` | success | 157.631 | `target/verification/run-5d46hzv8` |
+| `20261113T173312Z-f55952652206` | failed | 499.540 | `target/docker-ui/run-fNZnMF` |
+| `20261113T174206Z-2f10071d55d2` | failed | 209.795 | `target/docker-ui/run-JicGih` |
+| `20261113T174802Z-8150c1ca0f1b` | failed | 186.988 | `target/docker-ui/run-nztw21` |
+| `20261113T175205Z-9dffa718d40c` | failed | 202.120 | `target/docker-ui/run-i9TcXT` |
+| `20261113T175627Z-5e9c97dc2b09` | failed | 516.897 | `target/docker-ui/run-lF5Cdn` |
+| `20261113T180609Z-89419f262084` | failed | 289.464 | `target/docker-ui/run-tIACtw` |
+| `20261113T181132Z-6f61a20cb9f4` | failed | 214.752 | `target/docker-ui/run-w4s8OF` |
+| `20261113T181544Z-566d4b1097ac` | failed | 216.241 | `target/docker-ui/run-zqwx2N` |
+| `20261113T181959Z-8a3ae623fec6` | success | 154.121 | `target/verification/run-aez3h__8` |
+| `20261113T182021Z-ae6983e85f0e` | success | 156.179 | `target/verification/run-ngjg18ea` |
+| `20261113T182533Z-57587d536c75` | failed | 526.479 | `target/docker-ui/run-wMiSEE` |
+| `20261113T183459Z-7ca7c9d256e9` | failed | 217.155 | `target/docker-ui/run-FkAofO` |
+| `20261113T183943Z-b408d458b23d` | success | 202.843 | `target/docker-ui/run-3ttCbB` |
+| `20261113T184332Z-9eeaf9eab49a` | success | 506.484 | `target/docker-ui/run-bHOicD` |
+
+Smoke attempt `20261113T185218Z-627e395ff61e` failed after 252.810
+supervised seconds (precommit execution 249.687 s, within 420 s): **21 tests,
+0 failures, 2 errors, 0 skips**, 12 complete reports in
+`target/verification/run-9al6_ofr/`. TC21/04 and TC07/producing_goods timed out
+opening a colony through a map double-click. This attempt remains failed.
+The helper now records received mouse-press counts and targets on timeout.
+Those two scenarios plus PageVerificationContractTest are running diagnostically
+as `20261113T185738Z-6305582fed99`, supervisor PID 5667, 600-second timeout.
+The full smoke selection must pass before acceptance. Documentation consistency
+checks (14 tests), name audit and strict MkDocs passed before this evidence update.
+
+Diagnostic selection `20261113T185738Z-6305582fed99` passed **5 tests**, three
+complete XML reports, zero failures/errors/skips, in 78.807 supervised seconds;
+reports `target/docker-ui/run-OMbDck/`. No gesture correction was made, so this
+pass does not establish the cause or resolution of the prior double-click error.
+The full fixed smoke selection is rerunning with the diagnostic helper as
+`20261113T185916Z-769f6bd0010b`, supervisor PID 5744, 480-second supervisor
+timeout and unchanged 420-second smoke budget. Acceptance remains pending.
+
+
+Final smoke retry `20261113T185916Z-769f6bd0010b` passed as recorded above.
+The earlier smoke failure remains failed; the intermittent map-double-click
+cause was not established. Received mouse counts/targets remain in timeout
+messages for diagnosis. No tests were removed or weakened for acceptance.

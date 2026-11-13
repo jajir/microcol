@@ -33,7 +33,7 @@ public class TeProcessorFaminePlagueColony extends AbstractTeProcessor
                         te.getColonyName(),
                         getI18n().get(UnitTypes.getUnitName(te.getVictim()))));
             }
-            return new TeItemSimple(getI18n().get(TurnEvents.faminePlagueColony,
+            return new TeItemColony(getI18n().get(TurnEvents.faminePlagueColony,
                     te.getColonyName(),
                     getI18n().get(UnitTypes.getUnitName(te.getVictim())),
                     te.getStocks().stream().filter(
@@ -43,7 +43,8 @@ public class TeProcessorFaminePlagueColony extends AbstractTeProcessor
                                     .get(GoodsTypeName.getNameForGoodsType(
                                             goods.getType()))
                                     + ": " + goods.getAmount())
-                            .collect(Collectors.joining(", "))));
+                            .collect(Collectors.joining(", "))),
+                    te.getColonyId());
         }
         return null;
     }

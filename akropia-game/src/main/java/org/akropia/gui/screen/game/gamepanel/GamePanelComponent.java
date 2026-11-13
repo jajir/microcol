@@ -131,15 +131,16 @@ public final class GamePanelComponent
         control.relocate(MAP_CONTROL_MARGIN, MAP_CONTROL_MARGIN);
         canvasComponent.getCanvasPane().getChildren().add(control);
         control.layoutXProperty()
-                .bind(javafx.beans.binding.Bindings
-                        .createDoubleBinding(
-                                () -> control.getParent()
-                                        .sceneToLocal(
-                                                heading.localToScene(0, 0))
-                                        .getX(),
-                                heading.localToSceneTransformProperty(),
-                                control.getParent()
-                                        .localToSceneTransformProperty()));
+                .bind(javafx.beans.binding.Bindings.createDoubleBinding(() -> {
+                    // Validate both observed transforms so later resizes
+                    // invalidate them again.
+                    control.getParent().getLocalToSceneTransform();
+                    return control
+                            .getParent().sceneToLocal(heading
+                                    .getLocalToSceneTransform().transform(0, 0))
+                            .getX();
+                }, heading.localToSceneTransformProperty(),
+                        control.getParent().localToSceneTransformProperty()));
     }
 
 }

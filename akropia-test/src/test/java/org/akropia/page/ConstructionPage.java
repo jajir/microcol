@@ -144,11 +144,7 @@ public final class ConstructionPage extends AbstractScreen {
     }
 
     public void cancel() {
-        escape();
-    }
-
-    public void escape() {
-        getRobot().push(KeyCode.ESCAPE);
+        clickOnButtonWithId("colony-section-area");
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -198,7 +194,7 @@ public final class ConstructionPage extends AbstractScreen {
 
     public void verifyPickerClosed() {
         assertNull(picker.getScene(),
-                "Cancel/Escape must close the construction editor");
+                "Changing section must close the construction editor");
     }
 
     public void verifyOffer(final boolean available, final String reason,

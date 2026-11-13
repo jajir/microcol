@@ -411,4 +411,30 @@ public class TC_116_F107_trade_route_creation_test extends AbstractAkropiaTest {
                 "Home port", "Delft", "Home port", "Delft", "Home port");
         colony.close();
     }
+
+    @Test
+    @Tag("local")
+    void TC_08_map_mode_switch_follows_content_edge_after_resizing()
+            throws Exception {
+        WelcomePage.of(getContext()).loadGame();
+        final TradeRoutePlanningPage planner = new TradeRoutePlanningPage(
+                getContext());
+        // Both map modes keep their switch aligned with the centered header and
+        // footer.
+        planner.resizeWindow(1800, 1000);
+        planner.verifyToggleSharesContentEdge(true);
+        planner.open();
+        planner.verifyPlannerShown(true);
+        planner.verifyToggleSharesContentEdge(true);
+        planner.captureScreen("planner-wide-content-edge.png");
+        // Resize while the planner is active, then return to the normal map.
+        planner.resizeWindow(1024, 700);
+        planner.verifyToggleSharesContentEdge(false);
+        planner.close();
+        planner.verifyToggleSharesContentEdge(false);
+        planner.resizeWindow(1800, 1000);
+        planner.verifyToggleSharesContentEdge(true);
+        planner.captureScreen("map-wide-content-edge.png");
+    }
+
 }
