@@ -54,6 +54,8 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.revealProductionChoices();
         layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.LUMBER);
         layout.verifyPreviewMatchesMap(0, 1);
+        layout.hoverProductionChoices();
+        layout.verifyTileFacts(0);
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0362-production-en.png");
         jobs.verifyWorldUnchanged();
@@ -87,6 +89,8 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.revealProductionChoices();
         layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.GRAIN);
         layout.verifyPreviewMatchesMap(0, 1);
+        layout.hoverProductionChoices();
+        layout.verifyTileFacts(0);
         layout.selectTile(1, 1);
         layout.showStock();
         town.verifyWarehouseGoodsLayout(19, 45);
@@ -130,6 +134,10 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.revealProductionChoices();
         layout.verifyProductionChoices(1, GoodsType.LUMBER, GoodsType.GRAIN);
         layout.verifyPreviewMatchesMap(0, 1);
+        layout.hoverProductionChoices();
+        new InGameLayoutPage(getContext())
+                .saveEvidence("colony-hover-czech.png");
+        layout.verifyTileFacts(1);
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0362-production-cs.png");
         layout.selectTile(1, 1);

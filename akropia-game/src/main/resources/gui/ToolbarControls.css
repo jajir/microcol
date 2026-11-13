@@ -63,3 +63,10 @@
 #tradeRouteName:focused, .paper-input:focused {
     -fx-background-color: #E7E7D0;
 }
+
+/* Keep list focus and collapsed school choices on the paper surface. */
+#constructionProjects:focused, #constructionQueue:focused,
+#schoolPanel .combo-box, #schoolPanel .combo-box:focused,
+#schoolPanel .combo-box > .list-cell {
+    -fx-background-color: #FFF9EC;
+}

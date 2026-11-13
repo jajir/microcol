@@ -25,20 +25,37 @@ public final class EducationPage extends AbstractScreen {
 
     public void verifyInline() {
         for (int i = 0; i < 3; i++) {
-            for (String prefix : java.util.List.of("schoolTeacher-",
-                    "schoolStudent-", "schoolSkill-")) {
-                assertTrue(getNodeFinder().lookup("#" + prefix + i).query()
-                        .isVisible());
+            javafx.scene.image.ImageView teacher = getNodeFinder()
+                    .lookup("#schoolTeacher-" + i)
+                    .queryAs(javafx.scene.image.ImageView.class);
+            assertEquals(i != 1, teacher.getImage() != null);
+            for (String prefix : java.util.List.of("schoolStudent-",
+                    "schoolSkill-")) {
+                ComboBox<?> box = getNodeFinder().lookup("#" + prefix + i)
+                        .queryComboBox();
+                assertEquals(i != 1, box.getParent().isVisible());
+                assertEquals(i != 1, box.getParent().isManaged());
+                if (i != 1) {
+                    assertEquals(javafx.scene.paint.Color.web("#FFF9EC"),
+                            box.getBackground().getFills().get(0).getFill());
+                    javafx.scene.layout.Region cell = (javafx.scene.layout.Region) box
+                            .lookup(".list-cell");
+                    assertEquals(javafx.scene.paint.Color.web("#FFF9EC"),
+                            cell.getBackground().getFills().get(0).getFill());
+                }
+                assertNotEquals("Student", box.getPromptText());
+                assertNotEquals("Skill", box.getPromptText());
             }
         }
+        assertEquals("There is no teacher in the school building.",
+                getNodeFinder().lookup("#schoolTeacherName-1").queryLabeled()
+                        .getText());
         for (String id : java.util.List.of("educationAssign", "educationClose",
-                "educationCourses", "educationCancelCourse")) {
+                "educationCourses", "educationCancelCourse"))
             assertTrue(getNodeFinder().lookup("#" + id).queryAll().isEmpty());
-        }
     }
 
-    public void chooseInlineParticipants(int column, int teacher, int student) {
-        selectUnit("schoolTeacher-" + column, teacher);
+    public void chooseInlineStudent(int column, int student) {
         selectUnit("schoolStudent-" + column, student);
     }
 
@@ -55,12 +72,12 @@ public final class EducationPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void verifyInlineCourses(int count) {
-        assertEquals(count, getModel().getColonyById(0).orElseThrow()
-                .getEducationCourses().size());
-        for (int i = 0; i < count; i++) {
-            assertFalse(
-                    getLabeledById("schoolProgress-" + i).getText().isEmpty());
+    public void verifyInlineCourses(java.util.List<Integer> activeColumns) {
+        assertEquals(activeColumns.size(), getModel().getColonyById(0)
+                .orElseThrow().getEducationCourses().size());
+        for (int i = 0; i < 3; i++) {
+            assertEquals(activeColumns.contains(i),
+                    !getLabeledById("schoolProgress-" + i).getText().isEmpty());
         }
     }
 

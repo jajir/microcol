@@ -19,6 +19,7 @@
   <entry key="none">Choose participants with an available teaching option. A suitable school and a free teacher slot are required.</entry>
   <entry key="graduated">%s: student #%s completed education: %s → %s.</entry>
   <entry key="learned">%s: worker #%s learned through productive work: %s → %s.</entry>
-  <entry key="inlineRule">Choose a teacher, student and skill in each column to start teaching. Choose No teaching to cancel before assigning a different student.</entry>
+  <entry key="inlineRule">Choose a student and skill for each teacher working in the school. Choose No teaching to cancel a course.</entry>
   <entry key="noTeaching">No teaching</entry>
+<entry key="noTeacher">There is no teacher in the school building.</entry>
 </properties>

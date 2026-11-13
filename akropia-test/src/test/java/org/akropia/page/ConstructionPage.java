@@ -50,6 +50,29 @@ public final class ConstructionPage extends AbstractScreen {
     }
 
     @SuppressWarnings("unchecked")
+    public void focusList(final String id) {
+        javafx.scene.Node list = getNodeFinder().lookup("#" + id).query();
+        revealGameContent(list);
+        getRobot().interact(list::requestFocus);
+        org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyPaperListFocus(final String id) {
+        ListView<?> list = getNodeFinder().lookup("#" + id)
+                .queryAs(ListView.class);
+        assertTrue(list.isFocused());
+        assertEquals(javafx.scene.paint.Color.web("#FFF9EC"),
+                list.getBackground().getFills().get(0).getFill());
+    }
+
+    public void verifyProjectOffered(final String type,
+            final boolean expected) {
+        ListView<ColonyBuildingItem> list = getNodeFinder()
+                .lookup("#constructionProjects").queryAs(ListView.class);
+        assertEquals(expected, list.getItems().stream()
+                .anyMatch(item -> item.getName().equals(type)));
+    }
+
     public void select(final String type) {
         final ListView<ColonyBuildingItem> list = getNodeFinder()
                 .lookup("#constructionProjects").queryAs(ListView.class);
@@ -73,6 +96,7 @@ public final class ConstructionPage extends AbstractScreen {
 
     public void confirmTwice() {
         final Button button = getButtonById("constructionAdd");
+        revealGameContent(button);
         getRobot().clickOn(button);
         WaitForAsyncUtils.waitForFxEvents();
         getRobot().interact(button::fire);

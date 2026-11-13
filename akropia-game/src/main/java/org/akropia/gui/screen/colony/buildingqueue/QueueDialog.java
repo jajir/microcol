@@ -212,6 +212,10 @@ public class QueueDialog extends AbstractMessageWindow {
                         .getGoods(GoodsType.HAMMERS).getAmount()));
         final List<ColonyBuildingItem> offers = new ArrayList<>();
         ConstructionType.ALL.stream().filter(ConstructionType::canBeConstructed)
+                .filter(type -> type.getUpgradeFrom().map(previous -> controller
+                        .getColony().getConstructions().stream()
+                        .anyMatch(building -> building.getType() == previous))
+                        .orElse(true))
                 .forEach(type -> offers
                         .add(new ColonyBuildingItemConstruction(type)));
         UnitType.UNIT_TYPES.stream().filter(UnitType::canBeBuildInColony)

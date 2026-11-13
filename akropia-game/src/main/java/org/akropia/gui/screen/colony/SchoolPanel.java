@@ -20,18 +20,20 @@ final class SchoolPanel extends VBox {
     private final GameModelController game;
     private final I18n i18n;
     private final EventBus events;
+    private final org.akropia.gui.image.ImageProvider images;
     private final List<TeachingColumn> columns = new ArrayList<>();
     private final Label feedback = new Label();
     private boolean refreshing;
 
     SchoolPanel(Colony colony, GameModelController game, I18n i18n,
-            EventBus events) {
+            EventBus events, org.akropia.gui.image.ImageProvider images) {
         super(8);
         this.colony = colony;
         this.game = game;
         this.model = game.getModel();
         this.i18n = i18n;
         this.events = events;
+        this.images = images;
         setId("schoolPanel");
         Label rule = new Label(i18n.get(EducationText.inlineRule));
         rule.setWrapText(true);
@@ -56,7 +58,7 @@ final class SchoolPanel extends VBox {
     }
 
     private String unitName(Unit unit) {
-        return unit == null ? i18n.get(EducationText.noTeaching)
+        return unit == null ? ""
                 : "#" + unit.getId() + " "
                         + i18n.get(UnitTypes.getUnitName(unit.getType()));
     }
@@ -72,22 +74,40 @@ final class SchoolPanel extends VBox {
         refreshing = true;
         try {
             List<EducationCourse> courses = colony.getEducationCourses();
-            List<Unit> teachers = colony.getUnitsInsideColony().stream()
-                    .filter(unit -> !colony.getTeachingSkills(unit).isEmpty())
-                    .collect(Collectors.toList());
+            Construction school = colony.getConstructions().stream()
+                    .filter(building -> List
+                            .of(ConstructionType.SCHOOLHOUSE,
+                                    ConstructionType.COLLEGE,
+                                    ConstructionType.UNIVERSITY)
+                            .contains(building.getType()))
+                    .findFirst().orElse(null);
             List<Unit> students = colony.getUnitsInsideColony().stream()
                     .filter(UnitFreeColonist.class::isInstance)
                     .collect(Collectors.toList());
             for (int i = 0; i < columns.size(); i++) {
                 TeachingColumn column = columns.get(i);
-                EducationCourse course = i < courses.size() ? courses.get(i)
-                        : null;
+                column.teacher = school == null
+                        || school.getConstructionSlots().get(i).isEmpty() ? null
+                                : school.getConstructionSlots().get(i)
+                                        .getUnit();
+                EducationCourse course = column.teacher == null ? null
+                        : courses.stream()
+                                .filter(item -> java.util.Objects.equals(
+                                        item.getTeacherId(),
+                                        column.teacher.getId()))
+                                .findFirst().orElse(null);
                 column.course = course;
+                column.teacherPortrait.setImage(column.teacher == null ? null
+                        : images.getUnitImage(column.teacher));
+                column.teacherPortrait
+                        .setAccessibleText(unitName(column.teacher));
+                column.teacherName.setText(column.teacher == null
+                        ? i18n.get(EducationText.noTeacher)
+                        : unitName(column.teacher));
+                column.choices.setVisible(column.teacher != null);
+                column.choices.setManaged(column.teacher != null);
                 column.student.setDisable(course != null);
-                column.teacher.getItems().setAll(teachers);
                 column.student.getItems().setAll(students);
-                column.teacher.setValue(course == null ? null
-                        : resident(course.getTeacherId()));
                 column.student.setValue(course == null ? null
                         : resident(course.getStudentId()));
                 column.updateSkills();
@@ -112,7 +132,10 @@ final class SchoolPanel extends VBox {
     }
 
     private final class TeachingColumn extends VBox {
-        private final ComboBox<Unit> teacher = new ComboBox<>();
+        private Unit teacher;
+        private final javafx.scene.image.ImageView teacherPortrait = new javafx.scene.image.ImageView();
+        private final Label teacherName = new Label();
+        private final VBox choices = new VBox(6);
         private final ComboBox<Unit> student = new ComboBox<>();
         private final ComboBox<UnitType> skill = new ComboBox<>();
         private final Label progress = new Label();
@@ -123,11 +146,18 @@ final class SchoolPanel extends VBox {
             super(6);
             setMinWidth(0);
             setPrefWidth(300);
-            teacher.setId("schoolTeacher-" + index);
+            teacherPortrait.setId("schoolTeacher-" + index);
+            teacherPortrait.setFitWidth(45);
+            teacherPortrait.setFitHeight(45);
+            teacherPortrait.setPreserveRatio(true);
+            teacherName.setWrapText(true);
+            teacherName.setId("schoolTeacherName-" + index);
+            getChildren().addAll(new HBox(8, teacherPortrait, teacherName),
+                    choices);
             student.setId("schoolStudent-" + index);
             skill.setId("schoolSkill-" + index);
             progress.setId("schoolProgress-" + index);
-            for (ComboBox<?> box : List.of(teacher, student, skill)) {
+            for (ComboBox<?> box : List.of(student, skill)) {
                 box.setMaxWidth(Double.MAX_VALUE);
                 box.setMinWidth(0);
                 box.getStyleClass().add("paper-input");
@@ -141,7 +171,6 @@ final class SchoolPanel extends VBox {
                     throw new UnsupportedOperationException();
                 }
             };
-            teacher.setConverter(names);
             student.setConverter(names);
             skill.setConverter(new StringConverter<UnitType>() {
                 public String toString(UnitType type) {
@@ -160,21 +189,16 @@ final class SchoolPanel extends VBox {
                     setText(empty ? null : skill.getConverter().toString(item));
                 }
             });
-            teacher.setPromptText(i18n.get(EducationText.teacher));
-            student.setPromptText(i18n.get(EducationText.student));
             skill.setPromptText(i18n.get(EducationText.noTeaching));
             progress.setWrapText(true);
             for (var entry : List.of(
-                    new Object[] { EducationText.teacher, teacher },
                     new Object[] { EducationText.student, student },
                     new Object[] { EducationText.skill, skill })) {
                 Label label = new Label(i18n.get((EducationText) entry[0]));
                 label.setLabelFor((ComboBox<?>) entry[1]);
-                getChildren().addAll(label, (ComboBox<?>) entry[1]);
+                choices.getChildren().addAll(label, (ComboBox<?>) entry[1]);
             }
             getChildren().add(progress);
-            teacher.valueProperty()
-                    .addListener((a, b, c) -> participantsChanged());
             student.valueProperty()
                     .addListener((a, b, c) -> participantsChanged());
             skill.setOnAction(event -> scheduleApply());
@@ -197,10 +221,8 @@ final class SchoolPanel extends VBox {
         private void updateSkills() {
             skill.getItems().clear();
             skill.getItems().add(null);
-            if (current() && teacher.getValue() != null
-                    && student.getValue() != null) {
-                colony.getEducationOptions(teacher.getValue(),
-                        student.getValue()).stream()
+            if (current() && teacher != null && student.getValue() != null) {
+                colony.getEducationOptions(teacher, student.getValue()).stream()
                         .map(EducationOption::getSkill)
                         .forEach(skill.getItems()::add);
             }
@@ -236,15 +258,15 @@ final class SchoolPanel extends VBox {
                     colony.cancelEducation(pupil);
                 } else {
                     if (course != null && course.getSkill() == skill.getValue()
-                            && teacher.getValue() != null
+                            && teacher != null
                             && java.util.Objects.equals(course.getTeacherId(),
-                                    teacher.getValue().getId())
+                                    teacher.getId())
                             && student.getValue() != null
                             && course.getStudentId() == student.getValue()
                                     .getId())
                         return;
-                    colony.assignEducation(teacher.getValue(),
-                            student.getValue(), skill.getValue());
+                    colony.assignEducation(teacher, student.getValue(),
+                            skill.getValue());
                 }
                 feedback.setText("");
                 events.post(new RepaintColonyEvent());

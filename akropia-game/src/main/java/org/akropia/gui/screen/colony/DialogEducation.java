@@ -22,6 +22,7 @@ public final class DialogEducation extends AbstractMessageWindow {
     private final GameModelController game;
     private final EventBus events;
     private final ComboBox<Unit> teachers = new ComboBox<>();
+    private final org.akropia.gui.image.ImageProvider images;
     private final ComboBox<Unit> students = new ComboBox<>();
     private final ComboBox<EducationOption> skills = new ComboBox<>();
     private final ListView<EducationCourse> courses = new ListView<>();
@@ -43,11 +44,12 @@ public final class DialogEducation extends AbstractMessageWindow {
 
     @Inject
     public DialogEducation(ViewUtil view, I18n i18n, GameModelController game,
-            EventBus events) {
+            EventBus events, org.akropia.gui.image.ImageProvider images) {
         super(view, i18n);
         this.i18n = i18n;
         this.game = game;
         this.events = events;
+        this.images = images;
         teacherLabel.setLabelFor(teachers);
         studentLabel.setLabelFor(students);
         skillLabel.setLabelFor(skills);
@@ -144,7 +146,7 @@ public final class DialogEducation extends AbstractMessageWindow {
     }
 
     Region embedded(final Colony selected, final Runnable onClose) {
-        return new SchoolPanel(selected, game, i18n, events);
+        return new SchoolPanel(selected, game, i18n, events, images);
     }
 
     @Override

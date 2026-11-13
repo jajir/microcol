@@ -111,7 +111,7 @@ public final class PanelColonyFields implements JavaFxComponent {
     private final VBox output = new VBox(3);
     private final Label productHeader = new Label();
     private final Label yieldHeader = new Label();
-    private final Label outputHelp = new Label();
+    private final Label tileInfo = new Label();
     private final VBox production;
     private int selectedX = 1;
     private int selectedY = 1;
@@ -191,8 +191,16 @@ public final class PanelColonyFields implements JavaFxComponent {
         final HBox columns = new HBox(8, productHeader, headerSpace,
                 yieldHeader);
         columns.getStyleClass().add("field-output-header");
-        production = new VBox(4, columns, output, outputHelp);
-        final VBox detail = new VBox(4, detailTitle, tile, yield, production);
+        production = new VBox(4, columns, output);
+        production.setMaxWidth(480);
+        production.setOnMouseEntered(
+                event -> eventBus.post(new StatusBarMessageEvent(
+                        i18n.get(ColonyMsg.outputHelp), Source.COLONY)));
+        production.setOnMouseMoved(production.getOnMouseEntered());
+        production.setOnMouseExited(event -> eventBus
+                .post(new StatusBarMessageEvent(Source.COLONY)));
+        final VBox detail = new VBox(4, detailTitle, tile, tileInfo, yield,
+                production);
         detail.getStyleClass().add("tile-detail");
         detail.setMinWidth(200);
         detail.setMaxWidth(Double.MAX_VALUE);
@@ -200,8 +208,8 @@ public final class PanelColonyFields implements JavaFxComponent {
         tileName.setWrapText(true);
         workerName.setWrapText(true);
         yield.setWrapText(true);
-        outputHelp.setWrapText(true);
-        outputHelp.setMinHeight(Region.USE_PREF_SIZE);
+        tileInfo.setWrapText(true);
+        tileInfo.setId("colony-field-info");
         output.setId("colony-field-output");
         preview.setId("colony-field-preview");
         tileName.setId("colony-field-name");
@@ -582,12 +590,38 @@ public final class PanelColonyFields implements JavaFxComponent {
                 y * TILE_WIDTH_IN_PX / tileSize());
     }
 
+    private String describeTerrain(Terrain terrain) {
+        java.util.List<String> facts = new java.util.ArrayList<>();
+        facts.add(i18n.get(ColonyMsg.tileMovement, terrain.getMoveCost()));
+        facts.add(i18n.get(ColonyMsg.tileDefense,
+                terrain.isHasTrees()
+                        ? terrain.getTerrainType().getDefenseBonusWithTree()
+                        : terrain.getTerrainType().getDefenseBonus()));
+        if (terrain.isHasTrees())
+            facts.add(i18n.get(ColonyMsg.tileForest));
+        if (terrain.isHasField())
+            facts.add(i18n.get(ColonyMsg.tilePlowed));
+        if (terrain.isHasRoad())
+            facts.add(i18n.get(ColonyMsg.tileRoad));
+        if (terrain.getRiverSize() != org.akropia.model.RiverSize.NONE)
+            facts.add(i18n.get(
+                    terrain.getRiverSize() == org.akropia.model.RiverSize.SMALL
+                            ? ColonyMsg.tileSmallRiver
+                            : ColonyMsg.tileLargeRiver));
+        if (terrain
+                .getResourceOverlay() != org.akropia.model.ResourceOverlay.NONE)
+            facts.add(i18n.get(ColonyMsg.tileResource,
+                    new LocalizationHelper(i18n).getResourceOverlayName(
+                            terrain.getResourceOverlay())));
+        return String.join(" · ", facts);
+    }
+
     private void refreshDetail() {
         mapTitle.setText(i18n.get(ColonyMsg.surroundingSection));
         detailTitle.setText(i18n.get(ColonyMsg.selectedSection));
         productHeader.setText(i18n.get(ColonyMsg.outputLabel));
         yieldHeader.setText(i18n.get(ColonyMsg.outputYield));
-        outputHelp.setText(i18n.get(ColonyMsg.outputHelp));
+        tileInfo.setText("");
         output.setAccessibleText(i18n.get(ColonyMsg.outputLabel));
         canvas.setAccessibleText(i18n.get(ColonyMsg.surroundingSection));
         final boolean center = selectedX == 1 && selectedY == 1;
@@ -617,6 +651,7 @@ public final class PanelColonyFields implements JavaFxComponent {
         }
         final Terrain terrain = gameModelController.getModel().getMap()
                 .getTerrainAt(location);
+        tileInfo.setText(describeTerrain(terrain));
         gc.save();
         paintService.paintTerrainOnTile(gc, Point.of(0, 0), location, terrain,
                 false, 0);

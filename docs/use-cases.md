@@ -2,6 +2,16 @@
 
 1. [Návrat po přepsání](save-load-navigation.md#navrat-po-potvrzenem-prepsani-13-listopadu-2026) vrací hráče do hry a potvrzuje název bez přípony. TC191/16 zahrnuje přepsání dvojklikem i opakované přepsání tlačítkem; [výsledky](functional-tests.md#save-overwrite-return-2026-11-13).
 
+## UC-031/033/042: stavební nabídka, školní místa a detail pole — 13. listopadu 2026
+
+1. TC32/01 ověřuje skrytí vylepšení bez dokončeného předchůdce a papírové
+   pozadí obou stavebních seznamů i při focusu. Model stále ověřuje přijetí zakázky.
+2. TC68/09 ověřuje učitele ve skutečných místech 1 a 3 školy, prázdné místo 2,
+   dvě nezávislé výuky a jejich zrušení. TC195 ověřuje prázdnou školu,
+   informace o terénu, užší volby produkce a nápovědu ve stavovém řádku.
+3. Chování popisují [UX pravidla](ux.md#spodni-karty-kolonie-13-listopadu-2026),
+   výsledky [funkční evidence](functional-tests.md#colony-inspectors-2026-11-13).
+
 ## UC-114/119: opakované Continue — 12. listopadu 2026
 
 ## UC-114/119, UC-031/033/042: karty kolonie — 13. listopadu 2026

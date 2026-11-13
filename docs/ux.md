@@ -10,8 +10,11 @@
    Nakládání, vykládání a přetahování používají dosavadní pravidla.
 3. V horním menu nejsou Education ani Trade route. Dosavadní dialogy zůstávají
    dostupné klávesovými zkratkami E a R; ostatní horní akce zůstávají.
-4. School otevře pod přehledem tři sloupce, každý s učitelem, studentem a
-   dovedností. Výběr dovednosti rovnou přiřadí výuku; Bez výuky ji zruší.
+4. School otevře pod přehledem tři sloupce podle skutečných pracovních míst
+   školy. Učitele představuje portrét pracovníka na daném místě; bez učitele
+   je vidět zpráva a volby studenta a dovednosti jsou skryté. Rozbalovací
+   pole nemají zelené podbarvení ani zástupné hodnoty Student a Skill. Výběr
+   dovednosti rovnou přiřadí výuku; Bez výuky ji zruší.
    Před zadáním jiného studenta stejnému učiteli je nutné jeho kurz zrušit.
    Průběh a pozastavení jsou u příslušného sloupce, nikoli v dalším seznamu.
    Samostatná tlačítka Assign teaching, zrušení a Close nejsou součástí panelu.
@@ -22,6 +25,17 @@
 6. Jde o schválené zadání, nikoli hráčskou studii. Výsledky kontrol uvádí
    [funkční evidence](functional-tests.md#combined-depot-and-school-columns-2026-11-13).
 
+
+7. Stavební seznamy nemění barvu celého pole při focusu. Výběr řádku je
+   nadále rozlišitelný. Nabídka skrývá vylepšení bez skutečně dokončené
+   předchozí budovy; pouhé zařazení předchůdce do fronty nestačí. Ostatní
+   omezení zůstávají vysvětlena u nabídky a model je znovu kontroluje při akci.
+8. Detail vybraného pole doplňuje základní cenu vstupu v bodech pohybu,
+   obranný bonus terénu a přítomný les, zorání, cestu, řeku a zvláštní zdroj.
+   Základní cena není počet tahů konkrétní jednotky; propojená cesta cenu
+   snižuje na třetinu bodu. Výnosy voleb zahrnují aktuální bonusy i pracovníka.
+   Volby práce mají šířku nejvýše 480 logických pixelů. Nápověda ke změně
+   produkce se zobrazuje ve stavovém řádku při přejetí myší přes tuto část.
 
 ## Jednodušší načítání — 11. listopadu 2026
 1. Hráč vybírá soubor vlevo a vidí jeho náhled a souhrn vpravo, bez dalšího

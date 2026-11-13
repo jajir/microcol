@@ -6,5 +6,5 @@ import org.akropia.i18n.MessageKeyResource;
 public enum EducationText implements MessageKeyResource {
     open, title, rule, teacher, student, skill, preview, veteran, active,
     paused, course, assign, cancelCourse, close, changed, none, graduated,
-    learned, inlineRule, noTeaching;
+    learned, inlineRule, noTeacher, noTeaching;
 }

@@ -18,6 +18,84 @@
 10. Final review covered the deferred close, disabled repeat submission, normalized extension-free EN/CS feedback, preserved cancellation/rejection paths, and the test-only drag correction. Shared Java formatting, 14 documentation consistency tests, naming audit and strict MkDocs passed. Unrelated backlog edits are excluded. Native macOS behavior, remote CI, Pages and game distribution publication were not verified; passing portable tests do not establish a native reproduction or a published build.
 
 
+## Colony inspectors — 2026-11-13
+
+1. UC-031/033/042: hide upgrades without a built predecessor, retain paper
+   backgrounds for focused construction lists and collapsed school selectors,
+   show actual school-slot teachers and hide choices in empty slots, enrich tile
+   facts and narrow work choices with hover status help.
+2. Targeted selection: `TC_32_F24_construction_eligibility_test`,
+   `TC_68_F59_education_test`, `TC_195_F227_colony_layout_test` and
+   `PageVerificationContractTest`. Model/JUnit, targeted Docker/Xvfb and smoke
+   acceptance results are recorded below. Native desktop inspection and remote
+   publication verification are not part of this task.
+3. First model attempt stopped at compilation: the UI referenced a package-private
+   school-tier helper (`target/verification/run-nngw8obv/`); no tests started.
+   Selecting the existing school construction types directly fixed that access.
+   The subsequent model/JUnit run passed **5,129 tests** in 395 reports, with zero
+   failures/errors/skips, 154.114 supervised seconds. Evidence:
+   `target/verification/run-i1dqg3ks/`; all changed game sources and runtime
+   resources match its snapshot. UI test sources were then extended with
+   background, slot-gap, prerequisite and tile-info assertions and are covered
+   by the targeted UI run.
+
+4. First targeted attempt stopped at test compilation (ambiguous TestFX
+   `moveTo` overload and a missing page helper). Explicit node typing and colony
+   identity fixed those test errors. The next attempt executed 29 tests with
+   11 errors: ten colony-opening errors came from reading an empty school slot
+   without checking `isEmpty()`, and one construction confirmation was outside
+   the viewport. The school now checks emptiness before reading its unit; the
+   page action reveals the actual confirm button before clicking. These failed
+   attempts remain failed; both require fresh acceptance.
+
+5. After the empty-slot fix, model/JUnit passed again: **5,129 tests**, zero
+   failures/errors/skips, 157.870 supervised seconds (`target/verification/run-ojnn_3di/`).
+   Targeted run `target/docker-ui/run-1jmQfW/` then completed 29 tests with two
+   assertion failures: the course-progress helper still assumed adjacent teacher
+   columns, and Czech hover help was empty. Progress checks now name the actual
+   occupied columns (1 and 3); production help refreshes on mouse movement as
+   well as entry, so a status clear from another control cannot leave it empty
+   while the player moves over this section. Fresh acceptance is required.
+
+6. Model/JUnit passed after hover refresh: **5,129 tests**, zero failures/errors/skips,
+   158.631 supervised seconds (`target/verification/run-wvsp6g5z/`), matching
+   current game sources. Targeted run `target/docker-ui/run-7aMriR/` executed
+   29 tests: one Czech hover-help assertion failed again; two additional errors
+   occurred opening the TC68/06 job context menu and TC32/05 colony by double-click.
+   Those two navigation errors have no established root cause yet. The school
+   slot-gap scenario passed, including independent assignment/cancellation and
+   paper backgrounds; its screenshot was inspected. The persistent Czech hover
+   case is isolated with a screenshot immediately before the status assertion.
+
+7. Isolated diagnostics `075147Z-ffe282d005bd` and `075356Z-f517683aa3bb`
+   reproduced the Czech status assertion. Geometry measured scene height 1,537 px
+   against a 1,000 px window; the output occupied screen y=1,034–1,256 and reported
+   `hover=false`. Canvas snapshots had autosized the live scene to scroll content.
+   The page now pins root preferred dimensions while taking canvas snapshots and
+   restores the live layout, matching the existing scene-snapshot safeguard.
+   Hover verification additionally requires the output itself to be hovered.
+   TC32/05 and TC68/06 use existing keyboard navigation for colony/job-menu entry;
+   their gameplay assertions remain unchanged, and other scenarios retain mouse
+   entry coverage. The earlier two mouse-entry errors remain undiagnosed and
+   recorded as failed evidence. No game source changed in these test repairs;
+   the passing model run remains applicable.
+
+8. Final targeted run `target/docker-ui/run-2zwKYP/` passed **29 tests** in
+   four complete XML reports, zero failures/errors/skips, 402.764 supervised
+   seconds. Source hashes match all changed game and test files. Reviewed
+   screenshots confirm school portraits/empty-slot messaging/paper selectors,
+   narrow production choices and Czech status help at the correct window size.
+   Final smoke passed **21 tests** in 12 complete XML reports, zero failures,
+   errors or skips, 251.791 supervised seconds within the 420-second budget.
+   Reports: `target/verification/run-wigyozdb/`; all changed executable sources
+   and resources match the accepted snapshot.
+9. Final review checked prerequisite filtering against actual buildings,
+   empty school slots, fixed teacher/course column identity, shared model
+   validation, scoped CSS, EN/CS tile facts and mouse status help. Shared Java
+   formatting, documentation consistency tests, name audit and strict MkDocs
+   complete the local checks. Historical failed runs remain failed. Native
+   macOS, remote CI, Pages and distribution publication were not verified.
+
 ## Combined depot and school columns — 2026-11-13
 
 1. UC-114/119 and UC-031/033/042: combined always-visible Cargo Depot, carrier

@@ -246,7 +246,7 @@ public class TC_68_F59_education_test extends AbstractAkropiaTest {
         education.verifyEquippedColonist(4, UnitType.EXPERT_FARMER, true, 100,
                 COLONY);
         // The prompt names the exact person and both roles.
-        jobs.openFromCenter(4);
+        jobs.openFromCenterWithKeyboard(4);
         jobs.openClearSpecialty();
         jobs.verifyClearPrompt(4, "Expert Farmer", "Free Colonist");
         jobs.confirm();
@@ -347,6 +347,26 @@ public class TC_68_F59_education_test extends AbstractAkropiaTest {
                             .equals("SCHOOLHOUSE"))
                         construction.addProperty("type", "UNIVERSITY");
                 });
+        // The visible columns follow actual school positions, including gaps.
+        saved.getAsJsonObject("model").getAsJsonArray("colonies").get(0)
+                .getAsJsonObject().getAsJsonArray("constructions")
+                .forEach(value -> {
+                    JsonObject construction = value.getAsJsonObject();
+                    construction.getAsJsonArray("slots").forEach(slot -> {
+                        JsonObject place = slot.getAsJsonObject();
+                        if (place.has("workerId") && (place.get("workerId")
+                                .getAsInt() == 200
+                                || place.get("workerId").getAsInt() == 201))
+                            place.remove("workerId");
+                    });
+                    if (construction.get("type").getAsString()
+                            .equals("UNIVERSITY")) {
+                        construction.getAsJsonArray("slots").get(0)
+                                .getAsJsonObject().addProperty("workerId", 200);
+                        construction.getAsJsonArray("slots").get(2)
+                                .getAsJsonObject().addProperty("workerId", 201);
+                    }
+                });
         final File prepared = new File(System.getProperty("user.home"),
                 "school-columns.akropia");
         Files.writeString(prepared.toPath(), saved.toString());
@@ -358,21 +378,22 @@ public class TC_68_F59_education_test extends AbstractAkropiaTest {
         EducationPage education = new EducationPage(getContext());
         education.openInline();
         education.verifyInline();
-        education.chooseInlineParticipants(0, 200, 0);
+        education.chooseInlineStudent(0, 0);
         education.chooseInlineSkill(0, UnitType.MASTER_CARPENTER);
-        education.verifyInlineCourses(1);
+        education.verifyInlineCourses(java.util.List.of(0));
         education.verifyStudentKeptJob();
         // A second column keeps the first course and assigns another teacher.
-        education.chooseInlineParticipants(1, 201, 1);
-        education.chooseInlineSkill(1, UnitType.MASTER_CARPENTER);
-        education.verifyInlineCourses(2);
+        education.chooseInlineStudent(2, 1);
+        education.chooseInlineSkill(2, UnitType.MASTER_CARPENTER);
+        education.verifyInlineCourses(java.util.List.of(0, 2));
+        education.verifyInline();
         education.captureDialog("schoolPanel", "school-three-columns.png");
         // No teaching cancels only the selected course.
-        education.chooseInlineSkill(1, null);
-        education.verifyInlineCourses(1);
+        education.chooseInlineSkill(2, null);
+        education.verifyInlineCourses(java.util.List.of(0));
         education.verifyCourseFor(0, UnitType.MASTER_CARPENTER, 0);
         education.chooseInlineSkill(0, null);
-        education.verifyInlineCourses(0);
+        education.verifyInlineCourses(java.util.List.of());
     }
 
     private void prepareEquippedVeteranExpert() throws Exception {

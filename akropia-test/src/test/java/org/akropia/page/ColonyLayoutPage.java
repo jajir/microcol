@@ -416,10 +416,14 @@ public final class ColonyLayoutPage extends AbstractScreen {
 
     public void verifySchoolInputs() {
         for (int column = 0; column < 3; column++) {
-            for (String prefix : java.util.List.of("schoolTeacher-",
-                    "schoolStudent-", "schoolSkill-")) {
-                assertTrue(getNodeFinder().lookup("#" + prefix + column).query()
-                        .getStyleClass().contains("paper-input"));
+            assertNull(getNodeFinder().lookup("#schoolTeacher-" + column)
+                    .queryAs(javafx.scene.image.ImageView.class).getImage());
+            for (String prefix : java.util.List.of("schoolStudent-",
+                    "schoolSkill-")) {
+                javafx.scene.Node box = getNodeFinder()
+                        .lookup("#" + prefix + column).query();
+                assertFalse(box.getParent().isVisible());
+                assertFalse(box.getParent().isManaged());
             }
         }
         for (String id : java.util.List.of("educationAssign", "educationClose",
@@ -469,6 +473,26 @@ public final class ColonyLayoutPage extends AbstractScreen {
         assertFalse(output.getParent().isManaged());
     }
 
+    private javafx.scene.image.WritableImage snapshotCanvas(
+            final Canvas canvas) {
+        javafx.scene.Scene scene = canvas.getScene();
+        javafx.scene.layout.Region root = (javafx.scene.layout.Region) scene
+                .getRoot();
+        double width = scene.getWidth(), height = scene.getHeight();
+        double preferredWidth = root.getPrefWidth(),
+                preferredHeight = root.getPrefHeight();
+        try {
+            // A node snapshot must not autosize the live scene to all scroll
+            // content.
+            root.setPrefSize(width, height);
+            return canvas.snapshot(null, null);
+        } finally {
+            root.setPrefSize(preferredWidth, preferredHeight);
+            root.resize(width, height);
+            root.layout();
+        }
+    }
+
     public void verifyPreviewMatchesMap(final int column, final int row) {
         getRobot().interact(() -> {
             final Canvas map = getNodeFinder().lookup("#colony-field-map")
@@ -480,10 +504,10 @@ public final class ColonyLayoutPage extends AbstractScreen {
                     .localToScene(preview.getLayoutBounds());
             assertEquals(size, actual.getWidth(), .01);
             assertEquals(size, actual.getHeight(), .01);
-            final javafx.scene.image.PixelReader mapPixels = map
-                    .snapshot(null, null).getPixelReader();
-            final javafx.scene.image.PixelReader detailPixels = preview
-                    .snapshot(null, null).getPixelReader();
+            final javafx.scene.image.PixelReader mapPixels = snapshotCanvas(map)
+                    .getPixelReader();
+            final javafx.scene.image.PixelReader detailPixels = snapshotCanvas(
+                    preview).getPixelReader();
             // Compare terrain and worker pixels outside the map's crop badge
             // and frame.
             for (int x = 28; x < size - 4; x++) {
@@ -507,6 +531,38 @@ public final class ColonyLayoutPage extends AbstractScreen {
         revealGameContent(getNodeFinder().lookup("#colony-field-output").query()
                 .getParent());
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void hoverProductionChoices() {
+        getRobot().moveTo(getNodeFinder().lookup("#colony-field-output")
+                .queryAs(Node.class));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyTileFacts(final int colonyId) {
+        assertTrue(getNodeFinder().lookup("#colony-field-output").query()
+                .isHover());
+        final I18n texts = getContext().getClassFromGuice(I18n.class);
+        org.akropia.model.Terrain terrain = getModel().getMap()
+                .getTerrainAt(getModel().getColonyById(colonyId).orElseThrow()
+                        .getColonyFieldInDirection(Direction.west)
+                        .getLocation());
+        String facts = getNodeFinder().lookup("#colony-field-info")
+                .queryLabeled().getText();
+        assertTrue(facts.contains(
+                texts.get(ColonyMsg.tileMovement, terrain.getMoveCost())));
+        assertTrue(facts.contains(texts.get(ColonyMsg.tileDefense,
+                terrain.isHasTrees()
+                        ? terrain.getTerrainType().getDefenseBonusWithTree()
+                        : terrain.getTerrainType().getDefenseBonus())));
+        javafx.scene.layout.Region production = (javafx.scene.layout.Region) getNodeFinder()
+                .lookup("#colony-field-output").query().getParent();
+        assertTrue(production.getWidth() <= 480.1);
+        assertTrue(production.lookupAll(".label").stream().noneMatch(
+                node -> node instanceof Label && texts.get(ColonyMsg.outputHelp)
+                        .equals(((Label) node).getText())));
+        assertEquals(texts.get(ColonyMsg.outputHelp), getNodeFinder()
+                .lookup("#statusBarLabel").queryLabeled().getText());
     }
 
     public void verifyProductionChoices(final int colonyId,
@@ -648,7 +704,7 @@ public final class ColonyLayoutPage extends AbstractScreen {
             final Canvas canvas = getNodeFinder().lookup("#colony-field-map")
                     .queryAs(Canvas.class);
             final double size = canvas.getWidth() / 3;
-            final Color actual = canvas.snapshot(null, null).getPixelReader()
+            final Color actual = snapshotCanvas(canvas).getPixelReader()
                     .getColor((int) ((column + .5) * size),
                             (int) (row * size + 2));
             assertEquals(expected, actual, "Selected tile frame color");

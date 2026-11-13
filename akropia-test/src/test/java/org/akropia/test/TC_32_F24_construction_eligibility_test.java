@@ -53,8 +53,12 @@ public class TC_32_F24_construction_eligibility_test
         construction.select("BLACKSMITHS_SHOP");
         construction.verifyOffer(false, "Requires 4 residents; currently 3.",
                 64, 20);
-        construction.select("IRON_WORKS");
-        construction.verifyOffer(false, "Requires: Blacksmith shop.", 240, 100);
+        construction.verifyProjectOffered("IRON_WORKS", false);
+        construction.focusList("constructionProjects");
+        construction.verifyPaperListFocus("constructionProjects");
+        construction.focusList("constructionQueue");
+        construction.verifyPaperListFocus("constructionQueue");
+        construction.verifyProjectOffered("LARGE_STABLES", false);
         construction.captureDialog("constructionProjects",
                 "construction-unavailable.png");
         construction.escape();
@@ -175,6 +179,9 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyQueue(List.of("WAREHOUSE"), List.of(1), 12);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_HOUSE, 0);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 1);
+        construction.open();
+        construction.verifyProjectOffered("IRON_WORKS", true);
+        construction.escape();
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 0));
         construction.verifyStatus("Construction in progress.");
         game = colony.close();
@@ -265,7 +272,7 @@ public class TC_32_F24_construction_eligibility_test
         // Tab/Space.
         SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();
-        settings.goBack().loadGame().openColonyAt(COLONY, "New Amsterdam");
+        settings.goBack().loadGame().openColonyWithKeyboard(0, "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
         construction.openWithKeyboard();
         construction.select("LUMBER_MILL");

@@ -139,4 +139,12 @@
   <entry key="overviewArea">Surrounding area</entry>
   <entry key="overviewCargo">Cargo</entry>
   <entry key="overviewPeople">Outside colony</entry>
+<entry key="tileMovement">Base movement cost: %s points</entry>
+<entry key="tileDefense">Terrain defense bonus: %s%%</entry>
+<entry key="tileForest">Forest</entry>
+<entry key="tilePlowed">Plowed field (crop bonus included in yields)</entry>
+<entry key="tileRoad">Road (connected road movement: ⅓ point; production bonus included in yields)</entry>
+<entry key="tileSmallRiver">Small river</entry>
+<entry key="tileLargeRiver">Large river</entry>
+<entry key="tileResource">Resource: %s (included in yields)</entry>
 </properties>

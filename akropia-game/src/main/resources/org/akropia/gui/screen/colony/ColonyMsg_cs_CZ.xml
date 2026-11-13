@@ -139,4 +139,12 @@
   <entry key="overviewArea">Okolí</entry>
   <entry key="overviewCargo">Náklad</entry>
   <entry key="overviewPeople">Vně kolonie</entry>
+<entry key="tileMovement">Základní cena pohybu: %s bodů</entry>
+<entry key="tileDefense">Obranný bonus terénu: %s%%</entry>
+<entry key="tileForest">Les</entry>
+<entry key="tilePlowed">Zorané pole (bonus plodin je zahrnut ve výnosech)</entry>
+<entry key="tileRoad">Cesta (pohyb po propojené cestě: ⅓ bodu; výrobní bonus je zahrnut ve výnosech)</entry>
+<entry key="tileSmallRiver">Malá řeka</entry>
+<entry key="tileLargeRiver">Velká řeka</entry>
+<entry key="tileResource">Surovinový bonus: %s (zahrnut ve výnosech)</entry>
 </properties>
