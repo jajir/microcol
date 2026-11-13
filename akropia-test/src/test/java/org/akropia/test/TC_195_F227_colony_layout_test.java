@@ -288,6 +288,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.openSection("construction");
         layout.verifyDetail("constructionAdd");
         layout.verifyConstructionLists();
+        layout.verifyNoSectionSeparators();
         layout.verifyStableWorkspaceGeometry();
         new InGameLayoutPage(getContext())
                 .saveEvidence("colony-five-construction.png");

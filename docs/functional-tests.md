@@ -1,3 +1,41 @@
+## Page separators — 2026-11-13
+
+1. UC-031/033/042 and shared in-game navigation (UC-114): keep the shared
+header contour inside its bar so opaque scrolling content cannot clip its
+lower half. The existing status-bar contour remains the visual reference.
+Remove the stock and detail top borders in the colony; retain spacing and actions.
+2. TC192 frame verification checks the unclipped header inset across game
+pages; TC195/06 checks both removed colony separators while retaining the
+construction, school, card ordering and gameplay assertions. Local acceptance
+is pending; no remote CI or publication verification was requested.
+3. Model/JUnit passed 5,129 tests in 395 XML reports with zero failures,
+errors or skips (`target/verification/run-psbsd_4w/`, 151.800 supervised seconds).
+The earlier preparation run was deliberately cancelled to finish CSS and is
+not acceptance. First targeted run `target/docker-ui/run-zpeYLt/` completed
+12 tests with three errors in 176.943 seconds: the shared button verifier
+still required 14px/default padding for compact colony buttons, and the
+navigation helper expected one Escape to leave a colony with its area detail
+open. Separator checks and TC195/06 passed. The saved construction screenshot
+shows both frame contours and the removed detail border.
+4. Updated page-object expectations retain explicit compact button font/padding
+checks; colony navigation closes the initial detail before leaving with Escape.
+No gameplay assertion was removed. A full repeat of the same targeted selection
+is pending. Production source and model tests remain unchanged since model acceptance.
+5. Repeated targeted selection passed all 12 checks with zero failures, errors
+or skips in 196.134 supervised seconds (`target/docker-ui/run-nJZ4dd/`, three
+complete XML reports): all eight TC192 scenarios, TC195/06 and three page-source
+contract checks. Reviewed screenshots of colony, construction and Save game
+confirm full header contours and absence of the requested colony separators.
+6. Final fixed smoke/support gate passed 21 checks in 12 complete XML reports,
+zero failures/errors/skips, in 252.540 supervised seconds within the 420-second
+acceptance budget (`target/verification/run-4mq7ttd7/`). All changed production
+and test files match its source snapshot; the accepted model snapshot matches
+both production CSS files. Shared Java formatting and scoped diff review passed.
+Final documentation consistency checks, naming audit and strict MkDocs passed.
+Local acceptance covers base revision `de4b62765e838dd974cf07c8f729fd2a5c55bd1b`
+plus this scoped change. Earlier failed/cancelled runs remain failed/cancelled.
+Remote CI, native desktop checks and publication were not inspected.
+
 ## Save shortcut return — 2026-11-13
 
 1. UC-114: after the user's renewed report, inspection found Save opens synchronously inside the key-pressed filter, entering its nested event loop before key dispatch returns. A duplicate native event was not captured and native macOS reproduction is not claimed. The shortcut now queues opening after dispatch, guards the pending interval and rechecks availability. Consumed events are ignored.

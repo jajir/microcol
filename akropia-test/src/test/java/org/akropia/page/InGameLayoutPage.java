@@ -218,6 +218,12 @@ public final class InGameLayoutPage extends AbstractScreen {
         }
     }
 
+    public void closeColonyWithEscape() {
+        // The first Escape closes the initially selected area detail.
+        closeWithEscape();
+        closeWithEscape();
+    }
+
     public void closeWithEscape() {
         getRobot().push(KeyCode.ESCAPE);
         WaitForAsyncUtils.waitForFxEvents();
@@ -258,6 +264,10 @@ public final class InGameLayoutPage extends AbstractScreen {
                     ((Label) root.lookup("#labelEra")).getPadding().getRight(),
                     "The year adds no second inset at the right edge");
             assertEquals(1, toolbar.getBorder().getImages().size());
+            assertEquals(0,
+                    toolbar.getBorder().getImages().get(0).getInsets()
+                            .getBottom(),
+                    "Header ink stays inside the bar, above opaque scrolling content");
             assertEquals(1, status.getBorder().getImages().size());
             assertEquals(toolbar.getBorder().getImages().get(0).getImage(),
                     status.getBorder().getImages().get(0).getImage(),

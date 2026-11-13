@@ -87,7 +87,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         // Escape also works when focus is in the shared toolbar.
         new org.akropia.page.PaperButtonsPage(getContext())
                 .focus("closeButtonId");
-        page.closeWithEscape();
+        page.closeColonyWithEscape();
         page.verifyMapReturned();
         game.openEuroperPort();
         page.verifyFrame(484, 1600);
@@ -214,7 +214,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         page.open("closeButtonId");
         game.openColonyWithKeyboard(0, "New Amsterdam");
         page.verifyBackToGame("closeButtonId", "Zpět do hry");
-        page.closeWithEscape();
+        page.closeColonyWithEscape();
         game.openEuroperPort("Domovský přístav");
         page.verifyBackToGame("closeButtonId", "Zpět do hry");
         page.open("closeButtonId");
@@ -291,7 +291,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         bars.verifyContents(2560, 1440);
         page.verifyFrame(484, 1600);
         bars.resizeContent(1000, 900);
-        page.closeWithEscape();
+        page.closeColonyWithEscape();
         game.openEuroperPort();
         bars.resizeContent(2560, 900);
         bars.verifyContents(2560, 1440);

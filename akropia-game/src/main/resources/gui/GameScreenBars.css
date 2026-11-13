@@ -152,3 +152,8 @@
 #statusBar > .game-bar-content {
     -fx-alignment: center-left;
 }
+
+/* Keep the lower contour inside the header, clear of scrolling page content. */
+.in-game-page .screen-toolbar {
+-fx-border-image-insets: 0;
+}

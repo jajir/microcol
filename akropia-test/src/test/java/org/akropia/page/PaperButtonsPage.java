@@ -119,10 +119,17 @@ public final class PaperButtonsPage extends AbstractScreen {
                 || button.getSkin() instanceof ToggleButtonSkin || button
                         .getSkin() instanceof javafx.scene.control.skin.MenuButtonSkin);
         assertEquals("Playpen Sans Regular", button.getFont().getName());
-        assertEquals(14, button.getFont().getSize());
-        assertEquals(
-                button.getStyleClass().contains("congress-card")
-                        ? new javafx.geometry.Insets(16)
+        boolean compactColonyButton = false;
+        for (javafx.scene.Parent parent = button
+                .getParent(); parent != null; parent = parent.getParent()) {
+            compactColonyButton |= button.getStyleClass().contains("button")
+                    && parent.getStyleClass().contains("colony-overview");
+        }
+        assertEquals(compactColonyButton ? 12 : 14, button.getFont().getSize(),
+                button.getId());
+        assertEquals(button.getStyleClass().contains("congress-card")
+                ? new javafx.geometry.Insets(16)
+                : compactColonyButton ? new javafx.geometry.Insets(3, 4, 3, 4)
                         : new javafx.geometry.Insets(6, 3, 7, 3),
                 button.getPadding(), button.getId());
         if ("deleteSaveRow".equals(button.getId())) {

@@ -1509,3 +1509,14 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 Posuvník množství při přesunu zboží používá sdílený kreslený vzhled pravítka
 ze hry včetně popisků a klávesnicového ovládání; rozsah, zrušení a potvrzení
 přesunu se nemění.
+
+## Oddělovací linky stránek — 13. listopadu 2026
+
+1. Horní linka pod záhlavím herních stránek zůstává celá viditelná a má
+stejnou tloušťku jako linka nad spodním stavovým řádkem. Posuvný obsah
+ji nesmí překrývat; pravidlo platí také pro Turn report a Save game.
+2. Detail kolonie nemá oddělovací linku mezi budovami a zbožím ani mezi
+souhrnnými kartami a jejich podrobným panelem. Prostorové odsazení,
+výběr karet, pořadí stavby a zavření detailu klávesou Escape zůstávají zachované.
+3. Jde o úpravu prezentace podle uživatelského zadání, nikoli o hráčskou
+studii. Ověření sleduje [funkční evidence](functional-tests.md#page-separators-2026-11-13).

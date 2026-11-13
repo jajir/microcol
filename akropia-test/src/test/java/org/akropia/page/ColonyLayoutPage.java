@@ -33,6 +33,20 @@ public final class ColonyLayoutPage extends AbstractScreen {
         super(context);
     }
 
+    public void verifyNoSectionSeparators() {
+        getRobot().interact(() -> {
+            for (String selector : List.of(".colony-stock", "#colony-detail")) {
+                final javafx.scene.layout.Region panel = getNodeFinder()
+                        .lookup(selector)
+                        .queryAs(javafx.scene.layout.Region.class);
+                assertTrue(
+                        panel.getBorder() == null
+                                || panel.getBorder().isEmpty(),
+                        "No separator above " + selector);
+            }
+        });
+    }
+
     public void verifyCompactBuildings(final double expectedPictureRow,
             final double expectedNameMinimum, final double expectedWorkerSize,
             final double expectedOutputGap) {

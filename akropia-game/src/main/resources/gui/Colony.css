@@ -33,7 +33,7 @@
 .colony-harbor .ships { -fx-spacing: 6; }
 .colony-harbor .harbor-unit { -fx-padding: 3; }
 .colony-harbor .harbor-cargo { -fx-spacing: 3; }
-.colony-stock { -fx-padding: 6 0 0 0; -fx-border-color: #7c826b; -fx-border-width: 1 0 0 0; }
+.colony-stock { -fx-padding: 6 0 0 0; -fx-border-width: 0; }
 .panel-colony-goods-column { -fx-min-width: 720; }
 .panel-colony-goods { -fx-alignment: top-center; }
 .warehouseGoods { -fx-min-width: 45; -fx-alignment: top-center; }
@@ -88,7 +88,7 @@
 .colony-overview .constructionPaneCarpenter { -fx-padding: 0; -fx-border-width: 0; }
 .colony-overview .constructionPaneCarpenter .label { -fx-font-size: 11; }
 .colony-overview .action-icon { -fx-fit-width: 22; -fx-fit-height: 22; }
-.colony-detail { -fx-padding: 10; -fx-border-color: #000000; -fx-border-width: 2 0 0 0; }
+.colony-detail { -fx-padding: 10; -fx-border-width: 0; }
 #colony-politics { -fx-font-size: 14; -fx-text-fill: #445b36; }
 .panel-colony-goods { -fx-vgap: 5; }
 
