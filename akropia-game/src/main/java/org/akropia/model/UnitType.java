@@ -246,7 +246,7 @@ public final class UnitType {
             .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
             .setCargoCapacity(2).setStorable(false).setEuropePrice(0)
             .setCanBuildRoad(false).setCanCutTrees(false).setCanPlowField(false)
-            .setRequiredTools(40).setRequiredHammers(0)
+            .setRequiredTools(0).setRequiredHammers(40)
             .setCanByBuildInColony((model, colony) -> {
                 return colony
                         .wasConstructionBuilded(ConstructionType.LUMBER_MILL);

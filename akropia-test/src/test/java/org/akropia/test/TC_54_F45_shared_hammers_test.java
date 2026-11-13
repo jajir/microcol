@@ -91,28 +91,28 @@ public class TC_54_F45_shared_hammers_test extends AbstractAkropiaTest {
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         building.verifyBuilding(ConstructionType.WAREHOUSE, 1);
         building.verifyQueue(List.of("WAGON"), List.of(2), 57);
-        building.verifyResourceProgress("constructionWork", "Not required", "",
+        building.verifyResourceProgress("constructionWork", "57 / 40",
+                "+6/turn", "Ready", 1, true);
+        building.verifyResourceProgress("constructionTools", "Not required", "",
                 "", 0, false);
-        building.verifyResourceProgress("constructionTools", "100 / 40",
-                "+0/turn", "Ready", 1, true);
         building.verifyForecast("Estimated turns: 1 (at current production).");
         building.verifyOutsideUnits(UnitType.WAGON, 0);
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        building.verifyQueue(List.of(), List.of(), 63);
+        building.verifyQueue(List.of(), List.of(), 23);
         building.verifyOutsideUnits(UnitType.WAGON, 1);
-        colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 60));
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 100));
         // An empty queue retains newly produced hammers and survives Continue.
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        building.verifyQueue(List.of(), List.of(), 69);
+        building.verifyQueue(List.of(), List.of(), 29);
         game = colony.close();
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame().openColonyAt(COLONY,
                 "New Amsterdam");
-        building.verifyQueue(List.of(), List.of(), 69);
+        building.verifyQueue(List.of(), List.of(), 29);
         building.verifyOutsideUnits(UnitType.WAGON, 1);
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0365-production-icons.png");

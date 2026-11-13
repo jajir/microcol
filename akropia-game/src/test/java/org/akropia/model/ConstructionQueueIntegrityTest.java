@@ -265,7 +265,7 @@ class ConstructionQueueIntegrityTest {
                 .addAtEnd(UnitType.WAGON);
         final ColonyBuildingItemProgressConstruction warehouse = queue
                 .addAtEnd(ConstructionType.WAREHOUSE);
-        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 93));
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 133));
         colony.getWarehouse().setGoods(Goods.of(GoodsType.TOOLS, 40));
         final int unitsBefore = model.getAllUnits().size();
         queue.startTurn();
@@ -273,7 +273,7 @@ class ConstructionQueueIntegrityTest {
         assertEquals(List.of(warehouse), queue.getBuildingQueue());
         assertEquals(93,
                 colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
-        assertEquals(0,
+        assertEquals(40,
                 colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount());
         queue.startTurn();
         assertEquals(13,

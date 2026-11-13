@@ -235,28 +235,28 @@ class ConstructionWaitingReportTest {
 
     @Test
     void unitProjectReportsItsTypedIdentity() {
-        // Delft already has the lumber mill that admits wagons.
-        assertTrue(colony
-                .isContainsConstructionByType(ConstructionType.LUMBER_MILL));
-        final ColonyBuildingItemProgressUnit wagon = queue
-                .addAtEnd(UnitType.WAGON);
-        final int hammers = UnitType.WAGON.getRequiredHammers();
-        final int tools = UnitType.WAGON.getRequiredTools();
+        // Artillery retains the tools requirement for this waiting report.
+        colony.getConstructions().add(
+                Construction.build(model, colony, ConstructionType.ARMORY));
+        final ColonyBuildingItemProgressUnit artillery = queue
+                .addAtEnd(UnitType.ARTILLERY);
+        final int hammers = UnitType.ARTILLERY.getRequiredHammers();
+        final int tools = UnitType.ARTILLERY.getRequiredTools();
         stock(hammers, tools - 3);
         queue.startTurn();
-        assertEquals(List.of(wagon), queue.getBuildingQueue());
+        assertEquals(List.of(artillery), queue.getBuildingQueue());
         assertEquals(1, waitingEvents().size());
         final TurnEventConstructionWaitingForTools event = waitingEvents()
                 .get(0);
         assertEquals(QueueItemType.UNIT, event.getProjectKind());
-        assertEquals(Optional.of(UnitType.WAGON), event.getUnitType());
+        assertEquals(Optional.of(UnitType.ARTILLERY), event.getUnitType());
         assertEquals(Optional.empty(), event.getConstructionType());
         assertEquals(3, event.getMissingTools());
         final Model restored = Model.make(model.save(),
                 MissionImpl.getPredefinedGameOverEvaluators());
-        assertEquals(Optional.of(UnitType.WAGON),
+        assertEquals(Optional.of(UnitType.ARTILLERY),
                 waitingEvents(restored).get(0).getUnitType());
-        // Supplying the tools completes the wagon instead of reminding.
+        // Supplying the tools completes the artillery instead of reminding.
         stock(hammers, tools);
         nextOwnerUpdate();
         assertTrue(waitingEvents().isEmpty());

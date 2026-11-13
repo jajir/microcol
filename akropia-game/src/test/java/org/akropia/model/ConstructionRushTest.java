@@ -175,18 +175,18 @@ class ConstructionRushTest {
     }
 
     @Test
-    void unitRushCreatesOneUnitWithoutStoringBoughtTools() {
+    void unitRushCreatesOneUnitWithoutConsumingTools() {
         queue.addAtEnd(UnitType.WAGON);
         queue.addAtEnd(ConstructionType.WAREHOUSE);
         colony.getWarehouse().setGoods(Goods.of(GoodsType.TOOLS, 10));
         owner.setGold(1000);
         final int units = model.getAllUnits().size();
         final ConstructionRushQuote quote = queue.getRushQuote().orElseThrow();
-        assertEquals(0, quote.getMissingHammers());
-        assertEquals(30, quote.getMissingTools());
+        assertEquals(40, quote.getMissingHammers());
+        assertEquals(0, quote.getMissingTools());
         queue.rush(quote);
         assertEquals(units + 1, model.getAllUnits().size());
-        assertEquals(0,
+        assertEquals(10,
                 colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount());
         assertEquals(1, queue.getBuildingQueue().size());
     }
@@ -287,7 +287,9 @@ class ConstructionRushTest {
 
     @Test
     void unavailableEuropeAndOverflowNeverOfferAQuote() {
-        queue.addAtEnd(UnitType.WAGON);
+        colony.getConstructions().add(
+                Construction.build(model, colony, ConstructionType.ARMORY));
+        queue.addAtEnd(UnitType.ARTILLERY);
         model.getEurope()
                 .getGoodsTradeForType(GoodsType.TOOLS, EuropeanNation.DUTCH)
                 .setBuyPrice(Integer.MAX_VALUE);

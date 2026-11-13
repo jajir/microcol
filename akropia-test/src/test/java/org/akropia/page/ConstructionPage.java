@@ -241,10 +241,16 @@ public final class ConstructionPage extends AbstractScreen {
 
     public void verifyEmptyProgress() {
         verifyStatus("No construction selected.");
-        assertTrue(getNodeFinder().lookup("#constructionWorkBar").queryAll()
-                .isEmpty());
-        assertTrue(getNodeFinder().lookup("#constructionToolsBar").queryAll()
-                .isEmpty());
+        for (String id : List.of("constructionWork", "constructionTools")) {
+            final javafx.scene.control.ProgressBar bar = getNodeFinder()
+                    .lookup("#" + id + "Bar")
+                    .queryAs(javafx.scene.control.ProgressBar.class);
+            assertEquals(0, bar.getProgress(), 0.001);
+            assertTrue(bar.isVisible());
+            assertEquals("—", getLabeledById(id + "Amount").getText());
+            assertTrue(bar.getAccessibleText()
+                    .contains("No construction selected."));
+        }
     }
 
     public void verifyStatus(final String expected) {

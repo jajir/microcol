@@ -257,7 +257,10 @@ class TaxBoycottTest {
         final Colony colony = model.getColonyByName("Delft").orElseThrow();
         final ColonyBuildingQueue queue = colony.getColonyBuildingQueue();
         final Player owner = colony.getOwner();
-        queue.addAtEnd(UnitType.WAGON);
+        colony.getConstructions().add(
+                Construction.build(model, colony, ConstructionType.ARMORY));
+        queue.addAtEnd(UnitType.ARTILLERY);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 200));
         queue.addAtEnd(ConstructionType.WAREHOUSE);
         colony.getWarehouse().setGoods(Goods.of(GoodsType.TOOLS, 10));
         owner.setGold(1000);
@@ -282,12 +285,15 @@ class TaxBoycottTest {
         final Colony colony = model.getColonyByName("Delft").orElseThrow();
         final ColonyBuildingQueue queue = colony.getColonyBuildingQueue();
         final Player owner = colony.getOwner();
-        queue.addAtEnd(UnitType.WAGON);
+        colony.getConstructions().add(
+                Construction.build(model, colony, ConstructionType.ARMORY));
+        queue.addAtEnd(UnitType.ARTILLERY);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 200));
         queue.addAtEnd(ConstructionType.WAREHOUSE);
         colony.getWarehouse().setGoods(Goods.of(GoodsType.TOOLS, 10));
         owner.setGold(1000);
         final ConstructionRushQuote quote = queue.getRushQuote().orElseThrow();
-        assertEquals(30, quote.getMissingTools());
+        assertEquals(90, quote.getMissingTools());
 
         owner.addTaxArrears(GoodsType.TOOLS, 100);
         final String before = snapshot(model);

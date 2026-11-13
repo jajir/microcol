@@ -348,14 +348,17 @@ class CustomHouseExportTest {
         final Model model = model();
         final Colony colony = equipped(model);
         colony.configureExportGoods(Set.of(), Set.of(GoodsType.TOOLS));
-        colony.getColonyBuildingQueue().addAtEnd(UnitType.WAGON);
+        colony.getConstructions().add(
+                Construction.build(model, colony, ConstructionType.ARMORY));
+        colony.getColonyBuildingQueue().addAtEnd(UnitType.ARTILLERY);
+        colony.getWarehouse().setGoods(Goods.of(GoodsType.HAMMERS, 200));
         colony.getWarehouse().setGoods(Goods.of(GoodsType.TOOLS, 100));
         colony.getWarehouse().stageProducedGoods(Goods.of(GoodsType.TOOLS, 10));
         final Player owner = colony.getOwner();
         final int beforeGold = owner.getGold();
         final int beforeUnits = model.getAllUnits().size();
         colony.startTurn();
-        assertEquals(70,
+        assertEquals(10,
                 colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount());
         assertEquals(beforeGold, owner.getGold());
         assertEquals(beforeUnits + 1, model.getAllUnits().size());
