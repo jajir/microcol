@@ -907,7 +907,8 @@ public final class FreePlayAuditPage extends AbstractScreen {
                                 .filter(slot -> !slot.isEmpty()).count());
         assertTrue(getNodeFinder().lookup(".constructionPaneCarpenter").query()
                 .isVisible(), "Construction must be discoverable");
-        assertTrue(getButtonById("constructionOpen").isFocusTraversable());
+        assertTrue(getButtonById("colony-section-construction")
+                .isFocusTraversable());
         assertTrue(
                 colony.getColonyBuildingQueue().getBuildingQueue().isEmpty());
     }

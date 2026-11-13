@@ -25,10 +25,12 @@ public class PageComponentPanelDock extends AbstractPageComponent {
         final java.util.Set<javafx.scene.Node> cargoSection = getNodeFinder()
                 .lookup("#colony-section-cargo").queryAll();
         if (!cargoSection.isEmpty()) {
+            revealGameContent(cargoSection.iterator().next());
             getRobot().clickOn(cargoSection.iterator().next());
             WaitForAsyncUtils.waitForFxEvents();
         }
         final ToggleButton ship = getUnitsInPort().get(unitIndex);
+        revealGameContent(ship);
         if (!ship.isSelected()) {
             getRobot().clickOn(ship);
         }

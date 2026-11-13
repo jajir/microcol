@@ -39,7 +39,9 @@ public class ScreenColony implements GameScreen {
         page.getContent().addEventFilter(
                 javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
                     if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) {
-                        callback.close();
+                        if (!colonyPanel.closeEditor()) {
+                            callback.close();
+                        }
                         event.consume();
                     }
                 });

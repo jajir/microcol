@@ -51,6 +51,10 @@ public final class DialogEducation extends AbstractMessageWindow {
         teacherLabel.setLabelFor(teachers);
         studentLabel.setLabelFor(students);
         skillLabel.setLabelFor(skills);
+        teachers.getStyleClass().add("paper-input");
+        students.getStyleClass().add("paper-input");
+        skills.getStyleClass().add("paper-input");
+        courses.getStyleClass().add("paper-input");
         teachers.setId("educationTeacher");
         students.setId("educationStudent");
         skills.setId("educationSkill");

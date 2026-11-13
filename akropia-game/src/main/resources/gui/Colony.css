@@ -81,7 +81,7 @@
 
 /* Five always-visible summaries; the selected workspace opens underneath. */
 .colony-overview { -fx-padding: 7; -fx-spacing: 5; -fx-background-color: #fff9ec;
-    -fx-border-color: #000000; -fx-border-width: 2; -fx-border-radius: 4 6 3 5; }
+    -fx-border-width: 0; }
 .colony-overview .label { -fx-font-size: 12; }
 .colony-overview .button { -fx-font-size: 12; -fx-padding: 3 4; }
 .colony-overview .button:selected { -fx-background-color: #d8dfb5; }
@@ -92,4 +92,17 @@
 #colony-politics { -fx-font-size: 14; -fx-text-fill: #445b36; }
 .panel-colony-goods { -fx-vgap: 5; }
 
-.colony-overview .section-arrow .action-icon { -fx-fit-width: 12; -fx-fit-height: 12; }
+
+
+/* Embedded editors share the paper inputs and selection colours. */
+.colony-detail .list-cell {
+    -fx-background-color: #FFF9EC;
+    -fx-text-fill: #302D27;
+}
+.colony-detail .list-cell:filled:selected {
+    -fx-background-color: #d8dfb5;
+}
+.colony-detail .combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+.colony-detail .combo-box .arrow { -fx-background-color: #302D27; }

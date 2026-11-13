@@ -287,7 +287,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
     @Test
     @Tag("local")
     void TC_06_overviews_reorder_and_inline_editors() throws Exception {
-        // Move presentation cards without changing the colony or its jobs.
+        // Simplified presentation cards preserve the colony and its jobs.
         final ColonyScreen town = WelcomePage.of(getContext()).loadGame()
                 .openColonyAt(Location.of(24, 16), "New Amsterdam");
         final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
@@ -296,21 +296,27 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.rememberWorkspaceGeometry();
         layout.verifyEmptyConstructionMeters();
         jobs.rememberWorld();
-        layout.moveSectionRight("area");
-        layout.verifySectionOrder("colony-card-construction",
-                "colony-card-area", "colony-card-cargo", "colony-card-people",
-                "colony-card-school");
+        layout.verifySimplifiedCards();
+        layout.verifySectionOrder("colony-card-area",
+                "colony-card-construction", "colony-card-cargo",
+                "colony-card-people", "colony-card-school");
         jobs.verifyWorldUnchanged();
 
         // The existing editors open below all five summaries.
         layout.openSection("construction");
         layout.verifyDetail("constructionAdd");
+        layout.verifyConstructionLists();
         layout.verifyStableWorkspaceGeometry();
         new InGameLayoutPage(getContext())
                 .saveEvidence("colony-five-construction.png");
         layout.openSection("school");
         layout.verifyDetail("educationAssign");
+        layout.verifySchoolInputs();
+        new InGameLayoutPage(getContext())
+                .saveEvidence("colony-five-school.png");
         layout.verifyStableWorkspaceGeometry();
+        layout.escapeEditor();
+        layout.verifyDetail("colony-field-name");
         layout.openSection("cargo");
         layout.verifyStableWorkspaceGeometry();
         layout.openSection("area");

@@ -1,5 +1,10 @@
 ## UC-114/119: opakované Continue — 12. listopadu 2026
 
+## UC-114/119, UC-031/033/042: karty kolonie — 13. listopadu 2026
+1. TC195/06 kontroluje zjednodušené karty, oba viditelné stavební seznamy, styl vstupů School a stabilitu rozložení. Zachovává kontrolu nezměněného herního stavu.
+2. TC32 nadále ověřuje stavební pravidla, frontu a zrušení, nyní přes vložený editor otevřený záhlavím karty. TC55 a TC68 pokrývají urychlení stavby a vzdělávání. Viz [funkční evidence](functional-tests.md#colony-cards-2026-11-13).
+
+
 `TC_191_F224_session_menu_test` TC09 opakuje návrat z hlavní nabídky klávesou C,
 ověřuje viditelnou hru a obnovený stav; zachovává také myší cestu, češtinu,
 nepovolené modifikátory a nedostupné Continue. Měření FPS při zobrazení hry

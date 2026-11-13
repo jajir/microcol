@@ -336,12 +336,42 @@ public final class ColonyLayoutPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void moveSectionRight(final String section) {
-        final VBox card = getNodeFinder().lookup("#colony-card-" + section)
+    public void verifySimplifiedCards() {
+        assertTrue(getNodeFinder().lookup("#colony-move-right-area").queryAll()
+                .isEmpty());
+        assertTrue(getNodeFinder().lookup("#constructionOpen").queryAll()
+                .isEmpty());
+        assertTrue(getLabeledById("colony-section-people").getText()
+                .contains("Outside colony"));
+        final VBox card = getNodeFinder().lookup("#colony-card-area")
                 .queryAs(VBox.class);
-        revealGameContent(card);
-        getRobot().clickOn("#colony-move-right-" + section);
+        assertTrue(card.getBorder() == null
+                || card.getBorder().getStrokes().isEmpty() || card.getBorder()
+                        .getStrokes().get(0).getWidths().getTop() == 0);
+    }
+
+    public void verifyConstructionLists() {
+        for (String id : java.util.List.of("constructionProjects",
+                "constructionQueue")) {
+            final javafx.scene.control.ListView<?> list = getNodeFinder()
+                    .lookup("#" + id)
+                    .queryAs(javafx.scene.control.ListView.class);
+            assertTrue(list.getHeight() >= 150);
+            assertTrue(list.getStyleClass().contains("paper-input"));
+        }
+    }
+
+    public void escapeEditor() {
+        getRobot().push(javafx.scene.input.KeyCode.ESCAPE);
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifySchoolInputs() {
+        for (String id : java.util.List.of("educationTeacher",
+                "educationStudent", "educationSkill", "educationCourses")) {
+            assertTrue(getNodeFinder().lookup("#" + id).query().getStyleClass()
+                    .contains("paper-input"));
+        }
     }
 
     public void verifySectionOrder(final String... expected) {

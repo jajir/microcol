@@ -18,24 +18,25 @@ import javafx.scene.input.MouseButton;
 
 /** Player actions and separate observations for the construction picker. */
 public final class ConstructionPage extends AbstractScreen {
-    private javafx.stage.Window picker;
+    private javafx.scene.Node picker;
 
     public ConstructionPage(final TestContext context) {
         super(context);
     }
 
     public void open() {
-        clickOnButtonWithId("constructionOpen");
-        picker = getButtonById("constructionAdd").getScene().getWindow();
+        clickOnButtonWithId("colony-section-construction");
+        picker = getButtonById("constructionAdd");
     }
 
     public void openWithKeyboard() {
-        pressWithKeyboard("constructionOpen");
-        picker = getButtonById("constructionAdd").getScene().getWindow();
+        pressWithKeyboard("colony-section-construction");
+        picker = getButtonById("constructionAdd");
     }
 
     private void pressWithKeyboard(final String id) {
         final Button button = getButtonById(id);
+        revealGameContent(button);
         for (int i = 0; i < 40 && !button.isFocused(); i++) {
             getRobot().push(KeyCode.TAB);
             WaitForAsyncUtils.waitForFxEvents();
@@ -55,6 +56,7 @@ public final class ConstructionPage extends AbstractScreen {
         final ColonyBuildingItem item = list.getItems().stream()
                 .filter(value -> value.getName().equals(type)).findFirst()
                 .orElseThrow();
+        revealGameContent(list);
         getRobot().interact(() -> list.scrollTo(item));
         WaitForAsyncUtils.waitForFxEvents();
         getRobot().clickOn("#project-" + type);
@@ -87,6 +89,7 @@ public final class ConstructionPage extends AbstractScreen {
     }
 
     public void selectQueue(final int index) {
+        revealGameContent(getNodeFinder().lookup("#constructionQueue").query());
         getRobot().clickOn("#constructionQueue");
         getRobot().push(KeyCode.HOME);
         for (int i = 0; i < index; i++) {
@@ -130,8 +133,8 @@ public final class ConstructionPage extends AbstractScreen {
     }
 
     public void verifyPickerClosed() {
-        assertFalse(picker.isShowing(),
-                "Cancel/Escape must close the actual modal window");
+        assertNull(picker.getScene(),
+                "Cancel/Escape must close the construction editor");
     }
 
     public void verifyOffer(final boolean available, final String reason,

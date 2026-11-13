@@ -1,5 +1,11 @@
 ## FPS counter — 2026-11-12
 
+## Colony cards — 2026-11-13
+1. Removed card ordering arrows and outer borders; renamed People to Outside colony. Construction opens through its overview header, with visible project/queue lists and shared paper inputs; School uses the same input treatment. Existing drag ordering and gameplay operations remain.
+2. TC195/06 checks presentation and unchanged world state; TC32 follows the embedded construction route including Cancel/Escape. Targeted selection: TC195, TC32, TC55, TC68 and PageVerificationContractTest. Final local acceptance is recorded in items 13–16.
+3. Model/JUnit dispatched with a 600-second watchdog: completion `20261113T033112Z-27a1acdfca0e`, supervisor PID 31016. Attempt timed out during preparation after 22.076 seconds: Docker container listing exceeded 20 seconds; no test command started. A bounded follow-up probe returned Docker server 29.8.2 in 0.54 seconds and the same container listing in 0.02 seconds. The original timeout cause is not established; this is not a test pass. No remote CI or publication verification requested.
+
+
 1. Source base `0d4852df55b34e9bec702e5236bfb6c8563d7d70`: replaced Swing timer
    in `FpsCounter` with elapsed monotonic time measured on painted frames.
    All callers are in `GamePanelComponent`; its existing show/hide/paint
@@ -33,6 +39,29 @@
    Review preserves the unrelated backlog edit and confirms no Swing/AWT import,
    timer or thread in `FpsCounter`. Remote CI, native macOS UI and publication
    are not verified in this task.
+4. Retry `20261113T033243Z-4865292db904` passed model/JUnit in 151.563 supervised seconds; reports `target/verification/run-862hcxru/`. A subsequent review fixed the construction shortcut's old button selector and the matching page-object observation. This production change requires a fresh model pass; dispatched `20261113T033535Z-30447ca8e35f`, PID 32014, 600-second watchdog.
+
+5. Final-source model/JUnit passed **5,129 tests** in 395 XML reports, zero failures/errors/skips, 155.685 supervised seconds (`20261113T033535Z-30447ca8e35f`, reports `target/verification/run-56rc8uwh/`). Changed game sources match the tested snapshot based on `f28ea26c`.
+6. Targeted Docker/Xvfb TC195, TC32, TC55, TC68 and PageVerificationContractTest dispatched `20261113T033828Z-4144e0666670`, supervisor PID 32394, 1,800-second watchdog. Targeted and smoke acceptance remain pending.
+
+7. First targeted run failed after 348.764 supervised seconds: **30 tests, 0 failures, 12 errors, 0 skips**, reports `target/docker-ui/run-rBG8xx/`. Construction page actions tried to click list cells outside the main scroll viewport after moving from a modal to the embedded editor. Updated the page object to reveal the list/queue and keyboard target before interaction, preserving all gameplay assertions. TC195 and education passed; screenshots of both inline editors confirm visible framed lists and paper inputs. Production source remains unchanged, so the final model pass is reusable.
+
+8. Second targeted run `20261113T034452Z-3f740b1e3a18` completed in 424.997 seconds: **30 tests, 0 failures, 4 errors, 0 skips**, reports `target/docker-ui/run-IazNm5/`. TC195, TC55, TC68 and source contract passed. Three TC32 errors followed Escape closing the entire colony through ScreenColony's ancestor event filter before the editor could handle it; the fourth failed the initial map double-click and is not attributed to editor behavior. ScreenColony now closes an active construction/school editor before leaving the colony. TC195/06 also checks School Escape. Production correction requires a new model pass and complete targeted retry.
+
+9. Escape-corrected source passed **5,129 model/JUnit tests** in 395 reports, zero failures/errors/skips, 154.256 supervised seconds (`20261113T035256Z-5688713269f4`, reports `target/verification/run-8r6yuwwe/`). All changed game sources match the model snapshot. Complete targeted selection dispatched `20261113T035549Z-2bd8f8dbd463`, supervisor PID 33577, 1,800-second watchdog.
+
+10. Third targeted run `20261113T035549Z-2bd8f8dbd463` completed in 447.962 seconds: **30 tests, 0 failures, 1 error, 0 skips**, reports `target/docker-ui/run-xTUzsr/`. Escape checks now pass. TC195/TC55/TC68 and source-contract reports are complete and green. TC32/02 alone timed out waiting for native DRAG_DONE while unloading tools from a ship; saved logs do not establish the cause. A bounded, unchanged-source TC32 plus source-contract rerun checks reproducibility, preserving the failed run and the other passing reports.
+
+11. Isolated TC32/source-contract run `20261113T040408Z-411396d4e5f2` reproduced the same TC32/02 DRAG_DONE timeout: **13 tests, 0 failures, 1 error, 0 skips**, 180.305 supervised seconds, reports `target/docker-ui/run-rS8HJG/`. A diagnostic-only TC32/02 run adds a pre-drag screenshot, source/target bounds and drag-event logging: `20261113T040746Z-c7d5840c1ad8`, PID 34181, 600-second watchdog. Temporary diagnostics must be removed before final acceptance.
+
+12. Diagnostic `20261113T040746Z-c7d5840c1ad8` reproduced the error in 78.822 seconds (`target/docker-ui/run-cNobRj/`). Screenshot `construction-cargo-before-drag.png` shows Area still selected, Cargo hidden and its header clipped behind the toolbar; no drag-detected event reached the invisible crate. The shared dock page action clicked the clipped header without revealing it. It now reveals the Cargo header and ship before clicking. Temporary diagnostics were removed; gameplay code and assertions are unchanged.
+
+13. Corrected TC32/source-contract run `20261113T040950Z-78ced339cf80` passed **13 tests**, zero failures/errors/skips, 180.622 supervised seconds; complete reports `target/docker-ui/run-csUflC/`. Combined with the unchanged passing TC195 (6), TC55 (3) and TC68 (8) reports from `run-xTUzsr`, all **30 targeted checks** pass. Those three scenarios do not call the corrected dock selection helper; production source is unchanged from the accepted model snapshot. Historical failed reports remain failed.
+14. Fixed smoke/support dispatched `20261113T041308Z-07bef8f0e3a8`, supervisor PID 34490, 480-second supervisor watchdog with the unchanged 420-second phase acceptance budget.
+
+15. Final smoke/support passed **21 tests** in 12 complete XML reports, zero failures/errors/skips, **251.311 phase seconds** (254.386 supervised seconds), within the 420-second budget. Reports: `target/verification/run-th7rcrsj/`; all changed game and test files match its source snapshot. Local acceptance totals: **5,129 model/JUnit, 30 targeted UI/support and 21 smoke/support checks**, all accepted reports green.
+16. Shared Java formatting and final scope review completed. Fourteen documentation consistency tests, name audit and strict MkDocs passed; logs `target/colony-cards/`. Construction/School screenshots were reviewed for visible lists, paper inputs and borders. Unrelated backlog edits are excluded. No remote CI, Pages or game distribution publication verification was performed.
+
 
 ## Save feedback — 2026-11-12
 

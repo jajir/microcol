@@ -65,6 +65,8 @@ public class QueueDialog extends AbstractMessageWindow {
         this.eventBus = eventBus;
         this.controller = controller;
         this.rushDialog = new ConstructionRushDialog(viewUtil, i18n);
+        projects.getStyleClass().add("paper-input");
+        queue.getStyleClass().add("paper-input");
         projects.setId("constructionProjects");
         queue.setId("constructionQueue");
         hammerPool.setId("constructionHammerPool");
@@ -132,6 +134,8 @@ public class QueueDialog extends AbstractMessageWindow {
         final VBox current = new VBox(8, queueTitle, hammerPool, queue,
                 new HBox(8, up, down), remove, rush);
         choices.setPrefWidth(420);
+        HBox.setHgrow(choices, Priority.ALWAYS);
+        HBox.setHgrow(current, Priority.ALWAYS);
         current.setPrefWidth(310);
         VBox.setVgrow(projects, Priority.ALWAYS);
         VBox.setVgrow(queue, Priority.ALWAYS);
@@ -143,13 +147,12 @@ public class QueueDialog extends AbstractMessageWindow {
         init(root);
         // ListView consumes Escape; cancellation must run before its key
         // handler.
-        getScene().addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED,
-                event -> {
-                    if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) {
-                        close();
-                        event.consume();
-                    }
-                });
+        root.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) {
+                close();
+                event.consume();
+            }
+        });
         getScene().getStylesheets().add(MainStageBuilder.STYLE_SHEET_AKROPIA);
     }
 
@@ -165,9 +168,13 @@ public class QueueDialog extends AbstractMessageWindow {
         ((javafx.scene.layout.Pane) root.getParent()).getChildren()
                 .remove(root);
         root.getStyleClass().remove("modal-content");
-        root.setPrefSize(javafx.scene.layout.Region.USE_COMPUTED_SIZE, 370);
-        projects.setPrefHeight(150);
-        queue.setPrefHeight(150);
+        root.setPrefSize(javafx.scene.layout.Region.USE_COMPUTED_SIZE,
+                javafx.scene.layout.Region.USE_COMPUTED_SIZE);
+        projects.setMinHeight(150);
+        projects.setPrefHeight(200);
+        queue.setMinHeight(150);
+        queue.setPrefHeight(200);
+        root.setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
         add.setDefaultButton(false);
         cancel.setCancelButton(false);
         controller.begin();

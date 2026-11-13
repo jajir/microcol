@@ -250,33 +250,14 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         title.setWrapText(true);
         title.setOnAction(event -> selectSection(key));
         sections.put(key, title);
-        final Button left = ActionButtons.button(ButtonIcon.UP);
-        left.getGraphic().setRotate(-90);
-        final Button right = ActionButtons.button(ButtonIcon.DOWN);
-        right.getGraphic().setRotate(-90);
-        for (Button arrow : java.util.List.of(left, right)) {
-            arrow.getStyleClass().add("section-arrow");
-            ((ImageView) arrow.getGraphic()).setFitWidth(12);
-            ((ImageView) arrow.getGraphic()).setFitHeight(12);
-        }
-        left.setAccessibleText(i18n.get(ColonyMsg.moveSectionLeft));
-        right.setAccessibleText(i18n.get(ColonyMsg.moveSectionRight));
         final HBox header = new HBox(title);
-        final HBox ordering = new HBox(3, left, right);
-        ordering.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
-        right.setId("colony-move-right-" + key);
-        left.setId("colony-move-left-" + key);
-        final Region spacer = new Region();
-        VBox.setVgrow(spacer, Priority.ALWAYS);
         HBox.setHgrow(title, Priority.ALWAYS);
-        final VBox card = new VBox(5, header, body, spacer, ordering);
+        final VBox card = new VBox(5, header, body);
         card.setId("colony-card-" + key);
         card.getStyleClass().add("colony-overview");
         card.setMinWidth(0);
         card.setPrefWidth(240);
         HBox.setHgrow(card, Priority.ALWAYS);
-        left.setOnAction(event -> moveSection(card, -1));
-        right.setOnAction(event -> moveSection(card, 1));
         header.setOnDragDetected(event -> {
             final javafx.scene.input.ClipboardContent clipboard = new javafx.scene.input.ClipboardContent();
             clipboard.putString("colony-section:" + key);
@@ -309,13 +290,12 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         overview.getChildren().add(card);
     }
 
-    private void moveSection(final VBox card, final int direction) {
-        final int index = overview.getChildren().indexOf(card);
-        final int target = index + direction;
-        if (target >= 0 && target < overview.getChildren().size()) {
-            overview.getChildren().remove(card);
-            overview.getChildren().add(target, card);
+    boolean closeEditor() {
+        if ("construction".equals(selected) || "school".equals(selected)) {
+            selectSection("area");
+            return true;
         }
+        return false;
     }
 
     private void selectSection(final String key) {

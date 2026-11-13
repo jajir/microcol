@@ -120,7 +120,7 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_HOUSE, 1);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 0);
         construction.verifyStatus("Waiting for tools: 1.");
-        construction.captureDialog("constructionOpen",
+        construction.captureDialog("colony-section-construction",
                 "construction-waiting.png");
 
         // Reopening and cancelling cannot discard completed hammer work.

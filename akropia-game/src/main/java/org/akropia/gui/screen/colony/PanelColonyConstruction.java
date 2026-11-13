@@ -1,20 +1,16 @@
 package org.akropia.gui.screen.colony;
 
 import java.util.Optional;
-import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.image.ImageCache;
 import org.akropia.gui.screen.colony.buildingqueue.ConstructionText;
-import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.util.JavaFxComponent;
 import org.akropia.i18n.I18n;
 import org.akropia.model.BuildingStatus;
 import org.akropia.model.Colony;
 import org.akropia.model.ColonyBuildingItem;
 import org.akropia.model.GoodsType;
-import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
@@ -29,14 +25,11 @@ import javafx.scene.layout.VBox;
 final class PanelColonyConstruction implements JavaFxComponent {
     private final VBox mainVbox = new VBox(6);
     private final I18n i18n;
-    private final EventBus events;
     private final ImageCache images;
 
     @Inject
-    PanelColonyConstruction(final I18n i18n, final EventBus events,
-            final ImageCache images) {
+    PanelColonyConstruction(final I18n i18n, final ImageCache images) {
         this.i18n = i18n;
-        this.events = events;
         this.images = images;
         mainVbox.getStyleClass().addAll("constructionPaneCarpenter",
                 "colony-section");
@@ -51,11 +44,6 @@ final class PanelColonyConstruction implements JavaFxComponent {
         final Optional<BuildingStatus<ColonyBuildingItem>> oStats = colony
                 .getColonyBuildingQueue().getActuallyBuildingStat();
         mainVbox.getChildren().clear();
-        final Button open = ActionButtons.button(ButtonIcon.LABOR,
-                i18n.get(ConstructionText.open));
-        open.setId("constructionOpen");
-        open.setOnAction(event -> events.post(new ShowBuildingQueueEvent()));
-        mainVbox.getChildren().add(open);
         if (oStats.isEmpty()) {
             mainVbox.getChildren().add(label("constructionStatus",
                     i18n.get(ConstructionText.empty)));

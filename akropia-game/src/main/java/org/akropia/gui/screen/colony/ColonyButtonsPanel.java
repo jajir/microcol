@@ -87,7 +87,7 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         commands.put(ShortcutAction.COLONY_CONSTRUCTION,
                 () -> buttonClose.getScene() == null ? null
                         : (Button) buttonClose.getScene()
-                                .lookup("#constructionOpen"));
+                                .lookup("#colony-section-construction"));
         commands.put(ShortcutAction.COLONY_EDUCATION, () -> education);
         commands.put(ShortcutAction.COLONY_CUSTOM_HOUSE, () -> exports);
         commands.put(ShortcutAction.COLONY_TRADE_ROUTE, () -> tradeRoute);
