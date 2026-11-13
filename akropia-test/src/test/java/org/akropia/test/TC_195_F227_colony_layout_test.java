@@ -34,6 +34,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.verifyMapTileSize(Tile.TILE_WIDTH_IN_PX);
         layout.verifyLayout("New Amsterdam", 7);
         layout.verifyCompactBuildings(46, 22, 32, 12);
+        layout.verifyStockSpacing(4);
         layout.verifyBuildingLevel("id_warehouse",
                 ConstructionType.WAREHOUSE_BASIC);
         layout.verifyCenter();
@@ -72,6 +73,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.GRAIN);
         layout.verifyLayout("New Amsterdam", 7);
         layout.verifyCompactBuildings(46, 22, 32, 12);
+        layout.verifyStockSpacing(4);
         layout.selectTile(2, 0);
         layout.verifyEmptyField();
         layout.verifyPreviewMatchesMap(2, 0);
@@ -81,6 +83,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         // The warehouse remains reachable at the original window width.
         new GameBarWidthPage(getContext()).resizeContent(1000, 925);
         layout.verifyCompactBuildings(46, 22, 32, 12);
+        layout.verifyStockSpacing(4);
         layout.verifyMapTileSize(Tile.TILE_WIDTH_IN_PX);
         layout.selectTile(0, 1);
         layout.verifyTileClickKeepsScroll();
@@ -126,6 +129,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.verifyConditionalActions(true, false);
         layout.verifyActionNames(true, "Vývoz", "Zpět do hry");
         layout.verifyCompactBuildings(46, 22, 32, 12);
+        layout.verifyStockSpacing(4);
         layout.verifyBuildingLevel("id_fort", ConstructionType.FORTRESS);
         layout.verifyBuildingLevel("id_warehouse",
                 ConstructionType.WAREHOUSE_EXPANSION);
@@ -149,6 +153,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
                 .saveEvidence("r0371-colony-czech-upgrades.png");
         new GameBarWidthPage(getContext()).resizeContent(1000, 925);
         layout.verifyCompactBuildings(46, 22, 32, 12);
+        layout.verifyStockSpacing(4);
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0371-colony-czech-small.png");
 

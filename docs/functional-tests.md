@@ -1,3 +1,32 @@
+## Compact colony spacing — 2026-11-13
+
+1. UC-031/033/042: reduce main colony section spacing from 10 to 4 logical
+pixels and remove the stock panel's 6px top padding. The buildings-to-goods
+heading gap is now 4px instead of 16px; artwork, labels and worker slots retain
+their sizes. TC195/01–02 check the actual gap alongside compact building geometry
+at wide and narrow sizes, preserving job selection and production assertions.
+2. Local model/JUnit, targeted Docker/Xvfb UI and fixed smoke acceptance pending.
+No remote CI or publication verification requested.
+3. Initial model dispatch `20261113T113633Z-1332cf3481db` timed out during
+preparation: the labelled-container query took 20.005 seconds (20s limit),
+with no test command started. The subsequent server-version and identical
+container-list probes succeeded in 0.026 and 0.019 seconds respectively; these
+do not establish the cause of the earlier delay. Failed evidence is retained.
+4. Model retry passed 5,129 checks in 395 XML reports, zero failures/errors/skips,
+154.769 supervised seconds (`target/verification/run-_mv4gdz8/`). The CSS matches
+that snapshot. Full TC195 plus the page-source contract then passed 10 checks
+in two XML reports, zero failures/errors/skips, 117.038 supervised seconds
+(`target/docker-ui/run-zYFe0z/`). Reviewed the wide colony screenshot: the stock
+heading sits closer to buildings and icons/text retain their original sizes.
+5. Fixed smoke/support passed 21 checks in 12 complete XML reports, zero
+failures/errors/skips, in 256.392 supervised seconds within the 420-second
+budget (`target/verification/run-yfpd9xk2/`). All changed production and test
+files match its source snapshot, based on `0d8f15eda60e6928e8185932d69aeff96f1b38ef`.
+Shared Java formatting and scoped review passed; 14 documentation consistency
+checks, name audit and strict MkDocs passed. Local acceptance is complete.
+The original preparation timeout remains failed. Native desktop, remote CI
+and publication were not verified.
+
 ## Page separators — 2026-11-13
 
 1. UC-031/033/042 and shared in-game navigation (UC-114): keep the shared
