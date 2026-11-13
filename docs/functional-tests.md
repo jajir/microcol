@@ -1,3 +1,28 @@
+## Colony section order and headings — 2026-11-13
+
+1. UC-114/119: default cards now read Surrounding area, Construction, School,
+   Cargo, Outside colony, in that order and without numeric prefixes. TC195/06
+   checks the exact English headings and order while retaining editor and
+   unchanged-world checks. No gameplay rule or artwork changed.
+2. Source based on `c981db4d6d071eb2b6e0c13e1fb8d1b788bd13e7`, with shared
+   Java formatting applied. Model/JUnit passed **5,129 tests** in 395 reports,
+   zero failures/errors/skips, in 158.627 supervised seconds (600 s limit).
+   Reports: `target/verification/run-xg15j90z/`; completion
+   `20261113T045239Z-7de8d6a97adf`. Changed game sources match its snapshot.
+3. Targeted Docker/Xvfb `TC_195_F227_colony_layout_test` and
+   `PageVerificationContractTest` passed **9 tests** in two reports,
+   zero failures/errors/skips, in 112.693 supervised seconds (1,800 s limit).
+   Reports: `target/docker-ui/run-7k8nOw/`; completion
+   `20261113T045538Z-b325c6b51e65`.
+4. Fixed smoke/support selection passed **21 tests** in 12 reports, zero
+   failures/errors/skips, in 250.306 supervised seconds within the 420 s budget.
+   Reports: `target/verification/run-5e_m9siy/`; completion
+   `20261113T045748Z-d0259a38110c`, supervisor PID 39071. All changed executable
+   and test sources match its snapshot. Local acceptance and diff review passed.
+5. Documentation acceptance passed 14 consistency tests, the naming audit and
+   strict MkDocs. Logs: `target/colony-section-order/`. Unrelated backlog edits
+   are excluded. No remote CI or distribution/publication verification performed.
+
 ## FPS counter — 2026-11-12
 
 ## Colony cards — 2026-11-13

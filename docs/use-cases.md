@@ -1,7 +1,7 @@
 ## UC-114/119: opakované Continue — 12. listopadu 2026
 
 ## UC-114/119, UC-031/033/042: karty kolonie — 13. listopadu 2026
-1. TC195/06 kontroluje zjednodušené karty, oba viditelné stavební seznamy, styl vstupů School a stabilitu rozložení. Zachovává kontrolu nezměněného herního stavu.
+1. TC195/06 kontroluje výchozí pořadí Surrounding area, Construction, School, Cargo, Outside colony a nadpisy bez čísel, zjednodušené karty, oba viditelné stavební seznamy, styl vstupů School a stabilitu rozložení. Zachovává kontrolu nezměněného herního stavu.
 2. TC32 nadále ověřuje stavební pravidla, frontu a zrušení, nyní přes vložený editor otevřený záhlavím karty. TC55 a TC68 pokrývají urychlení stavby a vzdělávání. Viz [funkční evidence](functional-tests.md#colony-cards-2026-11-13).
 
 

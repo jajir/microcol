@@ -341,8 +341,15 @@ public final class ColonyLayoutPage extends AbstractScreen {
                 .isEmpty());
         assertTrue(getNodeFinder().lookup("#constructionOpen").queryAll()
                 .isEmpty());
-        assertTrue(getLabeledById("colony-section-people").getText()
-                .contains("Outside colony"));
+        assertEquals("Surrounding area",
+                getLabeledById("colony-section-area").getText());
+        assertEquals("Construction",
+                getLabeledById("colony-section-construction").getText());
+        assertEquals("School",
+                getLabeledById("colony-section-school").getText());
+        assertEquals("Cargo", getLabeledById("colony-section-cargo").getText());
+        assertEquals("Outside colony",
+                getLabeledById("colony-section-people").getText());
         final VBox card = getNodeFinder().lookup("#colony-card-area")
                 .queryAs(VBox.class);
         assertTrue(card.getBorder() == null

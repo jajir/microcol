@@ -1,7 +1,7 @@
 # UX a pravidla ovládání Akropia
 
 ## Spodní karty kolonie — 13. listopadu 2026
-1. Přehledové karty nemají vnější rámeček ani šipky pro změnu pořadí. Přetažení záhlaví zůstává dostupné. Čtvrtá karta se jmenuje Outside colony / Vně kolonie.
+1. Přehledové karty nemají vnější rámeček ani šipky pro změnu pořadí. Přetažení záhlaví zůstává dostupné. Výchozí pořadí je Surrounding area, Construction, School, Cargo, Outside colony; nadpisy nemají číslování. Český název první karty zůstává Okolí.
 2. Construction se otevírá záhlavím karty přímo pod přehledem. Duplicitní tlačítko Construction je odstraněné. Seznam nabízených projektů a stavební fronta mají vlastní viditelnou plochu i při prázdné frontě; přidání, změna pořadí, odebrání a urychlení používají dosavadní pravidla.
 3. Construction a School používají společný papírový vzhled vstupů a herní barvy výběru. Zavření stavebního editoru tlačítkem nebo Escape vrátí plochu okolí kolonie bez změny fronty. Escape na School také nejprve zavře editor a ponechá hráče v kolonii.
 4. Jde o schválené zadání, nikoli hráčskou studii. Výsledky kontrol uvádí [funkční evidence](functional-tests.md#colony-cards-2026-11-13).

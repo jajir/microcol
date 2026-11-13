@@ -136,7 +136,7 @@
   <entry key="schoolSection">School</entry>
   <entry key="studentField">Field [%s, %s]</entry>
   <entry key="studentWorkplace">Student works: %s</entry>
-  <entry key="overviewArea">Area</entry>
+  <entry key="overviewArea">Surrounding area</entry>
   <entry key="overviewCargo">Cargo</entry>
   <entry key="overviewPeople">Outside colony</entry>
 </properties>

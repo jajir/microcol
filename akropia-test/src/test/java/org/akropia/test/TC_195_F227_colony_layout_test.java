@@ -298,8 +298,8 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         jobs.rememberWorld();
         layout.verifySimplifiedCards();
         layout.verifySectionOrder("colony-card-area",
-                "colony-card-construction", "colony-card-cargo",
-                "colony-card-people", "colony-card-school");
+                "colony-card-construction", "colony-card-school",
+                "colony-card-cargo", "colony-card-people");
         jobs.verifyWorldUnchanged();
 
         // The existing editors open below all five summaries.

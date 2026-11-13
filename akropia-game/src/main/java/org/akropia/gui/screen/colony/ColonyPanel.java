@@ -157,9 +157,9 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         politics.setId("colony-politics");
         addSection("area", colonyFields.getOverview());
         addSection("construction", construction.getContent());
+        addSection("school", schoolSummary);
         addSection("cargo", cargoSummary);
         addSection("people", outside);
-        addSection("school", schoolSummary);
         colonyFields.onSelect(() -> selectSection("area"));
         final VBox stock = new VBox(2, goodsTitle, goods.getContent());
         stock.getStyleClass().add("colony-stock");
@@ -442,13 +442,11 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         panelDock.updateLanguage(i18n);
         quickCargo.updateLanguage(i18n);
         goodsTitle.setText(i18n.get(ColonyMsg.stockSection));
-        sections.get("area").setText("1 · " + i18n.get(ColonyMsg.overviewArea));
+        sections.get("area").setText(i18n.get(ColonyMsg.overviewArea));
         sections.get("construction")
-                .setText("2 · " + i18n.get(ColonyMsg.buildingSection));
-        sections.get("cargo")
-                .setText("3 · " + i18n.get(ColonyMsg.overviewCargo));
-        sections.get("people")
-                .setText("4 · " + i18n.get(ColonyMsg.overviewPeople));
+                .setText(i18n.get(ColonyMsg.buildingSection));
+        sections.get("cargo").setText(i18n.get(ColonyMsg.overviewCargo));
+        sections.get("people").setText(i18n.get(ColonyMsg.overviewPeople));
         sections.get("school").setText(i18n.get(ColonyMsg.schoolSection));
         repaint();
     }
