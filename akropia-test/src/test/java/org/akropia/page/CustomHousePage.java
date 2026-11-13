@@ -103,7 +103,7 @@ public final class CustomHousePage extends AbstractScreen {
     }
 
     public void verifyUnavailable() {
-        assertTrue(getButtonById("customHouseOpen").isDisabled());
+        assertFalse(getButtonById("customHouseOpen").isVisible());
     }
 
     public void verifyHomeMarketClosed() {

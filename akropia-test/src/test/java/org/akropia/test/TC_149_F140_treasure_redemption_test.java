@@ -74,6 +74,8 @@ class TC_149_F140_treasure_redemption_test extends AbstractAkropiaTest {
         int gold = treasure.gold();
         int net = treasure.expectedNet(true);
         ColonyScreen colony = cargo.openDock();
+        new ColonyLayoutPage(getContext()).verifyConditionalActions(false,
+                true);
         // Cancel has no effects; confirmation reserves the displayed proceeds.
         treasure.open();
         treasure.verifyTerms(true, net);
@@ -94,6 +96,9 @@ class TC_149_F140_treasure_redemption_test extends AbstractAkropiaTest {
         GamePage.of(getContext()).nextTurnAndCloseDialogs();
         treasure.verifyTrainPresent(false);
         treasure.verifyGold(gold + net);
+        cargo.openDock();
+        new ColonyLayoutPage(getContext()).verifyConditionalActions(false,
+                false);
     }
 
     @Test

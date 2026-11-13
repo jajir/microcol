@@ -54,7 +54,7 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
     }
 
     public void open() {
-        press("tradeRouteCargoOpen");
+        getRobot().push(KeyCode.C);
         WaitForAsyncUtils.waitForFxEvents();
     }
 

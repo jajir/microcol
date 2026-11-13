@@ -95,9 +95,10 @@ public final class ColonyLayoutPage extends AbstractScreen {
 
     public void verifyActionNames(final boolean expanded,
             final String... expected) {
-        final String[] ids = { "customHouseOpen", "treasureOpen",
-                "tradeRouteCargoOpen", "quickLoad", "quickUnload",
-                "closeButtonId" };
+        final String[] ids = getNodeFinder().lookup("#colonyButtons")
+                .queryAs(javafx.scene.layout.Pane.class).getChildren().stream()
+                .filter(Node::isVisible).map(Node::getId)
+                .toArray(String[]::new);
         getRobot().interact(() -> {
             assertEquals(ids.length, expected.length);
             final Node toolbar = getNodeFinder().lookup(".screen-toolbar")
@@ -130,6 +131,23 @@ public final class ColonyLayoutPage extends AbstractScreen {
                 }
             }
         });
+    }
+
+    public void verifyConditionalActions(final boolean exports,
+            final boolean treasure) {
+        assertEquals(exports, getButtonById("customHouseOpen").isVisible());
+        assertEquals(exports, getButtonById("customHouseOpen").isManaged());
+        assertEquals(treasure, getButtonById("treasureOpen").isVisible());
+        assertEquals(treasure, getButtonById("treasureOpen").isManaged());
+        verifyRemovedCargoActions();
+    }
+
+    public void verifyRemovedCargoActions() {
+        for (final String id : List.of("quickLoad", "quickUnload",
+                "tradeRouteCargoOpen", "tradeRouteOpen")) {
+            assertTrue(getNodeFinder().lookup("#" + id).tryQuery().isEmpty(),
+                    id);
+        }
     }
 
     public void hoverAction(final String id) {

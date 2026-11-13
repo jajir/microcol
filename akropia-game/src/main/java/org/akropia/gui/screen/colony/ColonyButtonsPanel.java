@@ -11,7 +11,7 @@ import org.akropia.gui.Loc;
 
 import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.image.ButtonIcon;
-import java.util.List;
+import org.akropia.model.unit.UnitTreasure;
 
 import org.akropia.gui.buttonpanel.AbstractButtonsPanel;
 import org.akropia.gui.event.model.GameModelController;
@@ -80,7 +80,12 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         buttonClose.setOnAction(
                 evnt -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
 
-        getButtonPanel().getChildren().addAll(exports, buttonClose);
+        getButtonPanel().getChildren().addAll(exports, treasure, buttonClose);
+        exports.managedProperty().bind(exports.visibleProperty());
+        treasure.managedProperty().bind(treasure.visibleProperty());
+        getButtonPanel().getChildren().stream().map(Button.class::cast)
+                .forEach(button -> button.accessibleTextProperty()
+                        .bind(button.textProperty()));
         final Map<ShortcutAction, Supplier<? extends Button>> commands = new EnumMap<>(
                 ShortcutAction.class);
         // The queue button is recreated with each repaint of the colony.
@@ -89,7 +94,6 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
                         : (Button) buttonClose.getScene()
                                 .lookup("#colony-section-construction"));
         commands.put(ShortcutAction.COLONY_CUSTOM_HOUSE, () -> exports);
-        commands.put(ShortcutAction.COLONY_ROUTE_CARGO, () -> tradeRouteCargo);
         commands.put(ShortcutAction.COLONY_TREASURE, () -> treasure);
         ShortcutButtons.install(buttonClose, shortcuts, commands);
         this.shortcuts = shortcuts;
@@ -122,6 +126,11 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
                                 && !tradeRoute.isDisabled()) {
                             tradeRoute.fire();
                             event.consume();
+                        } else if (shortcuts.matches(
+                                ShortcutAction.COLONY_ROUTE_CARGO, event)
+                                && !tradeRouteCargo.isDisabled()) {
+                            tradeRouteCargo.fire();
+                            event.consume();
                         }
                     });
         });
@@ -134,6 +143,7 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         getButtonPanel().addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
             final Button hovered = getButtonPanel().getChildren().stream()
                     .filter(Button.class::isInstance).map(Button.class::cast)
+                    .filter(Button::isVisible)
                     .filter(button -> button.contains(button.sceneToLocal(
                             event.getSceneX(), event.getSceneY())))
                     .findFirst().orElse(null);
@@ -165,6 +175,10 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         treasure.setText(i18n.get(ColonyMsg.treasureAction));
         treasure.setAccessibleHelp(i18n.get(ColonyMsg.treasureHelp));
         treasure.setDisable(colony.getOwner() != game.getHumanPlayer());
+        treasure.setVisible(game.getHumanPlayer().getAllUnits().stream()
+                .anyMatch(unit -> unit instanceof UnitTreasure
+                        && unit.isAtPlaceLocation()
+                        && colony.getLocation().equals(unit.getLocation())));
         education.setText(i18n.get(EducationText.open));
         education.setAccessibleHelp(i18n.get(ColonyMsg.educationHelp));
         education.setDisable(false);
@@ -178,6 +192,7 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         exports.setText(i18n.get(ColonyMsg.exportsAction));
         exports.setDisable(!colony.isContainsConstructionByType(
                 org.akropia.model.ConstructionType.CUSTOM_HOUSE));
+        exports.setVisible(!exports.isDisabled());
         exports.setAccessibleHelp(
                 i18n.get(exports.isDisabled() ? CustomHouseText.unavailable
                         : CustomHouseText.rule));
@@ -192,13 +207,4 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         return buttonClose;
     }
 
-    void addQuickCargoButtons(final List<Button> buttons) {
-        getButtonPanel().getChildren().remove(buttonClose);
-        getButtonPanel().getChildren().addAll(treasure, tradeRouteCargo);
-        getButtonPanel().getChildren().addAll(buttons);
-        getButtonPanel().getChildren().add(buttonClose);
-        getButtonPanel().getChildren().stream().map(Button.class::cast)
-                .forEach(button -> button.accessibleTextProperty()
-                        .bind(button.textProperty()));
-    }
 }

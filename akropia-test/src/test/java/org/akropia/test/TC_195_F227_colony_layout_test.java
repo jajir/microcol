@@ -123,6 +123,8 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
         layout.verifyMapTileSize(Tile.TILE_WIDTH_IN_PX);
         layout.verifyLayout("Delft", 0);
+        layout.verifyConditionalActions(true, false);
+        layout.verifyActionNames(true, "Vývoz", "Zpět do hry");
         layout.verifyCompactBuildings(46, 22, 32, 12);
         layout.verifyBuildingLevel("id_fort", ConstructionType.FORTRESS);
         layout.verifyBuildingLevel("id_warehouse",
@@ -159,7 +161,10 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         town.verifyLocalProduction(GoodsType.HAMMERS, "Kladiva", "0", "");
         town.verifyLocalProduction(GoodsType.TORCHES, "Pochodně", "", "+3");
         town.verifyLocalProduction(GoodsType.OWLS, "Sovy", "", "+2");
-        town.close();
+        final ColonyScreen other = town.close()
+                .openColonyAt(Location.of(24, 16), "New Amsterdam");
+        layout.verifyConditionalActions(false, false);
+        other.close();
     }
 
     @Test
@@ -173,36 +178,21 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.rememberWorld();
         bars.resizeContent(1600, 1000);
-        layout.verifyActionNames(true, "Exports", "Treasure", "Route cargo…",
-                "Load", "Unload", "Back to game");
+        layout.verifyActionNames(true, "Back to game");
+        layout.verifyConditionalActions(false, false);
         new InGameLayoutPage(getContext()).saveEvidence("r0360-actions-en.png");
         bars.resizeContent(1000, 925);
-        layout.verifyActionNames(true, "Exports", "Treasure", "Route cargo…",
-                "Load", "Unload", "Back to game");
+        layout.verifyActionNames(true, "Back to game");
+        layout.verifyConditionalActions(false, false);
 
         // Every icon explains its action; disabled exports explain the
         // prerequisite.
-        layout.hoverAction("customHouseOpen");
-        layout.verifyActionExplanation(
-                "Build a custom house to choose automatic exports. (X)");
-        layout.hoverAction("treasureOpen");
-        layout.verifyActionExplanation(
-                "Choose a treasure in this colony and review its payout and transport fee before redeeming it. (T)");
-        layout.hoverAction("tradeRouteCargoOpen");
-        layout.verifyActionExplanation(
-                "Set which goods to unload and load at each trade-route stop, or process a carrier waiting here. (C)");
-        layout.hoverAction("quickLoad");
-        layout.verifyActionExplanation(
-                "Propose goods from the warehouse to load onto the selected ship. Review the amount before confirming.");
-        layout.hoverAction("quickUnload");
-        layout.verifyActionExplanation(
-                "Propose cargo from the selected ship to unload into the warehouse. Review the amount before confirming.");
         layout.hoverAction("closeButtonId");
         layout.verifyActionExplanation(
                 "Close the colony and return to the world map.");
         layout.hoverActionGap();
         layout.verifyNoActionExplanation();
-        layout.hoverAction("quickUnload");
+        layout.hoverAction("closeButtonId");
         layout.leaveActions();
         layout.verifyNoActionExplanation();
         jobs.verifyWorldUnchanged();
@@ -210,8 +200,8 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         // Expanding restores the complete labels and the original return
         // action.
         bars.resizeContent(1600, 1000);
-        layout.verifyActionNames(true, "Exports", "Treasure", "Route cargo…",
-                "Load", "Unload", "Back to game");
+        layout.verifyActionNames(true, "Back to game");
+        layout.verifyConditionalActions(false, false);
         town.close();
     }
 
@@ -227,26 +217,20 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
         final GameBarWidthPage bars = new GameBarWidthPage(getContext());
         bars.resizeContent(1600, 1000);
-        layout.verifyActionNames(true, "Vývoz", "Poklad", "Náklad trasy…",
-                "Naložit", "Vyložit", "Zpět do hry");
+        layout.verifyActionNames(true, "Zpět do hry");
+        layout.verifyConditionalActions(false, false);
         new InGameLayoutPage(getContext()).saveEvidence("r0360-actions-cs.png");
         bars.resizeContent(1000, 925);
-        layout.verifyActionNames(true, "Vývoz", "Poklad", "Náklad trasy…",
-                "Naložit", "Vyložit", "Zpět do hry");
-        layout.hoverAction("customHouseOpen");
-        layout.verifyActionExplanation(
-                "Pro automatický vývoz nejprve postavte celnici. (X)");
-        layout.hoverAction("quickLoad");
-        layout.verifyActionExplanation(
-                "Navrhněte zboží ze skladu k naložení na vybranou loď. Před potvrzením zkontrolujte množství.");
+        layout.verifyActionNames(true, "Zpět do hry");
+        layout.verifyConditionalActions(false, false);
         layout.hoverActionGap();
         layout.verifyNoActionExplanation();
-        layout.hoverAction("quickUnload");
+        layout.hoverAction("closeButtonId");
         layout.leaveActions();
         layout.verifyNoActionExplanation();
         bars.resizeContent(1600, 1000);
-        layout.verifyActionNames(true, "Vývoz", "Poklad", "Náklad trasy…",
-                "Naložit", "Vyložit", "Zpět do hry");
+        layout.verifyActionNames(true, "Zpět do hry");
+        layout.verifyConditionalActions(false, false);
         town.close();
     }
 

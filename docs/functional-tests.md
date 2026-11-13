@@ -15942,3 +15942,54 @@ The numbered entries below are chronological evidence, including failed attempts
 2. Tool-shortage, boycott and export model tests use artillery, which still consumes tools. The initial model run (`run-4m_ov7ud`) ran 5,129 tests with six failures and one error from old wagon-cost assumptions; this failed evidence is retained. The second model run (`run-80rsljpo`) had one error because the revised export fixture exceeded warehouse capacity; the corrected fixture stays within capacity. Final model acceptance (`run-a0heow1r`) passed all 5,129 tests, with zero failures, errors or skips.
 3. Targeted Docker/Xvfb acceptance `20261113T052600Z-4c77b17a5003` passed all 19 tests in TC32, TC54, TC55 and `PageVerificationContractTest`, with zero failures, errors or skips (312 seconds of a 600-second limit). The earlier UI run `20261113T052024Z-91baf9817bc7` retained one failure from an outdated empty-progress assertion; the page verification now checks the existing visible zero bars, empty amounts and accessible text.
 4. Java formatting, documentation consistency checks (14 tests) and strict MkDocs passed. Smoke is explicitly waived by the user for this change; full regression and publication are not verified.
+
+## Conditional colony toolbar — 2026-11-13
+
+1. On base `8f829c58`, Exports is visible and managed only with a completed
+   custom house. Treasure is visible and managed only while an owned treasure
+   train stands at this colony, including a train awaiting pickup. Route cargo,
+   Load and Unload buttons are removed. Route configuration and its existing C
+   shortcut remain available; manual goods drag-and-drop remains available.
+2. Selection: `TC_195_F227_colony_layout_test`,
+   `TC_106_F97_quick_cargo_test`, `TC_149_F140_treasure_redemption_test`,
+   `TC_58_F49_custom_house_test`, `TC_118_F109_trade_route_assignment_test`,
+   `PageVerificationContractTest`. TC195 checks conditional visibility, layout
+   in both languages and switching colonies; TC149 checks a present treasure
+   and its absence after pickup. TC106 replaces obsolete quick-dialog scenarios
+   with removed-control and manual-transfer/save checks, retaining passenger,
+   treasury and non-cargo production assertions. Stable scenario numbers remain.
+3. Shared Java formatter passed (token equivalence and idempotence); review
+   includes filtering hidden controls out of hover hit testing. Model/JUnit
+   acceptance `20261113T101825Z-116a14ace972`, supervisor PID 72303,
+   `target/verification/run-1tiwy5c4`: **5,129 tests / 395 XML reports, zero
+   failures/errors/skips**, 152.756 seconds execution, 93.653 seconds lock wait,
+   600-second timeout. Earlier passing model run `20261113T101722Z-fab953de4ee0`
+   predates the hover filter and is retained but not used for final acceptance.
+4. Targeted Docker/Xvfb acceptance started as `20261113T102246Z-d01a38411ea5`,
+   supervisor PID 72968, timeout 2,400 seconds. This attempt failed at
+   compilation as detailed below. No remote CI or publication verification
+   is requested or claimed.
+
+5. Targeted attempt `20261113T102246Z-d01a38411ea5` failed during test
+   compilation after 38.668 seconds (2,400-second timeout); no UI test started.
+   TC106/01 passed a String instead of the existing boolean selection assertion
+   argument. Corrected to `true`; runtime/model source remains unchanged, so
+   the accepted model/JUnit phase is reused. The failed attempt is retained.
+
+6. Targeted retry `20261113T102402Z-368cf67a15ad`, supervisor PID 73358,
+   passed **27 tests / 6 fresh XML reports, zero failures/errors/skips** in
+   393.132 seconds (2,400-second timeout), `target/docker-ui/run-DKUAWK`.
+   Selection is exactly item 2. Visual review of `r0360-actions-en.png`
+   confirms that a colony without a custom house or treasure has only Back
+   to game in the toolbar, with no blank button slots.
+7. Fixed smoke/support dispatched as `20261113T103057Z-ebf5b071f6f0`,
+   supervisor PID 73777, 480-second supervisor timeout and 420-second total
+   acceptance budget. Passed **21 tests / 12 fresh XML reports, zero
+   failures/errors/skips**, `target/verification/run-_3nn8a9t`; total
+   supervisor execution 253.425 seconds, within the 420-second budget.
+   Selection is the fixed precommit smoke/support manifest in that run.
+8. Documentation acceptance passed all 14 consistency tests, naming audit
+   (zero unexplained old-name occurrences) and strict MkDocs. Logs:
+   `target/colony-toolbar-2026-11-13/`. Final review and `git diff --check`
+   cover task changes only; the unrelated backlog edit remains excluded.
+   Local acceptance does not establish full regression or publication.

@@ -95,8 +95,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     private Colony colony;
     private final ColonyButtonsPanel buttons;
 
-    private final ColonyQuickCargo quickCargo;
-
     private final EventBus eventBus;
 
     @Inject
@@ -106,8 +104,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             final PanelColonyGoods panelColonyGoods,
             final ColonyButtonsPanel colonyButtonsPanel,
             final PanelDockColony panelDockColony,
-            final PanelColonyName panelColonyName,
-            final ColonyQuickCargo colonyQuickCargo, final EventBus eventBus,
+            final PanelColonyName panelColonyName, final EventBus eventBus,
             final PanelColonyConstruction construction, final I18n i18n,
             final Provider<QueueDialog> queue,
             final Provider<DialogEducation> education) {
@@ -116,9 +113,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         this.construction = construction;
         this.i18n = i18n;
         this.buttons = colonyButtonsPanel;
-        this.quickCargo = Preconditions.checkNotNull(colonyQuickCargo);
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        colonyButtonsPanel.addQuickCargoButtons(quickCargo.getButtons());
         this.colonyFields = Preconditions.checkNotNull(panelColonyFields);
         this.colonyStructures = Preconditions
                 .checkNotNull(panelColonyStructures);
@@ -343,7 +338,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     @Override
     public void updateLanguage(final I18n i18n) {
         panelDock.updateLanguage(i18n);
-        quickCargo.updateLanguage(i18n);
         goodsTitle.setText(i18n.get(ColonyMsg.stockSection));
         sections.get("area").setText(i18n.get(ColonyMsg.overviewArea));
         sections.get("construction")

@@ -9,7 +9,13 @@
    colony. Nadpis začíná v úrovni horní hrany sousedních tlačítek. Výběr přepravce změní nadpis například na Cargo Depot - Wagon #14.
    Nakládání, vykládání a přetahování používají dosavadní pravidla.
 3. V horním menu nejsou Education ani Trade route. Dosavadní dialogy zůstávají
-   dostupné klávesovými zkratkami E a R; ostatní horní akce zůstávají.
+   dostupné klávesovými zkratkami E a R. Vývoz se zobrazuje pouze po dokončení
+celnice, Poklad pouze při přítomnosti vlastního povozu s pokladem na poli kolonie
+(včetně povozu čekajícího na vyzvednutí). Skryté akce nezabírají místo.
+Route cargo, Load a Unload v liště nejsou. Náklad obchodních tras se nastavuje
+ve správě tras; dosavadní zkratka C zůstává dostupná. Ruční přesuny zboží
+probíhají přetažením mezi skladem a vybraným dopravcem. Návrat do hry zůstává
+vždy dostupný. Zobrazení se přepočítá při překreslení i při otevření jiné kolonie.
 4. School otevře pod přehledem tři sloupce podle skutečných pracovních míst
    školy. Sloupce mají šířku nejvýše 300 logických pixelů a neroztahují se
    přes celou širokou obrazovku. Učitele představuje portrét pracovníka na daném místě; bez učitele

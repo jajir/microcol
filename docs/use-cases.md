@@ -1512,3 +1512,17 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 
 1. UC-031/033/042 a nákladové UC-023/024/026 používají rozložení se dvěma řadami budov, jedním řádkem zboží a pěti přehledy. Vybraný detail se otevírá pod nimi; mění se prezentace, nikoli podmínky herních operací. [Pracovní postup](ux.md#pet-prehledu-kolonie-12-listopadu-2026) popisuje výběr, přesuny sekcí a školu.
 2. Rozšíření TC195/06 a inline cesta TC68 doplňují existující kontroly. Přesné výsledky a zatím neověřená omezení vlastní [funkční evidence](functional-tests.md#colony-stock-row-and-stable-detail-height-2026-11-12); tato položka sama neoznačuje celé UC za přijaté.
+
+## Podmíněné akce kolonie — 2026-11-13
+
+1. Pro UC-026 již v detailu kolonie nejsou rychlá tlačítka Load/Unload. Ruční
+   přesuny přetažením zůstávají; modelová pravidla rychlého výběru se nemění.
+   TC_106/01–02 nyní ověřují odstranění tlačítek, ruční přesun, zachování
+   cestujícího, zlata a uložení zásob; TC_106/03 zachovává test nepřenosných
+   místních produktů. Starší doklady rychlého dialogu jsou historické.
+2. TC_195/02–04 ověřují podmíněnou celnici, přechod mezi koloniemi, odstraněné
+   akce a české/anglické popisky. TC_149/02 ověřuje zobrazení Pokladu před
+   vyzvednutím a skrytí po něm (UC-024/065/086). Správa tras je nadále
+   dostupná ve své konfiguraci i zkratkou C; TC_118 ověřuje přiřazení dopravce.
+3. Pravidla ovládání vlastní [UX](ux.md#spodni-karty-kolonie-13-listopadu-2026);
+   skutečné výsledky patří do [funkční evidence](functional-tests.md).
