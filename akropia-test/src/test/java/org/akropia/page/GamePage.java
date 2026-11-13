@@ -597,7 +597,15 @@ public class GamePage extends AbstractScreen {
     public ColonyScreen openColonyAt(final Location colonyLocation,
             final String expectedNamePart) {
         moveMouseAtLocation(colonyLocation);
-        getRobot().doubleClickOn(MouseButton.PRIMARY);
+        // Keep the native gesture together: TestFX waits between its clicks,
+        // which can exceed the double-click interval while selecting a unit.
+        getRobot().interact(() -> {
+            final javafx.scene.robot.Robot mouse = new javafx.scene.robot.Robot();
+            mouse.mousePress(MouseButton.PRIMARY);
+            mouse.mouseRelease(MouseButton.PRIMARY);
+            mouse.mousePress(MouseButton.PRIMARY);
+            mouse.mouseRelease(MouseButton.PRIMARY);
+        });
         WaitForAsyncUtils.waitForFxEvents();
         try {
             WaitForAsyncUtils.waitFor(5, java.util.concurrent.TimeUnit.SECONDS,
@@ -605,7 +613,9 @@ public class GamePage extends AbstractScreen {
                             .isPresent());
         } catch (java.util.concurrent.TimeoutException timeout) {
             throw new IllegalStateException(
-                    "Colony did not open after the map double-click", timeout);
+                    "Colony did not open after the map double-click; "
+                            + mapDiagnostics(),
+                    timeout);
         }
         return ColonyScreen.of(getContext(), expectedNamePart);
     }

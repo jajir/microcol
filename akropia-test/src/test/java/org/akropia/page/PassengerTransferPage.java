@@ -96,10 +96,12 @@ public final class PassengerTransferPage extends AbstractScreen {
 
     public void disembarkInPort(int unitId, int slotIndex, boolean europe)
             throws Exception {
-        getRobot()
-                .drag(PageComponentPanelDock.of(getContext()).getListOfCrates()
-                        .get(slotIndex), MouseButton.PRIMARY)
-                .dropTo(europe ? ".panel-port-pier" : ".outside");
+        final Node crate = PageComponentPanelDock.of(getContext())
+                .getListOfCrates().get(slotIndex);
+        final Node pier = getNodeFinder()
+                .lookup(europe ? ".panel-port-pier" : ".outside").query();
+        revealGameContent(crate, pier);
+        getRobot().drag(crate, MouseButton.PRIMARY).dropTo(pier);
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
                 () -> europe ? getModel().getUnitById(unitId).isAtEuropePier()
                         : getModel().getUnitById(unitId).isAtPlaceLocation());

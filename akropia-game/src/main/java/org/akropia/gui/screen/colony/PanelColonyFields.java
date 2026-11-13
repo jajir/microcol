@@ -490,8 +490,8 @@ public final class PanelColonyFields implements JavaFxComponent {
     }
 
     private void showFieldProblem(final ColonyMsg message) {
-        eventBus.post(
-                new StatusBarMessageEvent(i18n.get(message), Source.COLONY));
+        eventBus.post(StatusBarMessageEvent.outcome(i18n.get(message),
+                Source.COLONY));
     }
 
     @com.google.common.eventbus.Subscribe

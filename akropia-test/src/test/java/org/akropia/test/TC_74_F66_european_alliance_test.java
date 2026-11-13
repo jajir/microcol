@@ -31,10 +31,8 @@ import javafx.stage.Stage;
 public class TC_74_F66_european_alliance_test extends AbstractAkropiaTest {
     private static final File FIXTURE = new File(
             "src/test/scenarios/F50-peace-negotiation.akropia");
-    private static final List<String> NAMES = List.of(
-            "Dutch (Corinth) — France (Phocaea)",
-            "Dutch (Corinth) — Spain (Miletus)",
-            "France (Phocaea) — Spain (Miletus)");
+    private static final List<String> NAMES = List.of("Corinth — Phocaea",
+            "Corinth — Miletus", "Phocaea — Miletus");
     private static final Location SOLDIER = Location.of(18, 10);
     private static final Location DEFENDER = Location.of(17, 11);
     private static final Location COLONY = Location.of(17, 10);
@@ -96,8 +94,7 @@ public class TC_74_F66_european_alliance_test extends AbstractAkropiaTest {
         alliance.verifyState(300, 1200, ALLIANCE, false);
         relations.verifyPairs(ALLIANCE, PEACE, PEACE);
         relations.verifyReport(NAMES, List.of("Alliance", "Peace", "Peace"), 1);
-        relations.verifyFeedback(
-                "Dutch (Corinth) and France (Phocaea) are now allied");
+        relations.verifyFeedback("Corinth and Phocaea are now allied");
         relations.close().exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
         relations.open();
@@ -222,7 +219,7 @@ public class TC_74_F66_european_alliance_test extends AbstractAkropiaTest {
         relations.rememberWorld();
         // Keeping the alliance and Escape both change nothing.
         alliance.endAlliance();
-        alliance.verifyEndReview("Dutch", "France", 5);
+        alliance.verifyEndReview("Corinth", "Phocaea", 5);
         alliance.captureDialog("allianceEndDialog", "r89-alliance-end.png");
         alliance.keepAlliance();
         alliance.verifyEndReviewClosed();
@@ -236,9 +233,8 @@ public class TC_74_F66_european_alliance_test extends AbstractAkropiaTest {
         alliance.confirmEnd();
         alliance.verifyEndReviewClosed();
         alliance.verifyWait(5);
-        relations.verifyFeedback(
-                "The alliance between Dutch (Corinth) and France (Phocaea) has "
-                        + "ended. War cannot be declared for 5 rounds.");
+        relations.verifyFeedback("The alliance between Corinth and Phocaea has "
+                + "ended. War cannot be declared for 5 rounds.");
         relations.close().exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
         relations.open();
@@ -359,7 +355,7 @@ public class TC_74_F66_european_alliance_test extends AbstractAkropiaTest {
         alliance.verifyCrownProcessed(null);
         var report = game.nextTurn().orElseThrow();
         report.verifyThatAtLeastOneEventMessageContains(
-                "The mother city forced a war with France.");
+                "The mother city forced a war with Phocaea.");
         alliance.verifyCrownRound(20, 1);
         alliance.verifyCrownProcessed(20);
         alliance.verifyPairStates(WAR, WAR, WAR);
@@ -389,7 +385,7 @@ public class TC_74_F66_european_alliance_test extends AbstractAkropiaTest {
         relations.rememberWorld();
         relations.open();
         alliance.review();
-        alliance.verifyQuoteText("France přijme spojenectví za 200 zlatých.\n"
+        alliance.verifyQuoteText("Phocaea přijme spojenectví za 200 zlatých.\n"
                 + "Vaše pokladnice: 500 zlatých.\nPo zaplacení: 300 zlatých.",
                 true);
         alliance.verifyObligationsContain("nesmějí útočit");
@@ -399,7 +395,6 @@ public class TC_74_F66_european_alliance_test extends AbstractAkropiaTest {
         alliance.review();
         alliance.confirm();
         relations.verifyReport(NAMES, List.of("Spojenectví", "Mír", "Mír"), 1);
-        relations.verifyFeedback(
-                "Dutch (Corinth) a France (Phocaea) jsou nyní spojenci");
+        relations.verifyFeedback("Corinth a Phocaea jsou nyní spojenci");
     }
 }

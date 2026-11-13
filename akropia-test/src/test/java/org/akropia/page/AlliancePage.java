@@ -195,7 +195,7 @@ public final class AlliancePage extends AbstractScreen {
 
     public void verifyQuote(final int price, final int gold, final int after,
             final boolean enabled) {
-        final String expected = "France accepts an alliance for " + price
+        final String expected = "Phocaea accepts an alliance for " + price
                 + " gold.\n"
                 + (enabled
                         ? "Your treasury: " + gold + " gold.\nAfter payment: "

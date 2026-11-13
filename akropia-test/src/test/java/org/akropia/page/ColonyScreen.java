@@ -302,10 +302,10 @@ public class ColonyScreen extends AbstractScreen {
 
     public void dragUnitFromPierToShipCargoSlot(final int unitIndexInPier,
             final int cargoSlotIndex) {
-        getRobot()
-                .drag(getUnitsAtPier().get(unitIndexInPier),
-                        MouseButton.PRIMARY)
-                .dropTo(getListOfCrates().get(cargoSlotIndex))
+        final Pane worker = getUnitsAtPier().get(unitIndexInPier);
+        final StackPane crate = getListOfCrates().get(cargoSlotIndex);
+        revealGameContent(worker, crate);
+        getRobot().drag(worker, MouseButton.PRIMARY).dropTo(crate)
                 .release(MouseButton.PRIMARY);
     }
 

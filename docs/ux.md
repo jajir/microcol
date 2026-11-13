@@ -1,5 +1,9 @@
 # UX a pravidla ovládání Akropia
 
+## Odmítnutí změny práce v kolonii — 2026-11-13
+
+1. Pokud se pracovník nebo pole změní mezi otevřením nabídky a potvrzením práce, model akci odmítne bez dalších změn. Vysvětlení ve stavovém řádku se chová jako výsledek akce: samotné zavření nabídky nebo událost opuštění prvku je nesmaže. Další pohyb ukazatele nebo stisk myši opět dovolí běžnou kontextovou nápovědu; hráč může otevřít aktuální nabídku a zvolit platnou práci. Stav ověření vede [evidence opravy regrese](functional-tests.md#ui-regression-repair-43351448127-2026-11-13).
+
 ## Spodní karty kolonie — 13. listopadu 2026
 
 1. Pořadí je Surrounding area, Construction, School a společný Cargo Depot.
