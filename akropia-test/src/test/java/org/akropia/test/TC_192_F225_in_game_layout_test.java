@@ -285,6 +285,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         page.verifyFrame(484, 1600);
         page.saveEvidence("r0340-wide-statistics.png");
         bars.resizeContent(1000, 900);
+        bars.verifyContents(1000, 968);
         page.closeWithEscape();
         game.openColonyWithKeyboard(0, "New Amsterdam");
         bars.resizeContent(2560, 900);
@@ -315,6 +316,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         bars.verifyContents(2560, 1440);
         page.verifyFrame(484, 1600);
         bars.resizeContent(1000, 900);
+        bars.verifyContents(1000, 968);
         page.closeWithEscape();
 
         // Shrinking remains possible after navigating through capped toolbars.
@@ -347,6 +349,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         bars.verifyContents(2560, 1440);
         page.verifyFrame(484, 1600);
         bars.resizeContent(1000, 900);
+        bars.verifyContents(1000, 968);
         page.closeWithEscape();
         page.open("help");
         bars.resizeContent(2560, 900);
@@ -357,6 +360,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         bars.verifyContents(1000, 968);
         page.verifyFrame(484, 1600);
         bars.resizeContent(1000, 900);
+        bars.verifyContents(1000, 968);
         page.closeWithEscape();
         page.verifyMapReturned();
         // Czech action names also survive narrowing and reopening the port.

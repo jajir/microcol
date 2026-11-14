@@ -138,8 +138,8 @@
     -fx-underline: true;
 }
 
-/* Full-width frames share one centered content limit. */
-.game-bar-content {
+/* Single width limit for page bodies and bar contents; never for maps. */
+.game-bar-content, .screen-content-limit {
     -fx-min-width: 0;
     -fx-max-width: 1440;
 }

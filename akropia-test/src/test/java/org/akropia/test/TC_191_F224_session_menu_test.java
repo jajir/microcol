@@ -124,6 +124,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
                 getContext());
         saves.openSave();
         window.resizeContent(1800, 1100);
+        window.verifyContents(1800, 1440);
         saves.verifyExpandedLayout();
         saves.captureDialog("savedGamesList", "save-expanded.png");
         window.resizeContent(1100, 900);
@@ -133,6 +134,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.openLoad();
         saves.verifyExpandedLayout();
         window.resizeContent(1800, 1100);
+        window.verifyContents(1800, 1440);
         saves.verifyExpandedLayout();
         saves.captureDialog("savedGamesList", "load-expanded.png");
         saves.cancelBrowser();

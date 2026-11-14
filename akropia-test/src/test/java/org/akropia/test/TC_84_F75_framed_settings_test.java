@@ -481,6 +481,12 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         developer.setModeInSettings(false);
         shortcuts.open();
         shortcuts.verifyEditorOpen(true);
+        final org.akropia.page.GameBarWidthPage width = new org.akropia.page.GameBarWidthPage(
+                getContext());
+        width.resizeContent(2560, 900);
+        width.verifyContents(2560, 1440);
+        width.resizeContent(1000, 900);
+        width.verifyContents(1000, 968);
         // The game footer stays fixed while the whole editor body scrolls.
         shortcuts.verifyScrollingLayout(true);
         shortcuts.verifyCompleteLayout();

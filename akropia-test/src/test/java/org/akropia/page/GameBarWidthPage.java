@@ -7,6 +7,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
@@ -46,8 +47,30 @@ public final class GameBarWidthPage extends AbstractScreen {
                     .lookup(page == null ? "#mainBox" : ".screen-scroll");
             assertEquals(expectedWindowWidth, body.getLayoutBounds().getWidth(),
                     1, "The main content still uses the full window width");
+            if (page != null) {
+                verifyPageContent((ScrollPane) body);
+            }
             assertEquals(72, top.getHeight(), 0.01);
         });
+    }
+
+    private void verifyPageContent(final ScrollPane scroll) {
+        final Region content = (Region) scroll.lookup(".screen-content-limit");
+        final Bounds bounds = content.localToScene(content.getLayoutBounds());
+        final Region container = (Region) scroll.getContent();
+        final Bounds viewport = container
+                .localToScene(container.getLayoutBounds());
+        assertEquals(
+                Math.min(1440,
+                        viewport.getWidth() - container.getPadding().getLeft()
+                                - container.getPadding().getRight()),
+                bounds.getWidth(), 1,
+                "Page content shares the bars' maximum width");
+        assertEquals(
+                viewport.getMinX()
+                        + (viewport.getWidth() - bounds.getWidth()) / 2,
+                bounds.getMinX(), 1,
+                "Page content is centered in its viewport");
     }
 
     private void verifyBar(final Region frame, final double expectedWindowWidth,

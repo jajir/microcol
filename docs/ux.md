@@ -1598,3 +1598,21 @@ studii. Ověření sleduje [funkční evidence](functional-tests.md#page-separat
    a odmítnutí neplatného přesunu nadále používají společné operace modelu.
 3. Jde o zadané chování, nikoli hráčskou studii. Ověření je v
    [evidenci](functional-tests.md#depot-empty-states-and-plow-terrain-2026-11-14).
+
+## Společná šířka obsahu stránek — 14. listopadu 2026
+
+1. Obsah herních stránek je vystředěný a má nejvýše 1440 logických pixelů.
+   Na menším okně se zúží podle dostupného prostoru. Vnitřní odsazení jednotlivých
+   stránek zůstává zachované; hlavička, návrat a stavový řádek zůstávají dostupné
+   během posouvání obsahu. Otevření, zavření ani změna velikosti nemění herní stav.
+2. Jedinou definicí maxima je společné pravidlo `.game-bar-content,
+   .screen-content-limit` v `akropia-game/src/main/resources/gui/GameScreenBars.css`.
+   `InGamePage` vystřeďuje obsah společného rámce a pomocí `centerContent` také
+   samostatný editor klávesových zkratek. Nápověda, kongres, statistiky, report, cíle,
+   nastavení, Evropa, obchod, kolonie a herní ukládání/načítání používají tento rámec.
+   Užší formuláře si ponechávají své vlastní menší rozměry.
+3. Pozadí a posuvný viewport vyplňují okno. Herní mapa a mapa editoru nemají
+   tento limit; rozšiřují se do celého dostupného prostoru. Nabídky vložené do
+   úvodní obrazovky nadále používají svůj stávající hostitelský panel.
+4. Jde o dohodnuté chování, nikoli hráčskou studii. Ověření UC-114/115/119 vede
+   [funkční evidence](functional-tests.md#shared-page-width-2026-11-14).

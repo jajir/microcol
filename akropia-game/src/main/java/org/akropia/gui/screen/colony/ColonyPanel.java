@@ -158,7 +158,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
                 overview, detail);
         mainPanel.getStyleClass().add("colony-layout");
         mainPanel.setMinWidth(860);
-        mainPanel.setMaxWidth(1440);
         selectSection("area");
         updateLanguage(i18n);
 

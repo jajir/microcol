@@ -4,11 +4,13 @@ import org.akropia.gui.screen.game.components.StatusBar;
 import org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.akropia.i18n.I18n;
 import com.google.inject.Inject;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
+
 import javafx.scene.layout.VBox;
 
 /** Shared frame: controls, independently scrolling content and live status. */
@@ -28,6 +30,7 @@ public final class InGamePage implements JavaFxComponent, UpdatableLanguage {
         root.getStylesheets().add(InGamePage.class
                 .getResource("/gui/InGamePage.css").toExternalForm());
         body.getStyleClass().add("screen-body");
+        body.setAlignment(Pos.TOP_CENTER);
         root.setTop(header);
         final ScrollPane scroll = new ScrollPane(body);
         scroll.getStyleClass().add("screen-scroll");
@@ -37,11 +40,23 @@ public final class InGamePage implements JavaFxComponent, UpdatableLanguage {
         root.setBottom(statusBar.getContent());
     }
 
+    /**
+     * Keep page content centered while its scroll viewport fills the window.
+     */
+    public static VBox centerContent(final Region content) {
+        content.getStyleClass().add("screen-content-limit");
+        final VBox container = new VBox(content);
+        container.setAlignment(Pos.TOP_CENTER);
+        container.setMinWidth(0);
+        return container;
+    }
+
     public void setToolbar(final Node toolbar) {
         header.setActions(toolbar);
     }
 
     public void setContent(final Region content) {
+        content.getStyleClass().add("screen-content-limit");
         body.getChildren().setAll(content);
     }
 

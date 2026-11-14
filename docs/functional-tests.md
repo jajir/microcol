@@ -16352,3 +16352,40 @@ messages for diagnosis. No tests were removed or weakened for acceptance.
    `target/docker-ui/run-1pqJre/akropia-test/warehouse-qa/reference-expedition.png`
    vizuálně potvrzuje nepřítomnost popisku. Vzdálená regrese ani publikace
    distribuce nebyly ověřovány.
+
+## Shared page width — 2026-11-14
+
+1. UC-114/115/119: `TC_192_F225_in_game_layout_test` checks the shared frame,
+   including `TC_05` and `TC_06` at 2560 and 1000 logical pixels. The page object
+   checks the body cap and centering as well as the unchanged full-width map,
+   header/footer backgrounds, navigation and game state.
+2. `TC_84_F75_framed_settings_test#TC_10_keyboard_shortcuts_capture_conflict_and_apply_after_save`
+   checks the standalone shortcut editor at both widths and retains capture,
+   conflict and save behavior. `TC_191_F224_session_menu_test#TC_15_save_load_expand_between_shared_bars`
+   checks save/load width, padding and vertical expansion.
+3. Implementation uses the single CSS limit described in the
+   [UX contract](ux.md#spolecna-sirka-obsahu-stranek-14-listopadu-2026).
+   Final candidate is based on `507a6c8f185362f0eb47101643cb66f07dc426d7`.
+   Model/JUnit `target/verification/run-g2kybpn8` passed **5,133 tests** in
+   395 reports, zero failures/errors/skips (completion
+   `20261114T090912Z-d33ba88a791e`, 158.620 s including preparation and cleanup).
+4. Targeted Docker/Xvfb `target/docker-ui/run-lD9gNj` passed **15 checks**:
+   all eight TC_192 methods, TC_84/10, TC_191/15, both TC_56 methods and all
+   three `PageVerificationContractTest` checks. Zero failures/errors/skips;
+   completion `20261114T091206Z-087357cdf52a` took 266.210 s. Inspected wide
+   help/statistics screenshots confirm content edges match the centered bars.
+5. Failed evidence is retained: initial model preparation
+   `20261114T085602Z-09dcd38b8c4d` timed out on the 20-second Docker container
+   query before tests started. Earlier UI candidate `run-RU6VM6` passed 14/15;
+   TC_56/01 failed returning through Save to the menu. Diagnostic runs
+   `run-GHtt50` and `run-GRzI2k` reproduced it and showed Save below the viewport
+   after scrolling. The final implementation caps the page content directly,
+   preserving the original scroll layout; the complete targeted rerun above
+   verifies the repaired journey. Temporary diagnostics were removed.
+6. Fixed smoke `target/verification/run-cdrss07f` passed **21 checks** in
+   12 reports, zero failures/errors/skips. Completion
+   `20261114T091643Z-6cf7e5f24e8d` took **257.308 s**, within the 420-second
+   total local budget. Changed Java/CSS files match both final model and smoke
+   source snapshots byte for byte. Shared Java formatting, diff review,
+   14 documentation consistency tests, name audit and strict MkDocs passed.
+   No remote regression or publication verification is claimed.

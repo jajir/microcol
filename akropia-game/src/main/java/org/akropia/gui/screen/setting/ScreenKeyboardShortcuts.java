@@ -12,6 +12,7 @@ import org.akropia.gui.shortcut.ShortcutController;
 import org.akropia.gui.shortcut.ShortcutText;
 import org.akropia.gui.util.JavaFxComponent;
 import org.akropia.gui.util.GameScreenHeader;
+import org.akropia.gui.util.InGamePage;
 import org.akropia.gui.util.ActionButtons;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.TextAlignment;
@@ -142,7 +143,8 @@ public final class ScreenKeyboardShortcuts implements JavaFxComponent {
         final VBox information = new VBox(10, description, platform, status);
         information.setMinHeight(Region.USE_PREF_SIZE);
         information.setPadding(new Insets(16, 24, 8, 24));
-        scroll.setContent(new VBox(information, rows));
+        scroll.setContent(
+                InGamePage.centerContent(new VBox(information, rows)));
         root.setTop(header);
         root.setBottom(statusBar.getContent());
         root.setCenter(scroll);
