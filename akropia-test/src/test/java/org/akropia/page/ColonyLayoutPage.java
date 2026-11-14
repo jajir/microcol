@@ -500,6 +500,35 @@ public final class ColonyLayoutPage extends AbstractScreen {
                 .count());
     }
 
+    public void focusCarrier(final int id) {
+        getRobot().interact(() -> getNodeFinder()
+                .lookup("#europe-dock-ship-" + id).query().requestFocus());
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyCarrierFocusWithoutBorder(final int focusedId,
+            final int selectedId) {
+        getRobot().interact(() -> {
+            assertTrue(getNodeFinder().lookup("#europe-dock-ship-" + focusedId)
+                    .query().isFocused());
+            for (Node node : getNodeFinder()
+                    .lookup("#colony-cargo-depot .harbor-unit").queryAll()) {
+                final javafx.scene.control.ToggleButton button = (javafx.scene.control.ToggleButton) node;
+                assertEquals(
+                        button.getId().equals("europe-dock-ship-" + selectedId),
+                        button.isSelected());
+                assertEquals(button.isSelected() ? 1 : 0,
+                        button.getBorder().getImages().size());
+                for (var stroke : button.getBorder().getStrokes()) {
+                    assertEquals(Color.TRANSPARENT, stroke.getTopStroke());
+                    assertEquals(Color.TRANSPARENT, stroke.getRightStroke());
+                    assertEquals(Color.TRANSPARENT, stroke.getBottomStroke());
+                    assertEquals(Color.TRANSPARENT, stroke.getLeftStroke());
+                }
+            }
+        });
+    }
+
     public void prepareDepotScenario() throws Exception {
         final com.google.gson.JsonObject saved = new com.google.gson.Gson()
                 .fromJson(java.nio.file.Files.readString(java.nio.file.Path

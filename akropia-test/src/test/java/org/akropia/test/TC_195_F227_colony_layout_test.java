@@ -375,7 +375,16 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.hoverContainer();
         town.verifyThatStatusBarContains(
                 "This carrier cannot transport people.");
+        // Keyboard focus never adds a border to an unselected carrier.
+        layout.focusCarrier(3);
+        layout.verifyCarrierFocusWithoutBorder(3, wagon);
+        new InGameLayoutPage(getContext())
+                .saveEvidence("depot-carrier-focus.png");
+        layout.moveSelection(KeyCode.SPACE);
+        layout.verifyCarrierSelected(3);
+        layout.verifyCarrierFocusWithoutBorder(3, 3);
         town.selectShipInPort(3);
+        layout.verifyCarrierFocusWithoutBorder(3, 3);
         layout.hoverContainer();
         town.verifyThatStatusBarContains("Transport people, goods or animals");
         layout.verifyCarrierGeometryUnchanged();

@@ -1762,3 +1762,13 @@ studii. Ověření sleduje [funkční evidence](functional-tests.md#page-separat
 4. Oprava obnovuje dostupnost cíle skrytého při předchozí úpravě prázdného stavu.
    Jde o implementační zjištění, nikoli novou hráčskou studii. Ověření:
    [funkční evidence](functional-tests.md#depot-selection-and-outside-drop-2026-11-14).
+
+## Fokus přepravce v depu — 14. listopadu 2026
+
+1. Přepravce v kolonii má viditelný ručně kreslený rámeček pouze při výběru.
+   Fokus, najetí myší ani stisk nepřidávají přerušovaný rámeček. Nevybraný
+   přepravce zůstává bez obrysu i při fokusu; jde o výslovnou výjimku z
+   obecného zvýraznění fokusu pro tyto ikony. Klávesnicový výběr zůstává funkční.
+2. Ověření zachovává vybraný wagon, zaměří loď a zkontroluje oba obrysy;
+   následně loď vybere mezerníkem a opakovaným kliknutím.
+   [Funkční evidence](functional-tests.md#depot-focus-border-2026-11-14).

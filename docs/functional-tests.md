@@ -1,3 +1,14 @@
+## Depot focus border — 2026-11-14
+
+1. Remove the colony carrier focus-only dashed border. Preserve the selected
+   pen-drawn frame, selection, geometry and keyboard activation.
+2. `TC_195_F227_colony_layout_test` / TC07 checks a focused, unselected ship
+   beside the selected wagon, then Space activation and repeated clicking.
+   Page verification checks actual focus/selection, transparent border strokes
+   and the selected frame image. Screenshot: `depot-carrier-focus.png`.
+3. Model, targeted Docker UI, fixed smoke, screenshots and final review pending.
+   Targeted selection: `TC_195_F227_colony_layout_test,PageVerificationContractTest`.
+
 <a id="colony-font-empty-construction-2026-11-14"></a>
 ## Colony typography and idle construction — 2026-11-14
 1. Colony labels inherit the shared 14-pixel default. An empty construction queue shows localized instructions instead of empty meters. Selected projects retain both meters during shortages; the obsolete waiting-for-hammers message is removed.
@@ -305,6 +316,33 @@
     Earlier failures remain historical failed evidence. This is local
     acceptance, not a new full-regression or distribution-publication claim.
     Unrelated backlog edits are excluded from this task's commit.
+
+4. Model dispatched as `20261114T205652Z-f0b53096e0fc` (PID 90050,
+   timeout 600 seconds). Shared Java formatter applied to changed test files.
+
+5. Model passed: **5,134 tests in 395 reports, zero failures/errors/skips**,
+   157.846 supervised seconds. Evidence: `target/verification/run-b6mjtmvo/`,
+   base `fafe348f`; changed executable sources match the snapshot.
+6. Targeted Docker run `20261114T205948Z-a6b6e0826951` (PID 90347,
+   timeout 1,800 seconds) is dispatched with the two-class selection above.
+   UI, smoke and final acceptance remain pending.
+
+7. Targeted UI passed in 136.328 seconds: **11 tests in two reports, zero
+   failures/errors/skips**. Evidence: `target/docker-ui/run-xweIlP/`. Reviewed
+   `depot-carrier-focus.png`: the focused unselected ship has no outline; the
+   selected wagon retains only its pen-drawn frame. Space activation passed.
+8. Fixed smoke dispatched as `20261114T210221Z-e672af4b3aa5` (PID 90472,
+   runner timeout 480 seconds, smoke budget 420 seconds). Final acceptance pending.
+
+9. Fixed smoke passed: **21 tests in 12 reports, zero failures/errors/skips**,
+   254.314 seconds for the precommit phase, 257.238 supervised seconds, within
+   the 420-second budget. Evidence: `target/verification/run-tft8tbqc/`. All
+   changed executable sources match its snapshot.
+10. Final review confirms the colony-only CSS change preserves the existing
+    selected frame and geometry; UI checks preserve focus, selection and Space
+    activation. Documentation validation: 14 tests, zero unexplained old-name
+    occurrences and strict MkDocs build passed. Local acceptance complete.
+    Full regression and distribution publication were not requested or verified.
 
 ## Depot selection and outside drop — 2026-11-14
 
