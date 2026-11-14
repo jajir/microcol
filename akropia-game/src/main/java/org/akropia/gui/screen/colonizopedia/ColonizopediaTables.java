@@ -27,7 +27,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 /** Illustrated reference data read from the same definitions as the game. */
@@ -47,9 +47,13 @@ final class ColonizopediaTables {
         final GridPane table = new GridPane();
         table.setId("colonizopediaReference");
         final ColumnConstraints nameColumn = new ColumnConstraints();
-        nameColumn.setPercentWidth(34);
+        nameColumn.setPrefWidth(
+                topic == ColonizopediaTopic.IDENTITIES ? 128 : 160);
+        nameColumn.setMinWidth(javafx.scene.layout.Region.USE_PREF_SIZE);
+        nameColumn.setMaxWidth(javafx.scene.layout.Region.USE_PREF_SIZE);
         final ColumnConstraints detailColumn = new ColumnConstraints();
-        detailColumn.setPercentWidth(66);
+        detailColumn.setHgrow(Priority.ALWAYS);
+        detailColumn.setMinWidth(0);
         table.getColumnConstraints().addAll(nameColumn, detailColumn);
         table.add(cell(topic.getTitle(i18n)), 0, 0);
         table.add(cell(i18n.get(Colonizopedia.properties)), 1, 0);
@@ -108,23 +112,14 @@ final class ColonizopediaTables {
         } else if (topic == ColonizopediaTopic.TERRAIN) {
             for (final TerrainType terrain : TerrainType.TERRAINS) {
                 final String name = names.getTerrainName(terrain);
-                final HBox previews = new HBox(6,
+                final VBox identity = cell(name,
                         preview(terrain, false, ResourceOverlay.NONE));
-                if (terrain.isCanHaveTree()) {
-                    previews.getChildren()
-                            .add(preview(terrain, true, ResourceOverlay.NONE));
-                }
-                final VBox identity = cell(name, previews);
                 identity.setId("colonizopediaTerrain_" + terrain.name());
                 table.add(identity, 0, row);
                 String details = i18n
                         .get(terrain.isLand() ? Colonizopedia.land
                                 : Colonizopedia.water)
                         + "\n" + terrainProperties(terrain, false);
-                if (terrain.isCanHaveTree()) {
-                    details += "\n" + i18n.get(Colonizopedia.forest) + "\n"
-                            + terrainProperties(terrain, true);
-                }
                 details += "\n" + i18n.get(Colonizopedia.fields,
                         i18n.get(terrain.isCanHaveField() ? Colonizopedia.yes
                                 : Colonizopedia.no));
@@ -132,6 +127,21 @@ final class ColonizopediaTables {
                 properties.setId(
                         "colonizopediaTerrainProperties_" + terrain.name());
                 table.add(properties, 1, row++);
+                if (terrain.isCanHaveTree()) {
+                    final VBox forest = cell(
+                            name + " — " + i18n.get(Colonizopedia.forest),
+                            preview(terrain, true, ResourceOverlay.NONE));
+                    forest.setId(
+                            "colonizopediaTerrainForest_" + terrain.name());
+                    table.add(forest, 0, row);
+                    final VBox forestProperties = cell(
+                            i18n.get(Colonizopedia.land) + "\n"
+                                    + terrainProperties(terrain, true));
+                    forestProperties
+                            .setId("colonizopediaTerrainForestProperties_"
+                                    + terrain.name());
+                    table.add(forestProperties, 1, row++);
+                }
             }
         } else {
             for (final ResourceOverlay resource : ResourceOverlay.values()) {
@@ -335,7 +345,6 @@ final class ColonizopediaTables {
         cell.getChildren().addAll(illustrations);
         cell.getChildren().add(label);
         cell.setPadding(new Insets(8));
-        cell.setStyle("-fx-border-color: #9b9585; -fx-border-width: 0 0 1 0;");
         GridPane.setFillHeight(cell, true);
         return cell;
     }

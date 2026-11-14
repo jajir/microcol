@@ -256,6 +256,15 @@ public final class ColonizopediaPage extends AbstractScreen {
                     .lookup("#colonizopediaReference").queryAs(GridPane.class);
             assertEquals((expectedRows + 1) * 2, table.getChildren().size(),
                     "Every reference row has an image/name and properties cell");
+            for (final Node node : table.getChildren()) {
+                if (node instanceof Region) {
+                    assertTrue(
+                            ((Region) node).getBorder() == null
+                                    || ((Region) node).getBorder().getStrokes()
+                                            .isEmpty(),
+                            "Reference cells have no separators");
+                }
+            }
             table.lookupAll(".label").forEach(node -> {
                 final Labeled label = (Labeled) node;
                 assertEquals("Playpen Sans Regular", label.getFont().getName(),
@@ -358,7 +367,17 @@ public final class ColonizopediaPage extends AbstractScreen {
                         .queryAs(VBox.class);
                 assertEquals(names.getTerrainName(terrain),
                         ((Labeled) cell.lookup(".label")).getText());
-                final Set<Node> canvases = cell.lookupAll("Canvas");
+                final Set<Node> canvases = new java.util.HashSet<>(
+                        cell.lookupAll("Canvas"));
+                if (terrain.isCanHaveTree()) {
+                    final VBox forest = getNodeFinder().lookup(
+                            "#colonizopediaTerrainForest_" + terrain.name())
+                            .queryAs(VBox.class);
+                    assertEquals(GridPane.getRowIndex(cell) + 1,
+                            GridPane.getRowIndex(forest));
+                    assertEquals(1, forest.lookupAll("Canvas").size());
+                    canvases.addAll(forest.lookupAll("Canvas"));
+                }
                 assertEquals(terrain.isCanHaveTree() ? 2 : 1, canvases.size(),
                         "Open and supported forest pictures: "
                                 + terrain.name());
@@ -527,13 +546,44 @@ public final class ColonizopediaPage extends AbstractScreen {
         });
     }
 
+    public void verifyCompactIdentityRows() {
+        getRobot().interact(() -> {
+            final GridPane table = getNodeFinder()
+                    .lookup("#colonizopediaReference").queryAs(GridPane.class);
+            final Node first = table.lookup("#identityFlag-0");
+            final Node second = table.lookup("#identityFlag-1");
+            assertEquals(120, second.getBoundsInParent().getMinY()
+                    - first.getBoundsInParent().getMinY(), 1);
+            final Node description = table.getChildren().stream()
+                    .filter(node -> Integer.valueOf(1)
+                            .equals(GridPane.getColumnIndex(node))
+                            && Integer.valueOf(1)
+                                    .equals(GridPane.getRowIndex(node)))
+                    .findFirst().orElseThrow();
+            final Node label = description.lookup(".label");
+            assertEquals(16,
+                    label.localToScene(label.getBoundsInLocal()).getMinX()
+                            - first.localToScene(first.getBoundsInLocal())
+                                    .getMaxX(),
+                    1);
+        });
+    }
+
     public void verifyHandDrawnFramesWithoutStripes() {
         getRobot().interact(() -> {
+            final Region topicTitle = getNodeFinder()
+                    .lookup(".help-topic-title").queryAs(Region.class);
+            assertTrue(
+                    topicTitle.getBorder() == null
+                            || topicTitle.getBorder().getStrokes().isEmpty(),
+                    "Topic heading has no separator");
             final ListView<ColonizopediaTopic> list = getTopicList();
             final ScrollPane article = getNodeFinder()
                     .lookup("#" + ScreenColonizopedia.BODY_SCROLL_ID)
                     .queryAs(ScrollPane.class);
             for (final Region panel : List.of(list, article)) {
+                assertEquals(javafx.scene.paint.Color.web("#FFF9EC"),
+                        panel.getBackground().getFills().get(0).getFill());
                 assertTrue(
                         panel.getShape() instanceof javafx.scene.shape.SVGPath,
                         "Help panels use hand-drawn contours");
@@ -570,7 +620,7 @@ public final class ColonizopediaPage extends AbstractScreen {
                             "Selected topic stays underlined");
                 } else {
                     ordinaryRows++;
-                    assertEquals(javafx.scene.paint.Color.web("#FFFDF6"),
+                    assertEquals(javafx.scene.paint.Color.web("#FFF9EC"),
                             cell.getBackground().getFills().get(0).getFill(),
                             "Every ordinary topic has the same paper background");
                 }

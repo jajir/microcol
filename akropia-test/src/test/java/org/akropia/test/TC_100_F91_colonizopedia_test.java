@@ -98,6 +98,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         help.verifyFillsGameWindow("Colonizopedia");
         help.captureDialog("colonizopediaPage", "r0329-help-full-en.png");
         help.verifyHandDrawnFramesWithoutStripes();
+        help.verifyCompactIdentityRows();
         window.resize(900, 700);
         help.verifyFillsGameWindow("Colonizopedia");
         // Snapshot flushes the native controls' layout after resizing.
@@ -271,13 +272,18 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         help.typeSearch("tundra");
         help.verifyTopicTitles("Terrain");
         help.verifySelectedTopic("Terrain", "base output per worker");
-        help.verifyReferenceRows(14);
+        help.verifyReferenceRows(
+                14 + (int) org.akropia.model.TerrainType.TERRAINS.stream()
+                        .filter(org.akropia.model.TerrainType::isCanHaveTree)
+                        .count());
         help.verifyTerrainIllustrations();
         help.verifySelectedTerrainArtwork();
         help.verifyReferenceProperties(
                 "colonizopediaTerrainProperties_GRASSLAND",
-                "Move cost: 1; defense: +0%", "Grain 4", "With forest",
-                "Move cost: 2; defense: +50%", "Lumber 6", "Fields: yes");
+                "Move cost: 1; defense: +0%", "Grain 4", "Fields: yes");
+        help.verifyReferenceProperties(
+                "colonizopediaTerrainForestProperties_GRASSLAND",
+                "Move cost: 2; defense: +50%", "Lumber 6");
         help.verifyReferenceProperties(
                 "colonizopediaTerrainProperties_MOUNTAIN",
                 "Move cost: 3; defense: +150%", "Silver 1", "Fields: no");
@@ -329,13 +335,18 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         help.verifyTopicTitles(MOVEMENT_CZ, PRODUCTION_CZ, "Terén",
                 "Bonusy terénu");
         help.selectTopicWithMouse("Terén");
-        help.verifyReferenceRows(14);
+        help.verifyReferenceRows(
+                14 + (int) org.akropia.model.TerrainType.TERRAINS.stream()
+                        .filter(org.akropia.model.TerrainType::isCanHaveTree)
+                        .count());
         help.verifyTerrainIllustrations();
         help.verifySelectedTerrainArtwork();
         help.verifyReferenceProperties(
                 "colonizopediaTerrainProperties_GRASSLAND",
-                "Cena pohybu: 1; obrana: +0%", "Obilí 4", "S lesem", "Dříví 6",
-                "Pole: ano");
+                "Cena pohybu: 1; obrana: +0%", "Obilí 4", "Pole: ano");
+        help.verifyReferenceProperties(
+                "colonizopediaTerrainForestProperties_GRASSLAND",
+                "Cena pohybu: 2; obrana: +50%", "Dříví 6");
         help.captureDialog("colonizopediaReference", "r0274-terrain-cs.png");
 
         // Search a localized bonus name without accents and inspect the

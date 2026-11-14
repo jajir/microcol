@@ -1,5 +1,12 @@
 # UX a pravidla ovládání Akropia
 
+## Vzhled nápovědy — 14. listopadu 2026
+
+1. Seznam témat a obsah používají stejné pozadí jako stránka; vybrané téma zůstává zvýrazněné. Vnitřní vodorovné oddělovače nejsou v žádném tématu. Vnější rámečky zůstávají.
+2. Přehledy mají kompaktní sloupec obrázků a zalamovaný popis vedle něj. Vlajky zachovávají výšku řádků 120 logických pixelů; mezera k textu je 16 pixelů.
+3. Terén bez lesa a jeho lesní varianta mají dva po sobě jdoucí řádky, každý s vlastním obrázkem a vlastnostmi. Hledání, otevření z mapy a návrat tlačítkem nebo Escape zůstávají stejné.
+4. Ověření UC-114 a TC100 zaznamenává [funkční evidence](functional-tests.md#help-layout-2026-11-14).
+
 ## Nástroje a dostupnost orání — 13. listopadu 2026
 
 1. Pravý panel vlastní pracovní jednotky ukazuje aktuální počet nástrojů,

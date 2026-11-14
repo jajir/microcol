@@ -16443,3 +16443,18 @@ messages for diagnosis. No tests were removed or weakened for acceptance.
    source snapshots byte for byte. Shared Java formatting, diff review,
    14 documentation consistency tests, name audit and strict MkDocs passed.
    No remote regression or publication verification is claimed.
+
+
+## Help layout — 2026-11-14
+
+1. UC-114 / TC100: unified page, topic-list and article backgrounds; removed all internal article/table separators; compact reference columns; consecutive open/forest terrain rows with separate localized properties. Existing flags retain 120 logical-pixel row pitch and a 16-pixel image-to-text gap.
+2. TC100 retains navigation, search, game-state, artwork and property assertions in both languages, adds layout/background/separator checks and verifies consecutive forest rows. Acceptance results follow.
+
+3. Initial model attempt `20261114T094717Z-5f287f2118c0` timed out during the labelled-container `docker ps` preparation query (20-second step limit; 22.093 supervised seconds). No tests started. The next attempt completed the same query in 0.018 seconds; this does not establish the initial cause.
+4. Final-source model run `20261114T094819Z-83d88fa78c6e` / `target/verification/run-jybmr0lu/` passed 5,133 tests in 395 complete XML reports, zero failures/errors/skips (156.935 supervised seconds, 600-second limit). Full TC100 plus `PageVerificationContractTest` passed all 14 tests in two reports, zero failures/errors/skips: `20261114T095116Z-445f5883db4b`, `target/docker-ui/run-XVQXdx/`, 159.523 seconds with an 1,800-second limit. Screenshots reviewed for identities, terrain, units and buildings; Java formatted with the shared profile.
+5. Fixed smoke/support dispatched as `20261114T095414Z-0fea78b46a06`, supervisor PID 37576, 480-second watchdog and unchanged 420-second acceptance budget. The first result and final retry are recorded below.
+
+6. First smoke `20261114T095414Z-0fea78b46a06` failed after 258.569 supervised seconds: 21 tests, zero assertion failures, one error, zero skips (`target/verification/run-f6xyli9k/`). TC07 failed on colony reopening at line 111; the existing scene trace recorded only one primary press with click count 1. This is outside the help change and resembles the previously recorded intermittent reopening failure; its root cause is not established. The failed evidence is retained. A complete unchanged-source smoke retry follows, without weakening selection or assertions.
+
+7. Unchanged-source smoke retry `20261114T095909Z-0637e7811ff5`, supervisor PID 38233, passed all **21 tests** in 12 complete XML reports, zero failures/errors/skips (`target/verification/run-p7zkog81/`). Total supervised duration was 254.426 seconds, within the 420-second acceptance budget. All six changed executable/resource/test files match the smoke source snapshot byte-for-byte. The earlier failure remains failed and this pass does not diagnose or repair intermittent map input.
+8. Local acceptance on base `15826010`: 5,133 model/JUnit tests, 14 targeted UI/support tests and 21 fixed smoke/support tests passed. Final review preserves unrelated backlog edits. Fourteen documentation consistency tests, name audit and strict MkDocs passed. No remote regression or publication was inspected; local acceptance does not establish a new published distribution.
