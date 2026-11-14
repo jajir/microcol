@@ -581,7 +581,7 @@ public final class ColonizopediaPage extends AbstractScreen {
             final ScrollPane article = getNodeFinder()
                     .lookup("#" + ScreenColonizopedia.BODY_SCROLL_ID)
                     .queryAs(ScrollPane.class);
-            for (final Region panel : List.of(list, article)) {
+            for (final Region panel : List.of(article)) {
                 assertEquals(javafx.scene.paint.Color.web("#FFF9EC"),
                         panel.getBackground().getFills().get(0).getFill());
                 assertTrue(
@@ -612,9 +612,32 @@ public final class ColonizopediaPage extends AbstractScreen {
                 if (cell.isEmpty() || !cell.isVisible()) {
                     continue;
                 }
+                assertTrue(
+                        cell.getShape() instanceof javafx.scene.shape.SVGPath,
+                        "Each topic has its own hand-drawn card");
+                assertEquals(2, cell.getBorder().getStrokes().get(0).getWidths()
+                        .getTop(), 0.01);
+                assertEquals(javafx.scene.paint.Color.BLACK,
+                        cell.getBorder().getStrokes().get(0).getTopStroke());
+                assertTrue(cell.getBorder().getInsets().getBottom() >= 8,
+                        "Separate cards leave a visible gap");
+                assertTrue(cell.isWrapText(), "Long topic titles wrap");
+                final ImageView icon = (ImageView) cell.getGraphic();
+                assertEquals(32, icon.getFitWidth(), 0.01);
+                assertEquals(32, icon.getFitHeight(), 0.01);
+                assertFalse(icon.getImage().isError());
+                assertTrue(icon.getImage().getUrl()
+                        .endsWith("help-topic-icons.png"));
+                assertEquals(
+                        cell.getItem() instanceof ColonizopediaTopic
+                                ? ((ColonizopediaTopic) cell.getItem())
+                                        .ordinal() * 96
+                                : -1,
+                        icon.getViewport().getMinX(), 0.01,
+                        "Every topic uses its own semantic illustration");
                 if (cell.isSelected()) {
                     selectedRows++;
-                    assertEquals(javafx.scene.paint.Color.web("#DEC79B"),
+                    assertEquals(javafx.scene.paint.Color.web("#DCC49A"),
                             cell.getBackground().getFills().get(0).getFill());
                     assertTrue(cell.isUnderline(),
                             "Selected topic stays underlined");

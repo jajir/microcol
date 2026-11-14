@@ -99,6 +99,8 @@ public final class ScreenColonizopedia implements GameScreen {
                     final boolean empty) {
                 super.updateItem(topic, empty);
                 setText(empty || topic == null ? null : topic.getTitle(i18n));
+                setGraphic(empty || topic == null ? null
+                        : topicIcon(topic).createView());
             }
 
         });
@@ -157,6 +159,41 @@ public final class ScreenColonizopedia implements GameScreen {
 
         topicList.getSelectionModel().selectFirst();
         applyFilter();
+    }
+
+    private static ButtonIcon topicIcon(final ColonizopediaTopic topic) {
+        switch (topic) {
+        case IDENTITIES:
+            return ButtonIcon.HELP_IDENTITIES;
+        case MOVEMENT:
+            return ButtonIcon.HELP_MOVEMENT;
+        case CARGO:
+            return ButtonIcon.HELP_CARGO;
+        case COLONIES:
+            return ButtonIcon.HELP_COLONIES;
+        case PRODUCTION:
+            return ButtonIcon.HELP_PRODUCTION;
+        case TRADE:
+            return ButtonIcon.HELP_TRADE;
+        case DIPLOMACY:
+            return ButtonIcon.HELP_DIPLOMACY;
+        case COMBAT:
+            return ButtonIcon.HELP_COMBAT;
+        case INDEPENDENCE:
+            return ButtonIcon.HELP_INDEPENDENCE;
+        case SCORING:
+            return ButtonIcon.HELP_SCORING;
+        case TERRAIN:
+            return ButtonIcon.HELP_TERRAIN;
+        case RESOURCES:
+            return ButtonIcon.HELP_RESOURCES;
+        case UNITS:
+            return ButtonIcon.HELP_UNITS;
+        case BUILDINGS:
+            return ButtonIcon.HELP_BUILDINGS;
+        default:
+            throw new IllegalArgumentException("Unknown help topic: " + topic);
+        }
     }
 
     /**

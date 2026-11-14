@@ -1,3 +1,11 @@
+## UC-114: menu nápovědy — 14. listopadu 2026
+
+1. Seznam témat používá samostatné kreslené karty, významové ikony 32 × 32
+   a okrový podtržený výběr jako statistiky. Dlouhé názvy se zalamují.
+   Vyhledávání, šipky, samostatné posouvání článku i témat a návrat do hry
+   zachovávají dosavadní chování. Viz [UX pravidla](ux.md#menu-napovedy-14-listopadu-2026).
+2. Ověření: `TC_100_F91_colonizopedia_test`; [stav přejímky](functional-tests.md#help-topic-menu-2026-11-14).
+
 ## UC-114/119 a UC-113: modální tlačítka — 14. listopadu 2026
 
 1. Společné [UX pravidlo](ux.md#tlacitka-modalnich-oken-14-listopadu-2026)

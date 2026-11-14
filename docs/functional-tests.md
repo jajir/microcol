@@ -1,3 +1,46 @@
+<a id="help-topic-menu-2026-11-14"></a>
+## Help topic menu — 2026-11-14
+
+1. UC-114 retains native ListView search, selection, keyboard navigation,
+   independent scrolling, localized reference content and unchanged game state.
+   Each topic now has a separate paper card and a semantic 32px icon matching
+   statistics navigation. Selected cards use ochre fill and underlined text.
+2. `TC_100_F91_colonizopedia_test` retains its complete player journeys;
+   `verifyHandDrawnFramesWithoutStripes` now verifies individual black 2px
+   card contours, spacing, wrapping, semantic atlas cells and 32px icons while
+   retaining article, selected-state and no-horizontal-scroll assertions.
+   Targeted selection also includes `PageVerificationContractTest`.
+3. An initial caller setup error forwarded `--model`
+   to the targeted Docker/Maven command instead of `verify`; Maven rejected
+   the option before tests started. Evidence: completion
+   `20261114T154045Z-15739d4c4243` (4.315 seconds execution).
+   Correct model dispatch: `20261114T154056Z-113546ab8ae0`, PID 72978,
+   600-second watchdog. No remote CI or publication verification requested.
+4. Model/JUnit passed 5,134 checks, zero failures/errors/skips in 157.599 s
+   (`target/verification/run-qdv7fyzv`). All game, test and script files match
+   the tested snapshot. Targeted dispatch `20261114T154352Z-62dbc694be28`,
+   PID 73573, uses the two-class selection above and a 1,800-second watchdog.
+   SVG export comparison passed; documentation checks passed (14 checks,
+   zero unexplained old names, strict MkDocs).
+5. Targeted Docker/Xvfb completed in 174.129 s. Fresh reports in
+   `target/docker-ui/run-yOBfYF` contain 11 Colonizopedia scenarios and three
+   contract checks: 14 tests, zero failures/errors/skips. Visual review of
+   1280 × 850 and 900 × 700 screenshots confirms separate black pen cards,
+   wrapped titles, selected-state fill, 32px semantic icons and independent
+   scroll areas. [Implemented screenshot](graphics-assets/help-topic-menu-2026-11-14/implemented.png).
+6. Fixed smoke passed all 21 checks with zero failures/errors/skips
+   (`target/verification/run-erbghy3x`, completion
+   `20261114T154733Z-b9140ec45341`, PID 73958). Total supervised duration
+   262.641 s is within the 420-second acceptance budget. All executable
+   sources match the passing snapshot based on `d1067482`.
+7. Local acceptance complete: 5,134 model/JUnit checks, 14 targeted UI/support
+   checks and 21 fixed smoke checks. Shared Java formatter applied to the three
+   changed Java files; review covered recycled empty cells, all fourteen topic
+   mappings, native keyboard/search behavior, SVG sources and repeatable export.
+   Documentation consistency (14 checks), name audit and strict MkDocs passed.
+   Unrelated backlog edits are excluded. No full regression or remote publication
+   verification was performed.
+
 <a id="modal-actions-2026-11-14"></a>
 
 ## Modal actions — 2026-11-14

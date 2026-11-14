@@ -1,3 +1,15 @@
+## Menu nápovědy — 14. listopadu 2026
+
+1. Colonizopedia používá samostatné kreslené karty témat jako detail statistik.
+   Ikona vlevo má 32 × 32 logických px a vyjadřuje obsah tématu; dlouhý název
+   se zalomí. Vybraná karta má okrovou výplň a podtržený název.
+2. Vyhledávání zůstává nad seznamem a prohledává dosavadní názvy i obsah.
+   Seznam a článek se posouvají nezávisle. Šipky mění vybrané téma,
+   kliknutí otevře jeho obsah a Escape nebo Back to game vrací hráče do hry.
+   Prázdný výsledek hledání zachovává dosavadní zprávu. Čtení nemění herní stav.
+3. Grafický zdroj a export popisuje [grafická dokumentace](graphics.md#help-topic-menu-2026-11-14).
+   Stav přejímky vede [funkční evidence](functional-tests.md#help-topic-menu-2026-11-14).
+
 # UX a pravidla ovládání Akropia
 
 ## Tlačítka modálních oken — 14. listopadu 2026

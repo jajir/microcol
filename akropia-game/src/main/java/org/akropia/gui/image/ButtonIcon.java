@@ -42,7 +42,20 @@ public enum ButtonIcon {
     MOUNTAIN("action-icons.png", 37), FILTER("action-icons.png", 38),
     IMPORT("action-icons.png", 39), EXPORT("action-icons.png", 40),
     RENAME("action-icons.png", 41), REPLACE("action-icons.png", 42),
-    STOP("action-icons.png", 43);
+    STOP("action-icons.png", 43), HELP_IDENTITIES("help-topic-icons.png", 0),
+    HELP_MOVEMENT("help-topic-icons.png", 1),
+    HELP_CARGO("help-topic-icons.png", 2),
+    HELP_COLONIES("help-topic-icons.png", 3),
+    HELP_PRODUCTION("help-topic-icons.png", 4),
+    HELP_TRADE("help-topic-icons.png", 5),
+    HELP_DIPLOMACY("help-topic-icons.png", 6),
+    HELP_COMBAT("help-topic-icons.png", 7),
+    HELP_INDEPENDENCE("help-topic-icons.png", 8),
+    HELP_SCORING("help-topic-icons.png", 9),
+    HELP_TERRAIN("help-topic-icons.png", 10),
+    HELP_RESOURCES("help-topic-icons.png", 11),
+    HELP_UNITS("help-topic-icons.png", 12),
+    HELP_BUILDINGS("help-topic-icons.png", 13);
 
     private static final Map<String, Image> IMAGES = new HashMap<>();
     private final String resource;

@@ -1,3 +1,23 @@
+<a id="help-topic-menu-2026-11-14"></a>
+## Ikony menu nápovědy — 14. listopadu 2026
+
+1. Schválený návrh přebírá velikost ikon a uspořádání karet z detailu statistik.
+   Čtrnáct významových motivů odpovídá tématům: sídla, směrovník, náklad,
+   kolonie, kladivo, obchodní šipky, podání rukou, meče, vlajka, sloupce skóre,
+   hory, rostlina, lidé a budovy.
+2. Editovatelný vektorový zdroj [help-topic-icons.svg](../akropia-game/src/graphics/help-topic-icons.svg)
+   má buňky 32 × 32, černé pero `#000000` o šířce 2 logické px,
+   mírně nepravidelnou geometrii a plochou olivovou výplň. Neobsahuje rastry,
+   stíny, gradienty ani textury. Karty používají samostatnou vektorovou CSS
+   konturu se stejnou černou linkou 2 px a okrovou výplň výběru jako statistiky.
+3. Opakovatelný export: `python3 scripts/graphics/export-graphics.py help-topics --install`;
+   ověření `python3 scripts/graphics/export-graphics.py help-topics --check`.
+   Atlas PNG má buňky 96 × 96, `ButtonIcon` je zobrazuje při 32 × 32.
+   [Funkční evidence](functional-tests.md#help-topic-menu-2026-11-14) uvádí skutečnou přejímku.
+4. Snímek implementace z Docker/Xvfb; nejde o návrhový mockup:
+
+![Menu nápovědy s jednotlivými kartami a ikonami](graphics-assets/help-topic-menu-2026-11-14/implemented.png)
+
 # Grafické podklady a jejich použití v Akropia
 
 ## Pruhy stavby a malé ikony — 10. listopadu 2026
