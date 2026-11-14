@@ -420,6 +420,18 @@ public class GamePage extends AbstractScreen {
         return new ColonyNameDialog(getContext());
     }
 
+    public void verifyColonyActionRowFitsContent() {
+        openUnitActions();
+        getRobot().interact(() -> {
+            final javafx.scene.Node button = getNodeFinder()
+                    .lookup("#buildColony").query();
+            final javafx.scene.layout.Region row = (javafx.scene.layout.Region) button
+                    .getParent();
+            assertTrue(row.getHeight() <= row.prefHeight(row.getWidth()) + 1,
+                    "Action row must not reserve empty space below its wrapped content");
+        });
+    }
+
     public ColonyNameDialog foundColonyFromActions() {
         clickOnButtonWithId("buildColony");
         return new ColonyNameDialog(getContext());

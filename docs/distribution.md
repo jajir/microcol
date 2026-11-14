@@ -20,7 +20,7 @@ Java 25 and do not depend on the player's installed Java. License notices remain
 regular files (`jlink --disable-plugin dedup-legal-notices`) because updater
 archives reject symbolic links; no license content is removed.
 
-JavaFX is pinned to **17.0.20**. Its platform-specific dependencies include native
+JavaFX is pinned to **25.0.5** for both the game and its tests. Its platform-specific dependencies include native
 Apple Silicon libraries; the older JavaFX 13 configuration did not provide those
 libraries. The JavaFX classifiers and the bundled Java runtime must match the
 target operating system and CPU architecture.
@@ -63,8 +63,8 @@ working directory. With no explicit `JAVA_HOME`, it selects Homebrew `openjdk@25
 on macOS (or the registered JDK 25); elsewhere it uses the configured Java.
 An explicit `JAVA_HOME` is respected and Maven rejects it if it is not Java 25.
 The script does not modify global jenv or shell settings. `mvn -version` must
-report Java 25 when using Maven directly. JavaFX remains 17.0.20 to isolate
-this runtime change; it is not evidence that the reported macOS crash is fixed.
+report Java 25 when using Maven directly. The JavaFX upgrade does not by itself
+establish that the previously reported native macOS crash is fixed.
 
 Build the macOS application and DMG:
 

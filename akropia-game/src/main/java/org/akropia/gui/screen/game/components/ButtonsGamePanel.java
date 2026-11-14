@@ -546,8 +546,19 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         explanation.visibleProperty().bind(button.disabledProperty()
                 .and(explanation.textProperty().isNotEmpty()));
         explanation.managedProperty().bind(explanation.visibleProperty());
-        final VBox row = button == buttonPlowField ? new VBox(button)
-                : new VBox(2, button, explanation);
+        final VBox row = new VBox(2) {
+            @Override
+            protected double computePrefHeight(final double width) {
+                // ContextMenu measures custom rows without a width. Use the
+                // menu column so wrapped captions do not reserve narrow lines.
+                return super.computePrefHeight(
+                        width < 0 ? getPrefWidth() : width);
+            }
+        };
+        row.getChildren().add(button);
+        if (button != buttonPlowField) {
+            row.getChildren().add(explanation);
+        }
         row.setPrefWidth(290);
         // JavaFX custom rows focus themselves but leave sibling submenus open.
         row.setOnMouseEntered(event -> unitChoices.hide());

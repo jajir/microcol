@@ -224,7 +224,7 @@ The linked runtime disables license-notice deduplication so updater archives
 contain regular license files rather than symlinks, retaining all notices.
 
 Application sources and the module descriptor target Java 25; local launch,
-Docker/CI and native packaging use JDK 25 with JavaFX 17.0.20. Packages are specific to the build OS and
+Docker/CI and native packaging use JDK 25 with JavaFX 25.0.5. Packages are specific to the build OS and
 CPU architecture. A configured package format is not proof of compatibility with
 all machines running that OS; see the
 [distribution scope and remaining release work](distribution.md#distribution-scope-and-remaining-release-work)

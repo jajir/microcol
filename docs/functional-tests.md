@@ -1,3 +1,108 @@
+<a id="javafx-25-2026-11-14"></a>
+## Shared JavaFX 25 runtime — 2026-11-14
+1. The game and UI tests now resolve JavaFX 25.0.5 from the parent POM;
+   JDK 25 remains unchanged. See the [runtime contract](distribution.md).
+   This upgrades a shared game dependency, not only the test environment.
+2. UX-N03 diagnostic comparison on Linux/Xvfb/Openbox reproduced owner-window
+   shrinkage in all four attempts each with JavaFX 17.0.20, 17.0.21 and
+   21.0.13; 25.0.5 and 27.0.1 preserved maximization in all four attempts each.
+   The configured Ubuntu Noble packages were already current; the second
+   comparison arm repeated the same OS package versions.
+3. On historical game revision `2d92bff6`, JDK 25.0.5 and JavaFX 25.0.5,
+   Construction and Education each opened and closed twice without changing
+   the main window's maximization or 1600 × 1181 client size. Completion
+   records `20261114T183846Z-2464e8bca962` and
+   `20261114T184037Z-377aab16a1f4` and diagnostic evidence under
+   `~/Library/Logs/Akropia/ux/20261114-n03-versions/` retain the results.
+   This does not identify the first fixed upstream version, establish
+   cross-platform acceptance or replace current-source regression checks.
+4. Current-source model/JUnit acceptance passed all 5,134 tests in 395 XML
+   reports, zero failures/errors/skips, with JavaFX 25.0.5 in the captured
+   source (`target/verification/run-ntcf725g`, completion
+   `20261114T190232Z-0bb747f33258`, 150.249 supervised seconds).
+   The preceding attempt `20261114T190141Z-d314a26679e4` timed out on
+   Docker's container-list query after 20 seconds during preparation;
+   no tests started and that failed evidence remains unchanged.
+5. Targeted `TC_25_F17_colony_equipment_test`,
+   `TC_32_F24_construction_eligibility_test`, `TC_68_F59_education_test`
+   and `PageVerificationContractTest` passed all 31 checks in four complete
+   XML reports, zero failures/errors/skips (`target/docker-ui/run-bj1dO8`,
+   completion `20261114T190526Z-ca7b99bd88e1`, 432.961 supervised seconds).
+6. First smoke `20261114T191303Z-5205362c225d` completed 21 checks with
+   zero assertion failures, one error and zero skips in 250.150 supervised
+   seconds (`target/verification/run-tx7ytb9k`).
+   `TC_02_F02_founding_colony_test#TC_02_embark_disembark` could not click
+   `#buildColony`: the node existed but was not visible. This is an open
+   acceptance blocker at that stage. The 420-second
+   budget was not exceeded. Full regression and remote publication are
+   not verified.
+7. Isolated runs `20261114T191802Z-79619960e2a5`,
+   `20261114T191929Z-8ce7024885cc`, `20261114T192104Z-255bfddb21d9`,
+   `20261114T192131Z-fd05e9f59a49` and `20261114T192317Z-7173e40bc494`
+   retain reproduction and diagnostic failures. The first attempted edit did
+   not apply; disabling button wrapping in the subsequent attempt did not
+   solve the problem and was reverted. Diagnostic measurements showed the
+   custom menu row requesting 301 px without a supplied width but only 57 px
+   at its actual 290 px width. ContextMenu measured the row without a width,
+   leaving large gaps and placing Build new colony below the screen.
+8. Custom action rows now measure wrapped content against the existing menu
+   column width when no width is supplied. `TC_02_F02_founding_colony_test`
+   / `TC_02` explicitly verifies that the colony action row fits its content
+   before founding the colony; original gameplay assertions remain.
+   Focused repair verification and `PageVerificationContractTest` passed
+   all four checks, zero failures/errors/skips (`target/docker-ui/run-aSP1aY`,
+   completion `20261114T192500Z-aaf1962180eb`, 64.816 supervised seconds).
+   The saved `colony-action-row.png` was visually reviewed: compact rows,
+   readable disabled-action explanation and visible colony action.
+9. All three changed Java files were formatted with the shared Eclipse
+   profile. Temporary diagnostic code was removed. Final model acceptance
+   passed all 5,134 tests in 395 reports, zero failures/errors/skips
+   (`target/verification/run-xscohmor`, completion
+   `20261114T192633Z-0742512fd083`, 154.517 supervised seconds).
+   The captured POM and all three changed Java files match the repaired
+   working source at that stage; final acceptance is recorded below.
+10. Extended targeted run `20261114T192932Z-cda76f25c8c6` completed 37
+    checks with zero assertion failures, one error and zero skips in
+    533.437 supervised seconds (`target/docker-ui/run-637ASI`). All colony
+    founding, Construction, Education and equipment scenarios passed.
+    `TC_188_F221_game_toolbar_test` / `TC_03` detected an unexpected Rename
+    colony dialog after keyboard selection from the colony dropdown.
+    This run is not accepted as passing.
+11. Deferring the screen change did not fix the extra rename dialog
+    (`20261114T193921Z-15498fcb95da`, six checks, one error). Diagnostic run
+    `20261114T194127Z-8c0fe73f6626` captured repeated native Enter presses
+    after the colony opened: TestFX held Enter while waiting for rendering.
+    The attempted production change and diagnostic instrumentation were
+    removed. `GameToolbarPage.chooseFirstColony` now uses the existing
+    `GamePage.openColonyWithKeyboard` pattern: native JavaFX Robot press and
+    release in one FX task, then wait for events. Gameplay assertions and
+    the explicit no-modal-window check remain unchanged.
+12. Focused toolbar and page-contract verification passed all six checks,
+    zero failures/errors/skips (`target/docker-ui/run-nxwf5S`, completion
+    `20261114T194254Z-077cdeb7f4d6`, 97.283 supervised seconds).
+    All four changed Java files use the shared formatter.
+13. Final model acceptance passed all 5,134 tests in 395 complete reports,
+    zero failures/errors/skips (`target/verification/run-hidd2lf5`, completion
+    `20261114T194456Z-7de59ceab2ce`, 153.497 supervised seconds). The captured
+    POM and all four changed Java files match the final working source.
+14. Final targeted UI acceptance passed all 37 checks in six complete
+    reports, zero failures/errors/skips (`target/docker-ui/run-nh0ZNj`,
+    completion `20261114T194756Z-4745607d83a2`, 537.394 supervised seconds).
+    Selection: all scenarios in `TC_02`, `TC_25`, `TC_32`, `TC_68`, `TC_188`
+    and `PageVerificationContractTest`.
+15. Final fixed smoke/support passed all 21 checks, zero failures/errors/skips
+    (`target/verification/run-bfpbyme7`, completion
+    `20261114T195711Z-211d5531994f`). Total supervised execution and cleanup
+    took 262.200 seconds, within the 420-second acceptance budget. The POM
+    and all four changed Java files match the passing source snapshot.
+    Local acceptance covers the change based on `98dff142`; previous failed
+    runs remain failed. Full regression, native macOS behavior and remote
+    game distribution publication have not been verified.
+16. Final scope review and shared-formatter idempotence checks passed.
+    The staged source snapshot excludes unrelated backlog changes.
+    All 14 documentation consistency tests, the naming audit and strict
+    MkDocs build passed; logs are retained in `target/javafx25/`.
+
 <a id="goals-empty-2026-11-14"></a>
 ## Objectives empty state — 2026-11-14
 

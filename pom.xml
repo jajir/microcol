@@ -19,8 +19,7 @@
 		<github.global.oauth2Token>${env.GITHUB_OAUTH_TOKEN}</github.global.oauth2Token>
 		<junit.jupiter.version>5.5.2</junit.jupiter.version>
 		<maven.compiler.release>25</maven.compiler.release>
-		<!-- Keep JavaFX unchanged while standardizing the JDK baseline. -->
-		<javafx.version>17.0.20</javafx.version>
+		<javafx.version>25.0.5</javafx.version>
 		<!-- CI supplies its immutable build tag; local builds keep the plain game version. -->
 		<akropia.build.id>local</akropia.build.id>
 	</properties>

@@ -161,7 +161,13 @@ public final class GameToolbarPage extends AbstractScreen {
     public void chooseFirstColony() {
         getRobot().push(KeyCode.DOWN);
         WaitForAsyncUtils.waitForFxEvents();
-        getRobot().push(KeyCode.ENTER);
+        // Release before waiting for the colony to render, avoiding native
+        // key repeat activating the newly focused colony-name control.
+        getRobot().interact(() -> {
+            final javafx.scene.robot.Robot keyboard = new javafx.scene.robot.Robot();
+            keyboard.keyPress(KeyCode.ENTER);
+            keyboard.keyRelease(KeyCode.ENTER);
+        });
         WaitForAsyncUtils.waitForFxEvents();
     }
 

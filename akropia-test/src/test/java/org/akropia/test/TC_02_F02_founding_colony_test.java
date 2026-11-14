@@ -47,6 +47,8 @@ public class TC_02_F02_founding_colony_test extends AbstractAkropiaTest {
         gamePage.getRightPanelUnit(1).verifyFreeActionPoints(1);
 
         // found colony by pressing key 'b'
+        gamePage.verifyColonyActionRowFitsContent();
+        gamePage.captureDialog("buildColony", "colony-action-row.png");
         final ColonyNameDialog naming = gamePage.foundColonyFromActions();
         naming.verifyDraft("Massalia");
         naming.save();
