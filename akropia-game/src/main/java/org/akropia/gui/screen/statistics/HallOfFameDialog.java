@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.akropia.gui.LocalizationHelper;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.HallOfFameEntry;
@@ -38,7 +39,7 @@ public final class HallOfFameDialog extends AbstractMessageWindow {
         close.setDefaultButton(true);
         close.setCancelButton(true);
         close.setOnAction(event -> close());
-        final VBox root = new VBox(16, panel, close);
+        final VBox root = new VBox(16, panel, new ModalActions(close));
         root.setId("hallOfFameDialog");
         root.setPadding(new Insets(20));
         root.setPrefWidth(520);

@@ -4,9 +4,9 @@ import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.image.ButtonIcon;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 
@@ -63,7 +63,6 @@ final class DeclarationDialog extends AbstractMessageWindow {
         message.setMaxWidth(440);
         root.getChildren().add(message);
 
-        final HBox buttons = new HBox(12);
         final Button cancel = ActionButtons.button(ButtonIcon.CANCEL,
                 i18n.get(Stats.declarationCancel));
         cancel.setId("declarationCancel");
@@ -83,7 +82,7 @@ final class DeclarationDialog extends AbstractMessageWindow {
             }
         });
 
-        buttons.getChildren().addAll(cancel, confirm);
+        final ModalActions buttons = new ModalActions(confirm, cancel);
         root.getChildren().add(buttons);
 
         init(root);

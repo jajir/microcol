@@ -4,6 +4,7 @@ import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Model;
@@ -15,7 +16,6 @@ import com.google.inject.Singleton;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
@@ -69,7 +69,7 @@ public final class DeclareIndependenceDialog extends AbstractMessageWindow {
         cancel.setCancelButton(true);
         cancel.setOnAction(event -> close());
         root.getChildren().addAll(support, muster, europe, irreversible,
-                feedback, new HBox(12, confirm, cancel));
+                feedback, new ModalActions(confirm, cancel));
         init(root);
     }
 

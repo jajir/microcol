@@ -2675,3 +2675,23 @@ přístupným názvem; po rozšíření se text obnoví. Stav ověření vede
 4. Ověření UC-029/030 vede [funkční evidence](functional-tests.md#planner-fog-2026-11-10); popis implementace sám není potvrzením přejímky.
 
 ![Ověřený plánovač se sjednocenou mlhou a otazníky](graphics-assets/planner-fog-2026-11-10/planner-fog.png)
+
+
+## Modal button contour — 2026-11-14
+
+1. Modal buttons reuse the existing irregular toolbar geometry with the agreed
+   black `#000000` 2-logical-pixel stroke. The editable source is
+   [modal-button-frame.svg](../akropia-game/src/graphics/modal-button-frame.svg),
+   a genuine vector path without raster references. The
+   [runtime PNG](../akropia-game/src/main/resources/images/modal-button-frame.png)
+   is its 2× export. Nine-slice settings remain 12 source pixels / 6 logical
+   pixels; button fills are flat CSS colors. The common toolbar source is unchanged.
+2. Repeatable export:
+
+   ```sh
+   rsvg-convert --zoom 2 -o akropia-game/src/main/resources/images/modal-button-frame.png akropia-game/src/graphics/modal-button-frame.svg
+   ```
+
+3. Behavior and positioning follow [modal UX](ux.md#tlacitka-modalnich-oken-14-listopadu-2026).
+   Displayed-result verification is recorded with the
+   [functional evidence](functional-tests.md#modal-actions-2026-11-14).

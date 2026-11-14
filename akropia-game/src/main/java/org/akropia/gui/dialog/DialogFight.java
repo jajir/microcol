@@ -6,6 +6,7 @@ import org.akropia.gui.LocalizationHelper;
 import org.akropia.gui.image.ImageProvider;
 import org.akropia.gui.preferences.PreferencesProperties;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.AttackOrder;
@@ -168,14 +169,13 @@ public final class DialogFight extends AbstractMessageWindow {
         buttonCancel.setCancelButton(true);
         buttonCancel.setOnAction(e -> onClickCancel(
                 checkBoxShowNextTime.isSelected(), preferencesProperties));
-        root.add(buttonCancel, 0, 10);
 
         buttonFight = ActionButtons.button(ButtonIcon.MILITARY);
         buttonFight.setId("fightConfirm");
-        buttonFight.requestFocus();
+        buttonCancel.requestFocus();
         buttonFight.setOnAction(e -> onClickFight(
                 checkBoxShowNextTime.isSelected(), preferencesProperties));
-        root.add(buttonFight, 2, 10);
+        root.add(new ModalActions(buttonFight, buttonCancel), 0, 10, 3, 1);
     }
 
     public boolean showAndWait(final AttackOrder order) {

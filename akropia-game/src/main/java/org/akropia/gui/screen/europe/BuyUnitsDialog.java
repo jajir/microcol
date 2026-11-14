@@ -91,7 +91,8 @@ public final class BuyUnitsDialog extends AbstractMessageWindow {
                     }
                 });
 
-        final ButtonBarOk buttonBar = new ButtonBarOk(i18n);
+        final ButtonBarOk buttonBar = new ButtonBarOk(
+                i18n.get(org.akropia.gui.Loc.close));
         buttonBar.getButtonOk().setOnAction(e -> {
             close();
         });

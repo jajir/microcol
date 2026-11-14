@@ -233,6 +233,8 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         // The leave confirmation uses the same paper controls as the map.
         final org.akropia.page.PaperButtonsPage buttons = new org.akropia.page.PaperButtonsPage(
                 getContext());
+        buttons.verifyModalActions("saveConfirm", "saveDiscard", "saveCancel",
+                "saveConfirm");
         buttons.verifyPaperButton("saveConfirm");
         buttons.verifyModalFrame("saveConfirm");
         buttons.captureModalOnScreen("r0322-save-on-map.png");

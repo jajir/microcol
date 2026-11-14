@@ -8,6 +8,7 @@ import java.util.List;
 import org.akropia.gui.GoodsTypeName;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Colony;
@@ -24,7 +25,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
@@ -116,7 +116,7 @@ public final class DialogForeignColonyTrade extends AbstractMessageWindow {
         root.getChildren().addAll(barter, giveCaption, incomingGoods,
                 incomingAmount, receiveCaption, outgoingGoods, outgoingAmount,
                 give, receive, prices, net, feedback,
-                new HBox(12, confirm, cancel));
+                new ModalActions(confirm, cancel));
         init(root);
     }
 

@@ -459,8 +459,10 @@ public class PersistingService {
                 if (choice.entry == null) {
                     return false;
                 }
-                if (confirm(texts.get(SavedGameText.delete) + "\n"
-                        + describeTarget(choice.entry))) {
+                if (confirm(
+                        texts.get(SavedGameText.delete) + "\n"
+                                + describeTarget(choice.entry),
+                        SavedGameText.deleteAction)) {
                     java.nio.file.Files.delete(choice.entry.file.toPath());
                 }
                 return false;
@@ -568,7 +570,12 @@ public class PersistingService {
     }
 
     private boolean confirm(final String message) {
-        return new SaveConfirmation(view, texts).choose(message, false) == 1;
+        return confirm(message, SavedGameText.overwriteAction);
+    }
+
+    private boolean confirm(final String message, final SavedGameText action) {
+        return new SaveConfirmation(view, texts).choose(message, false,
+                action) == 1;
     }
 
     public void quickSave() {

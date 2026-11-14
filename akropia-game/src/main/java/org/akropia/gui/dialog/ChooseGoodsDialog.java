@@ -39,6 +39,7 @@ public final class ChooseGoodsDialog extends AbstractMessageWindow {
     private final Label explanation = new Label();
 
     private final Button cancel;
+    private final Button transfer;
 
     @Inject
     public ChooseGoodsDialog(final ViewUtil viewUtil, final I18n i18n) {
@@ -82,6 +83,8 @@ public final class ChooseGoodsDialog extends AbstractMessageWindow {
         final ButtonsBarYesNo buttonsBar = new ButtonsBarYesNo(i18n);
         buttonsBar.getButtonYes().setId("buttonOk");
         cancel = buttonsBar.getButtonNo();
+        transfer = buttonsBar.getButtonYes();
+        transfer.setDefaultButton(true);
         buttonsBar.getButtonYes().setOnAction(e -> {
             close();
         });
@@ -122,6 +125,7 @@ public final class ChooseGoodsDialog extends AbstractMessageWindow {
         labelCaption.setText(i18n.get(ChooseGoods.caption));
         labelActualValue.setText(i18n.get(ChooseGoods.selectedAmount));
         cancel.setText(i18n.get(Dialog.cancel));
+        transfer.setText(i18n.get(ChooseGoods.transfer));
         getScene().getWindow().sizeToScene();
     }
 

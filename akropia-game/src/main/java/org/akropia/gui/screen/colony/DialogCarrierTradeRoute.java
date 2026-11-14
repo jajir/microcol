@@ -4,6 +4,7 @@ import org.akropia.gui.UnitTypes;
 import org.akropia.gui.dialog.Dialog;
 import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
@@ -18,7 +19,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /** One carrier's draft selection; the model changes only on confirmation. */
@@ -98,7 +98,7 @@ public final class DialogCarrierTradeRoute extends AbstractMessageWindow {
             }
         });
         final VBox root = new VBox(12, current, rule, routes, problem,
-                new HBox(12, ok, cancel));
+                new ModalActions(ok, cancel));
         root.setId("carrierRouteDialog");
         root.setPrefWidth(460);
         root.setPadding(new Insets(18));

@@ -6,9 +6,6 @@ import org.akropia.gui.Loc;
 import org.akropia.i18n.I18n;
 
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
 /**
@@ -18,7 +15,7 @@ public class ButtonBarOk implements JavaFxComponent {
 
     public static final String BUTTON_OK_ID = "buttonOk";
 
-    private final HBox mainBox = new HBox();
+    private final ModalActions mainBox;
 
     private final Button buttonOk;
 
@@ -37,10 +34,8 @@ public class ButtonBarOk implements JavaFxComponent {
         buttonOk = ActionButtons.button(ButtonIcon.CONFIRM, buttonOkLabel);
         buttonOk.requestFocus();
         buttonOk.setId(BUTTON_OK_ID);
-        final Pane spacer = new Pane();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+        mainBox = new ModalActions(buttonOk);
         mainBox.setId("buttonPane");
-        mainBox.getChildren().addAll(spacer, buttonOk);
     }
 
     public void setButtonText(final String text) {

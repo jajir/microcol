@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.akropia.gui.GoodsTypeName;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Model;
@@ -19,7 +20,6 @@ import com.google.inject.Inject;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
@@ -72,7 +72,7 @@ public final class TaxDemandDialog extends AbstractMessageWindow {
         later.setCancelButton(true);
         later.setOnAction(event -> close());
         root.getChildren().addAll(rates, acceptExplain, protestDetail, feedback,
-                laterExplain, new HBox(12, accept, protest, later));
+                laterExplain, new ModalActions(null, later, protest, accept));
         init(root);
     }
 

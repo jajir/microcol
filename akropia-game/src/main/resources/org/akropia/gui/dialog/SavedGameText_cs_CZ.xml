@@ -55,4 +55,6 @@
     <entry key="savedAs">Hra byla uložena jako „%s“.</entry>
     <entry key="saveFileHint">Dvojklikem uložíte hru do tohoto souboru.</entry>
     <entry key="editNameHint">Zde můžete upravit název ukládaného souboru.</entry>
+    <entry key="overwriteAction">Přepsat uloženou hru</entry>
+    <entry key="deleteAction">Smazat uloženou hru</entry>
 </properties>

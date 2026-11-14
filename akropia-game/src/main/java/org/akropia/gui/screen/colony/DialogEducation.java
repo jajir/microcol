@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import org.akropia.gui.UnitTypes;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.*;
@@ -119,7 +120,7 @@ public final class DialogEducation extends AbstractMessageWindow {
         skills.setPrefWidth(420);
         courses.setPrefHeight(130);
         root = new VBox(10, title, rule, courses, cancelCourse, grid, preview,
-                feedback, new HBox(12, assign, closeButton));
+                assign, feedback, new ModalActions(closeButton));
         root.setId("educationDialog");
         root.setPadding(new Insets(18));
         root.setPrefWidth(650);

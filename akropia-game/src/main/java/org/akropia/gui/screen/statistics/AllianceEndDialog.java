@@ -4,9 +4,9 @@ import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.image.ButtonIcon;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 
@@ -64,7 +64,7 @@ final class AllianceEndDialog extends AbstractMessageWindow {
                 close();
             }
         });
-        root.getChildren().add(new HBox(12, cancel, end));
+        root.getChildren().add(new ModalActions(end, cancel));
         init(root);
         setTitle(i18n.get(Stats.allianceEndTitle));
         cancel.requestFocus();

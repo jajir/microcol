@@ -3,6 +3,7 @@ package org.akropia.gui.screen.colony.buildingqueue;
 import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.ConstructionRushQuote;
@@ -10,7 +11,6 @@ import org.akropia.model.NotEnoughtGoldException;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /** Explicit confirmation of one immutable construction offer. */
@@ -40,7 +40,7 @@ final class ConstructionRushDialog extends AbstractMessageWindow {
         confirm.setOnAction(event -> purchase());
         cancel.setOnAction(event -> close());
         VBox root = new VBox(16, detail, feedback,
-                new HBox(12, confirm, cancel));
+                new ModalActions(confirm, cancel));
         root.setId("constructionRushDialog");
         root.setPadding(new Insets(20));
         root.setPrefWidth(520);

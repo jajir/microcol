@@ -13,6 +13,7 @@ import org.akropia.gui.dialog.NativeLandGuard;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.screen.game.components.StatusBarMessageEvent;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.Listener;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
@@ -39,7 +40,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 @Listener
@@ -74,7 +74,7 @@ public final class DialogColonyJobChoices extends AbstractMessageWindow {
         this.callback = callback;
         this.nativeLand = nativeLand;
         final VBox root = new VBox(10, caption, choices, details, message,
-                new HBox(10, confirm, clear, cancel));
+                new ModalActions(confirm, clear, cancel));
         root.setPadding(new Insets(16));
         root.setPrefWidth(640);
         root.setId("jobDialog");

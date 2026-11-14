@@ -166,4 +166,43 @@ public class TC_83_F74_wooden_buttons_test extends AbstractAkropiaTest {
         page.click("woodBack");
         page.verifySamplesClosed();
     }
+
+    @Test
+    @Tag("local")
+    void TC_04_modal_final_actions_share_alignment_and_safe_keyboard()
+            throws Exception {
+        final PaperButtonsPage page = new PaperButtonsPage(getContext());
+
+        // One acknowledgement keeps the same right-hand anchor and accepts
+        // Enter.
+        page.showFinalActions(true);
+        page.verifyModalActions("modalPrimary", "modalPrimary");
+        page.press(KeyCode.ENTER);
+        page.verifySamplesClosed();
+        page.verifyActionCount(1);
+
+        // A long Czech action fits beside cancel; Enter initially cancels
+        // safely.
+        page.showFinalActions(false);
+        page.verifyModalActions("modalPrimary", "modalCancel", "modalPrimary");
+        page.captureDialog("modalPrimary", "modal-actions-czech.png");
+        page.press(KeyCode.ENTER);
+        page.verifySamplesClosed();
+        page.verifyActionCount(1);
+
+        // Tab reaches the primary action and deliberate activation performs it
+        // once.
+        page.showFinalActions(false);
+        page.press(KeyCode.TAB);
+        page.verifyFocused("modalPrimary");
+        page.press(KeyCode.SPACE);
+        page.verifySamplesClosed();
+        page.verifyActionCount(2);
+
+        // Escape cancels without executing the pending action.
+        page.showFinalActions(false);
+        page.press(KeyCode.ESCAPE);
+        page.verifySamplesClosed();
+        page.verifyActionCount(2);
+    }
 }

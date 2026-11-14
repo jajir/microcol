@@ -628,23 +628,27 @@ public class GamePage extends AbstractScreen {
         moveMouseAtLocation(colonyLocation);
         final StringBuilder received = new StringBuilder();
         final javafx.event.EventHandler<javafx.scene.input.MouseEvent> trace = event -> received
-                .append(" [count=").append(event.getClickCount())
-                .append(" target=").append(event.getTarget()).append(" xy=")
+                .append(" [time=").append(System.nanoTime()).append(" count=")
+                .append(event.getClickCount()).append(" target=")
+                .append(event.getTarget()).append(" xy=")
                 .append(event.getSceneX()).append(",").append(event.getSceneY())
                 .append("]");
         final javafx.scene.Scene scene = getContext().getPrimaryStage()
                 .getScene();
         getRobot().interact(() -> scene.addEventFilter(
                 javafx.scene.input.MouseEvent.MOUSE_PRESSED, trace));
-        // Let Xvfb deliver each native click before sending the next one,
-        // while remaining inside the platform double-click interval.
-        for (int click = 0; click < 2; click++) {
-            getRobot().interact(() -> {
-                final javafx.scene.robot.Robot mouse = new javafx.scene.robot.Robot();
-                mouse.mousePress(MouseButton.PRIMARY);
-                mouse.mouseRelease(MouseButton.PRIMARY);
-            });
-            getRobot().sleep(60);
+        // Send X11 events off the FX thread, without draining its queue between
+        // clicks.
+        try {
+            final java.awt.Robot mouse = new java.awt.Robot();
+            mouse.setAutoDelay(40);
+            for (int click = 0; click < 2; click++) {
+                mouse.mousePress(java.awt.event.InputEvent.BUTTON1_DOWN_MASK);
+                mouse.mouseRelease(java.awt.event.InputEvent.BUTTON1_DOWN_MASK);
+            }
+        } catch (java.awt.AWTException unavailable) {
+            throw new IllegalStateException("Native mouse input is unavailable",
+                    unavailable);
         }
         WaitForAsyncUtils.waitForFxEvents();
         try {

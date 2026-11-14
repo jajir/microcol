@@ -15,7 +15,8 @@ public final class DialogDestroyColony extends AbstractYesNoDialog {
 
     @Inject
     DialogDestroyColony(final ViewUtil viewUtil, final I18n i18n) {
-        super(viewUtil, i18n, i18n.get(Dialog.destroyColony_caption));
+        super(viewUtil, i18n, i18n.get(Dialog.destroyColony_caption),
+                i18n.get(Dialog.destroyColony_confirm));
 
         getContext().getChildren()
                 .add(new Label(i18n.get(Dialog.destroyColony_question)));

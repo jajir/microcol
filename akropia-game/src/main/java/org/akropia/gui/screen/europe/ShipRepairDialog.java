@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import org.akropia.gui.UnitTypes;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Colony;
@@ -77,7 +78,7 @@ public final class ShipRepairDialog extends AbstractMessageWindow {
         close.setCancelButton(true);
         close.setOnAction(event -> close());
         VBox root = new VBox(12, new Label(i18n.get(Europe.repairsOpen)),
-                explanation, scroll, close);
+                explanation, scroll, new ModalActions(close));
         root.setPadding(new Insets(12));
         init(root);
         setTitle(i18n.get(Europe.repairsOpen));

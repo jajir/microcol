@@ -4,6 +4,7 @@ import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.BaseScore;
@@ -18,7 +19,6 @@ import org.akropia.model.campaign.po.HallOfFameDao;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
@@ -73,7 +73,7 @@ public final class ScoreBoundaryDialog extends AbstractMessageWindow {
                 "scoreBoundaryUnscored");
         continueUnscored.setText(i18n.get(ScoreBoundaryText.continueUnscored));
         continueUnscored.setId("scoreBoundaryContinue");
-        continueUnscored.setDefaultButton(true);
+        continueUnscored.setDefaultButton(false);
         continueUnscored.setOnAction(event -> onContinue());
         later.setText(i18n.get(ScoreBoundaryText.decideLater));
         later.setId("scoreBoundaryLater");
@@ -83,7 +83,7 @@ public final class ScoreBoundaryDialog extends AbstractMessageWindow {
         feedback.setWrapText(true);
         feedback.setMinHeight(Region.USE_PREF_SIZE);
         final VBox root = new VBox(16, summary, parts, adjustments, ranking,
-                unscored, feedback, new HBox(12, continueUnscored, later));
+                unscored, feedback, new ModalActions(continueUnscored, later));
         root.setId("scoreBoundaryDialog");
         root.setPadding(new Insets(20));
         root.setPrefWidth(620);

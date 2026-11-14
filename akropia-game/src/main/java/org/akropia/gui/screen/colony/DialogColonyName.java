@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.akropia.gui.Loc;
 import org.akropia.gui.screen.game.components.StatusBarMessageService;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Colony;
@@ -29,7 +30,6 @@ import javafx.css.PseudoClass;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public final class DialogColonyName extends AbstractMessageWindow {
@@ -90,7 +90,7 @@ public final class DialogColonyName extends AbstractMessageWindow {
         name.textProperty()
                 .addListener((observable, previous, current) -> validate());
         final VBox root = new VBox(12, caption, land, label, name, generate,
-                message, new HBox(12, cancel, save));
+                message, new ModalActions(save, cancel));
         root.setId("colonyNameDialog");
         root.setPrefWidth(500);
         init(root);

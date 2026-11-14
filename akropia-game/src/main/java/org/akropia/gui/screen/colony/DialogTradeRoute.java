@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Colony;
@@ -152,7 +153,7 @@ public final class DialogTradeRoute extends AbstractMessageWindow {
         create.setId("tradeRouteCreate");
         create.setDefaultButton(true);
         create.setOnAction(event -> saveRoute());
-        root.getChildren().addAll(message, new HBox(12, cancel, create));
+        root.getChildren().addAll(message, new ModalActions(create, cancel));
         root.setId("tradeRouteDialog");
         root.setPrefWidth(500);
         init(root);

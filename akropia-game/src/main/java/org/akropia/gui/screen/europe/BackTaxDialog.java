@@ -7,6 +7,7 @@ import java.util.List;
 import org.akropia.gui.GoodsTypeName;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.GoodsType;
@@ -20,7 +21,6 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
@@ -90,7 +90,8 @@ public final class BackTaxDialog extends AbstractMessageWindow {
         cancel.setCancelButton(true);
         cancel.setOnAction(event -> close());
         root.getChildren().addAll(commodityLabel, commodity, arrears, restore,
-                treasury, insufficient, feedback, new HBox(12, pay, cancel));
+                treasury, insufficient, feedback,
+                new ModalActions(pay, cancel));
         init(root);
     }
 

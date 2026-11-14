@@ -120,6 +120,9 @@ public class TC_114_F105_native_land_test extends AbstractAkropiaTest {
         plow.useControl();
         land.verifyDialogShows(CLAIMANT, "Price: 200 gold. You have 300 gold.",
                 CONSEQUENCE);
+        land.verifyExplicitChoiceRequired();
+        new org.akropia.page.PaperButtonsPage(getContext()).verifyModalActions(
+                "nativeLandConfirm", "nativeLandCancel", "nativeLandConfirm");
         land.verifyPayEnabled(true);
 
         // Canceling starts no work and changes neither side's gold or alarm.

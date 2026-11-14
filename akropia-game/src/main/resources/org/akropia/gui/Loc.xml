@@ -315,4 +315,6 @@
     <entry key="stepInsufficientMovement">Not enough movement remaining</entry>
     <entry key="cancelWorkBeforeMoving">Cancel work in the context menu before moving this unit.</entry>
     <entry key="unitsPanel_tools">Tools: %s</entry>
+    <entry key="close">Close</entry>
+    <entry key="nativeLandChoose">Choose an option</entry>
 </properties>

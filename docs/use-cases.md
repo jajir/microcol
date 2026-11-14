@@ -1,3 +1,13 @@
+## UC-114/119 a UC-113: modální tlačítka — 14. listopadu 2026
+
+1. Společné [UX pravidlo](ux.md#tlacitka-modalnich-oken-14-listopadu-2026)
+   sjednocuje dokončení a zrušení vlastních modálních oken v EN/CS.
+   TC83 ověřuje společný vzhled a klávesnici, TC191/01 také pořadí tří
+   tlačítek při ochraně neuložené hry. TC114/01 ověřuje výslovný výběr
+   nároku na půdu před akcí a zachovává kontroly plateb a herního stavu.
+2. Výsledky a další cílené scénáře uvádí [evidence](functional-tests.md#modal-actions-2026-11-14).
+   Tato úprava sama neuzavírá celé use cases.
+
 ## UC-114: přepsání otevřené klávesovou zkratkou — 13. listopadu 2026
 
 1. TC191/17 ověřuje [otevření přes ⌘S/Ctrl+S](save-load-navigation.md#otevreni-ukladani-klavesovou-zkratkou-13-listopadu-2026), opakovaný stisk během ukládání, dvojklik a jediné potvrzení s návratem na mapu. Další samostatné uložení zůstává dostupné. [Evidence](functional-tests.md#save-shortcut-return-2026-11-13).

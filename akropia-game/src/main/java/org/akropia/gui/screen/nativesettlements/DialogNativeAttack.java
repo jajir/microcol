@@ -5,6 +5,7 @@ import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.Loc;
 import org.akropia.gui.screen.game.components.StatusBarMessageService;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.NativeConquestQuote;
@@ -82,7 +83,7 @@ public final class DialogNativeAttack extends AbstractMessageWindow {
         back.setId(BACK_BUTTON_ID);
         back.setCancelButton(true);
         back.setOnAction(e -> close());
-        final HBox buttons = new HBox(10, back, confirm);
+        final HBox buttons = new ModalActions(confirm, back);
         final VBox root = new VBox(10, line, defenders, spanish, relations,
                 buttons);
         root.setId(CONTENT_ID);

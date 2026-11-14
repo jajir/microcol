@@ -55,4 +55,6 @@
     <entry key="savedAs">Game saved as '%s'.</entry>
     <entry key="saveFileHint">Double-click to save the game to this file.</entry>
     <entry key="editNameHint">You can edit the save file name here.</entry>
+    <entry key="overwriteAction">Overwrite save</entry>
+    <entry key="deleteAction">Delete save</entry>
 </properties>

@@ -10,6 +10,7 @@ import com.google.inject.Inject;
 import org.akropia.gui.GoodsTypeName;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.*;
@@ -61,7 +62,7 @@ public final class DialogCustomHouse extends AbstractMessageWindow {
         confirm.setOnAction(event -> apply());
         cancel.setOnAction(event -> close());
         VBox root = new VBox(16, rule, grid, feedback,
-                new HBox(12, confirm, cancel));
+                new ModalActions(confirm, cancel));
         root.setId("customHouseDialog");
         root.setPadding(new Insets(20));
         root.setPrefWidth(580);

@@ -439,7 +439,7 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
         this.mission = mission;
         this.contest = contest;
         this.kept = kept;
-        buttonBar = new ButtonBarOk(i18n);
+        buttonBar = new ButtonBarOk(i18n.get(org.akropia.gui.Loc.close));
         buttonBar.getButtonOk().setOnAction(e -> {
             close();
         });
@@ -1136,7 +1136,7 @@ public final class DialogNativeVisit extends AbstractMessageWindow {
         incitementButton.setText(i18n.get(Loc.nativeVisitIncitementButton));
         attackButton.setText(i18n.get(Loc.nativeVisitActionAttack));
         tributeButton.setText(i18n.get(Loc.nativeVisitActionTribute));
-        buttonBar.setButtonText(i18n.get(Loc.ok));
+        buttonBar.setButtonText(i18n.get(Loc.close));
         for (int i = 0; i < choices.size(); i++) {
             final NativeVisitChoice choice = choices.get(i);
             choiceLabels.get(i)

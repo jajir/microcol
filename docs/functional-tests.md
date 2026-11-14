@@ -1,3 +1,136 @@
+<a id="modal-actions-2026-11-14"></a>
+
+## Modal actions — 2026-11-14
+
+
+1. Agreed [modal UX](ux.md#tlacitka-modalnich-oken-14-listopadu-2026)
+   uses a shared right-aligned footer across custom game dialogs. Content
+   actions and embedded colony panels retain their purpose. Native OS file
+   choosers retain platform controls. Native land now requires an explicit
+   option before execution; save protection names overwrite/delete actions.
+2. Local acceptance is complete; see items 13–14. The first model runner
+   `20261114T133926Z-419de31c0f41` stopped during Docker preparation:
+   the labelled-container query timed out after 20 seconds; no tests started.
+   Evidence remains in its completion directory. Subsequent direct Docker
+   server and container queries succeeded in 0.40 s and 0.02 s. This does
+   not establish a root cause or a passing test phase.
+
+3. Intermediate model check `target/verification/run-6sstsplr` passed
+   5,134 tests with zero failures, errors or skips in 156.447 seconds.
+   The final black modal contour, close label and footer sizing refinements
+   were made afterward, so this result is not acceptance of the final source.
+   The final model check `target/verification/run-kcn46j_k` passed all
+   5,134 tests with zero failures, errors or skips in 152.786 seconds.
+   Runner `20261114T134650Z-29e7eeb12cd3` first waited 33.732 seconds
+   for the serialized local slot; that wait is not test execution.
+4. The first targeted Docker/Xvfb attempt used completion runner
+   `20261114T135022Z-6fd9ecb496bf`, with a 3,600-second watchdog.
+   It selects TC83, TC114, TC191/01+17, TC05, TC25/01, TC27/01,
+   TC20/01, TC81/04, TC104/01, TC107/01, TC78/01, TC159/01,
+   TC164/01, TC149/01, TC55/01, TC46/01, TC128/01, TC131/01,
+   TC68/01, TC63/01, TC59/01, TC60/01, TC74/01, TC58/01,
+   TC40/01, TC210/02+05, TC06 and `PageVerificationContractTest`.
+   It failed during test compilation after 40.845 seconds: new TC83/04
+   omitted the checked exception declaration required by screenshot capture.
+   No UI scenarios started. The declaration was corrected and explicit
+   closed-window assertions were added after the keyboard actions.
+   Final smoke and acceptance remain pending.
+5. Java changes use the shared Eclipse formatter. The new black button
+   contour is a genuine SVG path; a second `rsvg-convert --zoom 2` export
+   is byte-identical to the runtime PNG. Existing toolbar artwork stays
+   unchanged. Displayed-result inspection remains part of UI acceptance.
+
+6. Targeted retry `20261114T135129Z-c35e91bbe530` ran 52 tests in
+   1,000.683 seconds: 50 passed, 2 errors, no skipped tests. Reports and
+   screenshots remain in `target/docker-ui/run-EEmCFB`. TC06's shared
+   appearance assertion incorrectly applied modal padding to the full-page
+   market; the assertion now distinguishes the actual modal ancestor.
+   TC25 stopped before opening equipment: the map recorded two separate
+   presses with click count 1 and the colony did not open. No equipment
+   behavior was exercised by that failed attempt. Its original interaction
+   and gameplay assertions are retained for retry; no root cause or fix of
+   the double-click failure is claimed.
+7. Visual inspection of `modal-actions-czech.png` and
+   `r0316-save-confirmation.png` from that run confirms full Czech/English
+   labels, adjacent right-aligned actions, flat primary fill and black
+   irregular outlines. An edit-script precondition failed before applying
+   the assertion fix; accidentally dispatched run
+   `20261114T140921Z-3100f3918b78` was canceled through its supervisor.
+   The complete targeted selection is rerun after the actual correction.
+   Game source remains identical to the passing model snapshot; only test
+   code has changed since that model check.
+
+8. Retry `20261114T140946Z-0d5d9f1298a0` completed 52 tests in
+   1,016.495 seconds (plus 9.815 seconds of slot waiting): 51 passed,
+   one error, no skips. TC06 and TC25 now passed. TC58 failed before
+   opening its modal with the same two single-click observations as the
+   earlier TC25 failure. Reports remain in `target/docker-ui/run-e25aBK`.
+   `GamePage.openColonyAt` now sends both native press/release pairs from
+   one FX interaction, removing the separate TestFX synchronization and
+   60 ms sleeps between them. It still opens the colony by a real map
+   double-click and requires the original colony-screen result; no direct
+   model/controller call or assertion fallback was added. The complete
+   targeted selection is rerun to verify the repair.
+
+9. Retry `20261114T142805Z-8d2abd376ce3` executed for 1,009.993
+   seconds: 52 tests, 50 passed, two errors and no skips. Reports remain
+   in `target/docker-ui/run-0yD1XN`. TC68/01 and TC40/01 failed before
+   opening their colony dialogs; the trace recorded only one press with
+   click count 1. Sending both native clicks in one FX interaction did
+   not resolve the intermittent input failure. The next focused check
+   uses TestFX's standard `doubleClickOn`, already used by other map
+   page objects, retaining the same colony-screen assertion.
+
+10. Focused retry `20261114T144747Z-560c61962549` passed all seven
+    selected scenarios (TC25/01, TC58/01, TC68/01, TC40/01 and TC05)
+    with zero failures, errors or skips in 217.257 seconds. This verifies
+    the affected colony journeys with the standard TestFX double-click
+    in this run; the complete modal selection and smoke remain pending.
+
+11. Complete retry `20261114T145149Z-5d2e247bd516` finished in
+    1,014.867 seconds: 52 tests, 51 passed, one error, no skips
+    (`target/docker-ui/run-AR745f`). TC58/01 again received two presses
+    with click count 1 before the colony opened. The standard TestFX
+    gesture did not resolve the intermittent failure. Its installed
+    `ClickRobotImpl` calls `MouseRobotImpl.release`, which drains the FX
+    queue between clicks; the earlier 2026-11-13 diagnostic recorded a
+    537 ms interval with this path. The next helper uses native AWT robot
+    input from the test thread with 40 ms between press/release events,
+    avoiding both FX queue synchronization and a zero-delay event burst.
+    It retains the original map gesture and colony-screen assertion.
+    This repair still requires verification.
+
+12. Focused native-input retry `20261114T150956Z-9522f638b4af`
+    passed ten checks in six complete XML reports, zero failures, errors
+    or skips, in 223.054 seconds (`target/docker-ui/run-InW6yc`). Selection:
+    TC25/01, TC58/01, TC68/01, TC40/01, complete TC05 and
+    `PageVerificationContractTest`. Complete modal selection and smoke
+    remain pending for this helper revision.
+
+13. Final complete targeted run `20261114T151400Z-96343ab18e60`
+    passed all 52 checks with zero failures, errors or skips in
+    1,027.672 seconds (`target/docker-ui/run-gfNkBn`). XML totals were
+    independently recomputed. This covers the complete selection in item 4
+    with the final native-input helper. All 68 changed/new game files are
+    byte-identical to the passing model snapshot `run-kcn46j_k/source`.
+    Documentation consistency tests, name audit and strict MkDocs passed.
+    Fixed smoke acceptance remains pending.
+
+14. Final smoke `20261114T153134Z-195985a723ce` passed all 21 checks
+    in 12 complete XML reports with zero failures, errors or skips
+    (`target/verification/run-g052kzg2`). The fixed precommit selection
+    took 253.924 seconds within its 420-second budget; total supervised
+    time was 258.662 seconds. All changed/new executable and runtime files
+    match its source snapshot byte-for-byte. Local acceptance covers
+    5,134 model tests, 52 targeted UI/support checks and 21 smoke/support
+    checks on the task changes based on `270f318ecde2d618b237616d1d39581485b94ace`.
+    Final review includes the modal inventory, keyboard/cancellation paths,
+    vector source and repeatable raster export, and screenshots of Czech
+    actions and save confirmation from the passing targeted run.
+    Earlier failures remain historical failed evidence. This is local
+    acceptance, not a new full-regression or distribution-publication claim.
+    Unrelated backlog edits are excluded from this task's commit.
+
 ## Depot selection and outside drop — 2026-11-14
 
 1. The empty-depot explanation replaces the heading while preserving the

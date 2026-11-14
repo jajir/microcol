@@ -4,6 +4,7 @@ import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Colony;
@@ -16,7 +17,6 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
@@ -98,7 +98,7 @@ public final class MercenaryOfferDialog extends AbstractMessageWindow {
                 || owner.getGold() < offer.getPrice());
         final VBox root = new VBox(16, detail,
                 new Label(i18n.get(MercenaryText.port)), port, hint, feedback,
-                new HBox(12, accept, decline, later));
+                new ModalActions(accept, decline, later));
         root.setId("mercenaryDialog");
         root.setPadding(new Insets(20));
         root.setPrefWidth(620);

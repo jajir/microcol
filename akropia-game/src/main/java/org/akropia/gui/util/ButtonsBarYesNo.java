@@ -7,9 +7,6 @@ import org.akropia.gui.dialog.Dialog;
 import org.akropia.i18n.I18n;
 
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
 /**
@@ -17,7 +14,7 @@ import javafx.scene.layout.Region;
  */
 public final class ButtonsBarYesNo implements JavaFxComponent {
 
-    private final HBox mainBox = new HBox();
+    private final ModalActions mainBox;
 
     private final Button buttonYes;
 
@@ -30,17 +27,16 @@ public final class ButtonsBarYesNo implements JavaFxComponent {
     public ButtonsBarYesNo(final String buttonYesLabel,
             final String buttonNoLabel) {
         buttonYes = ActionButtons.button(ButtonIcon.CONFIRM, buttonYesLabel);
-        buttonYes.requestFocus();
+
         buttonYes.setId("buttonYes");
 
         buttonNo = ActionButtons.button(ButtonIcon.CANCEL, buttonNoLabel);
         buttonNo.requestFocus();
         buttonNo.setId("buttonNo");
 
-        final Pane spacer = new Pane();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+        buttonNo.setCancelButton(true);
+        mainBox = new ModalActions(buttonYes, buttonNo);
         mainBox.setId("buttonPane");
-        mainBox.getChildren().addAll(buttonNo, spacer, buttonYes);
     }
 
     public Button getButtonYes() {

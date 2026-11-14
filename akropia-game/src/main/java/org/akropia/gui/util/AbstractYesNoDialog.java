@@ -11,14 +11,15 @@ public abstract class AbstractYesNoDialog extends AbstractMessageWindow {
     private boolean isSelectedYes = false;
 
     public AbstractYesNoDialog(final ViewUtil viewUtil, final I18n i18ns,
-            final String dialogCaption) {
+            final String dialogCaption, final String confirmText) {
         super(viewUtil, i18ns);
         setTitle(dialogCaption);
 
         /**
          * Buttons
          */
-        final ButtonsBarYesNo buttonsBar = new ButtonsBarYesNo(i18ns);
+        final ButtonsBarYesNo buttonsBar = new ButtonsBarYesNo(confirmText,
+                i18ns.get(org.akropia.gui.dialog.Dialog.cancel));
         buttonsBar.getButtonYes().setOnAction(e -> {
             isSelectedYes = true;
             close();
@@ -27,7 +28,7 @@ public abstract class AbstractYesNoDialog extends AbstractMessageWindow {
             isSelectedYes = false;
             close();
         });
-        buttonsBar.getButtonYes().requestFocus();
+        buttonsBar.getButtonNo().requestFocus();
 
         final VBox root = new VBox();
         root.getChildren().addAll(context, buttonsBar.getContent());
@@ -35,6 +36,7 @@ public abstract class AbstractYesNoDialog extends AbstractMessageWindow {
     }
 
     public boolean showWaitAndReturnIfYesWasSelected() {
+        isSelectedYes = false;
         showAndWait();
         return isSelectedYes;
     }

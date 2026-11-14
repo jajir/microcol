@@ -4,6 +4,6 @@ import org.akropia.i18n.MessageKeyResource;
 
 public enum ChooseGoods implements MessageKeyResource {
 
-    caption, zero, everything, selectedAmount;
+    caption, zero, everything, selectedAmount, transfer;
 
 }

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.OrdinationProblem;
@@ -61,7 +62,7 @@ public final class DialogOrdainMissionary extends AbstractMessageWindow {
         confirm.setId("missionaryConfirm");
         cancel.setId("missionaryCancel");
 
-        final HBox buttons = new HBox(8, confirm, cancel);
+        final HBox buttons = new ModalActions(confirm, cancel);
         buttons.setId("missionaryButtons");
 
         root.getChildren().addAll(caption, summary, message, buttons);

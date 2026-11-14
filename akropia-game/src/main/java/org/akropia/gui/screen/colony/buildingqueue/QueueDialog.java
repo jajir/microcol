@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.akropia.gui.MainStageBuilder;
 import org.akropia.gui.screen.colony.RepaintColonyEvent;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Colony;
@@ -54,6 +55,8 @@ public class QueueDialog extends AbstractMessageWindow {
     private final ConstructionRushDialog rushDialog;
     private VBox root;
     private Runnable embeddedClose;
+    private final Button closeButton = ActionButtons.button(ButtonIcon.CANCEL);
+    private final ModalActions actions = new ModalActions(closeButton);
     private List<?> selectionState = List.of();
 
     @Inject
@@ -161,7 +164,10 @@ public class QueueDialog extends AbstractMessageWindow {
         VBox.setVgrow(projects, Priority.ALWAYS);
         VBox.setVgrow(queue, Priority.ALWAYS);
         final HBox panels = new HBox(16, choices, current);
-        root = new VBox(12, panels, feedback);
+        closeButton.setId("constructionClose");
+        closeButton.setCancelButton(true);
+        closeButton.setOnAction(event -> close());
+        root = new VBox(12, panels, feedback, actions);
         root.setPadding(new Insets(18));
         root.setPrefSize(800, 550);
         VBox.setVgrow(panels, Priority.ALWAYS);
@@ -186,6 +192,8 @@ public class QueueDialog extends AbstractMessageWindow {
 
     public javafx.scene.layout.Region embedded(final Runnable onClose) {
         embeddedClose = onClose;
+        actions.setVisible(false);
+        actions.setManaged(false);
         ((javafx.scene.layout.Pane) root.getParent()).getChildren()
                 .remove(root);
         root.getStyleClass().remove("modal-content");
@@ -206,6 +214,7 @@ public class QueueDialog extends AbstractMessageWindow {
 
     @Override
     public void updateLanguage(final I18n language) {
+        closeButton.setText(language.get(org.akropia.gui.Loc.close));
         title.setText(language.get(ConstructionText.title,
                 controller.getColony().getName()));
         setTitle(title.getText());

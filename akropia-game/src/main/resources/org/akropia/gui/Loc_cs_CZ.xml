@@ -315,4 +315,6 @@
     <entry key="stepInsufficientMovement">Nedostatek zbývajícího pohybu</entry>
     <entry key="cancelWorkBeforeMoving">Před pohybem jednotky zvolte v kontextové nabídce Zrušit práci.</entry>
     <entry key="unitsPanel_tools">Nástroje: %s</entry>
+    <entry key="close">Zavřít</entry>
+    <entry key="nativeLandChoose">Vyberte možnost</entry>
 </properties>

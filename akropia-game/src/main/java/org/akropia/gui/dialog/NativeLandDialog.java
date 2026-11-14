@@ -19,8 +19,10 @@ import com.google.inject.Singleton;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import org.akropia.gui.util.ModalActions;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
@@ -118,10 +120,9 @@ public final class NativeLandDialog extends AbstractMessageWindow {
                 i18n.get(Loc.nativeLandConsequence));
         final Label note = text("nativeLandNote", noteText);
         final Label message = text("nativeLandMessage", "");
-        final Button pay = ActionButtons.button(ButtonIcon.GOLD,
-                i18n.get(Loc.nativeLandPay));
+        final RadioButton pay = new RadioButton(i18n.get(Loc.nativeLandPay));
         pay.setId("nativeLandPay");
-        final Button proceed = ActionButtons.button(ButtonIcon.NEXT,
+        final RadioButton proceed = new RadioButton(
                 i18n.get(Loc.nativeLandProceed));
         proceed.setId("nativeLandProceed");
         final Button cancel = ActionButtons.button(ButtonIcon.CANCEL,
@@ -132,27 +133,47 @@ public final class NativeLandDialog extends AbstractMessageWindow {
             pay.setDisable(true);
             message.setText(i18n.get(Loc.nativeLandCannotPay));
         }
-        pay.setOnAction(event -> {
-            try {
-                if (payment != null) {
-                    payment.run();
-                }
-                result = Result.PAID;
+        final ToggleGroup choices = new ToggleGroup();
+        pay.setToggleGroup(choices);
+        proceed.setToggleGroup(choices);
+        pay.setWrapText(true);
+        proceed.setWrapText(true);
+        final Button confirm = ActionButtons.button(ButtonIcon.CONFIRM,
+                i18n.get(Loc.nativeLandChoose));
+        confirm.setId("nativeLandConfirm");
+        confirm.setDisable(true);
+        choices.selectedToggleProperty()
+                .addListener((observable, before, selected) -> {
+                    confirm.setDisable(selected == null
+                            || selected == pay && pay.isDisabled());
+                    confirm.setText(
+                            selected == null ? i18n.get(Loc.nativeLandChoose)
+                                    : selected == pay ? pay.getText()
+                                            : proceed.getText());
+                });
+        confirm.setOnAction(event -> {
+            if (proceed.isSelected()) {
+                result = Result.UNPAID;
                 close();
-            } catch (IllegalArgumentException
-                    | IllegalStateException rejected) {
-                // The live state changed after the quote: nothing was charged.
-                pay.setDisable(true);
-                message.setText(i18n.get(Loc.nativeLandChanged));
+            } else if (pay.isSelected() && !pay.isDisabled()) {
+                try {
+                    if (payment != null) {
+                        payment.run();
+                    }
+                    result = Result.PAID;
+                    close();
+                } catch (IllegalArgumentException
+                        | IllegalStateException rejected) {
+                    pay.setDisable(true);
+                    choices.selectToggle(null);
+                    message.setText(i18n.get(Loc.nativeLandChanged));
+                }
             }
-        });
-        proceed.setOnAction(event -> {
-            result = Result.UNPAID;
-            close();
         });
         cancel.setOnAction(event -> onCancelDialog());
         root.getChildren().addAll(title, claimant, priceLabel, consequence,
-                note, message, new HBox(12, cancel, proceed, pay));
+                note, new VBox(12, pay, proceed), message,
+                new ModalActions(confirm, cancel));
         init(root);
         setTitle(i18n.get(Loc.nativeLandTitle));
         showAndWait();

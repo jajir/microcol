@@ -5,6 +5,7 @@ import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.UnitTypes;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.*;
@@ -70,7 +71,7 @@ final class TributeDialog extends AbstractMessageWindow {
         feedback.setWrapText(true);
         feedback.setMinHeight(Region.USE_PREF_SIZE);
         VBox root = new VBox(16, detail, contact, feedback,
-                new HBox(12, confirm, cancel, later));
+                new ModalActions(confirm, cancel, later));
         root.setId("tributeDialog");
         root.setPadding(new Insets(20));
         root.setPrefWidth(620);

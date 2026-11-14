@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
@@ -16,7 +17,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
@@ -80,9 +80,10 @@ final class NewMapDialog extends AbstractMessageWindow {
         final Button cancel = ActionButtons.button(ButtonIcon.CANCEL,
                 i18n.get(EditorText.newCancel));
         cancel.setId(CANCEL_ID);
+        cancel.setCancelButton(true);
         cancel.setOnAction(event -> close());
         final VBox content = new VBox(12, title, bounds, fields, error,
-                new HBox(10, confirm, cancel));
+                new ModalActions(confirm, cancel));
         content.setPadding(new Insets(20));
         init(content);
     }

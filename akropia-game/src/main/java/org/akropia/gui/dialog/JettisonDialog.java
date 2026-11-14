@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.akropia.gui.GoodsTypeName;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ButtonsBarYesNo;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
@@ -70,7 +71,7 @@ final class JettisonDialog extends AbstractMessageWindow {
                 i18n.get(Dialog.cancel));
         cancel.setId("jettisonCancel");
         cancel.setOnAction(event -> onCancelDialog());
-        root.getChildren().add(cancel);
+        root.getChildren().add(new ModalActions(cancel));
         init(root);
         setTitle(i18n.get(Jettison.holdTitle));
         showAndWait();

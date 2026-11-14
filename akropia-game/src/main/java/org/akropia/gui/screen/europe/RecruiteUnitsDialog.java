@@ -57,7 +57,8 @@ public final class RecruiteUnitsDialog extends AbstractMessageWindow {
         final VBox root = new VBox(12);
         root.setId("recruitment-dialog");
         candidates.setPadding(new Insets(10));
-        final ButtonBarOk buttons = new ButtonBarOk(i18n);
+        final ButtonBarOk buttons = new ButtonBarOk(
+                i18n.get(org.akropia.gui.Loc.close));
         buttons.getButtonOk().setOnAction(event -> close());
         root.getChildren().addAll(caption, candidates, buttons.getContent());
         init(root);

@@ -4,6 +4,7 @@ import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Colony;
@@ -69,7 +70,7 @@ public final class TreasureDialog extends AbstractMessageWindow {
         final VBox root = new VBox(12,
                 label(i18n.get(colony == null ? TreasureText.ownRule
                         : TreasureText.royalRule)),
-                scroll, cancel);
+                scroll, new ModalActions(cancel));
         root.setPadding(new Insets(20));
         root.setId("treasureDialog");
         init(root);

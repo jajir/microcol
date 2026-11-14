@@ -9,4 +9,5 @@
 	<entry key="everything">Všechno</entry>
 	<entry key="selectedAmount">Vybráno: </entry>
 
+    <entry key="transfer">Přesunout</entry>
 </properties>

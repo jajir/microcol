@@ -1,5 +1,44 @@
 # UX a pravidla ovládání Akropia
 
+## Tlačítka modálních oken — 14. listopadu 2026
+
+1. Schválené pravidlo: dokončovací tlačítka mají společnou spodní lištu
+   zarovnanou doprava. Hlavní akce je poslední, Zrušit bezprostředně před ní.
+   Také jediné OK je vpravo. Lišta má odstup od obsahu 20 logických pixelů,
+   mezery 12 pixelů, tlačítka výšku 48 pixelů a minimální šířku 96 pixelů;
+   delší text šířku zvětší a nesmí se oříznout. Pořadí je stejné v EN/CS.
+2. Informace a chyby mají OK. Potvrzení a formuláře pojmenují výsledek:
+   Přesunout, Koupit, Přepsat uloženou hru, Smazat uloženou hru apod.
+   Zrušit opouští nepotvrzenou akci, Zpět vrací předchozí krok a Zavřít
+   zavírá prohlížení nebo správu již provedených změn. Tyto významy se
+   nezaměňují. Dosavadní specifické názvy bezpečných návratů zůstávají.
+3. Stejné písmo, odsazení a kreslený rámeček používají všechna tlačítka.
+   Nejvýše jedna hlavní akce má výraznější plochou výplň. Platí
+   [grafický kontrakt](graphics.md#soucasne-zadani-vzhledu): nepravidelný
+   černý obrys přibližně 2 logické pixely, bez stínování a textur.
+   Destruktivní akce musí být srozumitelná z názvu a popisu následků;
+   barva sama nenese její význam. Zaměření je viditelně rozlišeno.
+4. Dvě stručné alternativy a návrat mohou zůstat v liště. U rovnocenných
+   nebo dlouhých možností s následky se vybírá v těle dialogu a následně
+   provádí konkrétně pojmenovaným tlačítkem. Nárok na půdu nemá předvolenou
+   platbu ani pokračování bez platby; do výběru je provedení zakázané.
+   Výběr sám nemění svět. Nedostupná platba má vysvětlení; změna stavu
+   při provedení je znovu ověřena stávající modelovou operací.
+5. Escape ruší rozpracovanou akci, u informace odpovídá OK. Enter může
+   provést běžnou platnou výchozí akci, pokud jej nepotřebuje aktivní vstup.
+   Otevření závažného rozhodnutí nesmí samo připravit nevratnou akci
+   k náhodnému potvrzení Enterem. Tab sleduje logické pořadí prvků.
+   Po zavření se ovládání vrací do místa otevření. Kliknutí mimo modal
+   nic neprovádí; případné zavření okna má význam zrušení nebo zavření.
+6. Průběžné akce, například nákup jednotky, úprava stavební fronty nebo
+   přiřazení výuky, zůstávají u příslušného obsahu. Nejde o potvrzení
+   celého dialogu. Vložené panely kolonie nemají přidanou zavírací lištu.
+   Nativní systémový výběr souboru používá ovládání operačního systému;
+   společná lišta patří vlastním herním modalům.
+7. Jde o dohodnuté UX, nikoli hráčskou studii. Implementaci a skutečné
+   výsledky ověření vede [funkční evidence](functional-tests.md#modal-actions-2026-11-14).
+
+
 ## Plovoucí panel hlavní mapy a plánovače — 14. listopadu 2026
 
 1. Mapa vyplňuje celou šířku okna, také pod panelem. Pravá hrana panelu

@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.akropia.gui.util.AbstractMessageWindow;
+import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.GoodsTypeName;
 import org.akropia.i18n.I18n;
 import org.akropia.model.GoodsType;
@@ -57,7 +58,7 @@ public final class DialogEquipment extends AbstractMessageWindow {
         confirm.setId("equipmentConfirm");
         cancel.setId("equipmentCancel");
 
-        HBox buttons = new HBox(8, confirm, cancel);
+        HBox buttons = new ModalActions(confirm, cancel);
         buttons.setId("equipmentButtons");
 
         root.getChildren().addAll(caption, cost, message, buttons);

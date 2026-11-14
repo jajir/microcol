@@ -111,4 +111,5 @@
     <entry key="fight_workerName">Field worker of %s</entry>
     <entry key="fight_workerCaptured">%s: a field worker of colony %s was captured.</entry>
     <entry key="fight_revereExit">%s: the armed worker keeps its weapons and joins the garrison outside the colony.</entry>
+    <entry key="destroyColony_confirm">Abandon colony</entry>
 </properties>

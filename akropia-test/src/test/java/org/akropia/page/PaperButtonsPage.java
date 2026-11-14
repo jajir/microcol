@@ -79,6 +79,40 @@ public final class PaperButtonsPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void showFinalActions(final boolean information) {
+        getRobot().interact(() -> {
+            final Button primary = ActionButtons.button(ButtonIcon.CONFIRM,
+                    information ? "OK" : "Přesunout vybrané zboží");
+            primary.setId("modalPrimary");
+            final Button cancel = ActionButtons.button(ButtonIcon.CANCEL,
+                    "Zrušit");
+            cancel.setId("modalCancel");
+            cancel.setCancelButton(true);
+            final org.akropia.gui.util.ModalActions row = information
+                    ? new org.akropia.gui.util.ModalActions(primary)
+                    : new org.akropia.gui.util.ModalActions(primary, cancel);
+            final VBox content = new VBox(
+                    new javafx.scene.control.Label("Modal actions"), row);
+            content.setPrefWidth(520);
+            final AbstractMessageWindow dialog = new AbstractMessageWindow(
+                    getContext().getClassFromGuice(ViewUtil.class),
+                    getContext().getClassFromGuice(I18n.class)) {
+            };
+            primary.setDefaultButton(information);
+            primary.setOnAction(event -> {
+                actions.incrementAndGet();
+                dialog.close();
+            });
+            cancel.setOnAction(event -> dialog.close());
+            dialog.init(content);
+            samples = (Stage) dialog.getScene().getWindow();
+            samples.show();
+            samples.requestFocus();
+            (information ? primary : cancel).requestFocus();
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public void hover(final String id) {
         getRobot().moveTo("#" + id);
         WaitForAsyncUtils.waitForFxEvents();
@@ -120,17 +154,25 @@ public final class PaperButtonsPage extends AbstractScreen {
                         .getSkin() instanceof javafx.scene.control.skin.MenuButtonSkin);
         assertEquals("Playpen Sans Regular", button.getFont().getName());
         boolean compactColonyButton = false;
+        boolean modal = false;
+        final boolean finalAction = button.getParent().getStyleClass()
+                .contains("modal-actions");
         for (javafx.scene.Parent parent = button
                 .getParent(); parent != null; parent = parent.getParent()) {
+            modal |= parent.getStyleClass().contains("modal-frame");
             compactColonyButton |= button.getStyleClass().contains("button")
                     && parent.getStyleClass().contains("colony-overview");
         }
         assertEquals(compactColonyButton ? 12 : 14, button.getFont().getSize(),
                 button.getId());
-        assertEquals(button.getStyleClass().contains("congress-card")
-                ? new javafx.geometry.Insets(16)
-                : compactColonyButton ? new javafx.geometry.Insets(3, 4, 3, 4)
-                        : new javafx.geometry.Insets(6, 3, 7, 3),
+        assertEquals(
+                modal && finalAction ? new javafx.geometry.Insets(7, 14, 7, 14)
+                        : button.getStyleClass().contains("congress-card")
+                                ? new javafx.geometry.Insets(16)
+                                : compactColonyButton
+                                        ? new javafx.geometry.Insets(3, 4, 3, 4)
+                                        : new javafx.geometry.Insets(6, 3, 7,
+                                                3),
                 button.getPadding(), button.getId());
         if ("deleteSaveRow".equals(button.getId())) {
             assertTrue(button.getBorder() == null
@@ -140,7 +182,9 @@ public final class PaperButtonsPage extends AbstractScreen {
             assertNotNull(button.getBorder());
             assertFalse(button.getBorder().getImages().isEmpty());
             assertTrue(button.getBorder().getImages().get(0).getImage().getUrl()
-                    .endsWith("game-toolbar-frame.png"));
+                    .endsWith(modal && button instanceof Button
+                            ? "modal-button-frame.png"
+                            : "game-toolbar-frame.png"));
         }
         assertNotNull(button.getGraphic(),
                 "Every action button has an icon: " + button.getId());
@@ -279,6 +323,36 @@ public final class PaperButtonsPage extends AbstractScreen {
             samples.setHeight(height);
         });
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /** Check the final row independently of its concrete dialog. */
+    public void verifyModalActions(final String primaryId,
+            final String... orderedIds) {
+        getRobot().interact(() -> {
+            final Button primary = getButtonById(primaryId);
+            final HBox row = (HBox) primary.getParent();
+            assertTrue(row.getStyleClass().contains("modal-actions"));
+            assertEquals(javafx.geometry.Pos.CENTER_RIGHT, row.getAlignment());
+            assertEquals(orderedIds.length, row.getChildren().size());
+            assertTrue(primary.getStyleClass().contains("modal-primary"));
+            double right = -1;
+            for (int i = 0; i < orderedIds.length; i++) {
+                final Button button = getButtonById(orderedIds[i]);
+                assertEquals(button, row.getChildren().get(i));
+                assertEquals(primary.getHeight(), button.getHeight(), 0.5);
+                assertTrue(button.getWidth() >= 96, "Minimum action width");
+                assertTrue(button.getWidth() + 0.5 >= button.prefWidth(-1),
+                        "Full translated label fits");
+                final javafx.geometry.Bounds bounds = button
+                        .getBoundsInParent();
+                if (right >= 0) {
+                    assertEquals(12, bounds.getMinX() - right, 1.5);
+                }
+                right = bounds.getMaxX();
+            }
+            assertEquals(row.getWidth() - row.getInsets().getRight(), right,
+                    1.5);
+        });
     }
 
     public void verifyModalFrame(final String contentId) {

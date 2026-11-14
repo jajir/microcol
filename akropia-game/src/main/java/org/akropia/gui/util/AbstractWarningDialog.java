@@ -24,6 +24,8 @@ public abstract class AbstractWarningDialog extends AbstractMessageWindow {
         buttonsBar.getButtonOk().setOnAction(e -> {
             close();
         });
+        buttonsBar.getButtonOk().setDefaultButton(true);
+        buttonsBar.getButtonOk().setCancelButton(true);
         buttonsBar.getButtonOk().requestFocus();
 
         final VBox root = new VBox();

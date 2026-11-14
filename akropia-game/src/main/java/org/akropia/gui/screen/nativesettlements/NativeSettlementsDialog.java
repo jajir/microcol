@@ -133,7 +133,7 @@ public final class NativeSettlementsDialog extends AbstractMessageWindow {
         this.gameModelController = gameModelController;
         this.statusBarMessageService = statusBarMessageService;
         this.selectedTileManager = selectedTileManager;
-        buttonBar = new ButtonBarOk(i18n);
+        buttonBar = new ButtonBarOk(i18n.get(org.akropia.gui.Loc.close));
         buttonBar.getButtonOk().setOnAction(e -> {
             close();
         });
@@ -226,7 +226,7 @@ public final class NativeSettlementsDialog extends AbstractMessageWindow {
     @Override
     public void updateLanguage(final I18n i18n) {
         setTitle(i18n.get(Loc.nativeSettlementsTitle));
-        buttonBar.setButtonText(i18n.get(Loc.ok));
+        buttonBar.setButtonText(i18n.get(Loc.close));
         none.setText(i18n.get(Loc.nativeSettlementsNone));
         stopTeaching.setText(i18n.get(Loc.nativeTeachingStop));
         showOnMap.setText(i18n.get(Loc.nativeAdvisorShowOnMap));

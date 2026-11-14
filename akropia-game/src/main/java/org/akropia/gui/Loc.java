@@ -8,6 +8,7 @@ import org.akropia.model.Calendar.Season;
  * be here.
  */
 public enum Loc implements MessageKeyResource {
+    close, nativeLandChoose,
 
     mapWork, cancelWork, cancelWorkBeforeMoving, returnToColony,
     workUnavailable, workingFor, fishermanOf, ok, backToGame, gameTitle,

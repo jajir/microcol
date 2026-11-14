@@ -10,6 +10,7 @@ import org.akropia.model.Player;
 import org.akropia.model.Unit;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Label;
 
 /**
@@ -31,12 +32,14 @@ public final class NativeLandPage extends AbstractScreen {
 
     /** Pay the quoted price and continue with the action. */
     public void pay() {
-        clickOnButtonWithId("nativeLandPay");
+        getRobot().clickOn("#nativeLandPay");
+        clickOnButtonWithId("nativeLandConfirm");
     }
 
     /** Knowingly continue without paying. */
     public void continueUnpaid() {
-        clickOnButtonWithId("nativeLandProceed");
+        getRobot().clickOn("#nativeLandProceed");
+        clickOnButtonWithId("nativeLandConfirm");
     }
 
     /** Cancel: the action must not start. */
@@ -55,13 +58,22 @@ public final class NativeLandPage extends AbstractScreen {
     }
 
     public void verifyPayEnabled(final boolean expectedEnabled) {
-        final Button pay = getButtonById("nativeLandPay");
+        final RadioButton pay = getNodeFinder().lookup("#nativeLandPay")
+                .queryAs(RadioButton.class);
         assertEquals(!expectedEnabled, pay.isDisabled(),
                 "Unexpected state of the pay button");
-        assertTrue(getButtonById("nativeLandProceed").isVisible(),
-                "Continuing unpaid must stay available");
+        assertTrue(getNodeFinder().lookup("#nativeLandProceed").query()
+                .isVisible(), "Continuing unpaid must stay available");
         assertTrue(getButtonById("nativeLandCancel").isVisible(),
                 "Canceling must stay available");
+    }
+
+    public void verifyExplicitChoiceRequired() {
+        assertTrue(getButtonById("nativeLandConfirm").isDisabled());
+        assertTrue(!getNodeFinder().lookup("#nativeLandPay")
+                .queryAs(RadioButton.class).isSelected());
+        assertTrue(!getNodeFinder().lookup("#nativeLandProceed")
+                .queryAs(RadioButton.class).isSelected());
     }
 
     public void verifyDialogMessage(final String expectedMessage) {
