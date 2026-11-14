@@ -69,13 +69,16 @@ final class PanelOutsideColony implements JavaFxComponent {
                 .checkNotNull(panelOutsideColonyUnitFactory);
         panelUnits = new HBox();
 
-        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
-                panelUnits, this::isItUnit);
-        panelUnits.setOnDragEntered(backgroundHighlighter::onDragEntered);
-        panelUnits.setOnDragExited(backgroundHighlighter::onDragExited);
-        panelUnits.setOnDragDropped(this::onDragDropped);
-        panelUnits.setOnDragOver(this::onDragOver);
         panelUnits.getStyleClass().add("outside");
+    }
+
+    void setDropTarget(final Region target) {
+        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
+                target, this::isItUnit);
+        target.setOnDragEntered(backgroundHighlighter::onDragEntered);
+        target.setOnDragExited(backgroundHighlighter::onDragExited);
+        target.setOnDragDropped(this::onDragDropped);
+        target.setOnDragOver(this::onDragOver);
     }
 
     void setColony(final Colony colony) {

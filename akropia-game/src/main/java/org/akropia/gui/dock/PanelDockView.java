@@ -53,7 +53,8 @@ public class PanelDockView implements JavaFxComponent {
     private I18n i18n;
     private final Label cargoTitle = new Label();
     private final Region crates;
-    private final Label emptyDepot = new Label();
+    private final Region emptyDepot = new Region();
+    private boolean updatingShips;
 
     public PanelDockView(final ImageProvider imageProvider,
             final PanelDockCratesPresenter panelDockCratesPresenter) {
@@ -77,6 +78,11 @@ public class PanelDockView implements JavaFxComponent {
     private void onToggleGroupWasChanged(
             final ObservableValue<? extends Toggle> object,
             final Toggle oldValue, final Toggle newValue) {
+        if (includeWagons && !updatingShips && newValue == null
+                && oldValue != null) {
+            toggleGroup.selectToggle(oldValue);
+            return;
+        }
         updateCargoTitle();
         if (onSelectedUnitWasChanged != null) {
             if (toggleGroup.getSelectedToggle() == null) {
@@ -97,9 +103,15 @@ public class PanelDockView implements JavaFxComponent {
     }
 
     void cleanShips() {
-        toggleGroup.selectToggle(null);
-        toggleGroup.getToggles().clear();
-        panelShips.getChildren().clear();
+        updatingShips = true;
+        try {
+            toggleGroup.selectToggle(null);
+            toggleGroup.getToggles().clear();
+            panelShips.getChildren().clear();
+        } finally {
+            updatingShips = false;
+        }
+        updateCargoTitle();
     }
 
     void enableHarborLayout(final boolean includeWagons) {
@@ -118,7 +130,9 @@ public class PanelDockView implements JavaFxComponent {
         cargo.getStyleClass().add("harbor-cargo");
         if (includeWagons) {
             cargo.getChildren().remove(cargoTitle);
-            emptyDepot.setId("colony-depot-empty");
+            emptyDepot.setId("colony-depot-empty-spacer");
+            emptyDepot.prefHeightProperty().bind(cargoTitle.heightProperty());
+            emptyDepot.setMouseTransparent(true);
             emptyDepot.visibleProperty().bind(javafx.beans.binding.Bindings
                     .isEmpty(panelShips.getChildren()));
             emptyDepot.managedProperty().bind(emptyDepot.visibleProperty());
@@ -134,8 +148,6 @@ public class PanelDockView implements JavaFxComponent {
 
     void updateLanguage(final I18n i18n) {
         this.i18n = i18n;
-        emptyDepot.setText(
-                i18n.get(org.akropia.gui.screen.colony.ColonyMsg.emptyHarbor));
         updateCargoTitle();
     }
 
@@ -168,9 +180,12 @@ public class PanelDockView implements JavaFxComponent {
                             ? i18n.get(Loc.selectedCarrierCargo,
                                     shipLabel(ship))
                             : i18n.get(Loc.selectedShipCargo, ship.getId()))
-                    .orElseGet(() -> i18n
-                            .get(includeWagons ? Loc.selectCarrierCargo
-                                    : Loc.selectShipCargo)));
+                    .orElseGet(() -> includeWagons && panelShips.getChildren()
+                            .isEmpty() ? i18n.get(
+                                    org.akropia.gui.screen.colony.ColonyMsg.emptyHarbor)
+                                    : i18n.get(includeWagons
+                                            ? Loc.selectCarrierCargo
+                                            : Loc.selectShipCargo)));
         }
     }
 

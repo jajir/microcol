@@ -139,14 +139,18 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         outside.getStyleClass().add("colony-unit-scroll");
         final Label outsideTitle = new Label();
         outsideTitle.setId("colony-outside-title");
-        VBox.setMargin(outsideTitle, new Insets(3, 0, 0, 0));
+        final VBox outsideArea = new VBox(6, outsideTitle, outside);
+        outsideArea.setId("colony-outside-area");
+        VBox.setMargin(outsideArea, new Insets(3, 0, 0, 0));
+        panelOutsideColony.setDropTarget(outsideArea);
         panelDock.getContent().setPickOnBounds(true);
         panelDock.getContent().setOnMouseEntered(this::showDepotHelp);
-        panelDock.getContent().setOnMouseMoved(this::showDepotHelp);
+        // Controls may consume mouse movement before it bubbles to the depot.
+        panelDock.getContent().addEventFilter(MouseEvent.MOUSE_MOVED,
+                this::showDepotHelp);
         panelDock.getContent().setOnMouseExited(event -> eventBus
                 .post(new StatusBarMessageEvent(Source.COLONY)));
-        dockDetail.getChildren().addAll(panelDock.getContent(), outsideTitle,
-                outside);
+        dockDetail.getChildren().addAll(panelDock.getContent(), outsideArea);
         dockDetail.setId("colony-cargo-depot");
         dockDetail.getStyleClass().add("colony-depot");
         dockDetail.getStyleClass().add("colony-harbor");
@@ -241,9 +245,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             ((Label) dockDetail.lookup("#colony-outside-title"))
                     .setText(i18n.get(outsideEmpty ? ColonyMsg.emptyOutside
                             : ColonyMsg.overviewPeople));
-            final Node outside = dockDetail.lookup("#colony-outside-scroll");
-            outside.setVisible(!outsideEmpty);
-            outside.setManaged(!outsideEmpty);
             detail.getChildren().stream().filter(SchoolPanel.class::isInstance)
                     .map(SchoolPanel.class::cast).forEach(SchoolPanel::refresh);
             refreshOverview();
@@ -350,8 +351,15 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         Node node = (Node) event.getTarget();
         ColonyMsg message = ColonyMsg.depotHelp;
         while (node != null && node != panelDock.getContent()) {
-            if (node.getStyleClass().contains(PanelCrateView.CRATE_CLASS)) {
-                message = ColonyMsg.containerHelp;
+            if (node.getStyleClass().contains(PanelCrateView.CRATE_CLASS)
+                    || node.getStyleClass().contains("harbor-unit")) {
+                final org.akropia.model.Unit carrier = node
+                        .getUserData() instanceof org.akropia.model.Unit
+                                ? (org.akropia.model.Unit) node.getUserData()
+                                : panelDock.getSelectedShip().orElse(null);
+                message = carrier != null && carrier.isShip()
+                        ? ColonyMsg.containerHelp
+                        : ColonyMsg.goodsContainerHelp;
                 break;
             }
             node = node.getParent();

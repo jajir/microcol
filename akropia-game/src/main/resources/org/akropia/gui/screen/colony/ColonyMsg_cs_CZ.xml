@@ -150,4 +150,5 @@
 <entry key="tileSmallRiver">Malá řeka</entry>
 <entry key="tileLargeRiver">Velká řeka</entry>
 <entry key="tileResource">Surovinový bonus: %s (zahrnut ve výnosech)</entry>
+  <entry key="goodsContainerHelp">V tomto kontejneru můžete převážet zboží nebo zvířata. Náklad do něj přetáhněte. Tento přepravce nemůže převážet lidi.</entry>
 </properties>

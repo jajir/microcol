@@ -398,7 +398,7 @@ public final class ColonyLayoutPage extends AbstractScreen {
                 "colony-section-people", "educationOpen", "tradeRouteOpen")) {
             assertTrue(getNodeFinder().lookup("#" + id).queryAll().isEmpty());
         }
-        assertEquals("Cargo Depot",
+        assertEquals("No transport units in the cargo depot.",
                 getLabeledById("europe-cargo-title").getText());
         assertEquals("Outside colony",
                 getLabeledById("colony-outside-title").getText());
@@ -441,13 +441,14 @@ public final class ColonyLayoutPage extends AbstractScreen {
     public void verifyEmptyDepot() {
         getRobot().interact(() -> {
             assertEquals("No transport units in the cargo depot.",
-                    getLabeledById("colony-depot-empty").getText());
-            assertTrue(getLabeledById("colony-depot-empty").isVisible());
+                    getLabeledById("europe-cargo-title").getText());
+            assertTrue(getNodeFinder().lookup("#colony-depot-empty").queryAll()
+                    .isEmpty());
             assertEquals("No units outside colony.",
                     getLabeledById("colony-outside-title").getText());
             assertTrue(getNodeFinder().lookup("#colony-outside-empty")
                     .queryAll().isEmpty());
-            assertFalse(getNodeFinder().lookup("#colony-outside-scroll").query()
+            assertTrue(getNodeFinder().lookup("#colony-outside-scroll").query()
                     .isManaged());
             final Node crate = getNodeFinder()
                     .lookup("#colony-cargo-depot .cratePanel").query();
@@ -459,21 +460,129 @@ public final class ColonyLayoutPage extends AbstractScreen {
     private final java.util.Map<String, Bounds> carrierGeometry = new java.util.HashMap<>();
 
     public int addSmallCarrier(final int colonyId) {
+        final org.akropia.model.UnitType type = org.akropia.model.UnitType.CARAVEL;
         final int[] id = new int[1];
         getRobot().interact(() -> {
             final org.akropia.model.Player owner = getModel()
                     .getCurrentPlayer();
             owner.setGold(owner.getGold() + 10000);
-            owner.buy(org.akropia.model.UnitType.CARAVEL);
+            owner.buy(type);
             final org.akropia.model.Unit carrier = owner.getAllUnits().stream()
-                    .filter(unit -> unit
-                            .getType() == org.akropia.model.UnitType.CARAVEL)
-                    .findFirst().orElseThrow();
+                    .filter(unit -> unit.getType() == type).findFirst()
+                    .orElseThrow();
             carrier.placeToLocation(getModel().getColonyById(colonyId)
                     .orElseThrow().getLocation());
             id[0] = carrier.getId();
         });
         return id[0];
+    }
+
+    public void hoverCarrier(final int id) {
+        hoverDepot();
+        final Node carrier = getNodeFinder().lookup("#europe-dock-ship-" + id)
+                .query();
+        revealGameContent(carrier);
+        getRobot().moveTo(carrier);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyCarrierSelected(final int id) {
+        assertTrue(getNodeFinder().lookup("#europe-dock-ship-" + id)
+                .queryAs(javafx.scene.control.ToggleButton.class).isSelected());
+        assertEquals(1, getNodeFinder()
+                .lookup("#colony-cargo-depot .harbor-unit").queryAll().stream()
+                .filter(node -> ((javafx.scene.control.ToggleButton) node)
+                        .isSelected())
+                .count());
+    }
+
+    public void prepareDepotScenario() throws Exception {
+        final com.google.gson.JsonObject saved = new com.google.gson.Gson()
+                .fromJson(java.nio.file.Files.readString(java.nio.file.Path
+                        .of("src/test/scenarios/F227-colony-layout.akropia")),
+                        com.google.gson.JsonObject.class);
+        final var units = saved.getAsJsonObject("model")
+                .getAsJsonArray("units");
+        final var wagon = units.get(0).getAsJsonObject().deepCopy();
+        wagon.addProperty("id", 139);
+        wagon.addProperty("type", "WAGON");
+        wagon.addProperty("movementThirds", 3);
+        final var location = wagon.getAsJsonObject("placeMap")
+                .getAsJsonObject("location");
+        location.addProperty("x", 24);
+        location.addProperty("y", 16);
+        final var slots = new com.google.gson.JsonArray();
+        slots.add(new com.google.gson.JsonObject());
+        slots.add(new com.google.gson.JsonObject());
+        wagon.getAsJsonObject("cargo").add("slots", slots);
+        units.add(wagon);
+        final com.google.gson.JsonObject colony = saved.getAsJsonObject("model")
+                .getAsJsonArray("colonies").get(0).getAsJsonObject();
+        for (var entry : colony.getAsJsonArray("constructions")) {
+            final var construction = entry.getAsJsonObject();
+            if (construction.get("type").getAsString().equals("TOWN_HALL")) {
+                construction.getAsJsonArray("slots").get(0).getAsJsonObject()
+                        .remove("workerId");
+            }
+            if (construction.get("type").getAsString()
+                    .equals("CARPENTERS_STAND")) {
+                construction.addProperty("type", "LUMBER_MILL");
+                construction.getAsJsonArray("slots").get(0).getAsJsonObject()
+                        .addProperty("workerId", 6);
+            }
+        }
+        final java.io.File prepared = new java.io.File(
+                System.getProperty("user.home"), "depot-lumber-mill.akropia");
+        java.nio.file.Files.writeString(prepared.toPath(), saved.toString());
+        org.mockito.Mockito.when(getContext()
+                .getClassFromGuice(org.akropia.gui.FileSelectingService.class)
+                .loadFile(org.mockito.ArgumentMatchers.any(java.io.File.class)))
+                .thenReturn(prepared);
+    }
+
+    public void dragLumberWorkerToOutside() {
+        final javafx.scene.Parent building = getNodeFinder()
+                .lookup("#id_carpenter").queryAs(javafx.scene.Parent.class);
+        final Canvas canvas = (Canvas) building.getChildrenUnmodifiable()
+                .stream().filter(node -> node instanceof Canvas).findFirst()
+                .orElseThrow();
+        final Node target = getNodeFinder().lookup("#colony-outside-title")
+                .query();
+        revealGameContent(canvas, target);
+        getRobot().drag(canvas.localToScreen(16, 16),
+                javafx.scene.input.MouseButton.PRIMARY).moveTo(target);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyOutsideHighlight(final boolean expected) {
+        getRobot().interact(() -> {
+            final javafx.scene.layout.Region area = getNodeFinder()
+                    .lookup("#colony-outside-area")
+                    .queryAs(javafx.scene.layout.Region.class);
+            final boolean highlighted = area.getBackground() != null
+                    && area.getBackground().getFills().stream().anyMatch(
+                            fill -> Color.BURLYWOOD.equals(fill.getFill()));
+            assertEquals(expected, highlighted);
+        });
+    }
+
+    public void dropWorkerOutside() {
+        getRobot().release(javafx.scene.input.MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyWorkerOutside(final int workerId, final int colonyId) {
+        final Colony colony = getModel().getColonyById(colonyId).orElseThrow();
+        final org.akropia.model.Unit worker = getModel().getUnitById(workerId);
+        assertTrue(worker.isAtPlaceLocation());
+        assertEquals(colony.getLocation(), worker.getLocation());
+        assertTrue(colony.getUnitsOutSideColony().contains(worker));
+        assertEquals("Outside colony",
+                getLabeledById("colony-outside-title").getText());
+        assertTrue(colony.getConstructions().stream()
+                .filter(c -> c.getType() == ConstructionType.LUMBER_MILL)
+                .findFirst().orElseThrow().getConstructionSlots().get(0)
+                .isEmpty());
     }
 
     public void rememberCarrierGeometry() {
@@ -552,7 +661,7 @@ public final class ColonyLayoutPage extends AbstractScreen {
         getRobot().interact(() -> {
             final VBox depot = getNodeFinder().lookup("#colony-cargo-depot")
                     .queryAs(VBox.class);
-            final Node title = depot.lookup("#colony-outside-title");
+            final Node title = depot.lookup("#colony-outside-area");
             assertEquals(9, depot.getSpacing() + VBox.getMargin(title).getTop(),
                     0.01);
             final javafx.scene.layout.Region scroll = (javafx.scene.layout.Region) depot
@@ -574,7 +683,8 @@ public final class ColonyLayoutPage extends AbstractScreen {
                     fill -> Color.TRANSPARENT.equals(fill.getFill())));
             assertTrue(depot.isVisible());
             assertTrue(depot.lookupAll(".separator").isEmpty());
-            assertFalse(getLabeledById("colony-depot-empty").isVisible());
+            assertFalse(getNodeFinder().lookup("#colony-depot-empty-spacer")
+                    .query().isVisible());
             for (Node node : depot.lookupAll(".harbor-crate-face")) {
                 final javafx.scene.shape.SVGPath face = (javafx.scene.shape.SVGPath) node;
                 assertEquals(Color.TRANSPARENT, face.getFill());

@@ -150,4 +150,5 @@
 <entry key="tileSmallRiver">Small river</entry>
 <entry key="tileLargeRiver">Large river</entry>
 <entry key="tileResource">Resource: %s (included in yields)</entry>
+  <entry key="goodsContainerHelp">Transport goods or animals in this container. Drag them into the container to load them. This carrier cannot transport people.</entry>
 </properties>

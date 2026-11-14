@@ -319,8 +319,9 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
     @Tag("local")
     void TC_07_depot_shows_selected_carrier_and_outside_units_together()
             throws Exception {
-        final GamePage game = WelcomePage.of(getContext()).loadGame();
         final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
+        layout.prepareDepotScenario();
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
         // Prepare a carrier at the colony before opening its overview.
         layout.clearDepot(0);
         final ColonyScreen emptyTown = game.openColonyAt(Location.of(24, 16),
@@ -330,7 +331,19 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
                 .saveEvidence("colony-empty-depot.png");
         emptyTown.close();
         layout.placeCarrierAtColony(3, 0);
+        // The sole carrier stays selected after repeated clicks.
+        final ColonyScreen singleTown = game.openColonyAt(Location.of(24, 16),
+                "New Amsterdam");
+        singleTown.selectShipInPort(3);
+        layout.verifyCarrierSelected(3);
+        layout.verifyAvailableContainers(6);
+        singleTown.selectShipInPort(3);
+        layout.verifyCarrierSelected(3);
+        layout.verifyAvailableContainers(6);
+        singleTown.close();
         final int smallCarrier = layout.addSmallCarrier(0);
+        final int wagon = 139;
+        layout.placeCarrierAtColony(wagon, 0);
         final ColonyScreen town = game.openColonyAt(Location.of(24, 16),
                 "New Amsterdam");
         layout.verifyDepot("Cargo Depot - Galleon #3");
@@ -351,12 +364,54 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.releaseCarrier();
         layout.verifyCarrierGeometryUnchanged();
         layout.verifyAvailableContainers(2);
+        town.selectShipInPort(smallCarrier);
+        layout.verifyCarrierSelected(smallCarrier);
+        layout.verifyAvailableContainers(2);
+        town.selectShipInPort(wagon);
+        layout.verifyCarrierSelected(wagon);
+        layout.hoverCarrier(wagon);
+        town.verifyThatStatusBarContains(
+                "This carrier cannot transport people.");
+        layout.hoverContainer();
+        town.verifyThatStatusBarContains(
+                "This carrier cannot transport people.");
         town.selectShipInPort(3);
+        layout.hoverContainer();
+        town.verifyThatStatusBarContains("Transport people, goods or animals");
         layout.verifyCarrierGeometryUnchanged();
         layout.verifyAvailableContainers(6);
         layout.verifyDepot("Cargo Depot - Galleon #3");
         new InGameLayoutPage(getContext())
                 .saveEvidence("colony-combined-depot.png");
+        town.close();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_08_lumber_mill_worker_can_leave_through_empty_outside_area()
+            throws Exception {
+        final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
+        layout.prepareDepotScenario();
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        layout.clearDepot(0);
+        final ColonyScreen town = game.openColonyWithKeyboard(0,
+                "New Amsterdam");
+        new GameBarWidthPage(getContext()).resizeContent(1440, 1000);
+        layout.verifyEmptyDepot();
+        town.verifyNumberOfUnitsAtPier(0);
+        layout.verifyOutsideHighlight(false);
+
+        // The empty heading is a live drop target and previews acceptance.
+        layout.dragLumberWorkerToOutside();
+        layout.verifyOutsideHighlight(true);
+        new InGameLayoutPage(getContext())
+                .saveEvidence("depot-outside-drop-highlight.png");
+        layout.dropWorkerOutside();
+        layout.verifyWorkerOutside(6, 0);
+        town.verifyNumberOfUnitsAtPier(1);
+        layout.verifyOutsideHighlight(false);
+        new InGameLayoutPage(getContext())
+                .saveEvidence("depot-worker-outside.png");
         town.close();
     }
 

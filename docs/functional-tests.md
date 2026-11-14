@@ -1,3 +1,79 @@
+## Depot selection and outside drop — 2026-11-14
+
+1. The empty-depot explanation replaces the heading while preserving the
+   outside section's position. Colony carriers retain one selection. Hover
+   help reflects the carrier's passenger capability. The empty outside area,
+   including its heading, remains a drop target and highlights valid workers.
+2. Targeted coverage: `TC_195_F227_colony_layout_test`,
+   `TC_05_F05_moving_goods_test`, `PageVerificationContractTest`.
+   TC195/07 checks repeated single/multiple-carrier selection and ship/wagon
+   hints. TC195/08 loads a scoped Lumber Mill fixture, drags its worker over
+   the empty outside heading, verifies highlighting and the completed transfer,
+   and records screenshots. Existing goods-transfer assertions are preserved.
+3. Model run `20261114T101044Z-bd053279a33f` (PID 39454, timeout 600 seconds)
+   passed: **5,133 tests in 395 XML reports, zero failures/errors/skips**.
+   Evidence: `target/verification/run-28j3_9jw/`; elapsed 155.185 seconds.
+   The tested runtime sources match the working tree.
+4. Targeted Docker run `20261114T101452Z-e4fa51c4b92f` (PID 39909,
+   timeout 1,800 seconds) is dispatched. Targeted UI, screenshot review,
+   fixed smoke and final review remain pending. Java formatting is applied;
+   unrelated backlog edits are excluded. Remote CI and publication verification
+   are outside this task.
+
+5. Targeted run `20261114T101452Z-e4fa51c4b92f` failed after 202.121
+   seconds: 14 tests, one failure, one error, zero skips. The selection
+   assertion used a pseudo-class lookup; it now counts actual selected toggle
+   states. The new drop scenario failed while opening the colony by mouse,
+   before dragging; it now uses the existing keyboard opening path.
+   Runtime sources are unchanged, so model evidence remains applicable.
+6. Targeted retry `20261114T101858Z-27f028812ff9` (PID 40228,
+   timeout 1,800 seconds) is dispatched. Acceptance remains pending.
+
+7. Retry `20261114T101858Z-27f028812ff9` failed after 199.838 seconds:
+   14 tests, one failure, zero errors/skips. The outside drop and highlight
+   scenario passed. Carrier selection passed using actual toggle states.
+   The remaining assertion concerned wagon hover help immediately after clicking
+   the same icon; the hover action now moves to the depot heading first, then
+   enters the carrier. Runtime sources remain unchanged.
+8. Targeted retry `20261114T102308Z-509ba7b7373c` (PID 40777,
+   timeout 1,800 seconds) is dispatched; acceptance remains pending.
+
+9. Retry `20261114T102308Z-509ba7b7373c` failed after 202.137 seconds:
+   14 tests, one failure, zero errors/skips. Wagon icon hover still showed
+   generic depot help after an explicit leave/enter gesture. The depot now
+   filters mouse movement before controls can consume it, rather than relying
+   on bubbling. The capability assertions are retained.
+10. Fresh model run `20261114T102652Z-ca8aa92cdc0c` (PID 41062,
+    timeout 600 seconds) covers the changed event handling. Model, targeted UI,
+    smoke and final acceptance remain pending for this source revision.
+
+11. Fresh model run `20261114T102652Z-ca8aa92cdc0c` passed in 152.859
+    seconds: **5,133 tests in 395 reports, zero failures/errors/skips**.
+    Evidence: `target/verification/run-lssmw7fd/`; runtime snapshot matches.
+    Targeted UI run `20261114T102950Z-6a572e8f5ae1` (PID 41440,
+    timeout 1,800 seconds) is dispatched with the same three-class selection.
+
+12. Targeted run `20261114T102950Z-6a572e8f5ae1` passed in 205.773
+    seconds: **14 tests in three reports, zero failures/errors/skips**.
+    Evidence: `target/docker-ui/run-vrYJmH/`. Reviewed screenshots confirm
+    the empty-depot heading, selected carrier and cargo, outside drop highlight,
+    and worker after transfer. Earlier failures above remain failed evidence.
+13. Fixed smoke run `20261114T103341Z-83f525143b8b` (PID 42210,
+    runner timeout 480 seconds; smoke budget 420 seconds) is dispatched.
+    Final acceptance and integration remain pending.
+
+14. Fixed smoke run `20261114T103341Z-83f525143b8b` passed: **21 tests
+    in 12 reports, zero failures/errors/skips**, 253.301 seconds for the
+    precommit phase (256.684 seconds including runner overhead), within the
+    420-second budget. Evidence: `target/verification/run-6dylf_9b/`.
+    All changed game and test sources match its source snapshot.
+15. Final review covered selection reset/repopulation, actual carrier hover
+    capability, empty drop-area geometry, preserved model departure validation,
+    and scenario assertions. Documentation checks passed: 14 tooling tests,
+    zero unexplained former-name occurrences, strict MkDocs build. Local
+    acceptance is complete; no full regression or distribution publication is
+    claimed. Unrelated backlog changes remain outside this commit.
+
 ## Depot spacing and help — 2026-11-14
 
 1. Colony cargo/transfer journeys: stable carrier icons across selection and

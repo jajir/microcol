@@ -1641,3 +1641,20 @@ studii. Ověření sleduje [funkční evidence](functional-tests.md#page-separat
    Přetažení a jeho pravidla zůstávají zachované.
 5. Jde o schválené chování, nikoli hráčskou studii. Ověření vede
    [funkční evidence](functional-tests.md#depot-spacing-and-help-2026-11-14).
+
+## Prázdné depo, trvalý výběr a odchod pracovníka — 14. listopadu 2026
+
+1. Bez přepravce nahrazuje hláška „No transport units in the cargo depot.“
+   nadpis depa. Její původní spodní místo zůstává prázdné, aby text okolí
+   kolonie neposkočil nahoru. Při přítomnosti přepravců zůstává jeden vybraný;
+   opakované kliknutí jej neodznačí a kliknutí na jiného přepne výběr.
+2. Nápověda nad ikonou i kontejnery odpovídá možnostem přepravce. Povoz
+   převáží zboží a zvířata, nikoli lidi; loď připouští také přepravu lidí.
+   Jde o popis druhu nákladu, nikoli příslib volné kapacity či obcházení pravidel.
+3. Prázdné okolí kolonie zůstává aktivní plochou pro přetažení včetně textu
+   „No units outside colony.“. Při vstupu jednotky, která smí odejít, se celá
+   plocha podbarví. Puštění přesune pracovníka ven, uvolní jeho pracovní místo
+   a aktualizuje nadpis i seznam jednotek. Nepovolené přesuny nadále odmítá model.
+4. Oprava obnovuje dostupnost cíle skrytého při předchozí úpravě prázdného stavu.
+   Jde o implementační zjištění, nikoli novou hráčskou studii. Ověření:
+   [funkční evidence](functional-tests.md#depot-selection-and-outside-drop-2026-11-14).
