@@ -330,10 +330,30 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
                 .saveEvidence("colony-empty-depot.png");
         emptyTown.close();
         layout.placeCarrierAtColony(3, 0);
+        final int smallCarrier = layout.addSmallCarrier(0);
         final ColonyScreen town = game.openColonyAt(Location.of(24, 16),
                 "New Amsterdam");
         layout.verifyDepot("Cargo Depot - Galleon #3");
+        layout.verifyAvailableContainers(6);
+        layout.verifyDepotSpacing();
+        layout.hoverDepot();
+        town.verifyThatStatusBarContains("The depot transfers goods and units");
+        layout.hoverContainer();
+        town.verifyThatStatusBarContains("Transport people, goods or animals");
+        layout.hoverDepot();
+        town.verifyThatStatusBarContains("The depot transfers goods and units");
+
+        // Selecting or pressing a differently sized carrier keeps both icons
+        // still.
+        layout.rememberCarrierGeometry();
+        layout.pressCarrier(smallCarrier);
+        layout.verifyCarrierGeometryUnchanged();
+        layout.releaseCarrier();
+        layout.verifyCarrierGeometryUnchanged();
+        layout.verifyAvailableContainers(2);
         town.selectShipInPort(3);
+        layout.verifyCarrierGeometryUnchanged();
+        layout.verifyAvailableContainers(6);
         layout.verifyDepot("Cargo Depot - Galleon #3");
         new InGameLayoutPage(getContext())
                 .saveEvidence("colony-combined-depot.png");

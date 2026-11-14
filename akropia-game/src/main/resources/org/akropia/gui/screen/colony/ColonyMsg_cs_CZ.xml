@@ -132,6 +132,8 @@
   <entry key="emptyCargo">Prázdný náklad</entry>
   <entry key="emptyHarbor">V překladišti není žádná přepravní jednotka.</entry>
     <entry key="emptyOutside">Mimo kolonii není žádná jednotka.</entry>
+    <entry key="depotHelp">Depo slouží k překládání zboží a jednotek mezi skladem, kolonií, loděmi a povozy.</entry>
+    <entry key="containerHelp">V přepravním kontejneru můžete převážet lidi, zboží nebo zvířata. Náklad do něj přetáhněte.</entry>
   <entry key="emptySchool">Žádná probíhající výuka. Kliknutím vyberte učitele a žáka.</entry>
   <entry key="buildingSection">Výstavba</entry>
   <entry key="schoolSection">Škola</entry>

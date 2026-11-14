@@ -131,7 +131,9 @@
   <entry key="overviewPolitics">Population %s · Liberty %s%% · Crown %s%%</entry>
   <entry key="emptyCargo">Empty hold</entry>
   <entry key="emptyHarbor">No transport units in the cargo depot.</entry>
-    <entry key="emptyOutside">No units outside the colony.</entry>
+    <entry key="emptyOutside">No units outside colony.</entry>
+    <entry key="depotHelp">The depot transfers goods and units between the warehouse, colony, ships and wagons.</entry>
+    <entry key="containerHelp">Transport people, goods or animals in this container. Drag them into the container to load them.</entry>
   <entry key="emptySchool">No active courses. Choose a teacher and student below.</entry>
   <entry key="buildingSection">Construction</entry>
   <entry key="schoolSection">School</entry>

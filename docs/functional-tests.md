@@ -1,3 +1,57 @@
+## Depot spacing and help — 2026-11-14
+
+1. Colony cargo/transfer journeys: stable carrier icons across selection and
+   press states, reduced carrier-to-cargo spacing, increased spacing before
+   outside units, a single empty-outside heading, only available cargo slots,
+   and localized depot/container status-bar help with container precedence.
+2. Targeted selection: `TC_195_F227_colony_layout_test`,
+   `TC_05_F05_moving_goods_test`, `PageVerificationContractTest`.
+   TC195/07 checks empty and populated depots, Galleon/Caravel capacities,
+   carrier geometry during press/selection, spacing and hover transitions.
+   Existing transfer assertions remain unchanged.
+3. Model dispatched as `20261114T092842Z-85f36fc4637b` (PID 32665), with a
+   600-second timeout. Model, targeted UI, screenshots, fixed smoke and
+   documentation acceptance remain pending. Java formatter applied to changed
+   Java files; unrelated backlog edits are excluded. No remote CI requested.
+4. First model attempt timed out during Docker preparation after 22.083
+   seconds: the labelled-container query exceeded 20 seconds. Tests never
+   started. Repeating that exact query succeeded in 0.017 seconds and the
+   server-version probe in 0.023 seconds; original root cause unconfirmed.
+   Failed evidence is preserved. Model startup retry:
+   `20261114T093006Z-c92ee5b4427c` (PID 32912, 600-second timeout).
+5. Model retry passed **5,133 tests in 395 complete XML reports**, zero
+   failures/errors/skips, in 157.215 supervised seconds. Snapshot:
+   `target/verification/run-hbf3w1ke/`, base `0bd21a1b`. All changed runtime
+   and test files match. Targeted selection from item 2 dispatched as
+   `20261114T093301Z-ab37b1993163` (PID 33502, 1,800-second timeout).
+6. First targeted attempt failed during UI test compilation after 37.959
+   seconds; no UI scenarios started. Java could not choose a TestFX `moveTo`
+   overload from a generic lookup. Assigning the result to a `Node` resolves
+   the ambiguity without changing the scenario or runtime sources. Failed
+   evidence is preserved; model sources and selection remain unchanged.
+7. Targeted retry `20261114T093409Z-8f9d5319fda0` (PID 33951) passed
+   **13 checks in three complete reports**, zero failures/errors/skips, in
+   194.705 supervised seconds. Evidence: `target/docker-ui/run-KRkzsz/`.
+   TC195/07 confirms unchanged icon bounds through press and selection,
+   six versus two available containers and depot/container/depot hover text.
+   The 900 × 750 screenshots confirm compact cargo spacing and a single
+   empty-outside label. Original goods-transfer assertions also passed.
+8. Fixed smoke dispatched as `20261114T093736Z-4b7c2b7b1560` (PID 34341),
+   480-second supervisor timeout, unchanged 420-second acceptance budget.
+   Final smoke, documentation validation and commit review remain pending.
+9. Fixed smoke passed **21 checks in 12 complete XML reports**, zero
+   failures/errors/skips, in 257.896 supervised seconds, below the 420-second
+   acceptance budget. Snapshot: `target/verification/run-t3tge5z3/`.
+   All changed runtime/test files match the accepted smoke source. Runtime
+   and model tests are unchanged from passing model acceptance; the only
+   later executable edit corrected the UI-test lookup type.
+10. Final local acceptance on base `0bd21a1b`: **5,133 model/JUnit, 13 targeted
+    UI/support and 21 fixed smoke checks** passed. Shared Java formatting,
+    final diff/source review, screenshot review, 14 documentation consistency
+    tests, name audit and strict MkDocs passed. Documentation logs:
+    `target/depot-spacing/`. Unrelated backlog edits remain excluded. This
+    does not claim full regression or verified distribution publication.
+
 ## Depot empty states and plow terrain — 2026-11-14
 
 1. Colony cargo/transfer journeys and UC-019/016: empty depot and outside

@@ -1616,3 +1616,21 @@ studii. Ověření sleduje [funkční evidence](functional-tests.md#page-separat
    úvodní obrazovky nadále používají svůj stávající hostitelský panel.
 4. Jde o dohodnuté chování, nikoli hráčskou studii. Ověření UC-114/115/119 vede
    [funkční evidence](functional-tests.md#shared-page-width-2026-11-14).
+
+## Rozestupy a nápověda depa — 14. listopadu 2026
+
+1. Lodě a povozy mají prostor pro výběrový rámeček rezervovaný stále.
+   Výběr ani stisk neposouvá jejich obrázky. Mezera pod vybraným přepravcem
+   k nákladovým boxům je zmenšená o 40 %; mezera před označením okolí
+   kolonie je zvětšená z 6 na 9 logických pixelů (o 50 %).
+2. Prázdné okolí ukazuje jediný text „No units outside colony.“ místo nadpisu
+   i druhé hlášky. Při přítomnosti jednotek se zobrazí „Outside colony“ a jednotky.
+   České znění nadále odpovídá zvolenému jazyku.
+3. Boxy představují pouze skutečnou kapacitu vybraného přepravce. Nedostupné
+   boxy nejsou vidět ani nezabírají místo; prázdné dostupné boxy zůstávají.
+4. Najetí nad depo vysvětluje překládání mezi skladem, kolonií, loděmi a povozy.
+   Nad boxem má přednost nápověda k přepravě lidí, zboží a zvířat přetažením.
+   Přechod zpět na depo obnoví obecnou nápovědu; opuštění depa ji odstraní.
+   Přetažení a jeho pravidla zůstávají zachované.
+5. Jde o schválené chování, nikoli hráčskou studii. Ověření vede
+   [funkční evidence](functional-tests.md#depot-spacing-and-help-2026-11-14).

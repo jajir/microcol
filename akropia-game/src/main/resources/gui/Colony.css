@@ -29,7 +29,7 @@
 .outside { -fx-min-height: 46; -fx-spacing: 6; }
 .colony-harbor .panel-dock { -fx-background-color: #83c7c4; -fx-background-radius: 12; -fx-padding: 5; -fx-spacing: 2; }
 .colony-harbor .harbor-scroll, .colony-harbor .harbor-scroll > .viewport { -fx-background-color: transparent; -fx-padding: 0; }
-.colony-harbor .harbor-scroll { -fx-min-height: 64; -fx-pref-height: 64; -fx-max-height: 64; }
+.colony-harbor .harbor-scroll { -fx-min-height: 57.6; -fx-pref-height: 57.6; -fx-max-height: 57.6; }
 .colony-harbor .ships { -fx-spacing: 6; }
 .colony-harbor .harbor-unit { -fx-padding: 3; }
 .colony-harbor .harbor-cargo { -fx-spacing: 3; }
@@ -49,11 +49,15 @@
 .colony-harbor .harbor-unit,
 .colony-harbor .harbor-unit:hover,
 .colony-harbor .harbor-unit:focused,
+.colony-harbor .harbor-unit:armed,
 .colony-harbor .harbor-unit:selected {
     -fx-background-color: transparent;
     -fx-border-image-source: null;
     -fx-underline: false;
     -fx-padding: 0;
+    -fx-border-width: 6;
+    -fx-border-color: transparent;
+    -fx-translate-y: 0;
 }
 .colony-harbor .harbor-unit:selected {
     -fx-border-image-source: url("../images/game-toolbar-frame.png");

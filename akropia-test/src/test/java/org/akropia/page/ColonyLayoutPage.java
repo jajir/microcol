@@ -443,12 +443,121 @@ public final class ColonyLayoutPage extends AbstractScreen {
             assertEquals("No transport units in the cargo depot.",
                     getLabeledById("colony-depot-empty").getText());
             assertTrue(getLabeledById("colony-depot-empty").isVisible());
-            assertEquals("No units outside the colony.",
-                    getLabeledById("colony-outside-empty").getText());
+            assertEquals("No units outside colony.",
+                    getLabeledById("colony-outside-title").getText());
+            assertTrue(getNodeFinder().lookup("#colony-outside-empty")
+                    .queryAll().isEmpty());
+            assertFalse(getNodeFinder().lookup("#colony-outside-scroll").query()
+                    .isManaged());
             final Node crate = getNodeFinder()
                     .lookup("#colony-cargo-depot .cratePanel").query();
             assertFalse(crate.getParent().isVisible());
             assertFalse(crate.getParent().isManaged());
+        });
+    }
+
+    private final java.util.Map<String, Bounds> carrierGeometry = new java.util.HashMap<>();
+
+    public int addSmallCarrier(final int colonyId) {
+        final int[] id = new int[1];
+        getRobot().interact(() -> {
+            final org.akropia.model.Player owner = getModel()
+                    .getCurrentPlayer();
+            owner.setGold(owner.getGold() + 10000);
+            owner.buy(org.akropia.model.UnitType.CARAVEL);
+            final org.akropia.model.Unit carrier = owner.getAllUnits().stream()
+                    .filter(unit -> unit
+                            .getType() == org.akropia.model.UnitType.CARAVEL)
+                    .findFirst().orElseThrow();
+            carrier.placeToLocation(getModel().getColonyById(colonyId)
+                    .orElseThrow().getLocation());
+            id[0] = carrier.getId();
+        });
+        return id[0];
+    }
+
+    public void rememberCarrierGeometry() {
+        carrierGeometry.clear();
+        getRobot().interact(() -> {
+            for (Node node : getNodeFinder()
+                    .lookup("#colony-cargo-depot .harbor-unit").queryAll()) {
+                final Node icon = ((javafx.scene.control.ToggleButton) node)
+                        .getGraphic();
+                carrierGeometry.put(node.getId(),
+                        icon.localToScene(icon.getBoundsInLocal()));
+            }
+        });
+    }
+
+    public void verifyCarrierGeometryUnchanged() {
+        getRobot().interact(() -> {
+            for (var entry : carrierGeometry.entrySet()) {
+                final Node icon = getNodeFinder().lookup("#" + entry.getKey())
+                        .queryAs(javafx.scene.control.ToggleButton.class)
+                        .getGraphic();
+                final Bounds actual = icon
+                        .localToScene(icon.getBoundsInLocal());
+                assertEquals(entry.getValue().getMinX(), actual.getMinX(), 0.1);
+                assertEquals(entry.getValue().getMinY(), actual.getMinY(), 0.1);
+                assertEquals(entry.getValue().getWidth(), actual.getWidth(),
+                        0.1);
+                assertEquals(entry.getValue().getHeight(), actual.getHeight(),
+                        0.1);
+            }
+        });
+    }
+
+    public void verifyAvailableContainers(final int expectedCount) {
+        getRobot().interact(() -> {
+            final java.util.Set<Node> crates = getNodeFinder()
+                    .lookup("#colony-cargo-depot .cratePanel").queryAll();
+            assertEquals(expectedCount,
+                    crates.stream().filter(Node::isVisible).count());
+            assertEquals(expectedCount,
+                    crates.stream().filter(Node::isManaged).count());
+        });
+    }
+
+    public void hoverDepot() {
+        final Node title = getNodeFinder().lookup("#europe-cargo-title")
+                .query();
+        revealGameContent(title);
+        getRobot().moveTo(title);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void hoverContainer() {
+        final Node crate = getNodeFinder()
+                .lookup("#colony-cargo-depot .cratePanel").queryAll().stream()
+                .filter(Node::isVisible).findFirst().orElseThrow();
+        revealGameContent(crate);
+        getRobot().moveTo(crate);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void pressCarrier(final int id) {
+        final Node carrier = getNodeFinder().lookup("#europe-dock-ship-" + id)
+                .query();
+        getRobot().moveTo(carrier)
+                .press(javafx.scene.input.MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void releaseCarrier() {
+        getRobot().release(javafx.scene.input.MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyDepotSpacing() {
+        getRobot().interact(() -> {
+            final VBox depot = getNodeFinder().lookup("#colony-cargo-depot")
+                    .queryAs(VBox.class);
+            final Node title = depot.lookup("#colony-outside-title");
+            assertEquals(9, depot.getSpacing() + VBox.getMargin(title).getTop(),
+                    0.01);
+            final javafx.scene.layout.Region scroll = (javafx.scene.layout.Region) depot
+                    .lookup("#europe-dock-scroll");
+            assertEquals(57.6, scroll.getPrefHeight(), 0.01);
         });
     }
 

@@ -127,6 +127,10 @@ public class PanelCrateView implements JavaFxComponent {
      * Show closed cargo slot.
      */
     public void closeSlot() {
+        if (colony) {
+            mainPane.setVisible(false);
+            mainPane.setManaged(false);
+        }
         if (harborCrate == null) {
             crateImage.setImage(
                     imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
@@ -151,6 +155,10 @@ public class PanelCrateView implements JavaFxComponent {
      * Open as empty cargo.
      */
     public void openSlot() {
+        if (colony) {
+            mainPane.setVisible(true);
+            mainPane.setManaged(true);
+        }
         if (harborCrate == null) {
             crateImage.setImage(
                     imageProvider.getImage(ImageProvider.IMG_CRATE_OPEN));

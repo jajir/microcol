@@ -21,6 +21,12 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import org.akropia.gui.screen.colony.buildingqueue.QueueDialog;
 import javafx.scene.control.Button;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
+import javafx.geometry.Insets;
+import org.akropia.gui.dock.PanelCrateView;
+import org.akropia.gui.screen.game.components.StatusBarMessageEvent;
+import org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
@@ -133,6 +139,12 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         outside.getStyleClass().add("colony-unit-scroll");
         final Label outsideTitle = new Label();
         outsideTitle.setId("colony-outside-title");
+        VBox.setMargin(outsideTitle, new Insets(3, 0, 0, 0));
+        panelDock.getContent().setPickOnBounds(true);
+        panelDock.getContent().setOnMouseEntered(this::showDepotHelp);
+        panelDock.getContent().setOnMouseMoved(this::showDepotHelp);
+        panelDock.getContent().setOnMouseExited(event -> eventBus
+                .post(new StatusBarMessageEvent(Source.COLONY)));
         dockDetail.getChildren().addAll(panelDock.getContent(), outsideTitle,
                 outside);
         dockDetail.setId("colony-cargo-depot");
@@ -224,6 +236,14 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             construction.repaint(colony);
             panelOutsideColony.setColony(colony);
             panelOutsideColony.repaint();
+            final boolean outsideEmpty = colony.getUnitsOutSideColony()
+                    .isEmpty();
+            ((Label) dockDetail.lookup("#colony-outside-title"))
+                    .setText(i18n.get(outsideEmpty ? ColonyMsg.emptyOutside
+                            : ColonyMsg.overviewPeople));
+            final Node outside = dockDetail.lookup("#colony-outside-scroll");
+            outside.setVisible(!outsideEmpty);
+            outside.setManaged(!outsideEmpty);
             detail.getChildren().stream().filter(SchoolPanel.class::isInstance)
                     .map(SchoolPanel.class::cast).forEach(SchoolPanel::refresh);
             refreshOverview();
@@ -324,6 +344,20 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     @Override
     public Region getContent() {
         return mainPanel;
+    }
+
+    private void showDepotHelp(final MouseEvent event) {
+        Node node = (Node) event.getTarget();
+        ColonyMsg message = ColonyMsg.depotHelp;
+        while (node != null && node != panelDock.getContent()) {
+            if (node.getStyleClass().contains(PanelCrateView.CRATE_CLASS)) {
+                message = ColonyMsg.containerHelp;
+                break;
+            }
+            node = node.getParent();
+        }
+        eventBus.post(
+                new StatusBarMessageEvent(i18n.get(message), Source.COLONY));
     }
 
     @Override
