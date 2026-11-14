@@ -1,5 +1,30 @@
 # UX a pravidla ovládání Akropia
 
+## Plovoucí panel hlavní mapy a plánovače — 14. listopadu 2026
+
+1. Mapa vyplňuje celou šířku okna, také pod panelem. Pravá hrana panelu
+   sleduje pravou hranu vystředěného obsahu o maximální šířce 1440 logických
+   pixelů; na širším okně pokračuje mapa i napravo od panelu.
+2. Oba režimy používají panel široký 260 logických pixelů, s odstupem 16
+   pixelů od horní a dolní hrany mapové plochy. Výběr pole nemění jeho
+   rozměry. Neprůhledná krémová výplň a nepravidelný černý obrys o síle
+   dvou logických pixelů navazují na společný kreslený vzhled.
+3. Minimapa zůstává nahoře mimo posuvný obsah v obou režimech. V nízkém
+   okně se úměrně zmenší, nejvýše na 30 % výšky panelu, nikdy se nesbalí.
+   Kliknutí, tažení a klávesová navigace minimapy zachovávají své chování.
+4. Údaje o poli a jednotkách se posouvají společně pod minimapou. Plánovač
+   posouvá seznam a podrobnosti tras; úprava trasy a návrat zůstávají
+   dostupné dole. Svislý posuvník se objeví při přetečení, vyhrazené místo
+   pro něj brání změně šířky obsahu. Texty se zalamují, vodorovný posuv není.
+5. Kliknutí a posouvací gesta nad panelem ovládají pouze panel, také na
+   konci posuvné oblasti. Mapa kolem panelu zůstává ovladatelná. Přepínač
+   režimu je nadále vlevo nahoře a přechod nemění herní stav.
+6. Automatické zaměření vybraného pole nebo jednotky používá střed části
+   mapy nalevo od panelu. Vykreslovaný výřez a minimapa nadále zahrnují
+   celou šířku mapy; panel nesmí zaměřenou jednotku zakrýt.
+7. Jde o dohodnuté chování, nikoli hráčskou studii. Stav ověření vede
+   [funkční evidence](functional-tests.md#floating-map-panel-2026-11-14).
+
 ## Vzhled nápovědy — 14. listopadu 2026
 
 1. Seznam témat a obsah používají stejné pozadí jako stránka; vybrané téma zůstává zvýrazněné. Vnitřní vodorovné oddělovače nejsou v žádném tématu. Vnější rámečky zůstávají.

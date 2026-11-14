@@ -106,8 +106,9 @@ public final class TradeRoutePlanningPanel
         content.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL);
         content.getStyleClass().add("trade-route-planning-panel");
         content.setPrefWidth(260);
-        content.setMinWidth(240);
-        content.setMaxWidth(260);
+        content.setMinWidth(0);
+        content.setMinHeight(0);
+        content.setMaxWidth(Double.MAX_VALUE);
         title.setId("tradeRoutePlanningTitle");
         title.getStyleClass().add("trade-route-planning-title");
         rule.setId("tradeRoutePlanningRule");
@@ -191,13 +192,18 @@ public final class TradeRoutePlanningPanel
         detail.setId("tradeRoutePlanningDetail");
         detail.getChildren().addAll(name, kind, carriers, previewNote,
                 stopsHeading, stops, legsHeading, legs, rule);
-        final ScrollPane scroll = new ScrollPane(detail);
+        final VBox scrollContent = new VBox(6, title, empty, message, listLabel,
+                list, detail);
+        final ScrollPane scroll = new ScrollPane(scrollContent);
         scroll.setId("tradeRoutePlanningScroll");
-        scroll.setFitToWidth(true);
+        scroll.setFitToWidth(false);
+        scrollContent.prefWidthProperty()
+                .bind(scroll.widthProperty().subtract(20));
+        scrollContent.setMaxWidth(Region.USE_PREF_SIZE);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        // Only the long detail scrolls; it gives up height first, so the
+        // Route selection and details scroll together, so the
         // actions below stay reachable in a small window.
-        scroll.setMinHeight(60);
+        scroll.setMinHeight(0);
         VBox.setVgrow(scroll, Priority.ALWAYS);
         // The route's edit action and the way back stay in a fixed area
         // below the scrolling detail, in every window size and language.
@@ -209,8 +215,7 @@ public final class TradeRoutePlanningPanel
         final VBox actions = new VBox(6, edit, back);
         actions.setId("tradeRoutePlanningActions");
         actions.setMinHeight(Region.USE_PREF_SIZE);
-        content.getChildren().addAll(title, empty, message, listLabel, list,
-                scroll, actions);
+        content.getChildren().addAll(scroll, actions);
         planning.addListener(this::refresh);
         updateLanguage(i18n);
     }

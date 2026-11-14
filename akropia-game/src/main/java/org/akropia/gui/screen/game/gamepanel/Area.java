@@ -102,7 +102,8 @@ public class Area {
         /**
          * Put new point in the center of screen.
          */
-        final Point screenCenter = visibleArea.getCanvasSize().divide(2);
+        final Point screenCenter = Point.of(visibleArea.getFocusWidth() / 2,
+                visibleArea.getCanvasSize().getY() / 2);
         return newScreenCenterPoint.substract(screenCenter);
     }
 

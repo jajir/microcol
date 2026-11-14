@@ -54,6 +54,7 @@ public class GamePage extends AbstractScreen {
 
     /** Move the pointer without assuming diagnostics are enabled. */
     public void hoverTile(final Location location) {
+        revealTile(location);
         final javafx.geometry.Point2D p = screenPoint(location);
         getRobot().moveTo(p.getX(), p.getY(), Motion.DEFAULT);
         WaitForAsyncUtils.waitForFxEvents();
@@ -187,6 +188,31 @@ public class GamePage extends AbstractScreen {
         closeUnitActions();
     }
 
+    /**
+     * Reveal a covered target through the player's minimap, without selecting
+     * it.
+     */
+    public void revealTile(final Location location) {
+        final javafx.scene.Node panel = getNodeFinder()
+                .lookup("#floatingMapPanel").query();
+        final javafx.scene.canvas.Canvas canvas = getContext()
+                .getClassFromGuice(
+                        org.akropia.gui.screen.game.gamepanel.GamePanelComponent.class)
+                .getCanvas();
+        final Point point = getContext().getArea()
+                .convertToCanvasPoint(location);
+        final javafx.geometry.Point2D center = canvas.localToScreen(
+                point.getX() + TILE_CENTER.getX(),
+                point.getY() + TILE_CENTER.getY());
+        if (panel.localToScreen(panel.getLayoutBounds()).contains(center)) {
+            new WorldMinimapPage(getContext()).clickWorld(
+                    (location.getX() - .5)
+                            / getModel().getMap().getMaxLocationX(),
+                    (location.getY() - .5)
+                            / getModel().getMap().getMaxLocationY());
+        }
+    }
+
     private javafx.geometry.Point2D screenPoint(final Location location) {
         WaitForAsyncUtils.waitForFxEvents();
         // Selecting a unit can wrap its toolbar and resize the map viewport.
@@ -211,6 +237,9 @@ public class GamePage extends AbstractScreen {
         final javafx.scene.Node toolbar = getNodeFinder().lookup(".buttonPanel")
                 .query();
         covered.add(toolbar.localToScreen(toolbar.getBoundsInLocal()));
+        final javafx.scene.Node sidebar = getNodeFinder()
+                .lookup("#floatingMapPanel").query();
+        covered.add(sidebar.localToScreen(sidebar.getLayoutBounds()));
         for (final javafx.scene.Node control : canvas.getParent()
                 .getChildrenUnmodifiable()) {
             if (control != canvas && control.isVisible()) {
@@ -607,15 +636,16 @@ public class GamePage extends AbstractScreen {
                 .getScene();
         getRobot().interact(() -> scene.addEventFilter(
                 javafx.scene.input.MouseEvent.MOUSE_PRESSED, trace));
-        // Keep the native gesture together: TestFX waits between its clicks,
-        // which can exceed the double-click interval while selecting a unit.
-        getRobot().interact(() -> {
-            final javafx.scene.robot.Robot mouse = new javafx.scene.robot.Robot();
-            mouse.mousePress(MouseButton.PRIMARY);
-            mouse.mouseRelease(MouseButton.PRIMARY);
-            mouse.mousePress(MouseButton.PRIMARY);
-            mouse.mouseRelease(MouseButton.PRIMARY);
-        });
+        // Let Xvfb deliver each native click before sending the next one,
+        // while remaining inside the platform double-click interval.
+        for (int click = 0; click < 2; click++) {
+            getRobot().interact(() -> {
+                final javafx.scene.robot.Robot mouse = new javafx.scene.robot.Robot();
+                mouse.mousePress(MouseButton.PRIMARY);
+                mouse.mouseRelease(MouseButton.PRIMARY);
+            });
+            getRobot().sleep(60);
+        }
         WaitForAsyncUtils.waitForFxEvents();
         try {
             WaitForAsyncUtils.waitFor(5, java.util.concurrent.TimeUnit.SECONDS,

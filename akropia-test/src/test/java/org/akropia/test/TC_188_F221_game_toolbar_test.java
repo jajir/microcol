@@ -184,6 +184,7 @@ public class TC_188_F221_game_toolbar_test extends AbstractAkropiaTest {
         // it.
         toolbar.openColoniesWithKeyboard();
         toolbar.chooseFirstColony();
+        menu.verifyClosed();
         final ColonyScreen colony = ColonyScreen.of(getContext(),
                 "New Amsterdam");
         colony.verifyColonyName("New Amsterdam");

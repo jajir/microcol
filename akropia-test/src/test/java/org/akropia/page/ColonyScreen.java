@@ -234,6 +234,7 @@ public class ColonyScreen extends AbstractScreen {
         final Button buttonNextTurn = getButtonById(
                 ColonyButtonsPanel.CLOSE_BUTTON_ID);
         getRobot().clickOn(buttonNextTurn);
+        WaitForAsyncUtils.waitForFxEvents();
         return GamePage.of(getContext());
     }
 

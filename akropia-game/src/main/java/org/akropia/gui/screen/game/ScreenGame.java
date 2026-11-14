@@ -7,10 +7,12 @@ import org.akropia.gui.buttonpanel.Buttons;
 import org.akropia.gui.util.GameScreenHeader;
 import org.akropia.gui.screen.game.components.ButtonsGamePanel;
 import org.akropia.gui.screen.game.components.RightPanel;
+import org.akropia.gui.screen.game.components.WorldMinimap;
 import org.akropia.gui.screen.game.components.StatusBar;
 import org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.akropia.gui.screen.game.components.TradeRoutePlanningPanel;
 import org.akropia.gui.screen.game.gamepanel.GamePanelComponent;
+import org.akropia.gui.screen.game.gamepanel.VisibleAreaService;
 import org.akropia.gui.screen.game.gamepanel.TradeRoutePlanning;
 import org.akropia.gui.shortcut.KeyboardShortcuts;
 import org.akropia.gui.shortcut.ReleaseGesture;
@@ -27,7 +29,13 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.shape.SVGPath;
+import javafx.beans.binding.Bindings;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -51,7 +59,9 @@ public class ScreenGame implements GameScreen {
 
     private final GameScreenHeader header = new GameScreenHeader();
 
-    private final HBox hBox = new HBox();
+    private final StackPane mapArea = new StackPane();
+    private final VBox sidebar = new VBox(8);
+    private final StackPane panelContent = new StackPane();
 
     private final TradeRoutePlanning tradeRoutePlanning;
 
@@ -62,7 +72,9 @@ public class ScreenGame implements GameScreen {
             final RightPanel rightPanel, final ButtonsGamePanel buttonGamePanel,
             final GamePanelComponent gamePanelComponents, final I18n i18n,
             final TradeRoutePlanning tradeRoutePlanning,
-            final TradeRoutePlanningPanel tradeRoutePlanningPanel) {
+            final TradeRoutePlanningPanel tradeRoutePlanningPanel,
+            final WorldMinimap minimap,
+            final @Named("game") VisibleAreaService visibleArea) {
         this.statusBar = Preconditions.checkNotNull(statusBar);
         this.rightPanel = Preconditions.checkNotNull(rightPanel);
         this.buttonGamePanel = Preconditions.checkNotNull(buttonGamePanel);
@@ -74,11 +86,49 @@ public class ScreenGame implements GameScreen {
                 .checkNotNull(tradeRoutePlanningPanel);
         this.statusBar.setShowEventsFromSource(Source.GAME);
 
-        hBox.setId("mainBox");
-        VBox.setVgrow(hBox, javafx.scene.layout.Priority.ALWAYS);
-        hBox.setMinHeight(0);
-        hBox.getChildren().add(gamePanelComponents.getContent());
-        hBox.getChildren().add(rightPanel.getContent());
+        mapArea.setId("mainBox");
+        VBox.setVgrow(mapArea, javafx.scene.layout.Priority.ALWAYS);
+        mapArea.setMinHeight(0);
+        mapArea.getChildren().add(gamePanelComponents.getContent());
+        final StackPane overlay = new StackPane(sidebar);
+        overlay.getStyleClass().add("screen-content-limit");
+        overlay.setPickOnBounds(false);
+        StackPane.setAlignment(sidebar, Pos.CENTER_RIGHT);
+        StackPane.setMargin(sidebar, new Insets(16, 0, 16, 0));
+        sidebar.setId("floatingMapPanel");
+        sidebar.setMinWidth(260);
+        sidebar.setPrefWidth(260);
+        sidebar.setMaxWidth(260);
+        sidebar.setMinHeight(0);
+        sidebar.setPadding(new Insets(12));
+        final SVGPath outline = new SVGPath();
+        outline.setContent("M2 2 Q65 0 130 2 T258 2 Q260 150 258 300 "
+                + "T258 598 Q195 600 130 598 T2 598 Q0 450 2 300 T2 2 Z");
+        sidebar.setShape(outline);
+        sidebar.setScaleShape(true);
+        sidebar.setCenterShape(true);
+        final StackPane minimapSlot = new StackPane(new Group(minimap));
+        minimapSlot.setId("floatingMinimapSlot");
+        minimapSlot.setMinHeight(Region.USE_PREF_SIZE);
+        minimapSlot.prefHeightProperty().bind(
+                Bindings.min(192, sidebar.heightProperty().multiply(0.30)));
+        minimapSlot.maxHeightProperty().bind(minimapSlot.prefHeightProperty());
+        minimap.scaleXProperty().bind(minimapSlot.heightProperty().divide(192));
+        minimap.scaleYProperty().bind(minimap.scaleXProperty());
+        panelContent.setMinHeight(0);
+        VBox.setVgrow(panelContent, javafx.scene.layout.Priority.ALWAYS);
+        panelContent.getChildren().add(rightPanel.getContent());
+        sidebar.getChildren().addAll(minimapSlot, panelContent);
+        sidebar.addEventHandler(MouseEvent.ANY, MouseEvent::consume);
+        sidebar.addEventHandler(ScrollEvent.ANY, ScrollEvent::consume);
+        mapArea.getChildren().add(overlay);
+        sidebar.boundsInParentProperty()
+                .addListener((p, old, bounds) -> visibleArea.setFocusWidth(
+                        (int) (overlay.getLayoutX() + bounds.getMinX())));
+        overlay.layoutXProperty()
+                .addListener((p, old, value) -> visibleArea
+                        .setFocusWidth((int) (value.doubleValue()
+                                + sidebar.getBoundsInParent().getMinX())));
         // The planner switch sits in the map's upper-left corner; the planner
         // panel takes the place of the normal right panel while it is on.
         gamePanelComponents.addMapControl(tradeRoutePlanningPanel.getToggle(),
@@ -100,7 +150,7 @@ public class ScreenGame implements GameScreen {
                                 () -> new javafx.geometry.Insets(
                                         header.getHeight(), 0, 0, 0),
                                 header.heightProperty()));
-        mainBox.getChildren().add(hBox);
+        mainBox.getChildren().add(mapArea);
         mainBox.getChildren().add(statusBar.getContent());
 
         mainPanel = new StackPane();
@@ -115,8 +165,8 @@ public class ScreenGame implements GameScreen {
         final Node wanted = tradeRoutePlanning.isActive()
                 ? tradeRoutePlanningPanel.getContent()
                 : rightPanel.getContent();
-        if (hBox.getChildren().get(1) != wanted) {
-            hBox.getChildren().set(1, wanted);
+        if (panelContent.getChildren().get(0) != wanted) {
+            panelContent.getChildren().set(0, wanted);
             if (!tradeRoutePlanning.isActive()) {
                 rightPanel.refresh();
             }

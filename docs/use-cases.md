@@ -2,6 +2,17 @@
 
 1. TC191/17 ověřuje [otevření přes ⌘S/Ctrl+S](save-load-navigation.md#otevreni-ukladani-klavesovou-zkratkou-13-listopadu-2026), opakovaný stisk během ukládání, dvojklik a jediné potvrzení s návratem na mapu. Další samostatné uložení zůstává dostupné. [Evidence](functional-tests.md#save-shortcut-return-2026-11-13).
 
+## UC-114/119: Plovoucí panel mapy — 14. listopadu 2026
+
+1. `TC_196_F228_world_minimap_test.TC_07_floating_panel_keeps_map_navigation_and_minimap_available`
+   ověřuje celou šířku mapy, limit 1440 px, rozměry a okraje panelu,
+   centrování mimo panel, izolaci vstupu a viditelnost minimapy v nízkém
+   okně i při přepnutí do plánovače. TC196/01–06 nadále chrání navigaci,
+   průzkum, fokus a vykreslování mapy.
+2. TC116 zachovává tvorbu a prohlížení tras včetně českého nízkého okna;
+   TC188 kontroluje vzhled a ovládání hlavní obrazovky. Výsledky vlastní
+   [funkční evidence](functional-tests.md#floating-map-panel-2026-11-14).
+
 ## UC-031/033/042: přímé ovládání fronty a kompaktní panely — 13. listopadu 2026
 
 1. TC32/11 pokrývá přidání stavby a jednotky dvojklikem, odmítnutí nedostupné

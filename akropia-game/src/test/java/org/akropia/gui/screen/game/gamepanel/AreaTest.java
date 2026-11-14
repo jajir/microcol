@@ -41,6 +41,7 @@ public class AreaTest {
         final Area area = makeArea(222, 222, 800, 600);
 
         when(visibleArea.getCanvasSize()).thenReturn(Point.of(800, 600));
+        when(visibleArea.getFocusWidth()).thenReturn(800);
         when(visibleArea.computeNewTopLeftConnerOfCanvas(Point.of(1805, 1905)))
                 .thenReturn(Point.of(1351, 1451));
 
@@ -49,6 +50,27 @@ public class AreaTest {
         assertNotNull(po);
         assertEquals(1351, po.getX());
         assertEquals(1451, po.getY());
+    }
+
+    @Test
+    void centeringUsesUncoveredWidthWithoutShrinkingTheMap() {
+        final VisibleAreaService view = new VisibleAreaService(true);
+        view.setMapSize(Location.of(100, 100));
+        view.setCanvasWidth(1800);
+        view.setCanvasHeight(900);
+        final Location selected = Location.of(50, 50);
+        final Point tile = Tile.ofLocation(selected).getTopLeftCorner();
+        final Area area = new Area(view);
+        assertEquals(tile.substract(Point.of(900, 450)),
+                area.getCanvasTopLeftForLocation(selected));
+        view.setFocusWidth(1360);
+        assertEquals(tile.substract(Point.of(680, 450)),
+                area.getCanvasTopLeftForLocation(selected));
+        assertEquals(Point.of(1800, 900), view.getCanvasSize());
+        view.setCanvasWidth(1024);
+        view.setFocusWidth(764);
+        assertEquals(tile.substract(Point.of(382, 450)),
+                area.getCanvasTopLeftForLocation(selected));
     }
 
     static Stream<Arguments> dataProvider_for_convertToPoint() {

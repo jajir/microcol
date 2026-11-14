@@ -250,4 +250,49 @@ public class TC_196_F228_world_minimap_test extends AbstractAkropiaTest {
         }
         map.verifyGameUnchanged();
     }
+
+    @Test
+    @Tag("local")
+    void TC_07_floating_panel_keeps_map_navigation_and_minimap_available()
+            throws Exception {
+        // The wide map continues behind and beyond the centered panel.
+        WelcomePage.of(getContext()).loadGame();
+        final MainScreenLayoutPage window = new MainScreenLayoutPage(
+                getContext());
+        final WorldMinimapPage map = new WorldMinimapPage(getContext());
+        window.resize(1800, 1000);
+        map.verifyFloatingPanel(false);
+        map.centerSelection();
+        map.verifySelectionCenteredOutsidePanel();
+        map.rememberGameAndView();
+        map.clickPanelBorder();
+        map.scrollPanel("mapDetailsScroll");
+        map.verifyCameraUnchanged();
+        map.verifyGameUnchanged();
+        window.saveEvidence("floating-map-wide.png");
+
+        // Low windows preserve the minimap while details scroll below it.
+        window.resize(1024, 640);
+        map.verifyFloatingPanel(false);
+        map.scrollPanel("mapDetailsScroll");
+        map.verifyFloatingPanel(false);
+        window.saveEvidence("floating-map-low.png");
+
+        // Planning uses the same panel and keeps minimap navigation available.
+        map.togglePlanner();
+        map.verifyFloatingPanel(true);
+        map.rememberGameAndView();
+        map.scrollPanel("tradeRoutePlanningScroll");
+        map.verifyFloatingPanel(true);
+        map.verifyCameraUnchanged();
+        map.verifyGameUnchanged();
+        map.clickWorld(.5, .5);
+        map.verifyCentered(.5, .5);
+        map.verifyViewport();
+        window.saveEvidence("floating-planner-low.png");
+        map.togglePlanner();
+        map.verifyFloatingPanel(false);
+        map.verifyGameUnchanged();
+    }
+
 }

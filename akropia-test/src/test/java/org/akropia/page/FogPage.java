@@ -60,6 +60,7 @@ public final class FogPage extends AbstractScreen {
     }
 
     public void centerOn(final Location center) throws Exception {
+        GamePage.of(getContext()).revealTile(center);
         final Canvas mapCanvas = getContext()
                 .getClassFromGuice(GamePanelComponent.class).getCanvas();
         final Point2D destination = mapCanvas.localToScreen(

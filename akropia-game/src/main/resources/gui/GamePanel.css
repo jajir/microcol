@@ -19,9 +19,10 @@
 }
 .game-screen #rightPanel {
     -fx-background-color: #FFF9EC;
-    -fx-border-color: #292824;
-    -fx-border-width: 0 0 0 1;
-    -fx-padding: 12 8 12 12;
+    -fx-border-width: 0;
+    -fx-padding: 0 4 0 0;
+    -fx-pref-width: 0;
+    -fx-min-width: 0;
     -fx-vgap: 12;
 }
 .game-screen #rightPanel .scroll-pane,
@@ -39,14 +40,21 @@
     -fx-border-width: 1;
 }
 
-/* Reuse the button's ink and slice scale for each single freehand edge. */
-.game-screen #rightPanel {
-    -fx-border-color: transparent;
-    -fx-border-image-source: url("../images/game-toolbar-frame.png");
-    -fx-border-image-slice: 12;
-    -fx-border-image-repeat: stretch;
+/* The full-width map sits behind a single fixed-width paper panel. */
+#floatingMapPanel {
+    -fx-background-color: #FFF9EC;
+    -fx-border-color: #000000;
+    -fx-border-width: 2;
 }
-.game-screen #rightPanel {
-    -fx-border-image-width: 0 0 0 6;
-    -fx-border-image-insets: 0 0 0 -3;
+.game-screen #tradeRoutePlanningPanel {
+    -fx-padding: 0;
+}
+#floatingMapPanel .scroll-pane,
+#floatingMapPanel .viewport {
+    -fx-background-color: #FFF9EC;
+}
+#mapDetailsScroll .scroll-bar:vertical .track,
+#mapDetailsScroll .scroll-bar:vertical .increment-button,
+#mapDetailsScroll .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
 }

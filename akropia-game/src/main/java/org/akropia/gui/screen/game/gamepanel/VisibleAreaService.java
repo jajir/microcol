@@ -63,6 +63,20 @@ public class VisibleAreaService {
      */
     private final CanvasArea canvasArea;
 
+    private int focusWidth;
+
+    /**
+     * Width left of the floating panel; rendering still uses the full canvas.
+     */
+    public void setFocusWidth(final int width) {
+        focusWidth = Math.max(0, width);
+    }
+
+    public int getFocusWidth() {
+        return focusWidth > 0 ? Math.min(focusWidth, getCanvasWidth())
+                : getCanvasWidth();
+    }
+
     public VisibleAreaService() {
         this(false);
     }

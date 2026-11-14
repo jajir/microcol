@@ -131,10 +131,8 @@ public final class MainScreenLayoutPage extends AbstractScreen {
                     .lookup(".game-toolbar-control").queryAs(Region.class);
             final BorderImage frame = button.getBorder().getImages().get(0);
             final double width = frame.getWidths().getTop();
-            final String[] selectors = { ".screen-toolbar", "#rightPanel",
-                    "#statusBar" };
+            final String[] selectors = { ".screen-toolbar", "#statusBar" };
             final BorderWidths[] edges = { new BorderWidths(0, 0, width, 0),
-                    new BorderWidths(0, 0, 0, width),
                     new BorderWidths(width, 0, 0, 0) };
             for (int i = 0; i < selectors.length; i++) {
                 final Region panel = getNodeFinder().lookup(selectors[i])
@@ -173,12 +171,6 @@ public final class MainScreenLayoutPage extends AbstractScreen {
                                 || pixels.getColor(x, (int) map.getMinY())
                                         .getBrightness() < 0.45,
                         "Ink touches map above at " + fraction);
-                assertTrue(
-                        pixels.getColor((int) map.getMaxX(), y)
-                                .getBrightness() < 0.45
-                                || pixels.getColor((int) map.getMaxX() - 1, y)
-                                        .getBrightness() < 0.45,
-                        "Ink touches map beside at " + fraction);
                 assertTrue(
                         pixels.getColor(x, (int) map.getMaxY())
                                 .getBrightness() < 0.45
@@ -265,14 +257,16 @@ public final class MainScreenLayoutPage extends AbstractScreen {
                     "The year adds no second inset at the right edge");
             final Bounds bar = bounds("statusBar");
             final Bounds map = bounds("canvas");
-            final Bounds right = bounds("rightPanel");
+            final Bounds right = bounds("floatingMapPanel");
             assertTrue(bar.getHeight() >= 72,
                     "Status panel reserves vertical space");
             assertTrue(map.getHeight() >= 200, "Map retains usable height");
             assertTrue(map.getMaxY() <= bar.getMinY() + 1,
                     "Map is above status panel");
-            assertTrue(map.getMaxX() <= right.getMinX() + 1,
-                    "Map does not overlap side panel");
+            assertEquals(getPrimaryStage().getScene().getWidth(), map.getMaxX(),
+                    1,
+                    "Map extends behind the floating panel to the window edge");
+            assertTrue(right.getMinX() > map.getMinX());
             assertTrue(
                     bar.getMaxY() <= getContext().getPrimaryStage().getScene()
                             .getHeight() + 1,

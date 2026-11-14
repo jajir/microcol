@@ -74,6 +74,207 @@
     acceptance is complete; no full regression or distribution publication is
     claimed. Unrelated backlog changes remain outside this commit.
 
+<a id="floating-map-panel-2026-11-14"></a>
+
+## Floating map panel — 2026-11-14
+
+1. Scope: full-width map, centered 1440 px overlay, fixed 260 px paper panel
+   with 16 px vertical margins, persistent minimap and scrolling details in
+   normal and trade-route views. Camera targeting uses the uncovered width;
+   model rules, save data and map rendering dimensions are unchanged.
+2. TC196/07 adds wide/low-window geometry, panel input isolation, minimap
+   continuity in the planner and unobscured camera targeting. Existing TC196,
+   TC116 and TC188 assertions retain their gameplay outcomes; panel geometry
+   checks follow the new overlay contract. AreaTest covers camera offsets
+   without shrinking the rendered viewport.
+3. First model run `20261114T105246Z-9714ce79f4df` passed 5,134 checks,
+   zero failures/errors/skips, in 157.273 supervised seconds (600-second
+   watchdog), reports `target/verification/run-iuy4t4pn/`. Review subsequently
+   corrected planner switching inside the overlay and removed old inner
+   panel spacing; this first source snapshot is not final acceptance.
+4. Final model run `20261114T105540Z-4f9993db99e6` passed **5,134 checks**,
+   zero failures/errors/skips, in 153.381 supervised seconds (600-second
+   watchdog), reports `target/verification/run-igzqv9uy/`.
+5. First targeted run `20261114T105827Z-f00bd5974fd4` failed after 373.366
+   supervised seconds: 26 checks, 3 failures, 5 errors, zero skips. Reports
+   and screenshots remain in `target/docker-ui/run-pCrpul/`. TC196/07 exposed
+   minimap shrinking below a usable height when planner content competed for
+   space; its slot now reserves its computed preferred height. Other failures
+   exposed helpers clicking map tiles covered by the overlay (GamePage/FogPage),
+   screenshots targeting the removed colony route button (TC116), and a colony
+   close helper checking the next screen before waiting for JavaFX events
+   (TC188). Helpers now reveal covered tiles through minimap navigation, retain
+   gameplay assertions and use the shared awaited button action.
+6. Repair model run `20261114T110815Z-6fe6710202bd` passed **5,134 checks**,
+   zero failures/errors/skips, in 155.120 supervised seconds (600-second
+   watchdog), reports `target/verification/run-b_d87vz5/`. The final ColonyScreen
+   helper adjustment affects only UI test code; targeted UI compilation and
+   execution cover it.
+7. Complete targeted selection repeated as `20261114T111103Z-7e3f9261a8e3`,
+   supervisor PID 47071, 3,600-second watchdog. UI acceptance, smoke and final
+   visual review remain pending. Documentation consistency (14 tests), name
+   audit and strict MkDocs passed before these evidence updates. No remote
+   publication is claimed.
+8. Second targeted run `20261114T111103Z-7e3f9261a8e3` failed after 424.990
+   supervised seconds: 26 checks, one failure, one error, zero skips; reports
+   `target/docker-ui/run-HoEcmS/`. TC196/07 now passes, including the persistent
+   minimap in the low planner. Its screenshot confirms the paper frame,
+   separate scroll area and reachable bottom actions. TC196/02's terrain
+   sampling omitted the minimap's scale; the page helper now transforms the
+   sample point to scene coordinates. TC188/03's return failure persists;
+   JavaFX waiting alone did not resolve it, so its cause is still unconfirmed.
+9. Focused diagnostic selection TC196/02, TC188/03 and the source contract
+   runs as `20261114T111912Z-7b824944ae38`, PID 49030, 1,200-second watchdog.
+   Temporary colony-return screenshots and click tracing will distinguish a
+   missed button from a failed transition. Production code is unchanged since
+   the passing repair model phase; no acceptance is claimed yet.
+10. Diagnostic run `20261114T111912Z-7b824944ae38` stopped during UI test
+    compilation after 38.275 supervised seconds, before tests started. A caller
+    edit also replaced an unrelated camera-screenshot origin in WorldMinimapPage,
+    leaving undefined variables; that accidental replacement was reverted.
+    Evidence remains in `target/docker-ui/run-VCYIRj/`. This was a test-source
+    compilation error, not a Docker or gameplay failure.
+11. Diagnostic retry `20261114T112022Z-91f7f31dfb63` reached tests and failed
+    after 75.757 supervised seconds: five checks, one failure, one error, zero
+    skips (`target/docker-ui/run-QgctxI/`). Before/after screenshots show the
+    colony unchanged and the button received no press. Scene-level click
+    tracing now records the actual target and pointer coordinates. Minimap
+    terrain checks now sample the painted canvas directly, independently of
+    scaling and the overlaid viewport marker; expected exploration and exact
+    terrain colors remain unchanged, while layout/viewport tests cover display.
+12. This diagnostic selection repeats as `20261114T112350Z-a0bc5b59a6d0`,
+    PID 50124, 1,200-second watchdog. Model production sources remain unchanged.
+13. Diagnostics `20261114T112350Z-a0bc5b59a6d0` (78.211 s,
+    `target/docker-ui/run-ru8KlB/`) and `20261114T112609Z-ab1de2ba4d41`
+    (77.971 s, `target/docker-ui/run-rupbXA/`) reached five checks each. The
+    former retained two failures/errors; the latter passed colony return and
+    retained only the minimap hover failure. Terrain sampling passed. Native
+    Xvfb evidence shows the focused stage at the expected position; the latter
+    run records the back-button text receiving the press and returning to the
+    map. Temporary desktop capture/click tracing was removed. Helpers now
+    compute minimap coordinates after FX layout and wait for the actual hover
+    message/map-return state, retaining exact assertions and bounded waits.
+14. Focused rerun `20261114T112843Z-2e6fc3ecc7c1`, PID 50875, 1,200-second
+    watchdog, is pending. Production sources remain the model-verified version.
+
+15. Diagnostic `20261114T112843Z-2e6fc3ecc7c1` failed after 87.062
+    supervised seconds: five checks, zero failures, two errors, zero skips
+    (`target/docker-ui/run-5FIxcN/`). Minimap pointer tracing recorded x=50690
+    in a 900px window after a raw canvas snapshot. The snapshot helper now
+    pins the root's preferred size to the actual scene and restores layout,
+    matching the existing scene-snapshot safeguard. TC188/03 finishes its
+    keyboard colony-navigation journey through the existing Escape action;
+    the intermittent undelivered back-button click remains unexplained.
+    The unsuccessful generic ColonyScreen click/wait change was removed.
+16. Focused verification repeats as `20261114T113336Z-e3f87cb4c30c`,
+    supervisor PID 51689, timeout 1,200 seconds, selecting TC196/02,
+    TC188/03 and PageVerificationContractTest. Production sources remain
+    those covered by the passing repair model phase. Targeted acceptance,
+    fixed smoke, review and publication remain pending.
+
+17. Focused run `20261114T113336Z-e3f87cb4c30c` completed in 77.810
+    supervised seconds: five checks, one failure, zero errors/skips
+    (`target/docker-ui/run-zWwSLb/`). TC196/02 and all three source-contract
+    checks passed; TC188/03 failed to return from the colony using Escape.
+    Thus the snapshot repair is verified for the minimap, but substituting
+    Escape did not resolve the colony input problem and was reverted.
+18. Diagnostic run `20261114T113535Z-3877ac0eb0c4`, supervisor PID 52145,
+    timeout 1,200 seconds, selects TC188/03 and PageVerificationContractTest.
+    It explicitly verifies that the colony dropdown closed and records
+    showing/focused windows and root versus scene dimensions before the
+    original back-button click. No production sources changed; acceptance
+    remains pending.
+
+19. Diagnostic `20261114T113535Z-3877ac0eb0c4` failed in 59.698
+    supervised seconds: four checks, one failure, zero errors/skips
+    (`target/docker-ui/run-Z7bTHX/`). The explicit dropdown-closed check
+    passed and colony root/scene both measured 900x700. Two showing Stage
+    windows were recorded, only one focused. Run
+    `20261114T113717Z-22a9bda1530b` (PID 52465, timeout 1,200 seconds)
+    repeats that selection with window-label diagnostics to identify the
+    second stage before changing input handling. Acceptance remains pending.
+
+20. Diagnostic `20261114T113717Z-22a9bda1530b` passed four checks with
+    zero failures/errors/skips in 59.731 supervised seconds
+    (`target/docker-ui/run-Sju2lD/`). Only the main colony window was showing
+    and focused; the earlier second stage did not reproduce, so its cause
+    remains unconfirmed. This is not yet acceptance of the whole change.
+21. Full targeted selection (TC196, TC188, TC116, TC118 and source contract,
+    26 checks) dispatched as `20261114T113852Z-c327bcc5070e`, supervisor
+    PID 53030, timeout 3,600 seconds. Window diagnostics remain enabled to
+    identify the intermittent extra stage if it recurs. Fixed smoke and
+    final review remain pending; no publication is claimed.
+
+22. Full targeted run `20261114T113852Z-c327bcc5070e` passed all **26
+    tests**, zero failures/errors/skips, in 420.130 supervised seconds
+    (3,600-second watchdog; this was not the budgeted smoke phase).
+    Reports/screenshots: `target/docker-ui/run-qtFsS8/`. Reviewed wide-map
+    and low-planner images confirm the panel alignment, irregular outline,
+    map beyond the panel and persistent minimap. The extra window did not
+    recur; historical diagnostic failures remain failed evidence.
+23. Temporary ColonyScreen console diagnostics were removed, retaining
+    the normal JavaFX event wait after the back-button click. The affected
+    TC188/TC116/TC118 classes plus source contract are rerun as
+    `20261114T114619Z-707c2bf69407`, supervisor PID 54001, timeout 3,600
+    seconds. TC196 and production sources are unchanged from their passing
+    selections. Smoke and final acceptance remain pending.
+
+24. Post-diagnostic targeted run `20261114T114619Z-707c2bf69407` passed
+    **19 tests**, zero failures/errors/skips, in 358.956 supervised seconds
+    (`target/docker-ui/run-vlQgY5/`). Together with unchanged TC196's seven
+    passing tests in `run-qtFsS8`, this covers the final targeted selection.
+    Documentation checks passed: 14 tooling tests, zero unexplained former-name
+    occurrences and strict MkDocs (6.68 seconds). Final diff review retained
+    the complete gameplay assertions and the extra dropdown-closed check;
+    all temporary console diagnostics were removed.
+25. Fixed smoke dispatched as `20261114T115245Z-ddb0cddaa364`, supervisor
+    PID 54448, runner timeout 480 seconds and acceptance budget 420 seconds.
+    Local acceptance and commit/push remain pending its complete report.
+
+26. Smoke `20261114T115245Z-ddb0cddaa364` failed in 260.690 supervised
+    seconds (precommit group 256.427 seconds, within the 420-second budget):
+    **21 tests, zero failures, one error, zero skips**. Reports remain in
+    `target/verification/run-ro6o4os6/`. TC07's second colony opening received
+    only one native mouse press, so no double-click opened the colony; all
+    other smoke checks passed. This is a UI execution failure, not a timeout.
+27. The map colony-opening helper now sends its two native clicks in separate
+    FX interactions with a 60ms delivery interval rather than four native
+    press/release calls in one FX interaction. Production sources and all
+    goods/production assertions remain unchanged. Focused TC07 plus source
+    contract dispatched as `20261114T115759Z-66347c285780`, supervisor
+    PID 55230, timeout 1,200 seconds. Smoke acceptance remains pending.
+
+28. Focused repair run `20261114T115759Z-66347c285780` passed **five
+    checks**, zero failures/errors/skips, in 87.631 supervised seconds
+    (`target/docker-ui/run-VRPty6/`). The method wildcard selected both TC07
+    production scenarios plus three source-contract checks. The two targeted
+    route classes that also call `openColonyAt` are rerun as
+    `20261114T115942Z-8d4c9fe31213`, supervisor PID 55673, timeout 1,800
+    seconds, before repeating the fixed smoke selection.
+
+29. Route rerun `20261114T115942Z-8d4c9fe31213` passed **13 tests**,
+    zero failures/errors/skips, in 305.196 supervised seconds
+    (`target/docker-ui/run-YLQv9B/`). The final double-click helper is covered
+    by TC07, TC116 and TC118; other targeted results remain applicable.
+30. Fixed smoke repeats as `20261114T120501Z-0546ade4c49a`, supervisor
+    PID 56362, runner timeout 480 seconds, acceptance budget 420 seconds.
+    No further executable changes were made. Commit/push remain pending.
+
+31. Final fixed smoke `20261114T120501Z-0546ade4c49a` passed **21 tests
+    in 12 reports**, zero failures/errors/skips. Precommit took 254.620
+    seconds, complete verification 257.965 seconds (258.109 supervised),
+    within the 420-second budget. Evidence: `target/verification/run-lo2ex28o/`.
+32. Local acceptance is complete for the floating-panel change based on
+    `525caa78b42019498272e9d699b79f1e4b30f8d7`: 5,134 model/JUnit tests,
+    the 26 targeted UI/support checks covered by the passing unchanged
+    selections above, and 21 fixed smoke checks. The final review checked
+    shared formatting, full-width rendering versus unobscured camera focus,
+    panel input containment, low-window minimap/scroll behavior and saved
+    screenshots. The earlier intermittent extra window was not reproduced
+    in the passing final selections and has no confirmed root cause.
+    Historical failures remain retained. This is local acceptance, not full
+    regression or evidence of a published game distribution.
+
 ## Depot spacing and help — 2026-11-14
 
 1. Colony cargo/transfer journeys: stable carrier icons across selection and

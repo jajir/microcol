@@ -76,8 +76,14 @@ public final class WorldMinimapPage extends AbstractScreen {
     }
 
     public void movePointer(final double xFraction, final double yFraction) {
-        getRobot().moveTo(node("worldMinimap")
-                .localToScreen(minimapPoint(xFraction, yFraction)));
+        final Point2D[] target = new Point2D[1];
+        getRobot().interact(() -> {
+            final Node map = node("worldMinimap");
+            map.getScene().getRoot().applyCss();
+            map.getScene().getRoot().layout();
+            target[0] = map.localToScreen(minimapPoint(xFraction, yFraction));
+        });
+        getRobot().moveTo(target[0]);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -225,6 +231,25 @@ public final class WorldMinimapPage extends AbstractScreen {
         });
     }
 
+    private WritableImage snapshotCanvas(final Canvas canvas,
+            final SnapshotParameters parameters) {
+        final Region root = (Region) canvas.getScene().getRoot();
+        final double width = canvas.getScene().getWidth();
+        final double height = canvas.getScene().getHeight();
+        final double preferredWidth = root.getPrefWidth();
+        final double preferredHeight = root.getPrefHeight();
+        try {
+            // Node snapshots otherwise autosize the map root to its 100000px
+            // preference.
+            root.setPrefSize(width, height);
+            return canvas.snapshot(parameters, null);
+        } finally {
+            root.setPrefSize(preferredWidth, preferredHeight);
+            root.resize(width, height);
+            root.layout();
+        }
+    }
+
     public void verifyTerrain(final Location location,
             final String expectedColor, final boolean explored)
             throws Exception {
@@ -239,10 +264,11 @@ public final class WorldMinimapPage extends AbstractScreen {
                                     / getModel().getMap().getMaxLocationX(),
                             (location.getY() - .5)
                                     / getModel().getMap().getMaxLocationY());
-                    final Point2D origin = canvas.localToScene(0, 0);
-                    return snapshotScene(canvas.getScene()).getPixelReader()
-                            .getColor((int) (origin.getX() + p.getX()),
-                                    (int) (origin.getY() + p.getY()))
+                    // Check painted geography independently of scaled sampling
+                    // and the viewport marker drawn above this canvas.
+                    return snapshotCanvas(canvas, new SnapshotParameters())
+                            .getPixelReader()
+                            .getColor((int) p.getX(), (int) p.getY())
                             .equals(Color.web(expectedColor));
                 }).get());
 
@@ -253,8 +279,8 @@ public final class WorldMinimapPage extends AbstractScreen {
         getRobot().interact(() -> {
             final Node map = node("worldMinimap");
             final Bounds b = map.localToScene(map.getLayoutBounds());
-            assertEquals(220, b.getWidth(), .01);
-            assertEquals(180, b.getHeight(), .01);
+            assertTrue(b.getWidth() > 0 && b.getWidth() <= 220.01);
+            assertEquals(220.0 / 180, b.getWidth() / b.getHeight(), .01);
             assertTrue(b.getMinY() >= 0
                     && b.getMaxY() < map.getScene().getHeight());
             final Node tile = node("tileImage");
@@ -277,11 +303,10 @@ public final class WorldMinimapPage extends AbstractScreen {
                             .noneMatch(label -> accessibleName
                                     .equals(((Label) label).getText())),
                     "No heading text remains in the right panel");
-            // The map starts at the right panel's normal 12 px top padding,
-            // with no extra space of its own.
-            assertEquals(12, ((Region) panel).getPadding().getTop(), .01);
-            final Bounds side = panel.localToScene(panel.getLayoutBounds());
-            assertEquals(side.getMinY() + 12, b.getMinY(), .5);
+            final Node frame = node("floatingMapPanel");
+            final Bounds side = frame.localToScene(frame.getLayoutBounds());
+            assertTrue(b.getMinY() >= side.getMinY() + 10);
+            assertTrue(b.getMaxX() <= side.getMaxX() - 10);
             assertTrue(
                     getNodeFinder().lookup("#minimapHint").queryAll().isEmpty(),
                     "The instruction is accessible help, not a visible footer");
@@ -312,7 +337,7 @@ public final class WorldMinimapPage extends AbstractScreen {
             final Canvas canvas = (Canvas) node("minimapTerrain");
             final SnapshotParameters params = new SnapshotParameters();
             params.setFill(Color.TRANSPARENT);
-            final WritableImage image = canvas.snapshot(params, null);
+            final WritableImage image = snapshotCanvas(canvas, params);
             for (int x = 0; x < image.getWidth(); x++) {
                 assertEquals(0,
                         image.getPixelReader().getColor(x, 1).getOpacity(),
@@ -332,6 +357,15 @@ public final class WorldMinimapPage extends AbstractScreen {
     }
 
     public void verifyStatusMessage(final String expected) {
+        try {
+            WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
+                    () -> WaitForAsyncUtils
+                            .asyncFx(() -> expected.equals(
+                                    ((Label) node("statusBarLabel")).getText()))
+                            .get());
+        } catch (Exception failure) {
+            // Keep the assertion below reporting the actual visible message.
+        }
         getRobot().interact(() -> {
             final Label status = (Label) node("statusBarLabel");
             assertEquals(expected, status.getText());
@@ -403,4 +437,91 @@ public final class WorldMinimapPage extends AbstractScreen {
             }
         }
     }
+
+    public void togglePlanner() {
+        getRobot().clickOn(node("tradeRoutePlanningToggle"));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void scrollPanel(final String scrollId) {
+        getRobot().moveTo(node(scrollId)).scroll(20,
+                javafx.geometry.VerticalDirection.DOWN);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void clickPanelBorder() {
+        final Bounds b = node("floatingMapPanel")
+                .localToScreen(node("floatingMapPanel").getLayoutBounds());
+        getRobot().clickOn(b.getMinX() + 5, b.getCenterY());
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void centerSelection() {
+        getRobot().clickOn(node("center"));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyFloatingPanel(final boolean planner) {
+        getRobot().interact(() -> {
+            final Region panel = (Region) node("floatingMapPanel");
+            final Bounds b = panel.localToScene(panel.getLayoutBounds());
+            final Node canvas = node("canvas");
+            final Bounds map = canvas.localToScene(canvas.getLayoutBounds());
+            final double width = panel.getScene().getWidth();
+            assertEquals(width, map.getWidth(), 1);
+            assertEquals(260, b.getWidth(), 1);
+            assertEquals((width + Math.min(width, 1440)) / 2, b.getMaxX(), 1);
+            assertEquals(16, b.getMinY() - map.getMinY(), 1);
+            assertEquals(16, map.getMaxY() - b.getMaxY(), 1);
+            assertNotNull(panel.getShape());
+            assertEquals(Color.BLACK,
+                    panel.getBorder().getStrokes().get(0).getTopStroke());
+            assertEquals(2,
+                    panel.getBorder().getStrokes().get(0).getWidths().getTop());
+            final Node mini = node("worldMinimap");
+            final Bounds m = mini.localToScene(mini.getLayoutBounds());
+            assertTrue(m.getHeight() > 60 && m.getWidth() <= 220.01,
+                    "Minimap remains usable in " + b + ": " + m);
+            assertTrue(b.contains(m));
+            final javafx.scene.control.ScrollPane scroll = (javafx.scene.control.ScrollPane) node(
+                    planner ? "tradeRoutePlanningScroll" : "mapDetailsScroll");
+            assertEquals(javafx.scene.control.ScrollPane.ScrollBarPolicy.NEVER,
+                    scroll.getHbarPolicy());
+            final Bounds content = scroll
+                    .localToScene(scroll.getLayoutBounds());
+            assertTrue(m.getMaxY() < content.getMinY());
+            assertTrue(b.contains(content));
+        });
+    }
+
+    public void verifyCameraUnchanged() {
+        getRobot().interact(() -> assertEquals(savedView, view().getTopLeft()));
+    }
+
+    public void verifySelectionCenteredOutsidePanel() throws Exception {
+        WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
+                () -> WaitForAsyncUtils.asyncFx(() -> {
+                    final Location selected = getContext().getClassFromGuice(
+                            org.akropia.gui.screen.game.gamepanel.SelectedTileManager.class)
+                            .getSelectedTile().orElseThrow();
+                    final Point point = new org.akropia.gui.screen.game.gamepanel.Area(
+                            view()).convertToCanvasPoint(selected);
+                    return Math.abs(
+                            point.getX() - view().getFocusWidth() / 2) <= 1;
+                }).get());
+        getRobot().interact(() -> {
+            final Location selected = getContext().getClassFromGuice(
+                    org.akropia.gui.screen.game.gamepanel.SelectedTileManager.class)
+                    .getSelectedTile().orElseThrow();
+            final Point point = new org.akropia.gui.screen.game.gamepanel.Area(
+                    view()).convertToCanvasPoint(selected);
+            final Node canvas = node("canvas");
+            final Point2D screen = canvas.localToScene(point.getX() + 22,
+                    point.getY() + 22);
+            final Node panel = node("floatingMapPanel");
+            assertFalse(panel.localToScene(panel.getLayoutBounds())
+                    .contains(screen));
+        });
+    }
+
 }

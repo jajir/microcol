@@ -51,7 +51,7 @@ public class TC_116_F107_trade_route_creation_test extends AbstractAkropiaTest {
         ColonyScreen colony = game.openColonyAt(Location.of(24, 16),
                 "New Amsterdam");
         final TradeRouteDialog route = new TradeRouteDialog(getContext());
-        route.captureDialog("tradeRouteOpen", "trade-route-colony.png");
+        route.captureDialog("colonyName", "trade-route-colony.png");
         route.open();
         route.verifyOpenedFor("New Amsterdam");
         route.verifyKind(TradeRouteKind.LAND);
@@ -207,7 +207,7 @@ public class TC_116_F107_trade_route_creation_test extends AbstractAkropiaTest {
         final ColonyScreen colony = game.openColonyAt(Location.of(24, 16),
                 "New Amsterdam");
         final TradeRouteDialog route = new TradeRouteDialog(getContext());
-        route.captureDialog("tradeRouteOpen", "trade-route-colony-czech.png");
+        route.captureDialog("colonyName", "trade-route-colony-czech.png");
         route.open();
         route.verifyTitle("Obchodní trasa z kolonie New Amsterdam");
         route.verifyMessage("Zadejte název trasy.");

@@ -29,9 +29,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.RowConstraints;
 
 /**
  * Draw right panel containing info about selected tile and selected unit.
@@ -55,6 +53,7 @@ public final class RightPanelView implements JavaFxComponent {
     private final LocalizationHelper localizationHelper;
 
     private final GridPane gridPane;
+    private final ScrollPane scrollPaneGamePanel;
 
     private final GameModelController gameModelController;
 
@@ -62,7 +61,7 @@ public final class RightPanelView implements JavaFxComponent {
     public RightPanelView(final I18n i18n, final UnitsPanel unitsPanel,
             final LocalizationHelper localizationHelper,
             final GameModelController gameModelController,
-            final TilePainter tilePainter, final WorldMinimap minimap,
+            final TilePainter tilePainter,
             final SelectedUnitManager selectedUnitManager) {
         this.selectedUnitManager = selectedUnitManager;
         this.i18n = Preconditions.checkNotNull(i18n);
@@ -77,32 +76,35 @@ public final class RightPanelView implements JavaFxComponent {
         gridPane.setId("rightPanel");
         gridPane.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL);
 
-        gridPane.add(minimap, 0, 0, 2, 1);
-
         labelOnMove = new Label();
-        gridPane.add(labelOnMove, 0, 1, 2, 1);
+        gridPane.add(labelOnMove, 0, 0, 2, 1);
 
         final Pane tileImagePane = new Pane(tilePainter.getCanvas());
         tileImagePane.setId("tileImage");
-        gridPane.add(tileImagePane, 0, 2);
+        gridPane.add(tileImagePane, 0, 1);
 
         tileName = new Label();
         tileName.setId("tileName");
         tileName.setMinHeight(Region.USE_PREF_SIZE);
-        gridPane.add(tileName, 1, 2);
+        gridPane.add(tileName, 1, 1);
 
         unitsLabel = new Label();
-        gridPane.add(unitsLabel, 0, 3);
+        gridPane.add(unitsLabel, 0, 2);
 
-        final ScrollPane scrollPaneGamePanel = new ScrollPane(
-                unitsPanel.getNode());
-        RowConstraints scrollPaneRow = new RowConstraints();
-        scrollPaneRow.setVgrow(Priority.ALWAYS);
-        scrollPaneRow.fillHeightProperty().set(true);
-        gridPane.getRowConstraints().addAll(new RowConstraints(),
-                new RowConstraints(), new RowConstraints(),
-                new RowConstraints(), scrollPaneRow);
-        gridPane.add(scrollPaneGamePanel, 0, 4, 2, 1);
+        gridPane.add(unitsPanel.getNode(), 0, 3, 2, 1);
+        tileName.setWrapText(true);
+        labelOnMove.setWrapText(true);
+        gridPane.setMinWidth(0);
+        scrollPaneGamePanel = new ScrollPane(gridPane);
+        scrollPaneGamePanel.setId("mapDetailsScroll");
+        scrollPaneGamePanel.setFitToWidth(false);
+        gridPane.prefWidthProperty()
+                .bind(scrollPaneGamePanel.widthProperty().subtract(20));
+        gridPane.setMaxWidth(Region.USE_PREF_SIZE);
+        scrollPaneGamePanel.setMinHeight(0);
+        scrollPaneGamePanel.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        // Keep the content width stable when the scrollbar appears.
+        scrollPaneGamePanel.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
     }
 
@@ -236,8 +238,8 @@ public final class RightPanelView implements JavaFxComponent {
     }
 
     @Override
-    public GridPane getContent() {
-        return gridPane;
+    public ScrollPane getContent() {
+        return scrollPaneGamePanel;
     }
 
 }
