@@ -218,6 +218,59 @@ public class ScreenTurnReport extends AbstractScreen {
         return EuropePortScreen.of(getContext());
     }
 
+    public void verifyMapAction(final org.akropia.model.Location at,
+            final String expectedText) {
+        final Button button = getMapButton(at);
+        assertEquals(expectedText, button.getText());
+        assertTrue(button.isVisible() && !button.isDisabled());
+    }
+
+    public GamePage showOnMap(final org.akropia.model.Location at) {
+        getRobot().clickOn(getMapButton(at), MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+        return GamePage.of(getContext());
+    }
+
+    private Button getMapButton(final org.akropia.model.Location at) {
+        return getNodeFinder()
+                .lookup("#turnEventShowOnMap-" + at.getX() + "-" + at.getY())
+                .queryAs(Button.class);
+    }
+
+    private javafx.scene.control.ScrollPane reportScroll() {
+        return getNodeFinder().lookup(".turn-report-screen .screen-scroll")
+                .queryAs(javafx.scene.control.ScrollPane.class);
+    }
+
+    public void scrollReport(final double position) {
+        getRobot().interact(() -> reportScroll().setVvalue(position));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyScrollPosition(final double expected) {
+        assertEquals(expected, reportScroll().getVvalue(), 0.01);
+        assertTrue(reportScroll().getContent().getBoundsInLocal()
+                .getHeight() > reportScroll().getViewportBounds().getHeight(),
+                "Fixture must exercise an overflowing report");
+    }
+
+    public void verifyReportAppearance() {
+        final javafx.scene.layout.Region root = getNodeFinder()
+                .lookup(".turn-report-screen")
+                .queryAs(javafx.scene.layout.Region.class);
+        assertEquals(javafx.scene.paint.Color.web("#FFF9EC"),
+                root.getBackground().getFills().get(0).getFill());
+        for (TurnEventPanel panel : getEventPanels()) {
+            assertTrue(
+                    panel.getBorder() == null
+                            || panel.getBorder().getStrokes().isEmpty(),
+                    "Notices must not have separators");
+            final Label message = (Label) panel.getChildren().get(1);
+            assertTrue(message.isWrapText());
+            assertTrue(message.getWidth() <= panel.getWidth());
+        }
+    }
+
     private Button getOpenEuropeButton() {
         return getNodeFinder().lookup("#turnEventOpenEurope")
                 .queryAs(Button.class);

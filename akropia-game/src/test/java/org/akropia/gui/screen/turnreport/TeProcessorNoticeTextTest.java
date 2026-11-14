@@ -28,6 +28,32 @@ import org.akropia.model.turnevent.TurnEventTradeRouteTransfer;
  */
 class TeProcessorNoticeTextTest {
 
+    @Test
+    void plowedNoticeKeepsRecordedLocationInBothLanguages() {
+        final org.akropia.model.Location at = org.akropia.model.Location.of(66,
+                17);
+        final TurnEventPo po = new TurnEventPo();
+        po.setType("TurnEventFieldPlowed");
+        po.setPlayerName("Dutch");
+        po.setFieldPlowedUnitId(138);
+        po.setFieldPlowedUnitType(UnitType.COLONIST);
+        po.setFieldPlowedX(66);
+        po.setFieldPlowedY(17);
+        final TurnEvent event = org.akropia.model.turnevent.TurnEventFieldPlowed
+                .tryLoad(po);
+        for (Locale locale : new Locale[] { Locale.ROOT, CZECH }) {
+            final TeItemSimple item = new TeProcessorFieldPlowed(i18n(locale))
+                    .apply(event);
+            assertEquals(at, item.getLocation().orElseThrow());
+            assertTrue(item.getMessage().contains("66, 17"));
+        }
+        assertTrue(new TeItemSimple("No place").getLocation().isEmpty());
+        final TeItemColony forest = new TeItemColony("Forest near colony", 7,
+                at);
+        assertEquals(at, forest.getLocation().orElseThrow());
+        assertEquals(7, forest.getColonyId());
+    }
+
     private static final Locale CZECH = new Locale("cs", "CZ");
 
     private static I18n i18n(final Locale locale) {

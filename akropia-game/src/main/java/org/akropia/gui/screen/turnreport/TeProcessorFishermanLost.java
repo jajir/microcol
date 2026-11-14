@@ -25,6 +25,6 @@ public final class TeProcessorFishermanLost extends AbstractTeProcessor
                         : TurnEvents.fishermanLostLand,
                 lost.getUnitId(), lost.getColonyName(),
                 lost.getLocation().getX(), lost.getLocation().getY()),
-                lost.getColonyId());
+                lost.getColonyId(), lost.getLocation());
     }
 }

@@ -36,4 +36,5 @@
 	
 <entry key="fishermanLostCargo">Rybář č. %s kolonie %s se utopil na (%s, %s): na vítězné lodi pro něj nebylo místo.</entry>
 <entry key="fishermanLostLand">Rybář č. %s kolonie %s se utopil na (%s, %s): ztratil zázemí pro rybolov a nebyla dostupná volná pevnina.</entry>
+    <entry key="showOnMap">Zobrazit na mapě</entry>
 </properties>

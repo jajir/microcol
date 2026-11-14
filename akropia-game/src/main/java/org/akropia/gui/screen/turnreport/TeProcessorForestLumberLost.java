@@ -30,10 +30,11 @@ public final class TeProcessorForestLumberLost extends AbstractTeProcessor
             return new TeItemColony(
                     getI18n().get(TurnEvents.forestLumberLostFull, x, y, amount,
                             lost.getColonyName().orElseThrow()),
-                    lost.getColonyId().get());
+                    lost.getColonyId().get(), lost.getLocation());
         }
         return new TeItemSimple(getI18n()
-                .get(TurnEvents.forestLumberLostNoColony, x, y, amount));
+                .get(TurnEvents.forestLumberLostNoColony, x, y, amount),
+                lost.getLocation());
     }
 
 }

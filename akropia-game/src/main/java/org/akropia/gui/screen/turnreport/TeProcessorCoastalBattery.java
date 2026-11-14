@@ -22,9 +22,10 @@ public final class TeProcessorCoastalBattery extends AbstractTeProcessor
     public TeItemSimple apply(TurnEvent event) {
         if (event instanceof TurnEventCoastalBattery) {
             final TurnEventCoastalBattery shot = (TurnEventCoastalBattery) event;
-            return new TeItemSimple(
+            return new TeItemColony(
                     getI18n().get(shot.isHit() ? CoastalBatteryText.hit
-                            : CoastalBatteryText.miss));
+                            : CoastalBatteryText.miss),
+                    shot.getColonyId());
         }
         return null;
     }

@@ -1,5 +1,12 @@
+.in-game-page.turn-report-screen,
+.in-game-page.turn-report-screen .screen-scroll,
+.in-game-page.turn-report-screen .screen-scroll > .viewport {
+    -fx-background-color: #FFF9EC;
+}
+.in-game-page.turn-report-screen .report-content {
+    -fx-border-width: 0;
+}
 .turnEventPanel { -fx-spacing: 16; }
-.turn-event { -fx-padding: 16 0; -fx-border-color: #A49B86; -fx-border-width: 0 0 1 0; }
+.turn-event { -fx-padding: 16 0; -fx-spacing: 10; }
 .turn-event .label { -fx-wrap-text: true; }
-.turn-event-action { -fx-max-width: 300; }
-.turn-event .icon { -fx-min-width: 20; -fx-min-height: 20; -fx-background-image: url('../images/bullet.png'); -fx-background-repeat: no-repeat; }
+.turn-event-actions { -fx-hgap: 10; -fx-vgap: 10; }

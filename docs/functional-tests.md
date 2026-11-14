@@ -1,3 +1,68 @@
+## Turn report navigation — 2026-11-14
+
+1. Scope: UC-019/020/043/114/119, uniform report background, no notice
+   separators or outer border, wrapping action rows, owned-colony detail,
+   recorded-location map navigation, and scroll retention within one event set.
+   Existing colony ownership validation and Europe actions remain in use.
+2. Model coverage: `TeProcessorNoticeTextTest` checks recorded plowing location
+   in English/Czech and optional location alongside colony identity. Targeted
+   Docker/Xvfb selection: TC18/09, full TC180, TC203 (Europe navigation),
+   and `PageVerificationContractTest`. TC180/04 uses 24 notices and verifies
+   the bottom scroll position after map and colony visits; TC18/09 also
+   verifies completed work and Continue.
+3. First model attempt `20261114T213602Z-e4c548ba3e86` stopped during
+   preparation: labelled-container listing timed out after 20 seconds,
+   total supervised time 22.087 seconds, test command never started.
+   Subsequent server-version and container-list probes completed in 0.03/0.02
+   seconds; this does not establish the cause of the earlier timeout.
+4. Attempt `20261114T213707Z-51b238221967` reached compilation but failed
+   because the new test fixture called a package-private event constructor;
+   no tests ran (34.562 supervised seconds). Test setup now uses the saved
+   event loader and the existing public event provider. Failed evidence stays
+   in `target/verification/run-jgu_l00f/`.
+5. The existing center icon has a genuine vector source in
+   `akropia-game/src/graphics/game-toolbar.svg`, without embedded images.
+   `rsvg-convert -z 2` reproduced the runtime PNG byte for byte. No artwork
+   or game rules changed.
+6. Model acceptance `20261114T213826Z-2a7c94a7d725` passed **5,135 tests**
+   in 395 complete XML reports, zero failures/errors/skips (153.424 supervised
+   seconds, 600-second limit). Evidence: `target/verification/run-0z26_xrz/`.
+   The only later Java edit moved a test comment; executable source is unchanged.
+7. First UI attempt `20261114T214123Z-ffe3edbee008` failed before tests in
+   test compilation (41.136 supervised seconds): TC180's new fixture called
+   `getRobot()` instead of the test context's accessor. Corrected test setup;
+   the game and model-test source remain unchanged, so the passing model phase
+   is reused for that test-only correction.
+8. UI attempt `20261114T214231Z-b0e50b732e7b` ran all 11 selected tests:
+   10 passed, TC180/04 failed because reopening reset scroll to zero.
+   Evidence: `target/docker-ui/run-mHWG1i/`, 166.099 supervised seconds.
+   Restoration now waits for the report to attach to the scene and focuses
+   the report before restoring scroll. This game-code repair requires a fresh
+   model phase, then the same UI selection and smoke. Screenshot inspection
+   confirmed uniform background, readable actions and no notice separators.
+9. After the scroll repair, final-source model run
+   `20261114T214634Z-cdeb5de91493` / `target/verification/run-bt_o_6rc/`
+   passed **5,135 tests**, 395 complete XML reports, zero failures/errors/skips
+   (158.899 supervised seconds, 600-second limit).
+10. Final-source targeted UI run `20261114T214930Z-8baeaa25f5e6` /
+    `target/docker-ui/run-Ud24Sk/` passed **11 tests** in four complete XML
+    reports, zero failures/errors/skips (171.963 supervised seconds,
+    1,800-second limit). TC180/04 now passes both map and colony return paths.
+    Its `akropia-test/warehouse-qa/turn-report-navigation.png` was visually
+    reviewed at 900 × 750: matching background, no separators, visible labels
+    and both colony actions. TC18/09 covers the Czech map action.
+11. Fixed smoke/support run `20261114T215237Z-4845e3263431` /
+    `target/verification/run-ugbyfmex/` passed **21 tests** in 12 complete XML
+    reports, zero failures/errors/skips; 263.749 supervised seconds, within
+    the 420-second acceptance budget. All phases cover the same final game
+    source based on `603405e5`; failures above remain failed historical attempts.
+12. Shared Eclipse formatting and diff review completed. All 14 documentation
+    consistency tests, naming audit (zero unexplained occurrences), and strict
+    MkDocs build passed; logs: `target/turn-report-navigation/`. Unrelated
+    backlog edits are excluded. No remote CI, Pages or game distribution was
+    inspected; this records local acceptance only. No remote CI or publication
+   verification requested.
+
 ## Depot focus border — 2026-11-14
 
 1. Remove the colony carrier focus-only dashed border. Preserve the selected

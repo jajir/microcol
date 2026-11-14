@@ -36,4 +36,5 @@
 
 <entry key="fishermanLostCargo">Fisherman #%s of %s drowned at (%s, %s): the victorious ship had no room for him.</entry>
 <entry key="fishermanLostLand">Fisherman #%s of %s drowned at (%s, %s): fishing support was lost and no free land was available.</entry>
+    <entry key="showOnMap">Show on map</entry>
 </properties>

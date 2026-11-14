@@ -27,7 +27,7 @@ public final class TeProcessorFieldPlowed extends AbstractTeProcessor
         return new TeItemSimple(getI18n().get(TurnEvents.fieldPlowed,
                 getI18n().get(UnitTypes.getUnitName(plowed.getUnitType())),
                 plowed.getUnitId(), plowed.getLocation().getX(),
-                plowed.getLocation().getY()));
+                plowed.getLocation().getY()), plowed.getLocation());
     }
 
 }

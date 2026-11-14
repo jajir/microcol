@@ -1,3 +1,16 @@
+## UC-019/020/043/114/119: navigace z hlášení — 14. listopadu 2026
+
+1. Z hlášení o dokončené orbě hráč přejde na zaznamenané políčko; tím
+   nevydává další rozkaz. Zprávy o vlastní kolonii nabízejí její existující
+   detail a zobrazení známé polohy na mapě. Pravidla ovládání a návratu jsou
+   v [UX přehledu](ux.md#prehled-udalosti-14-listopadu-2026).
+2. `TC_18_F01_plow_field_test.TC_09` ověřuje české tlačítko mapy, dokončené
+   pole a Continue. `TC_180_F204_project_and_overflow_notices_test.TC_01–04`
+   pokrývá město, odmítnutí ztracené kolonie, zachované zprávy, vzhled a
+   posunutí dlouhého seznamu po návštěvě mapy i města.
+3. Výsledky a rozsah místní přejímky uvádí
+   [funkční evidence](functional-tests.md#turn-report-navigation-2026-11-14).
+
 ## UC-043/114/119: výchozí písmo a nečinná výstavba — 14. listopadu 2026
 1. [UX kontrakt](ux.md#prubeh-stavby-ve-meste-10-listopadu-2026) určuje společné výchozí písmo a návod místo pruhů pouze bez vybrané stavby. Vybraná pozastavená stavba zachovává práci i nástroje; hláška o čekání na kladiva mizí.
 2. `TC_54_F45_shared_hammers_test` ověřuje prázdnou frontu, průběh a nulovou produkci; `TC_195_F227_colony_layout_test.TC_06_overviews_reorder_and_inline_editors` kontroluje návod, dědění velikosti písma a cestu do editoru. [Výsledek ověření](functional-tests.md#colony-font-empty-construction-2026-11-14).

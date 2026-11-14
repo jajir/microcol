@@ -26,18 +26,23 @@ public final class TeProcessorNativeConquest extends AbstractTeProcessor
     public TeItemSimple apply(TurnEvent event) {
         if (event instanceof TurnEventNativeConquest) {
             final TurnEventNativeConquest conquest = (TurnEventNativeConquest) event;
-            return new TeItemSimple(getI18n().get(Loc.nativeConquestTurnEvent,
-                    getI18n().get(StatusBarMessageService
-                            .nationLabel(conquest.getNation()))));
+            return new TeItemSimple(
+                    getI18n().get(Loc.nativeConquestTurnEvent,
+                            getI18n().get(StatusBarMessageService
+                                    .nationLabel(conquest.getNation()))),
+                    conquest.getLocation());
         }
         if (event instanceof TurnEventNativeConquestLoss) {
             final TurnEventNativeConquestLoss loss = (TurnEventNativeConquestLoss) event;
-            return new TeItemSimple(getI18n().get(
-                    loss.isPupil() ? Loc.nativeConquestLossPupil
+            return new TeItemSimple(
+                    getI18n().get(loss.isPupil()
+                            ? Loc.nativeConquestLossPupil
                             : Loc.nativeConquestLossMissionary,
-                    getI18n().get(UnitTypes.getUnitName(loss.getUnitType())),
-                    getI18n().get(StatusBarMessageService
-                            .nationLabel(loss.getNation()))));
+                            getI18n().get(
+                                    UnitTypes.getUnitName(loss.getUnitType())),
+                            getI18n().get(StatusBarMessageService
+                                    .nationLabel(loss.getNation()))),
+                    loss.getLocation());
         }
         return null;
     }

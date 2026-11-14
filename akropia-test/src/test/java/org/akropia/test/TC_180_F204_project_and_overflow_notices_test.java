@@ -61,6 +61,8 @@ public class TC_180_F204_project_and_overflow_notices_test
         report.verifyEventMessageCount(DONE_NOTICE, 1);
         report.verifyEventMessageCount(WAITING_NOTICE, 0);
         report.verifyOpenColonyAction(COLONY_ID, "Open colony");
+        report.verifyMapAction(COLONY, "Show on map");
+        report.verifyReportAppearance();
 
         // Open colony changes nothing: the smithy stands and the tools are
         // used.
@@ -164,6 +166,53 @@ public class TC_180_F204_project_and_overflow_notices_test
         restored.verifyShown();
         restored.verifyOpenColonyActionAbsent(COLONY_ID);
         restored.verifyEventMessageCount(notice, 1);
+    }
+
+    /** Navigation preserves a long report and its scroll position. */
+    @Test
+    @Tag("local")
+    void TC_04_report_preserves_scroll_after_map_and_colony_visits()
+            throws Exception {
+        // Fill the report with recorded notices to exercise real scrolling.
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        getContext().getRobot().interact(() -> {
+            final org.akropia.model.Colony colony = getModel()
+                    .getColonyById(COLONY_ID).orElseThrow();
+            for (int i = 0; i < 23; i++) {
+                getModel().addTurnEvent(
+                        org.akropia.model.turnevent.TurnEventProvider
+                                .getFieldPlowed(colony.getOwner(),
+                                        getModel().getUnitById(4),
+                                        Location.of(i + 1, 1)));
+            }
+            getModel()
+                    .addTurnEvent(org.akropia.model.turnevent.TurnEventProvider
+                            .getFamineWillPlagueColony(colony.getOwner(),
+                                    colony));
+        });
+        ScreenTurnReport report = game.openTurnReport();
+        report.scrollReport(1);
+        report.verifyScrollPosition(1);
+        report.verifyReportAppearance();
+        report.captureDialog("closeButtonId", "turn-report-navigation.png");
+
+        // Visit the last notice's location, then return to the same list
+        // position.
+        game = report.showOnMap(COLONY);
+        game.verifyThatSelectedTileIs(COLONY);
+        report = game.openTurnReport();
+        report.verifyScrollPosition(1);
+        report.verifyNumberOfEvents(24);
+
+        // The existing colony detail returns through the map to the same
+        // report.
+        final ColonyScreen colony = report.openColonyWithMouse(COLONY_ID,
+                COLONY_NAME);
+        game = colony.close();
+        report = game.openTurnReport();
+        report.verifyScrollPosition(1);
+        report.verifyNumberOfEvents(24);
+        report.close();
     }
 
     /**

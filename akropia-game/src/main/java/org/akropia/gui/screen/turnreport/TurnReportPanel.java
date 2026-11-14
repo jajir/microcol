@@ -3,6 +3,13 @@ package org.akropia.gui.screen.turnreport;
 import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.image.ButtonIcon;
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+import org.akropia.model.Location;
+import org.akropia.model.turnevent.TurnEvent;
+import org.akropia.gui.event.CenterViewEvent;
+import org.akropia.gui.screen.game.gamepanel.SelectedTileManager;
+import org.akropia.gui.screen.game.gamepanel.ScrollToFocusedTile;
 
 import org.akropia.gui.Loc;
 import org.akropia.gui.event.model.GameModelController;
@@ -40,12 +47,18 @@ public final class TurnReportPanel implements GameScreen {
 
     private final EuropeOpeningRequest europeOpeningRequest;
 
+    private final SelectedTileManager selectedTileManager;
+    private Model previousModel;
+    private List<TurnEvent> previousEvents = List.of();
+
     @Inject
     TurnReportPanel(final I18n i18n,
             final GameModelController gameModelController,
             final TurnReportView turnReportView, final TeService teService,
             final EventBus eventBus,
-            final EuropeOpeningRequest europeOpeningRequest) {
+            final EuropeOpeningRequest europeOpeningRequest,
+            final SelectedTileManager selectedTileManager) {
+        this.selectedTileManager = selectedTileManager;
         this.europeOpeningRequest = Preconditions
                 .checkNotNull(europeOpeningRequest);
         this.gameModelController = Preconditions
@@ -60,6 +73,14 @@ public final class TurnReportPanel implements GameScreen {
 
     @Override
     public void beforeShow() {
+        final Model current = gameModelController.getModel();
+        final List<TurnEvent> events = current.getTurnEventsLocalizedMessages(
+                gameModelController.getHumanPlayer());
+        if (current != previousModel || !events.equals(previousEvents)) {
+            turnReportView.resetScrollPosition();
+        }
+        previousModel = current;
+        previousEvents = List.copyOf(events);
         turnEventsPanel.getChildren().clear();
         if (gameModelController.getModel().isTurnEventsMessagesEmpty(
                 gameModelController.getHumanPlayer())) {
@@ -73,16 +94,25 @@ public final class TurnReportPanel implements GameScreen {
         }
     }
 
-    private TurnEventPanel createEventPanel(final TeItem turnEvent,
+    private TurnEventPanel createEventPanel(final TeItemSimple turnEvent,
             final Model shownModel) {
+        final List<Button> actions = new ArrayList<>();
+        Optional<Location> location = turnEvent.getLocation();
         if (turnEvent instanceof TeItemColony) {
             final int colonyId = ((TeItemColony) turnEvent).getColonyId();
+            if (location.isEmpty()) {
+                location = shownModel.getColonyById(colonyId)
+                        .filter(Colony::isValid)
+                        .filter(colony -> gameModelController.getHumanPlayer()
+                                .isVisible(colony.getLocation()))
+                        .map(Colony::getLocation);
+            }
             if (findOwnedColony(shownModel, colonyId).isPresent()) {
                 final Button open = ActionButtons.button(ButtonIcon.COLONIES,
                         i18n.get(TurnEvents.openColony));
                 open.setId("turnEventOpenColony-" + colonyId);
                 open.setOnAction(event -> openColony(shownModel, colonyId));
-                return new TurnEventPanel(turnEvent, open);
+                actions.add(open);
             }
         }
         if (turnEvent instanceof TeItemEurope) {
@@ -90,9 +120,16 @@ public final class TurnReportPanel implements GameScreen {
                     i18n.get(TurnEvents.openEurope));
             open.setId("turnEventOpenEurope");
             open.setOnAction(event -> openEurope(shownModel));
-            return new TurnEventPanel(turnEvent, open);
+            actions.add(open);
         }
-        return new TurnEventPanel(turnEvent);
+        location.filter(shownModel.getMap()::isValid).ifPresent(at -> {
+            final Button map = ActionButtons.button(ButtonIcon.CENTER,
+                    i18n.get(TurnEvents.showOnMap));
+            map.setId("turnEventShowOnMap-" + at.getX() + "-" + at.getY());
+            map.setOnAction(event -> openMap(shownModel, at));
+            actions.add(map);
+        });
+        return new TurnEventPanel(turnEvent, actions.toArray(new Button[0]));
     }
 
     /**
@@ -108,6 +145,22 @@ public final class TurnReportPanel implements GameScreen {
             eventBus.post(new ShowScreenEvent(Screen.GAME));
         } else {
             eventBus.post(new ShowScreenEvent(Screen.EUROPE));
+        }
+    }
+
+    private void openMap(final Model shownModel, final Location at) {
+        if (!gameModelController.isGameModelReady()) {
+            return;
+        }
+        if (gameModelController.getModel() == shownModel
+                && shownModel.getMap().isValid(at)) {
+            selectedTileManager.setSelectedTile(at,
+                    ScrollToFocusedTile.smoothScroll);
+            eventBus.post(new ShowScreenEvent(Screen.GAME));
+            // Center even if this tile was already selected before the report.
+            eventBus.post(new CenterViewEvent());
+        } else {
+            eventBus.post(new ShowScreenEvent(Screen.GAME));
         }
     }
 

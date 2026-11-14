@@ -1,3 +1,22 @@
+## Přehled událostí — 14. listopadu 2026
+
+1. Přehled tahu používá stejné světlé pozadí jako záhlaví a stavový řádek.
+   Zprávy odděluje mezera, bez čar a vnějšího rámečku. Dlouhý text se zalamuje;
+   dostupné akce jsou pod zprávou a při nedostatku místa se také zalomí.
+2. „Open colony“ otevírá existující detail vlastní, dosud platné kolonie.
+   „Show on map“ / „Zobrazit na mapě“ se stávající ikonou centrování přepne
+   na mapu, vybere a vycentruje místo události; nevydává jednotce rozkaz.
+   Událost s kolonií a místem může nabídnout obě akce. Ztracené město nelze
+   otevřít; při změně hry se staré tlačítko vrací na aktuální mapu.
+3. Poloha pochází z uložené události (orba, ztráta dřeva, rybáře nebo dobytí
+   domorodé osady), případně z dosud existující známé kolonie. Události bez
+   uloženého místa a bez určitelné kolonie nenabízejí odhadnutou polohu.
+4. Přehled lze z mapy znovu otevřít běžným tlačítkem Hlášení. Zachovává zprávy
+   a posunutí při návratu z mapy i po návštěvě detailu města. Nová sada událostí
+   nebo jiná hra začíná nahoře. Back to game a Escape nadále zavírají přehled.
+5. Implementace a skutečné výsledky kontrol jsou v
+   [evidenci přehledu](functional-tests.md#turn-report-navigation-2026-11-14).
+
 ## Obrazovka cílů — 14. listopadu 2026
 
 1. Obsahová plocha a panely cílů mají stejné světlé pozadí jako záhlaví
