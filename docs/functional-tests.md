@@ -17198,3 +17198,32 @@ messages for diagnosis. No tests were removed or weakened for acceptance.
 
 7. Unchanged-source smoke retry `20261114T095909Z-0637e7811ff5`, supervisor PID 38233, passed all **21 tests** in 12 complete XML reports, zero failures/errors/skips (`target/verification/run-p7zkog81/`). Total supervised duration was 254.426 seconds, within the 420-second acceptance budget. All six changed executable/resource/test files match the smoke source snapshot byte-for-byte. The earlier failure remains failed and this pass does not diagnose or repair intermittent map input.
 8. Local acceptance on base `15826010`: 5,133 model/JUnit tests, 14 targeted UI/support tests and 21 fixed smoke/support tests passed. Final review preserves unrelated backlog edits. Fourteen documentation consistency tests, name audit and strict MkDocs passed. No remote regression or publication was inspected; local acceptance does not establish a new published distribution.
+<a id="help-article-frame-2026-11-14"></a>
+## Help article frame — 2026-11-14
+
+1. UC-114: the article panel uses a black `#000000`, 2-logical-pixel border
+   with its existing editable vector CSS curves. Reading, search, scrolling
+   and returning to the game retain their existing behavior.
+2. `TC_100_F91_colonizopedia_test#TC_01_help_button_lists_all_topics_and_keyboard_selection`
+   checks the curved outline, black stroke and 2 px width at 1280 × 850 and
+   900 × 700, preserving topic navigation assertions and screenshots.
+3. Model/JUnit passed all 5,134 tests in 395 complete XML reports, zero
+   failures/errors/skips (`target/verification/run-fux5nn2g`, completion
+   `20261114T200447Z-51d0820bd423`, 156.355 supervised seconds).
+4. The named TC100 scenario and `PageVerificationContractTest` passed all
+   four checks in two complete XML reports, zero failures/errors/skips
+   (`target/docker-ui/run-OJBHrt`, completion `20261114T200737Z-9df6ac11875e`,
+   59.044 supervised seconds). Both `r0329-help-full-en.png` and
+   `r0329-help-small-en.png` were visually reviewed: black, gently irregular
+   article outline at both window sizes. Existing vector geometry is reused;
+   no raster source or export was introduced.
+5. Fixed smoke/support passed all 21 tests in 12 complete XML reports,
+   zero failures/errors/skips (`target/verification/run-18_ww85k`, completion
+   `20261114T200908Z-b31f4044407a`, 259.299 supervised seconds, within the
+   unchanged 420-second acceptance budget). Both changed executable/test
+   files match the smoke source snapshot byte-for-byte.
+6. Local acceptance used base `2a13af9c` plus the scoped CSS/test changes.
+   Shared Java formatting, diff review, 14 documentation consistency tests,
+   name audit and strict MkDocs passed. Unrelated backlog edits are preserved.
+   Full remote regression and publication were not inspected; no new verified
+   distribution is claimed.

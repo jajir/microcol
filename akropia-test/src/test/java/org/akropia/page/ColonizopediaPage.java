@@ -591,7 +591,9 @@ public final class ColonizopediaPage extends AbstractScreen {
                         ((javafx.scene.shape.SVGPath) panel.getShape())
                                 .getContent().contains("C"),
                         "Panel edges contain curves");
-                assertEquals(1.6, panel.getBorder().getStrokes().get(0)
+                assertEquals(javafx.scene.paint.Color.BLACK,
+                        panel.getBorder().getStrokes().get(0).getTopStroke());
+                assertEquals(2, panel.getBorder().getStrokes().get(0)
                         .getWidths().getTop(), 0.01);
                 assertTrue(panel.getPadding().getLeft() >= 4,
                         "Content leaves space for the pen contour");

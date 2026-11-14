@@ -14,7 +14,11 @@
    ověření `python3 scripts/graphics/export-graphics.py help-topics --check`.
    Atlas PNG má buňky 96 × 96, `ButtonIcon` je zobrazuje při 32 × 32.
    [Funkční evidence](functional-tests.md#help-topic-menu-2026-11-14) uvádí skutečnou přejímku.
-4. Snímek implementace z Docker/Xvfb; nejde o návrhový mockup:
+4. Obsahový panel článku používá stejný černý tah `#000000` o šířce
+   2 logické px. Jeho stávající editovatelná vektorová CSS kontura má jemně
+   nepravidelné křivky; tloušťka tahu se při změně velikosti okna nemění.
+   [Ověření rámečku](functional-tests.md#help-article-frame-2026-11-14).
+5. Snímek implementace z Docker/Xvfb; nejde o návrhový mockup:
 
 ![Menu nápovědy s jednotlivými kartami a ikonami](graphics-assets/help-topic-menu-2026-11-14/implemented.png)
 
