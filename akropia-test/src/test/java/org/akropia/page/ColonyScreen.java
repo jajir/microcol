@@ -230,6 +230,23 @@ public class ColonyScreen extends AbstractScreen {
         }
     }
 
+    public void verifyNoModalWindow() {
+        getRobot().interact(() -> {
+            final List<javafx.stage.Window> dialogs = javafx.stage.Window
+                    .getWindows().stream()
+                    .filter(window -> window instanceof javafx.stage.Stage
+                            && window != getPrimaryStage())
+                    .toList();
+            assertTrue(dialogs.isEmpty(),
+                    () -> "Unexpected modal windows: " + dialogs.stream()
+                            .map(window -> window.getScene().getRoot()
+                                    .lookupAll(".label").stream()
+                                    .map(node -> ((Label) node).getText())
+                                    .toList())
+                            .toList());
+        });
+    }
+
     public GamePage close() {
         final Button buttonNextTurn = getButtonById(
                 ColonyButtonsPanel.CLOSE_BUTTON_ID);

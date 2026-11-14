@@ -55,8 +55,7 @@ public final class WorldMinimapPage extends AbstractScreen {
             final double yFraction) {
         final double w = getModel().getMap().getMaxLocationX() * 45 * scale();
         final double h = getModel().getMap().getMaxLocationY() * 45 * scale();
-        return new Point2D((220 - w) / 2 + xFraction * w,
-                (180 - h) / 2 + yFraction * h);
+        return new Point2D(4 + xFraction * w, 4 + yFraction * h);
     }
 
     public void clickWorld(final double xFraction, final double yFraction) {
@@ -470,9 +469,11 @@ public final class WorldMinimapPage extends AbstractScreen {
             final double width = panel.getScene().getWidth();
             assertEquals(width, map.getWidth(), 1);
             assertEquals(260, b.getWidth(), 1);
-            assertEquals((width + Math.min(width, 1440)) / 2, b.getMaxX(), 1);
+            assertEquals((width + Math.min(width - 32, 1440)) / 2, b.getMaxX(),
+                    1);
             assertEquals(16, b.getMinY() - map.getMinY(), 1);
-            assertEquals(16, map.getMaxY() - b.getMaxY(), 1);
+            assertTrue(map.getMaxY() - b.getMaxY() >= 15,
+                    "Panel respects the bottom margin");
             assertNotNull(panel.getShape());
             assertEquals(Color.BLACK,
                     panel.getBorder().getStrokes().get(0).getTopStroke());
@@ -480,8 +481,10 @@ public final class WorldMinimapPage extends AbstractScreen {
                     panel.getBorder().getStrokes().get(0).getWidths().getTop());
             final Node mini = node("worldMinimap");
             final Bounds m = mini.localToScene(mini.getLayoutBounds());
-            assertTrue(m.getHeight() > 60 && m.getWidth() <= 220.01,
-                    "Minimap remains usable in " + b + ": " + m);
+            assertEquals(220, m.getWidth(), .01);
+            assertEquals(180, m.getHeight(), .01);
+            assertEquals(16, m.getMinX() + 4 - b.getMinX(), 1);
+            assertEquals(16, m.getMinY() + 4 - b.getMinY(), 1);
             assertTrue(b.contains(m));
             final javafx.scene.control.ScrollPane scroll = (javafx.scene.control.ScrollPane) node(
                     planner ? "tradeRoutePlanningScroll" : "mapDetailsScroll");
@@ -491,7 +494,37 @@ public final class WorldMinimapPage extends AbstractScreen {
                     .localToScene(scroll.getLayoutBounds());
             assertTrue(m.getMaxY() < content.getMinY());
             assertTrue(b.contains(content));
+            assertTrue(content.getHeight() >= 119,
+                    "Reserve at least 120px for scrolling");
+            if (!planner) {
+                final Node preview = node("tileImage");
+                assertEquals(m.getMinX() + 4, preview
+                        .localToScene(preview.getLayoutBounds()).getMinX(), 1);
+                final javafx.scene.shape.SVGPath frame = (javafx.scene.shape.SVGPath) node(
+                        "tilePreviewFrame");
+                assertTrue(frame.isVisible());
+                assertEquals(Color.BLACK, frame.getStroke());
+                assertEquals(2, frame.getStrokeWidth());
+                assertTrue(getNodeFinder().lookup(".label").queryAll().stream()
+                        .noneMatch(n -> ((Label) n).getText()
+                                .startsWith("On move:")));
+            }
         });
+    }
+
+    public void verifyCompactPanel() {
+        getRobot().interact(() -> {
+            final Bounds panel = node("floatingMapPanel").getBoundsInParent();
+            assertTrue(
+                    panel.getHeight() < node("canvas").getLayoutBounds()
+                            .getHeight() - 32,
+                    "Short content must not fill the whole map height");
+        });
+    }
+
+    public void verifyMinimumWindow() {
+        getRobot().interact(() -> assertTrue(getPrimaryStage()
+                .getHeight() >= getPrimaryStage().getMinHeight() - 1));
     }
 
     public void verifyCameraUnchanged() {

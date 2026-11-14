@@ -36,34 +36,34 @@ class TilePainter {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.paintService = Preconditions.checkNotNull(paintService);
-        canvas = new Canvas(TILE_WIDTH_IN_PX + 8, TILE_WIDTH_IN_PX);
+        canvas = new Canvas(TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
     }
 
     void setTerrain(final Terrain terrain, final Location location) {
         canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(),
                 canvas.getHeight());
         paintService.paintTerrainPreview(canvas.getGraphicsContext2D(),
-                Point.of(4, 0), location, terrain,
+                Point.of(0, 0), location, terrain,
                 gameModelController.getModel().getMap(),
                 gameModelController.getHumanPlayer());
     }
 
     void paintUnit(final List<Unit> units) {
         final Unit unit = units.stream().findFirst().get();
-        paintService.paintUnit(canvas.getGraphicsContext2D(), Point.of(4, 0),
+        paintService.paintUnit(canvas.getGraphicsContext2D(), Point.of(0, 0),
                 unit);
     }
 
     void paintColony(final ColonySighting sighting) {
-        paintService.paintColony(canvas.getGraphicsContext2D(), Point.of(4, 0),
+        paintService.paintColony(canvas.getGraphicsContext2D(), Point.of(0, 0),
                 sighting, false);
     }
 
     void setHiddenTerrain(final Location location) {
         final GraphicsContext graphics = canvas.getGraphicsContext2D();
         graphics.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        paintService.paintHiddenTile(graphics, Point.of(4, 0));
-        paintService.paintUnknownMark(graphics, Point.of(4, 0), location);
+        paintService.paintHiddenTile(graphics, Point.of(0, 0));
+        paintService.paintUnknownMark(graphics, Point.of(0, 0), location);
     }
 
     void clear() {

@@ -70,6 +70,9 @@ public class ScreenColony implements GameScreen {
     public void beforeShow() {
         page.beforeShow();
         colonyPanel.reserveDetailHeight();
+        // An activation key carried from the colony menu must not rename it.
+        javafx.application.Platform
+                .runLater(() -> page.getContent().requestFocus());
     }
 
     @Override

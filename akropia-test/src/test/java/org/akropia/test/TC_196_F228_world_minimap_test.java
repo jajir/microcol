@@ -269,10 +269,12 @@ public class TC_196_F228_world_minimap_test extends AbstractAkropiaTest {
         map.scrollPanel("mapDetailsScroll");
         map.verifyCameraUnchanged();
         map.verifyGameUnchanged();
+        map.verifyCompactPanel();
         window.saveEvidence("floating-map-wide.png");
 
         // Low windows preserve the minimap while details scroll below it.
-        window.resize(1024, 640);
+        window.resize(1024, 400);
+        map.verifyMinimumWindow();
         map.verifyFloatingPanel(false);
         map.scrollPanel("mapDetailsScroll");
         map.verifyFloatingPanel(false);

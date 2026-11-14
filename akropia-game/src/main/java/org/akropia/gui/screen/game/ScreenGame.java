@@ -31,11 +31,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.shape.SVGPath;
-import javafx.beans.binding.Bindings;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -93,29 +91,33 @@ public class ScreenGame implements GameScreen {
         final StackPane overlay = new StackPane(sidebar);
         overlay.getStyleClass().add("screen-content-limit");
         overlay.setPickOnBounds(false);
-        StackPane.setAlignment(sidebar, Pos.CENTER_RIGHT);
+        overlay.setMinHeight(0);
+        StackPane.setAlignment(sidebar, Pos.TOP_RIGHT);
+        overlay.maxWidthProperty().bind(javafx.beans.binding.Bindings.min(1440,
+                mapArea.widthProperty().subtract(32)));
         StackPane.setMargin(sidebar, new Insets(16, 0, 16, 0));
         sidebar.setId("floatingMapPanel");
         sidebar.setMinWidth(260);
         sidebar.setPrefWidth(260);
         sidebar.setMaxWidth(260);
-        sidebar.setMinHeight(0);
-        sidebar.setPadding(new Insets(12));
+        sidebar.setMaxHeight(Region.USE_PREF_SIZE);
+        sidebar.setPadding(new Insets(16));
         final SVGPath outline = new SVGPath();
         outline.setContent("M2 2 Q65 0 130 2 T258 2 Q260 150 258 300 "
                 + "T258 598 Q195 600 130 598 T2 598 Q0 450 2 300 T2 2 Z");
         sidebar.setShape(outline);
         sidebar.setScaleShape(true);
         sidebar.setCenterShape(true);
-        final StackPane minimapSlot = new StackPane(new Group(minimap));
+        // The projection's 4px safety margin is internal to the canvas.
+        minimap.setTranslateX(-4);
+        minimap.setTranslateY(-4);
+        final StackPane minimapSlot = new StackPane(minimap);
         minimapSlot.setId("floatingMinimapSlot");
-        minimapSlot.setMinHeight(Region.USE_PREF_SIZE);
-        minimapSlot.prefHeightProperty().bind(
-                Bindings.min(192, sidebar.heightProperty().multiply(0.30)));
-        minimapSlot.maxHeightProperty().bind(minimapSlot.prefHeightProperty());
-        minimap.scaleXProperty().bind(minimapSlot.heightProperty().divide(192));
-        minimap.scaleYProperty().bind(minimap.scaleXProperty());
-        panelContent.setMinHeight(0);
+        minimapSlot.setAlignment(Pos.TOP_LEFT);
+        minimapSlot.setMinHeight(180);
+        minimapSlot.setPrefHeight(180);
+        minimapSlot.setMaxHeight(180);
+        panelContent.setMinHeight(Region.USE_COMPUTED_SIZE);
         VBox.setVgrow(panelContent, javafx.scene.layout.Priority.ALWAYS);
         panelContent.getChildren().add(rightPanel.getContent());
         sidebar.getChildren().addAll(minimapSlot, panelContent);
@@ -152,6 +154,10 @@ public class ScreenGame implements GameScreen {
                                 header.heightProperty()));
         mainBox.getChildren().add(mapArea);
         mainBox.getChildren().add(statusBar.getContent());
+        mapArea.heightProperty()
+                .addListener((p, old, value) -> updateWindowMinimum());
+        header.heightProperty()
+                .addListener((p, old, value) -> updateWindowMinimum());
 
         mainPanel = new StackPane();
         mainPanel.getStyleClass().add("game-screen");
@@ -167,6 +173,9 @@ public class ScreenGame implements GameScreen {
                 : rightPanel.getContent();
         if (panelContent.getChildren().get(0) != wanted) {
             panelContent.getChildren().set(0, wanted);
+            panelContent.applyCss();
+            updateWindowMinimum();
+            javafx.application.Platform.runLater(this::updateWindowMinimum);
             if (!tradeRoutePlanning.isActive()) {
                 rightPanel.refresh();
             }
@@ -274,9 +283,32 @@ public class ScreenGame implements GameScreen {
         return mainPanel;
     }
 
+    private void updateWindowMinimum() {
+        if (mapArea.getScene() == null || !(mapArea.getScene()
+                .getWindow() instanceof javafx.stage.Stage)) {
+            return;
+        }
+        final javafx.stage.Stage stage = (javafx.stage.Stage) mapArea.getScene()
+                .getWindow();
+        // Reserve the fixed minimap, a 120px scroll area and the planner
+        // actions.
+        final double details = Math.max(120,
+                tradeRoutePlanningPanel.getContent().minHeight(228));
+        final double decorations = Math.max(0,
+                stage.getHeight() - mapArea.getScene().getHeight());
+        final double minimum = Math
+                .ceil(header.getHeight() + statusBar.getContent().getHeight()
+                        + 32 + 32 + 180 + 8 + details + decorations);
+        stage.setMinHeight(minimum);
+        if (stage.getHeight() < minimum) {
+            stage.setHeight(minimum);
+        }
+    }
+
     @Override
     public void beforeShow() {
         gamePanelComponents.beforeShow();
+        javafx.application.Platform.runLater(this::updateWindowMinimum);
     }
 
     @Override

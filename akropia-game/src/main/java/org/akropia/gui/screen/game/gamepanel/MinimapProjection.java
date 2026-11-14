@@ -16,9 +16,8 @@ public final class MinimapProjection {
         final double worldWidth = worldSize.getX() * Tile.TILE_WIDTH_IN_PX;
         final double worldHeight = worldSize.getY() * Tile.TILE_WIDTH_IN_PX;
         scale = Math.min((width - 8) / worldWidth, (height - 8) / worldHeight);
-        bounds = new Rectangle2D((width - worldWidth * scale) / 2,
-                (height - worldHeight * scale) / 2, worldWidth * scale,
-                worldHeight * scale);
+        // Keep the visible world aligned to the panel's top-left inset.
+        bounds = new Rectangle2D(4, 4, worldWidth * scale, worldHeight * scale);
     }
 
     public Rectangle2D getBounds() {

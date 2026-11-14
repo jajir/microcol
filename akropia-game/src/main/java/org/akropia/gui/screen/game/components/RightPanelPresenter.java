@@ -86,7 +86,6 @@ public final class RightPanelPresenter {
     @Subscribe
     private void onTurnStarted(final TurnStartedEvent event) {
         logger.debug("Turn started for player {}", event.getPlayer());
-        display.setOnMovePlayer(event.getPlayer());
         if (event.getPlayer().isHuman()) {
             if (lastFocusedTileEvent != null) {
                 display.refreshView(lastFocusedTileEvent);
@@ -96,10 +95,6 @@ public final class RightPanelPresenter {
 
     @SuppressWarnings("unused")
     public void updateLanguage(final I18n i18n) {
-        if (gameModelController.isGameModelReady()) {
-            display.setOnMovePlayer(
-                    gameModelController.getModel().getCurrentPlayer());
-        }
         if (lastFocusedTileEvent != null
                 && gameModelController.isGameModelReady()) {
             display.refreshView(lastFocusedTileEvent);

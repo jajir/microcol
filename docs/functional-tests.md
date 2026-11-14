@@ -74,6 +74,168 @@
     acceptance is complete; no full regression or distribution publication is
     claimed. Unrelated backlog changes remain outside this commit.
 
+## Floating panel refinement — 2026-11-14
+
+1. Follow-up scope: align the fixed 220x180 minimap with the tile preview
+   and a 16px top inset; size the panel to its content, capped by map height;
+   preserve the toolbar's 16px horizontal inset in narrow windows. Reserve
+   at least 120px for scroll content at the window's minimum height, including
+   planner actions. Remove the current-player row and frame the panel's tile
+   preview with an irregular black 2px vector outline.
+2. TC196/07 covers compact height, fixed minimap dimensions, preview frame,
+   narrow-window alignment and rejected undersized-window requests in both
+   map modes, preserving camera/input/gameplay assertions. The earlier
+   floating-panel evidence below remains historical.
+3. Model/JUnit dispatched as `20261114T123348Z-51cf23fd1a72`, supervisor
+   PID 58383, timeout 600 seconds. Targeted Docker UI, smoke, final review
+   and integration remain pending for this refinement.
+
+4. Model attempt `20261114T123348Z-51cf23fd1a72` never started tests:
+   preparation's labelled-container `docker ps` exceeded its 20-second
+   deadline (20.007 seconds; overall 22.090 seconds). Docker Desktop was
+   running, but the diagnostic server-info query also timed out. A later
+   identical container-list query succeeded in 0.02 seconds with no matching
+   containers; this does not establish the original cause. No test failure
+   or successful model acceptance is claimed for the timed-out attempt.
+
+5. Retry `20261114T123602Z-5cf3634fd272`, supervisor PID 58615,
+   timeout 600 seconds, runs the unchanged model/JUnit selection. UI,
+   smoke and review remain pending.
+
+6. Retry `20261114T123602Z-5cf3634fd272` passed the model/JUnit phase
+   in 149.934 seconds (153.978 supervised). Reports:
+   `target/verification/run-v0n78o5h/`. Targeted selection TC196, TC188,
+   TC116, TC118 and PageVerificationContractTest dispatched as
+   `20261114T123852Z-f34a171a79dd`, supervisor PID 58944, timeout
+   1,800 seconds. Visual review and smoke remain pending.
+
+7. Targeted `20261114T123852Z-f34a171a79dd` failed after 417.750
+   supervised seconds: 26 tests, one failure, one error, zero skips
+   (`target/docker-ui/run-GrRGq8/`). TC196/07 rejected a full-height panel
+   with short content. Its preferred-height calculation passed zero width
+   when JavaFX requested intrinsic size; the fallback now uses the known
+   fixed content width rather than forcing excessive wrapping. TC188/03
+   again failed on colony return; an explicit modal-window verification now
+   records any unexpected dialog labels before the close gesture. All 13
+   route scenarios and source-contract checks passed, but acceptance is not
+   complete. Fresh model run `20261114T124640Z-85f09b59db1d`, PID 59607,
+   timeout 600 seconds, covers the sizing repair.
+
+8. Repair model run `20261114T124640Z-85f09b59db1d` passed **5,134
+   tests**, zero failures/errors/skips, in 154.391 seconds (157.852
+   supervised), reports `target/verification/run-l3nm6s56/`. Focused
+   TC196/07, TC188/03 and source-contract verification dispatched as
+   `20261114T124932Z-53c329b63d31`, supervisor PID 60172, timeout
+   1,200 seconds. Targeted UI acceptance and smoke remain pending.
+
+9. Focused `20261114T124932Z-53c329b63d31` failed after 78.181
+   supervised seconds: five checks, zero failures, one error, zero skips
+   (`target/docker-ui/run-LODyCS/`). Compact normal-panel height passed;
+   the planner's top edge overflowed in the minimum-size window. Switching
+   panels now applies CSS and recalculates the minimum after planner actions
+   acquire their styled size. TC188/03 and the explicit no-modal check passed;
+   no unexpected window was available to diagnose in this run.
+10. Visual review of the wide image also found internal projection centering
+    above the visible minimap. The projection now anchors its world at the
+    top-left safety inset; the canvas safety inset is compensated in the
+    panel so the visible world aligns with the preview. Shared projection
+    model tests and UI input coordinates were updated together. Fresh model
+    run `20261114T125224Z-b8d15e07fc12`, PID 60380, timeout 600 seconds,
+    covers both production repairs. UI, smoke and acceptance remain pending.
+
+11. Model `20261114T125224Z-b8d15e07fc12` passed **5,134 tests**,
+    zero failures/errors/skips, in 155.200 seconds (158.215 supervised),
+    reports `target/verification/run-1hz09p63/`. Full targeted selection
+    TC196/TC188/TC116/TC118 plus source contract dispatched as
+    `20261114T125512Z-03dcde75b5d5`, supervisor PID 60909, timeout 1,800
+    seconds. Visual review, smoke and integration remain pending.
+
+12. Full targeted run `20261114T125512Z-03dcde75b5d5` failed in
+    425.432 supervised seconds: 26 tests, zero failures, one error, zero
+    skips (`target/docker-ui/run-cbplgJ/`). All seven minimap scenarios,
+    all 13 route scenarios and source-contract checks passed. Wide-map and
+    minimum-planner screenshots were reviewed: fixed-size aligned minimap,
+    compact panel, framed preview, narrow-window inset and planner actions
+    are visible. TC188/03's modal check identified the unexpected dialog as
+    **Rename colony**, resolving the earlier unknown-window observation.
+13. The toolbar helper sent DOWN+ENTER as a held chord. It now sends DOWN
+    and ENTER as separate gestures, with an FX event wait between them,
+    matching the scenario's sequential navigation. Production sources remain
+    unchanged. TC188 plus source contract repeats as
+    `20261114T130310Z-44173007ab01`, supervisor PID 61255, timeout 1,200
+    seconds. This retry must verify the hypothesized input cause; no root-
+    cause fix or final acceptance is claimed yet.
+
+14. Sequential-key retry `20261114T130310Z-44173007ab01` failed in
+    94.444 supervised seconds: six checks, zero failures, one error, zero
+    skips (`target/docker-ui/run-1aQlZC/`). Rename colony still opened;
+    separating test key gestures alone did not resolve the fault. The menu
+    now hides before deferring the screen change until its current event
+    dispatch completes, avoiding a new focused screen inside menu activation.
+    This production repair is pending verification. Fresh model run
+    `20261114T130539Z-ff855b209036`, supervisor PID 61361, timeout 600
+    seconds. The no-modal regression assertion remains intact.
+
+15. Model run `20261114T130539Z-ff855b209036` passed **5,134 tests**,
+    zero failures/errors/skips, in 153.194 seconds (157.574 supervised),
+    reports `target/verification/run-_pzttflv/`. TC188 plus source contract
+    dispatched as `20261114T130834Z-a37be13d7415`, supervisor PID 61729,
+    timeout 1,200 seconds, to verify the deferred menu-to-colony transition.
+    UI acceptance and smoke remain pending.
+
+16. Deferred-transition run `20261114T130834Z-a37be13d7415` failed
+    after 94.794 supervised seconds: six checks, zero failures, one error,
+    zero skips (`target/docker-ui/run-b57DfW/`). Rename colony still opened.
+    The ineffective ColoniesMenu production change was reverted, restoring
+    the model-tested source from `run-1hz09p63`. Focused diagnostic
+    `20261114T131037Z-2a050469ec76`, PID 61805, timeout 1,200 seconds,
+    selects TC188/03 and source contract, recording key/click targets on
+    the main scene to identify the actual activation event.
+
+17. Diagnostic `20261114T131037Z-2a050469ec76` passed four checks
+    in 60.623 supervised seconds, zero failures/errors/skips
+    (`target/docker-ui/run-Adux5I/`). It nevertheless recorded ENTER presses
+    targeting the newly focused colony-name label after menu navigation.
+    Colony entry now explicitly focuses the page after attachment, so carried
+    activation keys do not target the rename control; ordinary focus traversal
+    and clicking the name remain available. Temporary event logging was removed.
+    Model run `20261114T131255Z-ee38f2f61380`, PID 61891, timeout 600
+    seconds, covers this focus change. UI confirmation remains pending.
+
+18. Model `20261114T131255Z-ee38f2f61380` passed **5,134 tests**,
+    zero failures/errors/skips, in 153.336 seconds (156.606 supervised),
+    reports `target/verification/run-_7g_xkly/`. Targeted TC188, TC20 colony
+    naming and source contract dispatched as `20261114T131544Z-fcf9d6527f33`,
+    PID 62367, timeout 1,800 seconds. This selection checks both safe entry
+    focus and continued explicit rename/name-validation behavior.
+
+19. Focus/naming verification `20261114T131544Z-fcf9d6527f33` passed
+    **11 tests**, zero failures/errors/skips, in 176.989 supervised seconds
+    (`target/docker-ui/run-rPgtJb/`). All TC188 navigation and TC20 naming
+    scenarios passed, including the explicit no-modal check and rename flow.
+    Fixed smoke dispatched as `20261114T131854Z-98460d5ba5ce`, PID 62526,
+    runner timeout 480 seconds and acceptance budget 420 seconds. No further
+    executable changes are planned; final acceptance remains pending smoke.
+
+20. Final smoke `20261114T131854Z-98460d5ba5ce` passed **21 tests in
+    12 complete XML reports**, zero failures/errors/skips, in 259.717 seconds
+    against the 420-second budget (264.186 supervised). Evidence:
+    `target/verification/run-uh7win2w/`. After shared Java formatting, all
+    changed Java files match both the final model and smoke source snapshots
+    byte for byte.
+
+21. Local acceptance combines 5,134 model/JUnit checks, the passing TC196,
+    TC116 and TC118 scenarios from `run-cbplgJ` (unchanged panel source),
+    and all TC188, TC20 and source-contract checks from `run-rPgtJb`:
+    **31 distinct targeted checks**, plus the 21-check smoke above.
+    The earlier run's TC188 error remains failed historical evidence; its
+    repaired entry-focus behavior is covered by the final targeted run.
+    Reviewed wide-map and low-planner screenshots confirm fixed minimap size,
+    aligned insets, compact panel height and reachable planner actions.
+    Documentation acceptance: 14 consistency tests, name audit with zero
+    unexplained occurrences, and strict MkDocs build. Remote regression and
+    distribution publication are not part of this local acceptance.
+
 <a id="floating-map-panel-2026-11-14"></a>
 
 ## Floating map panel — 2026-11-14

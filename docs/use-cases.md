@@ -7,7 +7,9 @@
 1. `TC_196_F228_world_minimap_test.TC_07_floating_panel_keeps_map_navigation_and_minimap_available`
    ověřuje celou šířku mapy, limit 1440 px, rozměry a okraje panelu,
    centrování mimo panel, izolaci vstupu a viditelnost minimapy v nízkém
-   okně i při přepnutí do plánovače. TC196/01–06 nadále chrání navigaci,
+   okně i při přepnutí do plánovače. Dále ověřuje pevnou velikost minimapy,
+   společné odsazení, kompaktní výšku, rámeček náhledu a minimální výšku
+   okna s nejméně 120 px pro posouvání. TC196/01–06 nadále chrání navigaci,
    průzkum, fokus a vykreslování mapy.
 2. TC116 zachovává tvorbu a prohlížení tras včetně českého nízkého okna;
    TC188 kontroluje vzhled a ovládání hlavní obrazovky. Výsledky vlastní

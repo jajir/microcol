@@ -188,6 +188,7 @@ public class TC_188_F221_game_toolbar_test extends AbstractAkropiaTest {
         final ColonyScreen colony = ColonyScreen.of(getContext(),
                 "New Amsterdam");
         colony.verifyColonyName("New Amsterdam");
+        colony.verifyNoModalWindow();
         colony.close();
         toolbar.verifySeason(Season.autumn, 0xff71864b);
     }

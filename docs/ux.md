@@ -5,17 +5,23 @@
 1. Mapa vyplňuje celou šířku okna, také pod panelem. Pravá hrana panelu
    sleduje pravou hranu vystředěného obsahu o maximální šířce 1440 logických
    pixelů; na širším okně pokračuje mapa i napravo od panelu.
-2. Oba režimy používají panel široký 260 logických pixelů, s odstupem 16
-   pixelů od horní a dolní hrany mapové plochy. Výběr pole nemění jeho
-   rozměry. Neprůhledná krémová výplň a nepravidelný černý obrys o síle
-   dvou logických pixelů navazují na společný kreslený vzhled.
-3. Minimapa zůstává nahoře mimo posuvný obsah v obou režimech. V nízkém
-   okně se úměrně zmenší, nejvýše na 30 % výšky panelu, nikdy se nesbalí.
-   Kliknutí, tažení a klávesová navigace minimapy zachovávají své chování.
-4. Údaje o poli a jednotkách se posouvají společně pod minimapou. Plánovač
-   posouvá seznam a podrobnosti tras; úprava trasy a návrat zůstávají
-   dostupné dole. Svislý posuvník se objeví při přetečení, vyhrazené místo
-   pro něj brání změně šířky obsahu. Texty se zalamují, vodorovný posuv není.
+2. Oba režimy používají panel široký 260 logických pixelů, ukotvený
+   16 pixelů pod horní hranou mapy. Výška odpovídá obsahu, nejvýše však
+   končí 16 pixelů nad spodní hranou mapy. Na úzkém okně zachovává panel
+   stejné pravé odsazení 16 pixelů jako horní Menu; na širokém okně sdílí
+   vystředěný limit 1440 pixelů. Neprůhledná krémová výplň má nepravidelný
+   černý obrys o síle dvou logických pixelů.
+3. Minimapa zůstává nahoře mimo posuvný obsah v obou režimech, vždy
+   220 × 180 logických pixelů. Nezmenšuje se. Její levé a horní odsazení
+   je 16 pixelů; náhled políčka a obsah pod ní sdílejí levou linii.
+   Minimální výška herního okna zahrnuje lišty, minimapu, odsazení,
+   tlačítka plánovače a alespoň 120 pixelů pro posuvný obsah.
+4. Náhled políčka, údaje o poli a jednotkách se posouvají společně pod
+   minimapou. Náhled má jemně nepravidelný černý rámeček o síle 2 pixelů.
+   Řádek „On move: …“ se nezobrazuje. Plánovač posouvá seznam a podrobnosti
+   tras; úprava trasy a návrat zůstávají dostupné dole. Svislý posuvník
+   se objeví při přetečení, vyhrazené místo pro něj brání změně šířky
+   obsahu. Texty se zalamují, vodorovný posuv není.
 5. Kliknutí a posouvací gesta nad panelem ovládají pouze panel, také na
    konci posuvné oblasti. Mapa kolem panelu zůstává ovladatelná. Přepínač
    režimu je nadále vlevo nahoře a přechod nemění herní stav.
@@ -24,6 +30,15 @@
    celou šířku mapy; panel nesmí zaměřenou jednotku zakrýt.
 7. Jde o dohodnuté chování, nikoli hráčskou studii. Stav ověření vede
    [funkční evidence](functional-tests.md#floating-map-panel-2026-11-14).
+
+## Fokus při otevření kolonie — 14. listopadu 2026
+
+1. Po vstupu do kolonie má fokus stránka, aby klávesa použitá pro výběr
+   v nabídce neaktivovala přejmenování v nadpisu. Název zůstává dostupný
+   kliknutím a běžným klávesovým přechodem na ovládací prvek.
+2. TC188/03 kontroluje otevření bez dalšího dialogu; TC20 chrání explicitní
+   přejmenování a validaci názvů. Výsledky vede
+   [funkční evidence](functional-tests.md#floating-panel-refinement-2026-11-14).
 
 ## Vzhled nápovědy — 14. listopadu 2026
 

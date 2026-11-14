@@ -13,20 +13,20 @@ class MinimapProjectionTest {
     void entireLandscapeWorldFitsWithEqualScaleOnBothAxes() {
         final MinimapProjection projection = new MinimapProjection(
                 Location.of(100, 50), 220, 180);
-        assertEquals(new Rectangle2D(4, 37, 212, 106), projection.getBounds());
-        assertEquals(Point.of(0, 0), projection.toMap(4, 37));
-        assertEquals(Point.of(4500, 2250), projection.toMap(216, 143));
-        assertEquals(Point.of(2250, 1125), projection.toMap(110, 90));
+        assertEquals(new Rectangle2D(4, 4, 212, 106), projection.getBounds());
+        assertEquals(Point.of(0, 0), projection.toMap(4, 4));
+        assertEquals(Point.of(4500, 2250), projection.toMap(216, 110));
+        assertEquals(Point.of(2250, 1125), projection.toMap(110, 57));
     }
 
     @Test
     void portraitWorldFitsAndViewportUsesTheSameProjection() {
         final MinimapProjection projection = new MinimapProjection(
                 Location.of(20, 80), 220, 180);
-        assertEquals(new Rectangle2D(88.5, 4, 43, 172), projection.getBounds());
+        assertEquals(new Rectangle2D(4, 4, 43, 172), projection.getBounds());
         final Rectangle2D view = projection.viewport(Point.of(450, 900),
                 Point.of(450, 900));
-        assertEquals(new Rectangle2D(110, 47, 21.5, 43), view);
+        assertEquals(new Rectangle2D(25.5, 47, 21.5, 43), view);
     }
 
     @Test
@@ -78,7 +78,7 @@ class MinimapProjectionTest {
                 assertTrue(world.contains(view));
             }
         }
-        assertEquals(new Rectangle2D(4, 37, 212, 106), p.getBounds());
+        assertEquals(new Rectangle2D(4, 4, 212, 106), p.getBounds());
     }
 
     @Test

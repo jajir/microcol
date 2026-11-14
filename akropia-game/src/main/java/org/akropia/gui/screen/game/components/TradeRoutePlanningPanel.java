@@ -107,7 +107,7 @@ public final class TradeRoutePlanningPanel
         content.getStyleClass().add("trade-route-planning-panel");
         content.setPrefWidth(260);
         content.setMinWidth(0);
-        content.setMinHeight(0);
+        content.setMinHeight(Region.USE_COMPUTED_SIZE);
         content.setMaxWidth(Double.MAX_VALUE);
         title.setId("tradeRoutePlanningTitle");
         title.getStyleClass().add("trade-route-planning-title");
@@ -194,7 +194,14 @@ public final class TradeRoutePlanningPanel
                 stopsHeading, stops, legsHeading, legs, rule);
         final VBox scrollContent = new VBox(6, title, empty, message, listLabel,
                 list, detail);
-        final ScrollPane scroll = new ScrollPane(scrollContent);
+        final ScrollPane scroll = new ScrollPane(scrollContent) {
+            @Override
+            protected double computePrefHeight(final double width) {
+                return Math.max(120,
+                        scrollContent.prefHeight(width > 20 ? width - 20 : 208)
+                                + snappedTopInset() + snappedBottomInset());
+            }
+        };
         scroll.setId("tradeRoutePlanningScroll");
         scroll.setFitToWidth(false);
         scrollContent.prefWidthProperty()
@@ -203,7 +210,7 @@ public final class TradeRoutePlanningPanel
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         // Route selection and details scroll together, so the
         // actions below stay reachable in a small window.
-        scroll.setMinHeight(0);
+        scroll.setMinHeight(120);
         VBox.setVgrow(scroll, Priority.ALWAYS);
         // The route's edit action and the way back stay in a fixed area
         // below the scrolling detail, in every window size and language.

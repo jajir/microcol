@@ -159,7 +159,9 @@ public final class GameToolbarPage extends AbstractScreen {
     }
 
     public void chooseFirstColony() {
-        getRobot().push(KeyCode.DOWN, KeyCode.ENTER);
+        getRobot().push(KeyCode.DOWN);
+        WaitForAsyncUtils.waitForFxEvents();
+        getRobot().push(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
