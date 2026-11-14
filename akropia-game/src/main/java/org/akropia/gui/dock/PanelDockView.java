@@ -52,6 +52,8 @@ public class PanelDockView implements JavaFxComponent {
     private boolean includeWagons;
     private I18n i18n;
     private final Label cargoTitle = new Label();
+    private final Region crates;
+    private final Label emptyDepot = new Label();
 
     public PanelDockView(final ImageProvider imageProvider,
             final PanelDockCratesPresenter panelDockCratesPresenter) {
@@ -64,7 +66,8 @@ public class PanelDockView implements JavaFxComponent {
         panelShips = new HBox();
         panelShips.getStyleClass().add("ships");
 
-        mainPanel = new VBox(panelShips, panelDockCratesPresenter.getContent());
+        crates = panelDockCratesPresenter.getContent();
+        mainPanel = new VBox(panelShips, crates);
         // Empty dock space must not intercept the colony buildings below it.
         mainPanel.setPickOnBounds(false);
         mainPanel.getStyleClass().add("panel-dock");
@@ -115,6 +118,14 @@ public class PanelDockView implements JavaFxComponent {
         cargo.getStyleClass().add("harbor-cargo");
         if (includeWagons) {
             cargo.getChildren().remove(cargoTitle);
+            emptyDepot.setId("colony-depot-empty");
+            emptyDepot.visibleProperty().bind(javafx.beans.binding.Bindings
+                    .isEmpty(panelShips.getChildren()));
+            emptyDepot.managedProperty().bind(emptyDepot.visibleProperty());
+            crates.visibleProperty()
+                    .bind(toggleGroup.selectedToggleProperty().isNotNull());
+            crates.managedProperty().bind(crates.visibleProperty());
+            cargo.getChildren().add(0, emptyDepot);
             mainPanel.getChildren().setAll(cargoTitle, scroll, cargo);
         } else {
             mainPanel.getChildren().setAll(scroll, cargo);
@@ -123,6 +134,8 @@ public class PanelDockView implements JavaFxComponent {
 
     void updateLanguage(final I18n i18n) {
         this.i18n = i18n;
+        emptyDepot.setText(
+                i18n.get(org.akropia.gui.screen.colony.ColonyMsg.emptyHarbor));
         updateCargoTitle();
     }
 

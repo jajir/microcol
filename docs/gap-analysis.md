@@ -270,6 +270,13 @@ This matrix does not establish the implementation of terrain defense in combat, 
 
 ### Equipment and pioneers
 
+User decision (2026-11-14): Plains and Desert allow **Plow field**, alongside
+Prairie, Grassland and Savannah. All existing ownership, pioneer tools,
+movement, colony, forest, river and already-plowed checks still apply. This
+changes terrain eligibility, not work duration, tool consumption or crop bonuses.
+See [local acceptance evidence](functional-tests.md#depot-empty-states-and-plow-terrain-2026-11-14).
+
+
 | ID | Manual (printed / PDF) | Expected rule | Current implementation and gap | Status | Acceptance / evidence |
 | --- | --- | --- | --- | --- | --- |
 | UNIT-001 | 46 / 52 | Equipping a scout consumes 50 horses; a soldier consumes 50 muskets; a dragoon requires both, including equipping an existing soldier/scout with the missing item. | [UnitFreeColonist.equipWithHorses/equipWithMuskets](../akropia-game/src/main/java/org/akropia/model/unit/UnitFreeColonist.java) consumes 50 and preserves the other equipment flag, with matching colony context-menu options in [PanelOutsideColonyUnit](../akropia-game/src/main/java/org/akropia/gui/screen/colony/PanelOutsideColonyUnit.java). This match concerns equipment quantities/combinations, not combat strength or scout skill. | Matches | Proposed: 49/50 boundary for each item; soldier→dragoon and scout→dragoon; verify warehouse decrement, unit state, and save/reload. |

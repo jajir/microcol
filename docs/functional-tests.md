@@ -1,3 +1,53 @@
+## Depot empty states and plow terrain — 2026-11-14
+
+1. Colony cargo/transfer journeys and UC-019/016: empty depot and outside
+   sections show localized explanations; unselected cargo is hidden. Selected
+   carrier slots have transparent vector outlines without internal vertical
+   strokes, and the section divider is removed. Plains and Desert now permit
+   plowing under the existing model preconditions.
+2. Coverage: `TerrainTypeTest`, `TC_195_F227_colony_layout_test` (including
+   empty/selected depot checks and screenshots), `TC_05_F05_moving_goods_test`,
+   `TC_18_F01_plow_field_test` (TC11 Plains and TC12 Desert),
+   `TC_15_F05_plow_field_test` and `PageVerificationContractTest`.
+3. Model/JUnit passed **5,133 tests in 395 reports**, zero failures/errors/skips,
+   in 156.958 supervised seconds: completion `20261114T081212Z-7f498a8ec202`
+   (PID 23509), snapshot `target/verification/run-8f563e6j/`, base `b1098d4d`.
+   Every changed executable/test file matches that snapshot. Java formatting,
+   14 documentation consistency tests, name audit and strict MkDocs passed;
+   documentation logs are in `target/depot-plow/`.
+4. Targeted Docker/Xvfb selection from item 2 dispatched as
+   `20261114T081508Z-cb75c98b43eb` (PID 24173), with a 1,800-second timeout.
+   Targeted UI, screenshot review, fixed smoke and final review remain pending.
+   No remote CI or publication verification requested. Unrelated backlog edits
+   remain excluded.
+5. First targeted attempt failed after 38.115 seconds during UI test
+   compilation: the UI module has no JUnit parameterized-test dependency.
+   No UI tests started. Replaced the parameterized scenario with ordinary
+   TC11/TC12 tests, retaining both terrain checks without adding a dependency.
+   Production and model-test sources remain identical to the passing model
+   snapshot. Failed evidence is preserved; retry `20261114T081617Z-f78344370e68`
+   (PID 24844, 1,800-second timeout) repeats the entire targeted selection.
+6. Targeted retry passed **27 checks in five complete XML reports**, zero
+   failures/errors/skips, in 436.311 supervised seconds (under its 1,800-second
+   targeted budget). Reports and screenshots: `target/docker-ui/run-wUYagH/`.
+   Visual review at 900 × 750 confirms both empty explanations, no cargo slots
+   without a carrier, no section divider, and transparent open cargo outlines
+   with visible goods/passengers and quantities. These are existing procedural
+   JavaFX SVGPath controls, not new raster illustrations.
+7. Fixed smoke dispatched as `20261114T082345Z-04f3aad2cf80` (PID 25977),
+   480-second supervisor watchdog and unchanged 420-second acceptance budget.
+   Commit/push remains pending smoke and final documentation validation.
+8. Final fixed smoke passed **21 checks in 12 complete XML reports**, zero
+   failures/errors/skips, in 254.221 verifier seconds (254.378 supervised),
+   below the 420-second budget. Evidence: `target/verification/run-8gmj5px2/`.
+   Every changed executable/test file matches the smoke source snapshot.
+   Model results remain applicable: only UI scenario definitions changed after
+   model acceptance; game sources, model tests and model selection did not.
+9. Final local acceptance on base `b1098d4d`: 5,133 model/JUnit, 27 targeted
+   UI/support and 21 fixed smoke checks passed. Java formatting, source/diff
+   review, 14 documentation checks, name audit and strict MkDocs passed.
+   This is local acceptance, not full-regression or distribution verification.
+
 ## Plow availability and tools — 2026-11-13
 
 1. UC-019/016: the own worker panel shows its current tool count, including

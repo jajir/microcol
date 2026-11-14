@@ -322,6 +322,13 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         final GamePage game = WelcomePage.of(getContext()).loadGame();
         final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
         // Prepare a carrier at the colony before opening its overview.
+        layout.clearDepot(0);
+        final ColonyScreen emptyTown = game.openColonyAt(Location.of(24, 16),
+                "New Amsterdam");
+        layout.verifyEmptyDepot();
+        new InGameLayoutPage(getContext())
+                .saveEvidence("colony-empty-depot.png");
+        emptyTown.close();
         layout.placeCarrierAtColony(3, 0);
         final ColonyScreen town = game.openColonyAt(Location.of(24, 16),
                 "New Amsterdam");

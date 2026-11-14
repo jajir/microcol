@@ -493,11 +493,10 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
-    void TC_11_plains_rejection_is_explained_on_hover_and_ships_hide_plow()
-            throws Exception {
-        // Put a fully equipped worker beside the colony on open Plains.
-        PlowFixture.preparePlains(getContext(), "plow-f01-plains.akropia",
-                NEAR_LOCATION);
+    void TC_11_plains_allow_plowing_and_ships_hide_plow() throws Exception {
+        // Put a fully equipped worker beside the colony on cleared land.
+        PlowFixture.prepareTerrain(getContext(), "plow-f01-terrain.akropia",
+                NEAR_LOCATION, "l");
         final GamePage game = WelcomePage.of(getContext()).loadGame();
         final PlowPage plow = new PlowPage(getContext());
         game.getRightPanelUnit(2).selectUnit();
@@ -506,26 +505,45 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
         game.nextTurnAndCloseDialogs();
         game.selectTile(NEAR_LOCATION);
 
-        // The visible count and disabled command explain the terrain
-        // restriction.
+        // Both the control and keyboard use the newly allowed terrain rule.
         plow.verifyToolsShown(NEAR_LOCATION, 0, "Tools: 100");
-        plow.verifyControlDisabled(true);
-        plow.hoverControl();
-        game.verifyThatStatusBarContains("This terrain cannot be plowed.");
-        plow.clickDisabledControl();
-        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 100);
-        plow.verifyFieldAt(NEAR_LOCATION, false);
-        plow.dismissMenu();
-
-        // The keyboard path also rejects the same terrain without a modal.
+        plow.verifyControlDisabled(false);
         game.pressP();
-        game.verifyThatStatusBarContains("This terrain cannot be plowed.");
-        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 100);
+        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.plowField, 0, 100);
+        plow.verifyFieldAt(NEAR_LOCATION, false);
+        plow.verifyControlDisabled(true);
 
-        // A ship offers no plow command.
+        // Ships still have no plow action.
         game.selectTile(COLONY_LOCATION);
         game.selectMapUnit(3);
         game.verifyThatPlowFieldButtonIsHidden();
     }
 
+    @Test
+    @Tag("local")
+    void TC_12_desert_allow_plowing_and_ships_hide_plow() throws Exception {
+        // Put a fully equipped worker beside the colony on cleared land.
+        PlowFixture.prepareTerrain(getContext(), "plow-f01-terrain.akropia",
+                NEAR_LOCATION, "d");
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final PlowPage plow = new PlowPage(getContext());
+        game.getRightPanelUnit(2).selectUnit();
+        game.moveMouseAtLocation(COLONY_LOCATION);
+        game.dragMouseAtLocation(NEAR_LOCATION);
+        game.nextTurnAndCloseDialogs();
+        game.selectTile(NEAR_LOCATION);
+
+        // Both the control and keyboard use the newly allowed terrain rule.
+        plow.verifyToolsShown(NEAR_LOCATION, 0, "Tools: 100");
+        plow.verifyControlDisabled(false);
+        game.pressP();
+        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.plowField, 0, 100);
+        plow.verifyFieldAt(NEAR_LOCATION, false);
+        plow.verifyControlDisabled(true);
+
+        // Ships still have no plow action.
+        game.selectTile(COLONY_LOCATION);
+        game.selectMapUnit(3);
+        game.verifyThatPlowFieldButtonIsHidden();
+    }
 }

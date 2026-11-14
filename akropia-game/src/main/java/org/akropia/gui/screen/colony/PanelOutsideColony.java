@@ -84,6 +84,13 @@ final class PanelOutsideColony implements JavaFxComponent {
 
     void repaint() {
         panelUnits.getChildren().clear();
+        if (colony.getUnitsOutSideColony().isEmpty()) {
+            final javafx.scene.control.Label empty = new javafx.scene.control.Label(
+                    i18n.get(ColonyMsg.emptyOutside));
+            empty.setId("colony-outside-empty");
+            empty.setMouseTransparent(true);
+            panelUnits.getChildren().add(empty);
+        }
         colony.getUnitsOutSideColony().forEach(unit -> {
             final PanelOutsideColonyUnit paneImage = panelOutsideColonyUnitFactory
                     .make(unit, colony);

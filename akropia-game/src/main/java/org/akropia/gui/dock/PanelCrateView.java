@@ -37,6 +37,7 @@ public class PanelCrateView implements JavaFxComponent {
     private final ImageView cargoImage;
 
     private final SVGPath harborCrate;
+    private final boolean colony;
 
     private static final String CRATE_OUTLINE = "M 3 3 L 42 2 L 43 42 L 2 43 Z ";
 
@@ -44,7 +45,9 @@ public class PanelCrateView implements JavaFxComponent {
 
     private Background background;
 
-    PanelCrateView(final ImageProvider imageProvider, final boolean harbor) {
+    PanelCrateView(final ImageProvider imageProvider, final boolean harbor,
+            final boolean colony) {
+        this.colony = colony;
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
 
         crateImage = new ImageView();
@@ -56,8 +59,9 @@ public class PanelCrateView implements JavaFxComponent {
         harborCrate = harbor ? new SVGPath() : null;
         if (harborCrate != null) {
             harborCrate.getStyleClass().addAll("crate", "harbor-crate-face");
-            harborCrate.setFill(Color.web("#C99638"));
-            harborCrate.setStroke(Color.web("#25231F"));
+            harborCrate
+                    .setFill(colony ? Color.TRANSPARENT : Color.web("#C99638"));
+            harborCrate.setStroke(colony ? Color.BLACK : Color.web("#25231F"));
             harborCrate.setStrokeWidth(2);
             harborCrate.setStrokeLineJoin(StrokeLineJoin.ROUND);
             harborCrate.setMouseTransparent(true);
@@ -151,8 +155,8 @@ public class PanelCrateView implements JavaFxComponent {
             crateImage.setImage(
                     imageProvider.getImage(ImageProvider.IMG_CRATE_OPEN));
         } else {
-            harborCrate.setContent(
-                    CRATE_OUTLINE + "M 13 3 L 12 43 M 32 2 L 33 42");
+            harborCrate.setContent(CRATE_OUTLINE
+                    + (colony ? "" : "M 13 3 L 12 43 M 32 2 L 33 42"));
             mainPane.pseudoClassStateChanged(
                     PseudoClass.getPseudoClass("closed"), false);
         }

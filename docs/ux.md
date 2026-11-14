@@ -41,7 +41,7 @@
 
 1. Pořadí je Surrounding area, Construction, School a společný Cargo Depot.
    Nadpisy nemají číslování. Přetažení záhlaví prvních tří karet zůstává dostupné.
-2. Cargo Depot je trvale viditelná oblast bez vnějšího rámečku: přepravci, náklad a pod oddělovačem
+2. Cargo Depot je trvale viditelná oblast bez vnějšího rámečku: přepravci, náklad a pod ním
    Outside colony. Nemá mořské podbarvení ani přepínací tlačítka Cargo a Outside
    colony. Nadpis začíná v úrovni horní hrany sousedních tlačítek. Výběr přepravce změní nadpis například na Cargo Depot - Wagon #14.
    Nakládání, vykládání a přetahování používají dosavadní pravidla.
@@ -1586,3 +1586,15 @@ studii. Ověření sleduje [funkční evidence](functional-tests.md#page-separat
 2. Změna nevyžaduje novou akci ani potvrzení hráče. Kontrolují ji scénáře
    `TC_24_F15_free_play_setup_test` (UC-002/004) a
    `TC_196_F228_world_minimap_test` (mapový panel).
+
+## Prázdné překladiště a okolí kolonie — 14. listopadu 2026
+
+1. Cargo Depot a Outside colony neodděluje linka. Prázdné překladiště hlásí,
+   že v něm není žádná přepravní jednotka; prázdné okolí hlásí, že mimo kolonii
+   není žádná jednotka. Hlášky jsou lokalizované a nepřekážejí přetažení jednotky.
+2. Nákladové boxy se zobrazují jen pro vybraného přepravce. Nemají barevnou
+   výplň a otevřené boxy nemají vnitřní svislé čáry; zůstává černý obrys
+   o síle dvou logických pixelů, obsah a počet zboží. Nakládání, vykládání
+   a odmítnutí neplatného přesunu nadále používají společné operace modelu.
+3. Jde o zadané chování, nikoli hráčskou studii. Ověření je v
+   [evidenci](functional-tests.md#depot-empty-states-and-plow-terrain-2026-11-14).

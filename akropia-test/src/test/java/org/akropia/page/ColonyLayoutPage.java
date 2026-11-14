@@ -426,6 +426,32 @@ public final class ColonyLayoutPage extends AbstractScreen {
                         .getColonyById(colony).orElseThrow().getLocation()));
     }
 
+    public void clearDepot(final int colonyId) {
+        getRobot().interact(() -> {
+            final Colony colony = getModel().getColonyById(colonyId)
+                    .orElseThrow();
+            final org.akropia.model.Location destination = colony.getLocation()
+                    .getNeighbors().get(0);
+            new java.util.ArrayList<>(
+                    getModel().getUnitsAt(colony.getLocation()))
+                    .forEach(unit -> unit.placeToLocation(destination));
+        });
+    }
+
+    public void verifyEmptyDepot() {
+        getRobot().interact(() -> {
+            assertEquals("No transport units in the cargo depot.",
+                    getLabeledById("colony-depot-empty").getText());
+            assertTrue(getLabeledById("colony-depot-empty").isVisible());
+            assertEquals("No units outside the colony.",
+                    getLabeledById("colony-outside-empty").getText());
+            final Node crate = getNodeFinder()
+                    .lookup("#colony-cargo-depot .cratePanel").query();
+            assertFalse(crate.getParent().isVisible());
+            assertFalse(crate.getParent().isManaged());
+        });
+    }
+
     public void verifyDepot(String expectedTitle) {
         getRobot().interact(() -> {
             final VBox depot = getNodeFinder().lookup("#colony-cargo-depot")
@@ -438,6 +464,19 @@ public final class ColonyLayoutPage extends AbstractScreen {
             assertTrue(dock.getBackground().getFills().stream().allMatch(
                     fill -> Color.TRANSPARENT.equals(fill.getFill())));
             assertTrue(depot.isVisible());
+            assertTrue(depot.lookupAll(".separator").isEmpty());
+            assertFalse(getLabeledById("colony-depot-empty").isVisible());
+            for (Node node : depot.lookupAll(".harbor-crate-face")) {
+                final javafx.scene.shape.SVGPath face = (javafx.scene.shape.SVGPath) node;
+                assertEquals(Color.TRANSPARENT, face.getFill());
+                assertEquals(Color.BLACK, face.getStroke());
+                assertEquals(2, face.getStrokeWidth());
+                if (!face.getParent().getPseudoClassStates().contains(
+                        javafx.css.PseudoClass.getPseudoClass("closed"))) {
+                    assertEquals("M 3 3 L 42 2 L 43 42 L 2 43 Z ",
+                            face.getContent());
+                }
+            }
             assertTrue(depot.getBorder() == null || depot.getBorder()
                     .getInsets().equals(javafx.geometry.Insets.EMPTY));
             Node title = getNodeFinder().lookup("#europe-cargo-title").query();

@@ -133,8 +133,8 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         outside.getStyleClass().add("colony-unit-scroll");
         final Label outsideTitle = new Label();
         outsideTitle.setId("colony-outside-title");
-        dockDetail.getChildren().addAll(panelDock.getContent(),
-                new javafx.scene.control.Separator(), outsideTitle, outside);
+        dockDetail.getChildren().addAll(panelDock.getContent(), outsideTitle,
+                outside);
         dockDetail.setId("colony-cargo-depot");
         dockDetail.getStyleClass().add("colony-depot");
         dockDetail.getStyleClass().add("colony-harbor");

@@ -483,7 +483,8 @@ public final class TerrainType {
 
     public boolean isCanHaveField() {
         return this.equals(PRAIRIE) || this.equals(GRASSLAND)
-                || this.equals(SAVANNAH);
+                || this.equals(SAVANNAH) || this.equals(PLAINS)
+                || this.equals(DESERT);
     }
 
     public boolean isSea() {

@@ -130,7 +130,8 @@
   <entry key="peopleHint">Drag a colonist into a building or onto a field to assign work.</entry>
   <entry key="overviewPolitics">Population %s · Liberty %s%% · Crown %s%%</entry>
   <entry key="emptyCargo">Empty hold</entry>
-  <entry key="emptyHarbor">No ships or wagons in port.</entry>
+  <entry key="emptyHarbor">No transport units in the cargo depot.</entry>
+    <entry key="emptyOutside">No units outside the colony.</entry>
   <entry key="emptySchool">No active courses. Choose a teacher and student below.</entry>
   <entry key="buildingSection">Construction</entry>
   <entry key="schoolSection">School</entry>

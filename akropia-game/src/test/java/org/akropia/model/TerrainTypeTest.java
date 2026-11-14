@@ -11,6 +11,16 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 public class TerrainTypeTest {
 
+    @Test
+    void plowableTerrainIncludesPlainsAndDesert() {
+        final Set<TerrainType> expected = Set.of(TerrainType.PRAIRIE,
+                TerrainType.GRASSLAND, TerrainType.SAVANNAH, TerrainType.PLAINS,
+                TerrainType.DESERT);
+        for (TerrainType terrain : TerrainType.TERRAINS) {
+            assertEquals(expected.contains(terrain), terrain.isCanHaveField());
+        }
+    }
+
     private final static int NUMBER_OF_TERRAINS = 14;
 
     /**

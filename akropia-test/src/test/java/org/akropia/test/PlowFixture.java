@@ -96,8 +96,9 @@ final class PlowFixture {
         use(context, saved, name);
     }
 
-    static void preparePlains(final TestContext context, final String name,
-            final Location location) throws IOException {
+    static void prepareTerrain(final TestContext context, final String name,
+            final Location location, final String terrainCode)
+            throws IOException {
         prepare(context,
                 new File("src/test/scenarios/F01-embark-disembark.akropia"),
                 name, 100, null, location);
@@ -105,7 +106,7 @@ final class PlowFixture {
         final JsonObject saved = new Gson().fromJson(
                 Files.readString(prepared.toPath()), JsonObject.class);
         setCell(saved.getAsJsonObject("model").getAsJsonObject("map")
-                .getAsJsonArray("tiles"), location, "l");
+                .getAsJsonArray("tiles"), location, terrainCode);
         use(context, saved, name);
     }
 
