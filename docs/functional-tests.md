@@ -16284,3 +16284,21 @@ Final smoke retry `20261113T185916Z-769f6bd0010b` passed as recorded above.
 The earlier smoke failure remains failed; the intermittent map-double-click
 cause was not established. Received mouse counts/targets remain in timeout
 messages for diagnosis. No tests were removed or weakened for acceptance.
+
+## Odstranění popisku obtížnosti z mapy — 2026-11-14
+
+1. UC-002/004: pravý panel mapy nezobrazuje obtížnost. Testy dále kontrolují
+   zvolenou obtížnost modelu a uložené hry; herní pravidla se nemění.
+2. Zdroj založený na `fb88cf3f`: model/JUnit **5132 testů**, cílené Docker UI
+   **18 testů** (`TC_24_F15_free_play_setup_test`: 12,
+   `TC_196_F228_world_minimap_test`: 6), bez selhání, chyb a vynechání.
+   Reporty: `target/verification/run-pe8jqr1x/`,
+   `target/docker-ui/run-1pqJre/`.
+3. Dokumentační kontroly: 14 testů, audit názvů bez nevysvětlených výskytů
+   a strict MkDocs prošly. Výsledky v `target/remove-difficulty/`.
+4. Pevný smoke/support výběr: **21 testů**, bez selhání, chyb a vynechání;
+   celkový čas včetně přípravy a úklidu **252,521 s / 420 s**.
+   Report: `target/verification/run-xumk0twy/`. Snímek
+   `target/docker-ui/run-1pqJre/akropia-test/warehouse-qa/reference-expedition.png`
+   vizuálně potvrzuje nepřítomnost popisku. Vzdálená regrese ani publikace
+   distribuce nebyly ověřovány.

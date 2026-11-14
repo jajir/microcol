@@ -247,8 +247,7 @@ public class TC_24_F15_free_play_setup_test extends AbstractAkropiaTest {
             setup.verifyGameDifficulty(Difficulty.CONQUISTADOR, "Conquistador");
             final java.util.List<Integer> units = setup.referenceUnitIds();
             if (nation == EuropeanNation.DUTCH) {
-                setup.captureDialog("gameDifficulty",
-                        "reference-expedition.png");
+                setup.captureDialog("rightPanel", "reference-expedition.png");
             }
             game.exitToMenu();
             game = new FreePlayAuditPage(getContext()).continueGame();

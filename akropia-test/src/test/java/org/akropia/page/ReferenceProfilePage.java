@@ -18,12 +18,10 @@ import org.akropia.model.campaign.po.GameModelPoDao;
 import org.mockito.Mockito;
 import org.testfx.util.WaitForAsyncUtils;
 
-import javafx.scene.control.Labeled;
-
 /**
  * Prepares a reference position save and observes its profile after loading
- * (R-0208). The verifications read the loaded model and the game difficulty
- * label; they never change the game.
+ * (R-0208). The verifications read the loaded model and check the map panel;
+ * they never change the game.
  */
 public final class ReferenceProfilePage extends AbstractScreen {
     public ReferenceProfilePage(final TestContext context) {
@@ -60,12 +58,11 @@ public final class ReferenceProfilePage extends AbstractScreen {
                 () -> getModel().isGameRunning()
                         && getModel().getCurrentPlayer() == getModel()
                                 .getPlayerByName(nation.getPlayerName()));
-        // The difficulty label is set on the FX thread when a turn starts.
         WaitForAsyncUtils.waitForFxEvents();
         assertEquals(difficulty, getModel().getDifficulty());
-        final Labeled label = getLabeledById("gameDifficulty");
-        assertTrue(label.isVisible());
-        assertTrue(label.getText().contains(difficultyLabel), label.getText());
+        assertTrue(
+                getNodeFinder().lookup("#gameDifficulty").queryAll().isEmpty(),
+                "The map has no difficulty label");
         assertEquals(8, getModel().getPlayers().size());
         for (final EuropeanNation colonial : EuropeanNation.values()) {
             final Player player = getModel()

@@ -1577,3 +1577,12 @@ studii. Ověření sleduje [funkční evidence](functional-tests.md#page-separat
    a výuka zůstávají zachovány. Samostatné modální dialogy si zachovávají
    vlastní zrušení pomocí Escape.
 5. Stav skutečného ověření uvádí [testová evidence](functional-tests.md#navigation-shortcuts-2026-11-13).
+
+## Pravý panel mapy — 14. listopadu 2026
+
+1. Při prohlížení mapy pravý panel zobrazuje minimapu, hráče na tahu, terén
+   a jednotky. Dole nezobrazuje údaj „Difficulty: …“. Volba obtížnosti
+   při zakládání hry i její herní účinky zůstávají zachovány.
+2. Změna nevyžaduje novou akci ani potvrzení hráče. Kontrolují ji scénáře
+   `TC_24_F15_free_play_setup_test` (UC-002/004) a
+   `TC_196_F228_world_minimap_test` (mapový panel).

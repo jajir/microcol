@@ -239,10 +239,9 @@ public final class FreePlaySetupPage extends AbstractScreen {
             final String expectedLabel) {
         assertEquals(expected, getModel().getDifficulty());
         assertEquals(expected, getModel().save().getDifficulty());
-        final javafx.scene.control.Labeled label = getLabeledById(
-                "gameDifficulty");
-        assertTrue(label.isVisible());
-        assertTrue(label.getText().contains(expectedLabel), label.getText());
+        assertTrue(
+                getNodeFinder().lookup("#gameDifficulty").queryAll().isEmpty(),
+                "The map has no difficulty label");
     }
 
     /**

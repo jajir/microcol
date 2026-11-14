@@ -265,9 +265,8 @@ public final class WorldMinimapPage extends AbstractScreen {
                     terrain.getHeight() >= terrain
                             .prefHeight(terrain.getWidth()) - .5,
                     "Terrain name and movement cost must remain fully visible");
-            final Node difficulty = node("gameDifficulty");
-            assertTrue(difficulty.localToScene(difficulty.getLayoutBounds())
-                    .getMaxY() <= map.getScene().getHeight());
+            assertTrue(getNodeFinder().lookup("#gameDifficulty").queryAll()
+                    .isEmpty(), "The map has no difficulty label");
             assertEquals(accessibleName, map.getAccessibleText());
             assertEquals(hint, map.getAccessibleHelp());
             assertTrue(getNodeFinder().lookup("#minimapTitle").queryAll()
