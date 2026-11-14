@@ -1,3 +1,14 @@
+## Obrazovka cílů — 14. listopadu 2026
+
+1. Obsahová plocha a panely cílů mají stejné světlé pozadí jako záhlaví
+   a stavový řádek. Sdílené tlačítko návratu zachovává běžný vzhled.
+2. Hráč otevře Objectives z herního panelu. Pokud mise nemá cíle,
+   obsah zobrazí „Žádné cíle nebyly stanoveny. Užij si hru!“; anglicky
+   „No objectives have been set. Enjoy the game!“. Existující cíle dál
+   zobrazují popis a značku splnění. Back to game nebo Escape vrací do hry
+   bez změny herního stavu.
+3. Ověření UC-114/119 vede [funkční evidence](functional-tests.md#goals-empty-2026-11-14).
+
 ## Menu nápovědy — 14. listopadu 2026
 
 1. Colonizopedia používá samostatné kreslené karty témat jako detail statistik.

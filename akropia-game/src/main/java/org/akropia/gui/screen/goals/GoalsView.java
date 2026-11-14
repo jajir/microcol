@@ -17,6 +17,7 @@ public final class GoalsView implements JavaFxComponent, ScreenLifeCycle {
     @Inject
     GoalsView(final InGamePage page, final GoalsButtonsPanel buttons) {
         this.page = page;
+        page.getContent().getStyleClass().add("goals-screen");
         page.setToolbar(buttons.getContent());
     }
 

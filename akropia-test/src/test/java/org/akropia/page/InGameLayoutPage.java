@@ -44,6 +44,23 @@ public final class InGameLayoutPage extends AbstractScreen {
                 .map(node -> (Region) node).findFirst().orElseThrow();
     }
 
+    public void verifyEmptyGoals(final String expectedMessage) {
+        getRobot().interact(() -> {
+            final Region root = page();
+            assertEquals(expectedMessage,
+                    ((Label) root.lookup("#noGoalsMessage")).getText());
+            final Color paper = Color.web("#FFF9EC");
+            for (Region region : new Region[] { root,
+                    (Region) root.lookup(".screen-scroll"),
+                    (Region) root.lookup(".viewport"),
+                    (Region) root.lookup(".goals-main-panel") }) {
+                assertEquals(paper,
+                        region.getBackground().getFills().get(0).getFill());
+            }
+            assertTrue(root.lookupAll(".row").isEmpty());
+        });
+    }
+
     public void open(final String id) {
         if (id.endsWith("Tab")) {
             clickOnStatisticsTab(id);

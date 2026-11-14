@@ -8,4 +8,5 @@
 	<entry key="notYetDone">Not yet done.</entry>
 	<entry key="buttonBack">Back</entry>
 
+    <entry key="noGoals">No objectives have been set. Enjoy the game!</entry>
 </properties>

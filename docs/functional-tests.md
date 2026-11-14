@@ -1,3 +1,23 @@
+<a id="goals-empty-2026-11-14"></a>
+## Objectives empty state — 2026-11-14
+
+1. UC-114/119: [objectives UX](ux.md#obrazovka-cilu-14-listopadu-2026)
+   uses header/footer paper for the page and a localized empty-state message.
+   Existing goal rows and return controls retain their behavior.
+2. `TC_192_F225_in_game_layout_test` / `TC_01` and `TC_02` verify the
+   English/Czech message, empty rows, paper backgrounds and return to game.
+3. Local acceptance passed on the changed source based on `8275a837`:
+   all 5,134 model/JUnit tests in `target/verification/run-n__z0xbk`
+   (157.246 s), five targeted checks in `target/docker-ui/run-J4MEYV`
+   (`TC_192` methods above plus `PageVerificationContractTest`), and
+   21 fixed smoke/support checks in `target/verification/run-ppziamnl`
+   (253.648 s; total runner 257.752 s, within the 420-second budget).
+   Every phase has zero failures, errors and skips. English/Czech screenshots
+   were inspected: matching paper backgrounds, complete text and return controls.
+4. Shared Java formatting and diff review completed. Documentation consistency
+   (14 tests), name audit and strict MkDocs passed. Unrelated backlog changes
+   are excluded. Full regression and remote publication were not verified.
+
 <a id="help-topic-menu-2026-11-14"></a>
 ## Help topic menu — 2026-11-14
 

@@ -1,2 +1,8 @@
 .row { -fx-min-height: 45; -fx-spacing: 16; -fx-alignment: center-left; }
 .caption { -fx-wrap-text: true; }
+
+.in-game-page.goals-screen,
+.in-game-page.goals-screen .screen-scroll,
+.in-game-page.goals-screen .screen-scroll > .viewport {
+    -fx-background-color: #FFF9EC;
+}

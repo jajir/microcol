@@ -61,7 +61,14 @@ public final class GoalsPanel implements GameScreen {
         goalsPanel.getChildren().clear();
         final MissionGoals goals = gameModelController.getGameModel()
                 .getMissionGoals();
-        goals.getGoals().forEach(this::makeRow);
+        if (goals.getGoals().isEmpty()) {
+            final Label message = new Label(i18n.get(Goals.noGoals));
+            message.setId("noGoalsMessage");
+            message.setWrapText(true);
+            goalsPanel.getChildren().add(message);
+        } else {
+            goals.getGoals().forEach(this::makeRow);
+        }
     }
 
     private void makeRow(final MissionGoal goal) {
