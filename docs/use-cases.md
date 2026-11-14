@@ -1,3 +1,7 @@
+## UC-043/114/119: výchozí písmo a nečinná výstavba — 14. listopadu 2026
+1. [UX kontrakt](ux.md#prubeh-stavby-ve-meste-10-listopadu-2026) určuje společné výchozí písmo a návod místo pruhů pouze bez vybrané stavby. Vybraná pozastavená stavba zachovává práci i nástroje; hláška o čekání na kladiva mizí.
+2. `TC_54_F45_shared_hammers_test` ověřuje prázdnou frontu, průběh a nulovou produkci; `TC_195_F227_colony_layout_test.TC_06_overviews_reorder_and_inline_editors` kontroluje návod, dědění velikosti písma a cestu do editoru. [Výsledek ověření](functional-tests.md#colony-font-empty-construction-2026-11-14).
+
 ## UC-114: menu nápovědy — 14. listopadu 2026
 
 1. Seznam témat používá samostatné kreslené karty, významové ikony 32 × 32

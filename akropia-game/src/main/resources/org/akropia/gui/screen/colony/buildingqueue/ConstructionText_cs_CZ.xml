@@ -20,11 +20,11 @@
     <entry key="cancel">Zavřít / zrušit výběr</entry>
     <entry key="changed">Kolonie se změnila. Vyberte projekt znovu a zkontrolujte aktuální požadavky.</entry>
     <entry key="added">Přidáno do fronty.</entry>
+    <entry key="emptyHelp">V kolonii se nic nestaví. Klikněte na Stavění a ve spodním panelu vyberte stavbu. Pro stavbu potřebujete alespoň jednoho pracovníka na pile a dostatek dřeva.</entry>
     <entry key="empty">Není vybraná žádná stavba.</entry>
     <entry key="hammers">Kladiva: %s / %s (+%s/tah)</entry>
     <entry key="tools">Nástroje: %s / %s</entry>
     <entry key="waitingTools">Čeká na %s nástrojů.</entry>
-    <entry key="waitingHammers">Čeká na kladiva.</entry>
     <entry key="ready">Připraveno na příští fázi stavění.</entry>
 <entry key="hammerPool">Společná práce: %s kladiv.</entry>
     <entry key="coastalRequired">Je nutná pobřežní kolonie.</entry>

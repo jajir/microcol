@@ -14,8 +14,8 @@ import org.akropia.model.ConstructionType;
 public enum ConstructionText implements MessageKeyResource {
     open, title, projects, queue, choose, cost, available, population,
     predecessor, alreadyBuilt, alreadyQueued, unavailable, add, up, down,
-    remove, cancel, changed, added, empty, hammers, hammerPool, tools,
-    waitingTools, waitingHammers, ready, coastalRequired, missingShipyard, rush,
+    remove, cancel, changed, added, empty, emptyHelp, hammers, hammerPool,
+    tools, waitingTools, ready, coastalRequired, missingShipyard, rush,
     rushConfirm, rushCancel, rushDetail, rushUnavailable, rushNoGold,
     rushChanged, rushCompleted, missingFounder, missingArmory, work, toolsLabel,
     notRequired, resourceAmount, resourceRate, resourceTurns, resourceMissing,
@@ -85,9 +85,8 @@ public enum ConstructionText implements MessageKeyResource {
                                 stats.getTools().getRequired()
                                         - stats.getTools().getAlreadyHave());
                     }
-                    return i18n.get(stats.getHammers().getAlreadyHave() < stats
-                            .getHammers().getRequired() ? waitingHammers
-                                    : ready);
+                    return stats.getHammers().getAlreadyHave() < stats
+                            .getHammers().getRequired() ? "" : i18n.get(ready);
                 }).orElse(i18n.get(empty));
     }
 }

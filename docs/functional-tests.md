@@ -1,3 +1,10 @@
+<a id="colony-font-empty-construction-2026-11-14"></a>
+## Colony typography and idle construction — 2026-11-14
+1. Colony labels inherit the shared 14-pixel default. An empty construction queue shows localized instructions instead of empty meters. Selected projects retain both meters during shortages; the obsolete waiting-for-hammers message is removed.
+2. Model/JUnit passed 5,134 tests in 395 complete XML reports, zero failures/errors/skips (`target/verification/run-y80b0vbn`, completion `20261114T203520Z-60dbed1d626b`, 153.850 supervised seconds). Changed executable sources match its captured snapshot. The earlier `20261114T203427Z-c662264a11b9` failed during Docker preparation after a 20-second container-list timeout; no tests started. Subsequent diagnostic queries succeeded; failed evidence remains preserved.
+3. Targeted Docker/Xvfb selection `TC_54_F45_shared_hammers_test`, `TC_195_F227_colony_layout_test`, `PageVerificationContractTest` passed all 14 checks in three complete XML reports, zero failures/errors/skips (`target/docker-ui/run-BJqlrL`, completion `20261114T203819Z-69e64bec2887`, 218.987 supervised seconds). This covers empty instructions, inherited font size, selected-project shortages and existing player journeys.
+4. Fixed smoke/support selection passed 21 checks in 12 complete XML reports, zero failures/errors/skips (`target/verification/run-6qmrwqy7`, completion `20261114T204222Z-0f48ba38ddab`, 258.826 supervised seconds, within the 420-second acceptance budget). Changed executable sources match the smoke snapshot. Java files were formatted with the shared profile. Final documentation consistency (14 tests), name audit and strict MkDocs passed. Local acceptance covers the changes based on `25beb747f6d6a0530f0545a32ee35fcf6cb5a1d8`; unrelated backlog edits are excluded. No full-regression or publication claim.
+
 <a id="javafx-25-2026-11-14"></a>
 ## Shared JavaFX 25 runtime — 2026-11-14
 1. The game and UI tests now resolve JavaFX 25.0.5 from the parent POM;

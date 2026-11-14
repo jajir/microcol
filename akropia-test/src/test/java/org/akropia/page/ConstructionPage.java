@@ -300,21 +300,20 @@ public final class ConstructionPage extends AbstractScreen {
     }
 
     public void verifyEmptyProgress() {
-        verifyStatus("No construction selected.");
+        verifyStatus(
+                "Nothing is being built in this colony. Click Construction, "
+                        + "then choose a project in the panel below. Construction needs "
+                        + "at least one worker in the Lumber Mill and enough lumber.");
         for (String id : List.of("constructionWork", "constructionTools")) {
-            final javafx.scene.control.ProgressBar bar = getNodeFinder()
-                    .lookup("#" + id + "Bar")
-                    .queryAs(javafx.scene.control.ProgressBar.class);
-            assertEquals(0, bar.getProgress(), 0.001);
-            assertTrue(bar.isVisible());
-            assertEquals("—", getLabeledById(id + "Amount").getText());
-            assertTrue(bar.getAccessibleText()
-                    .contains("No construction selected."));
+            assertTrue(getNodeFinder().lookup("#" + id + "Bar").queryAll()
+                    .isEmpty());
         }
     }
 
     public void verifyStatus(final String expected) {
         assertEquals(expected, getLabeledById("constructionStatus").getText());
+        assertEquals(!expected.isEmpty(),
+                getLabeledById("constructionStatus").isVisible());
     }
 
     public void verifyChangedOffer() {

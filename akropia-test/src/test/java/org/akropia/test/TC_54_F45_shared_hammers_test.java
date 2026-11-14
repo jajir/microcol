@@ -207,7 +207,7 @@ public class TC_54_F45_shared_hammers_test extends AbstractAkropiaTest {
                 "+0/turn", "44 missing", 0.45, true);
         building.verifyResourceProgress("constructionTools", "Not required", "",
                 "", 0, false);
-        building.verifyStatus("Waiting for hammers.");
+        building.verifyStatus("");
         building.verifyForecast("Completion unknown at current production.");
         colony.close();
     }

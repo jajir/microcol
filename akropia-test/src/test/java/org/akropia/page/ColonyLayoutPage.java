@@ -364,16 +364,20 @@ public final class ColonyLayoutPage extends AbstractScreen {
     }
 
     public void verifyEmptyConstructionMeters() {
-        for (String resource : java.util.List.of("constructionWork",
-                "constructionTools")) {
-            final javafx.scene.control.ProgressBar bar = getNodeFinder()
-                    .lookup("#" + resource + "Bar")
-                    .queryAs(javafx.scene.control.ProgressBar.class);
-            assertTrue(bar.isVisible());
-            assertEquals(0, bar.getProgress());
-            assertEquals("—", getLabeledById(resource + "Amount").getText());
-            assertTrue(bar.getWidth() > 0);
-        }
+        new ConstructionPage(getContext()).verifyEmptyProgress();
+        getRobot().interact(() -> {
+            final javafx.scene.control.Label status = getNodeFinder()
+                    .lookup("#statusBar .label")
+                    .queryAs(javafx.scene.control.Label.class);
+            assertEquals(14, status.getFont().getSize(), 0.01);
+            for (Node node : getNodeFinder().lookup(".colony-overview .label")
+                    .queryAll()) {
+                assertEquals(status.getFont().getSize(),
+                        ((javafx.scene.control.Label) node).getFont().getSize(),
+                        0.01,
+                        "Colony overview inherits the shared default font");
+            }
+        });
     }
 
     public void openSection(final String section) {
