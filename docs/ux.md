@@ -19,6 +19,11 @@
 
 ## Obrazovka cílů — 14. listopadu 2026
 
+Úprava 15. listopadu 2026: obsah cílů nemá rámeček ani jeho vnitřní
+odsazení. Text začíná vlevo nahoře v obsahové ploše, s běžným vnějším
+odstupem od záhlaví a okrajů.
+
+
 1. Obsahová plocha a panely cílů mají stejné světlé pozadí jako záhlaví
    a stavový řádek. Sdílené tlačítko návratu zachovává běžný vzhled.
 2. Hráč otevře Objectives z herního panelu. Pokud mise nemá cíle,

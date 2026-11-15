@@ -57,6 +57,15 @@ public final class InGameLayoutPage extends AbstractScreen {
                 assertEquals(paper,
                         region.getBackground().getFills().get(0).getFill());
             }
+            final Region content = (Region) root.lookup(".goals-main-panel");
+            assertEquals(javafx.geometry.Insets.EMPTY, content.getInsets());
+            final Node message = root.lookup("#noGoalsMessage");
+            final Bounds contentBounds = content
+                    .localToScene(content.getLayoutBounds());
+            final Bounds messageBounds = message
+                    .localToScene(message.getLayoutBounds());
+            assertEquals(contentBounds.getMinX(), messageBounds.getMinX(), 0.5);
+            assertEquals(contentBounds.getMinY(), messageBounds.getMinY(), 0.5);
             assertTrue(root.lookupAll(".row").isEmpty());
         });
     }

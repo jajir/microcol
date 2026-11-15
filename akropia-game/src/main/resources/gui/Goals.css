@@ -6,3 +6,9 @@
 .in-game-page.goals-screen .screen-scroll > .viewport {
     -fx-background-color: #FFF9EC;
 }
+
+.in-game-page.goals-screen .report-content {
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-alignment: top-left;
+}

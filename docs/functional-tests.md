@@ -1,3 +1,31 @@
+## Objectives without a frame — 2026-11-15
+
+1. UC-114/119: the objectives content has no border or inner padding;
+   its text starts at the top left inside the existing page margins.
+2. `TC_192_F225_in_game_layout_test` / `TC_01` and `TC_02` retain English/Czech
+   empty-state, paper and navigation checks and now verify zero content insets
+   and the message position. Local acceptance passed; see item 4.
+3. Initial model attempt `20261115T162803Z-4e80554fe524` timed out during
+   Docker preparation (labelled-container query, 20-second step limit;
+   22.096 seconds total). Tests did not start. Evidence remains in the
+   completion directory. Subsequent Docker info and the same container query
+   passed in 0.101 s and 0.017 s; the timeout's root cause is unconfirmed.
+   Model retry is `20261115T162847Z-078e49ea4716` (600-second watchdog).
+4. Accepted source is based on `f961a5b3`: model retry passed all 5,136
+   tests in `target/verification/run-6zuu0s4h` (150.418 s); targeted UI
+   selection above plus `PageVerificationContractTest` passed five checks
+   in `target/docker-ui/run-bLdLgA` (90.144 s supervised total).
+   English/Czech screenshots confirm the frameless top-left text.
+   Fixed smoke passed 21 checks in `target/verification/run-f9d18g01`
+   (249.846 s; 252.745 s supervised total, within the 420-second budget).
+   All completed phases have zero failures, errors and skips. The earlier
+   preparation timeout remains failed evidence.
+5. Shared Java formatter, diff review, 14 documentation consistency tests,
+   name audit and strict MkDocs passed. Unrelated backlog edits are excluded.
+   Full regression and remote publication were not verified.
+
+
+
 ## Compact map panel — 2026-11-15
 
 1. UC-016/029/030/114: the carrier card keeps route status without an assignment
