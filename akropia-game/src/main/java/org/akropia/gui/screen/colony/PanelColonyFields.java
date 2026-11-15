@@ -300,6 +300,9 @@ public final class PanelColonyFields implements JavaFxComponent {
         });
         contextMenu.getItems().addAll(cancel, returnHome);
         contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
+        contextMenu.getScene().getStylesheets().setAll(
+                org.akropia.gui.MainStageBuilder.STYLE_SHEET_AKROPIA, getClass()
+                        .getResource("/gui/ContextMenus.css").toExternalForm());
     }
 
     @SuppressWarnings("unused")

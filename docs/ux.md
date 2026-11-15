@@ -211,11 +211,17 @@ vždy dostupný. Zobrazení se přepočítá při překreslení i při otevřen�
 
 7. Stavební seznamy nemění barvu celého pole při focusu. Výběr řádku je
    nadále rozlišitelný. Nabídka skrývá vylepšení bez skutečně dokončené
-   předchozí budovy; pouhé zařazení předchůdce do fronty nestačí. Ostatní
-   omezení zůstávají vysvětlena u nabídky a model je znovu kontroluje při akci.
+   předchozí budovy; pouhé zařazení předchůdce do fronty nestačí. Od úpravy
+   15. listopadu 2026 skrývá také již postavené budovy a nižší stupně nahrazené
+   vylepšením. Nedostatek kladiv nebo nástrojů položku neskrývá. Nedostatečný
+   počet obyvatel a již zařazený projekt zůstávají vysvětlené u nabídky; model
+   podmínky znovu kontroluje při akci.
    Nabídka rovněž skrývá jednotky bez požadované zbrojnice nebo loděnice a
    stavby bez požadovaného člena kongresu. Dvojklik na dostupnou položku ji
    jednou přidá na konec fronty; dvojklik ve frontě odebere právě tuto položku.
+   Kontextové nabídky pracovníků na poli, mimo kolonii i v budovách používají
+   společné papírové pozadí hlavní mapy. Choose work zůstává dostupné; jeho
+   případné odstranění je odloženo (15. listopadu 2026).
    Potvrzení, odebrání a řazení zůstávají také tlačítky. Podrobný panel nemá
    opakovaný nadpis Construction — kolonie ani tlačítko Close / cancel selection;
    Výběr jiné karty přepne panel bez zrušení fronty; Escape zavře celý detail

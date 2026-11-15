@@ -89,8 +89,13 @@ abstract class AbstractPanelConstructionWithSlots
                         work.setId("chooseWork");
                         work.setOnAction(action -> getEventBus()
                                 .post(new ShowColonyJobChoicesEvent(worker)));
-                        new ContextMenu(work).show(getMainPane(),
-                                event.getScreenX(), event.getScreenY());
+                        final ContextMenu menu = new ContextMenu(work);
+                        menu.show(getMainPane(), event.getScreenX(),
+                                event.getScreenY());
+                        menu.getScene().getStylesheets().setAll(
+                                org.akropia.gui.MainStageBuilder.STYLE_SHEET_AKROPIA,
+                                getClass().getResource("/gui/ContextMenus.css")
+                                        .toExternalForm());
                     });
             event.consume();
         });

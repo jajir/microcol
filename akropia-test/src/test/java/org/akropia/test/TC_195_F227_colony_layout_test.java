@@ -40,6 +40,14 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0371-colony-english.png");
 
+        // The worker menu shares the map's paper background and has no job
+        // picker.
+        town.openCropMenu(0);
+        town.verifyWorkerContextMenu();
+        new InGameLayoutPage(getContext())
+                .saveEvidence("colony-worker-menu.png");
+        town.cancelCropMenu();
+
         // Selecting a worked tile by keyboard is read-only.
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.rememberWorld();

@@ -1,3 +1,46 @@
+## Colony project filtering and worker menus — 2026-11-15
+
+1. UC-031/033/042/114/119: the construction picker hides completed buildings
+   and replaced lower tiers as well as upgrades without a completed predecessor.
+   Missing construction materials do not hide a project. Worker context menus
+   retain Choose work and use the shared paper menu background. The user
+   deferred removal of the job entry; existing mouse and keyboard paths stay.
+2. Final-source model run `target/verification/run-wy2kicy8` passed 5,136
+   tests with zero failures, errors or skips; the completion supervisor
+   recorded 161.820 seconds. Final targeted run
+   `20261115T194247Z-f16d84ce9b23` (`target/docker-ui/run-cdEehm`) passed
+   TC32/01, TC32/11, TC195/01, TC40/01 and TC40/02: five tests, zero
+   failures, errors or skips in 149.031 seconds including preparation.
+   These cover hidden projects, material/population explanations, queue
+   actions, rendered menu background and retained field/center/indoor job
+   entry paths. Additional TC32/03 (mixed queue ordering, removal and Continue)
+   passed in `target/docker-ui/run-BziFjb`, one test with zero failures,
+   errors or skips; supervisor time was 73.616 seconds. This covers the
+   additional assertions found during final diff review.
+   Fixed smoke/support run `target/verification/run-wf32tc0x`
+   passed 21 tests with zero failures, errors or skips in 255.411 seconds
+   including preparation, within the 420-second local budget. Changed Java
+   files match both final model and smoke source snapshots. Shared Java
+   formatting, 14 documentation consistency tests, the name audit and strict
+   MkDocs passed. Local acceptance is complete; remote regression and
+   distribution publication were not requested or verified.
+3. Targeted Docker run `20261115T192110Z-eb006ac3313b` ran TC32/01, TC32/11
+   and TC195/01: two passed and TC195/01 failed because the menu background
+   was transparent. The repair loads the shared menu stylesheet after the
+   legacy popup rule. Repeat `20261115T192624Z-07b5e01b3418`
+   (`target/docker-ui/run-AglYBD`) passed all three scenarios with zero
+   failures, errors or skips in 104.739 seconds including preparation.
+   The menu assertion checks the rendered background (`#fff9ec`) and absence
+   of Choose work; the construction screenshot was visually reviewed.
+   Fixed smoke/support selection `target/verification/run-_9ia7jzr`
+   passed in 252.085 seconds including preparation (420-second local limit);
+   it ran 21 tests with 0 failures, 0 errors and 0 skips. These earlier passes precede restoration of Choose work and do not
+   establish acceptance of the final source.
+4. Initial model attempt `20261115T191707Z-11c0d8ce5e7a` timed out during
+   Docker preparation (20-second container-list limit, 22.095 seconds total);
+   no test command started. Subsequent Docker server and container queries
+   succeeded. The failed attempt remains failed.
+
 ## Objectives without a frame — 2026-11-15
 
 1. UC-114/119: the objectives content has no border or inner padding;

@@ -59,6 +59,11 @@ public class TC_32_F24_construction_eligibility_test
         construction.focusList("constructionQueue");
         construction.verifyPaperListFocus("constructionQueue");
         construction.verifyProjectOffered("LARGE_STABLES", false);
+        // Missing predecessors and built lower tiers never appear as projects.
+        construction.verifyProjectOffered("NEWSPAPER", false);
+        construction.verifyProjectOffered("PRINTING_PRESS", true);
+        construction.verifyProjectOffered("BLACKSMITHS_HOUSE", false);
+        construction.verifyProjectOffered("CARPENTERS_STAND", false);
         construction.captureDialog("constructionProjects",
                 "construction-unavailable.png");
         construction.cancel();
@@ -212,6 +217,8 @@ public class TC_32_F24_construction_eligibility_test
         colony = game.openColonyWithKeyboard(0, "New Amsterdam");
         construction.verifyBuilding(ConstructionType.LUMBER_MILL, 1);
         construction.openWithKeyboard();
+        construction.verifyProjectOffered("LUMBER_MILL", false);
+        construction.verifyProjectOffered("CARPENTERS_STAND", false);
         construction.select("WAGON");
         construction.confirm();
         construction.select("WAREHOUSE");
@@ -501,6 +508,8 @@ public class TC_32_F24_construction_eligibility_test
         game.openColonyWithKeyboard(0, "New Amsterdam");
         construction.verifyBuilding(ConstructionType.LUMBER_MILL, 1);
         construction.openWithKeyboard();
+        construction.verifyProjectOffered("LUMBER_MILL", false);
+        construction.verifyProjectOffered("CARPENTERS_STAND", false);
         construction.doubleClickProject("WAGON");
         construction.doubleClickProject("WAREHOUSE");
         construction.verifyQueue(List.of("WAGON", "WAREHOUSE"), List.of(0, 1),

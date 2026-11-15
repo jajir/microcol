@@ -895,6 +895,21 @@ public class ColonyScreen extends AbstractScreen {
                                 && w.isShowing()));
     }
 
+    public void verifyWorkerContextMenu() {
+        final javafx.scene.control.ContextMenu menu = javafx.stage.Window
+                .getWindows().stream()
+                .filter(w -> w instanceof javafx.scene.control.ContextMenu
+                        && w.isShowing())
+                .map(w -> (javafx.scene.control.ContextMenu) w).findFirst()
+                .orElseThrow();
+        assertTrue(menu.getItems().stream()
+                .anyMatch(item -> "chooseWork".equals(item.getId())));
+        final javafx.scene.layout.Region root = (javafx.scene.layout.Region) menu
+                .getSkin().getNode();
+        assertEquals(javafx.scene.paint.Color.web("#fff9ec"),
+                root.getBackground().getFills().get(0).getFill());
+    }
+
     public void chooseCrop(final GoodsType crop, final int displayedYield) {
         getRobot().clickOn(crop.name() + "   " + displayedYield);
         WaitForAsyncUtils.waitForFxEvents();

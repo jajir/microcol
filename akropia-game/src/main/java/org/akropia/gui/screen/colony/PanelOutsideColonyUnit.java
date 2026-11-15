@@ -135,6 +135,9 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
         });
         contextMenu.getItems().add(ordain);
         contextMenu.show(mainPane, Side.BOTTOM, 0, 0);
+        contextMenu.getScene().getStylesheets().setAll(
+                org.akropia.gui.MainStageBuilder.STYLE_SHEET_AKROPIA, getClass()
+                        .getResource("/gui/ContextMenus.css").toExternalForm());
     }
 
     private void addEquipmentChoice(final UnitFreeColonist colonist,
