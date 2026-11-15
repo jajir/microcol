@@ -97,6 +97,11 @@
    je 16 pixelů; náhled políčka a obsah pod ní sdílejí levou linii.
    Minimální výška herního okna zahrnuje lišty, minimapu, odsazení,
    tlačítka plánovače a alespoň 120 pixelů pro posuvný obsah.
+   Výška systémového rámu se změří jednou při prvním ustálení mapy v okenním
+   režimu (150 ms bez změny rozložení) a potom se používá uložená hodnota.
+   Ve fullscreenu se minimum okna neaktualizuje; po návratu do okenního
+   režimu se znovu použije. Pokud hra začíná ve fullscreenu, měření počká
+   na první přechod do okenního režimu.
 4. Náhled políčka, údaje o poli a jednotkách se posouvají společně pod
    minimapou. Náhled má jemně nepravidelný černý rámeček o síle 2 pixelů.
    Řádek „On move: …“ se nezobrazuje. Plánovač posouvá seznam a podrobnosti

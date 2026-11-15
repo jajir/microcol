@@ -51,6 +51,11 @@ public class ScreenGame implements GameScreen {
     private static final double MINIMAP_BOTTOM_GAP = 8;
     private static final double MINIMUM_SCROLL_HEIGHT = 120;
 
+    private final javafx.animation.PauseTransition windowFrameMeasurementDelay = new javafx.animation.PauseTransition(
+            javafx.util.Duration.millis(150));
+    private javafx.stage.Stage windowStage;
+    private double osWindowFrameHeight = Double.NaN;
+
     private final VBox mainBox;
 
     private final GamePanelComponent gamePanelComponents;
@@ -90,6 +95,19 @@ public class ScreenGame implements GameScreen {
         this.tradeRoutePlanningPanel = Preconditions
                 .checkNotNull(tradeRoutePlanningPanel);
         this.statusBar.setShowEventsFromSource(Source.GAME);
+        windowFrameMeasurementDelay.setOnFinished(event -> {
+            if (windowStage == null || !windowStage.isShowing()
+                    || windowStage.isFullScreen()
+                    || windowStage.getScene() == null
+                    || windowStage.getScene().getHeight() <= 0) {
+                return;
+            }
+            // Measure only after windowed layout settles, never during
+            // resizing.
+            osWindowFrameHeight = Math.max(0, windowStage.getHeight()
+                    - windowStage.getScene().getHeight());
+            updateWindowMinimum();
+        });
 
         mapArea.setId("mainBox");
         VBox.setVgrow(mapArea, javafx.scene.layout.Priority.ALWAYS);
@@ -298,14 +316,30 @@ public class ScreenGame implements GameScreen {
         }
         final javafx.stage.Stage stage = (javafx.stage.Stage) mapArea.getScene()
                 .getWindow();
+        if (windowStage == null) {
+            windowStage = stage;
+            stage.fullScreenProperty()
+                    .addListener((property, oldValue, fullScreen) -> {
+                        windowFrameMeasurementDelay.stop();
+                        if (!fullScreen) {
+                            javafx.application.Platform
+                                    .runLater(this::updateWindowMinimum);
+                        }
+                    });
+        }
+        if (stage.isFullScreen()) {
+            return;
+        }
+        if (Double.isNaN(osWindowFrameHeight)) {
+            windowFrameMeasurementDelay.playFromStart();
+            return;
+        }
         // Reserve the fixed minimap, a 120px scroll area and the planner
         // actions.
         final double panelContentWidth = PANEL_WIDTH - 2 * PANEL_PADDING;
         final double minimumPanelContentHeight = Math.max(MINIMUM_SCROLL_HEIGHT,
                 tradeRoutePlanningPanel.getContent()
                         .minHeight(panelContentWidth));
-        final double osWindowFrameHeight = Math.max(0,
-                stage.getHeight() - mapArea.getScene().getHeight());
         final double headerHeight = header.getHeight();
         final double statusBarHeight = statusBar.getContent().getHeight();
         final double minimumWindowHeight = Math.ceil(headerHeight

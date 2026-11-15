@@ -63,6 +63,31 @@
     inspected; this records local acceptance only. No remote CI or publication
    verification requested.
 
+## Cached window frame height — 2026-11-15
+
+1. `ScreenGame` caches the OS frame height after the first windowed map
+   layout settles for 150 ms. Subsequent resizing uses that cached value
+   instead of subtracting transient stage and scene heights. Fullscreen
+   skips minimum-size updates; leaving fullscreen reapplies the windowed
+   minimum, or schedules the first measurement if no windowed value exists.
+2. The user explicitly requested pushing without UI tests and will manually
+   test resizing and fullscreen transitions. Targeted Docker UI tests and
+   smoke are omitted for this change by that instruction. Model/JUnit and
+   documentation checks remain applicable; no verified UI fix is claimed.
+3. Model attempt `20261115T080008Z-f1f58a6a7de2` timed out in preparation:
+   the labelled-container `docker ps` query exceeded its 20-second limit;
+   total elapsed time was 22.090 seconds and tests did not start. A later
+   identical read-only query passed in 0.019 seconds. This repeats the earlier
+   preparation symptom without establishing a root cause or permanent repair.
+   Documentation consistency checks passed (14), name audit found zero
+   unexplained occurrences, and strict MkDocs built in 5.69 seconds.
+4. Model retry `20261115T080057Z-06481b62cc8a` passed **5,135 tests**, zero
+   failures/errors/skips, in 146.894 seconds (150.692 supervised). Reports:
+   `target/verification/run-zy653ysy/`. The reviewed, formatted `ScreenGame`
+   source matches the tested source snapshot byte for byte. UI and smoke
+   were not run under the explicit exception above; manual verification of
+   resizing and fullscreen transitions remains with the user.
+
 ## Floating panel dimension names — 2026-11-15
 
 1. `ScreenGame` names the panel width, outer margin, padding, minimap height,
