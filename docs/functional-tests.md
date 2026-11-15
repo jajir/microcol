@@ -63,6 +63,24 @@
     inspected; this records local acceptance only. No remote CI or publication
    verification requested.
 
+## Floating panel dimension names — 2026-11-15
+
+1. `ScreenGame` names the panel width, outer margin, padding, minimap height,
+   minimap bottom gap and minimum scroll height. Local names distinguish the
+   OS window frame, game header, status bar and minimum panel content height.
+   Values and resizing behavior are unchanged; this is not a fix for the
+   reported resize feedback loop.
+2. Initial model attempt `20261115T073140Z-13762cd19179` timed out during
+   preparation: the labelled-container `docker ps` query exceeded 20 seconds
+   (20.009 measured, 22.085 seconds for the attempt). Tests did not start.
+   A subsequent identical read-only query passed in 0.069 seconds; the
+   original timeout's cause is not established.
+3. On 2026-11-15 the user explicitly requested pushing this naming-only
+   change without tests. Cancellation was requested for the model retry
+   `20261115T073231Z-f1cd587b52d0`; no further model, UI, smoke or documentation
+   test/build checks are run for this change. This exception does not claim
+   local test acceptance or alter the default verification policy.
+
 ## Depot focus border — 2026-11-14
 
 1. Remove the colony carrier focus-only dashed border. Preserve the selected

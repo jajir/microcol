@@ -44,6 +44,13 @@ public class ScreenGame implements GameScreen {
     public static final String STYLE_SHEET_GAME_PANEL = ScreenGame.class
             .getResource("/gui/GamePanel.css").toExternalForm();
 
+    private static final double PANEL_WIDTH = 260;
+    private static final double PANEL_OUTER_MARGIN = 16;
+    private static final double PANEL_PADDING = 16;
+    private static final double MINIMAP_HEIGHT = 180;
+    private static final double MINIMAP_BOTTOM_GAP = 8;
+    private static final double MINIMUM_SCROLL_HEIGHT = 120;
+
     private final VBox mainBox;
 
     private final GamePanelComponent gamePanelComponents;
@@ -58,7 +65,7 @@ public class ScreenGame implements GameScreen {
     private final GameScreenHeader header = new GameScreenHeader();
 
     private final StackPane mapArea = new StackPane();
-    private final VBox sidebar = new VBox(8);
+    private final VBox sidebar = new VBox(MINIMAP_BOTTOM_GAP);
     private final StackPane panelContent = new StackPane();
 
     private final TradeRoutePlanning tradeRoutePlanning;
@@ -94,14 +101,15 @@ public class ScreenGame implements GameScreen {
         overlay.setMinHeight(0);
         StackPane.setAlignment(sidebar, Pos.TOP_RIGHT);
         overlay.maxWidthProperty().bind(javafx.beans.binding.Bindings.min(1440,
-                mapArea.widthProperty().subtract(32)));
-        StackPane.setMargin(sidebar, new Insets(16, 0, 16, 0));
+                mapArea.widthProperty().subtract(2 * PANEL_OUTER_MARGIN)));
+        StackPane.setMargin(sidebar,
+                new Insets(PANEL_OUTER_MARGIN, 0, PANEL_OUTER_MARGIN, 0));
         sidebar.setId("floatingMapPanel");
-        sidebar.setMinWidth(260);
-        sidebar.setPrefWidth(260);
-        sidebar.setMaxWidth(260);
+        sidebar.setMinWidth(PANEL_WIDTH);
+        sidebar.setPrefWidth(PANEL_WIDTH);
+        sidebar.setMaxWidth(PANEL_WIDTH);
         sidebar.setMaxHeight(Region.USE_PREF_SIZE);
-        sidebar.setPadding(new Insets(16));
+        sidebar.setPadding(new Insets(PANEL_PADDING));
         final SVGPath outline = new SVGPath();
         outline.setContent("M2 2 Q65 0 130 2 T258 2 Q260 150 258 300 "
                 + "T258 598 Q195 600 130 598 T2 598 Q0 450 2 300 T2 2 Z");
@@ -114,9 +122,9 @@ public class ScreenGame implements GameScreen {
         final StackPane minimapSlot = new StackPane(minimap);
         minimapSlot.setId("floatingMinimapSlot");
         minimapSlot.setAlignment(Pos.TOP_LEFT);
-        minimapSlot.setMinHeight(180);
-        minimapSlot.setPrefHeight(180);
-        minimapSlot.setMaxHeight(180);
+        minimapSlot.setMinHeight(MINIMAP_HEIGHT);
+        minimapSlot.setPrefHeight(MINIMAP_HEIGHT);
+        minimapSlot.setMaxHeight(MINIMAP_HEIGHT);
         panelContent.setMinHeight(Region.USE_COMPUTED_SIZE);
         VBox.setVgrow(panelContent, javafx.scene.layout.Priority.ALWAYS);
         panelContent.getChildren().add(rightPanel.getContent());
@@ -292,16 +300,21 @@ public class ScreenGame implements GameScreen {
                 .getWindow();
         // Reserve the fixed minimap, a 120px scroll area and the planner
         // actions.
-        final double details = Math.max(120,
-                tradeRoutePlanningPanel.getContent().minHeight(228));
-        final double decorations = Math.max(0,
+        final double panelContentWidth = PANEL_WIDTH - 2 * PANEL_PADDING;
+        final double minimumPanelContentHeight = Math.max(MINIMUM_SCROLL_HEIGHT,
+                tradeRoutePlanningPanel.getContent()
+                        .minHeight(panelContentWidth));
+        final double osWindowFrameHeight = Math.max(0,
                 stage.getHeight() - mapArea.getScene().getHeight());
-        final double minimum = Math
-                .ceil(header.getHeight() + statusBar.getContent().getHeight()
-                        + 32 + 32 + 180 + 8 + details + decorations);
-        stage.setMinHeight(minimum);
-        if (stage.getHeight() < minimum) {
-            stage.setHeight(minimum);
+        final double headerHeight = header.getHeight();
+        final double statusBarHeight = statusBar.getContent().getHeight();
+        final double minimumWindowHeight = Math.ceil(headerHeight
+                + statusBarHeight + 2 * PANEL_OUTER_MARGIN + 2 * PANEL_PADDING
+                + MINIMAP_HEIGHT + MINIMAP_BOTTOM_GAP
+                + minimumPanelContentHeight + osWindowFrameHeight);
+        stage.setMinHeight(minimumWindowHeight);
+        if (stage.getHeight() < minimumWindowHeight) {
+            stage.setHeight(minimumWindowHeight);
         }
     }
 
