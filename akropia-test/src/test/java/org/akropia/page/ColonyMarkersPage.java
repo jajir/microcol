@@ -46,8 +46,9 @@ public final class ColonyMarkersPage extends AbstractScreen {
         getRobot().interact(() -> {
             final Canvas canvas = (Canvas) ((javafx.scene.layout.Pane) getNodeFinder()
                     .lookup("#tileImage").query()).getChildren().get(0);
-            assertEquals(53, canvas.getWidth());
-            verifyGlyph(canvas.snapshot(null, null), Point.of(4, 0), houses,
+            assertEquals(45, canvas.getWidth());
+            assertEquals(45, canvas.getHeight());
+            verifyGlyph(canvas.snapshot(null, null), Point.of(0, 0), houses,
                     defense);
         });
     }
@@ -100,8 +101,10 @@ public final class ColonyMarkersPage extends AbstractScreen {
             final int top, final int width, final int height,
             final Color color) {
         int count = 0;
-        for (int y = top; y < top + height; y++) {
-            for (int x = left; x < left + width; x++) {
+        for (int y = Math.max(0, top); y < Math.min(top + height,
+                image.getHeight()); y++) {
+            for (int x = Math.max(0, left); x < Math.min(left + width,
+                    image.getWidth()); x++) {
                 if (near(image.getPixelReader().getColor(x, y), color))
                     count++;
             }
@@ -121,9 +124,10 @@ public final class ColonyMarkersPage extends AbstractScreen {
         final boolean[][] roof = new boolean[44][53];
         for (int y = 0; y < 44; y++) {
             for (int x = 0; x < 53; x++) {
-                roof[y][x] = near(
-                        image.getPixelReader().getColor(left + x, top + y),
-                        Color.web("#c18150"));
+                roof[y][x] = left + x >= 0 && left + x < image.getWidth()
+                        && top + y >= 0 && top + y < image.getHeight()
+                        && near(image.getPixelReader().getColor(left + x,
+                                top + y), Color.web("#c18150"));
             }
         }
         int count = 0;

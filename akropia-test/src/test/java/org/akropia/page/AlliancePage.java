@@ -140,6 +140,7 @@ public final class AlliancePage extends AbstractScreen {
 
     public void confirmTwice() {
         final Button button = getButtonById("allianceConfirm");
+        getRobot().interact(button::requestFocus);
         getRobot().push(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
         getRobot().interact(button::fire);

@@ -161,11 +161,13 @@ public final class AtlanticAuditPage extends AbstractScreen {
     }
 
     public void attemptSendShipBack() {
-        final javafx.scene.Node target = getNodeFinder()
-                .lookup("#europe-outgoing-scroll .viewport").query();
-        getRobot().drag(
-                PageComponentPanelDock.of(getContext()).getUnitsInPort().get(0),
-                MouseButton.PRIMARY).dropTo(target);
+        final javafx.scene.control.ToggleButton carrier = getNodeFinder()
+                .lookup("#europe-dock-ship-" + 3)
+                .queryAs(javafx.scene.control.ToggleButton.class);
+        if (!carrier.isSelected()) {
+            getRobot().clickOn(carrier);
+        }
+        clickOnButtonWithId("europe-depart");
         WaitForAsyncUtils.waitForFxEvents();
     }
 

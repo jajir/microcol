@@ -278,7 +278,7 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
         plow.verifyCompletionReported(report, NEAR_LOCATION, 0,
                 COMPLETION_NOTICE, 1);
         // The report locates the finished field without issuing another order.
-        report.get().verifyMapAction(NEAR_LOCATION, "Zobrazit na mapě");
+        report.get().verifyMapAction(NEAR_LOCATION, "Show on map");
         report.get().verifyReportAppearance();
         gamePage = report.get().showOnMap(NEAR_LOCATION);
         gamePage.verifyThatSelectedTileIs(NEAR_LOCATION);

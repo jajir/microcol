@@ -732,7 +732,7 @@ public final class FogPage extends AbstractScreen {
                         for (int x = 3 * scale; x < (Tile.TILE_WIDTH_IN_PX - 3)
                                 * scale; x++) {
                             final int actual = previewImage.getPixelReader()
-                                    .getArgb(4 * scale + x, y);
+                                    .getArgb(x, y);
                             assertEquals(
                                     mapImage.getPixelReader()
                                             .getArgb(point.getX() * scale + x,
@@ -748,22 +748,10 @@ public final class FogPage extends AbstractScreen {
                     }
                     assertEquals(expectedMark, ink > 0,
                             "Question mark belongs to the selected location");
-                    for (int y = 0; y < Tile.TILE_WIDTH_IN_PX * scale; y++) {
-                        // At 2x, ignore only interpolation along the opaque
-                        // edge.
-                        for (int x = 0; x < 4 * scale - (scale - 1); x++) {
-                            assertEquals(0,
-                                    previewImage.getPixelReader().getArgb(x,
-                                            y) >>> 24,
-                                    "Left preview margin is clear");
-                            assertEquals(0,
-                                    previewImage.getPixelReader().getArgb(
-                                            (Tile.TILE_WIDTH_IN_PX + 4) * scale
-                                                    + x + (scale - 1),
-                                            y) >>> 24,
-                                    "Right preview margin is clear");
-                        }
-                    }
+                    assertEquals(Tile.TILE_WIDTH_IN_PX * scale,
+                            previewImage.getWidth());
+                    assertEquals(Tile.TILE_WIDTH_IN_PX * scale,
+                            previewImage.getHeight());
                 }
             } finally {
                 root.setPrefSize(preferredWidth, preferredHeight);

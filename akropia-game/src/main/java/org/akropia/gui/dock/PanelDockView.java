@@ -9,7 +9,6 @@ import org.akropia.gui.image.ImageProvider;
 import org.akropia.gui.UnitTypes;
 import org.akropia.gui.Loc;
 import org.akropia.i18n.I18n;
-import org.akropia.gui.util.ClipboardWritter;
 import org.akropia.gui.util.JavaFxComponent;
 import org.akropia.model.Unit;
 import org.akropia.model.unit.UnitWithCargo;
@@ -27,8 +26,6 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ContentDisplay;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -209,9 +206,6 @@ public class PanelDockView implements JavaFxComponent {
             toggleButtonShip.setAccessibleText(shipLabel(ship));
             toggleButtonShip.setMinWidth(Region.USE_PREF_SIZE);
         }
-        if (ship.isShip()) {
-            toggleButtonShip.setOnDragDetected(this::onDragDetected);
-        }
         panelShips.getChildren().add(toggleButtonShip);
     }
 
@@ -239,21 +233,6 @@ public class PanelDockView implements JavaFxComponent {
         }
         return Optional.of(
                 (UnitWithCargo) toggleGroup.getSelectedToggle().getUserData());
-    }
-
-    // Move drag handling to the behavior interface.
-    private void onDragDetected(final MouseEvent event) {
-        if (event.getSource() instanceof ToggleButton) {
-            final ToggleButton butt = (ToggleButton) event.getSource();
-            final Unit unit = (Unit) butt.getUserData();
-            Preconditions.checkNotNull(unit);
-            Preconditions.checkArgument(unit.getType().isShip(),
-                    "Unit (%s) have to be ship.");
-            ClipboardWritter.make(butt.startDragAndDrop(TransferMode.MOVE))
-                    .addImage(imageProvider.getUnitImage(unit)).addUnit(unit)
-                    .build();
-            event.consume();
-        }
     }
 
     @Override

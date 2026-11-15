@@ -81,6 +81,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         page.open("closeButtonId");
         // Colony and port retain their actions above the illustrated content.
         game.openColonyWithKeyboard(0, "New Amsterdam");
+        page.saveEvidence("r0307-colony-before-frame-check.png");
         page.verifyFrame(484, 1600);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.verifyColonyNameVisible("New Amsterdam");

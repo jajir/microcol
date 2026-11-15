@@ -98,7 +98,7 @@ public final class RiverPage extends AbstractScreen {
                                     .getArgb(point.getX() * scale + x,
                                             point.getY() * scale + y);
                             final int actual = previewImage.getPixelReader()
-                                    .getArgb(4 * scale + x, y);
+                                    .getArgb(x, y);
                             assertEquals(expected >>> 24, actual >>> 24,
                                     "Preview opacity at " + at);
                             for (int shift = 0; shift < 24; shift += 8) {
@@ -131,24 +131,17 @@ public final class RiverPage extends AbstractScreen {
                                 toRgb(images
                                         .getTerrainColor(TerrainType.OCEAN)),
                                 toRgb(previewImage.getPixelReader()
-                                        .getColor(7 * scale, 23 * scale)),
+                                        .getColor(3 * scale, 23 * scale)),
                                 "Sea water must extend upstream through the coastal opening");
                         assertEquals(
                                 toRgb(images
                                         .getTerrainColor(TerrainType.OCEAN)),
                                 toRgb(previewImage.getPixelReader()
-                                        .getColor(12 * scale, 23 * scale)),
+                                        .getColor(8 * scale, 23 * scale)),
                                 "The ocean preview must show open water without an island");
                     }
-                    for (int y = 0; y < 45 * scale; y++) {
-                        assertEquals(0,
-                                previewImage.getPixelReader().getArgb(0, y),
-                                "Left margin stays clear");
-                        assertEquals(0,
-                                previewImage.getPixelReader()
-                                        .getArgb(52 * scale, y),
-                                "Right margin stays clear");
-                    }
+                    assertEquals(45 * scale, previewImage.getWidth());
+                    assertEquals(45 * scale, previewImage.getHeight());
                 }
             } finally {
                 root.setPrefSize(preferredWidth, preferredHeight);

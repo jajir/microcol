@@ -33,7 +33,8 @@ public class ScreenEurope implements GameScreen, Repaintable {
 
         europePanel.getContent().getStylesheets().add(STYLE_SHEET_EUROPE);
         VBox.setVgrow(europePanel.getContent(), Priority.ALWAYS);
-        page.getContent().getStyleClass().add("illustrated-page");
+        page.getContent().getStyleClass().addAll("illustrated-page",
+                "europe-page");
         page.setToolbar(buttons.getContent());
         page.setContent(europePanel.getContent());
     }

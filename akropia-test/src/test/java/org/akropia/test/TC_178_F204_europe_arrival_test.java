@@ -60,7 +60,7 @@ public class TC_178_F204_europe_arrival_test extends AbstractAkropiaTest {
         final Optional<ScreenTurnReport> report = game.nextTurn();
         game.verifyTurnReportPresent(report);
         report.get().verifyEventMessageCount("home port", 0);
-        report.get().verifyOpenEuropeActionAbsent();
+        report.get().verifyOpenEuropeActionsForVisibleEvents();
         final int movement = audit.getMovement();
 
         // Open the port from the map without spending movement or changing
@@ -103,7 +103,7 @@ public class TC_178_F204_europe_arrival_test extends AbstractAkropiaTest {
             // The manual report also hides the routine arrival and its action.
             ScreenTurnReport report = game.openTurnReport();
             report.verifyEventMessageCount("home port", 0);
-            report.verifyOpenEuropeActionAbsent();
+            report.verifyOpenEuropeActionsForVisibleEvents();
             report.close();
 
             // Reopening adds no duplicate notice and spends nothing.
@@ -146,7 +146,7 @@ public class TC_178_F204_europe_arrival_test extends AbstractAkropiaTest {
             sailUntilArrivalTurn(game, duration);
             final Optional<ScreenTurnReport> report = game.nextTurn();
             game.verifyTurnReportPresent(report);
-            report.get().verifyOpenEuropeActionAbsent();
+            report.get().verifyOpenEuropeActionsForVisibleEvents();
             final int movement = audit.getMovement();
 
             // Closing the report shows Europe once; ship and cargo are

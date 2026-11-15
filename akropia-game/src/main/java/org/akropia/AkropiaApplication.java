@@ -97,6 +97,7 @@ public final class AkropiaApplication extends Application {
                     .getInstance(ApplicationController.class);
             primaryStage.setOnShowing(e -> applicationController.startMusic());
             primaryStage.show();
+
         } catch (Exception e) {
             recordStartupFailure(e);
             /**
@@ -147,6 +148,8 @@ public final class AkropiaApplication extends Application {
             injector.getInstance(MusicController.class).stop();
             injector.getInstance(
                     org.akropia.gui.screen.MainPanelPresenter.class).stop();
+            injector.getInstance(org.akropia.gui.screen.game.ScreenGame.class)
+                    .releasePrimaryStage();
             injector.getInstance(MainStageBuilder.class).releasePrimaryStage();
         }
     }

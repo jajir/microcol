@@ -36,6 +36,7 @@ public final class TributePage extends AbstractScreen {
 
     public void confirmTwice() {
         Button button = getButtonById("tributeConfirm");
+        getRobot().interact(button::requestFocus);
         getRobot().push(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
         getRobot().interact(button::fire);

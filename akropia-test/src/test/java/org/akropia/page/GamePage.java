@@ -126,6 +126,9 @@ public class GamePage extends AbstractScreen {
                         .getClassFromGuice(SelectedTileManager.class)
                         .getSelectedTile().orElseThrow());
         closeUnitActions();
+        // Move the camera before starting the gesture, while both ends can
+        // still be located in the resulting viewport.
+        revealTile(location);
         final javafx.geometry.Point2D start = screenPoint(source);
         getRobot().moveTo(start.getX(), start.getY(), Motion.DEFAULT);
         getRobot().drag(MouseButton.PRIMARY);
@@ -136,6 +139,7 @@ public class GamePage extends AbstractScreen {
 
     public void openUnitContextAt(final Location location) {
         closeUnitActions();
+        revealTile(location);
         final javafx.geometry.Point2D point = screenPoint(location);
         getRobot().clickOn(point.getX(), point.getY(), MouseButton.SECONDARY);
         WaitForAsyncUtils.waitForFxEvents();
@@ -144,6 +148,7 @@ public class GamePage extends AbstractScreen {
     public void controlClickUnitAt(final Location location,
             final boolean releaseControlFirst) {
         closeUnitActions();
+        revealTile(location);
         final javafx.geometry.Point2D point = screenPoint(location);
         getRobot().moveTo(point.getX(), point.getY()).press(KeyCode.CONTROL);
         try {
@@ -161,6 +166,7 @@ public class GamePage extends AbstractScreen {
     /** Primary click on a map tile, as a player picks what is drawn there. */
     public void clickTile(final Location location) {
         closeUnitActions();
+        revealTile(location);
         final javafx.geometry.Point2D point = screenPoint(location);
         getRobot().clickOn(point.getX(), point.getY(), MouseButton.PRIMARY);
         WaitForAsyncUtils.waitForFxEvents();
@@ -168,6 +174,7 @@ public class GamePage extends AbstractScreen {
 
     public void panFromTile(final Location location) {
         closeUnitActions();
+        revealTile(location);
         final javafx.geometry.Point2D start = screenPoint(location);
         getRobot().moveTo(start.getX(), start.getY())
                 .press(MouseButton.SECONDARY).moveBy(80, 50)
@@ -186,6 +193,9 @@ public class GamePage extends AbstractScreen {
             WaitForAsyncUtils.waitForFxEvents();
         }
         closeUnitActions();
+        // Closing the submenu may leave the pointer over another map tile.
+        // A subsequent drag must start on the unit the player just chose.
+        hoverTile(unit.getLocation());
     }
 
     /**
@@ -204,7 +214,9 @@ public class GamePage extends AbstractScreen {
         final javafx.geometry.Point2D center = canvas.localToScreen(
                 point.getX() + TILE_CENTER.getX(),
                 point.getY() + TILE_CENTER.getY());
-        if (panel.localToScreen(panel.getLayoutBounds()).contains(center)) {
+        if (!canvas.localToScreen(canvas.getLayoutBounds()).contains(center)
+                || panel.localToScreen(panel.getLayoutBounds())
+                        .contains(center)) {
             new WorldMinimapPage(getContext()).clickWorld(
                     (location.getX() - .5)
                             / getModel().getMap().getMaxLocationX(),

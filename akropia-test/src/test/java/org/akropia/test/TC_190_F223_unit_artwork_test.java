@@ -34,7 +34,8 @@ public class TC_190_F223_unit_artwork_test extends AbstractAkropiaTest {
         final FogPage map = new FogPage(getContext());
         final UnitArtworkPage units = new UnitArtworkPage(getContext());
         map.resizeMapWindow(1200, 900);
-        map.centerOn(Location.of(23, 14));
+        // Keep the whole roster to the left of the floating map panel.
+        map.centerOn(Location.of(26, 14));
         map.inspect(Location.of(23, 13));
         units.verifyRosterAndTurn();
         units.verifyMapArtwork();
@@ -49,7 +50,7 @@ public class TC_190_F223_unit_artwork_test extends AbstractAkropiaTest {
         // Continue retains the roster, position, equipment and shared pictures.
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
-        map.centerOn(Location.of(23, 14));
+        map.centerOn(Location.of(26, 14));
         map.inspect(Location.of(23, 13));
         units.verifyUnitLocation(1000, Location.of(17, 10));
         units.verifyRosterAndTurn();

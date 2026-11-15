@@ -69,7 +69,10 @@ public final class ShipRepairPage extends AbstractScreen {
         JsonObject repair = model.getAsJsonArray("units").get(0)
                 .getAsJsonObject().getAsJsonObject("placeShipRepair");
         repair.addProperty("europeDestination", false);
-        repair.addProperty("destinationColonyId", 9999);
+        // A lost colony still has an allocated identity in saved reports.
+        final int lostColonyId = model.get("nextColonyId").getAsInt();
+        model.addProperty("nextColonyId", lostColonyId + 1);
+        repair.addProperty("destinationColonyId", lostColonyId);
         repair.addProperty("phase", "REPAIR");
         repair.addProperty("repairDuration", 3);
         for (var element : model.getAsJsonObject("gameManager")

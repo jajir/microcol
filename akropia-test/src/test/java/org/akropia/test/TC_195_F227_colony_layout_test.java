@@ -347,6 +347,11 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         final ColonyScreen town = game.openColonyAt(Location.of(24, 16),
                 "New Amsterdam");
         layout.verifyDepot("Cargo Depot - Galleon #3");
+        layout.tryDraggingCarrier(3);
+        layout.verifyCarrierCannotDrag(3);
+        layout.tryDraggingCarrier(wagon);
+        layout.verifyCarrierCannotDrag(wagon);
+        town.selectShipInPort(3);
         layout.verifyAvailableContainers(6);
         layout.verifyDepotSpacing();
         layout.hoverDepot();
@@ -412,10 +417,17 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
 
         // The empty heading is a live drop target and previews acceptance.
         layout.dragLumberWorkerToOutside();
+        layout.verifyWorkerDragView(6);
         layout.verifyOutsideHighlight(true);
         new InGameLayoutPage(getContext())
                 .saveEvidence("depot-outside-drop-highlight.png");
         layout.dropWorkerOutside();
+        layout.verifyWorkerOutside(6, 0);
+        // The same worker keeps its image when dragged from outside; Escape
+        // cancels.
+        layout.dragOutsideWorker(6);
+        layout.verifyWorkerDragView(6);
+        layout.cancelWorkerDrag();
         layout.verifyWorkerOutside(6, 0);
         town.verifyNumberOfUnitsAtPier(1);
         layout.verifyOutsideHighlight(false);

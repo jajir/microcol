@@ -1,3 +1,76 @@
+## Input regression repair — 2026-11-15
+
+1. The user requested repair of [nightly run 43667534726](https://github.com/jajir/microcol/actions/runs/43667534726)
+   and colony worker drag images, non-draggable depot carriers and minimap
+   mouse navigation. The original report contains 209 failed/error scenarios.
+   Downloaded evidence and the scenario-to-report inventory are retained in
+   `target/repair-43667534726/`; historical failed runs remain failed.
+2. A Docker/Xvfb diagnostic click hit the header instead of the minimap:
+   its inner input surface was 667px high while the toolbar was 72px high.
+   `GameScreenHeader` now constrains its inner regions. TC196 covers all seven
+   minimap scenarios, including mouse, keyboard, resize and unchanged game
+   state; shared toolbar checks also verify that inner bounds stay inside it.
+3. `ClipboardWritter` supplies the worker image as the native drag view.
+   TC195/07 verifies that neither depot carrier starts a drag; TC195/08 checks
+   indoor/outside worker images, a successful drop and cancellation. Port
+   departures use the existing departure button. The harbor keeps a 1440px
+   content limit with 16px window insets; TC194 verifies four harbor scenarios.
+   Colony section headings reserve the height their wrapped labels need.
+4. Report-driven test repairs preserve gameplay outcomes: expose covered map
+   targets before starting a drag, restore the pointer to a selected unit,
+   drop workers on actual building slots, explicitly focus keyboard-confirmed
+   decisions, wait for world generation, and compare compact 45px previews.
+   Font, language and report-navigation checks match the agreed current UI.
+   A lost-colony fixture now uses a previously allocated colony identity.
+   Artwork checks place the complete roster beside the floating panel.
+5. Present sight reads a single unit-place snapshot. This prevents painting
+   from checking a map position and then asking for map sight after that ship
+   has departed. `CurrentSightDepartureTest` covers the transition while
+   existing sight tests retain role, radius, ownership and colony boundaries.
+6. As agreed on 2026-11-15, regression repair uses the GitHub failure inventory
+   and targeted functional neighborhoods; it does not authorize a full local
+   run. See the [acceptance policy](publishing.md#local-acceptance-policy).
+   Full attempt `20261115T084554Z-7dee03d1eecd` was cancelled on that instruction
+   after 5163.104 seconds, with no cleanup errors. Complete individual reports
+   from `target/verification/run-k38p_k23/` are retained as partial evidence,
+   not a full-suite pass. No full local run was started after that agreement.
+7. Diagnostic and repair failures remain preserved in the completion logs.
+   They include a dangling removed drag-handler reference, two iterations of
+   the drag-image observation probe, and an abstract-class construction error
+   in the new sight test. The corresponding later checks were rerun; a
+   compilation failure or cancelled run is never counted as test acceptance.
+8. Final-source model attempt `20261115T124425Z-607ac3276e46` passed
+   5,136 tests with zero failures/errors/skips in 158.957 supervised seconds
+   (`target/verification/run-5q354phm`). Targeted run
+   `20261115T103535Z-e80d5ace6868` passed 78/85 tests; its seven failures
+   were repaired and rerun with functional neighbors in
+   `20261115T112323Z-99de08338e31`: all 12 passed, zero failures/errors/skips,
+   in 1126.384 supervised seconds. Other completed targeted evidence is
+   indexed in `targeted-inventory.json` under the retained repair directory.
+9. All 209 originally failing scenarios have subsequent passing reports.
+   Additional whole-class checks of TC19 and TC40 exposed startup failures
+   after repeated application creation. Diagnostic run
+   `20261115T123328Z-8c34d5798973` confirmed `OutOfMemoryError: Java heap space`.
+   Flight Recorder evidence from `20261115T123900Z-dc7b6258ed36`
+   (`target/docker-ui/run-GWkRX1/akropia-test/surefire-reports/leak.jfr`)
+   traced retained image caches and injectors through `ScreenGame` to a
+   fullscreen listener on the reused primary stage. Application shutdown now
+   removes that listener and stops its delayed window measurement, using the
+   existing listener-registration utility. Temporary diagnostics were removed.
+10. Lifecycle repair verification `20261115T124718Z-d5b4b932b848`
+    passed both complete classes TC19 (18 tests) and TC40 (15 tests), with
+    zero failures/errors/skips in 342.839 supervised seconds
+    (`target/docker-ui/run-IAaZad`). Fixed smoke/support verification
+    `20261115T125316Z-e376244e12ff` passed all 21 checks, including the page
+    verification source contract, with zero failures/errors/skips in 258.749
+    supervised seconds, within the 420-second smoke budget
+    (`target/verification/run-3nsgrnzk`). Model and smoke source snapshots
+    match the final executable changes, based on revision `d1e7e993fe4d`.
+11. Final review includes the changed Java source, preserved gameplay
+    assertions, colony/harbor screenshots and report completeness. Targeted
+    passes are not a new full-regression pass or publication verification.
+    The unrelated backlog edit is excluded from this repair.
+
 ## Turn report navigation — 2026-11-14
 
 1. Scope: UC-019/020/043/114/119, uniform report background, no notice
@@ -62,7 +135,6 @@
     backlog edits are excluded. No remote CI, Pages or game distribution was
     inspected; this records local acceptance only. No remote CI or publication
    verification requested.
-
 ## Cached window frame height — 2026-11-15
 
 1. `ScreenGame` caches the OS frame height after the first windowed map

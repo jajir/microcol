@@ -81,6 +81,7 @@ public final class PeacePage extends AbstractScreen {
 
     public void confirmTwice() {
         Button button = getButtonById("peaceConfirm");
+        getRobot().interact(button::requestFocus);
         getRobot().push(javafx.scene.input.KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
         getRobot().interact(button::fire);

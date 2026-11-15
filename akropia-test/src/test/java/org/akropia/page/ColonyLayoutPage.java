@@ -573,6 +573,85 @@ public final class ColonyLayoutPage extends AbstractScreen {
                 .thenReturn(prepared);
     }
 
+    private javafx.scene.image.Image workerDragView;
+
+    private void recordWorkerDragView(final Node source) {
+        final var scene = source.getScene();
+        final var dispatcher = scene.getEventDispatcher();
+        workerDragView = null;
+        scene.setEventDispatcher((event, tail) -> {
+            final var result = dispatcher.dispatchEvent(event, tail);
+            if (event
+                    .getEventType() == javafx.scene.input.MouseEvent.DRAG_DETECTED) {
+                // Read after bubbling: construction drag handlers live on
+                // the parent of the canvas that starts the gesture.
+                workerDragView = source
+                        .startDragAndDrop(javafx.scene.input.TransferMode.MOVE)
+                        .getDragView();
+                scene.setEventDispatcher(dispatcher);
+            }
+            return result;
+        });
+    }
+
+    public void verifyWorkerDragView(final int workerId) {
+        getRobot().interact(() -> assertSame(
+                getContext()
+                        .getClassFromGuice(
+                                org.akropia.gui.image.ImageProvider.class)
+                        .getUnitImage(getModel().getUnitById(workerId)),
+                workerDragView,
+                "The dragged worker must supply its own cursor image"));
+    }
+
+    public void dragOutsideWorker(final int workerId) {
+        final Node source = getNodeFinder().lookup("#colonyUnit-" + workerId)
+                .query();
+        getRobot().interact(() -> recordWorkerDragView(source));
+        getRobot().drag(source, javafx.scene.input.MouseButton.PRIMARY)
+                .moveBy(20, 0);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void cancelWorkerDrag() {
+        getRobot().push(KeyCode.ESCAPE)
+                .release(javafx.scene.input.MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    private boolean carrierDragStarted;
+
+    public void tryDraggingCarrier(final int carrierId) {
+        final Node carrier = getNodeFinder()
+                .lookup("#europe-dock-ship-" + carrierId).query();
+        final var scene = carrier.getScene();
+        final javafx.event.EventHandler<javafx.scene.input.DragEvent> observer = event -> {
+            if (event.getGestureSource() == carrier) {
+                carrierDragStarted = true;
+            }
+        };
+        getRobot().interact(() -> {
+            carrierDragStarted = false;
+            scene.addEventFilter(javafx.scene.input.DragEvent.ANY, observer);
+        });
+        try {
+            getRobot().drag(carrier, javafx.scene.input.MouseButton.PRIMARY)
+                    .moveBy(30, 0)
+                    .release(javafx.scene.input.MouseButton.PRIMARY);
+            WaitForAsyncUtils.waitForFxEvents();
+        } finally {
+            getRobot().release(javafx.scene.input.MouseButton.PRIMARY);
+            getRobot().interact(() -> scene.removeEventFilter(
+                    javafx.scene.input.DragEvent.ANY, observer));
+        }
+    }
+
+    public void verifyCarrierCannotDrag(final int carrierId) {
+        getRobot()
+                .interact(() -> assertFalse(carrierDragStarted, "Depot carrier "
+                        + carrierId + " must not start a native drag"));
+    }
+
     public void dragLumberWorkerToOutside() {
         final javafx.scene.Parent building = getNodeFinder()
                 .lookup("#id_carpenter").queryAs(javafx.scene.Parent.class);
@@ -582,6 +661,7 @@ public final class ColonyLayoutPage extends AbstractScreen {
         final Node target = getNodeFinder().lookup("#colony-outside-title")
                 .query();
         revealGameContent(canvas, target);
+        getRobot().interact(() -> recordWorkerDragView(canvas));
         getRobot().drag(canvas.localToScreen(16, 16),
                 javafx.scene.input.MouseButton.PRIMARY).moveTo(target);
         WaitForAsyncUtils.waitForFxEvents();

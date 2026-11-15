@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import org.akropia.gui.screen.GameScreen;
 import org.akropia.gui.buttonpanel.Buttons;
 import org.akropia.gui.util.GameScreenHeader;
+import org.akropia.gui.util.ListenerRegistrations;
 import org.akropia.gui.screen.game.components.ButtonsGamePanel;
 import org.akropia.gui.screen.game.components.RightPanel;
 import org.akropia.gui.screen.game.components.WorldMinimap;
@@ -53,6 +54,8 @@ public class ScreenGame implements GameScreen {
 
     private final javafx.animation.PauseTransition windowFrameMeasurementDelay = new javafx.animation.PauseTransition(
             javafx.util.Duration.millis(150));
+    private final ListenerRegistrations stageListeners = new ListenerRegistrations();
+
     private javafx.stage.Stage windowStage;
     private double osWindowFrameHeight = Double.NaN;
 
@@ -318,8 +321,8 @@ public class ScreenGame implements GameScreen {
                 .getWindow();
         if (windowStage == null) {
             windowStage = stage;
-            stage.fullScreenProperty()
-                    .addListener((property, oldValue, fullScreen) -> {
+            stageListeners.add(stage.fullScreenProperty(),
+                    (property, oldValue, fullScreen) -> {
                         windowFrameMeasurementDelay.stop();
                         if (!fullScreen) {
                             javafx.application.Platform
@@ -350,6 +353,16 @@ public class ScreenGame implements GameScreen {
         if (stage.getHeight() < minimumWindowHeight) {
             stage.setHeight(minimumWindowHeight);
         }
+    }
+
+    /**
+     * Releases listeners on the primary stage, which may outlive this
+     * application.
+     */
+    public void releasePrimaryStage() {
+        windowFrameMeasurementDelay.stop();
+        stageListeners.removeAll();
+        windowStage = null;
     }
 
     @Override

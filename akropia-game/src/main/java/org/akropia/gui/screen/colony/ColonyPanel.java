@@ -264,6 +264,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         title.setOnAction(event -> selectSection(key));
         sections.put(key, title);
         final HBox header = new HBox(title);
+        header.setMinHeight(Region.USE_PREF_SIZE);
         HBox.setHgrow(title, Priority.ALWAYS);
         final VBox card = new VBox(5, header, body);
         card.setId("colony-card-" + key);

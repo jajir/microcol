@@ -343,6 +343,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
     public GamePage start() {
         nextStep();
         clickOnButtonWithId("freePlayStart");
+        awaitStartedWorld();
         return GamePage.of(getContext());
     }
 

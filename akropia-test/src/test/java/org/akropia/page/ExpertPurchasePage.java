@@ -214,10 +214,18 @@ public final class ExpertPurchasePage extends AbstractScreen {
     }
 
     public void assignToSmithy(int unitId) throws Exception {
-        getRobot()
-                .drag("#colonyUnit-" + unitId,
-                        javafx.scene.input.MouseButton.PRIMARY)
-                .dropTo("#id_blacksmith");
+        final javafx.scene.Node worker = getNodeFinder()
+                .lookup("#colonyUnit-" + unitId).query();
+        final javafx.scene.Parent building = getNodeFinder()
+                .lookup("#id_blacksmith").queryAs(javafx.scene.Parent.class);
+        final javafx.scene.canvas.Canvas slots = building
+                .getChildrenUnmodifiable().stream()
+                .filter(javafx.scene.canvas.Canvas.class::isInstance)
+                .map(javafx.scene.canvas.Canvas.class::cast).findFirst()
+                .orElseThrow();
+        revealGameContent(worker, slots);
+        getRobot().drag(worker, javafx.scene.input.MouseButton.PRIMARY)
+                .dropTo(slots.localToScreen(16, 16));
         WaitForAsyncUtils.waitFor(5, java.util.concurrent.TimeUnit.SECONDS,
                 () -> getModel().getUnitById(unitId)
                         .getPlace() instanceof org.akropia.model.PlaceConstructionSlot);

@@ -22,6 +22,7 @@
 }
 
 .illustrated-page .screen-body { -fx-padding: 0; -fx-spacing: 0; }
+.europe-page .screen-body { -fx-padding: 0 16; }
 
 .illustrated-page .label-title { -fx-font-size: 14; }
 

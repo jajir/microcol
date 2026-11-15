@@ -158,11 +158,13 @@ public final class EuropeEquipmentPage extends AbstractScreen {
     }
 
     public void depart(int shipId) throws Exception {
-        final javafx.scene.Node target = getNodeFinder()
-                .lookup("#europe-outgoing-scroll .viewport").query();
-        getRobot().drag(
-                PageComponentPanelDock.of(getContext()).getUnitsInPort().get(0),
-                MouseButton.PRIMARY).dropTo(target);
+        final javafx.scene.control.ToggleButton carrier = getNodeFinder()
+                .lookup("#europe-dock-ship-" + shipId)
+                .queryAs(javafx.scene.control.ToggleButton.class);
+        if (!carrier.isSelected()) {
+            getRobot().clickOn(carrier);
+        }
+        clickOnButtonWithId("europe-depart");
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
                 () -> getModel().getUnitById(shipId).isAtHighSea());
         WaitForAsyncUtils.waitForFxEvents();

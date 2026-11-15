@@ -231,13 +231,15 @@ public final class ExpeditionLoopPage extends AbstractScreen {
                 .map(Unit::getId).findFirst().orElseThrow();
     }
 
-    /** Drop the selected port ship on the departure panel of Europe. */
+    /** Send the selected port ship using the departure action. */
     public void sendShipBack() throws Exception {
-        final javafx.scene.Node target = getNodeFinder()
-                .lookup("#europe-outgoing-scroll .viewport").query();
-        getRobot().drag(
-                PageComponentPanelDock.of(getContext()).getUnitsInPort().get(0),
-                MouseButton.PRIMARY).dropTo(target);
+        final javafx.scene.control.ToggleButton carrier = getNodeFinder()
+                .lookup("#europe-dock-ship-" + ship().getId())
+                .queryAs(javafx.scene.control.ToggleButton.class);
+        if (!carrier.isSelected()) {
+            getRobot().clickOn(carrier);
+        }
+        clickOnButtonWithId("europe-depart");
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
                 () -> ship().isAtHighSea());
         WaitForAsyncUtils.waitForFxEvents();

@@ -332,8 +332,15 @@ Never force-push to publish. Task completion follows the local acceptance policy
    published commit**. A failing regression prevents promotion of that game
    build; the previous published build remains available. Pages has its own
    documentation gates. A local pass or push proves neither publication.
-6. Full local verification remains available for a requested regression-repair
-   session. Never reclassify historical failures, timeouts or partial runs as
+6. **Amended on 2026-11-15:** a regression-repair request alone does not
+   authorize running the full local regression suite. Run it only when the
+   user explicitly requests full local execution. Use the GitHub report as
+   the inventory of failures, group shared causes, and run each affected test
+   with its functional neighborhood after repair. Account for every reported
+   failure with targeted evidence; do not use a full local run to discover
+   failures. Required model/JUnit and smoke checks remain unchanged. Record
+   selected scenarios and actual results separately from full-regression
+   evidence. Never reclassify historical failures, timeouts or partial runs as
    successful; keep local smoke, full regression and publication evidence
    separate. The smoke time budget is a requirement, not a guarantee about
    an unmeasured machine or a cold dependency download.

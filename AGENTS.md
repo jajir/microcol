@@ -56,6 +56,15 @@ published; do not claim a new build/download without verification. Full local
 regression remains available for explicitly requested diagnosis or acceptance,
 but is not the ordinary pre-commit gate. Historical failed runs remain failed.
 
+As amended on 2026-11-15, a regression-repair request does not authorize a
+full local regression run. Run the entire local suite only when the user
+explicitly requests that execution. Use the GitHub report as the failure
+inventory, group failures by shared cause, and verify each repair with the
+affected tests and their functional neighborhood. Cover every reported failure
+without searching for failures by running the whole suite locally. Keep the
+required model/JUnit and smoke gates, and record targeted selections and results.
+See the [local acceptance policy](docs/publishing.md#local-acceptance-policy).
+
 Pushes to `main` publish documentation; conditional nightly full regression or
 manual full regression with publication explicitly enabled publishes verified
 development distributions.

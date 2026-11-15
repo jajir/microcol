@@ -18,7 +18,6 @@ import com.google.inject.Singleton;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -152,7 +151,6 @@ public final class EuropePanel
             }
         };
         content.getStyleClass().add("game-bar-content");
-        StackPane.setMargin(content, new Insets(0, 16, 0, 16));
         final StackPane scene = new StackPane(background.getContent(), content);
         scene.setId("europe-harbor-scene");
         scene.setMinHeight(600);

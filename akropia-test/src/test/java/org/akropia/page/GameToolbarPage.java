@@ -117,6 +117,10 @@ public final class GameToolbarPage extends AbstractScreen {
                 .localToScene(actions.getLayoutBounds());
         final Node content = toolbar.lookup(".game-bar-content");
         final Bounds inner = content.localToScene(content.getLayoutBounds());
+        assertTrue(frame.contains(inner),
+                "The header input surface must stay inside the visible toolbar");
+        assertTrue(frame.contains(actionBounds),
+                "Toolbar actions must not cover the map below the header");
         assertEquals(inner.getMinX(), title.getMinX(), 1);
         assertTrue(title.getMaxX() <= actionBounds.getMinX());
         assertTrue(title.getMinY() >= frame.getMinY());

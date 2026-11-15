@@ -136,6 +136,9 @@ public final class ClipboardWritter implements ClipboardConst {
     public void build() {
         content.putString(buff.toString());
         db.setContent(content);
+        if (content.hasImage()) {
+            db.setDragView(content.getImage());
+        }
     }
 
 }

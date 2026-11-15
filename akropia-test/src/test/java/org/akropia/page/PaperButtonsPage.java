@@ -163,8 +163,7 @@ public final class PaperButtonsPage extends AbstractScreen {
             compactColonyButton |= button.getStyleClass().contains("button")
                     && parent.getStyleClass().contains("colony-overview");
         }
-        assertEquals(compactColonyButton ? 12 : 14, button.getFont().getSize(),
-                button.getId());
+        assertEquals(14, button.getFont().getSize(), button.getId());
         assertEquals(
                 modal && finalAction ? new javafx.geometry.Insets(7, 14, 7, 14)
                         : button.getStyleClass().contains("congress-card")
@@ -194,7 +193,9 @@ public final class PaperButtonsPage extends AbstractScreen {
             final Text text = (Text) button.lookup(".text");
             assertNotNull(text);
             assertEquals(button.getText(), text.getText(),
-                    "Full button label: " + button.getId());
+                    "Full button label: " + button.getId() + "; bounds="
+                            + button.getLayoutBounds() + "; preferredHeight="
+                            + button.prefHeight(button.getWidth()));
         }
     }
 

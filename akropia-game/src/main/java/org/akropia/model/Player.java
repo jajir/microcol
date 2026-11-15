@@ -320,12 +320,17 @@ public abstract class Player {
         if (!model.isValid(location)) {
             return false;
         }
-        return model.getAllUnits().stream()
-                .anyMatch(unit -> unit.getOwner().equals(this)
-                        && unit.isAtPlaceLocation()
-                        && unit.getVisibleLocations().contains(location))
-                || model.getColonies(this).stream().anyMatch(colony -> colony
-                        .getLocation().getDistanceChebyshev(location) <= 1);
+        return model.getAllUnits().stream().anyMatch(unit -> {
+            // Painting can overlap a ship's departure. Use one place
+            // snapshot instead of checking and then rereading it.
+            final Place place = unit.getPlace();
+            return unit.getOwner().equals(this)
+                    && place instanceof PlaceLocation
+                    && ((PlaceLocation) place).getLocation()
+                            .getDistanceChebyshev(
+                                    location) <= unit.getSightRadius();
+        }) || model.getColonies(this).stream().anyMatch(colony -> colony
+                .getLocation().getDistanceChebyshev(location) <= 1);
     }
 
     /**

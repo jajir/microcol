@@ -16,6 +16,9 @@ public final class GameScreenHeader extends StackPane {
     public GameScreenHeader() {
         getStyleClass().add("screen-toolbar");
         content.getStyleClass().add("game-bar-content");
+        // The toolbar owns its height; FlowPane's minimum at a narrow width
+        // must not expand an invisible input surface over the map.
+        content.setMinHeight(0);
         getChildren().add(content);
         setTitle(new Label());
     }
@@ -43,6 +46,7 @@ public final class GameScreenHeader extends StackPane {
         HBox.setHgrow(actions, Priority.ALWAYS);
         if (actions instanceof Region) {
             ((Region) actions).setMinWidth(0);
+            ((Region) actions).setMinHeight(0);
             ((Region) actions).setMaxWidth(Double.MAX_VALUE);
         }
     }

@@ -1796,3 +1796,18 @@ studii. Ověření sleduje [funkční evidence](functional-tests.md#page-separat
 2. Ověření zachovává vybraný wagon, zaměří loď a zkontroluje oba obrysy;
    následně loď vybere mezerníkem a opakovaným kliknutím.
    [Funkční evidence](functional-tests.md#depot-focus-border-2026-11-14).
+
+
+## Ovládání mapy a tažení v kolonii — 2026-11-15
+
+1. Obsah horní lišty včetně jeho plochy přijímající myš musí zůstat uvnitř
+   viditelné lišty. Prázdný kontejner nesmí překrývat mapu, přepínač
+   obchodních tras ani minimapu. Kliknutí a tažení na minimapě nadále
+   určují střed kamery; nemění výběr ani herní stav.
+2. Při přetahování pracovníka z okolí kolonie, budovy, pole nebo nákladu
+   se používá obrázek dané jednotky jako náhled tažení. Přesun se provede
+   až platným upuštěním; zrušení zachová původní umístění.
+3. Lodě i povozy v seznamu dopravců depa slouží pouze k výběru nákladu.
+   Samotné dopravce nelze přetahovat. Přetahování lidí a zboží z jejich
+   nákladových boxů zůstává dostupné podle dosavadních pravidel.
+4. Stav automatického ověření vede [funkční evidence](functional-tests.md#input-regression-repair-2026-11-15).

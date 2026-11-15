@@ -58,6 +58,7 @@
     -fx-spacing: 3;
 }
 .europe-harbor .goods {
+    -fx-padding: 8 0 10 0;
     -fx-background-color: #FFF9EC;
     -fx-border-color: #393a2d;
     -fx-border-width: 2 0 0 0;

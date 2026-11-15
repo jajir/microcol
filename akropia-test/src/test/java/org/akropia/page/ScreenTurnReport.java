@@ -195,11 +195,19 @@ public class ScreenTurnReport extends AbstractScreen {
                 "Open Home port label must not be truncated");
     }
 
-    public void verifyOpenEuropeActionAbsent() {
-        assertTrue(
-                getNodeFinder().lookup("#turnEventOpenEurope").tryQuery()
-                        .isEmpty(),
-                "Open Home port action must not be offered");
+    public void verifyOpenEuropeActionsForVisibleEvents() {
+        getRobot().interact(() -> {
+            final long expected = getContext()
+                    .getClassFromGuice(
+                            org.akropia.gui.screen.turnreport.TeService.class)
+                    .getMessages().stream()
+                    .filter(org.akropia.gui.screen.turnreport.TeItemEurope.class::isInstance)
+                    .count();
+            assertEquals(expected,
+                    getNodeFinder().lookup("#turnEventOpenEurope").queryAll()
+                            .size(),
+                    "Only displayed Home port events offer navigation");
+        });
     }
 
     /** Activate the report's Open Europe action with the mouse. */
