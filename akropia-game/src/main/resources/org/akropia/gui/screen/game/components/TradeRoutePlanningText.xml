@@ -7,10 +7,9 @@
   <entry key="newRoute">New trade route</entry>
   <entry key="newRouteHelp">Creates a new route: choose its starting colony, its stops in order and land or sea transport. The game finds the paths between the stops.</entry>
   <entry key="title">Trade routes</entry>
-  <entry key="rule">Click a route on the map or choose it in the list. The game picks the fastest legal path between stops by movement cost, not by the number of tiles.</entry>
+  <entry key="rule">Click a route on the map to select it; click again to cycle through overlapping routes. Double-click to edit its stops, goods and carriers.</entry>
   <entry key="empty">You have no trade routes yet. Use New trade route in the bar above to create one.</entry>
-  <entry key="listLabel">Your routes</entry>
-  <entry key="noSelection">Choose a route to see its stops, goods, carriers and paths.</entry>
+  <entry key="noSelection">Select a trade route on the map to see its details.</entry>
   <entry key="kindLAND">Land route</entry>
   <entry key="kindSEA">Sea route</entry>
   <entry key="carriersNone">No carrier assigned</entry>
@@ -31,11 +30,10 @@
   <entry key="pointsWhole">%s movement points</entry>
   <entry key="pointsThirds">%s/3 movement point</entry>
   <entry key="stopLost">lost colony</entry>
-  <entry key="edit">Stops, goods and carriers…</entry>
-  <entry key="editHelp">Opens the route window with this route chosen: replace stops, set goods to unload and load, and assign or cancel carriers.</entry>
-  <entry key="back">Back to map</entry>
   <entry key="hoverRoute">%s: %s, stops: %s, %s.</entry>
   <entry key="hoverRoutes">Routes here: %s</entry>
   <entry key="created">Route %s was created.</entry>
   <entry key="toggleCloseHelp">Returns to the normal map. Viewing routes gives no orders and changes nothing in the game.</entry>
+  <entry key="pathsAvailable">Paths: all stops are reachable.</entry>
+  <entry key="pathsIncomplete">Paths: some stops are unreachable; see the details below.</entry>
 </properties>

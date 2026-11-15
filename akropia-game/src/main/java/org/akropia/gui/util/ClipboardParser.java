@@ -3,7 +3,6 @@ package org.akropia.gui.util;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import javax.annotation.Nullable;
 
 import org.akropia.model.Goods;
 import org.akropia.model.GoodsType;
@@ -37,7 +36,10 @@ public class ClipboardParser implements ClipboardConst {
                 .toString();
     }
 
-    protected ClipboardParser(final @Nullable String originalString) {
+    /**
+     * @param originalString clipboard text, or {@code null} for empty content
+     */
+    protected ClipboardParser(final String originalString) {
         if (originalString == null) {
             this.originalString = "";
             this.map = Maps.newHashMap();

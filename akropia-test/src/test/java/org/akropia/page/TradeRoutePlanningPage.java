@@ -28,16 +28,14 @@ import com.google.common.collect.Lists;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ListCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
 /**
  * Map trade route planner: the switch in the map's upper-left corner, the New
  * trade route button of the game bar and the planner's right panel. Routes are
- * chosen in the visible list with the keyboard or by clicking the map, as a
- * player would; the model and the planner state are only read to verify.
+ * chosen by clicking the map, as a player would; the model and the planner
+ * state are only read to verify.
  */
 public final class TradeRoutePlanningPage extends AbstractScreen {
 
@@ -129,12 +127,6 @@ public final class TradeRoutePlanningPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    /** Returns to the normal map with the panel's own button. */
-    public void back() {
-        clickOnButtonWithId("tradeRoutePlanningBack");
-        WaitForAsyncUtils.waitForFxEvents();
-    }
-
     public void pressEscape() {
         getRobot().push(KeyCode.ESCAPE);
         WaitForAsyncUtils.waitForFxEvents();
@@ -146,48 +138,45 @@ public final class TradeRoutePlanningPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    /** Opens the shared route window for the selected route. */
+    /** Opens the selected route through a double-click on its map path. */
     public void editSelected() {
-        clickOnButtonWithId("tradeRoutePlanningEdit");
-        WaitForAsyncUtils.waitForFxEvents();
+        final TradeRoutePreview selected = planning().getSelected()
+                .orElseThrow();
+        final Location square = routeSquare(selected);
+        final List<TradeRoutePreview> overlapping = planning()
+                .getRoutesAt(square);
+        final int index = overlapping.indexOf(selected);
+        chooseRoute(overlapping
+                .get((index + overlapping.size() - 1) % overlapping.size())
+                .getRoute().getName());
+        getRobot().sleep(600);
+        doubleClickMap(square);
     }
 
-    /**
-     * Chooses a route by its name in the panel list with the keyboard, which
-     * also separates routes drawn over the same squares.
-     */
+    /** Selects the named route using clicks on its drawn map path. */
     public void chooseRoute(final String name) {
-        final ListView<TradeRoutePreview> list = list();
-        int index = -1;
-        for (int i = 0; i < list.getItems().size(); i++) {
-            if (list.getItems().get(i).getRoute().getName().equals(name)) {
-                index = i;
+        final TradeRoutePreview route = previewOf(name);
+        final Location square = routeSquare(route);
+        for (int attempt = 0; attempt <= planning().getRoutesAt(square)
+                .size(); attempt++) {
+            if (planning().getSelected().filter(
+                    selected -> selected.getRoute().getName().equals(name))
+                    .isPresent()) {
+                return;
             }
+            getRobot().sleep(600);
+            GamePage.of(getContext()).clickTile(square);
         }
-        if (index < 0) {
-            throw new IllegalStateException("Route is not listed: " + name);
-        }
-        getRobot().interact(list::requestFocus);
-        getRobot().push(KeyCode.HOME);
-        for (int i = 0; i < index; i++) {
-            getRobot().push(KeyCode.DOWN);
-        }
-        WaitForAsyncUtils.waitForFxEvents();
+        throw new IllegalStateException("Cannot select route on map: " + name);
+    }
+
+    private Location routeSquare(final TradeRoutePreview route) {
+        return route.getConnections().get(0).getSquares().get(0);
     }
 
     public void doubleClickMap(final Location location) {
         GamePage.of(getContext()).hoverTile(location);
         getRobot().doubleClickOn(MouseButton.PRIMARY);
-        WaitForAsyncUtils.waitForFxEvents();
-    }
-
-    public void doubleClickRoute(final String name) {
-        final Node cell = getNodeFinder()
-                .lookup("#tradeRoutePlanningList .list-cell")
-                .match(node -> node instanceof ListCell<?>
-                        && name.equals(((ListCell<?>) node).getText()))
-                .query();
-        getRobot().doubleClickOn(cell);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -202,11 +191,6 @@ public final class TradeRoutePlanningPage extends AbstractScreen {
     /** Saves the whole game window for visual review. */
     public void captureScreen(final String fileName) throws IOException {
         captureDialog("mainPanel", fileName);
-    }
-
-    private ListView<TradeRoutePreview> list() {
-        return getNodeFinder().lookup("#tradeRoutePlanningList")
-                .queryListView();
     }
 
     private TradeRoutePlanning planning() {
@@ -310,18 +294,14 @@ public final class TradeRoutePlanningPage extends AbstractScreen {
                 getLabeledById("tradeRoutePlanningMessage").getText());
     }
 
-    public void verifyRouteList(final String... expected) {
+    public void verifyPlannedRoutes(final String... expected) {
         assertEquals(List.of(expected),
-                list().getItems().stream()
+                planning().getPreviews().stream()
                         .map(preview -> preview.getRoute().getName())
                         .collect(Collectors.toList()));
     }
 
     public void verifySelectedRoute(final String expected) {
-        final TradeRoutePreview selected = list().getSelectionModel()
-                .getSelectedItem();
-        assertNotNull(selected, "A route is selected in the list");
-        assertEquals(expected, selected.getRoute().getName());
         assertEquals(expected,
                 planning().getSelected().orElseThrow().getRoute().getName());
         assertEquals(expected,
@@ -329,7 +309,6 @@ public final class TradeRoutePlanningPage extends AbstractScreen {
     }
 
     public void verifyNoSelection(final String expectedHint) {
-        assertNull(list().getSelectionModel().getSelectedItem());
         assertTrue(planning().getSelected().isEmpty());
         assertEquals(expectedHint,
                 getLabeledById("tradeRoutePlanningName").getText());
@@ -365,9 +344,16 @@ public final class TradeRoutePlanningPage extends AbstractScreen {
                         + "' in:\n" + legs);
     }
 
-    public void verifyEditEnabled(final boolean expected) {
+    public void verifyDetailsOnlyPanel() {
+        for (final String id : List.of("tradeRoutePlanningList",
+                "tradeRoutePlanningEdit", "tradeRoutePlanningBack")) {
+            assertFalse(isInScene(id), id + " was removed from the panel");
+        }
+    }
+
+    public void verifyPathStatus(final String expected) {
         assertEquals(expected,
-                !getButtonById("tradeRoutePlanningEdit").isDisabled());
+                getLabeledById("tradeRoutePlanningStatus").getText());
     }
 
     /**
@@ -472,8 +458,7 @@ public final class TradeRoutePlanningPage extends AbstractScreen {
     public void verifyPanelFitsWindow() {
         final double width = getPrimaryStage().getScene().getWidth();
         final double height = getPrimaryStage().getScene().getHeight();
-        for (final String id : List.of(PANEL, "tradeRoutePlanningList",
-                "tradeRoutePlanningEdit", "tradeRoutePlanningBack")) {
+        for (final String id : List.of(PANEL, "tradeRoutePlanningScroll")) {
             final Node node = getNodeFinder().lookup("#" + id).query();
             final Bounds bounds = node.localToScene(node.getLayoutBounds());
             assertTrue(bounds.getMinX() >= 0 && bounds.getMaxX() <= width + 1,

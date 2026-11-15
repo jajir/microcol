@@ -136,8 +136,7 @@ public final class TradeRoutePlanning {
 
     /**
      * Selects a route under a clicked square. Repeated clicks on a square
-     * shared by several routes step through them; the panel list also selects
-     * each one by name.
+     * shared by several routes step through them.
      *
      * @param location required clicked map square
      * @return whether a route passes the square

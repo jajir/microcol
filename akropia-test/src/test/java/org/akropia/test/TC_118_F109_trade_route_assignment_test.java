@@ -336,7 +336,7 @@ public class TC_118_F109_trade_route_assignment_test
 
         // The saved Idle cart route is drawn for its wagon 6.
         planner.open();
-        planner.verifyRouteList("Idle cart");
+        planner.verifyPlannedRoutes("Idle cart");
         planner.chooseRoute("Idle cart");
         planner.verifySelectedRoute("Idle cart");
         planner.verifyCarriers("Carriers: Wagon #6");
@@ -352,7 +352,8 @@ public class TC_118_F109_trade_route_assignment_test
         route.create();
         route.verifyStoredRoute("Ore Cart", TradeRouteKind.LAND, "Delft",
                 "New Amsterdam");
-        planner.verifyRouteList("Idle cart", "Ore Cart");
+        planner.verifyPlannedRoutes("Idle cart", "Ore Cart");
+        planner.chooseRoute("Ore Cart");
         planner.verifySelectedRoute("Ore Cart");
         planner.verifyRouteDrawnOver("Idle cart", DELFT_LOCATION);
         planner.verifyRouteDrawnOver("Ore Cart", DELFT_LOCATION);
@@ -432,7 +433,7 @@ public class TC_118_F109_trade_route_assignment_test
         planner.verifyCarriers("Carriers: Wagon #4");
         planner.verifyDrawnConnection("Ore Cart", TradeRouteKind.LAND,
                 NEW_AMSTERDAM_LOCATION, BETWEEN_TOWNS_LOCATION, DELFT_LOCATION);
-        planner.back();
+        planner.close();
         planner.verifyPlannerShown(false);
     }
 

@@ -281,9 +281,9 @@ public class TC_116_F107_trade_route_creation_test extends AbstractAkropiaTest {
         route.verifyDialogClosed();
         route.verifyStoredRoutes(0);
         planner.verifyPlannerShown(true);
-        planner.verifyRouteList();
+        planner.verifyPlannedRoutes();
 
-        // A created route is drawn over its towns and described at once.
+        // A created route is drawn; its details appear after a map selection.
         planner.newRoute();
         route.verifyNoStopsChosen();
         route.enterName("Wagon Road");
@@ -292,7 +292,8 @@ public class TC_116_F107_trade_route_creation_test extends AbstractAkropiaTest {
         route.verifyDialogClosed();
         route.verifyStoredRoute("Wagon Road", TradeRouteKind.LAND, "Delft");
         planner.verifyMessage("Route Wagon Road was created.");
-        planner.verifyRouteList("Wagon Road");
+        planner.verifyPlannedRoutes("Wagon Road");
+        planner.chooseRoute("Wagon Road");
         planner.verifySelectedRoute("Wagon Road");
         planner.verifyKind("Land route");
         planner.verifyCarriers("No carrier assigned");
@@ -320,18 +321,18 @@ public class TC_116_F107_trade_route_creation_test extends AbstractAkropiaTest {
         planner.verifyNewRouteButton(null);
 
         // Save and Continue keep the route; the game reopens on the normal
-        // map, and the list selects the route by keyboard.
+        // map, where a click selects the route.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         planner.verifyPlannerShown(false);
         planner.open();
-        planner.verifyRouteList("Wagon Road");
+        planner.verifyPlannedRoutes("Wagon Road");
         planner.verifyNoSelection(
-                "Choose a route to see its stops, goods, carriers and paths.");
-        planner.verifyEditEnabled(false);
+                "Select a trade route on the map to see its details.");
+        planner.verifyDetailsOnlyPanel();
         planner.chooseRoute("Wagon Road");
         planner.verifySelectedRoute("Wagon Road");
-        planner.verifyEditEnabled(true);
+        planner.verifyPathStatus("Paths: all stops are reachable.");
         route.verifyStoredRoute("Wagon Road", TradeRouteKind.LAND, "Delft");
 
         // Escape leaves the planner as well.
@@ -368,6 +369,7 @@ public class TC_116_F107_trade_route_creation_test extends AbstractAkropiaTest {
         route.create();
         route.verifyStoredRoute("Povozová cesta", TradeRouteKind.LAND,
                 "New Amsterdam");
+        planner.chooseRoute("Povozová cesta");
         planner.verifySelectedRoute("Povozová cesta");
         planner.verifyKind("Pozemní trasa");
         planner.verifyCarriers("Bez přiřazeného dopravce");
@@ -375,11 +377,11 @@ public class TC_116_F107_trade_route_creation_test extends AbstractAkropiaTest {
         planner.verifyLegsContain("Delft → New Amsterdam: po souši");
         planner.captureScreen("trade-route-planner-czech.png");
 
-        // In a small window the panel, its list and its buttons stay visible.
+        // In a small window the detail panel stays within the window.
         planner.resizeWindow(1024, 640);
         planner.verifyPanelFitsWindow();
         planner.captureScreen("trade-route-planner-narrow-czech.png");
-        planner.back();
+        planner.close();
         planner.verifyPlannerShown(false);
     }
 

@@ -319,6 +319,7 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
 
         // Without a carrier only a ship can reach Europe, so each leg shows
         // its sea path; Europe is drawn out on the high sea.
+        planner.chooseRoute("Oil Run");
         planner.verifySelectedRoute("Oil Run");
         planner.verifyKind("Sea route");
         planner.verifyCarriers("No carrier assigned");
@@ -327,7 +328,7 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         planner.verifyRouteDrawnOver("Oil Run", DELFT_LOCATION);
         planner.captureScreen("trade-route-planner-europe.png");
 
-        // The panel opens the shared route window with this route. Closing it
+        // A map double-click opens the shared route window. Closing it
         // after staging goods keeps the stored stop unchanged.
         planner.editSelected();
         cargo.verifyOpened();

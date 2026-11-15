@@ -1,3 +1,59 @@
+## Trade route detail panel — 2026-11-15
+
+1. UC-107/108/109/110: the planning panel shows selected route details only.
+   Route selection uses map clicks, including overlapping paths; map double-click
+   opens the existing editor. The corner switch and Escape return to the map.
+   The minimap remains. New routes require map selection to show their details.
+2. Removed the route list, its captions and both panel action buttons. Added
+   a path availability summary above the existing carriers, ordered stops,
+   goods and individual path explanations. Empty details collapse; all content
+   scrolls in small windows. English and Czech text follow the same behavior.
+3. Targeted coverage: TC116/05–06, TC117/04, TC118/04, TC119/07 and /09,
+   and TC209/01. The page object selects through actual map clicks and opens
+   editors by map double-click, retaining gameplay and save/load assertions.
+4. Model run `20261115T140607Z-a3446e6efc8b` passed 5,136 checks with
+   zero failures/errors/skips in 159.788 supervised seconds; reports are in
+   `target/verification/run-da0o9x1n`. Targeted attempt
+   `20261115T140922Z-8a4ecbe8ccaf` failed during test compilation after 38.049 s:
+   one assertion still referenced the removed list helper. No UI test started.
+   Removed that obsolete assertion; the empty-selection and hint checks remain.
+5. Targeted retry `20261115T141028Z-75a48f29d822` passed all seven UI scenarios
+   and three page-contract checks with zero failures/errors/skips in 255.870 s.
+   Reports and reviewed English/Czech screenshots are in
+   `target/docker-ui/run-m47z2C`. The game/model source is unchanged from the
+   passing model run.
+6. Fixed smoke/support run `20261115T141458Z-07e821f6a8a3` passed all 21
+   checks with zero failures/errors/skips in 256.706 supervised seconds,
+   within the 420-second acceptance budget. Reports are in
+   `target/verification/run-kkb3g7hp`; its source snapshot matches every
+   executable change accepted here, based on `20066ef69b5c`.
+7. Scoped Java formatting, final diff review, 14 documentation consistency
+   checks, name audit and strict MkDocs passed. The unrelated backlog edit is
+   excluded. This is local acceptance; no full regression, remote CI or
+   publication verification was performed.
+
+8. Initial push was rejected because main gained the Guava 33.7.1 update
+   (`5918734c`). Rebased without conflicts and preserved the unrelated backlog
+   edit. Integration model attempt `20261115T142032Z-4f725bcb35e3` failed
+   after 23.303 s during compilation: `javax.annotation.Nullable` was no
+   longer available. No tests started. Removed that sole annotation from
+   `ClipboardParser` and documented the already-supported null input without
+   changing runtime behavior or adding a dependency.
+9. Integration model retry `20261115T142136Z-ff85d6b9d9ae` passed all 5,136
+   checks with zero failures/errors/skips in 158.273 s; reports are in
+   `target/verification/run-os07onfs`.
+10. Integration targeted run `20261115T142427Z-aa314f487c5b` passed the same
+    seven UI scenarios and three page-contract checks with zero
+    failures/errors/skips in 259.573 s; reports are in
+    `target/docker-ui/run-0WSgyQ`.
+11. Integration fixed smoke/support run `20261115T142906Z-390050a7e734`
+    passed all 21 checks with zero failures/errors/skips in 256.054 s,
+    within the 420-second budget. Reports are in
+    `target/verification/run-rmuhcibg`. Final executable source matches this
+    snapshot and the integration model evidence. Final documentation checks
+    (14 tests, name audit and strict MkDocs) passed again after evidence closure.
+    The integrated change is locally accepted; remote publication is unverified.
+
 ## Input regression repair — 2026-11-15
 
 1. The user requested repair of [nightly run 43667534726](https://github.com/jajir/microcol/actions/runs/43667534726)

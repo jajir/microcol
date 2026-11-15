@@ -7,10 +7,9 @@
   <entry key="newRoute">Nová obchodní trasa</entry>
   <entry key="newRouteHelp">Založí novou trasu: zvolte výchozí kolonii, zastávky v pořadí a pozemní nebo námořní dopravu. Cesty mezi zastávkami najde hra.</entry>
   <entry key="title">Obchodní trasy</entry>
-  <entry key="rule">Klikněte na trasu na mapě nebo ji vyberte v seznamu. Hra mezi zastávkami volí nejrychlejší legální cestu podle pohybové ceny, ne podle počtu polí.</entry>
+  <entry key="rule">Trasu vyberete kliknutím na mapu; opakovaným kliknutím přepnete překrývající se trasy. Dvojklik otevře úpravu zastávek, zboží a dopravců.</entry>
   <entry key="empty">Zatím nemáte žádné obchodní trasy. Založte je tlačítkem Nová obchodní trasa v liště nahoře.</entry>
-  <entry key="listLabel">Vaše trasy</entry>
-  <entry key="noSelection">Vyberte trasu a uvidíte její zastávky, zboží, dopravce a cesty.</entry>
+  <entry key="noSelection">Vyberte obchodní trasu na mapě a zobrazí se její podrobnosti.</entry>
   <entry key="kindLAND">Pozemní trasa</entry>
   <entry key="kindSEA">Námořní trasa</entry>
   <entry key="carriersNone">Bez přiřazeného dopravce</entry>
@@ -31,11 +30,10 @@
   <entry key="pointsWhole">%s b. pohybu</entry>
   <entry key="pointsThirds">%s/3 bodu pohybu</entry>
   <entry key="stopLost">ztracená kolonie</entry>
-  <entry key="edit">Zastávky, zboží a dopravci…</entry>
-  <entry key="editHelp">Otevře okno trasy s touto trasou: nahraďte zastávky, nastavte zboží k vyložení a naložení a přiřaďte nebo zrušte dopravce.</entry>
-  <entry key="back">Zpět na mapu</entry>
   <entry key="hoverRoute">%s: %s, zastávek: %s, %s.</entry>
   <entry key="hoverRoutes">Trasy zde: %s</entry>
   <entry key="created">Trasa %s byla založena.</entry>
   <entry key="toggleCloseHelp">Vrátí se na běžnou mapu. Prohlížení tras nezadává rozkazy a ve hře nic nemění.</entry>
+  <entry key="pathsAvailable">Cesty: všechny zastávky jsou dosažitelné.</entry>
+  <entry key="pathsIncomplete">Cesty: některé zastávky nejsou dosažitelné; podrobnosti jsou níže.</entry>
 </properties>

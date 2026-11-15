@@ -14,7 +14,6 @@ import org.akropia.gui.screen.colony.DialogTradeRoute;
 import org.akropia.gui.screen.colony.DialogTradeRouteCargo;
 import org.akropia.gui.screen.colony.TradeRouteText;
 import org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source;
-import org.akropia.gui.screen.game.gamepanel.TradeRouteColors;
 import org.akropia.gui.screen.game.gamepanel.TradeRoutePlanning;
 import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.shortcut.KeyboardShortcuts;
@@ -38,22 +37,15 @@ import com.google.inject.Singleton;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 
 /**
- * Right panel of the map trade route planner. It replaces the normal right
- * panel while the planner is on: a keyboard list of the player's routes, which
- * also separates routes drawn over the same squares, and the selected route's
- * stops, goods, carriers and paths. Editing opens the existing route windows,
- * whose model operations decide every change; canceling them changes nothing.
- * The panel also owns the planner's map toggle and the toolbar's New trade
- * route button.
+ * Details of the route selected on the planning map. The panel also owns the
+ * map toggle and toolbar's New trade route button. Map double-clicks open the
+ * existing editor; model operations decide every change.
  */
 @Singleton
 public final class TradeRoutePlanningPanel
@@ -71,23 +63,18 @@ public final class TradeRoutePlanningPanel
     private final Label rule = new Label();
     private final Label empty = new Label();
     private final Label message = new Label();
-    private final Label listLabel = new Label();
-    private final ListView<TradeRoutePreview> list = new ListView<>();
     private final VBox detail = new VBox(6);
     private final Label name = new Label();
     private final Label kind = new Label();
+    private final Label status = new Label();
     private final Label carriers = new Label();
     private final Label previewNote = new Label();
     private final Label stopsHeading = new Label();
     private final Label stops = new Label();
     private final Label legsHeading = new Label();
     private final Label legs = new Label();
-    private final Button edit = ActionButtons.button(ButtonIcon.CARGO);
-    private final Button back = ActionButtons.button(ButtonIcon.BACK);
     private final Button toggle = ActionButtons.button(ButtonIcon.TRADE);
     private final Button newRoute = ActionButtons.button(ButtonIcon.TRADE);
-    /** Set while the list is rebuilt, so its own events do not recurse. */
-    private boolean refreshing;
 
     @Inject
     TradeRoutePlanningPanel(final GameModelController game,
@@ -117,12 +104,13 @@ public final class TradeRoutePlanningPanel
         name.setId("tradeRoutePlanningName");
         name.getStyleClass().add("trade-route-planning-title");
         kind.setId("tradeRoutePlanningKind");
+        status.setId("tradeRoutePlanningStatus");
         carriers.setId("tradeRoutePlanningCarriers");
         previewNote.setId("tradeRoutePlanningPreviewFor");
         stops.setId("tradeRoutePlanningStops");
         legs.setId("tradeRoutePlanningLegs");
         for (final Label label : List.of(rule, empty, message, name, kind,
-                carriers, previewNote, stopsHeading, stops, legsHeading,
+                status, carriers, previewNote, stopsHeading, stops, legsHeading,
                 legs)) {
             label.setWrapText(true);
             label.setMinHeight(Region.USE_PREF_SIZE);
@@ -132,41 +120,6 @@ public final class TradeRoutePlanningPanel
             label.managedProperty().bind(label.visibleProperty());
         }
 
-        list.setId("tradeRoutePlanningList");
-        list.setPrefHeight(150);
-        list.setMinHeight(90);
-        listLabel.setLabelFor(list);
-        list.setCellFactory(view -> new ListCell<>() {
-            @Override
-            protected void updateItem(final TradeRoutePreview item,
-                    final boolean isEmpty) {
-                super.updateItem(item, isEmpty);
-                if (isEmpty || item == null) {
-                    setText(null);
-                    setGraphic(null);
-                    setId(null);
-                } else {
-                    final Rectangle swatch = new Rectangle(14, 14,
-                            TradeRouteColors.colorOf(item));
-                    swatch.setStroke(javafx.scene.paint.Color.web("#34332b"));
-                    setGraphic(swatch);
-                    setText(item.getRoute().getName());
-                    setId("tradeRoutePlanningItem-" + item.getRoute().getId());
-                }
-            }
-        });
-        list.getSelectionModel().selectedItemProperty()
-                .addListener((observable, previous, current) -> {
-                    if (!refreshing) {
-                        planning.select(current == null ? null
-                                : current.getRoute().getId());
-                    }
-                });
-
-        edit.setId("tradeRoutePlanningEdit");
-        edit.setOnAction(event -> editSelected());
-        back.setId("tradeRoutePlanningBack");
-        back.setOnAction(event -> planning.setActive(false));
         toggle.setId("tradeRoutePlanningToggle");
         toggle.getStyleClass().add("trade-route-planning-toggle");
         toggle.setOnAction(event -> planning.setActive(!planning.isActive()));
@@ -174,7 +127,7 @@ public final class TradeRoutePlanningPanel
         newRoute.setOnAction(event -> createRoute());
         newRoute.setVisible(false);
         newRoute.setManaged(false);
-        for (final Button button : List.of(toggle, newRoute, edit)) {
+        for (final Button button : List.of(toggle, newRoute)) {
             button.setOnMouseEntered(
                     event -> eventBus.post(new StatusBarMessageEvent(
                             button == toggle
@@ -187,13 +140,19 @@ public final class TradeRoutePlanningPanel
                     .post(new StatusBarMessageEvent(Source.GAME)));
             button.accessibleTextProperty().bind(button.textProperty());
         }
-        back.accessibleTextProperty().bind(back.textProperty());
 
+        for (final Label label : List.of(kind, status, carriers, previewNote,
+                stops, legs)) {
+            label.visibleProperty().bind(label.textProperty().isNotEmpty());
+            label.managedProperty().bind(label.visibleProperty());
+        }
+        for (final Label heading : List.of(stopsHeading, legsHeading)) {
+            heading.managedProperty().bind(heading.visibleProperty());
+        }
         detail.setId("tradeRoutePlanningDetail");
-        detail.getChildren().addAll(name, kind, carriers, previewNote,
+        detail.getChildren().addAll(name, kind, status, carriers, previewNote,
                 stopsHeading, stops, legsHeading, legs, rule);
-        final VBox scrollContent = new VBox(6, title, empty, message, listLabel,
-                list, detail);
+        final VBox scrollContent = new VBox(6, title, empty, message, detail);
         final ScrollPane scroll = new ScrollPane(scrollContent) {
             @Override
             protected double computePrefHeight(final double width) {
@@ -208,21 +167,9 @@ public final class TradeRoutePlanningPanel
                 .bind(scroll.widthProperty().subtract(20));
         scrollContent.setMaxWidth(Region.USE_PREF_SIZE);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        // Route selection and details scroll together, so the
-        // actions below stay reachable in a small window.
         scroll.setMinHeight(120);
         VBox.setVgrow(scroll, Priority.ALWAYS);
-        // The route's edit action and the way back stay in a fixed area
-        // below the scrolling detail, in every window size and language.
-        for (final Button button : List.of(edit, back)) {
-            button.setWrapText(true);
-            button.setMaxWidth(240);
-            button.setMinHeight(Region.USE_PREF_SIZE);
-        }
-        final VBox actions = new VBox(6, edit, back);
-        actions.setId("tradeRoutePlanningActions");
-        actions.setMinHeight(Region.USE_PREF_SIZE);
-        content.getChildren().addAll(scroll, actions);
+        content.getChildren().add(scroll);
         planning.addListener(this::refresh);
         updateLanguage(i18n);
     }
@@ -251,7 +198,6 @@ public final class TradeRoutePlanningPanel
     public void setControlsDisabled(final boolean disable) {
         toggle.setDisable(disable);
         newRoute.setDisable(disable);
-        edit.setDisable(disable || planning.getSelected().isEmpty());
     }
 
     @Override
@@ -260,13 +206,8 @@ public final class TradeRoutePlanningPanel
         title.setText(i18n.get(TradeRoutePlanningText.title));
         rule.setText(i18n.get(TradeRoutePlanningText.rule));
         empty.setText(i18n.get(TradeRoutePlanningText.empty));
-        listLabel.setText(i18n.get(TradeRoutePlanningText.listLabel));
-        list.setAccessibleText(listLabel.getText());
         stopsHeading.setText(i18n.get(TradeRoutePlanningText.stopsHeading));
         legsHeading.setText(i18n.get(TradeRoutePlanningText.legsHeading));
-        edit.setText(i18n.get(TradeRoutePlanningText.edit));
-        edit.setAccessibleHelp(i18n.get(TradeRoutePlanningText.editHelp));
-        back.setText(i18n.get(TradeRoutePlanningText.back));
         newRoute.setText(i18n.get(TradeRoutePlanningText.newRoute));
         newRoute.setAccessibleHelp(
                 i18n.get(TradeRoutePlanningText.newRouteHelp));
@@ -274,8 +215,8 @@ public final class TradeRoutePlanningPanel
     }
 
     /**
-     * Rebuilds the toggle, the list and the selected route's detail from the
-     * planner's current previews.
+     * Rebuilds the toggle and the selected route's detail from the planner's
+     * current previews.
      */
     private void refresh() {
         final boolean active = planning.isActive();
@@ -295,31 +236,16 @@ public final class TradeRoutePlanningPanel
         }
         final List<TradeRoutePreview> previews = planning.getPreviews();
         final Optional<TradeRoutePreview> selected = planning.getSelected();
-        refreshing = true;
-        try {
-            list.getItems().setAll(previews);
-            if (selected.isPresent()) {
-                final int index = previews.indexOf(selected.get());
-                list.getSelectionModel().select(index);
-                list.scrollTo(index);
-            } else {
-                list.getSelectionModel().clearSelection();
-            }
-        } finally {
-            refreshing = false;
-        }
         empty.setVisible(previews.isEmpty());
-        list.setDisable(previews.isEmpty());
         message.setVisible(!message.getText().isEmpty());
         showDetail(selected);
     }
 
     private void showDetail(final Optional<TradeRoutePreview> selected) {
-        edit.setDisable(selected.isEmpty() || !game.isHumanTurnReady());
         if (selected.isEmpty()) {
             name.setText(i18n.get(TradeRoutePlanningText.noSelection));
-            for (final Label label : List.of(kind, carriers, previewNote, stops,
-                    legs)) {
+            for (final Label label : List.of(kind, status, carriers,
+                    previewNote, stops, legs)) {
                 label.setText("");
             }
             stopsHeading.setVisible(false);
@@ -332,6 +258,10 @@ public final class TradeRoutePlanningPanel
         legsHeading.setVisible(true);
         name.setText(route.getName());
         kind.setText(kindText(route.getKind()));
+        status.setText(i18n.get(preview.getLegs().stream()
+                .anyMatch(leg -> leg.getProblem().isPresent())
+                        ? TradeRoutePlanningText.pathsIncomplete
+                        : TradeRoutePlanningText.pathsAvailable));
         carriers.setText(carriersText(route));
         previewNote.setText(preview.getCarrier()
                 .map(carrier -> i18n.get(TradeRoutePlanningText.previewFor,
@@ -452,7 +382,7 @@ public final class TradeRoutePlanningPanel
      */
     public void editSelected() {
         final Optional<TradeRoutePreview> selected = planning.getSelected();
-        if (selected.isEmpty() || edit.isDisabled()) {
+        if (selected.isEmpty() || !game.isHumanTurnReady()) {
             return;
         }
         message.setText("");
@@ -474,7 +404,6 @@ public final class TradeRoutePlanningPanel
             message.setText(i18n.get(TradeRoutePlanningText.created,
                     created.get().getName()));
             planning.invalidate();
-            planning.select(created.get().getId());
         }
         refresh();
     }

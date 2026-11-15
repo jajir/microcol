@@ -72,6 +72,7 @@ public class TC_209_F240_trade_route_two_ports_test
                 "Delft");
 
         // Without a carrier the sea route still shows only sea paths.
+        planner.chooseRoute("Bay Run");
         planner.verifySelectedRoute("Bay Run");
         planner.verifyCarriers("No carrier assigned");
         planner.verifyLegsContain(

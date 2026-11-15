@@ -630,8 +630,10 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
 
         // The lost stop draws no path; each leg touching it says why.
         planner.open();
-        planner.verifyRouteList("Ore cart", "Lost cart", "Atlantic run");
+        planner.verifyPlannedRoutes("Ore cart", "Lost cart", "Atlantic run");
         planner.chooseRoute("Lost cart");
+        planner.verifyPathStatus(
+                "Paths: some stops are unreachable; see the details below.");
         planner.verifyCarriers("Carriers: Wagon #8");
         planner.verifyStops("1. Delft — unload: nothing; load: nothing\n"
                 + "2. lost colony — unload: nothing; load: nothing");
@@ -688,8 +690,8 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         planner.verifySelectedRoute("Ore cart");
         cargo.verifyDialogClosed();
 
-        // Double-clicking the list only selects, as before R-0426.
-        planner.doubleClickRoute("Lost cart");
+        // Another map click selects the overlapping route without editing.
+        game.clickTile(ROAD_LOCATION);
         planner.verifySelectedRoute("Lost cart");
         cargo.verifyDialogClosed();
 
