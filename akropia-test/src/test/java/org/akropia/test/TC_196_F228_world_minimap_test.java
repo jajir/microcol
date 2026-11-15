@@ -236,17 +236,19 @@ public class TC_196_F228_world_minimap_test extends AbstractAkropiaTest {
         fog.centerFrontier();
         map.rememberGameAndView();
 
-        // Capture while each WASD direction is held, at default and maximum
+        // Capture while each WASD direction is held, at minimum, default and
+        // maximum
         // speed. A settled screenshot alone would miss a one-frame mismatch.
-        for (final int speed : new int[] { 2, 9 }) {
+        for (final int speed : new int[] { 1, 2, 9 }) {
+            final int pixels = speed == 1 ? 10 : speed == 2 ? 13 : 36;
             map.captureScrollingFrame(KeyCode.D, speed, Location.of(26, 15));
-            map.verifyScrollingFrame(speed * 2, 0);
+            map.verifyScrollingFrame(pixels, 0);
             map.captureScrollingFrame(KeyCode.A, speed, Location.of(26, 15));
-            map.verifyScrollingFrame(-speed * 2, 0);
+            map.verifyScrollingFrame(-pixels, 0);
             map.captureScrollingFrame(KeyCode.S, speed, Location.of(26, 15));
-            map.verifyScrollingFrame(0, speed * 2);
+            map.verifyScrollingFrame(0, pixels);
             map.captureScrollingFrame(KeyCode.W, speed, Location.of(26, 15));
-            map.verifyScrollingFrame(0, -speed * 2);
+            map.verifyScrollingFrame(0, -pixels);
         }
         map.verifyGameUnchanged();
     }

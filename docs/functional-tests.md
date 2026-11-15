@@ -17578,3 +17578,12 @@ messages for diagnosis. No tests were removed or weakened for acceptance.
    name audit and strict MkDocs passed. Unrelated backlog edits are preserved.
    Full remote regression and publication were not inspected; no new verified
    distribution is claimed.
+
+## WASD speed range — 2026-11-15
+
+1. The nine slider positions now produce 10, 13, 17, 20, 23, 26, 30, 33 and 36 pixels per step. The minimum equals the former midpoint; the maximum doubles the former maximum. Position 2 remains the default and now produces 13 pixels. UC-114/UC-119 behavior is documented in the [UX rule](ux.md#rychlost-posunu-mapy-wasd-2026-11-08).
+2. Acceptance source: `43aca958a05d9b8289035f6f6cbdd00859c8f546` plus the WASD range change. The first model attempt (`20261115T165531Z-05c1ba9b28e8`) timed out during Docker preparation after a 20-second container query; tests never started. A subsequent probe completed in 0.02 seconds; the original delay has no confirmed root cause. The failed attempt remains failed.
+3. Model/JUnit: **5,136 tests, zero failures/errors/skips**, 146.355 seconds; `target/verification/run-rlgitaex/summary.json`, completion `20261115T165619Z-456624e84629`. `WasdControllerTest` covers all nine positions in four directions and speed changes while a key is held.
+4. Targeted Docker/Xvfb: **19 tests, zero failures/errors/skips**: all 15 scenarios in `TC_84_F75_framed_settings_test`, `TC_196_F228_world_minimap_test#TC_06_scrolling_keeps_terrain_and_fog_aligned`, and three `PageVerificationContractTest` checks. Reports: `target/docker-ui/run-W0wjrN/`; completion `20261115T165907Z-ddfcc2f72448`, 248.375 seconds.
+5. Fixed smoke/support selection (`verify.sh --smoke`): **21 tests, zero failures/errors/skips**, 253.942 seconds total against the 420-second budget (test group 250.946 seconds). Evidence: `target/verification/run-o20gco2m/summary.json`, completion `20261115T170332Z-7f9ab6fc2a12`. Changed Java sources match the accepted model and smoke snapshots.
+6. The shared Eclipse formatter was applied to all five changed Java files; token preservation and idempotence checks passed. Documentation acceptance: 14 consistency tests, zero failures/errors/skips, zero unexplained name-audit occurrences, and strict MkDocs; logs in `target/scroll-scale/`. This is local acceptance only; no full regression or remote publication verification was requested.

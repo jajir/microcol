@@ -100,17 +100,17 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         final FramedSettingsPage page = new FramedSettingsPage(getContext());
         // WASD speed keeps its default, endpoints, keyboard steps and saved
         // value.
-        page.verifyMapScrollSpeed(2);
+        page.verifyMapScrollSpeed(2, 13);
         page.press("settingMapScrollSpeed", KeyCode.END);
-        page.verifyMapScrollSpeed(9);
+        page.verifyMapScrollSpeed(9, 36);
         page.press("settingMapScrollSpeed", KeyCode.HOME);
-        page.verifyMapScrollSpeed(1);
+        page.verifyMapScrollSpeed(1, 10);
         page.press("settingMapScrollSpeed", KeyCode.RIGHT);
-        page.verifyMapScrollSpeed(2);
+        page.verifyMapScrollSpeed(2, 13);
         page.dragSlider("settingMapScrollSpeed", 1);
-        page.verifyMapScrollSpeed(9);
+        page.verifyMapScrollSpeed(9, 36);
         settings.goBack().openSetting();
-        page.verifyMapScrollSpeed(9);
+        page.verifyMapScrollSpeed(9, 36);
         // End and Home keep the actual application ranges and stored values.
         page.press("settingVolume", KeyCode.END);
         page.press("settingAnimationSpeed", KeyCode.END);

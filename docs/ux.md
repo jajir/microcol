@@ -1657,8 +1657,10 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 
 ## Rychlost posunu mapy WASD — 2026-11-08
 
-1. [R-0431](requirements/done/R-0431.md) přidává do nastavení společný posuvník s devíti polohami. Hráč jej mění myší nebo klávesami; Home/End nastaví meze, šipky jednu polohu. Výchozí 2 zachovává dosavadní rychlost, 1 je poloviční a 9 je 4,5násobná. Jde o počáteční škálu určenou k pozdějšímu doladění.
+1. [R-0431](requirements/done/R-0431.md) přidává do nastavení společný posuvník s devíti polohami. Hráč jej mění myší nebo klávesami; Home/End nastaví meze, šipky jednu polohu. Výchozí poloha je 2; aktuální rozsah rychlostí popisuje bod 3.
 2. Nastavení se ukládá okamžitě. Návrat nevrací předchozí hodnotu; hráč ji může obnovit polohou 2. Výsledek pozná při posunu mapy WASD. Není potřebný zvuk ani restart partie. Přijímací výsledky vlastní [funkční evidence](functional-tests.md).
+
+3. Od 15. listopadu 2026 zůstává devět poloh a výchozí poloha 2, ale rozsah posunu je 10–36 pixelů za krok. Minimum odpovídá původnímu středu, maximum dvojnásobku původního maxima. Mezilehlé hodnoty jsou rovnoměrně rozdělené a zaokrouhlené na celé pixely; výchozí poloha nyní posouvá o 13 pixelů.
 
 ## Průvodce novým světem — 2026-11-09
 1. [R-0437](requirements/done/R-0437.md) rozděluje přípravu na svět a hráče. První krok obsahuje rozměry, rozložení pevniny a kopírovatelný textový seed; druhý obtížnost, národ a samostatné jméno hráče. Shrnutí neodhaluje mapu.

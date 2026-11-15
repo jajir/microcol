@@ -370,7 +370,8 @@ public final class FramedSettingsPage extends AbstractScreen {
         assertEquals(!czech, ((RadioButton) control("rbEnglish")).isSelected());
     }
 
-    public void verifyMapScrollSpeed(final int expected) {
+    public void verifyMapScrollSpeed(final int expected,
+            final int expectedPixels) {
         assertEquals(expected,
                 ((Slider) control("settingMapScrollSpeed")).getValue(), .001);
         assertEquals(expected, getContext()
@@ -382,7 +383,7 @@ public final class FramedSettingsPage extends AbstractScreen {
                         javafx.scene.input.KeyEvent.KEY_PRESSED, "", "",
                         KeyCode.D, false, false, false, false)));
         try {
-            assertEquals(org.akropia.gui.Point.of(expected * 2, 0),
+            assertEquals(org.akropia.gui.Point.of(expectedPixels, 0),
                     wasd.getDiff());
         } finally {
             getRobot().interact(

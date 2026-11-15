@@ -1593,3 +1593,7 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 2. TC116/08 checks the map/planner toggle against the common header/footer
    content edge after resizing to wide and narrow windows. This verifies the
    requested maximum-width alignment in both modes.
+
+## Vyšší rozsah rychlosti WASD — 2026-11-15
+
+1. UC-114 (Hra) a UC-119: posuvník nyní pokrývá 10–36 pixelů za krok; podrobnosti vlastní [UX pravidlo](ux.md#rychlost-posunu-mapy-wasd-2026-11-08). TC_84/02 kontroluje nastavení, uložení a skutečný posun pro polohy 1, 2 a 9. TC_196/06 ověřuje shodu terénu a mlhy při posunu všemi čtyřmi směry na minimu, výchozí poloze a maximu. Výsledky vlastní [funkční evidence](functional-tests.md#wasd-speed-range-2026-11-15).

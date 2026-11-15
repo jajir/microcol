@@ -75,7 +75,11 @@ public class WasdController {
     }
 
     public Point getDiff() {
-        final int diff = preferences.getMapScrollSpeedProperty().get() * 2;
+        // The endpoints are the former midpoint (10 px) and twice the former
+        // maximum (36 px); intermediate positions use whole screen pixels.
+        final int diff = (int) Math
+                .round(10 + (preferences.getMapScrollSpeedProperty().get() - 1)
+                        * 26.0 / 8);
         Point out = Point.ZERO;
         if (held.containsKey(ShortcutAction.SCROLL_UP)) {
             out = out.add(0, -diff);

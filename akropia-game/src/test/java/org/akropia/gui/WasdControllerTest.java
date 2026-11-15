@@ -37,9 +37,11 @@ class WasdControllerTest {
         for (int i = 0; i < keys.length; i++) {
             assertTrue(controller
                     .onKeyPressed(event(KeyEvent.KEY_PRESSED, keys[i], false)));
-            for (int speed : new int[] { 1, 2, 9 }) {
+            for (int speed : new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }) {
                 speedProperty.set(speed);
-                assertEquals(directions[i].multiply(speed * 2),
+                assertEquals(
+                        directions[i].multiply(new int[] { 10, 13, 17, 20, 23,
+                                26, 30, 33, 36 }[speed - 1]),
                         controller.getDiff());
             }
             controller.onKeyReleased(
@@ -71,7 +73,7 @@ class WasdControllerTest {
                 .onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.W, false)));
         assertTrue(controller
                 .onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.UP, false)));
-        assertEquals(Point.of(0, -4), controller.getDiff());
+        assertEquals(Point.of(0, -13), controller.getDiff());
     }
 
     @Test
@@ -85,12 +87,12 @@ class WasdControllerTest {
         assertFalse(controller.isScrolling());
         controller.onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.UP, false));
         controller.onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.D, false));
-        assertEquals(Point.of(4, -4), controller.getDiff());
+        assertEquals(Point.of(13, -13), controller.getDiff());
         // Auto-repeat does not add another held key.
         controller.onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.UP, false));
         controller
                 .onKeyReleased(event(KeyEvent.KEY_RELEASED, KeyCode.UP, true));
-        assertEquals(Point.of(4, 0), controller.getDiff());
+        assertEquals(Point.of(13, 0), controller.getDiff());
         controller
                 .onKeyReleased(event(KeyEvent.KEY_RELEASED, KeyCode.D, false));
         assertFalse(controller.isScrolling());
@@ -99,7 +101,7 @@ class WasdControllerTest {
         controller.onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.D, false));
         controller
                 .onKeyReleased(event(KeyEvent.KEY_RELEASED, KeyCode.D, false));
-        assertEquals(Point.of(0, -4), controller.getDiff());
+        assertEquals(Point.of(0, -13), controller.getDiff());
         shortcuts.save(shortcuts.getActive());
         assertFalse(controller.isScrolling());
     }
