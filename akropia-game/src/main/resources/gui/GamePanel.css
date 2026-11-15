@@ -23,7 +23,7 @@
     -fx-padding: 0 4 0 0;
     -fx-pref-width: 0;
     -fx-min-width: 0;
-    -fx-vgap: 12;
+    -fx-vgap: 16;
 }
 .game-screen #rightPanel .scroll-pane,
 .game-screen #rightPanel .viewport {

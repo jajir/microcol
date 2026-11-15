@@ -49,7 +49,7 @@ public class ScreenGame implements GameScreen {
     private static final double PANEL_OUTER_MARGIN = 16;
     private static final double PANEL_PADDING = 16;
     private static final double MINIMAP_HEIGHT = 180;
-    private static final double MINIMAP_BOTTOM_GAP = 8;
+    private static final double MINIMAP_BOTTOM_GAP = PANEL_PADDING;
     private static final double MINIMUM_SCROLL_HEIGHT = 120;
 
     private final javafx.animation.PauseTransition windowFrameMeasurementDelay = new javafx.animation.PauseTransition(
@@ -143,9 +143,9 @@ public class ScreenGame implements GameScreen {
         final StackPane minimapSlot = new StackPane(minimap);
         minimapSlot.setId("floatingMinimapSlot");
         minimapSlot.setAlignment(Pos.TOP_LEFT);
-        minimapSlot.setMinHeight(MINIMAP_HEIGHT);
-        minimapSlot.setPrefHeight(MINIMAP_HEIGHT);
-        minimapSlot.setMaxHeight(MINIMAP_HEIGHT);
+        minimapSlot.minHeightProperty().bind(minimap.prefHeightProperty());
+        minimapSlot.prefHeightProperty().bind(minimap.prefHeightProperty());
+        minimapSlot.maxHeightProperty().bind(minimap.prefHeightProperty());
         panelContent.setMinHeight(Region.USE_COMPUTED_SIZE);
         VBox.setVgrow(panelContent, javafx.scene.layout.Priority.ALWAYS);
         panelContent.getChildren().add(rightPanel.getContent());

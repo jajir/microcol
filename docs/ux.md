@@ -1715,12 +1715,22 @@ studii. Ověření sleduje [funkční evidence](functional-tests.md#page-separat
 
 ## Pravý panel mapy — 14. listopadu 2026
 
-1. Při prohlížení mapy pravý panel zobrazuje minimapu, hráče na tahu, terén
+1. Při prohlížení mapy pravý panel zobrazuje minimapu, terén
    a jednotky. Dole nezobrazuje údaj „Difficulty: …“. Volba obtížnosti
    při zakládání hry i její herní účinky zůstávají zachovány.
 2. Změna nevyžaduje novou akci ani potvrzení hráče. Kontrolují ji scénáře
    `TC_24_F15_free_play_setup_test` (UC-002/004) a
    `TC_196_F228_world_minimap_test` (mapový panel).
+
+3. Úprava 15. listopadu 2026 sjednocuje horní odsazení minimapy, mezeru
+   pod její skutečnou kresbou a mezeru mezi terénem a seznamem jednotek na
+   16 logických pixelů. Výška minimapy respektuje poměr stran světa;
+   široká mapa nezanechává prázdné místo pod kresbou.
+4. Karta dopravce ponechává stav obchodní trasy, ale nemá tlačítko přiřazení
+   ani změny trasy. Hráč otevře kontextovou nabídku dopravce na mapě a zvolí
+   přiřazení nebo změnu. Stávající dialog, zrušení přes Escape, potvrzení
+   a zákaz změny během plavby přes Atlantik zůstávají zachovány.
+   Ověření UC-016/029/030/114 vede [funkční evidence](functional-tests.md#compact-map-panel-2026-11-15).
 
 ## Prázdné překladiště a okolí kolonie — 14. listopadu 2026
 

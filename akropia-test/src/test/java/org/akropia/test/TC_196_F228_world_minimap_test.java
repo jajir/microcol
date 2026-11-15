@@ -262,6 +262,7 @@ public class TC_196_F228_world_minimap_test extends AbstractAkropiaTest {
         final WorldMinimapPage map = new WorldMinimapPage(getContext());
         window.resize(1800, 1000);
         map.verifyFloatingPanel(false);
+        map.verifyPanelSpacing();
         map.centerSelection();
         map.verifySelectionCenteredOutsidePanel();
         map.rememberGameAndView();

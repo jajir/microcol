@@ -19,14 +19,6 @@ public final class CarrierRoutePage extends AbstractScreen {
         super(context);
     }
 
-    public void openFromPanel() {
-        // The localized action can extend below the unit panel viewport.
-        getRobot().moveTo("#carrierRouteStatus");
-        getRobot().scroll(3, javafx.geometry.VerticalDirection.DOWN);
-        getRobot().clickOn("#changeCarrierRoute");
-        WaitForAsyncUtils.waitForFxEvents();
-    }
-
     public void openFromContext() {
         getRobot().clickOn("#changeCarrierRouteContext");
         WaitForAsyncUtils.waitForFxEvents();
@@ -65,8 +57,16 @@ public final class CarrierRoutePage extends AbstractScreen {
     }
 
     public void cancelWithEscape() {
+        final Button cancel = getRobot().lookup("#carrierRouteCancel")
+                .queryAs(Button.class);
+        getRobot().interact(cancel::requestFocus);
         getRobot().push(KeyCode.ESCAPE);
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyDialogClosed() {
+        assertTrue(
+                getRobot().lookup("#carrierRouteDialog").queryAll().isEmpty());
     }
 
     public void remember(final int id) {
@@ -81,12 +81,13 @@ public final class CarrierRoutePage extends AbstractScreen {
                 new com.google.gson.Gson().toJson(getModel().save()));
     }
 
-    public void verifyPanel(final String text, final String action) {
+    public void verifyPanel(final String text) {
         WaitForAsyncUtils.waitForFxEvents();
         assertEquals(text, getRobot().lookup("#carrierRouteStatus")
                 .queryAs(Label.class).getText());
-        assertEquals(action, getRobot().lookup("#changeCarrierRoute")
-                .queryAs(Button.class).getText());
+        assertTrue(
+                getRobot().lookup("#changeCarrierRoute").queryAll().isEmpty(),
+                "The carrier card only displays route status");
     }
 
     public void verifyDialog(final String current,

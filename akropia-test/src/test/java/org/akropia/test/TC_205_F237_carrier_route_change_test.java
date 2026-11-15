@@ -30,24 +30,25 @@ public class TC_205_F237_carrier_route_change_test extends AbstractAkropiaTest {
         final CarrierRoutePage route = new CarrierRoutePage(getContext());
         // The selected wagon exposes its assignment and the matching routes.
         game.selectMapUnit(4);
-        route.verifyPanel("Wagon #4 — Trade route: No trade route",
-                "Assign trade route");
+        route.verifyPanel("Wagon #4 — Trade route: No trade route");
         route.remember(4);
-        route.openFromPanel();
+        game.openUnitContextAt(Location.of(26, 16));
+        route.openFromContext();
         route.verifyDialog("Wagon #4 — Trade route: No trade route",
                 List.of("Idle cart", "Supply circuit"), null);
         route.choose("Supply circuit");
         route.verifyUnchanged();
         route.captureDialog("carrierRouteDialog", "r0415-wagon-dialog.png");
         route.cancelWithEscape();
+        route.verifyDialogClosed();
         route.verifyUnchanged();
         // Confirming joins at the current colony, although it is stop two.
-        route.openFromPanel();
+        game.openUnitContextAt(Location.of(26, 16));
+        route.openFromContext();
         route.choose("Supply circuit");
         route.confirm();
         route.verifyAssigned(4, "Supply circuit", 1);
-        route.verifyPanel("Wagon #4 — Trade route: Supply circuit",
-                "Change route assignment");
+        route.verifyPanel("Wagon #4 — Trade route: Supply circuit");
         route.captureDialog("rightPanel", "r0415-wagon-panel.png");
         // Save and Continue retain the new assignment without advancing it.
         game.exitToMenu();
@@ -75,8 +76,7 @@ public class TC_205_F237_carrier_route_change_test extends AbstractAkropiaTest {
         route.choose("Supply circuit");
         route.confirm();
         route.verifyAssigned(6, "Supply circuit", 1);
-        route.verifyPanel("Wagon #6 — Trade route: Supply circuit",
-                "Change route assignment");
+        route.verifyPanel("Wagon #6 — Trade route: Supply circuit");
     }
 
     @Test
@@ -87,7 +87,8 @@ public class TC_205_F237_carrier_route_change_test extends AbstractAkropiaTest {
         // Sea transport does not offer the land routes.
         game.selectMapUnit(3);
         route.remember(3);
-        route.openFromPanel();
+        game.openUnitContextAt(Location.of(28, 16));
+        route.openFromContext();
         route.verifyDialog("Galleon #3 — Trade route: No trade route",
                 List.of("Ocean circuit"), null);
         route.choose("Ocean circuit");
@@ -105,15 +106,14 @@ public class TC_205_F237_carrier_route_change_test extends AbstractAkropiaTest {
         final CarrierRoutePage route = new CarrierRoutePage(getContext());
         // Localized controls use the same selection and model operation.
         game.selectMapUnit(4);
-        route.verifyPanel("Povoz #4 — Obchodní trasa: Bez obchodní trasy",
-                "Přiřadit obchodní trasu");
+        route.verifyPanel("Povoz #4 — Obchodní trasa: Bez obchodní trasy");
         route.remember(4);
-        route.openFromPanel();
+        game.openUnitContextAt(Location.of(26, 16));
+        route.openFromContext();
         route.choose("Supply circuit");
         route.captureDialog("carrierRouteDialog", "r0415-wagon-dialog-cs.png");
         route.confirmWithKeyboard();
         route.verifyAssigned(4, "Supply circuit", 1);
-        route.verifyPanel("Povoz #4 — Obchodní trasa: Supply circuit",
-                "Upravit přiřazení trasy");
+        route.verifyPanel("Povoz #4 — Obchodní trasa: Supply circuit");
     }
 }

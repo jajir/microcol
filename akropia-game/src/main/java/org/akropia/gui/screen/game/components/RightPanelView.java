@@ -44,8 +44,6 @@ public final class RightPanelView implements JavaFxComponent {
 
     private final Label tileName;
 
-    private final Label unitsLabel;
-
     private final UnitsPanel unitsPanel;
 
     private final LocalizationHelper localizationHelper;
@@ -95,10 +93,7 @@ public final class RightPanelView implements JavaFxComponent {
         tileName.setMinHeight(Region.USE_PREF_SIZE);
         gridPane.add(tileName, 1, 0);
 
-        unitsLabel = new Label();
-        gridPane.add(unitsLabel, 0, 1);
-
-        gridPane.add(unitsPanel.getNode(), 0, 2, 2, 1);
+        gridPane.add(unitsPanel.getNode(), 0, 1, 2, 1);
         tileName.setWrapText(true);
         gridPane.setMinWidth(0);
         scrollPaneGamePanel = new ScrollPane(gridPane) {
@@ -170,9 +165,7 @@ public final class RightPanelView implements JavaFxComponent {
                     }
                 }
                 final List<Unit> units = player.getObservedUnitsAt(location);
-                if (units.isEmpty()) {
-                    unitsLabel.setText("");
-                } else {
+                if (!units.isEmpty()) {
                     tilePainter.paintUnit(units);
                     /**
                      * Current player is not same as human player. For purposes

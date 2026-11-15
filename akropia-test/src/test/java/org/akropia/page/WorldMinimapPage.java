@@ -279,7 +279,11 @@ public final class WorldMinimapPage extends AbstractScreen {
             final Node map = node("worldMinimap");
             final Bounds b = map.localToScene(map.getLayoutBounds());
             assertTrue(b.getWidth() > 0 && b.getWidth() <= 220.01);
-            assertEquals(220.0 / 180, b.getWidth() / b.getHeight(), .01);
+            assertEquals(Math.ceil(
+                    new org.akropia.gui.screen.game.gamepanel.MinimapProjection(
+                            getModel().getMap().getMapSize(), 220, 180)
+                            .getBounds().getHeight() + 8),
+                    b.getHeight(), .01);
             assertTrue(b.getMinY() >= 0
                     && b.getMaxY() < map.getScene().getHeight());
             final Node tile = node("tileImage");
@@ -482,7 +486,11 @@ public final class WorldMinimapPage extends AbstractScreen {
             final Node mini = node("worldMinimap");
             final Bounds m = mini.localToScene(mini.getLayoutBounds());
             assertEquals(220, m.getWidth(), .01);
-            assertEquals(180, m.getHeight(), .01);
+            assertEquals(Math.ceil(
+                    new org.akropia.gui.screen.game.gamepanel.MinimapProjection(
+                            getModel().getMap().getMapSize(), 220, 180)
+                            .getBounds().getHeight() + 8),
+                    m.getHeight(), .01);
             assertEquals(16, m.getMinX() + 4 - b.getMinX(), 1);
             assertEquals(16, m.getMinY() + 4 - b.getMinY(), 1);
             assertTrue(b.contains(m));
@@ -509,6 +517,28 @@ public final class WorldMinimapPage extends AbstractScreen {
                         .noneMatch(n -> ((Label) n).getText()
                                 .startsWith("On move:")));
             }
+        });
+    }
+
+    public void verifyPanelSpacing() {
+        getRobot().interact(() -> {
+            final Bounds panel = node("floatingMapPanel")
+                    .localToScene(node("floatingMapPanel").getLayoutBounds());
+            final Bounds mini = node("worldMinimap")
+                    .localToScene(node("worldMinimap").getLayoutBounds());
+            final Bounds tile = node("tileImage")
+                    .localToScene(node("tileImage").getLayoutBounds());
+            final Bounds name = node("tileName")
+                    .localToScene(node("tileName").getLayoutBounds());
+            final Node units = getRobot().lookup(".unitPanel").query()
+                    .getParent();
+            final Bounds list = units.localToScene(units.getLayoutBounds());
+            final double topGap = mini.getMinY() + 4 - panel.getMinY();
+            assertEquals(16, topGap, 1);
+            assertEquals(topGap, tile.getMinY() - (mini.getMaxY() - 4), 1);
+            assertEquals(topGap,
+                    list.getMinY() - Math.max(tile.getMaxY(), name.getMaxY()),
+                    1);
         });
     }
 

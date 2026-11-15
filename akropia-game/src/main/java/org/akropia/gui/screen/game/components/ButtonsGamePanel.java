@@ -622,15 +622,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
             assignment.setId("carrierRouteStatus");
             assignment.setWrapText(true);
             assignment.setMaxWidth(230);
-            final Button change = org.akropia.gui.util.ActionButtons
-                    .button(ButtonIcon.TRADE, routeActionText(model, carrier));
-            change.setId("changeCarrierRoute");
-            change.setWrapText(true);
-            change.setMaxWidth(230);
-            change.setDisable(carrier.isAtHighSea());
-            change.setOnAction(event -> showCarrierRoute(model, carrier));
-            change.setOnMouseClicked(javafx.event.Event::consume);
-            card.getChildren().addAll(assignment, change);
+            card.getChildren().add(assignment);
             if (carrier.isAtHighSea()) {
                 final Label reason = new Label(currentI18n.get(
                         org.akropia.gui.screen.colony.TradeRouteText.carrierRouteVoyage));

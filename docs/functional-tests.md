@@ -1,3 +1,45 @@
+## Compact map panel — 2026-11-15
+
+1. UC-016/029/030/114: the carrier card keeps route status without an assignment
+   button. TC205 retains wagon/ship assignment, cancellation, paused replacement,
+   same-route no-op, Czech keyboard confirmation and save/Continue via the map
+   context menu. Its panel assertions also reject the removed button.
+2. TC196/07 measures the three equal 16px gaps. TC196 retains minimap navigation,
+   discovery, resize, scrolling and unchanged gameplay checks; TC192 covers the
+   surrounding main-screen layout. The minimap slot follows the painted world's
+   height instead of reserving unused canvas space; the empty terrain/unit row
+   is removed.
+3. Model run `20261115T144209Z-b463afe37cd9` passed 5,136 checks in 396
+   complete reports, zero failures/errors/skips, in 150.524 supervised seconds
+   (`target/verification/run-wpf8qyve`). The earlier attempt
+   `20261115T144011Z-4386e296f0ba` timed out during Docker preparation after
+   22.073 seconds; no test command started. Subsequent Docker queries responded.
+4. Targeted attempt `20261115T144516Z-76c029d5dac8` completed 22 checks with
+   four errors in 258.720 seconds. Three expectations omitted JavaFX pixel
+   rounding; the route scenario tried to reopen the context menu while its
+   dialog remained open after Escape. Expectations now include pixel rounding.
+5. Run `20261115T145126Z-7eec602ce3ce` passed all eight TC192 and seven TC196
+   scenarios, plus three page-contract checks; TC205/01 still errored
+   (280.093 seconds overall, reports `target/docker-ui/run-iI7bfB`). Reviewed
+   `floating-map-wide.png` confirms the compact panel. Diagnostic run
+   `20261115T145712Z-8c09a64483e0` confirmed the still-open dialog; temporary
+   diagnostics were removed. Refocusing the cancel control before Escape and
+   explicitly verifying dialog closure fixes the test interaction.
+6. Final route selection `20261115T145843Z-20860ed206a4` passed all four TC205
+   scenarios and three page-contract checks, zero failures/errors/skips, in
+   95.416 seconds (`target/docker-ui/run-d2nLeM`). Game code remains identical
+   to the passing model run; TC192/196 code is unchanged from its passing run.
+   These selections cover 22 distinct targeted checks. Historical failed runs
+   remain failed.
+7. Fixed smoke/support run `20261115T150035Z-a01847469e4c` passed 21 checks
+   with zero failures/errors/skips in 253.020 supervised seconds, within the
+   420-second budget (`target/verification/run-0ay_ntvq`). Every changed
+   executable file matches its source snapshot, based on `a9d73c81d38a`.
+8. Scoped Java formatting, final diff review, 14 documentation consistency
+   checks, name audit and strict MkDocs passed. Wide and low-window screenshots
+   were reviewed. The unrelated backlog edit is excluded. This is local
+   acceptance; full regression, remote CI and publication were not verified.
+
 ## Trade route detail panel — 2026-11-15
 
 1. UC-107/108/109/110: the planning panel shows selected route details only.

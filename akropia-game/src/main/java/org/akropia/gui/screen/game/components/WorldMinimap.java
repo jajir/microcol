@@ -67,6 +67,7 @@ public final class WorldMinimap extends VBox {
         this.i18n = i18n;
         setId("minimapPanel");
         setSpacing(3);
+        setPrefHeight(HEIGHT - 8);
         setMinWidth(WIDTH);
         setMaxWidth(WIDTH);
         terrain.setId("minimapTerrain");
@@ -179,6 +180,12 @@ public final class WorldMinimap extends VBox {
         if (!world.getMapSize().equals(worldSize)) {
             worldSize = world.getMapSize();
             projection = new MinimapProjection(worldSize, WIDTH, HEIGHT);
+            final double paintedHeight = projection.getBounds().getHeight();
+            setPrefHeight(paintedHeight);
+            map.setMinHeight(paintedHeight + 8);
+            map.setPrefHeight(paintedHeight + 8);
+            map.setMaxHeight(paintedHeight + 8);
+            terrain.setHeight(paintedHeight + 8);
             painted = null;
         }
         final String name = i18n.get(Loc.minimap_title);
