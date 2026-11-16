@@ -53,9 +53,7 @@ public final class DisbandPage extends AbstractScreen {
         if (!cssId.equals("goToStatus")) {
             openUnitActions();
         }
-        return getNodeFinder().lookup("#" + cssId).<Node>tryQuery()
-                .map(node -> node.isVisible() && node.isManaged())
-                .orElse(false);
+        return isCssIdShown(cssId);
     }
 
     private Optional<Unit> findUnit(final int id) {
@@ -69,10 +67,6 @@ public final class DisbandPage extends AbstractScreen {
     public void verifyControlVisible(final boolean expectedVisible) {
         assertEquals(expectedVisible, isShown(CONTROL_ID),
                 "Unexpected Disband control visibility");
-        if (!expectedVisible) {
-            assertFalse(isCssIdShown("waitUnit"),
-                    "No own unit has an action menu");
-        }
         closeUnitActions();
     }
 

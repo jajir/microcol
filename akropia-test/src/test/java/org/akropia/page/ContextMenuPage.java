@@ -64,7 +64,7 @@ public final class ContextMenuPage extends AbstractScreen {
                     "The unit heading cannot activate a command");
             assertTrue(popup.getItems()
                     .get(1) instanceof javafx.scene.control.SeparatorMenuItem);
-            assertEquals(1, popup.getItems().stream().filter(
+            assertEquals(2, popup.getItems().stream().filter(
                     item -> item instanceof javafx.scene.control.SeparatorMenuItem)
                     .count());
             final Region panel = (Region) popup.getSkin().getNode();

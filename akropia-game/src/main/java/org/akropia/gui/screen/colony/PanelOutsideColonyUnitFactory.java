@@ -29,23 +29,27 @@ class PanelOutsideColonyUnitFactory {
     private final DialogOrdainMissionary ordinationDialog;
 
     private final I18n i18n;
+    private final org.akropia.gui.event.model.GameModelController controller;
 
     @Inject
     PanelOutsideColonyUnitFactory(final ImageProvider imageProvider,
             final EventBus eventBus, final PaintService paintService,
             final DialogEquipment equipmentDialog, final I18n i18n,
-            final DialogOrdainMissionary ordinationDialog) {
+            final DialogOrdainMissionary ordinationDialog,
+            final org.akropia.gui.event.model.GameModelController controller) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.paintService = Preconditions.checkNotNull(paintService);
         this.equipmentDialog = equipmentDialog;
         this.i18n = i18n;
+        this.controller = controller;
         this.ordinationDialog = Preconditions.checkNotNull(ordinationDialog);
     }
 
     PanelOutsideColonyUnit make(final Unit unit, final Colony colony) {
         return new PanelOutsideColonyUnit(imageProvider, eventBus, paintService,
-                colony, unit, equipmentDialog, i18n, ordinationDialog);
+                colony, unit, equipmentDialog, i18n, ordinationDialog,
+                controller.getModel());
     }
 
 }

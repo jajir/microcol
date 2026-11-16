@@ -1,3 +1,24 @@
+## Kontextové příkazy pracovníka — 16. listopadu 2026
+
+1. Hráč pravým kliknutím nebo klávesovým otevřením nabídky zjistí všechny
+   příkazy dostupné pro vybraného pracovníka na jeho současném místě a v
+   současném stavu. Stejný kontrakt platí na mapě, na poli kolonie i v budově.
+   Vzhled papírových tlačítek, ikony a zkratky zůstávají zachované.
+2. Nedostupné příkazy se nezobrazují; nabídka neobsahuje zašedlá tlačítka ani
+   odstavce s jejich podmínkami. Práce na poli nabízí jen plodiny současného
+   pole. Práce v budovách se nabízí uvnitř kolonie nebo na jejím políčku,
+   pouze pro dostupná pracoviště. Prázdná podnabídka se nezobrazí.
+3. Přesun je dostupnou akcí, pokud jej lze nyní zadat. Nabídka ale nenabízí
+   zahájení práce vyžadující nejprve přesun na jiné políčko. Přímé přetahování
+   pracovníků mezi pracovišti zůstává samostatnou cestou se stávajícími pravidly.
+4. Nabídka vybavení, vysvěcení, zrušení práce, návratu a odstranění odbornosti
+   respektuje aktuální modelové podmínky. Rozpuštění je oddělené na konci
+   nabídky a nadále vyžaduje potvrzení. Zavření nabídky nic nemění; model
+   znovu ověřuje podmínky při provedení a zachovává odmítnutí zastaralé volby.
+5. Nevzniká nová karta pracovníka. Jde o schválenou úpravu současného ovládání,
+   nikoli výsledek hráčského výzkumu. Ověření vede
+   [funkční evidence](functional-tests.md#worker-context-actions-2026-11-16).
+
 ## Přehled událostí — 14. listopadu 2026
 
 1. Přehled tahu používá stejné světlé pozadí jako záhlaví a stavový řádek.
@@ -143,11 +164,10 @@ odstupem od záhlaví a okrajů.
 1. Pravý panel vlastní pracovní jednotky ukazuje aktuální počet nástrojů,
    včetně nuly. U cizích jednotek se množství vybavení neodhaluje; lodě
    nemají řádek nástrojů pracovníka.
-2. „Plow field“ se nezobrazuje u typů jednotek, které orat neumějí.
-   U pracovníka zůstává viditelné, ale je zakázané, pokud model vrátí
-   překážku: například nedostatek nástrojů, vyčerpaný pohyb, rozpracovaný
-   příkaz nebo nevhodný terén. Najetí myší na zakázanou položku zobrazí
-   konkrétní důvod ve stavovém řádku. Kliknutí nezahájí práci a nic nespotřebuje.
+2. Od 16. listopadu 2026 se „Plow field“ zobrazí pouze tehdy, když lze
+   orání právě zahájit. Nedostatek nástrojů, vyčerpaný pohyb, rozpracovaný
+   příkaz nebo nevhodný terén položku skryjí. Platí společný
+   [kontrakt kontextové nabídky](#kontextove-prikazy-pracovnika-16-listopadu-2026).
 3. Klávesa P nadále používá společnou kontrolu modelu a při odmítnutí
    vypíše důvod bez modálního dialogu. Při probíhajícím orání zůstává
    dostupné jeho zrušení. Povolené zahájení spotřebuje pohyb a panel

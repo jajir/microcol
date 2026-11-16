@@ -157,6 +157,10 @@ public final class GoToPage extends AbstractScreen {
     }
 
     public void verifyButton(final String text, final boolean enabled) {
+        if (!enabled) {
+            verifyUnitCommandAvailable("goToUnit", false);
+            return;
+        }
         final Button button = getButtonById("goToUnit");
         assertEquals(text, button.getText());
         assertEquals(enabled, !button.isDisabled());
@@ -178,8 +182,8 @@ public final class GoToPage extends AbstractScreen {
     }
 
     public void verifyColonyButton(final boolean shown, final boolean enabled) {
-        assertEquals(shown, isShown("goToColonyUnit"));
-        if (shown) {
+        assertEquals(shown && enabled, isShown("goToColonyUnit"));
+        if (shown && enabled) {
             final Button button = getButtonById("goToColonyUnit");
             assertEquals("Go to… (G)", button.getText());
             assertEquals(enabled, !button.isDisabled());

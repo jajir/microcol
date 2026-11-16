@@ -1,3 +1,91 @@
+## Worker context actions — 2026-11-16
+
+1. Accepted scope: current-location/current-state commands only, retaining
+   existing paper buttons. Model rules and stale-action rejection remain
+   authoritative. No worker card is introduced. See the
+   [UX contract](ux.md#kontextove-prikazy-pracovnika-16-listopadu-2026).
+2. Local acceptance passed on 2026-11-16 for changes based on
+   `8ab75e1add71f65c41728fe690b72f0aafb79012`: 5,136 model/JUnit tests,
+   114 targeted UI/support tests in two final runs (48 + 66), and 21 smoke
+   tests, all with zero failures, errors or skips. The Java formatter, source
+   review, 14 documentation-tool tests, name audit and strict MkDocs build
+   also passed. This is local acceptance, not full regression or verification
+   of a published game distribution. Initial model attempt `20261116T055045Z-8cbd373e31be`
+   (PID 69083) failed during Docker preparation: container inventory exceeded
+   its 20-second operation limit, total 22.084 seconds. Tests did not start.
+   Evidence is preserved in the completion runner directory.
+3. Model retry `20261116T055232Z-d1cf4e2546fc` (PID 69237) passed all
+   5,136 tests with zero failures, errors or skips in 154.689 seconds
+   (`target/verification/run-aq3mkj6u`). A later review preserved field-local
+   clear-specialty availability while filtering indoor work; final-source
+   model verification `20261116T055523Z-636e0ab030a7` (PID 69857,
+   600-second watchdog) passed all 5,136 tests with zero failures, errors or
+   skips in 154.658 seconds (`target/verification/run-cp9qp1dg`). All changed
+   runtime files match that verified source byte for byte.
+4. Targeted Docker/Xvfb run `20261116T055813Z-232aa6b16b3d` (PID 70587,
+   3,600-second watchdog) selects TC02, TC11, TC18, TC25, TC40, TC45, TC61,
+   TC68, TC90, TC91, TC96, TC103, TC104, TC107, TC118, TC200, TC201, TC202,
+   TC204 and PageVerificationContractTest. Completed in 1,540.536 seconds:
+   114 tests, five failures, six errors, zero skips (`target/docker-ui/run-Ts3d3L`).
+   Failed evidence remains preserved. Stale tests expected unavailable actions
+   or full-building choices; other failures exposed menu-helper assumptions
+   about hidden nodes, keyboard positions and deferred menu creation.
+5. Test repairs retain gameplay assertions, check absence instead of disabled
+   actions, and await deferred context menus before selecting. Equipped
+   specialists no longer need an empty work submenu to reach clear-specialty.
+   Repair run `20261116T062709Z-7b28807ba053` (PID 71438,
+   1,800-second watchdog) completed execution in 547.702 seconds:
+   48 tests, four failures, two errors, zero skips
+   (`target/docker-ui/run-iluz7k`). Remaining failures concern equipment
+   keyboard navigation, center-tile job expectations, a loaded-ship menu
+   expectation and missing colony ordination choices. A menu timing hypothesis
+   did not resolve ordination; the subsequent diagnosis and repair follow below.
+6. Focused diagnostic run `20261116T064033Z-0f41fcbb996f` (PID 72369,
+   600-second watchdog) selects TC96/03, TC25/04, TC40/08, TC104/02 and
+   PageVerificationContractTest. It completed in 113.080 seconds: seven tests,
+   zero failures, one error, zero skips (`target/docker-ui/run-08T12s`). TC25/04,
+   TC40/08 and TC104/02 passed; TC96/03 still could not find ordination despite
+   a passing model-availability assertion. A repeated single-scenario run
+   `20261116T064324Z-1639379d2626` (PID 72595) reproduced that error in
+   51.770 seconds (`target/docker-ui/run-vou3bE`). Diagnostic run
+   `20261116T064435Z-4d900d2145e2` (PID 72789) failed test compilation after
+   39.187 seconds because screenshot capture lacked its checked exception
+   declaration; no tests started. Corrected diagnostic run
+   `20261116T064535Z-b9a17d83aa72` (PID 73025, 600-second watchdog) selects
+   TC96/03. It completed in 49.490 seconds with one error and no skips
+   (`target/docker-ui/run-FIQRsZ`): the root context menu itself was absent.
+   The ordination page helper now reveals the unit in the colony scroll area
+   before clicking, as the equipment helper already does, and verifies that
+   the root menu is open before asserting an unavailable action is absent.
+   Diagnostic logging was removed. Repeat run `20261116T064645Z-3d473742cf00`
+   (PID 73227, 1,800-second watchdog) selects full TC25, TC40, TC68, TC96,
+   TC104, TC204 and PageVerificationContractTest. It passed all 48 tests with
+   zero failures, errors or skips in 578.250 seconds
+   (`target/docker-ui/run-n25OwY`), including all previously failing scenarios.
+   The other 66 targeted tests passed in the original broad run. Final review
+   identified shared page-helper callers in that selection, so those tests
+   were repeated as well. The five modified runtime files still match the
+   passing model manifest byte for byte.
+   Smoke run `20261116T065637Z-d04ebfe4fb16` (PID 73468, 480-second runner
+   watchdog and 420-second smoke budget) passed: 21 tests, zero failures,
+   errors or skips (`target/verification/run-7zlqt8a9`), 253.073 seconds for
+   the selection and 257.005 seconds supervised total. All changed Java files
+   match its source manifest.
+   Remaining targeted run `20261116T065841Z-ccc2225add2c` (PID 73752,
+   2,400-second watchdog) selected exact TC02, TC11,
+   TC18, TC45, TC61, TC90, TC91, TC103, TC107, TC118, TC200, TC201 and TC202
+   class names. It passed all 66 tests with zero failures, errors or skips
+   (`target/docker-ui/run-SgSZbI`): 132.877 seconds waiting for the lock and
+   1,053.969 seconds after admission. Final review found no remaining blocker.
+   An earlier queued request `20261116T065814Z-50a267b4d553`
+   (PID 73662) used overly broad name patterns and was canceled during lock
+   waiting after 26.384 seconds; no test command started and cleanup succeeded.
+7. Reviewed Docker captures `worker-field-context.png`,
+   `worker-indoor-context.png` and `worker-map-context.png`: original paper
+   buttons remain, unavailable-action paragraphs are absent and Disband is
+   separated at the bottom. These captures verify appearance alongside the
+   completed automated acceptance above.
+
 ## Consistent unit work — 2026-11-15
 
 Local acceptance completed on 2026-11-16. Items 3–15 retain the attempt

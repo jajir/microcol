@@ -549,14 +549,6 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         // Stop the menu skin forwarding the button's action back into its menu
         // item.
         button.addEventHandler(ActionEvent.ACTION, event -> event.consume());
-        final Label explanation = new Label();
-        explanation.getStyleClass().add("unit-action-explanation");
-        explanation.setWrapText(true);
-        explanation.setMaxWidth(290);
-        explanation.textProperty().bind(button.accessibleHelpProperty());
-        explanation.visibleProperty().bind(button.disabledProperty()
-                .and(explanation.textProperty().isNotEmpty()));
-        explanation.managedProperty().bind(explanation.visibleProperty());
         final VBox row = new VBox(2) {
             @Override
             protected double computePrefHeight(final double width) {
@@ -567,9 +559,6 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
             }
         };
         row.getChildren().add(button);
-        if (button != buttonPlowField) {
-            row.getChildren().add(explanation);
-        }
         row.setPrefWidth(290);
         // JavaFX custom rows focus themselves but leave sibling submenus open.
         row.setOnMouseEntered(event -> unitChoices.hide());
@@ -580,26 +569,9 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
                 event -> event.consume());
         item.getStyleClass().add("unit-command-item");
         item.setOnAction(event -> button.fire());
-        if (button == buttonPlowField) {
-            // Disabled buttons do not receive mouse events; their row does.
-            button.mouseTransparentProperty().bind(button.disabledProperty());
-            item.setHideOnClick(false);
-            row.setOnMouseEntered(event -> {
-                unitChoices.hide();
-                if (button.isDisabled()) {
-                    toolbarEvents.post(new StatusBarMessageEvent(
-                            button.getAccessibleHelp(), Source.GAME));
-                }
-            });
-            row.setOnMouseExited(event -> {
-                if (button.isDisabled()) {
-                    toolbarEvents.post(new StatusBarMessageEvent(Source.GAME));
-                }
-            });
-        } else {
-            item.disableProperty().bind(button.disableProperty());
-        }
-        item.visibleProperty().bind(button.visibleProperty());
+        item.disableProperty().bind(button.disableProperty());
+        item.visibleProperty().bind(
+                button.visibleProperty().and(button.disabledProperty().not()));
         unitActions.getItems().add(item);
     }
 
@@ -663,6 +635,9 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
 
     private void addMapJob(final String text, final String id,
             final Runnable command, final boolean disabled) {
+        if (disabled) {
+            return;
+        }
         final MenuItem item = new MenuItem(text);
         item.setUserData("mapJob");
         item.setId(id);
@@ -782,6 +757,16 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
                             selected, unitActions, jobs.isEmpty()));
 
         }
+        final MenuItem disband = unitActions.getItems().stream()
+                .filter(item -> item instanceof CustomMenuItem
+                        && ((CustomMenuItem) item).getContent() == buttonDisband
+                                .getParent())
+                .findFirst().orElseThrow();
+        unitActions.getItems().remove(disband);
+        final SeparatorMenuItem separator = new SeparatorMenuItem();
+        separator.setUserData("mapJob");
+        separator.visibleProperty().bind(disband.visibleProperty());
+        unitActions.getItems().addAll(separator, disband);
         unitActions.show(owner, screenX, screenY);
         unitActions.getScene().getStylesheets().setAll(
                 MainStageBuilder.STYLE_SHEET_AKROPIA,
@@ -795,7 +780,10 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     void appendUnitActions(final java.util.List<MenuItem> items) {
         for (final MenuItem item : items) {
             item.setUserData("mapJob");
-            unitActions.getItems().add(item);
+            if (!item.isDisable()) {
+                unitActions.getItems().add(unitActions.getItems().size() - 2,
+                        item);
+            }
         }
     }
 

@@ -67,6 +67,9 @@ public class TC_204_F236_map_selection_work_test extends AbstractAkropiaTest {
 
         // Explicit cancellation leaves position and movement intact.
         game.openUnitContextAt(field);
+        work.verifyAvailableMenu();
+        new org.akropia.page.ContextMenuPage(getContext())
+                .captureMenu("worker-map-context.png");
         work.verifyMenuAction("cancelColonyWork", "Cancel work", false);
         work.choose("cancelColonyWork");
         work.verifyWorker(0, field, "", null, 3);
@@ -95,6 +98,7 @@ public class TC_204_F236_map_selection_work_test extends AbstractAkropiaTest {
 
         // Canceling is explicit, named consistently, and does not refund moves.
         game.openUnitContextAt(field);
+        work.verifyAvailableMenu();
         work.verifyMenuAction("cancelPlowField", "Cancel work", false);
         work.choose("cancelPlowField");
         work.verifyWorker(6, field, "", null, 3);

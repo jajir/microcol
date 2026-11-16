@@ -44,28 +44,12 @@ public final class PlowPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    /**
-     * Hover the real disabled command, whose surrounding row receives input.
-     */
-    public void hoverControl() {
-        getRobot().moveTo(getButtonById("plowField"));
-        WaitForAsyncUtils.waitForFxEvents();
-    }
-
-    public void clickDisabledControl() {
-        getRobot().clickOn(getButtonById("plowField"));
-        WaitForAsyncUtils.waitForFxEvents();
-    }
-
     public void dismissMenu() {
         closeUnitActions();
     }
 
-    public void verifyControlDisabled(final boolean expected) {
-        final Button button = getButtonById("plowField");
-        assertEquals(expected, button.isDisabled(),
-                "Plow command availability");
-        closeUnitActions();
+    public void verifyControlUnavailable(final boolean expected) {
+        verifyUnitCommandAvailable("plowField", !expected);
     }
 
     public void verifyToolsShown(final Location location, final int index,

@@ -58,6 +58,9 @@ public final class ColonyWorkMenu {
     private void configure(final ConfigureColonyWorkMenuEvent event) {
         final Colony colony = callback.getColony();
         final Unit worker = event.worker;
+        final boolean atColony = worker.isAtPlaceConstructionSlot()
+                || worker.isAtPlaceLocation()
+                        && worker.getLocation().equals(colony.getLocation());
         final Menu work = new Menu(i18n.get(
                 event.includeWork ? Loc.workForColony : Loc.workInBuildings,
                 colony.getName()));
@@ -69,6 +72,8 @@ public final class ColonyWorkMenu {
                 .getJobChoices(worker).stream()
                 .filter(choice -> choice
                         .getKind() == ColonyJobChoice.Kind.INDOOR)
+                .filter(choice -> atColony
+                        && choice.getUnavailableReason().isEmpty())
                 .collect(java.util.stream.Collectors.toList());
         final org.akropia.model.GoodsType current = worker
                 .isAtPlaceConstructionSlot()
@@ -93,10 +98,13 @@ public final class ColonyWorkMenu {
         work.getItems().add(production);
         work.setOnShown(shown -> javafx.application.Platform.runLater(
                 () -> org.akropia.gui.util.ProductionChoices.focus(table)));
-        event.menu.getItems().add(Math.min(event.includeWork ? 3 : 4,
-                event.menu.getItems().size()), work);
+        if (!choices.isEmpty()) {
+            event.menu.getItems().add(Math.min(event.includeWork ? 3 : 4,
+                    event.menu.getItems().size()), work);
+        }
         if (worker instanceof UnitFreeColonist
-                && ((UnitFreeColonist) worker).hasCivilianSpecialty()) {
+                && ((UnitFreeColonist) worker).hasCivilianSpecialty()
+                && colony.getClearSpecialtyProblem(worker).isEmpty()) {
             final MenuItem clear = new MenuItem(i18n.get(ColonyMsg.clearOpen));
             clear.setUserData("mapJob");
             clear.setId("jobClearSpecialty");

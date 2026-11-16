@@ -33,11 +33,8 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
     public void verifyOrdersAvailable(final boolean wait, final boolean skip) {
         WaitForAsyncUtils.waitForFxEvents();
         openUnitActions();
-        final boolean hasSelection = isCssIdShown("waitUnit");
-        assertEquals(wait,
-                hasSelection && !getButtonById("waitUnit").isDisabled());
-        assertEquals(skip,
-                hasSelection && !getButtonById("skipUnitTurn").isDisabled());
+        assertEquals(wait, isCssIdShown("waitUnit"));
+        assertEquals(skip, isCssIdShown("skipUnitTurn"));
         closeUnitActions();
     }
 
@@ -182,11 +179,9 @@ public final class UnitTurnOrdersPage extends AbstractScreen {
         assertEquals(canFoundColony, isCssIdShown("buildColony"));
         assertTrue(isCssIdShown("disbandUnit"));
         assertTrue(
-                getNodeFinder().lookup(".unit-action-explanation")
-                        .queryAllAs(javafx.scene.control.Label.class).stream()
-                        .anyMatch(label -> label.isVisible()
-                                && !label.getText().isEmpty()),
-                "Unavailable commands have a visible explanation");
+                getNodeFinder().lookup(".unit-action-explanation").queryAll()
+                        .isEmpty(),
+                "Unavailable actions and their paragraphs are omitted");
     }
 
     public void resizeWindow(final double width, final double height) {

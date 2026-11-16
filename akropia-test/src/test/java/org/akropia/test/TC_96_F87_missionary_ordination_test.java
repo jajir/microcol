@@ -113,10 +113,9 @@ public class TC_96_F87_missionary_ordination_test extends AbstractAkropiaTest {
         ordination.loadFixture(null, false);
         GamePage.of(getContext()).openColonyAt(COLONY, COLONY_NAME);
 
-        // The dialog explains the missing building and cannot be confirmed.
-        ordination.openFromColony(MissionaryOrdinationPage.ORDINARY, MENU);
-        ordination.verifyChoice(CAPTION, false, NO_CHURCH);
-        ordination.cancel();
+        // The unavailable ordination action is omitted.
+        ordination.verifyColonyOrdinationNotOffered(
+                MissionaryOrdinationPage.ORDINARY);
         ordination.verifyMissionary(MissionaryOrdinationPage.ORDINARY, false,
                 false, UnitType.COLONIST, 20, 3, PlaceLocation.class);
     }
@@ -133,12 +132,14 @@ public class TC_96_F87_missionary_ordination_test extends AbstractAkropiaTest {
                 COLONY_NAME);
 
         // Cancel first, then confirm; tools and movement stay with the person.
+        ordination.verifyOrdinationAvailable(MissionaryOrdinationPage.ORDINARY);
         ordination.openFromColony(MissionaryOrdinationPage.ORDINARY, MENU);
         ordination.verifyChoice(CAPTION, true, "");
         ordination.captureDialog("missionaryDialog", "ordination-colony.png");
         ordination.cancel();
         ordination.verifyMissionary(MissionaryOrdinationPage.ORDINARY, false,
                 false, UnitType.COLONIST, 20, 3, PlaceLocation.class);
+        ordination.verifyOrdinationAvailable(MissionaryOrdinationPage.ORDINARY);
         ordination.openFromColony(MissionaryOrdinationPage.ORDINARY, MENU);
         ordination.confirm();
         ordination.verifyChoice(CAPTION, false, DONE);
@@ -157,13 +158,11 @@ public class TC_96_F87_missionary_ordination_test extends AbstractAkropiaTest {
         ordination.verifyMissionary(MissionaryOrdinationPage.PLAIN, false,
                 false, UnitType.COLONIST, 0, 3, PlaceConstructionSlot.class);
 
-        // The Jesuit and the existing missionary are refused as already such.
-        ordination.openFromColony(MissionaryOrdinationPage.MISSIONARY, MENU);
-        ordination.verifyChoice(CAPTION, false, ALREADY);
-        ordination.cancel();
-        ordination.openFromColony(MissionaryOrdinationPage.JESUIT, MENU);
-        ordination.verifyChoice(CAPTION, false, ALREADY);
-        ordination.cancel();
+        // Already ordained and Jesuit identities have no ordination action.
+        ordination.verifyColonyOrdinationNotOffered(
+                MissionaryOrdinationPage.MISSIONARY);
+        ordination.verifyColonyOrdinationNotOffered(
+                MissionaryOrdinationPage.JESUIT);
 
         // Roles, identities and the refused worker survive Continue.
         colony.close().exitToMenu();
@@ -189,6 +188,7 @@ public class TC_96_F87_missionary_ordination_test extends AbstractAkropiaTest {
         ordination.loadFixture(ConstructionType.CATHEDRAL, false);
         ColonyScreen colony = GamePage.of(getContext()).openColonyAt(COLONY,
                 COLONY_NAME);
+        ordination.verifyOrdinationAvailable(MissionaryOrdinationPage.ORDINARY);
         ordination.openFromColony(MissionaryOrdinationPage.ORDINARY, MENU);
         ordination.confirm();
         ordination.verifyChoice(CAPTION, false, DONE);
@@ -214,6 +214,7 @@ public class TC_96_F87_missionary_ordination_test extends AbstractAkropiaTest {
                 UnitType.JESUIT_MISSIONARY, 0, 3, PlaceLocation.class);
         ordination.verifyMissionary(MissionaryOrdinationPage.PLAIN, false,
                 false, UnitType.COLONIST, 0, 3, PlaceLocation.class);
+        ordination.verifyOrdinationAvailable(MissionaryOrdinationPage.ORDINARY);
         ordination.openFromColony(MissionaryOrdinationPage.ORDINARY, MENU);
         ordination.confirm();
         ordination.verifyChoice(CAPTION, false, DONE);

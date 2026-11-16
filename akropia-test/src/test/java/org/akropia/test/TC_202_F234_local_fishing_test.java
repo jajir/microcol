@@ -67,7 +67,7 @@ public class TC_202_F234_local_fishing_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
-    void TC_03_no_movement_keeps_fishing_and_disables_cancellation() {
+    void TC_03_no_movement_keeps_fishing_and_hides_cancellation() {
         LocalFishingFixture.exhaustFisherman(getContext());
         final GamePage game = WelcomePage.of(getContext()).loadGame();
         final WorldWorkersPage work = new WorldWorkersPage(getContext());
@@ -79,7 +79,7 @@ public class TC_202_F234_local_fishing_test extends AbstractAkropiaTest {
         game.openUnitContextAt(water);
         work.verifyMenuAction("cancelColonyWork", "Cancel work", true);
         work.verifyMenuAction("returnToColony", "Return to colony", true);
-        work.choose("cancelColonyWork");
+        work.closeContext();
         work.verifyWorker(0, water, "w", 0, 0);
         work.verifyFood(0, 4);
     }

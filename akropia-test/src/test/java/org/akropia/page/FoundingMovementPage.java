@@ -27,14 +27,7 @@ public final class FoundingMovementPage extends AbstractScreen {
 
     public void verifyWaitingAction(final String explanation) {
         openUnitActions();
-        final Button button = getButtonById("buildColony");
-        assertTrue(button.isVisible());
-        assertTrue(button.isDisabled());
-        assertTrue(button.getAccessibleHelp().contains(explanation));
-        assertTrue(getNodeFinder().lookup(".unit-action-explanation")
-                .queryAllAs(Label.class).stream()
-                .anyMatch(label -> label.isVisible()
-                        && label.getText().contains(explanation)));
+        verifyUnitCommandAvailable("buildColony", false);
     }
 
     public void pressFoundingShortcut() {

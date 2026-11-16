@@ -96,16 +96,11 @@ public class TC_104_F95_disband_test extends AbstractAkropiaTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         DisbandPage disband = new DisbandPage(getContext());
         game.panToTile(DisbandFixture.GALLEON);
-        // The galleon is an own unit, so the control is offered.
+        // A loaded ship cannot be disbanded, so the action is absent.
         game.selectTile(DisbandFixture.GALLEON);
         disband.verifySelectedUnit(Optional.of(GALLEON));
-        disband.verifyControlVisible(true);
-        disband.verifyControlEnabled(true);
-        // The refusal gives the reason and opens no confirmation.
-        disband.useControl();
+        disband.verifyControlVisible(false);
         disband.verifyDialogClosed();
-        game.verifyThatStatusBarContains(
-                "Unload all passengers and goods before disbanding this ship or wagon.");
         // The galleon, its passenger and the passenger's tools stay unchanged.
         disband.verifyUnitPresent(GALLEON, true);
         disband.verifyPassengerAboard(PASSENGER, GALLEON);

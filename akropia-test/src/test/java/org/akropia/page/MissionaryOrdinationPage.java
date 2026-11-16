@@ -132,9 +132,27 @@ public final class MissionaryOrdinationPage extends AbstractScreen {
     }
 
     /** Open the ordination dialog from the outside-colony unit's menu. */
+    public void verifyColonyOrdinationNotOffered(final int unitId) {
+        revealGameContent(
+                getNodeFinder().lookup("#colonyUnit-" + unitId).query());
+        getRobot().clickOn("#colonyUnit-" + unitId, MouseButton.SECONDARY);
+        WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(isCssIdShown("unitActionsMenu"));
+        assertFalse(isCssIdShown("colony-ordain-" + unitId));
+        getRobot().push(KeyCode.ESCAPE);
+    }
+
+    public void verifyOrdinationAvailable(final int unitId) {
+        assertEquals(java.util.Optional.empty(), getModel()
+                .getOrdinationProblem(getModel().getUnitById(unitId)));
+    }
+
     public void openFromColony(final int unitId, final String menuText) {
-        getRobot().clickOn("#colonyUnit-" + unitId, MouseButton.SECONDARY)
-                .clickOn(menuText);
+        revealGameContent(
+                getNodeFinder().lookup("#colonyUnit-" + unitId).query());
+        getRobot().clickOn("#colonyUnit-" + unitId, MouseButton.SECONDARY);
+        WaitForAsyncUtils.waitForFxEvents();
+        getRobot().clickOn(menuText);
         WaitForAsyncUtils.waitForFxEvents();
     }
 

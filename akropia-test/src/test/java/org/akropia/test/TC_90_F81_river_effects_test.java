@@ -93,8 +93,8 @@ public class TC_90_F81_river_effects_test extends AbstractAkropiaTest {
         // or movement.
         final org.akropia.page.PlowPage plow = new org.akropia.page.PlowPage(
                 getContext());
-        plow.verifyControlDisabled(true);
-        plow.hoverControl();
+        plow.verifyControlUnavailable(true);
+        gamePage.pressP();
         gamePage.verifyThatStatusBarContains("River squares cannot be plowed");
         river.verifyRejectedWork(SMALL_LOCATION, 100, 2);
         plow.dismissMenu();

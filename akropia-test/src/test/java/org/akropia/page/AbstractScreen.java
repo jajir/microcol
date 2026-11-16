@@ -210,9 +210,30 @@ public abstract class AbstractScreen {
                 String.format("unable to find button by id '%s'", cssId));
     }
 
+    private boolean isUnitActionsOpen() {
+        return javafx.stage.Window.getWindows().stream().anyMatch(
+                window -> window instanceof javafx.scene.control.ContextMenu
+                        && window.isShowing()
+                        && "unitActionsMenu".equals(
+                                ((javafx.scene.control.ContextMenu) window)
+                                        .getId()));
+    }
+
+    public void verifyUnitCommandAvailable(final String id,
+            final boolean available) {
+        openUnitActions();
+        org.junit.jupiter.api.Assertions.assertEquals(available,
+                isCssIdShown(id));
+        if (available) {
+            org.junit.jupiter.api.Assertions
+                    .assertFalse(getButtonById(id).isDisabled());
+        }
+        closeUnitActions();
+    }
+
     protected void openUnitActions() {
         WaitForAsyncUtils.waitForFxEvents();
-        if (getNodeFinder().lookup("#waitUnit").tryQuery().isEmpty()) {
+        if (!isUnitActionsOpen()) {
             final javafx.scene.canvas.Canvas canvas = getContext()
                     .getClassFromGuice(
                             org.akropia.gui.screen.game.gamepanel.GamePanelComponent.class)
@@ -225,8 +246,7 @@ public abstract class AbstractScreen {
 
     protected void closeUnitActions() {
         final boolean[] open = new boolean[1];
-        getRobot().interact(() -> open[0] = getNodeFinder().lookup("#waitUnit")
-                .tryQuery().isPresent());
+        getRobot().interact(() -> open[0] = isUnitActionsOpen());
         if (open[0]) {
             getRobot().push(KeyCode.ESCAPE);
             WaitForAsyncUtils.waitForFxEvents();

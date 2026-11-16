@@ -98,8 +98,8 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
         // Press 'p' to plow field.
         gamePage.pressP();
 
-        // The busy worker retains a disabled plow command.
-        new PlowPage(getContext()).verifyControlDisabled(true);
+        // The busy worker no longer offers starting another plow order.
+        new PlowPage(getContext()).verifyControlUnavailable(true);
 
         // Assert the captured unit's action type changed to plowField and AP
         // consumed
@@ -137,12 +137,12 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
         plow.verifyFieldAt(NEAR_LOCATION, false);
         plow.verifyCancelControlVisible(false);
         plow.verifyToolsShown(NEAR_LOCATION, 0, "Tools: 0");
-        plow.verifyControlDisabled(true);
+        plow.verifyControlUnavailable(true);
     }
 
     @Test
     @Tag("local")
-    void TC_07_nineteen_tools_keep_the_control_and_explain_the_shortfall()
+    void TC_07_nineteen_tools_hide_the_control_and_shortcut_explains_shortfall()
             throws Exception {
         // Equip the colonists with one tool fewer than required.
         PlowFixture.prepare(getContext(), testFileName,
@@ -156,18 +156,18 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
         gamePage.dragMouseAtLocation(NEAR_LOCATION);
         gamePage.nextTurnAndCloseDialogs();
 
-        // The partly equipped pioneer still shows the plow control.
+        // The partly equipped pioneer cannot start plowing.
         gamePage.selectTile(NEAR_LOCATION);
-        gamePage.verifyThatPlowFieldButtonIsVisible();
+        gamePage.verifyThatPlowFieldButtonIsHidden();
 
-        // Hovering the disabled control explains the shortfall.
+        // The unavailable command is hidden; its shortcut still explains why.
         plow.verifyToolsShown(NEAR_LOCATION, 0, "Tools: 19");
-        plow.verifyControlDisabled(true);
-        plow.hoverControl();
+        plow.verifyControlUnavailable(true);
+        gamePage.pressP();
         gamePage.verifyThatStatusBarContains(
                 "Plowing needs a pioneer with at least 20 tools.");
         plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 19);
-        plow.clickDisabledControl();
+        gamePage.pressP();
         plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 19);
         plow.dismissMenu();
         plow.verifyFieldAt(NEAR_LOCATION, false);
@@ -511,11 +511,11 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
 
         // Both the control and keyboard use the newly allowed terrain rule.
         plow.verifyToolsShown(NEAR_LOCATION, 0, "Tools: 100");
-        plow.verifyControlDisabled(false);
+        plow.verifyControlUnavailable(false);
         game.pressP();
         plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.plowField, 0, 100);
         plow.verifyFieldAt(NEAR_LOCATION, false);
-        plow.verifyControlDisabled(true);
+        plow.verifyControlUnavailable(true);
 
         // Ships still have no plow action.
         game.selectTile(COLONY_LOCATION);
@@ -539,11 +539,11 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
 
         // Both the control and keyboard use the newly allowed terrain rule.
         plow.verifyToolsShown(NEAR_LOCATION, 0, "Tools: 100");
-        plow.verifyControlDisabled(false);
+        plow.verifyControlUnavailable(false);
         game.pressP();
         plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.plowField, 0, 100);
         plow.verifyFieldAt(NEAR_LOCATION, false);
-        plow.verifyControlDisabled(true);
+        plow.verifyControlUnavailable(true);
 
         // Ships still have no plow action.
         game.selectTile(COLONY_LOCATION);

@@ -1,3 +1,8 @@
+Aktualizace 2026-11-16: kontext pracovníka nyní nabízí jen akce dostupné
+na současném místě a v současném stavu, se zachovanými papírovými tlačítky.
+Nedostupné akce a jejich vysvětlující odstavce jsou skryté; podrobnosti vlastní
+[UX kontrakt](ux.md#kontextove-prikazy-pracovnika-16-listopadu-2026).
+
 # Hlavní mapa: akce, vstupy a srovnání ovládání
 
 Aktualizace 2026-11-08: klávesové vstupy níže jsou nyní nastavitelné; aktuální výchozí kombinace, kontexty a pevné klávesy vede [inventura klávesových zkratek](keyboard-shortcuts.md) podle [R-0433](requirements/done/R-0433.md).

@@ -1,3 +1,12 @@
+## Kontext pracovníka — 16. listopadu 2026
+
+1. UC-011/014 a pracovní cesty kolonie používají stejnou nabídku dostupných
+   příkazů podle [UX kontraktu](ux.md#kontextove-prikazy-pracovnika-16-listopadu-2026).
+   TC40 kontroluje dostupnou práci uvnitř i na poli, TC204 mapovou nabídku,
+   TC18 nedostatek nástrojů a TC202 nemožný návrat rybáře. TC25/68/96
+   kontrolují nedostupné vybavení, odstranění odbornosti a vysvěcení.
+2. Výsledek lokální přejímky vede [funkční evidence](functional-tests.md#worker-context-actions-2026-11-16).
+
 ## UC-019/020/043/114/119: navigace z hlášení — 14. listopadu 2026
 
 1. Z hlášení o dokončené orbě hráč přejde na zaznamenané políčko; tím

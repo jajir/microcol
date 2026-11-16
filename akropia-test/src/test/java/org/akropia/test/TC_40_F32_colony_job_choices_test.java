@@ -41,6 +41,9 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
         jobs.openFromField(0);
         // Every entry offers only the current field, in the common goods order.
         jobs.verifyNoAutomaticFieldChoice();
+        jobs.verifyCurrentTileChoices(false);
+        new org.akropia.page.ContextMenuPage(getContext())
+                .captureMenu("worker-field-context.png");
         jobs.verifySameProductionTable();
         jobs.select(Kind.CURRENT_FIELD, GoodsType.LUMBER);
         jobs.verifyDetails("Current field: 3 Lumber per turn", true);
@@ -109,6 +112,9 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.rememberWorld();
         jobs.openFromIndoor("id_blacksmith", 0);
+        jobs.verifyCurrentTileChoices(true);
+        new org.akropia.page.ContextMenuPage(getContext())
+                .captureMenu("worker-indoor-context.png");
         jobs.select(Kind.INDOOR, GoodsType.TOOLS);
         jobs.verifyDetails("Potential output: 6 Tools per turn", true);
         jobs.verifyDetails("Required each turn: 6 Ore; in warehouse: 1", true);
@@ -132,6 +138,7 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
         jobs.rememberWorld();
         jobs.openFromField(0);
         jobs.verifyNoAutomaticFieldChoice();
+        jobs.verifyCurrentTileChoices(false);
         jobs.verifyOnlyColonyMenu(0);
         jobs.cancel();
         jobs.verifyWorldUnchanged();
@@ -219,6 +226,7 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
         jobs.rememberWorld();
         jobs.openFromCenter(4);
         jobs.verifyNoAutomaticFieldChoice();
+        jobs.verifyCurrentTileChoices(true, true);
         jobs.cancel();
         jobs.verifyClosed();
         jobs.verifyWorldUnchanged();
@@ -247,8 +255,7 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
         // Verify that occupied slots stay unchanged when a new picker is opened
         jobs.rememberWorld();
         jobs.openFromIndoor("id_town_hall", 0); // worker6
-        jobs.select(Kind.INDOOR, GoodsType.TOOLS);
-        jobs.verifyDetails("All jobs in this building are occupied.", false);
+        jobs.verifyJobNotOffered(Kind.INDOOR, GoodsType.TOOLS);
         jobs.cancel();
         jobs.verifyClosed();
         jobs.verifyWorldUnchanged();
@@ -264,7 +271,8 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
 
         jobs.rememberWorld();
-        jobs.openFromIndoor("id_blacksmith", 0); // master7
+        jobs.openFromIndoor("id_blacksmith", 0);
+        jobs.verifyCurrentTileChoices(true); // master7
         jobs.select(Kind.INDOOR, GoodsType.TOOLS);
         jobs.verifyDetails("Potential output: 6 Tools per turn", true);
         jobs.confirmWithEnter();

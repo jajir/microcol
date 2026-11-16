@@ -18,16 +18,44 @@ public final class EquipmentPage extends AbstractScreen {
 
     public void open(final String action) {
         revealGameContent(getNodeFinder().lookup("#colonyUnit-4").query());
-        getRobot().clickOn("#colonyUnit-4", MouseButton.SECONDARY)
-                .clickOn(action);
+        getRobot().clickOn("#colonyUnit-4", MouseButton.SECONDARY);
+        WaitForAsyncUtils.waitForFxEvents();
+        getRobot().clickOn(action);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void openWithKeyboard(final int choice) {
+    public void verifyEquipmentNotOffered(final String id) {
+        revealGameContent(getNodeFinder().lookup("#colonyUnit-4").query());
+        getRobot().clickOn("#colonyUnit-4", MouseButton.SECONDARY);
+        WaitForAsyncUtils.waitForFxEvents();
+        org.junit.jupiter.api.Assertions.assertFalse(isCssIdShown(id));
+        getRobot().push(KeyCode.ESCAPE);
+    }
+
+    public void openWithKeyboard(final String actionId) {
         revealGameContent(getNodeFinder().lookup("#colonyUnit-4").query());
         getRobot().clickOn("#colonyUnit-4").push(KeyCode.SHIFT, KeyCode.F10);
-        for (int i = 0; i < choice; i++)
+        WaitForAsyncUtils.waitForFxEvents();
+        final int[] index = new int[1];
+        getRobot().interact(() -> {
+            final javafx.scene.control.ContextMenu menu = (javafx.scene.control.ContextMenu) javafx.stage.Window
+                    .getWindows().stream()
+                    .filter(window -> window instanceof javafx.scene.control.ContextMenu
+                            && window.isShowing())
+                    .findFirst().orElseThrow();
+            final java.util.List<javafx.scene.control.MenuItem> items = menu
+                    .getItems().stream()
+                    .filter(item -> item.isVisible() && !item.isDisable()
+                            && !(item instanceof javafx.scene.control.SeparatorMenuItem))
+                    .collect(java.util.stream.Collectors.toList());
+            index[0] = items.indexOf(
+                    items.stream().filter(item -> actionId.equals(item.getId()))
+                            .findFirst().orElseThrow());
+        });
+        getRobot().push(KeyCode.DOWN);
+        for (int i = 0; i < index[0]; i++) {
             getRobot().push(KeyCode.DOWN);
+        }
         getRobot().push(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
     }

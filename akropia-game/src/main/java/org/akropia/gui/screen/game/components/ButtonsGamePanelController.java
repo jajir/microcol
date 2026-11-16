@@ -630,9 +630,11 @@ public class ButtonsGamePanelController {
                     selected != null && selected.isShip());
             view.setDisbandOrder(
                     selected != null && selected.getOwner().isHuman(),
-                    ready && selected != null);
+                    ready && selected != null && getModel()
+                            .getDisbandProblem(selected).isEmpty());
             view.setJettisonOrder(selected != null && isJettisonShown(selected),
-                    ready && selected != null);
+                    ready && selected != null && getModel()
+                            .getJettisonProblem(selected).isEmpty());
             view.setRetireOrder(getModel().getRetirementQuote().isPresent(),
                     ready);
             view.setUnitOrdersEnabled(

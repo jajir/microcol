@@ -37,6 +37,29 @@ public final class WorldWorkersPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void closeContext() {
+        getRobot().push(javafx.scene.input.KeyCode.ESCAPE);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyAvailableMenu() {
+        assertTrue(getNodeFinder().lookup(".unit-action-explanation").queryAll()
+                .isEmpty());
+        for (final javafx.scene.control.Button button : getNodeFinder()
+                .lookup(".unit-command-item .button")
+                .queryAllAs(javafx.scene.control.Button.class)) {
+            if (isCssIdShown(button.getId())) {
+                assertFalse(button.isDisabled(),
+                        "Only available command buttons are shown: "
+                                + button.getId());
+            }
+        }
+        assertFalse(isCssIdShown("goToUnit"),
+                "Working unit cannot start a journey");
+        assertFalse(isCssIdShown("plowField"),
+                "Working unit cannot start plowing");
+    }
+
     public void verifyMenuAction(final String id, final String label,
             final boolean disabled) {
         getRobot().interact(() -> {
@@ -48,6 +71,11 @@ public final class WorldWorkersPage extends AbstractScreen {
             final java.util.Optional<javafx.scene.control.MenuItem> item = menu
                     .getItems().stream()
                     .filter(entry -> id.equals(entry.getId())).findFirst();
+            if (disabled) {
+                assertTrue(item.isEmpty() || !item.get().isVisible());
+                assertFalse(isCssIdShown(id));
+                return;
+            }
             if (item.isPresent()) {
                 assertEquals(label, item.get().getText());
                 assertEquals(disabled, item.get().isDisable());

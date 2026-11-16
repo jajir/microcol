@@ -26,6 +26,10 @@ public final class FortifyPage extends AbstractScreen {
     }
 
     public void verifyAction(final String text, final boolean enabled) {
+        if (!enabled) {
+            verifyUnitCommandAvailable("fortifyUnit", false);
+            return;
+        }
         final Button button = getButtonById("fortifyUnit");
         assertEquals(text, button.getText());
         assertEquals(enabled, !button.isDisabled());

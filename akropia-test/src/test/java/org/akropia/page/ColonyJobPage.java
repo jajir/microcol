@@ -95,9 +95,13 @@ public final class ColonyJobPage extends AbstractScreen {
 
     private void openWorkMenu() {
         WaitForAsyncUtils.waitForFxEvents();
-        getRobot().moveTo("#workForColony-" + getModel().getColonies().stream()
+        final String id = "workForColony-" + getModel().getColonies().stream()
                 .filter(value -> value.getName().equals(colonyName)).findFirst()
-                .orElseThrow().getId());
+                .orElseThrow().getId();
+        if (!isCssIdShown(id)) {
+            return;
+        }
+        getRobot().moveTo("#" + id);
         getRobot().sleep(400);
         WaitForAsyncUtils.waitForFxEvents();
     }
@@ -214,7 +218,6 @@ public final class ColonyJobPage extends AbstractScreen {
     }
 
     public void openClearSpecialty() {
-        getRobot().push(KeyCode.ESCAPE);
         getRobot().clickOn("#jobClearSpecialty");
         WaitForAsyncUtils.waitForFxEvents();
     }
@@ -445,6 +448,49 @@ public final class ColonyJobPage extends AbstractScreen {
         openFromField(colonyName, unitId);
         select(ColonyJobChoice.Kind.CURRENT_FIELD, goods);
         confirm();
+    }
+
+    public void verifyJobNotOffered(final ColonyJobChoice.Kind kind,
+            final GoodsType goods) {
+        assertTrue(getNodeFinder().lookup(".field-output-choice")
+                .queryAllAs(javafx.scene.control.RadioButton.class).stream()
+                .map(row -> row.getProperties().get("jobChoice"))
+                .filter(value -> value instanceof ColonyJobChoice)
+                .map(value -> (ColonyJobChoice) value)
+                .noneMatch(choice -> choice.getKind() == kind
+                        && choice.getGoodsType() == goods));
+    }
+
+    public void verifyCurrentTileChoices(final boolean indoor) {
+        verifyCurrentTileChoices(indoor, !indoor);
+    }
+
+    public void verifyCurrentTileChoices(final boolean indoor,
+            final boolean field) {
+        final java.util.Set<javafx.scene.control.RadioButton> rows = getNodeFinder()
+                .lookup(".field-output-choice")
+                .queryAllAs(javafx.scene.control.RadioButton.class);
+        assertFalse(rows.isEmpty());
+        for (final javafx.scene.control.RadioButton row : rows) {
+            if (!(row.getProperties()
+                    .get("jobChoice") instanceof ColonyJobChoice)) {
+                continue;
+            }
+            final ColonyJobChoice choice = (ColonyJobChoice) row.getProperties()
+                    .get("jobChoice");
+            assertTrue(choice.getUnavailableReason().isEmpty());
+            assertTrue((indoor
+                    && choice.getKind() == ColonyJobChoice.Kind.INDOOR)
+                    || (field && choice
+                            .getKind() == ColonyJobChoice.Kind.CURRENT_FIELD));
+            assertFalse(row.isDisabled());
+        }
+        if (!indoor) {
+            assertTrue(getNodeFinder()
+                    .lookup(node -> node.getId() != null
+                            && node.getId().startsWith("indoorWorkForColony-"))
+                    .queryAll().isEmpty());
+        }
     }
 
     public void verifyNoAutomaticFieldChoice() {

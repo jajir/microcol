@@ -101,8 +101,7 @@ public class TC_02_F02_founding_colony_test extends AbstractAkropiaTest {
         final org.akropia.page.FoundingMovementPage founding = new org.akropia.page.FoundingMovementPage(
                 getContext());
         founding.rememberWorld();
-        // The disabled action retains a visible explanation; B works in its
-        // menu.
+        // The unavailable menu action is hidden; B still explains the reason.
         founding.verifyWaitingAction();
         founding.pressFoundingShortcut();
         founding.verifyInformation();

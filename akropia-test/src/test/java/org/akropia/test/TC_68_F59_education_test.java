@@ -280,8 +280,7 @@ public class TC_68_F59_education_test extends AbstractAkropiaTest {
         // A teacher with an active course cannot become a free colonist.
         jobs.rememberWorld();
         jobs.openFromIndoor("id_school", 0);
-        jobs.openClearSpecialty();
-        jobs.verifyClearBlocked("teaches a course");
+        jobs.verifyClearSpecialtyOffered(false);
         jobs.cancel();
         jobs.verifyWorldUnchanged();
         education.verifyUnitType(200, UnitType.MASTER_CARPENTER);
@@ -291,8 +290,7 @@ public class TC_68_F59_education_test extends AbstractAkropiaTest {
         education.close();
         jobs.rememberWorld();
         jobs.openFromIndoor("id_school", 0);
-        jobs.openClearSpecialty();
-        jobs.verifyClearBlocked("school place");
+        jobs.verifyClearSpecialtyOffered(false);
         jobs.escape();
         jobs.verifyWorldUnchanged();
         education.verifyUnitType(200, UnitType.MASTER_CARPENTER);

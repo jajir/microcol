@@ -41,11 +41,7 @@ public class TC_25_F17_colony_equipment_test extends AbstractAkropiaTest {
                 .openColonyAt(COLONY, "New Amsterdam");
         final EquipmentPage equipment = new EquipmentPage(getContext());
         equipment.verifySightRadius(1);
-        equipment.open("Equip with weapons");
-        equipment.verifyChoice("Equip with weapons", false, MISSING);
-        equipment.verifyCostContains("50");
-        equipment.captureDialog("equipmentDialog", "equipment-missing.png");
-        equipment.cancel();
+        equipment.verifyEquipmentNotOffered("equipment-WEAPONS");
         equipment.verifyState(49, 100, 80, false, false, 0);
 
         // Obtain the missing weapons through the existing cargo journey.
@@ -132,7 +128,7 @@ public class TC_25_F17_colony_equipment_test extends AbstractAkropiaTest {
         final EquipmentPage equipment = new EquipmentPage(getContext());
         equipment.captureDialog("closeButtonId",
                 "r0316-colony-equipment-before.png");
-        equipment.openWithKeyboard(1);
+        equipment.openWithKeyboard("equipment-HORSE");
         equipment.verifyChoice("Mount horses", true, "");
         equipment.escape();
         equipment.verifyState(49, 100, 80, false, false, 0);
@@ -159,13 +155,10 @@ public class TC_25_F17_colony_equipment_test extends AbstractAkropiaTest {
         settings.goBack().loadGame().openColonyAt(COLONY, "New Amsterdam");
         final EquipmentPage equipment = new EquipmentPage(getContext());
         equipment.verifySightRadius(1);
-        equipment.open("Vybavit zbraněmi");
-        equipment.verifyChoice("Vybavit zbraněmi", false,
-                "Ve skladu není dostatek zboží. Zrušte volbu a obstarejte potřebné zboží.");
-        equipment.escape();
+        equipment.verifyEquipmentNotOffered("equipment-WEAPONS");
 
         // Keyboard confirmation has the same cost and result as a mouse click.
-        equipment.openWithKeyboard(1);
+        equipment.openWithKeyboard("equipment-HORSE");
         equipment.verifyChoice("Osedlat koně", true, "");
         equipment.captureDialog("equipmentDialog", "equipment-czech.png");
         equipment.confirmWithEnter();
@@ -182,9 +175,7 @@ public class TC_25_F17_colony_equipment_test extends AbstractAkropiaTest {
                 "New Amsterdam");
         final EquipmentPage equipment = new EquipmentPage(getContext());
         equipment.setWarehouseTools(19);
-        equipment.open("Equip with tools");
-        equipment.verifyChoice("Equip with tools", false, MISSING);
-        equipment.cancel();
+        equipment.verifyEquipmentNotOffered("equipment-TOOLS");
         equipment.verifyState(49, 100, 19, false, false, 0);
     }
 

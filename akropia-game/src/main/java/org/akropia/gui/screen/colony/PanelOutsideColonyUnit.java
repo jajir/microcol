@@ -40,6 +40,7 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
     private final Pane mainPane;
 
     private final Unit unit;
+    private final org.akropia.model.Model model;
 
     private final Colony colony;
 
@@ -61,13 +62,15 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
             final EventBus eventBus, final PaintService paintService,
             final Colony colony, final Unit unit,
             final DialogEquipment equipmentDialog, final I18n i18n,
-            final DialogOrdainMissionary ordinationDialog) {
+            final DialogOrdainMissionary ordinationDialog,
+            final org.akropia.model.Model model) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.paintService = Preconditions.checkNotNull(paintService);
         this.colony = Preconditions.checkNotNull(colony);
         this.equipmentDialog = Preconditions.checkNotNull(equipmentDialog);
         this.ordinationDialog = Preconditions.checkNotNull(ordinationDialog);
         this.i18n = Preconditions.checkNotNull(i18n);
+        this.model = model;
         this.unit = Preconditions.checkNotNull(unit);
 
         canvas = new Canvas(TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
@@ -127,7 +130,9 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
                 eventBus.post(new ShowScreenEvent(Screen.GAME));
             }
         });
-        contextMenu.getItems().add(ordain);
+        if (model.getOrdinationProblem(unit).isEmpty()) {
+            contextMenu.getItems().add(ordain);
+        }
         final javafx.geometry.Bounds bounds = mainPane
                 .localToScreen(mainPane.getBoundsInLocal());
         final java.util.List<MenuItem> extra = java.util.List
@@ -139,6 +144,9 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
 
     private void addEquipmentChoice(final UnitFreeColonist colonist,
             final GoodsType type, final boolean equip) {
+        if (colonist.getEquipmentProblem(type, equip).isPresent()) {
+            return;
+        }
         final MenuItem item = new MenuItem(
                 i18n.get(DialogEquipment.actionKey(type, equip)));
         item.setId("equipment-" + type.name());
