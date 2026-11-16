@@ -13,7 +13,17 @@ public final class WorldWorkersPage extends AbstractScreen {
     }
 
     public void choose(final String id) {
-        getRobot().clickOn("#" + id);
+        if (id.startsWith("mapJob-")) {
+            final String[] parts = id.split("-");
+            getRobot().moveTo("#workForColony-" + parts[1]);
+            getRobot().sleep(400);
+            moveToSubmenuRow(getNodeFinder()
+                    .lookup("#mapJob-" + parts[1] + "-output-" + parts[2])
+                    .query());
+            getRobot().clickOn();
+        } else {
+            getRobot().clickOn("#" + id);
+        }
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -157,4 +167,56 @@ public final class WorldWorkersPage extends AbstractScreen {
             throws java.io.IOException {
         captureDialog("rightPanel", fileName);
     }
+
+    private java.util.Map<String, Boolean> rememberedCommands;
+
+    private java.util.Map<String, Boolean> commandStates() {
+        final java.util.Map<String, Boolean> states = new java.util.TreeMap<>();
+        javafx.stage.Window.getWindows().stream().filter(
+                window -> window instanceof javafx.scene.control.ContextMenu
+                        && window.isShowing())
+                .forEach(window -> window.getScene().getRoot()
+                        .lookupAll(".button").stream()
+                        .filter(node -> node instanceof javafx.scene.control.Button
+                                && node.isVisible())
+                        .forEach(node -> states.put(node.getId(),
+                                node.isDisabled())));
+        return states;
+    }
+
+    public void rememberCommands() {
+        getRobot().interact(() -> rememberedCommands = commandStates());
+    }
+
+    public void verifySameCommands() {
+        getRobot().interact(() -> {
+            assertFalse(rememberedCommands.isEmpty());
+            assertEquals(rememberedCommands, commandStates());
+        });
+    }
+
+    public void closeMenu() {
+        getRobot().push(javafx.scene.input.KeyCode.ESCAPE)
+                .push(javafx.scene.input.KeyCode.ESCAPE);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyReceivingColonies(final Integer... expected) {
+        getRobot().interact(() -> {
+            final java.util.Set<Integer> actual = new java.util.TreeSet<>();
+            javafx.stage.Window.getWindows().stream().filter(
+                    window -> window instanceof javafx.scene.control.ContextMenu
+                            && window.isShowing())
+                    .map(window -> (javafx.scene.control.ContextMenu) window)
+                    .forEach(menu -> menu.getItems().stream()
+                            .filter(item -> item.getId() != null && item.getId()
+                                    .startsWith("workForColony-"))
+                            .forEach(item -> actual
+                                    .add(Integer.valueOf(item.getId().substring(
+                                            "workForColony-".length())))));
+            assertEquals(new java.util.TreeSet<>(java.util.List.of(expected)),
+                    actual);
+        });
+    }
+
 }

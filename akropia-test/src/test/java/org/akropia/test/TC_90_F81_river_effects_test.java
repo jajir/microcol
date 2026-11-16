@@ -5,7 +5,6 @@ import java.io.File;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.akropia.model.ColonyJobChoice.Kind;
 import org.akropia.model.Goods;
 import org.akropia.model.GoodsType;
 import org.akropia.model.Location;
@@ -157,18 +156,14 @@ public class TC_90_F81_river_effects_test extends AbstractAkropiaTest {
                 "Delft");
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.GRAIN);
-        jobs.verifyDetails("Field coordinates: 23, 11", true);
-        jobs.verifyDetails("Best eligible field: 5 Grain per turn", true);
+        jobs.verifyNoAutomaticFieldChoice();
         jobs.cancel();
         jobs.verifyClosed();
         production.verifyWarehouseGoods(DELFT_ID,
                 Goods.of(GoodsType.GRAIN, 50));
         // Confirm fishing and compare the colony's displayed net output with
         // the next stock.
-        jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.GRAIN);
-        jobs.confirm();
+        jobs.assignField(WORKER_ID, SMALL_LOCATION, GoodsType.GRAIN);
         jobs.verifyClosed();
         production.verifyFieldJob(DELFT_ID, WORKER_ID, SMALL_LOCATION,
                 Goods.of(GoodsType.GRAIN, 5));
@@ -247,9 +242,8 @@ public class TC_90_F81_river_effects_test extends AbstractAkropiaTest {
         final ColonyScreen colony = game.openColonyAt(COLONY_LOCATION, "Delft");
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, goods);
-        jobs.verifyDetails("Field coordinates: 23, 11", true);
-        jobs.confirm();
+        jobs.cancel();
+        jobs.assignField(WORKER_ID, SMALL_LOCATION, goods);
         jobs.verifyClosed();
         production.verifyFieldJob(DELFT_ID, WORKER_ID, SMALL_LOCATION,
                 Goods.of(goods, output));
@@ -311,9 +305,8 @@ public class TC_90_F81_river_effects_test extends AbstractAkropiaTest {
         final ColonyScreen colony = game.openColonyAt(COLONY_LOCATION, "Delft");
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, goods);
-        jobs.verifyDetails("Field coordinates: 23, 11", true);
-        jobs.confirm();
+        jobs.cancel();
+        jobs.assignField(WORKER_ID, SMALL_LOCATION, goods);
         jobs.verifyClosed();
         production.verifyFieldJob(DELFT_ID, WORKER_ID, SMALL_LOCATION,
                 Goods.of(goods, output));

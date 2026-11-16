@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.akropia.gui.screen.colony.ColonyButtonsPanel;
-import org.akropia.gui.screen.colony.PanelColonyFields;
 import org.akropia.gui.screen.colony.PanelColonyGood;
 import org.akropia.gui.screen.colony.PanelColonyName;
 import org.akropia.gui.screen.colony.PanelOutsideColonyUnit;
@@ -673,11 +672,14 @@ public class ColonyScreen extends AbstractScreen {
 
     public void moveWorkerFromPierToField(final int unitId,
             final org.akropia.model.Direction direction) {
-        getRobot()
-                .drag(getNodeFinder().lookup("#colonyUnit-" + unitId)
-                        .queryAs(Node.class), MouseButton.PRIMARY)
-                .dropTo(findPlaceOfField(
-                        colony.getColonyFieldInDirection(direction)))
+        final Node worker = getNodeFinder().lookup("#colonyUnit-" + unitId)
+                .query();
+        final Node fieldMap = getNodeFinder().lookup("#colony-field-map")
+                .query();
+        revealGameContent(worker, fieldMap);
+        final Point2D target = findPlaceOfField(
+                colony.getColonyFieldInDirection(direction));
+        getRobot().drag(worker, MouseButton.PRIMARY).dropTo(target)
                 .release(MouseButton.PRIMARY);
         WaitForAsyncUtils.waitForFxEvents();
     }
@@ -903,7 +905,8 @@ public class ColonyScreen extends AbstractScreen {
                 .map(w -> (javafx.scene.control.ContextMenu) w).findFirst()
                 .orElseThrow();
         assertTrue(menu.getItems().stream()
-                .anyMatch(item -> "chooseWork".equals(item.getId())));
+                .anyMatch(item -> ("workForColony-" + colony.getId())
+                        .equals(item.getId())));
         final javafx.scene.layout.Region root = (javafx.scene.layout.Region) menu
                 .getSkin().getNode();
         assertEquals(javafx.scene.paint.Color.web("#fff9ec"),
@@ -911,7 +914,13 @@ public class ColonyScreen extends AbstractScreen {
     }
 
     public void chooseCrop(final GoodsType crop, final int displayedYield) {
-        getRobot().clickOn(crop.name() + "   " + displayedYield);
+        getRobot().moveTo("#workForColony-" + colony.getId());
+        getRobot().sleep(400);
+        WaitForAsyncUtils.waitForFxEvents();
+        moveToSubmenuRow(getNodeFinder()
+                .lookup("#mapJob-" + colony.getId() + "-output-" + crop.name())
+                .query());
+        getRobot().clickOn();
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -922,8 +931,15 @@ public class ColonyScreen extends AbstractScreen {
                         && w.isShowing())
                 .map(w -> (javafx.scene.control.ContextMenu) w).findFirst()
                 .orElseThrow();
-        getRobot().interact(() -> menu
-                .addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+        final javafx.scene.control.Menu work = (javafx.scene.control.Menu) menu
+                .getItems().stream()
+                .filter(item -> ("workForColony-" + colony.getId())
+                        .equals(item.getId()))
+                .findFirst().orElseThrow();
+        final javafx.scene.Node table = ((javafx.scene.control.CustomMenuItem) work
+                .getItems().get(0)).getContent();
+        getRobot().interact(() -> table.addEventFilter(
+                javafx.scene.input.MouseEvent.MOUSE_PRESSED, event -> {
                     getModel().getUnitById(unitId).placeToColonyField(
                             colony.getColonyFieldInDirection(
                                     org.akropia.model.Direction.north),
@@ -1014,4 +1030,23 @@ public class ColonyScreen extends AbstractScreen {
                     .isEmpty());
         }
     }
+
+    public Point2D fieldPoint(final Location location) {
+        return findPlaceOfField(colony.getColonyFields().stream()
+                .filter(field -> field.getLocation().equals(location))
+                .findFirst().orElseThrow());
+    }
+
+    public void moveFieldWorkerToBuilding(final int unitId,
+            final String buildingId) {
+        final Node building = getNodeFinder().lookup("#" + buildingId).query();
+        final Node canvas = getNodeFinder().lookup("#colony-field-map").query();
+        revealGameContent(canvas, building);
+        getRobot()
+                .drag(fieldPoint(getModel().getUnitById(unitId).getLocation()),
+                        MouseButton.PRIMARY)
+                .dropTo(building.lookup(".building-top").localToScreen(25, 23));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
 }

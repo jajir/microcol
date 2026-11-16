@@ -220,8 +220,9 @@ vždy dostupný. Zobrazení se přepočítá při překreslení i při otevřen�
    stavby bez požadovaného člena kongresu. Dvojklik na dostupnou položku ji
    jednou přidá na konec fronty; dvojklik ve frontě odebere právě tuto položku.
    Kontextové nabídky pracovníků na poli, mimo kolonii i v budovách používají
-   společné papírové pozadí hlavní mapy. Choose work zůstává dostupné; jeho
-   případné odstranění je odloženo (15. listopadu 2026).
+   společné papírové pozadí hlavní mapy. Historická obnova Choose work předcházela
+   [sjednocení práce](#volba-prace-kolonisty-r-0056) dohodnutému později
+   15. listopadu 2026.
    Potvrzení, odebrání a řazení zůstávají také tlačítky. Podrobný panel nemá
    opakovaný nadpis Construction — kolonie ani tlačítko Close / cancel selection;
    Výběr jiné karty přepne panel bez zrušení fronty; Escape zavře celý detail
@@ -970,28 +971,31 @@ výsledek uživatelského výzkumu.
 
 ## Volba práce kolonisty — R-0056
 
-1. Cílem hráče je porovnat dostupná zaměstnání před přesunem pracovníka.
-   Kontextová nabídka pracovníka na poli, v budově i uprostřed kolonie nabízí
-   „Vybrat práci…“. Uprostřed kolonie zůstává také Shift+F10 / klávesa kontextové
-   nabídky a původní volby vybavení. Stávající přetažení a nabídka plodin zůstávají.
-2. Dialog odděluje ponechání současného pole od výslovného přesunu na zobrazené
-   nejlepší pole. Vnitřní práce ukazuje možnou produkci, potřebné vstupy,
-   současnou zásobu a textový nedostatek; nejde o slib růstu skladu. Nedostupná
-   práce má důvod a zakázané potvrzení. Pravidla vlastní
-   [náhled zaměstnání](gap-analysis.md#colony-job-choices-and-yield-previews).
-3. Šipky vybírají, Enter potvrzuje výběr v seznamu, Escape nebo Zrušit zavírá
-   bez změny. Stejně jako u stavební fronty musí dialog zachytit klávesu dříve,
-   než ji spotřebuje seznam. První TC40 běhy odhalily spotřebované Escape i Enter;
-   opravená cesta včetně hraničních případů prošla 15 hráčskými scénáři 16. října 2026.
-4. Změna pracovníka nebo místa před potvrzením zobrazí odmítnutí a obnoví nabídku;
-   jiná práce se sama nepřidělí. Odmítnuté přetažení do budovy otevře stejný dialog
-   s vysvětlením a obnovenými možnostmi; hráč znovu potvrdí nebo výběr zruší.
-   Zpráva tak přežije překreslení budovy i návrat ukazatele po přetažení.
-   Úspěch překreslí kolonii. Anglické a české
-   snímky byly zkontrolované: popisky, výnosy i upozornění se vejdou do dialogu.
-   Snímek odmítnutého přetažení také potvrzuje čitelnou zprávu a dostupné Zrušit.
-   Jde o automatizované ověření, nikoli pozorování skutečných hráčů. Úplná přejímka
-   a publikace jsou doložené v [evidenci R-0056](functional-tests.md#r-0056-job-choice-implementation-2026-10-16).
+1. **Změna dohodnutá 15. listopadu 2026:** panel vybraného políčka,
+   kontext pracovníka v kolonii a kontext na hlavní mapě používají stejné
+   řádky produkce: přepínač, ikona, lokalizovaný název a výnos za tah.
+   Pořadí surovin je společné a nemění se podle výnosnosti.
+2. Na mapě otevírá „Práce pro město …“ tabulku pro konkrétní přípustnou
+   kolonii. Sdílené volné políčko může nabídnout více měst. V detailu kolonie
+   se nabízí pouze právě otevřené město. Změna produkce nepřesouvá pracovníka.
+3. Jednotka má společné příkazy na mapě i v kolonii; dostupnost vychází
+   z jejího stavu. Příkaz vyžadující výběr cíle na mapě tam přejde.
+   Práce v budovách zůstává dostupná přímo v podnabídce; podrobnosti o
+   vstupních surovinách a nedostatku jsou v nápovědě řádku.
+4. Samostatný dialog „Choose work“ a hráčská volba nejlepšího políčka byly
+   odstraněny. Hráč určuje cílové políčko výslovně přetažením nebo pohybem.
+   Přetažení na pole přednostně nastaví obilí; pokud je terén nepodporuje,
+   použije první podporovanou surovinu ve společném pořadí. Výběr další
+   suroviny probíhá v tabulce na témže políčku.
+5. Zrušení odbornosti má vlastní potvrzení. Odmítnuté přetažení do budovy
+   zobrazí vysvětlení a nepřidělí náhradní místo. Pravidla a kontrolu
+   zastaralého příkazu stále vlastní
+   [model práce](gap-analysis.md#colony-job-choices-and-yield-previews).
+6. Vzhled navazuje na první referenční tabulku: černé pero přibližně
+   2 logické pixely, ruční obrysy a ploché výplně. Výsledky nynějšího ověření
+   patří do [funkční evidence](functional-tests.md#consistent-unit-work-2026-11-15).
+   [Přejímka původního dialogu](functional-tests.md#r-0056-job-choice-implementation-2026-10-16)
+   zůstává historickým záznamem, nikoli důkazem nové implementace.
 
 
 ### Volba obtížnosti — R-0064

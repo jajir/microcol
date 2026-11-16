@@ -30,7 +30,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.input.KeyCode;
-import javafx.geometry.Side;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 
@@ -117,11 +116,6 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
         addEquipmentChoice(colonist, GoodsType.HORSE, !colonist.isMounted());
         addEquipmentChoice(colonist, GoodsType.TOOLS,
                 !colonist.isHoldingTools());
-        final MenuItem work = new MenuItem(i18n.get(ColonyMsg.jobOpen));
-        work.setId("chooseWork");
-        work.setOnAction(
-                event -> eventBus.post(new ShowColonyJobChoicesEvent(unit)));
-        contextMenu.getItems().add(work);
         final MenuItem ordain = new MenuItem(
                 i18n.get(OrdinationMsg.ordainMenu));
         ordain.setId("colony-ordain-" + unit.getId());
@@ -134,10 +128,13 @@ public class PanelOutsideColonyUnit implements JavaFxComponent {
             }
         });
         contextMenu.getItems().add(ordain);
-        contextMenu.show(mainPane, Side.BOTTOM, 0, 0);
-        contextMenu.getScene().getStylesheets().setAll(
-                org.akropia.gui.MainStageBuilder.STYLE_SHEET_AKROPIA, getClass()
-                        .getResource("/gui/ContextMenus.css").toExternalForm());
+        final javafx.geometry.Bounds bounds = mainPane
+                .localToScreen(mainPane.getBoundsInLocal());
+        final java.util.List<MenuItem> extra = java.util.List
+                .copyOf(contextMenu.getItems());
+        contextMenu.getItems().clear();
+        eventBus.post(new ShowColonyUnitActionsEvent(mainPane, bounds.getMinX(),
+                bounds.getMaxY(), unit, colony, extra));
     }
 
     private void addEquipmentChoice(final UnitFreeColonist colonist,

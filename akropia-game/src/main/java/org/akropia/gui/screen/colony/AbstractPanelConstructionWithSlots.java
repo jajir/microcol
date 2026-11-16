@@ -28,8 +28,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -84,18 +82,10 @@ abstract class AbstractPanelConstructionWithSlots
                     canvasPoint(event.getSceneX(), event.getSceneY()))
                     .filter(slot -> !slot.isEmpty()).ifPresent(slot -> {
                         final Unit worker = slot.getUnit();
-                        final MenuItem work = new MenuItem(
-                                getI18n().get(ColonyMsg.jobOpen));
-                        work.setId("chooseWork");
-                        work.setOnAction(action -> getEventBus()
-                                .post(new ShowColonyJobChoicesEvent(worker)));
-                        final ContextMenu menu = new ContextMenu(work);
-                        menu.show(getMainPane(), event.getScreenX(),
-                                event.getScreenY());
-                        menu.getScene().getStylesheets().setAll(
-                                org.akropia.gui.MainStageBuilder.STYLE_SHEET_AKROPIA,
-                                getClass().getResource("/gui/ContextMenus.css")
-                                        .toExternalForm());
+                        getEventBus().post(new ShowColonyUnitActionsEvent(
+                                getMainPane(), event.getScreenX(),
+                                event.getScreenY(), worker,
+                                worker.getWorkingColony().orElseThrow()));
                     });
             event.consume();
         });
@@ -190,8 +180,7 @@ abstract class AbstractPanelConstructionWithSlots
                                                 DragEvent.DRAG_DONE, this);
                                         javafx.application.Platform.runLater(
                                                 () -> getEventBus().post(
-                                                        new ShowColonyJobChoicesEvent(
-                                                                unit, true)));
+                                                        new ColonyWorkDropRejectedEvent()));
                                     }
                                 });
                     }

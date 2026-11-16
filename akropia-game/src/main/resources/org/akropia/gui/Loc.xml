@@ -301,6 +301,8 @@
 	<entry key="minimap_status">Minimap. It never really caught on in ancient Greece. They were waiting for the invention of the monitor.</entry>
     <entry key="selectedCarrierCargo">Cargo Depot - %s</entry>
     <entry key="selectCarrierCargo">Cargo Depot</entry>
+  <entry key="workForColony">Work for %s</entry>
+  <entry key="workInBuildings">Work in buildings of %s</entry>
   <entry key="mapWork">Produce %s — %s</entry>
   <entry key="cancelWork">Cancel work</entry>
   <entry key="returnToColony">Return to colony</entry>

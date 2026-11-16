@@ -31,7 +31,7 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
-    void TC_01_current_crop_and_explicit_best_move() throws Exception {
+    void TC_01_current_crop_and_explicit_field_move() throws Exception {
         // Compare current yield with eligible fields, excluding the neighbor's
         // better square.
         WelcomePage.of(getContext()).loadGame().openColonyAt(COLONY,
@@ -39,15 +39,12 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.rememberWorld();
         jobs.openFromField(0);
-        // Forested desert has no grapes, but forested grassland nearby does.
-        jobs.select(Kind.CURRENT_FIELD, GoodsType.GRAPES);
-        jobs.verifyDetails("This crop cannot be produced on the current field",
-                false);
+        // Every entry offers only the current field, in the common goods order.
+        jobs.verifyNoAutomaticFieldChoice();
+        jobs.verifySameProductionTable();
         jobs.select(Kind.CURRENT_FIELD, GoodsType.LUMBER);
-        jobs.verifyVisibleChoice("Keep this field: Lumber");
         jobs.verifyDetails("Current field: 3 Lumber per turn", true);
-        jobs.verifyDetails("Best eligible field: 7 Lumber per turn", true);
-        jobs.captureDialog("jobDialog", "job-choices-english.png");
+        jobs.captureProductionTable("unit-production-table.png");
         jobs.escape();
         jobs.verifyClosed();
         jobs.verifyWorldUnchanged();
@@ -60,11 +57,8 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
         jobs.verifyFieldJob(0, Location.of(23, 16),
                 Goods.of(GoodsType.GRAIN, 2));
 
-        // Moving to the shown best field is a separate confirmed action.
-        jobs.openFromField(0);
-        jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
-        jobs.verifyDetails("Field coordinates: 23, 15", true);
-        jobs.confirmWithEnter();
+        // Drag explicitly to the chosen field, then select its output.
+        jobs.assignField(0, Location.of(23, 15), GoodsType.LUMBER);
         jobs.verifyClosed();
         jobs.verifyFieldJob(0, Location.of(23, 15),
                 Goods.of(GoodsType.LUMBER, 7));
@@ -86,23 +80,18 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
         jobs.verifyDetails("Not enough input goods", true);
         jobs.cancel();
 
-        // A center worker can take outdoor work directly from the picker.
-        jobs.openFromCenter(4);
-        jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
-        jobs.confirm();
+        // Drag a center worker to a specific outdoor square.
+        jobs.assignField(4, Location.of(23, 15), GoodsType.LUMBER);
         jobs.verifyFieldJob(4, Location.of(23, 15),
                 Goods.of(GoodsType.LUMBER, 7));
 
         // Move that worker indoors using the field entry point.
-        jobs.openFromField(4);
-        jobs.select(Kind.INDOOR, GoodsType.TOOLS);
-        jobs.confirm();
+        jobs.assignIndoorFromField(4, "id_blacksmith");
         jobs.verifyIndoorJob(4, ConstructionType.BLACKSMITHS_HOUSE, 1);
 
-        // The same picker lets the indoor worker take the best outdoor job.
-        jobs.openFromIndoor("id_blacksmith", 1);
-        jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
-        jobs.confirm();
+        // Drag the indoor worker back to the same explicit outdoor square.
+        jobs.assignIndoorWorkerToField("id_blacksmith", 1, 4,
+                Location.of(23, 15), GoodsType.LUMBER);
         jobs.verifyFieldJob(4, Location.of(23, 15),
                 Goods.of(GoodsType.LUMBER, 7));
         jobs.verifyNeighborUnchanged(1, Location.of(25, 16),
@@ -125,7 +114,7 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
         jobs.verifyDetails("Required each turn: 6 Ore; in warehouse: 1", true);
         jobs.verifyDetails("Not enough input goods", true);
         jobs.verifyDetails("Specialty: Tools", true);
-        jobs.captureDialog("jobDialog", "job-expert-shortage.png");
+        jobs.captureProductionTable("job-expert-shortage.png");
         jobs.cancel();
         jobs.verifyClosed();
         jobs.verifyWorldUnchanged();
@@ -134,26 +123,20 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
-    void TC_04_stale_destination_rejects_and_refreshes_without_assignment()
-            throws Exception {
-        // Keep an offer open while another worker takes its exact destination.
+    void TC_04_city_context_limits_work_to_open_colony() throws Exception {
+        // Opening the production submenu never offers a destination in another
+        // colony.
         WelcomePage.of(getContext()).loadGame().openColonyAt(COLONY,
                 "New Amsterdam");
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
+        jobs.rememberWorld();
         jobs.openFromField(0);
-        jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
-        jobs.occupyBestFieldWhileOpen(4);
-        jobs.confirm();
-        jobs.verifyMessage("Nothing was assigned");
-        jobs.verifyWorldUnchanged();
-        jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
-        jobs.verifyDetails("Best eligible field: 5 Lumber per turn", true);
-        jobs.verifyDetails("Field coordinates: 24, 15", true);
+        jobs.verifyNoAutomaticFieldChoice();
+        jobs.verifyOnlyColonyMenu(0);
         jobs.cancel();
-        jobs.verifyFieldJob(0, Location.of(23, 16),
-                Goods.of(GoodsType.LUMBER, 3));
-        jobs.verifyFieldJob(4, Location.of(23, 15),
-                Goods.of(GoodsType.LUMBER, 7));
+        jobs.verifyWorldUnchanged();
+        jobs.verifyNeighborUnchanged(1, Location.of(25, 16),
+                Goods.of(GoodsType.LUMBER, 6));
     }
 
     @Test
@@ -166,10 +149,12 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
                 "New Amsterdam");
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromField(0);
-        jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
+        jobs.select(Kind.CURRENT_FIELD, GoodsType.LUMBER);
         jobs.changeSourceCropWhileOpen(GoodsType.GRAIN);
         jobs.confirm();
-        jobs.verifyMessage("Nothing was assigned");
+        ColonyScreen.of(getContext(), "New Amsterdam")
+                .verifyThatStatusBarContains(
+                        "Work is no longer available. Refresh the selection.");
         jobs.verifyWorldUnchanged();
         jobs.cancel();
         jobs.verifyFieldJob(0, Location.of(23, 16),
@@ -192,7 +177,7 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
         jobs.verifyDetails("Potřeba za tah: 3", true);
         jobs.verifyDetails("ve skladu: 1", true);
         jobs.verifyDetails("Nedostatek vstupních surovin", true);
-        jobs.captureDialog("jobDialog", "job-choices-czech.png");
+        jobs.captureProductionTable("job-choices-czech.png");
         jobs.escape();
         jobs.verifyClosed();
         jobs.verifyWorldUnchanged();
@@ -218,26 +203,22 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
                 "New Amsterdam");
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
 
-        // Assign master7 to best lumber field
-        jobs.openFromIndoor("id_blacksmith", 0);
-        jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
-        jobs.confirm();
+        // Assign master7 to the north-west lumber field
+        jobs.assignIndoorWorkerToField("id_blacksmith", 0, 7,
+                Location.of(23, 15), GoodsType.LUMBER);
         jobs.verifyFieldJob(7, Location.of(23, 15),
                 Goods.of(GoodsType.LUMBER, 7));
 
-        // Assign worker6 from town hall to best lumber field
-        jobs.openFromIndoor("id_town_hall", 0);
-        jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
-        jobs.confirm();
+        // Assign worker6 from the town hall to the north lumber field
+        jobs.assignIndoorWorkerToField("id_town_hall", 0, 6,
+                Location.of(24, 15), GoodsType.LUMBER);
         jobs.verifyFieldJob(6, Location.of(24, 15),
                 Goods.of(GoodsType.LUMBER, 5));
 
         // Attempt to assign center worker 4 to lumber but none available
         jobs.rememberWorld();
         jobs.openFromCenter(4);
-        jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
-        jobs.verifyDetails("No eligible field is available for this crop.",
-                false);
+        jobs.verifyNoAutomaticFieldChoice();
         jobs.cancel();
         jobs.verifyClosed();
         jobs.verifyWorldUnchanged();
@@ -254,9 +235,7 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
 
         // Fill first smithy slot from a field worker
-        jobs.openFromField(0);
-        jobs.select(Kind.INDOOR, GoodsType.TOOLS);
-        jobs.confirm();
+        jobs.assignIndoorFromField(0, "id_blacksmith");
         jobs.verifyIndoorJob(0, ConstructionType.BLACKSMITHS_HOUSE, 1);
 
         // Fill second smithy slot from a center worker
@@ -362,7 +341,8 @@ public class TC_40_F32_colony_job_choices_test extends AbstractAkropiaTest {
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.dragAfterSlotIsTaken(4, false);
         jobs.verifyDropRejected(4);
-        jobs.captureDialog("jobDialog", "job-stale-drop.png");
+        jobs.captureDialog(org.akropia.gui.util.ButtonBarOk.BUTTON_OK_ID,
+                "job-stale-drop.png");
         jobs.cancel();
         jobs.verifyWorldUnchanged();
         jobs.verifyIndoorJob(6, ConstructionType.BLACKSMITHS_HOUSE, 1);

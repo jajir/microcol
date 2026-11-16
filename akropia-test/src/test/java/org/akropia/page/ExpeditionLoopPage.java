@@ -29,8 +29,6 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import com.google.gson.Gson;
 
-import javafx.scene.input.MouseButton;
-
 /**
  * Ordinary player actions and read-only observations for the integrated
  * four-nation expedition journey. Identities are read from the live model
@@ -204,7 +202,9 @@ public final class ExpeditionLoopPage extends AbstractScreen {
     public void openFieldJobChoice(final ColonyScreen colonyScreen,
             final int unitId) {
         colonyScreen.openCropMenu(unitId);
-        getRobot().clickOn("#chooseWork");
+        getRobot().moveTo("#workForColony-" + getModel().getUnitById(unitId)
+                .getWorkingColony().orElseThrow().getId());
+        getRobot().sleep(400);
         WaitForAsyncUtils.waitForFxEvents();
     }
 

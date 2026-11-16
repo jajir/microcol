@@ -67,6 +67,12 @@ public class ButtonsGamePanelController {
     private final GameModelController gameModelController;
 
     private final SelectedUnitManager selectedUnitManager;
+    private Unit colonyCommandUnit;
+
+    private Optional<Unit> selectedUnit() {
+        return colonyCommandUnit == null ? selectedUnitManager.getSelectedUnit()
+                : Optional.of(colonyCommandUnit);
+    }
 
     private final ButtonsGamePanel view;
     private final GamePanelController gamePanelController;
@@ -100,6 +106,20 @@ public class ButtonsGamePanelController {
                 .checkNotNull(gameModelController);
         this.selectedUnitManager = Preconditions
                 .checkNotNull(selectedUnitManager);
+        view.beforeUnitCommand(() -> {
+            final Unit worker = colonyCommandUnit;
+            if (worker != null && worker.isAtPlaceLocation()) {
+                selectedUnitManager.selectFromPanel(worker);
+                colonyCommandUnit = worker;
+            }
+        });
+        view.onUnitActionsClosed(() -> {
+            if (colonyCommandUnit != null) {
+                colonyCommandUnit = null;
+                eventBus.post(
+                        new org.akropia.gui.screen.colony.RepaintColonyEvent());
+            }
+        });
         view.setSentryAction(this::changeSentryOrder);
         view.setFortifyAction(this::changeFortifyOrder);
         view.setGoToAction(this::changeGoToOrder);
@@ -110,6 +130,22 @@ public class ButtonsGamePanelController {
         view.setDisbandAction(this::disbandSelectedUnit);
         view.setJettisonAction(this::jettisonSelectedShip);
         view.setRetireAction(this::retireGame);
+    }
+
+    @Subscribe
+    private void showColonyUnitActions(
+            final org.akropia.gui.screen.colony.ShowColonyUnitActionsEvent event) {
+        // Let pending screen refreshes finish before opening the popup.
+        // Map selection changes only when a unit command is executed.
+        Platform.runLater(() -> {
+            colonyCommandUnit = event.worker;
+            evaluateAllButtonsForSelectedUnit(event.worker);
+            view.showUnitActions(event.owner, event.x, event.y,
+                    java.util.List.of(event.worker), event.worker,
+                    selectedUnitManager::selectFromPanel, getModel(),
+                    event.colony);
+            view.appendUnitActions(event.extraItems);
+        });
     }
 
     @SuppressWarnings("unused")
@@ -165,8 +201,8 @@ public class ButtonsGamePanelController {
             refreshToolbarSeason();
             // Production changes support at the start of the national round.
             refreshDeclareIndependenceButton();
-            if (selectedUnitManager.getSelectedUnit().isPresent()) {
-                final Unit unit = selectedUnitManager.getSelectedUnit().get();
+            if (selectedUnit().isPresent()) {
+                final Unit unit = selectedUnit().get();
                 evaluateAllButtonsForSelectedUnit(unit);
             } else {
                 view.setVisibleButtonMove(false);
@@ -206,6 +242,7 @@ public class ButtonsGamePanelController {
     @Subscribe
     private void onSelectedUnitWasChanged(
             final SelectedUnitWasChangedEvent event) {
+        colonyCommandUnit = null;
         view.hideUnitActions();
         LOGGER.debug("Selected unit was changed " + event.getSelectedUnit());
         if (event.getSelectedUnit().isPresent()) {
@@ -228,8 +265,7 @@ public class ButtonsGamePanelController {
     @Subscribe
     private void onActionWasStarted(
             @SuppressWarnings("unused") final ActionWasStartedEvent event) {
-        selectedUnitManager.getSelectedUnit()
-                .ifPresent(this::evaluateAllButtonsForSelectedUnit);
+        selectedUnit().ifPresent(this::evaluateAllButtonsForSelectedUnit);
         updateUnitOrders();
     }
 
@@ -300,9 +336,9 @@ public class ButtonsGamePanelController {
     }
 
     private void evaluateMoveButton(final Unit unit) {
-        view.setVisibleButtonMove(
-                unit.getMovementThirds() > 0 && !unit.hasAssignedWork()
-                        && getModel().getGoToDestination(unit).isEmpty());
+        view.setVisibleButtonMove(unit.isAtPlaceLocation()
+                && unit.getMovementThirds() > 0 && !unit.hasAssignedWork()
+                && getModel().getGoToDestination(unit).isEmpty());
     }
 
     private void evaluateDeclareIndependenceButton() {
@@ -347,7 +383,7 @@ public class ButtonsGamePanelController {
     }
 
     private void cancelBuildRoad() {
-        final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
+        final Unit unit = selectedUnit().orElse(null);
         if (unit == null) {
             return;
         }
@@ -369,7 +405,7 @@ public class ButtonsGamePanelController {
     }
 
     private void cancelClearForest() {
-        final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
+        final Unit unit = selectedUnit().orElse(null);
         if (unit == null) {
             return;
         }
@@ -384,7 +420,7 @@ public class ButtonsGamePanelController {
     }
 
     private void cancelPlowField() {
-        final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
+        final Unit unit = selectedUnit().orElse(null);
         if (unit == null) {
             return;
         }
@@ -406,19 +442,20 @@ public class ButtonsGamePanelController {
      * the model's reason; canceling changes nothing.
      */
     private void disbandSelectedUnit() {
-        final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
+        final boolean fromColony = colonyCommandUnit != null;
+        final Unit unit = selectedUnit().orElse(null);
         if (unit == null || !gameModelController.isHumanTurnReady()) {
             return;
         }
         final Model model = getModel();
         final Optional<DisbandProblem> problem = model.getDisbandProblem(unit);
         if (problem.isPresent()) {
-            postDisbandStatus(disbandReason(problem.get()));
+            postDisbandStatus(disbandReason(problem.get()), fromColony);
             return;
         }
         final Optional<DisbandOffer> offer = model.getDisbandOffer(unit);
         if (offer.isEmpty()) {
-            postDisbandStatus(Buttons.disbandProblemUnavailable);
+            postDisbandStatus(Buttons.disbandProblemUnavailable, fromColony);
             return;
         }
         final Optional<Boolean> answer = disbandDialog.get().confirm(unit,
@@ -431,12 +468,16 @@ public class ButtonsGamePanelController {
             model.disband(unit, offer.get(), answer.get());
         } catch (IllegalStateException | IllegalArgumentException rejected) {
             // State changed between the offer and the confirmation.
-            postDisbandStatus(Buttons.disbandChanged);
+            postDisbandStatus(Buttons.disbandChanged, fromColony);
             updateUnitOrders();
             return;
         }
         selectedUnitManager.forgetRemovedUnit(unit);
         eventBus.post(new RefreshRightPanelEvent());
+        if (fromColony) {
+            eventBus.post(
+                    new org.akropia.gui.screen.colony.RepaintColonyEvent());
+        }
         updateUnitOrders();
     }
 
@@ -446,7 +487,7 @@ public class ButtonsGamePanelController {
      * cargo after a discard.
      */
     private void jettisonSelectedShip() {
-        final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
+        final Unit unit = selectedUnit().orElse(null);
         if (!(unit instanceof Ship)
                 || !gameModelController.isHumanTurnReady()) {
             return;
@@ -505,9 +546,11 @@ public class ButtonsGamePanelController {
                 || problem.get() == JettisonProblem.NO_GOODS;
     }
 
-    private void postDisbandStatus(final Buttons reason) {
+    private void postDisbandStatus(final Buttons reason,
+            final boolean fromColony) {
         eventBus.post(new StatusBarMessageEvent(i18n.get(reason),
-                StatusBarMessageEvent.Source.GAME));
+                fromColony ? StatusBarMessageEvent.Source.COLONY
+                        : StatusBarMessageEvent.Source.GAME));
     }
 
     private static Buttons disbandReason(final DisbandProblem problem) {
@@ -551,8 +594,7 @@ public class ButtonsGamePanelController {
         Platform.runLater(() -> {
             final boolean ready = gameModelController.isHumanTurnReady()
                     && !gamePanelController.isUnitMoving();
-            final Unit selected = selectedUnitManager.getSelectedUnit()
-                    .orElse(null);
+            final Unit selected = selectedUnit().orElse(null);
             if (selected != null) {
                 // Recheck at the final location, after the model finishes
                 // moving.
@@ -595,13 +637,13 @@ public class ButtonsGamePanelController {
                     ready);
             view.setUnitOrdersEnabled(
                     ready && getModel().getFirstSelectableUnit().isPresent(),
-                    ready && selectedUnitManager.getSelectedUnit()
-                            .map(getModel()::canSkipUnitTurn).orElse(false));
+                    ready && selectedUnit().map(getModel()::canSkipUnitTurn)
+                            .orElse(false));
         });
     }
 
     private void changeSentryOrder() {
-        final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
+        final Unit unit = selectedUnit().orElse(null);
         if (unit == null) {
             return;
         }
@@ -623,7 +665,7 @@ public class ButtonsGamePanelController {
      * Cancels the shown go-to order, or asks the map for a new destination.
      */
     private void changeGoToOrder() {
-        final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
+        final Unit unit = selectedUnit().orElse(null);
         if (unit == null) {
             return;
         }
@@ -637,6 +679,10 @@ public class ButtonsGamePanelController {
             }
             updateUnitOrders();
         } else {
+            if (colonyCommandUnit != null) {
+                eventBus.post(new org.akropia.gui.screen.ShowScreenEvent(
+                        org.akropia.gui.screen.Screen.GAME));
+            }
             eventBus.post(new StartGoToEvent());
         }
     }
@@ -652,7 +698,7 @@ public class ButtonsGamePanelController {
     }
 
     private void chooseGoToColony() {
-        final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
+        final Unit unit = selectedUnit().orElse(null);
         if (unit == null || !gameModelController.isHumanTurnReady()) {
             return;
         }
@@ -679,7 +725,7 @@ public class ButtonsGamePanelController {
     }
 
     private void changeFortifyOrder() {
-        final Unit unit = selectedUnitManager.getSelectedUnit().orElse(null);
+        final Unit unit = selectedUnit().orElse(null);
         if (unit == null) {
             return;
         }

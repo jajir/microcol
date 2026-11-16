@@ -211,17 +211,12 @@ public class TC_134_F125_native_convert_test extends AbstractAkropiaTest {
 
         // The road gives seven lumber to an ordinary colonist; the convert
         // produces one more on the same field.
-        jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
-        jobs.verifyDetails(BEST_LUMBER_EN, true);
-        jobs.confirm();
+        jobs.assignField(WORKER_ID, Location.of(23, 15), GoodsType.LUMBER);
         jobs.verifyFieldJob(WORKER_ID, Location.of(23, 15),
                 Goods.of(GoodsType.LUMBER, 8));
 
         // A brief building job keeps the work non-manufacturing: the town hall.
-        jobs.openFromField(WORKER_ID);
-        jobs.select(Kind.INDOOR, GoodsType.OWLS);
-        jobs.confirm();
+        jobs.assignIndoorFromField(WORKER_ID, "id_town_hall");
         jobs.verifyIndoorJob(WORKER_ID, ConstructionType.TOWN_HALL, 1);
         final GamePage game = ColonyScreen.of(getContext(), COLONY_NAME)
                 .close();
@@ -263,7 +258,7 @@ public class TC_134_F125_native_convert_test extends AbstractAkropiaTest {
         jobs.openFromCenter(WORKER_ID);
         jobs.select(Kind.INDOOR, GoodsType.TOOLS);
         jobs.verifyDetails(REFUSED_EN, false);
-        jobs.captureDialog("jobDialog", "native-convert-refused-en.png");
+        jobs.captureProductionTable("native-convert-refused-en.png");
         jobs.cancel();
         jobs.verifyClosed();
         jobs.verifyWorldUnchanged();
@@ -359,7 +354,7 @@ public class TC_134_F125_native_convert_test extends AbstractAkropiaTest {
         jobs.openFromCenter(WORKER_ID);
         jobs.select(Kind.INDOOR, GoodsType.TOOLS);
         jobs.verifyDetails(REFUSED_CS, false);
-        jobs.captureDialog("jobDialog", "native-convert-refused-cs.png");
+        jobs.captureProductionTable("native-convert-refused-cs.png");
         jobs.cancel();
         jobs.verifyClosed();
         jobs.verifyWorldUnchanged();

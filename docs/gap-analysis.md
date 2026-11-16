@@ -373,7 +373,7 @@ The core colony economy exists: workers occupy fields/buildings, input goods fee
 | PROD-008 | 35, 57 / 41, 63 | Every colony produces one cross automatically, without staffing a church. | [Construction.getProduction](../akropia-game/src/main/java/org/akropia/model/Construction.java) includes unattended religious production. A new colony produces one cross without a preacher; church/cathedral replacement totals are 2/3 under R-0110. | Matches | [R-0062 evidence](functional-tests.md#r-0062-automatic-cross-production-2026-10-16) verifies the automatic cross. [R-0110 evidence](functional-tests.md#r-0110-religious-production-2026-10-17) covers upgrades. Construction_CHURCH_Test now expects two crosses without workers. |
 | PROD-009 | 57 / 63 | Building a church increases cross production immediately; cathedral construction increases it further and improves preachers' output. | R-0110 uses unattended replacement totals 1/2/3, ordinary church/cathedral staffing 3/6, the existing expert multiplier and Penn applied once to total crosses. Preview and actual colony production share Construction.getProduction; queue completion preserves production-before-construction timing. | Partial | Model and TC67 acceptance passed; complete CI/publication remain pending. See [religious production evidence](functional-tests.md#r-0110-religious-production-2026-10-17). |
 | PROD-010 | 57 / 63 | Horses breed in colonies; stables increase the breeding rate. | [Colony.startTurn/getGoodsStats](../akropia-game/src/main/java/org/akropia/model/Colony.java) shares food- and capacity-limited breeding after population growth; existing Stables/Large Stables double potential output beginning on the following update. | Partial | [R-0078](requirements/done/R-0078.md) records model/player verification against the agreed [breeding rule](#economy-production-and-education); full acceptance remains separately tracked. |
-| PROD-011 | 46 / 52 | The jobs menu previews the worker's output at the current and best usable location; for an indoor worker it shows the best output and choosing a job assigns the best available location. | Published R-0056 implementation (2026-10-16): [ColonyJobChoice](../akropia-game/src/main/java/org/akropia/model/ColonyJobChoice.java) binds worker-aware previews to exact destinations; [DialogColonyJobChoices](../akropia-game/src/main/java/org/akropia/gui/screen/colony/DialogColonyJobChoices.java) offers current-field, explicit best-field and existing indoor work. Model validation also protects manual assignment. | Matches | All 15 TC40 scenarios and the complete 1298-game/185-UI regression pass. Published as `dev-107-75341b36bcc2`; [evidence](functional-tests.md#r-0056-job-choice-implementation-2026-10-16). |
+| PROD-011 | 46 / 52 | Amended 2026-11-15: one production table shows current-square yields; map submenus identify the receiving colony, while the colony view uses its own city. No player-facing best-field selection. | Shared [ProductionChoices](../akropia-game/src/main/java/org/akropia/gui/util/ProductionChoices.java), unit commands and [indoor work menu](../akropia-game/src/main/java/org/akropia/gui/screen/colony/ColonyWorkMenu.java); model validation remains authoritative. | Locally verified 2026-11-16 | [Current contract](#colony-job-choices-and-yield-previews), [current evidence](functional-tests.md#consistent-unit-work-2026-11-15). [R-0056 evidence](functional-tests.md#r-0056-job-choice-implementation-2026-10-16) records the former dialog. |
 
 ### Construction, upgrades and building effects
 
@@ -2007,25 +2007,44 @@ For the selected future change [R-0405](requirements/done/R-0405.md), see [worke
 
 1. Agreed for [R-0055](requirements/done/R-0055.md) on 2026-10-16: each world square may supply outdoor production to at most one colony, regardless of owner. The eight local field slots do not grant separate rights to the same square. Releasing a worker makes that square available again, subject to the existing founding availability rules (valid map square, no colony center and no foreign map unit).
 2. Assignment requires a registered colonist of the colony’s owner during that owner’s prepared turn, already working inside that colony or standing at its center. No remote transfer between colonies is allowed. Validate the target, crop and every equipment return before changing the old job or either warehouse. Reject stale or invalid actions without partial changes. Moving the last resident between jobs inside the same colony preserves it; canceling a drag changes nothing.
-3. Changing the crop keeps the same worker and square, with exactly one output contribution. The UI obtains admissible destinations from the model, explains unavailable shared squares and rechecks state when applying a drag or crop selection. The broader current/best-yield jobs menu belongs to [R-0056](requirements/done/R-0056.md).
+3. Changing the crop keeps the same worker and square, with exactly one output contribution. The UI obtains admissible destinations from the model, explains unavailable shared squares and rechecks state when applying a drag or crop selection. The current job-selection contract is [below](#colony-job-choices-and-yield-previews).
 4. Saved assignments must be unambiguous: one outdoor worker per world square, one job reference per worker, an existing worker of the matching owner, and agreement between its saved place and its field reference. Reject contradictory data before exposing or replacing the game. Do not relocate workers, discard conflicting records or modify the file being opened. Valid saves retain identities, crops and unique production. Load and Continue explain a validation failure, retain the current game and stay on the current screen.
 5. These are agreed rules and the resolved persistence policy, not a claim of verified implementation. Current acceptance belongs to R-0055 and its linked evidence; manufacturing capacity and fortified-colony resident limits remain separately tracked.
 
 ## Colony job choices and yield previews
 
-The selected [R-0405](requirements/done/R-0405.md) changes outdoor entry to actual movement followed by work assignment. The earlier automatic best-field placement below describes the existing flow and must not bypass normal terrain/movement costs. Changes between indoor jobs and changes of crop on the same square are agreed to cost no movement; only the final valid job yields on Next turn. See the [future worker rules](#workers-on-world-map).
-
-1. Agreed for [R-0056](requirements/done/R-0056.md) on 2026-10-16 under the user’s authorization to choose reasonable defaults: a worker’s job choice includes outdoor commodities supported by the colony’s surrounding terrain and producing indoor jobs in buildings already present. Show unavailable destinations with a reason; warehouses, fortifications, building projects and teaching are not commodity jobs. This flow includes ordinary colonists and the currently supported master blacksmith; additional specialist types remain [R-0074](requirements/done/R-0074.md).
-2. Outdoor previews use the selected worker’s production rule. A worker already on a field sees the yield there and the best eligible yield in that colony. An indoor worker or a colonist at the colony center sees the best eligible yield. Exclude other workers’ fields, globally occupied shared squares and otherwise invalid destinations; the selected worker’s own field remains a candidate. Ties use the existing stable field order. An unavailable job shows no invented numeric yield.
-3. Choosing a crop for an outdoor worker keeps that worker’s current field. Moving to the best field requires a separate explicit reassignment action; show the destination and yield before confirmation. Choosing outdoor work from an indoor job or the colony center selects the best eligible field. If a chosen destination, the worker’s original job or the shown potential output changes before confirmation, reject without moving anyone or changing stocks, then refresh the choices. Do not silently choose a different field after confirmation.
-4. Indoor previews label the selected worker’s unconstrained output as **potential per turn**, show the required input per turn and current warehouse stock, and flag a shortage. Potential output excludes the building’s automatic base output. It is not a promise of next-turn warehouse growth: inputs are shared, earlier production can change them, and storage limits still apply. For example, a normal blacksmith with potential 3 tools requiring 3 ore and only 1 ore in stock must show that shortage rather than promise 3 tools. The existing production algorithm, expert multiplier and input consumption remain authoritative. Input stock is advisory: a stock change alone does not invalidate an otherwise legal assignment, which does not consume the production inputs immediately.
-5. Mark an expert’s own commodity with text as well as any icon. Opening, browsing or canceling is read-only. Assignment uses the same model boundaries as dragging, including owner/turn/identity, same-colony source, capacity and atomic equipment return. Ordinary producing buildings retain their existing slot capacity; this feature does not grant extra slots or move a worker between colonies.
-6. Offer the choice from occupied outdoor and indoor worker controls and colonists at the colony center. Preserve manual dragging and crop selection, use English/Czech localized names and feedback, and support dismissing the choice without action. Indoor dragging retains the job offered during hover: if that slot becomes unavailable before release, reject rather than move the worker to another slot. A rejected drop opens the existing job picker with an explanation and refreshed choices; only a new explicit confirmation can assign a replacement. These are adopted behavior decisions; R-0056 records their implementation and verified acceptance.
-7. Implemented and verified on 2026-10-16 in [R-0056](requirements/done/R-0056.md), published as `dev-107-75341b36bcc2`. All 15 player scenarios and the complete regression pass, including English/Czech previews, unavailable jobs, cancellation and stale menu/drop rejection. See [evidence](functional-tests.md#r-0056-job-choice-implementation-2026-10-16).
+1. **Amended 2026-11-15:** outdoor production uses the same table in the
+   selected colony-field panel and the unit context menus in both screens.
+   Commodity order is stable; each row shows the selected worker's output
+   on the current square. Choosing a commodity never chooses or moves to
+   a different square. The player-facing best-field option and Choose work
+   dialog are removed. Internal AI job evaluation is not a player command.
+2. The map groups production under the receiving colony's name. A shared
+   eligible square can offer multiple colonies. A colony screen offers only
+   its own colony, never assignment to its neighbor. The model retains
+   global field occupancy, owner, identity and movement checks.
+3. Ordinary unit commands are shared between the map and colony views;
+   their availability depends on unit state. Outdoor reassignment uses
+   explicit dragging or movement with normal terrain costs. Changing crop
+   on the same square or changing indoor jobs retains existing movement rules.
+4. Producing buildings retain their direct assignment choices and capacities.
+   Their previews show potential output and input requirements, including
+   shortages; they do not promise a net warehouse increase. Input stock alone
+   does not invalidate assignment or consume production inputs immediately.
+5. Stale worker, source job, destination or potential output is rejected before
+   mutation. A failed indoor drop reports the rejection without selecting an
+   alternate slot or opening a replacement job dialog. Clearing specialty has
+   a separate confirmation and retains its existing model restrictions.
+6. Current interaction and verification are linked from
+   [unit-work UX](ux.md#volba-prace-kolonisty-r-0056).
+   [R-0056](requirements/done/R-0056.md) and its
+   [2026-10-16 evidence](functional-tests.md#r-0056-job-choice-implementation-2026-10-16)
+   record the previous dialog; those historical results are not rewritten.
 
 ### Local diagnostic logs
 
 1. Accepted on 2026-10-19: keep local diagnostic logs outside saved games, bounded to three files of at most 5 MB each. On macOS use ~/Library/Logs/Akropia. Failure guidance identifies the log location. Do not include saved-game content or player-entered text in diagnostic reports, and do not transmit anything automatically.
+
 
 
 ## Mediterranean goods naming

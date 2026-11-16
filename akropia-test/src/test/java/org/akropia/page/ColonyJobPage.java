@@ -18,12 +18,13 @@ import org.testfx.util.WaitForAsyncUtils;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
 public final class ColonyJobPage extends AbstractScreen {
     private com.google.gson.JsonElement remembered;
+    private javafx.scene.control.RadioButton selectedRow;
+    private String colonyName = "New Amsterdam";
 
     public ColonyJobPage(final TestContext context) {
         super(context);
@@ -44,27 +45,32 @@ public final class ColonyJobPage extends AbstractScreen {
      * @param unitId     worker on the field
      */
     public void openFromField(final String colonyName, final int unitId) {
+        this.colonyName = colonyName;
         ColonyScreen.of(getContext(), colonyName).openCropMenu(unitId);
-        getRobot().clickOn("#chooseWork");
-        WaitForAsyncUtils.waitForFxEvents();
+        openWorkMenu();
     }
 
     public void openFromCenter(final int unitId) {
+        colonyName = getModel().getColonies().stream()
+                .filter(value -> value.getLocation()
+                        .equals(getModel().getUnitById(unitId).getLocation()))
+                .findFirst().orElseThrow().getName();
         revealGameContent(
                 getNodeFinder().lookup("#colonyUnit-" + unitId).query());
-        getRobot().clickOn("#colonyUnit-" + unitId, MouseButton.SECONDARY)
-                .clickOn("#chooseWork");
-        WaitForAsyncUtils.waitForFxEvents();
+        getRobot().clickOn("#colonyUnit-" + unitId, MouseButton.SECONDARY);
+        openWorkMenu();
     }
 
     public void openFromCenterWithKeyboard(final int unitId) {
+        colonyName = getModel().getColonies().stream()
+                .filter(value -> value.getLocation()
+                        .equals(getModel().getUnitById(unitId).getLocation()))
+                .findFirst().orElseThrow().getName();
         revealGameContent(
                 getNodeFinder().lookup("#colonyUnit-" + unitId).query());
         getRobot().clickOn("#colonyUnit-" + unitId).push(KeyCode.SHIFT,
                 KeyCode.F10);
-        getRobot().push(KeyCode.DOWN).push(KeyCode.DOWN).push(KeyCode.DOWN)
-                .push(KeyCode.ENTER);
-        WaitForAsyncUtils.waitForFxEvents();
+        openWorkMenu();
     }
 
     private Point2D slotPoint(final String buildingId, final int index) {
@@ -79,122 +85,82 @@ public final class ColonyJobPage extends AbstractScreen {
 
     public void openFromIndoor(final String buildingId, final int index)
             throws Exception {
-        final Point2D target = slotPoint(buildingId, index);
         final Parent building = getNodeFinder().lookup("#" + buildingId)
                 .queryAs(Parent.class);
-        final javafx.scene.Scene scene = building.getScene();
-        final java.util.concurrent.atomic.AtomicReference<String> press = new java.util.concurrent.atomic.AtomicReference<>(
-                "absent");
-        final java.util.concurrent.atomic.AtomicReference<String> menu = new java.util.concurrent.atomic.AtomicReference<>(
-                "absent");
-        final java.util.concurrent.atomic.AtomicBoolean reachedBuilding = new java.util.concurrent.atomic.AtomicBoolean();
-        final javafx.event.EventHandler<javafx.scene.input.MouseEvent> pressed = event -> press
-                .set("target=" + event.getTarget() + "; picked="
-                        + (event.getPickResult() == null ? "none"
-                                : event.getPickResult().getIntersectedNode())
-                        + "; scene=" + event.getSceneX() + ","
-                        + event.getSceneY());
-        final javafx.event.EventHandler<javafx.scene.input.ContextMenuEvent> requested = event -> menu
-                .set("target=" + event.getTarget() + "; picked="
-                        + (event.getPickResult() == null ? "none"
-                                : event.getPickResult().getIntersectedNode())
-                        + "; scene=" + event.getSceneX() + ","
-                        + event.getSceneY());
-        final javafx.event.EventHandler<javafx.scene.input.ContextMenuEvent> received = event -> reachedBuilding
-                .set(true);
-        getRobot().interact(() -> {
-            scene.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED,
-                    pressed);
-            scene.addEventFilter(
-                    javafx.scene.input.ContextMenuEvent.CONTEXT_MENU_REQUESTED,
-                    requested);
-            building.addEventFilter(
-                    javafx.scene.input.ContextMenuEvent.CONTEXT_MENU_REQUESTED,
-                    received);
-        });
-        try {
-            getRobot().clickOn(target, MouseButton.SECONDARY);
-            // Native drag cleanup and context-menu creation need separate
-            // event cycles.
-            WaitForAsyncUtils.waitForFxEvents();
-            WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> getNodeFinder()
-                    .lookup("#chooseWork").tryQuery().isPresent());
-        } catch (java.util.concurrent.TimeoutException timeout) {
-            final Canvas canvas = (Canvas) building.getChildrenUnmodifiable()
-                    .stream().filter(node -> node instanceof Canvas).findFirst()
-                    .orElseThrow();
-            final String details = "Indoor context menu absent at " + target
-                    + "; sceneTarget="
-                    + building.localToScene(building.screenToLocal(target))
-                    + "; canvas="
-                    + canvas.localToScreen(canvas.getBoundsInLocal())
-                    + "; building="
-                    + building.localToScreen(building.getBoundsInLocal())
-                    + "; scene=" + scene.getWidth() + "x" + scene.getHeight()
-                    + "; press=" + press.get() + "; contextRequested="
-                    + menu.get() + "; reachedBuilding=" + reachedBuilding.get()
-                    + "; menuPresent=" + getNodeFinder().lookup("#chooseWork")
-                            .tryQuery().isPresent();
-            try {
-                captureDialog(buildingId, "indoor-context-menu-timeout.png");
-            } catch (Exception captureError) {
-                timeout.addSuppressed(captureError);
-            }
-            final java.util.concurrent.TimeoutException diagnosed = new java.util.concurrent.TimeoutException(
-                    details);
-            diagnosed.initCause(timeout);
-            throw diagnosed;
-        } finally {
-            getRobot().interact(() -> {
-                scene.removeEventFilter(
-                        javafx.scene.input.MouseEvent.MOUSE_PRESSED, pressed);
-                scene.removeEventFilter(
-                        javafx.scene.input.ContextMenuEvent.CONTEXT_MENU_REQUESTED,
-                        requested);
-                building.removeEventFilter(
-                        javafx.scene.input.ContextMenuEvent.CONTEXT_MENU_REQUESTED,
-                        received);
-            });
-        }
-        getRobot().clickOn("#chooseWork");
+        revealGameContent(building);
+        getRobot().clickOn(slotPoint(buildingId, index), MouseButton.SECONDARY);
+        WaitForAsyncUtils.waitForFxEvents();
+        openWorkMenu();
+    }
+
+    private void openWorkMenu() {
+        WaitForAsyncUtils.waitForFxEvents();
+        getRobot().moveTo("#workForColony-" + getModel().getColonies().stream()
+                .filter(value -> value.getName().equals(colonyName)).findFirst()
+                .orElseThrow().getId());
+        getRobot().sleep(400);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    @SuppressWarnings("unchecked")
-    private ListView<ColonyJobChoice> choices() {
-        return (ListView<ColonyJobChoice>) getNodeFinder().lookup("#jobChoices")
-                .queryAs(ListView.class);
-    }
-
     public void select(final ColonyJobChoice.Kind kind, final GoodsType goods) {
-        final ListView<ColonyJobChoice> list = choices();
-        final ColonyJobChoice target = list.getItems().stream()
-                .filter(choice -> choice.getKind() == kind
-                        && choice.getGoodsType() == goods)
-                .findFirst().orElseThrow();
-        final int index = list.getItems().indexOf(target);
-        getRobot().clickOn(list).push(KeyCode.HOME);
-        for (int i = 0; i < index; i++)
-            getRobot().push(KeyCode.DOWN);
+        if (kind == ColonyJobChoice.Kind.INDOOR && getNodeFinder()
+                .lookup(node -> node.getId() != null
+                        && node.getId().startsWith("indoorWorkForColony-"))
+                .tryQuery().isPresent()) {
+            getRobot().push(KeyCode.ESCAPE);
+            getRobot().moveTo(getNodeFinder()
+                    .lookup(node -> node.getId() != null
+                            && node.getId().startsWith("indoorWorkForColony-"))
+                    .queryAs(javafx.scene.Node.class));
+            getRobot().sleep(400);
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+        selectedRow = getNodeFinder().lookup(".field-output-choice")
+                .queryAllAs(javafx.scene.control.RadioButton.class).stream()
+                .filter(row -> row.getId() != null
+                        && !row.getId().startsWith("colony-field-")
+                        && row.getProperties()
+                                .get("jobChoice") instanceof ColonyJobChoice)
+                .filter(row -> {
+                    final ColonyJobChoice choice = (ColonyJobChoice) row
+                            .getProperties().get("jobChoice");
+                    return choice.getKind() == kind
+                            && choice.getGoodsType() == goods;
+                }).findFirst().orElseThrow();
+        moveToSubmenuRow(selectedRow);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void confirm() {
-        clickOnButtonWithId("jobConfirm");
+        if (isCssIdVisible("clearSpecialtyDialog")) {
+            getRobot().clickOn("#jobConfirm");
+        } else {
+            getRobot().clickOn(selectedRow);
+        }
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void confirmWithEnter() {
-        getRobot().push(KeyCode.ENTER);
+        if (isCssIdVisible("clearSpecialtyDialog")) {
+            getRobot().push(KeyCode.ENTER);
+        } else {
+            getRobot().interact(selectedRow::requestFocus);
+            getRobot().push(KeyCode.ENTER);
+        }
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void cancel() {
-        clickOnButtonWithId("jobCancel");
+        if (isCssIdVisible("clearSpecialtyDialog")) {
+            getRobot().push(KeyCode.ESCAPE);
+        } else {
+            getRobot().push(KeyCode.ESCAPE).push(KeyCode.ESCAPE);
+        }
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void escape() {
-        getRobot().push(KeyCode.ESCAPE);
-        WaitForAsyncUtils.waitForFxEvents();
+        cancel();
     }
 
     public void rememberWorld() {
@@ -208,11 +174,10 @@ public final class ColonyJobPage extends AbstractScreen {
 
     public void verifyDetails(final String expectedPart,
             final boolean canConfirm) {
-        assertTrue(isCssIdVisible("jobDialog"));
-        assertTrue(
-                getLabeledById("jobDetails").getText().contains(expectedPart),
-                () -> getLabeledById("jobDetails").getText());
-        assertEquals(!canConfirm, getButtonById("jobConfirm").isDisabled());
+        assertNotNull(selectedRow);
+        assertTrue(selectedRow.getAccessibleHelp().contains(expectedPart),
+                selectedRow.getAccessibleHelp());
+        assertEquals(!canConfirm, selectedRow.isDisabled());
     }
 
     public void verifyVisibleChoice(final String expectedTitle) {
@@ -221,8 +186,11 @@ public final class ColonyJobPage extends AbstractScreen {
     }
 
     public void verifyMessage(final String expectedPart) {
-        assertTrue(
-                getLabeledById("jobMessage").getText().contains(expectedPart));
+        assertTrue(getNodeFinder().lookup((
+                javafx.scene.Node node) -> node instanceof javafx.scene.control.Label
+                        && ((javafx.scene.control.Label) node).getText()
+                                .contains(expectedPart))
+                .tryQuery().isPresent());
     }
 
     /**
@@ -231,22 +199,24 @@ public final class ColonyJobPage extends AbstractScreen {
      */
     public void verifyManufacturingOffered(final String refusalPart) {
         verifyOpen();
-        assertFalse(
-                getLabeledById("jobDetails").getText().contains(refusalPart),
-                () -> getLabeledById("jobDetails").getText());
-        assertFalse(getButtonById("jobConfirm").isDisabled());
+        assertFalse(selectedRow.getAccessibleHelp().contains(refusalPart));
+        assertFalse(selectedRow.isDisabled());
     }
 
     public void verifyClosed() {
-        assertFalse(isCssIdVisible("jobDialog"));
+        assertFalse(isCssIdVisible("clearSpecialtyDialog"));
+        assertFalse(isCssIdVisible("unitActionsMenu"));
     }
 
     public void verifyOpen() {
-        assertTrue(isCssIdVisible("jobDialog"));
+        assertTrue(isCssIdVisible("unitActionsMenu")
+                || isCssIdVisible("clearSpecialtyDialog"));
     }
 
     public void openClearSpecialty() {
-        clickOnButtonWithId("jobClearSpecialty");
+        getRobot().push(KeyCode.ESCAPE);
+        getRobot().clickOn("#jobClearSpecialty");
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     /** Remove the specialty through the model while the dialog is open. */
@@ -258,7 +228,8 @@ public final class ColonyJobPage extends AbstractScreen {
     }
 
     public void verifyClearSpecialtyOffered(final boolean expected) {
-        assertEquals(expected, getButtonById("jobClearSpecialty").isVisible());
+        assertEquals(expected, getNodeFinder().lookup("#jobClearSpecialty")
+                .tryQuery().isPresent());
     }
 
     public void verifyClearPrompt(final int workerId, final String currentRole,
@@ -316,15 +287,6 @@ public final class ColonyJobPage extends AbstractScreen {
                 .findFirst().orElseThrow();
         assertEquals(at, field.getLocation());
         assertEquals(expected, field.getProduction().orElseThrow());
-    }
-
-    public void occupyBestFieldWhileOpen(final int otherWorker) {
-        getRobot().interact(() -> {
-            getModel().getUnitById(otherWorker).placeToColonyField(
-                    colony().getColonyFieldInDirection(Direction.northWest),
-                    GoodsType.LUMBER);
-            rememberWorld();
-        });
     }
 
     public void changeSourceCropWhileOpen(final GoodsType crop) {
@@ -464,4 +426,115 @@ public final class ColonyJobPage extends AbstractScreen {
                 .getUnitById(workerId).isAtPlaceConstructionSlot());
         WaitForAsyncUtils.waitForFxEvents();
     }
+
+    public void assignField(final int unitId, final Location target,
+            final GoodsType goods) throws Exception {
+        final Colony current = getModel().getColonies().stream()
+                .filter(value -> value.getName().equals(colonyName)).findFirst()
+                .orElseThrow();
+        final Direction direction = Direction.valueOf(
+                Location.of(target.getX() - current.getLocation().getX(),
+                        target.getY() - current.getLocation().getY()));
+        final ColonyScreen screen = ColonyScreen.of(getContext(), colonyName);
+        if (getModel().getUnitById(unitId).isAtPlaceColonyField()) {
+            screen.dragFieldWorkerTo(unitId, direction);
+        } else {
+            screen.moveWorkerFromPierToField(unitId, direction);
+        }
+        WaitForAsyncUtils.waitForFxEvents();
+        openFromField(colonyName, unitId);
+        select(ColonyJobChoice.Kind.CURRENT_FIELD, goods);
+        confirm();
+    }
+
+    public void verifyNoAutomaticFieldChoice() {
+        final java.util.Set<javafx.scene.control.RadioButton> rows = getNodeFinder()
+                .lookup(".field-output-choice")
+                .queryAllAs(javafx.scene.control.RadioButton.class);
+        assertFalse(rows.stream().anyMatch(row -> {
+            final Object value = row.getProperties().get("jobChoice");
+            return value instanceof ColonyJobChoice && ((ColonyJobChoice) value)
+                    .getKind() == ColonyJobChoice.Kind.BEST_FIELD;
+        }));
+        assertFalse(
+                getNodeFinder().lookup("#chooseWork").tryQuery().isPresent());
+        assertFalse(isCssIdVisible("jobDialog"));
+    }
+
+    public void assignIndoorFromField(final int unitId,
+            final String buildingId) {
+        ColonyScreen.of(getContext(), colonyName)
+                .moveFieldWorkerToBuilding(unitId, buildingId);
+    }
+
+    public void assignIndoorWorkerToField(final String buildingId,
+            final int slot, final int unitId, final Location location,
+            final GoodsType goods) {
+        final ColonyScreen screen = ColonyScreen.of(getContext(), colonyName);
+        final Parent building = getNodeFinder().lookup("#" + buildingId)
+                .queryAs(Parent.class);
+        revealGameContent(building,
+                getNodeFinder().lookup("#colony-field-map").query());
+        getRobot().drag(slotPoint(buildingId, slot), MouseButton.PRIMARY)
+                .dropTo(screen.fieldPoint(location));
+        WaitForAsyncUtils.waitForFxEvents();
+        openFromField(colonyName, unitId);
+        select(ColonyJobChoice.Kind.CURRENT_FIELD, goods);
+        confirm();
+    }
+
+    public void verifyOnlyColonyMenu(final int colonyId) {
+        final java.util.Set<javafx.scene.Node> entries = getNodeFinder()
+                .lookup(node -> node.getId() != null
+                        && node.getId().startsWith("workForColony-"))
+                .queryAll();
+        assertEquals(1, entries.size());
+        assertEquals("workForColony-" + colonyId,
+                entries.iterator().next().getId());
+    }
+
+    public void verifySameProductionTable() {
+        final java.util.Set<javafx.scene.control.RadioButton> rows = getNodeFinder()
+                .lookup(".field-output-choice")
+                .queryAllAs(javafx.scene.control.RadioButton.class);
+        final java.util.List<javafx.scene.control.RadioButton> inline = rows
+                .stream()
+                .filter(row -> row.getId().startsWith("colony-field-output-"))
+                .sorted(java.util.Comparator
+                        .comparingDouble(row -> row.localToScene(0, 0).getY()))
+                .collect(java.util.stream.Collectors.toList());
+        final java.util.List<javafx.scene.control.RadioButton> popup = rows
+                .stream().filter(row -> row.getId().startsWith("mapJob-"))
+                .sorted(java.util.Comparator
+                        .comparingDouble(row -> row.localToScene(0, 0).getY()))
+                .collect(java.util.stream.Collectors.toList());
+        assertFalse(inline.isEmpty());
+        assertEquals(
+                inline.stream().map(javafx.scene.Node::getAccessibleText)
+                        .collect(java.util.stream.Collectors.toList()),
+                popup.stream().map(javafx.scene.Node::getAccessibleText)
+                        .collect(java.util.stream.Collectors.toList()));
+        assertEquals(
+                inline.stream()
+                        .map(javafx.scene.control.RadioButton::isSelected)
+                        .collect(java.util.stream.Collectors.toList()),
+                popup.stream().map(javafx.scene.control.RadioButton::isSelected)
+                        .collect(java.util.stream.Collectors.toList()));
+    }
+
+    public void captureProductionTable(final String filename) throws Exception {
+        final javafx.scene.Parent table = selectedRow.getParent()
+                .getChildrenUnmodifiable().stream()
+                .anyMatch(node -> "jobDetails".equals(node.getId()))
+                        ? selectedRow.getParent()
+                        : selectedRow.getParent().getParent();
+        final String previousId = table.getId();
+        getRobot().interact(() -> table.setId("capturedProductionTable"));
+        try {
+            captureDialog("capturedProductionTable", filename);
+        } finally {
+            getRobot().interact(() -> table.setId(previousId));
+        }
+    }
+
 }

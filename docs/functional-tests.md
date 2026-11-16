@@ -1,3 +1,141 @@
+## Consistent unit work — 2026-11-15
+
+Local acceptance completed on 2026-11-16. Items 3–15 retain the attempt
+history, including failed evidence; item 16 records final acceptance.
+
+1. UC-016/030/033: one production-row component serves the field panel and
+   colony/map submenus. Commodity order is shared; map work is grouped by
+   receiving colony and the colony view filters to its current city.
+   Ordinary commands use the existing unit-command controller in both views.
+2. The player Choose work dialog and automatic best-field selection are
+   removed. Existing production scenarios now choose explicit fields and
+   retain their gameplay, input-stock, depletion and specialist assertions.
+   Indoor jobs, equipment and clear-specialty confirmation remain accessible.
+3. Initial model attempt
+   `20261115T204540Z-58d8d7dfa102` never started tests: Docker's labelled
+   container query timed out at 20 seconds (22.094 seconds total preparation).
+   A later Docker info probe passed in 0.470 seconds and the same container
+   query in 0.019 seconds; the initial timeout's root cause is unconfirmed.
+   Model retry: `20261115T204709Z-f351c6e2f3ae`, PID 55578, 600-second watchdog.
+   This retry ran 5,136 tests: 5,135 passed and one failed, with no errors or
+   skips (153.824 seconds, `target/verification/run-54m6iyxq`).
+   `ButtonPresentationContractTest.gameDoesNotCreateHoverTooltips` rejected
+   the new hover tooltip; it was replaced by inline and accessible details.
+   This failed evidence is retained.
+4. Repaired model attempt `20261115T205102Z-67b2ed80fb5a` passed all 5,136
+   tests with zero failures/errors/skips in `target/verification/run-7c2v8f9t`
+   (154.589 seconds supervised total). Initial targeted selection TC40,
+   TC195, TC201 and PageVerificationContractTest ran as
+   `20261115T205452Z-3e8967c8549c` (PID 56328, 1,800-second watchdog).
+5. Initial targeted run completed 30 tests with one failure and ten errors,
+   no skips, in 271.279 seconds (`target/docker-ui/run-G1tmwJ`). The shared
+   map-panel refresh closed newly opened colony menus; the old inline
+   accessibility hint was unintentionally replaced; keyboard confirmation
+   of an already selected indoor job did not fire; and the new shared-square
+   test canceled its receiving city's last resident, removing that city.
+   Repairs defer the popup until after refresh, retain the inline hint,
+   explicitly handle production-table Enter/Space, and add a second Delft
+   resident to F233. Verification of these repairs is pending.
+   No full-regression or publication claim is made.
+6. Model run `20261115T210701Z-48344434b5db` passed 5,136 tests with
+   zero failures/errors/skips (`target/verification/run-62z0wado`, 153.757
+   seconds total). The subsequent targeted run
+   `20261115T211109Z-85d1978a6d57` completed 46 tests with one failure,
+   seven errors and no skips in 450.490 seconds (`target/docker-ui/run-OQFJEG`).
+   TC195 and TC104 passed. Remaining errors involved submenu opening in the
+   test helpers; confirming an already selected radio option also did not
+   emit an action. Submenu screenshots exposed inherited menu highlight
+   styles overriding production-table ink and radio backgrounds. Corrections
+   are under verification; the failed reports remain preserved.
+7. The final radio-confirmation and menu-style candidate passed all 5,136
+   model tests with zero failures/errors/skips in
+   `target/verification/run-kplfiwmw` (supervisor
+   `20261115T212100Z-57aba59d0d3f`, 99.683 seconds lock wait, 155.189 seconds
+   execution/cleanup). The same six-class targeted UI selection is running
+   as `20261115T212534Z-ed7b4eabf5ce`, PID 58312, watchdog 1,800 seconds.
+8. That UI run completed 46 tests with zero failures, seven errors and
+   no skips in 457.490 seconds (`target/docker-ui/run-cPIO5E`). Enter
+   confirmation passed. A single-scenario diagnostic
+   `20261115T213431Z-8da22f72616d` (`run-rR2h07`, 56.034 seconds) showed an
+   attached, visible production table before TestFX's diagonal pointer move
+   crossed a sibling menu and detached the target row. A horizontal-first
+   pointer path passed TC40/01 in `20261115T213603Z-992937dc7c87`
+   (`run-rKD1dT`, 105.407 seconds); its three other selected scenarios still
+   used the earlier page helpers and errored. PageVerificationContractTest
+   passed all three checks. The same pointer path is now applied to those
+   helpers; final acceptance remains pending. Production rows explicitly
+   reuse the shared hand-drawn radio skin in submenu popups as well as the
+   colony panel.
+9. Latest-source model gate passed all 5,136 tests, zero failures/errors/skips,
+   in `target/verification/run-9t31645w` (supervisor
+   `20261115T213825Z-d2ecbf7000af`, 162.730 seconds). The six-class targeted
+   UI retry is `20261115T214124Z-87de2e61294b`, PID 59630, watchdog 1,800 seconds.
+10. That retry completed 46 tests: 45 passed, one failed, zero errors/skips
+    (`target/docker-ui/run-Ymwc34`, 502.603 seconds). TC40, TC195, TC201,
+    TC104 and the page contract all passed. TC39/07's stale-action hook was
+    still attached to the parent menu and never moved its worker; it now
+    intercepts the production table's mouse event before the player action.
+    Visual review also found an opaque native radio background covering the
+    shared pen drawing; production radio backgrounds are now transparent.
+    Both corrections remain under final verification.
+11. Model run `20261115T215057Z-500bc793e807` passed all 5,136 tests,
+    zero failures/errors/skips (`target/verification/run-mobsczyo`, 158.056
+    seconds). Targeted UI run `20261115T215357Z-e29d5c6d9d2c` (PID 60632,
+    3,600-second watchdog) covers TC08/24/39/40/51/52/53/67/68/80/86/88/90/91/
+    97/101/102/104/106/134/143/167/168/184/195/197/201 and
+    PageVerificationContractTest. These are the changed production paths,
+    shared job-page callers and ordinary-unit-command neighborhood, not a
+    full regression. Acceptance is pending their actual reports and smoke.
+12. The expanded selection completed 128 tests: 117 passed, one failed,
+    ten errored, zero skipped (`target/docker-ui/run-xA5kcC`, 2,429.924
+    seconds). Core TC40/195/201/104 all passed. TC39/07 now exercises stale
+    state rejection correctly but expected the old status wording. The
+    clear-specialty cancel helper sent a second Escape after closing its
+    modal, leaving the colony; it now sends only one. Pier-to-field drags
+    evaluated a scrolling target lookup after starting the drag; source and
+    target are now revealed and the target point computed beforehand.
+    These failed scenarios and TC40/01/02/08 plus the page contract are
+    rerunning as `20261115T223643Z-e30b8415e1a2`, PID 61397, watchdog 1,800
+    seconds. Final-source production screenshots in `run-xA5kcC` show the
+    shared pen-drawn radio controls, goods icons, readable yields and
+    selected-row highlight; these are automated captures, not a player study.
+13. Targeted retry `20261115T223643Z-e30b8415e1a2` completed 17 tests:
+    12 passed, five errors, zero failures/skips (`target/docker-ui/run-l4HOfM`,
+    669.445 seconds). Education, farmer, convert, stale-action and TC40
+    neighborhood repairs all passed. Only TC101's five expedition variants
+    remained: the replacement explicit destination `(25,13)` was already
+    occupied by the founder. They now verify that founder placement and use
+    the free grassland `(24,14)` for the second colonist, preserving output,
+    stock, travel, trade and save/continue assertions. TC101 and the page
+    contract rerun as `20261115T224910Z-c7eb680709bb`, PID 61673, watchdog
+    1,800 seconds.
+14. The expedition retry passed all eight selected checks (five TC101
+    variants and three page-contract tests), zero failures/errors/skips,
+    in `target/docker-ui/run-IRZ5cI` (960.167 seconds). Smoke ran as
+    `20261115T230527Z-441d504049f0`, PID 61937, with the fixed 420-second
+    verifier budget and 480-second supervisor watchdog. All reported
+    targeted failures have passing repair evidence; because shared test
+    helpers changed, the complete affected selection will be repeated on
+    their final source before acceptance.
+15. Smoke passed in `target/verification/run-phn89zyj` with zero failures,
+    errors or skips: the fixed precommit selection took 252.668 seconds,
+    within its 420-second budget (257.179 seconds supervised total).
+    The final complete affected-selection retry is
+    `20261115T230630Z-c17fe44fbbab`, PID 62121, watchdog 3,600 seconds.
+    It was serialized after smoke; the final report is recorded below.
+16. Final affected selection passed all 128 tests with zero failures, errors
+    or skips in `target/docker-ui/run-YqTP8S`; the supervisor recorded
+    194.725 seconds waiting for the Docker lock and 3,085.021 seconds after
+    acquisition. This clean report supersedes the incomplete acceptance of
+    the earlier attempts without erasing their failures. The same final
+    runtime sources passed 5,136 model tests (`run-mobsczyo`) and all 21
+    fixed smoke/support checks (`run-phn89zyj`, 252.668 seconds, below 420).
+    Scope review preserves unrelated backlog edits, reuses existing artwork,
+    and confirms shared goods order, city-specific work, removal of the old
+    player dialog, current-job keyboard confirmation and stale-action guards.
+    English/Czech production captures were reviewed. No full regression,
+    remote CI, website or game-distribution publication was verified.
+
 ## Colony project filtering and worker menus — 2026-11-15
 
 1. UC-031/033/042/114/119: the construction picker hides completed buildings

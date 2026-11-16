@@ -103,4 +103,70 @@ public class TC_201_F233_world_workers_test extends AbstractAkropiaTest {
         work.verifyWorker(0, field, "", null, 0);
         work.verifyRecipientNotInPanel(0, true);
     }
+
+    @Test
+    @Tag("local")
+    void TC_03_shared_square_offers_explicit_receiving_colonies()
+            throws Exception {
+        // Release Delft's worker on the square shared with New Amsterdam.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final WorldWorkersPage work = new WorldWorkersPage(getContext());
+        final Location shared = Location.of(25, 16);
+        game.openUnitContextAt(shared);
+        work.choose("cancelColonyWork");
+
+        // The same stationary worker can explicitly choose either receiving
+        // city.
+        game.openUnitContextAt(shared);
+        work.verifyReceivingColonies(0, 1);
+        work.choose("mapJob-0-GRAIN");
+        work.verifyWorker(1, shared, "w", 0, 3);
+
+        // The city view offers only its own production destination.
+        final ColonyScreen colony = game.openColonyAt(Location.of(24, 16),
+                "New Amsterdam");
+        colony.openCropMenu(1);
+        work.verifyReceivingColonies(0);
+        work.closeMenu();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_04_map_and_colony_share_unit_commands() throws Exception {
+        // Record ordinary commands for a working unit without changing its
+        // state.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final WorldWorkersPage work = new WorldWorkersPage(getContext());
+        game.openUnitContextAt(Location.of(23, 16));
+        work.rememberCommands();
+        work.closeMenu();
+
+        // Opening the same unit from its city preserves command availability.
+        final ColonyScreen colony = game.openColonyAt(Location.of(24, 16),
+                "New Amsterdam");
+        colony.openCropMenu(0);
+        work.verifySameCommands();
+        work.closeMenu();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_disband_from_colony_refreshes_the_selected_field()
+            throws Exception {
+        // Open the same shared unit command directly from the colony view.
+        final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(Location.of(24, 16), "New Amsterdam");
+        colony.openCropMenu(0);
+        final DisbandPage disband = new DisbandPage(getContext());
+        disband.useControl();
+
+        // Confirm removal and verify both the model and the visible field
+        // detail.
+        disband.verifyConfirmEnabled(true);
+        disband.confirm();
+        disband.verifyDialogClosed();
+        disband.verifyUnitPresent(0, false);
+        new ColonyLayoutPage(getContext()).verifyEmptyField();
+    }
+
 }

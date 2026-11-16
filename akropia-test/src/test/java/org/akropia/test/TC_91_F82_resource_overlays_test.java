@@ -5,7 +5,6 @@ import java.io.File;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.akropia.model.ColonyJobChoice.Kind;
 import org.akropia.model.Goods;
 import org.akropia.model.GoodsType;
 import org.akropia.model.Location;
@@ -130,18 +129,15 @@ public class TC_91_F82_resource_overlays_test extends AbstractAkropiaTest {
         ColonyScreen colony = gamePage.openColonyAt(COLONY_LOCATION, "Delft");
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.OLIVES);
-        jobs.verifyDetails("Field coordinates: 23, 12", true);
-        jobs.verifyDetails("Best eligible field: 2 Olives per turn", true);
+        jobs.verifyNoAutomaticFieldChoice();
         jobs.cancel();
         jobs.verifyClosed();
         production.verifyWarehouseGoods(DELFT_ID,
                 Goods.of(GoodsType.OLIVES, 0));
 
         // Confirm the same job; the field is worked, but nothing is stored yet.
-        jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.OLIVES);
-        jobs.confirm();
+        jobs.assignField(WORKER_ID, ResourceFixture.OLIVES_LOCATION,
+                GoodsType.OLIVES);
         jobs.verifyClosed();
         production.verifyFieldJob(DELFT_ID, WORKER_ID,
                 ResourceFixture.OLIVES_LOCATION, Goods.of(GoodsType.OLIVES, 2));

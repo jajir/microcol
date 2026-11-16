@@ -216,7 +216,7 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractAkropiaTest {
         colony.verifyWorldUnchanged();
         colony.verifyFieldWorker(0, Location.of(24, 15), 4);
         colony.verifyThatStatusBarContains(
-                "This worker or square is unavailable");
+                "Work is no longer available. Refresh the selection.");
     }
 
     @Test

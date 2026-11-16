@@ -72,9 +72,9 @@ public class TC_102_F93_mineral_depletion_test extends AbstractAkropiaTest {
         ColonyScreen colony = gamePage.openColonyAt(COLONY_LOCATION,
                 COLONY_NAME);
         jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.SILVER);
-        jobs.verifyDetails("Best eligible field: 2 ", true);
-        jobs.confirm();
+        jobs.cancel();
+        jobs.assignField(WORKER_ID, MineralFixture.DEPOSIT_LOCATION,
+                GoodsType.SILVER);
         jobs.verifyClosed();
         gamePage = colony.close();
 
@@ -128,9 +128,9 @@ public class TC_102_F93_mineral_depletion_test extends AbstractAkropiaTest {
         ColonyScreen colony = gamePage.openColonyAt(COLONY_LOCATION,
                 COLONY_NAME);
         jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.ORE);
-        jobs.verifyDetails("Best eligible field: 5 ", true);
-        jobs.confirm();
+        jobs.cancel();
+        jobs.assignField(WORKER_ID, MineralFixture.DEPOSIT_LOCATION,
+                GoodsType.ORE);
         jobs.verifyClosed();
         gamePage = colony.close();
 
@@ -177,9 +177,9 @@ public class TC_102_F93_mineral_depletion_test extends AbstractAkropiaTest {
         ColonyScreen colony = gamePage.openColonyAt(COLONY_LOCATION,
                 COLONY_NAME);
         jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.SILVER);
-        jobs.verifyDetails("Best eligible field: 1 ", true);
-        jobs.confirm();
+        jobs.cancel();
+        jobs.assignField(WORKER_ID, MineralFixture.DEPOSIT_LOCATION,
+                GoodsType.SILVER);
         jobs.verifyClosed();
         gamePage = colony.close();
 
@@ -197,8 +197,8 @@ public class TC_102_F93_mineral_depletion_test extends AbstractAkropiaTest {
         // Switch the same worker to ore: its full ore reserve is still there.
         colony = gamePage.openColonyAt(COLONY_LOCATION, COLONY_NAME);
         jobs.openFromField(COLONY_NAME, WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.ORE);
-        jobs.verifyDetails("Best eligible field: 4 ", true);
+        jobs.select(Kind.CURRENT_FIELD, GoodsType.ORE);
+        jobs.verifyDetails("Current field: 4 ", true);
         jobs.confirm();
         jobs.verifyClosed();
         gamePage = colony.close();

@@ -95,10 +95,7 @@ public class TC_97_F88_founder_production_test extends AbstractAkropiaTest {
         ColonyJobPage jobs = new ColonyJobPage(getContext());
         // Ordinary colonist on bare grassland: clay pit gives 2 clay, and
         // Hudson doubles them to 4.
-        jobs.openFromCenter(4);
-        jobs.select(ColonyJobChoice.Kind.BEST_FIELD, GoodsType.CLAY);
-        jobs.verifyDetails("Best eligible field: 4 Clay per turn", true);
-        jobs.confirm();
+        jobs.assignField(4, Location.of(24, 15), GoodsType.CLAY);
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");

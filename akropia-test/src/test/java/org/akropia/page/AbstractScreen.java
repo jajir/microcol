@@ -237,6 +237,21 @@ public abstract class AbstractScreen {
         return isCssIdVisible("closeButtonId");
     }
 
+    protected void moveToSubmenuRow(final Node row) {
+        final javafx.geometry.Bounds target = row
+                .localToScreen(row.getBoundsInLocal());
+        final javafx.stage.PopupWindow popup = (javafx.stage.PopupWindow) row
+                .getScene().getWindow();
+        final Node owner = popup.getOwnerNode();
+        final javafx.geometry.Bounds origin = owner
+                .localToScreen(owner.getBoundsInLocal());
+        // Cross into the submenu horizontally before moving down its rows.
+        // A diagonal move crosses sibling menus and closes this submenu.
+        getRobot().moveTo(target.getCenterX(), origin.getCenterY());
+        getRobot().moveTo(target.getCenterX(), target.getCenterY());
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     public void captureDialog(final String contentId, final String fileName)
             throws IOException {
         if (UNIT_COMMANDS.contains(contentId)) {

@@ -140,6 +140,24 @@
         "tools": 0,
         "holdingWeapons": true,
         "mounted": false
+      },
+      {
+        "workUpdates": 0,
+        "missionary": false,
+        "id": 6,
+        "type": "COLONIST",
+        "ownerId": "Dutch",
+        "cargo": {
+          "slots": []
+        },
+        "action": {
+          "type": "noAction"
+        },
+        "movementThirds": 3,
+        "tools": 80,
+        "holdingWeapons": false,
+        "mounted": false,
+        "placeConstructionSlot": {}
       }
     ],
     "nextColonyId": 2,
@@ -541,7 +559,9 @@
           {
             "type": "TOWN_HALL",
             "slots": [
-              {},
+              {
+                "workerId": 6
+              },
               {},
               {}
             ]

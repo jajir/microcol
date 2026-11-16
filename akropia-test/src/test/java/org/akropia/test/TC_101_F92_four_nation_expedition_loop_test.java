@@ -327,9 +327,11 @@ public class TC_101_F92_four_nation_expedition_loop_test
 
         // The second colonist grows grapes; commons keep net food at four.
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
+        jobs.verifyFieldJob(founder.getId(), Location.of(25, 13),
+                Goods.of(GoodsType.GRAIN, 4));
         jobs.openFromCenter(worker);
-        jobs.select(Kind.BEST_FIELD, GoodsType.GRAPES);
-        jobs.confirm();
+        jobs.cancel();
+        jobs.assignField(worker, Location.of(24, 14), GoodsType.GRAPES);
         jobs.verifyClosed();
         trip.verifyWorkerOutput(route.colonyName, worker,
                 Goods.of(GoodsType.GRAPES, 3));

@@ -45,9 +45,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -248,61 +246,9 @@ public final class PanelColonyFields implements JavaFxComponent {
     private void showContextMenuAtColonyField(final ColonyField colonyField,
             final ContextMenuEvent event) {
         final Unit expectedWorker = fieldWorker(colonyField).orElseThrow();
-        contextMenu.getItems().clear();
-        colonyField.getTerrain().getProduction().stream()
-                .filter(production -> expectedWorker.isAtPlaceColonyField())
-                .forEach(production -> {
-                    final MenuItem item = new MenuItem(
-                            production.getGoodsType().name() + "   "
-                                    + production.getProduction());
-                    item.setOnAction(evt -> {
-                        try {
-                            colonyField.setProducedGoodsType(expectedWorker,
-                                    production.getGoodsType());
-                            eventBus.post(new RepaintColonyEvent());
-                        } catch (IllegalArgumentException
-                                | IllegalStateException rejected) {
-                            showFieldProblem(ColonyMsg.fieldChanged);
-                        }
-                    });
-                    contextMenu.getItems().add(item);
-                });
-        final MenuItem work = new MenuItem(i18n.get(ColonyMsg.jobOpen));
-        work.setId("chooseWork");
-        work.setOnAction(action -> eventBus
-                .post(new ShowColonyJobChoicesEvent(expectedWorker)));
-        contextMenu.getItems().add(work);
-        final MenuItem cancel = new MenuItem(
-                i18n.get(org.akropia.gui.Loc.cancelWork));
-        cancel.setId("cancelColonyWork");
-        cancel.setDisable(!expectedWorker.canCancelColonyWork());
-        cancel.setOnAction(action -> {
-            try {
-                expectedWorker.cancelColonyWork();
-                eventBus.post(new RepaintColonyEvent());
-            } catch (IllegalArgumentException
-                    | IllegalStateException rejected) {
-                showFieldProblem(ColonyMsg.fieldChanged);
-            }
-        });
-        final MenuItem returnHome = new MenuItem(
-                i18n.get(org.akropia.gui.Loc.returnToColony));
-        returnHome.setId("returnToColony");
-        returnHome.setDisable(!expectedWorker.canReturnToWorkingColony());
-        returnHome.setOnAction(action -> {
-            try {
-                expectedWorker.returnToWorkingColony();
-                eventBus.post(new RepaintColonyEvent());
-            } catch (IllegalArgumentException
-                    | IllegalStateException rejected) {
-                showFieldProblem(ColonyMsg.fieldChanged);
-            }
-        });
-        contextMenu.getItems().addAll(cancel, returnHome);
-        contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
-        contextMenu.getScene().getStylesheets().setAll(
-                org.akropia.gui.MainStageBuilder.STYLE_SHEET_AKROPIA, getClass()
-                        .getResource("/gui/ContextMenus.css").toExternalForm());
+        eventBus.post(new ShowColonyUnitActionsEvent(canvas, event.getScreenX(),
+                event.getScreenY(), expectedWorker, colony));
+        event.consume();
     }
 
     @SuppressWarnings("unused")
@@ -358,8 +304,8 @@ public final class PanelColonyFields implements JavaFxComponent {
         final Optional<ColonyField> field = clickableArea
                 .getDirection(fieldPoint(event.getX(), event.getY()))
                 .map(colony::getColonyFieldInDirection);
-        if (unit.isPresent() && field.isPresent()
-                && field.get().canAccept(unit.get(), GoodsType.GRAIN)) {
+        if (unit.isPresent() && field.isPresent() && field.get()
+                .canAccept(unit.get(), defaultGoods(field.get()))) {
             event.acceptTransferModes(TransferMode.MOVE);
             eventBus.post(new StatusBarMessageEvent(Source.COLONY));
         } else {
@@ -368,7 +314,7 @@ public final class PanelColonyFields implements JavaFxComponent {
             if (unit.isPresent() && field.isPresent()) {
                 event.acceptTransferModes(TransferMode.MOVE);
                 movementDropHint = field.get().isWaitingForMovement(unit.get(),
-                        GoodsType.GRAIN);
+                        defaultGoods(field.get()));
                 eventBus.post(new StatusBarMessageEvent(
                         i18n.get(ColonyMsg.fieldDropRejected) + ". "
                                 + i18n.get(
@@ -390,7 +336,7 @@ public final class PanelColonyFields implements JavaFxComponent {
                     if (unit.isEmpty()) {
                         return;
                     }
-                    if (!field.canAccept(unit.get(), GoodsType.GRAIN)) {
+                    if (!field.canAccept(unit.get(), defaultGoods(field))) {
                         final ColonyMsg reason = dropProblem(field, unit.get());
                         afterDrag(event, () -> showDropMessage(reason));
                         return;
@@ -416,8 +362,13 @@ public final class PanelColonyFields implements JavaFxComponent {
         event.consume();
     }
 
+    private GoodsType defaultGoods(final ColonyField field) {
+        return GoodsType.GOOD_TYPES.stream().filter(field::canProduce)
+                .findFirst().orElse(GoodsType.GRAIN);
+    }
+
     private ColonyMsg dropProblem(final ColonyField field, final Unit unit) {
-        if (field.isWaitingForMovement(unit, GoodsType.GRAIN)) {
+        if (field.isWaitingForMovement(unit, defaultGoods(field))) {
             return ColonyMsg.fieldInsufficientMovement;
         }
         if (!field.isValid()) {
@@ -429,7 +380,8 @@ public final class PanelColonyFields implements JavaFxComponent {
         if (field.isWorkedByAnotherColony()) {
             return ColonyMsg.fieldWorked;
         }
-        return !field.canProduce(GoodsType.GRAIN) ? ColonyMsg.fieldCannotProduce
+        return !field.canProduce(defaultGoods(field))
+                ? ColonyMsg.fieldCannotProduce
                 : ColonyMsg.fieldChanged;
     }
 
@@ -480,7 +432,7 @@ public final class PanelColonyFields implements JavaFxComponent {
     private boolean place(final Unit unit, final ColonyField field,
             final NativeLandDialog.Result land) {
         try {
-            unit.placeToColonyField(field, GoodsType.GRAIN);
+            unit.placeToColonyField(field, defaultGoods(field));
             eventBus.post(new RepaintColonyEvent());
             return true;
         } catch (IllegalArgumentException | IllegalStateException rejected) {
@@ -699,30 +651,9 @@ public final class PanelColonyFields implements JavaFxComponent {
     private void addOutputChoice(final ColonyJobChoice choice,
             final GoodsType current, final ToggleGroup group) {
         final Goods goods = choice.getPotential().orElseThrow();
-        final String name = i18n
-                .get(GoodsTypeName.getNameForGoodsType(goods.getType()));
-        final ImageView icon = new ImageView(
-                imageProvider.getGoodsTypeImage(goods.getType()));
-        icon.setFitWidth(24);
-        icon.setFitHeight(24);
-        final Region space = new Region();
-        HBox.setHgrow(space, Priority.ALWAYS);
-        final Label amount = new Label(Integer.toString(goods.getAmount()));
-        amount.setId("colony-field-yield-" + goods.getType().name());
-        final HBox content = new HBox(8, icon, new Label(name), space, amount);
-        content.setAlignment(Pos.CENTER_LEFT);
-        content.prefWidthProperty().bind(output.widthProperty().subtract(40));
-        final RadioButton row = new RadioButton();
-        row.setGraphic(content);
-        row.setMinWidth(0);
-        row.setMaxWidth(Double.MAX_VALUE);
-        row.setId("colony-field-output-" + goods.getType().name());
-        row.setUserData(goods.getType());
-        row.getStyleClass().add("field-output-choice");
-        row.setToggleGroup(group);
-        row.setSelected(goods.getType() == current);
-        row.setAccessibleText(name + ", "
-                + i18n.get(ColonyMsg.yieldSummary, goods.getAmount()));
+        final RadioButton row = org.akropia.gui.util.ProductionChoices.row(
+                output, choice, current, group, imageProvider, i18n,
+                "colony-field-");
         row.setAccessibleHelp(i18n.get(ColonyMsg.outputHelp));
         // Runs after the scroll pane's own jump to the focused row.
         row.focusedProperty().addListener((observable, wasFocused, focused) -> {

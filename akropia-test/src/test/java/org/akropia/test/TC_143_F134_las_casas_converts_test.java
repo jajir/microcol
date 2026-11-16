@@ -212,10 +212,7 @@ public class TC_143_F134_las_casas_converts_test extends AbstractAkropiaTest {
 
         // The convert works the best lumber field at one more than an ordinary
         // colonist, and manufacturing stays refused before the join.
-        jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
-        jobs.verifyDetails(BEST_LUMBER_EN, true);
-        jobs.confirm();
+        jobs.assignField(WORKER_ID, FIELD_AT, GoodsType.LUMBER);
         jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 8));
         jobs.openFromField(WORKER_ID);
         jobs.select(Kind.INDOOR, GoodsType.TOOLS);

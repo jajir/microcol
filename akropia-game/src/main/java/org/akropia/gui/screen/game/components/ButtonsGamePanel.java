@@ -31,14 +31,12 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javafx.application.Platform;
-import java.util.stream.Collectors;
 import javafx.scene.Node;
 import javafx.scene.AccessibleAction;
 import java.util.function.Consumer;
 import org.akropia.model.Unit;
 import org.akropia.model.ColonyJobChoice;
 import org.akropia.gui.Loc;
-import org.akropia.gui.GoodsTypeName;
 import org.akropia.gui.UnitTypes;
 import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
@@ -54,7 +52,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.Background;
 import java.util.ArrayList;
 import java.util.List;
 import org.akropia.gui.MainStageBuilder;
@@ -114,6 +111,9 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
     private Buttons plowFieldProblem;
 
     private final ContextMenu unitActions = new ContextMenu();
+    private boolean colonyActions;
+    private Runnable beforeUnitCommand = () -> {
+    };
     private final MenuItem unitContextTitle = new MenuItem();
     private final Menu unitChoices = new Menu();
     private final List<Button> unitCommands = new ArrayList<>();
@@ -299,7 +299,12 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
             eventBus.post(new RequestNextTurnEvent());
         });
         buttonMove = makeButton(ButtonIcon.CENTER, Buttons.buttonMove);
-        buttonMove.setOnAction(event -> eventBus.post(new StartMoveEvent()));
+        buttonMove.setOnAction(event -> {
+            if (colonyActions) {
+                eventBus.post(new ShowScreenEvent(Screen.GAME));
+            }
+            eventBus.post(new StartMoveEvent());
+        });
         buttonMove.setId(BUTTON_MOVE_ID);
         buttonPlowField = makeButton(ButtonIcon.PLOW, Buttons.buttonPlowField);
         buttonPlowField
@@ -369,7 +374,10 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         // Act on release so Space cannot also reach the map's skip-turn
         // handler.
         unitActions.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (shortcuts.matches(ShortcutAction.BUILD_COLONY, event)) {
+            if (shortcuts.matches(ShortcutAction.BUILD_COLONY, event)
+                    && buttonBuildColony.isVisible()
+                    && !buttonBuildColony.isDisabled()) {
+                beforeUnitCommand.run();
                 unitActions.hide();
                 eventBus.post(new BuildColonyEvent());
                 event.consume();
@@ -534,7 +542,10 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         button.textProperty().addListener((observable, oldText,
                 newText) -> updateUnitCaption(newText, caption, shortcut));
         updateUnitCaption(button.getText(), caption, shortcut);
-        button.addEventFilter(ActionEvent.ACTION, event -> unitActions.hide());
+        button.addEventFilter(ActionEvent.ACTION, event -> {
+            beforeUnitCommand.run();
+            unitActions.hide();
+        });
         // Stop the menu skin forwarding the button's action back into its menu
         // item.
         button.addEventHandler(ActionEvent.ACTION, event -> event.consume());
@@ -672,6 +683,16 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
             final double screenY, final List<Unit> units, final Unit selected,
             final Consumer<Unit> selectUnit,
             final org.akropia.model.Model model) {
+        showUnitActions(owner, screenX, screenY, units, selected, selectUnit,
+                model, null);
+    }
+
+    public void showUnitActions(final Node owner, final double screenX,
+            final double screenY, final List<Unit> units, final Unit selected,
+            final Consumer<Unit> selectUnit,
+            final org.akropia.model.Model model,
+            final org.akropia.model.Colony workColony) {
+        colonyActions = workColony != null;
         unitContextTitle.setText(
                 currentI18n.get(UnitTypes.getUnitName(selected.getType())));
         unitChoices.setText(currentI18n.get(Buttons.chooseUnit));
@@ -689,16 +710,53 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
         }
         unitActions.getItems()
                 .removeIf(item -> "mapJob".equals(item.getUserData()));
+        final java.util.Map<org.akropia.model.Colony, List<ColonyJobChoice>> jobs = new java.util.LinkedHashMap<>();
         for (final ColonyJobChoice job : selected.getMapJobChoices()) {
-            addMapJob(
-                    currentI18n.get(Loc.mapWork,
-                            currentI18n.get(GoodsTypeName
-                                    .getNameForGoodsType(job.getGoodsType())),
-                            job.getColony().getName()),
-                    "mapJob-" + job.getColony().getId() + "-"
-                            + job.getGoodsType().name(),
-                    job::execute, false);
+            if (workColony == null || job.getColony() == workColony) {
+                jobs.computeIfAbsent(job.getColony(),
+                        ignored -> new java.util.ArrayList<>()).add(job);
+            }
         }
+        jobs.forEach((colony, choices) -> {
+            final Menu work = new Menu(
+                    currentI18n.get(Loc.workForColony, colony.getName()));
+            work.setId("workForColony-" + colony.getId());
+            work.setUserData("mapJob");
+            final org.akropia.model.GoodsType current = selected
+                    .isAtPlaceColonyField()
+                    && selected.getWorkingColony().orElse(null) == colony
+                            ? selected.getPlaceColonyField()
+                                    .getProducedGoodsType()
+                            : null;
+            final javafx.scene.layout.VBox table = org.akropia.gui.util.ProductionChoices
+                    .table(choices, current, toolbarImages, currentI18n,
+                            "mapJob-" + colony.getId() + "-", choice -> {
+                                unitActions.hide();
+                                try {
+                                    choice.execute();
+                                    toolbarEvents.post(
+                                            new org.akropia.gui.screen.colony.RepaintColonyEvent());
+                                    toolbarEvents.post(
+                                            new org.akropia.gui.event.RefreshRightPanelEvent());
+                                } catch (IllegalArgumentException
+                                        | IllegalStateException rejected) {
+                                    toolbarEvents.post(StatusBarMessageEvent
+                                            .outcome(currentI18n
+                                                    .get(Loc.workUnavailable),
+                                                    workColony == null
+                                                            ? Source.GAME
+                                                            : Source.COLONY));
+                                }
+                            });
+            final CustomMenuItem production = new CustomMenuItem(table, false);
+            production.getStyleClass().add("production-menu-item");
+            work.getItems().add(production);
+            work.setOnShown(event -> javafx.application.Platform.runLater(
+                    () -> org.akropia.gui.util.ProductionChoices.focus(table)));
+            unitActions.getItems().add(3
+                    + new java.util.ArrayList<>(jobs.keySet()).indexOf(colony),
+                    work);
+        });
         if (selected.getWorkingColony().isPresent() || selected.isFishing()) {
             addMapJob(currentI18n.get(Loc.cancelWork), "cancelColonyWork",
                     selected::cancelColonyWork,
@@ -718,10 +776,35 @@ public class ButtonsGamePanel extends AbstractButtonsPanel
                     () -> model.cancelTradeRouteAssignment(selected),
                     model.getTradeRouteCancelProblem(selected).isPresent());
         }
+        if (workColony != null) {
+            toolbarEvents.post(
+                    new org.akropia.gui.screen.colony.ConfigureColonyWorkMenuEvent(
+                            selected, unitActions, jobs.isEmpty()));
+
+        }
         unitActions.show(owner, screenX, screenY);
         unitActions.getScene().getStylesheets().setAll(
                 MainStageBuilder.STYLE_SHEET_AKROPIA,
                 MainStageBuilder.STYLE_SHEET_RIGHT_PANEL);
+    }
+
+    void beforeUnitCommand(final Runnable prepare) {
+        beforeUnitCommand = prepare;
+    }
+
+    void appendUnitActions(final java.util.List<MenuItem> items) {
+        for (final MenuItem item : items) {
+            item.setUserData("mapJob");
+            unitActions.getItems().add(item);
+        }
+    }
+
+    void onUnitActionsClosed(final Runnable closed) {
+        unitActions.setOnHidden(event -> Platform.runLater(() -> {
+            if (!unitActions.isShowing()) {
+                closed.run();
+            }
+        }));
     }
 
     public void hideUnitActions() {

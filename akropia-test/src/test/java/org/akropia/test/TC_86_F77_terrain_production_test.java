@@ -5,7 +5,6 @@ import java.io.File;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.akropia.model.ColonyJobChoice.Kind;
 import org.akropia.model.Goods;
 import org.akropia.model.GoodsType;
 import org.akropia.model.Location;
@@ -65,20 +64,14 @@ public class TC_86_F77_terrain_production_test extends AbstractAkropiaTest {
         ColonyScreen colony = gamePage.openColonyAt(COLONY_LOCATION, "Delft");
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
-        jobs.verifyDetails("Field coordinates: 23, 12", true);
-        // Baseline 6 minus the Tory penalty of -1 that applies to every job of
-        // Delft at zero liberty is the effective 5 shown to the player.
-        jobs.verifyDetails("Best eligible field: 5 Lumber per turn", true);
+        jobs.verifyNoAutomaticFieldChoice();
         jobs.cancel();
         jobs.verifyClosed();
         production.verifyWarehouseGoods(DELFT_ID,
                 Goods.of(GoodsType.LUMBER, 0));
 
         // Confirm the same job; the field produces the forested lumber.
-        jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.BEST_FIELD, GoodsType.LUMBER);
-        jobs.confirm();
+        jobs.assignField(WORKER_ID, FOREST_LOCATION, GoodsType.LUMBER);
         jobs.verifyClosed();
         production.verifyFieldJob(DELFT_ID, WORKER_ID, FOREST_LOCATION,
                 Goods.of(GoodsType.LUMBER, 5));

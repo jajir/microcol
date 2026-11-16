@@ -171,15 +171,13 @@ public class TC_184_F212_expert_farmer_field_test extends AbstractAkropiaTest {
         purchase.verifySpecialistState(103, UnitType.EXPERT_FARMER, 3400,
                 PlaceLocation.class);
 
-        // Send the expert to the best grain field through the job menu. It
+        // Drag the expert to the explicitly chosen grain field. It
         // takes
         // the bare square and doubles the ordinary grain of the worker beside
         // it.
         colony = game.openColonyAt(COLONY, "New Amsterdam");
         ColonyJobPage jobs = new ColonyJobPage(getContext());
-        jobs.openFromCenter(103);
-        jobs.select(ColonyJobChoice.Kind.BEST_FIELD, GoodsType.GRAIN);
-        jobs.confirm();
+        jobs.assignField(103, FARM_SQUARE, GoodsType.GRAIN);
         jobs.verifyFieldJob(103, FARM_SQUARE, Goods.of(GoodsType.GRAIN, 8));
         jobs.verifyFieldJob(1, ORDINARY_GRAIN_SQUARE,
                 Goods.of(GoodsType.GRAIN, 4));

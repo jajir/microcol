@@ -301,6 +301,8 @@
 	<entry key="minimap_status">Minimapa. Ve starém Řecku se příliš neujala. Čekalo se na vynález monitoru.</entry>
     <entry key="selectedCarrierCargo">Překladiště - %s</entry>
     <entry key="selectCarrierCargo">Překladiště</entry>
+  <entry key="workForColony">Práce pro město %s</entry>
+  <entry key="workInBuildings">Práce v budovách města %s</entry>
   <entry key="mapWork">Vyrábět %s — %s</entry>
   <entry key="cancelWork">Zrušit práci</entry>
   <entry key="returnToColony">Vrátit do kolonie</entry>
