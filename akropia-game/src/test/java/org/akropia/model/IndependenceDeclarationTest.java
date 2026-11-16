@@ -238,19 +238,16 @@ class IndependenceDeclarationTest {
 
     @ParameterizedTest
     @CsvSource({ "1490,0,true", "1600,0,true", "1700,0,true", "1700,399,true",
-            "1700,400,false", "1700,404,false" })
-    void declarationIsOpenOnlyBeforeSpring1800(final int startYear,
-            final int turns, final boolean open) {
+            "1700,400,true", "1700,404,true" })
+    void declarationHasNoCalendarDeadline(final int startYear, final int turns,
+            final boolean open) {
         // 1700 plus 399 turns is winter 1799; 400 turns is spring 1800.
         final GameModelPo data = data(true);
         fullSupport(data);
         date(data, startYear, turns);
         final Player dutch = load(data).getPlayerByName("Dutch");
         assertEquals(open, dutch.isPossibleToDecalareIndependence());
-        assertEquals(
-                open ? Optional.empty()
-                        : Optional.of(IndependenceProblem.TOO_LATE),
-                dutch.getIndependenceProblem());
+        assertEquals(Optional.empty(), dutch.getIndependenceProblem());
     }
 
     @Test
@@ -492,15 +489,12 @@ class IndependenceDeclarationTest {
     }
 
     @Test
-    void aStaleConfirmationIsRevalidatedAfterTheVetoCallbacks() {
-        // Winter 1799 allows the declaration; a callback advances the calendar
-        // to spring 1800 before the commit.
-        final GameModelPo data = musterData(200L);
+    void aCalendarChangeDuringConfirmationDoesNotPreventDeclaration() {
+        final GameModelPo data = data(true);
+        fullSupport(data);
         date(data, 1700, 399);
         final Model model = load(data);
         final Player dutch = model.getPlayerByName("Dutch");
-        assertTrue(dutch.isPossibleToDecalareIndependence());
-        final Events events = new Events(model);
         model.addListener(new ModelListenerAdapter() {
             @Override
             public void onBeforeDeclaringIndependence(
@@ -508,12 +502,11 @@ class IndependenceDeclarationTest {
                 model.getCalendar().endRound();
             }
         });
-        assertThrows(IllegalStateException.class, dutch::declareIndependence);
-        assertFalse(dutch.isDeclaredIndependence());
-        assertEquals(List.of(), roleHolders(model));
-        assertEquals(0, events.declared.get());
-        assertEquals(Optional.of(IndependenceProblem.TOO_LATE),
-                dutch.getIndependenceProblem());
+        dutch.declareIndependence();
+        assertTrue(dutch.isDeclaredIndependence());
+        assertEquals(Optional.of(1800), dutch.getDeclarationYear());
+        assertTrue(load(data).getPlayerByName("Dutch")
+                .isPossibleToDecalareIndependence());
     }
 
     @Test

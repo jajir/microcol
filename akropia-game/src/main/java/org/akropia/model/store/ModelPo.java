@@ -9,6 +9,35 @@ import org.akropia.model.Location;
 import com.google.common.base.Preconditions;
 
 public class ModelPo {
+    private java.util.List<org.akropia.model.FreePlayGoal> freePlayGoals = new java.util.ArrayList<>(
+            java.util.List.of(org.akropia.model.FreePlayGoal.INDEPENDENCE));
+    private java.util.List<String> establishedNations = new java.util.ArrayList<>();
+    private java.util.List<String> eliminatedNations = new java.util.ArrayList<>();
+
+    public java.util.List<org.akropia.model.FreePlayGoal> getFreePlayGoals() {
+        return freePlayGoals;
+    }
+
+    public void setFreePlayGoals(
+            java.util.List<org.akropia.model.FreePlayGoal> value) {
+        freePlayGoals = value;
+    }
+
+    public java.util.List<String> getEstablishedNations() {
+        return establishedNations;
+    }
+
+    public void setEstablishedNations(java.util.List<String> value) {
+        establishedNations = value;
+    }
+
+    public java.util.List<String> getEliminatedNations() {
+        return eliminatedNations;
+    }
+
+    public void setEliminatedNations(java.util.List<String> value) {
+        eliminatedNations = value;
+    }
 
     private Long combatRandomState;
 

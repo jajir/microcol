@@ -12,6 +12,9 @@ import com.google.common.base.Preconditions;
  */
 public final class GameOverEvaluator {
 
+    public static final String REASON_OBJECTIVE_VICTORY = "OBJECTIVE_VICTORY";
+    public static final String REASON_OPPONENT_VICTORY = "OPPONENT_VICTORY";
+
     public final static String REASON_TIME_IS_UP = "TIME_IS_UP";
 
     /** Free play reached spring 1850 (R-0193); all play ends. */
@@ -101,7 +104,7 @@ public final class GameOverEvaluator {
      */
     public static final Function<Model, GameOverResult> GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES = (
             model) -> {
-        if (model.getCalendar()
+        if (!model.getCalendar().isScoredPlay() && model.getCalendar()
                 .hasReachedYear(Calendar.YEAR_WHEN_LAST_COLONY_ENDS_GAME)) {
             for (final Player player : model.getPlayerStore().getPlayers()) {
                 if (player.isHuman() && model.getColonies(player).isEmpty()) {

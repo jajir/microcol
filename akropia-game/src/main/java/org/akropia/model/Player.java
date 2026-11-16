@@ -38,7 +38,6 @@ import com.google.common.base.Preconditions;
 public abstract class Player {
 
     /** Independence must be declared before spring of this year. */
-    public static final int INDEPENDENCE_DEADLINE_YEAR = 1800;
 
     /** Exact national and local support percentage needed for the revolt. */
     public static final int REQUIRED_SUPPORT_PERCENT = 50;
@@ -1139,8 +1138,8 @@ public abstract class Player {
      * Load the saved declaration year (R-0196). A declared colonial nation must
      * name the year it declared, and no other nation has one; the year is never
      * guessed from the calendar on load. A declaration cannot lie after the
-     * saved current year, nor at or after the independence deadline. The
-     * calendar is read only to judge an actual declared year.
+     * saved current year, nor after the current calendar year. The calendar is
+     * read only to judge an actual declared year.
      *
      * @param saved declaration year of the save, or null
      */
@@ -1153,7 +1152,6 @@ public abstract class Player {
         Preconditions
                 .checkArgument(
                         saved != null && saved >= 1
-                                && saved < INDEPENDENCE_DEADLINE_YEAR
                                 && saved <= model.getCalendar()
                                         .getCurrentYear(),
                         "Declared nation needs a valid declaration year");
@@ -2602,16 +2600,16 @@ public abstract class Player {
      *
      * @return the first failing rule, or empty when declaring is allowed
      */
+    ObjectiveResult freezeObjectives() {
+        return ObjectiveResult.freeze(model);
+    }
+
     public Optional<IndependenceProblem> getIndependenceProblem() {
         if (isKing() || model.getPlayers().stream().noneMatch(p -> p == this)) {
             return Optional.of(IndependenceProblem.UNAVAILABLE);
         }
         if (isDeclaredIndependence()) {
             return Optional.of(IndependenceProblem.ALREADY_DECLARED);
-        }
-        if (model.getCalendar()
-                .getCurrentYear() >= INDEPENDENCE_DEADLINE_YEAR) {
-            return Optional.of(IndependenceProblem.TOO_LATE);
         }
         if (model.getColonies(this).stream().noneMatch(colony -> model
                 .isOwnedCoastalPort(this, colony.getLocation()))) {

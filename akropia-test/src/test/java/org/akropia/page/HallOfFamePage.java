@@ -75,6 +75,18 @@ public final class HallOfFamePage extends AbstractScreen {
     }
 
     /** Close the Hall of Fame window, whichever screen opened it. */
+    public void continueWithoutScoring() {
+        clickOnButtonWithId("hallOfFameContinue");
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyObjectiveResult(org.akropia.model.FreePlayGoal goal) {
+        assertTrue(frozen().getObjectives().getAchieved().contains(goal));
+        assertFalse(
+                getLabeledById("hallOfFameResultGoals").getText().isBlank());
+        assertTrue(isCssIdVisible("hallOfFameContinue"));
+    }
+
     public void closeResultDialog() {
         clickOnButtonWithId("hallOfFameClose");
         WaitForAsyncUtils.waitForFxEvents();

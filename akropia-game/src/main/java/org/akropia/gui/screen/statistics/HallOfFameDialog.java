@@ -24,9 +24,21 @@ import javafx.scene.layout.VBox;
  */
 public final class HallOfFameDialog extends AbstractMessageWindow {
 
+    private boolean continueRequested;
+
+    public boolean isContinueRequested() {
+        return continueRequested;
+    }
+
     public HallOfFameDialog(final ViewUtil viewUtil, final I18n i18n,
             final HallOfFameDao dao, final LocalizationHelper localization,
             final Optional<HallOfFameEntry> result) {
+        this(viewUtil, i18n, dao, localization, result, false);
+    }
+
+    public HallOfFameDialog(final ViewUtil viewUtil, final I18n i18n,
+            final HallOfFameDao dao, final LocalizationHelper localization,
+            final Optional<HallOfFameEntry> result, final boolean canContinue) {
         super(viewUtil, i18n);
         setTitle(i18n.get(result.isPresent() ? HallOfFameText.finishedTitle
                 : HallOfFameText.title));
@@ -39,7 +51,23 @@ public final class HallOfFameDialog extends AbstractMessageWindow {
         close.setDefaultButton(true);
         close.setCancelButton(true);
         close.setOnAction(event -> close());
-        final VBox root = new VBox(16, panel, new ModalActions(close));
+        final Button continuation = ActionButtons.button(ButtonIcon.PLAY,
+                i18n.get(org.akropia.gui.FreePlayText.continueAction));
+        continuation.setId("hallOfFameContinue");
+        continuation.setOnAction(event -> {
+            continueRequested = true;
+            close();
+        });
+        final VBox root = new VBox(16, panel);
+        if (canContinue) {
+            javafx.scene.control.Label note = new javafx.scene.control.Label(
+                    i18n.get(org.akropia.gui.FreePlayText.continueText));
+            note.setWrapText(true);
+            root.getChildren().add(note);
+        }
+        root.getChildren()
+                .add(canContinue ? new ModalActions(continuation, close)
+                        : new ModalActions(close));
         root.setId("hallOfFameDialog");
         root.setPadding(new Insets(20));
         root.setPrefWidth(520);

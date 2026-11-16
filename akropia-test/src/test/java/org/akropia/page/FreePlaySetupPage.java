@@ -49,13 +49,16 @@ public final class FreePlaySetupPage extends AbstractScreen {
     }
 
     public void worldStep() {
-        if (getButtonById("freePlayStart").isVisible()) {
+        for (int step = 0; step < 2 && !getNodeFinder().lookup("#freePlayMap")
+                .queryAs(ChoiceBox.class).getParent().getParent()
+                .isVisible(); step++) {
             clickOnButtonWithId("freePlayBack");
         }
     }
 
     public void nextStep() {
-        if (getButtonById("freePlayNext").isVisible()) {
+        if (getNodeFinder().lookup("#freePlayMap").queryAs(ChoiceBox.class)
+                .getParent().getParent().isVisible()) {
             clickOnButtonWithId("freePlayNext");
         }
     }
@@ -92,8 +95,8 @@ public final class FreePlaySetupPage extends AbstractScreen {
         assertTrue(bounds.getMinY() >= 0
                 && bounds.getMaxY() <= title.getScene().getHeight());
 
-        assertEquals(playerStep, getButtonById("freePlayStart").isVisible());
-        assertEquals(!playerStep, getButtonById("freePlayNext").isVisible());
+        assertFalse(getButtonById("freePlayStart").isVisible());
+        assertTrue(getButtonById("freePlayNext").isVisible());
         assertEquals(playerStep, getNodeFinder().lookup("#freePlayPlayerName")
                 .queryAs(TextField.class).getParent().getParent().isVisible());
     }
@@ -340,8 +343,77 @@ public final class FreePlaySetupPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public GamePage start() {
+    public void objectivesStep() {
         nextStep();
+        if (getButtonById("freePlayNext").isVisible())
+            clickOnButtonWithId("freePlayNext");
+    }
+
+    public void selectObjective(org.akropia.model.FreePlayGoal goal,
+            boolean selected) {
+        objectivesStep();
+        String suffix = goal == org.akropia.model.FreePlayGoal.INDEPENDENCE
+                ? "Independence"
+                : goal == org.akropia.model.FreePlayGoal.CONGRESS ? "Congress"
+                        : "Domination";
+        javafx.scene.control.CheckBox box = getNodeFinder()
+                .lookup("#freePlayGoal" + suffix)
+                .queryAs(javafx.scene.control.CheckBox.class);
+        if (box.isSelected() != selected)
+            getRobot().clickOn(box);
+    }
+
+    public void verifyObjectivesStep(boolean independenceSelected,
+            boolean congressSelected, boolean dominationSelected) {
+        assertTrue(getButtonById("freePlayStart").isVisible());
+        assertEquals(independenceSelected,
+                getNodeFinder().lookup("#freePlayGoalIndependence")
+                        .queryAs(javafx.scene.control.CheckBox.class)
+                        .isSelected());
+        assertEquals(congressSelected,
+                getNodeFinder().lookup("#freePlayGoalCongress")
+                        .queryAs(javafx.scene.control.CheckBox.class)
+                        .isSelected());
+        assertEquals(dominationSelected,
+                getNodeFinder().lookup("#freePlayGoalDomination")
+                        .queryAs(javafx.scene.control.CheckBox.class)
+                        .isSelected());
+        assertFalse(getLabeledById("freePlayGoalNote").getText().isBlank());
+    }
+
+    public void verifyDefaultFormStyle() {
+        TextField input = getNodeFinder().lookup("#freePlayPlayerName")
+                .queryAs(TextField.class);
+        ChoiceBox<?> choice = getNodeFinder().lookup("#freePlayNation")
+                .queryAs(ChoiceBox.class);
+        assertFalse(input.getBorder().getImages().isEmpty());
+        assertFalse(choice.getBorder().getImages().isEmpty());
+        assertEquals(javafx.scene.paint.Color.web("#FFF9EC"),
+                input.getBackground().getFills().get(0).getFill());
+    }
+
+    public void closeObjectives() {
+        getRobot().push(KeyCode.ESCAPE);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void openObjectives() {
+        clickOnButtonWithId("goals");
+    }
+
+    public void verifyEnabledObjectives(
+            java.util.List<org.akropia.model.FreePlayGoal> expected) {
+        assertEquals(expected, getModel().getFreePlayObjectives().getEnabled());
+        assertFalse(
+                getLabeledById("freePlayObjectiveRule").getText().isBlank());
+        for (org.akropia.model.FreePlayGoal goal : expected) {
+            assertFalse(getLabeledById("objectiveProgress" + goal.name())
+                    .getText().isBlank());
+        }
+    }
+
+    public GamePage start() {
+        objectivesStep();
         clickOnButtonWithId("freePlayStart");
         awaitStartedWorld();
         return GamePage.of(getContext());
@@ -350,6 +422,8 @@ public final class FreePlaySetupPage extends AbstractScreen {
     public GamePage startWithEnter() {
         nextStep();
         getRobot().clickOn("#freePlayPlayerName").push(KeyCode.ENTER);
+        WaitForAsyncUtils.waitForFxEvents();
+        getRobot().push(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
         awaitStartedWorld();
         return GamePage.of(getContext());

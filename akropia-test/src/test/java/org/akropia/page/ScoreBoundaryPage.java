@@ -203,6 +203,13 @@ public final class ScoreBoundaryPage extends AbstractScreen {
 
     // --- explicit observations --------------------------------------------
 
+    public void verifyUntimedPlay() {
+        assertTrue(getModel().isGameRunning());
+        assertFalse(getModel().isAwaitingScoreChoice());
+        assertTrue(getModel().getGameOverResult().isEmpty());
+        assertTrue(getModel().getFrozenResult().isEmpty());
+    }
+
     public void verifyNoFrozenResult() {
         assertTrue(getModel().getFrozenResult().isEmpty());
     }

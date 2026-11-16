@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="INDEPENDENCE">Independence</entry>
+    <entry key="CONGRESS">Complete Congress</entry>
+    <entry key="DOMINATION">Domination</entry>
+    <entry key="rule">Complete any enabled objective to win. Opponents share these objectives. No time limit.</entry>
+    <entry key="sandbox">Sandbox — no objective victory or time limit. Losing your last colony after first establishing one eliminates you.</entry>
+    <entry key="support">Support for independence: %s / 50%%. Establish a coastal colony, develop your economy and build support. Then declare independence and defeat the invasion.</entry>
+    <entry key="invasion">Independence declared. Occupied colonies: %s. Remaining royal ground units: %s. Recover every surviving colony of your nation and reduce the total royal ground force to at most 2 units. Keep an accessible coastal port; occupation of all coastal colonies or 90%% of residents means defeat.</entry>
+    <entry key="congressProgress">Congress members: %s / 25. Produce owls and select new members.</entry>
+    <entry key="opponents">Remaining opponents: %s / %s. A rival is eliminated upon losing its last colony after first establishing one.</entry>
+    <entry key="achieved">Completed</entry>
+    <entry key="result">Completed objectives: %s · Winning nation: %s · Turn: %s</entry>
+    <entry key="selected">Enabled objectives: %s</entry>
+    <entry key="none">None</entry>
+    <entry key="noWinner">None</entry>
+    <entry key="continueTitle">Continue building?</entry>
+    <entry key="continueText">Your result and score are frozen. Further play will not change them.</entry>
+    <entry key="continueAction">Continue without scoring</entry>
+</properties>

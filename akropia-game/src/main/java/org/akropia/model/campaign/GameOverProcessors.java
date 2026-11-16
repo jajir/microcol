@@ -11,6 +11,21 @@ import org.slf4j.LoggerFactory;
  */
 final class GameOverProcessors {
 
+    public static final Function<GameOverProcessingContext, String> OBJECTIVE_PROCESSOR = context -> {
+        String reason = context.getEvent().getGameOverResult()
+                .getGameOverReason();
+        if (GameOverEvaluator.REASON_OBJECTIVE_VICTORY.equals(reason)) {
+            context.fireEvent(EventFinishMission
+                    .victory(Missions.gameOver_objectiveVictory));
+            return "ok";
+        }
+        if (GameOverEvaluator.REASON_OPPONENT_VICTORY.equals(reason)) {
+            context.fireEvent(EventFinishMission
+                    .ended(Missions.gameOver_opponentVictory));
+            return "ok";
+        }
+        return null;
+    };
     private final static Logger LOGGER = LoggerFactory
             .getLogger(GameOverProcessors.class);
 

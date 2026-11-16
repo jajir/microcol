@@ -24,9 +24,9 @@ public class MissionsTest {
                 czech ? "Ztratil jsi všechny kolonie."
                         : "You lost all colonies.",
                 i18n.get(Missions.gameOver_allColoniesAreLost));
-        assertEquals(czech
-                ? "Nepodařilo se ti dosáhnout svobody před rokem 1800. V cestě za svobodou jsi selhal.."
-                : "You didn't reach freedom before year 1800. You failed to reach freedom.",
+        assertEquals(
+                czech ? "Čas vyhrazený pro tuto misi vypršel."
+                        : "The time allowed for this mission has expired.",
                 i18n.get(Missions.gameOver_timeIsUp));
         assertEquals(czech
                 ? "Vyhlásil jsi samostatnou polis. Připrav se na útok vojska mateřského města."

@@ -57,194 +57,60 @@ public class TC_162_F193_score_boundary_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
-    void TC_01_spring_1800_freezes_the_result_and_the_player_postpones_reopens_and_continues()
-            throws Exception {
-        // The prepared game stands in winter 1799, before any frozen result.
+    void TC_01_spring_1800_keeps_scored_play_running() throws Exception {
+        // The player crosses the former scoring boundary without a modal
+        // interruption.
         ScoreBoundaryFixture.prepareBeforeBoundary(getContext(), testFileName,
-                "score-boundary-f193.akropia");
+                "untimed-1800.akropia");
         GamePage game = WelcomePage.of(getContext()).loadGame();
-        final ScoreBoundaryPage boundary = new ScoreBoundaryPage(getContext());
+        ScoreBoundaryPage boundary = new ScoreBoundaryPage(getContext());
         boundary.verifyNoFrozenResult();
-        boundary.verifyTurn(ScoreBoundaryFixture.WINTER_1799);
-
-        // The player ends the turn. Spring 1800 freezes the result and asks
-        // for the choice, showing the frozen result and the unscored limit.
-        boundary.endTurnToBoundary();
+        game.nextTurnAndCloseDialogs();
         boundary.verifyTurn(ScoreBoundaryFixture.WINTER_1799 + 1);
-        boundary.verifyDialogShown(true);
-        boundary.verifyDialogShowsFrozenTotal();
-        boundary.verifyDialogComponents();
-        boundary.verifyDialogOffersChoices();
-        boundary.verifyAwaitingChoice();
-        boundary.rememberFrozenResult();
+        boundary.verifyUntimedPlay();
+    }
 
-        // The player decides later. The game stays paused: no next turn, but
-        // the statistics are still reachable.
-        boundary.decideLater();
-        boundary.verifyDialogShown(false);
-        boundary.verifyAwaitingChoice();
-        boundary.verifyNextTurnBlocked();
-        boundary.verifyStatisticsReachable();
-
-        // The statistics show the frozen result, labelled as such, and offer
-        // the pending choice again.
-        boundary.openStatistics();
-        boundary.verifyFrozenDisplay(AWAITING_TEXT);
-        boundary.verifyDecideActionOffered(true);
-        boundary.decideFromStatistics();
-        boundary.verifyDialogShown(true);
-        boundary.verifyDialogShowsFrozenTotal();
-        boundary.verifyRememberedResultKept();
-
-        // The player continues without scoring. The new round reaches the
-        // player's turn, the result is unchanged and the choice is gone.
-        final Optional<ScreenTurnReport> firstReport = boundary
-                .continueUnscored();
-        boundary.verifyDialogShown(false);
-        boundary.verifyContinuedUnscored();
-        boundary.verifyRememberedResultKept();
-        game = boundary.returnToMap(firstReport);
-
-        // The statistics now show the continued frozen result and no choice.
-        boundary.openStatistics();
-        boundary.verifyFrozenDisplay(CONTINUED_TEXT);
-        boundary.verifyDecideActionOffered(false);
-        game = boundary.closeStatistics();
-
-        // An unscored round passes without changing the frozen result.
-        final Optional<ScreenTurnReport> report = game.nextTurn();
-        boundary.closeReport(report);
-        boundary.verifyTurn(ScoreBoundaryFixture.WINTER_1799 + 2);
-        boundary.verifyContinuedUnscored();
-        boundary.verifyRememberedResultKept();
-
-        // Save and Continue keep the same result and ask nothing again.
+    @Test
+    @Tag("local")
+    void TC_02_save_and_continue_past_1800_preserve_active_scored_play()
+            throws Exception {
+        // Continuing a saved game after 1800 must not create a frozen result.
+        ScoreBoundaryFixture.prepareUntimed(getContext(), testFileName,
+                "untimed-reload.akropia", 920);
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        ScoreBoundaryPage boundary = new ScoreBoundaryPage(getContext());
+        boundary.verifyUntimedPlay();
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
-        boundary.verifyDialogShown(false);
-        boundary.verifyContinuedUnscored();
-        boundary.verifyRememberedResultKept();
+        boundary.verifyUntimedPlay();
+        boundary.verifyTurn(920);
     }
 
     @Test
     @Tag("local")
-    void TC_02_a_saved_pending_choice_is_asked_again_with_the_same_result()
-            throws Exception {
-        ScoreBoundaryFixture.prepareBeforeBoundary(getContext(), testFileName,
-                "score-boundary-f193-saved.akropia");
-        final GamePage game = WelcomePage.of(getContext()).loadGame();
-        final ScoreBoundaryPage boundary = new ScoreBoundaryPage(getContext());
-
-        // The turn ends, the choice opens and the player decides later.
-        boundary.endTurnToBoundary();
-        boundary.verifyAwaitingChoice();
-        boundary.rememberFrozenResult();
-        boundary.decideLater();
-        boundary.verifyDialogShown(false);
-
-        // Save: leaving to the menu stores the paused position, and Continue
-        // opens it again with the same pending choice.
-        game.exitToMenu();
-        new FreePlayAuditPage(getContext()).verifyContinueButtonEnabled(true);
-        new FreePlayAuditPage(getContext()).continueGame();
-        boundary.waitForDialog();
-        boundary.verifyDialogShown(true);
-        boundary.verifyAwaitingChoice();
-        boundary.verifyDialogShowsFrozenTotal();
-        boundary.verifyRememberedResultKept();
-
-        // Continuing now keeps the same identity and components.
-        final Optional<ScreenTurnReport> report = boundary.continueUnscored();
-        boundary.verifyDialogShown(false);
-        boundary.verifyContinuedUnscored();
-        boundary.verifyRememberedResultKept();
-        boundary.closeReport(report);
+    void TC_03_spring_1850_does_not_end_free_play() throws Exception {
+        // The player crosses the former final deadline and can keep playing.
+        ScoreBoundaryFixture.prepareUntimed(getContext(), testFileName,
+                "untimed-1850.akropia", 1109);
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        game.nextTurnAndCloseDialogs();
+        ScoreBoundaryPage boundary = new ScoreBoundaryPage(getContext());
+        boundary.verifyTurn(1110);
+        boundary.verifyUntimedPlay();
     }
 
     @Test
     @Tag("local")
-    void TC_03_spring_1850_ends_all_play_and_keeps_the_earlier_result()
+    void TC_04_spring_1600_does_not_eliminate_a_nation_before_its_first_colony()
             throws Exception {
-        // The prepared game already continued without scoring and stands in
-        // winter 1849; the choice is not asked again.
-        ScoreBoundaryFixture.prepareBeforeEnd(getContext(), testFileName,
-                "score-boundary-f193-end.akropia");
-        WelcomePage.of(getContext()).loadGame();
-        final ScoreBoundaryPage boundary = new ScoreBoundaryPage(getContext());
-        boundary.verifyTurn(ScoreBoundaryFixture.WINTER_1849);
-        boundary.verifyDialogShown(false);
-        boundary.verifyContinuedUnscored();
-        boundary.rememberFrozenResult();
-
-        // The player ends the turn. Spring 1850 ends all play with a message,
-        // and the earlier frozen result stays as it was.
-        boundary.endTurnToFreePlayEnd(END_TEXT);
-        boundary.verifyEndMessage(END_TEXT);
-        boundary.verifyFreePlayEnded();
-        boundary.verifyRememberedResultKept();
-
-        // Acknowledging the message leaves the game for the campaign screen,
-        // so play cannot continue.
-        boundary.closeEndMessage();
-        // The finished result follows the end message with its breakdown; it is
-        // closed before the campaign screen.
-        final HallOfFamePage result = new HallOfFamePage(getContext());
-        result.awaitResultDialog();
-        result.verifyResultDialogShown();
-        result.verifyCurrentResultShown();
-        result.closeResultDialog();
-        new CampaignScreenPage(getContext()).verifyCampaignScreen();
-    }
-
-    @Test
-    @Tag("local")
-    void TC_04_losing_every_colony_at_spring_1600_ends_play_once_and_keeps_one_hall_entry()
-            throws Exception {
-        // The shipped free-play map has no Dutch colony, and the prepared game
-        // has the Dutch on turn in winter 1599. The round that ends it leaves
-        // the human with none when spring 1600 comes. No ranking is saved yet.
-        HallOfFameFixture.removeRanking();
+        // An arriving expedition is not defeated just because the calendar
+        // changed.
         ScoreBoundaryFixture.prepareNoColonyBeforeBoundary(getContext(),
-                "score-boundary-f193-no-colony.akropia");
-        WelcomePage.of(getContext()).loadGame();
-        final ScoreBoundaryPage boundary = new ScoreBoundaryPage(getContext());
-        boundary.verifyNoFrozenResult();
-        boundary.verifyTurn(ScoreBoundaryFixture.WINTER_1599);
-        boundary.verifyHumanHasNoColony();
-
-        // Ending the turn enters spring 1600: play ends with its message, and
-        // the one final result is kept.
-        boundary.endTurnToFreePlayEnd(NO_COLONY_TEXT);
-        boundary.verifyEndMessage(NO_COLONY_TEXT);
-        boundary.verifyZeroColonyEnd();
+                "untimed-1600.akropia");
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        game.nextTurnAndCloseDialogs();
+        ScoreBoundaryPage boundary = new ScoreBoundaryPage(getContext());
         boundary.verifyTurn(ScoreBoundaryFixture.SPRING_1600);
-
-        // The result follows the message, and then the campaign screen opens.
-        boundary.closeEndMessage();
-        final HallOfFamePage result = new HallOfFamePage(getContext());
-        result.awaitResultDialog();
-        result.verifyResultDialogShown();
-        result.verifyCurrentResultShown();
-        // It is the first place of an empty ranking, and the file holds exactly
-        // that one entry.
-        result.verifyRankedAt(1);
-        result.verifyStoredEntries(1);
-        result.closeResultDialog();
-        final CampaignScreenPage campaign = new CampaignScreenPage(
-                getContext());
-        campaign.verifyCampaignScreen();
-
-        // The main menu shows that one entry, and closing and reopening the
-        // ranking writes nothing new.
-        campaign.back();
-        final HallOfFamePage hall = new HallOfFamePage(getContext());
-        hall.openFromMenu();
-        hall.verifyRankingRows(1);
-        hall.verifyStoredEntries(1);
-        hall.closeMenuDialog();
-        hall.openFromMenu();
-        hall.verifyRankingRows(1);
-        hall.verifyStoredEntries(1);
-        hall.closeMenuDialog();
+        boundary.verifyUntimedPlay();
     }
 }

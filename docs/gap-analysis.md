@@ -934,8 +934,8 @@ rules; implementation and acceptance are tracked by that requirement.
    Example at k=1: 120 owls recruits the first founder for 100, retains 20
    toward the next 200. Recruit John Paul Jones first in the implementation
    acceptance journey: one free frigate proves a real, exactly-once effect.
-5. Independence requires exact national support ≥50% and a declaration before
-   spring 1800, with at least one owned coastal colony. On declaration, a colony
+5. Independence requires exact national support ≥50% and at least one owned
+   coastal colony, without a calendar deadline (amended 2026-11-16). On declaration, a colony
    with support s≥50% upgrades `floor(V × s/100)` eligible veteran soldiers/
    dragoons on its tile to Continental equivalents, stable unit-ID order; below
    50% upgrades none. V includes those garrison roles, not unarmed workers or
@@ -1046,11 +1046,14 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
 
 ### End dates and scoring
 
-1. At entry to spring 1800, a nation without a declared revolution records its
-   result once and may continue without scoring until spring 1850. A revolution
-   already underway continues scoring until victory/loss or spring 1850; an
-   unresolved revolution loses then. Spring 1850 ends all play. This reconciles
-   the two manual passages by making post-1800 continuation bounded, not endless.
+1. **Amended 2026-11-16:** free play has no calendar deadlines. The former
+   1600/1800/1850 restrictions and pre-1800 declaration requirement are removed.
+   Players select independence, a complete Congress, domination, or any combination;
+   completing any enabled objective wins. Opponents share those objectives.
+   Losing the last colony eliminates an established nation at any date, while an
+   expedition which never owned a colony is not eliminated. See the authoritative
+   [free-play objectives](free-play-maps.md#cile-a-konec-volne-hry).
+
 2. Independence order means **successful independence**, ordered by completion
    event sequence; stable national turn order breaks any same-round tie. Bonuses
    are +100%, +50%, +25%, +0% for first through fourth. Declaration alone awards
@@ -1068,21 +1071,12 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
    one entry per game-result identity. Show the result breakdown even if it
    misses the list. Retire records a result, Exit does not; canceled choices do
    neither. Later unscored play cannot replace the stored result.
-5. Configured implementation note (2026-10-23, [R-0193](requirements/done/R-0193.md)
-   in development; not verified by an accepted run). The rules run only for a
-   game saved with the explicit `scoredPlay` calendar field, which also requires
-   the end year 1850; the bundled free-play maps, the reference expedition,
-   generated worlds and the free-play test scenarios carry it. A mission keeps
-   its own deadline and no frozen result, even if that deadline is 1850, and a
-   missing field means an unscored game. Spring 1800 freezes the undeclared
-   human nation's result once, shows it and pauses play until an explicit
-   continuation; closing the window postpones the choice and the statistics
-   reopen it. Any ordinary end of scored play, such as losing the last colony
-   from spring 1600 on, freezes a final result as its end. A declared rebellion
-   freezes at its victory, loss or unresolved spring-1850 end. A result frozen
-   at spring 1800 is kept by a later unscored loss or by the 1850 end. Each
-   frozen result keeps one identity and its components; only its status changes
-   on continuation. Loading rejects a missing or impossible result history.
+5. The `scoredPlay` calendar flag distinguishes free play from authored missions.
+   Missions retain their own deadlines. Free-play results freeze on victory,
+   defeat or confirmed retirement; winning players may continue without scoring.
+   Frozen results include enabled/completed objectives, the winner and completion
+   turn. The 2026-10-23 deadline implementation is historical; its original
+   evidence remains in [R-0193](requirements/done/R-0193.md).
 
 ### Recovery and presentation
 

@@ -45,7 +45,7 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 vína.</entry>
 
 	<entry key="independenceWasDeclared_caption">Vyhlásil jsi samostatnou polis. Připrav se na útok vojska mateřského města.</entry>
 	<entry key="gameOver_allColoniesAreLost">Ztratil jsi všechny kolonie.</entry>
-	<entry key="gameOver_timeIsUp">Nepodařilo se ti dosáhnout svobody před rokem 1800. V cestě za svobodou jsi selhal..</entry>
+	<entry key="gameOver_timeIsUp">Čas vyhrazený pro tuto misi vypršel.</entry>
 	<entry key="gameOver_rebellionNoColonies">Vzpoura selhala: nepřežila žádná kolonie povstalců.</entry>
 	<entry key="gameOver_rebellionAllColoniesCrown">Vzpoura selhala: všechny zbývající kolonie povstalců jsou zpět pod správou mateřského města.</entry>
 	<entry key="gameOver_rebellionCoastalCrown">Vzpoura selhala: nezůstala žádná svobodná pobřežní kolonie.</entry>
@@ -54,4 +54,6 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 vína.</entry>
 	<entry key="gameOver_rebellionUnresolved">Vzpoura do jara 1850 nebyla rozhodnuta, a proto je prohraná.</entry>
 	<entry key="gameOver_freePlayEnded">Jaro 1850 přišlo a volná hra skončila. Tvůj zmrazený výsledek platí jako konečný.</entry>
 	<entry key="gameOver_retired">Odešel jsi ze hry a hra skončila. Zobrazený výsledek je tvůj konečný výsledek.</entry>
+<entry key="gameOver_objectiveVictory">Vítězství! Splnili jste cíl partie. Výsledek a skóre jsou zapsány v Síni slávy.</entry>
+<entry key="gameOver_opponentVictory">Porážka. Jeden ze soupeřů splnil cíl partie dříve než vy.</entry>
 </properties>

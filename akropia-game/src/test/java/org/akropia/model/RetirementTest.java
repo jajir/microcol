@@ -62,9 +62,13 @@ class RetirementTest {
     private static Model continued(final int turns) {
         final Model model = load(COLONIAL_HUMAN, SPRING_1800 - 1);
         model.startGame();
-        finishRound(model);
-        model.continueWithoutScoring(dutch(model));
+        toHumanTurn(model);
+        model.retire(model.getRetirementQuote().orElseThrow());
         final ModelPo saved = model.save();
+        saved.getGameManager().getGameResult()
+                .setStatus(GameResult.Status.CONTINUED_UNSCORED.name());
+        saved.getGameManager().setGameFinished(false);
+        saved.getGameManager().setGameOverReason(null);
         saved.getCalendar().setNumberOfPlayedTurns(turns);
         return make(saved);
     }
@@ -275,19 +279,16 @@ class RetirementTest {
     // --- refusals ----------------------------------------------------------
 
     @Test
-    void pendingSpring1800ChoiceOffersNoRetirementAndRefusesOne() {
+    void retirementRemainsAvailableAfterSpring1800() {
         final Model model = load(COLONIAL_HUMAN, SPRING_1800 - 1);
         model.startGame();
         finishRound(model);
-        assertTrue(model.isAwaitingScoreChoice());
-        assertTrue(model.getRetirementQuote().isEmpty());
-        final RetirementQuote preview = RetirementQuote.live(dutch(model));
-        final String before = snapshot(model);
-        assertThrows(IllegalStateException.class, () -> model.retire(preview));
-        assertEquals(before, snapshot(model));
-        assertTrue(model.isAwaitingScoreChoice());
-        assertEquals(GameResult.Status.AWAITING_CONTINUATION,
-                model.getFrozenResult().orElseThrow().getStatus());
+        toHumanTurn(model);
+        assertFalse(model.isAwaitingScoreChoice());
+        assertTrue(model.getFrozenResult().isEmpty());
+        assertTrue(model.getRetirementQuote().isPresent());
+        model.retire(model.getRetirementQuote().orElseThrow());
+        assertTrue(model.isGameFinished());
     }
 
     @Test

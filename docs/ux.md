@@ -1858,3 +1858,28 @@ studii. Ověření sleduje [funkční evidence](functional-tests.md#page-separat
    Samotné dopravce nelze přetahovat. Přetahování lidí a zboží z jejich
    nákladových boxů zůstává dostupné podle dosavadních pravidel.
 4. Stav automatického ověření vede [funkční evidence](functional-tests.md#input-regression-repair-2026-11-15).
+
+
+## Výchozí formulářové prvky a cíle freegame — 2026-11-16
+
+1. `FormControls.css` je součástí společného stylu hlavní scény i dialogů.
+   Běžné `TextField`, `TextArea`, `ChoiceBox`, `ComboBox`, spinner, checkbox a
+   slider dostanou herní vzhled automaticky; jednotlivá obrazovka jej nezapíná
+   vlastní opt-in třídou. Zůstává nativní editace, výběr, klávesnice a přístupnost.
+2. Vstupy a nabídky používají plochou papírovou výplň a existující skutečný
+   vektorový zdroj `trade-route-name-frame.svg` s černým obrysem. Zaměření
+   zvýrazňuje černý přerušovaný rámeček, nikoli výchozí modrá záře JavaFX.
+   Otevřený seznam, výběr, neaktivní stav a editační část mají společné provedení.
+3. Checkboxy a posuvníky sdílejí existující kreslené skiny i mimo Nastavení.
+   Platí pravidlo černého pera přibližně 2 logické pixely, nepravidelné geometrie
+   a jednobarevných ploch bez gradientů a stínování.
+4. Průvodce **Svět → Hráč → Cíle** zachovává rozepsané hodnoty při návratu.
+   Jméno a parametry světa se ověří před startem; cíle mají checkboxy, protože
+   lze zapnout více alternativ. Stránka vysvětluje shodné podmínky soupeřů,
+   vítězství splněním libovolného cíle a absenci časového limitu.
+5. Výchozí je Nezávislost. Prázdný výběr je výslovně označené volné budování.
+   Obrazovka Cíle ukazuje postup před vyhlášením samostatnosti i během invaze.
+   Výsledkové okno nabízí vítězi pokračování bez změny uloženého skóre.
+6. Nejde o výsledek nové hráčské studie. Implementační přejímku a snímky vede
+   [funkční evidence](functional-tests.md#free-play-objectives-2026-11-16);
+   autoritativní pravidla jsou u [volné hry](free-play-maps.md#cile-a-konec-volne-hry).

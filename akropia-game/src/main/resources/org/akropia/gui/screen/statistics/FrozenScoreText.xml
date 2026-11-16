@@ -10,6 +10,6 @@
   <entry key="statusAwaiting">Waiting for your choice: continue without scoring, or decide later. The game stays paused until you choose.</entry>
   <entry key="statusContinued">You continued without scoring. This frozen result stays your score.</entry>
   <entry key="statusFinal">The game has ended. This frozen result is your final result.</entry>
-  <entry key="liveTitle">Live preview, not frozen: these values change with play until the result is frozen at spring 1800.</entry>
+  <entry key="liveTitle">Live preview, not frozen: these values change until the game ends or you retire.</entry>
   <entry key="decideFrozen">Decide the frozen result choice…</entry>
 </properties>

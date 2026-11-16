@@ -221,11 +221,9 @@ public class ColonyScreen extends AbstractScreen {
                 .map(unit -> unit.getId())
                 .collect(java.util.stream.Collectors.toList());
         for (final int id : workers) {
-            final ColonyJobPage jobs = new ColonyJobPage(getContext());
-            jobs.openFromField(colony.getName(), id);
-            jobs.select(org.akropia.model.ColonyJobChoice.Kind.INDOOR,
-                    GoodsType.OWLS);
-            jobs.confirm();
+            // Moving the last resident outside abandons the colony. Transfer
+            // directly between jobs instead.
+            moveFieldWorkerToBuilding(id, "id_town_hall");
         }
     }
 

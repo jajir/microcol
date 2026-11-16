@@ -415,100 +415,40 @@ class RebellionVictoryTest {
     }
 
     @Test
-    void theFirstCompletionTakesOrderOneAndTheOtherNationTakesOrderTwo() {
+    void theFirstOpponentCompletionEndsTheObjectiveRace() {
         final Model model = twoNationsScene();
         final Player french = model.getPlayerByName(FRANCE);
-        final Player dutch = rebel(model);
-        final List<GameFinishedEvent> events = listen(model);
         keepLivingGround(king(model, FRENCH_KING).getRoyalRoster(), 2);
         keepLivingGround(crown(model).getRoyalRoster(), 3);
-        assertTrue(french.getRebellionVictoryOrder().isEmpty(),
-                "Nothing is judged until an action completes");
-
-        // The French win first with order one. The game goes on: a computer
-        // victory never ends the human's game.
         model.checkRebellionLoss();
         assertEquals(Optional.of(1), french.getRebellionVictoryOrder());
-        assertTrue(dutch.getRebellionVictoryOrder().isEmpty(),
-                "Three living Crown ground units hold the Dutch");
-        assertFalse(model.isGameFinished());
-        assertTrue(events.isEmpty());
-
-        // The Dutch win later and take the next free order; their game ends.
-        keepLivingGround(crown(model).getRoyalRoster(), 2);
-        model.checkRebellionLoss();
-        assertEquals(Optional.of(2), dutch.getRebellionVictoryOrder());
-        assertEquals(Optional.of(1), french.getRebellionVictoryOrder(),
-                "The first order is kept");
-        assertEquals(Optional.of(VICTORY), endReason(model));
-        assertEquals(1, events.size());
-
-        // The scene fixes these facts: the Dutch declared in 1490, the calendar
-        // year of the saved scene, so the early points are the 290 years
-        // before 1780. They own four colonists (three in the galleon, one in
-        // Montreal, two points each) and 2,108 gold (two points), and no
-        // father. The displayed support is the model's own, owned by
-        // BaseScoreTest.
-        assertEquals(Optional.of(1490), dutch.getDeclarationYear());
-        final BaseScore base = dutch.getBaseScore();
-        assertEquals(4, base.getColonists());
-        assertEquals(8, base.getPopulationPoints());
-        assertEquals(2, base.getGoldPoints());
-        assertEquals(0, base.getFathers());
-
-        // Second order: 50 percent bonus at factor 100. The total is the
-        // floor of (clamped base x 150 + 290 x 100) / 100; this restates the
-        // formula's algebra over the model's own support, it is not an
-        // independent oracle for the base.
-        final ResultScore won = dutch.getResultScore();
-        assertEquals(10 + base.getSupportPoints(), won.getClampedBase());
-        assertEquals(50, won.getOrderBonusPercent());
-        assertEquals(290, won.getEarlyPoints());
-        assertEquals(100, won.getDifficultyPercent());
-        assertEquals((won.getClampedBase() * 150 + 290 * 100) / 100,
-                won.getTotal());
+        assertTrue(rebel(model).getRebellionVictoryOrder().isEmpty());
+        assertEquals(Optional.of(GameOverEvaluator.REASON_OPPONENT_VICTORY),
+                endReason(model));
+        assertTrue(model.isGameFinished());
+        assertEquals(List.of(FreePlayGoal.INDEPENDENCE), model.getFrozenResult()
+                .orElseThrow().getObjectives().getAchieved());
+        assertEquals(0, model.getFrozenResult().orElseThrow().getScore()
+                .getOrderBonusPercent());
     }
 
     @Test
     void savedOrdersAreKeptAndNeverAssignedAgainOnContinue() {
         final Model model = bothRebellionsWon(twoNationsScene());
-        final long total = rebel(model).getResultScore().getTotal();
-        final String identity = model.getFrozenResult().orElseThrow()
-                .getIdentity();
-
-        // The saved game names both orders, and the one human end.
-        final ModelPo saved = model.save();
-        assertEquals(Integer.valueOf(1),
-                playerPo(saved, FRANCE).getRebellionVictoryOrder());
-        assertEquals(Integer.valueOf(2),
-                playerPo(saved, DUTCH).getRebellionVictoryOrder());
-        assertTrue(saved.getGameManager().isGameFinished());
-        assertEquals(VICTORY, saved.getGameManager().getGameOverReason());
-
-        final Model restored = load(saved);
+        final GameResult result = model.getFrozenResult().orElseThrow();
+        final Model restored = load(model.save());
         final List<GameFinishedEvent> again = listen(restored);
         assertEquals(Optional.of(1),
                 restored.getPlayerByName(FRANCE).getRebellionVictoryOrder());
-        assertEquals(Optional.of(2),
-                restored.getPlayerByName(DUTCH).getRebellionVictoryOrder());
-        assertEquals(Optional.of(VICTORY), endReason(restored));
-        assertEquals(total,
-                restored.getPlayerByName(DUTCH).getResultScore().getTotal());
-        // The one frozen result is the same final result, of order two.
-        final GameResult frozen = restored.getFrozenResult().orElseThrow();
-        assertEquals(identity, frozen.getIdentity());
-        assertEquals(GameResult.Status.FINAL, frozen.getStatus());
-        assertEquals(Optional.of(2), frozen.getVictoryOrder());
-        assertEquals(total, frozen.getScore().getTotal());
-
-        // A later judgment, or Continue, neither reassigns nor repeats the end.
+        assertTrue(rebel(restored).getRebellionVictoryOrder().isEmpty());
+        assertEquals(result.getIdentity(),
+                restored.getFrozenResult().orElseThrow().getIdentity());
+        assertEquals(result.getScore().getTotal(),
+                restored.getFrozenResult().orElseThrow().getScore().getTotal());
         restored.checkRebellionLoss();
         assertThrows(IllegalStateException.class, restored::startGame);
-        assertTrue(again.isEmpty(), "The victory is not announced again");
-        assertEquals(Optional.of(1),
-                restored.getPlayerByName(FRANCE).getRebellionVictoryOrder());
-        assertEquals(Optional.of(2),
-                restored.getPlayerByName(DUTCH).getRebellionVictoryOrder());
+        assertFalse(restored.canContinueAfterVictory());
+        assertTrue(again.isEmpty());
     }
 
     // ---- undeclared nations and terminal persistence -----------------------

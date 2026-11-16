@@ -169,6 +169,12 @@ public class Model {
         });
     }
 
+    private final FreePlayObjectives freePlayObjectives;
+
+    public FreePlayObjectives getFreePlayObjectives() {
+        return freePlayObjectives;
+    }
+
     Model(final Calendar calendar, final WorldMap map, final ModelPo modelPo,
             final UnitStorage unitStorage,
             final List<Function<Model, GameOverResult>> gameOverEvaluators) {
@@ -378,6 +384,7 @@ public class Model {
                                 || europeanRelations.isRetainedOverlap(first,
                                         second, at)));
 
+        freePlayObjectives = new FreePlayObjectives(this, modelPo);
         gameManager = GameManager.make(this, modelPo, gameOverEvaluators,
                 playerStore);
         // A human rebel that lost or won ended the game with that same reason;
@@ -391,14 +398,22 @@ public class Model {
                                 .equals(rebel.getRebellionLossReason()),
                         "A lost human rebellion needs its saved game over reason");
             }
-            if (rebel.isHuman()
-                    && rebel.getRebellionVictoryOrder().isPresent()) {
-                Preconditions.checkArgument(
-                        gameManager.getGameOverResult()
-                                .map(GameOverResult::getGameOverReason)
-                                .filter(GameOverEvaluator::isRebellionVictory)
-                                .isPresent(),
-                        "A won human rebellion needs its saved victory reason");
+
+        }
+        for (Player nation : playerStore.getPlayers()) {
+            if (nation.isHuman()
+                    && nation.getRebellionVictoryOrder().isPresent()
+                    && (!calendar.isScoredPlay()
+                            || freePlayObjectives.getEnabled()
+                                    .contains(FreePlayGoal.INDEPENDENCE))) {
+                Preconditions.checkArgument(gameManager.getGameOverResult()
+                        .map(GameOverResult::getGameOverReason)
+                        .filter(GameOverEvaluator::isRebellionVictory)
+                        .isPresent()
+                        || gameManager.getFrozenResult().map(result -> result
+                                .getStatus() == GameResult.Status.CONTINUED_UNSCORED)
+                                .orElse(false),
+                        "A won human rebellion needs its saved victory result");
             }
         }
         // Victory orders are the completion order 1 to n, each taken once, so
@@ -4270,21 +4285,13 @@ public class Model {
         if (!gameManager.isOpen()) {
             return;
         }
-        // Spring 1850 ends free play; a rebellion still open then is lost
-        // (R-0193), after its own conditions were judged.
-        final boolean freePlayEnded = calendar.isScoredPlay()
-                && calendar.hasReachedYear(Calendar.YEAR_OF_FREE_PLAY_END);
-        for (final Player rebel : getPlayers()) {
+        for (final Player rebel : freePlayObjectives.nations()) {
             if (rebel.isKing() || rebel.isNative()
                     || !rebel.isDeclaredIndependence()
                     || rebel.isRebellionDecided()) {
                 continue;
             }
             Optional<GameOverResult> loss = RebellionLoss.evaluate(this, rebel);
-            if (loss.isEmpty() && freePlayEnded) {
-                loss = Optional.of(new GameOverResult(
-                        GameOverEvaluator.REASON_REBELLION_UNRESOLVED));
-            }
             if (loss.isPresent()) {
                 rebel.markRebellionLost(loss.get().getGameOverReason());
                 if (rebel.isHuman() && gameManager.isOpen()) {
@@ -4297,12 +4304,14 @@ public class Model {
                     .evaluate(this, rebel);
             if (victory.isPresent()) {
                 rebel.markRebellionWon(countRebellionVictories() + 1);
-                if (rebel.isHuman() && gameManager.isOpen()) {
+                if (!calendar.isScoredPlay() && rebel.isHuman()
+                        && gameManager.isOpen()) {
                     gameManager.finishByRebellion(victory.get(),
                             finalScoreOf(rebel));
                 }
             }
         }
+        judgeFreePlayObjectives();
     }
 
     /**
@@ -4313,6 +4322,36 @@ public class Model {
      *              just ended
      * @return the final result in free play, null otherwise
      */
+    private void judgeFreePlayObjectives() {
+        if (!calendar.isScoredPlay() || !gameManager.isOpen())
+            return;
+        freePlayObjectives.updateColonyHistory();
+        Player human = freePlayObjectives.nations().stream()
+                .filter(Player::isHuman).findFirst().orElse(null);
+        if (human == null)
+            return;
+        if (freePlayObjectives.isEliminated(human)) {
+            gameManager.finishByRebellion(
+                    new GameOverResult(GameOverEvaluator.REASON_NO_COLONIES),
+                    finalScoreOf(human));
+            return;
+        }
+        if (getFrozenResult().isPresent())
+            return;
+        for (Player nation : freePlayObjectives.nations()) {
+            if (!freePlayObjectives.achieved(nation).isEmpty()) {
+                String reason = nation.isHuman() ? freePlayObjectives
+                        .achieved(nation).contains(FreePlayGoal.INDEPENDENCE)
+                                ? GameOverEvaluator.REASON_REBELLION_VICTORY
+                                : GameOverEvaluator.REASON_OBJECTIVE_VICTORY
+                        : GameOverEvaluator.REASON_OPPONENT_VICTORY;
+                gameManager.finishByRebellion(new GameOverResult(reason),
+                        finalScoreOf(human));
+                return;
+            }
+        }
+    }
+
     private GameResult finalScoreOf(final Player rebel) {
         return calendar.isScoredPlay()
                 ? GameResult.freeze(rebel, GameResult.Status.FINAL)
@@ -4345,6 +4384,14 @@ public class Model {
      *         game is open; a reloaded finished game keeps the same result and
      *         never announces it again
      */
+    public boolean canContinueAfterVictory() {
+        return gameManager.canContinueAfterVictory();
+    }
+
+    public void continueAfterVictory() {
+        gameManager.continueAfterVictory();
+    }
+
     public Optional<GameOverResult> getGameOverResult() {
         return gameManager.getGameOverResult();
     }
@@ -5643,6 +5690,7 @@ public class Model {
         unitStorage.save(out);
         out.setCalendar(calendar.save());
         gameManager.save(out);
+        freePlayObjectives.save(out);
         playerStore.save(out);
         out.setEuropeanRelations(europeanRelations.save(this::isOverlapLive));
         out.setEurope(europe.save());

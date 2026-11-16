@@ -10,6 +10,6 @@
   <entry key="statusAwaiting">Čeká se na tvou volbu: pokračovat bez bodování, nebo rozhodnout později. Hra zůstane pozastavena, dokud nevybereš.</entry>
   <entry key="statusContinued">Pokračoval jsi bez bodování. Tento zmrazený výsledek zůstává tvým skóre.</entry>
   <entry key="statusFinal">Hra skončila. Tento zmrazený výsledek je tvůj konečný výsledek.</entry>
-  <entry key="liveTitle">Živý náhled, nezmrazený: tyto hodnoty se mění s hrou, dokud se výsledek nezmrazí na jaře 1800.</entry>
+  <entry key="liveTitle">Živý náhled, nezmrazený: tyto hodnoty se mění až do konce partie nebo dobrovolného ukončení.</entry>
   <entry key="decideFrozen">Rozhodnout o volbě zmrazeného výsledku…</entry>
 </properties>

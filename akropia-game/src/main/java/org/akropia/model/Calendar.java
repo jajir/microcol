@@ -79,10 +79,6 @@ public final class Calendar {
                 endYear);
         Preconditions.checkArgument(numberOfPlayedTurns >= 0,
                 "Number of played turns must not be negative.");
-        Preconditions.checkArgument(
-                !scoredPlay || endYear == YEAR_OF_FREE_PLAY_END,
-                "Scored play ends in %s, not in %s.", YEAR_OF_FREE_PLAY_END,
-                endYear);
         this.startYear = startYear;
         this.endYear = endYear;
         this.numberOfPlayedTurns = numberOfPlayedTurns;
@@ -122,7 +118,7 @@ public final class Calendar {
     }
 
     boolean isFinished() {
-        return getCurrentYear() >= endYear;
+        return !scoredPlay && getCurrentYear() >= endYear;
     }
 
     /**

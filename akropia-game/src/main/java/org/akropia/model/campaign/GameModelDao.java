@@ -85,6 +85,14 @@ public final class GameModelDao {
     public GameModel createFreePlay(final FreePlayMap map,
             final String playerName, final Difficulty difficulty,
             final EuropeanNation nation, final EventBus eventBus) {
+        return createFreePlay(map, playerName, difficulty, nation, eventBus,
+                java.util.List.of(org.akropia.model.FreePlayGoal.INDEPENDENCE));
+    }
+
+    public GameModel createFreePlay(final FreePlayMap map,
+            final String playerName, final Difficulty difficulty,
+            final EuropeanNation nation, final EventBus eventBus,
+            final java.util.List<org.akropia.model.FreePlayGoal> goals) {
         final String name = Player.normalizeDisplayName(playerName);
         Preconditions.checkNotNull(map, "Map is null");
         Preconditions.checkNotNull(difficulty, "Difficulty is null");
@@ -119,6 +127,7 @@ public final class GameModelDao {
                     .forEach(player -> player
                             .setRoyalRoster(RoyalRoster.initial(difficulty)));
         }
+        source.getModel().setFreePlayGoals(java.util.List.copyOf(goals));
         return finishFreePlay(source, name, eventBus);
     }
 

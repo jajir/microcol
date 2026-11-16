@@ -14,7 +14,8 @@ public final class FreePlay_0_mission
     }
 
     protected List<Function<GameOverProcessingContext, String>> prepareProcessors() {
-        return Lists.newArrayList(GameOverProcessors.TIME_IS_UP_PROCESSOR,
+        return Lists.newArrayList(GameOverProcessors.OBJECTIVE_PROCESSOR,
+                GameOverProcessors.TIME_IS_UP_PROCESSOR,
                 GameOverProcessors.FREE_PLAY_ENDED_PROCESSOR,
                 GameOverProcessors.RETIRED_PROCESSOR,
                 GameOverProcessors.NO_COLONIES_PROCESSOR,

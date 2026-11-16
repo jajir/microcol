@@ -115,97 +115,31 @@ final class GameManager {
         final Optional<Player> human = model.getPlayers().stream()
                 .filter(player -> player.isHuman() && player.isColonialNation())
                 .findFirst();
-        final boolean declared = human.isPresent()
-                && human.get().isDeclaredIndependence();
-        final boolean pastBoundary = calendar
-                .hasReachedYear(Calendar.YEAR_OF_SCORING_BOUNDARY);
+        if (alreadyFinished && human.isPresent()) {
+            Preconditions.checkArgument(
+                    reason != null && (GameOverEvaluator.isRebellionLoss(reason)
+                            || GameOverEvaluator.isRebellionVictory(reason)
+                            || GameOverEvaluator.REASON_OBJECTIVE_VICTORY
+                                    .equals(reason)
+                            || GameOverEvaluator.REASON_OPPONENT_VICTORY
+                                    .equals(reason)
+                            || GameOverEvaluator.REASON_RETIRED.equals(reason)
+                            || GameOverEvaluator.REASON_NO_COLONIES
+                                    .equals(reason)),
+                    "Invalid free-play end reason");
+        }
         if (frozenResult == null) {
-            // Every end of a scored game with a human nation leaves exactly one
-            // frozen result, and an undeclared nation past spring 1800 always
-            // has one; a saved game never guesses it.
             Preconditions.checkArgument(human.isEmpty() || !alreadyFinished,
                     "A finished free-play game needs its frozen result");
-            Preconditions.checkArgument(
-                    human.isEmpty() || declared || !alreadyStarted
-                            || !pastBoundary,
-                    "Saved free play past spring 1800 needs its frozen result");
-            checkReason(reason, null, human.isPresent());
-            return;
+        } else {
+            Preconditions.checkArgument(human.isPresent() && alreadyStarted,
+                    "A result needs a started human game");
+            Preconditions.checkArgument(frozenResult
+                    .getStatus() == GameResult.Status.FINAL && alreadyFinished
+                    || frozenResult
+                            .getStatus() == GameResult.Status.CONTINUED_UNSCORED,
+                    "Invalid result continuation state");
         }
-        Preconditions.checkArgument(human.isPresent(),
-                "A frozen result needs the human colonial nation");
-        final GameResult.Status status = frozenResult.getStatus();
-        switch (status) {
-        case AWAITING_CONTINUATION:
-            Preconditions.checkArgument(
-                    alreadyStarted && !alreadyFinished && pastBoundary
-                            && !declared,
-                    "An awaited score choice needs a running undeclared game"
-                            + " past spring 1800");
-            break;
-        case CONTINUED_UNSCORED:
-            Preconditions.checkArgument(
-                    alreadyStarted && pastBoundary && !declared,
-                    "An unscored continuation needs an undeclared game past"
-                            + " spring 1800");
-            break;
-        case FINAL:
-            // A final result is the end itself: a rebellion's victory or loss,
-            // the ordinary colony loss of an undeclared nation, or a confirmed
-            // retirement (R-0194), which a declared nation may also take while
-            // its rebellion is still open.
-            Preconditions.checkArgument(alreadyStarted && alreadyFinished,
-                    "A final result needs a finished game");
-            Preconditions.checkArgument(declared
-                    ? GameOverEvaluator.isRebellionLoss(reason)
-                            || GameOverEvaluator.isRebellionVictory(reason)
-                            || GameOverEvaluator.REASON_RETIRED.equals(reason)
-                    : GameOverEvaluator.REASON_NO_COLONIES.equals(reason)
-                            || GameOverEvaluator.REASON_RETIRED.equals(reason),
-                    "A final result needs the end that produced it");
-            // A declared rebellion is decided by its own end; a retirement is
-            // the only end that leaves it open.
-            Preconditions.checkArgument(
-                    !declared || GameOverEvaluator.REASON_RETIRED
-                            .equals(reason) != human.get().isRebellionDecided(),
-                    "A declared final result is decided by its rebellion or"
-                            + " retired while it is open");
-            break;
-        default:
-            throw new IllegalArgumentException("Unknown result status");
-        }
-        checkReason(reason, status, true);
-    }
-
-    /**
-     * The calendar and the frozen result a scored-play terminal reason needs.
-     */
-    private void checkReason(final String reason,
-            final GameResult.Status status, final boolean humanPresent) {
-        final Calendar calendar = model.getCalendar();
-        Preconditions.checkArgument(!GameOverEvaluator.REASON_FREE_PLAY_ENDED
-                .equals(reason)
-                || calendar.hasReachedYear(Calendar.YEAR_OF_FREE_PLAY_END)
-                        && (status == GameResult.Status.CONTINUED_UNSCORED
-                                || status == null && !humanPresent),
-                "Free play end needs the unscored continuation");
-        Preconditions.checkArgument(
-                !GameOverEvaluator.REASON_REBELLION_UNRESOLVED.equals(reason)
-                        || calendar
-                                .hasReachedYear(Calendar.YEAR_OF_FREE_PLAY_END),
-                "An unresolved rebellion is lost only at spring 1850");
-        // A retirement keeps a scored result: it is taken at once or kept from
-        // the unscored continuation, never from the pending spring 1800 choice.
-        Preconditions.checkArgument(
-                !GameOverEvaluator.REASON_RETIRED.equals(reason)
-                        || status == GameResult.Status.FINAL
-                        || status == GameResult.Status.CONTINUED_UNSCORED,
-                "A retirement needs its scored result");
-        Preconditions.checkArgument(
-                !GameOverEvaluator.REASON_NO_COLONIES.equals(reason)
-                        || calendar.hasReachedYear(
-                                Calendar.YEAR_WHEN_LAST_COLONY_ENDS_GAME),
-                "A colony loss ends play only from spring 1600");
     }
 
     public static GameManager make(final Model model, final ModelPo modelPo,
@@ -249,6 +183,8 @@ final class GameManager {
 
     private List<Player> turnOrder() {
         final List<Player> players = new ArrayList<>(model.getPlayers());
+        if (model.getCalendar().isScoredPlay())
+            players.removeIf(model.getFreePlayObjectives()::isEliminated);
         players.sort(Comparator.comparingInt(GameManager::nativeRank)
                 .thenComparing(Player::isKing)
                 .thenComparingInt(player -> nationRank(nationKey(player)))
@@ -273,7 +209,7 @@ final class GameManager {
                 : player.getName();
     }
 
-    private static int nationRank(final String nation) {
+    static int nationRank(final String nation) {
         final int index = List.of("England", "France", "Spain", "Dutch")
                 .indexOf(nation);
         return index < 0 ? 4 : index;
@@ -367,10 +303,27 @@ final class GameManager {
     void finishByRebellion(final GameOverResult result,
             final GameResult finalResult) {
         Preconditions.checkState(isOpen(), "Only an open game can end");
-        Preconditions.checkState(frozenResult == null,
-                "A result is already frozen");
-        frozenResult = finalResult;
+        if (frozenResult == null)
+            frozenResult = finalResult;
         finish(result);
+    }
+
+    boolean canContinueAfterVictory() {
+        return finished && !stopped && frozenResult != null
+                && frozenResult.getStatus() == GameResult.Status.FINAL
+                && frozenResult.getObjectives().getWinner()
+                        .equals(Optional.of(frozenResult.getPlayerName()));
+    }
+
+    void continueAfterVictory() {
+        Preconditions.checkState(canContinueAfterVictory(),
+                "Only an objective winner can continue");
+        frozenResult.continueUnscored();
+        finished = false;
+        gameOverResult = null;
+        awaitingImmigrationChoice = false;
+        awaitingTaxDecision = false;
+        continueGame();
     }
 
     private void finish(final GameOverResult result) {
@@ -496,7 +449,7 @@ final class GameManager {
             } else if (oGameOverResult.isPresent()) {
                 freezeScoreAtOrdinaryEnd();
                 finish(oGameOverResult.get());
-            } else if (!freezeScoreAtBoundary()) {
+            } else {
                 startRound();
             }
         }
@@ -542,25 +495,6 @@ final class GameManager {
      *
      * @return whether the score was frozen and the game now waits
      */
-    private boolean freezeScoreAtBoundary() {
-        if (frozenResult != null || !model.getCalendar().isScoredPlay()
-                || !model.getCalendar()
-                        .hasReachedYear(Calendar.YEAR_OF_SCORING_BOUNDARY)) {
-            return false;
-        }
-        final Optional<Player> scored = model.getPlayers().stream()
-                .filter(player -> player.isHuman() && player.isColonialNation()
-                        && !player.isDeclaredIndependence())
-                .findFirst();
-        if (scored.isEmpty()) {
-            return false;
-        }
-        frozenResult = GameResult.freeze(scored.get(),
-                GameResult.Status.AWAITING_CONTINUATION);
-        currentPlayer = turnOrder().get(0);
-        model.fireScoreBoundaryRequired(scored.get());
-        return true;
-    }
 
     /**
      * Continue past spring 1800 without scoring (R-0193). The frozen score is
@@ -602,7 +536,7 @@ final class GameManager {
         }
         final Optional<Player> nation = retiringNation();
         if (nation.isEmpty() || nation.get() != currentPlayer
-                || nation.get().isRebellionDecided()) {
+                || nation.get().getRebellionLossReason().isPresent()) {
             return Optional.empty();
         }
         if (frozenResult == null) {

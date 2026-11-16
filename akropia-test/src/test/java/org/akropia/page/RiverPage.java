@@ -162,39 +162,46 @@ public final class RiverPage extends AbstractScreen {
                 .interpolate(images.getTerrainColor(TerrainType.OCEAN), 0.5));
         final int[] expected = { river, mixed, sea, sea, sea, ink, ink, mixed,
                 river, sea, mixed };
+        // Keep hover-driven status/layout changes outside this pixel check.
+        getRobot().moveTo("#goals");
+        WaitForAsyncUtils.waitForFxEvents();
+        final int[][] actual = new int[1][];
         try {
-            WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
-                    () -> Arrays.equals(expected, mouthPixels(at, towardSea)));
+            WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS, () -> {
+                actual[0] = mouthPixels(at, towardSea);
+                return Arrays.equals(expected, actual[0]);
+            });
         } catch (final TimeoutException timeout) {
-            // The assertion reports missing tones, curved interfaces or bank
-            // ink.
+            // Report the sampled frame without capturing a different frame.
         }
-        assertArrayEquals(expected, mouthPixels(at, towardSea),
+        assertArrayEquals(expected, actual[0],
                 "Expected three flat water tones with wavy interfaces inside outlined banks");
     }
 
     private int[] mouthPixels(final Location at, final Direction towardSea)
             throws Exception {
-        final Image canvas = WaitForAsyncUtils
-                .asyncFx(() -> FogFrameProbe.captureCanvas(getContext()))
-                .get(10, TimeUnit.SECONDS);
-        final Point tile = getContext().getArea().convertToCanvasPoint(at);
-        final Location direction = towardSea.getVector();
-        final int[][] samples = { { -8, 0 }, { 12, 0 }, { 25, 0 }, { 28, 0 },
-                { 32, 0 }, { 12, -8 }, { 12, 6 }, { 5, -3 }, { 5, 2 },
-                { 14, -3 }, { 14, 2 } };
-        final int[] pixels = new int[samples.length];
-        for (int i = 0; i < samples.length; i++) {
-            final int x = (int) Math.round(Tile.TILE_WIDTH_IN_PX / 2.0
-                    + direction.getX() * samples[i][0]
-                    - direction.getY() * samples[i][1]);
-            final int y = (int) Math.round(Tile.TILE_WIDTH_IN_PX / 2.0
-                    + direction.getY() * samples[i][0]
-                    + direction.getX() * samples[i][1]);
-            pixels[i] = toRgb(canvas.getPixelReader().getColor(tile.getX() + x,
-                    tile.getY() + y));
-        }
-        return pixels;
+        // Snapshot and projection must refer to the same FX frame: the map
+        // origin can change when the hover status bar changes the viewport.
+        return WaitForAsyncUtils.asyncFx(() -> {
+            final Image canvas = FogFrameProbe.captureCanvas(getContext());
+            final Point tile = getContext().getArea().convertToCanvasPoint(at);
+            final Location direction = towardSea.getVector();
+            final int[][] samples = { { -8, 0 }, { 12, 0 }, { 25, 0 },
+                    { 28, 0 }, { 32, 0 }, { 12, -8 }, { 12, 6 }, { 5, -3 },
+                    { 5, 2 }, { 14, -3 }, { 14, 2 } };
+            final int[] pixels = new int[samples.length];
+            for (int i = 0; i < samples.length; i++) {
+                final int x = (int) Math.round(Tile.TILE_WIDTH_IN_PX / 2.0
+                        + direction.getX() * samples[i][0]
+                        - direction.getY() * samples[i][1]);
+                final int y = (int) Math.round(Tile.TILE_WIDTH_IN_PX / 2.0
+                        + direction.getY() * samples[i][0]
+                        + direction.getX() * samples[i][1]);
+                pixels[i] = toRgb(canvas.getPixelReader()
+                        .getColor(tile.getX() + x, tile.getY() + y));
+            }
+            return pixels;
+        }).get(10, TimeUnit.SECONDS);
     }
 
     /**

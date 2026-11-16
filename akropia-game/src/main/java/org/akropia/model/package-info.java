@@ -1,4 +1,10 @@
 /**
+ * FreePlayObjectives owns immutable selectable goals and persistent last-colony
+ * elimination history; Model evaluates all nations at completed action
+ * boundaries. ObjectiveResult snapshots goals and winner alongside score. Free
+ * games have no calendar deadline; authored missions retain their own limits.
+ *
+ *
  * School courses and productive-work learning preserve registered identities;
  * Colony validates assignments and credits actual production once per update.
  * Immutable education previews and completion events are consumed by GUI/AI.

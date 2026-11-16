@@ -12,6 +12,11 @@ import com.google.common.base.Preconditions;
  * agrees with the stored components.
  */
 public final class HallOfFameEntry {
+    private ObjectiveResult objectives;
+
+    public ObjectiveResult getObjectives() {
+        return objectives;
+    }
 
     private final String identity;
 
@@ -59,10 +64,13 @@ public final class HallOfFameEntry {
         Preconditions.checkArgument(
                 owner.getName().equals(result.getPlayerName()),
                 "Result belongs to another nation");
-        return new HallOfFameEntry(result.getIdentity(), result.getPlayerName(),
-                owner.getDisplayName(), difficulty, result.getBaseScore(),
-                result.getScore(), result.getVictoryOrder().orElse(null),
+        final HallOfFameEntry entry = new HallOfFameEntry(result.getIdentity(),
+                result.getPlayerName(), owner.getDisplayName(), difficulty,
+                result.getBaseScore(), result.getScore(),
+                result.getVictoryOrder().orElse(null),
                 result.getDeclarationYear().orElse(null));
+        entry.objectives = result.getObjectives();
+        return entry;
     }
 
     /**
@@ -99,9 +107,11 @@ public final class HallOfFameEntry {
                 po.getDeclarationYear());
         Preconditions.checkArgument(score.getTotal() == po.getTotal(),
                 "Hall of Fame total does not match its components");
-        return new HallOfFameEntry(po.getIdentity(), po.getPlayerName(),
-                po.getPlayerDisplayName(), difficulty, base, score,
-                po.getVictoryOrder(), po.getDeclarationYear());
+        final HallOfFameEntry loaded = new HallOfFameEntry(po.getIdentity(),
+                po.getPlayerName(), po.getPlayerDisplayName(), difficulty, base,
+                score, po.getVictoryOrder(), po.getDeclarationYear());
+        loaded.objectives = ObjectiveResult.load(po.getObjectives());
+        return loaded;
     }
 
     private static Difficulty parseDifficulty(final String name) {
@@ -170,6 +180,7 @@ public final class HallOfFameEntry {
     public HallOfFameEntryPo save() {
         final HallOfFameEntryPo out = new HallOfFameEntryPo();
         out.setIdentity(identity);
+        out.setObjectives(objectives.save());
         out.setPlayerName(nationName);
         out.setPlayerDisplayName(playerDisplayName);
         out.setDifficulty(difficulty.name());

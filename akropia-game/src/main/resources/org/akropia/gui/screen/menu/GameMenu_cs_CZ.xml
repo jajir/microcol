@@ -71,8 +71,8 @@
     <entry key="settingDeveloperHeading">Vývojář</entry>
     <entry key="settingDeveloperMode">Režim vývojáře</entry>
     <entry key="settingDeveloperDescription">Zobrazí souřadnice mapy a diagnostické informace.</entry>
-    <entry key="setupWorldStep">1 Svět → 2 Hráč</entry>
-    <entry key="setupPlayerStep">1 Svět → 2 Hráč · Krok 2</entry>
+    <entry key="setupWorldStep">1 Svět → 2 Hráč → 3 Cíle</entry>
+    <entry key="setupPlayerStep">1 Svět → 2 Hráč → 3 Cíle · Krok 2</entry>
     <entry key="setupNext">Pokračovat</entry>
     <entry key="setupSize">Velikost mapy</entry>
     <entry key="setupLayout">Rozložení pevniny</entry>
@@ -87,4 +87,10 @@
     <entry key="setupGenerating">Vytvářím svět…</entry>
     <entry key="setupNamePrompt">Zadejte své jméno</entry>
     <entry key="setupSummary">%1$s · %2$s</entry>
+    <entry key="setupGoalsStep">1 Svět → 2 Hráč → 3 Cíle · Krok 3</entry>
+    <entry key="setupGoalIndependence">Nezávislost — vyhlaste samostatnost a odrazte královskou invazi.</entry>
+    <entry key="setupGoalCongress">Úplný kongres — získejte všech 25 členů.</entry>
+    <entry key="setupGoalDomination">Nadvláda — připravte všechny ostatní kolonizační národy o jejich kolonie.</entry>
+    <entry key="setupGoalRule">Splnění kteréhokoli vybraného cíle znamená vítězství. Stejné cíle platí pro soupeře. Cíl a skóre se zapíší do Síně slávy. Bez časového limitu.</entry>
+    <entry key="setupSandbox">Volné budování bez cílového vítězství a bez časového limitu. Ztráta poslední kolonie po jejím prvním získání stále znamená vyřazení.</entry>
 </properties>

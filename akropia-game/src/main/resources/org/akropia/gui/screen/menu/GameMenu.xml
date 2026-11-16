@@ -72,8 +72,8 @@
     <entry key="settingDeveloperHeading">Developer</entry>
     <entry key="settingDeveloperMode">Developer mode</entry>
     <entry key="settingDeveloperDescription">Show map coordinates and diagnostic information.</entry>
-    <entry key="setupWorldStep">1 World → 2 Player</entry>
-    <entry key="setupPlayerStep">1 World → 2 Player · Step 2</entry>
+    <entry key="setupWorldStep">1 World → 2 Player → 3 Objectives</entry>
+    <entry key="setupPlayerStep">1 World → 2 Player → 3 Objectives · Step 2</entry>
     <entry key="setupNext">Continue</entry>
     <entry key="setupSize">Map size</entry>
     <entry key="setupLayout">Land layout</entry>
@@ -88,4 +88,10 @@
     <entry key="setupGenerating">Creating world…</entry>
     <entry key="setupNamePrompt">Enter your name</entry>
     <entry key="setupSummary">%1$s · %2$s</entry>
+    <entry key="setupGoalsStep">1 World → 2 Player → 3 Objectives · Step 3</entry>
+    <entry key="setupGoalIndependence">Independence — declare independence and defeat the royal invasion.</entry>
+    <entry key="setupGoalCongress">Complete Congress — recruit all 25 members.</entry>
+    <entry key="setupGoalDomination">Domination — take every other colonizing nation’s last colony.</entry>
+    <entry key="setupGoalRule">Complete any selected objective to win. Opponents have the same objectives. The objective and score enter the Hall of Fame. No time limit.</entry>
+    <entry key="setupSandbox">Sandbox without objective victory or a time limit. Losing your last colony after establishing your nation still eliminates you.</entry>
 </properties>

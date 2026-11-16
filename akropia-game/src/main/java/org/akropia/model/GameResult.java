@@ -16,6 +16,11 @@ import com.google.common.base.Preconditions;
  * reloads cannot replace it. Only the status moves on continuation.
  */
 public final class GameResult {
+    private ObjectiveResult objectives;
+
+    public ObjectiveResult getObjectives() {
+        return objectives;
+    }
 
     /** Where the frozen result stands in the free-play calendar. */
     public enum Status {
@@ -75,10 +80,13 @@ public final class GameResult {
                 "Only the human colonial nation has a result");
         Preconditions.checkArgument(status != Status.CONTINUED_UNSCORED,
                 "A result starts awaiting continuation or final");
-        return new GameResult(UUID.randomUUID().toString(), owner.getName(),
-                status, owner.getBaseScore(), owner.getResultScore(),
+        final GameResult frozen = new GameResult(UUID.randomUUID().toString(),
+                owner.getName(), status, owner.getBaseScore(),
+                owner.getResultScore(),
                 owner.getRebellionVictoryOrder().orElse(null),
                 owner.getDeclarationYear().orElse(null));
+        frozen.objectives = owner.freezeObjectives();
+        return frozen;
     }
 
     /**
@@ -120,9 +128,11 @@ public final class GameResult {
         Preconditions.checkArgument(savedScore.getTotal() == po.getTotal(),
                 "Frozen result total does not match its components");
         checkStatus(savedStatus, owner, po);
-        return new GameResult(po.getIdentity(), owner.getName(), savedStatus,
-                savedBase, savedScore, po.getVictoryOrder(),
-                po.getDeclarationYear());
+        final GameResult loaded = new GameResult(po.getIdentity(),
+                owner.getName(), savedStatus, savedBase, savedScore,
+                po.getVictoryOrder(), po.getDeclarationYear());
+        loaded.objectives = ObjectiveResult.load(po.getObjectives());
+        return loaded;
     }
 
     private static Status parseStatus(final String name) {
@@ -138,8 +148,12 @@ public final class GameResult {
 
     private static void checkStatus(final Status status, final Player owner,
             final GameResultPo po) {
+        if (status == Status.CONTINUED_UNSCORED)
+            return;
         if (owner.isDeclaredIndependence()) {
-            Preconditions.checkArgument(status == Status.FINAL,
+            Preconditions.checkArgument(
+                    status == Status.FINAL
+                            || status == Status.CONTINUED_UNSCORED,
                     "A declared nation keeps only the final result of its"
                             + " rebellion");
             // An open rebellion keeps a final result only when it was retired
@@ -221,7 +235,8 @@ public final class GameResult {
 
     /** Record the unscored continuation; the frozen score is not touched. */
     void continueUnscored() {
-        Preconditions.checkState(isAwaitingContinuation(),
+        Preconditions.checkState(
+                status == Status.FINAL || isAwaitingContinuation(),
                 "Only a result awaiting continuation can continue unscored");
         status = Status.CONTINUED_UNSCORED;
     }
@@ -229,6 +244,7 @@ public final class GameResult {
     GameResultPo save() {
         final GameResultPo out = new GameResultPo();
         out.setIdentity(identity);
+        out.setObjectives(objectives.save());
         out.setStatus(status.name());
         out.setPlayerName(playerName);
         out.setServants(base.getServants());

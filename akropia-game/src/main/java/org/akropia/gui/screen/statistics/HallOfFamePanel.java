@@ -97,6 +97,8 @@ final class HallOfFamePanel extends VBox {
                     localization.getDifficultyName(entry.getDifficulty())));
             row.getStyleClass().add("hall-of-fame-row");
             rows.getChildren().add(row);
+            rows.getChildren().add(
+                    line("hallOfFameGoals" + rank, objectiveSummary(entry)));
         }
     }
 
@@ -123,8 +125,36 @@ final class HallOfFamePanel extends VBox {
                             : line("hallOfFameCurrent",
                                     i18n.get(HallOfFameText.notRanked)));
         }
+        rows.getChildren()
+                .add(line("hallOfFameResultGoals", objectiveSummary(result)));
+        rows.getChildren()
+                .add(line("hallOfFameSelectedGoals", i18n.get(
+                        org.akropia.gui.FreePlayText.selected,
+                        goalNames(result.getObjectives().getEnabled()))));
         rows.getChildren().addAll(BaseScorePanel.scoreLines(i18n,
                 result.getBaseScore(), result.getScore(), true));
+    }
+
+    private String goalNames(
+            java.util.List<org.akropia.model.FreePlayGoal> goals) {
+        return goals.isEmpty() ? i18n.get(org.akropia.gui.FreePlayText.none)
+                : goals.stream()
+                        .map(goal -> i18n.get(org.akropia.gui.FreePlayText
+                                .valueOf(goal.name())))
+                        .collect(java.util.stream.Collectors.joining(", "));
+    }
+
+    private String objectiveSummary(HallOfFameEntry entry) {
+        org.akropia.model.ObjectiveResult result = entry.getObjectives();
+        return i18n.get(org.akropia.gui.FreePlayText.result,
+                goalNames(result.getAchieved()),
+                result.getWinner().map(name -> org.akropia.model.EuropeanNation
+                        .findByPlayerName(name)
+                        .map(org.akropia.model.EuropeanNation::getDisplayName)
+                        .orElse(name))
+                        .orElse(i18n
+                                .get(org.akropia.gui.FreePlayText.noWinner)),
+                result.getTurn());
     }
 
     private static Label line(final String id, final String text) {

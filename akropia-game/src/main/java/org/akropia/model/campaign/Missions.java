@@ -2,6 +2,7 @@ package org.akropia.model.campaign;
 
 /** Mission and outcome identifiers translated outside the model. */
 public enum Missions {
+    gameOver_objectiveVictory, gameOver_opponentVictory,
 
     independenceWasDeclared_caption, gameOver_allColoniesAreLost,
     gameOver_timeIsUp, gameOver_rebellionNoColonies,

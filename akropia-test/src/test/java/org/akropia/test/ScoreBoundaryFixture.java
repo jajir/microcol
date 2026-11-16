@@ -106,6 +106,11 @@ final class ScoreBoundaryFixture {
         select(context, prepared);
     }
 
+    static void prepareUntimed(TestContext context, File source, String name,
+            int turn) throws IOException {
+        select(context, write(scored(source, turn), name));
+    }
+
     private static JsonObject scored(final File source, final int turns)
             throws IOException {
         final JsonObject saved = new Gson()

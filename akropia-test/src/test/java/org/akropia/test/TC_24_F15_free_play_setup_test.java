@@ -469,4 +469,58 @@ public class TC_24_F15_free_play_setup_test extends AbstractAkropiaTest {
         setup.verifyLakeSeparatedFromSea(lake);
         setup.verifyOriginalWorldLandscape();
     }
+
+    @Test
+    @Tag("local")
+    void TC_13_objectives_and_default_form_style_survive_start_and_continue()
+            throws Exception {
+        // The player chooses the authored world and enters their identity.
+        FreePlaySetupPage setup = WelcomePage.of(getContext())
+                .openFreePlaySetup();
+        setup.selectMap(0);
+        setup.enterName("Athena");
+        setup.verifyDefaultFormStyle();
+        setup.objectivesStep();
+        setup.verifyObjectivesStep(true, false, false);
+        setup.captureDialog("freePlaySetup",
+                "free-play-objectives-default.png");
+
+        // Any enabled goal can win; the player selects all three alternatives.
+        setup.selectObjective(org.akropia.model.FreePlayGoal.CONGRESS, true);
+        setup.selectObjective(org.akropia.model.FreePlayGoal.DOMINATION, true);
+        setup.verifyObjectivesStep(true, true, true);
+        GamePage game = setup.start();
+        setup.openObjectives();
+        setup.verifyEnabledObjectives(
+                java.util.List.of(org.akropia.model.FreePlayGoal.values()));
+
+        // Saving and continuing retain the selected objectives and their
+        // progress.
+        setup.closeObjectives();
+        game.exitToMenu();
+        new FreePlayAuditPage(getContext()).continueGame();
+        setup.openObjectives();
+        setup.verifyEnabledObjectives(
+                java.util.List.of(org.akropia.model.FreePlayGoal.values()));
+    }
+
+    @Test
+    @Tag("local")
+    void TC_14_empty_objective_selection_starts_an_untimed_sandbox()
+            throws Exception {
+        // The player deliberately disables the default independence goal.
+        FreePlaySetupPage setup = WelcomePage.of(getContext())
+                .openFreePlaySetup();
+        setup.selectMap(0);
+        setup.enterName("Builder");
+        setup.selectObjective(org.akropia.model.FreePlayGoal.INDEPENDENCE,
+                false);
+        setup.verifyObjectivesStep(false, false, false);
+        setup.start();
+
+        // The objectives page explicitly explains sandbox play instead of being
+        // blank.
+        setup.openObjectives();
+        setup.verifyEnabledObjectives(java.util.List.of());
+    }
 }

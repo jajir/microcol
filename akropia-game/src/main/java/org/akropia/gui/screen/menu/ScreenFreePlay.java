@@ -29,6 +29,8 @@ import javafx.concurrent.Task;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.CheckBox;
+import org.akropia.model.FreePlayGoal;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
@@ -79,7 +81,13 @@ public final class ScreenFreePlay extends AbstractScreenMenu
     private final Label difficultyLabel = new Label();
     private final Label nationLabel = new Label();
     private final Label nameLabel = new Label();
-    private boolean secondStep;
+    private int step;
+    private final VBox objectives = new VBox(10);
+    private final CheckBox independence = new CheckBox();
+    private final CheckBox congress = new CheckBox();
+    private final CheckBox domination = new CheckBox();
+    private final Label goalNote = new Label();
+    private final Label finalSummary = new Label();
     private boolean starting;
     private Task<ModelPo> generation;
 
@@ -129,10 +137,13 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         error.setWrapText(true);
         next.setId("freePlayNext");
         next.setOnAction(e -> {
-            if (validWorld()) {
-                secondStep = true;
+            if (validWorld() && (step == 0 || validName())) {
+                step++;
                 refresh();
-                name.requestFocus();
+                if (step == 1)
+                    name.requestFocus();
+                else
+                    start.requestFocus();
             }
         });
         start.setId("freePlayStart");
@@ -141,8 +152,21 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         back.setCancelButton(true);
         back.setOnAction(e -> goBack());
         progress.setMaxSize(28, 28);
-        form.getChildren().addAll(steps, world, player, error, progress,
-                new HBox(12, back, next, start));
+        independence.setId("freePlayGoalIndependence");
+        congress.setId("freePlayGoalCongress");
+        domination.setId("freePlayGoalDomination");
+        independence.setSelected(true);
+        for (CheckBox goal : List.of(independence, congress, domination)) {
+            goal.setWrapText(true);
+            goal.selectedProperty().addListener((o, a, b) -> refresh());
+        }
+        goalNote.setId("freePlayGoalNote");
+        goalNote.setWrapText(true);
+        finalSummary.setWrapText(true);
+        objectives.getChildren().addAll(finalSummary, independence, congress,
+                domination, goalNote);
+        form.getChildren().addAll(steps, world, player, objectives, error,
+                progress, new HBox(12, back, next, start));
         maps.valueProperty().addListener((o, a, b) -> {
             updateNation();
             refresh();
@@ -190,7 +214,7 @@ public final class ScreenFreePlay extends AbstractScreenMenu
     @Override
     public void beforeShow() {
         starting = false;
-        secondStep = false;
+        step = 0;
         seed.setText(randomSeed());
         refresh();
         holder.beforeShow();
@@ -253,27 +277,36 @@ public final class ScreenFreePlay extends AbstractScreenMenu
     }
 
     private void refresh() {
-        show(world, !secondStep);
-        show(player, secondStep);
+        show(world, step == 0);
+        show(player, step == 1);
+        show(objectives, step == 2);
         show(generated, isGenerated());
-        show(next, !secondStep);
-        show(start, secondStep);
+        show(next, step < 2);
+        show(start, step == 2);
         show(progress, starting);
-        steps.setText(i18n.get(secondStep ? GameMenu.setupPlayerStep
-                : GameMenu.setupWorldStep));
+        steps.setText(i18n.get(step == 0 ? GameMenu.setupWorldStep
+                : step == 1 ? GameMenu.setupPlayerStep
+                        : GameMenu.setupGoalsStep));
         summary.setText(isGenerated() ? i18n.get(GameMenu.setupSummary,
                 sizeName(sizes.getValue()), layoutName(layouts.getValue()))
                 : maps.getValue());
         world.setDisable(starting);
         player.setDisable(starting);
+        objectives.setDisable(starting);
+        goalNote.setText(
+                i18n.get(selectedGoals().isEmpty() ? GameMenu.setupSandbox
+                        : GameMenu.setupGoalRule));
+        finalSummary.setText(summary.getText() + " · "
+                + localizationHelper.getDifficultyName(difficulties.getValue())
+                + " · " + name.getText());
         back.setDisable(starting);
-        next.setDefaultButton(!secondStep);
-        start.setDefaultButton(secondStep);
-        next.setDisable(starting || !validWorld());
+        next.setDefaultButton(step < 2);
+        start.setDefaultButton(step == 2);
+        next.setDisable(starting || !validWorld() || step == 1 && !validName());
         start.setDisable(starting || !validWorld() || !validName());
         error.setText(starting ? i18n.get(GameMenu.setupGenerating)
                 : !validWorld() ? i18n.get(GameMenu.setupGeneratedSeedError)
-                        : secondStep && !validName()
+                        : step == 1 && !validName()
                                 ? i18n.get(GameMenu.setupNameError)
                                 : "");
     }
@@ -282,8 +315,8 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         if (starting) {
             return;
         }
-        if (secondStep) {
-            secondStep = false;
+        if (step > 0) {
+            step--;
             refresh();
         } else {
             eventBus.post(new ShowScreenEvent(Screen.MENU));
@@ -291,7 +324,7 @@ public final class ScreenFreePlay extends AbstractScreenMenu
     }
 
     private void startGame() {
-        if (starting || !secondStep || !validWorld() || !validName()) {
+        if (starting || step != 2 || !validWorld() || !validName()) {
             return;
         }
         final String playerName = Player.normalizeDisplayName(name.getText());
@@ -300,16 +333,20 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         final Difficulty difficulty = difficulties.getValue();
         if (!isGenerated()) {
             applicationController.startNewFreeGame(selectedMap(), playerName,
-                    difficulty, nation);
+                    difficulty, nation, selectedGoals());
             return;
         }
         final GeneratedWorldSettings settings = settings();
         starting = true;
         refresh();
+        final List<FreePlayGoal> chosenGoals = selectedGoals();
         generation = new Task<ModelPo>() {
             @Override
             protected ModelPo call() {
-                return GeneratedWorld.create(settings, nation, difficulty);
+                ModelPo world = GeneratedWorld.create(settings, nation,
+                        difficulty);
+                world.setFreePlayGoals(chosenGoals);
+                return world;
             }
         };
         generation.setOnSucceeded(e -> {
@@ -324,6 +361,17 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         final Thread thread = new Thread(generation, "world-generation");
         thread.setDaemon(true);
         thread.start();
+    }
+
+    private List<FreePlayGoal> selectedGoals() {
+        java.util.ArrayList<FreePlayGoal> goals = new java.util.ArrayList<>();
+        if (independence.isSelected())
+            goals.add(FreePlayGoal.INDEPENDENCE);
+        if (congress.isSelected())
+            goals.add(FreePlayGoal.CONGRESS);
+        if (domination.isSelected())
+            goals.add(FreePlayGoal.DOMINATION);
+        return List.copyOf(goals);
     }
 
     private void generationFailed() {
@@ -389,6 +437,9 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         maps.getSelectionModel().select(Math.max(0, mapIndex));
         nations.getItems().setAll(nationNames());
         nations.getSelectionModel().select(Math.max(0, nationIndex));
+        independence.setText(language.get(GameMenu.setupGoalIndependence));
+        congress.setText(language.get(GameMenu.setupGoalCongress));
+        domination.setText(language.get(GameMenu.setupGoalDomination));
         holder.setTitle(language.get(GameMenu.setupTitle));
         mapLabel.setText(language.get(GameMenu.setupMap));
         sizeLabel.setText(language.get(GameMenu.setupSize));

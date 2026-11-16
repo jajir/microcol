@@ -148,8 +148,15 @@ public final class GameController {
 
     public void startFreePlay(final FreePlayMap map, final String playerName,
             final Difficulty difficulty, final EuropeanNation nation) {
+        startFreePlay(map, playerName, difficulty, nation,
+                java.util.List.of(org.akropia.model.FreePlayGoal.INDEPENDENCE));
+    }
+
+    public void startFreePlay(final FreePlayMap map, final String playerName,
+            final Difficulty difficulty, final EuropeanNation nation,
+            final java.util.List<org.akropia.model.FreePlayGoal> goals) {
         startMission(gameModelDao.createFreePlay(map, playerName, difficulty,
-                nation, eventBus));
+                nation, eventBus, goals));
     }
 
     /**

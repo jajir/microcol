@@ -101,9 +101,18 @@ public final class MissionEventListener {
                 dialogMessage.setText(i18n.get(messageKey));
                 dialogMessage.showAndWait();
             });
-            finished.ifPresent(
-                    entry -> new HallOfFameDialog(viewUtil, i18n, hallOfFameDao,
-                            localization, Optional.of(entry)).showAndWait());
+            if (finished.isPresent()) {
+                HallOfFameDialog result = new HallOfFameDialog(viewUtil, i18n,
+                        hallOfFameDao, localization, finished,
+                        gameModelController.getModel()
+                                .canContinueAfterVictory());
+                result.showAndWait();
+                if (result.isContinueRequested()) {
+                    gameModelController.getModel().continueAfterVictory();
+                    eventBus.post(new ShowScreenEvent(Screen.GAME));
+                    return;
+                }
+            }
             goToGameMenu();
         });
     }

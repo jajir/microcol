@@ -302,4 +302,37 @@ public class TC_76_F68_colony_defense_test extends AbstractAkropiaTest {
         colony.verifyColonyHeld(2, 400, 0, SOLDIER, null);
         colony.verifyMilitia(ColonyDefensePage.RESIDENT, true);
     }
+
+    @Test
+    @Tag("local")
+    void TC_11_capturing_the_last_rival_colony_wins_domination_and_records_the_goal()
+            throws Exception {
+        // This free game enables domination and the rival owns one colony.
+        FreePlayObjectiveFixture.domination(getContext(), FIXTURE,
+                "domination-last-colony.akropia");
+        WelcomePage.of(getContext()).loadGame();
+        AttackPage attack = new AttackPage(getContext());
+        ColonyDefensePage colony = new ColonyDefensePage(getContext());
+        attack.establishExistingWar();
+        colony.chooseColonyOutcome(true);
+
+        // The player captures the last rival colony through the ordinary attack
+        // UI.
+        attack.chooseAttack(SOLDIER, QUEBEC);
+        attack.confirm();
+        org.akropia.page.RebellionVictoryPage victory = new org.akropia.page.RebellionVictoryPage(
+                getContext());
+        victory.verifyVictoryDialog("Victory! You completed");
+        victory.closeVictoryDialog("Victory! You completed");
+
+        // A single frozen result identifies domination and offers unscored
+        // continuation.
+        org.akropia.page.HallOfFamePage hall = new org.akropia.page.HallOfFamePage(
+                getContext());
+        hall.awaitResultDialog();
+        hall.verifyCurrentResultShown();
+        hall.verifyObjectiveResult(org.akropia.model.FreePlayGoal.DOMINATION);
+        hall.closeResultDialog();
+        colony.closeCapturedColonyMessage();
+    }
 }

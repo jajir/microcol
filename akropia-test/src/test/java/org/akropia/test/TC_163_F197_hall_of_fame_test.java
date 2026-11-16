@@ -68,7 +68,7 @@ public class TC_163_F197_hall_of_fame_test extends AbstractAkropiaTest {
             throws Exception {
         // The prepared game stands in winter 1799, and ten authored rivals are
         // already saved with totals above the Dutch result.
-        ScoreBoundaryFixture.prepareBeforeBoundary(getContext(), testFileName,
+        FreePlayObjectiveFixture.congress(getContext(), testFileName,
                 "hall-of-fame-f197-full.akropia");
         HallOfFameFixture.writeFullRanking();
         WelcomePage.of(getContext()).loadGame();
@@ -83,9 +83,12 @@ public class TC_163_F197_hall_of_fame_test extends AbstractAkropiaTest {
         GamePage game = hall.closeStatistics();
 
         // Spring 1800 freezes the result and the player postpones the choice.
-        boundary.endTurnToBoundary();
-        boundary.verifyAwaitingChoice();
-        boundary.decideLater();
+        boundary.endTurnToFreePlayEnd("Victory! You completed");
+        new RebellionVictoryPage(getContext())
+                .closeVictoryDialog("Victory! You completed");
+        hall.awaitResultDialog();
+        hall.verifyObjectiveResult(org.akropia.model.FreePlayGoal.CONGRESS);
+        hall.continueWithoutScoring();
 
         // The result is below the rivals: it is not ranked, but its breakdown
         // is shown next to the unchanged ranking.
@@ -116,7 +119,7 @@ public class TC_163_F197_hall_of_fame_test extends AbstractAkropiaTest {
     void TC_02_scored_result_is_the_only_entry_once_and_is_kept_after_leaving_the_game()
             throws Exception {
         // The prepared game stands in winter 1799 with no saved ranking.
-        ScoreBoundaryFixture.prepareBeforeBoundary(getContext(), testFileName,
+        FreePlayObjectiveFixture.congress(getContext(), testFileName,
                 "hall-of-fame-f197-first.akropia");
         HallOfFameFixture.removeRanking();
         WelcomePage.of(getContext()).loadGame();
@@ -124,9 +127,13 @@ public class TC_163_F197_hall_of_fame_test extends AbstractAkropiaTest {
         final ScoreBoundaryPage boundary = new ScoreBoundaryPage(getContext());
 
         // Spring 1800 records the frozen result, and it is the first entry.
-        boundary.endTurnToBoundary();
-        boundary.verifyRankingPlace(1);
-        boundary.decideLater();
+        boundary.endTurnToFreePlayEnd("Victory! You completed");
+        new RebellionVictoryPage(getContext())
+                .closeVictoryDialog("Victory! You completed");
+        hall.awaitResultDialog();
+        hall.verifyRankedAt(1);
+        hall.verifyObjectiveResult(org.akropia.model.FreePlayGoal.CONGRESS);
+        hall.continueWithoutScoring();
         hall.openFromStatistics();
         hall.verifyRankingRows(1);
         hall.verifyRankedAt(1);
@@ -155,7 +162,7 @@ public class TC_163_F197_hall_of_fame_test extends AbstractAkropiaTest {
     void TC_03_leaving_before_a_frozen_result_records_nothing()
             throws Exception {
         // The prepared game stands in winter 1799: no score is frozen yet.
-        ScoreBoundaryFixture.prepareBeforeBoundary(getContext(), testFileName,
+        FreePlayObjectiveFixture.congress(getContext(), testFileName,
                 "hall-of-fame-f197-exit.akropia");
         HallOfFameFixture.removeRanking();
         final GamePage game = WelcomePage.of(getContext()).loadGame();
@@ -299,7 +306,7 @@ public class TC_163_F197_hall_of_fame_test extends AbstractAkropiaTest {
     @Tag("local")
     void TC_07_invalid_saved_ranking_is_named_at_spring_1800_and_continuing_still_works()
             throws Exception {
-        ScoreBoundaryFixture.prepareBeforeBoundary(getContext(), testFileName,
+        FreePlayObjectiveFixture.congress(getContext(), testFileName,
                 "hall-of-fame-f197-invalid.akropia");
         HallOfFameFixture.writeInvalidRanking();
         WelcomePage.of(getContext()).loadGame();
@@ -307,15 +314,16 @@ public class TC_163_F197_hall_of_fame_test extends AbstractAkropiaTest {
         final ScoreBoundaryPage boundary = new ScoreBoundaryPage(getContext());
 
         // Spring 1800 freezes the result; the choice window names the failure.
-        boundary.endTurnToBoundary();
-        boundary.verifyRankingStorageFailure();
-        boundary.verifyAwaitingChoice();
+        boundary.endTurnToFreePlayEnd("Victory! You completed");
+        new RebellionVictoryPage(getContext())
+                .closeVictoryDialog("Victory! You completed");
+        hall.awaitResultDialog();
+        hall.verifyStorageFailure();
 
         // Continuing without scoring is still possible and keeps the bytes.
-        final Optional<ScreenTurnReport> report = boundary.continueUnscored();
+        hall.continueWithoutScoring();
         boundary.verifyDialogShown(false);
         boundary.verifyContinuedUnscored();
-        boundary.closeReport(report);
         hall.verifyStoredBytes(HallOfFameFixture.INVALID_RANKING);
     }
 }

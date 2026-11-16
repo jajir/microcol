@@ -57,7 +57,15 @@ public final class ApplicationController {
 
     public void startNewFreeGame(final FreePlayMap map, final String playerName,
             final Difficulty difficulty, final EuropeanNation nation) {
-        gameController.startFreePlay(map, playerName, difficulty, nation);
+        startNewFreeGame(map, playerName, difficulty, nation,
+                java.util.List.of(org.akropia.model.FreePlayGoal.INDEPENDENCE));
+    }
+
+    public void startNewFreeGame(final FreePlayMap map, final String playerName,
+            final Difficulty difficulty, final EuropeanNation nation,
+            final java.util.List<org.akropia.model.FreePlayGoal> goals) {
+        gameController.startFreePlay(map, playerName, difficulty, nation,
+                goals);
         eventBus.post(new ShowScreenEvent(Screen.GAME));
         persistingService.checkpointNewGame();
     }

@@ -17856,3 +17856,82 @@ messages for diagnosis. No tests were removed or weakened for acceptance.
 4. Targeted Docker/Xvfb: **19 tests, zero failures/errors/skips**: all 15 scenarios in `TC_84_F75_framed_settings_test`, `TC_196_F228_world_minimap_test#TC_06_scrolling_keeps_terrain_and_fog_aligned`, and three `PageVerificationContractTest` checks. Reports: `target/docker-ui/run-W0wjrN/`; completion `20261115T165907Z-ddfcc2f72448`, 248.375 seconds.
 5. Fixed smoke/support selection (`verify.sh --smoke`): **21 tests, zero failures/errors/skips**, 253.942 seconds total against the 420-second budget (test group 250.946 seconds). Evidence: `target/verification/run-o20gco2m/summary.json`, completion `20261115T170332Z-7f9ab6fc2a12`. Changed Java sources match the accepted model and smoke snapshots.
 6. The shared Eclipse formatter was applied to all five changed Java files; token preservation and idempotence checks passed. Documentation acceptance: 14 consistency tests, zero failures/errors/skips, zero unexplained name-audit occurrences, and strict MkDocs; logs in `target/scroll-scale/`. This is local acceptance only; no full regression or remote publication verification was requested.
+
+
+## Free-play objectives — 2026-11-16
+
+1. Scope: [free-play objectives](free-play-maps.md#cile-a-konec-volne-hry),
+   removal of free-play calendar deadlines, World/Player/Objectives setup,
+   progress and frozen Hall of Fame results, and shared form-control styling.
+   Acceptance source is `c19058ea4da206e7e9e579128ba32bbb98ce0021` plus this change.
+   Relevant journeys include UC-085, UC-111, UC-112 and free-play setup.
+2. All **5,128 model/JUnit tests passed with zero failures, errors or skips**
+   in `target/verification/run-ot21bg8i`, completion
+   `20261116T162412Z-3bfebbb81769`, 157.920 seconds. All changed game sources,
+   resources and model tests still match that snapshot after UI-test repairs.
+3. Historical model attempts remain failed: `run-y05buup8` had 7 failures and
+   2 errors; `run-8kwe_qr3` had 3 failures (both 5,128 tests, no skips).
+   Repairs updated obsolete date/order expectations, result validation and
+   test setup. Completion `20261116T155517Z-e9288043ab39` timed out during
+   a 20-second Docker preparation query; tests never started. Later bounded
+   Docker probes succeeded, but the delay's root cause is unconfirmed.
+   Earlier successful model evidence is `run-j24sa_y3` (5,128 tests, no
+   failures/errors/skips); the later snapshot above supersedes it.
+4. Targeted UI selection: `TC_24_F15_free_play_setup_test`, domination scenario
+   `TC_76_F68_colony_defense_test#TC_11_capturing_the_last_rival_colony_wins_domination_and_records_the_goal`,
+   `TC_84_F75_framed_settings_test`, `TC_85_F75_playpen_typography_test`,
+   `TC_122_F113_generated_world_test`, `TC_158_F191_revolution_victory_test`,
+   `TC_162_F193_score_boundary_test`, `TC_163_F197_hall_of_fame_test`,
+   `TC_164_F194_retirement_test` and `PageVerificationContractTest`.
+   Failed runs are retained under `target/docker-ui/`:
+
+   | Run | Tests | Failures | Errors | Skips |
+   | --- | ---: | ---: | ---: | ---: |
+   | `run-h1uHXP` | 59 | 2 | 5 | 0 |
+   | `run-yAB7Og` | 59 | 1 | 1 | 0 |
+   | `run-MMGuvG` | 5 | 0 | 2 | 0 |
+   | `run-vaKTy1` | 5 | 0 | 1 | 0 |
+   | `run-rhmflT` | 1 | 0 | 1 | 0 |
+   | `run-1d5MS1` | 1 | 0 | 1 | 0 |
+   | `run-HHHtxJ` | 33 | 0 | 1 | 0 |
+   | `run-Psskcq` | 74 | 1 | 0 | 0 |
+
+5. UI repairs: the objectives step now focuses Start for keyboard activation;
+   setup checks cover three steps. The domination fixture makes Montreal a
+   previously captured Dutch colony with matching affiliation and resident
+   ownership; the victory/result dialogs are handled before the capture
+   message. The river scenario now drags its sole worker directly from the
+   field to the town hall. The indoor menu is intentionally restricted to
+   workers in the colony center; returning the sole resident outside first
+   abandons the last colony and correctly ends this free game. Diagnostics
+   were removed. The repaired scenario and three page-contract checks passed
+   in `run-Ir8wbS`, completion `20261116T170512Z-821bb8692339`, 155.606 seconds,
+   zero failures/errors/skips. The complete final targeted selection also
+   includes the 15 TC_40 colony-job scenarios.
+6. The existing genuine vector paper-frame source is reused; its runtime export
+   matches `export-graphics.py trade-route-name --check`. Docker screenshots
+   `wizard-world.png` and `free-play-objectives-default.png` were visually
+   inspected. The shared Java formatter was applied to changed Java files.
+7. `run-Psskcq` passed 73 of 74 scenarios; its one failure was the original
+   river-mouth pixel check. Image capture and tile projection previously ran
+   on different threads and the assertion captured another frame after the
+   wait. The page now samples image and projection on the FX thread, keeps
+   the cursor outside the map and asserts the sampled frame. All expected
+   pixels remain unchanged. The repaired scenario and three page-contract
+   checks passed in `run-Bhpr84` (`20261116T172530Z-2b4975e45836`),
+   157.436 seconds, zero failures/errors/skips. The full TC_24 group and page
+   contract then passed **17 tests with zero failures/errors/skips** in
+   `run-9f1Vhd`, completion `20261116T172824Z-4c7bc5918d35`, 392.366 seconds.
+   Together with the unchanged passing class reports from `run-Psskcq`
+   (excluding its failed TC_24 report), this covers **74 distinct targeted
+   scenarios**. The historical `run-Psskcq` aggregate remains failed.
+8. Fixed smoke/support acceptance passed **21 tests with zero failures,
+   errors or skips** in `target/verification/run-4xl4ie2n`, completion
+   `20261116T173515Z-4ccf5863f794`: 253.273 seconds total against the
+   420-second budget (test group 250.217 seconds). All changed game and UI-test
+   files match this source snapshot. Final shared formatting was idempotent
+   for all 46 changed Java files. Documentation checks passed: 14 consistency
+   tests, zero unexplained naming-audit occurrences and strict MkDocs.
+   Logs are retained in `target/freeplay-objectives/`.
+9. This is local acceptance. No full regression, remote CI or publication
+   verification was requested or claimed.

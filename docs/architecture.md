@@ -163,12 +163,21 @@ Nové partie mají výchozí Conquistador; načtené hry nemají náhradní výc
 hodnotu. Číselné účinky a stav ověření mají své vlastní požadavky;
 [R-0064](requirements/done/R-0064.md) přijímá pouze volbu a kontinuitu profilu.
 
+### Volitelné cíle freegame — 2026-11-16
+
+`model.FreePlayObjectives` vlastní neměnný výběr cílů, průběžné dotazy a uloženou
+historii získání a ztráty poslední kolonie. `Model` vyhodnocuje cíle všech národů
+na dokončených akčních hranicích; `GameManager` přeskočí vyřazené národy a uzavře
+jediný výsledek. `ObjectiveResult` uchovává neměnná metadata cílů vedle skóre v
+`GameResult` a `HallOfFameEntry`. `model.store` ukládá jejich hodnoty, UI pouze
+zobrazuje společné dotazy. Freegame nemá hranice 1600/1800/1850; kalendář může
+ukončit pouze časově omezenou misi. [Pravidla](free-play-maps.md#cile-a-konec-volne-hry).
+
 ### Ukončení a odchod ze volné hry (R-0194)
 
 `Model.getRetirementQuote` nabízí ukončení (Retire) jen v běžící bodované volné
 hře, pro lidskou koloniální velmoc na jejím tahu a bez čekající volby, i když
-svou vzpouru už vyhlásila. Čekání na rozhodnutí jara 1800, mise a dokončená hra
-ji nenabízejí; vzpoura, kterou už rozhodl konec, ji také nenabízí. Ukončení
+svou vzpouru už vyhlásila. Mise a dokončená hra ji nenabízejí; vzpoura, kterou už rozhodl konec, ji také nenabízí. Ukončení
 rozhlášené vzpoury zmrazí aktuální skóre bez bonusu za nezávislost.
 `RetirementQuote` je neměnný náhled: u živé hry je to aktuální `ResultScore`,
 u nepřerušeného pokračování zmrazený výsledek s původní identitou. `Model.retire`
@@ -1174,9 +1183,14 @@ produkce se nemění. Viz [ověření](functional-tests.md#r-0188-targeted-cause
 
 `Model.deliverInterventionForces` nyní ověřuje získaný a dosud nevyužitý nárok, příslušnost hráče, přístupnost zvoleného přístavu a kapacitu ID před vytvořením osmi jednotek. Výběr nejnižšího ID používá geografickou dostupnost; blokace zachovává čekající stav místo přesunu do dalšího přístavu. Úspěch ukládá příznak doručení spolu s hlášením, načtení samo dodávku neprovádí. [Ověření R-0190](functional-tests.md#r-0190-targeted-intervention-delivery-verification-2026-10-23) zatím nezahrnuje následnou integraci přednosti porážky R-0192.
 
-### Hranice 1600, 1800 a 1850 volné hry (R-0193, 2026-10-23)
+### Kalendář a výsledky volné hry
 
-`Calendar` nese výslovné uložené pole `scoredPlay`; pravidla neodvozuje z koncového roku, takže mise může mít libovolný termín včetně 1850 a nedostane zmrazený výsledek. Bodovaný kalendář musí končit rokem 1850, chybějící pole znamená nebodovanou hru. Ztráta poslední kolonie ukončuje hru od jara 1600 (`GameOverEvaluator`). `GameManager` na konci dokončeného kola po úsudku o vzpouře a běžných podmínkách buď zmrazí výsledek nevyhlášeného lidského národa na jaře 1800 a pozastaví hru, nebo zapíše konečný výsledek při běžném konci; vzpoura zmrazuje při svém vítězství, porážce či nerozhodnutém konci 1850. `GameResult` je neměnný (jediná změna je stav po pokračování bez bodování) a ukládá se přes `store.GameResultPo`; `GameManager` při načtení odmítne nemožnou historii a nic nedomýšlí. GUI (`gui.screen.statistics`) pouze zobrazuje modelový výsledek, nabízí volbu a vrací se k ní ze záložky základního skóre. Bez Síně slávy, žebříčku a odchodu do důchodu; ty patří do R-0197 a R-0194. [Evidence](functional-tests.md#r-0193-targeted-date-boundary-verification-2026-10-23) není akceptace.
+Dohoda z 16. listopadu 2026 ruší kalendářní omezení freegame. Pole
+`Calendar.scoredPlay` nyní rozlišuje volnou hru bez časového limitu od misí
+s vlastním koncem; uložený `endYear` volnou hru neukončuje. `GameManager`
+uchovává jediné skóre při výsledku a nemění ho při pokračování bez bodování.
+Pravidla a odpovědnosti popisují [cíle freegame](#volitelne-cile-freegame-2026-11-16).
+Historická přejímka původních lhůt zůstává v [evidenci R-0193](functional-tests.md#r-0193-targeted-date-boundary-verification-2026-10-23).
 
 ### Placené skupiny veteránů (R-0169, 2026-10-23)
 

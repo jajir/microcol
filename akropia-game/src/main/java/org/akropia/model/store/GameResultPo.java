@@ -6,6 +6,15 @@ package org.akropia.model.store;
  * victory order and declaration year are present only for a declared rebellion.
  */
 public final class GameResultPo {
+    private ObjectiveResultPo objectives = new ObjectiveResultPo();
+
+    public ObjectiveResultPo getObjectives() {
+        return objectives;
+    }
+
+    public void setObjectives(ObjectiveResultPo value) {
+        objectives = value;
+    }
 
     private String identity;
 

@@ -1,5 +1,50 @@
 # Mapy volné hry
 
+## Cíle a konec volné hry
+
+Dohoda z **16. listopadu 2026**: průvodce má kroky **Svět → Hráč → Cíle**.
+Svět vybírá mapu, její parametry a seed; Hráč jméno, národ a obtížnost.
+Ve třetím kroku lze nezávisle zapnout následující cíle. Výchozí je pouze
+Nezávislost. Volba je součástí uložené partie a během hraní se nemění.
+
+1. **Nezávislost:** vyhlásit samostatnost a vyhrát revoluci. Samotné vyhlášení
+   nestačí. Platí společné podmínky [revoluce](gap-analysis.md#revolution-and-intervention),
+   včetně osvobození přeživších kolonií a nejvýše dvou živých pozemních
+   jednotek krále napříč rezervou, přepravou a pevninou.
+2. **Úplný kongres:** získat všech 25 členů kongresu.
+3. **Nadvláda:** vyřadit všechny ostatní kolonizační národy. Domorodé národy
+   a králové nejsou soupeři pro tento cíl. Národ je vyřazen ztrátou poslední
+   kolonie po prvním založení nebo získání kolonie; úvodní výprava bez kolonie
+   není vyřazena. Vyřazení se ukládá a národ už nedostává další tahy.
+   Bez soupeřů nemůže být nadvláda splněna.
+4. Stačí splnit **kterýkoli zapnutý cíl**. Stejné cíle platí pro soupeře;
+   vítězství soupeře ukončí lidskou partii porážkou. Vyhodnocení používá
+   dokončené modelové akce a přípravy tahu. Porážka má přednost před vítězstvím.
+   Při současném splnění více cílů jedním národem vznikne jediný výsledek se
+   všemi splněnými zapnutými cíli. Pořadí při stejné hranici je stabilní pořadí
+   národů; nezávislost nadále uchovává pořadí skutečných dokončení revoluce.
+5. **Žádné časové limity:** roky 1600, 1800 ani 1850 nevyřazují národ,
+   neuzavírají skóre, neblokují vyhlášení samostatnosti a neukončují freegame.
+   Formulář nenabízí časový limit. Kalendář a jeho zobrazení zůstávají;
+   vlastní lhůty scénářů kampaně tato změna neruší.
+6. Vypnutí všech cílů znamená **volné budování bez cílového vítězství a bez
+   časového limitu**. Pravidla porážky a dobrovolné ukončení stále platí.
+7. Obrazovka Cíle od prvního tahu ukazuje zapnuté cíle a jejich postup:
+   podporu samostatnosti, po vyhlášení okupované kolonie a zbývající královské
+   pozemní jednotky, členy kongresu a zbývající soupeře.
+8. Síň slávy uchovává cíl či cíle vítězného národa, vítěze, tah dokončení,
+   zapnuté cíle a stávající skóre s rozpisem, obtížností a identitou hráče.
+   Skórovací vzorec včetně bonusů za nezávislost se touto změnou nepřebalancovává.
+   Výsledek se uzavře jednou; načtení, opětovné otevření ani pokračování bez
+   bodování jej nepřepočítají a nevytvoří duplicitu.
+9. Vítěz může z okna výsledku pokračovat bez bodování. Zavření výsledku tuto
+   možnost neaktivuje. Další hraní nemění původní výsledek; uložená pokračující
+   partie tento stav zachová.
+
+Implementace a přejímka: změna je rozpracovaná; ověření bude zaznamenáno ve
+[funkční evidenci](functional-tests.md#free-play-objectives-2026-11-16).
+
+
 ## Editor map
 
 1. Schválené zadání z 9. listopadu 2026, implementace a místní přejímka dokončené: [R-0435](requirements/done/R-0435.md). Samostatný editor je dostupný tlačítkem **Map editor** napravo od **Settings** pouze v developer mode; používá mapový pohled a pravý panel nástrojů.
