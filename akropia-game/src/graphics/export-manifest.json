@@ -8,6 +8,25 @@
   "sourceRoot": "akropia-game/src/graphics",
   "runtimeRoot": "akropia-game/src/main/resources/images",
   "groups": {
+    "trade-route-cargo": {
+      "family": "Trade route cargo actions, selected 5B",
+      "outputs": [
+        {
+          "output": "trade-route-cargo-icons.png",
+          "source": "trade-route-cargo-icons.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            192,
+            96
+          ],
+          "transparent": true,
+          "consumer": "DialogTradeRouteCargo via ButtonIcon",
+          "display": "32 x 32 logical px, shared action icon size",
+          "stroke": "3 source units, 2 logical px black pen"
+        }
+      ]
+    },
     "help-topics": {
       "family": "Colonizopedia topic navigation",
       "outputs": [{"output":"help-topic-icons.png","source":"help-topic-icons.svg","render":"zoom","zoom":3,"size":[1344,96],"transparent":true,"consumer":"ScreenColonizopedia via ButtonIcon","display":"32 x 32 logical px","stroke":"2 logical px black pen, flat olive fills"}]

@@ -1,8 +1,8 @@
 .trade-route-column {
-    -fx-padding: 12;
-    -fx-background-color: #FFF9EC;
-    -fx-border-color: #000000;
-    -fx-border-width: 2;
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
 }
 .trade-route-column .label { -fx-wrap-text: true; }
 .trade-route-row {
@@ -17,13 +17,13 @@
 }
 .trade-route-matrix .trade-route-station-name { -fx-wrap-text: false; }
 .trade-route-goods-header {
-    -fx-min-width: 34;
+    -fx-min-width: 56;
     -fx-alignment: center;
 }
 .trade-route-cell {
-    -fx-min-width: 34;
-    -fx-min-height: 30;
-    -fx-pref-width: 34;
+    -fx-min-width: 56;
+    -fx-min-height: 48;
+    -fx-pref-width: 56;
     -fx-background-color: #FFF9EC;
     -fx-background-radius: 0;
     -fx-border-color: #000000;
@@ -87,7 +87,7 @@
     -fx-underline: true;
 }
 #tradeRouteTabs > .tab-content-area {
-    -fx-background-color: #FFF9EC;
+    -fx-background-color: transparent;
     -fx-padding: 6 0 0 0;
 }
 
@@ -115,4 +115,9 @@
 #tradeRouteCargoDialog .titled-pane > .content {
     -fx-background-color: #FFF9EC;
     -fx-border-color: transparent;
+}
+
+#tradeRouteGoodsScroll, #tradeRouteGoodsScroll > .viewport {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
 }

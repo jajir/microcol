@@ -2719,3 +2719,9 @@ přístupným názvem; po rozšíření se text obnoví. Stav ověření vede
 3. Behavior and positioning follow [modal UX](ux.md#tlacitka-modalnich-oken-14-listopadu-2026).
    Displayed-result verification is recorded with the
    [functional evidence](functional-tests.md#modal-actions-2026-11-14).
+
+## Ikony nákladu obchodní trasy — 16. listopadu 2026
+
+1. Uživatel vybral variantu 5B: jednoduchý povoz a širší oblouková šipka dovnitř pro nakládání, zprava doleva nahoru pro vykládání. [Vektorový zdroj](../akropia-game/src/graphics/trade-route-cargo-icons.svg) obsahuje pouze editovatelné cesty, černou linku a ploché okrové/olivové výplně, bez bitmap, stínování a textur.
+2. Dvě buňky 48 × 48 jednotek mají linku 3 jednotky; ButtonIcon je zobrazuje ve společné velikosti 32 × 32 logických px, tedy s linkou 2 px. Manifest exportuje atlas 192 × 96: `python3 scripts/graphics/export-graphics.py trade-route-cargo --install`; opakovatelnost ověří `--check`.
+3. [UX kontrakt](ux.md#trade-route-direct-editing) určuje velikost tabulky a dostupnost při menší šířce. Kontrolu skutečného zobrazení a testy zaznamenává [evidence](functional-tests.md#trade-route-direct-editing-2026-11-16).

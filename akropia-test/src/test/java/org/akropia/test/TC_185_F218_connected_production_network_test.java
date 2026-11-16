@@ -170,10 +170,8 @@ public class TC_185_F218_connected_production_network_test
         cargo.chooseRoute("Ore Line");
         cargo.chooseStop(AT_NEW_AMSTERDAM);
         cargo.addUnload(GoodsType.ORE);
-        cargo.save();
         cargo.chooseStop(AT_DELFT);
         cargo.addLoad(GoodsType.ORE);
-        cargo.save();
         cargo.addCarrier(WAGON);
         cargo.verifyAssignment(WAGON, "Ore Line", AT_DELFT, false);
         cargo.verifyHoldEmpty(WAGON, 0);
@@ -394,10 +392,8 @@ public class TC_185_F218_connected_production_network_test
         cargo.chooseRoute("Ore Line");
         cargo.chooseStop(AT_NEW_AMSTERDAM);
         cargo.addUnload(GoodsType.ORE);
-        cargo.save();
         cargo.chooseStop(AT_DELFT);
         cargo.addLoad(GoodsType.ORE);
-        cargo.save();
         cargo.addCarrier(WAGON);
         cargo.verifyAssignment(WAGON, "Ore Line", AT_DELFT, false);
         cargo.close();

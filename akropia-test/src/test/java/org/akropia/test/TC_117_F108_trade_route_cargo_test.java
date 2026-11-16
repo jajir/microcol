@@ -80,9 +80,9 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         cargo.chooseStop(DELFT_STOP);
         cargo.verifyUnloadOrder();
         cargo.verifyLoadOrder();
-        cargo.verifySaveEnabled(false);
+        cargo.verifyDirectEditingControls();
 
-        // Stage the goods: ore off first, then weapon and horse on. The
+        // Set the goods: ore off first, then weapon and horse on. The
         // matrix keeps the fixed goods order, so the horse precedes the
         // weapon however they were clicked.
         cargo.addUnload(GoodsType.ORE);
@@ -90,33 +90,26 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         cargo.addLoad(GoodsType.HORSE);
         cargo.verifyUnloadOrder(GoodsType.ORE);
         cargo.verifyLoadOrder(GoodsType.HORSE, GoodsType.WEAPONS);
-        cargo.verifySaveEnabled(true);
-        cargo.verifyProcessEnabled(false);
-        cargo.verifyCarrierStatus(
-                "Save the cargo changes before processing the stop.");
+        cargo.verifyDirectEditingControls();
         cargo.openGoodsTab();
         cargo.captureDialog("tradeRouteCargoDialog", "trade-route-cargo.png");
-        cargo.save();
-        cargo.verifyMessage(
-                "Route saved. Each carrier takes the changes at its next stop.");
         cargo.verifyStoredCargo("Oil Run", DELFT_STOP, List.of(GoodsType.ORE),
                 List.of(GoodsType.HORSE, GoodsType.WEAPONS));
-        cargo.verifySaveEnabled(false);
-        cargo.verifyCarrierStatus("Ready to process.");
-        cargo.verifyProcessEnabled(true);
+        cargo.verifyDirectEditingControls();
 
-        // Saving and viewing moved nothing.
+        // Editing and viewing orders moved nothing.
         cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.ORE, 60));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 0));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.HORSE, 50));
-        cargo.verifyVisitProcessed(GALLEON_ID, false);
 
-        // Process the stop: unload first, then load in the goods order.
-        cargo.process();
-        cargo.verifyResult("Unload Ore: 60 – moved all",
-                "Load Horse: 50 – moved all",
-                "Load Weapons: 0 – nothing moved: no hold has room");
-        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.HORSE, 50));
+        // Turn production breeds two horses before automatic service unloads
+        // ore and loads all 52 horses in goods order.
+        cargo.addCarrier(GALLEON_ID);
+        cargo.verifyDirectEditingControls();
+        cargo.close();
+        colony.close();
+        game.nextTurnAndCloseDialogs();
+        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.HORSE, 52));
         cargo.verifyHold(GALLEON_ID, 1, Goods.of(GoodsType.OLIVE_OIL, 100));
         cargo.verifyHold(GALLEON_ID, 3, Goods.of(GoodsType.OLIVES, 100));
         cargo.verifyHold(GALLEON_ID, 4, Goods.of(GoodsType.GRAPES, 100));
@@ -124,12 +117,11 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 60));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.HORSE, 0));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 50));
-        cargo.verifyVisitProcessed(GALLEON_ID, true);
 
-        // The same visit cannot be processed again.
-        cargo.verifyProcessEnabled(false);
-        cargo.verifyCarrierStatus(
-                "Already processed during this visit. Leave the stop and come back to process it again.");
+        // Reopening the route does not perform another transfer.
+        colony = game.openColonyAt(DELFT_LOCATION, "Delft");
+        cargo.open();
+        cargo.chooseRoute("Oil Run");
         cargo.close();
         cargo.verifyDialogClosed();
         colony.verifyWarehouseGoods(Goods.of(GoodsType.ORE, 60));
@@ -145,15 +137,10 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         cargo.chooseStop(DELFT_STOP);
         cargo.verifyUnloadOrder(GoodsType.ORE);
         cargo.verifyLoadOrder(GoodsType.HORSE, GoodsType.WEAPONS);
-        cargo.verifyResult();
-        cargo.verifyProcessEnabled(false);
-        cargo.verifyCarrierStatus(
-                "Already processed during this visit. Leave the stop and come back to process it again.");
-        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.HORSE, 50));
+        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.HORSE, 52));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 60));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.HORSE, 0));
         cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 50));
-        cargo.verifyVisitProcessed(GALLEON_ID, true);
         cargo.close();
         colony.close();
     }
@@ -195,7 +182,7 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
                 "Delft, Ore: unload");
         cargo.clickCell(DELFT_STOP, GoodsType.ORE);
         cargo.verifyCell(DELFT_STOP, GoodsType.ORE, "", "Delft, Ore: ignore");
-        cargo.verifySaveEnabled(false);
+        cargo.verifyDirectEditingControls();
 
         // More than six goods in one direction: seven unloads and nine loads
         // fill the whole row, and no goods is loaded and unloaded at once.
@@ -210,23 +197,17 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         // At Home port the same signs mean buying and selling.
         cargo.clickCell(0, GoodsType.WEAPONS);
         cargo.verifyCell(0, GoodsType.WEAPONS, "+", "Home port, Weapons: buy");
-        cargo.save();
         cargo.verifyStoredCargo("Coast Run", DELFT_STOP, seven, nine);
         cargo.verifyStoredCargo("Coast Run", 0, List.of(),
                 List.of(GoodsType.WEAPONS));
 
-        // Clearing one cell is staged until it is saved; Back first warns,
-        // the second press discards it and the stored row stays.
+        // Leaving keeps the final edit without another confirmation.
         cargo.chooseStop(DELFT_STOP);
         cargo.ignoreGoods(GoodsType.WEAPONS);
-        cargo.verifySaveEnabled(true);
-        cargo.close();
-        cargo.verifyMessage(
-                "The route has unsaved changes. Save or cancel them, or press again to discard them.");
-        cargo.verifyOpened();
         cargo.close();
         cargo.verifyDialogClosed();
-        cargo.verifyStoredCargo("Coast Run", DELFT_STOP, seven, nine);
+        cargo.verifyStoredCargo("Coast Run", DELFT_STOP, seven,
+                nine.subList(0, nine.size() - 1));
         colony.close();
     }
 
@@ -269,29 +250,21 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         // return the grain cell to ignoring.
         cargo.cycleCellWithKeyboard(DELFT_STOP, GoodsType.GRAIN);
         cargo.verifyStatusBar("Delft, Obilí: nakládat. "
-                + "Změníte kliknutím nebo mezerníkem: prázdná ignoruje, + nakládá, \u2212 vykládá.");
+                + "Změníte kliknutím nebo mezerníkem: ignorovat, nakládat, vykládat.");
         cargo.cycleCellWithKeyboard(DELFT_STOP, GoodsType.GRAIN);
         cargo.cycleCellWithKeyboard(DELFT_STOP, GoodsType.GRAIN);
         cargo.verifyCell(DELFT_STOP, GoodsType.GRAIN, "",
                 "Delft, Obilí: ignorovat");
-        cargo.verifyCarrierStatus(
-                "Před zpracováním zastávky uložte změny nákladu.");
         cargo.captureDialog("tradeRouteCargoDialog",
                 "trade-route-cargo-czech.png");
-        cargo.save();
-        cargo.verifyMessage(
-                "Trasa je uložena. Každý dopravce převezme změny na své příští zastávce.");
-        cargo.process();
-        cargo.verifyResult("Vyložit Železná ruda: 60 – přesunuto vše",
-                "Naložit Koně: 50 – přesunuto vše",
-                "Naložit Zbraně: 0 – nic nepřesunuto: žádné místo nemá volno");
-        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.HORSE, 50));
-        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 50));
-        cargo.verifyCarrierStatus(
-                "Při této návštěvě už bylo zpracováno. Zastávku opusťte a vraťte se, pak ji lze zpracovat znovu.");
-        cargo.verifyProcessEnabled(false);
+        cargo.addCarrier(GALLEON_ID);
+        cargo.verifyDirectEditingControls();
         cargo.close();
         colony.close();
+        game.nextTurnAndCloseDialogs();
+        cargo.verifyHold(GALLEON_ID, 0, Goods.of(GoodsType.HORSE, 52));
+        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 50));
+
     }
 
     @Test
@@ -329,25 +302,21 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         planner.captureScreen("trade-route-planner-europe.png");
 
         // A map double-click opens the shared route window. Closing it
-        // after staging goods keeps the stored stop unchanged.
+        // after editing goods keeps the applied stop instructions.
         planner.editSelected();
         cargo.verifyOpened();
         cargo.verifyChosenRoute("Oil Run");
         cargo.chooseStop(DELFT_STOP);
         cargo.addUnload(GoodsType.ORE);
         cargo.close();
-        cargo.verifyMessage(
-                "The route has unsaved changes. Save or cancel them, or press again to discard them.");
-        cargo.close();
         cargo.verifyDialogClosed();
         planner.verifyStops("1. Home port — unload: nothing; load: nothing\n"
-                + "2. Delft — unload: nothing; load: nothing");
+                + "2. Delft — unload: Ore; load: nothing");
 
         // Saved goods and the assigned galleon appear in the panel.
         planner.editSelected();
         cargo.chooseStop(DELFT_STOP);
         cargo.addUnload(GoodsType.ORE);
-        cargo.save();
         cargo.verifyStoredCargo("Oil Run", DELFT_STOP, List.of(GoodsType.ORE),
                 List.of());
         cargo.openCarriersTab();
@@ -417,7 +386,6 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         cargo.verifyModeChoice(true,
                 "Touch and go: make the available transfers and continue",
                 "Wait until the designated unloading and loading are complete");
-        cargo.save();
         cargo.verifyStoredMode("Horse Run", TradeRouteMode.WAIT_FOR_COMPLETION);
 
         // The galleon joins the route at Delft; joining moves nothing.
@@ -458,7 +426,7 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         cargo.captureDialog("tradeRouteCargoPage",
                 "trade-route-carriers-default.png");
         cargo.openGoodsTab();
-        cargo.verifyGoodsMatrixFits();
+        cargo.verifyGoodsMatrixAccessible();
         cargo.captureDialog("tradeRouteCargoPage",
                 "trade-route-goods-default.png");
 
@@ -473,7 +441,7 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         cargo.captureDialog("tradeRouteCargoPage",
                 "trade-route-carriers-1024.png");
         cargo.openGoodsTab();
-        cargo.verifyGoodsMatrixFits();
+        cargo.verifyGoodsMatrixAccessible();
         cargo.captureDialog("tradeRouteCargoPage",
                 "trade-route-goods-1024.png");
         cargo.close();
@@ -492,7 +460,6 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         cargo.chooseRoute("Horse Run");
         cargo.openGoodsTab();
         cargo.chooseTouchAndGo();
-        cargo.save();
         cargo.verifyStoredMode("Horse Run", TradeRouteMode.TOUCH_AND_GO);
         cargo.verifyPauseReason(GALLEON_ID, TradeRoutePause.WAITING_LOAD);
         cargo.close();
@@ -545,28 +512,19 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         cargo.verifyCell(0, GoodsType.ORE, "\u2212", "Delft, Ore: unload");
         cargo.openStationsTab();
         cargo.verifyStopChoices("1. Delft", "2. Home port");
-        cargo.verifyStationStatus(
-                "Unsaved route changes. Save them or cancel them.");
+        cargo.verifyStationStatus("");
         cargo.openGoodsTab();
         cargo.verifyCell(0, GoodsType.ORE, "\u2212", "Delft, Ore: unload");
 
-        // Choosing nothing else and pressing Escape first warns.
+        // Escape leaves immediately and preserves both station order and cargo.
         cargo.closeWithEscape();
-        cargo.verifyOpened();
-        cargo.verifyMessage(
-                "The route has unsaved changes. Save or cancel them, or press again to discard them.");
-
-        // Cancel changes restores the stored route.
-        cargo.discardChanges();
-        cargo.verifyMessage("Unsaved changes were discarded.");
-        cargo.verifyGoodsRows("1. Home port", "2. Delft");
-        cargo.verifySaveEnabled(false);
-
-        // Saved with the keyboard, the new order is stored.
-        cargo.openStationsTab();
-        cargo.moveStationDown(0);
-        cargo.saveWithKeyboard();
+        cargo.verifyDialogClosed();
         cargo.verifyStoredStops("Key Run", "Delft", "Home port");
+        cargo.verifyStoredCargo("Key Run", 0, List.of(GoodsType.ORE),
+                List.of());
+        cargo.open();
+        cargo.chooseRoute("Key Run");
+        cargo.verifyStopChoices("1. Delft", "2. Home port");
         cargo.verifyRouteSummary("Sea (ship) route · 2 stops");
         cargo.closeWithEscape();
         cargo.verifyDialogClosed();

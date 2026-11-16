@@ -1,9 +1,7 @@
 package org.akropia.gui.screen.colony;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,9 +31,6 @@ import org.akropia.model.TradeRouteKind;
 import org.akropia.model.TradeRouteMode;
 import org.akropia.model.TradeRouteProblem;
 import org.akropia.model.TradeRouteStop;
-import org.akropia.model.TradeRouteStopProblem;
-import org.akropia.model.TradeRouteStopResult;
-import org.akropia.model.TradeRouteTransfer;
 import org.akropia.model.unit.UnitWithCargo;
 
 import com.google.common.eventbus.EventBus;
@@ -52,6 +47,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
@@ -66,21 +62,12 @@ import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
 /**
- * Management of the player's saved trade routes in three tabs: Stations,
- * Carriers and Goods. Stations and Goods edit one draft of the whole route, its
- * ordered stops, the goods instruction of every stop and the route-wide mode,
- * which the shared Save stores through the model and Cancel changes discards.
- * Switching tabs keeps the draft; leaving the screen or choosing another route
- * with unsaved changes asks for a second press. Carriers are added and removed
- * at once through the model, and a carrier standing at a stop is processed only
- * by its explicit button. Opening the screen or loading a game moves nothing;
- * every rule, quantity and waiting reason comes from the model.
+ * Trade route management. Each completed edit is validated and applied through
+ * the model; leaving this screen keeps the stored orders without executing
+ * them.
  */
 @Singleton
 public final class DialogTradeRouteCargo implements GameScreen {
-
-    /** Leaving the screen with unsaved changes. */
-    private static final int LEAVE_BACK = -1;
 
     private final GameModelController game;
     private final I18n i18n;
@@ -94,13 +81,11 @@ public final class DialogTradeRouteCargo implements GameScreen {
     private final Tab stationsTab = new Tab();
     private final Tab carriersTab = new Tab();
     private final Tab goodsTab = new Tab();
-    /** Route whose draft and carriers the screen shows, if any. */
+    /** Route whose settings and carriers the screen shows, if any. */
     private TradeRoute selectedRoute;
     /** Staged stops with their goods, in travel order. */
     private final List<TradeRouteStop> draftStops = new ArrayList<>();
     private TradeRouteMode draftMode = TradeRouteMode.TOUCH_AND_GO;
-    /** Leave request that already showed the unsaved warning, if any. */
-    private Integer leaveAskedFor;
 
     // Stations
     private final Label stationsRule = new Label();
@@ -119,17 +104,6 @@ public final class DialogTradeRouteCargo implements GameScreen {
     private final Label carriersRule = new Label();
     private final VBox carrierRows = new VBox(8);
     private final MenuButton addCarrier = ActionButtons.menu(ButtonIcon.ADD);
-    /** Explicit processing of a carrier standing at a stop, collapsed. */
-    private final TitledPane processPane = new TitledPane();
-    private final Label processRule = new Label();
-    private final ComboBox<UnitWithCargo> carrierBox = new ComboBox<>();
-    /** Stop index of each carrier offered for explicit processing. */
-    private final Map<UnitWithCargo, Integer> carrierStops = new LinkedHashMap<>();
-    private final Label carrierStatus = new Label();
-    private final Button process = ActionButtons.button(ButtonIcon.PLAY);
-    private final Label resultHeading = new Label();
-    private final Label result = new Label();
-
     // Goods
     private final Label goodsRule = new Label();
     private final GridPane matrix = new GridPane();
@@ -138,9 +112,6 @@ public final class DialogTradeRouteCargo implements GameScreen {
     private final RadioButton touchAndGo = new RadioButton();
     private final RadioButton waitForCompletion = new RadioButton();
 
-    // Shared draft actions
-    private final Button save = ActionButtons.button(ButtonIcon.SAVE);
-    private final Button discard = ActionButtons.button(ButtonIcon.CANCEL);
     private final Label message = new Label();
 
     private final InGamePage page;
@@ -190,19 +161,11 @@ public final class DialogTradeRouteCargo implements GameScreen {
         // TabBody makes the tabs measure that height again when it grows.
         tabs.setMinHeight(Region.USE_PREF_SIZE);
 
-        save.setId("tradeRouteCargoSave");
-        save.setOnAction(event -> saveRoute());
-        discard.setId("tradeRouteCargoDiscard");
-        discard.setOnAction(event -> discardChanges());
         message.setId("tradeRouteCargoMessage");
         message.setWrapText(true);
         message.setMinHeight(20);
         message.setMaxWidth(740);
-        final HBox draftActions = new HBox(8, save, discard);
-        draftActions.setId("tradeRouteDraftActions");
-
-        final VBox root = new VBox(12, routeSummary, tabs, draftActions,
-                message);
+        final VBox root = new VBox(12, routeSummary, tabs, message);
         root.setId("tradeRouteCargoDialog");
         page.setTitle(caption);
         final HBox actions = new HBox(3, routeMenu, close);
@@ -267,51 +230,8 @@ public final class DialogTradeRouteCargo implements GameScreen {
         // The list is read from the model each time it opens; closing it
         // without a choice changes nothing.
         addCarrier.setOnShowing(event -> fillAddCarrier());
-        processPane.setId("tradeRouteProcessPane");
-        processPane.setAnimated(false);
-        processPane.setExpanded(false);
-        processRule.setWrapText(true);
-        processRule.setMaxWidth(740);
-        carrierBox.setId("tradeRouteCargoCarrier");
-        carrierBox.setConverter(new StringConverter<UnitWithCargo>() {
-            @Override
-            public String toString(final UnitWithCargo carrier) {
-                if (carrier == null) {
-                    return "";
-                }
-                final Integer stop = carrierStops.get(carrier);
-                return stop == null || selectedRoute == null
-                        || stop >= selectedRoute.getStops().size()
-                                ? carrierName(carrier)
-                                : i18n.get(TradeRouteText.carrierAtStop,
-                                        carrierName(carrier),
-                                        stopName(selectedRoute.getStops()
-                                                .get(stop)));
-            }
-
-            @Override
-            public UnitWithCargo fromString(final String value) {
-                throw new UnsupportedOperationException();
-            }
-        });
-        carrierBox.setOnAction(event -> {
-            if (!refreshing) {
-                updateState();
-            }
-        });
-        carrierStatus.setId("tradeRouteCargoCarrierStatus");
-        carrierStatus.setWrapText(true);
-        carrierStatus.setMaxWidth(740);
-        process.setId("tradeRouteCargoProcess");
-        process.setOnAction(event -> processStop());
-        resultHeading.setId("tradeRouteCargoResultHeading");
-        result.setId("tradeRouteCargoResult");
-        result.setWrapText(true);
-        result.setMaxWidth(740);
-        processPane.setContent(new VBox(10, processRule, carrierBox,
-                carrierStatus, process, resultHeading, result));
         final VBox carriers = new TabBody(10, carriersRule, carrierRows,
-                addCarrier, processPane);
+                addCarrier);
         carriers.setId("tradeRouteCarriersColumn");
         carriers.getStyleClass().add("trade-route-column");
         return carriers;
@@ -334,12 +254,26 @@ public final class DialogTradeRouteCargo implements GameScreen {
                 .addListener((observable, previous, current) -> {
                     if (!refreshing && current != null) {
                         draftMode = (TradeRouteMode) current.getUserData();
-                        leaveAskedFor = null;
+                        applyRouteEdit();
                         updateState();
                     }
                 });
         modeLabel.setId("tradeRouteModeLabel");
-        final VBox goods = new TabBody(10, goodsRule, matrix, modeLabel,
+        final ScrollPane goodsScroll = new ScrollPane(matrix) {
+            @Override
+            protected double computePrefHeight(final double width) {
+                // Keep every row above the horizontal scrollbar, also before
+                // the tab skin has assigned the final viewport width.
+                return matrix.prefHeight(-1) + 24;
+            }
+        };
+        goodsScroll.setId("tradeRouteGoodsScroll");
+        goodsScroll.setFitToHeight(false);
+        goodsScroll.setMinHeight(Region.USE_PREF_SIZE);
+        goodsScroll.setMinWidth(0);
+        goodsScroll.setPrefViewportWidth(0);
+        goodsScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        final VBox goods = new TabBody(10, goodsRule, goodsScroll, modeLabel,
                 touchAndGo, waitForCompletion);
         goods.setId("tradeRouteGoodsColumn");
         goods.getStyleClass().add("trade-route-column");
@@ -361,16 +295,10 @@ public final class DialogTradeRouteCargo implements GameScreen {
     }
 
     /**
-     * Back. Unsaved changes are kept after the first press, which only warns; a
-     * second press leaves and discards them.
+     * Back returns to the opening screen; completed edits stay applied.
      */
     public void close() {
-        if (isDirty() && !Objects.equals(leaveAskedFor, LEAVE_BACK)) {
-            leaveAskedFor = LEAVE_BACK;
-            message.setText(i18n.get(TradeRouteText.unsavedWarning));
-            return;
-        }
-        leaveAskedFor = null;
+
         planning.invalidate();
         eventBus.post(originColony == null ? new ShowScreenEvent(Screen.GAME)
                 : new ShowScreenEvent(Screen.COLONY, originColony));
@@ -430,18 +358,11 @@ public final class DialogTradeRouteCargo implements GameScreen {
         deletePane.setText(i18n.get(TradeRouteText.deleteRoute));
         carriersRule.setText(i18n.get(TradeRouteText.carriersRule));
         addCarrier.setText(i18n.get(TradeRouteText.carrierAdd));
-        processPane.setText(i18n.get(TradeRouteText.carriersSection));
-        processRule.setText(i18n.get(TradeRouteText.processRule));
-        carrierBox.setAccessibleText(i18n.get(TradeRouteText.carrierLabel));
-        process.setText(i18n.get(TradeRouteText.processNow));
-        resultHeading.setText(i18n.get(TradeRouteText.resultHeading));
         goodsRule.setText(i18n.get(TradeRouteText.goodsRule));
         modeLabel.setText(i18n.get(TradeRouteText.modeLabel));
         touchAndGo.setText(i18n.get(TradeRouteText.modeTOUCH_AND_GO));
         waitForCompletion
                 .setText(i18n.get(TradeRouteText.modeWAIT_FOR_COMPLETION));
-        save.setText(i18n.get(TradeRouteText.saveRoute));
-        discard.setText(i18n.get(TradeRouteText.discardRoute));
         close.setText(i18n.get(TradeRouteText.closeCargo));
         showRouteChoice();
     }
@@ -472,15 +393,10 @@ public final class DialogTradeRouteCargo implements GameScreen {
         this.player = game.getHumanPlayer();
         translate();
         message.setText("");
-        result.setText("");
-        resultHeading.setVisible(false);
         deleteAskedFor = null;
-        leaveAskedFor = null;
         refreshing = true;
         try {
             // A choice or a carrier left from an earlier game is dropped.
-            carrierBox.getItems().clear();
-            carrierStops.clear();
             addStationBox.getItems().clear();
         } finally {
             refreshing = false;
@@ -526,24 +442,16 @@ public final class DialogTradeRouteCargo implements GameScreen {
     }
 
     /**
-     * Shows another route of the player. Unsaved changes of the current route
-     * are kept after the first choice, which only warns.
+     * Shows another route; all completed edits are already stored.
      */
     private void chooseRoute(final int routeId) {
         if (refreshing || (selectedRoute != null
                 && selectedRoute.getId() == routeId)) {
             return;
         }
-        if (isDirty() && !Objects.equals(leaveAskedFor, routeId)) {
-            leaveAskedFor = routeId;
-            message.setText(i18n.get(TradeRouteText.unsavedWarning));
-            return;
-        }
-        leaveAskedFor = null;
+
         deleteAskedFor = null;
         message.setText("");
-        result.setText("");
-        resultHeading.setVisible(false);
         final Optional<TradeRoute> route = model.getTradeRoutes(player).stream()
                 .filter(stored -> stored.getId() == routeId).findFirst();
         if (route.isEmpty()) {
@@ -565,6 +473,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
 
     /** Replaces the draft by the stored route. */
     private void resetDraft() {
+        stationStatus.setText("");
         draftStops.clear();
         if (selectedRoute != null) {
             draftStops.addAll(selectedRoute.getStops());
@@ -572,7 +481,6 @@ public final class DialogTradeRouteCargo implements GameScreen {
         } else {
             draftMode = TradeRouteMode.TOUCH_AND_GO;
         }
-        leaveAskedFor = null;
         showDraft();
     }
 
@@ -614,7 +522,6 @@ public final class DialogTradeRouteCargo implements GameScreen {
             showStations();
             showMatrix();
             showCarriers();
-            refreshProcessCarriers();
         } finally {
             refreshing = false;
         }
@@ -669,7 +576,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
             return;
         }
         draftStops.add(target, draftStops.remove(index));
-        leaveAskedFor = null;
+        applyRouteEdit();
         showDraft();
         focusStationButton(target, offset < 0 ? "Up" : "Down");
     }
@@ -693,7 +600,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
             return;
         }
         draftStops.remove(index);
-        leaveAskedFor = null;
+        applyRouteEdit();
         showDraft();
     }
 
@@ -704,7 +611,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
         }
         draftStops.add(choice.isEurope() ? TradeRouteStop.europe()
                 : TradeRouteStop.ofColony(choice.getColonyId()));
-        leaveAskedFor = null;
+        applyRouteEdit();
         showDraft();
         Platform.runLater(addStationBox::requestFocus);
     }
@@ -722,8 +629,8 @@ public final class DialogTradeRouteCargo implements GameScreen {
         for (final GoodsType type : TradeRouteStop.TRANSPORTABLE_GOODS) {
             final ImageView icon = new ImageView(
                     images.getGoodsTypeImage(type));
-            icon.setFitWidth(28);
-            icon.setFitHeight(28);
+            icon.setFitWidth(48);
+            icon.setFitHeight(48);
             icon.setPreserveRatio(true);
             final Label header = new Label();
             header.setGraphic(icon);
@@ -749,10 +656,10 @@ public final class DialogTradeRouteCargo implements GameScreen {
     }
 
     private Button makeCell(final int row, final GoodsType type) {
-        // The shared factory's load icon marks the cell as a cargo action;
-        // the cell itself shows only the agreed +, \u2212 or empty sign.
+        // The cell displays the route action icon; text retains its state
+        // marker.
         final Button cell = ActionButtons.button(ButtonIcon.LOAD);
-        cell.setContentDisplay(ContentDisplay.TEXT_ONLY);
+        cell.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         cell.setId("tradeRouteCell-" + row + "-" + type.name());
         cell.getStyleClass().add("trade-route-cell");
         cell.setFocusTraversable(true);
@@ -789,14 +696,17 @@ public final class DialogTradeRouteCargo implements GameScreen {
         final TradeRouteText state;
         if (stop.getLoadGoods().contains(type)) {
             cell.setText("+");
+            cell.setGraphic(ButtonIcon.ROUTE_LOAD.createView());
             state = stop.isEurope() ? TradeRouteText.cellBuy
                     : TradeRouteText.cellLoad;
         } else if (stop.getUnloadGoods().contains(type)) {
             cell.setText("−");
+            cell.setGraphic(ButtonIcon.ROUTE_UNLOAD.createView());
             state = stop.isEurope() ? TradeRouteText.cellSell
                     : TradeRouteText.cellUnload;
         } else {
             cell.setText("");
+            cell.setGraphic(null);
             state = TradeRouteText.cellIgnore;
         }
         cell.getStyleClass().removeAll("load", "unload");
@@ -821,7 +731,9 @@ public final class DialogTradeRouteCargo implements GameScreen {
             load.add(type);
         }
         draftStops.set(row, stop.withCargo(unload, load));
-        leaveAskedFor = null;
+        if (!applyRouteEdit()) {
+            return;
+        }
         showCell(cell, row, type);
         showHelp(cell.getAccessibleText() + ". "
                 + i18n.get(TradeRouteText.cellHint));
@@ -988,7 +900,6 @@ public final class DialogTradeRouteCargo implements GameScreen {
             message.setText(i18n.get(TradeRouteText.changed));
         }
         showCarriers();
-        refreshProcessCarriers();
         updateState();
     }
 
@@ -1005,76 +916,18 @@ public final class DialogTradeRouteCargo implements GameScreen {
             message.setText(i18n.get(TradeRouteText.changed));
         }
         showCarriers();
-        refreshProcessCarriers();
         updateState();
-    }
-
-    /** Carriers standing at any stop of the stored route, by stop order. */
-    private void refreshProcessCarriers() {
-        final TradeRoute route = selectedRoute;
-        final UnitWithCargo previous = carrierBox.getValue();
-        carrierStops.clear();
-        if (route != null) {
-            for (int index = 0; index < route.getStops().size(); index++) {
-                for (final UnitWithCargo carrier : model
-                        .getTradeRouteCarriers(player, route, index)) {
-                    carrierStops.putIfAbsent(carrier, index);
-                }
-            }
-        }
-        final List<UnitWithCargo> carriers = new ArrayList<>(
-                carrierStops.keySet());
-        final boolean wasRefreshing = refreshing;
-        refreshing = true;
-        try {
-            carrierBox.getItems().setAll(carriers);
-            carrierBox.setValue(carriers.contains(previous) ? previous
-                    : carriers.isEmpty() ? null : carriers.get(0));
-        } finally {
-            refreshing = wasRefreshing;
-        }
     }
 
     // ------------------------------------------------------------ Shared state
 
-    /** Enables the actions that fit the draft and the stored state. */
+    /** Enables actions for the current stored route. */
     private void updateState() {
         if (refreshing) {
             return;
         }
         final TradeRoute route = selectedRoute;
-        final boolean dirty = isDirty();
-        final Optional<TradeRouteProblem> problem = route == null || !dirty
-                ? Optional.empty()
-                : model.getTradeRouteUpdateProblem(player, route, draftStops,
-                        draftMode);
-        save.setDisable(!dirty || problem.isPresent());
-        discard.setDisable(!dirty);
-        stationStatus.setText(problem.map(this::editProblemText)
-                .orElse(dirty ? i18n.get(TradeRouteText.stationPending) : ""));
         addStation.setDisable(addStationBox.getValue() == null);
-        // Explicit processing
-        final UnitWithCargo carrier = carrierBox.getValue();
-        String status;
-        boolean ready = false;
-        if (route == null) {
-            status = i18n.get(TradeRouteText.cargoNoRoutes);
-        } else if (carrier == null) {
-            status = i18n.get(TradeRouteText.noCarrier);
-        } else if (dirty) {
-            status = i18n.get(TradeRouteText.cargoUnsaved);
-        } else {
-            final Optional<TradeRouteStopProblem> stopProblem = model
-                    .getTradeRouteStopProblem(carrier, route,
-                            carrierStops.get(carrier));
-            status = stopProblem.map(this::problemText)
-                    .orElse(i18n.get(TradeRouteText.carrierReady));
-            ready = stopProblem.isEmpty();
-        }
-        carrierStatus.setText(status);
-        process.setDisable(!ready);
-        carrierBox.setDisable(carrierBox.getItems().isEmpty());
-        // Delete
         final boolean asked = route != null && deleteAskedFor != null
                 && deleteAskedFor == route.getId();
         deleteRoute.setText(i18n.get(asked ? TradeRouteText.confirmDeleteRoute
@@ -1101,38 +954,32 @@ public final class DialogTradeRouteCargo implements GameScreen {
         return i18n.get(TradeRouteText.valueOf("editProblem" + problem.name()));
     }
 
-    private String problemText(final TradeRouteStopProblem problem) {
-        return i18n.get(TradeRouteText.valueOf("problem" + problem.name()));
-    }
-
-    /** Stores the whole draft through the model; nothing changes if refused. */
-    private void saveRoute() {
+    /** Applies one completed edit; rejection restores the stored route. */
+    private boolean applyRouteEdit() {
         final TradeRoute route = selectedRoute;
         if (route == null || !isDirty()) {
-            return;
+            return false;
         }
         try {
-            final TradeRoute stored = model.updateTradeRoute(player, route,
+            selectedRoute = model.updateTradeRoute(player, route,
                     new ArrayList<>(draftStops), draftMode);
-            reloadRoutes(Optional.of(stored.getId()));
-            message.setText(i18n.get(TradeRouteText.routeSaved));
+            stationStatus.setText("");
+            planning.invalidate();
         } catch (final IllegalArgumentException | IllegalStateException stale) {
-            // The route or colony changed; nothing was stored. The draft stays
-            // so the player can review it.
-            message.setText(i18n.get(TradeRouteText.changed));
-            updateState();
+            final String reason = model
+                    .getTradeRouteUpdateProblem(player, route, draftStops,
+                            draftMode)
+                    .map(this::editProblemText)
+                    .orElse(i18n.get(TradeRouteText.changed));
+            reloadRoutes(Optional.of(route.getId()));
+            stationStatus.setText(reason);
+            message.setText(reason);
+            return false;
         }
+        updateState();
+        return true;
     }
 
-    private void discardChanges() {
-        resetDraft();
-        message.setText(i18n.get(TradeRouteText.routeDiscarded));
-    }
-
-    /**
-     * Deletes the chosen route. Assigned carriers return to manual orders where
-     * they stand; the message says how many were released.
-     */
     private void deleteRoute() {
         final TradeRoute route = selectedRoute;
         if (route == null) {
@@ -1157,60 +1004,6 @@ public final class DialogTradeRouteCargo implements GameScreen {
             reloadRoutes(Optional.of(route.getId()));
             message.setText(i18n.get(TradeRouteText.changed));
         }
-    }
-
-    private void processStop() {
-        final TradeRoute route = selectedRoute;
-        final UnitWithCargo carrier = carrierBox.getValue();
-        if (route == null || carrier == null || isDirty()) {
-            return;
-        }
-        final Integer index = carrierStops.get(carrier);
-        message.setText("");
-        final TradeRouteStopResult outcome;
-        try {
-            outcome = model.processTradeRouteStop(carrier, route, index);
-        } catch (final IllegalStateException stale) {
-            message.setText(i18n.get(TradeRouteText.changed));
-            refreshProcessCarriers();
-            updateState();
-            return;
-        }
-        resultHeading.setVisible(true);
-        result.setText(describe(outcome));
-        // The colony screen behind this screen shows the moved goods.
-        eventBus.post(new RepaintColonyEvent());
-        showCarriers();
-        refreshProcessCarriers();
-        updateState();
-    }
-
-    private String describe(final TradeRouteStopResult outcome) {
-        if (outcome.getProblem().isPresent()) {
-            return problemText(outcome.getProblem().get());
-        }
-        if (outcome.getTransfers().isEmpty()) {
-            return i18n.get(TradeRouteText.noEntries);
-        }
-        return outcome.getTransfers().stream().map(this::entryText)
-                .collect(Collectors.joining("\n"));
-    }
-
-    private String entryText(final TradeRouteTransfer entry) {
-        final String verb = i18n
-                .get(entry.isUnload() ? TradeRouteText.verbUnload
-                        : TradeRouteText.verbLoad);
-        final String goods = goodsName(entry.getGoodsType());
-        final String reason = i18n.get(
-                TradeRouteText.valueOf("reason" + entry.getReason().name()))
-                + entry.getDetail().map(detail -> ": " + detail).orElse("");
-        if (entry.getGoldChange() == 0) {
-            return i18n.get(TradeRouteText.entryLine, verb, goods,
-                    entry.getAmount(), reason);
-        }
-        return i18n.get(TradeRouteText.entryGold, verb, goods,
-                entry.getAmount(), reason,
-                String.format("%+d", entry.getGoldChange()));
     }
 
     /**

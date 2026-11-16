@@ -204,38 +204,10 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void save() {
-        press("tradeRouteCargoSave");
-        WaitForAsyncUtils.waitForFxEvents();
-    }
-
-    public void saveWithKeyboard() {
-        pressWithKeyboard("tradeRouteCargoSave");
-    }
-
-    public void discardChanges() {
-        press("tradeRouteCargoDiscard");
-        WaitForAsyncUtils.waitForFxEvents();
-    }
-
-    public void process() {
-        press("tradeRouteCargoProcess");
-        WaitForAsyncUtils.waitForFxEvents();
-    }
-
-    /** Presses Back once; unsaved changes need a second press. */
+    /** Presses Back once, preserving applied changes. */
     public void close() {
         press("tradeRouteCargoClose");
         WaitForAsyncUtils.waitForFxEvents();
-    }
-
-    /** @param index zero-based position among the carriers at the stops */
-    public void chooseCarrier(final int index) {
-        final ComboBox<?> combo = getNodeFinder()
-                .lookup("#tradeRouteCargoCarrier").queryComboBox();
-        showTabOf(combo);
-        expandSectionOf(combo);
-        choose(combo, index);
     }
 
     // Stations
@@ -277,7 +249,7 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
     /**
      * Replaces the stop at {@code index} as a player does in the Stations tab:
      * remove it, add the new destination at the end and move it up to the same
-     * place. The change is staged until Save.
+     * place. Each completed action is applied immediately.
      */
     public void replaceStation(final int index, final String name) {
         removeStation(index);
@@ -488,6 +460,22 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
 
     /** Scrolls the screen, when it has a scroll bar, until the node shows. */
     private void reveal(final Node node) {
+        getNodeFinder().lookup("#tradeRouteGoodsScroll").tryQuery()
+                .filter(found -> isInside(node, found)).ifPresent(found -> {
+                    final ScrollPane scroll = (ScrollPane) found;
+                    getRobot().interact(() -> {
+                        final Node content = scroll.getContent();
+                        final double excess = content.getLayoutBounds()
+                                .getWidth()
+                                - scroll.getViewportBounds().getWidth();
+                        if (excess > 0) {
+                            final Bounds inside = content.sceneToLocal(
+                                    node.localToScene(node.getBoundsInLocal()));
+                            scroll.setHvalue(Math.max(0, Math.min(1,
+                                    (inside.getMinX() - 8) / excess)));
+                        }
+                    });
+                });
         getNodeFinder().lookup("#tradeRouteCargoScroll").tryQuery()
                 .ifPresent(found -> {
                     final ScrollPane scroll = (ScrollPane) found;
@@ -614,12 +602,9 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
             final Bounds summary = sceneBounds(
                     getNodeFinder().lookup("#tradeRouteCargoSummary").query());
             final Bounds tabBounds = sceneBounds(tabs());
-            final Bounds actions = sceneBounds(
-                    getNodeFinder().lookup("#tradeRouteDraftActions").query());
             assertTrue(summary.getMaxY() <= tabBounds.getMinY() + 1,
                     "The route kind and stop count are above the tabs");
-            assertTrue(tabBounds.getMaxY() <= actions.getMinY() + 1,
-                    "Save and Cancel changes follow the tabs");
+            verifyDirectEditingControls();
             assertEquals(3, tabs().getTabs().size());
             captureDialog("tradeRouteCargoPage", screenshot);
             getRobot().interact(() -> stage.setWidth(900));
@@ -814,6 +799,17 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
             final String expectedSign, final String expectedAccessible) {
         final Button cell = cell(stop, type);
         assertEquals(expectedSign, cell.getText());
+        assertEquals(javafx.scene.control.ContentDisplay.GRAPHIC_ONLY,
+                cell.getContentDisplay());
+        if (expectedSign.isEmpty()) {
+            assertNull(cell.getGraphic());
+        } else {
+            final javafx.scene.image.ImageView icon = (javafx.scene.image.ImageView) cell
+                    .getGraphic();
+            assertEquals(32, icon.getFitWidth());
+            assertEquals(expectedSign.equals("+") ? 0 : 96,
+                    icon.getViewport().getMinX());
+        }
         assertEquals(expectedAccessible, cell.getAccessibleText());
     }
 
@@ -856,19 +852,16 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
         assertEquals(expectedWaitText, wait.getText());
     }
 
-    public void verifySaveEnabled(final boolean expected) {
-        assertEquals(expected,
-                !getButtonById("tradeRouteCargoSave").isDisabled());
-    }
-
-    public void verifyProcessEnabled(final boolean expected) {
-        assertEquals(expected,
-                !getButtonById("tradeRouteCargoProcess").isDisabled());
-    }
-
-    public void verifyCarrierStatus(final String expected) {
-        assertEquals(expected,
-                getLabeledById("tradeRouteCargoCarrierStatus").getText());
+    /**
+     * Direct editing has neither a batch confirmation nor one-off processing.
+     */
+    public void verifyDirectEditingControls() {
+        for (final String id : List.of("tradeRouteCargoSave",
+                "tradeRouteCargoDiscard", "tradeRouteProcessPane",
+                "tradeRouteCargoProcess", "tradeRouteCargoCarrier")) {
+            assertTrue(getNodeFinder().lookup("#" + id).queryAll().isEmpty(),
+                    id);
+        }
     }
 
     public void verifyMessage(final String expected) {
@@ -876,13 +869,7 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 getLabeledById("tradeRouteCargoMessage").getText());
     }
 
-    /** @param expected the result lines, one per configured goods entry */
-    public void verifyResult(final String... expected) {
-        assertEquals(String.join("\n", expected),
-                getLabeledById("tradeRouteCargoResult").getText());
-    }
-
-    /** @param expected the model's refusal of the draft, or a pending note */
+    /** @param expected the model rejection, or empty after a valid edit */
     public void verifyStationStatus(final String expected) {
         assertEquals(expected,
                 getLabeledById("tradeRouteStationStatus").getText());
@@ -987,21 +974,44 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
     }
 
     /**
-     * Every column of the goods matrix and the mode choice are inside the
-     * window width, so no cell needs horizontal scrolling.
+     * Every full-size goods column is reachable in its own viewport; mode
+     * choices stay inside the page at narrow widths.
      */
-    public void verifyGoodsMatrixFits() {
+    public void verifyGoodsMatrixAccessible() {
         layout();
+        final ScrollPane scroll = getNodeFinder()
+                .lookup("#tradeRouteGoodsScroll").queryAs(ScrollPane.class);
         final double width = getPrimaryStage().getScene().getWidth();
+        assertTrue(sceneBounds(scroll).getMaxX() <= width);
         for (final GoodsType type : TradeRouteStop.TRANSPORTABLE_GOODS) {
-            final Bounds header = sceneBounds(getNodeFinder()
-                    .lookup("#tradeRouteGoodsHeader-" + type.name()).query());
-            assertTrue(header.getMinX() >= 0 && header.getMaxX() <= width,
-                    "Goods column outside the window: " + type + " " + header);
+            final Label header = getNodeFinder()
+                    .lookup("#tradeRouteGoodsHeader-" + type.name())
+                    .queryAs(Label.class);
+            reveal(header);
+            layout();
+            final Bounds shown = sceneBounds(scroll.lookup(".viewport"));
+            final Bounds bounds = sceneBounds(header);
+            assertTrue(
+                    bounds.getMinX() >= shown.getMinX() - 1
+                            && bounds.getMaxX() <= shown.getMaxX() + 1,
+                    "Goods column cannot be reached: " + type);
+            final javafx.scene.image.ImageView icon = (javafx.scene.image.ImageView) header
+                    .getGraphic();
+            assertEquals(48, icon.getFitWidth());
+            assertEquals(48, icon.getFitHeight());
         }
+        final Node goodsMatrix = getNodeFinder()
+                .lookup("#tradeRouteGoodsMatrix").query();
+        final Bounds matrixBounds = sceneBounds(goodsMatrix);
+        final Bounds viewport = sceneBounds(scroll.lookup(".viewport"));
+        assertTrue(
+                matrixBounds.getMinY() >= viewport.getMinY() - 1
+                        && matrixBounds.getMaxY() <= viewport.getMaxY() + 1,
+                "All rows must fit above the horizontal scrollbar");
+        getRobot().interact(() -> scroll.setHvalue(0));
         final Bounds wait = sceneBounds(
                 getNodeFinder().lookup("#tradeRouteModeWait").query());
-        assertTrue(wait.getMaxX() <= width, "Mode choice cut: " + wait);
+        assertTrue(wait.getMaxX() <= width, "Mode choices stay in the page");
     }
 
     /**

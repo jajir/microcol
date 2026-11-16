@@ -75,9 +75,8 @@ public class TC_207_F238_trade_route_home_port_test
         cargo.verifyCell(EUROPE_STOP, GoodsType.WEAPONS, "+",
                 "Home port, Weapons: buy");
         cargo.verifyStatusBar("Home port, Weapons: buy. "
-                + "Click or press Space to change: empty ignores, + loads, − unloads.");
+                + "Click or press Space to change: ignore, load, unload.");
         cargo.chooseWaitForCompletion();
-        cargo.save();
         cargo.verifyStoredMode("Arms Run", TradeRouteMode.WAIT_FOR_COMPLETION);
 
         // The docked galleon joins the route at the home port.

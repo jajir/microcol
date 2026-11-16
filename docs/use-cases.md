@@ -1606,3 +1606,8 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 ## Vyšší rozsah rychlosti WASD — 2026-11-15
 
 1. UC-114 (Hra) a UC-119: posuvník nyní pokrývá 10–36 pixelů za krok; podrobnosti vlastní [UX pravidlo](ux.md#rychlost-posunu-mapy-wasd-2026-11-08). TC_84/02 kontroluje nastavení, uložení a skutečný posun pro polohy 1, 2 a 9. TC_196/06 ověřuje shodu terénu a mlhy při posunu všemi čtyřmi směry na minimu, výchozí poloze a maximu. Výsledky vlastní [funkční evidence](functional-tests.md#wasd-speed-range-2026-11-15).
+
+## Průběžná správa obchodních tras — 16. listopadu 2026
+
+1. UC-029/030/116: TC117 ověřuje okamžité změny nákladu a režimu, EN/CS, ikony, klávesnici a zachování při návratu/Continue; jednorázové odbavení nahrazuje běžná automatická obsluha. TC119 chrání změny zastávek, rozkazy již jedoucích dopravců, přepínání tras a návrat. TC206 pokrývá pořadí a opakované úpravy více stanic.
+2. TC118, TC185, TC207 a TC208 nadále kontrolují přiřazení, propojenou produkci, domovský přístav a plný sklad bez dodatečného Save. [UX kontrakt](ux.md#trade-route-direct-editing) a [výsledky](functional-tests.md#trade-route-direct-editing-2026-11-16) rozlišují zadání od přejímky.

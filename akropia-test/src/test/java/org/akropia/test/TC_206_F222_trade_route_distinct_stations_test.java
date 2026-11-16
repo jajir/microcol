@@ -97,10 +97,7 @@ public class TC_206_F222_trade_route_distinct_stations_test
         cargo.captureDialog("tradeRouteCargoDialog",
                 "trade-route-five-stations.png");
 
-        // Save stores the five stations in this order with their goods.
-        cargo.save();
-        cargo.verifyMessage(
-                "Route saved. Each carrier takes the changes at its next stop.");
+        // The five stations and their goods are already stored in this order.
         cargo.verifyStoredStops("Grid Run", "D3", "A2", "C2", "D2", "A1");
         cargo.verifyStoredCargo("Grid Run", 0, List.of(),
                 List.of(GoodsType.ORE));
@@ -115,7 +112,7 @@ public class TC_206_F222_trade_route_distinct_stations_test
         cargo.verifyStopChoices("1. D3", "2. A2", "3. C2", "4. A1", "5. D2");
         cargo.captureDialog("tradeRouteCargoPage",
                 "trade-route-five-stations-1024.png");
-        cargo.discardChanges();
+        cargo.moveStationDown(3);
         cargo.verifyStopChoices("1. D3", "2. A2", "3. C2", "4. D2", "5. A1");
         cargo.close();
         cargo.verifyDialogClosed();

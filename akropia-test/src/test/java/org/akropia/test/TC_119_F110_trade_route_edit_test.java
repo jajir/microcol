@@ -95,17 +95,20 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         cargo.openCarriersTab();
         cargo.verifyNoCarrierRow("No ship or wagon follows this route.");
         cargo.replaceStation(NEW_AMSTERDAM_STOP, "Haarlem");
-        cargo.verifySaveEnabled(true);
-        cargo.verifyStationStatus(
-                "Unsaved route changes. Save them or cancel them.");
-        // Escape first warns about the unsaved change; a second press
-        // discards it.
-        cargo.closeWithEscape();
-        cargo.verifyMessage(
-                "The route has unsaved changes. Save or cancel them, or press again to discard them.");
+        cargo.verifyDirectEditingControls();
+        cargo.verifyStationStatus("");
+        // Escape leaves immediately and preserves the applied change.
         cargo.closeWithEscape();
         cargo.verifyDialogClosed();
-        cargo.verifyStoredStop("Ore cart", NEW_AMSTERDAM_STOP, "New Amsterdam");
+        cargo.verifyStoredStop("Ore cart", NEW_AMSTERDAM_STOP, "Haarlem");
+
+        cargo.open();
+        cargo.chooseRoute("Ore cart");
+        cargo.replaceStation(NEW_AMSTERDAM_STOP, "New Amsterdam");
+        cargo.chooseStop(NEW_AMSTERDAM_STOP);
+        cargo.addUnload(GoodsType.WEAPONS);
+        cargo.addLoad(GoodsType.ORE);
+        cargo.close();
 
         // Wagon 4 joins at New Amsterdam, and one turn passes: it takes its
         // first step.
@@ -174,13 +177,10 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         cargo.verifyLoadOrder(GoodsType.ORE);
         cargo.captureDialog("tradeRouteCargoDialog",
                 "trade-route-edit-before.png");
-        cargo.save();
-        cargo.verifyMessage(
-                "Route saved. Each carrier takes the changes at its next stop.");
         cargo.verifyStoredStop("Ore cart", NEW_AMSTERDAM_STOP, "Haarlem");
         cargo.verifyStoredCargo("Ore cart", NEW_AMSTERDAM_STOP,
                 List.of(GoodsType.WEAPONS), List.of(GoodsType.ORE));
-        cargo.verifySaveEnabled(false);
+        cargo.verifyDirectEditingControls();
 
         // Wagon 4 is still on its leg and keeps New Amsterdam as the stop it
         // accepted. Wagon 6 has not left Delft, so it already heads for
@@ -451,10 +451,7 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
 
         // The player repairs the route: the lost stop becomes Haarlem.
         cargo.replaceStation(LOST_STOP, "Haarlem");
-        cargo.verifySaveEnabled(true);
-        cargo.save();
-        cargo.verifyMessage(
-                "Route saved. Each carrier takes the changes at its next stop.");
+        cargo.verifyDirectEditingControls();
         cargo.verifyStoredStop("Lost cart", LOST_STOP, "Haarlem");
 
         // The wagon has not moved. It says that the repair is taken next turn.
@@ -529,17 +526,13 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         cargo.openStationsTab();
         cargo.verifyTabs("Stanice", "Přeprava", "Zboží");
         cargo.replaceStation(NEW_AMSTERDAM_STOP, "Haarlem");
-        cargo.verifyStationStatus(
-                "Trasa má neuložené změny. Uložte je nebo je zrušte.");
+        cargo.verifyStationStatus("");
         cargo.chooseStop(NEW_AMSTERDAM_STOP);
         cargo.addUnload(GoodsType.WEAPONS);
         cargo.addLoad(GoodsType.ORE);
         cargo.openStationsTab();
         cargo.captureDialog("tradeRouteCargoDialog",
                 "trade-route-edit-czech.png");
-        cargo.saveWithKeyboard();
-        cargo.verifyMessage(
-                "Trasa je uložena. Každý dopravce převezme změny na své příští zastávce.");
         cargo.verifyStoredStop("Ore cart", NEW_AMSTERDAM_STOP, "Haarlem");
         cargo.verifyStoredCargo("Ore cart", NEW_AMSTERDAM_STOP,
                 List.of(GoodsType.WEAPONS), List.of(GoodsType.ORE));
@@ -648,9 +641,6 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         planner.editSelected();
         cargo.verifyChosenRoute("Lost cart");
         cargo.replaceStation(LOST_STOP, "Haarlem");
-        cargo.save();
-        cargo.verifyMessage(
-                "Route saved. Each carrier takes the changes at its next stop.");
         cargo.close();
         planner.verifyStops("1. Delft — unload: nothing; load: nothing\n"
                 + "2. Haarlem — unload: nothing; load: nothing");

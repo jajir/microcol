@@ -111,7 +111,7 @@
   <entry key="tabStations">Stations</entry>
   <entry key="tabCarriers">Carriers</entry>
   <entry key="tabGoods">Goods</entry>
-  <entry key="stationsRule">Stops are visited in this order and the last one returns to the first. Move a stop with Up and Down; changes are stored by Save changes and reach each carrier at its next stop.</entry>
+  <entry key="stationsRule">Stops are visited in this order and the last one returns to the first. Move a stop with Up and Down. Changes apply immediately; each carrier takes them at its next stop.</entry>
   <entry key="stationAddLabel">Add destination</entry>
   <entry key="stationAdd">Add</entry>
   <entry key="stationUp">↑ Up</entry>
@@ -130,7 +130,7 @@
   <entry key="cargoSlot">%s %s</entry>
   <entry key="cargoPassenger">Passenger</entry>
   <entry key="cargoEmptySlot">Empty hold</entry>
-  <entry key="goodsRule">Each cell cycles: empty ignores, + loads, − unloads. At Home port + buys and − sells. A stop unloads first, then loads, both in the order of the goods icons.</entry>
+  <entry key="goodsRule">Click a cell to cycle: ignore, load, unload. Arrows point into or out of the wagon. At Home port loading buys and unloading sells. A stop unloads first, then loads, in goods order.</entry>
   <entry key="modeLabel">At every stop</entry>
   <entry key="modeTOUCH_AND_GO">Touch and go: make the available transfers and continue</entry>
   <entry key="modeWAIT_FOR_COMPLETION">Wait until the designated unloading and loading are complete</entry>
@@ -149,5 +149,5 @@
   <entry key="pauseWAITING_LOAD">Waiting: free holds remain and the stop has no more goods to load.</entry>
   <entry key="pauseWAITING_FUNDS">Waiting: free holds remain and the treasury cannot pay for more goods.</entry>
   <entry key="editProblemSTOP_COUNT">A route needs at least one stop.</entry>
-  <entry key="cellHint">Click or press Space to change: empty ignores, + loads, − unloads.</entry>
+  <entry key="cellHint">Click or press Space to change: ignore, load, unload.</entry>
 </properties>

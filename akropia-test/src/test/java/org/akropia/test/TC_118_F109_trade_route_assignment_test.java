@@ -110,13 +110,11 @@ public class TC_118_F109_trade_route_assignment_test
         cargo.chooseStop(DELFT_STOP);
         cargo.addUnload(GoodsType.ORE);
         cargo.addLoad(GoodsType.WEAPONS);
-        cargo.save();
         cargo.verifyStoredCargo("Ore Cart", DELFT_STOP, List.of(GoodsType.ORE),
                 List.of(GoodsType.WEAPONS));
         cargo.chooseStop(NEW_AMSTERDAM_STOP);
         cargo.addUnload(GoodsType.WEAPONS);
         cargo.addLoad(GoodsType.ORE);
-        cargo.save();
         cargo.verifyStoredCargo("Ore Cart", NEW_AMSTERDAM_STOP,
                 List.of(GoodsType.WEAPONS), List.of(GoodsType.ORE));
 

@@ -359,7 +359,7 @@ Esc v detailu otevřeném z mapového plánovače vrací mapu obchodních tras s
 ## Plánování obchodních tras
 
 1. Dohodnuté zadání z 1. listopadu 2026 zachycuje [R-0395](requirements/done/R-0395.md): přepínač vlevo nahoře přepne mapu do režimu barevných obchodních tras na tmavém podkladu. Najetí ukáže jméno a vlastnosti; výběr otevře popis a editaci konkrétní trasy v místě běžného pravého panelu.
-2. Po přepnutí do režimu obchodních tras se nahoře v hlavní herní liště zobrazí tlačítko pro novou trasu. Použije existující podobu tlačítka „Trade route…“ z detailu kolonie, které uživatel přiložil jako referenci. Hráč vybírá zastávky a jejich vlastnosti, cestu mezi městy volí hra podle [pohybových pravidel tras](gap-analysis.md#automated-trade-routes). Zrušení editace nemění uloženou trasu.
+2. Po přepnutí do režimu obchodních tras se nahoře v hlavní herní liště zobrazí tlačítko pro novou trasu. Použije existující podobu tlačítka „Trade route…“ z detailu kolonie, které uživatel přiložil jako referenci. Hráč vybírá zastávky a jejich vlastnosti, cestu mezi městy volí hra podle [pohybových pravidel tras](gap-analysis.md#automated-trade-routes). Zrušení zakládání nevytvoří trasu; správa existující trasy používá [průběžné změny](#trade-route-direct-editing).
 3. Zobrazují se všechny vypočtené cesty, nejen vybraná trasa. Vedou přibližně středy dlaždic jako měkké, ladně zahýbající křivky s viditelnými nepravidelnostmi ruční kresby. Stylizace nemění modelovou cestu ani její cenu. Čitelnost a možnost jednotlivého výběru zůstávají nutné i při překryvu. Jde o dohodnutý návrh, nikoli implementovaný nebo hráčsky ověřený výsledek.
 
 4. Trasa bez dopravce má šedý náhled: zobrazuje pouze legální cestu uloženého druhu trasy (pozemní nebo námořní), nikdy alternativu druhého druhu. Při shodné nejnižší ceně se stabilně vybere jedna cesta pro každou variantu; překreslení ji náhodně nemění. Evropa je zastávkou v high seas, ke které vede nejrychlejší legální námořní cesta podle pohybové ceny. Zobrazení nemění dobu samotné plavby ani návratové místo. Pravidla výpočtu vlastní [obchodní trasy](gap-analysis.md#automated-trade-routes).
@@ -1640,12 +1640,10 @@ skutečného hráče; výsledky patří do [funkční evidence](functional-tests
 
 
 <a id="trade-route-workbench"></a>
-## Správa obchodní trasy jako pracovní stůl — 2026-11-03
+## Správa obchodní trasy jako pracovní stůl — historie 2026-11-03
 
-1. Uživatel vybral první návrh „Pracovní stůl“, zachycený v [R-0407](requirements/done/R-0407.md): samostatná obrazovka uvnitř herního okna se zastávkami vlevo, zbožím pro vybranou zastávku uprostřed a dopravci vpravo. Návrat a kontext trasy mají zůstat dostupné při práci s obsahem.
-2. Uložení pokynů ke zboží, automatické přiřazení dopravce a jednorázové odbavení jsou různé činnosti a jejich popisky musí vysvětlit rozdíl. Přehled přiřazených dopravců a odstranění trasy mají vlastní rozbalovací části. Stávající pravidla a potvrzovací kroky se nemění.
-3. Zpět a Escape vedou do místa otevření, včetně plánovače tras nebo kolonie. Úzké okno nesmí znepřístupnit ovládání. Implementace byla lokálně ověřena 2026-11-04 v EN/CS, včetně tří sloupců a dostupného návratu při menší šířce. Nejde o závěr hráčské studie; [evidence](functional-tests.md#r-0406-r-0409-local-acceptance-2026-11-03) uvádí provedené kontroly.
-
+1. [R-0407](requirements/done/R-0407.md) zavedl samostatnou obrazovku s návratem do plánovače nebo kolonie. Původní tři sloupce následně nahradily záložky R-0421. Historické ověření zachovává [evidence](functional-tests.md#r-0406-r-0409-local-acceptance-2026-11-03).
+2. Současné ovládání určuje [průběžná správa trasy](#trade-route-direct-editing); původní ukládání návrhu a jednorázové odbavení již nejsou hráčskou cestou.
 
 <a id="movement-cost-presentation"></a>
 ## Cena kroku a zbývající pohyb — 2026-11-03
@@ -1681,9 +1679,17 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 
 ## Ověření editoru přepravní cesty — 6. listopadu 2026
 
-1. R-0421 zachovává společný rozpracovaný plán mezi záložkami; Uložit/Zrušit pracuje s celou trasou. Přidávání stanic nabízí pouze dosud nevybrané legální cíle, odebrání dopravce ponechá jeho polohu a náklad. Při odchodu s rozpracovanou editací hra nejprve upozorní.
-2. Stavový řádek vysvětluje ikonový sloupec a stav buňky při ukázání i zaměření klávesnicí. Symboly a důvod čekání doplňují barvy; režim celé trasy je pod tabulkou.
-3. Docker/Xvfb scénáře ověřily EN/CS, klávesnici, pět různých stanic, všechny druhy zboží a šest nákladových boxů při šířce 1024. Oprava dynamické výšky umožňuje posunout dlouhou záložku i rozbalené mazání; skutečné snímky a výsledky vlastní [funkční evidence](functional-tests.md#r-0421-tabbed-trade-route-editor-2026-11-06). Jde o automatické ověření a kontrolu snímků, nikoli studii hráčů.
+1. Historické ověření R-0421 (EN/CS, klávesnice, pět stanic, zboží a nákladové boxy) zachovává [funkční evidence](functional-tests.md#r-0421-tabbed-trade-route-editor-2026-11-06). Pozdější změnu ovládání popisuje následující kontrakt.
+
+<a id="trade-route-direct-editing"></a>
+## Průběžná správa obchodní trasy — 16. listopadu 2026
+
+1. Hráč upravuje zastávky, zboží a režim čekání přímo. Každá dokončená akce projde modelovou validací a ihned změní uložené rozkazy. Save changes / Cancel changes nejsou přítomné. Back, Escape, přepnutí záložky i výběr jiné trasy provedené změny zachovávají bez dalšího potvrzení. Odmítnutá změna zobrazí důvod a obnoví skutečné nastavení.
+2. Změna rozkazů sama nepřesune dopravce ani zboží a neprovede obchod. Dopravci dál přebírají nové rozkazy na své další zastávce podle stávajícího modelu. Jedna zastávka je nadále platná; poslední zastávku nelze odstranit. Přidání a odebrání dopravce zůstává přímou akcí; smazání celé trasy si ponechává potvrzení.
+3. Obsah Stations / Carriers / Goods nemá vlastní barevné pozadí ani vnější rámeček. Horní přepínače zachovávají označení aktivní záložky. Rámečky ovládacích prvků včetně buněk zboží zůstávají.
+4. Sloupce mají prostor pro ikony zboží 48 × 48 logických px. Buňky mají šířku 56 a minimální výšku 48 px (dříve 34 × 30). Na úzkém okně se posouvá jen matice vodorovně; názvy nejsou důvodem zmenšovat ikony. Stav se střídá ignorovat → nakládat → vykládat. Prázdná buňka ignoruje, ostatní zobrazí povoz s obloukovou šipkou vybrané varianty 5B. Vykládání vede zprava doleva nahoru. Sdílená velikost akčních ikon je 32 × 32 px, černá linka 2 px; přístupný popis a stavový řádek vysvětlují význam bez spoléhání na barvu.
+5. Celý formulář jednorázového odbavení dopravce byl odstraněn. Ruční překládání v kolonii, nákup/prodej v domovském přístavu a automatická obsluha přiřazených dopravců zůstávají dostupné.
+6. Jde o schválené zadání, nikoli hráčskou studii. Skutečné výsledky kontrol vede [evidence změny](functional-tests.md#trade-route-direct-editing-2026-11-16).
 
 ## Rychlost posunu mapy WASD — 2026-11-08
 

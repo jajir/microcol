@@ -75,7 +75,6 @@ public class TC_208_F239_trade_route_full_warehouse_test
         cargo.addLoad(GoodsType.WEAPONS);
         cargo.addLoad(GoodsType.TOOLS);
         cargo.chooseWaitForCompletion();
-        cargo.save();
         cargo.verifyStoredCargo("Ore Hold", DELFT_STOP, List.of(GoodsType.ORE),
                 List.of(GoodsType.TOOLS, GoodsType.WEAPONS));
         cargo.verifyStoredMode("Ore Hold", TradeRouteMode.WAIT_FOR_COMPLETION);

@@ -111,7 +111,7 @@
   <entry key="tabStations">Stanice</entry>
   <entry key="tabCarriers">Přeprava</entry>
   <entry key="tabGoods">Zboží</entry>
-  <entry key="stationsRule">Zastávky se navštěvují v tomto pořadí a z poslední se pokračuje na první. Pořadí měňte tlačítky Nahoru a Dolů; změny uloží Uložit změny a každý dopravce je převezme na své příští zastávce.</entry>
+  <entry key="stationsRule">Zastávky se navštěvují v tomto pořadí a z poslední se pokračuje na první. Pořadí měňte tlačítky Nahoru a Dolů. Změny platí ihned; každý dopravce je převezme na své příští zastávce.</entry>
   <entry key="stationAddLabel">Přidat cíl</entry>
   <entry key="stationAdd">Přidat</entry>
   <entry key="stationUp">↑ Nahoru</entry>
@@ -130,7 +130,7 @@
   <entry key="cargoSlot">%s %s</entry>
   <entry key="cargoPassenger">Cestující</entry>
   <entry key="cargoEmptySlot">Prázdný box</entry>
-  <entry key="goodsRule">Každá buňka cyklí: prázdná ignoruje, + nakládá, − vykládá. V domovském přístavu + nakupuje a − prodává. Zastávka nejprve vykládá, potom nakládá, obojí v pořadí ikon zboží.</entry>
+  <entry key="goodsRule">Kliknutím na buňku střídáte: ignorovat, nakládat, vykládat. Šipky míří do povozu nebo z něj. V domovském přístavu nakládání nakupuje a vykládání prodává. Zastávka nejprve vykládá, potom nakládá, v pořadí zboží.</entry>
   <entry key="modeLabel">Na každé zastávce</entry>
   <entry key="modeTOUCH_AND_GO">Projet a pokračovat: provést dostupné převody a jet dál</entry>
   <entry key="modeWAIT_FOR_COMPLETION">Čekat na úplné vyložení a naložení</entry>
@@ -149,5 +149,5 @@
   <entry key="pauseWAITING_LOAD">Čeká: zbývá volné místo a zastávka už nemá zboží k naložení.</entry>
   <entry key="pauseWAITING_FUNDS">Čeká: zbývá volné místo a pokladna nestačí na další nákup.</entry>
   <entry key="editProblemSTOP_COUNT">Trasa potřebuje alespoň jednu zastávku.</entry>
-  <entry key="cellHint">Změníte kliknutím nebo mezerníkem: prázdná ignoruje, + nakládá, − vykládá.</entry>
+  <entry key="cellHint">Změníte kliknutím nebo mezerníkem: ignorovat, nakládat, vykládat.</entry>
 </properties>
