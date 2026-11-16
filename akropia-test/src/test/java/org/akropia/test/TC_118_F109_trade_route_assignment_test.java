@@ -372,9 +372,9 @@ public class TC_118_F109_trade_route_assignment_test
 
         // Clicks on the shared square step through the routes there; the
         // list picks either one by name.
-        game.clickTile(DELFT_LOCATION);
+        planner.clickMap(DELFT_LOCATION);
         planner.verifySelectedRoute("Idle cart");
-        game.clickTile(DELFT_LOCATION);
+        planner.clickMap(DELFT_LOCATION);
         planner.verifySelectedRoute("Ore Cart");
         planner.chooseRoute("Idle cart");
         planner.verifySelectedRoute("Idle cart");

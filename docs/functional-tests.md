@@ -1,3 +1,53 @@
+## Regression run 43792018988 repair — 2026-11-16
+
+1. The [failed GitHub run](https://github.com/jajir/microcol/actions/runs/43792018988)
+   checked `8ab75e1add71f65c41728fe690b72f0aafb79012`. Its 613 XML reports
+   contain 6,019 tests: four failures, three errors and zero skips. The
+   complete failure inventory and original reports are retained locally in
+   `target/regression-43792018988/`; the historical run remains failed.
+2. TC96/02, /03 and /04 could not find the colony ordination action.
+   TC25/04 and /05 selected the wrong equipment action through positional
+   keyboard navigation. Subsequent commit `c19058ea4` already reveals the
+   colony unit before opening its menu, selects keyboard actions by stable
+   identity and checks omission of unavailable commands. This task verifies
+   those cases again on current main rather than reintroducing obsolete menus.
+3. TC118/04 and TC119/09 expected the next overlapping route but retained
+   the previous one. Their successive raw map clicks could become a native
+   double-click, which opens the current route instead of cycling. The
+   planning page now shares its existing 600 ms single-click separation
+   with these scenarios. Explicit double-clicks remain separate; route,
+   carrier, movement and editing assertions are preserved (UC-029/030).
+4. Acceptance source is based on `86f46c11d`. Required targeted selection:
+   all TC25, TC96, TC117, TC118 and TC119 scenarios, plus
+   `PageVerificationContractTest`, covering every reported failure and the
+   equipment, ordination and route-planning neighborhood. No full local
+   regression or publication verification is claimed.
+5. Model/JUnit passed all **5,128 tests**, zero failures/errors/skips,
+   in 397 XML reports (`target/verification/run-ha8n8ii6/`). Completion
+   `20261116T204411Z-2f7ade929b4d` (PID 4036) took 158.528 seconds within
+   its 600-second watchdog. All game-module source files still match the
+   verified snapshot; subsequent edits only concern UI test helpers and docs.
+6. Targeted attempt `20261116T204711Z-c173a725b78d` (PID 4418) was canceled
+   during compilation before tests began: the caller misspelled the TC117
+   class name. Its evidence remains retained. Corrected selection uses
+   `TC_117_F108_trade_route_cargo_test`; replacement completion
+   `20261116T204723Z-d508ea3c8fbf` (PID 4442, 1,800-second watchdog) passed
+   **35 tests**, zero failures/errors/skips, in 722.201 seconds after a
+   separate 10.420-second lock wait. Six complete reports in
+   `target/docker-ui/run-rpBcCJ/` cover TC25 (8), TC96 (5), TC117 (6),
+   TC118 (5), TC119 (8) and the page contract (3). All seven original
+   failing scenario IDs are present and passing.
+7. Fixed smoke/support completion `20261116T205956Z-0b2666c33166`
+   (PID 5201) passed **21 tests**, zero failures/errors/skips, in 255.199
+   supervised seconds within the 420-second acceptance budget. Reports:
+   `target/verification/run-dl77tsr4/`. All three changed Java files match
+   its source snapshot. Local acceptance is **5,128 model/JUnit + 35
+   targeted UI/contract + 21 smoke/support**, all passing. Shared Eclipse
+   formatting and final diff review passed; documentation validation passed
+   14 consistency tests, name audit and strict MkDocs. The unrelated backlog
+   edits remain excluded. This accepts the local repair, not a new full
+   regression result or a published distribution.
+
 ## Worker context actions — 2026-11-16
 
 1. Accepted scope: current-location/current-state commands only, retaining

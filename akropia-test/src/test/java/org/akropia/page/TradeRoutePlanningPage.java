@@ -164,10 +164,15 @@ public final class TradeRoutePlanningPage extends AbstractScreen {
                     .isPresent()) {
                 return;
             }
-            getRobot().sleep(600);
-            GamePage.of(getContext()).clickTile(square);
+            clickMap(square);
         }
         throw new IllegalStateException("Cannot select route on map: " + name);
+    }
+
+    /** A separate single click must not become the preceding click's double. */
+    public void clickMap(final Location square) {
+        getRobot().sleep(600);
+        GamePage.of(getContext()).clickTile(square);
     }
 
     private Location routeSquare(final TradeRoutePreview route) {

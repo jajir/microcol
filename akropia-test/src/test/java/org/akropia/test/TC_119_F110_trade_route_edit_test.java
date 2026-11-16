@@ -676,12 +676,12 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         // A single map click selects the route without opening its editor.
         planner.open();
         planner.chooseRoute("Atlantic run");
-        game.clickTile(ROAD_LOCATION);
+        planner.clickMap(ROAD_LOCATION);
         planner.verifySelectedRoute("Ore cart");
         cargo.verifyDialogClosed();
 
         // Another map click selects the overlapping route without editing.
-        game.clickTile(ROAD_LOCATION);
+        planner.clickMap(ROAD_LOCATION);
         planner.verifySelectedRoute("Lost cart");
         cargo.verifyDialogClosed();
 
