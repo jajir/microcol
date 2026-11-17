@@ -6,7 +6,10 @@ import org.akropia.model.Unit;
 import org.testfx.util.WaitForAsyncUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.layout.VBox;
 import javafx.scene.input.KeyCode;
 
 /** Player actions and explicit assertions for the carrier assignment dialog. */
@@ -24,23 +27,58 @@ public final class CarrierRoutePage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    @SuppressWarnings("unchecked")
-    private ListView<TradeRoute> choices() {
-        return getRobot().lookup("#carrierRouteChoices")
-                .queryAs(ListView.class);
+    private java.util.List<ToggleButton> choices() {
+        return getRobot().lookup("#carrierRouteChoices").queryAs(VBox.class)
+                .getChildren().stream().filter(ToggleButton.class::isInstance)
+                .map(ToggleButton.class::cast)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    private ToggleButton choice(final String name) {
+        return choices().stream()
+                .filter(button -> ((TradeRoute) button.getUserData()).getName()
+                        .equals(name))
+                .findFirst().orElseThrow();
     }
 
     public void choose(final String name) {
-        final int index = java.util.stream.IntStream
-                .range(0, choices().getItems().size())
-                .filter(i -> choices().getItems().get(i).getName().equals(name))
-                .findFirst().orElseThrow();
-        getRobot().clickOn("#carrierRouteChoices");
-        getRobot().push(KeyCode.HOME);
-        for (int i = 0; i < index; i++) {
-            getRobot().push(KeyCode.DOWN);
-        }
+        getRobot().clickOn(choice(name));
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void addManyRoutes() {
+        getRobot().interact(() -> {
+            final TradeRoute template = getModel()
+                    .getTradeRoutes(getModel().getUnitById(4).getOwner())
+                    .stream()
+                    .filter(route -> route.getName().equals("Supply circuit"))
+                    .findFirst().orElseThrow();
+            for (int i = 0; i < 20; i++) {
+                getModel().createTradeRoute(template.getOwner(),
+                        String.format("ZZ extra %02d", i), template.getKind(),
+                        template.getStartColonyId(), template.getStops());
+            }
+        });
+    }
+
+    public void scrollToLastRoute() {
+        getRobot().moveTo("#carrierRouteScroll").scroll(40,
+                javafx.geometry.VerticalDirection.DOWN);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyRouteLabel(final String name, final String label) {
+        assertEquals(label, choice(name).getText());
+    }
+
+    public void verifyScrollableChoices(final boolean expected) {
+        final ScrollPane pane = getRobot().lookup("#carrierRouteScroll")
+                .queryAs(ScrollPane.class);
+        assertEquals(expected, pane.lookupAll(".scroll-bar").stream()
+                .map(ScrollBar.class::cast)
+                .anyMatch(bar -> bar
+                        .getOrientation() == javafx.geometry.Orientation.VERTICAL
+                        && bar.isVisible()));
     }
 
     public void confirm() {
@@ -57,9 +95,6 @@ public final class CarrierRoutePage extends AbstractScreen {
     }
 
     public void cancelWithEscape() {
-        final Button cancel = getRobot().lookup("#carrierRouteCancel")
-                .queryAs(Button.class);
-        getRobot().interact(cancel::requestFocus);
         getRobot().push(KeyCode.ESCAPE);
         WaitForAsyncUtils.waitForFxEvents();
     }
@@ -95,12 +130,13 @@ public final class CarrierRoutePage extends AbstractScreen {
         assertEquals(current, getRobot().lookup("#carrierRouteCurrent")
                 .queryAs(Label.class).getText());
         assertEquals(names,
-                choices().getItems().stream().map(TradeRoute::getName)
+                choices().stream().map(
+                        button -> ((TradeRoute) button.getUserData()).getName())
                         .collect(java.util.stream.Collectors.toList()));
         assertEquals(selected,
-                choices().getSelectionModel().getSelectedItem() == null ? null
-                        : choices().getSelectionModel().getSelectedItem()
-                                .getName());
+                choices().stream().filter(ToggleButton::isSelected).map(
+                        button -> ((TradeRoute) button.getUserData()).getName())
+                        .findFirst().orElse(null));
         assertEquals(selected == null, getRobot().lookup("#carrierRouteOk")
                 .queryAs(Button.class).isDisabled());
     }

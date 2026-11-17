@@ -17,8 +17,17 @@ import org.akropia.model.Unit;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.geometry.Pos;
+import javafx.scene.layout.Priority;
+import org.akropia.model.Colony;
+import org.akropia.model.TradeRouteStop;
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.scene.layout.VBox;
 
 /** One carrier's draft selection; the model changes only on confirmation. */
@@ -37,25 +46,41 @@ public final class DialogCarrierTradeRoute extends AbstractMessageWindow {
         final Label problem = new Label();
         problem.setId("carrierRouteProblem");
         problem.setWrapText(true);
-        final ListView<TradeRoute> routes = new ListView<>();
-        routes.setId("carrierRouteChoices");
-        routes.setPrefHeight(180);
-        routes.getItems()
-                .setAll(model.getTradeRoutes(carrier.getOwner()).stream()
-                        .filter(route -> route.getKind() == (carrier.isShip()
-                                ? TradeRouteKind.SEA
+        final ToggleGroup selection = new ToggleGroup();
+        final VBox choices = new VBox(6);
+        choices.setId("carrierRouteChoices");
+        final ScrollPane routes = new ScrollPane(choices);
+        routes.setId("carrierRouteScroll");
+        routes.setFitToWidth(true);
+        routes.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        routes.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        routes.setPrefViewportHeight(
+                Math.min(240, viewUtil.getPrimaryStage().getHeight() * 0.35));
+        routes.setMinHeight(60);
+        VBox.setVgrow(routes, Priority.ALWAYS);
+        model.getTradeRoutes(carrier.getOwner()).stream()
+                .filter(route -> route
+                        .getKind() == (carrier.isShip() ? TradeRouteKind.SEA
                                 : TradeRouteKind.LAND))
-                        .collect(java.util.stream.Collectors.toList()));
-        routes.setCellFactory(list -> new ListCell<>() {
-            @Override
-            protected void updateItem(final TradeRoute route,
-                    final boolean empty) {
-                super.updateItem(route, empty);
-                setText(empty || route == null ? null : route.getName());
-            }
-        });
-        routes.setPlaceholder(
-                new Label(i18n.get(TradeRouteText.carrierRouteEmpty)));
+                .forEach(route -> {
+                    final ToggleButton choice = ActionButtons
+                            .toggle(ButtonIcon.TRADE, routeLabel(model, route));
+                    choice.setId("carrierRouteChoice" + route.getId());
+                    choice.setUserData(route);
+                    choice.setToggleGroup(selection);
+                    choice.setMaxWidth(Double.MAX_VALUE);
+                    choice.setAlignment(Pos.CENTER_LEFT);
+                    choice.setWrapText(true);
+                    choices.getChildren().add(choice);
+                    if (expected != null
+                            && route.getId() == expected.getRouteId()) {
+                        choice.setSelected(true);
+                    }
+                });
+        if (choices.getChildren().isEmpty()) {
+            choices.getChildren()
+                    .add(new Label(i18n.get(TradeRouteText.carrierRouteEmpty)));
+        }
         final Button ok = ActionButtons.button(ButtonIcon.CONFIRM,
                 i18n.get(Dialog.ok));
         ok.setId("carrierRouteOk");
@@ -66,8 +91,9 @@ public final class DialogCarrierTradeRoute extends AbstractMessageWindow {
         cancel.setCancelButton(true);
         cancel.setOnAction(event -> close());
         final Runnable update = () -> {
-            final TradeRoute route = routes.getSelectionModel()
-                    .getSelectedItem();
+            final TradeRoute route = selection.getSelectedToggle() == null
+                    ? null
+                    : (TradeRoute) selection.getSelectedToggle().getUserData();
             final var reason = route == null
                     ? java.util.Optional.<org.akropia.model.TradeRouteAssignmentProblem>empty()
                     : model.getTradeRouteChangeProblem(carrier, route);
@@ -77,18 +103,13 @@ public final class DialogCarrierTradeRoute extends AbstractMessageWindow {
                             .valueOf("assignProblem" + value.name())))
                     .orElse(""));
         };
-        routes.getSelectionModel().selectedItemProperty()
+        selection.selectedToggleProperty()
                 .addListener((o, before, after) -> update.run());
-        if (expected != null) {
-            routes.getItems().stream()
-                    .filter(route -> route.getId() == expected.getRouteId())
-                    .findFirst().ifPresent(routes.getSelectionModel()::select);
-        }
         update.run();
         ok.setOnAction(event -> {
             try {
-                model.changeTradeRoute(carrier,
-                        routes.getSelectionModel().getSelectedItem(), expected);
+                model.changeTradeRoute(carrier, (TradeRoute) selection
+                        .getSelectedToggle().getUserData(), expected);
                 refreshed.run();
                 close();
             } catch (IllegalArgumentException
@@ -104,6 +125,25 @@ public final class DialogCarrierTradeRoute extends AbstractMessageWindow {
         root.setPadding(new Insets(18));
         setTitle(i18n.get(TradeRouteText.carrierRouteTitle));
         init(root);
+        getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                cancel.fire();
+                event.consume();
+            }
+        });
+    }
+
+    static String routeLabel(final Model model, final TradeRoute route) {
+        final List<String> colonies = route.getStops().stream()
+                .filter(stop -> !stop.isEurope())
+                .map(TradeRouteStop::getColonyId).distinct()
+                .map(id -> model.getColonyById(id).map(Colony::getName)
+                        .orElse(""))
+                .filter(name -> !name.isEmpty()).collect(Collectors.toList());
+        return route.getName() + (colonies.isEmpty() ? ""
+                : " — " + colonies.stream().limit(3)
+                        .collect(Collectors.joining(", "))
+                        + (colonies.size() > 3 ? ", …" : ""));
     }
 
     public static String describe(final I18n i18n, final Model model,

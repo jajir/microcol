@@ -36,6 +36,9 @@ public class TC_205_F237_carrier_route_change_test extends AbstractAkropiaTest {
         route.openFromContext();
         route.verifyDialog("Wagon #4 — Trade route: No trade route",
                 List.of("Idle cart", "Supply circuit"), null);
+        route.verifyScrollableChoices(false);
+        route.verifyRouteLabel("Supply circuit",
+                "Supply circuit — Delft, New Amsterdam");
         route.choose("Supply circuit");
         route.verifyUnchanged();
         route.captureDialog("carrierRouteDialog", "r0415-wagon-dialog.png");
@@ -91,6 +94,7 @@ public class TC_205_F237_carrier_route_change_test extends AbstractAkropiaTest {
         route.openFromContext();
         route.verifyDialog("Galleon #3 — Trade route: No trade route",
                 List.of("Ocean circuit"), null);
+        route.verifyRouteLabel("Ocean circuit", "Ocean circuit — Delft");
         route.choose("Ocean circuit");
         route.confirm();
         route.verifyAssigned(3, "Ocean circuit", 1);
@@ -115,5 +119,32 @@ public class TC_205_F237_carrier_route_change_test extends AbstractAkropiaTest {
         route.confirmWithKeyboard();
         route.verifyAssigned(4, "Supply circuit", 1);
         route.verifyPanel("Povoz #4 — Obchodní trasa: Supply circuit");
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_overflow_scrolls_and_escape_cancels_focused_route()
+            throws Exception {
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final CarrierRoutePage route = new CarrierRoutePage(getContext());
+
+        // Prepare enough routes to exceed the dialog viewport.
+        route.addManyRoutes();
+        game.selectMapUnit(4);
+        route.remember(4);
+        game.openUnitContextAt(Location.of(26, 16));
+        route.openFromContext();
+
+        // Scroll to and select the last route without changing the model.
+        route.verifyScrollableChoices(true);
+        route.scrollToLastRoute();
+        route.choose("ZZ extra 19");
+        route.verifyUnchanged();
+        route.captureDialog("carrierRouteDialog", "carrier-route-scroll.png");
+
+        // Escape works directly from the focused route button.
+        route.cancelWithEscape();
+        route.verifyDialogClosed();
+        route.verifyUnchanged();
     }
 }

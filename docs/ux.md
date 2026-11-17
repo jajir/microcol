@@ -1913,3 +1913,19 @@ studii. Ověření sleduje [funkční evidence](functional-tests.md#page-separat
 6. Nejde o výsledek nové hráčské studie. Implementační přejímku a snímky vede
    [funkční evidence](functional-tests.md#free-play-objectives-2026-11-16);
    autoritativní pravidla jsou u [volné hry](free-play-maps.md#cile-a-konec-volne-hry).
+
+## Přiřazení obchodní trasy dopravci — 17. listopadu 2026
+
+1. Hráč otevře přiřazení z kontextové nabídky dopravce. Dialog nabízí pouze
+   trasy odpovídající jeho druhu dopravy jako společná herní tlačítka;
+   aktuální přiřazení je předvybrané. Volba v seznamu je rozpracovaný výběr,
+   který se provede až tlačítkem OK.
+2. Za názvem trasy jsou v pořadí zastávek nejvýše tři názvy různých kolonií,
+   oddělené čárkami. Další kolonie označuje „…“. Evropa se do počtu kolonií
+   nezapočítává. Delší popisek se zalomí.
+3. Seznam má omezenou výšku a při přeplnění svislý posuvník. Potvrzení
+   a Zrušit zůstávají mimo posuvný obsah. Escape ruší dialog i z právě
+   zaměřené volby; stejně jako Zrušit nemění přiřazení, náklad ani pohyb.
+4. Nedostupná trasa zobrazí modelový důvod a nepovolí OK. Potvrzení znovu
+   ověří stav hry. [Evidence ověření](functional-tests.md#carrier-route-dialog-2026-11-17)
+   uvádí skutečně provedené testy.

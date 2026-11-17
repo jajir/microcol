@@ -78,3 +78,8 @@
 .modal-frame .button {
     -fx-border-image-source: url("../images/modal-button-frame.png");
 }
+
+/* Route choices use the shared paper buttons and scroll only when needed. */
+#carrierRouteScroll, #carrierRouteScroll > .viewport {
+    -fx-background-color: transparent;
+}

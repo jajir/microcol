@@ -1629,3 +1629,10 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 ### Carrier destination and delete confirmation — 2026-11-17
 
 1. UC-029/030: `TC_119_F110_trade_route_edit_test` covers ordered destination choices, individual redirection while travelling, removal of the selected final stop, Save/Continue, automatic cargo handling at the new destination, and EN/CS deletion confirmation including cancellation. Model boundaries are covered by `TradeRouteDestinationTest`; [acceptance results](functional-tests.md#trade-route-destination-2026-11-17) distinguish local checks from full regression.
+
+## UC-029/030 — výběr trasy dopravce, 17. listopadu 2026
+
+1. TC205/01–05 ověřují společná tlačítka tras, náhled názvů kolonií,
+   potvrzení a zrušení bez změny modelu; TC205/05 navíc přeplněný seznam,
+   svislé posouvání a Escape přímo z volby. [Chování](ux.md#prirazeni-obchodni-trasy-dopravci-17-listopadu-2026)
+   a [aktuální evidence](functional-tests.md#carrier-route-dialog-2026-11-17).

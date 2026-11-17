@@ -1,3 +1,44 @@
+<a id="carrier-route-dialog-2026-11-17"></a>
+## Carrier assignment dialog — 2026-11-17
+
+1. UC-029/030: route choices use shared paper toggle buttons, at most three
+   colony names and an ellipsis for further colonies. The list scrolls
+   vertically; OK confirms and Escape cancels directly from a focused choice.
+   Game rules and saved-game format are unchanged.
+2. TC205 retains wagon/ship, existing assignment, cancellation, EN/CS,
+   keyboard confirmation and Continue checks. TC205/05 adds overflow,
+   scrolling to the last route and Escape without focusing Cancel first.
+   DialogCarrierTradeRouteTest covers one, three and four colony names.
+3. First model dispatch `20261117T133256Z-0212a6c2ed4c` stopped during
+   Docker admission: container-list query exceeded 20 s; no test command
+   started (22.081 s total). Retry `20261117T133418Z-3fa310899c0e`
+   completed 5,137 tests with three errors in the new label test: its fixture
+   repeated the start colony, rejected as SAME_STOP. The other 5,134 passed.
+   The fixture now uses a different start colony; failed evidence is retained.
+4. Corrected model/JUnit run `20261117T133721Z-adfa39ed28ba` (PID 44689)
+   passed **5,137 tests, zero failures/errors/skips** in 156.434 supervised
+   seconds (600-second limit), reports `target/verification/run-0nszn5fd/`.
+5. Targeted attempt `20261117T134016Z-858550e29b81` failed during test
+   compilation after 40.579 s: the new screenshot step needed a declared
+   IOException. No UI test started; the scenario now declares the exception.
+6. Corrected targeted run `20261117T134123Z-c40d25fd84ce` (PID 45216)
+   passed **8 tests, zero failures/errors/skips** in 103.536 supervised seconds
+   (900-second limit): five TC205 scenarios and three page-contract checks.
+   Reports and reviewed screenshots: `target/docker-ui/run-npMUOY/`.
+   Normal and overflow screenshots confirm paper buttons, readable colony
+   labels, selected-state styling and the shared vertical scrollbar.
+7. Smoke/support `20261117T134350Z-1a7fe92cec0e` (PID 45427) passed
+   **21 tests, zero failures/errors/skips**, in 269.418 supervised seconds,
+   within the 420-second acceptance budget. Reports:
+   `target/verification/run-dp9_7nqz/`. All five changed executable/test files
+   match the smoke snapshot; all three game-module files match the model
+   snapshot. Shared Java formatter, scoped diff review, 14 documentation
+   consistency checks, naming audit and strict MkDocs passed.
+8. Local acceptance covers `56d22df8c2d92d91e763d521b2819f9c32fa1ae8` plus
+   this change: **5,137 model/JUnit + 8 targeted UI/contract + 21 smoke/support**.
+   Unrelated backlog edits are excluded. Remote CI, Pages and game-distribution
+   publication were not inspected; local acceptance is not full regression.
+
 ## UC-005: two-second wait and map-ocean palette — 2026-11-17
 
 1. Follow-up to the accepted rowing modal: minimum visibility is two seconds.
