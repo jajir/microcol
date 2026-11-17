@@ -230,20 +230,17 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
 
     /** @param name the colony name, or the text of Home port, as offered */
     public void addStation(final String name) {
-        final ComboBox<TradeRouteStop> combo = addStationBox();
-        showTabOf(combo);
-        int index = -1;
-        for (int i = 0; i < combo.getItems().size(); i++) {
-            if (combo.getConverter().toString(combo.getItems().get(i))
-                    .equals(name)) {
-                index = i;
-            }
-        }
-        if (index < 0) {
-            throw new IllegalStateException("Stop is not offered: " + name);
-        }
-        choose(combo, index);
-        press("tradeRouteAddStationButton");
+        final MenuButton menu = addStationBox();
+        showTabOf(menu);
+        final MenuItem item = menu.getItems().stream()
+                .filter(option -> option.getText().equals(name)).findFirst()
+                .orElseThrow(() -> new IllegalStateException(
+                        "Stop is not offered: " + name));
+        reveal(menu);
+        getRobot().clickOn(menu);
+        WaitForAsyncUtils.waitForFxEvents();
+        getRobot().clickOn("#" + item.getId());
+        WaitForAsyncUtils.waitForFxEvents();
     }
 
     /**
@@ -531,8 +528,9 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
         return getButtonById("tradeRouteCell-" + stop + "-" + type.name());
     }
 
-    private ComboBox<TradeRouteStop> addStationBox() {
-        return getNodeFinder().lookup("#tradeRouteAddStation").queryComboBox();
+    private MenuButton addStationBox() {
+        return getNodeFinder().lookup("#tradeRouteAddStation")
+                .queryAs(MenuButton.class);
     }
 
     private int routeIndex(final String name) {
@@ -889,10 +887,9 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
 
     /** @param expected the destinations Add offers, in order */
     public void verifyAddStationOffers(final String... expected) {
-        final ComboBox<TradeRouteStop> combo = addStationBox();
-        assertEquals(List.of(expected),
-                combo.getItems().stream().map(combo.getConverter()::toString)
-                        .collect(Collectors.toList()));
+        final MenuButton combo = addStationBox();
+        assertEquals(List.of(expected), combo.getItems().stream()
+                .map(MenuItem::getText).collect(Collectors.toList()));
     }
 
     /**
@@ -908,6 +905,52 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                         .getText());
         assertEquals(expectedState,
                 getLabeledById("tradeRouteCarrierState-" + unitId).getText());
+    }
+
+    public void verifyCarrierTable(final int unitId, final boolean colonyLink) {
+        layout();
+        final javafx.scene.image.ImageView icon = getNodeFinder()
+                .lookup("#tradeRouteCarrierImage-" + unitId)
+                .queryAs(javafx.scene.image.ImageView.class);
+        assertNotNull(icon.getImage());
+        assertEquals(org.akropia.gui.Tile.TILE_WIDTH_IN_PX, icon.getFitWidth());
+        assertEquals(org.akropia.gui.Tile.TILE_WIDTH_IN_PX,
+                icon.getFitHeight());
+        final Node destination = getNodeFinder()
+                .lookup("#tradeRouteCarrierDestination-" + unitId).query();
+        assertEquals(colonyLink,
+                destination instanceof javafx.scene.control.Hyperlink);
+        final Pane row = getNodeFinder()
+                .lookup("#tradeRouteCarrierRow-" + unitId).queryAs(Pane.class);
+        assertEquals(6, row.getChildren().size());
+        final Pane header = getNodeFinder().lookup("#tradeRouteCarrierHeader")
+                .queryAs(Pane.class);
+        for (int column = 0; column < header.getChildren().size(); column++) {
+            assertEquals(
+                    sceneBounds(header.getChildren().get(column)).getMinX(),
+                    sceneBounds(row.getChildren().get(column)).getMinX(), 1.0);
+        }
+    }
+
+    public void openCarrierDestination(final int unitId) {
+        final Node link = getNodeFinder()
+                .lookup("#tradeRouteCarrierDestination-" + unitId).query();
+        reveal(link);
+        getRobot().clickOn(link);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyStationActions(final String addText,
+            final String deleteText) {
+        assertEquals(addText, addStationBox().getText());
+        assertEquals(deleteText, getButtonById("tradeRouteDelete").getText());
+        assertTrue(getNodeFinder().lookup("#tradeRouteAddStationButton")
+                .tryQuery().isEmpty());
+        layout();
+        assertTrue(sceneBounds(getButtonById("tradeRouteDelete"))
+                .getMinY() > sceneBounds(getNodeFinder()
+                        .lookup("#tradeRouteDeleteSeparator").query())
+                        .getMaxY());
     }
 
     /** @param expected unit IDs of the carrier rows, in order */
@@ -935,9 +978,11 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
      */
     public void verifyCarrierSlot(final int unitId, final int slot,
             final String expectedText, final String expectedAccessible) {
-        final Label box = (Label) getLabeledById(
-                "tradeRouteCarrierSlot-" + unitId + "-" + slot);
-        assertEquals(expectedText, box.getText());
+        final Parent box = getNodeFinder()
+                .lookup("#tradeRouteCarrierSlot-" + unitId + "-" + slot)
+                .queryAs(Parent.class);
+        assertEquals(expectedText,
+                ((Label) box.lookup(".cargo-amount")).getText());
         assertEquals(expectedAccessible, box.getAccessibleText());
     }
 

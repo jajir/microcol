@@ -1691,6 +1691,10 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 5. Celý formulář jednorázového odbavení dopravce byl odstraněn. Ruční překládání v kolonii, nákup/prodej v domovském přístavu a automatická obsluha přiřazených dopravců zůstávají dostupné.
 6. Jde o schválené zadání, nikoli hráčskou studii. Skutečné výsledky kontrol vede [evidence změny](functional-tests.md#trade-route-direct-editing-2026-11-16).
 
+7. Doplnění schválené 17. listopadu 2026: Carriers má samostatné sloupce pro obrázek jednotky (standardních 45 × 45 logických px), jméno, cíl, stav a náklad; Remove zůstává na konci řádku. Cíl vlastní kolonie je podtržený odkaz na její detail. Domovský přístav a nedostupný cíl nejsou odkazy na kolonii. Náklad používá stejný pohled jako kontejnery v depu včetně obrázků pasažérů, množství vpravo dole a prázdných míst; více kontejnerů se zalomí uvnitř sloupce.
+8. Add destination je rozbalovací nabídka: výběr cíle ho okamžitě připojí na konec zastávek. Zavření nabídky bez výběru nic nezmění a po přidání zůstává text Add destination. Samostatné potvrzovací Add není přítomné; dostupné cíle a odmítnutí změny dál určuje model.
+9. Delete traderoute je přímo dole pod oddělovací čarou, bez rozbalovacího obalu. První stisk vysvětlí dopad a druhý potvrdí smazání. [Přejímka tabulky a ovládání](functional-tests.md#trade-route-table-2026-11-17) odděluje implementaci od výsledků ověření.
+
 ## Rychlost posunu mapy WASD — 2026-11-08
 
 1. [R-0431](requirements/done/R-0431.md) přidává do nastavení společný posuvník s devíti polohami. Hráč jej mění myší nebo klávesami; Home/End nastaví meze, šipky jednu polohu. Výchozí poloha je 2; aktuální rozsah rychlostí popisuje bod 3.

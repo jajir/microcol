@@ -164,6 +164,13 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
                 "\u2192 New Amsterdam", "On the way.");
         cargo.verifyCarrierRow(SECOND_WAGON_ID, "Wagon #6",
                 "\u2192 New Amsterdam", "On the way.");
+        // The destination link opens the actual target colony.
+        cargo.verifyCarrierTable(FIRST_WAGON_ID, true);
+        cargo.openCarrierDestination(FIRST_WAGON_ID);
+        colony = ColonyScreen.of(getContext(), "New Amsterdam");
+        colony.verifyColonyName("New Amsterdam");
+        cargo.open();
+        cargo.chooseRoute("Ore cart");
         cargo.replaceStation(NEW_AMSTERDAM_STOP, "Haarlem");
         cargo.verifyStopChoices("1. Delft", "2. Haarlem");
         // A new destination starts without goods; Haarlem gets the cargo the
@@ -366,7 +373,7 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         cargo.verifyGold(10000);
 
         // The first press on Delete only names the carrier it would release.
-        cargo.verifyDeleteButtonText("Delete route");
+        cargo.verifyDeleteButtonText("Delete traderoute");
         cargo.askToDeleteRoute();
         cargo.verifyDeleteButtonText("Confirm: delete route");
         cargo.verifyDeleteInfo(

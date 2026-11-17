@@ -45,8 +45,8 @@ public class PanelCrateView implements JavaFxComponent {
 
     private Background background;
 
-    PanelCrateView(final ImageProvider imageProvider, final boolean harbor,
-            final boolean colony) {
+    public PanelCrateView(final ImageProvider imageProvider,
+            final boolean harbor, final boolean colony) {
         this.colony = colony;
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
 

@@ -36,14 +36,7 @@
 .trade-route-cell.load { -fx-background-color: #CFE8B8; }
 .trade-route-cell.unload { -fx-background-color: #F2C7A5; }
 .trade-route-cell:focused { -fx-border-width: 3; }
-.trade-route-slot {
-    -fx-min-width: 54;
-    -fx-min-height: 30;
-    -fx-padding: 2 4 2 4;
-    -fx-background-color: #FFFFFF;
-    -fx-border-color: #000000;
-    -fx-border-width: 2;
-}
+
 
 /* Tabs use the paper-button face with the black pen frame of this screen. */
 #tradeRouteTabs > .tab-header-area > .tab-header-background {
@@ -120,4 +113,14 @@
 #tradeRouteGoodsScroll, #tradeRouteGoodsScroll > .viewport {
     -fx-background-color: transparent;
     -fx-padding: 0;
+}
+
+#tradeRouteCarrierRows .hyperlink {
+    -fx-text-fill: #302D27;
+    -fx-underline: true;
+    -fx-padding: 0;
+}
+#tradeRouteDeleteSeparator .line {
+    -fx-border-color: #000000;
+    -fx-border-width: 2 0 0 0;
 }

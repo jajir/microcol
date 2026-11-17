@@ -1611,3 +1611,7 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 
 1. UC-029/030/116: TC117 ověřuje okamžité změny nákladu a režimu, EN/CS, ikony, klávesnici a zachování při návratu/Continue; jednorázové odbavení nahrazuje běžná automatická obsluha. TC119 chrání změny zastávek, rozkazy již jedoucích dopravců, přepínání tras a návrat. TC206 pokrývá pořadí a opakované úpravy více stanic.
 2. TC118, TC185, TC207 a TC208 nadále kontrolují přiřazení, propojenou produkci, domovský přístav a plný sklad bez dodatečného Save. [UX kontrakt](ux.md#trade-route-direct-editing) a [výsledky](functional-tests.md#trade-route-direct-editing-2026-11-16) rozlišují zadání od přejímky.
+
+## Tabulka přepravců a přímé přidání zastávky — 17. listopadu 2026
+
+1. UC-029/030: TC117 ověřuje tabulku, standardní obrázek, zboží a pasažéra v kontejnerech i úzké okno; TC119 otevření detailu cílové kolonie a potvrzené smazání trasy; TC206 okamžité přidání cíle na konec a další práci s pořadím. [UX kontrakt](ux.md#trade-route-direct-editing), [výsledky přejímky](functional-tests.md#trade-route-table-2026-11-17).

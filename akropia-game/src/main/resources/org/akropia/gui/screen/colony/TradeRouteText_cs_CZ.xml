@@ -150,4 +150,9 @@
   <entry key="pauseWAITING_FUNDS">Čeká: zbývá volné místo a pokladna nestačí na další nákup.</entry>
   <entry key="editProblemSTOP_COUNT">Trasa potřebuje alespoň jednu zastávku.</entry>
   <entry key="cellHint">Změníte kliknutím nebo mezerníkem: ignorovat, nakládat, vykládat.</entry>
+<entry key="carrierUnit">Jednotka</entry>
+<entry key="carrierName">Jméno</entry>
+<entry key="carrierDestination">Cíl</entry>
+<entry key="carrierState">Stav</entry>
+<entry key="carrierCargo">Náklad</entry>
 </properties>

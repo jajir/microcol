@@ -1,3 +1,14 @@
+<a id="trade-route-table-2026-11-17"></a>
+## Carrier table and station actions — 2026-11-17
+
+1. UC-029/030: standard unit images, separate carrier columns, target-colony links and shared depot holds; immediate Add destination menu; Delete traderoute below the separator with existing confirmation; horizontally mirrored unload arrow. No game-rule or save-schema change.
+2. Targeted selection: TC117, TC118, TC119, TC206, TC207 and TC208 plus PageVerificationContractTest. It covers goods/passenger/empty holds, six-hold narrow layout, destination navigation, assignment/removal/deletion, station ordering, home-port targets and waiting states. Existing fixture and gameplay assertions remain; the passenger now has its actual image instead of a smiley.
+3. Model/JUnit passed **5,128 tests in 397 reports**, zero failures/errors/skips (`target/verification/run-zjsl6d2m/`, completion `20261117T071858Z-32edee388017`, PID 17901, 153.170 supervised seconds / 600-second limit). All eight changed game-module files match the tested snapshot.
+4. Targeted Docker/Xvfb passed **25 tests in seven reports**, zero failures/errors/skips (`target/docker-ui/run-sxO0iA/`, completion `20261117T072153Z-3510b6c02ed8`, PID 18411, 679.182 seconds / 1,800-second limit, no lock wait). Counts: TC117 6, TC118 5, TC119 8, TC206/207/208 one each, page contract 3. Visual review of [carriers at 1024 px](assets/trade-route-table-2026-11-17/trade-route-carriers-1024.png), [station actions](assets/trade-route-table-2026-11-17/trade-route-stations-default.png) and [load/unload icons](assets/trade-route-table-2026-11-17/trade-route-goods-default.png) passed; these are implementation screenshots, not mockups.
+5. Vector export check passed for the genuine SVG and derived runtime atlas. Final documentation acceptance: all 14 consistency checks, naming audit (zero unexplained occurrences) and strict MkDocs passed; logs are in `target/trade-route-table/`.
+6. Fixed smoke/support passed **21 tests in 12 reports**, zero failures/errors/skips (`target/verification/run-xxkh1bx0/`, completion `20261117T073343Z-2dd4d0e9e70a`, PID 19243). Total supervised time was 259.184 seconds, within the 420-second acceptance budget; no lock wait or cleanup errors. All changed game and test files match the smoke source snapshot.
+7. Acceptance is based on `3fb41e3acc53123ea5ed57e6bb1fc21a0e84f677` plus this reviewed change. Shared Eclipse formatting and diff checks passed; unrelated backlog edits are excluded from the commit. These results establish local acceptance only; remote regression and publication were not inspected.
+
 ## Regression run 43792018988 repair — 2026-11-16
 
 1. The [failed GitHub run](https://github.com/jajir/microcol/actions/runs/43792018988)

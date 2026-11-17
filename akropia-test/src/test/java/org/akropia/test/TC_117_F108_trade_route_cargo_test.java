@@ -413,7 +413,8 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         // Ignored goods and the passenger keep their real holds.
         cargo.verifyCarrierSlot(GALLEON_ID, 0, "52", "Horse 52");
         cargo.verifyCarrierSlot(GALLEON_ID, 1, "100", "Olive oil 100");
-        cargo.verifyCarrierSlot(GALLEON_ID, 2, "\u263A", "Passenger");
+        cargo.verifyCarrierSlot(GALLEON_ID, 2, "", "Passenger");
+        cargo.verifyCarrierTable(GALLEON_ID, true);
 
         // All three tabs at the default size: station actions, all six holds
         // with Remove, and the sixteen goods columns are inside the window.

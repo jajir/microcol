@@ -64,7 +64,10 @@ public class TC_206_F222_trade_route_distinct_stations_test
                 "C3", "D1", "D2", "D3");
 
         // Four more distinct stations make five; each one leaves the list.
+        cargo.verifyStationActions("Add destination", "Delete traderoute");
         cargo.addStation("B2");
+        cargo.verifyStoredStops("Grid Run", "A2", "B2");
+        cargo.verifyStationActions("Add destination", "Delete traderoute");
         cargo.addStation("C2");
         cargo.addStation("D2");
         cargo.addStation("D3");

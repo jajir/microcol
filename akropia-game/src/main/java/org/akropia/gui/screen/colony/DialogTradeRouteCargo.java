@@ -41,7 +41,6 @@ import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
@@ -50,7 +49,12 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Separator;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.FlowPane;
+import org.akropia.gui.Tile;
+import org.akropia.gui.dock.PanelCrateView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -59,7 +63,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.util.StringConverter;
 
 /**
  * Trade route management. Each completed edit is validated and applied through
@@ -90,11 +93,8 @@ public final class DialogTradeRouteCargo implements GameScreen {
     // Stations
     private final Label stationsRule = new Label();
     private final VBox stationRows = new VBox(6);
-    private final Label addStationLabel = new Label();
-    private final ComboBox<TradeRouteStop> addStationBox = new ComboBox<>();
-    private final Button addStation = ActionButtons.button(ButtonIcon.ADD);
+    private final MenuButton addStationBox = ActionButtons.menu(ButtonIcon.ADD);
     private final Label stationStatus = new Label();
-    private final TitledPane deletePane = new TitledPane();
     private final Button deleteRoute = ActionButtons.button(ButtonIcon.DELETE);
     private final Label deleteInfo = new Label();
     /** Route whose deletion was asked for and awaits the second press. */
@@ -192,15 +192,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
         stationsRule.setMaxWidth(740);
         stationRows.setId("tradeRouteStationRows");
         addStationBox.setId("tradeRouteAddStation");
-        addStationBox.setConverter(stopConverter());
-        addStationBox.setOnAction(event -> {
-            if (!refreshing) {
-                updateState();
-            }
-        });
-        addStationLabel.setLabelFor(addStationBox);
-        addStation.setId("tradeRouteAddStationButton");
-        addStation.setOnAction(event -> addStation());
+        addStationBox.setMnemonicParsing(false);
         stationStatus.setId("tradeRouteStationStatus");
         stationStatus.setWrapText(true);
         stationStatus.setMaxWidth(740);
@@ -209,13 +201,11 @@ public final class DialogTradeRouteCargo implements GameScreen {
         deleteInfo.setId("tradeRouteDeleteInfo");
         deleteInfo.setWrapText(true);
         deleteInfo.setMaxWidth(740);
-        deletePane.setContent(new VBox(10, deleteRoute, deleteInfo));
-        deletePane.setId("tradeRouteDeletePane");
-        deletePane.setAnimated(false);
-        deletePane.setExpanded(false);
+        final Separator deleteSeparator = new Separator();
+        deleteSeparator.setId("tradeRouteDeleteSeparator");
         final VBox stations = new TabBody(10, stationsRule, stationRows,
-                new HBox(8, addStationLabel, addStationBox, addStation),
-                stationStatus, deletePane);
+                addStationBox, stationStatus, deleteSeparator, deleteRoute,
+                deleteInfo);
         stations.setId("tradeRouteStopsColumn");
         stations.getStyleClass().add("trade-route-column");
         return stations;
@@ -280,20 +270,6 @@ public final class DialogTradeRouteCargo implements GameScreen {
         return goods;
     }
 
-    private StringConverter<TradeRouteStop> stopConverter() {
-        return new StringConverter<TradeRouteStop>() {
-            @Override
-            public String toString(final TradeRouteStop stop) {
-                return stop == null ? "" : stopName(stop);
-            }
-
-            @Override
-            public TradeRouteStop fromString(final String value) {
-                throw new UnsupportedOperationException();
-            }
-        };
-    }
-
     /**
      * Back returns to the opening screen; completed edits stay applied.
      */
@@ -352,10 +328,8 @@ public final class DialogTradeRouteCargo implements GameScreen {
         carriersTab.setText(i18n.get(TradeRouteText.tabCarriers));
         goodsTab.setText(i18n.get(TradeRouteText.tabGoods));
         stationsRule.setText(i18n.get(TradeRouteText.stationsRule));
-        addStationLabel.setText(i18n.get(TradeRouteText.stationAddLabel));
-        addStationBox.setAccessibleText(addStationLabel.getText());
-        addStation.setText(i18n.get(TradeRouteText.stationAdd));
-        deletePane.setText(i18n.get(TradeRouteText.deleteRoute));
+        addStationBox.setText(i18n.get(TradeRouteText.stationAddLabel));
+        addStationBox.setAccessibleText(addStationBox.getText());
         carriersRule.setText(i18n.get(TradeRouteText.carriersRule));
         addCarrier.setText(i18n.get(TradeRouteText.carrierAdd));
         goodsRule.setText(i18n.get(TradeRouteText.goodsRule));
@@ -565,8 +539,14 @@ public final class DialogTradeRouteCargo implements GameScreen {
         final TradeRoute route = selectedRoute;
         final List<TradeRouteStop> options = route == null ? List.of()
                 : model.getTradeRouteAddableStops(player, route, draftStops);
-        addStationBox.getItems().setAll(options);
-        addStationBox.setValue(options.isEmpty() ? null : options.get(0));
+        addStationBox.getItems().clear();
+        for (final TradeRouteStop stop : options) {
+            final MenuItem item = new MenuItem(stopName(stop));
+            item.setId("tradeRouteAddStationOption-"
+                    + addStationBox.getItems().size());
+            item.setOnAction(event -> addStation(stop));
+            addStationBox.getItems().add(item);
+        }
         addStationBox.setDisable(options.isEmpty());
     }
 
@@ -604,8 +584,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
         showDraft();
     }
 
-    private void addStation() {
-        final TradeRouteStop choice = addStationBox.getValue();
+    private void addStation(final TradeRouteStop choice) {
         if (choice == null || draftStops.contains(choice)) {
             return;
         }
@@ -757,6 +736,18 @@ public final class DialogTradeRouteCargo implements GameScreen {
             none.setId("tradeRouteCarrierNone");
             carrierRows.getChildren().add(none);
         }
+        if (!carriers.isEmpty()) {
+            final GridPane header = carrierGrid();
+            int column = 0;
+            for (final TradeRouteText key : List.of(TradeRouteText.carrierUnit,
+                    TradeRouteText.carrierName,
+                    TradeRouteText.carrierDestination,
+                    TradeRouteText.carrierState, TradeRouteText.carrierCargo)) {
+                header.add(new Label(i18n.get(key)), column++, 0);
+            }
+            header.setId("tradeRouteCarrierHeader");
+            carrierRows.getChildren().add(header);
+        }
         for (final UnitWithCargo carrier : carriers) {
             carrierRows.getChildren().add(carrierRow(carrier));
         }
@@ -768,18 +759,34 @@ public final class DialogTradeRouteCargo implements GameScreen {
      * state below, and every real hold on the third line, so six holds fit a
      * 1024-pixel window.
      */
-    private VBox carrierRow(final UnitWithCargo carrier) {
+    private GridPane carrierRow(final UnitWithCargo carrier) {
         final int id = carrier.getId();
         final Label name = new Label(carrierName(carrier));
         name.setId("tradeRouteCarrierName-" + id);
-        name.getStyleClass().add("trade-route-station-name");
-        final Label destination = new Label(destinationText(carrier));
+        name.setMinWidth(0);
+        final javafx.scene.control.Labeled destination;
+        final Optional<Colony> target = model.getTradeRouteHeadingStop(carrier)
+                .filter(stop -> !stop.isEurope())
+                .flatMap(stop -> model.getColonyById(stop.getColonyId()))
+                .filter(colony -> colony.getOwner().equals(player));
+        if (target.isPresent() && !destinationText(carrier).isEmpty()) {
+            final Hyperlink link = new Hyperlink(destinationText(carrier));
+            link.setOnAction(event -> eventBus
+                    .post(new ShowScreenEvent(Screen.COLONY, target.get())));
+            destination = link;
+        } else {
+            destination = new Label(destinationText(carrier));
+        }
+        destination.setWrapText(true);
+        destination.setMinWidth(0);
         destination.setId("tradeRouteCarrierDestination-" + id);
         final Label state = new Label(stateText(carrier));
         state.setId("tradeRouteCarrierState-" + id);
         state.setWrapText(true);
-        state.setMaxWidth(700);
-        final HBox cargo = new HBox(2);
+        state.setMinWidth(0);
+        final FlowPane cargo = new FlowPane(2, 2);
+        cargo.setPrefWrapLength(150);
+        cargo.setMinWidth(50);
         cargo.setId("tradeRouteCarrierCargo-" + id);
         int slotIndex = 0;
         for (final CargoSlot slot : carrier.getCargo().getSlots()) {
@@ -792,38 +799,52 @@ public final class DialogTradeRouteCargo implements GameScreen {
         remove.setDisable(
                 model.getTradeRouteCancelProblem(carrier).isPresent());
         remove.setOnAction(event -> removeCarrier(carrier));
-        final HBox heading = new HBox(10, name, destination, remove);
-        heading.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-        final VBox row = new VBox(4, heading, state, cargo);
+        final ImageView unit = new ImageView(images.getUnitImage(carrier));
+        unit.setFitWidth(Tile.TILE_WIDTH_IN_PX);
+        unit.setFitHeight(Tile.TILE_WIDTH_IN_PX);
+        unit.setPreserveRatio(true);
+        unit.setId("tradeRouteCarrierImage-" + id);
+        final GridPane row = carrierGrid();
+        row.addRow(0, unit, name, destination, state, cargo, remove);
         row.setId("tradeRouteCarrierRow-" + id);
-        row.getStyleClass().add("trade-route-row");
         return row;
     }
 
-    private Label slotBox(final int unitId, final int index,
-            final CargoSlot slot) {
-        final Label box = new Label();
-        box.setId("tradeRouteCarrierSlot-" + unitId + "-" + index);
-        box.getStyleClass().add("trade-route-slot");
-        final Optional<Goods> goods = slot.getGoods();
-        final String text;
-        if (goods.isPresent()) {
-            final ImageView icon = new ImageView(
-                    images.getGoodsTypeImage(goods.get().getType()));
-            icon.setFitWidth(22);
-            icon.setFitHeight(22);
-            icon.setPreserveRatio(true);
-            box.setGraphic(icon);
-            box.setText(String.valueOf(goods.get().getAmount()));
-            text = i18n.get(TradeRouteText.cargoSlot,
-                    goodsName(goods.get().getType()), goods.get().getAmount());
-        } else if (slot.getUnit().isPresent()) {
-            box.setText("☺");
-            text = i18n.get(TradeRouteText.cargoPassenger);
-        } else {
-            text = i18n.get(TradeRouteText.cargoEmptySlot);
+    /** Shared column widths keep headers and every carrier aligned. */
+    private GridPane carrierGrid() {
+        final GridPane row = new GridPane();
+        row.setHgap(8);
+        row.getStyleClass().add("trade-route-row");
+        for (final double width : new double[] { 8, 16, 21, 16, 25, 14 }) {
+            final ColumnConstraints column = new ColumnConstraints();
+            column.setPercentWidth(width);
+            column.setMinWidth(0);
+            row.getColumnConstraints().add(column);
         }
+        return row;
+    }
+
+    /** Reuses the colony depot's hold rendering without drag/drop behavior. */
+    private Region slotBox(final int unitId, final int index,
+            final CargoSlot slot) {
+        final PanelCrateView view = new PanelCrateView(images, true, true);
+        view.openSlot();
+        if (slot.isEmpty()) {
+            view.emptyCargo();
+        } else {
+            view.showCargoSlot(slot);
+        }
+        final Region box = view.getContent();
+        box.setId("tradeRouteCarrierSlot-" + unitId + "-" + index);
+        final Optional<Goods> goods = slot.getGoods();
+        final String text = goods.isPresent()
+                ? i18n.get(TradeRouteText.cargoSlot,
+                        goodsName(goods.get().getType()),
+                        goods.get().getAmount())
+                : i18n.get(slot.isEmpty() ? TradeRouteText.cargoEmptySlot
+                        : TradeRouteText.cargoPassenger);
         box.setAccessibleText(text);
+        help(box, () -> text);
         return box;
     }
 
@@ -927,7 +948,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
             return;
         }
         final TradeRoute route = selectedRoute;
-        addStation.setDisable(addStationBox.getValue() == null);
+
         final boolean asked = route != null && deleteAskedFor != null
                 && deleteAskedFor == route.getId();
         deleteRoute.setText(i18n.get(asked ? TradeRouteText.confirmDeleteRoute
