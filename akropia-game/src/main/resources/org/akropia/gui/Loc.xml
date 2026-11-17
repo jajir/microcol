@@ -270,7 +270,7 @@
 	<entry key="nativeTeachingHostility">The local peoples turned hostile, so the colonist left without learning %s.</entry>
 	<entry key="nativeConvertJoined">A native convert joined your colony as an unassigned colonist.</entry>
 	<entry key="nativeConvertReturned">A native convert returned to the local people after eight turns without work.</entry>
-	<entry key="nativeConvertFreed">Las Casas freed your existing native converts; they now work as ordinary colonists.</entry>
+	<entry key="nativeConvertFreed">The charter freed your existing native converts; they now work as ordinary colonists.</entry>
 	<entry key="nativeTeachingProgress">Learning %s here: %d of %d owner updates.</entry>
 	<entry key="nativeTeachingStop">Stop learning</entry>
 	<entry key="nativeTeachingRejected">The offer or the situation changed, so nothing was started.</entry>

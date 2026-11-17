@@ -8,7 +8,6 @@ import java.util.List;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.akropia.model.ColonyJobChoice.Kind;
 import org.akropia.model.Founder;
 import org.akropia.model.Goods;
 import org.akropia.model.GoodsType;
@@ -76,9 +75,9 @@ public class TC_143_F134_las_casas_converts_test extends AbstractAkropiaTest {
 
     private static final String LABEL_0_EN = "Local convert of the Egyptians. Unassigned turns: 0 of 8.";
 
-    private static final String FREED_EN = "Las Casas freed your existing native converts";
+    private static final String FREED_EN = "The charter freed your existing native converts";
 
-    private static final String FREED_CS = "Las Casas osvobodil vaše dosavadní místní konvertity";
+    private static final String FREED_CS = "Charta osvobodila vaše dosavadní místní konvertity";
 
     private static final String ACQUIRED_EN = "A native convert joined your colony";
 
@@ -96,8 +95,6 @@ public class TC_143_F134_las_casas_converts_test extends AbstractAkropiaTest {
     private static final Location FIELD_AT = Location.of(23, 15);
 
     private static final String BEST_LUMBER_EN = "Best eligible field: 8 Lumber per turn";
-
-    private static final String REFUSED_EN = "Unavailable: A native convert cannot work in a manufacturing building.";
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -130,19 +127,20 @@ public class TC_143_F134_las_casas_converts_test extends AbstractAkropiaTest {
         congress.verifyWorldUnchanged();
         convert.verifyUnassignedUpdates(0);
 
-        // Choosing him is not yet the join; the convert is still a convert.
+        // Buying the charter frees the existing convert immediately.
         congress.open();
         congress.select(Founder.BARTOLOME_DE_LAS_CASAS);
         congress.choose();
         congress.close();
-        convert.verifyUnassignedUpdates(0);
+        convert.verifyFreedColonist(CONVERT_ID, CONVERT_AT);
 
-        // The next turn brings the earned join and its notice.
+        // Read the current notice, then continue with an ordinary turn.
         final GamePage game = GamePage.of(getContext());
-        final ScreenTurnReport report = game.nextTurn().orElseThrow();
+        final ScreenTurnReport report = game.openTurnReport();
         report.verifyThatAtLeastOneEventMessageContains(FREED_EN);
         convert.captureReport("las-casas-freed-en.png");
         report.close();
+        GamePage.of(getContext()).nextTurnAndCloseDialogs();
         convert.verifyFreedColonist(CONVERT_ID, CONVERT_AT);
         convert.verifyNoConvertLabel(CONVERT_ID);
         convert.verifyNoConvertHeld();
@@ -189,11 +187,12 @@ public class TC_143_F134_las_casas_converts_test extends AbstractAkropiaTest {
         congress.choose();
         congress.close();
 
-        final ScreenTurnReport report = GamePage.of(getContext()).nextTurn()
-                .orElseThrow();
+        final ScreenTurnReport report = GamePage.of(getContext())
+                .openTurnReport();
         report.verifyThatAtLeastOneEventMessageContains(FREED_CS);
         convert.captureReport("las-casas-freed-cs.png");
         report.close();
+        GamePage.of(getContext()).nextTurnAndCloseDialogs();
         convert.verifyFreedColonist(CONVERT_ID, CONVERT_AT);
         convert.verifyNoConvertLabel(CONVERT_ID);
     }
@@ -214,38 +213,44 @@ public class TC_143_F134_las_casas_converts_test extends AbstractAkropiaTest {
         // colonist, and manufacturing stays refused before the join.
         jobs.assignField(WORKER_ID, FIELD_AT, GoodsType.LUMBER);
         jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 8));
-        jobs.openFromField(WORKER_ID);
-        jobs.select(Kind.INDOOR, GoodsType.TOOLS);
-        jobs.verifyDetails(REFUSED_EN, false);
-        jobs.cancel();
-        jobs.verifyClosed();
+        // The current work menu lists available jobs only. Exercise the real
+        // refused field-to-building drop and verify the complete state.
+        jobs.rememberWorld();
+        jobs.assignIndoorFromField(WORKER_ID, "id_blacksmith");
+        jobs.verifyWorldUnchanged();
+        jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 8));
         final GamePage afterColony = ColonyScreen.of(getContext(), COLONY_NAME)
                 .close();
 
-        // Choosing Las Casas is not yet the join; the field job is unchanged.
+        // Buying the charter keeps the field job but immediately removes the
+        // convert bonus.
         congress.open();
         congress.select(Founder.BARTOLOME_DE_LAS_CASAS);
         congress.choose();
         congress.close();
-        jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 8));
+        jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 7));
 
-        // The earned join at the next turn frees the convert; its field job
+        // The following turn retains the freed colonist; its field job
         // stays the same worker, now at ordinary output. The scenario colony
         // starts with no liberty and the join adds no resident, so the update
         // leaves the support bonus and the Tory penalty at zero and the
-        // ordinary figure is the six of TC_134.
-        final ScreenTurnReport report = afterColony.nextTurn().orElseThrow();
+        // ordinary field output remains seven.
+        final ScreenTurnReport report = afterColony.openTurnReport();
         report.verifyThatAtLeastOneEventMessageContains(FREED_EN);
         report.close();
+        GamePage.of(getContext()).nextTurnAndCloseDialogs();
         final ColonyScreen colony = afterColony.openColonyAt(COLONY,
                 COLONY_NAME);
         jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 7));
         convert.verifyNoConvertHeld();
-        jobs.openFromField(WORKER_ID);
-        jobs.select(Kind.INDOOR, GoodsType.TOOLS);
-        jobs.verifyManufacturingOffered(REFUSED_EN);
-        jobs.cancel();
-        jobs.verifyClosed();
+        // The same drop now succeeds. Return the same worker to its field
+        // before saving, preserving the original job-persistence coverage.
+        jobs.assignIndoorFromField(WORKER_ID, "id_blacksmith");
+        jobs.verifyIndoorJob(WORKER_ID,
+                org.akropia.model.ConstructionType.BLACKSMITHS_HOUSE, 1);
+        jobs.assignIndoorWorkerToField("id_blacksmith", 1, WORKER_ID, FIELD_AT,
+                GoodsType.LUMBER);
+        jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 7));
 
         // Save and Continue keep the same person, field job and ordinary
         // output.

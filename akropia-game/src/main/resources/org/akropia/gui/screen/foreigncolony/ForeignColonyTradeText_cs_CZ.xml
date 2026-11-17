@@ -15,7 +15,7 @@
     <entry key="confirm">Potvrdit obchod</entry>
     <entry key="cancel">Zrušit</entry>
     <entry key="noGoods">Nemáte zboží, které tato kolonie teď přijme.</entry>
-    <entry key="founderAbsent">K obchodu s cizí kolonií musí být Jan de Witt ve vašem Kongresu.</entry>
+    <entry key="founderAbsent">Obchod s cizí kolonií vyžaduje poznání Zámořské obchodní styky.</entry>
     <entry key="atWar">Obchod vyžaduje mír nebo spojenectví s národem této kolonie.</entry>
     <entry key="hostGold">Národ kolonie nemá dost zlata na tuto platbu.</entry>
     <entry key="visitorGold">Nemáte dost zlata na tento obchod.</entry>

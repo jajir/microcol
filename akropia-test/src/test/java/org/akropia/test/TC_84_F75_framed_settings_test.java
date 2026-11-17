@@ -532,7 +532,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         // Map actions conflict with each other too.
         shortcuts.startChange(ShortcutAction.HELP, 0);
         shortcuts.pressKeys(KeyCode.K);
-        shortcuts.verifyStatus("K is used by both Congress and Colonizopedia."
+        shortcuts.verifyStatus("K is used by both Knowledge and Colonizopedia."
                 + " Change one of them before saving.");
         shortcuts.verifySaveEnabled(false);
         // A free key resolves the conflict; changing it replaces the only
@@ -705,7 +705,7 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         shortcuts.verifyStatus(
                 "Stiskněte novou kombinaci pro Colonizopedie. Escape zruší.");
         shortcuts.pressKeys(KeyCode.K);
-        shortcuts.verifyStatus("K používá Kongres i Colonizopedie."
+        shortcuts.verifyStatus("K používá Poznání i Colonizopedie."
                 + " Před uložením jednu z nich změňte.");
         shortcuts.verifyCompleteLayout();
         shortcuts.captureDialog(ScreenKeyboardShortcuts.STATUS_ID,

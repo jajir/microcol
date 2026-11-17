@@ -2476,7 +2476,7 @@ Remote CI, native desktop checks and publication were not inspected.
 2. Model/JUnit completion `20261110T171718Z-c9979ef7d823` (PID 91091, timeout 600 s) passed **5,122 checks in 394 complete reports**, zero failures/errors/skips, in 160.311 supervised seconds. Reports: `target/verification/run-u9xsgkzs/model/`; game sources/resources match the checked snapshot based on `966ba058`.
 3. Targeted Docker/Xvfb `20261110T172022Z-d77d5baad09d` (PID 91650, timeout 1,800 s) passed **18 checks in two complete reports**, zero failures/errors/skips, in 261.000 supervised seconds: full `TC_84_F75_framed_settings_test` and `PageVerificationContractTest`. Reports and screenshots: `target/docker-ui/run-DtzPd1/`. Reviewed `shortcut-conflict-warning-en.png` and `shortcut-conflict-warning-cs.png`: legible warning beside the binding, matching EN/CZ footer text and disabled save.
 4. Fixed smoke/support `20261110T172510Z-8a8355ff21f1` (PID 92081, outer timeout 480 s) passed **21 checks in 12 complete reports**, zero failures/errors/skips, in 255.632 verifier seconds and 258.540 supervised seconds, below the 420-second acceptance budget. Reports: `target/verification/run-vb_nwel1/`. All ten changed executable/source/resource/test files match the reviewed hashes and smoke snapshot; model-tested game sources remain unchanged.
-5. Graphics export check passed all eight controls; seven graphics-export tooling checks and fourteen documentation consistency checks passed. Name audit found no unexplained occurrences. Initial strict MkDocs rejected a heading anchor; corrected heading passed strict build. No full-regression or distribution-publication claim.
+6. Graphics export check passed all eight controls; seven graphics-export tooling checks and fourteen documentation consistency checks passed. Name audit found no unexplained occurrences. Initial strict MkDocs rejected a heading anchor; corrected heading passed strict build. No full-regression or distribution-publication claim.
 
 ## UI regression repair from run 42742278071 — 2026-11-10
 
@@ -18227,3 +18227,60 @@ messages for diagnosis. No tests were removed or weakened for acceptance.
 10. Final focused run `20261117T101329Z-a65b6e1841db` (PID 26458) passed **4 checks in two reports**, zero failures/errors/skips, in 127.953 seconds (`target/docker-ui/run-AxC7Ye/`): TC119/01 and the three page-contract checks. Together with the unchanged passing scenarios in `run-sWN01f`, all **25 distinct targeted checks** pass on the final production source. Earlier failures remain recorded as failures.
 11. Fixed smoke/support `20261117T101558Z-6b6d44ff5211` (PID 26606) passed **21 checks in 12 reports**, zero failures/errors/skips, in 256.335 supervised seconds, within the 420-second phase budget (`target/verification/run-bwjdhcgl/`). All nine task executable/test/resource files matched the smoke snapshot before final comment cleanup. The cleanup removed stale comments and clarified removal behavior in two Java files; token comparison confirms identical Java code to the passing smoke snapshot. Final reviewed hashes are in `target/route-destination/source-hashes.json`.
 12. Local acceptance is based on `efd14b5cb190aa959862073e3ccf9b917136beaf` plus the reviewed change: **5,132 model/JUnit + 25 distinct targeted UI/source-contract + 21 smoke/support checks**, all passing. Shared Eclipse formatting, diff review, 14 documentation consistency tests, naming audit (zero unexplained occurrences) and strict MkDocs passed. Documentation logs are in `target/route-destination/`. Unrelated backlog edits are excluded. No full local regression or remote CI/publication verification was requested or performed.
+
+<a id="knowledge-2026-11-17"></a>
+## Knowledge, Agora and historical help — 2026-11-17
+
+1. UC-079, UC-086–110, UC-114: human acquisition spends accumulated national
+   owls immediately and retains the existing bonus rules. TC56 covers the
+   99/100 boundary, cancel, purchase, stale offer and Continue; TC100 covers
+   25 illustrated reference rows, searchable artifacts and external link targets.
+2. First model invocation `20261117T192938Z-dba65861a1e9` stopped in preparation:
+   Docker container discovery exceeded 20 s; no tests started. A subsequent
+   server-info probe succeeded without restarting Docker. Retry
+   `20261117T193131Z-4f2c880f86b2`, PID 56230,
+   `target/verification/run-y4uux24s`: model/JUnit **5139 passed**, zero
+   failures/errors/skips, 157.918 s including runner preparation.
+3. Targeted Docker/Xvfb run `20261117T193436Z-b6c89f6a8c64`, supervisor PID
+   63355, selection TC56/57/69/70/71/72/100/110/111/113/114/124/143/144/148/176/192:
+   stopped at test compilation because the new page verifier lacked the
+   `assertNotNull` import; no UI scenarios ran. Retry
+   `20261117T193715Z-e90fa356d9b5`, PID 63528, uses the same selection after
+   correcting that import: `target/docker-ui/run-X3Q55b`, 61 scenarios,
+   9 failures, 5 errors, zero skips, 982.541 s. The failed evidence is retained.
+   Causes: predecessor next-turn notice expectations, an immediate stockade,
+   explicit positive alarm signs, two untranslated Czech expectations, a
+   99-owl foreign-report fixture, and an obsolete unavailable-job submenu path.
+   Repairs read acquisition notices in the current turn, retain all effect/state
+   checks and exercise the actual rejected/successful field-to-building drop.
+   The run covers acquisition, individual affected bonuses,
+   English/Czech help and small/wide main-window layouts.
+4. Final-source model retry `20261117T194547Z-136a34ac9daf`, PID 63808,
+   `target/verification/run-05qh0980`, waited for the targeted run's local lock
+   and began execution at 19:53:38 UTC. **5139 passed**, zero
+   failures/errors/skips; execution and runner preparation 159.426 s, lock
+   waiting 470.341 s. No native macOS UI tests were used.
+5. Final-source targeted run `20261117T195645Z-835d44ab04b0`, PID 64349,
+   repeats the same affected classes and adds TC84 methods TC10 and TC12
+   for the renamed shortcut conflicts. TC56 also checks direct help navigation;
+   TC100 captures English/Czech knowledge help at 1440 px.
+   `target/docker-ui/run-6RKz6w`: **64 passed**, zero failures/errors/skips,
+   1159.636 s including preparation, no lock waiting.
+6. Graphics export `knowledge --check` matches all 24 SVG-derived PNGs.
+   A source montage and final in-game screenshots were inspected: help at
+   1440 × 900 in [Czech](graphics-assets/knowledge-2026-11-17/help-cs.png)
+   and [English](graphics-assets/knowledge-2026-11-17/help-en.png), plus the
+   [knowledge cards](graphics-assets/knowledge-2026-11-17/knowledge-en.png).
+   Text and illustrations do not overlap. All 14 documentation checks, the
+   naming audit and strict MkDocs passed before adding these evidence images.
+7. Fixed smoke/support run `20261117T201619Z-981caecbda91`, PID 65129,
+   `target/verification/run-5b7wo214`: **23 passed**, zero failures/errors/skips,
+   289.058 supervised seconds within the 420-second phase budget; no lock waiting.
+   All 119 changed game/test source, fixture and asset files match its snapshot.
+8. Local acceptance covers base `b3abe5cfa422594d6320a307ba1136478aee0457`
+   plus this reviewed change: **5139 model/JUnit, 64 targeted UI and 23
+   smoke/support checks**, all passing. All 92 changed game files also match
+   the passing final model snapshot. Shared Java formatting, vector/export
+   review, final screenshots, 14 documentation consistency checks, naming audit
+   and strict MkDocs passed. The unrelated backlog edit is excluded. No full
+   local regression, remote regression or publication verification was requested.

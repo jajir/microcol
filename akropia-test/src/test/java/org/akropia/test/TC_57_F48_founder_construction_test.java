@@ -45,7 +45,8 @@ public class TC_57_F48_founder_construction_test extends AbstractAkropiaTest {
         construction.cancel();
         colony.verifyWorldUnchanged();
         game = colony.close();
-        // Choose the founder and earn the final owl through an ordinary turn.
+        // Spend the saved owls, then verify the unlocked projects after an
+        // ordinary turn.
         CongressPage congress = new CongressPage(getContext());
         congress.open();
         congress.select(Founder.ADAM_SMITH);
@@ -100,7 +101,8 @@ public class TC_57_F48_founder_construction_test extends AbstractAkropiaTest {
         construction.verifyProjectOffered("CUSTOM_HOUSE", false);
         construction.cancel();
         game = colony.close();
-        // Choose the founder and earn the final owl through an ordinary turn.
+        // Spend the saved owls, then verify the unlocked projects after an
+        // ordinary turn.
         CongressPage congress = new CongressPage(getContext());
         congress.open();
         congress.select(Founder.PETER_STUYVESANT);
@@ -139,7 +141,7 @@ public class TC_57_F48_founder_construction_test extends AbstractAkropiaTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
-        construction.verifyStatus("Requires founder: Adam Smith.");
+        construction.verifyStatus("Requires discovery: Large workshops.");
         colony.rememberWorld();
         construction.open();
         ConstructionRushPage rush = new ConstructionRushPage(getContext());
@@ -151,7 +153,7 @@ public class TC_57_F48_founder_construction_test extends AbstractAkropiaTest {
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
-        construction.verifyStatus("Requires founder: Adam Smith.");
+        construction.verifyStatus("Requires discovery: Large workshops.");
         construction.verifyQueue(List.of("IRON_WORKS"), List.of(9), 503);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 100));
         construction.verifyBuilding(ConstructionType.IRON_WORKS, 0);
@@ -161,7 +163,7 @@ public class TC_57_F48_founder_construction_test extends AbstractAkropiaTest {
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame().openColonyAt(COLONY,
                 "New Amsterdam");
-        construction.verifyStatus("Requires founder: Adam Smith.");
+        construction.verifyStatus("Requires discovery: Large workshops.");
         construction.verifyQueue(List.of("IRON_WORKS"), List.of(9), 503);
     }
 }

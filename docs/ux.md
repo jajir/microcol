@@ -1943,3 +1943,14 @@ studii. Ověření sleduje [funkční evidence](functional-tests.md#page-separat
 4. Nedostupná trasa zobrazí modelový důvod a nepovolí OK. Potvrzení znovu
    ověří stav hry. [Evidence ověření](functional-tests.md#carrier-route-dialog-2026-11-17)
    uvádí skutečně provedené testy.
+
+## Poznání a nápověda — 17. listopadu 2026
+
+Hráč vyrábí sovy v agoře a chce za ně získat bonus. **Poznání** najde v liště,
+menu nebo přes K; na každé kartě vidí cenu, ilustraci a účinek. Volba karty
+není nákup. Nedostatek sov blokuje potvrzení, Escape a návrat nic nemění.
+Platné potvrzení odečte sovy a ihned zpřístupní bonus, zobrazí potvrzení a novou
+nabídku. Neplatná nabídka zobrazí výzvu k obnovení výběru. Tlačítko nápovědy
+vede na [historické předlohy](knowledge.md); externí čtení je dobrovolné.
+Ověření vizuálního rozložení a funkce je v [evidenci](functional-tests.md#knowledge-2026-11-17),
+nejde o novou uživatelskou studii.

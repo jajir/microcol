@@ -19,8 +19,8 @@ import javafx.stage.Stage;
 
 /**
  * Foreign power comparison. The Dutch start without Jan de Witt, earn him by
- * choosing him in Congress and ending the turn, and only then see France's
- * actual values, while Spain, which they never met, stays withheld.
+ * purchasing Overseas trade networks, and immediately see France's actual
+ * values, while Spain, which they never met, stays withheld.
  *
  * <p>
  * Fixture (see {@link EuropeanRelationsPage#foreignReportFixture()}): France
@@ -36,13 +36,13 @@ public class TC_144_F135_foreign_power_report_test extends AbstractAkropiaTest {
     private static final String SPAIN = "Spain";
     private static final String FRANCE_NAME = "Nová Francie (Phocaea)";
     private static final String SPAIN_NAME = "Nová Francie (Miletus)";
-    private static final String LOCKED = "Locked: recruit Jan de Witt to compare powers.";
+    private static final String LOCKED = "Locked: acquire Overseas trade networks to compare powers.";
     private static final String UNKNOWN = "Unknown: no contact with this power yet.";
     private static final List<String> FRANCE_VALUES = List.of("1", "1", "1",
             "6.5", "16", "12");
     private static final List<String> FRANCE_VALUES_CZ = List.of("1", "1", "1",
             "6,5", "16", "12");
-    private static final String LOCKED_CZ = "Zamčeno: získejte Jana de Witta pro srovnání mocností.";
+    private static final String LOCKED_CZ = "Zamčeno: získejte Zámořské obchodní styky pro srovnání mocností.";
     private static final String UNKNOWN_CZ = "Neznámé: zatím žádný kontakt s touto mocností.";
     private static final List<Founder> OFFER = List.of(Founder.JOHN_PAUL_JONES,
             Founder.THOMAS_JEFFERSON, Founder.JAN_DE_WITT, Founder.WILLIAM_PENN,
@@ -72,22 +72,23 @@ public class TC_144_F135_foreign_power_report_test extends AbstractAkropiaTest {
         relations.captureDialog("foreignPowers", "foreign-power-locked.png");
         game = relations.close();
 
-        // Choosing the founder is not recruiting him: still locked.
+        // Purchasing the discovery immediately unlocks the known power.
         congress.open();
         congress.verifyOffer(OFFER);
         congress.select(Founder.JAN_DE_WITT);
         congress.choose();
         congress.close();
         relations.open();
-        relations.verifyForeignWithheld(FRANCE, FRANCE_NAME, "Peace", LOCKED);
+        relations.verifyForeignRow(FRANCE, FRANCE_NAME, "Peace", FRANCE_VALUES);
         game = relations.close();
 
-        // The next owner turn, after the computer nations played, brings him.
-        var report = game.nextTurn();
+        // Read the acquisition notice before ending the current owner turn.
+        var report = java.util.Optional.of(game.openTurnReport());
         game.verifyTurnReportPresent(report);
         report.orElseThrow().verifyThatAtLeastOneEventMessageContains(
-                "Jan de Witt has joined Congress.");
+                "Knowledge acquired: Overseas trade networks.");
         report.orElseThrow().close();
+        game.nextTurnAndCloseDialogs();
 
         // Now the contacted France shows all six values, the unknown Spain
         // stays withheld and says why.

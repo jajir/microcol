@@ -23,7 +23,7 @@ public class TC_144_F135_foreign_power_locked_test extends AbstractAkropiaTest {
     private static final String FRANCE_NAME = "Nová Francie (Phocaea)";
     private static final String SPAIN_NAME = "Nová Francie (Miletus)";
     private static final String PEACE = "Peace";
-    private static final String LOCKED = "Locked: recruit Jan de Witt to compare powers.";
+    private static final String LOCKED = "Locked: acquire Overseas trade networks to compare powers.";
 
     @Start
     private void start(final Stage stage) throws Exception {

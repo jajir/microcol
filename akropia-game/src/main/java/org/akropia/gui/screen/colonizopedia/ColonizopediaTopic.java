@@ -41,7 +41,9 @@ public enum ColonizopediaTopic {
             Colonizopedia.topic_resources_body),
     UNITS(Colonizopedia.topic_units_title, Colonizopedia.topic_units_body),
     BUILDINGS(Colonizopedia.topic_buildings_title,
-            Colonizopedia.topic_buildings_body);
+            Colonizopedia.topic_buildings_body),
+    KNOWLEDGE(Colonizopedia.topic_knowledge_title,
+            Colonizopedia.topic_knowledge_body);
 
     private final Colonizopedia title;
 
@@ -76,6 +78,14 @@ public enum ColonizopediaTopic {
     }
 
     private boolean referenceMatches(final I18n i18n, final String needle) {
+        if (this == KNOWLEDGE) {
+            return Arrays.stream(org.akropia.model.Founder.values()).anyMatch(
+                    founder -> fold(org.akropia.gui.screen.congress.CongressText
+                            .name(i18n, founder)).contains(needle)
+                            || fold(org.akropia.gui.screen.congress.KnowledgeReference
+                                    .of(founder).getArtifact(i18n))
+                                    .contains(needle));
+        }
         if (this == BUILDINGS) {
             return ConstructionType.ALL.stream()
                     .anyMatch(type -> fold(

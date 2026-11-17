@@ -244,7 +244,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
                 getContext());
         congress.open();
         congress.verifyFillsGameWindow("Zpět do hry");
-        congress.verifyHeading("Kongres");
+        congress.verifyHeading("Poznání");
         page.verifyBackToGame("congressClose", "Zpět do hry");
         page.verifyFrame(484, 1600);
         page.scrollToBottom();

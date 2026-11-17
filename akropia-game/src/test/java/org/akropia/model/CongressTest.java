@@ -109,6 +109,60 @@ class CongressTest {
     }
 
     @Test
+    void knowledgePurchaseIsImmediateAndPreservesExcessOwls() {
+        final Model world = model(125, null);
+        final Player owner = world.getCurrentPlayer();
+        final FounderOffer offer = owner.getFounderOffers().stream()
+                .filter(item -> item.getFounder() == Founder.JOHN_PAUL_JONES)
+                .findFirst().orElseThrow();
+        final long ships = world.getAllUnits().stream()
+                .filter(unit -> unit.getOwner() == owner
+                        && unit.getType() == UnitType.FRIGATE)
+                .count();
+        owner.acquireKnowledge(offer);
+        assertEquals(25, owner.getCongressOwls());
+        assertEquals(200, owner.getCongressTarget());
+        assertTrue(
+                owner.getCongressMembers().contains(Founder.JOHN_PAUL_JONES));
+        assertTrue(owner.getSelectedFounder().isEmpty());
+        assertEquals(ships + 1,
+                world.getAllUnits().stream()
+                        .filter(unit -> unit.getOwner() == owner
+                                && unit.getType() == UnitType.FRIGATE)
+                        .count());
+        final String after = new Gson().toJson(world.save());
+        assertFalse(owner.canAcquireKnowledge(offer));
+        assertThrows(IllegalStateException.class,
+                () -> owner.acquireKnowledge(offer));
+        assertEquals(after, new Gson().toJson(world.save()));
+        final Model restored = Model.make(world.save(),
+                MissionImpl.getPredefinedGameOverEvaluators());
+        assertEquals(owner.getCongressMembers(),
+                restored.getCurrentPlayer().getCongressMembers());
+        assertEquals(25, restored.getCurrentPlayer().getCongressOwls());
+    }
+
+    @Test
+    void unaffordableAndForeignKnowledgeOffersDoNotMutateAnything() {
+        final Model world = model(99, null);
+        final Player owner = world.getCurrentPlayer();
+        final FounderOffer own = owner.getFounderOffers().get(0);
+        final FounderOffer foreign = model(200, null).getCurrentPlayer()
+                .getFounderOffers().get(0);
+        final String before = new Gson().toJson(world.save());
+        for (final FounderOffer offer : List.of(own, foreign)) {
+            assertFalse(owner.canAcquireKnowledge(offer));
+            assertThrows(IllegalStateException.class,
+                    () -> owner.acquireKnowledge(offer));
+            assertEquals(before, new Gson().toJson(world.save()));
+        }
+        assertFalse(owner.canAcquireKnowledge(null));
+        assertThrows(IllegalStateException.class,
+                () -> owner.acquireKnowledge(null));
+        assertEquals(before, new Gson().toJson(world.save()));
+    }
+
+    @Test
     void catalogueHasFiveDistinctMembersPerCategory() {
         assertEquals(25, Founder.values().length);
         for (final Founder.Category category : Founder.Category.values()) {

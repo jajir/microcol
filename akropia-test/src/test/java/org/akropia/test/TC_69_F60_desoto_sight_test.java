@@ -50,17 +50,18 @@ public class TC_69_F60_desoto_sight_test extends AbstractAkropiaTest {
         congress.select(Founder.HERNANDO_DE_SOTO);
         congress.choose();
         congress.close();
-        fog.verifyExplored(SECOND_RING, false);
+        fog.verifyExplored(SECOND_RING, true);
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        fog.verifyExplored(SECOND_RING, false);
+        fog.verifyExplored(SECOND_RING, true);
 
         // One actual town-hall owl completes recruitment during the next turn.
-        var report = game.nextTurn();
+        var report = java.util.Optional.of(game.openTurnReport());
         game.verifyTurnReportPresent(report);
         report.orElseThrow().verifyThatAtLeastOneEventMessageContains(
-                "Hernando de Soto has joined Congress.");
+                "Knowledge acquired: Prudent exploration.");
         report.orElseThrow().close();
+        game.nextTurnAndCloseDialogs();
         fog.centerFrontier();
         fog.verifyUnitLocation(4, OBSERVER);
         fog.verifySightRadius(4, 2);
@@ -82,9 +83,9 @@ public class TC_69_F60_desoto_sight_test extends AbstractAkropiaTest {
         fog.verifyNoFogBorder(Location.of(30, 16));
         fog.verifyRevealedPixels(SECOND_RING);
         congress.open();
-        congress.verifyProgress(0, 200,
-                "Choose the next founder. Owls wait until a choice is made.",
-                "Hernando de Soto");
+        congress.verifyProgress(1, 200,
+                "Choose a discovery. Acquiring it costs the displayed number of owls.",
+                "Prudent exploration");
         congress.close();
     }
 }

@@ -182,14 +182,31 @@ public final class CongressPage extends AbstractScreen {
 
     public void verifyFounderSelection(final Founder founder,
             final String expectedEffect) {
+        verifyFounderSelection(founder, expectedEffect, true);
+    }
+
+    public void verifyFounderSelection(final Founder founder,
+            final String expectedEffect, final boolean affordable) {
         final ToggleButton card = getNodeFinder()
                 .lookup("#founder-" + founder.name())
                 .queryAs(ToggleButton.class);
         assertTrue(card.isSelected());
         assertEquals(expectedEffect,
                 getLabeledById("congressDetail").getText());
-        assertFalse(getButtonById("congressChoose").isDisabled());
+        assertEquals(!affordable, getButtonById("congressChoose").isDisabled());
         assertTrue(player().getSelectedFounder().isEmpty());
+    }
+
+    public void openKnowledgeHelp() {
+        clickOnButtonWithId("knowledgeHelp");
+    }
+
+    public void verifyKnowledgeArtwork(final Founder founder) {
+        final javafx.scene.image.ImageView image = getNodeFinder()
+                .lookup("#knowledgeImage-" + founder.name())
+                .queryAs(javafx.scene.image.ImageView.class);
+        assertFalse(image.getImage().isError());
+        assertTrue(image.getBoundsInParent().getWidth() > 0);
     }
 
     public void verifySelectionRequired() {
@@ -199,10 +216,10 @@ public final class CongressPage extends AbstractScreen {
 
     public void verifyProgress(int owls, int target, String objective,
             String members) {
-        assertEquals("Congress owls: " + owls + " / " + target,
+        assertEquals("Owls: " + owls + " / " + target,
                 getLabeledById("congressProgress").getText());
         assertEquals(objective, getLabeledById("congressObjective").getText());
-        assertEquals("Members: " + members,
+        assertEquals("Acquired knowledge: " + members,
                 getLabeledById("congressMembers").getText());
         assertEquals(owls, player().getCongressOwls());
         assertEquals(target, player().getCongressTarget());
@@ -220,7 +237,7 @@ public final class CongressPage extends AbstractScreen {
         assertEquals(Set.of(Founder.JOHN_PAUL_JONES),
                 Set.copyOf(player().getCongressMembers()));
         assertFalse(player().isJonesDeliveryPending());
-        assertEquals("Jones: one free frigate delivered.",
+        assertEquals("Master shipbuilding: the free ship has been delivered.",
                 getLabeledById("congressReward").getText());
     }
 
@@ -542,7 +559,7 @@ public final class CongressPage extends AbstractScreen {
     }
 
     public void verifyChanged() {
-        assertEquals("The offer changed. Close Congress and open it again.",
+        assertEquals("The offer or game state changed. Reopen Knowledge.",
                 getLabeledById("congressFeedback").getText());
         assertTrue(getButtonById("congressChoose").isDisabled());
     }

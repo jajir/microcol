@@ -32,7 +32,7 @@ public class TC_148_F139_foreign_colony_trade_test extends AbstractAkropiaTest {
     private static final String RECEIVE_NOTHING = "You receive no goods back.";
     private static final String RECEIVE_GRAPES = "You receive: 1 Grapes.";
     private static final String NO_NET = "";
-    private static final String NO_FOUNDER = "Jan de Witt must be in your Congress to trade with a foreign colony.";
+    private static final String NO_FOUNDER = "Foreign-colony trade requires Overseas trade networks.";
     private static final String FRENCH_CANNOT_PAY = "The colony's nation cannot pay this much gold.";
     private static final String GIVE_TWO_GRAIN_CZ = "Dáte: 2 Obilí.";
     private static final String RECEIVE_NOTHING_CZ = "Zpět nedostanete žádné zboží.";

@@ -56,23 +56,25 @@ public class TC_111_F102_coronado_reveal_test extends AbstractAkropiaTest {
         fog.verifyExplored(CROWN_POST, false);
         fog.verifyNoKnownColony(CROWN_POST);
 
-        // Choosing him is not arrival; the founder joins during the next turn.
+        // Buying reveals the cities immediately; Continue keeps the knowledge.
         congress.open();
         congress.select(Founder.FRANCISCO_DE_CORONADO);
         congress.choose();
         congress.close();
-        fog.verifyExplored(CROWN_POST, false);
+        fog.verifyExplored(CROWN_POST, true);
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        fog.verifyExplored(CROWN_POST, false);
-        fog.verifyNoKnownColony(CROWN_POST);
+        fog.verifyExplored(CROWN_POST, true);
+        fog.verifyKnownColony(CROWN_POST, "Crown Post", "Dutch's King", false);
 
-        // The arrival explores the colony and its neighbors, not beyond them.
-        var report = game.nextTurn();
+        // The notice is available now; an ordinary turn keeps the same explored
+        // area.
+        var report = java.util.Optional.of(game.openTurnReport());
         game.verifyTurnReportPresent(report);
         report.orElseThrow().verifyThatAtLeastOneEventMessageContains(
-                "Francisco de Coronado has joined Congress.");
+                "Knowledge acquired: Register of cities.");
         report.orElseThrow().close();
+        game.nextTurnAndCloseDialogs();
         fog.centerFrontier();
         fog.verifyExplored(CROWN_POST, true);
         fog.verifyExplored(WEST_NEIGHBOR, true);
@@ -95,9 +97,9 @@ public class TC_111_F102_coronado_reveal_test extends AbstractAkropiaTest {
         fog.verifyObservedUnits(CROWN_POST, 0);
         fog.verifyRevealedPixels(WEST_NEIGHBOR);
         congress.open();
-        congress.verifyProgress(0, 200,
-                "Choose the next founder. Owls wait until a choice is made.",
-                "Francisco de Coronado");
+        congress.verifyProgress(1, 200,
+                "Choose a discovery. Acquiring it costs the displayed number of owls.",
+                "Register of cities");
         congress.close();
     }
 }

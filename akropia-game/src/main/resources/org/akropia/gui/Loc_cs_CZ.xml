@@ -270,7 +270,7 @@
 	<entry key="nativeTeachingHostility">Místní obyvatelé se obrátili proti kolonii, takže kolonista odešel, aniž by se naučil: %s.</entry>
 	<entry key="nativeConvertJoined">Místní konvertita se připojil ke kolonii jako nepřiřazený kolonista.</entry>
 	<entry key="nativeConvertReturned">Místní konvertita se po osmi tazích bez práce vrátil ke svému národu.</entry>
-	<entry key="nativeConvertFreed">Las Casas osvobodil vaše dosavadní místní konvertity; nyní pracují jako běžní kolonisté.</entry>
+	<entry key="nativeConvertFreed">Charta osvobodila vaše dosavadní místní konvertity; nyní pracují jako běžní kolonisté.</entry>
 	<entry key="nativeTeachingProgress">Učení: %s zde, %d z %d aktualizací vlastníka.</entry>
 	<entry key="nativeTeachingStop">Přestat se učit</entry>
 	<entry key="nativeTeachingRejected">Nabídka nebo situace se změnila, proto nic nezačalo.</entry>

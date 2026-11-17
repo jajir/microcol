@@ -76,7 +76,7 @@ public final class ScreenCongress implements GameScreen {
             final FounderOffer offer = value == null ? null
                     : (FounderOffer) value.getUserData();
             choose.setDisable(offer == null || !isCurrent()
-                    || !player.canChooseFounder(offer));
+                    || !player.canAcquireKnowledge(offer));
             founderName.setText(offer == null ? ""
                     : CongressText.name(i18n, offer.getFounder()));
             detail.setText(offer == null ? ""
@@ -132,7 +132,12 @@ public final class ScreenCongress implements GameScreen {
         heading.setId("congressHeading");
         heading.setGraphic(ButtonIcon.CONGRESS.createView());
         page.setTitle(heading);
-        final HBox actions = new HBox(close);
+        final Button help = ActionButtons.button(ButtonIcon.HELP);
+        help.setId("knowledgeHelp");
+        help.setOnAction(
+                event -> eventBus.post(new org.akropia.gui.event.ShowHelpEvent(
+                        org.akropia.gui.screen.colonizopedia.ColonizopediaTopic.KNOWLEDGE)));
+        final HBox actions = new HBox(12, help, close);
         actions.setId("congressActions");
         page.getContent().addEventFilter(
                 javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
@@ -162,8 +167,15 @@ public final class ScreenCongress implements GameScreen {
         effect.setText(CongressText.effect(i18n, founder));
         final Label selected = label("");
         final ToggleButton card = ActionButtons.toggle(categoryIcon(founder));
-        final VBox content = new VBox(10, card.getGraphic(), category, name,
-                effect, selected);
+        final javafx.scene.image.ImageView artwork = KnowledgeReference
+                .of(founder).createView(220);
+        artwork.fitWidthProperty()
+                .bind(candidates.prefTileWidthProperty().subtract(40));
+        artwork.setFitHeight(160);
+        final Label cost = label("");
+        cost.setText(i18n.get(CongressText.cost, player.getCongressTarget()));
+        final VBox content = new VBox(10, artwork, category, name, effect, cost,
+                selected);
         content.setMouseTransparent(true);
         card.setId("founder-" + founder.name());
         card.setUserData(offer);
@@ -236,6 +248,8 @@ public final class ScreenCongress implements GameScreen {
     public void updateLanguage(final I18n texts) {
         ((Label) page.getContent().lookup("#congressHeading"))
                 .setText(texts.get(CongressText.title));
+        ((Button) page.getContent().lookup("#knowledgeHelp"))
+                .setText(texts.get(CongressText.help));
         royalDetails.setText(texts.get(CongressText.deployment));
         choose.setText(texts.get(CongressText.choose));
         close.setText(texts.get(Loc.backToGame));
@@ -383,7 +397,7 @@ public final class ScreenCongress implements GameScreen {
         try {
             if (!isCurrent())
                 throw new IllegalStateException("Congress view changed");
-            player.chooseFounder(offer);
+            player.acquireKnowledge(offer);
             refresh();
             feedback.setText(i18n.get(CongressText.chosen));
         } catch (IllegalArgumentException | IllegalStateException rejected) {

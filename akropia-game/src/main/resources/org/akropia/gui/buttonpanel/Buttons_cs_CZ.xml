@@ -126,7 +126,7 @@
     <entry key="fortifyUnavailable">Vyžaduje váš tah a ozbrojenou pozemní jednotku na pevnině, se zbývajícím pohybem a bez jiného rozkazu.</entry>
     <entry key="goToColonyUnavailable">Pro tuto jednotku nyní není dostupný cíl cesty.</entry>
     <entry key="toolbarColonies">Kolonie</entry>
-    <entry key="toolbarCongress">Kongres</entry>
+    <entry key="toolbarCongress">Poznání</entry>
     <entry key="toolbarCenter">Vycentrovat</entry>
     <entry key="toolbarStatistics">Statistiky</entry>
     <entry key="toolbarTurnReport">Hlášení</entry>
@@ -138,7 +138,7 @@
     <entry key="toolbarExit">Nabídka</entry>
     <entry key="toolbarIndependence">Nezávislost</entry>
     <entry key="coloniesExplanation">Vyberte kolonii, kterou chcete otevřít.</entry>
-    <entry key="congressExplanation">Otevřít Kongres a vybrat Otce zakladatele.</entry>
+    <entry key="congressExplanation">Otevřít Poznání a získat bonus za sovy.</entry>
     <entry key="nextTurnExplanation">Dokončit tento tah a zahájit další.</entry>
     <entry key="plowProblemRiver">Na říčním políčku nelze zorat pole.</entry>
     <entry key="mapHeadingExplanation">Mappa Mundi je latinsky „mapa světa“. Latina se tehdy běžně používala.</entry>

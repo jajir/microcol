@@ -131,7 +131,7 @@ jsou označeny.
 | `map.center` | Najít vybrané místo | Mapa | C | C | |
 | `map.colonies` | Kolonie | Mapa | I | I | |
 | `map.europe` | Domovský přístav | Mapa | E | E | |
-| `map.congress` | Kongres | Mapa | K | K | |
+| `map.congress` | Poznání | Mapa | K | K | |
 | `map.nativeSettlements` | Domorodá sídla | Mapa | N | N | |
 | `map.statistics` | Statistiky | Mapa | R | R | |
 | `map.turnReport` | Hlášení tahu | Mapa | T | T | |

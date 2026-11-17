@@ -12,7 +12,8 @@ import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
 /**
- * A frozen offer becomes one lasting member and one real ship after production.
+ * Banked owls purchase a permanent discovery and its ship without advancing the
+ * turn.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_56_F47_congress_test extends AbstractAkropiaTest {
@@ -29,10 +30,10 @@ public class TC_56_F47_congress_test extends AbstractAkropiaTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         CongressPage congress = new CongressPage(getContext());
         congress.rememberWorld();
-        // Discover the shortcut, open Congress and return without a decision.
+        // Discover the shortcut, open Knowledge and return without a purchase.
         congress.hoverOpenButton();
         game.verifyThatStatusBarContains(
-                "Open Congress and choose a Founding Father.");
+                "Open Knowledge and acquire a bonus with owls.");
         congress.openWithShortcut();
         congress.verifyFillsGameWindow("Back to game");
         congress.verifyWorldUnchanged();
@@ -46,7 +47,7 @@ public class TC_56_F47_congress_test extends AbstractAkropiaTest {
                 Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
                 Founder.WILLIAM_PENN, Founder.FERDINAND_MAGELLAN));
         congress.verifyProgress(99, 100,
-                "Choose the next founder. Owls wait until a choice is made.",
+                "Choose a discovery. Acquiring it costs the displayed number of owls.",
                 "None");
         congress.captureDialog("congressDialog", "r104-congress-offer.png");
         congress.verifySelectionRequired();
@@ -54,10 +55,11 @@ public class TC_56_F47_congress_test extends AbstractAkropiaTest {
         // A card explains the benefit before the separate confirmation.
         congress.select(Founder.FERDINAND_MAGELLAN);
         congress.verifyFounderSelection(Founder.FERDINAND_MAGELLAN,
-                "Ships gain +1 movement. New voyages to Home port from the western edge take half as long, rounded up.");
+                "Ships gain +1 movement. New voyages to Home port from the western edge take half as long, rounded up.",
+                false);
         congress.select(Founder.JOHN_PAUL_JONES);
         congress.verifyFounderSelection(Founder.JOHN_PAUL_JONES,
-                "John Paul Jones grants one free frigate on joining.");
+                "Grants one free frigate once.", false);
         congress.verifyWorldUnchanged();
         congress.scrollReportToStart();
         congress.captureDialog("congressDialog",
@@ -82,31 +84,23 @@ public class TC_56_F47_congress_test extends AbstractAkropiaTest {
         congress.verifyReturnedToGame();
         congress.verifyWorldUnchanged();
         window.resize(900, 750);
-        // Only explicit confirmation chooses the objective; Continue does not
-        // reroll it.
+        // Produce the missing owl before buying; no discovery is selected in
+        // advance.
+        game.nextTurnAndCloseDialogs();
         congress.open();
+        congress.verifyProgress(100, 100,
+                "Choose a discovery. Acquiring it costs the displayed number of owls.",
+                "None");
         congress.select(Founder.JOHN_PAUL_JONES);
+        congress.verifyFounderSelection(Founder.JOHN_PAUL_JONES,
+                "Grants one free frigate once.");
+        congress.verifyKnowledgeArtwork(Founder.JOHN_PAUL_JONES);
+        // Explicit confirmation charges the account and grants the reward
+        // immediately.
         congress.choose();
-        congress.verifyProgress(99, 100, "Working toward: John Paul Jones",
-                "None");
-        congress.close();
-        game.exitToMenu();
-        game = new FreePlayAuditPage(getContext()).continueGame();
-        congress.open();
-        congress.verifyProgress(99, 100, "Working toward: John Paul Jones",
-                "None");
-        congress.close();
-        // The unattended town hall makes one owl in the normal national
-        // update.
-        var report = game.nextTurn();
-        game.verifyTurnReportPresent(report);
-        report.orElseThrow().verifyThatAtLeastOneEventMessageContains(
-                "John Paul Jones has joined Congress.");
-        report.orElseThrow().close();
-        congress.open();
         congress.verifyProgress(0, 200,
-                "Choose the next founder. Owls wait until a choice is made.",
-                "John Paul Jones");
+                "Choose a discovery. Acquiring it costs the displayed number of owls.",
+                "Master shipbuilding");
         congress.verifyReward(1, 10000, 1);
         congress.captureDialog("congressDialog", "r104-congress-member.png");
         congress.close();
@@ -115,24 +109,43 @@ public class TC_56_F47_congress_test extends AbstractAkropiaTest {
         congress.open();
         congress.verifyReward(1, 10000, 1);
         congress.verifyProgress(0, 200,
-                "Choose the next founder. Owls wait until a choice is made.",
-                "John Paul Jones");
+                "Choose a discovery. Acquiring it costs the displayed number of owls.",
+                "Master shipbuilding");
         congress.close();
-        // Pending selection banks new owls and never repeats the joining
+        // The next offer banks new owls and never repeats the acquisition
         // effect.
         game.nextTurnAndCloseDialogs();
         congress.open();
         congress.verifyProgress(1, 200,
-                "Choose the next founder. Owls wait until a choice is made.",
-                "John Paul Jones");
+                "Choose a discovery. Acquiring it costs the displayed number of owls.",
+                "Master shipbuilding");
         congress.verifyReward(1, 10000, 2);
         congress.close();
     }
 
     @Test
     @Tag("local")
-    void TC_02_changed_objective_rejects_old_confirmation() throws Exception {
+    void TC_03_knowledge_help_opens_its_topic_without_spending_owls()
+            throws Exception {
         WelcomePage.of(getContext()).loadGame();
+        final CongressPage congress = new CongressPage(getContext());
+        congress.rememberWorld();
+        congress.open();
+        congress.openKnowledgeHelp();
+        final ColonizopediaPage help = ColonizopediaPage.of(getContext());
+        help.verifyDialogOpen();
+        help.verifySelectedTopic("Knowledge and historical references", "owls");
+        help.verifyReferenceRows(25);
+        help.closeWithOk();
+        congress.verifyWorldUnchanged();
+        congress.verifyReturnedToGame();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_02_changed_objective_rejects_old_confirmation() throws Exception {
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        game.nextTurnAndCloseDialogs();
         CongressPage congress = new CongressPage(getContext());
         congress.open();
         congress.select(Founder.JOHN_PAUL_JONES);
@@ -143,7 +156,8 @@ public class TC_56_F47_congress_test extends AbstractAkropiaTest {
         congress.verifyWorldUnchanged();
         congress.close();
         congress.open();
-        congress.verifyProgress(99, 100, "Working toward: Adam Smith", "None");
+        congress.verifyProgress(100, 100, "Planned discovery: Large workshops",
+                "None");
         congress.close();
     }
 }

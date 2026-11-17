@@ -15,7 +15,7 @@
     <entry key="confirm">Confirm trade</entry>
     <entry key="cancel">Cancel</entry>
     <entry key="noGoods">You carry no goods this colony can take now.</entry>
-    <entry key="founderAbsent">Jan de Witt must be in your Congress to trade with a foreign colony.</entry>
+    <entry key="founderAbsent">Foreign-colony trade requires Overseas trade networks.</entry>
     <entry key="atWar">Trade needs peace or alliance with this colony's nation.</entry>
     <entry key="hostGold">The colony's nation cannot pay this much gold.</entry>
     <entry key="visitorGold">You do not have enough gold for this trade.</entry>

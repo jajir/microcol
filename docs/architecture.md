@@ -495,12 +495,12 @@ verzi pravidla. [UX](ux.md) a [grafika](graphics.md) popisují společné požad
 | [gui.screen.campaign](../akropia-game/src/main/java/org/akropia//gui/screen/campaign) | Výběr kampaně a mise. |
 | [gui.screen.goals](../akropia-game/src/main/java/org/akropia//gui/screen/goals) | Zobrazení cílů mise a jejich postupu. |
 | [gui.screen.statistics](../akropia-game/src/main/java/org/akropia//gui/screen/statistics) | Zobrazení herních statistik, grafů, základních evropských vztahů, síně slávy (R-0197; zápis výsledku jde přes `HallOfFameDao`) a přehledu práce (R-0198; počty a místa čte `model.LaborReport`, odkaz otevírá existující obrazovky přes `LaborNavigator`) a přehledu náboženství (R-0199; výstup a postup čte `model.ReligionReport`, zobrazení nemění pochodně ani přistěhovalce) a přehledu kolonií (R-0200; populaci, zásoby, očekávaný výstup, příští stav a projekt čte `model.ColonyAdvisorReport`, otevření kolonie přes `ColonyAdvisorNavigator` ověřuje model a vlastnictví; projekt a nástroje používají stejné pravidlo jako oznámení R-0086); přehled lodí (R-0202; loďstvo, plavby, opravy a náklad čte `model.FleetReport`, cizí lodě jen počet obsazených prostorů, otevření přes `FleetNavigator` ověřuje živý přehled); potvrzení vyhlášení války se kontroluje proti původní hře a hráčům před modelovou operací. |
-| [gui.screen.congress](../akropia-game/src/main/java/org/akropia//gui/screen/congress) | `ScreenCongress` v hlavním okně přes `InGamePage` (R-0332); zobrazení neměnné nabídky otců, národních sov, cíle a členství. Národní podporu, členy, cíl a skutečnou REF vlastního národa čte `model.CongressReport` (R-0203) jedním dotazem bez mezipaměti. Výslovná volba používá hlídanou operaci hráče; UI nelosuje ani neuděluje odměny. |
+| [gui.screen.congress](../akropia-game/src/main/java/org/akropia//gui/screen/congress) | `ScreenCongress` v hlavním okně přes `InGamePage` (R-0332); zobrazení neměnné nabídky poznání, národních sov, ceny a získaných bonusů. `KnowledgeReference` přidává statické historické předlohy a odkazy do nápovědy. Národní podporu, členy, cíl a skutečnou REF vlastního národa čte `model.CongressReport` (R-0203) jedním dotazem bez mezipaměti. Výslovný nákup používá hlídanou operaci `Player.acquireKnowledge`; UI nelosuje ani neuděluje odměny. |
 | [gui.screen.turnreport](../akropia-game/src/main/java/org/akropia//gui/screen/turnreport) | Prezentace uložených zpráv `model.turnevent`. Rutinní přehled řídí předvolba v `gui.preferences` (R-0204); kritické zprávy otevřou přehled i při jejím vypnutí. Akce Otevřít kolonii (chybějící nástroje, dokončený projekt, zahozené zboží, narození) a Otevřít Evropu ověřují aktuální hru a nic nespotřebují. `EuropeOpeningRequest` drží automatické otevření Evropy až za přehledem a zruší se při jeho opuštění (R-0204). |
 | [gui.screen.menu](../akropia-game/src/main/java/org/akropia//gui/screen/menu) | Hlavní menu, navigace a nastavení volné hry (`ScreenFreePlay`); skutečná volba mapy, validovaný zobrazovaný název hráče a výslovně označený náhled národa. |
 | [gui.screen.setting](../akropia-game/src/main/java/org/akropia//gui/screen/setting) | Ovládání uživatelských nastavení. |
 | [gui.screen.load](../akropia-game/src/main/java/org/akropia//gui/screen/load) | Stránka Načíst hru v hlavním okně (R-0377): sdílený `gui.dialog.SavedGamesView` se seznamem vlevo a detailem s náhledem a souhrnem vpravo (R-0383) v mořské oblasti menu nebo v herním rámu podle obrazovky, která ji otevřela. Výpis, ověření a načtení zůstávají v `PersistingService`; původ a návrat vlastní `MainPanelPresenter`. |
-| [gui.screen.colonizopedia](../akropia-game/src/main/java/org/akropia//gui/screen/colonizopedia) | Herní nápověda: tlačítko a klávesa H otevírají plnou hlavní obrazovku s tématy pravidel, hledáním a texty z `i18n`. `ScreenColonizopedia` používá společnou navigaci a `InGamePage`; referenční obsah čte pouze statické definice terénů, bonusů, typů jednotek a budov (včetně řad vylepšení, cen a produkce). Sdílený stavový panel čte stav partie, nápověda jej nemění. Viz [R-0324](requirements/done/R-0324.md). |
+| [gui.screen.colonizopedia](../akropia-game/src/main/java/org/akropia//gui/screen/colonizopedia) | Herní nápověda: tlačítko a klávesa H otevírají plnou hlavní obrazovku s tématy pravidel, hledáním a texty z `i18n`. `ScreenColonizopedia` používá společnou navigaci a `InGamePage`; referenční obsah čte pouze statické definice terénů, bonusů, typů jednotek, budov (včetně řad vylepšení, cen a produkce) a [poznání s historickými předlohami](knowledge.md). Odkazy předává JavaFX `HostServices` výchozímu prohlížeči. Sdílený stavový panel čte stav partie, nápověda jej nemění. Viz [R-0324](requirements/done/R-0324.md). |
 | [gui.screen.editor](../akropia-game/src/main/java/org/akropia//gui/screen/editor) | Vývojářský editor map a scénářů (R-0435): vstup jen v developer mode, horní menu Nová/Otevřít/Uložit/Hrát, pravý panel nástrojů a vybraného pole, ochrana neuložených změn (`EditorActions`). Návrh drží `ModelService` odděleně od běžící hry. | Pravidla, validace a sestavení scénáře vlastní `model.generation.ScenarioDraft`; GUI jen sbírá volby a zobrazuje odmítnutí. Editor záměrně mění mapu mimo běžné herní tahy; tato cesta není vzorem provádění akcí hráče či AI. |
 
 ## Testy a ostatní adresáře
@@ -766,13 +766,16 @@ Produkční bonusy R-0101 a vyhlášení nezávislosti R-0105 mají tento výpo�
 
 ### Kongres a příchod otce (R-0104)
 
-`Player` vlastní uložený `Congress`: nabídku kandidátů, zvolený cíl, národní
-sovy, členy a případnou čekající Jonesovu fregatu. `Colony` připisuje novou
-výrobu sov nezávisle na místním skladu. Po aktualizaci kolonií hráč dokončí
-nejvýše jeden cíl a zachová přebytek. `FounderOffer` váže potvrzení na
-původního hráče a generaci nabídky. Model vytváří odměnu a uloženou zprávu
-příchodu; rozhraní pouze překládá a zobrazuje. Continue neopakuje aktualizaci.
-Rozsah a přejímku vede [R-0104](requirements/done/R-0104.md).
+`Player` vlastní uložený `Congress`: nabídku poznání, národní sovy,
+získané bonusy a případné čekající doručení lodi. `Colony` připisuje novou
+výrobu sov nezávisle na místním skladu. `Player.acquireKnowledge` před mutací
+ověří dostupnost nabídky, účet, generaci a kapacitu odměny; pak ihned odečte
+cenu a udělí účinek. `FounderOffer` váže potvrzení na původního hráče a generaci.
+Model vytváří odměnu a uloženou zprávu; rozhraní pouze překládá a zobrazuje.
+AI a dříve připravené scénáře mohou stále používat plánovaný cíl dokončený
+po aktualizaci kolonií; ten není novým hráčským postupem. Continue odměny
+neopakuje. Aktuální chování popisují [poznání](knowledge.md), historický
+základ [R-0104](requirements/done/R-0104.md).
 
 ### Stavební podmínky otců (R-0084)
 

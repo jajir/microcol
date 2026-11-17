@@ -8,6 +8,347 @@
   "sourceRoot": "akropia-game/src/graphics",
   "runtimeRoot": "akropia-game/src/main/resources/images",
   "groups": {
+    "knowledge": {
+      "family": "Knowledge historical illustrations",
+      "outputs": [
+        {
+          "output": "knowledge/treasury.png",
+          "source": "knowledge/treasury.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/helmet.png",
+          "source": "knowledge/helmet.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/miltiades.png",
+          "source": "knowledge/miltiades.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/wreath.png",
+          "source": "knowledge/wreath.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/stamp.png",
+          "source": "knowledge/stamp.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/water-clock.png",
+          "source": "knowledge/water-clock.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/democracy.png",
+          "source": "knowledge/democracy.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/treaty.png",
+          "source": "knowledge/treaty.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/tribute.png",
+          "source": "knowledge/tribute.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/debt.png",
+          "source": "knowledge/debt.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/boundary.png",
+          "source": "knowledge/boundary.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/oath.png",
+          "source": "knowledge/oath.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/citizenship.png",
+          "source": "knowledge/citizenship.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/freedom.png",
+          "source": "knowledge/freedom.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/hymns.png",
+          "source": "knowledge/hymns.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/antikythera.png",
+          "source": "knowledge/antikythera.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/kyrenia.png",
+          "source": "knowledge/kyrenia.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/walls.png",
+          "source": "knowledge/walls.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/omphalos.png",
+          "source": "knowledge/omphalos.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/clay.png",
+          "source": "knowledge/clay.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/kiln.png",
+          "source": "knowledge/kiln.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/trireme.png",
+          "source": "knowledge/trireme.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/torch.png",
+          "source": "knowledge/torch.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        },
+        {
+          "output": "knowledge/nike.png",
+          "source": "knowledge/nike.svg",
+          "render": "zoom",
+          "zoom": 2,
+          "size": [
+            480,
+            360
+          ],
+          "transparent": true,
+          "consumer": "KnowledgeReference",
+          "display": "240 x 180 logical pixels",
+          "stroke": "2 logical px black pen, flat fills"
+        }
+      ]
+    },
     "turn-rowers": {
       "family": "Waiting for other nations: vigorous rowing loop",
       "outputs": [

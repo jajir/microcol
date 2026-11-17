@@ -90,7 +90,7 @@
     <entry key="setupSummary">%1$s · %2$s</entry>
     <entry key="setupGoalsStep">1 World → 2 Player → 3 Objectives · Step 3</entry>
     <entry key="setupGoalIndependence">Independence — declare independence and defeat the royal invasion.</entry>
-    <entry key="setupGoalCongress">Complete Congress — recruit all 25 members.</entry>
+    <entry key="setupGoalCongress">All discoveries — acquire all 25 discoveries.</entry>
     <entry key="setupGoalDomination">Domination — take every other colonizing nation’s last colony.</entry>
     <entry key="setupGoalRule">Complete any selected objective to win. Opponents have the same objectives. The objective and score enter the Hall of Fame. No time limit.</entry>
     <entry key="setupSandbox">Sandbox without objective victory or a time limit. Losing your last colony after establishing your nation still eliminates you.</entry>

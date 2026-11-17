@@ -48,7 +48,7 @@ public class TC_72_F64_la_salle_stockade_test extends AbstractAkropiaTest {
         congress.select(Founder.SIEUR_DE_LA_SALLE);
         congress.close();
         congress.verifyWorldUnchanged();
-        // Choosing him and one ordinary update completes the objective.
+        // Buying the discovery applies the population gate immediately.
         congress.open();
         congress.select(Founder.SIEUR_DE_LA_SALLE);
         congress.choose();
@@ -110,7 +110,7 @@ public class TC_72_F64_la_salle_stockade_test extends AbstractAkropiaTest {
         congress.select(Founder.SIEUR_DE_LA_SALLE);
         congress.choose();
         congress.close();
-        defense.verifyStockadeBuilt(0);
+        defense.verifyStockadeBuilt(1);
         defense.verifyStock(58, 19, 10000);
         // Joining grants the already eligible colony without spending.
         game.nextTurnAndCloseDialogs();

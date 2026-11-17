@@ -281,12 +281,6 @@ public class TC_114_F105_native_land_test extends AbstractAkropiaTest {
         NativeRelationsPage relations = new NativeRelationsPage(getContext());
 
         // Choose Minuit. Choosing is not arrival: the square is still unpaid.
-        congress.open();
-        congress.select(Founder.PETER_MINUIT);
-        congress.choose();
-        congress.close();
-        relations.verifySelectedFounder(EuropeanNation.DUTCH,
-                Founder.PETER_MINUIT);
         relations.verifyFounderMember(EuropeanNation.DUTCH,
                 Founder.PETER_MINUIT, false);
         land.verifyLandStatus(PLOW_SQUARE, NativeLandStatus.UNPAID);
@@ -301,6 +295,12 @@ public class TC_114_F105_native_land_test extends AbstractAkropiaTest {
         land.verifyDialogClosed();
         plow.verifyUnitWork(PLOW_SQUARE, 0, UnitActionType.plowField, 0, 80);
 
+        // Acquire the land agreement: existing work is exempt immediately.
+        congress.open();
+        congress.select(Founder.PETER_MINUIT);
+        congress.choose();
+        congress.close();
+        land.verifyLandStatus(PLOW_SQUARE, NativeLandStatus.WAIVED);
         // At the next update Minuit joins: the square is waived from now on.
         // The surroundings still add 3.0, so alarm 3 and anger 3 / 20. Nothing
         // is paid or refunded, and the earlier paid squares stay paid.

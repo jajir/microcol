@@ -79,14 +79,14 @@ Vaše pokladna při nabídce: %s zlatých.</entry>
 	<entry key="foreignMilitary">Vojenská síla</entry>
 	<entry key="foreignNaval">Námořní síla</entry>
 	<entry key="foreignTrade">Prodeje za 10 tahů</entry>
-	<entry key="foreignLocked">Zamčeno: získejte Jana de Witta pro srovnání mocností.</entry>
+	<entry key="foreignLocked">Zamčeno: získejte Zámořské obchodní styky pro srovnání mocností.</entry>
 	<entry key="foreignUncontacted">Neznámé: zatím žádný kontakt s touto mocností.</entry>
 	<entry key="titleBaseScore">Základní skóre</entry>
 	<entry key="baseScoreTitle">Náhled základního skóre, ne konečné pořadí</entry>
 	<entry key="baseScoreNote">Pouze pro čtení. Základní mezisoučet válečné a obtížnostní složky neobsahuje; výsledek vypočtený níže je použije. Nic se nezapisuje.</entry>
 	<entry key="baseScoreUnavailable">Základní skóre se zobrazí, když běží hra.</entry>
 	<entry key="baseScorePopulation">Obyvatelstvo: %s bodů (služebníci %s, kolonisté %s, odborníci %s)</entry>
-	<entry key="baseScoreFathers">Zakladatelé: %s bodů (%s naverbováno)</entry>
+	<entry key="baseScoreFathers">Poznání: %s bodů (%s získáno)</entry>
 	<entry key="baseScoreGold">Pokladna: %s bodů (%s zlata)</entry>
 	<entry key="baseScoreSupport">Celostátní podpora: %s bodů (%s %%)</entry>
 	<entry key="baseScoreSubtotal">Základní mezisoučet: %s bodů</entry>

@@ -84,8 +84,8 @@ public final class AkropiaApplication extends Application {
         try {
             injector = Guice.createInjector(com.google.inject.Stage.PRODUCTION,
                     new AkropiaModule(), new ModuleImages(),
-                    new ExternalModule(primaryStage), new CampaignModule(),
-                    overridenModule);
+                    new ExternalModule(primaryStage, getHostServices()),
+                    new CampaignModule(), overridenModule);
             setDevelopmentMode();
             injector.getInstance(DiagnosticLog.class)
                     .record(DiagnosticEvent.STARTED, null);

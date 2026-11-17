@@ -36,8 +36,11 @@ final class ColonizopediaTables {
     private final I18n i18n;
     private final LocalizationHelper names;
     private final ImageProvider images;
+    private final javafx.application.HostServices hostServices;
 
-    ColonizopediaTables(final I18n i18n, final ImageProvider images) {
+    ColonizopediaTables(final I18n i18n, final ImageProvider images,
+            final javafx.application.HostServices hostServices) {
+        this.hostServices = hostServices;
         this.i18n = i18n;
         this.names = new LocalizationHelper(i18n);
         this.images = images;
@@ -47,8 +50,8 @@ final class ColonizopediaTables {
         final GridPane table = new GridPane();
         table.setId("colonizopediaReference");
         final ColumnConstraints nameColumn = new ColumnConstraints();
-        nameColumn.setPrefWidth(
-                topic == ColonizopediaTopic.IDENTITIES ? 128 : 160);
+        nameColumn.setPrefWidth(topic == ColonizopediaTopic.KNOWLEDGE ? 264
+                : topic == ColonizopediaTopic.IDENTITIES ? 128 : 160);
         nameColumn.setMinWidth(javafx.scene.layout.Region.USE_PREF_SIZE);
         nameColumn.setMaxWidth(javafx.scene.layout.Region.USE_PREF_SIZE);
         final ColumnConstraints detailColumn = new ColumnConstraints();
@@ -58,7 +61,33 @@ final class ColonizopediaTables {
         table.add(cell(topic.getTitle(i18n)), 0, 0);
         table.add(cell(i18n.get(Colonizopedia.properties)), 1, 0);
         int row = 1;
-        if (topic == ColonizopediaTopic.IDENTITIES) {
+        if (topic == ColonizopediaTopic.KNOWLEDGE) {
+            for (final org.akropia.model.Founder founder : org.akropia.model.Founder
+                    .values()) {
+                final org.akropia.gui.screen.congress.KnowledgeReference reference = org.akropia.gui.screen.congress.KnowledgeReference
+                        .of(founder);
+                final ImageView picture = reference.createView(240);
+                picture.setAccessibleText(reference.getArtifact(i18n));
+                table.add(cell("", picture), 0, row);
+                final VBox details = cell(CongressText.name(i18n, founder)
+                        + "\n" + CongressText.effect(i18n, founder) + "\n"
+                        + CongressText.rules(i18n, founder) + "\n\n"
+                        + i18n.get(CongressText.requirements) + "\n\n"
+                        + i18n.get(CongressText.history) + ": "
+                        + reference.getArtifact(i18n) + "\n"
+                        + reference.getHistory(i18n));
+                details.setId("knowledgeDetails-" + founder.name());
+                details.getChildren()
+                        .add(readingLink(i18n.get(CongressText.wiki),
+                                reference.getWikipedia(),
+                                "knowledgeWiki-" + founder.name()));
+                details.getChildren()
+                        .add(readingLink(i18n.get(CongressText.source),
+                                reference.getSource(),
+                                "knowledgeSource-" + founder.name()));
+                table.add(details, 1, row++);
+            }
+        } else if (topic == ColonizopediaTopic.IDENTITIES) {
             for (int index = 0; index < 12; index++) {
                 final ImageView flag = new ImageView(
                         images.getImage("nation_" + index + "_0"));
@@ -348,4 +377,22 @@ final class ColonizopediaTables {
         GridPane.setFillHeight(cell, true);
         return cell;
     }
+
+    private javafx.scene.control.Hyperlink readingLink(final String title,
+            final String url, final String id) {
+        final javafx.scene.control.Hyperlink link = new javafx.scene.control.Hyperlink(
+                title);
+        link.setId(id);
+        link.setUserData(url);
+        link.setWrapText(true);
+        link.setOnAction(event -> {
+            try {
+                hostServices.showDocument(url);
+            } catch (RuntimeException failure) {
+                link.setText(i18n.get(CongressText.externalFailure, url));
+            }
+        });
+        return link;
+    }
+
 }

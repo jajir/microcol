@@ -33,7 +33,7 @@
 	<entry key="topic_independence_body">Vyhlášení samostatné polis je samostatné potvrzení. Vyžaduje dost podpory národa a alespoň jednu vlastní pobřežní kolonii. Potvrzení nejdřív ukáže důsledky a zrušení nic nezmění. Po vyhlášení se kolonie, kde je místní podpora alespoň poloviční, mobilizují: část ozbrojených veteránů na svém poli přejde na nový národ. Podpora povstalců se ukazuje u každé kolonie i jako národní hodnota.</entry>
 
 	<entry key="topic_scoring_title">Statistiky a skóre</entry>
-	<entry key="topic_scoring_body">Klávesou R otevřete statistiky. Ukazují čárové grafy zaznamenaných tahů této hry: Zlato (pokladna), Vojenská síla, Bohatství (hospodářská hodnota zboží), Score a městské vztahy. Score se za každý tah zaznamenává jako Bohatství plus Vojenská síla plus Zlato; jde o záznam tahu, ne o váš konečný výsledek. Zatím není dostupné: konečné skóre na konci hry, části skóre za obyvatele a Kongres, úprava podle obtížnosti a síň slávy nejlepších výsledků. Odchod ze hry skóre nezapisuje. Konec hry výhrou či prohrou v revoluci také zatím není úplný.</entry>
+	<entry key="topic_scoring_body">Klávesou R otevřete statistiky. Ukazují čárové grafy zaznamenaných tahů této hry: Zlato (pokladna), Vojenská síla, Bohatství (hospodářská hodnota zboží), Score a městské vztahy. Score se za každý tah zaznamenává jako Bohatství plus Vojenská síla plus Zlato; jde o záznam tahu, ne o váš konečný výsledek. Zatím není dostupné: konečné skóre na konci hry, části skóre za obyvatele a Poznání, úprava podle obtížnosti a síň slávy nejlepších výsledků. Odchod ze hry skóre nezapisuje. Konec hry výhrou či prohrou v revoluci také zatím není úplný.</entry>
 
 
 	<entry key="topic_terrain_title">Terén</entry>
@@ -84,12 +84,12 @@
 	<entry key="buildingFounded">Součást kolonie od jejího založení.</entry>
 	<entry key="buildingPopulation">Nejméně obyvatel: %s</entry>
 	<entry key="buildingPredecessor">Vylepšení budovy: %s</entry>
-	<entry key="buildingFounder">Vyžaduje člena Kongresu: %s</entry>
+	<entry key="buildingFounder">Vyžaduje poznání: %s</entry>
 	<entry key="buildingWorkers">Pracovní místa: %s</entry>
 	<entry key="buildingOutput">Základní výstup na pracovníka za tah: %s %s</entry>
 	<entry key="buildingInput">Základní vstup na pracovníka za tah: %s %s</entry>
 	<entry key="buildingBaseOutput">Navíc výnos bez pracovníků za tah: %s %s</entry>
-	<entry key="building_TOWN_HALL">Srdce koloniální správy. Sovy posilují podporu povstání a přivádějí nové členy Kongresu.</entry>
+	<entry key="building_TOWN_HALL">Agora vytváří sovy — symbol moudrosti a učenosti. Sovy se sčítají za civilizaci a platíte jimi za poznání. Produkce také posiluje podporu nezávislosti.</entry>
 	<entry key="building_CARPENTERS_STAND">Skromná dílna mění dřevo na kladiva potřebná k výstavbě.</entry>
 	<entry key="building_LUMBER_MILL">Větší dílna zdvojnásobuje základní objem dřeva zpracovaný každým truhlářem a urychluje výstavbu.</entry>
 	<entry key="building_BLACKSMITHS_HOUSE">Malá kovárna vyrábí z rudy nářadí pro stavby, výstroj a práci pionýrů.</entry>
@@ -145,4 +145,6 @@
 <entry key="identity9">Ilyrové — Jadranské pobřeží a hornaté zázemí; zátoky, průchody a pobřežní osady.</entry>
 <entry key="identity10">Skythové — Severní Černomoří a step; kontakty pobřežních měst s komunitami ve vnitrozemí.</entry>
 <entry key="identity11">Arabové — Arabské a přilehlé pouštní oblasti; oázy, karavanní spojení a přístup k vodě.</entry>
+  <entry key="topic_knowledge_title">Poznání a historické předlohy</entry>
+  <entry key="topic_knowledge_body">V agoře vytváříte sovy. V okně Poznání vyberte nabízené poznání a potvrďte jeho získání. Pět oblastí nabízí vždy nejvýše jedno dosud nezískané poznání; nabídka zůstává do získání stejná. Pod každým bonusem najdete podmínky, pravidla a skutečnou historickou předlohu. Obrázky jsou výtvarné interpretace, ne přesné archeologické kopie.</entry>
 </properties>

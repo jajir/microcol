@@ -74,10 +74,11 @@ public final class ScreenColonizopedia implements GameScreen {
 
     @Inject
     public ScreenColonizopedia(final I18n i18n, final EventBus eventBus,
-            final ImageProvider images, final InGamePage page) {
+            final ImageProvider images, final InGamePage page,
+            final javafx.application.HostServices hostServices) {
         this.i18n = i18n;
         this.page = page;
-        tables = new ColonizopediaTables(i18n, images);
+        tables = new ColonizopediaTables(i18n, images, hostServices);
         buttonBar = new ButtonBarOk(i18n);
         buttonBar.getButtonOk().setGraphic(ButtonIcon.BACK.createView());
         buttonBar.getButtonOk().setOnAction(e -> {
@@ -163,6 +164,8 @@ public final class ScreenColonizopedia implements GameScreen {
 
     private static ButtonIcon topicIcon(final ColonizopediaTopic topic) {
         switch (topic) {
+        case KNOWLEDGE:
+            return ButtonIcon.CONGRESS;
         case IDENTITIES:
             return ButtonIcon.HELP_IDENTITIES;
         case MOVEMENT:
@@ -225,6 +228,11 @@ public final class ScreenColonizopedia implements GameScreen {
         showBody(topicList.getSelectionModel().getSelectedItem());
     }
 
+    public void selectTopic(final ColonizopediaTopic topic) {
+        search.clear();
+        topicList.getSelectionModel().select(topic);
+    }
+
     private void applyFilter() {
         final String query = search.getText();
         topics.setPredicate(topic -> topic.matches(i18n, query));
@@ -242,7 +250,8 @@ public final class ScreenColonizopedia implements GameScreen {
         topicTitle.setVisible(topic != null);
         topicTitle.setManaged(topic != null);
         bodyContent.getChildren().setAll(topicTitle, body);
-        if (topic == ColonizopediaTopic.IDENTITIES
+        if (topic == ColonizopediaTopic.KNOWLEDGE
+                || topic == ColonizopediaTopic.IDENTITIES
                 || topic == ColonizopediaTopic.TERRAIN
                 || topic == ColonizopediaTopic.RESOURCES
                 || topic == ColonizopediaTopic.UNITS

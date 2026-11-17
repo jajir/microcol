@@ -4,7 +4,7 @@
 <properties>
 	<comment>Define messages for construction types.</comment>
 	
-	<entry key="TOWN_HALL_name">Radnice</entry>
+	<entry key="TOWN_HALL_name">Agora</entry>
 	<entry key="LUMBER_MILL_name">Pila</entry>
 	<entry key="CARPENTERS_STAND_name">Truhlářství</entry>
 	<entry key="IRON_WORKS_name">Huť</entry>

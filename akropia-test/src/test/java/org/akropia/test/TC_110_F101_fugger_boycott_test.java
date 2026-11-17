@@ -50,15 +50,14 @@ public class TC_110_F101_fugger_boycott_test extends AbstractAkropiaTest {
 
     /**
      * Weapons and cloth are already boycotted with their arrears. Congress
-     * holds 99 of the 100 owls needed, so the next national update completes a
-     * chosen objective.
+     * holds the 100 owls needed to purchase debt settlement immediately.
      */
     private Fixture fixture() {
         return new Fixture(FIXTURE, "fugger-boycott")
                 .warehouse(Map.of(GoodsType.WEAPONS, 100, GoodsType.GRAIN, 40))
                 .arrears(Map.of(GoodsType.WEAPONS, WEAPONS_ARREARS,
                         GoodsType.CLOTH, CLOTH_ARREARS))
-                .gold(START_GOLD).congress(99, OFFERS);
+                .gold(START_GOLD).congress(100, OFFERS);
     }
 
     @Test
@@ -75,8 +74,8 @@ public class TC_110_F101_fugger_boycott_test extends AbstractAkropiaTest {
         congress.rememberWorld();
         congress.open();
         congress.verifyOffer(OFFERS);
-        congress.verifyProgress(99, 100,
-                "Choose the next founder. Owls wait until a choice is made.",
+        congress.verifyProgress(100, 100,
+                "Choose a discovery. Acquiring it costs the displayed number of owls.",
                 "None");
         congress.select(Founder.JAKOB_FUGGER);
         congress.close();
@@ -90,25 +89,26 @@ public class TC_110_F101_fugger_boycott_test extends AbstractAkropiaTest {
                 GoodsType.CLOTH, CLOTH_ARREARS));
         EuropePortScreen europe = EuropePortScreen.of(getContext());
         game = europe.close();
-        // Only the explicit choice starts the objective; the arrival is the
-        // next national update.
+        // Explicit confirmation pays for debt settlement immediately.
         congress.open();
         congress.select(Founder.JAKOB_FUGGER);
         congress.choose();
-        congress.verifyProgress(99, 100, "Working toward: Jakob Fugger",
-                "None");
+        congress.verifyProgress(0, 200,
+                "Choose a discovery. Acquiring it costs the displayed number of owls.",
+                "Debt settlement");
         congress.close();
-        var report = game.nextTurn();
+        var report = java.util.Optional.of(game.openTurnReport());
         game.verifyTurnReportPresent(report);
         report.orElseThrow().verifyThatAtLeastOneEventMessageContains(
-                "Jakob Fugger has joined Congress.");
+                "Knowledge acquired: Debt settlement.");
         report.orElseThrow().close();
-        // The arrival clears both debts without deducting gold or changing the
+        game.nextTurnAndCloseDialogs();
+        // Acquisition clears both debts without deducting gold or changing the
         // tax rate.
         congress.open();
-        congress.verifyProgress(0, 200,
-                "Choose the next founder. Owls wait until a choice is made.",
-                "Jakob Fugger");
+        congress.verifyProgress(1, 200,
+                "Choose a discovery. Acquiring it costs the displayed number of owls.",
+                "Debt settlement");
         congress.close();
         taxes.openEurope();
         taxes.verifyBoycottMarked(GoodsType.WEAPONS, false);
@@ -149,9 +149,9 @@ public class TC_110_F101_fugger_boycott_test extends AbstractAkropiaTest {
         europe.close().exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         congress.open();
-        congress.verifyProgress(0, 200,
-                "Choose the next founder. Owls wait until a choice is made.",
-                "Jakob Fugger");
+        congress.verifyProgress(1, 200,
+                "Choose a discovery. Acquiring it costs the displayed number of owls.",
+                "Debt settlement");
         congress.close();
         game.openEuroperPort();
         taxes.verifyBoycottMarked(GoodsType.WEAPONS, false);

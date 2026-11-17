@@ -1,6 +1,7 @@
 package org.akropia.page;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -831,6 +832,45 @@ public final class ColonizopediaPage extends AbstractScreen {
 
     private I18n getI18n() {
         return getContext().getClassFromGuice(I18n.class);
+    }
+
+    public void verifyKnowledgeReferences() {
+        getRobot().interact(() -> {
+            for (final org.akropia.model.Founder founder : org.akropia.model.Founder
+                    .values()) {
+                final ImageView image = getNodeFinder()
+                        .lookup("#knowledgeImage-" + founder.name())
+                        .queryAs(ImageView.class);
+                assertFalse(image.getImage().isError());
+                assertEquals(240, image.getFitWidth());
+                final javafx.scene.layout.VBox detail = getNodeFinder()
+                        .lookup("#knowledgeDetails-" + founder.name())
+                        .queryAs(javafx.scene.layout.VBox.class);
+                final String text = detail.getChildren().stream()
+                        .filter(Labeled.class::isInstance)
+                        .map(Labeled.class::cast).map(Labeled::getText)
+                        .collect(Collectors.joining("\n"));
+                assertTrue(text
+                        .contains(org.akropia.gui.screen.congress.CongressText
+                                .effect(getI18n(), founder)));
+                assertTrue(text.contains("100"),
+                        "Each row explains the acquisition cost");
+                final javafx.scene.control.Hyperlink link = getNodeFinder()
+                        .lookup("#knowledgeWiki-" + founder.name())
+                        .queryAs(javafx.scene.control.Hyperlink.class);
+                assertEquals(
+                        org.akropia.gui.screen.congress.KnowledgeReference
+                                .of(founder).getWikipedia(),
+                        link.getUserData());
+                assertNotNull(link.getOnAction());
+                assertTrue(
+                        image.localToScene(image.getBoundsInLocal())
+                                .getMaxX() <= detail
+                                        .localToScene(detail.getBoundsInLocal())
+                                        .getMinX(),
+                        "Artwork is left of the description");
+            }
+        });
     }
 
 }

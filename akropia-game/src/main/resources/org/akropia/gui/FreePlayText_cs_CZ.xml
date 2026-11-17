@@ -2,13 +2,13 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
     <entry key="INDEPENDENCE">Nezávislost</entry>
-    <entry key="CONGRESS">Úplný kongres</entry>
+    <entry key="CONGRESS">Všechna poznání</entry>
     <entry key="DOMINATION">Nadvláda</entry>
     <entry key="rule">Pro vítězství splňte kterýkoli zapnutý cíl. Stejné cíle mají soupeři. Bez časového limitu.</entry>
     <entry key="sandbox">Volné budování — bez cílového vítězství a bez časového limitu. Ztráta poslední kolonie po jejím prvním získání znamená vyřazení.</entry>
     <entry key="support">Podpora samostatnosti: %s / 50 %%. Založte pobřežní kolonii, rozvíjejte hospodářství a získávejte podporu. Pak vyhlaste samostatnost a odrazte invazi.</entry>
     <entry key="invasion">Samostatnost vyhlášena. Okupované kolonie: %s. Zbývající královské pozemní jednotky: %s. Osvoboďte všechny přeživší kolonie svého národa a snižte celkový počet královských pozemních jednotek nejvýše na 2. Udržte přístupný pobřežní přístav; úplná okupace pobřeží nebo 90 %% obyvatel znamená porážku.</entry>
-    <entry key="congressProgress">Členové kongresu: %s / 25. Produkujte sovy a vybírejte další členy.</entry>
+    <entry key="congressProgress">Získaná poznání: %s / 25. Produkujte sovy v agoře a získávejte poznání.</entry>
     <entry key="opponents">Zbývající soupeři: %s / %s. Soupeř je vyřazen ztrátou poslední kolonie po jejím prvním získání.</entry>
     <entry key="achieved">Splněno</entry>
     <entry key="result">Splněné cíle: %s · Vítězný národ: %s · Tah: %s</entry>

@@ -893,6 +893,12 @@ rules; implementation and acceptance are tracked by that requirement.
 
 ### Support, production and Congress
 
+**Current player-facing rule, 2026-11-17:** [Knowledge and Agora](knowledge.md)
+replace Congress, founders and Town Hall. Human confirmation purchases an
+available discovery immediately when enough national owls have accumulated.
+The 25 effect parameters remain unchanged. The older recruitment terminology
+and evidence below describe the predecessor and stable internal identifiers.
+
 1. Each colony stores nonnegative local liberty `L`. Each produced owl adds
    one point; no passive decay. After a population change/update cap it at
    `200 × resident population N`. Base rebel fraction is `L / (200N)`, zero at

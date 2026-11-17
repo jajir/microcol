@@ -1,3 +1,14 @@
+## Ilustrace poznání — 17. listopadu 2026
+
+[Poznání a historické předlohy](knowledge.md) popisují 24 nových editovatelných
+SVG, jejich 25 použití, vybrané motivy a zdroje. Skupina exportu `knowledge`
+převádí 240 × 180 logických px na 480 × 360 PNG. Obrysy jsou černé 2 px,
+výplně ploché a pohledy 2D. Ověření skutečného zobrazení a přejímka jsou
+vedeny v [evidenci](functional-tests.md#knowledge-2026-11-17).
+Zkontrolované snímky: [česká nápověda](graphics-assets/knowledge-2026-11-17/help-cs.png),
+[anglická nápověda](graphics-assets/knowledge-2026-11-17/help-en.png)
+a [výběr poznání](graphics-assets/knowledge-2026-11-17/knowledge-en.png).
+
 <a id="turn-rowers-2026-11-17"></a>
 ## Veslaři v čekacím modalu — 17. listopadu 2026
 

@@ -1061,6 +1061,29 @@ public abstract class Player {
         congress.choose(this, offer);
     }
 
+    /** Whether the current offer can be purchased from accumulated owls. */
+    public boolean canAcquireKnowledge(final FounderOffer offer) {
+        return canChooseFounder(offer)
+                && getCongressOwls() >= getCongressTarget();
+    }
+
+    /** Validate every purchase prerequisite before selecting or charging it. */
+    public void acquireKnowledge(final FounderOffer offer) {
+        model.checkTurnPreparationComplete();
+        Preconditions.checkState(canAcquireKnowledge(offer),
+                "Knowledge is unavailable or unaffordable");
+        congress.checkAcquisition(model.getDifficulty());
+        if (offer.getFounder() == Founder.JOHN_PAUL_JONES) {
+            Preconditions.checkState(model.canAddUnitInEurope(),
+                    "No unit IDs remain for the ship reward");
+        }
+        if (offer.getFounder() == Founder.WILLIAM_BREWSTER) {
+            recruitment.checkBrewsterJoin();
+        }
+        congress.choose(this, offer);
+        settleCongress();
+    }
+
     public boolean isJonesDeliveryPending() {
         return congress != null && congress.isJonesDeliveryPending();
     }

@@ -33,7 +33,7 @@
 	<entry key="topic_independence_body">Declaring independence is a separate confirmation. It needs enough national support and at least one owned coastal colony. The confirmation shows the consequences first, and cancelling it changes nothing. After a declaration, colonies whose local support is at least half mobilize some of their armed veterans on their square for the new nation. Rebel support is shown for each colony and as a national value.</entry>
 
 	<entry key="topic_scoring_title">Statistics and score</entry>
-	<entry key="topic_scoring_body">Press R to open Statistics. It shows line graphs of the recorded turns of this game: Gold (the treasury), Military (military strength), Wealth (the economy value of goods), Score and city-state relations. Score is recorded for each turn as Wealth plus Military plus Gold. It is a turn record, not your final result. Not available yet: a final score at the end of a game, the population and Congress parts of the score, the difficulty adjustment, and the Hall of Fame of best results. Leaving a game does not record a score. Revolution victory and loss at game end are also not complete yet.</entry>
+	<entry key="topic_scoring_body">Press R to open Statistics. It shows line graphs of the recorded turns of this game: Gold (the treasury), Military (military strength), Wealth (the economy value of goods), Score and city-state relations. Score is recorded for each turn as Wealth plus Military plus Gold. It is a turn record, not your final result. Not available yet: a final score at the end of a game, the population and Knowledge parts of the score, the difficulty adjustment, and the Hall of Fame of best results. Leaving a game does not record a score. Revolution victory and loss at game end are also not complete yet.</entry>
 
 
 	<entry key="topic_terrain_title">Terrain</entry>
@@ -84,12 +84,12 @@
 	<entry key="buildingFounded">Present from colony founding.</entry>
 	<entry key="buildingPopulation">Minimum population: %s</entry>
 	<entry key="buildingPredecessor">Upgrade from: %s</entry>
-	<entry key="buildingFounder">Required Congress member: %s</entry>
+	<entry key="buildingFounder">Required discovery: %s</entry>
 	<entry key="buildingWorkers">Worker places: %s</entry>
 	<entry key="buildingOutput">Base output per worker per turn: %s %s</entry>
 	<entry key="buildingInput">Base input per worker per turn: %s %s</entry>
 	<entry key="buildingBaseOutput">Additional output without workers per turn: %s %s</entry>
-	<entry key="building_TOWN_HALL">The heart of colonial government. Owls build rebel support and bring new members to Congress.</entry>
+	<entry key="building_TOWN_HALL">The agora produces owls, a symbol of wisdom and learning. Owls accumulate across the civilisation and pay for discoveries. Production also strengthens independence support.</entry>
 	<entry key="building_CARPENTERS_STAND">A modest workshop turns lumber into the hammers needed for construction.</entry>
 	<entry key="building_LUMBER_MILL">A larger workshop doubles the base timber throughput of each carpenter, speeding up construction.</entry>
 	<entry key="building_BLACKSMITHS_HOUSE">A small forge turns ore into tools for building, equipment and pioneering.</entry>
@@ -145,4 +145,6 @@
 <entry key="identity9">Illyrians — Adriatic coasts and mountain hinterlands, with bays, passes and coastal settlements.</entry>
 <entry key="identity10">Scythians — The northern Black Sea and steppe; contacts between coastal cities and inland communities.</entry>
 <entry key="identity11">Arabs — Arabian and neighbouring desert regions; oases, caravan connections and access to water.</entry>
+  <entry key="topic_knowledge_title">Knowledge and historical references</entry>
+  <entry key="topic_knowledge_body">Produce owls in the agora. In Knowledge, select an offered discovery and confirm acquisition. Each of five areas offers at most one unacquired discovery; the offer stays fixed until acquisition. Below each bonus are acquisition conditions, rules and its real historical reference. Illustrations are artistic interpretations, not exact archaeological copies.</entry>
 </properties>

@@ -353,7 +353,7 @@ public final class EuropeanRelationsPage extends AbstractScreen {
             if ("Dutch".equals(
                     player.getAsJsonObject().get("name").getAsString())) {
                 player.getAsJsonObject().add("congress",
-                        gson.fromJson("{\"activated\": true, \"owls\": 99, "
+                        gson.fromJson("{\"activated\": true, \"owls\": 100, "
                                 + "\"members\": [], "
                                 + "\"candidates\": [\"JOHN_PAUL_JONES\", "
                                 + "\"THOMAS_JEFFERSON\", \"JAN_DE_WITT\", "

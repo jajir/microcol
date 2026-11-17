@@ -18,15 +18,20 @@ import org.akropia.gui.screen.ShowScreenEvent;
 public final class ShowHelpListener {
 
     private final EventBus eventBus;
+    private final ScreenColonizopedia help;
 
     @Inject
-    public ShowHelpListener(final EventBus eventBus) {
+    public ShowHelpListener(final EventBus eventBus,
+            final ScreenColonizopedia help) {
+        this.help = help;
         this.eventBus = Preconditions.checkNotNull(eventBus);
     }
 
     @Subscribe
     private void onShowHelp(final ShowHelpEvent event) {
         eventBus.post(new ShowScreenEvent(Screen.HELP));
+        if (event.getTopic() != null)
+            help.selectTopic(event.getTopic());
     }
 
 }

@@ -202,10 +202,10 @@ public final class GameToolbarPage extends AbstractScreen {
 
     public void verifyControls(final boolean czech, final boolean iconsOnly) {
         getRobot().interact(() -> {
-            final String[] labels = czech ? new String[] { "Kolonie", "Kongres",
+            final String[] labels = czech ? new String[] { "Kolonie", "Poznání",
                     "Vycentrovat", "Statistiky", "Hlášení", "Cíle", "Nápověda",
                     "Domovský přístav", "Další tah", "Ukončit", "Nabídka" }
-                    : new String[] { "Colonies", "Congress", "Center",
+                    : new String[] { "Colonies", "Knowledge", "Center",
                             "Statistics", "Report", "Objectives", "Help",
                             "Home port", "Next turn", "Retire", "Menu" };
             final FlowPane bar = getNodeFinder().lookup(".buttonPanel")

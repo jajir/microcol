@@ -126,7 +126,7 @@
     <entry key="fortifyUnavailable">Requires your turn and an armed land unit on land, with movement remaining and no other order.</entry>
     <entry key="goToColonyUnavailable">No reachable destination is available for this unit in its current state.</entry>
     <entry key="toolbarColonies">Colonies</entry>
-    <entry key="toolbarCongress">Congress</entry>
+    <entry key="toolbarCongress">Knowledge</entry>
     <entry key="toolbarCenter">Center</entry>
     <entry key="toolbarStatistics">Statistics</entry>
     <entry key="toolbarTurnReport">Report</entry>
@@ -138,7 +138,7 @@
     <entry key="toolbarExit">Menu</entry>
     <entry key="toolbarIndependence">Independence</entry>
     <entry key="coloniesExplanation">Choose a colony to open.</entry>
-    <entry key="congressExplanation">Open Congress and choose a Founding Father.</entry>
+    <entry key="congressExplanation">Open Knowledge and acquire a bonus with owls.</entry>
     <entry key="nextTurnExplanation">Finish this turn and start the next one.</entry>
     <entry key="plowProblemRiver">River squares cannot be plowed.</entry>
     <entry key="mapHeadingExplanation">Mappa Mundi is Latin for “map of the world”. Latin was widely used at the time.</entry>

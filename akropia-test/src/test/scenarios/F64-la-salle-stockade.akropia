@@ -370,7 +370,7 @@
           },
           "congress": {
             "activated": true,
-            "owls": 99,
+            "owls": 100,
             "members": [],
             "candidates": [
               "JOHN_PAUL_JONES",

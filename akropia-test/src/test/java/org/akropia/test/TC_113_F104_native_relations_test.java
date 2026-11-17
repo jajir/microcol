@@ -87,36 +87,34 @@ public class TC_113_F104_native_relations_test extends AbstractAkropiaTest {
                 10);
         relations.verifyLocalAlarm(EuropeanNation.DUTCH, AZTEC_CAPITAL, 30);
 
-        // Choosing is not arrival: the choice is recorded, relations wait.
+        // Buying clears existing anger and alarm immediately.
         congress.open();
         congress.select(Founder.POCAHONTAS);
         congress.choose();
         congress.close();
-        relations.verifySelectedFounder(EuropeanNation.DUTCH,
-                Founder.POCAHONTAS);
+        relations.verifyNoSelectedFounder(EuropeanNation.DUTCH);
         relations.verifyFounderMember(EuropeanNation.DUTCH, Founder.POCAHONTAS,
-                false);
+                true);
         relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                10);
-        relations.verifyLocalAlarm(EuropeanNation.DUTCH, AZTEC_CAPITAL, 30);
+                0);
+        relations.verifyLocalAlarm(EuropeanNation.DUTCH, AZTEC_CAPITAL, 0);
 
-        // Continue before arrival keeps the choice and the saved relations.
+        // Continue keeps the acquired discovery and the cleared relations.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        relations.verifySelectedFounder(EuropeanNation.DUTCH,
-                Founder.POCAHONTAS);
+        relations.verifyNoSelectedFounder(EuropeanNation.DUTCH);
         relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                10);
-        relations.verifyLocalAlarm(EuropeanNation.DUTCH, AZTEC_CAPITAL, 30);
+                0);
+        relations.verifyLocalAlarm(EuropeanNation.DUTCH, AZTEC_CAPITAL, 0);
 
-        // The next Dutch turn has enough owls: Pocahontas joins Congress, the
-        // old 10 and 30 are cleared once and only 1.25 of halved pressure and
-        // its 1.25 / 20 remain.
-        var report = game.nextTurn();
+        // Read the current acquisition notice. The next Dutch update adds only
+        // 1.25 of halved pressure and the corresponding 1.25 / 20 anger.
+        var report = java.util.Optional.of(game.openTurnReport());
         game.verifyTurnReportPresent(report);
         report.orElseThrow().verifyThatAtLeastOneEventMessageContains(
-                "Pocahontas has joined Congress.");
+                "Knowledge acquired: Civic coexistence.");
         report.orElseThrow().close();
+        game.nextTurnAndCloseDialogs();
         relations.verifyFounderMember(EuropeanNation.DUTCH, Founder.POCAHONTAS,
                 true);
         relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,

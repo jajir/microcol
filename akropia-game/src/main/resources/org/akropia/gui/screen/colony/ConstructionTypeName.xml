@@ -4,7 +4,7 @@
 <properties>
 	<comment>Define construction type names</comment>
 
-	<entry key="townHall">Town Hall</entry>
+	<entry key="townHall">Agora</entry>
 	<entry key="lubmerMill">Lumber Mill</entry>
 	<entry key="carpenterStand">Carpenter’s Shop</entry>
 	<entry key="ironWorks">Iron Works</entry>

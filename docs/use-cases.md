@@ -1636,3 +1636,12 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
    potvrzení a zrušení bez změny modelu; TC205/05 navíc přeplněný seznam,
    svislé posouvání a Escape přímo z volby. [Chování](ux.md#prirazeni-obchodni-trasy-dopravci-17-listopadu-2026)
    a [aktuální evidence](functional-tests.md#carrier-route-dialog-2026-11-17).
+
+## UC-079, UC-086–110 a UC-114: Poznání — 2026-11-17
+
+Aktuální [pravidla poznání](knowledge.md) nahrazují hráčské pojmy Kongres a otcové
+zakladatelé, zachovávají 25 účinků a stabilní UC/TC ID. TC56 pokrývá cenu,
+nedostatek sov, zrušení volby, okamžitý nákup, přebytek, novou nabídku a Continue.
+TC100 ověřuje řádkovou nápovědu s obrázky vlevo, popisem vpravo, hledáním památek
+a odkazy. Dosavadní scénáře bonusů kontrolují zachované účinky při okamžitém
+získání. Výsledky jsou v [evidenci](functional-tests.md#knowledge-2026-11-17).

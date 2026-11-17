@@ -41,7 +41,8 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
     private static final String IDENTITIES = "City states and local peoples";
     private static final String[] TOPICS = { IDENTITIES, MOVEMENT, CARGO,
             COLONIES, PRODUCTION, TRADE, DIPLOMACY, COMBAT, INDEPENDENCE,
-            SCORING, "Terrain", "Terrain bonuses", "Units", "Buildings" };
+            SCORING, "Terrain", "Terrain bonuses", "Units", "Buildings",
+            "Knowledge and historical references" };
     private static final String MOVEMENT_PART = "movement points";
     private static final String COLONIES_PART = "Colony names must be unique";
     private static final String DIPLOMACY_PART = "tribute";
@@ -65,8 +66,31 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
     private static final String[] TOPICS_CZ = { IDENTITIES_CZ, MOVEMENT_CZ,
             CARGO_CZ, "Kolonie a práce", PRODUCTION_CZ, "Obchod, daně a bojkot",
             DIPLOMACY_CZ, "Boj", "Nezávislost", "Statistiky a skóre", "Terén",
-            "Bonusy terénu", "Jednotky", "Budovy" };
+            "Bonusy terénu", "Jednotky", "Budovy",
+            "Poznání a historické předlohy" };
     private static final String NO_RESULTS_CZ = "Žádné téma neodpovídá hledání. Vymažte hledaný text a zobrazíte všechna témata.";
+
+    @Test
+    @Tag("local")
+    void TC_10_knowledge_rows_show_bonuses_art_and_reading_links()
+            throws Exception {
+        // A historical artifact is searchable without knowing its gameplay
+        // name.
+        WelcomePage.of(getContext()).loadGame();
+        final ColonizopediaPage help = ColonizopediaPage.of(getContext());
+        final String before = help.snapshotGameState();
+        new MainScreenLayoutPage(getContext()).resize(1440, 900);
+        help.openFromButton();
+        help.typeSearch("antikythera");
+        help.verifyTopicTitles("Knowledge and historical references");
+        help.verifyReferenceRows(25);
+        help.verifyKnowledgeReferences();
+        help.captureDialog("colonizopediaPage", "knowledge-help-en.png");
+        help.scrollReferenceToEnd();
+        help.verifyBodyScrolledToEnd();
+        help.closeWithOk();
+        help.verifyGameStateUnchanged(before);
+    }
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -136,7 +160,8 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         // A word found only in the body text finds its topic. Surrounding
         // spaces are trimmed before the search.
         help.typeSearch("  tribute  ");
-        help.verifyTopicTitles(IDENTITIES, TRADE, DIPLOMACY);
+        help.verifyTopicTitles(IDENTITIES, TRADE, DIPLOMACY,
+                "Knowledge and historical references");
         help.verifyNoResultsHidden();
 
         // Another body-only word finds the cargo topic and its passenger text.
@@ -240,12 +265,19 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
 
         // Czech body text is searched; accents are ignored when typing.
         help.typeSearch("tribut");
-        help.verifyTopicTitles(DIPLOMACY_CZ);
+        help.verifyTopicTitles(DIPLOMACY_CZ, "Poznání a historické předlohy");
         help.typeSearch("breh");
         help.verifyTopicTitles(CARGO_CZ);
         help.verifyBodyContains(CARGO_ASHORE_CZ);
         help.typeSearch("vyroba");
         help.verifyTopicTitles(PRODUCTION_CZ);
+
+        // Artifact names find the same complete reference in Czech.
+        new MainScreenLayoutPage(getContext()).resize(1440, 900);
+        help.typeSearch("miltiad");
+        help.verifyTopicTitles("Poznání a historické předlohy");
+        help.verifyKnowledgeReferences();
+        help.captureDialog("colonizopediaPage", "knowledge-help-cs.png");
 
         // The no-results message and the scoring text are in Czech too.
         help.typeSearch("zzzz");
@@ -493,7 +525,8 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
                 "Base input per worker per turn: Lumber 6", "Worker places: 3");
         help.verifyReferenceProperties(
                 "colonizopediaBuildingProperties_IRON_WORKS",
-                "240 hammers, 100 tools", "Adam Smith", "Tools 9", "Ore 6");
+                "240 hammers, 100 tools", "Large workshops", "Tools 9",
+                "Ore 6");
         help.verifyReferenceProperties(
                 "colonizopediaBuildingProperties_CATHEDRAL",
                 "176 hammers, 100 tools", "Torches 6",
@@ -526,7 +559,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         help.verifyBodyScrolledToEnd();
         help.verifyReferenceProperties(
                 "colonizopediaBuildingProperties_CUSTOM_HOUSE",
-                "160 hammers, 50 tools", "Peter Stuyvesant", "export settings");
+                "160 hammers, 50 tools", "Trade stamps", "export settings");
         help.captureDialog("colonizopediaPage", "r0361-buildings-end-en.png");
         help.closeWithOk();
         help.verifyDialogClosed();
@@ -563,13 +596,12 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         help.verifyTopicTitles("Budovy");
         help.verifyReferenceProperties(
                 "colonizopediaBuildingProperties_IRON_WORKS",
-                "240 kladiv, 100 nářadí", "Adam Smith", "Nářadí 9");
+                "240 kladiv, 100 nářadí", "Velké řemeslné dílny", "Nářadí 9");
         help.scrollReferenceToEnd();
         help.verifyBodyScrolledToEnd();
         help.verifyReferenceProperties(
                 "colonizopediaBuildingProperties_CUSTOM_HOUSE",
-                "160 kladiv, 50 nářadí", "Peter Stuyvesant",
-                "nastavení vývozu");
+                "160 kladiv, 50 nářadí", "Obchodní pečetě", "nastavení vývozu");
         help.captureDialog("colonizopediaPage", "r0361-buildings-end-cs.png");
         help.closeWithEscape();
         help.verifyDialogClosed();

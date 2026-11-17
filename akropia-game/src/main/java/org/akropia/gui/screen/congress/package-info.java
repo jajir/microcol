@@ -1,8 +1,9 @@
 /**
- * Congress screen in the main game window: frozen model offers, national
- * support and owl progress, lasting membership and the Crown's real royal force
- * counts, all read from {@code model.CongressReport}. Selection uses guarded
- * Player operations; this package does not draw candidates, produce owls, grow
- * the force or dispatch rewards.
+ * Knowledge screen: immutable model offers, national owls, acquired bonuses and
+ * the mother city's forces. Purchases use guarded Player operations; this
+ * package never produces owls, draws offers or grants rewards.
+ * KnowledgeReference supplies shared historical illustrations and reading links
+ * for the screen and Colonizopedia; it contains no game rules. Legacy package
+ * and rule identifiers remain internal.
  */
 package org.akropia.gui.screen.congress;

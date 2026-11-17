@@ -210,6 +210,17 @@ public final class Congress {
         return selected != null && (long) owls + produced >= target(difficulty);
     }
 
+    void checkAcquisition(final Difficulty difficulty) {
+        Preconditions.checkState(owls >= target(difficulty), "Not enough owls");
+        Preconditions.checkState(generation < Integer.MAX_VALUE,
+                "Knowledge generation exhausted");
+        if (members.size() < Founder.values().length - 1) {
+            Math.toIntExact(Math.addExact(Math.multiplyExact(
+                    Math.multiplyExact(100L, members.size() + 2L),
+                    RecruitmentPool.factor(difficulty)), 99L) / 100L);
+        }
+    }
+
     Founder join(final Difficulty difficulty) {
         Preconditions.checkState(canJoin(difficulty),
                 "Founder objective has not been reached");

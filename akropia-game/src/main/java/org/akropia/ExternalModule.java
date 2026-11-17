@@ -11,13 +11,16 @@ import javafx.stage.Stage;
 final class ExternalModule extends AbstractModule {
 
     private final Stage primaryStage;
+    private final javafx.application.HostServices hostServices;
 
     /**
      * Default constructor called from guice.
      *
      * @param primaryStage required primary stage
      */
-    ExternalModule(final Stage primaryStage) {
+    ExternalModule(final Stage primaryStage,
+            final javafx.application.HostServices hostServices) {
+        this.hostServices = hostServices;
         this.primaryStage = Preconditions.checkNotNull(primaryStage,
                 "Primary stage is null.");
     }
@@ -25,6 +28,7 @@ final class ExternalModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(Stage.class).toInstance(primaryStage);
+        bind(javafx.application.HostServices.class).toInstance(hostServices);
     }
 
 }

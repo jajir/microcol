@@ -76,27 +76,27 @@ public class TC_124_F115_native_alarm_display_test extends AbstractAkropiaTest {
         alarm.closeWithEscape();
         alarm.verifyDialogClosed();
 
-        // Choose Pocahontas in Congress; the 100 saved owls bring her next
-        // turn.
+        // Spend the saved 100 owls to clear the existing alarm immediately.
         congress.open();
         congress.select(Founder.POCAHONTAS);
         congress.choose();
         congress.close();
 
-        // The arrival turn clears the alarm and leaves 1.25: a fall of 28.75
-        // with no exclamation mark, read from the value at the turn start.
-        var report = game.nextTurn();
+        // After acquisition, the next update starts at zero and adds 1.25.
+        // The small rise has no exclamation mark.
+        var report = java.util.Optional.of(game.openTurnReport());
         game.verifyTurnReportPresent(report);
         report.orElseThrow().verifyThatAtLeastOneEventMessageContains(
-                "Pocahontas has joined Congress.");
+                "Knowledge acquired: Civic coexistence.");
         report.orElseThrow().close();
+        game.nextTurnAndCloseDialogs();
         game.moveMouseAtLocation(AZTEC_CAPITAL);
         alarm.verifyStatusBarShows("Attitude: content.",
-                "Alarm change -28.75, falling.", UNKNOWN_PROVOKER);
+                "Alarm change +1.25, rising.", UNKNOWN_PROVOKER);
         alarm.openWithNKey();
         alarm.verifyListHasFocus();
         alarm.verifyDialogRelation("Attitude: content.",
-                "Alarm change -28.75, falling.", UNKNOWN_PROVOKER);
+                "Alarm change +1.25, rising.", UNKNOWN_PROVOKER);
         alarm.closeWithEscape();
         alarm.verifyDialogClosed();
 
@@ -105,7 +105,7 @@ public class TC_124_F115_native_alarm_display_test extends AbstractAkropiaTest {
         game = new FreePlayAuditPage(getContext()).continueGame();
         alarm.openWithNKey();
         alarm.verifyDialogRelation("Attitude: content.",
-                "Alarm change -28.75, falling.", UNKNOWN_PROVOKER);
+                "Alarm change +1.25, rising.", UNKNOWN_PROVOKER);
         alarm.closeWithEscape();
         alarm.verifyDialogClosed();
 
@@ -114,7 +114,7 @@ public class TC_124_F115_native_alarm_display_test extends AbstractAkropiaTest {
         // A report of that turn is closed with Escape, so the pointer stays.
         game.moveMouseAtLocation(AZTEC_CAPITAL);
         alarm.verifyStatusBarShows("Attitude: content.",
-                "Alarm change -28.75, falling.", UNKNOWN_PROVOKER);
+                "Alarm change +1.25, rising.", UNKNOWN_PROVOKER);
         alarm.nextTurnKeepingPointer()
                 .ifPresent(ScreenTurnReport::closeWithEscape);
         alarm.verifyStatusBarShows("Attitude: content.",
@@ -161,8 +161,8 @@ public class TC_124_F115_native_alarm_display_test extends AbstractAkropiaTest {
         alarm.closeWithEscape();
         alarm.verifyDialogClosed();
 
-        // After choosing Pocahontas, the real arrival turn makes the Czech text
-        // fall by the exact value.
+        // After the immediate reset, the next update shows the small Czech
+        // rise.
         congress.open();
         congress.select(Founder.POCAHONTAS);
         congress.choose();
@@ -171,7 +171,7 @@ public class TC_124_F115_native_alarm_display_test extends AbstractAkropiaTest {
         alarm.openWithNKey();
         alarm.verifyListHasFocus();
         alarm.verifyDialogRelation("Postoj: spokojené.",
-                "Změna poplachu -28.75, klesá.", UNKNOWN_PROVOKER_CS);
+                "Změna poplachu +1.25, roste.", UNKNOWN_PROVOKER_CS);
         alarm.verifyDialogFitsWindow();
         alarm.captureDialog("TC124-native-alarm-falling-cs.png");
         alarm.closeWithEscape();
