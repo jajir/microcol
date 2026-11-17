@@ -598,8 +598,8 @@ public class GamePage extends AbstractScreen {
                 .getNumberOfPlayedTurns();
         final java.util.concurrent.CountDownLatch prepared = new java.util.concurrent.CountDownLatch(
                 1);
-        final org.akropia.model.ModelListenerAdapter listener = new org.akropia.model.ModelListenerAdapter() {
-            @Override
+        final Object listener = new Object() {
+            @com.google.common.eventbus.Subscribe
             public void onTurnStarted(
                     final org.akropia.model.event.TurnStartedEvent event) {
                 if (event.getPlayer().isHuman() && getModel().getCalendar()
@@ -608,7 +608,9 @@ public class GamePage extends AbstractScreen {
                 }
             }
         };
-        getModel().addListener(listener);
+        final com.google.common.eventbus.EventBus eventBus = getContext()
+                .getClassFromGuice(com.google.common.eventbus.EventBus.class);
+        eventBus.register(listener);
         try {
             clickOnButtonWithId(ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
             // Running state and movement callbacks precede completion of all
@@ -618,7 +620,7 @@ public class GamePage extends AbstractScreen {
                         "Human turn preparation did not finish");
             }
         } finally {
-            getModel().removeListener(listener);
+            eventBus.unregister(listener);
         }
         waitWhileMoving();
     }

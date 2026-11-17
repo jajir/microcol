@@ -1,3 +1,13 @@
+## UC-005: čekání na tahy soupeřů — 17. listopadu 2026
+
+1. Po potvrzení dalšího tahu se zobrazí neuzavíratelný modal s veslaři a
+   lokalizovaným textem. Trvá alespoň sekundu a do dokončení zpracování;
+   následná rozhodnutí a hlášení čekají na jeho zavření. Selhání výpočtu
+   uvolní čekání a nabídne informaci o obnově hry.
+2. `TC_212_F28_turn_waiting_test` pokrývá rychlý i pomalý tah, blokování
+   zavření, chybu a češtinu. [Pravidla UX](ux.md) a
+   [stav ověření](functional-tests.md#turn-waiting-2026-11-17).
+
 ## Kontext pracovníka — 16. listopadu 2026
 
 1. UC-011/014 a pracovní cesty kolonie používají stejnou nabídku dostupných

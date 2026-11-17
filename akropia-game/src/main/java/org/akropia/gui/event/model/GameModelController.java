@@ -2,6 +2,8 @@ package org.akropia.gui.event.model;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.akropia.diagnostics.DiagnosticLog;
 import org.akropia.gui.Loc;
@@ -10,6 +12,7 @@ import org.akropia.gui.screen.game.components.StatusBarMessageEvent;
 import org.akropia.gui.screen.game.gamepanel.ScrollToFocusedTile;
 import org.akropia.gui.dialog.Dialog;
 import org.akropia.gui.dialog.DialogMessage;
+import org.akropia.gui.dialog.TurnWaitingDialog;
 import org.akropia.i18n.I18n;
 import com.google.inject.Provider;
 import javafx.application.Platform;
@@ -73,13 +76,19 @@ public class GameModelController {
     private final Provider<DialogMessage> passengerMessage;
     private final I18n i18n;
     private final DiagnosticLog diagnosticLog;
+    private final Provider<TurnWaitingDialog> turnWaitingDialog;
+    private final Queue<Runnable> afterTurn = new ConcurrentLinkedQueue<>();
+    private volatile boolean processingTurn;
+    private TurnWaitingDialog activeTurnWait;
 
     @Inject
     public GameModelController(final SelectedTileManager selectedTileManager,
             final ArtifitialPlayersManager artifitialPlayersManager,
             final EventBus eventBus,
             final Provider<DialogMessage> passengerMessage, final I18n i18n,
-            final DiagnosticLog diagnosticLog) {
+            final DiagnosticLog diagnosticLog,
+            final Provider<TurnWaitingDialog> turnWaitingDialog) {
+        this.turnWaitingDialog = Preconditions.checkNotNull(turnWaitingDialog);
         this.diagnosticLog = Preconditions.checkNotNull(diagnosticLog);
         this.selectedTileManager = Preconditions
                 .checkNotNull(selectedTileManager);
@@ -686,7 +695,8 @@ public class GameModelController {
     }
 
     public boolean isHumanTurnReady() {
-        return isGameModelReady() && getModel().isGameRunning()
+        return !processingTurn && isGameModelReady()
+                && getModel().isGameRunning()
                 && getRealCurrentPlayer().isHuman();
     }
 
@@ -755,7 +765,61 @@ public class GameModelController {
             return;
         }
         logger.debug("Next Turn event was triggered.");
-        new Thread(() -> getModel().endTurn()).start();
+        final Model model = getModel();
+        final TurnWaitingDialog waiting = turnWaitingDialog.get();
+        synchronized (afterTurn) {
+            processingTurn = true;
+            activeTurnWait = waiting;
+        }
+        waiting.showWaiting();
+        final Thread worker = new Thread(() -> {
+            Throwable failure = null;
+            try {
+                model.endTurn();
+            } catch (Throwable rejected) {
+                failure = rejected;
+                logger.error("Turn processing failed", rejected);
+                Platform.runLater(waiting::finishWaiting);
+            }
+            try {
+                waiting.awaitClosed();
+            } catch (InterruptedException interrupted) {
+                Thread.currentThread().interrupt();
+                failure = interrupted;
+            }
+            final List<Runnable> notifications;
+            synchronized (afterTurn) {
+                processingTurn = false;
+                activeTurnWait = null;
+                notifications = List.copyOf(afterTurn);
+                afterTurn.clear();
+            }
+            if (isGameModelReady() && getModel() == model) {
+                if (failure != null) {
+                    Platform.runLater(this::showTurnPreparationUnavailable);
+                } else {
+                    // Retain worker-thread delivery, including recovery saving.
+                    notifications.forEach(Runnable::run);
+                }
+            }
+        }, "other-player-turns");
+        worker.setDaemon(true);
+        worker.start();
+    }
+
+    /** Human choices/reports must not open above the unfinished wait modal. */
+    void afterTurnPresentation(final Runnable notification) {
+        synchronized (afterTurn) {
+            if (processingTurn) {
+                afterTurn.add(notification);
+                // AI turns run on separate threads; this boundary, not the
+                // first endTurn return, means the player can proceed.
+                final TurnWaitingDialog waiting = activeTurnWait;
+                Platform.runLater(waiting::finishWaiting);
+                return;
+            }
+        }
+        notification.run();
     }
 
     /**

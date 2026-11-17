@@ -112,4 +112,6 @@
     <entry key="fight_workerCaptured">%s: polní pracovník kolonie %s byl zajat.</entry>
     <entry key="fight_revereExit">%s: vyzbrojený pracovník si ponechal zbraně a připojil se k posádce mimo kolonii.</entry>
     <entry key="destroyColony_confirm">Opustit kolonii</entry>
+    <entry key="turnWait_title">Hrají ostatní hráči</entry>
+    <entry key="turnWait_message">Ostatní hráči hrají, prosím čekejte.</entry>
 </properties>

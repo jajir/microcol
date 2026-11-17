@@ -1,3 +1,69 @@
+<a id="turn-waiting-2026-11-17"></a>
+## UC-005: modal during other players' turns — 2026-11-17
+
+1. `TC_212_F28_turn_waiting_test` reuses F28 and covers a fast completed round
+   with at least one second of visible animation, a held slow round with live
+   frame changes and blocked dismissal, worker failure followed by recovery
+   feedback, and the Czech message. Page assertions remain in named `verify...`
+   methods. `GamePage` now awaits the presented human-turn event, after the wait
+   closes, before reading reports; model rules and turn order are unchanged.
+2. `TurnRowersArtworkTest` checks six distinct opaque frames and a genuine
+   path-only SVG with the flat palette. The existing graphics exporter owns
+   repeatable PNG creation. UI evidence must include both localized snapshots.
+3. Final-source model/JUnit passed **5,134 tests**, zero failures/errors/skips
+   (`target/verification/run-gf5s_9y1/`, completion
+   `20261117T121125Z-0beef07feda0`, PID 34714, 156.273 supervised seconds).
+   This pass precedes the asynchronous-turn correction below; fresh acceptance
+   is pending. First model dispatch
+   `20261117T120525Z-fae5d9fae9cd` (PID 34306, 600-second watchdog) did not reach
+   tests: Docker container discovery timed out at 20.008 seconds, followed by
+   a server-version diagnostic timeout at 2.008 seconds. This is admission
+   failure, not a failed test. Remote CI and publication are outside this task.
+4. Targeted attempt `20261117T121501Z-a9f62be6ff9a` (PID 34970) finished
+   in 414.788 seconds with **23 tests: 22 passed, one error, zero skips**
+   (`target/docker-ui/run-XdTaF7/`). All four TC212 scenarios passed. TC179
+   still expected the retired automatic spring-1800 score dialog; the current
+   model correctly continues scored play there (TC162/01 passed). TC179 now
+   crosses that date and explicitly retires, preserving the final-result,
+   breakdown and unchanged-ranking assertions with routine summaries off.
+5. Review also found that national turns dispatch on separate threads. The
+   modal now waits for the presented human-turn/choice/end boundary, not the
+   return of the initial `endTurn` call. The slow-turn test holds a computer
+   nation's turn after that call returns, so it checks this actual lifecycle.
+   Model rerun `20261117T122532Z-2257e1531429` (PID 35306) passed **5,134 tests**,
+   zero failures/errors/skips in 158.812 supervised seconds
+   (`target/verification/run-6dx_uq13/`). Runtime sources match its snapshot.
+6. Targeted rerun `20261117T122834Z-98cb27597048` (PID 35556, 1,800-second
+   watchdog) selects TC212, TC36, TC199, TC78/01, TC159/01, TC47/01, TC162/01,
+   TC177, TC178, TC179 and `PageVerificationContractTest`. It finished in
+   349.653 seconds with **23 tests: 22 passed, one failure, zero skips**
+   (`target/docker-ui/run-wZ9lsW/`). TC179 omitted `rememberPreview()` before
+   checking that retirement preserved the shown score (expected default zero,
+   actual 14). The test now captures the preview before confirming. Runtime
+   code is unchanged; the 5,134-test model pass remains applicable. All other
+   selected UI scenarios passed, including the held computer turn.
+7. Repair verification `20261117T123528Z-38ab8e601942` (PID 35937) passed
+   **8 tests**, zero failures/errors/skips, in 95.430 seconds
+   (`target/docker-ui/run-N7D82X/`): TC179 (1), TC212 (4) and page contract (3).
+   Together with the unchanged passing reports from `run-wZ9lsW`, the complete
+   targeted selection is **23 tests in 11 reports**, all passing. Earlier
+   failed attempts remain failed; only the repaired report is replaced for
+   acceptance. Model/runtime sources are unchanged since the successful model
+   run; only TC179's missing preview capture changed for this retry.
+8. Visual review of the [English and Czech modal](graphics.md#turn-rowers-2026-11-17)
+   and repeatable vector export passed. Documentation checks passed (14 tests,
+   zero unexplained naming occurrences, strict MkDocs). Smoke completion
+   `20261117T123720Z-582278a5b55f` (PID 36051) passed **21 tests** with zero
+   failures/errors/skips in 263.730 supervised seconds, within the 420-second
+   acceptance limit (`target/verification/run-ea0lnoox/`). All 14 changed
+   runtime, test and graphics files match the smoke source snapshot.
+9. Local acceptance covers `2e1dced0a4315db21b5ab4cd9c639f48d05487b4` plus
+   this reviewed change: **5,134 model/JUnit + 23 targeted UI/contract + 21
+   smoke/support tests**. Shared Java formatting and diff checks passed.
+   Unrelated backlog edits are excluded from the commit. This is local
+   acceptance, not a full-regression result or verification of a newly
+   published game distribution.
+
 <a id="trade-route-table-2026-11-17"></a>
 ## Carrier table and station actions — 2026-11-17
 

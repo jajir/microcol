@@ -8,6 +8,24 @@
   "sourceRoot": "akropia-game/src/graphics",
   "runtimeRoot": "akropia-game/src/main/resources/images",
   "groups": {
+    "turn-rowers": {
+      "family": "Waiting for other nations: vigorous rowing loop",
+      "outputs": [
+        {
+          "output": "turn-rowers.png",
+          "source": "turn-rowers.svg",
+          "render": "native",
+          "size": [
+            1881,
+            836
+          ],
+          "transparent": false,
+          "consumer": "TurnWaitingDialog",
+          "display": "Six 627 x 418 frames, shown at 588 x 392 logical px",
+          "stroke": "Black pen contours approximately 2 logical px; five flat colors"
+        }
+      ]
+    },
     "trade-route-cargo": {
       "family": "Trade route cargo actions, selected 5B",
       "outputs": [

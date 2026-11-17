@@ -11,7 +11,8 @@ import org.akropia.gui.preferences.GamePreferences;
 import org.akropia.page.FramedSettingsPage;
 import org.akropia.page.GamePage;
 import org.akropia.page.HallOfFamePage;
-import org.akropia.page.ScoreBoundaryPage;
+import org.akropia.page.RetirePage;
+import org.akropia.page.CampaignScreenPage;
 import org.akropia.page.SettingPage;
 import org.akropia.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
@@ -20,11 +21,7 @@ import org.testfx.framework.junit5.Start;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
-/**
- * R-0204: with the routine turn summary switched off, the final scored result
- * still reaches its boundary choice and shows its breakdown beside the
- * unchanged ranking. The steps are those of TC_163 TC_01.
- */
+/** R-0204: disabling routine summaries never suppresses a final result. */
 @ExtendWith(ApplicationExtension.class)
 public class TC_179_F204_summary_off_final_result_test
         extends AbstractAkropiaTest {
@@ -62,24 +59,28 @@ public class TC_179_F204_summary_off_final_result_test
             HallOfFameFixture.writeFullRanking();
             WelcomePage.of(getContext()).loadGame();
             final HallOfFamePage hall = new HallOfFamePage(getContext());
-            final ScoreBoundaryPage boundary = new ScoreBoundaryPage(
-                    getContext());
+            final RetirePage retire = new RetirePage(getContext());
 
-            // Spring 1800 freezes the result and the player postpones the
-            // choice, even though the routine summary is off.
-            boundary.endTurnToBoundary();
-            boundary.verifyAwaitingChoice();
-            boundary.decideLater();
+            // Cross the former calendar boundary, then explicitly retire.
+            // The final result must appear even with routine summaries off.
+            GamePage.of(getContext()).nextTurnWithoutOpeningReport();
+            retire.openRetire();
+            retire.verifyPreviewShown();
+            retire.rememberPreview();
+            retire.confirmRetire();
+            retire.verifyLiveRetirementFinished();
+            retire.verifyRetirementNotice();
+            retire.closeRetirementNotice();
+            hall.awaitResultDialog();
+            hall.verifyResultDialogShown();
 
-            // The result is below the rivals: it is not ranked, but its
-            // breakdown is shown next to the unchanged ranking.
-            hall.openFromStatistics();
+            // The result remains below the ten authored rivals.
             hall.verifyRankingRows(HallOfFameFixture.RIVALS);
             hall.verifyNotRanked();
             hall.verifyCurrentResultShown();
             hall.verifyStoredEntries(HallOfFameFixture.RIVALS);
-            final GamePage game = hall.closeStatistics();
-            game.verifyGameInFront();
+            hall.closeResultDialog();
+            new CampaignScreenPage(getContext()).verifyCampaignScreen();
         } finally {
             getContext().getClassFromGuice(GamePreferences.class)
                     .setShowTurnSummary(

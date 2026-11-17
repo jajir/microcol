@@ -35,6 +35,6 @@ public enum Dialog implements MessageKeyResource {
     passenger_unavailable, turnPreparation_title, turnPreparation_unavailable,
     recoverySave_title, recoverySave_failed, saveFolder_unavailable,
     diagnosticLog_folder, goodsTransfer_changed, europePrice_changed,
-    europeGold_changed, europeTrade_changed;
+    europeGold_changed, europeTrade_changed, turnWait_title, turnWait_message;
 
 }

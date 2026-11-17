@@ -1,3 +1,21 @@
+## Čekání na tahy ostatních hráčů — 17. listopadu 2026
+
+1. Po potvrzeném konci tahu se před spuštěním výpočtu otevře modální okno
+   s veslující posádkou a textem „Ostatní hráči hrají, prosím čekejte.“
+   Anglická verze zní „Other players are playing, please wait.“
+   Případné varování před koncem tahu zůstává před tímto oknem.
+2. Okno nemá tlačítka ani křížek; Escape, požadavek na zavření ani kliknutí
+   do hlavního okna tah nepřeruší. Zůstává viditelné nejméně jednu sekundu
+   a déle, dokud zpracování neskončí. Animace běží na UI vlákně nezávisle
+   na modelové práci; její pohyb není ukazatelem procent dokončení.
+3. Po zavření následuje obvyklé hlášení, případně rozhodnutí o přistěhovalci,
+   dani, žoldnéřích nebo skóre. Při výjimce výpočtu se čekání ukončí a hra
+   zobrazí existující zprávu o neúplném tahu a možnosti obnovy uložené hry.
+4. Použita je druhá, svižnější šestifázová varianta veslařů s plným bokem.
+   Zdroj a export vlastní [grafická dokumentace](graphics.md#turn-rowers-2026-11-17).
+   [Testovací evidence](functional-tests.md#turn-waiting-2026-11-17)
+   rozlišuje implementaci a skutečně dokončenou přejímku.
+
 ## Kontextové příkazy pracovníka — 16. listopadu 2026
 
 1. Hráč pravým kliknutím nebo klávesovým otevřením nabídky zjistí všechny

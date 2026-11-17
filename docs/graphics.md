@@ -1,3 +1,28 @@
+<a id="turn-rowers-2026-11-17"></a>
+## Veslaři v čekacím modalu — 17. listopadu 2026
+
+1. Uživatel vybral druhou, svižnější pohybovou studii: šest horních veslařů,
+   plný prkenný bok bez průhledů na další posádku a vlny s kapkami.
+   [turn-rowers.svg](../akropia-game/src/graphics/turn-rowers.svg) obsahuje
+   skutečné editovatelné vektorové cesty, převedené z vybraných šesti fází;
+   neobsahuje vložené rastry. Výplně jsou sjednocené na pět plochých barev,
+   kontury jsou černé `#000000`, přibližně 2 logické px v cílovém zobrazení.
+2. Atlas má 1881 × 836 px, tři sloupce a dvě řady polí 627 × 418 px.
+   `TurnWaitingDialog` střídá šest fází po 220 ms, smyčka trvá 1,32 s.
+   Dvoupixelový okraj každého pole se ořízne, aby nebyly vidět dělící čáry.
+   Ilustrace v okně zabírá 588 × 392 logických px. Zdroj zůstává autoritativní;
+   PNG je odvozený runtime export, nikoli náhrada SVG zdroje.
+3. Opakovatelný export: `python3 scripts/graphics/export-graphics.py turn-rowers --install`;
+   ověření shody: `python3 scripts/graphics/export-graphics.py turn-rowers --check`.
+   Používá existující manifest a renderer, bez nové runtime závislosti.
+4. [Chování čekání](ux.md) a [funkční evidence](functional-tests.md#turn-waiting-2026-11-17)
+   popisují minimální dobu, uzavření a kontrolu skutečně vykresleného výsledku.
+5. Skutečné zobrazení z Docker/Xvfb (`run-wZ9lsW`):
+   [anglická verze](graphics-assets/turn-rowers-2026-11-17/turn-wait-rowers.png)
+   a [česká verze](graphics-assets/turn-rowers-2026-11-17/turn-wait-rowers-cs.png).
+   Kontrola potvrdila čitelný text, plný bok bez spodních veslařů a ploché
+   barevné výplně s černými konturami. Funkční scénáře kontrolují střídání fází.
+
 <a id="help-topic-menu-2026-11-14"></a>
 ## Ikony menu nápovědy — 14. listopadu 2026
 

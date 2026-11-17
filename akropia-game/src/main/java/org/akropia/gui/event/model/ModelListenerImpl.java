@@ -67,31 +67,38 @@ final class ModelListenerImpl implements ModelListener {
     @Override
     public void onImmigrationChoiceRequired(
             final ImmigrationChoiceRequiredEvent event) {
-        eventBus.post(event);
+        gameModelController.afterTurnPresentation(() -> eventBus.post(event));
     }
 
     @Override
     public void onScoreBoundaryRequired(
             final ScoreBoundaryRequiredEvent event) {
-        eventBus.post(event);
+        gameModelController.afterTurnPresentation(() -> eventBus.post(event));
     }
 
     @Override
     public void onTaxDemandRequired(final TaxDemandRequiredEvent event) {
-        eventBus.post(event);
+        gameModelController.afterTurnPresentation(() -> eventBus.post(event));
     }
 
     @Override
     public void onMercenaryOfferRequired(
             final MercenaryOfferRequiredEvent event) {
-        eventBus.post(event);
+        gameModelController.afterTurnPresentation(() -> eventBus.post(event));
     }
 
     @Override
     public void onTurnStarted(final TurnStartedEvent event) {
-        eventBus.post(event);
-        // A turn update may have moved native alarm and attitude.
-        eventBus.post(new NativeRelationsChangedEvent());
+        final Runnable notification = () -> {
+            eventBus.post(event);
+            // A turn update may have moved native alarm and attitude.
+            eventBus.post(new NativeRelationsChangedEvent());
+        };
+        if (event.getPlayer().isHuman()) {
+            gameModelController.afterTurnPresentation(notification);
+        } else {
+            notification.run();
+        }
     }
 
     @Override
@@ -140,7 +147,7 @@ final class ModelListenerImpl implements ModelListener {
 
     @Override
     public void onGameFinished(final GameFinishedEvent event) {
-        eventBus.post(event);
+        gameModelController.afterTurnPresentation(() -> eventBus.post(event));
     }
 
     @Override

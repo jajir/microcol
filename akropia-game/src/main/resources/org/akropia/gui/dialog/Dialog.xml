@@ -112,4 +112,6 @@
     <entry key="fight_workerCaptured">%s: a field worker of colony %s was captured.</entry>
     <entry key="fight_revereExit">%s: the armed worker keeps its weapons and joins the garrison outside the colony.</entry>
     <entry key="destroyColony_confirm">Abandon colony</entry>
+    <entry key="turnWait_title">Other players are playing</entry>
+    <entry key="turnWait_message">Other players are playing, please wait.</entry>
 </properties>
