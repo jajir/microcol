@@ -5,7 +5,7 @@
    Anglická verze zní „Other players are playing, please wait.“
    Případné varování před koncem tahu zůstává před tímto oknem.
 2. Okno nemá tlačítka ani křížek; Escape, požadavek na zavření ani kliknutí
-   do hlavního okna tah nepřeruší. Zůstává viditelné nejméně jednu sekundu
+   do hlavního okna tah nepřeruší. Zůstává viditelné nejméně dvě sekundy
    a déle, dokud zpracování neskončí. Animace běží na UI vlákně nezávisle
    na modelové práci; její pohyb není ukazatelem procent dokončení.
 3. Po zavření následuje obvyklé hlášení, případně rozhodnutí o přistěhovalci,

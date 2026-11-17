@@ -105,7 +105,7 @@ public final class TurnWaitingPage extends AbstractScreen {
             throws Exception {
         assertTrue(entered.await(5, TimeUnit.SECONDS));
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
-                () -> System.nanoTime() - shown >= 1_300_000_000L
+                () -> System.nanoTime() - shown >= 2_300_000_000L
                         && frames.get() >= 3);
         getRobot().interact(() -> {
             assertTrue(waiting.isShowing());
@@ -118,8 +118,8 @@ public final class TurnWaitingPage extends AbstractScreen {
 
     public void verifyClosedAfterMinimum() {
         assertNotNull(waiting);
-        assertTrue(hidden - shown >= 1_000_000_000L,
-                "The window must remain visible for at least one second");
+        assertTrue(hidden - shown >= 2_000_000_000L,
+                "The window must remain visible for at least two seconds");
         assertTrue(frames.get() >= 3, "Rowing must advance on the FX thread");
         assertFalse(waiting.isShowing());
     }

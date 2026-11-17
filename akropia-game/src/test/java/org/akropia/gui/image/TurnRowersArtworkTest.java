@@ -43,7 +43,7 @@ class TurnRowersArtworkTest {
         final var document = factory.newDocumentBuilder()
                 .parse(Path.of("src/graphics/turn-rowers.svg").toFile());
         final var elements = document.getElementsByTagName("*");
-        final Set<String> palette = Set.of("#000000", "#F3AA32", "#4D7FB2",
+        final Set<String> palette = Set.of("#000000", "#F3AA32", "#649B97",
                 "#FAECD2", "#FFFFFF");
         for (int i = 0; i < elements.getLength(); i++) {
             final var element = (org.w3c.dom.Element) elements.item(i);

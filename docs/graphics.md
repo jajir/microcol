@@ -12,12 +12,19 @@
    Dvoupixelový okraj každého pole se ořízne, aby nebyly vidět dělící čáry.
    Ilustrace v okně zabírá 588 × 392 logických px. Zdroj zůstává autoritativní;
    PNG je odvozený runtime export, nikoli náhrada SVG zdroje.
+   Následné upřesnění z téhož dne mění pouze modrou výplň `#4D7FB2` na
+   `#649B97`, barvu oceánu hlavní mapy z `terrain-symbols.svg`. Geometrie všech
+   cest, ostatní barvy a šest fází zůstávají beze změny. Minimum zobrazení
+   modalu je nyní dvě sekundy; rychlost animace se nemění.
+   Aktuální snímky z Docker/Xvfb (`run-Fbw7I5`):
+   [česky](graphics-assets/turn-rowers-2026-11-17/map-ocean-cs.png),
+   [anglicky](graphics-assets/turn-rowers-2026-11-17/map-ocean-en.png).
 3. Opakovatelný export: `python3 scripts/graphics/export-graphics.py turn-rowers --install`;
    ověření shody: `python3 scripts/graphics/export-graphics.py turn-rowers --check`.
    Používá existující manifest a renderer, bez nové runtime závislosti.
 4. [Chování čekání](ux.md) a [funkční evidence](functional-tests.md#turn-waiting-2026-11-17)
    popisují minimální dobu, uzavření a kontrolu skutečně vykresleného výsledku.
-5. Skutečné zobrazení z Docker/Xvfb (`run-wZ9lsW`):
+5. Původní zobrazení před sjednocením modré, z Docker/Xvfb (`run-wZ9lsW`):
    [anglická verze](graphics-assets/turn-rowers-2026-11-17/turn-wait-rowers.png)
    a [česká verze](graphics-assets/turn-rowers-2026-11-17/turn-wait-rowers-cs.png).
    Kontrola potvrdila čitelný text, plný bok bez spodních veslařů a ploché

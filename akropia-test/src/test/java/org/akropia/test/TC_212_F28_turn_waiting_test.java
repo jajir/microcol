@@ -26,7 +26,7 @@ public class TC_212_F28_turn_waiting_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
-    void TC_01_fast_round_keeps_rowing_for_at_least_one_second()
+    void TC_01_fast_round_keeps_rowing_for_at_least_two_seconds()
             throws Exception {
         // Start at a prepared human turn and observe the actual modal lifetime.
         WelcomePage.of(getContext()).loadGame();

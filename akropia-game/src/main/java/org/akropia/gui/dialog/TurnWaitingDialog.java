@@ -27,7 +27,7 @@ public final class TurnWaitingDialog extends AbstractMessageWindow {
 
     private final Timeline rowing = new Timeline();
     private final PauseTransition minimum = new PauseTransition(
-            Duration.seconds(1));
+            Duration.seconds(2));
     private final CountDownLatch closed = new CountDownLatch(1);
     private boolean minimumElapsed;
     private boolean workFinished;

@@ -1,7 +1,7 @@
 ## UC-005: čekání na tahy soupeřů — 17. listopadu 2026
 
 1. Po potvrzení dalšího tahu se zobrazí neuzavíratelný modal s veslaři a
-   lokalizovaným textem. Trvá alespoň sekundu a do dokončení zpracování;
+   lokalizovaným textem. Trvá alespoň dvě sekundy a do dokončení zpracování;
    následná rozhodnutí a hlášení čekají na jeho zavření. Selhání výpočtu
    uvolní čekání a nabídne informaci o obnově hry.
 2. `TC_212_F28_turn_waiting_test` pokrývá rychlý i pomalý tah, blokování

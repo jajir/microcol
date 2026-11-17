@@ -1,3 +1,37 @@
+## UC-005: two-second wait and map-ocean palette — 2026-11-17
+
+1. Follow-up to the accepted rowing modal: minimum visibility is two seconds.
+   Only the blue SVG fill changes from `#4D7FB2` to the main map's ocean
+   `#649B97`; all paths and animation phases are byte-identical after reversing
+   that substitution. Repeatable runtime export and `--check` passed.
+2. TC212/01 now checks two seconds; the held computer-turn scenarios wait past
+   2.3 seconds before checking that the modal remains visible and animated.
+   The SVG palette assertion follows the new color. Required acceptance is
+   pending; model completion `20261117T131623Z-0becc9d23b34` (PID 41257,
+   600-second watchdog) timed out during Docker discovery after 20 seconds;
+   tests did not start (22.096 seconds including diagnostics). A subsequent
+   server query succeeded with Docker 29.8.2, allowing a retry. Targeted
+   selection: TC212 and page contract,
+   followed by fixed smoke/support, visual review and documentation checks.
+3. Model retry `20261117T131730Z-ac97a1265d2b` (PID 41411) passed **5,134
+   tests**, zero failures/errors/skips, in 154.445 supervised seconds
+   (`target/verification/run-33vmy8h6/`). Targeted Docker run
+   `20261117T132023Z-fdb2cb0f3b2b` (PID 41748, 900-second watchdog) passed
+   **7 tests**, zero failures/errors/skips, in 80.321 seconds
+   (`target/docker-ui/run-Fbw7I5/`): TC212 (4), page contract (3).
+4. The [updated modal snapshots](graphics.md#turn-rowers-2026-11-17) confirm
+   the map-ocean blue and unchanged composition. Smoke completion
+   `20261117T132203Z-add078b5b215` (PID 41929) passed **21 tests**, zero
+   failures/errors/skips, in 269.136 supervised seconds, within the 420-second
+   acceptance limit (`target/verification/run-3n4ncqii/`). All six changed code,
+   test and runtime-asset files match its source snapshot.
+5. Local acceptance: **5,134 model/JUnit + 7 targeted UI/contract + 21
+   smoke/support**, on `dd379635da4de6d1a1c307bb8ea823ea052d869c` plus this
+   change. SVG geometry equality, repeatable export, displayed result, Java
+   formatting, documentation consistency and strict MkDocs are checked before
+   commit. Unrelated backlog edits are excluded. No remote regression or new
+   game-distribution publication is claimed.
+
 <a id="turn-waiting-2026-11-17"></a>
 ## UC-005: modal during other players' turns — 2026-11-17
 
