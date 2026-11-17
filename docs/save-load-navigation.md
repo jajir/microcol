@@ -18,9 +18,9 @@
 
 # Ukládání, načítání a herní nabídka
 
-Seznamy Uložit a Načíst podtrhují název také při najetí myší; odjetí
-myší ponechá podtržený pouze vybraný soubor. Najetí nemění výběr ani
-náhled. Od 11. listopadu 2026 mají řádky mírně menší svislé odsazení
+Od 17. listopadu 2026 seznamy Uložit a Načíst nepodtrhují názvy. Vybraný
+řádek označuje černý rámeček, najetí myší zvýrazní pozadí. Najetí nemění
+výběr ani náhled. Od 11. listopadu 2026 mají řádky mírně menší svislé odsazení
 (7 místo 10 logických pixelů nahoře i dole).
 
 Čitelné názvy souborů a deset společných kruhových autosavů z 8. listopadu
@@ -57,8 +57,8 @@ Cílené Docker/Xvfb scénáře a prohlídka snímků prošly; modelové ověře
 
 1. Pole názvu souboru používá společný papírový rám s černou linkou
    přibližně 2 logické pixely, stejně jako název obchodní trasy.
-2. Vybraný soubor označuje pouze nepravidelné černé podtržení názvu;
-   pozadí řádku zůstává papírové. Koše nemají rámeček, zachovávají
+2. Od 17. listopadu 2026 vybraný soubor označuje černý rámeček bez
+   podtržení názvu; mimo najetí myší zůstává pozadí papírové. Koše nemají rámeček, zachovávají
    přístupný název, zvýraznění při zaměření a potvrzení odstranění.
 3. Mezi koši, posuvníkem a detailem je volné místo. Uložit ani vybraný
    soubor v Načíst nezobrazuje titulek nad minimapou. Prázdný výběr

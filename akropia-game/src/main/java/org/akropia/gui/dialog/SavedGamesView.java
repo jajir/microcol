@@ -101,8 +101,7 @@ public final class SavedGamesView {
             private final Label filename = new Label();
             private final Button delete = ActionButtons
                     .button(ButtonIcon.DELETE);
-            private final Region underline = new Region();
-            private final VBox title = new VBox(3, filename, underline);
+            private final VBox title = new VBox(filename);
             private final HBox row = new HBox(16, title, delete);
             {
                 prefWidthProperty().bind(list.widthProperty().subtract(28));
@@ -119,9 +118,6 @@ public final class SavedGamesView {
                 // title width left over from the previous layout pass.
                 filename.setMaxWidth(Double.MAX_VALUE);
                 HBox.setHgrow(title, Priority.ALWAYS);
-                underline.getStyleClass().add("saved-game-selection");
-                underline.visibleProperty()
-                        .bind(selectedProperty().or(title.hoverProperty()));
                 row.setAlignment(Pos.CENTER_LEFT);
                 row.getStyleClass().add("saved-game-row");
                 row.prefWidthProperty().bind(widthProperty().subtract(20));

@@ -111,6 +111,14 @@ public class TC_20_F02_colony_names_test extends AbstractAkropiaTest {
         final GamePage game = WelcomePage.of(getContext()).loadGame();
         final ColonyScreen colony = game.openColonyAt(DELFT_LOCATION, "Delft");
 
+        // Only hovering the editable colony name underlines its text.
+        colony.hoverColonyName(false);
+        colony.verifyColonyNameUnderline(false);
+        colony.hoverColonyName(true);
+        colony.verifyColonyNameUnderline(true);
+        colony.hoverColonyName(false);
+        colony.verifyColonyNameUnderline(false);
+
         // A duplicate is visibly rejected without changing the stored name.
         final ColonyNameDialog dialog = colony.rename();
         dialog.enterName(" new AMSTERDAM ");

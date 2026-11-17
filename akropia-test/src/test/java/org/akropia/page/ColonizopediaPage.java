@@ -641,8 +641,8 @@ public final class ColonizopediaPage extends AbstractScreen {
                     selectedRows++;
                     assertEquals(javafx.scene.paint.Color.web("#DCC49A"),
                             cell.getBackground().getFills().get(0).getFill());
-                    assertTrue(cell.isUnderline(),
-                            "Selected topic stays underlined");
+                    assertFalse(cell.isUnderline(),
+                            "Selected topics have no underline");
                 } else {
                     ordinaryRows++;
                     assertEquals(javafx.scene.paint.Color.web("#FFF9EC"),

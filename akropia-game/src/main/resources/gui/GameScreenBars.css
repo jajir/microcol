@@ -131,10 +131,10 @@
     -fx-alignment: center-left;
 }
 .screen-toolbar .screen-title:focused {
-    -fx-underline: true;
+    -fx-underline: false;
 }
 
-#colonyName:hover, #colonyName:focused {
+#colonyName:hover {
     -fx-underline: true;
 }
 

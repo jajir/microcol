@@ -1,3 +1,17 @@
+## Podtržení a zrušení dialogů — 17. listopadu 2026
+
+1. Texty tlačítek, záložek, odkazů, nápovědy a uložených her nemají
+   podtržení ani při zaměření či výběru. Jediná výjimka je název kolonie
+   při najetí myší, který upozorňuje na možnost přejmenování.
+2. Escape odpovídá dostupnému tlačítku Zrušit, Zpět či jinému bezpečnému
+   opuštění dialogu. Nepotvrdí rozepsané změny; platí i při fokusu na
+   seznamu, vstupu nebo potvrzovacím tlačítku. Otevřený rozbalovací výběr
+   se nejprve zavře, další Escape zruší dialog.
+3. Prohlížení a správa s okamžitými změnami zachovávají již provedené akce.
+   Čekání na tah ostatních hráčů nemá zrušovací akci a Escape je nepřeruší.
+4. Nejde o hráčskou studii. Skutečné výsledky přejímky vede
+   [funkční evidence](functional-tests.md#text-and-escape-2026-11-17).
+
 ## Čekání na tahy ostatních hráčů — 17. listopadu 2026
 
 1. Po potvrzeném konci tahu se před spuštěním výpočtu otevře modální okno
@@ -76,7 +90,7 @@ odstupem od záhlaví a okrajů.
 
 1. Colonizopedia používá samostatné kreslené karty témat jako detail statistik.
    Ikona vlevo má 32 × 32 logických px a vyjadřuje obsah tématu; dlouhý název
-   se zalomí. Vybraná karta má okrovou výplň a podtržený název.
+   se zalomí. Vybraná karta má okrovou výplň; název není podtržený.
 2. Vyhledávání zůstává nad seznamem a prohledává dosavadní názvy i obsah.
    Seznam a článek se posouvají nezávisle. Šipky mění vybrané téma,
    kliknutí otevře jeho obsah a Escape nebo Back to game vrací hráče do hry.

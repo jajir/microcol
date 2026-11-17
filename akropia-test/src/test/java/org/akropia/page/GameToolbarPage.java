@@ -314,8 +314,8 @@ public final class GameToolbarPage extends AbstractScreen {
             final Labeled focused = getLabeledById(focusedId);
             assertFalse(focused.getBorder().getImages().isEmpty(),
                     "Keyboard focus must preserve the freehand frame");
-            assertTrue(focused.isUnderline(),
-                    "Keyboard focus also uses an underline, not color alone");
+            assertFalse(focused.isUnderline(),
+                    "Focused buttons have no underline");
         }
     }
 

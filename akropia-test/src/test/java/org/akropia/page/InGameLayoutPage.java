@@ -44,11 +44,20 @@ public final class InGameLayoutPage extends AbstractScreen {
                 .map(node -> (Region) node).findFirst().orElseThrow();
     }
 
-    public void verifyEmptyGoals(final String expectedMessage) {
+    public void verifyFreePlayGoals(final String expectedMessage,
+            final String expectedGoal) {
         getRobot().interact(() -> {
             final Region root = page();
             assertEquals(expectedMessage,
-                    ((Label) root.lookup("#noGoalsMessage")).getText());
+                    ((Label) root.lookup("#freePlayObjectiveRule")).getText());
+            assertEquals(
+                    java.util.List
+                            .of(org.akropia.model.FreePlayGoal.INDEPENDENCE),
+                    getModel().getFreePlayObjectives().getEnabled());
+            assertEquals(expectedGoal,
+                    ((Label) root.lookup("#objectiveINDEPENDENCE")).getText());
+            assertFalse(((Label) root.lookup("#objectiveProgressINDEPENDENCE"))
+                    .getText().isBlank());
             final Color paper = Color.web("#FFF9EC");
             for (Region region : new Region[] { root,
                     (Region) root.lookup(".screen-scroll"),
@@ -59,7 +68,7 @@ public final class InGameLayoutPage extends AbstractScreen {
             }
             final Region content = (Region) root.lookup(".goals-main-panel");
             assertEquals(javafx.geometry.Insets.EMPTY, content.getInsets());
-            final Node message = root.lookup("#noGoalsMessage");
+            final Node message = root.lookup("#freePlayObjectiveRule");
             final Bounds contentBounds = content
                     .localToScene(content.getLayoutBounds());
             final Bounds messageBounds = message
@@ -180,7 +189,8 @@ public final class InGameLayoutPage extends AbstractScreen {
             final Bounds visible = clip.localToScene(clip.getLayoutBounds());
             assertTrue(tab.getMinY() >= visible.getMinY() - 1);
             assertTrue(tab.getMaxY() <= visible.getMaxY() + 1);
-            assertTrue(selected.isUnderline(), "Selection has a non-color cue");
+            assertFalse(selected.isUnderline(),
+                    "Selected tabs have no underline");
             assertEquals("Playpen Sans Regular", selected.getFont().getName());
             assertEquals(14, selected.getFont().getSize());
             assertTrue(root.getBackground().getFills().stream().anyMatch(

@@ -21,7 +21,7 @@
 }
 .button:focused, .toggle-button:focused, .menu-button:focused, .split-menu-button:focused {
     -fx-background-color: #E7E7D0;
-    -fx-underline: true;
+    -fx-underline: false;
 }
 .button:armed, .toggle-button:armed, .menu-button:armed, .split-menu-button:armed {
     -fx-background-color: #DCDCC5;
@@ -30,7 +30,7 @@
 .button:disabled, .toggle-button:disabled, .menu-button:disabled, .split-menu-button:disabled {
     -fx-opacity: 0.45;
 }
-.toggle-button:selected { -fx-underline: true; }
+.toggle-button:selected { -fx-underline: false; }
 
 /* Shared radio appearance, including modal dialogs. */
 .radio-button {

@@ -10,7 +10,13 @@ import com.google.common.base.Preconditions;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBoxBase;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.MenuButton;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
@@ -82,16 +88,48 @@ public abstract class AbstractMessageWindow implements UpdatableLanguage {
         viewUtil.installSceneShortcuts(scene);
         scene.getStylesheets().add(MainStageBuilder.STYLE_SHEET_DIALOGS);
         stageDialog.setScene(scene);
-        /**
-         * Following code manually close dialog. If it's not manually closed JVM
-         * crash. According to bug
-         * https://bugs.openjdk.java.net/browse/JDK-8172847 it will be fixed.
-         */
-        scene.setOnKeyPressed(event -> {
+        // Handle cancellation before a focused control consumes Escape.
+        root.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
-                onCancelDialog();
+                for (Node node = scene
+                        .getFocusOwner(); node != null; node = node
+                                .getParent()) {
+                    if (node instanceof ComboBoxBase<?>
+                            && ((ComboBoxBase<?>) node).isShowing()
+                            || node instanceof ChoiceBox<?>
+                                    && ((ChoiceBox<?>) node).isShowing()
+                            || node instanceof MenuButton
+                                    && ((MenuButton) node).isShowing()) {
+                        return;
+                    }
+                }
+                final Button cancel = findCancelButton(root);
+                if (cancel == null) {
+                    onCancelDialog();
+                } else {
+                    cancel.fire();
+                }
+                event.consume();
             }
         });
+    }
+
+    private Button findCancelButton(final Node node) {
+        if (!node.isVisible() || node.isDisabled()) {
+            return null;
+        }
+        if (node instanceof Button && ((Button) node).isCancelButton()) {
+            return (Button) node;
+        }
+        if (node instanceof Parent) {
+            for (final Node child : ((Parent) node).getChildrenUnmodifiable()) {
+                final Button cancel = findCancelButton(child);
+                if (cancel != null) {
+                    return cancel;
+                }
+            }
+        }
+        return null;
     }
 
     protected void onCancelDialog() {

@@ -82,7 +82,7 @@
     -fx-background-color: #E7E7D0;
 }
 #keyboardShortcutsScreen .shortcut-key:focused .shortcut-keycap {
-    -fx-underline: true;
+    -fx-underline: false;
 }
 #keyboardShortcutsScreen .shortcut-capturing .shortcut-keycap {
     -fx-background-color: #FFF9EC;

@@ -77,13 +77,16 @@
     -fx-padding: 0 24 0 0;
 }
 
-/* A single pen stroke marks selection without covering the paper. */
-.saved-games .saved-game-selection {
-    -fx-shape: "M0 1 Q25 0 50 1 T100 1 L100 3 Q75 2 50 3 T0 3 Z";
-    -fx-background-color: #000000;
-    -fx-min-height: 3;
-    -fx-pref-height: 3;
-    -fx-max-height: 3;
+/* Selection remains visible without underlining the filename. */
+.saved-games .list-cell:filled {
+    -fx-border-color: transparent;
+    -fx-border-width: 2;
+}
+.saved-games .list-cell:filled:selected {
+    -fx-border-color: #000000;
+}
+.saved-games .list-cell:filled:hover {
+    -fx-background-color: #E7E7D0;
 }
 .saved-games #deleteSaveRow {
     -fx-border-image-source: none;

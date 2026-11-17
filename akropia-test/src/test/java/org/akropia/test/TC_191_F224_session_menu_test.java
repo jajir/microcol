@@ -960,13 +960,13 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.verifyManagedWarning();
         saves.verifyBorderlessDetails();
         saves.verifyPaperFileControls();
-        // Hover underlines a different filename without changing selection.
+        // Hover highlights a different filename without changing selection.
         saves.hoverFile("Alpha");
-        saves.verifyFileUnderline("Alpha", true, false);
-        saves.verifyFileUnderline("autosave-000", true, true);
+        saves.verifyFileSelection("Alpha", true, false);
+        saves.verifyFileSelection("autosave-000", false, true);
         saves.leaveFiles();
-        saves.verifyFileUnderline("Alpha", false, false);
-        saves.verifyFileUnderline("autosave-000", true, true);
+        saves.verifyFileSelection("Alpha", false, false);
+        saves.verifyFileSelection("autosave-000", false, true);
         saves.captureDialog("savedGamesList", "save-borderless-autosave.png");
 
         // Cancel preserves the existing slot; explicit confirmation overwrites
@@ -993,10 +993,10 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.verifyCompactFileRows(2);
         saves.select("Zulu");
         saves.hoverFile("Alpha");
-        saves.verifyFileUnderline("Alpha", true, false);
+        saves.verifyFileSelection("Alpha", true, false);
         saves.leaveFiles();
-        saves.verifyFileUnderline("Alpha", false, false);
-        saves.verifyFileUnderline("Zulu", true, true);
+        saves.verifyFileSelection("Alpha", false, false);
+        saves.verifyFileSelection("Zulu", false, true);
         saves.cancelBrowser();
         saves.verifyGameUnchanged();
     }

@@ -71,13 +71,13 @@
 #tradeRouteTabs > .tab-header-area > .headers-region > .tab:selected .tab-label {
     -fx-font-weight: bold;
 }
-/* Keyboard focus underlines the chosen tab, as on the shared buttons. */
+/* Tab text stays unadorned, as on the shared buttons. */
 #tradeRouteTabs > .tab-header-area > .headers-region > .tab .focus-indicator {
     -fx-border-color: transparent;
     -fx-background-color: transparent;
 }
 #tradeRouteTabs:focused > .tab-header-area > .headers-region > .tab:selected .tab-label {
-    -fx-underline: true;
+    -fx-underline: false;
 }
 #tradeRouteTabs > .tab-content-area {
     -fx-background-color: transparent;
@@ -100,7 +100,7 @@
     -fx-background-color: #E7E7D0;
 }
 #tradeRouteCargoDialog .titled-pane:focused > .title > .text {
-    -fx-underline: true;
+    -fx-underline: false;
 }
 #tradeRouteCargoDialog .titled-pane > .title > .arrow-button > .arrow {
     -fx-background-color: #000000;
@@ -117,7 +117,7 @@
 
 #tradeRouteCarrierRows .hyperlink {
     -fx-text-fill: #302D27;
-    -fx-underline: true;
+    -fx-underline: false;
     -fx-padding: 0;
 }
 #tradeRouteDeleteSeparator .line {

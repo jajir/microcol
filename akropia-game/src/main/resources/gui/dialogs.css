@@ -72,7 +72,7 @@
     -fx-background-color: #CFDCAB;
 }
 .modal-actions .button:focused {
-    -fx-underline: true;
+    -fx-underline: false;
 }
 
 .modal-frame .button {

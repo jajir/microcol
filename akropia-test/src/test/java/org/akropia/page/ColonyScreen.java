@@ -75,6 +75,20 @@ public class ColonyScreen extends AbstractScreen {
                         expectedNamePart, labeled.getText()));
     }
 
+    public void hoverColonyName(final boolean hover) {
+        if (hover) {
+            getRobot().moveTo(getLabeledById(PanelColonyName.COLONY_NAME_ID));
+        } else {
+            getRobot().moveTo(0, 0);
+        }
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyColonyNameUnderline(final boolean expected) {
+        assertEquals(expected,
+                getLabeledById(PanelColonyName.COLONY_NAME_ID).isUnderline());
+    }
+
     public void verifyTownCommons(final String expectedText) {
         new ColonyLayoutPage(getContext()).verifyCenter();
         assertEquals(expectedText,

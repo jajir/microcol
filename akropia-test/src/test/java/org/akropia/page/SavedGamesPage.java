@@ -685,10 +685,15 @@ public final class SavedGamesPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void verifyFileUnderline(final String name, final boolean visible,
+    public void verifyFileSelection(final String name, final boolean hovered,
             final boolean selected) {
         final javafx.scene.control.ListCell<?> cell = fileCell(name);
-        assertEquals(visible, cell.lookup(".saved-game-selection").isVisible());
+        assertNull(cell.lookup(".saved-game-selection"));
+        assertEquals(hovered, cell.isHover());
+        assertEquals(
+                selected ? javafx.scene.paint.Color.BLACK
+                        : javafx.scene.paint.Color.TRANSPARENT,
+                cell.getBorder().getStrokes().get(0).getTopStroke());
         assertEquals(selected, cell.isSelected());
         assertEquals(7, cell.getPadding().getTop(), 0.1);
         assertEquals(7, cell.getPadding().getBottom(), 0.1);
@@ -698,13 +703,13 @@ public final class SavedGamesPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
         final javafx.scene.control.ListCell<?> selected = fileCell(
                 list().getSelectionModel().getSelectedItem().getName());
-        final javafx.scene.layout.Region underline = (javafx.scene.layout.Region) selected
-                .lookup(".saved-game-selection");
-        assertTrue(underline.isVisible());
-        assertEquals(3, underline.getHeight(), 0.1);
-        assertFalse(underline.getShape() == null);
-        assertEquals(javafx.scene.paint.Color.web("#FFF9EC"),
+        assertNull(selected.lookup(".saved-game-selection"));
+        assertEquals(
+                javafx.scene.paint.Color
+                        .web(selected.isHover() ? "#E7E7D0" : "#FFF9EC"),
                 selected.getBackground().getFills().get(0).getFill());
+        assertEquals(javafx.scene.paint.Color.BLACK,
+                selected.getBorder().getStrokes().get(0).getTopStroke());
         final javafx.scene.control.Button delete = (javafx.scene.control.Button) selected
                 .lookup("#deleteSaveRow");
         assertTrue(delete.getBorder() == null
@@ -715,11 +720,11 @@ public final class SavedGamesPage extends AbstractScreen {
         for (final javafx.scene.Node node : list().lookupAll(".list-cell")) {
             final javafx.scene.control.ListCell<?> cell = (javafx.scene.control.ListCell<?>) node;
             if (!cell.isEmpty()) {
+                assertNull(cell.lookup(".saved-game-selection"));
                 assertEquals(
-                        cell.isSelected()
-                                || cell.lookup(".saved-game-selection")
-                                        .getParent().isHover(),
-                        cell.lookup(".saved-game-selection").isVisible());
+                        cell.isSelected() ? javafx.scene.paint.Color.BLACK
+                                : javafx.scene.paint.Color.TRANSPARENT,
+                        cell.getBorder().getStrokes().get(0).getTopStroke());
             }
         }
         final javafx.scene.Node field = list().getScene()

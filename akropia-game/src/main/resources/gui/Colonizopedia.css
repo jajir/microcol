@@ -63,7 +63,7 @@
 #colonizopediaTopics .list-cell:empty { -fx-background-color: #FFF9EC; }
 #colonizopediaTopics .list-cell:filled:selected {
     -fx-background-color: #DCC49A;
-    -fx-underline: true;
+    -fx-underline: false;
 }
 
 

@@ -37,7 +37,9 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         window.resize(1000, 925);
         // Goals and every statistics tab share the frame.
         page.open("goals");
-        page.verifyEmptyGoals("No objectives have been set. Enjoy the game!");
+        page.verifyFreePlayGoals(
+                "Complete any enabled objective to win. Opponents share these objectives. No time limit.",
+                "Independence");
         page.verifyFrame(484, 1600);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.saveEvidence("r0307-goals.png");
@@ -209,7 +211,9 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         // Shared return controls retain their Czech text after changing
         // language.
         page.open("goals");
-        page.verifyEmptyGoals("Žádné cíle nebyly stanoveny. Užij si hru!");
+        page.verifyFreePlayGoals(
+                "Pro vítězství splňte kterýkoli zapnutý cíl. Stejné cíle mají soupeři. Bez časového limitu.",
+                "Nezávislost");
         page.saveEvidence("goals-empty-cs.png");
         page.verifyBackToGame("closeButtonId", "Zpět do hry");
         page.open("closeButtonId");

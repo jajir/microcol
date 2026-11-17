@@ -32,3 +32,8 @@ SemiBold	600	"Playpen Sans SemiBold"
     -fx-tick-label-fill: black;
 }
 
+
+/* Only the colony name opts into a hover underline. */
+.hyperlink, .hyperlink:hover, .hyperlink:visited, .hyperlink:focused {
+    -fx-underline: false;
+}

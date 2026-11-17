@@ -1,3 +1,61 @@
+<a id="text-and-escape-2026-11-17"></a>
+## Text decoration and modal cancellation — 2026-11-17
+
+1. UC-114/115/119: shared controls, selected report/help tabs and saved-game
+   rows no longer underline text. Colony-name hover remains the sole exception.
+   Save/load selection uses a black outline; hovering does not change selection.
+2. Shared modal cancellation runs before focused controls consume Escape and
+   invokes the visible enabled cancel button, including its cleanup callback.
+   Open dropdowns retain their first-Escape dismissal; mandatory turn waiting
+   retains its non-cancellable override.
+3. Targeted selection: `ModalCancellationTest`, TC188, TC191/TC12, TC192,
+   TC100/TC01+TC04+TC05, TC195, TC205, TC212, TC20/TC01+TC03 and
+   `PageVerificationContractTest`. TC20 explicitly checks the colony-name
+   hover exception. Existing gameplay and selection assertions remain;
+   obsolete underline checks follow the new presentation contract.
+4. Model attempt `20261117T143643Z-e055a70c5524` timed out during Docker
+   preparation: the labelled-container query exceeded 20 seconds; elapsed
+   22.079 seconds, no test command started. A later `docker ps` probe passed
+   in 0.023 seconds without restarting Docker; the original cause is unknown.
+5. Model retry `20261117T143811Z-214ffd52a777` passed all **5,137 tests**
+   with zero failures/errors/skips in 157.657 seconds including supervision.
+   Reports: `target/verification/run-meqlmao5`; base `a4c0ec87b` plus this
+   change. Production sources match the retained snapshot.
+6. Targeted run `20261117T144121Z-67a0c6188eb8` completed 39 checks:
+   35 passed, four errors, zero assertion failures/skips, 499.785 seconds
+   including supervision (`target/docker-ui/run-YAyLHL`). The two new modal
+   tests incorrectly mocked final `ViewUtil`; they now use the real app's
+   injected services. TC192/TC01+TC02 still expected the obsolete empty-goals
+   message in a scored fixture; they now check the existing Independence
+   objective, progress, localized rule and the same layout boundaries.
+   No production change was needed for these four test errors.
+7. Retry `20261117T145159Z-3b67d19c4cce` (PID 47356, 1,200-second limit)
+   selects `ModalCancellationTest`, all TC192 and `PageVerificationContractTest`.
+   It completed 13 checks in 179.488 seconds: all eight TC192 scenarios and
+   three source-contract checks passed, two modal tests errored before input
+   because they requested Guice services during asynchronous app startup.
+   Reports: `target/docker-ui/run-pqA7wT`. Dialog preparation now follows
+   the real welcome/load flow; production code remains unchanged.
+8. Retry `20261117T145550Z-cb7fc7f65271` (PID 47572, 600-second limit)
+   passed the two modal tests and all three source-contract checks with zero
+   failures/errors/skips in 61.485 seconds (`target/docker-ui/run-LeJI34`).
+   The final targeted selection therefore has **39 distinct passing checks**;
+   passing results for unchanged other selections are retained. Visual
+   inspection of the first run's save-browser and toolbar captures confirmed
+   unadorned text and visible save selection.
+9. Fixed smoke/support run `20261117T145705Z-0bce7e44680f` passed **23 tests**
+   with zero failures/errors/skips in 284.779 seconds including supervision
+   and cleanup, below the 420-second budget. Reports:
+   `target/verification/run-zg355x9n`. All game and UI-test sources match its
+   retained snapshot. The selection includes the two new shared modal checks.
+10. Shared Eclipse formatting and diff checks passed. Documentation consistency
+   checks (14 tests), naming audit and strict MkDocs passed; logs are in
+   `target/text-escape/`, refreshed after the final evidence update. Final
+   acceptance is 5,137 model/JUnit, 39 distinct targeted and 23 smoke/support
+   checks, all passing; earlier failed attempts remain failed. Unrelated
+   backlog edits are excluded. No full local regression or remote publication
+   check was requested or performed.
+
 <a id="carrier-route-dialog-2026-11-17"></a>
 ## Carrier assignment dialog — 2026-11-17
 
@@ -3295,7 +3353,7 @@ Integration update: R-0378 was pushed and the combined revision **`0e752b7b0f652
 3. Targeted selection: TC09, TC10, TC11, TC53, TC60, TC72, TC74, TC75, TC77, TC83, TC85, TC188, TC192, TC194; TC134 only `TC_04_a_convert_works_a_field_at_plus_one_and_a_brief_building_job_pauses_the_count_across_continue`; plus `PageVerificationContractTest`. Complete fresh XML reports cover all selected classes/methods. The existing colony, ship, diplomacy, order and navigation assertions remain; the updated shared drag helper was checked through its existing callers. The successful colony screenshot was visually inspected.
 4. Initial model run `target/verification/run-m2_ulgbm` passed 4,784 tests in 133.791 s (completion `20261029T105700Z-a24dece76199`). Initial UI run `target/docker-ui/run-vRGmeu` failed at application startup (completion `20261029T110120Z-c1093de11641`): only three source-contract checks completed; UI forks terminated with Guice CreationException. Source review found `updateLanguage` accessing `buttonBuildRoad` before construction after moving the explanation into the control. Initialization now occurs after all buttons are constructed. The repaired model run `target/verification/run-pzukuabz` passed 4,784 tests in 136.430 s (completion `20261029T110819Z-ed2711c6d2e1`).
 5. The next UI run `target/docker-ui/run-VIPmSZ` completed 50 tests: 47 passed, 3 errors, no failures/skips (completion `20261029T111416Z-f5a3dec875e8`). TC85 still expected a 14-pixel colony heading instead of the implemented 28; TC83 expected old harbor padding; TC77 timed out waiting for an indoor drag. TC85 now follows the shared heading size, the accepted R-0344 change supplies the correct harbor expectation, and the drag helper reveals both targets in scrollable content before the gesture, using the existing construction-helper pattern. All three scenarios and the other drag-helper callers passed in the final selection. Earlier failed runs remain failed and their evidence is retained.
-6. Shared Eclipse formatting preserved exact Java tokens and was idempotent. Review confirmed no production Tooltip references remain, all meaningful description values are retained, and the final executable source matches both the model and smoke snapshots. Documentation consistency checks and strict MkDocs passed. Local acceptance does not establish full-regression success or publication; remote CI and delivery were not inspected.
+8. Shared Eclipse formatting preserved exact Java tokens and was idempotent. Review confirmed no production Tooltip references remain, all meaningful description values are retained, and the final executable source matches both the model and smoke snapshots. Documentation consistency checks and strict MkDocs passed. Local acceptance does not establish full-regression success or publication; remote CI and delivery were not inspected.
 
 ## R-0344 visible return labels — 2026-10-29
 
