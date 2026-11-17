@@ -1615,3 +1615,7 @@ Průběžné ověření 2026-11-01 (UC-113/SUPPORT-001, navigace UC-114/115): R-
 ## Tabulka přepravců a přímé přidání zastávky — 17. listopadu 2026
 
 1. UC-029/030: TC117 ověřuje tabulku, standardní obrázek, zboží a pasažéra v kontejnerech i úzké okno; TC119 otevření detailu cílové kolonie a potvrzené smazání trasy; TC206 okamžité přidání cíle na konec a další práci s pořadím. [UX kontrakt](ux.md#trade-route-direct-editing), [výsledky přejímky](functional-tests.md#trade-route-table-2026-11-17).
+
+### Carrier destination and delete confirmation — 2026-11-17
+
+1. UC-029/030: `TC_119_F110_trade_route_edit_test` covers ordered destination choices, individual redirection while travelling, removal of the selected final stop, Save/Continue, automatic cargo handling at the new destination, and EN/CS deletion confirmation including cancellation. Model boundaries are covered by `TradeRouteDestinationTest`; [acceptance results](functional-tests.md#trade-route-destination-2026-11-17) distinguish local checks from full regression.

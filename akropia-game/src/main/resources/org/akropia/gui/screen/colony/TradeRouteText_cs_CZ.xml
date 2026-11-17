@@ -80,7 +80,7 @@
   <entry key="cancelAssignment">Přestat jet podle trasy</entry>
   <entry key="cancelAssignmentDone">%s je zpět na ručních příkazech. Nic dalšího se nezměnilo.</entry>
   <entry key="confirmDeleteRoute">Potvrdit: smazat trasu</entry>
-  <entry key="deleteConfirm">Stiskněte znovu pro smazání trasy. Na ruční příkazy tam, kde stojí, se vrátí: %s.</entry>
+  <entry key="deleteConfirm">Opravdu chcete odstranit tuto obchodní cestu? Na ruční příkazy tam, kde stojí, se vrátí: %s.</entry>
   <entry key="deleteReleases">Smazání trasy vrátí na ruční příkazy tam, kde stojí: %s.</entry>
   <entry key="affectedNone">žádné</entry>
   <entry key="newTitle">Nová obchodní trasa</entry>
@@ -111,14 +111,14 @@
   <entry key="tabStations">Stanice</entry>
   <entry key="tabCarriers">Přeprava</entry>
   <entry key="tabGoods">Zboží</entry>
-  <entry key="stationsRule">Zastávky se navštěvují v tomto pořadí a z poslední se pokračuje na první. Pořadí měňte tlačítky Nahoru a Dolů. Změny platí ihned; každý dopravce je převezme na své příští zastávce.</entry>
+  <entry key="stationsRule">Zastávky se navštěvují v tomto pořadí a z poslední se pokračuje na první. Pořadí měňte tlačítky Nahoru a Dolů. Odebrání cíle přesměruje dopravce na další zbývající zastávku.</entry>
   <entry key="stationAddLabel">Přidat cíl</entry>
   <entry key="stationAdd">Přidat</entry>
   <entry key="stationUp">↑ Nahoru</entry>
   <entry key="stationDown">↓ Dolů</entry>
   <entry key="stationRemove">Odebrat</entry>
   <entry key="stationPending">Trasa má neuložené změny. Uložte je nebo je zrušte.</entry>
-  <entry key="carriersRule">Lodě a vozy, které jezdí po této trase. Odebrat vrátí k ručnímu řízení jen danou jednotku; zůstane na místě i s nákladem.</entry>
+  <entry key="carriersRule">Výběr cíle změní příští zastávku pouze daného dopravce. Odebrat ho vrátí k ručnímu řízení; zůstane na místě i s nákladem.</entry>
   <entry key="carrierAdd">Přidat další</entry>
   <entry key="carrierAddNone">Teď se nemůže připojit žádná loď ani vůz</entry>
   <entry key="carrierRemove">Odebrat</entry>

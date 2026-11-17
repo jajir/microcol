@@ -49,7 +49,9 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.Hyperlink;
+import javafx.scene.control.ComboBox;
+import javafx.util.StringConverter;
+import org.akropia.gui.util.ViewUtil;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
@@ -97,8 +99,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
     private final Label stationStatus = new Label();
     private final Button deleteRoute = ActionButtons.button(ButtonIcon.DELETE);
     private final Label deleteInfo = new Label();
-    /** Route whose deletion was asked for and awaits the second press. */
-    private Integer deleteAskedFor;
+    private final ViewUtil viewUtil;
 
     // Carriers
     private final Label carriersRule = new Label();
@@ -126,7 +127,9 @@ public final class DialogTradeRouteCargo implements GameScreen {
     public DialogTradeRouteCargo(final I18n i18n,
             final GameModelController game, final EventBus eventBus,
             final InGamePage page, final ImageProvider images,
+            final ViewUtil viewUtil,
             final org.akropia.gui.screen.game.gamepanel.TradeRoutePlanning planning) {
+        this.viewUtil = viewUtil;
         this.planning = planning;
         this.page = page;
         this.i18n = i18n;
@@ -367,7 +370,6 @@ public final class DialogTradeRouteCargo implements GameScreen {
         this.player = game.getHumanPlayer();
         translate();
         message.setText("");
-        deleteAskedFor = null;
         refreshing = true;
         try {
             // A choice or a carrier left from an earlier game is dropped.
@@ -424,7 +426,6 @@ public final class DialogTradeRouteCargo implements GameScreen {
             return;
         }
 
-        deleteAskedFor = null;
         message.setText("");
         final Optional<TradeRoute> route = model.getTradeRoutes(player).stream()
                 .filter(stored -> stored.getId() == routeId).findFirst();
@@ -764,22 +765,59 @@ public final class DialogTradeRouteCargo implements GameScreen {
         final Label name = new Label(carrierName(carrier));
         name.setId("tradeRouteCarrierName-" + id);
         name.setMinWidth(0);
-        final javafx.scene.control.Labeled destination;
-        final Optional<Colony> target = model.getTradeRouteHeadingStop(carrier)
-                .filter(stop -> !stop.isEurope())
-                .flatMap(stop -> model.getColonyById(stop.getColonyId()))
-                .filter(colony -> colony.getOwner().equals(player));
-        if (target.isPresent() && !destinationText(carrier).isEmpty()) {
-            final Hyperlink link = new Hyperlink(destinationText(carrier));
-            link.setOnAction(event -> eventBus
-                    .post(new ShowScreenEvent(Screen.COLONY, target.get())));
-            destination = link;
-        } else {
-            destination = new Label(destinationText(carrier));
-        }
-        destination.setWrapText(true);
+        final TradeRoute route = selectedRoute;
+        final ComboBox<TradeRouteStop> destination = new ComboBox<>();
+        destination.getItems().setAll(route.getStops());
+        destination.setConverter(new StringConverter<TradeRouteStop>() {
+            @Override
+            public String toString(final TradeRouteStop stop) {
+                return stop == null ? "" : stopName(stop);
+            }
+
+            @Override
+            public TradeRouteStop fromString(final String text) {
+                throw new UnsupportedOperationException();
+            }
+        });
+        model.getTradeRouteHeadingStop(carrier)
+                .filter(route.getStops()::contains)
+                .ifPresent(destination::setValue);
         destination.setMinWidth(0);
+        destination.setMaxWidth(Double.MAX_VALUE);
         destination.setId("tradeRouteCarrierDestination-" + id);
+        destination.setAccessibleText(name.getText() + ": "
+                + i18n.get(TradeRouteText.carrierDestination));
+        destination
+                .setDisable(route.getStops().stream()
+                        .allMatch(stop -> model
+                                .getTradeRouteDestinationProblem(carrier, route,
+                                        route.getStops().indexOf(stop))
+                                .isPresent()));
+        destination.setCellFactory(
+                list -> new javafx.scene.control.ListCell<TradeRouteStop>() {
+                    @Override
+                    protected void updateItem(final TradeRouteStop stop,
+                            final boolean empty) {
+                        super.updateItem(stop, empty);
+                        setText(empty || stop == null ? null : stopName(stop));
+                        setDisable(!empty && stop != null && model
+                                .getTradeRouteDestinationProblem(carrier, route,
+                                        route.getStops().indexOf(stop))
+                                .isPresent());
+                    }
+                });
+        destination.setOnAction(event -> {
+            final int index = route.getStops().indexOf(destination.getValue());
+            try {
+                model.changeTradeRouteDestination(carrier, route, index);
+                planning.invalidate();
+                reloadRoutes(Optional.of(route.getId()));
+            } catch (final IllegalArgumentException
+                    | IllegalStateException stale) {
+                reloadRoutes(Optional.of(route.getId()));
+                message.setText(i18n.get(TradeRouteText.changed));
+            }
+        });
         final Label state = new Label(stateText(carrier));
         state.setId("tradeRouteCarrierState-" + id);
         state.setWrapText(true);
@@ -846,23 +884,6 @@ public final class DialogTradeRouteCargo implements GameScreen {
         box.setAccessibleText(text);
         help(box, () -> text);
         return box;
-    }
-
-    /**
-     * The stop the model says the carrier is heading to or standing at; a
-     * carrier without a usable route shows no destination.
-     */
-    private String destinationText(final UnitWithCargo carrier) {
-        final Optional<TradeRouteAssignment> assignment = model
-                .getTradeRouteAssignment(carrier);
-        if (assignment.isEmpty() || assignment.get().getPause().filter(
-                pause -> pause == org.akropia.model.TradeRoutePause.NO_ROUTE)
-                .isPresent()) {
-            return "";
-        }
-        return model.getTradeRouteHeadingStop(carrier).map(
-                stop -> i18n.get(TradeRouteText.carrierToward, stopName(stop)))
-                .orElse("");
     }
 
     private String stateText(final UnitWithCargo carrier) {
@@ -949,16 +970,11 @@ public final class DialogTradeRouteCargo implements GameScreen {
         }
         final TradeRoute route = selectedRoute;
 
-        final boolean asked = route != null && deleteAskedFor != null
-                && deleteAskedFor == route.getId();
-        deleteRoute.setText(i18n.get(asked ? TradeRouteText.confirmDeleteRoute
-                : TradeRouteText.deleteRoute));
+        deleteRoute.setText(i18n.get(TradeRouteText.deleteRoute));
         deleteRoute.setDisable(route == null
                 || model.getTradeRouteDeleteProblem(player, route).isPresent());
         deleteInfo.setText(route == null ? ""
-                : i18n.get(
-                        asked ? TradeRouteText.deleteConfirm
-                                : TradeRouteText.deleteReleases,
+                : i18n.get(TradeRouteText.deleteReleases,
                         affectedCarriers(route)));
     }
 
@@ -997,6 +1013,7 @@ public final class DialogTradeRouteCargo implements GameScreen {
             message.setText(reason);
             return false;
         }
+        showCarriers();
         updateState();
         return true;
     }
@@ -1007,14 +1024,10 @@ public final class DialogTradeRouteCargo implements GameScreen {
             return;
         }
         message.setText("");
-        // The first press only names the affected carriers; the second press
-        // on the same route deletes it, so a stray key press cannot.
-        if (deleteAskedFor == null || deleteAskedFor != route.getId()) {
-            deleteAskedFor = route.getId();
-            updateState();
+        if (!new TradeRouteDeleteConfirmation(viewUtil, i18n).confirm(i18n
+                .get(TradeRouteText.deleteConfirm, affectedCarriers(route)))) {
             return;
         }
-        deleteAskedFor = null;
         final int released = model.getTradeRouteAssignedCarriers(player, route)
                 .size();
         try {

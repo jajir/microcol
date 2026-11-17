@@ -73,7 +73,7 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
-    void TC_01_stop_replacement_reaches_each_carrier_at_its_own_next_stop()
+    void TC_01_destination_selection_and_removal_redirect_only_the_affected_carrier()
             throws Exception {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(NEW_AMSTERDAM_LOCATION,
@@ -119,6 +119,14 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
                 "Wagon #4 now follows this route, starting at New Amsterdam.");
         cargo.verifyAssignment(FIRST_WAGON_ID, "Ore cart", NEW_AMSTERDAM_STOP,
                 false);
+        // Selecting the town where the wagon stands defers ordinary cargo
+        // handling to the turn, without moving or transferring on selection.
+        cargo.openCarriersTab();
+        cargo.chooseCarrierDestination(FIRST_WAGON_ID, "Delft");
+        cargo.chooseCarrierDestination(FIRST_WAGON_ID, "New Amsterdam");
+        cargo.verifyUnitAt(FIRST_WAGON_ID, NEW_AMSTERDAM_LOCATION);
+        cargo.verifyHoldEmpty(FIRST_WAGON_ID, 0);
+        cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 90));
         cargo.close();
         game = colony.close();
         game.nextTurnAndCloseDialogs();
@@ -164,13 +172,11 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
                 "\u2192 New Amsterdam", "On the way.");
         cargo.verifyCarrierRow(SECOND_WAGON_ID, "Wagon #6",
                 "\u2192 New Amsterdam", "On the way.");
-        // The destination link opens the actual target colony.
+        // Each carrier offers the route stops in route order.
         cargo.verifyCarrierTable(FIRST_WAGON_ID, true);
-        cargo.openCarrierDestination(FIRST_WAGON_ID);
-        colony = ColonyScreen.of(getContext(), "New Amsterdam");
-        colony.verifyColonyName("New Amsterdam");
-        cargo.open();
-        cargo.chooseRoute("Ore cart");
+        cargo.verifyCarrierDestinations(FIRST_WAGON_ID, "Delft",
+                "New Amsterdam");
+        cargo.openStationsTab();
         cargo.replaceStation(NEW_AMSTERDAM_STOP, "Haarlem");
         cargo.verifyStopChoices("1. Delft", "2. Haarlem");
         // A new destination starts without goods; Haarlem gets the cargo the
@@ -189,75 +195,51 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
                 List.of(GoodsType.WEAPONS), List.of(GoodsType.ORE));
         cargo.verifyDirectEditingControls();
 
-        // Wagon 4 is still on its leg and keeps New Amsterdam as the stop it
-        // accepted. Wagon 6 has not left Delft, so it already heads for
-        // Haarlem. The edit moved and transferred nothing.
+        // Removing the selected final stop wraps to Delft. A manual choice
+        // then redirects only wagon 4 from its present position to Haarlem.
         cargo.openCarriersTab();
-        cargo.verifyCarrierRow(FIRST_WAGON_ID, "Wagon #4",
-                "\u2192 New Amsterdam", "On the way.");
-        cargo.verifyCarrierRow(SECOND_WAGON_ID, "Wagon #6", "\u2192 Haarlem",
+        cargo.verifyCarrierDestinations(FIRST_WAGON_ID, "Delft", "Haarlem");
+        cargo.verifyAcceptedStop(FIRST_WAGON_ID, DELFT_STOP, "Delft");
+        cargo.chooseCarrierDestination(FIRST_WAGON_ID, "Haarlem");
+        cargo.verifyCarrierRow(FIRST_WAGON_ID, "Wagon #4", "\u2192 Haarlem",
                 "On the way.");
-        cargo.verifyAcceptedStop(FIRST_WAGON_ID, NEW_AMSTERDAM_STOP,
-                "New Amsterdam");
+        cargo.captureDialog("tradeRouteCargoDialog",
+                "trade-route-destination-dropdown.png");
+        cargo.verifyAssignment(FIRST_WAGON_ID, "Ore cart", NEW_AMSTERDAM_STOP,
+                false);
+        cargo.verifyAcceptedStop(SECOND_WAGON_ID, DELFT_STOP, "Delft");
         cargo.verifyUnitBetween(FIRST_WAGON_ID, NEW_AMSTERDAM_LOCATION,
                 DELFT_LOCATION);
         cargo.verifyUnitAt(SECOND_WAGON_ID, DELFT_LOCATION);
+        cargo.verifyHold(FIRST_WAGON_ID, 0, Goods.of(GoodsType.WEAPONS, 50));
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID,
                 Goods.of(GoodsType.WEAPONS, 50));
         cargo.verifyGold(10000);
-        cargo.captureDialog("tradeRouteCargoDialog",
-                "trade-route-edit-pending.png");
         cargo.close();
         game = colony.close();
 
-        // Save and Continue keep the pending change and both legs, and move
-        // or transfer nothing.
+        // Save/Continue preserves the selected destination without movement.
         cargo.rememberUnitLocation(FIRST_WAGON_ID);
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         cargo.verifyUnitAtRememberedLocation(FIRST_WAGON_ID);
-        cargo.verifyUnitAt(SECOND_WAGON_ID, DELFT_LOCATION);
+        cargo.verifyAssignment(FIRST_WAGON_ID, "Ore cart", NEW_AMSTERDAM_STOP,
+                false);
+
+        // The cheapest route bypasses New Amsterdam instead of processing
+        // its removed stop, then handles cargo at the selected Haarlem stop.
+        game.nextTurnAndCloseDialogs();
+        cargo.verifyUnitAt(FIRST_WAGON_ID, Location.of(26, 15));
         cargo.verifyHold(FIRST_WAGON_ID, 0, Goods.of(GoodsType.WEAPONS, 50));
-        cargo.verifyVisitProcessed(SECOND_WAGON_ID, true);
-        cargo.verifyStoredStop("Ore cart", NEW_AMSTERDAM_STOP, "Haarlem");
-        cargo.verifyAcceptedStop(FIRST_WAGON_ID, NEW_AMSTERDAM_STOP,
-                "New Amsterdam");
-        cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 0));
         cargo.verifyWarehouse(NEW_AMSTERDAM_ID,
                 Goods.of(GoodsType.WEAPONS, 50));
-        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 0));
-
-        // Next turn: wagon 4 reaches the stop it had accepted and processes it
-        // once, WEAPONS off and ORE on. Wagon 6 leaves Delft for Haarlem.
-        game.nextTurnAndCloseDialogs();
-        cargo.verifyUnitAt(FIRST_WAGON_ID, NEW_AMSTERDAM_LOCATION);
-        cargo.verifyHoldEmpty(FIRST_WAGON_ID, 0);
-        cargo.verifyHoldEmpty(FIRST_WAGON_ID, 1);
-        cargo.verifyWarehouse(NEW_AMSTERDAM_ID,
-                Goods.of(GoodsType.WEAPONS, 100));
-        cargo.verifyWarehouse(NEW_AMSTERDAM_ID, Goods.of(GoodsType.ORE, 0));
-        cargo.verifyAcceptedStop(FIRST_WAGON_ID, NEW_AMSTERDAM_STOP, "Haarlem");
-        cargo.verifyAssignment(FIRST_WAGON_ID, "Ore cart", DELFT_STOP, false);
-        cargo.verifyUnitBetween(SECOND_WAGON_ID, DELFT_LOCATION,
-                NEW_AMSTERDAM_LOCATION);
-        cargo.verifyAssignment(SECOND_WAGON_ID, "Ore cart", NEW_AMSTERDAM_STOP,
-                false);
-        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.WEAPONS, 0));
-        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 90));
-
-        // Three more turns: wagon 4 unloads its ORE in Delft, and wagon 6
-        // reaches Haarlem and loads the ORE 40 stored there, once.
         game.nextTurnAndCloseDialogs();
         game.nextTurnAndCloseDialogs();
-        game.nextTurnAndCloseDialogs();
-        cargo.verifyUnitAt(SECOND_WAGON_ID, HAARLEM_LOCATION);
-        cargo.verifyHold(SECOND_WAGON_ID, 0, Goods.of(GoodsType.ORE, 40));
+        cargo.verifyUnitAt(FIRST_WAGON_ID, HAARLEM_LOCATION);
+        cargo.verifyHold(FIRST_WAGON_ID, 0, Goods.of(GoodsType.ORE, 40));
+        cargo.verifyWarehouse(HAARLEM_ID, Goods.of(GoodsType.WEAPONS, 70));
         cargo.verifyWarehouse(HAARLEM_ID, Goods.of(GoodsType.ORE, 0));
-        cargo.verifyWarehouse(HAARLEM_ID, Goods.of(GoodsType.WEAPONS, 20));
-        cargo.verifyWarehouse(DELFT_ID, Goods.of(GoodsType.ORE, 90));
-        cargo.verifyWarehouse(NEW_AMSTERDAM_ID,
-                Goods.of(GoodsType.WEAPONS, 100));
-        cargo.verifyAssignment(SECOND_WAGON_ID, "Ore cart", DELFT_STOP, false);
+        cargo.verifyAssignment(FIRST_WAGON_ID, "Ore cart", DELFT_STOP, false);
         cargo.verifyGold(10000);
     }
 
@@ -372,19 +354,25 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         cargo.verifyHold(GALLEON_ID, 1, Goods.of(GoodsType.WOOL, 60));
         cargo.verifyGold(10000);
 
-        // The first press on Delete only names the carrier it would release.
+        // Delete opens a modal dialog naming the carrier it would release.
         cargo.verifyDeleteButtonText("Delete traderoute");
         cargo.askToDeleteRoute();
-        cargo.verifyDeleteButtonText("Confirm: delete route");
-        cargo.verifyDeleteInfo(
-                "Press again to delete this route. Released to manual orders where they stand: Galleon #7.");
+        cargo.verifyDeleteButtonText("Delete traderoute");
+        cargo.verifyDeleteQuestion(
+                "Do you really want to delete this trade route? Carriers released to manual orders where they stand: Galleon #7.");
         cargo.verifyRouteStored("Atlantic run", true);
         cargo.verifyAssignment(GALLEON_ID, "Atlantic run", 1, false);
-        cargo.captureDialog("tradeRouteCargoDialog",
+        cargo.captureDialog("tradeRouteDeleteDialog",
                 "trade-route-delete-confirm.png");
 
-        // The second press deletes it. The ship keeps its place, countdown,
+        // Confirmation deletes it. The ship keeps its place, countdown,
         // goods and the player's gold, and another carrier is not touched.
+        cargo.cancelDeleteRoute();
+        cargo.verifyRouteStored("Atlantic run", true);
+        cargo.askToDeleteRoute();
+        cargo.closeWithEscape();
+        cargo.verifyRouteStored("Atlantic run", true);
+        cargo.askToDeleteRoute();
         cargo.confirmDeleteRoute();
         cargo.verifyMessage(
                 "Route deleted. Carriers released to manual orders: 1.");
@@ -463,9 +451,11 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
 
         // The wagon has not moved. It says that the repair is taken next turn.
         cargo.openCarriersTab();
+        cargo.verifyAcceptedStop(LOST_WAGON_ID, 0, "Delft");
+        cargo.chooseCarrierDestination(LOST_WAGON_ID, "Haarlem");
         cargo.verifyCarrierRow(LOST_WAGON_ID, "Wagon #8", "\u2192 Haarlem",
-                "The stop colony is lost or no longer yours.");
-        cargo.verifyAcceptedStop(LOST_WAGON_ID, LOST_STOP, "lost 3");
+                "On the way.");
+        cargo.verifyAcceptedStop(LOST_WAGON_ID, LOST_STOP, "Haarlem");
         cargo.verifyUnitAt(LOST_WAGON_ID, NEW_AMSTERDAM_LOCATION);
         cargo.captureDialog("tradeRouteCargoDialog", "trade-route-repair.png");
         cargo.close();
@@ -544,11 +534,11 @@ public class TC_119_F110_trade_route_edit_test extends AbstractAkropiaTest {
         cargo.verifyStoredCargo("Ore cart", NEW_AMSTERDAM_STOP,
                 List.of(GoodsType.WEAPONS), List.of(GoodsType.ORE));
 
-        // Deleting needs a second press that names the affected carriers.
+        // Deleting requires confirmation in a separate modal dialog.
         cargo.askToDeleteRouteWithKeyboard();
-        cargo.verifyDeleteButtonText("Potvrdit: smazat trasu");
-        cargo.verifyDeleteInfo(
-                "Stiskněte znovu pro smazání trasy. Na ruční příkazy tam, kde stojí, se vrátí: žádné.");
+        cargo.verifyDeleteButtonText("Smazat trasu");
+        cargo.verifyDeleteQuestion(
+                "Opravdu chcete odstranit tuto obchodní cestu? Na ruční příkazy tam, kde stojí, se vrátí: žádné.");
         cargo.verifyRouteStored("Ore cart", true);
         cargo.confirmDeleteRouteWithKeyboard();
         cargo.verifyMessage(

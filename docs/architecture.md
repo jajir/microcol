@@ -1306,3 +1306,8 @@ slouží deterministickým testům bez čekání.
 Změna odstraňuje zachycenou blokující cestu přes Swing `Timer.start()`
 a inicializaci macOS AppKit. Neprokazuje absenci jiných příčin zamrznutí.
 Lokální ověření popisuje [funkční evidence](functional-tests.md#fps-counter-2026-11-12).
+
+### Výběr cíle dopravce — 2026-11-17
+
+1. `Model.getTradeRouteDestinationProblem` ověřuje vlastníka dopravce, přiřazení, aktuální trasu, dostupnost a dosažitelnost cíle prostřednictvím existujících pravidel přiřazení. `changeTradeRouteDestination` po validaci mění pouze přijaté zastávky, cíl a důvod čekání; zachovává polohu, náklad i záznam již zpracované návštěvy. `updateTradeRoute` při odebrání cíle vybere následující zbývající zastávku v cyklickém pořadí. UI z tohoto modelového kontraktu odvozuje dostupnost voleb.
+2. Odpovědnosti balíčků se nemění. Editor trasy poskytuje dropdown pro každého dopravce a standardní modální potvrzení smazání. Navigace v tahu a obsluha nákladu zůstávají v modelu. [Chování](gap-analysis.md#carrier-destination-and-route-deletion-agreed-2026-11-17), [lokální evidence](functional-tests.md#trade-route-destination-2026-11-17).

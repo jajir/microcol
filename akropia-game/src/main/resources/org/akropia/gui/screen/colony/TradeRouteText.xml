@@ -80,7 +80,7 @@
   <entry key="cancelAssignment">Stop following route</entry>
   <entry key="cancelAssignmentDone">%s is back on manual orders. Nothing else changed.</entry>
   <entry key="confirmDeleteRoute">Confirm: delete route</entry>
-  <entry key="deleteConfirm">Press again to delete this route. Released to manual orders where they stand: %s.</entry>
+  <entry key="deleteConfirm">Do you really want to delete this trade route? Carriers released to manual orders where they stand: %s.</entry>
   <entry key="deleteReleases">Deleting the route releases to manual orders where they stand: %s.</entry>
   <entry key="affectedNone">none</entry>
   <entry key="newTitle">New trade route</entry>
@@ -111,14 +111,14 @@
   <entry key="tabStations">Stations</entry>
   <entry key="tabCarriers">Carriers</entry>
   <entry key="tabGoods">Goods</entry>
-  <entry key="stationsRule">Stops are visited in this order and the last one returns to the first. Move a stop with Up and Down. Changes apply immediately; each carrier takes them at its next stop.</entry>
+  <entry key="stationsRule">Stops are visited in this order and the last returns to the first. Move a stop with Up and Down. Removing a carrier's destination redirects it to the next remaining stop.</entry>
   <entry key="stationAddLabel">Add destination</entry>
   <entry key="stationAdd">Add</entry>
   <entry key="stationUp">↑ Up</entry>
   <entry key="stationDown">↓ Down</entry>
   <entry key="stationRemove">Remove</entry>
   <entry key="stationPending">Unsaved route changes. Save them or cancel them.</entry>
-  <entry key="carriersRule">Ships and wagons that follow this route. Remove returns only that unit to manual orders; it keeps its place and cargo.</entry>
+  <entry key="carriersRule">Select Destination to change only this carrier's next stop. Remove returns it to manual orders, keeping its place and cargo.</entry>
   <entry key="carrierAdd">Add carrier</entry>
   <entry key="carrierAddNone">No ship or wagon can join now</entry>
   <entry key="carrierRemove">Remove</entry>

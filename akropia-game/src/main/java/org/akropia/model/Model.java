@@ -1204,16 +1204,13 @@ public class Model {
     }
 
     /**
-     * Stores a whole edited configuration of a saved route after every check of
-     * {@link #getTradeRouteUpdateProblem} passes; nothing changes when one
-     * fails. The route keeps its ID, name, owner, kind and start. A carrier on
-     * its way keeps the leg it accepted and a carrier waiting at a stop keeps
-     * the instructions of that visit; both take the change at their next stop.
-     * The mode applies to waiting carriers in their next owner turn, so
-     * switching to touch and go releases them without repeating a settled
-     * transfer.
+     * Stores the edited route after every update check passes. Identity stays
+     * unchanged. Removing a carrier's target redirects it to the next surviving
+     * stop; other edits retain the existing boundary adoption rules. No
+     * movement or transfer occurs here, and processed visits cannot repeat
+     * transfers.
      *
-     * @return the stored replacement route
+     * @return stored replacement route
      * @throws IllegalArgumentException when a rule rejects the update
      */
     public TradeRoute updateTradeRoute(final Player owner,
@@ -1226,6 +1223,28 @@ public class Model {
                     "Trade route cannot be updated: " + problem.get());
         }
         final TradeRoute stored = tradeRoutes.replace(route, stops, mode);
+        for (final UnitWithCargo carrier : getTradeRouteAssignedCarriers(owner,
+                stored)) {
+            final TradeRouteAssignment assignment = getTradeRouteAssignment(
+                    carrier).orElseThrow();
+            final List<TradeRouteStop> accepted = assignment.getStops();
+            final int target = assignment.getStopIndex();
+            if (!stops.contains(accepted.get(target))) {
+                int next = Math.floorMod(target, stops.size());
+                for (int offset = 1; offset < accepted.size(); offset++) {
+                    final int candidate = stops.indexOf(
+                            accepted.get((target + offset) % accepted.size()));
+                    if (candidate >= 0) {
+                        next = candidate;
+                        break;
+                    }
+                }
+                assignment.setStops(stops);
+                assignment.setStopIndex(next);
+                assignment.setPause(null);
+            }
+        }
+
         // Receipts name the place where a stop was processed, so they stay
         // true through the edit and still keep that visit from repeating.
         return stored;
@@ -1645,6 +1664,42 @@ public class Model {
         }
         unit.startTradeRouteAssignment(replacement);
         fireActionWasStarted(carrier);
+    }
+
+    /**
+     * Checks a new destination for an already assigned carrier without
+     * mutation.
+     */
+    public Optional<TradeRouteAssignmentProblem> getTradeRouteDestinationProblem(
+            final Unit carrier, final TradeRoute route, final int stopIndex) {
+        final Optional<TradeRouteAssignmentProblem> problem = getTradeRouteAssignmentProblem(
+                carrier, route, stopIndex, true);
+        if (problem.isPresent()) {
+            return problem;
+        }
+        return getTradeRouteAssignment(carrier)
+                .filter(assignment -> assignment.getRouteId() == route.getId())
+                .isPresent() ? Optional.empty()
+                        : Optional
+                                .of(TradeRouteAssignmentProblem.NO_ASSIGNMENT);
+    }
+
+    /**
+     * Redirects only this carrier; movement and cargo wait for normal turn
+     * processing.
+     */
+    public void changeTradeRouteDestination(final Unit carrier,
+            final TradeRoute route, final int stopIndex) {
+        final Optional<TradeRouteAssignmentProblem> problem = getTradeRouteDestinationProblem(
+                carrier, route, stopIndex);
+        Preconditions.checkArgument(problem.isEmpty(),
+                "Trade route destination cannot be changed: %s",
+                problem.orElse(null));
+        final TradeRouteAssignment assignment = getTradeRouteAssignment(carrier)
+                .orElseThrow();
+        assignment.setStops(route.getStops());
+        assignment.setStopIndex(stopIndex);
+        assignment.setPause(null);
     }
 
     /**

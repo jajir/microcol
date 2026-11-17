@@ -456,7 +456,7 @@ class TradeRouteWaitingTest {
     }
 
     @Test
-    void stopCountEditsRemapTheCarrierAtItsBoundary() {
+    void removingTheTargetRedirectsTheCarrierAndSurvivesSave() {
         final World w = new World();
         final TradeRoute route = w.route(TradeRouteMode.TOUCH_AND_GO,
                 TradeRouteStop.europe(),
@@ -466,19 +466,19 @@ class TradeRouteWaitingTest {
         // The ship has left Delft for Home port, its next stop.
         assertEquals(EUROPE_STOP, w.assignment().getStopIndex());
 
-        // Home port is removed while the ship is on its way: it keeps the leg
-        // it accepted, and the single remaining stop is Delft.
+        // Removing Home port selects the single remaining destination, Delft.
         final TradeRoute single = w.model.updateTradeRoute(w.dutch, w.stored(),
                 List.of(TradeRouteStop.ofColony(DELFT)),
                 TradeRouteMode.TOUCH_AND_GO);
         assertEquals(1, single.getStops().size());
-        assertEquals(2, w.assignment().getStops().size());
-        assertTrue(w.model.getTradeRouteHeadingStop(w.ship).orElseThrow()
-                .isEurope()
-                || w.ship.getProcessedTradeRouteVisit().isPresent());
-        // Saving and restoring keeps the longer accepted copy.
+        assertEquals(1, w.assignment().getStops().size());
+        assertEquals(TradeRouteStop.ofColony(DELFT),
+                w.model.getTradeRouteHeadingStop(w.ship).orElseThrow());
+        // Saving and restoring keeps the redirected destination.
         final World restored = w.saveAndContinue();
-        assertEquals(2, restored.assignment().getStops().size());
+        assertEquals(1, restored.assignment().getStops().size());
+        assertEquals(TradeRouteStop.ofColony(DELFT), restored.model
+                .getTradeRouteHeadingStop(restored.ship).orElseThrow());
     }
 
     @Test

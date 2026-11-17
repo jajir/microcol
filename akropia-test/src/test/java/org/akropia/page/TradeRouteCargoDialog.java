@@ -331,14 +331,14 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
 
     // Delete
 
-    /** First press: names the affected carriers, deletes nothing yet. */
+    /** Opens a modal confirmation without deleting the route. */
     public void askToDeleteRoute() {
         press("tradeRouteDelete");
     }
 
-    /** Second press on the same route: now the route is deleted. */
+    /** Confirms deletion in the modal dialog. */
     public void confirmDeleteRoute() {
-        press("tradeRouteDelete");
+        press("tradeRouteDeleteConfirm");
     }
 
     public void askToDeleteRouteWithKeyboard() {
@@ -346,7 +346,7 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
     }
 
     public void confirmDeleteRouteWithKeyboard() {
-        pressWithKeyboard("tradeRouteDelete");
+        pressWithKeyboard("tradeRouteDeleteConfirm");
     }
 
     /**
@@ -900,14 +900,14 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
             final String expectedDestination, final String expectedState) {
         assertEquals(expectedName,
                 getLabeledById("tradeRouteCarrierName-" + unitId).getText());
-        assertEquals(expectedDestination,
-                getLabeledById("tradeRouteCarrierDestination-" + unitId)
-                        .getText());
+        assertEquals(expectedDestination, "\u2192 " + destination(unitId)
+                .getConverter().toString(destination(unitId).getValue()));
         assertEquals(expectedState,
                 getLabeledById("tradeRouteCarrierState-" + unitId).getText());
     }
 
-    public void verifyCarrierTable(final int unitId, final boolean colonyLink) {
+    public void verifyCarrierTable(final int unitId,
+            final boolean destinationSelector) {
         layout();
         final javafx.scene.image.ImageView icon = getNodeFinder()
                 .lookup("#tradeRouteCarrierImage-" + unitId)
@@ -918,8 +918,8 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
                 icon.getFitHeight());
         final Node destination = getNodeFinder()
                 .lookup("#tradeRouteCarrierDestination-" + unitId).query();
-        assertEquals(colonyLink,
-                destination instanceof javafx.scene.control.Hyperlink);
+        assertEquals(destinationSelector,
+                destination instanceof javafx.scene.control.ComboBox);
         final Pane row = getNodeFinder()
                 .lookup("#tradeRouteCarrierRow-" + unitId).queryAs(Pane.class);
         assertEquals(6, row.getChildren().size());
@@ -932,12 +932,46 @@ public final class TradeRouteCargoDialog extends AbstractScreen {
         }
     }
 
-    public void openCarrierDestination(final int unitId) {
-        final Node link = getNodeFinder()
-                .lookup("#tradeRouteCarrierDestination-" + unitId).query();
-        reveal(link);
-        getRobot().clickOn(link);
+    private javafx.scene.control.ComboBox<TradeRouteStop> destination(
+            final int unitId) {
+        return getNodeFinder().lookup("#tradeRouteCarrierDestination-" + unitId)
+                .queryAs(javafx.scene.control.ComboBox.class);
+    }
+
+    public void chooseCarrierDestination(final int unitId, final String name) {
+        final ComboBox<TradeRouteStop> box = destination(unitId);
+        final int index = box.getItems().stream()
+                .map(box.getConverter()::toString).collect(Collectors.toList())
+                .indexOf(name);
+        if (index < 0) {
+            throw new IllegalArgumentException(
+                    "Destination is not offered: " + name);
+        }
+        reveal(box);
+        getRobot().clickOn(box).push(KeyCode.HOME);
+        for (int step = 0; step < index; step++) {
+            getRobot().push(KeyCode.DOWN);
+        }
+        getRobot().push(KeyCode.ENTER);
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyCarrierDestinations(final int unitId,
+            final String... expected) {
+        final javafx.scene.control.ComboBox<TradeRouteStop> box = destination(
+                unitId);
+        assertEquals(List.of(expected),
+                box.getItems().stream().map(box.getConverter()::toString)
+                        .collect(Collectors.toList()));
+    }
+
+    public void verifyDeleteQuestion(final String expected) {
+        assertEquals(expected,
+                getLabeledById("tradeRouteDeleteQuestion").getText());
+    }
+
+    public void cancelDeleteRoute() {
+        press("tradeRouteDeleteCancel");
     }
 
     public void verifyStationActions(final String addText,

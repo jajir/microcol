@@ -2081,3 +2081,9 @@ For the selected future change [R-0405](requirements/done/R-0405.md), see [worke
 
 1. Each completed station, cargo or mode edit applies immediately through the existing model operation. Back/Escape and switching routes preserve it; there is no whole-route Save/Cancel stage. Invalid edits restore stored settings with a reason. Editing orders does not execute transfers or movement, and carriers retain the existing next-stop adoption rule.
 2. The one-off stop-processing form is removed. Automatic routes and ordinary manual cargo/market operations remain available. The [current UX contract](ux.md#trade-route-direct-editing) owns layout, icon behavior and navigation; [verification evidence](functional-tests.md#trade-route-direct-editing-2026-11-16) records actual acceptance.
+
+### Carrier destination and route deletion — agreed 2026-11-17
+
+1. Each carrier's Destination dropdown lists the route stops in travel order. Selecting a stop immediately changes only that carrier's target from its current position. Movement and stop processing still follow normal turn rules. Choosing the current town processes its ordinary cargo instructions at the next route processing opportunity; an already processed visit cannot repeat transfers.
+2. Removing the selected destination redirects the carrier to the next surviving stop in the previous cyclic order, wrapping after the last stop. After reaching the selected destination, normal route order resumes. The existing prohibition on removing the final stop remains.
+3. Delete trade route opens a modal confirmation. Confirm deletes and releases carriers under the existing rules; Cancel, Escape and closing the dialog leave the route intact. These decisions supersede the former destination link and two presses on Delete. See the [UX contract](ux.md#trade-route-direct-editing) and [acceptance evidence](functional-tests.md#trade-route-destination-2026-11-17).
