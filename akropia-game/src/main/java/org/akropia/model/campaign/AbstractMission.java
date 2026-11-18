@@ -83,8 +83,7 @@ abstract class AbstractMission<G extends MissionGoals> {
     }
 
     protected boolean isFirstTurn(final Model model) {
-        return model.getCalendar().getCurrentYear() == model.getCalendar()
-                .getStartYear();
+        return model.getCalendar().getNumberOfPlayedTurns() == 0;
     }
 
     protected Player getHumanPlayer(final Model model) {

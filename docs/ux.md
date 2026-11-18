@@ -1,3 +1,13 @@
+## Datum výpravy — 2026-11-18
+
+Hráč pozná rok, den/měsíc a období ve stavovém řádku. Po najetí na datum získá
+řecký název měsíce a počet dní do dalšího období; tentýž popis je přístupný
+asistenčním technologiím. Datum je pouze informace, bez potvrzení či rušení.
+Začínáme kolem roku 1000 př. n. l., ale rok 1 označuje začátek výpravy.
+[Pravidla kalendáře](gap-analysis.md#calendar-and-starting-expeditions) vlastní
+přesné převody. Jde o návrh ověřovaný automatickými scénáři, ne o pozorování hráčů.
+
+
 ## Podtržení a zrušení dialogů — 17. listopadu 2026
 
 1. Texty tlačítek, záložek, odkazů, nápovědy a uložených her nemají

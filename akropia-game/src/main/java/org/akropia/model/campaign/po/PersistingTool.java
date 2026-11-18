@@ -124,10 +124,8 @@ public class PersistingTool {
         buff.append('-');
         buff.append(calendar.getCurrentYear());
 
-        if (calendar.getCurrentSeason().isPresent()) {
-            buff.append('-');
-            buff.append(calendar.getCurrentSeason().get().name());
-        }
+        buff.append('-').append(calendar.getMonthOfYear());
+        buff.append('-').append(calendar.getDayOfMonth());
 
         buff.append(EXTENSION);
 

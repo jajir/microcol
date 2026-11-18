@@ -36,25 +36,22 @@ public class TC_37_F29_calendar_boundaries_test extends AbstractAkropiaTest {
     @Test
     @Tag("local")
     void TC_01_complete_rounds_cross_the_season_boundary() throws Exception {
-        // Load the last annual turn and advance complete rounds with the UI.
+        // Complete the last summer day and inspect the first autumn date.
         GamePage game = WelcomePage.of(getContext()).loadGame();
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
-        audit.verifyDisplayedDate("AD 1599");
+        audit.verifyDisplayedDate("Year 1 · 7/3 · Summer");
         game.nextTurnAndCloseDialogs();
-        audit.verifyDisplayedDate("AD 1600 Spring");
-        game.nextTurnAndCloseDialogs();
-        audit.verifyDisplayedDate("AD 1600 Summer");
-        game.nextTurnAndCloseDialogs();
-        audit.verifyDisplayedDate("AD 1600 Autumn");
-        game.nextTurnAndCloseDialogs();
-        audit.verifyDisplayedDate("AD 1600 Winter");
+        audit.verifyDisplayedDate("Year 1 · 1/4 · Autumn");
+        audit.hoverCalendar();
+        audit.verifyCalendarDescription(
+                "Day 1 of Pyanepsion · Year 1 of the expedition · Autumn. Days until the next season: 21.");
 
-        // Save and continue the winter position, then advance into spring.
+        // Continue retains the exact day and the next round advances one day.
         game.exitToMenu().verifyMainScreen();
         game = audit.continueGame();
-        audit.verifyDisplayedDate("AD 1600 Winter");
+        audit.verifyDisplayedDate("Year 1 · 1/4 · Autumn");
         game.nextTurnAndCloseDialogs();
-        audit.verifyDisplayedDate("AD 1601 Spring");
+        audit.verifyDisplayedDate("Year 1 · 2/4 · Autumn");
     }
 
     @Test
@@ -69,8 +66,8 @@ public class TC_37_F29_calendar_boundaries_test extends AbstractAkropiaTest {
 
         // Continue must neither advance the calendar nor rewrite that file.
         audit.continueGame();
-        audit.verifyDisplayedDate("AD 1599");
-        audit.verifyCalendarAndGold(109, 10000);
+        audit.verifyDisplayedDate("Year 1 · 7/3 · Summer");
+        audit.verifyCalendarAndGold(20, 10000);
         audit.verifyAutosaveUnchanged(saved);
         audit.verifyAutosaveLastModifiedTime(modified);
     }
@@ -78,33 +75,33 @@ public class TC_37_F29_calendar_boundaries_test extends AbstractAkropiaTest {
     @Test
     @Tag("local")
     void TC_03_loading_a_later_start_preserves_its_date() throws Exception {
-        // Load an explicit later-date scenario through the ordinary chooser.
+        // Load an last-day-of-year scenario through the ordinary chooser.
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         audit.chooseLoadFile(
                 new File("src/test/scenarios/F29-calendar-late-start.akropia"));
         final GamePage game = WelcomePage.of(getContext()).loadGame();
-        audit.verifyDisplayedDate("AD 1630 Winter");
+        audit.verifyDisplayedDate("Year 1 · 7/12 · Spring");
 
-        // Complete a round and preserve the resulting spring through Continue.
+        // Complete a round and preserve the resulting summer through Continue.
         game.nextTurnAndCloseDialogs();
-        audit.verifyDisplayedDate("AD 1631 Spring");
+        audit.verifyDisplayedDate("Year 2 · 1/1 · Summer");
         game.exitToMenu().verifyMainScreen();
         audit.continueGame();
-        audit.verifyDisplayedDate("AD 1631 Spring");
+        audit.verifyDisplayedDate("Year 2 · 1/1 · Summer");
     }
 
     @Test
     @Tag("local")
     void TC_04_fresh_human_turn_writes_recovery() throws Exception {
         // A fresh human turn writes Latest turn without changing Latest
-        // position or creating a decade point in 1599.
+        // position or creating a decade point.
         WelcomePage.of(getContext()).loadGame();
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
         audit.verifyRecoveryAbsent(RecoverySlot.LATEST_TURN);
         audit.verifyRecoveryAbsent(RecoverySlot.PREVIOUS_DECADE);
         audit.deliverTurnStartedNotification(true, true);
-        audit.verifyRecoveryTurn(RecoverySlot.LATEST_TURN, 109);
+        audit.verifyRecoveryTurn(RecoverySlot.LATEST_TURN, 20);
         audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
         audit.verifyRecoveryAbsent(RecoverySlot.PREVIOUS_DECADE);
     }

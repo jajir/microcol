@@ -87,7 +87,7 @@ public class TC_115_F106_native_turns_test extends AbstractAkropiaTest {
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         fog.centerFrontier();
         audit.verifyCurrentTurn(18);
-        audit.verifyDisplayedDate("AD 1508");
+        audit.verifyDisplayedDate("Year 1 · 5/3 · Summer");
 
         // Four real braves exist, each with its own nation and explicit home.
         natives.verifyBraveCount(4);
@@ -133,7 +133,7 @@ public class TC_115_F106_native_turns_test extends AbstractAkropiaTest {
         turns.verifyTurnOrder(ORDER);
         natives.verifyNativeCallbacksOncePerRound("AZTEC", "INCA", "CHEROKEE");
         audit.verifyCurrentTurn(19);
-        audit.verifyDisplayedDate("AD 1509");
+        audit.verifyDisplayedDate("Year 1 · 6/3 · Summer");
 
         // Each native turn prepared its braves once. The content braves with a
         // home spent the whole allowance on one home-patrol step; the homeless
@@ -170,7 +170,7 @@ public class TC_115_F106_native_turns_test extends AbstractAkropiaTest {
         turns.verifyTurnState(prepared);
         fog.centerFrontier();
         audit.verifyCurrentTurn(19);
-        audit.verifyDisplayedDate("AD 1509");
+        audit.verifyDisplayedDate("Year 1 · 6/3 · Summer");
         // Continue neither prepares nor patrols again: the spent braves keep
         // their squares with no movement, the survivor keeps its full one.
         natives.verifyBraveCount(4);
@@ -195,7 +195,7 @@ public class TC_115_F106_native_turns_test extends AbstractAkropiaTest {
         turns.verifyTurnOrder(ORDER);
         natives.verifyNativeCallbacksOncePerRound("AZTEC", "INCA", "CHEROKEE");
         audit.verifyCurrentTurn(20);
-        audit.verifyDisplayedDate("AD 1510");
+        audit.verifyDisplayedDate("Year 1 · 7/3 · Summer");
         natives.verifyBraveCount(4);
     }
 

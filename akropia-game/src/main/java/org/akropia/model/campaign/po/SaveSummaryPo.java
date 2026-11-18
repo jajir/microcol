@@ -19,6 +19,8 @@ public class SaveSummaryPo {
     private String nation;
     private String difficulty;
     private int year;
+    private int month;
+    private int day;
     private String season;
     private int gold;
     private int rebelSupportPercent;
@@ -51,6 +53,8 @@ public class SaveSummaryPo {
                 .map(EuropeanNation::name).orElse(player.getName());
         out.difficulty = model.getDifficulty().name();
         out.year = calendar.getCurrentYear();
+        out.month = calendar.getMonthOfYear();
+        out.day = calendar.getDayOfMonth();
         out.season = calendar.getCurrentSeason().map(Enum::name).orElse(null);
         out.gold = player.getGold();
         out.rebelSupportPercent = player.getNationalRebelSupport()
@@ -90,6 +94,11 @@ public class SaveSummaryPo {
                 "Difficulty is required");
         Difficulty.valueOf(difficulty);
         Preconditions.checkArgument(year > 0, "Invalid year");
+        Preconditions.checkArgument(
+                month >= 1 && month <= Calendar.MONTHS_PER_YEAR,
+                "Invalid month");
+        Preconditions.checkArgument(day >= 1 && day <= Calendar.DAYS_PER_MONTH,
+                "Invalid day");
         if (season != null) {
             Calendar.Season.valueOf(season);
         }
@@ -117,6 +126,14 @@ public class SaveSummaryPo {
 
     public String getDifficulty() {
         return difficulty;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getDay() {
+        return day;
     }
 
     public int getYear() {

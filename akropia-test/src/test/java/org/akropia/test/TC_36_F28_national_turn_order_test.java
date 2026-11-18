@@ -44,7 +44,7 @@ public class TC_36_F28_national_turn_order_test extends AbstractAkropiaTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         final NationalTurnPage turns = new NationalTurnPage(getContext());
-        audit.verifyDisplayedDate("AD 1508");
+        audit.verifyDisplayedDate("Year 1 · 5/3 · Summer");
         audit.verifyCalendarAndGold(18, 10000);
 
         // End the human turn, let all present Crowns/nations act, and return
@@ -52,7 +52,7 @@ public class TC_36_F28_national_turn_order_test extends AbstractAkropiaTest {
         turns.observeTurnOrder();
         game.nextTurnAndCloseDialogs();
         turns.verifyTurnOrder(ORDER);
-        audit.verifyDisplayedDate("AD 1509");
+        audit.verifyDisplayedDate("Year 1 · 6/3 · Summer");
         audit.verifyCalendarAndGold(19, 10000);
         final JsonElement prepared = turns.readTurnState();
 
@@ -64,13 +64,13 @@ public class TC_36_F28_national_turn_order_test extends AbstractAkropiaTest {
         game.exitToMenu().verifyMainScreen();
         game = audit.continueGame();
         turns.verifyTurnState(prepared);
-        audit.verifyDisplayedDate("AD 1509");
+        audit.verifyDisplayedDate("Year 1 · 6/3 · Summer");
 
         // Another complete round follows the same order and advances only once.
         turns.observeTurnOrder();
         game.nextTurnAndCloseDialogs();
         turns.verifyTurnOrder(ORDER);
-        audit.verifyDisplayedDate("AD 1510");
+        audit.verifyDisplayedDate("Year 1 · 7/3 · Summer");
         audit.verifyCalendarAndGold(20, 10000);
     }
 
@@ -106,7 +106,7 @@ public class TC_36_F28_national_turn_order_test extends AbstractAkropiaTest {
         // round.
         turns.verifyTurnOrder(ORDER);
         audit.verifyCalendarAndGold(19, 10000);
-        audit.verifyDisplayedDate("AD 1509");
+        audit.verifyDisplayedDate("Year 1 · 6/3 · Summer");
     }
 
     @Test

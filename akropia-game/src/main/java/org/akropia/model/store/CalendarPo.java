@@ -2,6 +2,16 @@ package org.akropia.model.store;
 
 public final class CalendarPo {
 
+    private Integer turnLimit;
+
+    public Integer getTurnLimit() {
+        return turnLimit;
+    }
+
+    public void setTurnLimit(final Integer turnLimit) {
+        this.turnLimit = turnLimit;
+    }
+
     private int startYear;
     private int endYear;
     private int numberOfPlayedTurns;

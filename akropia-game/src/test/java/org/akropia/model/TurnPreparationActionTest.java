@@ -40,7 +40,7 @@ class TurnPreparationActionTest {
     private Model fixture(final boolean beforePreparation) {
         final GameModelPo data = new GameModelPoDao().loadFromClassPath(
                 "/maps/default-campaign-mission-2-thrive.akropia");
-        data.getModel().getCalendar().setStartYear(1700);
+        data.getModel().getCalendar().setStartYear(1);
         data.getModel().getCalendar().setNumberOfPlayedTurns(10);
         data.getModel().getColonies().get(1).getColonyWarehouse().put("GRAIN",
                 200);

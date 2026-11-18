@@ -124,7 +124,7 @@ final class StatusBarPresenter implements UpdatableLanguage {
             Preconditions.checkNotNull(showEventsFromSource,
                     "It's not defined which events should be shown in status bar.");
             eventBus.post(new StatusBarMessageEvent(
-                    i18n.get(Loc.statusBar_era_description),
+                    describeDate(gameModelController.getModel().getCalendar()),
                     showEventsFromSource));
         });
         statusBarView.getLabelGold().setOnMouseEntered(event -> {
@@ -174,12 +174,20 @@ final class StatusBarPresenter implements UpdatableLanguage {
     private void setYearText(final Label labelEra, final Calendar calendar) {
         Preconditions.checkNotNull(labelEra);
         Preconditions.checkNotNull(calendar);
-        String date = "AD " + calendar.getCurrentYear();
-        if (calendar.getCurrentSeason().isPresent()) {
-            date += " " + i18n.get(Loc
-                    .getTerrainDescription(calendar.getCurrentSeason().get()));
-        }
-        labelEra.setText(date);
+        final String season = i18n.get(Loc.getTerrainDescription(
+                calendar.getCurrentSeason().orElseThrow()));
+        labelEra.setText(i18n.get(Loc.statusBar_era, calendar.getCurrentYear(),
+                calendar.getDayOfMonth(), calendar.getMonthOfYear(), season));
+        final String description = describeDate(calendar);
+        labelEra.setAccessibleText(description);
+    }
+
+    private String describeDate(final Calendar calendar) {
+        return i18n.get(Loc.statusBar_era_description, calendar.getDayOfMonth(),
+                calendar.getMonthName(), calendar.getCurrentYear(),
+                i18n.get(Loc.getTerrainDescription(
+                        calendar.getCurrentSeason().orElseThrow())),
+                calendar.getDaysUntilNextSeason());
     }
 
     private void setGoldText(final int gold) {

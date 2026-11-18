@@ -497,8 +497,7 @@ class RebellionVictoryTest {
                 .toJson(rebel(model).save());
         final ResultScore won = rebel(model).getResultScore();
         assertEquals(100, won.getOrderBonusPercent());
-        assertEquals(1780 - rebel(model).getDeclarationYear().orElseThrow(),
-                won.getEarlyPoints());
+        assertEquals(290, won.getEarlyPoints());
         assertEquals(won.getTotal(),
                 restored.getPlayerByName(DUTCH).getResultScore().getTotal());
         assertEquals(beforeRead,

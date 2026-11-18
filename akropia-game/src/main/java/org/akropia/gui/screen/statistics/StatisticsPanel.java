@@ -456,7 +456,8 @@ final class StatisticsPanel implements GameScreen {
         series.setName(i18n.get(messageKey));
         stats.forEach(stat -> series.getData()
                 .add(new XYChart.Data<Number, Number>(
-                        calendar.getYearForTurnNo(stat.getTurnNo()),
+                        calendar.getStartYear() + stat.getTurnNo()
+                                / (double) Calendar.DAYS_PER_YEAR,
                         statFunction.apply(stat))));
         historySummary.setText(stats.stream()
                 .max(java.util.Comparator

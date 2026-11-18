@@ -12,12 +12,23 @@ import org.junit.jupiter.params.provider.CsvSource;
  * 100 points so that the support percentage alone sets it exactly.
  */
 class ResultScoreTest {
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.CsvSource({ "0,290", "109,181",
+            "110,180", "113,180", "114,179", "699,33", "829,1", "830,0",
+            "900,0" })
+    void expeditionDaysPreserveTheEarlyDeclarationCurve(int turn,
+            long expected) {
+        assertEquals(expected, ResultScore.earlyPoints(turn));
+    }
 
     private static ResultScore score(final int base, final int destroyed,
             final Difficulty difficulty, final long owls, final Integer order,
             final Integer year) {
         return ResultScore.of(BaseScore.of(0, 0, 0, 0, 0L, base), destroyed,
-                difficulty, owls, order, year);
+                difficulty, owls, order,
+                year == null ? null
+                        : Math.min(year - 1490, 110)
+                                + Math.max(0, year - 1600) * 4);
     }
 
     @Test

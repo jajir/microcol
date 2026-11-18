@@ -108,23 +108,23 @@ public class TC_181_F208_reference_profile_matrix_spanish_test
         profile.chooseReferencePosition(nation, difficulty);
         final GamePage game = WelcomePage.of(getContext()).loadGame();
 
-        // The new game starts in 1490 on the human's first turn.
+        // The new game starts in expedition year 1 on the human's first turn.
         profile.verifyProfile(nation, difficulty, difficultyLabel, gold);
         profile.verifyPlayedTurns(0);
-        audit.verifyDisplayedDate("AD 1490");
+        audit.verifyDisplayedDate("Year 1 · 1/1 · Summer");
 
         // End the human turn; the computer nations and Crowns act, then the
         // next round starts. The profile and the gold must not change.
         game.nextTurnAndCloseDialogs();
         profile.verifyProfile(nation, difficulty, difficultyLabel, gold);
         profile.verifyPlayedTurns(1);
-        audit.verifyDisplayedDate("AD 1491");
+        audit.verifyDisplayedDate("Year 1 · 2/1 · Summer");
 
         // Leaving the game saves it; Continue reopens the same position.
         game.exitToMenu();
         audit.continueGame();
         profile.verifyProfile(nation, difficulty, difficultyLabel, gold);
         profile.verifyPlayedTurns(1);
-        audit.verifyDisplayedDate("AD 1491");
+        audit.verifyDisplayedDate("Year 1 · 2/1 · Summer");
     }
 }

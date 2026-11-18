@@ -78,6 +78,21 @@ public final class FreePlayAuditPage extends AbstractScreen {
                 getRobot().lookup("#labelEra").queryAs(Label.class).getText());
     }
 
+    public void hoverCalendar() {
+        getRobot().moveTo("#labelEra");
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void verifyCalendarDescription(final String expected) {
+        getRobot().interact(() -> {
+            final Label date = getRobot().lookup("#labelEra")
+                    .queryAs(Label.class);
+            assertEquals(expected, date.getAccessibleText());
+            assertEquals(expected, getRobot().lookup("#statusBarLabel")
+                    .queryAs(Label.class).getText());
+        });
+    }
+
     public void deliverTurnStartedNotification(final boolean fresh,
             final boolean human) {
         final Player player = getModel().getPlayers().stream()

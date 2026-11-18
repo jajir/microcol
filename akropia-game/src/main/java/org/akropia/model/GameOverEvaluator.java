@@ -98,14 +98,12 @@ public final class GameOverEvaluator {
     };
 
     /**
-     * Losing the last colony ends play only from spring 1600 on (R-0193);
-     * before that a zero-colony position is not a game end and no turn count
-     * replaces the year.
+     * Legacy mission colony-loss grace period, independent of displayed years.
      */
     public static final Function<Model, GameOverResult> GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES = (
             model) -> {
-        if (!model.getCalendar().isScoredPlay() && model.getCalendar()
-                .hasReachedYear(Calendar.YEAR_WHEN_LAST_COLONY_ENDS_GAME)) {
+        if (!model.getCalendar().isScoredPlay()
+                && model.getCalendar().getNumberOfPlayedTurns() >= 110) {
             for (final Player player : model.getPlayerStore().getPlayers()) {
                 if (player.isHuman() && model.getColonies(player).isEmpty()) {
                     return new GameOverResult(REASON_NO_COLONIES);

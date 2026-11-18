@@ -57,6 +57,8 @@ class SaveSummaryPoTest {
         assertEquals("DUTCH", summary.getNation());
         assertEquals(model.getDifficulty().name(), summary.getDifficulty());
         assertEquals(model.getCalendar().getCurrentYear(), summary.getYear());
+        assertEquals(model.getCalendar().getMonthOfYear(), summary.getMonth());
+        assertEquals(model.getCalendar().getDayOfMonth(), summary.getDay());
         assertEquals(human.getGold(), summary.getGold());
         assertEquals(human.getNationalRebelSupport().getDisplayPercent(),
                 summary.getRebelSupportPercent());

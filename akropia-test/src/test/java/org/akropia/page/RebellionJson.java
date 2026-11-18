@@ -48,6 +48,8 @@ public final class RebellionJson {
         members.forEach(ids::add);
         player.addProperty("declaredIndependence", true);
         player.addProperty("declarationYear", currentYear(model));
+        player.addProperty("declarationTurn", model.getAsJsonObject("calendar")
+                .get("numberOfPlayedTurns").getAsInt());
         player.add("rebellionColonyIds", ids);
         seizeHomePort(model, owner);
     }
@@ -111,6 +113,7 @@ public final class RebellionJson {
         } else {
             player.addProperty("declaredIndependence", false);
             player.remove("declarationYear");
+            player.remove("declarationTurn");
             player.remove("rebellionColonyIds");
         }
     }

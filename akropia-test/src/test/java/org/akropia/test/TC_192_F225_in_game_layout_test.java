@@ -40,51 +40,51 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         page.verifyFreePlayGoals(
                 "Complete any enabled objective to win. Opponents share these objectives. No time limit.",
                 "Independence");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.saveEvidence("r0307-goals.png");
         page.open("closeButtonId");
         page.open("statistics");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("coloniesTab");
         page.verifySelectedTab("coloniesTab");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.saveEvidence("r0307-statistics.png");
         page.open("relationsTab");
         page.verifySelectedTab("relationsTab");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("tradeTab");
         page.verifySelectedTab("tradeTab");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("baseScoreTab");
         page.verifySelectedTab("baseScoreTab");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("hallOfFameTab");
         page.verifySelectedTab("hallOfFameTab");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("laborTab");
         page.verifySelectedTab("laborTab");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("religionTab");
         page.verifySelectedTab("religionTab");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("fleetTab");
         page.verifySelectedTab("fleetTab");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.open("closeButtonId");
         // Colony and port retain their actions above the illustrated content.
         game.openColonyWithKeyboard(0, "New Amsterdam");
         page.saveEvidence("r0307-colony-before-frame-check.png");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.verifyColonyNameVisible("New Amsterdam");
         page.saveEvidence("r0307-colony.png");
@@ -94,17 +94,17 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         page.closeColonyWithEscape();
         page.verifyMapReturned();
         game.openEuroperPort();
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.saveEvidence("r0307-europe.png");
         page.open("closeButtonId");
         // A smaller window scrolls only the report body.
         game.openTurnReport();
         window.resize(900, 700);
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.scrollToBottom();
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("closeButtonId", "Back to game");
         page.saveEvidence("r0307-turn-report-small.png");
         page.closeWithEscape();
@@ -136,9 +136,9 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         window.resize(1280, 850);
         page.open("statistics");
         page.verifyAtlasLayout("Gold");
-        page.verifyAtlasHistory(198, 484, 1649,
-                "Last recorded value: 484 · Year 1649");
-        page.verifyFrame(484, 1600);
+        page.verifyAtlasHistory(198, 484, 3,
+                "Last recorded value: 484 · Year 3");
+        page.verifyFrame(484, 1);
         page.saveEvidence("r0323-atlas-gold-en.png");
 
         // Repeated selection keeps its cue; arrows select the next report.
@@ -146,20 +146,19 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         page.verifySelectedTab("goldTab");
         page.selectNextReportWithKeyboard();
         page.verifySelectedTab("militaryTab");
-        page.verifyAtlasHistory(198, 27, 1649,
-                "Last recorded value: 27 · Year 1649");
+        page.verifyAtlasHistory(198, 27, 3, "Last recorded value: 27 · Year 3");
         page.open("wealthTab");
-        page.verifyAtlasHistory(198, 1551, 1649,
-                "Last recorded value: 1551 · Year 1649");
+        page.verifyAtlasHistory(198, 1551, 3,
+                "Last recorded value: 1551 · Year 3");
         page.open("scoreTab");
-        page.verifyAtlasHistory(198, 2062, 1649,
-                "Last recorded value: 2062 · Year 1649");
+        page.verifyAtlasHistory(198, 2062, 3,
+                "Last recorded value: 2062 · Year 3");
 
         // A small window keeps the last index entry and the report reachable.
         window.resize(900, 700);
         page.open("fleetTab");
         page.verifyAtlasLayout("Fleet");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.saveEvidence("r0323-atlas-fleet-small.png");
         page.closeWithEscape();
         page.verifyMapReturned();
@@ -191,7 +190,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         page.verifyAtlasLayout("Zlato");
         page.verifyAtlasHistory(1, 2108, 1600,
                 "Poslední zaznamenaná hodnota: 2108 · Rok 1600");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.saveEvidence("r0323-atlas-single-cs.png");
         page.open("closeButtonId");
         page.verifyMapReturned();
@@ -235,7 +234,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         final SavedGamesPage saves = new SavedGamesPage(getContext());
         saves.openMenu();
         saves.chooseMenu("menuSettings");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("buttonBack", "Zpět do hry");
         page.saveEvidence("r0307-settings-czech.png");
         page.open("buttonBack");
@@ -246,16 +245,16 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         congress.verifyFillsGameWindow("Zpět do hry");
         congress.verifyHeading("Poznání");
         page.verifyBackToGame("congressClose", "Zpět do hry");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.scrollToBottom();
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.saveEvidence("r0307-congress-czech.png");
         page.closeWithEscape();
         page.verifyMapReturned();
         page.open("help");
         org.akropia.page.ColonizopediaPage.of(getContext())
                 .verifyFillsGameWindow("Colonizopedia");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("buttonOk", "Zpět do hry");
         page.saveEvidence("r0325-help-czech.png");
         page.closeWithEscape();
@@ -284,13 +283,13 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         page.open("goals");
         bars.resizeContent(2560, 900);
         bars.verifyContents(2560, 1440);
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         bars.resizeContent(1000, 900);
         page.open("closeButtonId");
         page.open("statistics");
         bars.resizeContent(2560, 900);
         bars.verifyContents(2560, 1440);
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.saveEvidence("r0340-wide-statistics.png");
         bars.resizeContent(1000, 900);
         bars.verifyContents(1000, 968);
@@ -298,13 +297,13 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         game.openColonyWithKeyboard(0, "New Amsterdam");
         bars.resizeContent(2560, 900);
         bars.verifyContents(2560, 1440);
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         bars.resizeContent(1000, 900);
         page.closeColonyWithEscape();
         game.openEuroperPort();
         bars.resizeContent(2560, 900);
         bars.verifyContents(2560, 1440);
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.saveEvidence("r0340-wide-europe.png");
         // All Europe action names fit both wide and supported narrow windows.
         page.verifyEuropeActionLabels("Recruit", "Buy units", "Ship repairs",
@@ -322,7 +321,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         game.openTurnReport();
         bars.resizeContent(2560, 900);
         bars.verifyContents(2560, 1440);
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         bars.resizeContent(1000, 900);
         bars.verifyContents(1000, 968);
         page.closeWithEscape();
@@ -349,24 +348,24 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         saves.chooseMenu("menuSettings");
         bars.resizeContent(2560, 900);
         bars.verifyContents(2560, 1440);
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         bars.resizeContent(1000, 900);
         page.open("buttonBack");
         new org.akropia.page.CongressPage(getContext()).open();
         bars.resizeContent(2560, 900);
         bars.verifyContents(2560, 1440);
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         bars.resizeContent(1000, 900);
         bars.verifyContents(1000, 968);
         page.closeWithEscape();
         page.open("help");
         bars.resizeContent(2560, 900);
         bars.verifyContents(2560, 1440);
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.saveEvidence("r0340-wide-help-czech.png");
         bars.resizeContent(1000, 900);
         bars.verifyContents(1000, 968);
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         bars.resizeContent(1000, 900);
         bars.verifyContents(1000, 968);
         page.closeWithEscape();
@@ -428,13 +427,13 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         saves.openMenu();
         saves.chooseMenu("menuSettings");
         hosted.verifyInGameHosted("Settings");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("buttonBack", "Back to game");
         hosted.verifyScrollBarFollowsOverflow();
         hosted.verifyCompleteTexts();
         hosted.pressShortcut(KeyCode.O);
         hosted.verifyInGameHosted("Load game");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("savedGamesCancel", "Back to game");
         hosted.verifyScrollBarFollowsOverflow();
         hosted.verifyCompleteTexts();
@@ -461,7 +460,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         hosted.rememberFonts();
         page.saveEvidence("r0377-settings-game-wide-cs.png");
         window.resize(900, 700);
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("buttonBack", "Zpět do hry");
         hosted.verifyScrollBarFollowsOverflow();
         hosted.verifyCompleteTexts();
@@ -513,7 +512,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         saves.rememberGame();
         saves.openSave();
         saves.verifyFullScreenPaper("Save game");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         page.verifyBackToGame("savedGamesCancel", "Back to game");
         page.saveEvidence("r0444-save-screen.png");
         hosted.press(KeyCode.ESCAPE);
@@ -530,7 +529,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         hosted.pressShortcut(KeyCode.O);
         hosted.verifyInGameHosted("Load game");
         saves.verifyFullScreenPaper("Load game");
-        page.verifyFrame(484, 1600);
+        page.verifyFrame(484, 1);
         saves.select("Small window harbour");
         saves.verifyLoadLayout("Small window harbour");
         saves.verifyPreview(true);

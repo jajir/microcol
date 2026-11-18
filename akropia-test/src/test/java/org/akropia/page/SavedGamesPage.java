@@ -347,7 +347,7 @@ public final class SavedGamesPage extends AbstractScreen {
         assertFalse(summary.contains("null"), summary);
         assertFalse(summary.contains("Type:"), summary);
         assertFalse(summary.contains("Discoverer"), summary);
-        assertTrue(summary.contains(" AD"), summary);
+        assertFalse(summary.contains(" AD"), summary);
         assertTrue(summary.contains("\nRebel support:"), summary);
     }
 

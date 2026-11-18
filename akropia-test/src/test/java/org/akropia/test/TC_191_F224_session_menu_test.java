@@ -203,7 +203,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.verifyGameUnchanged();
         saves.openLoad();
         saves.select("Přístav – před bitvou");
-        saves.verifySelectedDetails("Corinth", "1508 AD",
+        saves.verifySelectedDetails("Corinth", "1 · 5/3 Summer",
                 "Game type: Free play");
         saves.captureDialog("savedGamesList", "r0298-saved-games-filled.png");
         saves.action("loadSelected");
@@ -486,9 +486,9 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.verifyHiddenDetailName("New save of the current game");
         saves.verifySimplifiedSaveControls();
         saves.verifyPreview(true);
-        saves.verifySummaryLines("Year: 1508 AD", "Gold: ", "Rebel support: ",
-                "People: ", "Colonies: ", "Ships: ");
-        saves.verifySuggestedName("1508");
+        saves.verifySummaryLines("Year: 1 · 5/3 Summer", "Gold: ",
+                "Rebel support: ", "People: ", "Colonies: ", "Ships: ");
+        saves.verifySuggestedName("dutch-1");
         saves.captureDialog("savedGamesList", "r0382-save-current-en.png");
         saves.saveName("Harbour before the storm");
         saves.verifySavedName("Harbour before the storm", 1);
@@ -537,7 +537,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.select("Harbour before the storm");
         saves.verifyLoadLayout("Harbour before the storm");
         saves.verifyPreview(true);
-        saves.verifySelectedDetails("Corinth", "1508 AD",
+        saves.verifySelectedDetails("Corinth", "1 · 5/3 Summer",
                 "Game type: Free play");
         saves.verifyLoadEnabled(true);
         saves.captureDialog("savedGamesList", "r0383-load-detail-en.png");
@@ -922,7 +922,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.select("Metadata title");
         saves.verifyLoadLayout("Metadata title");
         saves.verifyPreview(true);
-        saves.verifySelectedDetails("Corinth", "1508 AD",
+        saves.verifySelectedDetails("Corinth", "1 · 5/3 Summer",
                 "Game type: Free play");
         saves.verifySummaryLines("Game type: Free play", "Saved:");
         saves.verifyLoadEnabled(true);

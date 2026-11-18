@@ -15,8 +15,8 @@ import com.google.common.base.Preconditions;
  */
 public final class ResultScore {
 
-    /** Early declaration points are the years before this one. */
-    static final int EARLY_DECLARATION_YEAR = 1780;
+    /** Maximum early-declaration bonus at the start of the expedition. */
+    static final int INITIAL_EARLY_POINTS = 290;
 
     /** Independence bonus in percent for the first to fourth victory. */
     private static final int[] ORDER_BONUS_PERCENT = { 100, 50, 25, 0 };
@@ -71,13 +71,13 @@ public final class ResultScore {
      * @param victoryOrder         completion order of a successful
      *                             independence, one or more; null when it did
      *                             not succeed
-     * @param declarationYear      calendar year of the declaration; required
+     * @param declarationTurn      elapsed round of the declaration; required
      *                             for a successful independence
      * @return immutable calculated result
      */
     static ResultScore of(final BaseScore base, final int destroyedSettlements,
             final Difficulty difficulty, final long owlsBeyondTarget,
-            final Integer victoryOrder, final Integer declarationYear) {
+            final Integer victoryOrder, final Integer declarationTurn) {
         Preconditions.checkNotNull(base, "Base score is required");
         Preconditions.checkNotNull(difficulty, "Difficulty is required");
         Preconditions.checkArgument(destroyedSettlements >= 0,
@@ -87,14 +87,14 @@ public final class ResultScore {
         Preconditions.checkArgument(victoryOrder == null || victoryOrder >= 1,
                 "Invalid victory order");
         Preconditions.checkArgument(
-                victoryOrder == null || declarationYear != null,
-                "A successful independence needs its declaration year");
+                victoryOrder == null || declarationTurn != null,
+                "A successful independence needs its declaration turn");
         final boolean successful = victoryOrder != null;
         final long pointsPerSettlement = difficulty.ordinal() + 1L;
         return new ResultScore(base, destroyedSettlements, pointsPerSettlement,
                 owlsBeyondTarget,
                 successful ? orderBonusPercent(victoryOrder) : 0,
-                successful ? earlyPoints(declarationYear) : 0L,
+                successful ? earlyPoints(declarationTurn) : 0L,
                 difficultyPercent(difficulty));
     }
 
@@ -108,12 +108,13 @@ public final class ResultScore {
                 : 0;
     }
 
-    /**
-     * @param declarationYear calendar year of a successful declaration
-     * @return points for declaring before 1780, zero from 1780 on
-     */
-    static long earlyPoints(final int declarationYear) {
-        return Math.max(0L, (long) EARLY_DECLARATION_YEAR - declarationYear);
+    /** Preserve the original bonus curve independently of displayed years. */
+    static long earlyPoints(final int declarationTurn) {
+        Preconditions.checkArgument(declarationTurn >= 0,
+                "Negative declaration turn");
+        return Math.max(0L,
+                INITIAL_EARLY_POINTS - Math.min(110, declarationTurn)
+                        - Math.max(0, declarationTurn - 110) / 4);
     }
 
     /**

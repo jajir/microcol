@@ -6,9 +6,10 @@
   },
   "model": {
   "calendar": {
-    "startYear": 1490,
-    "endYear": 1800,
-    "numberOfPlayedTurns": 219
+    "startYear": 1,
+    "endYear": 12,
+    "numberOfPlayedTurns": 219,
+    "turnLimit": 910
   },
   "units": [
     {

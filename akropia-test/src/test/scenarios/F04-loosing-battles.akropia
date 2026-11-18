@@ -8,9 +8,10 @@
     "combatRandomState": 0,
     "difficulty": "CONQUISTADOR",
   "calendar": {
-    "startYear": 1490,
-    "endYear": 1800,
-    "numberOfPlayedTurns": 219
+    "startYear": 1,
+    "endYear": 12,
+    "numberOfPlayedTurns": 219,
+    "turnLimit": 910
   },
   "units": [
     {
@@ -5065,7 +5066,8 @@
         "computer": false,
         "gold": 484,
         "declaredIndependence": true,
-        "declarationYear": 1627,
+        "declarationYear": 1,
+        "declarationTurn": 0,
         "rebellionColonyIds": [1, 2],
         "extraData": {},
         "visible": {

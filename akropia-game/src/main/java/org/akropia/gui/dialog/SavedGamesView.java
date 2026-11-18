@@ -489,7 +489,8 @@ public final class SavedGamesView {
             return texts.get(SavedGameText.summaryMissing) + saved;
         }
         try {
-            String year = String.valueOf(value.getYear()) + " AD";
+            String year = value.getYear() + " · " + value.getDay() + "/"
+                    + value.getMonth();
             if (value.getSeason() != null) {
                 year += " " + texts.get(Loc.getTerrainDescription(
                         Calendar.Season.valueOf(value.getSeason())));

@@ -52,16 +52,17 @@ import javafx.stage.Stage;
  * residents, so the national capacity is 4 x 1,600 = 6,400 liberty points. A
  * town hall makes 1 unattended owl plus 3 per worker; at 50 percent support
  * every worker makes one more, and five Tories stay below the Discoverer
- * threshold of 10. Owls become liberty one for one. The calendar counts years
- * until 1600 (turn 110) and then four turns a year: turns 698 to 701 are 1747.
+ * threshold of 10. Owls become liberty one for one. The expedition calendar has
+ * 84 days per year: turns 698 to 701 are in year 9. The early-declaration bonus
+ * retains its original round-based curve.
  * </p>
  * <ul>
  * <li>Turn 698: 1,500 gold; 4 x 762 = 3,048 of 6,400 (47 percent), so no
  * declaration is offered; 40 + 12 = 52 Dutch colonists; 160 ore; the Discoverer
  * force of 4 infantry, 2 cavalry, 2 artillery and 2 men-of-war in reserve.</li>
  * <li>Turn 699, after one update of 4 x 2 x (1 + 3 x 6) = 152 owls: 3,200 of
- * 6,400, exactly 50 percent. The declaration in 1747 musters floor(4 x 1/2) = 2
- * veterans per garrisoned colony, the two lowest identities: 500, 501, 504,
+ * 6,400, exactly 50 percent. The declaration in year 9 musters floor(4 x 1/2) =
+ * 2 veterans per garrisoned colony, the two lowest identities: 500, 501, 504,
  * 505, 508 and 509. Home Europe closes, and the player selects the export of
  * ore. Nothing is sold before the update.</li>
  * <li>Turn 700, after the first update since the declaration: the target of 375
@@ -70,10 +71,10 @@ import javafx.stage.Stage;
  * home market halves the 240 to 120, so the Dutch hold 1,620 gold and 100 ore.
  * The first royal turn put all eight ground units on the two men-of-war: six on
  * the first and two on the second.</li>
- * <li>Victory: one Dutch completion first (+100 percent), 1780 - 1747 = 33
- * early points, Discoverer 50 percent, no destroyed settlement, no father, and
- * the owls after the target are the counted owls less 375. The result is the
- * only, first entry of a Hall of Fame that was empty.</li>
+ * <li>Victory: one Dutch completion first (+100 percent), 33 early points from
+ * the declaration round, Discoverer 50 percent, no destroyed settlement, no
+ * father, and the owls after the target are the counted owls less 375. The
+ * result is the only, first entry of a Hall of Fame that was empty.</li>
  * </ul>
  * <p>
  * The course of the war is not part of the literal ledger. Each royal crossing
@@ -96,7 +97,7 @@ public class TC_187_F220_independence_journey_test extends AbstractAkropiaTest {
 
     /** Derived ledger; see the class comment. */
     private static final int START_TURN = 698;
-    private static final int YEAR = 1747;
+    private static final int YEAR = 9;
     private static final int START_LIBERTY = 3048;
     private static final int DECLARATION_LIBERTY = 3200;
     private static final int LIBERTY_AFTER_FIRST_UPDATE = 3376;

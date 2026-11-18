@@ -61,7 +61,7 @@ public class GameModelPoDaoTest {
                 });
 
         assertEquals(
-                "com.google.gson.stream.MalformedJsonException: Expected name at line 189 column 9 path $.model.units[9].action",
+                "com.google.gson.stream.MalformedJsonException: Expected name at line 190 column 9 path $.model.units[9].action",
                 exception.getMessage());
     }
 

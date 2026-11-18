@@ -237,11 +237,11 @@ class IndependenceDeclarationTest {
     }
 
     @ParameterizedTest
-    @CsvSource({ "1490,0,true", "1600,0,true", "1700,0,true", "1700,399,true",
-            "1700,400,true", "1700,404,true" })
+    @CsvSource({ "1,0,true", "1,83,true", "1,84,true", "1,399,true",
+            "1,400,true", "1,404,true" })
     void declarationHasNoCalendarDeadline(final int startYear, final int turns,
             final boolean open) {
-        // 1700 plus 399 turns is winter 1799; 400 turns is spring 1800.
+        // Independence remains available across expedition years.
         final GameModelPo data = data(true);
         fullSupport(data);
         date(data, startYear, turns);
@@ -492,7 +492,7 @@ class IndependenceDeclarationTest {
     void aCalendarChangeDuringConfirmationDoesNotPreventDeclaration() {
         final GameModelPo data = data(true);
         fullSupport(data);
-        date(data, 1700, 399);
+        date(data, 1, 83);
         final Model model = load(data);
         final Player dutch = model.getPlayerByName("Dutch");
         model.addListener(new ModelListenerAdapter() {
@@ -504,7 +504,7 @@ class IndependenceDeclarationTest {
         });
         dutch.declareIndependence();
         assertTrue(dutch.isDeclaredIndependence());
-        assertEquals(Optional.of(1800), dutch.getDeclarationYear());
+        assertEquals(Optional.of(2), dutch.getDeclarationYear());
         assertTrue(load(data).getPlayerByName("Dutch")
                 .isPossibleToDecalareIndependence());
     }
@@ -570,6 +570,20 @@ class IndependenceDeclarationTest {
         model.getPlayerByName("Dutch").declareIndependence();
         final ModelPo saved = model.save();
         savedDutch(saved).setDeclarationYear(null);
+        assertThrows(IllegalArgumentException.class, () -> Model.make(saved,
+                MissionImpl.getPredefinedGameOverEvaluators()));
+    }
+
+    @Test
+    void aDeclarationNeedsItsExactSavedTurn() {
+        final Model model = load(musterData(120L));
+        model.getPlayerByName("Dutch").declareIndependence();
+        final ModelPo saved = model.save();
+        savedDutch(saved).setDeclarationTurn(null);
+        assertThrows(IllegalArgumentException.class, () -> Model.make(saved,
+                MissionImpl.getPredefinedGameOverEvaluators()));
+        savedDutch(saved).setDeclarationTurn(
+                model.getCalendar().getNumberOfPlayedTurns() + 1);
         assertThrows(IllegalArgumentException.class, () -> Model.make(saved,
                 MissionImpl.getPredefinedGameOverEvaluators()));
     }
@@ -719,7 +733,7 @@ class IndependenceDeclarationTest {
         fullSupport(data);
         final Model model = load(data);
         final Player dutch = model.getPlayerByName("Dutch");
-        assertEquals(1490, model.getCalendar().getCurrentYear());
+        assertEquals(1, model.getCalendar().getCurrentYear());
         assertEquals(3, dutch.getColonies().size());
         assertEquals(1L, dutch.getColonies().stream().filter(
                 colony -> model.isOwnedCoastalPort(dutch, colony.getLocation()))

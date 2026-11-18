@@ -233,7 +233,7 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
 
         // Selecting a recovery point only shows its details.
         saves.openLoad();
-        audit.verifyRecoveryOption(RecoverySlot.LATEST_TURN, true, "1509");
+        audit.verifyRecoveryOption(RecoverySlot.LATEST_TURN, true, "1 · 6/3");
         audit.selectRecovery(RecoverySlot.LATEST_TURN);
         saves.verifyGameUnchanged();
         audit.verifyRecoveryBytesUnchanged();
@@ -351,8 +351,9 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         game.exitToMenu().verifyMainScreen();
         audit.verifyRecoveryAbsent(RecoverySlot.LATEST_POSITION);
         audit.openRecoveryChooser();
-        audit.verifyTurnSnapshotOptions("1519", "1510", "1511", "1512", "1513",
-                "1514", "1515", "1516", "1517", "1518");
+        audit.verifyTurnSnapshotOptions("1 · 2/5", "1 · 7/3", "1 · 1/4",
+                "1 · 2/4", "1 · 3/4", "1 · 4/4", "1 · 5/4", "1 · 6/4",
+                "1 · 7/4", "1 · 1/5");
 
         // Loading the oldest snapshot rewrites and rotates nothing.
         audit.chooseOldestTurnSnapshot();

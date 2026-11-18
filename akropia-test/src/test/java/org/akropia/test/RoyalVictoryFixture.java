@@ -96,6 +96,9 @@ final class RoyalVictoryFixture {
             final JsonObject player = element.getAsJsonObject();
             if (DUTCH.equals(player.get("name").getAsString())) {
                 player.addProperty("declaredIndependence", true);
+                player.addProperty("declarationTurn",
+                        model.getAsJsonObject("calendar")
+                                .get("numberOfPlayedTurns").getAsInt());
                 player.addProperty("declarationYear", currentYear);
                 player.add("rebellionColonyIds",
                         ownedColonyIds(colonies, DUTCH));

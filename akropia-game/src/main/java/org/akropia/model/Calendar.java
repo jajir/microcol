@@ -9,19 +9,17 @@ import com.google.common.base.Preconditions;
 
 public final class Calendar {
 
-    private final static int YEAR_WHEN_START_COUNT_SEASONS = 1600;
+    public static final int DAYS_PER_MONTH = 7;
+    public static final int MONTHS_PER_YEAR = 12;
+    public static final int DAYS_PER_YEAR = DAYS_PER_MONTH * MONTHS_PER_YEAR;
+    public static final int DAYS_PER_SEASON = 21;
+    private static final String[] MONTH_NAMES = { "Hekatombaion",
+            "Metageitnion", "Boedromion", "Pyanepsion", "Maimakterion",
+            "Poseideon", "Gamelion", "Anthesterion", "Elaphebolion",
+            "Mounichion", "Thargelion", "Skirophorion" };
+    private int turnLimit;
 
-    /** From spring of this year, losing the last colony ends ordinary play. */
-    public final static int YEAR_WHEN_LAST_COLONY_ENDS_GAME = 1600;
-
-    /** Spring of this year is the scoring boundary of free play (R-0193). */
-    public final static int YEAR_OF_SCORING_BOUNDARY = 1800;
-
-    /**
-     * Spring of this year ends all scored free play (R-0193). It is the end
-     * year a scored calendar must carry; an unscored calendar, such as a
-     * mission, may use any deadline including this one.
-     */
+    /** Legacy fixture horizon; scored free play has no calendar deadline. */
     public final static int YEAR_OF_FREE_PLAY_END = 1850;
 
     private final int startYear;
@@ -83,16 +81,34 @@ public final class Calendar {
         this.endYear = endYear;
         this.numberOfPlayedTurns = numberOfPlayedTurns;
         this.scoredPlay = scoredPlay;
+        this.turnLimit = Math.multiplyExact(endYear - startYear, DAYS_PER_YEAR);
     }
 
     public static Calendar make(final CalendarPo cal) {
-        return new Calendar(cal.getStartYear(), cal.getEndYear(),
-                cal.getNumberOfPlayedTurns(), cal.isScoredPlay());
+        Preconditions.checkArgument(
+                cal.getTurnLimit() != null && cal.getTurnLimit() > 0,
+                "A positive mission turn limit is required.");
+        final Calendar result = new Calendar(cal.getStartYear(),
+                cal.getEndYear(), cal.getNumberOfPlayedTurns(),
+                cal.isScoredPlay());
+        result.turnLimit = cal.getTurnLimit();
+        return result;
     }
 
-    private int getTurnWhenStartCountsSeasons() {
-        final int out = YEAR_WHEN_START_COUNT_SEASONS - startYear;
-        return out < 0 ? 0 : out;
+    public int getDayOfMonth() {
+        return numberOfPlayedTurns % DAYS_PER_MONTH + 1;
+    }
+
+    public int getMonthOfYear() {
+        return numberOfPlayedTurns % DAYS_PER_YEAR / DAYS_PER_MONTH + 1;
+    }
+
+    public String getMonthName() {
+        return MONTH_NAMES[getMonthOfYear() - 1];
+    }
+
+    public int getDaysUntilNextSeason() {
+        return DAYS_PER_SEASON - numberOfPlayedTurns % DAYS_PER_SEASON;
     }
 
     public int getStartYear() {
@@ -108,32 +124,24 @@ public final class Calendar {
     }
 
     public Optional<Season> getCurrentSeason() {
-        if (numberOfPlayedTurns < getTurnWhenStartCountsSeasons()) {
-            return Optional.empty();
-        } else {
-            final int index = (numberOfPlayedTurns
-                    - getTurnWhenStartCountsSeasons()) % 4;
-            return Optional.of(Season.values()[index]);
-        }
+        return Optional.of(Season
+                .values()[(numberOfPlayedTurns / DAYS_PER_SEASON + 1) % 4]);
     }
 
     boolean isFinished() {
-        return !scoredPlay && getCurrentYear() >= endYear;
+        return !scoredPlay && numberOfPlayedTurns >= turnLimit;
     }
 
     /**
-     * @return whether this game was saved with the free-play score policy
-     *         (R-0193): the frozen result at spring 1800 and the end at spring
-     *         1850. Missions, even with an 1850 deadline, return false.
+     * @return whether this is free play, without a calendar deadline.
      */
     public boolean isScoredPlay() {
         return scoredPlay;
     }
 
     /**
-     * @param year calendar year
-     * @return whether the current year has reached the given one; the year
-     *         changes in spring, so this is true from that spring on
+     * @param year expedition year
+     * @return whether the current year has reached the given one
      */
     public boolean hasReachedYear(final int year) {
         return getCurrentYear() >= year;
@@ -141,7 +149,7 @@ public final class Calendar {
 
     void endRound() {
         Preconditions.checkState(!isFinished(),
-                "End year (%s) already reached.", endYear);
+                "Mission turn limit (%s) already reached.", turnLimit);
 
         numberOfPlayedTurns++;
     }
@@ -149,17 +157,13 @@ public final class Calendar {
     public int getYearForTurnNo(final int turnNo) {
         Preconditions.checkArgument(turnNo >= 0,
                 "Turn number must not be negative.");
-        final int annualTurns = getTurnWhenStartCountsSeasons();
-        if (turnNo <= annualTurns) {
-            return startYear + turnNo;
-        }
-        return Math.max(startYear, YEAR_WHEN_START_COUNT_SEASONS)
-                + (turnNo - annualTurns) / 4;
+        return startYear + turnNo / DAYS_PER_YEAR;
     }
 
     public CalendarPo save() {
         final CalendarPo out = new CalendarPo();
         out.setStartYear(startYear);
+        out.setTurnLimit(turnLimit);
         out.setEndYear(endYear);
         out.setScoredPlay(scoredPlay);
         out.setNumberOfPlayedTurns(numberOfPlayedTurns);

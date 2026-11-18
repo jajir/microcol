@@ -6,9 +6,10 @@
     "combatRandomState": 0,
     "difficulty": "CONQUISTADOR",
     "calendar": {
-      "startYear": 1630,
-      "endYear": 1850, "scoredPlay": true,
-      "numberOfPlayedTurns": 3
+      "startYear": 1,
+      "endYear": 12, "scoredPlay": true,
+      "numberOfPlayedTurns": 83,
+      "turnLimit": 880
     },
     "units": [
       {

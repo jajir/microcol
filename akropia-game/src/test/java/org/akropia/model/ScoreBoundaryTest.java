@@ -54,10 +54,10 @@ class ScoreBoundaryTest {
 
     @Test
     void missionStillHasItsAuthoredDeadline() {
-        Calendar mission = new Calendar(1849, 1850, 3, false);
+        Calendar mission = new Calendar(1, 2, 83, false);
         mission.endRound();
         assertTrue(mission.isFinished());
-        Calendar free = new Calendar(1849, 1850, 3, true);
+        Calendar free = new Calendar(1, 2, 83, true);
         free.endRound();
         free.endRound();
         assertFalse(free.isFinished());

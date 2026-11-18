@@ -249,6 +249,15 @@ public final class PlayerPo {
      * colonial nation and null for every other player.
      */
     private Integer declarationYear;
+    private Integer declarationTurn;
+
+    public Integer getDeclarationTurn() {
+        return declarationTurn;
+    }
+
+    public void setDeclarationTurn(final Integer turn) {
+        declarationTurn = turn;
+    }
 
     public Integer getDeclarationYear() {
         return declarationYear;

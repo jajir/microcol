@@ -113,6 +113,7 @@ public abstract class Player {
      * declaration. Null until a colonial nation declares.
      */
     private Integer declarationYear;
+    private Integer declarationTurn;
 
     /**
      * Native settlements this nation destroyed by conquest (R-0196). Each one
@@ -251,6 +252,7 @@ public abstract class Player {
             player.loadRebellionVictoryOrder(
                     playerPo.getRebellionVictoryOrder());
             player.loadDeclarationYear(playerPo.getDeclarationYear());
+            player.loadDeclarationTurn(playerPo.getDeclarationTurn());
             player.loadNativeSettlementsDestroyed(
                     playerPo.getNativeSettlementsDestroyed());
             return player;
@@ -627,6 +629,7 @@ public abstract class Player {
         out.setRebellionLossReason(rebellionLossReason);
         out.setRebellionVictoryOrder(rebellionVictoryOrder);
         out.setDeclarationYear(declarationYear);
+        out.setDeclarationTurn(declarationTurn);
         out.setNativeSettlementsDestroyed(nativeSettlementsDestroyed);
         out.setRivalLastServedColonyId(rivalLastServedColonyId);
         out.setRivalParkedCarrierIds(new ArrayList<>(rivalParkedCarrierIds));
@@ -1030,7 +1033,7 @@ public abstract class Player {
                 : intervention.getOwlsBeyondTarget();
         return ResultScore.of(BaseScore.calculate(this),
                 nativeSettlementsDestroyed, model.getDifficulty(), owls,
-                rebellionVictoryOrder, declarationYear);
+                rebellionVictoryOrder, declarationTurn);
     }
 
     public int getCongressOwls() {
@@ -1154,7 +1157,25 @@ public abstract class Player {
                 || playerPo.getRebellionColonyIds().isEmpty())
                 && playerPo.getRebellionLossReason() == null
                 && playerPo.getRebellionVictoryOrder() == null
-                && playerPo.getDeclarationYear() == null;
+                && playerPo.getDeclarationYear() == null
+                && playerPo.getDeclarationTurn() == null;
+    }
+
+    private void loadDeclarationTurn(final Integer saved) {
+        if (!declaredIndependence) {
+            Preconditions.checkArgument(saved == null,
+                    "Only a declared nation has a declaration turn");
+            return;
+        }
+        Preconditions
+                .checkArgument(
+                        saved != null && saved >= 0
+                                && saved <= model.getCalendar()
+                                        .getNumberOfPlayedTurns()
+                                && model.getCalendar().getYearForTurnNo(
+                                        saved) == declarationYear,
+                        "Declared nation needs a valid declaration turn");
+        declarationTurn = saved;
     }
 
     /**
@@ -2564,8 +2585,9 @@ public abstract class Player {
             final List<VoyageReversalOffer> reversals = planInboundReversals();
             reversals.forEach(model::checkCurrentVoyageReversal);
             declaredIndependence = true;
-            // The year of the declaration fixes the early points (R-0196).
+            // Keep the displayed year and exact round for the early bonus.
             declarationYear = model.getCalendar().getCurrentYear();
+            declarationTurn = model.getCalendar().getNumberOfPlayedTurns();
             // The declaration fixes the rebellion's first colonies (R-0192).
             model.getColonies(this)
                     .forEach(colony -> rebellionColonyIds.add(colony.getId()));

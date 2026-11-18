@@ -105,8 +105,9 @@ public final class ReferenceExpedition {
                 NativeRelations.freshLocalAlarm(model.getNativeSettlements()));
         model.setNativeLandRights(new ArrayList<>());
         model.setNativeLandTakings(new ArrayList<>());
-        model.getCalendar().setStartYear(1490);
-        model.getCalendar().setEndYear(Calendar.YEAR_OF_FREE_PLAY_END);
+        model.getCalendar().setStartYear(1);
+        model.getCalendar().setEndYear(15);
+        model.getCalendar().setTurnLimit(1110);
         model.getCalendar().setScoredPlay(true);
         final WorldMapPo map = new WorldMapPo();
         map.setMaxX(maxX);

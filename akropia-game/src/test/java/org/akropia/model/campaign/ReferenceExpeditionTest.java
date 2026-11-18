@@ -105,8 +105,8 @@ class ReferenceExpeditionTest {
                 assertTrue(po.getGameManager().getPlayers().stream()
                         .allMatch(player -> player.getVisible()
                                 .getVisibilitySet().isEmpty()));
-                assertEquals(1490, po.getCalendar().getStartYear());
-                assertEquals(1850, po.getCalendar().getEndYear());
+                assertEquals(1, po.getCalendar().getStartYear());
+                assertEquals(15, po.getCalendar().getEndYear());
                 assertTrue(po.getCalendar().isScoredPlay());
                 assertFalse(po.getGameManager().isGameStarted());
                 assertEquals(selected.getPlayerName(),
@@ -246,7 +246,7 @@ class ReferenceExpeditionTest {
                 .loadFromClassPath(FreePlayMap.REFERENCE.getResource());
         game.setModel(ReferenceExpedition.create(game.getModel().getMap(),
                 nation, difficulty));
-        assertEquals(1490, game.getModel().getCalendar().getStartYear());
+        assertEquals(1, game.getModel().getCalendar().getStartYear());
         final Model fresh = Model.make(game.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         assertIdentityAndRules(fresh, nation, difficulty, rule);

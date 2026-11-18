@@ -407,6 +407,9 @@ final class IndependenceFixture {
                 if ("Dutch".equals(player.get("name").getAsString())
                         && !player.has("whosKingThisPlayerIs")) {
                     player.addProperty("declaredIndependence", true);
+                    player.addProperty("declarationTurn",
+                            model.getAsJsonObject("calendar")
+                                    .get("numberOfPlayedTurns").getAsInt());
                     // The declaration is dated by the saved calendar (R-0196).
                     player.addProperty("declarationYear",
                             RebellionJson.currentYear(model));

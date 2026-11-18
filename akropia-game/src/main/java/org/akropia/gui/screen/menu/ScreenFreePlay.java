@@ -66,6 +66,7 @@ public final class ScreenFreePlay extends AbstractScreenMenu
     private final TextField seed = new TextField();
     private final TextField name = new TextField();
     private final Label steps = new Label();
+    private final Label calendarIntro = new Label();
     private final Label summary = new Label();
     private final Label error = new Label();
     private final Label nationNote = new Label();
@@ -119,7 +120,10 @@ public final class ScreenFreePlay extends AbstractScreenMenu
         generated.getChildren().addAll(row(sizeLabel, sizes),
                 row(layoutLabel, layouts),
                 row(seedLabel, new HBox(8, seed, newSeed)));
-        world.getChildren().addAll(row(mapLabel, maps), generated);
+        calendarIntro.setId("expeditionCalendarIntro");
+        calendarIntro.setWrapText(true);
+        world.getChildren().addAll(calendarIntro, row(mapLabel, maps),
+                generated);
         difficulties.setId("freePlayDifficulty");
         difficulties.getItems().setAll(Difficulty.values());
         difficulties.setValue(Difficulty.CONQUISTADOR);
@@ -431,6 +435,7 @@ public final class ScreenFreePlay extends AbstractScreenMenu
 
     @Override
     public void updateLanguage(I18n language) {
+        calendarIntro.setText(i18n.get(Loc.expeditionCalendarIntro));
         final int mapIndex = maps.getSelectionModel().getSelectedIndex();
         final int nationIndex = nations.getSelectionModel().getSelectedIndex();
         maps.getItems().setAll(mapNames(language));

@@ -89,7 +89,8 @@ final class MercenaryFixture {
         france.addProperty("gold", 1000);
         france.addProperty("declaredIndependence", false);
         for (final String key : new String[] { "rebellionColonyIds",
-                "declarationYear", "intervention", "mercenaryRebelUpdates" }) {
+                "declarationYear", "declarationTurn", "intervention",
+                "mercenaryRebelUpdates" }) {
             france.remove(key);
         }
         // France has met nobody and remembers no colony.

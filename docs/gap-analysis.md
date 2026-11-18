@@ -10,7 +10,7 @@
 4. **Amended 2026-11-03:** the user selected rectangular B1 flags, separate large and simplified small drawings, whole animals with one shared light fill, and a darker ochre field for Miletus. The new [proposal sheets](graphics.md#vlajky-b1-a-ukazky-jednotek-3-listopadu-2026) include a ship, servant and rider with upper-right vertical nation-colored tags bearing sample lowercase letters. Random letters are presentation examples only; this does not change game-state semantics. The standing graphics rule is black hand-irregular pen lines around 2 logical UI pixels and flat solid fills.
 5. **Selected later on 2026-11-03:** variant 03 is the accepted large/small flag reference for all four powers. [R-0403](requirements/done/R-0403.md) owns replacing existing flags and an upper-right vertical banner for every map unit: visible but empty without an instruction, otherwise one letter identifying the actual activity. Preserve existing activity meanings; proposal letters are not random runtime states. [Current graphical decision](graphics.md#vybrane-vlajky-03).
 6. **Banner answers accepted on 2026-11-03:** [the shared graphics rule](graphics.md#vybrane-vlajky-03) defines existing `s/f/p/c/r` and new `g` (go to), `t` (trade route), `w` (colony work including fishing). A retained instruction keeps its letter while waiting, paused or blocked; the detail explains why. A trade route retains `t` during travel between stops. Large/small/banner starting dimensions are 120 × 80 / 30 × 20 / 16 × 20 logical px, with approximately 2px top/right inset for the banner; visual adjustment remains implementation work. R-0403 chapter 4 has no unanswered questions; this does not start implementation or change readiness.
-7. **R-0402 answers accepted on 2026-11-03:** [R-0402 2.13–17](requirements/done/R-0402.md#2-chovani) records the eight animal/color directions, complete old-to-new identity mapping with existing national profiles and settlement mechanics preserved, and homeland terminology and narrative. The atmosphere around 600 BCE does not change the calendar: existing dates, display, progression, seasons and gameplay/scoring/end boundaries remain exactly as configured. The proposed expedition-year display was rejected. Exact artwork/palette validation remains production work; chapter 4 contains None and status remains `new`.
+7. **R-0402 answers accepted on 2026-11-03:** [R-0402 2.13–17](requirements/done/R-0402.md#2-chovani) records the eight animal/color directions, complete old-to-new identity mapping with existing national profiles and settlement mechanics preserved, and homeland terminology and narrative. The original calendar exception was superseded on 2026-11-18 by the [expedition calendar](#calendar-and-starting-expeditions), including the setting around 1000 BCE. Exact artwork/palette validation remains production work; chapter 4 contains None and status remains `new`.
 
 **2026-10-14 requirement migration:** current ownership and newer evidence for
 R-0001–R-0040 are in the [migration map](requirements/migration-2026-10-14.md);
@@ -802,15 +802,18 @@ keeps answered questions out of the current catalogue and active requirements.
 
 ### Calendar and starting expeditions
 
-1. **Always start newly created games in 1490**, including all bundled campaign
-   starts. This is an intentional departure
-   from the manual's 1500 reference, not a change of the historical comparison.
-   Loading a current-schema game retains its saved date and never restarts it.
-   Test fixtures may set a later date to exercise a boundary.
-2. Provisionally retain the present pacing: one year per complete round until
-   1600, then spring → summer → autumn → winter, one season per round. Thus
-   1599 → spring 1600 → summer 1600 and winter 1600 → spring 1601. Mission-specific
-   objectives remain separate from the free-play end rules in [end dates and scoring](#end-dates-and-scoring).
+1. **Agreed 2026-11-18:** the expedition is loosely set around 1000 BCE. The
+   player-facing calendar counts from year 1 of the expedition, not BCE/AD.
+   One complete round is one day; each of twelve months has seven days, making
+   84 days per year. The first date is day 1, month 1, year 1, with zero elapsed days.
+2. Months, in order: Hekatombaion, Metageitnion, Boedromion, Pyanepsion,
+   Maimakterion, Poseideon, Gamelion, Anthesterion, Elaphebolion, Mounichion,
+   Thargelion, Skirophorion. Months 1–3 are summer, 4–6 autumn, 7–9 winter and
+   10–12 spring. These names borrow from the later Athenian calendar; seven-day
+   months and equal 21-day seasons are deliberate game conventions, not a
+   reconstruction of Greek practice around 1000 BCE. No leap months or weeks.
+   Mission deadlines retain their authored number of rounds via saved `turnLimit`;
+   free play has no calendar deadline. Action durations remain measured in turns.
 3. A free-play game contains all four European nations, one human selection and
    the other three rivals, with matching Crowns and distinct internal identities.
    Initial European pairs are at peace. Every expedition starts aboard its own
@@ -822,12 +825,24 @@ keeps answered questions out of the current catalogue and active requirements.
    does not consume a third hold. No starting expert is implied. Use the manual's
    ship capacities/speeds. Native settlement placement belongs to map generation;
    this expedition decision does not require an otherwise unfinished map generator.
-5. Current-schema positions and explicit test scenarios may begin after 1600.
-   Their seasons advance from that stored start, never back to 1600: a 1630
-   start gives spring/summer/autumn/winter 1630, then spring 1631. Historical
-   statistics use the same zero-based round-to-year conversion as the current
-   date. Reject negative elapsed/query round indexes. These clarified boundaries
-   are implemented by [R-0051](requirements/done/R-0051.md); its [dated acceptance](functional-tests.md#r-0051-calendar-and-continue-2026-10-15) covers model conversion, actual displayed dates and Continue.
+5. Loading retains elapsed rounds and therefore the exact day, month, season and
+   year. Negative elapsed/query rounds and missing or invalid mission turn limits
+   are rejected. Bundled scenarios use the current schema directly; old player
+   saves are not migrated or rewritten merely by opening them. Historical queries
+   use the same round-to-year conversion as the current date.
+6. The status bar shows `Year 3 · 5/8 · Winter` (localized). Hover help and the
+   accessible description give day, Greek month, expedition year, season and days
+   until the next season. The last day of a season has one day remaining. Context
+   help uses the same text. The calendar is informational and has no confirm/cancel
+   action. The in-game identity help explains the historical setting and shortened year.
+7. Early independence scoring retains its established pacing: at elapsed round `t`,
+   the bonus is `max(0, 290 - min(t, 110) - max(0, t - 110) / 4)` with integer division.
+   The declaration stores its exact round as well as its displayed expedition year;
+   loading validates both. This changes no action duration or bonus at a given round.
+8. This agreement supersedes the calendar exception in the archived R-0402
+   decision and the former 1490/1600 schedule in R-0051. Those dated records remain
+   historical evidence. Acceptance is recorded in
+   [functional evidence](functional-tests.md#expedition-calendar-2026-11-18).
 
 ### National turn processing
 

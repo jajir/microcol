@@ -12,8 +12,8 @@
 	<entry key="statusBar_tile_start">This is </entry>
 	<entry key="statusBar_tile_withUnit">with:</entry>
 	<entry key="statusBar_tile_unitCount">with %s units</entry>
-	<entry key="statusBar_era">Year</entry>
-	<entry key="statusBar_era_description">Current year</entry>
+	<entry key="statusBar_era">Year %s · %s/%s · %s</entry>
+	<entry key="statusBar_era_description">Day %s of %s · Year %s of the expedition · %s. Days until the next season: %s.</entry>
 	<entry key="statusBar_gold">Gold</entry>
 	<entry key="statusBar_gold_description">How many golden coins do you have.</entry>
 	<entry key="statusBar_status_description">Here will by simple help message</entry>
@@ -319,4 +319,5 @@
     <entry key="unitsPanel_tools">Tools: %s</entry>
     <entry key="close">Close</entry>
     <entry key="nativeLandChoose">Choose an option</entry>
+    <entry key="expeditionCalendarIntro">Around 1000 BC. Year 1 begins with your expedition. One round is one day; twelve months of seven days make a year. Greek month names are a historical inspiration.</entry>
 </properties>

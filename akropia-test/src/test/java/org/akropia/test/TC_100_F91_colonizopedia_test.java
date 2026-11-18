@@ -131,7 +131,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
 
         // Every rule family is listed; the first topic is shown at once.
         help.verifyTopicTitles(TOPICS);
-        help.verifySelectedTopic(IDENTITIES, "600 BC");
+        help.verifySelectedTopic(IDENTITIES, "1000 BC");
         help.pressDownArrow(1);
         help.verifySelectedTopic(MOVEMENT, MOVEMENT_PART);
 

@@ -1,4 +1,48 @@
+## Expedition calendar — 2026-11-18
+
+1. UC-004/UC-005: [calendar rules](gap-analysis.md#calendar-and-starting-expeditions)
+   now count 84 days per expedition year. `Calendar` owns conversion; the status
+   bar translates it and exposes the same detailed date through hover help
+   and accessibility. Mission round budgets are retained in `turnLimit`.
+2. Model checks cover every day in two years, month/season/year boundaries,
+   historical queries, invalid saved state and authored mission deadlines.
+   TC_37_F29 checks the final summer day, autumn, spring/year rollover and
+   Continue; TC_36_F28 checks one date advance per complete national round;
+   TC_21_F15 checks English/Czech layout. Existing save, reference expedition and
+   layout expectations use expedition dates.
+3. The early independence bonus retains its round-based curve; declaration
+   round/year consistency is validated and saved. Targeted score scenarios check
+   the same result before and after Continue.
+4. Model acceptance: `target/verification/run-vtcaa6u8`, completion
+   `20261118T064024Z-995c65c2880c`, passed all 5,133 checks in 400 reports
+   with zero failures, errors or skips (160.642 seconds, excluding 81.178 seconds
+   waiting for the local lock). This checks the working-tree candidate based on
+   `00cb54de0d1421c95dd81efa32dd9b640dd39e0c`.
+5. Initial targeted Docker run `20261118T064458Z-86ef93effb87`
+   (`target/docker-ui/run-rBipLR`) completed 24 checks with one failure,
+   zero errors/skips in 353.354 seconds: TC_191 TC_05 still expected `1508`
+   in the suggested save name. Its expectation now checks `dutch-1`.
+   The Czech calendar screenshot was reviewed at 900 × 700: short date and
+   detailed status help remain readable without overlap.
+6. The same targeted selection passed in completion
+   `20261118T065138Z-927030a8a0d7`, reports `target/docker-ui/run-YTtEg5`:
+   all 24 checks in ten reports, zero failures/errors/skips, 398.974 seconds.
+   Selection: PageVerificationContractTest; TC_37 and TC_36; TC_21 TC_10;
+   TC_24 TC_01/06; TC_192 TC_03; TC_191 TC_05/11; TC_43 TC_05/07;
+   TC_100 TC_01; TC_161.
+7. Fixed smoke passed in completion `20261118T065847Z-640e461d89be`,
+   reports `target/verification/run-ivn7azoo`: 23 checks in 13 reports,
+   zero failures/errors/skips, 285.408 seconds including supervision and cleanup,
+   within the 420-second acceptance budget. All changed game/test sources match
+   the smoke snapshot; game sources also match the accepted model snapshot.
+8. Final review covered calendar boundaries, save-state validation, preserved
+   mission/score round budgets, localization, fixture changes and status layout.
+   Shared Java formatting, 14 documentation checks, name audit and strict
+   MkDocs passed. Local acceptance is complete; full regression and publication
+   were not verified in this task. Earlier failed attempts remain failed.
+
 <a id="text-and-escape-2026-11-17"></a>
+
 ## Text decoration and modal cancellation — 2026-11-17
 
 1. UC-114/115/119: shared controls, selected report/help tabs and saved-game
