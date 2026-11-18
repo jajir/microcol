@@ -2,6 +2,8 @@ package org.akropia.gui.screen.turnreport;
 
 import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.image.ButtonIcon;
+import org.akropia.gui.image.ImageProvider;
+import javafx.scene.image.ImageView;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ public final class TurnReportPanel implements GameScreen {
     private final GameModelController gameModelController;
 
     private final I18n i18n;
+    private final ImageProvider imageProvider;
 
     private final TurnReportView turnReportView;
 
@@ -52,12 +55,13 @@ public final class TurnReportPanel implements GameScreen {
     private List<TurnEvent> previousEvents = List.of();
 
     @Inject
-    TurnReportPanel(final I18n i18n,
+    TurnReportPanel(final I18n i18n, final ImageProvider imageProvider,
             final GameModelController gameModelController,
             final TurnReportView turnReportView, final TeService teService,
             final EventBus eventBus,
             final EuropeOpeningRequest europeOpeningRequest,
             final SelectedTileManager selectedTileManager) {
+        this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.selectedTileManager = selectedTileManager;
         this.europeOpeningRequest = Preconditions
                 .checkNotNull(europeOpeningRequest);
@@ -129,7 +133,23 @@ public final class TurnReportPanel implements GameScreen {
             map.setOnAction(event -> openMap(shownModel, at));
             actions.add(map);
         });
-        return new TurnEventPanel(turnEvent, actions.toArray(new Button[0]));
+        final ImageView icon;
+        if (turnEvent.getUnitIcon().isPresent()) {
+            icon = new ImageView(imageProvider
+                    .getUnitImage(turnEvent.getUnitIcon().orElseThrow()));
+            icon.setFitWidth(45);
+            icon.setFitHeight(45);
+            icon.setPreserveRatio(true);
+            icon.setId("turnEventUnitIcon-"
+                    + turnEvent.getUnitIcon().orElseThrow().name());
+        } else if (turnEvent.hasColonyIcon()) {
+            icon = ButtonIcon.COLONIES.createView();
+            icon.setId("turnEventColonyIcon");
+        } else {
+            icon = null;
+        }
+        return new TurnEventPanel(turnEvent, icon,
+                actions.toArray(new Button[0]));
     }
 
     /**

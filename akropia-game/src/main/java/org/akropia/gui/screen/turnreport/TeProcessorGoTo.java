@@ -28,9 +28,12 @@ public final class TeProcessorGoTo extends AbstractTeProcessor
         final String message = getI18n().get(key, unit, goTo.getUnitId(),
                 goTo.getDestinationName());
         if (goTo.isEurope()) {
-            return new TeItemEurope(message);
+            return new TeItemEurope(message).withUnitIcon(goTo.getUnitType());
         }
-        return goTo.getColonyId() == null ? new TeItemSimple(message)
-                : new TeItemColony(message, goTo.getColonyId());
+        return (goTo.getColonyId() == null
+                ? new TeItemSimple(message, goTo.getLocation())
+                : new TeItemColony(message, goTo.getColonyId(),
+                        goTo.getLocation()))
+                .withUnitIcon(goTo.getUnitType());
     }
 }

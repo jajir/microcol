@@ -29,6 +29,7 @@ public final class TeProcessorNativeConvert extends AbstractTeProcessor
         } else {
             message = Loc.nativeConvertReturned;
         }
-        return new TeItemSimple(getI18n().get(message));
+        return new TeItemSimple(getI18n().get(message))
+                .withUnitIcon(org.akropia.model.UnitType.COLONIST);
     }
 }

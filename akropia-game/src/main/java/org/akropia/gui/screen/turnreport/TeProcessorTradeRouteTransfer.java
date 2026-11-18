@@ -40,7 +40,8 @@ public final class TeProcessorTradeRouteTransfer extends AbstractTeProcessor
                             : TurnEvents.tradeRouteBought,
                     transfer.getRouteName(), carrier, transfer.getCarrierId(),
                     stop, amount, goods,
-                    String.format("%+d", transfer.getGoldChange())));
+                    String.format("%+d", transfer.getGoldChange())))
+                    .withUnitIcon(transfer.getCarrierType());
         }
         return new TeItemColony(
                 getI18n().get(
@@ -49,7 +50,8 @@ public final class TeProcessorTradeRouteTransfer extends AbstractTeProcessor
                         transfer.getRouteName(), carrier,
                         transfer.getCarrierId(), stop,
                         transfer.getColonyName().orElseThrow(), amount, goods),
-                transfer.getColonyId().orElseThrow());
+                transfer.getColonyId().orElseThrow())
+                .withUnitIcon(transfer.getCarrierType());
     }
 
 }

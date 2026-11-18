@@ -22,7 +22,8 @@ public class TeProcessorNewUnitInEurope extends AbstractTeProcessor
     @Override
     public TeItemSimple apply(final TurnEvent turnEvent) {
         if (turnEvent instanceof TurnEventNewUnitInEurope) {
-            return new TeItemEurope(getMessage());
+            return new TeItemEurope(getMessage())
+                    .withUnitIcon(org.akropia.model.UnitType.COLONIST);
         }
         return null;
     }

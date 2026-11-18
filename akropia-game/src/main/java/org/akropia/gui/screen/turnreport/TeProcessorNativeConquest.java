@@ -42,7 +42,7 @@ public final class TeProcessorNativeConquest extends AbstractTeProcessor
                                     UnitTypes.getUnitName(loss.getUnitType())),
                             getI18n().get(StatusBarMessageService
                                     .nationLabel(loss.getNation()))),
-                    loss.getLocation());
+                    loss.getLocation()).withUnitIcon(loss.getUnitType());
         }
         return null;
     }

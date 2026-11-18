@@ -28,7 +28,7 @@ public final class TeProcessorEducation extends AbstractTeProcessor
                         step.getColonyName(), step.getStudentId(),
                         name(step.getBeforeType(), step.wasVeteran()),
                         name(step.getAfterType(), step.isVeteran())),
-                step.getColonyId());
+                step.getColonyId()).withUnitIcon(step.getAfterType());
     }
 
     private String name(UnitType type, boolean veteran) {

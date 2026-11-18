@@ -226,6 +226,22 @@ public class ScreenTurnReport extends AbstractScreen {
         return EuropePortScreen.of(getContext());
     }
 
+    public void verifyNoticeIcon(final String messagePart,
+            final String expectedIconId) {
+        final Label message = getNodeFinder().lookup(".turn-event .label")
+                .queryAllAs(Label.class).stream()
+                .filter(label -> label.getText().contains(messagePart))
+                .findFirst().orElseThrow();
+        assertTrue(
+                message.getGraphic() instanceof javafx.scene.image.ImageView);
+        final javafx.scene.image.ImageView icon = (javafx.scene.image.ImageView) message
+                .getGraphic();
+        assertEquals(expectedIconId, icon.getId());
+        assertTrue(icon.isVisible());
+        assertTrue(icon.getBoundsInParent().getWidth() > 0);
+        assertTrue(icon.getImage() != null && !icon.getImage().isError());
+    }
+
     public void verifyMapAction(final org.akropia.model.Location at,
             final String expectedText) {
         final Button button = getMapButton(at);

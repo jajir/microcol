@@ -137,8 +137,10 @@ public abstract class Ship extends UnitWithCargo {
             if (manualVoyage) {
                 model.addTurnEvent(TurnEventProvider.getGoToOrder(getOwner(),
                         org.akropia.model.turnevent.TurnEventGoTo.Kind.ARRIVED_MAP,
-                        getId(), getType(), departureLocation.getX() + ", "
-                                + departureLocation.getY()));
+                        getId(), getType(),
+                        departureLocation.getX() + ", "
+                                + departureLocation.getY())
+                        .atLocation(departureLocation));
             }
             model.fireUnitArrivedToColonies(this);
         } else if (place.recordBlockedArrival()) {

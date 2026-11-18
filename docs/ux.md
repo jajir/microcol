@@ -75,6 +75,20 @@ přesné převody. Jde o návrh ověřovaný automatickými scénáři, ne o poz
 
 ## Přehled událostí — 14. listopadu 2026
 
+Doplnění schválené 18. listopadu 2026: zpráva o jednotce začíná její herní
+ikonou, zpráva o kolonii ikonou města. Konkrétní typ jednotky se bere ze
+zaznamenané události; obecné hlášení o novém obyvateli používá kolonistu.
+Dokončená budova má ikonu města, dokončená jednotka svou vlastní ikonu.
+Ikona doplňuje text, nenahrazuje název ani identifikátor. Zpráva o návratu
+lodi na mapu nabízí terčík „Show on map“ pro uložené místo příjezdu;
+pozdější pohyb lodi cíl tohoto odkazu nemění. U hlášení cesty s uloženým
+mapovým cílem vede terčík k tomuto cíli. Příjezd do domovského přístavu
+používá stávající „Open Home port“. Návrat do přehledu ani kliknutí na
+navigační tlačítka nevydává rozkaz a nespotřebuje tah. Automatické plavby
+obchodních tras zůstávají bez nových příjezdových hlášení.
+Ověření vlastní [evidence ikon a příjezdů](functional-tests.md#turn-report-icons-and-arrival-location-2026-11-18).
+
+
 1. Přehled tahu používá stejné světlé pozadí jako záhlaví a stavový řádek.
    Zprávy odděluje mezera, bez čar a vnějšího rámečku. Dlouhý text se zalamuje;
    dostupné akce jsou pod zprávou a při nedostatku místa se také zalomí.

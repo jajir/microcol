@@ -1,6 +1,7 @@
 package org.akropia.model.turnevent;
 
 import org.akropia.model.UnitType;
+import org.akropia.model.Location;
 import org.akropia.model.store.TurnEventPo;
 
 import com.google.common.base.Preconditions;
@@ -28,6 +29,7 @@ public final class TurnEventGoTo extends AbstractTurnEvent {
     private final String destinationName;
     private Integer colonyId;
     private boolean europe;
+    private Location location;
 
     public TurnEventGoTo(final String playerName, final Kind kind,
             final int unitId, final UnitType unitType,
@@ -50,6 +52,15 @@ public final class TurnEventGoTo extends AbstractTurnEvent {
         this.colonyId = colonyId;
         this.europe = europe;
         return this;
+    }
+
+    public TurnEventGoTo atLocation(final Location at) {
+        location = at;
+        return this;
+    }
+
+    public Location getLocation() {
+        return location;
     }
 
     public Integer getColonyId() {
@@ -87,6 +98,10 @@ public final class TurnEventGoTo extends AbstractTurnEvent {
         po.setGoToDestinationName(destinationName);
         po.setColonyId(colonyId);
         po.setGoToEurope(europe);
+        if (location != null) {
+            po.setGoToX(location.getX());
+            po.setGoToY(location.getY());
+        }
         return po;
     }
 
@@ -99,9 +114,14 @@ public final class TurnEventGoTo extends AbstractTurnEvent {
                         && po.getGoToUnitType() != null
                         && po.getGoToDestinationName() != null,
                 "Incomplete go-to event");
+        Preconditions.checkArgument(
+                (po.getGoToX() == null) == (po.getGoToY() == null),
+                "Incomplete go-to location");
         return new TurnEventGoTo(po.getPlayerName(),
                 Kind.valueOf(po.getGoToKind()), po.getGoToUnitId(),
                 po.getGoToUnitType(), po.getGoToDestinationName())
-                .destination(po.getColonyId(), po.isGoToEurope());
+                .destination(po.getColonyId(), po.isGoToEurope())
+                .atLocation(po.getGoToX() == null ? null
+                        : Location.of(po.getGoToX(), po.getGoToY()));
     }
 }

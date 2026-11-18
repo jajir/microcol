@@ -1,3 +1,10 @@
+## UC-013/016/043/114/119: ikony a místo příjezdu v přehledu — 18. listopadu 2026
+
+Zprávy označují jednotku nebo kolonii ikonou. Návrat lodi na mapu nabízí
+terčík vedoucí k zaznamenanému místu příjezdu, také po uložení a načtení.
+Chování a cesta hráče jsou v [UX přehledu událostí](ux.md#prehled-udalosti-14-listopadu-2026),
+scénáře a výsledky v [evidenci](functional-tests.md#turn-report-icons-and-arrival-location-2026-11-18).
+
 ## Dokončení práce pionýra — 18. listopadu 2026
 
 ## UC-033/042: dostupnost vybrané stavby po přesunu pracovníka — 18. listopadu 2026

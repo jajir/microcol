@@ -28,10 +28,12 @@ public class TeProcessorFaminePlagueColony extends AbstractTeProcessor
         if (turnEvent instanceof TurnEventFaminePlagueColony) {
             final TurnEventFaminePlagueColony te = (TurnEventFaminePlagueColony) turnEvent;
             if (te.getStocks().isEmpty()) {
-                return new TeItemSimple(getI18n().get(
-                        TurnEvents.faminePlagueColonyDestroyed,
-                        te.getColonyName(),
-                        getI18n().get(UnitTypes.getUnitName(te.getVictim()))));
+                return new TeItemSimple(
+                        getI18n().get(TurnEvents.faminePlagueColonyDestroyed,
+                                te.getColonyName(),
+                                getI18n().get(
+                                        UnitTypes.getUnitName(te.getVictim()))))
+                        .withColonyIcon();
             }
             return new TeItemColony(getI18n().get(TurnEvents.faminePlagueColony,
                     te.getColonyName(),

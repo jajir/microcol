@@ -312,4 +312,39 @@ class TeProcessorNoticeTextTest {
                         .tryLoad(po));
     }
 
+    @Test
+    void arrivalKeepsRecordedMapLocationAndUnitIconAfterLoading() {
+        final org.akropia.model.Location at = org.akropia.model.Location.of(50,
+                14);
+        final var arrival = new org.akropia.model.turnevent.TurnEventGoTo(
+                "Dutch",
+                org.akropia.model.turnevent.TurnEventGoTo.Kind.ARRIVED_MAP, 3,
+                UnitType.MERCHANTMAN, "50, 14").atLocation(at);
+        for (Locale locale : new Locale[] { Locale.ROOT, CZECH }) {
+            final TeItemSimple item = new TeProcessorGoTo(i18n(locale))
+                    .apply(org.akropia.model.turnevent.TurnEventGoTo
+                            .tryLoad(arrival.save()));
+            assertEquals(at, item.getLocation().orElseThrow());
+            assertEquals(UnitType.MERCHANTMAN,
+                    item.getUnitIcon().orElseThrow());
+            assertTrue(item.getMessage().contains("50, 14"));
+        }
+        final TurnEventPo invalid = arrival.save();
+        invalid.setGoToY(null);
+        org.junit.jupiter.api.Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> org.akropia.model.turnevent.TurnEventGoTo
+                        .tryLoad(invalid));
+    }
+
+    @Test
+    void projectIconsDistinguishBuildingsFromProducedUnits() {
+        final TeProcessorProjectCompleted processor = new TeProcessorProjectCompleted(
+                i18n(Locale.ROOT));
+        final TeItemSimple building = processor.apply(constructionDone());
+        assertTrue(building.hasColonyIcon());
+        assertTrue(building.getUnitIcon().isEmpty());
+        final TeItemSimple wagon = processor.apply(unitDone());
+        assertEquals(UnitType.WAGON, wagon.getUnitIcon().orElseThrow());
+    }
 }

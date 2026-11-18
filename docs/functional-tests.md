@@ -1,3 +1,45 @@
+## Turn report icons and arrival location — 2026-11-18
+
+1. Scope: UC-013/016/043/114/119. Notices identify units and colonies with
+   existing artwork; manual map arrivals retain their location in the saved
+   event and offer the existing map action. Go-to notices retain a known map
+   destination. Home-port and owned-colony actions remain available.
+2. Model coverage: `GoToOrderTest.manualMapArrivalRecordsTheActualSquareAndSurvivesReload`
+   exercises a real round trip, reload, and later movement;
+   `TeProcessorNoticeTextTest` checks bilingual arrival text, persisted location,
+   unit/building icon selection, and rejection of incomplete coordinates.
+   Targeted Docker/Xvfb selection: full TC203, TC180 and TC103 plus
+   `PageVerificationContractTest`. TC203/04 checks the loaded voyage, arrival
+   icon, target button, selected visible map tile, and reopening the report.
+3. Existing `units.svg` and `game-toolbar.svg` are genuine vector sources.
+   `python3 scripts/graphics/export-graphics.py units controls --check` passed
+   all nine exports with librsvg 2.61.4. No production artwork was changed.
+4. First model attempt `20261118T202955Z-6304640bd18d` stopped in preparation:
+   the labelled-container query timed out at 20 seconds (22.078 seconds total),
+   before tests started. Subsequent server-version and identical container-list
+   probes succeeded in 0.02 seconds each; the original timeout cause is unknown.
+   Retry `20261118T203052Z-0d34e7749c60` passed in 161.801 seconds:
+   **5,141 tests in 400 XML reports**, zero failures/errors/skips,
+   `target/verification/run-cx4xj88f` (base revision `3b86793c` plus this diff).
+5. Targeted run `20261118T203355Z-b0203dfc7224` passed in 329.786 seconds:
+   **20 tests in four XML reports**, zero failures/errors/skips,
+   `target/docker-ui/run-uWmnIi`. The full selected TC203 (4), TC180 (4),
+   TC103 (9), and source contract (3) passed. Visual review of
+   `akropia-test/warehouse-qa/turn-report-arrival-icons.png` and
+   `turn-report-colony-icons.png` in that run confirmed readable unit/city
+   icons before the notice text and intact map, colony and return buttons
+   at 900 × 750. This is implementation evidence, not a player study.
+6. Fixed smoke/support selection passed in
+   `20261118T203952Z-54d7bc26f42c`, `target/verification/run-mr9qhy7e`:
+   **23 tests in 13 XML reports**, zero failures/errors/skips. The phase took
+   282.302 seconds; the supervised run including admission and cleanup took
+   285.449 seconds, within the 420-second local budget. Source hashes match
+   the reviewed Java changes; all game sources also match the model run.
+7. Changed Java files were formatted with the shared Eclipse profile.
+   Documentation discovery (14 tests), name audit and strict MkDocs passed.
+   This is local acceptance; full regression and publication were not run
+   or verified as part of this task.
+
 ## Regression run 44222879665 repair — 2026-11-18
 
 ## Construction workforce refresh — 2026-11-18

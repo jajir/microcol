@@ -18,6 +18,11 @@ final class ShipVoyageNoticeFixture {
 
     static void prepare(final TestContext context, final File source,
             final boolean automatic) {
+        prepare(context, source, automatic, true);
+    }
+
+    static void prepare(final TestContext context, final File source,
+            final boolean automatic, final boolean toEurope) {
         final GameModelPoDao dao = new GameModelPoDao();
         final GameModelPo data = dao.loadFromFile(source);
         data.getModel().getGameManager().setGameStarted(true);
@@ -34,6 +39,10 @@ final class ShipVoyageNoticeFixture {
         }
         ship.placeToLocation(Location.of(model.getMap().getMaxLocationX(), 14));
         ship.placeToHighSeas(true);
+        if (!toEurope) {
+            model.getEurope().getPort().placeShipToPort(ship);
+            ship.placeToHighSeas(false);
+        }
         while (((PlaceHighSea) ship.getPlace()).getRemainigTurns() > 1) {
             ship.advanceVoyage();
         }

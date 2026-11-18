@@ -24,7 +24,8 @@ public class TeProcessorNewUnitInColony extends AbstractTeProcessor
         if (turnEvent instanceof TurnEventNewUnitInColony) {
             final TurnEventNewUnitInColony te = (TurnEventNewUnitInColony) turnEvent;
             return new TeItemColony(getMessage(te.getColonyName()),
-                    te.getColonyId());
+                    te.getColonyId())
+                    .withUnitIcon(org.akropia.model.UnitType.COLONIST);
         }
         return null;
     }

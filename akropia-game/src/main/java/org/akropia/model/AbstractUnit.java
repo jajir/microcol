@@ -1836,7 +1836,8 @@ public abstract class AbstractUnit implements Unit {
             model.addTurnEvent(TurnEventProvider
                     .getGoToOrder(owner, TurnEventGoTo.Kind.CANCELLED_DAMAGED,
                             id, getType(), goTo.getDestinationName())
-                    .destination(goTo.getColonyId(), goTo.isEurope()));
+                    .destination(goTo.getColonyId(), goTo.isEurope())
+                    .atLocation(goTo.getDestination()));
             goTo = null;
         }
     }
@@ -2851,7 +2852,8 @@ public abstract class AbstractUnit implements Unit {
                     model.addTurnEvent(TurnEventProvider
                             .getGoToOrder(owner, TurnEventGoTo.Kind.ARRIVED, id,
                                     getType(), goTo.getDestinationName())
-                            .destination(goTo.getColonyId(), goTo.isEurope()));
+                            .destination(goTo.getColonyId(), goTo.isEurope())
+                            .atLocation(goTo.getDestination()));
                 }
                 goTo = null;
                 break;
@@ -2886,7 +2888,8 @@ public abstract class AbstractUnit implements Unit {
                 model.addTurnEvent(TurnEventProvider
                         .getGoToOrder(owner, TurnEventGoTo.Kind.PAUSED, id,
                                 getType(), goTo.getDestinationName())
-                        .destination(goTo.getColonyId(), goTo.isEurope()));
+                        .destination(goTo.getColonyId(), goTo.isEurope())
+                        .atLocation(goTo.getDestination()));
             }
         }
         if (!walked.isEmpty()) {
@@ -3015,7 +3018,8 @@ public abstract class AbstractUnit implements Unit {
         model.addTurnEvent(TurnEventProvider
                 .getGoToOrder(owner, kind, id, getType(),
                         goTo.getDestinationName())
-                .destination(goTo.getColonyId(), goTo.isEurope()));
+                .destination(goTo.getColonyId(), goTo.isEurope())
+                .atLocation(goTo.getDestination()));
         goTo = null;
     }
 

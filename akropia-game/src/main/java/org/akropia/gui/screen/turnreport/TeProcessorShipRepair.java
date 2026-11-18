@@ -34,7 +34,8 @@ public final class TeProcessorShipRepair extends AbstractTeProcessor
                                     .getNameForGoodsType(item.getType())))
                     .collect(Collectors.joining(", "));
             return new TeItemSimple(getI18n().get(key, ship, repair.getShipId(),
-                    repair.getLostPassengers(), goods.isEmpty() ? "0" : goods));
+                    repair.getLostPassengers(), goods.isEmpty() ? "0" : goods))
+                    .withUnitIcon(repair.getShipType());
         }
         String destination = repair.isEuropeDestination()
                 ? getI18n().get(Europe.voyageDestinationEurope)
@@ -42,9 +43,10 @@ public final class TeProcessorShipRepair extends AbstractTeProcessor
         final String message = getI18n().get(key, ship, repair.getShipId(),
                 destination);
         if (repair.isEuropeDestination()) {
-            return new TeItemEurope(message);
+            return new TeItemEurope(message).withUnitIcon(repair.getShipType());
         }
-        return repair.getColonyId() == null ? new TeItemSimple(message)
-                : new TeItemColony(message, repair.getColonyId());
+        return (repair.getColonyId() == null ? new TeItemSimple(message)
+                : new TeItemColony(message, repair.getColonyId()))
+                .withUnitIcon(repair.getShipType());
     }
 }

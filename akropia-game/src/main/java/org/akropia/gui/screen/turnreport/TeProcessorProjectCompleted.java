@@ -25,12 +25,14 @@ public final class TeProcessorProjectCompleted extends AbstractTeProcessor
     public TeItemSimple apply(final TurnEvent event) {
         if (event instanceof TurnEventProjectCompleted) {
             final TurnEventProjectCompleted completed = (TurnEventProjectCompleted) event;
-            return new TeItemColony(
+            final TeItemSimple item = new TeItemColony(
                     getI18n().get(TurnEvents.projectCompleted,
                             completed.getColonyName(),
                             ConstructionText.name(getI18n(),
                                     completed.getProject())),
                     completed.getColonyId());
+            completed.getUnitType().ifPresent(item::withUnitIcon);
+            return item;
         }
         return null;
     }

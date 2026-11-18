@@ -935,4 +935,37 @@ class GoToOrderTest {
         assertTrue(model.canIssueGoTo(colonist, strip(28)));
         assertFalse(model.canIssueGoTo(colonist, strip(31)));
     }
+
+    @Test
+    void manualMapArrivalRecordsTheActualSquareAndSurvivesReload() {
+        final GameModelPo data = shipScenario();
+        final Model model = load(data);
+        final Ship ship = (Ship) model.getUnitById(3);
+        final Location arrival = Location.of(model.getMap().getMaxLocationX(),
+                14);
+        ship.placeToLocation(arrival);
+        ship.placeToHighSeas(true);
+        for (int turn = 0; turn < 12 && ship.isAtHighSea(); turn++) {
+            ship.advanceVoyage();
+        }
+        ship.placeToHighSeas(false);
+        for (int turn = 0; turn < 12 && ship.isAtHighSea(); turn++) {
+            ship.advanceVoyage();
+        }
+        assertEquals(arrival, ship.getLocation());
+        final Model restored = reload(model, data, saved -> {
+        });
+        final var notice = restored
+                .getTurnEventsLocalizedMessages(
+                        restored.getUnitById(3).getOwner())
+                .stream().filter(event -> event instanceof TurnEventGoTo)
+                .map(event -> (TurnEventGoTo) event)
+                .filter(event -> event
+                        .getKind() == TurnEventGoTo.Kind.ARRIVED_MAP)
+                .findFirst().orElseThrow();
+        assertEquals(arrival, notice.getLocation());
+        restored.getUnitById(3)
+                .placeToLocation(Location.of(arrival.getX(), 15));
+        assertEquals(arrival, notice.getLocation());
+    }
 }

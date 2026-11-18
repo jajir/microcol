@@ -47,6 +47,7 @@ public class TC_203_F235_ship_voyage_notices_test extends AbstractAkropiaTest {
         report.verifyCompletedHomeVoyage(3, false);
         report.verifyEventMessageCount("#3 arrived", 1);
         report.verifyOpenEuropeAction("Open Home port");
+        report.verifyNoticeIcon("#3 arrived", "turnEventUnitIcon-GALLEON");
         report.openEuropeWithMouse().close();
         // Opening the report again reads the same result without generating a
         // duplicate.
@@ -65,6 +66,9 @@ public class TC_203_F235_ship_voyage_notices_test extends AbstractAkropiaTest {
         final GamePage game = WelcomePage.of(getContext()).loadGame();
         final ScreenTurnReport report = game.openTurnReport();
         report.verifyColonyNoticeActions(0, 3);
+        report.verifyNoticeIcon("Famine", "turnEventColonyIcon");
+        report.captureDialog("turnEventColonyIcon",
+                "turn-report-colony-icons.png");
         report.verifyOpenColonyAction(0, "Open colony");
         // The historical name never redirects the action to a different colony.
         report.openColonyWithMouse(0, "Renamed port").closeWithEscape();
@@ -73,4 +77,31 @@ public class TC_203_F235_ship_voyage_notices_test extends AbstractAkropiaTest {
         reopened.close();
     }
 
+    @Test
+    @Tag("local")
+    void TC_04_return_arrival_has_ship_icon_and_map_link() throws Exception {
+        // Load a manual return voyage with one turn remaining.
+        ShipVoyageNoticeFixture.prepare(getContext(), SOURCE, false, false);
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        game.nextTurnAndCloseDialogs();
+        final ScreenTurnReport report = game.openTurnReport();
+        final org.akropia.model.Location arrival = org.akropia.model.Location
+                .of(50, 14);
+
+        // The recorded arrival offers its ship and an accessible map action.
+        report.verifyEventMessageCount("#3 arrived", 1);
+        report.verifyNoticeIcon("#3 arrived", "turnEventUnitIcon-GALLEON");
+        report.verifyMapAction(arrival, "Show on map");
+        report.captureDialog("turnEventShowOnMap-50-14",
+                "turn-report-arrival-icons.png");
+        final GamePage map = report.showOnMap(arrival);
+        map.verifyThatSelectedTileIs(arrival);
+        map.verifyThatTileIsVisible(arrival);
+
+        // Reopening the report retains the same notice and navigation.
+        final ScreenTurnReport reopened = map.openTurnReport();
+        reopened.verifyEventMessageCount("#3 arrived", 1);
+        reopened.verifyMapAction(arrival, "Show on map");
+        reopened.close();
+    }
 }

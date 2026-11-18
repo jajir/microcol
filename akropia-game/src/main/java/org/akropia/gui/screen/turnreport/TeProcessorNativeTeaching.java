@@ -27,6 +27,10 @@ public final class TeProcessorNativeTeaching extends AbstractTeProcessor
         return new TeItemSimple(getI18n()
                 .get(notice.getKind() == TurnEventNativeTeaching.Kind.COMPLETED
                         ? Loc.nativeTeachingDone
-                        : Loc.nativeTeachingHostility, skill));
+                        : Loc.nativeTeachingHostility, skill))
+                .withUnitIcon(notice
+                        .getKind() == TurnEventNativeTeaching.Kind.COMPLETED
+                                ? notice.getSkill()
+                                : org.akropia.model.UnitType.COLONIST);
     }
 }

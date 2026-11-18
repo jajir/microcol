@@ -24,12 +24,10 @@ public class TeProcessorColonyWasDestroyed extends AbstractTeProcessor
         if (turnEvent instanceof TurnEventColonyWasDestroyed) {
             final TurnEventColonyWasDestroyed te = (TurnEventColonyWasDestroyed) turnEvent;
             final String message = getMessage(te.getColonyName());
-            return new TeItemSimple(
-                    te.getLostShips() == 0 ? message
-                            : message + " "
-                                    + getI18n().get(
-                                            TurnEvents.shipsLostWithColony,
-                                            te.getLostShips()));
+            return new TeItemSimple(te.getLostShips() == 0 ? message
+                    : message + " " + getI18n().get(
+                            TurnEvents.shipsLostWithColony, te.getLostShips()))
+                    .withColonyIcon();
         }
         return null;
     }

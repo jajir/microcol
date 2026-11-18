@@ -9,6 +9,25 @@ import org.akropia.model.UnitType;
 import org.akropia.model.Founder;
 
 public final class TurnEventPo {
+    private Integer goToX;
+    private Integer goToY;
+
+    public Integer getGoToX() {
+        return goToX;
+    }
+
+    public void setGoToX(final Integer value) {
+        goToX = value;
+    }
+
+    public Integer getGoToY() {
+        return goToY;
+    }
+
+    public void setGoToY(final Integer value) {
+        goToY = value;
+    }
+
     private String fishermanLossReason;
     private Integer fishermanUnitId;
 

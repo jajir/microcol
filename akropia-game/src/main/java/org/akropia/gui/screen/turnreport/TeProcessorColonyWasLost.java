@@ -23,7 +23,8 @@ public class TeProcessorColonyWasLost extends AbstractTeProcessor
     public TeItemSimple apply(final TurnEvent turnEvent) {
         if (turnEvent instanceof TurnEventColonyWasLost) {
             final TurnEventColonyWasLost te = (TurnEventColonyWasLost) turnEvent;
-            return new TeItemSimple(getMessage(te.getColonyName()));
+            return new TeItemSimple(getMessage(te.getColonyName()))
+                    .withColonyIcon();
         }
         return null;
     }
