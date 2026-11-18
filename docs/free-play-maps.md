@@ -53,6 +53,24 @@ Implementace a přejímka: změna je rozpracovaná; ověření bude zaznamenáno
 4. **Uložit** uchovává i nehotový návrh jako scénář; **Otevřít mapu** jej znovu zpřístupní k úpravám. Spuštění nové hry samostatně kontroluje hratelnost, vypíše konkrétní chyby a neplatný scénář nespustí. Platný scénář zachová autorem určený svět a výpravu. Scénář se samotným spuštěním nepřepíše a není uloženou rozehranou pozicí.
 5. Nová mapa, otevření jiné mapy a odchod chrání neuložené změny volbami uložit, zahodit nebo zrušit. Zrušení a selhání načtení či uložení zachovávají rozpracovaný návrh. Ovládání používá společné mapové konvence a anglické i české texty.
 
+### Ovládání editoru — 18. listopadu 2026
+
+1. Pohled se posouvá touchpadem či kolečkem v obou osách, tažením pravým
+   tlačítkem a stejnými nastavitelnými klávesami jako ve hře (výchozí WASD).
+   Klávesy fungují při zaměření mapy; formuláře si ponechávají vlastní vstup.
+   Uvolnění klávesy, ztráta zaměření mapy nebo odchod z editoru posun zastaví.
+   Rychlost a citlivost přebírají nastavení hry. Šipky nadále vybírají pole,
+   pokud nejsou přemapované na posun; Enter/mezerou se použije nástroj.
+2. Pravý panel má svislý posuvník. Autor vybere nástroj a variantu terénu,
+   bonusu, řeky, sídla či jednotky a klikne do mapy. Alternativně nejprve
+   označí pole nástrojem Výběr a poté použije tlačítko **Použít na vybrané pole**.
+   Bez vybraného pole nebo s nástrojem Výběr je tlačítko neaktivní.
+   Les a obdělání se přepínají; odstranění objektů zůstává v detailu pole.
+3. Samotná volba nástroje návrh nemění. Model odmítne nepovolenou kombinaci
+   bez částečných změn a panel vypíše důvod. Odchod dál chrání neuložený návrh.
+   Jde o implementované ovládání, nikoli hráčskou studii; skutečné výsledky
+   ověření vlastní [funkční evidence](functional-tests.md#map-editor-controls-2026-11-18).
+
 ### Implementační volby editoru (R-0435, 9. listopadu 2026, místní přejímka dokončená)
 
 1. Rozměry: šířka i výška jsou celá čísla od 10 do 100 polí (`ScenarioDraft.MIN_SIDE`/`MAX_SIDE`). Horní mez odpovídá největšímu dodávanému světu 100 × 80; mimo rozsah se svět nevytváří. Nový návrh je oceán pro nizozemský národ bez osad a jednotek; editor bez otevřeného souboru ukazuje oceán 40 × 30.

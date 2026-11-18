@@ -320,4 +320,48 @@ public class TC_211_F242_map_editor_scenario_test extends AbstractAkropiaTest {
                 NativeNation.SIOUX);
     }
 
+    @Test
+    @Tag("local")
+    void TC_05_camera_and_selected_tile_tools_work_in_small_window()
+            throws Exception {
+        // Open a map larger than the viewport and select a square.
+        final MapEditorPage editor = new MapEditorPage(getContext());
+        editor.openFromMenu();
+        editor.pressNew();
+        editor.typeDimensions("40", "30");
+        editor.confirmDimensions();
+        editor.resizeWindow(1024, 768);
+        editor.chooseTool("editorToolSelect");
+        editor.clickTile(Location.of(3, 3));
+
+        // Apply the right-panel terrain tool without another map click.
+        editor.chooseTerrain(TerrainType.GRASSLAND);
+        editor.applyToolToSelectedTile();
+        editor.verifyTile("Square [3, 3]: Grass land");
+        editor.chooseBonus(ResourceOverlay.ORE);
+        editor.applyToolToSelectedTile();
+        editor.chooseUnit(UnitType.COLONIST);
+        editor.applyToolToSelectedTile();
+        editor.verifyControl("editorRemoveUnit-1", true);
+        final File saved = scratch("selected-tile.akropia");
+        editor.chooseSaveFile(saved);
+        editor.pressSave();
+        editor.verifySavedTerrain(saved, Location.of(3, 3),
+                TerrainType.GRASSLAND);
+        editor.verifySavedBonus(saved, Location.of(3, 3), ResourceOverlay.ORE);
+        editor.verifyLayoutFitsWindow(400);
+
+        // The game camera controls move the editor and stop on key release.
+        org.akropia.gui.Point before = editor.cameraPosition();
+        editor.panWithKey(KeyCode.D);
+        editor.verifyCameraMoved(before, true, false);
+        editor.verifyCameraStopped();
+        before = editor.cameraPosition();
+        editor.panWithKey(KeyCode.S);
+        editor.verifyCameraMoved(before, false, true);
+        editor.verifyCameraStopped();
+        before = editor.cameraPosition();
+        editor.panWithTouchpad();
+        editor.verifyCameraMoved(before, true, true);
+    }
 }

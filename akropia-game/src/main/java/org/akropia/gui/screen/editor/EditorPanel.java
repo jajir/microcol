@@ -1,6 +1,7 @@
 package org.akropia.gui.screen.editor;
 
 import org.akropia.gui.screen.ScreenLifeCycle;
+import org.akropia.gui.WasdController;
 import org.akropia.gui.screen.game.gamepanel.GamePanelComponent;
 import org.akropia.gui.screen.game.gamepanel.VisibleAreaService;
 import org.akropia.gui.util.AnimationScheduler;
@@ -31,10 +32,28 @@ class EditorPanel implements ScreenLifeCycle, JavaFxComponent {
     private final EditorPaintingService editorPaintingService;
 
     private final AnimationScheduler animationScheduler;
+    private final VisibleAreaService visibleAreaService;
+    private final WasdController navigation;
 
     @Inject
     EditorPanel(final @Named("editor") VisibleAreaService visibleAreaService,
-            final EditorPaintingService editorPaintingService) {
+            final EditorPaintingService editorPaintingService,
+            final WasdController navigation) {
+        this.visibleAreaService = visibleAreaService;
+        this.navigation = navigation;
+        canvasComponent.getCanvasPane().setMinSize(0, 0);
+        canvasComponent.getCanvas().setFocusTraversable(true);
+        canvasComponent.getCanvas().focusedProperty()
+                .addListener((o, before, focused) -> {
+                    if (!focused) {
+                        navigation.reset();
+                    }
+                });
+        canvasComponent.getCanvas().setOnScroll(event -> {
+            visibleAreaService.addDeltaToTopLeftPoint(navigation
+                    .scrollDelta(event.getDeltaX(), event.getDeltaY()));
+            event.consume();
+        });
         this.editorPaintingService = Preconditions
                 .checkNotNull(editorPaintingService);
 
@@ -66,6 +85,9 @@ class EditorPanel implements ScreenLifeCycle, JavaFxComponent {
      */
     @SuppressWarnings("unused")
     private void paintFrame(final Long tick) {
+        if (navigation.isScrolling()) {
+            visibleAreaService.addDeltaToTopLeftPoint(navigation.getDiff());
+        }
         editorPaintingService.paint(canvasComponent.getGraphicsContext2D());
         logger.debug("painting editor");
     }
@@ -83,6 +105,7 @@ class EditorPanel implements ScreenLifeCycle, JavaFxComponent {
 
     @Override
     public void beforeHide() {
+        navigation.reset();
         animationScheduler.pause();
     }
 

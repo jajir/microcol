@@ -1650,3 +1650,10 @@ získání. Výsledky jsou v [evidenci](functional-tests.md#knowledge-2026-11-17
 
 1. Nastavení nabízí společnou citlivost touchpadu/kolečka 25–200 %, výchozích 100 %, s okamžitým uložením a použitím pro obě osy mapy. [UX pravidlo](ux.md#citlivost-posunu-mapy-touchpadem-koleckem-2026-11-18).
 2. `TC_84/16` ověřuje výchozí hodnotu, krajní polohy, návrat do nastavení a oba směry včetně setrvačných událostí; `TC_84/01,02,15` ověřují okolní nastavení a rozložení. [Evidence](functional-tests.md#citlivost-scrollovani-2026-11-18).
+
+
+### UC-001 — ovládání editoru, 18. listopadu 2026
+
+1. Posun mapy používá stejné nastavení jako hra; pravý panel umožňuje použití
+   nástroje přímo na vybrané pole. [Pravidla ovládání](free-play-maps.md#ovladani-editoru-18-listopadu-2026)
+   a [výsledky ověření TC210/TC211](functional-tests.md#map-editor-controls-2026-11-18).

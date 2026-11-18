@@ -1,6 +1,7 @@
 package org.akropia.gui.screen.editor;
 
 import org.akropia.gui.shortcut.KeyboardShortcuts;
+import org.akropia.gui.WasdController;
 import org.akropia.gui.shortcut.ShortcutAction;
 import org.akropia.model.Location;
 
@@ -27,12 +28,16 @@ public class ScreenEditorPresenter {
     private final MouseOperationManager mouseOperationManager;
 
     private final KeyboardShortcuts shortcuts;
+    private final WasdController navigation;
 
     @Inject
     ScreenEditorPresenter(final ScreenEditor screenEditor,
             final EditorActions actions, final ModelService modelService,
             final MouseOperationManager mouseOperationManager,
-            final KeyboardShortcuts shortcuts) {
+            final KeyboardShortcuts shortcuts,
+            final WasdController navigation) {
+        this.navigation = navigation;
+        screenEditor.getContent().setOnKeyReleased(navigation::onKeyReleased);
         this.shortcuts = Preconditions.checkNotNull(shortcuts);
         this.actions = Preconditions.checkNotNull(actions);
         this.modelService = Preconditions.checkNotNull(modelService);
@@ -50,7 +55,11 @@ public class ScreenEditorPresenter {
             actions.save();
         } else if (!(event.getTarget() instanceof TextInputControl)
                 && event.getTarget() instanceof javafx.scene.canvas.Canvas) {
-            onMapKey(event);
+            if (navigation.onKeyPressed(event)) {
+                event.consume();
+            } else {
+                onMapKey(event);
+            }
         }
     }
 

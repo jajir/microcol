@@ -76,4 +76,6 @@
 	<entry key="reason_NO_EXPEDITION">Umístěte aspoň jednu jednotku své výpravy.</entry>
 	<entry key="reason_NO_CAPITAL">Kmen s osadami potřebuje hlavní město.</entry>
 	<entry key="reason_GAME_REJECTED">Hra scénář odmítá.</entry>
+<entry key="toolHelp">Vyberte nástroj a klikněte do mapy, nebo jej použijte na vybrané pole. Mapu posunete touchpadem, WASD nebo tažením pravým tlačítkem.</entry>
+<entry key="applyTool">Použít na vybrané pole</entry>
 </properties>

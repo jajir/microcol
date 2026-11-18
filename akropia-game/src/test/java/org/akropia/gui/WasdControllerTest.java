@@ -28,6 +28,22 @@ class WasdControllerTest {
     }
 
     @Test
+    void wheelUsesLiveSensitivityAndResetStopsHeldKeys() {
+        PreferencesProperties preferences = mock(PreferencesProperties.class);
+        SimpleIntegerProperty sensitivity = new SimpleIntegerProperty(100);
+        when(preferences.getMapScrollSensitivityProperty())
+                .thenReturn(sensitivity);
+        WasdController controller = new WasdController(preferences,
+                ShortcutControllerTest.controller(ShortcutPlatform.LINUX));
+        assertEquals(Point.of(-41, 20), controller.scrollDelta(90, -45));
+        sensitivity.set(50);
+        assertEquals(Point.of(-21, 10), controller.scrollDelta(90, -45));
+        controller.onKeyPressed(event(KeyEvent.KEY_PRESSED, KeyCode.D, false));
+        controller.reset();
+        assertFalse(controller.isScrolling());
+    }
+
+    @Test
     void speedAppliesToAllDirectionsAndChangesWhileHeld() {
         WasdController controller = controller(
                 ShortcutControllerTest.controller(ShortcutPlatform.LINUX));

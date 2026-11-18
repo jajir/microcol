@@ -18375,3 +18375,61 @@ messages for diagnosis. No tests were removed or weakened for acceptance.
 4. První cílený běh `target/docker-ui/run-tG4RXv` dokončil 19 testů: 18 úspěšných, jedna chyba, žádné přeskočení (230,585 s). Nový TC_84/16 prošel; TC_84/05 nedokázal najet na rohové políčko zakryté ovládáním po přesunu klávesami. Scénář nyní zpřístupňuje stejné rohy přes minimapu, zachovává původní kontroly souřadnic i herního stavu. Původní neúspěšný běh zůstává neúspěšný.
 5. Pevný smoke/support výběr `target/verification/run-csrotllj` prošel všech 23 testů ve 13 XML reportech, bez selhání, chyb a přeskočení za 289,978 s včetně dohledu (limit 420 s). Herní zdroje se shodují s úspěšným modelovým snímkem; všechny změněné spustitelné a testové zdroje se shodují se smoke snímkem. Základ kontrolované změny je `46cbfe3898b93bbfbb23c2dc8e1457e84e3d0808`.
 6. Sdílený Java formatter byl aplikován na změněné Java soubory. Kontrola diffu a 14 dokumentačních testů i strict MkDocs prošly. Snímek nastavení z cíleného běhu potvrzuje viditelný nový posuvník a aktuální procenta. Přejímka je lokální; plná regrese a publikace herní distribuce nebyly spuštěny ani ověřeny.
+
+
+## Map editor controls — 2026-11-18
+
+1. UC-001: `TC_211_F242_map_editor_scenario_test` adds scenario 05 for
+   editor WASD, release, two-axis touchpad scrolling and applying terrain,
+   a bonus and a unit from the right panel to the selected square at 1024 × 768.
+   Existing TC210/TC211 cover lifecycle, language/layout, rejected edits,
+   settlements, passengers, save/reopen and starting the authored game.
+2. `WasdControllerTest` covers live wheel sensitivity and clearing held keys.
+   Local model/JUnit acceptance has been dispatched; targeted Docker UI and
+   smoke acceptance are pending. No full regression or publication is claimed.
+3. First model run `20261118T092625Z-81ff6e0c6214` (PID 87509,
+   600-second limit) completed 5,134 tests with one assertion failure,
+   zero errors/skips in 159.711 supervised seconds. The new wheel test
+   expected mathematical rounding instead of the existing `Point.divide`
+   negative-coordinate result; production behavior was unchanged. Corrected
+   expectations retain the same game/editor behavior. Reports:
+   `target/verification/run-al7qcii4`. Retry `20261118T092932Z-123c20b8f9ae`
+   (PID 87965, same 600-second limit) is pending; UI tests have not started.
+4. Model retry `20261118T092932Z-123c20b8f9ae` passed all **5,134** tests
+   with zero failures/errors/skips in 154.522 supervised seconds
+   (`target/verification/run-2a6aqse5`). Production and model-test sources
+   are unchanged; only the new UI scenario received its existing `local` tag.
+   Targeted run `20261118T093229Z-80a586ab1cac` (PID 88312, 1,800-second limit)
+   selects all TC210/TC211, TC84/16 and `PageVerificationContractTest`.
+   Its result and the fixed smoke selection remain pending.
+5. Targeted run `20261118T093229Z-80a586ab1cac` completed **15** checks
+   in 266.871 supervised seconds: 13 passed, two assertion failures,
+   zero errors/skips (`target/docker-ui/run-2YhqEC`). TC211/05 expected
+   “Grassland” instead of the existing localized “Grass land”. TC210/06
+   exposed a stale saved-game fixture: metadata lacked required month/day,
+   and its calendar lacked the current required turn limit. The bundled
+   F241 archive now supplies the date matching its seven played turns and
+   the explicit limit; no player save or compatibility behavior was changed.
+   Visual review of English/Czech compact editor captures confirmed legible
+   controls and a visible sidebar scrollbar. Retry
+   `20261118T093809Z-432b8e15f587` (PID 88747, 1,200-second limit) reruns
+   the same 15 checks. Production/model-test sources remain unchanged.
+6. Targeted retry `20261118T093809Z-432b8e15f587` passed all **15**
+   checks, zero failures/errors/skips, in 282.253 supervised seconds
+   (`target/docker-ui/run-jkkIon`). This includes all six TC210 cases,
+   five TC211 cases, TC84/16 and three source-contract checks. All changed
+   game sources, resources and model tests match the passing model snapshot.
+   Fixture review confirms only calendar limit and metadata date changes;
+   world data and embedded preview are preserved. Fixed smoke/support run
+   `20261118T094303Z-86158a44fb14` (PID 89047, outer watchdog 480 seconds,
+   acceptance limit 420 seconds) is pending.
+7. Fixed smoke/support run `20261118T094303Z-86158a44fb14` passed **23**
+   checks, zero failures/errors/skips, in 284.754 supervised seconds, within
+   the 420-second acceptance limit (`target/verification/run-qh9iy_h7`).
+   Final executable sources, tests and fixture match its retained snapshot.
+   Review and shared Java formatting are complete. Documentation acceptance:
+   all 14 consistency tests, zero unexplained former-name occurrences, and
+   strict MkDocs passed. Local acceptance is **5,134 model/JUnit + 15 targeted
+   UI/support + 23 smoke/support**, on base `cc4c7f95e` plus this change.
+   The unrelated backlog edit is excluded. No full regression, native macOS
+   UI execution, remote CI watch or distribution/publication verification ran.

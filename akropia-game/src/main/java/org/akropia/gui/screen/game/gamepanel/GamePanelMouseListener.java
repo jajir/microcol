@@ -31,8 +31,6 @@ import javafx.scene.input.ScrollEvent;
 @Listener
 public final class GamePanelMouseListener {
 
-    private final static double DEFAULT_SCROLL_SPEED_DIVIDER = 2.25;
-
     private final Logger logger = LoggerFactory
             .getLogger(GamePanelMouseListener.class);
 
@@ -59,7 +57,7 @@ public final class GamePanelMouseListener {
     private final TradeRoutePlanning tradeRoutePlanning;
     private final Provider<TradeRoutePlanningPanel> tradeRoutePlanningPanel;
     private final Canvas canvas;
-    private final org.akropia.gui.preferences.PreferencesProperties preferences;
+    private final org.akropia.gui.WasdController navigation;
     private Point contextPress;
     private boolean contextDragged;
 
@@ -80,8 +78,8 @@ public final class GamePanelMouseListener {
             final Provider<ButtonsGamePanel> gameButtons,
             final TradeRoutePlanning tradeRoutePlanning,
             final Provider<TradeRoutePlanningPanel> tradeRoutePlanningPanel,
-            final org.akropia.gui.preferences.PreferencesProperties preferences) {
-        this.preferences = preferences;
+            final org.akropia.gui.WasdController navigation) {
+        this.navigation = navigation;
         this.tradeRoutePlanningPanel = Preconditions
                 .checkNotNull(tradeRoutePlanningPanel);
         this.tradeRoutePlanning = Preconditions
@@ -164,10 +162,8 @@ public final class GamePanelMouseListener {
     }
 
     private void onScroll(final ScrollEvent event) {
-        visibleArea.addDeltaToTopLeftPoint(Point
-                .of(-event.getDeltaX(), -event.getDeltaY())
-                .divide(DEFAULT_SCROLL_SPEED_DIVIDER * 100
-                        / preferences.getMapScrollSensitivityProperty().get()));
+        visibleArea.addDeltaToTopLeftPoint(
+                navigation.scrollDelta(event.getDeltaX(), event.getDeltaY()));
     }
 
     private void tryToSwitchToMoveMode(final Location location) {

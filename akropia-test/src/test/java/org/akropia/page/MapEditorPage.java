@@ -259,6 +259,58 @@ public final class MapEditorPage extends AbstractScreen {
                 point.getY() + Tile.TILE_WIDTH_IN_PX / 2);
     }
 
+    private VisibleAreaService camera() {
+        return getContext().getAkropia().getInjector().getInstance(
+                Key.get(VisibleAreaService.class, Names.named("editor")));
+    }
+
+    public Point cameraPosition() {
+        final Point[] position = new Point[1];
+        getRobot().interact(() -> position[0] = camera().getTopLeft());
+        return position[0];
+    }
+
+    public void panWithKey(final KeyCode key) {
+        final Canvas canvas = getNodeFinder().lookup("#canvas Canvas")
+                .queryAs(Canvas.class);
+        getRobot().interact(canvas::requestFocus);
+        getRobot().press(key).sleep(250).release(key);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void panWithTouchpad() {
+        final Canvas canvas = getNodeFinder().lookup("#canvas Canvas")
+                .queryAs(Canvas.class);
+        getRobot().interact(
+                () -> canvas.fireEvent(new javafx.scene.input.ScrollEvent(
+                        javafx.scene.input.ScrollEvent.SCROLL, 100, 100, 100,
+                        100, false, false, false, false, false, false, -90, -90,
+                        -90, -90,
+                        javafx.scene.input.ScrollEvent.HorizontalTextScrollUnits.NONE,
+                        0,
+                        javafx.scene.input.ScrollEvent.VerticalTextScrollUnits.NONE,
+                        0, 0, null)));
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void applyToolToSelectedTile() {
+        clickOnButtonWithId("editorApplyTool");
+    }
+
+    public void verifyCameraMoved(final Point before, final boolean horizontal,
+            final boolean vertical) {
+        final Point after = cameraPosition();
+        assertEquals(horizontal, after.getX() > before.getX(),
+                "Horizontal pan");
+        assertEquals(vertical, after.getY() > before.getY(), "Vertical pan");
+    }
+
+    public void verifyCameraStopped() {
+        final Point before = cameraPosition();
+        getRobot().sleep(150);
+        assertEquals(before, cameraPosition(), "Released keys stop the camera");
+    }
+
     private static ModelPo read(final File file) {
         return ScenarioDraft.of(new GameModelPoDao().loadScenarioFromFile(file))
                 .toScenario().getModel();

@@ -64,6 +64,17 @@ public class WasdController {
         return scroll;
     }
 
+    /** Clear held keys when leaving a map or losing its focus. */
+    public void reset() {
+        held.clear();
+    }
+
+    /** Shared mouse wheel / touchpad movement at the configured sensitivity. */
+    public Point scrollDelta(final double deltaX, final double deltaY) {
+        return Point.of(-deltaX, -deltaY).divide(2.25 * 100
+                / preferences.getMapScrollSensitivityProperty().get());
+    }
+
     public void onKeyReleased(final KeyEvent event) {
         // Only the released key stops; modifiers may have changed since.
         held.values().forEach(keys -> keys.remove(event.getCode()));

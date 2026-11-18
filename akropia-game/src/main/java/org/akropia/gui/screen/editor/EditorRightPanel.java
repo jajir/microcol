@@ -59,6 +59,8 @@ public class EditorRightPanel implements JavaFxComponent {
 
     private final ScrollPane scroll = new ScrollPane(mainPanel);
 
+    private final Label help = new Label();
+    private final Button applyTool = ActionButtons.button(ButtonIcon.CONFIRM);
     private final VBox inspector = new VBox(6);
 
     private final Label nationLabel = new Label();
@@ -198,6 +200,14 @@ public class EditorRightPanel implements JavaFxComponent {
                             .setOperation((MouseOperation) after.getUserData());
                 });
         toolSelect.setSelected(true);
+        applyTool.setId("editorApplyTool");
+        applyTool.setMaxWidth(Double.MAX_VALUE);
+        applyTool.setOnAction(event -> modelService.getSelected()
+                .ifPresent(at -> mouseOperationManager.getMouseOperation()
+                        .ifPresent(operation -> operation.execute(at))));
+        tools.selectedToggleProperty().addListener(
+                (o, before, after) -> applyTool.setDisable(after == toolSelect
+                        || modelService.getSelected().isEmpty()));
         // Opening or changing a variant chooses its tool, also when the
         // default variant stays chosen.
         variant(terrainChoice, toolTerrain);
@@ -215,11 +225,12 @@ public class EditorRightPanel implements JavaFxComponent {
         mainPanel.getStyleClass().add("right");
         // Each tool has its own full-width row with its variant below, so no
         // label competes for width with a list.
-        mainPanel.getChildren().addAll(nationLabel, nation, toolsLabel,
+        mainPanel.setMinHeight(Region.USE_PREF_SIZE);
+        mainPanel.getChildren().addAll(nationLabel, nation, toolsLabel, help,
                 toolSelect, toolTerrain, terrainChoice, toolForest, toolField,
                 toolRiver, riverChoice, toolBonus, bonusChoice, toolSettlement,
-                tribeChoice, capitalChoice, toolUnit, unitChoice, inspector,
-                message);
+                tribeChoice, capitalChoice, toolUnit, unitChoice, applyTool,
+                inspector, message);
         scroll.getStyleClass().add("screen-scroll");
         scroll.setFitToWidth(true);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -311,6 +322,8 @@ public class EditorRightPanel implements JavaFxComponent {
      * Rename the controls in the current language.
      */
     void updateLanguage() {
+        help.setText(i18n.get(EditorText.toolHelp));
+        applyTool.setText(i18n.get(EditorText.applyTool));
         nationLabel.setText(i18n.get(EditorText.nation));
         toolsLabel.setText(i18n.get(EditorText.tools));
         toolSelect.setText(i18n.get(EditorText.toolSelect));
@@ -329,6 +342,8 @@ public class EditorRightPanel implements JavaFxComponent {
      * Show the nation and the selected square of the current draft.
      */
     private void show() {
+        applyTool.setDisable(tools.getSelectedToggle() == toolSelect
+                || modelService.getSelected().isEmpty());
         refresh();
         fit(mainPanel);
     }

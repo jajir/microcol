@@ -76,4 +76,6 @@
 	<entry key="reason_NO_EXPEDITION">Place at least one unit of your expedition.</entry>
 	<entry key="reason_NO_CAPITAL">A tribe with settlements needs a capital.</entry>
 	<entry key="reason_GAME_REJECTED">The game refuses the scenario.</entry>
+<entry key="toolHelp">Choose a tool and click the map, or apply it to the selected square. Pan with the touchpad, WASD or right-button drag.</entry>
+<entry key="applyTool">Apply to selected square</entry>
 </properties>
