@@ -10,7 +10,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javafx.beans.property.DoubleProperty;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
@@ -20,7 +19,7 @@ import javafx.util.StringConverter;
 
 /**
  * Separate music and effects volume sliders (R-0227). Each shows its caption,
- * the silent and high endpoints and its current value; zero is silent.
+ * the silent and loud endpoints without a separate current value.
  */
 @Singleton
 public class SettingVolumeView implements JavaFxComponent, UpdatableLanguage {
@@ -28,11 +27,6 @@ public class SettingVolumeView implements JavaFxComponent, UpdatableLanguage {
     public static final String MUSIC_VOLUME_ID = "settingVolume";
 
     public static final String EFFECTS_VOLUME_ID = "settingEffectsVolume";
-
-    /**
-     * Suffix of the label id that shows a slider's current value.
-     */
-    public static final String VALUE_SUFFIX = "Value";
 
     /**
      * Suffix of the label id that names a slider's category.
@@ -50,7 +44,6 @@ public class SettingVolumeView implements JavaFxComponent, UpdatableLanguage {
         music = new VolumeRow(MUSIC_VOLUME_ID, Preferences.volume_caption);
         effects = new VolumeRow(EFFECTS_VOLUME_ID,
                 Preferences.effectsVolume_caption);
-        effects.row.getChildren().remove(effects.value);
         mainPanel = new VBox(4, music.row, effects.row);
 
         updateLanguage(i18n);
@@ -85,10 +78,6 @@ public class SettingVolumeView implements JavaFxComponent, UpdatableLanguage {
 
         private final Slider slider;
 
-        private final Label value;
-
-        private I18n i18n;
-
         VolumeRow(final String id, final Preferences caption) {
             this.caption = caption;
             label = new Label();
@@ -107,19 +96,12 @@ public class SettingVolumeView implements JavaFxComponent, UpdatableLanguage {
             slider.setShowTickMarks(false);
             slider.setBlockIncrement(10);
 
-            value = new Label();
-            value.setId(id + VALUE_SUFFIX);
-            slider.valueProperty()
-                    .addListener((object, old, newValue) -> showValue());
-
             row = new HBox();
-            row.getChildren().addAll(label, slider, value);
+            row.getChildren().addAll(label, slider);
             SettingRow.align(row, label);
-            HBox.setMargin(value, new Insets(0, 0, 0, 8));
         }
 
         void updateLanguage(final I18n i18n) {
-            this.i18n = i18n;
             label.setText(i18n.get(caption));
             // The skin passes every formatter through one wrapper, so its
             // axis keeps old tick labels unless the formatter is cleared.
@@ -141,19 +123,7 @@ public class SettingVolumeView implements JavaFxComponent, UpdatableLanguage {
                     return null;
                 }
             });
-            showValue();
-        }
-
-        private void showValue() {
-            if (i18n == null) {
-                return;
-            }
-            final int volume = (int) slider.getValue();
-            value.setText(volume <= MusicPlayer.MIN_VOLUME
-                    ? i18n.get(Preferences.volume_silent)
-                    : i18n.get(Preferences.volume_value, volume));
         }
 
     }
-
 }

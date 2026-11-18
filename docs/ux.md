@@ -1779,7 +1779,7 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 
 ## Settings — stručné popisky (2026-11-10)
 
-1. [R-0441](requirements/done/R-0441.md): Efekty nemají vedle posuvníku další hodnotu; rychlost posunu mapy má pouze krajní popisky Pomalu/Rychle podle zvoleného jazyka. Vývojářský režim zachovává checkbox s popiskem, bez samostatného nadpisu a vysvětlující věty; navazující [R-0442](requirements/done/R-0442.md) odstraňuje z popisku zkratku. Ovládání a okamžité ukládání voleb se nemění; výsledky ověření vlastní funkční evidence.
+1. [R-0441](requirements/done/R-0441.md), rozšířeno 18. listopadu 2026: Hudba ani efekty nemají vedle posuvníku další hodnotu. Krajní popisky jsou Silent/Loud, česky Ticho/Nahlas; rychlost posunu mapy má pouze krajní popisky Nízká/Vysoká podle zvoleného jazyka. Vývojářský režim zachovává checkbox s popiskem, bez samostatného nadpisu a vysvětlující věty; navazující [R-0442](requirements/done/R-0442.md) odstraňuje z popisku zkratku. Ovládání a okamžité ukládání voleb se nemění; výsledky ověření vlastní funkční evidence.
 
 ## Nastavení: pozadí a popisek vývojářského režimu (2026-11-10)
 
@@ -1993,7 +1993,7 @@ nejde o novou uživatelskou studii.
 
 ## Citlivost posunu mapy touchpadem / kolečkem — 2026-11-18
 
-1. V Nastavení hráč upraví samostatný posuvník „Citlivost posunu mapy touchpadem / kolečkem“ od 25 do 200 % po 5 procentních bodech; aktuální hodnota je viditelná v procentech. Výchozích 100 % zachovává dosavadní rychlost.
+1. V Nastavení hráč upraví samostatný posuvník „Citlivost posunu mapy touchpadem / kolečkem“ od 25 do 200 % po 5 procentních bodech; polohu vyjadřuje jezdec a pouze krajní popisky Nízká/Vysoká (Slow/Fast), bez čísel stupnice a bez samostatné hodnoty. Výchozích 100 % zachovává dosavadní rychlost.
 2. Změna se ukládá okamžitě mezi nastavení aplikace a platí při příštím scrollování mapy v obou osách. Návrat z Nastavení změnu neruší; původní hodnotu lze nastavit stejným posuvníkem. Není potřeba rozehraná partie.
 3. Kolečko a touchpad sdílejí citlivost. Směr přijatých událostí a jejich setrvačný dojezd zůstávají zachované. Tažení mapy pravým tlačítkem a rychlost WASD jsou nezávislé.
 4. Jde o implementované chování; skutečné výsledky kontrol vlastní [funkční evidence](functional-tests.md#citlivost-scrollovani-2026-11-18). Nejde o měření konkrétního touchpadu ani hráčskou studii.

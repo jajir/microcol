@@ -444,19 +444,18 @@ public final class FramedSettingsPage extends AbstractScreen {
     }
 
     /**
-     * Checks both volume sliders, the current values they show and the stored
+     * Checks both volume sliders, absence of separate values and stored
      * preferences.
      */
-    public void verifyVolumes(final int music, final int effects,
-            final String musicValue) {
+    public void verifyVolumes(final int music, final int effects) {
         final GamePreferences prefs = getContext()
                 .getClassFromGuice(GamePreferences.class);
         assertEquals(music, ((Slider) control("settingVolume")).getValue(),
                 .001);
         assertEquals(effects,
                 ((Slider) control("settingEffectsVolume")).getValue(), .001);
-        assertEquals(musicValue,
-                ((Labeled) control("settingVolumeValue")).getText());
+        assertTrue(control("settingVolume").getScene().getRoot()
+                .lookupAll("#settingVolumeValue").isEmpty());
         assertTrue(control("settingEffectsVolume").getScene().getRoot()
                 .lookupAll("#settingEffectsVolumeValue").isEmpty());
         assertEquals(music, prefs.getMusicVolume());
@@ -468,27 +467,50 @@ public final class FramedSettingsPage extends AbstractScreen {
      * endpoint, in the normal Settings font.
      */
     public void verifyVolumeTexts(final String musicCaption,
-            final String effectsCaption, final String silent) {
-        getRobot().interact(() -> {
-            // Tick labels are rebuilt in the axis layout after a language
-            // change.
-            control("settingVolume").getScene().getRoot().layout();
-            verifyVolumeRow("settingVolume", musicCaption, silent);
-            verifyVolumeRow("settingEffectsVolume", effectsCaption, silent);
-        });
+            final String effectsCaption, final String silent, final String loud)
+            throws Exception {
+        verifyVolumeRow("settingVolume", musicCaption, silent, loud);
+        verifyVolumeRow("settingEffectsVolume", effectsCaption, silent, loud);
     }
 
     private void verifyVolumeRow(final String id, final String caption,
-            final String silent) {
+            final String silent, final String loud) throws Exception {
         final Labeled label = (Labeled) control(id + "Caption");
         assertEquals(caption, label.getText());
         assertEquals("Playpen Sans", label.getFont().getFamily());
         assertTrue(label.isVisible() && label.getWidth() > 0, id);
-        assertTrue(
-                control(id).lookupAll("Text").stream()
-                        .anyMatch(node -> node.isVisible()
-                                && silent.equals(((Text) node).getText())),
-                id + " shows its silent endpoint");
+        verifySliderEndpoints(id, silent, loud);
+    }
+
+    public void verifySliderEndpoints(final String id, final String low,
+            final String high) throws Exception {
+        // JavaFX fades out old axis labels after changing the language.
+        WaitForAsyncUtils.waitFor(5, java.util.concurrent.TimeUnit.SECONDS,
+                () -> WaitForAsyncUtils.asyncFx(() -> visibleSliderLabels(id))
+                        .get().equals(java.util.Set.of(low, high)));
+        getRobot().interact(() -> {
+            final Slider slider = (Slider) control(id);
+            slider.getScene().getRoot().layout();
+            assertEquals(2, slider.getParent().getChildrenUnmodifiable().size(),
+                    "Only caption and slider, without a separate value");
+            assertEquals(low,
+                    slider.getLabelFormatter().toString(slider.getMin()));
+            assertEquals(high,
+                    slider.getLabelFormatter().toString(slider.getMax()));
+            assertNull(slider.getLabelFormatter()
+                    .toString((slider.getMin() + slider.getMax()) / 2));
+            assertEquals(java.util.Set.of(low, high), visibleSliderLabels(id));
+        });
+    }
+
+    private java.util.Set<String> visibleSliderLabels(final String id) {
+        final Slider slider = (Slider) control(id);
+        slider.getScene().getRoot().layout();
+        return slider.lookupAll("Text").stream()
+                .filter(node -> node.isVisible())
+                .map(node -> ((Text) node).getText())
+                .filter(text -> !text.isBlank())
+                .collect(java.util.stream.Collectors.toSet());
     }
 
     public void verifyFocused(final String id) {

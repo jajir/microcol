@@ -1694,3 +1694,7 @@ získání. Výsledky jsou v [evidenci](functional-tests.md#knowledge-2026-11-17
    TC18 kolizi názvu, Enter, neplatný vstup a přepsání včetně zrušení;
    TC19 český návrh a uložení Enterem. Výsledky vede
    [funkční evidence](functional-tests.md#save-name-and-enter-2026-11-18).
+
+## UC-114: stručné stupnice nastavení — 2026-11-18
+
+1. `TC_84/09` ověřuje Music/Effects s krajními popisky Silent/Loud a Ticho/Nahlas bez samostatné hodnoty, ovládání a uchování nastavení. `TC_84/16` ověřuje pouze Slow/Fast a Nízká/Vysoká u touchpadu/kolečka bez čísel a procent, rozsah, uložení a účinek v obou osách. [UX pravidla](ux.md#citlivost-posunu-mapy-touchpadem-koleckem-2026-11-18).

@@ -40,6 +40,15 @@
    This is local acceptance; full regression and publication were not run
    or verified as part of this task.
 
+## Settings endpoint labels — 2026-11-18
+
+1. UC-114/119: Music and Effects show Silent/Loud (Ticho/Nahlas), without a separate current-value label. Touchpad/wheel sensitivity shows only Slow/Fast (Nízká/Vysoká), without numeric tick labels or a percentage beside the slider. Existing ranges, input and persistence stay unchanged; see [UX](ux.md#citlivost-posunu-mapy-touchpadem-koleckem-2026-11-18).
+2. `TC_84/09` checks both localized audio endpoints, absent value labels, independent keyboard input, reopening and application restart. `TC_84/16` checks localized scroll endpoints, absent extra value, saved limits and normal/inertial scrolling in both axes. The targeted neighborhood includes `TC_84/01,02,15` and `PageVerificationContractTest`.
+3. Targeted attempt `20261118T205349Z-c5e9ccfce921` (`target/docker-ui/run-kyWRBL`) ran 8 checks with 2 errors, 0 failures/skips in 93.471 s: the new test expected different Czech wording from the existing WASD translation, and checked localized ticks before JavaFX removed fading old labels. Expected Czech labels now match WASD; the test waits up to 5 s for exactly the expected pair. Product behavior was unchanged by this test repair. Initial model preparation `20261118T204944Z-8cc33c103fc2` timed out after 22.110 s on a 20 s Docker container-list query; no tests started. Docker host log records engine startup during that interval. Subsequent server-version and container-list probes succeeded. Model retry `20261118T205056Z-62d9f9fbbb19` (PID 28329, 600 s watchdog) passed all **5,141 tests**, zero failures/errors/skips, in 152.963 s (`target/verification/run-jg7w41dn`). Failed evidence is preserved; no full-regression or publication claim is made.
+4. Targeted retry `20261118T205620Z-c6b47ca6f1e9` (PID 29127, 1,800 s watchdog) passed **8 checks**, zero failures/errors/skips, in 107.792 s (`target/docker-ui/run-I126LN`): TC84/01,02,09,15,16 plus three page-contract tests. Reviewed English in-game and Czech menu screenshots; the volume endpoints are correct and separate values are absent. Smoke `20261118T205823Z-8d57c74cb988` (PID 29324, 480 s supervisor / 420 s acceptance limit) passed **23 checks**, zero failures/errors/skips, in 286.755 s overall; precommit selection took 283.729 s (`target/verification/run-6wecjoii`). All changed executable/test sources match the smoke snapshot; game sources also match the passing model snapshot.
+5. Shared Java formatter and diff review passed. All 14 documentation consistency tests, name audit and strict MkDocs passed; logs are in `target/settings-endpoints-20261118/`. This is local acceptance against base `2a2f61a067569c4081a38aa0e9ec2afa8d143ae3` plus this change, not full regression or verification of a published distribution.
+
+
 ## Regression run 44222879665 repair — 2026-11-18
 
 ## Construction workforce refresh — 2026-11-18
