@@ -15,4 +15,5 @@
 	<entry key="animationSpeed_slow">Slow</entry>
 
     <entry key="mapScrollSpeed_caption">Map scroll speed (WASD)</entry>
+ <entry key="mapScrollSensitivity_caption">Map scroll sensitivity (touchpad / wheel)</entry>
 </properties>

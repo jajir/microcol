@@ -18,6 +18,7 @@ public class PreferencesProperties {
 
     private final SimpleIntegerProperty animationSpeedProperty;
     private final SimpleIntegerProperty mapScrollSpeedProperty;
+    private final SimpleIntegerProperty mapScrollSensitivityProperty;
 
     private final SimpleIntegerProperty musicVolumeProperty;
 
@@ -28,6 +29,11 @@ public class PreferencesProperties {
     @Inject
     PreferencesProperties(final GamePreferences gamePreferences,
             final EventBus eventBus) {
+        mapScrollSensitivityProperty = new SimpleIntegerProperty(
+                gamePreferences.getMapScrollSensitivity());
+        mapScrollSensitivityProperty
+                .addListener((object, old, value) -> gamePreferences
+                        .setMapScrollSensitivity(value.intValue()));
         mapScrollSpeedProperty = new SimpleIntegerProperty(
                 gamePreferences.getMapScrollSpeed());
         mapScrollSpeedProperty
@@ -58,6 +64,10 @@ public class PreferencesProperties {
         showFightAdvisorProperty.addListener((object, old, newValue) -> {
             gamePreferences.setShowFightAdvisor(newValue);
         });
+    }
+
+    public SimpleIntegerProperty getMapScrollSensitivityProperty() {
+        return mapScrollSensitivityProperty;
     }
 
     public SimpleIntegerProperty getMapScrollSpeedProperty() {

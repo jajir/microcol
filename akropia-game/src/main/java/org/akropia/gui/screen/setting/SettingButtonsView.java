@@ -40,6 +40,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
     private final SettingVolumeView settingVolumeView;
     private final SettingAnimationSpeedView settingAnimationSpeedView;
     private final SettingMapScrollSpeedView settingMapScrollSpeedView;
+    private final SettingMapScrollSensitivityView settingMapScrollSensitivityView;
     private final SettingVersionView settingVersionView;
     private final CheckBox autosaveCheckBox;
     private final CheckBox turnSummaryCheckBox;
@@ -54,11 +55,13 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
             final SettingVolumeView settingVolumeView,
             final SettingAnimationSpeedView settingAnimationSpeedView,
             final SettingMapScrollSpeedView settingMapScrollSpeedView,
+            final SettingMapScrollSensitivityView settingMapScrollSensitivityView,
             final SettingVersionView settingVersionView,
             final GamePreferences gamePreferences, final I18n i18n,
             final org.akropia.gui.preferences.DeveloperMode developerMode) {
         shortcutsButton = ActionButtons.button(ButtonIcon.SETTINGS);
         shortcutsButton.setId(BUTTON_SHORTCUTS_ID);
+        this.settingMapScrollSensitivityView = settingMapScrollSensitivityView;
         this.settingMapScrollSpeedView = settingMapScrollSpeedView;
         this.settingLanguageView = Preconditions
                 .checkNotNull(settingLanguageView);
@@ -117,6 +120,8 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         buttonsBox.getChildren().add(settingVolumeView.getContent());
         buttonsBox.getChildren().add(settingAnimationSpeedView.getContent());
         buttonsBox.getChildren().add(settingMapScrollSpeedView.getContent());
+        buttonsBox.getChildren()
+                .add(settingMapScrollSensitivityView.getContent());
         final javafx.scene.layout.HBox shortcutsRow = new javafx.scene.layout.HBox(
                 new javafx.scene.control.Label(), shortcutsButton);
         SettingRow.align(shortcutsRow,
@@ -153,6 +158,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         this.settingVolumeView.updateLanguage(i18n);
         this.settingAnimationSpeedView.updateLanguage(i18n);
         this.settingMapScrollSpeedView.updateLanguage(i18n);
+        this.settingMapScrollSensitivityView.updateLanguage(i18n);
         this.settingVersionView.updateLanguage(i18n);
     }
 

@@ -35,13 +35,36 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
                     "autosaveEnabled", "settingTurnSummary",
                     "settingOpenEuropeOnArrival", "settingVolume",
                     "settingEffectsVolume", "settingAnimationSpeed",
-                    "settingMapScrollSpeed", "settingKeyboardShortcuts",
-                    "settingDeveloperMode");
+                    "settingMapScrollSpeed", "settingMapScrollSensitivity",
+                    "settingKeyboardShortcuts", "settingDeveloperMode");
 
     @Start
     private void start(final Stage stage) throws Exception {
         initialize(stage, getClass(),
                 new File("src/test/scenarios/F15-free-play-audit.akropia"));
+    }
+
+    @Test
+    @Tag("local")
+    void TC_16_scroll_sensitivity_persists_and_scales_both_axes()
+            throws Exception {
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        final FramedSettingsPage page = new FramedSettingsPage(getContext());
+        // Check the default and both keyboard endpoints.
+        page.verifyMapScrollSensitivity(100);
+        page.press("settingMapScrollSensitivity", KeyCode.HOME);
+        page.verifyMapScrollSensitivity(25);
+        page.press("settingMapScrollSensitivity", KeyCode.END);
+        page.verifyMapScrollSensitivity(200);
+        settings.goBack().openSetting();
+        page.verifyMapScrollSensitivity(200);
+        // Load the map and verify both axes, including inertial events.
+        final GamePage game = settings.goBack().loadGame();
+        game.waitWhileMoving();
+        page.verifyMapScrollDelta(100, false, 40, 20);
+        page.verifyMapScrollDelta(25, false, 10, 5);
+        page.verifyMapScrollDelta(200, false, 80, 40);
+        page.verifyMapScrollDelta(200, true, 80, 40);
     }
 
     @Test
@@ -220,12 +243,12 @@ public class TC_84_F75_framed_settings_test extends AbstractAkropiaTest {
         developer.rememberGame();
         // Real camera panning retains the map-file convention at both corners.
         final Location first = Location.of(1, 1);
-        game.panToTile(first);
+        new org.akropia.page.WorldMinimapPage(getContext()).clickWorld(0, 0);
         game.hoverTile(first);
         developer.verifyUnknownTile(first);
         final Location last = Location.of(getModel().getMap().getMaxLocationX(),
                 getModel().getMap().getMaxLocationY());
-        game.panToTile(last);
+        new org.akropia.page.WorldMinimapPage(getContext()).clickWorld(1, 1);
         game.hoverTile(last);
         developer.verifyUnknownTile(last);
         developer.leaveMap();

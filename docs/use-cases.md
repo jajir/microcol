@@ -1645,3 +1645,8 @@ nedostatek sov, zrušení volby, okamžitý nákup, přebytek, novou nabídku a 
 TC100 ověřuje řádkovou nápovědu s obrázky vlevo, popisem vpravo, hledáním památek
 a odkazy. Dosavadní scénáře bonusů kontrolují zachované účinky při okamžitém
 získání. Výsledky jsou v [evidenci](functional-tests.md#knowledge-2026-11-17).
+
+## UC-114/119: Citlivost scrollování — 2026-11-18
+
+1. Nastavení nabízí společnou citlivost touchpadu/kolečka 25–200 %, výchozích 100 %, s okamžitým uložením a použitím pro obě osy mapy. [UX pravidlo](ux.md#citlivost-posunu-mapy-touchpadem-koleckem-2026-11-18).
+2. `TC_84/16` ověřuje výchozí hodnotu, krajní polohy, návrat do nastavení a oba směry včetně setrvačných událostí; `TC_84/01,02,15` ověřují okolní nastavení a rozložení. [Evidence](functional-tests.md#citlivost-scrollovani-2026-11-18).

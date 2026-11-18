@@ -15,4 +15,5 @@
 	<entry key="animationSpeed_slow">Nízká</entry>
 
     <entry key="mapScrollSpeed_caption">Rychlost posunu mapy (WASD)</entry>
+ <entry key="mapScrollSensitivity_caption">Citlivost posunu mapy touchpadem / kolečkem</entry>
 </properties>

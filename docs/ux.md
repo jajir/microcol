@@ -1964,3 +1964,10 @@ nabídku. Neplatná nabídka zobrazí výzvu k obnovení výběru. Tlačítko n�
 vede na [historické předlohy](knowledge.md); externí čtení je dobrovolné.
 Ověření vizuálního rozložení a funkce je v [evidenci](functional-tests.md#knowledge-2026-11-17),
 nejde o novou uživatelskou studii.
+
+## Citlivost posunu mapy touchpadem / kolečkem — 2026-11-18
+
+1. V Nastavení hráč upraví samostatný posuvník „Citlivost posunu mapy touchpadem / kolečkem“ od 25 do 200 % po 5 procentních bodech; aktuální hodnota je viditelná v procentech. Výchozích 100 % zachovává dosavadní rychlost.
+2. Změna se ukládá okamžitě mezi nastavení aplikace a platí při příštím scrollování mapy v obou osách. Návrat z Nastavení změnu neruší; původní hodnotu lze nastavit stejným posuvníkem. Není potřeba rozehraná partie.
+3. Kolečko a touchpad sdílejí citlivost. Směr přijatých událostí a jejich setrvačný dojezd zůstávají zachované. Tažení mapy pravým tlačítkem a rychlost WASD jsou nezávislé.
+4. Jde o implementované chování; skutečné výsledky kontrol vlastní [funkční evidence](functional-tests.md#citlivost-scrollovani-2026-11-18). Nejde o měření konkrétního touchpadu ani hráčskou studii.

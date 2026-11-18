@@ -218,6 +218,18 @@ public class GamePreferences {
                 .update(setting -> setting.setAnimationSpeed(animationSpeed));
     }
 
+    public int getMapScrollSensitivity() {
+        final Integer value = settingService.load().getMapScrollSensitivity();
+        return value == null || value < 25 || value > 200 ? 100 : value;
+    }
+
+    public void setMapScrollSensitivity(final int value) {
+        Preconditions.checkArgument(value >= 25 && value <= 200,
+                "Map scroll sensitivity must be between 25 and 200 percent");
+        settingService
+                .update(setting -> setting.setMapScrollSensitivity(value));
+    }
+
     public int getMapScrollSpeed() {
         final Integer speed = settingService.load().getMapScrollSpeed();
         return speed == null || speed < 1 || speed > MAX_MAP_SCROLL_SPEED

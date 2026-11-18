@@ -59,6 +59,7 @@ public final class GamePanelMouseListener {
     private final TradeRoutePlanning tradeRoutePlanning;
     private final Provider<TradeRoutePlanningPanel> tradeRoutePlanningPanel;
     private final Canvas canvas;
+    private final org.akropia.gui.preferences.PreferencesProperties preferences;
     private Point contextPress;
     private boolean contextDragged;
 
@@ -78,7 +79,9 @@ public final class GamePanelMouseListener {
             final SelectedUnitManager selectedUnitManager,
             final Provider<ButtonsGamePanel> gameButtons,
             final TradeRoutePlanning tradeRoutePlanning,
-            final Provider<TradeRoutePlanningPanel> tradeRoutePlanningPanel) {
+            final Provider<TradeRoutePlanningPanel> tradeRoutePlanningPanel,
+            final org.akropia.gui.preferences.PreferencesProperties preferences) {
+        this.preferences = preferences;
         this.tradeRoutePlanningPanel = Preconditions
                 .checkNotNull(tradeRoutePlanningPanel);
         this.tradeRoutePlanning = Preconditions
@@ -161,9 +164,10 @@ public final class GamePanelMouseListener {
     }
 
     private void onScroll(final ScrollEvent event) {
-        visibleArea.addDeltaToTopLeftPoint(
-                Point.of(-event.getDeltaX(), -event.getDeltaY())
-                        .divide(DEFAULT_SCROLL_SPEED_DIVIDER));
+        visibleArea.addDeltaToTopLeftPoint(Point
+                .of(-event.getDeltaX(), -event.getDeltaY())
+                .divide(DEFAULT_SCROLL_SPEED_DIVIDER * 100
+                        / preferences.getMapScrollSensitivityProperty().get()));
     }
 
     private void tryToSwitchToMoveMode(final Location location) {

@@ -28,6 +28,27 @@ public class SettingServicePersistingTest {
     private SettingService settingService;
 
     @Test
+    void scrollSensitivityPersistsAndRejectsInvalidValues() {
+        when(persistingTool.getRootSaveDirectory())
+                .thenReturn(temporaryDirectory);
+        final GamePreferences preferences = new GamePreferences(settingService);
+        assertEquals(100, preferences.getMapScrollSensitivity());
+        for (int value : new int[] { 25, 100, 200 }) {
+            preferences.setMapScrollSensitivity(value);
+            assertEquals(value, new GamePreferences(
+                    new SettingService(new SettingDao(), persistingTool))
+                    .getMapScrollSensitivity());
+        }
+        assertThrows(IllegalArgumentException.class,
+                () -> preferences.setMapScrollSensitivity(24));
+        assertThrows(IllegalArgumentException.class,
+                () -> preferences.setMapScrollSensitivity(201));
+        assertEquals(200, preferences.getMapScrollSensitivity());
+        settingService.update(setting -> setting.setMapScrollSensitivity(0));
+        assertEquals(100, preferences.getMapScrollSensitivity());
+    }
+
+    @Test
     public void verify_that_default_setting_is_used() throws Exception {
         when(persistingTool.getRootSaveDirectory())
                 .thenReturn(temporaryDirectory);

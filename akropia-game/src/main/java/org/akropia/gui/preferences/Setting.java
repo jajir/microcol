@@ -33,6 +33,7 @@ public class Setting {
     private Integer animationSpeed;
 
     private Integer mapScrollSpeed;
+    private Integer mapScrollSensitivity;
 
     private boolean showGrid;
 
@@ -72,6 +73,7 @@ public class Setting {
         out.effectsVolume = effectsVolume;
         out.animationSpeed = animationSpeed;
         out.mapScrollSpeed = mapScrollSpeed;
+        out.mapScrollSensitivity = mapScrollSensitivity;
         out.showGrid = showGrid;
         out.developerMode = developerMode;
         out.showFightAdvisor = showFightAdvisor;
@@ -88,10 +90,10 @@ public class Setting {
     @Override
     public int hashCode() {
         return Objects.hashCode(mainFramePosition, mainFrameState, locale,
-                volume, effectsVolume, animationSpeed, mapScrollSpeed, showGrid,
-                developerMode, showFightAdvisor, version,
-                gameInProgressSaveFile, autosaveEnabled, turnSummaryEnabled,
-                openEuropeOnArrival, keyboardShortcuts);
+                volume, effectsVolume, animationSpeed, mapScrollSpeed,
+                mapScrollSensitivity, showGrid, developerMode, showFightAdvisor,
+                version, gameInProgressSaveFile, autosaveEnabled,
+                turnSummaryEnabled, openEuropeOnArrival, keyboardShortcuts);
     }
 
     @Override
@@ -110,6 +112,8 @@ public class Setting {
                 && Objects.equal(this.effectsVolume, other.effectsVolume)
                 && Objects.equal(this.animationSpeed, other.animationSpeed)
                 && Objects.equal(this.mapScrollSpeed, other.mapScrollSpeed)
+                && Objects.equal(this.mapScrollSensitivity,
+                        other.mapScrollSensitivity)
                 && Objects.equal(this.showGrid, other.showGrid)
                 && this.developerMode == other.developerMode
                 && Objects.equal(this.showFightAdvisor, other.showFightAdvisor)
@@ -187,6 +191,14 @@ public class Setting {
 
     public void setEffectsVolume(Integer effectsVolume) {
         this.effectsVolume = effectsVolume;
+    }
+
+    public Integer getMapScrollSensitivity() {
+        return mapScrollSensitivity;
+    }
+
+    public void setMapScrollSensitivity(final int sensitivity) {
+        mapScrollSensitivity = sensitivity;
     }
 
     public Integer getMapScrollSpeed() {

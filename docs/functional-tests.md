@@ -18366,3 +18366,12 @@ messages for diagnosis. No tests were removed or weakened for acceptance.
    MkDocs passed. Native distribution test expectations were updated to this
    logging policy; native distributions and remote CI were not run or verified.
    Earlier failed attempts remain failed.
+
+## Citlivost scrollování — 2026-11-18
+
+1. UC-114/119: `TC_84_F75_framed_settings_test.TC_16_scroll_sensitivity_persists_and_scales_both_axes` pokrývá výchozích 100 %, krajní hodnoty 25/200 %, opětovné otevření nastavení a škálování obou os mapy včetně setrvačnosti. `SettingServicePersistingTest` ověřuje uložení přes nový čtecí objekt, odmítnutí hodnot mimo rozsah a výchozí hodnotu při neplatném nastavení.
+2. Cílený výběr zahrnuje celou `TC_84_F75_framed_settings_test` a `PageVerificationContractTest`. Opakovaný běh `target/docker-ui/run-wCkDQk` prošel všech 19 testů bez selhání, chyb a přeskočení za 233,230 s.
+3. První modelový pokus `20261118T080351Z-513804259b48` skončil při přípravě: `docker ps` překročil 20 s, testovací příkaz nezačal. Po úspěšném dotazu na verzi Dockeru nový modelový běh `run-mjun_ge1` prošel 5 133 testy ve 400 XML reportech, bez chyb a přeskočení (157,037 s včetně dohledu).
+4. První cílený běh `target/docker-ui/run-tG4RXv` dokončil 19 testů: 18 úspěšných, jedna chyba, žádné přeskočení (230,585 s). Nový TC_84/16 prošel; TC_84/05 nedokázal najet na rohové políčko zakryté ovládáním po přesunu klávesami. Scénář nyní zpřístupňuje stejné rohy přes minimapu, zachovává původní kontroly souřadnic i herního stavu. Původní neúspěšný běh zůstává neúspěšný.
+5. Pevný smoke/support výběr `target/verification/run-csrotllj` prošel všech 23 testů ve 13 XML reportech, bez selhání, chyb a přeskočení za 289,978 s včetně dohledu (limit 420 s). Herní zdroje se shodují s úspěšným modelovým snímkem; všechny změněné spustitelné a testové zdroje se shodují se smoke snímkem. Základ kontrolované změny je `46cbfe3898b93bbfbb23c2dc8e1457e84e3d0808`.
+6. Sdílený Java formatter byl aplikován na změněné Java soubory. Kontrola diffu a 14 dokumentačních testů i strict MkDocs prošly. Snímek nastavení z cíleného běhu potvrzuje viditelný nový posuvník a aktuální procenta. Přejímka je lokální; plná regrese a publikace herní distribuce nebyly spuštěny ani ověřeny.

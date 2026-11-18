@@ -182,7 +182,8 @@ public final class FramedSettingsPage extends AbstractScreen {
                     "settingTurnSummary", "settingOpenEuropeOnArrival",
                     "settingVolume", "settingEffectsVolume",
                     "settingAnimationSpeed", "settingMapScrollSpeed",
-                    "settingKeyboardShortcuts", "settingDeveloperMode" }) {
+                    "settingMapScrollSensitivity", "settingKeyboardShortcuts",
+                    "settingDeveloperMode" }) {
                 final Control input = control(id);
                 final javafx.scene.control.Label caption = (javafx.scene.control.Label) ((javafx.scene.layout.HBox) input
                         .getParent()).getChildren().get(0);
@@ -368,6 +369,44 @@ public final class FramedSettingsPage extends AbstractScreen {
     public void verifyLanguage(final boolean czech) {
         assertEquals(czech, ((RadioButton) control("rbCzech")).isSelected());
         assertEquals(!czech, ((RadioButton) control("rbEnglish")).isSelected());
+    }
+
+    public void verifyMapScrollSensitivity(final int expected) {
+        assertEquals(expected,
+                ((Slider) control("settingMapScrollSensitivity")).getValue(),
+                .001);
+        assertEquals(expected,
+                getContext().getClassFromGuice(GamePreferences.class)
+                        .getMapScrollSensitivity());
+    }
+
+    public void verifyMapScrollDelta(final int sensitivity,
+            final boolean inertia, final int expectedX, final int expectedY) {
+        getRobot().interact(() -> {
+            getContext().getClassFromGuice(
+                    org.akropia.gui.preferences.PreferencesProperties.class)
+                    .getMapScrollSensitivityProperty().set(sensitivity);
+            final org.akropia.gui.screen.game.gamepanel.VisibleAreaService view = getAkropia()
+                    .getInjector()
+                    .getInstance(com.google.inject.Key.get(
+                            org.akropia.gui.screen.game.gamepanel.VisibleAreaService.class,
+                            com.google.inject.name.Names.named("game")));
+            view.setTopLeftPosionOfCanvas(org.akropia.gui.Point.of(500, 500));
+            final org.akropia.gui.Point before = view.getTopLeft();
+            final Canvas canvas = getContext().getClassFromGuice(
+                    org.akropia.gui.screen.game.gamepanel.GamePanelComponent.class)
+                    .getCanvas();
+            javafx.event.Event.fireEvent(canvas,
+                    new javafx.scene.input.ScrollEvent(
+                            javafx.scene.input.ScrollEvent.SCROLL, 100, 100,
+                            100, 100, false, false, false, false, false,
+                            inertia, -90, -45, -90, -45,
+                            javafx.scene.input.ScrollEvent.HorizontalTextScrollUnits.NONE,
+                            0,
+                            javafx.scene.input.ScrollEvent.VerticalTextScrollUnits.NONE,
+                            0, 0, null));
+            assertEquals(before.add(expectedX, expectedY), view.getTopLeft());
+        });
     }
 
     public void verifyMapScrollSpeed(final int expected,
