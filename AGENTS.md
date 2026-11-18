@@ -1,3 +1,17 @@
+# Analysis before implementation
+
+As agreed on 2026-11-18, start with a shared analysis of the problem, expected
+behavior and proposed solution. Change code only after the user explicitly
+confirms implementation of the agreed scope. A problem report, screenshot,
+question or agreement on desired behavior alone does not authorize code changes.
+Before confirmation, inspect relevant sources and discuss findings and options;
+do not modify implementation, tests, runtime assets/data or build/runtime/CI
+configuration. Explicitly requested instruction or documentation updates may
+proceed within their requested scope. This analysis does not require a new
+requirement document unless separately agreed under the requirement workflow.
+After implementation is confirmed, the normal acceptance, commit and push
+workflow below remains authorized for that scope.
+
 # Branch workflow
 
 Use `main` for ongoing development, integration and publication unless the user
@@ -98,8 +112,9 @@ As agreed on 2026-11-10, do not create requirement documents by default.
 Create a new analysis in `docs/requirements/R-NNNN.md` only when explicitly
 agreed with the user, using the
 [requirement workflow and template](docs/requirements/README.md).
-Ordinary requests, including small changes, proceed without a new R document
-or a routine question about whether to create one. Continue maintaining relevant
+Ordinary requests, including small changes, are analyzed without a new R document
+or a routine question about whether to create one; implementation still requires
+the explicit confirmation described above. Continue maintaining relevant
 project documentation and performing the required acceptance checks.
 Preserve existing requirements and keep affected active ones consistent; work
 explicitly selected from an existing requirement continues to follow its workflow.
