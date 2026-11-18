@@ -1,5 +1,16 @@
 ## Dokončení práce pionýra — 18. listopadu 2026
 
+## UC-033/042: dostupnost vybrané stavby po přesunu pracovníka — 18. listopadu 2026
+
+1. `TC_32_F24_construction_eligibility_test/TC_12` ponechá otevřenou
+   Construction a vybraný Lumber Mill. Přetažení pracovníka mezi budovou
+   a Outside colony mění populaci 3 → 2 → 3 → 2 → 3; test kontroluje
+   dostupnost, důvod odmítnutí, zachování fronty a následné potvrzení.
+2. [Chování](ux.md#dostupnost-stavby-pri-presunu-pracovnika-18-listopadu-2026)
+   a [evidence](functional-tests.md#construction-workforce-refresh-2026-11-18)
+   doplňují stávající přejímku staveb; nemění pravidlo minimální populace.
+
+
 UC-019–021: po úspěšném dokončení orby, kácení nebo silnice může pracovník
 hned ve stejném tahu pokračovat s plným aktuálním přídělem pohybu. Ruční
 zrušení ani neplatná práce pohyb nevracejí. Pravidlo vlastní

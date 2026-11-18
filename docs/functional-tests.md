@@ -1,5 +1,40 @@
 ## Regression run 44222879665 repair — 2026-11-18
 
+## Construction workforce refresh — 2026-11-18
+
+1. UC-033/042: the active construction editor rechecks the selected project's
+   model admission when the colony repaints after worker transfers. Selection
+   stays intact; the detail and Add button update together. Confirmation still
+   uses the model validation and stale-state guard.
+2. `TC_32_F24_construction_eligibility_test/TC_12` drags the carpenter outside
+   and back while Lumber Mill remains selected, checks both population
+   boundaries repeatedly and confirms exactly one queue entry. Existing
+   `ConstructionAdmissionTest` covers model population boundaries for every
+   constructible project.
+3. The first model dispatch (`20261118T200816Z-936795159ad2`) timed out
+   during Docker admission: the labelled-container query exceeded 20 seconds;
+   no test command started (22.070 seconds total). The next probe completed;
+   retry `20261118T200903Z-4fcd72c85616` passed **5,138 model/JUnit tests**,
+   zero failures/errors/skips, in 156.907 supervised seconds (600-second limit).
+   Reports: `target/verification/run-7u0kepj9/`.
+4. Targeted Docker/Xvfb selection passed **23 tests**, zero failures/errors/skips:
+   all 12 TC32 scenarios, all 8 TC195 colony-layout scenarios and 3 page-contract
+   checks. The new TC32/12 passed in 10.429 seconds. Completion
+   `20261118T201159Z-aee874bb885b` took 325.135 seconds (1,800-second limit);
+   reports: `target/docker-ui/run-Z8fZAw/`.
+5. Fixed smoke/support selection passed **23 tests**, zero failures/errors/skips,
+   in 285.017 verification seconds (285.168 supervised seconds), within the
+   420-second local budget. Completion `20261118T201736Z-71370489bae7`;
+   reports: `target/verification/run-pi7capog/`.
+6. Local acceptance covers base `956130d679984e8f5e4cc8ac65b5e1a6f8a906f5`
+   plus this fix. Final tracked non-document source matches both verifier
+   snapshots. Shared Java formatting, scoped review and diff checks passed;
+   documentation checks passed all 14 tests, naming audit (zero unexplained
+   occurrences) and strict MkDocs. Logs: `target/construction-workforce-refresh/`.
+   The unrelated backlog edit is excluded. No remote CI or distribution
+   publication verification was requested or performed.
+
+
 1. Failure inventory: [the requested GitHub run](https://github.com/jajir/microcol/actions/runs/44222879665)
    tested `00cb54de0d1421c95dd81efa32dd9b640dd39e0c` and reported 23 failed
    scenarios in TC11, TC32, TC53, TC78, TC81, TC101, TC125, TC134, TC147,

@@ -171,12 +171,7 @@ public final class ConstructionPage extends AbstractScreen {
     }
 
     public void assignCarpenter(final int unitId) throws Exception {
-        javafx.scene.Parent building = getNodeFinder().lookup("#id_carpenter")
-                .queryAs(javafx.scene.Parent.class);
-        javafx.scene.canvas.Canvas canvas = (javafx.scene.canvas.Canvas) building
-                .getChildrenUnmodifiable().stream()
-                .filter(node -> node instanceof javafx.scene.canvas.Canvas)
-                .findFirst().orElseThrow();
+        final javafx.scene.canvas.Canvas canvas = carpenterCanvas();
         revealGameContent(
                 getNodeFinder().lookup("#colonyUnit-" + unitId).query(),
                 canvas);
@@ -186,6 +181,25 @@ public final class ConstructionPage extends AbstractScreen {
                 () -> getModel().getUnitById(unitId)
                         .getPlace() instanceof org.akropia.model.PlaceConstructionSlot);
         WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void moveCarpenterOutside(final int slot) {
+        final javafx.scene.canvas.Canvas canvas = carpenterCanvas();
+        final javafx.scene.Node outside = getNodeFinder()
+                .lookup("#colony-outside-area").query();
+        revealGameContent(canvas, outside);
+        getRobot().drag(canvas.localToScreen(16 + 35 * slot, 16),
+                MouseButton.PRIMARY).dropTo(outside);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    private javafx.scene.canvas.Canvas carpenterCanvas() {
+        javafx.scene.Parent building = getNodeFinder().lookup("#id_carpenter")
+                .queryAs(javafx.scene.Parent.class);
+        return (javafx.scene.canvas.Canvas) building.getChildrenUnmodifiable()
+                .stream()
+                .filter(node -> node instanceof javafx.scene.canvas.Canvas)
+                .findFirst().orElseThrow();
     }
 
     private Colony colony() {

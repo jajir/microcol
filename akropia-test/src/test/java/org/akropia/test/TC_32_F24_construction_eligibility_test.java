@@ -36,6 +36,40 @@ public class TC_32_F24_construction_eligibility_test
     private static final String CZECH_WAITING_NOTICE = "Kolonie New Amsterdam: "
             + "Kovářství má dost kladiv, ale čeká na nástroje (chybí 1).";
 
+    @Test
+    @Tag("local")
+    void TC_12_open_project_tracks_worker_arrival_and_departure()
+            throws Exception {
+        // Keep the selected project open while its population boundary changes.
+        WelcomePage.of(getContext()).loadGame().openColonyWithKeyboard(0,
+                "New Amsterdam");
+        ConstructionPage construction = new ConstructionPage(getContext());
+        construction.open();
+        construction.select("LUMBER_MILL");
+        construction.verifyOffer(true, "Available.", 52, 0);
+        construction.moveCarpenterOutside(0);
+        construction.verifyStocksAndPopulation(58, 19, 2);
+        construction.verifyOffer(false, "Requires 3 residents; currently 2.",
+                52, 0);
+
+        // Returning the worker enables the same selection without reopening it.
+        construction.assignCarpenter(200);
+        construction.verifyOffer(true, "Available.", 52, 0);
+        construction.select("LUMBER_MILL");
+        construction.verifyOffer(true, "Available.", 52, 0);
+
+        // A second departure disables it again; returning permits confirmation.
+        construction.moveCarpenterOutside(1);
+        construction.verifyOffer(false, "Requires 3 residents; currently 2.",
+                52, 0);
+        construction.verifyQueue(List.of(), List.of(), 58);
+        construction.assignCarpenter(200);
+        construction.verifyOffer(true, "Available.", 52, 0);
+        construction.confirm();
+        construction.verifyQueue(List.of("LUMBER_MILL"), List.of(0), 58);
+        construction.verifyStocksAndPopulation(58, 19, 3);
+    }
+
     @Start
     private void start(final Stage stage) throws Exception {
         initialize(stage, getClass(), FIXTURE);

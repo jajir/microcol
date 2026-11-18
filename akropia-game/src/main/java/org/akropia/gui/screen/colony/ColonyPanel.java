@@ -47,6 +47,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     private final VBox schoolSummary = new VBox(4);
     private final Label politics = new Label();
     private final Provider<QueueDialog> queue;
+    private QueueDialog activeQueue;
     private final Provider<DialogEducation> education;
     private final java.util.Map<String, Button> sections = new java.util.LinkedHashMap<>();
     private String selected = "area";
@@ -248,6 +249,8 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             detail.getChildren().stream().filter(SchoolPanel.class::isInstance)
                     .map(SchoolPanel.class::cast).forEach(SchoolPanel::refresh);
             refreshOverview();
+            if (activeQueue != null)
+                activeQueue.refreshSelection();
         }
     }
 
@@ -308,6 +311,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         if (key.equals(selected) && !detail.getChildren().isEmpty())
             return;
         selected = key;
+        activeQueue = null;
         detail.getChildren().setAll(colonyFields.getContent());
         colonyFields.getContent().setVisible(key.equals("area"));
         colonyFields.getContent().setManaged(key.equals("area"));
@@ -319,9 +323,11 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         case "area":
             break;
         case "construction":
-            if (colony != null)
+            if (colony != null) {
+                activeQueue = queue.get();
                 detail.getChildren()
-                        .add(queue.get().embedded(() -> selectSection("area")));
+                        .add(activeQueue.embedded(() -> selectSection("area")));
+            }
             break;
         case "school":
             if (colony != null)

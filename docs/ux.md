@@ -1,5 +1,17 @@
 ## Datum výpravy — 2026-11-18
 
+## Dostupnost stavby při přesunu pracovníka — 18. listopadu 2026
+
+1. Otevřená záložka Construction po přesunu pracovníka dovnitř nebo ven
+   z kolonie znovu vyhodnotí dostupnost vybraného projektu podle modelu.
+   Výběr zůstává zachovaný; tlačítko i důvod nedostupnosti odpovídají novému
+   počtu obyvatel bez zavírání záložky či výběru jiného projektu.
+2. Přidání stavby nadále vyžaduje potvrzení. Přesun pracovníka sám nic
+   nezařazuje do fronty a model při potvrzení znovu ověřuje podmínky.
+   [Testovací evidence](functional-tests.md#construction-workforce-refresh-2026-11-18)
+   rozlišuje změnu zdroje a dokončené ověření.
+
+
 Hráč pozná rok, den/měsíc a období ve stavovém řádku. Po najetí na datum získá
 řecký název měsíce a počet dní do dalšího období; tentýž popis je přístupný
 asistenčním technologiím. Datum je pouze informace, bez potvrzení či rušení.

@@ -286,6 +286,10 @@ public class QueueDialog extends AbstractMessageWindow {
                         colony));
     }
 
+    public void refreshSelection() {
+        select(projects.getSelectionModel().getSelectedItem());
+    }
+
     private void select(final ColonyBuildingItem item) {
         if (item == null) {
             add.setDisable(true);
