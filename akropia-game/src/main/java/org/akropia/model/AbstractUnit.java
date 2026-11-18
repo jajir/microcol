@@ -401,7 +401,7 @@ public abstract class AbstractUnit implements Unit {
         movementThirds = MovementPoints.ofPoints(getSpeed());
         if (unitAction.startTurn(model, this)) {
             setAction(UnitActionType.noAction.make());
-            movementThirds = 0;
+            // The completed action owns its movement cost.
             model.fireActionWasStarted(this);
         }
     }

@@ -1518,6 +1518,16 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
 
 ### Exploration, work and transport
 
+**Completed pioneer work (agreed 2026-11-18):** when plowing, road building
+or forest clearing successfully finishes at the start of an owner turn, the
+worker receives its full current movement allowance, including applicable
+speed bonuses, and can immediately move or receive another order. Work duration,
+tool charges and terrain/lumber effects are unchanged. Ongoing work consumes
+the turn's movement. Manual cancellation and stale/invalid work do not refund
+movement. Completion notices therefore describe a worker that can act now.
+Verification is recorded in [the functional evidence](functional-tests.md#completed-worker-movement-2026-11-18).
+
+
 1. Sight uses Chebyshev distance (all eight neighbors): ordinary land units 1,
    scouts/seasoned scouts 2, ships 2; De Soto sets a minimum of 2 for units.
    User decision (2026-10-17; [R-0070](requirements/done/R-0070.md)): an owned colony

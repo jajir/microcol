@@ -311,16 +311,19 @@ class PlowFieldTest {
         assertEquals(0, pioneer.getActionPoints());
         assertEquals(4, remaining(pioneer));
         assertEquals(tools, pioneer.getTools());
+        assertEquals(0, pioneer.getActionPoints());
         for (int expected = 3; expected >= 1; expected--) {
             nextOwnerTurn(model);
             assertEquals(expected, remaining(pioneer));
             assertEquals(tools, pioneer.getTools());
+            assertEquals(0, pioneer.getActionPoints());
             assertFalse(model.getMap().getTerrainAt(TARGET).isHasField());
         }
         nextOwnerTurn(model);
         assertTrue(model.getMap().getTerrainAt(TARGET).isHasField());
         assertEquals(tools - 20, pioneer.getTools());
         assertEquals(UnitActionType.noAction, pioneer.getAction().getType());
+        assertEquals(pioneer.getSpeed(), pioneer.getActionPoints());
         nextOwnerTurn(model);
         assertEquals(tools - 20, pioneer.getTools());
     }

@@ -18573,3 +18573,59 @@ messages for diagnosis. No tests were removed or weakened for acceptance.
    unexplained occurrences) and strict MkDocs passed. Documentation logs:
    `target/save-name-enter/`. Unrelated backlog changes are excluded. No full
    regression, native macOS UI or remote CI/publication verification was run.
+
+## Completed worker movement — 2026-11-18
+
+1. PION-002–004 / UC-019–021: successful plowing, forest clearing
+   and road building restore the worker's full current movement allowance on
+   the completing owner update. Manual cancellation and stale work keep their
+   existing movement cost; tools and terrain effects still occur once.
+2. Model coverage extends `PlowFieldTest`, `ClearForestTest` and `BuildRoadTest`
+   to check zero movement during work and full movement immediately on completion.
+   `TC_18_F01_plow_field_test`, `TC_73_F65_clear_forest_test` and
+   `TC_88_F79_road_construction_test` check completion/Continue movement and
+   move the hardy pioneer immediately after completion without another turn.
+3. The initial model attempt (`20261118T181726Z-ef420c55abb9`) timed out
+   during Docker preparation: the container-list query exceeded 20 seconds;
+   tests did not start. The Docker VM log records startup during that attempt;
+   a later identical query passed in 0.075 seconds. The next attempt
+   (`20261118T181820Z-0d5ed4c2d559`, `target/verification/run-t50u7iuo/`)
+   ran 5,136 tests in 158.320 supervised seconds: one failure, zero errors/skips.
+   `NationalTurnPreparationTest` still expected zero movement after completed
+   plowing; that expectation now uses the full allowance while retaining all
+   colony-production checks. Both failed attempts remain preserved.
+4. Final model/JUnit acceptance passed all 5,136 tests with zero failures,
+   errors or skips in 156.322 supervised seconds (600-second limit):
+   `target/verification/run-tgr2632e/`, completion
+   `20261118T182124Z-a89bca0f373a`. The checked source is based on `d3fddf84`
+   plus this change; unrelated backlog edits are outside the task.
+5. Targeted Docker selection: `TC_15_F05_plow_field_test`,
+   `TC_18_F01_plow_field_test`, `TC_73_F65_clear_forest_test`,
+   `TC_88_F79_road_construction_test` and `PageVerificationContractTest`.
+   The initial targeted run (`20261118T182417Z-14e18c1cf557`,
+   `target/docker-ui/run-pzpF0O/`) ran 28 tests in 689.631 supervised seconds:
+   27 passed, one failed, zero errors/skips. The new TC73/04 movement check
+   incorrectly expected an empty origin tile despite another colony worker
+   remaining there. Its log confirms the pioneer moved successfully. The
+   repaired scenario verifies the specific pioneer's destination instead.
+   Passing unchanged TC15, TC18 and TC88 results are retained; the complete
+   TC73 class and source contract were rerun.
+6. The repaired targeted selection passed all nine tests (six TC73 and three
+   source-contract checks), zero failures/errors/skips, in 217.278 supervised
+   seconds (1,200-second limit): completion `20261118T183703Z-78008c9e7eb3`,
+   `target/docker-ui/run-9fh7cT/`. Together with the retained passing reports
+   for unchanged TC15 (2), TC18 (12) and TC88 (5), all 28 selected tests pass.
+   Only the TC73 test changed after model acceptance; model/runtime source
+   and its test selection are unchanged, so the 5,136-test model pass is reused.
+7. The fixed `verify.sh --smoke` selection passed all 23 UI/support tests,
+   zero failures/errors/skips, in 285.806 supervised seconds, within the
+   420-second acceptance budget: completion `20261118T184053Z-93ea968979a9`,
+   `target/verification/run-_l483rph/`. The manifest and summary preserve the
+   exact selected methods and tested source snapshot.
+8. Shared Eclipse formatting was applied to all 11 changed Java files.
+   Final documentation acceptance passed all 14 consistency tests, the name
+   audit (zero unexplained occurrences), and strict MkDocs; logs are in
+   `target/completed-worker-movement/`. Final review preserves cancellation,
+   invalid-order handling, work durations and one-time charges. Unrelated
+   backlog edits are excluded from the commit. No full regression or
+   publication verification was performed or claimed.

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.akropia.model.Location;
+import org.akropia.model.Unit;
 import org.akropia.model.unit.UnitActionType;
 import org.akropia.page.ClearForestPage;
 import org.akropia.page.FreePlayAuditPage;
@@ -97,7 +98,7 @@ public class TC_73_F65_clear_forest_test extends AbstractAkropiaTest {
         gamePage.nextTurnAndCloseDialogs();
         clear.verifyForestAt(FOREST_LOCATION, false);
         clear.verifyClearedAt(FOREST_LOCATION, true);
-        clear.verifyUnitWork(FOREST_LOCATION, 0, UnitActionType.noAction, 0,
+        clear.verifyUnitWork(FOREST_LOCATION, 0, UnitActionType.noAction, 1,
                 80);
         clear.verifyColonyLumber(DELFT_ID, 20);
         clear.verifyTerrainOutput(FOREST_LOCATION, 0, 0);
@@ -193,9 +194,20 @@ public class TC_73_F65_clear_forest_test extends AbstractAkropiaTest {
         clear.verifyForestAt(FOREST_LOCATION, true);
         gamePage.nextTurnAndCloseDialogs();
         clear.verifyForestAt(FOREST_LOCATION, false);
-        clear.verifyUnitWork(FOREST_LOCATION, 0, UnitActionType.noAction, 0,
+        clear.verifyUnitWork(FOREST_LOCATION, 0, UnitActionType.noAction, 1,
                 80);
         clear.verifyColonyLumber(DELFT_ID, 20);
+
+        // The completed worker can move immediately, without another turn.
+        final Unit worker = getModel().getUnitsAt(FOREST_LOCATION).stream()
+                .filter(unit -> unit.getWorkingColony().isEmpty()).findFirst()
+                .orElseThrow();
+        final Location destination = Location.of(24, 12);
+        gamePage.selectTile(FOREST_LOCATION);
+        gamePage.selectMapUnit(worker.getId());
+        gamePage.moveMouseAtLocation(FOREST_LOCATION);
+        gamePage.dragMouseAtLocation(destination);
+        gamePage.verifyUnitLocation(worker, destination);
     }
 
     @Test
@@ -251,7 +263,7 @@ public class TC_73_F65_clear_forest_test extends AbstractAkropiaTest {
                 "Forest cleared at (23, 12): lumber lost: 15. The warehouse of colony Delft is full.");
         report.get().close();
         clear.verifyColonyLumber(DELFT_ID, 100);
-        clear.verifyUnitWork(FOREST_LOCATION, 0, UnitActionType.noAction, 0,
+        clear.verifyUnitWork(FOREST_LOCATION, 0, UnitActionType.noAction, 1,
                 80);
 
         // Continue keeps the same single notice without disposing again.

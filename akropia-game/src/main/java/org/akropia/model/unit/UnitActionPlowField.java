@@ -95,6 +95,7 @@ public final class UnitActionPlowField implements UnitAction {
         ((UnitFreeColonist) unit).consumeWorkTools(REQUIRED_TOOLS);
         model.getMap().plowFiled(unit.getLocation());
         model.recordNativeLandUse(unit.getOwner(), unit.getLocation());
+        unit.setActionPoints(unit.getSpeed());
         // Only the created field is reported, once, to the pioneer's owner.
         model.getTurnEventStore().add(TurnEventProvider
                 .getFieldPlowed(unit.getOwner(), unit, unit.getLocation()));

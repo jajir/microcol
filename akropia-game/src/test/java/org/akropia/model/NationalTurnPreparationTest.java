@@ -209,7 +209,7 @@ class NationalTurnPreparationTest {
                 colony.getWarehouse().getGoods(GoodsType.GRAIN).getAmount());
         assertTrue(model.getMap().getTerrainAt(field).isHasField());
         assertEquals(UnitActionType.noAction, pioneer.getAction().getType());
-        assertEquals(0, pioneer.getActionPoints());
+        assertEquals(pioneer.getSpeed(), pioneer.getActionPoints());
         assertTrue(colony.getColonyFieldInDirection(Direction.west)
                 .getProduction().orElseThrow().getAmount() > firstProduction);
         final int secondStock = colony.getGoodsStats()

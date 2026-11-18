@@ -106,6 +106,7 @@ public final class UnitActionClearForest implements UnitAction {
         }
         finished = true;
         complete(model, (UnitFreeColonist) unit);
+        unit.setActionPoints(unit.getSpeed());
         return true;
     }
 

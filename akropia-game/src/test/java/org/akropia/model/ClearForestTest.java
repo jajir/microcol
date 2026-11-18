@@ -350,6 +350,7 @@ class ClearForestTest {
             nextOwnerTurn(model);
             assertEquals(expected, action(pioneer).getRemainingTurns());
             assertEquals(100, pioneer.getTools());
+            assertEquals(0, pioneer.getActionPoints());
             assertTrue(forest(model, TARGET));
         }
         nextOwnerTurn(model);
@@ -357,6 +358,7 @@ class ClearForestTest {
         assertTrue(model.getMap().getTerrainAt(TARGET).isCleared());
         assertEquals(80, pioneer.getTools());
         assertEquals(UnitActionType.noAction, pioneer.getAction().getType());
+        assertEquals(pioneer.getSpeed(), pioneer.getActionPoints());
         nextOwnerTurn(model);
         assertEquals(80, pioneer.getTools());
         assertEquals(pioneer.getSpeed(), pioneer.getActionPoints());

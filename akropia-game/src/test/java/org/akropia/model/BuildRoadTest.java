@@ -292,10 +292,12 @@ class BuildRoadTest {
         assertEquals(1, action(pioneer).getRemainingTurns());
         assertFalse(road(model, target));
         assertEquals(100, pioneer.getTools());
+        assertEquals(0, pioneer.getActionPoints());
         nextOwnerTurn(model);
         assertTrue(road(model, target));
         assertEquals(80, pioneer.getTools());
         assertEquals(UnitActionType.noAction, pioneer.getAction().getType());
+        assertEquals(pioneer.getSpeed(), pioneer.getActionPoints());
     }
 
     @Test

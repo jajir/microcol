@@ -115,7 +115,7 @@ public class TC_88_F79_road_construction_test extends AbstractAkropiaTest {
         gamePage.nextTurnAndCloseDialogs();
         gamePage.selectTile(ROAD_LOCATION);
         road.verifyRoadAt(ROAD_LOCATION, true);
-        road.verifyUnitWork(ROAD_LOCATION, UnitActionType.noAction, 0, 80);
+        road.verifyUnitWork(ROAD_LOCATION, UnitActionType.noAction, 3, 80);
         road.verifyRoadProgressHidden();
         road.verifyCancelControlVisible(false);
 
@@ -198,8 +198,14 @@ public class TC_88_F79_road_construction_test extends AbstractAkropiaTest {
         gamePage.nextTurnAndCloseDialogs();
         gamePage.selectTile(ROAD_LOCATION);
         road.verifyRoadAt(ROAD_LOCATION, true);
-        road.verifyUnitWork(ROAD_LOCATION, UnitActionType.noAction, 0, 80);
+        road.verifyUnitWork(ROAD_LOCATION, UnitActionType.noAction, 3, 80);
         road.verifyRoadProgressHidden();
+
+        // The completed worker can move immediately, without another turn.
+        gamePage.selectTile(ROAD_LOCATION);
+        gamePage.moveMouseAtLocation(ROAD_LOCATION);
+        gamePage.dragMouseAtLocation(Location.of(24, 12));
+        gamePage.verifyNumberOfUnitsAt(ROAD_LOCATION, 0);
     }
 
     @Test

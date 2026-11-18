@@ -1,3 +1,12 @@
+## Dokončení práce pionýra — 18. listopadu 2026
+
+UC-019–021: po úspěšném dokončení orby, kácení nebo silnice může pracovník
+hned ve stejném tahu pokračovat s plným aktuálním přídělem pohybu. Ruční
+zrušení ani neplatná práce pohyb nevracejí. Pravidlo vlastní
+[průzkum, práce a přeprava](gap-analysis.md#exploration-work-and-transport),
+konkrétní scénáře a výsledky uvádí
+[funkční evidence](functional-tests.md#completed-worker-movement-2026-11-18).
+
 ## UC-005: čekání na tahy soupeřů — 17. listopadu 2026
 
 1. Po potvrzení dalšího tahu se zobrazí neuzavíratelný modal s veslaři a

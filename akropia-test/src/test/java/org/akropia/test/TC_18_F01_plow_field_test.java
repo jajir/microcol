@@ -283,7 +283,7 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
         gamePage = report.get().showOnMap(NEAR_LOCATION);
         gamePage.verifyThatSelectedTileIs(NEAR_LOCATION);
         plow.verifyFieldAt(NEAR_LOCATION, true);
-        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 0, 80);
+        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 80);
         gamePage.selectTile(NEAR_LOCATION);
         plow.verifyPlowProgressHidden();
 
@@ -330,11 +330,17 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
                 COMPLETION_NOTICE, 1);
         plow.closeReport(report);
         plow.verifyFieldAt(NEAR_LOCATION, true);
-        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 0, 80);
+        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 80);
 
         // The countdown line is gone once the field exists.
         gamePage.selectTile(NEAR_LOCATION);
         plow.verifyPlowProgressHidden();
+
+        // The completed worker can move immediately, without another turn.
+        gamePage.selectTile(NEAR_LOCATION);
+        gamePage.moveMouseAtLocation(NEAR_LOCATION);
+        gamePage.dragMouseAtLocation(COLONY_LOCATION);
+        gamePage.verifyNumberOfUnitsAt(NEAR_LOCATION, 0);
     }
 
     @Test
@@ -422,7 +428,7 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
         gamePage.exitToMenu();
         gamePage = new FreePlayAuditPage(getContext()).continueGame();
         plow.verifyFieldAt(NEAR_LOCATION, true);
-        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 0, 80);
+        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 80);
         report = Optional.of(gamePage.openTurnReport());
         plow.verifyCompletionReported(report, NEAR_LOCATION, 0,
                 CZECH_COMPLETION_NOTICE, 1);
@@ -483,7 +489,7 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
 
         // All tools are spent and the field exists.
         plow.verifyFieldAt(NEAR_LOCATION, true);
-        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 0, 0);
+        plow.verifyUnitWork(NEAR_LOCATION, 0, UnitActionType.noAction, 1, 0);
 
         // A later 'p' is rejected and explains the missing tools.
         gamePage.nextTurnAndCloseDialogs();
