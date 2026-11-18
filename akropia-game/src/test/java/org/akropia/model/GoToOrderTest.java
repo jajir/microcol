@@ -153,20 +153,75 @@ class GoToOrderTest {
     // ---------------------------------------------
 
     @Test
-    void idleWarningIsReadOnlyIncludesExhaustedColonistsAndSurvivesLoad() {
+    void idleWarningIsReadOnlyExcludesExhaustedColonistsAndSurvivesLoad() {
         final Model model = load(scenario());
         final Colony colony = model.getColonyById(0).orElseThrow();
         final Unit idle = colonist(model, colony.getLocation(), 0);
         final String before = snapshot(model);
-        assertTrue(model.getIdleColonistsBeforeEndTurn().get(colony)
-                .contains(idle));
+        assertTrue(model.getIdleColonistsBeforeEndTurn().values().stream()
+                .flatMap(List::stream).noneMatch(unit -> unit == idle));
         assertEquals(before, snapshot(model));
         final GameModelPo data = mission();
         data.setModel(model.save());
         final Model restored = load(data);
         assertTrue(restored.getIdleColonistsBeforeEndTurn().values().stream()
                 .flatMap(List::stream)
-                .anyMatch(unit -> unit.getId() == idle.getId()));
+                .noneMatch(unit -> unit.getId() == idle.getId()));
+    }
+
+    @Test
+    void idleWarningRequiresAnAffordableNeighborAndKeepsFractionalRoadSteps() {
+        final Model model = load(scenario());
+        final Colony colony = model.getColonyById(0).orElseThrow();
+        final Unit idle = colonist(model, colony.getLocation(), 1);
+        assertTrue(model.getIdleColonistsBeforeEndTurn().isEmpty());
+        ((AbstractUnit) idle).setMovementThirds(2);
+        assertTrue(model.getIdleColonistsBeforeEndTurn().isEmpty());
+        ((AbstractUnit) idle).setMovementThirds(3);
+        assertTrue(model.getIdleColonistsBeforeEndTurn().get(colony)
+                .contains(idle));
+
+        final Model roadModel = load(scenario(Set.of(COLONY, LANDING)));
+        final Colony roadColony = roadModel.getColonyById(0).orElseThrow();
+        final Unit roadWalker = colonist(roadModel, roadColony.getLocation(),
+                1);
+        assertTrue(roadWalker.canMoveStepTo(LANDING));
+        assertTrue(roadModel.getIdleColonistsBeforeEndTurn().get(roadColony)
+                .contains(roadWalker));
+    }
+
+    @Test
+    void idleWarningExcludesColonistWithNoPassableNeighbor() {
+        final GameModelPo data = scenario();
+        final WorldMapPo map = data.getModel().getMap();
+        final Set<Location> trees = new HashSet<>(map.getTreeSet());
+        final Set<Location> fields = new HashSet<>(map.getFieldSet());
+        final Set<Location> cleared = new HashSet<>(map.getClearedSet());
+        for (final Location neighbor : COLONY.getNeighbors()) {
+            terrain(data, neighbor, TerrainType.OCEAN);
+            trees.remove(neighbor);
+            fields.remove(neighbor);
+            cleared.remove(neighbor);
+        }
+        map.setTrees(trees);
+        map.setFields(fields);
+        map.setCleared(cleared);
+        // Remove the original land workers before flooding their work squares.
+        data.getModel().getColonies().stream()
+                .filter(colony -> colony.getId() == 0)
+                .forEach(colony -> colony.getColonyFields().forEach(field -> {
+                    final Integer workerId = field.getWorkerId();
+                    if (workerId != null) {
+                        data.getModel().getUnits()
+                                .removeIf(unit -> unit.getId() == workerId);
+                        field.setWorkerId(null);
+                        field.setProducedGoodsType(null);
+                    }
+                }));
+        final Model model = load(data);
+        final Colony colony = model.getColonyById(0).orElseThrow();
+        colonist(model, colony.getLocation(), 3);
+        assertTrue(model.getIdleColonistsBeforeEndTurn().isEmpty());
     }
 
     @Test
@@ -190,6 +245,7 @@ class GoToOrderTest {
         assertTrue(model.getIdleColonistsBeforeEndTurn().values().stream()
                 .flatMap(List::stream).noneMatch(unit -> unit == waiting));
         ((AbstractUnit) waiting).cancelGoTo();
+        ((AbstractUnit) waiting).setMovementThirds(3);
         ((AbstractUnit) waiting).restoreGoTo(strip(28), null, "28, 15", true);
         assertTrue(model.getIdleColonistsBeforeEndTurn().get(colony)
                 .contains(waiting));

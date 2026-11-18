@@ -23,9 +23,9 @@ public class TC_199_F52_end_turn_warnings_test extends AbstractAkropiaTest {
     @Test
     @Tag("local")
     void TC_01_back_escape_and_open_colony_do_not_end_turn() throws Exception {
-        // An exhausted colonist waits outside the colony buildings.
+        // A colonist with available movement waits outside the buildings.
         GoToFixture.prepare(getContext(), SOURCE, "F52-idle-warning.akropia",
-                GoToFixture.COLONY, 0);
+                GoToFixture.COLONY, 3);
         final GamePage game = WelcomePage.of(getContext()).loadGame();
         final EndTurnWarningsPage warning = new EndTurnWarningsPage(
                 getContext());
@@ -55,7 +55,7 @@ public class TC_199_F52_end_turn_warnings_test extends AbstractAkropiaTest {
     void TC_02_continue_is_for_one_turn_and_reload_recomputes_warning()
             throws Exception {
         GoToFixture.prepare(getContext(), SOURCE, "F52-idle-repeat.akropia",
-                GoToFixture.COLONY, 0);
+                GoToFixture.COLONY, 3);
         GamePage game = WelcomePage.of(getContext()).loadGame();
         final EndTurnWarningsPage warning = new EndTurnWarningsPage(
                 getContext());
@@ -89,4 +89,53 @@ public class TC_199_F52_end_turn_warnings_test extends AbstractAkropiaTest {
         warning.verifyTurn(before + 1);
         warning.verifyClosed();
     }
+
+    @Test
+    @Tag("local")
+    void TC_04_exhausted_movement_does_not_warn() throws Exception {
+        // Load an idle colonist who cannot afford any neighboring square.
+        GoToFixture.prepare(getContext(), SOURCE, "F52-idle-immobile-0.akropia",
+                GoToFixture.COLONY, 0);
+        WelcomePage.of(getContext()).loadGame();
+        final EndTurnWarningsPage warning = new EndTurnWarningsPage(
+                getContext());
+        final int before = warning.turn();
+
+        // Request the turn directly: do not automatically accept a warning.
+        warning.requestTurn();
+        warning.verifyTurnAdvancedWithoutWarning(before);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_05_one_third_movement_does_not_warn() throws Exception {
+        // Load an idle colonist who cannot afford any neighboring square.
+        GoToFixture.prepare(getContext(), SOURCE, "F52-idle-immobile-1.akropia",
+                GoToFixture.COLONY, 1);
+        WelcomePage.of(getContext()).loadGame();
+        final EndTurnWarningsPage warning = new EndTurnWarningsPage(
+                getContext());
+        final int before = warning.turn();
+
+        // Request the turn directly: do not automatically accept a warning.
+        warning.requestTurn();
+        warning.verifyTurnAdvancedWithoutWarning(before);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_06_two_thirds_movement_does_not_warn() throws Exception {
+        // Load an idle colonist who cannot afford any neighboring square.
+        GoToFixture.prepare(getContext(), SOURCE, "F52-idle-immobile-2.akropia",
+                GoToFixture.COLONY, 2);
+        WelcomePage.of(getContext()).loadGame();
+        final EndTurnWarningsPage warning = new EndTurnWarningsPage(
+                getContext());
+        final int before = warning.turn();
+
+        // Request the turn directly: do not automatically accept a warning.
+        warning.requestTurn();
+        warning.verifyTurnAdvancedWithoutWarning(before);
+    }
+
 }

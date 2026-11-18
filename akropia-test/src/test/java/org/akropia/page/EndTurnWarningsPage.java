@@ -57,4 +57,13 @@ public final class EndTurnWarningsPage extends AbstractScreen {
     public void verifyTurn(final int expected) {
         assertEquals(expected, turn());
     }
+
+    public void verifyTurnAdvancedWithoutWarning(final int previous)
+            throws Exception {
+        WaitForAsyncUtils.waitFor(60, java.util.concurrent.TimeUnit.SECONDS,
+                () -> turn() > previous);
+        assertEquals(previous + 1, turn());
+        assertTrue(getNodeFinder().lookup("#end-turn-warnings").tryQuery()
+                .isEmpty());
+    }
 }

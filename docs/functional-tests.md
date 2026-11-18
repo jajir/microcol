@@ -18629,3 +18629,55 @@ messages for diagnosis. No tests were removed or weakened for acceptance.
    invalid-order handling, work durations and one-time charges. Unrelated
    backlog edits are excluded from the commit. No full regression or
    publication verification was performed or claimed.
+
+<a id="idle-warning-movement-2026-11-18"></a>
+
+## End-turn warnings require a legal step (2026-11-18)
+
+1. UC-005/038: the idle-colonist warning now uses `Unit.canMoveStepTo`
+   over neighboring squares. It excludes exhausted, underfunded and enclosed
+   colonists; a fractional allowance still warns when it pays a road step.
+   Existing employment and go-to exclusions remain in effect. See the
+   [current UX rule](ux.md#upozorneni-pred-koncem-tahu).
+2. `GoToOrderTest` covers zero movement, reload and query purity, one/two thirds
+   insufficient for natural terrain, an affordable one-third road step, no
+   passable neighbor, and paused/blocked versus movement-waiting orders.
+   `TC_199_F52_end_turn_warnings_test` retains Back/Escape, colony navigation,
+   one-turn confirmation/reload and worker/passenger checks. Its new `TC_04`–`TC_06`
+   directly request Next turn with zero, one and two thirds and verifies turn
+   advancement without automatically confirming a warning.
+3. Model acceptance on base `664b3edd93e9f21e2a605ff9f6d655a183a16292`:
+   completion `20261118T192025Z-34842010008f`, reports
+   `target/verification/run-b22oidj6`, **5,138 tests in 400 reports**, zero
+   failures/errors/skips, 157.237 s including supervision. `GoToOrderTest`
+   contributes 29 passing cases. Its source and the model implementation match
+   the retained source snapshot.
+4. Earlier evidence is retained: `20261118T190213Z-6389b640f81c` timed out
+   during the 20-second Docker admission query before tests;
+   `20261118T190311Z-a31bf1b60e11` and `20261118T190632Z-a6fbd48e2ebc` each
+   found one invalid test-map error (trees, then fields retained on newly
+   flooded terrain). The fixture now removes those overlays and their land
+   workers. `20261118T190948Z-72d2b7383b9c` timed out at 600 s after 265
+   passing checks, last running `NativeRaidTest`; its stall cause is unknown.
+   The unchanged-source retry passed the complete model phase. None of these
+   earlier attempts is reclassified as passing.
+5. Targeted Docker/Xvfb completion `20261118T192425Z-98c6b25c38d5`, reports
+   `target/docker-ui/run-mPA2eJ`: **18 tests, zero failures/errors/skips**,
+   256.898 s including supervision. Selection: TC199 (6),
+   `TC_103_F94_persistent_go_to_test` (9), `PageVerificationContractTest` (3).
+   Earlier targeted attempt `20261118T192318Z-7cbc8d9df475` failed compilation
+   because the UI module has no parameterized-test dependency; no UI test
+   started. Three ordinary scenarios replace the parameterized case without
+   changing dependencies. The retry also corrects the initially mistyped TC103
+   selector. The model source and model-test selection remain unchanged.
+6. Fixed smoke/support completion `20261118T192858Z-99557a8c80ee`, reports
+   `target/verification/run-ohvl02s8`: **23 tests in 13 reports**, zero
+   failures/errors/skips, 284.067 s including supervision, within the 420 s
+   acceptance limit. All four changed Java files match the source snapshot.
+7. Local acceptance: 5,138 model/JUnit + 18 targeted UI/contract + 23 fixed
+   smoke/support checks. The shared formatter passed exact-token and idempotence
+   checks; 14 documentation consistency tests, name audit (zero unexplained
+   occurrences) and strict MkDocs passed. Review covered the shared read-only
+   movement query, warning callers, fractional road movement, existing orders,
+   and direct Next turn verification without automatic warning confirmation.
+   No full local regression or remote publication verification was requested.

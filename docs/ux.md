@@ -1667,10 +1667,10 @@ skutečného hráče; výsledky patří do [funkční evidence](functional-tests
 
 ## Upozornění před koncem tahu
 
-1. Dohodnuto 2026-11-02, dosud neimplementováno: [R-0398](requirements/done/R-0398.md) zavádí při každém Next turn společný dialog pro aktuální upozornění. Bez upozornění tah pokračuje rovnou. Více druhů a kolonií se zobrazí pohromadě; další druhy se určí později.
-2. První kontrola označí každého vlastního kolonistu na políčku vlastní kolonie bez práce uvnitř či na okolních polích a bez Fortify, Sentry nebo jiného zaměstnávajícího rozkazu, bez ohledu na způsob příchodu. Vyčerpaný pohyb není výjimkou; cestující na lodi se nezahrnují. Pozastavený nebo skutečně zablokovaný rozkaz kolonistu z upozornění nevylučuje; běžné čekání na obnovení pohybových bodů se za nečinnost nepovažuje.
+1. Dohodnuto 2026-11-02: [R-0398](requirements/done/R-0398.md) zavádí při každém Next turn společný dialog pro aktuální upozornění. Bez upozornění tah pokračuje rovnou. Více druhů a kolonií se zobrazí pohromadě; další druhy se určí později.
+2. První kontrola označí každého vlastního kolonistu na políčku vlastní kolonie bez práce uvnitř či na okolních polích a bez Fortify, Sentry nebo jiného zaměstnávajícího rozkazu, bez ohledu na způsob příchodu. Podle úpravy dohodnuté 2026-11-18 se zahrne pouze kolonista, který nyní může provést alespoň jeden povolený krok na sousední pole. Nulový pohyb, nedostatek bodů na všechny dostupné kroky i úplné zablokování okolím jej vyloučí. Zlomkový pohyb se posuzuje podle skutečné ceny kroku, například po cestě; cestující na lodi se nezahrnují. Pozastavený nebo skutečně zablokovaný rozkaz sám o sobě kolonistu z upozornění nevylučuje, pokud ještě může udělat povolený krok; běžné čekání na obnovení pohybových bodů se za nečinnost nepovažuje.
 3. „Zpět“, Escape a zavření dialogu ponechají tah rozehraný. Odkaz u upozornění otevře příslušnou kolonii a umožní přidělit práci. „Přesto pokračovat“ potvrdí jen právě ukončovaný tah; nevyřešené upozornění se v příštím tahu znovu objeví. Kontrola nic sama nemění a práci nepřiděluje.
-4. Jde o dohodnutý návrh navazující na uživatelovo pozorování UX-24, nikoli důkaz implementace nebo úspěšný hráčský test. Podrobné přijetí a nevyřešená hranice nečinnosti jsou v R-0398.
+4. Pravidlo navazuje na uživatelovo pozorování UX-24 a úpravu z 2026-11-18. Historické přijetí původní verze je v R-0398; aktuální ověření patří do [funkční evidence](functional-tests.md#idle-warning-movement-2026-11-18). Automatické ověření není hráčská studie.
 
 7. Dohoda 2026-11-02: pozastavený nebo skutečně zablokovaný rozkaz nevyřadí jinak nepracujícího kolonistu z upozornění. Běžné čekání na obnovení pohybových bodů není nečinnost.
 

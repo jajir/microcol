@@ -5685,6 +5685,8 @@ public class Model {
                             && unit.getLocation().equals(colony.getLocation())
                             && unit.getAction().isNoAction())
                     .filter(this::hasNoEmployingGoToOrder)
+                    .filter(unit -> unit.getLocation().getNeighbors().stream()
+                            .anyMatch(unit::canMoveStepTo))
                     .collect(java.util.stream.Collectors.toList());
             if (!idle.isEmpty()) {
                 warnings.put(colony, List.copyOf(idle));
