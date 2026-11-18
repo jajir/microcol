@@ -1657,3 +1657,13 @@ získání. Výsledky jsou v [evidenci](functional-tests.md#knowledge-2026-11-17
 1. Posun mapy používá stejné nastavení jako hra; pravý panel umožňuje použití
    nástroje přímo na vybrané pole. [Pravidla ovládání](free-play-maps.md#ovladani-editoru-18-listopadu-2026)
    a [výsledky ověření TC210/TC211](functional-tests.md#map-editor-controls-2026-11-18).
+
+## UC-114: Název uložení a Enter — 2026-11-18
+
+1. Výchozí název používá jméno hráče a lokalizované označení roku; Enter
+   v poli názvu spouští běžné uložení s validací a potvrzením přepsání.
+   Autoritativní chování popisuje [ukládání](save-load-navigation.md).
+2. `TC_191_F224_session_menu_test` TC05 kontroluje návrh v přehledu,
+   TC18 kolizi názvu, Enter, neplatný vstup a přepsání včetně zrušení;
+   TC19 český návrh a uložení Enterem. Výsledky vede
+   [funkční evidence](functional-tests.md#save-name-and-enter-2026-11-18).

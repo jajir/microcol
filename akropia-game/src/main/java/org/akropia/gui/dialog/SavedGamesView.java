@@ -156,6 +156,9 @@ public final class SavedGamesView {
         });
         name.setId("savedGameName");
         if (saving) {
+            name.setOnAction(event -> save());
+        }
+        if (saving) {
             name.setOnMouseEntered(event -> saveHelp
                     .accept(texts.get(SavedGameText.editNameHint)));
             name.setOnMouseMoved(event -> saveHelp

@@ -40,13 +40,22 @@ public final class SavedGamesPage extends AbstractScreen {
     }
 
     public void saveName(final String name) {
+        enterSaveName(name);
+        clickOnButtonWithId("saveNew");
+    }
+
+    public void saveNameWithEnter(final String name) {
+        enterSaveName(name);
+        getRobot().push(javafx.scene.input.KeyCode.ENTER);
+    }
+
+    private void enterSaveName(final String name) {
         // Replace the prefilled suggestion with the given name.
         final javafx.scene.control.TextField field = getNodeFinder()
                 .lookup("#savedGameName")
                 .queryAs(javafx.scene.control.TextField.class);
         getRobot().interact(field::clear);
         getRobot().clickOn(field).write(name);
-        clickOnButtonWithId("saveNew");
     }
 
     public void action(final String id) {
@@ -521,6 +530,15 @@ public final class SavedGamesPage extends AbstractScreen {
                 .getScene();
         assertNotNull(owner.lookup("#saveNew"));
         assertTrue(owner.lookup("#savedGamesList").isVisible());
+    }
+
+    public void verifySuggestedPlayerName(final String yearLabel,
+            final String suffix) {
+        final var summary = game().getSaveSummary();
+        final String expected = summary.getPlayerName() + "-" + yearLabel + "-"
+                + summary.getYear() + suffix;
+        assertEquals(expected, getNodeFinder().lookup("#savedGameName")
+                .queryAs(javafx.scene.control.TextField.class).getText());
     }
 
     public void verifySuggestedName(final String expectedPart) {

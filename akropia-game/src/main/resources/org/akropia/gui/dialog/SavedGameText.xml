@@ -57,4 +57,5 @@
     <entry key="editNameHint">You can edit the save file name here.</entry>
     <entry key="overwriteAction">Overwrite save</entry>
     <entry key="deleteAction">Delete save</entry>
+    <entry key="saveNameYear">year</entry>
 </properties>

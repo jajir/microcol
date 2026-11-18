@@ -384,8 +384,8 @@ public class PersistingService {
     }
 
     private String suggestedName(final SaveSummaryPo current) {
-        return savedGames.unusedName(
-                org.akropia.model.campaign.GameModelDao.defaultName(current));
+        return savedGames.unusedName(org.akropia.model.campaign.GameModelDao
+                .defaultName(current, texts.get(SavedGameText.saveNameYear)));
     }
 
     private String describeTarget(final SavedGames.Entry entry) {

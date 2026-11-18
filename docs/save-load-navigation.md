@@ -353,11 +353,19 @@ mimo deset automatických slotů. Nová
    identita přehledu jsou metadata obálky, nikoli náhrada povinných identit
    hráčů, kolonií či jednotek. Autorské scénáře je nemusejí mít.
 4. Nové spravované soubory jsou v `~/.akropia/saves/`, bez podsložek partií.
-   Ruční názvy odpovídají zadaným jménům; předvyplněný název tvoří národnost
-   a rok. Při kolizi se doplní první volná přípona `-2`, `-3` atd.;
-   výsledek má nejvýše 64 Unicode znaků. Automatické sloty 000–009 se kruhově přepisují. Katalog čte jen soubory přímo v této složce. Starší soubory mimo ni
-   ani v podsložkách nevypisuje, nic automaticky nemaže ani nepřesouvá.
-   Hráč je může do této složky zkopírovat systémovým správcem souborů.
+   Ruční názvy odpovídají zadaným jménům; předvyplněný název tvoří jméno hráče
+   a herní rok, například `Honza-rok-1` v češtině nebo `Honza-year-1`
+   v angličtině. Diakritika a vnitřní mezery zůstávají zachované; znaky
+   zakázané v názvu souboru se nahradí pomlčkou a rezervovaný systémový
+   název dostane prefix `save-`. Dlouhé jméno se zkrátí tak, aby zůstalo
+   místo pro rok. Při kolizi se doplní první volná přípona `-2`, `-3` atd.;
+   výsledek má nejvýše 64 Unicode znaků bez přípony `.akropia`.
+   Automatické sloty 000–009 se kruhově přepisují. Katalog čte jen soubory
+   přímo v této složce. Starší soubory mimo ni ani v podsložkách nevypisuje,
+   nic automaticky nemaže ani nepřesouvá. Hráč je může do této složky
+   zkopírovat systémovým správcem souborů.
+   Enter v poli názvu provede stejnou akci jako **Uložit hru**, včetně
+   validace názvu a potvrzení přepsání existujícího souboru (18. listopadu 2026).
 5. **Otevřít složku uložení** otevře `~/.akropia/saves/` systémovým správcem souborů.
    Pokud to prostředí nepodporuje, hra oznámí chybu a zachová přehled.
 6. Ukládání a rychlé akce jsou běžně dostupné během připraveného lidského

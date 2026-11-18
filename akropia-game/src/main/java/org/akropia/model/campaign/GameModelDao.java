@@ -357,13 +357,26 @@ public final class GameModelDao {
                 snapshot.getPlaythroughId(), summary);
     }
 
-    /**
-     * @return the played nationality and game year within the 64-code-point
-     *         name limit
-     */
+    /** @return a portable player/year name for non-localized metadata */
     public static String defaultName(final SaveSummaryPo summary) {
-        return summary.getNation().toLowerCase(java.util.Locale.ROOT) + "-"
-                + summary.getYear();
+        return defaultName(summary, "year");
+    }
+
+    /** @return a portable player/year name within the 64-code-point limit */
+    public static String defaultName(final SaveSummaryPo summary,
+            final String yearLabel) {
+        String player = summary.getPlayerName()
+                .replaceAll("[\\\\/:*?\"<>|\\p{Cntrl}]", "-");
+        if (player.split("\\.", 2)[0].toLowerCase(java.util.Locale.ROOT)
+                .matches("con|prn|aux|nul|com[1-9]|lpt[1-9]")) {
+            player = "save-" + player;
+        }
+        final String ending = "-" + yearLabel + "-" + summary.getYear();
+        final int length = Math.min(player.codePointCount(0, player.length()),
+                64 - ending.codePointCount(0, ending.length()));
+        return SavedGames.manualName(
+                player.substring(0, player.offsetByCodePoints(0, length))
+                        + ending);
     }
 
 }

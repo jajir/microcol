@@ -18537,3 +18537,39 @@ messages for diagnosis. No tests were removed or weakened for acceptance.
    UI/support + 23 smoke/support**, on base `cc4c7f95e` plus this change.
    The unrelated backlog edit is excluded. No full regression, native macOS
    UI execution, remote CI watch or distribution/publication verification ran.
+
+## Save name and Enter — 2026-11-18
+
+1. UC-114: manual suggestions use the player's display name and localized
+   year label, sanitize filesystem characters and retain the 64-code-point
+   limit and collision suffix. Enter in the filename field uses the same
+   save action and overwrite confirmation as the button.
+2. Model coverage: `SaveSummaryPoTest` covers display names, Unicode,
+   localization, reserved filenames and length; existing `SavedGamesTest`
+   covers collision allocation. Targeted Docker/Xvfb selection: TC191
+   TC05, TC16, TC17, TC18 and TC19 plus `PageVerificationContractTest`.
+3. Initial model attempt `20261118T171828Z-636037f06f3f` failed during
+   compilation (`illegal escape character` in the filename sanitizer), before
+   tests started, after 15.144 seconds of its 600-second limit. Evidence:
+   `target/verification/run-q44c3cu6/`. The Java escape was corrected and the
+   formatter reapplied before retry `20261118T171844Z-446fddc2f349`.
+   This failed attempt remains failed.
+4. Corrected-source model/JUnit acceptance passed **5,136 tests**, zero
+   failures/errors/skips, in 158.967 supervised seconds (600-second limit).
+   Reports: `target/verification/run-jzfcqbwb/`; the changed Java/XML files
+   match its source snapshot.
+5. Targeted Docker/Xvfb acceptance passed **8 tests** (the five selected TC191
+   scenarios and three page-source-contract checks), zero failures/errors/skips,
+   in 163.586 supervised seconds (1,200-second limit). Reports:
+   `target/docker-ui/run-u7anm8/`, completion `20261118T172136Z-3083fb5bad33`.
+6. Fixed smoke/support acceptance passed **23 tests**, zero failures/errors/skips,
+   in 281.289 supervised seconds, within the 420-second acceptance budget.
+   Reports: `target/verification/run-71nzb4ls/`, completion
+   `20261118T172438Z-e3381bcfccae`; changed Java/XML files match its snapshot.
+7. Local acceptance covers base `b8d9e5b61f87c99fb6ad76e1011683e7544ffbfc`
+   plus this reviewed change: **5,136 model/JUnit + 8 targeted UI/support +
+   23 smoke/support tests**, all passing. Shared Eclipse formatting, scoped
+   diff review, 14 documentation consistency checks, naming audit (zero
+   unexplained occurrences) and strict MkDocs passed. Documentation logs:
+   `target/save-name-enter/`. Unrelated backlog changes are excluded. No full
+   regression, native macOS UI or remote CI/publication verification was run.

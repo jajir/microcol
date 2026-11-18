@@ -36,6 +36,61 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
+    void TC_18_enter_saves_the_typed_name_and_keeps_overwrite_protection()
+            throws Exception {
+        // The suggested name belongs to the player, not the internal nation.
+        final GamePage game = WelcomePage.of(getContext()).loadGame();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        saves.openSave();
+        saves.verifySuggestedPlayerName("year", "");
+        saves.action("saveNew");
+        game.verifyGameInFront();
+        saves.openSave();
+        saves.verifySuggestedPlayerName("year", "-2");
+
+        // Enter validates the typed name and leaves invalid input editable.
+        saves.saveNameWithEnter("../outside");
+        saves.verifyInvalidName();
+        saves.verifySaveDialogOpen(true);
+        saves.saveNameWithEnter("Přístav Enter");
+        saves.verifySaveDialogOpen(false);
+        game.verifyGameInFront();
+        saves.verifySavedName("Přístav Enter", 1);
+        game.verifyThatStatusBarContains("Game saved as 'Přístav Enter'.");
+
+        // Enter cannot bypass overwrite confirmation or its cancellation.
+        saves.openSave();
+        saves.saveNameWithEnter("Přístav Enter");
+        saves.verifyOverwriteConfirmation("Přístav Enter");
+        saves.action("saveCancel");
+        saves.verifySaveDialogOpen(true);
+        saves.saveNameWithEnter("Přístav Enter");
+        saves.verifyOverwriteConfirmation("Přístav Enter");
+        saves.action("saveConfirm");
+        saves.verifySaveDialogOpen(false);
+        saves.verifySavedName("Přístav Enter", 1);
+        game.verifyGameInFront();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_19_suggested_save_name_uses_the_interface_language()
+            throws Exception {
+        // The Czech interface uses a Czech year label in its suggestion.
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        final GamePage game = settings.goBack().loadGame();
+        final SavedGamesPage saves = new SavedGamesPage(getContext());
+        saves.openSave();
+        saves.verifySuggestedPlayerName("rok", "");
+        saves.saveNameWithEnter("České uložení");
+        saves.verifySavedName("České uložení", 1);
+        saves.verifySaveDialogOpen(false);
+        game.verifyGameInFront();
+    }
+
+    @Test
+    @Tag("local")
     void TC_17_save_shortcut_overwrite_returns_after_one_confirmation()
             throws Exception {
         // Prepare an existing file, then enter Save through the real shortcut.
@@ -488,7 +543,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.verifyPreview(true);
         saves.verifySummaryLines("Year: 1 · 5/3 Summer", "Gold: ",
                 "Rebel support: ", "People: ", "Colonies: ", "Ships: ");
-        saves.verifySuggestedName("dutch-1");
+        saves.verifySuggestedPlayerName("year", "");
         saves.captureDialog("savedGamesList", "r0382-save-current-en.png");
         saves.saveName("Harbour before the storm");
         saves.verifySavedName("Harbour before the storm", 1);

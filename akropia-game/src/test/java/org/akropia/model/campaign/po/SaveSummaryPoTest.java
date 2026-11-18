@@ -35,13 +35,36 @@ class SaveSummaryPoTest {
     }
 
     @Test
-    void defaultFilenameUsesNationInsteadOfThePlayersDisplayName() {
+    void defaultFilenameUsesThePlayersDisplayName() {
         final Model model = freePlay();
         model.getPlayers().stream().filter(Player::isHuman).findFirst()
                 .orElseThrow().setDisplayName("Žluťoučký hráč");
-        assertEquals("dutch-" + model.getCalendar().getCurrentYear(),
+        assertEquals(
+                "Žluťoučký hráč-year-" + model.getCalendar().getCurrentYear(),
                 org.akropia.model.campaign.GameModelDao.defaultName(
                         SaveSummaryPo.describe(model, "freePlay", "freePlay")));
+    }
+
+    @Test
+    void suggestedNamesArePortableLocalizedAndBounded() {
+        final Model model = freePlay();
+        final Player human = model.getPlayers().stream().filter(Player::isHuman)
+                .findFirst().orElseThrow();
+        for (final String player : new String[] { "Honza", "CON.txt", "NUL",
+                "A/B:C*D?E\"F<G>H|I\\J", "😀".repeat(64) }) {
+            human.setDisplayName(player);
+            final SaveSummaryPo summary = SaveSummaryPo.describe(model, null,
+                    null);
+            final String suggested = org.akropia.model.campaign.GameModelDao
+                    .defaultName(summary, "rok");
+            assertEquals(suggested, SavedGames.manualName(suggested));
+            assertTrue(suggested.endsWith("-rok-1"));
+            assertTrue(suggested.codePointCount(0, suggested.length()) <= 64);
+        }
+        human.setDisplayName("  Žluťoučký hráč  ");
+        assertEquals("Žluťoučký hráč-rok-1",
+                org.akropia.model.campaign.GameModelDao.defaultName(
+                        SaveSummaryPo.describe(model, null, null), "rok"));
     }
 
     @Test

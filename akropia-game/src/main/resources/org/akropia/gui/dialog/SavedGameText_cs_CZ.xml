@@ -57,4 +57,5 @@
     <entry key="editNameHint">Zde můžete upravit název ukládaného souboru.</entry>
     <entry key="overwriteAction">Přepsat uloženou hru</entry>
     <entry key="deleteAction">Smazat uloženou hru</entry>
+    <entry key="saveNameYear">rok</entry>
 </properties>
