@@ -62,49 +62,49 @@ class DiagnosticLogTest {
     }
 
     @Test
-    void recordHasBuildPlatformAndFramesButNoMessagesOrPlayerText()
+    void recordPreservesStandardTraceIncludingMessagesCausesAndSuppressed()
             throws Exception {
         final DiagnosticLog log = new DiagnosticLog(directory, "test-build");
-        final String home = System.getProperty("user.home");
-
-        log.record(DiagnosticEvent.LOAD_FAILED, new IllegalArgumentException(
-                "Colony 'New Amsterdam' in " + home + "/game.akropia"));
-
+        final Exception root = new IllegalArgumentException("Poškozený save");
+        root.setStackTrace(Stream
+                .generate(() -> new StackTraceElement("external.Parser", "read",
+                        "Parser.java", 42))
+                .limit(30).toArray(StackTraceElement[]::new));
+        final Exception failure = new IllegalStateException("Load failed",
+                root);
+        failure.addSuppressed(new java.io.IOException("Close failed"));
+        final java.io.StringWriter expected = new java.io.StringWriter();
+        failure.printStackTrace(new java.io.PrintWriter(expected));
+        log.record(DiagnosticEvent.LOAD_FAILED, failure);
         final String record = Files.readString(log.getActiveFile());
         assertTrue(record.contains("event=LOAD_FAILED"));
         assertTrue(record.contains("build=test-build"));
-        assertTrue(record.contains("os=\""));
-        assertTrue(record.contains(" arch="));
-        assertTrue(record.contains(" java="));
-        assertTrue(record.contains("cause=java.lang.IllegalArgumentException"));
-        assertTrue(record.contains(
-                "\n    at org.akropia.diagnostics.DiagnosticLogTest."));
-        assertFalse(record.contains("New Amsterdam"));
-        assertFalse(record.contains(home));
-        assertFalse(record.contains("game.akropia"));
+        assertTrue(record.endsWith(expected.toString()));
+        assertEquals(record, console.toString(UTF_8));
     }
 
     @Test
-    void stackIsBoundedToEightAkropiaFramesAndSkipsOtherPackages()
+    void oversizedUnicodeTraceIsNotTruncatedAndNextRecordRotates()
             throws Exception {
-        final IllegalStateException failure = new IllegalStateException();
-        final StackTraceElement[] frames = Stream
-                .concat(Stream.of(new StackTraceElement("java.lang.Thread",
-                        "run", "Thread.java", 1)),
-                        Stream.generate(() -> new StackTraceElement(
-                                "org.akropia.Example", "run", "Example.java",
-                                1)).limit(20))
-                .toArray(StackTraceElement[]::new);
-        failure.setStackTrace(frames);
+        final DiagnosticLog log = new DiagnosticLog(directory, "test", 100, 3);
+        final RuntimeException failure = new RuntimeException("ž".repeat(5000));
+        failure.initCause(failureWithCycle());
+        log.record(DiagnosticEvent.LOAD_FAILED, failure);
+        final String record = Files.readString(log.getActiveFile());
+        assertTrue(record.contains("ž".repeat(5000)));
+        assertTrue(record.contains("CIRCULAR REFERENCE"));
+        log.record(DiagnosticEvent.STARTED, null);
+        assertEquals(record,
+                Files.readString(directory.resolve("akropia.1.log")));
+        assertTrue(Files.readString(log.getActiveFile())
+                .contains("event=STARTED"));
+    }
 
-        new DiagnosticLog(directory, "test-build")
-                .record(DiagnosticEvent.STARTUP_FAILED, failure);
-
-        final String record = Files
-                .readString(directory.resolve(DiagnosticLog.FILE_NAME));
-        assertEquals(8, record.lines()
-                .filter(line -> line.startsWith("    at ")).count());
-        assertFalse(record.contains("java.lang.Thread"));
+    private static Throwable failureWithCycle() {
+        final RuntimeException first = new RuntimeException("first");
+        final RuntimeException second = new RuntimeException("second", first);
+        first.initCause(second);
+        return first;
     }
 
     @Test
@@ -125,49 +125,12 @@ class DiagnosticLogTest {
     }
 
     @Test
-    void hostileInputStaysAsciiSingleRecordAndWithinTheRecordBound()
-            throws Exception {
-        class Výjimka extends RuntimeException {
-            private static final long serialVersionUID = 1L;
-        }
-        final Výjimka hostile = new Výjimka();
-        final RuntimeException other = new RuntimeException();
-        hostile.initCause(other);
-        other.initCause(hostile);
-        final StackTraceElement[] frames = Stream
-                .generate(() -> new StackTraceElement(
-                        "org.akropia.Přehled" + "x".repeat(500),
-                        "metoda\nšest" + "y".repeat(500), "File.java", 7))
-                .limit(30).toArray(StackTraceElement[]::new);
-        hostile.setStackTrace(frames);
-        final DiagnosticLog log = new DiagnosticLog(directory,
-                "příliš\nlong" + "z".repeat(500));
-
-        log.record(DiagnosticEvent.LOAD_FAILED, hostile);
-
-        final byte[] bytes = Files.readAllBytes(log.getActiveFile());
-        assertTrue(bytes.length <= DiagnosticLog.MAX_RECORD_CHARS,
-                "Record is " + bytes.length + " bytes");
-        for (final byte value : bytes) {
-            assertTrue(value >= 0, "Record contains a non-ASCII byte");
-        }
-        final String record = new String(bytes,
-                java.nio.charset.StandardCharsets.US_ASCII);
-        assertEquals(9, record.lines().count());
-        assertEquals(1,
-                record.lines().filter(line -> line.contains("event=")).count());
-        assertTrue(record.split(" <- ", -1).length <= 4);
-        assertFalse(record.contains("příliš"));
-        assertTrue(record.endsWith("\n"));
-    }
-
-    @Test
     void unexpectedInputNeverEscapesTheRecordCall() throws Exception {
         final RuntimeException broken = new RuntimeException() {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public StackTraceElement[] getStackTrace() {
+            public void printStackTrace(final java.io.PrintWriter writer) {
                 throw new IllegalStateException("must not escape");
             }
         };

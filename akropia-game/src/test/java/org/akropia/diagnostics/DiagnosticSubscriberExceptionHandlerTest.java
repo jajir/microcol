@@ -17,7 +17,7 @@ class DiagnosticSubscriberExceptionHandlerTest {
     Path directory;
 
     @Test
-    void failedSubscriberIsRecordedWithoutItsMessage() throws Exception {
+    void failedSubscriberIsRecordedWithItsMessage() throws Exception {
         final DiagnosticLog log = new DiagnosticLog(directory, "test-build");
         final EventBus eventBus = new EventBus(
                 new DiagnosticSubscriberExceptionHandler(log));
@@ -27,8 +27,9 @@ class DiagnosticSubscriberExceptionHandlerTest {
 
         final String record = Files.readString(log.getActiveFile());
         assertTrue(record.contains("event=EVENT_HANDLER_FAILED"));
-        assertTrue(record.contains("cause=java.lang.IllegalStateException"));
-        assertFalse(record.contains("Jan"));
+        assertTrue(record.contains(
+                "java.lang.IllegalStateException: subscriber failed for player text Jan"));
+        assertTrue(record.contains("Jan"));
     }
 
     public static final class FailingSubscriber {

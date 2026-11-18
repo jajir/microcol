@@ -19,14 +19,13 @@ import javafx.stage.Stage;
 
 /**
  * A failed Exit keeps the active game playable, names the local diagnostic
- * folder and records only safe context. The save folder is replaced by a file,
- * not by changing permissions, so the test is independent of the user.
+ * folder and records the exception stack trace. The save folder is replaced by
+ * a file, not by changing permissions, so the test is independent of the user.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_99_F90_diagnostic_failure_test extends AbstractAkropiaTest {
     private static final File FIXTURE = new File(
             "src/test/scenarios/F15-free-play-audit.akropia");
-    private static final String PLAYER_TEXT = "New Amsterdam";
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -63,8 +62,7 @@ public class TC_99_F90_diagnostic_failure_test extends AbstractAkropiaTest {
         audit.verifyCurrentTurn(19);
         audit.verifyCurrentPlayerIsHuman();
         audit.verifyActiveGameUnchangedAfterSaveFailure();
-        audit.verifyDiagnosticRecord(DiagnosticEvent.EXIT_SAVE_FAILED,
-                PLAYER_TEXT);
+        audit.verifyDiagnosticRecord(DiagnosticEvent.EXIT_SAVE_FAILED);
 
         // After restoring the save folder, Exit saves normally.
         audit.restoreSaveFolder();

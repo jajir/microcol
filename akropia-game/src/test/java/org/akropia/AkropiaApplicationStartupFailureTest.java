@@ -36,8 +36,7 @@ class AkropiaApplicationStartupFailureTest {
     }
 
     @Test
-    void startupFailureIsRecordedWithoutMessageOrRawStackTrace()
-            throws Exception {
+    void startupFailureIsRecordedWithMessageAndStackTrace() throws Exception {
         final DiagnosticLog log = new DiagnosticLog(directory.resolve("logs"),
                 "test-build");
 
@@ -46,11 +45,11 @@ class AkropiaApplicationStartupFailureTest {
 
         final String record = Files.readString(log.getActiveFile());
         assertTrue(record.contains("event=STARTUP_FAILED"));
-        assertTrue(record.contains("cause=java.lang.IllegalStateException"));
-        assertFalse(record.contains("Alpha"));
+        assertTrue(record.contains("java.lang.IllegalStateException"));
+        assertTrue(record.contains(SECRET));
         final String output = console.toString(UTF_8);
-        assertFalse(output.contains("Alpha"), "Message reached the console");
-        assertFalse(output.contains("\tat "), "Raw stack trace was printed");
+        assertTrue(output.contains(SECRET));
+        assertTrue(output.contains("\tat "));
         assertTrue(output.contains(log.getActiveFile().toString()),
                 "The log location is shown to the player");
     }
@@ -69,7 +68,7 @@ class AkropiaApplicationStartupFailureTest {
         final String output = console.toString(UTF_8);
         assertTrue(output.contains("event=STARTUP_FAILED"));
         assertTrue(output.contains("diagnostic log is unavailable"));
-        assertFalse(output.contains("Alpha"));
+        assertTrue(output.contains(SECRET));
         assertEquals("not a directory", Files.readString(blocked));
     }
 

@@ -18328,3 +18328,41 @@ messages for diagnosis. No tests were removed or weakened for acceptance.
    review, final screenshots, 14 documentation consistency checks, naming audit
    and strict MkDocs passed. The unrelated backlog edit is excluded. No full
    local regression, remote regression or publication verification was requested.
+
+
+## Standard diagnostic stack traces — 2026-11-18
+
+1. The shared diagnostic logger now preserves standard Java exception output;
+   see [diagnostic policy](diagnostics.md). The affected journeys are failed
+   Load/Continue (TC_42), failed Exit and unavailable log storage (TC_99).
+   Existing scenario IDs and gameplay assertions are retained.
+2. Model coverage compares the full standard trace, including a nested cause,
+   external-package frames, suppressed exceptions, Unicode, circular causes
+   and oversized-record rotation. Startup, event subscriber and load rejection
+   tests verify the shared callers.
+3. The first model attempt
+   `20261118T073151Z-70120fda9c8a` timed out during Docker preparation:
+   container listing exceeded 20 seconds; tests never started.
+4. Model attempt `20261118T073241Z-aba59f5ed57d` completed 5,132 game tests
+   with one failure, no errors or skips: the startup test still expected the
+   exception message to be absent from the console. This obsolete assertion
+   was corrected; final-source model acceptance remains pending.
+5. Final model run `20261118T073327Z-fb49c4714c8e` passed all **5,132**
+   tests with zero failures, errors or skips in 170.070 seconds, after a separate
+   110.724-second lock wait. Reports: `target/verification/run-ndnsiqkw`.
+6. Targeted Docker/Xvfb run `20261118T073824Z-dbdd01acfe5d` passed **43**
+   checks in 160.083 seconds, with zero failures, errors or skips. Selection:
+   TC_42 (5), TC_99 (2), PageVerificationContractTest (3),
+   GameLoadRejectionTest (21), DiagnosticLogTest (8),
+   DiagnosticSubscriberExceptionHandlerTest (1), and
+   AkropiaApplicationStartupFailureTest (3). Reports: `target/docker-ui/run-zfISKa`.
+   No remote publication was inspected.
+7. Fixed smoke/support run `20261118T074112Z-8673937d1d7c` passed **23**
+   checks with zero failures, errors or skips in 287.914 seconds, within the
+   420-second budget. Reports: `target/verification/run-6p8utz47`.
+8. Local acceptance is complete for the source based on `eed3006e94e6`.
+   Every changed Java file matches the passing model snapshot. Shared Java
+   formatting, 14 documentation consistency checks, name audit and strict
+   MkDocs passed. Native distribution test expectations were updated to this
+   logging policy; native distributions and remote CI were not run or verified.
+   Earlier failed attempts remain failed.

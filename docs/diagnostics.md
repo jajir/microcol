@@ -2,9 +2,9 @@
 
 This page is the authoritative description of the local diagnostic log
 ([R-0231](requirements/done/R-0231.md)). It describes the **configured source
-behavior** as of 19 October 2026. The accepted policy is in the
-[rules gap analysis](gap-analysis.md#local-diagnostic-logs). No run after the
-latest repair has verified this behavior; see [Evidence](#evidence).
+behavior** as of 18 November 2026. The accepted policy is in the
+[rules gap analysis](gap-analysis.md#local-diagnostic-logs). Local acceptance
+for the current policy is recorded below; publication is separate.
 
 ## Where records go
 
@@ -19,17 +19,15 @@ settings backup performed by `SettingService` neither move nor delete it.
 
 ## Retention
 
-The whole diagnostic set is at most three files, including the active file:
-`akropia.log`, `akropia.1.log` and `akropia.2.log`, each at most 5 MiB
-(15 MiB in total). When the active file would exceed 5 MiB, the oldest archive
-is removed and the others move one step older. The game and the macOS launcher
-wrapper write to this same set with the same rule. No other copy of console
-output is kept.
+The diagnostic set keeps three files including the active file. The game rotates
+before appending a record that would exceed 5 MiB. A single exception is never
+truncated, so an oversized record can exceed that threshold; the next record
+rotates it. The macOS launcher retains its existing rotation behavior.
 
 ## What a record contains
 
-Each record is plain ASCII, at most 4096 characters, and consists of one header
-line followed by up to eight stack-frame lines:
+Each record is UTF-8 and contains a header followed by the standard Java
+`Throwable.printStackTrace` output, without application filtering or truncation.
 
 1. UTC time.
 2. Build identity: the Maven version, plus the CI build ID when the packaged
@@ -39,27 +37,14 @@ line followed by up to eight stack-frame lines:
    `LOAD_FAILED`, `SAVE_FAILED`, `EXIT_SAVE_FAILED`, `RECOVERY_SAVE_FAILED` or
    `TURN_PREPARATION_REJECTED`. The macOS launcher wrapper adds
    `LAUNCHER_FAILED` with the numeric exit status.
-5. The exception class chain, at most four classes.
-6. At most eight stack frames from `org.akropia.*` as class, method and line
-   number.
+5. The complete standard exception output: messages, frames from all packages,
+   causes and suppressed exceptions. Java itself abbreviates shared frames and
+   handles circular cause references.
 
-Every non-fixed value (build, platform fields, class and method names) is
-reduced to a short ASCII form: other characters become `?` and each field has a
-length limit. A record is therefore always one bounded unit, even for hostile or
-unexpected input. `DiagnosticLog.record` never throws; unexpected input is
-reported on the console instead.
-
-## What is never recorded
-
-- Exception messages. They may contain player names, colony names, file paths
-  or parser fragments.
-- Player-entered text, saved-game JSON or any save content.
-- Absolute paths, including the home directory and the save folder.
-- Hostnames, user names or network data.
-
-Nothing is uploaded or sent. The log is a local file that the player may read or
-attach to a report manually. The folder path shown in dialogs is a local path
-for the player's own use; it is not part of any record.
+Header fields retain their short ASCII representation. Exception text is preserved
+unchanged, including Unicode, paths and player data present in messages. This
+policy was explicitly agreed on 18 November 2026. Nothing is uploaded automatically.
+Failures of the log itself are reported on the console without disrupting gameplay.
 
 ## Console
 
@@ -103,11 +88,10 @@ continue:
 
 ## Startup failures
 
-A failed startup no longer prints a raw stack trace (exception messages may
-hold paths). It records `STARTUP_FAILED` with the safe fields above, prints
-`Akropia diagnostic log: <path>` and exits with status 1. If even the log
-cannot be prepared, only the exception class is printed. No dialog is shown by
-the game; the macOS Finder launcher shows its own dialog, see below.
+A failed startup records `STARTUP_FAILED` with the standard exception trace,
+prints `Akropia diagnostic log: <path>` and exits with status 1. If the logger
+cannot even be prepared, the fallback still prints only the exception class.
+No game dialog is shown; the macOS Finder launcher shows its own dialog below.
 
 An unusable save location **at launch** is a startup failure: the campaign
 progress store needs the save folder while the game is assembled. Only a
@@ -139,6 +123,15 @@ prints errors to the terminal.
 - The launcher records only the exit status, not why the launcher failed.
 - Two Akropia processes writing the same log may race on rotation.
 - Existing console loggers still print exception messages to the console.
+
+## Standard stack trace acceptance — 18 November 2026
+
+The shared logger now uses `Throwable.printStackTrace` directly and stores UTF-8.
+Local acceptance passed 5,132 model/JUnit tests, 43 targeted checks (including
+seven TC_42/TC_99 UI scenarios), and 23 fixed smoke/support checks, all without
+failures, errors or skips. Smoke took 287.914 seconds within its 420-second budget.
+See [the selections and retained failure evidence](functional-tests.md#standard-diagnostic-stack-traces-2026-11-18).
+Native distributions and remote publication were not verified.
 
 ## Evidence
 

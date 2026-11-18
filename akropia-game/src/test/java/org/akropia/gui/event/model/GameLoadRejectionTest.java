@@ -134,8 +134,7 @@ class GameLoadRejectionTest {
     }
 
     @Test
-    void rejectedLoadIsRecordedWithoutMessagesOrSourceLocation()
-            throws Exception {
+    void rejectedLoadRecordsTheOriginalCause() throws Exception {
         Files.writeString(source.toPath(), "{");
 
         assertFalse(controller.loadModelFromFile(source));
@@ -143,9 +142,7 @@ class GameLoadRejectionTest {
         final String record = Files.readString(diagnostics.getActiveFile());
         assertTrue(record.contains("event=LOAD_FAILED"));
         assertTrue(record.contains("build=test-build"));
-        assertFalse(record.contains("column"), "Parser message was recorded");
-        assertFalse(record.contains(directory.toString()),
-                "Source location was recorded");
+        assertTrue(record.contains("Caused by:"));
     }
 
     @Test

@@ -1,6 +1,8 @@
 package org.akropia.diagnostics;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,14 +13,9 @@ import java.time.Instant;
 import com.google.common.base.Preconditions;
 
 /**
- * Bounded local record of recoverable failures. A record is plain ASCII and
- * holds the fixed event, build, operating system, architecture, Java version,
- * time, the exception class chain and at most eight Akropia stack frames.
- * Exception messages, player text and save content are never written; every
- * value that is not a fixed label is reduced to a short ASCII form. Every
- * record is also printed to the console. Failures of the log itself, including
- * unexpected input, are reported on the console and never propagate into
- * gameplay, saving or loading.
+ * Local diagnostic records with standard Java exception stack traces. Records
+ * are printed to the console and stored in rotating UTF-8 files. Log failures
+ * never propagate into gameplay, saving or loading.
  */
 public final class DiagnosticLog {
 
@@ -28,19 +25,8 @@ public final class DiagnosticLog {
 
     static final String FILE_NAME = "akropia.log";
 
-    /** Records are ASCII, so characters and bytes are the same count. */
-    static final int MAX_RECORD_CHARS = 4096;
-
-    private static final int MAX_FRAMES = 8;
-
-    private static final int MAX_CAUSES = 4;
-
     private static final int MAX_NAME = 120;
-
     private static final int MAX_FIELD = 48;
-
-    private static final String AKROPIA_PACKAGE = "org.akropia.";
-
     private final Path directory;
 
     private final String buildVersion;
@@ -57,8 +43,8 @@ public final class DiagnosticLog {
             final long maxFileBytes, final int maxFiles) {
         this.directory = Preconditions.checkNotNull(directory);
         this.buildVersion = Preconditions.checkNotNull(buildVersion);
-        Preconditions.checkArgument(maxFileBytes >= MAX_RECORD_CHARS,
-                "Each file must hold at least one record");
+        Preconditions.checkArgument(maxFileBytes > 0,
+                "File rotation limit must be positive");
         Preconditions.checkArgument(maxFiles >= 2,
                 "At least one archive is needed next to the active file");
         this.maxFileBytes = maxFileBytes;
@@ -144,42 +130,13 @@ public final class DiagnosticLog {
                 .append(ascii(System.getProperty("java.version"), MAX_FIELD))
                 .append(" event=")
                 .append(event == null ? "UNKNOWN" : event.name());
+        out.append('\n');
         if (failure != null) {
-            out.append(" cause=").append(causeChain(failure));
-            int frames = 0;
-            for (final StackTraceElement frame : failure.getStackTrace()) {
-                if (frames == MAX_FRAMES) {
-                    break;
-                }
-                if (frame != null && String.valueOf(frame.getClassName())
-                        .startsWith(AKROPIA_PACKAGE)) {
-                    out.append("\n    at ")
-                            .append(ascii(frame.getClassName(), MAX_NAME))
-                            .append('.')
-                            .append(ascii(frame.getMethodName(), MAX_NAME))
-                            .append('(').append(frame.getLineNumber())
-                            .append(')');
-                    frames++;
-                }
-            }
+            final StringWriter trace = new StringWriter();
+            failure.printStackTrace(new PrintWriter(trace));
+            out.append(trace);
         }
-        if (out.length() > MAX_RECORD_CHARS - 1) {
-            out.setLength(MAX_RECORD_CHARS - 1);
-        }
-        return out.append('\n').toString();
-    }
-
-    private static String causeChain(final Throwable failure) {
-        final StringBuilder chain = new StringBuilder();
-        Throwable current = failure;
-        for (int depth = 0; current != null && depth < MAX_CAUSES; depth++) {
-            if (depth > 0) {
-                chain.append(" <- ");
-            }
-            chain.append(ascii(current.getClass().getName(), MAX_NAME));
-            current = current.getCause();
-        }
-        return chain.toString();
+        return out.toString();
     }
 
     /**
@@ -203,7 +160,7 @@ public final class DiagnosticLog {
 
     private void append(final String record) throws IOException {
         Files.createDirectories(directory);
-        final byte[] bytes = record.getBytes(StandardCharsets.US_ASCII);
+        final byte[] bytes = record.getBytes(StandardCharsets.UTF_8);
         if (Files.exists(getActiveFile())
                 && Files.size(getActiveFile()) + bytes.length > maxFileBytes) {
             rotate();

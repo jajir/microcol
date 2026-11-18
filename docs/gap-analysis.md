@@ -2058,7 +2058,7 @@ For the selected future change [R-0405](requirements/done/R-0405.md), see [worke
 
 ### Local diagnostic logs
 
-1. Accepted on 2026-10-19: keep local diagnostic logs outside saved games, bounded to three files of at most 5 MB each. On macOS use ~/Library/Logs/Akropia. Failure guidance identifies the log location. Do not include saved-game content or player-entered text in diagnostic reports, and do not transmit anything automatically.
+1. Updated by explicit agreement on 2026-11-18: keep local diagnostic logs outside saved games, with three rotating files and a 5 MiB rotation threshold. Preserve standard Java stack traces including messages, causes and suppressed exceptions without filtering or truncation; a single record may exceed the threshold. Player text or paths present in exception messages are retained. Nothing is transmitted automatically. See [local diagnostics](diagnostics.md) for the authoritative behavior and evidence.
 
 
 
