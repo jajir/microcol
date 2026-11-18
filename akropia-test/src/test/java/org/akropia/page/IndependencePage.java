@@ -52,10 +52,10 @@ public final class IndependencePage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    /** Let the calendar pass a boundary while the confirmation stays open. */
-    public void advanceCalendarBehindOpenConfirmation() {
-        WaitForAsyncUtils.asyncFx(
-                () -> ConcurrentModelEvents.advanceCalendar(getModel()));
+    /** Remove political support while the confirmation remains open. */
+    public void removeSupportBehindOpenConfirmation() {
+        getRobot().interact(() -> ConcurrentModelEvents.removeRebelSupport(
+                getModel(), getModel().getPlayerByName(PLAYER)));
         WaitForAsyncUtils.waitForFxEvents();
     }
 

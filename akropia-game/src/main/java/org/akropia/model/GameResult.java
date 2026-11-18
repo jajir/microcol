@@ -51,11 +51,14 @@ public final class GameResult {
 
     private final Integer declarationYear;
 
+    private final Integer declarationTurn;
+
     private volatile Status status;
 
     private GameResult(final String identity, final String playerName,
             final Status status, final BaseScore base, final ResultScore score,
-            final Integer victoryOrder, final Integer declarationYear) {
+            final Integer victoryOrder, final Integer declarationYear,
+            final Integer declarationTurn) {
         this.identity = identity;
         this.playerName = playerName;
         this.status = status;
@@ -63,6 +66,7 @@ public final class GameResult {
         this.score = score;
         this.victoryOrder = victoryOrder;
         this.declarationYear = declarationYear;
+        this.declarationTurn = declarationTurn;
     }
 
     /**
@@ -84,7 +88,8 @@ public final class GameResult {
                 owner.getName(), status, owner.getBaseScore(),
                 owner.getResultScore(),
                 owner.getRebellionVictoryOrder().orElse(null),
-                owner.getDeclarationYear().orElse(null));
+                owner.getDeclarationYear().orElse(null),
+                owner.getDeclarationTurn().orElse(null));
         frozen.objectives = owner.freezeObjectives();
         return frozen;
     }
@@ -124,13 +129,14 @@ public final class GameResult {
         final ResultScore savedScore = ResultScore.of(savedBase,
                 po.getDestroyedSettlements(), difficulty,
                 po.getOwlsBeyondTarget(), po.getVictoryOrder(),
-                po.getDeclarationYear());
+                po.getDeclarationTurn());
         Preconditions.checkArgument(savedScore.getTotal() == po.getTotal(),
                 "Frozen result total does not match its components");
         checkStatus(savedStatus, owner, po);
         final GameResult loaded = new GameResult(po.getIdentity(),
                 owner.getName(), savedStatus, savedBase, savedScore,
-                po.getVictoryOrder(), po.getDeclarationYear());
+                po.getVictoryOrder(), po.getDeclarationYear(),
+                po.getDeclarationTurn());
         loaded.objectives = ObjectiveResult.load(po.getObjectives());
         return loaded;
     }
@@ -168,6 +174,9 @@ public final class GameResult {
                                             .orElse(null))
                                     && Objects.equals(po.getDeclarationYear(),
                                             owner.getDeclarationYear()
+                                                    .orElse(null))
+                                    && Objects.equals(po.getDeclarationTurn(),
+                                            owner.getDeclarationTurn()
                                                     .orElse(null)),
                             "Final result disagrees with the saved rebellion");
         } else {
@@ -175,6 +184,7 @@ public final class GameResult {
                     !owner.isDeclaredIndependence()
                             && po.getVictoryOrder() == null
                             && po.getDeclarationYear() == null
+                            && po.getDeclarationTurn() == null
                             && po.getOwlsBeyondTarget() == 0L,
                     "An unscored or colony-loss result needs an undeclared nation");
         }
@@ -229,6 +239,11 @@ public final class GameResult {
         return Optional.ofNullable(declarationYear);
     }
 
+    /** @return the exact declaration turn used by the frozen score */
+    public Optional<Integer> getDeclarationTurn() {
+        return Optional.ofNullable(declarationTurn);
+    }
+
     boolean isAwaitingContinuation() {
         return status == Status.AWAITING_CONTINUATION;
     }
@@ -257,6 +272,7 @@ public final class GameResult {
         out.setOwlsBeyondTarget(score.getOwlsAfterTarget());
         out.setVictoryOrder(victoryOrder);
         out.setDeclarationYear(declarationYear);
+        out.setDeclarationTurn(declarationTurn);
         out.setTotal(score.getTotal());
         return out;
     }

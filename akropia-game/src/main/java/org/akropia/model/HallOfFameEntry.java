@@ -34,10 +34,13 @@ public final class HallOfFameEntry {
 
     private final Integer declarationYear;
 
+    private final Integer declarationTurn;
+
     private HallOfFameEntry(final String identity, final String nationName,
             final String playerDisplayName, final Difficulty difficulty,
             final BaseScore base, final ResultScore score,
-            final Integer victoryOrder, final Integer declarationYear) {
+            final Integer victoryOrder, final Integer declarationYear,
+            final Integer declarationTurn) {
         this.identity = identity;
         this.nationName = nationName;
         this.playerDisplayName = playerDisplayName;
@@ -46,6 +49,7 @@ public final class HallOfFameEntry {
         this.score = score;
         this.victoryOrder = victoryOrder;
         this.declarationYear = declarationYear;
+        this.declarationTurn = declarationTurn;
     }
 
     /**
@@ -68,7 +72,8 @@ public final class HallOfFameEntry {
                 result.getPlayerName(), owner.getDisplayName(), difficulty,
                 result.getBaseScore(), result.getScore(),
                 result.getVictoryOrder().orElse(null),
-                result.getDeclarationYear().orElse(null));
+                result.getDeclarationYear().orElse(null),
+                result.getDeclarationTurn().orElse(null));
         entry.objectives = result.getObjectives();
         return entry;
     }
@@ -104,12 +109,13 @@ public final class HallOfFameEntry {
         final ResultScore score = ResultScore.of(base,
                 po.getDestroyedSettlements(), difficulty,
                 po.getOwlsBeyondTarget(), po.getVictoryOrder(),
-                po.getDeclarationYear());
+                po.getDeclarationTurn());
         Preconditions.checkArgument(score.getTotal() == po.getTotal(),
                 "Hall of Fame total does not match its components");
         final HallOfFameEntry loaded = new HallOfFameEntry(po.getIdentity(),
                 po.getPlayerName(), po.getPlayerDisplayName(), difficulty, base,
-                score, po.getVictoryOrder(), po.getDeclarationYear());
+                score, po.getVictoryOrder(), po.getDeclarationYear(),
+                po.getDeclarationTurn());
         loaded.objectives = ObjectiveResult.load(po.getObjectives());
         return loaded;
     }
@@ -194,6 +200,7 @@ public final class HallOfFameEntry {
         out.setOwlsBeyondTarget(score.getOwlsAfterTarget());
         out.setVictoryOrder(victoryOrder);
         out.setDeclarationYear(declarationYear);
+        out.setDeclarationTurn(declarationTurn);
         out.setTotal(score.getTotal());
         return out;
     }

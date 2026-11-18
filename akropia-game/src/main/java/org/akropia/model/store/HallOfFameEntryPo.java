@@ -47,6 +47,8 @@ public final class HallOfFameEntryPo {
 
     private Integer declarationYear;
 
+    private Integer declarationTurn;
+
     private Long total;
 
     /**
@@ -259,4 +261,11 @@ public final class HallOfFameEntryPo {
         this.total = total;
     }
 
+    public Integer getDeclarationTurn() {
+        return declarationTurn;
+    }
+
+    public void setDeclarationTurn(final Integer declarationTurn) {
+        this.declarationTurn = declarationTurn;
+    }
 }

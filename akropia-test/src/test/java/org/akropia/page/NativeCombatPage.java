@@ -169,13 +169,25 @@ public final class NativeCombatPage extends AbstractScreen {
         assertTrue(text.contains(anger), text);
     }
 
+    /** Content keeps its size budget; the drawn frame must fit the screen. */
     public void verifyDialogFits(final int width, final int height) {
         final javafx.stage.Window window = getButtonById("fightConfirm")
                 .getScene().getWindow();
-        assertTrue(window.getWidth() <= width,
-                "Review width " + window.getWidth());
-        assertTrue(window.getHeight() <= height,
-                "Review height " + window.getHeight());
+        final javafx.scene.Node content = window.getScene().getRoot()
+                .lookup(".modal-content");
+        assertTrue(content.getLayoutBounds().getWidth() <= width,
+                "Review content width " + content.getLayoutBounds().getWidth());
+        assertTrue(content.getLayoutBounds().getHeight() <= height,
+                "Review content height "
+                        + content.getLayoutBounds().getHeight());
+        final javafx.geometry.Rectangle2D screen = javafx.stage.Screen
+                .getScreensForRectangle(window.getX(), window.getY(),
+                        window.getWidth(), window.getHeight())
+                .get(0).getVisualBounds();
+        assertTrue(
+                screen.contains(window.getX(), window.getY(), window.getWidth(),
+                        window.getHeight()),
+                "The complete review frame must fit the screen");
     }
 
     /**

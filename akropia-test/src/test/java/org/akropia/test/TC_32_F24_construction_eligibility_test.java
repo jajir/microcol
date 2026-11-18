@@ -424,6 +424,10 @@ public class TC_32_F24_construction_eligibility_test
         turnReport.verifyThatAtLeastOneEventMessageContains(WAITING_NOTICE);
         turnReport.retainOpenColonyAction(COLONY_ID);
 
+        // Losing this colony must not end the whole game before the stale
+        // click.
+        new org.akropia.page.RoyalBattlePage(getContext())
+                .foundReserveColony(100, Location.of(22, 12));
         // The galleon sails out and the king captures the colony while the
         // report is still open; no escape animation is needed.
         getContext().getRobot().interact(() -> getModel().getUnitById(3)

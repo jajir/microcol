@@ -2,7 +2,6 @@ package org.akropia.page;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
-import java.util.stream.Collectors;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.AccessibleAttribute;
@@ -175,29 +174,11 @@ public final class GameToolbarPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public double getCurrentRowWindowWidth() throws Exception {
-        return WaitForAsyncUtils.asyncFx(() -> {
-            final FlowPane bar = getNodeFinder().lookup(".buttonPanel")
-                    .queryAs(FlowPane.class);
-            final List<Node> controls = bar.getChildren().stream()
-                    .filter(Node::isManaged).collect(Collectors.toList());
-            final org.akropia.gui.util.GameScreenHeader header = getNodeFinder()
-                    .lookup(".screen-toolbar")
-                    .queryAs(org.akropia.gui.util.GameScreenHeader.class);
-            return header.getHeadingWidth() + header.getInsets().getLeft()
-                    + header.getInsets().getRight()
-                    + controls.stream()
-                            .mapToDouble(
-                                    node -> node.getBoundsInParent().getWidth())
-                            .sum()
-                    + (controls.size() - 1) * bar.getHgap()
-                    + bar.getInsets().getLeft() + bar.getInsets().getRight()
-                    + ((javafx.scene.layout.Region) bar.getParent()).getInsets()
-                            .getLeft()
-                    + ((javafx.scene.layout.Region) bar.getParent()).getInsets()
-                            .getRight()
-                    + getPrimaryStage().getWidth() - bar.getScene().getWidth();
-        }).get();
+    public void verifyContentWidthLimit(final double maximumWidth) {
+        final Node content = getNodeFinder()
+                .lookup(".screen-toolbar > .game-bar-content").query();
+        assertTrue(content.getLayoutBounds().getWidth() <= maximumWidth,
+                "Toolbar content must preserve the shared width limit");
     }
 
     public void verifyControls(final boolean czech, final boolean iconsOnly) {

@@ -76,6 +76,16 @@ public abstract class AbstractScreen {
         return FxAssert.assertContext().getNodeFinder();
     }
 
+    /**
+     * Model completion precedes dismissal of the minimum-duration wait window.
+     */
+    protected void awaitTurnPresentation() throws Exception {
+        WaitForAsyncUtils.waitFor(10, java.util.concurrent.TimeUnit.SECONDS,
+                () -> WaitForAsyncUtils
+                        .asyncFx(() -> !isCssIdShown("turn-wait")).get());
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
     protected void clickOnButtonWithId(final String buttonId) {
         if (UNIT_COMMANDS.contains(buttonId)) {
             openUnitActions();

@@ -13,7 +13,6 @@ import org.akropia.ai.RivalPlayerFactory;
 import org.akropia.gui.FileSelectingService;
 import org.akropia.gui.screen.game.gamepanel.CursorService;
 import org.akropia.mock.CursorServiceNoOpp;
-import org.akropia.model.ColonyJobChoice.Kind;
 import org.akropia.model.ConstructionType;
 import org.akropia.model.Difficulty;
 import org.akropia.model.EuropeanNation;
@@ -363,9 +362,7 @@ public class TC_101_F92_four_nation_expedition_loop_test
         // Move the second colonist into the small winery.
         game.panToTile(SITE);
         colony = game.openColonyAt(SITE, route.colonyName);
-        trip.openFieldJobChoice(colony, worker);
-        jobs.select(Kind.INDOOR, GoodsType.WINE);
-        jobs.confirm();
+        colony.moveFieldWorkerToBuilding(worker, "id_winery");
         jobs.verifyClosed();
         trip.verifyWorkerIndoors(route.colonyName, worker,
                 ConstructionType.SMALL_WINERY);

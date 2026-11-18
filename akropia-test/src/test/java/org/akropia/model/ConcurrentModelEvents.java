@@ -2,7 +2,7 @@ package org.akropia.model;
 
 /**
  * Test-only access to events that can invalidate an open proposal: a lost unit
- * under a cargo proposal, or a calendar that moves on beneath an independence
+ * under a cargo proposal, or political support lost beneath an independence
  * confirmation.
  */
 public final class ConcurrentModelEvents {
@@ -14,8 +14,18 @@ public final class ConcurrentModelEvents {
         model.destroyUnit(unit);
     }
 
-    /** Move the calendar one turn on, as a concurrent round boundary would. */
-    public static void advanceCalendar(final Model model) {
-        model.getCalendar().endRound();
+    /** Remove current support while a proposal is already open. */
+    public static void removeRebelSupport(final Model model,
+            final Player player) {
+        try {
+            final java.lang.reflect.Field liberty = Colony.class
+                    .getDeclaredField("liberty");
+            liberty.setAccessible(true);
+            for (final Colony colony : model.getColonies(player)) {
+                liberty.setLong(colony, 0);
+            }
+        } catch (final ReflectiveOperationException failure) {
+            throw new IllegalStateException(failure);
+        }
     }
 }

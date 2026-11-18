@@ -1221,6 +1221,11 @@ public abstract class Player {
         return Optional.ofNullable(declarationYear);
     }
 
+    /** @return the exact declaration turn, empty before independence */
+    Optional<Integer> getDeclarationTurn() {
+        return Optional.ofNullable(declarationTurn);
+    }
+
     /** @return native settlements this nation destroyed by conquest */
     public int getNativeSettlementsDestroyed() {
         return nativeSettlementsDestroyed;

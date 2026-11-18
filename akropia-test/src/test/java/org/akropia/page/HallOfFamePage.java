@@ -75,9 +75,11 @@ public final class HallOfFamePage extends AbstractScreen {
     }
 
     /** Close the Hall of Fame window, whichever screen opened it. */
-    public void continueWithoutScoring() {
+    public void continueWithoutScoring() throws Exception {
         clickOnButtonWithId("hallOfFameContinue");
-        WaitForAsyncUtils.waitForFxEvents();
+        WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS,
+                () -> getModel().isGameRunning() && !isCssIdShown(DIALOG));
+        awaitTurnPresentation();
     }
 
     public void verifyObjectiveResult(org.akropia.model.FreePlayGoal goal) {

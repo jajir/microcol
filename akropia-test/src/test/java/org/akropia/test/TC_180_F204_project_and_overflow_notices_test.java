@@ -101,6 +101,10 @@ public class TC_180_F204_project_and_overflow_notices_test
         report.verifyOpenColonyAction(COLONY_ID, "Open colony");
         report.retainOpenColonyAction(COLONY_ID);
 
+        // Losing this colony must not end the whole game before the stale
+        // click.
+        new org.akropia.page.RoyalBattlePage(getContext())
+                .foundReserveColony(100, Location.of(22, 12));
         // The galleon sails out and the king captures the colony while the
         // report is still open.
         getContext().getRobot().interact(() -> getModel().getUnitById(3)
@@ -158,6 +162,8 @@ public class TC_180_F204_project_and_overflow_notices_test
 
         // The colony is lost while the report is open; the action refuses it.
         restored.retainOpenColonyAction(COLONY_ID);
+        new RoyalBattlePage(getContext()).foundReserveColony(100,
+                Location.of(22, 12));
         getContext().getRobot().interact(() -> getModel().getUnitById(3)
                 .placeToLocation(Location.of(25, 16)));
         new RoyalBattlePage(getContext()).captureColony(COLONY, 200);

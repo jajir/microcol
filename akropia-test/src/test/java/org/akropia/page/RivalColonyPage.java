@@ -87,7 +87,7 @@ public final class RivalColonyPage extends AbstractScreen {
                                 || getModel().isGameRunning()));
         // Model preparation completes before the queued report replaces its
         // nodes.
-        org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
+        awaitTurnPresentation();
         if (getModel().isAwaitingTaxDecision()) {
             final TaxDemandPage tax = new TaxDemandPage(getContext());
             tax.waitForDemand();

@@ -63,6 +63,21 @@ public final class RoyalBattlePage extends AbstractScreen {
     }
 
     /**
+     * Keep the stale-report scenario running after the tested colony is lost.
+     */
+    public void foundReserveColony(final int founderId, final Location at) {
+        getRobot().interact(() -> {
+            final Unit founder = getModel().getUnitById(founderId);
+            founder.placeToLocation(at);
+            ((AbstractUnit) founder).setActionPoints(founder.getSpeed());
+            founder.getOwner().revealMapForUnit(founder);
+            getModel().buildColony(founder.getOwner(), founder,
+                    "Reserve colony");
+        });
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    /**
      * Let the Crown force win the defense battle of the colony.
      *
      * @param colonyAt required colony center

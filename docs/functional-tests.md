@@ -1,3 +1,107 @@
+## Regression run 44222879665 repair — 2026-11-18
+
+1. Failure inventory: [the requested GitHub run](https://github.com/jajir/microcol/actions/runs/44222879665)
+   tested `00cb54de0d1421c95dd81efa32dd9b640dd39e0c` and reported 23 failed
+   scenarios in TC11, TC32, TC53, TC78, TC81, TC101, TC125, TC134, TC147,
+   TC163, TC180, TC183 and TC188. The downloaded evidence is retained in
+   `target/regression-44222879665/`; the historical run remains failed.
+2. Repair scope preserves the current game rules and scenario IDs. Field
+   workers enter buildings by drag and drop; unavailable manufacturing and
+   equipment choices are absent from menus. Tax expectations match the
+   fixture's initial 100 knowledge points. Declaration has no historical
+   calendar cutoff; loss of political support still invalidates an open confirmation.
+   Toolbar checks follow daily seasons and the shared 1,440-pixel content cap,
+   retaining accessible names and the icon row at both wide and narrow sizes. Combat content retains its
+   size budget and its complete frame must remain on screen.
+3. Turn helpers wait for dismissal of the minimum-duration players' turn
+   window. Stale-report scenarios retain another owned colony, because loss of
+   the last colony now ends the game and its result dialog blocks report input.
+   Existing ownership, no-mutation, production, Continue and battle assertions
+   remain part of the affected scenarios.
+4. Initial model/JUnit acceptance on `936044ff657b95aac4e401cea017b278d22b9b55`
+   passed 5,134 tests, zero failures/errors/skips in 158.620 supervised seconds
+   (600-second limit): `target/verification/run-gmdxhcn7/`, completion
+   `20261118T100916Z-bd9b65245cf6`. This initial result predates the frozen-score repair; fresh model/JUnit
+   acceptance is required for the final executable source.
+5. Baseline diagnostic selection sampled every failing class and both failing
+   TC81 cases: 14 tests, five failures, seven errors, zero skips, 462.881
+   supervised seconds (3,600-second limit). Evidence: `target/docker-ui/run-iePHsK/`,
+   completion `20261118T101217Z-238a03936776`. TC11 and TC163 passed this sample;
+   a single pass does not resolve their original failures. Targeted repair
+   verification and smoke acceptance remain pending.
+
+6. The first repaired 14-case selection completed in 699.816 supervised
+seconds: nine passed, three failed and two errored, no skips
+(`target/docker-ui/run-0kdZnu/`, completion
+`20261118T102309Z-be516a0e110e`, 3,600-second limit).
+The next attempt stopped at compilation after 42.637 seconds; no UI tests ran
+(`run-7nz9PN`, completion `20261118T104029Z-5abb0f55ac13`).
+After correcting test-only access to political support, the 32-case neighborhood
+completed in 433.292 seconds: 30 passed, one failed and one errored, no skips
+(`run-UWFEH5`, completion `20261118T104154Z-72edc31dbb99`, 1,800-second limit).
+7. TC163/05 exposed a calendar migration defect in persisted winning scores:
+the frozen result and ranking recomputed the declaration bonus from the year.
+Both now retain the exact declaration turn. The model round-trip test covers
+both saved representations and rejects a missing required turn; TC163 covers
+the player-visible winning result and persistent ranking. Toolbar resizing also
+waits for the native scene width before checking responsive layout.
+The first fresh model attempt stopped at compilation after 23.484 seconds
+(`target/verification/run-bk0hmupp/`, completion
+`20261118T105215Z-6fe5b0f68b30`, 600-second limit); tests did not start.
+The missing player accessor was added before retrying. A second compilation
+attempt then exposed a missing assertion import in the new test, corrected
+after 34.762 seconds (`run-bch0u0w_`, completion
+`20261118T105339Z-be52a37a1f9d`); no tests ran in that attempt either.
+8. Fresh model/JUnit acceptance passed **5,135 tests, zero failures/errors/skips**,
+including the winning-score persistence check, in 156.907 supervised seconds
+(600-second limit). Reports: `target/verification/run-kp3sfkpw/`, completion
+`20261118T105434Z-bd7f0dbd91d6`. This covers the repaired game/model-test source.
+The targeted Docker selection covers all thirteen originally failing classes,
+the six other users of the shared independence fixture, TC21 window navigation
+and the page-source contract (21 classes total). Its exact selection is retained
+in `target/regression-44222879665/final-targeted-selection.txt`.
+9. The complete targeted selection ran 95 tests in 2,536.832 supervised
+seconds (5,400-second limit): 94 passed, zero assertion failures, one error,
+zero skips. Reports: `target/docker-ui/run-T1Lona/`, completion
+`20261118T105733Z-facf1d799a84`. TC163/05 now passes, confirming persisted
+winning scores. Only TC188/01 still expected labels at a fixed window width.
+The other twenty classes retain their passing evidence with unchanged source
+and selections. A six-check retry still had one error in 77.450 seconds
+(`run-ho6nKb`, completion `20261118T114052Z-0dfd3c0854fc`). A one-case
+diagnostic confirmed the cause in 51.370 seconds (`run-7k9jjo`, completion
+`20261118T114242Z-817cabc5c445`): a 1,482-pixel scene contains a capped
+1,440-pixel header row, leaving 1,236 pixels for the actions. The toolbar test
+now verifies this configured cap and accessible icon controls, preserving
+keyboard, hint, season and Continue assertions. Temporary diagnostics were
+removed. The next six-check run passed the toolbar assertions and exposed
+three stale unchanged-turn expectations (day 2 instead of fixture day 41):
+one failure, no errors/skips, 82.517 seconds (`run-kTj8b1`, completion
+`20261118T114358Z-2e5647664809`). Those expectations now match the daily
+calendar fixture; TC188 and the page-source contract are repeated before smoke.
+
+10. Final TC188 and page-source-contract verification passed all **6 tests**,
+zero failures/errors/skips, in 97.292 supervised seconds (600-second limit).
+Reports: `target/docker-ui/run-XcdhTA/`, completion
+`20261118T114549Z-a281819dc349`. Together with the unchanged passing classes
+from `run-T1Lona`, all **95 distinct targeted tests** are accepted, covering
+all 23 original failures and the functional neighborhood. The historical failed
+attempts above remain failed; no full local regression was run.
+11. Fixed smoke/support acceptance passed **23 tests**, zero
+failures/errors/skips, in 288.359 verification seconds (291.728 supervised
+seconds), within the 420-second local budget and 480-second watchdog.
+Reports: `target/verification/run-3ufjf4dp/`, completion
+`20261118T114743Z-58fe2e8848a6`. Final source comparison found no changes to
+the accepted game/model-test snapshot or the smoke snapshot's executable/test
+sources. Shared Java formatting made no further changes; the scoped diff was
+reviewed, including saved-score validation, unchanged gameplay assertions,
+responsive width cap and scenario coverage. Documentation acceptance passed
+14 consistency tests, naming audit (zero unexplained occurrences) and strict
+MkDocs; logs are in `target/regression-44222879665/`.
+12. Local acceptance is based on `936044ff657b95aac4e401cea017b278d22b9b55` plus
+this repair. The unrelated backlog edit is excluded from the task commit.
+These are local results; no new full-regression, website or game-distribution
+publication is claimed.
+
 ## Expedition calendar — 2026-11-18
 
 1. UC-004/UC-005: [calendar rules](gap-analysis.md#calendar-and-starting-expeditions)

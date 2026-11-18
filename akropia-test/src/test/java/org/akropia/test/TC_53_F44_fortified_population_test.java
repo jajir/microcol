@@ -78,12 +78,8 @@ public class TC_53_F44_fortified_population_test extends AbstractAkropiaTest {
         ColonyJobPage jobs = new ColonyJobPage(getContext());
         // Remove food-producing jobs, then expose the colony to an actual
         // update.
-        jobs.openFromField(0);
-        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.TORCHES);
-        jobs.confirm();
-        jobs.openFromField(1);
-        jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.OWLS);
-        jobs.confirm();
+        jobs.assignIndoorFromField(0, "id_church");
+        jobs.assignIndoorFromField(1, "id_town_hall");
         FortifiedPopulationPage people = new FortifiedPopulationPage(
                 getContext());
         people.exhaustFood();

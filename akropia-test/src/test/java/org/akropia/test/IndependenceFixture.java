@@ -377,6 +377,10 @@ final class IndependenceFixture {
         final JsonObject calendar = model.getAsJsonObject("calendar");
         calendar.addProperty("numberOfPlayedTurns", playedTurns);
         calendar.addProperty("endYear", endYear);
+        calendar.addProperty("turnLimit",
+                Math.multiplyExact(
+                        endYear - calendar.get("startYear").getAsInt(),
+                        org.akropia.model.Calendar.DAYS_PER_YEAR));
         final JsonArray colonies = model.getAsJsonArray("colonies");
         for (int index = 0; index < liberty.length; index++) {
             colonies.get(index).getAsJsonObject().addProperty("liberty",

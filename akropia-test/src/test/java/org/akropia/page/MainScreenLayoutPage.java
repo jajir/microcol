@@ -43,11 +43,22 @@ public final class MainScreenLayoutPage extends AbstractScreen {
         });
     }
 
-    public void resize(final double width, final double height) {
+    public void resize(final double width, final double height)
+            throws Exception {
         getRobot().interact(() -> {
             getContext().getPrimaryStage().setWidth(width);
             getContext().getPrimaryStage().setHeight(height);
         });
+        WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
+                () -> WaitForAsyncUtils.asyncFx(() -> {
+                    final Stage stage = getContext().getPrimaryStage();
+                    final double expected = Math.max(width,
+                            stage.getMinWidth());
+                    return Math
+                            .abs(stage.getScene().getWidth() - expected) < 20;
+                }).get());
+        getRobot().interact(() -> getContext().getPrimaryStage().getScene()
+                .getRoot().layout());
         WaitForAsyncUtils.waitForFxEvents();
     }
 

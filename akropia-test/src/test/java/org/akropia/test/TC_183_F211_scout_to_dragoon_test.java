@@ -23,7 +23,6 @@ import javafx.stage.Stage;
 @ExtendWith(ApplicationExtension.class)
 public class TC_183_F211_scout_to_dragoon_test extends AbstractAkropiaTest {
     private static final Location COLONY = Location.of(24, 16);
-    private static final String MISSING = "Not enough goods in the warehouse. Cancel and obtain the required goods.";
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -44,11 +43,8 @@ public class TC_183_F211_scout_to_dragoon_test extends AbstractAkropiaTest {
         equipment.verifyState(49, 50, 80, false, true, 0);
         equipment.verifySightRadius(2);
 
-        // One weapon short of the 50 needed: refused, cancel changes nothing.
-        equipment.open("Equip with weapons");
-        equipment.verifyChoice("Equip with weapons", false, MISSING);
-        equipment.verifyCostContains("50");
-        equipment.cancel();
+        // Insufficient stock hides the action and keeps the scout unchanged.
+        equipment.verifyEquipmentNotOffered("equipment-WEAPONS");
         equipment.verifyState(49, 50, 80, false, true, 0);
         equipment.verifySightRadius(2);
 

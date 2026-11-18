@@ -18,6 +18,8 @@ historických kol na roky. `model.store.CalendarPo` uchovává výslovný limit
 kol mise nezávisle na zobrazovaných rocích. GUI datum pouze překládá a zobrazuje;
 první tah mise se rozpoznává podle počtu odehraných kol. `Player` ukládá rok
 i přesné kolo vyhlášení nezávislosti; `ResultScore` zachovává bonus podle kol.
+Zmrazený `GameResult` i položka `HallOfFameEntry` ukládají vedle roku také
+`declarationTurn`; při načtení počítají bonus z tohoto kola, nikoli z roku.
 Odpovědnosti balíčků se nemění. Viz
 [pravidla kalendáře](gap-analysis.md#calendar-and-starting-expeditions).
 

@@ -44,7 +44,7 @@ public final class NationalTurnPage extends AbstractScreen {
                 () -> finished.size() >= expected.size()
                         && getModel().isGameRunning()
                         && getModel().getCurrentPlayer().isHuman());
-        WaitForAsyncUtils.waitForFxEvents();
+        awaitTurnPresentation();
         assertEquals(expected, finished);
         assertEquals("Dutch", getModel().getCurrentPlayer().getName());
     }

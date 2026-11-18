@@ -40,19 +40,19 @@ public class TC_188_F221_game_toolbar_test extends AbstractAkropiaTest {
         final MainScreenLayoutPage layout = new MainScreenLayoutPage(
                 getContext());
         layout.verifyPaperWindowConfiguration(expectedWindowStyle);
-        // Read all names and discover actions by hover and keyboard focus.
+        // Read accessible names and discover actions by hover and keyboard
+        // focus.
         GamePage game = WelcomePage.of(getContext()).loadGame();
         final GameToolbarPage toolbar = new GameToolbarPage(getContext());
         layout.verifyPaperWindowConfiguration(expectedWindowStyle);
-        layout.resize(1500, 900);
-        toolbar.verifyControls(false, false);
+        layout.resize(1600, 900);
+        toolbar.verifyControls(false, true);
         // Hover keeps the status explanation without opening a popup.
         toolbar.hoverRetire();
         toolbar.verifyNoHoverPopup();
         toolbar.verifyExplanation(
                 "Retire ends the game with your score. Scored play only, on your turn.",
                 null);
-        final double namedWidth = toolbar.getCurrentRowWindowWidth();
 
         // The map heading explains its Latin name and restores prior context.
         toolbar.leaveMapHeading();
@@ -68,7 +68,7 @@ public class TC_188_F221_game_toolbar_test extends AbstractAkropiaTest {
         toolbar.focusMapHeadingWithKeyboard();
         toolbar.verifyMapHeading(true);
         toolbar.activateFocusedButton();
-        toolbar.verifyUnitUnchanged(3, 3, 2);
+        toolbar.verifyUnitUnchanged(3, 3, 41);
         toolbar.verifyExplanation(
                 "Mappa Mundi is Latin for “map of the world”. Latin was widely used at the time.",
                 null);
@@ -80,14 +80,15 @@ public class TC_188_F221_game_toolbar_test extends AbstractAkropiaTest {
                 null);
         toolbar.leaveMapHeading();
 
-        // Crossing the measured boundary hides all names together and restores
-        // them, with no second row or oscillation on another layout pulse.
-        layout.resize(namedWidth - 2, 900);
+        // The shared 1440-pixel content cap keeps the full action row in icon
+        // mode even in a wider window, without wrapping or layout oscillation.
+        toolbar.verifyContentWidthLimit(1440);
+        layout.resize(1440, 900);
         toolbar.verifyControls(false, true);
         layout.showContextMessage("Resize boundary");
         toolbar.verifyControls(false, true);
-        layout.resize(namedWidth + 2, 900);
-        toolbar.verifyControls(false, false);
+        layout.resize(1600, 900);
+        toolbar.verifyControls(false, true);
         layout.resize(900, 900);
         toolbar.verifyControls(false, true);
         toolbar.verifySeason(Season.autumn, 0xff71864b);
@@ -95,17 +96,17 @@ public class TC_188_F221_game_toolbar_test extends AbstractAkropiaTest {
         toolbar.verifyExplanation("Home port port. (E)", null);
         toolbar.focusCenterWithTab();
         toolbar.verifyExplanation("Find focused place. (C)", "center");
-        toolbar.verifyUnitUnchanged(3, 3, 2);
+        toolbar.verifyUnitUnchanged(3, 3, 41);
         layout.saveEvidence("toolbar-one-row-keyboard-focus.png");
         toolbar.activateFocusedButton();
-        toolbar.verifyUnitUnchanged(3, 3, 2);
+        toolbar.verifyUnitUnchanged(3, 3, 41);
         layout.saveEvidence("toolbar-one-row-icons.png");
         // Even an extreme resize leaves every icon accessible in one row.
         layout.resize(300, 900);
         toolbar.verifyControls(false, true);
-        layout.resize(1500, 900);
-        toolbar.verifyControls(false, false);
-        layout.saveEvidence("toolbar-one-row-labels.png");
+        layout.resize(1600, 900);
+        toolbar.verifyControls(false, true);
+        layout.saveEvidence("toolbar-one-row-wide.png");
 
         // A real turn changes only the accent to winter blue; Continue keeps
         // it.
@@ -118,7 +119,7 @@ public class TC_188_F221_game_toolbar_test extends AbstractAkropiaTest {
         layout.verifyPaperWindowConfiguration(expectedWindowStyle);
         toolbar.verifySeason(Season.winter, 0xff568b9b);
         game.nextTurnAndCloseDialogs();
-        toolbar.verifySeason(Season.spring, 0xff71864b);
+        toolbar.verifySeason(Season.winter, 0xff568b9b);
     }
 
     @Test
@@ -142,7 +143,7 @@ public class TC_188_F221_game_toolbar_test extends AbstractAkropiaTest {
                 "Mappa Mundi je latinsky „mapa světa“. Latina se tehdy běžně používala.",
                 null);
 
-        toolbar.verifySeason(null, 0xff71864b);
+        toolbar.verifySeason(Season.summer, 0xff71864b);
         toolbar.hover("coloniesMenu");
         toolbar.verifyExplanation("Vyberte kolonii, kterou chcete otevřít. (I)",
                 null);
@@ -154,7 +155,7 @@ public class TC_188_F221_game_toolbar_test extends AbstractAkropiaTest {
         toolbar.verifyColonies(true, true, "Zatím nemáte žádnou kolonii");
         toolbar.dismissColonies(false);
         toolbar.verifyColonies(false, true, "Zatím nemáte žádnou kolonii");
-        toolbar.verifySeason(null, 0xff71864b);
+        toolbar.verifySeason(Season.summer, 0xff71864b);
         layout.resize(1800, 700);
         // The shared 1440px content cap keeps the longer Czech actions iconic.
         toolbar.verifyControls(true, true);

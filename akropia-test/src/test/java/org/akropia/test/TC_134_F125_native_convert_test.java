@@ -103,10 +103,6 @@ public class TC_134_F125_native_convert_test extends AbstractAkropiaTest {
 
     private static final String BEST_LUMBER_EN = "Best eligible field: 8 Lumber per turn";
 
-    private static final String REFUSED_EN = "Unavailable: A native convert cannot work in a manufacturing building.";
-
-    private static final String REFUSED_CS = "Nedostupné: Místní konvertita nemůže pracovat ve výrobní budově.";
-
     @Start
     private void start(final Stage stage) throws Exception {
         Files.deleteIfExists(Path.of(System.getProperty("user.home"),
@@ -254,11 +250,9 @@ public class TC_134_F125_native_convert_test extends AbstractAkropiaTest {
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.rememberWorld();
 
-        // The job picker explains the refusal and cannot confirm it.
+        // Manufacturing is absent from the current-state work menu.
         jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.INDOOR, GoodsType.TOOLS);
-        jobs.verifyDetails(REFUSED_EN, false);
-        jobs.captureProductionTable("native-convert-refused-en.png");
+        jobs.verifyJobNotOffered(Kind.INDOOR, GoodsType.TOOLS);
         jobs.cancel();
         jobs.verifyClosed();
         jobs.verifyWorldUnchanged();
@@ -341,7 +335,7 @@ public class TC_134_F125_native_convert_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
-    void TC_09_czech_refusal_explains_the_manufacturing_ban() throws Exception {
+    void TC_09_czech_menu_preserves_the_manufacturing_ban() throws Exception {
         final SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();
         settings.goBack().loadGame();
@@ -352,11 +346,13 @@ public class TC_134_F125_native_convert_test extends AbstractAkropiaTest {
         jobs.rememberWorld();
 
         jobs.openFromCenter(WORKER_ID);
-        jobs.select(Kind.INDOOR, GoodsType.TOOLS);
-        jobs.verifyDetails(REFUSED_CS, false);
-        jobs.captureProductionTable("native-convert-refused-cs.png");
+        jobs.verifyJobNotOffered(Kind.INDOOR, GoodsType.TOOLS);
         jobs.cancel();
         jobs.verifyClosed();
+        jobs.verifyWorldUnchanged();
+        convert.dragCenterToBuildingExpectingRefusal(WORKER_ID,
+                "id_blacksmith");
+        convert.verifyUnassignedAtColony(WORKER_ID, "AZTEC", COLONY);
         jobs.verifyWorldUnchanged();
     }
 

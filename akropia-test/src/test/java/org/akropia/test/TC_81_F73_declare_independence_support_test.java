@@ -28,10 +28,10 @@ import javafx.stage.Stage;
 public class TC_81_F73_declare_independence_support_test
         extends AbstractAkropiaTest {
 
-    /** Winter 1799 and the last turn before spring 1800 (start 1490). */
-    private final static int WINTER_1799 = 909;
+    /** Last turn before the removed historical calendar cutoff. */
+    private final static int LEGACY_CUTOFF_LAST_TURN = 909;
 
-    /** The turn count of the shared scenario: the year is 1747. */
+    /** Historical turn count retained by the shared scenario. */
     private final static int YEAR_1747 = 700;
 
     private final static int END_YEAR = 1900;
@@ -125,19 +125,19 @@ public class TC_81_F73_declare_independence_support_test
 
     @Test
     @Tag("local")
-    void TC_02_declaration_is_offered_until_winter_1799_and_not_in_spring_1800()
+    void TC_02_declaration_remains_available_across_the_legacy_cutoff()
             throws Exception {
-        // Load full support in winter 1799, the last turn before spring 1800.
+        // Full support remains sufficient across the former calendar cutoff.
         final GamePage gamePage = prepareAndLoad(
-                "independence-f73-winter.akropia", WINTER_1799,
+                "independence-f73-winter.akropia", LEGACY_CUTOFF_LAST_TURN,
                 new long[] { FULL, FULL, FULL, FULL });
         final IndependencePage independence = new IndependencePage(
                 getContext());
         independence.verifyDeclareButtonVisible(true);
 
-        // Spring 1800 starts: the declaration is no longer offered.
+        // Advancing the calendar does not revoke the declaration action.
         gamePage.nextTurnAndCloseDialogs();
-        independence.verifyDeclareButtonVisible(false);
+        independence.verifyDeclareButtonVisible(true);
         independence.verifyDeclared(false);
     }
 
@@ -145,9 +145,9 @@ public class TC_81_F73_declare_independence_support_test
     @Tag("local")
     void TC_03_a_stale_confirmation_is_explained_and_changes_nothing()
             throws Exception {
-        // Load full support in winter 1799 and open the confirmation.
+        // Load full support and open the confirmation.
         final GamePage gamePage = prepareAndLoad(
-                "independence-f73-stale.akropia", WINTER_1799,
+                "independence-f73-stale.akropia", LEGACY_CUTOFF_LAST_TURN,
                 new long[] { FULL, FULL, FULL, FULL },
                 IndependenceFixture.soldier(101, "COLONIST", NEW_AMSTERDAM,
                         true, false, true));
@@ -157,8 +157,9 @@ public class TC_81_F73_declare_independence_support_test
                 "National support for independence: 100%.",
                 "1 armed veteran(s) standing in colonies with at least 50% local support will become Continental troops. They keep their equipment and remain the same units.");
 
-        // The calendar reaches spring 1800 while the confirmation is open.
-        independence.advanceCalendarBehindOpenConfirmation();
+        // National support drops below the threshold while confirmation is
+        // open.
+        independence.removeSupportBehindOpenConfirmation();
 
         // Confirming is refused with an explanation and nothing changes.
         independence.confirm();

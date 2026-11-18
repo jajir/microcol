@@ -1,6 +1,7 @@
 package org.akropia.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -147,6 +148,37 @@ class RebellionVictoryTest {
     }
 
     // ---- ground boundary ----------------------------------------------------
+
+    @Test
+    void victoryScoresRoundTripWithTheDeclarationTurnRatherThanItsYear() {
+        final ModelPo data = RoyalScenarioFixtures.declaredCrown().getModel();
+        data.getCalendar().setNumberOfPlayedTurns(84);
+        RebellionFixtures.declare(data, rebelPo(data));
+        final Model model = load(data);
+        keepLivingGround(crown(model).getRoyalRoster(), 2);
+        model.checkRebellionLoss();
+        final Player player = rebel(model);
+        final GameResult result = GameResult.freeze(player,
+                GameResult.Status.FINAL);
+        assertEquals(Optional.of(84), result.getDeclarationTurn());
+        assertNotEquals(result.getDeclarationYear(),
+                result.getDeclarationTurn());
+        final var saved = result.save();
+        assertEquals(result.getScore().getTotal(),
+                GameResult.load(saved, player, model.getDifficulty()).getScore()
+                        .getTotal());
+        final HallOfFameEntry entry = HallOfFameEntry.of(result, player,
+                model.getDifficulty());
+        final var ranking = entry.save();
+        assertEquals(entry.getTotal(),
+                HallOfFameEntry.load(ranking).getTotal());
+        saved.setDeclarationTurn(null);
+        ranking.setDeclarationTurn(null);
+        assertThrows(IllegalArgumentException.class,
+                () -> GameResult.load(saved, player, model.getDifficulty()));
+        assertThrows(IllegalArgumentException.class,
+                () -> HallOfFameEntry.load(ranking));
+    }
 
     @Test
     void threeLivingGroundUnitsDoNotWinAndTwoDo() {

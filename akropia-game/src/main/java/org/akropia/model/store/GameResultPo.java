@@ -44,6 +44,8 @@ public final class GameResultPo {
 
     private Integer declarationYear;
 
+    private Integer declarationTurn;
+
     private Long total;
 
     /**
@@ -242,4 +244,11 @@ public final class GameResultPo {
         this.total = total;
     }
 
+    public Integer getDeclarationTurn() {
+        return declarationTurn;
+    }
+
+    public void setDeclarationTurn(final Integer declarationTurn) {
+        this.declarationTurn = declarationTurn;
+    }
 }
