@@ -1,3 +1,36 @@
+## Construction offer prerequisites — 2026-11-19
+
+1. UC-033/042: the building picker uses the model's existing admission list.
+   Population, predecessor, founder, coastal access, built buildings and queue
+   conflicts filter offers; missing hammers/tools do not. Units retain their
+   existing filtering. See [player behavior](ux.md#dostupnost-stavby-pri-presunu-pracovnika-18-listopadu-2026).
+2. Updated TC32/01,04,11,12 and TC22/05 verify hidden ineligible buildings,
+   unchanged confirmation/cancel/resource behavior, and live workforce changes.
+   Existing `ConstructionAdmissionTest` covers every building's population
+   boundary, predecessor, queue conflict and rejection without mutation.
+   Targeted selection planned: TC32, TC51, TC57, TC22/05 and
+   `PageVerificationContractTest` (results below).
+3. Model attempt `20261119T063211Z-514c5850df1a` timed out during Docker
+   preparation (labelled-container query: 20 s limit; total 22.09 s).
+   No tests started. Subsequent server-version and identical container-list
+   probes passed in 0.078 s and 0.017 s; the original cause remains unknown.
+   Retry `20261119T063314Z-da10d62b1856` passed in 151.711 s: **5,141 tests
+   in 400 XML reports**, zero failures/errors/skips, under
+   `target/verification/run-pzjqd968` (base `834236fd` plus task diff).
+4. Targeted Docker/Xvfb run `20261119T063602Z-c8d18f01ec4b` passed in
+   424.142 s: **21 tests in five XML reports**, zero failures/errors/skips,
+   under `target/docker-ui/run-b3qFQ4`: TC32 (12), TC51 (2), TC57 (3),
+   TC22/05 (1), page source contract (3). Existing gameplay assertions,
+   cancellation, stale confirmation and completion checks remain covered.
+5. Fixed smoke/support run `20261119T064327Z-416634dfa93f` passed:
+   **23 tests in 13 XML reports**, zero failures/errors/skips, under
+   `target/verification/run-9vj9j_q2`. Verification took 283.453 s
+   (283.608 s including wrapper cleanup), below the 420 s acceptance limit.
+   Java formatting used the shared Eclipse profile; diff review passed.
+6. Final documentation checks passed all 14 tests and strict MkDocs; logs
+   are in `target/construction-offers/`. The unrelated backlog edit is excluded
+   from this task. No full regression or remote publication verification ran.
+
 ## Turn report icons and arrival location — 2026-11-18
 
 1. Scope: UC-013/016/043/114/119. Notices identify units and colonies with

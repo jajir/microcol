@@ -4,8 +4,13 @@
 
 1. Otevřená záložka Construction po přesunu pracovníka dovnitř nebo ven
    z kolonie znovu vyhodnotí dostupnost vybraného projektu podle modelu.
-   Výběr zůstává zachovaný; tlačítko i důvod nedostupnosti odpovídají novému
-   počtu obyvatel bez zavírání záložky či výběru jiného projektu.
+   Od 19. listopadu 2026 nabídka obsahuje pouze budovy splňující všechny
+   modelové předpoklady kromě zásoby tesařské práce a nástrojů. Chybějící
+   populace, předchozí budova, zakladatel nebo pobřeží budovu skryjí;
+   již postavené a frontou blokované budovy se také nenabízejí.
+   Při změně populace se seznam obnoví bez zavírání záložky. Dostupný výběr
+   zůstane zachovaný; skrytý projekt se odznačí a po návratu do nabídky jej
+   hráč znovu vybere. Nabídka jednotek zachovává dosavadní pravidla.
 2. Přidání stavby nadále vyžaduje potvrzení. Přesun pracovníka sám nic
    nezařazuje do fronty a model při potvrzení znovu ověřuje podmínky.
    [Testovací evidence](functional-tests.md#construction-workforce-refresh-2026-11-18)

@@ -115,9 +115,7 @@ public class TC_22_F15_free_play_capability_audit_test
         new FreePlayAuditPage(getContext()).verifyConstructionQueueAvailable(2);
         ConstructionPage construction = new ConstructionPage(getContext());
         construction.open();
-        construction.select("BLACKSMITHS_SHOP");
-        construction.verifyOffer(false, "Requires 4 residents; currently 2.",
-                64, 20);
+        construction.verifyProjectOffered("BLACKSMITHS_SHOP", false);
         construction.cancel();
         construction.verifyPickerClosed();
         colony.close();

@@ -238,20 +238,17 @@ public class QueueDialog extends AbstractMessageWindow {
         hammerPool.setText(i18n.get(ConstructionText.hammerPool,
                 controller.getColony().getWarehouse()
                         .getGoods(GoodsType.HAMMERS).getAmount()));
-        final List<ColonyBuildingItem> offers = new ArrayList<>();
-        ConstructionType.ALL.stream().filter(ConstructionType::canBeConstructed)
-                .filter(type -> !controller.getColony()
-                        .isContainsConstructionByType(type))
-                .filter(type -> type.getUpgradeFrom().map(previous -> controller
-                        .getColony().getConstructions().stream()
-                        .anyMatch(building -> building.getType() == previous))
-                        .orElse(true))
-                .filter(type -> type.getRequiredFounder()
-                        .map(founder -> controller.getColony().getOwner()
-                                .getCongressMembers().contains(founder))
-                        .orElse(true))
-                .forEach(type -> offers
-                        .add(new ColonyBuildingItemConstruction(type)));
+        refreshProjects();
+        select(null);
+        updateQueueButtons();
+    }
+
+    private void refreshProjects() {
+        final ColonyBuildingItem selected = projects.getSelectionModel()
+                .getSelectedItem();
+        final List<ColonyBuildingItem> offers = new ArrayList<>(
+                controller.getColony().getColonyBuildingQueue()
+                        .getBuildigItemsConstruction());
         UnitType.UNIT_TYPES.stream().filter(UnitType::canBeBuildInColony)
                 .filter(type -> controller.getColony().getColonyBuildingQueue()
                         .getUnitUnavailableReason(type)
@@ -264,8 +261,12 @@ public class QueueDialog extends AbstractMessageWindow {
                         .isEmpty())
                 .forEach(type -> offers.add(new ColonyBuildingItemUnit(type)));
         projects.getItems().setAll(offers);
-        select(null);
-        updateQueueButtons();
+        if (selected != null) {
+            offers.stream()
+                    .filter(item -> item.getName().equals(selected.getName()))
+                    .findFirst().ifPresent(
+                            item -> projects.getSelectionModel().select(item));
+        }
     }
 
     private Optional<String> unavailable(final ColonyBuildingItem item) {
@@ -287,6 +288,7 @@ public class QueueDialog extends AbstractMessageWindow {
     }
 
     public void refreshSelection() {
+        refreshProjects();
         select(projects.getSelectionModel().getSelectedItem());
     }
 

@@ -12,7 +12,10 @@ scénáře a výsledky v [evidenci](functional-tests.md#turn-report-icons-and-ar
 1. `TC_32_F24_construction_eligibility_test/TC_12` ponechá otevřenou
    Construction a vybraný Lumber Mill. Přetažení pracovníka mezi budovou
    a Outside colony mění populaci 3 → 2 → 3 → 2 → 3; test kontroluje
-   dostupnost, důvod odmítnutí, zachování fronty a následné potvrzení.
+   skrytí a opětovné nabídnutí projektu, zachování fronty a následné potvrzení
+   (úprava nabídky 19. listopadu 2026). TC_01 a TC_04 ověřují skrytí kvůli
+   populaci, předchůdci, zakladateli a frontě i odmítnutí zastaralého potvrzení;
+   nedostatek práce a nástrojů nabídku neblokuje.
 2. [Chování](ux.md#dostupnost-stavby-pri-presunu-pracovnika-18-listopadu-2026)
    a [evidence](functional-tests.md#construction-workforce-refresh-2026-11-18)
    doplňují stávající přejímku staveb; nemění pravidlo minimální populace.

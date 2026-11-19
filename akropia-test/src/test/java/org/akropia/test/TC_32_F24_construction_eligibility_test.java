@@ -49,21 +49,21 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyOffer(true, "Available.", 52, 0);
         construction.moveCarpenterOutside(0);
         construction.verifyStocksAndPopulation(58, 19, 2);
-        construction.verifyOffer(false, "Requires 3 residents; currently 2.",
-                52, 0);
+        construction.verifyProjectOffered("LUMBER_MILL", false);
 
-        // Returning the worker enables the same selection without reopening it.
+        // Returning the worker restores the offer without reopening the picker.
         construction.assignCarpenter(200);
-        construction.verifyOffer(true, "Available.", 52, 0);
+        construction.verifyProjectOffered("LUMBER_MILL", true);
         construction.select("LUMBER_MILL");
         construction.verifyOffer(true, "Available.", 52, 0);
 
-        // A second departure disables it again; returning permits confirmation.
+        // A second departure hides it again; returning permits confirmation.
         construction.moveCarpenterOutside(1);
-        construction.verifyOffer(false, "Requires 3 residents; currently 2.",
-                52, 0);
+        construction.verifyProjectOffered("LUMBER_MILL", false);
         construction.verifyQueue(List.of(), List.of(), 58);
         construction.assignCarpenter(200);
+        construction.verifyProjectOffered("LUMBER_MILL", true);
+        construction.select("LUMBER_MILL");
         construction.verifyOffer(true, "Available.", 52, 0);
         construction.confirm();
         construction.verifyQueue(List.of("LUMBER_MILL"), List.of(0), 58);
@@ -84,9 +84,7 @@ public class TC_32_F24_construction_eligibility_test
                 .openColonyWithKeyboard(0, "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
         construction.openWithKeyboard();
-        construction.select("BLACKSMITHS_SHOP");
-        construction.verifyOffer(false, "Requires 4 residents; currently 3.",
-                64, 20);
+        construction.verifyProjectOffered("BLACKSMITHS_SHOP", false);
         construction.verifyProjectOffered("IRON_WORKS", false);
         construction.focusList("constructionProjects");
         construction.verifyPaperListFocus("constructionProjects");
@@ -123,8 +121,7 @@ public class TC_32_F24_construction_eligibility_test
         construction.select("BLACKSMITHS_SHOP");
         construction.confirmTwice();
         construction.verifyQueue(List.of("BLACKSMITHS_SHOP"), List.of(0), 58);
-        construction.select("BLACKSMITHS_SHOP");
-        construction.verifyOffer(false, "already queued", 64, 20);
+        construction.verifyProjectOffered("BLACKSMITHS_SHOP", false);
         construction.cancel();
         construction.verifyPickerClosed();
         construction.verifyStocksAndPopulation(58, 19, 4);
@@ -299,9 +296,7 @@ public class TC_32_F24_construction_eligibility_test
         construction.confirm();
         construction.verifyChangedOffer();
         construction.verifyQueue(List.of(), List.of(), 58);
-        construction.select("LUMBER_MILL");
-        construction.verifyOffer(false, "Requires 3 residents; currently 2.",
-                52, 0);
+        construction.verifyProjectOffered("LUMBER_MILL", false);
         construction.cancel();
         construction.verifyPickerClosed();
         construction.verifyStocksAndPopulation(58, 19, 2);
@@ -530,7 +525,7 @@ public class TC_32_F24_construction_eligibility_test
         ConstructionPage construction = new ConstructionPage(getContext());
         construction.openWithKeyboard();
         construction.verifyCompactEditor();
-        construction.doubleClickProject("BLACKSMITHS_SHOP");
+        construction.verifyProjectOffered("BLACKSMITHS_SHOP", false);
         construction.verifyQueue(List.of(), List.of(), 58);
         // Each double click adds exactly one item without spending shared work.
         construction.doubleClickProject("LUMBER_MILL");
