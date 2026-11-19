@@ -97,6 +97,7 @@ class TradeRouteAssignmentTest {
         final UnitWithCargo ship = ship(model);
         final TradeRoute route = createSeaRoute(model, dutch, "Circuit");
         model.assignTradeRoute(ship, route, 0);
+        assertFalse(model.getIdleMapUnitsBeforeEndTurn().contains(ship));
 
         assertThrows(IllegalStateException.class,
                 () -> model.moveUnit(ship, Path.of(List.of(SEA))));

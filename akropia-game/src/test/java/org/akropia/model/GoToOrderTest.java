@@ -257,6 +257,70 @@ class GoToOrderTest {
     }
 
     @Test
+    void mapWarningIncludesForestColonistAndShipWithoutMutatingOrDuplicatingColony() {
+        final GameModelPo data = shipScenario();
+        terrain(data, strip(31), TerrainType.GRASSLAND);
+        terrain(data, strip(30), TerrainType.GRASSLAND);
+        final Set<Location> trees = new HashSet<>(
+                data.getModel().getMap().getTreeSet());
+        trees.add(strip(31));
+        data.getModel().getMap().setTrees(trees);
+        final Model model = load(data);
+        final Unit forest = colonist(model, strip(31), 3);
+        final Unit inColony = colonist(model, COLONY, 3);
+        final Unit ship = model.getUnitById(3);
+        final String before = snapshot(model);
+        assertTrue(model.getIdleMapUnitsBeforeEndTurn().contains(forest));
+        assertTrue(model.getIdleMapUnitsBeforeEndTurn().contains(ship));
+        assertFalse(model.getIdleMapUnitsBeforeEndTurn().contains(inColony));
+        assertTrue(model.getIdleColonistsBeforeEndTurn()
+                .get(model.getColonyById(0).orElseThrow()).contains(inColony));
+        assertEquals(before, snapshot(model));
+        final Model restored = reload(model, data, saved -> {
+        });
+        assertTrue(restored.getIdleMapUnitsBeforeEndTurn().stream()
+                .anyMatch(unit -> unit.getId() == forest.getId()));
+        assertTrue(model.getIdleMapUnitsBeforeEndTurn().stream()
+                .allMatch(unit -> unit.getOwner() == model.getCurrentPlayer()
+                        && unit.isAtPlaceLocation()));
+    }
+
+    @Test
+    void mapWarningRequiresAffordableStepAndExcludesAssignedWork() {
+        final Model model = load(scenario());
+        final Unit idle = colonist(model, strip(31), 0);
+        for (int thirds = 0; thirds < 3; thirds++) {
+            ((AbstractUnit) idle).setMovementThirds(thirds);
+            assertFalse(model.getIdleMapUnitsBeforeEndTurn().contains(idle));
+        }
+        ((AbstractUnit) idle).setMovementThirds(3);
+        assertTrue(model.getIdleMapUnitsBeforeEndTurn().contains(idle));
+        model.setSentry(idle);
+        assertFalse(model.getIdleMapUnitsBeforeEndTurn().contains(idle));
+        final Unit ordered = colonist(model, strip(31), 3);
+        ((AbstractUnit) ordered).restoreGoTo(strip(28), null, "28, 15", false);
+        assertFalse(model.getIdleMapUnitsBeforeEndTurn().contains(ordered));
+        ((AbstractUnit) ordered).cancelGoTo();
+        ((AbstractUnit) ordered).restoreGoTo(strip(28), null, "28, 15", true);
+        assertTrue(model.getIdleMapUnitsBeforeEndTurn().contains(ordered));
+        ((AbstractUnit) ordered).cancelGoTo();
+        ((AbstractUnit) ordered).restoreGoTo(Location.of(1, 1), null, "1, 1",
+                false);
+        assertTrue(model.getIdleMapUnitsBeforeEndTurn().contains(ordered));
+    }
+
+    @Test
+    void mapWarningExcludesEuropeVoyageWithNullMapDestination() {
+        final Model model = load(shipScenario());
+        final Ship ship = (Ship) model.getUnitById(3);
+        assertTrue(model.getIdleMapUnitsBeforeEndTurn().contains(ship));
+        ship.restoreGoTo(null, null, "Europe", false, true);
+        final String before = snapshot(model);
+        assertFalse(model.getIdleMapUnitsBeforeEndTurn().contains(ship));
+        assertEquals(before, snapshot(model));
+    }
+
+    @Test
     void threeTurnJourneyFollowsSharedCostsAndArrivesOnce() {
         final Model model = load(scenario());
         final Unit colonist = colonist(model, strip(31), 3);

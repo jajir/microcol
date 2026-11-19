@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import org.akropia.gui.buttonpanel.Buttons;
+import org.akropia.gui.LocalizationHelper;
 import org.akropia.gui.image.ButtonIcon;
 import org.akropia.gui.util.AbstractMessageWindow;
 import org.akropia.gui.util.ActionButtons;
@@ -22,19 +23,27 @@ import javafx.scene.layout.VBox;
 /** One confirmation for all warnings at the requested turn boundary. */
 public final class EndTurnWarningsDialog extends AbstractMessageWindow {
     private final I18n i18n;
+    private final LocalizationHelper localizationHelper;
+
+    private Unit selectedUnit;
+
     private boolean proceed;
     private Colony selectedColony;
 
     @Inject
-    EndTurnWarningsDialog(final ViewUtil viewUtil, final I18n i18n) {
+    EndTurnWarningsDialog(final ViewUtil viewUtil, final I18n i18n,
+            final LocalizationHelper localizationHelper) {
         super(viewUtil, i18n);
         this.i18n = i18n;
+        this.localizationHelper = localizationHelper;
     }
 
     public boolean confirm(final Map<Colony, List<Unit>> warnings,
-            final Consumer<Colony> openColony) {
+            final List<Unit> mapUnits, final Consumer<Colony> openColony,
+            final Consumer<Unit> selectUnit) {
         proceed = false;
         selectedColony = null;
+        selectedUnit = null;
         final VBox content = new VBox(10);
         content.setPadding(new Insets(10));
         final Label caption = new Label(
@@ -53,9 +62,22 @@ public final class EndTurnWarningsDialog extends AbstractMessageWindow {
             });
             rows.getChildren().add(row);
         });
+        for (final Unit unit : mapUnits) {
+            final Button row = ActionButtons.button(ButtonIcon.CENTER,
+                    localizationHelper.getUnitName(unit.getType()) + " ("
+                            + unit.getLocation().getX() + ", "
+                            + unit.getLocation().getY() + ")");
+            row.setId("end-turn-unit-" + unit.getId());
+            row.setOnAction(event -> {
+                selectedUnit = unit;
+                close();
+            });
+            rows.getChildren().add(row);
+        }
         final ScrollPane scroll = new ScrollPane(rows);
         scroll.setFitToWidth(true);
-        scroll.setPrefViewportHeight(Math.min(260, warnings.size() * 55));
+        scroll.setPrefViewportHeight(
+                Math.min(260, (warnings.size() + mapUnits.size()) * 55));
         content.getChildren().add(scroll);
         final ButtonsBarYesNo buttons = new ButtonsBarYesNo(
                 i18n.get(Buttons.endTurnProceed),
@@ -77,6 +99,9 @@ public final class EndTurnWarningsDialog extends AbstractMessageWindow {
         showAndWait();
         if (selectedColony != null) {
             openColony.accept(selectedColony);
+        }
+        if (selectedUnit != null) {
+            selectUnit.accept(selectedUnit);
         }
         return proceed;
     }

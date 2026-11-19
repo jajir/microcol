@@ -5694,12 +5694,33 @@ public class Model {
         return java.util.Collections.unmodifiableMap(warnings);
     }
 
+    /** Idle map units not already represented by a colony warning. */
+    public List<Unit> getIdleMapUnitsBeforeEndTurn() {
+        return getAllUnits().stream()
+                .filter(unit -> unit.getOwner() == getCurrentPlayer()
+                        && unit.isAtPlaceLocation()
+                        && unit.getAction().isNoAction())
+                .filter(this::hasNoEmployingGoToOrder)
+                .filter(unit -> getTradeRouteAssignment(unit).isEmpty())
+                .filter(unit -> !(unit instanceof UnitFreeColonist)
+                        || getColonyAt(unit.getLocation())
+                                .filter(colony -> colony
+                                        .getOwner() == getCurrentPlayer())
+                                .isEmpty())
+                .filter(unit -> unit.getLocation().getNeighbors().stream()
+                        .anyMatch(unit::canMoveStepTo))
+                .collect(java.util.stream.Collectors.toUnmodifiableList());
+    }
+
     private boolean hasNoEmployingGoToOrder(final Unit unit) {
         final Optional<GoToOrder> order = goToOrderOf(unit);
         if (order.isEmpty()) {
             return true;
         }
         final GoToOrder goTo = order.get();
+        if (goTo.isEurope()) {
+            return ((AbstractUnit) unit).findEuropeGoToRoute().isEmpty();
+        }
         return goTo.isPaused()
                 || goTo.getDestination().equals(unit.getLocation())
                 || (goTo.getColonyId() != null

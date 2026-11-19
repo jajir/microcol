@@ -1710,3 +1710,8 @@ získání. Výsledky jsou v [evidenci](functional-tests.md#knowledge-2026-11-17
 ## UC-114: stručné stupnice nastavení — 2026-11-18
 
 1. `TC_84/09` ověřuje Music/Effects s krajními popisky Silent/Loud a Ticho/Nahlas bez samostatné hodnoty, ovládání a uchování nastavení. `TC_84/16` ověřuje pouze Slow/Fast a Nízká/Vysoká u touchpadu/kolečka bez čísel a procent, rozsah, uložení a účinek v obou osách. [UX pravidla](ux.md#citlivost-posunu-mapy-touchpadem-koleckem-2026-11-18).
+
+## Map unit end-turn review — 2026-11-19
+
+1. UC-005/015/038: the shared [end-turn warning rule](ux.md#upozorneni-pred-koncem-tahu) now includes idle own map units outside colonies and ships. Colony navigation remains available; a unit row selects and centers that unit without ending the turn or changing orders.
+2. `GoToOrderTest` covers forest placement, ships, colony deduplication, ownership/location filtering, movement boundaries, sentry, paused/blocked/active Go to, Europe voyage and read-only reload behavior. `TradeRouteAssignmentTest` covers assigned-carrier exclusion. `TC_199_F52_end_turn_warnings_test.TC_07` covers the forest unit, Back/Escape and map selection; `TC_08` covers ship/colonist rows, Continue and reload. TC_01–TC_06 retain the colony, worker/passenger and movement-limit journeys with other map units explicitly exhausted in their fixtures. [Acceptance evidence](functional-tests.md#map-unit-end-turn-warnings-2026-11-19).

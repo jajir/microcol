@@ -144,7 +144,7 @@
     <entry key="mapHeadingExplanation">Mappa Mundi je latinsky „mapa světa“. Latina se tehdy běžně používala.</entry>
     <entry key="goToEurope">Domovský přístav</entry>
     <entry key="endTurnWarningTitle">Před koncem tahu</entry>
-    <entry key="endTurnWarningCaption">V těchto koloniích čekají kolonisté bez práce. Otevřete kolonii a přidělte jim práci, vraťte se do hry, nebo přesto ukončete tento tah.</entry>
+    <entry key="endTurnWarningCaption">Nečinné jednotky se ještě mohou pohybovat. Otevřete kolonii a přidělte práci, vyberte jednotku na mapě, vraťte se do hry, nebo přesto ukončete tento tah.</entry>
     <entry key="endTurnProceed">Přesto ukončit tah</entry>
     <entry key="endTurnBack">Zpět</entry>
     <entry key="buildColonyWaitingForMovement">Jednotka nemá zbývající pohyb. Kolonii lze založit po obnovení pohybu v příštím tahu.</entry>

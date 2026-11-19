@@ -3,6 +3,8 @@ package org.akropia.gui.buttonpanel;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.dialog.EndTurnWarningsDialog;
 import org.akropia.gui.screen.Screen;
+import org.akropia.gui.event.CenterViewEvent;
+import org.akropia.gui.screen.game.gamepanel.SelectedUnitManager;
 import org.akropia.gui.screen.ShowScreenEvent;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Provider;
@@ -24,12 +26,16 @@ public class NextTurnListener {
 
     private final Provider<EndTurnWarningsDialog> warningsDialog;
     private final EventBus eventBus;
+    private final SelectedUnitManager selectedUnitManager;
+
     private boolean handlingRequest;
 
     @Inject
     NextTurnListener(final GameModelController gameModelController,
             final Provider<EndTurnWarningsDialog> warningsDialog,
-            final EventBus eventBus) {
+            final EventBus eventBus,
+            final SelectedUnitManager selectedUnitManager) {
+        this.selectedUnitManager = selectedUnitManager;
         this.warningsDialog = warningsDialog;
         this.eventBus = eventBus;
         this.gameModelController = Preconditions
@@ -45,9 +51,16 @@ public class NextTurnListener {
         try {
             final var warnings = gameModelController.getModel()
                     .getIdleColonistsBeforeEndTurn();
-            if (warnings.isEmpty() || warningsDialog.get().confirm(warnings,
-                    colony -> eventBus.post(
-                            new ShowScreenEvent(Screen.COLONY, colony)))) {
+            final var mapUnits = gameModelController.getModel()
+                    .getIdleMapUnitsBeforeEndTurn();
+            if ((warnings.isEmpty() && mapUnits.isEmpty())
+                    || warningsDialog.get().confirm(warnings, mapUnits,
+                            colony -> eventBus.post(
+                                    new ShowScreenEvent(Screen.COLONY, colony)),
+                            unit -> {
+                                selectedUnitManager.selectFromPanel(unit);
+                                eventBus.post(new CenterViewEvent());
+                            })) {
                 eventBus.post(new NextTurnEvent());
             }
         } finally {
