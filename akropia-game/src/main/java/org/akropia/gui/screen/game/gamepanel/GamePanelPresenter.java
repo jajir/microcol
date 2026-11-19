@@ -1033,7 +1033,7 @@ public final class GamePanelPresenter {
     }
 
     private void fight(final AttackOrder order) {
-        if ((!order.isDeclarationRequired() && !order.isPrivateerException()
+        if ((!order.isDeclarationRequired() && !order.isSeaRaiderException()
                 && !gamePreferences.isShowFightAdvisor())
                 || gamePanelView.performFightDialog(order)) {
             gameModelController.performFight(order);

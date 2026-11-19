@@ -69,13 +69,13 @@ class RoyalRosterTest {
         assertEquals(infantry, crown.getTotal(Family.INFANTRY));
         assertEquals(cavalry, crown.getTotal(Family.CAVALRY));
         assertEquals(2, crown.getTotal(Family.ARTILLERY));
-        assertEquals(2, crown.getTotal(Family.MAN_OF_WAR));
+        assertEquals(2, crown.getTotal(Family.WAR_GALLEY));
         assertEquals(infantry + cavalry + 4, crown.getMembers().size());
         assertEquals(infantry + cavalry + 4,
                 crown.getCount(Family.INFANTRY, State.RESERVE)
                         + crown.getCount(Family.CAVALRY, State.RESERVE)
                         + crown.getCount(Family.ARTILLERY, State.RESERVE)
-                        + crown.getCount(Family.MAN_OF_WAR, State.RESERVE));
+                        + crown.getCount(Family.WAR_GALLEY, State.RESERVE));
         assertEquals(threshold, crown.getOwlThreshold());
         assertEquals(0, crown.getOwlRemainder());
     }
@@ -106,7 +106,7 @@ class RoyalRosterTest {
         assertThrows(IllegalStateException.class,
                 () -> Family.ARTILLERY.getChartBase());
         assertThrows(IllegalStateException.class,
-                () -> Family.MAN_OF_WAR.getChartBase());
+                () -> Family.WAR_GALLEY.getChartBase());
     }
 
     @Test
@@ -122,23 +122,23 @@ class RoyalRosterTest {
     }
 
     @Test
-    void shipBoundaryAddsOneManOfWarOnlyAboveSixTimesShips() {
+    void shipBoundaryAddsOneWarGalleyOnlyAboveSixTimesShips() {
         final RoyalRoster crown = roster(Difficulty.CONQUISTADOR);
         // Twelve ground units and two ships sit exactly on the six-to-one
         // ratio.
         assertEquals(12, ground(crown));
-        assertEquals(2, crown.getTotal(Family.MAN_OF_WAR));
+        assertEquals(2, crown.getTotal(Family.WAR_GALLEY));
         crown.credit(499);
-        assertEquals(2, crown.getTotal(Family.MAN_OF_WAR));
+        assertEquals(2, crown.getTotal(Family.WAR_GALLEY));
         crown.credit(1);
         assertEquals(13, ground(crown));
-        assertEquals(3, crown.getTotal(Family.MAN_OF_WAR));
+        assertEquals(3, crown.getTotal(Family.WAR_GALLEY));
         crown.credit(5 * 500);
         assertEquals(18, ground(crown));
-        assertEquals(3, crown.getTotal(Family.MAN_OF_WAR));
+        assertEquals(3, crown.getTotal(Family.WAR_GALLEY));
         crown.credit(500);
         assertEquals(19, ground(crown));
-        assertEquals(4, crown.getTotal(Family.MAN_OF_WAR));
+        assertEquals(4, crown.getTotal(Family.WAR_GALLEY));
     }
 
     @Test
@@ -283,7 +283,7 @@ class RoyalRosterTest {
                 () -> new RoyalRoster(missingShip, conquistador));
 
         final RoyalRosterPo extraShip = grown.save();
-        extraShip.getMembers().add(member(17, Family.MAN_OF_WAR));
+        extraShip.getMembers().add(member(17, Family.WAR_GALLEY));
         assertThrows(IllegalArgumentException.class,
                 () -> new RoyalRoster(extraShip, conquistador));
 
@@ -293,7 +293,7 @@ class RoyalRosterTest {
                 () -> new RoyalRoster(unshipped, conquistador));
 
         final RoyalRosterPo overShipped = RoyalRoster.initial(conquistador);
-        overShipped.getMembers().add(member(15, Family.MAN_OF_WAR));
+        overShipped.getMembers().add(member(15, Family.WAR_GALLEY));
         assertThrows(IllegalArgumentException.class,
                 () -> new RoyalRoster(overShipped, conquistador));
     }
@@ -302,7 +302,7 @@ class RoyalRosterTest {
     void growthWithoutAvailableIdentitiesChangesNothing() {
         final RoyalRosterPo saved = RoyalRoster
                 .initial(Difficulty.CONQUISTADOR);
-        // The last starting man-of-war keeps the largest identity.
+        // The last starting war galley keeps the largest identity.
         saved.getMembers().get(13).setId(Integer.MAX_VALUE - 1);
         final RoyalRoster crown = new RoyalRoster(saved,
                 Difficulty.CONQUISTADOR);
@@ -414,7 +414,7 @@ class RoyalRosterTest {
     }
 
     @Test
-    void reserveIsDeliverableOnlyWhileSomeManOfWarRemains() {
+    void reserveIsDeliverableOnlyWhileSomeWarGalleyRemains() {
         final RoyalRoster crown = roster(Difficulty.CONQUISTADOR);
         assertTrue(crown.hasDeliverableReserve());
         crown.ship(13, 900);
@@ -426,7 +426,7 @@ class RoyalRosterTest {
     }
 
     @Test
-    void transportRetriesStayBelowTheLimitAndNeedAShippedManOfWar() {
+    void transportRetriesStayBelowTheLimitAndNeedAShippedWarGalley() {
         final RoyalRoster crown = roster(Difficulty.CONQUISTADOR);
         crown.ship(13, 900);
         crown.setTransportPlan(900, Optional.of(3), 2);

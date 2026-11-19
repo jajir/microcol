@@ -294,10 +294,10 @@ final class ColonizopediaTables {
                     yesNo(type.isCanCutTrees()));
         }
         final Colonizopedia note;
-        if (type == UnitType.SEASONED_SCOUT) {
+        if (type == UnitType.WAYFARER) {
             note = Colonizopedia.unitScout;
-        } else if (type == UnitType.HARDY_PIONEER) {
-            note = Colonizopedia.unitHardyPioneer;
+        } else if (type == UnitType.CULTIVATOR) {
+            note = Colonizopedia.unitCultivator;
         } else if (type == UnitType.VETERAN_SOLDIER) {
             note = Colonizopedia.unitVeteran;
         } else if (type == UnitType.JESUIT_MISSIONARY) {

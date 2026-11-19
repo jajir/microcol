@@ -1587,12 +1587,12 @@
               },
               {
                 "id": 13,
-                "family": "MAN_OF_WAR",
+                "family": "WAR_GALLEY",
                 "state": "RESERVE"
               },
               {
                 "id": 14,
-                "family": "MAN_OF_WAR",
+                "family": "WAR_GALLEY",
                 "state": "RESERVE"
               }
             ]
@@ -1730,12 +1730,12 @@
               },
               {
                 "id": 13,
-                "family": "MAN_OF_WAR",
+                "family": "WAR_GALLEY",
                 "state": "RESERVE"
               },
               {
                 "id": 14,
-                "family": "MAN_OF_WAR",
+                "family": "WAR_GALLEY",
                 "state": "RESERVE"
               }
             ]

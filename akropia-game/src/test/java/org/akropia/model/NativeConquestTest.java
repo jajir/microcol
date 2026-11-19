@@ -298,7 +298,7 @@ class NativeConquestTest {
         assertEligible(true, UnitType.COLONIST, SOLDIER);
         assertEligible(true, UnitType.COLONIST, DRAGOON);
         assertEligible(true, UnitType.COLONIST, SCOUT);
-        assertEligible(true, UnitType.SEASONED_SCOUT, SEASONED);
+        assertEligible(true, UnitType.WAYFARER, SEASONED);
         assertEligible(true, UnitType.ARTILLERY, INTACT_GUN);
         assertEligible(false, UnitType.COLONIST, UNARMED);
         assertEligible(false, UnitType.WAGON, UNARMED);

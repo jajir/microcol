@@ -172,8 +172,8 @@
   },
   {
     "id": "U20",
-    "key": "FIREBRAND_PREACHER",
-    "name": "horlivý kazatel",
+    "key": "ORPHIC_TELESTES",
+    "name": "Orfický telestés",
     "sprite": [
       2,
       4
@@ -181,8 +181,8 @@
   },
   {
     "id": "U21",
-    "key": "ELDER_STATESMAN",
-    "name": "zkušený státník",
+    "key": "PHILOSOPHER",
+    "name": "filozof",
     "sprite": [
       2,
       4
@@ -190,8 +190,8 @@
   },
   {
     "id": "U22",
-    "key": "SEASONED_SCOUT",
-    "name": "zkušený průzkumník",
+    "key": "WAYFARER",
+    "name": "poutník",
     "sprite": [
       2,
       4
@@ -199,8 +199,8 @@
   },
   {
     "id": "U23",
-    "key": "HARDY_PIONEER",
-    "name": "zdatný pionýr",
+    "key": "CULTIVATOR",
+    "name": "kultivátor",
     "sprite": [
       2,
       4
@@ -295,8 +295,8 @@
   },
   {
     "id": "U34",
-    "key": "PRIVATEER",
-    "name": "korzárská loď",
+    "key": "SEA_RAIDER",
+    "name": "mořský nájezdník",
     "sprite": [
       5,
       5
@@ -304,8 +304,8 @@
   },
   {
     "id": "U35",
-    "key": "MAN_OF_WAR",
-    "name": "řadová loď",
+    "key": "WAR_GALLEY",
+    "name": "válečná galéra",
     "sprite": [
       5,
       5

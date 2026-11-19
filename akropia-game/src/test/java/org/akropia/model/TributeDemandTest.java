@@ -76,8 +76,7 @@ class TributeDemandTest {
         final Player dutch = model.getPlayerByName("Dutch");
         final Player france = model.getPlayerByName("France");
         model.getUnitById(0).placeToLocation(Location.of(30, 10));
-        final Unit scout = model.addUnitInEurope(UnitType.SEASONED_SCOUT,
-                dutch);
+        final Unit scout = model.addUnitInEurope(UnitType.WAYFARER, dutch);
         scout.placeToLocation(Location.of(18, 10));
         dutch.revealMapForUnit(scout);
         assertEquals(List.of(scout), model.getTributeVisitors(dutch, france));

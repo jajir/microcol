@@ -18800,3 +18800,45 @@ messages for diagnosis. No tests were removed or weakened for acceptance.
    movement query, warning callers, fractional road movement, existing orders,
    and direct Next turn verification without automatic warning confirmation.
    No full local regression or remote publication verification was requested.
+
+## Unit terminology — 2026-11-19
+
+1. Six unit names and internal identities were renamed without changing rules,
+   prices, movement, capacity or expertise. The agreed terminology is recorded
+   in [game rules](gap-analysis.md#nazvy-sesti-jednotek-19-listopadu-2026).
+   Bundled scenarios use the new identities; historical evidence and stable
+   TC/F IDs retain their original spelling.
+2. UC-114 / TC_100_F91 TC_08 and TC_09 verify all six displayed names in English
+   and Czech, retaining artwork, properties and unchanged-game assertions.
+   TC_30_F22 covers localized purchase offers and save/reload; TC_65_F56 covers
+   the unchanged naval exception with the new battle labels. TC_150_F141
+   verifies the renamed war-galley roster through growth and save/reload.
+3. First model dispatch never started tests: Docker's labelled-container query
+   timed out after 20.009 seconds (20-second limit). Evidence:
+   `20261119T080729Z-5922294cf657`. A later `docker ps` succeeded in 0.021 seconds;
+   this establishes API availability at retry, not the cause of the timeout.
+4. Model/JUnit passed **5,141 tests** in 400 suites, zero failures/errors/skips,
+   in 156.401 seconds including supervision. Evidence:
+   `target/verification/run-4wwvwo7k/summary.json`, callback
+   `20261119T080830Z-22bee6c8b52b`.
+5. Targeted Docker/Xvfb passed **12 tests**, zero failures/errors/skips:
+   TC_100_F91 TC_08–09; TC_30_F22 TC_08–12; all TC_65_F56 and TC_150_F141.
+   Reports and screenshots: `target/docker-ui/run-oTz6s5/akropia-test/`;
+   callback `20261119T081127Z-5faa3fac4b6d`, 332.598 seconds.
+   English/Czech specialist purchase screenshots were visually reviewed;
+   names and accents fit the existing layout. This is automated/local review,
+   not a player study.
+6. Production Java review confirms only identifier/text/comment changes and
+   formatter output; all numeric rule constants are unchanged. All 86 bundled
+   scenario edits are exact identity substitutions. SVG edits change only a
+   title, with no illustration geometry or runtime PNG changes.
+7. Fixed smoke/support selection passed **23 tests** in 13 suites, zero
+   failures/errors/skips. Total verifier time was **287.632 seconds**, within
+   the 420-second acceptance budget. Evidence:
+   `target/verification/run-07j1vgww/summary.json`, callback
+   `20261119T081719Z-1ef1e5c5b7f8` (287.772 seconds including supervision).
+8. All phases checked the implementation based on `007d82f70ba67671cfbe290954b56514399e355e`
+   plus this naming change. Final documentation acceptance: 14 consistency tests,
+   zero unexplained name-audit occurrences and strict MkDocs. Logs:
+   `target/unit-names/`. Local acceptance does not establish full-regression
+   success or publication of a game distribution; remote CI was not inspected.

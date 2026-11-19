@@ -191,7 +191,7 @@ final class RoyalVictoryFixture {
         int kept = 0;
         for (final JsonElement element : roster.getAsJsonArray("members")) {
             final JsonObject member = element.getAsJsonObject();
-            if ("MAN_OF_WAR".equals(member.get("family").getAsString())) {
+            if ("WAR_GALLEY".equals(member.get("family").getAsString())) {
                 continue;
             }
             if (kept < KEPT_GROUND) {

@@ -473,7 +473,7 @@
       },
       {
         "id": 1019,
-        "type": "FIREBRAND_PREACHER",
+        "type": "ORPHIC_TELESTES",
         "ownerId": "Dutch",
         "placeMap": {
           "location": {
@@ -497,7 +497,7 @@
       },
       {
         "id": 1020,
-        "type": "ELDER_STATESMAN",
+        "type": "PHILOSOPHER",
         "ownerId": "Dutch",
         "placeMap": {
           "location": {
@@ -521,7 +521,7 @@
       },
       {
         "id": 1021,
-        "type": "SEASONED_SCOUT",
+        "type": "WAYFARER",
         "ownerId": "Dutch",
         "placeMap": {
           "location": {
@@ -545,7 +545,7 @@
       },
       {
         "id": 1022,
-        "type": "HARDY_PIONEER",
+        "type": "CULTIVATOR",
         "ownerId": "Dutch",
         "placeMap": {
           "location": {
@@ -820,7 +820,7 @@
       },
       {
         "id": 1033,
-        "type": "PRIVATEER",
+        "type": "SEA_RAIDER",
         "ownerId": "Dutch",
         "placeMap": {
           "location": {
@@ -845,7 +845,7 @@
       },
       {
         "id": 1034,
-        "type": "MAN_OF_WAR",
+        "type": "WAR_GALLEY",
         "ownerId": "Dutch",
         "placeMap": {
           "location": {

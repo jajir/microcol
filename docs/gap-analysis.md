@@ -1,3 +1,14 @@
+## Názvy šesti jednotek — 19. listopadu 2026
+
+Schválené názvy jsou **Orfický telestés**, **Philosopher**, **Wayfarer**,
+**Cultivator**, **Sea Raider** a **War Galley**. První název je záměrně stejný
+v obou jazycích; české rozhraní ostatní překládá jako filozof, poutník,
+kultivátor, mořský nájezdník a válečná galéra. Změna je pouze terminologická:
+ceny, pohyb, přeprava, produkce, odbornost, boj a všechny zvláštní výjimky
+zůstávají stejné. Interní identity a přibalené scénáře používají nové názvy;
+staré uložené hry se nemigrují. Archivované požadavky a historická evidence
+zachovávají dobové názvy, stejně jako stabilní ID funkčních scénářů.
+
 # First-release rules gap analysis
 
 <a id="greek-player-identities"></a>
@@ -202,7 +213,7 @@ The catalogue is organized by [setup](#setup-and-turn-sequence), [map](#map-terr
 | MAP-006 | 18 / 24 | Mining can deplete silver, ore, and mixed mineral deposits according to their extent. | `WorldMap` stores independent mineral reserves; `ColonyField` caps the actual job bonus and `Colony.startTurn()` debits committed extraction once. Explicit remaining quantities persist through `WorldMapPo`. | Partial | [R-0128 local model/UI checks](functional-tests.md#r-0128-mineral-depletion-2026-10-20) passed on 2026-10-20; full batch acceptance remains pending. |
 | MAP-007 | 14–15 / 20–21 | Exploration reveals the surrounding map; previously discovered terrain remains revealed. | [Visibility.makeVisibleMapForUnit](../akropia-game/src/main/java/org/akropia/model/Visibility.java) accumulates revealed locations; [AbstractUnit.moveOneStep](../akropia-game/src/main/java/org/akropia/model/AbstractUnit.java) reveals after each ordinary step and [Player.save](../akropia-game/src/main/java/org/akropia/model/Player.java) stores visibility. This supports permanent terrain discovery. | Matches | R-0019 targeted verification (2026-10-13): TC26 leaves the newly explored frontier and continues a saved game; VisibilityTest retains discovered cells and keeps another cell unknown. [Evidence](functional-tests.md#fog-implementation-2026-10-13). This does not establish live enemy visibility or every turn transition. |
 | MAP-008 | 14–15 / 20–21 | At game start, knowledge is limited to the area surrounding the expedition; unexplored terrain remains unknown. | [Model.assureDefaultVisibility](../akropia-game/src/main/java/org/akropia/model/Model.java) initializes each owner’s local exploration. R-0069 implementation (2026-10-16) gives existing ordinary land roles sight one and scout/ship roles sight two through [AbstractUnit.getVisibleLocations](../akropia-game/src/main/java/org/akropia/model/AbstractUnit.java), independently of speed and clipped to the map. | Unclear | R-0019 targeted verification (2026-10-13): TC26 checks unknown terrain, enemy/colony disclosure, path preview and animation covering. [Evidence](functional-tests.md#fog-implementation-2026-10-13). The speed-derived formula is historical evidence. [R-0069 checks](functional-tests.md#r-0069-explicit-sight-2026-10-16) cover current roles; De Soto joining, immediate reveal and saved continuation are now covered by [integration evidence](functional-tests.md#r-0069-de-soto-sight-integration-2026-10-17). Full regression remains separately tracked. R-0070 owns the separate current-visibility policy in [exploration, work and transport](#exploration-work-and-transport). |
-| MAP-009 | 19 / 25; aid card 2 / 133 | Entering a lost-city rumor may yield a benefit, nothing, or danger; a seasoned scout explores rumors more effectively. | No rumor marker or resolution state exists in [WorldMapPo](../akropia-game/src/main/java/org/akropia/model/store/WorldMapPo.java); movement in [AbstractUnit.moveOneStep](../akropia-game/src/main/java/org/akropia/model/AbstractUnit.java) only reveals terrain/captures colonies, and [UnitFactory](../akropia-game/src/main/java/org/akropia/model/unit/UnitFactory.java) cannot create a seasoned scout. | Missing | Proposed: resolve each explored marker once; persist its removal and resulting event; distinguish scout skill. Use the probabilities and rewards in [exploration, work and transport](#exploration-work-and-transport). |
+| MAP-009 | 19 / 25; aid card 2 / 133 | Entering a lost-city rumor may yield a benefit, nothing, or danger; a wayfarer explores rumors more effectively. | No rumor marker or resolution state exists in [WorldMapPo](../akropia-game/src/main/java/org/akropia/model/store/WorldMapPo.java); movement in [AbstractUnit.moveOneStep](../akropia-game/src/main/java/org/akropia/model/AbstractUnit.java) only reveals terrain/captures colonies, and [UnitFactory](../akropia-game/src/main/java/org/akropia/model/unit/UnitFactory.java) cannot create a wayfarer. | Missing | Proposed: resolve each explored marker once; persist its removal and resulting event; distinguish scout skill. Use the probabilities and rewards in [exploration, work and transport](#exploration-work-and-transport). |
 
 #### Terrain reference-data audit
 
@@ -292,8 +303,8 @@ See [local acceptance evidence](functional-tests.md#depot-empty-states-and-plow-
 
 | ID | Manual (printed / PDF) | Expected rule | Current implementation and gap | Status | Acceptance / evidence |
 | --- | --- | --- | --- | --- | --- |
-| UNIT-003 | Aid card 1 / 132 | Naval roster includes caravel, merchantman, galleon, privateer, frigate, and man-o-war, with distinct movement/cargo roles. | R-0108 registers all six ships, adds European purchases for caravel/merchantman/privateer and uses man-of-war in the existing Crown carrier event. The latter is not purchasable. | Partial | Selected model/player journeys pass; full CI/publication and the separately owned naval/privateer/royal-force rules remain pending. See [R-0108 evidence](functional-tests.md#r-0108-six-ship-roster-2026-10-16). |
-| UNIT-004 | Aid card 1 / 132 | Moves / holds: caravel 4/2, merchantman 5/4, galleon 6/6, privateer 8/2, frigate 6/4, man-o-war 6/6. | R-0108 implements these six ordinary movement/capacity values in the shared unit types and cargo views. Save/load and European voyage journeys are covered for all six types. | Partial | Model and selected Docker UI checks pass; complete CI acceptance remains pending. [Evidence](functional-tests.md#r-0108-six-ship-roster-2026-10-16). |
+| UNIT-003 | Aid card 1 / 132 | Naval roster includes caravel, merchantman, galleon, sea raider, frigate, and man-o-war, with distinct movement/cargo roles. | R-0108 registers all six ships, adds European purchases for caravel/merchantman/sea raider and uses war galley in the existing Crown carrier event. The latter is not purchasable. | Partial | Selected model/player journeys pass; full CI/publication and the separately owned naval/sea raider/royal-force rules remain pending. See [R-0108 evidence](functional-tests.md#r-0108-six-ship-roster-2026-10-16). |
+| UNIT-004 | Aid card 1 / 132 | Moves / holds: caravel 4/2, merchantman 5/4, galleon 6/6, sea raider 8/2, frigate 6/4, man-o-war 6/6. | R-0108 implements these six ordinary movement/capacity values in the shared unit types and cargo views. Save/load and European voyage journeys are covered for all six types. | Partial | Model and selected Docker UI checks pass; complete CI acceptance remains pending. [Evidence](functional-tests.md#r-0108-six-ship-roster-2026-10-16). |
 | CARGO-001 | 42–43, 62 / 48–49, 68 | A goods hold contains up to 100 units of one commodity; transfers respect free capacity and source stock. | `CargoSlot` clamps Europe purchases before charging and enforces the 100-unit invariant in shared addition/restoration. Existing warehouse/carrier clamps remain; market confirmation rejects a chosen amount that no longer fits or has an incompatible commodity. | Partial | R-0132: all 115 selected checks passed on 2026-10-17, including model boundaries/conservation, invalid restore, stale purchase/cancel and Continue; full batch regression pending. [Evidence](functional-tests.md#claude-batch-20-targeted-acceptance-2026-10-17). |
 | CARGO-002 | 26, 42 / 32, 48 | A colonist occupies one ship hold even when equipped with horses, guns, or tools. | [CargoSlot.store](../akropia-game/src/main/java/org/akropia/model/CargoSlot.java) stores one unit per slot; equipment remains in [UnitFreeColonist](../akropia-game/src/main/java/org/akropia/model/unit/UnitFreeColonist.java), not in additional holds. | Matches | Existing `test_store_unit` in [CargoSlotTest](../akropia-game/src/test/java/org/akropia/model/CargoSlotTest.java) covers basic occupancy. Proposed: equipped variants retain all equipment through loading, transit, save/reload, and unloading. |
 | CARGO-003 | 42–43 / 48–49 | Wagons carry goods only; colonists/artillery cannot ride in them, and ships/wagons cannot be carried as ordinary passengers. | Shared gameplay admission rejects non-storable carriers; lower-level slot admission also validates passenger role, ship destination, slot relation and ownership during restore. Existing wagon goods and ordinary ship-passenger paths remain intact. | Partial | R-0133: all 184 targeted checks passed on 2026-10-17, including direct/adjacent rejection, invalid restore and TC31_07 wagon-to-ship rejection/Continue. Full batch regression pending; [evidence](functional-tests.md#claude-batch-20-targeted-acceptance-2026-10-17). |
@@ -470,8 +481,8 @@ Source: Skills aid card 2, PDF 133, plus printed 34/PDF40. S/C/U are minimum sch
 | Master Sugar Planter | Sugar | C | Yes; Europe-excluded by agreed rules |
 | Master Cotton Planter | Cotton | C | Yes; Europe-excluded by agreed rules |
 | Master Tobacco Planter | Tobacco | C | Yes; Europe-excluded by agreed rules |
-| Firebrand Preacher | Crosses | U | No marking |
-| Elder Statesman | Liberty bells | U | No marking |
+| Orfický telestés | Crosses | U | No marking |
+| Philosopher | Liberty bells | U | No marking |
 | Master Carpenter | Lumber→hammers | S | No marking |
 | Master Distiller | Sugar→rum | C | No marking |
 | Master Weaver | Cotton→cloth | C | No marking |
@@ -479,8 +490,8 @@ Source: Skills aid card 2, PDF 133, plus printed 34/PDF40. S/C/U are minimum sch
 | Master Fur Trader | Furs→coats | C | No marking |
 | Master Blacksmith | Ore→tools | C | No marking |
 | Master Gunsmith | Tools→muskets | C | No marking |
-| Seasoned Scout | Exploration/native diplomacy expertise | S | Yes |
-| Hardy Pioneer | Faster improvements | S | No marking |
+| Wayfarer | Exploration/native diplomacy expertise | S | Yes |
+| Cultivator | Faster improvements | S | No marking |
 | Veteran Soldier | Increased attack/defense | C | No marking |
 | Jesuit Missionary | Improved missionary actions | U | No marking |
 
@@ -559,7 +570,7 @@ All acceptance items in these tables are proposed checks. Inspection establishes
 | ID | Manual (printed / PDF) | Expected rule | Current implementation and gap | Status | Acceptance / evidence |
 | --- | --- | --- | --- | --- | --- |
 | DIP-001 | 79, 81–82 / 85, 87–88 | European rivals build colonial economies, expand, challenge weak opponents, and contest commerce with land/naval forces. | [R-0027](requirements/done/R-0027.md) now plans a first coastal colony using known reachable terrain and ordinary movement/landing/founding. Its reference fleet founds in three turns and survives three further turns in targeted model/UI checks, including travel continuation. R-0090 adds bounded food-first/lumber workforce decisions and targeted ten-turn model/UI production and Continue checks on 2026-10-17. General expansion, commerce and purposeful military strategy remain missing; full batch regression/publication of the workforce slice is pending. | Partial | Run a seeded rival from an initial fleet through landing, founding, production, transport, and a purposeful attack; define observable strategic criteria instead of expecting identical original AI choices. |
-| DIP-002 | 81 / 87 | Attacking a rival colonist/colony or using a flagged warship against its ship declares war; privateer attacks are treated differently. | R-0099 adds the shared privateer attack/counterattack exception without changing European relations. Ordinary attacks retain explicit declaration; the command freezes and revalidates the actual relation before battle. | Partial | Model acceptance passed; English/Czech TC65 and full CI/publication remain pending. See [R-0099 evidence](functional-tests.md#r-0099-privateer-hostilities-2026-10-17). |
+| DIP-002 | 81 / 87 | Attacking a rival colonist/colony or using a flagged warship against its ship declares war; sea raider attacks are treated differently. | R-0099 adds the shared sea raider attack/counterattack exception without changing European relations. Ordinary attacks retain explicit declaration; the command freezes and revalidates the actual relation before battle. | Partial | Model acceptance passed; English/Czech TC65 and full CI/publication remain pending. See [R-0099 evidence](functional-tests.md#r-0099-privateer-hostilities-2026-10-17). |
 | DIP-003 | 81–82 / 87–88 | War persists until peace is agreed; treaties stop hostilities but can be broken. | [PlayerPo](../akropia-game/src/main/java/org/akropia/model/store/PlayerPo.java) lacks diplomatic relationships; [SimpleUnitBehavior.tryToFight](../akropia-game/src/main/java/org/akropia/ai/SimpleUnitBehavior.java) has no treaty gate. | Missing | Save/reload war and peace, ensure peace affects AI hostility, then verify a treaty-breaking attack renews war. |
 | DIP-004 | 82 / 88 | Adjacent rivals may initiate contact; scouts can visit foreign mayors. Negotiation can produce tribute, peace, or alliances, influenced by relative strength and attitude. | [GamePanelPresenter](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/GamePanelPresenter.java) routes a foreign colony to attack/capture; no envoy/mayor/negotiation command is present in that route or opponent AI. | Missing | Trigger each contact route, offer valid responses, and verify tribute/peace/alliance outcomes and associated state/gold changes. |
 | DIP-005 | 82 / 88 | With a substantial treasury (described as around 5, 000), foreign powers may offer a package of veteran mercenaries; accept/reject the whole group, with future offers possible after rejection. | [Player.startTurn](../akropia-game/src/main/java/org/akropia/model/Player.java) adds periodic immigrants but has no mercenary offers; [UnitFactory](../akropia-game/src/main/java/org/akropia/model/unit/UnitFactory.java) lacks the veteran/artillery roster. | Missing | Test offered bundle, insufficient gold, full acceptance, rejection without payment, and eligibility for a later offer. Exact threshold/chance remain open. |
@@ -575,7 +586,7 @@ The central divergence is [AbstractUnit.isWinnerAttacker](../akropia-game/src/ma
 | --- | --- | --- | --- | --- | --- |
 | COMBAT-001 | 30, 80 / 36, 86 | Attempting to enter an enemy-occupied adjacent square can initiate an immediate land/naval battle. | [AttackOrder](../akropia-game/src/main/java/org/akropia/model/AttackOrder.java) and shared `AbstractUnit.prepareAttack` validate the live adjacent known target, registered attacker, role, terrain and movement. UI confirms the actual selected defender and never walks after confirmation. | Matches | R-0028 targeted model boundaries and TC35 player paths passed; complete regression/publication remain pending in [evidence](functional-tests.md#attack-initiation-integration-2026-10-14). |
 | COMBAT-002 | 30 / 36 | A battle consumes the unit’s remaining movement; a unit cannot continue moving in a turn in which it has fought. | `AttackOrder.execute` exhausts both participants before the existing resolution. The surviving owner’s next ordinary turn replenishes movement. | Matches | [R-0028](requirements/done/R-0028.md) establishes this movement rule from PDF p. 36. Both controlled outcomes, ship movement, save/load and actual owner-turn advancement pass model tests; TC35/07 and /09 verify either survivor through Continue. Full regression/publication pending. |
-| COMBAT-003 | Aid card 1 / 132 | Unarmed colonists, wagons, treasure trains, and cargo ships cannot initiate attacks; equipment and supported specialties determine eligibility. | Instance `Unit.canAttack` requires muskets for ordinary colonists and master blacksmiths; frigates attack ships, wagons/galleons cannot initiate. Type-level target domains remain separate from equipment. | Partial | [R-0028](requirements/done/R-0028.md) role/domain/boundary tests and TC35 pass for current types. The aid card’s Seasoned Scout exception and treasure/other missing types remain outside the supported roster; ordinary horses-only colonists do not acquire that specialty. Full regression/publication pending. |
+| COMBAT-003 | Aid card 1 / 132 | Unarmed colonists, wagons, treasure trains, and cargo ships cannot initiate attacks; equipment and supported specialties determine eligibility. | Instance `Unit.canAttack` requires muskets for ordinary colonists and master blacksmiths; frigates attack ships, wagons/galleons cannot initiate. Type-level target domains remain separate from equipment. | Partial | [R-0028](requirements/done/R-0028.md) role/domain/boundary tests and TC35 pass for current types. The aid card’s Wayfarer exception and treasure/other missing types remain outside the supported roster; ordinary horses-only colonists do not acquire that specialty. Full regression/publication pending. |
 | COMBAT-004 | 30–31; aid card 1 / 36–37; 132 | Resolve combat using base strengths, including soldier 2, dragoon 3, veteran soldier 3, veteran dragoon 4.5, artillery 7/5 attack/defense, and the chart's native/naval strengths. | [AbstractUnit.isWinnerAttacker](../akropia-game/src/main/java/org/akropia/model/AbstractUnit.java) ignores strength and chooses by constant probability. `UnitFreeColonist.getMilitaryStrenght` reports 1.5 for armed foot and 2 for armed mounted, differing from the chart even as descriptive values. | Differs | Verify table values and that the resolution engine consumes computed attack/defense strengths. Use the provisional probability conversion in [combat and naval outcomes](#combat-and-naval-outcomes); the manual does not give the complete RNG formula. |
 | COMBAT-005 | 31 / 37 | The attacker receives a 50% strength bonus. | The fixed probability in [AbstractUnit.isWinnerAttacker](../akropia-game/src/main/java/org/akropia/model/AbstractUnit.java) has no modifier calculation. A 60% win chance alone cannot prove this rule for unequal strengths or combined bonuses. | Differs | With unequal base strengths, inspect the computed attack strength and confirm the 50% modifier, independent of sampled winners. |
 | COMBAT-006 | 31; aid card 4 / 37; 135 | Defender terrain modifiers follow the chart: e.g. ordinary forest +50%, hills +100%, mountains +150%; marsh/swamp and cleared terrain have their own listed values. Apply the stated exception when facing natives. | [AbstractUnit.attack](../akropia-game/src/main/java/org/akropia/model/AbstractUnit.java) uses terrain only to validate access, never to calculate defense. | Missing | Table-driven checks for all terrain/forest combinations, followed by native/European opponent cases. |
@@ -617,7 +628,7 @@ Source: visually checked aid card 1 / PDF 132. A single strength applies to both
 | Caravel | 2 | No | R-0097 uses base 2 in actual naval combat; targeted acceptance passes, full CI pending |
 | Merchantman | 6 | No | R-0097 uses base 6 in actual naval combat; targeted acceptance passes, full CI pending |
 | Galleon | 10 | No | R-0097 uses base 10 in actual naval combat; targeted acceptance passes, full CI pending |
-| Privateer | 8 | Yes | R-0097 uses base 8 in actual naval combat; targeted acceptance passes, full CI pending |
+| Sea Raider | 8 | Yes | R-0097 uses base 8 in actual naval combat; targeted acceptance passes, full CI pending |
 | Frigate | 16 | Yes | R-0097 uses base 16 in actual naval combat; targeted acceptance passes, full CI pending |
 | Man-o-war | 24 | Yes | R-0097 uses base 24 in actual naval combat; targeted acceptance passes, full CI pending |
 
@@ -657,7 +668,7 @@ Suggested first verification additions are a deterministic strength/modifier cal
 | GOV-014 | 5, 88 / 11, 94 | A royal expeditionary force exists before rebellion, grows, and includes regular infantry, cavalry, artillery and warships; its size is visible in Congress. | [KingRobotPlayer](../akropia-game/src/main/java/org/akropia/ai/KingRobotPlayer.java).createRoyalArmyForces creates the force only after declaration, sized as min(two-thirds of the player’s military-strength score, 15). [Model](../akropia-game/src/main/java/org/akropia/model/Model.java).createRoyalExpeditionForceUnit creates ordinary COLONIST units in GALLEONs. | Differs | Proposed: persist and display the prewar force, send the documented unit families, and use the growth rates in [revolution and intervention](#revolution-and-intervention). |
 | GOV-015 | 88 / 94 | Royal troops receive a 50% bombardment bonus attacking colonies; rebels can ambush them in the countryside. | No REF-specific bonuses or ambush path in attack resolution; [Model](../akropia-game/src/main/java/org/akropia/model/Model.java) does not create distinct royal troop types. | Missing | Proposed: distinguish colony assault from countryside battle and verify each modifier’s eligibility. |
 | GOV-016 | 88 / 94 | On the turn after declaration, announce a bell target for foreign intervention; reaching it brings an ally. | [KingRobotPlayer](../akropia-game/src/main/java/org/akropia/ai/KingRobotPlayer.java) handles only the royal invasion; [Player](../akropia-game/src/main/java/org/akropia/model/Player.java).startTurn and campaign listeners contain no intervention target or alliance state. | Missing | Proposed: announce once on the next turn, persist progress, and trigger intervention exactly once at the agreed target. |
-| GOV-017 | 88–89 / 94–95 | Intervention grants controlled men-of-war and ground troops, and a 50% bombardment bonus against Tory colonies. | [UnitType](../akropia-game/src/main/java/org/akropia/model/UnitType.java) lacks men-of-war/Continental forces; no allied reinforcement or intervention effect exists. | Missing | Proposed: arrival at an owned port grants control and the situational bonus; persist units and intervention state. |
+| GOV-017 | 88–89 / 94–95 | Intervention grants controlled war galleys and ground troops, and a 50% bombardment bonus against Tory colonies. | [UnitType](../akropia-game/src/main/java/org/akropia/model/UnitType.java) lacks war galleys/Continental forces; no allied reinforcement or intervention effect exists. | Missing | Proposed: arrival at an owned port grants control and the situational bonus; persist units and intervention state. |
 | GOV-018 | 89 / 95 | After rebellion begins, a sympathetic foreign power can offer paid mercenaries. | No mercenary offer, foreign diplomacy, or intervention economy path in [Player](../akropia-game/src/main/java/org/akropia/model/Player.java), [Europe](../akropia-game/src/main/java/org/akropia/model/Europe.java), and campaign listeners. | Missing | Proposed: accept/decline an offer; acceptance checks gold and delivers troops once; use the offer frequency/prices in [revolution and intervention](#revolution-and-intervention). |
 | GOV-019 | 89 / 95 | Win rebellion by controlling all your colonies and reducing the REF to very few troops, including those still in Europe. | [KingRobotPlayer](../akropia-game/src/main/java/org/akropia/ai/KingRobotPlayer.java).isKinngCoquered only checks royal military score < 5 after sending forces. [Default_2_mission](../akropia-game/src/main/java/org/akropia/model/campaign/Default_2_mission.java) consumes this flag; [FreePlay_0_mission](../akropia-game/src/main/java/org/akropia/model/campaign/FreePlay_0_mission.java) has no independence-victory evaluator. Colony recovery is not required by the flag. | Differs | Proposed: no victory while a colony is occupied or the combined REF remaining in Europe and the New World exceeds the accepted limit; use the accepted “very few” threshold in [revolution and intervention](#revolution-and-intervention). |
 | GOV-020 | 89 / 95 | Lose rebellion if the REF holds all colonies. | [GameOverEvaluator](../akropia-game/src/main/java/org/akropia/model/GameOverEvaluator.java) checks whether a human has zero colonies only after 15 turns, irrespective of declaration/REF; no dedicated rebellion defeat state exists. | Partial | Proposed: loss is evaluated for a rebel immediately when the REF captures the last colony. |
@@ -671,7 +682,7 @@ These entries assess recruitment and the stated father-dependent effects. The so
 | ID | Manual (printed / PDF) | Expected rule | Current implementation and gap | Status | Acceptance / evidence |
 | --- | --- | --- | --- | --- | --- |
 | FATHER-001 | 90 / 96 | **Hernan Cortes:** Every conquered native settlement yields treasure, with greater amounts. | Owner in place: native treasure guarantees double ordinary and capital trains (`NativeTreasureTest`); joining is fixture-only. | Partial — [R-0214 ledger](functional-tests.md#r-0214-founder-effects-ledger-2026-10-24) written, not run | Proposed: Capture native settlements with and without the father; guarantee treasure and compare its greater amount in the enabled case; use the increase in [founder details](#founder-details). |
-| FATHER-002 | 90 / 96 | **Francis Drake:** Privateer combat strengths increase 50%. | Shared naval strength adds the owner’s Drake +50% to privateers in either role, additive with ordinary attack. Frozen review equality includes the modifier and UI names it. | Partial | R-0179: all 75 targeted checks passed on 2026-10-17 (exact strength/odds, ownership, resolution, stale order, disk and TC64_04 Continue). Full batch regression pending; [evidence](functional-tests.md#claude-batch-20-targeted-acceptance-2026-10-17). |
+| FATHER-002 | 90 / 96 | **Francis Drake:** Sea Raider combat strengths increase 50%. | Shared naval strength adds the owner’s Drake +50% to sea raiders in either role, additive with ordinary attack. Frozen review equality includes the modifier and UI names it. | Partial | R-0179: all 75 targeted checks passed on 2026-10-17 (exact strength/odds, ownership, resolution, stale order, disk and TC64_04 Continue). Full batch regression pending; [evidence](functional-tests.md#claude-batch-20-targeted-acceptance-2026-10-17). |
 | FATHER-003 | 90 / 96 | **John Paul Jones:** Receive a free frigate when he joins. | Jones joining creates one free frigate at home Europe or retains a pending delivery to the lowest-ID reachable owned coastal colony after independence. Membership and pending delivery persist separately. | Partial | R-0104 model tests cover the actual ship, surplus, pending delivery retry and Continue; selected player acceptance passed, with full CI/publication pending. See [Congress evidence](functional-tests.md#r-0104-congress-recruitment-2026-10-16). |
 | FATHER-004 | 90 / 96 | **Paul Revere:** An undefended attacked colony automatically arms a worker from stored muskets; losing still allows capture. | Owner in place: Revere arming, muskets, victory exits and capture after defeat (`ColonyDefenseTest`); joining is fixture-only. | Partial — [R-0214 ledger](functional-tests.md#r-0214-founder-effects-ledger-2026-10-24) written, not run | Proposed: Test available/no muskets and existing/no militia; check equipment consumption and capture outcome. |
 | FATHER-005 | 90 / 96 | **George Washington:** Winning non-veteran soldiers/dragoons always gain status. | R-0111 reads persisted Washington membership to guarantee one eligible victory step, preserving specialty and rank after disarming. | Partial | Model and Czech expert-promotion/Continue player acceptance passed; full publication remains pending. [Evidence](functional-tests.md#r-0111-military-promotion-2026-10-17). |
@@ -966,9 +977,9 @@ and evidence below describe the predecessor and stable internal identifiers.
 ### Revolution and intervention
 
 1. Per Crown, initial REF is `4+d` regular infantry, `2+d` cavalry, 2 artillery
-   and 2 men-of-war. Before declaration, each `ceil(500/k)` cumulative owls
+   and 2 war galleys. Before declaration, each `ceil(500/k)` cumulative owls
    produced by its colonial nation adds one ground unit, cycling infantry,
-   cavalry, artillery. Add a man-of-war whenever total ground units exceed
+   cavalry, artillery. Add a war galley whenever total ground units exceed
    six times the number of REF ships. No post-declaration growth. Persist the
    roster, growth remainder and shipped/reserve/destroyed state; destruction
    never recreates a unit. Use the manual's unit strengths and cargo capacities.
@@ -988,7 +999,7 @@ and evidence below describe the predecessor and stable internal identifiers.
    set/denominator choices remain balance policy, not a historical formula.
 4. On the first rebel update after declaration announce a fixed intervention
    target `ceil(500 × k)` owls; count new owls from that update onward. Deliver
-   once: 2 men-of-war, 4 Continental infantry and 2 Continental cavalry, at the
+   once: 2 war galleys, 4 Continental infantry and 2 Continental cavalry, at the
    lowest-ID owned reachable coastal colony. If temporarily obstructed, keep
    the delivery pending; no duplicate units or forced displacement. With no
    coastal colony, evaluate loss first. Grant the manual's +50% bombardment
@@ -1213,12 +1224,12 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
    2 per full artillery or 1 per damaged artillery on the colony tile. Use
    A/(A+D) against ship defense; a hit damages and sends it for repair, a miss
    does nothing. Stockades do not fire. Save/load does not repeat a shot.
-8. Privateers may attack non-allied foreign ships without changing peace to war;
-   either side may attack a non-allied foreign privateer on the same diplomatic exception.
+8. Sea Raiders may attack non-allied foreign ships without changing peace to war;
+   either side may attack a non-allied foreign sea raider on the same diplomatic exception.
    Alliance and post-termination attack restrictions still apply.
    This is no immunity to ordinary combat. Retain observed owner information,
    but do not reveal an otherwise unknown national identity through the attack.
-   Confirmation states that this privateer action does not declare war; normal
+   Confirmation states that this sea raider action does not declare war; normal
    frigate-versus-ordinary-ship attacks retain treaty-breaking confirmation.
 
 ### Native and European relations
@@ -1453,8 +1464,8 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
    purchase and immigration, retaining the other native-teachable experts as
    eligible. This is the chosen formerly uncertain exclusion list. Existing
    positive ship/artillery base prices remain; missing bases caravel 1000,
-   merchantman 2000, galleon 3000, privateer 2000, frigate 5000, artillery 500;
-   men-of-war cannot be bought. A type's nth prior purchase adds `n×ceil(base/10)`
+   merchantman 2000, galleon 3000, sea raider 2000, frigate 5000, artillery 500;
+   war galleys cannot be bought. A type's nth prior purchase adds `n×ceil(base/10)`
    to its next price, no shared demand group or arbitrary cap; reject arithmetic
    overflow before charging.
 9. Maintain three candidates. Each replacement draws free colonist 60%, servant
@@ -1529,7 +1540,7 @@ Verification is recorded in [the functional evidence](functional-tests.md#comple
 
 
 1. Sight uses Chebyshev distance (all eight neighbors): ordinary land units 1,
-   scouts/seasoned scouts 2, ships 2; De Soto sets a minimum of 2 for units.
+   scouts/wayfarers 2, ships 2; De Soto sets a minimum of 2 for units.
    User decision (2026-10-17; [R-0070](requirements/done/R-0070.md)): an owned colony
    supplies present sight over its own tile and all eight neighboring tiles
    even when every resident is inside and no unit stands on the map. Colony
@@ -1572,7 +1583,7 @@ Verification is recorded in [the functional evidence](functional-tests.md#comple
    Soldiers, dragoons and artillery may issue fortify with positive movement,
    spending all remaining moves; its bonus begins next owner turn. Cancel
    removes the order/bonus without restoring spent movement.
-5. Ordinary clear/plow/road work takes 4/4/2 owner updates; hardy pioneer takes
+5. Ordinary clear/plow/road work takes 4/4/2 owner updates; cultivator takes
    2/2/1. Starting requires at least 20 tools and positive moves, consumes the
    current movement, and first progress is the next owner update. Deduct 20
    tools only on completion. Explicit cancel discards incomplete progress,
@@ -1785,7 +1796,7 @@ Verification is recorded in [the functional evidence](functional-tests.md#comple
 
 #### R-0171 refinement
 
-1. Answer **29** — European naval strategy: Prefer visible unarmed hostile carriers, then armed legal targets with at least 60% win probability; break equal priority by distance and then stable ID. Without a target patrol known sea within five tiles of an owned port without knowledge of hidden cargo or routes. A prepared scenario with reachable commerce must produce an encounter within ten turns. Retain the existing privateer attack exception and alliance restrictions.
+1. Answer **29** — European naval strategy: Prefer visible unarmed hostile carriers, then armed legal targets with at least 60% win probability; break equal priority by distance and then stable ID. Without a target patrol known sea within five tiles of an owned port without knowledge of hidden cargo or routes. A prepared scenario with reachable commerce must produce an encounter within ten turns. Retain the existing sea raider attack exception and alliance restrictions.
 2. Owner: [R-0171](requirements/done/R-0171.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0172 refinement
@@ -1810,7 +1821,7 @@ Verification is recorded in [the functional evidence](functional-tests.md#comple
 
 #### R-0176 refinement
 
-1. Answer **34** — Privateer patrol eligibility: A privateer may passively intercept foreign nonallied shipping even at peace when it could legally attack that ship; interception itself does not declare war. Other armed vessels intercept only declared wartime enemies, retaining the single strongest-patrol/ID rule.
+1. Answer **34** — Sea Raider patrol eligibility: A sea raider may passively intercept foreign nonallied shipping even at peace when it could legally attack that ship; interception itself does not declare war. Other armed vessels intercept only declared wartime enemies, retaining the single strongest-patrol/ID rule.
 2. Owner: [R-0176](requirements/done/R-0176.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0177 refinement
@@ -1825,7 +1836,7 @@ Verification is recorded in [the functional evidence](functional-tests.md#comple
 
 #### R-0186 refinement
 
-1. Answer **37** — Crown dispatch policy: On each royal turn fill all available transport-capable men-of-war from actual reserves, cycling infantry, cavalry, artillery within actual hold capacity. Target the nearest known rebel coastal colony with a legal landing, ties by stable ID and then coordinates. Recompute a blocked route at most once per turn; after three unsuccessful turns try another target, otherwise wait safely. A prepared clear-route scenario must demonstrate landing and attack within ten royal turns, without teleporting or duplicating reserves.
+1. Answer **37** — Crown dispatch policy: On each royal turn fill all available transport-capable war galleys from actual reserves, cycling infantry, cavalry, artillery within actual hold capacity. Target the nearest known rebel coastal colony with a legal landing, ties by stable ID and then coordinates. Recompute a blocked route at most once per turn; after three unsuccessful turns try another target, otherwise wait safely. A prepared clear-route scenario must demonstrate landing and attack within ten royal turns, without teleporting or duplicating reserves.
 2. Owner: [R-0186](requirements/done/R-0186.md); acceptance and unresolved follow-ups remain there.
 
 #### R-0196 refinement

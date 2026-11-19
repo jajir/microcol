@@ -58,11 +58,11 @@ public class UnitFactory {
                 if (UnitType.MERCHANTMAN == request.getUnitType()) {
                     return makeMerchantman(request);
                 }
-                if (UnitType.PRIVATEER == request.getUnitType()) {
-                    return makePrivateer(request);
+                if (UnitType.SEA_RAIDER == request.getUnitType()) {
+                    return makeSeaRaider(request);
                 }
-                if (UnitType.MAN_OF_WAR == request.getUnitType()) {
-                    return makeManOfWar(request);
+                if (UnitType.WAR_GALLEY == request.getUnitType()) {
+                    return makeWarGalley(request);
                 }
                 return null;
             }, request -> {
@@ -156,15 +156,15 @@ public class UnitFactory {
                 request.getMovementThirds(), request.getAction());
     }
 
-    private Unit makePrivateer(final UnitCreateRequest request) {
-        return new UnitPrivateer(request.getCargoBuilder(), request.getModel(),
+    private Unit makeSeaRaider(final UnitCreateRequest request) {
+        return new UnitSeaRaider(request.getCargoBuilder(), request.getModel(),
                 request.getUnitId(), request.getPlaceBuilder(),
                 request.getOwner(), request.getMovementThirds(),
                 request.getAction());
     }
 
-    private Unit makeManOfWar(final UnitCreateRequest request) {
-        return new UnitManOfWar(request.getCargoBuilder(), request.getModel(),
+    private Unit makeWarGalley(final UnitCreateRequest request) {
+        return new UnitWarGalley(request.getCargoBuilder(), request.getModel(),
                 request.getUnitId(), request.getPlaceBuilder(),
                 request.getOwner(), request.getMovementThirds(),
                 request.getAction());

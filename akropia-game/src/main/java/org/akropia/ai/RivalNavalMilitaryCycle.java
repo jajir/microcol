@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  * An approach is a known sea square beside the target, reached by a known
  * route. Each one carries the shared quote of the battle from that square, so
  * the fight the rival launches is the one it judged. Peace bars an ordinary
- * warship and a privateer uses the model's privateer exception without
+ * warship and a seaRaider uses the model's seaRaider exception without
  * declaring war; allies and the war wait never qualify. Hidden ships and cargo
  * are never read.
  *

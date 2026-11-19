@@ -141,7 +141,7 @@ class UnitPurchaseDemandTest {
     @Test
     void everyPurchasableShipUsesItsOwnExistingBasePrice() {
         for (final UnitType type : new UnitType[] { UnitType.CARAVEL,
-                UnitType.MERCHANTMAN, UnitType.GALLEON, UnitType.PRIVATEER,
+                UnitType.MERCHANTMAN, UnitType.GALLEON, UnitType.SEA_RAIDER,
                 UnitType.FRIGATE }) {
             final GameModelPo data = scenario();
             data.getModel().getGameManager().getPlayers().stream()
@@ -163,7 +163,7 @@ class UnitPurchaseDemandTest {
                 .orElseThrow().setUnitPurchaseCounts(null);
         assertThrows(IllegalArgumentException.class, () -> load(missing));
         for (final Map<String, Integer> invalid : List.of(Map.of("UNKNOWN", 1),
-                Map.of("COLONIST", 1), Map.of("MAN_OF_WAR", 1),
+                Map.of("COLONIST", 1), Map.of("WAR_GALLEY", 1),
                 Map.of("CARAVEL", -1), Map.of("CARAVEL", 21_474_827))) {
             final GameModelPo data = scenario();
             data.getModel().getGameManager().getPlayers().stream()

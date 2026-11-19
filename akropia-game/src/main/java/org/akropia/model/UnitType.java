@@ -228,14 +228,13 @@ public final class UnitType {
     public static final UnitType MASTER_WEAPONSMITH = specialist(
             "MASTER_WEAPONSMITH", 2_000, GoodsType.WEAPONS);
 
-    public static final UnitType FIREBRAND_PREACHER = specialist(
-            "FIREBRAND_PREACHER", 3_000, GoodsType.TORCHES);
-    public static final UnitType ELDER_STATESMAN = specialist("ELDER_STATESMAN",
-            3_000, GoodsType.OWLS);
-    public static final UnitType SEASONED_SCOUT = specialist("SEASONED_SCOUT",
-            1_000, null);
-    public static final UnitType HARDY_PIONEER = specialist("HARDY_PIONEER",
-            1_000, null);
+    public static final UnitType ORPHIC_TELESTES = specialist("ORPHIC_TELESTES",
+            3_000, GoodsType.TORCHES);
+    public static final UnitType PHILOSOPHER = specialist("PHILOSOPHER", 3_000,
+            GoodsType.OWLS);
+    public static final UnitType WAYFARER = specialist("WAYFARER", 1_000, null);
+    public static final UnitType CULTIVATOR = specialist("CULTIVATOR", 1_000,
+            null);
     public static final UnitType VETERAN_SOLDIER = specialist("VETERAN_SOLDIER",
             2_000, null);
     public static final UnitType JESUIT_MISSIONARY = specialist(
@@ -325,15 +324,15 @@ public final class UnitType {
             .setCargoCapacity(4).setStorable(false).setEuropePrice(2_000)
             .build();
 
-    public static final UnitType PRIVATEER = UnitType.make()
-            .setName("PRIVATEER")
+    public static final UnitType SEA_RAIDER = UnitType.make()
+            .setName("SEA_RAIDER")
             .setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT).setSpeed(8)
             .setAttackableUnitTypeFilter(unitType -> unitType.isShip())
             .setCargoCapacity(2).setStorable(false).setEuropePrice(2_000)
             .build();
 
-    public static final UnitType MAN_OF_WAR = UnitType.make()
-            .setName("MAN_OF_WAR")
+    public static final UnitType WAR_GALLEY = UnitType.make()
+            .setName("WAR_GALLEY")
             .setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT).setSpeed(6)
             .setAttackableUnitTypeFilter(unitType -> unitType.isShip())
             .setCargoCapacity(6).setStorable(false).setEuropePrice(0).build();
@@ -346,8 +345,8 @@ public final class UnitType {
             EXPERT_SILVER_MINER, EXPERT_LUMBERJACK, EXPERT_ORE_MINER,
             MASTER_CARPENTER, MASTER_OIL_MAKER, MASTER_WEAVER, MASTER_WINEMAKER,
             MASTER_POTTER, MASTER_BLACKSMITH, MASTER_WEAPONSMITH,
-            FIREBRAND_PREACHER, ELDER_STATESMAN, SEASONED_SCOUT, HARDY_PIONEER,
-            VETERAN_SOLDIER, JESUIT_MISSIONARY);
+            ORPHIC_TELESTES, PHILOSOPHER, WAYFARER, CULTIVATOR, VETERAN_SOLDIER,
+            JESUIT_MISSIONARY);
 
     public static final List<UnitType> SCHOOL_ONLY_SPECIALISTS = ImmutableList
             .of(MASTER_OLIVE_GROWER, MASTER_SHEPHERD, MASTER_GRAPE_GROWER);
@@ -360,13 +359,13 @@ public final class UnitType {
     public static final List<UnitType> NATIVE_TEACHABLE_SKILLS = ImmutableList
             .of(EXPERT_FARMER, EXPERT_FISHERMAN, EXPERT_CLAY_DIGGER,
                     EXPERT_SILVER_MINER, MASTER_OLIVE_GROWER, MASTER_SHEPHERD,
-                    MASTER_GRAPE_GROWER, SEASONED_SCOUT);
+                    MASTER_GRAPE_GROWER, WAYFARER);
 
     public static final List<UnitType> UNIT_TYPES = ImmutableList
             .<UnitType>builder()
             .add(COLONIST, INDENTURED_SERVANT, PETTY_CRIMINAL, ARTILLERY,
-                    FRIGATE, GALLEON, CARAVEL, MERCHANTMAN, PRIVATEER,
-                    MAN_OF_WAR, WAGON, BRAVE, TREASURE_TRAIN)
+                    FRIGATE, GALLEON, CARAVEL, MERCHANTMAN, SEA_RAIDER,
+                    WAR_GALLEY, WAGON, BRAVE, TREASURE_TRAIN)
             .addAll(EUROPEAN_SPECIALISTS).addAll(SCHOOL_ONLY_SPECIALISTS)
             .build();
 
@@ -676,7 +675,7 @@ public final class UnitType {
     public boolean isShip() {
         return this == UnitType.FRIGATE || this == UnitType.GALLEON
                 || this == UnitType.CARAVEL || this == UnitType.MERCHANTMAN
-                || this == UnitType.PRIVATEER || this == UnitType.MAN_OF_WAR;
+                || this == UnitType.SEA_RAIDER || this == UnitType.WAR_GALLEY;
     }
 
     /**

@@ -9,8 +9,7 @@ public final class EducationSkills {
             UnitType.EXPERT_FARMER, UnitType.EXPERT_FISHERMAN,
             UnitType.EXPERT_CLAY_DIGGER, UnitType.EXPERT_SILVER_MINER,
             UnitType.EXPERT_LUMBERJACK, UnitType.EXPERT_ORE_MINER,
-            UnitType.MASTER_CARPENTER, UnitType.SEASONED_SCOUT,
-            UnitType.HARDY_PIONEER);
+            UnitType.MASTER_CARPENTER, UnitType.WAYFARER, UnitType.CULTIVATOR);
     private static final List<UnitType> COLLEGE = List.of(
             UnitType.MASTER_OLIVE_GROWER, UnitType.MASTER_SHEPHERD,
             UnitType.MASTER_GRAPE_GROWER, UnitType.MASTER_OIL_MAKER,
@@ -18,7 +17,7 @@ public final class EducationSkills {
             UnitType.MASTER_POTTER, UnitType.MASTER_BLACKSMITH,
             UnitType.MASTER_WEAPONSMITH, UnitType.VETERAN_SOLDIER);
     private static final List<UnitType> UNIVERSITY = List.of(
-            UnitType.FIREBRAND_PREACHER, UnitType.ELDER_STATESMAN,
+            UnitType.ORPHIC_TELESTES, UnitType.PHILOSOPHER,
             UnitType.JESUIT_MISSIONARY);
 
     private EducationSkills() {
@@ -113,10 +112,10 @@ public final class EducationSkills {
             return Optional.of(UnitType.MASTER_WEAPONSMITH);
         }
         if (goods == GoodsType.TORCHES) {
-            return Optional.of(UnitType.FIREBRAND_PREACHER);
+            return Optional.of(UnitType.ORPHIC_TELESTES);
         }
         if (goods == GoodsType.OWLS) {
-            return Optional.of(UnitType.ELDER_STATESMAN);
+            return Optional.of(UnitType.PHILOSOPHER);
         }
         return Optional.empty();
     }
@@ -138,7 +137,7 @@ public final class EducationSkills {
                 || skill == UnitType.MASTER_POTTER
                 || skill == UnitType.MASTER_BLACKSMITH
                 || skill == UnitType.MASTER_WEAPONSMITH
-                || skill == UnitType.FIREBRAND_PREACHER
-                || skill == UnitType.ELDER_STATESMAN;
+                || skill == UnitType.ORPHIC_TELESTES
+                || skill == UnitType.PHILOSOPHER;
     }
 }

@@ -28,9 +28,9 @@ import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
 /**
- * A Dutch frigate passes a French privateer that is at peace with it. The saved
+ * A Dutch frigate passes a French seaRaider that is at peace with it. The saved
  * random state is chosen in the prepared save file, so the first step beside
- * the privateer slows the frigate, a step away from it draws nothing, and the
+ * the seaRaider slows the frigate, a step away from it draws nothing, and the
  * next step beside it stops the frigate. The unarmed French galleon beside the
  * route never intercepts. Continue keeps the stop and the stream without
  * redrawing.
@@ -43,16 +43,16 @@ public class TC_141_F132_naval_interception_test extends AbstractAkropiaTest {
 
     private static final Location START = Location.of(20, 10);
 
-    /** Beside the privateer; the first check slows the frigate. */
+    /** Beside the seaRaider; the first check slows the frigate. */
     private static final Location SLOWED_STEP = Location.of(20, 9);
 
     /**
-     * Open water two squares from the privateer, the square the frigate started
+     * Open water two squares from the seaRaider, the square the frigate started
      * from; no check and no report. The squares west of it are land.
      */
     private static final Location SAFE_STEP = Location.of(20, 10);
 
-    /** Beside the privateer again; the second check stops the frigate. */
+    /** Beside the seaRaider again; the second check stops the frigate. */
     private static final Location STOPPED_STEP = Location.of(19, 9);
 
     private static final Location PATROL = Location.of(20, 8);
@@ -109,7 +109,7 @@ public class TC_141_F132_naval_interception_test extends AbstractAkropiaTest {
         naval.verifyMovementThirds(FULL_MOVEMENT);
         naval.verifyCombatRandomState(state);
 
-        // The first step beside the privateer pays its cost, then loses one
+        // The first step beside the seaRaider pays its cost, then loses one
         // point.
         selectShipAt(game, START);
         final ScreenTurnReport slowed = game
@@ -123,7 +123,7 @@ public class TC_141_F132_naval_interception_test extends AbstractAkropiaTest {
         naval.verifyMovementThirds(FULL_MOVEMENT - 2 * POINT);
         naval.verifyCombatRandomState(state + GAMMA);
 
-        // A step away from the privateer is an ordinary move: no draw, no
+        // A step away from the seaRaider is an ordinary move: no draw, no
         // report.
         selectShipAt(game, SLOWED_STEP);
         game.dragMouseAtLocation(SAFE_STEP);
@@ -192,7 +192,7 @@ public class TC_141_F132_naval_interception_test extends AbstractAkropiaTest {
                 getContext());
         game.panToTile(START);
 
-        // The privateer passes unseen: the step pays its cost and the stream
+        // The seaRaider passes unseen: the step pays its cost and the stream
         // advances by its one draw, with no notice and no report.
         selectShipAt(game, START);
         game.dragMouseAtLocation(SLOWED_STEP);
@@ -204,7 +204,7 @@ public class TC_141_F132_naval_interception_test extends AbstractAkropiaTest {
         naval.verifyNoPatrolNotice();
     }
 
-    /** The first saved state whose coming draw passes the privateer unseen. */
+    /** The first saved state whose coming draw passes the seaRaider unseen. */
     private static long undetectedState() {
         for (long state = 0;; state++) {
             if (ShipPatrolRules.draw(
@@ -231,7 +231,7 @@ public class TC_141_F132_naval_interception_test extends AbstractAkropiaTest {
     }
 
     /**
-     * Writes the fixture with a French privateer beside the route and the
+     * Writes the fixture with a French seaRaider beside the route and the
      * chosen saved random state. The file is prepared outside the model; the
      * game opens it like any player save.
      */
@@ -240,19 +240,19 @@ public class TC_141_F132_naval_interception_test extends AbstractAkropiaTest {
                 .fromJson(Files.readString(FIXTURE.toPath()), JsonObject.class);
         final JsonObject model = saved.getAsJsonObject("model");
         model.addProperty("combatRandomState", state);
-        model.getAsJsonArray("units").add(privateerAtPeace());
+        model.getAsJsonArray("units").add(seaRaiderAtPeace());
         final File prepared = new File(System.getProperty("user.home"),
                 "naval-interception-prepared.akropia");
         Files.writeString(prepared.toPath(), saved.toString());
         return prepared;
     }
 
-    private static JsonObject privateerAtPeace() {
+    private static JsonObject seaRaiderAtPeace() {
         final JsonObject unit = new JsonObject();
         unit.addProperty("id", PATROL_ID);
-        unit.addProperty("type", "PRIVATEER");
+        unit.addProperty("type", "SEA_RAIDER");
         unit.addProperty("ownerId", "France");
-        // A privateer holds two goods or passengers; both holds are empty.
+        // A seaRaider holds two goods or passengers; both holds are empty.
         final JsonArray slots = new JsonArray();
         slots.add(new JsonObject());
         slots.add(new JsonObject());

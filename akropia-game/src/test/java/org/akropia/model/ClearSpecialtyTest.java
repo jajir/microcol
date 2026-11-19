@@ -31,13 +31,13 @@ class ClearSpecialtyTest {
         return Stream.of(UnitType.EXPERT_FARMER, UnitType.EXPERT_FISHERMAN,
                 UnitType.EXPERT_CLAY_DIGGER, UnitType.EXPERT_SILVER_MINER,
                 UnitType.EXPERT_LUMBERJACK, UnitType.EXPERT_ORE_MINER,
-                UnitType.MASTER_CARPENTER, UnitType.SEASONED_SCOUT,
-                UnitType.HARDY_PIONEER, UnitType.MASTER_OLIVE_GROWER,
+                UnitType.MASTER_CARPENTER, UnitType.WAYFARER,
+                UnitType.CULTIVATOR, UnitType.MASTER_OLIVE_GROWER,
                 UnitType.MASTER_SHEPHERD, UnitType.MASTER_GRAPE_GROWER,
                 UnitType.MASTER_OIL_MAKER, UnitType.MASTER_WEAVER,
                 UnitType.MASTER_WINEMAKER, UnitType.MASTER_POTTER,
                 UnitType.MASTER_BLACKSMITH, UnitType.MASTER_WEAPONSMITH,
-                UnitType.FIREBRAND_PREACHER, UnitType.ELDER_STATESMAN,
+                UnitType.ORPHIC_TELESTES, UnitType.PHILOSOPHER,
                 UnitType.JESUIT_MISSIONARY);
     }
 

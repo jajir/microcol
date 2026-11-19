@@ -313,8 +313,8 @@ public class TC_30_F22_expert_purchase_test extends AbstractAkropiaTest {
     @Tag("local")
     void TC_08_each_ship_renders_boards_and_continues_its_voyage()
             throws Exception {
-        String[] types = { "CARAVEL", "MERCHANTMAN", "GALLEON", "PRIVATEER",
-                "FRIGATE", "MAN_OF_WAR" };
+        String[] types = { "CARAVEL", "MERCHANTMAN", "GALLEON", "SEA_RAIDER",
+                "FRIGATE", "WAR_GALLEY" };
         int[] capacities = { 2, 4, 6, 2, 4, 6 };
         for (int i = 0; i < types.length; i++) {
             String typeName = types[i];
@@ -393,8 +393,8 @@ public class TC_30_F22_expert_purchase_test extends AbstractAkropiaTest {
     @Test
     @Tag("local")
     void TC_09_buy_new_ship_and_preserve_it_after_continue() throws Exception {
-        String[] types = { "CARAVEL", "MERCHANTMAN", "PRIVATEER" };
-        String[] names = { "Caravel", "Merchantman", "Privateer" };
+        String[] types = { "CARAVEL", "MERCHANTMAN", "SEA_RAIDER" };
+        String[] names = { "Caravel", "Merchantman", "Sea Raider" };
         int[] prices = { 1000, 2000, 2000 };
         int[] capacities = { 2, 4, 2 };
         for (int i = 0; i < types.length; i++) {
@@ -445,8 +445,8 @@ public class TC_30_F22_expert_purchase_test extends AbstractAkropiaTest {
                 1000, true);
         offer.verifyShipOffer(org.akropia.model.UnitType.MERCHANTMAN,
                 "obchodní loď", 2000, true);
-        offer.verifyShipOffer(org.akropia.model.UnitType.PRIVATEER,
-                "korzárská loď", 2000, true);
+        offer.verifyShipOffer(org.akropia.model.UnitType.SEA_RAIDER,
+                "mořský nájezdník", 2000, true);
         offer.verifyRoyalShipNotOffered();
         new ExpertPurchasePage(getContext()).captureDialog("mainVbox",
                 "ship-roster-czech.png");
@@ -502,17 +502,17 @@ public class TC_30_F22_expert_purchase_test extends AbstractAkropiaTest {
         purchase.revealSpecialist("MASTER_WEAPONSMITH");
         purchase.verifySpecialistOffer("MASTER_WEAPONSMITH",
                 "Master Weaponsmith", 2000, "Hire specialist for ");
-        purchase.revealSpecialist("FIREBRAND_PREACHER");
-        purchase.verifySpecialistOffer("FIREBRAND_PREACHER",
-                "Firebrand Preacher", 3000, "Hire specialist for ");
-        purchase.revealSpecialist("ELDER_STATESMAN");
-        purchase.verifySpecialistOffer("ELDER_STATESMAN", "Elder Statesman",
+        purchase.revealSpecialist("ORPHIC_TELESTES");
+        purchase.verifySpecialistOffer("ORPHIC_TELESTES", "Orfický telestés",
                 3000, "Hire specialist for ");
-        purchase.revealSpecialist("SEASONED_SCOUT");
-        purchase.verifySpecialistOffer("SEASONED_SCOUT", "Seasoned Scout", 1000,
+        purchase.revealSpecialist("PHILOSOPHER");
+        purchase.verifySpecialistOffer("PHILOSOPHER", "Philosopher", 3000,
                 "Hire specialist for ");
-        purchase.revealSpecialist("HARDY_PIONEER");
-        purchase.verifySpecialistOffer("HARDY_PIONEER", "Hardy Pioneer", 1000,
+        purchase.revealSpecialist("WAYFARER");
+        purchase.verifySpecialistOffer("WAYFARER", "Wayfarer", 1000,
+                "Hire specialist for ");
+        purchase.revealSpecialist("CULTIVATOR");
+        purchase.verifySpecialistOffer("CULTIVATOR", "Cultivator", 1000,
                 "Hire specialist for ");
         purchase.revealSpecialist("VETERAN_SOLDIER");
         purchase.verifySpecialistOffer("VETERAN_SOLDIER", "Veteran Soldier",
@@ -586,17 +586,17 @@ public class TC_30_F22_expert_purchase_test extends AbstractAkropiaTest {
         purchase.revealSpecialist("MASTER_WEAPONSMITH");
         purchase.verifySpecialistOffer("MASTER_WEAPONSMITH", "mistr zbrojíř",
                 2000, "Najmout odborníka za ");
-        purchase.revealSpecialist("FIREBRAND_PREACHER");
-        purchase.verifySpecialistOffer("FIREBRAND_PREACHER", "horlivý kazatel",
+        purchase.revealSpecialist("ORPHIC_TELESTES");
+        purchase.verifySpecialistOffer("ORPHIC_TELESTES", "Orfický telestés",
                 3000, "Najmout odborníka za ");
-        purchase.revealSpecialist("ELDER_STATESMAN");
-        purchase.verifySpecialistOffer("ELDER_STATESMAN", "zkušený státník",
-                3000, "Najmout odborníka za ");
-        purchase.revealSpecialist("SEASONED_SCOUT");
-        purchase.verifySpecialistOffer("SEASONED_SCOUT", "zkušený průzkumník",
-                1000, "Najmout odborníka za ");
-        purchase.revealSpecialist("HARDY_PIONEER");
-        purchase.verifySpecialistOffer("HARDY_PIONEER", "zdatný pionýr", 1000,
+        purchase.revealSpecialist("PHILOSOPHER");
+        purchase.verifySpecialistOffer("PHILOSOPHER", "filozof", 3000,
+                "Najmout odborníka za ");
+        purchase.revealSpecialist("WAYFARER");
+        purchase.verifySpecialistOffer("WAYFARER", "poutník", 1000,
+                "Najmout odborníka za ");
+        purchase.revealSpecialist("CULTIVATOR");
+        purchase.verifySpecialistOffer("CULTIVATOR", "kultivátor", 1000,
                 "Najmout odborníka za ");
         purchase.revealSpecialist("VETERAN_SOLDIER");
         purchase.verifySpecialistOffer("VETERAN_SOLDIER", "vojenský veterán",

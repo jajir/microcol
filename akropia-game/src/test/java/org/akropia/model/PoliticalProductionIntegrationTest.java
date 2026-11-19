@@ -107,13 +107,13 @@ class PoliticalProductionIntegrationTest {
     @CsvSource({ "0,10", "500,12", "1000,13" })
     void specialistThenPoliticalThenPrintingPressPercentage(final long liberty,
             final int expectedOwls) {
-        // Elder statesman: 3 doubled to 6, +0/+1/+2 for support, plus the
+        // Elder philosopher: 3 doubled to 6, +0/+1/+2 for support, plus the
         // hall's
         // unattended owl, then the press adds half: (6 + p + 1) * 3 / 2.
         final GameModelPo data = data(liberty);
         addBuilding(data, ConstructionType.PRINTING_PRESS);
         moveToBuilding(data, 0, ConstructionType.TOWN_HALL, 0,
-                UnitType.ELDER_STATESMAN);
+                UnitType.PHILOSOPHER);
         final Colony colony = load(data).getColonyById(0).orElseThrow();
         assertEquals(5, colony.getPopulation());
         assertEquals(expectedOwls, planned(colony, GoodsType.OWLS));
@@ -167,7 +167,7 @@ class PoliticalProductionIntegrationTest {
                 .filter(value -> value.getType() == ConstructionType.CHAPEL)
                 .findFirst().orElseThrow();
         religious.setType(tier);
-        moveToBuilding(data, 0, tier, 0, UnitType.FIREBRAND_PREACHER);
+        moveToBuilding(data, 0, tier, 0, UnitType.ORPHIC_TELESTES);
         final Model model = load(data);
         final Colony colony = model.getColonyById(0).orElseThrow();
         assertEquals(5, colony.getPopulation());
@@ -183,7 +183,7 @@ class PoliticalProductionIntegrationTest {
         final GameModelPo data = data(1000);
         addBuilding(data, ConstructionType.NEWSPAPER);
         moveToBuilding(data, 0, ConstructionType.TOWN_HALL, 0,
-                UnitType.ELDER_STATESMAN);
+                UnitType.PHILOSOPHER);
         final Colony colony = load(data).getColonyById(0).orElseThrow();
         // (6 + 2 + 1) * 2
         assertEquals(18, planned(colony, GoodsType.OWLS));

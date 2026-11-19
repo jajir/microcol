@@ -190,8 +190,8 @@ class NavalCombatTest {
     }
 
     @Test
-    void drakeAddsPrivateerBonusToOwnerAttackAndDefense() {
-        final Model model = game(3L, UnitType.PRIVATEER, UnitType.PRIVATEER,
+    void drakeAddsSeaRaiderBonusToOwnerAttackAndDefense() {
+        final Model model = game(3L, UnitType.SEA_RAIDER, UnitType.SEA_RAIDER,
                 false, false, null, List.of(Founder.FRANCIS_DRAKE), List.of());
         final CombatStrengths asAttacker = battle(model, 3, 100);
         assertEquals(16, asAttacker.getAttacker().getTotal());
@@ -206,8 +206,8 @@ class NavalCombatTest {
     }
 
     @Test
-    void privateerWithoutDrakeKeepsOrdinaryStrengths() {
-        final Model model = game(3L, UnitType.PRIVATEER, UnitType.PRIVATEER);
+    void seaRaiderWithoutDrakeKeepsOrdinaryStrengths() {
+        final Model model = game(3L, UnitType.SEA_RAIDER, UnitType.SEA_RAIDER);
         final CombatStrengths values = battle(model, 3, 100);
         assertEquals(12, values.getAttacker().getTotal());
         assertEquals(0, values.getAttacker().getFounderBonus());
@@ -216,8 +216,8 @@ class NavalCombatTest {
     }
 
     @Test
-    void opponentDrakeDoesNotStrengthenAttackingPrivateer() {
-        final Model model = game(3L, UnitType.PRIVATEER, UnitType.PRIVATEER,
+    void opponentDrakeDoesNotStrengthenAttackingSeaRaider() {
+        final Model model = game(3L, UnitType.SEA_RAIDER, UnitType.SEA_RAIDER,
                 false, false, null, List.of(), List.of(Founder.FRANCIS_DRAKE));
         final CombatStrengths values = battle(model, 3, 100);
         assertEquals(12, values.getAttacker().getTotal());
@@ -226,9 +226,9 @@ class NavalCombatTest {
     }
 
     @Test
-    void drakeDoesNotChangeNonPrivateerShips() {
+    void drakeDoesNotChangeNonSeaRaiderShips() {
         final UnitType[] types = { UnitType.CARAVEL, UnitType.MERCHANTMAN,
-                UnitType.GALLEON, UnitType.FRIGATE, UnitType.MAN_OF_WAR };
+                UnitType.GALLEON, UnitType.FRIGATE, UnitType.WAR_GALLEY };
         for (final UnitType type : types) {
             final Model plain = game(3L, type, type);
             final Model drake = game(3L, type, type, false, false, null,
@@ -242,13 +242,13 @@ class NavalCombatTest {
 
     @Test
     void drakeBonusSurvivesDiskRoundtripWithoutStacking() {
-        final GameModelPo data = prepared(3L, UnitType.PRIVATEER,
-                UnitType.PRIVATEER, false, false, null,
+        final GameModelPo data = prepared(3L, UnitType.SEA_RAIDER,
+                UnitType.SEA_RAIDER, false, false, null,
                 List.of(Founder.FRANCIS_DRAKE), List.of());
         final Model model = start(data);
         data.setModel(model.save());
         final GameModelPoDao dao = new GameModelPoDao();
-        final Path file = directory.resolve("drake-privateer.akropia");
+        final Path file = directory.resolve("drake-seaRaider.akropia");
         dao.saveToFile(file.toString(), data);
         final GameModelPo loaded = dao.loadFromFile(file.toFile());
         final Model reloaded = Model.make(loaded.getModel(),
@@ -263,8 +263,8 @@ class NavalCombatTest {
 
     @Test
     void staleDrakeMembershipRejectsFrozenOrderBeforeRandomDraw() {
-        final GameModelPo data = prepared(3L, UnitType.PRIVATEER,
-                UnitType.PRIVATEER, false, false, null, List.of(), List.of());
+        final GameModelPo data = prepared(3L, UnitType.SEA_RAIDER,
+                UnitType.SEA_RAIDER, false, false, null, List.of(), List.of());
         playerNamed(data.getModel(), "Dutch")
                 .setCongress(congress(List.of(), Founder.FRANCIS_DRAKE));
         final Model model = start(data);
@@ -291,10 +291,10 @@ class NavalCombatTest {
 
     @Test
     void drakeOddsDecideActualNavalResolution() {
-        final Model probe = game(3L, UnitType.PRIVATEER, UnitType.PRIVATEER,
+        final Model probe = game(3L, UnitType.SEA_RAIDER, UnitType.SEA_RAIDER,
                 false, false, null, List.of(Founder.FRANCIS_DRAKE), List.of());
         final boolean attackerWins = probe.nextCombatRandom() < 2.0 / 3.0;
-        final Model model = game(3L, UnitType.PRIVATEER, UnitType.PRIVATEER,
+        final Model model = game(3L, UnitType.SEA_RAIDER, UnitType.SEA_RAIDER,
                 false, false, null, List.of(Founder.FRANCIS_DRAKE), List.of());
         final List<UnitAttackedEvent> events = new ArrayList<>();
         model.addListener(new ModelListenerAdapter() {
@@ -315,8 +315,8 @@ class NavalCombatTest {
     @Test
     void allSixBaseStrengthsUseOnlyAttackerBonus() {
         final UnitType[] types = { UnitType.CARAVEL, UnitType.MERCHANTMAN,
-                UnitType.GALLEON, UnitType.PRIVATEER, UnitType.FRIGATE,
-                UnitType.MAN_OF_WAR };
+                UnitType.GALLEON, UnitType.SEA_RAIDER, UnitType.FRIGATE,
+                UnitType.WAR_GALLEY };
         final int[] bases = { 2, 6, 10, 8, 16, 24 };
         for (int i = 0; i < types.length; i++) {
             final Model model = game(3L, types[i], types[i]);
@@ -455,7 +455,7 @@ class NavalCombatTest {
 
     @Test
     void defenderCanWinAndSinkAttacker() {
-        final Model model = game(0L, UnitType.FRIGATE, UnitType.MAN_OF_WAR);
+        final Model model = game(0L, UnitType.FRIGATE, UnitType.WAR_GALLEY);
         final Ship attacker = (Ship) model.getUnitById(3);
         final Ship defender = (Ship) model.getUnitById(100);
         final List<UnitAttackedEvent> events = new ArrayList<>();
@@ -529,7 +529,7 @@ class NavalCombatTest {
     @Test
     void strongestDefenderWinsSelectionBeforeStableIdTie() {
         final Model model = game(3L, UnitType.FRIGATE, UnitType.CARAVEL, false,
-                false, UnitType.MAN_OF_WAR);
+                false, UnitType.WAR_GALLEY);
         final Ship attacker = (Ship) model.getUnitById(3);
         assertEquals(102, attacker.prepareAttack(DEFENDER, true).orElseThrow()
                 .getDefender().getId());

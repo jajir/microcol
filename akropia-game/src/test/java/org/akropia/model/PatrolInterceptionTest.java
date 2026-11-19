@@ -92,7 +92,7 @@ class PatrolInterceptionTest {
         }
     }
 
-    /** Same unit-building pattern as the privateer naval tests. */
+    /** Same unit-building pattern as the seaRaider naval tests. */
     private static UnitPo patrol(final int id, final UnitType type,
             final String owner, final Location at) {
         final UnitPo unit = new UnitPo();
@@ -211,7 +211,7 @@ class PatrolInterceptionTest {
 
     /**
      * The harbour fixture: a French frigate starts at the given square, and a
-     * Dutch privateer at peace with France waits at the patrol square. The
+     * Dutch seaRaider at peace with France waits at the patrol square. The
      * first turn belongs to France, so the frigate's own step is legal.
      */
     private static Model harbourGame(final Location from,
@@ -220,8 +220,8 @@ class PatrolInterceptionTest {
         final ModelPo data = harbourData();
         data.getUnits().add(frenchPassenger());
         data.getUnits().add(frenchFrigate(from));
-        data.getUnits().add(
-                patrol(FIRST_PATROL_ID, UnitType.PRIVATEER, "Dutch", patrolAt));
+        data.getUnits().add(patrol(FIRST_PATROL_ID, UnitType.SEA_RAIDER,
+                "Dutch", patrolAt));
         final Model model = Model.make(data,
                 MissionImpl.getPredefinedGameOverEvaluators());
         model.startGame();
@@ -312,7 +312,7 @@ class PatrolInterceptionTest {
         final Ground ground = new Ground();
         final long state = stateFor(ShipPatrolRules.Outcome.UNDETECTED);
         final Model model = game(List.of(patrol(FIRST_PATROL_ID,
-                UnitType.PRIVATEER, "France", ground.beside.get(0))), state);
+                UnitType.SEA_RAIDER, "France", ground.beside.get(0))), state);
         final Ship mover = (Ship) model.getUnitById(MOVER_ID);
         final int before = mover.getMovementThirds();
         mover.moveOneStep(ground.step);
@@ -329,7 +329,7 @@ class PatrolInterceptionTest {
             throws ReflectiveOperationException {
         final Ground ground = new Ground();
         final Model model = game(
-                List.of(patrol(FIRST_PATROL_ID, UnitType.PRIVATEER, "France",
+                List.of(patrol(FIRST_PATROL_ID, UnitType.SEA_RAIDER, "France",
                         ground.beside.get(0))),
                 stateFor(ShipPatrolRules.Outcome.SLOWED));
         final Ship mover = (Ship) model.getUnitById(MOVER_ID);
@@ -348,7 +348,7 @@ class PatrolInterceptionTest {
             throws ReflectiveOperationException {
         final Ground ground = new Ground();
         final Model model = game(
-                List.of(patrol(FIRST_PATROL_ID, UnitType.PRIVATEER, "France",
+                List.of(patrol(FIRST_PATROL_ID, UnitType.SEA_RAIDER, "France",
                         ground.beside.get(0))),
                 stateFor(ShipPatrolRules.Outcome.SLOWED));
         final Ship mover = (Ship) model.getUnitById(MOVER_ID);
@@ -363,7 +363,7 @@ class PatrolInterceptionTest {
         final Ground ground = new Ground();
         final long state = stateFor(ShipPatrolRules.Outcome.STOPPED);
         final Model model = game(List.of(patrol(FIRST_PATROL_ID,
-                UnitType.PRIVATEER, "France", ground.beside.get(0))), state);
+                UnitType.SEA_RAIDER, "France", ground.beside.get(0))), state);
         final Ship mover = (Ship) model.getUnitById(MOVER_ID);
         mover.moveOneStep(ground.step);
         assertEquals(0, mover.getMovementThirds());
@@ -382,7 +382,7 @@ class PatrolInterceptionTest {
         final Model model = game(List.of(
                 patrol(FIRST_PATROL_ID, UnitType.FRIGATE, "France",
                         ground.beside.get(0)),
-                patrol(FIRST_PATROL_ID + 1, UnitType.MAN_OF_WAR, "France",
+                patrol(FIRST_PATROL_ID + 1, UnitType.WAR_GALLEY, "France",
                         ground.beside.get(1))),
                 0L);
         model.declareHostilities(model.getUnitById(MOVER_ID).getOwner(),
@@ -405,13 +405,13 @@ class PatrolInterceptionTest {
     }
 
     @Test
-    void privateerInterceptsAtPeaceButOrdinaryArmedShipDoesNot()
+    void seaRaiderInterceptsAtPeaceButOrdinaryArmedShipDoesNot()
             throws ReflectiveOperationException {
         final Ground ground = new Ground();
-        final Model privateer = game(List.of(patrol(FIRST_PATROL_ID,
-                UnitType.PRIVATEER, "France", ground.beside.get(0))), 0L);
-        assertTrue(privateer
-                .findPatrol((Ship) privateer.getUnitById(MOVER_ID), ground.step)
+        final Model seaRaider = game(List.of(patrol(FIRST_PATROL_ID,
+                UnitType.SEA_RAIDER, "France", ground.beside.get(0))), 0L);
+        assertTrue(seaRaider
+                .findPatrol((Ship) seaRaider.getUnitById(MOVER_ID), ground.step)
                 .isPresent());
 
         final Model ordinary = game(List.of(patrol(FIRST_PATROL_ID,
@@ -444,7 +444,7 @@ class PatrolInterceptionTest {
             throws ReflectiveOperationException {
         final Ground ground = new Ground();
         final Model friendly = game(List.of(patrol(FIRST_PATROL_ID,
-                UnitType.PRIVATEER, "Dutch", ground.beside.get(0))), 0L);
+                UnitType.SEA_RAIDER, "Dutch", ground.beside.get(0))), 0L);
         assertTrue(friendly
                 .findPatrol((Ship) friendly.getUnitById(MOVER_ID), ground.step)
                 .isEmpty());
@@ -459,7 +459,7 @@ class PatrolInterceptionTest {
 
         final long state = stateFor(ShipPatrolRules.Outcome.STOPPED);
         final Model nonadjacent = game(List.of(patrol(FIRST_PATROL_ID,
-                UnitType.PRIVATEER, "France", ground.far)), state);
+                UnitType.SEA_RAIDER, "France", ground.far)), state);
         final Ship mover = (Ship) nonadjacent.getUnitById(MOVER_ID);
         mover.moveOneStep(ground.step);
         assertTrue(mover.getMovementThirds() > 0);
@@ -472,7 +472,7 @@ class PatrolInterceptionTest {
         final Ground ground = new Ground();
         final long state = stateFor(ShipPatrolRules.Outcome.STOPPED);
         final Model model = game(List.of(patrol(FIRST_PATROL_ID,
-                UnitType.PRIVATEER, "France", ground.beside.get(0))), state);
+                UnitType.SEA_RAIDER, "France", ground.beside.get(0))), state);
         final Ship mover = (Ship) model.getUnitById(MOVER_ID);
         final int before = mover.getMovementThirds();
         assertThrows(IllegalArgumentException.class,
@@ -488,7 +488,7 @@ class PatrolInterceptionTest {
         assertTrue(ground.beside.size() >= 2, "Two open squares beside step");
         final long state = stateFor(ShipPatrolRules.Outcome.STOPPED);
         final Model model = game(List.of(patrol(FIRST_PATROL_ID,
-                UnitType.PRIVATEER, "France", ground.beside.get(0))), state);
+                UnitType.SEA_RAIDER, "France", ground.beside.get(0))), state);
         final Ship mover = (Ship) model.getUnitById(MOVER_ID);
         model.moveUnit(mover,
                 Path.of(List.of(ground.step, ground.beside.get(1))));
@@ -502,7 +502,7 @@ class PatrolInterceptionTest {
             throws ReflectiveOperationException {
         final Ground ground = new Ground();
         final Model model = game(
-                List.of(patrol(FIRST_PATROL_ID, UnitType.PRIVATEER, "France",
+                List.of(patrol(FIRST_PATROL_ID, UnitType.SEA_RAIDER, "France",
                         ground.beside.get(0))),
                 stateFor(ShipPatrolRules.Outcome.STOPPED));
         ((Ship) model.getUnitById(MOVER_ID)).moveOneStep(ground.step);
@@ -518,7 +518,7 @@ class PatrolInterceptionTest {
             throws ReflectiveOperationException {
         final Ground ground = new Ground();
         final Model model = game(
-                List.of(patrol(FIRST_PATROL_ID, UnitType.PRIVATEER, "France",
+                List.of(patrol(FIRST_PATROL_ID, UnitType.SEA_RAIDER, "France",
                         ground.beside.get(0))),
                 stateFor(ShipPatrolRules.Outcome.STOPPED));
         final Ship mover = (Ship) model.getUnitById(MOVER_ID);
@@ -537,7 +537,7 @@ class PatrolInterceptionTest {
         final Model model = game(List.of(
                 patrol(FIRST_PATROL_ID, UnitType.FRIGATE, "France",
                         ground.beside.get(0)),
-                patrol(FIRST_PATROL_ID + 1, UnitType.MAN_OF_WAR, "France",
+                patrol(FIRST_PATROL_ID + 1, UnitType.WAR_GALLEY, "France",
                         ground.beside.get(1))),
                 state);
         final Ship mover = (Ship) model.getUnitById(MOVER_ID);
@@ -558,7 +558,7 @@ class PatrolInterceptionTest {
         final Ground ground = new Ground();
         final long state = stateFor(ShipPatrolRules.Outcome.STOPPED);
         final Model model = game(
-                List.of(patrol(FIRST_PATROL_ID, UnitType.PRIVATEER, "France",
+                List.of(patrol(FIRST_PATROL_ID, UnitType.SEA_RAIDER, "France",
                         ground.beside.get(0))),
                 state, EuropeanRelationState.ALLIANCE);
         final Ship mover = (Ship) model.getUnitById(MOVER_ID);

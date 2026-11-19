@@ -59,7 +59,8 @@ import javafx.stage.Stage;
  * <ul>
  * <li>Turn 698: 1,500 gold; 4 x 762 = 3,048 of 6,400 (47 percent), so no
  * declaration is offered; 40 + 12 = 52 Dutch colonists; 160 ore; the Discoverer
- * force of 4 infantry, 2 cavalry, 2 artillery and 2 men-of-war in reserve.</li>
+ * force of 4 infantry, 2 cavalry, 2 artillery and 2 war galleys in
+ * reserve.</li>
  * <li>Turn 699, after one update of 4 x 2 x (1 + 3 x 6) = 152 owls: 3,200 of
  * 6,400, exactly 50 percent. The declaration in year 9 musters floor(4 x 1/2) =
  * 2 veterans per garrisoned colony, the two lowest identities: 500, 501, 504,
@@ -69,8 +70,8 @@ import javafx.stage.Stage;
  * owls starts with 4 x 2 x (1 + 3 x 7) = 176 owls; liberty is 3,376; the custom
  * house sells 160 - 100 = 60 ore at the bid of 4 and no tax, and the closed
  * home market halves the 240 to 120, so the Dutch hold 1,620 gold and 100 ore.
- * The first royal turn put all eight ground units on the two men-of-war: six on
- * the first and two on the second.</li>
+ * The first royal turn put all eight ground units on the two war galleys: six
+ * on the first and two on the second.</li>
  * <li>Victory: one Dutch completion first (+100 percent), 33 early points from
  * the declaration round, Discoverer 50 percent, no destroyed settlement, no
  * father, and the owls after the target are the counted owls less 375. The
@@ -157,7 +158,7 @@ public class TC_187_F220_independence_journey_test extends AbstractAkropiaTest {
         journey.verifyRosterCount(Family.INFANTRY, State.RESERVE, 4);
         journey.verifyRosterCount(Family.CAVALRY, State.RESERVE, 2);
         journey.verifyRosterCount(Family.ARTILLERY, State.RESERVE, 2);
-        journey.verifyRosterCount(Family.MAN_OF_WAR, State.RESERVE, 2);
+        journey.verifyRosterCount(Family.WAR_GALLEY, State.RESERVE, 2);
         independence.verifyDeclared(false);
         independence.verifyDeclareButtonVisible(false);
 
@@ -218,7 +219,7 @@ public class TC_187_F220_independence_journey_test extends AbstractAkropiaTest {
         journey.verifyRosterCount(Family.INFANTRY, State.SHIPPED, 4);
         journey.verifyRosterCount(Family.CAVALRY, State.SHIPPED, 2);
         journey.verifyRosterCount(Family.ARTILLERY, State.SHIPPED, 2);
-        journey.verifyRosterCount(Family.MAN_OF_WAR, State.SHIPPED, 2);
+        journey.verifyRosterCount(Family.WAR_GALLEY, State.SHIPPED, 2);
         journey.verifyRosterCount(Family.INFANTRY, State.RESERVE, 0);
         journey.verifyInterventionDelivered(false);
 
@@ -236,7 +237,7 @@ public class TC_187_F220_independence_journey_test extends AbstractAkropiaTest {
         journey.verifyNationalSupport(LIBERTY_AFTER_FIRST_UPDATE, CAPACITY);
         journey.verifyRosterMembers(ROSTER_MEMBERS);
         journey.verifyRosterCount(Family.INFANTRY, State.SHIPPED, 4);
-        journey.verifyRosterCount(Family.MAN_OF_WAR, State.SHIPPED, 2);
+        journey.verifyRosterCount(Family.WAR_GALLEY, State.SHIPPED, 2);
         journey.verifyInterventionDelivered(false);
 
         // Hold the receiving port and withdraw the other garrisons. Leave
@@ -362,7 +363,7 @@ public class TC_187_F220_independence_journey_test extends AbstractAkropiaTest {
         journey.verifyRosterCount(Family.INFANTRY, State.SHIPPED, 4);
         journey.verifyRosterCount(Family.CAVALRY, State.SHIPPED, 2);
         journey.verifyRosterCount(Family.ARTILLERY, State.SHIPPED, 2);
-        journey.verifyRosterCount(Family.MAN_OF_WAR, State.SHIPPED, 2);
+        journey.verifyRosterCount(Family.WAR_GALLEY, State.SHIPPED, 2);
 
         // Save without interrupting this route; both branches will share the
         // voyage weather.

@@ -336,6 +336,16 @@ public final class ColonizopediaPage extends AbstractScreen {
         }).get(5, TimeUnit.SECONDS);
     }
 
+    public void verifyUnitName(final String type, final String expected)
+            throws Exception {
+        WaitForAsyncUtils.asyncFx(() -> {
+            final VBox cell = getNodeFinder()
+                    .lookup("#colonizopediaUnit_" + type).queryAs(VBox.class);
+            assertEquals(expected, ((Labeled) cell.lookup(".label")).getText());
+            return null;
+        }).get(5, TimeUnit.SECONDS);
+    }
+
     public void verifyUnitIllustrations() throws Exception {
         WaitForAsyncUtils.asyncFx(() -> {
             final LocalizationHelper names = new LocalizationHelper(getI18n());

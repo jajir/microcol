@@ -411,7 +411,7 @@ class FleetReportTest {
 
     private static List<UnitType> families() {
         return List.of(UnitType.FRIGATE, UnitType.GALLEON, UnitType.CARAVEL,
-                UnitType.MERCHANTMAN, UnitType.PRIVATEER, UnitType.MAN_OF_WAR);
+                UnitType.MERCHANTMAN, UnitType.SEA_RAIDER, UnitType.WAR_GALLEY);
     }
 
     /** Fields every saved unit carries; a ship adds its own place. */

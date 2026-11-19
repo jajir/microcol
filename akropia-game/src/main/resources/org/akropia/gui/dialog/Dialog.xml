@@ -68,7 +68,7 @@
 	<entry key="fight_lostHorses">%s: the unit lost its horses and survives as a soldier.</entry>
 	<entry key="fight_lostWeapons">%s: the unit lost its weapons and survives unarmed.</entry>
 	<entry key="fight_artilleryBonus">Artillery outside a fortified colony: %s%%</entry>
-	<entry key="fight_drakeBonus">Privateers under Francis Drake: +%s%%</entry>
+	<entry key="fight_drakeBonus">Sea Raiders under Francis Drake: +%s%%</entry>
 	<entry key="fight_artilleryLoss">Defeated full artillery is damaged; damaged artillery is destroyed. A defeated soldier loses horses, otherwise weapons. Both participants spend their remaining movement.</entry>
 	<entry key="fight_artilleryDamaged">%s: artillery was damaged; attack/defense strength is now 5/3.</entry>
 	<entry key="fight_artilleryDestroyed">%s: damaged artillery was destroyed.</entry>
@@ -81,7 +81,7 @@
     <entry key="fight_navalLost">Lost passengers: %s. Lost goods: %s.</entry>
     <entry key="fight_navalPreserved">Passengers remaining aboard: %s. Goods remaining aboard: %s.</entry>
     <entry key="fight_none">None</entry>
-    <entry key="fight_privateerException">This privateer action does not declare war. Existing relations stay unchanged. Fight?</entry>
+    <entry key="fight_seaRaiderException">This sea raider action does not declare war. Existing relations stay unchanged. Fight?</entry>
     <entry key="fight_veteranName">%s (veteran)</entry>
     <entry key="fight_veteranStatus">veteran</entry>
     <entry key="fight_continentalName">%s (Continental)</entry>

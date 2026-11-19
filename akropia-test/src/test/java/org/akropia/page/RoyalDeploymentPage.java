@@ -26,7 +26,7 @@ import org.akropia.model.unit.UnitWithCargo;
 
 /**
  * The Crown's real deployment after independence (R-0186): roster families, the
- * voyage of the carrying men-of-war, the landing and the attack on a rebel
+ * voyage of the carrying war galleys, the landing and the attack on a rebel
  * colony. The page only reads the live model and counts its events; the
  * player's actions go through the ordinary controls of the other pages, and
  * only the verify methods assert.
@@ -109,8 +109,8 @@ public final class RoyalDeploymentPage extends AbstractScreen {
 
     private static boolean isFamily(final Family family, final Unit unit) {
         switch (family) {
-        case MAN_OF_WAR:
-            return unit.getType() == UnitType.MAN_OF_WAR;
+        case WAR_GALLEY:
+            return unit.getType() == UnitType.WAR_GALLEY;
         case ARTILLERY:
             return unit instanceof UnitArtillery;
         case INFANTRY:
@@ -175,14 +175,14 @@ public final class RoyalDeploymentPage extends AbstractScreen {
     /** Every member of the starting force has been put on a ship. */
     public void verifyAllReserveSent() {
         final RoyalRoster crown = crown();
-        assertEquals(0, crown.getCount(Family.MAN_OF_WAR, State.RESERVE),
-                "A reserve man-of-war stayed in Home port");
+        assertEquals(0, crown.getCount(Family.WAR_GALLEY, State.RESERVE),
+                "A reserve war galley stayed in Home port");
         assertEquals(0,
                 crown.getCount(Family.INFANTRY, State.RESERVE)
                         + crown.getCount(Family.CAVALRY, State.RESERVE)
                         + crown.getCount(Family.ARTILLERY, State.RESERVE),
                 "Reserve ground units stayed in Home port");
-        assertEquals(2, crown.getCount(Family.MAN_OF_WAR, State.SHIPPED));
+        assertEquals(2, crown.getCount(Family.WAR_GALLEY, State.SHIPPED));
         assertEquals(6, crown.getCount(Family.INFANTRY, State.SHIPPED));
         assertEquals(4, crown.getCount(Family.CAVALRY, State.SHIPPED));
         assertEquals(2, crown.getCount(Family.ARTILLERY, State.SHIPPED));
@@ -257,7 +257,7 @@ public final class RoyalDeploymentPage extends AbstractScreen {
 
     /**
      * Every shipped member is exactly one live unit of the Crown with its own
-     * family, and the Crown has no man-of-war or royal regular outside the
+     * family, and the Crown has no war galley or royal regular outside the
      * roster. Colonists and guns taken with a captured colony may belong to the
      * Crown; they are not royal forces and are not counted as members.
      */
@@ -281,7 +281,7 @@ public final class RoyalDeploymentPage extends AbstractScreen {
                 "A shipped member has no live unit");
         for (final Unit unit : crownUnits()) {
             if (!bound.contains(unit.getId())) {
-                assertTrue(unit.getType() != UnitType.MAN_OF_WAR, "Man-of-war "
+                assertTrue(unit.getType() != UnitType.WAR_GALLEY, "War Galley "
                         + unit.getId() + " is outside the roster");
                 assertTrue(!(unit instanceof UnitFreeColonist)
                         || ((UnitFreeColonist) unit)

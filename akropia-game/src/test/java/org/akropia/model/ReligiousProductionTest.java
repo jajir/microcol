@@ -88,12 +88,12 @@ class ReligiousProductionTest {
                         5),
                 Arguments.of(ConstructionType.CATHEDRAL, UnitType.COLONIST,
                         false, 9),
-                Arguments.of(ConstructionType.CHAPEL,
-                        UnitType.FIREBRAND_PREACHER, false, 3),
-                Arguments.of(ConstructionType.CHURCH,
-                        UnitType.FIREBRAND_PREACHER, false, 8),
+                Arguments.of(ConstructionType.CHAPEL, UnitType.ORPHIC_TELESTES,
+                        false, 3),
+                Arguments.of(ConstructionType.CHURCH, UnitType.ORPHIC_TELESTES,
+                        false, 8),
                 Arguments.of(ConstructionType.CATHEDRAL,
-                        UnitType.FIREBRAND_PREACHER, false, 15),
+                        UnitType.ORPHIC_TELESTES, false, 15),
                 Arguments.of(ConstructionType.CHURCH, UnitType.MASTER_CARPENTER,
                         false, 5),
                 Arguments.of(ConstructionType.CHAPEL, null, true, 1),
@@ -102,7 +102,7 @@ class ReligiousProductionTest {
                 Arguments.of(ConstructionType.CATHEDRAL, UnitType.COLONIST,
                         true, 13),
                 Arguments.of(ConstructionType.CATHEDRAL,
-                        UnitType.FIREBRAND_PREACHER, true, 22));
+                        UnitType.ORPHIC_TELESTES, true, 22));
     }
 
     @ParameterizedTest

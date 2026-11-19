@@ -15,7 +15,7 @@ public final class AttackOrder {
     private final Location origin;
     private final Location target;
     private final boolean declarationRequired;
-    private final boolean privateerException;
+    private final boolean seaRaiderException;
     private final EuropeanRelationState originalRelation;
     private final Optional<CombatStrengths> combatStrengths;
     private final Optional<NavalCombatPreview> navalPreview;
@@ -54,14 +54,14 @@ public final class AttackOrder {
         this.origin = origin;
         target = colonyDefense.map(ColonyDefense::getBattlefield)
                 .orElseGet(defender::getLocation);
-        privateerException = attacker.model.isPrivateerNavalException(attacker,
+        seaRaiderException = attacker.model.isSeaRaiderNavalException(attacker,
                 defender);
         originalRelation = isEuropeanPair(attackingPlayer, defendingPlayer)
                 ? attacker.model.getEuropeanRelation(attackingPlayer,
                         defendingPlayer)
                 : null;
         declarationRequired = isDeclarationNeeded(attacker.model,
-                attackingPlayer, defendingPlayer, privateerException);
+                attackingPlayer, defendingPlayer, seaRaiderException);
         combatStrengths = colonyDefense.isPresent()
                 ? CombatStrengths.forColonyBattleFrom(attacker.model, attacker,
                         origin, colonyDefense.get())
@@ -91,9 +91,9 @@ public final class AttackOrder {
         return declarationRequired;
     }
 
-    /** @return whether this battle preserves the relation by privateer rule */
-    public boolean isPrivateerException() {
-        return privateerException;
+    /** @return whether this battle preserves the relation by seaRaider rule */
+    public boolean isSeaRaiderException() {
+        return seaRaiderException;
     }
 
     EuropeanRelationState getOriginalRelation() {
@@ -153,8 +153,8 @@ public final class AttackOrder {
      * Natives take no declaration: the attack itself is their legal act.
      */
     static boolean isDeclarationNeeded(final Model model, final Player attacker,
-            final Player defender, final boolean privateerException) {
-        return isEuropeanPair(attacker, defender) && !privateerException
+            final Player defender, final boolean seaRaiderException) {
+        return isEuropeanPair(attacker, defender) && !seaRaiderException
                 && !model.areHostile(attacker, defender);
     }
 

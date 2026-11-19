@@ -219,10 +219,10 @@ class NativeSettlementsTest {
     @Test
     void teachableSkillRoundTripsUnchanged() {
         final NativeSettlementPo po = po(0, NativeNation.TUPI, true, 1, 1);
-        po.setTeachableSkill(UnitType.SEASONED_SCOUT.name());
+        po.setTeachableSkill(UnitType.WAYFARER.name());
         final NativeSettlements restored = make(
                 make(List.of(po)).toPo(open -> true));
-        assertEquals(UnitType.SEASONED_SCOUT,
+        assertEquals(UnitType.WAYFARER,
                 restored.getAll().get(0).getTeachableSkill());
     }
 

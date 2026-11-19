@@ -22,8 +22,8 @@ import org.akropia.model.unit.Ship;
 /** Actual Magellan membership controls ship allowance and new departures. */
 class MagellanEffectTest {
     private static final UnitType[] SHIPS = { UnitType.CARAVEL,
-            UnitType.MERCHANTMAN, UnitType.GALLEON, UnitType.PRIVATEER,
-            UnitType.FRIGATE, UnitType.MAN_OF_WAR };
+            UnitType.MERCHANTMAN, UnitType.GALLEON, UnitType.SEA_RAIDER,
+            UnitType.FRIGATE, UnitType.WAR_GALLEY };
 
     private GameModelPo fixture(final boolean member) {
         final GameModelPo data = new GameModelPoDao().loadFromClassPath(

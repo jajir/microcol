@@ -140,7 +140,7 @@ public final class PoliticalProductionPage extends AbstractScreen {
             final Difficulty difficulty) {
         final int index = difficulty.ordinal();
         final String[] families = { "INFANTRY", "CAVALRY", "ARTILLERY",
-                "MAN_OF_WAR" };
+                "WAR_GALLEY" };
         final int[] counts = { 4 + index, 2 + index, 2, 2 };
         final JsonArray members = new JsonArray();
         int id = 1;

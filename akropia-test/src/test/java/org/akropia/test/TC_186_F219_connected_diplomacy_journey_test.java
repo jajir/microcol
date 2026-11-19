@@ -22,8 +22,8 @@ import static org.akropia.test.DiplomacyJourneyFixture.MISSIONARY_AT;
 import static org.akropia.test.DiplomacyJourneyFixture.OBSERVER;
 import static org.akropia.test.DiplomacyJourneyFixture.OBSERVER_AT;
 import static org.akropia.test.DiplomacyJourneyFixture.PIONEER_AT;
-import static org.akropia.test.DiplomacyJourneyFixture.PRIVATEER_AT;
-import static org.akropia.test.DiplomacyJourneyFixture.PRIVATEER_SHIP;
+import static org.akropia.test.DiplomacyJourneyFixture.SEA_RAIDER_AT;
+import static org.akropia.test.DiplomacyJourneyFixture.SEA_RAIDER_SHIP;
 import static org.akropia.test.DiplomacyJourneyFixture.RAID_SOLDIER;
 import static org.akropia.test.DiplomacyJourneyFixture.RAID_SOLDIER_AT;
 import static org.akropia.test.DiplomacyJourneyFixture.ROUTE;
@@ -687,7 +687,7 @@ public class TC_186_F219_connected_diplomacy_journey_test
     void TC_04_privateer_attacks_the_french_galleon_in_peace_without_declaring_war()
             throws Exception {
         DiplomacyJourneyFixture.prepare(getContext(), SOURCE, PREPARED,
-                Variant.PRIVATEER);
+                Variant.SEA_RAIDER);
         final FogPage fog = new FogPage(getContext());
         final AttackPage attack = new AttackPage(getContext());
         final NavalBattlePage naval = new NavalBattlePage(getContext());
@@ -699,24 +699,24 @@ public class TC_186_F219_connected_diplomacy_journey_test
 
         // The review names the exception and is cancelled without a change.
         attack.rememberWorld();
-        attack.chooseAttack(PRIVATEER_AT, GALLEON_AT);
-        attack.verifyReview("Privateer", "Galleon", "does not declare war",
-                PRIVATEER_SHIP, FRENCH_GALLEON);
+        attack.chooseAttack(SEA_RAIDER_AT, GALLEON_AT);
+        attack.verifyReview("Sea Raider", "Galleon", "does not declare war",
+                SEA_RAIDER_SHIP, FRENCH_GALLEON);
         attack.cancel();
         attack.verifyReviewClosed();
         attack.verifyGameplayUnchanged();
 
         // The confirmed attack is fought and leaves the peace untouched.
-        attack.chooseAttack(PRIVATEER_AT, GALLEON_AT);
+        attack.chooseAttack(SEA_RAIDER_AT, GALLEON_AT);
         attack.confirm();
         naval.closeOutcome();
         journey.verifyTreatyKept();
-        journey.verifyMovementSpent(PRIVATEER_SHIP);
+        journey.verifyMovementSpent(SEA_RAIDER_SHIP);
 
-        // Save and Continue keep the peace and the spent privateer.
+        // Save and Continue keep the peace and the spent seaRaider.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         journey.verifyTreatyKept();
-        journey.verifyMovementSpent(PRIVATEER_SHIP);
+        journey.verifyMovementSpent(SEA_RAIDER_SHIP);
     }
 }

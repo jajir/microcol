@@ -93,7 +93,7 @@ public final class CombatStrength {
         return artilleryBonus;
     }
 
-    /** @return named founder modifier, such as Francis Drake's privateers */
+    /** @return named founder modifier, such as Francis Drake's seaRaiders */
     public int getFounderBonus() {
         return founderBonus;
     }

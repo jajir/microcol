@@ -180,9 +180,9 @@ public class TC_73_F65_clear_forest_test extends AbstractAkropiaTest {
     @Test
     @Tag("local")
     void TC_04_hardy_pioneer_completes_after_two_updates() throws Exception {
-        // Load a prepared copy with hardy pioneers and start the work.
+        // Load a prepared copy with cultivators and start the work.
         final GamePage gamePage = prepareAndMove("clear-f01-hardy.akropia", 100,
-                "HARDY_PIONEER", 0);
+                "CULTIVATOR", 0);
         final ClearForestPage clear = new ClearForestPage(getContext());
         clear.pressKey();
         clear.confirm();

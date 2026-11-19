@@ -19,7 +19,7 @@
   <entry key="royalInfantry">Infantry of the mother city</entry>
   <entry key="royalCavalry">Cavalry of the mother city</entry>
   <entry key="royalArtillery">Artillery of the mother city</entry>
-  <entry key="royalMenOfWar">Men-of-war</entry>
+  <entry key="royalWarGalleys">War Galleys</entry>
   <entry key="royalFamily">%s: %s total, %s reserve, %s shipped, %s destroyed, %s captured</entry>
   <entry key="royalOwls">Owls of the mother city toward the next unit: %s / %s</entry>
   <entry key="royalStopped">Army growth of the mother city stopped at independence.</entry>
@@ -63,9 +63,9 @@
   <entry key="jonesEffect">Grants one free frigate once.</entry>
   <entry key="selected">Selected</entry>
   <entry key="deployment">Deployment details</entry>
-  <entry key="royalSummary">Forces of the mother city: %s infantry · %s cavalry · %s artillery · %s men-of-war</entry>
+  <entry key="royalSummary">Forces of the mother city: %s infantry · %s cavalry · %s artillery · %s war galleys</entry>
   <entry key="effectHERNAN_CORTES">Captured native settlements always yield treasure, at twice the usual value.</entry>
-  <entry key="effectFRANCIS_DRAKE">Privateers gain +50%% combat strength in attack and defense.</entry>
+  <entry key="effectFRANCIS_DRAKE">Sea Raiders gain +50%% combat strength in attack and defense.</entry>
   <entry key="effectJOHN_PAUL_JONES">Grants one free frigate once.</entry>
   <entry key="effectPAUL_REVERE">An undefended colony can arm a worker with 50 stored weapons when attacked.</entry>
   <entry key="effectGEORGE_WASHINGTON">Every eligible military victory promotes the winning unit one step.</entry>
@@ -99,7 +99,7 @@
   <entry key="artifactHERNAN_CORTES">Athenian Treasury at Delphi</entry>
   <entry key="historyHERNAN_CORTES">The Athenian Treasury held offerings and spoils dedicated to Apollo. Its surviving, reassembled facade connects victory, wealth and sanctuary.</entry>
   <entry key="artifactFRANCIS_DRAKE">Lenormant relief</entry>
-  <entry key="historyFRANCIS_DRAKE">A marble fragment from the Athenian Acropolis depicts trireme rowers. It records the organisation of Greek naval warfare; the privateer bonus is a thematic association.</entry>
+  <entry key="historyFRANCIS_DRAKE">A marble fragment from the Athenian Acropolis depicts trireme rowers. It records the organisation of Greek naval warfare; the sea raider bonus is a thematic association.</entry>
   <entry key="artifactJOHN_PAUL_JONES">Kyrenia ship</entry>
   <entry key="historyJOHN_PAUL_JONES">The surviving hull of a Greek merchant ship from the late fourth century BC reveals ancient shipbuilding. The reference is a merchant vessel; the game reward remains a warship.</entry>
   <entry key="artifactPAUL_REVERE">Corinthian helmet</entry>

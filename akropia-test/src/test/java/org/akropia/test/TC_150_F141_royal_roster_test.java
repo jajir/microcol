@@ -36,7 +36,7 @@ public class TC_150_F141_royal_roster_test extends AbstractAkropiaTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         CongressPage congress = new CongressPage(getContext());
         // The fixture starts Conquistador with 6 infantry, 4 cavalry, 2
-        // artillery and 2 men-of-war, and 499 produced owls toward the next
+        // artillery and 2 war galleys, and 499 produced owls toward the next
         // unit.
         congress.open();
         congress.verifyRoyalForce(6, 4, 2, 2, 499);

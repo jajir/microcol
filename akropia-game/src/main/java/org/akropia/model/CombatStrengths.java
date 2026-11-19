@@ -36,10 +36,10 @@ public final class CombatStrengths {
                 && defender.isAtPlaceLocation()) {
             final CombatStrength attack = new CombatStrength(
                     shipBase(attacker.getType()), 50, 0, 0, 0, 0,
-                    privateerFounderBonus(attacker));
+                    seaRaiderFounderBonus(attacker));
             final CombatStrength defense = new CombatStrength(
                     shipBase(defender.getType()), 0, 0, 0, 0, 0,
-                    privateerFounderBonus(defender));
+                    seaRaiderFounderBonus(defender));
             return Optional.of(new CombatStrengths(attack, defense,
                     "NAVAL:" + attacker.getType().name() + ':'
                             + defender.getType().name()));
@@ -478,9 +478,9 @@ public final class CombatStrengths {
         final CombatStrength attack = new CombatStrength(fort, 0, 0, 0, 0, 0);
         final CombatStrength defense = new CombatStrength(
                 shipBase(ship.getType()), 0, 0, 0, 0, 0,
-                privateerFounderBonus(ship));
+                seaRaiderFounderBonus(ship));
         final String inputs = "COASTAL:" + fort + ':' + ship.getType().name()
-                + ':' + privateerFounderBonus(ship);
+                + ':' + seaRaiderFounderBonus(ship);
         return new CombatStrengths(attack, defense, inputs);
     }
 
@@ -541,21 +541,21 @@ public final class CombatStrengths {
             return 6;
         if (type == UnitType.GALLEON)
             return 10;
-        if (type == UnitType.PRIVATEER)
+        if (type == UnitType.SEA_RAIDER)
             return 8;
         if (type == UnitType.FRIGATE)
             return 16;
-        if (type == UnitType.MAN_OF_WAR)
+        if (type == UnitType.WAR_GALLEY)
             return 24;
         throw new IllegalArgumentException("Unsupported naval combatant");
     }
 
     /**
-     * Francis Drake adds +50% to privateers owned by a player who has recruited
+     * Francis Drake adds +50% to seaRaiders owned by a player who has recruited
      * him; opponents' Drake and other ships receive nothing.
      */
-    private static int privateerFounderBonus(final Unit unit) {
-        return unit.getType() == UnitType.PRIVATEER && unit.getOwner()
+    private static int seaRaiderFounderBonus(final Unit unit) {
+        return unit.getType() == UnitType.SEA_RAIDER && unit.getOwner()
                 .getCongressMembers().contains(Founder.FRANCIS_DRAKE) ? 50 : 0;
     }
 

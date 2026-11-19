@@ -170,11 +170,11 @@ public class TC_211_F242_map_editor_scenario_test extends AbstractAkropiaTest {
         editor.chooseTool("editorToolSelect");
         editor.clickTile(VILLAGE);
         editor.chooseSettlementForm(NativeNation.SIOUX, true,
-                UnitType.SEASONED_SCOUT);
+                UnitType.WAYFARER);
         editor.chooseSaveFile(file);
         editor.pressSave();
         editor.verifySavedSettlement(file, VILLAGE, NativeNation.SIOUX, true,
-                UnitType.SEASONED_SCOUT);
+                UnitType.WAYFARER);
         editor.verifySavedSettlementCount(file, 1);
         editor.captureDialog("mapEditor", "r0434-editor-capital.png");
 
@@ -196,7 +196,7 @@ public class TC_211_F242_map_editor_scenario_test extends AbstractAkropiaTest {
         editor.chooseNation(EuropeanNation.ENGLISH);
         editor.chooseUnit(UnitType.CARAVEL);
         editor.clickTile(SEA);
-        editor.chooseUnit(UnitType.SEASONED_SCOUT);
+        editor.chooseUnit(UnitType.WAYFARER);
         editor.clickTile(SCOUT);
 
         // A colonist cannot stand at sea.
@@ -210,7 +210,7 @@ public class TC_211_F242_map_editor_scenario_test extends AbstractAkropiaTest {
         editor.clickTile(SEA);
         editor.verifyUnitLabel(CARAVEL_ID, "Caravel #1");
         editor.choosePassenger(CARAVEL_ID, UnitType.COLONIST);
-        editor.choosePassenger(CARAVEL_ID, UnitType.HARDY_PIONEER);
+        editor.choosePassenger(CARAVEL_ID, UnitType.CULTIVATOR);
         editor.choosePassenger(CARAVEL_ID, UnitType.COLONIST);
         editor.verifyMessage(
                 "Nothing was changed. The ship has no free hold. [9, 4]");
@@ -235,8 +235,8 @@ public class TC_211_F242_map_editor_scenario_test extends AbstractAkropiaTest {
         editor.pressOpen();
         editor.verifySavedExpedition(file, EuropeanNation.ENGLISH, SEA,
                 UnitType.CARAVEL,
-                List.of(UnitType.COLONIST, UnitType.HARDY_PIONEER), SCOUT,
-                UnitType.SEASONED_SCOUT);
+                List.of(UnitType.COLONIST, UnitType.CULTIVATOR), SCOUT,
+                UnitType.WAYFARER);
         editor.chooseTool("editorToolSelect");
         editor.clickTile(SEA);
         editor.verifyUnitLabel(CARAVEL_ID, "Caravel #1");
@@ -247,7 +247,7 @@ public class TC_211_F242_map_editor_scenario_test extends AbstractAkropiaTest {
         editor.pressSave();
         editor.verifySavedExpedition(file, EuropeanNation.ENGLISH, SEA,
                 UnitType.CARAVEL, List.of(UnitType.COLONIST), SCOUT,
-                UnitType.SEASONED_SCOUT);
+                UnitType.WAYFARER);
     }
 
     @Test
@@ -279,7 +279,7 @@ public class TC_211_F242_map_editor_scenario_test extends AbstractAkropiaTest {
         editor.clickTile(VILLAGE);
         editor.chooseUnit(UnitType.CARAVEL);
         editor.clickTile(SEA);
-        editor.chooseUnit(UnitType.SEASONED_SCOUT);
+        editor.chooseUnit(UnitType.WAYFARER);
         editor.clickTile(SCOUT);
         editor.chooseTool("editorToolSelect");
         editor.clickTile(SEA);
@@ -297,7 +297,7 @@ public class TC_211_F242_map_editor_scenario_test extends AbstractAkropiaTest {
         // With a capital the saved scenario starts exactly as authored and
         // stays unchanged.
         editor.chooseSettlementForm(NativeNation.SIOUX, true,
-                UnitType.SEASONED_SCOUT);
+                UnitType.WAYFARER);
         editor.chooseSaveFile(file);
         editor.pressSave();
         final String saved = Files.readString(file.toPath(),
@@ -307,7 +307,7 @@ public class TC_211_F242_map_editor_scenario_test extends AbstractAkropiaTest {
         editor.verifyStartedGame(EuropeanNation.SPANISH, 12, 10, SEA,
                 UnitType.CARAVEL,
                 List.of(UnitType.COLONIST, UnitType.EXPERT_FARMER), SCOUT,
-                UnitType.SEASONED_SCOUT, VILLAGE, NativeNation.SIOUX);
+                UnitType.WAYFARER, VILLAGE, NativeNation.SIOUX);
         editor.verifyFileContent(file, saved);
 
         // Two whole turns keep the authored expedition, the passengers and

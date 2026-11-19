@@ -36,8 +36,8 @@ class KingRobotDispatchTest {
             turns.nextRoyalTurn();
 
             final RoyalRoster crown = turns.king.getRoyalRoster();
-            assertEquals(2, crown.getCount(Family.MAN_OF_WAR, State.SHIPPED));
-            assertEquals(0, crown.getCount(Family.MAN_OF_WAR, State.RESERVE));
+            assertEquals(2, crown.getCount(Family.WAR_GALLEY, State.SHIPPED));
+            assertEquals(0, crown.getCount(Family.WAR_GALLEY, State.RESERVE));
             assertEquals(0, reserveGround(crown));
             assertEquals(12, shippedGround(crown));
             // Every shipped member is exactly one live unit, and no unit of the
@@ -57,8 +57,8 @@ class KingRobotDispatchTest {
             turns.nextRoyalTurn();
 
             final RoyalRoster crown = turns.king.getRoyalRoster();
-            assertEquals(2, crown.getCount(Family.MAN_OF_WAR, State.RESERVE));
-            assertEquals(0, crown.getCount(Family.MAN_OF_WAR, State.SHIPPED));
+            assertEquals(2, crown.getCount(Family.WAR_GALLEY, State.RESERVE));
+            assertEquals(0, crown.getCount(Family.WAR_GALLEY, State.SHIPPED));
             assertEquals(12, reserveGround(crown));
             assertTrue(turns.king.getAllUnits().isEmpty());
             assertNull(turns.king.getExtraData().get("refWasSend"));
@@ -82,9 +82,9 @@ class KingRobotDispatchTest {
             final RoyalRoster crown = turns.king.getRoyalRoster();
             assertFalse(crown.hasSailed());
             assertEquals(12, reserveGround(crown));
-            assertEquals(2, crown.getCount(Family.MAN_OF_WAR, State.RESERVE));
+            assertEquals(2, crown.getCount(Family.WAR_GALLEY, State.RESERVE));
             assertTrue(turns.king.getAllUnits().stream()
-                    .noneMatch(unit -> unit.getType() == UnitType.MAN_OF_WAR));
+                    .noneMatch(unit -> unit.getType() == UnitType.WAR_GALLEY));
         }
     }
 }

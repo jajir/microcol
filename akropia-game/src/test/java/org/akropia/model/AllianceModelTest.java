@@ -623,27 +623,27 @@ class AllianceModelTest {
     }
 
     @Test
-    void alliedShipsAndPrivateersCannotFightEachOther() {
+    void alliedShipsAndSeaRaidersCannotFightEachOther() {
         final ModelPo data = data("Dutch");
         relate(data, "Dutch", "France", EuropeanRelationState.ALLIANCE);
-        final Model privateer = ships(data, "Dutch", UnitType.PRIVATEER,
+        final Model seaRaider = ships(data, "Dutch", UnitType.SEA_RAIDER,
                 UnitType.FRIGATE, "France");
-        assertFalse(privateer.isPrivateerNavalException(
-                privateer.getUnitById(3), privateer.getUnitById(100)));
+        assertFalse(seaRaider.isSeaRaiderNavalException(
+                seaRaider.getUnitById(3), seaRaider.getUnitById(100)));
         assertTrue(
-                privateer.getUnitById(3).prepareAttack(TARGET, true).isEmpty());
-        assertFalse(privateer.getUnitById(3).isPossibleToAttackAt(TARGET));
+                seaRaider.getUnitById(3).prepareAttack(TARGET, true).isEmpty());
+        assertFalse(seaRaider.getUnitById(3).isPossibleToAttackAt(TARGET));
         final ModelPo counter = data("Dutch");
         relate(counter, "Dutch", "France", EuropeanRelationState.ALLIANCE);
         final Model frigate = ships(counter, "Dutch", UnitType.FRIGATE,
-                UnitType.PRIVATEER, "France");
+                UnitType.SEA_RAIDER, "France");
         assertTrue(
                 frigate.getUnitById(3).prepareAttack(TARGET, false).isEmpty());
-        // Without the alliance the same privateer exception still applies.
+        // Without the alliance the same seaRaider exception still applies.
         final Model open = ships(data("Dutch"), "Dutch", UnitType.FRIGATE,
-                UnitType.PRIVATEER, "France");
+                UnitType.SEA_RAIDER, "France");
         assertTrue(open.getUnitById(3).prepareAttack(TARGET, false)
-                .orElseThrow().isPrivateerException());
+                .orElseThrow().isSeaRaiderException());
     }
 
     @Test
@@ -729,10 +729,10 @@ class AllianceModelTest {
     }
 
     @Test
-    void privateerAttackRecordsHistoryWithoutWarOrDefenseCascade() {
+    void seaRaiderAttackRecordsHistoryWithoutWarOrDefenseCascade() {
         final ModelPo data = data("Dutch", "Spain");
         relate(data, "France", "Spain", EuropeanRelationState.ALLIANCE);
-        final Model model = ships(data, "Dutch", UnitType.PRIVATEER,
+        final Model model = ships(data, "Dutch", UnitType.SEA_RAIDER,
                 UnitType.FRIGATE, "France");
         model.getUnitById(3).prepareAttack(TARGET, false).orElseThrow()
                 .execute();

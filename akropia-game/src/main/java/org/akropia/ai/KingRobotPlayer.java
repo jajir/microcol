@@ -29,8 +29,8 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
 
     private final static float KINGS_MILITARY_STREGTH_GAME_OVER = 5;
 
-    /** Holds of one man-of-war, the most it can carry in one wave. */
-    private final static int CARRIER_HOLDS = UnitType.MAN_OF_WAR
+    /** Holds of one war galley, the most it can carry in one wave. */
+    private final static int CARRIER_HOLDS = UnitType.WAR_GALLEY
             .getCargoCapacity();
 
     private final SimpleUnitBehavior simpleUnitBehavior = new SimpleUnitBehavior();
@@ -55,7 +55,7 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
     /**
      * The existing campaign rule: after the expedition was sent, a Crown whose
      * military strength falls below the limit is conquered. A Crown that still
-     * has reserve ground units and a man-of-war to bring them is not conquered,
+     * has reserve ground units and a war galley to bring them is not conquered,
      * because that army is still on its way. A reserve stranded without any
      * carrier does not hold the rule back. This is not a victory rule of its
      * own; the mission reads the same flag as before.
@@ -124,7 +124,7 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
     }
 
     /**
-     * Each reserve man-of-war with a reserve ground unit sails this royal turn.
+     * Each reserve war galley with a reserve ground unit sails this royal turn.
      * The model checks every condition and creates the passengers from the
      * roster, so this only asks for the dispatch that is allowed.
      */
@@ -145,7 +145,7 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
     private void reloadReturnedShips() {
         for (final Unit unit : king.getAllUnits()) {
             if (unit instanceof UnitWithCargo
-                    && unit.getType() == UnitType.MAN_OF_WAR
+                    && unit.getType() == UnitType.WAR_GALLEY
                     && unit.isAtEuropePort() && getModel()
                             .canReloadRoyalShip(king, (UnitWithCargo) unit)) {
                 getModel().reloadRoyalShip(king, (UnitWithCargo) unit);
@@ -195,7 +195,7 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
     }
 
     /**
-     * Choose and sail toward the landing target of one man-of-war. The
+     * Choose and sail toward the landing target of one war galley. The
      * remembered target stays while the Crown still knows it as a rebel coastal
      * colony with a legal landing; otherwise the nearest known one is chosen.
      * The route is searched once this turn. A turn without a route is counted,
@@ -259,7 +259,7 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
 
     /**
      * @param known    colonies the Crown may target
-     * @param ship     required carrying man-of-war
+     * @param ship     required carrying war galley
      * @param excluded colony that must not be chosen, if any
      * @return the known colony nearest to the ship; ties go to the lower
      *         identity, then to the lower coordinates
@@ -359,7 +359,7 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
                         && member.getState() == RoyalRoster.State.RESERVE)
                 .count();
         final long homeward = king.getAllUnits().stream()
-                .filter(unit -> unit.getType() == UnitType.MAN_OF_WAR
+                .filter(unit -> unit.getType() == UnitType.WAR_GALLEY
                         && roster.findByUnitId(unit.getId()).isPresent())
                 .filter(unit -> unit.isAtEuropePort()
                         || unit.getPlace() instanceof PlaceHighSea

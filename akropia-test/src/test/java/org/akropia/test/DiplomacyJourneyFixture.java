@@ -51,8 +51,8 @@ import com.google.gson.JsonObject;
  * <p>
  * Variants: {@link Variant#HOSTILE} makes the Aztecs hostile toward the Dutch
  * and leaves one armed soldier beside the brave and nothing else near the
- * capital; {@link Variant#PRIVATEER} leaves a Dutch privateer beside the French
- * galleon and nothing else near the capital.
+ * capital; {@link Variant#SEA_RAIDER} leaves a Dutch seaRaider beside the
+ * French galleon and nothing else near the capital.
  * </p>
  */
 final class DiplomacyJourneyFixture {
@@ -62,8 +62,8 @@ final class DiplomacyJourneyFixture {
         JOURNEY,
         /** Hostile Aztecs raid an armed soldier beside their brave. */
         HOSTILE,
-        /** A privateer attacks a foreign ship without declaring war. */
-        PRIVATEER
+        /** A seaRaider attacks a foreign ship without declaring war. */
+        SEA_RAIDER
     }
 
     static final int SCOUT = 300;
@@ -76,7 +76,7 @@ final class DiplomacyJourneyFixture {
     static final int FRIGATE = ForeignColonyTradePage.SHIP_ID;
     static final int FORT_WORKER = 360;
     static final int RAID_SOLDIER = 370;
-    static final int PRIVATEER_SHIP = 380;
+    static final int SEA_RAIDER_SHIP = 380;
     static final int AZTEC_BRAVE = 200;
     static final int FRENCH_GALLEON = 106;
 
@@ -99,7 +99,7 @@ final class DiplomacyJourneyFixture {
     static final Location FRIGATE_AT = Location.of(27, 16);
     static final Location GALLEON_AT = Location.of(28, 16);
     static final Location HIDDEN_QUEBEC_AT = Location.of(28, 17);
-    static final Location PRIVATEER_AT = Location.of(27, 15);
+    static final Location SEA_RAIDER_AT = Location.of(27, 15);
 
     static final int DUTCH_GOLD = 2000;
     static final int FRENCH_GOLD = 1000;
@@ -124,7 +124,7 @@ final class DiplomacyJourneyFixture {
 
     /**
      * Smallest saved state whose first eight draws are all below 0.2: the
-     * incitement succeeds at 25%, and the brave, the soldier and the privateer
+     * incitement succeeds at 25%, and the brave, the soldier and the seaRaider
      * win their battles at any odds above 0.2. It runs only while the fixture
      * is prepared and follows the model's own stream.
      */
@@ -162,7 +162,7 @@ final class DiplomacyJourneyFixture {
             units.add(colonist(RAID_SOLDIER, "Dutch", RAID_SOLDIER_AT, true,
                     false, false));
         } else {
-            units.add(ship(PRIVATEER_SHIP, "PRIVATEER", PRIVATEER_AT));
+            units.add(ship(SEA_RAIDER_SHIP, "SEA_RAIDER", SEA_RAIDER_AT));
         }
         final File prepared = new File(System.getProperty("user.home"), name);
         Files.writeString(prepared.toPath(), saved.toString());

@@ -29,15 +29,15 @@ class UnitSightTest {
                 Arguments.of(UnitType.INDENTURED_SERVANT, 1),
                 Arguments.of(UnitType.PETTY_CRIMINAL, 1),
                 Arguments.of(UnitType.MASTER_BLACKSMITH, 1),
-                Arguments.of(UnitType.SEASONED_SCOUT, 2),
+                Arguments.of(UnitType.WAYFARER, 2),
                 Arguments.of(UnitType.ARTILLERY, 1),
                 Arguments.of(UnitType.WAGON, 1),
                 Arguments.of(UnitType.CARAVEL, 2),
                 Arguments.of(UnitType.MERCHANTMAN, 2),
                 Arguments.of(UnitType.GALLEON, 2),
-                Arguments.of(UnitType.PRIVATEER, 2),
+                Arguments.of(UnitType.SEA_RAIDER, 2),
                 Arguments.of(UnitType.FRIGATE, 2),
-                Arguments.of(UnitType.MAN_OF_WAR, 2));
+                Arguments.of(UnitType.WAR_GALLEY, 2));
     }
 
     private Unit unit(final UnitType type, final Location center,

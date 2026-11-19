@@ -63,13 +63,13 @@ public class TC_22_F15_free_play_capability_audit_test
         FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         audit.verifyPurchaseOffers(java.util.List.of("Free Colonist",
                 "Artillery", "Frigate", "Galleon", "Caravel", "Merchantman",
-                "Privateer", "Expert Farmer", "Expert Fisherman",
+                "Sea Raider", "Expert Farmer", "Expert Fisherman",
                 "Expert Clay Digger", "Expert Silver Miner",
                 "Expert Lumberjack", "Expert Ore Miner", "Master Carpenter",
                 "Master Oil Maker", "Master Weaver", "Master Winemaker",
                 "Master Potter", "Master Blacksmith", "Master Weaponsmith",
-                "Firebrand Preacher", "Elder Statesman", "Seasoned Scout",
-                "Hardy Pioneer", "Veteran Soldier", "Jesuit Missionary"));
+                "Orfický telestés", "Philosopher", "Wayfarer", "Cultivator",
+                "Veteran Soldier", "Jesuit Missionary"));
         // Cancel the offer list without spending money.
         audit.closePurchaseDialog();
         europe.verifyGold(10000);

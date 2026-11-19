@@ -26,7 +26,7 @@ public final class RoyalRoster {
     /** Each ship covers this many ground units. */
     private static final int GROUND_PER_SHIP = 6;
 
-    /** Men-of-war of the starting force, before any growth. */
+    /** War Galleys of the starting force, before any growth. */
     private static final int START_SHIPS = 2;
 
     /**
@@ -44,7 +44,7 @@ public final class RoyalRoster {
         /** Crown regular infantry, the {@link MilitaryRole#ROYAL} infantry. */
         INFANTRY(true),
         /** Crown regular cavalry, the {@link MilitaryRole#ROYAL} cavalry. */
-        CAVALRY(true), ARTILLERY(true), MAN_OF_WAR(false);
+        CAVALRY(true), ARTILLERY(true), WAR_GALLEY(false);
 
         private final boolean ground;
 
@@ -61,7 +61,7 @@ public final class RoyalRoster {
 
         /**
          * @return chart base of this family from the shared Crown role
-         * @throws IllegalStateException for artillery and men-of-war, which
+         * @throws IllegalStateException for artillery and war galleys, which
          *                               have no chart base
          */
         public int getChartBase() {
@@ -82,7 +82,7 @@ public final class RoyalRoster {
 
     /**
      * One roster member with its stable identity. A shipped member names the
-     * unit that carries it; a shipped man-of-war may also name its colony
+     * unit that carries it; a shipped war galley may also name its colony
      * target and count its unsuccessful turns.
      */
     public static final class Member {
@@ -120,7 +120,7 @@ public final class RoyalRoster {
         }
 
         /**
-         * @return colony chosen as the landing target of this man-of-war, empty
+         * @return colony chosen as the landing target of this war galley, empty
          *         when none is chosen
          */
         public Optional<Integer> getTargetColonyId() {
@@ -162,7 +162,7 @@ public final class RoyalRoster {
 
     /**
      * Start with the fresh roster of this difficulty: {@code 4+d} royal
-     * infantry, {@code 2+d} cavalry, two artillery and two men-of-war, where
+     * infantry, {@code 2+d} cavalry, two artillery and two war galleys, where
      * {@code d} is the difficulty index.
      *
      * @param difficulty required selected difficulty
@@ -178,7 +178,7 @@ public final class RoyalRoster {
         addSaved(saved, Family.INFANTRY, 4 + index);
         addSaved(saved, Family.CAVALRY, 2 + index);
         addSaved(saved, Family.ARTILLERY, 2);
-        addSaved(saved, Family.MAN_OF_WAR, START_SHIPS);
+        addSaved(saved, Family.WAR_GALLEY, START_SHIPS);
         po.setMembers(saved);
         return po;
     }
@@ -243,8 +243,8 @@ public final class RoyalRoster {
 
     /**
      * A shipped member is bound to exactly one unit; every other member has no
-     * unit. A transport target and its retry count belong to a shipped
-     * man-of-war only.
+     * unit. A transport target and its retry count belong to a shipped war
+     * galley only.
      */
     private static void checkBindings(final List<Member> members) {
         final Set<Integer> units = new HashSet<>();
@@ -255,11 +255,11 @@ public final class RoyalRoster {
                             && units.add(member.unitId) : member.unitId == null,
                     "Invalid Crown unit binding");
             final boolean transporting = shipped
-                    && member.family == Family.MAN_OF_WAR;
+                    && member.family == Family.WAR_GALLEY;
             Preconditions.checkArgument(
                     transporting || member.targetColonyId == null
                             && member.blockedTurns == 0,
-                    "Crown transport state needs a shipped man-of-war");
+                    "Crown transport state needs a shipped war galley");
             Preconditions.checkArgument(
                     member.targetColonyId == null || member.targetColonyId >= 0,
                     "Invalid Crown transport target");
@@ -380,7 +380,7 @@ public final class RoyalRoster {
                                 + grownCount(growth, 1)
                         && count(members, Family.ARTILLERY) == 2L
                                 + grownCount(growth, 2)
-                        && count(members, Family.MAN_OF_WAR) == expectedShips(
+                        && count(members, Family.WAR_GALLEY) == expectedShips(
                                 difficulty, growth),
                 "Crown families do not match its starting force and growth");
     }
@@ -453,7 +453,7 @@ public final class RoyalRoster {
             ground++;
             added.add(newMember(id++, family));
             while (ground > GROUND_PER_SHIP * ships) {
-                added.add(newMember(id++, Family.MAN_OF_WAR));
+                added.add(newMember(id++, Family.WAR_GALLEY));
                 ships++;
             }
         }
@@ -545,12 +545,12 @@ public final class RoyalRoster {
 
     /**
      * @return whether reserve ground members can still reach the colonies: some
-     *         man-of-war is in reserve or afloat. A reserve whose carriers are
+     *         war galley is in reserve or afloat. A reserve whose carriers are
      *         all lost is stranded and no longer counts as a force on its way.
      */
     public boolean hasDeliverableReserve() {
         return hasReserveGround() && members.stream()
-                .anyMatch(member -> member.family == Family.MAN_OF_WAR
+                .anyMatch(member -> member.family == Family.WAR_GALLEY
                         && (member.state == State.RESERVE
                                 || member.state == State.SHIPPED));
     }
@@ -584,20 +584,20 @@ public final class RoyalRoster {
     }
 
     /**
-     * Ground members that a man-of-war would load now, in cycle order. The
+     * Ground members that a war galley would load now, in cycle order. The
      * cycle takes the next family with reserve members and each family in turn;
      * the lowest identity of a family is loaded first. Nothing changes.
      *
      * @param capacity   maximal number of passengers, at least one
-     * @param shipMember identity of the reserve man-of-war
+     * @param shipMember identity of the reserve war galley
      * @return passengers to ship in this order; empty when none is reserved
-     * @throws IllegalStateException when the member is not a reserve man-of-war
+     * @throws IllegalStateException when the member is not a reserve war galley
      */
     List<Member> planPassengers(final int capacity, final int shipMember) {
         final Member ship = find(shipMember);
         Preconditions.checkState(
-                ship.family == Family.MAN_OF_WAR && ship.state == State.RESERVE,
-                "Only a reserve man-of-war can sail");
+                ship.family == Family.WAR_GALLEY && ship.state == State.RESERVE,
+                "Only a reserve war galley can sail");
         return planPassengers(capacity);
     }
 
@@ -650,7 +650,7 @@ public final class RoyalRoster {
     }
 
     /**
-     * Save the landing target and retry count of a shipped man-of-war. A target
+     * Save the landing target and retry count of a shipped war galley. A target
      * is an identity only, and the retry count stays below the limit.
      *
      * @param unitId       identity of the carrying unit
@@ -661,8 +661,8 @@ public final class RoyalRoster {
             final int blockedTurns) {
         final Member member = findByUnitId(unitId).orElseThrow(
                 () -> new IllegalArgumentException("Unknown Crown ship"));
-        Preconditions.checkState(member.family == Family.MAN_OF_WAR,
-                "Only a Crown man-of-war has a transport plan");
+        Preconditions.checkState(member.family == Family.WAR_GALLEY,
+                "Only a Crown war galley has a transport plan");
         Preconditions.checkArgument(
                 blockedTurns >= 0
                         && blockedTurns < BLOCKED_TURNS_BEFORE_RETARGET

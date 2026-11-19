@@ -78,8 +78,8 @@ class UnitArtworkTest {
     @Test
     void shipSailsUseTheHeightOfTheMapTile() {
         for (final UnitType type : List.of(UnitType.FRIGATE, UnitType.GALLEON,
-                UnitType.CARAVEL, UnitType.MERCHANTMAN, UnitType.PRIVATEER,
-                UnitType.MAN_OF_WAR)) {
+                UnitType.CARAVEL, UnitType.MERCHANTMAN, UnitType.SEA_RAIDER,
+                UnitType.WAR_GALLEY)) {
             final Image image = images.getUnitImage(type);
             int highest = 45;
             int lowest = -1;
@@ -99,8 +99,8 @@ class UnitArtworkTest {
             }
             assertTrue(highest <= 4 && lowest >= 39,
                     type.name() + " uses the tile height");
-            if (type != UnitType.PRIVATEER) {
-                assertTrue(sail >= (type == UnitType.MAN_OF_WAR ? 45 : 130),
+            if (type != UnitType.SEA_RAIDER) {
+                assertTrue(sail >= (type == UnitType.WAR_GALLEY ? 45 : 130),
                         type.name() + " retains a substantial cream sail");
             }
         }

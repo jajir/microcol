@@ -127,10 +127,10 @@ class RebellionLossTest {
         return po;
     }
 
-    /** Men-of-war and Continental soldiers that an intervention delivered. */
+    /** War Galleys and Continental soldiers that an intervention delivered. */
     private static long helpUnits(final Player owner) {
         return owner.getAllUnits().stream()
-                .filter(unit -> unit.getType() == UnitType.MAN_OF_WAR
+                .filter(unit -> unit.getType() == UnitType.WAR_GALLEY
                         || unit instanceof UnitFreeColonist
                                 && ((UnitFreeColonist) unit)
                                         .isInterventionDelivered())

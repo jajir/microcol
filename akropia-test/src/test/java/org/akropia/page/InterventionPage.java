@@ -74,7 +74,7 @@ public final class InterventionPage extends AbstractScreen {
                 "The arrival update must show a turn report");
         report.get().verifyThatAtLeastOneEventMessageContains(
                 "Foreign intervention arrived at " + colonyName
-                        + ": two men-of-war, four Continental infantry and two Continental cavalry.");
+                        + ": two war galleys, four Continental infantry and two Continental cavalry.");
     }
 
     /** A later update has no second arrival notice. */
@@ -85,7 +85,7 @@ public final class InterventionPage extends AbstractScreen {
 
     /**
      * The delivered forces stand on the port as rebel-controlled units: the
-     * given number of men-of-war, infantry and cavalry. Every Continental
+     * given number of war galleys, infantry and cavalry. Every Continental
      * soldier is a rebel Continental, armed, and marked as delivered by
      * intervention.
      */
@@ -96,7 +96,7 @@ public final class InterventionPage extends AbstractScreen {
                 .filter(unit -> unit.getOwner() == owner)
                 .collect(Collectors.toList());
         assertEquals(ships, atPort.stream()
-                .filter(unit -> unit.getType() == UnitType.MAN_OF_WAR).count());
+                .filter(unit -> unit.getType() == UnitType.WAR_GALLEY).count());
         final List<UnitFreeColonist> soldiers = atPort.stream()
                 .filter(unit -> unit instanceof UnitFreeColonist)
                 .map(unit -> (UnitFreeColonist) unit)
@@ -115,7 +115,7 @@ public final class InterventionPage extends AbstractScreen {
     private List<Unit> deliveredForces() {
         final Player owner = getModel().getCurrentPlayer();
         return owner.getAllUnits().stream()
-                .filter(unit -> unit.getType() == UnitType.MAN_OF_WAR
+                .filter(unit -> unit.getType() == UnitType.WAR_GALLEY
                         || unit instanceof UnitFreeColonist
                                 && ((UnitFreeColonist) unit)
                                         .isInterventionDelivered())
@@ -147,7 +147,7 @@ public final class InterventionPage extends AbstractScreen {
     }
 
     /**
-     * Nothing was delivered: the nation owns no man-of-war and no soldier from
+     * Nothing was delivered: the nation owns no war galley and no soldier from
      * the intervention, and the arrival was not recorded.
      */
     public void verifyNothingDelivered() {

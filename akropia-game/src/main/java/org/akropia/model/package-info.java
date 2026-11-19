@@ -52,7 +52,7 @@
  * credits it once per update. Each Crown's RoyalRoster holds its prewar force
  * (identities, reserve/shipped/destroyed state, owl remainder) and grows from
  * the same produced owls until the colonial nation declares independence. Model
- * dispatches a reserve man-of-war with its ground passengers as real units
+ * dispatches a reserve war galley with its ground passengers as real units
  * bound to their roster members; a surviving empty carrier that returned to the
  * European port is reloaded with the remaining reserve through the same
  * Atlantic voyage, without a new ship. A bound unit's loss is recorded once as

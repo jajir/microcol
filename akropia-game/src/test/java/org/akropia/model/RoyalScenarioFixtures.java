@@ -106,10 +106,10 @@ public final class RoyalScenarioFixtures {
 
     /**
      * A war that is already under way. The Crown has the Governor force of
-     * fourteen ground members and two men-of-war, but only the named members
+     * fourteen ground members and two war galleys, but only the named members
      * survive: the reserve waits in Europe, the aboard members sit in the hold
      * of the carrier, and every other ground member and the second ship are
-     * lost. The carrier is the first man-of-war, or lost as well.
+     * lost. The carrier is the first war galley, or lost as well.
      *
      * @param carrierAt       sea square of the carrier on the map, or
      *                        {@code null} for the European port
@@ -129,7 +129,7 @@ public final class RoyalScenarioFixtures {
         final RoyalRosterPo roster = RoyalRoster.initial(Difficulty.GOVERNOR);
         boolean firstShip = true;
         for (final RoyalMemberPo member : roster.getMembers()) {
-            if (member.getFamily() == Family.MAN_OF_WAR) {
+            if (member.getFamily() == Family.WAR_GALLEY) {
                 if (firstShip && carrierSurvives) {
                     member.setState(State.SHIPPED);
                     member.setUnitId(CARRIER_ID);
@@ -160,7 +160,7 @@ public final class RoyalScenarioFixtures {
     /**
      * Every way the Crown's deployed force could differ from its roster. Each
      * shipped member names one live unit of the Crown with its own family, no
-     * unit is named twice, and the Crown has no man-of-war or royal regular
+     * unit is named twice, and the Crown has no war galley or royal regular
      * outside the roster. Other Crown units are allowed: they are colonists,
      * soldiers and guns taken with a captured colony, which never become royal
      * forces.
@@ -196,8 +196,8 @@ public final class RoyalScenarioFixtures {
             if (bound.contains(unit.getId())) {
                 continue;
             }
-            if (unit.getType() == UnitType.MAN_OF_WAR) {
-                out.add("man-of-war " + unit.getId()
+            if (unit.getType() == UnitType.WAR_GALLEY) {
+                out.add("war galley " + unit.getId()
                         + " is outside the roster");
             }
             if (unit instanceof UnitFreeColonist && ((UnitFreeColonist) unit)
@@ -223,8 +223,8 @@ public final class RoyalScenarioFixtures {
 
     private static boolean isFamily(final Family family, final Unit unit) {
         switch (family) {
-        case MAN_OF_WAR:
-            return unit.getType() == UnitType.MAN_OF_WAR;
+        case WAR_GALLEY:
+            return unit.getType() == UnitType.WAR_GALLEY;
         case ARTILLERY:
             return unit instanceof UnitArtillery;
         case INFANTRY:
@@ -259,9 +259,9 @@ public final class RoyalScenarioFixtures {
         final UnitPo ship = new UnitPo();
         ship.setId(CARRIER_ID);
         ship.setOwnerId(KING);
-        ship.setType(UnitType.MAN_OF_WAR);
+        ship.setType(UnitType.WAR_GALLEY);
         ship.setAction(new UnitActionNoAction().save());
-        ship.setAvailableMoves(UnitType.MAN_OF_WAR.getSpeed());
+        ship.setAvailableMoves(UnitType.WAR_GALLEY.getSpeed());
         ship.setDepartureLocation(Location.of(49, 15));
         ship.setDepartureDirection(Direction.east);
         if (at == null) {

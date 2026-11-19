@@ -29,11 +29,11 @@ import com.google.gson.JsonObject;
  * <p>
  * Changes, all legal saved data: the game is scored free play on the Discoverer
  * profile, so the royal force is the fresh Discoverer roster of four infantry,
- * two cavalry, two artillery and two men-of-war and the intervention target is
+ * two cavalry, two artillery and two war galleys and the intervention target is
  * ceil(500 x 75 / 100) = 375 owls; the calendar stands at turn 698, spring
  * 1747; the Dutch hold 1,500 gold, below the 5,000 at which mercenaries are
  * offered; every colony holds 762 liberty of its 1,600, which is 47 percent,
- * and its three elder statesmen work in the town hall, with a newspaper; every
+ * and its three philosophers work in the town hall, with a newspaper; every
  * colony stores 100 grain, so the two derived updates can neither starve a
  * resident nor reach the 200 of a birth; New Amsterdam has a completed custom
  * house and a warehouse that stores 200, with 160 ore; colonies 0, 1 and 2 hold
@@ -86,7 +86,7 @@ final class IndependenceJourneyFixture {
     /** Starting force of the Discoverer profile: ids run in this order. */
     private static final String[] ROSTER = { "INFANTRY", "INFANTRY", "INFANTRY",
             "INFANTRY", "CAVALRY", "CAVALRY", "ARTILLERY", "ARTILLERY",
-            "MAN_OF_WAR", "MAN_OF_WAR" };
+            "WAR_GALLEY", "WAR_GALLEY" };
 
     private IndependenceJourneyFixture() {
     }
@@ -144,7 +144,7 @@ final class IndependenceJourneyFixture {
                             if (unit.getAsJsonObject().get("id")
                                     .getAsInt() == worker) {
                                 unit.getAsJsonObject().addProperty("type",
-                                        "ELDER_STATESMAN");
+                                        "PHILOSOPHER");
                             }
                         }
                     }

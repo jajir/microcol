@@ -12,8 +12,8 @@ class AtlanticVoyageDurationTest {
         final int[] fastEastOut = { 1, 1, 2 };
         final int[] fastWestOutOrInbound = { 1, 2, 3 };
         final UnitType[] ships = { UnitType.CARAVEL, UnitType.MERCHANTMAN,
-                UnitType.GALLEON, UnitType.PRIVATEER, UnitType.FRIGATE,
-                UnitType.MAN_OF_WAR };
+                UnitType.GALLEON, UnitType.SEA_RAIDER, UnitType.FRIGATE,
+                UnitType.WAR_GALLEY };
         for (final UnitType ship : ships) {
             for (int index = 0; index < 3; index++) {
                 final int weather = index - 1;

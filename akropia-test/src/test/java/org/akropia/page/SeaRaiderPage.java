@@ -12,9 +12,9 @@ import org.akropia.model.MovementPoints;
 import org.akropia.model.UnitType;
 import org.akropia.model.unit.Ship;
 
-/** Observe diplomatic state after the actual privateer controls. */
-public final class PrivateerPage extends AbstractScreen {
-    public PrivateerPage(TestContext context) {
+/** Observe diplomatic state after the actual seaRaider controls. */
+public final class SeaRaiderPage extends AbstractScreen {
+    public SeaRaiderPage(TestContext context) {
         super(context);
     }
 
@@ -35,7 +35,7 @@ public final class PrivateerPage extends AbstractScreen {
                 unit.getAsJsonObject("cargo").getAsJsonArray("slots")
                         .add(new JsonObject());
             } else if (unit.get("id").getAsInt() == 6) {
-                unit.addProperty("type", "PRIVATEER");
+                unit.addProperty("type", "SEA_RAIDER");
                 unit.addProperty("movementThirds", MovementPoints.ofPoints(8));
                 JsonArray slots = new JsonArray();
                 JsonObject goods = new JsonObject();
@@ -48,7 +48,7 @@ public final class PrivateerPage extends AbstractScreen {
                 unit.getAsJsonObject("cargo").add("slots", slots);
             }
         }
-        Path file = Files.createTempFile("privateer-counterattack-",
+        Path file = Files.createTempFile("seaRaider-counterattack-",
                 ".akropia");
         try {
             Files.writeString(file, gson.toJson(game));

@@ -30,8 +30,8 @@ class ShipRosterTest {
     @Test
     void registeredShipsHaveSpecifiedMovementCargoAndPurchaseRules() {
         UnitType[] types = { UnitType.CARAVEL, UnitType.MERCHANTMAN,
-                UnitType.GALLEON, UnitType.PRIVATEER, UnitType.FRIGATE,
-                UnitType.MAN_OF_WAR };
+                UnitType.GALLEON, UnitType.SEA_RAIDER, UnitType.FRIGATE,
+                UnitType.WAR_GALLEY };
         int[] moves = { 4, 5, 6, 8, 6, 6 };
         int[] holds = { 2, 4, 6, 2, 4, 6 };
         int[] prices = { 1000, 2000, 5000, 2000, 4000, 0 };
@@ -53,9 +53,9 @@ class ShipRosterTest {
         buyer.setGold(10_000);
         int count = model.getAllUnits().size();
         int gold = buyer.getGold();
-        assertFalse(buyer.canBuyUnit(UnitType.MAN_OF_WAR));
+        assertFalse(buyer.canBuyUnit(UnitType.WAR_GALLEY));
         assertThrows(IllegalArgumentException.class,
-                () -> buyer.buy(UnitType.MAN_OF_WAR));
+                () -> buyer.buy(UnitType.WAR_GALLEY));
         assertEquals(count, model.getAllUnits().size());
         assertEquals(gold, buyer.getGold());
         for (UnitType type : types) {
@@ -67,8 +67,8 @@ class ShipRosterTest {
     @Test
     void allShipClassesRestoreCargoAndDepartureIdentity() {
         for (UnitType type : new UnitType[] { UnitType.CARAVEL,
-                UnitType.MERCHANTMAN, UnitType.GALLEON, UnitType.PRIVATEER,
-                UnitType.FRIGATE, UnitType.MAN_OF_WAR }) {
+                UnitType.MERCHANTMAN, UnitType.GALLEON, UnitType.SEA_RAIDER,
+                UnitType.FRIGATE, UnitType.WAR_GALLEY }) {
             ModelPo saved = scenario();
             UnitPo ship = saved.getUnits().stream().filter(u -> u.getId() == 3)
                     .findFirst().orElseThrow();
@@ -122,7 +122,7 @@ class ShipRosterTest {
     @Test
     void newEuropeanShipsPurchaseAtPriceAndRejectInsufficientFunds() {
         for (UnitType type : new UnitType[] { UnitType.CARAVEL,
-                UnitType.MERCHANTMAN, UnitType.PRIVATEER }) {
+                UnitType.MERCHANTMAN, UnitType.SEA_RAIDER }) {
             Model model = load(scenario());
             Player buyer = model.getPlayerByName("Dutch");
             buyer.setGold(type.getEuropePrice());
@@ -147,8 +147,8 @@ class ShipRosterTest {
     @Test
     void eachFullHoldRejectsAnotherPassengerWithoutMutation() {
         for (UnitType type : new UnitType[] { UnitType.CARAVEL,
-                UnitType.MERCHANTMAN, UnitType.GALLEON, UnitType.PRIVATEER,
-                UnitType.FRIGATE, UnitType.MAN_OF_WAR }) {
+                UnitType.MERCHANTMAN, UnitType.GALLEON, UnitType.SEA_RAIDER,
+                UnitType.FRIGATE, UnitType.WAR_GALLEY }) {
             ModelPo saved = scenario();
             UnitPo ship = saved.getUnits().stream().filter(u -> u.getId() == 3)
                     .findFirst().orElseThrow();
@@ -244,7 +244,7 @@ class ShipRosterTest {
                         load(scenario()).getPlayerByName("Dutch's King")));
         assertEquals(count, model.getAllUnits().size());
         Ship royal = (Ship) model.createCargoShipForKing(king);
-        assertSame(UnitType.MAN_OF_WAR, royal.getType());
+        assertSame(UnitType.WAR_GALLEY, royal.getType());
         assertSame(king, royal.getOwner());
         assertEquals(count + 1, model.getAllUnits().size());
     }

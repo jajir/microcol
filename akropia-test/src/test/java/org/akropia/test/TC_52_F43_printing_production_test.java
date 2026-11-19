@@ -31,7 +31,7 @@ public class TC_52_F43_printing_production_test extends AbstractAkropiaTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
         PrintingProductionPage owls = new PrintingProductionPage(getContext());
-        // Two ordinary statesmen plus the unattended owl produce seven.
+        // Two ordinary philosophers plus the unattended owl produce seven.
         owls.verifyOwls(7, 0, 0, 1);
         ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromIndoor("id_town_hall", 0);
@@ -88,7 +88,7 @@ public class TC_52_F43_printing_production_test extends AbstractAkropiaTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
         ColonyJobPage jobs = new ColonyJobPage(getContext());
-        // Give both statesmen other jobs through the actual work picker.
+        // Give both philosophers other jobs through the actual work picker.
         jobs.openFromIndoor("id_town_hall", 0);
         jobs.select(ColonyJobChoice.Kind.INDOOR, GoodsType.WINE);
         jobs.confirm();

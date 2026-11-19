@@ -97,9 +97,9 @@ public final class NativeVisitPage extends AbstractScreen {
     }
 
     /**
-     * Load the scenario with one ordinary scout and one seasoned scout beside
-     * the Aztec capital. The natives' anger toward the Dutch starts at zero, so
-     * the tribe is content and the chief's risk is the content one. The saved
+     * Load the scenario with one ordinary scout and one wayfarer beside the
+     * Aztec capital. The natives' anger toward the Dutch starts at zero, so the
+     * tribe is content and the chief's risk is the content one. The saved
      * random state is set so that the first draw of the first confirmed visit
      * gives the named outcome. Both scouts are plain saved units; nothing in
      * the running model is changed.
@@ -204,11 +204,11 @@ public final class NativeVisitPage extends AbstractScreen {
     }
 
     /**
-     * A seasoned scout is a free colonist of its own type, so it carries the
-     * colonist work history and missionary fields of the saved schema.
+     * A wayfarer is a free colonist of its own type, so it carries the colonist
+     * work history and missionary fields of the saved schema.
      */
     private static JsonObject seasoned(final int id, final Location at) {
-        final JsonObject unit = unit(id, "SEASONED_SCOUT", at);
+        final JsonObject unit = unit(id, "WAYFARER", at);
         unit.addProperty("workUpdates", 0);
         unit.addProperty("missionary", false);
         return unit;

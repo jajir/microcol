@@ -70,7 +70,7 @@
 <entry key="unitCombat">Can initiate combat: %s</entry>
 <entry key="unitArmedRoles">with weapons</entry>
 <entry key="unitScout">Scouting specialist: explores rumors and visits native settlements; wider sight even without a horse.</entry>
-<entry key="unitHardyPioneer">Expert pioneer: completes improvements faster and gains more lumber from clearing forest.</entry>
+<entry key="unitCultivator">Expert pioneer: completes improvements faster and gains more lumber from clearing forest.</entry>
 <entry key="unitVeteran">Veteran: stronger than an ordinary soldier when armed; horses give the mounted combat role.</entry>
 <entry key="unitMissionary">Expert missionary: can establish and contest native missions.</entry>
 <entry key="unitServant">Indoor production penalty; can advance through education and learn skills from local peoples.</entry>
@@ -118,7 +118,7 @@
 	<entry key="building_SHIPYARD">Keeps fishing access, repairs ships in two turns and enables galleon and frigate construction. Requires an ocean-connected coastal colony.</entry>
 	<entry key="building_SCHOOLHOUSE">Experts teach basic outdoor and carpentry skills to eligible colonists working in the colony. Assign a teacher and a suitable student.</entry>
 	<entry key="building_COLLEGE">Expands the school curriculum with plantation, manufacturing and veteran soldier skills. Teaching still needs an expert and a suitable student.</entry>
-	<entry key="building_UNIVERSITY">Adds the highest teaching tier: preachers, statesmen and Jesuit missionaries, alongside the earlier curricula.</entry>
+	<entry key="building_UNIVERSITY">Adds the highest teaching tier: Orfický telestés specialists, philosophers and Jesuit missionaries, alongside the earlier curricula.</entry>
 	<entry key="building_BASIC_WAREHOUSE">Stores up to 100 of each non-food trade good. Food has no warehouse capacity limit.</entry>
 	<entry key="building_WAREHOUSE">Raises storage to 200 of each non-food trade good, leaving more room for production and incoming cargo.</entry>
 	<entry key="building_WAREHOUSE_EXPANSION">Raises storage to 300 of each non-food trade good. Food remains unlimited.</entry>

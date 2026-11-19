@@ -41,7 +41,7 @@ public final class NativeChiefPreview {
 
     /**
      * @param hostility required mood of the settlement toward the visitor
-     * @param seasoned  whether the visitor is a seasoned scout
+     * @param seasoned  whether the visitor is a wayfarer
      * @param repeat    whether this nation already had its encounter here
      * @return the terms of the visit
      */
@@ -59,7 +59,7 @@ public final class NativeChiefPreview {
     }
 
     /**
-     * @return whether the visitor is a seasoned scout
+     * @return whether the visitor is a wayfarer
      */
     public boolean isSeasoned() {
         return seasoned;

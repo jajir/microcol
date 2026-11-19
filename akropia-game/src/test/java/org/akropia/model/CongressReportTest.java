@@ -184,7 +184,7 @@ class CongressReportTest {
         final Player owner = dutch(model);
         final RoyalRoster crown = owner.getCrownRoster().orElseThrow();
         // A Conquistador has difficulty index 2: 4+2 infantry, 2+2 cavalry, 2
-        // artillery and 2 men-of-war, all in reserve (RoyalRosterTest).
+        // artillery and 2 war galleys, all in reserve (RoyalRosterTest).
         assertEquals(6, crown.getTotal(Family.INFANTRY));
         assertEquals(6, crown.getCount(Family.INFANTRY, State.RESERVE));
         assertEquals(4, crown.getTotal(Family.CAVALRY));
@@ -205,7 +205,7 @@ class CongressReportTest {
         assertEquals(4, seen.getCount(Family.CAVALRY, State.RESERVE));
         // Growth at the Conquistador threshold of 500 adds one infantry, the
         // first unit of the growth cycle, and keeps the 7 owls beyond it. Its
-        // 13 ground members exceed six per ship, so one man-of-war joins.
+        // 13 ground members exceed six per ship, so one war galley joins.
         assertEquals(500, crown.getOwlThreshold());
         crown.credit(500 + 7);
         final RoyalRoster grown = model.getCongressReport(owner)
@@ -215,7 +215,7 @@ class CongressReportTest {
         assertEquals(1, grown.getCount(Family.INFANTRY, State.SHIPPED));
         assertEquals(1, grown.getCount(Family.INFANTRY, State.DESTROYED));
         assertEquals(4, grown.getCount(Family.CAVALRY, State.RESERVE));
-        assertEquals(3, grown.getTotal(Family.MAN_OF_WAR));
+        assertEquals(3, grown.getTotal(Family.WAR_GALLEY));
         assertEquals(7, grown.getOwlRemainder());
         assertEquals(grown.getTotal(Family.INFANTRY),
                 grown.getCount(Family.INFANTRY, State.RESERVE)

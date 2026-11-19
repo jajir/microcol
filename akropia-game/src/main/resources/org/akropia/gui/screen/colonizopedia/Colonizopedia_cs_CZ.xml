@@ -70,7 +70,7 @@
 <entry key="unitCombat">Může zahájit boj: %s</entry>
 <entry key="unitArmedRoles">se zbraněmi</entry>
 <entry key="unitScout">Odborník na průzkum: zkoumá zvěsti a navštěvuje místní osady; širší rozhled i bez koně.</entry>
-<entry key="unitHardyPioneer">Odborný pionýr: dokončuje úpravy rychleji a získává více dřeva při kácení.</entry>
+<entry key="unitCultivator">Kultivátor: dokončuje úpravy rychleji a získává více dřeva při kácení.</entry>
 <entry key="unitVeteran">Veterán: s výzbrojí je silnější než běžný voják; koně umožní jízdní bojovou roli.</entry>
 <entry key="unitMissionary">Odborný misionář: může zakládat a přebírat místní misie.</entry>
 <entry key="unitServant">Postih výroby v budovách; může postoupit vzděláním a učit se od místních obyvatel.</entry>
@@ -118,7 +118,7 @@
 	<entry key="building_SHIPYARD">Zachovává rybolov, opravuje lodě za dva tahy a umožňuje stavbu galeon a fregat. Vyžaduje pobřežní kolonii spojenou s oceánem.</entry>
 	<entry key="building_SCHOOLHOUSE">Odborníci učí vhodné kolonisty pracující v kolonii základní venkovní a truhlářské dovednosti. Přiřaďte učitele a vhodného žáka.</entry>
 	<entry key="building_COLLEGE">Rozšiřuje výuku o plantážnické, řemeslné a vojenské dovednosti. Výuka stále potřebuje odborného učitele a vhodného žáka.</entry>
-	<entry key="building_UNIVERSITY">Přidává nejvyšší stupeň výuky: kazatele, státníky a jezuitské misionáře, vedle dřívějších dovedností.</entry>
+	<entry key="building_UNIVERSITY">Přidává nejvyšší stupeň výuky: orfické telesty, filozofy a jezuitské misionáře, vedle dřívějších dovedností.</entry>
 	<entry key="building_BASIC_WAREHOUSE">Pojme až 100 kusů každého obchodního zboží kromě jídla. Jídlo nemá skladový limit.</entry>
 	<entry key="building_WAREHOUSE">Zvyšuje kapacitu na 200 kusů každého obchodního zboží kromě jídla a uvolňuje místo pro výrobu i příchozí náklad.</entry>
 	<entry key="building_WAREHOUSE_EXPANSION">Zvyšuje kapacitu na 300 kusů každého obchodního zboží kromě jídla. Jídlo zůstává bez limitu.</entry>

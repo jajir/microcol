@@ -19,7 +19,7 @@
   <entry key="royalInfantry">Pěchota mateřského města</entry>
   <entry key="royalCavalry">Jízda mateřského města</entry>
   <entry key="royalArtillery">Dělostřelectvo mateřského města</entry>
-  <entry key="royalMenOfWar">Válečné lodě</entry>
+  <entry key="royalWarGalleys">Válečné galéry</entry>
   <entry key="royalFamily">%s: celkem %s, v záloze %s, naloděno %s, zničeno %s, zajato %s</entry>
   <entry key="royalOwls">Sovy mateřského města k dalšímu oddílu: %s / %s</entry>
   <entry key="royalStopped">Růst mateřského města se zastavil při vyhlášení samostatné polis.</entry>
@@ -99,7 +99,7 @@
   <entry key="artifactHERNAN_CORTES">Athénská pokladnice v Delfách</entry>
   <entry key="historyHERNAN_CORTES">Athénská pokladnice uchovávala votivní dary a kořist věnovanou Apollónovi. Dochované a znovu sestavené průčelí připomíná propojení vítězství, bohatství a svatyně.</entry>
   <entry key="artifactFRANCIS_DRAKE">Lenormantův reliéf</entry>
-  <entry key="historyFRANCIS_DRAKE">Mramorový fragment z athénské Akropole zobrazuje veslaře triéry. Je svědectvím organizace řeckého válečného loďstva; herní bonus pro korzáry je volná tematická vazba.</entry>
+  <entry key="historyFRANCIS_DRAKE">Mramorový fragment z athénské Akropole zobrazuje veslaře triéry. Je svědectvím organizace řeckého válečného loďstva; herní bonus pro mořské nájezdníky je volná tematická vazba.</entry>
   <entry key="artifactJOHN_PAUL_JONES">Loď z Kyrénie</entry>
   <entry key="historyJOHN_PAUL_JONES">Dochovaný trup řecké obchodní lodi z pozdního 4. století př. n. l. odhaluje stavbu starověkých plavidel. Předloha je obchodní loď, zatímco herní odměna zůstává válečnou lodí.</entry>
   <entry key="artifactPAUL_REVERE">Korintská přilba</entry>

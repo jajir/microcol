@@ -131,11 +131,10 @@ class BuildRoadTest {
     private UnitFreeColonist hardy(final Model model, final int tools,
             final Location at) {
         final Player buyer = model.getPlayerByName("Dutch");
-        buyer.setGold(UnitType.HARDY_PIONEER.getEuropePrice());
-        buyer.buy(UnitType.HARDY_PIONEER);
+        buyer.setGold(UnitType.CULTIVATOR.getEuropePrice());
+        buyer.buy(UnitType.CULTIVATOR);
         final UnitFreeColonist hardy = (UnitFreeColonist) buyer.getAllUnits()
-                .stream()
-                .filter(unit -> unit.getType() == UnitType.HARDY_PIONEER)
+                .stream().filter(unit -> unit.getType() == UnitType.CULTIVATOR)
                 .findFirst().orElseThrow();
         hardy.placeToLocation(at);
         hardy.setTools(tools);

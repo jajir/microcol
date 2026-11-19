@@ -358,7 +358,7 @@ class CoastalBatteryTest {
             throws ReflectiveOperationException {
         final Model model = game(
                 ConstructionType.FORT, List.of(unit(PATROL_ID,
-                        UnitType.PRIVATEER, "France", APPROACH_PATROL)),
+                        UnitType.SEA_RAIDER, "France", APPROACH_PATROL)),
                 stateFor(true));
         final Ship ship = ship(model);
         final List<Optional<Goods>> goods = goodsOf(ship);
@@ -379,7 +379,7 @@ class CoastalBatteryTest {
             throws ReflectiveOperationException {
         final Model model = game(
                 ConstructionType.FORT, List.of(unit(PATROL_ID,
-                        UnitType.PRIVATEER, "France", APPROACH_PATROL)),
+                        UnitType.SEA_RAIDER, "France", APPROACH_PATROL)),
                 stateFor(false));
         final Ship ship = ship(model);
         final long state = savedState(model);

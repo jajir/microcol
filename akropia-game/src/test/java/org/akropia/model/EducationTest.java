@@ -24,14 +24,14 @@ class EducationTest {
         return Stream.of(UnitType.EXPERT_FARMER, UnitType.EXPERT_FISHERMAN,
                 UnitType.EXPERT_CLAY_DIGGER, UnitType.EXPERT_SILVER_MINER,
                 UnitType.EXPERT_LUMBERJACK, UnitType.EXPERT_ORE_MINER,
-                UnitType.MASTER_CARPENTER, UnitType.SEASONED_SCOUT,
-                UnitType.HARDY_PIONEER, UnitType.MASTER_OLIVE_GROWER,
+                UnitType.MASTER_CARPENTER, UnitType.WAYFARER,
+                UnitType.CULTIVATOR, UnitType.MASTER_OLIVE_GROWER,
                 UnitType.MASTER_SHEPHERD, UnitType.MASTER_GRAPE_GROWER,
                 UnitType.MASTER_OIL_MAKER, UnitType.MASTER_WEAVER,
                 UnitType.MASTER_WINEMAKER, UnitType.MASTER_POTTER,
                 UnitType.MASTER_BLACKSMITH, UnitType.MASTER_WEAPONSMITH,
-                UnitType.VETERAN_SOLDIER, UnitType.FIREBRAND_PREACHER,
-                UnitType.ELDER_STATESMAN, UnitType.JESUIT_MISSIONARY);
+                UnitType.VETERAN_SOLDIER, UnitType.ORPHIC_TELESTES,
+                UnitType.PHILOSOPHER, UnitType.JESUIT_MISSIONARY);
     }
 
     private static ConstructionType school(final UnitType skill) {
@@ -105,8 +105,8 @@ class EducationTest {
             "EXPERT_CLAY_DIGGER,SCHOOLHOUSE,",
             "EXPERT_SILVER_MINER,SCHOOLHOUSE,",
             "EXPERT_LUMBERJACK,SCHOOLHOUSE,", "EXPERT_ORE_MINER,SCHOOLHOUSE,",
-            "MASTER_CARPENTER,SCHOOLHOUSE,", "SEASONED_SCOUT,SCHOOLHOUSE,",
-            "HARDY_PIONEER,SCHOOLHOUSE,",
+            "MASTER_CARPENTER,SCHOOLHOUSE,", "WAYFARER,SCHOOLHOUSE,",
+            "CULTIVATOR,SCHOOLHOUSE,",
             "MASTER_OLIVE_GROWER,COLLEGE,SCHOOLHOUSE",
             "MASTER_SHEPHERD,COLLEGE,SCHOOLHOUSE",
             "MASTER_GRAPE_GROWER,COLLEGE,SCHOOLHOUSE",
@@ -117,8 +117,8 @@ class EducationTest {
             "MASTER_BLACKSMITH,COLLEGE,SCHOOLHOUSE",
             "MASTER_WEAPONSMITH,COLLEGE,SCHOOLHOUSE",
             "VETERAN_SOLDIER,COLLEGE,SCHOOLHOUSE",
-            "FIREBRAND_PREACHER,UNIVERSITY,COLLEGE",
-            "ELDER_STATESMAN,UNIVERSITY,COLLEGE",
+            "ORPHIC_TELESTES,UNIVERSITY,COLLEGE",
+            "PHILOSOPHER,UNIVERSITY,COLLEGE",
             "JESUIT_MISSIONARY,UNIVERSITY,COLLEGE" })
     void cardSchoolRowAdmitsTheSkillAndRefusesOneTierLower(final String name,
             final String minimum, final String lower) {
@@ -159,8 +159,7 @@ class EducationTest {
     @ParameterizedTest
     @ValueSource(strings = { "EXPERT_FARMER", "EXPERT_FISHERMAN",
             "EXPERT_CLAY_DIGGER", "EXPERT_SILVER_MINER", "EXPERT_LUMBERJACK",
-            "EXPERT_ORE_MINER", "MASTER_CARPENTER", "SEASONED_SCOUT",
-            "HARDY_PIONEER" })
+            "EXPERT_ORE_MINER", "MASTER_CARPENTER", "WAYFARER", "CULTIVATOR" })
     void schoolhouseSkillsAreRefusedWithoutAnySchool(final String name) {
         final UnitType skill = UnitType.valueOf(name);
         final Model model = load(scenarioWithoutSchool(skill));

@@ -142,10 +142,8 @@ class SpecialistProductionTest {
                         ConstructionType.BLACKSMITHS_HOUSE),
                 Arguments.of(UnitType.MASTER_WEAPONSMITH,
                         ConstructionType.ARMORY),
-                Arguments.of(UnitType.FIREBRAND_PREACHER,
-                        ConstructionType.CHAPEL),
-                Arguments.of(UnitType.ELDER_STATESMAN,
-                        ConstructionType.TOWN_HALL));
+                Arguments.of(UnitType.ORPHIC_TELESTES, ConstructionType.CHAPEL),
+                Arguments.of(UnitType.PHILOSOPHER, ConstructionType.TOWN_HALL));
     }
 
     private ConstructionTurnProduction indoorProduction(final UnitType type,
@@ -204,7 +202,7 @@ class SpecialistProductionTest {
             assertEquals(0, indoorProduction(type, building, 0)
                     .getProducedGoods().orElseThrow().getAmount());
         }
-        final ConstructionType unrelated = type == UnitType.ELDER_STATESMAN
+        final ConstructionType unrelated = type == UnitType.PHILOSOPHER
                 ? ConstructionType.CHAPEL
                 : ConstructionType.TOWN_HALL;
         assertEquals(

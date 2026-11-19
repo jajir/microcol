@@ -4,7 +4,7 @@ import org.akropia.model.RoyalRoster;
 
 /**
  * One saved member of a Crown roster with its identity, family and state. A
- * shipped member names its carrying unit; a shipped man-of-war may name its
+ * shipped member names its carrying unit; a shipped war galley may name its
  * colony target and its retry count. Absent values mean none or zero.
  */
 public final class RoyalMemberPo {

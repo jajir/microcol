@@ -25,8 +25,8 @@ public final class UnitActionClearForest implements UnitAction {
     /** Owner updates needed by an ordinary pioneer. */
     public static final int REQUIRED_TURNS_TO_CLEAR_FOREST = 4;
 
-    /** Owner updates needed by a hardy pioneer. */
-    public static final int HARDY_TURNS_TO_CLEAR_FOREST = 2;
+    /** Owner updates needed by a cultivator. */
+    public static final int CULTIVATOR_TURNS_TO_CLEAR_FOREST = 2;
 
     /** Tools consumed once when the forest is removed. */
     public static final int REQUIRED_TOOLS = 20;

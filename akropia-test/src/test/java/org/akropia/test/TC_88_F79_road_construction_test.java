@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 /**
  * Verify that a pioneer builds a road on a bare square without a question, that
  * the unit panel shows the owner updates left, that the work takes two owner
- * updates (one for a hardy pioneer), spends 20 tools once and records the road,
+ * updates (one for a cultivator), spends 20 tools once and records the road,
  * that cancelling leaves no road and no charge, and that a pioneer with 19
  * tools is told why it cannot start. A road on clay pit land adds one clay to
  * the tile output, the job preview and the next turn's stored clay, and
@@ -71,7 +71,7 @@ public class TC_88_F79_road_construction_test extends AbstractAkropiaTest {
         return moveToRoadSquare(WelcomePage.of(getContext()).loadGame());
     }
 
-    /** Same as above, with every colonist saved as a hardy pioneer. */
+    /** Same as above, with every colonist saved as a cultivator. */
     private GamePage prepareHardyAndMove(final String name) throws Exception {
         RoadFixture.prepareHardy(getContext(), testFileName, name, 100,
                 ROAD_LOCATION);

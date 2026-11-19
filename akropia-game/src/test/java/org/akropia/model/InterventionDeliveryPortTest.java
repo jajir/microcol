@@ -159,10 +159,10 @@ class InterventionDeliveryPortTest {
         return model.getColonyById(id).orElseThrow();
     }
 
-    private static long menOfWarAt(final Model model, final Colony port) {
+    private static long warGalleysAt(final Model model, final Colony port) {
         return model.getUnitsAt(port.getLocation()).stream()
                 .filter(unit -> unit.getOwner() == dutch(model))
-                .filter(unit -> unit.getType() == UnitType.MAN_OF_WAR).count();
+                .filter(unit -> unit.getType() == UnitType.WAR_GALLEY).count();
     }
 
     private static List<UnitFreeColonist> deliveredSoldiers(
@@ -193,7 +193,7 @@ class InterventionDeliveryPortTest {
     }
 
     /**
-     * Nothing was delivered: no provenance soldier, no man-of-war, no notice.
+     * Nothing was delivered: no provenance soldier, no war galley, no notice.
      */
     private static void assertNothingDelivered(final Model model) {
         final Player dutch = dutch(model);
@@ -201,7 +201,7 @@ class InterventionDeliveryPortTest {
         assertEquals(0, deliveredSoldiers(dutch).size());
         assertEquals(0L, model.getAllUnits().stream()
                 .filter(unit -> unit.getOwner() == dutch)
-                .filter(unit -> unit.getType() == UnitType.MAN_OF_WAR).count());
+                .filter(unit -> unit.getType() == UnitType.WAR_GALLEY).count());
         assertEquals(0, arrivals(model).size());
     }
 
@@ -210,7 +210,7 @@ class InterventionDeliveryPortTest {
             final Colony port) {
         final Player dutch = dutch(model);
         assertTrue(dutch.getIntervention().orElseThrow().isDelivered());
-        assertEquals(2L, menOfWarAt(model, port));
+        assertEquals(2L, warGalleysAt(model, port));
         final List<UnitFreeColonist> soldiers = deliveredSoldiers(dutch);
         assertEquals(6, soldiers.size());
         assertEquals(4L, soldiers.stream()
@@ -267,8 +267,8 @@ class InterventionDeliveryPortTest {
         // The owner update tried again and still waits; the next port by ID
         // received nothing, and no identity was spent.
         assertNothingDelivered(model);
-        assertEquals(0L, menOfWarAt(model, colony(model, NEXT_COLONY)));
-        assertEquals(0L, menOfWarAt(model, colony(model, LOWEST_COLONY)));
+        assertEquals(0L, warGalleysAt(model, colony(model, NEXT_COLONY)));
+        assertEquals(0L, warGalleysAt(model, colony(model, LOWEST_COLONY)));
         assertTrue(unitIds(model).containsAll(before));
         assertEquals(before.size(), unitIds(model).size());
     }
@@ -332,7 +332,7 @@ class InterventionDeliveryPortTest {
         assertTrue(dutch.startTurn());
         assertNothingDelivered(model);
         // Delft opens to the open sea but is not the geographic choice.
-        assertEquals(0L, menOfWarAt(model, colony(model, NEXT_COLONY)));
+        assertEquals(0L, warGalleysAt(model, colony(model, NEXT_COLONY)));
         // Once the corridor is clear the same port receives the forces.
         final ModelPo saved = model.save();
         assertTrue(saved.getUnits()
@@ -340,7 +340,7 @@ class InterventionDeliveryPortTest {
         final Model open = load(saved);
         assertTrue(dutch(open).startTurn());
         assertDeliveredAt(open, colony(open, LOWEST_COLONY));
-        assertEquals(0L, menOfWarAt(open, colony(open, NEXT_COLONY)));
+        assertEquals(0L, warGalleysAt(open, colony(open, NEXT_COLONY)));
     }
 
     @Test
@@ -366,7 +366,7 @@ class InterventionDeliveryPortTest {
         // reach it, so nothing is placed there.
         assertTrue(model.isOwnedCoastalPort(dutch, lakeside.getLocation()));
         assertTrue(dutch.startTurn());
-        assertEquals(0L, menOfWarAt(model, lakeside));
+        assertEquals(0L, warGalleysAt(model, lakeside));
         assertDeliveredAt(model, colony(model, NEXT_COLONY));
         assertTrue(model.getUnitsAt(NORTH_APPROACH).isEmpty());
         assertTrue(model.getUnitsAt(SOUTH_APPROACH).isEmpty());
@@ -385,7 +385,7 @@ class InterventionDeliveryPortTest {
         ColonyBattles.capture(model, lowest, invader);
         assertSame(crown, lowest.getOwner());
         assertTrue(dutch.startTurn());
-        assertEquals(0L, menOfWarAt(model, lowest));
+        assertEquals(0L, warGalleysAt(model, lowest));
         assertDeliveredAt(model, colony(model, NEXT_COLONY));
     }
 

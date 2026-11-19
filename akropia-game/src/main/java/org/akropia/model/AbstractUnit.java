@@ -903,13 +903,13 @@ public abstract class AbstractUnit implements Unit {
                         || CombatStrengths.forBattle(model, this, unit)
                                 .isPresent())
                 // Allies, and former allies during the war wait, are never
-                // attacked, not even by declaration or privateer exception.
+                // attacked, not even by declaration or seaRaider exception.
                 .filter(unit -> !model.isAttackRestrained(owner,
                         unit.getOwner()))
                 .filter(unit -> allowDeclaration
                         || !AttackOrder.isDeclarationNeeded(model, owner,
                                 unit.getOwner(),
-                                model.isPrivateerNavalException(this, unit)))
+                                model.isSeaRaiderNavalException(this, unit)))
                 .filter(unit -> peacefulColony.isEmpty()
                         || peacefulColony.get().getOwner() == unit.getOwner())
                 .collect(Collectors.toList());
@@ -1263,19 +1263,19 @@ public abstract class AbstractUnit implements Unit {
                 "The colony defense changed");
         Preconditions.checkState(order.matchesPromotionInputs(),
                 "The combat experience inputs changed");
-        final boolean privateerException = model.isPrivateerNavalException(this,
+        final boolean seaRaiderException = model.isSeaRaiderNavalException(this,
                 selected);
         final EuropeanRelationState currentRelation = AttackOrder
                 .isEuropeanPair(owner, selected.getOwner())
                         ? model.getEuropeanRelation(owner, selected.getOwner())
                         : null;
         Preconditions.checkState(
-                order.isPrivateerException() == privateerException
+                order.isSeaRaiderException() == seaRaiderException
                         && order.getOriginalRelation() == currentRelation
                         && order.isDeclarationRequired() == AttackOrder
                                 .isDeclarationNeeded(model, owner,
                                         selected.getOwner(),
-                                        privateerException),
+                                        seaRaiderException),
                 "The diplomatic state changed");
         // Actual aggression, not the declaration alone, is recorded and
         // obliges the victim's allies. Plan it before any random draw, combat
@@ -1287,7 +1287,7 @@ public abstract class AbstractUnit implements Unit {
                         && model.areHostile(owner, colony.getOwner()))
                 .ifPresent(colony -> victims.add(colony.getOwner()));
         final AggressionPlan aggression = model.planAggression(owner, victims,
-                privateerException);
+                seaRaiderException);
         final Optional<CombatStrengths> strengths = battle.defense.isPresent()
                 ? CombatStrengths.forColonyBattle(model, this,
                         battle.defense.get())
@@ -2627,9 +2627,9 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(unitAction.isNoAction() && !hasStandingOrder(),
                 "Cancel go-to before clearing forest");
         final UnitActionClearForest next = new UnitActionClearForest();
-        if (getType() == UnitType.HARDY_PIONEER) {
+        if (getType() == UnitType.CULTIVATOR) {
             next.setRemainingTurns(
-                    UnitActionClearForest.HARDY_TURNS_TO_CLEAR_FOREST);
+                    UnitActionClearForest.CULTIVATOR_TURNS_TO_CLEAR_FOREST);
         }
         setAction(next);
         movementThirds = 0;
@@ -2647,9 +2647,9 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(unitAction.isNoAction() && !hasStandingOrder(),
                 "Cancel go-to before building road");
         final UnitActionBuildRoad next = new UnitActionBuildRoad();
-        if (getType() == UnitType.HARDY_PIONEER) {
+        if (getType() == UnitType.CULTIVATOR) {
             next.setRemainingTurns(
-                    UnitActionBuildRoad.HARDY_TURNS_TO_BUILD_ROAD);
+                    UnitActionBuildRoad.CULTIVATOR_TURNS_TO_BUILD_ROAD);
         }
         setAction(next);
         movementThirds = 0;
@@ -3056,9 +3056,9 @@ public abstract class AbstractUnit implements Unit {
         }
         final UnitAction next = actionType.make();
         if (actionType == UnitActionType.plowField
-                && getType() == UnitType.HARDY_PIONEER) {
+                && getType() == UnitType.CULTIVATOR) {
             ((UnitActionPlowField) next).setRemainingTurns(
-                    UnitActionPlowField.HARDY_TURNS_TO_PLOW_FIELD);
+                    UnitActionPlowField.CULTIVATOR_TURNS_TO_PLOW_FIELD);
         }
         setAction(next);
         movementThirds = 0;

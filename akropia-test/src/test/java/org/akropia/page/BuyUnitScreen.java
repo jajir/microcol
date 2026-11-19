@@ -80,7 +80,7 @@ public class BuyUnitScreen extends AbstractScreen {
 
     public void verifyRoyalShipNotOffered() {
         org.junit.jupiter.api.Assertions.assertTrue(getNodeFinder()
-                .lookup("#buy-unit-MAN_OF_WAR").queryAll().isEmpty());
+                .lookup("#buy-unit-WAR_GALLEY").queryAll().isEmpty());
     }
 
     public EuropePortScreen close() {

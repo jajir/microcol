@@ -40,7 +40,7 @@ Your treasury: %s gold.
 After payment: %s gold.</entry>
 	<entry key="allianceOfferUnaffordable">%s accepts an alliance for %s gold.
 Your treasury when quoted: %s gold.</entry>
-	<entry key="allianceObligations">Allies cannot attack each other, including privateers, and may pass through each other's units and colonies without capturing them or using their workers, cargo or sight. Each ally must go to war against anyone who attacks the other. No units, goods or map knowledge are given. Either side may end the alliance; peace remains and war cannot be declared for 5 rounds.</entry>
+	<entry key="allianceObligations">Allies cannot attack each other, including sea raiders, and may pass through each other's units and colonies without capturing them or using their workers, cargo or sight. Each ally must go to war against anyone who attacks the other. No units, goods or map knowledge are given. Either side may end the alliance; peace remains and war cannot be declared for 5 rounds.</entry>
 	<entry key="allianceVisitor">Contact: %s at (%s, %s).</entry>
 	<entry key="allianceVisitorUnavailable">The original contact is no longer available.</entry>
 	<entry key="allianceConfirm">Pay and form alliance</entry>

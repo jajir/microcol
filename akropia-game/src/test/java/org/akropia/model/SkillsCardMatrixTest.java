@@ -39,12 +39,12 @@ class SkillsCardMatrixTest {
             "EXPERT_CLAY_DIGGER,1,true,1000", "EXPERT_SILVER_MINER,1,true,1000",
             "EXPERT_LUMBERJACK,1,false,1000", "EXPERT_ORE_MINER,1,false,1000",
             "MASTER_OLIVE_GROWER,2,true,0", "MASTER_SHEPHERD,2,true,0",
-            "MASTER_GRAPE_GROWER,2,true,0", "FIREBRAND_PREACHER,3,false,3000",
-            "ELDER_STATESMAN,3,false,3000", "MASTER_CARPENTER,1,false,1000",
+            "MASTER_GRAPE_GROWER,2,true,0", "ORPHIC_TELESTES,3,false,3000",
+            "PHILOSOPHER,3,false,3000", "MASTER_CARPENTER,1,false,1000",
             "MASTER_OIL_MAKER,2,false,2000", "MASTER_WEAVER,2,false,2000",
             "MASTER_WINEMAKER,2,false,2000", "MASTER_POTTER,2,false,2000",
             "MASTER_BLACKSMITH,2,false,2200", "MASTER_WEAPONSMITH,2,false,2000",
-            "SEASONED_SCOUT,1,true,1000", "HARDY_PIONEER,1,false,1000",
+            "WAYFARER,1,true,1000", "CULTIVATOR,1,false,1000",
             "VETERAN_SOLDIER,2,false,2000", "JESUIT_MISSIONARY,3,false,3000" })
     void cardRowAgreesWithTierNativeTeachingAndEuropeanOffer(final String name,
             final int tier, final boolean nativeTeachable, final int price) {
@@ -65,11 +65,11 @@ class SkillsCardMatrixTest {
     @CsvSource({ "EXPERT_FARMER,1000", "EXPERT_FISHERMAN,1000",
             "EXPERT_CLAY_DIGGER,1000", "EXPERT_SILVER_MINER,1000",
             "EXPERT_LUMBERJACK,1000", "EXPERT_ORE_MINER,1000",
-            "MASTER_CARPENTER,1000", "FIREBRAND_PREACHER,3000",
-            "ELDER_STATESMAN,3000", "MASTER_OIL_MAKER,2000",
-            "MASTER_WEAVER,2000", "MASTER_WINEMAKER,2000", "MASTER_POTTER,2000",
+            "MASTER_CARPENTER,1000", "ORPHIC_TELESTES,3000", "PHILOSOPHER,3000",
+            "MASTER_OIL_MAKER,2000", "MASTER_WEAVER,2000",
+            "MASTER_WINEMAKER,2000", "MASTER_POTTER,2000",
             "MASTER_BLACKSMITH,2200", "MASTER_WEAPONSMITH,2000",
-            "SEASONED_SCOUT,1000", "HARDY_PIONEER,1000", "VETERAN_SOLDIER,2000",
+            "WAYFARER,1000", "CULTIVATOR,1000", "VETERAN_SOLDIER,2000",
             "JESUIT_MISSIONARY,3000" })
     void europeanPurchaseChargesTheCardPriceOnceAndRefusesOneGoldLess(
             final String name, final int price) {

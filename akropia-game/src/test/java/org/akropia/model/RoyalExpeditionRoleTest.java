@@ -32,7 +32,7 @@ class RoyalExpeditionRoleTest {
         final UnitWithCargo ship = model.dispatchRoyalShip(king,
                 model.getRoyalRosterOf(king).getMembers().stream()
                         .filter(member -> member
-                                .getFamily() == RoyalRoster.Family.MAN_OF_WAR)
+                                .getFamily() == RoyalRoster.Family.WAR_GALLEY)
                         .findFirst().orElseThrow().getId());
         final UnitFreeColonist soldier = ship.getCargo().getSlots().stream()
                 .flatMap(slot -> slot.getUnit().stream())

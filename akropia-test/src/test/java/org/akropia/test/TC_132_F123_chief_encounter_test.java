@@ -26,10 +26,10 @@ import javafx.stage.Stage;
  * the outcome is explicit. The mood and the exact risk are shown before the
  * draw, the reported result is recorded for the Dutch nation, and information
  * marks the land within two squares of the capital on the Dutch map. A repeat
- * visit by the seasoned scout, or after Save and Continue, repeats the
- * information without a draw. The model rules for each distribution, the gold
- * caps, the death cleanup, the map delta and the stale terms are checked in the
- * model tests.
+ * visit by the wayfarer, or after Save and Continue, repeats the information
+ * without a draw. The model rules for each distribution, the gold caps, the
+ * death cleanup, the map delta and the stale terms are checked in the model
+ * tests.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_132_F123_chief_encounter_test extends AbstractAkropiaTest {
@@ -55,7 +55,7 @@ public class TC_132_F123_chief_encounter_test extends AbstractAkropiaTest {
     private static final int SCOUT_ID = 300;
     private static final Location SCOUT_AT = Location.of(22, 14);
 
-    /** Seasoned scout, land square north of the capital. */
+    /** Wayfarer, land square north of the capital. */
     private static final int SEASONED_ID = 303;
     private static final Location SEASONED_AT = Location.of(23, 14);
 
@@ -120,7 +120,7 @@ public class TC_132_F123_chief_encounter_test extends AbstractAkropiaTest {
         visit.escape();
         visit.verifyChooserClosed();
 
-        // A repeat visit by the seasoned scout repeats the information only.
+        // A repeat visit by the wayfarer repeats the information only.
         visit.enterSettlement(SEASONED_AT, CAPITAL);
         visit.startChiefChoice();
         visit.verifyChiefConfirmation(REPEAT_EN);
@@ -206,7 +206,7 @@ public class TC_132_F123_chief_encounter_test extends AbstractAkropiaTest {
         visit.verifyLandExplored(FAR_LAND, false);
         visit.verifyChooserClosed();
 
-        // After Save and Continue the scout stays lost, and the seasoned scout
+        // After Save and Continue the scout stays lost, and the wayfarer
         // repeats the information without a new draw.
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
@@ -221,7 +221,7 @@ public class TC_132_F123_chief_encounter_test extends AbstractAkropiaTest {
         visit.verifyChiefGold(CAPITAL, treasury, gold, 0);
         visit.verifyLandExplored(FAR_LAND, true);
 
-        // The seasoned scout survives, so its chooser opens again with the
+        // The wayfarer survives, so its chooser opens again with the
         // chief still offered; Escape closes it.
         visit.verifyChiefScoutAlive(SEASONED_ID, SEASONED_AT);
         visit.verifyChiefButtonShown();

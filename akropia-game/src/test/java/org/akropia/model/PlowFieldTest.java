@@ -85,11 +85,10 @@ class PlowFieldTest {
     private UnitFreeColonist hardy(final Model model, final int tools,
             final Location at) {
         final Player buyer = model.getPlayerByName("Dutch");
-        buyer.setGold(UnitType.HARDY_PIONEER.getEuropePrice());
-        buyer.buy(UnitType.HARDY_PIONEER);
+        buyer.setGold(UnitType.CULTIVATOR.getEuropePrice());
+        buyer.buy(UnitType.CULTIVATOR);
         final UnitFreeColonist hardy = (UnitFreeColonist) buyer.getAllUnits()
-                .stream()
-                .filter(unit -> unit.getType() == UnitType.HARDY_PIONEER)
+                .stream().filter(unit -> unit.getType() == UnitType.CULTIVATOR)
                 .findFirst().orElseThrow();
         hardy.placeToLocation(at);
         hardy.setTools(tools);
@@ -155,7 +154,7 @@ class PlowFieldTest {
         final List<TurnEventFieldPlowed> notices = dutchNotices(model);
         assertEquals(1, notices.size());
         verifyNotice(notices.get(0), hardy, TARGET);
-        assertEquals(UnitType.HARDY_PIONEER, notices.get(0).getUnitType());
+        assertEquals(UnitType.CULTIVATOR, notices.get(0).getUnitType());
     }
 
     @Test

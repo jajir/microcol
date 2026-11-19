@@ -2162,12 +2162,12 @@ public class Model {
                 .orElseThrow(() -> new IllegalStateException(
                         "No eastern sea-lane arrival is available"));
         return (UnitWithCargo) unitStorage.createUnit(
-                unit -> new Cargo(unit, UnitType.MAN_OF_WAR.getCargoCapacity()),
+                unit -> new Cargo(unit, UnitType.WAR_GALLEY.getCargoCapacity()),
                 this,
                 unit -> ((AbstractUnit) unit).createVoyage(false,
                         Direction.east),
-                UnitType.MAN_OF_WAR, king,
-                MovementPoints.ofPoints(UnitType.MAN_OF_WAR.getSpeed()),
+                UnitType.WAR_GALLEY, king,
+                MovementPoints.ofPoints(UnitType.WAR_GALLEY.getSpeed()),
                 new UnitActionNoAction());
     }
 
@@ -2357,7 +2357,7 @@ public class Model {
     }
 
     /**
-     * Whether the Crown may send this reserve man-of-war now (R-0186). It asks
+     * Whether the Crown may send this reserve war galley now (R-0186). It asks
      * the same rules as {@link #dispatchRoyalShip(Player, int)} and changes
      * nothing.
      *
@@ -2374,7 +2374,7 @@ public class Model {
         }
         final RoyalRoster roster = getRoyalRosterOf(king);
         final boolean reserveShip = roster.findMember(shipMemberId).filter(
-                member -> member.getFamily() == RoyalRoster.Family.MAN_OF_WAR
+                member -> member.getFamily() == RoyalRoster.Family.WAR_GALLEY
                         && member.getState() == RoyalRoster.State.RESERVE)
                 .isPresent();
         if (!reserveShip) {
@@ -2386,14 +2386,14 @@ public class Model {
     }
 
     /**
-     * Send a reserve man-of-war from Europe with every reserve ground unit it
+     * Send a reserve war galley from Europe with every reserve ground unit it
      * can hold, cycling infantry, cavalry and artillery. Each passenger is a
      * real unit bound to its roster member; the roster is the only source.
      * Every rule is checked before anything is created.
      *
      * @param king         required Crown, the current player
-     * @param shipMemberId identity of the reserve man-of-war
-     * @return the new man-of-war, already on its voyage
+     * @param shipMemberId identity of the reserve war galley
+     * @return the new war galley, already on its voyage
      * @throws IllegalStateException    when the Crown or the member may not
      *                                  sail or no ground unit is reserved
      * @throws IllegalArgumentException when the member is unknown
@@ -2403,7 +2403,7 @@ public class Model {
         final RoyalRoster roster = getRoyalRosterOf(king);
         checkRoyalDispatch(king);
         final List<RoyalRoster.Member> passengers = roster.planPassengers(
-                UnitType.MAN_OF_WAR.getCargoCapacity(), shipMemberId);
+                UnitType.WAR_GALLEY.getCargoCapacity(), shipMemberId);
         Preconditions.checkState(!passengers.isEmpty(),
                 "No reserve ground unit can sail");
         Preconditions.checkState(
@@ -2425,7 +2425,7 @@ public class Model {
      * {@link #reloadRoyalShip(Player, UnitWithCargo)} and changes nothing.
      *
      * @param king required Crown
-     * @param ship required man-of-war of this Crown
+     * @param ship required war galley of this Crown
      * @return whether a reload would succeed at this moment
      */
     public boolean canReloadRoyalShip(final Player king,
@@ -2443,7 +2443,7 @@ public class Model {
      * changes.
      *
      * @param king required Crown, the current player
-     * @param ship required man-of-war of this Crown in the European port
+     * @param ship required war galley of this Crown in the European port
      * @throws IllegalStateException when the Crown or the carrier may not act,
      *                               or no ground unit is reserved
      */
@@ -2477,14 +2477,14 @@ public class Model {
         final RoyalRoster roster = getRoyalRosterOf(king);
         if (unitStorage.tryGetUnitById(ship.getId()).orElse(null) != ship
                 || ship.getOwner() != king
-                || ship.getType() != UnitType.MAN_OF_WAR
+                || ship.getType() != UnitType.WAR_GALLEY
                 || !(ship instanceof Ship)) {
-            return Optional.of("Not a live man-of-war of this Crown");
+            return Optional.of("Not a live war galley of this Crown");
         }
         final Optional<RoyalRoster.Member> member = roster
                 .findByUnitId(ship.getId());
         if (member.isEmpty()
-                || member.get().getFamily() != RoyalRoster.Family.MAN_OF_WAR) {
+                || member.get().getFamily() != RoyalRoster.Family.WAR_GALLEY) {
             return Optional.of("The ship is not bound to a roster member");
         }
         if (!ship.isAtEuropePort() || ((Ship) ship).isDamaged()
@@ -2511,12 +2511,11 @@ public class Model {
     }
 
     /**
-     * Save the landing target and retry count the Crown chose for its
-     * man-of-war on the map (R-0186). The target must be a coastal colony, or
-     * none.
+     * Save the landing target and retry count the Crown chose for its war
+     * galley on the map (R-0186). The target must be a coastal colony, or none.
      *
      * @param king         required Crown
-     * @param ship         required man-of-war of this Crown on the map
+     * @param ship         required war galley of this Crown on the map
      * @param colonyTarget coastal colony the Crown believes rebel, or empty
      * @param blockedTurns unsuccessful turns of the current route
      */
@@ -2572,7 +2571,7 @@ public class Model {
     private List<RoyalRoster.Member> planRoyalPassengers(final Player king,
             final int shipMemberId) {
         return getRoyalRosterOf(king).planPassengers(
-                UnitType.MAN_OF_WAR.getCargoCapacity(), shipMemberId);
+                UnitType.WAR_GALLEY.getCargoCapacity(), shipMemberId);
     }
 
     /** Create one royal passenger in the next free hold of the ship. */
@@ -2672,8 +2671,8 @@ public class Model {
     private static boolean matchesRoyalFamily(final RoyalRoster.Family family,
             final Unit unit) {
         switch (family) {
-        case MAN_OF_WAR:
-            return unit.getType() == UnitType.MAN_OF_WAR;
+        case WAR_GALLEY:
+            return unit.getType() == UnitType.WAR_GALLEY;
         case ARTILLERY:
             return unit instanceof UnitArtillery;
         case INFANTRY:
@@ -2794,7 +2793,7 @@ public class Model {
         return reachableWater;
     }
 
-    /** Men-of-war of one intervention delivery (R-0190). */
+    /** War Galleys of one intervention delivery (R-0190). */
     private static final int INTERVENTION_SHIPS = 2;
 
     /** Continental infantry of one intervention delivery (R-0190). */
@@ -2805,7 +2804,7 @@ public class Model {
 
     /**
      * Deliver the earned foreign intervention of a rebel nation (R-0190): two
-     * men-of-war, four Continental infantry and two Continental cavalry, all
+     * war galleys, four Continental infantry and two Continental cavalry, all
      * under rebel control, at the lowest-ID owned coastal colony that the high
      * seas reach. The port, its obstruction and every unit ID are checked
      * before the first unit exists. When any of them prevents the delivery,
@@ -2857,7 +2856,7 @@ public class Model {
     }
 
     /**
-     * Two men-of-war, four infantry and two cavalry on the square of the port.
+     * Two war galleys, four infantry and two cavalry on the square of the port.
      * The caller checks every precondition first; this only creates.
      */
     private void createInterventionForces(final Player owner,
@@ -2866,13 +2865,13 @@ public class Model {
             final Unit man = unitStorage
                     .createUnit(
                             unit -> new Cargo(unit,
-                                    UnitType.MAN_OF_WAR.getCargoCapacity()),
+                                    UnitType.WAR_GALLEY.getCargoCapacity()),
                             this,
                             unit -> new PlaceLocation(unit, at,
                                     unit.getDefaultOrintation()),
-                            UnitType.MAN_OF_WAR, owner,
+                            UnitType.WAR_GALLEY, owner,
                             MovementPoints.ofPoints(owner
-                                    .getEffectiveSpeed(UnitType.MAN_OF_WAR)),
+                                    .getEffectiveSpeed(UnitType.WAR_GALLEY)),
                             new UnitActionNoAction());
             owner.revealMapForUnit(man);
         }
@@ -3498,7 +3497,7 @@ public class Model {
     }
 
     /**
-     * Whether any attack, declaration or privateer exception between these
+     * Whether any attack, declaration or seaRaider exception between these
      * players is forbidden: allies, or former allies during the war wait.
      *
      * @param first  registered participant
@@ -3563,9 +3562,9 @@ public class Model {
      *
      * @param attacker registered attacking unit
      * @param defender registered foreign target
-     * @return whether the privateer naval exception applies
+     * @return whether the seaRaider naval exception applies
      */
-    public boolean isPrivateerNavalException(final Unit attacker,
+    public boolean isSeaRaiderNavalException(final Unit attacker,
             final Unit defender) {
         return attacker != null && defender != null && attacker != defender
                 && tryGetUnitById(attacker.getId()).orElse(null) == attacker
@@ -3578,8 +3577,8 @@ public class Model {
                 && attacker.canAttack()
                 && attacker.getType().getAttackableUnitType()
                         .contains(defender.getType())
-                && (attacker.getType() == UnitType.PRIVATEER
-                        || defender.getType() == UnitType.PRIVATEER);
+                && (attacker.getType() == UnitType.SEA_RAIDER
+                        || defender.getType() == UnitType.SEA_RAIDER);
     }
 
     private void checkRegisteredPlayers(final Player first,
@@ -3801,7 +3800,7 @@ public class Model {
                 .filter(unit -> unit.getOwner() == actor
                         && unit instanceof UnitFreeColonist
                         && unit.isAtPlaceLocation())
-                .filter(unit -> unit.getType() == UnitType.SEASONED_SCOUT
+                .filter(unit -> unit.getType() == UnitType.WAYFARER
                         || ((UnitFreeColonist) unit).isHoldingWeapons()
                         || ((UnitFreeColonist) unit).isMounted())
                 .filter(unit -> hasVisiblePeaceContact(unit, rival))
@@ -4170,7 +4169,7 @@ public class Model {
      * with it. Mere war declarations are not aggression.
      */
     AggressionPlan planAggression(final Player attacker,
-            final Set<Player> victims, final boolean privateerException) {
+            final Set<Player> victims, final boolean seaRaiderException) {
         checkGameRunning();
         checkRegisteredPlayers(attacker, attacker);
         checkCurrentPlayer(attacker);
@@ -4191,7 +4190,7 @@ public class Model {
             Preconditions.checkState(state != EuropeanRelationState.ALLIANCE,
                     "Allies cannot attack each other");
             boolean war = state == EuropeanRelationState.WAR;
-            if (state == EuropeanRelationState.PEACE && !privateerException) {
+            if (state == EuropeanRelationState.PEACE && !seaRaiderException) {
                 plan.addChange(attacker, victim, state);
                 war = true;
             }
@@ -5266,8 +5265,8 @@ public class Model {
         }
         return Optional.of(new ClearForestOffer(unit.getId(),
                 unit.getLocation(),
-                unit.getType() == UnitType.HARDY_PIONEER
-                        ? UnitActionClearForest.HARDY_TURNS_TO_CLEAR_FOREST
+                unit.getType() == UnitType.CULTIVATOR
+                        ? UnitActionClearForest.CULTIVATOR_TURNS_TO_CLEAR_FOREST
                         : UnitActionClearForest.REQUIRED_TURNS_TO_CLEAR_FOREST,
                 UnitActionClearForest.REQUIRED_TOOLS,
                 UnitActionClearForest.LUMBER_YIELD));
@@ -5955,7 +5954,7 @@ public class Model {
                 .findChiefEncounter(nativeEuropean(owner)).isPresent();
         return Optional
                 .of(NativeChiefPreview.of(getNativeHostility(owner, settlement),
-                        visitor.getType() == UnitType.SEASONED_SCOUT, repeat));
+                        visitor.getType() == UnitType.WAYFARER, repeat));
     }
 
     /**
@@ -9236,7 +9235,7 @@ public class Model {
     /**
      * The patrol that checks a step onto this square, or empty. Any live armed
      * ship of another owner beside the square qualifies when its owner is at
-     * war with the mover's owner. A privateer also qualifies at peace when it
+     * war with the mover's owner. A seaRaider also qualifies at peace when it
      * could legally attack the mover; other armed ships never do. The strongest
      * attacker wins, and the lowest stable ID breaks a tie.
      *
@@ -9265,8 +9264,8 @@ public class Model {
             return false;
         }
         return areHostile(patrol.getOwner(), mover.getOwner())
-                || patrol.getType() == UnitType.PRIVATEER
-                        && isPrivateerNavalException(patrol, mover);
+                || patrol.getType() == UnitType.SEA_RAIDER
+                        && isSeaRaiderNavalException(patrol, mover);
     }
 
     private double attackStrength(final Ship patrol, final Ship mover) {
@@ -9297,8 +9296,7 @@ public class Model {
         // a refused result restores the random state, so nothing changed.
         final long randomBefore = combatRandomState;
         final LostCityRumorRules.Outcome drawn = LostCityRumorRules.draw(
-                explorer.getType() == UnitType.SEASONED_SCOUT,
-                nextCombatRandom());
+                explorer.getType() == UnitType.WAYFARER, nextCombatRandom());
         final LostCityRumorRules.Outcome outcome = LostCityRumorRules
                 .withDeSoto(drawn, owner.getCongressMembers()
                         .contains(Founder.HERNANDO_DE_SOTO));

@@ -28,7 +28,7 @@ enum Colonizopedia implements MessageKeyResource {
     topic_units_title, topic_units_body, unitMovement, unitCargo, unitPassenger,
     unitNotPassenger, unitPrice, unitNotForSale, unitExpertise, unitFarmer,
     unitFisherman, unitPioneer, unitCombat, unitArmedRoles, unitScout,
-    unitHardyPioneer, unitVeteran, unitMissionary, unitServant, unitCriminal,
+    unitCultivator, unitVeteran, unitMissionary, unitServant, unitCriminal,
     unitTreasure, unitBrave, unitArtillery, title, searchPrompt, noResults,
     properties, land, water, forest, fields, yes, no, none, movementDefense,
     production, occurrence, bonus, reserves, renewable, topic_terrain_title,

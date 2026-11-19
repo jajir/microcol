@@ -160,7 +160,7 @@ public class TC_169_F106_native_advisor_test extends AbstractAkropiaTest {
         advisor.closeWithEscape();
         advisor.verifyDialogClosed();
 
-        // The seasoned scout's repeat visit gives the information again, and
+        // The wayfarer's repeat visit gives the information again, and
         // the first outcome stays gold.
         visit.enterSettlement(SEASONED_AT, CAPITAL);
         visit.startChiefChoice();

@@ -9,9 +9,9 @@ import org.akropia.model.Player;
 import org.akropia.model.Unit;
 import org.akropia.model.UnitType;
 
-public final class UnitPrivateer extends Ship {
+public final class UnitWarGalley extends Ship {
 
-    public UnitPrivateer(Function<Unit, Cargo> cargoBuilder, Model model,
+    public UnitWarGalley(Function<Unit, Cargo> cargoBuilder, Model model,
             Integer id, Function<Unit, Place> placeBuilder, Player owner,
             int availableMoves, final UnitAction unitAction) {
         super(cargoBuilder, model, id, placeBuilder, owner, availableMoves,
@@ -20,7 +20,7 @@ public final class UnitPrivateer extends Ship {
 
     @Override
     public UnitType getType() {
-        return UnitType.PRIVATEER;
+        return UnitType.WAR_GALLEY;
     }
 
 }

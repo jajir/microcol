@@ -168,8 +168,8 @@ final class NativeVisitRules {
     }
 
     /**
-     * Ordinary and seasoned scouts share the one scout predicate of the
-     * colonist, so a mounted colonist without guns counts as a scout.
+     * Ordinary and wayfarers share the one scout predicate of the colonist, so
+     * a mounted colonist without guns counts as a scout.
      */
     private static boolean isScout(final Unit unit) {
         return unit instanceof UnitFreeColonist

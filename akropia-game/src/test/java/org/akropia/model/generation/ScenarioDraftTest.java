@@ -230,10 +230,10 @@ class ScenarioDraftTest {
                 () -> draft.placeSettlement(LAND, NativeNation.SIOUX, true)));
 
         draft.updateSettlement(LAND, NativeNation.SIOUX, false,
-                UnitType.SEASONED_SCOUT);
+                UnitType.WAYFARER);
         assertEquals(NativeNation.SIOUX,
                 draft.getSettlementAt(LAND).orElseThrow().getNation());
-        assertEquals("SEASONED_SCOUT",
+        assertEquals("WAYFARER",
                 draft.getSettlementAt(LAND).orElseThrow().getTeachableSkill());
         assertEquals(List.of(Reason.NO_EXPEDITION, Reason.NO_CAPITAL),
                 draft.getPlayabilityProblems().stream()
@@ -323,7 +323,7 @@ class ScenarioDraftTest {
     void nationChangeKeepsTheExpedition() {
         final ScenarioDraft draft = island();
         final int ship = draft.addUnit(UnitType.CARAVEL, SEA);
-        draft.addPassenger(ship, UnitType.HARDY_PIONEER);
+        draft.addPassenger(ship, UnitType.CULTIVATOR);
 
         draft.setNation(EuropeanNation.FRENCH);
 
@@ -334,7 +334,7 @@ class ScenarioDraftTest {
         assertTrue(saved.getModel().getGameManager().getPlayers().stream()
                 .anyMatch(player -> "France's King".equals(player.getName())
                         && "France".equals(player.getWhosKingThisPlayerIs())));
-        assertEquals(UnitType.HARDY_PIONEER,
+        assertEquals(UnitType.CULTIVATOR,
                 draft.getPassengers(ship).get(0).getType());
     }
 
@@ -345,7 +345,7 @@ class ScenarioDraftTest {
         final int ship = draft.addUnit(UnitType.MERCHANTMAN, SEA);
         draft.addPassenger(ship, UnitType.COLONIST);
         draft.addPassenger(ship, UnitType.VETERAN_SOLDIER);
-        draft.addUnit(UnitType.SEASONED_SCOUT, Location.of(3, 7));
+        draft.addUnit(UnitType.WAYFARER, Location.of(3, 7));
         draft.placeSettlement(Location.of(5, 4), NativeNation.CHEROKEE, true);
         draft.setForest(Location.of(6, 6), true);
         final File file = dir.resolve("english.akropia").toFile();

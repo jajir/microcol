@@ -46,14 +46,14 @@ import javafx.stage.Stage;
  * Rival naval military on the free-play map, through real French and Dutch
  * owner turns. In that save the sea is the {@code _} terrain and Quebec (17,10)
  * has no sea neighbour, so each fixture turns its unworked field slot at (18,9)
- * into ocean, where the French man-of-war starts. Every other ocean square of
+ * into ocean, where the French war galley starts. Every other ocean square of
  * the window around the port becomes grassland, so the water left is exactly
  * the listed set, and the squares turned to ocean lose the trees, fields, roads
  * and clearings that an ocean square cannot carry.
  *
  * The Dutch merchantman sits at (20,9) with land on seven sides and the sea
  * square (21,9) on the east. The only route from the port is six steps long,
- * and a man-of-war has six movement points, so the warship uses its whole first
+ * and a war galley has six movement points, so the warship uses its whole first
  * turn to arrive beside the carrier and can fight only on the second turn. The
  * whole route stays within two squares of the carrier, so it remains in sight.
  *
@@ -260,7 +260,7 @@ public class TC_146_F137_rival_naval_military_test extends AbstractAkropiaTest {
         // The saved armed colonist would fight on land; the warship is the only
         // attacker in these scenarios.
         unitPo(data, RIVAL_ID).setHoldingWeapons(false);
-        addShip(data, WARSHIP_ID, UnitType.MAN_OF_WAR, "France", WARSHIP_START);
+        addShip(data, WARSHIP_ID, UnitType.WAR_GALLEY, "France", WARSHIP_START);
         if (withCarrier) {
             addShip(data, CARRIER_ID, UnitType.MERCHANTMAN, "Dutch",
                     CARRIER_START);

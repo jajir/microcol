@@ -11,7 +11,7 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
-/** Privateer combat never changes the European treaty as a side effect. */
+/** SeaRaider combat never changes the European treaty as a side effect. */
 @ExtendWith(ApplicationExtension.class)
 public class TC_65_F56_privateer_test extends AbstractAkropiaTest {
     private static final Location ATTACKER = Location.of(20, 10);
@@ -30,29 +30,29 @@ public class TC_65_F56_privateer_test extends AbstractAkropiaTest {
         WelcomePage.of(getContext()).loadGame();
         AttackPage attack = new AttackPage(getContext());
         NavalBattlePage naval = new NavalBattlePage(getContext());
-        PrivateerPage privateer = new PrivateerPage(getContext());
+        SeaRaiderPage seaRaider = new SeaRaiderPage(getContext());
         // The diplomatic explanation remains mandatory even with the optional
         // advisor hidden.
         attack.configureHiddenAdvisor();
         attack.rememberWorld();
         attack.chooseAttack(ATTACKER, DEFENDER);
-        attack.verifyReview("Privateer", "Galleon", "does not declare war", 0,
+        attack.verifyReview("Sea Raider", "Galleon", "does not declare war", 0,
                 6);
-        attack.captureDialog("fightReview", "privateer-english.png");
+        attack.captureDialog("fightReview", "seaRaider-english.png");
         attack.cancel();
         attack.verifyGameplayUnchanged();
-        // A legal privateer victory takes fitting cargo without declaring
+        // A legal seaRaider victory takes fitting cargo without declaring
         // hostilities.
         naval.chooseSavedSeed(7);
         attack.chooseAttack(ATTACKER, DEFENDER);
         attack.confirm();
         naval.verifyOutcomeText("#6 sank.", "captured: 5 Ore.");
         naval.closeOutcome();
-        privateer.verifyPeacefulVictory(UnitType.PRIVATEER, 100);
+        seaRaider.verifyPeacefulVictory(UnitType.SEA_RAIDER, 100);
         attack.rememberWorld();
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
-        privateer.verifyPeacefulVictory(UnitType.PRIVATEER, 100);
+        seaRaider.verifyPeacefulVictory(UnitType.SEA_RAIDER, 100);
         attack.verifyGameplayUnchanged();
     }
 
@@ -63,21 +63,21 @@ public class TC_65_F56_privateer_test extends AbstractAkropiaTest {
         SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();
         settings.goBack().loadGame();
-        PrivateerPage privateer = new PrivateerPage(getContext());
-        privateer.loadCounterattackFixture();
+        SeaRaiderPage seaRaider = new SeaRaiderPage(getContext());
+        seaRaider.loadCounterattackFixture();
         AttackPage attack = new AttackPage(getContext());
         NavalBattlePage naval = new NavalBattlePage(getContext());
-        // The same exception applies against a privateer, with observed
+        // The same exception applies against a seaRaider, with observed
         // ownership preserved.
         naval.chooseSavedSeed(7);
         attack.chooseAttack(ATTACKER, DEFENDER);
-        attack.verifyReview("frigata", "korzárská loď", "nevyhlašuje válku", 0,
-                6);
-        attack.captureDialog("fightReview", "privateer-czech.png");
+        attack.verifyReview("frigata", "mořský nájezdník", "nevyhlašuje válku",
+                0, 6);
+        attack.captureDialog("fightReview", "seaRaider-czech.png");
         attack.confirm();
         naval.verifyOutcomeText("#6 se potopila.", "7 Železná ruda");
         naval.closeOutcome();
-        privateer.verifyPeacefulVictory(UnitType.FRIGATE, 100);
+        seaRaider.verifyPeacefulVictory(UnitType.FRIGATE, 100);
     }
 
     @Test

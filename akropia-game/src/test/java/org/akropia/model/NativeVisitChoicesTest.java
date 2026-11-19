@@ -127,8 +127,8 @@ class NativeVisitChoicesTest {
 
     @Test
     void seasonedScoutMeetsChiefButIsNotAlreadyAPupil() {
-        assertLimits(limitsOf(UnitType.SEASONED_SCOUT, COLONIST_FIELDS), CHIEF,
-                NO, NO, TRIBUTE, NO, NO, NO);
+        assertLimits(limitsOf(UnitType.WAYFARER, COLONIST_FIELDS), CHIEF, NO,
+                NO, TRIBUTE, NO, NO, NO);
     }
 
     @Test

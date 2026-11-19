@@ -93,7 +93,7 @@ class ExpertPurchaseTest {
         int nextId = model.getAllUnits().stream().mapToInt(Unit::getId).max()
                 .orElseThrow() + 1;
         for (UnitType type : new UnitType[] { UnitType.WAGON,
-                UnitType.MAN_OF_WAR }) {
+                UnitType.WAR_GALLEY }) {
             String before = snapshot();
             assertThrows(IllegalArgumentException.class,
                     () -> buyer().buy(type));

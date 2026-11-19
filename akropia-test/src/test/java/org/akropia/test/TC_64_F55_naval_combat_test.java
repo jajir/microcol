@@ -26,7 +26,7 @@ public class TC_64_F55_naval_combat_test extends AbstractAkropiaTest {
     private static final Location DEFENDER = Location.of(21, 10);
     private static final File FIXTURE = new File(
             "src/test/scenarios/F55-naval-combat.akropia");
-    private static final String DRAKE_ATTACKER = "Base: 8\nAttack: +50%\nPrivateers under Francis Drake: +50%\nFinal strength: 16";
+    private static final String DRAKE_ATTACKER = "Base: 8\nAttack: +50%\nSeaRaiders under Francis Drake: +50%\nFinal strength: 16";
     private static final String GALLEON_DEFENDER = "Base: 10\nFinal strength: 10";
 
     @Start
@@ -117,9 +117,9 @@ public class TC_64_F55_naval_combat_test extends AbstractAkropiaTest {
     @Test
     @Tag("local")
     void TC_04_drake_privateer_preview_survives_continue() throws Exception {
-        // Load the same battle with a privateer whose owner has recruited
+        // Load the same battle with a seaRaider whose owner has recruited
         // Drake.
-        prepareDrakePrivateer();
+        prepareDrakeSeaRaider();
         WelcomePage.of(getContext()).loadGame();
         AttackPage attack = new AttackPage(getContext());
         // The review names the Drake bonus and shows the exact 16 against 10
@@ -143,15 +143,15 @@ public class TC_64_F55_naval_combat_test extends AbstractAkropiaTest {
         attack.verifyGameplayUnchanged();
     }
 
-    private void prepareDrakePrivateer() throws Exception {
+    private void prepareDrakeSeaRaider() throws Exception {
         final JsonObject saved = new Gson()
                 .fromJson(Files.readString(FIXTURE.toPath()), JsonObject.class);
         final JsonObject model = saved.getAsJsonObject("model");
         model.getAsJsonArray("units").forEach(value -> {
             final JsonObject unit = value.getAsJsonObject();
             if (unit.get("id").getAsInt() == 0) {
-                unit.addProperty("type", "PRIVATEER");
-                // A privateer holds two goods or passengers; keep ore and the
+                unit.addProperty("type", "SEA_RAIDER");
+                // A seaRaider holds two goods or passengers; keep ore and the
                 // passenger in the first two holds.
                 final JsonArray slots = unit.getAsJsonObject("cargo")
                         .getAsJsonArray("slots");

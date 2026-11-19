@@ -17,9 +17,9 @@ import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
 /**
- * R-0186: after independence the Crown sends its recorded force on real
- * men-of-war, the carriers cross the Atlantic, the passengers land on legal
- * shore and attack a rebel colony within ten royal turns, and a Continue in
+ * R-0186: after independence the Crown sends its recorded force on real war
+ * galleys, the carriers cross the Atlantic, the passengers land on legal shore
+ * and attack a rebel colony within ten royal turns, and a Continue in
  * mid-voyage keeps the same force.
  */
 @ExtendWith(ApplicationExtension.class)
@@ -57,7 +57,7 @@ public class TC_152_F186_royal_deployment_test extends AbstractAkropiaTest {
         deployment.watchRoyalAttacks();
 
         // the first royal turn puts the whole recorded force on two real
-        // men-of-war: royal infantry, royal cavalry and artillery
+        // war galleys: royal infantry, royal cavalry and artillery
         gamePage.nextTurnAndCloseDialogs();
         deployment.verifyAllReserveSent();
         deployment.verifyVoyageUnderway();

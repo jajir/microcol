@@ -23,13 +23,12 @@ public final class ImageLoaderUnit extends AbstractTiledImageLoader {
             UnitType.MASTER_CARPENTER, UnitType.MASTER_OIL_MAKER,
             UnitType.MASTER_WEAVER, UnitType.MASTER_WINEMAKER,
             UnitType.MASTER_POTTER, UnitType.MASTER_WEAPONSMITH,
-            UnitType.FIREBRAND_PREACHER, UnitType.ELDER_STATESMAN,
-            UnitType.SEASONED_SCOUT, UnitType.HARDY_PIONEER,
-            UnitType.VETERAN_SOLDIER, UnitType.JESUIT_MISSIONARY,
-            UnitType.WAGON, UnitType.TREASURE_TRAIN, UnitType.ARTILLERY,
-            UnitType.MASTER_BLACKSMITH, UnitType.FRIGATE, UnitType.GALLEON,
-            UnitType.CARAVEL, UnitType.MERCHANTMAN, UnitType.PRIVATEER,
-            UnitType.MAN_OF_WAR);
+            UnitType.ORPHIC_TELESTES, UnitType.PHILOSOPHER, UnitType.WAYFARER,
+            UnitType.CULTIVATOR, UnitType.VETERAN_SOLDIER,
+            UnitType.JESUIT_MISSIONARY, UnitType.WAGON, UnitType.TREASURE_TRAIN,
+            UnitType.ARTILLERY, UnitType.MASTER_BLACKSMITH, UnitType.FRIGATE,
+            UnitType.GALLEON, UnitType.CARAVEL, UnitType.MERCHANTMAN,
+            UnitType.SEA_RAIDER, UnitType.WAR_GALLEY);
 
     public ImageLoaderUnit() {
         super(TileImageParams.makeBuilder().setTileWidthCount(8)

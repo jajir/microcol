@@ -128,13 +128,13 @@ class FounderOwlAndClayProductionTest {
     @Test
     void jeffersonAddsHalfOnlyToStaffedStatesmen() {
         final GameModelPo data = data(0);
-        moveToTownHall(data, 0, 0, UnitType.ELDER_STATESMAN);
+        moveToTownHall(data, 0, 0, UnitType.PHILOSOPHER);
         final Model without = load(data);
         // Unattended 1 plus expert 6 gives 7 without the father.
         assertEquals(7, planned(colony(without), GoodsType.OWLS));
         final GameModelPo withFather = data(0);
         giveMembers(withFather, List.of(Founder.THOMAS_JEFFERSON));
-        moveToTownHall(withFather, 0, 0, UnitType.ELDER_STATESMAN);
+        moveToTownHall(withFather, 0, 0, UnitType.PHILOSOPHER);
         // (1 * 100 + 6 * 150) / 100 = 10: only the staffed 6 gains 50%.
         assertEquals(10, planned(colony(load(withFather)), GoodsType.OWLS));
     }
@@ -174,7 +174,7 @@ class FounderOwlAndClayProductionTest {
     void paineAddsCurrentTaxToUnattendedAndStaffedOwls() {
         final GameModelPo data = data(0);
         giveMembers(data, List.of(Founder.THOMAS_PAINE));
-        moveToTownHall(data, 0, 0, UnitType.ELDER_STATESMAN);
+        moveToTownHall(data, 0, 0, UnitType.PHILOSOPHER);
         final Colony colony = colony(load(data));
         colony.getOwner().setTaxRate(0);
         assertEquals(7, planned(colony, GoodsType.OWLS));
@@ -203,7 +203,7 @@ class FounderOwlAndClayProductionTest {
     void currentTaxChangeAffectsOnlyTheNextCreditedOutput() {
         final GameModelPo data = data(0);
         giveMembers(data, List.of(Founder.THOMAS_PAINE));
-        moveToTownHall(data, 0, 0, UnitType.ELDER_STATESMAN);
+        moveToTownHall(data, 0, 0, UnitType.PHILOSOPHER);
         final Model model = load(data);
         final Colony colony = colony(model);
         colony.getOwner().setTaxRate(20);
@@ -222,7 +222,7 @@ class FounderOwlAndClayProductionTest {
         final GameModelPo press = data(500);
         giveMembers(press, List.of(Founder.THOMAS_JEFFERSON,
                 Founder.THOMAS_PAINE, Founder.HENRY_HUDSON));
-        moveToTownHall(press, 0, 0, UnitType.ELDER_STATESMAN);
+        moveToTownHall(press, 0, 0, UnitType.PHILOSOPHER);
         addBuilding(press, ConstructionType.PRINTING_PRESS);
         final Colony pressColony = colony(load(press));
         pressColony.getOwner().setTaxRate(20);
@@ -234,7 +234,7 @@ class FounderOwlAndClayProductionTest {
         final GameModelPo newspaper = data(500);
         giveMembers(newspaper, List.of(Founder.THOMAS_JEFFERSON,
                 Founder.THOMAS_PAINE, Founder.HENRY_HUDSON));
-        moveToTownHall(newspaper, 0, 0, UnitType.ELDER_STATESMAN);
+        moveToTownHall(newspaper, 0, 0, UnitType.PHILOSOPHER);
         addBuilding(newspaper, ConstructionType.NEWSPAPER);
         final Colony newspaperColony = colony(load(newspaper));
         newspaperColony.getOwner().setTaxRate(20);
@@ -242,10 +242,10 @@ class FounderOwlAndClayProductionTest {
         assertEquals(21, planned(newspaperColony, GoodsType.OWLS));
     }
 
-    /** An ELDER_STATESMAN hall whose owner joins the founder on one update. */
+    /** An PHILOSOPHER hall whose owner joins the founder on one update. */
     private Model hallReadyFor(final Founder founder) {
         final GameModelPo data = data(0);
-        moveToTownHall(data, 0, 0, UnitType.ELDER_STATESMAN);
+        moveToTownHall(data, 0, 0, UnitType.PHILOSOPHER);
         RealFounderJoin.readyFor(RealFounderJoin.congressOf(data.getModel(),
                 saved(data).getOwnerName()), founder);
         return load(data);
@@ -305,7 +305,7 @@ class FounderOwlAndClayProductionTest {
         final GameModelPo data = data(500);
         giveMembers(data, List.of(Founder.THOMAS_JEFFERSON,
                 Founder.THOMAS_PAINE, Founder.HENRY_HUDSON));
-        moveToTownHall(data, 0, 0, UnitType.ELDER_STATESMAN);
+        moveToTownHall(data, 0, 0, UnitType.PHILOSOPHER);
         addBuilding(data, ConstructionType.PRINTING_PRESS);
         final Model model = load(data);
         final Colony colony = colony(model);
@@ -446,8 +446,8 @@ class FounderOwlAndClayProductionTest {
         dutch.setTaxRate(newTax);
         quebec.getWarehouse().setGoods(Goods.of(GoodsType.GRAIN, 100));
         // A new colonist takes the town hall beside the unattended owl.
-        final Unit statesman = model.addUnitOutSideColony(quebec);
-        statesman.placeToColonyStructureSlot(
+        final Unit philosopher = model.addUnitOutSideColony(quebec);
+        philosopher.placeToColonyStructureSlot(
                 quebec.getConstructionByType(ConstructionType.TOWN_HALL)
                         .getSlotAt(0));
         model.declareHostilities(france, dutch);
@@ -456,7 +456,7 @@ class FounderOwlAndClayProductionTest {
         final Unit armed = model.addUnitOutSideColony(quebec);
         armed.takeOver(dutch);
         assertEquals(beforeOwls, planned(quebec, GoodsType.OWLS));
-        final int clayBefore = clayPreview(quebec, statesman);
+        final int clayBefore = clayPreview(quebec, philosopher);
         final int owlsBefore = stored(quebec, GoodsType.OWLS);
         quebec.startTurn();
         assertEquals(owlsBefore + beforeOwls, stored(quebec, GoodsType.OWLS));
@@ -464,7 +464,7 @@ class FounderOwlAndClayProductionTest {
         ColonyBattles.capture(model, quebec, armed);
         assertSame(dutch, quebec.getOwner());
         assertEquals(afterOwls, planned(quebec, GoodsType.OWLS));
-        final int clayAfter = clayPreview(quebec, statesman);
+        final int clayAfter = clayPreview(quebec, philosopher);
         final boolean hudsonBefore = priorMembers
                 .contains(Founder.HENRY_HUDSON);
         final boolean hudsonAfter = newMembers.contains(Founder.HENRY_HUDSON);

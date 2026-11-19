@@ -45,8 +45,8 @@ final class NativeChiefRules {
 
     /**
      * @param hostility required mood of the settlement toward the visitor
-     * @param seasoned  whether the visitor is a seasoned scout
-     * @return per-mille chance of death; a seasoned scout halves it exactly
+     * @param seasoned  whether the visitor is a wayfarer
+     * @return per-mille chance of death; a wayfarer halves it exactly
      */
     static int deathPerMille(final NativeHostility hostility,
             final boolean seasoned) {
@@ -75,7 +75,7 @@ final class NativeChiefRules {
      * seasoned difference in death is added to it.
      *
      * @param hostility required mood of the settlement toward the visitor
-     * @param seasoned  whether the visitor is a seasoned scout
+     * @param seasoned  whether the visitor is a wayfarer
      * @return per-mille chance of information
      */
     static int informationPerMille(final NativeHostility hostility,
@@ -86,7 +86,7 @@ final class NativeChiefRules {
 
     /**
      * @param hostility required mood of the settlement toward the visitor
-     * @param seasoned  whether the visitor is a seasoned scout
+     * @param seasoned  whether the visitor is a wayfarer
      * @param roll      uniform roll in [0, 1)
      * @return information below its share, then gold, then death
      */

@@ -32,7 +32,7 @@ public final class ScreenCongress implements GameScreen {
     private final Label royalInfantry = label("congressRoyalInfantry");
     private final Label royalCavalry = label("congressRoyalCavalry");
     private final Label royalArtillery = label("congressRoyalArtillery");
-    private final Label royalMenOfWar = label("congressRoyalMenOfWar");
+    private final Label royalWarGalleys = label("congressRoyalWarGalleys");
     private final Label royalOwls = label("congressRoyalOwls");
     private final Label royalStopped = label("congressRoyalStopped");
     private final Label intervention = label("congressIntervention");
@@ -113,7 +113,7 @@ public final class ScreenCongress implements GameScreen {
         royalDetails.setAnimated(false);
         royalDetails.setExpanded(false);
         royalDetails.setContent(new VBox(8, royalInfantry, royalCavalry,
-                royalArtillery, royalMenOfWar));
+                royalArtillery, royalWarGalleys));
         final VBox royal = new VBox(8, royalSummary, royalDetails, royalOwls,
                 royalStopped, intervention, interventionForces);
         royal.getStyleClass().add("congress-royal");
@@ -327,7 +327,7 @@ public final class ScreenCongress implements GameScreen {
                         crown.getTotal(RoyalRoster.Family.INFANTRY),
                         crown.getTotal(RoyalRoster.Family.CAVALRY),
                         crown.getTotal(RoyalRoster.Family.ARTILLERY),
-                        crown.getTotal(RoyalRoster.Family.MAN_OF_WAR)));
+                        crown.getTotal(RoyalRoster.Family.WAR_GALLEY)));
         royalDetails.setManaged(crown != null);
         royalDetails.setVisible(crown != null);
         royalInfantry.setText(crown == null ? ""
@@ -339,9 +339,9 @@ public final class ScreenCongress implements GameScreen {
         royalArtillery.setText(crown == null ? ""
                 : familyLine(CongressText.royalArtillery, crown,
                         RoyalRoster.Family.ARTILLERY));
-        royalMenOfWar.setText(crown == null ? ""
-                : familyLine(CongressText.royalMenOfWar, crown,
-                        RoyalRoster.Family.MAN_OF_WAR));
+        royalWarGalleys.setText(crown == null ? ""
+                : familyLine(CongressText.royalWarGalleys, crown,
+                        RoyalRoster.Family.WAR_GALLEY));
         royalOwls.setText(crown == null ? ""
                 : i18n.get(CongressText.royalOwls, crown.getOwlRemainder(),
                         crown.getOwlThreshold()));

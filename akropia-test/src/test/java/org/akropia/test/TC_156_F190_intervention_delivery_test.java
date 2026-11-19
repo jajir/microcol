@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 
 /**
  * The earned foreign intervention is delivered once (R-0190): a real update
- * delivers two men-of-war, four Continental infantry and two Continental
+ * delivers two war galleys, four Continental infantry and two Continental
  * cavalry at the lowest-ID owned coastal colony, the arrival is reported, the
  * player selects and moves a delivered unit, and Save and Continue keep the
  * delivered state without a second delivery. While the Crown's ships hold both

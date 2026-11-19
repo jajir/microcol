@@ -68,7 +68,7 @@ public class TC_97_F88_founder_production_test extends AbstractAkropiaTest {
         PrintingProductionPage owls = new PrintingProductionPage(getContext());
         FounderProductionPage founders = new FounderProductionPage(
                 getContext());
-        // Unattended 1 at 120% plus two ordinary statesmen 6 at 170%:
+        // Unattended 1 at 120% plus two ordinary philosophers 6 at 170%:
         // floor((120 + 1020) / 100) = 11.
         owls.verifyOwls(11, 0, 0, 1);
         ConstructionPage building = new ConstructionPage(getContext());

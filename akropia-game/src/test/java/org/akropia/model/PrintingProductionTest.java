@@ -30,9 +30,9 @@ class PrintingProductionTest {
                         ConstructionType.PRINTING_PRESS, 10),
                 Arguments.of("COLONIST,COLONIST", ConstructionType.NEWSPAPER,
                         14),
-                Arguments.of("ELDER_STATESMAN", ConstructionType.PRINTING_PRESS,
+                Arguments.of("PHILOSOPHER", ConstructionType.PRINTING_PRESS,
                         10),
-                Arguments.of("ELDER_STATESMAN", ConstructionType.NEWSPAPER, 14),
+                Arguments.of("PHILOSOPHER", ConstructionType.NEWSPAPER, 14),
                 Arguments.of("INDENTURED_SERVANT",
                         ConstructionType.PRINTING_PRESS, 4),
                 Arguments.of("INDENTURED_SERVANT", ConstructionType.NEWSPAPER,
@@ -40,7 +40,7 @@ class PrintingProductionTest {
                 Arguments.of("PETTY_CRIMINAL", ConstructionType.PRINTING_PRESS,
                         3),
                 Arguments.of("PETTY_CRIMINAL", ConstructionType.NEWSPAPER, 4),
-                Arguments.of("ELDER_STATESMAN,COLONIST",
+                Arguments.of("PHILOSOPHER,COLONIST",
                         ConstructionType.PRINTING_PRESS, 15));
     }
 

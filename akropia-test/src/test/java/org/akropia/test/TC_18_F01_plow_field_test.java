@@ -302,9 +302,9 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
     @Test
     @Tag("local")
     void TC_05_hardy_pioneer_completes_after_two_updates() throws Exception {
-        // Equip hardy pioneers in a scoped copy and load it.
+        // Equip cultivators in a scoped copy and load it.
         PlowFixture.prepare(getContext(), testFileName,
-                "plow-f01-hardy.akropia", 100, "HARDY_PIONEER", NEAR_LOCATION);
+                "plow-f01-hardy.akropia", 100, "CULTIVATOR", NEAR_LOCATION);
         GamePage gamePage = WelcomePage.of(getContext()).loadGame();
         final PlowPage plow = new PlowPage(getContext());
 
@@ -390,9 +390,9 @@ public class TC_18_F01_plow_field_test extends AbstractAkropiaTest {
     @Test
     @Tag("local")
     void TC_09_plowing_completion_report_survives_continue() throws Exception {
-        // Switch to Czech and load hardy pioneers in a scoped copy.
+        // Switch to Czech and load cultivators in a scoped copy.
         PlowFixture.prepare(getContext(), testFileName,
-                "plow-f01-report.akropia", 100, "HARDY_PIONEER", NEAR_LOCATION);
+                "plow-f01-report.akropia", 100, "CULTIVATOR", NEAR_LOCATION);
         SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();
         GamePage gamePage = settings.goBack().loadGame();

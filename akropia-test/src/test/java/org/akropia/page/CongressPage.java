@@ -242,13 +242,13 @@ public final class CongressPage extends AbstractScreen {
     }
 
     public void verifyRoyalForce(int infantry, int cavalry, int artillery,
-            int menOfWar, int remainder) {
-        verifyRoyalForce(infantry, cavalry, artillery, menOfWar, remainder,
+            int warGalleys, int remainder) {
+        verifyRoyalForce(infantry, cavalry, artillery, warGalleys, remainder,
                 false);
     }
 
     public void verifyRoyalForce(int infantry, int cavalry, int artillery,
-            int menOfWar, int remainder, boolean shipped) {
+            int warGalleys, int remainder, boolean shipped) {
         assertEquals(
                 "Infantry of the mother city: " + infantry + " total, "
                         + (shipped ? 0 : infantry) + " reserve, "
@@ -266,11 +266,11 @@ public final class CongressPage extends AbstractScreen {
                         + " shipped, 0 destroyed, 0 captured",
                 getLabeledById("congressRoyalArtillery").getText());
         assertEquals(
-                "Men-of-war: " + menOfWar + " total, "
-                        + (shipped ? 0 : menOfWar) + " reserve, "
-                        + (shipped ? menOfWar : 0)
+                "War Galleys: " + warGalleys + " total, "
+                        + (shipped ? 0 : warGalleys) + " reserve, "
+                        + (shipped ? warGalleys : 0)
                         + " shipped, 0 destroyed, 0 captured",
-                getLabeledById("congressRoyalMenOfWar").getText());
+                getLabeledById("congressRoyalWarGalleys").getText());
         assertEquals(
                 "Owls of the mother city toward the next unit: " + remainder
                         + " / 500",
@@ -279,7 +279,7 @@ public final class CongressPage extends AbstractScreen {
         assertEquals(infantry, crown.getTotal(RoyalRoster.Family.INFANTRY));
         assertEquals(cavalry, crown.getTotal(RoyalRoster.Family.CAVALRY));
         assertEquals(artillery, crown.getTotal(RoyalRoster.Family.ARTILLERY));
-        assertEquals(menOfWar, crown.getTotal(RoyalRoster.Family.MAN_OF_WAR));
+        assertEquals(warGalleys, crown.getTotal(RoyalRoster.Family.WAR_GALLEY));
         assertEquals(remainder, crown.getOwlRemainder());
         assertEquals(500, crown.getOwlThreshold());
     }
@@ -313,9 +313,9 @@ public final class CongressPage extends AbstractScreen {
                         RoyalRoster.Family.ARTILLERY),
                 getLabeledById("congressRoyalArtillery").getText());
         assertEquals(
-                royalFamilyText("Men-of-war", crown,
-                        RoyalRoster.Family.MAN_OF_WAR),
-                getLabeledById("congressRoyalMenOfWar").getText());
+                royalFamilyText("War Galleys", crown,
+                        RoyalRoster.Family.WAR_GALLEY),
+                getLabeledById("congressRoyalWarGalleys").getText());
         assertEquals("Owls of the mother city toward the next unit: "
                 + crown.getOwlRemainder() + " / " + crown.getOwlThreshold(),
                 getLabeledById("congressRoyalOwls").getText());
@@ -402,7 +402,7 @@ public final class CongressPage extends AbstractScreen {
     private static final String[] TEXT_IDS = { "congressSupport",
             "congressProgress", "congressObjective", "congressMembers",
             "congressReward", "congressRoyalInfantry", "congressRoyalCavalry",
-            "congressRoyalArtillery", "congressRoyalMenOfWar",
+            "congressRoyalArtillery", "congressRoyalWarGalleys",
             "congressRoyalOwls", "congressRoyalStopped", "congressIntervention",
             "congressInterventionForces", "congressDetail",
             "congressFeedback" };

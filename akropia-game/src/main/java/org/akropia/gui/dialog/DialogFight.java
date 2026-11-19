@@ -182,7 +182,7 @@ public final class DialogFight extends AbstractMessageWindow {
         userChooseFight = false;
         checkBoxShowNextTime.setSelected(false);
         final boolean mandatoryReview = order.isDeclarationRequired()
-                || order.isPrivateerException();
+                || order.isSeaRaiderException();
         checkBoxShowNextTime.setVisible(!mandatoryReview);
         checkBoxShowNextTime.setManaged(!mandatoryReview);
         declaration.setVisible(mandatoryReview);
@@ -193,9 +193,9 @@ public final class DialogFight extends AbstractMessageWindow {
                                 ? i18n.get(Dialog.fight_declaration,
                                         order.getDefender().getOwner()
                                                 .getDisplayName())
-                                : order.isPrivateerException()
+                                : order.isSeaRaiderException()
                                         ? i18n.get(
-                                                Dialog.fight_privateerException)
+                                                Dialog.fight_seaRaiderException)
                                         : "");
         final boolean hasStrengths = order.getCombatStrengths().isPresent();
         attackerStrength.setVisible(hasStrengths);

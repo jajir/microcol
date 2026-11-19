@@ -28,8 +28,8 @@ final class RoadFixture {
      */
     static final String COLONIST_TYPE = "COLONIST";
 
-    /** Saved type name of a hardy pioneer. */
-    static final String HARDY_PIONEER_TYPE = "HARDY_PIONEER";
+    /** Saved type name of a cultivator. */
+    static final String CULTIVATOR_TYPE = "CULTIVATOR";
 
     private RoadFixture() {
     }
@@ -73,7 +73,7 @@ final class RoadFixture {
 
     /**
      * Same as {@link #prepare(TestContext, File, String, int, Location...)} but
-     * every colonist is saved as a hardy pioneer.
+     * every colonist is saved as a cultivator.
      *
      * @param context running application context
      * @param source  shared scenario
@@ -84,7 +84,7 @@ final class RoadFixture {
     static void prepareHardy(final TestContext context, final File source,
             final String name, final int tools, final Location... bareAt)
             throws IOException {
-        write(context, source, name, tools, HARDY_PIONEER_TYPE, new Location[0],
+        write(context, source, name, tools, CULTIVATOR_TYPE, new Location[0],
                 bareAt, new Location[0], null);
     }
 
@@ -122,7 +122,7 @@ final class RoadFixture {
                 unit.addProperty("tools", tools);
                 if (unitType != null) {
                     unit.addProperty("type", unitType);
-                    // A hardy pioneer keeps a valid, empty work history.
+                    // A cultivator keeps a valid, empty work history.
                     unit.addProperty("workUpdates", 0);
                     unit.addProperty("missionary", false);
                     unit.remove("workSkill");

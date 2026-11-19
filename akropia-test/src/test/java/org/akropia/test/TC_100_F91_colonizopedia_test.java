@@ -412,13 +412,20 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
                 "Equipment can change movement and combat");
         help.verifyReferenceRows(35);
         help.verifyUnitIllustrations();
+        help.verifyUnitName("ORPHIC_TELESTES", "Orfický telestés");
+        help.verifyUnitName("PHILOSOPHER", "Philosopher");
+        help.verifyUnitName("WAYFARER", "Wayfarer");
+        help.verifyUnitName("CULTIVATOR", "Cultivator");
+        help.verifyUnitName("SEA_RAIDER", "Sea Raider");
+        help.verifyUnitName("WAR_GALLEY", "War Galley");
+
         // Check ships, civilians, native fighters, treasure and specialists.
         help.verifyReferenceProperties("colonizopediaUnitProperties_FRIGATE",
                 "base points per turn: 6", "Cargo holds: 4", "4000 gold",
                 "combat: yes");
         help.verifyReferenceProperties("colonizopediaUnitProperties_CARAVEL",
                 "base points per turn: 4", "Cargo holds: 2", "combat: no");
-        help.verifyReferenceProperties("colonizopediaUnitProperties_MAN_OF_WAR",
+        help.verifyReferenceProperties("colonizopediaUnitProperties_WAR_GALLEY",
                 "Cargo holds: 6", "Home port purchase: unavailable");
         help.verifyReferenceProperties("colonizopediaUnitProperties_COLONIST",
                 "Transport by ship: 1 hold(s)", "with weapons",
@@ -437,8 +444,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         help.verifyReferenceProperties(
                 "colonizopediaUnitProperties_EXPERT_FISHERMAN",
                 "water fields only");
-        help.verifyReferenceProperties(
-                "colonizopediaUnitProperties_HARDY_PIONEER",
+        help.verifyReferenceProperties("colonizopediaUnitProperties_CULTIVATOR",
                 "completes improvements faster");
         help.verifyHandDrawnFramesWithoutStripes();
         help.captureDialog("colonizopediaPage", "r0329-help-units-en.png");
@@ -481,6 +487,13 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         help.verifySelectedTopic("Jednotky", "Výstroj může měnit pohyb a boj");
         help.verifyReferenceRows(35);
         help.verifyUnitIllustrations();
+        help.verifyUnitName("ORPHIC_TELESTES", "Orfický telestés");
+        help.verifyUnitName("PHILOSOPHER", "filozof");
+        help.verifyUnitName("WAYFARER", "poutník");
+        help.verifyUnitName("CULTIVATOR", "kultivátor");
+        help.verifyUnitName("SEA_RAIDER", "mořský nájezdník");
+        help.verifyUnitName("WAR_GALLEY", "válečná galéra");
+
         help.verifyReferenceProperties("colonizopediaUnitProperties_CARAVEL",
                 "základní body za tah: 4", "Nákladové oddíly: 2", "1000 zlata",
                 "Může zahájit boj: ne");

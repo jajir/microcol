@@ -127,9 +127,9 @@ samostatný základní typ. Matice návrhu proto musí pracovat se schopnostmi a
 | Rodina | Typy ve zdrojích | Specifika ovládání |
 | --- | --- | --- |
 | Běžní kolonisté (3) | COLONIST, INDENTURED_SERVANT, PETTY_CRIMINAL | Pohyb, práce, založení, vybavení, přeprava podle pravidel |
-| Odborníci (22) | EXPERT_ORE_MINER, EXPERT_FARMER, EXPERT_FISHERMAN, EXPERT_CLAY_DIGGER, EXPERT_SILVER_MINER, EXPERT_LUMBERJACK; MASTER_OLIVE_GROWER, MASTER_SHEPHERD, MASTER_GRAPE_GROWER, MASTER_CARPENTER, MASTER_OIL_MAKER, MASTER_WEAVER, MASTER_WINEMAKER, MASTER_POTTER, MASTER_WEAPONSMITH, MASTER_BLACKSMITH; FIREBRAND_PREACHER, ELDER_STATESMAN, SEASONED_SCOUT, HARDY_PIONEER, VETERAN_SOLDIER, JESUIT_MISSIONARY | Stejný základ výběru a pohybu; specializované akce odvozené od role, výstroje, práce a cíle |
+| Odborníci (22) | EXPERT_ORE_MINER, EXPERT_FARMER, EXPERT_FISHERMAN, EXPERT_CLAY_DIGGER, EXPERT_SILVER_MINER, EXPERT_LUMBERJACK; MASTER_OLIVE_GROWER, MASTER_SHEPHERD, MASTER_GRAPE_GROWER, MASTER_CARPENTER, MASTER_OIL_MAKER, MASTER_WEAVER, MASTER_WINEMAKER, MASTER_POTTER, MASTER_WEAPONSMITH, MASTER_BLACKSMITH; ORPHIC_TELESTES, PHILOSOPHER, WAYFARER, CULTIVATOR, VETERAN_SOLDIER, JESUIT_MISSIONARY | Stejný základ výběru a pohybu; specializované akce odvozené od role, výstroje, práce a cíle |
 | Pozemní zvláštní jednotky (3) | WAGON, TREASURE_TRAIN, ARTILLERY | Náklad/trasy, transport pokladu, boj; nepřidělovat automaticky kolonistické příkazy |
-| Lodě (6) | FRIGATE, GALLEON, CARAVEL, MERCHANTMAN, PRIVATEER, MAN_OF_WAR | Přístavy, náklad/pasažéři, plavba, případně boj podle schopností |
+| Lodě (6) | FRIGATE, GALLEON, CARAVEL, MERCHANTMAN, SEA_RAIDER, WAR_GALLEY | Přístavy, náklad/pasažéři, plavba, případně boj podle schopností |
 | Domorodá jednotka (1) | BRAVE | V běžné lidské koloniální hře pozorování nebo interakce jako s cizí jednotkou; vlastnictví rozhoduje o ovladatelnosti |
 
 1. U každé použitelné rodiny zahrnout: samostatnou jednotku, více vlastních

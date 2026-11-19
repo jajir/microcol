@@ -376,7 +376,7 @@ class NativeTeachingTest {
                 UnitType.EXPERT_FISHERMAN, UnitType.EXPERT_CLAY_DIGGER,
                 UnitType.EXPERT_SILVER_MINER, UnitType.MASTER_OLIVE_GROWER,
                 UnitType.MASTER_SHEPHERD, UnitType.MASTER_GRAPE_GROWER,
-                UnitType.SEASONED_SCOUT);
+                UnitType.WAYFARER);
         assertEquals(8, cardSkills.size());
         for (final UnitType skill : cardSkills) {
             final Model built = teachingScene(UnitType.COLONIST, UNARMED);

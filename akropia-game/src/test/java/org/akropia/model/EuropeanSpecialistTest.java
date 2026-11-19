@@ -125,16 +125,15 @@ class EuropeanSpecialistTest {
     void seasonedScoutHasTwoTileSightWithoutChangingItsIdentity() {
         final Model model = load(scenario());
         final Player buyer = model.getPlayerByName("Dutch");
-        buyer.setGold(UnitType.SEASONED_SCOUT.getEuropePrice());
-        buyer.buy(UnitType.SEASONED_SCOUT);
+        buyer.setGold(UnitType.WAYFARER.getEuropePrice());
+        buyer.buy(UnitType.WAYFARER);
         final UnitFreeColonist scout = (UnitFreeColonist) buyer.getAllUnits()
-                .stream()
-                .filter(unit -> unit.getType() == UnitType.SEASONED_SCOUT)
+                .stream().filter(unit -> unit.getType() == UnitType.WAYFARER)
                 .findFirst().orElseThrow();
         assertEquals(2, scout.getSightRadius());
         scout.setHoldingWeapons(true);
         assertEquals(2, scout.getSightRadius());
-        assertSame(UnitType.SEASONED_SCOUT, scout.getType());
+        assertSame(UnitType.WAYFARER, scout.getType());
     }
 
     @Test
@@ -147,11 +146,10 @@ class EuropeanSpecialistTest {
         Model model = Model.make(data.getModel(),
                 List.of(GameOverEvaluator.GAMEOVER_CONDITION_CALENDAR));
         final Player buyer = model.getPlayerByName("Dutch");
-        buyer.setGold(UnitType.HARDY_PIONEER.getEuropePrice());
-        buyer.buy(UnitType.HARDY_PIONEER);
+        buyer.setGold(UnitType.CULTIVATOR.getEuropePrice());
+        buyer.buy(UnitType.CULTIVATOR);
         final UnitFreeColonist hardy = (UnitFreeColonist) buyer.getAllUnits()
-                .stream()
-                .filter(unit -> unit.getType() == UnitType.HARDY_PIONEER)
+                .stream().filter(unit -> unit.getType() == UnitType.CULTIVATOR)
                 .findFirst().orElseThrow();
         final int id = hardy.getId();
         hardy.placeToLocation(field);
@@ -172,7 +170,7 @@ class EuropeanSpecialistTest {
         model = Model.make(dao.loadFromFile(file.toFile()).getModel(),
                 List.of(GameOverEvaluator.GAMEOVER_CONDITION_CALENDAR));
         final Unit reloaded = model.getUnitById(id);
-        assertSame(UnitType.HARDY_PIONEER, reloaded.getType());
+        assertSame(UnitType.CULTIVATOR, reloaded.getType());
         assertEquals(100, ((UnitFreeColonist) reloaded).getTools());
         assertEquals(1, ((UnitActionPlowField) reloaded.getAction())
                 .getRemainingTurns());

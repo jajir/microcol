@@ -15,8 +15,8 @@ import org.akropia.model.unit.UnitActionNoAction;
 
 import com.google.gson.Gson;
 
-/** Privateers permit naval fighting without changing European relations. */
-class PrivateerExceptionTest {
+/** SeaRaiders permit naval fighting without changing European relations. */
+class SeaRaiderExceptionTest {
     private static final Location TARGET = Location.of(44, 15);
 
     private Model game(final UnitType attackerType, final UnitType targetType,
@@ -62,20 +62,20 @@ class PrivateerExceptionTest {
     }
 
     @Test
-    void privateerAttackKeepsPeaceAndSurvivesReload() {
-        final Model model = game(UnitType.PRIVATEER, UnitType.FRIGATE,
+    void seaRaiderAttackKeepsPeaceAndSurvivesReload() {
+        final Model model = game(UnitType.SEA_RAIDER, UnitType.FRIGATE,
                 "France");
         final Ship attacker = (Ship) model.getUnitById(3);
         final Ship target = (Ship) model.getUnitById(100);
         final Player dutch = attacker.getOwner();
         final Player french = target.getOwner();
         assertFalse(model.areHostile(dutch, french));
-        assertTrue(model.isPrivateerNavalException(attacker, target));
+        assertTrue(model.isSeaRaiderNavalException(attacker, target));
         assertTrue(attacker.isPossibleToAttackAt(TARGET));
         final String before = new Gson().toJson(model.save());
         final AttackOrder order = attacker.prepareAttack(TARGET, false)
                 .orElseThrow();
-        assertTrue(order.isPrivateerException());
+        assertTrue(order.isSeaRaiderException());
         assertFalse(order.isDeclarationRequired());
         assertEquals(before, new Gson().toJson(model.save()));
         order.execute();
@@ -91,14 +91,14 @@ class PrivateerExceptionTest {
     }
 
     @Test
-    void armedShipCanCounterattackPrivateerWithoutWar() {
-        final Model model = game(UnitType.FRIGATE, UnitType.PRIVATEER,
+    void armedShipCanCounterattackSeaRaiderWithoutWar() {
+        final Model model = game(UnitType.FRIGATE, UnitType.SEA_RAIDER,
                 "France");
         final Ship attacker = (Ship) model.getUnitById(3);
         final Ship target = (Ship) model.getUnitById(100);
         final AttackOrder order = attacker.prepareAttack(TARGET, false)
                 .orElseThrow();
-        assertTrue(order.isPrivateerException());
+        assertTrue(order.isSeaRaiderException());
         assertFalse(order.isDeclarationRequired());
         order.execute();
         assertEquals(EuropeanRelationState.PEACE, model
@@ -107,17 +107,17 @@ class PrivateerExceptionTest {
 
     @Test
     void existingWarIsPreservedAndOrdinaryFrigateStillDeclares() {
-        final Model atWar = game(UnitType.PRIVATEER, UnitType.FRIGATE,
+        final Model atWar = game(UnitType.SEA_RAIDER, UnitType.FRIGATE,
                 "France");
-        final Ship privateer = (Ship) atWar.getUnitById(3);
+        final Ship seaRaider = (Ship) atWar.getUnitById(3);
         final Ship rival = (Ship) atWar.getUnitById(100);
-        atWar.declareHostilities(privateer.getOwner(), rival.getOwner());
-        final AttackOrder wartime = privateer.prepareAttack(TARGET, false)
+        atWar.declareHostilities(seaRaider.getOwner(), rival.getOwner());
+        final AttackOrder wartime = seaRaider.prepareAttack(TARGET, false)
                 .orElseThrow();
-        assertTrue(wartime.isPrivateerException());
+        assertTrue(wartime.isSeaRaiderException());
         wartime.execute();
         assertEquals(EuropeanRelationState.WAR, atWar
-                .getEuropeanRelation(privateer.getOwner(), rival.getOwner()));
+                .getEuropeanRelation(seaRaider.getOwner(), rival.getOwner()));
 
         final Model ordinary = game(UnitType.FRIGATE, UnitType.GALLEON,
                 "France");
@@ -125,7 +125,7 @@ class PrivateerExceptionTest {
         assertFalse(frigate.isPossibleToAttackAt(TARGET));
         final AttackOrder declaration = frigate.prepareAttack(TARGET, true)
                 .orElseThrow();
-        assertFalse(declaration.isPrivateerException());
+        assertFalse(declaration.isSeaRaiderException());
         assertTrue(declaration.isDeclarationRequired());
         declaration.execute();
         assertEquals(EuropeanRelationState.WAR, ordinary.getEuropeanRelation(
@@ -134,7 +134,7 @@ class PrivateerExceptionTest {
 
     @Test
     void stalePeaceToWarRejectsBeforeDrawMovementOrCargoChange() {
-        final Model model = game(UnitType.PRIVATEER, UnitType.FRIGATE,
+        final Model model = game(UnitType.SEA_RAIDER, UnitType.FRIGATE,
                 "France");
         final Ship attacker = (Ship) model.getUnitById(3);
         final Ship target = (Ship) model.getUnitById(100);
@@ -148,7 +148,7 @@ class PrivateerExceptionTest {
 
     @Test
     void staleWarToPeaceAlsoRejectsBeforeBattle() {
-        final Model model = game(UnitType.FRIGATE, UnitType.PRIVATEER,
+        final Model model = game(UnitType.FRIGATE, UnitType.SEA_RAIDER,
                 "France");
         final Ship attacker = (Ship) model.getUnitById(3);
         final Ship target = (Ship) model.getUnitById(100);
@@ -163,16 +163,16 @@ class PrivateerExceptionTest {
 
     @Test
     void noncombatantCannotExploitExceptionAndCrownHostilityStillWorks() {
-        final Model merchant = game(UnitType.MERCHANTMAN, UnitType.PRIVATEER,
+        final Model merchant = game(UnitType.MERCHANTMAN, UnitType.SEA_RAIDER,
                 "France");
-        assertFalse(merchant.isPrivateerNavalException(merchant.getUnitById(3),
+        assertFalse(merchant.isSeaRaiderNavalException(merchant.getUnitById(3),
                 merchant.getUnitById(100)));
         assertTrue(
                 merchant.getUnitById(3).prepareAttack(TARGET, true).isEmpty());
 
-        final Model crown = game(UnitType.FRIGATE, UnitType.PRIVATEER,
+        final Model crown = game(UnitType.FRIGATE, UnitType.SEA_RAIDER,
                 "France's King");
-        assertFalse(crown.isPrivateerNavalException(crown.getUnitById(3),
+        assertFalse(crown.isSeaRaiderNavalException(crown.getUnitById(3),
                 crown.getUnitById(100)));
         assertTrue(
                 crown.getUnitById(3).prepareAttack(TARGET, false).isPresent());

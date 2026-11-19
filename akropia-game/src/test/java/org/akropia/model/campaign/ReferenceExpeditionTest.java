@@ -407,7 +407,7 @@ class ReferenceExpeditionTest {
             assertEquals(rule.cavalry,
                     members(roster, RoyalRoster.Family.CAVALRY));
             assertEquals(2, members(roster, RoyalRoster.Family.ARTILLERY));
-            assertEquals(2, members(roster, RoyalRoster.Family.MAN_OF_WAR));
+            assertEquals(2, members(roster, RoyalRoster.Family.WAR_GALLEY));
             assertEquals(ceilDivide(500 * 100, rule.factor),
                     roster.getOwlThreshold());
         }

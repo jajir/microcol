@@ -62,8 +62,8 @@ import org.akropia.model.unit.Ship;
  * it damaged for repair. A patrol interception draws once for a step beside an
  * eligible hostile armed ship: below one half it is undetected, below three
  * quarters slowed, otherwise stopped. The naval quote of two ships depends only
- * on their types: a man-of-war against a man-of-war is 36 / (36 + 24) = 0.6, a
- * frigate against one is 24 / (24 + 24) = 0.5, a man-of-war against a
+ * on their types: a war galley against a war galley is 36 / (36 + 24) = 0.6, a
+ * frigate against one is 24 / (24 + 24) = 0.5, a war galley against a
  * merchantman is 36 / 42, and a frigate against a merchantman is 24 / 30.
  */
 class RivalNavalMilitaryCycleTest {
@@ -217,7 +217,7 @@ class RivalNavalMilitaryCycleTest {
      * the carrier is in sight along the whole way. The carrier at (20,9) has
      * land on seven sides and the sea square (21,9) on the east. From the port
      * square (18,9) the only route is (18,8), (19,7), (20,7), (21,7), (22,8),
-     * (21,9): six steps, one whole owner turn of a man-of-war, so the attack
+     * (21,9): six steps, one whole owner turn of a war galley, so the attack
      * cannot happen before the second turn. With the approach closed the
      * carrier has no sea neighbour at all.
      */
@@ -508,7 +508,7 @@ class RivalNavalMilitaryCycleTest {
     // ------------------------------------------------------- target choice
 
     /**
-     * The armed Dutch man-of-war stands beside the warship, but the unarmed
+     * The armed Dutch war galley stands beside the warship, but the unarmed
      * merchantman two squares away is the priority. The warship's approach step
      * to (19,10) is beside the armed ship, so the model's patrol check draws
      * once before the fight; that draw is pinned undetected, and the two fight
@@ -517,9 +517,9 @@ class RivalNavalMilitaryCycleTest {
     @Test
     void unarmedCarrierRanksBeforeAnAdjacentArmedTarget() {
         final GameModelPo data = seaPort();
-        addShip(data, FIRST_NEW_ID, UnitType.MAN_OF_WAR, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.WAR_GALLEY, "France",
                 WARSHIP_START);
-        addShip(data, SECOND_NEW_ID, UnitType.MAN_OF_WAR, "Dutch",
+        addShip(data, SECOND_NEW_ID, UnitType.WAR_GALLEY, "Dutch",
                 Location.of(19, 9));
         addShip(data, THIRD_NEW_ID, UnitType.MERCHANTMAN, "Dutch",
                 Location.of(20, 11));
@@ -540,15 +540,15 @@ class RivalNavalMilitaryCycleTest {
     }
 
     /**
-     * The armed Dutch man-of-war stands beside the warship at exactly the
+     * The armed Dutch war galley stands beside the warship at exactly the
      * shared threshold, 0.6, so the attack is made and the defender is sunk.
      */
     @Test
     void anArmedTargetAtExactlySixtyPercentIsAttacked() {
         final GameModelPo data = seaPort();
-        addShip(data, FIRST_NEW_ID, UnitType.MAN_OF_WAR, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.WAR_GALLEY, "France",
                 WARSHIP_START);
-        addShip(data, SECOND_NEW_ID, UnitType.MAN_OF_WAR, "Dutch",
+        addShip(data, SECOND_NEW_ID, UnitType.WAR_GALLEY, "Dutch",
                 Location.of(19, 9));
         start(data);
         model.declareHostilities(france(), dutch());
@@ -571,9 +571,9 @@ class RivalNavalMilitaryCycleTest {
     @Test
     void anAttackerThatLosesTheDrawIsDamagedByTheSharedRule() {
         final GameModelPo data = seaPort();
-        addShip(data, FIRST_NEW_ID, UnitType.MAN_OF_WAR, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.WAR_GALLEY, "France",
                 WARSHIP_START);
-        addShip(data, SECOND_NEW_ID, UnitType.MAN_OF_WAR, "Dutch",
+        addShip(data, SECOND_NEW_ID, UnitType.WAR_GALLEY, "Dutch",
                 Location.of(19, 9));
         start(data);
         model.declareHostilities(france(), dutch());
@@ -589,7 +589,7 @@ class RivalNavalMilitaryCycleTest {
     }
 
     /**
-     * A frigate beside a man-of-war quotes 0.5, below the threshold, so it
+     * A frigate beside a war galley quotes 0.5, below the threshold, so it
      * never attacks. The only patrol square is the one north of the port, which
      * is also beside the Dutch ship, so the model's own interception check
      * draws once there; the pinned state makes that draw stop the ship. The
@@ -600,7 +600,7 @@ class RivalNavalMilitaryCycleTest {
     void anArmedTargetBelowSixtyPercentIsNotAttackedAndOnlyPatrolsIntercepted() {
         final GameModelPo data = tinyPort();
         addShip(data, FIRST_NEW_ID, UnitType.FRIGATE, "France", WARSHIP_START);
-        addShip(data, SECOND_NEW_ID, UnitType.MAN_OF_WAR, "Dutch",
+        addShip(data, SECOND_NEW_ID, UnitType.WAR_GALLEY, "Dutch",
                 Location.of(19, 9));
         data.getModel().setCombatRandomState(statePinning(STOPPED));
         start(data);
@@ -636,7 +636,7 @@ class RivalNavalMilitaryCycleTest {
     @Test
     void equalDistanceCarriersRankByTheLowerTargetId() {
         final GameModelPo data = seaPort();
-        addShip(data, FIRST_NEW_ID, UnitType.MAN_OF_WAR, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.WAR_GALLEY, "France",
                 WARSHIP_START);
         addShip(data, THIRD_NEW_ID, UnitType.MERCHANTMAN, "Dutch",
                 Location.of(20, 9));
@@ -656,7 +656,7 @@ class RivalNavalMilitaryCycleTest {
     @Test
     void peaceBarsAnOrdinaryWarshipFromAttackingACarrier() {
         final GameModelPo data = seaPort();
-        addShip(data, FIRST_NEW_ID, UnitType.MAN_OF_WAR, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.WAR_GALLEY, "France",
                 WARSHIP_START);
         addShip(data, SECOND_NEW_ID, UnitType.MERCHANTMAN, "Dutch",
                 Location.of(19, 9));
@@ -671,14 +671,14 @@ class RivalNavalMilitaryCycleTest {
     }
 
     /**
-     * A privateer attacks a peaceful carrier through the privateer exception:
+     * A seaRaider attacks a peaceful carrier through the seaRaider exception:
      * the battle is fought, the sunk carrier is the result, and the relation
      * stays at peace with no war declared.
      */
     @Test
-    void privateerAttacksAPeacefulCarrierWithoutDeclaringWar() {
+    void seaRaiderAttacksAPeacefulCarrierWithoutDeclaringWar() {
         final GameModelPo data = seaPort();
-        addShip(data, FIRST_NEW_ID, UnitType.PRIVATEER, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.SEA_RAIDER, "France",
                 WARSHIP_START);
         addShip(data, SECOND_NEW_ID, UnitType.MERCHANTMAN, "Dutch",
                 Location.of(19, 9));
@@ -692,12 +692,12 @@ class RivalNavalMilitaryCycleTest {
                 model.getEuropeanRelation(france(), dutch()));
     }
 
-    /** An alliance restrains every attack, privateers included. */
+    /** An alliance restrains every attack, seaRaiders included. */
     @Test
-    void allianceRestrainsEvenAPrivateer() {
+    void allianceRestrainsEvenASeaRaider() {
         final GameModelPo data = seaPort();
         relate(data, EuropeanRelationState.ALLIANCE);
-        addShip(data, FIRST_NEW_ID, UnitType.PRIVATEER, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.SEA_RAIDER, "France",
                 WARSHIP_START);
         addShip(data, SECOND_NEW_ID, UnitType.MERCHANTMAN, "Dutch",
                 Location.of(19, 9));
@@ -721,7 +721,7 @@ class RivalNavalMilitaryCycleTest {
     @Test
     void aHiddenCarrierIsIgnoredAndTheWarshipStaysInItsBand() {
         final GameModelPo data = seaPort();
-        addShip(data, FIRST_NEW_ID, UnitType.MAN_OF_WAR, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.WAR_GALLEY, "France",
                 WARSHIP_START);
         addShip(data, SECOND_NEW_ID, UnitType.MERCHANTMAN, "Dutch", HIDDEN_SEA);
         start(data);
@@ -744,7 +744,7 @@ class RivalNavalMilitaryCycleTest {
     @Test
     void noTargetPatrolsTheKnownSeaWithinFiveSquaresOfThePort() {
         final GameModelPo data = seaPort();
-        addShip(data, FIRST_NEW_ID, UnitType.MAN_OF_WAR, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.WAR_GALLEY, "France",
                 WARSHIP_START);
         start(data);
         final Unit warship = model.getUnitById(FIRST_NEW_ID);
@@ -780,7 +780,7 @@ class RivalNavalMilitaryCycleTest {
     @Test
     void multiTurnPursuitReachesTheCarrierAfterItsFirstTurnMoves() {
         final GameModelPo data = channelPort(true);
-        addShip(data, FIRST_NEW_ID, UnitType.MAN_OF_WAR, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.WAR_GALLEY, "France",
                 WARSHIP_START);
         addShip(data, THIRD_NEW_ID, UnitType.MERCHANTMAN, "Dutch",
                 CARRIER_SQUARE);
@@ -789,7 +789,7 @@ class RivalNavalMilitaryCycleTest {
         pinBattle(FIRST_NEW_ID, APPROACH, CARRIER_SQUARE, true);
         final Unit warship = model.getUnitById(FIRST_NEW_ID);
         final int stepsBefore = stepsToApproach(warship, CARRIER_SQUARE);
-        assertTrue(stepsBefore >= UnitType.MAN_OF_WAR.getSpeed(),
+        assertTrue(stepsBefore >= UnitType.WAR_GALLEY.getSpeed(),
                 "The approach must cost a whole turn, was " + stepsBefore);
         final long combat = combatState();
         playFrenchTurn();
@@ -814,7 +814,7 @@ class RivalNavalMilitaryCycleTest {
     @Test
     void peaceAcceptedMidPursuitStopsTheAttack() {
         final GameModelPo data = channelPort(true);
-        addShip(data, FIRST_NEW_ID, UnitType.MAN_OF_WAR, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.WAR_GALLEY, "France",
                 WARSHIP_START);
         addShip(data, THIRD_NEW_ID, UnitType.MERCHANTMAN, "Dutch",
                 CARRIER_SQUARE);
@@ -843,7 +843,7 @@ class RivalNavalMilitaryCycleTest {
     @Test
     void vanishedTargetEndsThePursuitWithoutABattle() {
         final GameModelPo data = channelPort(true);
-        addShip(data, FIRST_NEW_ID, UnitType.MAN_OF_WAR, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.WAR_GALLEY, "France",
                 WARSHIP_START);
         addShip(data, THIRD_NEW_ID, UnitType.MERCHANTMAN, "Dutch",
                 CARRIER_SQUARE);
@@ -870,7 +870,7 @@ class RivalNavalMilitaryCycleTest {
     @Test
     void blockedRouteFindsNoApproachAndNoBattle() {
         final GameModelPo data = channelPort(false);
-        addShip(data, FIRST_NEW_ID, UnitType.MAN_OF_WAR, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.WAR_GALLEY, "France",
                 WARSHIP_START);
         addShip(data, THIRD_NEW_ID, UnitType.MERCHANTMAN, "Dutch",
                 CARRIER_SQUARE);
@@ -908,11 +908,11 @@ class RivalNavalMilitaryCycleTest {
         final int tradeCarrier = FIRST_NEW_ID;
         final int expansionCarrier = SECOND_NEW_ID;
         final int freeWarship = FIFTH_NEW_ID;
-        addShip(data, tradeCarrier, UnitType.MAN_OF_WAR, "France",
+        addShip(data, tradeCarrier, UnitType.WAR_GALLEY, "France",
                 WARSHIP_START);
-        addShip(data, expansionCarrier, UnitType.MAN_OF_WAR, "France",
+        addShip(data, expansionCarrier, UnitType.WAR_GALLEY, "France",
                 PATROL_SEA);
-        addShip(data, freeWarship, UnitType.MAN_OF_WAR, "France",
+        addShip(data, freeWarship, UnitType.WAR_GALLEY, "France",
                 Location.of(19, 10));
         addShip(data, THIRD_NEW_ID, UnitType.MERCHANTMAN, "Dutch",
                 Location.of(19, 9));
@@ -983,7 +983,7 @@ class RivalNavalMilitaryCycleTest {
     void spareWarshipWithoutAColonyIsGovernedBelowSixtyPercent() {
         final GameModelPo data = noColonyPort();
         addShip(data, FIRST_NEW_ID, UnitType.FRIGATE, "France", WARSHIP_START);
-        addShip(data, SECOND_NEW_ID, UnitType.MAN_OF_WAR, "Dutch",
+        addShip(data, SECOND_NEW_ID, UnitType.WAR_GALLEY, "Dutch",
                 Location.of(19, 9));
         start(data);
         model.declareHostilities(france(), dutch());
@@ -1006,13 +1006,13 @@ class RivalNavalMilitaryCycleTest {
 
     /**
      * A spare warship of a rival without a colony is still governed when a
-     * target is worth it: a man-of-war sinks the adjacent merchantman at the
+     * target is worth it: a war galley sinks the adjacent merchantman at the
      * shared 36 / 42 quote with the pinned draws.
      */
     @Test
     void spareWarshipWithoutAColonyStillHuntsAtTheSharedQuote() {
         final GameModelPo data = noColonyPort();
-        addShip(data, FIRST_NEW_ID, UnitType.MAN_OF_WAR, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.WAR_GALLEY, "France",
                 WARSHIP_START);
         addShip(data, THIRD_NEW_ID, UnitType.MERCHANTMAN, "Dutch",
                 Location.of(19, 9));
@@ -1029,7 +1029,7 @@ class RivalNavalMilitaryCycleTest {
 
     /**
      * A frigate with goods aboard is still an armed ship under the naval
-     * policy. Beside the Dutch man-of-war it quotes 0.5, so it never attacks
+     * policy. Beside the Dutch war galley it quotes 0.5, so it never attacks
      * and the ordinary unit loop leaves it alone. Its one patrol step beside
      * the Dutch ship is checked by the model's interception, pinned to stop it,
      * so the exact consequence is one draw and unchanged cargo.
@@ -1040,7 +1040,7 @@ class RivalNavalMilitaryCycleTest {
         addShip(data, FIRST_NEW_ID, UnitType.FRIGATE, "France", WARSHIP_START);
         load(data, FIRST_NEW_ID, goodsSlot(GoodsType.GRAIN, 2),
                 new CargoSlotPo());
-        addShip(data, SECOND_NEW_ID, UnitType.MAN_OF_WAR, "Dutch",
+        addShip(data, SECOND_NEW_ID, UnitType.WAR_GALLEY, "Dutch",
                 Location.of(19, 9));
         data.getModel().setCombatRandomState(statePinning(STOPPED));
         start(data);
@@ -1126,7 +1126,7 @@ class RivalNavalMilitaryCycleTest {
     @Test
     void damagedCarrierIsNotAttackedAgainWhileItIsInRepair() {
         final GameModelPo data = seaPort();
-        addShip(data, FIRST_NEW_ID, UnitType.MAN_OF_WAR, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.WAR_GALLEY, "France",
                 WARSHIP_START);
         addShip(data, THIRD_NEW_ID, UnitType.MERCHANTMAN, "Dutch",
                 Location.of(19, 9));
@@ -1152,9 +1152,9 @@ class RivalNavalMilitaryCycleTest {
     @Test
     void continueDoesNotRepeatTheBattle() {
         final GameModelPo data = seaPort();
-        addShip(data, FIRST_NEW_ID, UnitType.MAN_OF_WAR, "France",
+        addShip(data, FIRST_NEW_ID, UnitType.WAR_GALLEY, "France",
                 WARSHIP_START);
-        addShip(data, SECOND_NEW_ID, UnitType.MAN_OF_WAR, "Dutch",
+        addShip(data, SECOND_NEW_ID, UnitType.WAR_GALLEY, "Dutch",
                 Location.of(19, 9));
         start(data);
         model.declareHostilities(france(), dutch());

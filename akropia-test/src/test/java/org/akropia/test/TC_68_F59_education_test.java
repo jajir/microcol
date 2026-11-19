@@ -317,7 +317,7 @@ public class TC_68_F59_education_test extends AbstractAkropiaTest {
         ColonyJobPage jobs = new ColonyJobPage(getContext());
         jobs.openFromIndoor("id_blacksmith", 0);
         jobs.openClearSpecialty();
-        jobs.verifyClearPrompt(300, "Firebrand Preacher", "Free Colonist");
+        jobs.verifyClearPrompt(300, "Orfický telestés", "Free Colonist");
         // The specialty disappears before the player confirms.
         jobs.clearSpecialtyBehindDialog(300);
         jobs.confirm();

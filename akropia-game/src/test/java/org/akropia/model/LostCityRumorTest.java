@@ -200,20 +200,18 @@ class LostCityRumorTest {
     }
 
     /**
-     * A Seasoned Scout bought in Europe takes the seasoned draw once placed on
-     * the square before the marker; the seed draws gold only for that scout.
+     * A Wayfarer bought in Europe takes the seasoned draw once placed on the
+     * square before the marker; the seed draws gold only for that scout.
      */
     @Test
-    void purchasedSeasonedScoutDrawsTheSpecialistRumorAndKeepsItsIdentity() {
+    void purchasedWayfarerDrawsTheSpecialistRumorAndKeepsItsIdentity() {
         final long seed = seedFor(true, Outcome.GOLD);
         final Model model = scene(seed, RUMOR)
-                .gold(DUTCH, UnitType.SEASONED_SCOUT.getEuropePrice())
-                .toModel();
+                .gold(DUTCH, UnitType.WAYFARER.getEuropePrice()).toModel();
         final Player dutch = dutch(model);
-        dutch.buy(UnitType.SEASONED_SCOUT);
+        dutch.buy(UnitType.WAYFARER);
         final UnitFreeColonist scout = (UnitFreeColonist) dutch.getAllUnits()
-                .stream()
-                .filter(unit -> unit.getType() == UnitType.SEASONED_SCOUT)
+                .stream().filter(unit -> unit.getType() == UnitType.WAYFARER)
                 .findFirst().orElseThrow();
         scout.placeToLocation(START);
         scout.setActionPoints(scout.getSpeed());
@@ -230,7 +228,7 @@ class LostCityRumorTest {
         final int amount = 200 + (int) (roll(seed, 2) * 301);
         assertEquals(amount, notice.getGold());
         assertEquals(gold + amount, dutch.getGold());
-        assertSame(UnitType.SEASONED_SCOUT, scout.getType());
+        assertSame(UnitType.WAYFARER, scout.getType());
     }
 
     private void verifyRealStep(final boolean seasoned,
@@ -238,9 +236,10 @@ class LostCityRumorTest {
         final long seed = seedFor(seasoned, expected);
         final String label = (seasoned ? "seasoned " : "ordinary ") + expected
                 + " seed " + seed;
-        final Model model = scene(seed, RUMOR).unit(DUTCH,
-                seasoned ? UnitType.SEASONED_SCOUT : UnitType.COLONIST, START,
-                seasoned ? SEASONED : ORDINARY_SCOUT).toModel();
+        final Model model = scene(seed, RUMOR)
+                .unit(DUTCH, seasoned ? UnitType.WAYFARER : UnitType.COLONIST,
+                        START, seasoned ? SEASONED : ORDINARY_SCOUT)
+                .toModel();
         final Player dutch = dutch(model);
         final int gold = dutch.getGold();
         final int units = model.getAllUnits().size();
@@ -322,8 +321,8 @@ class LostCityRumorTest {
                                 .gold(roll(candidate, 2)) == wanted)
                         .orElseThrow();
                 final Model model = scene(seed, RUMOR).unit(DUTCH,
-                        seasoned ? UnitType.SEASONED_SCOUT : UnitType.COLONIST,
-                        START, seasoned ? SEASONED : ORDINARY_SCOUT).toModel();
+                        seasoned ? UnitType.WAYFARER : UnitType.COLONIST, START,
+                        seasoned ? SEASONED : ORDINARY_SCOUT).toModel();
                 final int gold = dutch(model).getGold();
                 step(model, scout(model), RUMOR);
                 assertEquals(wanted, notices(model).get(0).getGold());
@@ -813,10 +812,10 @@ class LostCityRumorTest {
     }
 
     @Test
-    void deSotoAlsoGuardsTheSeasonedScout() {
+    void deSotoAlsoGuardsTheWayfarer() {
         final long seed = seedFor(true, Outcome.EXPLORER_LOST);
         final Model model = withDeSoto(scene(seed, RUMOR).unit(DUTCH,
-                UnitType.SEASONED_SCOUT, START, SEASONED)).toModel();
+                UnitType.WAYFARER, START, SEASONED)).toModel();
         step(model, scout(model), RUMOR);
         assertEquals(Outcome.EMPTY, notices(model).get(0).getOutcome());
         assertTrue(model.isUnitInGame(scout(model)));

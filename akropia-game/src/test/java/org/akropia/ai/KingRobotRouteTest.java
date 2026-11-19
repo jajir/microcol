@@ -80,7 +80,7 @@ class KingRobotRouteTest {
 
     /**
      * Each shipped member is one live royal unit of its family, no unit is
-     * bound twice and no man-of-war or regular exists outside the roster.
+     * bound twice and no war galley or regular exists outside the roster.
      * Colonists of a captured colony may belong to the Crown; they are not
      * royal forces and are not counted here.
      */
@@ -290,7 +290,7 @@ class KingRobotRouteTest {
                         .orElseThrow().intValue());
         final UnitWithCargo carrier = (UnitWithCargo) turns.model
                 .getUnitById(RoyalScenarioFixtures.CARRIER_ID);
-        assertEquals(UnitType.MAN_OF_WAR, carrier.getType());
+        assertEquals(UnitType.WAR_GALLEY, carrier.getType());
         final List<Integer> aboard = carrier.getCargo().getSlots().stream()
                 .flatMap(slot -> slot.getUnit().stream()).map(Unit::getId)
                 .collect(Collectors.toList());

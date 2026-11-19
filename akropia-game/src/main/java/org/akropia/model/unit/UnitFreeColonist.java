@@ -646,15 +646,14 @@ public class UnitFreeColonist extends CanMount {
     }
 
     /**
-     * Ordinary scouts are mounted colonists without weapons; seasoned scouts
-     * are the specialist of that name. Both see two squares further and enter
-     * lost-city rumors.
+     * Ordinary scouts are mounted colonists without weapons; wayfarers are the
+     * specialist of that name. Both see two squares further and enter lost-city
+     * rumors.
      *
-     * @return whether this unit is an ordinary or seasoned scout
+     * @return whether this unit is an ordinary or wayfarer
      */
     public boolean isScout() {
-        return getType() == UnitType.SEASONED_SCOUT
-                || mounted && !holdingWeapons;
+        return getType() == UnitType.WAYFARER || mounted && !holdingWeapons;
     }
 
     @Override

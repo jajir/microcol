@@ -80,11 +80,11 @@ class InterventionDeliveryTest {
                 .count();
     }
 
-    private static long menOfWarAt(final Model model, final Colony port,
+    private static long warGalleysAt(final Model model, final Colony port,
             final Player owner) {
         return model.getUnitsAt(port.getLocation()).stream()
                 .filter(unit -> unit.getOwner() == owner)
-                .filter(unit -> unit.getType() == UnitType.MAN_OF_WAR).count();
+                .filter(unit -> unit.getType() == UnitType.WAR_GALLEY).count();
     }
 
     @Test
@@ -95,7 +95,7 @@ class InterventionDeliveryTest {
         final InterventionTarget state = dutch.getIntervention().orElseThrow();
         final Colony port = expectedPort(model, dutch);
         final int unitsBefore = dutch.getAllUnits().size();
-        final long shipsBefore = menOfWarAt(model, port, dutch);
+        final long shipsBefore = warGalleysAt(model, port, dutch);
         dutch.creditProducedOwls(
                 Math.toIntExact(state.getTarget() - state.getOwls()));
         assertTrue(state.isEarned());
@@ -105,7 +105,7 @@ class InterventionDeliveryTest {
         assertTrue(dutch.startTurn());
         assertTrue(state.isDelivered());
         assertEquals(unitsBefore + 8, dutch.getAllUnits().size());
-        assertEquals(shipsBefore + 2, menOfWarAt(model, port, dutch));
+        assertEquals(shipsBefore + 2, warGalleysAt(model, port, dutch));
         assertEquals(6L, delivered(dutch));
         final List<UnitFreeColonist> soldiers = dutch.getAllUnits().stream()
                 .filter(unit -> unit instanceof UnitFreeColonist)

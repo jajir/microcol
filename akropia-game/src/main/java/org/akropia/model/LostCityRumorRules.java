@@ -25,7 +25,7 @@ public final class LostCityRumorRules {
     private static final double[] ORDINARY_BOUNDS = { 0.40, 0.65, 0.80, 0.90,
             1.00 };
 
-    /** Cumulative upper bounds of the seasoned scout distribution. */
+    /** Cumulative upper bounds of the wayfarer distribution. */
     private static final double[] SEASONED_BOUNDS = { 0.30, 0.65, 0.90, 0.95,
             1.00 };
 
@@ -33,7 +33,7 @@ public final class LostCityRumorRules {
     }
 
     /**
-     * @param seasoned whether the explorer is a seasoned scout
+     * @param seasoned whether the explorer is a wayfarer
      * @param roll     uniform roll in [0, 1)
      * @return outcome of the roll in the order empty, gold, recruit, lost,
      *         burial

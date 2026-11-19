@@ -16,12 +16,12 @@ class UnitRoleLedgerTest {
 
     private static final List<UnitType> LAND_TYPES = List.of(UnitType.COLONIST,
             UnitType.BRAVE, UnitType.ARTILLERY, UnitType.WAGON,
-            UnitType.TREASURE_TRAIN, UnitType.SEASONED_SCOUT,
+            UnitType.TREASURE_TRAIN, UnitType.WAYFARER,
             UnitType.VETERAN_SOLDIER);
 
     private static final List<UnitType> SHIP_TYPES = List.of(UnitType.CARAVEL,
-            UnitType.MERCHANTMAN, UnitType.GALLEON, UnitType.PRIVATEER,
-            UnitType.FRIGATE, UnitType.MAN_OF_WAR);
+            UnitType.MERCHANTMAN, UnitType.GALLEON, UnitType.SEA_RAIDER,
+            UnitType.FRIGATE, UnitType.WAR_GALLEY);
 
     @Test
     void landTypesWalkOnLandOnlyAndShipsSailOnSeaOnly() {
@@ -51,7 +51,7 @@ class UnitRoleLedgerTest {
         assertTrue(UnitType.BRAVE.canAttack());
         assertTrue(UnitType.ARTILLERY.canAttack());
         assertTrue(UnitType.VETERAN_SOLDIER.canAttack());
-        assertTrue(UnitType.SEASONED_SCOUT.canAttack());
+        assertTrue(UnitType.WAYFARER.canAttack());
         // Instance eligibility still needs weapons; see ColonistEquipmentTest
         // and AttackRoleTest.
         assertTrue(UnitType.COLONIST.canAttack());

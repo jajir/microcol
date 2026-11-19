@@ -36,7 +36,7 @@ class NativeChiefTest {
 
     private static final long GOLDEN = 0x9E3779B97F4A7C15L;
 
-    /** Seasoned scout: a free colonist of its own type. */
+    /** Wayfarer: a free colonist of its own type. */
     private static final Consumer<UnitPo> SEASONED_FIELDS = unit -> {
         unit.setWorkUpdates(0);
         unit.setMissionary(false);
@@ -102,8 +102,7 @@ class NativeChiefTest {
     private static Model scoutScene(final long seed, final double anger,
             final boolean seasoned) {
         final NativeRelationsScene scene = island(NativeNation.AZTEC)
-                .unit(DUTCH,
-                        seasoned ? UnitType.SEASONED_SCOUT : UnitType.COLONIST,
+                .unit(DUTCH, seasoned ? UnitType.WAYFARER : UnitType.COLONIST,
                         at(1, 0), seasoned ? SEASONED_FIELDS : SCOUT)
                 .tribal(NativeNation.AZTEC, EuropeanNation.DUTCH, anger);
         scene.toPo().setCombatRandomState(seed);
@@ -138,7 +137,7 @@ class NativeChiefTest {
     }
 
     @Test
-    void contentSeasonedScoutDistributionIsExact() {
+    void contentWayfarerDistributionIsExact() {
         assertBoundaries(NativeHostility.CONTENT, true, 725, 975);
     }
 
@@ -444,8 +443,7 @@ class NativeChiefTest {
         for (final NativeChiefOutcome first : List.of(GOLD, DEATH)) {
             final NativeRelationsScene scene = island(NativeNation.AZTEC)
                     .unit(DUTCH, UnitType.COLONIST, at(1, 0), SCOUT)
-                    .unit(DUTCH, UnitType.SEASONED_SCOUT, at(1, -1),
-                            SEASONED_FIELDS)
+                    .unit(DUTCH, UnitType.WAYFARER, at(1, -1), SEASONED_FIELDS)
                     .tribal(NativeNation.AZTEC, EuropeanNation.DUTCH, 10);
             scene.toPo().setCombatRandomState(
                     seedFor(NativeHostility.CONTENT, false, first));

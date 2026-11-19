@@ -27,7 +27,7 @@ class NativeTeachableSkillsTest {
         assertEquals(Set.of(UnitType.EXPERT_FARMER, UnitType.EXPERT_FISHERMAN,
                 UnitType.EXPERT_CLAY_DIGGER, UnitType.EXPERT_SILVER_MINER,
                 UnitType.MASTER_OLIVE_GROWER, UnitType.MASTER_SHEPHERD,
-                UnitType.MASTER_GRAPE_GROWER, UnitType.SEASONED_SCOUT),
+                UnitType.MASTER_GRAPE_GROWER, UnitType.WAYFARER),
                 Set.copyOf(UnitType.NATIVE_TEACHABLE_SKILLS));
         assertEquals(8, UnitType.NATIVE_TEACHABLE_SKILLS.size());
     }
@@ -38,7 +38,7 @@ class NativeTeachableSkillsTest {
                 UnitType.EXPERT_FARMER.getExpertInProducing());
         assertEquals(GoodsType.OLIVES,
                 UnitType.MASTER_OLIVE_GROWER.getExpertInProducing());
-        assertNull(UnitType.SEASONED_SCOUT.getExpertInProducing());
+        assertNull(UnitType.WAYFARER.getExpertInProducing());
     }
 
     @Test

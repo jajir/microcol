@@ -51,7 +51,7 @@ class AuthoredScenarioTurnTest {
         final int ship = draft.addUnit(UnitType.CARAVEL, SEA);
         draft.addPassenger(ship, UnitType.COLONIST);
         draft.addPassenger(ship, UnitType.EXPERT_FARMER);
-        draft.addUnit(UnitType.SEASONED_SCOUT, Location.of(3, 5));
+        draft.addUnit(UnitType.WAYFARER, Location.of(3, 5));
         draft.placeSettlement(VILLAGE, NativeNation.SIOUX, true);
         final ModelPo authored = draft.playableScenario().getModel();
 

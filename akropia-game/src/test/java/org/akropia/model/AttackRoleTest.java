@@ -60,13 +60,13 @@ class AttackRoleTest {
     }
 
     /**
-     * R-0028 chapter 4: a purchased Seasoned Scout is a supported specialist.
-     * Weapons confer the soldier role and horses then the dragoon base 3, so
-     * there is no unarmed open-field scout attack and no separate specialty.
+     * R-0028 chapter 4: a purchased Wayfarer is a supported specialist. Weapons
+     * confer the soldier role and horses then the dragoon base 3, so there is
+     * no unarmed open-field scout attack and no separate specialty.
      */
     @Test
     void seasonedScoutAttacksOnlyWithWeaponsAndThenFightsAsAnOrdinaryDragoon() {
-        final Model model = border(UnitType.SEASONED_SCOUT);
+        final Model model = border(UnitType.WAYFARER);
         final UnitFreeColonist scout = (UnitFreeColonist) model.getUnitById(0);
         final Location target = model.getUnitById(6).getLocation();
         scout.setTools(0);
@@ -79,7 +79,7 @@ class AttackRoleTest {
                 .orElseThrow().getCombatStrengths().orElseThrow();
         assertEquals(3.0, strengths.getAttacker().getBase(), 1e-9);
         assertEquals(4.5, strengths.getAttacker().getTotal(), 1e-9);
-        assertSame(UnitType.SEASONED_SCOUT, scout.getType());
+        assertSame(UnitType.WAYFARER, scout.getType());
     }
 
     @ParameterizedTest

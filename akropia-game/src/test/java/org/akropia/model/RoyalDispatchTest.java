@@ -70,7 +70,7 @@ class RoyalDispatchTest {
 
     private static int firstReserveShip(final RoyalRoster crown) {
         return crown.getMembers().stream()
-                .filter(member -> member.getFamily() == Family.MAN_OF_WAR
+                .filter(member -> member.getFamily() == Family.WAR_GALLEY
                         && member.getState() == State.RESERVE)
                 .findFirst().orElseThrow().getId();
     }
@@ -90,7 +90,7 @@ class RoyalDispatchTest {
 
         final UnitWithCargo voyage = model.dispatchRoyalShip(king, member);
 
-        assertEquals(UnitType.MAN_OF_WAR, voyage.getType());
+        assertEquals(UnitType.WAR_GALLEY, voyage.getType());
         assertSame(king, voyage.getOwner());
         assertTrue(voyage.isAtHighSea());
         final List<CargoSlot> loaded = loadedSlots(voyage);
@@ -124,7 +124,7 @@ class RoyalDispatchTest {
         assertEquals(4, reserve(crown, Family.INFANTRY));
         assertEquals(2, reserve(crown, Family.CAVALRY));
         assertEquals(0, reserve(crown, Family.ARTILLERY));
-        assertEquals(1, reserve(crown, Family.MAN_OF_WAR));
+        assertEquals(1, reserve(crown, Family.WAR_GALLEY));
     }
 
     @Test
@@ -144,14 +144,14 @@ class RoyalDispatchTest {
         assertEquals(0,
                 reserve(crown, Family.INFANTRY) + reserve(crown, Family.CAVALRY)
                         + reserve(crown, Family.ARTILLERY));
-        assertEquals(0, reserve(crown, Family.MAN_OF_WAR));
+        assertEquals(0, reserve(crown, Family.WAR_GALLEY));
         assertEquals(12,
                 shipped(crown, Family.INFANTRY) + shipped(crown, Family.CAVALRY)
                         + shipped(crown, Family.ARTILLERY));
-        assertEquals(2, shipped(crown, Family.MAN_OF_WAR));
+        assertEquals(2, shipped(crown, Family.WAR_GALLEY));
         assertEquals(2,
                 model.getAllUnits().stream()
-                        .filter(unit -> unit.getType() == UnitType.MAN_OF_WAR
+                        .filter(unit -> unit.getType() == UnitType.WAR_GALLEY
                                 && unit.getOwner() == king)
                         .count());
     }
@@ -165,7 +165,7 @@ class RoyalDispatchTest {
         assertFalse(model.canDispatchRoyalShip(king, member));
         assertThrows(IllegalStateException.class,
                 () -> model.dispatchRoyalShip(king, member));
-        assertEquals(2, reserve(crown, Family.MAN_OF_WAR));
+        assertEquals(2, reserve(crown, Family.WAR_GALLEY));
         assertEquals(0, shipped(crown, Family.INFANTRY));
     }
 
@@ -179,13 +179,13 @@ class RoyalDispatchTest {
 
         model.destroyUnit(voyage);
 
-        assertEquals(1, lost(crown, Family.MAN_OF_WAR));
+        assertEquals(1, lost(crown, Family.WAR_GALLEY));
         assertEquals(2, lost(crown, Family.INFANTRY));
         assertEquals(2, lost(crown, Family.CAVALRY));
         assertEquals(2, lost(crown, Family.ARTILLERY));
         assertEquals(4, reserve(crown, Family.INFANTRY));
         assertEquals(2, reserve(crown, Family.CAVALRY));
-        assertEquals(1, reserve(crown, Family.MAN_OF_WAR));
+        assertEquals(1, reserve(crown, Family.WAR_GALLEY));
         assertEquals(0, shipped(crown, Family.INFANTRY));
     }
 
@@ -261,16 +261,16 @@ class RoyalDispatchTest {
         assertEquals(2,
                 reserve(crown, Family.INFANTRY) + reserve(crown, Family.CAVALRY)
                         + reserve(crown, Family.ARTILLERY));
-        assertEquals(0, reserve(crown, Family.MAN_OF_WAR));
+        assertEquals(0, reserve(crown, Family.WAR_GALLEY));
         // No third ship is created for the surplus, and no member is copied.
         final int shipMember = crown.getMembers().stream()
-                .filter(member -> member.getFamily() == Family.MAN_OF_WAR)
+                .filter(member -> member.getFamily() == Family.WAR_GALLEY)
                 .findFirst().orElseThrow().getId();
         assertFalse(model.canDispatchRoyalShip(king, shipMember));
         assertEquals(16, crown.getMembers().size());
         assertEquals(2,
                 model.getAllUnits().stream()
-                        .filter(unit -> unit.getType() == UnitType.MAN_OF_WAR
+                        .filter(unit -> unit.getType() == UnitType.WAR_GALLEY
                                 && unit.getOwner() == king)
                         .count());
     }

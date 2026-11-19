@@ -217,8 +217,8 @@ class RebellionVictoryTest {
                 RoyalScenarioFixtures.declaredCrown().getModel());
         keepLivingGround(model, 0);
         assertEquals(2, crown(model).getRoyalRoster().getCount(
-                RoyalRoster.Family.MAN_OF_WAR, RoyalRoster.State.RESERVE),
-                "Both men-of-war are still in reserve");
+                RoyalRoster.Family.WAR_GALLEY, RoyalRoster.State.RESERVE),
+                "Both war galleys are still in reserve");
 
         model.checkRebellionLoss();
         assertEquals(Optional.of(VICTORY), endReason(model));
@@ -232,7 +232,7 @@ class RebellionVictoryTest {
                 RoyalScenarioFixtures.declaredCrown().getModel());
         keepLivingGround(model, 3);
         final RoyalRoster roster = crown(model).getRoyalRoster();
-        // Two reserve units and one carried by a man-of-war: three in all.
+        // Two reserve units and one carried by a war galley: three in all.
         final int carried = roster.getMembers().stream()
                 .filter(member -> member.getFamily().isGround()
                         && member.getState() == RoyalRoster.State.RESERVE)

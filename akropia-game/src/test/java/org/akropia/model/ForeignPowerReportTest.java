@@ -429,7 +429,7 @@ class ForeignPowerReportTest {
         final Unit dead = colonist(107, "France", QUEBEC, true, false, true);
         model.destroyUnit(dead);
 
-        // Armed ships: a ship under repair (16), privateer (8) and man-of-war
+        // Armed ships: a ship under repair (16), seaRaider (8) and war galley
         // (24) = 48. Unarmed ships and a sunk frigate add nothing. The French
         // fleet shares one unoccupied sea square beside the Dutch galleon,
         // never the galleon's own square.
@@ -438,8 +438,8 @@ class ForeignPowerReportTest {
                 NEAR_QUEBEC_SEA);
         model.damageShip(repaired);
         assertTrue(repaired.isDamaged());
-        ship(111, "France", UnitType.PRIVATEER, sea);
-        ship(112, "France", UnitType.MAN_OF_WAR, sea);
+        ship(111, "France", UnitType.SEA_RAIDER, sea);
+        ship(112, "France", UnitType.WAR_GALLEY, sea);
         ship(113, "France", UnitType.GALLEON, sea);
         ship(114, "France", UnitType.CARAVEL, sea);
         ship(115, "France", UnitType.MERCHANTMAN, sea);

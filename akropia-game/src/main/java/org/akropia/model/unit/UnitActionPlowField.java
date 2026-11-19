@@ -18,8 +18,8 @@ public final class UnitActionPlowField implements UnitAction {
     /** Owner updates needed by an ordinary pioneer. */
     public static final int REQUIRED_TURNS_TO_PLOW_FIELD = 4;
 
-    /** Owner updates needed by a hardy pioneer. */
-    public static final int HARDY_TURNS_TO_PLOW_FIELD = 2;
+    /** Owner updates needed by a cultivator. */
+    public static final int CULTIVATOR_TURNS_TO_PLOW_FIELD = 2;
 
     /** Tools consumed once when the field is completed. */
     public static final int REQUIRED_TOOLS = 20;

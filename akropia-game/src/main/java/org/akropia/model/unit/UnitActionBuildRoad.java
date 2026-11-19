@@ -18,8 +18,8 @@ public final class UnitActionBuildRoad implements UnitAction {
     /** Owner updates needed by an ordinary pioneer. */
     public static final int REQUIRED_TURNS_TO_BUILD_ROAD = 2;
 
-    /** Owner updates needed by a hardy pioneer. */
-    public static final int HARDY_TURNS_TO_BUILD_ROAD = 1;
+    /** Owner updates needed by a cultivator. */
+    public static final int CULTIVATOR_TURNS_TO_BUILD_ROAD = 1;
 
     /** Tools consumed once when the road is completed. */
     public static final int REQUIRED_TOOLS = 20;

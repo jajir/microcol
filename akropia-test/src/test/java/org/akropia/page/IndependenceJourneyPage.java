@@ -437,10 +437,10 @@ public final class IndependenceJourneyPage extends AbstractScreen {
                 .orElse(false);
     }
 
-    /** Living Dutch men-of-war and soldiers delivered by the intervention. */
+    /** Living Dutch war galleys and soldiers delivered by the intervention. */
     private Set<Integer> interventionUnitIds() {
         return dutch().getAllUnits().stream()
-                .filter(unit -> unit.getType() == UnitType.MAN_OF_WAR
+                .filter(unit -> unit.getType() == UnitType.WAR_GALLEY
                         || unit instanceof UnitFreeColonist
                                 && ((UnitFreeColonist) unit)
                                         .isInterventionDelivered())
@@ -662,17 +662,16 @@ public final class IndependenceJourneyPage extends AbstractScreen {
         assertEquals(earlyPoints, score.getEarlyPoints(), "Early points");
         assertEquals(difficultyPercent, score.getDifficultyPercent(),
                 "Difficulty factor");
-        // This fixture contains ordinary colonists and elder statesmen only.
+        // This fixture contains ordinary colonists and philosophers only.
         long population = 0;
         for (final Unit unit : dutch().getAllUnits()) {
             if (unit instanceof UnitFreeColonist && !unit.isCrownSeized()) {
                 assertTrue(
                         unit.getType() == UnitType.COLONIST
-                                || unit.getType() == UnitType.ELDER_STATESMAN,
+                                || unit.getType() == UnitType.PHILOSOPHER,
                         "Unexpected civilian identity in the journey ledger: "
                                 + unit.getType());
-                population += unit.getType() == UnitType.ELDER_STATESMAN ? 4
-                        : 2;
+                population += unit.getType() == UnitType.PHILOSOPHER ? 4 : 2;
             }
         }
         long liberty = 0;
