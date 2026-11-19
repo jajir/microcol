@@ -232,10 +232,15 @@ public class ScreenTurnReport extends AbstractScreen {
                 .queryAllAs(Label.class).stream()
                 .filter(label -> label.getText().contains(messagePart))
                 .findFirst().orElseThrow();
-        assertTrue(
-                message.getGraphic() instanceof javafx.scene.image.ImageView);
-        final javafx.scene.image.ImageView icon = (javafx.scene.image.ImageView) message
-                .getGraphic();
+        final javafx.scene.layout.GridPane row = (javafx.scene.layout.GridPane) message
+                .getParent();
+        final javafx.scene.layout.StackPane iconCell = (javafx.scene.layout.StackPane) row
+                .getChildren().get(0);
+        assertEquals(1, iconCell.getChildren().size());
+        assertTrue(iconCell.getChildren()
+                .get(0) instanceof javafx.scene.image.ImageView);
+        final javafx.scene.image.ImageView icon = (javafx.scene.image.ImageView) iconCell
+                .getChildren().get(0);
         assertEquals(expectedIconId, icon.getId());
         assertTrue(icon.isVisible());
         assertTrue(icon.getBoundsInParent().getWidth() > 0);
@@ -293,6 +298,38 @@ public class ScreenTurnReport extends AbstractScreen {
             assertTrue(message.isWrapText());
             assertTrue(message.getWidth() <= panel.getWidth());
         }
+    }
+
+    /**
+     * All notices share the same three columns, including rows without icons.
+     */
+    public void verifyReportColumns() {
+        getRobot().interact(() -> {
+            Double messageX = null;
+            Double actionsX = null;
+            for (TurnEventPanel panel : getEventPanels()) {
+                final Label message = (Label) panel.getChildren().get(1);
+                final javafx.scene.layout.FlowPane actions = (javafx.scene.layout.FlowPane) panel
+                        .getChildren().get(2);
+                assertEquals(3, panel.getColumnConstraints().size());
+                assertTrue(message.getWidth() > 0);
+                assertTrue(message.getBoundsInParent().getMaxX() <= actions
+                        .getLayoutX());
+                assertEquals(message.getLayoutY(), actions.getLayoutY(), 1);
+                if (messageX != null) {
+                    assertEquals(messageX, message.getLayoutX(), 1);
+                    assertEquals(actionsX, actions.getLayoutX(), 1);
+                }
+                messageX = message.getLayoutX();
+                actionsX = actions.getLayoutX();
+                for (javafx.scene.Node action : actions.getChildren()) {
+                    assertTrue(
+                            action.getBoundsInParent()
+                                    .getMaxX() <= actions.getWidth() + 1,
+                            "Navigation must fit its column");
+                }
+            }
+        });
     }
 
     private Button getOpenEuropeButton() {

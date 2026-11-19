@@ -1,5 +1,7 @@
 ## UC-013/016/043/114/119: ikony a místo příjezdu v přehledu — 18. listopadu 2026
 
+Úprava 19. listopadu 2026: ikona, popis a navigační akce jsou ve třech
+zarovnaných sloupcích bez dělicích čar; rozložení kontroluje TC180/04.
 Zprávy označují jednotku nebo kolonii ikonou. Návrat lodi na mapu nabízí
 terčík vedoucí k zaznamenanému místu příjezdu, také po uložení a načtení.
 Chování a cesta hráče jsou v [UX přehledu událostí](ux.md#prehled-udalosti-14-listopadu-2026),

@@ -96,7 +96,10 @@ Ověření vlastní [evidence ikon a příjezdů](functional-tests.md#turn-repor
 
 1. Přehled tahu používá stejné světlé pozadí jako záhlaví a stavový řádek.
    Zprávy odděluje mezera, bez čar a vnějšího rámečku. Dlouhý text se zalamuje;
-   dostupné akce jsou pod zprávou a při nedostatku místa se také zalomí.
+   od 19. listopadu 2026 mají řádky tři společně zarovnané sloupce: ikonu
+   jednotky či města, popis a dostupné navigační akce. Bez ikony zůstává
+   první buňka prázdná. Tlačítka jsou vedle sebe a při nedostatku místa se
+   zalomí uvnitř pravého sloupce. Tabulka nemá vodorovné ani svislé čáry.
 2. „Open colony“ otevírá existující detail vlastní, dosud platné kolonie.
    „Show on map“ / „Zobrazit na mapě“ se stávající ikonou centrování přepne
    na mapu, vybere a vycentruje místo události; nevydává jednotce rozkaz.

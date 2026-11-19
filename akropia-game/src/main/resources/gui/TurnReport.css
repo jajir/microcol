@@ -7,6 +7,6 @@
     -fx-border-width: 0;
 }
 .turnEventPanel { -fx-spacing: 16; }
-.turn-event { -fx-padding: 16 0; -fx-spacing: 10; }
+.turn-event { -fx-padding: 16 0; -fx-hgap: 16; }
 .turn-event .label { -fx-wrap-text: true; }
 .turn-event-actions { -fx-hgap: 10; -fx-vgap: 10; }

@@ -1,3 +1,32 @@
+## Turn report columns — 2026-11-19
+
+1. UC-013/016/043/114/119: report rows align an icon, wrapping description
+   and wrapping navigation actions in three borderless columns. TC180/04 checks
+   column positions and action bounds while retaining scroll, map and colony
+   navigation assertions. Existing icon checks follow the separate icon cell.
+   [Player behavior](ux.md#prehled-udalosti-14-listopadu-2026) remains authoritative.
+2. TC192 expectations now match its existing F221 calendar: 41 played turns
+   and year 1 for its first statistics record. Navigation still must preserve
+   the exact turn and treasury; no fixture or calendar behavior was changed.
+3. Model run `run-athj1qjw` passed 5,141 tests, zero failures/errors/skips.
+   Targeted Docker/Xvfb run `run-613obm` passed all 23 checks in TC178, TC180,
+   TC192, TC203 and PageVerificationContractTest. Completion
+   `20261119T085115Z-1d0737f902fd` took 386.582 seconds. The report screenshot
+   was visually checked for alignment, wrapping and absence of separators.
+4. Earlier attempts remain failed: `20261119T083000Z-cb44579f119e` timed out
+   during Docker admission before tests; `20261119T083048Z-2533a344d963` exposed
+   the corrected compilation error. Targeted `run-ysn83F` exposed TC192's
+   obsolete calendar expectations. Completion `20261119T084427Z-3209b00f78a3`
+   then hit an intermittent TC178/04 departure exception: map-order refresh
+   read PlaceLocation after the ship changed to PlaceHighSea. An unchanged-source
+   rerun passed; this does not establish a repair of that separate race.
+5. Fixed smoke `run-wgqntnfj` passed 23 checks, zero failures/errors/skips,
+   in 287.101 seconds including supervision, within the 420-second budget.
+   Changed executable/test files match both final model and smoke snapshots.
+   Shared Java formatting, 14 documentation consistency checks, name audit and
+   strict MkDocs passed. Local acceptance is complete; no remote regression,
+   Pages or game distribution publication was inspected.
+
 ## Construction offer prerequisites — 2026-11-19
 
 1. UC-033/042: the building picker uses the model's existing admission list.

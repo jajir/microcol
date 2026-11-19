@@ -63,6 +63,7 @@ public class TC_180_F204_project_and_overflow_notices_test
         report.verifyOpenColonyAction(COLONY_ID, "Open colony");
         report.verifyMapAction(COLONY, "Show on map");
         report.verifyReportAppearance();
+        report.verifyReportColumns();
 
         // Open colony changes nothing: the smithy stands and the tools are
         // used.
@@ -200,6 +201,7 @@ public class TC_180_F204_project_and_overflow_notices_test
         report.scrollReport(1);
         report.verifyScrollPosition(1);
         report.verifyReportAppearance();
+        report.verifyReportColumns();
         report.captureDialog("closeButtonId", "turn-report-navigation.png");
 
         // Visit the last notice's location, then return to the same list

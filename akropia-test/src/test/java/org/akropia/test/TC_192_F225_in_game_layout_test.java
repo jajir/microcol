@@ -121,7 +121,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         page.open("buttonBack");
         page.verifyMapReturned();
         game.verifyGameInFront();
-        page.verifyTurnUnchanged(2, 484);
+        page.verifyTurnUnchanged(41, 484);
     }
 
     @Test
@@ -162,7 +162,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         page.saveEvidence("r0323-atlas-fleet-small.png");
         page.closeWithEscape();
         page.verifyMapReturned();
-        page.verifyTurnUnchanged(2, 484);
+        page.verifyTurnUnchanged(41, 484);
         game.verifyGameInFront();
     }
 
@@ -188,13 +188,13 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         page.loadAtlasHistoryFixture(1);
         page.open("statistics");
         page.verifyAtlasLayout("Zlato");
-        page.verifyAtlasHistory(1, 2108, 1600,
-                "Poslední zaznamenaná hodnota: 2108 · Rok 1600");
+        page.verifyAtlasHistory(1, 2108, 1,
+                "Poslední zaznamenaná hodnota: 2108 · Rok 1");
         page.verifyFrame(484, 1);
         page.saveEvidence("r0323-atlas-single-cs.png");
         page.open("closeButtonId");
         page.verifyMapReturned();
-        page.verifyTurnUnchanged(2, 484);
+        page.verifyTurnUnchanged(41, 484);
     }
 
     @Test
@@ -260,7 +260,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         page.closeWithEscape();
         page.verifyMapReturned();
         game.verifyGameInFront();
-        page.verifyTurnUnchanged(2, 484);
+        page.verifyTurnUnchanged(41, 484);
     }
 
     @Test
@@ -330,7 +330,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         bars.resizeContent(1000, 900);
         bars.verifyContents(1000, 968);
         page.verifyMapReturned();
-        page.verifyTurnUnchanged(2, 484);
+        page.verifyTurnUnchanged(41, 484);
     }
 
     @Test
@@ -386,7 +386,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
                 "Vyplatit poklad", "Zpět do hry");
         page.open("closeButtonId");
         page.verifyMapReturned();
-        page.verifyTurnUnchanged(2, 484);
+        page.verifyTurnUnchanged(41, 484);
     }
 
     @Test
@@ -477,7 +477,7 @@ public class TC_192_F225_in_game_layout_test extends AbstractAkropiaTest {
         hosted.press(KeyCode.ESCAPE);
         page.open("buttonBack");
         page.verifyMapReturned();
-        page.verifyTurnUnchanged(2, 484);
+        page.verifyTurnUnchanged(41, 484);
 
         // Czech menu hosts use the same sea geometry after leaving the game.
         game.exitToMenu();
