@@ -36,6 +36,12 @@ public class TC_199_F52_end_turn_warnings_test extends AbstractAkropiaTest {
         // Back and Escape retain the entire model and leave commands usable.
         warning.requestTurn();
         warning.verifyWarning(0, "New Amsterdam (1)");
+        // The modal content uses the shared paper surface.
+        final DialogSurfacesPage surfaces = new DialogSurfacesPage(
+                getContext());
+        surfaces.verifyScrollSurface("end-turn-warnings");
+        surfaces.captureDialog("end-turn-warnings",
+                "paper-end-turn-warnings.png");
         warning.back();
         warning.verifyUnchanged(before);
         warning.verifyClosed();

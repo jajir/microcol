@@ -13,6 +13,7 @@ import org.akropia.page.AttackPage;
 import org.akropia.page.CampaignScreenPage;
 import org.akropia.page.GamePage;
 import org.akropia.page.HallOfFamePage;
+import org.akropia.page.DialogSurfacesPage;
 import org.akropia.page.RebellionLossPage;
 import org.akropia.page.RebellionVictoryPage;
 import org.akropia.page.ScoreBoundaryPage;
@@ -108,6 +109,12 @@ public class TC_163_F197_hall_of_fame_test extends AbstractAkropiaTest {
         // After leaving the game the main menu opens the saved ranking alone.
         game.exitToMenu();
         hall.openFromMenu();
+        // The modal content uses the shared paper surface.
+        final DialogSurfacesPage surfaces = new DialogSurfacesPage(
+                getContext());
+        surfaces.verifyScrollSurface("hallOfFameDialog");
+        surfaces.captureDialog("hallOfFameDialog",
+                "paper-hallOfFameDialog.png");
         hall.verifyRankingRows(HallOfFameFixture.RIVALS);
         hall.verifyNoCurrentResult();
         hall.verifyStoredEntries(HallOfFameFixture.RIVALS);

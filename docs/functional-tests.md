@@ -1,3 +1,45 @@
+<a id="dialog-surfaces-2026-11-19"></a>
+
+## Dialog paper surfaces — 2026-11-19
+
+1. Scope: UC-005/024/029/046/055/086/114/118/119. Shared modal scroll
+   surfaces and the native-settlement list use the paper background. Construction,
+   education and colony fields retain their existing surfaces; selection and
+   keyboard focus remain visible. See the [UX contract](ux.md).
+2. TC199/01, TC149/01, TC30/01, TC63/01, TC163/01 and TC169/01 now explicitly
+   inspect rendered backgrounds through `DialogSurfacesPage` and capture each
+   dialog. Existing gameplay assertions remain intact. Targeted acceptance also
+   covers carrier route selection and the protected construction, education and
+   colony layout journeys, plus `PageVerificationContractTest`.
+3. First model attempt `20261119T223722Z-f849da80dd7d`
+   (PID 76286, 600-second supervisor limit) did not reach tests: Docker admission's
+   labelled-container query timed out after 20.052 seconds (20-second limit).
+   This is a preparation failure, not a failing model test; its evidence is
+   preserved independently of the passing retry.
+4. Model retry `20261119T223846Z-83814a1434e2` (PID 76487) passed all
+   **5,144 tests**, zero failures/errors/skips, in 162.388 seconds overall.
+   Reports: `target/verification/run-0k3cse9i`; all game sources match its snapshot.
+   A subsequent `docker ps` probe completed successfully in 0.074 seconds before
+   retry; this does not establish the cause of the original preparation timeout.
+5. Targeted Docker/Xvfb run `20261119T224159Z-602b3ddc7f47` (PID 76985,
+   1,800-second watchdog) selects TC199/01,07; TC149/01; TC30/01; TC63/01;
+   TC163/01; TC169/01; TC118/02,03; TC32/01; TC68/01,09; TC195/01,06;
+   and `PageVerificationContractTest`. All **17 checks passed**, zero failures,
+   errors or skips, in 332.599 seconds overall. Reports and six reviewed dialog
+   screenshots: `target/docker-ui/run-DUFNU2/`. The screenshots show paper behind
+   content, retained focus/selection and usable scrollbars. Reviewed TC195
+   screenshots also retain construction, school and surrounding-field surfaces.
+6. Smoke `20261119T224801Z-86d7de5abd76` (PID 77583) passed all **23 checks**,
+   zero failures/errors/skips, in 289.161 seconds overall, within the 420-second
+   acceptance budget (`target/verification/run-1r1j1p1d`). Game and test sources
+   match the smoke snapshot; game sources also match the passing model snapshot.
+7. Shared Eclipse formatting, code review and `git diff --check` passed. Final
+   documentation acceptance: 14 consistency tests, zero unexplained naming-audit
+   occurrences and strict MkDocs. Logs: `target/dialog-surfaces/`. Checked source
+   is based on `c97ccdb7769c50b849ce8ebe72166987fc87bc9f` plus this change;
+   the unrelated `docs/requirements/backlog.md` edit is excluded from the commit.
+   This is local acceptance; remote CI, Pages and distributions were not checked.
+
 <a id="knowledge-owl-soft-2026-11-19"></a>
 ## Softer Knowledge owl — 2026-11-19
 

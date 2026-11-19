@@ -13,6 +13,7 @@ import org.akropia.model.PlaceEuropePier;
 import org.akropia.model.PlaceLocation;
 import org.akropia.model.PlaceConstructionSlot;
 import org.akropia.model.GoodsType;
+import org.akropia.page.DialogSurfacesPage;
 import org.akropia.page.EuropeEquipmentPage;
 import org.akropia.page.ColonyScreen;
 import org.akropia.page.EuropePortScreen;
@@ -44,6 +45,11 @@ public class TC_30_F22_expert_purchase_test extends AbstractAkropiaTest {
                 .openEuroperPort();
         ExpertPurchasePage purchase = new ExpertPurchasePage(getContext());
         europe.openBuyUnitScreen();
+        // The modal content uses the shared paper surface.
+        final DialogSurfacesPage surfaces = new DialogSurfacesPage(
+                getContext());
+        surfaces.verifyScrollSurface("mainVbox");
+        surfaces.captureDialog("mainVbox", "paper-mainVbox.png");
         purchase.verifyOffer(true, "");
         purchase.captureDialog("mainVbox", "expert-hiring.png");
         purchase.escape();

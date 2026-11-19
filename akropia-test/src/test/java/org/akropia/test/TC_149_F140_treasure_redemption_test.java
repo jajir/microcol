@@ -44,6 +44,11 @@ class TC_149_F140_treasure_redemption_test extends AbstractAkropiaTest {
         // intact.
         GamePage.of(getContext()).openEuroperPort();
         treasure.open();
+        // The modal content uses the shared paper surface.
+        final DialogSurfacesPage surfaces = new DialogSurfacesPage(
+                getContext());
+        surfaces.verifyScrollSurface("treasureDialog");
+        surfaces.captureDialog("treasureDialog", "paper-treasureDialog.png");
         treasure.verifyTerms(false, net);
         treasure.close();
         treasure.verifyGold(gold);

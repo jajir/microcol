@@ -72,7 +72,18 @@
     -fx-border-image-source: url("../images/modal-button-frame.png");
 }
 
-/* Route choices use the shared paper buttons and scroll only when needed. */
-#carrierRouteScroll, #carrierRouteScroll > .viewport {
+/* Dialog lists share the paper surface; embedded colony panels keep theirs. */
+.modal-frame .scroll-pane,
+.modal-frame .scroll-pane > .viewport {
     -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+/* Keep native selection feedback, without grey empty or alternating rows.
+ * Construction and education lists deliberately retain their own surfaces. */
+.modal-frame #nativeSettlementsList {
+    -fx-background-color: #FFF9EC;
+    -fx-background-insets: 0;
+    -fx-control-inner-background: #FFF9EC;
+    -fx-control-inner-background-alt: #FFF9EC;
 }

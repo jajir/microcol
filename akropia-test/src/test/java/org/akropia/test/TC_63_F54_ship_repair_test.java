@@ -26,6 +26,11 @@ public class TC_63_F54_ship_repair_test extends AbstractAkropiaTest {
         EuropePortScreen europe = game.openEuroperPort();
         europe.verifyNumberOfShipsInPort(0);
         repairs.open();
+        // The modal content uses the shared paper surface.
+        final DialogSurfacesPage surfaces = new DialogSurfacesPage(
+                getContext());
+        surfaces.verifyScrollSurface("shipRepairRows");
+        surfaces.captureDialog("shipRepairRows", "paper-shipRepairRows.png");
         repairs.verifyProgress("TRANSFER", 3,
                 "Galleon #3 — Home port\nTransfer; your turns until operational: 3");
         repairs.captureDialog("shipRepairRows", "ship-repairs-english.png");

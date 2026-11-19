@@ -1,3 +1,16 @@
+## Pozadí seznamů v dialozích — 19. listopadu 2026
+
+1. Posuvné oblasti vlastních modálních dialogů splývají s krémovým papírovým
+   pozadím okna; kolem obsahu nezůstává šedá systémová plocha ani její rámeček.
+   Týká se varování před koncem tahu, pokladů, nákupu jednotek v Evropě,
+   oprav lodí, síně slávy a výběru obchodní trasy dopravce. Také seznam
+   domorodých osad používá krémové pozadí včetně prázdných řádků.
+2. Výslovné výjimky: stavební fronta, vzdělávání v kolonii a okolí kolonie
+   s poli si zachovávají dosavadní podbarvení. Zvýraznění výběru, fokusu
+   a najetí myší zůstává funkční; ovládání, posouvání a herní pravidla se nemění.
+3. Jde o schválený vzhled, nikoli hráčskou studii. Skutečnou přejímku vede
+   [funkční evidence](functional-tests.md#dialog-surfaces-2026-11-19).
+
 
 ## Neutrální potvrzovací tlačítka — 19. listopadu 2026
 

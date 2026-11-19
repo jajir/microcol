@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.akropia.model.Location;
 import org.akropia.model.NativeChiefOutcome;
+import org.akropia.page.DialogSurfacesPage;
 import org.akropia.page.FogPage;
 import org.akropia.page.FreePlayAuditPage;
 import org.akropia.page.GamePage;
@@ -85,6 +86,12 @@ public class TC_169_F106_native_advisor_test extends AbstractAkropiaTest {
         // Learned by sight, the nation and the attitude are known, but the
         // chief has told nothing about the goods or the skill yet.
         advisor.openWithNKey();
+        // The modal content uses the shared paper surface.
+        final DialogSurfacesPage surfaces = new DialogSurfacesPage(
+                getContext());
+        surfaces.verifySettlementListSurface();
+        surfaces.captureDialog("nativeSettlementsContent",
+                "paper-nativeSettlementsContent.png");
         advisor.verifyNations(NATIONS_EN);
         advisor.verifyAttitude(ATTITUDE_EN);
         advisor.verifyChiefLine(NOT_TOLD_EN);
