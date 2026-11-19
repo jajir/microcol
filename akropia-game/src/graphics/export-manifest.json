@@ -615,7 +615,7 @@
           "transparent": true,
           "consumer": "ImageLoaderGameToolbar and ButtonIcon",
           "display": "32 x 32 logical",
-          "stroke": "2.4 units in a 48 unit cell, 1.6 logical px"
+          "stroke": "Knowledge: 3 units, 2 logical px; other cells: 2.4 units, 1.6 logical px"
         },
         {
           "output": "shortcut-warning.png",

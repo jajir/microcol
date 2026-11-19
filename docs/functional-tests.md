@@ -1,3 +1,41 @@
+<a id="knowledge-owl-2026-11-19"></a>
+## Knowledge owl icon — 2026-11-19
+
+1. UC-079: the selected owl with olive sprig replaces the building in the shared
+   Knowledge artwork. TC56/01 additionally captures the map entry icon before
+   exercising shortcut discovery, opening, cancellation, purchase and persistence.
+   Existing gameplay assertions remain unchanged. TC188 covers toolbar sizing,
+   languages and seasonal artwork; PageVerificationContractTest checks test structure.
+2. Genuine vector source and repeatable export: `game-toolbar.svg`, group `congress`;
+   `python3 scripts/graphics/export-graphics.py controls --check` passed all eight exports.
+   The acceptance results and failed attempts are recorded below.
+3. Initial model dispatch `20261119T213708Z-1034e66f4c52` timed out in
+   preparation: the labelled-container Docker query exceeded 20 seconds; no tests
+   started. Server and the same query subsequently returned successfully in
+   0.077 and 0.018 seconds. This establishes responsiveness, not a diagnosed cause.
+   Retry: `20261119T213813Z-9b63b22988d9`.
+4. Model retry passed 5,144 tests with zero failures/errors/skips in 152.841 s;
+   reports: `target/verification/run-062sbezc`. Targeted run
+   `20261119T214101Z-e12b67006e3c` / `run-hrWMf7` took 130.051 s and failed:
+   nine tests, three errors, zero failures/skips. All TC56 and source-contract
+   tests passed; TC188's three checks still expected legacy brown ink for
+   Knowledge. Its page verification now expects the required black ink for
+   this icon while retaining accent, transparency, size and gameplay checks.
+   Targeted retry: `20261119T214341Z-67721964c94f`.
+5. Targeted retry passed all nine tests, zero failures/errors/skips, in 145.480 s
+   (`target/docker-ui/run-MG7Cuy`). Visual review checked the owl in the map
+   toolbar, Knowledge heading and winter toolbar; no clipping was observed.
+   Fixed smoke/support `20261119T214613Z-ef2e341fb28f` passed 23 tests,
+   zero failures/errors/skips, in 287.215 supervised seconds (within 420 s).
+   Reports: `target/verification/run-9yfkijz9`; all changed runtime/test sources
+   match its source snapshot. Model production sources remain unchanged since
+   the passing model run; the subsequent change only corrected the UI ink assertion.
+6. Shared Java formatting, vector/export review, 14 documentation checks,
+   naming audit and strict MkDocs passed. Unrelated backlog changes are excluded.
+   No full regression, remote CI or publication verification was run.
+
+
+
 
 ## Neutrální potvrzovací tlačítka — 2026-11-19
 

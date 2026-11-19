@@ -268,8 +268,9 @@ public final class GameToolbarPage extends AbstractScreen {
                 for (int y = 0; y < 96; y++) {
                     for (int x = 0; x < 96; x++) {
                         final int pixel = icon.getPixelReader().getArgb(x, y);
-                        inkPixels += pixel == (id.equals("exit") ? 0xff000000
-                                : 0xff302d27) ? 1 : 0;
+                        inkPixels += pixel == (id.equals("exit")
+                                || id.equals("congress") ? 0xff000000
+                                        : 0xff302d27) ? 1 : 0;
                         accentPixels += pixel == accent ? 1 : 0;
                     }
                 }

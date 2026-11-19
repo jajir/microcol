@@ -1,3 +1,19 @@
+## Ikona poznání — 19. listopadu 2026
+
+1. Vybraná varianta 2 nahrazuje budovu s vlajkou sovou s olivovou větvičkou,
+   inspirovanou antickou mincí: tělo z profilu, hlava zpředu a kruhové oči.
+   Zdroj `game-toolbar.svg`, skupina `congress`, obsahuje pouze editovatelné
+   vektorové cesty. Černá linka `#000000` má 3 jednotky v buňce 48 px,
+   tedy 2 logické px při zobrazení 32 px; výplně jsou ploché, bez textur.
+2. Sdílený atlas zachovává letní olivovou a zimní modrou variantu.
+   Stejný motiv používá tlačítko mapy, nadpis Poznání a příslušná nápověda.
+   Význam akce, klávesa K a návrat do hry se nemění.
+3. Opakovatelný export: `python3 scripts/graphics/export-graphics.py controls --install`;
+   kontrola: `python3 scripts/graphics/export-graphics.py controls --check`.
+   Výsledky přejímky vlastní [funkční evidence](functional-tests.md#knowledge-owl-2026-11-19).
+4. Ověřené Docker/Xvfb snímky: [letní lišta](graphics-assets/knowledge-owl-2026-11-19/toolbar.png)
+   a [zimní lišta](graphics-assets/knowledge-owl-2026-11-19/winter.png).
+
 ## Ilustrace poznání — 17. listopadu 2026
 
 [Poznání a historické předlohy](knowledge.md) popisují 24 nových editovatelných
