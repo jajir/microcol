@@ -1,3 +1,11 @@
+
+## Neutrální potvrzovací tlačítka — 19. listopadu 2026
+
+Potvrzovací tlačítka mají stejný krémový podklad jako ostatní akce.
+Hlavní akci rozlišuje název, ikona a poloha vpravo, nikoli trvalá zelená
+výplň. Najetí myší, fokus, stisk a neaktivní stav používají společné
+stavy tlačítek. Výběr cíle, potvrzení, zrušení a klávesové ovládání se nemění.
+Jde o schválené pravidlo vzhledu, nikoli závěr hráčského testování.
 ## Datum výpravy — 2026-11-18
 
 ## Dostupnost stavby při přesunu pracovníka — 18. listopadu 2026

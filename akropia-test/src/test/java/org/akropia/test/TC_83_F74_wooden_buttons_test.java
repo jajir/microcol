@@ -185,6 +185,16 @@ public class TC_83_F74_wooden_buttons_test extends AbstractAkropiaTest {
         // safely.
         page.showFinalActions(false);
         page.verifyModalActions("modalPrimary", "modalCancel", "modalPrimary");
+        // Confirmation shares the paper surface and interaction colors.
+        page.hover("modalCancel");
+        page.verifyFill("modalPrimary", "#FFF9EC", false);
+        page.hover("modalPrimary");
+        page.verifyFill("modalPrimary", "#E7E7D0", false);
+        page.hover("modalCancel");
+        page.focus("modalPrimary");
+        page.verifyFocused("modalPrimary");
+        page.verifyFill("modalPrimary", "#E7E7D0", false);
+        page.focus("modalCancel");
         page.captureDialog("modalPrimary", "modal-actions-czech.png");
         page.press(KeyCode.ENTER);
         page.verifySamplesClosed();

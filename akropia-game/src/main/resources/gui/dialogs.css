@@ -64,13 +64,6 @@
     -fx-min-height: 48;
     -fx-padding: 7 14 7 14;
 }
-.modal-actions .modal-primary {
-    -fx-background-color: #DCE5C3;
-}
-.modal-actions .modal-primary:hover,
-.modal-actions .modal-primary:focused {
-    -fx-background-color: #CFDCAB;
-}
 .modal-actions .button:focused {
     -fx-underline: false;
 }

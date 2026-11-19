@@ -1,3 +1,25 @@
+
+## Neutrální potvrzovací tlačítka — 2026-11-19
+
+1. Rozsah UC-114/119: odstranění zelené výplně sdílené `.modal-primary`;
+   tlačítka přebírají společný krémový podklad, hover, fokus a stisk.
+   Ikony, pořadí, klávesové akce a neaktivní stav se nemění.
+2. Izolovaný zdroj vychází z `bf1165e8c12458f54a75612f0aa10082afc9123a`
+   a obsahuje pouze změnu stylu, rozšíření TC83/04 a dokumentaci.
+   Model/JUnit: **5 141 testů**, nula selhání, chyb a vynechání;
+   `target/verification/run-ky_5w95w`, completion `20261119T172456Z-4194b90f21ea`.
+3. Docker/Xvfb: `TC_83_F74_wooden_buttons_test` (4),
+   `TC_103_F94_persistent_go_to_test` (9), `PageVerificationContractTest` (3):
+   **16 testů**, nula selhání, chyb a vynechání.
+   `target/docker-ui/run-moZUhC`, completion `20261119T172813Z-0e8e45b6dd16`.
+   Kontrola snímku `modal-actions-czech.png` potvrdila krémové potvrzení
+   a rozlišený fokus na Zrušit; nejde o hráčské testování.
+4. Evidence je uložená pod `target/neutral-confirmation/source/`.
+   Smoke: **23 testů**, nula selhání, chyb a vynechání, 285,5 s z limitu 420 s;
+   `target/verification/run-rxbcsfz4`, completion `20261119T173451Z-540be3230d69`.
+5. Sdílený Eclipse formatter byl použit na změněný Java test. Dokumentační
+   přejímka: 14 kontrol, audit názvů bez nálezu a strict MkDocs prošly.
+   Vzdálená CI, Pages ani distribuce nebyly ověřovány.
 ## Turn report columns — 2026-11-19
 
 1. UC-013/016/043/114/119: report rows align an icon, wrapping description

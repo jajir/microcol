@@ -1,3 +1,10 @@
+
+## UC-114/119: neutrální potvrzení — 19. listopadu 2026
+
+Sdílené potvrzovací akce používají [neutrální vzhled](ux.md#neutralni-potvrzovaci-tlacitka-19-listopadu-2026).
+`TC_83_F74_wooden_buttons_test` / `TC_04_modal_final_actions_share_alignment_and_safe_keyboard`
+ověřuje krémový podklad, hover a fokus spolu s dosavadními cestami Enter,
+Space a Escape. Herní výsledky a pořadí akcí se nemění.
 ## UC-013/016/043/114/119: ikony a místo příjezdu v přehledu — 18. listopadu 2026
 
 Úprava 19. listopadu 2026: ikona, popis a navigační akce jsou ve třech
