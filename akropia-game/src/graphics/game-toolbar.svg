@@ -8,14 +8,14 @@
       <path d="M13 41 L13 33 18 33 18 41 M31 41 L31 33 36 33 36 41 M31 24 L36 24.5 36 28 31 28 Z" fill="currentColor"/>
     </g>
     <g id="congress" stroke="#000000" stroke-width="3" fill="currentColor">
-      <title>Knowledge: ancient owl with olive sprig, selected concept 2</title>
-      <path d="M6 17 Q8 10 15 5" fill="none"/>
-      <path d="M9 11 Q5 6 10 3 Q13 7 9 11 Z M12 8 Q15 2 20 4 Q18 9 12 8 Z M8 14 Q13 10 17 14 Q13 18 8 14 Z"/>
-      <path d="M23 31 L23 40 Q28 39 29 43 L19 43 L19 34 M32 29 L32 39 Q38 38 39 43 L28 43 L28 33"/>
-      <path d="M24 18 Q17 20 12 28 L5 39 Q13 38 20 32 Q31 32 37 19 Z"/>
-      <path d="M26 21 Q23 29 10 34" fill="none"/>
-      <path d="M22 8 L20 6 Q25 4 28 6 Q33 4 38 6 L42 6 L40 9 L44 11 L42 14 L44 17 L40 18 L39 22 L34 21 L31 25 L28 21 L24 22 L22 19 L19 18 L21 15 L19 12 Z"/>
-      <path d="M26 9 C32 9 32 18 26 18 C20 18 20 9 26 9 Z M37 9 C43 9 43 18 37 18 C31 18 31 9 37 9 Z" fill="#FFF9EC"/>
+      <title>Knowledge: ancient owl with olive sprig, simplified for 32 px</title>
+      <path d="M5 17 Q7 12 12 8" fill="none"/>
+      <path d="M7 12 Q2 8 6 3 Q10 6 7 12 Z M9 10 Q9 4 14 4 Q15 9 9 10 Z"/>
+      <path d="M23 34 L22.5 42 L28 42 M33 32 L33 41.5 L38 42" fill="none"/>
+      <path d="M24 20 Q16 23 10 36 Q20 36 31 31 Q37 27 38 20 Z"/>
+      <path d="M29 24 Q24 30 15 32" fill="none"/>
+      <path d="M20 7 Q25 3 31 5 Q38 3 43 8 Q46 15 41 21 Q37 24 33 22 L31 25 L29 22 Q22 24 19 18 Q16 12 20 7 Z"/>
+      <path d="M25 9 C31 9 31 18 25 18 C19 18 19 9 25 9 Z M38 9 C44 9 44 18 38 18 C32 18 32 9 38 9 Z" fill="#FFF9EC" stroke="none"/>
     </g>
     <g id="center">
       <path d="M24 9 C45 8 46 38 25 39 C4 40 3 10 24 9 Z M24 3 L24.5 15 M24 33 L24 45 M3 24 L15 24.5 M33 24 L45 24"/>

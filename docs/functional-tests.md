@@ -1,3 +1,32 @@
+<a id="knowledge-owl-soft-2026-11-19"></a>
+## Softer Knowledge owl — 2026-11-19
+
+1. UC-079: the user rejected the first owl as visually too heavy during real
+   play. Earlier passing tests remain valid historical functional evidence,
+   but do not establish satisfactory visual weight. The approved correction
+   simplifies the head, eyes, olive sprig, wing and feet at 32 logical pixels.
+2. TC56/01 captures `knowledge-owl-soft-toolbar.png` and retains its complete
+   discovery, cancel, purchase and persistence assertions. Targeted selection:
+   TC56, TC188 (seasons, sizing, languages), PageVerificationContractTest.
+3. Editable SVG paths retain black 2-logical-pixel contours and flat seasonal
+   fills; all eight `controls --check` exports passed. Shared Java formatting
+   was applied to TC56. Model dispatch: `20261119T220847Z-84ba6c397fef`.
+   Model passed 5,144 tests, zero failures/errors/skips, in 158.261 supervised
+   seconds (`target/verification/run-00yj2fes`). Targeted dispatch:
+   `20261119T221142Z-cd063a43d159` passed all nine tests in three XML reports,
+   zero failures/errors/skips, in 146.773 s (`target/docker-ui/run-vFFovx`).
+4. Visual inspection of the real 32 px summer and winter toolbar screenshots
+   confirms separated sprig/head contours and open light eye shapes, without
+   the earlier stacked black eye outlines. This is developer visual review,
+   not new player acceptance. Screenshots are linked in the graphics catalogue.
+5. Fixed smoke `20261119T221430Z-7f0b00ba096f` passed 23 tests with zero
+   failures/errors/skips in 289.518 supervised seconds, within the 420 s budget.
+   Reports: `target/verification/run-8rasophh`. Changed runtime/test files match
+   both the passing model and smoke snapshots. All eight vector exports,
+   14 documentation checks, naming audit and strict MkDocs passed.
+6. Local acceptance is complete. The unrelated backlog edit is excluded;
+   no full regression, remote CI or distribution publication was verified.
+
 <a id="knowledge-owl-2026-11-19"></a>
 ## Knowledge owl icon — 2026-11-19
 

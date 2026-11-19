@@ -1,3 +1,19 @@
+## Zjemnění ikony poznání — 19. listopadu 2026
+
+1. Uživatel při skutečném hraní odmítl první převod sovy jako příliš výrazný
+   vůči okolním ikonám. Původní automatická přejímka a snímky níže dokládají
+   tehdejší zobrazení, nikoli přijatelnou vizuální jemnost.
+2. Schválená oprava zachovává sovu s olivovou větvičkou, černé pero přibližně
+   2 logické px a ploché sezónní barvy. Hlava má hladký obrys, světlé oči bez
+   dalšího černého prstence, větvička je oddělená a nohy tvoří jednoduché tahy.
+   Cílem je omezit slévání černých kontur při skutečné velikosti 32 px.
+3. Zdroj i export zůstávají `game-toolbar.svg` / skupina `controls`.
+   [Evidence opravy](functional-tests.md#knowledge-owl-soft-2026-11-19)
+   odděluje kontrolu zdrojů, automatické testy a vizuální posouzení.
+4. Snímky opravy ze skutečného Docker/Xvfb zobrazení: [letní lišta](graphics-assets/knowledge-owl-soft-2026-11-19/toolbar.png)
+   a [zimní lišta](graphics-assets/knowledge-owl-soft-2026-11-19/winter.png).
+   Vývojářská vizuální kontrola není novým uživatelským potvrzením vzhledu.
+
 ## Ikona poznání — 19. listopadu 2026
 
 1. Vybraná varianta 2 nahrazuje budovu s vlajkou sovou s olivovou větvičkou,

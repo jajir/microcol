@@ -30,9 +30,9 @@ public class TC_56_F47_congress_test extends AbstractAkropiaTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         CongressPage congress = new CongressPage(getContext());
         congress.rememberWorld();
-        // Capture the owl-and-olive entry icon before opening Knowledge.
+        // Capture the simplified owl at its real toolbar size.
         new MainScreenLayoutPage(getContext())
-                .saveEvidence("knowledge-owl-toolbar.png");
+                .saveEvidence("knowledge-owl-soft-toolbar.png");
         // Discover the shortcut, open Knowledge and return without a purchase.
         congress.hoverOpenButton();
         game.verifyThatStatusBarContains(
